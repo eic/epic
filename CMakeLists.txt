@@ -1,0 +1,20 @@
+cmake_minimum_required(VERSION 3.3 FATAL_ERROR)
+
+find_package(Acts REQUIRED COMPONENTS Core PluginIdentification PluginTGeo PluginDD4hep )
+
+#-----------------------------------------------------------------------------------
+set(a_lib_name IP6)
+dd4hep_configure_output()
+
+dd4hep_add_plugin(${a_lib_name} SOURCES src/*.cpp
+        USES ActsCore ActsPluginDD4hep
+  )
+target_link_libraries(${a_lib_name}
+  PUBLIC DD4hep::DDCore  DD4hep::DDRec
+  )
+
+#-----------------------------------------------------------------------------------
+install(DIRECTORY compact/
+    DESTINATION share/${PROJECT_NAME}/${a_lib_name}
+    FILES_MATCHING PATTERN "*.xml"
+    )
