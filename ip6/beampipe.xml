@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<lccdd>
+  <define>
+  </define>
+
+  <display>
+  </display>
+
+  <detectors>
+
+    <detector id="BeamPipe_ID" name="BeamPipe" type="IP6BeamPipe" vis="BeamPipeVis"> 
+      <IP_pipe OD="55*mm" wall_thickness="4*mm" crossing_angle="0.025" />
+      <downstream_pipe straight_length="685.0 * mm" length="4500.0 * mm" />
+      <upstream_pipe straight_length="1300.0 * mm" length="4500.0 * mm" />
+    </detector>
+
+  </detectors>
+
+
+</lccdd>

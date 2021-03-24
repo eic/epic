@@ -185,4 +185,4 @@ static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector sens)  {
   return sdet;
 }
 
-DECLARE_DETELEMENT(TopsideIRBeamPipe,create_detector)
+DECLARE_DETELEMENT(IP6BeamPipe,create_detector)
