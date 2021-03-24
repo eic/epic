@@ -1,0 +1,33 @@
+image: eicweb.phy.anl.gov:4567/eic/juggler/juggler:latest
+
+default:
+  before_script:
+    - mkdir -p images && mkdir -p doc/
+
+stages:
+  - build
+  - test 
+
+compile:
+  stage: build
+  tags:
+    - silicon
+  artifacts:
+    paths:
+      - images/
+      - doc/
+  script:
+    -  ls #./bin/make_dawn_views 
+
+overlap_check:
+  stage: test
+  tags:
+    - silicon
+  needs: 
+    - ["compile"]
+  script:
+    #- $(exit $(checkOverlaps -c topside.xml  | tee doc/overlap_check.out | wc -l ))
+    - checkOverlaps -c eic_beamline.xml  | tee doc/overlap_check.out | wc -l
+    - cat doc/overlap_check.out
+  allow_failure: true
+
