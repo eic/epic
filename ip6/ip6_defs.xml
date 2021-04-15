@@ -4,7 +4,7 @@
     <constant name="electronCrossingAngle" value="0.00833333"/>
     <constant name="CrossingSlope" value="0.0166682"/>
 
-    <constant name="IPBeampipe_rmax" value="55.0*mm/2.0"/>
+    <constant name="IPBeampipe_rmax" value="40.0*mm/2.0"/>
     <constant name="BeampipeOD"      value="2.0*IPBeampipe_rmax"/>
 
     
