@@ -1,33 +1,88 @@
 image: eicweb.phy.anl.gov:4567/eic/juggler/juggler:latest
 
+workflow:
+  rules:
+    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
+    - if: '$CI_PIPELINE_SOURCE == "web"'
+    - if: '$CI_PIPELINE_SOURCE == "webide"'
+    - if: '$CI_COMMIT_BRANCH == "master"'
+    - if: '$CI_COMMIT_TAG'
+
 default:
   before_script:
     - mkdir -p images && mkdir -p doc/
-
-stages:
-  - build
-  - test 
-
-compile:
-  stage: build
-  tags:
-    - silicon
+    - build && cd build && cmake ../. -DCMAKE_INSTALL_PREFIX=/usr/local && make -j20 && make install  && cd ..  
   artifacts:
     paths:
       - images/
       - doc/
+    reports:
+      dotenv: juggler.env
+
+
+stages:
+  - config
+  - build
+  - docs
+  - test 
+  - finalize 
+  - deploy
+
+env:
+  stage: config 
   script:
-    -  ls #./bin/make_dawn_views 
+    - |
+      export BEAMLINE_CONFIG="ip6"
+      if [[ -z "${JUGGLER_DETECTOR}" ]]; then 
+        export JUGGLER_DETECTOR="reference_detector"
+      fi
+    - |
+      if [[ "x${CI_PIPELINE_SOURCE}" == "xmerge_request_event"  || "$CI_COMMIT_BRANCH" == "master" ]]; then
+        export BEAMLINE_CONFIG_VERSION=${CI_COMMIT_REF_NAME}
+        echo "BEAMLINE_CONFIG          = ${BEAMLINE_CONFIG}"
+        echo "BEAMLINE_CONFIG_VERSION  = ${CI_COMMIT_REF_NAME}"
+        echo "JUGGLER_DETECTOR         = ${JUGGLER_DETECTOR}"
+        # add to env file testing
+        echo "BEAMLINE_CONFIG_VERSION=$CI_COMMIT_REF_NAME" >> juggler.env
+        echo "BEAMLINE_CONFIG=$BEAMLINE_CONFIG" >> juggler.env
+        echo "JUGGLER_DETECTOR=$JUGGLER_DETECTOR" >> juggler.env
+        # if specific juggler version is requested
+        if [[ -n "${JUGGLER_DETECTOR_VERSION}" ]]; then
+          echo "JUGGLER_DETECTOR_VERSION = ${CI_COMMIT_REF_NAME}"
+          echo "JUGGLER_DETECTOR_VERSION=$CI_COMMIT_REF_NAME" >> juggler.env
+        fi
+      fi  
+  artifacts:
+    reports:
+      dotenv: juggler.env
+
+compile:
+  stage: build
+  needs:
+    - ["env"]
+  script:
+    - mkdir -p build && cd build && cmake ../. -DCMAKE_INSTALL_PREFIX=/usr/local && make -j20 && make install  && cd ..
+    - echo "Build successful."
 
 overlap_check:
   stage: test
-  tags:
-    - silicon
   needs: 
     - ["compile"]
   script:
     #- $(exit $(checkOverlaps -c topside.xml  | tee doc/overlap_check.out | wc -l ))
-    - checkOverlaps -c eic_beamline.xml  | tee doc/overlap_check.out | wc -l
+    - checkOverlaps -c eic_ip6.xml  | tee doc/overlap_check.out | wc -l
     - cat doc/overlap_check.out
   allow_failure: true
 
+
+detectors:reference_detector:
+  stage: deploy
+  variables:
+    JUGGLER_DETECTOR: "$JUGGLER_DETECTOR"
+    JUGGLER_DETECTOR_VERSION: "$JUGGLER_DETECTOR_VERSION"
+    BEAMLINE_CONFIG: "$BEAMLINE_CONFIG"
+    BEAMLINE_CONFIG_VERSION: "$BEAMLINE_CONFIG_VERSION"
+  trigger:
+    project: EIC/detectors/reference_detector
+    strategy: depend
+  needs: ["env"]

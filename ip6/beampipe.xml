@@ -9,7 +9,7 @@
   <detectors>
 
     <detector id="BeamPipe_ID" name="BeamPipe" type="IP6BeamPipe" vis="BeamPipeVis"> 
-      <IP_pipe OD="55*mm" wall_thickness="4*mm" crossing_angle="0.025" />
+      <IP_pipe OD="BeampipeOD" wall_thickness="4*mm" crossing_angle="CrossingAngle" />
       <downstream_pipe straight_length="685.0 * mm" length="4500.0 * mm" />
       <upstream_pipe straight_length="1300.0 * mm" length="4500.0 * mm" />
     </detector>
