@@ -6,6 +6,7 @@
     <constant name="world_x" value="world_side"/>
     <constant name="world_y" value="world_side"/>
     <constant name="world_z" value="100*m"/>
+    <constant name="BeamPipe_ID" value="1"/>
 
     <include ref="ip6/ip6_defs.xml" />
   </define>
@@ -15,6 +16,6 @@
     <gdmlFile ref="ip6/materials.xml"/>
   </includes>
 
-  <include ref="ip6/beamline.xml" />
+  <include ref="ip6/beampipe.xml" />
 
 </lccdd>
