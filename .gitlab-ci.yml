@@ -9,16 +9,21 @@ workflow:
     - if: '$CI_COMMIT_TAG'
 
 default:
-  before_script:
-    - mkdir -p images && mkdir -p doc/
-    - build && cd build && cmake ../. -DCMAKE_INSTALL_PREFIX=/usr/local && make -j20 && make install  && cd ..  
   artifacts:
+    expire_in: 72 hours 
     paths:
+      - .local/detector
+      - .local/lib
+      - .local/bin
+      - .local/include
+      - .local/share
+      - results
+      - config
       - images/
       - doc/
+      - juggler.env
     reports:
       dotenv: juggler.env
-
 
 stages:
   - config
@@ -28,8 +33,15 @@ stages:
   - finalize 
   - deploy
 
-env:
-  stage: config 
+common:setup:
+  stage: config
+  script:
+    - git clone https://eicweb.phy.anl.gov/EIC/benchmarks/common_bench.git setup 
+    - source setup/bin/env.sh && ./setup/bin/install_common.sh
+
+common:detector:
+  stage: build
+  needs: ["common:setup"]
   script:
     - |
       export BEAMLINE_CONFIG="ip6"
@@ -51,32 +63,31 @@ env:
           echo "JUGGLER_DETECTOR_VERSION = ${CI_COMMIT_REF_NAME}"
           echo "JUGGLER_DETECTOR_VERSION=$CI_COMMIT_REF_NAME" >> juggler.env
         fi
-      fi  
-  artifacts:
-    reports:
-      dotenv: juggler.env
-
-compile:
-  stage: build
-  needs:
-    - ["env"]
-  script:
-    - mkdir -p build && cd build && cmake ../. -DCMAKE_INSTALL_PREFIX=/usr/local && make -j20 && make install  && cd ..
-    - echo "Build successful."
+      fi
+    - source .local/bin/env.sh
+    - mkdir -p build && cd build && cmake ../. -DCMAKE_INSTALL_PREFIX=${LOCAL_PREFIX} && make -j20 && make install  && cd ..
+    - mkdir_local_data_link sim_output
+    - ls -lrth
+    - print_env.sh
 
 overlap_check:
   stage: test
   needs: 
-    - ["compile"]
+    - ["common:detector"]
   script:
-    #- $(exit $(checkOverlaps -c topside.xml  | tee doc/overlap_check.out | wc -l ))
-    - checkOverlaps -c eic_ip6.xml  | tee doc/overlap_check.out | wc -l
-    - cat doc/overlap_check.out
-  allow_failure: true
+    - |
+      set -o allexport
+      source juggler.env
+      set +o allexport
+    - source .local/bin/env.sh
+    - mkdir doc
+    - ls -lrth
+    - checkOverlaps -c eic_ip6.xml 
 
 
 detectors:reference_detector:
   stage: deploy
+  needs: ["overlap_check"]
   variables:
     JUGGLER_DETECTOR: "$JUGGLER_DETECTOR"
     JUGGLER_DETECTOR_VERSION: "$JUGGLER_DETECTOR_VERSION"
@@ -85,4 +96,3 @@ detectors:reference_detector:
   trigger:
     project: EIC/detectors/reference_detector
     strategy: depend
-  needs: ["env"]
