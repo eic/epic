@@ -115,11 +115,11 @@ static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector sens)  {
   sdet.setAttributes(det, v_upstream_electron_tube, x_det.regionStr(), x_det.limitsStr(), vis_name);
   //Volume v_upstream_conic_section_vacuum("v_upstream_conic_section_vacuum", upstream_electron_tube, m_Al);
 
-  auto pv_upstream_conic_section = assembly.placeVolume(
-      v_upstream_conic_section,
-      Transform3D(
-          Position(-upstream_delta_r/2.0,0, -upstream_straight_length - upstream_conic_length / 2.0)) *
-          RotationY(crossing_angle / 2.0) * RotationX(M_PI));
+  //auto pv_upstream_conic_section = assembly.placeVolume(
+  //    v_upstream_conic_section,
+  //    Transform3D(
+  //        Position(-upstream_delta_r/2.0,0, -upstream_straight_length - upstream_conic_length / 2.0)) *
+  //        RotationY(crossing_angle / 2.0) * RotationX(M_PI));
   auto pv_upstream_electron_tube =
       assembly.placeVolume(v_upstream_electron_tube,
                            Position(0, 0, -upstream_straight_length - upstream_conic_length / 2.0));
