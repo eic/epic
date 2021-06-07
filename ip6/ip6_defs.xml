@@ -1,8 +1,8 @@
   <define>
     <constant name="CrossingAngle" value="0.025"/>
-    <constant name="ionCrossingAngle" value="0.0166667"/>
-    <constant name="electronCrossingAngle" value="0.00833333"/>
-    <constant name="CrossingSlope" value="0.0166682"/>
+    <constant name="ionCrossingAngle" value="CrossingAngle"/>
+    <constant name="electronCrossingAngle" value="0.0"/>
+    <constant name="CrossingSlope" value="CrossingAngle"/>
 
     <constant name="IPBeampipe_rmax" value="40.0*mm/2.0"/>
     <constant name="Beampipe_rmax"   value="IPBeampipe_rmax"/>

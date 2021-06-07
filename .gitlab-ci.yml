@@ -83,6 +83,15 @@ common:detector:
     - mkdir -p geo
     - print_env.sh
 
+dump_geometry:
+  stage: test
+  needs:
+    - common:detector
+  script:
+   - echo "dumping geometry"
+   - mkdir -p geo
+   - dd_web_display --output geo/detector_geo_full.root eic_ip6.xml
+
 overlap_check:
   stage: test
   needs: 
