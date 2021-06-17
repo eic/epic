@@ -1,0 +1,59 @@
+<lccdd>
+
+  <comment>Far Forward Hadron Detectors</comment>        
+
+  <define>
+    <comment>
+      ----------------------
+      Zero Degree Parameters
+      ----------------------
+    </comment>
+    <constant name="ffi_ZDC_ECAL_z_pos"            value="3800.0 * cm"/>
+    <constant name="ffi_ZDC_ECAL_x_pos"            value="ffi_ZDC_ECAL_z_pos * ionCrossingAngle"/>
+    <constant name="ffi_ZDC_ECAL_y_pos"            value="0.0 * cm"/>
+    <constant name="ffi_ZDC_ECAL_rotateX_angle"    value="0.0 * rad"/>
+    <constant name="ffi_ZDC_ECAL_rotateY_angle"    value="-0.0125 * rad"/>
+    <constant name="ffi_ZDC_ECAL_rotateZ_angle"    value="0.0 * rad"/>
+    <constant name="ffi_ZDC_ECAL_module_width"     value="5.0 * cm"/>
+    <constant name="ffi_ZDC_ECAL_module_thickness" value="20.0 * cm"/>
+    <constant name="ffi_ZDC_ECAL_module_gap"       value="1.0 * mm"/>
+    <constant name="ffi_ZDC_ECAL_module_ntower"    value="12"/>
+    <constant name="ffi_ZDC_ECAL_width"            value="(ffi_ZDC_ECAL_module_width + ffi_ZDC_ECAL_module_gap) * ffi_ZDC_ECAL_module_ntower + 2.0 * cm"/>
+    <constant name="ffi_ZDC_ECAL_thickness"        value="ffi_ZDC_ECAL_module_thickness + 2.0 * cm"/>
+
+    <constant name="ffi_ZDC_HCAL_x_pos"            value="ffi_ZDC_ECAL_x_pos"/>
+    <constant name="ffi_ZDC_HCAL_y_pos"            value="ffi_ZDC_ECAL_y_pos"/>
+    <constant name="ffi_ZDC_HCAL_z_pos"            value="ffi_ZDC_ECAL_z_pos + ffi_ZDC_ECAL_thickness + 3.0 * cm"/>
+    <constant name="ffi_ZDC_HCAL_rotateX_angle"    value="ffi_ZDC_ECAL_rotateX_angle"/>
+    <constant name="ffi_ZDC_HCAL_rotateY_angle"    value="ffi_ZDC_ECAL_rotateY_angle"/>
+    <constant name="ffi_ZDC_HCAL_rotateZ_angle"    value="ffi_ZDC_ECAL_rotateZ_angle"/>
+    <constant name="ffi_ZDC_HCAL_width"            value="ffi_ZDC_ECAL_module_width * ffi_ZDC_ECAL_module_ntower"/>
+    <constant name="ffi_ZDC_HCAL_length"           value="200.0 * cm"/>
+
+  </define>
+
+  <limits>
+  </limits>
+
+  <regions>
+  </regions>
+
+  <display>
+  </display>
+
+
+  <include ref="far_forward_ZDC_Ecal.xml" />
+  <include ref="far_forward_ZDC_Hcal.xml" />
+  
+  <detectors>
+  </detectors>
+
+  <readouts>
+  </readouts>
+
+  <plugins>
+  </plugins>
+
+  <fields>
+  </fields>
+</lccdd>

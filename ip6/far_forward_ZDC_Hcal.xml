@@ -1,0 +1,35 @@
+<lccdd>
+  <comment>
+    //////////////////////////////////////////////////
+    // Far Forward Ion Zero Degree Calorimeter - Hcal
+    // Si+W sampling
+    //////////////////////////////////////////////////
+  </comment>        
+
+  <define>
+    <constant name="ffi_ZDC_HCAL_NRepeat"          value="40"/>
+    <constant name="ffiZDCHcalTungstenThickness"   value="3.5 * mm"/>
+    <constant name="ffiZDCHcalSiliconThickness"    value="500.0 * um"/>
+    <constant name="ffiZDCHcalAirThickness"        value="1.0 * mm"/>
+  </define>
+
+  <detectors>
+    <detector id="ffi_ZDC_HCAL_ID" name="ffi_ZDC_HCAL" type="ffi_ZDC_HCAL" readout="ffi_ZDC_HCAL_Hits" vis="ffi_ZDC_HCAL_Vis">
+      <position x="ffi_ZDC_HCAL_x_pos" y="ffi_ZDC_HCAL_y_pos" z="ffi_ZDC_HCAL_z_pos"/>
+      <rotation x="ffi_ZDC_HCAL_rotateX_angle" y="ffi_ZDC_HCAL_rotateY_angle" z="ffi_ZDC_HCAL_rotateZ_angle"/>
+      <dimensions x="ffi_ZDC_HCAL_width" z="ffi_ZDC_HCAL_length"/>
+      <layer repeat="ffi_ZDC_HCAL_NRepeat">
+        <slice name="Tungsten_slice" material="TungstenDens24" thickness="ffiZDCHcalTungstenThickness" vis="AnlBlue"/>
+	<slice name="Silicon_slice"  material="Silicon"        thickness="ffiZDCHcalSiliconThickness"  vis="AnlRed"  sensitive="true"/>
+	<slice name="Air_slice"      material="Air"            thickness="ffiZDCHcalAirThickness"      vis="AnlGold"/>
+      </layer>
+    </detector>
+  </detectors>
+
+  <readouts>
+    <readout name="ffi_ZDC_HCAL_Hits">
+      <segmentation type="CartesianGridXY" grid_size_x="1.0*cm" grid_size_y="1.0*cm" />
+      <id>system:8,layer:12,slice:12,x:32:-16,y:-16</id>  
+    </readout>
+  </readouts>
+</lccdd>

@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<lccdd>
+  <define>
+    <comment>
+      ----------------------------------------
+      Forward Off-Momentum Tracker Parameters
+      ----------------------------------------
+    </comment>
+    <constant name="ForwardOffMTracker_zpos" value="B1APF_CenterPosition + B1APF_Length/2.0 + 10.0*cm"/>
+    <constant name="ForwardOffMTracker_xpos" value="B1APF_XPosition+40.0*cm"/>
+  </define>
+
+  <detectors>
+    <detector 
+      id="ForwardOffMTracker_ID"
+      name="ForwardOffMTracker"
+      readout="ForwardOffMTrackerHits" 
+      type="ip6_RectangularTracker"
+      insideTrackingVolume="true"
+      reflect="false"
+      vis="AnlRed">
+      <position x="ForwardOffMTracker_xpos" y="0" z="ForwardOffMTracker_zpos"/>
+      <layer id="1" 
+        vis="AnlViolet"
+        x="60.0*cm" 
+        y="20.0*cm" >
+        <slice material="Air" thickness="1.0*cm" vis="AnlViolet" sensitive="true" />
+        <slice material="Air" thickness="1.0*cm" vis="AnlViolet" sensitive="true" />
+        <slice material="Air" thickness="1.0*cm" vis="AnlViolet" sensitive="true" />
+        <slice material="Air" thickness="1.0*cm" vis="AnlViolet" sensitive="true" />
+      </layer>
+    </detector>
+  </detectors>
+
+  <readouts>
+    <readout name="ForwardOffMTrackerHits">
+      <segmentation type="CartesianGridXY" grid_size_x="1.0*mm" grid_size_y="1.0*mm" />
+      <id>system:8,barrel:3,layer:4,slice:4,x:32:-16,y:-16</id>  
+    </readout>
+  </readouts>
+
+</lccdd>

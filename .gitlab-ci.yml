@@ -83,6 +83,13 @@ common:detector:
     - mkdir -p geo
     - print_env.sh
 
+dump_constants:
+  stage: test
+  needs: 
+    - ["common:detector"]
+  script:
+    - npdet_info dump eic_ip6.xml  | tee doc/constants.out 
+
 dump_geometry:
   stage: test
   needs:

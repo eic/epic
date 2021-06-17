@@ -9,6 +9,39 @@
     <constant name="BeamPipe_ID" value="1"/>
 
     <include ref="ip6/ip6_defs.xml" />
+
+    <comment> 
+      
+      =====================================
+      (150-169) Far Forward  Detectors
+      =====================================
+
+      Forward Roman Pot     ID: 150
+      Forward B0 Tracker    ID: 151
+      Zero Degree Cal. Ecal ID: 160
+      Zero Degree Cal. Hcal ID: 161
+
+    </comment>
+    <constant name="B0Tracker_ID"          value="150"/>
+    <constant name="ForwardRomanPotA_ID"   value="155"/>
+    <constant name="ForwardRomanPotB_ID"   value="156"/>
+    <constant name="ForwardRomanPotC_ID"   value="157"/>
+    <constant name="ForwardOffMTracker_ID" value="159"/>
+    <constant name="ffi_ZDC_ECAL_ID"       value="160"/>
+    <constant name="ffi_ZDC_HCAL_ID"       value="161"/>
+
+    <comment> 
+      =====================================
+      (170-189) Forward Beamline Magnets
+      =====================================
+    </comment>
+
+    <comment> 
+      =====================================
+      (190-199) Backward Beamline Magnets
+      =====================================
+    </comment>
+
   </define>
 
   <includes>
@@ -18,5 +51,9 @@
 
   <include ref="ip6/beampipe.xml" />
   <include ref="ip6/forward_ion_beamline.xml" />
+  <include ref="ip6/B0_tracker.xml"/>
+  <include ref="ip6/far_forward_offM_tracker.xml"/>
+  <include ref="ip6/far_forward_romanpots.xml"/>
+  <include ref="ip6/far_forward_detectors.xml"/>
 
 </lccdd>
