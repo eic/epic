@@ -12,6 +12,9 @@
     <constant name="ForwardRomanPotB_xpos" value="B2PF_XPosition "/>
   </define>
 
+  <include ref="roman_pots_eRD24_design.xml"/>
+
+  <!--
   <detectors>
     <detector 
       id="ForwardRomanPotA_ID"
@@ -52,12 +55,15 @@
       </layer>
     </detector>
   </detectors>
+  -->
 
+  <!--
   <readouts>
     <readout name="ForwardRomanPotHits">
       <segmentation type="CartesianGridXY" grid_size_x="1.0*mm" grid_size_y="1.0*mm" />
       <id>system:8,barrel:3,layer:4,slice:4,x:32:-16,y:-16</id>  
     </readout>
   </readouts>
+  -->
 
 </lccdd>

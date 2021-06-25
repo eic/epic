@@ -23,9 +23,10 @@
 
     </comment>
     <constant name="B0Tracker_ID"          value="150"/>
-    <constant name="ForwardRomanPotA_ID"   value="155"/>
-    <constant name="ForwardRomanPotB_ID"   value="156"/>
-    <constant name="ForwardRomanPotC_ID"   value="157"/>
+    <constant name="ForwardRomanPot_Station_1_ID"   value="155"/>
+    <constant name="ForwardRomanPot_Station_2_ID"   value="156"/>
+    <constant name="ForwardRomanPotB_ID"   value="157"/>
+    <constant name="ForwardRomanPotC_ID"   value="158"/>
     <constant name="ForwardOffMTracker_ID" value="159"/>
     <constant name="ffi_ZDC_ECAL_ID"       value="160"/>
     <constant name="ffi_ZDC_HCAL_ID"       value="161"/>
@@ -49,11 +50,11 @@
     <gdmlFile ref="ip6/materials.xml"/>
   </includes>
 
-  <include ref="ip6/beampipe.xml" />
+  <comment><include ref="ip6/beampipe.xml" /> </comment>
   <include ref="ip6/forward_ion_beamline.xml" />
   <include ref="ip6/B0_tracker.xml"/>
   <include ref="ip6/far_forward_offM_tracker.xml"/>
-  <include ref="ip6/far_forward_romanpots.xml"/>
   <include ref="ip6/far_forward_detectors.xml"/>
+  <include ref="ip6/roman_pots_eRD24_design.xml"/>
 
 </lccdd>
