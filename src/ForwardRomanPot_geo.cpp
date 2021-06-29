@@ -132,7 +132,6 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
     }
   }
 
-  std::cout << " derp \n";
   int l_num = 0;
   for (xml_coll_t i(x_det, _U(layer)); i; ++i, ++l_num) {
     xml_comp_t x_layer    = i;
@@ -146,34 +145,26 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
     }
     DetElement layer(sdet, l_nam + "_pos", l_num);
 
-  std::cout << "layer derp \n";
     int i_assembly = 1;
     xml_coll_t ci(x_layer, _U(component));
     for (ci.reset(); ci; ++ci) {
       xml_comp_t x_comp  = ci;
       xml_comp_t c_pos   = x_comp.position(false);
 
-  std::cout << i_assembly  << " assembly  \n";
       // string     ma_name = x_comp.nameStr();
       string comp_assembly = getAttrOrDefault(x_comp, _Unicode(assembly), "");
 
-  std::cout << comp_assembly << "  derp \n";
 
       auto comp_vol = module_assemblies[comp_assembly];
       //auto de       = ;
-  std::cout << "comp_vol derp \n";
       auto comp_de  = module_assembly_delements[comp_assembly].clone(comp_assembly + std::to_string(l_num));
-  std::cout << "comp_de derp \n";
       if (c_pos) {
         pv = l_vol.placeVolume(comp_vol, Position(c_pos.x(), c_pos.y(), c_pos.z()));
       } else {
         pv = l_vol.placeVolume(comp_vol);
       }
-  std::cout << "pv derp \n";
       pv.addPhysVolID("assembly", i_assembly);
-  std::cout << "layer derp \n";
       comp_de.setPlacement(pv);
-  std::cout << "layer derp \n";
       layer.add(comp_de);
       i_assembly++;
       // DetElement det = module > 1 ? stave.clone(_toString(module,"stave%d")) : stave;
