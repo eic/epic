@@ -98,6 +98,7 @@ dump_geometry:
    - echo "dumping geometry"
    - mkdir -p geo
    - dd_web_display --output geo/detector_geo_full.root eic_ip6.xml
+   - echo "Geometry viewer at https://eic.phy.anl.gov/geoviewer/index.htm?file=https://eicweb.phy.anl.gov/EIC/detectors/ip6/-/jobs/${CI_JOB_ID}/artifacts/raw/geo/detector_geo_full.root?job=dump_geometry&item=default;1&opt=clipxyz;transp30;zoom75;ROTY290;ROTZ350;trz0;trr0;ctrl;all&"
 
 overlap_check:
   stage: test
