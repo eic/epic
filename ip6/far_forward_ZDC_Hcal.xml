@@ -7,10 +7,16 @@
   </comment>        
 
   <define>
-    <constant name="ffi_ZDC_HCAL_NRepeat"          value="40"/>
-    <constant name="ffiZDCHcalTungstenThickness"   value="3.5 * mm"/>
-    <constant name="ffiZDCHcalSiliconThickness"    value="500.0 * um"/>
-    <constant name="ffiZDCHcalAirThickness"        value="1.0 * mm"/>
+    <constant name="ffi_ZDC_HCAL_SiW_NRepeat"     value="20"/>
+    <constant name="ffi_ZDC_HCAL_SiPb_NRepeat"    value="12"/>
+    <constant name="ffi_ZDC_HCAL_PbScint_NRepeat" value="30"/>
+    <constant name="ffiZDCHcalTungstenThickness"  value="3.5 * mm"/>
+    <constant name="ffiZDCHcalSiliconThickness"   value="320.0 * um"/>
+    <constant name="ffiZDCHcalGlueThickness"      value="0.11 * mm"/>
+    <constant name="ffiZDCHcalFPCThickness"       value="0.28 * mm"/>
+    <constant name="ffiZDCHcalAirThickness"       value="1.0 * mm"/>
+    <constant name="ffiZDCHcalLeadThickness"      value="30.0 * mm"/>
+    <constant name="ffiZDCHcalScintThickness"     value="2.0 * mm"/>
   </define>
 
   <detectors>
@@ -18,10 +24,26 @@
       <position x="ffi_ZDC_HCAL_x_pos" y="ffi_ZDC_HCAL_y_pos" z="ffi_ZDC_HCAL_z_pos"/>
       <rotation x="ffi_ZDC_HCAL_rotateX_angle" y="ffi_ZDC_HCAL_rotateY_angle" z="ffi_ZDC_HCAL_rotateZ_angle"/>
       <dimensions x="ffi_ZDC_HCAL_width" z="ffi_ZDC_HCAL_length"/>
-      <layer repeat="ffi_ZDC_HCAL_NRepeat">
+      <layer repeat="ffi_ZDC_HCAL_SiW_NRepeat">
         <slice name="Tungsten_slice" material="TungstenDens24" thickness="ffiZDCHcalTungstenThickness" vis="AnlBlue"/>
-	<slice name="Silicon_slice"  material="Silicon"        thickness="ffiZDCHcalSiliconThickness"  vis="AnlRed"  sensitive="true"/>
+	<slice name="Air_slice"      material="Air"            thickness="ffiZDCHcalGlueThickness"     vis="AnlGold"/>
+	<slice name="Silicon_slice"  material="Silicon"        thickness="ffiZDCHcalSiliconThickness"  vis="AnlRed" sensitive="true"/>
+	<slice name="Air_slice"      material="Air"            thickness="ffiZDCHcalGlueThickness"     vis="AnlGold"/>
+	<slice name="Air_slice"      material="Air"            thickness="ffiZDCHcalFPCThickness"      vis="AnlGold"/>
 	<slice name="Air_slice"      material="Air"            thickness="ffiZDCHcalAirThickness"      vis="AnlGold"/>
+      </layer>
+      <layer repeat="ffi_ZDC_HCAL_SiPb_NRepeat">
+        <slice name="Lead_slice"    material="Pb"      thickness="ffiZDCHcalLeadThickness"    vis="BlueGreenVis"/>
+	<slice name="Air_slice"     material="Air"     thickness="ffiZDCHcalGlueThickness"    vis="AnlGold"/>
+	<slice name="Silicon_slice" material="Silicon" thickness="ffiZDCHcalSiliconThickness" vis="AnlRed" sensitive="true"/>
+	<slice name="Air_slice"     material="Air"     thickness="ffiZDCHcalGlueThickness"    vis="AnlGold"/>
+	<slice name="Air_slice"     material="Air"     thickness="ffiZDCHcalFPCThickness"     vis="AnlGold"/>
+	<slice name="Air_slice"     material="Air"     thickness="ffiZDCHcalAirThickness"     vis="AnlGold"/>
+      </layer>
+      <layer repeat="ffi_ZDC_HCAL_PbScint_NRepeat">
+        <slice name="Lead_slice"  material="Pb"           thickness="ffiZDCHcalLeadThickness"  vis="BlueGreenVis"/>
+        <slice name="Scint_slice" material="PlasticScint" thickness="ffiZDCHcalScintThickness" vis="AnlOrange" sensitive="true"/>
+	<slice name="Air_slice"   material="Air"          thickness="ffiZDCHcalAirThickness"   vis="AnlGold"/>
       </layer>
     </detector>
   </detectors>

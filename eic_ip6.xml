@@ -50,6 +50,10 @@
     <gdmlFile ref="ip6/materials.xml"/>
   </includes>
 
+  <display>
+  <include ref="ip6/display.xml" />
+  </display>
+
   <comment><include ref="ip6/beampipe.xml" /> </comment>
   <include ref="ip6/forward_ion_beamline.xml" />
   <include ref="ip6/B0_tracker.xml"/>

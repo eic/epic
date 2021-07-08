@@ -23,7 +23,7 @@
 
   <readouts>
     <readout name="ffi_ZDC_ECAL_Hits">
-      <segmentation type="CartesianGridXY" grid_size_x="5.0*cm" grid_size_y="5.0*cm" />
+      <segmentation type="CartesianGridXY" grid_size_x="3.0*cm" grid_size_y="3.0*cm" />
       <id>system:8,module:14,x:32:-16,y:-16</id>  
     </readout>
   </readouts>

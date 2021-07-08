@@ -8,22 +8,22 @@
       Zero Degree Parameters
       ----------------------
     </comment>
-    <constant name="ffi_ZDC_ECAL_z_pos"            value="3800.0 * cm"/>
+    <constant name="ffi_ZDC_ECAL_z_pos"            value="3720.0 * cm"/>
     <constant name="ffi_ZDC_ECAL_x_pos"            value="ffi_ZDC_ECAL_z_pos * ionCrossingAngle"/>
     <constant name="ffi_ZDC_ECAL_y_pos"            value="0.0 * cm"/>
     <constant name="ffi_ZDC_ECAL_rotateX_angle"    value="0.0 * rad"/>
     <constant name="ffi_ZDC_ECAL_rotateY_angle"    value="-0.0125 * rad"/>
     <constant name="ffi_ZDC_ECAL_rotateZ_angle"    value="0.0 * rad"/>
-    <constant name="ffi_ZDC_ECAL_module_width"     value="5.0 * cm"/>
+    <constant name="ffi_ZDC_ECAL_module_width"     value="3.0 * cm"/>
     <constant name="ffi_ZDC_ECAL_module_thickness" value="20.0 * cm"/>
-    <constant name="ffi_ZDC_ECAL_module_gap"       value="1.0 * mm"/>
-    <constant name="ffi_ZDC_ECAL_module_ntower"    value="12"/>
+    <constant name="ffi_ZDC_ECAL_module_gap"       value="0.000001 * mm"/>
+    <constant name="ffi_ZDC_ECAL_module_ntower"    value="20"/>
     <constant name="ffi_ZDC_ECAL_width"            value="(ffi_ZDC_ECAL_module_width + ffi_ZDC_ECAL_module_gap) * ffi_ZDC_ECAL_module_ntower + 2.0 * cm"/>
-    <constant name="ffi_ZDC_ECAL_thickness"        value="ffi_ZDC_ECAL_module_thickness + 2.0 * cm"/>
+    <constant name="ffi_ZDC_ECAL_thickness"        value="ffi_ZDC_ECAL_module_thickness + 1.0 * cm"/>
 
     <constant name="ffi_ZDC_HCAL_x_pos"            value="ffi_ZDC_ECAL_x_pos"/>
     <constant name="ffi_ZDC_HCAL_y_pos"            value="ffi_ZDC_ECAL_y_pos"/>
-    <constant name="ffi_ZDC_HCAL_z_pos"            value="ffi_ZDC_ECAL_z_pos + ffi_ZDC_ECAL_thickness + 3.0 * cm"/>
+    <constant name="ffi_ZDC_HCAL_z_pos"            value="ffi_ZDC_ECAL_z_pos + ffi_ZDC_ECAL_thickness + 1.0 * cm"/>
     <constant name="ffi_ZDC_HCAL_rotateX_angle"    value="ffi_ZDC_ECAL_rotateX_angle"/>
     <constant name="ffi_ZDC_HCAL_rotateY_angle"    value="ffi_ZDC_ECAL_rotateY_angle"/>
     <constant name="ffi_ZDC_HCAL_rotateZ_angle"    value="ffi_ZDC_ECAL_rotateZ_angle"/>
