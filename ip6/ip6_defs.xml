@@ -32,7 +32,6 @@ Gradient [T/m]                          0.0   0.0    -72.608   -66.180   40.737 
     <constant name="QPFC3_GradientMax" value="-80.0*tesla/m"/>
     <constant name="QPFC4_GradientMax" value="80.0*tesla/m"/>
     <constant name="QPFR1_GradientMax" value="80.0*tesla/m"/>
-    <constant name="QPFR1_GradientMax" value="80.0*tesla/m"/>
     <constant name="BPFR1_GradientMax" value="0"/>
     <constant name="QPFR2_GradientMax" value="80.0*tesla/m"/>
 
@@ -59,7 +58,6 @@ Gradient [T/m]                          0.0   0.0    -72.608   -66.180   40.737 
     <constant name="Q1BPF_InnerRadius" value="7.8*cm"/>
     <constant name="Q2PF_InnerRadius"  value="13.1*cm"/>
     <constant name="B1PF_InnerRadius"  value="13.5*cm"/>
-    <constant name="B1APF_InnerRadius" value="16.8*cm"/>
     <constant name="B1APF_InnerRadius" value="16.8*cm"/>
     <constant name="B2PF_InnerRadius"  value="18.8*cm"/>
     <constant name="QPFC1_InnerRadius"  value="20.0*cm"/>
