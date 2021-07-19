@@ -123,16 +123,16 @@ overlap_check_geant4:
     - if [[ "$(cat doc/overlap_check_geant4.out | grep GeomVol1002 | wc -l)" -gt "0" ]] ; then echo "Overlaps exist!" && false ; fi
 
 
-      #detectors:athena:
-      #  stage: deploy
-      #  needs: ["overlap_check"]
-      #  variables:
-      #    JUGGLER_DETECTOR: "athena"
-      #    JUGGLER_DETECTOR_VERSION: "master"
-      #    BEAMLINE_CONFIG: "$BEAMLINE_CONFIG"
-      #    BEAMLINE_CONFIG_VERSION: "$BEAMLINE_CONFIG_VERSION"
-      #  trigger:
-      #    project: EIC/detectors/athena
+detectors:athena:
+  stage: deploy
+  needs: ["overlap_check"]
+  variables:
+    JUGGLER_DETECTOR: "athena"
+    JUGGLER_DETECTOR_VERSION: "master"
+    BEAMLINE_CONFIG: "$BEAMLINE_CONFIG"
+    BEAMLINE_CONFIG_VERSION: "$BEAMLINE_CONFIG_VERSION"
+  trigger:
+    project: EIC/detectors/athena
       #
       #detectors:jug_detector:
       #  stage: deploy
