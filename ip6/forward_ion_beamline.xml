@@ -15,19 +15,21 @@
       =====================================
   </comment>
   <detectors>
-    <detector id="170" name="B0PF_BeamlineMagnet" type="B0pFMag">
+    <detector id="170" name="B0PF_BeamlineMagnet" type="CylindricalDipoleMagnet">
       <placement x="B0PF_XPosition" y="0*m" z="B0PF_CenterPosition" theta="B0PF_RotationAngle" />
-      <dimensions x="1.4*m" y="0.8*m" z="B0PF_Length" />
-      <apperture x="0.5*m" y="0.2*m" />
-      <coil dx="0.08*m" dy="0.02*m" />
+      <dimensions x="B0PF_InnerRadius*4" y="B0PF_InnerRadius*4" z="B0PF_Length" r="B0PF_InnerRadius*2.0" />
+      <apperture x="B0PF_InnerRadius" y="B0PF_InnerRadius" r="B0PF_InnerRadius" />
+      <coil dx="2*cm" dy="1.5*cm" />
     </detector>
-    <detector id="171" name="B0APF_BeamlineMagnet" vis="RedVis" type="CylindricalDipoleMagnet">
+    <comment>
+	<detector id="171" name="B0APF_BeamlineMagnet" vis="RedVis" type="CylindricalDipoleMagnet">
       <placement x="B0APF_XPosition" y="0*m" z="B0APF_CenterPosition" theta="B0APF_RotationAngle" />
       <dimensions x="B0APF_InnerRadius*4" y="B0APF_InnerRadius*4" z="B0APF_Length" r="B0APF_InnerRadius*2.0" />
       <apperture x="B0APF_InnerRadius" y="B0APF_InnerRadius" r="B0APF_InnerRadius" />
       <coil dx="2*cm" dy="1.5*cm" />
     </detector>
-    <detector id="172" name="Q1APF_BeamlineMagnet" vis="RedVis" type="CylindricalDipoleMagnet">
+    </comment>
+	<detector id="172" name="Q1APF_BeamlineMagnet" vis="RedVis" type="CylindricalDipoleMagnet">
       <placement x="Q1APF_XPosition" y="0*m" z="Q1APF_CenterPosition" theta="Q1APF_RotationAngle" />
       <dimensions x="Q1APF_InnerRadius*4" y="Q1APF_InnerRadius*4" z="Q1APF_Length" r="2.0*Q1APF_InnerRadius"/>
       <apperture x="Q1APF_InnerRadius*2" y="Q1APF_InnerRadius*2"  r="Q1APF_InnerRadius"/>

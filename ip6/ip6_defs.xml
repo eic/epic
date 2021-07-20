@@ -1,5 +1,5 @@
   <define>
-    <constant name="CrossingAngle" value="0.025"/>
+    <constant name="CrossingAngle" value="0.025*rad "/>
     <constant name="ionCrossingAngle" value="CrossingAngle"/>
     <constant name="electronCrossingAngle" value="0.0"/>
     <constant name="CrossingSlope" value="CrossingAngle"/>

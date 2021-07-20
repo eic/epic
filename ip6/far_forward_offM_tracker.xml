@@ -12,24 +12,74 @@
 
   <detectors>
     <detector 
-      id="ForwardOffMTracker_ID"
-      name="ForwardOffMTracker"
+      id="ForwardOffMTracker_station_1_ID"
+      name="ForwardOffMTracker_station_1"
       readout="ForwardOffMTrackerHits" 
       type="ip6_RectangularTracker"
       insideTrackingVolume="true"
       reflect="false"
       vis="AnlRed">
-      <position x="ForwardOffMTracker_xpos" y="0" z="ForwardOffMTracker_zpos"/>
+      <position x="980.0*mm" y="0" z="22000*mm"/>
       <layer id="1" 
         vis="AnlViolet"
-        x="60.0*cm" 
+        x="40.0*cm" 
         y="20.0*cm" >
-        <slice material="Air" thickness="1.0*cm" vis="AnlViolet" sensitive="true" />
-        <slice material="Air" thickness="1.0*cm" vis="AnlViolet" sensitive="true" />
-        <slice material="Air" thickness="1.0*cm" vis="AnlViolet" sensitive="true" />
-        <slice material="Air" thickness="1.0*cm" vis="AnlViolet" sensitive="true" />
+        <slice material="SiliconOxide" thickness="0.3*mm" vis="AnlYellow" sensitive="true" />
       </layer>
     </detector>
+
+	<detector
+      id="ForwardOffMTracker_station_2_ID"
+      name="ForwardOffMTracker_station_2"
+      readout="ForwardOffMTrackerHits"
+      type="ip6_RectangularTracker"
+      insideTrackingVolume="true"
+      reflect="false"
+      vis="AnlRed">
+      <position x="1080.0*mm" y="0" z="24000*mm"/>
+      <layer id="1"
+        vis="AnlViolet"
+        x="40.0*cm"
+        y="20.0*cm" >
+        <slice material="SiliconOxide" thickness="0.3*mm" vis="AnlYellow" sensitive="true" />
+      </layer>
+    </detector>
+
+	<detector
+      id="ForwardOffMTracker_station_3_ID"
+      name="ForwardOffMTracker_station_3"
+      readout="ForwardOffMTrackerHits"
+      type="ip6_RectangularTracker"
+      insideTrackingVolume="true"
+      reflect="false"
+      vis="AnlRed">
+      <position x="1400.0*mm" y="0" z="34000*mm"/>
+      <layer id="1"
+        vis="AnlViolet"
+        x="30.0*cm"
+        y="20.0*cm" >
+        <slice material="SiliconOxide" thickness="0.3*mm" vis="AnlYellow" sensitive="true" />
+      </layer>
+    </detector>
+
+	<detector
+      id="ForwardOffMTracker_station_4_ID"
+      name="ForwardOffMTracker_station_4"
+      readout="ForwardOffMTrackerHits"
+      type="ip6_RectangularTracker"
+      insideTrackingVolume="true"
+      reflect="false"
+      vis="AnlRed"> 
+      <position x="1450.0*mm" y="0" z="36000*mm"/>
+      <layer id="1"
+        vis="AnlViolet"
+        x="30.0*cm"
+        y="20.0*cm" >
+        <slice material="SiliconOxide" thickness="0.3*mm" vis="AnlYellow" sensitive="true" />
+      </layer>
+    </detector>
+
+
   </detectors>
 
   <readouts>

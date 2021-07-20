@@ -6,7 +6,7 @@
     <constant name="world_x" value="world_side"/>
     <constant name="world_y" value="world_side"/>
     <constant name="world_z" value="100*m"/>
-    <constant name="BeamPipe_ID" value="1"/>
+    <constant name="BeamPipeB0_ID" value="1"/>
 
     <include ref="ip6/ip6_defs.xml" />
 
@@ -16,31 +16,38 @@
       (150-169) Far Forward  Detectors
       =====================================
 
-      Forward Roman Pot     ID: 150
-      Forward B0 Tracker    ID: 151
-      Zero Degree Cal. Ecal ID: 160
-      Zero Degree Cal. Hcal ID: 161
+      Forward B0 Tracker    ID: 150 - 153
+      Forward Roman Pot     ID: 155 - 158
+
+      Zero Degree Cal. Ecal ID: 163
+      Zero Degree Cal. Hcal ID: 164
 
     </comment>
-    <constant name="B0Tracker_ID"          value="150"/>
+    <constant name="B0Tracker_Station_1_ID"          value="150"/>
+    <constant name="B0Tracker_Station_2_ID"          value="151"/>
+    <constant name="B0Tracker_Station_3_ID"          value="152"/>
+    <constant name="B0Tracker_Station_4_ID"          value="153"/>
     <constant name="ForwardRomanPot_Station_1_ID"   value="155"/>
     <constant name="ForwardRomanPot_Station_2_ID"   value="156"/>
     <constant name="ForwardRomanPotB_ID"   value="157"/>
     <constant name="ForwardRomanPotC_ID"   value="158"/>
-    <constant name="ForwardOffMTracker_ID" value="159"/>
-    <constant name="ffi_ZDC_ECAL_ID"       value="160"/>
-    <constant name="ffi_ZDC_HCAL_ID"       value="161"/>
+    <constant name="ForwardOffMTracker_station_1_ID" value="159"/>
+    <constant name="ForwardOffMTracker_station_2_ID" value="160"/>
+    <constant name="ForwardOffMTracker_station_3_ID" value="161"/>
+    <constant name="ForwardOffMTracker_station_4_ID" value="162"/>
+    <constant name="ffi_ZDC_ECAL_ID"       value="163"/>
+    <constant name="ffi_ZDC_HCAL_ID"       value="164"/>
 
     <comment> 
-      =====================================
+        =====================================
       (170-189) Forward Beamline Magnets
-      =====================================
+        =====================================
     </comment>
 
     <comment> 
-      =====================================
+        =====================================
       (190-199) Backward Beamline Magnets
-      =====================================
+        =====================================
     </comment>
 
   </define>
@@ -54,8 +61,8 @@
   <include ref="ip6/display.xml" />
   </display>
 
-  <comment><include ref="ip6/beampipe.xml" /> </comment>
-  <include ref="ip6/forward_ion_beamline.xml" />
+  <comment><include ref="ip6/beampipe.xml" /></comment>
+  <comment><include ref="ip6/forward_ion_beamline.xml" /></comment>
   <include ref="ip6/B0_tracker.xml"/>
   <include ref="ip6/far_forward_offM_tracker.xml"/>
   <include ref="ip6/far_forward_detectors.xml"/>

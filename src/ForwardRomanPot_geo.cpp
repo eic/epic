@@ -13,6 +13,7 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
   Material       vacuum   = description.vacuum();
   string         det_name = x_det.nameStr();
   xml::Component pos      = x_det.position();
+  xml::Component rot      = x_det.rotation();
   DetElement     sdet(det_name, x_det.id());
   Assembly       assembly(det_name);
 
@@ -179,8 +180,10 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
     pv.addPhysVolID("layer", l_num);
   }
 
-  pv =
-      description.pickMotherVolume(sdet).placeVolume(assembly, Position(pos.x(), pos.y(), pos.z()));
+  //pv = description.pickMotherVolume(sdet).placeVolume(assembly, Position(pos.x(), pos.y(), pos.z()));
+  Transform3D posAndRot(RotationZYX(rot.z(), rot.y(), rot.x()), Position(pos.x(), pos.y(), pos.z()));
+  //pv = description.pickMotherVolume(sdet).placeVolume(assembly, Position(pos.x(), pos.y(), pos.z()));
+  pv = description.pickMotherVolume(sdet).placeVolume(assembly, posAndRot);
   pv.addPhysVolID("system", x_det.id()); // Set the subdetector system ID.
   sdet.setPlacement(pv);
   return sdet;

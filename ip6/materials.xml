@@ -185,5 +185,11 @@
     <composite n="1" ref="W"/>
     <composite n="4" ref="O"/>
   </material>
+  <material name="StainlessSteel">
+    <D type="density" value="8.3" unit="g / cm3"/>
+    <fraction n="0.74" ref="Fe"/>
+    <fraction n="0.18" ref="Cr"/>
+    <fraction n="0.08" ref="Ni"/>
+  </material>
 
 </materials>

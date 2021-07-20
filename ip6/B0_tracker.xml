@@ -3,36 +3,146 @@
   <define>
     <comment>
       ---------------------------------
-      Far Forward B0 Tracker Parameters
+      B0 Tracker Parameters
       ---------------------------------
     </comment>
     <constant name="B0Tracker_zpos" value="B0PF_CenterPosition + B0PF_Length/2.0 - 50.0*cm"/>
+    <constant name="B0Tracker_zmin" value="B0PF_CenterPosition - B0PF_Length/2.0 + 10.0*cm "/>
   </define>
 
   <detectors>
     <detector 
-      id="B0Tracker_ID"
-      name="B0Tracker"
+      id="B0Tracker_Station_1_ID"
+      name="B0Tracker_Station_1"
       readout="B0TrackerHits" 
-      type="ip6_RectangularTracker"
+      type="ip6_SimpleDiskTracker"
       insideTrackingVolume="true"
       reflect="false"
       vis="AnlRed">
-      <position x="100*mm" y="0" z="B0Tracker_zpos"/>
-      <layer id="1" 
-        vis="AnlBlue"
-        x="15.0*cm" 
-        y="5.0*cm" >
-        <slice material="Air" thickness="1.0*cm" vis="AnlBlue" sensitive="true" />
+      <position x="150*mm" y="0" z="B0Tracker_zmin"/>
+      <rotation x="0*rad" y="ionCrossingAngle" z="0*rad"/>
+      <layer id="1" vis="AnlBlue"
+        inner_z="1.0*cm"
+        inner_r="3.5*cm" 
+        outer_r="15.0*cm"
+        phi1="-0.8*Pi*rad"
+        phi2="0.8*Pi*rad">
+        <slice material="SiliconOxide" thickness="1.0*cm" vis="AnlBlue" sensitive="true" />
       </layer>
-      <layer id="2" 
+		
+      <layer id="2"
         vis="AnlBlue"
-        x="15.0*cm" 
-        y="5.0*cm" >
-        <slice material="Air" thickness="1.0*cm" vis="AnlBlue" sensitive="true" />
+        inner_z="1.0*cm"
+        inner_r="3.5*cm"
+        outer_r="8.0*cm"
+        phi1="0.8*Pi*rad"
+        phi2="-0.8*Pi*rad">
+        <slice material="SiliconOxide" thickness="1.0*cm" vis="AnlBlue" sensitive="true" />
+      </layer>      
+    </detector>
+
+  <detector
+      id="B0Tracker_Station_2_ID"
+      name="B0Tracker_Station_2"
+      readout="B0TrackerHits"
+      type="ip6_SimpleDiskTracker"
+      insideTrackingVolume="true"
+      reflect="false"
+      vis="AnlRed">
+      <position x="150*mm" y="0" z="5700*mm"/>
+	  <rotation x="0*rad" y="ionCrossingAngle" z="0*rad"/>
+      <layer id="1"
+        vis="AnlBlue"
+        inner_z="1.0*cm"
+        inner_r="3.5*cm"
+        outer_r="15.0*cm"
+		phi1="-0.8*Pi*rad"
+        phi2="0.8*Pi*rad">
+        <slice material="SiliconOxide" thickness="1.0*cm" vis="AnlBlue" sensitive="true" />
+      </layer>
+
+	  <layer id="2"
+        vis="AnlBlue"
+        inner_z="1.0*cm"
+        inner_r="3.5*cm"
+        outer_r="8.0*cm"
+        phi1="0.8*Pi*rad"
+        phi2="-0.8*Pi*rad">
+        <slice material="SiliconOxide" thickness="1.0*cm" vis="AnlBlue" sensitive="true" />
       </layer>
 
     </detector>
+
+	<detector
+      id="B0Tracker_Station_3_ID"
+      name="B0Tracker_Station_3"
+      readout="B0TrackerHits"
+      type="ip6_SimpleDiskTracker"
+      insideTrackingVolume="true"
+      reflect="false"
+      vis="AnlRed">
+      <position x="150*mm" y="0" z="6000*mm"/>
+	  <rotation x="0*rad" y="ionCrossingAngle" z="0*rad"/>
+      <layer id="1"
+        vis="AnlBlue"
+        inner_z="1.0*cm"
+        inner_r="3.5*cm"
+        outer_r="15.0*cm"
+		phi1="-0.8*Pi*rad"
+        phi2="0.8*Pi*rad">
+        <slice material="SiliconOxide" thickness="1.0*cm" vis="AnlBlue" sensitive="true" />
+      </layer>
+
+	  <layer id="2"
+        vis="AnlBlue"
+        inner_z="1.0*cm"
+        inner_r="3.5*cm"
+        outer_r="8.0*cm"
+        phi1="0.8*Pi*rad"
+        phi2="-0.8*Pi*rad">
+        <slice material="SiliconOxide" thickness="1.0*cm" vis="AnlBlue" sensitive="true" />
+      </layer>
+
+
+    </detector>
+
+
+	<detector
+      id="B0Tracker_Station_4_ID"
+      name="B0Tracker_Station_4"
+      readout="B0TrackerHits"
+      type="ip6_SimpleDiskTracker"
+      insideTrackingVolume="true"
+      reflect="false"
+      vis="AnlRed">
+      <position x="150*mm" y="0" z="6200*mm"/>
+      <rotation x="0*rad" y="ionCrossingAngle" z="0*rad"/>
+      <layer id="1"
+        vis="AnlBlue"
+        inner_z="1.0*cm"
+        inner_r="3.5*cm"
+        outer_r="15.0*cm"
+		phi1="-0.8*Pi*rad"
+        phi2="0.8*Pi*rad">
+        <slice material="SiliconOxide" thickness="1.0*cm" vis="AnlBlue" sensitive="true" />
+      </layer>
+
+	  <layer id="2"
+        vis="AnlBlue"
+        inner_z="1.0*cm"
+        inner_r="3.5*cm"
+        outer_r="8.0*cm"
+        phi1="0.8*Pi*rad"
+        phi2="-0.8*Pi*rad">
+        <slice material="SiliconOxide" thickness="1.0*cm" vis="AnlBlue" sensitive="true" />
+      </layer>
+
+
+    </detector>
+
+
+
+
   </detectors>
 
   <readouts>

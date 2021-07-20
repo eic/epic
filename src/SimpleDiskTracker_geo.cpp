@@ -33,6 +33,7 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
   PlacedVolume   pv;
   int            l_num = 0;
   xml::Component pos   = x_det.position();
+  xml::Component rot   = x_det.rotation();
 
   Acts::ActsExtension* detWorldExt = new Acts::ActsExtension();
   detWorldExt->addType("endcap", "detector");
@@ -44,6 +45,8 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
     double     zmin       = x_layer.inner_z();
     double     rmin       = x_layer.inner_r();
     double     rmax       = x_layer.outer_r();
+	double	   phiStart   = x_layer.phi1();
+	double     phiEnd     = x_layer.phi2();
     double     z          = zmin;
     double     layerWidth = 0.;
     int        s_num      = 0;
@@ -52,8 +55,9 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
       double thickness = xml_comp_t(j).thickness();
       layerWidth += thickness;
     }
-    Tube   l_tub(rmin, rmax, layerWidth/2.0, 2 * M_PI);
-    Volume l_vol(l_nam, l_tub, air);
+    //Tube   l_tub(rmin, rmax, layerWidth/2.0, 2 * M_PI);
+    Tube l_tub(rmin, rmax, layerWidth/2.0, phiStart, phiEnd);
+	Volume l_vol(l_nam, l_tub, air);
     l_vol.setVisAttributes(description, x_layer.visStr());
     DetElement layer;
     PlacedVolume layer_pv;
@@ -95,7 +99,7 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
       double     thick   = x_slice.thickness();
       Material   mat     = description.material(x_slice.materialStr());
       string     s_nam   = l_nam + _toString(s_num, "_slice%d");
-      Volume     s_vol(s_nam, Tube(rmin, rmax, thick/2.0), mat);
+      Volume     s_vol(s_nam, Tube(rmin, rmax, thick/2.0, phiStart, phiEnd), mat);
       if(!reflect){
         s_nam += "_pos";
       } else {
@@ -120,12 +124,12 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
   if (x_det.hasAttr(_U(combineHits))) {
     sdet.setCombineHits(x_det.attr<bool>(_U(combineHits)), sens);
   }
-  pv = description.pickMotherVolume(sdet).placeVolume(assembly, Position(pos.x(), pos.y(), pos.z()));
+  Transform3D posAndRot(RotationZYX(rot.z(), rot.y(), rot.x()), Position(pos.x(), pos.y(), pos.z()));
+  //pv = description.pickMotherVolume(sdet).placeVolume(assembly, Position(pos.x(), pos.y(), pos.z()));
+  pv = description.pickMotherVolume(sdet).placeVolume(assembly, posAndRot);
   pv.addPhysVolID("system", x_det.id()); // Set the subdetector system ID.
   sdet.setPlacement(pv);
   return sdet;
 }
 
 DECLARE_DETELEMENT(ip6_SimpleDiskTracker, create_detector)
-DECLARE_DETELEMENT(ref_DiskTracker, create_detector)
-DECLARE_DETELEMENT(ref_SolenoidEndcap, create_detector)

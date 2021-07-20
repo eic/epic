@@ -133,6 +133,7 @@ detectors:athena:
     BEAMLINE_CONFIG_VERSION: "$BEAMLINE_CONFIG_VERSION"
   trigger:
     project: EIC/detectors/athena
+    strategy: depend
       #
       #detectors:jug_detector:
       #  stage: deploy
