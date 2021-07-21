@@ -160,10 +160,7 @@ static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector sens)  {
                                                                  downstream_conic_length / 2.0));
   Volume v_downstream_taper_section("v_downstream_taper_section", downstream_taper_section, m_Be);
   sdet.setAttributes(det, v_downstream_taper_section, x_det.regionStr(), x_det.limitsStr(), vis_name);
-  auto   pv_downstream_taper_section = assembly.placeVolume(
-      v_downstream_taper_section, Position(0, 0,
-                                           downstream_straight_length + downstream_conic_length +
-                                               downstream_taper_length / 2.0));
+  auto   pv_downstream_taper_section = assembly.placeVolume(v_downstream_taper_section, Position(0, 0, downstream_straight_length + downstream_conic_length + downstream_taper_length / 2.0));
 
   //Volume v_downstream_conic_section("v_downstream_conic_section", downstream_conic_section, m_Al);
   //Volume v_downstream_hadron_tube("v_downstream_hadron_tube", downstream_hadron_tube, m_Al);

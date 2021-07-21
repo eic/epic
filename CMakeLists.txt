@@ -12,7 +12,7 @@ dd4hep_add_plugin(${a_lib_name} SOURCES src/*.cpp
         USES ActsCore ActsPluginDD4hep
   )
 target_link_libraries(${a_lib_name}
-  PUBLIC DD4hep::DDCore  DD4hep::DDRec
+  PUBLIC DD4hep::DDCore  DD4hep::DDRec DD4hep::DDG4
   )
 
 #-----------------------------------------------------------------------------------

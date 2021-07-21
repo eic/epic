@@ -19,7 +19,7 @@
       insideTrackingVolume="true"
       reflect="false"
       vis="AnlRed">
-      <position x="980.0*mm" y="0" z="22000*mm"/>
+      <position x="1060.0*mm" y="0" z="22000*mm"/>
       <layer id="1" 
         vis="AnlViolet"
         x="40.0*cm" 
@@ -36,7 +36,7 @@
       insideTrackingVolume="true"
       reflect="false"
       vis="AnlRed">
-      <position x="1080.0*mm" y="0" z="24000*mm"/>
+      <position x="1200.0*mm" y="0" z="24000*mm"/>
       <layer id="1"
         vis="AnlViolet"
         x="40.0*cm"
@@ -53,7 +53,7 @@
       insideTrackingVolume="true"
       reflect="false"
       vis="AnlRed">
-      <position x="1400.0*mm" y="0" z="34000*mm"/>
+      <position x="1500.0*mm" y="0" z="34000*mm"/>
       <layer id="1"
         vis="AnlViolet"
         x="30.0*cm"
@@ -70,7 +70,7 @@
       insideTrackingVolume="true"
       reflect="false"
       vis="AnlRed"> 
-      <position x="1450.0*mm" y="0" z="36000*mm"/>
+      <position x="1550.0*mm" y="0" z="36000*mm"/>
       <layer id="1"
         vis="AnlViolet"
         x="30.0*cm"
