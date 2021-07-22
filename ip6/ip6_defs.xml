@@ -26,6 +26,9 @@
 
 -->
 
+<comment> All magnet values are input by hand and represent the implementation in EICRoot used for the Yellow Report.</comment>
+<comment> The magnet coordinate system is the one where the view is from "the floor". It will be flipped in a future MR. </comment>
+
     <constant name="B0PF_GradientMax"  value="0.0*tesla/m"/>
     <constant name="B0APF_GradientMax" value="0.0*tesla/m"/>
     <constant name="Q1APF_GradientMax" value="-72.608*tesla/m"/>
@@ -62,8 +65,7 @@
     <constant name="B1APF_RotationAngle" value="25.0*0.001*rad"/>
     <constant name="B2PF_RotationAngle" value="25.0*0.001*rad"/>
 
-
-    <constant name="B0PF_CenterPosition"  value="5.89913*m"/>
+	<constant name="B0PF_CenterPosition"  value="5.89913*m"/>
     <constant name="B0APF_CenterPosition" value="7.69866*m"/>
     <constant name="Q1APF_CenterPosition" value="9.22834*m"/>
     <constant name="Q1BPF_CenterPosition" value="11.0629*m"/>
@@ -81,8 +83,7 @@
     <constant name="B1APF_XPosition" value="0.600444*m"/>
     <constant name="B2PF_XPosition"  value="1.522232*m"/>
 
-
-    <constant name="B0PF_Length"  value="1.2*m"/>
+	<constant name="B0PF_Length"  value="1.2*m"/>
     <constant name="B0APF_Length" value="0.6*m"/>
     <constant name="Q1APF_Length" value="1.46*m"/>
     <constant name="Q1BPF_Length" value="1.61*m"/>
