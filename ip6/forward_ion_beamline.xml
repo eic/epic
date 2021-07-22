@@ -63,56 +63,6 @@
       <apperture x="B2PF_InnerRadius*2" y="B2PF_InnerRadius*2"  r="B2PF_InnerRadius"/>
       <coil dx="1*cm" dy="0.5*cm" />
     </detector>
-    <!--
-    <detector id="178" name="QPFC1_BeamlineMagnet" vis="RedVis" type="CylindricalDipoleMagnet">
-      <placement x="QPFC1_XPosition" y="0*m" z="QPFC1_CenterPosition" theta="QPFC1_RotationAngle" />
-      <dimensions x="QPFC1_InnerRadius*4" y="QPFC1_InnerRadius*4" z="QPFC1_Length"  r="2.0*QPFC1_InnerRadius"/>
-      <apperture x="QPFC1_InnerRadius*2" y="QPFC1_InnerRadius*2"  r="QPFC1_InnerRadius"/>
-      <coil dx="1*cm" dy="0.5*cm" />
-    </detector>
-    <detector id="179" name="QPFC2_BeamlineMagnet" vis="RedVis" type="CylindricalDipoleMagnet">
-      <placement x="QPFC2_XPosition" y="0*m" z="QPFC2_CenterPosition" theta="QPFC2_RotationAngle" />
-      <dimensions x="QPFC2_InnerRadius*4" y="QPFC2_InnerRadius*4" z="QPFC2_Length"  r="2.0*QPFC2_InnerRadius"/>
-      <apperture x="QPFC2_InnerRadius*2" y="QPFC2_InnerRadius*2"  r="QPFC2_InnerRadius"/>
-      <coil dx="1*cm" dy="0.5*cm" />
-    </detector>
-  <detector id="180" name="crab_example" vis="RedVis" type="CrabCavity">
-    <placement x="CCPF_XPosition" y="0*m" z="CCPF_CenterPosition" theta="0.0" />
-    <dimensions r="1.2*m" z="2*m" />
-    <apperture r="0.2*m" />
-    <cavity r1="1*m" r2="0.5*m" z1="1.2*m" z2="0.4*m" />
-  </detector>
-  <detector id="181" name="QPFC3_BeamlineMagnet" vis="RedVis" type="CylindricalDipoleMagnet">
-    <placement x="QPFC3_XPosition" y="0*m" z="QPFC3_CenterPosition" theta="QPFC3_RotationAngle" />
-    <dimensions x="QPFC3_InnerRadius*4" y="QPFC3_InnerRadius*4" z="QPFC3_Length"  r="2.0*QPFC3_InnerRadius"/>
-    <apperture x="QPFC3_InnerRadius*2" y="QPFC3_InnerRadius*2"  r="QPFC3_InnerRadius"/>
-    <coil dx="1*cm" dy="0.5*cm" />
-  </detector>
-  <detector id="182" name="QPFC4_BeamlineMagnet" vis="RedVis" type="CylindricalDipoleMagnet">
-    <placement x="QPFC4_XPosition" y="0*m" z="QPFC4_CenterPosition" theta="QPFC4_RotationAngle" />
-    <dimensions x="QPFC4_InnerRadius*4" y="QPFC4_InnerRadius*4" z="QPFC4_Length"  r="2.0*QPFC4_InnerRadius"/>
-    <apperture x="QPFC4_InnerRadius*2" y="QPFC4_InnerRadius*2"  r="QPFC4_InnerRadius"/>
-    <coil dx="1*cm" dy="0.5*cm" />
-  </detector>
-  <detector id="183" name="QPFR1_BeamlineMagnet" vis="RedVis" type="CylindricalDipoleMagnet">
-    <placement x="QPFR1_XPosition" y="0*m" z="QPFR1_CenterPosition" theta="QPFR1_RotationAngle" />
-    <dimensions x="QPFR1_InnerRadius*4" y="QPFR1_InnerRadius*4" z="QPFR1_Length"  r="2.0*QPFR1_InnerRadius"/>
-    <apperture x="QPFR1_InnerRadius*2" y="QPFR1_InnerRadius*2"  r="QPFR1_InnerRadius"/>
-    <coil dx="1*cm" dy="0.5*cm" />
-  </detector>
-  <detector id="184" name="BPFR1_BeamlineMagnet" vis="RedVis" type="CylindricalDipoleMagnet">
-    <placement x="BPFR1_XPosition" y="0*m" z="BPFR1_CenterPosition" theta="BPFR1_RotationAngle" />
-    <dimensions x="BPFR1_InnerRadius*4" y="BPFR1_InnerRadius*4" z="BPFR1_Length" r="2.0*BPFR1_InnerRadius" />
-    <apperture x="BPFR1_InnerRadius*2" y="BPFR1_InnerRadius*2"  r="BPFR1_InnerRadius"/>
-    <coil dx="1*cm" dy="0.5*cm" />
-  </detector>
-  <detector id="185" name="QPFR2_BeamlineMagnet" vis="RedVis" type="CylindricalDipoleMagnet">
-    <placement x="QPFR2_XPosition" y="0*m" z="QPFR2_CenterPosition" theta="QPFR2_RotationAngle" />
-    <dimensions x="QPFR2_InnerRadius*4" y="QPFR2_InnerRadius*4" z="QPFR2_Length"  r="2.0*QPFR2_InnerRadius"/>
-    <apperture x="QPFR2_InnerRadius*2" y="QPFR2_InnerRadius*2"  r="QPFR2_InnerRadius"/>
-    <coil dx="1*cm" dy="0.5*cm" />
-  </detector>
-  -->
 </detectors>
 
 

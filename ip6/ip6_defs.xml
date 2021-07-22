@@ -10,15 +10,22 @@
 
     
 <!--                                    Hadron Magnets
-                                        B0PF  B0APF    Q1APF     Q1BPF     Q2PF     B1PF     B1APF 
-Center position [m]                     5.9   7.7      9.23     11.065    14.170   18.070   20.820
-Length [m]                              1.2   0.6      1.46      1.6        3.8      3.0      1.5              
-Center position w.r.t. to x-axis [cm]   -1.50 5.5      1.40      2.38       4.07     3.90     8.00
-Angle w.r.t. to z-axis [mrad]           -25.0 0.0      -5.5    -10.0    -10.2    9.0      0.0
-Inner radius [cm]                       20.0   4.3     5.6       7.8      13.1     13.5    16.8
-Peak field [T]                          -1.3  -3.3     0.0       0.0        0.0      -3.4    -2.7
-Gradient [T/m]                          0.0   0.0    -72.608   -66.180   40.737     0.0     0.0 
+
+##   name    center_x center_y center_z rin(z-in) rin(z-out)  dout   length   angle      B      gradient
+##             [m]      [m]      [m]      [m]        [m]      [m]      [m]   [mrad]     [T]      [T/m]
+##
+
+     B0PF    0.132497   0.0    5.89913   0.2000    0.2000    0.5000   1.200   0.00    -1.300      0.000
+    B0APF    0.197995   0.0    7.69866   0.0430    0.0430    0.1860   0.600   25.0   -3.474      0.000
+    Q1APF    0.244734   0.0    9.22834   0.0560    0.0560    0.2120   1.460   19.5    0.000    -72.608
+    Q1BPF    0.300512   0.0    11.0629   0.0780    0.0780    0.2560   1.610   15.0    0.000    -66.180
+     Q2PF     0.39495   0.0    14.1673   0.1315    0.1315    0.3620   3.800   14.8    0.000     40.737
+     B1PF    0.490747   0.0    18.0667   0.1350    0.1350    0.3700   3.000   34.0   -3.400      0.000
+    B1APF    0.600444   0.0    20.8159   0.1680    0.1680    0.4360   1.500   25.0   -2.700      0.000
+    B2PF    1.522232   0.0    41.9092   0.2       0.2       0.5      5.76    25.0    5.94       0.000
+
 -->
+
     <constant name="B0PF_GradientMax"  value="0.0*tesla/m"/>
     <constant name="B0APF_GradientMax" value="0.0*tesla/m"/>
     <constant name="Q1APF_GradientMax" value="-72.608*tesla/m"/>
@@ -27,133 +34,62 @@ Gradient [T/m]                          0.0   0.0    -72.608   -66.180   40.737 
     <constant name="B1PF_GradientMax"  value="0.0*tesla/m"/>
     <constant name="B1APF_GradientMax" value="0.0*tesla/m"/>
     <constant name="B2PF_GradientMax"  value="0.0*tesla/m"/>
-    <constant name="QPFC1_GradientMax" value="-80.0*tesla/m"/>
-    <constant name="QPFC2_GradientMax" value="80.0*tesla/m"/>
-    <constant name="QPFC3_GradientMax" value="-80.0*tesla/m"/>
-    <constant name="QPFC4_GradientMax" value="80.0*tesla/m"/>
-    <constant name="QPFR1_GradientMax" value="80.0*tesla/m"/>
-    <constant name="BPFR1_GradientMax" value="0"/>
-    <constant name="QPFR2_GradientMax" value="80.0*tesla/m"/>
 
     <constant name="B0PF_Bmax"  value="-1.3*tesla"/>
-    <constant name="B0APF_Bmax" value="-3.3*tesla"/>
+    <constant name="B0APF_Bmax" value="-3.474*tesla"/>
     <constant name="Q1APF_Bmax" value="0.0*tesla"/>
     <constant name="Q1BPF_Bmax" value="0.0*tesla"/>
     <constant name="Q2PF_Bmax"  value="0.0*tesla"/>
     <constant name="B1PF_Bmax"  value="-3.4*tesla"/>
     <constant name="B1APF_Bmax" value="-2.7*tesla"/>
-    <constant name="B2PF_Bmax" value="3.2*tesla"/>
-    <constant name="QPFC1_Bmax" value="0.0*tesla"/>
-    <constant name="QPFC2_Bmax" value="0.0*tesla"/>
-    <!--<constant name="CCPF_Bmax" value="0.0*tesla"/>-->
-    <constant name="QPFC3_Bmax" value="0.0*tesla"/>
-    <constant name="QPFC4_Bmax" value="0.0*tesla"/>
-    <constant name="QPFR1_Bmax" value="0.0*tesla"/>
-    <constant name="BPFR1_Bmax" value="3.4*tesla"/>
-    <constant name="QPFR2_Bmax" value="0.0*tesla"/>
+    <constant name="B2PF_Bmax" value="5.94*tesla"/>
 
     <constant name="B0PF_InnerRadius"  value="20.0*cm"/>
     <constant name="B0APF_InnerRadius" value="4.3*cm"/>
     <constant name="Q1APF_InnerRadius" value="5.6*cm"/>
     <constant name="Q1BPF_InnerRadius" value="7.8*cm"/>
-    <constant name="Q2PF_InnerRadius"  value="13.1*cm"/>
+    <constant name="Q2PF_InnerRadius"  value="13.15*cm"/>
     <constant name="B1PF_InnerRadius"  value="13.5*cm"/>
     <constant name="B1APF_InnerRadius" value="16.8*cm"/>
-    <constant name="B2PF_InnerRadius"  value="18.8*cm"/>
-    <constant name="QPFC1_InnerRadius"  value="20.0*cm"/>
-    <constant name="QPFC2_InnerRadius"  value="20.0*cm"/>
-    <constant name="QPFC3_InnerRadius"  value="20.0*cm"/>
-    <constant name="QPFC4_InnerRadius"  value="20.0*cm"/>
-    <constant name="QPFR1_InnerRadius"  value="20.0*cm"/>
-    <constant name="BPFR1_InnerRadius"  value="20.0*cm"/>
-    <constant name="QPFR2_InnerRadius"  value="20.0*cm"/>
+    <constant name="B2PF_InnerRadius"  value="20.0*cm"/>
+    
+	<constant name="B0PF_RotationAngle"  value="0.0*0.001*rad"/>
+    <constant name="B0APF_RotationAngle" value="25.0*0.001*rad"/>
+    <constant name="Q1APF_RotationAngle" value="19.5*0.001*rad"/>
+    <constant name="Q1BPF_RotationAngle" value="15.0*0.001*rad"/>
+    <constant name="Q2PF_RotationAngle"  value="14.8*0.001*rad"/>
+    <constant name="B1PF_RotationAngle"  value="34.0*0.001*rad"/>
+    <constant name="B1APF_RotationAngle" value="25.0*0.001*rad"/>
+    <constant name="B2PF_RotationAngle" value="25.0*0.001*rad"/>
 
-    <constant name="B0PF_RotationAngle"  value="-25.0*0.001*rad + ionCrossingAngle"/>
-    <constant name="B0APF_RotationAngle" value="0.0*0.001*rad + ionCrossingAngle"/>
-    <constant name="Q1APF_RotationAngle" value="-5.5*0.001*rad + ionCrossingAngle"/>
-    <constant name="Q1BPF_RotationAngle" value="-10.0*0.001*rad + ionCrossingAngle"/>
-    <constant name="Q2PF_RotationAngle"  value="-10.2*0.001*rad + ionCrossingAngle"/>
-    <constant name="B1PF_RotationAngle"  value="9.0*0.001*rad + ionCrossingAngle"/>
-    <constant name="B1APF_RotationAngle" value="0.0*0.001*rad + ionCrossingAngle"/>
-    <constant name="B2PF_RotationAngle" value="10.0*0.001*rad + ionCrossingAngle"/>
-    <constant name="QPFC1_RotationAngle" value="10.0*0.001*rad + ionCrossingAngle"/>
-    <constant name="QPFC2_RotationAngle" value="10.0*0.001*rad + ionCrossingAngle"/>
-    <constant name="QPFC3_RotationAngle" value="10.0*0.001*rad + ionCrossingAngle"/>
-    <constant name="QPFC4_RotationAngle" value="10.0*0.001*rad + ionCrossingAngle"/>
-    <constant name="QPFR1_RotationAngle" value="10.0*0.001*rad + ionCrossingAngle"/>
-    <constant name="BPFR1_RotationAngle" value="10.0*0.001*rad + ionCrossingAngle"/>
-    <constant name="QPFR2_RotationAngle" value="10.0*0.001*rad + ionCrossingAngle"/>
 
-    <constant name="B0PF_CenterPosition"  value="5.9*m"/>
-    <constant name="B0APF_CenterPosition" value="7.7*m"/>
-    <constant name="Q1APF_CenterPosition" value="9.23*m"/>
-    <constant name="Q1BPF_CenterPosition" value="11.065*m"/>
-    <constant name="Q2PF_CenterPosition"  value="14.170*m"/>
-    <constant name="B1PF_CenterPosition"  value="18.070*m"/>
-    <constant name="B1APF_CenterPosition" value="20.820*m"/>
-    <constant name="B2PF_CenterPosition" value="41.6*m"/>
-    <constant name="QPFC1_CenterPosition" value="46.35*m"/>
-    <constant name="QPFC2_CenterPosition" value="48.54*m"/>
-    <constant name="CCPF_CenterPosition" value="58.85*m"/>
-    <constant name="QPFC3_CenterPosition" value="69.2*m"/>
-    <constant name="QPFC4_CenterPosition" value="71.25*m"/>
-    <constant name="QPFR1_CenterPosition" value="83.95*m"/>
-    <constant name="BPFR1_CenterPosition" value="88.5*m"/>
-    <constant name="QPFR2_CenterPosition" value="93.5*m"/>
-    <constant name="RPF1_CenterPosition"  value="99.8*m"/>
-    <constant name="QPFR3_CenterPosition" value="106.4*m"/>
-    <constant name="RPF2_CenterPosition"  value="112.9*m"/>
-    <constant name="QPFR4_CenterPosition" value="119.3*m"/>
-    <constant name="BPFR2_CenterPosition" value="124.58*m"/>
-    <constant name="BPFR3_CenterPosition" value="133.9*m"/>
-<!--
-69.1666666667 0.452554744526 
-71.25 0.306569343066 
-83.9583333333 0.481751824818 
-88.5416666667 0.423357664234 
-93.5416666667 0.306569343066 
-99.7916666667 0.0583941605839 
-106.458333333 -0.175182481752 
-112.916666667 -0.423357664234 
-119.375 -0.656934306569 
-124.583333333 -0.875912408759 
-133.958333333 -1.34306569343 
--->
+    <constant name="B0PF_CenterPosition"  value="5.89913*m"/>
+    <constant name="B0APF_CenterPosition" value="7.69866*m"/>
+    <constant name="Q1APF_CenterPosition" value="9.22834*m"/>
+    <constant name="Q1BPF_CenterPosition" value="11.0629*m"/>
+    <constant name="Q2PF_CenterPosition"  value="14.1673*m"/>
+    <constant name="B1PF_CenterPosition"  value="18.0667*m"/>
+    <constant name="B1APF_CenterPosition" value="20.8159*m"/>
+    <constant name="B2PF_CenterPosition" value="41.9092*m"/>
 
-    <constant name="B0PF_XPosition"  value="-1.50*cm + CrossingSlope * B0PF_CenterPosition"/>
-    <constant name="B0APF_XPosition" value="0.0*cm   + CrossingSlope * B0APF_CenterPosition"/>
-    <constant name="Q1APF_XPosition" value="1.40*cm  + CrossingSlope * Q1APF_CenterPosition"/>
-    <constant name="Q1BPF_XPosition" value="2.38*cm  + CrossingSlope * Q1BPF_CenterPosition"/>
-    <constant name="Q2PF_XPosition"  value="4.07*cm  + CrossingSlope * Q2PF_CenterPosition"/>
-    <constant name="B1PF_XPosition"  value="3.90*cm  + CrossingSlope * B1PF_CenterPosition"/>
-    <constant name="B1APF_XPosition" value="8.00*cm  + CrossingSlope * B1APF_CenterPosition"/>
-    <constant name="B2PF_XPosition"  value="40.00*cm  + CrossingSlope * B2PF_CenterPosition"/>
-    <constant name="QPFC1_XPosition" value="45.00*cm  + CrossingSlope * QPFC1_CenterPosition"/>
-    <constant name="QPFC2_XPosition" value="45.00*cm  + CrossingSlope * QPFC2_CenterPosition"/>
-    <constant name="CCPF_XPosition"  value="45.00*cm  + CrossingSlope * CCPF_CenterPosition"/>
-    <constant name="QPFC3_XPosition" value="45.00*cm  + CrossingSlope * QPFC3_CenterPosition"/>
-    <constant name="QPFC4_XPosition" value="45.00*cm  + CrossingSlope * QPFC4_CenterPosition"/>
-    <constant name="QPFR1_XPosition" value="45.00*cm  + CrossingSlope * QPFR1_CenterPosition"/>
-    <constant name="BPFR1_XPosition" value="45.00*cm  + CrossingSlope * BPFR1_CenterPosition"/>
-    <constant name="QPFR2_XPosition" value="45.00*cm  + CrossingSlope * QPFR2_CenterPosition"/>
+    <constant name="B0PF_XPosition"  value="0.132497*m"/>
+    <constant name="B0APF_XPosition" value="0.197995*m"/>
+    <constant name="Q1APF_XPosition" value="0.244734*m"/>
+    <constant name="Q1BPF_XPosition" value="0.300512*m"/>
+    <constant name="Q2PF_XPosition"  value="0.39495*m"/>
+    <constant name="B1PF_XPosition"  value="0.490747*m"/>
+    <constant name="B1APF_XPosition" value="0.600444*m"/>
+    <constant name="B2PF_XPosition"  value="1.522232*m"/>
 
 
     <constant name="B0PF_Length"  value="1.2*m"/>
     <constant name="B0APF_Length" value="0.6*m"/>
     <constant name="Q1APF_Length" value="1.46*m"/>
-    <constant name="Q1BPF_Length" value="1.6*m"/>
+    <constant name="Q1BPF_Length" value="1.61*m"/>
     <constant name="Q2PF_Length"  value="3.8*m"/>
     <constant name="B1PF_Length"  value="3.0*m"/>
     <constant name="B1APF_Length" value="1.5*m"/>
-    <constant name="B2PF_Length"  value="5*m"/>
-    <constant name="QPFC1_Length"  value="1.25*m"/>
-    <constant name="QPFC2_Length"  value="1.25*m"/>
-    <constant name="CCPF_Length"  value="8.85*m"/>
-    <constant name="QPFC3_Length"  value="1.25*m"/>
-    <constant name="QPFC4_Length"  value="1.25*m"/>
-    <constant name="QPFR1_Length"  value="1.25*m"/>
-    <constant name="BPFR1_Length"  value="5*m"/>
-    <constant name="QPFR2_Length"  value="1.25*m"/>
+    <constant name="B2PF_Length"  value="5.76*m"/>
 
   </define>
 
