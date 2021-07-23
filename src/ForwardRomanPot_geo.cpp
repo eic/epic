@@ -91,7 +91,7 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
       xml_comp_t x_array = ai;
       double nx      = getAttrOrDefault(x_array, _Unicode(nx), 1);
       double ny      = getAttrOrDefault(x_array, _Unicode(ny), 1);
-      double dz      = getAttrOrDefault(x_array, _Unicode(dz), 2*mm);
+      double dz      = getAttrOrDefault(x_array, _Unicode(dz), 0*mm);
       double arr_width       = getAttrOrDefault(x_array, _Unicode(width ), 3.2*cm);
       double arr_height      = getAttrOrDefault(x_array, _Unicode(height), 3.2*cm);
       std::string arr_module      = getAttrOrDefault(x_array, _Unicode(module), "");
@@ -106,7 +106,7 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
 
       for (int ix = 0; ix < nx; ix++) {
         for (int iy = 0; iy < ny; iy++) {
-          double z_pos = (ix%2)? dz : -dz;
+          double z_pos = dz; //(ix%2)? dz : -dz;
           i_mod++;
           Position arr_pos(-arr_width / 2.0 + arr_x_delta / 2.0 + ix * arr_x_delta,
                            -arr_height / 2.0 + arr_y_delta / 2.0 + iy * arr_y_delta, z_pos);
