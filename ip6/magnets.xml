@@ -1,26 +1,10 @@
-<geant4_setup>
-  <properties>
-    <attributes name="geant4_field"
-		id="0"
-		type="Geant4FieldSetup"
-		object="B0PF_Magnet"
-		global="true"
-		min_chord_step="0.001*mm"
-		delta_chord="0.025*mm"
-		delta_intersection="1e-06*mm"
-		delta_one_step="0.00001*mm"
-		eps_min="1.0e-6"
-		eps_max="1.0e-5"
-		stepper="HelixSimpleRunge"
-		equation="Mag_UsualEqRhs">
-    </attributes>
-  </properties>
-</geant4_setup>
-
-
 <lccdd>
+
   <define>
   </define>
+
+  <detectors>
+  </detectors>
 
   <fields>
     <field name="B0PF_Magnet" type="MultipoleMagnet">
@@ -79,6 +63,7 @@
       <coefficient coefficient="B2PF_Bmax" skew="0.0*tesla"/>
       <coefficient coefficient="B2PF_GradientMax" skew="0.0*tesla/cm"/>
     </field>
+    <!--
     <field name="QPFC1_Magnet" type="MultipoleMagnet">
       <position x="QPFC1_XPosition" y="0" z="QPFC1_CenterPosition"/>
       <rotation x="0" y="QPFC1_RotationAngle" z="pi/2.0"/>
@@ -121,5 +106,8 @@
       <coefficient coefficient="BPFR1_Bmax" skew="0.0*tesla"/>
       <coefficient coefficient="BPFR1_GradientMax" skew="0.0*tesla/cm"/>
     </field>
+    -->
   </fields>
+
+
 <lccdd>
