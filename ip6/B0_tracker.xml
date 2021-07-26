@@ -8,6 +8,17 @@
     </comment>
     <constant name="B0Tracker_zpos" value="B0PF_CenterPosition + B0PF_Length/2.0 - 50.0*cm"/>
     <constant name="B0Tracker_zmin" value="B0PF_CenterPosition - B0PF_Length/2.0 + 10.0*cm "/>
+  	<constant name="B0Tracker_rotation" value="0.025*rad"/>
+
+	<constant name="B0Tracker_Station_1_xpos" value="0.1375013*m" />
+	<constant name="B0Tracker_Station_1_zpos" value="5.4*m" />
+	<constant name="B0Tracker_Station_2_xpos" value="0.14250078*m" />
+    <constant name="B0Tracker_Station_2_zpos" value="5.6*m" />
+	<constant name="B0Tracker_Station_3_xpos" value="0.14750026*m" />
+    <constant name="B0Tracker_Station_3_zpos" value="5.8*m" />
+	<constant name="B0Tracker_Station_4_xpos" value="0.15249974*m" />
+    <constant name="B0Tracker_Station_4_zpos" value="6.0*m" />
+
   </define>
 
   <detectors>
@@ -19,25 +30,25 @@
       insideTrackingVolume="true"
       reflect="false"
       vis="AnlRed">
-      <position x="150*mm" y="0" z="B0Tracker_zmin"/>
-      <rotation x="0*rad" y="ionCrossingAngle" z="0*rad"/>
+      <position x="B0Tracker_Station_1_xpos" y="0" z="B0Tracker_Station_1_zpos"/>
+      <rotation x="0*rad" y="B0Tracker_rotation" z="0*rad"/>
       <layer id="1" vis="AnlBlue"
         inner_z="1.0*cm"
         inner_r="3.5*cm" 
         outer_r="15.0*cm"
         phi1="-0.8*Pi*rad"
         phi2="0.8*Pi*rad">
-        <slice material="SiliconOxide" thickness="1.0*cm" vis="AnlBlue" sensitive="true" />
+        <slice material="SiliconOxide" thickness="0.3*mm" vis="AnlBlue" sensitive="true" />
       </layer>
 		
       <layer id="2"
         vis="AnlBlue"
         inner_z="1.0*cm"
         inner_r="3.5*cm"
-        outer_r="8.0*cm"
+        outer_r="10.0*cm"
         phi1="0.8*Pi*rad"
         phi2="-0.8*Pi*rad">
-        <slice material="SiliconOxide" thickness="1.0*cm" vis="AnlBlue" sensitive="true" />
+        <slice material="SiliconOxide" thickness="0.3*mm" vis="AnlBlue" sensitive="true" />
       </layer>      
     </detector>
 
@@ -49,8 +60,8 @@
       insideTrackingVolume="true"
       reflect="false"
       vis="AnlRed">
-      <position x="150*mm" y="0" z="5700*mm"/>
-	  <rotation x="0*rad" y="ionCrossingAngle" z="0*rad"/>
+      <position x="B0Tracker_Station_2_xpos" y="0" z="B0Tracker_Station_2_zpos"/>
+	  <rotation x="0*rad" y="B0Tracker_rotation" z="0*rad"/>
       <layer id="1"
         vis="AnlBlue"
         inner_z="1.0*cm"
@@ -58,17 +69,17 @@
         outer_r="15.0*cm"
 		phi1="-0.8*Pi*rad"
         phi2="0.8*Pi*rad">
-        <slice material="SiliconOxide" thickness="1.0*cm" vis="AnlBlue" sensitive="true" />
+        <slice material="SiliconOxide" thickness="0.3*mm" vis="AnlBlue" sensitive="true" />
       </layer>
 
 	  <layer id="2"
         vis="AnlBlue"
         inner_z="1.0*cm"
         inner_r="3.5*cm"
-        outer_r="8.0*cm"
+        outer_r="11.0*cm"
         phi1="0.8*Pi*rad"
         phi2="-0.8*Pi*rad">
-        <slice material="SiliconOxide" thickness="1.0*cm" vis="AnlBlue" sensitive="true" />
+        <slice material="SiliconOxide" thickness="0.3*mm" vis="AnlBlue" sensitive="true" />
       </layer>
 
     </detector>
@@ -81,8 +92,8 @@
       insideTrackingVolume="true"
       reflect="false"
       vis="AnlRed">
-      <position x="150*mm" y="0" z="6000*mm"/>
-	  <rotation x="0*rad" y="ionCrossingAngle" z="0*rad"/>
+      <position x="B0Tracker_Station_3_xpos" y="0" z="B0Tracker_Station_3_zpos"/>
+	  <rotation x="0*rad" y="B0Tracker_rotation" z="0*rad"/>
       <layer id="1"
         vis="AnlBlue"
         inner_z="1.0*cm"
@@ -90,17 +101,17 @@
         outer_r="15.0*cm"
 		phi1="-0.8*Pi*rad"
         phi2="0.8*Pi*rad">
-        <slice material="SiliconOxide" thickness="1.0*cm" vis="AnlBlue" sensitive="true" />
+        <slice material="SiliconOxide" thickness="0.3*mm" vis="AnlBlue" sensitive="true" />
       </layer>
 
 	  <layer id="2"
         vis="AnlBlue"
         inner_z="1.0*cm"
         inner_r="3.5*cm"
-        outer_r="8.0*cm"
+        outer_r="11.0*cm"
         phi1="0.8*Pi*rad"
         phi2="-0.8*Pi*rad">
-        <slice material="SiliconOxide" thickness="1.0*cm" vis="AnlBlue" sensitive="true" />
+        <slice material="SiliconOxide" thickness="0.3*mm" vis="AnlBlue" sensitive="true" />
       </layer>
 
 
@@ -115,8 +126,8 @@
       insideTrackingVolume="true"
       reflect="false"
       vis="AnlRed">
-      <position x="150*mm" y="0" z="6200*mm"/>
-      <rotation x="0*rad" y="ionCrossingAngle" z="0*rad"/>
+      <position x="B0Tracker_Station_4_xpos" y="0" z="B0Tracker_Station_4_zpos"/>
+      <rotation x="0*rad" y="B0Tracker_rotation" z="0*rad"/>
       <layer id="1"
         vis="AnlBlue"
         inner_z="1.0*cm"
@@ -124,17 +135,17 @@
         outer_r="15.0*cm"
 		phi1="-0.8*Pi*rad"
         phi2="0.8*Pi*rad">
-        <slice material="SiliconOxide" thickness="1.0*cm" vis="AnlBlue" sensitive="true" />
+        <slice material="SiliconOxide" thickness="0.3*mm" vis="AnlBlue" sensitive="true" />
       </layer>
 
 	  <layer id="2"
         vis="AnlBlue"
         inner_z="1.0*cm"
         inner_r="3.5*cm"
-        outer_r="8.0*cm"
+        outer_r="12.0*cm"
         phi1="0.8*Pi*rad"
         phi2="-0.8*Pi*rad">
-        <slice material="SiliconOxide" thickness="1.0*cm" vis="AnlBlue" sensitive="true" />
+        <slice material="SiliconOxide" thickness="0.3*mm" vis="AnlBlue" sensitive="true" />
       </layer>
 
 

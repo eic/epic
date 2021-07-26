@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<lccdd>
+  <define>
+    <comment>
+      ---------------------------------
+      B0 Tracker Parameters
+      ---------------------------------
+    </comment>
+  	<constant name="B0Preshower_rotation" value="0.025*rad"/>
+
+	<constant name="B0Preshower_Station_1_xpos" value="0.15749922*m" />
+	<constant name="B0Preshower_Station_1_zpos" value="6.2*m" />
+
+  </define>
+
+  <detectors>
+    <detector 
+      id="B0Preshower_Station_1_ID"
+      name="B0Preshower_Station_1"
+      readout="B0PreshowerHits" 
+      type="ip6_SimpleDiskTracker"
+      insideTrackingVolume="true"
+      reflect="false"
+      vis="AnlRed">
+      <position x="B0Preshower_Station_1_xpos" y="0" z="B0Preshower_Station_1_zpos"/>
+      <rotation x="0*rad" y="B0Tracker_rotation" z="0*rad"/>
+      <layer id="1" vis="AnlBlue"
+        inner_z="1.0*cm"
+        inner_r="3.5*cm" 
+        outer_r="15.0*cm"
+        phi1="-0.8*Pi*rad"
+        phi2="0.8*Pi*rad">
+		<slice material="PbWO4"        thickness="1.0*cm" vis="AnlYellow"/>
+        <slice material="SiliconOxide" thickness="0.3*mm" vis="AnlYellow" sensitive="true" />
+      </layer>
+		
+      <layer id="2"
+        vis="AnlBlue"
+        inner_z="1.0*cm"
+        inner_r="3.5*cm"
+        outer_r="10.0*cm"
+        phi1="0.8*Pi*rad"
+        phi2="-0.8*Pi*rad">
+		<slice material="PbWO4"        thickness="1.0*cm" vis="AnlYellow"/>
+        <slice material="SiliconOxide" thickness="0.3*mm" vis="AnlYellow" sensitive="true" />
+      </layer>      
+    </detector>
+  </detectors>
+
+  <readouts>
+    <readout name="B0PreshowerHits">
+      <segmentation type="CartesianGridXY" grid_size_x="1.0*mm" grid_size_y="1.0*mm" />
+      <id>system:8,barrel:3,layer:4,slice:4,x:32:-16,y:-16</id>  
+    </readout>
+  </readouts>
+
+</lccdd>

@@ -51,8 +51,8 @@ static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector sens)  {
 
   double drift_beam_pipe_angle = 0.0475492667;
 
-  double b0_hadron_tube_inner_r = 2.0; // cm
-  double b0_hadron_tube_outer_r = 2.2; //cm
+  double b0_hadron_tube_inner_r = 2.9; // cm
+  double b0_hadron_tube_outer_r = 3.1; //cm
   double b0_hadron_tube_length  = 120.0; //cm
 
   double drift_hadron_section_1_inner_r = 19.5;
