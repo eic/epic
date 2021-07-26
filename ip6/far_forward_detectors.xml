@@ -4,32 +4,72 @@
 
   <define>
     <comment>
-      ----------------------
-      Zero Degree Parameters
-      ----------------------
+      -------------------------------------------
+      Zero Degree Calorimeter General Parameters
+      -------------------------------------------
     </comment>
-    <constant name="ffi_ZDC_ECAL_z_pos"            value="3720.0 * cm"/>
-    <constant name="ffi_ZDC_ECAL_x_pos"            value="ffi_ZDC_ECAL_z_pos * ionCrossingAngle"/>
-    <constant name="ffi_ZDC_ECAL_y_pos"            value="0.0 * cm"/>
-    <constant name="ffi_ZDC_ECAL_rotateX_angle"    value="0.0 * rad"/>
-    <constant name="ffi_ZDC_ECAL_rotateY_angle"    value="-0.0125 * rad"/>
-    <constant name="ffi_ZDC_ECAL_rotateZ_angle"    value="0.0 * rad"/>
-    <constant name="ffi_ZDC_ECAL_module_width"     value="3.0 * cm"/>
-    <constant name="ffi_ZDC_ECAL_module_thickness" value="20.0 * cm"/>
-    <constant name="ffi_ZDC_ECAL_module_gap"       value="0.000001 * mm"/>
-    <constant name="ffi_ZDC_ECAL_module_ntower"    value="20"/>
-    <constant name="ffi_ZDC_ECAL_width"            value="(ffi_ZDC_ECAL_module_width + ffi_ZDC_ECAL_module_gap) * ffi_ZDC_ECAL_module_ntower + 2.0 * cm"/>
-    <constant name="ffi_ZDC_ECAL_thickness"        value="ffi_ZDC_ECAL_module_thickness + 1.0 * cm"/>
+    <constant name="ffi_ZDC_z_pos"         value="3710.0 * cm"/>
+    <constant name="ffi_ZDC_x_pos"         value="ffi_ZDC_z_pos * ionCrossingAngle"/>
+    <constant name="ffi_ZDC_y_pos"         value="0.0 * cm"/>
+    <constant name="ffi_ZDC_rotateX_angle" value="0.0 * rad"/>
+    <constant name="ffi_ZDC_rotateY_angle" value="-0.0125 * rad"/>
+    <constant name="ffi_ZDC_rotateZ_angle" value="0.0 * rad"/>
+    <constant name="ffi_ZDC_width"         value="60.0 * cm"/>
+    <constant name="ffi_ZDC_length"        value="200.0 * cm"/>
 
-    <constant name="ffi_ZDC_HCAL_x_pos"            value="ffi_ZDC_ECAL_x_pos"/>
-    <constant name="ffi_ZDC_HCAL_y_pos"            value="ffi_ZDC_ECAL_y_pos"/>
-    <constant name="ffi_ZDC_HCAL_z_pos"            value="ffi_ZDC_ECAL_z_pos + ffi_ZDC_ECAL_thickness + 1.0 * cm"/>
-    <constant name="ffi_ZDC_HCAL_rotateX_angle"    value="ffi_ZDC_ECAL_rotateX_angle"/>
-    <constant name="ffi_ZDC_HCAL_rotateY_angle"    value="ffi_ZDC_ECAL_rotateY_angle"/>
-    <constant name="ffi_ZDC_HCAL_rotateZ_angle"    value="ffi_ZDC_ECAL_rotateZ_angle"/>
-    <constant name="ffi_ZDC_HCAL_width"            value="ffi_ZDC_ECAL_module_width * ffi_ZDC_ECAL_module_ntower"/>
-    <constant name="ffi_ZDC_HCAL_length"           value="200.0 * cm"/>
+    <comment>
+      -------------------------------
+      Zero Degree Calorimeter - ECAL
+      -------------------------------
+    </comment>
+    <constant name="ffi_ZDC_ECAL_z_pos"           value="ffi_ZDC_z_pos"/>
+    <constant name="ffi_ZDC_ECAL_x_pos"           value="ffi_ZDC_ECAL_z_pos * ionCrossingAngle"/>
+    <constant name="ffi_ZDC_ECAL_y_pos"           value="ffi_ZDC_y_pos"/>
+    <constant name="ffi_ZDC_ECAL_rotateX_angle"   value="ffi_ZDC_rotateX_angle"/>
+    <constant name="ffi_ZDC_ECAL_rotateY_angle"   value="ffi_ZDC_rotateY_angle"/>
+    <constant name="ffi_ZDC_ECAL_rotateZ_angle"   value="ffi_ZDC_rotateZ_angle"/>
+    <constant name="ffi_ZDC_ECAL_width"           value="ffi_ZDC_width"/>
 
+    <constant name="ffi_ZDC_SiPbWO4_NRepeat"      value="2"/>
+    
+    <constant name="ffi_ZDC_Silicon_1_Thickness"  value="300.0 * um"/>
+    <constant name="ffi_ZDC_PbWO4_Thickness"      value="100.0 * mm"/>
+    <constant name="ffi_ZDC_Glue_1_Thickness"     value="0.11 * mm"/>
+    <constant name="ffi_ZDC_FPC_Thickness"        value="0.28 * mm"/>
+    <constant name="ffi_ZDC_Air_1_Thickness"      value="1.2 * mm"/>
+    <constant name="ffi_ZDC_Air_2_Thickness"      value="3.0 * cm"/>
+
+    <constant name="ffi_ZDC_ECAL_layer_thickness" value="ffi_ZDC_Silicon_1_Thickness + ffi_ZDC_Glue_1_Thickness + ffi_ZDC_FPC_Thickness +                                                          ffi_ZDC_Air_1_Thickness + ffi_ZDC_PbWO4_Thickness + ffi_ZDC_Air_2_Thickness"/>
+    <constant name="ffi_ZDC_ECAL_length"          value="ffi_ZDC_SiPbWO4_NRepeat * ffi_ZDC_ECAL_layer_thickness"/>
+
+    <comment>
+      -------------------------------
+      Zero Degree Calorimeter - HCAL
+      -------------------------------
+    </comment>
+    <constant name="ffi_ZDC_HCAL_x_pos"           value="ffi_ZDC_ECAL_x_pos"/>
+    <constant name="ffi_ZDC_HCAL_y_pos"           value="ffi_ZDC_ECAL_y_pos"/>
+    <constant name="ffi_ZDC_HCAL_z_pos"           value="ffi_ZDC_ECAL_z_pos + ffi_ZDC_ECAL_length"/>
+    <constant name="ffi_ZDC_HCAL_rotateX_angle"   value="ffi_ZDC_rotateX_angle"/>
+    <constant name="ffi_ZDC_HCAL_rotateY_angle"   value="ffi_ZDC_rotateY_angle"/>
+    <constant name="ffi_ZDC_HCAL_rotateZ_angle"   value="ffi_ZDC_rotateZ_angle"/>
+    <constant name="ffi_ZDC_HCAL_width"           value="ffi_ZDC_width"/>
+    <constant name="ffi_ZDC_HCAL_length"          value="ffi_ZDC_length"/>
+
+    <constant name="ffi_ZDC_SiW_LG_Layer_NRepeat" value="20"/>
+    <constant name="ffi_ZDC_SiW_HG_Layer_NRepeat" value="1"/>
+    <constant name="ffi_ZDC_SiPb_NRepeat"         value="12"/>
+    <constant name="ffi_ZDC_PbScint_NRepeat"      value="15"/>
+    <constant name="ffi_ZDC_Gap_NRepeat"          value="1"/>
+    
+    <constant name="ffi_ZDC_Silicon_2_Thickness"  value="320.0 * um"/>
+    <constant name="ffi_ZDC_Tungsten_Thickness"   value="3.5 * mm"/>
+    <constant name="ffi_ZDC_Glue_2_Thickness"     value="0.13 * mm"/>
+    <constant name="ffi_ZDC_Air_3_Thickness"      value="1.0 * mm"/>
+    <constant name="ffi_ZDC_Air_4_Thickness"      value="0.0013 * mm"/>
+    <constant name="ffi_ZDC_Lead_Thickness"       value="30.0 * mm"/>
+    <constant name="ffi_ZDC_Scint_Thickness"      value="2.0 * mm"/>
+    <constant name="ffi_ZDC_Gap_Thickness"        value="2.0 * cm"/>
   </define>
 
   <limits>
@@ -41,9 +81,8 @@
   <display>
   </display>
 
-
-  <include ref="far_forward_ZDC_Ecal.xml" />
-  <include ref="far_forward_ZDC_Hcal.xml" />
+  <include ref="far_forward_ZDC_Ecal.xml"/>
+  <include ref="far_forward_ZDC_Hcal.xml"/>
   
   <detectors>
   </detectors>

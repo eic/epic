@@ -1,30 +1,38 @@
 <lccdd>
   <comment>
     //////////////////////////////////////////////////
-    // Far Forward Ion Zero Degree Calorimeter - Ecal
-    // PWO crystal bars
+    // Far Forward Ion Zero Degree Calorimeter
+    // Silicon/PbWO4 for Ecal
     //////////////////////////////////////////////////
   </comment>        
 
   <detectors>
-    <detector id="ffi_ZDC_ECAL_ID" name="ffi_ZDC_ECAL" type="ffi_ZDC_ECAL" readout="ffi_ZDC_ECAL_Hits" vis="ffi_ZDC_ECAL_Vis">
+    <detector id="ffi_ZDC_ECAL_ID" name="ffi_ZDC_ECAL" type="ffi_ZDC_Sampling" readout="ffi_ZDC_ECAL_Hits" vis="ffi_ZDC_ECAL_Vis">
       <position x="ffi_ZDC_ECAL_x_pos" y="ffi_ZDC_ECAL_y_pos" z="ffi_ZDC_ECAL_z_pos"/>
       <rotation x="ffi_ZDC_ECAL_rotateX_angle" y="ffi_ZDC_ECAL_rotateY_angle" z="ffi_ZDC_ECAL_rotateZ_angle"/>
-      <dimensions x="ffi_ZDC_ECAL_width" z="ffi_ZDC_ECAL_thickness"/>
-      <module name="ffi_ZDC_ECAL_module" 
-	      vis="ffi_ZDC_ECAL_module_Vis" 
-	      material="PbWO4" 
-	      thickness="ffi_ZDC_ECAL_module_thickness" 
-	      width="ffi_ZDC_ECAL_module_width" 
-	      gap="ffi_ZDC_ECAL_module_gap" 
-	      ntower="ffi_ZDC_ECAL_module_ntower"/>
+      <dimensions x="ffi_ZDC_ECAL_width" z="ffi_ZDC_ECAL_length"/>
+      <layer repeat="ffi_ZDC_SiPbWO4_NRepeat">
+        <slice name="Silicon_1_slice" material="Silicon" thickness="ffi_ZDC_Silicon_1_Thickness" vis="AnlRed"  sensitive="true"/>
+	<slice name="Glue_1_slice"    material="Epoxy"   thickness="ffi_ZDC_Glue_1_Thickness"    vis="AnlGold"/>
+	<slice name="FPC_slice"       material="Epoxy"   thickness="ffi_ZDC_FPC_Thickness"       vis="AnlGold"/>
+	<slice name="Air_1_slice"     material="Air"     thickness="ffi_ZDC_Air_1_Thickness"     vis="InvisibleNoDaughters"/>
+        <slice name="PbWO4_slice"     material="PbWO4"   thickness="ffi_ZDC_PbWO4_Thickness"     vis="AnlGold" sensitive="true"/>
+	<slice name="Air_2_slice"     material="Air"     thickness="ffi_ZDC_Air_2_Thickness"     vis="InvisibleNoDaughters"/>
+      </layer>
     </detector>
   </detectors>
 
   <readouts>
     <readout name="ffi_ZDC_ECAL_Hits">
-      <segmentation type="CartesianGridXY" grid_size_x="3.0*cm" grid_size_y="3.0*cm" />
-      <id>system:8,module:14,x:32:-16,y:-16</id>  
+      <segmentation type="MultiSegmentation" key="slice">
+        <segmentation name="Si_HG_grid" type="CartesianGridXY" key_value="1"  grid_size_x="3.0*mm" grid_size_y="3.0*mm"/>
+        <segmentation name="PbWO4_grid" type="CartesianGridXY" key_value="5"  grid_size_x="3.0*cm" grid_size_y="3.0*cm"/>
+      </segmentation>
+      <hits_collections>
+	<hits_collection name="ffiZDCSiHits"    key="slice" key_value="1"/>
+        <hits_collection name="ffiZDCPbWO4Hits" key="slice" key_value="5"/>
+      </hits_collections>
+      <id>system:8,layer:12,slice:12,x:32:-16,y:-16</id>  
     </readout>
   </readouts>
 </lccdd>

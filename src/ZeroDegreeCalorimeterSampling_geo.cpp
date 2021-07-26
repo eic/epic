@@ -28,9 +28,6 @@ static Ref_t createDetector(Detector& desc, xml_h e, SensitiveDetector sens)
 
   Material   Vacuum     = desc.material("Vacuum");
 
-  int layer_num = 1;
-  int slice_num = 1;
-
   double totWidth = Layering(x_det).totalThickness();
   
   Box envelope (Width/2.0, Width/2.0, totWidth/2.0);
@@ -39,7 +36,8 @@ static Ref_t createDetector(Detector& desc, xml_h e, SensitiveDetector sens)
   PlacedVolume pv;
 	
   xml_comp_t x_layer = x_det.child(_U(layer));
-
+  
+  int layer_num = 1;
   // Read layers
   for(xml_coll_t c(x_det,_U(layer)); c; ++c) {
     xml_comp_t x_layer = c;
@@ -55,6 +53,7 @@ static Ref_t createDetector(Detector& desc, xml_h e, SensitiveDetector sens)
       string layer_name = detName + _toString(layer_num,"_layer%d");
       Volume layer_vol(layer_name,Box(Width/2.0, Width/2.0,layerWidth/2.0), Vacuum);
 
+      int slice_num = 1;
       // Loop over slices
       for(xml_coll_t l(x_layer,_U(slice)); l; ++l) {
 	xml_comp_t x_slice = l;
@@ -92,4 +91,4 @@ static Ref_t createDetector(Detector& desc, xml_h e, SensitiveDetector sens)
 
   return det;
 }
-DECLARE_DETELEMENT(ffi_ZDC_HCAL, createDetector)
+DECLARE_DETELEMENT(ffi_ZDC_Sampling, createDetector)

@@ -1,56 +1,94 @@
 <lccdd>
   <comment>
     //////////////////////////////////////////////////
-    // Far Forward Ion Zero Degree Calorimeter - Hcal
-    // Si+W sampling
+    // Far Forward Ion Zero Degree Calorimeter
+    // Silicon/W for Hcal
     //////////////////////////////////////////////////
   </comment>        
 
-  <define>
-    <constant name="ffi_ZDC_HCAL_SiW_NRepeat"     value="20"/>
-    <constant name="ffi_ZDC_HCAL_SiPb_NRepeat"    value="12"/>
-    <constant name="ffi_ZDC_HCAL_PbScint_NRepeat" value="30"/>
-    <constant name="ffiZDCHcalTungstenThickness"  value="3.5 * mm"/>
-    <constant name="ffiZDCHcalSiliconThickness"   value="320.0 * um"/>
-    <constant name="ffiZDCHcalGlueThickness"      value="0.11 * mm"/>
-    <constant name="ffiZDCHcalFPCThickness"       value="0.28 * mm"/>
-    <constant name="ffiZDCHcalAirThickness"       value="1.0 * mm"/>
-    <constant name="ffiZDCHcalLeadThickness"      value="30.0 * mm"/>
-    <constant name="ffiZDCHcalScintThickness"     value="2.0 * mm"/>
-  </define>
-
   <detectors>
-    <detector id="ffi_ZDC_HCAL_ID" name="ffi_ZDC_HCAL" type="ffi_ZDC_HCAL" readout="ffi_ZDC_HCAL_Hits" vis="ffi_ZDC_HCAL_Vis">
+    <detector id="ffi_ZDC_HCAL_ID" name="ffi_ZDC_HCAL" type="ffi_ZDC_Sampling" readout="ffi_ZDC_HCAL_Hits" vis="ffi_ZDC_HCAL_Vis">
       <position x="ffi_ZDC_HCAL_x_pos" y="ffi_ZDC_HCAL_y_pos" z="ffi_ZDC_HCAL_z_pos"/>
       <rotation x="ffi_ZDC_HCAL_rotateX_angle" y="ffi_ZDC_HCAL_rotateY_angle" z="ffi_ZDC_HCAL_rotateZ_angle"/>
       <dimensions x="ffi_ZDC_HCAL_width" z="ffi_ZDC_HCAL_length"/>
-      <layer repeat="ffi_ZDC_HCAL_SiW_NRepeat">
-        <slice name="Tungsten_slice" material="TungstenDens24" thickness="ffiZDCHcalTungstenThickness" vis="AnlBlue"/>
-	<slice name="Air_slice"      material="Air"            thickness="ffiZDCHcalGlueThickness"     vis="AnlGold"/>
-	<slice name="Silicon_slice"  material="Silicon"        thickness="ffiZDCHcalSiliconThickness"  vis="AnlRed" sensitive="true"/>
-	<slice name="Air_slice"      material="Air"            thickness="ffiZDCHcalGlueThickness"     vis="AnlGold"/>
-	<slice name="Air_slice"      material="Air"            thickness="ffiZDCHcalFPCThickness"      vis="AnlGold"/>
-	<slice name="Air_slice"      material="Air"            thickness="ffiZDCHcalAirThickness"      vis="AnlGold"/>
+      <layer repeat="ffi_ZDC_SiW_LG_Layer_NRepeat">
+        <slice name="Tungsten_slice"  material="TungstenDens24" thickness="ffi_ZDC_Tungsten_Thickness"  vis="AnlBlue"/>
+	<slice name="Glue_1_slice"    material="Epoxy"          thickness="ffi_ZDC_Glue_1_Thickness"    vis="AnlGold"/>
+	<slice name="Silicon_2_slice" material="Silicon"        thickness="ffi_ZDC_Silicon_2_Thickness" vis="AnlRed" sensitive="true"/>
+	<slice name="Glue_2_slice"    material="Epoxy"          thickness="ffi_ZDC_Glue_2_Thickness"    vis="AnlGold"/>
+	<slice name="FPC_slice"       material="Epoxy"          thickness="ffi_ZDC_FPC_Thickness"       vis="AnlGold"/>
+	<slice name="Air_3_slice"     material="Air"            thickness="ffi_ZDC_Air_3_Thickness"     vis="InvisibleNoDaughters"/>
       </layer>
-      <layer repeat="ffi_ZDC_HCAL_SiPb_NRepeat">
-        <slice name="Lead_slice"    material="Pb"      thickness="ffiZDCHcalLeadThickness"    vis="BlueGreenVis"/>
-	<slice name="Air_slice"     material="Air"     thickness="ffiZDCHcalGlueThickness"    vis="AnlGold"/>
-	<slice name="Silicon_slice" material="Silicon" thickness="ffiZDCHcalSiliconThickness" vis="AnlRed" sensitive="true"/>
-	<slice name="Air_slice"     material="Air"     thickness="ffiZDCHcalGlueThickness"    vis="AnlGold"/>
-	<slice name="Air_slice"     material="Air"     thickness="ffiZDCHcalFPCThickness"     vis="AnlGold"/>
-	<slice name="Air_slice"     material="Air"     thickness="ffiZDCHcalAirThickness"     vis="AnlGold"/>
+      <layer repeat="ffi_ZDC_SiW_HG_Layer_NRepeat">
+        <slice name="Tungsten_slice"  material="TungstenDens24" thickness="ffi_ZDC_Tungsten_Thickness"  vis="AnlBlue"/>
+	<slice name="Glue_1_slice"    material="Epoxy"          thickness="ffi_ZDC_Glue_1_Thickness"    vis="AnlGold"/>
+        <slice name="Silicon_1_slice" material="Silicon"        thickness="ffi_ZDC_Silicon_1_Thickness" vis="AnlRed" sensitive="true"/>
+	<slice name="Glue_1_slice"    material="Epoxy"          thickness="ffi_ZDC_Glue_1_Thickness"    vis="AnlGold"/>
+	<slice name="FPC_slice"       material="Epoxy"          thickness="ffi_ZDC_FPC_Thickness"       vis="AnlGold"/>
+	<slice name="Air_1_slice"     material="Air"            thickness="ffi_ZDC_Air_1_Thickness"     vis="InvisibleNoDaughters"/>
       </layer>
-      <layer repeat="ffi_ZDC_HCAL_PbScint_NRepeat">
-        <slice name="Lead_slice"  material="Pb"           thickness="ffiZDCHcalLeadThickness"  vis="BlueGreenVis"/>
-        <slice name="Scint_slice" material="PlasticScint" thickness="ffiZDCHcalScintThickness" vis="AnlOrange" sensitive="true"/>
-	<slice name="Air_slice"   material="Air"          thickness="ffiZDCHcalAirThickness"   vis="AnlGold"/>
+      <layer repeat="ffi_ZDC_SiW_LG_Layer_NRepeat">
+        <slice name="Tungsten_slice"  material="TungstenDens24" thickness="ffi_ZDC_Tungsten_Thickness"  vis="AnlBlue"/>
+        <slice name="Glue_1_slice"    material="Epoxy"          thickness="ffi_ZDC_Glue_1_Thickness"    vis="AnlGold"/>
+        <slice name="Silicon_2_slice" material="Silicon"        thickness="ffi_ZDC_Silicon_2_Thickness" vis="AnlRed" sensitive="true"/>
+        <slice name="Glue_2_slice"    material="Epoxy"          thickness="ffi_ZDC_Glue_2_Thickness"    vis="AnlGold"/>
+        <slice name="FPC_slice"       material="Epoxy"          thickness="ffi_ZDC_FPC_Thickness"       vis="AnlGold"/>
+        <slice name="Air_3_slice"     material="Air"            thickness="ffi_ZDC_Air_3_Thickness"     vis="InvisibleNoDaughters"/>
+      </layer>
+      <layer repeat="ffi_ZDC_SiW_HG_Layer_NRepeat">
+        <slice name="Tungsten_slice"  material="TungstenDens24" thickness="ffi_ZDC_Tungsten_Thickness"  vis="AnlBlue"/>
+        <slice name="Glue_1_slice"    material="Epoxy"          thickness="ffi_ZDC_Glue_1_Thickness"    vis="AnlGold"/>
+        <slice name="Silicon_1_slice" material="Silicon"        thickness="ffi_ZDC_Silicon_1_Thickness" vis="AnlRed" sensitive="true"/>
+        <slice name="Glue_1_slice"    material="Epoxy"          thickness="ffi_ZDC_Glue_1_Thickness"    vis="AnlGold"/>
+        <slice name="FPC_slice"       material="Epoxy"          thickness="ffi_ZDC_FPC_Thickness"       vis="AnlGold"/>
+        <slice name="Air_1_slice"     material="Air"            thickness="ffi_ZDC_Air_1_Thickness"     vis="InvisibleNoDaughters"/>
+      </layer>
+      <layer repeat="ffi_ZDC_Gap_NRepeat">
+        <slice name="Gap_slice" material="Air" thickness="ffi_ZDC_Gap_Thickness" vis="InvisibleNoDaughters"/>
+      </layer>
+      <layer repeat="ffi_ZDC_SiPb_NRepeat">
+        <slice name="Lead_slice"      material="Pb"      thickness="ffi_ZDC_Lead_Thickness"      vis="BlueGreenVis"/>
+        <slice name="Glue_1_slice"    material="Epoxy"   thickness="ffi_ZDC_Glue_1_Thickness"    vis="AnlGold"/>
+        <slice name="Silicon_2_slice" material="Silicon" thickness="ffi_ZDC_Silicon_2_Thickness" vis="AnlRed" sensitive="true"/>
+        <slice name="Glue_2_slice"    material="Epoxy"   thickness="ffi_ZDC_Glue_2_Thickness"    vis="AnlGold"/>
+        <slice name="FPC_slice"       material="Epoxy"   thickness="ffi_ZDC_FPC_Thickness"       vis="AnlGold"/>
+        <slice name="Air_3_slice"     material="Air"     thickness="ffi_ZDC_Air_3_Thickness"     vis="InvisibleNoDaughters"/>
+      </layer>
+      <layer repeat="ffi_ZDC_Gap_NRepeat">
+        <slice name="Gap_slice" material="Air" thickness="ffi_ZDC_Gap_Thickness" vis="InvisibleNoDaughters"/>
+      </layer>
+      <layer repeat="ffi_ZDC_PbScint_NRepeat">
+        <slice name="Lead_slice"  material="Pb"           thickness="ffi_ZDC_Lead_Thickness"  vis="BlueGreenVis"/>
+        <slice name="Scint_slice" material="PlasticScint" thickness="ffi_ZDC_Scint_Thickness" vis="AnlOrange" sensitive="true"/>
+	<slice name="Air_4_slice" material="Air"          thickness="ffi_ZDC_Air_4_Thickness" vis="InvisibleNoDaughters"/>
+      </layer>
+      <layer repeat="ffi_ZDC_Gap_NRepeat">
+        <slice name="Gap_slice" material="Air" thickness="ffi_ZDC_Gap_Thickness" vis="InvisibleNoDaughters"/>
+      </layer>
+      <layer repeat="ffi_ZDC_PbScint_NRepeat">
+        <slice name="Lead_slice"  material="Pb"           thickness="ffi_ZDC_Lead_Thickness"  vis="BlueGreenVis"/>
+        <slice name="Scint_slice" material="PlasticScint" thickness="ffi_ZDC_Scint_Thickness" vis="AnlOrange" sensitive="true"/>
+        <slice name="Air_4_slice" material="Air"          thickness="ffi_ZDC_Air_4_Thickness" vis="InvisibleNoDaughters"/>
       </layer>
     </detector>
   </detectors>
 
   <readouts>
     <readout name="ffi_ZDC_HCAL_Hits">
-      <segmentation type="CartesianGridXY" grid_size_x="1.0*cm" grid_size_y="1.0*cm" />
+      <segmentation type="MultiSegmentation" key="layer">
+        <segmentation name="Si_LG_grid" type="CartesianGridXY" key_min="1" key_max="20" grid_size_x="1.0*cm" grid_size_y="1.0*cm"/>
+        <segmentation name="Si_HG_grid" type="CartesianGridXY" key_value="21" grid_size_x="3.0*mm" grid_size_y="3.0*mm"/>
+        <segmentation name="Si_LG_grid" type="CartesianGridXY" key_min="22" key_max="41" grid_size_x="1.0*cm" grid_size_y="1.0*cm"/>
+        <segmentation name="Si_HG_grid" type="CartesianGridXY" key_value="42" grid_size_x="3.0*mm" grid_size_y="3.0*mm"/>
+        <segmentation name="Si_LG_grid" type="CartesianGridXY" key_min="44" key_max="55" grid_size_x="1.0*cm" grid_size_y="1.0*cm"/>
+        <segmentation name="Scint_grid" type="CartesianGridXY" key_min="57" key_max="71" grid_size_x="10.0*cm" grid_size_y="10.0*cm"/>
+        <segmentation name="Scint_grid" type="CartesianGridXY" key_min="73" key_max="87" grid_size_x="10.0*cm" grid_size_y="10.0*cm"/>
+      </segmentation>
+      <hits_collections>
+        <hits_collection name="ffiZDCSiWHits"   key="layer" key_min="1" key_max="42"/>
+        <hits_collection name="ffiZDCSiPbHits"  key="layer" key_min="44" key_max="55"/>
+        <hits_collection name="ffiZDCScintHits" key="layer" key_min="57" key_max="87"/>
+      </hits_collections>
       <id>system:8,layer:12,slice:12,x:32:-16,y:-16</id>  
     </readout>
   </readouts>
