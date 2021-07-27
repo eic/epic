@@ -28,27 +28,26 @@
       readout="B0TrackerHits" 
       type="ip6_SimpleDiskTracker"
       insideTrackingVolume="true"
-      reflect="false"
-      vis="AnlRed">
+      reflect="false">
       <position x="B0Tracker_Station_1_xpos" y="0" z="B0Tracker_Station_1_zpos"/>
       <rotation x="0*rad" y="B0Tracker_rotation" z="0*rad"/>
-      <layer id="1" vis="AnlBlue"
+      <layer id="1" vis="OrangeVis"
         inner_z="1.0*cm"
         inner_r="3.5*cm" 
         outer_r="15.0*cm"
         phi1="-0.8*Pi*rad"
         phi2="0.8*Pi*rad">
-        <slice material="SiliconOxide" thickness="0.3*mm" vis="AnlBlue" sensitive="true" />
+        <slice material="SiliconOxide" thickness="0.3*mm" vis="OrangeVis" sensitive="true" />
       </layer>
 		
       <layer id="2"
-        vis="AnlBlue"
+        vis="AnlGold"
         inner_z="1.0*cm"
         inner_r="3.5*cm"
         outer_r="10.0*cm"
         phi1="0.8*Pi*rad"
         phi2="-0.8*Pi*rad">
-        <slice material="SiliconOxide" thickness="0.3*mm" vis="AnlBlue" sensitive="true" />
+        <slice material="SiliconOxide" thickness="0.3*mm" vis="OrangeVis" sensitive="true" />
       </layer>      
     </detector>
 
@@ -69,7 +68,7 @@
         outer_r="15.0*cm"
 		phi1="-0.8*Pi*rad"
         phi2="0.8*Pi*rad">
-        <slice material="SiliconOxide" thickness="0.3*mm" vis="AnlBlue" sensitive="true" />
+        <slice material="SiliconOxide" thickness="0.3*mm" vis="OrangeVis" sensitive="true" />
       </layer>
 
 	  <layer id="2"
@@ -79,7 +78,7 @@
         outer_r="11.0*cm"
         phi1="0.8*Pi*rad"
         phi2="-0.8*Pi*rad">
-        <slice material="SiliconOxide" thickness="0.3*mm" vis="AnlBlue" sensitive="true" />
+        <slice material="SiliconOxide" thickness="0.3*mm" vis="OrangeVis" sensitive="true" />
       </layer>
 
     </detector>
@@ -101,7 +100,7 @@
         outer_r="15.0*cm"
 		phi1="-0.8*Pi*rad"
         phi2="0.8*Pi*rad">
-        <slice material="SiliconOxide" thickness="0.3*mm" vis="AnlBlue" sensitive="true" />
+        <slice material="SiliconOxide" thickness="0.3*mm" vis="OrangeVis" sensitive="true" />
       </layer>
 
 	  <layer id="2"
@@ -111,7 +110,7 @@
         outer_r="11.0*cm"
         phi1="0.8*Pi*rad"
         phi2="-0.8*Pi*rad">
-        <slice material="SiliconOxide" thickness="0.3*mm" vis="AnlBlue" sensitive="true" />
+        <slice material="SiliconOxide" thickness="0.3*mm" vis="OrangeVis" sensitive="true" />
       </layer>
 
 
@@ -135,7 +134,7 @@
         outer_r="15.0*cm"
 		phi1="-0.8*Pi*rad"
         phi2="0.8*Pi*rad">
-        <slice material="SiliconOxide" thickness="0.3*mm" vis="AnlBlue" sensitive="true" />
+        <slice material="SiliconOxide" thickness="0.3*mm" vis="OrangeVis" sensitive="true" />
       </layer>
 
 	  <layer id="2"
@@ -145,7 +144,7 @@
         outer_r="12.0*cm"
         phi1="0.8*Pi*rad"
         phi2="-0.8*Pi*rad">
-        <slice material="SiliconOxide" thickness="0.3*mm" vis="AnlBlue" sensitive="true" />
+        <slice material="SiliconOxide" thickness="0.3*mm" vis="OrangeVis" sensitive="true" />
       </layer>
 
 
@@ -158,7 +157,7 @@
 
   <readouts>
     <readout name="B0TrackerHits">
-      <segmentation type="CartesianGridXY" grid_size_x="1.0*mm" grid_size_y="1.0*mm" />
+      <segmentation type="CartesianGridXY" grid_size_x="20.0*um" grid_size_y="20.0*um" />
       <id>system:8,barrel:3,layer:4,slice:4,x:32:-16,y:-16</id>  
     </readout>
   </readouts>
