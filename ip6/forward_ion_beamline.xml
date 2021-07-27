@@ -71,13 +71,13 @@
       <placement x="Q0EF_XPosition" y="0*m" z="Q0EF_CenterPosition" theta="Q0EF_RotationAngle" />
       <dimensions x="5.0*cm" y="5.0*cm" z="Q0EF_Length" r="2.5*cm" />
       <apperture x="Q0EF_InnerRadius*2" y="Q0EF_InnerRadius*2"  r="Q0EF_InnerRadius"/>
-      <coil dx="1*cm" dy="0.5*cm" />
+      <coil dx="0.4*cm" dy="0.2*cm" />
     </detector>
 	<detector id="181" name="Q1EF_BeamlineMagnet" vis="RedVis" type="CylindricalDipoleMagnet">
       <placement x="Q1EF_XPosition" y="0*m" z="Q1EF_CenterPosition" theta="Q1EF_RotationAngle" />
       <dimensions x="6.0*cm" y="6.0*cm" z="Q1EF_Length" r="3.0*cm" />
       <apperture x="Q1EF_InnerRadius*2" y="Q1EF_InnerRadius*2"  r="Q1EF_InnerRadius"/>
-      <coil dx="1*cm" dy="0.5*cm" />
+      <coil dx="0.4*cm" dy="0.2*cm" />
     </detector>
 
 </detectors>
