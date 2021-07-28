@@ -191,5 +191,21 @@
     <fraction n="0.18" ref="Cr"/>
     <fraction n="0.08" ref="Ni"/>
   </material>
-
+  <material name="ZDC_Tungsten">
+    <D type="density" value="18.73" unit="g / cm3"/>
+    <fraction n="0.943" ref="W"/>
+    <fraction n="0.038" ref="Ni"/>
+    <fraction n="0.019" ref="Cu"/>
+  </material>
+  <material name="ZDC_EpoxyGlue">
+    <D type="density" value="1.38" unit="g/cm3"/>
+    <composite n="8"  ref="H"/>
+    <composite n="10" ref="C"/>
+    <composite n="4"  ref="O"/>
+  </material>
+  <material name="ZDC_Scintillator">
+    <D type="density" value="1.032" unit="g/cm3"/>
+    <composite n="8" ref="C"/>
+    <composite n="8" ref="H"/>
+  </material>
 </materials>

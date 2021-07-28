@@ -39,7 +39,7 @@
     <constant name="ffi_ZDC_Air_1_Thickness"      value="1.2 * mm"/>
     <constant name="ffi_ZDC_Air_2_Thickness"      value="3.0 * cm"/>
 
-    <constant name="ffi_ZDC_ECAL_layer_thickness" value="ffi_ZDC_Silicon_1_Thickness + ffi_ZDC_Glue_1_Thickness + ffi_ZDC_FPC_Thickness +                                                          ffi_ZDC_Air_1_Thickness + ffi_ZDC_PbWO4_Thickness + ffi_ZDC_Air_2_Thickness"/>
+    <constant name="ffi_ZDC_ECAL_layer_thickness" value="ffi_ZDC_Silicon_1_Thickness + ffi_ZDC_Glue_1_Thickness + ffi_ZDC_FPC_Thickness +                                                                        ffi_ZDC_Air_1_Thickness + ffi_ZDC_PbWO4_Thickness + ffi_ZDC_Air_2_Thickness"/>
     <constant name="ffi_ZDC_ECAL_length"          value="ffi_ZDC_SiPbWO4_NRepeat * ffi_ZDC_ECAL_layer_thickness"/>
 
     <comment>

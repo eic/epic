@@ -12,12 +12,12 @@
       <rotation x="ffi_ZDC_ECAL_rotateX_angle" y="ffi_ZDC_ECAL_rotateY_angle" z="ffi_ZDC_ECAL_rotateZ_angle"/>
       <dimensions x="ffi_ZDC_ECAL_width" z="ffi_ZDC_ECAL_length"/>
       <layer repeat="ffi_ZDC_SiPbWO4_NRepeat">
-        <slice name="Silicon_1_slice" material="Silicon" thickness="ffi_ZDC_Silicon_1_Thickness" vis="AnlRed"  sensitive="true"/>
-	<slice name="Glue_1_slice"    material="Epoxy"   thickness="ffi_ZDC_Glue_1_Thickness"    vis="AnlGold"/>
-	<slice name="FPC_slice"       material="Epoxy"   thickness="ffi_ZDC_FPC_Thickness"       vis="AnlGold"/>
-	<slice name="Air_1_slice"     material="Air"     thickness="ffi_ZDC_Air_1_Thickness"     vis="InvisibleNoDaughters"/>
-        <slice name="PbWO4_slice"     material="PbWO4"   thickness="ffi_ZDC_PbWO4_Thickness"     vis="AnlGold" sensitive="true"/>
-	<slice name="Air_2_slice"     material="Air"     thickness="ffi_ZDC_Air_2_Thickness"     vis="InvisibleNoDaughters"/>
+        <slice name="Silicon_1_slice" material="Silicon"       thickness="ffi_ZDC_Silicon_1_Thickness" vis="RedVis"  sensitive="true"/>
+	<slice name="Glue_1_slice"    material="ZDC_EpoxyGlue" thickness="ffi_ZDC_Glue_1_Thickness"    vis="AnlGold"/>
+	<slice name="FPC_slice"       material="ZDC_EpoxyGlue" thickness="ffi_ZDC_FPC_Thickness"       vis="AnlGold"/>
+	<slice name="Air_1_slice"     material="Air"           thickness="ffi_ZDC_Air_1_Thickness"     vis="InvisibleNoDaughters"/>
+        <slice name="PbWO4_slice"     material="PbWO4"         thickness="ffi_ZDC_PbWO4_Thickness"     vis="AnlGold" sensitive="true"/>
+	<slice name="Air_2_slice"     material="Air"           thickness="ffi_ZDC_Air_2_Thickness"     vis="InvisibleNoDaughters"/>
       </layer>
     </detector>
   </detectors>
