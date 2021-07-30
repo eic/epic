@@ -16,6 +16,7 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
   xml::Component rot      = x_det.rotation();
   DetElement     sdet(det_name, x_det.id());
   Assembly       assembly(det_name);
+  sens.setType("tracker");
 
   PlacedVolume pv;
 
