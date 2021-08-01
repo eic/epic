@@ -6,9 +6,9 @@
       B0 Tracker Parameters
       ---------------------------------
     </comment>
-  	<constant name="B0Preshower_rotation" value="0.025*rad"/>
+  	<constant name="B0Preshower_rotation" value="-0.025*rad"/>
 
-	<constant name="B0Preshower_Station_1_xpos" value="0.15749922*m" />
+	<constant name="B0Preshower_Station_1_xpos" value="-0.15749922*m" />
 	<constant name="B0Preshower_Station_1_zpos" value="6.2*m" />
 
   </define>
@@ -28,8 +28,8 @@
         inner_z="1.0*cm"
         inner_r="3.5*cm" 
         outer_r="15.0*cm"
-        phi1="-0.8*Pi*rad"
-        phi2="0.8*Pi*rad">
+        phi1="0.2*Pi*rad"
+        phi2="-0.2*Pi*rad">
 		<slice material="PbWO4"        thickness="1.0*cm" vis="AnlYellow"/>
         <slice material="SiliconOxide" thickness="0.3*mm" vis="AnlYellow" sensitive="true" />
       </layer>
@@ -38,9 +38,9 @@
         vis="AnlBlue"
         inner_z="1.0*cm"
         inner_r="3.5*cm"
-        outer_r="10.0*cm"
-        phi1="0.8*Pi*rad"
-        phi2="-0.8*Pi*rad">
+        outer_r="12.0*cm"
+        phi1="-0.2*Pi*rad"
+        phi2="0.2*Pi*rad">
 		<slice material="PbWO4"        thickness="1.0*cm" vis="AnlYellow"/>
         <slice material="SiliconOxide" thickness="0.3*mm" vis="AnlYellow" sensitive="true" />
       </layer>      

@@ -12,7 +12,7 @@
     <constant name="ffi_ZDC_x_pos"         value="ffi_ZDC_z_pos * ionCrossingAngle"/>
     <constant name="ffi_ZDC_y_pos"         value="0.0 * cm"/>
     <constant name="ffi_ZDC_rotateX_angle" value="0.0 * rad"/>
-    <constant name="ffi_ZDC_rotateY_angle" value="-0.0125 * rad"/>
+    <constant name="ffi_ZDC_rotateY_angle" value="0.0125 * rad"/> <!-- was negative prior to big flip -->
     <constant name="ffi_ZDC_rotateZ_angle" value="0.0 * rad"/>
     <constant name="ffi_ZDC_width"         value="60.0 * cm"/>
     <constant name="ffi_ZDC_length"        value="200.0 * cm"/>

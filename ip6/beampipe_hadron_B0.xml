@@ -9,7 +9,7 @@
   <detectors>
 
     <detector id="BeamPipeB0_ID" name="BeamPipeB0" type="hadronDownstreamBeamPipe" vis="BeamPipeVis"> 
-      <position x="0.150*m" y="0*m" z="5.9*m" />
+      <position x="-0.150*m" y="0*m" z="5.9*m" />
       <rotation x="0*rad" y="0*rad" z="0*rad" />
     </detector>
 

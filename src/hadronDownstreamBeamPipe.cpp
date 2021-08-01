@@ -49,7 +49,7 @@ static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector sens)  {
 
   /// hard-code defintion here, then refine and make more general
 
-  double drift_beam_pipe_angle = 0.0475492667;
+  double drift_beam_pipe_angle = -0.0475492667;
 
   double b0_hadron_tube_inner_r = 2.9; // cm
   double b0_hadron_tube_outer_r = 3.1; //cm
@@ -105,27 +105,27 @@ static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector sens)  {
 
   //----------------------------//
 
-  auto pv_b0_hadron_tube = assembly.placeVolume( v_b0_hadron_tube, Transform3D(RotationY(0.025), Position(pos.x(), pos.y(), pos.z())));
+  auto pv_b0_hadron_tube = assembly.placeVolume( v_b0_hadron_tube, Transform3D(RotationY(-0.025), Position(pos.x(), pos.y(), pos.z())));
   pv_b0_hadron_tube.addPhysVolID("sector", 1);
   DetElement tube_de_1(sdet, "sector1_de", 1);
   tube_de_1.setPlacement(pv_b0_hadron_tube);
 
-  auto pv_drift_tube_section_1 = assembly.placeVolume( v_drift_tube_section_1, Transform3D(RotationY(drift_beam_pipe_angle), Position(71.269416, 0.0, 2353.7))); //2353.06094)));
+  auto pv_drift_tube_section_1 = assembly.placeVolume( v_drift_tube_section_1, Transform3D(RotationY(drift_beam_pipe_angle), Position(-71.269416, 0.0, 2353.7))); //2353.06094)));
   pv_drift_tube_section_1.addPhysVolID("sector", 1);
   DetElement tube_de_2(sdet, "sector2_de", 1);
   tube_de_2.setPlacement(pv_drift_tube_section_1);
   
-  auto pv_drift_tube_section_2 = assembly.placeVolume( v_drift_tube_section_2, Transform3D(RotationY(drift_beam_pipe_angle), Position(87.74933, 0.0, 2699.38578)));
+  auto pv_drift_tube_section_2 = assembly.placeVolume( v_drift_tube_section_2, Transform3D(RotationY(drift_beam_pipe_angle), Position(-87.74933, 0.0, 2699.38578)));
   pv_drift_tube_section_2.addPhysVolID("sector", 1);
   DetElement tube_de_3(sdet, "sector3_de", 1);
   tube_de_3.setPlacement(pv_drift_tube_section_2);
 
-  auto pv_drift_tube_section_3 = assembly.placeVolume( v_drift_tube_section_3, Transform3D(RotationY(drift_beam_pipe_angle), Position(100.820452, 0.0, 2974.07496)));
+  auto pv_drift_tube_section_3 = assembly.placeVolume( v_drift_tube_section_3, Transform3D(RotationY(drift_beam_pipe_angle), Position(-100.820452, 0.0, 2974.07496)));
   pv_drift_tube_section_3.addPhysVolID("sector", 1);
   DetElement tube_de_4(sdet, "sector4_de", 1);
   tube_de_4.setPlacement(pv_drift_tube_section_3);
 
-  auto pv_drift_tube_section_4 = assembly.placeVolume( v_drift_tube_section_4, Transform3D(RotationY(drift_beam_pipe_angle), Position(128.150979, 0.0, 3548.42507)));
+  auto pv_drift_tube_section_4 = assembly.placeVolume( v_drift_tube_section_4, Transform3D(RotationY(drift_beam_pipe_angle), Position(-128.150979, 0.0, 3548.42507)));
   pv_drift_tube_section_4.addPhysVolID("sector", 1);
   DetElement tube_de_5(sdet, "sector5_de", 1);
   tube_de_5.setPlacement(pv_drift_tube_section_4);
