@@ -28,6 +28,8 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
   bool       reflect   = x_det.reflect();
   DetElement sdet(det_name,x_det.id());
   Assembly   assembly(det_name);
+  sens.setType("tracker");
+
   PlacedVolume pv;
   int l_num = 0;
   xml::Component  pos  = x_det.position();
@@ -58,8 +60,8 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
       xml::Component  m_pos  = x_module.position();
       int         s_num      = 0;
 
-      for (xml_coll_t j(x_module, _U(slice)); j; ++j, ++s_num) {
-        xml_comp_t x_slice = j;
+      for (xml_coll_t k(x_module, _U(slice)); k; ++k, ++s_num) {
+        xml_comp_t x_slice = k;
         double     thick   = x_slice.thickness();
         Material   mat     = description.material(x_slice.materialStr());
         string     s_nam   = m_nam + _toString(s_num, "_slice%d");

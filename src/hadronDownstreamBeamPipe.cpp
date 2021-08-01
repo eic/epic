@@ -140,4 +140,4 @@ static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector sens)  {
   return sdet;
 }
 
-DECLARE_DETELEMENT(handronDownstreamBeamPipe,create_detector)
+DECLARE_DETELEMENT(hadronDownstreamBeamPipe,create_detector)

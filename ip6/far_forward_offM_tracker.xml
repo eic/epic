@@ -84,8 +84,8 @@
 
   <readouts>
     <readout name="ForwardOffMTrackerHits">
-      <segmentation type="CartesianGridXY" grid_size_x="1.0*mm" grid_size_y="1.0*mm" />
-      <id>system:8,barrel:3,layer:4,slice:4,x:32:-16,y:-16</id>  
+      <segmentation type="CartesianGridXY" grid_size_x="0.5*mm" grid_size_y="0.5*mm" />
+      <id>system:8,barrel:8,layer:5,module:5,slice:4,x:32:-16,y:-16</id>  
     </readout>
   </readouts>
 
