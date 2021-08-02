@@ -52,7 +52,7 @@ static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector sens) {
   double IP_beampipe_thickness =
       IP_pipe_c.attr<double>(_Unicode(wall_thickness));
   double IP_beampipe_ID = IP_beampipe_OD - IP_beampipe_thickness;
-  double - crossing_angle = IP_pipe_c.attr<double>(_Unicode(-crossing_angle));
+  double crossing_angle = IP_pipe_c.attr<double>(_Unicode(crossing_angle));
 
   // upstream parameters
   double upstream_straight_length =
