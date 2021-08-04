@@ -9,7 +9,7 @@ set(a_lib_name IP6)
 dd4hep_configure_output()
 
 dd4hep_add_plugin(${a_lib_name} SOURCES src/*.cpp
-        USES ActsCore ActsPluginDD4hep
+        USES ActsCore ActsPluginDD4hep ROOT::Core ROOT::Gdml
   )
 target_link_libraries(${a_lib_name}
   PUBLIC DD4hep::DDCore  DD4hep::DDRec DD4hep::DDG4
