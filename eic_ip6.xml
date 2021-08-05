@@ -7,6 +7,7 @@
     <constant name="world_y" value="world_side"/>
     <constant name="world_z" value="100*m"/>
     <constant name="BeamPipeB0_ID" value="1"/>
+    <constant name="BeamPipe_ID" value="2"/>
 
     <include ref="ip6/ip6_defs.xml" />
 
@@ -61,7 +62,7 @@
   <include ref="ip6/display.xml" />
   </display>
 
-  <!--include ref="ip6/beampipe.xml" /-->
+  <include ref="ip6/beampipe.xml" />
   <include ref="ip6/forward_ion_beamline.xml" />
   <include ref="ip6/beampipe_hadron_B0.xml" />
   <include ref="ip6/B0_tracker.xml"/>
