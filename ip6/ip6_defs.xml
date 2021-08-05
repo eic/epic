@@ -9,7 +9,8 @@
     <constant name="BeampipeOD"      value="2.0*IPBeampipe_rmax"/>
 
     
-<!--                                    Hadron Magnets -- PRE BIG FLIP COORDINATES
+    <comment>
+                                    Hadron Magnets -- PRE BIG FLIP COORDINATES
 
 ##   name    center_x center_y center_z rin(z-in) rin(z-out)  dout   length   angle      B      gradient
 ##             [m]      [m]      [m]      [m]        [m]      [m]      [m]   [mrad]     [T]      [T/m]
@@ -24,10 +25,9 @@
     B1APF    0.600444   0.0    20.8159   0.1680    0.1680    0.4360   1.500   25.0   -2.700      0.000
     B2PF    1.522232   0.0    41.9092   0.2       0.2       0.5      5.76    25.0    5.94       0.000
 
--->
+  </comment>
 
 <comment> All magnet values are input by hand and represent the implementation in EICRoot used for the Yellow Report.</comment>
-<!-- ALERT: NOW IN FLIPPED TOP-DOWN COORDINATE SYSTEM -->
 
     <constant name="B0PF_GradientMax"  value="0.0*tesla/m"/>
     <constant name="B0APF_GradientMax" value="0.0*tesla/m"/>
