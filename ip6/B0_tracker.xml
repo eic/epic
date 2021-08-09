@@ -2,32 +2,162 @@
 <lccdd>
   <define>
     <comment>
-      ---------------------------------
-      B0 Tracker Parameters
-      ---------------------------------
+      ### B0 Tracker Parameters
     </comment>
-    <constant name="B0Tracker_zpos" value="B0PF_CenterPosition + B0PF_Length/2.0 - 50.0*cm"/>
-    <constant name="B0Tracker_zmin" value="B0PF_CenterPosition - B0PF_Length/2.0 + 10.0*cm "/>
-  	<constant name="B0Tracker_rotation" value="-0.025*rad"/>
 
-	<constant name="B0Tracker_Station_1_xpos" value="-0.1375013*m" />
-	<constant name="B0Tracker_Station_1_zpos" value="5.4*m" />
-	<constant name="B0Tracker_Station_2_xpos" value="-0.14250078*m" />
+    <comment>
+      - The detector length based on the 0.2*m step size and 4 layers. 
+      - I start from the downstream side of the B0 magnet and an arbitrary offset 
+        which puts the downstream of the detector 10cm from the end of the magnet.
+    </comment>
+    <constant name="B0Tracker_length"      value="60.0*cm"/>
+    <constant name="B0Tracker_zoffset"     value="10.0*cm"/>
+    <constant name="B0TrackerCenter_zpos"  value="5.7*m"/>
+    <constant name="B0TrackerCenter_xpos"  value="-0.145001*m" />
+    <!--constant name="B0Tracker_zpos"        value="B0PF_CenterPosition + B0PF_Length/2.0 - B0Tracker_length/2.0 + B0Tracker_zoffset"/-->
+    <constant name="B0Tracker_zmin"        value="B0TrackerCenter_zpos - B0Tracker_length/2.0 "/>
+    <constant name="B0Tracker_rotation"    value="ionCrossingAngle"/>
+    <comment>
+      average of station 2 and 3 x postions below...
+    </comment>
+    <constant name="B0TrackerSlope_x" value="0.0249974*m" />
+
+    <constant name="B0Tracker_nlayers"   value="4"/>
+    <constant name="B0Tracker_dz"        value="B0Tracker_length/(B0Tracker_nlayers-1)"/>
+
+
+    <comment>
+      How are the positions below computed?  -Whit
+    </comment>
+    <!--
+    <constant name="B0Tracker_Station_1_xpos" value="-0.1375013*m" />
+    <constant name="B0Tracker_Station_1_zpos" value="5.4*m" />
+    <constant name="B0Tracker_Station_2_xpos" value="-0.14250078*m" />
     <constant name="B0Tracker_Station_2_zpos" value="5.6*m" />
-	<constant name="B0Tracker_Station_3_xpos" value="-0.14750026*m" />
+    <constant name="B0Tracker_Station_3_xpos" value="-0.14750026*m" />
     <constant name="B0Tracker_Station_3_zpos" value="5.8*m" />
-	<constant name="B0Tracker_Station_4_xpos" value="-0.15249974*m" />
+    <constant name="B0Tracker_Station_4_xpos" value="-0.15249974*m" />
     <constant name="B0Tracker_Station_4_zpos" value="6.0*m" />
+    -->
 
-	<constant name="B0Tracker_big_disc_phi1" value="0.2*Pi*rad" />
+    <!--
+    <constant name="B0Tracker_big_disc_phi1" value="0.2*Pi*rad" />
     <constant name="B0Tracker_big_disc_phi2" value="-0.2*Pi*rad" />
 
-	<constant name="B0Tracker_small_disc_phi1" value="-0.2*Pi*rad" />
+    <constant name="B0Tracker_small_disc_phi1" value="-0.2*Pi*rad" />
     <constant name="B0Tracker_small_disc_phi2" value="0.2*Pi*rad" />
+    -->
+
+    <comment>
+      This angle is the angle subtended in phi for each trap segment.
+    </comment>
+    <constant name="B0TrackerModOpeningAngle"         value="30.0*degree"/>
+    <constant name="B0TrackerLayer_nModules"          value="12"/>
+    <constant name="B0TrackerLayerSmallMod_nModules"  value="2"/>
+    <constant name="B0TrackerLayerBigMod_nModules"    value="B0TrackerLayer_nModules - B0TrackerLayerSmallMod_nModules"/>
+    <constant name="B0TrackerLayerBigMod_phi0"        value="(B0TrackerLayerSmallMod_nModules/2.0 + 0.5)*B0TrackerModOpeningAngle + Pi"/>
+    <constant name="B0TrackerLayerSmallMod_phi0"        value="(B0TrackerLayerSmallMod_nModules/2.0 - 0.5)*B0TrackerModOpeningAngle + Pi"/>
+
+    <constant name="B0TrackerMod1Inner_z"      value="1.0*cm" />
+    <constant name="B0TrackerMod1Inner_r"      value="3.5*cm" />
+    <constant name="B0TrackerMod1Outer_r"      value="15.0*cm"/>
+    <constant name="B0TrackerMod1_x1"          value="2.0*B0TrackerMod1Inner_r*sin(B0TrackerModOpeningAngle/2.0)"/>
+    <constant name="B0TrackerMod1_x2"          value="2.0*B0TrackerMod1Outer_r*sin(B0TrackerModOpeningAngle/2.0)"/>
+    <constant name="B0TrackerMod1_y"           value="B0TrackerMod1Outer_r*cos(B0TrackerModOpeningAngle/2.0) - B0TrackerMod1Inner_r"/>
+
+    <constant name="B0TrackerMod1SmallOuter_r" value="10.0*cm"/>
+    <constant name="B0TrackerMod1Small_x2"     value="2.0*B0TrackerMod1SmallOuter_r*sin(B0TrackerModOpeningAngle/2.0)"/>
+    <constant name="B0TrackerMod1Small_y"      value="B0TrackerMod1SmallOuter_r*cos(B0TrackerModOpeningAngle/2.0) - B0TrackerMod1Inner_r"/>
+    
+    <constant name="B0TrackerMod2SmallOuter_r" value="11.0*cm"/>
+    <constant name="B0TrackerMod2Small_x2"     value="2.0*B0TrackerMod2SmallOuter_r*sin(B0TrackerModOpeningAngle/2.0)"/>
+    <constant name="B0TrackerMod2Small_y"      value="B0TrackerMod2SmallOuter_r*cos(B0TrackerModOpeningAngle/2.0) - B0TrackerMod1Inner_r"/>
+
+    <constant name="B0TrackerMod3SmallOuter_r" value="11.0*cm"/>
+    <constant name="B0TrackerMod3Small_x2"     value="2.0*B0TrackerMod3SmallOuter_r*sin(B0TrackerModOpeningAngle/2.0)"/>
+    <constant name="B0TrackerMod3Small_y"      value="B0TrackerMod3SmallOuter_r*cos(B0TrackerModOpeningAngle/2.0) - B0TrackerMod1Inner_r"/>
+
+    <constant name="B0TrackerMod4SmallOuter_r" value="12.0*cm"/>
+    <constant name="B0TrackerMod4Small_x2"     value="2.0*B0TrackerMod4SmallOuter_r*sin(B0TrackerModOpeningAngle/2.0)"/>
+    <constant name="B0TrackerMod4Small_y"      value="B0TrackerMod4SmallOuter_r*cos(B0TrackerModOpeningAngle/2.0) - B0TrackerMod1Inner_r"/>
 
   </define>
 
   <detectors>
+
+    <detector
+      id="B0Tracker_Station_1_ID"
+      name="B0Tracker"
+      type="ip6_B0Tracker"
+      readout="B0TrackerHits"
+      vis="AnlRed"
+      reflect="false">
+      <position x="B0TrackerCenter_xpos" y="0" z="B0TrackerCenter_zpos"/>
+      <rotation x="0*rad" y="B0Tracker_rotation" z="0*rad"/>
+      <module name="Module1" vis="AnlProcess_Blue">
+        <trd x1="B0TrackerMod1_x1/2.0" x2="B0TrackerMod1_x2/2.0" z="B0TrackerMod1_y/2"/>
+        <module_component thickness="0.3*mm" material="SiliconOxide" sensitive="true"/>
+      </module>
+      <module name="SmallModule1" vis="AnlProcess_Blue">
+        <trd x1="B0TrackerMod1_x1/2.0" x2="B0TrackerMod1Small_x2/2.0" z="B0TrackerMod1Small_y/2"/>
+        <module_component thickness="0.3*mm" material="SiliconOxide" sensitive="true"/>
+      </module>
+      <module name="SmallModule2" vis="AnlProcess_Blue">
+        <trd x1="B0TrackerMod1_x1/2.0" x2="B0TrackerMod2Small_x2/2.0" z="B0TrackerMod2Small_y/2"/>
+        <module_component thickness="0.3*mm" material="SiliconOxide" sensitive="true"/>
+      </module>
+      <module name="SmallModule3" vis="AnlProcess_Blue">
+        <trd x1="B0TrackerMod1_x1/2.0" x2="B0TrackerMod3Small_x2/2.0" z="B0TrackerMod3Small_y/2"/>
+        <module_component thickness="0.3*mm" material="SiliconOxide" sensitive="true"/>
+      </module>
+      <module name="SmallModule4" vis="AnlProcess_Blue">
+        <trd x1="B0TrackerMod1_x1/2.0" x2="B0TrackerMod4Small_x2/2.0" z="B0TrackerMod4Small_y/2"/>
+        <module_component thickness="0.3*mm" material="SiliconOxide" sensitive="true"/>
+      </module>
+      <layer id="1">
+        <envelope  vis="AnlRed" rmin="B0TrackerMod1Inner_r" rmax="B0TrackerMod1Outer_r" length="1.0*cm" 
+          zstart="-B0Tracker_length/2.0" />
+        <ring vis="AnlRed" phi0="B0TrackerLayerBigMod_phi0" dphi="B0TrackerModOpeningAngle" 
+          r="B0TrackerMod1Inner_r+B0TrackerMod1_y/2.0" zstart="0.0*mm" 
+          nmodules="10" dz="0 * mm" module="Module1" />
+        <ring vis="AnlRed" phi0="-B0TrackerLayerSmallMod_phi0" dphi="B0TrackerModOpeningAngle"
+          r="B0TrackerMod1Inner_r+B0TrackerMod1Small_y/2.0" zstart="0.0*mm" 
+          nmodules="B0TrackerLayerSmallMod_nModules" dz="0 * mm" module="SmallModule1" />
+      </layer>
+      <layer id="2">
+        <envelope  vis="AnlRed" rmin="B0TrackerMod1Inner_r" rmax="B0TrackerMod1Outer_r" length="1.0*cm" 
+          zstart="-B0Tracker_length/2.0 + 1.0*B0Tracker_dz" />
+        <ring vis="AnlRed" phi0="B0TrackerLayerBigMod_phi0" dphi="B0TrackerModOpeningAngle" 
+          r="B0TrackerMod1Inner_r+B0TrackerMod1_y/2.0" zstart="0.0*mm" 
+          nmodules="10" dz="0 * mm" module="Module1" />
+        <ring vis="AnlRed" phi0="-B0TrackerLayerSmallMod_phi0" dphi="B0TrackerModOpeningAngle"
+          r="B0TrackerMod1Inner_r+B0TrackerMod2Small_y/2.0" zstart="0.0*mm" 
+          nmodules="B0TrackerLayerSmallMod_nModules" dz="0 * mm" module="SmallModule2" />
+      </layer>
+      <layer id="3">
+        <envelope  vis="AnlRed" rmin="B0TrackerMod1Inner_r" rmax="B0TrackerMod1Outer_r" length="1.0*cm" 
+          zstart="-B0Tracker_length/2.0 +  2.0*B0Tracker_dz" />
+        <ring vis="AnlRed" phi0="B0TrackerLayerBigMod_phi0" dphi="B0TrackerModOpeningAngle" 
+          r="B0TrackerMod1Inner_r+B0TrackerMod1_y/2.0" zstart="0.0*mm" 
+          nmodules="10" dz="0 * mm" module="Module1" />
+        <ring vis="AnlRed" phi0="-B0TrackerLayerSmallMod_phi0" dphi="B0TrackerModOpeningAngle"
+          r="B0TrackerMod1Inner_r+B0TrackerMod3Small_y/2.0" zstart="0.0*mm" 
+          nmodules="B0TrackerLayerSmallMod_nModules" dz="0 * mm" module="SmallModule3" />
+      </layer>
+      <layer id="4">
+        <envelope  vis="AnlRed" rmin="B0TrackerMod1Inner_r" rmax="B0TrackerMod1Outer_r" length="1.0*cm" 
+          zstart="-B0Tracker_length/2.0 + 3.0*B0Tracker_dz" />
+        <ring vis="AnlRed" phi0="B0TrackerLayerBigMod_phi0" dphi="B0TrackerModOpeningAngle" 
+          r="B0TrackerMod1Inner_r+B0TrackerMod1_y/2.0" zstart="0.0*mm" 
+          nmodules="10" dz="0 * mm" module="Module1" />
+        <ring vis="AnlRed" phi0="-B0TrackerLayerSmallMod_phi0" dphi="B0TrackerModOpeningAngle"
+          r="B0TrackerMod1Inner_r+B0TrackerMod4Small_y/2.0" zstart="0.0*mm" 
+          nmodules="B0TrackerLayerSmallMod_nModules" dz="0 * mm" module="SmallModule4" />
+      </layer>
+    </detector>
+
+
+    <!--
     <detector 
       id="B0Tracker_Station_1_ID"
       name="B0Tracker_Station_1"
@@ -156,6 +286,7 @@
 
     </detector>
 
+-->
 
 
 
@@ -163,8 +294,8 @@
 
   <readouts>
     <readout name="B0TrackerHits">
-      <segmentation type="CartesianGridXY" grid_size_x="20.0*um" grid_size_y="20.0*um" />
-      <id>system:8,barrel:3,layer:4,slice:4,x:32:-16,y:-16</id>  
+      <segmentation type="CartesianGridXZ" grid_size_x="0.020*mm" grid_size_z="0.020*mm" />
+      <id>system:8,barrel:2,layer:4,module:12,sensor:2,x:32:-16,z:-16</id>
     </readout>
   </readouts>
 
