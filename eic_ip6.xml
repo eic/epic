@@ -30,8 +30,8 @@
     <constant name="B0Tracker_Station_3_ID"          value="152"/>
     <constant name="B0Tracker_Station_4_ID"          value="153"/>
     <constant name="B0Preshower_Station_1_ID"        value="154"/>
-	<constant name="ForwardRomanPot_Station_1_ID"   value="155"/>
-    <constant name="ForwardRomanPot_Station_2_ID"   value="156"/>
+    <constant name="ForwardRomanPot_Station_1_ID"    value="155"/>
+    <constant name="ForwardRomanPot_Station_2_ID"    value="156"/>
     
 	<constant name="ForwardOffMTracker_station_1_ID" value="159"/>
     <constant name="ForwardOffMTracker_station_2_ID" value="160"/>
@@ -39,6 +39,10 @@
     <constant name="ForwardOffMTracker_station_4_ID" value="162"/>
     <constant name="ffi_ZDC_ECAL_ID"       value="163"/>
     <constant name="ffi_ZDC_HCAL_ID"       value="164"/>
+
+    <constant name="tracker_region_zmax" value="10*m"/>
+    <constant name="tracker_region_rmax" value="1*m"/>
+    
 
     <comment> 
         =====================================
@@ -60,7 +64,7 @@
   </includes>
 
   <display>
-  <include ref="ip6/display.xml" />
+  <include ref="ip6/ip6_display.xml" />
   </display>
 
   <include ref="ip6/beampipe.xml" />

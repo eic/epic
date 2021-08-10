@@ -2,23 +2,78 @@
 <lccdd>
   <define>
     <comment>
-      ---------------------------------
-      B0 Tracker Parameters
-      ---------------------------------
+    ###  B0 Tracker Parameters
     </comment>
-  	<constant name="B0Preshower_rotation" value="-0.025*rad"/>
+    <constant name="B0Preshower_rotation" value="ionCrossingAngle"/>
+    <constant name="B0Preshower_Station_1_xpos" value="-0.15749922*m" />
 
-	<constant name="B0Preshower_Station_1_xpos" value="-0.15749922*m" />
-	<constant name="B0Preshower_Station_1_zpos" value="6.2*m" />
+    <constant name="B0Preshower_length" value="5.0*cm" />
+    <comment> 
+      where do these numbers come from?
+    </comment>
+    <constant name="B0PreshowerCenter_xpos" value="-0.15749922*m" />
+    <constant name="B0PreshowerCenter_zpos" value="6.2*m" />
+
+    <comment>
+      This angle is the angle subtended in phi for each trap segment.
+    </comment>
+    <constant name="B0PreshowerModOpeningAngle"         value="30.0*degree"/>
+    <constant name="B0PreshowerLayer_nModules"          value="12"/>
+    <constant name="B0PreshowerLayerSmallMod_nModules"  value="2"/>
+    <constant name="B0PreshowerLayerBigMod_nModules"    value="B0PreshowerLayer_nModules - B0PreshowerLayerSmallMod_nModules"/>
+    <constant name="B0PreshowerLayerBigMod_phi0"        value="(B0PreshowerLayerSmallMod_nModules/2.0 + 0.5)*B0PreshowerModOpeningAngle + Pi"/>
+    <constant name="B0PreshowerLayerSmallMod_phi0"        value="(B0PreshowerLayerSmallMod_nModules/2.0 - 0.5)*B0PreshowerModOpeningAngle + Pi"/>
+
+    <constant name="B0PreshowerMod1Inner_z"      value="1.0*cm" />
+    <constant name="B0PreshowerMod1Inner_r"      value="3.5*cm" />
+    <constant name="B0PreshowerMod1Outer_r"      value="15.0*cm"/>
+    <constant name="B0PreshowerMod1_x1"          value="2.0*B0PreshowerMod1Inner_r*sin(B0PreshowerModOpeningAngle/2.0)"/>
+    <constant name="B0PreshowerMod1_x2"          value="2.0*B0PreshowerMod1Outer_r*sin(B0PreshowerModOpeningAngle/2.0)"/>
+    <constant name="B0PreshowerMod1_y"           value="B0PreshowerMod1Outer_r*cos(B0PreshowerModOpeningAngle/2.0) - B0PreshowerMod1Inner_r"/>
+
+    <constant name="B0PreshowerMod1SmallOuter_r" value="12.0*cm"/>
+    <constant name="B0PreshowerMod1Small_x2"     value="2.0*B0PreshowerMod1SmallOuter_r*sin(B0PreshowerModOpeningAngle/2.0)"/>
+    <constant name="B0PreshowerMod1Small_y"      value="B0PreshowerMod1SmallOuter_r*cos(B0PreshowerModOpeningAngle/2.0) - B0PreshowerMod1Inner_r"/>
 
   </define>
 
   <detectors>
+    <detector
+      id="B0Preshower_Station_1_ID"
+      name="B0Preshower"
+      type="ip6_B0Preshower"
+      readout="B0PreshowerHits"
+      vis="AnlRed"
+      reflect="false">
+      <position x="B0PreshowerCenter_xpos" y="0" z="B0PreshowerCenter_zpos"/>
+      <rotation x="0*rad" y="B0Preshower_rotation" z="0*rad"/>
+      <module name="Module1" vis="AnlProcess_Blue">
+        <trd x1="B0PreshowerMod1_x1/2.0" x2="B0PreshowerMod1_x2/2.0" z="B0PreshowerMod1_y/2"/>
+        <module_component material="PbWO4"        thickness="1.0*cm" vis="AnlYellow"/>
+        <module_component material="SiliconOxide" thickness="0.3*mm" sensitive="true"/>
+      </module>
+      <module name="SmallModule1" vis="AnlProcess_Blue">
+        <trd x1="B0PreshowerMod1_x1/2.0" x2="B0PreshowerMod1Small_x2/2.0" z="B0PreshowerMod1Small_y/2"/>
+        <module_component material="PbWO4"        thickness="1.0*cm" vis="AnlYellow"/>
+        <module_component material="SiliconOxide" thickness="0.3*mm" sensitive="true"/>
+      </module>
+      <layer id="1">
+        <envelope  vis="AnlRed" rmin="B0PreshowerMod1Inner_r" rmax="B0PreshowerMod1Outer_r" length="1.0*cm" 
+          zstart="-B0Preshower_length/2.0" />
+        <ring vis="AnlRed" phi0="B0PreshowerLayerBigMod_phi0" dphi="B0PreshowerModOpeningAngle" 
+          r="B0PreshowerMod1Inner_r+B0PreshowerMod1_y/2.0" zstart="0.0*mm" 
+          nmodules="10" dz="0 * mm" module="Module1" />
+        <ring vis="AnlRed" phi0="-B0PreshowerLayerSmallMod_phi0" dphi="B0PreshowerModOpeningAngle"
+          r="B0PreshowerMod1Inner_r+B0PreshowerMod1Small_y/2.0" zstart="0.0*mm" 
+          nmodules="B0PreshowerLayerSmallMod_nModules" dz="0 * mm" module="SmallModule1" />
+      </layer>
+    </detector>
+  <!--
     <detector 
       id="B0Preshower_Station_1_ID"
       name="B0Preshower_Station_1"
       readout="B0PreshowerHits" 
-      type="ip6_SimpleDiskTracker"
+      type="ip6_B0Preshower"
       insideTrackingVolume="true"
       reflect="false"
       vis="AnlRed">
@@ -30,8 +85,8 @@
         outer_r="15.0*cm"
         phi1="0.2*Pi*rad"
         phi2="-0.2*Pi*rad">
-		<slice material="PbWO4"        thickness="1.0*cm" vis="AnlYellow"/>
-        <slice material="SiliconOxide" thickness="0.3*mm" vis="AnlYellow" sensitive="true" />
+      <slice material="PbWO4"        thickness="1.0*cm" vis="AnlYellow"/>
+      <slice material="SiliconOxide" thickness="0.3*mm" vis="AnlYellow" sensitive="true" />
       </layer>
 		
       <layer id="2"
@@ -41,16 +96,17 @@
         outer_r="12.0*cm"
         phi1="-0.2*Pi*rad"
         phi2="0.2*Pi*rad">
-		<slice material="PbWO4"        thickness="1.0*cm" vis="AnlYellow"/>
-        <slice material="SiliconOxide" thickness="0.3*mm" vis="AnlYellow" sensitive="true" />
+      <slice material="PbWO4"        thickness="1.0*cm" vis="AnlYellow"/>
+      <slice material="SiliconOxide" thickness="0.3*mm" vis="AnlYellow" sensitive="true" />
       </layer>      
     </detector>
+    -->
   </detectors>
 
   <readouts>
     <readout name="B0PreshowerHits">
-      <segmentation type="CartesianGridXY" grid_size_x="1.0*mm" grid_size_y="1.0*mm" />
-      <id>system:8,barrel:3,layer:4,slice:4,x:32:-16,y:-16</id>  
+      <segmentation type="CartesianGridXZ" grid_size_x="1.0*mm" grid_size_z="1.0*mm" />
+      <id>system:8,barrel:2,layer:4,module:12,sensor:2,x:32:-16,z:-16</id>
     </readout>
   </readouts>
 

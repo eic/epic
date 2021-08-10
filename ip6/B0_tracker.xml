@@ -21,10 +21,8 @@
       average of station 2 and 3 x postions below...
     </comment>
     <constant name="B0TrackerSlope_x" value="0.0249974*m" />
-
     <constant name="B0Tracker_nlayers"   value="4"/>
     <constant name="B0Tracker_dz"        value="B0Tracker_length/(B0Tracker_nlayers-1)"/>
-
 
     <comment>
       How are the positions below computed?  -Whit
