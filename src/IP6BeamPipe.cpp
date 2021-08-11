@@ -39,6 +39,7 @@ static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector sens)  {
   Material   m_Cu    = det.material("Copper");
   Material   m_Al    = det.material("Aluminum");
   Material   m_Be    = det.material("Beryllium");
+  Material   m_Au    = det.material("Gold");
   string     vis_name  = x_det.visStr();
 
   int n = 0;
@@ -48,17 +49,18 @@ static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector sens)  {
   xml::Component downstream_c = x_det.child(_Unicode(downstream_pipe));
 
   // IP
-  double IP_beampipe_OD        = IP_pipe_c.attr<double>(_Unicode(OD));
-  double IP_beampipe_thickness = IP_pipe_c.attr<double>(_Unicode(wall_thickness));
-  double IP_beampipe_ID        = IP_beampipe_OD - IP_beampipe_thickness;
-  double crossing_angle        = IP_pipe_c.attr<double>(_Unicode(crossing_angle));
+  double IP_beampipe_OD             = IP_pipe_c.attr<double>(_Unicode(OD));
+  double IP_beampipe_wall_thickness = IP_pipe_c.attr<double>(_Unicode(wall_thickness));
+  double IP_beampipe_gold_thickness = IP_pipe_c.attr<double>(_Unicode(gold_thickness));
+  double IP_beampipe_ID             = IP_beampipe_OD - IP_beampipe_gold_thickness - IP_beampipe_wall_thickness;
+  double crossing_angle             = IP_pipe_c.attr<double>(_Unicode(crossing_angle));
 
   // upstream parameters
   double upstream_straight_length  = upstream_c.attr<double>(_Unicode(straight_length));;
   double upstream_total_length     = upstream_c.attr<double>(_Unicode(length));
   double upstream_conic_length     = upstream_total_length - upstream_straight_length;
   double upstream_beampipe_exit_OD = 229.96 * mm;
-  double upstream_beampipe_exit_ID = upstream_beampipe_exit_OD - IP_beampipe_thickness;
+  double upstream_beampipe_exit_ID = upstream_beampipe_exit_OD - IP_beampipe_gold_thickness - IP_beampipe_wall_thickness;
   double upstream_epipe_thickness  = 4.0*mm;
 
   // downstream parameters
@@ -79,21 +81,30 @@ static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector sens)  {
 
   // -----------------------------
   // IP beampipe
-  Tube downstream_IP_tube(IP_beampipe_ID/2.0, IP_beampipe_OD/2.0, downstream_straight_length/2.0);
+  Tube downstream_IP_gold(IP_beampipe_OD/2.0 - IP_beampipe_gold_thickness, IP_beampipe_OD/2.0, downstream_straight_length/2.0);
+  Tube downstream_IP_tube(IP_beampipe_ID/2.0, IP_beampipe_OD/2.0 - IP_beampipe_gold_thickness, downstream_straight_length/2.0);
   Tube downstream_IP_vacuum(0.0, IP_beampipe_ID/2.0, downstream_straight_length/2.0);
-  Tube upstream_IP_tube(IP_beampipe_ID/2.0, IP_beampipe_OD/2.0, upstream_straight_length/2.0);
+  Tube upstream_IP_gold(IP_beampipe_OD/2.0 - IP_beampipe_gold_thickness, IP_beampipe_OD/2.0, upstream_straight_length/2.0);
+  Tube upstream_IP_tube(IP_beampipe_ID/2.0, IP_beampipe_OD/2.0 - IP_beampipe_gold_thickness, upstream_straight_length/2.0);
   Tube upstream_IP_vacuum(0.0, IP_beampipe_OD/2.0, upstream_straight_length/2.0);
 
+  Volume v_upstream_IP_gold("v_upstream_IP_gold", upstream_IP_gold, m_Au);
   Volume v_upstream_IP_tube("v_upstream_IP_tube", upstream_IP_tube, m_Be);
+  Volume v_downstream_IP_gold("v_downstream_IP_gold", downstream_IP_gold, m_Au);
   Volume v_downstream_IP_tube("v_downstream_IP_tube", downstream_IP_tube, m_Be);
 
   //v_upstream_IP_tube.setVisAttributes(det,"GrayVis");
   //v_downstream_IP_tube.setVisAttributes(det,"RedVis");
+  sdet.setAttributes(det, v_upstream_IP_gold  , x_det.regionStr(), x_det.limitsStr(), vis_name);
   sdet.setAttributes(det, v_upstream_IP_tube  , x_det.regionStr(), x_det.limitsStr(), vis_name);
+  sdet.setAttributes(det, v_downstream_IP_gold, x_det.regionStr(), x_det.limitsStr(), vis_name);
   sdet.setAttributes(det, v_downstream_IP_tube, x_det.regionStr(), x_det.limitsStr(), vis_name);
 
+  auto pv_upstream_IP_gold = assembly.placeVolume( v_upstream_IP_gold, Position(0, 0, -upstream_straight_length / 2.0));
   auto pv_upstream_IP_tube = assembly.placeVolume( v_upstream_IP_tube, Position(0, 0, -upstream_straight_length / 2.0));
 
+  auto pv_downstream_IP_gold = assembly.placeVolume(
+      v_downstream_IP_gold, Position(0, 0, downstream_straight_length / 2.0));
   auto pv_downstream_IP_tube = assembly.placeVolume(
       v_downstream_IP_tube, Position(0, 0, downstream_straight_length / 2.0));
 
@@ -105,7 +116,7 @@ static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector sens)  {
   Cone upstream_conic_section(upstream_conic_length / 2.0,
                               IP_beampipe_ID / 2.0, IP_beampipe_OD / 2.0,
                               IP_beampipe_ID / 2.0 + upstream_delta_r,
-                              IP_beampipe_OD / 2.0+ upstream_delta_r  + IP_beampipe_thickness);
+                              IP_beampipe_OD / 2.0 + upstream_delta_r  + IP_beampipe_gold_thickness + IP_beampipe_wall_thickness);
   Cone upstream_conic_section_vacuum(upstream_conic_length / 2.0,
                                      0.0, IP_beampipe_ID / 2.0,
                                      0.0, IP_beampipe_ID / 2.0 + upstream_delta_r);
