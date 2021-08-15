@@ -89,7 +89,8 @@ static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector sens)  {
     std::vector<double> zero, rmax, rmin, z;
     for (xml_coll_t x_zplane_i(x_pipe, _Unicode(zplane)); x_zplane_i; ++x_zplane_i) {
       xml_comp_t x_zplane = x_zplane_i;
-      auto thickness = getAttrOrDefault(x_zplane, _U(thickness), x_pipe.thickness());
+      auto thickness = getAttrOrDefault(x_zplane, _Unicode(thickness), x_pipe.thickness());
+      thickness += getAttrOrDefault(x_zplane, _Unicode(extra_thickness), 0.0);
       zero.push_back(0);
       rmax.push_back(x_zplane.attr<double>(_Unicode(OD)) / 2.0);
       rmin.push_back(x_zplane.attr<double>(_Unicode(OD)) / 2.0 - thickness);
@@ -101,6 +102,63 @@ static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector sens)  {
     );
   };
 
+  auto create_volumes = [&](const std::string& name,
+                            xml::Component& x_pipe1,
+                            xml::Component& x_pipe2,
+                            xml_coll_t& x_additional_subtraction_i,
+                            bool subtract_vacuum_from_matter = true,
+                            bool subtract_matter_from_vacuum = false) {
+    auto pipe1_polycones = zplane_to_polycones(x_pipe1);
+    auto pipe2_polycones = zplane_to_polycones(x_pipe2);
+
+    auto crossing_angle = getAttrOrDefault(x_pipe2, _Unicode(crossing_angle), 0.0);
+    auto axis_intersection = getAttrOrDefault(x_pipe2, _Unicode(axis_intersection), 0.0);
+
+    auto tf = Transform3D(Position(0,0,axis_intersection)) *
+              Transform3D(RotationY(crossing_angle)) *
+              Transform3D(Position(0,0,-axis_intersection));
+
+    // union of all matter and vacuum
+    UnionSolid matter_union(pipe1_polycones.first,
+                            pipe2_polycones.first,
+                            tf);
+    UnionSolid vacuum_union(pipe1_polycones.second,
+                            pipe2_polycones.second,
+                            tf);
+
+    // subtract vacuum from matter
+    BooleanSolid matter;
+    if (subtract_vacuum_from_matter) {
+      matter = SubtractionSolid(matter_union, vacuum_union);
+    } else {
+      matter = matter_union;
+    }
+    // subtract matter from vacuum
+    BooleanSolid vacuum;
+    if (subtract_matter_from_vacuum) {
+      vacuum = SubtractionSolid(vacuum_union, matter_union);
+    } else {
+      vacuum = vacuum_union;
+    }
+
+    // subtract additional vacuum from matter
+    for (; x_additional_subtraction_i; ++x_additional_subtraction_i) {
+      xml_comp_t x_additional_subtraction = x_additional_subtraction_i;
+      auto additional_polycones = zplane_to_polycones(x_additional_subtraction);
+      auto additional_crossing_angle = getAttrOrDefault(x_additional_subtraction, _Unicode(crossing_angle), 0.0);
+      auto additional_axis_intersection = getAttrOrDefault(x_additional_subtraction, _Unicode(axis_intersection), 0.0);
+      auto additional_tf = Transform3D(Position(0,0,additional_axis_intersection)) *
+                           Transform3D(RotationY(additional_crossing_angle)) *
+                           Transform3D(Position(0,0,-additional_axis_intersection));
+      matter = SubtractionSolid(matter, additional_polycones.second, additional_tf);
+    }
+
+    return std::make_pair<Volume,Volume>(
+      {"v_" + name + "_matter", matter, m_Al},
+      {"v_" + name + "_vacuum", vacuum, m_Vacuum}
+    );
+  };
+
   // -----------------------------
   // Upstream:
   // - incoming hadron tube: straight section, tapered section, straight section
@@ -109,40 +167,24 @@ static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector sens)  {
   xml::Component upstream_c = x_det.child(_Unicode(upstream));
   xml::Component incoming_hadron_c = upstream_c.child(_Unicode(incoming_hadron));
   xml::Component outgoing_lepton_c = upstream_c.child(_Unicode(outgoing_lepton));
-  auto outgoing_lepton_polycones = zplane_to_polycones(outgoing_lepton_c);
-  auto incoming_hadron_polycones = zplane_to_polycones(incoming_hadron_c);
+  xml_coll_t additional_subtractions_upstream(upstream_c, _Unicode(additional_subtraction));
+  bool subtract_vacuum_upstream = getAttrOrDefault<bool>(upstream_c, _Unicode(subtract_vacuum), true);
+  bool subtract_matter_upstream = getAttrOrDefault<bool>(upstream_c, _Unicode(subtract_matter), true);
+  auto volumes_upstream = create_volumes("upstream",
+                                         outgoing_lepton_c,
+                                         incoming_hadron_c,
+                                         additional_subtractions_upstream,
+                                         subtract_vacuum_upstream,
+                                         subtract_matter_upstream
+                                         );
 
-  auto incoming_crossing_angle = getAttrOrDefault(incoming_hadron_c, _Unicode(crossing_angle), 0.0);
-  auto incoming_axis_intersection = getAttrOrDefault(incoming_hadron_c, _Unicode(axis_intersection), 0.0);
-
-
-  auto upstream_tf = Transform3D(Position(0,0,incoming_axis_intersection)) *
-                     Transform3D(RotationY(incoming_crossing_angle)) *
-                     Transform3D(Position(0,0,-incoming_axis_intersection));
-
-  UnionSolid upstream_matter(outgoing_lepton_polycones.first,
-                             incoming_hadron_polycones.first,
-                             upstream_tf);
-  UnionSolid upstream_vacuum(outgoing_lepton_polycones.second,
-                             incoming_hadron_polycones.second,
-                             upstream_tf);
-  SubtractionSolid upstream(upstream_matter, upstream_vacuum);
-
-  Volume v_upstream("v_upstream", upstream, m_Al);
-  Volume v_upstream_vacuum("v_upstream_vacuum", upstream_vacuum, m_Vacuum);
-
-  if (upstream_c.reflect(true)) {
-    auto tf = Transform3D(RotationZYX(0, M_PI, 0));
-    assembly.placeVolume(v_upstream, tf);
-    if (getAttrOrDefault<bool>(upstream_c, _Unicode(place_vacuum), true)) {
-      assembly.placeVolume(v_upstream_vacuum, tf);
-    }
-  } else {
-    auto tf = Transform3D(RotationZYX(0, 0, 0));
-    assembly.placeVolume(v_upstream, tf);
-    if (getAttrOrDefault<bool>(upstream_c, _Unicode(place_vacuum), true)) {
-      assembly.placeVolume(v_upstream_vacuum, tf);
-    }
+  auto tf_upstream = Transform3D(RotationZYX(0, 0, 0));
+  if (getAttrOrDefault<bool>(upstream_c, _Unicode(reflect), true)) {
+    tf_upstream = Transform3D(RotationZYX(0, M_PI, 0));
+  }
+  assembly.placeVolume(volumes_upstream.first, tf_upstream);
+  if (getAttrOrDefault<bool>(upstream_c, _Unicode(place_vacuum), true)) {
+    assembly.placeVolume(volumes_upstream.second, tf_upstream);
   }
 
   // -----------------------------
@@ -154,58 +196,24 @@ static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector sens)  {
   xml::Component downstream_c = x_det.child(_Unicode(downstream));
   xml::Component incoming_lepton_c = downstream_c.child(_Unicode(incoming_lepton));
   xml::Component outgoing_hadron_c = downstream_c.child(_Unicode(outgoing_hadron));
-  auto incoming_lepton_polycones = zplane_to_polycones(incoming_lepton_c);
-  auto outgoing_hadron_polycones = zplane_to_polycones(outgoing_hadron_c);
+  xml_coll_t additional_subtractions_downstream(downstream_c, _Unicode(additional_subtraction));
+  bool subtract_vacuum_downstream = getAttrOrDefault<bool>(downstream_c, _Unicode(subtract_vacuum), true);
+  bool subtract_matter_downstream = getAttrOrDefault<bool>(downstream_c, _Unicode(subtract_matter), true);
+  auto volumes_downstream = create_volumes("downstream",
+                                           incoming_lepton_c,
+                                           outgoing_hadron_c,
+                                           additional_subtractions_downstream,
+                                           subtract_vacuum_downstream,
+                                           subtract_matter_downstream
+                                           );
 
-  auto outgoing_crossing_angle = getAttrOrDefault(outgoing_hadron_c, _Unicode(crossing_angle), 0.0);
-  auto outgoing_axis_intersection = getAttrOrDefault(outgoing_hadron_c, _Unicode(axis_intersection), 0.0);
-
-  auto downstream_tf = Transform3D(Position(0,0,outgoing_axis_intersection)) *
-                       Transform3D(RotationY(outgoing_crossing_angle)) *
-                       Transform3D(Position(0,0,-outgoing_axis_intersection));
-
-  UnionSolid downstream_matter(incoming_lepton_polycones.first,
-                               outgoing_hadron_polycones.first,
-                               downstream_tf);
-  UnionSolid downstream_vacuum(incoming_lepton_polycones.second,
-                               outgoing_hadron_polycones.second,
-                               downstream_tf);
-
-  // subtract vacuum
-  BooleanSolid downstream;
-  if (getAttrOrDefault<bool>(downstream_c, _Unicode(subtract_vacuum), true)) {
-    downstream = SubtractionSolid (downstream_matter, downstream_vacuum);
-  } else {
-    downstream = downstream_matter;
+  auto tf_downstream = Transform3D(RotationZYX(0, 0, 0));
+  if (getAttrOrDefault<bool>(downstream_c, _Unicode(reflect), true)) {
+    tf_downstream = Transform3D(RotationZYX(0, M_PI, 0));
   }
-
-  // subtract additional tubes
-  for (xml_coll_t x_additional_subtraction_i(downstream_c, _Unicode(additional_subtraction)); x_additional_subtraction_i; ++x_additional_subtraction_i) {
-    xml_comp_t x_additional_subtraction = x_additional_subtraction_i;
-    auto additional_subtraction_polycones = zplane_to_polycones(x_additional_subtraction);
-    auto crossing_angle = getAttrOrDefault(x_additional_subtraction, _Unicode(crossing_angle), 0.0);
-    auto axis_intersection = getAttrOrDefault(x_additional_subtraction, _Unicode(axis_intersection), 0.0);
-    auto tf = Transform3D(Position(0,0,axis_intersection)) *
-                         Transform3D(RotationY(crossing_angle)) *
-                         Transform3D(Position(0,0,-axis_intersection));
-    downstream = SubtractionSolid(downstream, additional_subtraction_polycones.second, tf);
-  }
-
-  Volume v_downstream("v_downstream", downstream, m_Al);
-  Volume v_downstream_vacuum("v_downstream_vacuum", downstream_vacuum, m_Vacuum);
-
-  if (downstream_c.reflect(true)) {
-    auto tf = Transform3D(RotationZYX(0, M_PI, 0));
-    assembly.placeVolume(v_downstream, tf);
-    if (getAttrOrDefault<bool>(downstream_c, _Unicode(place_vacuum), true)) {
-      assembly.placeVolume(v_downstream_vacuum, tf);
-    }
-  } else {
-    auto tf = Transform3D(RotationZYX(0, 0, 0));
-    assembly.placeVolume(v_downstream, tf);
-    if (getAttrOrDefault<bool>(downstream_c, _Unicode(place_vacuum), true)) {
-      assembly.placeVolume(v_downstream_vacuum, tf);
-    }
+  assembly.placeVolume(volumes_downstream.first, tf_downstream);
+  if (getAttrOrDefault<bool>(downstream_c, _Unicode(place_vacuum), true)) {
+    assembly.placeVolume(volumes_downstream.second, tf_downstream);
   }
 
   // -----------------------------
