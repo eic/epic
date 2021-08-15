@@ -43,42 +43,16 @@ static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector sens)  {
   Material   m_Vacuum  = det.material("Vacuum");
   string     vis_name  = x_det.visStr();
 
-  int n = 0;
-
   xml::Component IP_pipe_c = x_det.child(_Unicode(IP_pipe));
-  xml::Component upstream_c = x_det.child(_Unicode(upstream_pipe));
-  xml::Component downstream_c = x_det.child(_Unicode(downstream_pipe));
 
   // IP
   double IP_beampipe_OD             = IP_pipe_c.attr<double>(_Unicode(OD));
   double IP_beampipe_wall_thickness = IP_pipe_c.attr<double>(_Unicode(wall_thickness));
   double IP_beampipe_gold_thickness = IP_pipe_c.attr<double>(_Unicode(gold_thickness));
   double IP_beampipe_ID             = IP_beampipe_OD - IP_beampipe_gold_thickness - IP_beampipe_wall_thickness;
-  double crossing_angle             = IP_pipe_c.attr<double>(_Unicode(crossing_angle));
 
-  // upstream parameters
-  double upstream_straight_length  = upstream_c.attr<double>(_Unicode(straight_length));;
-  double upstream_total_length     = upstream_c.attr<double>(_Unicode(length));
-  double upstream_conic_length     = upstream_total_length - upstream_straight_length;
-  double upstream_beampipe_exit_OD = 229.96 * mm;
-  double upstream_beampipe_exit_ID = upstream_beampipe_exit_OD - IP_beampipe_gold_thickness - IP_beampipe_wall_thickness;
-  double upstream_epipe_thickness  = 4.0*mm;
-
-  // downstream parameters
-  double downstream_straight_length = downstream_c.attr<double>(_Unicode(straight_length));
-  double downstream_taper_length    = 310.0 * mm;
-  double downstream_total_length    = downstream_c.attr<double>(_Unicode(length));
-  double downstream_conic_length    = downstream_total_length - downstream_straight_length ;
-  double downstream_cone_rmax       = 110.00*mm/2.0;
-  double downstream_epipe_thickness  = 4.0*mm; // just a guess
-  double downstream_beampipe_exit_OD = 62.0 * mm;
-  double downstream_beampipe_exit_ID = downstream_beampipe_exit_OD - downstream_epipe_thickness;
-  double downstream_hpipe_OD         = IP_beampipe_ID/2; // just a guess
-  double downstream_hpipe_thickness  = 4.0*mm; // just a guess
-
-  double upstream_delta_r   = upstream_conic_length*std::tan(crossing_angle/2.0);
-  double downstream_delta_r = (downstream_conic_length+downstream_straight_length)*std::tan(crossing_angle);
-
+  double upstream_straight_length   = IP_pipe_c.attr<double>(_Unicode(upstream_straight_length));
+  double downstream_straight_length = IP_pipe_c.attr<double>(_Unicode(downstream_straight_length));
 
   // -----------------------------
   // IP beampipe
@@ -96,105 +70,146 @@ static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector sens)  {
   Volume v_upstream_IP_gold("v_upstream_IP_gold", upstream_IP_gold, m_Au);
   Volume v_upstream_IP_tube("v_upstream_IP_tube", upstream_IP_tube, m_Be);
 
-  //v_upstream_IP_tube.setVisAttributes(det,"GrayVis");
-  //v_downstream_IP_tube.setVisAttributes(det,"RedVis");
   sdet.setAttributes(det, v_upstream_IP_gold  , x_det.regionStr(), x_det.limitsStr(), vis_name);
   sdet.setAttributes(det, v_upstream_IP_tube  , x_det.regionStr(), x_det.limitsStr(), vis_name);
   sdet.setAttributes(det, v_downstream_IP_gold, x_det.regionStr(), x_det.limitsStr(), vis_name);
   sdet.setAttributes(det, v_downstream_IP_tube, x_det.regionStr(), x_det.limitsStr(), vis_name);
 
-  auto pv_upstream_IP_vacuum = assembly.placeVolume(
-      v_upstream_IP_vacuum, Position(0, 0, -upstream_straight_length / 2.0));
-  auto pv_upstream_IP_gold = assembly.placeVolume(
-      v_upstream_IP_gold, Position(0, 0, -upstream_straight_length / 2.0));
-  auto pv_upstream_IP_tube = assembly.placeVolume(
-      v_upstream_IP_tube, Position(0, 0, -upstream_straight_length / 2.0));
+  assembly.placeVolume(v_upstream_IP_vacuum, Position(0, 0, -upstream_straight_length / 2.0));
+  assembly.placeVolume(v_upstream_IP_gold, Position(0, 0, -upstream_straight_length / 2.0));
+  assembly.placeVolume(v_upstream_IP_tube, Position(0, 0, -upstream_straight_length / 2.0));
 
-  auto pv_downstream_IP_vacuum = assembly.placeVolume(
-      v_downstream_IP_vacuum, Position(0, 0, downstream_straight_length / 2.0));
-  auto pv_downstream_IP_gold = assembly.placeVolume(
-      v_downstream_IP_gold, Position(0, 0, downstream_straight_length / 2.0));
-  auto pv_downstream_IP_tube = assembly.placeVolume(
-      v_downstream_IP_tube, Position(0, 0, downstream_straight_length / 2.0));
+  assembly.placeVolume(v_downstream_IP_vacuum, Position(0, 0, downstream_straight_length / 2.0));
+  assembly.placeVolume(v_downstream_IP_gold, Position(0, 0, downstream_straight_length / 2.0));
+  assembly.placeVolume(v_downstream_IP_tube, Position(0, 0, downstream_straight_length / 2.0));
 
-  // -----------------------------
-  // upstream
-  Tube upstream_electron_tube(IP_beampipe_ID/2.0 - upstream_epipe_thickness,
-                              IP_beampipe_ID/2.0-0.01*upstream_epipe_thickness,  // leave a gap 1% of pipe thickness
-                              upstream_conic_length/2.0);
-  Cone upstream_conic_section(upstream_conic_length / 2.0,
-                              IP_beampipe_ID / 2.0, IP_beampipe_OD / 2.0,
-                              IP_beampipe_ID / 2.0 + upstream_delta_r,
-                              IP_beampipe_OD / 2.0 + upstream_delta_r  + IP_beampipe_gold_thickness + IP_beampipe_wall_thickness);
-  Cone upstream_conic_section_vacuum(upstream_conic_length / 2.0,
-                                     0.0, IP_beampipe_ID / 2.0,
-                                     0.0, IP_beampipe_ID / 2.0 + upstream_delta_r);
-  Volume v_upstream_conic_section("v_upstream_conic_section", upstream_conic_section, m_Be);
-  Volume v_upstream_electron_tube("v_upstream_electron_tube", upstream_electron_tube, m_Be);
-  sdet.setAttributes(det, v_upstream_conic_section, x_det.regionStr(), x_det.limitsStr(), vis_name);
-  sdet.setAttributes(det, v_upstream_electron_tube, x_det.regionStr(), x_det.limitsStr(), vis_name);
-  //Volume v_upstream_conic_section_vacuum("v_upstream_conic_section_vacuum", upstream_electron_tube, m_Al);
 
-  //auto pv_upstream_conic_section = assembly.placeVolume(
-  //    v_upstream_conic_section,
-  //    Transform3D(
-  //        Position(-upstream_delta_r/2.0,0, -upstream_straight_length - upstream_conic_length / 2.0)) *
-  //        RotationY(crossing_angle / 2.0) * RotationX(M_PI));
-  auto pv_upstream_electron_tube =
-      assembly.placeVolume(v_upstream_electron_tube,
-                           Position(0, 0, -upstream_straight_length - upstream_conic_length / 2.0));
-  //DetElement de_upstream_conic_section(sdet,"de_upstream_conic_section",1);
-  //de_upstream_conic_section.setPlacement(pv_upstream_conic_section);
+  // Helper function to create polycone pairs (shell and vacuum)
+  auto zplane_to_polycones = [](xml::Component& x_pipe) {
+    std::vector<double> zero, rmax, rmin, z;
+    for (xml_coll_t x_zplane_i(x_pipe, _Unicode(zplane)); x_zplane_i; ++x_zplane_i) {
+      xml_comp_t x_zplane = x_zplane_i;
+      auto thickness = getAttrOrDefault(x_zplane, _U(thickness), x_pipe.thickness());
+      zero.push_back(0);
+      rmax.push_back(x_zplane.attr<double>(_Unicode(OD)) / 2.0);
+      rmin.push_back(x_zplane.attr<double>(_Unicode(OD)) / 2.0 - thickness);
+      z.push_back(x_zplane.attr<double>(_Unicode(z)));
+    }
+    return std::make_pair<Polycone,Polycone>(
+      {0, 2.0 * M_PI, rmin, rmax, z},
+      {0, 2.0 * M_PI, zero, rmin, z}
+    );
+  };
 
   // -----------------------------
-  // downstream
-  Tube downstream_hadron_tube(downstream_hpipe_OD/2.0 - downstream_epipe_thickness,
-                                downstream_hpipe_OD/2.0, downstream_conic_length / 2.0);
-  Cone downstream_conic_section(downstream_conic_length / 2.0, IP_beampipe_ID / 2.0,
-                                IP_beampipe_OD / 2.0, downstream_cone_rmax,
-                                downstream_cone_rmax + downstream_epipe_thickness);
-  Cone downstream_taper_section(downstream_taper_length / 2.0, 
-                                  downstream_cone_rmax, downstream_cone_rmax + downstream_epipe_thickness,
-                                  downstream_beampipe_exit_ID/2.0, downstream_beampipe_exit_OD/2.0);
+  // Upstream:
+  // - incoming hadron tube: straight section, tapered section, straight section
+  // - outgoing electron tube: tapered section, straight section
 
-  UnionSolid downstream_pipe_split0(downstream_conic_section, downstream_hadron_tube,
-                                    Transform3D(Position(downstream_delta_r / 2.0, 0.0, 0.0)) *
-                                    RotationY(crossing_angle));
+  xml::Component upstream_c = x_det.child(_Unicode(upstream));
+  xml::Component incoming_hadron_c = upstream_c.child(_Unicode(incoming_hadron));
+  xml::Component outgoing_lepton_c = upstream_c.child(_Unicode(outgoing_lepton));
+  auto outgoing_lepton_polycones = zplane_to_polycones(outgoing_lepton_c);
+  auto incoming_hadron_polycones = zplane_to_polycones(incoming_hadron_c);
 
-  // Vacuum
-  Cone downstream_conic_section_vacuum(downstream_conic_length / 2.0, 
-                                       0.0, IP_beampipe_ID / 2.0,
-                                       0.0, downstream_cone_rmax);
-  Tube downstream_hadron_vacuum(0.0, downstream_hpipe_OD / 2.0 - downstream_epipe_thickness,
-                                downstream_conic_length / 1.9);
-  UnionSolid downstream_pipe_vacuum_split0(downstream_conic_section_vacuum, downstream_hadron_vacuum,
-                                           Transform3D(Position(downstream_delta_r / 2.0, 0.0, 0.0)) *
-                                           RotationY(crossing_angle));
-  SubtractionSolid downstream_pipe_split1(downstream_pipe_split0, 
-                                          downstream_pipe_vacuum_split0);
-  Volume v_downstream_pipe_split1("v_downstream_pipe_split1", downstream_pipe_split1, m_Be);
-  sdet.setAttributes(det, v_downstream_pipe_split1, x_det.regionStr(), x_det.limitsStr(), vis_name);
-  auto pv_downstream_pipe_split1 = assembly.placeVolume(v_downstream_pipe_split1,
-                                                        Position(0, 0, 
-                                                                 downstream_straight_length + 
-                                                                 downstream_conic_length / 2.0));
-  Volume v_downstream_taper_section("v_downstream_taper_section", downstream_taper_section, m_Be);
-  sdet.setAttributes(det, v_downstream_taper_section, x_det.regionStr(), x_det.limitsStr(), vis_name);
-  auto   pv_downstream_taper_section = assembly.placeVolume(v_downstream_taper_section, Position(0, 0, downstream_straight_length + downstream_conic_length + downstream_taper_length / 2.0));
+  auto incoming_crossing_angle = getAttrOrDefault(incoming_hadron_c, _Unicode(crossing_angle), 0.0);
+  auto incoming_axis_intersection = getAttrOrDefault(incoming_hadron_c, _Unicode(axis_intersection), 0.0);
 
-  //Volume v_downstream_conic_section("v_downstream_conic_section", downstream_conic_section, m_Al);
-  //Volume v_downstream_hadron_tube("v_downstream_hadron_tube", downstream_hadron_tube, m_Al);
-  //auto pv_downstream_hadron_tube = assembly.placeVolume(
-  //    v_downstream_hadron_tube,
-  //    Transform3D(Position(downstream_delta_r / 2.0, 0,
-  //                         downstream_straight_length + downstream_conic_length / 2.0)) *
-  //        RotationY(crossing_angle) );
 
-  //auto pv_downstream_conic_section = assembly.placeVolume(
-  //    v_downstream_conic_section, Position(0, 0, downstream_straight_length + downstream_conic_length / 2.0));
-  //DetElement de_downstream_conic_section(sdet,"de_downstream_conic_section",1);
-  //de_downstream_conic_section.setPlacement(pv_downstream_conic_section);
+  auto upstream_tf = Transform3D(Position(0,0,incoming_axis_intersection)) *
+                     Transform3D(RotationY(incoming_crossing_angle)) *
+                     Transform3D(Position(0,0,-incoming_axis_intersection));
 
+  UnionSolid upstream_matter(outgoing_lepton_polycones.first,
+                             incoming_hadron_polycones.first,
+                             upstream_tf);
+  UnionSolid upstream_vacuum(outgoing_lepton_polycones.second,
+                             incoming_hadron_polycones.second,
+                             upstream_tf);
+  SubtractionSolid upstream(upstream_matter, upstream_vacuum);
+
+  Volume v_upstream("v_upstream", upstream, m_Al);
+  Volume v_upstream_vacuum("v_upstream_vacuum", upstream_vacuum, m_Vacuum);
+
+  if (upstream_c.reflect(true)) {
+    auto tf = Transform3D(RotationZYX(0, M_PI, 0));
+    assembly.placeVolume(v_upstream, tf);
+    if (getAttrOrDefault<bool>(upstream_c, _Unicode(place_vacuum), true)) {
+      assembly.placeVolume(v_upstream_vacuum, tf);
+    }
+  } else {
+    auto tf = Transform3D(RotationZYX(0, 0, 0));
+    assembly.placeVolume(v_upstream, tf);
+    if (getAttrOrDefault<bool>(upstream_c, _Unicode(place_vacuum), true)) {
+      assembly.placeVolume(v_upstream_vacuum, tf);
+    }
+  }
+
+  // -----------------------------
+  // downstream:
+  // - incoming electron tube: tube with tube cut out
+  // - outgoing hadron tube: cone centered at scattering angle
+  // (incoming electron tube internal touching to outgoing hadron tube)
+
+  xml::Component downstream_c = x_det.child(_Unicode(downstream));
+  xml::Component incoming_lepton_c = downstream_c.child(_Unicode(incoming_lepton));
+  xml::Component outgoing_hadron_c = downstream_c.child(_Unicode(outgoing_hadron));
+  auto incoming_lepton_polycones = zplane_to_polycones(incoming_lepton_c);
+  auto outgoing_hadron_polycones = zplane_to_polycones(outgoing_hadron_c);
+
+  auto outgoing_crossing_angle = getAttrOrDefault(outgoing_hadron_c, _Unicode(crossing_angle), 0.0);
+  auto outgoing_axis_intersection = getAttrOrDefault(outgoing_hadron_c, _Unicode(axis_intersection), 0.0);
+
+  auto downstream_tf = Transform3D(Position(0,0,outgoing_axis_intersection)) *
+                       Transform3D(RotationY(outgoing_crossing_angle)) *
+                       Transform3D(Position(0,0,-outgoing_axis_intersection));
+
+  UnionSolid downstream_matter(incoming_lepton_polycones.first,
+                               outgoing_hadron_polycones.first,
+                               downstream_tf);
+  UnionSolid downstream_vacuum(incoming_lepton_polycones.second,
+                               outgoing_hadron_polycones.second,
+                               downstream_tf);
+
+  // subtract vacuum
+  BooleanSolid downstream;
+  if (getAttrOrDefault<bool>(downstream_c, _Unicode(subtract_vacuum), true)) {
+    downstream = SubtractionSolid (downstream_matter, downstream_vacuum);
+  } else {
+    downstream = downstream_matter;
+  }
+
+  // subtract additional tubes
+  for (xml_coll_t x_additional_subtraction_i(downstream_c, _Unicode(additional_subtraction)); x_additional_subtraction_i; ++x_additional_subtraction_i) {
+    xml_comp_t x_additional_subtraction = x_additional_subtraction_i;
+    auto additional_subtraction_polycones = zplane_to_polycones(x_additional_subtraction);
+    auto crossing_angle = getAttrOrDefault(x_additional_subtraction, _Unicode(crossing_angle), 0.0);
+    auto axis_intersection = getAttrOrDefault(x_additional_subtraction, _Unicode(axis_intersection), 0.0);
+    auto tf = Transform3D(Position(0,0,axis_intersection)) *
+                         Transform3D(RotationY(crossing_angle)) *
+                         Transform3D(Position(0,0,-axis_intersection));
+    downstream = SubtractionSolid(downstream, additional_subtraction_polycones.second, tf);
+  }
+
+  Volume v_downstream("v_downstream", downstream, m_Al);
+  Volume v_downstream_vacuum("v_downstream_vacuum", downstream_vacuum, m_Vacuum);
+
+  if (downstream_c.reflect(true)) {
+    auto tf = Transform3D(RotationZYX(0, M_PI, 0));
+    assembly.placeVolume(v_downstream, tf);
+    if (getAttrOrDefault<bool>(downstream_c, _Unicode(place_vacuum), true)) {
+      assembly.placeVolume(v_downstream_vacuum, tf);
+    }
+  } else {
+    auto tf = Transform3D(RotationZYX(0, 0, 0));
+    assembly.placeVolume(v_downstream, tf);
+    if (getAttrOrDefault<bool>(downstream_c, _Unicode(place_vacuum), true)) {
+      assembly.placeVolume(v_downstream_vacuum, tf);
+    }
+  }
+
+  // -----------------------------
+  // final placement
   auto pv_assembly = det.pickMotherVolume(sdet).placeVolume(assembly);
   pv_assembly.addPhysVolID("system",sdet.id()).addPhysVolID("barrel",1);
   sdet.setPlacement(pv_assembly);

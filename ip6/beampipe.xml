@@ -9,9 +9,63 @@
   <detectors>
 
     <detector id="BeamPipe_ID" name="BeamPipe" type="IP6BeamPipe" vis="BeamPipeVis"> 
-      <IP_pipe OD="BeampipeOD" wall_thickness="0.757*mm" gold_thickness="5*um" crossing_angle="CrossingAngle" />
-      <downstream_pipe straight_length="670.0 * mm" length="4500.0 * mm" />
-      <upstream_pipe straight_length="800.0 * mm" length="4500.0 * mm" />
+      <IP_pipe
+        OD="BeampipeOD"
+        wall_thickness="0.757*mm"
+        gold_thickness="5*um"
+        crossing_angle="CrossingAngle"
+        upstream_straight_length="800.0 * mm"
+        downstream_straight_length="670.0 * mm"
+      />
+
+      <upstream reflect="true"
+                place_vacuum="false">
+        <outgoing_lepton thickness="2.0*mm">
+          <zplane z="800.0 * mm"   OD="BeampipeOD"/>
+          <zplane z="2690.95 * mm" OD="85.616 * mm"/>
+          <zplane z="4560.17 * mm" OD="99.20 * mm"/>
+        </outgoing_lepton>
+        <incoming_hadron thickness="1.65*mm"
+                         crossing_angle="CrossingAngle">
+          <!-- avoid overlap with 800 mm -->
+          <zplane z="800.0 * mm + BeampipeOD * cos(CrossingAngle)" OD="24.714 * mm"/>
+          <zplane z="2690.95 * mm" OD="24.714 * mm"/>
+          <zplane z="2710.75 * mm" OD="31.75 * mm"/>
+          <zplane z="2890.35 * mm" OD="31.75 * mm"/>
+          <zplane z="2940.35 * mm" OD="44.45 * mm"/>
+          <zplane z="4490.35 * mm" OD="44.45 * mm"/>
+        </incoming_hadron>
+      </upstream>
+
+      <downstream reflect="false"
+                  place_vacuum="false"
+                  subtract_vacuum="false">
+        <incoming_lepton thickness="1.0*mm">
+          <zplane z="670.0 * mm"   OD="BeampipeOD"/>
+          <zplane z="4484.25 * mm" OD="BeampipeOD"/>
+        </incoming_lepton>
+        <outgoing_hadron thickness="4.0*mm"
+                         axis_intersection="670.0 * mm"
+                         crossing_angle="CrossingAngle">
+          <!-- avoid overlap with IP beampipe by going starting at 670 mm + epsilon -->
+          <zplane z=" 670.00 * mm + BeampipeOD * cos(CrossingAngle)" OD="BeampipeOD"/>
+          <!-- FIXME avoid overlap with TrackerEndcapP_Outer_layer3 by moving flange 40 mm in z -->
+          <!-- FIXME avoid overlap with TrackerEndcapP_Outer_layer3 by changing OD -->
+          <zplane z="1240.00 * mm" OD=" 92.06 * mm - 1.0 * mm"/>
+          <zplane z="1240.01 * mm" OD="151.64 * mm" thickness="30.0 * mm"/>
+          <zplane z="1280.00 * mm" OD="151.64 * mm" thickness="30.0 * mm"/>
+          <zplane z="1280.01 * mm" OD=" 92.06 * mm"/>
+          <zplane z="4455.80 * mm" OD="257.92 * mm"/>
+          <zplane z="4455.81 * mm" OD="335.79 * mm" thickness="39.0 * mm"/>
+          <zplane z="4484.25 * mm" OD="335.79 * mm" thickness="39.0 * mm"/>
+        </outgoing_hadron>
+        <additional_subtraction thickness="4.0*mm"
+                                crossing_angle="CrossingAngle">
+          <!-- these are somewhat arbitrary to get the right hole shape -->
+          <zplane z="670.0 * mm"   OD="32. * mm"/>
+          <zplane z="4484.25 * mm" OD="120. * mm"/>
+        </additional_subtraction>
+      </downstream>
     </detector>
 
   </detectors>
