@@ -49,7 +49,7 @@ static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector sens)  {
   double IP_beampipe_OD             = IP_pipe_c.attr<double>(_Unicode(OD));
   double IP_beampipe_wall_thickness = IP_pipe_c.attr<double>(_Unicode(wall_thickness));
   double IP_beampipe_gold_thickness = IP_pipe_c.attr<double>(_Unicode(gold_thickness));
-  double IP_beampipe_ID             = IP_beampipe_OD - IP_beampipe_gold_thickness - IP_beampipe_wall_thickness;
+  double IP_beampipe_ID             = IP_beampipe_OD - 2.0 * IP_beampipe_gold_thickness - 2.0 * IP_beampipe_wall_thickness;
 
   double upstream_straight_length   = IP_pipe_c.attr<double>(_Unicode(upstream_straight_length));
   double downstream_straight_length = IP_pipe_c.attr<double>(_Unicode(downstream_straight_length));
