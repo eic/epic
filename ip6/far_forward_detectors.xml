@@ -8,7 +8,7 @@
       Zero Degree Calorimeter General Parameters
       -------------------------------------------
     </comment>
-    <constant name="ffi_ZDC_z_pos"         value="3710.0 * cm"/>
+    <constant name="ffi_ZDC_z_pos"         value="3560.0 * cm"/> <!-- need to shift FORWARD toward IP to account for 50cm shift -->
     <constant name="ffi_ZDC_x_pos"         value="ffi_ZDC_z_pos * ionCrossingAngle"/>
     <constant name="ffi_ZDC_y_pos"         value="0.0 * cm"/>
     <constant name="ffi_ZDC_rotateX_angle" value="0.0 * rad"/>

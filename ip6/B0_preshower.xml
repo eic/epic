@@ -5,14 +5,14 @@
     ###  B0 Tracker Parameters
     </comment>
     <constant name="B0Preshower_rotation" value="ionCrossingAngle"/>
-    <constant name="B0Preshower_Station_1_xpos" value="-0.15749922*m" />
+    <constant name="B0Preshower_Station_1_xpos" value="-0.17249922*m" />
 
     <constant name="B0Preshower_length" value="5.0*cm" />
     <comment> 
       where do these numbers come from?
     </comment>
-    <constant name="B0PreshowerCenter_xpos" value="-0.15749922*m" />
-    <constant name="B0PreshowerCenter_zpos" value="6.2*m" />
+    <constant name="B0PreshowerCenter_xpos" value="-0.17249922*m" />
+    <constant name="B0PreshowerCenter_zpos" value="6.7*m" />
 
     <comment>
       This angle is the angle subtended in phi for each trap segment.

@@ -49,7 +49,8 @@ static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector sens)  {
 
   /// hard-code defintion here, then refine and make more general
 
-  double drift_beam_pipe_angle = -0.0475492667;
+  double drift_beam_pipe_angle = -0.047666638;
+  //double zPosShift             = 50.0; //cm
 
   double b0_hadron_tube_inner_r = 2.9; // cm
   double b0_hadron_tube_outer_r = 3.1; //cm
@@ -57,7 +58,7 @@ static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector sens)  {
 
   double drift_hadron_section_1_inner_r = 19.5;
   double drift_hadron_section_1_outer_r = 20.5;
-  double drift_hadron_section_1_length  = 392.0; //393.4334363;
+  double drift_hadron_section_1_length  = 342.225466; //393.4334363;
 
   double drift_hadron_section_2_inner_r = 19.5;
   double drift_hadron_section_2_outer_r = 20.5;
@@ -67,11 +68,11 @@ static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector sens)  {
   double drift_hadron_section_3_outer_r_ent = 20.5;
   double drift_hadron_section_3_inner_r_ex  = 5.0;
   double drift_hadron_section_3_outer_r_ex  = 5.2;
-  double drift_hadron_section_3_length  = 250.0;
+  double drift_hadron_section_3_length  = 150.0;
 
   double drift_hadron_section_4_inner_r = 5.0;
   double drift_hadron_section_4_outer_r = 5.2;
-  double drift_hadron_section_4_length  = 900.0;
+  double drift_hadron_section_4_length  = 850.0;
 
   //This is the beam tube in the B0 magnet for the hadron beam
 
@@ -110,22 +111,25 @@ static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector sens)  {
   DetElement tube_de_1(sdet, "sector1_de", 1);
   tube_de_1.setPlacement(pv_b0_hadron_tube);
 
-  auto pv_drift_tube_section_1 = assembly.placeVolume( v_drift_tube_section_1, Transform3D(RotationY(drift_beam_pipe_angle), Position(-71.269416, 0.0, 2353.7))); //2353.06094)));
+  //first tube section - right after b1apf - has same size as RP chamber, but keeping separate.
+  auto pv_drift_tube_section_1 = assembly.placeVolume( v_drift_tube_section_1, Transform3D(RotationY(drift_beam_pipe_angle), Position(-73.23100294, 0.0, 2378.69291))); //2353.06094)));
   pv_drift_tube_section_1.addPhysVolID("sector", 1);
   DetElement tube_de_2(sdet, "sector2_de", 1);
   tube_de_2.setPlacement(pv_drift_tube_section_1);
   
-  auto pv_drift_tube_section_2 = assembly.placeVolume( v_drift_tube_section_2, Transform3D(RotationY(drift_beam_pipe_angle), Position(-87.74933, 0.0, 2699.38578)));
+  //Second section - RP scattering chamber -- keeping separate for now.
+  auto pv_drift_tube_section_2 = assembly.placeVolume( v_drift_tube_section_2, Transform3D(RotationY(drift_beam_pipe_angle), Position(-88.5315717, 0.0, 2699.440911)));
   pv_drift_tube_section_2.addPhysVolID("sector", 1);
   DetElement tube_de_3(sdet, "sector3_de", 1);
   tube_de_3.setPlacement(pv_drift_tube_section_2);
 
-  auto pv_drift_tube_section_3 = assembly.placeVolume( v_drift_tube_section_3, Transform3D(RotationY(drift_beam_pipe_angle), Position(-100.820452, 0.0, 2974.07496)));
+  //Third section -- tapered section acting as poor man's universal exit window.
+  auto pv_drift_tube_section_3 = assembly.placeVolume( v_drift_tube_section_3, Transform3D(RotationY(drift_beam_pipe_angle), Position(-99.25250431, 0.0, 2924.185347)));
   pv_drift_tube_section_3.addPhysVolID("sector", 1);
   DetElement tube_de_4(sdet, "sector4_de", 1);
   tube_de_4.setPlacement(pv_drift_tube_section_3);
 
-  auto pv_drift_tube_section_4 = assembly.placeVolume( v_drift_tube_section_4, Transform3D(RotationY(drift_beam_pipe_angle), Position(-128.150979, 0.0, 3548.42507)));
+  auto pv_drift_tube_section_4 = assembly.placeVolume( v_drift_tube_section_4, Transform3D(RotationY(drift_beam_pipe_angle), Position(-123.076799, 0.0, 3423.617428)));
   pv_drift_tube_section_4.addPhysVolID("sector", 1);
   DetElement tube_de_5(sdet, "sector5_de", 1);
   tube_de_5.setPlacement(pv_drift_tube_section_4);
