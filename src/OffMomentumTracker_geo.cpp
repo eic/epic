@@ -149,7 +149,7 @@ static Ref_t create_OffMomentumTracker(Detector& description, xml_h e, Sensitive
       if (c.isSensitive()) {
         //std::cout << " adding sensitive volume" << c_name << "\n";
         sdet.check(n_sensor > 2, "SiTrackerEndcap2::fromCompact: " + c_name + " Max of 2 modules allowed!");
-        pv.addPhysVolID("sensor", n_sensor);
+        pv.addPhysVolID("slice", n_sensor);
         sens.setType("tracker");
         c_vol.setSensitiveDetector(sens);
         sensitives[m_nam].push_back(pv);
