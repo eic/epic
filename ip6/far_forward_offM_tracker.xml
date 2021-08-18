@@ -11,6 +11,28 @@
   </define>
 
   <detectors>
+
+    <detector
+      id="ForwardOffMTracker_station_1_ID"
+      name="ForwardOffMTracker_station_1"
+      type="ip6_OffMomentumTracker"
+      readout="ForwardOffMTrackerHits"
+      vis="AnlRed"
+      reflect="false">
+      <position x="-780.0*mm" y="0" z="22500*mm"/>
+      <rotation x="0*rad" y="0.0" z="0*rad"/>
+      <module name="Module1" vis="AnlProcess_Blue">
+        <shape x="10.0*cm" y="20.0*cm"/>
+        <module_component thickness="0.3*mm" material="SiliconOxide" sensitive="true" vis="RedVis" />
+      </module>
+      <layer id="1" module="Module1">
+        <envelope  vis="AnlRed" x="10.0*cm" y="20.0*cm" length="1.0*cm" 
+          zstart="0.0/2.0" />
+      </layer>
+    </detector>
+
+
+    <!--
     <detector 
       id="ForwardOffMTracker_station_1_ID"
       name="ForwardOffMTracker_station_1"
@@ -27,6 +49,7 @@
         <slice material="SiliconOxide" thickness="0.3*mm" vis="RedVis" sensitive="true" />
       </layer>
     </detector>
+    -->
 
 	<detector
       id="ForwardOffMTracker_station_2_ID"
@@ -85,7 +108,7 @@
   <readouts>
     <readout name="ForwardOffMTrackerHits">
       <segmentation type="CartesianGridXY" grid_size_x="0.5*mm" grid_size_y="0.5*mm" />
-      <id>system:8,barrel:8,layer:5,module:5,slice:4,x:32:-16,y:-16</id>  
+      <id>system:8,layer:5,module:5,slice:4,x:32:-16,y:-16</id>  
     </readout>
   </readouts>
 
