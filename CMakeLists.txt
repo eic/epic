@@ -17,8 +17,6 @@ dd4hep_add_plugin(${a_lib_name}
   src/ForwardRomanPot_geo.cpp
   src/hadronDownstreamBeamPipe.cpp
   src/IP6BeamPipe.cpp
-  src/SimpleDiskTracker_geo.cpp
-  src/SimpleRectangularTracker_geo.cpp
   src/ZeroDegreeCalorimeterEcal_geo.cpp
   src/ZeroDegreeCalorimeterSampling_geo.cpp
   USES ActsCore ActsPluginDD4hep ROOT::Core ROOT::Gdml

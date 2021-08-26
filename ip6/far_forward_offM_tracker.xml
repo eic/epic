@@ -31,7 +31,62 @@
       </layer>
     </detector>
 
+    <detector
+      id="ForwardOffMTracker_station_2_ID"
+      name="ForwardOffMTracker_station_2"
+      type="ip6_OffMomentumTracker"
+      readout="ForwardOffMTrackerHits"
+      vis="AnlRed"
+      reflect="false">
+      <position x="-870.0*mm" y="0" z="24500*mm"/>
+      <rotation x="0*rad" y="0.0" z="0*rad"/>
+      <module name="Module1" vis="AnlProcess_Blue">
+        <shape x="10.0*cm" y="20.0*cm"/>
+        <module_component thickness="0.3*mm" material="SiliconOxide" sensitive="true" vis="RedVis" />
+      </module>
+      <layer id="1" module="Module1">
+        <envelope  vis="AnlRed" x="10.0*cm" y="20.0*cm" length="1.0*cm" 
+          zstart="0.0/2.0" />
+      </layer>
+    </detector>
 
+    <detector
+      id="ForwardOffMTracker_station_3_ID"
+      name="ForwardOffMTracker_station_3"
+      type="ip6_OffMomentumTracker"
+      readout="ForwardOffMTrackerHits"
+      vis="AnlRed"
+      reflect="false">
+      <position x="-1425.0*mm" y="0" z="34000*mm"/>
+      <rotation x="0*rad" y="0.0" z="0*rad"/>
+      <module name="Module1" vis="AnlProcess_Blue">
+        <shape x="30.0*cm" y="20.0*cm"/>
+        <module_component thickness="0.3*mm" material="SiliconOxide" sensitive="true" vis="RedVis" />
+      </module>
+      <layer id="1" module="Module1">
+        <envelope  vis="AnlRed" x="30.0*cm" y="20.0*cm" length="1.0*cm" 
+          zstart="0.0/2.0" />
+      </layer>
+    </detector>
+
+    <detector
+      id="ForwardOffMTracker_station_4_ID"
+      name="ForwardOffMTracker_station_4"
+      type="ip6_OffMomentumTracker"
+      readout="ForwardOffMTrackerHits"
+      vis="AnlRed"
+      reflect="false">
+      <position x="-1530.0*mm" y="0" z="36000*mm"/>
+      <rotation x="0*rad" y="0.0" z="0*rad"/>
+      <module name="Module1" vis="AnlProcess_Blue">
+        <shape x="30.0*cm" y="20.0*cm"/>
+        <module_component thickness="0.3*mm" material="SiliconOxide" sensitive="true" vis="RedVis" />
+      </module>
+      <layer id="1" module="Module1">
+        <envelope  vis="AnlRed" x="30.0*cm" y="20.0*cm" length="1.0*cm" 
+          zstart="0.0/2.0" />
+      </layer>
+    </detector>
     <!--
     <detector 
       id="ForwardOffMTracker_station_1_ID"
@@ -49,7 +104,6 @@
         <slice material="SiliconOxide" thickness="0.3*mm" vis="RedVis" sensitive="true" />
       </layer>
     </detector>
-    -->
 
 	<detector
       id="ForwardOffMTracker_station_2_ID"
@@ -101,6 +155,7 @@
         <slice material="SiliconOxide" thickness="0.3*mm" vis="RedVis" sensitive="true" />
       </layer>
     </detector>
+    -->
 
 
   </detectors>
