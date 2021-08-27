@@ -1,0 +1,156 @@
+#!/usr/bin/env python3
+
+# same as make_dawn_views but stops at generating the prim file.
+# W. Armstrong (ANL), original bash script
+# C. Peng (ANL), translate to python and add flexible run time for simulation
+
+import os
+import signal
+import subprocess
+import argparse
+import atexit
+import time
+from datetime import datetime
+import fcntl
+import psutil
+
+
+def readline_nonblocking(output):
+    fd = output.fileno()
+    fl = fcntl.fcntl(fd, fcntl.F_GETFL)
+    fcntl.fcntl(fd, fcntl.F_SETFL, fl | os.O_NONBLOCK)
+    try:
+        return output.readline()
+    except:
+        return ''
+
+
+# arguments
+parser = argparse.ArgumentParser()
+
+parser.add_argument('-c', '--compact-file', type=str, dest='compact',
+        default=os.path.join(os.environ.get('DETECTOR_PATH', '.'), 'athena.xml'),
+        help='Top level compact file for detectors')
+
+parser.add_argument('-s', '--skip', type=int,
+        default=0,
+        help='Number of events number to skip in the input')
+
+parser.add_argument('-i', '--input', type=str,
+        default='scripts/input_data/few_events.hepmc',
+        help='Input hepmc file')
+
+parser.add_argument('-o', '--output-dir', type=str, dest='out_dir',
+        default='sim_output',
+        help='output directory')
+
+parser.add_argument('-D', '--detector-only', action='store_true', dest='detector_only',
+        help='only generate the prim files for the detector geometry')
+
+parser.add_argument('-t', '--tag', type=str,dest='file_tag',
+        default='view',
+        help='Output file tag')
+
+parser.add_argument('--timeout', type=int,
+        default=60,
+        help='Timeout in seconds')
+        
+parser.add_argument('passthrough', nargs='*')
+
+args = parser.parse_args()
+
+macro = 'macro/dawn_picture.mac' if args.detector_only else 'macro/dawn_picture2.mac'
+
+# raise error if cannot create a temporary working dir
+# os.makedirs('dawn_view_tmp', exist_ok=False)
+os.makedirs(args.out_dir, exist_ok=True)
+
+# use absolute path so the chdir does not affect them
+args.input = os.path.abspath(args.input)
+args.out_dir = os.path.abspath(args.out_dir)
+args.compact = os.path.abspath(args.compact)
+macro = os.path.abspath(macro)
+
+prim_file = 'g4_0000.prim'
+dawn_env = os.environ.copy()
+dawn_env['DAWN_BATCH'] = 'a'
+# sdir = os.path.dirname(os.path.realpath(__file__))
+
+# Using a python warpper such as npsim introduces some problem in managing the subprocess.
+# The process1 managed by subprocess will generate another process with proc2_pid = proc1_pid + 1, which will not
+# be terminated by terminating or killing the process1.
+# In addition, running Geant4 with vis mode will never exit automatically (it waits for input).
+# Thus the created process 2 will occupy the system resources.
+sim_cmd = ['npsim', '--runType', 'vis',
+        '--compact', args.compact,
+        '--inputFiles', args.input,
+        '--outputFile', 'derp.root',
+        '--numberOfEvents', '1',
+        '--skipNEvents', str(args.skip),
+        '--macroFile', macro]
+
+start = datetime.now()
+elapse = datetime.now() - start
+last_update = datetime.now()
+finished = False
+
+# run simulation
+print(' '.join(sim_cmd))
+p = subprocess.Popen(args=sim_cmd, env=dawn_env,
+                     stdout=subprocess.PIPE, stderr=subprocess.PIPE, stdin=subprocess.PIPE)
+__child_pid = p.pid
+while elapse.seconds < args.timeout:
+    line = readline_nonblocking(p.stdout)
+    elapse = datetime.now() - start
+    time_left = args.timeout - elapse.seconds
+    time_str = '[{:02d}:{:02d}]'.format(elapse.seconds // 60, elapse.seconds % 60)
+
+    if time_left < 10:
+        print('{} === TIMEOUT ===: Terminating in {:d} seconds'.format(time_str, time_left))
+
+    if line:
+        decoded_line = line.decode('utf-8').strip()
+        print('{} {}'.format(time_str, decoded_line))
+        # what we are looking for
+        if decoded_line == 'File  {}  is generated.'.format(prim_file):
+            print('{} === FINISHED ===: Got the prim file, terminating.'.format(time_str))
+            finished = True
+            break
+        if decoded_line == 'Idle>':
+            p.stdin.write(b'exit')
+            break
+        # do not sleep
+        continue
+
+    # ended early before file
+    if p.poll() is not None:
+        print(p.poll())
+        break
+
+    time.sleep(1)
+
+p.kill()
+# use to kill the subprocess generated from the python wrapper
+# this is unsafe so maybe more checks required
+for proc in psutil.process_iter():
+    pinfo = proc.as_dict(attrs=['pid', 'name', 'create_time'])
+    if pinfo['pid'] == p.pid + 1 and pinfo['name'] == 'python':
+        print('kill {}, generated from {}'.format(pinfo, p.pid))
+        os.kill(pinfo['pid'], signal.SIGTERM)
+
+line = b'stderr outputs:\n'
+while line:
+    print(line.decode('utf-8'), end='')
+    line = readline_nonblocking(p.stderr)
+
+if finished:
+    print('Simulation finished')
+else:
+    print('Simulation failed')
+    exit(1)
+
+# move the prim files (which can be quite large)
+# to the local pipeline storage path
+os.system('mv g4_0000.prim {}/{}.prim'.format(args.out_dir,args.file_tag))
+
+

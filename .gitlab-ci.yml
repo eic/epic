@@ -32,8 +32,9 @@ stages:
   - config
   - initialize
   - build
-  - docs
   - test 
+  - docs
+  - collect
   - finalize 
   - deploy
 
@@ -82,6 +83,19 @@ common:detector:
     - mkdir -p doc
     - mkdir -p geo
     - print_env.sh
+
+.views:
+  stage: docs
+  before_script:
+    - source .local/bin/env.sh
+    - env
+    - pip3 install psutil
+  needs:
+    - ["common:detector"]
+
+include:
+  - local: 'views/generate_prim_files.yml'
+  - local: 'views/view50.yml'
 
 dump_constants:
   stage: test
