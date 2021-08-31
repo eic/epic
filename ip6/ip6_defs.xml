@@ -50,7 +50,7 @@
     <constant name="B0PF_GradientMax"  value="-8.12238283*tesla/m"/>
     <constant name="B0APF_GradientMax" value="0.0*tesla/m"/>
     <constant name="Q1APF_GradientMax" value="-72.608*tesla/m"/>
-    <constant name="Q1BPF_GradientMax" value="-66.24525402*tesla/m"/>
+    <constant name="Q1BPF_GradientMax" value="-63.24525402*tesla/m"/>
     <constant name="Q2PF_GradientMax"  value="36.88301623*tesla/m"/>
     <constant name="B1PF_GradientMax"  value="0.0*tesla/m"/>
     <constant name="B1APF_GradientMax" value="0.0*tesla/m"/>
@@ -128,7 +128,7 @@
     <constant name="Q2PF_Length"  value="3.8*m"/>
     <constant name="B1PF_Length"  value="3.0*m"/>
     <constant name="B1APF_Length" value="1.5*m"/>
-    <constant name="B2PF_Length"  value="5.76*m"/>
+    <constant name="B2PF_Length"  value="4.4*m"/>
     <constant name="Q0EF_Length" value="1.2*m"/>
     <constant name="Q1EF_Length"  value="1.61*m"/>
 

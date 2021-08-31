@@ -21,26 +21,26 @@
       <coefficient coefficient="B0APF_Bmax" skew="0.0*tesla"/>
       <!--<coefficient coefficient="2.0*tesla/cm" skew="0.2*tesla/cm"/> -->
     </field>
-    <field name="Q1APF_Magnet" type="MultipoleMagnet">
+    <field name="Q1APF_Magnet" type="QuadrupoleMagnet">
       <position x="Q1APF_XPosition" y="0" z="Q1APF_CenterPosition"/>
       <rotation x="0" y="Q1APF_RotationAngle" z="0"/>
       <shape type="Tube" rmin="0.0" rmax="Q1APF_InnerRadius" dz="Q1APF_Length*0.5"/>
-      <coefficient coefficient="Q1APF_Bmax" skew="0.0*tesla"/>
-      <coefficient coefficient="Q1APF_GradientMax" skew="0.0*tesla/cm"/>
+      <!--<coefficient coefficient="Q1APF_Bmax" skew="0.0*tesla"/>-->
+      <coefficient coefficient="Q1APF_GradientMax" skew="0.0*tesla/m"/>
     </field>
-    <field name="Q1BPF_Magnet" type="MultipoleMagnet">
+    <field name="Q1BPF_Magnet" type="QuadrupoleMagnet">
       <position x="Q1BPF_XPosition" y="0" z="Q1BPF_CenterPosition"/>
       <rotation x="0" y="Q1BPF_RotationAngle" z="0"/>
       <shape type="Tube" rmin="0.0" rmax="Q1BPF_InnerRadius" dz="Q1BPF_Length*0.5"/>
-      <coefficient coefficient="Q1BPF_Bmax" skew="0.0*tesla"/>
-      <coefficient coefficient="Q1BPF_GradientMax" skew="0.0*tesla/cm"/>
+      <!--<coefficient coefficient="Q1BPF_Bmax" skew="0.0*tesla"/>-->
+      <coefficient coefficient="Q1BPF_GradientMax" skew="0.0*tesla/m"/>
     </field>
-    <field name="Q2PF_Magnet" type="MultipoleMagnet">
+    <field name="Q2PF_Magnet" type="QuadrupoleMagnet">
       <position x="Q2PF_XPosition" y="0" z="Q2PF_CenterPosition"/>
       <rotation x="0" y="Q2PF_RotationAngle" z="pi/2.0"/>
       <shape type="Tube" rmin="0.0" rmax="Q2PF_InnerRadius" dz="Q2PF_Length*0.5"/>
-      <coefficient coefficient="Q2PF_Bmax" skew="0.0*tesla"/>
-      <coefficient coefficient="Q2PF_GradientMax" skew="0.0*tesla/cm"/>
+      <!--<coefficient coefficient="Q2PF_Bmax" skew="0.0*tesla"/>-->
+      <coefficient coefficient="Q2PF_GradientMax" skew="0.0*tesla/m"/>
     </field>
     <field name="B1PF_Magnet" type="MultipoleMagnet">
       <position x="B1PF_XPosition" y="0" z="B1PF_CenterPosition"/>

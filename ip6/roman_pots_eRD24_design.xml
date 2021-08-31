@@ -12,9 +12,9 @@
     <!-- Global "station" location, rotation, position information -->
     
     <constant name="ForwardRomanPotStation1_zpos" value="26.0*m"/>
-    <constant name="ForwardRomanPotStation1_xpos" value="-0.832224*m"/>
-	<constant name="ForwardRomanPotStation2_zpos" value="28.0*m"/>
-    <constant name="ForwardRomanPotStation2_xpos" value="-0.922032*m"/>
+    <constant name="ForwardRomanPotStation1_xpos" value="-0.8333878326*m"/> 
+	  <constant name="ForwardRomanPotStation2_zpos" value="28.0*m"/>
+    <constant name="ForwardRomanPotStation2_xpos" value="-0.924342804*m"/>
 
 	<constant name="ForwardRomanPotStation1_rotation" value="-0.047*rad"/>
     <constant name="ForwardRomanPotStation2_rotation" value="-0.047*rad"/>

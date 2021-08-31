@@ -32,13 +32,17 @@
     <constant name="B0Preshower_Station_1_ID"        value="154"/>
     <constant name="ForwardRomanPot_Station_1_ID"    value="155"/>
     <constant name="ForwardRomanPot_Station_2_ID"    value="156"/>
-    
-	<constant name="ForwardOffMTracker_station_1_ID" value="159"/>
+
+    <constant name="BeamOrbitTracker_station_1_ID"    value="157"/>
+    <constant name="BeamOrbitTracker_station_2_ID"    value="158"/>    
+	  <constant name="ForwardOffMTracker_station_1_ID" value="159"/>
     <constant name="ForwardOffMTracker_station_2_ID" value="160"/>
     <constant name="ForwardOffMTracker_station_3_ID" value="161"/>
     <constant name="ForwardOffMTracker_station_4_ID" value="162"/>
     <constant name="ffi_ZDC_ECAL_ID"       value="163"/>
     <constant name="ffi_ZDC_HCAL_ID"       value="164"/>
+
+	<constant name="VacuumMagnetElement_1_ID" value="165"/>
 
     <constant name="tracker_region_zmax" value="10*m"/>
     <constant name="tracker_region_rmax" value="1*m"/>
@@ -70,11 +74,13 @@
   <include ref="ip6/beampipe.xml" />
   <include ref="ip6/forward_ion_beamline.xml" />
   <include ref="ip6/beampipe_hadron_B0.xml" />
-  <include ref="ip6/B0_tracker.xml"/>
+  <include ref="ip6/B0_tracker.xml"/>-->
   <include ref="ip6/B0_preshower.xml"/>
   <include ref="ip6/far_forward_offM_tracker.xml"/>
   <include ref="ip6/far_forward_detectors.xml"/>
   <include ref="ip6/roman_pots_eRD24_design.xml"/>
+  <!--<include ref="ip6/beam_orbit_tracker.xml"/>-->
+  <include ref="ip6/inner_vacuum_FF_magnets.xml"/>
 
   <!--include ref="ip6/magnets.xml" /-->
   <fields>
@@ -83,49 +89,49 @@
       <rotation x="0" y="B0PF_RotationAngle" z="0"/>
       <shape type="Tube" rmin="0.0" rmax="B0PF_InnerRadius" dz="B0PF_Length*0.5"/>
       <coefficient coefficient="B0PF_Bmax" skew="0.0*tesla"/>
-      <!--<coefficient coefficient="2.0*tesla/cm" skew="0.2*tesla/cm"/> -->
+      <coefficient coefficient="B0PF_GradientMax" skew="0.0*tesla/m"/>
     </field>
     <field name="B0APF_Magnet" type="MultipoleMagnet">
       <position x="B0APF_XPosition" y="0" z="B0APF_CenterPosition"/>
       <rotation x="0" y="B0APF_RotationAngle" z="0"/>
       <shape type="Tube" rmin="0.0" rmax="B0APF_InnerRadius" dz="B0APF_Length*0.5"/>
       <coefficient coefficient="B0APF_Bmax" skew="0.0*tesla"/>
-      <!--<coefficient coefficient="2.0*tesla/cm" skew="0.2*tesla/cm"/> -->
+	  <coefficient coefficient="B0APF_GradientMax" skew="0.0*tesla"/>
     </field>
     <field name="Q1APF_Magnet" type="MultipoleMagnet">
       <position x="Q1APF_XPosition" y="0" z="Q1APF_CenterPosition"/>
       <rotation x="0" y="Q1APF_RotationAngle" z="0"/>
       <shape type="Tube" rmin="0.0" rmax="Q1APF_InnerRadius" dz="Q1APF_Length*0.5"/>
       <coefficient coefficient="Q1APF_Bmax" skew="0.0*tesla"/>
-      <coefficient coefficient="Q1APF_GradientMax" skew="0.0*tesla/cm"/>
+      <coefficient coefficient="Q1APF_GradientMax" skew="0.0*tesla/m"/>
     </field>
     <field name="Q1BPF_Magnet" type="MultipoleMagnet">
       <position x="Q1BPF_XPosition" y="0" z="Q1BPF_CenterPosition"/>
       <rotation x="0" y="Q1BPF_RotationAngle" z="0"/>
       <shape type="Tube" rmin="0.0" rmax="Q1BPF_InnerRadius" dz="Q1BPF_Length*0.5"/>
       <coefficient coefficient="Q1BPF_Bmax" skew="0.0*tesla"/>
-      <coefficient coefficient="Q1BPF_GradientMax" skew="0.0*tesla/cm"/>
+      <coefficient coefficient="Q1BPF_GradientMax" skew="0.0*tesla/m"/>
     </field>
     <field name="Q2PF_Magnet" type="MultipoleMagnet">
       <position x="Q2PF_XPosition" y="0" z="Q2PF_CenterPosition"/>
-      <rotation x="0" y="Q2PF_RotationAngle" z="pi/2.0"/>
+      <rotation x="0" y="Q2PF_RotationAngle" z="0"/>
       <shape type="Tube" rmin="0.0" rmax="Q2PF_InnerRadius" dz="Q2PF_Length*0.5"/>
       <coefficient coefficient="Q2PF_Bmax" skew="0.0*tesla"/>
-      <coefficient coefficient="Q2PF_GradientMax" skew="0.0*tesla/cm"/>
+      <coefficient coefficient="Q2PF_GradientMax" skew="0.0*tesla/m"/>
     </field>
     <field name="B1PF_Magnet" type="MultipoleMagnet">
       <position x="B1PF_XPosition" y="0" z="B1PF_CenterPosition"/>
-      <rotation x="0" y="B1PF_RotationAngle" z="0"/>
+      <rotation x="0" y="-B1PF_RotationAngle" z="0"/>
       <shape type="Tube" rmin="0.0" rmax="B1PF_InnerRadius" dz="B1PF_Length*0.5"/>
       <coefficient coefficient="B1PF_Bmax" skew="0.0*tesla"/>
-      <coefficient coefficient="B1PF_GradientMax" skew="0.0*tesla/cm"/>
+	  <coefficient coefficient="B1PF_GradientMax" skew="0.0*tesla/m"/>
     </field>
     <field name="B1APF_Magnet" type="MultipoleMagnet">
       <position x="B1APF_XPosition" y="0" z="B1APF_CenterPosition"/>
       <rotation x="0" y="B1APF_RotationAngle" z="0"/>
       <shape type="Tube" rmin="0.0" rmax="B1APF_InnerRadius" dz="B1APF_Length*0.5"/>
       <coefficient coefficient="B1APF_Bmax" skew="0.0*tesla"/>
-      <coefficient coefficient="B1APF_GradientMax" skew="0.0*tesla/cm"/>
+	  <coefficient coefficient="B1APF_GradientMax" skew="0.0*tesla/m"/>
     </field>
     <field name="B2PF_Magnet" type="MultipoleMagnet">
       <position x="B2PF_XPosition" y="0" z="B2PF_CenterPosition"/>
