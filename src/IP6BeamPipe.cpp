@@ -11,6 +11,8 @@
 #include "TMath.h"
 #include <XML/Helper.h>
 
+#include <Acts/Plugins/DD4hep/ActsExtension.hpp>
+
 using namespace std;
 using namespace dd4hep;
 
@@ -42,6 +44,13 @@ static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector sens)  {
   Material   m_Au      = det.material("Gold");
   Material   m_Vacuum  = det.material("Vacuum");
   string     vis_name  = x_det.visStr();
+
+  // Add extension for the beampipe
+  {
+    Acts::ActsExtension* beamPipeExtension = new Acts::ActsExtension();
+    beamPipeExtension->addType("beampipe", "layer");
+    sdet.addExtension<Acts::ActsExtension>(beamPipeExtension);
+  }
 
   xml::Component IP_pipe_c = x_det.child(_Unicode(IP_pipe));
 

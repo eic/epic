@@ -57,6 +57,7 @@
     <readout name="BeamOrbitHits">
       <segmentation type="CartesianGridXY" grid_size_x="0.01*mm" grid_size_y="0.01*mm" />
       <id>system:8,layer:5,module:5,slice:4,x:32:-16,y:-16</id>
+    </readout>
   </readouts>
 
 </lccdd>
