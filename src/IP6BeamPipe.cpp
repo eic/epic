@@ -46,11 +46,14 @@ static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector sens)  {
   string     vis_name  = x_det.visStr();
 
   // Add extension for the beampipe
-  {
-    Acts::ActsExtension* beamPipeExtension = new Acts::ActsExtension();
-    beamPipeExtension->addType("beampipe", "layer");
-    sdet.addExtension<Acts::ActsExtension>(beamPipeExtension);
-  }
+  // TODO this does not work as ACTS assumes beampipes to be cylinders, not assemblies.
+  //      can probably manually add this as a volume with an envelope for just the center
+  //      beampipe
+  //{
+  //  Acts::ActsExtension* beamPipeExtension = new Acts::ActsExtension();
+  //  beamPipeExtension->addType("beampipe", "layer");
+  //  sdet.addExtension<Acts::ActsExtension>(beamPipeExtension);
+  //}
 
   xml::Component IP_pipe_c = x_det.child(_Unicode(IP_pipe));
 
