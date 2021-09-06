@@ -10,7 +10,7 @@ using Placements = vector<PlacedVolume>;
 static Ref_t create_detector(Detector& description, xml_h e,
                              SensitiveDetector sens) {
   xml_det_t x_det = e;
-  Material air = description.air();
+  //Material air = description.air();
   Material vacuum = description.vacuum();
   string det_name = x_det.nameStr();
   xml::Component pos = x_det.position();

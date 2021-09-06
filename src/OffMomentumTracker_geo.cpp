@@ -29,7 +29,7 @@ static Ref_t create_OffMomentumTracker(Detector& description, xml_h e, Sensitive
   xml::Component rot   = x_det.rotation();
 
 
-  Material  air  = description.material("Air");
+  //Material  air  = description.material("Air");
   // Volume      assembly    (det_name,Box(10000,10000,10000),vacuum);
   Volume                  motherVol = description.pickMotherVolume(sdet);
   int                     m_id = 0, c_id = 0, n_sensor = 0;
@@ -169,8 +169,8 @@ static Ref_t create_OffMomentumTracker(Detector& description, xml_h e, Sensitive
     string     layer_name = det_name + std::string("_layer") + std::to_string(l_id);
 
     std::string layer_vis    = l_env.attr<std::string>(_Unicode(vis));
-    double      layer_x  = l_env.attr<double>(_Unicode(x));
-    double      layer_y   = l_env.attr<double>(_Unicode(y));
+    //double      layer_x  = l_env.attr<double>(_Unicode(x));
+    //double      layer_y   = l_env.attr<double>(_Unicode(y));
     double      layer_length = l_env.attr<double>(_Unicode(length));
     double      layer_zstart = l_env.attr<double>(_Unicode(zstart));
     double      layer_center_z =  layer_zstart + layer_length/2.0;

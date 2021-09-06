@@ -28,16 +28,16 @@ using namespace dd4hep;
  * \endcode
  *
  */
-static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector sens)  {
+static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector /* sens */)  {
 
   using namespace ROOT::Math;
   xml_det_t  x_det     = e;
   string     det_name  = x_det.nameStr();
-  Material   air       = det.air();
+  //Material   air       = det.air();
   DetElement sdet        (det_name,x_det.id());
   Assembly   assembly    (det_name+"_assembly");
-  Material   m_Cu    = det.material("Copper");
-  Material   m_Al    = det.material("Aluminum");
+  //Material   m_Cu    = det.material("Copper");
+  //Material   m_Al    = det.material("Aluminum");
   Material   m_Be    = det.material("Beryllium");
   Material   m_SS    = det.material("StainlessSteel");
   string     vis_name  = x_det.visStr();
@@ -45,7 +45,7 @@ static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector sens)  {
   PlacedVolume pv_assembly;
 
   xml::Component pos   = x_det.position();
-  xml::Component rot   = x_det.rotation();
+  //xml::Component rot   = x_det.rotation();
 
   /// hard-code defintion here, then refine and make more general
 

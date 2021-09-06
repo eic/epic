@@ -20,7 +20,7 @@ static Ref_t createDetector(Detector& desc, xml_h e, SensitiveDetector sens)
 
   xml_dim_t  dim        = x_det.dimensions();
   double     Width      = dim.x();
-  double     Length     = dim.z();
+  //double     Length     = dim.z();
   
   xml_dim_t  pos        = x_det.position();
   double     z          = pos.z();

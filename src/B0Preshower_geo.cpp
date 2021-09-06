@@ -26,7 +26,7 @@ static Ref_t create_B0Preshower(Detector& description, xml_h e, SensitiveDetecto
   xml::Component rot   = x_det.rotation();
 
 
-  Material  air  = description.material("Air");
+  //Material  air  = description.material("Air");
   // Volume      assembly    (det_name,Box(10000,10000,10000),vacuum);
   Volume                  motherVol = description.pickMotherVolume(sdet);
   int                     m_id = 0, c_id = 0, n_sensor = 0;
@@ -127,8 +127,8 @@ static Ref_t create_B0Preshower(Detector& description, xml_h e, SensitiveDetecto
     string     layer_name = det_name + std::string("_layer") + std::to_string(l_id);
 
     std::string layer_vis    = l_env.attr<std::string>(_Unicode(vis));
-    double      layer_rmin   = l_env.attr<double>(_Unicode(rmin));
-    double      layer_rmax   = l_env.attr<double>(_Unicode(rmax));
+    //double      layer_rmin   = l_env.attr<double>(_Unicode(rmin));
+    //double      layer_rmax   = l_env.attr<double>(_Unicode(rmax));
     double      layer_length = l_env.attr<double>(_Unicode(length));
     double      layer_zstart = l_env.attr<double>(_Unicode(zstart));
     double      layer_center_z =  layer_zstart + layer_length/2.0;
