@@ -1,8 +1,7 @@
 cmake_minimum_required(VERSION 3.3 FATAL_ERROR)
 
 SET(CMAKE_CXX_STANDARD 17)
-
-find_package(Acts REQUIRED COMPONENTS Core PluginIdentification PluginTGeo PluginDD4hep )
+find_package(Acts REQUIRED COMPONENTS Core PluginTGeo PluginDD4hep )
 
 #-----------------------------------------------------------------------------------
 set(a_lib_name IP6)

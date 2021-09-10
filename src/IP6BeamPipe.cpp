@@ -11,7 +11,8 @@
 #include "TMath.h"
 #include <XML/Helper.h>
 
-#include <Acts/Plugins/DD4hep/ActsExtension.hpp>
+#include "Acts/Definitions/Units.hpp"
+#include "Acts/Plugins/DD4hep/ActsExtension.hpp"
 
 using namespace std;
 using namespace dd4hep;
@@ -45,26 +46,49 @@ static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector sens)  {
   Material   m_Vacuum  = det.material("Vacuum");
   string     vis_name  = x_det.visStr();
 
-  // Add extension for the beampipe
-  // TODO this does not work as ACTS assumes beampipes to be cylinders, not assemblies.
-  //      can probably manually add this as a volume with an envelope for just the center
-  //      beampipe
-  //{
-  //  Acts::ActsExtension* beamPipeExtension = new Acts::ActsExtension();
-  //  beamPipeExtension->addType("beampipe", "layer");
-  //  sdet.addExtension<Acts::ActsExtension>(beamPipeExtension);
-  //}
-
   xml::Component IP_pipe_c = x_det.child(_Unicode(IP_pipe));
 
   // IP
-  double IP_beampipe_OD             = IP_pipe_c.attr<double>(_Unicode(OD));
+  double IP_beampipe_OD             = IP_pipe_c.attr<double>(_Unicode(OD)) - 5.0*mm;
   double IP_beampipe_wall_thickness = IP_pipe_c.attr<double>(_Unicode(wall_thickness));
   double IP_beampipe_gold_thickness = IP_pipe_c.attr<double>(_Unicode(gold_thickness));
   double IP_beampipe_ID             = IP_beampipe_OD - 2.0 * IP_beampipe_gold_thickness - 2.0 * IP_beampipe_wall_thickness;
 
   double upstream_straight_length   = IP_pipe_c.attr<double>(_Unicode(upstream_straight_length));
   double downstream_straight_length = IP_pipe_c.attr<double>(_Unicode(downstream_straight_length));
+
+  // Add extension for the beampipe
+  Acts::ActsExtension* sdExtension = new Acts::ActsExtension();
+  //sdExtension->addType("beampipe", "layer");
+  sdExtension->addValue(0.001 * Acts::UnitConstants::mm, "r_min", "envelope");
+  sdExtension->addValue(0.001 * Acts::UnitConstants::mm, "r_max", "envelope");
+  sdExtension->addValue(0.001 * Acts::UnitConstants::mm, "z_min", "envelope");
+  sdExtension->addValue(0.001 * Acts::UnitConstants::mm, "z_max", "envelope");
+  sdet.addExtension<Acts::ActsExtension>(sdExtension);
+
+
+  // central beampipe volume
+  Tube         central_tube(0.5 * IP_beampipe_ID, 0.5 * IP_beampipe_OD,
+                    0.5 * (upstream_straight_length + downstream_straight_length));
+  Volume       central_volume("central_beampipe_vol", central_tube, m_Vacuum);
+  const double central_offset = -.5 * (upstream_straight_length - downstream_straight_length);
+  DetElement   central_det(sdet, "beampipe_central", 1);
+
+  // Add extension for the beampipe
+  {
+    Acts::ActsExtension* beamPipeExtension = new Acts::ActsExtension();
+    //beamPipeExtension->addType("barrel", "detector");
+    //beamPipeExtension->addType("beampipe", "beampipe");
+    //beamPipeExtension->addType("passive cylinder", "layer");
+    beamPipeExtension->addType("beampipe", "layer");
+    beamPipeExtension->addValue(0.001 * Acts::UnitConstants::mm, "r_min", "envelope");
+    beamPipeExtension->addValue(0.001 * Acts::UnitConstants::mm, "r_max", "envelope");
+    beamPipeExtension->addValue(0.001 * Acts::UnitConstants::mm, "z_min", "envelope");
+    beamPipeExtension->addValue(0.001 * Acts::UnitConstants::mm, "z_max", "envelope");
+
+    central_det.addExtension<Acts::ActsExtension>(beamPipeExtension);
+    // TODO add material binning
+  }
 
   // -----------------------------
   // IP beampipe
@@ -88,13 +112,15 @@ static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector sens)  {
   sdet.setAttributes(det, v_downstream_IP_tube, x_det.regionStr(), x_det.limitsStr(), vis_name);
 
   assembly.placeVolume(v_upstream_IP_vacuum, Position(0, 0, -upstream_straight_length / 2.0));
-  assembly.placeVolume(v_upstream_IP_gold, Position(0, 0, -upstream_straight_length / 2.0));
-  assembly.placeVolume(v_upstream_IP_tube, Position(0, 0, -upstream_straight_length / 2.0));
+  central_volume.placeVolume(v_upstream_IP_gold, Position(0, 0, -upstream_straight_length / 2.0 - central_offset));
+  central_volume.placeVolume(v_upstream_IP_tube, Position(0, 0, -upstream_straight_length / 2.0 - central_offset));
 
   assembly.placeVolume(v_downstream_IP_vacuum, Position(0, 0, downstream_straight_length / 2.0));
-  assembly.placeVolume(v_downstream_IP_gold, Position(0, 0, downstream_straight_length / 2.0));
-  assembly.placeVolume(v_downstream_IP_tube, Position(0, 0, downstream_straight_length / 2.0));
+  central_volume.placeVolume(v_downstream_IP_gold, Position(0, 0, downstream_straight_length / 2.0 - central_offset));
+  central_volume.placeVolume(v_downstream_IP_tube, Position(0, 0, downstream_straight_length / 2.0 - central_offset));
 
+  auto central_pv = assembly.placeVolume(central_volume, Position(0, 0, +central_offset));
+  central_det.setPlacement(central_pv);
 
   // Helper function to create polycone pairs (shell and vacuum)
   auto zplane_to_polycones = [](xml::Component& x_pipe) {
@@ -231,7 +257,7 @@ static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector sens)  {
   // -----------------------------
   // final placement
   auto pv_assembly = det.pickMotherVolume(sdet).placeVolume(assembly);
-  pv_assembly.addPhysVolID("system",sdet.id()).addPhysVolID("barrel",1);
+  pv_assembly.addPhysVolID("system",sdet.id());
   sdet.setPlacement(pv_assembly);
   assembly->GetShape()->ComputeBBox() ;
   return sdet;
