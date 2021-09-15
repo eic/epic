@@ -49,30 +49,33 @@ static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector sens)  {
   xml::Component IP_pipe_c = x_det.child(_Unicode(IP_pipe));
 
   // IP
-  double IP_beampipe_OD             = IP_pipe_c.attr<double>(_Unicode(OD)) - 5.0*mm;
+  double IP_beampipe_OD             = IP_pipe_c.attr<double>(_Unicode(OD));
   double IP_beampipe_wall_thickness = IP_pipe_c.attr<double>(_Unicode(wall_thickness));
   double IP_beampipe_gold_thickness = IP_pipe_c.attr<double>(_Unicode(gold_thickness));
   double IP_beampipe_ID             = IP_beampipe_OD - 2.0 * IP_beampipe_gold_thickness - 2.0 * IP_beampipe_wall_thickness;
+  double IP_acts_beampipe_OD = IP_beampipe_ID - 5.0*mm;
+  double IP_acts_beampipe_ID = IP_acts_beampipe_OD - 1.0*mm;
+
 
   double upstream_straight_length   = IP_pipe_c.attr<double>(_Unicode(upstream_straight_length));
   double downstream_straight_length = IP_pipe_c.attr<double>(_Unicode(downstream_straight_length));
 
   // Add extension for the beampipe
-  Acts::ActsExtension* sdExtension = new Acts::ActsExtension();
+  //Acts::ActsExtension* sdExtension = new Acts::ActsExtension();
   //sdExtension->addType("beampipe", "layer");
-  sdExtension->addValue(0.001 * Acts::UnitConstants::mm, "r_min", "envelope");
-  sdExtension->addValue(0.001 * Acts::UnitConstants::mm, "r_max", "envelope");
-  sdExtension->addValue(0.001 * Acts::UnitConstants::mm, "z_min", "envelope");
-  sdExtension->addValue(0.001 * Acts::UnitConstants::mm, "z_max", "envelope");
-  sdet.addExtension<Acts::ActsExtension>(sdExtension);
+  //sdExtension->addValue(0.001 * Acts::UnitConstants::mm, "r_min", "envelope");
+  //sdExtension->addValue(0.001 * Acts::UnitConstants::mm, "r_max", "envelope");
+  //sdExtension->addValue(0.001 * Acts::UnitConstants::mm, "z_min", "envelope");
+  //sdExtension->addValue(0.001 * Acts::UnitConstants::mm, "z_max", "envelope");
+  //sdet.addExtension<Acts::ActsExtension>(sdExtension);
 
 
   // central beampipe volume
-  Tube         central_tube(0.5 * IP_beampipe_ID, 0.5 * IP_beampipe_OD,
+  Tube         central_tube(0.5 * IP_acts_beampipe_ID, 0.5 * IP_acts_beampipe_OD,
                     0.5 * (upstream_straight_length + downstream_straight_length));
-  Volume       central_volume("central_beampipe_vol", central_tube, m_Vacuum);
+  Volume       central_volume("acts_central_beampipe_vol", central_tube, m_Vacuum);
   const double central_offset = -.5 * (upstream_straight_length - downstream_straight_length);
-  DetElement   central_det(sdet, "beampipe_central", 1);
+  DetElement   central_det(sdet, "acts_beampipe_central", 1);
 
   // Add extension for the beampipe
   {
@@ -92,17 +95,37 @@ static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector sens)  {
 
   // -----------------------------
   // IP beampipe
-  Tube downstream_IP_vacuum(0.0, IP_beampipe_ID/2.0, downstream_straight_length/2.0);
+  //
+  // setup for the central IP beampipe:
+  //
+  // /-------\ Be wall
+  //  /-----\  Au coating
+  //   /---\   Vacuum padding (5mm)
+  //    /-\    Fake vacuum beampipe (1mm)
+  //     -     Vacuum filled inner beampipe
+  //
+  Tube downstream_IP_vacuum_fill(0.0, IP_acts_beampipe_ID / 2.0, downstream_straight_length / 2.0);
+  Tube downstream_IP_acts_beampipe(IP_acts_beampipe_ID / 2.0, IP_acts_beampipe_OD / 2.0,
+                                   downstream_straight_length / 2.0);
+  Tube downstream_IP_vacuum_padding(IP_acts_beampipe_OD / 2.0, IP_beampipe_ID / 2.0, downstream_straight_length / 2.0);
   Tube downstream_IP_gold(IP_beampipe_ID/2.0, IP_beampipe_ID/2.0 + IP_beampipe_gold_thickness, downstream_straight_length/2.0);
   Tube downstream_IP_tube(IP_beampipe_ID/2.0 + IP_beampipe_gold_thickness, IP_beampipe_OD/2.0, downstream_straight_length/2.0);
-  Tube upstream_IP_vacuum(0.0, IP_beampipe_ID/2.0, upstream_straight_length/2.0);
+
+  Tube upstream_IP_vacuum_fill(0.0, IP_acts_beampipe_ID / 2.0, upstream_straight_length / 2.0);
+  Tube upstream_IP_acts_beampipe(IP_acts_beampipe_ID / 2.0, IP_acts_beampipe_OD / 2.0,
+                                   upstream_straight_length / 2.0);
+  Tube upstream_IP_vacuum_padding(IP_acts_beampipe_OD / 2.0, IP_beampipe_ID / 2.0, upstream_straight_length / 2.0);
   Tube upstream_IP_gold(IP_beampipe_ID/2.0, IP_beampipe_ID/2.0 + IP_beampipe_gold_thickness, upstream_straight_length/2.0);
   Tube upstream_IP_tube(IP_beampipe_ID/2.0 + IP_beampipe_gold_thickness, IP_beampipe_OD/2.0, upstream_straight_length/2.0);
 
-  Volume v_downstream_IP_vacuum("v_downstream_IP_vacuum", downstream_IP_vacuum, m_Vacuum);
+  Volume v_downstream_IP_vacuum_fill("v_downstream_IP_vacuum_fill", downstream_IP_vacuum_fill, m_Vacuum);
+  Volume v_downstream_IP_acts_beampipe("v_downstream_IP_acts_beampipe", downstream_IP_acts_beampipe, m_Vacuum);
+  Volume v_downstream_IP_vacuum_padding("v_downstream_IP_vacuum_padding", downstream_IP_vacuum_padding, m_Vacuum);
   Volume v_downstream_IP_gold("v_downstream_IP_gold", downstream_IP_gold, m_Au);
   Volume v_downstream_IP_tube("v_downstream_IP_tube", downstream_IP_tube, m_Be);
-  Volume v_upstream_IP_vacuum("v_upstream_IP_vacuum", upstream_IP_vacuum, m_Vacuum);
+  Volume v_upstream_IP_vacuum_fill("v_upstream_IP_vacuum_fill", upstream_IP_vacuum_fill, m_Vacuum);
+  Volume v_upstream_IP_acts_beampipe("v_upstream_IP_acts_beampipe", upstream_IP_acts_beampipe, m_Vacuum);
+  Volume v_upstream_IP_vacuum_padding("v_upstream_IP_vacuum_padding", upstream_IP_vacuum_padding, m_Vacuum);
   Volume v_upstream_IP_gold("v_upstream_IP_gold", upstream_IP_gold, m_Au);
   Volume v_upstream_IP_tube("v_upstream_IP_tube", upstream_IP_tube, m_Be);
 
@@ -111,13 +134,17 @@ static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector sens)  {
   sdet.setAttributes(det, v_downstream_IP_gold, x_det.regionStr(), x_det.limitsStr(), vis_name);
   sdet.setAttributes(det, v_downstream_IP_tube, x_det.regionStr(), x_det.limitsStr(), vis_name);
 
-  assembly.placeVolume(v_upstream_IP_vacuum, Position(0, 0, -upstream_straight_length / 2.0));
-  central_volume.placeVolume(v_upstream_IP_gold, Position(0, 0, -upstream_straight_length / 2.0 - central_offset));
-  central_volume.placeVolume(v_upstream_IP_tube, Position(0, 0, -upstream_straight_length / 2.0 - central_offset));
+  assembly.placeVolume(v_upstream_IP_vacuum_fill, Position(0, 0, -upstream_straight_length / 2.0));
+  central_volume.placeVolume(v_upstream_IP_acts_beampipe, Position(0, 0, -upstream_straight_length / 2.0 - central_offset));
+  assembly.placeVolume(v_upstream_IP_vacuum_padding, Position(0, 0, -upstream_straight_length / 2.0));
+  assembly.placeVolume(v_upstream_IP_gold, Position(0, 0, -upstream_straight_length / 2.0));
+  assembly.placeVolume(v_upstream_IP_tube, Position(0, 0, -upstream_straight_length / 2.0));
 
-  assembly.placeVolume(v_downstream_IP_vacuum, Position(0, 0, downstream_straight_length / 2.0));
-  central_volume.placeVolume(v_downstream_IP_gold, Position(0, 0, downstream_straight_length / 2.0 - central_offset));
-  central_volume.placeVolume(v_downstream_IP_tube, Position(0, 0, downstream_straight_length / 2.0 - central_offset));
+  assembly.placeVolume(v_downstream_IP_vacuum_fill, Position(0, 0, downstream_straight_length / 2.0));
+  central_volume.placeVolume(v_downstream_IP_acts_beampipe, Position(0, 0, downstream_straight_length / 2.0 - central_offset));
+  assembly.placeVolume(v_downstream_IP_vacuum_padding, Position(0, 0, downstream_straight_length / 2.0));
+  assembly.placeVolume(v_downstream_IP_gold, Position(0, 0, downstream_straight_length / 2.0));
+  assembly.placeVolume(v_downstream_IP_tube, Position(0, 0, downstream_straight_length / 2.0));
 
   auto central_pv = assembly.placeVolume(central_volume, Position(0, 0, +central_offset));
   central_det.setPlacement(central_pv);
