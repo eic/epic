@@ -121,7 +121,7 @@
     </field>
     <field name="B1PF_Magnet" type="MultipoleMagnet">
       <position x="B1PF_XPosition" y="0" z="B1PF_CenterPosition"/>
-      <rotation x="0" y="-B1PF_RotationAngle" z="0"/>
+      <rotation x="0" y="B1PF_RotationAngle" z="0"/>
       <shape type="Tube" rmin="0.0" rmax="B1PF_InnerRadius" dz="B1PF_Length*0.5"/>
       <coefficient coefficient="B1PF_Bmax" skew="0.0*tesla"/>
 	  <coefficient coefficient="B1PF_GradientMax" skew="0.0*tesla/m"/>
