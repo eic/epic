@@ -132,21 +132,21 @@
     </module_assembly>
 
     <layer id="1">
-      <position x="0" y="0" z="5.0*cm"/>
+      <position x="0" y="0" z="0.0*cm"/>
       <component assembly="Station1Top">
-        <position x="0" y="0" z="1.0*cm"/>
+        <position x="0" y="0" z="0.0*cm"/>
       </component>
       <component assembly="Station1Bottom">
-        <position x="0" y="0" z="1.0*cm"/>
+        <position x="0" y="0" z="0.0*cm"/>
       </component>
     </layer>
     <layer id="2">
-      <position x="0" y="0" z="-5.0*cm"/>
+      <position x="0" y="0" z="0.0*cm"/>
       <component assembly="Station1Top">
-        <position x="0" y="0" z="-1.0*cm"/>
+        <position x="0" y="0" z="20.0*mm"/>
       </component>
       <component assembly="Station1Bottom">
-        <position x="0" y="0" z="-1.0*cm"/>
+        <position x="0" y="0" z="20.0*mm"/>
       </component>
     </layer>
 
@@ -207,21 +207,21 @@
 
 
     <layer id="1">
-      <position x="0" y="0" z="5.0*cm"/>
+      <position x="0" y="0" z="0.0*cm"/>
       <component assembly="Station2Top">
-        <position x="0" y="0" z="1.0*cm"/>
+        <position x="0" y="0" z="0.0*cm"/>
       </component>
       <component assembly="Station2Bottom">
-        <position x="0" y="0" z="1.0*cm"/>
+        <position x="0" y="0" z="0.0*cm"/>
       </component>
     </layer>
     <layer id="2">
-      <position x="0" y="0" z="-5.0*cm"/>
+      <position x="0" y="0" z="0.0*cm"/>
       <component assembly="Station2Top">
-        <position x="0" y="0" z="-1.0*cm"/>
+        <position x="0" y="0" z="20.0*mm"/>
       </component>
       <component assembly="Station2Bottom">
-        <position x="0" y="0" z="-1.0*cm"/>
+        <position x="0" y="0" z="20.0*mm"/>
 	  </component>
     </layer>
   </detector>
