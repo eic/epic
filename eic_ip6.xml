@@ -74,7 +74,7 @@
   <include ref="ip6/beampipe.xml" />
   <include ref="ip6/forward_ion_beamline.xml" />
   <include ref="ip6/beampipe_hadron_B0.xml" />
-  <include ref="ip6/B0_tracker.xml"/>-->
+  <include ref="ip6/B0_tracker.xml"/>
   <include ref="ip6/B0_preshower.xml"/>
   <include ref="ip6/far_forward_offM_tracker.xml"/>
   <include ref="ip6/far_forward_detectors.xml"/>

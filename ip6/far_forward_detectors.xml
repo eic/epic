@@ -30,7 +30,7 @@
     <constant name="ffi_ZDC_ECAL_rotateZ_angle"   value="ffi_ZDC_rotateZ_angle"/>
     <constant name="ffi_ZDC_ECAL_width"           value="ffi_ZDC_width"/>
 
-    <constant name="ffi_ZDC_SiPbWO4_NRepeat"      value="2"/>
+    <constant name="ffi_ZDC_SiPbWO4_NRepeat"      value="1"/>
     
     <constant name="ffi_ZDC_Silicon_1_Thickness"  value="300.0 * um"/>
     <constant name="ffi_ZDC_PbWO4_Thickness"      value="100.0 * mm"/>
@@ -49,17 +49,15 @@
     </comment>
     <constant name="ffi_ZDC_HCAL_x_pos"           value="ffi_ZDC_ECAL_x_pos"/>
     <constant name="ffi_ZDC_HCAL_y_pos"           value="ffi_ZDC_ECAL_y_pos"/>
-    <constant name="ffi_ZDC_HCAL_z_pos"           value="ffi_ZDC_ECAL_z_pos + ffi_ZDC_ECAL_length"/>
+    <constant name="ffi_ZDC_HCAL_z_pos"           value="ffi_ZDC_ECAL_z_pos + ffi_ZDC_ECAL_length + 10.0 * cm"/>
     <constant name="ffi_ZDC_HCAL_rotateX_angle"   value="ffi_ZDC_rotateX_angle"/>
     <constant name="ffi_ZDC_HCAL_rotateY_angle"   value="ffi_ZDC_rotateY_angle"/>
     <constant name="ffi_ZDC_HCAL_rotateZ_angle"   value="ffi_ZDC_rotateZ_angle"/>
     <constant name="ffi_ZDC_HCAL_width"           value="ffi_ZDC_width"/>
     <constant name="ffi_ZDC_HCAL_length"          value="ffi_ZDC_length"/>
 
-    <constant name="ffi_ZDC_SiW_LG_Layer_NRepeat" value="20"/>
-    <constant name="ffi_ZDC_SiW_HG_Layer_NRepeat" value="1"/>
     <constant name="ffi_ZDC_SiPb_NRepeat"         value="12"/>
-    <constant name="ffi_ZDC_PbScint_NRepeat"      value="15"/>
+    <constant name="ffi_ZDC_PbScint_NRepeat"      value="19"/>
     <constant name="ffi_ZDC_Gap_NRepeat"          value="1"/>
     
     <constant name="ffi_ZDC_Silicon_2_Thickness"  value="320.0 * um"/>
