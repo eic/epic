@@ -1,4 +1,8 @@
 cmake_minimum_required(VERSION 3.3 FATAL_ERROR)
+PROJECT(ip6
+  LANGUAGES CXX
+  DESCRIPTION "A template dd4hep+acts beamline"
+  )
 
 SET(CMAKE_CXX_STANDARD 17)
 find_package(Acts REQUIRED COMPONENTS Core PluginTGeo PluginDD4hep )
@@ -28,8 +32,14 @@ target_link_libraries(${a_lib_name}
   )
 
 #-----------------------------------------------------------------------------------
-install(DIRECTORY compact/
+install(DIRECTORY ip6/
     DESTINATION share/${PROJECT_NAME}/${a_lib_name}
     FILES_MATCHING PATTERN "*.xml"
     )
-
+install(DIRECTORY ip6/
+    DESTINATION share/${PROJECT_NAME}/ip6
+    FILES_MATCHING PATTERN "*.xml"
+    )
+install(FILES eic_ip6.xml
+    DESTINATION share/${PROJECT_NAME}/
+    )
