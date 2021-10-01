@@ -88,8 +88,7 @@
       name="B0Tracker"
       type="ip6_B0Tracker"
       readout="B0TrackerHits"
-      vis="AnlRed"
-      reflect="false">
+      vis="AnlRed">
       <position x="B0TrackerCenter_xpos" y="0" z="B0TrackerCenter_zpos"/>
       <rotation x="0*rad" y="B0Tracker_rotation" z="0*rad"/>
       <module name="Module1" vis="AnlProcess_Blue">
@@ -154,146 +153,12 @@
       </layer>
     </detector>
 
-
-    <!--
-    <detector 
-      id="B0Tracker_Station_1_ID"
-      name="B0Tracker_Station_1"
-      readout="B0TrackerHits" 
-      type="ip6_SimpleDiskTracker"
-      insideTrackingVolume="true"
-      reflect="false">
-      <position x="B0Tracker_Station_1_xpos" y="0" z="B0Tracker_Station_1_zpos"/>
-      <rotation x="0*rad" y="B0Tracker_rotation" z="0*rad"/>
-      <layer id="1" vis="OrangeVis"
-        inner_z="1.0*cm"
-        inner_r="3.5*cm" 
-        outer_r="15.0*cm"
-        phi1="B0Tracker_big_disc_phi1"
-        phi2="B0Tracker_big_disc_phi2">
-        <slice material="SiliconOxide" thickness="0.3*mm" vis="OrangeVis" sensitive="true" />
-      </layer>
-		
-      <layer id="2"
-        vis="AnlGold"
-        inner_z="1.0*cm"
-        inner_r="3.5*cm"
-        outer_r="10.0*cm"
-        phi1="B0Tracker_small_disc_phi1"
-        phi2="B0Tracker_small_disc_phi2">
-        <slice material="SiliconOxide" thickness="0.3*mm" vis="OrangeVis" sensitive="true" />
-      </layer>      
-    </detector>
-
-  <detector
-      id="B0Tracker_Station_2_ID"
-      name="B0Tracker_Station_2"
-      readout="B0TrackerHits"
-      type="ip6_SimpleDiskTracker"
-      insideTrackingVolume="true"
-      reflect="false"
-      vis="AnlRed">
-      <position x="B0Tracker_Station_2_xpos" y="0" z="B0Tracker_Station_2_zpos"/>
-	  <rotation x="0*rad" y="B0Tracker_rotation" z="0*rad"/>
-      <layer id="1"
-        vis="AnlBlue"
-        inner_z="1.0*cm"
-        inner_r="3.5*cm"
-        outer_r="15.0*cm"
-		phi1="B0Tracker_big_disc_phi1"
-        phi2="B0Tracker_big_disc_phi2">
-        <slice material="SiliconOxide" thickness="0.3*mm" vis="OrangeVis" sensitive="true" />
-      </layer>
-
-	  <layer id="2"
-        vis="AnlBlue"
-        inner_z="1.0*cm"
-        inner_r="3.5*cm"
-        outer_r="11.0*cm"
-        phi1="B0Tracker_small_disc_phi1"
-        phi2="B0Tracker_small_disc_phi2">
-        <slice material="SiliconOxide" thickness="0.3*mm" vis="OrangeVis" sensitive="true" />
-      </layer>
-
-    </detector>
-
-	<detector
-      id="B0Tracker_Station_3_ID"
-      name="B0Tracker_Station_3"
-      readout="B0TrackerHits"
-      type="ip6_SimpleDiskTracker"
-      insideTrackingVolume="true"
-      reflect="false"
-      vis="AnlRed">
-      <position x="B0Tracker_Station_3_xpos" y="0" z="B0Tracker_Station_3_zpos"/>
-	  <rotation x="0*rad" y="B0Tracker_rotation" z="0*rad"/>
-      <layer id="1"
-        vis="AnlBlue"
-        inner_z="1.0*cm"
-        inner_r="3.5*cm"
-        outer_r="15.0*cm"
-		phi1="B0Tracker_big_disc_phi1"
-        phi2="B0Tracker_big_disc_phi2">
-        <slice material="SiliconOxide" thickness="0.3*mm" vis="OrangeVis" sensitive="true" />
-      </layer>
-
-	  <layer id="2"
-        vis="AnlBlue"
-        inner_z="1.0*cm"
-        inner_r="3.5*cm"
-        outer_r="11.0*cm"
-        phi1="B0Tracker_small_disc_phi1"
-        phi2="B0Tracker_small_disc_phi2">
-        <slice material="SiliconOxide" thickness="0.3*mm" vis="OrangeVis" sensitive="true" />
-      </layer>
-
-
-    </detector>
-
-
-	<detector
-      id="B0Tracker_Station_4_ID"
-      name="B0Tracker_Station_4"
-      readout="B0TrackerHits"
-      type="ip6_SimpleDiskTracker"
-      insideTrackingVolume="true"
-      reflect="false"
-      vis="AnlRed">
-      <position x="B0Tracker_Station_4_xpos" y="0" z="B0Tracker_Station_4_zpos"/>
-      <rotation x="0*rad" y="B0Tracker_rotation" z="0*rad"/>
-      <layer id="1"
-        vis="AnlBlue"
-        inner_z="1.0*cm"
-        inner_r="3.5*cm"
-        outer_r="15.0*cm"
-		phi1="B0Tracker_big_disc_phi1"
-        phi2="B0Tracker_big_disc_phi2">
-        <slice material="SiliconOxide" thickness="0.3*mm" vis="OrangeVis" sensitive="true" />
-      </layer>
-
-	  <layer id="2"
-        vis="AnlBlue"
-        inner_z="1.0*cm"
-        inner_r="3.5*cm"
-        outer_r="12.0*cm"
-        phi1="B0Tracker_small_disc_phi1"
-        phi2="B0Tracker_small_disc_phi2">
-        <slice material="SiliconOxide" thickness="0.3*mm" vis="OrangeVis" sensitive="true" />
-      </layer>
-
-
-    </detector>
-
--->
-
-
-
   </detectors>
 
   <readouts>
     <readout name="B0TrackerHits">
       <segmentation type="CartesianGridXZ" grid_size_x="0.020*mm" grid_size_z="0.020*mm" />
-      <id>system:8,barrel:2,layer:4,module:12,sensor:2,x:32:-16,z:-16</id>
+      <id>system:8,layer:4,module:12,sensor:2,x:32:-16,z:-16</id>
     </readout>
   </readouts>
 

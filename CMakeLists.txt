@@ -21,8 +21,6 @@ dd4hep_add_plugin(${a_lib_name}
   src/IP6BeamPipe.cpp
   src/magnetVacuumFF.cpp
   src/OffMomentumTracker_geo.cpp
-  src/SimpleDiskTracker_geo.cpp
-  src/SimpleRectangularTracker_geo.cpp
   src/ZeroDegreeCalorimeterEcal_geo.cpp
   src/ZeroDegreeCalorimeterSampling_geo.cpp
   USES ActsCore ActsPluginDD4hep ROOT::Core ROOT::Gdml

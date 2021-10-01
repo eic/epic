@@ -66,11 +66,13 @@ common:setup:
           echo "JUGGLER_DETECTOR_VERSION=$CI_COMMIT_REF_NAME" >> juggler.env
         fi
       fi
-    - source .local/bin/env.sh
-    - mkdir -p build && cd build && cmake ../. -DCMAKE_INSTALL_PREFIX=${LOCAL_PREFIX} && make -j20 && make install  && cd ..
-    - mkdir_local_data_link sim_output
-    - ls -lrth
-    - print_env.sh
+    - |
+      source .local/bin/env.sh
+      mkdir -p build && cd build && cmake ../. -DCMAKE_INSTALL_PREFIX=${LOCAL_PREFIX} && make -j20  || exit -1 
+      make install  && cd ..
+      mkdir_local_data_link sim_output
+      ls -lrth
+      print_env.sh
 
 common:detector:
   stage: initialize
