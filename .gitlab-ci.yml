@@ -11,6 +11,8 @@ workflow:
 default:
   before_script:
     - source .local/bin/env.sh
+  tags:
+    - phy
   artifacts:
     expire_in: 72 hours 
     paths:

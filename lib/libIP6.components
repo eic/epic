@@ -1,0 +1,10 @@
+v2::libIP6.so:DD4hep_GdmlDetector
+v2::libIP6.so:IP6BeamPipe
+v2::libIP6.so:ffi_ZDC_ECAL
+v2::libIP6.so:ffi_ZDC_Sampling
+v2::libIP6.so:hadronDownstreamBeamPipe
+v2::libIP6.so:ip6_B0Preshower
+v2::libIP6.so:ip6_B0Tracker
+v2::libIP6.so:ip6_ForwardRomanPot
+v2::libIP6.so:ip6_OffMomentumTracker
+v2::libIP6.so:magnetElementInnerVacuum
