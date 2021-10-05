@@ -1,0 +1,35 @@
+<define>
+
+  <comment> 
+      All magnet values are input by hand and represent the implementation in EICRoot used for the Yellow Report.
+
+      The original values were calculated for 275 GeV ions. For now, we can get a lower energy tune
+      by scaling down all magnets (except for B0pf) by new_beam_energy/275.
+
+      This is the 100GeV file, so we applied 100/275.
+  </comment>
+
+  <constant name="B0PF_GradientMax"  value="-8.12238283*tesla/m"/>
+  <constant name="B0APF_GradientMax" value="0.0*tesla/m"/>
+  <constant name="Q1APF_GradientMax" value="-26.40290909*tesla/m"/>
+  <constant name="Q1BPF_GradientMax" value="-22.99827419*tesla/m"/>
+  <constant name="Q2PF_GradientMax"  value="13.4120059*tesla/m"/>
+  <constant name="B1PF_GradientMax"  value="0.0*tesla/m"/>
+  <constant name="B1APF_GradientMax" value="0.0*tesla/m"/>
+  <constant name="B2PF_GradientMax"  value="0.0*tesla/m"/>
+  <constant name="Q0EF_GradientMax" value="-4.774134545*tesla/m"/>
+  <constant name="Q1EF_GradientMax"  value="2.127596364*tesla/m"/>
+
+  <constant name="B0PF_Bmax"  value="1.1840539*tesla"/>
+  <constant name="B0APF_Bmax" value="1.247798873*tesla"/>
+  <constant name="Q1APF_Bmax" value="0.0*tesla"/>
+  <constant name="Q1BPF_Bmax" value="0.0*tesla"/>
+  <constant name="Q2PF_Bmax"  value="0.0*tesla"/>
+  <constant name="B1PF_Bmax"  value="1.253814182*tesla"/>
+  <constant name="B1APF_Bmax" value="0.9818181818*tesla"/>
+  <constant name="B2PF_Bmax" value="-1.741459709*tesla"/>
+  <constant name="Q0EF_BMax" value="0.0*tesla"/>
+  <constant name="Q1EF_BMax"  value="0.0*tesla"/>
+
+</define>
+

@@ -11,6 +11,8 @@
     <constant name="BeamPipe_ID" value="2"/>
 
     <include ref="ip6/ip6_defs.xml" />
+    <comment> Change this to 275/100/41 to change the field setup</comment>
+    <include ref="ip6/far_forward_fields_275.xml" />
 
     <comment> 
       
