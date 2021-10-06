@@ -1,5 +1,7 @@
 <define>
 
+  <constant name="IonBeamEnergy" value="275*GeV" />
+
   <comment> 
       All magnet values are input by hand and represent the implementation in EICRoot used for the Yellow Report.
   </comment>
