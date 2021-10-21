@@ -208,4 +208,10 @@
     <composite n="8" ref="C"/>
     <composite n="8" ref="H"/>
   </material>
+  <material name="ZDC_WSciFiMixture">
+    <D type="density" value="10.17" unit="g/cm3"/>
+    <composite n="0.950"  ref="W"/>
+    <composite n="0.009" ref="H"/>
+    <composite n="0.041"  ref="C"/>
+  </material>
 </materials>

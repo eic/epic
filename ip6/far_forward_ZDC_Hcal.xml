@@ -11,7 +11,16 @@
       <position x="ffi_ZDC_HCAL_x_pos" y="ffi_ZDC_HCAL_y_pos" z="ffi_ZDC_HCAL_z_pos"/>
       <rotation x="ffi_ZDC_HCAL_rotateX_angle" y="ffi_ZDC_HCAL_rotateY_angle" z="ffi_ZDC_HCAL_rotateZ_angle"/>
       <dimensions x="ffi_ZDC_HCAL_width" z="ffi_ZDC_HCAL_length"/>
-      <layer repeat="ffi_ZDC_SiPb_NRepeat">
+      
+      <layer repeat="ffi_ZDC_Gap_NRepeat">
+        <slice name="Gap_slice" material="Air" thickness="ffi_ZDC_Gap_Thickness" vis="InvisibleNoDaughters"/>
+      </layer>
+      <layer repeat="ffi_ZDC_PbScint_NRepeat">
+        <slice name="Lead_slice"  material="Pb"               thickness="ffi_ZDC_Lead_Thickness"  vis="BlueGreenVis"/>
+        <slice name="Scint_slice" material="ZDC_Scintillator" thickness="ffi_ZDC_Scint_Thickness" vis="AnlOrange" sensitive="true"/>
+	      <slice name="Air_4_slice" material="Air"              thickness="ffi_ZDC_Air_4_Thickness" vis="InvisibleNoDaughters"/>
+      </layer>
+       <layer repeat="ffi_ZDC_SiPb_NRepeat">
         <slice name="Lead_slice"      material="Pb"            thickness="ffi_ZDC_Lead_Thickness"      vis="BlueGreenVis"/>
         <slice name="Glue_1_slice"    material="ZDC_EpoxyGlue" thickness="ffi_ZDC_Glue_1_Thickness"    vis="AnlGold"/>
         <slice name="Silicon_2_slice" material="Silicon"       thickness="ffi_ZDC_Silicon_2_Thickness" vis="RedVis" sensitive="true"/>
@@ -19,14 +28,7 @@
         <slice name="FPC_slice"       material="ZDC_EpoxyGlue" thickness="ffi_ZDC_FPC_Thickness"       vis="AnlGold"/>
         <slice name="Air_3_slice"     material="Air"           thickness="ffi_ZDC_Air_3_Thickness"     vis="InvisibleNoDaughters"/>
       </layer>
-      <layer repeat="ffi_ZDC_Gap_NRepeat">
-        <slice name="Gap_slice" material="Air" thickness="ffi_ZDC_Gap_Thickness" vis="InvisibleNoDaughters"/>
-      </layer>
-      <layer repeat="ffi_ZDC_PbScint_NRepeat">
-        <slice name="Lead_slice"  material="Pb"               thickness="ffi_ZDC_Lead_Thickness"  vis="BlueGreenVis"/>
-        <slice name="Scint_slice" material="ZDC_Scintillator" thickness="ffi_ZDC_Scint_Thickness" vis="AnlOrange" sensitive="true"/>
-	<slice name="Air_4_slice" material="Air"              thickness="ffi_ZDC_Air_4_Thickness" vis="InvisibleNoDaughters"/>
-      </layer>
+
       <layer repeat="ffi_ZDC_Gap_NRepeat">
         <slice name="Gap_slice" material="Air" thickness="ffi_ZDC_Gap_Thickness" vis="InvisibleNoDaughters"/>
       </layer>
