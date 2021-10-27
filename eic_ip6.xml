@@ -2,7 +2,6 @@
 <lccdd>
   <define>
     <constant name="Pi" value="3.14159265359"/>
-    <constant name="degree" value="3.14159265359/180.0"/>
     <constant name="world_side" value="30*m"/>
     <constant name="world_x" value="world_side"/>
     <constant name="world_y" value="world_side"/>
