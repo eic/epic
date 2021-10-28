@@ -1,2 +1,26 @@
-build/*
+!*.png
 
+*.prim
+*/*.eps
+*/*/*.eps
+*/*/*.png
+*/*/*.pdf
+*.root
+build/*
+.DAWN*
+*/*.pyc
+**.pyc
+
+images/*
+doc/*
+
+accelerator
+eic
+
+*.swp
+
+fieldmaps
+
+manifest.txt
+acts.txt
+acts2.txt

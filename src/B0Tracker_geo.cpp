@@ -50,7 +50,7 @@ static Ref_t create_B0Tracker(Detector& description, xml_h e, SensitiveDetector 
   detWorldExt->addType("endcap", "detector");
   sdet.addExtension<Acts::ActsExtension>(detWorldExt);
 
-  assembly.setVisAttributes(description.invisible());
+  //assembly.setVisAttributes(description.invisible());
   sens.setType("tracker");
 
   for (xml_coll_t mi(x_det, _U(module)); mi; ++mi, ++m_id) {
@@ -90,7 +90,7 @@ static Ref_t create_B0Tracker(Detector& description, xml_h e, SensitiveDetector 
 
       Material f_mat  = description.material(m_frame.materialStr());
       Volume f_vol(m_nam + "_frame", frame_shape, f_mat);
-      f_vol.setVisAttributes(description.visAttributes(m_frame.visStr()));
+      //f_vol.setVisAttributes(description.visAttributes(m_frame.visStr()));
 
       // figure out how to best place
       pv = m_volume.placeVolume(f_vol, Position(f_pos.x(), f_pos.y(),  f_pos.z()));
@@ -174,7 +174,8 @@ static Ref_t create_B0Tracker(Detector& description, xml_h e, SensitiveDetector 
     //assembly.placeVolume(layer_assembly);
     //Tube       layer_tub(layer_rmin, layer_rmax, layer_length / 2);
     //Volume     layer_vol(layer_name, layer_tub, air); // Create the layer envelope volume.
-    layer_vol.setVisAttributes(description.visAttributes(layer_vis));
+    //layer_vol.setVisAttributes(description.visAttributes(layer_vis));
+    //layer_vol.setVisAttributes(description.visAttributes(x_layer.visStr()));
 
     PlacedVolume layer_pv;
     //if (reflect) {

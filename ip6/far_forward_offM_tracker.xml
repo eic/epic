@@ -26,21 +26,22 @@
       name="ForwardOffMTracker_station_1"
       type="ip6_OffMomentumTracker"
       readout="ForwardOffMTrackerHits"
-      vis="AnlRed"
+      vis="FFTrackerVis"
       reflect="false">
       <position x="-780.0*mm" y="0" z="22500*mm"/>
       <rotation x="0*rad" y="-0.047*rad" z="0*rad"/>
-      <module name="Module1" vis="AnlProcess_Blue">
+      <module name="Module1" vis="FFTrackerShieldedModuleVis">
         <shape x="10.0*cm" y="20.0*cm"/>
-        <module_component material="Aluminum"     vis="GrayVis"              thickness="ForwardOffMTracker_RFShieldThickness"/>
-        <module_component material="Vacuum"       vis="InvisibleNoDaughters" thickness="ForwardOffMTracker_ShieldingAirLayerThickness"/>
-        <module_component material="SiliconOxide" vis="OrangeVis"            thickness="ForwardOffMTracker_LGADThickness" sensitive="true"/>
-        <module_component material="SiliconOxide" vis="GreenVis"             thickness="ForwardOffMTracker_ASICThickness"  />
-        <module_component material="Copper"       vis="BlueVis"              thickness="ForwardOffMTracker_ThermalStripThickness" />
-        <module_component material="Aluminum"     vis="GrayVis"              thickness="ForwardOffMTracker_RFShieldThickness"/>
+        <comment> back-to-front </comment>
+        <module_component material="Aluminum"     vis="FFTrackerShieldingVis" thickness="ForwardOffMTracker_RFShieldThickness"/>
+        <module_component material="Copper"       vis="FFTrackerServiceVis"   thickness="ForwardOffMTracker_ThermalStripThickness" />
+        <module_component material="SiliconOxide" vis="FFTrackerServiceVis"   thickness="ForwardOffMTracker_ASICThickness"  />
+        <module_component material="SiliconOxide" vis="FFTrackerSurfaceVis"   thickness="ForwardOffMTracker_LGADThickness" sensitive="true"/>
+        <module_component material="Vacuum"       vis="InvisibleNoDaughters"  thickness="ForwardOffMTracker_ShieldingAirLayerThickness"/>
+        <module_component material="Aluminum"     vis="FFTrackerShieldingVis" thickness="ForwardOffMTracker_RFShieldThickness"/>
       </module>
       <layer id="1" module="Module1">
-        <envelope  vis="AnlRed" x="10.0*cm" y="20.0*cm" length="1.0*cm" 
+        <envelope vis="FFTrackerLayerVis" x="10.0*cm" y="20.0*cm" length="1.0*cm" 
           zstart="0.0/2.0" />
       </layer>
     </detector>
@@ -54,18 +55,17 @@
       reflect="false">
       <position x="-780.0*mm" y="0" z="22520*mm"/>
       <rotation x="0*rad" y="-0.047*rad" z="0*rad"/>
-      <module name="Module1" vis="AnlProcess_Blue">
+      <module name="Module1" vis="FFTrackerShieldedModuleVis">
         <shape x="10.0*cm" y="20.0*cm"/>
-        <module_component material="Aluminum"     vis="GrayVis"              thickness="ForwardOffMTracker_RFShieldThickness"/>
-        <module_component material="Vacuum"       vis="InvisibleNoDaughters" thickness="ForwardOffMTracker_ShieldingAirLayerThickness"/>
-        <module_component material="SiliconOxide" vis="OrangeVis"            thickness="ForwardOffMTracker_LGADThickness" sensitive="true"/>
-        <module_component material="SiliconOxide" vis="GreenVis"             thickness="ForwardOffMTracker_ASICThickness"  />
-        <module_component material="Copper"       vis="BlueVis"              thickness="ForwardOffMTracker_ThermalStripThickness" />
-        <module_component material="Aluminum"     vis="GrayVis"              thickness="ForwardOffMTracker_RFShieldThickness"/>
+        <module_component material="Aluminum"     vis="FFTrackerShieldingVis" thickness="ForwardOffMTracker_RFShieldThickness"/>
+        <module_component material="Copper"       vis="FFTrackerServiceVis"   thickness="ForwardOffMTracker_ThermalStripThickness" />
+        <module_component material="SiliconOxide" vis="FFTrackerServiceVis"   thickness="ForwardOffMTracker_ASICThickness"  />
+        <module_component material="SiliconOxide" vis="FFTrackerSurfaceVis"   thickness="ForwardOffMTracker_LGADThickness" sensitive="true"/>
+        <module_component material="Vacuum"       vis="InvisibleNoDaughters"  thickness="ForwardOffMTracker_ShieldingAirLayerThickness"/>
+        <module_component material="Aluminum"     vis="FFTrackerShieldingVis" thickness="ForwardOffMTracker_RFShieldThickness"/>
       </module>
-      
       <layer id="1" module="Module1">
-         <envelope  vis="AnlRed" x="10.0*cm" y="20.0*cm" length="3.2*mm" 
+         <envelope vis="FFTrackerLayerVis" x="10.0*cm" y="20.0*cm" length="3.2*mm" 
            zstart="0.0/2.0" />
       </layer>
       
@@ -76,22 +76,21 @@
       name="ForwardOffMTracker_station_3"
       type="ip6_OffMomentumTracker"
       readout="ForwardOffMTrackerHits"
-      vis="AnlRed"
+      vis="FFTrackerVis"
       reflect="false">
       <position x="-870.0*mm" y="0" z="24500*mm"/>
       <rotation x="0*rad" y="-0.047*rad" z="0*rad"/>
-      <module name="Module1" vis="AnlProcess_Blue">
+      <module name="Module1" vis="FFTrackerShieldedModuleVis">
         <shape x="10.0*cm" y="20.0*cm"/>
-        <module_component material="Aluminum"     vis="GrayVis"              thickness="ForwardOffMTracker_RFShieldThickness"/>
-        <module_component material="Vacuum"       vis="InvisibleNoDaughters" thickness="ForwardOffMTracker_ShieldingAirLayerThickness"/>
-        <module_component material="SiliconOxide" vis="OrangeVis"            thickness="ForwardOffMTracker_LGADThickness" sensitive="true"/>
-        <module_component material="SiliconOxide" vis="GreenVis"             thickness="ForwardOffMTracker_ASICThickness"  />
-        <module_component material="Copper"       vis="BlueVis"              thickness="ForwardOffMTracker_ThermalStripThickness" />
-        <module_component material="Aluminum"     vis="GrayVis"              thickness="ForwardOffMTracker_RFShieldThickness"/>
+        <module_component material="Aluminum"     vis="FFTrackerShieldingVis" thickness="ForwardOffMTracker_RFShieldThickness"/>
+        <module_component material="Copper"       vis="FFTrackerServiceVis"   thickness="ForwardOffMTracker_ThermalStripThickness" />
+        <module_component material="SiliconOxide" vis="FFTrackerServiceVis"   thickness="ForwardOffMTracker_ASICThickness"  />
+        <module_component material="SiliconOxide" vis="FFTrackerSurfaceVis"   thickness="ForwardOffMTracker_LGADThickness" sensitive="true"/>
+        <module_component material="Vacuum"       vis="InvisibleNoDaughters"  thickness="ForwardOffMTracker_ShieldingAirLayerThickness"/>
+        <module_component material="Aluminum"     vis="FFTrackerShieldingVis" thickness="ForwardOffMTracker_RFShieldThickness"/>
       </module>
-      
       <layer id="1" module="Module1">
-         <envelope  vis="AnlRed" x="10.0*cm" y="20.0*cm" length="3.2*mm" 
+         <envelope vis="FFTrackerLayerVis" x="10.0*cm" y="20.0*cm" length="3.2*mm" 
           zstart="0.0/2.0" />
       </layer>
       
@@ -102,22 +101,21 @@
       name="ForwardOffMTracker_station_4"
       type="ip6_OffMomentumTracker"
       readout="ForwardOffMTrackerHits"
-      vis="AnlRed"
+      vis="FFTrackerVis"
       reflect="false">
       <position x="-870.0*mm" y="0" z="24520*mm"/>
       <rotation x="0*rad" y="-0.047*rad" z="0*rad"/>
-      <module name="Module1" vis="AnlProcess_Blue">
+      <module name="Module1" vis="FFTrackerShieldedModuleVis">
         <shape x="10.0*cm" y="20.0*cm"/>
-        <module_component material="Aluminum"     vis="GrayVis"              thickness="ForwardOffMTracker_RFShieldThickness"/>
-        <module_component material="Vacuum"       vis="InvisibleNoDaughters" thickness="ForwardOffMTracker_ShieldingAirLayerThickness"/>
-        <module_component material="SiliconOxide" vis="OrangeVis"            thickness="ForwardOffMTracker_LGADThickness" sensitive="true"/>
-        <module_component material="SiliconOxide" vis="GreenVis"             thickness="ForwardOffMTracker_ASICThickness"  />
-        <module_component material="Copper"       vis="BlueVis"              thickness="ForwardOffMTracker_ThermalStripThickness" />
-        <module_component material="Aluminum"     vis="GrayVis"              thickness="ForwardOffMTracker_RFShieldThickness"/>
+        <module_component material="Aluminum"     vis="FFTrackerShieldingVis" thickness="ForwardOffMTracker_RFShieldThickness"/>
+        <module_component material="Copper"       vis="FFTrackerServiceVis"   thickness="ForwardOffMTracker_ThermalStripThickness" />
+        <module_component material="SiliconOxide" vis="FFTrackerServiceVis"   thickness="ForwardOffMTracker_ASICThickness"  />
+        <module_component material="SiliconOxide" vis="FFTrackerSurfaceVis"   thickness="ForwardOffMTracker_LGADThickness" sensitive="true"/>
+        <module_component material="Vacuum"       vis="InvisibleNoDaughters"  thickness="ForwardOffMTracker_ShieldingAirLayerThickness"/>
+        <module_component material="Aluminum"     vis="FFTrackerShieldingVis" thickness="ForwardOffMTracker_RFShieldThickness"/>
       </module>
-      
       <layer id="1" module="Module1">
-         <envelope  vis="AnlRed" x="10.0*cm" y="20.0*cm" length="3.2*mm" 
+         <envelope vis="FFTrackerLayerVis" x="10.0*cm" y="20.0*cm" length="3.2*mm" 
           zstart="0.0/2.0" />
       </layer>
       

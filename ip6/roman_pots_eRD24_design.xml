@@ -84,16 +84,16 @@
       readout="ForwardRomanPotHits" 
       type="ip6_ForwardRomanPot"
       insideTrackingVolume="true"
-      reflect="false" vis="AnlRed">
+      reflect="false" vis="FFTrackerVis">
     <position x="ForwardRomanPotStation1_xpos" y="0" z="ForwardRomanPotStation1_zpos" />
     <rotation x="0" y="ForwardRomanPotStation1_rotation" z="0" />
-    <module name="Module1" vis="AnlYellow" nx="2" ny="2" width="ForwardRomanPot_ModuleWidth" height="ForwardRomanPot_ModuleHeight">
-      <module_component material="Aluminum"     vis="GrayVis"              thickness="ForwardRomanPot_RFShieldThickness"/>
-      <module_component material="Vacuum"       vis="InvisibleNoDaughters" thickness="ForwardRomanPot_ShieldingAirLayerThickness"/>
-	  <module_component material="SiliconOxide" vis="OrangeVis"            thickness="ForwardRomanPot_LGADThickness" sensitive="true"/>
-      <module_component material="SiliconOxide" vis="GreenVis"             thickness="ForwardRomanPot_ASICThickness"  />
-      <module_component material="Copper"       vis="BlueVis"              thickness="ForwardRomanPot_ThermalStripThickness" />
-	  <module_component material="Aluminum"     vis="GrayVis"              thickness="ForwardRomanPot_RFShieldThickness"/>
+    <module name="Module1" vis="FFTrackerShieldedModuleVis" nx="2" ny="2" width="ForwardRomanPot_ModuleWidth" height="ForwardRomanPot_ModuleHeight">
+        <module_component material="Aluminum"     vis="FFTrackerShieldingVis" thickness="ForwardRomanPot_RFShieldThickness"/>
+        <module_component material="Copper"       vis="FFTrackerServiceVis"   thickness="ForwardRomanPot_ThermalStripThickness" />
+        <module_component material="SiliconOxide" vis="FFTrackerServiceVis"   thickness="ForwardRomanPot_ASICThickness"  />
+        <module_component material="SiliconOxide" vis="FFTrackerSurfaceVis"   thickness="ForwardRomanPot_LGADThickness" sensitive="true"/>
+        <module_component material="Vacuum"       vis="InvisibleNoDaughters"  thickness="ForwardRomanPot_ShieldingAirLayerThickness"/>
+        <module_component material="Aluminum"     vis="FFTrackerShieldingVis" thickness="ForwardRomanPot_RFShieldThickness"/>
       <!--<module_component material="Vacuum"       thickness="ForwardRomanPot_LayerSeparationThickness"/>	-->
     </module>
     <module_assembly name="Station1Top">
@@ -131,7 +131,7 @@
       </array>
     </module_assembly>
 
-    <layer id="1">
+    <layer id="1" vis="FFTrackerLayerVis">
       <position x="0" y="0" z="0.0*cm"/>
       <component assembly="Station1Top">
         <position x="0" y="0" z="0.0*cm"/>
@@ -140,7 +140,7 @@
         <position x="0" y="0" z="0.0*cm"/>
       </component>
     </layer>
-    <layer id="2">
+    <layer id="2" vis="FFTrackerLayerVis">
       <position x="0" y="0" z="0.0*cm"/>
       <component assembly="Station1Top">
         <position x="0" y="0" z="20.0*mm"/>
@@ -159,16 +159,16 @@
       type="ip6_ForwardRomanPot"
       insideTrackingVolume="true"
       reflect="false"
-      vis="AnlRed">
+      vis="FFTrackerVis">
       <position x="ForwardRomanPotStation2_xpos" y="0" z="ForwardRomanPotStation2_zpos" />
     <rotation x="0" y="ForwardRomanPotStation1_rotation" z="0" />
-    <module name="Module1" vis="AnlYellow" nx="2" ny="2" width="ForwardRomanPot_ModuleWidth" height="ForwardRomanPot_ModuleHeight">
-     <module_component material="Aluminum"     vis="GrayVis"              thickness="ForwardRomanPot_RFShieldThickness"/>
-      <module_component material="Vacuum"       vis="InvisibleNoDaughters" thickness="ForwardRomanPot_ShieldingAirLayerThickness"/>
-      <module_component material="SiliconOxide" vis="OrangeVis"            thickness="ForwardRomanPot_LGADThickness" sensitive="true"/>
-      <module_component material="SiliconOxide" vis="GreenVis"             thickness="ForwardRomanPot_ASICThickness"  />
-      <module_component material="Copper"       vis="BlueVis"              thickness="ForwardRomanPot_ThermalStripThickness" />
-      <module_component material="Aluminum"     vis="GrayVis"              thickness="ForwardRomanPot_RFShieldThickness"/>
+    <module name="Module1" vis="FFTrackerShieldedModuleVis" nx="2" ny="2" width="ForwardRomanPot_ModuleWidth" height="ForwardRomanPot_ModuleHeight">
+      <module_component material="Aluminum"     vis="FFTrackerShieldingVis" thickness="ForwardRomanPot_RFShieldThickness"/>
+      <module_component material="Copper"       vis="FFTrackerServiceVis"   thickness="ForwardRomanPot_ThermalStripThickness" />
+      <module_component material="SiliconOxide" vis="FFTrackerServiceVis"   thickness="ForwardRomanPot_ASICThickness"  />
+      <module_component material="SiliconOxide" vis="FFTrackerSurfaceVis"   thickness="ForwardRomanPot_LGADThickness" sensitive="true"/>
+      <module_component material="Vacuum"       vis="InvisibleNoDaughters"  thickness="ForwardRomanPot_ShieldingAirLayerThickness"/>
+      <module_component material="Aluminum"     vis="FFTrackerShieldingVis" thickness="ForwardRomanPot_RFShieldThickness"/>
     </module>
 	<module_assembly name="Station2Top">
 		<array nx="2" ny="2" module="Module1" width="2*ForwardRomanPot_ModuleWidth" height="2*ForwardRomanPot_ModuleHeight">
@@ -206,7 +206,7 @@
     </module_assembly>
 
 
-    <layer id="1">
+    <layer id="1" vis="FFTrackerLayerVis">
       <position x="0" y="0" z="0.0*cm"/>
       <component assembly="Station2Top">
         <position x="0" y="0" z="0.0*cm"/>
@@ -215,7 +215,7 @@
         <position x="0" y="0" z="0.0*cm"/>
       </component>
     </layer>
-    <layer id="2">
+    <layer id="2" vis="FFTrackerLayerVis">
       <position x="0" y="0" z="0.0*cm"/>
       <component assembly="Station2Top">
         <position x="0" y="0" z="20.0*mm"/>

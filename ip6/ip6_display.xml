@@ -1,71 +1,58 @@
   <display>
 
-    <vis name="AnlGreen"        alpha="1" r="119/255" g="179/255" b="0"/>
-    <vis name="AnlViolet"       alpha="1" r="91/256" g="0" b="145/256"/>
-    <vis name="AnlProcess_Blue" alpha="1" r="0/256" g="130/256" b="202/256"/>
-    <vis name="AnlOrange"       alpha="1" r="255/256" g="121/256" b="0"/>
-    <vis name="AnlRed"          alpha="1" r="205/256" g="32/256" b="44/256"/>
-    <vis name="AnlGold"         alpha="1" r="248/256" g="178/256" b="0/256"/>
-    <vis name="AnlBlue"         alpha="1" r="0/256" g="96/256" b="156/256"/>
-    <vis name="AnlTeal"         alpha="1" r="0/256" g="161/256" b="156/256"/>
-    <vis name="AnlGray"         alpha="1" r="102/256" g="102/256" b="102/256"/>
-    <vis name="AnlLight_Gray"   alpha="1" r="209/256" g="209/256" b="209/256"/>
-    <vis name="AnlOff_White"    alpha="1" r="242/256" g="242/256" b="242/256"/>
-    <vis name="AnlDelta_Red"    alpha="1" r="161/256" g="43/256" b="47/256"/>
-    <vis name="AnlDelta_Green"  alpha="1" r="0" g="120/256" b="54/256"/>
-    <vis name="AnlDelta_Blue"   alpha="1" r="11/256" g="31/256" b="143/256"/>
-
-    <vis name="AnlRed_1"        alpha="0.5" r="205/256" g="32/256" b="44/256"/>
-
-    <comment>Tracker_Layer_Vis is AnlGold</comment>
-    <vis name="Tracker_Layer_Vis"  alpha="0.5" r="248/256" g="178/256" b="0/256" showDaughters="true" />
-
+    <comment>
+      See compact/ip6_colors.xml for list of colors.
+    </comment>
     <vis name="InvisibleNoDaughters"      showDaughters="false" visible="false"/>
     <vis name="InvisibleWithDaughters"    showDaughters="true" visible="false"/>
 
-    <vis name="SiVertexVis" alpha="0.9" r="1" g="0" b="1" showDaughters="true" />
-    <vis name="SiTrackerBarrelVis" alpha="0.5" r="0.0" g="0.0" b="1.0" showDaughters="true" visible="true"/>
-    <vis name="SiTrackerVis" alpha="0.9" r="1.0" g="0.0" b="0.0" showDaughters="true" lineStyle="solid"  drawingStyle="solid" />
+    <comment>
+      Tracker visualizations
+    </comment>
+    <vis name="TrackerVis"          ref="AnlRed" />
+    <vis name="TrackerSupportVis"   ref="AnlBlue"             visible="true"  showDaughters="false" />
+    <vis name="TrackerServiceVis"   ref="AnlGold"             showDaughters="false" />
+    <vis name="FFTrackerVis"        ref="AnlRed" />
+    <vis name="FFTrackerSupportVis" ref="AnlBlue"             visible="true"  showDaughters="false" />
+    <vis name="FFTrackerShieldingVis" ref="AnlGray"           visible="true"  showDaughters="false" />
+    <vis name="FFTrackerServiceVis" ref="AnlGold"             visible="true"  showDaughters="false" />
+    <vis name="FFTrackerLayerVis"   ref="TrackerVis"          visible="true"  showDaughters="true" />
+    <vis name="FFTrackerModuleVis"  ref="FFTrackerLayerVis"   visible="true"  showDaughters="true" />
+    <vis name="FFTrackerSurfaceVis" ref="FFTrackerLayerVis"   visible="true"  showDaughters="true" />
+    <comment> For shielded modules by default just display to module instead of 6 layers </comment>
+    <vis name="FFTrackerShieldedModuleVis" ref="FFTrackerModuleVis"   visible="true"  showDaughters="false" />
 
-    <vis name="TrackerSupportVis" alpha="1.0" r="1.0" g="0.0" b="0.0" visible="true"  showDaughters="false" />
-    <vis name="TrackerLayerVis" alpha="0.9" r="0.0" g="1.0" b="0.0" visible="true"  showDaughters="true" />
+    <comment>
+      Calorimeter visualization
+    </comment>
 
-    <vis name="SiTrackerBarrelVis1" alpha="0.8" r="0.0" g="0.9" b="0.9" showDaughters="true" />
-    <vis name="SiTrackerBarrelVis2" alpha="0.8" r="0.1" g="0.9" b="0.0" showDaughters="true" visible="true"/>
-    <vis name="SiTrackerEndcapVis1" alpha="0.8" r="1.0" g="0.0" b="1.0" showDaughters="true" visible="true"/>
-    <vis name="SiTrackerEndcapVis2" alpha="0.8" r="1.0" g="0.45" b="0.0" showDaughters="false" visible="true"/>
-    <vis name="SiTrackerSubAssemblyVis" alpha="1" r="0.0" g="0.99" b="0.0" showDaughters="true" visible="true"/>
-    <vis name="SiTrackerLayerVis" alpha="1" r="0.0" g="1" b="0.0" showDaughters="true" visible="true"  lineStyle="solid"  drawingStyle="solid" />
+    <comment>
+      ECal Vis
+    </comment>
+    <vis name="FFPreVis"            ref="AnlGold"             showDaughters="true" visible="true"/>
+    <vis name="FFPreLayerVis"       ref="FFPreVis"            showDaughters="true" visible="true"/>
+    <vis name="FFPreModuleVis"      ref="FFPreLayerVis"       showDaughters="true" visible="true"/>
+    <vis name="FFPreRadiatorVis"    ref="FFPreModuleVis"      showDaughters="true" visible="true"/>
+    <vis name="FFPreReadoutVis"     ref="FFTrackerSurfaceVis" showDaughters="true" visible="true"/>
+      
+    <comment>
+      Magnet/beamline visualization
+    </comment>
+    <vis name="FFMagnetVis"         ref="AnlGreen"            showDaughters="true" visible="true"/>
+    <vis name="FFMagnetCoilVis"     ref="AnlRed"              showDaughters="true" visible="true"/>
+    <vis name="BeamPipeVis"         ref="AnlLight_Gray"       showDaughters="true" visible="true"/>
 
-    <vis name="EcalVis" alpha="0.1" r="0.0" g="0.75" b="0.1" showDaughters="false"/>
-    <vis name="EcalEndcapVis" alpha="1.0" r="0.0" g="0.99" b="0.0" showDaughters="false" visible="true" />
-    <vis name="EcalBarrelVis" alpha="1.0" r="0.0" g="0.99" b="0.0" showDaughters="false" visible="true" />
-   
-   
-    
 
-    <vis name="SolenoidCoilVis" alpha="1.0" r="0.55" g="0.55" b="0.7" showDaughters="true" visible="true" lineStyle="solid" drawingStyle="solid" />
-    <vis name="SolenoidCryostatVis" alpha="0.4" r="0.55" g="0.55" b="0.7" showDaughters="true" visible="true" lineStyle="solid" drawingStyle="solid" />
-    <vis name="SolenoidYokeVis" alpha="0.2" r="0.8" g="0.1" b="0.1" showDaughters="false" visible="true" lineStyle="solid"  drawingStyle="solid" />
-    <vis name="RICHVis" alpha="0.5" r="1" g="0" b="1" showDaughters="true"/>
-    <vis name="BeamPipeVis"    alpha="1"  r= "0.75" g="0.75" b="0.75" showDaughters="true" visible="true"/>
+    <comment>
+      Old visualization code that should be integrated in the new color scheme
+    </comment>
 
-    <vis name="cb_SolenoidVis"          alpha="0.4"  r= "0.1"  g="0.0"  b="0.1"  showDaughters="true" visible="true"/>
     <vis name="ffi_ZDC_ECAL_Vis"        alpha="0.1"  r= "0.1"  g="0.0"  b="1.0"  showDaughters="true" visible="true"/>
     <vis name="ffi_ZDC_ECAL_module_Vis" alpha="1.0"  r= "0.1"  g="1.0"  b="0.9"  showDaughters="true" visible="true"/>
     <vis name="ffi_ZDC_HCAL_Vis"        alpha="0.1"  r= "0.1"  g="0.0"  b="1.0"  showDaughters="true" visible="true"/>
-    <vis name="cb_CTDVis"               alpha="0.1"  r= "0.1"  g="0.0"  b="1.0"  showDaughters="true" visible="true"/>
-    <vis name="cb_CTD_Si_layerVis"      alpha="1.0"  r= "0.9"  g="1.0"  b="0.1"  showDaughters="true" visible="true"/>
-    <vis name="ce_GEMVis"               alpha="0.1"  r= "0.1"  g="0.0"  b="1.0"  showDaughters="true" visible="true"/>
-    <vis name="cb_GEM_layerVis"         alpha="0.8"  r= "0.8"  g="0.4"  b="0.3"  showDaughters="true" visible="true"/>
-    <vis name="cb_VTX_BarrelVis"        alpha="0.1"  r= "0.1"  g="0.0"  b="1.0"  showDaughters="true" visible="true"/>
-    <vis name="cb_VTX_Barrel_layerVis"  alpha="2.0"  r= "0.0"  g="0.2"  b="0.8"  showDaughters="true" visible="true"/>
-
-    <vis name="ci_GEMVis"  r= "0.8"  g="0.4"  b="0.3" alpha="0.8" showDaughters="true" visible="true"/>
-    <vis name="ci_HCALVis"  r= "0.6"  g="0"  b="0.6" alpha="1.0" showDaughters="true" visible="true"/>
 
     <comment>
-      Deprecated colors.
+      Deprecated color scheme
     </comment>
     <vis name="GreenVis"       alpha="1.0"  r= "0.0" g="1.0" b="0.0" showDaughters="true" visible="true"/>
     <vis name="RedVis"         alpha="0.2"  r= "1.0" g="0.0" b="0.0" showDaughters="true" visible="true"/>

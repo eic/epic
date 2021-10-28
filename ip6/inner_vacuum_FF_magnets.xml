@@ -8,7 +8,7 @@
 
   <detectors>
 
-    <detector id="VacuumMagnetElement_1_ID" name="VacuumMagnetElement" type="magnetElementInnerVacuum" vis="visBlue" visible="false"> 
+    <detector id="VacuumMagnetElement_1_ID" name="VacuumMagnetElement" type="magnetElementInnerVacuum" vis="InvisibleNoDaughters"> 
       <position x="0.0" y="0.0" z="0.0" />
       <rotation x="0*rad" y="0*rad" z="0*rad" />
     </detector>

@@ -17,6 +17,7 @@ dd4hep_configure_output()
 
 dd4hep_add_plugin(${a_lib_name} 
   SOURCES 
+  src/CylindricalDipoleMagnet_geo.cpp
   src/B0Tracker_geo.cpp
   src/B0Preshower_geo.cpp
   src/DD4hep_GdmlDetector.cpp
