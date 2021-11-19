@@ -40,7 +40,8 @@
     <constant name="ffi_ZDC_Air_2_Thickness"      value="3.0 * cm"/>
 
     <constant name="ffi_ZDC_ECAL_layer_thickness" value="ffi_ZDC_Silicon_1_Thickness + ffi_ZDC_Glue_1_Thickness + ffi_ZDC_FPC_Thickness +                                                                        ffi_ZDC_Air_1_Thickness + ffi_ZDC_WSciFi_Thickness + ffi_ZDC_Air_2_Thickness"/>
-    <constant name="ffi_ZDC_ECAL_length"          value="ffi_ZDC_SiWSciFi_NRepeat * ffi_ZDC_ECAL_layer_thickness"/>
+    <!--<constant name="ffi_ZDC_ECAL_length"          value="ffi_ZDC_SiWSciFi_NRepeat * ffi_ZDC_ECAL_layer_thickness"/>-->
+    <constant name="ffi_ZDC_ECAL_length"          value="170.0 * mm"/>
 
     <comment>
       -------------------------------
@@ -56,9 +57,9 @@
     <constant name="ffi_ZDC_HCAL_width"           value="ffi_ZDC_width"/>
     <constant name="ffi_ZDC_HCAL_length"          value="ffi_ZDC_length"/>
 
-    <constant name="ffi_ZDC_SiPb_NRepeat"         value="2"/> <!-- changed from 12 -->
-    <constant name="ffi_ZDC_PbScint_NRepeat"      value="19"/>
-    <constant name="ffi_ZDC_Gap_NRepeat"          value="1"/>
+    <constant name="ffi_ZDC_SiPb_NRepeat"         value="0"/> <!-- changed from 12 -->
+    <constant name="ffi_ZDC_PbScint_NRepeat"      value="35"/>
+    <constant name="ffi_ZDC_Gap_NRepeat"          value="0"/>
     
     <constant name="ffi_ZDC_Silicon_2_Thickness"  value="320.0 * um"/>
     <constant name="ffi_ZDC_Tungsten_Thickness"   value="3.5 * mm"/>
@@ -79,7 +80,7 @@
   <display>
   </display>
 
-  <include ref="far_forward_ZDC_Ecal.xml"/>
+  <include ref="far_forward_ZDC_Ecal_WSciFi.xml"/>
   <include ref="far_forward_ZDC_Hcal.xml"/>
   
   <detectors>

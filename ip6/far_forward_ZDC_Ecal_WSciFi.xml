@@ -1,0 +1,42 @@
+<lccdd>
+  <comment>
+    //////////////////////////////////////////////////
+    // Far Forward Ion Zero Degree Calorimeter
+    // W power + SciFi for Ecal
+    //////////////////////////////////////////////////
+  </comment>        
+
+  <define>
+    <constant name="ffi_ZDC_ECAL_FiberRadius" value="0.235*mm"/>
+    <constant name="ffi_ZDC_ECAL_FiberOffset" value="0.5*mm"/>
+    <constant name="ffi_ZDC_ECAL_FiberSpaceX" value="0.265*mm"/>
+    <constant name="ffi_ZDC_ECAL_FiberSpaceY" value="0.425*mm"/>
+  </define>
+
+  <detectors>
+    <detector id="ffi_ZDC_ECAL_ID"
+      name="ffi_ZDC_ECAL"
+      type="ZDCEcalScFiCalorimeter"
+      vis="ffi_ZDC_ECAL_Vis"
+      readout="ffi_ZDC_ECAL_Hits">
+      <position x="ffi_ZDC_ECAL_x_pos" y="ffi_ZDC_ECAL_y_pos" z="ffi_ZDC_ECAL_z_pos"/>
+      <rotation x="ffi_ZDC_ECAL_rotateX_angle" y="ffi_ZDC_ECAL_rotateY_angle" z="ffi_ZDC_ECAL_rotateZ_angle"/>
+      <dimensions x="ffi_ZDC_ECAL_width" z="ffi_ZDC_ECAL_length"/>
+      <module sizex="25*mm" sizey="25*mm" sizez="170*mm" material="WSciFi_UCLA_Abs" vis="ffi_ZDC_ECAL_module_Vis">
+        <fiber material="PlasticScint"
+          radius="ffi_ZDC_ECAL_FiberRadius"
+          offset="ffi_ZDC_ECAL_FiberOffset"
+          spacex="ffi_ZDC_ECAL_FiberSpaceX"
+          spacey="ffi_ZDC_ECAL_FiberSpaceY"/>
+      </module>
+    </detector>
+  </detectors>
+
+  <readouts>
+    <readout name="ffi_ZDC_ECAL_Hits">
+      <segmentation type="NoSegmentation"/>
+      <id>system:8,module:28,fiber_x:8,fiber_y:8</id>
+    </readout>
+  </readouts>
+
+</lccdd>

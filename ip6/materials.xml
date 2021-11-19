@@ -214,4 +214,9 @@
     <composite n="0.009" ref="H"/>
     <composite n="0.041"  ref="C"/>
   </material>
+  <material name="WSciFi_UCLA_Abs">
+    <D type="density" value="12.4" unit="g / cm3"/>
+    <fraction n="0.96" ref="W"/>
+    <fraction n="0.04" ref="Polystyrene"/>
+  </material>  
 </materials>

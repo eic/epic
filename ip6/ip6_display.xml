@@ -44,12 +44,12 @@
 
 
     <comment>
-      Old visualization code that should be integrated in the new color scheme
+      ZDC visualization
     </comment>
 
-    <vis name="ffi_ZDC_ECAL_Vis"        alpha="0.1"  r= "0.1"  g="0.0"  b="1.0"  showDaughters="true" visible="true"/>
-    <vis name="ffi_ZDC_ECAL_module_Vis" alpha="1.0"  r= "0.1"  g="1.0"  b="0.9"  showDaughters="true" visible="true"/>
-    <vis name="ffi_ZDC_HCAL_Vis"        alpha="0.1"  r= "0.1"  g="0.0"  b="1.0"  showDaughters="true" visible="true"/>
+    <vis name="ffi_ZDC_ECAL_Vis"        ref="AnlGreen" showDaughters="true"  visible="true"/>
+    <vis name="ffi_ZDC_ECAL_module_Vis" ref="AnlRed"   showDaughters="false" visible="true"/>
+    <vis name="ffi_ZDC_HCAL_Vis"        ref="AnlBlue"  showDaughters="true"  visible="true"/>
 
     <comment>
       Deprecated color scheme
