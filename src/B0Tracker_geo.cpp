@@ -28,7 +28,7 @@ static Ref_t create_B0Tracker(Detector& description, xml_h e, SensitiveDetector 
   Material                     vacuum   = description.vacuum();
   int                          det_id   = x_det.id();
   string                       det_name = x_det.nameStr();
-  bool                         reflect  = false;
+  //bool                         reflect  = false;
   DetElement                   sdet(det_name, det_id);
   Assembly                     assembly(det_name);
   xml::Component pos   = x_det.position();

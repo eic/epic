@@ -35,8 +35,6 @@ static Ref_t createDetector(Detector& desc, xml_h e, SensitiveDetector sens)
   envelopeVol.setVisAttributes(desc.visAttributes(x_det.visStr()));
   PlacedVolume pv;
 	
-  xml_comp_t x_layer = x_det.child(_U(layer));
-  
   int layer_num = 1;
   // Read layers
   for(xml_coll_t c(x_det,_U(layer)); c; ++c) {
@@ -56,30 +54,30 @@ static Ref_t createDetector(Detector& desc, xml_h e, SensitiveDetector sens)
       int slice_num = 1;
       // Loop over slices
       for(xml_coll_t l(x_layer,_U(slice)); l; ++l) {
-	xml_comp_t x_slice = l;
-	double w = x_slice.thickness();
-	string slice_name = layer_name + _toString(slice_num,"slice%d");
-	Material slice_mat = desc.material(x_slice.materialStr());		
-	Volume slice_vol (slice_name,Box(Width/2.0, Width/2.0,w/2.0),slice_mat);
-	
-	if(x_slice.isSensitive()) {
-	  sens.setType("calorimeter");
-	  slice_vol.setSensitiveDetector(sens);
-	}
-	
-	slice_vol.setAttributes(desc,x_slice.regionStr(), x_slice.limitsStr(), x_slice.visStr());
-	pv = layer_vol.placeVolume(slice_vol, Transform3D(RotationZYX(0, 0, 0),Position(0.0,0.0,z-zlayer-layerWidth/2.0+w/2.0)));
-	pv.addPhysVolID("slice", slice_num);
-	z += w;
-	++slice_num;
-	}
+        xml_comp_t x_slice = l;
+        double w = x_slice.thickness();
+        string slice_name = layer_name + _toString(slice_num,"slice%d");
+        Material slice_mat = desc.material(x_slice.materialStr());		
+        Volume slice_vol (slice_name,Box(Width/2.0, Width/2.0,w/2.0),slice_mat);
+        
+        if(x_slice.isSensitive()) {
+          sens.setType("calorimeter");
+          slice_vol.setSensitiveDetector(sens);
+        }
+        
+        slice_vol.setAttributes(desc,x_slice.regionStr(), x_slice.limitsStr(), x_slice.visStr());
+        pv = layer_vol.placeVolume(slice_vol, Transform3D(RotationZYX(0, 0, 0),Position(0.0,0.0,z-zlayer-layerWidth/2.0+w/2.0)));
+        pv.addPhysVolID("slice", slice_num);
+        z += w;
+        ++slice_num;
+    	}
 			
       string layer_vis = dd4hep::getAttrOrDefault(x_layer, _Unicode(vis), "InvisibleWithDaughters");
       layer_vol.setAttributes(desc, x_layer.regionStr(), x_layer.limitsStr(), layer_vis);
       pv = envelopeVol.placeVolume(layer_vol, Transform3D(RotationZYX(0, 0, 0), Position(0,0,zlayer-pos.z()-totWidth/2.0+layerWidth/2.0)));
       pv.addPhysVolID("layer", layer_num);
       ++layer_num;
-      }
+    }
   }
   
   DetElement   det(detName, detID);  

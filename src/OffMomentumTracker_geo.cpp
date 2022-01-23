@@ -53,8 +53,8 @@ static Ref_t create_OffMomentumTracker(Detector& description, xml_h e, Sensitive
     double      support_zstart    = getAttrOrDefault(x_support, _U(zstart), 2.0 * mm);
     std::string support_name      = getAttrOrDefault<std::string>(x_support, _Unicode(name), "support_tube");
     std::string support_vis       = getAttrOrDefault<std::string>(x_support, _Unicode(vis), "AnlRed");
-    xml_dim_t  pos        (x_support.child(_U(position), false));
-    xml_dim_t  rot        (x_support.child(_U(rotation), false));
+    xml_dim_t   support_pos        (x_support.child(_U(position), false));
+    xml_dim_t   support_rot        (x_support.child(_U(rotation), false));
     Solid support_solid;
     if(x_support.hasChild("shape")){
       xml_comp_t shape(x_support.child(_U(shape)));
@@ -64,16 +64,16 @@ static Ref_t create_OffMomentumTracker(Detector& description, xml_h e, Sensitive
       support_solid = Tube(support_rmin, support_rmin + support_thickness, support_length / 2);
     }
     Transform3D tr = Transform3D(Rotation3D(),Position(0,0,(support_zstart + support_length / 2)));
-    if ( pos.ptr() && rot.ptr() )  {
-      Rotation3D  rot3D(RotationZYX(rot.z(0),rot.y(0),rot.x(0)));
-      Position    pos3D(pos.x(0),pos.y(0),pos.z(0));
+    if ( support_pos.ptr() && support_rot.ptr() )  {
+      Rotation3D  rot3D(RotationZYX(support_rot.z(0),support_rot.y(0),support_rot.x(0)));
+      Position    pos3D(support_pos.x(0),support_pos.y(0),support_pos.z(0));
       tr = Transform3D(rot3D, pos3D);
     }
-    else if ( pos.ptr() )  {
-      tr = Transform3D(Rotation3D(),Position(pos.x(0),pos.y(0),pos.z(0)));
+    else if ( support_pos.ptr() )  {
+      tr = Transform3D(Rotation3D(),Position(support_pos.x(0),support_pos.y(0),support_pos.z(0)));
     }
-    else if ( rot.ptr() )  {
-      Rotation3D rot3D(RotationZYX(rot.z(0),rot.y(0),rot.x(0)));
+    else if ( support_rot.ptr() )  {
+      Rotation3D rot3D(RotationZYX(support_rot.z(0),support_rot.y(0),support_rot.x(0)));
       tr = Transform3D(rot3D,Position());
     }
     Material    support_mat       = description.material(x_support.materialStr());

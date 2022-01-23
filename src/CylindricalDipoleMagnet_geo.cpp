@@ -11,7 +11,7 @@ using namespace dd4hep;
 using namespace dd4hep::rec;
 using namespace ROOT::Math;
 
-static Ref_t build_magnet(Detector& dtor, xml_h e, SensitiveDetector sens) {
+static Ref_t build_magnet(Detector& dtor, xml_h e, SensitiveDetector /* sens */) {
     xml_det_t x_det     = e;
     int       det_id    = x_det.id();
     string    det_name  = x_det.nameStr();
