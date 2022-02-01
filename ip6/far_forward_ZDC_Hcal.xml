@@ -1,13 +1,13 @@
 <lccdd>
   <comment>
-    //////////////////////////////////////////////////
+    ///////////////////////////////////////////////////////////
     // Far Forward Ion Zero Degree Calorimeter
-    // Silicon/W for Hcal
-    //////////////////////////////////////////////////
+    // Pb + Scintillator (Pb/Sci) sandwich sampling  for Hcal
+    ///////////////////////////////////////////////////////////
   </comment>        
 
   <detectors>
-    <detector id="ffi_ZDC_HCAL_ID" name="ffi_ZDC_HCAL" type="ffi_ZDC_Sampling" readout="ffi_ZDC_HCAL_Hits" vis="ffi_ZDC_HCAL_Vis">
+    <detector id="ffi_ZDC_HCAL_ID" name="ffi_ZDC_HCAL" type="ffi_ZDC_Sampling" readout="ZDCHcalHits" vis="ffi_ZDC_HCAL_Vis">
       <position x="ffi_ZDC_HCAL_x_pos" y="ffi_ZDC_HCAL_y_pos" z="ffi_ZDC_HCAL_z_pos"/>
       <rotation x="ffi_ZDC_HCAL_rotateX_angle" y="ffi_ZDC_HCAL_rotateY_angle" z="ffi_ZDC_HCAL_rotateZ_angle"/>
       <dimensions x="ffi_ZDC_HCAL_width" z="ffi_ZDC_HCAL_length"/>
@@ -19,19 +19,9 @@
     </detector>
   </detectors>
 
-  <define>
-    <constant name="ZDC_HCAL_PbScintMin_index"   value="1" />
-    <constant name="ZDC_HCAL_PbScintMax_index"   value="ZDC_HCAL_PbScintMin_index + ffi_ZDC_PbScint_NRepeat - 1" />
-  </define>
-
   <readouts>
-    <readout name="ffi_ZDC_HCAL_Hits">
-      <segmentation type="MultiSegmentation" key="layer">
-        <segmentation name="Scint_grid" type="CartesianGridXY" key_min="ZDC_HCAL_PbScintMin_index" key_max="ZDC_HCAL_PbScintMax_index" grid_size_x="10.0*cm" grid_size_y="10.0*cm"/>
-      </segmentation>
-      <hits_collections>
-        <hits_collection name="ffiZDCPbScintHits" key="layer" key_min="ZDC_HCAL_PbScintMin_index" key_max="ZDC_HCAL_PbScintMax_index"/>
-      </hits_collections>
+    <readout name="ZDCHcalHits">
+      <segmentation type="CartesianGridXY" grid_size_x="10.0 * cm" grid_size_y="10.0 * cm"/>
       <id>system:8,layer:12,slice:12,x:32:-16,y:-16</id>  
     </readout>
   </readouts>

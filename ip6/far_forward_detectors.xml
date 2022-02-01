@@ -30,10 +30,10 @@
     <constant name="ffi_ZDC_ECAL_rotateZ_angle"   value="ffi_ZDC_rotateZ_angle"/>
     <constant name="ffi_ZDC_ECAL_width"           value="ffi_ZDC_width"/>
 
-    <constant name="ffi_ZDC_SiWSciFi_NRepeat"      value="1"/>
+    <constant name="ffi_ZDC_SiWSciFi_NRepeat"     value="1"/>
     
     <constant name="ffi_ZDC_Silicon_1_Thickness"  value="300.0 * um"/>
-    <constant name="ffi_ZDC_WSciFi_Thickness"      value="170.0 * mm"/> <!-- length of WSciFi tower block -->
+    <constant name="ffi_ZDC_WSciFi_Thickness"     value="170.0 * mm"/> <!-- length of WSciFi tower block -->
     <constant name="ffi_ZDC_Glue_1_Thickness"     value="0.11 * mm"/>
     <constant name="ffi_ZDC_FPC_Thickness"        value="0.28 * mm"/>
     <constant name="ffi_ZDC_Air_1_Thickness"      value="1.2 * mm"/>
@@ -41,7 +41,7 @@
 
     <constant name="ffi_ZDC_ECAL_layer_thickness" value="ffi_ZDC_Silicon_1_Thickness + ffi_ZDC_Glue_1_Thickness + ffi_ZDC_FPC_Thickness +                                                                        ffi_ZDC_Air_1_Thickness + ffi_ZDC_WSciFi_Thickness + ffi_ZDC_Air_2_Thickness"/>
     <!--<constant name="ffi_ZDC_ECAL_length"          value="ffi_ZDC_SiWSciFi_NRepeat * ffi_ZDC_ECAL_layer_thickness"/>-->
-    <constant name="ffi_ZDC_ECAL_length"          value="170.0 * mm"/>
+    <constant name="ffi_ZDC_ECAL_length"          value="170.0 * mm"/> <!-- 1 interaction length -->
 
     <comment>
       -------------------------------
@@ -58,7 +58,7 @@
     <constant name="ffi_ZDC_HCAL_length"          value="ffi_ZDC_length"/>
 
     <constant name="ffi_ZDC_SiPb_NRepeat"         value="0"/> <!-- changed from 12 -->
-    <constant name="ffi_ZDC_PbScint_NRepeat"      value="35"/>
+    <constant name="ffi_ZDC_PbScint_NRepeat"      value="120"/> <!-- 7 interaction length -->
     <constant name="ffi_ZDC_Gap_NRepeat"          value="0"/>
     
     <constant name="ffi_ZDC_Silicon_2_Thickness"  value="320.0 * um"/>
@@ -67,7 +67,7 @@
     <constant name="ffi_ZDC_Air_3_Thickness"      value="1.0 * mm"/>
     <constant name="ffi_ZDC_Air_4_Thickness"      value="0.0013 * mm"/>
     <constant name="ffi_ZDC_Lead_Thickness"       value="10.0 * mm"/>
-    <constant name="ffi_ZDC_Scint_Thickness"      value="2.0 * mm"/>
+    <constant name="ffi_ZDC_Scint_Thickness"      value="2.5 * mm"/> <!-- a quarter of Lead thickness -->
     <constant name="ffi_ZDC_Gap_Thickness"        value="2.0 * cm"/>
   </define>
 
