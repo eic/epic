@@ -128,12 +128,6 @@ overlap_check:
   needs: 
     - ["common:detector"]
   script:
-    - |
-      set -o allexport
-      source juggler.env
-      set +o allexport
-    - source .local/bin/env.sh
-    - ls -lrth
     - checkOverlaps -c eic_ip6.xml 
 
 overlap_check_geant4:
