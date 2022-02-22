@@ -25,7 +25,7 @@
       id="ForwardOffMTracker_station_1_ID"
       name="ForwardOffMTracker_station_1"
       type="ip6_OffMomentumTracker"
-      readout="ForwardOffMTrackerHits"
+      readout="ForwardOffMTrackerHits1"
       vis="FFTrackerVis"
       reflect="false">
       <position x="-780.0*mm" y="0" z="22500*mm"/>
@@ -50,7 +50,7 @@
       id="ForwardOffMTracker_station_2_ID"
       name="ForwardOffMTracker_station_2"
       type="ip6_OffMomentumTracker"
-      readout="ForwardOffMTrackerHits"
+      readout="ForwardOffMTrackerHits2"
       vis="AnlRed"
       reflect="false">
       <position x="-780.0*mm" y="0" z="22520*mm"/>
@@ -75,7 +75,7 @@
       id="ForwardOffMTracker_station_3_ID"
       name="ForwardOffMTracker_station_3"
       type="ip6_OffMomentumTracker"
-      readout="ForwardOffMTrackerHits"
+      readout="ForwardOffMTrackerHits3"
       vis="FFTrackerVis"
       reflect="false">
       <position x="-870.0*mm" y="0" z="24500*mm"/>
@@ -100,7 +100,7 @@
       id="ForwardOffMTracker_station_4_ID"
       name="ForwardOffMTracker_station_4"
       type="ip6_OffMomentumTracker"
-      readout="ForwardOffMTrackerHits"
+      readout="ForwardOffMTrackerHits4"
       vis="FFTrackerVis"
       reflect="false">
       <position x="-870.0*mm" y="0" z="24520*mm"/>
@@ -125,7 +125,19 @@
   </detectors>
 
   <readouts>
-    <readout name="ForwardOffMTrackerHits">
+    <readout name="ForwardOffMTrackerHits1">
+      <segmentation type="CartesianGridXY" grid_size_x="0.5*mm" grid_size_y="0.5*mm" />
+      <id>system:8,layer:5,module:5,slice:4,x:32:-16,y:-16</id>  
+    </readout>
+    <readout name="ForwardOffMTrackerHits2">
+      <segmentation type="CartesianGridXY" grid_size_x="0.5*mm" grid_size_y="0.5*mm" />
+      <id>system:8,layer:5,module:5,slice:4,x:32:-16,y:-16</id>  
+    </readout>
+    <readout name="ForwardOffMTrackerHits3">
+      <segmentation type="CartesianGridXY" grid_size_x="0.5*mm" grid_size_y="0.5*mm" />
+      <id>system:8,layer:5,module:5,slice:4,x:32:-16,y:-16</id>  
+    </readout>
+    <readout name="ForwardOffMTrackerHits4">
       <segmentation type="CartesianGridXY" grid_size_x="0.5*mm" grid_size_y="0.5*mm" />
       <id>system:8,layer:5,module:5,slice:4,x:32:-16,y:-16</id>  
     </readout>

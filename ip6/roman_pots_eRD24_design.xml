@@ -81,7 +81,7 @@
   <detectors>
     <detector id="ForwardRomanPot_Station_1_ID"
       name="ForwardRomanPot_Station_1"
-      readout="ForwardRomanPotHits" 
+      readout="ForwardRomanPotHits1" 
       type="ip6_ForwardRomanPot"
       insideTrackingVolume="true"
       reflect="false" vis="FFTrackerVis">
@@ -155,7 +155,7 @@
   <detector
       id="ForwardRomanPot_Station_2_ID"
       name="ForwardRomanPot_Station_2"
-      readout="ForwardRomanPotHits"
+      readout="ForwardRomanPotHits2"
       type="ip6_ForwardRomanPot"
       insideTrackingVolume="true"
       reflect="false"
@@ -233,7 +233,11 @@
 
 
   <readouts>
-    <readout name="ForwardRomanPotHits">
+    <readout name="ForwardRomanPotHits1">
+      <segmentation type="CartesianGridXY" grid_size_x="0.5*mm" grid_size_y="0.5*mm" />
+      <id>system:8,assembly:3,layer:4,module:4,sensor:4,x:32:-16,y:-16</id>
+    </readout>
+    <readout name="ForwardRomanPotHits2">
       <segmentation type="CartesianGridXY" grid_size_x="0.5*mm" grid_size_y="0.5*mm" />
       <id>system:8,assembly:3,layer:4,module:4,sensor:4,x:32:-16,y:-16</id>
     </readout>
