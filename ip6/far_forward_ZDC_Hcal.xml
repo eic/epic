@@ -12,9 +12,9 @@
       <rotation x="ffi_ZDC_HCAL_rotateX_angle" y="ffi_ZDC_HCAL_rotateY_angle" z="ffi_ZDC_HCAL_rotateZ_angle"/>
       <dimensions x="ffi_ZDC_HCAL_width" z="ffi_ZDC_HCAL_length"/>
       <layer repeat="ffi_ZDC_PbScint_NRepeat">
-        <slice name="Lead_slice"  material="Pb"               thickness="ffi_ZDC_Lead_Thickness"  vis="AnlGray"/>
-        <slice name="Scint_slice" material="ZDC_Scintillator" thickness="ffi_ZDC_Scint_Thickness" vis="AnlOrange" sensitive="true"/>
-	<slice name="Air_4_slice" material="Air"              thickness="ffi_ZDC_Air_4_Thickness" vis="InvisibleNoDaughters"/>
+        <slice name="Lead_slice"  material="Pb"           thickness="ffi_ZDC_Lead_Thickness"  vis="AnlGray"/>
+        <slice name="Scint_slice" material="PlasticScint" thickness="ffi_ZDC_Scint_Thickness" vis="AnlOrange" sensitive="true"/>
+	<slice name="Air_4_slice" material="Air"          thickness="ffi_ZDC_Air_4_Thickness" vis="InvisibleNoDaughters"/>
       </layer>
     </detector>
   </detectors>

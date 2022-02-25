@@ -94,7 +94,7 @@ static Ref_t create_detector(Detector& desc, xml::Handle_t handle, SensitiveDete
   double mod_x_pos = 0.0;
   double mod_y_pos = 0.0;
   double mod_z_pos = 0.0 * mm;
-  double mgap = sx/100.; // 0.000001 * mm;
+  double mgap = 0.000001 * mm;
   int mNTowers = floor(width / (sx+mgap));
   //std::cout << "mNTowers: " << mNTowers << std::endl;
 
