@@ -97,7 +97,6 @@ static Ref_t create_B0Tracker(Detector& description, xml_h e, SensitiveDetector 
     }
 
     double thickness_so_far = 0.0;
-    double thickness_sum = -total_thickness/2.0;
     for (ci.reset(), n_sensor = 1, c_id = 0, posY = -y1; ci; ++ci, ++c_id) {
       xml_comp_t c           = ci;
       double     c_thick     = c.thickness();
@@ -147,7 +146,6 @@ static Ref_t create_B0Tracker(Detector& description, xml_h e, SensitiveDetector 
         volplane_surfaces[m_nam].push_back(surf);
       }
       posY += c_thick;
-      thickness_sum += c_thick;
       thickness_so_far += c_thick;
     }
     modules[m_nam] = m_volume;

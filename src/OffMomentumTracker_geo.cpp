@@ -102,7 +102,7 @@ static Ref_t create_OffMomentumTracker(Detector& description, xml_h e, Sensitive
     Volume m_volume(m_nam, m_solid, vacuum);
     m_volume.setVisAttributes(description.visAttributes(x_mod.visStr()));
 
-    Solid  frame_s;
+    //Solid  frame_s;
     if(x_mod.hasChild("frame")){
       // todo
       // build frame from trd (assumed to be smaller)
