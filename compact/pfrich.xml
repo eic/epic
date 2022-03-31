@@ -1,0 +1,210 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<lccdd>
+
+<define>
+<!-- vessel geometry -->
+<constant name="PFRICH_Length"             value="BackwardRICHRegion_length"/>  <!-- vessel z-length -->
+<constant name="PFRICH_zmin"               value="-BackwardRICHRegion_zmin"/> <!-- vessel front -->
+<constant name="PFRICH_zmax"               value="PFRICH_zmin - PFRICH_Length"/>  <!-- vessel back -->
+<constant name="PFRICH_rmin0"              value="BackwardPIDRegion_tan * BackwardRICHRegion_zmin"/>  <!-- bore radius at vessel frontplane -->
+<constant name="PFRICH_rmin1"              value="BackwardPIDRegion_tan * (BackwardRICHRegion_zmin + BackwardRICHRegion_length)"/>  <!-- bore radius at vessel backplane -->
+<constant name="PFRICH_rmax"               value="BackwardPIDRegion_rmax - 2*cm"/>  <!-- vessel backplane radius -->
+<constant name="PFRICH_wall_thickness"     value="0.5*cm"/>  <!-- thickness of radial walls -->
+<constant name="PFRICH_window_thickness"   value="0.1*cm"/>  <!-- thickness of entrance and exit walls -->
+<!-- additional parameters -->
+<constant name="PFRICH_aerogel_thickness"  value="3.0*cm"/>  <!-- aerogel thickness -->
+<constant name="PFRICH_sensor_active_size_default" value="24.0*mm"/> <!-- sensor side length (effective area) -->
+<constant name="PFRICH_sensor_full_size_default"   value="25.8*mm"/> <!-- sensor side length (full size, with enclosure) -->
+<!-- lores values are used for global vizualizations _only_ -->
+<constant name="PFRICH_sensor_active_size_lores" value="PFRICH_sensor_active_size_default * 4"/>
+<constant name="PFRICH_sensor_full_size_lores"   value="PFRICH_sensor_full_size_default * 4"/>
+<!-- actual values used by the parametrization -->
+<constant name="PFRICH_sensor_active_size" value="PFRICH_sensor_active_size_default"/>
+<constant name="PFRICH_sensor_full_size"   value="PFRICH_sensor_full_size_default"/>
+
+
+<constant name="PFRICH_sensor_thickness"   value="1.5*mm"/> <!-- sensor thickness -->
+<constant name="PFRICH_sensor_dist"        value="40*cm"/> <!-- distance between aerogel exit plane and sensor entrance plane -->
+<constant name="PFRICH_num_px"             value="8"/> <!-- number of pixels along one side of the sensor -->
+<!-- debugging switches -->
+<comment>
+- `PFRICH_debug_optics`:  1 = all components become vacuum; test opticalphotons from IP
+                         2 = all components become vacuum, except for `gasvol`, test charged particles from IP
+                         0 = off
+</comment>
+<constant name="PFRICH_debug_optics"  value="0"/>
+</define>
+
+
+<detectors>
+
+
+<!-- /detectors/detector -->
+<documentation level="10">
+### pfRICH: Proximity Focusing RICH
+</documentation>
+<detector
+  id="BackwardRICH_ID"
+  name="PFRICH"
+  type="athena_PFRICH"
+  readout="PFRICHHits"
+  gas="C4F10_PFRICH"
+  material="Aluminum"
+  vis_vessel="DRICH_vessel_vis"
+  vis_gas="DRICH_gas_vis"
+  debug_optics="PFRICH_debug_optics"
+  >
+
+
+<!-- /detectors/detector/dimensions -->
+<documentation level="10">
+#### Vessel
+- dimensions:
+  - `zmin`: z-position of vessel front plane
+  - `length`: overall z-length of the full vessel
+  - `rmin0` and `rmin1`: bore radius at front plane and back plane, respectively
+  - `rmax0` and `rmax1`: outer radius of vessel, at front plane and back plane, respectively
+  - `wall_thickness`: thickness of radial walls
+  - `window_thickness`: thickness of entrance and exit disks
+</documentation>
+<dimensions
+  zmin="PFRICH_zmin"
+  zmax="PFRICH_zmax"
+  length="PFRICH_Length"
+  rmin0="PFRICH_rmin0"
+  rmin1="PFRICH_rmin1"
+  rmax0="PFRICH_rmax"
+  rmax1="PFRICH_rmax"
+  wall_thickness="PFRICH_wall_thickness"
+  window_thickness="PFRICH_window_thickness"
+  />
+
+
+<!-- /detectors/detector/radiator -->
+<documentation level="10">
+#### Radiator
+- radiator is defined in a wedge of azimuthal space, composed of aerogel and a
+  filter; the filter is applied to the back of the aerogel, so that it separates
+  the aerogel and gas radiators
+- dimensions:
+  - `frontplane`: front of the aerogel, w.r.t. front plane of the vessel envelope
+  - `rmin` and `rmax`: inner and outer radius (at the front plane; radial bounds are conical)
+  - `phiw`: azimuthal width of wedge
+  - `thickness`: radiator thickness, defined separately for aerogel and filter
+  - `pitch`: controls the angle of the radiator (0=vertical)
+</documentation>
+<radiator
+  frontplane="-PFRICH_window_thickness"
+  rmin="PFRICH_rmin0 + PFRICH_wall_thickness + 0.2*cm"
+  rmax="(PFRICH_rmax/PFRICH_zmax)*PFRICH_zmin + 8.0*cm"
+  phiw="60*degree"
+  pitch="0*degree"
+  >
+  <aerogel
+    material="Aerogel_DRICH"
+    vis="DRICH_aerogel_vis"
+    thickness="PFRICH_aerogel_thickness"
+    />
+  <filter
+    material="Acrylic_DRICH"
+    vis="DRICH_filter_vis"
+    thickness="0.3*mm"
+    />
+</radiator>
+
+
+
+<!-- /detectors/detector/sensors -->
+<documentation level="10">
+#### Sensors
+</documentation>
+<sensors>
+
+
+<!-- /detectors/detector/sensors/module -->
+<documentation level="10">
+##### Sensor module
+- based on Hamamatsu S13361-3050AE-08
+  - effective area: 24.0 x 24.0 mm
+  - enclosure size: 25.8 x 25.8 mm
+  - pixel size: 3x3 mm (8x8 matrix)
+  - thickness: 1.5 mm
+- dimensions:
+  - `side`: side length of the square module
+  - `thickness`: thickness of the sensor module
+  - `gap`: provides room between the squares, to help prevent them from overlapping
+  - note: the values of `side` and `gap` will determine how many sensors there are, since the
+    sensor placement algorithm will try to place as many as it can in the specified region
+</documentation>
+<module
+  material="Silicon"
+  surface="SensorSurface_DRICH"
+  vis="PFRICH_sensor_vis"
+  side="PFRICH_sensor_active_size"
+  thickness="PFRICH_sensor_thickness"
+  gap="0.5*(PFRICH_sensor_full_size-PFRICH_sensor_active_size) + 0.5*mm"
+  />
+
+
+<!-- /detectors/detector/sensors/plane -->
+<documentation level="10">
+##### Sensor plane
+- sensors will be placed on a plane
+  - plane dimensions:
+    - `sensordist`: distance between sensor plane active surface (e.g., photocathode) and aerogel backplane
+    - `rmin`: minimum radial position of a sensor's centroid
+    - `rmax`: maximum radial position of a sensor's centroid
+</documentation>
+<plane
+  sensordist="PFRICH_sensor_dist"
+  rmin="PFRICH_rmin1 + 2*cm"
+  rmax="PFRICH_rmax  - 4*cm"
+  />
+
+<services>
+  <comment> 
+    Material should be equivallent with 3x0.5cm Al, spread over the entire available distance.
+    This was confirmed by Silvia.
+  </comment>
+  <component name="aluminum" thickness="5*mm" vis="RICHServiceVis" material="Aluminum"/>
+  <component name="air" thickness="40*mm" vis="InvisibleNoDaughters" material="Air"/>
+  <component name="aluminum" thickness="5*mm" vis="RICHServiceVis" material="Aluminum"/>
+  <component name="air" thickness="40*mm" vis="InvisibleNoDaughters" material="Air"/>
+  <component name="aluminum" thickness="5*mm" vis="RICHServiceVis" material="Aluminum"/>
+</services>
+
+</sensors>
+</detector>
+</detectors>
+
+<documentation level="10">
+#### Readout
+- segmentation: square matrix of pixels
+  - `grid_size_x,y`: size of each sensor, but note we must divide sensor size
+    by 1 less than the number of pixels, to account for fenceposting
+  - `offset_x,y`: specified such that the `x` and `y` indicators are unsigned
+- indicators and `cellID` bits:
+
+  | indicator | offset | length |
+  |-----------|--------|--------|
+  | pfRICH ID | 0      | 8      |
+  | sensor    | 8      | 12     |
+  | x pixel   | 20     | 16     |
+  | y pixel   | 36     | 16     |
+
+</documentation>
+<readouts>
+  <readout name="PFRICHHits">
+    <segmentation
+      type="CartesianGridXY"
+      grid_size_x="PFRICH_sensor_active_size/(PFRICH_num_px-1)"
+      grid_size_y="PFRICH_sensor_active_size/(PFRICH_num_px-1)"
+      offset_x="-PFRICH_sensor_active_size/2.0"
+      offset_y="-PFRICH_sensor_active_size/2.0"
+      />
+    <id>system:8,module:12,x:20:16,y:16</id>
+  </readout>
+</readouts>
+
+
+</lccdd>

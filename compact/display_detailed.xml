@@ -1,0 +1,164 @@
+  <display>
+
+    <comment>
+      This is where a detailed display can be created.
+      Note this is currently just a copy of display.xml
+    </comment>
+
+    <vis name="InvisibleNoDaughters"      showDaughters="false" visible="false"/>
+    <vis name="InvisibleWithDaughters"    showDaughters="true" visible="false"/>
+
+    <comment>
+      Tracking Visualizations
+    </comment>
+    <vis name="TrackerVis"        ref="AnlRed"      />
+    <vis name="TrackerSupportVis" ref="AnlBlue"         visible="true"  showDaughters="false" />
+    <vis name="TrackerServiceVis" ref="AnlGold"         showDaughters="false" />
+    <vis name="TrackerLayerVis"   ref="AnlGray"         visible="true"  showDaughters="true" />
+    <vis name="TrackerModuleVis"  ref="TrackerLayerVis" visible="true"  showDaughters="true" />
+    <vis name="TrackerMPGDVis"    ref="AnlRed"          visible="true"  showDaughters="true" />
+    <comment> Layer-based visualization for MPGD detectors as it looks better </comment>
+    <vis name="TrackerGEMModuleVis"  ref="TrackerMPGDVis"   visible="true"  showDaughters="false" />
+    <vis name="TrackerMMGASLayerVis" ref="TrackerMPGDVis"   visible="true"  showDaughters="false" />
+
+    <vis name="VertexLayerVis"        ref="AnlGray"         visible="true"  showDaughters="false" />
+    <vis name="VertexSupportLayerVis" ref="AnlBlue"         visible="true"  showDaughters="false" />
+    <vis name="VertexSupportVis"      ref="VertexSupportLayerVis" visible="true"  showDaughters="true" />
+    <vis name="VertexModuleVis"       ref="TrackerLayerVis" visible="true"  showDaughters="true" />
+
+    <vis name="TOFVis"            ref="AnlTeal"             visible="true"  showDaughters="true"/>
+    <vis name="TOFLayerVis"       ref="TOFVis"              visible="true"  showdaughters="true"/>
+    <vis name="TOFModuleVis"      ref="TOFVis"              visible="true"  showdaughters="true"/>
+    <vis name="TOFSupportVis"     ref="TrackerSupportVis"   visible="true"  showDaughters="true"/>
+    <vis name="TOFSensorVis"      ref="TOFVis"              visible="true"  showDaughters="true"/>
+    <vis name="TOFBarrelModuleVis" ref="TOFVis"             visible="true"  showdaughters="true"/>
+    <vis name="TOFHybridVis"      ref="AnlGold"             visible="true"  showDaughters="true"/>
+    <vis name="TOFCoolingTube"    ref="AnlRed"              visible="true"  showDaughters="true"/>
+    <vis name="TOFCoolant"        ref="TrackerServiceVis"   visible="true"  showDaughters="true"/>
+    <vis name="TOFCSkinVis"       ref="TrackerSupportVis"   visible="true"  showDaughters="true"/>
+    <vis name="TOFCFoamVis"       ref="TrackerSupportVis"   visible="true"  showDaughters="true"/>
+    <vis name="TOFCHoneycombVis"  ref="TrackerServiceVis"   visible="true"  showDaughters="true"/>
+
+    <vis name="FFTrackerVis"        ref="AnlRed" />
+    <vis name="FFTrackerSupportVis" ref="AnlBlue"             visible="true"  showDaughters="false" />
+    <vis name="FFTrackerShieldingVis" ref="AnlGray"           visible="true"  showDaughters="false" />
+    <vis name="FFTrackerServiceVis" ref="AnlGold"             visible="true"  showDaughters="false" />
+    <vis name="FFTrackerLayerVis"   ref="TrackerVis"          visible="true"  showDaughters="true" />
+    <vis name="FFTrackerModuleVis"  ref="FFTrackerLayerVis"   visible="true"  showDaughters="true" />
+    <vis name="FFTrackerSurfaceVis" ref="FFTrackerLayerVis"   visible="true"  showDaughters="true" />
+    <comment> Display shielded modules in all their glory </comment>
+    <vis name="FFTrackerShieldedModuleVis" ref="FFTrackerModuleVis"   visible="true"  showDaughters="true" />
+
+    <comment>
+      ECal Vis
+    </comment>
+    <vis name="EcalBarrelLayerVis"      ref="AnlGold"   showDaughters="false" visible="true"/>
+    <vis name="EcalBarrelEnvelopeVis"   ref="AnlGold"   showDaughters="true" visible="false" />
+    <vis name="EcalBarrelStaveVis"      ref="AnlGold"   showDaughters="true" visible="true" />
+    <vis name="EcalBarrelFiberLayerVis" ref="AnlGold"   showDaughters="false" visible="true" />
+    <vis name="EcalBarrelSliceVis"      ref="AnlGray"/>
+    <vis name="EcalBarrelSupportVis"    ref="AnlOrange"/>
+
+    <vis name="EcalVis"                 ref="AnlGold"   showDaughters="true"  visible="false"/>
+    <vis name="EcalEndcapVis"           ref="AnlGold"   showDaughters="false" visible="true"/>
+    <vis name="EcalEndcapLayerVis"      ref="AnlGold"   showDaughters="false" visible="true"/>
+    <vis name="EcalEndcapBlockVis"      ref="AnlGold"   showDaughters="false" visible="true"/>
+
+    <vis name="EcalEndcapNModuleVis"    ref="AnlGold"   showDaughters="false" visible="true"/>
+
+    <vis name="FFPreVis"            ref="AnlGold"             showDaughters="true" visible="true"/>
+    <vis name="FFPreLayerVis"       ref="FFPreVis"            showDaughters="true" visible="true"/>
+    <vis name="FFPreModuleVis"      ref="FFPreLayerVis"       showDaughters="true" visible="true"/>
+    <vis name="FFPreRadiatorVis"    ref="FFPreModuleVis"      showDaughters="true" visible="true"/>
+    <vis name="FFPreReadoutVis"     ref="FFTrackerSurfaceVis" showDaughters="true" visible="true"/>
+
+    <comment>
+      HCal Vis
+    </comment>
+    <vis name="HcalVis"               ref="AnlBlue"   showDaughters="true"  visible="true"/>
+    <vis name="HcalBarrelVis"         ref="AnlBlue"   showDaughters="true"  visible="true"/>
+    <vis name="HcalBarrelStaveVis"    ref="AnlBlue"   showDaughters="false" visible="true"/>
+    <vis name="HcalBarrelLayerVis"    ref="AnlBlue"   showDaughters="true" visible="true"/>
+    <vis name="HcalEndcapVis"         ref="AnlBlue"   showDaughters="false" visible="true"/>
+    <vis name="HcalEndcapLayerVis"    ref="AnlBlue"   showDaughters="true" visible="true"/>
+    <vis name="HcalSensorVis"         ref="AnlBlue"   showDaughters="true" visible="true"/>
+    <vis name="HcalAbsorberVis"       ref="AnlGray"   showDaughters="true" visible="true"/>
+
+    <comment>
+      Passive steel for flux return
+    </comment>
+    <vis name="PassiveSteelVis"       ref="AnlViolet" showDaughters="false" visible="true"/>
+
+    <comment>
+      Solenoid
+    </comment>
+    <vis name="SolenoidCoilVis"     ref="AnlLight_Gray" showDaughters="true"  visible="true" lineStyle="solid" drawingStyle="solid" />
+    <vis name="SolenoidCryostatVis" ref="AnlGray"       showDaughters="true"  visible="true" lineStyle="solid" drawingStyle="solid" />
+    <vis name="SolenoidYokeVis"     ref="AnlLight_Gray" showDaughters="false" visible="true" lineStyle="solid" drawingStyle="solid" />
+
+
+    <comment>
+      PID Detectors
+    </comment>
+    <vis name="RICHVis"         ref="AnlTeal"       showDaughters="true"/>
+
+    <vis name="DIRCVis"         ref="AnlTeal"       showDaughters="true" visible="true"/>
+    <vis name="DIRCLayerVis"    ref="AnlTeal"       showDaughters="false" visible="true"/>
+    <vis name="DIRCModuleVis"   ref="AnlTeal"       showDaughters="true" visible="true"/>
+    <vis name="DIRCSupportVis"  ref="AnlTeal"       showDaughters="true" visible="true"/>
+    <vis name="DIRCFrameVis"    ref="AnlOrange"     showDaughters="true" visible="true"/>
+    <vis name="DIRCBarVis"      ref="AnlTeal"       showDaughters="true" visible="true"/>
+
+    <comment>
+      Beam line with magnets
+    </comment>
+    <vis name="BeamPipeVis"         ref="AnlLightGray"       showDaughters="true" visible="true"/>
+    <vis name="FFMagnetVis"         ref="AnlGreen"            showDaughters="true" visible="true"/>
+    <vis name="FFMagnetCoilVis"     ref="AnlRed"              showDaughters="true" visible="true"/>
+
+    <comment>
+      ZDC visualization
+    </comment>
+
+    <vis name="ffi_ZDC_ECAL_Vis"        ref="AnlGreen" showDaughters="true"  visible="true"/>
+    <vis name="ffi_ZDC_ECAL_module_Vis" ref="AnlRed"   showDaughters="false" visible="true"/>
+    <vis name="ffi_ZDC_HCAL_Vis"        ref="AnlBlue"  showDaughters="true"  visible="true"/>
+
+    <comment>
+      PID visualization
+    </comment>
+
+    <vis name="DRICH_vessel_vis"  ref="AnlGray" showDaughters="true" visible="true" />
+    <vis name="DRICH_gas_vis"     ref="AnlLightGray" alpha="0.2" showDaughters="true" visible="true" />
+    <vis name="DRICH_aerogel_vis" ref="AnlTeal" showDaughters="true" visible="true" />
+    <vis name="DRICH_filter_vis"  alpha="1.0" r="1.0" g="1.0" b="0.0" showDaughters="true" visible="true" />
+    <vis name="DRICH_mirror_vis"  ref="AnlGray" showDaughters="true" visible="true" />
+    <vis name="DRICH_sensor_vis"  ref="AnlGreen" showDaughters="true" visible="true" />
+    <vis name="PFRICH_sensor_vis" ref="AnlGreen" showDaughters="true" visible="true" /> 
+
+    <vis name="MRICH_aerogel_vis" ref="AnlTeal" showDaughters="true" visible="true" />
+    <vis name="MRICH_frame_vis" ref="AnlGold" showDaughters="true" visible="true" />
+    <vis name="MRICH_lens_vis" ref="AnlGray" showDaughters="true" visible="true" />
+    <vis name="MRICH_mirror_vis"  ref="AnlGray" showDaughters="true" visible="true" />
+
+    <vis name="RICHServiceVis"  ref="AnlGray" showDaughters="true" visible="true" />
+
+    <comment>
+      Deprecated values used for IP6 vis
+    </comment>
+    <vis name="GreenVis"       ref="AnlGreen" showDaughters="true" visible="true"/>
+    <vis name="RedVis"         ref="AnlRed" showDaughters="true" visible="true"/>
+    <vis name="RPVis"          ref="AnlDelta_Red" showDaughters="true" visible="true"/>
+    <vis name="RPLayerVis"     ref="AnlTeal" showDaughters="true" visible="true" lineStyle="solid" drawingStyle="solid" />
+    <vis name="BlueVis"        ref="AnlBlue" showDaughters="true" visible="true"/>
+    <vis name="OrangeVis"      ref="AnlOrange" showDaughters="true" visible="true"/>
+    <vis name="BlueGreenVis"   alpha="0.5"  r= "0.0" g="1.0" b="1.0" showDaughters="true" visible="true"/>
+    <vis name="PurpleVis"      alpha="1.0"  r= "1.0" g="0.0" b="1.0" showDaughters="true" visible="true"/>
+    <vis name="DoubleRedG"     alpha="0.5"  r= "2.0" g=".10" b="0.0" showDaughters="true" visible="true"/>
+    <vis name="RBG015"         alpha="0.5"  r= "0.0" g=".2"  b="1.0" showDaughters="true" visible="true"/>
+    <vis name="RBG510"         alpha="0.5"  r= "1.0" g=".2"  b="0.0" showDaughters="true" visible="true"/>
+    <vis name="RBG"            alpha="0.5"  r= "1.0" g="1.0" b="1.0" showDaughters="true" visible="true"/>
+    <vis name="GrayVis"        alpha="1.0"  r= "0.75" g="0.75" b="0.75" showDaughters="true" visible="true"/>
+		<vis name="AnlRed_1"        alpha="0.5" r="205/256" g="32/256" b="44/256"/>
+
+  </display>

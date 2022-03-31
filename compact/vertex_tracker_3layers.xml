@@ -1,0 +1,185 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<lccdd>
+  <define>
+    <comment>
+      Main parameters
+    </comment>
+
+    <constant name="SiVertexSensor_thickness"           value="40*um"/>
+    <constant name="VertexBarrelMod_length"             value="280.0*mm"/>
+    <constant name="VertexBarrelMod_rmin"               value="3.3*cm"/>
+    <constant name="VertexBarrelMod_offset"             value="1.05*cm"/>
+    <constant name="VertexBarrelMod_count"              value="3"/>
+    <constant name="VertexBarrelShell_thickness"        value="300.0*um"/>
+
+    <documentation>
+      #### Vertex Tracker Barrel Parameters
+
+- The sensor modules are 2 half-cylinders.
+- There are 2 sensitive layers
+- Each sensor has a thickness is 40um
+- There is an outer shell for structural support 300um thick.
+- The ID of this shell is set (arbitrarily) to 10 cm.
+
+      ##### Sensor layers
+
+Currently there are 2 sensor layers. Each is composed of 2 half-cylinders modules with only 40um of silicon thickness.
+
+      ##### Support shell
+
+Simple carbon fiber support shell.
+
+    </documentation>
+
+    <constant name="VertexBarrelEnvelope_length"    value="VertexTrackingRegion_length"/>
+    <constant name="VertexBarrelLayer_length"       value="VertexBarrelMod_length + 1*um"/>
+
+    <constant name="VertexBarrelLayer_thickness"    value="0.2*cm"/>
+    <constant name="VertexBarrelMod_thickness"      value="0.1*cm"/>
+
+    <constant name="VertexBarrelMod1_rmin"          value="VertexBarrelMod_rmin"/>
+    <constant name="VertexBarrelMod2_rmin"          value="VertexBarrelMod_rmin + 1 * VertexBarrelMod_offset"/>
+    <constant name="VertexBarrelMod3_rmin"          value="VertexBarrelMod_rmin + 2 * VertexBarrelMod_offset"/>
+
+    <constant name="VertexBarrelLayer1_rmin"        value="VertexBarrelMod_rmin - VertexBarrelLayer_thickness/2.0"/>
+    <constant name="VertexBarrelLayer1_rmax"        value="VertexBarrelLayer1_rmin + VertexBarrelLayer_thickness"/>
+    <constant name="VertexBarrelLayer2_rmin"        value="VertexBarrelLayer1_rmin + 1 * VertexBarrelMod_offset"/>
+    <constant name="VertexBarrelLayer2_rmax"        value="VertexBarrelLayer2_rmin + VertexBarrelLayer_thickness"/>
+    <constant name="VertexBarrelLayer3_rmin"        value="VertexBarrelLayer1_rmin + 2 * VertexBarrelMod_offset"/>
+    <constant name="VertexBarrelLayer3_rmax"        value="VertexBarrelLayer3_rmin + VertexBarrelLayer_thickness"/>
+
+    <comment> 
+      "Support" is to "shell" like "layer" is to "module", and is need for the flat stave barrel implementation.
+    </comment>
+    <constant name="VertexBarrelShell_rmin"         value="VertexBarrelMod_rmin + VertexBarrelMod_count * VertexBarrelMod_offset"/>
+    <constant name="VertexBarrelShell_rmax"         value="VertexBarrelShell_rmin + VertexBarrelShell_thickness"/>
+    <constant name="VertexBarrelShell_length"       value="VertexBarrelMod_length"/>
+
+    <constant name="VertexBarrelSupport_thickness"  value="0.1*cm"/>
+    <constant name="VertexBarrelSupport_rmin"       value="VertexBarrelShell_rmin-VertexBarrelSupport_thickness/2.0"/>
+    <constant name="VertexBarrelSupport_rmax"       value="VertexBarrelSupport_rmin + VertexBarrelSupport_thickness"/>
+    <constant name="VertexBarrelSupport_length"     value="VertexBarrelLayer_length"/>
+
+    <comment>
+      Extra parameters to approximate a cylinder as a set of skinny staves
+      due to ACTS limitations.
+    </comment>
+    <constant name="VertexBarrelStave_count"       value="128"/>
+    <constant name="VertexBarrelStave1_width"      value="2*VertexBarrelMod1_rmin * tan(180*degree/VertexBarrelStave_count)"/>
+    <constant name="VertexBarrelStave2_width"      value="2*VertexBarrelMod2_rmin * tan(180*degree/VertexBarrelStave_count)"/>
+    <constant name="VertexBarrelStave3_width"      value="2*VertexBarrelMod3_rmin * tan(180*degree/VertexBarrelStave_count)"/>
+    <constant name="VertexBarrelShellStave_width"  value="2*VertexBarrelShell_rmin * tan(180*degree/VertexBarrelStave_count)"/>
+  </define>
+
+  <display>
+  </display>
+
+  <detectors>
+    <documentation level="5">
+        ### Actual detectors
+    </documentation>
+    <detector
+      id="VertexBarrel_0_ID"
+      name="VertexBarrel"
+      type="athena_VertexBarrel"
+      readout="VertexBarrelHits"
+      insideTrackingVolume="true">
+      <dimensions
+        rmin="VertexBarrelLayer1_rmin"
+        rmax="VertexBarrelSupport_rmax"
+        length="VertexBarrelEnvelope_length" />
+      <comment>Vertex Barrel Modules</comment>
+      <module name="Module1" vis="VertexLayerVis">
+        <module_component name="ITS3"
+                          material="Silicon" 
+                          sensitive="true"
+                          width="VertexBarrelStave1_width" 
+                          length="VertexBarrelMod_length"
+                          thickness="SiVertexSensor_thickness" 
+                          vis="VertexLayerVis" />
+      </module>
+      <module name="Module2" vis="VertexLayerVis">
+        <module_component name="ITS3"
+                          material="Silicon" 
+                          sensitive="true"
+                          width="VertexBarrelStave2_width" 
+                          length="VertexBarrelMod_length"
+                          thickness="SiVertexSensor_thickness" 
+                          vis="VertexLayerVis" />
+      </module>
+      <module name="Module3" vis="VertexLayerVis">
+        <module_component name="ITS3"
+                          material="Silicon" 
+                          sensitive="true"
+                          width="VertexBarrelStave3_width" 
+                          length="VertexBarrelMod_length"
+                          thickness="SiVertexSensor_thickness" 
+                          vis="VertexLayerVis" />
+      </module>
+      <module name="SupportShell" vis="VertexSupportVis">
+        <module_component name="CF Shell"
+                          material="CarbonFiber" 
+                          sensitive="false"
+                          width="VertexBarrelShellStave_width" 
+                          length="VertexBarrelShell_length"
+                          thickness="VertexBarrelShell_thickness" 
+                          vis="VertexSupportVis" />
+      </module>
+      <comment> Layers composed of many arrayed modules  </comment>
+      <layer module="Module1" id="1" vis="VertexLayerVis">
+        <barrel_envelope
+          inner_r="VertexBarrelLayer1_rmin"
+          outer_r="VertexBarrelLayer1_rmax"
+          z_length="VertexBarrelLayer_length" />
+        <layer_material surface="outer" binning="binPhi,binZ" bins0="VertexBarrelStave_count" bins1="100" />
+        <comment>
+          phi0     : Starting phi of first module.
+          phi_tilt : Phi tilt of a module.
+          rc       : Radius of the module center.
+          nphi     : Number of modules in phi.
+          rphi_dr  : The delta radius of every other module.
+          z0       : Z position of first module in phi.
+          nz       : Number of modules to place in z.
+          dr       : Radial displacement parameter, of every other module.
+        </comment>
+        <rphi_layout phi_tilt="0.0*degree" nphi="VertexBarrelStave_count" phi0="0.0" rc="VertexBarrelMod1_rmin" dr="0.0 * mm"/>
+        <z_layout dr="0.0 * mm" z0="0.0 * mm" nz="1"/>
+      </layer>
+      <layer module="Module2" id="2" vis="VertexLayerVis">
+        <barrel_envelope
+          inner_r="VertexBarrelLayer2_rmin"
+          outer_r="VertexBarrelLayer2_rmax"
+          z_length="VertexBarrelLayer_length" />
+        <layer_material surface="outer" binning="binPhi,binZ" bins0="VertexBarrelStave_count" bins1="100" />
+        <rphi_layout phi_tilt="0.0*degree" nphi="VertexBarrelStave_count" phi0="0.0" rc="VertexBarrelMod2_rmin" dr="0.0 * mm"/>
+        <z_layout dr="0.0 * mm" z0="0.0 * mm" nz="1"/>
+      </layer>
+      <layer module="Module3" id="3" vis="VertexLayerVis">
+        <barrel_envelope
+          inner_r="VertexBarrelLayer3_rmin"
+          outer_r="VertexBarrelLayer3_rmax"
+          z_length="VertexBarrelLayer_length" />
+        <layer_material surface="outer" binning="binPhi,binZ" bins0="VertexBarrelStave_count" bins1="100" />
+        <rphi_layout phi_tilt="0.0*degree" nphi="VertexBarrelStave_count" phi0="0.0" rc="VertexBarrelMod3_rmin" dr="0.0 * mm"/>
+        <z_layout dr="0.0 * mm" z0="0.0 * mm" nz="1"/>
+      </layer>
+      <layer module="SupportShell" id="VertexBarrelMod_count + 1" vis="VertexSupportLayerVis">
+        <barrel_envelope
+          inner_r="VertexBarrelSupport_rmin"
+          outer_r="VertexBarrelSupport_rmax"
+          z_length="VertexBarrelSupport_length" />
+        <layer_material surface="outer" binning="binPhi,binZ" bins0="VertexBarrelStave_count" bins1="100" />
+        <rphi_layout phi_tilt="0.0*degree" nphi="VertexBarrelStave_count" phi0="0.0" rc="VertexBarrelShell_rmin" dr="0.0 * mm"/>
+        <z_layout dr="0.0 * mm" z0="0.0 * mm" nz="1"/>
+      </layer>
+    </detector>
+  </detectors>
+
+  <readouts>
+    <readout name="VertexBarrelHits">
+      <segmentation type="CartesianGridXY" grid_size_x="0.010*mm" grid_size_y="0.010*mm" />
+      <id>system:8,layer:4,module:12,sensor:2,x:32:-16,y:-16</id>
+    </readout>
+  </readouts>
+
+</lccdd>

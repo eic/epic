@@ -1,0 +1,57 @@
+<lccdd>
+  <comment>
+    Simplified homogenous implementation of the forward ScFi calorimeter
+  </comment>
+
+  <define>
+    <constant name="EcalEndcapP_FiberRadius" value="0.235*cm"/>
+    <constant name="EcalEndcapP_FiberOffset" value="0.5*mm"/>
+    <constant name="EcalEndcapP_FiberSpaceX" value="0.265*mm"/>
+    <constant name="EcalEndcapP_FiberSpaceY" value="0.425*mm"/>
+  </define>
+
+
+  <limits>
+  </limits>
+
+  <regions>
+  </regions>
+
+  <!-- Common Generic visualization attributes -->
+  <comment>Common Generic visualization attributes</comment>
+  <display>
+  </display>
+
+  <detectors>
+
+    <comment>
+      ------------------------------------------
+      Forward (Positive Z) Endcap EM Calorimeter
+      ------------------------------------------
+      An EM calorimeter with ScFi modules
+    </comment>
+    <detector id="ECalEndcapP_ID"
+      name="EcalEndcapP"
+      type="ScFiCalorimeter"
+      vis="EcalEndcapVis"
+      readout="EcalEndcapPHits">
+      <position x="0" y="0" z="EcalEndcapP_zmin + EcalEndcapP_length/2."/>
+      <dimensions rmin="EcalEndcapP_rmin" rmax="EcalEndcapP_rmax" length="EcalEndcapP_length"/>
+      <module sizex="25*mm" sizey="25*mm" sizez="170*mm" material="AvgTungstenScFi" vis="EcalEndcapBlockVis">
+      </module>
+    </detector>
+  </detectors>
+
+  <!--  Definition of the readout segmentation/definition  -->
+  <readouts>
+    <readout name="EcalEndcapPHits">
+      <segmentation type="NoSegmentation"/>
+      <id>system:8,ring:8,module:20,fiber_x:8,fiber_y:8</id>
+    </readout>
+  </readouts>
+
+  <plugins>
+  </plugins>
+
+</lccdd>
+

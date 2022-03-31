@@ -1,0 +1,24 @@
+dawn_view_12:detector:
+  extends: .views
+  needs:
+    - job: view_prim:detector_only
+      optional: false
+  script:
+    - ./bin/make_dawn_views -i ${LOCAL_DATA_PATH}/detector_view.prim -t view12 -d scripts/view12 -D -- ${SLICE}
+    - ls -lrth *
+    - ls -lrth images/*
+  parallel:
+    matrix:
+      - SLICE: ["100", "300", "500", "700", "900", "1100", "1300", "1500", "1700", "1900"]
+
+
+view_12:
+  stage: collect
+  rules:
+    - if: '$CI_SERVER_HOST == "eicweb.phy.anl.gov"' 
+  needs:
+    - ["dawn_view_12:detector"]
+  script:
+    - ls -lrth *
+    - ls -lrth images/*
+

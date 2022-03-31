@@ -1,0 +1,32 @@
+#!/bin/bash
+
+# this is a detector slice
+
+# units are mm
+dawncut 0 0 -1 -1500 $1 out1.prim 
+dawncut 0 0 1 1600 out1.prim view4.prim
+dawn -d view4.prim 
+ps2pdf view4.eps view4.pdf
+pdftoppm view4.pdf view4 -png -singlefile
+
+#https://geant4.kek.jp/~tanaka/DAWN/About_DAWNCUT.html
+# % dawncut a b c d input-file [output-file]
+#
+#       input-file : Source DAWN-format file describing a 3D scene.
+#
+#       output-file: Output DAWN-format file describing a plane-clipped 
+#                    3D scene.  The default output stream is stdout.
+#
+#       a, b, c, d : Parameters  a, b, c, and d  are double values to
+#                    define a clipping plane described with the following 
+#                    equation: 
+#
+#                       ax + by + cz + d = 0. 
+#
+#                    Vector (a,b,c) defines the normal vector of 
+#                    the clipping plane.  
+#                    3D scene data in the half space at the front side 
+#                    of the clipping plane are clipped out and erased. 
+#                    The normal vector (a,b,c) needs not be a unit vector. 
+#                    If it is a unit vector, parameter "d" gives distance 
+#                    between the clipping plane and origin (0,0,0).

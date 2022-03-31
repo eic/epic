@@ -1,0 +1,21 @@
+<lccdd>
+
+  <display>
+  </display>
+  <define>
+  </define>
+
+  <documentation level="10">
+    ### Mixed tracking configuration
+
+    This configuration needs attention!
+  </documentation>
+
+  <include ref="rwell_tracker_barrel.xml">
+  <!--include ref="compact/ce_GEM.xml"/-->
+  <!--include ref="compact/mm_tracker_barrel.xml"/-->
+  <!--include ref="compact/cb_VTX_Barrel.xml"/-->
+  <!--include ref="compact/gem_tracker_endcap.xml"/-->
+
+</lccdd>
+

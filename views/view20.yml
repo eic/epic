@@ -1,0 +1,44 @@
+dawn_view_20:detector:
+  extends: .views
+  needs:
+    - job: view_prim:calorimeters
+      optional: false
+  script:
+    - cp "compact/subsystem_views/calorimeters.xml" "${DETECTOR_PATH}/."
+    - ./bin/make_dawn_views -c ${DETECTOR_PATH}/calorimeters.xml -i ${LOCAL_DATA_PATH}/calorimeters_view.prim -t view20 -d scripts/view20 -D
+
+dawn_view_20:ev001:
+  extends: .views
+  needs:
+    - job: view_prim:calorimeters_ev001
+      optional: true
+  rules:
+    - if: '$DETECTOR_EVENT_VIEWS == "ON"'
+  script:
+    - ./bin/make_dawn_views -i ${LOCAL_DATA_PATH}/calorimeters_view_ev001.prim -t view20_ev001 -d scripts/view20 -s 1
+
+dawn_view_20:ev002:
+  extends: .views
+  needs:
+    - job: view_prim:calorimeters_ev002
+      optional: true
+  rules:
+    - if: '$DETECTOR_EVENT_VIEWS == "ON"'
+  script:
+    - ./bin/make_dawn_views -i ${LOCAL_DATA_PATH}/calorimeters_view_ev002.prim  -t view20_ev002 -d scripts/view20 -s 2
+
+view_20:
+  stage: collect
+  rules:
+    - if: '$CI_SERVER_HOST == "eicweb.phy.anl.gov"' 
+  needs:
+    - job: dawn_view_20:detector
+      optional: false
+    - job: dawn_view_20:ev001
+      optional: true
+    - job: dawn_view_20:ev002
+      optional: true
+  script:
+    - ls -lrth *
+    - ls -lrth images/*
+

@@ -1,0 +1,185 @@
+<lccdd>
+
+  <comment>
+    DIRC consists of 16 (default) identical modules making a barrel.
+    Each DIRC module consists of:
+    _______
+    [  |   \
+    [  |    \
+    [FD|Prizm|Lens|--------bars+glue-----|mirror]
+
+    Main constants to control DIRC global geometry:
+      - DIRC_length
+      - DIRC_offset
+      - DIRC_rmin
+      - DIRCBox_count  (16 full dirc, 1 - a single module)
+      - DIRC_rotation  (allows to flip the DIRC)
+
+    When DIRC_length is set, it affects bars length (all other lengths are fixed)
+    The width of each DIRC module is derived from DIRCPrism_width
+
+  </comment>
+
+  <define>
+    <constant name="DIRCFake_rmin"             value="BarrelTracking_rmax-11*cm"/>
+    <constant name="DIRC_rotation"         value="pi" comment="Allows DIRC flip"/>
+    <!-- <constant name="cb_DIRC_length"    value="DIRCLength"/> -->
+    <!-- CLEANUP THIS if not sure. This is from the initial implementation
+    <constant name="DIRC_length"            value="285.500*cm"/>
+    <constant name="DIRCFake_rmin"              value="82.00*cm"/>-->
+
+    <!-- Prism -->
+    <constant name="DIRCPrism_width"        value="360*mm"/>
+    <constant name="DIRCPrism_length"       value="300*mm"/>
+    <constant name="DIRCPrism_short_edge"   value="50*mm"/>
+    <constant name="DIRCPrism_angle"        value="32*deg"/>
+    <constant name="DIRCPrism_long_edge"    value="DIRCPrism_short_edge + DIRCPrism_length * tan(DIRCPrism_angle)"/>
+    <constant name="DIRCPrism_height"       value="DIRCPrism_long_edge"/>
+
+    <!-- DIRC length -->
+    <constant name="DIRCMain_length"           value="DIRC_length"/>
+    <constant name="DIRCFake_offset"           value="DIRC_offset+15*cm"/>
+
+    <!-- Box - main DIRC modules -->
+    <constant name="DIRCBox_count"          value="16"  comment="Number of DIRC boxes per... DIRC. 16 - default"/>
+    <constant name="DIRCBox_width"          value="DIRCPrism_width"/>
+
+    <!-- Mirror -->
+    <constant name="DIRCMirror_height"      value="20 * mm"/>
+    <constant name="DIRCMirror_width"       value="DIRCPrism_width"/>
+    <constant name="DIRCMirror_thickness"   value="1 * mm"/>
+
+    <!-- Lens -->
+    <constant name="DIRCLens_height"        value="DIRCPrism_long_edge"/>
+    <constant name="DIRCLens_width"         value="DIRCPrism_width"/>
+    <constant name="DIRCLens_thickness"     value="12 * mm"/>
+    <constant name="DIRCLens_r1"            value="33 * mm"/>
+    <constant name="DIRCLens_r2"            value="24 * mm"/>
+    <constant name="DIRCLens_shight"        value="25 * mm" comment="Is 'shight' from UK urban dictionary???"/>
+
+    <!-- FD (Foto detectors?) -->
+    <constant name="DIRCFd_height"          value="DIRCPrism_height"/>
+    <constant name="DIRCFd_width"           value="DIRCPrism_width"/>
+    <constant name="DIRCFd_thickness"       value="1*mm"/>
+
+    <!-- Bar - Each DIRC box consists of N "bars" -->
+    <!-- BarAssembly - Bars + Glue -->
+    <constant name="DIRCBarAssm_length"     value="DIRCMain_length - DIRCPrism_length - DIRCMirror_thickness - DIRCLens_thickness - DIRCFd_thickness" comment="Length of bars+glue assembly"/>
+    <constant name="DIRCBar_count"          value="11" comment="Number of bars per box"/>
+    <constant name="DIRCBar_gap"            value="0.15 * mm"/>
+    <constant name="DIRCBar_height"         value="17 * mm"/>
+    <constant name="DIRCBar_width"          value="(DIRCPrism_width - (DIRCBar_count - 1) * DIRCBar_gap) / DIRCBar_count"/>
+    <constant name="DIRCGlue_thickness"     value="0.05 * mm"/>
+    <constant name="DIRCBar_length"         value="(DIRCBarAssm_length-4*DIRCGlue_thickness)/4"/>
+
+    <!-- dirc outer volume -->
+    <comment>
+      RMax is calculated according to "rectangle inside ring" problem solution
+      https://math.stackexchange.com/questions/4222684/calculate-rectangle-inside-ring-parameters/4222691#4222691
+    </comment>
+    <constant name="DIRCFake_rmax"              value="sqrt( (DIRCFake_rmin+DIRCPrism_height)^2 + 0.25*(DIRCPrism_height)^2 )"/>
+  </define>
+
+  <materials>
+    <comment>
+      Only non optical material variants are here.
+      See optical_materials.xml for optical ones
+      -
+    </comment>
+
+    <material name="Epotek">
+      <D type="density" value="1.2" unit="g/cm3"/>
+      <composite n="5" ref="H"/>
+      <composite n="3" ref="C"/>
+      <composite n="2" ref="O"/>
+    </material>
+    <material name="Nlak33a">
+      <D type="density" value="4.220" unit="g/cm3"/>
+      <composite n="1" ref="Si"/>
+      <composite n="2" ref="O"/>
+    </material>
+  </materials>
+
+  <limits>
+  </limits>
+
+  <regions>
+  </regions>
+
+  <display>
+    <vis name="DIRCTube"   ref="AnlTeal" alpha="0.1" visible="true"  showDaughters="true"   lineStyle="solid" drawingStyle="solid" />
+    <vis name="DIRCBox"    ref="AnlLight_Gray" alpha="0.1" visible="true"  showDaughters="true"   lineStyle="solid" drawingStyle="solid" />
+    <vis name="DIRCLens1"  ref="AnlProcess_Blue" visible="true"  showDaughters="false"  lineStyle="solid" drawingStyle="solid" />
+    <vis name="DIRCLens2"  ref="AnlProcess_Blue" visible="true"  showDaughters="false"  lineStyle="solid" drawingStyle="solid" />
+    <vis name="DIRCLens3"  ref="AnlTeal" visible="true"  showDaughters="false"  lineStyle="solid" drawingStyle="solid" />
+    <vis name="DIRCBar"    ref="AnlTeal" visible="true"  showDaughters="false"  lineStyle="solid" drawingStyle="solid" />
+    <vis name="DIRCGlue"   ref="AnlViolet" visible="true"  showDaughters="false"  lineStyle="solid" drawingStyle="solid" />
+    <vis name="DIRCMirror" ref="AnlGray" visible="true"  showDaughters="false"  lineStyle="solid" drawingStyle="solid" />
+    <vis name="DIRCPrism"  ref="AnlTeal" visible="true"  showDaughters="false"  lineStyle="solid" drawingStyle="solid" />
+    <vis name="DIRCFd"     ref="AnlRed" visible="true"  showDaughters="false" />
+  </display>
+
+  <detectors>
+    <detector id="BarrelDIRC_ID" name="cb_DIRC" type="cb_DIRC" readout="DIRCBarHits" vis="DIRCTube">
+      <dimensions rmin="DIRCFake_rmin" rmax="DIRCFake_rmax" length="DIRCMain_length" radius="DIRCRadius" dx="DIRCBars_DX" dy="DIRCBars_DY" number="DIRCNum" deltaphi="DIRCDPhi"/>
+      <position x="0" y="0" z="DIRCFake_offset"/>
+      <rotation theta="DIRC_rotation"/>
+      <module name="DircBox" R="DIRCRadius" repeat="DIRCBox_count" width="DIRCPrism_width + 1*mm" height="DIRCPrism_height*2" length="DIRCBarAssm_length + 550*mm" vis="DIRCBox">
+        <!-- Mirror (at the end of the module) -->
+        <mirror
+          height="DIRCMirror_height"
+          width="DIRCMirror_width"
+          thickness="DIRCMirror_thickness"
+          material="Aluminum"
+          vis="DIRCMirror"
+        />
+
+        <!-- DIRC Bar -->
+        <!-- TODO parametrize as bar+glue assembly with layers -->
+        <bar
+          height="DIRCBar_height"
+          width="DIRCBar_width"
+          length="DIRCBar_length"
+          repeat="DIRCBar_count"
+          gap="DIRCBar_gap"
+          material="Quartz"
+          vis="DIRCBar"
+        />
+
+        <glue thickness="DIRCGlue_thickness" material="Epotek" vis="DIRCGlue"/>
+
+        <!-- lens -->
+        <lens
+          height="DIRCLens_height"
+          width="DIRCLens_width"
+          thickness="DIRCLens_thickness"
+          r1="DIRCLens_r1"
+          r2="DIRCLens_r2"
+        />
+
+        <prism/> <!-- TODO parametrize here -->
+
+        <fd
+          height="DIRCFd_height"
+          width="DIRCFd_width"
+          thickness="DIRCFd_thickness"
+          vis="DIRCFd"
+          material="Quartz"
+        />
+      </module>
+    </detector>
+  </detectors>
+
+  <readouts>
+    <readout name="DIRCBarHits">
+      <segmentation type="CartesianGridXY" grid_size_x="3.0*mm" grid_size_y="3.0*mm" />
+      <id>system:8,module:8,section:8,bar:8,x:32:-16,y:-16</id>
+    </readout>
+  </readouts>
+
+  <plugins>
+  </plugins>
+
+  <fields>
+  </fields>
+</lccdd>

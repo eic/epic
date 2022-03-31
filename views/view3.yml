@@ -1,0 +1,40 @@
+dawn_view_03:detector:
+  extends: .views
+  needs:
+    - job: view_prim:detector_only
+      optional: false
+  script:
+    - ./bin/make_dawn_views -i ${LOCAL_DATA_PATH}/detector_view.prim -t view03 -d scripts/view3 -D
+
+#dawn_view_03:ev001:
+#  extends: .views
+#  needs:
+#    - job: view_prim:ev001
+#      optional: true
+#  script:
+#    - ./bin/make_dawn_views -i ${LOCAL_DATA_PATH}/view_ev001.prim -t view03_ev001 -d scripts/view3 -s 1
+
+dawn_view_03:ev002:
+  extends: .views
+  needs:
+    - job: view_prim:ev002
+      optional: true
+  rules:
+    - if: '$DETECTOR_EVENT_VIEWS == "ON"'
+  script:
+    - ./bin/make_dawn_views -i ${LOCAL_DATA_PATH}/view_ev002.prim  -t view03_ev002 -d scripts/view3 -s 2
+
+view_03:
+  stage: collect
+  rules:
+    - if: '$CI_SERVER_HOST == "eicweb.phy.anl.gov"' 
+  needs:
+    - job: dawn_view_03:detector
+      optional: false
+    - job: dawn_view_03:ev002
+      optional: true
+    #- ["dawn_view_03:detector", "dawn_view_03:ev001", "dawn_view_03:ev002"]
+  script:
+    - ls -lrth *
+    - ls -lrth images/*
+

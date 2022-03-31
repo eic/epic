@@ -1,0 +1,267 @@
+image: eicweb.phy.anl.gov:4567/eic/juggler/juggler:latest
+
+workflow:
+  rules:
+    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
+    - if: '$CI_PIPELINE_SOURCE == "web"'
+    - if: '$CI_PIPELINE_SOURCE == "webide"'
+    - if: '$CI_COMMIT_BRANCH == "master"'
+    - if: '$CI_COMMIT_TAG'
+
+default:
+  before_script:
+    - source .local/bin/env.sh
+  artifacts:
+    expire_in: 1 week 
+    paths:
+      - .local/detector
+      - .local/lib
+      - .local/bin
+      - .local/include
+      - .local/share
+      - results
+      - config
+      - images
+      - doc
+      - juggler.env
+      - geo
+    reports:
+      dotenv: juggler.env
+
+stages:
+  - config
+  - build
+  - test
+  - docs
+  - collect
+  - finalize 
+  - deploy
+
+common:setup:
+  stage: config
+  rules:
+    - if: '$CI_SERVER_HOST == "eicweb.phy.anl.gov"' 
+  before_script:
+    - git clone https://eicweb.phy.anl.gov/EIC/benchmarks/common_bench.git setup 
+  script:
+    - export JUGGLER_DETECTOR="ecce"
+    - |
+      #      if [[ "x${CI_PIPELINE_SOURCE}" == "xmerge_request_event"  || "$CI_COMMIT_BRANCH" == "master" ]]; then
+        export JUGGLER_DETECTOR_VERSION="${CI_COMMIT_REF_NAME}"
+        echo "BEAMLINE_CONFIG          = ${BEAMLINE_CONFIG}"
+        echo "BEAMLINE_CONFIG_VERSION  = ${BEAMLINE_CONFIG_VERSION}"
+        echo "JUGGLER_DETECTOR         = ${JUGGLER_DETECTOR}"
+        echo "JUGGLER_DETECTOR_VERSION = ${CI_COMMIT_REF_NAME}"
+        echo "JUGGLER_DETECTOR_VERSION=$CI_COMMIT_REF_NAME" >> juggler.env
+        echo "JUGGLER_DETECTOR=$JUGGLER_DETECTOR" >> juggler.env
+        #fi
+    - source setup/bin/env.sh && ./setup/bin/install_common.sh
+
+common:detector:
+  stage: build
+  needs: 
+    - common:setup
+  script:
+    #- source .local/bin/env.sh && build_detector.sh
+    - build_detector.sh
+    - mkdir -p results
+    - mkdir -p config
+    - mkdir -p doc
+    - mkdir -p geo
+    - print_env.sh
+
+build:simple:
+  stage: build
+  script:
+    - mkdir -p build && cd build && cmake ../. -DCMAKE_INSTALL_PREFIX=/usr/local && make -j20 && make install  && cd ..
+    - echo "Build successful."
+
+
+.views:
+  stage: docs
+  tags:
+    - phy-scratch
+  before_script:
+    - source .local/bin/env.sh
+    - env
+    - pip3 install psutil
+  needs:
+    - ["common:detector"]
+
+include:
+  - local: 'views/generate_prim_files.yml'
+  - local: 'views/view1.yml'
+  - local: 'views/view2.yml'
+  - local: 'views/view3.yml'
+  - local: 'views/view6.yml'
+  - local: 'views/view7.yml'
+  - local: 'views/view11.yml'
+  - local: 'views/view12.yml'
+  - local: 'views/view13.yml'
+  - local: 'views/view14.yml'
+  - local: 'views/view15.yml'
+  - local: 'views/view20.yml'
+
+dump_geometry:
+  stage: test
+  needs:
+    - common:detector
+  script:
+    - echo "dumping geometry"
+    ## DEBUG
+    - echo "LD_LIBRARY_PATH - $LD_LIBRARY_PATH"
+    - echo "PATH - $PATH"
+    - print_env.sh
+    ## DEBUG
+    - mkdir -p geo
+    - |
+      sed -i -e '/<detectors>/,/<\/detectors>/d' ${DETECTOR_PATH}/compact/tracking_config*.xml
+      mv ${DETECTOR_PATH}/compact/display_geoviewer.xml ${DETECTOR_PATH}/compact/display.xml
+      for xml in ${DETECTOR_PATH}/compact/subsystem_views/*.xml; do
+        echo $xml
+        geo_name=`basename $xml .xml`_geo.root
+        cp $xml ${DETECTOR_PATH}/geo.xml
+        dd_web_display --output geo/${geo_name} ${DETECTOR_PATH}/geo.xml
+      done
+    ## Lower-resolution display of the pfRICH sensors for global views
+    - sed -i 's/_default"\/>/_lores"\/>/' ${DETECTOR_PATH}/compact/pfrich.xml
+    ## full geo with downstream beamline
+    - dd_web_display --output geo/detector_geo_full.root ${DETECTOR_PATH}/ecce.xml
+    ## only central detector geo
+    - sed -i '/forward_ion_beamline/d' ${DETECTOR_PATH}/ecce.xml
+    - sed -i '/beampipe_hadron_B0/d' ${DETECTOR_PATH}/ecce.xml
+    - sed -i '/B0_/d' ${DETECTOR_PATH}/ecce.xml
+    - sed -i '/far_forward_offM/d' ${DETECTOR_PATH}/ecce.xml
+    - sed -i '/far_forward_detectors/d' ${DETECTOR_PATH}/ecce.xml
+    - sed -i '/roman_pots/d' ${DETECTOR_PATH}/ecce.xml
+    - sed -i '/inner_vacuum_FF_magnets/d' ${DETECTOR_PATH}/ecce.xml
+    - dd_web_display --output geo/detector_geo.root ${DETECTOR_PATH}/ecce.xml
+    ## print some useful output
+    - |
+      echo "Geometry viewer at:"
+      echo "https://eic.phy.anl.gov/geoviewer/index.htm?file=https://eicweb.phy.anl.gov/EIC/detectors/ecce/-/jobs/${CI_JOB_ID}/artifacts/raw/geo/detector_geo_full.root?job=dump_geometry&item=default;1&opt=clipx;clipy;transp30;zoom75;ROTY290;ROTZ350;trz0;trr0;ctrl;all"
+      echo " - Central detector view at: "
+      echo "https://eic.phy.anl.gov/geoviewer/index.htm?file=https://eicweb.phy.anl.gov/EIC/detectors/ecce/-/jobs/${CI_JOB_ID}/artifacts/raw/geo/detector_geo.root?job=dump_geometry&item=default;1&opt=clipx;clipy;transp30;zoom120;ROTY320;ROTZ340;trz0;trr0;ctrl;all"
+      for xml in ${DETECTOR_PATH}/compact/subsystem_views/*.xml; do
+        geo_name=`basename $xml .xml`_geo.root
+        echo " - Subsystem view for `basename $xml .xml` at:"
+        echo "   https://eic.phy.anl.gov/geoviewer/index.htm?file=https://eicweb.phy.anl.gov/EIC/detectors/ecce/-/jobs/${CI_JOB_ID}/artifacts/raw/geo/${geo_name}?job=dump_geometry&item=default;1&opt=clipx;clipy;transp30;zoom75;ROTY320;ROTZ340;trz0;trr0;ctrl;all"
+      done
+
+detector_documentation:
+  stage: docs
+  needs:
+    - common:detector
+  script:
+    - mkdir -p doc
+    - bash bin/build_documentation | tee doc/detector.md
+      #- |
+      #  xmllint --format --xpath '//comment/text()' ${DETECTOR_PATH}/ecce.xml | sed -re 's/<\/?\w+>//g' | sed 's/^[[:space:]]*#/#/' | tee  doc/detector.md
+      #  xmllint --format --xpath '//comment/text()' ${DETECTOR_PATH}/ip6/ip6_defs.xml | sed -re 's/<\/?\w+>//g' | sed 's/^[[:space:]]*#/#/' | tee -a doc/detector.md || true
+      #  for afile in ${DETECTOR_PATH}/compact/*.xml ; do
+      #    xmllint --format --xpath '//comment/text()' ${afile} | sed -re 's/<\/?\w+>//g' | sed 's/^[[:space:]]*#/#/' | tee -a doc/detector.md || true
+      #  done
+
+report:
+  stage: finalize
+  needs: 
+    - view_01
+    - view_02
+    - view_03
+    - view_06
+    - view_07
+    - view_11
+    - view_12
+    - view_13
+    - view_14
+    - view_15
+    - view_20
+    - dump_constants
+    - dump_geometry
+    - convert_to_gdml
+  script:
+    - pip3 install jinja2 &&  ls -lrth
+    - ./bin/make_images > doc/dawn_views.md
+    - echo "Geometry viewer at https://eic.phy.anl.gov/geoviewer/index.htm?file=https://eicweb.phy.anl.gov/EIC/detectors/ecce/-/jobs/${CI_JOB_ID}/artifacts/raw/geo/detector_geo_full.root?job=finalize&item=default;1&opt=clipxyz;transp30;zoom75;ROTY290;ROTZ350;trz0;trr0;ctrl;all&"
+
+dump_constants:
+  stage: test
+  needs: 
+    - ["common:detector"]
+  script:
+    - npdet_info dump ${DETECTOR_PATH}/ecce.xml  | tee doc/constants.out 
+
+overlap_check_tgeo:
+  stage: test
+  needs: 
+    - ["common:detector"]
+  script:
+    ## disable fibers in ECAL for normal overlap check
+    - sed -i '/<fiber/,+6d' ${DETECTOR_PATH}/compact/ecal_barrel_interlayers.xml
+    - sed -i '/<fiber/,+4d' ${DETECTOR_PATH}/ip6/far_forward_ZDC_Ecal_WSciFi.xml
+    - checkOverlaps -c ${DETECTOR_PATH}/ecce.xml  | tee doc/overlap_check_tgeo.out 
+    - echo "$(cat doc/overlap_check_tgeo.out | grep ovlp | wc -l) overlaps..."
+    - if [[ "$(cat doc/overlap_check_tgeo.out | grep ovlp | wc -l)" -gt "0" ]] ; then echo "Overlaps exist!" && false ; fi
+
+overlap_check_geant4:full_fast:
+  stage: test
+  needs: 
+    - ["common:detector"]
+  script:
+    ## disable fibers in ECAL for normal overlap check
+    - sed -i '/<fiber/,+6d' ${DETECTOR_PATH}/compact/ecal_barrel_interlayers.xml
+    - sed -i '/<fiber/,+4d' ${DETECTOR_PATH}/ip6/far_forward_ZDC_Ecal_WSciFi.xml
+    ## reduce the number of fibers in Hadron EMCal for overlap check
+    ## not needed, as we are running with a different setup now
+    #- sed -i 's/radius="EcalEndcapP_FiberRadius"/radius="EcalEndcapP_FiberRadius*10"/' ${DETECTOR_PATH}/compact/ci_ecal_scfi.xml
+    - python scripts/checkOverlaps.py -c ${DETECTOR_PATH}/ecce.xml | tee doc/overlap_check_geant4.out
+    - echo "$(cat doc/overlap_check_geant4.out | grep GeomVol1002 | wc -l) overlaps..."
+    - if [[ "$(cat doc/overlap_check_geant4.out | grep GeomVol1002 | wc -l)" -gt "0" ]] ; then echo "Overlaps exist!" && false ; fi
+
+## TODO: add real full overlap check as child pipeline to run on branches only
+
+overlap_check_geant4:inner_detector:
+  stage: test
+  needs: 
+    - ["common:detector"]
+  script:
+    - cp ${DETECTOR_PATH}/compact/subsystem_views/inner_detector.xml ${DETECTOR_PATH}/inner_detector.xml
+    - python scripts/checkOverlaps.py -c ${DETECTOR_PATH}/inner_detector.xml | tee doc/overlap_check_geant4.out
+    - echo "$(cat doc/overlap_check_geant4.out | grep GeomVol1002 | wc -l) overlaps..."
+    - if [[ "$(cat doc/overlap_check_geant4.out | grep GeomVol1002 | wc -l)" -gt "0" ]] ; then echo "Overlaps exist!" && false ; fi
+
+convert_to_gdml:
+  stage: test
+  needs: 
+    - ["common:detector"]
+  script:
+    - mkdir -p geo
+    - python scripts/convert_to_gdml.py --compact ${DETECTOR_PATH}/ecce.xml --output geo/ecce.gdml
+
+tracking_geometry_debug:
+  stage: test
+  needs: 
+    - ["common:detector"]
+  script:
+    - root -b -q "scripts/test_ACTS.cxx+(\"${DETECTOR_PATH}/ecce.xml\")" | tee geo/tracking_geometry_debug.out 
+    - ./bin/acts_geo_check geo/tracking_geometry_debug.out
+
+detector:config_testing:
+  stage: test
+  needs: 
+    - ["common:detector"]
+  script:
+    - checkOverlaps -o 's' -c ${DETECTOR_PATH}/ecce.xml  | tee doc/overlap_check.out | wc -l
+    - cat doc/overlap_check.out
+
+benchmarks:detector:
+  stage: deploy
+  variables:
+    JUGGLER_DETECTOR: "$JUGGLER_DETECTOR"
+    JUGGLER_DETECTOR_VERSION: "$JUGGLER_DETECTOR_VERSION"
+  trigger:
+    project: EIC/benchmarks/detector_benchmarks
+    strategy: depend
+  needs: 
+    - overlap_check_geant4:full_fast
+    - common:detector

@@ -1,0 +1,149 @@
+#!/bin/bash
+
+#git clone --depth 1 https://eicweb.phy.anl.gov/EIC/datasets.git
+export DAWN_PS_PREVIEWER="ls"
+
+OUT_FILE=".DAWN_1.history"
+
+function print_the_help {
+  echo "USAGE: ${0} [-s <skip_events>] -d <dawn_run_dir> "
+  echo "  OPTIONS: "
+  echo "            -x         targeted x coordinate position"
+  echo "            -y         targeted x coordinate position"
+  echo "            -z         targeted x coordinate position"
+  echo "            --theta    viewing angle"
+  echo "            --phi      viewing angle"
+  echo "            -m,--mag   magnification"
+  echo "            --draw     draw style "
+  echo "            -d,--dawn-dir <dawn_run_dir>  Directory with the .DAWN files and a generate script "
+  exit 
+}
+
+function yes_or_no {
+  while true; do
+    read -p "$* [y/n]: " yn
+    case $yn in
+      [Yy]*) return 0 ;;
+      [Nn]*) echo "No entered" ; return 1 ;;
+    esac
+  done
+}
+
+if [[ $# -eq 0 ]] ; then
+  print_the_help
+  exit 
+fi
+
+SKIP_EVENTS=0
+DETECTOR_ONLY=0
+FILE_TAG="view"
+DAWN_RUN_DIR="."
+
+
+POSITIONAL=()
+while [[ $# -gt 0 ]]
+do
+  key="$1"
+
+  case $key in
+    -h|--help)
+      shift # past argument
+      print_the_help
+      ;;
+    -x)
+      echo "updating x coordinate to ${2}"
+      sed -i '5d' ${DAWN_RUN_DIR}/${OUT_FILE}
+      sed -i '5i'${2} ${DAWN_RUN_DIR}/${OUT_FILE}
+      shift # past argument
+      shift # past value
+      ;;
+    -y)
+      echo "updating y coordinate to ${2}"
+      sed -i '6d' ${DAWN_RUN_DIR}/${OUT_FILE}
+      sed -i '6i'${2} ${DAWN_RUN_DIR}/${OUT_FILE}
+      shift # past argument
+      shift # past value
+      ;;
+    -z)
+      echo "updating z coordinate to ${2}"
+      sed -i '7d' ${DAWN_RUN_DIR}/${OUT_FILE}
+      sed -i '7i'${2} ${DAWN_RUN_DIR}/${OUT_FILE}
+      shift # past argument
+      shift # past value
+      ;;
+    --theta)
+      echo "updating theta angle to ${2}"
+      sed -i '3d' ${DAWN_RUN_DIR}/${OUT_FILE}
+      sed -i '3i'${2} ${DAWN_RUN_DIR}/${OUT_FILE}
+      shift # past argument
+      shift # past value
+      ;;
+    --phi)
+      echo "updating phi angle to ${2}"
+      sed -i '2d' ${DAWN_RUN_DIR}/${OUT_FILE}
+      sed -i '2i'${2} ${DAWN_RUN_DIR}/${OUT_FILE}
+      shift # past argument
+      shift # past value
+      ;;
+    --mag)
+      echo "updating magnification to ${2}"
+      sed -i '8d' ${DAWN_RUN_DIR}/${OUT_FILE}
+      sed -i '8i'${2} ${DAWN_RUN_DIR}/${OUT_FILE}
+      shift # past argument
+      shift # past value
+      ;;
+    --draw)
+      echo "updating drawing to ${2}"
+      sed -i '9d' ${DAWN_RUN_DIR}/${OUT_FILE}
+      sed -i '9i'${2} ${DAWN_RUN_DIR}/${OUT_FILE}
+      shift # past argument
+      shift # past value
+      ;;
+    --light-theta)
+      echo "updating drawing to ${2}"
+      sed -i '19d' ${DAWN_RUN_DIR}/${OUT_FILE}
+      sed -i '19i'${2} ${DAWN_RUN_DIR}/${OUT_FILE}
+      shift # past argument
+      shift # past value
+      ;;
+    --light-phi)
+      echo "updating drawing to ${2}"
+      sed -i '18d' ${DAWN_RUN_DIR}/${OUT_FILE}
+      sed -i '18i'${2} ${DAWN_RUN_DIR}/${OUT_FILE}
+      shift # past argument
+      shift # past value
+      ;;
+    -i|--input)
+      OUT_FILE="$2"
+      shift # past argument
+      shift # past value
+      ;;
+    -o|--ouput-dir)
+      OUTPUT_DIR="$2"
+      shift # past argument
+      shift # past value
+      ;;
+    -D|--detector-only)
+      DETECTOR_ONLY=1
+      shift # past argument
+      #shift # past value
+      ;;
+    -d|--dawn-dir)
+      DAWN_RUN_DIR=$2
+      shift # past argument
+      shift # past value
+      ;;
+    -t|--tag)
+      FILE_TAG=$2
+      shift # past argument
+      shift # past value
+      ;;
+    *)    # unknown option
+      #POSITIONAL+=("$1") # save it in an array for later
+      echo "unknown option $1"
+      print_the_help
+      shift # past argument
+      ;;
+  esac
+done
+set -- "${POSITIONAL[@]}" # restore positional parameters

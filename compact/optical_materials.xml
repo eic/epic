@@ -1,0 +1,1081 @@
+<lccdd>
+  <properties>
+    <matrix name="RINDEX__Vacuum" coldim="2" values="
+      1.0*eV 1.0
+      5.1*eV 1.0
+      "/>
+    <matrix name="RINDEX__Air" coldim="2" values="
+      1.0*eV 1.00029
+      5.1*eV 1.00029
+      "/>
+    <matrix name="RINDEX__Quartz" coldim="2" values="
+      1.0*eV 1.46
+      5.1*eV 1.46
+      "/>
+    <matrix name="RINDEX__N2" coldim="2" values="
+      1.0*eV 1.00033
+      4.0*eV 1.00033
+      5.1*eV 1.00033
+      "/>
+    <matrix name="RINDEX__Pyrex" coldim="2" values="
+      1.0*eV 1.5
+      4.0*eV 1.5
+      5.1*eV 1.5
+      "/>
+    <matrix name="ABSLENGTH__Pyrex" coldim="2" values="
+      1.0*eV 10.0*cm
+      4.0*eV 10.0*cm
+      5.1*eV 10.0*cm
+      "/>
+    <matrix name="RINDEX__DIRCQuartz" coldim="2" values="
+      1.90745*eV   1.45653
+      1.93725*eV   1.45681
+      1.968*eV     1.4571
+      1.99974*eV   1.4574
+      2.03253*eV   1.45771
+      2.0664*eV    1.45804
+      2.10143*eV   1.45838
+      2.13766*eV   1.45873
+      2.17516*eV   1.45911
+      2.214*eV     1.4595
+      2.25426*eV   1.45991
+      2.296*eV     1.46034
+      2.33932*eV   1.4608
+      2.38431*eV   1.46128
+      2.43106*eV   1.46179
+      2.47968*eV   1.46233
+      2.53029*eV   1.4629
+      2.583*eV     1.4635
+      2.63796*eV   1.46415
+      2.69531*eV   1.46483
+      2.7552*eV    1.46557
+      2.81782*eV   1.46635
+      2.88335*eV   1.46719
+      2.952*eV     1.46809
+      3.024*eV     1.46907
+      3.0996*eV    1.47012
+      3.17908*eV   1.47125
+      3.26274*eV   1.47249
+      3.35092*eV   1.47383
+      3.44401*eV   1.47529
+      3.54241*eV   1.47689
+      3.64659*eV   1.47865
+      3.7571*eV    1.48059
+      3.87451*eV   1.48274
+      3.99949*eV   1.48513
+      4.13281*eV   1.48779
+      "/>
+    <matrix name="ABSLENGTH__DIRCQuartz" coldim="2" values="
+      1.90745*eV   2.33615e+06*mm
+      1.93725*eV   2.19567e+06*mm
+      1.968*eV     2.06162e+06*mm
+      1.99974*eV   1.93381e+06*mm
+      2.03253*eV   1.81203e+06*mm
+      2.0664*eV    1.6961e+06*mm
+      2.10143*eV   1.58582e+06*mm
+      2.13766*eV   1.48101e+06*mm
+      2.17516*eV   1.38148e+06*mm
+      2.214*eV     1.28706e+06*mm
+      2.25426*eV   1.19756e+06*mm
+      2.296*eV     1.11281e+06*mm
+      2.33932*eV   1.03264e+06*mm
+      2.38431*eV   956885*mm
+      2.43106*eV   885374*mm
+      2.47968*eV   817949*mm
+      2.53029*eV   754450*mm
+      2.583*eV     694722*mm
+      2.63796*eV   638613*mm
+      2.69531*eV   585973*mm
+      2.7552*eV    536656*mm
+      2.81782*eV   490520*mm
+      2.88335*eV   447425*mm
+      2.952*eV     407233*mm
+      3.024*eV     369813*mm
+      3.0996*eV    335032*mm
+      3.17908*eV   302764*mm
+      3.26274*eV   272886*mm
+      3.35092*eV   245275*mm
+      3.44401*eV   219814*mm
+      3.54241*eV   196390*mm
+      3.64659*eV   174889*mm
+      3.7571*eV    155204*mm
+      3.87451*eV   137229*mm
+      3.99949*eV   120863*mm
+      4.13281*eV   106006*mm
+      "/>
+    <matrix name="RINDEX__DIRCEpotek" coldim="2" values="
+      1.90745*eV   1.55403
+      1.93725*eV   1.55557
+      1.968*eV     1.55698
+      1.99974*eV   1.55827
+      2.03253*eV   1.55945
+      2.0664*eV    1.56056
+      2.10143*eV   1.5616
+      2.13766*eV   1.5626
+      2.17516*eV   1.56358
+      2.214*eV     1.56455
+      2.25426*eV   1.56553
+      2.296*eV     1.56654
+      2.33932*eV   1.5676
+      2.38431*eV   1.56872
+      2.43106*eV   1.56993
+      2.47968*eV   1.57125
+      2.53029*eV   1.57269
+      2.583*eV     1.57427
+      2.63796*eV   1.57601
+      2.69531*eV   1.57793
+      2.7552*eV    1.58005
+      2.81782*eV   1.58238
+      2.88335*eV   1.58495
+      2.952*eV     1.58777
+      3.024*eV     1.59086
+      3.0996*eV    1.59424
+      3.17908*eV   1.59793
+      3.26274*eV   1.60195
+      3.35092*eV   1.60631
+      3.44401*eV   1.61103
+      3.54241*eV   1.61614
+      3.64659*eV   1.62165
+      3.7571*eV    1.62758
+      3.87451*eV   1.63395
+      3.99949*eV   1.64077
+      4.13281*eV   1.64807
+      "/>
+    <matrix name="ABSLENGTH__DIRCEpotek" coldim="2" values="
+      1.90745*eV   2.33615e+06*mm
+      1.93725*eV   2.19567e+06*mm
+      1.968*eV     2.06162e+06*mm
+      1.99974*eV   1.93381e+06*mm
+      2.03253*eV   1.81203e+06*mm
+      2.0664*eV    1.6961e+06*mm
+      2.10143*eV   1.58582e+06*mm
+      2.13766*eV   1.48101e+06*mm
+      2.17516*eV   1.38148e+06*mm
+      2.214*eV     1.28706e+06*mm
+      2.25426*eV   1.19756e+06*mm
+      2.296*eV     1.11281e+06*mm
+      2.33932*eV   1.03264e+06*mm
+      2.38431*eV   956885*mm
+      2.43106*eV   885374*mm
+      2.47968*eV   817949*mm
+      2.53029*eV   754450*mm
+      2.583*eV     694722*mm
+      2.63796*eV   638613*mm
+      2.69531*eV   585973*mm
+      2.7552*eV    536656*mm
+      2.81782*eV   490520*mm
+      2.88335*eV   447425*mm
+      2.952*eV     407233*mm
+      3.024*eV     369813*mm
+      3.0996*eV    335032*mm
+      3.17908*eV   302764*mm
+      3.26274*eV   272886*mm
+      3.35092*eV   245275*mm
+      3.44401*eV   219814*mm
+      3.54241*eV   196390*mm
+      3.64659*eV   174889*mm
+      3.7571*eV    155204*mm
+      3.87451*eV   137229*mm
+      3.99949*eV   120863*mm
+      4.13281*eV   106006*mm
+      "/>
+
+    <matrix name="RINDEX__DIRCNlak33a" coldim="2" values="
+      1.0*eV       1.73816
+      1.2511*eV    1.73836
+      1.26386*eV   1.73858
+      1.27687*eV   1.73881
+      1.29016*eV   1.73904
+      1.30372*eV   1.73928
+      1.31758*eV   1.73952
+      1.33173*eV   1.73976
+      1.34619*eV   1.74001
+      1.36097*eV   1.74026
+      1.37607*eV   1.74052
+      1.39152*eV   1.74078
+      1.40731*eV   1.74105
+      1.42347*eV   1.74132
+      1.44*eV      1.7416
+      1.45692*eV   1.74189
+      1.47425*eV   1.74218
+      1.49199*eV   1.74249
+      1.51016*eV   1.74279
+      1.52878*eV   1.74311
+      1.54787*eV   1.74344
+      1.56744*eV   1.74378
+      1.58751*eV   1.74412
+      1.6081*eV    1.74448
+      1.62923*eV   1.74485
+      1.65092*eV   1.74522
+      1.6732*eV    1.74562
+      1.69609*eV   1.74602
+      1.71961*eV   1.74644
+      1.7438*eV    1.74687
+      1.76868*eV   1.74732
+      1.79427*eV   1.74779
+      1.82062*eV   1.74827
+      1.84775*eV   1.74878
+      1.87571*eV   1.7493
+      1.90452*eV   1.74985
+      1.93423*eV   1.75042
+      1.96488*eV   1.75101
+      1.99652*eV   1.75163
+      2.0292*eV    1.75228
+      2.06296*eV   1.75296
+      2.09787*eV   1.75368
+      2.13398*eV   1.75443
+      2.17135*eV   1.75521
+      2.21006*eV   1.75604
+      2.25017*eV   1.75692
+      2.29176*eV   1.75784
+      2.33492*eV   1.75882
+      2.37973*eV   1.75985
+      2.42631*eV   1.76095
+      2.47473*eV   1.76211
+      2.52514*eV   1.76335
+      2.57763*eV   1.76467
+      2.63236*eV   1.76608
+      2.68946*eV   1.76758
+      2.7491*eV    1.7692
+      2.81143*eV   1.77093
+      2.87666*eV   1.77279
+      2.94499*eV   1.7748
+      3.01665*eV   1.77698
+      3.09187*eV   1.77934
+      3.17095*eV   1.7819
+      3.25418*eV   1.7847
+      3.34189*eV   1.78775
+      3.43446*eV   1.79111
+      3.53231*eV   1.79481
+      3.6359*eV    1.79889
+      3.74575*eV   1.80343
+      3.86244*eV   1.8085
+      3.98663*eV   1.81419
+      4.11908*eV   1.82061
+      4.26062*eV   1.8279
+      4.41225*eV   1.83625
+      4.57506*eV   1.84589
+      4.75035*eV   1.85713
+      4.93961*eV   1.87039
+      "/>
+    <matrix name="ABSLENGTH__DIRCNlak33a" coldim="2" values="
+      1.0*eV       371813*mm
+      1.2511*eV    352095*mm
+      1.26386*eV   331021*mm
+      1.27687*eV   310814*mm
+      1.29016*eV   291458*mm
+      1.30372*eV   272937*mm
+      1.31758*eV   255238*mm
+      1.33173*eV   238342*mm
+      1.34619*eV   222234*mm
+      1.36097*eV   206897*mm
+      1.37607*eV   192313*mm
+      1.39152*eV   178463*mm
+      1.40731*eV   165331*mm
+      1.42347*eV   152896*mm
+      1.44*eV      141140*mm
+      1.45692*eV   130043*mm
+      1.47425*eV   119585*mm
+      1.49199*eV   109747*mm
+      1.51016*eV   100507*mm
+      1.52878*eV   91846.3*mm
+      1.54787*eV   83743.1*mm
+      1.56744*eV   76176.7*mm
+      1.58751*eV   69126.1*mm
+      1.6081*eV    62570.2*mm
+      1.62923*eV   56488.0*mm
+      1.65092*eV   50858.3*mm
+      1.6732*eV    45660.1*mm
+      1.69609*eV   40872.4*mm
+      1.71961*eV   36474.6*mm
+      1.7438*eV    32445.8*mm
+      1.76868*eV   28765.9*mm
+      1.79427*eV   25414.6*mm
+      1.82062*eV   22372.2*mm
+      1.84775*eV   19619.3*mm
+      1.87571*eV   17136.9*mm
+      1.90452*eV   14906.5*mm
+      1.93423*eV   12910.2*mm
+      1.96488*eV   11130.3*mm
+      1.99652*eV   9550.13*mm
+      2.0292*eV    8153.3*mm
+      2.06296*eV   6924.25*mm
+      2.09787*eV   5848.04*mm
+      2.13398*eV   4910.46*mm
+      2.17135*eV   4098.04*mm
+      2.21006*eV   3398.06*mm
+      2.25017*eV   2798.54*mm
+      2.29176*eV   2288.32*mm
+      2.33492*eV   1856.99*mm
+      2.37973*eV   1494.92*mm
+      2.42631*eV   1193.28*mm
+      2.47473*eV   943.973*mm
+      2.52514*eV   739.657*mm
+      2.57763*eV   573.715*mm
+      2.63236*eV   440.228*mm
+      2.68946*eV   333.94*mm
+      2.7491*eV    250.229*mm
+      2.81143*eV   185.064*mm
+      2.87666*eV   134.967*mm
+      2.94499*eV   96.9664*mm
+      3.01665*eV   68.5529*mm
+      3.09187*eV   47.6343*mm
+      3.17095*eV   32.4882*mm
+      3.25418*eV   21.7174*mm
+      3.34189*eV   14.2056*mm
+      3.43446*eV   9.07612*mm
+      3.53231*eV   5.65267*mm
+      3.6359*eV    3.4241*mm
+      3.74575*eV   2.01226*mm
+      3.86244*eV   1.14403*mm
+      3.98663*eV   0.62722*mm
+      4.11908*eV   0.330414*mm
+      4.26062*eV   0.166558*mm
+      4.41225*eV   0.0799649*mm
+      4.57506*eV   0.0363677*mm
+      4.75035*eV   0.0155708*mm
+      4.93961*eV   0.00623089*mm
+      "/>
+
+
+    <matrix name= "REFLECTIVITY_mirror" coldim="2" values="
+      1.0*eV  0.9
+      4.0*eV  0.9
+      5.1*eV  0.9
+      "/>
+    <matrix name="RINDEX__Aerogel" coldim="2" values="
+      1.0*eV 1.030
+      4.0*eV 1.030
+      5.1*eV 1.030
+      "/>
+    <matrix name="ABSLENGTH__Aerogel" coldim="2" values="
+      1.0*eV 4.0*cm
+      4.0*eV 4.0*cm
+      5.1*eV 4.0*cm
+      "/>
+    <matrix name="RINDEX__Acrylic" coldim="2" values="
+      1240*eV/1100  1.49
+      1240*eV/600   1.49
+      1240*eV/400   1.49
+      "/>
+    <matrix name="ABSLENGTH__Acrylic" coldim="2" values="
+      1240*eV/1100 2631*mm
+      1240*eV/1000 2631*mm
+      1240*eV/900  2631*mm
+      1240*eV/800  2631*mm
+      1240*eV/700  2500*mm
+      1240*eV/600  2272*mm
+      1240*eV/500  2000*mm
+      1240*eV/400  1315*mm
+      1240*eV/300  1613*mm
+      1240*eV/250  740*mm
+      1240*eV/225  125*mm
+      1240*eV/210  10*mm
+      1240*eV/200  0*mm
+      "/>
+    <!-- BEGIN dRICh and pfRICh material properties
+         - dumped from fun4all implementation
+         - see https://github.com/cisbani/dRICh/blob/main/share/source/g4dRIChOptics.hh
+         -->
+    <!-- dRICh gas -->
+    <matrix name="RINDEX__C2F6_DRICH" coldim="2" values="
+      1.7712*eV   1.00075
+      1.92389*eV  1.00075
+      2.10539*eV  1.00075
+      2.3247*eV   1.00075
+      2.59502*eV  1.00076
+      2.93647*eV  1.00076
+      3.38139*eV  1.00077
+      3.98521*eV  1.00078
+      4.85156*eV  1.0008
+      6.19921*eV  1.00084
+      "/>
+    <matrix name="ABSLENGTH__C2F6_DRICH" coldim="2" values="
+      1.7712*eV   10.0*m
+      1.92389*eV  10.0*m
+      2.10539*eV  10.0*m
+      2.3247*eV   10.0*m
+      2.59502*eV  10.0*m
+      2.93647*eV  10.0*m
+      3.38139*eV  10.0*m
+      3.98521*eV  10.0*m
+      4.85156*eV  10.0*m
+      6.19921*eV  10.0*m
+      "/>
+    <!-- pfRICh gas -->
+    <matrix name="RINDEX__C4F10_PFRICH" coldim="2" values="
+      1.7712*eV   1.0013
+      1.92389*eV  1.0013
+      2.10539*eV  1.00131
+      2.3247*eV   1.00131
+      2.59502*eV  1.00132
+      2.93647*eV  1.00133
+      3.38139*eV  1.00134
+      3.98521*eV  1.00136
+      4.85156*eV  1.0014
+      6.19921*eV  1.00149
+      "/>
+    <matrix name="ABSLENGTH__C4F10_PFRICH" coldim="2" values="
+      1.7712*eV   6.0*m
+      1.92389*eV  6.0*m
+      2.10539*eV  6.0*m
+      2.3247*eV   6.0*m
+      2.59502*eV  6.0*m
+      2.93647*eV  6.0*m
+      3.38139*eV  6.0*m
+      3.98521*eV  6.0*m
+      4.85156*eV  6.0*m
+      6.19921*eV  6.0*m
+      "/>
+    <!-- dRICh aerogel, for density=0.11 g/cm3 (OLD versions are for 0.1g/cm3) -->
+    <matrix name="RINDEX__Aerogel_DRICH_OLD" coldim="2" values="
+      1.87855*eV  1.01638
+      1.96673*eV  1.01642
+      2.0549*eV   1.01647
+      2.14308*eV  1.01652
+      2.23126*eV  1.01657
+      2.31943*eV  1.01662
+      2.40761*eV  1.01667
+      2.49579*eV  1.01673
+      2.58396*eV  1.01679
+      2.67214*eV  1.01685
+      2.76032*eV  1.01691
+      2.84849*eV  1.01698
+      2.93667*eV  1.01705
+      3.02485*eV  1.01712
+      3.11302*eV  1.01719
+      3.2012*eV   1.01727
+      3.28938*eV  1.01734
+      3.37755*eV  1.01742
+      3.46573*eV  1.01751
+      3.55391*eV  1.01759
+      3.64208*eV  1.01768
+      3.73026*eV  1.01777
+      3.81844*eV  1.01787
+      3.90661*eV  1.01796
+      3.99479*eV  1.01806
+      4.08297*eV  1.01816
+      4.17114*eV  1.01827
+      4.25932*eV  1.01838
+      4.3475*eV   1.01849
+      4.43567*eV  1.0186
+      4.52385*eV  1.01872
+      4.61203*eV  1.01884
+      4.7002*eV   1.01897
+      4.78838*eV  1.01909
+      4.87656*eV  1.01922
+      4.96473*eV  1.01936
+      5.05291*eV  1.0195
+      5.14109*eV  1.01964
+      5.22927*eV  1.01979
+      5.31744*eV  1.01994
+      5.40562*eV  1.02009
+      5.4938*eV   1.02025
+      5.58197*eV  1.02041
+      5.67015*eV  1.02057
+      5.75833*eV  1.02074
+      5.8465*eV   1.02092
+      5.93468*eV  1.0211
+      6.02286*eV  1.02128
+      6.11103*eV  1.02147
+      6.19921*eV  1.02167
+      "/>
+    <matrix name="RINDEX__Aerogel_DRICH" coldim="2" values="
+      1.87855*eV  1.01852
+      1.96673*eV  1.01856
+      2.05490*eV  1.01861
+      2.14308*eV  1.01866
+      2.23126*eV  1.01871
+      2.31943*eV  1.01876
+      2.40761*eV  1.01881
+      2.49579*eV  1.01887
+      2.58396*eV  1.01893
+      2.67214*eV  1.01899
+      2.76032*eV  1.01905
+      2.84849*eV  1.01912
+      2.93667*eV  1.01919
+      3.02485*eV  1.01926
+      3.11302*eV  1.01933
+      3.20120*eV  1.01941
+      3.28938*eV  1.01948
+      3.37755*eV  1.01956
+      3.46573*eV  1.01965
+      3.55391*eV  1.01973
+      3.64208*eV  1.01982
+      3.73026*eV  1.01991
+      3.81844*eV  1.02001
+      3.90661*eV  1.02010
+      3.99479*eV  1.02020
+      4.08297*eV  1.02030
+      4.17114*eV  1.02041
+      4.25932*eV  1.02052
+      4.34750*eV  1.02063
+      4.43567*eV  1.02074
+      4.52385*eV  1.02086
+      4.61203*eV  1.02098
+      4.70020*eV  1.02111
+      4.78838*eV  1.02123
+      4.87656*eV  1.02136
+      4.96473*eV  1.02150
+      5.05291*eV  1.02164
+      5.14109*eV  1.02178
+      5.22927*eV  1.02193
+      5.31744*eV  1.02208
+      5.40562*eV  1.02223
+      5.49380*eV  1.02239
+      5.58197*eV  1.02255
+      5.67015*eV  1.02271
+      5.75833*eV  1.02288
+      5.84650*eV  1.02306
+      5.93468*eV  1.02324
+      6.02286*eV  1.02342
+      6.11103*eV  1.02361
+      6.19921*eV  1.02381
+      "/>
+    <matrix name="ABSLENGTH__Aerogel_DRICH_OLD" coldim="2" values="
+      1.87855*eV  154*mm
+      1.96673*eV  156.17*mm
+      2.0549*eV   158.154*mm
+      2.14308*eV  159.974*mm
+      2.23126*eV  161.651*mm
+      2.31943*eV  163.2*mm
+      2.40761*eV  164.636*mm
+      2.49579*eV  165.97*mm
+      2.58396*eV  167.213*mm
+      2.67214*eV  168.374*mm
+      2.76032*eV  169.461*mm
+      2.84849*eV  170.481*mm
+      2.93667*eV  171.439*mm
+      3.02485*eV  172.342*mm
+      3.11302*eV  173.193*mm
+      3.2012*eV   173.998*mm
+      3.28938*eV  174.759*mm
+      3.37755*eV  175.481*mm
+      3.46573*eV  176.165*mm
+      3.55391*eV  176.817*mm
+      3.64208*eV  162.708*mm
+      3.73026*eV  140.953*mm
+      3.81844*eV  122.516*mm
+      3.90661*eV  106.833*mm
+      3.99479*eV  93.4428*mm
+      4.08297*eV  81.9694*mm
+      4.17114*eV  72.1072*mm
+      4.25932*eV  63.6011*mm
+      4.3475*eV   56.2434*mm
+      4.43567*eV  49.8599*mm
+      4.52385*eV  44.3054*mm
+      4.61203*eV  39.4601*mm
+      4.7002*eV   35.2211*mm
+      4.78838*eV  31.5049*mm
+      4.87656*eV  28.2374*mm
+      4.96473*eV  25.359*mm
+      5.05291*eV  22.8166*mm
+      5.14109*eV  20.5674*mm
+      5.22927*eV  18.5724*mm
+      5.31744*eV  16.7992*mm
+      5.40562*eV  15.2205*mm
+      5.4938*eV   13.8125*mm
+      5.58197*eV  12.5541*mm
+      5.67015*eV  11.4277*mm
+      5.75833*eV  10.4166*mm
+      5.8465*eV   9.50928*mm
+      5.93468*eV  8.69176*mm
+      6.02286*eV  7.95608*mm
+      6.11103*eV  7.29168*mm
+      6.19921*eV  6.69064*mm
+      "/>
+    <matrix name="ABSLENGTH__Aerogel_DRICH" coldim="2" values="
+      1.87855*eV  140.000*mm
+      1.96673*eV  141.973*mm
+      2.05490*eV  143.776*mm
+      2.14308*eV  145.431*mm
+      2.23126*eV  146.955*mm
+      2.31943*eV  148.364*mm
+      2.40761*eV  149.669*mm
+      2.49579*eV  150.882*mm
+      2.58396*eV  152.012*mm
+      2.67214*eV  153.067*mm
+      2.76032*eV  154.055*mm
+      2.84849*eV  154.982*mm
+      2.93667*eV  155.854*mm
+      3.02485*eV  156.674*mm
+      3.11302*eV  157.448*mm
+      3.20120*eV  158.180*mm
+      3.28938*eV  158.872*mm
+      3.37755*eV  159.528*mm
+      3.46573*eV  160.150*mm
+      3.55391*eV  160.742*mm
+      3.64208*eV  147.916*mm
+      3.73026*eV  128.139*mm
+      3.81844*eV  111.378*mm
+      3.90661*eV   97.121*mm
+      3.99479*eV   84.948*mm
+      4.08297*eV   74.518*mm
+      4.17114*eV   65.552*mm
+      4.25932*eV   57.819*mm
+      4.34750*eV   51.130*mm
+      4.43567*eV   45.327*mm
+      4.52385*eV   40.278*mm
+      4.61203*eV   35.873*mm
+      4.70020*eV   32.019*mm
+      4.78838*eV   28.641*mm
+      4.87656*eV   25.670*mm
+      4.96473*eV   23.054*mm
+      5.05291*eV   20.742*mm
+      5.14109*eV   18.698*mm
+      5.22927*eV   16.884*mm
+      5.31744*eV   15.272*mm
+      5.40562*eV   13.837*mm
+      5.49380*eV   12.557*mm
+      5.58197*eV   11.413*mm
+      5.67015*eV   10.389*mm
+      5.75833*eV    9.470*mm
+      5.84650*eV    8.645*mm
+      5.93468*eV    7.902*mm
+      6.02286*eV    7.233*mm
+      6.11103*eV    6.629*mm
+      6.19921*eV    6.082*mm
+      "/>
+    <matrix name="RAYLEIGH__Aerogel_DRICH_OLD" coldim="2" values="
+      1.87855*eV  309.218*mm
+      1.96673*eV  257.383*mm
+      2.0549*eV   215.968*mm
+      2.14308*eV  182.559*mm
+      2.23126*eV  155.367*mm
+      2.31943*eV  133.053*mm
+      2.40761*eV  114.606*mm
+      2.49579*eV  99.2482*mm
+      2.58396*eV  86.3795*mm
+      2.67214*eV  75.5291*mm
+      2.76032*eV  66.3313*mm
+      2.84849*eV  58.4918*mm
+      2.93667*eV  51.777*mm
+      3.02485*eV  45.998*mm
+      3.11302*eV  41.0045*mm
+      3.2012*eV   36.6696*mm
+      3.28938*eV  32.8931*mm
+      3.37755*eV  29.5904*mm
+      3.46573*eV  26.6917*mm
+      3.55391*eV  24.1402*mm
+      3.64208*eV  21.8856*mm
+      3.73026*eV  19.8884*mm
+      3.81844*eV  18.1144*mm
+      3.90661*eV  16.533*mm
+      3.99479*eV  15.1206*mm
+      4.08297*eV  13.856*mm
+      4.17114*eV  12.7208*mm
+      4.25932*eV  11.7005*mm
+      4.3475*eV   10.7791*mm
+      4.43567*eV  9.94752*mm
+      4.52385*eV  9.1938*mm
+      4.61203*eV  8.51136*mm
+      4.7002*eV   7.88964*mm
+      4.78838*eV  7.32468*mm
+      4.87656*eV  6.80988*mm
+      4.96473*eV  6.33864*mm
+      5.05291*eV  5.907*mm
+      5.14109*eV  5.51232*mm
+      5.22927*eV  5.14932*mm
+      5.31744*eV  4.81668*mm
+      5.40562*eV  4.51044*mm
+      5.4938*eV   4.22796*mm
+      5.58197*eV  3.9666*mm
+      5.67015*eV  3.72504*mm
+      5.75833*eV  3.50196*mm
+      5.8465*eV   3.29604*mm
+      5.93468*eV  3.10464*mm
+      6.02286*eV  2.92644*mm
+      6.11103*eV  2.76144*mm
+      6.19921*eV  2.607*mm
+      "/>
+    <matrix name="RAYLEIGH__Aerogel_DRICH" coldim="2" values="
+      1.87855*eV  281.107*mm
+      1.96673*eV  233.984*mm
+      2.05490*eV  196.334*mm
+      2.14308*eV  165.962*mm
+      2.23126*eV  141.242*mm
+      2.31943*eV  120.958*mm
+      2.40761*eV  104.188*mm
+      2.49579*eV   90.226*mm
+      2.58396*eV   78.527*mm
+      2.67214*eV   68.663*mm
+      2.76032*eV   60.301*mm
+      2.84849*eV   53.174*mm
+      2.93667*eV   47.070*mm
+      3.02485*eV   41.816*mm
+      3.11302*eV   37.277*mm
+      3.20120*eV   33.336*mm
+      3.28938*eV   29.903*mm
+      3.37755*eV   26.900*mm
+      3.46573*eV   24.265*mm
+      3.55391*eV   21.946*mm
+      3.64208*eV   19.896*mm
+      3.73026*eV   18.080*mm
+      3.81844*eV   16.468*mm
+      3.90661*eV   15.030*mm
+      3.99479*eV   13.746*mm
+      4.08297*eV   12.596*mm
+      4.17114*eV   11.564*mm
+      4.25932*eV   10.637*mm
+      4.34750*eV    9.799*mm
+      4.43567*eV    9.043*mm
+      4.52385*eV    8.358*mm
+      4.61203*eV    7.738*mm
+      4.70020*eV    7.172*mm
+      4.78838*eV    6.659*mm
+      4.87656*eV    6.191*mm
+      4.96473*eV    5.762*mm
+      5.05291*eV    5.370*mm
+      5.14109*eV    5.011*mm
+      5.22927*eV    4.681*mm
+      5.31744*eV    4.379*mm
+      5.40562*eV    4.100*mm
+      5.49380*eV    3.844*mm
+      5.58197*eV    3.606*mm
+      5.67015*eV    3.386*mm
+      5.75833*eV    3.184*mm
+      5.84650*eV    2.996*mm
+      5.93468*eV    2.822*mm
+      6.02286*eV    2.660*mm
+      6.11103*eV    2.510*mm
+      6.19921*eV    2.370*mm
+      "/>
+    <!-- dRICh acrylic -->
+    <matrix name="RINDEX__Acrylic_DRICH" coldim="2" values="
+      4.13281*eV  1.5017
+      4.22099*eV  1.5017
+      4.30916*eV  1.5017
+      4.39734*eV  1.5017
+      4.48552*eV  1.5017
+      4.57369*eV  1.5017
+      4.66187*eV  1.5017
+      4.75005*eV  1.5017
+      4.83822*eV  1.5017
+      4.9264*eV   1.5017
+      5.01458*eV  1.5017
+      5.10275*eV  1.5017
+      5.19093*eV  1.5017
+      5.27911*eV  1.5017
+      5.36728*eV  1.5017
+      5.45546*eV  1.5017
+      5.54364*eV  1.5017
+      5.63181*eV  1.5017
+      5.71999*eV  1.5017
+      5.80817*eV  1.5017
+      5.89634*eV  1.5017
+      5.98452*eV  1.5017
+      6.0727*eV   1.5017
+      6.16087*eV  1.5017
+      6.24905*eV  1.5017
+      6.33723*eV  1.5017
+      6.4254*eV   1.5017
+      6.51358*eV  1.5017
+      6.60176*eV  1.5017
+      6.68993*eV  1.5017
+      6.77811*eV  1.5017
+      6.86629*eV  1.5017
+      6.95446*eV  1.5017
+      7.04264*eV  1.5017
+      7.13082*eV  1.5017
+      7.21899*eV  1.5017
+      7.30717*eV  1.5017
+      7.39535*eV  1.5017
+      7.48353*eV  1.5017
+      7.5717*eV   1.5017
+      7.65988*eV  1.5017
+      7.74806*eV  1.5017
+      7.83623*eV  1.5017
+      7.92441*eV  1.5017
+      8.01259*eV  1.5017
+      8.10076*eV  1.5017
+      8.18894*eV  1.5017
+      8.27712*eV  1.5017
+      8.36529*eV  1.5017
+      8.45347*eV  1.5017
+      "/>
+    <matrix name="ABSLENGTH__Acrylic_DRICH" coldim="2" values="
+      4.13281*eV  82.0704*mm
+      4.22099*eV  36.9138*mm
+      4.30916*eV  13.3325*mm
+      4.39734*eV  5.03627*mm
+      4.48552*eV  2.3393*mm
+      4.57369*eV  1.36177*mm
+      4.66187*eV  0.933192*mm
+      4.75005*eV  0.708268*mm
+      4.83822*eV  0.573082*mm
+      4.9264*eV   0.483641*mm
+      5.01458*eV  0.420282*mm
+      5.10275*eV  0.373102*mm
+      5.19093*eV  0.33662*mm
+      5.27911*eV  0.307572*mm
+      5.36728*eV  0.283902*mm
+      5.45546*eV  0.264235*mm
+      5.54364*eV  0.247641*mm
+      5.63181*eV  0.233453*mm
+      5.71999*eV  0.221177*mm
+      5.80817*eV  0.210456*mm
+      5.89634*eV  0.201012*mm
+      5.98452*eV  0.192627*mm
+      6.0727*eV   0.185134*mm
+      6.16087*eV  0.178399*mm
+      6.24905*eV  0.172309*mm
+      6.33723*eV  0.166779*mm
+      6.4254*eV   0.166779*mm
+      6.51358*eV  0.166779*mm
+      6.60176*eV  0.166779*mm
+      6.68993*eV  0.166779*mm
+      6.77811*eV  0.166779*mm
+      6.86629*eV  0.166779*mm
+      6.95446*eV  0.166779*mm
+      7.04264*eV  0.166779*mm
+      7.13082*eV  0.166779*mm
+      7.21899*eV  0.166779*mm
+      7.30717*eV  0.166779*mm
+      7.39535*eV  0.166779*mm
+      7.48353*eV  0.166779*mm
+      7.5717*eV   0.166779*mm
+      7.65988*eV  0.166779*mm
+      7.74806*eV  0.166779*mm
+      7.83623*eV  0.166779*mm
+      7.92441*eV  0.166779*mm
+      8.01259*eV  0.166779*mm
+      8.10076*eV  0.166779*mm
+      8.18894*eV  0.166779*mm
+      8.27712*eV  0.166779*mm
+      8.36529*eV  0.166779*mm
+      8.45347*eV  0.166779*mm
+      "/>
+    <!-- END dRICh optical properties -->
+  </properties>
+  <materials>
+    <material name="AirOptical">
+      <D type="density" unit="g/cm3" value="0.0012"/>
+      <fraction n="0.754" ref="N"/>
+      <fraction n="0.234" ref="O"/>
+      <fraction n="0.012" ref="Ar"/>
+      <property name="RINDEX" ref="RINDEX__Air"/>
+      <property name="ABSLENGTH"               coldim="2" values="1*eV  200*m  5*eV  200*m"/>
+    </material>
+    <material name="VacuumOptical">
+      <D type="density" unit="g/cm3" value="0.0000000001"/>
+      <fraction n="0.754" ref="N"/>
+      <fraction n="0.234" ref="O"/>
+      <fraction n="0.012" ref="Ar"/>
+      <property name="RINDEX" ref="RINDEX__Vacuum"/>
+      <property name="ABSLENGTH"               coldim="2" values="1*eV  2000*m  5*eV  2000*m"/>
+    </material>
+    <material name="N2cherenkov">
+      <D type="density" value="0.00125" unit="g/cm3"/>
+      <composite n="1" ref="N"/>
+      <property name="RINDEX"  ref="RINDEX__N2"/>
+    </material>
+    <material name="PyrexGlassOptical">
+      <D type="density" value="2.23" unit="g/cm3"/>
+      <fraction n="0.806" ref="SiliconOxide"/>
+      <fraction n="0.130" ref="BoronOxide"/>
+      <fraction n="0.040" ref="SodiumOxide"/>
+      <fraction n="0.023" ref="AluminumOxide"/>
+      <property name="RINDEX" ref="RINDEX__Pyrex"/>
+      <property name="ABSLENGTH" ref="ABSLENGTH__Pyrex"/>
+    </material>
+    <material name="AerogelOptical">
+      <D value="0.2" unit="g / cm3"/>
+      <fraction n="0.625" ref="SiliconOxide"/>
+      <fraction n="0.374" ref="SiliconOxide"/>
+      <fraction n="0.1"   ref="C"/>
+      <property name="RINDEX" ref="RINDEX__Aerogel"/>
+      <property name="ABSLENGTH" ref="ABSLENGTH__Aerogel"/>
+    </material>
+    <material name="AcrylicOptical">
+      <D type="density" value="1.18" unit="g/cm3"/>
+      <composite n="5" ref="C"/>
+      <composite n="2" ref="O"/>
+      <composite n="8" ref="H"/>
+      <property name="RINDEX" ref="RINDEX__Acrylic"/>
+      <property name="ABSLENGTH" ref="ABSLENGTH__Acrylic"/>
+    </material>
+    <!-- BEGIN dRICh and pfRICh material definitions -->
+    <material name="C2F6_DRICH">
+      <D type="density" value="0.005734" unit="g/cm3"/>
+      <composite n="2" ref="C"/>
+      <composite n="6" ref="F"/>
+      <property name="RINDEX"    ref="RINDEX__C2F6_DRICH"/>
+      <property name="ABSLENGTH" ref="ABSLENGTH__C2F6_DRICH"/>
+    </material>
+    <material name="C4F10_PFRICH">
+      <D type="density" value="0.009935" unit="g/cm3"/>
+      <composite n="4" ref="C"/>
+      <composite n="10" ref="F"/>
+      <property name="RINDEX"    ref="RINDEX__C4F10_PFRICH"/>
+      <property name="ABSLENGTH" ref="ABSLENGTH__C4F10_PFRICH"/>
+    </material>
+    <material name="Aerogel_DRICH_OLD">
+      <D type="density" value="0.100" unit="g/cm3"/>
+      <comment> n_air = [dens(Si02)-dens(aerogel)] / [dens(Si02)-dens(Air) ] </comment>
+      <fraction n="    (2.32-0.1) / (2.32-0.0012)" ref="Air"/>
+      <fraction n="1 - (2.32-0.1) / (2.32-0.0012)" ref="SiliconDioxide"/>
+      <property name="RINDEX"    ref="RINDEX__Aerogel_DRICH_OLD"/>
+      <property name="ABSLENGTH" ref="ABSLENGTH__Aerogel_DRICH_OLD"/>
+      <property name="RAYLEIGH"  ref="RAYLEIGH__Aerogel_DRICH_OLD"/>
+    </material>
+    <material name="Aerogel_DRICH">
+      <D type="density" value="0.110" unit="g/cm3"/>
+      <comment> n_air = [dens(Si02)-dens(aerogel)] / [dens(Si02)-dens(Air) ] </comment>
+      <fraction n="    (2.32-0.11) / (2.32-0.0012)" ref="Air"/>
+      <fraction n="1 - (2.32-0.11) / (2.32-0.0012)" ref="SiliconDioxide"/>
+      <property name="RINDEX"    ref="RINDEX__Aerogel_DRICH"/>
+      <property name="ABSLENGTH" ref="ABSLENGTH__Aerogel_DRICH"/>
+      <property name="RAYLEIGH"  ref="RAYLEIGH__Aerogel_DRICH"/>
+    </material>
+    <material name="Acrylic_DRICH">
+      <D type="density" value="1.19" unit="g/cm3"/>
+      <comment> TO BE IMPROVED </comment>
+      <fraction n="0.99" ref="Plexiglass"/>
+      <fraction n="0.01" ref="PolyvinylAcetate"/>
+      <property name="RINDEX"    ref="RINDEX__Acrylic_DRICH"/>
+      <property name="ABSLENGTH" ref="ABSLENGTH__Acrylic_DRICH"/>
+    </material>
+    <!-- END dRICh material definitions -->
+    <material name="QuartzOptical">
+      <D type="density" value="2.2" unit="g/cm3"/>
+      <composite n="1" ref="Si"/>
+      <composite n="2" ref="O"/>
+      <property name="RINDEX" ref="RINDEX__DIRCQuartz"/>
+      <property name="ABSLENGTH" ref="ABSLENGTH__DIRCQuartz"/>
+    </material>
+    <material name="EpotekOptical">
+      <D type="density" value="1.2" unit="g/cm3"/>
+      <composite n="5" ref="H"/>
+      <composite n="3" ref="C"/>
+      <composite n="2" ref="O"/>
+      <property name="RINDEX" ref="RINDEX__DIRCEpotek"/>
+      <property name="ABSLENGTH" ref="ABSLENGTH__DIRCEpotek"/>
+      <!-- G4Material *Epotek = new G4Material("Epotek", density = 1.2 * g / cm3, ncomponents = 3);
+      Epotek->AddElement(C, natoms = 3);
+      Epotek->AddElement(H, natoms = 5);
+      Epotek->AddElement(O, natoms = 2);-->
+    </material>
+    <material name="Nlak33aOptical">
+      <D type="density" value="4.220" unit="g/cm3"/>
+      <composite n="1" ref="Si"/>
+      <composite n="2" ref="O"/>
+      <property name="RINDEX" ref="RINDEX__DIRCNlak33a"/>
+      <property name="ABSLENGTH" ref="ABSLENGTH__DIRCNlak33a"/>
+      <!--
+        Nlak33aMaterial = new G4Material("Nlak33a", density = 4.220 * g / cm3, ncomponents = 2);
+        Nlak33aMaterial->AddElement(Si, natoms = 1);
+        Nlak33aMaterial->AddElement(O, natoms = 2);
+      -->
+    </material>
+  </materials>
+  <surfaces>
+    <opticalsurface finish="polished" model="glisur" name="MirrorOpticalSurface" type="dielectric_metal" value="0">
+      <property name="REFLECTIVITY" ref="REFLECTIVITY_mirror"/>
+      <property name="RINDEX"       coldim="2" values="1.034*eV  1.5   4.136*eV  1.5"/>
+      <!--<property name="EFFICIENCY"   ref="EFFICIENCY0x8b77240"/>-->
+    </opticalsurface>
+    <!--
+    <opticalsurface name="mirror2" finish="polished" model="glisur" type="dielectric_dielectric">
+      <property name="REFLECTIVITY"            coldim="2" values="1.034*eV  0.8   4.136*eV  0.9"/>
+      <property name="EFFICIENCY"              coldim="2" values="2.034*eV  0.8   4.136*eV  1.0"/>
+      <property name="RINDEX"                  coldim="2" values="1.034*eV  1.5   4.136*eV  1.5"/>
+    </opticalsurface>
+    -->
+
+    <opticalsurface finish="polished" model="unified" name="MRICH_MirrorOpticalSurface" type="dielectric_metal" value="0">
+    </opticalsurface>
+    <opticalsurface finish="polished" model="unified" name="MRICH_LensOpticalSurface" type="dielectric_dielectric" value="0">
+      <property name="REFLECTIVITY"            coldim="2" values="1240*eV/1100  0.08   1240*eV/400  0.08"/>
+      <!--
+      <property name="RINDEX"                  coldim="2" values="2.034*eV  1.56  4.136*eV  1.56"/>
+      <property name="SPECULARLOBECONSTANT"    coldim="2" values="2.034*eV  0.3   4.136*eV  0.3 "/>
+      <property name="SPECULARSPIKECONSTANT"   coldim="2" values="2.034*eV  0.2   4.136*eV  0.2 "/>
+      <property name="BACKSCATTERCONSTANT"     coldim="2" values="2.034*eV  0.2   4.136*eV  0.2 "/>
+      -->
+    </opticalsurface>
+
+    <opticalsurface finish="polished" model="unified" name="MRICH_PhotoSensorOpticalSurface" type="dielectric_dielectric" value="0">
+      <!--
+      <property name="RINDEX"                  coldim="2" values="2.034*eV  1.35  4.136*eV  1.40"/>
+      <property name="SPECULARLOBECONSTANT"    coldim="2" values="2.034*eV  0.3   4.136*eV  0.3 "/>
+      <property name="SPECULARSPIKECONSTANT"   coldim="2" values="2.034*eV  0.2   4.136*eV  0.2 "/>
+      <property name="BACKSCATTERCONSTANT"     coldim="2" values="2.034*eV  0.2   4.136*eV  0.2 "/>
+      -->
+    </opticalsurface>
+
+    <opticalsurface finish="polished" model="unified" name="MRICH_AerogelOpticalSurface" type="dielectric_dielectric" value="0">
+      <!--
+      <property name="RINDEX"                  coldim="2" values="2.034*eV  1.010  4.136*eV  1.010"/>
+      <property name="SPECULARLOBECONSTANT"    coldim="2" values="2.034*eV  0.3   4.136*eV  0.3 "/>
+      <property name="SPECULARSPIKECONSTANT"   coldim="2" values="2.034*eV  0.2   4.136*eV  0.2 "/>
+      <property name="BACKSCATTERCONSTANT"     coldim="2" values="2.034*eV  0.2   4.136*eV  0.2 "/>
+      -->
+    </opticalsurface>
+
+    <!-- BEGIN dRICh surface definitions -->
+    <opticalsurface name="MirrorSurface_DRICH" model="unified" finish="polishedfrontpainted" type="dielectric_dielectric">
+      <property name="REFLECTIVITY" coldim="2" values="
+        2.04358*eV  0.867812
+        2.0664*eV   0.865156
+        2.09046*eV  0.863906
+        2.14023*eV  0.86375
+        2.16601*eV  0.864062
+        2.20587*eV  0.864531
+        2.23327*eV  0.864375
+        2.26137*eV  0.865625
+        2.31972*eV  0.865313
+        2.35005*eV  0.865
+        2.38116*eV  0.864844
+        2.41313*eV  0.863828
+        2.44598*eV  0.863516
+        2.47968*eV  0.863125
+        2.53081*eV  0.862187
+        2.58354*eV  0.861719
+        2.6194*eV   0.861328
+        2.69589*eV  0.861016
+        2.73515*eV  0.861094
+        2.79685*eV  0.861602
+        2.86139*eV  0.862305
+        2.95271*eV  0.86375
+        3.04884*eV  0.865586
+        3.12665*eV  0.867383
+        3.2393*eV   0.870059
+        3.39218*eV  0.874199
+        3.52508*eV  0.878105
+        3.66893*eV  0.88252
+        3.82396*eV  0.887617
+        3.99949*eV  0.893721
+        4.13281*eV  0.898184
+        4.27679*eV  0.902744
+        4.48244*eV  0.907837
+        4.65057*eV  0.9102
+        4.89476*eV  0.909316
+        5.02774*eV  0.906174
+        5.16816*eV  0.900422
+        5.31437*eV  0.891521
+        5.63821*eV  0.859954
+        5.90401*eV  0.820831
+        6.19921*eV  0.762502
+        "/>
+    </opticalsurface>
+    <opticalsurface name="SensorSurface_DRICH" model="glisur" finish="polished" type="dielectric_metal">
+      <property name="EFFICIENCY" coldim="2" values="
+        1*eV  1
+        4*eV  1
+        7*eV  1
+        "/>
+      <property name="IMAGINARYRINDEX" coldim="2" values="
+        1*eV  1.69
+        4*eV  1.69
+        7*eV  1.69
+        "/>
+      <property name="REALRINDEX" coldim="2" values="
+        1*eV  1.92
+        4*eV  1.92
+        7*eV  1.92
+        "/>
+    </opticalsurface>
+    <!-- END dRICh surface definitions -->
+
+  </surfaces>
+</lccdd>

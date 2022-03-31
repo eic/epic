@@ -1,0 +1,94 @@
+#!/bin/bash
+
+#export DAWN_PS_PREVIEWER="derp"
+
+function print_the_help {
+  echo "USAGE: $0 <PRIM_FILE>  "
+  echo "  OPTIONS: "
+  echo "            -t,--tag           filename tag (default: view1)"
+  exit 
+}
+
+FILE_TAG="view20"
+INPUT_FILE="../../g4_0000.prim"
+
+
+POSITIONAL=()
+while [[ $# -gt 0 ]]
+do
+  key="$1"
+
+  case $key in
+    -h|--help)
+      shift # past argument
+      print_the_help
+      ;;
+    -t|--tag)
+      FILE_TAG="$2"
+      shift # past argument
+      shift # past value
+      ;;
+    -i|--input)
+      INPUT_FILE="$2"
+      shift # past argument
+      shift # past value
+      ;;
+    *)    # unknown option
+      #POSITIONAL+=("$1") # save it in an array for later
+      echo "unknown option $1"
+      print_the_help
+      shift # past argument
+      ;;
+  esac
+done
+set -- "${POSITIONAL[@]}" # restore positional parameters
+
+
+# Top view with a thin slice down the middle
+dawncut 0 1 0 1 ${INPUT_FILE} ${FILE_TAG}_top_temp0.prim   
+dawncut 0 -1 0 1 ${FILE_TAG}_top_temp0.prim  ${FILE_TAG}_top.prim
+../../bin/dawn_tweak --mag 2 --draw 1 --theta 90 --phi 90
+dawn -d ${FILE_TAG}_top.prim 
+ps2pdf ${FILE_TAG}_top.eps ${FILE_TAG}_top_full.pdf
+gs -o ${FILE_TAG}_top.pdf -sDEVICE=pdfwrite \
+  -c "[/CropBox [51 250 550 590] /PAGES pdfmark" \
+  -f ${FILE_TAG}_top_full.pdf
+pdftoppm ${FILE_TAG}_top.pdf ${FILE_TAG}_top -png -singlefile -cropbox -thinlinemode solid -aaVector yes
+
+# Side view (lines)
+dawncut 1 0 0 1 ${INPUT_FILE} ${FILE_TAG}_temp0.prim 
+dawncut -1 0 0 1 ${FILE_TAG}_temp0.prim  ${FILE_TAG}.prim
+../../bin/dawn_tweak --mag 1 --draw 1 --theta 180 --phi 90 
+dawn -d ${FILE_TAG}.prim
+ps2pdf ${FILE_TAG}.eps ${FILE_TAG}_full.pdf
+gs -o ${FILE_TAG}.pdf -sDEVICE=pdfwrite \
+  -c "[/CropBox [51 250 550 590] /PAGES pdfmark" \
+  -f ${FILE_TAG}_full.pdf
+pdftoppm ${FILE_TAG}.pdf ${FILE_TAG} -png -singlefile -cropbox -thinlinemode solid -aaVector yes
+
+#npdet_info print EcalEndcapN_z0 --value-only ../../athena.xml
+#180.5 cm
+zcut=$(npdet_info print EcalEndcapN_z0 --value-only ${DETECTOR_PATH}/athena.xml )
+NMOD1=$(npdet_info print EcalEndcapN_NModules_Sector1 --value-only ${DETECTOR_PATH}/calorimeters.xml )
+NMOD2=$(npdet_info print EcalEndcapN_NModules_Sector2 --value-only ${DETECTOR_PATH}/calorimeters.xml )
+
+echo "NMOD1 = ${NMOD1}"
+echo "NMOD2 = ${NMOD2}"
+echo "zcut  = ${zcut}"
+
+# Top view with a thin slice down the middle
+dawncut 0 0  1 -1800 ${INPUT_FILE} ${FILE_TAG}_endcapN_temp0.prim   
+dawncut 0 0 -1 2200 ${FILE_TAG}_endcapN_temp0.prim  ${FILE_TAG}_endcapN.prim
+../../bin/dawn_tweak --mag 5 --draw 3 --theta 180 --phi 0
+dawn -d ${FILE_TAG}_endcapN.prim 
+ps2pdf ${FILE_TAG}_endcapN.eps ${FILE_TAG}_endcapN_full.pdf
+gs -o ${FILE_TAG}_endcapN.pdf -sDEVICE=pdfwrite \
+  -c "[/CropBox [50 170 550 670] /PAGES pdfmark" \
+  -f ${FILE_TAG}_endcapN_full.pdf
+pdftoppm ${FILE_TAG}_endcapN.pdf ${FILE_TAG}_endcapN -png -singlefile -cropbox -thinlinemode solid \
+         -aaVector yes -r 1200
+convert -pointsize 180 -fill black -draw "text 200,200 \"$NMOD1 Crystals\"" \
+        ${FILE_TAG}_endcapN.png ${FILE_TAG}_endcapN.png
+convert -pointsize 180 -fill black -draw "text 200,400 \"$NMOD2 Glasses\"" \
+        ${FILE_TAG}_endcapN.png ${FILE_TAG}_endcapN.png
+

@@ -1,0 +1,8 @@
+#dawn_view_13:detector:
+#  extends: .views
+#  script:
+#    - ./bin/make_dawn_views -t view13 -d scripts/view13 -D
+#dawn_view_14:detector:
+#  extends: .views
+#  script:
+#    - ./bin/make_dawn_views -t view14 -d scripts/view14 -D

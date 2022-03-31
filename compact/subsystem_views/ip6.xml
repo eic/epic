@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<lccdd>
+  <define>
+    <constant name="Pi" value="3.14159265359"/>
+    <constant name="world_side" value="30*m"/>
+    <constant name="world_x" value="world_side"/>
+    <constant name="world_y" value="world_side"/>
+    <constant name="world_z" value="100*m"/>
+    <constant name="BeamPipeB0_ID" value="1"/>
+    <constant name="BeamPipe_ID" value="2"/>
+
+    <include ref="ip6/ip6_defs.xml" />
+    <comment> Change this to 275/100/41 to change the field setup</comment>
+    <include ref="ip6/far_forward_fields_275.xml" />
+
+    <comment> 
+      
+      =====================================
+      (150-169) Far Forward  Detectors
+      =====================================
+
+      Forward B0 Tracker    ID: 150 - 153
+      Forward Roman Pot     ID: 155 - 158
+
+      Zero Degree Cal. Ecal ID: 163
+      Zero Degree Cal. Hcal ID: 164
+
+    </comment>
+    <constant name="B0Tracker_Station_1_ID"          value="150"/>
+    <constant name="B0Tracker_Station_2_ID"          value="151"/>
+    <constant name="B0Tracker_Station_3_ID"          value="152"/>
+    <constant name="B0Tracker_Station_4_ID"          value="153"/>
+    <constant name="B0Preshower_Station_1_ID"        value="154"/>
+    <constant name="ForwardRomanPot_Station_1_ID"    value="155"/>
+    <constant name="ForwardRomanPot_Station_2_ID"    value="156"/>
+
+    <constant name="BeamOrbitTracker_station_1_ID"    value="157"/>
+    <constant name="BeamOrbitTracker_station_2_ID"    value="158"/>    
+	  <constant name="ForwardOffMTracker_station_1_ID" value="159"/>
+    <constant name="ForwardOffMTracker_station_2_ID" value="160"/>
+    <constant name="ForwardOffMTracker_station_3_ID" value="161"/>
+    <constant name="ForwardOffMTracker_station_4_ID" value="162"/>
+    <constant name="ffi_ZDC_ECAL_ID"       value="163"/>
+    <constant name="ffi_ZDC_HCAL_ID"       value="164"/>
+
+	<constant name="VacuumMagnetElement_1_ID" value="165"/>
+
+    <constant name="tracker_region_zmax" value="10*m"/>
+    <constant name="tracker_region_rmax" value="1*m"/>
+    
+
+    <comment> 
+        =====================================
+      (170-189) Forward Beamline Magnets
+        =====================================
+    </comment>
+
+    <comment> 
+        =====================================
+      (190-199) Backward Beamline Magnets
+        =====================================
+    </comment>
+
+  </define>
+
+  <includes>
+    <gdmlFile ref="ip6/elements.xml"/>
+    <gdmlFile ref="ip6/materials.xml"/>
+  </includes>
+
+  <display>
+  <include ref="compact/colors.xml" />
+  <include ref="compact/display.xml" />
+  </display>
+
+  <include ref="ip6/beampipe.xml" />
+  <include ref="ip6/forward_ion_beamline.xml" />
+  <include ref="ip6/beampipe_hadron_B0.xml" />
+  <include ref="ip6/B0_tracker.xml"/>
+  <include ref="ip6/B0_preshower.xml"/>
+  <include ref="ip6/far_forward_offM_tracker.xml"/>
+  <include ref="ip6/far_forward_detectors.xml"/>
+  <include ref="ip6/roman_pots_eRD24_design.xml"/>
+  <!--
+    Old BOM not used
+  <include ref="ip6/beam_orbit_tracker.xml"/>
+  -->
+  <include ref="ip6/inner_vacuum_FF_magnets.xml"/>
+
+  <!--
+    Magnet file not used for some reason
+  <include ref="ip6/magnets.xml" />
+  -->
+  <fields>
+    <field name="B0PF_Magnet" type="MultipoleMagnet">
+      <position x="B0PF_XPosition" y="0" z="B0PF_CenterPosition"/>
+      <rotation x="0" y="B0PF_RotationAngle" z="0"/>
+      <shape type="Tube" rmin="0.0" rmax="B0PF_InnerRadius" dz="B0PF_Length*0.5"/>
+      <coefficient coefficient="B0PF_Bmax" skew="0.0*tesla"/>
+      <coefficient coefficient="B0PF_GradientMax" skew="0.0*tesla/m"/>
+    </field>
+    <field name="B0APF_Magnet" type="MultipoleMagnet">
+      <position x="B0APF_XPosition" y="0" z="B0APF_CenterPosition"/>
+      <rotation x="0" y="B0APF_RotationAngle" z="0"/>
+      <shape type="Tube" rmin="0.0" rmax="B0APF_InnerRadius" dz="B0APF_Length*0.5"/>
+      <coefficient coefficient="B0APF_Bmax" skew="0.0*tesla"/>
+	  <coefficient coefficient="B0APF_GradientMax" skew="0.0*tesla"/>
+    </field>
+    <field name="Q1APF_Magnet" type="MultipoleMagnet">
+      <position x="Q1APF_XPosition" y="0" z="Q1APF_CenterPosition"/>
+      <rotation x="0" y="Q1APF_RotationAngle" z="0"/>
+      <shape type="Tube" rmin="0.0" rmax="Q1APF_InnerRadius" dz="Q1APF_Length*0.5"/>
+      <coefficient coefficient="Q1APF_Bmax" skew="0.0*tesla"/>
+      <coefficient coefficient="Q1APF_GradientMax" skew="0.0*tesla/m"/>
+    </field>
+    <field name="Q1BPF_Magnet" type="MultipoleMagnet">
+      <position x="Q1BPF_XPosition" y="0" z="Q1BPF_CenterPosition"/>
+      <rotation x="0" y="Q1BPF_RotationAngle" z="0"/>
+      <shape type="Tube" rmin="0.0" rmax="Q1BPF_InnerRadius" dz="Q1BPF_Length*0.5"/>
+      <coefficient coefficient="Q1BPF_Bmax" skew="0.0*tesla"/>
+      <coefficient coefficient="Q1BPF_GradientMax" skew="0.0*tesla/m"/>
+    </field>
+    <field name="Q2PF_Magnet" type="MultipoleMagnet">
+      <position x="Q2PF_XPosition" y="0" z="Q2PF_CenterPosition"/>
+      <rotation x="0" y="Q2PF_RotationAngle" z="0"/>
+      <shape type="Tube" rmin="0.0" rmax="Q2PF_InnerRadius" dz="Q2PF_Length*0.5"/>
+      <coefficient coefficient="Q2PF_Bmax" skew="0.0*tesla"/>
+      <coefficient coefficient="Q2PF_GradientMax" skew="0.0*tesla/m"/>
+    </field>
+    <field name="B1PF_Magnet" type="MultipoleMagnet">
+      <position x="B1PF_XPosition" y="0" z="B1PF_CenterPosition"/>
+      <rotation x="0" y="B1PF_RotationAngle" z="0"/>
+      <shape type="Tube" rmin="0.0" rmax="B1PF_InnerRadius" dz="B1PF_Length*0.5"/>
+      <coefficient coefficient="B1PF_Bmax" skew="0.0*tesla"/>
+	  <coefficient coefficient="B1PF_GradientMax" skew="0.0*tesla/m"/>
+    </field>
+    <field name="B1APF_Magnet" type="MultipoleMagnet">
+      <position x="B1APF_XPosition" y="0" z="B1APF_CenterPosition"/>
+      <rotation x="0" y="B1APF_RotationAngle" z="0"/>
+      <shape type="Tube" rmin="0.0" rmax="B1APF_InnerRadius" dz="B1APF_Length*0.5"/>
+      <coefficient coefficient="B1APF_Bmax" skew="0.0*tesla"/>
+	  <coefficient coefficient="B1APF_GradientMax" skew="0.0*tesla/m"/>
+    </field>
+    <field name="B2PF_Magnet" type="MultipoleMagnet">
+      <position x="B2PF_XPosition" y="0" z="B2PF_CenterPosition"/>
+      <rotation x="0" y="B2PF_RotationAngle" z="0"/>
+      <shape type="Tube" rmin="0.0" rmax="B2PF_InnerRadius" dz="B2PF_Length*0.5"/>
+      <coefficient coefficient="B2PF_Bmax" skew="0.0*tesla"/>
+      <coefficient coefficient="B2PF_GradientMax" skew="0.0*tesla/cm"/>
+    </field>
+  </fields>
+
+</lccdd>
