@@ -54,6 +54,9 @@ common:setup:
         echo "JUGGLER_DETECTOR_VERSION = ${CI_COMMIT_REF_NAME}"
         echo "JUGGLER_DETECTOR_VERSION=$CI_COMMIT_REF_NAME" >> juggler.env
         echo "JUGGLER_DETECTOR=$JUGGLER_DETECTOR" >> juggler.env
+        # as long as this repo is private, we need to use a deploy token to git clone it in CI
+        echo "JUGGLER_DETECTOR_DEPLOY_TOKEN_USERNAME=${DEPLOY_TOKEN_USERNAME}" >> juggler.env
+        echo "JUGGLER_DETECTOR_DEPLOY_TOKEN_PASSWORD=${DEPLOY_TOKEN_PASSWORD}" >> juggler.env
         #fi
     - source setup/bin/env.sh && ./setup/bin/install_common.sh
 
