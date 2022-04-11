@@ -101,7 +101,7 @@
       PID detectors
       -------------
   </comment>
-  <include ref="compact/pid_config_deathvalley.xml"/>
+  <include ref="compact/pid_config.xml"/>
 
 
   <comment>

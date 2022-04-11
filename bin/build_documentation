@@ -1,0 +1,90 @@
+#!/bin/bash
+
+#included files
+detector_file="./ecce.xml"
+
+#filelist=$(xmllint --format --xpath '//include/@ref' ${detector_file}   | sed 's/ref=\"//g' | sed 's/\"/\n/g' )
+#echo $filelist
+
+# Searches for included files two levels down
+get_includes() {
+  local input_file="${1}"
+  #echo ${1}
+  local filelist=$(xmllint --format --xpath '//include/@ref' ${input_file}   | sed 's/ref=\"//g' | sed 's/\"//g' )
+  for afile in $filelist ; do
+    xmllint --format --xpath '//include/@ref' ${input_file}  &> /dev/null
+    local res="$?"
+    if [ "${res}" == "0" ]  ; then
+      local subincluded=$(xmllint --format --xpath '//include/@ref' ${input_file}  2> /dev/null | sed 's/ref=\"//g' | sed 's/\"//g' )
+      filelist="${filelist} ${subincluded}"
+      #echo "sub include $afile"
+    fi
+  done
+  # <includes > <gdmlFile > <file>
+  local otherfiles=$(xmllint --format --xpath '//includes/file/@ref | //includes/gdmlFile/@ref' ${input_file}   | sed 's/ref=\"//g' | sed 's/\"/\n/g' )
+  #echo $otherfiles
+  filelist=$(echo "${filelist} ${otherfiles}" | sed 's/ /\n/g' | sort | uniq )
+  echo "$input_file $filelist"
+}
+
+
+xml_files=$(get_includes ${detector_file})
+#echo $xml_files
+
+get_doc_levels() {
+  # levels
+  local levels=0
+  for afile in $xml_files ; do
+    xmllint --format --xpath '//documentation/@level' $afile  &> /dev/null
+    local res="$?"
+    if [ "${res}" == "0" ]  ; then
+      local new_levels=$(xmllint --format --xpath '//documentation/@level' $afile  2> /dev/null  | sed 's/level=\"/ /g' | sed 's/\"//g' )
+      levels="${levels} ${new_levels}"
+    fi
+    # see if there are tags without level attribute
+    xmllint --format --xpath '//documentation[not(@level)]' $afile  &> /dev/null 
+    if [ "${?}" == "0" ] ; then 
+      #echo "DERP"
+      levels="${levels} 100"
+    fi
+  done
+  echo "$levels" | sed 's/ /\n/g' | sort  | uniq
+}
+
+all_levels=$(get_doc_levels ${xml_file_array})
+#echo " levels: "
+#echo $all_levels
+
+for alevel in $(echo ${all_levels} | sed 's/ /\n/g' | sort -n  | uniq ) ; do
+  #echo " doing level $alevel ..."
+  for afile in $(echo $xml_files | sed 's/ / \n/g') ; do
+    #echo $afile
+    #xmllint --format --xpath '//documentation[@level="'"$alevel"'"]/text()' $afile
+    level_doc=$(xmllint --format --xpath '//documentation[@level="'$alevel'"]' ${afile} 2> /dev/null )
+    if [ "$?" -eq "0" ] ;  then
+      xmllint --format --xpath '//documentation[@level="'$alevel'"]/text()' ${afile} | sed -re 's/<\/?\w+>//g' | sed 's/^[[:space:]]*#/#/g' 
+    fi
+    # sets the tags without attribute level to 100
+    xmllint --format --xpath '//documentation[not(@level)]/text()' ${afile} &> /dev/null 
+    if [ "$?" -eq "0" ] ;  then
+      if [ "$alevel" -eq "100" ] ; then
+        xmllint --format --xpath '//documentation[not(@level)]/text()' ${afile} | sed -re 's/<\/?\w+>//g' | sed 's/^[[:space:]]*#/#/g' 
+      fi
+    fi
+  done
+done
+
+
+
+#${DETECTOR_PATH}=.
+#
+#
+#xmllint --format --xpath '//
+#
+#xmllint --format --xpath '//documentation/text()' ${DETECTOR_PATH}/ecce.xml | sed -re 's/<\/?\w+>//g' | sed 's/^[[:space:]]*#/#/' | tee  doc/detector.md
+#xmllint --format --xpath '//documentation/text()' ${DETECTOR_PATH}/ip6/ip6_defs.xml | sed -re 's/<\/?\w+>//g' | sed 's/^[[:space:]]*#/#/' | tee -a doc/detector.md || true
+#for afile in ${DETECTOR_PATH}/compact/*.xml ; do
+#  xmllint --format --xpath '//documentation/text()' ${afile} | sed -re 's/<\/?\w+>//g' | sed 's/^[[:space:]]*#/#/' | tee -a doc/detector.md || true
+#done
+#
+
