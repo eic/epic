@@ -1,0 +1,24 @@
+#!/bin/bash
+
+logfile=$1
+
+# parse the verobse output of scripts/test_ACTS.cxx
+res=0
+
+nlines=$(grep -in error ${logfile} | grep -in D2A_ | wc -l)
+if [[ "$nlines" > "0" ]] ; then
+  echo " ACTS geometry error: "
+  grep -in error ${logfile} | grep -in D2A_ 
+  res="1"
+fi
+
+
+nlines=$(grep -in warn ${logfile} | grep -in D2A_ | wc -l)
+if [[ "$nlines" > "0" ]] ; then
+  echo " ACTS geometry error: "
+  grep -in warn ${logfile} | grep -in D2A_ 
+  res="1"
+fi
+
+exit ${res}
+

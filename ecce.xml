@@ -104,12 +104,12 @@
     ## Central tracking detectors
   </documentation>
 
-  <include ref="compact/tracking_config_ecce.xml"/>
+  <include ref="compact/tracking_config.xml"/>
 
   <documentation level="10">
   ### PID detectors
   </documentation>
-  <include ref="compact/pid_config_ecce.xml" />
+  <include ref="compact/pid_config.xml"/>
 
   <documentation level="10">
   ## Central calorimetry

@@ -1,0 +1,16 @@
+{
+    "ffi_zdc_ecal": {
+        "sampling_fraction": 1.0,
+        "minClusterCenterEdep": "3.*MeV",
+        "minClusterHitEdep": "0.1*MeV",
+        "localDistXY": ["50*mm", "50*mm"],
+        "splitCluster": true
+    },
+    "ffi_zdc_hcal": {
+        "sampling_fraction": 1.0,
+        "minClusterCenterEdep": "1.*MeV",
+        "minClusterHitEdep": "0.1*MeV",
+        "localDistXY": ["200*mm", "200*mm"],
+        "splitCluster": false
+    }
+}
