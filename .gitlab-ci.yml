@@ -91,19 +91,19 @@ build:simple:
   needs:
     - ["common:detector"]
 
-#include:
-#  - local: 'views/generate_prim_files.yml'
-#  - local: 'views/view1.yml'
-#  - local: 'views/view2.yml'
-#  - local: 'views/view3.yml'
-#  - local: 'views/view6.yml'
-#  - local: 'views/view7.yml'
-#  - local: 'views/view11.yml'
-#  - local: 'views/view12.yml'
-#  - local: 'views/view13.yml'
-#  - local: 'views/view14.yml'
-#  - local: 'views/view15.yml'
-#  - local: 'views/view20.yml'
+include:
+  - local: 'views/generate_prim_files.yml'
+  - local: 'views/view1.yml'
+  - local: 'views/view2.yml'
+  - local: 'views/view3.yml'
+  - local: 'views/view6.yml'
+  - local: 'views/view7.yml'
+  - local: 'views/view11.yml'
+  - local: 'views/view12.yml'
+  - local: 'views/view13.yml'
+  - local: 'views/view14.yml'
+  - local: 'views/view15.yml'
+  - local: 'views/view20.yml'
 
 dump_geometry:
   stage: test
@@ -168,17 +168,17 @@ detector_documentation:
 report:
   stage: finalize
   needs: 
-    #- view_01
-    #- view_02
-    #- view_03
-    #- view_06
-    #- view_07
-    #- view_11
-    #- view_12
-    #- view_13
-    #- view_14
-    #- view_15
-    #- view_20
+    - view_01
+    - view_02
+    - view_03
+    - view_06
+    - view_07
+    - view_11
+    - view_12
+    - view_13
+    - view_14
+    - view_15
+    - view_20
     - dump_constants
     - dump_geometry
     - convert_to_gdml
