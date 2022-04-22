@@ -72,9 +72,9 @@ args.compact = os.path.abspath(args.compact)
 macro = os.path.abspath(macro)
 
 # adjust fiber radius to reduce the number of fibers
-compact_dir = os.path.dirname(os.path.realpath(args.compact))
-ci_ecal = os.path.join(compact_dir, 'compact', 'ci_ecal_scfi.xml')
-os.system('sed -i \'s/radius=\"EcalEndcapP_FiberRadius\"/radius=\"EcalEndcapP_FiberRadius*10\"/\' {}'.format(ci_ecal))
+#compact_dir = os.path.dirname(os.path.realpath(args.compact))
+#ci_ecal = os.path.join(compact_dir, 'compact', 'ci_ecal_scfi.xml')
+#os.system('sed -i \'s/radius=\"EcalEndcapP_FiberRadius\"/radius=\"EcalEndcapP_FiberRadius*10\"/\' {}'.format(ci_ecal))
 
 prim_file = 'g4_0000.prim'
 dawn_env = os.environ.copy()
@@ -144,7 +144,7 @@ for proc in psutil.process_iter():
         os.kill(pinfo['pid'], signal.SIGTERM)
 
 # revert the change
-os.system('sed -i \'s/radius=\"EcalEndcapP_FiberRadius*10\"/radius=\"EcalEndcapP_FiberRadius\"/\' {}'.format(ci_ecal))
+#os.system('sed -i \'s/radius=\"EcalEndcapP_FiberRadius*10\"/radius=\"EcalEndcapP_FiberRadius\"/\' {}'.format(ci_ecal))
 
 line = b'stderr outputs:\n'
 while line:

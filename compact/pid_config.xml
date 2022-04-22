@@ -3,7 +3,8 @@
 <include ref="fake_dirc.xml"/>
 <!--include ref="dirc.xml"/-->
 <include ref="drich.xml"/>
-<include ref="pfrich.xml"/>
+<!--include ref="pfrich.xml"/-->
+<include ref="mrich.xml"/>
 
 <!--include ref="tof_endcap.xml"/-->
 <include ref="tof_barrel.xml"/>

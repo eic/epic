@@ -45,6 +45,18 @@
     <fraction n="0.998" ref="Fe"/>
     <fraction n=".002" ref="C"/>
   </material>
+  <material name="Aluminum5083">
+    <D value="2.650" unit="g/cm3"/>
+    <fraction n="0.94" ref="Al"/>
+    <fraction n="0.045" ref="Mg"/>
+    <fraction n="0.007" ref="Mn"/>
+    <fraction n="0.002" ref="Fe"/>
+    <fraction n="0.002" ref="Si"/>
+    <fraction n="0.0015" ref="Cr"/>
+    <fraction n="0.00125" ref="Zn"/>
+    <fraction n="0.00075" ref="Ti"/>
+    <fraction n="0.00050" ref="Cu"/>
+  </material>
   <material name="SiliconOxide"> <!-- different density than `SiliconDioxide` -->
     <D type="density" value="2.65" unit="g/cm3"/>
     <composite n="1" ref="Si"/>
