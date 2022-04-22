@@ -38,7 +38,7 @@
 
     <constant name="EcalEndcapN_thickness" value="GlassModule_length"/>
     <constant name="EcalEndcapN_z0" value="-EcalEndcapN_zmin - EcalEndcapN_thickness/2"/>
-    <constant name="EcalEndcapNCrystal_rmax" value="40*cm"/>
+    <constant name="EcalEndcapNCrystal_rmax" value="100*cm"/> <!-- i.e. never -->
 
     <constant name="CrystalModule_distance" value="CrystalModule_width + CrystalModule_wrap"/>
     <constant name="GlassModule_distance" value="GlassModule_width + GlassModule_wrap"/>

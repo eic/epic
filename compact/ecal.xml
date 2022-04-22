@@ -13,7 +13,8 @@
 
   <include ref="ecal_backward_hybrid.xml"/>
 
-  <include ref="ecal_barrel_interlayers.xml"/>
+  <!--include ref="ecal_barrel_interlayers.xml"/-->
+  <include ref="ecal_barrel_sciglass.xml"/>
 
 </lccdd>
 

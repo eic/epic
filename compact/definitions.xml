@@ -327,24 +327,31 @@ Examples:
       When changing here, also change the include file in athena.xml.
     </documentation>
 
-    <comment>Solenoid option</comment>
+    <comment>Solenoid option (BaBar magnet)</comment>
+    <constant name="Solenoid_length"           value="3790.0*mm"/>
+    <constant name="Solenoid_rmin"             value="1420.0*mm"/>
+    <constant name="Solenoid_thickness"        value="350*mm"/>
+    <constant name="Solenoid_offset"           value="0*mm"/>
+
+    <comment>Solenoid option (ATHENA design)</comment>
+    <comment>
     <constant name="Solenoid_length"           value="3840.0*mm"/>
     <constant name="Solenoid_rmin"             value="1600.0*mm"/>
     <constant name="Solenoid_thickness"        value="455*mm"/>
     <constant name="Solenoid_offset"           value="-240*mm"/>
+    </comment>
 
-    <!--
     <comment>Helmholtz option</comment>
+    <comment>
     <constant name="Solenoid_length"           value="3840.0*mm"/>
     <constant name="Solenoid_rmin"             value="1655.0*mm"/> <comment> Larger inner bore radius </comment>
     <constant name="Solenoid_thickness"        value="640*mm"/>
     <constant name="Solenoid_offset"           value="10*mm"/>
     </comment>
-    -->
 
     <constant name="Solenoid_rmax"             value="Solenoid_rmin + Solenoid_thickness"/>
     <constant name="SolenoidForward_zmax"      value="Solenoid_length/2. + Solenoid_offset"/>
-    <constant name="SolenoidBackward_zmax"      value="Solenoid_length/2. - Solenoid_offset"/>
+    <constant name="SolenoidBackward_zmax"     value="Solenoid_length/2. - Solenoid_offset"/>
     <constant name="SolenoidBarrel_rmin"       value="Solenoid_rmin"/>
     <constant name="SolenoidBarrel_length"     value="Solenoid_length"/>
 
@@ -460,21 +467,21 @@ Service gaps in FW direction (before endcapP ECAL) and BW direction (before endc
       rmin1: rmin round electron pipe (ignoring the hadron pipe)
       rmin2: rmin around both beam pipes
     </comment>
-    <constant name="EcalEndcapN_rmin1"               value="Eta4_6_tan * EcalEndcapN_zmin" />
-    <constant name="EcalEndcapN_rmin2"               value="Eta4_1_tan * EcalEndcapN_zmin" />
-    <constant name="EcalEndcapN_rmax"               value="CentralTrackingRegion_rmax" />
+    <constant name="EcalEndcapN_rmin1"              value="Eta4_6_tan * EcalEndcapN_zmin"/>
+    <constant name="EcalEndcapN_rmin2"              value="Eta4_1_tan * EcalEndcapN_zmin"/>
+    <constant name="EcalEndcapN_rmax"               value="85*cm"/> <!-- FIXME hardcoded -->
 
-    <constant name="EcalBarrelRegion_thickness"     value="45.0*cm"/>
-    <constant name="EcalBarrel_rmin"                value="CentralTrackingRegion_rmax + BarrelPIDRegion_thickness + BarrelExtraSpace_thickness"/>
-    <constant name="EcalBarrelForward_zmax"         value="SolenoidForward_zmax"/>
-    <constant name="EcalBarrelBackward_zmax"        value="EcalEndcapN_zmin + 30*cm"/>
+    <constant name="EcalBarrelRegion_thickness"     value="50.0*cm"/>
+    <constant name="EcalBarrel_rmin"                value="CentralTrackingRegion_rmax + BarrelPIDRegion_thickness + BarrelExtraSpace_thickness - 23*cm"/> <!-- ECCE proposal: 85 cm, FIXME hardcoded spacing -->
+    <constant name="EcalBarrel_rmax"                value="EcalBarrel_rmin + EcalBarrelRegion_thickness"/>
+    <constant name="EcalBarrelForward_zmax"         value="SolenoidForward_zmax + 5.5*cm"/> <!-- ECCE proposal: 195 cm, FIXME hardcoded spacing -->
+    <constant name="EcalBarrelBackward_zmax"        value="EcalEndcapN_zmin + 179*cm"/> <!-- ECCE proposal: -389 cm, FIXME hardcoded spacing -->
     <constant name="EcalBarrel_length"              value="EcalBarrelForward_zmax + EcalBarrelBackward_zmax"/>
     <constant name="EcalBarrel_offset"              value="(EcalBarrelForward_zmax - EcalBarrelBackward_zmax)/2.0"/>
     <constant name="EcalBarrelReadout_length"       value="20*cm"/>
 
-
   <documentation level="3">
-## Special DIRC parameters (depend on the ECAL setup)
+    ## Special DIRC parameters (depend on the ECAL setup)
   </documentation>
     <constant name="DIRCReadout_length"         value="30*cm"/>
     <constant name="DIRCForward_length"         value="0*cm"/>
@@ -499,8 +506,8 @@ Service gaps in FW direction (before endcapP ECAL) and BW direction (before endc
     <comment> HcalEndcapN needs to clear the straight beampipe with 1 * crossing angle + its radius of 22.25 mm </comment>
     <constant name="HcalEndcapN_rmin"     value="max((HcalEndcapN_zmin + HcalEndcapN_length) * tan(abs(CrossingAngle)) + 22.25 * mm, 11 * cm)"/>
 
-    <constant name="HcalBarrel_thickness" value="100.0*cm "/>
-    <constant name="HcalBarrel_rmin"      value="max(Solenoid_rmax, 230*cm)"/>
+    <constant name="HcalBarrel_thickness" value="88.0*cm"/> <!-- ref: ECCE proposal -->
+    <constant name="HcalBarrel_rmin"      value="182*cm"/> <!-- ref: ECCE proposal -->
     <constant name="HcalBarrel_rmax"      value="HcalBarrel_rmin + HcalBarrel_thickness"/>
     <constant name="HcalBarrelForward_zmax" value="HcalEndcapP_zmin - ForwardServiceGap_length - EcalEndcapP_length"/>
     <constant name="HcalBarrelBackward_zmax" value="HcalEndcapN_zmin - BackwardServiceGap_length"/>
