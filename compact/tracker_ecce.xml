@@ -106,7 +106,7 @@
     </plugin>
   </plugins>
 
-  <include ref="vertex_tracker_3layers.xml"/>
-  <include ref="central_tracker_hybrid_v2.xml"/>
+  <include ref="tracker/vertex_3layers.xml"/>
+  <include ref="tracker/central_tracker_hybrid_v2.xml"/>
 
 </lccdd>

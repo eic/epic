@@ -172,6 +172,24 @@ total X0 0.24% per disk layer （4 sectors per disk):
     <constant name="InnerTrackerBarrelMod2_count"        value="floor(180.*degree/asin(InnerTrackerBarrelMod_width*cos(InnerTrackerBarrelModTilt_angle)/2/InnerTrackerBarrelMod2_rmin))+2"/>
   </define>
   <detectors>
+    <detector type="eic_TrackerSupport"
+      name="SupportCone"
+      id="84"
+    >
+      <support type="Cone"
+        name="serv_cone_dmmy"
+        vis="TrackerServiceVis"
+        rmin1="InnerTrackerBarrelSupportCone_rmin2"
+        rmax1="InnerTrackerBarrelSupportCone_rmax2"
+        rmin2="InnerTrackerBarrelSupportCone_rmin1"
+        rmax2="InnerTrackerBarrelSupportCone_rmax1" 
+        length="InnerTrackerBarrelCone_length/2"
+        thickness="0.1*cm">
+          <position x="0*cm" y="0*cm" z="-InnerTrackerBarrelCone_z" />
+          <component material="Aluminum" thickness="100*um" name="al_support_serv" />
+          <component material="Aluminum" thickness="100*um" name="al_support_serv2" />
+      </support>
+    </detector>
     <detector
       id="TrackerBarrel_0_ID"
       name="InnerTrackerBarrel"
