@@ -45,6 +45,7 @@ dd4hep_add_plugin(${a_lib_name} SOURCES
   src/SimpleDiskDetector_geo.cpp
   src/Solenoid_geo.cpp
   src/TrapEndcapTracker_geo.cpp
+  src/TrackerSupport_geo.cpp
   USES ActsCore ActsPluginDD4hep
   )
 target_link_libraries(${a_lib_name}
