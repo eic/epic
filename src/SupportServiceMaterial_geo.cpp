@@ -41,14 +41,14 @@ namespace {
     if (type == "Tube") {
       const double thickness = getAttrOrDefault(x_child, _U(thickness), x_support.thickness());
       const double length    = getAttrOrDefault(x_child, _U(length), x_support.length());
-      const double rmin      = getAttrOrDefault(x_child, _U(rmin), x_support.rmin());
-      solid                  = Tube(rmin + offset, rmin + thickness + offset, length / 2);
+      const double rmin      = getAttrOrDefault(x_child, _U(rmin), x_support.rmin()) + offset;
+      solid                  = Tube(rmin, rmin + thickness, length / 2);
     }
     if (type == "Cone") {
       const double thickness = getAttrOrDefault(x_child, _U(thickness), x_support.thickness());
       const double length    = getAttrOrDefault(x_child, _U(length), x_support.length());
-      const double rmin1     = getAttrOrDefault(x_child, _U(rmin1), x_support.rmin2());
-      const double rmin2     = getAttrOrDefault(x_child, _U(rmin2), x_support.rmin2());
+      const double rmin1     = getAttrOrDefault(x_child, _U(rmin1), x_support.rmin1()) + offset;
+      const double rmin2     = getAttrOrDefault(x_child, _U(rmin2), x_support.rmin2()) + offset;
       // Account for the fact that the distance between rmin1 and rmax2 is the projection
       // of the thickness on the transverse direction
       const double transverse_thickness = thickness / cos(atan2(fabs(rmin2 - rmin1), length));
@@ -81,7 +81,7 @@ namespace {
  *
  * @author Sylvester Joosten
  */
-static Ref_t create_TrackerSupport(Detector& description, xml_h e, [[maybe_unused]] SensitiveDetector sens)
+static Ref_t create_SupportServiceMaterial(Detector& description, xml_h e, [[maybe_unused]] SensitiveDetector sens)
 {
   const xml_det_t x_det    = e;
   const int       det_id   = x_det.id();
