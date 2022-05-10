@@ -10,7 +10,7 @@
 <constant name="DRICH_wall_thickness"     value="0.5*cm"/>  <!-- thickness of radial walls -->
 <constant name="DRICH_window_thickness"   value="0.1*cm"/>  <!-- thickness of entrance and exit walls -->
 <!-- tank geometry: cylinder, holding the majority of detector components -->
-<constant name="DRICH_rmax2"              value="HcalBarrel_rmin-10*cm"/>  <!-- cylinder radius, near maximal to fit HCal barrel inner polygon -->
+<constant name="DRICH_rmax2"              value="HcalBarrel_rmin-2*cm"/>  <!-- cylinder radius, near maximal to fit HCal barrel inner polygon -->
 <!-- snout geometry: cone with front radius rmax0 and back radius of rmax1 -->
 <constant name="DRICH_SnoutLength"        value="4.0*cm"/>
 <constant name="DRICH_SnoutSlope"         value="DRICH_rmax2 / (DRICH_zmin + DRICH_Length)"/>
