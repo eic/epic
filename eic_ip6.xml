@@ -9,57 +9,89 @@
     <constant name="BeamPipeB0_ID" value="1"/>
     <constant name="BeamPipe_ID" value="2"/>
 
-    <include ref="ip6/ip6_defs.xml" />
-    <comment> Change this to 275/100/41 to change the field setup</comment>
-    <include ref="ip6/far_forward_fields_275.xml" />
+    <include ref="ip6/definitions.xml"/>
 
-    <comment> 
-      
-      =====================================
-      (150-169) Far Forward  Detectors
-      =====================================
-
-      Forward B0 Tracker    ID: 150 - 153
-      Forward Roman Pot     ID: 155 - 158
-
-      Zero Degree Cal. Ecal ID: 163
-      Zero Degree Cal. Hcal ID: 164
-
+    <comment>
+      Change this to 275/100/41 to change the field setup
     </comment>
-    <constant name="B0Tracker_Station_1_ID"          value="150"/>
-    <constant name="B0Tracker_Station_2_ID"          value="151"/>
-    <constant name="B0Tracker_Station_3_ID"          value="152"/>
-    <constant name="B0Tracker_Station_4_ID"          value="153"/>
-    <constant name="B0Preshower_Station_1_ID"        value="154"/>
-    <constant name="ForwardRomanPot_Station_1_ID"    value="155"/>
-    <constant name="ForwardRomanPot_Station_2_ID"    value="156"/>
-
-    <constant name="BeamOrbitTracker_station_1_ID"    value="157"/>
-    <constant name="BeamOrbitTracker_station_2_ID"    value="158"/>    
-	  <constant name="ForwardOffMTracker_station_1_ID" value="159"/>
-    <constant name="ForwardOffMTracker_station_2_ID" value="160"/>
-    <constant name="ForwardOffMTracker_station_3_ID" value="161"/>
-    <constant name="ForwardOffMTracker_station_4_ID" value="162"/>
-    <constant name="ffi_ZDC_ECAL_ID"       value="163"/>
-    <constant name="ffi_ZDC_HCAL_ID"       value="164"/>
-
-	<constant name="VacuumMagnetElement_1_ID" value="165"/>
-
+    <include ref="ip6/far_forward/fields_275.xml"/>
+      
     <constant name="tracker_region_zmax" value="10*m"/>
     <constant name="tracker_region_rmax" value="1*m"/>
     
+    <documentation> 
+      #### (150-169) Far Forward Detectors
 
-    <comment> 
-        =====================================
-      (170-189) Forward Beamline Magnets
-        =====================================
-    </comment>
+      - Forward Roman Pot     ID: 150
+      - Forward B0 Tracker    ID: 151
+      - Zero Degree Cal. Ecal ID: 160
+      - Zero Degree Cal. Hcal ID: 161
 
-    <comment> 
-        =====================================
-      (190-199) Backward Beamline Magnets
-        =====================================
-    </comment>
+      TODO: A lot of the repeated ID's below should be pushed into a single detector
+    </documentation>
+    <constant name="B0Tracker_Station_1_ID"   value="150"/>
+    <constant name="B0Tracker_Station_2_ID"   value="151"/>
+    <constant name="B0Tracker_Station_3_ID"   value="152"/>
+    <constant name="B0Tracker_Station_4_ID"   value="153"/>
+    <constant name="B0Preshower_Station_1_ID" value="154"/>
+    <constant name="ForwardRomanPot_Station_1_ID"    value="155"/>
+    <constant name="ForwardRomanPot_Station_2_ID"    value="156"/>
+    <constant name="ForwardOffMTracker_station_1_ID" value="159"/>
+    <constant name="ForwardOffMTracker_station_2_ID" value="160"/>
+    <constant name="ForwardOffMTracker_station_3_ID" value="161"/>
+    <constant name="ForwardOffMTracker_station_4_ID" value="162"/>
+    <constant name="ZDCEcal_ID"              value="163"/>
+    <constant name="ZDCHcal_ID"              value="164"/>
+    <constant name="VacuumMagnetElement_1_ID"        value="165"/>
+
+    <documentation>
+      #### (170-189) Far Forward Beamline Magnets
+    </documentation> 
+    <constant name="B0PF_ID"  value="170"/>
+    <constant name="B0APF_ID" value="171"/>
+    <constant name="Q1APF_ID" value="172"/>
+    <constant name="Q1BPF_ID" value="173"/>
+    <constant name="Q2PF_ID"  value="174"/>
+    <constant name="B1PF_ID"  value="175"/>
+    <constant name="B1APF_ID" value="176"/>
+    <constant name="B2PF_ID"  value="177"/>
+    <constant name="Q0EF_ID"  value="180"/>
+    <constant name="Q1EF_ID"  value="181"/>
+
+    <documentation>
+      #### (190-199) Far Backward Beamline Detectors
+
+      - Low-Q2 Tagger 1 Tracker      ID: 195
+      - Low-Q2 Tagger 1 Calorimeter  ID: 196
+      - Low-Q2 Tagger 2 Tracker      ID: 198
+      - Low-Q2 Tagger 2 Calorimeter  ID: 199
+
+      TODO: A lot of the repeated ID's below should be pushed into a single detector
+    </documentation>
+    <constant name="LumiCollimator_ID"       value="190"/>
+    <constant name="LumiDipole_ID"           value="191"/>
+    <constant name="TaggerTracker_1_ID"      value="195"/>
+    <constant name="TaggerCalorimeter_1_ID"  value="196"/>
+    <constant name="TaggerTracker_2_ID"      value="198"/>
+    <constant name="TaggerCalorimeter_2_ID"  value="199"/>
+
+    <documentation> 
+      #### (200-219) Far Backward Beamline Magnets
+    </documentation>
+    <constant name="Pipe_to_Q1eR_ID"        value="200"/>
+    <constant name="Magnet_Q1eR_ID"         value="201"/>
+    <constant name="Pipe_in_Q1eR_ID"        value="202"/>
+    <constant name="Pipe_Q1eR_to_Q2eR_ID"   value="203"/>
+    <constant name="Magnet_Q2eR_ID"         value="204"/>
+    <constant name="Pipe_in_Q2eR_ID"        value="205"/>
+    <constant name="Pipe_Q2eR_to_B2AeR_ID"  value="206"/>
+    <constant name="Magnet_B2AeR_ID"        value="207"/>
+    <constant name="Pipe_in_B2AeR_ID"       value="208"/>
+    <constant name="Pipe_B2AeR_to_B2BeR_ID" value="209"/>
+    <constant name="Magnet_B2BeR_ID"        value="210"/>
+    <constant name="Pipe_in_B2BeR_ID"       value="211"/>
+    <constant name="Magnet_Q3eR_ID"         value="212"/>
+    <constant name="Vacuum_in_Q3eR_ID"      value="213"/>
 
   </define>
 
@@ -69,85 +101,23 @@
   </includes>
 
   <display>
-  <include ref="ip6/ip6_colors.xml" />
-  <include ref="ip6/ip6_display.xml" />
+    <include ref="ip6/ip6_colors.xml"/>
+    <include ref="ip6/ip6_display.xml"/>
   </display>
 
-  <include ref="ip6/beampipe.xml" />
-  <include ref="ip6/forward_ion_beamline.xml" />
-  <include ref="ip6/beampipe_hadron_B0.xml" />
-  <include ref="ip6/B0_tracker.xml"/>
-  <include ref="ip6/B0_preshower.xml"/>
-  <include ref="ip6/far_forward_offM_tracker.xml"/>
-  <include ref="ip6/far_forward_detectors.xml"/>
-  <include ref="ip6/roman_pots_eRD24_design.xml"/>
-  <!--
-    Old BOM not used
-  <include ref="ip6/beam_orbit_tracker.xml"/>
-  -->
-  <include ref="ip6/inner_vacuum_FF_magnets.xml"/>
+  <comment>
+    Central beamline
+  </comment>
+  <include ref="ip6/central_beampipe.xml"/>
 
-  <!--
-    Magnet file not used for some reason
-  <include ref="ip6/magnets.xml" />
-  -->
-  <fields>
-    <field name="B0PF_Magnet" type="MultipoleMagnet">
-      <position x="B0PF_XPosition" y="0" z="B0PF_CenterPosition"/>
-      <rotation x="0" y="B0PF_RotationAngle" z="0"/>
-      <shape type="Tube" rmin="0.0" rmax="B0PF_InnerRadius" dz="B0PF_Length*0.5"/>
-      <coefficient coefficient="B0PF_Bmax" skew="0.0*tesla"/>
-      <coefficient coefficient="B0PF_GradientMax" skew="0.0*tesla/m"/>
-    </field>
-    <field name="B0APF_Magnet" type="MultipoleMagnet">
-      <position x="B0APF_XPosition" y="0" z="B0APF_CenterPosition"/>
-      <rotation x="0" y="B0APF_RotationAngle" z="0"/>
-      <shape type="Tube" rmin="0.0" rmax="B0APF_InnerRadius" dz="B0APF_Length*0.5"/>
-      <coefficient coefficient="B0APF_Bmax" skew="0.0*tesla"/>
-	  <coefficient coefficient="B0APF_GradientMax" skew="0.0*tesla"/>
-    </field>
-    <field name="Q1APF_Magnet" type="MultipoleMagnet">
-      <position x="Q1APF_XPosition" y="0" z="Q1APF_CenterPosition"/>
-      <rotation x="0" y="Q1APF_RotationAngle" z="0"/>
-      <shape type="Tube" rmin="0.0" rmax="Q1APF_InnerRadius" dz="Q1APF_Length*0.5"/>
-      <coefficient coefficient="Q1APF_Bmax" skew="0.0*tesla"/>
-      <coefficient coefficient="Q1APF_GradientMax" skew="0.0*tesla/m"/>
-    </field>
-    <field name="Q1BPF_Magnet" type="MultipoleMagnet">
-      <position x="Q1BPF_XPosition" y="0" z="Q1BPF_CenterPosition"/>
-      <rotation x="0" y="Q1BPF_RotationAngle" z="0"/>
-      <shape type="Tube" rmin="0.0" rmax="Q1BPF_InnerRadius" dz="Q1BPF_Length*0.5"/>
-      <coefficient coefficient="Q1BPF_Bmax" skew="0.0*tesla"/>
-      <coefficient coefficient="Q1BPF_GradientMax" skew="0.0*tesla/m"/>
-    </field>
-    <field name="Q2PF_Magnet" type="MultipoleMagnet">
-      <position x="Q2PF_XPosition" y="0" z="Q2PF_CenterPosition"/>
-      <rotation x="0" y="Q2PF_RotationAngle" z="0"/>
-      <shape type="Tube" rmin="0.0" rmax="Q2PF_InnerRadius" dz="Q2PF_Length*0.5"/>
-      <coefficient coefficient="Q2PF_Bmax" skew="0.0*tesla"/>
-      <coefficient coefficient="Q2PF_GradientMax" skew="0.0*tesla/m"/>
-    </field>
-    <field name="B1PF_Magnet" type="MultipoleMagnet">
-      <position x="B1PF_XPosition" y="0" z="B1PF_CenterPosition"/>
-      <rotation x="0" y="B1PF_RotationAngle" z="0"/>
-      <shape type="Tube" rmin="0.0" rmax="B1PF_InnerRadius" dz="B1PF_Length*0.5"/>
-      <coefficient coefficient="B1PF_Bmax" skew="0.0*tesla"/>
-	  <coefficient coefficient="B1PF_GradientMax" skew="0.0*tesla/m"/>
-    </field>
-    <field name="B1APF_Magnet" type="MultipoleMagnet">
-      <position x="B1APF_XPosition" y="0" z="B1APF_CenterPosition"/>
-      <rotation x="0" y="B1APF_RotationAngle" z="0"/>
-      <shape type="Tube" rmin="0.0" rmax="B1APF_InnerRadius" dz="B1APF_Length*0.5"/>
-      <coefficient coefficient="B1APF_Bmax" skew="0.0*tesla"/>
-	  <coefficient coefficient="B1APF_GradientMax" skew="0.0*tesla/m"/>
-    </field>
-    <field name="B2PF_Magnet" type="MultipoleMagnet">
-      <position x="B2PF_XPosition" y="0" z="B2PF_CenterPosition"/>
-      <rotation x="0" y="B2PF_RotationAngle" z="0"/>
-      <shape type="Tube" rmin="0.0" rmax="B2PF_InnerRadius" dz="B2PF_Length*0.5"/>
-      <coefficient coefficient="B2PF_Bmax" skew="0.0*tesla"/>
-      <coefficient coefficient="B2PF_GradientMax" skew="0.0*tesla/cm"/>
-    </field>
-  </fields>
+  <comment>
+    Far Forward
+  </comment>
+  <include ref="ip6/far_forward.xml"/>
+
+  <comment>
+    Far Backward
+  </comment>
+  <include ref="ip6/far_backward.xml"/>
 
 </lccdd>

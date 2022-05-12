@@ -89,4 +89,4 @@ static Ref_t createDetector(Detector& desc, xml_h e, SensitiveDetector sens)
 
   return det;
 }
-DECLARE_DETELEMENT(ffi_ZDC_Sampling, createDetector)
+DECLARE_DETELEMENT(ZDC_Sampling, createDetector)

@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<lccdd>
+  
+  <define>
+
+<comment>
+
+    <constant name="Collimator_Box_Depth"    value="300*mm"/>
+    <constant name="Collimator_Box_Width"    value="Tag_Box_1_Height"/>
+    <constant name="Collimator_Box_Height"   value="Tag_Box_1_Height"/>
+
+    <constant name="Collimator_Hole_Height"  value="70*mm"/>
+    <constant name="Collimator_Hole_Width"   value="96*mm"/>
+    <constant name="Collimator_Hole_XOff"    value="0"/>
+
+    <constant name="CollimatorZ"    value="-27*m"/>
+
+</comment>
+
+  </define>
+
+  <detectors>
+
+    <comment>
+
+    <detector name="LumiMag_shape" type="CylindricalDipoleMagnet">
+      <placement  x="0" y="0" z="LumiMag_cen_Z" theta="0"/>
+      <dimensions x="LumiMag_R*4" y="LumiMag_R*4" z="LumiMag_DZ" r="2*LumiMag_R"/>
+      <apperture  x="LumiMag_R*2" y="LumiMag_R*2" r="LumiMag_R"/>
+      <coil dx="2*cm" dy="1.5*cm"/><!--unchecked-->
+    </detector>
+
+    <detector id="FarBackwardLumiCollimator_ID" name="LumiCollimator" type="BackwardsCollimator" vis="Shape1_vis">
+      <dimensions height="Collimator_Box_Height"  width="Collimator_Box_Width"  depth="Collimator_Box_Depth"/>
+      <collimator height="Collimator_Hole_Height" width="Collimator_Hole_Width" xOff="Collimator_Hole_XOff"/>
+      <placement  z="CollimatorZ-Collimator_Box_Depth"/>
+    </detector>
+
+    <detector id="FarBackwardLumiDipole_ID" name="LumiDipoleBox" type="DD4hep_TestShape_Creator">
+      <check vis="Shape1_vis">
+        <shape type="Box" dx="LumiDipole_x" dy="LumiDipole_y" dz="LumiDipole_z/2"/>
+        <position x="0" y="0" z="LumiDipole_CenterPosition"/>
+      </check>
+    </detector>
+
+    </comment>
+
+  </detectors>
+
+  <comment>
+  <fields>
+    <field name="LumiDipole" type="MultipoleMagnet">
+      <shape type="Box" dx="LumiDipole_x" dy="LumiDipole_y" dz="LumiDipole_z/2"/>
+      <position x="0" y="0" z="LumiDipole_CenterPosition"/>
+      <coefficient coefficient="0.26*tesla"/>
+    </field>
+  </fields>
+  </comment>
+  
+</lccdd>
+

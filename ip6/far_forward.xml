@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<lccdd>
+
+  <include ref="ip6/far_forward/ion_beamline.xml" />
+  <include ref="ip6/far_forward/beampipe_hadron_B0.xml" />
+  <include ref="ip6/far_forward/B0_tracker.xml"/>
+  <include ref="ip6/far_forward/B0_preshower.xml"/>
+  <include ref="ip6/far_forward/offM_tracker.xml"/>
+  <include ref="ip6/far_forward/ZDC.xml"/>
+  <include ref="ip6/far_forward/roman_pots_eRD24_design.xml"/>
+  <!--
+    Old BOM not used
+  <include ref="ip6/far_forward/beam_orbit_tracker.xml"/>
+  -->
+  <include ref="ip6/far_forward/vacuum.xml"/>
+  <include ref="ip6/far_forward/magnets.xml"/>
+
+</lccdd>

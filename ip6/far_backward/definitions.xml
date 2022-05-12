@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<lccdd>
+
+  <define>
+
+    <!-- Connection to central beam pipe -->
+
+    <constant name="Center_Beampipe_End"  value="-4560.17 * mm"/>
+    <constant name="Center_Beampipe_Rad"  value="47.60 * mm"/>
+
+    <!-- Magnet dimensions and positions -->
+
+    <constant name="Q1eR_InnerRadius"  value="55.5*mm"/>
+    <constant name="Q1eR_Length"  value="1.78*m"/>
+    <constant name="Q1eR_CenterPosition"  value="-6.2*m"/>
+
+    <constant name="Q2eR_InnerRadius"  value="64.5*mm"/>
+    <constant name="Q2eR_Length"  value="1.4*m"/>
+    <constant name="Q2eR_CenterPosition"  value="-8.3*m"/>
+
+    <constant name="B2AeR_InnerRadius"  value="70.0*mm"/>
+    <constant name="B2AeR_Length"  value="1.78*m"/>
+    <constant name="B2AeR_CenterPosition"  value="-10.5*m"/>
+
+    <constant name="B2BeR_InnerRadius"  value="98.0*mm"/>
+    <constant name="B2BeR_Length"  value="3.18*m"/>
+    <constant name="B2BeR_CenterPosition"  value="-13.275*m"/>
+
+    <constant name="Q3eR_InnerRadius"  value="0.05*m"/>
+    <constant name="Q3eR_Length"  value="0.6*m"/>
+    <constant name="Q3eR_StartZ"  value="-37.696067*m"/>
+    <constant name="Q3eR_StartX"  value="-0.460027*m"/>
+    <constant name="Q3eR_EndZ"  value="-38.295969*m"/>
+    <constant name="Q3eR_EndX"  value="-0.470873*m"/>
+    <constant name="Q3eR_XPosition"  value="-0.46545*m"/>
+    <constant name="Q3eR_Theta"  value="0.0180766389*rad"/>
+    <constant name="Q3eR_CenterPosition"  value="-37.996018*m"/>
+
+  </define>
+
+</lccdd>

@@ -5,6 +5,7 @@ dawn_view_50:detector:
       optional: false
   script:
     - ./bin/make_dawn_views -i ${LOCAL_DATA_PATH}/detector_view.prim -t view50 -d views/view50 -D
+  allow_failure: true
 
 dawn_view_50:ev001:
   extends: .views
@@ -38,4 +39,4 @@ view_50:
   script:
     - ls -lrth *
     - ls -lrth images/*
-
+  allow_failure: true

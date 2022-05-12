@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<lccdd>
+
+  <include ref="ip6/far_backward/definitions.xml"/>
+  <include ref="ip6/far_backward/magnets.xml"/>
+  <include ref="ip6/far_backward/vacuum.xml"/>
+  <include ref="ip6/far_backward/taggers.xml"/>
+  <include ref="ip6/far_backward/lumi.xml"/>
+
+</lccdd>

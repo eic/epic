@@ -85,4 +85,4 @@ static Ref_t createDetector(Detector& desc, xml_h e, SensitiveDetector sens)
   det.setPlacement(detPV);
   return det;
 }
-DECLARE_DETELEMENT(ffi_ZDC_ECAL, createDetector)
+DECLARE_DETELEMENT(ZDC_ECAL, createDetector)
