@@ -207,16 +207,16 @@
     - `zmin`: z-plane cut
 </documentation>
 <sphere
-  centerz="-55.0 * cm"
-  centerx="DRICH_rmax2 - 35.0*cm"
-  radius="85.0 * cm"
+  centerz="-108.07*cm - 16*cm"
+  centerx="124.98*cm"
+  radius="140*cm"
   debug="DRICH_debug_sensors"
   />
 <sphericalpatch
   phiw="18*degree"
-  rmin="DRICH_rmax1 + 5.0*cm"
+  rmin="DRICH_rmax1 + 2.0*cm"
   rmax="DRICH_rmax2 - 5.0*cm"
-  zmin="DRICH_SnoutLength + 5.0*cm"
+  zmin="DRICH_SnoutLength + 3.0*cm"
   />
 
 
