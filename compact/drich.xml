@@ -3,7 +3,7 @@
 
 <define>
 <!-- vessel (=snout+tank) geometry -->
-<constant name="DRICH_zmin"               value="ForwardRICHRegion_zmin"/> <!-- vessel front -->
+<constant name="DRICH_zmin"               value="ForwardRICHRegion_zmin + 16*cm"/> <!-- vessel front -->
 <constant name="DRICH_Length"             value="ForwardRICHRegion_length"/>  <!-- overall vessel length (including snout) -->
 <constant name="DRICH_rmin0"              value="ForwardRICHRegion_zmin * ForwardRICHRegion_tan1"/>  <!-- bore radius at dRICh vessel frontplane -->
 <constant name="DRICH_rmin1"              value="(ForwardRICHRegion_zmin + ForwardRICHRegion_length) * ForwardRICHRegion_tan2"/>  <!-- bore radius at dRICh vessel backplane -->
