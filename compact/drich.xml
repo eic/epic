@@ -18,9 +18,11 @@
 <constant name="DRICH_rmax1"              value="DRICH_SnoutSlope * ( DRICH_zmin + DRICH_SnoutLength)"/>
 <!-- additional parameters -->
 <constant name="DRICH_aerogel_thickness"  value="4.0*cm"/>  <!-- aerogel thickness -->
-<constant name="DRICH_sensor_size"        value="48.0*mm"/> <!-- sensor side length -->
-<constant name="DRICH_sensor_thickness"   value="35.0*mm"/> <!-- sensor thickness -->
-<constant name="DRICH_num_px"             value="16"/> <!-- number of pixels along one side of the sensor -->
+<constant name="DRICH_sensor_size"        value="25.8*mm"/> <!-- sensor side length -->
+<constant name="DRICH_sensor_thickness"   value="0.5*mm"/> <!-- sensor thickness -->
+<constant name="DRICH_num_px"             value="8"/> <!-- number of pixels along one side of the sensor -->
+<constant name="DRICH_sensor_pixel_pitch" value="3.2*mm"/> <!-- center-to-center distance between SiPMs in a 8x8 panel -->
+<constant name="DRICH_sensor_pixel_size"  value="3.0*mm"/> <!-- a single SiPM pixel size -->
 <!-- debugging switches -->
 <comment>
 - `DRICH_debug_optics`:  1 = all components become vacuum, except for mirrors; test opticalphotons from IP
@@ -178,12 +180,12 @@
     spherical patch below
 </documentation>
 <module
-  material="Silicon"
+  material="AirOptical"
   surface="SensorSurface_DRICH"
   vis="DRICH_sensor_vis"
   side="DRICH_sensor_size"
   thickness="DRICH_sensor_thickness"
-  gap="0.5*(52-48)*mm + 2*mm"
+  gap="0.2*mm"
   />
 
 
@@ -244,10 +246,10 @@
   <readout name="DRICHHits">
     <segmentation
       type="CartesianGridXY"
-      grid_size_x="DRICH_sensor_size/(DRICH_num_px-1)"
-      grid_size_y="DRICH_sensor_size/(DRICH_num_px-1)"
-      offset_x="-DRICH_sensor_size/2.0"
-      offset_y="-DRICH_sensor_size/2.0"
+      grid_size_x="DRICH_sensor_pixel_pitch"
+      grid_size_y="DRICH_sensor_pixel_pitch"
+      offset_x="-DRICH_sensor_pixel_pitch*DRICH_num_px/2.0"
+      offset_y="-DRICH_sensor_pixel_pitch*DRICH_num_px/2.0"
       />
     <id>system:8,sector:3,module:12,x:23:16,y:16</id>
   </readout>

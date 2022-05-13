@@ -1058,7 +1058,7 @@
         6.19921*eV  0.762502
         "/>
     </opticalsurface>
-    <opticalsurface name="SensorSurface_DRICH" model="glisur" finish="polished" type="dielectric_metal">
+    <opticalsurface name="SensorSurface_DRICH" model="glisur" finish="polished" type="dielectric_dielectric">
       <property name="EFFICIENCY" coldim="2" values="
         1*eV  1
         4*eV  1
