@@ -72,7 +72,7 @@
     <constant name="ZDC_Gap_Thickness"        value="2.0 * cm"/>
   </define>
 
-  <include ref="ip6/far_forward/ZDC_Ecal_WSciFi.xml"/>
-  <include ref="ip6/far_forward/ZDC_Hcal.xml"/>
+  <include ref="ZDC_Ecal_WSciFi.xml"/>
+  <include ref="ZDC_Hcal.xml"/>
   
 </lccdd>
