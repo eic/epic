@@ -207,7 +207,7 @@
     - `zmin`: z-plane cut
 </documentation>
 <sphere
-  centerz="-108.07*cm - 16*cm"
+  centerz="-168.07*cm + DRICH_SnoutLength + (DRICH_Length-DRICH_SnoutLength)/2.0"
   centerx="124.98*cm"
   radius="140*cm"
   debug="DRICH_debug_sensors"
