@@ -246,8 +246,8 @@
   <readout name="DRICHHits">
     <segmentation
       type="CartesianGridXY"
-      grid_size_x="DRICH_sensor_pixel_pitch"
-      grid_size_y="DRICH_sensor_pixel_pitch"
+      grid_size_x="DRICH_sensor_pixel_pitch*DRICH_num_px/(DRICH_num_px-1)"
+      grid_size_y="DRICH_sensor_pixel_pitch*DRICH_num_px/(DRICH_num_px-1)"
       offset_x="-DRICH_sensor_pixel_pitch*DRICH_num_px/2.0"
       offset_y="-DRICH_sensor_pixel_pitch*DRICH_num_px/2.0"
       />
