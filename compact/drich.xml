@@ -213,7 +213,7 @@
   debug="DRICH_debug_sensors"
   />
 <sphericalpatch
-  phiw="18*degree"
+  phiw="14*degree"
   rmin="DRICH_rmax1 + 2.0*cm"
   rmax="DRICH_rmax2 - 5.0*cm"
   zmin="DRICH_SnoutLength + 3.0*cm"
