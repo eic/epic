@@ -231,38 +231,78 @@ The unused IDs below are saved for future use.
     <constant name="SolenoidYoke_ID"         value="142"/>
 
     <documentation> 
-      #### (150-169) Far Forward  Detectors
+      #### (150-169) Far Forward Detectors
 
       - Forward Roman Pot     ID: 150
       - Forward B0 Tracker    ID: 151
       - Zero Degree Cal. Ecal ID: 160
       - Zero Degree Cal. Hcal ID: 161
 
-      TODO: A lot of the  repeated ID's below should be pushed into a single detector
+      TODO: A lot of the repeated ID's below should be pushed into a single detector
     </documentation>
-    <constant name="B0Tracker_Station_1_ID"          value="150"/>
-    <constant name="B0Tracker_Station_2_ID"          value="151"/>
-    <constant name="B0Tracker_Station_3_ID"          value="152"/>
-    <constant name="B0Tracker_Station_4_ID"          value="153"/>
-    <constant name="B0Preshower_Station_1_ID"        value="154"/>
-	  <constant name="ForwardRomanPot_Station_1_ID"    value="155"/>
+    <constant name="B0Tracker_Station_1_ID"   value="150"/>
+    <constant name="B0Tracker_Station_2_ID"   value="151"/>
+    <constant name="B0Tracker_Station_3_ID"   value="152"/>
+    <constant name="B0Tracker_Station_4_ID"   value="153"/>
+    <constant name="B0Preshower_Station_1_ID" value="154"/>
+    <constant name="ForwardRomanPot_Station_1_ID"    value="155"/>
     <constant name="ForwardRomanPot_Station_2_ID"    value="156"/>
-	  <constant name="ForwardOffMTracker_station_1_ID" value="159"/>
+    <constant name="ForwardOffMTracker_station_1_ID" value="159"/>
     <constant name="ForwardOffMTracker_station_2_ID" value="160"/>
     <constant name="ForwardOffMTracker_station_3_ID" value="161"/>
     <constant name="ForwardOffMTracker_station_4_ID" value="162"/>
-    <comment> TODO naming consistency </comment>
-    <constant name="ffi_ZDC_ECAL_ID"                 value="163"/>
-    <constant name="ffi_ZDC_HCAL_ID"                 value="164"/>
+    <constant name="ZDCEcal_ID"              value="163"/>
+    <constant name="ZDCHcal_ID"              value="164"/>
     <constant name="VacuumMagnetElement_1_ID"        value="165"/>
 
     <documentation> 
-      #### (170-189) Forward Beamline Magnets
+      #### (170-189) Far Forward Beamline Magnets
     </documentation>
+    <constant name="B0PF_ID"  value="170"/>
+    <constant name="B0APF_ID" value="171"/>
+    <constant name="Q1APF_ID" value="172"/>
+    <constant name="Q1BPF_ID" value="173"/>
+    <constant name="Q2PF_ID"  value="174"/>
+    <constant name="B1PF_ID"  value="175"/>
+    <constant name="B1APF_ID" value="176"/>
+    <constant name="B2PF_ID"  value="177"/>
+    <constant name="Q0EF_ID"  value="180"/>
+    <constant name="Q1EF_ID"  value="181"/>
 
     <documentation> 
-      #### (190-199) Backward Beamline Magnets
+      #### (190-199) Far Backward Beamline Detectors
+
+      - Low-Q2 Tagger 1 Tracker      ID: 195
+      - Low-Q2 Tagger 1 Calorimeter  ID: 196
+      - Low-Q2 Tagger 2 Tracker      ID: 198
+      - Low-Q2 Tagger 2 Calorimeter  ID: 199
+
+      TODO: A lot of the repeated ID's below should be pushed into a single detector
     </documentation>
+    <constant name="LumiCollimator_ID"       value="190"/>
+    <constant name="LumiDipole_ID"           value="191"/>
+    <constant name="TaggerTracker_1_ID"      value="195"/>
+    <constant name="TaggerCalorimeter_1_ID"  value="196"/>
+    <constant name="TaggerTracker_2_ID"      value="198"/>
+    <constant name="TaggerCalorimeter_2_ID"  value="199"/>
+
+    <documentation> 
+      #### (200-219) Far Backward Beamline Magnets
+    </documentation>
+    <constant name="Pipe_to_Q1eR_ID"        value="200"/>
+    <constant name="Magnet_Q1eR_ID"         value="201"/>
+    <constant name="Pipe_in_Q1eR_ID"        value="202"/>
+    <constant name="Pipe_Q1eR_to_Q2eR_ID"   value="203"/>
+    <constant name="Magnet_Q2eR_ID"         value="204"/>
+    <constant name="Pipe_in_Q2eR_ID"        value="205"/>
+    <constant name="Pipe_Q2eR_to_B2AeR_ID"  value="206"/>
+    <constant name="Magnet_B2AeR_ID"        value="207"/>
+    <constant name="Pipe_in_B2AeR_ID"       value="208"/>
+    <constant name="Pipe_B2AeR_to_B2BeR_ID" value="209"/>
+    <constant name="Magnet_B2BeR_ID"        value="210"/>
+    <constant name="Pipe_in_B2BeR_ID"       value="211"/>
+    <constant name="Magnet_Q3eR_ID"         value="212"/>
+    <constant name="Vacuum_in_Q3eR_ID"      value="213"/>
 
     <documentation>
 ## Detector Definition Parameters 

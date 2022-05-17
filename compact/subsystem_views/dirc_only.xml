@@ -13,18 +13,18 @@
        </debug>
 
   <documentation level="-1">
-  # Athena Detector 
-  - https://eicweb.phy.anl.gov/EIC/detectors/athena.git 
+  # ECCE Detector 
+  - https://eicweb.phy.anl.gov/EIC/detectors/ecce.git 
   - https://eicweb.phy.anl.gov/EIC/detectors/ip6.git
   </documentation>
 
   <!-- Some information about detector  -->
-  <info name="Athena Detector" title="Athena Detector"
-        author="Athena Collaboration"
-	url="https://eicweb.phy.anl.gov/EIC/detectors/athena.git"
+  <info name="ECCE Detector" title="ECCE Detector"
+        author="ECCE Collaboration"
+	url="https://eicweb.phy.anl.gov/EIC/detectors/ecce.git"
 	status="development"
 	version="v1 2021-03-16">
-  <comment> Athena </comment>
+  <comment> ECCE </comment>
   </info>
   <define>
   <documentation level="2">
@@ -33,8 +33,8 @@
       The ip6 (or other ip) defines should be included first.
       These files have only a define tags.
   </documentation>
-    <include ref="ip6/ip6_defs.xml" /> 
-    <include ref="ip6/far_forward_fields_275.xml" />
+    <include ref="ip6/definitions.xml" /> 
+    <include ref="ip6/far_forward/fields_275.xml" />
     <include ref="compact/definitions.xml" />
   </define>
 
@@ -81,59 +81,6 @@
      - Beam line magnets.
      - and more...
   </documentation>
-
-<!--  <include ref="ip6/forward_ion_beamline.xml"/>-->
-<!--  <include ref="ip6/beampipe.xml"/>-->
-
-  <detectors>
-<!--    <detector id="VertexBarrelSubAssembly_ID"-->
-<!--      name="VertexBarrelSubAssembly"-->
-<!--      type="DD4hep_SubdetectorAssembly"-->
-<!--      vis="TrackerSubAssemblyVis">-->
-<!--      <composite name="VertexBarrel" />-->
-<!--    </detector>-->
-<!--    <detector id="VertexEndcapSubAssembly_ID"-->
-<!--      name="VertexEndcapSubAssembly"-->
-<!--      type="DD4hep_SubdetectorAssembly"-->
-<!--      vis="TrackerSubAssemblyVis">-->
-<!--      <composite name="VertexEndcapN" />-->
-<!--      <composite name="VertexEndcapP" />-->
-<!--    </detector>-->
-
-<!--    <detector id="TrackerBarrelSubAssembly_Inner_ID"-->
-<!--      name="TrackerBarrelSubAssembly_Inner"-->
-<!--      type="DD4hep_SubdetectorAssembly"-->
-<!--      vis="TrackerSubAssemblyVis">-->
-<!--      <composite name="TrackerBarrel_Inner"/>-->
-<!--    </detector>-->
-<!--    <detector id="TrackerEndcapSubAssembly_Inner_ID"-->
-<!--      name="TrackerEndcapSubAssembly_Inner"-->
-<!--      type="DD4hep_SubdetectorAssembly"-->
-<!--      vis="TrackerSubAssemblyVis">-->
-<!--      <composite name="TrackerEndcapN_Inner"/>-->
-<!--      <composite name="TrackerEndcapP_Inner"/>-->
-<!--    </detector>-->
-
-<!--    <detector id="TrackerBarrelSubAssembly_Outer_ID"-->
-<!--      name="TrackerSubAssembly_Outer"-->
-<!--      type="DD4hep_SubdetectorAssembly"-->
-<!--      vis="TrackerSubAssemblyVis">-->
-<!--      <composite name="TrackerBarrel_Outer"/>-->
-<!--      <composite name="TrackerEndcapP_Outer"/>-->
-<!--      <composite name="TrackerEndcapN_Outer"/>-->
-<!--    </detector>-->
-
-<!--    <detector id="TOFSubAssembly_ID"-->
-<!--      name="TOFSubAssembly"-->
-<!--      type="DD4hep_SubdetectorAssembly"-->
-<!--      vis="TOFSubAssemblyVis">-->
-<!--      <composite name="BarrelTOF"/>-->
-<!--      <composite name="ForwardTOF"/>-->
-<!--      <composite name="BackwardTOF"/>-->
-<!--    </detector>-->
-
-  </detectors>
-
 
   <include ref="compact/fake_dirc.xml"/>
 

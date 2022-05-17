@@ -52,7 +52,7 @@ parser.add_argument('-t', '--tag', type=str,dest='file_tag',
         help='Output file tag')
 
 parser.add_argument('--timeout', type=int,
-        default=60,
+        default=3600,
         help='Timeout in seconds')
 
 parser.add_argument('passthrough', nargs='*')
