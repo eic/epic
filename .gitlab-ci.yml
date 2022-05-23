@@ -181,6 +181,7 @@ report:
     - view_20
     - dump_constants
     - dump_geometry
+    - dump_parameter_table
     - convert_to_gdml
   script:
     - pip3 install jinja2 &&  ls -lrth
@@ -193,6 +194,19 @@ dump_constants:
     - ["common:detector"]
   script:
     - npdet_info dump ${DETECTOR_PATH}/ecce.xml  | tee doc/constants.out 
+
+dump_parameter_table:
+  stage: test
+  needs:
+    - ["common:detector"]
+  script:
+    # discard lines starting with spaces and require '='
+    # to prevent dangling long expressions with newlines
+    - npdet_info dump --all ${DETECTOR_PATH}/ecce.xml | grep -v '^\s' | grep '=' | cut -d= -f1-2 | tee doc/constants.toml
+    - pip install jinja2-cli toml
+    - jinja2 --strict --outfile doc/DetectorParameterTable.csv
+      templates/DetectorParameterTable.csv.jinja2
+      doc/constants.toml
 
 overlap_check_tgeo:
   stage: test
