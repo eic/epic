@@ -86,9 +86,10 @@ using namespace dd4hep;
  *     <position x="0" y="0" z="-30*cm"/>
  *     <rotation x="0" y="0" z="0"/>
  *     <placements>
- *       <disk rmin="25*cm" rmax="125*cm" length="20.5*cm" phimin="0" phimax="360*degree" sector="1"/>
+ *       <disk rmin="25*cm" rmax="125*cm" length="20.5*cm" phimin="0" phimax="360*degree" sector="1">
  *         <module sizex="2.05*cm" sizey="2.05*cm" sizez="20*cm" vis="GreenVis" material="PbWO4"/>
  *         <wrapper thickness="0.015*cm" material="Epoxy" vis="WhiteVis"/>
+ *       </disk>
  *     </placements>
  *   </detector>
  *
