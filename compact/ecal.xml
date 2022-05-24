@@ -11,7 +11,8 @@
   <!--include ref="ecal_forward_scfi.xml"/-->
   <include ref="ecal_forward_homogenous.xml"/>
 
-  <include ref="ecal_backward_hybrid.xml"/>
+  <!--include ref="ecal_backward_hybrid.xml"/-->
+  <include ref="ecal_backward_PbWO4.xml"/>
 
   <!--include ref="ecal_barrel_interlayers.xml"/-->
   <include ref="ecal_barrel_sciglass.xml"/>

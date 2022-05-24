@@ -510,7 +510,7 @@ Service gaps in FW direction (before endcapP ECAL) and BW direction (before endc
     <constant name="EcalEndcapN_rmin1"              value="Eta4_6_tan * EcalEndcapN_zmin"/>
     <constant name="EcalEndcapN_rmin2"              value="Eta4_1_tan * EcalEndcapN_zmin"/>
     <constant name="EcalEndcapN_rmin"               value="min(EcalEndcapN_rmin1, EcalEndcapN_rmin2)"/>
-    <constant name="EcalEndcapN_rmax"               value="85*cm"/> <!-- FIXME hardcoded -->
+    <constant name="EcalEndcapN_rmax"               value="63*cm"/> <!-- FIXME hardcoded -->
 
     <constant name="EcalBarrelRegion_thickness"     value="50.0*cm"/>
     <constant name="EcalBarrel_rmin"                value="CentralTrackingRegion_rmax + BarrelPIDRegion_thickness + BarrelExtraSpace_thickness - 23*cm"/> <!-- ECCE proposal: 85 cm, FIXME hardcoded spacing -->
