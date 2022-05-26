@@ -13,7 +13,14 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Werror")
 
 find_package(DD4hep REQUIRED COMPONENTS DDCore DDG4)
-find_package(ActsDD4hep REQUIRED)
+find_package(ActsDD4hep)
+if(ActsDD4hep_FOUND)
+  add_compile_definitions(USE_ACTSDD4HEP)
+  set(ActsDD4hep ActsDD4hep::ActsDD4hep)
+else()
+  find_package(Acts REQUIRED COMPONENTS Core PluginIdentification PluginTGeo PluginDD4hep)
+  set(ActsDD4hep ActsCore ActsPluginDD4hep)
+endif()
 find_package(fmt REQUIRED)
 
 #-----------------------------------------------------------------------------------
@@ -46,7 +53,7 @@ dd4hep_add_plugin(${a_lib_name} SOURCES
   src/Solenoid_geo.cpp
   src/TrapEndcapTracker_geo.cpp
   src/TrackerSupport_geo.cpp
-  USES ActsDD4hep::ActsDD4hep
+  USES ${ActsDD4hep}
   )
 target_link_libraries(${a_lib_name}
   PUBLIC DD4hep::DDCore DD4hep::DDRec fmt::fmt
