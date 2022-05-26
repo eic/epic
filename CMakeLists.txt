@@ -46,10 +46,10 @@ dd4hep_add_plugin(${a_lib_name} SOURCES
   src/Solenoid_geo.cpp
   src/TrapEndcapTracker_geo.cpp
   src/TrackerSupport_geo.cpp
-  USES ActsCore ActsPluginDD4hep
+  USES ActsDD4hep::ActsDD4hep
   )
 target_link_libraries(${a_lib_name}
-  PUBLIC DD4hep::DDCore  DD4hep::DDRec fmt::fmt
+  PUBLIC DD4hep::DDCore DD4hep::DDRec fmt::fmt
   )
 
 #-----------------------------------------------------------------------------------
