@@ -13,7 +13,7 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Werror")
 
 find_package(DD4hep REQUIRED COMPONENTS DDCore DDG4)
-find_package(Acts REQUIRED COMPONENTS Core PluginIdentification PluginTGeo PluginDD4hep )
+find_package(ActsDD4hep REQUIRED)
 find_package(fmt REQUIRED)
 
 #-----------------------------------------------------------------------------------

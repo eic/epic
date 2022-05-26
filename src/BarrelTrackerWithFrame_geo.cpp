@@ -14,8 +14,8 @@
 #include "XML/Layering.h"
 #include "XML/Utilities.h"
 
-#include "Acts/Plugins/DD4hep/ActsExtension.hpp"
-#include "Acts/Plugins/DD4hep/ConvertDD4hepMaterial.hpp"
+#include "ActsDD4hep/ActsExtension.hpp"
+#include "ActsDD4hep/ConvertMaterial.hpp"
 
 
 using namespace std;
