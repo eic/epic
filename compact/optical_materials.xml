@@ -861,12 +861,32 @@
         4*eV  1
         7*eV  1
         "/>
+      <property name="IMAGINARYRINDEX" coldim="2" values="
+        1*eV  1.69
+        4*eV  1.69
+        7*eV  1.69
+        "/>
+      <property name="REALRINDEX" coldim="2" values="
+        1*eV  1.92
+        4*eV  1.92
+        7*eV  1.92
+        "/>
     </opticalsurface>
     <opticalsurface name="SensorSurface_PFRICH" model="glisur" finish="polished" type="dielectric_dielectric">
       <property name="EFFICIENCY" coldim="2" values="
         1*eV  1
         4*eV  1
         7*eV  1
+        "/>
+      <property name="IMAGINARYRINDEX" coldim="2" values="
+        1*eV  1.69
+        4*eV  1.69
+        7*eV  1.69
+        "/>
+      <property name="REALRINDEX" coldim="2" values="
+        1*eV  1.92
+        4*eV  1.92
+        7*eV  1.92
         "/>
     </opticalsurface>
     <!-- END dRICh surface definitions -->
