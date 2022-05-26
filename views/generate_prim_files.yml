@@ -4,7 +4,6 @@ view_prim:detector_only:
   script:
     - ./bin/generate_prim_file -o ${LOCAL_DATA_PATH} -D -t detector_view -c eic_ip6.xml
     - ls -lrth && ls -lrth ${LOCAL_DATA_PATH}
-  allow_failure: true # FIXME this fails since including far_backward
 
 view_prim:ev001:
   extends: .views
