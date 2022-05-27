@@ -51,8 +51,8 @@
     <constant name="OuterTrackerEndcapN_zmin"               value="109*cm"/>
     <constant name="OuterTrackerEndcapN_offset"             value="36.00*cm"/>
     <constant name="OuterTrackerEndcapN_count"              value="2"/>
-    
-    <comment> Gem disk setup. 
+
+    <comment> Gem disk setup.
       Note: some GEM disk z-positions are moved slightly (below in the parametrization)
             to avoid vertical overlaps with the silicon disks (which is not allowed by ACTS).
             @FIXME
@@ -66,9 +66,9 @@
     <constant name="GEMEndcapN_count"                       value="2"/>
 
     <comment> Silicon tracker parameters </comment>
-    <constant name="SiTrackerBarrelSpaceFrameCF_thickness"  value="0.12*mm"/> 
+    <constant name="SiTrackerBarrelSpaceFrameCF_thickness"  value="0.12*mm"/>
     <constant name="SiTrackerBarrelSpaceFrame_height"       value="1.0*cm"/>
-    <constant name="SiTrackerEndcapAl_thickness"            value="0.15*mm"/> 
+    <constant name="SiTrackerEndcapAl_thickness"            value="0.15*mm"/>
     <constant name="SiTrackerEndcapCF_thickness"            value="0.12*mm"/>
     <constant name="SiTrackerEndcapMod_count"               value="36"/>
     <constant name="SiTrackerEndcapMod_dz"                  value="0" />
@@ -126,14 +126,14 @@ To be used as standin until we get more detailed specs from the working group on
 
 #### ITS3 sensors
 
-ITS3 sensor thickness: 
+ITS3 sensor thickness:
 - 40um, pixel size: 10um (segmentation)
 - total X0 0.55% per barrel layer:
--  0.35 mm aluminum ~ 0.4% X0. 
+-  0.35 mm aluminum ~ 0.4% X0.
 -  2 x carbonfiber (RL ~ 28) 0.12 mm (!!! material scan shows ~0.17mm, need to check later) to match Si (RL~9) of 0.04mm ~ 0.04%
 
 total X0 0.24% per disk layer （4 sectors per disk):
-  - 0.15 mm aluminum ~ 0.16% X0. 
+  - 0.15 mm aluminum ~ 0.16% X0.
   - 1 x carbonfiber (RL ~ 28) 0.12 mm to match Si (RL~9) of 0.04mm ~ 0.04%
 
   </documentation>
@@ -144,8 +144,8 @@ total X0 0.24% per disk layer （4 sectors per disk):
     <constant name="InnerTrackerBarrelCone_z"            value="(InnerTrackerBarrelCone_zmax + InnerTrackerBarrelCone_zmin)/2" />
     <constant name="InnerTrackerBarrelCone_thickness"    value="SiTrackerSupportConeCF_thickness + SiTrackerServiceConeAl_thickness" />
     <comment> Shorten Module (with non-zero thickness!) to avoid overlaps with support cone</comment>
-    <constant name="InnerTrackerBarrelMod1_length"       value="2 * InnerTrackerBarrelMod1_rmin / CentralTrackingBarrel_tan - 0.5*cm - 2. * InnerTrackerBarrelCone_thickness" /> 
-    <constant name="InnerTrackerBarrelMod2_length"       value="2 * InnerTrackerBarrelMod2_rmin / CentralTrackingBarrel_tan - 0.5*cm - 2. * InnerTrackerBarrelCone_thickness" /> 
+    <constant name="InnerTrackerBarrelMod1_length"       value="2 * InnerTrackerBarrelMod1_rmin / CentralTrackingBarrel_tan - 0.5*cm - 2. * InnerTrackerBarrelCone_thickness" />
+    <constant name="InnerTrackerBarrelMod2_length"       value="2 * InnerTrackerBarrelMod2_rmin / CentralTrackingBarrel_tan - 0.5*cm - 2. * InnerTrackerBarrelCone_thickness" />
     <constant name="InnerTrackerBarrelServiceCone_rmin1" value="InnerTrackerBarrelCone_zmin * CentralTrackingBarrel_tan" />
     <constant name="InnerTrackerBarrelServiceCone_rmax1" value="InnerTrackerBarrelServiceCone_rmin1 + SiTrackerServiceConeAl_thickness" />
     <constant name="InnerTrackerBarrelServiceCone_rmin2" value="InnerTrackerBarrelCone_zmax * CentralTrackingBarrel_tan" />
@@ -180,14 +180,14 @@ total X0 0.24% per disk layer （4 sectors per disk):
       insideTrackingVolume="true">
       <dimensions
         rmin="InnerTrackerBarrelEnvelope_rmin"
-        rmax="InnerTrackerBarrelEnvelope_rmax" 
+        rmax="InnerTrackerBarrelEnvelope_rmax"
         length="InnerTrackerBarrelEnvelope_length"/>
       <support material="Aluminum" name="serv_cone_pos" vis="TrackerServiceVis">
         <shape type="Cone"
           rmin1="InnerTrackerBarrelServiceCone_rmin1"
           rmax1="InnerTrackerBarrelServiceCone_rmax1"
           rmin2="InnerTrackerBarrelServiceCone_rmin2"
-          rmax2="InnerTrackerBarrelServiceCone_rmax2" 
+          rmax2="InnerTrackerBarrelServiceCone_rmax2"
           z="InnerTrackerBarrelCone_length/2"/>
         <position x="0*cm" y="0*cm" z="InnerTrackerBarrelCone_z" />
       </support>
@@ -196,7 +196,7 @@ total X0 0.24% per disk layer （4 sectors per disk):
           rmin1="InnerTrackerBarrelSupportCone_rmin1"
           rmax1="InnerTrackerBarrelSupportCone_rmax1"
           rmin2="InnerTrackerBarrelSupportCone_rmin2"
-          rmax2="InnerTrackerBarrelSupportCone_rmax2" 
+          rmax2="InnerTrackerBarrelSupportCone_rmax2"
           z="InnerTrackerBarrelCone_length/2"/>
         <position x="0*cm" y="0*cm" z="InnerTrackerBarrelCone_z" />
       </support>
@@ -205,7 +205,7 @@ total X0 0.24% per disk layer （4 sectors per disk):
           rmin1="InnerTrackerBarrelServiceCone_rmin2"
           rmax1="InnerTrackerBarrelServiceCone_rmax2"
           rmin2="InnerTrackerBarrelServiceCone_rmin1"
-          rmax2="InnerTrackerBarrelServiceCone_rmax1" 
+          rmax2="InnerTrackerBarrelServiceCone_rmax1"
           z="InnerTrackerBarrelCone_length/2"/>
         <position x="0*cm" y="0*cm" z="-InnerTrackerBarrelCone_z" />
       </support>
@@ -214,7 +214,7 @@ total X0 0.24% per disk layer （4 sectors per disk):
           rmin1="InnerTrackerBarrelSupportCone_rmin2"
           rmax1="InnerTrackerBarrelSupportCone_rmax2"
           rmin2="InnerTrackerBarrelSupportCone_rmin1"
-          rmax2="InnerTrackerBarrelSupportCone_rmax1" 
+          rmax2="InnerTrackerBarrelSupportCone_rmax1"
           z="InnerTrackerBarrelCone_length/2"/>
         <position x="0*cm" y="0*cm" z="-InnerTrackerBarrelCone_z" />
       </support>
@@ -222,24 +222,24 @@ total X0 0.24% per disk layer （4 sectors per disk):
         Tracker Barrel Modules
       </comment>
       <module name="InnerTrackerBarrel_Mod1" vis="TrackerModuleVis">
-        <frame material="CarbonFiber" vis="TrackerSupportVis" 
-          width="InnerTrackerBarrelMod_width"  
-          height="SiTrackerBarrelSpaceFrame_height" 
+        <frame material="CarbonFiber" vis="TrackerSupportVis"
+          width="InnerTrackerBarrelMod_width"
+          height="SiTrackerBarrelSpaceFrame_height"
           length="InnerTrackerBarrelMod1_length"
           thickness="SiTrackerBarrelSpaceFrameCF_thickness" />
-        <module_component name="silicon" 
+        <module_component name="silicon"
           width="InnerTrackerBarrelMod_width"
           length="InnerTrackerBarrelMod1_length" thickness="SiTrackerSensor_thickness" material="Silicon" sensitive="true" vis="TrackerLayerVis" />
         <module_component name="aluminum1" material="Aluminum" sensitive="false"
           width="InnerTrackerBarrelMod_width" length="InnerTrackerBarrelMod1_length" thickness="0.4*mm" vis="TrackerServiceVis"/>
       </module>
       <module name="InnerTrackerBarrel_Mod2" vis="TrackerModuleVis">
-        <frame material="CarbonFiber" vis="TrackerSupportVis" 
-          width="InnerTrackerBarrelMod_width"  
-          height="SiTrackerBarrelSpaceFrame_height" 
+        <frame material="CarbonFiber" vis="TrackerSupportVis"
+          width="InnerTrackerBarrelMod_width"
+          height="SiTrackerBarrelSpaceFrame_height"
           length="InnerTrackerBarrelMod2_length"
           thickness="SiTrackerBarrelSpaceFrameCF_thickness" />
-        <module_component name="silicon" 
+        <module_component name="silicon"
           width="InnerTrackerBarrelMod_width"
           length="InnerTrackerBarrelMod2_length" thickness="SiTrackerSensor_thickness" material="Silicon" sensitive="true" vis="TrackerLayerVis" />
         <module_component name="aluminum1" material="Aluminum" sensitive="false"
@@ -334,7 +334,7 @@ total X0 0.24% per disk layer （4 sectors per disk):
           rmin1="InnerTrackerEndcapServiceCone_rmin1"
           rmax1="InnerTrackerEndcapServiceCone_rmax1"
           rmin2="InnerTrackerEndcapServiceCone_rmin2"
-          rmax2="InnerTrackerEndcapServiceCone_rmax2" 
+          rmax2="InnerTrackerEndcapServiceCone_rmax2"
           z="InnerTrackerEndcapCone_length/2"/>
         <position x="0*cm" y="0*cm" z="InnerTrackerEndcapCone_z" />
       </support>
@@ -343,7 +343,7 @@ total X0 0.24% per disk layer （4 sectors per disk):
           rmin1="InnerTrackerEndcapSupportCone_rmin1"
           rmax1="InnerTrackerEndcapSupportCone_rmax1"
           rmin2="InnerTrackerEndcapSupportCone_rmin2"
-          rmax2="InnerTrackerEndcapSupportCone_rmax2" 
+          rmax2="InnerTrackerEndcapSupportCone_rmax2"
           z="InnerTrackerEndcapCone_length/2"/>
         <position x="0*cm" y="0*cm" z="InnerTrackerEndcapCone_z" />
       </support>
@@ -376,7 +376,7 @@ total X0 0.24% per disk layer （4 sectors per disk):
           length="SiTrackerEndcapLayer_thickness"
           zstart="InnerTrackerEndcapLayer1_zmin" />
         <layer_material surface="representing" binning="binPhi,binR" bins0="20*SiTrackerEndcapMod_count" bins1="256"/>
-        <ring 
+        <ring
           r="InnerTrackerEndcapMod1_rmin + InnerTrackerEndcapMod1_y/2"
           zstart="0"
           nmodules="SiTrackerEndcapMod_count"
@@ -390,7 +390,7 @@ total X0 0.24% per disk layer （4 sectors per disk):
           length="SiTrackerEndcapLayer_thickness"
           zstart="InnerTrackerEndcapLayer2_zmin" />
         <layer_material surface="representing" binning="binPhi,binR" bins0="20*SiTrackerEndcapMod_count" bins1="256"/>
-        <ring 
+        <ring
           r="InnerTrackerEndcapMod2_rmin + InnerTrackerEndcapMod2_y/2"
           zstart="0"
           nmodules="SiTrackerEndcapMod_count"
@@ -410,7 +410,7 @@ total X0 0.24% per disk layer （4 sectors per disk):
           rmin1="InnerTrackerEndcapServiceCone_rmin2"
           rmax1="InnerTrackerEndcapServiceCone_rmax2"
           rmin2="InnerTrackerEndcapServiceCone_rmin1"
-          rmax2="InnerTrackerEndcapServiceCone_rmax1" 
+          rmax2="InnerTrackerEndcapServiceCone_rmax1"
           z="InnerTrackerEndcapCone_length/2"/>
         <position x="0*cm" y="0*cm" z="-1*InnerTrackerEndcapCone_z" />
       </support>
@@ -419,7 +419,7 @@ total X0 0.24% per disk layer （4 sectors per disk):
           rmin1="InnerTrackerEndcapSupportCone_rmin2"
           rmax1="InnerTrackerEndcapSupportCone_rmax2"
           rmin2="InnerTrackerEndcapSupportCone_rmin1"
-          rmax2="InnerTrackerEndcapSupportCone_rmax1" 
+          rmax2="InnerTrackerEndcapSupportCone_rmax1"
           z="InnerTrackerEndcapCone_length/2"/>
         <position x="0*cm" y="0*cm" z="-1*InnerTrackerEndcapCone_z" />
       </support>
@@ -452,7 +452,7 @@ total X0 0.24% per disk layer （4 sectors per disk):
           length="SiTrackerEndcapLayer_thickness"
           zstart="InnerTrackerEndcapLayer1_zmin" />
         <layer_material surface="representing" binning="binPhi,binR" bins0="20*SiTrackerEndcapMod_count" bins1="256"/>
-        <ring 
+        <ring
           r="InnerTrackerEndcapMod1_rmin + InnerTrackerEndcapMod1_y/2"
           zstart="0"
           nmodules="SiTrackerEndcapMod_count"
@@ -466,7 +466,7 @@ total X0 0.24% per disk layer （4 sectors per disk):
           length="SiTrackerEndcapLayer_thickness"
           zstart="InnerTrackerEndcapLayer2_zmin" />
         <layer_material surface="representing" binning="binPhi,binR" bins0="20*SiTrackerEndcapMod_count" bins1="256"/>
-        <ring 
+        <ring
           r="InnerTrackerEndcapMod2_rmin + InnerTrackerEndcapMod2_y/2"
           zstart="0"
           nmodules="SiTrackerEndcapMod_count"
@@ -480,12 +480,12 @@ total X0 0.24% per disk layer （4 sectors per disk):
   </documentation>
   <define>
     <comment> Global MMGAS variables </comment>
-    <constant 
-      name="MMTrackerBarrelMod_thickness"    
+    <constant
+      name="MMTrackerBarrelMod_thickness"
       value="MMKaptonOverlay_thickness + MMCuGround_thickness + MMPCB_thickness
            + MMCuStrip_thickness + MMKaptonStrip_thickness + MMResistiveStrip_thickness
-           + MMGas_thickness + MMMesh_thickness + MMGasGap_thickness 
-           + MMDriftCuElectrode_thickness + MMDriftKapton_thickness 
+           + MMGas_thickness + MMMesh_thickness + MMGasGap_thickness
+           + MMDriftCuElectrode_thickness + MMDriftKapton_thickness
            + MMDriftCuGround_thickness" />
     <comment> Medial barrel implementation </comment>
     <comment> The value of InnerTrackerEndcap_zmax is calculated above based on the rmin of the MedialTrackerBarrel </comment>
@@ -517,7 +517,7 @@ total X0 0.24% per disk layer （4 sectors per disk):
       insideTrackingVolume="true">
       <dimensions
         rmin="MedialTrackerBarrelEnvelope_rmin"
-        rmax="MedialTrackerBarrelEnvelope_rmax" 
+        rmax="MedialTrackerBarrelEnvelope_rmax"
         length="MedialTrackerBarrelEnvelope_length"/>
       <module name="MedialTrackerBarrel_Mod1" vis="TrackerMPGDVis">
         <comment> Going from the inside (sensitive) side to the readout side </comment>
@@ -635,7 +635,7 @@ total X0 0.24% per disk layer （4 sectors per disk):
           length="SiTrackerEndcapLayer_thickness"
           zstart="MedialTrackerEndcapPLayer1_zmin" />
         <layer_material surface="representing" binning="binPhi,binR" bins0="20*SiTrackerEndcapMod_count" bins1="256"/>
-        <ring 
+        <ring
           r="MedialTrackerEndcapPMod1_rmin + MedialTrackerEndcapPMod1_y/2"
           zstart="0"
           nmodules="SiTrackerEndcapMod_count"
@@ -673,7 +673,7 @@ total X0 0.24% per disk layer （4 sectors per disk):
           length="SiTrackerEndcapLayer_thickness"
           zstart="MedialTrackerEndcapNLayer1_zmin" />
         <layer_material surface="representing" binning="binPhi,binR" bins0="20*SiTrackerEndcapMod_count" bins1="256"/>
-        <ring 
+        <ring
           r="MedialTrackerEndcapNMod1_rmin + MedialTrackerEndcapNMod1_y/2"
           zstart="0"
           nmodules="SiTrackerEndcapMod_count"
@@ -715,7 +715,7 @@ total X0 0.24% per disk layer （4 sectors per disk):
       insideTrackingVolume="true">
       <dimensions
         rmin="OuterTrackerBarrelEnvelope_rmin"
-        rmax="OuterTrackerBarrelEnvelope_rmax" 
+        rmax="OuterTrackerBarrelEnvelope_rmax"
         length="OuterTrackerBarrelEnvelope_length"/>
       <module name="OuterTrackerBarrel_Mod1" vis="TrackerMPGDVis">
         <comment> Going from the inside (sensitive) side to the readout side </comment>
@@ -881,7 +881,7 @@ total X0 0.24% per disk layer （4 sectors per disk):
           length="SiTrackerEndcapLayer_thickness"
           zstart="OuterTrackerEndcapPLayer1_zmin" />
         <layer_material surface="representing" binning="binPhi,binR" bins0="20*SiTrackerEndcapMod_count" bins1="256"/>
-        <ring 
+        <ring
           r="OuterTrackerEndcapPMod1_rmin + OuterTrackerEndcapPMod1_y/2"
           zstart="0"
           nmodules="SiTrackerEndcapMod_count"
@@ -895,7 +895,7 @@ total X0 0.24% per disk layer （4 sectors per disk):
           length="SiTrackerEndcapLayer_thickness"
           zstart="OuterTrackerEndcapPLayer2_zmin" />
         <layer_material surface="representing" binning="binPhi,binR" bins0="20*SiTrackerEndcapMod_count" bins1="256"/>
-        <ring 
+        <ring
           r="OuterTrackerEndcapPMod2_rmin + OuterTrackerEndcapPMod2_y/2"
           zstart="0"
           nmodules="SiTrackerEndcapMod_count"
@@ -909,7 +909,7 @@ total X0 0.24% per disk layer （4 sectors per disk):
           length="SiTrackerEndcapLayer_thickness"
           zstart="OuterTrackerEndcapPLayer3_zmin" />
         <layer_material surface="representing" binning="binPhi,binR" bins0="20*SiTrackerEndcapMod_count" bins1="256"/>
-        <ring 
+        <ring
           r="OuterTrackerEndcapPMod3_rmin + OuterTrackerEndcapPMod3_y/2"
           zstart="0"
           nmodules="SiTrackerEndcapMod_count"
@@ -953,7 +953,7 @@ total X0 0.24% per disk layer （4 sectors per disk):
           length="SiTrackerEndcapLayer_thickness"
           zstart="OuterTrackerEndcapNLayer1_zmin" />
         <layer_material surface="representing" binning="binPhi,binR" bins0="20*SiTrackerEndcapMod_count" bins1="256"/>
-        <ring 
+        <ring
           r="OuterTrackerEndcapNMod1_rmin + OuterTrackerEndcapNMod1_y/2"
           zstart="0"
           nmodules="SiTrackerEndcapMod_count"
@@ -967,7 +967,7 @@ total X0 0.24% per disk layer （4 sectors per disk):
           length="SiTrackerEndcapLayer_thickness"
           zstart="OuterTrackerEndcapNLayer2_zmin" />
         <layer_material surface="representing" binning="binPhi,binR" bins0="20*SiTrackerEndcapMod_count" bins1="256"/>
-        <ring 
+        <ring
           r="OuterTrackerEndcapNMod2_rmin + OuterTrackerEndcapNMod2_y/2"
           zstart="0"
           nmodules="SiTrackerEndcapMod_count"
@@ -980,8 +980,8 @@ total X0 0.24% per disk layer （4 sectors per disk):
     ## GEM trackers (3P, 2N)
   </documentation>
   <define>
-    <constant 
-      name="GEMEndcapMod_thickness"   
+    <constant
+      name="GEMEndcapMod_thickness"
       value="GEMMylar_thickness * 2 + GEMGas_thickness * 5 + GEMDriftRegion_thickness * 1
            + GEMKapton_thickness * (2 + 3 * GEMAreaFactor)
            + GEMCuFoil_thickness * (3 * GEMAreaFactor)
@@ -1012,8 +1012,8 @@ total X0 0.24% per disk layer （4 sectors per disk):
     <constant name="GEMEndcapRingLayer_rmin"        value="GEMEndcapRingModBotFrame_rmin - 1*um" />
     <constant name="GEMEndcapRingLayer_rmax"        value="GEMEndcapRingModTopFrame_rmax + 1*um" />
 
-    <comment> 
-      z position of the "ring" GEMS, note that some are offset slightly 
+    <comment>
+      z position of the "ring" GEMS, note that some are offset slightly
       to not overlap in z with the silicon disks (an ACTS limitation).
     </comment>
     <constant name="GEMEndcapPMod1_zmin"            value="GEMEndcapPDisk1_zmin + GEMEndcapLayer_thickness" />
@@ -1100,31 +1100,31 @@ total X0 0.24% per disk layer （4 sectors per disk):
           length="GEMEndcapLayer_thickness"
           zstart="GEMEndcapPLayer1_zmin" />
         <layer_material surface="representing" binning="binPhi,binR" bins0="20*GEMEndcapMod_count" bins1="256"/>
-        <ring 
+        <ring
           r="GEMEndcapRingMod_rmin + GEMEndcapRingMod_y/2" zstart="0" dz="GEMEndcapMod_dz"
           phi0="0*degree" dphi="GEMEndcapMod_angle" nmodules="GEMEndcapMod_count/2"
           module="RingModule" />
-        <ring 
+        <ring
           r="GEMEndcapRingMod_rmin + GEMEndcapRingMod_y/2" zstart="0" dz="GEMEndcapMod_dz"
           phi0="GEMEndcapMod_angle" dphi="GEMEndcapMod_angle" nmodules="GEMEndcapMod_count/2"
           module="RingModule" />
-        <ring 
+        <ring
           r="GEMEndcapRingModBotFrame_rmin + GEMEndcapRingModBotFrame_y/2" zstart="0" dz="GEMEndcapMod_dz"
           phi0="0*degree" dphi="GEMEndcapMod_angle" nmodules="GEMEndcapMod_count/2"
           module="RingBotFrame" />
-        <ring 
+        <ring
           r="GEMEndcapRingModBotFrame_rmin + GEMEndcapRingModBotFrame_y/2" zstart="0" dz="GEMEndcapMod_dz"
           phi0="GEMEndcapMod_angle" dphi="GEMEndcapMod_angle" nmodules="GEMEndcapMod_count/2"
           module="RingBotFrame" />
-        <ring 
+        <ring
           r="GEMEndcapRingModTopFrame_rmin + GEMEndcapRingModTopFrame_y/2" zstart="0" dz="GEMEndcapMod_dz"
           phi0="GEMEndcapMod_angle" dphi="GEMEndcapMod_angle" nmodules="GEMEndcapMod_count/2"
           module="RingTopFrame" />
-        <ring 
+        <ring
           r="GEMEndcapRingModTopFrame_rmin + GEMEndcapRingModTopFrame_y/2" zstart="0" dz="GEMEndcapMod_dz"
           phi0="0*degree" dphi="GEMEndcapMod_angle" nmodules="GEMEndcapMod_count/2"
           module="RingTopFrame" />
-        <ring 
+        <ring
           r="GEMEndcapRingModSpoke_r" zstart="0" dz="0"
           nmodules="GEMEndcapMod_count/2" phi0="3*GEMEndcapMod_angle/2"
           module="RingSpoke" />
@@ -1136,31 +1136,31 @@ total X0 0.24% per disk layer （4 sectors per disk):
           length="GEMEndcapLayer_thickness"
           zstart="GEMEndcapPLayer2_zmin" />
         <layer_material surface="representing" binning="binPhi,binR" bins0="20*GEMEndcapMod_count" bins1="256"/>
-        <ring 
+        <ring
           r="GEMEndcapRingMod_rmin + GEMEndcapRingMod_y/2" zstart="0" dz="GEMEndcapMod_dz"
           phi0="0*degree" dphi="GEMEndcapMod_angle" nmodules="GEMEndcapMod_count/2"
           module="RingModule" />
-        <ring 
+        <ring
           r="GEMEndcapRingMod_rmin + GEMEndcapRingMod_y/2" zstart="0" dz="GEMEndcapMod_dz"
           phi0="GEMEndcapMod_angle" dphi="GEMEndcapMod_angle" nmodules="GEMEndcapMod_count/2"
           module="RingModule" />
-        <ring 
+        <ring
           r="GEMEndcapRingModBotFrame_rmin + GEMEndcapRingModBotFrame_y/2" zstart="0" dz="GEMEndcapMod_dz"
           phi0="0*degree" dphi="GEMEndcapMod_angle" nmodules="GEMEndcapMod_count/2"
           module="RingBotFrame" />
-        <ring 
+        <ring
           r="GEMEndcapRingModBotFrame_rmin + GEMEndcapRingModBotFrame_y/2" zstart="0" dz="GEMEndcapMod_dz"
           phi0="GEMEndcapMod_angle" dphi="GEMEndcapMod_angle" nmodules="GEMEndcapMod_count/2"
           module="RingBotFrame" />
-        <ring 
+        <ring
           r="GEMEndcapRingModTopFrame_rmin + GEMEndcapRingModTopFrame_y/2" zstart="0" dz="GEMEndcapMod_dz"
           phi0="GEMEndcapMod_angle" dphi="GEMEndcapMod_angle" nmodules="GEMEndcapMod_count/2"
           module="RingTopFrame" />
-        <ring 
+        <ring
           r="GEMEndcapRingModTopFrame_rmin + GEMEndcapRingModTopFrame_y/2" zstart="0" dz="GEMEndcapMod_dz"
           phi0="0*degree" dphi="GEMEndcapMod_angle" nmodules="GEMEndcapMod_count/2"
           module="RingTopFrame" />
-        <ring 
+        <ring
           r="GEMEndcapRingModSpoke_r" zstart="0" dz="0"
           nmodules="GEMEndcapMod_count/2" phi0="3*GEMEndcapMod_angle/2"
           module="RingSpoke" />
@@ -1248,31 +1248,31 @@ total X0 0.24% per disk layer （4 sectors per disk):
           length="GEMEndcapLayer_thickness"
           zstart="GEMEndcapNLayer1_zmin" />
         <layer_material surface="representing" binning="binPhi,binR" bins0="20*GEMEndcapMod_count" bins1="256"/>
-        <ring 
+        <ring
           r="GEMEndcapRingMod_rmin + GEMEndcapRingMod_y/2" zstart="0" dz="GEMEndcapMod_dz"
           phi0="0*degree" dphi="GEMEndcapMod_angle" nmodules="GEMEndcapMod_count/2"
           module="RingModule" />
-        <ring 
+        <ring
           r="GEMEndcapRingMod_rmin + GEMEndcapRingMod_y/2" zstart="0" dz="GEMEndcapMod_dz"
           phi0="GEMEndcapMod_angle" dphi="GEMEndcapMod_angle" nmodules="GEMEndcapMod_count/2"
           module="RingModule" />
-        <ring 
+        <ring
           r="GEMEndcapRingModBotFrame_rmin + GEMEndcapRingModBotFrame_y/2" zstart="0" dz="GEMEndcapMod_dz"
           phi0="0*degree" dphi="GEMEndcapMod_angle" nmodules="GEMEndcapMod_count/2"
           module="RingBotFrame" />
-        <ring 
+        <ring
           r="GEMEndcapRingModBotFrame_rmin + GEMEndcapRingModBotFrame_y/2" zstart="0" dz="GEMEndcapMod_dz"
           phi0="GEMEndcapMod_angle" dphi="GEMEndcapMod_angle" nmodules="GEMEndcapMod_count/2"
           module="RingBotFrame" />
-        <ring 
+        <ring
           r="GEMEndcapRingModTopFrame_rmin + GEMEndcapRingModTopFrame_y/2" zstart="0" dz="GEMEndcapMod_dz"
           phi0="GEMEndcapMod_angle" dphi="GEMEndcapMod_angle" nmodules="GEMEndcapMod_count/2"
           module="RingTopFrame" />
-        <ring 
+        <ring
           r="GEMEndcapRingModTopFrame_rmin + GEMEndcapRingModTopFrame_y/2" zstart="0" dz="GEMEndcapMod_dz"
           phi0="0*degree" dphi="GEMEndcapMod_angle" nmodules="GEMEndcapMod_count/2"
           module="RingTopFrame" />
-        <ring 
+        <ring
           r="GEMEndcapRingModSpoke_r" zstart="0" dz="0"
           nmodules="GEMEndcapMod_count/2" phi0="3*GEMEndcapMod_angle/2"
           module="RingSpoke" />
@@ -1284,31 +1284,31 @@ total X0 0.24% per disk layer （4 sectors per disk):
           length="GEMEndcapLayer_thickness"
           zstart="GEMEndcapNLayer2_zmin" />
         <layer_material surface="representing" binning="binPhi,binR" bins0="20*GEMEndcapMod_count" bins1="256"/>
-        <ring 
+        <ring
           r="GEMEndcapRingMod_rmin + GEMEndcapRingMod_y/2" zstart="0" dz="GEMEndcapMod_dz"
           phi0="0*degree" dphi="GEMEndcapMod_angle" nmodules="GEMEndcapMod_count/2"
           module="RingModule" />
-        <ring 
+        <ring
           r="GEMEndcapRingMod_rmin + GEMEndcapRingMod_y/2" zstart="0" dz="GEMEndcapMod_dz"
           phi0="GEMEndcapMod_angle" dphi="GEMEndcapMod_angle" nmodules="GEMEndcapMod_count/2"
           module="RingModule" />
-        <ring 
+        <ring
           r="GEMEndcapRingModBotFrame_rmin + GEMEndcapRingModBotFrame_y/2" zstart="0" dz="GEMEndcapMod_dz"
           phi0="0*degree" dphi="GEMEndcapMod_angle" nmodules="GEMEndcapMod_count/2"
           module="RingBotFrame" />
-        <ring 
+        <ring
           r="GEMEndcapRingModBotFrame_rmin + GEMEndcapRingModBotFrame_y/2" zstart="0" dz="GEMEndcapMod_dz"
           phi0="GEMEndcapMod_angle" dphi="GEMEndcapMod_angle" nmodules="GEMEndcapMod_count/2"
           module="RingBotFrame" />
-        <ring 
+        <ring
           r="GEMEndcapRingModTopFrame_rmin + GEMEndcapRingModTopFrame_y/2" zstart="0" dz="GEMEndcapMod_dz"
           phi0="GEMEndcapMod_angle" dphi="GEMEndcapMod_angle" nmodules="GEMEndcapMod_count/2"
           module="RingTopFrame" />
-        <ring 
+        <ring
           r="GEMEndcapRingModTopFrame_rmin + GEMEndcapRingModTopFrame_y/2" zstart="0" dz="GEMEndcapMod_dz"
           phi0="0*degree" dphi="GEMEndcapMod_angle" nmodules="GEMEndcapMod_count/2"
           module="RingTopFrame" />
-        <ring 
+        <ring
           r="GEMEndcapRingModSpoke_r" zstart="0" dz="0"
           nmodules="GEMEndcapMod_count/2" phi0="3*GEMEndcapMod_angle/2"
           module="RingSpoke" />
@@ -1362,25 +1362,25 @@ total X0 0.24% per disk layer （4 sectors per disk):
           length="GEMEndcapLayer_thickness"
           zstart="GEMEndcapPLayer3_zmin" />
         <layer_material surface="representing" binning="binPhi,binR" bins0="20*GEMEndcapMod_count" bins1="256"/>
-        <ring 
+        <ring
           r="GEMEndcapLargeMod_rmin + GEMEndcapLargeMod_y/2"
           zstart="0"
           nmodules="GEMEndcapMod_count"
           dz="GEMEndcapMod_dz"
           module="LargeModule" />
-        <ring 
+        <ring
           r="GEMEndcapLargeModBotFrame_rmin + GEMEndcapLargeModBotFrame_y/2"
           zstart="0"
           nmodules="GEMEndcapMod_count"
           dz="GEMEndcapMod_dz"
           module="LargeBotFrame" />
-        <ring 
+        <ring
           r="GEMEndcapLargeModTopFrame_rmin + GEMEndcapLargeModTopFrame_y/2"
           zstart="0"
           nmodules="GEMEndcapMod_count"
           dz="GEMEndcapMod_dz"
           module="LargeTopFrame" />
-        <ring 
+        <ring
           r="GEMEndcapLargeModSpoke_r"
           zstart="0"
           nmodules="GEMEndcapMod_count"

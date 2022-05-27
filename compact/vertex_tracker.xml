@@ -5,8 +5,8 @@
       THis value probably can live in the file that includes this one.
     </comment>
     <constant name="ITS3Thickness"       value="40*um"/>
-    <constant name="VertexCarbon_thickness"         value="0.12*mm"/> 
-    <constant name="VertexEndcapAluminumThickness" value="0.15*mm"/> 
+    <constant name="VertexCarbon_thickness"         value="0.12*mm"/>
+    <constant name="VertexEndcapAluminumThickness" value="0.15*mm"/>
 
     <documentation>
       #### Vertex Tracker Barrel Parameters
@@ -48,7 +48,7 @@ Simple carbon fiber support shell.
     <constant name="VertexBarrelLayer_rmax1"        value="VertexBarrelLayer_rmin1 + VertexBarrelLayer_thickness"/>
     <constant name="VertexBarrelLayer_rmax2"        value="VertexBarrelLayer_rmin2 + VertexBarrelLayer_thickness"/>
 
-    <comment> 
+    <comment>
       "Support" is to "shell" like "layer" is to "module", and is need for the flat stave barrel implementation.
     </comment>
     <constant name="VertexBarrelShell_rmin"         value="10.0*cm"/>
@@ -121,29 +121,29 @@ Simple carbon fiber support shell.
       <comment>Vertex Barrel Modules</comment>
       <module name="Module1" vis="VertexLayerVis">
         <module_component name="ITS3"
-                          material="Silicon" 
+                          material="Silicon"
                           sensitive="true"
-                          width="VertexBarrelStave1_width" 
+                          width="VertexBarrelStave1_width"
                           length="VertexBarrelMod_length"
-                          thickness="VertexBarrelSensor_thickness" 
+                          thickness="VertexBarrelSensor_thickness"
                           vis="VertexLayerVis" />
       </module>
       <module name="Module2" vis="VertexLayerVis">
         <module_component name="ITS3"
-                          material="Silicon" 
+                          material="Silicon"
                           sensitive="true"
-                          width="VertexBarrelStave2_width" 
+                          width="VertexBarrelStave2_width"
                           length="VertexBarrelMod_length"
-                          thickness="VertexBarrelSensor_thickness" 
+                          thickness="VertexBarrelSensor_thickness"
                           vis="VertexLayerVis" />
       </module>
       <module name="SupportShell" vis="VertexSupportVis">
         <module_component name="CF Shell"
-                          material="CarbonFiber" 
+                          material="CarbonFiber"
                           sensitive="false"
-                          width="VertexBarrelShellStave_width" 
+                          width="VertexBarrelShellStave_width"
                           length="VertexBarrelShell_length"
-                          thickness="VertexBarrelShell_thickness" 
+                          thickness="VertexBarrelShell_thickness"
                           vis="VertexSupportVis" />
       </module>
       <comment> Layers composed of many arrayed modules  </comment>
@@ -195,13 +195,13 @@ Simple carbon fiber support shell.
       reflect="false">
 
       <support  material="CarbonFiber" name="sup_cone" vis="TrackerSupportVis">
-        <shape type="Cone" 
+        <shape type="Cone"
           rmin1="VertexEndcapCone_rmin1" rmax1="VertexEndcapCone_rmin1+VertexSupportCarbon_thickness"
           rmin2="VertexEndcapCone_rmin2" rmax2="VertexEndcapCone_rmin2+VertexSupportCarbon_thickness" z="VertexEndcapCone_length/2.0"/>
         <position x="0*cm"  y="0*cm"   z="(VertexEndcapCone_zmin+VertexEndcapCone_zmax)/2.0"/>
       </support>
       <support  material="Aluminum" name="sup_cone_service" vis="TrackerSupportVis">
-        <shape type="Cone" 
+        <shape type="Cone"
           rmin1="VertexEndcapConeService_rmin1" rmax1="VertexEndcapConeService_rmin1+VertexEndcapConeService_thickness"
           rmin2="VertexEndcapConeService_rmin2" rmax2="VertexEndcapConeService_rmin2+VertexEndcapConeService_thickness" z="VertexEndcapCone_length/2.0"/>
         <position x="0*cm"  y="0*cm"   z="(VertexEndcapCone_zmin+VertexEndcapCone_zmax)/2.0"/>
@@ -238,13 +238,13 @@ Simple carbon fiber support shell.
       reflect="true">
 
       <support  material="CarbonFiber" name="sup_cone" vis="TrackerSupportVis">
-        <shape type="Cone" 
+        <shape type="Cone"
           rmin2="VertexEndcapCone_rmin1" rmax2="VertexEndcapCone_rmin1+VertexSupportCarbon_thickness"
           rmin1="VertexEndcapCone_rmin2" rmax1="VertexEndcapCone_rmin2+VertexSupportCarbon_thickness" z="VertexEndcapCone_length/2.0"/>
         <position x="0*cm"  y="0*cm"   z="-1.0*(VertexEndcapCone_zmin+VertexEndcapCone_zmax)/2.0"/>
       </support>
       <support  material="Aluminum" name="sup_cone_service" vis="TrackerSupportVis">
-        <shape type="Cone" 
+        <shape type="Cone"
           rmin2="VertexEndcapConeService_rmin1" rmax2="VertexEndcapConeService_rmin1+VertexEndcapConeService_thickness"
           rmin1="VertexEndcapConeService_rmin2" rmax1="VertexEndcapConeService_rmin2+VertexEndcapConeService_thickness" z="VertexEndcapCone_length/2.0"/>
         <position x="0*cm"  y="0*cm"   z="-1.0*(VertexEndcapCone_zmin+VertexEndcapCone_zmax)/2.0"/>

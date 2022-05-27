@@ -38,4 +38,3 @@ view_01:
   script:
     - ls -lrth *
     - ls -lrth images/*
-

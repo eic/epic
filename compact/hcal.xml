@@ -6,7 +6,7 @@
     <constant name="HcalBarrelAvailThickness" value="HcalBarrel_thickness"/>
 
     <documentation>
-      #### Material Thickness 
+      #### Material Thickness
     </documentation>
     <constant name="HcalBarrelSteelThickness"        value="2.0 * cm"/>
     <constant name="HcalBarrelPolystyreneThickness"  value="0.5 * cm"/>
@@ -53,19 +53,19 @@
   <!-- Define detector -->
   <detectors>
 
-    <detector 
-      id="HCalBarrel_ID" 
+    <detector
+      id="HCalBarrel_ID"
       name="HcalBarrel"
       type="athena_EcalBarrel"
       readout="HcalBarrelHits"
-      vis="HcalBarrelVis" 
+      vis="HcalBarrelVis"
       calorimeterType="HAD_BARREL"
       offset="HcalBarrel_offset"
       gap="0.*cm"
       material="Steel235">
-      <dimensions 
-        numsides="CaloSides" 
-        rmin="HcalBarrel_rmin" 
+      <dimensions
+        numsides="CaloSides"
+        rmin="HcalBarrel_rmin"
         z="HcalBarrel_length"/>
       <staves vis="HcalBarrelStaveVis"/>
       <layer repeat="HcalBarrelLayer_NRepeat" vis="HcalBarrelLayerVis">
@@ -74,18 +74,18 @@
       </layer>
     </detector>
 
-    <detector 
-      id="HCalEndcapP_ID" 
-      name="HcalEndcapP" 
-      type="athena_PolyhedraEndcapCalorimeter2" 
-      readout="HcalEndcapPHits" 
-      vis="HcalEndcapVis" 
+    <detector
+      id="HCalEndcapP_ID"
+      name="HcalEndcapP"
+      type="athena_PolyhedraEndcapCalorimeter2"
+      readout="HcalEndcapPHits"
+      vis="HcalEndcapVis"
       calorimeterType="HAD_ENDCAP"
       reflect="false">
       <position x="0" y="0" z="0"/>
-      <dimensions 
-        numsides="CaloSides" 
-        zmin="HcalEndcapP_zmin" 
+      <dimensions
+        numsides="CaloSides"
+        zmin="HcalEndcapP_zmin"
         rmin="HcalEndcapP_rmin"
         rmax="HcalBarrel_rmax"/>
       <layer repeat="HcalEndcapPLayer_NRepeat" vis="HcalEndcapLayerVis" >
@@ -94,17 +94,17 @@
       </layer>
     </detector>
 
-    <detector 
-      id="PassiveSteelRingEndcapP_ID" 
-      name="PassiveSteelRingEndcapP" 
-      type="athena_PolyhedraEndcapCalorimeter2" 
-      vis="PassiveSteelVis" 
+    <detector
+      id="PassiveSteelRingEndcapP_ID"
+      name="PassiveSteelRingEndcapP"
+      type="athena_PolyhedraEndcapCalorimeter2"
+      vis="PassiveSteelVis"
       calorimeterType="HAD_ENDCAP"
       reflect="false">
       <position x="0" y="0" z="0"/>
-      <dimensions 
-        numsides="CaloSides" 
-        zmin="EcalEndcapP_zmin" 
+      <dimensions
+        numsides="CaloSides"
+        zmin="EcalEndcapP_zmin"
         rmin="EcalEndcapP_rmax"
         rmax="HcalBarrel_rmax"/>
       <layer repeat="1">
@@ -112,18 +112,18 @@
       </layer>
     </detector>
 
-    <detector 
-      id="HCalEndcapN_ID" 
-      name="HcalEndcapN" 
-      type="athena_PolyhedraEndcapCalorimeter2" 
-      readout="HcalEndcapNHits" 
-      vis="HcalEndcapVis" 
+    <detector
+      id="HCalEndcapN_ID"
+      name="HcalEndcapN"
+      type="athena_PolyhedraEndcapCalorimeter2"
+      readout="HcalEndcapNHits"
+      vis="HcalEndcapVis"
       calorimeterType="HAD_ENDCAP" reflect="true">
       <position x="0" y="0" z="0"/>
-      <dimensions 
-        numsides="CaloSides" 
-        zmin="HcalEndcapN_zmin" 
-        rmin="HcalEndcapN_rmin" 
+      <dimensions
+        numsides="CaloSides"
+        zmin="HcalEndcapN_zmin"
+        rmin="HcalEndcapN_rmin"
         rmax="HcalBarrel_rmax"/>
       <layer repeat="HcalEndcapNLayer_NRepeat" vis="HcalEndcapLayerVis" >
         <slice material="Steel235" thickness="HcalEndcapNSteelThickness" vis="HcalAbsorberVis"/>

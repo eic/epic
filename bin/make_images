@@ -22,4 +22,3 @@ images = glob.glob("images/*.png")
 
 template = env.get_template('detector_views.md')
 print(template.render(base_url=base_url, images=images))
-

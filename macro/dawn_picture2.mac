@@ -8,9 +8,9 @@
 #/tracking/storeTrajectory 1
 #/vis/drawVolume
 #/vis/geometry/set/forceSolid all -1 true
-#/vis/geometry/set/visibility world_volume 0 0 
+#/vis/geometry/set/visibility world_volume 0 0
 #/run/beamOn 1
-#/vis/viewer/flush 
+#/vis/viewer/flush
 /vis/open DAWNFILE
 /vis/scene/create
 /vis/scene/add/volume

@@ -160,5 +160,3 @@ else:
 # move the prim files (which can be quite large)
 # to the local pipeline storage path
 os.system('mv g4_0000.prim {}/{}.prim'.format(args.out_dir,args.file_tag))
-
-

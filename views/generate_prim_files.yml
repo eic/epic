@@ -63,4 +63,3 @@ view_prim:calorimeters_ev002:
   script:
     - cp "compact/subsystem_views/calorimeters.xml" "${DETECTOR_PATH}/."
     - ./bin/generate_prim_file -c ${DETECTOR_PATH}/calorimeters.xml -o ${LOCAL_DATA_PATH} -t calorimeters_view_ev002 -s 2
-

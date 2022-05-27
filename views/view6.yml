@@ -49,7 +49,7 @@ dawn_view_06:ev004:
 view_06:
   stage: collect
   rules:
-    - if: '$CI_SERVER_HOST == "eicweb.phy.anl.gov"' 
+    - if: '$CI_SERVER_HOST == "eicweb.phy.anl.gov"'
   needs:
     - job: dawn_view_06:detector
       optional: false
@@ -57,7 +57,7 @@ view_06:
       optional: true
     - job: dawn_view_06:ev002
       optional: true
-    - job: dawn_view_06:ev003 
+    - job: dawn_view_06:ev003
       optional: true
     - job: dawn_view_06:ev004
       optional: true
@@ -65,4 +65,3 @@ view_06:
   script:
     - ls -lrth *
     - ls -lrth images/*
-

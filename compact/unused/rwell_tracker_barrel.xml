@@ -17,7 +17,7 @@
                //outer ring
                support_03_thickness = 0.50;
                support_03_length = 1.2;
-            
+
                Length=TrackerBarrelOuter_length=(160, 160) cm // to avoid conflict with GEM tracker
                TODO: fix GEM geometry and restore length
   </comment>
@@ -37,12 +37,12 @@
     <constant name="RWellTrackerBarrelLayer1_gas_rmin"      value="786.7 * mm"/>
     <constant name="RWellTrackerBarrelLayer1_rmin"          value="RWellTrackerBarrelLayer1_gas_rmin - RWellTrackerBarrel_Kapton_thickness"/>
     <constant name="RWellTrackerBarrelLayer1_thickness"     value="RWellTrackerBarrel_Kapton_thickness + RWellTrackerBarrel_Gas_thickness + RWellTrackerBarrel_Cu_thickness + RWellTrackerBarrel_Prepreg_thickness + RWellTrackerBarrel_Pcb_thickness"/>
-    
+
     <constant name="RWellTrackerBarrelLayer2_length"        value="RWellTrackerBarrel_length"/>
     <constant name="RWellTrackerBarrelLayer2_gas_rmin"      value="900.0 * mm"/>
     <constant name="RWellTrackerBarrelLayer2_rmin"          value="RWellTrackerBarrelLayer2_gas_rmin - RWellTrackerBarrel_Kapton_thickness"/>
     <constant name="RWellTrackerBarrelLayer2_thickness"     value="RWellTrackerBarrel_Kapton_thickness + RWellTrackerBarrel_Gas_thickness + RWellTrackerBarrel_Cu_thickness + RWellTrackerBarrel_Prepreg_thickness + RWellTrackerBarrel_Pcb_thickness"/>
-    
+
     <constant name="RWellTrackerBarrel_STube_thickness"     value="0.5*cm"/>
     <constant name="RWellTrackerBarrel_STube_length"        value="7.2*cm"/>
     <constant name="RWellTrackerBarrel_IRing_thickness"     value="1.6*cm"/>
@@ -64,7 +64,7 @@
 
   <detectors>
     <detector id="RWellTrackerBarrel_ID" name="RWellTrackerBarrel" type="athena_RWellTrackerBarrel" readout="RWellTrackerBarrelHits">
-        
+
         <module name="Module1" vis="GreenVis">
           <module_envelope
             rmin="RWellTrackerBarrelLayer1_rmin" thickness="RWellTrackerBarrelLayer1_thickness" length="RWellTrackerBarrelLayer1_length" phi="360*degree" />
@@ -74,7 +74,7 @@
           <module_component rmin="RWellTrackerBarrelLayer1_rmin + RWellTrackerBarrel_Kapton_thickness + RWellTrackerBarrel_Gas_thickness + RWellTrackerBarrel_Cu_thickness" thickness="RWellTrackerBarrel_Prepreg_thickness" material="Nomex"   name="Prepreg"         sensitive="false"/>
           <module_component rmin="RWellTrackerBarrelLayer1_rmin + RWellTrackerBarrel_Kapton_thickness + RWellTrackerBarrel_Gas_thickness + RWellTrackerBarrel_Cu_thickness + RWellTrackerBarrel_Prepreg_thickness" thickness="RWellTrackerBarrel_Pcb_thickness" material="Fr4"     name="Pcb"             sensitive="false"/>
         </module>
-        
+
         <module name="Module1_STube" vis="GreenVis">
            <module_envelope
              rmin="RWellTrackerBarrelLayer1_support_rmin" thickness="RWellTrackerBarrel_STube_thickness" length="RWellTrackerBarrel_STube_length" phi="360*degree" />
@@ -90,7 +90,7 @@
              rmin="RWellTrackerBarrelLayer1_support_rmin + RWellTrackerBarrel_STube_thickness + RWellTrackerBarrel_IRing_thickness" thickness="RWellTrackerBarrel_ORing_thickness" length="RWellTrackerBarrel_ORing_length" phi="360*degree" />
            <module_component rmin="RWellTrackerBarrelLayer1_support_rmin + RWellTrackerBarrel_STube_thickness + RWellTrackerBarrel_IRing_thickness" thickness="RWellTrackerBarrel_ORing_thickness" material="Cfrp_intt"  name="support_outer_ring" sensitive="false"/>
         </module>
-      
+
         <module name="Module2" vis="GreenVis">
           <module_envelope
               rmin="RWellTrackerBarrelLayer2_rmin" thickness="RWellTrackerBarrelLayer2_thickness" length="RWellTrackerBarrelLayer2_length" phi="360*degree" />
@@ -100,7 +100,7 @@
           <module_component rmin="RWellTrackerBarrelLayer2_rmin + RWellTrackerBarrel_Kapton_thickness + RWellTrackerBarrel_Gas_thickness + RWellTrackerBarrel_Cu_thickness" thickness="RWellTrackerBarrel_Prepreg_thickness" material="Nomex"   name="Prepreg"         sensitive="false"/>
           <module_component rmin="RWellTrackerBarrelLayer2_rmin + RWellTrackerBarrel_Kapton_thickness + RWellTrackerBarrel_Gas_thickness + RWellTrackerBarrel_Cu_thickness + RWellTrackerBarrel_Pcb_thickness" thickness="RWellTrackerBarrel_Pcb_thickness" material="Fr4"     name="Pcb"             sensitive="false"/>
         </module>
-        
+
         <module name="Module2_STube" vis="GreenVis">
            <module_envelope
              rmin="RWellTrackerBarrelLayer2_support_rmin" thickness="RWellTrackerBarrel_STube_thickness" length="RWellTrackerBarrel_STube_length" phi="360*degree" />

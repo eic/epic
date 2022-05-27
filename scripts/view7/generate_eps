@@ -6,7 +6,7 @@ function print_the_help {
   echo "USAGE: $0 <PRIM_FILE>  "
   echo "  OPTIONS: "
   echo "            -t,--tag           filename tag (default: view1)"
-  exit 
+  exit
 }
 
 FILE_TAG="view7"
@@ -51,9 +51,9 @@ set -- "${POSITIONAL[@]}" # restore positional parameters
 #SiTracker Endcap layer 5 zstart = 860mm ( 90 mm thick )
 
 # units are mm
-dawncut 0 0 -1 1 ${INPUT_FILE} ${FILE_TAG}a_temp0.prim 
+dawncut 0 0 -1 1 ${INPUT_FILE} ${FILE_TAG}a_temp0.prim
 dawncut 0 0 1 1  ${FILE_TAG}a_temp0.prim  ${FILE_TAG}a.prim
-dawn -d ${FILE_TAG}a.prim 
+dawn -d ${FILE_TAG}a.prim
 ps2pdf ${FILE_TAG}a.eps ${FILE_TAG}a_full.pdf
 gs -o ${FILE_TAG}a.pdf -sDEVICE=pdfwrite \
   -c "[/CropBox [50 175 550 675] /PAGES pdfmark" \
@@ -61,9 +61,9 @@ gs -o ${FILE_TAG}a.pdf -sDEVICE=pdfwrite \
 pdftoppm ${FILE_TAG}a.pdf ${FILE_TAG}a -png -singlefile -cropbox
 
 #SiTracker Endcap layer 5 zstart = 860mm ( 90 mm thick )
-dawncut 0 0 1 225 ${INPUT_FILE} ${FILE_TAG}b_temp0.prim 
+dawncut 0 0 1 225 ${INPUT_FILE} ${FILE_TAG}b_temp0.prim
 dawncut 0 0 -1 205 ${FILE_TAG}b_temp0.prim  ${FILE_TAG}b.prim
-dawn -d ${FILE_TAG}b.prim 
+dawn -d ${FILE_TAG}b.prim
 ps2pdf ${FILE_TAG}b.eps ${FILE_TAG}b_full.pdf
 gs -o ${FILE_TAG}b.pdf -sDEVICE=pdfwrite \
   -c "[/CropBox [50 175 550 675] /PAGES pdfmark" \
@@ -76,19 +76,19 @@ pdftoppm ${FILE_TAG}b.pdf ${FILE_TAG}b -png -singlefile -cropbox
 #
 #       input-file : Source DAWN-format file describing a 3D scene.
 #
-#       output-file: Output DAWN-format file describing a plane-clipped 
+#       output-file: Output DAWN-format file describing a plane-clipped
 #                    3D scene.  The default output stream is stdout.
 #
 #       a, b, c, d : Parameters  a, b, c, and d  are double values to
-#                    define a clipping plane described with the following 
-#                    equation: 
+#                    define a clipping plane described with the following
+#                    equation:
 #
-#                       ax + by + cz + d = 0. 
+#                       ax + by + cz + d = 0.
 #
-#                    Vector (a,b,c) defines the normal vector of 
-#                    the clipping plane.  
-#                    3D scene data in the half space at the front side 
-#                    of the clipping plane are clipped out and erased. 
-#                    The normal vector (a,b,c) needs not be a unit vector. 
-#                    If it is a unit vector, parameter "d" gives distance 
+#                    Vector (a,b,c) defines the normal vector of
+#                    the clipping plane.
+#                    3D scene data in the half space at the front side
+#                    of the clipping plane are clipped out and erased.
+#                    The normal vector (a,b,c) needs not be a unit vector.
+#                    If it is a unit vector, parameter "d" gives distance
 #                    between the clipping plane and origin (0,0,0).

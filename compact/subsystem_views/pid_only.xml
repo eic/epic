@@ -13,8 +13,8 @@
        </debug>
 
   <documentation level="-1">
-  # ECCE Detector 
-  - https://eicweb.phy.anl.gov/EIC/detectors/ecce.git 
+  # ECCE Detector
+  - https://eicweb.phy.anl.gov/EIC/detectors/ecce.git
   - https://eicweb.phy.anl.gov/EIC/detectors/ip6.git
   </documentation>
 
@@ -33,7 +33,7 @@
       The ip6 (or other ip) defines should be included first.
       These files have only a define tags.
   </documentation>
-    <include ref="ip6/definitions.xml" /> 
+    <include ref="ip6/definitions.xml" />
     <include ref="ip6/far_forward/fields_275.xml" />
     <include ref="compact/definitions.xml" />
   </define>
@@ -70,10 +70,10 @@
     The interaction point subsystems are included before the central detector subsystems.
     This is becuase the IP subsystems, for exmaple the beampipe, will define paramters
     which are subsquently used in the central detector construction -- e.g. the vertex tracker
-    uses the beampipe OD to help define its placement. 
+    uses the beampipe OD to help define its placement.
 
     The IP subsystems include the Far forward and backward regions. The list of subsystem includes:
-     - Interaction region beampipe 
+     - Interaction region beampipe
      - B0 tracker
      - Off-momentum tracker
      - Far forward roman pots

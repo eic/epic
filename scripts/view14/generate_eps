@@ -26,7 +26,7 @@ function print_the_help {
   echo "USAGE: $0 -i <PRIM_FILE> <slices ...> "
   echo "  OPTIONS: "
   echo "            -t,--tag           filename tag (default: view1)"
-  exit 
+  exit
 }
 
 FILE_TAG="view14"
@@ -77,11 +77,11 @@ make_slice(){
   local FILE_TAG="${original_file_tag}a${tagnum}"
   local z1=$(add ${zpos} 100)
   local z2=$(add ${zpos} -100)
-  #dawncut 0 0 1 ${z1}1 ${INPUT_FILE} ${FILE_TAG}_temp0.prim 
+  #dawncut 0 0 1 ${z1}1 ${INPUT_FILE} ${FILE_TAG}_temp0.prim
   #dawncut 0 0 -1 -${z2}0  ${FILE_TAG}_temp0.prim  ${FILE_TAG}.prim
   ../../bin/dawn_tweak -z ${zpos}0
   cp ${INPUT_FILE} ${FILE_TAG}.prim
-  dawn -d ${FILE_TAG}.prim 
+  dawn -d ${FILE_TAG}.prim
   ps2pdf ${FILE_TAG}.eps ${FILE_TAG}_full.pdf
   gs -o ${FILE_TAG}.pdf -sDEVICE=pdfwrite \
     -c "[/CropBox [50 175 550 675] /PAGES pdfmark" \
@@ -93,16 +93,16 @@ make_slice(){
 
 for zzz in $@ ;
 do
-  make_slice ${zzz} 
+  make_slice ${zzz}
 done
 
 wait
 
 
 
-#dawncut 0  1 0 10 ${INPUT_FILE} ${FILE_TAG}c_temp0.prim 
+#dawncut 0  1 0 10 ${INPUT_FILE} ${FILE_TAG}c_temp0.prim
 #dawncut 0 -1 0 0 ${FILE_TAG}c_temp0.prim  ${FILE_TAG}c.prim
-#dawn -d ${FILE_TAG}c.prim 
+#dawn -d ${FILE_TAG}c.prim
 #ps2pdf ${FILE_TAG}c.eps ${FILE_TAG}c_full.pdf
 #gs -o ${FILE_TAG}c.pdf -sDEVICE=pdfwrite \
 #  -c "[/CropBox [50 175 550 675] /PAGES pdfmark" \
@@ -110,9 +110,9 @@ wait
 #pdftoppm ${FILE_TAG}c.pdf ${FILE_TAG}c -png -singlefile -cropbox
 #
 ## slice at z = -1m
-#dawncut 0 0 1 -1000 ${INPUT_FILE} ${FILE_TAG}d_temp0.prim 
+#dawncut 0 0 1 -1000 ${INPUT_FILE} ${FILE_TAG}d_temp0.prim
 #dawncut 0 0 -1 1001 ${FILE_TAG}d_temp0.prim  ${FILE_TAG}d.prim
-#dawn -d ${FILE_TAG}d.prim 
+#dawn -d ${FILE_TAG}d.prim
 #ps2pdf ${FILE_TAG}d.eps ${FILE_TAG}d_full.pdf
 #gs -o ${FILE_TAG}d.pdf -sDEVICE=pdfwrite \
 #  -c "[/CropBox [50 175 550 675] /PAGES pdfmark" \
@@ -120,9 +120,9 @@ wait
 #pdftoppm ${FILE_TAG}d.pdf ${FILE_TAG}d -png -singlefile -cropbox
 #
 ## slice at z = -2m
-#dawncut 0 0 1 -2000 ${INPUT_FILE} ${FILE_TAG}e_temp0.prim 
+#dawncut 0 0 1 -2000 ${INPUT_FILE} ${FILE_TAG}e_temp0.prim
 #dawncut 0 0 -1 2001 ${FILE_TAG}e_temp0.prim  ${FILE_TAG}e.prim
-#dawn -d ${FILE_TAG}e.prim 
+#dawn -d ${FILE_TAG}e.prim
 #ps2pdf ${FILE_TAG}e.eps ${FILE_TAG}e_full.pdf
 #gs -o ${FILE_TAG}e.pdf -sDEVICE=pdfwrite \
 #  -c "[/CropBox [50 175 550 675] /PAGES pdfmark" \
@@ -135,19 +135,19 @@ wait
 #
 #       input-file : Source DAWN-format file describing a 3D scene.
 #
-#       output-file: Output DAWN-format file describing a plane-clipped 
+#       output-file: Output DAWN-format file describing a plane-clipped
 #                    3D scene.  The default output stream is stdout.
 #
 #       a, b, c, d : Parameters  a, b, c, and d  are double values to
-#                    define a clipping plane described with the following 
-#                    equation: 
+#                    define a clipping plane described with the following
+#                    equation:
 #
-#                       ax + by + cz + d = 0. 
+#                       ax + by + cz + d = 0.
 #
-#                    Vector (a,b,c) defines the normal vector of 
-#                    the clipping plane.  
-#                    3D scene data in the half space at the front side 
-#                    of the clipping plane are clipped out and erased. 
-#                    The normal vector (a,b,c) needs not be a unit vector. 
-#                    If it is a unit vector, parameter "d" gives distance 
+#                    Vector (a,b,c) defines the normal vector of
+#                    the clipping plane.
+#                    3D scene data in the half space at the front side
+#                    of the clipping plane are clipped out and erased.
+#                    The normal vector (a,b,c) needs not be a unit vector.
+#                    If it is a unit vector, parameter "d" gives distance
 #                    between the clipping plane and origin (0,0,0).

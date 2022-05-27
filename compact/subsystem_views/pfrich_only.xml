@@ -13,8 +13,8 @@
        </debug>
 
   <documentation level="-1">
-  # ECCE Detector 
-  - https://eicweb.phy.anl.gov/EIC/detectors/ecce.git 
+  # ECCE Detector
+  - https://eicweb.phy.anl.gov/EIC/detectors/ecce.git
   - https://eicweb.phy.anl.gov/EIC/detectors/ip6.git
   </documentation>
 
@@ -33,7 +33,7 @@
       The ip6 (or other ip) defines should be included first.
       These files have only a define tags.
   </documentation>
-    <include ref="ip6/definitions.xml" /> 
+    <include ref="ip6/definitions.xml" />
     <include ref="ip6/far_forward/fields_275.xml" />
     <include ref="compact/definitions.xml" />
   </define>

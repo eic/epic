@@ -48,7 +48,7 @@ Simple carbon fiber support shell.
     <constant name="VertexBarrelLayer3_rmin"        value="VertexBarrelLayer1_rmin + 2 * VertexBarrelMod_offset"/>
     <constant name="VertexBarrelLayer3_rmax"        value="VertexBarrelLayer3_rmin + VertexBarrelLayer_thickness"/>
 
-    <comment> 
+    <comment>
       "Support" is to "shell" like "layer" is to "module", and is need for the flat stave barrel implementation.
     </comment>
     <constant name="VertexBarrelShell_rmin"         value="VertexBarrelMod_rmin + VertexBarrelMod_count * VertexBarrelMod_offset"/>
@@ -91,38 +91,38 @@ Simple carbon fiber support shell.
       <comment>Vertex Barrel Modules</comment>
       <module name="Module1" vis="VertexLayerVis">
         <module_component name="ITS3"
-                          material="Silicon" 
+                          material="Silicon"
                           sensitive="true"
-                          width="VertexBarrelStave1_width" 
+                          width="VertexBarrelStave1_width"
                           length="VertexBarrelMod_length"
-                          thickness="SiVertexSensor_thickness" 
+                          thickness="SiVertexSensor_thickness"
                           vis="VertexLayerVis" />
       </module>
       <module name="Module2" vis="VertexLayerVis">
         <module_component name="ITS3"
-                          material="Silicon" 
+                          material="Silicon"
                           sensitive="true"
-                          width="VertexBarrelStave2_width" 
+                          width="VertexBarrelStave2_width"
                           length="VertexBarrelMod_length"
-                          thickness="SiVertexSensor_thickness" 
+                          thickness="SiVertexSensor_thickness"
                           vis="VertexLayerVis" />
       </module>
       <module name="Module3" vis="VertexLayerVis">
         <module_component name="ITS3"
-                          material="Silicon" 
+                          material="Silicon"
                           sensitive="true"
-                          width="VertexBarrelStave3_width" 
+                          width="VertexBarrelStave3_width"
                           length="VertexBarrelMod_length"
-                          thickness="SiVertexSensor_thickness" 
+                          thickness="SiVertexSensor_thickness"
                           vis="VertexLayerVis" />
       </module>
       <module name="SupportShell" vis="VertexSupportVis">
         <module_component name="CF Shell"
-                          material="CarbonFiber" 
+                          material="CarbonFiber"
                           sensitive="false"
-                          width="VertexBarrelShellStave_width" 
+                          width="VertexBarrelShellStave_width"
                           length="VertexBarrelShell_length"
-                          thickness="VertexBarrelShell_thickness" 
+                          thickness="VertexBarrelShell_thickness"
                           vis="VertexSupportVis" />
       </module>
       <comment> Layers composed of many arrayed modules  </comment>

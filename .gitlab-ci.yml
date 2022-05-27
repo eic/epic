@@ -12,7 +12,7 @@ default:
   before_script:
     - source .local/bin/env.sh
   artifacts:
-    expire_in: 1 week 
+    expire_in: 1 week
     paths:
       - .local/detector
       - .local/lib
@@ -34,15 +34,15 @@ stages:
   - test
   - docs
   - collect
-  - finalize 
+  - finalize
   - deploy
 
 common:setup:
   stage: config
   rules:
-    - if: '$CI_SERVER_HOST == "eicweb.phy.anl.gov"' 
+    - if: '$CI_SERVER_HOST == "eicweb.phy.anl.gov"'
   before_script:
-    - git clone https://eicweb.phy.anl.gov/EIC/benchmarks/common_bench.git setup 
+    - git clone https://eicweb.phy.anl.gov/EIC/benchmarks/common_bench.git setup
   script:
     - export JUGGLER_DETECTOR="ecce"
     - |
@@ -62,7 +62,7 @@ common:setup:
 
 common:detector:
   stage: build
-  needs: 
+  needs:
     - common:setup
   script:
     #- source .local/bin/env.sh && build_detector.sh
@@ -167,7 +167,7 @@ detector_documentation:
 
 report:
   stage: finalize
-  needs: 
+  needs:
     - view_01
     - view_02
     - view_03
@@ -190,10 +190,10 @@ report:
 
 dump_constants:
   stage: test
-  needs: 
+  needs:
     - ["common:detector"]
   script:
-    - npdet_info dump ${DETECTOR_PATH}/ecce.xml  | tee doc/constants.out 
+    - npdet_info dump ${DETECTOR_PATH}/ecce.xml  | tee doc/constants.out
 
 dump_parameter_table:
   stage: test
@@ -210,19 +210,19 @@ dump_parameter_table:
 
 overlap_check_tgeo:
   stage: test
-  needs: 
+  needs:
     - ["common:detector"]
   script:
     ## disable fibers in ECAL for normal overlap check
     - sed -i '/<fiber/,+6d' ${DETECTOR_PATH}/compact/ecal_barrel_interlayers.xml
     - sed -i '/<fiber/,+4d' ${DETECTOR_PATH}/ip6/far_forward/ZDC_Ecal_WSciFi.xml
-    - checkOverlaps -c ${DETECTOR_PATH}/ecce.xml  | tee doc/overlap_check_tgeo.out 
+    - checkOverlaps -c ${DETECTOR_PATH}/ecce.xml  | tee doc/overlap_check_tgeo.out
     - echo "$(cat doc/overlap_check_tgeo.out | grep ovlp | wc -l) overlaps..."
     - if [[ "$(cat doc/overlap_check_tgeo.out | grep ovlp | wc -l)" -gt "0" ]] ; then echo "Overlaps exist!" && false ; fi
 
 overlap_check_geant4:full_fast:
   stage: test
-  needs: 
+  needs:
     - ["common:detector"]
   script:
     ## disable fibers in ECAL for normal overlap check
@@ -239,7 +239,7 @@ overlap_check_geant4:full_fast:
 
 overlap_check_geant4:inner_detector:
   stage: test
-  needs: 
+  needs:
     - ["common:detector"]
   script:
     - cp ${DETECTOR_PATH}/compact/subsystem_views/inner_detector.xml ${DETECTOR_PATH}/inner_detector.xml
@@ -249,7 +249,7 @@ overlap_check_geant4:inner_detector:
 
 convert_to_gdml:
   stage: test
-  needs: 
+  needs:
     - ["common:detector"]
   script:
     - mkdir -p geo
@@ -257,15 +257,15 @@ convert_to_gdml:
 
 tracking_geometry_debug:
   stage: test
-  needs: 
+  needs:
     - ["common:detector"]
   script:
-    - root -b -q "scripts/test_ACTS.cxx+(\"${DETECTOR_PATH}/ecce.xml\")" | tee geo/tracking_geometry_debug.out 
+    - root -b -q "scripts/test_ACTS.cxx+(\"${DETECTOR_PATH}/ecce.xml\")" | tee geo/tracking_geometry_debug.out
     - ./bin/acts_geo_check geo/tracking_geometry_debug.out
 
 detector:config_testing:
   stage: test
-  needs: 
+  needs:
     - ["common:detector"]
   script:
     - checkOverlaps -o 's' -c ${DETECTOR_PATH}/ecce.xml  | tee doc/overlap_check.out | wc -l
@@ -281,6 +281,6 @@ benchmarks:detector:
   trigger:
     project: EIC/benchmarks/detector_benchmarks
     strategy: depend
-  needs: 
+  needs:
     - overlap_check_geant4:full_fast
     - common:detector

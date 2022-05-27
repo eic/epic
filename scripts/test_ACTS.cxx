@@ -1,15 +1,10 @@
-R__LOAD_LIBRARY(libDDCore.so)
-R__LOAD_LIBRARY(libActsPluginDD4hep.so)
-R__LOAD_LIBRARY(libDDG4.so)
-R__LOAD_LIBRARY(libDDG4IO.so)
-#include "DD4hep/Detector.h"
 #include "DD4hep/DetElement.h"
-#include "DD4hep/Objects.h"
 #include "DD4hep/Detector.h"
+#include "DD4hep/Objects.h"
 #include "DDG4/Geant4Data.h"
 #include "DDRec/CellIDPositionConverter.h"
-#include "DDRec/SurfaceManager.h"
 #include "DDRec/Surface.h"
+#include "DDRec/SurfaceManager.h"
 
 #include "TCanvas.h"
 #include "TChain.h"
@@ -22,7 +17,8 @@ R__LOAD_LIBRARY(libDDG4IO.so)
  *
  *
  */
-void test_ACTS(const char* compact = "ecce.xml"){
+void test_ACTS(const char* compact = "ecce.xml")
+{
 
   using namespace ROOT::Math;
   // -------------------------
@@ -33,11 +29,11 @@ void test_ACTS(const char* compact = "ecce.xml"){
   detector.fromCompact(compact);
   dd4hep::rec::CellIDPositionConverter cellid_converter(detector);
 
-  //std::unique_ptr<const Acts::TrackingGeometry> 
-  auto acts_tracking_geometry  = Acts::convertDD4hepDetector (detector.world(),Acts::Logging::Level::VERBOSE);
-  //acts_tracking_geometry  = Acts::convertDD4hepDetector (detector.world(),Acts::Logging::Level::INFO);
+  // std::unique_ptr<const Acts::TrackingGeometry>
+  auto acts_tracking_geometry = Acts::convertDD4hepDetector(detector.world(), Acts::Logging::Level::VERBOSE);
+  // acts_tracking_geometry  = Acts::convertDD4hepDetector (detector.world(),Acts::Logging::Level::INFO);
 
-  if(acts_tracking_geometry) {
+  if (acts_tracking_geometry) {
     std::cout << "success?\n";
   }
   //  if(acts_tracking_geometry->highestTrackingVolume()) {
@@ -47,5 +43,4 @@ void test_ACTS(const char* compact = "ecce.xml"){
   //    std::cout << "derp\n";
   //  }
   //}
-
 }
