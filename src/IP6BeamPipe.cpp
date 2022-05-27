@@ -11,8 +11,11 @@
 #include "TMath.h"
 #include <XML/Helper.h>
 
-#include "Acts/Definitions/Units.hpp"
+#if defined(USE_ACTSDD4HEP)
+#include "ActsDD4hep/ActsExtension.hpp"
+#else
 #include "Acts/Plugins/DD4hep/ActsExtension.hpp"
+#endif
 
 using namespace std;
 using namespace dd4hep;
@@ -61,10 +64,10 @@ static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector /* sens *
   // Add extension for the beampipe
   //Acts::ActsExtension* sdExtension = new Acts::ActsExtension();
   //sdExtension->addType("beampipe", "layer");
-  //sdExtension->addValue(0.001 * Acts::UnitConstants::mm, "r_min", "envelope");
-  //sdExtension->addValue(0.001 * Acts::UnitConstants::mm, "r_max", "envelope");
-  //sdExtension->addValue(0.001 * Acts::UnitConstants::mm, "z_min", "envelope");
-  //sdExtension->addValue(0.001 * Acts::UnitConstants::mm, "z_max", "envelope");
+  //sdExtension->addValue(0.001, "r_min", "envelope"); // Acts::UnitConstants::mm == 1
+  //sdExtension->addValue(0.001, "r_max", "envelope"); // Acts::UnitConstants::mm == 1
+  //sdExtension->addValue(0.001, "z_min", "envelope"); // Acts::UnitConstants::mm == 1
+  //sdExtension->addValue(0.001, "z_max", "envelope"); // Acts::UnitConstants::mm == 1
   //sdet.addExtension<Acts::ActsExtension>(sdExtension);
 
 
@@ -82,10 +85,10 @@ static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector /* sens *
     //beamPipeExtension->addType("beampipe", "beampipe");
     //beamPipeExtension->addType("passive cylinder", "layer");
     beamPipeExtension->addType("beampipe", "layer");
-    beamPipeExtension->addValue(0.001 * Acts::UnitConstants::mm, "r_min", "envelope");
-    beamPipeExtension->addValue(0.001 * Acts::UnitConstants::mm, "r_max", "envelope");
-    beamPipeExtension->addValue(0.001 * Acts::UnitConstants::mm, "z_min", "envelope");
-    beamPipeExtension->addValue(0.001 * Acts::UnitConstants::mm, "z_max", "envelope");
+    beamPipeExtension->addValue(0.001, "r_min", "envelope"); // Acts::UnitConstants::mm == 1
+    beamPipeExtension->addValue(0.001, "r_max", "envelope"); // Acts::UnitConstants::mm == 1
+    beamPipeExtension->addValue(0.001, "z_min", "envelope"); // Acts::UnitConstants::mm == 1
+    beamPipeExtension->addValue(0.001, "z_max", "envelope"); // Acts::UnitConstants::mm == 1
 
     central_det.addExtension<Acts::ActsExtension>(beamPipeExtension);
     // TODO add material binning

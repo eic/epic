@@ -12,7 +12,14 @@ SET(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra -Werror")
 
 find_package(DD4hep REQUIRED COMPONENTS DDCore DDG4)
-find_package(Acts REQUIRED COMPONENTS Core PluginTGeo PluginDD4hep )
+find_package(ActsDD4hep)
+if(ActsDD4hep_FOUND)
+  add_compile_definitions(USE_ACTSDD4HEP)
+  set(ActsDD4hep ActsDD4hep::ActsDD4hep)
+else()
+  find_package(Acts REQUIRED COMPONENTS Core PluginIdentification PluginTGeo PluginDD4hep)
+  set(ActsDD4hep ActsCore ActsPluginDD4hep)
+endif()
 
 #-----------------------------------------------------------------------------------
 set(a_lib_name IP6)
@@ -41,10 +48,10 @@ dd4hep_add_plugin(${a_lib_name}
   src/ZeroDegreeCalorimeterEcalWSciFi_geo.cpp
   src/ZeroDegreeCalorimeterEcal_geo.cpp
   src/ZeroDegreeCalorimeterSampling_geo.cpp
-  USES ActsCore ActsPluginDD4hep ROOT::Core ROOT::Gdml
+  USES ${ActsDD4hep} ROOT::Core ROOT::Gdml
   )
 target_link_libraries(${a_lib_name}
-  PUBLIC DD4hep::DDCore  DD4hep::DDRec DD4hep::DDG4
+  PUBLIC DD4hep::DDCore DD4hep::DDRec DD4hep::DDG4
   )
 
 #-----------------------------------------------------------------------------------
