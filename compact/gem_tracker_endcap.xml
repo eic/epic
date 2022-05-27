@@ -1,6 +1,6 @@
 <lccdd>
 
-  <comment> Endcap Tracker for Acadia  </comment>        
+  <comment> Endcap Tracker for Acadia  </comment>
 
   <define>
     <constant name="GEMTrackerEndcapP_thickness"      value="min(10.0*cm,ForwardTrackingRegion_length)" />
@@ -14,10 +14,10 @@
     <constant name="GEMTrackerEndcapOpeningAngle"     value="30.4*degree"/>
     <constant name="GEMTrackerEndcap_dz"              value="15*mm" />
     <comment>
-      ____X2____ 
+      ____X2____
       \        /
        \      /    Y (=z for the trd)
-        \_X1_/ 
+        \_X1_/
     </comment>
     <constant name="GEMTrackerEndcapP_x1"          value="2.0*GEMTrackerEndcapP_rmin*sin(GEMTrackerEndcapOpeningAngle/2.0)"/>
     <constant name="GEMTrackerEndcapP_x2"          value="2.0*GEMTrackerEndcapP_rmax*sin(GEMTrackerEndcapOpeningAngle/2.0)"/>
@@ -26,7 +26,7 @@
     <constant name="GEMTrackerEndcapN_x2"          value="2.0*GEMTrackerEndcapN_rmax*sin(GEMTrackerEndcapOpeningAngle/2.0)"/>
     <constant name="GEMTrackerEndcapN_y"           value="GEMTrackerEndcapN_rmax*cos(GEMTrackerEndcapOpeningAngle/2.0) - GEMTrackerEndcapN_rmin"/>
 
-    <comment> 
+    <comment>
               Needs implimentation:
 	      Carbon fiber support ring and spokes
               Initial preliminary details can be found here: https://www.dropbox.com/s/grt9p8feqlsh52f/GEM-RD-GEMWheel.pdf?dl=0
@@ -60,7 +60,7 @@
       mGEMFoilCopperThickness     (    3.0 * etm::um),
 
       mReadoutG10Thickness        (    0.0 * etm::mm),
-      mReadoutKaptonThickness     (   30.0 * etm::um), 
+      mReadoutKaptonThickness     (   30.0 * etm::um),
       mReadoutCopperThickness     (    3.0 * etm::um),
 
       // 3mm thick Nomex honeycomb for SBS GEMs),
@@ -99,7 +99,7 @@
           Frame disabled as it gives issue with the ACTS geometry conversion
         <frame material="G10" thickness="GEMTrackerEndcapFrame_thickness" vis="TrackerSupportVis">
           <position x="0"  y="0" z="0" />
-          <trd x1="GEMTrackerEndcapP_x1/2.0 - GEMTrackerEndcapFrameSideEdge_width/cos(GEMTrackerEndcapOpeningAngle) 
+          <trd x1="GEMTrackerEndcapP_x1/2.0 - GEMTrackerEndcapFrameSideEdge_width/cos(GEMTrackerEndcapOpeningAngle)
                                               + GEMTrackerEndcapFrameBotEdge_width*tan(GEMTrackerEndcapOpeningAngle)"
                x2="GEMTrackerEndcapP_x2/2.0 - GEMTrackerEndcapFrameSideEdge_width/cos(GEMTrackerEndcapOpeningAngle)
                                               - GEMTrackerEndcapFrameTopEdge_width*tan(GEMTrackerEndcapOpeningAngle)"
@@ -163,7 +163,7 @@
           Frame disabled as it gives issue with the ACTS geometry conversion
         <frame material="G10" thickness="GEMTrackerEndcapFrame_thickness" vis="TrackerSupportVis">
           <position x="0"  y="0" z="0" />
-          <trd x1="GEMTrackerEndcapN_x1/2.0 - GEMTrackerEndcapFrameSideEdge_width/cos(GEMTrackerEndcapOpeningAngle) 
+          <trd x1="GEMTrackerEndcapN_x1/2.0 - GEMTrackerEndcapFrameSideEdge_width/cos(GEMTrackerEndcapOpeningAngle)
                                               + GEMTrackerEndcapFrameBotEdge_width*tan(GEMTrackerEndcapOpeningAngle)"
                x2="GEMTrackerEndcapN_x2/2.0 - GEMTrackerEndcapFrameSideEdge_width/cos(GEMTrackerEndcapOpeningAngle)
                                               - GEMTrackerEndcapFrameTopEdge_width*tan(GEMTrackerEndcapOpeningAngle)"

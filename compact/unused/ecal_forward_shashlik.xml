@@ -22,9 +22,9 @@
       ------------------------------------------
       An EM calorimeter with shashlik hexagon modules
     </comment>
-    <detector id="ECalEndcapP_ID" 
-      name="EcalEndcapP" 
-      type="ShashlikCalorimeter" 
+    <detector id="ECalEndcapP_ID"
+      name="EcalEndcapP"
+      type="ShashlikCalorimeter"
       readout="EcalEndcapPHits">
       <position x="0" y="0" z="EcalEndcapP_zmin"/>
       <placements>
@@ -72,4 +72,3 @@
 
 
 </lccdd>
-

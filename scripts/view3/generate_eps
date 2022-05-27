@@ -6,7 +6,7 @@ function print_the_help {
   echo "USAGE: $0 <PRIM_FILE>  "
   echo "  OPTIONS: "
   echo "            -t,--tag           filename tag (default: view1)"
-  exit 
+  exit
 }
 
 FILE_TAG="view3"
@@ -45,8 +45,8 @@ set -- "${POSITIONAL[@]}" # restore positional parameters
 
 
 # units are mm
-dawncut 0 0 -1 1500 ${INPUT_FILE} ${FILE_TAG}.prim 
-dawn -d ${FILE_TAG}.prim 
+dawncut 0 0 -1 1500 ${INPUT_FILE} ${FILE_TAG}.prim
+dawn -d ${FILE_TAG}.prim
 ps2pdf ${FILE_TAG}.eps ${FILE_TAG}_full.pdf
 gs -o ${FILE_TAG}.pdf -sDEVICE=pdfwrite \
   -c "[/CropBox [50 175 550 675] /PAGES pdfmark" \
@@ -58,19 +58,19 @@ pdftoppm ${FILE_TAG}.pdf ${FILE_TAG} -png -singlefile -cropbox
 #
 #       input-file : Source DAWN-format file describing a 3D scene.
 #
-#       output-file: Output DAWN-format file describing a plane-clipped 
+#       output-file: Output DAWN-format file describing a plane-clipped
 #                    3D scene.  The default output stream is stdout.
 #
 #       a, b, c, d : Parameters  a, b, c, and d  are double values to
-#                    define a clipping plane described with the following 
-#                    equation: 
+#                    define a clipping plane described with the following
+#                    equation:
 #
-#                       ax + by + cz + d = 0. 
+#                       ax + by + cz + d = 0.
 #
-#                    Vector (a,b,c) defines the normal vector of 
-#                    the clipping plane.  
-#                    3D scene data in the half space at the front side 
-#                    of the clipping plane are clipped out and erased. 
-#                    The normal vector (a,b,c) needs not be a unit vector. 
-#                    If it is a unit vector, parameter "d" gives distance 
+#                    Vector (a,b,c) defines the normal vector of
+#                    the clipping plane.
+#                    3D scene data in the half space at the front side
+#                    of the clipping plane are clipped out and erased.
+#                    The normal vector (a,b,c) needs not be a unit vector.
+#                    If it is a unit vector, parameter "d" gives distance
 #                    between the clipping plane and origin (0,0,0).

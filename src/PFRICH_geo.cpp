@@ -103,9 +103,9 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
 
   // tank solids
   double boreDelta = vesselRmin1 - vesselRmin0;
-  Cone vesselTank(vesselLength / 2.0, vesselRmin1, vesselRmax1, vesselRmin0, vesselRmax0);
-  Cone gasvolTank(vesselLength / 2.0 - windowThickness, vesselRmin1 + wallThickness, vesselRmax1 - wallThickness,
-                  vesselRmin0 + wallThickness, vesselRmax0 - wallThickness);
+  Cone   vesselTank(vesselLength / 2.0, vesselRmin1, vesselRmax1, vesselRmin0, vesselRmax0);
+  Cone   gasvolTank(vesselLength / 2.0 - windowThickness, vesselRmin1 + wallThickness, vesselRmax1 - wallThickness,
+                    vesselRmin0 + wallThickness, vesselRmax0 - wallThickness);
 
   //  extra solids for `debug_optics` only
   Box vesselBox(1001, 1001, 1001);
@@ -147,27 +147,20 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
   // sensitive detector type
   sens.setType("tracker");
 
-
   // BUILD RADIATOR //////////////////////////////////////
 
   // attributes
-  double airGap = 0.01*mm; // air gap between aerogel and filter (FIXME? actually it's currently a gas gap)
+  double airGap = 0.01 * mm; // air gap between aerogel and filter (FIXME? actually it's currently a gas gap)
 
   // solid and volume: create aerogel and filter
-  Cone aerogelSolid(
-      aerogelThickness/2,
-      radiatorRmin + boreDelta * aerogelThickness / vesselLength, /* at backplane */
-      radiatorRmax,
-      radiatorRmin, /* at frontplane */
-      radiatorRmax
-      );
+  Cone aerogelSolid(aerogelThickness / 2, radiatorRmin + boreDelta * aerogelThickness / vesselLength, /* at backplane */
+                    radiatorRmax, radiatorRmin, /* at frontplane */
+                    radiatorRmax);
   Cone filterSolid(
-      filterThickness/2,
+      filterThickness / 2,
       radiatorRmin + boreDelta * (aerogelThickness + airGap + filterThickness) / vesselLength, /* at backplane */
-      radiatorRmax,
-      radiatorRmin + boreDelta * (aerogelThickness + airGap) / vesselLength, /* at frontplane */
-      radiatorRmax
-      );
+      radiatorRmax, radiatorRmin + boreDelta * (aerogelThickness + airGap) / vesselLength,     /* at frontplane */
+      radiatorRmax);
   Volume aerogelVol(detName + "_aerogel", aerogelSolid, aerogelMat);
   Volume filterVol(detName + "_filter", filterSolid, filterMat);
   aerogelVol.setVisAttributes(aerogelVis);
@@ -176,10 +169,12 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
   // aerogel placement and surface properties
   // TODO [low-priority]: define skin properties for aerogel and filter
   auto radiatorPos = Position(0., 0., radiatorFrontplane - 0.5 * aerogelThickness) + originFront;
-  auto aerogelPV = gasvolVol.placeVolume(
+  auto aerogelPV   = gasvolVol.placeVolume(
       aerogelVol,
       Translation3D(radiatorPos.x(), radiatorPos.y(), radiatorPos.z()) // re-center to originFront
-          * RotationY(radiatorPitch) // change polar angle to specified pitch // (FIXME: probably broken, currently not in use)
+          *
+          RotationY(
+              radiatorPitch) // change polar angle to specified pitch // (FIXME: probably broken, currently not in use)
   );
   DetElement aerogelDE(det, "aerogel_de", 0);
   aerogelDE.setPlacement(aerogelPV);
@@ -189,18 +184,16 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
   // filter placement and surface properties
   if (!debug_optics) {
     auto filterPV = gasvolVol.placeVolume(
-        filterVol,
-        Translation3D(0., 0., -airGap) // add an airgap (FIXME: actually a gas gap)
-            * Translation3D(radiatorPos.x(), radiatorPos.y(), radiatorPos.z())  // re-center to originFront
-            * RotationY(radiatorPitch) // change polar angle
-            * Translation3D(0., 0., -(aerogelThickness + filterThickness) / 2.) // move to aerogel backplane
+        filterVol, Translation3D(0., 0., -airGap) // add an airgap (FIXME: actually a gas gap)
+                       * Translation3D(radiatorPos.x(), radiatorPos.y(), radiatorPos.z())  // re-center to originFront
+                       * RotationY(radiatorPitch)                                          // change polar angle
+                       * Translation3D(0., 0., -(aerogelThickness + filterThickness) / 2.) // move to aerogel backplane
     );
     DetElement filterDE(det, "filter_de", 0);
     filterDE.setPlacement(filterPV);
     // SkinSurface filterSkin(desc, filterDE, "mirror_optical_surface", filterSurf, filterVol);
     // filterSkin.isValid();
   };
-
 
   // BUILD SENSORS ///////////////////////
 
@@ -287,7 +280,7 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
     for (xml_coll_t ci(x_service, _Unicode(component)); ci; ++ci, ncomponents++) {
       xml_comp_t x_comp    = ci;
       double     thickness = x_comp.thickness();
-      Tube       c_tube{sensorPlaneRmin, sensorPlaneRmax, thickness/2};
+      Tube       c_tube{sensorPlaneRmin, sensorPlaneRmax, thickness / 2};
       Volume     c_vol{_toString(ncomponents, "component%d"), c_tube, desc.material(x_comp.materialStr())};
       c_vol.setVisAttributes(desc, x_comp.visStr());
       service_vol.placeVolume(c_vol, Position(0, 0, thickness_sum + thickness / 2.0));

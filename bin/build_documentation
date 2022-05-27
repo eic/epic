@@ -42,8 +42,8 @@ get_doc_levels() {
       levels="${levels} ${new_levels}"
     fi
     # see if there are tags without level attribute
-    xmllint --format --xpath '//documentation[not(@level)]' $afile  &> /dev/null 
-    if [ "${?}" == "0" ] ; then 
+    xmllint --format --xpath '//documentation[not(@level)]' $afile  &> /dev/null
+    if [ "${?}" == "0" ] ; then
       #echo "DERP"
       levels="${levels} 100"
     fi
@@ -62,13 +62,13 @@ for alevel in $(echo ${all_levels} | sed 's/ /\n/g' | sort -n  | uniq ) ; do
     #xmllint --format --xpath '//documentation[@level="'"$alevel"'"]/text()' $afile
     level_doc=$(xmllint --format --xpath '//documentation[@level="'$alevel'"]' ${afile} 2> /dev/null )
     if [ "$?" -eq "0" ] ;  then
-      xmllint --format --xpath '//documentation[@level="'$alevel'"]/text()' ${afile} | sed -re 's/<\/?\w+>//g' | sed 's/^[[:space:]]*#/#/g' 
+      xmllint --format --xpath '//documentation[@level="'$alevel'"]/text()' ${afile} | sed -re 's/<\/?\w+>//g' | sed 's/^[[:space:]]*#/#/g'
     fi
     # sets the tags without attribute level to 100
-    xmllint --format --xpath '//documentation[not(@level)]/text()' ${afile} &> /dev/null 
+    xmllint --format --xpath '//documentation[not(@level)]/text()' ${afile} &> /dev/null
     if [ "$?" -eq "0" ] ;  then
       if [ "$alevel" -eq "100" ] ; then
-        xmllint --format --xpath '//documentation[not(@level)]/text()' ${afile} | sed -re 's/<\/?\w+>//g' | sed 's/^[[:space:]]*#/#/g' 
+        xmllint --format --xpath '//documentation[not(@level)]/text()' ${afile} | sed -re 's/<\/?\w+>//g' | sed 's/^[[:space:]]*#/#/g'
       fi
     fi
   done
@@ -87,4 +87,3 @@ done
 #  xmllint --format --xpath '//documentation/text()' ${afile} | sed -re 's/<\/?\w+>//g' | sed 's/^[[:space:]]*#/#/' | tee -a doc/detector.md || true
 #done
 #
-

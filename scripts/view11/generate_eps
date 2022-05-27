@@ -22,7 +22,7 @@ function print_the_help {
   echo "USAGE: $0 <PRIM_FILE>  "
   echo "  OPTIONS: "
   echo "            -t,--tag           filename tag (default: view1)"
-  exit 
+  exit
 }
 
 FILE_TAG="view11"
@@ -61,13 +61,13 @@ set -- "${POSITIONAL[@]}" # restore positional parameters
 
 echo "view11 produces a series of slightly rotated XY slices a different z locations. Along beamline"
 
-#dawncut 1 0 0 100 ${INPUT_FILE} ${FILE_TAG}_temp0.prim 
+#dawncut 1 0 0 100 ${INPUT_FILE} ${FILE_TAG}_temp0.prim
 #dawncut -1 0 0 100 ${FILE_TAG}_temp0.prim  ${FILE_TAG}.prim
 #cp ${INPUT_FILE} ${FILE_TAG}.prim
 
-dawncut  1  0 -0.01666 200 ${INPUT_FILE} ${FILE_TAG}_temp0.prim 
+dawncut  1  0 -0.01666 200 ${INPUT_FILE} ${FILE_TAG}_temp0.prim
 dawncut -1  0  0.01666 200 ${FILE_TAG}_temp0.prim  ${FILE_TAG}.prim
-dawn -d ${FILE_TAG}.prim 
+dawn -d ${FILE_TAG}.prim
 ps2pdf ${FILE_TAG}.eps ${FILE_TAG}_full.pdf
 gs -o ${FILE_TAG}.pdf -sDEVICE=pdfwrite \
   -c "[/CropBox [51 250 550 590] /PAGES pdfmark" \
@@ -75,13 +75,11 @@ gs -o ${FILE_TAG}.pdf -sDEVICE=pdfwrite \
 pdftoppm ${FILE_TAG}.pdf ${FILE_TAG} -png -singlefile -cropbox
 
 
-dawncut  1  0 -0.01666 200 ${INPUT_FILE} ${FILE_TAG}a_temp0.prim 
+dawncut  1  0 -0.01666 200 ${INPUT_FILE} ${FILE_TAG}a_temp0.prim
 dawncut -1  0  0.01666 200 ${FILE_TAG}a_temp0.prim  ${FILE_TAG}a.prim
-dawn -d ${FILE_TAG}a.prim 
+dawn -d ${FILE_TAG}a.prim
 ps2pdf ${FILE_TAG}a.eps ${FILE_TAG}a_full.pdf
 gs -o ${FILE_TAG}a.pdf -sDEVICE=pdfwrite \
   -c "[/CropBox [51 250 550 590] /PAGES pdfmark" \
   -f ${FILE_TAG}a_full.pdf
 pdftoppm ${FILE_TAG}a.pdf ${FILE_TAG}a -png -singlefile -cropbox
-
-

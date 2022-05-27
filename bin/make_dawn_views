@@ -58,7 +58,7 @@ parser.add_argument('-t', '--tag', type=str,dest='file_tag',
 parser.add_argument('--timeout', type=int,
         default=60,
         help='Timeout in seconds')
-        
+
 parser.add_argument('passthrough', nargs='*')
 
 args = parser.parse_args()
@@ -96,4 +96,3 @@ subprocess.run(['ls', '-lrth'])
 os.system('cp *.pdf {}'.format(out_dir))
 os.system('cp *.png {}'.format(out_dir))
 os.chdir(owd)
-

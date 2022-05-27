@@ -82,7 +82,7 @@
           phi0="0"
           rc="0.5*(DIRCModule_rmin+DIRCModule_rmax)"
           dr="0" />
-        <z_layout 
+        <z_layout
           dr="0.0*mm"
           z0="0.0*mm"
           nz="1" />

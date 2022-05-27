@@ -12,7 +12,7 @@
   </define>
 
   <detectors>
-    <detector 
+    <detector
       id="ForwardTRD_ID"
       name="ForwardTRD"
       type="ref_DiskTracker"
@@ -20,18 +20,18 @@
       reflect="false"
       vis="AnlRed">
       <position x="0" y="0" z="0.0"/>
-      <layer id="1" 
+      <layer id="1"
         vis="AnlRed"
-        inner_z="ForwardTRD_zmin" 
-        inner_r="ForwardTRD_rmin" 
+        inner_z="ForwardTRD_zmin"
+        inner_r="ForwardTRD_rmin"
         outer_r="ForwardTRD_rmax">
         <slice material="Air" thickness="ForwardTRD_length/2.5" vis="AnlRed" />
       </layer>
 
-      <layer id="1" 
+      <layer id="1"
         vis="AnlRed"
-        inner_z="ForwardTRD_zmin+ForwardTRD_length/2.0" 
-        inner_r="ForwardTRD_rmin" 
+        inner_z="ForwardTRD_zmin+ForwardTRD_length/2.0"
+        inner_r="ForwardTRD_rmin"
         outer_r="ForwardTRD_rmax">
         <slice material="Air" thickness="ForwardTRD_length/2.5" vis="AnlRed" />
       </layer>

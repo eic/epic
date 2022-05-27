@@ -13,7 +13,7 @@
 #/vis/modeling/trajectories/drawByCharge-0/default/setDrawStepPts true
 #/vis/modeling/trajectories/drawByCharge-0/default/setStepPtsSize 2
 /vis/scene/add/hits
-/vis/scene/endOfEventAction accumulate 2 
+/vis/scene/endOfEventAction accumulate 2
 
 #/vis/filtering/trajectories/create/particleFilter
 #/vis/filtering/trajectories/particleFilter-0/add gamma
@@ -42,7 +42,7 @@
 /gps/pos/halfz  1 cm
 /gps/position 0 0 0 cm
 
-#/gps/direction 0 0.1 1.0 
+#/gps/direction 0 0.1 1.0
 /gps/ang/type iso
 /gps/ang/mintheta  10 degree
 /gps/ang/maxtheta  20 degree

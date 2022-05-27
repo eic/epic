@@ -10,7 +10,7 @@
 #/vis/modeling/trajectories/drawByCharge-0/default/setDrawStepPts true
 #/vis/modeling/trajectories/drawByCharge-0/default/setStepPtsSize 2
 /vis/scene/add/hits
-/vis/scene/endOfEventAction accumulate 2 
+/vis/scene/endOfEventAction accumulate 2
 
 #/vis/filtering/trajectories/create/particleFilter
 #/vis/filtering/trajectories/particleFilter-0/add gamma
@@ -26,4 +26,3 @@
 /run/beamOn 1
 
 #/control/execute macro/gun.mac
-

@@ -8,7 +8,7 @@ res=0
 nlines=$(grep -in error ${logfile} | grep -in D2A_ | wc -l)
 if [[ "$nlines" > "0" ]] ; then
   echo " ACTS geometry error: "
-  grep -in error ${logfile} | grep -in D2A_ 
+  grep -in error ${logfile} | grep -in D2A_
   res="1"
 fi
 
@@ -16,9 +16,8 @@ fi
 nlines=$(grep -in warn ${logfile} | grep -in D2A_ | wc -l)
 if [[ "$nlines" > "0" ]] ; then
   echo " ACTS geometry error: "
-  grep -in warn ${logfile} | grep -in D2A_ 
+  grep -in warn ${logfile} | grep -in D2A_
   res="1"
 fi
 
 exit ${res}
-

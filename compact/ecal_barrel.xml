@@ -18,7 +18,7 @@
     <constant name="EcalBarrel_CarbonSpacerWidth"    value="4*mm"/>
     <constant name="EcalBarrel_LayerSpacing"         value="10.0*mm"/>
     <constant name="EcalBarrel_TungstenThickness"    value="4.0*mm"/>
-    <constant name="EcalBarrel_ModRepeat"            value="CaloSides"/> 
+    <constant name="EcalBarrel_ModRepeat"            value="CaloSides"/>
     <constant name="EcalBarrel_ModLength"            value="0.5*m"/>
     <constant name="EcalBarrel_ModWidth"             value="0.5*m"/>
     <constant name="EcalBarrel_AvailThickness"       value="EcalBarrelRegion_thickness-EcalBarrel_Support_thickness"/>
@@ -58,8 +58,8 @@
       calorimeterType="EM_BARREL"
       vis="EcalBarrelEnvelopeVis"
       offset="EcalBarrel_offset">
-      <dimensions numsides="EcalBarrel_ModRepeat" 
-        rmin="EcalBarrel_rmin" 
+      <dimensions numsides="EcalBarrel_ModRepeat"
+        rmin="EcalBarrel_rmin"
         z="EcalBarrel_length"/>
       <staves vis="EcalBarrelStaveVis">
         <support inside="true"  material="Steel235" vis="EcalBarrelSupportVis"

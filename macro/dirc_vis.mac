@@ -108,7 +108,7 @@
 /vis/viewer/set/hiddenEdge true
 #/vis/viewer/set/background 1 1 1 0
 #/vis/viewer/set/background 0 0 0 0
-/vis/viewer/set/hiddenMarker 
+/vis/viewer/set/hiddenMarker
 /vis/geometry/set/forceLineSegmentsPerCircle all 0 50
 # /vis/viewer/set/globalLineWidthScale 1.5
 # /vis/geometry/set/lineWidth all 0 1
@@ -125,7 +125,7 @@
 # /vis/viewer/set/upVector 0 1
 # /vis/viewer/set/viewpointThetaPhi 9  41  deg
 # /vis/viewer/zoomTo 6
-# /vis/viewer/set/targetPoint 88.5358 -17.0546 18.8692 cm 
+# /vis/viewer/set/targetPoint 88.5358 -17.0546 18.8692 cm
 
 
 # lens
@@ -139,7 +139,7 @@
 # /vis/viewer/set/projection orthogonal
 # /vis/viewer/zoomTo 11
 # /vis/viewer/scaleTo 1 1 1
-# /vis/viewer/set/targetPoint 1.01299 -0.569503 2.15227 m  
+# /vis/viewer/set/targetPoint 1.01299 -0.569503 2.15227 m
 
 
 # side wedge

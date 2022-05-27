@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <lccdd>
-  <documentation> 
+  <documentation>
     ### Silicon Tracker
 
 #### Some references:
@@ -14,22 +14,22 @@ TODO: add parametrization
 
 #### ITS3 sensors
 
-ITS3 sensor thickness: 
+ITS3 sensor thickness:
 - 40um, pixel size: 10um (segmentation)
 - total X0 0.55% per barrel layer:
--  0.35 mm aluminum ~ 0.4% X0. 
+-  0.35 mm aluminum ~ 0.4% X0.
 -  2 x carbonfiber (RL ~ 28) 0.12 mm (!!! material scan shows ~0.17mm, need to check later) to match Si (RL~9) of 0.04mm ~ 0.04%
 
 total X0 0.24% per disk layer （4 sectors per disk):
-  - 0.15 mm aluminum ~ 0.16% X0. 
+  - 0.15 mm aluminum ~ 0.16% X0.
   - 1 x carbonfiber (RL ~ 28) 0.12 mm to match Si (RL~9) of 0.04mm ~ 0.04%
 
   </documentation>
 
   <define>
     <constant name="CentralTrackerSensor_thickness"      value="40*um"/>
-    <constant name="TrackerCarbon_thickness"         value="0.12*mm"/> 
-    <constant name="TrackerEndcapAluminum_thickness" value="0.15*mm"/> 
+    <constant name="TrackerCarbon_thickness"         value="0.12*mm"/>
+    <constant name="TrackerEndcapAluminum_thickness" value="0.15*mm"/>
 
     <comment>
       Layer_rOffset is used to add inside space so the _rmin value is the nominal sensor radius.
@@ -39,9 +39,9 @@ total X0 0.24% per disk layer （4 sectors per disk):
     <constant name="TrackerBarrelLayer_rOffset"     value="0.5*cm"/>
     <constant name="TrackerBarrelSpaceFrame_width"  value="4.0*cm"/>
     <constant name="TrackerBarrelSpaceFrame_height" value="1.0*cm"/>
-    <constant name="TrackerSensor_thickness"        value="CentralTrackerSensor_thickness"/> 
+    <constant name="TrackerSensor_thickness"        value="CentralTrackerSensor_thickness"/>
 
-    <constant name="TrackerBarrelInner_rmin1"       value="21.0*cm"/>    
+    <constant name="TrackerBarrelInner_rmin1"       value="21.0*cm"/>
     <constant name="TrackerBarrelInner_rmin2"       value="22.68*cm"/>
     <constant name="TrackerBarrelInner_length1"     value="54.0*cm"/>
     <constant name="TrackerBarrelInner_length2"     value="60.0*cm"/>
@@ -75,7 +75,7 @@ total X0 0.24% per disk layer （4 sectors per disk):
     <constant name="TrackerEndcapOuter_zmax"             value="TrackerEndcapOuter_zmin3 + TrackerEndcapLayer_dz"/>
     <constant name="TrackerEndcapOuterLayer_thickness"   value="min(5.0*cm,TrackerEndcapLayer_dz - 1.0*cm)"/>
 
-    <comment> Note, the -1.0*cm is so the layers do not touch surfaces. 
+    <comment> Note, the -1.0*cm is so the layers do not touch surfaces.
       This is a limitation of ACTS geometry which will likely go away in the future.</comment>
 
 
@@ -166,34 +166,34 @@ total X0 0.24% per disk layer （4 sectors per disk):
       insideTrackingVolume="true">
       <dimensions
         rmin="TrackerBarrelInner_rmin1-TrackerBarrelLayer_rOffset"
-        rmax="TrackerBarrelInner_rmin2-TrackerBarrelLayer_rOffset + TrackerBarrelInner_thickness" 
+        rmax="TrackerBarrelInner_rmin2-TrackerBarrelLayer_rOffset + TrackerBarrelInner_thickness"
         length="TrackerBarrelInner_length"/>
       <comment>
         Tracker Barrel Modules
       </comment>
       <module name="TrackerBarrelInner_Module1" vis="TrackerModuleVis">
-        <frame material="CarbonFiber" vis="TrackerSupportVis" 
-          width="TrackerBarrelSpaceFrame_width"  
-          height="TrackerBarrelSpaceFrame_height" 
+        <frame material="CarbonFiber" vis="TrackerSupportVis"
+          width="TrackerBarrelSpaceFrame_width"
+          height="TrackerBarrelSpaceFrame_height"
           length="TrackerBarrelInner_length1"
           thickness="TrackerCarbon_thickness" />
         <module_component name="aluminum1" material="Aluminum" sensitive="false"
           width="TrackerBarrelSpaceFrame_width" length="TrackerBarrelInner_length1-4*mm" thickness="0.4*mm" />
-        <module_component name="silicon" 
+        <module_component name="silicon"
           width="TrackerBarrelSpaceFrame_width"
           length="TrackerBarrelInner_length1-5*mm" thickness="TrackerSensor_thickness" material="Silicon" sensitive="true">
           <!--position z="-0.025*mm" y="0*mm"/-->
         </module_component>
       </module>
       <module name="TrackerBarrelInner_Module2" vis="TrackerModuleVis">
-        <frame material="CarbonFiber" vis="TrackerSupportVis" 
-          width="TrackerBarrelSpaceFrame_width"  
-          height="TrackerBarrelSpaceFrame_height" 
+        <frame material="CarbonFiber" vis="TrackerSupportVis"
+          width="TrackerBarrelSpaceFrame_width"
+          height="TrackerBarrelSpaceFrame_height"
           length="TrackerBarrelInner_length2"
           thickness="TrackerCarbon_thickness" />
         <module_component name="aluminum1" material="Aluminum" sensitive="false"
           width="TrackerBarrelSpaceFrame_width" length="TrackerBarrelInner_length2-4*mm" thickness="0.4*mm" />
-        <module_component name="silicon" 
+        <module_component name="silicon"
           width="TrackerBarrelSpaceFrame_width"
           length="TrackerBarrelInner_length2-5*mm" thickness="TrackerSensor_thickness" material="Silicon" sensitive="true">
           <!--position z="-0.025*mm" y="0*mm"/-->
@@ -231,13 +231,13 @@ total X0 0.24% per disk layer （4 sectors per disk):
       reflect="false">
 
       <support  material="CarbonFiber" name="sup_cone" vis="TrackerSupportVis">
-        <shape type="Cone" 
+        <shape type="Cone"
           rmin1="TrackerEndcapInnerCone_rmin1" rmax1="TrackerEndcapInnerCone_rmin1 + TrackerSupportCarbon_thickness"
           rmin2="TrackerEndcapInnerCone_rmin2" rmax2="TrackerEndcapInnerCone_rmin2 + TrackerSupportCarbon_thickness" z="TrackerEndcapInnerCone_length/2.0"/>
         <position x="0*cm"  y="0*cm"   z="(TrackerEndcapInnerCone_zmax+TrackerEndcapInnerCone_zmin)/2.0"/>
       </support>
       <support  material="Aluminum" name="sup_cone_service" vis="TrackerSupportVis">
-      <shape type="Cone" 
+      <shape type="Cone"
           rmin1="TrackerEndcapInnerConeService_rmin1" rmax1="TrackerEndcapInnerConeService_rmin1 + TrackerEndcapInnerConeService_thickness"
           rmin2="TrackerEndcapInnerConeService_rmin2" rmax2="TrackerEndcapInnerConeService_rmin2 + TrackerEndcapInnerConeService_thickness" z="TrackerEndcapInnerCone_length/2.0"/>
         <position x="0*cm"  y="0*cm"   z="(TrackerEndcapInnerCone_zmax+TrackerEndcapInnerCone_zmin)/2.0"/>
@@ -271,13 +271,13 @@ total X0 0.24% per disk layer （4 sectors per disk):
       vis="TrackerVis"
       reflect="true">
       <support  material="CarbonFiber" name="sup_cone" vis="TrackerSupportVis">
-        <shape type="Cone" 
+        <shape type="Cone"
           rmin2="TrackerEndcapInnerCone_rmin1" rmax2="TrackerEndcapInnerCone_rmin1 + TrackerSupportCarbon_thickness"
           rmin1="TrackerEndcapInnerCone_rmin2" rmax1="TrackerEndcapInnerCone_rmin2 + TrackerSupportCarbon_thickness" z="TrackerEndcapInnerCone_length/2.0"/>
         <position x="0*cm"  y="0*cm"   z="-1.0*(TrackerEndcapInnerCone_zmax+TrackerEndcapInnerCone_zmin)/2.0"/>
       </support>
       <support  material="Aluminum" name="sup_cone_service" vis="TrackerSupportVis">
-      <shape type="Cone" 
+      <shape type="Cone"
           rmin2="TrackerEndcapInnerConeService_rmin1" rmax2="TrackerEndcapInnerConeService_rmin1 + TrackerEndcapInnerConeService_thickness"
           rmin1="TrackerEndcapInnerConeService_rmin2" rmax1="TrackerEndcapInnerConeService_rmin2 + TrackerEndcapInnerConeService_thickness" z="TrackerEndcapInnerCone_length/2.0"/>
         <position x="0*cm"  y="0*cm"   z="-1.0*(TrackerEndcapInnerCone_zmax+TrackerEndcapInnerCone_zmin)/2.0"/>
@@ -298,7 +298,7 @@ total X0 0.24% per disk layer （4 sectors per disk):
           zstart="TrackerEndcapInner_zmin" />
         <layer_material surface="representing" binning="binPhi,binR" bins0="20*TrackerEndcap_NModules" bins1="256"/>
         <ring vis="TrackerVis"
-          r="TrackerEndcapInner_rmin1+TrackerEndcapInnerMod1_y/2.0" 
+          r="TrackerEndcapInner_rmin1+TrackerEndcapInnerMod1_y/2.0"
           zstart="0"
           nmodules="TrackerEndcap_NModules" dz="TrackerEndcapModule_dz" module="Module1" />
       </layer>
@@ -324,29 +324,29 @@ total X0 0.24% per disk layer （4 sectors per disk):
       </comment>
       <module name="TrackerBarrelOuter_Module1" vis="TrackerModuleVis">
         <frame  material="CarbonFiber" vis="TrackerSupportVis"
-          width="TrackerBarrelSpaceFrame_width"  
-          height="TrackerBarrelSpaceFrame_height" 
+          width="TrackerBarrelSpaceFrame_width"
+          height="TrackerBarrelSpaceFrame_height"
           length="TrackerBarrelOuter_length1"
           thickness="TrackerCarbon_thickness" />
         <module_component name="aluminum1" material="Aluminum" sensitive="false"
           width="TrackerBarrelSpaceFrame_width" length="TrackerBarrelOuter_length1-0.1*mm" thickness="0.40*mm" />
-        <module_component name="silicon" 
+        <module_component name="silicon"
           width="TrackerBarrelSpaceFrame_width"
-          length="TrackerBarrelOuter_length1-0.1*mm" 
+          length="TrackerBarrelOuter_length1-0.1*mm"
           thickness="TrackerSensor_thickness" material="Silicon" sensitive="true">
         </module_component>
       </module>
       <module name="TrackerBarrelOuter_Module2" vis="TrackerModuleVis">
         <frame  material="CarbonFiber" vis="TrackerSupportVis"
-          width="TrackerBarrelSpaceFrame_width"  
-          height="TrackerBarrelSpaceFrame_height" 
+          width="TrackerBarrelSpaceFrame_width"
+          height="TrackerBarrelSpaceFrame_height"
           length="TrackerBarrelOuter_length2"
           thickness="TrackerCarbon_thickness" />
         <module_component name="aluminum1" material="Aluminum" sensitive="false"
           width="TrackerBarrelSpaceFrame_width" length="TrackerBarrelOuter_length2-0.1*mm" thickness="0.40*mm" />
-        <module_component name="silicon" 
+        <module_component name="silicon"
           width="TrackerBarrelSpaceFrame_width"
-          length="TrackerBarrelOuter_length1-0.1*mm" 
+          length="TrackerBarrelOuter_length1-0.1*mm"
           thickness="TrackerSensor_thickness" material="Silicon" sensitive="true">
         </module_component>
       </module>
@@ -387,15 +387,15 @@ total X0 0.24% per disk layer （4 sectors per disk):
       <support vis="TrackerSupportVis"  material="Aluminum" name="sup_cylinder_service"
         rmin="TrackerEndcapOuterShell_rmin+1.0*mm+TrackerSupportCarbon_thickness"
         thickness="2.0*mm" length="TrackerEndcapOuterShell_length" zstart="TrackerEndcapOuterShell_zmin" />
-        
+
       <support  material="CarbonFiber" name="sup_cone" vis="TrackerSupportVis">
-        <shape type="Cone" 
+        <shape type="Cone"
           rmin1="TrackerEndcapOuterCone_rmin1" rmax1="TrackerEndcapOuterCone_rmin1+TrackerSupportCarbon_thickness"
           rmin2="TrackerEndcapOuterCone_rmin2" rmax2="TrackerEndcapOuterCone_rmin2+TrackerSupportCarbon_thickness" z="TrackerEndcapOuterCone_length/2.0"/>
         <position x="0*cm"  y="0*cm"   z="(TrackerEndcapOuterCone_zmin+TrackerEndcapOuterCone_zmax)/2.0"/>
       </support>
       <support  material="Aluminum" name="sup_cone_service" vis="TrackerSupportVis">
-        <shape type="Cone" 
+        <shape type="Cone"
           rmin1="TrackerEndcapOuterConeService_rmin1" rmax1="TrackerEndcapOuterConeService_rmin1+TrackerEndcapOuterConeService_thickness"
           rmin2="TrackerEndcapOuterConeService_rmin2" rmax2="TrackerEndcapOuterConeService_rmin2+TrackerEndcapOuterConeService_thickness" z="TrackerEndcapOuterCone_length/2.0"/>
         <position x="0*cm"  y="0*cm"   z="(TrackerEndcapOuterCone_zmin+TrackerEndcapOuterCone_zmax)/2.0"/>
@@ -473,13 +473,13 @@ total X0 0.24% per disk layer （4 sectors per disk):
         thickness="2.0*mm" length="TrackerEndcapOuterShell_length" zstart="TrackerEndcapOuterShell_zmin" />
         <comment>the cone can not be reflected. need to flip z explicitly</comment>
       <support  material="CarbonFiber" name="sup_cone" vis="TrackerSupportVis">
-        <shape type="Cone" 
+        <shape type="Cone"
           rmin2="TrackerEndcapOuterCone_rmin1" rmax2="TrackerEndcapOuterCone_rmin1+TrackerSupportCarbon_thickness"
           rmin1="TrackerEndcapOuterCone_rmin2" rmax1="TrackerEndcapOuterCone_rmin2+TrackerSupportCarbon_thickness" z="TrackerEndcapOuterCone_length/2.0"/>
         <position x="0*cm"  y="0*cm"   z="-1.0*(TrackerEndcapOuterCone_zmin+TrackerEndcapOuterCone_zmax)/2.0"/>
       </support>
       <support  material="Aluminum" name="sup_cone_service" vis="TrackerSupportVis">
-        <shape type="Cone" 
+        <shape type="Cone"
           rmin2="TrackerEndcapOuterConeService_rmin1" rmax2="TrackerEndcapOuterConeService_rmin1+TrackerEndcapOuterConeService_thickness"
           rmin1="TrackerEndcapOuterConeService_rmin2" rmax1="TrackerEndcapOuterConeService_rmin2+TrackerEndcapOuterConeService_thickness" z="TrackerEndcapOuterCone_length/2.0"/>
         <position x="0*cm"  y="0*cm"   z="-1.0*(TrackerEndcapOuterCone_zmin+TrackerEndcapOuterCone_zmax)/2.0"/>

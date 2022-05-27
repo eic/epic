@@ -13,43 +13,43 @@
 
       ### Note about ACTS tracking geometry construction
 
-The tracking surfaces need to be structured in a barrel + endcapP + endcapN where 
-endcapP/endcapN are the endcaps at positive/negative z values. 
+The tracking surfaces need to be structured in a barrel + endcapP + endcapN where
+endcapP/endcapN are the endcaps at positive/negative z values.
 See https://acts.readthedocs.io/en/latest/plugins/dd4hep.html for more details.
 
 The tracking geometry needs to be constructed from cylinders from the inside out. For this reason
-each layer needs its own subsystem assembly. This increases the number of top level system IDs. 
+each layer needs its own subsystem assembly. This increases the number of top level system IDs.
 For example the silicon tracker needs 3 IDs for each area (endcap+barrel+endcap) and a subassembly for each
 layer. Therefore it needs a minimum of 20 IDs. Therefore we will allocate blocks of ~25 for each major subsystem.
-Note, future improvements will likely include a more sophisticated ACTS-dd4hep plugin, 
+Note, future improvements will likely include a more sophisticated ACTS-dd4hep plugin,
 eliminating the need for so many system IDs at construction time.
 
-This barrel/endcap structure needs IDs to be in increasing order going outward. 
+This barrel/endcap structure needs IDs to be in increasing order going outward.
 The space of IDs for the subassemblies starts at (Subassembly_ID*10+101).
 
 The unused IDs below are saved for future use.
     </documentation>
 
 
-    <documentation> 
+    <documentation>
 
-      ### Allocated IDs 
+      ### Allocated IDs
 
       #### (1-9) Reserved IDs
 
-      - Unused IDs: 1-9 
+      - Unused IDs: 1-9
 
-      #### (10-24) Interaction region beamline 
+      #### (10-24) Interaction region beamline
 
       - Beampipe ID : 10
       - Unused   IDs: 11-24
 
-    </documentation> 
+    </documentation>
     <constant name="BeamPipe_ID" value="10"/>
     <constant name="BeamPipeB0_ID" value="11"/>
 
 
-    <documentation> 
+    <documentation>
       #### (25-39) Silicon Vertex Tracker
 
        - Vertex subassemblies: 25-27
@@ -69,7 +69,7 @@ The unused IDs below are saved for future use.
     <constant name="VertexEndcapP_0_ID"         value="37"/>
     <constant name="VertexEndcapP_1_ID"         value="38"/>
     <constant name="VertexEndcapP_2_ID"         value="39"/>
-    
+
     <documentation>
        - Unused IDs: 31-39
     </documentation>
@@ -84,9 +84,9 @@ The unused IDs below are saved for future use.
 
     </documentation>
 
-    <comment> 
-      SubAssembly IDs should increment from inner to outer 
-      (it's not the definition order but rather the ID order that's used 
+    <comment>
+      SubAssembly IDs should increment from inner to outer
+      (it's not the definition order but rather the ID order that's used
       for construction order in the ACTS geometry conversion)
     </comment>
     <constant name="TrackerSubAssembly_0_ID"      value="40"/>
@@ -140,10 +140,10 @@ The unused IDs below are saved for future use.
     <documentation>
     #### (85-99) Reserved IDs
 
-    - Unused IDs: 85-89 
+    - Unused IDs: 85-89
     TBD
     </documentation>
-    <documentation> 
+    <documentation>
     #### (90-99) Barrel PID IDs
 
     - DIRC subsystem       ID: 90
@@ -156,7 +156,7 @@ The unused IDs below are saved for future use.
     <constant name="BarrelTOF_ID"  value="92"/>
     <constant name="TOFSubAssembly_ID" value="93"/>
 
-    <documentation> 
+    <documentation>
       #### (100-109) Electromagnetic Calorimeter
 
       ECal     subsystem  ID:  100
@@ -176,7 +176,7 @@ The unused IDs below are saved for future use.
     <constant name="CrystalEndcap_ID"   value="104"/>
     <constant name="ECalBarrel2_ID"     value="105"/>
 
-    <documentation> 
+    <documentation>
       #### (110-119) Hadronic Calorimeter
 
       - HCal     subsystem  ID:  110
@@ -191,7 +191,7 @@ The unused IDs below are saved for future use.
     <constant name="HCalEndcapP_ID"     value="112"/>
     <constant name="HCalEndcapN_ID"     value="113"/>
     <constant name="PassiveSteelRingEndcapP_ID" value="114"/>
-    <documentation> 
+    <documentation>
       #### (120-129) (near) Forward reserved
 
       - Forward RICH    ID: 120
@@ -203,7 +203,7 @@ The unused IDs below are saved for future use.
     <constant name="ForwardTRD_ID"      value="121"/>
     <constant name="ForwardTOF_ID"      value="122"/>
 
-    <documentation> 
+    <documentation>
       #### (130-139) Backward reserved
 
       - Modular RICH ID: 130
@@ -216,7 +216,7 @@ The unused IDs below are saved for future use.
     <constant name="BackwardRICH_ID"    value="131"/>
     <constant name="BackwardTOF_ID"     value="132"/>
 
-    <documentation> 
+    <documentation>
       #### (140-149) Central Magnet
 
       - Solenoid         ID: 140
@@ -230,7 +230,7 @@ The unused IDs below are saved for future use.
     <constant name="SolenoidSupport_ID"      value="141"/>
     <constant name="SolenoidYoke_ID"         value="142"/>
 
-    <documentation> 
+    <documentation>
       #### (150-169) Far Forward Detectors
 
       - Forward Roman Pot     ID: 150
@@ -255,7 +255,7 @@ The unused IDs below are saved for future use.
     <constant name="ZDCHcal_ID"              value="164"/>
     <constant name="VacuumMagnetElement_1_ID"        value="165"/>
 
-    <documentation> 
+    <documentation>
       #### (170-189) Far Forward Beamline Magnets
     </documentation>
     <constant name="B0PF_ID"  value="170"/>
@@ -269,7 +269,7 @@ The unused IDs below are saved for future use.
     <constant name="Q0EF_ID"  value="180"/>
     <constant name="Q1EF_ID"  value="181"/>
 
-    <documentation> 
+    <documentation>
       #### (190-199) Far Backward Beamline Detectors
 
       - Low-Q2 Tagger 1 Tracker      ID: 195
@@ -286,7 +286,7 @@ The unused IDs below are saved for future use.
     <constant name="TaggerTracker_2_ID"      value="198"/>
     <constant name="TaggerCalorimeter_2_ID"  value="199"/>
 
-    <documentation> 
+    <documentation>
       #### (200-219) Far Backward Beamline Magnets
     </documentation>
     <constant name="Pipe_to_Q1eR_ID"        value="200"/>
@@ -305,13 +305,13 @@ The unused IDs below are saved for future use.
     <constant name="Vacuum_in_Q3eR_ID"      value="213"/>
 
     <documentation>
-## Detector Definition Parameters 
+## Detector Definition Parameters
 
 ## Constant naming convention
 
 SubSystemNameFurtherDescriptor_quantity
 
-Examples: 
+Examples:
  - TrackerBarrelInside_length
  - EcalEndcapP_rmin
  - MRichFresnelLens_thickness
@@ -323,9 +323,9 @@ Examples:
    - Postive Endcap (+z direction)
    - This is the ion beam side
  - **EndcapN**
-   - Negative Endcap (-z direction) 
+   - Negative Endcap (-z direction)
    - This is the electron beam side
-       
+
 ## Parameter nomenclature
 
  - "rmin", "rmax", "thickness" all refer to the radial direction.
@@ -333,7 +333,7 @@ Examples:
  - Positive and Negative are  "EndcapP" and "EndcapN", respectively.
  - All values are positive (except offsets, which are positive in the hadron direction, i.e. towards EndCapP).
      When refering to a negative endcap z position, the values are
-     also positive then negated when required. (Many endcap constructions are mirrored, 
+     also positive then negated when required. (Many endcap constructions are mirrored,
      hence a postive value.)
  - We will try to keep the subsystem component name first and the parameter after an "_" (eg, EcalBarrel_length").
 
@@ -442,7 +442,7 @@ Examples:
     <constant name="ForwardTOFRegion_length"      value="20.0*cm" />
     <constant name="ForwardTOFRegion_rmax"        value="CentralTrackingRegion_rmax" />
     <constant name="ForwardTOFRegion_tan"         value="CentralTrackingRegionP_tan" />
-      
+
     <comment> Forward RICH region </comment>
     <constant name="ForwardRICHRegion_zmin"       value="ForwardTOFRegion_zmin + ForwardTOFRegion_length" />
     <constant name="ForwardRICHRegion_length"     value="ForwardPIDRegion_length - ForwardTOFRegion_length" />
@@ -494,7 +494,7 @@ Service gaps in FW direction (before endcapP ECAL) and BW direction (before endc
     <constant name="BackwardServiceGap_length"    value="10.0 * cm"/>
     <constant name="BackwardServiceGap_zmin"      value="320.0 * cm"/> <!-- FIXME hardcoded -->
     <constant name="BackwardServiceGap_zmax"      value="BackwardServiceGap_zmin + BackwardServiceGap_length"/>
- 
+
   <documentation level="3">
 ## Calorimeter Parameters
   </documentation>
@@ -566,8 +566,8 @@ Service gaps in FW direction (before endcapP ECAL) and BW direction (before endc
     <constant name="HcalEndcapN_rmax"     value="HcalBarrel_rmax"/>
     <constant name="HcalEndcapP_rmax"     value="HcalBarrel_rmax"/>
 
-    <comment> 
-      These are used by ddsim, the region where we store all secondaries 
+    <comment>
+      These are used by ddsim, the region where we store all secondaries
 
       For now they are forced to be symmetric, and we cover up to the start of the backward ECAL.
       (this means in the forward region we stop in the middle of the RICH).

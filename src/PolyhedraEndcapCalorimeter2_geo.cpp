@@ -39,11 +39,11 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
   Volume         endcapVol("endcap", PolyhedraRegular(numsides, rmin, rmax, totalThickness), air);
   DetElement     endcap("endcap", det_id);
 
-  //std::cout << "totalThickness = " << totalThickness << "\n";
-  //std::cout << "zmin = " << zmin << "\n";
-  //std::cout << "rmin = " << rmin << "\n";
-  //std::cout << "rmax = " << rmax << "\n";
-  //std::cout << "nlayers = " << std::size(layering.layers()) << "\n";
+  // std::cout << "totalThickness = " << totalThickness << "\n";
+  // std::cout << "zmin = " << zmin << "\n";
+  // std::cout << "rmin = " << rmin << "\n";
+  // std::cout << "rmax = " << rmax << "\n";
+  // std::cout << "nlayers = " << std::size(layering.layers()) << "\n";
   int    l_num     = 1;
   int    layerType = 0;
   double layerZ    = -totalThickness / 2;
@@ -51,11 +51,11 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
   endcapVol.setAttributes(description, x_det.regionStr(), x_det.limitsStr(), x_det.visStr());
 
   for (xml_coll_t xc(x_det, _U(layer)); xc; ++xc) {
-    //std::cout << "l_num = " << l_num << "\n";
-    //std::cout << "xc = " << xc << "\n";
+    // std::cout << "l_num = " << l_num << "\n";
+    // std::cout << "xc = " << xc << "\n";
     xml_comp_t x_layer = xc;
     double     l_thick = layering.layer(l_num - 1)->thickness();
-    //std::cout << "xc = " << xc << "\n";
+    // std::cout << "xc = " << xc << "\n";
     string               l_name   = _toString(layerType, "layer%d");
     int                  l_repeat = x_layer.repeat();
     Volume               l_vol(l_name, PolyhedraRegular(numsides, rmin, rmax, l_thick), air);
@@ -121,7 +121,7 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
     endcap.setPlacement(pv);
   }
   endcapAssyDE.add(endcap);
-  pv = motherVol.placeVolume(assembly,Position(pos.x(),pos.y(),pos.z()));
+  pv = motherVol.placeVolume(assembly, Position(pos.x(), pos.y(), pos.z()));
   pv.addPhysVolID("system", det_id);
   endcapAssyDE.setPlacement(pv);
   return endcapAssyDE;

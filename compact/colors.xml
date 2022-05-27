@@ -1,6 +1,6 @@
 <display>
 
-  <comment> 
+  <comment>
     Colors tweaked to be displayable by geoViewer
   </comment>
   <vis name="AnlGreen"        alpha="1" r="100/256" g="200/256" b="0/256"/>

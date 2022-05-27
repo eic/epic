@@ -130,7 +130,7 @@
     w.r.t. the back plane of vessel envelope
   - `rmin` and `rmax`: polar angle boundaries
   - `phiw`: azimuthal width of one sector
-  - `thickness` is the radial thickness of the mirror; note that `backplane` is given for the 
+  - `thickness` is the radial thickness of the mirror; note that `backplane` is given for the
     reflective mirror surface, the inner radius of the sphere
   - `focus_tune*` are tuning parameters for the focal region:
     - `focus_tune_z` and `focus_tune_x` will move the focal region, with respect

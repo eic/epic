@@ -1,5 +1,5 @@
 <lccdd>
-  <comment> MRICH (alternative design) </comment>        
+  <comment> MRICH (alternative design) </comment>
   <define>
     <constant name="MRICH_rmin"   value="10*cm"/>
     <constant name="MRICH_rmax"   value="BackwardPIDRegion_rmax"/>
@@ -58,7 +58,7 @@
   </display>
 
   <detectors>
-    <detector id="MRICH_ID" name="MRICH" type="athena_MRICH" 
+    <detector id="MRICH_ID" name="MRICH" type="athena_MRICH"
       readout="MRICHHits"
       reflect="true"
       projective="false"
@@ -79,7 +79,7 @@
         </aerogel>
         <lens vis="MRICH_lens_vis" thickness="MRICHFresnelLens_thickness"
               pitch="MRICHFresnelLensGroove_pitch" focal_length="6.0*inch"
-              effective_diameter="MRICHFresnelLensEffectiveDiameter" 
+              effective_diameter="MRICHFresnelLensEffectiveDiameter"
               width="MRICHAerogel_width"
               material="AcrylicOptical"/>
         <space thickness="MRICHLensPhotoDet_length"/>
@@ -102,7 +102,7 @@
       <id>system:8,module:14,sensor:8,x:32:-16,y:-16</id>
     </readout>
   </readouts>
-  
+
   <!--Globals>
     <Parameter Name="mrichInfo" Value="mrichmod/mrich_1_geoparams-0-0-4294967295-1527211159.xml"/>
   </Globals-->

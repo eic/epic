@@ -16,7 +16,7 @@ function print_the_help {
   echo "            -m,--mag   magnification"
   echo "            --draw     draw style "
   echo "            -d,--dawn-dir <dawn_run_dir>  Directory with the .DAWN files and a generate script "
-  exit 
+  exit
 }
 
 function yes_or_no {
@@ -31,7 +31,7 @@ function yes_or_no {
 
 if [[ $# -eq 0 ]] ; then
   print_the_help
-  exit 
+  exit
 fi
 
 SKIP_EVENTS=0

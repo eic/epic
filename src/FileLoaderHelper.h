@@ -1,15 +1,15 @@
 #pragma once
 
 #include <DD4hep/DetFactoryHelper.h>
-#include <DD4hep/Primitives.h>
 #include <DD4hep/Factories.h>
+#include <DD4hep/Primitives.h>
 #include <DD4hep/Printout.h>
 
 #include <fmt/core.h>
 
+#include <cstdlib>
 #include <filesystem>
 #include <iostream>
-#include <cstdlib>
 #include <string>
 
 namespace fs = std::filesystem;
@@ -17,25 +17,21 @@ namespace fs = std::filesystem;
 using namespace dd4hep;
 
 // Function to download files
-inline void
-EnsureFileFromURLExists(
-  std::string url,
-  std::string file,
-  std::string cache = "",
-  std::string cmd = "curl --retry 5 -f {0} -o {1}"
-) {
+inline void EnsureFileFromURLExists(std::string url, std::string file, std::string cache = "",
+                                    std::string cmd = "curl --retry 5 -f {0} -o {1}")
+{
   // parse cache for environment variables
   auto pos = std::string::npos;
   while ((pos = cache.find('$')) != std::string::npos) {
-    auto after = cache.find_first_not_of(
-      "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
-      "abcdefghijklmnopqrstuvwxyz"
-      "0123456789"
-      "_",
-      pos + 1);
-    if (after == std::string::npos) after = cache.size(); // cache ends on env var
+    auto after = cache.find_first_not_of("ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+                                         "abcdefghijklmnopqrstuvwxyz"
+                                         "0123456789"
+                                         "_",
+                                         pos + 1);
+    if (after == std::string::npos)
+      after = cache.size(); // cache ends on env var
     const std::string env_name(cache.substr(pos + 1, after - pos - 1));
-    auto env_ptr = std::getenv(env_name.c_str());
+    auto              env_ptr = std::getenv(env_name.c_str());
     const std::string env_value(env_ptr != nullptr ? env_ptr : "");
     cache.erase(pos, after - pos);
     cache.insert(pos, env_value);
@@ -60,8 +56,7 @@ EnsureFileFromURLExists(
 
   // if file exists and is symlink to correct hash
   fs::path hash_path(parent_path / hash);
-  if (fs::exists(file_path)
-   && fs::equivalent(file_path, hash_path)) {
+  if (fs::exists(file_path) && fs::equivalent(file_path, hash_path)) {
     printout(INFO, "FileLoader", "Link " + file + " -> hash " + hash + " already exists");
     return;
   }
@@ -72,8 +67,9 @@ EnsureFileFromURLExists(
     fs::path cache_path(cache);
     printout(INFO, "FileLoader", "Cache " + cache_path.string());
     if (fs::exists(cache_path)) {
-      for (auto const& dir_entry: fs::recursive_directory_iterator(cache_path)) {
-        if (!dir_entry.is_directory()) continue;
+      for (auto const& dir_entry : fs::recursive_directory_iterator(cache_path)) {
+        if (!dir_entry.is_directory())
+          continue;
         fs::path cache_dir_path = cache_path / dir_entry;
         printout(INFO, "FileLoader", "Checking " + cache_dir_path.string());
         fs::path cache_hash_path = cache_dir_path / hash;
@@ -83,7 +79,8 @@ EnsureFileFromURLExists(
           try {
             fs::create_symlink(cache_hash_path, hash_path);
           } catch (const fs::filesystem_error&) {
-            printout(ERROR, "FileLoader", "unable to link from " + hash_path.string() + " to " + cache_hash_path.string());
+            printout(ERROR, "FileLoader",
+                     "unable to link from " + hash_path.string() + " to " + cache_hash_path.string());
             printout(ERROR, "FileLoader", "check permissions and retry");
             std::quick_exit(1);
           }
@@ -115,7 +112,7 @@ EnsureFileFromURLExists(
         // link points to correct path
         return;
       } else {
-        // link points to incorrect path 
+        // link points to incorrect path
         if (fs::remove(file_path) == false) {
           printout(ERROR, "FileLoader", "unable to remove symlink " + file_path.string());
           printout(ERROR, "FileLoader", "check permissions or remove manually");

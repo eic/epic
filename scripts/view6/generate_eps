@@ -6,7 +6,7 @@ function print_the_help {
   echo "USAGE: $0 <PRIM_FILE>  "
   echo "  OPTIONS: "
   echo "            -t,--tag           filename tag (default: view1)"
-  exit 
+  exit
 }
 
 FILE_TAG="view06"
@@ -50,17 +50,17 @@ set -- "${POSITIONAL[@]}" # restore positional parameters
 #SiTracker Endcap layer 4 zstart = 695mm ( 90 mm thick )
 #SiTracker Endcap layer 5 zstart = 860mm ( 90 mm thick )
 
-dawncut 0 0 -1 1000 ${INPUT_FILE} ${FILE_TAG}a_temp0.prim 
+dawncut 0 0 -1 1000 ${INPUT_FILE} ${FILE_TAG}a_temp0.prim
 dawncut 0 0 1 1000  ${FILE_TAG}a_temp0.prim  ${FILE_TAG}_input.prim
 
 INPUT_FILE=${FILE_TAG}_input.prim
 
 
 # units are mm
-dawncut 0 0 -1 1 ${INPUT_FILE} ${FILE_TAG}a_temp0.prim 
+dawncut 0 0 -1 1 ${INPUT_FILE} ${FILE_TAG}a_temp0.prim
 dawncut 0 0 1 1  ${FILE_TAG}a_temp0.prim  ${FILE_TAG}a.prim
-../../bin/dawn_tweak --mag 14 
-dawn -d ${FILE_TAG}a.prim 
+../../bin/dawn_tweak --mag 14
+dawn -d ${FILE_TAG}a.prim
 ps2pdf ${FILE_TAG}a.eps ${FILE_TAG}a_full.pdf
 gs -o ${FILE_TAG}a.pdf -sDEVICE=pdfwrite \
   -c "[/CropBox [50 175 550 675] /PAGES pdfmark" \
@@ -68,10 +68,10 @@ gs -o ${FILE_TAG}a.pdf -sDEVICE=pdfwrite \
 pdftoppm ${FILE_TAG}a.pdf ${FILE_TAG}a -png -singlefile -cropbox
 
 #SiTracker Endcap layer 5 zstart = 860mm ( 90 mm thick )
-dawncut 0 0 1   945   ${INPUT_FILE} ${FILE_TAG}b_temp0.prim 
+dawncut 0 0 1   945   ${INPUT_FILE} ${FILE_TAG}b_temp0.prim
 dawncut 0 0 -1 -865 ${FILE_TAG}b_temp0.prim  ${FILE_TAG}b.prim
-../../bin/dawn_tweak --mag 14 
-dawn -d ${FILE_TAG}b.prim 
+../../bin/dawn_tweak --mag 14
+dawn -d ${FILE_TAG}b.prim
 ps2pdf ${FILE_TAG}b.eps ${FILE_TAG}b_full.pdf
 gs -o ${FILE_TAG}b.pdf -sDEVICE=pdfwrite \
   -c "[/CropBox [50 175 550 675] /PAGES pdfmark" \
@@ -79,10 +79,10 @@ gs -o ${FILE_TAG}b.pdf -sDEVICE=pdfwrite \
 pdftoppm ${FILE_TAG}b.pdf ${FILE_TAG}b -png -singlefile -cropbox
 
 #SiTracker Endcap layer 4 zstart = 695mm ( 90 mm thick )
-dawncut 0 0 1 780   ${INPUT_FILE} ${FILE_TAG}c_temp0.prim 
+dawncut 0 0 1 780   ${INPUT_FILE} ${FILE_TAG}c_temp0.prim
 dawncut 0 0 -1 -700 ${FILE_TAG}c_temp0.prim  ${FILE_TAG}c.prim
-../../bin/dawn_tweak --mag 14 
-dawn -d ${FILE_TAG}c.prim 
+../../bin/dawn_tweak --mag 14
+dawn -d ${FILE_TAG}c.prim
 ps2pdf ${FILE_TAG}c.eps ${FILE_TAG}c_full.pdf
 gs -o ${FILE_TAG}c.pdf -sDEVICE=pdfwrite \
   -c "[/CropBox [50 175 550 675] /PAGES pdfmark" \
@@ -91,9 +91,9 @@ pdftoppm ${FILE_TAG}c.pdf ${FILE_TAG}c -png -singlefile -cropbox
 
 #SiTracker Endcap layer 3 zstart = 530mm ( 70 mm thick )
 # slice at z = -1m
-dawncut 0 0 1 595 ${INPUT_FILE} ${FILE_TAG}d_temp0.prim 
+dawncut 0 0 1 595 ${INPUT_FILE} ${FILE_TAG}d_temp0.prim
 dawncut 0 0 -1 -535 ${FILE_TAG}d_temp0.prim  ${FILE_TAG}d.prim
-dawn -d ${FILE_TAG}d.prim 
+dawn -d ${FILE_TAG}d.prim
 ps2pdf ${FILE_TAG}d.eps ${FILE_TAG}d_full.pdf
 gs -o ${FILE_TAG}d.pdf -sDEVICE=pdfwrite \
   -c "[/CropBox [50 175 550 675] /PAGES pdfmark" \
@@ -102,10 +102,10 @@ pdftoppm ${FILE_TAG}d.pdf ${FILE_TAG}d -png -singlefile -cropbox
 
 #SiTracker Endcap layer 2 zstart = 365mm ( 70 mm thick )
 # slice at z = -2m
-dawncut 0 0 1 430 ${INPUT_FILE} ${FILE_TAG}e_temp0.prim 
+dawncut 0 0 1 430 ${INPUT_FILE} ${FILE_TAG}e_temp0.prim
 dawncut 0 0 -1 -370 ${FILE_TAG}e_temp0.prim  ${FILE_TAG}e.prim
-../../bin/dawn_tweak --mag 14 
-dawn -d ${FILE_TAG}e.prim 
+../../bin/dawn_tweak --mag 14
+dawn -d ${FILE_TAG}e.prim
 ps2pdf ${FILE_TAG}e.eps ${FILE_TAG}e_full.pdf
 gs -o ${FILE_TAG}e.pdf -sDEVICE=pdfwrite \
   -c "[/CropBox [50 175 550 675] /PAGES pdfmark" \
@@ -113,10 +113,10 @@ gs -o ${FILE_TAG}e.pdf -sDEVICE=pdfwrite \
 pdftoppm ${FILE_TAG}e.pdf ${FILE_TAG}e -png -singlefile -cropbox
 
 #SiTracker Endcap layer 1 zstart = 200mm ( 30 mm thick )
-dawncut 0 0 1 225 ${INPUT_FILE} ${FILE_TAG}f_temp0.prim 
+dawncut 0 0 1 225 ${INPUT_FILE} ${FILE_TAG}f_temp0.prim
 dawncut 0 0 -1 205 ${FILE_TAG}f_temp0.prim  ${FILE_TAG}f.prim
-../../bin/dawn_tweak --mag 14 
-dawn -d ${FILE_TAG}f.prim 
+../../bin/dawn_tweak --mag 14
+dawn -d ${FILE_TAG}f.prim
 ps2pdf ${FILE_TAG}f.eps ${FILE_TAG}f_full.pdf
 gs -o ${FILE_TAG}f.pdf -sDEVICE=pdfwrite \
   -c "[/CropBox [50 175 550 675] /PAGES pdfmark" \
@@ -128,19 +128,19 @@ pdftoppm ${FILE_TAG}f.pdf ${FILE_TAG}f -png -singlefile -cropbox
 #
 #       input-file : Source DAWN-format file describing a 3D scene.
 #
-#       output-file: Output DAWN-format file describing a plane-clipped 
+#       output-file: Output DAWN-format file describing a plane-clipped
 #                    3D scene.  The default output stream is stdout.
 #
 #       a, b, c, d : Parameters  a, b, c, and d  are double values to
-#                    define a clipping plane described with the following 
-#                    equation: 
+#                    define a clipping plane described with the following
+#                    equation:
 #
-#                       ax + by + cz + d = 0. 
+#                       ax + by + cz + d = 0.
 #
-#                    Vector (a,b,c) defines the normal vector of 
-#                    the clipping plane.  
-#                    3D scene data in the half space at the front side 
-#                    of the clipping plane are clipped out and erased. 
-#                    The normal vector (a,b,c) needs not be a unit vector. 
-#                    If it is a unit vector, parameter "d" gives distance 
+#                    Vector (a,b,c) defines the normal vector of
+#                    the clipping plane.
+#                    3D scene data in the half space at the front side
+#                    of the clipping plane are clipped out and erased.
+#                    The normal vector (a,b,c) needs not be a unit vector.
+#                    If it is a unit vector, parameter "d" gives distance
 #                    between the clipping plane and origin (0,0,0).

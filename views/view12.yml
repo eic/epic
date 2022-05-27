@@ -15,10 +15,9 @@ dawn_view_12:detector:
 view_12:
   stage: collect
   rules:
-    - if: '$CI_SERVER_HOST == "eicweb.phy.anl.gov"' 
+    - if: '$CI_SERVER_HOST == "eicweb.phy.anl.gov"'
   needs:
     - ["dawn_view_12:detector"]
   script:
     - ls -lrth *
     - ls -lrth images/*
-

@@ -15,7 +15,7 @@
     <constant name="BackwardTOF_zmin"            value="BackwardTOFRegion_zmin + 0.5*cm"/>
     <constant name="BackwardTOF_nlayers"         value="2"/>
     <constant name="BackwardTOFMod_offset"       value="1.2*cm"/>
-    
+
     <comment> LGAD parameters for the endcap TOFs </comment>
     <constant name="TOFEndcapSensor_thickness"   value="300*um" />
     <constant name="TOFEndcapService_thickness"  value="5.00/100*9.37*cm-TOFEndcapSensor_thickness" />
@@ -30,7 +30,7 @@
   </documentation>
 
   <comment>
-    Actual detector implementation. 
+    Actual detector implementation.
   </comment>
   <define>
 
@@ -84,11 +84,11 @@
             rmax="ForwardTOFLayer_rmax"
             length="TOFEndcapLayer_thickness"
             zstart="ForwardTOFLayer1_zmin" />
-          <ring 
+          <ring
             r="ForwardTOFMod_rmin + ForwardTOFMod_y/2.0"
             zstart="0"
-            nmodules="TOFEndcapMod_count" 
-            dz="TOFEndcapMod_dz" 
+            nmodules="TOFEndcapMod_count"
+            dz="TOFEndcapMod_dz"
             module="ForwardModule" />
         </layer>
         <layer id="2">
@@ -97,11 +97,11 @@
             rmax="ForwardTOFLayer_rmax"
             length="TOFEndcapLayer_thickness"
             zstart="ForwardTOFLayer2_zmin" />
-          <ring 
+          <ring
             r="ForwardTOFMod_rmin + ForwardTOFMod_y/2.0"
             zstart="0"
-            nmodules="TOFEndcapMod_count" 
-            dz="TOFEndcapMod_dz" 
+            nmodules="TOFEndcapMod_count"
+            dz="TOFEndcapMod_dz"
             module="ForwardModule" />
         </layer>
       </detector>
@@ -124,11 +124,11 @@
             rmax="BackwardTOFLayer_rmax"
             length="TOFEndcapLayer_thickness"
             zstart="BackwardTOFLayer1_zmin" />
-          <ring 
+          <ring
             r="BackwardTOFMod_rmin + BackwardTOFMod_y/2.0"
             zstart="0"
-            nmodules="TOFEndcapMod_count" 
-            dz="TOFEndcapMod_dz" 
+            nmodules="TOFEndcapMod_count"
+            dz="TOFEndcapMod_dz"
             module="BackwardModule" />
         </layer>
         <layer id="2">
@@ -137,11 +137,11 @@
             rmax="BackwardTOFLayer_rmax"
             length="TOFEndcapLayer_thickness"
             zstart="BackwardTOFLayer2_zmin" />
-          <ring 
+          <ring
             r="BackwardTOFMod_rmin + BackwardTOFMod_y/2.0"
             zstart="0"
-            nmodules="TOFEndcapMod_count" 
-            dz="TOFEndcapMod_dz" 
+            nmodules="TOFEndcapMod_count"
+            dz="TOFEndcapMod_dz"
             module="BackwardModule" />
         </layer>
       </detector>
