@@ -77,8 +77,9 @@ static Ref_t create_BarrelTrackerWithFrame(Detector& description, xml_h e, Sensi
     sdet.addExtension<Acts::ActsExtension>(detWorldExt);
   }
 
-  Tube   topVolumeShape(dimensions.rmin(), dimensions.rmax(), dimensions.length() * 0.5);
-  Volume assembly(det_name, topVolumeShape, air);
+  //Tube topVolumeShape(dimensions.rmin(), dimensions.rmax(), dimensions.length() * 0.5);
+  //Volume assembly(det_name,topVolumeShape,air);
+  Assembly assembly(det_name);
 
   sens.setType("tracker");
 
