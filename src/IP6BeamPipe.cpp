@@ -61,16 +61,6 @@ static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector /* sens *
   double upstream_straight_length   = IP_pipe_c.attr<double>(_Unicode(upstream_straight_length));
   double downstream_straight_length = IP_pipe_c.attr<double>(_Unicode(downstream_straight_length));
 
-  // Add extension for the beampipe
-  //Acts::ActsExtension* sdExtension = new Acts::ActsExtension();
-  //sdExtension->addType("beampipe", "layer");
-  //sdExtension->addValue(0.001, "r_min", "envelope"); // Acts::UnitConstants::mm == 1
-  //sdExtension->addValue(0.001, "r_max", "envelope"); // Acts::UnitConstants::mm == 1
-  //sdExtension->addValue(0.001, "z_min", "envelope"); // Acts::UnitConstants::mm == 1
-  //sdExtension->addValue(0.001, "z_max", "envelope"); // Acts::UnitConstants::mm == 1
-  //sdet.addExtension<Acts::ActsExtension>(sdExtension);
-
-
   // central beampipe volume
   Tube         central_tube(0.5 * IP_acts_beampipe_ID, 0.5 * IP_acts_beampipe_OD,
                     0.5 * (upstream_straight_length + downstream_straight_length));
@@ -85,11 +75,6 @@ static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector /* sens *
     //beamPipeExtension->addType("beampipe", "beampipe");
     //beamPipeExtension->addType("passive cylinder", "layer");
     beamPipeExtension->addType("beampipe", "layer");
-    beamPipeExtension->addValue(0.001, "r_min", "envelope"); // Acts::UnitConstants::mm == 1
-    beamPipeExtension->addValue(0.001, "r_max", "envelope"); // Acts::UnitConstants::mm == 1
-    beamPipeExtension->addValue(0.001, "z_min", "envelope"); // Acts::UnitConstants::mm == 1
-    beamPipeExtension->addValue(0.001, "z_max", "envelope"); // Acts::UnitConstants::mm == 1
-
     central_det.addExtension<Acts::ActsExtension>(beamPipeExtension);
     // TODO add material binning
   }
