@@ -30,9 +30,10 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
 
   // attributes -----------------------------------------------------------
   // - vessel
-  double vesselLength    = dims.attr<double>(_Unicode(length));
-  double vesselZmin      = dims.attr<double>(_Unicode(zmin));
-  double vesselZmax      = dims.attr<double>(_Unicode(zmax));
+  double vesselLength = dims.attr<double>(_Unicode(length));
+  double vesselZmin   = dims.attr<double>(_Unicode(zmin));
+  // FIXME unused
+  // double vesselZmax      = dims.attr<double>(_Unicode(zmax));
   double vesselRmin0     = dims.attr<double>(_Unicode(rmin0));
   double vesselRmin1     = dims.attr<double>(_Unicode(rmin1));
   double vesselRmax0     = dims.attr<double>(_Unicode(rmax0));
@@ -44,10 +45,11 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
   auto   vesselVis       = desc.visAttributes(detElem.attr<std::string>(_Unicode(vis_vessel)));
   auto   gasvolVis       = desc.visAttributes(detElem.attr<std::string>(_Unicode(vis_gas)));
   // - radiator (applies to aerogel and filter)
-  auto   radiatorElem       = detElem.child(_Unicode(radiator));
-  double radiatorRmin       = radiatorElem.attr<double>(_Unicode(rmin));
-  double radiatorRmax       = radiatorElem.attr<double>(_Unicode(rmax));
-  double radiatorPhiw       = radiatorElem.attr<double>(_Unicode(phiw));
+  auto   radiatorElem = detElem.child(_Unicode(radiator));
+  double radiatorRmin = radiatorElem.attr<double>(_Unicode(rmin));
+  double radiatorRmax = radiatorElem.attr<double>(_Unicode(rmax));
+  // FIXME unused
+  // double radiatorPhiw       = radiatorElem.attr<double>(_Unicode(phiw));
   double radiatorPitch      = radiatorElem.attr<double>(_Unicode(pitch));
   double radiatorFrontplane = radiatorElem.attr<double>(_Unicode(frontplane));
   // - aerogel
@@ -142,7 +144,8 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
   // - these reference positions are for the frontplane and backplane of the vessel,
   //   with respect to the vessel origin position
   auto originFront = Position(0., 0., vesselLength / 2.0);
-  auto originBack  = Position(0., 0., -vesselLength / 2.0);
+  // FIXME unused
+  // auto originBack = Position(0., 0., -vesselLength / 2.0);
 
   // sensitive detector type
   sens.setType("tracker");

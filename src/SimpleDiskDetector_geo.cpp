@@ -50,7 +50,6 @@ static Ref_t SimpleDiskDetector_create_detector(Detector& description, xml_h e, 
     double     zmin       = x_layer.inner_z();
     double     rmin       = x_layer.inner_r();
     double     rmax       = x_layer.outer_r();
-    double     z          = zmin;
     double     layerWidth = 0.;
     int        s_num      = 0;
 
@@ -70,14 +69,6 @@ static Ref_t SimpleDiskDetector_create_detector(Detector& description, xml_h e, 
       layer.setPlacement(layer_pv);
       Acts::ActsExtension* layerExtension = new Acts::ActsExtension();
       layerExtension->addType("sensitive disk", "layer");
-      // layerExtension->addType("axes", "definitions", "XzY");
-      //  need all four of these or else it is ignored.
-      // layerExtension->addValue(0, "r_min", "envelope");
-      // layerExtension->addValue(0, "r_max", "envelope");
-      // layerExtension->addValue(0, "z_min", "envelope");
-      // layerExtension->addValue(0, "z_max", "envelope");
-      //  layerExtension->addType("axes", "definitions", "XZY");
-
       layer.addExtension<Acts::ActsExtension>(layerExtension);
     } else {
       layer    = DetElement(sdet, l_nam + "_neg", l_num);
@@ -88,10 +79,6 @@ static Ref_t SimpleDiskDetector_create_detector(Detector& description, xml_h e, 
       // sdet.add(layerR.setPlacement(pv));
       Acts::ActsExtension* layerExtension = new Acts::ActsExtension();
       layerExtension->addType("sensitive disk", "layer");
-      // layerExtension->addValue(0, "r_min", "envelope");
-      // layerExtension->addValue(0, "r_max", "envelope");
-      // layerExtension->addValue(0, "z_min", "envelope");
-      // layerExtension->addValue(0, "z_max", "envelope");
       layer.addExtension<Acts::ActsExtension>(layerExtension);
     }
 

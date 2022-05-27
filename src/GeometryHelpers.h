@@ -3,7 +3,7 @@
 #include <vector>
 
 // some utility functions that can be shared
-namespace athena::geo {
+namespace ecce::geo {
 
   using Point = ROOT::Math::XYPoint;
 
@@ -29,4 +29,4 @@ namespace athena::geo {
   std::vector<Point> fillHexagons(Point ref, double lside, double rmin, double rmax, double phmin = -M_PI,
                                   double phmax = M_PI);
 
-} // namespace athena::geo
+} // namespace ecce::geo

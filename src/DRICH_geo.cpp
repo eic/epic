@@ -52,10 +52,11 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
   auto   vesselVis       = desc.visAttributes(detElem.attr<std::string>(_Unicode(vis_vessel)));
   auto   gasvolVis       = desc.visAttributes(detElem.attr<std::string>(_Unicode(vis_gas)));
   // - radiator (applies to aerogel and filter)
-  auto   radiatorElem       = detElem.child(_Unicode(radiator));
-  double radiatorRmin       = radiatorElem.attr<double>(_Unicode(rmin));
-  double radiatorRmax       = radiatorElem.attr<double>(_Unicode(rmax));
-  double radiatorPhiw       = radiatorElem.attr<double>(_Unicode(phiw));
+  auto   radiatorElem = detElem.child(_Unicode(radiator));
+  double radiatorRmin = radiatorElem.attr<double>(_Unicode(rmin));
+  double radiatorRmax = radiatorElem.attr<double>(_Unicode(rmax));
+  // FIXME unused
+  // double radiatorPhiw       = radiatorElem.attr<double>(_Unicode(phiw));
   double radiatorPitch      = radiatorElem.attr<double>(_Unicode(pitch));
   double radiatorFrontplane = radiatorElem.attr<double>(_Unicode(frontplane));
   // - aerogel
@@ -195,7 +196,8 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
   // - these reference positions are for the frontplane and backplane of the vessel,
   //   with respect to the vessel origin position
   auto originFront = Position(0., 0., -tankLength / 2.0 - snoutLength);
-  auto originBack  = Position(0., 0., tankLength / 2.0);
+  // FIXME unused
+  // auto originBack  = Position(0., 0., tankLength / 2.0);
 
   // initialize sensor centroids (used for mirror parameterization below); this is
   // the average (x,y,z) of the placed sensors, w.r.t. originFront
@@ -326,8 +328,8 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
         double y = xGen;
         double z = yGen;
         // - convert global {x,y,z} -> global {phi,theta}
-        double phi   = std::atan2(y, x);
-        double theta = std::acos(z / sensorSphRadius);
+        // double phi   = std::atan2(y, x);
+        // double theta = std::acos(z / sensorSphRadius);
 
         // shift global coordinates so we can apply spherical patch cuts
         double zCheck   = z + sensorSphCenterZ;
@@ -411,8 +413,8 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
     // attributes, re-defined w.r.t. IP, needed for mirror positioning
     double zS = sensorSphCenterZ + vesselZmin; // sensor sphere attributes
     double xS = sensorSphCenterX;
-    double rS = sensorSphRadius;
-    double B  = vesselZmax - mirrorBackplane; // distance between IP and mirror back plane
+    // double rS = sensorSphRadius;
+    double B = vesselZmax - mirrorBackplane; // distance between IP and mirror back plane
 
     // focus 1: set mirror to focus IP on center of sensor sphere `(zS,xS)`
     /*double zF = zS;

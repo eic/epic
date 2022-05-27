@@ -24,7 +24,6 @@ static Ref_t createDetector(Detector& description, xml::Handle_t e, SensitiveDet
 {
   xml_det_t  x_det    = e;
   Material   air      = description.material("AirOptical");
-  Material   vacuum   = description.vacuum();
   string     det_name = x_det.nameStr();
   DetElement sdet(det_name, x_det.id());
   Assembly   assembly(det_name);
@@ -276,11 +275,12 @@ static Ref_t createDetector(Detector& description, xml::Handle_t e, SensitiveDet
     ++n_sensor;
 
     // sensor
-    xml_comp_t x_sensor         = x_photodet.child(_Unicode(sensor));
-    double     sensor_thickness = getAttrOrDefault(x_sensor, _U(thickness), 2.0 * mm);
-    Material   sensor_mat       = description.material(x_sensor.materialStr());
-    int        sensor_nx        = getAttrOrDefault(x_sensor, _Unicode(nx), 2);
-    int        sensor_ny        = getAttrOrDefault(x_sensor, _Unicode(ny), 2);
+    // FIXME sensor is not implemented
+    // xml_comp_t x_sensor         = x_photodet.child(_Unicode(sensor));
+    // double     sensor_thickness = getAttrOrDefault(x_sensor, _U(thickness), 2.0 * mm);
+    // Material   sensor_mat       = description.material(x_sensor.materialStr());
+    // int        sensor_nx        = getAttrOrDefault(x_sensor, _Unicode(nx), 2);
+    // int        sensor_ny        = getAttrOrDefault(x_sensor, _Unicode(ny), 2);
 
     // layers
     int i_layer = 1;
@@ -323,13 +323,10 @@ static Ref_t createDetector(Detector& description, xml::Handle_t e, SensitiveDet
   // end module
 
   // place modules in the sectors (disk)
-  auto points = athena::geo::fillSquares({0., 0.}, mod_width, rmin, rmax);
+  auto points = ecce::geo::fillSquares({0., 0.}, mod_width, rmin, rmax);
 
   // mod_name = ...
-  Placements& sensVols = sensitives[mod_name];
-  auto        mod_v    = modules[mod_name];
-  // determine module direction, always facing z = 0
-  double roty = dims.zmin() < 0. ? -M_PI : 0;
+  auto mod_v = modules[mod_name];
 
   // read module positions
   std::vector<std::tuple<double, double, double>> positions;

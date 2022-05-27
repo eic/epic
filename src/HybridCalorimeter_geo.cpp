@@ -54,9 +54,10 @@ static Ref_t create_detector(Detector& desc, xml::Handle_t handle, SensitiveDete
 
   double Crystal_Width     = desc.constantAsDouble("CrystalModule_width");
   double Crystal_thickness = desc.constantAsDouble("CrystalModule_length");
-  double Crystal_Gap       = desc.constantAsDouble("CrystalModule_wrap");
   double crystal_distance  = desc.constantAsDouble("CrystalModule_distance");
   double Crystal_z0        = desc.constantAsDouble("CrystalModule_z0");
+  // FIXME Crystal_Gap is read but not used
+  // double Crystal_Gap       = desc.constantAsDouble("CrystalModule_wrap");
 
   // RIn and ROut will define outer tube embedding the calorimeter
   // centers_rmin/out define the maximum radius of module centers
@@ -89,7 +90,6 @@ static Ref_t create_detector(Detector& desc, xml::Handle_t handle, SensitiveDete
 
   // TODO why 1cm and not something else?
   double Glass_OuterR = ROut - 1 * cm;
-  double Glass_InnerR = trans_radius;
 
   // Geometry of modules
   Box    glass_box("glass_box", Glass_Width * 0.5, Glass_Width * 0.5, Glass_thickness * 0.5);
@@ -108,8 +108,7 @@ static Ref_t create_detector(Detector& desc, xml::Handle_t handle, SensitiveDete
   // Can we fit an even or odd amount of glass blocks within our rmax?
   // This determines the transition points between crystal and glass as we need the
   // outer crystal arangement to be in multiples of 2 (aligned with glass)
-  const int  towersInRow = std::ceil((diameter + Glass_Gap) / (Glass_Width + Glass_Gap));
-  const bool align_even  = (towersInRow % 2);
+  const int towersInRow = std::ceil((diameter + Glass_Gap) / (Glass_Width + Glass_Gap));
 
   // Is it odd or even number of towersInRow
   double leftTowerPos, topTowerPos;
@@ -127,8 +126,6 @@ static Ref_t create_detector(Detector& desc, xml::Handle_t handle, SensitiveDete
     int towersInHalfRow = towersInRow / 2;
     topTowerPos = leftTowerPos = -(towersInHalfRow - 0.5) * (Glass_Width + Glass_Gap);
   }
-
-  int moduleIndex = 0;
 
   int glass_module_index = 0;
   int cryst_module_index = 0;

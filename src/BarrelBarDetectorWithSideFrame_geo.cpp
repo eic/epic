@@ -62,7 +62,6 @@ static Ref_t create_BarrelBarDetectorWithSideFrame(Detector& description, xml_h 
     }
 
     int    ncomponents     = 0;
-    int    sensor_number   = 1;
     double total_thickness = 0;
 
     // Compute module total thickness from components
@@ -95,7 +94,6 @@ static Ref_t create_BarrelBarDetectorWithSideFrame(Detector& description, xml_h 
     double max_component_width = 0;
     for (xml_coll_t ci(x_mod, _U(module_component)); ci; ++ci, ++ncomponents) {
       xml_comp_t x_comp = ci;
-      xml_comp_t x_pos  = x_comp.position(false);
       string     c_nam  = _toString(ncomponents, "component%d");
 
       double box_width    = x_comp.width() - 2 * frame_width;

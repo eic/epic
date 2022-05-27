@@ -20,18 +20,12 @@ using namespace std;
 using namespace dd4hep;
 using namespace dd4hep::detail;
 
-static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector sens)
+static Ref_t create_detector(Detector& description, xml_h e, [[maybe_unused]] SensitiveDetector sens)
 {
-  xml_det_t  x_det    = e;
-  string     det_name = x_det.nameStr();
-  Material   air      = description.air();
-  DetElement sdet(det_name, x_det.id());
-
-  // dimensions
-  xml_comp_t   dims   = x_det.dimensions();
-  auto         rmin   = dims.rmin();
-  auto         rmax   = dims.rmax();
-  auto         length = dims.length();
+  xml_det_t    x_det    = e;
+  string       det_name = x_det.nameStr();
+  Material     air      = description.air();
+  DetElement   sdet(det_name, x_det.id());
   Assembly     assembly(det_name + "_assembly");
   PlacedVolume pv;
 

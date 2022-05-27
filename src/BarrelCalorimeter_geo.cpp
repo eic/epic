@@ -81,8 +81,9 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
   // optional stave support
   if (x_staves.hasChild("support")) {
     xml_comp_t x_support = x_staves.child(_U(support));
+    // FIXME is_inside_support is read but not supported
     // is the support on the inside surface?
-    bool is_inside_support = getAttrOrDefault<bool>(x_support, _Unicode(inside), true);
+    // bool is_inside_support = getAttrOrDefault<bool>(x_support, _Unicode(inside), true);
     // number of "beams" running the length of the stave.
     int    n_beams        = getAttrOrDefault<int>(x_support, _Unicode(n_beams), 3);
     double beam_thickness = support_thickness / 4.0; // maybe a parameter later...
@@ -129,8 +130,7 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
     support_vol.setVisAttributes(description, x_support.visStr());
 
     // figure out how to best place
-    // auto pv = mod_vol.placeVolume(support_vol, Position(0.0, 0.0, l_pos_z + support_thickness / 2.0));
-    auto pv = mod_vol.placeVolume(support_vol, Position(0.0, 0.0, -l_pos_z - support_thickness / 2.0));
+    mod_vol.placeVolume(support_vol, Position(0.0, 0.0, -l_pos_z - support_thickness / 2.0));
   }
   // l_pos_z += support_thickness;
 

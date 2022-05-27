@@ -86,7 +86,7 @@ static Ref_t create_detector(Detector& desc, xml::Handle_t handle, SensitiveDete
   // start at center and move outwards in eta
   auto theta_min = 0.0;
   auto theta_max = 0.0;
-  for (int k_eta = 0; k_eta < std::max(n_eta_neg, n_eta_pos); k_eta++) {
+  for (unsigned int k_eta = 0; k_eta < std::max(n_eta_neg, n_eta_pos); k_eta++) {
     // previous theta_max is current theta_min
     theta_min = theta_max;
 
@@ -124,7 +124,7 @@ static Ref_t create_detector(Detector& desc, xml::Handle_t handle, SensitiveDete
     // create module envelope
     Trd2     mod_env_trd(mod_x1 / 2.0, mod_x2 / 2.0, mod_y1 / 2.0, mod_y2 / 2.0, mod_length / 2.0);
     Material mod_env_mat(desc.material(x_mod.materialStr()));
-    Volume   mod_env(mod_name + _toString(k_eta, "_sector%d"), mod_env_trd, mod_env_mat);
+    Volume   mod_env(mod_name + _toString((signed)k_eta, "_sector%d"), mod_env_trd, mod_env_mat);
     mod_env.setVisAttributes(desc.visAttributes(x_mod.visStr()));
 
     // place slices in module
@@ -150,7 +150,7 @@ static Ref_t create_detector(Detector& desc, xml::Handle_t handle, SensitiveDete
       }
       // DetElement slice(stave_det, s_name, det_id);
       s_pos_z += s_thickness / 2.0;
-      PlacedVolume slice_pv = mod_env.placeVolume(s_vol, Position(0, 0, s_pos_z));
+      mod_env.placeVolume(s_vol, Position(0, 0, s_pos_z));
       s_pos_z += s_thickness / 2.0;
       // set starting face for next slice
       s_rmin += s_thickness / cos(dtheta / 2.0) * cos(M_PI_2 - theta_max);
