@@ -58,29 +58,29 @@ static Ref_t SimpleDiskDetector_create_detector(Detector& description, xml_h e, 
       double thickness = xml_comp_t(j).thickness();
       layerWidth += thickness;
     }
-    Tube   l_tub(rmin, rmax, layerWidth/2.0, 2 * M_PI);
+    Tube   l_tub(rmin, rmax, layerWidth / 2.0, 2 * M_PI);
     Volume l_vol(l_nam, l_tub, air);
     l_vol.setVisAttributes(description, x_layer.visStr());
-    DetElement layer;
+    DetElement   layer;
     PlacedVolume layer_pv;
     if (!reflect) {
-      layer = DetElement(sdet, l_nam + "_pos", l_num);
+      layer    = DetElement(sdet, l_nam + "_pos", l_num);
       layer_pv = assembly.placeVolume(l_vol, Position(0, 0, zmin + layerWidth / 2.));
       layer_pv.addPhysVolID("barrel", 3).addPhysVolID("layer", l_num);
       layer.setPlacement(layer_pv);
       Acts::ActsExtension* layerExtension = new Acts::ActsExtension();
       layerExtension->addType("sensitive disk", "layer");
-      //layerExtension->addType("axes", "definitions", "XzY");
-      // need all four of these or else it is ignored.
-      //layerExtension->addValue(0, "r_min", "envelope");
-      //layerExtension->addValue(0, "r_max", "envelope");
-      //layerExtension->addValue(0, "z_min", "envelope");
-      //layerExtension->addValue(0, "z_max", "envelope");
-      // layerExtension->addType("axes", "definitions", "XZY");
+      // layerExtension->addType("axes", "definitions", "XzY");
+      //  need all four of these or else it is ignored.
+      // layerExtension->addValue(0, "r_min", "envelope");
+      // layerExtension->addValue(0, "r_max", "envelope");
+      // layerExtension->addValue(0, "z_min", "envelope");
+      // layerExtension->addValue(0, "z_max", "envelope");
+      //  layerExtension->addType("axes", "definitions", "XZY");
 
       layer.addExtension<Acts::ActsExtension>(layerExtension);
     } else {
-      layer = DetElement(sdet, l_nam + "_neg", l_num);
+      layer    = DetElement(sdet, l_nam + "_neg", l_num);
       layer_pv = assembly.placeVolume(l_vol, Transform3D(RotationY(M_PI), Position(0, 0, -zmin - layerWidth / 2)));
       layer_pv.addPhysVolID("barrel", 2).addPhysVolID("layer", l_num);
       layer.setPlacement(layer_pv);
@@ -88,10 +88,10 @@ static Ref_t SimpleDiskDetector_create_detector(Detector& description, xml_h e, 
       // sdet.add(layerR.setPlacement(pv));
       Acts::ActsExtension* layerExtension = new Acts::ActsExtension();
       layerExtension->addType("sensitive disk", "layer");
-      //layerExtension->addValue(0, "r_min", "envelope");
-      //layerExtension->addValue(0, "r_max", "envelope");
-      //layerExtension->addValue(0, "z_min", "envelope");
-      //layerExtension->addValue(0, "z_max", "envelope");
+      // layerExtension->addValue(0, "r_min", "envelope");
+      // layerExtension->addValue(0, "r_max", "envelope");
+      // layerExtension->addValue(0, "z_min", "envelope");
+      // layerExtension->addValue(0, "z_max", "envelope");
       layer.addExtension<Acts::ActsExtension>(layerExtension);
     }
 
@@ -101,18 +101,18 @@ static Ref_t SimpleDiskDetector_create_detector(Detector& description, xml_h e, 
       double     thick   = x_slice.thickness();
       Material   mat     = description.material(x_slice.materialStr());
       string     s_nam   = l_nam + _toString(s_num, "_slice%d");
-      Volume     s_vol(s_nam, Tube(rmin, rmax, thick/2.0), mat);
-      if(!reflect){
+      Volume     s_vol(s_nam, Tube(rmin, rmax, thick / 2.0), mat);
+      if (!reflect) {
         s_nam += "_pos";
       } else {
         s_nam += "_neg";
       }
-      DetElement slice_de(layer, s_nam , s_num);
+      DetElement slice_de(layer, s_nam, s_num);
       if (x_slice.isSensitive()) {
         sens.setType("tracker");
         s_vol.setSensitiveDetector(sens);
         Acts::ActsExtension* sensorExtension = new Acts::ActsExtension();
-        //sensorExtension->addType("sensor", "detector");
+        // sensorExtension->addType("sensor", "detector");
         slice_de.addExtension<Acts::ActsExtension>(sensorExtension);
       }
       s_vol.setAttributes(description, x_slice.regionStr(), x_slice.limitsStr(), x_slice.visStr());
@@ -121,7 +121,6 @@ static Ref_t SimpleDiskDetector_create_detector(Detector& description, xml_h e, 
       slice_de.setPlacement(pv);
       tot_thickness = tot_thickness + thick;
     }
-
   }
   if (x_det.hasAttr(_U(combineHits))) {
     sdet.setCombineHits(x_det.attr<bool>(_U(combineHits)), sens);
