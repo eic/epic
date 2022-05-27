@@ -5,7 +5,7 @@ workflow:
     - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
     - if: '$CI_PIPELINE_SOURCE == "web"'
     - if: '$CI_PIPELINE_SOURCE == "webide"'
-    - if: '$CI_COMMIT_BRANCH == "master"'
+    - if: '$CI_COMMIT_BRANCH == "main"'
     - if: '$CI_COMMIT_TAG'
 
 default:
@@ -46,7 +46,7 @@ common:setup:
   script:
     - export JUGGLER_DETECTOR="ecce"
     - |
-      #      if [[ "x${CI_PIPELINE_SOURCE}" == "xmerge_request_event"  || "$CI_COMMIT_BRANCH" == "master" ]]; then
+      #      if [[ "x${CI_PIPELINE_SOURCE}" == "xmerge_request_event"  || "$CI_COMMIT_BRANCH" == "main" ]]; then
         export JUGGLER_DETECTOR_VERSION="${CI_COMMIT_REF_NAME}"
         echo "BEAMLINE_CONFIG          = ${BEAMLINE_CONFIG}"
         echo "BEAMLINE_CONFIG_VERSION  = ${BEAMLINE_CONFIG_VERSION}"
