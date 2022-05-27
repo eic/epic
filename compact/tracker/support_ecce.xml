@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<lccdd>
+  <comment>
+    Tracker support as in the ECCE proposal.
+  </comment>
+  <define>
+    <comment> Vertex Support </comment>
+    <constant name="VertexSupportCyl_length"              value="2*VertexSupportCyl_rmin/tan(TrackerPrimaryAngle)" />
+    <constant name="VertexSupportCyl_zmax"                value="VertexSupportCyl_length/2." />
+    <constant name="VertexSupportCylCF_thickness"         value="300.0*um" />
+    <constant name="VertexSupportCyl_thickness"           value="VertexSupportCylCF_thickness" />
+
+    <comment> Sagitta Support </comment>
+    <constant name="SagittaSupportCyl_length"              value="2*SagittaSupportCyl_rmin/tan(TrackerPrimaryAngle) - SagittaBarrel_dz" />
+    <constant name="SagittaSupportCyl_zmax"                value="SagittaSupportCyl_length/2." />
+    <constant name="SagittaSupportCylCF_thickness"         value="300.0*um" />
+    <constant name="SagittaSupportCyl_thickness"           value="SagittaSupportCylCF_thickness" />
+
+    <comment> Inner tracker service/support cone </comment>
+    <constant name="TrackerInnerCone_rmin1"               value="VertexSupportCyl_rmin" />
+    <constant name="TrackerInnerCone_rmin2"               value="SiDiskSupportCyl_rmin" />
+    <constant name="TrackerInnerCone_zmin"                value="VertexSupportCyl_zmax" />
+    <constant name="TrackerInnerCone_zmax"                value="TrackerInnerCone_rmin2/tan(TrackerPrimaryAngle)" />
+    <constant name="TrackerInnerCone_z"                   value="0.5*(TrackerInnerCone_zmax + TrackerInnerCone_zmin)" />
+    <constant name="TrackerInnerCone_length"              value="TrackerInnerCone_zmax - TrackerInnerCone_zmin" />
+    <constant name="TrackerInnerConeCF_thickness"         value="2.0*mm" />
+    <comment> Effective Aluminum for services for now </comment>
+    <constant name="TrackerInnerConeAl_thickness"         value="2.5*mm" />
+    <constant name="TrackerInnerCone_thickness"           value="TrackerInnerConeAl_thickness + TrackerInnerConeCF_thickness" />
+
+    <comment> Tracker disk support cylinder </comment>
+    <constant name="SiDiskSupportCyl_zmin"                value="TrackerInnerCone_zmax" />
+    <constant name="SiDiskSupportCylEndcapP_zmax"         value="SiDiskSupportCyl_rmin/tan(TrackerForwardAngle1)" />
+    <constant name="SiDiskSupportCylEndcapN_zmax"         value="SiDiskSupportCyl_rmin/tan(TrackerBackwardAngle1)" />
+    <constant name="SiDiskSupportCylEndcapP_z"            value="0.5*(SiDiskSupportCyl_zmin + SiDiskSupportCylEndcapP_zmax)" />
+    <constant name="SiDiskSupportCylEndcapN_z"            value="0.5*(SiDiskSupportCyl_zmin + SiDiskSupportCylEndcapN_zmax)" />
+    <constant name="SiDiskSupportCylEndcapP_length"       value="SiDiskSupportCylEndcapP_zmax - SiDiskSupportCyl_zmin" />
+    <constant name="SiDiskSupportCylEndcapN_length"       value="SiDiskSupportCylEndcapN_zmax - SiDiskSupportCyl_zmin" />
+    <constant name="SiDiskSupportCylCF_thickness"         value="2.0*mm" />
+    <comment> Effective Aluminum for services for now </comment>
+    <constant name="SiDiskSupportCylAl_thickness"         value="2.5*mm" />
+    <constant name="SiDiskSupportCyl_thickness"           value="SiDiskSupportCylAl_thickness + SiDiskSupportCylCF_thickness" />
+  </define>
+
+  <detectors>
+    <detector type="eic_SupportServiceMaterial"
+      name="InnerTrackerSupport"
+      id="84"
+    >
+      <support type="Cylinder"
+        name="VertexSupportCyl"
+        vis="TrackerSupportVis"
+        rmin="VertexSupportCyl_rmin"
+        length="VertexSupportCyl_length"
+        thickness="VertexSupportCyl_thickness">
+          <position x="0*cm" y="0*cm" z="0*cm" />
+          <component material="CarbonFiber" thickness="VertexSupportCylCF_thickness" name="Carbon Fiber Shell" vis="TrackerSupportVis"/>
+      </support>
+      <support type="Cylinder"
+        name="SagittaSupportCyl"
+        vis="TrackerSupportVis"
+        rmin="SagittaSupportCyl_rmin"
+        length="SagittaSupportCyl_length"
+        thickness="SagittaSupportCyl_thickness">
+          <position x="0*cm" y="0*cm" z="0*cm" />
+          <component material="CarbonFiber" thickness="SagittaSupportCylCF_thickness" name="Carbon Fiber Shell" vis="TrackerSupportVis"/>
+      </support>
+      <support type="Cone"
+        name="TrackerInnerConeEndcapN"
+        vis="TrackerSupportVis"
+        rmin1="TrackerInnerCone_rmin2"
+        rmin2="TrackerInnerCone_rmin1"
+        length="TrackerInnerCone_length"
+        thickness="TrackerInnerCone_thickness">
+          <position x="0*cm" y="0*cm" z="-TrackerInnerCone_z" />
+          <component material="Aluminum" thickness="TrackerInnerConeAl_thickness" name="Services" vis="TrackerServiceVis" />
+          <component material="CarbonFiber" thickness="TrackerInnerConeCF_thickness" name="Support" vis="TrackerSupportVis"/>
+      </support>
+      <support type="Cone"
+        name="TrackerInnerConeEndcapP"
+        vis="TrackerSupportVis"
+        rmin1="TrackerInnerCone_rmin1"
+        rmin2="TrackerInnerCone_rmin2"
+        length="TrackerInnerCone_length"
+        thickness="TrackerInnerCone_thickness">
+          <position x="0*cm" y="0*cm" z="TrackerInnerCone_z" />
+          <component material="Aluminum" thickness="TrackerInnerConeAl_thickness" name="Services" vis="TrackerServiceVis" />
+          <component material="CarbonFiber" thickness="TrackerInnerConeCF_thickness" name="Support" vis="TrackerSupportVis"/>
+      </support>
+      <support type="Cylinder"
+        name="SiDiskSupportCylEndcapN"
+        vis="TrackerSupportVis"
+        rmin="SiDiskSupportCyl_rmin"
+        length="SiDiskSupportCylEndcapN_length"
+        thickness="SiDiskSupportCyl_thickness">
+          <position x="0*cm" y="0*cm" z="-SiDiskSupportCylEndcapN_z" />
+          <component material="Aluminum" thickness="SiDiskSupportCylAl_thickness" name="Services" vis="TrackerServiceVis" />
+          <component material="CarbonFiber" thickness="SiDiskSupportCylCF_thickness" name="Support" vis="TrackerSupportVis"/>
+      </support>
+      <support type="Cylinder"
+        name="SiDiskSupportCylEndcapP"
+        vis="TrackerSupportVis"
+        rmin="SiDiskSupportCyl_rmin"
+        length="SiDiskSupportCylEndcapP_length"
+        thickness="SiDiskSupportCyl_thickness">
+          <position x="0*cm" y="0*cm" z="SiDiskSupportCylEndcapP_z" />
+          <component material="Aluminum" thickness="SiDiskSupportCylAl_thickness" name="Services" vis="TrackerServiceVis" />
+          <component material="CarbonFiber" thickness="SiDiskSupportCylCF_thickness" name="Support" vis="TrackerSupportVis"/>
+      </support>
+    </detector>
+  </detectors>
+
+</lccdd>

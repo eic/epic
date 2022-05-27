@@ -172,24 +172,6 @@ total X0 0.24% per disk layer （4 sectors per disk):
     <constant name="InnerTrackerBarrelMod2_count"        value="floor(180.*degree/asin(InnerTrackerBarrelMod_width*cos(InnerTrackerBarrelModTilt_angle)/2/InnerTrackerBarrelMod2_rmin))+2"/>
   </define>
   <detectors>
-    <detector type="eic_TrackerSupport"
-      name="SupportCone"
-      id="84"
-    >
-      <support type="Cone"
-        name="serv_cone_dmmy"
-        vis="TrackerServiceVis"
-        rmin1="InnerTrackerBarrelSupportCone_rmin2"
-        rmax1="InnerTrackerBarrelSupportCone_rmax2"
-        rmin2="InnerTrackerBarrelSupportCone_rmin1"
-        rmax2="InnerTrackerBarrelSupportCone_rmax1" 
-        length="InnerTrackerBarrelCone_length/2"
-        thickness="0.1*cm">
-          <position x="0*cm" y="0*cm" z="-InnerTrackerBarrelCone_z" />
-          <component material="Aluminum" thickness="100*um" name="al_support_serv" />
-          <component material="Aluminum" thickness="100*um" name="al_support_serv2" />
-      </support>
-    </detector>
     <detector
       id="TrackerBarrel_0_ID"
       name="InnerTrackerBarrel"
@@ -200,42 +182,6 @@ total X0 0.24% per disk layer （4 sectors per disk):
         rmin="InnerTrackerBarrelEnvelope_rmin"
         rmax="InnerTrackerBarrelEnvelope_rmax"
         length="InnerTrackerBarrelEnvelope_length"/>
-      <support material="Aluminum" name="serv_cone_pos" vis="TrackerServiceVis">
-        <shape type="Cone"
-          rmin1="InnerTrackerBarrelServiceCone_rmin1"
-          rmax1="InnerTrackerBarrelServiceCone_rmax1"
-          rmin2="InnerTrackerBarrelServiceCone_rmin2"
-          rmax2="InnerTrackerBarrelServiceCone_rmax2"
-          z="InnerTrackerBarrelCone_length/2"/>
-        <position x="0*cm" y="0*cm" z="InnerTrackerBarrelCone_z" />
-      </support>
-      <support material="CarbonFiber" name="sup_cone_pos" vis="TrackerSupportVis">
-        <shape type="Cone"
-          rmin1="InnerTrackerBarrelSupportCone_rmin1"
-          rmax1="InnerTrackerBarrelSupportCone_rmax1"
-          rmin2="InnerTrackerBarrelSupportCone_rmin2"
-          rmax2="InnerTrackerBarrelSupportCone_rmax2"
-          z="InnerTrackerBarrelCone_length/2"/>
-        <position x="0*cm" y="0*cm" z="InnerTrackerBarrelCone_z" />
-      </support>
-      <support material="Aluminum" name="serv_cone_neg" vis="TrackerServiceVis">
-        <shape type="Cone"
-          rmin1="InnerTrackerBarrelServiceCone_rmin2"
-          rmax1="InnerTrackerBarrelServiceCone_rmax2"
-          rmin2="InnerTrackerBarrelServiceCone_rmin1"
-          rmax2="InnerTrackerBarrelServiceCone_rmax1"
-          z="InnerTrackerBarrelCone_length/2"/>
-        <position x="0*cm" y="0*cm" z="-InnerTrackerBarrelCone_z" />
-      </support>
-      <support material="CarbonFiber" name="sup_cone_neg" vis="TrackerSupportVis">
-        <shape type="Cone"
-          rmin1="InnerTrackerBarrelSupportCone_rmin2"
-          rmax1="InnerTrackerBarrelSupportCone_rmax2"
-          rmin2="InnerTrackerBarrelSupportCone_rmin1"
-          rmax2="InnerTrackerBarrelSupportCone_rmax1"
-          z="InnerTrackerBarrelCone_length/2"/>
-        <position x="0*cm" y="0*cm" z="-InnerTrackerBarrelCone_z" />
-      </support>
       <comment>
         Tracker Barrel Modules
       </comment>
@@ -340,6 +286,52 @@ total X0 0.24% per disk layer （4 sectors per disk):
 
   </define>
   <detectors>
+    <detector type="eic_SupportServiceMaterial"
+      name="SupportCone"
+      id="84"
+    >
+      <support type="Cone"
+        name="serv_cone_dmmy_neg"
+        vis="TrackerServiceVis"
+        rmin1="SiTrackerServiceCyl_rmin"
+        rmin2="InnerTrackerBarrelSupportCone_rmin1"
+        length="InnerTrackerBarrelCone_length+InnerTrackerEndcapCone_length"
+        thickness="0.1*cm">
+          <position x="0*cm" y="0*cm" z="-(InnerTrackerBarrelCone_z + InnerTrackerEndcapCone_z)/2" />
+          <component material="Aluminum" thickness="SiTrackerServiceConeAl_thickness" name="al_support_serv" vis="TrackerServiceVis" />
+          <component material="CarbonFiber" thickness="SiTrackerSupportConeCF_thickness" name="al_support_serv2" vis="TrackerSupportVis"/>
+      </support>
+      <support type="Cone"
+        name="serv_cone_dmmy_pos"
+        vis="TrackerSupportVis"
+        rmin1="InnerTrackerBarrelSupportCone_rmin1"
+        rmin2="SiTrackerServiceCyl_rmin"
+        length="InnerTrackerBarrelCone_length+InnerTrackerEndcapCone_length"
+        thickness="0.1*cm">
+      <position x="0*cm" y="0*cm" z="(InnerTrackerBarrelCone_z + InnerTrackerEndcapCone_z)/2" />
+          <component material="Aluminum" thickness="SiTrackerServiceConeAl_thickness" name="al_support_serv" vis="TrackerServiceVis" />
+          <component material="CarbonFiber" thickness="SiTrackerSupportConeCF_thickness" name="al_support_serv2" vis="TrackerSupportVis"/>
+      </support>
+      <support type="Tube"
+        name="serv_cyl_pos"
+        rmin="SiTrackerServiceCyl_rmin"
+        thickness="0.1*cm"
+        length="InnerTrackerEndcapCyl_length">
+          <position x="0*cm" y="0*cm" z="InnerTrackerEndcapCyl_zmin" />
+          <component material="Aluminum" thickness="SiTrackerServiceCylAl_thickness" vis="TrackerServiceVis" />
+          <component material="CarbonFiber" thickness="SiTrackerSupportCylCF_thickness" vis="TrackerSupportVis" />
+      </support>
+      <support 
+        name="serv_cyl_neg"
+        type="Tube"
+        rmin="SiTrackerServiceCyl_rmin"
+        thickness="0.1*cm"
+        length="InnerTrackerEndcapCyl_length">
+          <position x="0*cm" y="0*cm" z="-InnerTrackerEndcapCyl_zmin" />
+          <component material="Aluminum" thickness="SiTrackerServiceCylAl_thickness" vis="TrackerServiceVis" />
+          <component material="CarbonFiber" thickness="SiTrackerSupportCylCF_thickness" vis="TrackerSupportVis" />
+      </support>
+    </detector>
     <detector
       id="TrackerEndcapP_0_ID"
       name="InnerTrackerEndcapP"
@@ -347,34 +339,6 @@ total X0 0.24% per disk layer （4 sectors per disk):
       readout="TrackerEndcapHits1"
       vis="TrackerVis"
       reflect="false">
-      <support material="Aluminum" name="serv_cone_pos" vis="TrackerServiceVis">
-        <shape type="Cone"
-          rmin1="InnerTrackerEndcapServiceCone_rmin1"
-          rmax1="InnerTrackerEndcapServiceCone_rmax1"
-          rmin2="InnerTrackerEndcapServiceCone_rmin2"
-          rmax2="InnerTrackerEndcapServiceCone_rmax2"
-          z="InnerTrackerEndcapCone_length/2"/>
-        <position x="0*cm" y="0*cm" z="InnerTrackerEndcapCone_z" />
-      </support>
-      <support material="CarbonFiber" name="sup_cone_pos" vis="TrackerSupportVis">
-        <shape type="Cone"
-          rmin1="InnerTrackerEndcapSupportCone_rmin1"
-          rmax1="InnerTrackerEndcapSupportCone_rmax1"
-          rmin2="InnerTrackerEndcapSupportCone_rmin2"
-          rmax2="InnerTrackerEndcapSupportCone_rmax2"
-          z="InnerTrackerEndcapCone_length/2"/>
-        <position x="0*cm" y="0*cm" z="InnerTrackerEndcapCone_z" />
-      </support>
-      <support material="Aluminum" name="serv_cyl_pos" vis="TrackerServiceVis"
-          rmin="SiTrackerServiceCyl_rmin"
-          thickness="SiTrackerServiceCylAl_thickness"
-          length="InnerTrackerEndcapCyl_length"
-          zstart="InnerTrackerEndcapCyl_zmin" />
-      <support material="CarbonFiber" name="sup_cyl_pos" vis="TrackerSupportVis"
-          rmin="SiTrackerSupportCyl_rmin"
-          thickness="SiTrackerSupportCylCF_thickness"
-          length="InnerTrackerEndcapCyl_length"
-          zstart="InnerTrackerEndcapCyl_zmin" />
       <module name="Module1" vis="TrackerModuleVis">
         <trd x1="InnerTrackerEndcapMod1_x1/2" x2="InnerTrackerEndcapMod1_x2/2" z="InnerTrackerEndcapMod1_y/2" />
         <module_component thickness="SiTrackerEndcapCF_thickness" material="CarbonFiber" vis="TrackerSupportVis" />

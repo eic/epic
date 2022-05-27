@@ -3,6 +3,33 @@
   <display>
   </display>
   <define>
+    <comment> Primary directions for the tracker </comment>
+    <constant name="TrackerPrimaryAngle"             value="2*atan(exp(-1.109))" />
+    <constant name="TrackerForwardAngle1"            value="2*atan(exp(-1.6472))" />
+    <constant name="TrackerForwardAngle2"            value="2*atan(exp(-1.3899))" />
+    <constant name="TrackerBackwardAngle1"           value="2*atan(exp(-1.5166))" />
+    <!--constant name="TrackerBackwardAngle2"           value="tan(2*atan(exp(-1.6685)))" /-->
+
+
+    <comment> Main parameters for the vertex tracker </comment>
+    <constant name="VertexBarrel_length"             value="280.0*mm"/>
+    <constant name="VertexBarrel_rmin"               value="3.3*cm"/>
+    <constant name="VertexBarrel_offset"             value="1.05*cm"/>
+    <constant name="VertexBarrel_count"              value="3"/>
+
+    <comment> Main parameters for the Sagitta layer geometry </comment>
+    <constant name="SagittaBarrel_rmin"              value="21.0*cm"/>
+    <constant name="SagittaBarrel_offset"            value="1.68*cm"/>
+    <constant name="SagittaBarrel_angle"             value="TrackerPrimaryAngle"/>
+    <constant name="SagittaBarrel_dz"                value="2.0*cm"/>
+    <constant name="SagittaBarrel_count"             value="2"/>
+    <comment> barrel length: 2R/tan(angle) - dz </comment>
+
+    <comment> Service/Support setup </comment>
+    <constant name="VertexSupportCyl_rmin"           value="6.3*cm"/>
+    <constant name="SagittaSupportCyl_rmin"          value="23.5*cm"/>
+    <constant name="SiDiskSupportCyl_rmin"           value="41.5*cm"/>
+
   </define>
 
   <documentation level="10">
@@ -13,6 +40,7 @@
       ### Tracker subassemblies for ACTS
   </documentation>
   <detectors>
+    <!--
     <detector id="VertexSubAssembly_0_ID"
       name="VertexBarrelSubAssembly"
       type="DD4hep_SubdetectorAssembly"
@@ -43,14 +71,13 @@
       <composite name="OuterTrackerBarrel"/>
       <composite name="OuterTrackerCompositeEndcapP"/>
     </detector>
-    <!--
     <detector id="TrackerSubAssembly_3_ID"
       name="EcalBarrelSubAssembly"
       type="DD4hep_SubdetectorAssembly"
       vis="TrackerSubAssemblyVis">
     </detector>
     -->
-    <detector id="TrackerSubAssembly_4_ID"
+    <!--detector id="TrackerSubAssembly_4_ID"
       name="ForwardBackwardTrackerSubAssembly"
       type="DD4hep_SubdetectorAssembly"
       vis="TrackerSubAssemblyVis">
@@ -90,7 +117,7 @@
       actsType="endcap"
       vis="TrackerSubAssemblyVis">
       <position x="0*cm" y="0*cm" z="-1*um" />
-    </detector>
+    </detector-->
 
   </detectors>
 
@@ -106,7 +133,9 @@
     </plugin>
   </plugins>
 
-  <include ref="tracker/vertex_3layers.xml"/>
-  <include ref="tracker/central_tracker_hybrid_v2.xml"/>
+  <include ref="tracker/vertex_its3_3layers.xml"/>
+  <include ref="tracker/sagitta_its3_curved.xml"/>
+  <!--include ref="tracker/central_tracker_hybrid_v2.xml"/-->
+  <include ref="tracker/support_ecce.xml"/>
 
 </lccdd>

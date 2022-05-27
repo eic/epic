@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<lccdd>
+  <define>
+    <comment>
+      Main parameters - this is for the design from the ECCE proposal
+    </comment>
+
+    <constant name="SagittaBarrelMod_rmin"              value="SagittaBarrel_rmin"/>
+    <constant name="SagittaBarrelMod_offset"            value="SagittaBarrel_offset"/>
+    <constant name="SagittaBarrelMod_angle"             value="SagittaBarrel_angle"/>
+    <constant name="SagittaBarrelMod_dz"                value="SagittaBarrel_dz"/>
+    <constant name="SagittaBarrelMod_count"             value="SagittaBarrel_count"/>
+
+    <constant name="SiSagittaSensor_thickness"          value="40*um"/>
+
+    <comment>
+      Actual parametrization
+    </comment>
+
+    <constant name="SagittaBarrelMod1_rmin"          value="SagittaBarrelMod_rmin"/>
+    <constant name="SagittaBarrelMod2_rmin"          value="SagittaBarrelMod_rmin + 1 * SagittaBarrelMod_offset"/>
+
+    <constant name="SagittaBarrelMod1_length"        value="2 * SagittaBarrelMod1_rmin / tan(SagittaBarrelMod_angle) - SagittaBarrel_dz"/>
+    <constant name="SagittaBarrelMod2_length"        value="2 * SagittaBarrelMod2_rmin / tan(SagittaBarrelMod_angle) - SagittaBarrel_dz"/>
+
+    <constant name="SagittaBarrelLayer1_length"      value="SagittaBarrelMod1_length + 1*um"/>
+    <constant name="SagittaBarrelLayer2_length"      value="SagittaBarrelMod2_length + 1*um"/>
+    <constant name="SagittaBarrelEnvelope_length"    value="SagittaBarrelLayer2_length + 1*um" />
+
+    <constant name="SagittaBarrelLayer_thickness"    value="0.2*cm"/>
+    <constant name="SagittaBarrelMod_thickness"      value="0.1*cm"/>
+
+    <constant name="SagittaBarrelLayer1_rmin"        value="SagittaBarrelMod_rmin - SagittaBarrelLayer_thickness/2.0"/>
+    <constant name="SagittaBarrelLayer1_rmax"        value="SagittaBarrelLayer1_rmin + SagittaBarrelLayer_thickness"/>
+    <constant name="SagittaBarrelLayer2_rmin"        value="SagittaBarrelLayer1_rmin + 1 * SagittaBarrelMod_offset"/>
+    <constant name="SagittaBarrelLayer2_rmax"        value="SagittaBarrelLayer2_rmin + SagittaBarrelLayer_thickness"/>
+    <constant name="SagittaBarrelLayer3_rmin"        value="SagittaBarrelLayer1_rmin + 2 * SagittaBarrelMod_offset"/>
+    <constant name="SagittaBarrelLayer3_rmax"        value="SagittaBarrelLayer3_rmin + SagittaBarrelLayer_thickness"/>
+
+    <comment>
+      Extra parameters to approximate a cylinder as a set of skinny staves
+      due to ACTS limitations.
+      FIXME: this shouldn't be needed anymore, need to update the cylindrical plugin.
+    </comment>
+    <constant name="SagittaBarrelStave_count"       value="128"/>
+    <constant name="SagittaBarrelStave1_width"      value="2*SagittaBarrelMod1_rmin * tan(180*degree/SagittaBarrelStave_count)"/>
+    <constant name="SagittaBarrelStave2_width"      value="2*SagittaBarrelMod2_rmin * tan(180*degree/SagittaBarrelStave_count)"/>
+  </define>
+
+  <display>
+  </display>
+
+  <detectors>
+    <documentation level="5">
+        ### Actual detectors
+    </documentation>
+    <detector
+      id="TrackerBarrel_0_ID"
+      name="SagittaBarrel"
+      type="eic_TrackerBarrel"
+      readout="SagittaBarrelHits"
+      insideTrackingVolume="true">
+      <dimensions
+        rmin="SagittaBarrelLayer1_rmin"
+        rmax="SagittaBarrelLayer2_rmax"
+        length="SagittaBarrelEnvelope_length" />
+      <comment>Sagitta Barrel Modules</comment>
+      <module name="Module1" vis="TrackerLayerVis">
+        <module_component name="ITS3"
+                          material="Silicon" 
+                          sensitive="true"
+                          width="SagittaBarrelStave1_width" 
+                          length="SagittaBarrelMod1_length"
+                          thickness="SiSagittaSensor_thickness" 
+                          vis="TrackerLayerVis" />
+      </module>
+      <module name="Module2" vis="TrackerLayerVis">
+        <module_component name="ITS3"
+                          material="Silicon" 
+                          sensitive="true"
+                          width="SagittaBarrelStave2_width" 
+                          length="SagittaBarrelMod2_length"
+                          thickness="SiSagittaSensor_thickness" 
+                          vis="TrackerLayerVis" />
+      </module>
+      <comment> Layers composed of many arrayed modules  </comment>
+      <layer module="Module1" id="1" vis="TrackerLayerVis">
+        <barrel_envelope
+          inner_r="SagittaBarrelLayer1_rmin"
+          outer_r="SagittaBarrelLayer1_rmax"
+          z_length="SagittaBarrelLayer1_length" />
+        <layer_material surface="outer" binning="binPhi,binZ" bins0="SagittaBarrelStave_count" bins1="100" />
+        <comment>
+          phi0     : Starting phi of first module.
+          phi_tilt : Phi tilt of a module.
+          rc       : Radius of the module center.
+          nphi     : Number of modules in phi.
+          rphi_dr  : The delta radius of every other module.
+          z0       : Z position of first module in phi.
+          nz       : Number of modules to place in z.
+          dr       : Radial displacement parameter, of every other module.
+        </comment>
+        <rphi_layout phi_tilt="0.0*degree" nphi="SagittaBarrelStave_count" phi0="0.0" rc="SagittaBarrelMod1_rmin" dr="0.0 * mm"/>
+        <z_layout dr="0.0 * mm" z0="0.0 * mm" nz="1"/>
+      </layer>
+      <layer module="Module2" id="2" vis="TrackerLayerVis">
+        <barrel_envelope
+          inner_r="SagittaBarrelLayer2_rmin"
+          outer_r="SagittaBarrelLayer2_rmax"
+          z_length="SagittaBarrelLayer2_length" />
+        <layer_material surface="outer" binning="binPhi,binZ" bins0="SagittaBarrelStave_count" bins1="100" />
+        <rphi_layout phi_tilt="0.0*degree" nphi="SagittaBarrelStave_count" phi0="0.0" rc="SagittaBarrelMod2_rmin" dr="0.0 * mm"/>
+        <z_layout dr="0.0 * mm" z0="0.0 * mm" nz="1"/>
+      </layer>
+    </detector>
+  </detectors>
+
+  <readouts>
+    <readout name="SagittaBarrelHits">
+      <segmentation type="CartesianGridXY" grid_size_x="0.010*mm" grid_size_y="0.010*mm" />
+      <id>system:8,layer:4,module:12,sensor:2,x:32:-16,y:-16</id>
+    </readout>
+  </readouts>
+
+</lccdd>
