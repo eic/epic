@@ -11,7 +11,11 @@
 #include "DD4hep/Printout.h"
 #include "XML/Utilities.h"
 
+#if defined(USE_ACTSDD4HEP)
+#include "ActsDD4hep/ActsExtension.hpp"
+#else
 #include "Acts/Plugins/DD4hep/ActsExtension.hpp"
+#endif
 
 using namespace dd4hep;
 using namespace dd4hep::detail;

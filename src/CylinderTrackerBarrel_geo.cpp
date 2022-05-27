@@ -2,10 +2,16 @@
 // Specialized generic detector constructor
 //==========================================================================
 
-#include "Acts/Plugins/DD4hep/ActsExtension.hpp"
-#include "Acts/Plugins/DD4hep/ConvertDD4hepMaterial.hpp"
 #include "DD4hep/DetFactoryHelper.h"
 #include "DD4hep/Printout.h"
+
+#if defined(USE_ACTSDD4HEP)
+#include "ActsDD4hep/ActsExtension.hpp"
+#include "ActsDD4hep/ConvertMaterial.hpp"
+#else
+#include "Acts/Plugins/DD4hep/ActsExtension.hpp"
+#include "Acts/Plugins/DD4hep/ConvertDD4hepMaterial.hpp"
+#endif
 
 using namespace std;
 using namespace dd4hep;
