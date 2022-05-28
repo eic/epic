@@ -37,13 +37,9 @@ static Ref_t createDetector(Detector& desc, xml_h e, SensitiveDetector sens)
   // DIRC box:
   xml_comp_t xml_box_module = xml_det.child(_U(module));
 
-  Material Vacuum          = desc.material("Vacuum");
-  Material air             = desc.material("AirOptical");
-  Material quartz          = desc.material("Quartz");
-  Material epotek          = desc.material("Epotek");
-  Material nlak33a         = desc.material("Nlak33a");
-  auto&    bar_material    = quartz;
-  auto     mirror_material = desc.material("Aluminum"); // mirror material
+  Material quartz       = desc.material("Quartz");
+  Material nlak33a      = desc.material("Nlak33a");
+  auto&    bar_material = quartz;
 
   Tube det_geo(det_rin, det_rout, SizeZ / 2., 0., 360.0 * deg);
   // Volume   det_volume("DIRC", det_geo, Vacuum);
@@ -61,39 +57,53 @@ static Ref_t createDetector(Detector& desc, xml_h e, SensitiveDetector sens)
 
   // Parts Dimentions
 
-  int fLensId = 6; // focusing system
-                   // 0    no lens
-                   // 1    spherical lens
-                   // 3    3-layer spherical lens
-                   // 6    3-layer cylindrical lens
-                   // 10   ideal lens (thickness = 0, ideal focusing)
+  // focusing system:
+  //   0    no lens
+  //   1    spherical lens
+  //   3    3-layer spherical lens
+  //   6    3-layer cylindrical lens
+  //   10   ideal lens (thickness = 0, ideal focusing)
+  // FIXME unused
+  // int fLensId = 6;
 
-  int fGeomType = 0; // Full DIRC - 0, 1 only one plate
-  int fRunType  = 0; // 0, 10 - simulation, 1, 5 - lookup table, 2,3,4 - reconstruction
+  // geometry type:
+  //   0    full DIRC
+  //   1    only one plate
+  // FIXME unused
+  // int fGeomType = 0;
 
+  // run type:
+  //   0, 10 - simulation, 1, 5 - lookup table, 2,3,4 - reconstruction
+  // FIXME unused
+  // int fRunType  = 0;
+
+  // prism
   double fPrizm[4];
-  fPrizm[0]       = 360 * mm;
-  fPrizm[1]       = 300 * mm;
-  fPrizm[3]       = 50 * mm;
-  fPrizm[2]       = fPrizm[3] + 300 * tan(32 * deg) * mm;
-  double fBarsGap = 0.15 * mm;
-
+  fPrizm[0] = 360 * mm;
+  fPrizm[1] = 300 * mm;
+  fPrizm[3] = 50 * mm;
+  fPrizm[2] = fPrizm[3] + 300 * tan(32 * deg) * mm;
   std::cout << "DIRC: fPrizm[2] " << fPrizm[2] << std::endl;
 
-  double fdTilt = 80 * deg;
-  double fPrizmT[6];
-  fPrizmT[0] = 390 * mm;
-  fPrizmT[1] = (400 - 290 * cos(fdTilt)) * mm; //
-  fPrizmT[2] = 290 * sin(fdTilt) * mm;         // hight
-  fPrizmT[3] = 50 * mm;                        // face
-  fPrizmT[4] = 290 * mm;
-  fPrizmT[5] = 290 * cos(fdTilt) * mm;
+  // gap between bars
+  // FIXME unused
+  // double fBarsGap = 0.15 * mm;
 
-  double fMirror[3];
-  fMirror[0] = 20 * mm;
-  fMirror[1] = fPrizm[0];
-  fMirror[2] = 1 * mm;
-  //  fPrizm[0] = 170; fPrizm[1] = 300; fPrizm[2] = 50+300*tan(45*deg); fPrizm[3] = 50;
+  // double fdTilt = 80 * deg;
+
+  // double fPrizmT[6];
+  // fPrizmT[0] = 390 * mm;
+  // fPrizmT[1] = (400 - 290 * cos(fdTilt)) * mm; //
+  // fPrizmT[2] = 290 * sin(fdTilt) * mm;         // hight
+  // fPrizmT[3] = 50 * mm;                        // face
+  // fPrizmT[4] = 290 * mm;
+  // fPrizmT[5] = 290 * cos(fdTilt) * mm;
+
+  // double fMirror[3];
+  // fMirror[0] = 20 * mm;
+  // fMirror[1] = fPrizm[0];
+  // fMirror[2] = 1 * mm;
+  //   fPrizm[0] = 170; fPrizm[1] = 300; fPrizm[2] = 50+300*tan(45*deg); fPrizm[3] = 50;
 
   //  double fBar[3];
   //  fBar[0] = 17 * mm;
@@ -124,10 +134,11 @@ static Ref_t createDetector(Detector& desc, xml_h e, SensitiveDetector sens)
   fLens[2] = 12 * mm;
 
   // Getting box XML
-  const int    fNBoxes    = xml_box_module.repeat();
-  const double box_width  = xml_box_module.width();
-  const double box_height = xml_box_module.height();
-  const double box_length = xml_box_module.length() + 550 * mm;
+  const int    fNBoxes   = xml_box_module.repeat();
+  const double box_width = xml_box_module.width();
+  // FIXME unused box height and length
+  // const double box_height = xml_box_module.height();
+  // const double box_length = xml_box_module.length() + 550 * mm;
 
   // The DIRC
   Assembly dirc_module("DIRCModule");

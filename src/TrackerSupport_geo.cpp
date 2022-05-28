@@ -81,10 +81,9 @@ namespace {
  *
  * @author Sylvester Joosten
  */
-static Ref_t create_TrackerSupport(Detector& description, xml_h e, SensitiveDetector sens)
+static Ref_t create_TrackerSupport(Detector& description, xml_h e, [[maybe_unused]] SensitiveDetector sens)
 {
   const xml_det_t x_det    = e;
-  const Material  air      = description.air();
   const int       det_id   = x_det.id();
   const string    det_name = x_det.nameStr();
 
@@ -96,9 +95,9 @@ static Ref_t create_TrackerSupport(Detector& description, xml_h e, SensitiveDete
 
   // Loop over the supports
   for (xml_coll_t su{x_det, _U(support)}; su; ++su) {
-    xml_comp_t x_sup = su;
-    auto [vol, tr]   = build_shape(description, x_det, x_sup);
-    auto pv          = assembly.placeVolume(vol, tr);
+    xml_comp_t x_sup         = su;
+    auto [vol, tr]           = build_shape(description, x_det, x_sup);
+    [[maybe_unused]] auto pv = assembly.placeVolume(vol, tr);
     // Loop over support components, if any
     double cumulative_thickness = 0;
     for (xml_coll_t com{x_sup, _U(component)}; com; ++com) {

@@ -298,7 +298,7 @@ static std::tuple<int, int> add_disk(Detector& desc, Assembly& env, xml::Collect
   double phimin          = dd4hep::getAttrOrDefault<double>(plm, _Unicode(phimin), 0.);
   double phimax          = dd4hep::getAttrOrDefault<double>(plm, _Unicode(phimax), 2. * M_PI);
 
-  auto points = athena::geo::fillRectangles({0., 0.}, modSize.x(), modSize.y(), rmin, rmax, phimin, phimax);
+  auto points = ecce::geo::fillRectangles({0., 0.}, modSize.x(), modSize.y(), rmin, rmax, phimin, phimax);
   // placement to mother
   auto pos = get_xml_xyz(plm, _Unicode(position));
   auto rot = get_xml_xyz(plm, _Unicode(rotation));
@@ -353,19 +353,19 @@ static std::tuple<int, int> add_lines(Detector& desc, Assembly& env, xml::Collec
 
     // mirror placement
     if (mirrorx) {
-      int curr_size = trans.size();
+      size_t curr_size = trans.size();
       for (size_t i = 0; i < curr_size; ++i) {
         trans.push_back(Position{-trans[i].x(), trans[i].y(), trans[i].z()});
       }
     }
     if (mirrory) {
-      int curr_size = trans.size();
+      size_t curr_size = trans.size();
       for (size_t i = 0; i < curr_size; ++i) {
         trans.push_back(Position{trans[i].x(), -trans[i].y(), trans[i].z()});
       }
     }
     if (mirrorz) {
-      int curr_size = trans.size();
+      size_t curr_size = trans.size();
       for (size_t i = 0; i < curr_size; ++i) {
         trans.push_back(Position{trans[i].x(), trans[i].y(), -trans[i].z()});
       }

@@ -98,6 +98,7 @@ inline void EnsureFileFromURLExists(std::string url, std::string file, std::stri
     auto ret = std::system(cmd.c_str());
     if (!fs::exists(hash_path)) {
       printout(ERROR, "FileLoader", "unable to run cmd " + cmd);
+      printout(ERROR, "FileLoader", "value returned was ", ret);
       printout(ERROR, "FileLoader", "check command and retry");
       std::quick_exit(1);
     }

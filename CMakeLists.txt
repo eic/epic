@@ -9,8 +9,28 @@ PROJECT(ecce
   DESCRIPTION "A template dd4hep+acts detector"
   )
 
+# C++ standard
 set(CMAKE_CXX_STANDARD 17)
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Werror")
+set(CMAKE_CXX_STANDARD 17 CACHE STRING "Set the C++ standard to be used")
+if(NOT CMAKE_CXX_STANDARD MATCHES "17|20|23")
+  message(FATAL_ERROR "Unsupported C++ standard: ${CMAKE_CXX_STANDARD}")
+endif()
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_CXX_EXTENSIONS OFF)
+
+# Build type
+if (NOT CMAKE_BUILD_TYPE)
+  set(CMAKE_BUILD_TYPE RelWithDebInfo CACHE STRING "Build type configuration" FORCE)
+  message(STATUS "Setting default build type: ${CMAKE_BUILD_TYPE}")
+endif()
+
+# Error on all warnings
+if(NOT CMAKE_BUILD_TYPE STREQUAL "Release")
+  add_compile_options(-Wall -Wextra -Werror -pedantic)
+endif()
+
+# Export compile commands as json for run-clang-tidy
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 find_package(DD4hep REQUIRED COMPONENTS DDCore DDG4)
 find_package(ActsDD4hep)
@@ -28,7 +48,7 @@ set(a_lib_name ecce)
 
 dd4hep_configure_output()
 
-dd4hep_add_plugin(${a_lib_name} SOURCES 
+dd4hep_add_plugin(${a_lib_name} SOURCES
   src/BarrelBarDetectorWithSideFrame_geo.cpp
   src/BarrelCalorimeter_geo.cpp
   src/BarrelCalorimeterInterlayers_geo.cpp

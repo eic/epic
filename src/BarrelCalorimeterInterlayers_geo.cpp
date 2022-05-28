@@ -265,10 +265,11 @@ void buildSupport(Detector& desc, Volume& mod_vol, xml_comp_t x_support,
               << std::endl;
     beam_thickness = support_thickness / 3.;
   }
-  double   trd_x1_support = std::tan(hphi) * l_pos_z;
-  double   trd_x2_support = std::tan(hphi) * (l_pos_z + support_thickness);
-  double   trd_y          = stave_length / 2.;
   Assembly env_vol("support_envelope");
+  double   trd_y          = stave_length / 2.;
+  double   trd_x1_support = std::tan(hphi) * l_pos_z;
+  // FIXME trd_x2_support is filled but unused
+  // double   trd_x2_support = std::tan(hphi) * (l_pos_z + support_thickness);
 
   double grid_size        = getAttrOrDefault(x_support, _Unicode(grid_size), 25. * cm);
   int    n_cross_supports = std::floor(trd_y - beam_thickness) / grid_size;
@@ -280,11 +281,11 @@ void buildSupport(Detector& desc, Volume& mod_vol, xml_comp_t x_support,
   double beam_gap   = getAttrOrDefault(x_support, _Unicode(beam_gap), 3. * cm);
 
   // build T-shape beam
-  double beam_space_x    = beam_width + beam_gap;
-  double beam_space_z    = support_thickness - beam_thickness;
-  double cross_thickness = support_thickness - beam_thickness;
-  double beam_pos_z      = beam_thickness / 2.;
-  double beam_center_z   = support_thickness / 2. - beam_pos_z;
+  double                  beam_space_x    = beam_width + beam_gap;
+  [[maybe_unused]] double beam_space_z    = support_thickness - beam_thickness;
+  double                  cross_thickness = support_thickness - beam_thickness;
+  double                  beam_pos_z      = beam_thickness / 2.;
+  [[maybe_unused]] double beam_center_z   = support_thickness / 2. - beam_pos_z;
 
   Box        beam_vert_s(beam_thickness / 2., trd_y, cross_thickness / 2.);
   Box        beam_hori_s(beam_width / 2., trd_y, beam_thickness / 2.);

@@ -95,7 +95,7 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
 }
 
 // @TODO: implement a radiator, now the envelope serves as the radiator
-void build_radiator(Detector& desc, Volume& env, xml::Component plm, const Position& offset)
+void build_radiator(Detector& /* desc */, Volume& /* env */, xml::Component /* plm */, const Position& /* offset */)
 {
   // place holder
 }
@@ -192,7 +192,7 @@ void build_sensors(Detector& desc, Volume& env, xml::Component plm, const Positi
 
     // fill sensors to the piece
     auto points =
-        athena::geo::fillRectangles({0., 0.}, sx + gap, sy + gap, rmin - gap, rmax + gap, -phiw / 2., phiw / 2.);
+        ecce::geo::fillRectangles({0., 0.}, sx + gap, sy + gap, rmin - gap, rmax + gap, -phiw / 2., phiw / 2.);
     int imod = 1;
     for (auto& p : points) {
       // transofrms are in a reversed order

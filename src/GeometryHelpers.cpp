@@ -1,7 +1,7 @@
 #include "GeometryHelpers.h"
 
 // some utility functions that can be shared
-namespace athena::geo {
+namespace ecce::geo {
 
   typedef ROOT::Math::XYPoint Point;
 
@@ -100,7 +100,7 @@ namespace athena::geo {
     for (int i = 0; i < nsides; ++i) {
       double phi = (i + 0.5) * 2. * M_PI / static_cast<double>(nsides);
       Point  p2(p.x() + 2. * lside * std::sin(phi), p.y() + 2. * lside * std::cos(phi));
-      if ((p2.r() > rmax) || (p2.r() < rmin)) {
+      if ((p2.r() > rmax) || (p2.r() < rmin) || p.phi() > phmax || p.phi() < phmin) {
         return false;
       }
     }
@@ -124,7 +124,6 @@ namespace athena::geo {
 
     // recursively add neigbors, continue if it was a good placement or no placement found yet
     if (in_ring || res.empty()) {
-      double d = 2. * std::cos(M_PI / static_cast<double>(nsides)) * lside;
       for (int i = 0; i < nsides; ++i) {
         double phi = i * 2. * M_PI / static_cast<double>(nsides);
         add_poly(Point(p.x() + 2. * lside * std::sin(phi), p.y() + 2. * lside * std::cos(phi)), res, nsides, lside,
@@ -149,4 +148,4 @@ namespace athena::geo {
     return res;
   }
 
-} // namespace athena::geo
+} // namespace ecce::geo
