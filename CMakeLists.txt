@@ -4,7 +4,6 @@ cmake_minimum_required(VERSION 3.12 FATAL_ERROR)
 cmake_policy(SET CMP0074 NEW)
 
 PROJECT(ecce
-  VERSION 0.0.1
   LANGUAGES CXX
   DESCRIPTION "A template dd4hep+acts detector"
   )
