@@ -3,7 +3,7 @@
 
 <define>
 <!-- vessel (=snout+tank) geometry -->
-<constant name="DRICH_zmin"               value="ForwardRICHRegion_zmin + 3*cm"/> <!-- vessel front (+3cm to avoid beamline overlap; cf. DRICH_SnoutLength and ForwardPIDRegion_length) -->
+<constant name="DRICH_zmin"               value="ForwardRICHRegion_zmin"/> <!-- vessel front -->
 <constant name="DRICH_Length"             value="ForwardRICHRegion_length"/>  <!-- overall vessel length (including snout) -->
 <constant name="DRICH_rmin0"              value="ForwardRICHRegion_zmin * ForwardRICHRegion_tan1"/>  <!-- bore radius at dRICh vessel frontplane -->
 <constant name="DRICH_rmin1"              value="(ForwardRICHRegion_zmin + ForwardRICHRegion_length) * ForwardRICHRegion_tan2"/>  <!-- bore radius at dRICh vessel backplane -->
@@ -12,7 +12,7 @@
 <!-- tank geometry: cylinder, holding the majority of detector components -->
 <constant name="DRICH_rmax2"              value="HcalBarrel_rmin-2*cm"/>  <!-- cylinder radius, near maximal to fit HCal barrel inner polygon -->
 <!-- snout geometry: cone with front radius rmax0 and back radius of rmax1 -->
-<constant name="DRICH_SnoutLength"        value="20.0*cm - 3*cm"/> <!-- -3cm to avoid beamline overlap; cf. DRICH_zmin and ForwardPIDRegion_length -->
+<constant name="DRICH_SnoutLength"        value="20.0*cm"/>
 <constant name="DRICH_SnoutSlope"         value="DRICH_rmax2 / (DRICH_zmin + DRICH_Length)"/>
 <constant name="DRICH_rmax0"              value="DRICH_SnoutSlope * DRICH_zmin"/>
 <constant name="DRICH_rmax1"              value="DRICH_SnoutSlope * ( DRICH_zmin + DRICH_SnoutLength)"/>
