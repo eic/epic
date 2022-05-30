@@ -138,7 +138,7 @@
 </documentation>
 <module
   material="Silicon"
-  surface="SensorSurface_DRICH"
+  surface="SensorSurface_PFRICH"
   vis="PFRICH_sensor_vis"
   side="PFRICH_sensor_active_size"
   thickness="PFRICH_sensor_thickness"

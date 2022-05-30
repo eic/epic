@@ -469,17 +469,8 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
     Sphere mirrorSolid1(mirrorRadius, mirrorRadius + mirrorThickness, mirrorTheta1, mirrorTheta2, -40 * degree,
                         40 * degree);
 
-    /* CAUTION: if any of the relative placements or boolean operations below
-     * are changed, you MUST make sure this does not break access to the sphere
-     * primitive and positioning in Juggler `IRTAlgorithm`; cross check the
-     * mirror sphere attributes carefully!
-     */
-    /*
-    // PRINT MIRROR ATTRIBUTES (before any sector z-rotation)
-    printf("zM = %f\n",zM); // sphere centerZ, w.r.t. IP
-    printf("xM = %f\n",xM); // sphere centerX, w.r.t. IP
-    printf("rM = %f\n",rM); // sphere radius
-    */
+    // print mirror attributes for sector 0
+    //if(isec==0) printf("dRICH mirror (zM, xM, rM) = (%f, %f, %f)\n",zM,xM,rM); // coords w.r.t. IP
 
     // mirror placement transformation (note: transformations are in reverse order)
     auto        mirrorPos = Position(mirrorCenterX, 0., mirrorCenterZ) + originFront;

@@ -427,59 +427,7 @@
       4.85156*eV  6.0*m
       6.19921*eV  6.0*m
       "/>
-    <!-- dRICh aerogel, for density=0.11 g/cm3 (OLD versions are for 0.1g/cm3) -->
-    <matrix name="RINDEX__Aerogel_DRICH_OLD" coldim="2" values="
-      1.87855*eV  1.01638
-      1.96673*eV  1.01642
-      2.0549*eV   1.01647
-      2.14308*eV  1.01652
-      2.23126*eV  1.01657
-      2.31943*eV  1.01662
-      2.40761*eV  1.01667
-      2.49579*eV  1.01673
-      2.58396*eV  1.01679
-      2.67214*eV  1.01685
-      2.76032*eV  1.01691
-      2.84849*eV  1.01698
-      2.93667*eV  1.01705
-      3.02485*eV  1.01712
-      3.11302*eV  1.01719
-      3.2012*eV   1.01727
-      3.28938*eV  1.01734
-      3.37755*eV  1.01742
-      3.46573*eV  1.01751
-      3.55391*eV  1.01759
-      3.64208*eV  1.01768
-      3.73026*eV  1.01777
-      3.81844*eV  1.01787
-      3.90661*eV  1.01796
-      3.99479*eV  1.01806
-      4.08297*eV  1.01816
-      4.17114*eV  1.01827
-      4.25932*eV  1.01838
-      4.3475*eV   1.01849
-      4.43567*eV  1.0186
-      4.52385*eV  1.01872
-      4.61203*eV  1.01884
-      4.7002*eV   1.01897
-      4.78838*eV  1.01909
-      4.87656*eV  1.01922
-      4.96473*eV  1.01936
-      5.05291*eV  1.0195
-      5.14109*eV  1.01964
-      5.22927*eV  1.01979
-      5.31744*eV  1.01994
-      5.40562*eV  1.02009
-      5.4938*eV   1.02025
-      5.58197*eV  1.02041
-      5.67015*eV  1.02057
-      5.75833*eV  1.02074
-      5.8465*eV   1.02092
-      5.93468*eV  1.0211
-      6.02286*eV  1.02128
-      6.11103*eV  1.02147
-      6.19921*eV  1.02167
-      "/>
+    <!-- dRICh aerogel, for density=0.11 g/cm3 -->
     <matrix name="RINDEX__Aerogel_DRICH" coldim="2" values="
       1.87855*eV  1.01852
       1.96673*eV  1.01856
@@ -532,58 +480,6 @@
       6.11103*eV  1.02361
       6.19921*eV  1.02381
       "/>
-    <matrix name="ABSLENGTH__Aerogel_DRICH_OLD" coldim="2" values="
-      1.87855*eV  154*mm
-      1.96673*eV  156.17*mm
-      2.0549*eV   158.154*mm
-      2.14308*eV  159.974*mm
-      2.23126*eV  161.651*mm
-      2.31943*eV  163.2*mm
-      2.40761*eV  164.636*mm
-      2.49579*eV  165.97*mm
-      2.58396*eV  167.213*mm
-      2.67214*eV  168.374*mm
-      2.76032*eV  169.461*mm
-      2.84849*eV  170.481*mm
-      2.93667*eV  171.439*mm
-      3.02485*eV  172.342*mm
-      3.11302*eV  173.193*mm
-      3.2012*eV   173.998*mm
-      3.28938*eV  174.759*mm
-      3.37755*eV  175.481*mm
-      3.46573*eV  176.165*mm
-      3.55391*eV  176.817*mm
-      3.64208*eV  162.708*mm
-      3.73026*eV  140.953*mm
-      3.81844*eV  122.516*mm
-      3.90661*eV  106.833*mm
-      3.99479*eV  93.4428*mm
-      4.08297*eV  81.9694*mm
-      4.17114*eV  72.1072*mm
-      4.25932*eV  63.6011*mm
-      4.3475*eV   56.2434*mm
-      4.43567*eV  49.8599*mm
-      4.52385*eV  44.3054*mm
-      4.61203*eV  39.4601*mm
-      4.7002*eV   35.2211*mm
-      4.78838*eV  31.5049*mm
-      4.87656*eV  28.2374*mm
-      4.96473*eV  25.359*mm
-      5.05291*eV  22.8166*mm
-      5.14109*eV  20.5674*mm
-      5.22927*eV  18.5724*mm
-      5.31744*eV  16.7992*mm
-      5.40562*eV  15.2205*mm
-      5.4938*eV   13.8125*mm
-      5.58197*eV  12.5541*mm
-      5.67015*eV  11.4277*mm
-      5.75833*eV  10.4166*mm
-      5.8465*eV   9.50928*mm
-      5.93468*eV  8.69176*mm
-      6.02286*eV  7.95608*mm
-      6.11103*eV  7.29168*mm
-      6.19921*eV  6.69064*mm
-      "/>
     <matrix name="ABSLENGTH__Aerogel_DRICH" coldim="2" values="
       1.87855*eV  140.000*mm
       1.96673*eV  141.973*mm
@@ -635,58 +531,6 @@
       6.02286*eV    7.233*mm
       6.11103*eV    6.629*mm
       6.19921*eV    6.082*mm
-      "/>
-    <matrix name="RAYLEIGH__Aerogel_DRICH_OLD" coldim="2" values="
-      1.87855*eV  309.218*mm
-      1.96673*eV  257.383*mm
-      2.0549*eV   215.968*mm
-      2.14308*eV  182.559*mm
-      2.23126*eV  155.367*mm
-      2.31943*eV  133.053*mm
-      2.40761*eV  114.606*mm
-      2.49579*eV  99.2482*mm
-      2.58396*eV  86.3795*mm
-      2.67214*eV  75.5291*mm
-      2.76032*eV  66.3313*mm
-      2.84849*eV  58.4918*mm
-      2.93667*eV  51.777*mm
-      3.02485*eV  45.998*mm
-      3.11302*eV  41.0045*mm
-      3.2012*eV   36.6696*mm
-      3.28938*eV  32.8931*mm
-      3.37755*eV  29.5904*mm
-      3.46573*eV  26.6917*mm
-      3.55391*eV  24.1402*mm
-      3.64208*eV  21.8856*mm
-      3.73026*eV  19.8884*mm
-      3.81844*eV  18.1144*mm
-      3.90661*eV  16.533*mm
-      3.99479*eV  15.1206*mm
-      4.08297*eV  13.856*mm
-      4.17114*eV  12.7208*mm
-      4.25932*eV  11.7005*mm
-      4.3475*eV   10.7791*mm
-      4.43567*eV  9.94752*mm
-      4.52385*eV  9.1938*mm
-      4.61203*eV  8.51136*mm
-      4.7002*eV   7.88964*mm
-      4.78838*eV  7.32468*mm
-      4.87656*eV  6.80988*mm
-      4.96473*eV  6.33864*mm
-      5.05291*eV  5.907*mm
-      5.14109*eV  5.51232*mm
-      5.22927*eV  5.14932*mm
-      5.31744*eV  4.81668*mm
-      5.40562*eV  4.51044*mm
-      5.4938*eV   4.22796*mm
-      5.58197*eV  3.9666*mm
-      5.67015*eV  3.72504*mm
-      5.75833*eV  3.50196*mm
-      5.8465*eV   3.29604*mm
-      5.93468*eV  3.10464*mm
-      6.02286*eV  2.92644*mm
-      6.11103*eV  2.76144*mm
-      6.19921*eV  2.607*mm
       "/>
     <matrix name="RAYLEIGH__Aerogel_DRICH" coldim="2" values="
       1.87855*eV  281.107*mm
@@ -909,15 +753,6 @@
       <property name="RINDEX"    ref="RINDEX__C4F10_PFRICH"/>
       <property name="ABSLENGTH" ref="ABSLENGTH__C4F10_PFRICH"/>
     </material>
-    <material name="Aerogel_DRICH_OLD">
-      <D type="density" value="0.100" unit="g/cm3"/>
-      <comment> n_air = [dens(Si02)-dens(aerogel)] / [dens(Si02)-dens(Air) ] </comment>
-      <fraction n="    (2.32-0.1) / (2.32-0.0012)" ref="Air"/>
-      <fraction n="1 - (2.32-0.1) / (2.32-0.0012)" ref="SiliconDioxide"/>
-      <property name="RINDEX"    ref="RINDEX__Aerogel_DRICH_OLD"/>
-      <property name="ABSLENGTH" ref="ABSLENGTH__Aerogel_DRICH_OLD"/>
-      <property name="RAYLEIGH"  ref="RAYLEIGH__Aerogel_DRICH_OLD"/>
-    </material>
     <material name="Aerogel_DRICH">
       <D type="density" value="0.110" unit="g/cm3"/>
       <comment> n_air = [dens(Si02)-dens(aerogel)] / [dens(Si02)-dens(Air) ] </comment>
@@ -1013,52 +848,31 @@
     </opticalsurface>
 
     <!-- BEGIN dRICh surface definitions -->
-    <opticalsurface name="MirrorSurface_DRICH" model="unified" finish="polishedfrontpainted" type="dielectric_dielectric">
+    <opticalsurface name="MirrorSurface_DRICH" model="unified" finish="polished" type="dielectric_metal">
       <property name="REFLECTIVITY" coldim="2" values="
-        2.04358*eV  0.867812
-        2.0664*eV   0.865156
-        2.09046*eV  0.863906
-        2.14023*eV  0.86375
-        2.16601*eV  0.864062
-        2.20587*eV  0.864531
-        2.23327*eV  0.864375
-        2.26137*eV  0.865625
-        2.31972*eV  0.865313
-        2.35005*eV  0.865
-        2.38116*eV  0.864844
-        2.41313*eV  0.863828
-        2.44598*eV  0.863516
-        2.47968*eV  0.863125
-        2.53081*eV  0.862187
-        2.58354*eV  0.861719
-        2.6194*eV   0.861328
-        2.69589*eV  0.861016
-        2.73515*eV  0.861094
-        2.79685*eV  0.861602
-        2.86139*eV  0.862305
-        2.95271*eV  0.86375
-        3.04884*eV  0.865586
-        3.12665*eV  0.867383
-        3.2393*eV   0.870059
-        3.39218*eV  0.874199
-        3.52508*eV  0.878105
-        3.66893*eV  0.88252
-        3.82396*eV  0.887617
-        3.99949*eV  0.893721
-        4.13281*eV  0.898184
-        4.27679*eV  0.902744
-        4.48244*eV  0.907837
-        4.65057*eV  0.9102
-        4.89476*eV  0.909316
-        5.02774*eV  0.906174
-        5.16816*eV  0.900422
-        5.31437*eV  0.891521
-        5.63821*eV  0.859954
-        5.90401*eV  0.820831
-        6.19921*eV  0.762502
+        1*eV  0.9
+        4*eV  0.9
+        7*eV  0.9
         "/>
     </opticalsurface>
-    <opticalsurface name="SensorSurface_DRICH" model="glisur" finish="polished" type="dielectric_metal">
+    <opticalsurface name="SensorSurface_DRICH" model="glisur" finish="polished" type="dielectric_dielectric">
+      <property name="EFFICIENCY" coldim="2" values="
+        1*eV  1
+        4*eV  1
+        7*eV  1
+        "/>
+      <property name="IMAGINARYRINDEX" coldim="2" values="
+        1*eV  1.69
+        4*eV  1.69
+        7*eV  1.69
+        "/>
+      <property name="REALRINDEX" coldim="2" values="
+        1*eV  1.92
+        4*eV  1.92
+        7*eV  1.92
+        "/>
+    </opticalsurface>
+    <opticalsurface name="SensorSurface_PFRICH" model="glisur" finish="polished" type="dielectric_dielectric">
       <property name="EFFICIENCY" coldim="2" values="
         1*eV  1
         4*eV  1
