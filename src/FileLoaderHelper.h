@@ -100,6 +100,7 @@ inline void EnsureFileFromURLExists(std::string url, std::string file, std::stri
       printout(ERROR, "FileLoader", "unable to run cmd " + cmd);
       printout(ERROR, "FileLoader", "value returned was ", ret);
       printout(ERROR, "FileLoader", "check command and retry");
+      printout(ERROR, "FileLoader", "hint: allow insecure connections with -k");
       std::quick_exit(1);
     }
   }
