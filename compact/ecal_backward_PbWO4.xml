@@ -25,7 +25,7 @@
         <disk
             rmin="EcalEndcapN_rmin"
             rmax="EcalEndcapN_rmax"
-            length="EcalEndcapN_length"
+            envelope="true"
             sector="1">
           <module
             sizex="EcalEndcapN_CrystalModule_width"
