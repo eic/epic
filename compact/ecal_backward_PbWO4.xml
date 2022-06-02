@@ -20,7 +20,7 @@
         type="HomogeneousCalorimeter"
         readout="EcalEndcapNHits">
       <position x="0" y="0" z="-(EcalEndcapN_zmin + EcalEndcapN_length/2.)"/>
-      <rotation x="0" y="180." z="0"/>
+      <rotation x="0" y="180.*degree" z="0"/>
       <placements>
         <disk
             rmin="EcalEndcapN_rmin"
