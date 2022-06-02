@@ -15,7 +15,7 @@ if "CI_PROJECT_ID" in os.environ:
 else:
     CI_PROJECT_ID = "473"
 
-base_url = f"https://eicweb.phy.anl.gov/api/v4/projects/{CI_PROJECT_ID}/jobs/artifacts/master/raw"
+base_url = f"https://eicweb.phy.anl.gov/api/v4/projects/{CI_PROJECT_ID}/jobs/artifacts/main/raw"
 
 #images = ["images/view2a.png","images/view2b.png", "images/view1.png"]
 images = glob.glob("images/*.png")
