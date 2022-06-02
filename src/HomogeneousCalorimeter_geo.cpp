@@ -35,7 +35,8 @@ using namespace dd4hep;
  *     <position x="0" y="0" z="0"/>
  *     <rotation x="0" y="0" z="0"/>
  *     <placements>
- *       <array nrow="34" ncol="34" sector="1">
+ *       <array nrow="34" ncol="34"
+ *              envelope="false" sector="1">
  *         <position x="0" y="0" z="-9.73*cm"/>
  *         <module sizex="2.05*cm" sizey="2.05*cm" sizez="18*cm" vis="GreenVis" material="PbWO4"/>
  *         <wrapper thickness="0.015*cm" material="Epoxy" vis="WhiteVis"/>
@@ -86,7 +87,8 @@ using namespace dd4hep;
  *     <position x="0" y="0" z="-30*cm"/>
  *     <rotation x="0" y="0" z="0"/>
  *     <placements>
- *       <disk rmin="25*cm" rmax="125*cm" length="20.5*cm" phimin="0" phimax="360*degree" sector="1">
+ *       <disk rmin="25*cm" rmax="125*cm" length="20.5*cm" phimin="0" phimax="360*degree"
+ *             envelope="false" sector="1">
  *         <module sizex="2.05*cm" sizey="2.05*cm" sizez="20*cm" vis="GreenVis" material="PbWO4"/>
  *         <wrapper thickness="0.015*cm" material="Epoxy" vis="WhiteVis"/>
  *       </disk>
@@ -143,7 +145,8 @@ static Ref_t create_detector(Detector& desc, xml::Handle_t handle, SensitiveDete
   int             detID   = detElem.id();
   DetElement      det(detName, detID);
   sens.setType("calorimeter");
-  // envelope
+
+  // assembly
   Assembly assembly(detName);
 
   // module placement
@@ -266,19 +269,32 @@ static std::tuple<int, int> add_array(Detector& desc, Assembly& env, xml::Collec
     removals.push_back({rm.attr<int>(_Unicode(row)), rm.attr<int>(_Unicode(col))});
   }
 
-  // placement to mother
-  auto pos      = get_xml_xyz(plm, _Unicode(position));
-  auto rot      = get_xml_xyz(plm, _Unicode(rotation));
-  int  nmodules = 0;
+  // placement inside mother
+  auto pos = get_xml_xyz(plm, _Unicode(position));
+  auto rot = get_xml_xyz(plm, _Unicode(rotation));
+
+  // optional envelope volume
+  bool        has_envelope = dd4hep::getAttrOrDefault<bool>(plm, _Unicode(envelope), false);
+  Material    material     = desc.material(getAttrOrDefault<std::string>(plm, _U(material), "Air"));
+  Box         solid(ncol * modSize.x() / 2.0, nrow * modSize.y() / 2.0, modSize.z() / 2.0);
+  Volume      env_vol(std::string(env.name()) + "_envelope", solid, material);
+  Transform3D tr_global = RotationZYX(rot.z(), rot.y(), rot.x()) * Translation3D(pos.x(), pos.y(), pos.z());
+  if (has_envelope) {
+    env.placeVolume(env_vol, tr_global);
+  }
+
+  // local placement of modules
+  int nmodules = 0;
   for (int i = 0; i < nrow; ++i) {
     for (int j = 0; j < ncol; ++j) {
       if (std::find(removals.begin(), removals.end(), std::pair<int, int>(i, j)) != removals.end()) {
         continue;
       }
-      double      px    = begx + modSize.x() * j;
-      double      py    = begy - modSize.y() * i;
-      Transform3D tr    = RotationZYX(rot.z(), rot.y(), rot.x()) * Translation3D(pos.x() + px, pos.y() + py, pos.z());
-      auto        modPV = env.placeVolume(modVol, tr);
+      double      px       = begx + modSize.x() * j;
+      double      py       = begy - modSize.y() * i;
+      Transform3D tr_local = RotationZYX(0.0, 0.0, 0.0) * Translation3D(px, py, 0.0);
+      auto        modPV =
+          (has_envelope ? env_vol.placeVolume(modVol, tr_local) : env.placeVolume(modVol, tr_global * tr_local));
       modPV.addPhysVolID("sector", sector_id).addPhysVolID("module", i * ncol + j + id_begin);
       nmodules++;
     }
@@ -298,14 +314,26 @@ static std::tuple<int, int> add_disk(Detector& desc, Assembly& env, xml::Collect
   double phimin          = dd4hep::getAttrOrDefault<double>(plm, _Unicode(phimin), 0.);
   double phimax          = dd4hep::getAttrOrDefault<double>(plm, _Unicode(phimax), 2. * M_PI);
 
-  auto points = ecce::geo::fillRectangles({0., 0.}, modSize.x(), modSize.y(), rmin, rmax, phimin, phimax);
-  // placement to mother
+  // placement inside mother
   auto pos = get_xml_xyz(plm, _Unicode(position));
   auto rot = get_xml_xyz(plm, _Unicode(rotation));
-  int  mid = 0;
+
+  // optional envelope volume
+  bool        has_envelope = dd4hep::getAttrOrDefault<bool>(plm, _Unicode(envelope), false);
+  Material    material     = desc.material(getAttrOrDefault<std::string>(plm, _U(material), "Air"));
+  Tube        solid(rmin, rmax, modSize.z() / 2.0, phimin, phimax);
+  Volume      env_vol(std::string(env.name()) + "_envelope", solid, material);
+  Transform3D tr_global = RotationZYX(rot.z(), rot.y(), rot.x()) * Translation3D(pos.x(), pos.y(), pos.z());
+  if (has_envelope) {
+    env.placeVolume(env_vol, tr_global);
+  }
+
+  // local placement of modules
+  int  mid    = 0;
+  auto points = ecce::geo::fillRectangles({0., 0.}, modSize.x(), modSize.y(), rmin, rmax, phimin, phimax);
   for (auto& p : points) {
-    Transform3D tr = RotationZYX(rot.z(), rot.y(), rot.x()) * Translation3D(pos.x() + p.x(), pos.y() + p.y(), pos.z());
-    auto        modPV = env.placeVolume(modVol, tr);
+    Transform3D tr_local = RotationZYX(0.0, 0.0, 0.0) * Translation3D(p.x(), p.y(), 0.0);
+    auto modPV = (has_envelope ? env_vol.placeVolume(modVol, tr_local) : env.placeVolume(modVol, tr_global * tr_local));
     modPV.addPhysVolID("sector", sector_id).addPhysVolID("module", id_begin + mid++);
   }
   return {sector_id, mid};
