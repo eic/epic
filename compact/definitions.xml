@@ -533,8 +533,8 @@ Service gaps in FW direction (before endcapP ECAL) and BW direction (before endc
   </documentation>
     <constant name="DIRCReadout_length"         value="30*cm"/>
     <constant name="DIRCForward_length"         value="0*cm"/>
-    <constant name="DIRCForward_zmax"           value="EcalBarrelForward_zmax "/>
-    <constant name="DIRCBackward_zmax"          value="EcalBarrelBackward_zmax + EcalBarrelReadout_length +DIRCReadout_length "/>
+    <constant name="DIRCForward_zmax"           value="ForwardRICHRegion_zmin"/>
+    <constant name="DIRCBackward_zmax"          value="EcalBarrelBackward_zmax"/>
     <constant name="DIRC_length"                value="DIRCForward_zmax + DIRCBackward_zmax"/>
     <constant name="DIRC_offset"                value="(DIRCForward_zmax - DIRCBackward_zmax)/2"/>
     <constant name="DIRC_rmin"                  value="CentralTrackingRegion_rmax"/>
