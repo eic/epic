@@ -5,6 +5,12 @@
 
   <define>
     <constant name="EcalBarrel_Support_thickness" value="5*cm"/>
+
+    <documentation>
+      The EcalBarrel eta limits cut into the barrel shape.
+    </documentation>
+    <constant name="EcalBarrel_etamin" value="-3.5"/>
+    <constant name="EcalBarrel_etamax" value="+1.4"/>
   </define>
 
   <limits>
@@ -27,8 +33,9 @@
       vis="InvisibleWithDaughters"
       calorimeterType="EM_BARREL"
       readout="EcalBarrelHits">
-      <position z="EcalBarrel_offset"/>
-      <dimensions rmin="EcalBarrel_rmin" rmax="EcalBarrel_rmax" length="EcalBarrel_length"/>
+      <dimensions rmin="EcalBarrel_rmin" rmax="EcalBarrel_rmax"
+                  zmin="-EcalBarrelBackward_zmax" zmax="EcalBarrelForward_zmax"
+                  etamin="EcalBarrel_etamin" etamax="EcalBarrel_etamax"/>
       <comment>
           Modules are specified by layers and slices:
           - Slices are e.g. sciglass, PMT windows along radial direction.
