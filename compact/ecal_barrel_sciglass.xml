@@ -46,7 +46,7 @@
       <module name="SciGlassModule"
               material="Air"
               repeat_phi="128"
-              repeat_eta_pos="30"
+              repeat_eta_pos="28"
               repeat_eta_neg="40"
               length="461*mm"
               x1="3.9*cm"
