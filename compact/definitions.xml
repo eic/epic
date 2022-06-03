@@ -464,8 +464,8 @@ Examples:
     <constant name="BackwardTOFRegion_length"      value="BackwardPIDRegion_length - BackwardRICHRegion_length" />
 
     <comment> Note: PID has space for DIRC, ExtraSpace sits past the PID</comment>
-    <constant name="BarrelPIDRegion_thickness"    value="6.8 * cm" />
-    <constant name="BarrelExtraSpace_thickness"   value="2.2 * cm" />
+    <constant name="BarrelPIDRegion_thickness"    value="7.0 * cm" />
+    <constant name="BarrelExtraSpace_thickness"   value="2.0 * cm" />
 
     <documentation>
     ## Forward/backward tracking region behind the PID detectors
