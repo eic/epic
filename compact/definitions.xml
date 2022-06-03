@@ -418,7 +418,7 @@ Examples:
 
     </documentation>
 
-    <constant name="CentralTrackingRegion_rmax"   value="950.0*mm" />
+    <constant name="CentralTrackingRegion_rmax"   value="715.0*mm" />
     <constant name="CentralTrackingRegionP_zmax"  value="1600.0*mm" />
     <constant name="CentralTrackingRegionN_zmax"  value="1500.0*mm" />
     <constant name="CentralTrackingRegion_length" value="CentralTrackingRegionP_zmax + CentralTrackingRegionN_zmax" />
