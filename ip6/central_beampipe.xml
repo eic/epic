@@ -59,12 +59,12 @@
                          crossing_angle="CrossingAngle">
           <!-- avoid overlap with IP beampipe by starting slightly displaced -->
           <zplane z="BeampipeDownstreamStraightLength + 0.5 * BeampipeOD * tan(abs(CrossingAngle))" OD="BeampipeOD"/>
-          <zplane z="1780.00 * mm" OD=" 92.06 * mm - 1.0 * mm"/>
-          <zplane z="1780.01 * mm" OD=" 92.06 * mm + 2.0 * BeampipeDownstreamFlange1Thickness"
+          <zplane z="1750.00 * mm" OD=" 92.06 * mm - 1.0 * mm"/>
+          <zplane z="1750.01 * mm" OD=" 92.06 * mm + 2.0 * BeampipeDownstreamFlange1Thickness"
                   extra_thickness="BeampipeDownstreamFlange1Thickness"/>
-          <zplane z="1820.00 * mm" OD=" 92.06 * mm + 2.0 * BeampipeDownstreamFlange1Thickness"
+          <zplane z="1790.00 * mm" OD=" 92.06 * mm + 2.0 * BeampipeDownstreamFlange1Thickness"
                   extra_thickness="BeampipeDownstreamFlange1Thickness"/>
-          <zplane z="1820.01 * mm" OD=" 92.06 * mm"/>
+          <zplane z="1790.01 * mm" OD=" 92.06 * mm"/>
           <zplane z="4455.80 * mm" OD="257.92 * mm"/>
           <zplane z="4455.81 * mm" OD="257.92 * mm + 2.0 * BeampipeDownstreamFlange2Thickness"
                   extra_thickness="BeampipeDownstreamFlange2Thickness"/>
