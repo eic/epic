@@ -105,17 +105,17 @@
         Modules are only listed here for one quadrant. The modules point back to the
         z0 position (should be their actual position, but breaks parametrization).
       </comment>
-      <positions scale="1.03" z0="147.5*cm">
+      <positions scale="1.05" z0="147.5*cm">
         <position x="-41.3250000000"  y="178.6750000000"/>
         <position x=" 96.0250000001"  y="178.6750000000"/>
       </positions>
-      <positions scale="1.036" z0="147.5*cm">
+      <positions scale="1.076" z0="147.5*cm">
         <position x="-41.3250000000"  y="316.0250000001"/>
         <position x=" 96.0250000001"  y="316.0250000001"/>
         <position x="233.3750000002"  y="178.6750000000"/>
         <position x="233.3750000002"  y="316.0250000001"/>
       </positions>
-      <positions scale="1.052" z0="147.5*cm">
+      <positions scale="1.112" z0="147.5*cm">
         <position x="-41.3250000000"  y="453.3750000002"/>
         <position x=" 96.0250000001"  y="453.3750000002"/>
         <!--position x="233.3750000002"  y="453.3750000002"/-->
