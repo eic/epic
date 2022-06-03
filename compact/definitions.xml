@@ -452,7 +452,7 @@ Examples:
 
     <constant name="BackwardPIDRegion_zmin"       value="CentralTrackingRegionN_zmax" />
     <constant name="BackwardPIDRegion_length"     value="60.0*cm" />
-    <constant name="BackwardPIDRegion_rmax"       value="CentralTrackingRegion_rmax" />
+    <constant name="BackwardPIDRegion_rmax"       value="64.0*cm" /> <!-- FIXME hardcoded, was CentralTrackingRegion_rmax -->
     <constant name="BackwardPIDRegion_tan"        value="CentralTrackingRegionN_tan * 0.92" />
 
     <comment> Backward RICH region </comment>
@@ -464,8 +464,8 @@ Examples:
     <constant name="BackwardTOFRegion_length"      value="BackwardPIDRegion_length - BackwardRICHRegion_length" />
 
     <comment> Note: PID has space for DIRC, ExtraSpace sits past the PID</comment>
-    <constant name="BarrelPIDRegion_thickness"    value="8.0 * cm" />
-    <constant name="BarrelExtraSpace_thickness"   value="0.0 * cm" />
+    <constant name="BarrelPIDRegion_thickness"    value="5.1 * cm" />
+    <constant name="BarrelExtraSpace_thickness"   value="3.4 * cm" />
 
     <documentation>
     ## Forward/backward tracking region behind the PID detectors
@@ -520,7 +520,7 @@ Service gaps in FW direction (before endcapP ECAL) and BW direction (before endc
     <constant name="EcalEndcapN_rmax"               value="63*cm"/> <!-- FIXME hardcoded -->
 
     <constant name="EcalBarrelRegion_thickness"     value="50.0*cm"/>
-    <constant name="EcalBarrel_rmin"                value="CentralTrackingRegion_rmax + BarrelPIDRegion_thickness + BarrelExtraSpace_thickness - 23*cm"/> <!-- ECCE proposal: 85 cm, FIXME hardcoded spacing -->
+    <constant name="EcalBarrel_rmin"                value="CentralTrackingRegion_rmax + BarrelPIDRegion_thickness + BarrelExtraSpace_thickness"/>
     <constant name="EcalBarrel_rmax"                value="EcalBarrel_rmin + EcalBarrelRegion_thickness"/>
     <constant name="EcalBarrelForward_zmax"         value="SolenoidForward_zmax + 5.5*cm"/> <!-- ECCE proposal: 195 cm, FIXME hardcoded spacing -->
     <constant name="EcalBarrelBackward_zmax"        value="EcalEndcapN_zmin + 179*cm"/> <!-- ECCE proposal: -389 cm, FIXME hardcoded spacing -->
