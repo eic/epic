@@ -7,6 +7,7 @@
 #include <XML/Helper.h>
 #include <algorithm>
 #include <iostream>
+#include <limits>
 #include <math.h>
 #include <tuple>
 
@@ -40,12 +41,67 @@ static Ref_t create_detector(Detector& desc, xml::Handle_t handle, SensitiveDete
   auto det_rot = get_xml_xyz(x_det, _U(rotation));
 
   // envelop
-  auto   dim    = x_det.dimensions();
-  auto   rmin   = dim.rmin();
-  auto   rmax   = dim.rmax();
-  auto   length = dim.length();
-  Tube   envShape(rmin, rmax, length / 2.);
-  Volume env(det_name + "_envelope", envShape, desc.material("Air"));
+  auto                dim    = x_det.dimensions();
+  auto                rmin   = dim.rmin();
+  auto                rmax   = dim.rmax();
+  auto                zmin   = dim.zmin();
+  auto                zmax   = dim.zmax();
+  auto                etamin = dd4hep::getAttrOrDefault<double>(x_det.child(_U(dimensions)), _Unicode(etamin),
+                                                 -std::numeric_limits<double>::max());
+  auto                etamax = dd4hep::getAttrOrDefault<double>(x_det.child(_U(dimensions)), _Unicode(etamax),
+                                                 +std::numeric_limits<double>::max());
+  std::vector<double> v_rmin, v_rmax, v_z;
+  auto                theta = [](const auto eta) { return 2.0 * atan(exp(-eta)); };
+
+  // backward nose cone
+  printout(DEBUG, "SciGlassCalorimeter", "etamin cutout: etamin = %f, thetamin = %f", etamin, theta(etamin));
+  if (-zmin * sin(theta(etamin)) < rmin) {
+    // no cutout: regular end face
+    printout(DEBUG, "SciGlassCalorimeter", "no etamin cutout: zmin * sin(theta(etamin)) = %f < rmin = %f",
+             zmin * sin(theta(etamin)), rmin);
+    v_z.emplace_back(zmin);
+    v_rmin.emplace_back(rmin);
+    v_rmax.emplace_back(rmax);
+  } else {
+    // with cutout: first add zmin side
+    printout(DEBUG, "SciGlassCalorimeter", "etamin cutout: zmin * sin(theta(etamin)) = %f > rmin = %f",
+             zmin * sin(theta(etamin)), rmin);
+    auto z = std::max(zmin, rmax / tan(theta(etamin))); // zmin or furthest backwards
+    v_z.emplace_back(z);
+    v_rmin.emplace_back(std::max(rmin, z * tan(theta(etamin))));
+    v_rmax.emplace_back(rmax);
+    // then where cutout starts
+    v_z.emplace_back(rmin / tan(theta(etamin)));
+    v_rmin.emplace_back(rmin);
+    v_rmax.emplace_back(rmax);
+  }
+
+  // forward nose cone
+  printout(DEBUG, "SciGlassCalorimeter", "etamax cutout: etamax = %f, thetamax = %f", etamax, theta(etamax));
+  if (zmax * sin(theta(etamax)) < rmin) {
+    // no cutout: regular end face
+    printout(DEBUG, "SciGlassCalorimeter", "no etamax cutout: zmax * sin(theta(etamin)) = %f < rmin = %f",
+             zmax * sin(theta(etamax)), rmin);
+    v_z.emplace_back(zmax);
+    v_rmin.emplace_back(rmin);
+    v_rmax.emplace_back(rmax);
+  } else {
+    // with cutout: first add where cutout starts
+    printout(DEBUG, "SciGlassCalorimeter", "etamax cutout: zmax * sin(theta(etamax)) = %f > rmin = %f",
+             zmax * sin(theta(etamax)), rmin);
+    v_z.emplace_back(rmin / tan(theta(etamax)));
+    v_rmin.emplace_back(rmin);
+    v_rmax.emplace_back(rmax);
+    // then add zmax side
+    auto z = std::min(zmax, rmax / tan(theta(etamax))); // zmax or furthest forward
+    v_z.emplace_back(z);
+    v_rmin.emplace_back(std::max(rmin, z * tan(theta(etamax))));
+    v_rmax.emplace_back(rmax);
+  }
+
+  // create polycone
+  Polycone envShape(0.0, 2 * M_PI, v_rmin, v_rmax, v_z);
+  Volume   env(det_name + "_envelope", envShape, desc.material("Air"));
   env.setVisAttributes(desc.visAttributes(x_det.visStr()));
 
   // number of modules (default to 128 in phi, and 1 in eta so one ring is placed)

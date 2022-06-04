@@ -1,8 +1,6 @@
 <lccdd>
 
   <define>
-    <constant name="HcalBarrel_length"    value="HcalBarrelForward_zmax + HcalBarrelBackward_zmax"/>
-    <constant name="HcalBarrel_offset"    value="(HcalBarrelForward_zmax - HcalBarrelBackward_zmax)/2"/>
     <constant name="HcalBarrelAvailThickness" value="HcalBarrel_thickness"/>
 
     <documentation>

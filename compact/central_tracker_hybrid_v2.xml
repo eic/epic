@@ -42,14 +42,14 @@
     <constant name="MedialTrackerEndcapN_rmin"              value="InnerTrackerEndcap_rmin"/>
 
     <comment> Outer tracker setup </comment>
-    <constant name="OuterTrackerBarrel_rmin"                value="75.61*cm"/>
+    <constant name="OuterTrackerBarrel_rmin"                value="65.61*cm"/>
     <constant name="OuterTrackerBarrel_offset"              value="1.85*cm"/>
     <constant name="OuterTrackerBarrel_count"               value="2"/>
     <constant name="OuterTrackerEndcapP_zmin"               value="103.67*cm"/>
     <constant name="OuterTrackerEndcapP_offset"             value="30.66*cm"/>
     <constant name="OuterTrackerEndcapP_count"              value="3"/>
     <constant name="OuterTrackerEndcapN_zmin"               value="109*cm"/>
-    <constant name="OuterTrackerEndcapN_offset"             value="36.00*cm"/>
+    <constant name="OuterTrackerEndcapN_offset"             value="10.00*cm"/>
     <constant name="OuterTrackerEndcapN_count"              value="2"/>
 
     <comment> Gem disk setup.
@@ -60,10 +60,10 @@
     <constant name="GEMEndcapPDisk1_zmin"                   value="103*cm"/>
     <constant name="GEMEndcapPDisk2_zmin"                   value="164.5"/>
     <constant name="GEMEndcapPDisk3_zmin"                   value="ForwardTrackingRegion_zmin + 2*cm"/>
-    <constant name="GEMEndcapP_count"                       value="3"/>
-    <constant name="GEMEndcapN_zmin"                        value="103*cm"/>
+    <constant name="GEMEndcapP_count"                       value="2"/>
+    <constant name="GEMEndcapN_zmin"                        value="90*cm"/>
     <constant name="GEMEndcapN_offset"                      value="41.5*cm"/>
-    <constant name="GEMEndcapN_count"                       value="2"/>
+    <constant name="GEMEndcapN_count"                       value="1"/>
 
     <comment> Silicon tracker parameters </comment>
     <constant name="SiTrackerBarrelSpaceFrameCF_thickness"  value="0.12*mm"/>

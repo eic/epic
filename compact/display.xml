@@ -105,10 +105,10 @@
     </comment>
     <vis name="RICHVis"         ref="AnlTeal"     showDaughters="true"/>
 
-    <vis name="DIRCVis"         ref="AnlTeal"       showDaughters="true" visible="false"/>
-    <vis name="DIRCLayerVis"    ref="AnlTeal"       showDaughters="true" visible="false"/>
-    <vis name="DIRCModuleVis"   ref="AnlTeal"       showDaughters="true" visible="false"/>
-    <vis name="DIRCSupportVis"  ref="AnlTeal" showDaughters="true" visible="true"/>
+    <vis name="DIRCVis"         ref="AnlTeal"       showDaughters="true" visible="true"/>
+    <vis name="DIRCLayerVis"    ref="AnlTeal"       showDaughters="true" visible="true"/>
+    <vis name="DIRCModuleVis"   ref="AnlTeal"       showDaughters="true" visible="true"/>
+    <vis name="DIRCSupportVis"  ref="AnlTeal"       showDaughters="true" visible="true"/>
     <vis name="DIRCFrameVis"    ref="AnlOrange"     showDaughters="true" visible="true"/>
     <vis name="DIRCBarVis"      ref="AnlTeal"       showDaughters="true" visible="true"/>
 
