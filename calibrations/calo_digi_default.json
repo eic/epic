@@ -31,6 +31,14 @@
         "pedestalSigma": 0.8,
         "thresholdValue": 3
     },
+    "ecal_barrel_sciglass": {
+        "readout": "module",
+        "dynamicRange": "20*GeV",
+        "capacityBitsADC": 14,
+        "pedestalMean": 100,
+        "pedestalSigma": 1,
+        "thresholdValue": 3
+    },
     "ecal_barrel_imaging": {
         "readout": "pixel",
         "dynamicRange": "3*MeV",
