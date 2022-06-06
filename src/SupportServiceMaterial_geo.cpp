@@ -49,8 +49,9 @@ namespace {
       const double thickness = getAttrOrDefault(x_child, _U(thickness), x_support.thickness());
       const double rmin      = getAttrOrDefault(x_child, _U(rmin), x_support.rmin());
       const double rmax      = getAttrOrDefault(x_child, _U(rmax), x_support.rmax());
-      pos3D                  = pos3D + Position(0, 0, offset);
+      pos3D                  = pos3D + Position(0, 0, -x_support.thickness()/2 + thickness / 2 + offset);
       solid                  = Tube(rmin, rmax, thickness / 2);
+      std::cout << pos3D << std::endl;
     } else if (type == "Cone") {
       const double thickness = getAttrOrDefault(x_child, _U(thickness), x_support.thickness());
       const double length    = getAttrOrDefault(x_child, _U(length), x_support.length());
