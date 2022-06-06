@@ -94,22 +94,21 @@
       vis="TrackerSubAssemblyVis">
       <composite name="SagittaBarrel"/>
     </detector>
-    <!--
     <detector id="TrackerSubAssembly_2_ID"
-      name="OuterTrackerSubAssembly"
+      name="TrackerSubAssembly"
       type="DD4hep_SubdetectorAssembly"
       vis="TrackerSubAssemblyVis">
-      <composite name="OuterTrackerCompositeEndcapN"/>
-      <composite name="OuterTrackerBarrel"/>
-      <composite name="OuterTrackerCompositeEndcapP"/>
+      <composite name="TrackerEndcapN"/>
+      <!--composite name="rwellbarrel"/-->
+      <composite name="TrackerEndcapP"/>
     </detector>
+    <!--
     <detector id="TrackerSubAssembly_3_ID"
       name="EcalBarrelSubAssembly"
       type="DD4hep_SubdetectorAssembly"
       vis="TrackerSubAssemblyVis">
     </detector>
-    -->
-    <!--detector id="TrackerSubAssembly_4_ID"
+    <detector id="TrackerSubAssembly_4_ID"
       name="ForwardBackwardTrackerSubAssembly"
       type="DD4hep_SubdetectorAssembly"
       vis="TrackerSubAssemblyVis">
