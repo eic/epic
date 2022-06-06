@@ -41,15 +41,22 @@ namespace {
       const double thickness = getAttrOrDefault(x_child, _U(thickness), x_support.thickness());
       const double length    = getAttrOrDefault(x_child, _U(length), x_support.length());
       const double rmin      = getAttrOrDefault(x_child, _U(rmin), x_support.rmin()) + offset;
-      //std::cout << rmin << " " << length << std::endl;
-      solid                  = Tube(rmin, rmin + thickness, length / 2);
+      // std::cout << rmin << " " << length << std::endl;
+      solid = Tube(rmin, rmin + thickness, length / 2);
     }
-    else if (type == "Cone") {
+    // A disk is a cylinder, constructed differently
+    else if (type == "Disk") {
+      const double thickness = getAttrOrDefault(x_child, _U(thickness), x_support.thickness());
+      const double rmin      = getAttrOrDefault(x_child, _U(rmin), x_support.rmin());
+      const double rmax      = getAttrOrDefault(x_child, _U(rmax), x_support.rmax());
+      pos3D                  = pos3D + Position(0, 0, offset);
+      solid                  = Tube(rmin, rmax, thickness / 2);
+    } else if (type == "Cone") {
       const double thickness = getAttrOrDefault(x_child, _U(thickness), x_support.thickness());
       const double length    = getAttrOrDefault(x_child, _U(length), x_support.length());
       const double rmin1     = getAttrOrDefault(x_child, _U(rmin1), x_support.rmin1()) + offset;
       const double rmin2     = getAttrOrDefault(x_child, _U(rmin2), x_support.rmin2()) + offset;
-      //std::cout << rmin1 << " " << rmin2 << " " << length << std::endl;
+      // std::cout << rmin1 << " " << rmin2 << " " << length << std::endl;
       // Account for the fact that the distance between rmin1 and rmax2 is the projection
       // of the thickness on the transverse direction
       const double transverse_thickness = thickness / cos(atan2(fabs(rmin2 - rmin1), length));
@@ -65,7 +72,7 @@ namespace {
     // Create our volume
     Volume vol{getAttrOrDefault<std::string>(x_child, _U(name), "support_vol"), solid, mat};
 
-    // Create full transformation 
+    // Create full transformation
     Transform3D tr(rot3D, pos3D);
 
     // visualization?
