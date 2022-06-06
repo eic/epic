@@ -10,7 +10,6 @@
     <constant name="TrackerBackwardAngle1"           value="2*atan(exp(-1.5166))" />
     <!--constant name="TrackerBackwardAngle2"           value="tan(2*atan(exp(-1.6685)))" /-->
 
-
     <comment> Main parameters for the vertex tracker </comment>
     <constant name="VertexBarrel_length"             value="280.0*mm"/>
     <constant name="VertexBarrel_rmin"               value="3.3*cm"/>
@@ -39,15 +38,42 @@
     <constant name="ForwardEndcapSupportCone_zmax"   value="190*cm" />
     <constant name="BackwardEndcapSupportCyl_zmax"   value="300*cm" />
 
+    <comment> Main parameters for the positive silicon disks </comment>
+    <constant name="InnerTrackerEndcapP_zmin"        value="25.0*cm" />
+    <constant name="InnerTrackerEndcapP_rmin"        value="Beampipe_rmax + 3.2*mm" />
+    <constant name="InnerTrackerEndcapP_rmax"        value="InnerTrackerEndcapP_zmin * tan(TrackerPrimaryAngle) * .9995" />
+    <constant name="TrackerEndcapPDisk1_zmin"        value="52.0*cm" />
+    <constant name="TrackerEndcapPDisk1_rmin"        value="Beampipe_rmax + 3.2*mm" />
+    <constant name="TrackerEndcapPDisk1_rmax"        value="TrackerEndcapPDisk1_zmin * tan(TrackerPrimaryAngle) * .96" />
+    <constant name="TrackerEndcapPDisk2_zmin"        value="73.0*cm" />
+    <constant name="TrackerEndcapPDisk2_rmin"        value="Beampipe_rmax + 13.2*mm" />
+    <constant name="TrackerEndcapPDisk2_rmax"        value="TrackerSupportCyl_rmin * .98" />
+    <constant name="TrackerEndcapPDisk3_zmin"        value="106.0*cm" />
+    <constant name="TrackerEndcapPDisk3_rmin"        value="Beampipe_rmax + 23.2*mm" />
+    <constant name="TrackerEndcapPDisk3_rmax"        value="TrackerEndcapPDisk3_zmin * tan(TrackerForwardAngle1) * 0.98" />
+    <constant name="TrackerEndcapPDisk4_zmin"        value="125.0*cm" />
+    <constant name="TrackerEndcapPDisk4_rmin"        value="Beampipe_rmax + 43.2*mm" />
+    <constant name="TrackerEndcapPDisk4_rmax"        value="TrackerEndcapPDisk4_zmin * tan(TrackerForwardAngle1) * 0.87" />
+
+    <comment> Main parameters for the negative silicon disks (will be reflected, so positive z-values here)
+              Values such that the disk dimensions are identical to the positive endcap. 
+              This currently leads to rather large gaps with the support/service material etc.
+    </comment>
+    <constant name="InnerTrackerEndcapN_zmin"        value="InnerTrackerEndcapP_zmin" />
+    <constant name="InnerTrackerEndcapN_rmin"        value="InnerTrackerEndcapP_rmin" />
+    <constant name="InnerTrackerEndcapN_rmax"        value="InnerTrackerEndcapP_rmax" />
+    <constant name="TrackerEndcapNDisk1_zmin"        value="TrackerEndcapPDisk1_zmin" />
+    <constant name="TrackerEndcapNDisk1_rmin"        value="TrackerEndcapPDisk1_rmin" />
+    <constant name="TrackerEndcapNDisk1_rmax"        value="TrackerEndcapPDisk1_rmax" />
+    <constant name="TrackerEndcapNDisk2_zmin"        value="79.0*cm" />
+    <constant name="TrackerEndcapNDisk2_rmin"        value="TrackerEndcapPDisk2_rmin" />
+    <constant name="TrackerEndcapNDisk2_rmax"        value="TrackerEndcapPDisk2_rmax" />
+    <constant name="TrackerEndcapNDisk3_zmin"        value="TrackerEndcapPDisk3_zmin" />
+    <constant name="TrackerEndcapNDisk3_rmin"        value="TrackerEndcapPDisk3_rmin" />
+    <constant name="TrackerEndcapNDisk3_rmax"        value="TrackerEndcapPDisk3_rmax" />
+
   </define>
 
-  <documentation level="10">
-    ### Silicon tracking configuration
-  </documentation>
-
-  <documentation level="5">
-      ### Tracker subassemblies for ACTS
-  </documentation>
   <detectors>
     <detector id="VertexSubAssembly_0_ID"
       name="VertexBarrelSubAssembly"
@@ -55,23 +81,20 @@
       vis="TrackerSubAssemblyVis">
       <composite name="VertexBarrel" />
     </detector>
-    <!--
     <detector id="TrackerSubAssembly_0_ID"
       name="InnerTrackerSubAssembly"
       type="DD4hep_SubdetectorAssembly"
       vis="TrackerSubAssemblyVis">
       <composite name="InnerTrackerEndcapN"/>
-      <composite name="InnerTrackerBarrel"/>
       <composite name="InnerTrackerEndcapP"/>
     </detector>
     <detector id="TrackerSubAssembly_1_ID"
-      name="MedialTrackerSubAssembly"
+      name="SagittaSubAssembly"
       type="DD4hep_SubdetectorAssembly"
       vis="TrackerSubAssemblyVis">
-      <composite name="MedialTrackerEndcapN"/>
-      <composite name="MedialTrackerCompositeBarrel"/>
-      <composite name="MedialTrackerEndcapP"/>
+      <composite name="SagittaBarrel"/>
     </detector>
+    <!--
     <detector id="TrackerSubAssembly_2_ID"
       name="OuterTrackerSubAssembly"
       type="DD4hep_SubdetectorAssembly"
@@ -144,7 +167,7 @@
 
   <include ref="tracker/vertex_its3_3layers.xml"/>
   <include ref="tracker/sagitta_its3_curved.xml"/>
-  <!--include ref="tracker/central_tracker_hybrid_v2.xml"/-->
+  <include ref="tracker/disks_its3_5fw4bw.xml"/>
   <include ref="tracker/support_ecce.xml"/>
 
 </lccdd>
