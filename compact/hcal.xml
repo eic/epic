@@ -54,7 +54,7 @@
     <detector
       id="HCalBarrel_ID"
       name="HcalBarrel"
-      type="athena_EcalBarrel"
+      type="ecce_EcalBarrel"
       readout="HcalBarrelHits"
       vis="HcalBarrelVis"
       calorimeterType="HAD_BARREL"
@@ -75,7 +75,7 @@
     <detector
       id="HCalEndcapP_ID"
       name="HcalEndcapP"
-      type="athena_PolyhedraEndcapCalorimeter2"
+      type="ecce_PolyhedraEndcapCalorimeter2"
       readout="HcalEndcapPHits"
       vis="HcalEndcapVis"
       calorimeterType="HAD_ENDCAP"
@@ -95,7 +95,7 @@
     <detector
       id="PassiveSteelRingEndcapP_ID"
       name="PassiveSteelRingEndcapP"
-      type="athena_PolyhedraEndcapCalorimeter2"
+      type="ecce_PolyhedraEndcapCalorimeter2"
       vis="PassiveSteelVis"
       calorimeterType="HAD_ENDCAP"
       reflect="false">
@@ -113,7 +113,7 @@
     <detector
       id="HCalEndcapN_ID"
       name="HcalEndcapN"
-      type="athena_PolyhedraEndcapCalorimeter2"
+      type="ecce_PolyhedraEndcapCalorimeter2"
       readout="HcalEndcapNHits"
       vis="HcalEndcapVis"
       calorimeterType="HAD_ENDCAP" reflect="true">

@@ -69,7 +69,7 @@
     <detector
       id="ECalBarrel_ID"
       name="EcalBarrel"
-      type="athena_EcalBarrelHybrid"
+      type="ecce_EcalBarrelHybrid"
       readout="EcalBarrelHits"
       calorimeterType="EM_BARREL"
       vis="EcalBarrelEnvelope_vis"

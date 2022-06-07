@@ -63,7 +63,7 @@
   </display>
 
   <detectors>
-    <detector id="MRICH_ID" name="MRICH" type="athena_MRICH"
+    <detector id="MRICH_ID" name="MRICH" type="ecce_MRICH"
       readout="MRICHHits"
       reflect="true"
       projective="true"

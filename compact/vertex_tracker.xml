@@ -111,7 +111,7 @@ Simple carbon fiber support shell.
     <detector
       id="VertexBarrel_0_ID"
       name="VertexBarrel"
-      type="athena_VertexBarrel"
+      type="ecce_VertexBarrel"
       readout="VertexBarrelHits"
       insideTrackingVolume="true">
       <dimensions
@@ -189,7 +189,7 @@ Simple carbon fiber support shell.
     <detector
       id="VertexEndcapP_0_ID"
       name="VertexEndcapP"
-      type="athena_TrapEndcapTracker"
+      type="ecce_TrapEndcapTracker"
       readout="VertexEndcapHits"
       vis="TrackerVis"
       reflect="false">
@@ -232,7 +232,7 @@ Simple carbon fiber support shell.
     <detector
       id="VertexEndcapN_0_ID"
       name="VertexEndcapN"
-      type="athena_TrapEndcapTracker"
+      type="ecce_TrapEndcapTracker"
       readout="VertexEndcapHits"
       vis="TrackerVis"
       reflect="true">

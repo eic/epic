@@ -223,7 +223,7 @@
     <detector
       id="Solenoid_ID"
       name="SolenoidEndcapP"
-      type="ref_SolenoidEndcap"
+      type="ecce_SolenoidEndcap"
       insideTrackingVolume="false"
       reflect="false"
       vis="SolenoidCryostatVis">
@@ -275,7 +275,7 @@
     <detector
       id="Solenoid_ID"
       name="SolenoidEndcapN"
-      type="ref_SolenoidEndcap"
+      type="ecce_SolenoidEndcap"
       insideTrackingVolume="false"
       reflect="true"
       vis="SolenoidCryostatVis">
@@ -330,7 +330,7 @@
     <!--field type="solenoid" name="GlobalSolenoid" inner_field="3.0 * tesla" outer_field="0.5*tesla"
            zmin="-SolenoidBarrelCoil_zmax" zmax="SolenoidBarrelCoil_zmax"
            inner_radius="SolenoidalFieldRadius" outer_radius="SolenoidalFieldRadius+20*cm"/-->
-    <field type="FieldMapBrBz" name="GlobalSolenoid" field_type="magnetic"
+    <field type="ecce_FieldMapBrBz" name="GlobalSolenoid" field_type="magnetic"
            field_map="fieldmaps/EIC_v.2.0.3_Magnetic_Field_Map_2021_09_28_radial_coords_cm_T.Bmap.txt"
            url="https://eicweb.phy.anl.gov/EIC/detectors/athena/uploads/fd64db33e1c99547ab1840d8847fd1c1/EIC_v.2.0.3_Magnetic_Field_Map_2021_09_28_radial_coords_cm_T.Bmap.txt"
            scale="-0.5"> <!-- FIXME currently using ATHENA map scaled by factor 2 -->
