@@ -105,6 +105,18 @@ include:
   - local: 'views/view15.yml'
   - local: 'views/view20.yml'
 
+check_prefix:
+  stage: test
+  needs:
+    - common:detector
+  script:
+    - |
+      echo "checking detector type prefix equals ${JUGGLER_DETECTOR}"
+      declares=`grep -r DECLARE_ src/ | grep -v ${JUGGLER_DETECTOR} || true`
+      if [[ ! -z "${declares}" ]] ; then
+        echo "${declares}" && false
+      fi
+
 dump_geometry:
   stage: test
   needs:

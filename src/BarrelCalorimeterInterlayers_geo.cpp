@@ -449,4 +449,4 @@ vector<tuple<int, Point, Point, Point, Point>> gridPoints(int div_x, int div_z, 
   return points;
 }
 
-DECLARE_DETELEMENT(athena_EcalBarrelInterlayers, create_detector)
+DECLARE_DETELEMENT(ecce_EcalBarrelInterlayers, create_detector)

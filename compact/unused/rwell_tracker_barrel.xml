@@ -63,7 +63,7 @@
   </display>
 
   <detectors>
-    <detector id="RWellTrackerBarrel_ID" name="RWellTrackerBarrel" type="athena_RWellTrackerBarrel" readout="RWellTrackerBarrelHits">
+    <detector id="RWellTrackerBarrel_ID" name="RWellTrackerBarrel" type="ecce_RWellTrackerBarrel" readout="RWellTrackerBarrelHits">
 
         <module name="Module1" vis="GreenVis">
           <module_envelope

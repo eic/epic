@@ -59,7 +59,7 @@
     </detector>
     <detector id="TrackerCompositeBarrel_0_ID"
       name="MedialTrackerCompositeBarrel"
-      type="athena_CompositeTracker"
+      type="ecce_CompositeTracker"
       actsType="barrel"
       vis="TrackerSubAssemblyVis">
       <position x="0*cm" y="0*cm" z="0*um" />
@@ -68,7 +68,7 @@
     </detector>
     <detector id="TrackerCompositeEndcapN_0_ID"
       name="OuterTrackerCompositeEndcapN"
-      type="athena_CompositeTracker"
+      type="ecce_CompositeTracker"
       actsType="endcap"
       vis="TrackerSubAssemblyVis">
       <position x="0*cm" y="0*cm" z="-1*um" />
@@ -77,7 +77,7 @@
     </detector>
     <detector id="TrackerCompositeEndcapP_0_ID"
       name="OuterTrackerCompositeEndcapP"
-      type="athena_CompositeTracker"
+      type="ecce_CompositeTracker"
       actsType="endcap"
       vis="TrackerSubAssemblyVis">
       <position x="0*cm" y="0*cm" z="0*cm" />
@@ -86,7 +86,7 @@
     </detector>
     <detector id="TrackerCompositeEndcapN_1_ID"
       name="BackwardNullTracker"
-      type="athena_CompositeTracker"
+      type="ecce_CompositeTracker"
       actsType="endcap"
       vis="TrackerSubAssemblyVis">
       <position x="0*cm" y="0*cm" z="-1*um" />
@@ -99,7 +99,7 @@
       https://eicweb.phy.anl.gov/EIC/detectors/athena/-/issues/127
   </documentation>
   <plugins>
-    <plugin name="FileLoader">
+    <plugin name="ecce_FileLoader">
       <arg value="cache:$DETECTOR_PATH"/>
       <arg value="file:calibrations/materials-map.cbor"/>
       <arg value="url:https://eicweb.phy.anl.gov/EIC/detectors/athena/uploads/4a4e7c8eb6089b634d762d112c89bd5d/material-maps.cbor"/>

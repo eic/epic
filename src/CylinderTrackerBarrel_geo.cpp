@@ -202,7 +202,7 @@ static Ref_t CylinderTrackerBarrel_create_detector(Detector& description, xml_h 
 }
 
 // clang-format off
-DECLARE_DETELEMENT(athena_CylinderTrackerBarrel, CylinderTrackerBarrel_create_detector)
-DECLARE_DETELEMENT(athena_MMTrackerBarrel,       CylinderTrackerBarrel_create_detector)
-DECLARE_DETELEMENT(athena_RWellTrackerBarrel,    CylinderTrackerBarrel_create_detector)
-DECLARE_DETELEMENT(athena_CylinderVertexBarrel,  CylinderTrackerBarrel_create_detector)
+DECLARE_DETELEMENT(ecce_CylinderTrackerBarrel, CylinderTrackerBarrel_create_detector)
+DECLARE_DETELEMENT(ecce_MMTrackerBarrel,       CylinderTrackerBarrel_create_detector)
+DECLARE_DETELEMENT(ecce_RWellTrackerBarrel,    CylinderTrackerBarrel_create_detector)
+DECLARE_DETELEMENT(ecce_CylinderVertexBarrel,  CylinderTrackerBarrel_create_detector)

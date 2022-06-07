@@ -182,4 +182,4 @@ static void add_disk_shashlik(Detector& desc, Assembly& env, xml::Collection_t& 
   }
 }
 
-DECLARE_DETELEMENT(ShashlikCalorimeter, create_detector)
+DECLARE_DETELEMENT(ecce_ShashlikCalorimeter, create_detector)

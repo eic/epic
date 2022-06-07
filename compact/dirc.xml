@@ -120,7 +120,7 @@
   </display>
 
   <detectors>
-    <detector id="BarrelDIRC_ID" name="cb_DIRC" type="cb_DIRC" readout="DIRCBarHits" vis="DIRCTube">
+    <detector id="BarrelDIRC_ID" name="cb_DIRC" type="ecce_cb_DIRC" readout="DIRCBarHits" vis="DIRCTube">
       <dimensions rmin="DIRCFake_rmin" rmax="DIRCFake_rmax" length="DIRCMain_length" radius="DIRCRadius" dx="DIRCBars_DX" dy="DIRCBars_DY" number="DIRCNum" deltaphi="DIRCDPhi"/>
       <position x="0" y="0" z="DIRCFake_offset"/>
       <rotation theta="DIRC_rotation"/>

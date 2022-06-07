@@ -175,7 +175,7 @@ total X0 0.24% per disk layer （4 sectors per disk):
     <detector
       id="TrackerBarrel_0_ID"
       name="InnerTrackerBarrel"
-      type="athena_TrackerBarrel"
+      type="ecce_TrackerBarrel"
       readout="TrackerBarrelHits"
       insideTrackingVolume="true">
       <dimensions
@@ -325,7 +325,7 @@ total X0 0.24% per disk layer （4 sectors per disk):
     <detector
       id="TrackerEndcapP_0_ID"
       name="InnerTrackerEndcapP"
-      type="athena_TrapEndcapTracker"
+      type="ecce_TrapEndcapTracker"
       readout="TrackerEndcapHits1"
       vis="TrackerVis"
       reflect="false">
@@ -401,7 +401,7 @@ total X0 0.24% per disk layer （4 sectors per disk):
     <detector
       id="TrackerEndcapN_0_ID"
       name="InnerTrackerEndcapN"
-      type="athena_TrapEndcapTracker"
+      type="ecce_TrapEndcapTracker"
       readout="TrackerEndcapHits2"
       vis="TrackerVis"
       reflect="true">
@@ -512,7 +512,7 @@ total X0 0.24% per disk layer （4 sectors per disk):
     <detector
       id="TrackerBarrel_1_ID"
       name="MedialTrackerBarrel"
-      type="athena_TrackerBarrel"
+      type="ecce_TrackerBarrel"
       readout="MPGDTrackerBarrelHits1"
       insideTrackingVolume="true">
       <dimensions
@@ -608,7 +608,7 @@ total X0 0.24% per disk layer （4 sectors per disk):
     <detector
       id="TrackerEndcapP_1_ID"
       name="MedialTrackerEndcapP"
-      type="athena_TrapEndcapTracker"
+      type="ecce_TrapEndcapTracker"
       readout="TrackerEndcapHits3"
       vis="TrackerVis"
       reflect="false">
@@ -646,7 +646,7 @@ total X0 0.24% per disk layer （4 sectors per disk):
     <detector
       id="TrackerEndcapN_1_ID"
       name="MedialTrackerEndcapN"
-      type="athena_TrapEndcapTracker"
+      type="ecce_TrapEndcapTracker"
       readout="TrackerEndcapHits4"
       vis="TrackerVis"
       reflect="true">
@@ -710,7 +710,7 @@ total X0 0.24% per disk layer （4 sectors per disk):
     <detector
       id="TrackerBarrel_2_ID"
       name="OuterTrackerBarrel"
-      type="athena_TrackerBarrel"
+      type="ecce_TrackerBarrel"
       readout="MPGDTrackerBarrelHits2"
       insideTrackingVolume="true">
       <dimensions
@@ -842,7 +842,7 @@ total X0 0.24% per disk layer （4 sectors per disk):
     <detector
       id="TrackerEndcapP_2_ID"
       name="OuterTrackerEndcapP"
-      type="athena_TrapEndcapTracker"
+      type="ecce_TrapEndcapTracker"
       readout="TrackerEndcapHits5"
       vis="TrackerVis"
       reflect="false">
@@ -920,7 +920,7 @@ total X0 0.24% per disk layer （4 sectors per disk):
     <detector
       id="TrackerEndcapN_2_ID"
       name="OuterTrackerEndcapN"
-      type="athena_TrapEndcapTracker"
+      type="ecce_TrapEndcapTracker"
       readout="TrackerEndcapHits6"
       vis="TrackerVis"
       reflect="true">
@@ -1055,7 +1055,7 @@ total X0 0.24% per disk layer （4 sectors per disk):
     <detector
       id="TrackerEndcapP_3_ID"
       name="GEMEndcapP"
-      type="athena_TrapEndcapTracker"
+      type="ecce_TrapEndcapTracker"
       readout="GEMTrackerEndcapHits1"
       vis="TrackerVis"
       reflect="false">
@@ -1169,7 +1169,7 @@ total X0 0.24% per disk layer （4 sectors per disk):
     <detector
       id="TrackerEndcapN_3_ID"
       name="GEMEndcapN"
-      type="athena_TrapEndcapTracker"
+      type="ecce_TrapEndcapTracker"
       readout="GEMTrackerEndcapHits2"
       vis="TrackerVis"
       reflect="true">
@@ -1317,7 +1317,7 @@ total X0 0.24% per disk layer （4 sectors per disk):
     <detector
       id="TrackerEndcapP_4_ID"
       name="ForwardGEM"
-      type="athena_TrapEndcapTracker"
+      type="ecce_TrapEndcapTracker"
       readout="GEMTrackerEndcapHits3"
       vis="TrackerVis"
       reflect="false">

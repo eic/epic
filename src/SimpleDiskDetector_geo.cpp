@@ -118,5 +118,5 @@ static Ref_t SimpleDiskDetector_create_detector(Detector& description, xml_h e, 
   return sdet;
 }
 
-DECLARE_DETELEMENT(ref_SolenoidEndcap, SimpleDiskDetector_create_detector)
-DECLARE_DETELEMENT(athena_SolenoidEndcap, SimpleDiskDetector_create_detector)
+DECLARE_DETELEMENT(ecce_ref_SolenoidEndcap, SimpleDiskDetector_create_detector)
+DECLARE_DETELEMENT(ecce_SolenoidEndcap, SimpleDiskDetector_create_detector)

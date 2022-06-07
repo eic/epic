@@ -409,4 +409,4 @@ static std::tuple<int, int> add_lines(Detector& desc, Assembly& env, xml::Collec
   return {sector_id, mid};
 }
 //@}
-DECLARE_DETELEMENT(HomogeneousCalorimeter, create_detector)
+DECLARE_DETELEMENT(ecce_HomogeneousCalorimeter, create_detector)

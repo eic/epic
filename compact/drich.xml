@@ -47,7 +47,7 @@
 <detector
   id="ForwardRICH_ID"
   name="DRICH"
-  type="athena_DRICH"
+  type="ecce_DRICH"
   readout="DRICHHits"
   gas="C2F6_DRICH"
   material="Aluminum"

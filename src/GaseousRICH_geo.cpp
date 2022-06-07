@@ -210,4 +210,4 @@ void build_sensors(Detector& desc, Volume& env, xml::Component plm, const Positi
 //@}
 
 // clang-format off
-DECLARE_DETELEMENT(athena_GaseousRICH, createDetector)
+DECLARE_DETELEMENT(ecce_GaseousRICH, createDetector)

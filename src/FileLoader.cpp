@@ -66,4 +66,4 @@ long load_file(Detector& /* desc */, int argc, char** argv)
   return 0;
 }
 
-DECLARE_APPLY(FileLoader, load_file)
+DECLARE_APPLY(ecce_FileLoader, load_file)
