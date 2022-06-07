@@ -113,7 +113,7 @@ check_prefix:
     - |
       echo "checking detector type prefix equals ${JUGGLER_DETECTOR}"
       declares="$(grep -r DECLARE_ src/ | grep -v $JUGGLER_DETECTOR)"
-      if [ -z "$declares" ] ; then
+      if [ ! -z "$declares" ] ; then
         echo "$declares"
         false
       fi
