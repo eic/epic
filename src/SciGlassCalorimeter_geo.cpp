@@ -257,4 +257,4 @@ static Ref_t create_detector(Detector& desc, xml::Handle_t handle, SensitiveDete
   return det;
 }
 
-DECLARE_DETELEMENT(SciGlassCalorimeter, create_detector)
+DECLARE_DETELEMENT(ecce_SciGlassCalorimeter, create_detector)

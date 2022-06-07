@@ -128,5 +128,5 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
 }
 
 // clang-format off
-DECLARE_DETELEMENT(athena_PolyhedraEndcapCalorimeter2, create_detector)
-DECLARE_DETELEMENT(athena_PolyhedraEndcapCalorimeter, create_detector)
+DECLARE_DETELEMENT(ecce_PolyhedraEndcapCalorimeter2, create_detector)
+DECLARE_DETELEMENT(ecce_PolyhedraEndcapCalorimeter, create_detector)

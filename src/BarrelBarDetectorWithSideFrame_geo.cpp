@@ -245,5 +245,5 @@ static Ref_t create_BarrelBarDetectorWithSideFrame(Detector& description, xml_h 
 
 //@}
 // clang-format off
-DECLARE_DETELEMENT(BarrelBarDetectorWithSideFrame, create_BarrelBarDetectorWithSideFrame)
-DECLARE_DETELEMENT(athena_FakeDIRC, create_BarrelBarDetectorWithSideFrame)
+DECLARE_DETELEMENT(ecce_BarrelBarDetectorWithSideFrame, create_BarrelBarDetectorWithSideFrame)
+DECLARE_DETELEMENT(ecce_FakeDIRC, create_BarrelBarDetectorWithSideFrame)

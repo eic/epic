@@ -337,7 +337,7 @@ static Ref_t createDetector(Detector& desc, xml_h e, SensitiveDetector sens)
   return det;
 }
 
-DECLARE_DETELEMENT(cb_DIRC, createDetector)
+DECLARE_DETELEMENT(ecce_cb_DIRC, createDetector)
 
 dd4hep::Trap MakeTrap(const std::string& pName, double pZ, double pY, double pX, double pLTX)
 {

@@ -220,4 +220,4 @@ static Ref_t create_field_map_brbz(Detector& /*lcdd*/, xml::Handle_t handle)
   return field;
 }
 
-DECLARE_XMLELEMENT(FieldMapBrBz, create_field_map_brbz)
+DECLARE_XMLELEMENT(ecce_FieldMapBrBz, create_field_map_brbz)

@@ -119,4 +119,4 @@ static Ref_t create_TrackerSupport(Detector& description, xml_h e, [[maybe_unuse
 }
 
 // clang-format off
-DECLARE_DETELEMENT(eic_TrackerSupport, create_TrackerSupport)
+DECLARE_DETELEMENT(ecce_TrackerSupport, create_TrackerSupport)

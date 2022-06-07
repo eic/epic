@@ -325,5 +325,5 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
 
 //@}
 // clang-format off
-DECLARE_DETELEMENT(athena_TrapEndcapTracker, create_detector)
-DECLARE_DETELEMENT(athena_GEMTrackerEndcap, create_detector)
+DECLARE_DETELEMENT(ecce_TrapEndcapTracker, create_detector)
+DECLARE_DETELEMENT(ecce_GEMTrackerEndcap, create_detector)

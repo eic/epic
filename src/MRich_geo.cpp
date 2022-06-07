@@ -456,4 +456,4 @@ static Ref_t createDetector(Detector& description, xml::Handle_t e, SensitiveDet
 // }
 
 // clang-format off
-DECLARE_DETELEMENT(athena_MRICH, createDetector)
+DECLARE_DETELEMENT(ecce_MRICH, createDetector)

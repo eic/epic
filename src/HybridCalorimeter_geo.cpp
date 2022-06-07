@@ -181,4 +181,4 @@ static Ref_t create_detector(Detector& desc, xml::Handle_t handle, SensitiveDete
 }
 
 //@}
-DECLARE_DETELEMENT(HybridCalorimeter, create_detector)
+DECLARE_DETELEMENT(ecce_HybridCalorimeter, create_detector)

@@ -470,7 +470,7 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
                         40 * degree);
 
     // print mirror attributes for sector 0
-    //if(isec==0) printf("dRICH mirror (zM, xM, rM) = (%f, %f, %f)\n",zM,xM,rM); // coords w.r.t. IP
+    // if(isec==0) printf("dRICH mirror (zM, xM, rM) = (%f, %f, %f)\n",zM,xM,rM); // coords w.r.t. IP
 
     // mirror placement transformation (note: transformations are in reverse order)
     auto        mirrorPos = Position(mirrorCenterX, 0., mirrorCenterZ) + originFront;
@@ -514,4 +514,4 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
 };
 
 // clang-format off
-DECLARE_DETELEMENT(athena_DRICH, createDetector)
+DECLARE_DETELEMENT(ecce_DRICH, createDetector)

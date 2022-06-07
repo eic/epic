@@ -66,4 +66,4 @@ static Ref_t create_element(Detector& description, xml_h e, Ref_t)
   return sdet;
 }
 
-DECLARE_DETELEMENT(athena_CompositeTracker, create_element)
+DECLARE_DETELEMENT(ecce_CompositeTracker, create_element)
