@@ -327,16 +327,13 @@
   </detectors>
 
   <fields>
-    <!--field type="solenoid" name="GlobalSolenoid" inner_field="3.0 * tesla" outer_field="0.5*tesla"
-           zmin="-SolenoidBarrelCoil_zmax" zmax="SolenoidBarrelCoil_zmax"
-           inner_radius="SolenoidalFieldRadius" outer_radius="SolenoidalFieldRadius+20*cm"/-->
     <field type="ecce_FieldMapBrBz" name="GlobalSolenoid" field_type="magnetic"
-           field_map="fieldmaps/EIC_v.2.0.3_Magnetic_Field_Map_2021_09_28_radial_coords_cm_T.Bmap.txt"
-           url="https://eicweb.phy.anl.gov/EIC/detectors/athena/uploads/fd64db33e1c99547ab1840d8847fd1c1/EIC_v.2.0.3_Magnetic_Field_Map_2021_09_28_radial_coords_cm_T.Bmap.txt"
-           scale="-0.5"> <!-- FIXME currently using ATHENA map scaled by factor 2 -->
+           field_map="fieldmaps/sPHENIX.2d.dat"
+           url="https://eicweb.phy.anl.gov/EIC/detectors/ecce/uploads/f8d8ab9f8d8353a84862584bf1d2d27f/sPHENIX.2d.dat"
+           scale="1.0">
       <dimensions>
-        <transverse step="2.0*cm" rmin="0*cm" rmax="998*cm" />
-        <longitudinal step="2.0*cm" zmin="-800*cm" zmax="798*cm" />
+        <transverse step="2.0*cm" rmin="0*cm" rmax="300*cm" />
+        <longitudinal step="2.0*cm" zmin="-400*cm" zmax="400*cm" />
         <translation x="0.0*cm" y="0.0*cm" z="0.0*cm" />
         <rotation x="0" y="0" z="0" />
       </dimensions>
