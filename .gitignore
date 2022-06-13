@@ -11,6 +11,9 @@ build/*
 */*.pyc
 **.pyc
 
+lib/
+share/
+
 images/*
 doc/*
 
