@@ -97,10 +97,10 @@ foreach(config_json ${CONFIG_JSONS})
     get_filename_component(config ${config_json} NAME_WE)
     add_custom_target(${config}.xml ALL)
     add_custom_command(TARGET ${config}.xml
-        COMMAND jinja2 ${TEMPLATE} ${config_json} -o ${CMAKE_CURRENT_BINARY_DIR}/${config}.xml
+        COMMAND jinja2 ${TEMPLATE} ${config_json} -o ${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}_${config}.xml
         COMMENT "Creating configuration ${config} for ${PROJECT_NAME}"
         )
-    install(FILES ${CMAKE_CURRENT_BINARY_DIR}/${config}.xml
+    install(FILES ${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}_${config}.xml
         DESTINATION share/${PROJECT_NAME}/
         )
 endforeach()

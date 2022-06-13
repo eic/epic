@@ -98,48 +98,49 @@
      - and more...
   </documentation>
 
-{%- if 'solenoid' in features -%}
+{% if 'solenoid' in features %}
   <documentation level="5">
     ## Main magnet
   </documentation>
   <include ref="compact/solenoid.xml"/>
-{%- endif -%}
+{% endif -%}
 
-{%- if 'tracking' in features -%}
+{% if 'tracking' in features %}
   <documentation level="10">
     ## Central tracking detectors
   </documentation>
   <include ref="compact/tracking_config.xml"/>
-{%- endif -%}
+{% endif -%}
 
-{%- if 'pid' in features -%}
+{% if 'pid' in features %}
   <documentation level="10">
     ## PID detectors
   </documentation>
   <include ref="compact/pid_config.xml"/>
-{%- endif -%}
+{% endif -%}
 
-{%- if 'ecal' in features -%}
-
+{% if 'ecal' in features %}
   <documentation level="10">
     ## Central EM calorimetry
   </documentation>
-  {%- if 'forward_scifi' in features['ecal'] -%}
+  {% if 'forward_scifi' in features['ecal'] %}
   <include ref="compact/ecal_forward_scfi.xml"/>
-  {%- else -%}
+  {% else -%}
   <include ref="compact/ecal_forward_homogenous.xml"/>
-  {%- endif -%}
+  {% endif -%}
 
-  {%- if 'backward_PbWO4' in features['ecal'] -%}
+  {% if 'backward_hybrid' in features['ecal'] %}
+  <include ref="compact/ecal_backward_hybrid.xml"/>
+  {% else -%}
   <include ref="compact/ecal_backward_PbWO4.xml"/>
-  {%- endif -%}
+  {% endif -%}
 
-  {%- if 'barrel_imaging' in features['ecal'] -%}
+  {% if 'barrel_imaging' in features['ecal'] %}
   <include ref="compact/ecal_barrel_interlayers.xml"/>
-  {%- else -%}
+  {% else -%}
   <include ref="compact/ecal_barrel_sciglass.xml"/>
-  {%- endif -%}
-{%- endif -%}
+  {% endif -%}
+{% endif -%}
 
 {% if 'hcal' in features %}
   <documentation level="10">
