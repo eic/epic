@@ -85,10 +85,10 @@ set(TEMPLATE ${CMAKE_CURRENT_SOURCE_DIR}/templates/${PROJECT_NAME}.xml.jinja2)
 
 add_custom_target(${PROJECT_NAME}.xml ALL)
 add_custom_command(TARGET ${PROJECT_NAME}.xml
-    COMMAND jinja2 ${TEMPLATE} -o ${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}.xml
+    COMMAND jinja2 ${TEMPLATE} -o ${CMAKE_CURRENT_SOURCE_DIR}/${PROJECT_NAME}.xml
     COMMENT "Creating default ${PROJECT_NAME}.xml geometry"
     )
-install(FILES ${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}.xml
+install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/${PROJECT_NAME}.xml
     DESTINATION share/${PROJECT_NAME}/
     )
 
@@ -97,10 +97,10 @@ foreach(config_json ${CONFIG_JSONS})
     get_filename_component(config ${config_json} NAME_WE)
     add_custom_target(${config}.xml ALL)
     add_custom_command(TARGET ${config}.xml
-        COMMAND jinja2 ${TEMPLATE} ${config_json} -o ${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}_${config}.xml
+        COMMAND jinja2 ${TEMPLATE} ${config_json} -o ${CMAKE_CURRENT_SOURCE_DIR}/${PROJECT_NAME}_${config}.xml
         COMMENT "Creating configuration ${config} for ${PROJECT_NAME}"
         )
-    install(FILES ${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}_${config}.xml
+    install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/${PROJECT_NAME}_${config}.xml
         DESTINATION share/${PROJECT_NAME}/
         )
 endforeach()
