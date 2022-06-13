@@ -1,6 +1,8 @@
 {# This is the master template for the geometry description #}
 {%- if features is not defined -%}
 {# define some sensible default settings #}
+{%- set ebeam = 18 -%}
+{%- set pbeam = 275 -%}
 {%- set features = [
    "beampipe",
    "tracking",
@@ -48,7 +50,7 @@
       These files have only a define tags.
   </documentation>
     <include ref="ip6/definitions.xml" />
-    <include ref="ip6/far_forward/fields_275.xml" />
+    <include ref="ip6/far_forward/fields_{{pbeam}}.xml" />
     <include ref="compact/definitions.xml" />
   </define>
 
