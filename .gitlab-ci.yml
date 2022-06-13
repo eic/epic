@@ -65,7 +65,7 @@ common:detector:
   needs:
     - common:setup
   script:
-    #- source .local/bin/env.sh && build_detector.sh
+    - python -m pip install jinja2-cli
     - build_detector.sh
     - mkdir -p results
     - mkdir -p config
@@ -76,6 +76,7 @@ common:detector:
 build:simple:
   stage: build
   script:
+    - python -m pip install jinja2-cli
     - mkdir -p build && cd build && cmake ../. -DCMAKE_INSTALL_PREFIX=/usr/local && make -j20 && make install  && cd ..
     - echo "Build successful."
 
