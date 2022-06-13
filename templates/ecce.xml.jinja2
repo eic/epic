@@ -74,10 +74,16 @@
   </limits>
 
   <display>
-  <include ref="compact/colors.xml" />
-  <!--include ref="compact/colors2.xml"/-->
-  <include ref="compact/display.xml" />
-  <!--include ref="compact/display_detailed.xml"/-->
+  {% if colors is defined %}
+    <include ref="compact/{{colors}}"/>
+  {% else -%}
+    <include ref="compact/colors.xml"/>
+  {% endif -%}
+  {% if display is defined %}
+    <include ref="compact/{{display}}"/>
+  {% else -%}
+    <include ref="compact/display.xml"/>
+  {% endif -%}
   </display>
 
   <documentation level="0">
