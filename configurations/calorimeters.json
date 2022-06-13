@@ -1,0 +1,11 @@
+{
+  "features": {
+    "beampipe": [],
+    "solenoid": [],
+    "ecal": [
+      "forward_scifi",
+      "barrel_imaging"
+    ],
+    "hcal": []
+  }
+}
