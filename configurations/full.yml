@@ -1,0 +1,16 @@
+features:
+  beampipe:
+  tracking:
+  pid:
+    fake_dirc:
+    mrich:
+    drich:
+    tof_barrel:
+  ecal:
+    forward_scifi:
+    barrel_sciglass:
+    backward_PbWO4:
+  solenoid:
+  hcal:
+  farforward:
+  farbackward:

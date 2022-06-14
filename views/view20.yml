@@ -4,8 +4,7 @@ dawn_view_20:detector:
     - job: view_prim:calorimeters
       optional: false
   script:
-    - cp "compact/subsystem_views/calorimeters.xml" "${DETECTOR_PATH}/."
-    - ./bin/make_dawn_views -c ${DETECTOR_PATH}/calorimeters.xml -i ${LOCAL_DATA_PATH}/calorimeters_view.prim -t view20 -d scripts/view20 -D
+    - ./bin/make_dawn_views -c ${DETECTOR_PATH}/ecce_calorimeters.xml -i ${LOCAL_DATA_PATH}/calorimeters_view.prim -t view20 -d scripts/view20 -D
 
 dawn_view_20:ev001:
   extends: .views

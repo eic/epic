@@ -65,7 +65,7 @@ common:detector:
   needs:
     - common:setup
   script:
-    #- source .local/bin/env.sh && build_detector.sh
+    - python -m pip install jinja2-cli
     - build_detector.sh
     - mkdir -p results
     - mkdir -p config
@@ -76,6 +76,7 @@ common:detector:
 build:simple:
   stage: build
   script:
+    - python -m pip install jinja2-cli
     - mkdir -p build && cd build && cmake ../. -DCMAKE_INSTALL_PREFIX=/usr/local && make -j20 && make install  && cd ..
     - echo "Build successful."
 
@@ -130,37 +131,19 @@ dump_geometry:
     ## DEBUG
     - mkdir -p geo
     - |
-      sed -i -e '/<detectors>/,/<\/detectors>/d' ${DETECTOR_PATH}/compact/tracking_config*.xml
-      mv ${DETECTOR_PATH}/compact/display_geoviewer.xml ${DETECTOR_PATH}/compact/display.xml
-      for xml in ${DETECTOR_PATH}/compact/subsystem_views/*.xml; do
-        echo $xml
-        geo_name=`basename $xml .xml`_geo.root
-        cp $xml ${DETECTOR_PATH}/geo.xml
-        dd_web_display --output geo/${geo_name} ${DETECTOR_PATH}/geo.xml
+      for yml in ${DETECTOR_PATH}/configurations/*.yml; do
+        xml_name=ecce_`basename $yml .yml`.xml
+        geo_name=detector_geo_`basename $yml .yml`.root
+        dd_web_display --output geo/${geo_name} ${DETECTOR_PATH}/${xml_name}
       done
-    ## Lower-resolution display of the pfRICH sensors for global views
-    - sed -i 's/_default"\/>/_lores"\/>/' ${DETECTOR_PATH}/compact/pfrich.xml
-    ## full geo with downstream beamline
-    - dd_web_display --output geo/detector_geo_full.root ${DETECTOR_PATH}/ecce.xml
-    ## only central detector geo
-    - sed -i '/forward_ion_beamline/d' ${DETECTOR_PATH}/ecce.xml
-    - sed -i '/beampipe_hadron_B0/d' ${DETECTOR_PATH}/ecce.xml
-    - sed -i '/B0_/d' ${DETECTOR_PATH}/ecce.xml
-    - sed -i '/far_forward_offM/d' ${DETECTOR_PATH}/ecce.xml
-    - sed -i '/far_forward_detectors/d' ${DETECTOR_PATH}/ecce.xml
-    - sed -i '/roman_pots/d' ${DETECTOR_PATH}/ecce.xml
-    - sed -i '/inner_vacuum_FF_magnets/d' ${DETECTOR_PATH}/ecce.xml
-    - dd_web_display --output geo/detector_geo.root ${DETECTOR_PATH}/ecce.xml
     ## print some useful output
     - |
-      echo "Geometry viewer at:"
-      echo "https://eic.phy.anl.gov/geoviewer/index.htm?file=https://eicweb.phy.anl.gov/EIC/detectors/ecce/-/jobs/${CI_JOB_ID}/artifacts/raw/geo/detector_geo_full.root?job=dump_geometry&item=default;1&opt=clipx;clipy;transp30;zoom75;ROTY290;ROTZ350;trz0;trr0;ctrl;all"
-      echo " - Central detector view at: "
-      echo "https://eic.phy.anl.gov/geoviewer/index.htm?file=https://eicweb.phy.anl.gov/EIC/detectors/ecce/-/jobs/${CI_JOB_ID}/artifacts/raw/geo/detector_geo.root?job=dump_geometry&item=default;1&opt=clipx;clipy;transp30;zoom120;ROTY320;ROTZ340;trz0;trr0;ctrl;all"
-      for xml in ${DETECTOR_PATH}/compact/subsystem_views/*.xml; do
-        geo_name=`basename $xml .xml`_geo.root
-        echo " - Subsystem view for `basename $xml .xml` at:"
-        echo "   https://eic.phy.anl.gov/geoviewer/index.htm?file=https://eicweb.phy.anl.gov/EIC/detectors/ecce/-/jobs/${CI_JOB_ID}/artifacts/raw/geo/${geo_name}?job=dump_geometry&item=default;1&opt=clipx;clipy;transp30;zoom75;ROTY320;ROTZ340;trz0;trr0;ctrl;all"
+      geo_base="https://eic.phy.anl.gov/geoviewer/index.htm?file=https://eicweb.phy.anl.gov/EIC/detectors/ecce/-/jobs/${CI_JOB_ID}/artifacts/raw"
+      for yml in ${DETECTOR_PATH}/configurations/*.yml; do
+        xml_name=ecce_`basename $yml .yml`.xml
+        geo_name=detector_geo_`basename $yml .yml`.root
+        echo " - Subsystem view for ${xml_name} at:"
+        echo "   ${geo_base}/geo/${geo_name}?job=dump_geometry&item=default;1&opt=clipx;clipy;transp30;zoom75;ROTY320;ROTZ340;trz0;trr0;ctrl;all"
       done
 
 detector_documentation:
@@ -254,8 +237,7 @@ overlap_check_geant4:inner_detector:
   needs:
     - ["common:detector"]
   script:
-    - cp ${DETECTOR_PATH}/compact/subsystem_views/inner_detector.xml ${DETECTOR_PATH}/inner_detector.xml
-    - python scripts/checkOverlaps.py -c ${DETECTOR_PATH}/inner_detector.xml | tee doc/overlap_check_geant4.out
+    - python scripts/checkOverlaps.py -c ${DETECTOR_PATH}/ecce_inner_detector.xml | tee doc/overlap_check_geant4.out
     - echo "$(cat doc/overlap_check_geant4.out | grep GeomVol1002 | wc -l) overlaps..."
     - if [[ "$(cat doc/overlap_check_geant4.out | grep GeomVol1002 | wc -l)" -gt "0" ]] ; then echo "Overlaps exist!" && false ; fi
 
@@ -286,7 +268,6 @@ detector:config_testing:
 benchmarks:detector:
   stage: deploy
   variables:
-    JUGGLER_DETECTOR: "$JUGGLER_DETECTOR"
     JUGGLER_DETECTOR_VERSION: "$JUGGLER_DETECTOR_VERSION"
     JUGGLER_DETECTOR_DEPLOY_TOKEN_USERNAME: "$DEPLOY_TOKEN_USERNAME"
     JUGGLER_DETECTOR_DEPLOY_TOKEN_PASSWORD: "$DEPLOY_TOKEN_PASSWORD"
@@ -296,3 +277,7 @@ benchmarks:detector:
   needs:
     - overlap_check_geant4:full_fast
     - common:detector
+  parallel:
+    matrix:
+      - JUGGLER_DETECTOR:
+        - "${JUGGLER_DETECTOR}"

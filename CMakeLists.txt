@@ -79,18 +79,39 @@ target_link_libraries(${a_lib_name}
   )
 
 #-----------------------------------------------------------------------------------
-# Install the detector description files.
-install(DIRECTORY compact/
-    DESTINATION share/${PROJECT_NAME}/${a_lib_name}
-    FILES_MATCHING PATTERN "*.xml"
+# Parse jinja templates: once by default, and once for all yml files
+
+set(TEMPLATE ${CMAKE_CURRENT_SOURCE_DIR}/templates/${PROJECT_NAME}.xml.jinja2)
+
+add_custom_target(${PROJECT_NAME}.xml ALL)
+add_custom_command(TARGET ${PROJECT_NAME}.xml
+    COMMAND jinja2 --strict ${TEMPLATE} -o ${CMAKE_CURRENT_SOURCE_DIR}/${PROJECT_NAME}.xml
+    COMMENT "Creating default ${PROJECT_NAME}.xml geometry"
     )
+install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/${PROJECT_NAME}.xml
+    DESTINATION share/${PROJECT_NAME}/
+    )
+
+file(GLOB CONFIG_YMLS ${CMAKE_CURRENT_SOURCE_DIR}/configurations/*.yml)
+foreach(config_yml ${CONFIG_YMLS})
+    get_filename_component(config ${config_yml} NAME_WE)
+    add_custom_target(${config}.xml ALL)
+    add_custom_command(TARGET ${config}.xml
+        COMMAND jinja2 --strict ${TEMPLATE} ${config_yml} -o ${CMAKE_CURRENT_SOURCE_DIR}/${PROJECT_NAME}_${config}.xml
+        COMMENT "Creating configuration ${config} for ${PROJECT_NAME}"
+        )
+    install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/${PROJECT_NAME}_${config}.xml
+        DESTINATION share/${PROJECT_NAME}/
+        )
+endforeach()
+
+#-----------------------------------------------------------------------------------
+# Install the detector description files.
 install(DIRECTORY compact/
     DESTINATION share/${PROJECT_NAME}/compact
     FILES_MATCHING PATTERN "*.xml"
     )
-install(FILES ecce.xml
-    DESTINATION share/${PROJECT_NAME}/
-    )
+
 #-----------------------------------------------------------------------------------
 # Install the detector calibration files.
 install(DIRECTORY calibrations/
