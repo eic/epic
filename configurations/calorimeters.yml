@@ -3,6 +3,6 @@ features:
 - solenoid
 - ecal:
   - forward_scifi
-  - barrel_imaging
+  - barrel_sciglass
   - backward_PbWO4
 - hcal
