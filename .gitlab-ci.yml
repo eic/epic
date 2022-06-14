@@ -269,5 +269,3 @@ benchmarks:detector:
     matrix:
       - JUGGLER_DETECTOR:
         - "${JUGGLER_DETECTOR}"
-        - "${JUGGLER_DETECTOR}_sciglass"
-        - "${JUGGLER_DETECTOR}_imaging"
