@@ -112,27 +112,27 @@
     ## PID detectors
   </documentation>
   {% if features is not defined or features['pid'] is none or 'fake_dirc' in features['pid'] %}
-  <include ref="fake_dirc.xml"/>
+  <include ref="compact/fake_dirc.xml"/>
   {% elif 'dirc' in features['pid'] -%}
-  <include ref="dirc.xml"/>
+  <include ref="compact/dirc.xml"/>
   {% endif -%}
 
   {% if features is not defined or features['pid'] is none or 'drich' in features['pid'] %}
-  <include ref="drich.xml"/>
+  <include ref="compact/drich.xml"/>
   {% endif -%}
 
   {% if features is not defined or features['pid'] is none or 'pfrich' in features['pid'] %}
-  <include ref="pfrich.xml"/>
+  <include ref="compact/pfrich.xml"/>
   {% elif 'mrich' in features['pid'] -%}
-  <include ref="mrich.xml"/>
+  <include ref="compact/mrich.xml"/>
   {% endif -%}
 
   {% if features is not defined or features['pid'] is none or 'tof_endcap' in features['pid'] %}
-  <include ref="tof_endcap.xml"/>
+  <include ref="compact/tof_endcap.xml"/>
   {% endif -%}
 
   {% if features is not defined or features['pid'] is none or 'tof_barrel' in features['pid'] %}
-  <include ref="tof_barrel.xml"/>
+  <include ref="compact/tof_barrel.xml"/>
   {% endif -%}
 {% endif -%}
 
