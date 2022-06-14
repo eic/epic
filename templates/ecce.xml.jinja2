@@ -127,7 +127,7 @@
   <include ref="compact/pfrich.xml"/>
   {% endif -%}
 
-  {% if features is not defined or features['pid'] is none or 'tof_endcap' in features['pid'] %}
+  {% if features is defined and features['pid'] is not none and 'tof_endcap' in features['pid'] %}
   <include ref="compact/tof_endcap.xml"/>
   {% endif -%}
 
