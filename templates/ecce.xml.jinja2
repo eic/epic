@@ -121,10 +121,10 @@
   <include ref="compact/drich.xml"/>
   {% endif -%}
 
-  {% if features is not defined or features['pid'] is none or 'pfrich' in features['pid'] %}
-  <include ref="compact/pfrich.xml"/>
-  {% elif 'mrich' in features['pid'] -%}
+  {% if features is not defined or features['pid'] is none or 'mrich' in features['pid'] %}
   <include ref="compact/mrich.xml"/>
+  {% elif 'pfrich' in features['pid'] -%}
+  <include ref="compact/pfrich.xml"/>
   {% endif -%}
 
   {% if features is not defined or features['pid'] is none or 'tof_endcap' in features['pid'] %}
