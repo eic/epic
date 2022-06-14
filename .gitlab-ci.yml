@@ -119,17 +119,17 @@ dump_geometry:
     ## DEBUG
     - mkdir -p geo
     - |
-      for json in ${DETECTOR_PATH}/configurations/*.json; do
-        xml_name=ecce_`basename $json .json`.xml
-        geo_name=detector_geo_`basename $json .json`.root
+      for yml in ${DETECTOR_PATH}/configurations/*.yml; do
+        xml_name=ecce_`basename $yml .yml`.xml
+        geo_name=detector_geo_`basename $yml .yml`.root
         dd_web_display --output geo/${geo_name} ${DETECTOR_PATH}/${xml_name}
       done
     ## print some useful output
     - |
       geo_base="https://eic.phy.anl.gov/geoviewer/index.htm?file=https://eicweb.phy.anl.gov/EIC/detectors/ecce/-/jobs/${CI_JOB_ID}/artifacts/raw"
-      for json in ${DETECTOR_PATH}/configurations/*.json; do
-        xml_name=ecce_`basename $json .json`.xml
-        geo_name=`basename $json .json`_geo.root
+      for yml in ${DETECTOR_PATH}/configurations/*.yml; do
+        xml_name=ecce_`basename $yml .yml`.xml
+        geo_name=`basename $yml .yml`_geo.root
         echo " - Subsystem view for ${xml_name} at:"
         echo "   ${geo_base}/geo/${geo_name}?job=dump_geometry&item=default;1&opt=clipx;clipy;transp30;zoom75;ROTY320;ROTZ340;trz0;trr0;ctrl;all"
       done
