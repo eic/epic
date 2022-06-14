@@ -256,7 +256,6 @@ detector:config_testing:
 benchmarks:detector:
   stage: deploy
   variables:
-    JUGGLER_DETECTOR: "$JUGGLER_DETECTOR"
     JUGGLER_DETECTOR_VERSION: "$JUGGLER_DETECTOR_VERSION"
     JUGGLER_DETECTOR_DEPLOY_TOKEN_USERNAME: "$DEPLOY_TOKEN_USERNAME"
     JUGGLER_DETECTOR_DEPLOY_TOKEN_PASSWORD: "$DEPLOY_TOKEN_PASSWORD"
@@ -266,3 +265,9 @@ benchmarks:detector:
   needs:
     - overlap_check_geant4:full_fast
     - common:detector
+  parallel:
+    matrix:
+      - JUGGLER_DETECTOR:
+        - "${JUGGLER_DETECTOR}"
+        - "${JUGGLER_DETECTOR}_sciglass"
+        - "${JUGGLER_DETECTOR}_imaging"
