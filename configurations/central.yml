@@ -1,0 +1,10 @@
+features:
+- beampipe
+- tracking
+- pid
+- ecal:
+  - forward_scifi
+  - barrel_imaging
+  - backward_PbWO4
+- solenoid
+- hcal
