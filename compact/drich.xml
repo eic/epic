@@ -12,7 +12,7 @@
 <!-- tank geometry: cylinder, holding the majority of detector components -->
 <constant name="DRICH_rmax2"              value="HcalBarrel_rmin-2*cm"/>  <!-- cylinder radius, near maximal to fit HCal barrel inner polygon -->
 <!-- snout geometry: cone with front radius rmax0 and back radius of rmax1 -->
-<constant name="DRICH_SnoutLength"        value="20.0*cm"/>
+<constant name="DRICH_SnoutLength"        value="30.0*cm"/>
 <constant name="DRICH_SnoutSlope"         value="DRICH_rmax2 / (DRICH_zmin + DRICH_Length)"/>
 <constant name="DRICH_rmax0"              value="DRICH_SnoutSlope * DRICH_zmin"/>
 <constant name="DRICH_rmax1"              value="DRICH_SnoutSlope * ( DRICH_zmin + DRICH_SnoutLength)"/>
