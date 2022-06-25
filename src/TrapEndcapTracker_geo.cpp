@@ -13,6 +13,7 @@
 #include "DDRec/Surface.h"
 #include "XML/Layering.h"
 #include "XML/Utilities.h"
+#include <array>
 #include <map>
 
 #if defined(USE_ACTSDD4HEP)
