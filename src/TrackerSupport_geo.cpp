@@ -56,7 +56,7 @@ namespace {
       const double rmax2                = rmin2 + transverse_thickness;
       solid                             = Cone(length / 2, rmin1, rmax1, rmin2, rmax2);
     } else {
-      printout(ERROR, x_det.nameStr(), "Unknown support type: %s", type);
+      printout(ERROR, x_det.nameStr(), "Unknown support type: %s", type.c_str());
       std::exit(1);
     }
     // Materials
