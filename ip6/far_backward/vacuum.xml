@@ -79,6 +79,7 @@
         xQB="Q3eR_XB"
         zW="ExitWin_Z"
         xW="ExitWin_XB"
+        zA="ExitWin_Z"
         xA="ExitWin_XA"
       />
     </detector>
@@ -197,4 +198,3 @@
   </detectors>
 
 </lccdd>
-

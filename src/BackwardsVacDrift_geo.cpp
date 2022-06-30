@@ -35,6 +35,7 @@ static Ref_t createDetector(Detector& lccdd, xml_h e, SensitiveDetector /*sens*/
 
   double zW = points.attr<double>(_Unicode(zW));
   double xW = points.attr<double>(_Unicode(xW));
+  double zA = points.attr<double>(_Unicode(zA));
   double xA = points.attr<double>(_Unicode(xA));
 
   printout(DEBUG, "BackwardsVacDrift", "zW: %f", zW);
@@ -45,16 +46,16 @@ static Ref_t createDetector(Detector& lccdd, xml_h e, SensitiveDetector /*sens*/
   double ver[16];
 
   // plane at upper y
-  ver[0] = xQB;
-  ver[1] = zQB;
+  ver[0] = xQT;
+  ver[1] = zQT;
 
-  ver[2] = xQT;
-  ver[3] = zQT;
+  ver[2] = xQB;
+  ver[3] = zQB;
 
-  ver[4] = xW;
-  ver[5] = zW;
+  ver[4] = xA;
+  ver[5] = zA;
 
-  ver[6] = xA;
+  ver[6] = xW;
   ver[7] = zW;
 
   // plane at lower y

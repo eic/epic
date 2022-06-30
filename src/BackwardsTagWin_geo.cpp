@@ -42,17 +42,17 @@ static Ref_t createDetector(Detector& lccdd, xml_h e, SensitiveDetector /*sens*/
   double ver[16];
 
   // plane at upper y
-  ver[0] = xTB;
-  ver[1] = zTB;
+  ver[0] = xB;
+  ver[1] = zB;
 
-  ver[2] = xB;
-  ver[3] = zB;
+  ver[2] = xT;
+  ver[3] = zT;
 
-  ver[4] = xB;
-  ver[5] = zB;
+  ver[4] = xTB;
+  ver[5] = zTB;
 
-  ver[6] = xT;
-  ver[7] = zT;
+  ver[6] = xB - 0.001 * mm;
+  ver[7] = zB - 0.001 * mm;
 
   // plane at lower y
   for (int i = 8; i < 16; i++) {
