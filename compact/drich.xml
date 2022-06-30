@@ -23,17 +23,17 @@
 <constant name="DRICH_num_px"             value="8"/> <!-- number of pixels along one side of the sensor -->
 <constant name="DRICH_sensor_pixel_pitch" value="3.2*mm"/> <!-- center-to-center distance between SiPMs in a 8x8 panel -->
 <constant name="DRICH_sensor_pixel_size"  value="3.0*mm"/> <!-- a single SiPM pixel size -->
-<!-- debugging switches -->
+<!-- settings and switches -->
 <comment>
-- `DRICH_debug_optics`:  1 = all components become vacuum, except for mirrors; test opticalphotons from IP
-                         2 = all components become vacuum, except for mirrors and `gasvol`, test charged particles from IP
-                         0 = off
-- `DRICH_debug_mirror`:  1 = draw full mirror shape for single sector; 0 = off
-- `DRICH_debug_sensors`: 1 = draw full sensor sphere for a single sector; 0 = off
+- `DRICH_debug_optics`:    1 = all components become vacuum, except for mirrors; test opticalphotons from IP
+                           2 = all components become vacuum, except for mirrors and `gasvol`, test charged particles from IP
+                           0 = off
+- `DRICH_debug_mirror`:    1 = draw full mirror shape for single sector; 0 = off
+- `DRICH_debug_sensors`:   1 = draw full sensor sphere for a single sector; 0 = off
 </comment>
-<constant name="DRICH_debug_optics"  value="0"/>
-<constant name="DRICH_debug_mirror"  value="0"/>
-<constant name="DRICH_debug_sensors" value="0"/>
+<constant name="DRICH_debug_optics"    value="0"/>
+<constant name="DRICH_debug_mirror"    value="0"/>
+<constant name="DRICH_debug_sensors"   value="0"/>
 </define>
 
 
@@ -53,7 +53,6 @@
   material="Aluminum"
   vis_vessel="DRICH_vessel_vis"
   vis_gas="DRICH_gas_vis"
-  debug_optics="DRICH_debug_optics"
   >
 
 
@@ -98,14 +97,12 @@
 - dimensions:
   - `frontplane`: front of the aerogel, w.r.t. front plane of the vessel envelope
   - `rmin` and `rmax`: inner and outer radius (at the front plane; radial bounds are conical)
-  - `phiw`: azimuthal width of wedge
   - `thickness`: radiator thickness, defined separately for aerogel and filter
   - `pitch`: controls the angle of the radiator (0=vertical)
 </documentation>
 <radiator
   rmin="DRICH_rmin0 + DRICH_wall_thickness + 0.2*cm"
   rmax="DRICH_rmax0 - DRICH_wall_thickness - 0.2*cm"
-  phiw="60*degree"
   frontplane="DRICH_window_thickness + 0.5*DRICH_aerogel_thickness"
   pitch="0*degree"
   >
@@ -138,8 +135,6 @@
     - `focus_tune_z` and `focus_tune_x` will move the focal region, with respect
       to the sensor sphere center (i.e., set both to zero for focus at the sensor sphere center
       (ignoring spherical aberrations effects))
-- other settings:
-  - `debug`: set to 1 so draw reference sphere instead, view with y-clipping
 </documentation>
 <mirror
   material="Acrylic_DRICH"
@@ -152,7 +147,6 @@
   thickness="0.2*cm"
   focus_tune_x="69.78*cm"
   focus_tune_z="51.45*cm"
-  debug="DRICH_debug_mirror"
   />
 
 <!-- /detectors/detector/sensors -->
@@ -198,8 +192,6 @@
     - `centerx` and `centerz`: sphere center, defined w.r.t. vessel front plane,
       for the sector on +x axis
     - `radius`: radius of the sensor sphere
-  - other settings:
-    - `debug`: set to 1 so draw reference sphere instead, view with y-clipping
 - sensors will be limited to a patch of the sphere
   - patch dimensions:
     - `phiw`: defines half the angle between the azimuthal boundaries
@@ -210,7 +202,6 @@
   centerz="-168.07*cm + DRICH_SnoutLength + (DRICH_Length-DRICH_SnoutLength)/2.0"
   centerx="124.98*cm"
   radius="140*cm"
-  debug="DRICH_debug_sensors"
   />
 <sphericalpatch
   phiw="14*degree"
