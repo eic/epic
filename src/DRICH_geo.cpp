@@ -85,6 +85,7 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
   double sensorSide      = sensorElem.attr<double>(_Unicode(side));
   double sensorGap       = sensorElem.attr<double>(_Unicode(gap));
   double sensorThickness = sensorElem.attr<double>(_Unicode(thickness));
+  auto   readoutName     = detElem.attr<std::string>(_Unicode(readout));
   // - sensor sphere
   auto   sensorSphElem    = detElem.child(_Unicode(sensors)).child(_Unicode(sphere));
   double sensorSphRadius  = sensorSphElem.attr<double>(_Unicode(radius));
@@ -119,6 +120,14 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
     aerogelVis = sensorVis = mirrorVis;
     gasvolVis = vesselVis = desc.invisible();
   };
+
+  // readout decoder
+  auto        decoder    = desc.readout(readoutName).idSpec().decoder();
+  const auto& moduleBits = (*decoder)["module"];
+  const auto& sectorBits = (*decoder)["sector"];
+  uint64_t    cellMask   = moduleBits.mask() | sectorBits.mask();
+  printout(DEBUG, "DRICH_geo", "sectorMask, sectorOffset, moduleMask, moduleOffset = 0x%x %d 0x%x %d",
+           sectorBits.mask(), sectorBits.offset(), moduleBits.mask(), moduleBits.offset());
 
   // BUILD VESSEL ====================================================================
   /* - `vessel`: aluminum enclosure, the mother volume of the dRICh
@@ -192,14 +201,19 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
   // - these reference positions are for the frontplane and backplane of the vessel,
   //   with respect to the vessel origin position
   auto originFront = Position(0., 0., -tankLength / 2.0 - snoutLength);
-  // FIXME unused
   // auto originBack  = Position(0., 0., tankLength / 2.0);
+  auto vesselPos = Position(0, 0, vesselZmin) - originFront;
 
-  // initialize sensor centroids (used for mirror parameterization below); this is
-  // the average (x,y,z) of the placed sensors, w.r.t. originFront
-  double sensorCentroidX = 0;
-  double sensorCentroidZ = 0;
-  int    sensorCount     = 0;
+  // place gas volume
+  PlacedVolume gasvolPV = vesselVol.placeVolume(gasvolVol, Position(0, 0, 0));
+  DetElement   gasvolDE(det, "gasvol_de", 0);
+  gasvolDE.setPlacement(gasvolPV);
+
+  // place mother volume (vessel)
+  Volume       motherVol = desc.pickMotherVolume(det);
+  PlacedVolume vesselPV  = motherVol.placeVolume(vesselVol, vesselPos);
+  vesselPV.addPhysVolID("system", detID);
+  det.setPlacement(vesselPV);
 
   // BUILD RADIATOR ====================================================================
 
@@ -222,34 +236,39 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
 
   // aerogel placement and surface properties
   // TODO [low-priority]: define skin properties for aerogel and filter
-  auto radiatorPos = Position(0., 0., radiatorFrontplane) + originFront;
-  auto aerogelPV   = gasvolVol.placeVolume(
-      aerogelVol,
-      Translation3D(radiatorPos.x(), radiatorPos.y(), radiatorPos.z()) // re-center to originFront
-          *
-          RotationY(
-              radiatorPitch) // change polar angle to specified pitch // FIXME: probably broken (not yet in use anyway)
-  );
+  // FIXME: radiatorPitch might not be working correctly (not yet used)
+  auto radiatorPos      = Position(0., 0., radiatorFrontplane) + originFront;
+  auto aerogelPlacement = Translation3D(radiatorPos.x(), radiatorPos.y(), radiatorPos.z()) * // re-center to originFront
+                          RotationY(radiatorPitch); // change polar angle to specified pitch
+  auto       aerogelPV = gasvolVol.placeVolume(aerogelVol, aerogelPlacement);
   DetElement aerogelDE(det, "aerogel_de", 0);
   aerogelDE.setPlacement(aerogelPV);
   // SkinSurface aerogelSkin(desc, aerogelDE, "mirror_optical_surface", aerogelSurf, aerogelVol);
   // aerogelSkin.isValid();
 
   // filter placement and surface properties
+  PlacedVolume filterPV;
   if (!debugOptics) {
-    auto filterPV = gasvolVol.placeVolume(
-        filterVol, Translation3D(0., 0., airGap)                                          // add an air gap
-                       * Translation3D(radiatorPos.x(), radiatorPos.y(), radiatorPos.z()) // re-center to originFront
-                       * RotationY(radiatorPitch)                                         // change polar angle
-                       * Translation3D(0., 0., (aerogelThickness + filterThickness) / 2.) // move to aerogel backplane
-    );
+    auto filterPlacement =
+        Translation3D(0., 0., airGap) *                                    // add an air gap
+        Translation3D(radiatorPos.x(), radiatorPos.y(), radiatorPos.z()) * // re-center to originFront
+        RotationY(radiatorPitch) *                                         // change polar angle
+        Translation3D(0., 0., (aerogelThickness + filterThickness) / 2.);  // move to aerogel backplane
+    filterPV = gasvolVol.placeVolume(filterVol, filterPlacement);
     DetElement filterDE(det, "filter_de", 0);
     filterDE.setPlacement(filterPV);
     // SkinSurface filterSkin(desc, filterDE, "mirror_optical_surface", filterSurf, filterVol);
     // filterSkin.isValid();
   };
 
-  // SECTOR LOOP //////////////////////////////////
+  // SECTOR LOOP //////////////////////////////////////////////////////////////////////
+
+  // initialize sensor centroids (used for mirror parameterization below); this is
+  // the average (x,y,z) of the placed sensors, w.r.t. originFront
+  double sensorCentroidX = 0;
+  double sensorCentroidZ = 0;
+  int    sensorCount     = 0;
+
   for (int isec = 0; isec < nSectors; isec++) {
 
     // debugging filters, limiting the number of sectors
@@ -348,25 +367,26 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
           // placement (note: transformations are in reverse order)
           // - transformations operate on global coordinates; the corresponding
           //   generator coordinates are provided in the comments
-          auto sensorPV =
-              gasvolVol.placeVolume(sensorVol,
-                                    RotationZ(sectorRotation) // rotate about beam axis to sector
-                                        * Translation3D(sensorSphPos.x(), sensorSphPos.y(),
-                                                        sensorSphPos.z())        // move sphere to reference position
-                                        * RotationX(phiGen)                      // rotate about `zGen`
-                                        * RotationZ(thetaGen)                    // rotate about `yGen`
-                                        * Translation3D(sensorSphRadius, 0., 0.) // push radially to spherical surface
-                                        * RotationY(M_PI / 2)  // rotate sensor to be compatible with generator coords
-                                        * RotationZ(-M_PI / 2) // correction for readout segmentation mapping
-              );
+          auto sensorPlacement =
+              RotationZ(sectorRotation) *                                           // rotate about beam axis to sector
+              Translation3D(sensorSphPos.x(), sensorSphPos.y(), sensorSphPos.z()) * // move sphere to reference position
+              RotationX(phiGen) *                                                   // rotate about `zGen`
+              RotationZ(thetaGen) *                                                 // rotate about `yGen`
+              Translation3D(sensorSphRadius, 0., 0.) * // push radially to spherical surface
+              RotationY(M_PI / 2) *                    // rotate sensor to be compatible with generator coords
+              RotationZ(-M_PI / 2);                    // correction for readout segmentation mapping
+          auto sensorPV = gasvolVol.placeVolume(sensorVol, sensorPlacement);
 
           // generate LUT for module number -> sensor position, for readout mapping tests
           // if(isec==0) printf("%d %f %f\n",imod,sensorPV.position().x(),sensorPV.position().y());
 
+          // cellID encoding of (sector,module)
+          uint64_t imodsec =
+              ((uint64_t(imod) << moduleBits.offset()) | (uint64_t(isec) << sectorBits.offset())) & cellMask;
+
           // properties
           sensorPV.addPhysVolID("sector", isec).addPhysVolID("module", imod);
-          DetElement sensorDE(det, Form("sensor_de%d_%d", isec, imod),
-                              (imod << 3) | isec); // id must match IRTAlgorithm usage
+          DetElement sensorDE(det, Form("sensor_de%d_%d", isec, imod), imodsec);
           sensorDE.setPlacement(sensorPV);
           if (!debugOptics) {
             SkinSurface sensorSkin(desc, sensorDE, Form("sensor_optical_surface%d", isec), sensorSurf, sensorVol);
@@ -466,10 +486,9 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
     // if(isec==0) printf("dRICH mirror (zM, xM, rM) = (%f, %f, %f)\n",zM,xM,rM); // coords w.r.t. IP
 
     // mirror placement transformation (note: transformations are in reverse order)
-    auto        mirrorPos = Position(mirrorCenterX, 0., mirrorCenterZ) + originFront;
-    Transform3D mirrorPlacement(
-        Translation3D(mirrorPos.x(), mirrorPos.y(), mirrorPos.z()) // re-center to specified position
-        * RotationY(-mirrorThetaRot) // rotate about vertical axis, to be within vessel radial walls
+    auto mirrorPos = Position(mirrorCenterX, 0., mirrorCenterZ) + originFront;
+    auto mirrorPlacement(Translation3D(mirrorPos.x(), mirrorPos.y(), mirrorPos.z()) // re-center to specified position
+                         * RotationY(-mirrorThetaRot) // rotate about vertical axis, to be within vessel radial walls
     );
 
     // cut overlaps with other sectors using "pie slice" wedges, to the extent specified
@@ -480,28 +499,16 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
     // mirror volume, attributes, and placement
     Volume mirrorVol(detName + "_mirror_" + secName, mirrorSolid2, mirrorMat);
     mirrorVol.setVisAttributes(mirrorVis);
-    auto mirrorPV2 = gasvolVol.placeVolume(mirrorVol,
-                                           RotationZ(sectorRotation) // rotate about beam axis to sector
-                                               * Translation3D(0, 0, 0));
+    auto mirrorSectorPlacement = RotationZ(sectorRotation) * Translation3D(0, 0, 0); // rotate about beam axis to sector
+    auto mirrorPV              = gasvolVol.placeVolume(mirrorVol, mirrorSectorPlacement);
 
     // properties
     DetElement mirrorDE(det, Form("mirror_de%d", isec), isec);
-    mirrorDE.setPlacement(mirrorPV2);
+    mirrorDE.setPlacement(mirrorPV);
     SkinSurface mirrorSkin(desc, mirrorDE, Form("mirror_optical_surface%d", isec), mirrorSurf, mirrorVol);
     mirrorSkin.isValid();
 
   }; // END SECTOR LOOP //////////////////////////
-
-  // place gas volume
-  PlacedVolume gasvolPV = vesselVol.placeVolume(gasvolVol, Position(0, 0, 0));
-  DetElement   gasvolDE(det, "gasvol_de", 0);
-  gasvolDE.setPlacement(gasvolPV);
-
-  // place mother volume (vessel)
-  Volume       motherVol = desc.pickMotherVolume(det);
-  PlacedVolume vesselPV  = motherVol.placeVolume(vesselVol, Position(0, 0, vesselZmin) - originFront);
-  vesselPV.addPhysVolID("system", detID);
-  det.setPlacement(vesselPV);
 
   return det;
 };
