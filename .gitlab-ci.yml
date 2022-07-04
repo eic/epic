@@ -121,27 +121,28 @@ dump_geometry:
   needs:
     - common:detector
   script:
-    - echo "dumping geometry"
-    ## DEBUG
-    - echo "LD_LIBRARY_PATH - $LD_LIBRARY_PATH"
-    - echo "PATH - $PATH"
-    - print_env.sh
-    ## DEBUG
     - mkdir -p geo
     - |
+      geo_base_file="geo/detector_geo"
+      dd_web_display --output ${geo_base_file}.root ${DETECTOR_PATH}/${CI_PROJECT_NAME}.xml
       for yml in ${DETECTOR_PATH}/configurations/*.yml; do
-        xml_name=ecce_`basename $yml .yml`.xml
-        geo_name=detector_geo_`basename $yml .yml`.root
-        dd_web_display --output geo/${geo_name} ${DETECTOR_PATH}/${xml_name}
+        name=`basename $yml .yml`
+        xml_file=${CI_PROJECT_NAME}_${name}.xml
+        geo_file=${geo_base_file}_${name}.root
+        dd_web_display --output ${geo_file} ${DETECTOR_PATH}/${xml_file}
       done
-    ## print some useful output
     - |
-      geo_base="https://eic.phy.anl.gov/geoviewer/index.htm?file=https://eicweb.phy.anl.gov/EIC/detectors/ecce/-/jobs/${CI_JOB_ID}/artifacts/raw"
+      geoviewer="https://eic.phy.anl.gov/geoviewer/index.htm"
+      geo_base_url="${CI_PROJECT_URL}/-/jobs/${CI_JOB_ID}/artifacts/raw/${geo_base_file}"
+      geo_suffix="?job=${CI_JOB_NAME}&item=default;1&opt=clipx;clipy;transp30;zoom75;ROTY320;ROTZ340;trz0;trr0;ctrl;all"
+      echo " - Default subsystem view at:"
+      echo "   ${geoviewer}?file=${geo_base_url}.root${geo_suffix}"
       for yml in ${DETECTOR_PATH}/configurations/*.yml; do
-        xml_name=ecce_`basename $yml .yml`.xml
-        geo_name=detector_geo_`basename $yml .yml`.root
-        echo " - Subsystem view for ${xml_name} at:"
-        echo "   ${geo_base}/geo/${geo_name}?job=dump_geometry&item=default;1&opt=clipx;clipy;transp30;zoom75;ROTY320;ROTZ340;trz0;trr0;ctrl;all"
+        name=`basename $yml .yml`
+        xml_file=${CI_PROJECT_NAME}_${name}.xml
+        geo_url=${geo_base_url}_${name}.root
+        echo " - Subsystem view for ${xml_file} at:"
+        echo "   ${geoviewer}?file=${geo_url}${geo_suffix}"
       done
 
 detector_documentation:
