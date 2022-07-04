@@ -16,6 +16,7 @@
 #include "DDRec/DetectorData.h"
 #include "DDRec/Surface.h"
 #include "XML/Layering.h"
+#include <array>
 
 using namespace std;
 using namespace dd4hep;

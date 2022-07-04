@@ -193,7 +193,7 @@ static Ref_t create_field_map_brbz(Detector& /*lcdd*/, xml::Handle_t handle)
   if (!fs::exists(fs::path(field_map_file))) {
     printout(ERROR, "FieldMapBrBz", "file " + field_map_file + " does not exist");
     printout(ERROR, "FieldMapBrBz", "use a FileLoader plugin before the field element");
-    std::quick_exit(1);
+    std::_Exit(EXIT_FAILURE);
   }
 
   auto map = new FieldMapBrBz(field_type);
