@@ -298,7 +298,7 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
     auto sensorSphPos = Position(sensorSphCenterX, 0., sensorSphCenterZ) + originFront;
 
     // sensitivity
-    if (!debugOptics)
+    if (!debugOptics || debugOpticsMode==3)
       sensorVol.setSensitiveDetector(sens);
 
     // SENSOR MODULE LOOP ------------------------
@@ -392,7 +392,7 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
           sensorPV.addPhysVolID("sector", isec).addPhysVolID("module", imod);
           DetElement sensorDE(det, Form("sensor_de%d_%d", isec, imod), imodsec);
           sensorDE.setPlacement(sensorPV);
-          if (!debugOptics) {
+          if (!debugOptics || debugOpticsMode==3) {
             SkinSurface sensorSkin(desc, sensorDE, Form("sensor_optical_surface%d", isec), sensorSurf, sensorVol);
             sensorSkin.isValid();
           };
