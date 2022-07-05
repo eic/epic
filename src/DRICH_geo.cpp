@@ -113,6 +113,9 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
     case 2:
       vesselMat = aerogelMat = filterMat = sensorMat = desc.material("VacuumOptical");
       break;
+    case 3:
+      vesselMat = aerogelMat = filterMat = gasvolMat = desc.material("VacuumOptical");
+      break;
     default:
       printout(FATAL, "DRICH_geo", "UNKNOWN debugOpticsMode");
       return det;
@@ -178,6 +181,7 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
     gasvolSolid = gasvolUnion;
     break; // `!debugOptics`
   case 1:
+  case 3:
     vesselSolid = vesselBox;
     gasvolSolid = gasvolBox;
     break;
