@@ -113,6 +113,9 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
     case 2:
       vesselMat = aerogelMat = filterMat = sensorMat = desc.material("VacuumOptical");
       break;
+    case 3:
+      vesselMat = aerogelMat = filterMat = gasvolMat = desc.material("VacuumOptical");
+      break;
     default:
       printout(FATAL, "DRICH_geo", "UNKNOWN debugOpticsMode");
       return det;
@@ -178,6 +181,7 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
     gasvolSolid = gasvolUnion;
     break; // `!debugOptics`
   case 1:
+  case 3:
     vesselSolid = vesselBox;
     gasvolSolid = gasvolBox;
     break;
@@ -294,7 +298,7 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
     auto sensorSphPos = Position(sensorSphCenterX, 0., sensorSphCenterZ) + originFront;
 
     // sensitivity
-    if (!debugOptics)
+    if (!debugOptics || debugOpticsMode==3)
       sensorVol.setSensitiveDetector(sens);
 
     // SENSOR MODULE LOOP ------------------------
@@ -388,7 +392,7 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
           sensorPV.addPhysVolID("sector", isec).addPhysVolID("module", imod);
           DetElement sensorDE(det, Form("sensor_de%d_%d", isec, imod), imodsec);
           sensorDE.setPlacement(sensorPV);
-          if (!debugOptics) {
+          if (!debugOptics || debugOpticsMode==3) {
             SkinSurface sensorSkin(desc, sensorDE, Form("sensor_optical_surface%d", isec), sensorSurf, sensorVol);
             sensorSkin.isValid();
           };
