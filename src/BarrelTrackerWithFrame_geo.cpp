@@ -94,7 +94,7 @@ static Ref_t create_BarrelTrackerWithFrame(Detector& description, xml_h e, Sensi
     xml_dim_t   pos(x_support.child(_U(position), false));
     xml_dim_t   rot(x_support.child(_U(rotation), false));
     Solid       support_solid;
-    if (x_support.hasChild("shape")) {
+    if (x_support.hasChild(_U(shape))) {
       xml_comp_t shape(x_support.child(_U(shape)));
       string     shape_type = shape.typeStr();
       support_solid         = xml::createShape(description, shape_type, shape);
@@ -145,7 +145,7 @@ static Ref_t create_BarrelTrackerWithFrame(Detector& description, xml_h e, Sensi
     m_vol.setVisAttributes(description.visAttributes(x_mod.visStr()));
 
     // Optional module frame.
-    if (x_mod.hasChild("frame")) {
+    if (x_mod.hasChild(_U(frame))) {
       xml_comp_t m_frame = x_mod.child(_U(frame));
       // xmleles[m_nam]  = x_mod;
       double frame_thickness = m_frame.thickness();

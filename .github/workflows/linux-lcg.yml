@@ -20,7 +20,7 @@ jobs:
         release-platform: ${{ matrix.LCG }}
         run: |
           cmake -B build -S .
-          cmake --build build install
+          cmake --build build -- install
 
   ubuntu-2204:
     runs-on: ubuntu-22.04
@@ -39,4 +39,4 @@ jobs:
         release-platform: ${{ matrix.LCG }}
         run: |
           cmake -B build -S .
-          cmake --build build install
+          cmake --build build -- install

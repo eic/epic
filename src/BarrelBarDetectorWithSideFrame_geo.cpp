@@ -85,7 +85,7 @@ static Ref_t create_BarrelBarDetectorWithSideFrame(Detector& description, xml_h 
     // Get frame width, as it impacts the main module for being built. We
     // construct the actual frame structure later (once we know the module width)
     double frame_width = 0;
-    if (x_mod.hasChild("frame")) {
+    if (x_mod.hasChild(_U(frame))) {
       xml_comp_t m_frame = x_mod.child(_U(frame));
       frame_width        = m_frame.width();
     }
@@ -132,7 +132,7 @@ static Ref_t create_BarrelBarDetectorWithSideFrame(Detector& description, xml_h 
       thickness_so_far += x_comp.thickness();
     }
     // Now add-on the frame
-    if (x_mod.hasChild("frame")) {
+    if (x_mod.hasChild(_U(frame))) {
       xml_comp_t m_frame         = x_mod.child(_U(frame));
       double     frame_thickness = getAttrOrDefault<double>(m_frame, _U(thickness), total_thickness);
 

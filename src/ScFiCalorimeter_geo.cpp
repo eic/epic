@@ -115,7 +115,7 @@ std::tuple<Volume, Position> build_module(const Detector& desc, const xml::Compo
     modVol.setVisAttributes(desc.visAttributes(mod_x.attr<std::string>(_Unicode(vis))));
   }
 
-  if (mod_x.hasChild("fiber")) {
+  if (mod_x.hasChild(_Unicode(fiber))) {
     auto   fiber_x  = mod_x.child(_Unicode(fiber));
     auto   fr       = fiber_x.attr<double>(_Unicode(radius));
     auto   fsx      = fiber_x.attr<double>(_Unicode(spacex));
