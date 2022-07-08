@@ -15,8 +15,8 @@
 <!-- snout geometry: cone with front radius rmax0 and back radius of rmax1 -->
 <constant name="DRICH_SnoutLength"        value="20.0*cm"/>
 <constant name="DRICH_SnoutSlope"         value="DRICH_rmax2 / DRICH_zmax"/>
-<constant name="DRICH_rmax0"              value="DRICH_SnoutSlope * DRICH_zmin"/>
-<constant name="DRICH_rmax1"              value="DRICH_SnoutSlope * ( DRICH_zmin + DRICH_SnoutLength)"/>
+<constant name="DRICH_rmax0"              value="DRICH_SnoutSlope * DRICH_zmin - 16.429*cm"/> <!-- FIXME -->
+<constant name="DRICH_rmax1"              value="DRICH_SnoutSlope * ( DRICH_zmin + DRICH_SnoutLength) - 16.429*cm"/> <!-- FIXME -->
 <!-- additional parameters -->
 <constant name="DRICH_aerogel_thickness"  value="4.0*cm"/>  <!-- aerogel thickness -->
 <constant name="DRICH_sensor_size"        value="25.8*mm"/> <!-- sensor side length -->
