@@ -435,17 +435,19 @@ Examples:
 
     <comment> Global PID regions with suballocations for TOF and RICH detectors </comment>
     <constant name="ForwardPIDRegion_zmin"        value="CentralTrackingRegionP_zmax" />
-    <constant name="ForwardPIDRegion_length"      value="150.0*cm" />
+    <constant name="ForwardPIDRegion_length"      value="155.0*cm" />
+    <constant name="ForwardPIDRegion_rmax"        value="180.0*cm" />
 
     <comment> Forward TOF region currenlty empty for future upgrades </comment>
     <constant name="ForwardTOFRegion_zmin"        value="ForwardPIDRegion_zmin" />
-    <constant name="ForwardTOFRegion_length"      value="20.0*cm" />
+    <constant name="ForwardTOFRegion_length"      value="35.0*cm" />
     <constant name="ForwardTOFRegion_rmax"        value="CentralTrackingRegion_rmax" />
     <constant name="ForwardTOFRegion_tan"         value="CentralTrackingRegionP_tan" />
 
     <comment> Forward RICH region </comment>
     <constant name="ForwardRICHRegion_zmin"       value="ForwardTOFRegion_zmin + ForwardTOFRegion_length" />
     <constant name="ForwardRICHRegion_length"     value="ForwardPIDRegion_length - ForwardTOFRegion_length" />
+    <constant name="ForwardRICHRegion_rmax"       value="ForwardPIDRegion_rmax" />
     <comment> tangent of the opening angle at the front and back of the RICH </comment>
     <constant name="ForwardRICHRegion_tan1"        value="CentralTrackingRegionP_tan * 0.88" />
     <constant name="ForwardRICHRegion_tan2"        value="Eta3_6_tan * 0.89" />
@@ -490,6 +492,11 @@ Service gaps in FW direction (before endcapP ECAL) and BW direction (before endc
     <constant name="ForwardServiceGap_length"     value="8.0*cm"/>
     <constant name="ForwardServiceGap_zmin"       value="ForwardPIDRegion_zmin + ForwardInnerEndcapRegion_length"/>
     <constant name="ForwardServiceGap_zmax"       value="ForwardServiceGap_zmin + ForwardServiceGap_length"/>
+
+    <comment> Radial service gap between dRICH and HcalBarrel </comment>
+    <constant name="ForwardServiceGap_thickness"  value="15.0*cm"/>
+    <constant name="ForwardServiceGap_rmin"       value="ForwardPIDRegion_rmax"/>
+    <constant name="ForwardServiceGap_rmax"       value="ForwardServiceGap_rmin + ForwardServiceGap_thickness"/>
 
     <constant name="BackwardServiceGap_length"    value="10.0 * cm"/>
     <constant name="BackwardServiceGap_zmin"      value="320.0 * cm"/> <!-- FIXME hardcoded -->
@@ -557,7 +564,7 @@ Service gaps in FW direction (before endcapP ECAL) and BW direction (before endc
     <constant name="HcalEndcapN_rmin"     value="max((HcalEndcapN_zmin + HcalEndcapN_length) * tan(abs(CrossingAngle)) + 22.25 * mm, 11 * cm)"/>
 
     <constant name="HcalBarrel_thickness" value="88.0*cm"/> <!-- ref: ECCE proposal -->
-    <constant name="HcalBarrel_rmin"      value="195.0*cm"/>
+    <constant name="HcalBarrel_rmin"      value="ForwardServiceGap_rmax"/>
     <constant name="HcalBarrel_rmax"      value="HcalBarrel_rmin + HcalBarrel_thickness"/>
     <constant name="HcalBarrelForward_zmax"  value="ForwardServiceGap_zmin"/>
     <constant name="HcalBarrelBackward_zmax" value="BackwardServiceGap_zmin"/>
