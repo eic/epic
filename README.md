@@ -37,8 +37,8 @@ Getting Started
 
 You will  likely want to use this repository along with the IP6 repository:
 ```bash
-git clone https://eicweb.phy.anl.gov/EIC/detectors/ecce.git
-git clone https://eicweb.phy.anl.gov/EIC/detectors/ip6.git
+git clone https://github.com/eic/ecce.git
+git clone https://github.com/eic/ip6.git
 ln -s ../ip6/ip6 ecce/ip6
 ```
 
