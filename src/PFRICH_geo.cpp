@@ -266,7 +266,7 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
   // END SENSOR MODULE LOOP ------------------------
   //
   // Add service material if desired
-  if (detElem.child("sensors").hasChild("services")) {
+  if (detElem.child("sensors").hasChild(_Unicode(services))) {
     xml_comp_t x_service = detElem.child("sensors").child(_Unicode(services));
     Assembly   service_vol("services");
     service_vol.setVisAttributes(desc, x_service.visStr());

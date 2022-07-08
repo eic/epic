@@ -36,7 +36,7 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
   double        dphi              = (2 * M_PI / nsides);
   double        hphi              = dphi / 2;
   double        support_thickness = 0.0;
-  if (x_staves.hasChild("support")) {
+  if (x_staves.hasChild(_U(support))) {
     support_thickness = getAttrOrDefault(x_staves.child(_U(support)), _U(thickness), 5.0 * cm);
   }
   double           mod_z    = layering.totalThickness() + support_thickness;
@@ -79,7 +79,7 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
 
   Solid support_frame_s;
   // optional stave support
-  if (x_staves.hasChild("support")) {
+  if (x_staves.hasChild(_U(support))) {
     xml_comp_t x_support = x_staves.child(_U(support));
     // FIXME is_inside_support is read but not supported
     // is the support on the inside surface?
