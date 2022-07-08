@@ -3,7 +3,7 @@ name: linux-lcg
 on: [push, pull_request]
 
 jobs:
-  ubuntu-20.04:
+  ubuntu-2004:
     runs-on: ubuntu-20.04
     strategy:
       fail-fast: false
@@ -22,7 +22,7 @@ jobs:
           cmake -B build -S .
           cmake --build build install
 
-  ubuntu-22.04:
+  ubuntu-2204:
     runs-on: ubuntu-22.04
     strategy:
       fail-fast: false
