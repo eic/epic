@@ -306,7 +306,7 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
   det.setPlacement(vesselPV);
 
   return det;
-};
+}
 
 // clang-format off
 DECLARE_DETELEMENT(ecce_PFRICH, createDetector)

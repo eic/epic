@@ -149,7 +149,7 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
   double boreDelta  = vesselRmin1 - vesselRmin0;
   double snoutDelta = vesselRmax1 - vesselRmax0;
   Cone   vesselSnout(snoutLength / 2.0, vesselRmin0, vesselRmax0, vesselRmin0 + boreDelta * snoutLength / vesselLength,
-                   vesselRmax1);
+                     vesselRmax1);
   Cone   gasvolSnout(
       /* note: `gasvolSnout` extends a bit into the tank, so it touches `gasvolTank`
        * - the extension distance is equal to the tank `windowThickness`, so the
@@ -298,7 +298,7 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
     auto sensorSphPos = Position(sensorSphCenterX, 0., sensorSphCenterZ) + originFront;
 
     // sensitivity
-    if (!debugOptics || debugOpticsMode==3)
+    if (!debugOptics || debugOpticsMode == 3)
       sensorVol.setSensitiveDetector(sens);
 
     // SENSOR MODULE LOOP ------------------------
@@ -392,7 +392,7 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
           sensorPV.addPhysVolID("sector", isec).addPhysVolID("module", imod);
           DetElement sensorDE(det, Form("sensor_de%d_%d", isec, imod), imodsec);
           sensorDE.setPlacement(sensorPV);
-          if (!debugOptics || debugOpticsMode==3) {
+          if (!debugOptics || debugOpticsMode == 3) {
             SkinSurface sensorSkin(desc, sensorDE, Form("sensor_optical_surface%d", isec), sensorSurf, sensorVol);
             sensorSkin.isValid();
           };
@@ -515,7 +515,7 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
   }; // END SECTOR LOOP //////////////////////////
 
   return det;
-};
+}
 
 // clang-format off
 DECLARE_DETELEMENT(ecce_DRICH, createDetector)
