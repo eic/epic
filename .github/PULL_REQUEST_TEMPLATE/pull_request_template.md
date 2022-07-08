@@ -1,6 +1,9 @@
 ---
 name: Pull request
 about: Create a pull request to merge bug fixes or new features
+title: ''
+labels: ''
+assignees: ''
 
 ---
 
