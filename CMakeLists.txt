@@ -43,35 +43,13 @@ endif()
 find_package(fmt REQUIRED)
 
 #-----------------------------------------------------------------------------------
-set(a_lib_name ecce)
+set(a_lib_name ${PROJECT_NAME})
 
 dd4hep_configure_output()
 
-dd4hep_add_plugin(${a_lib_name} SOURCES
-  src/BarrelBarDetectorWithSideFrame_geo.cpp
-  src/BarrelCalorimeter_geo.cpp
-  src/BarrelCalorimeterInterlayers_geo.cpp
-  src/BarrelTrackerWithFrame_geo.cpp
-  src/CompositeTracker_geo.cpp
-  src/CylinderTrackerBarrel_geo.cpp
-  src/DIRC_geo.cpp
-  src/DRICH_geo.cpp
-  src/PFRICH_geo.cpp
-  src/FileLoader.cpp
-  src/FieldMapBrBz.cpp
-  src/GaseousRICH_geo.cpp
-  src/GeometryHelpers.cpp
-  src/HomogeneousCalorimeter_geo.cpp
-  src/HybridCalorimeter_geo.cpp
-  src/MRich_geo.cpp
-  src/PolyhedraEndcapCalorimeter2_geo.cpp
-  src/ScFiCalorimeter_geo.cpp
-  src/SciGlassCalorimeter_geo.cpp
-  src/ShashlikCalorimeter_geo.cpp
-  src/SimpleDiskDetector_geo.cpp
-  src/Solenoid_geo.cpp
-  src/TrapEndcapTracker_geo.cpp
-  src/TrackerSupport_geo.cpp
+file(GLOB sources CONFIGURE_DEPENDS src/*.cpp)
+dd4hep_add_plugin(${a_lib_name}
+  SOURCES ${sources}
   USES ${ActsDD4hep}
   )
 target_link_libraries(${a_lib_name}
