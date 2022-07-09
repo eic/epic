@@ -24,8 +24,11 @@ jobs:
           cmake --build build -- install
           export LD_LIBRARY_PATH=${PWD}/install/lib:${LD_LIBRARY_PATH}
           # link ip6 into install
-          ln -sf ${PWD}/eic_ip6/install/share/ip6 install/share/ecce/ip6
+          ln -sf ${PWD}/eic_ip6/install/share/ip6/ip6 install/share/ecce/ip6
           ls -al install/share/ecce
+          ls -al install/share/ecce/ip6
+          readlink install/share/ecce/ip6
+          ls -al $(readlink install/share/ecce/ip6)
           find install/share/ecce
           # test
           checkOverlaps -c install/share/ecce/ecce.xml
