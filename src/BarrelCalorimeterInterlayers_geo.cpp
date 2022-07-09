@@ -178,8 +178,8 @@ void buildFibers(Detector& desc, SensitiveDetector& sens, Volume& s_vol, xml_com
   double      f_radius                     = getAttrOrDefault(x_fiber, _U(radius), 0.1 * cm);
   double      f_spacing_x                  = getAttrOrDefault(x_fiber, _Unicode(spacing_x), 0.122 * cm);
   double      f_spacing_z                  = getAttrOrDefault(x_fiber, _Unicode(spacing_z), 0.134 * cm);
-  std::string f_id_grid                    = getAttrOrDefault(x_fiber, _Unicode(identifier_grid), "grid");
-  std::string f_id_fiber                   = getAttrOrDefault(x_fiber, _Unicode(identifier_fiber), "fiber");
+  std::string f_id_grid                    = getAttrOrDefault<std::string>(x_fiber, _Unicode(identifier_grid), "grid");
+  std::string f_id_fiber                   = getAttrOrDefault<std::string>(x_fiber, _Unicode(identifier_fiber), "fiber");
 
   // Set up the readout grid for the fiber layers
   // Trapezoid is divided into segments with equal dz and equal number of divisions in x

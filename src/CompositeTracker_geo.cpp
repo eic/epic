@@ -33,7 +33,7 @@ static Ref_t create_element(Detector& description, xml_h e, Ref_t)
   sdet.setType("compound");
   xml::setDetectorTypeFlag(e, sdet);
 
-  const std::string actsType = getAttrOrDefault(x_det, _Unicode(actsType), "endcap");
+  const std::string actsType = getAttrOrDefault<std::string>(x_det, _Unicode(actsType), "endcap");
   printout(DEBUG, det_name, "+++ Creating composite tracking detector (type: " + actsType + ")");
   assert(actsType == "barrel" || actsType == "endcap");
 
