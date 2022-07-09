@@ -360,7 +360,7 @@ static std::tuple<int, int> add_lines(Detector& desc, Assembly& env, xml::Collec
                  dd4hep::getAttrOrDefault<double>(pl, _Unicode(roty), 0.),
                  dd4hep::getAttrOrDefault<double>(pl, _Unicode(rotz), 0.));
     // determine axis
-    std::string axis = dd4hep::getAttrOrDefault(pl, _Unicode(axis), "x");
+    std::string axis = dd4hep::getAttrOrDefault<std::string>(pl, _Unicode(axis), "x");
     std::transform(axis.begin(), axis.end(), axis.begin(), [](char c) { return std::tolower(c); });
     if ((axis != "x") && (axis != "y") && (axis != "z")) {
       std::cerr << "HomogeneousCalorimeter Error: cannot determine axis of line " << axis

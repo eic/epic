@@ -137,7 +137,7 @@ static Ref_t createDetector(Detector& description, xml::Handle_t e, SensitiveDet
 
     // optical surfaces
     auto aerogel_surf =
-        surfMgr.opticalSurface(dd4hep::getAttrOrDefault(x_aerogel, _Unicode(surface), "MRICH_AerogelOpticalSurface"));
+        surfMgr.opticalSurface(dd4hep::getAttrOrDefault<std::string>(x_aerogel, _Unicode(surface), "MRICH_AerogelOpticalSurface"));
     SkinSurface skin_surf(description, aerogel_de, Form("MRICH_aerogel_skin_surface_%d", 1), aerogel_surf, aerogel_vol);
     skin_surf.isValid();
   }
@@ -205,7 +205,7 @@ static Ref_t createDetector(Detector& description, xml::Handle_t e, SensitiveDet
 
     // optical surfaces
     auto lens_surf =
-        surfMgr.opticalSurface(dd4hep::getAttrOrDefault(x_lens, _Unicode(surface), "MRICH_LensOpticalSurface"));
+        surfMgr.opticalSurface(dd4hep::getAttrOrDefault<std::string>(x_lens, _Unicode(surface), "MRICH_LensOpticalSurface"));
     SkinSurface skin_surf(description, lens_de, Form("MRichFresnelLens_skin_surface_%d", 1), lens_surf, lens_vol);
     skin_surf.isValid();
   }
@@ -244,7 +244,7 @@ static Ref_t createDetector(Detector& description, xml::Handle_t e, SensitiveDet
 
     // optical surfaces
     auto mirror_surf =
-        surfMgr.opticalSurface(dd4hep::getAttrOrDefault(x_mirror, _Unicode(surface), "MRICH_MirrorOpticalSurface"));
+        surfMgr.opticalSurface(dd4hep::getAttrOrDefault<std::string>(x_mirror, _Unicode(surface), "MRICH_MirrorOpticalSurface"));
     SkinSurface skin_surf(description, mirror_de, Form("MRICH_mirror_skin_surface_%d", 1), mirror_surf, mirror_vol);
     skin_surf.isValid();
   }
