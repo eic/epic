@@ -41,34 +41,16 @@ else()
   find_package(Acts REQUIRED COMPONENTS Core PluginIdentification PluginTGeo PluginDD4hep)
   set(ActsDD4hep ActsCore ActsPluginDD4hep)
 endif()
+find_package(fmt REQUIRED)
 
 #-----------------------------------------------------------------------------------
-set(a_lib_name IP6)
+set(a_lib_name ${PROJECT_NAME})
+
 dd4hep_configure_output()
 
+file(GLOB sources CONFIGURE_DEPENDS src/*.cpp)
 dd4hep_add_plugin(${a_lib_name}
-  SOURCES
-  src/B0Tracker_geo.cpp
-  src/B0Preshower_geo.cpp
-  src/BackwardsBeamPipe_geo.cpp
-  src/BackwardsCollimator.cpp
-  src/BackwardsLumiVac_geo.cpp
-  src/BackwardsTagWin_geo.cpp
-  src/BackwardsVacBox_geo.cpp
-  src/BackwardsVacDrift_geo.cpp
-  src/CylindricalDipoleMagnet_geo.cpp
-  src/DD4hep_GdmlDetector.cpp
-  src/ForwardRomanPot_geo.cpp
-  src/hadronDownstreamBeamPipe.cpp
-  src/IP6BeamPipe.cpp
-  src/magnetVacuumFF.cpp
-  src/OffMomentumTracker_geo.cpp
-  src/TaggerCalWSi_geo.cpp
-  src/TaggerTracker_geo.cpp
-  src/Timepix_geo.cpp
-  src/ZeroDegreeCalorimeterEcalWSciFi_geo.cpp
-  src/ZeroDegreeCalorimeterEcal_geo.cpp
-  src/ZeroDegreeCalorimeterSampling_geo.cpp
+  SOURCES ${sources}
   USES ${ActsDD4hep} ROOT::Core ROOT::Gdml
   )
 target_link_libraries(${a_lib_name}
