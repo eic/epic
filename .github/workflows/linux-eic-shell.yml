@@ -12,7 +12,18 @@ jobs:
       with:
         platform-release: "jug_xl:nightly"
         run: |
+          # install ip6 repo
+          git clone https://github.com/eic/ip6.git eic_ip6
+          pushd eic_ip6
           cmake -B build -S . -DCMAKE_INSTALL_PREFIX=install
           cmake --build build -- install
           export LD_LIBRARY_PATH=${PWD}/install/lib:${LD_LIBRARY_PATH}
+          popd
+          # install this repo
+          cmake -B build -S . -DCMAKE_INSTALL_PREFIX=install
+          cmake --build build -- install
+          export LD_LIBRARY_PATH=${PWD}/install/lib:${LD_LIBRARY_PATH}
+          # link ip6 into install
+          ln -sf ${PWD}/eic_ip6/install/share/ip6 install/share/ecce/ip6
+          # test
           checkOverlaps -c install/share/ecce/ecce.xml
