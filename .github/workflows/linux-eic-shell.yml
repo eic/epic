@@ -25,5 +25,7 @@ jobs:
           export LD_LIBRARY_PATH=${PWD}/install/lib:${LD_LIBRARY_PATH}
           # link ip6 into install
           ln -sf ${PWD}/eic_ip6/install/share/ip6 install/share/ecce/ip6
+          ls -al install/share/ecce
+          find install/share/ecce
           # test
           checkOverlaps -c install/share/ecce/ecce.xml
