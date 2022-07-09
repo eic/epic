@@ -1,0 +1,18 @@
+name: linux-eic-shell
+
+on: [push, pull_request]
+
+jobs:
+  build-and-check-overlap:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - uses: cvmfs-contrib/github-action-cvmfs@v2
+    - uses: eic/run-cvmfs-osg-eic-shell@main
+      with:
+        release-platform: "jug_xl:nightly"
+        run: |
+          cmake -B build -S . -DCMAKE_INSTALL_PREFIX=install
+          cmake --build build -- install
+          export LD_LIBRARY_PATH=${PWD}/install/lib:${LD_LIBRARY_PATH}
+          checkOverlaps -c install/share/ecce/ecce.xml
