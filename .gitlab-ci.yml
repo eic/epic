@@ -145,22 +145,23 @@ detectors:athena:
   needs: ["overlap_check"]
   variables:
     JUGGLER_DETECTOR: "athena"
+    JUGGLER_DETECTOR_CONFIG: "athena"
     JUGGLER_DETECTOR_VERSION: "master"
     BEAMLINE_CONFIG: "$BEAMLINE_CONFIG"
     BEAMLINE_CONFIG_VERSION: "$BEAMLINE_CONFIG_VERSION"
   trigger:
     project: EIC/detectors/athena
     strategy: depend
-      #
-      #detectors:jug_detector:
-      #  stage: deploy
-      #  needs: ["overlap_check"]
-      #  variables:
-      #    JUGGLER_DETECTOR: "$JUGGLER_DETECTOR"
-      #    JUGGLER_DETECTOR_VERSION: "$JUGGLER_DETECTOR_VERSION"
-      #    BEAMLINE_CONFIG: "$BEAMLINE_CONFIG"
-      #    BEAMLINE_CONFIG_VERSION: "$BEAMLINE_CONFIG_VERSION"
-      #  trigger:
-      #    project: "EIC/detectors/$JUGGLER_DETECTOR"
-      #   strategy: depend
 
+detectors:ecce:
+  stage: deploy
+  needs: ["overlap_check"]
+  variables:
+    JUGGLER_DETECTOR: "ecce"
+    JUGGLER_DETECTOR_CONFIG: "ecce"
+    JUGGLER_DETECTOR_VERSION: "main"
+    BEAMLINE_CONFIG: "$BEAMLINE_CONFIG"
+    BEAMLINE_CONFIG_VERSION: "$BEAMLINE_CONFIG_VERSION"
+  trigger:
+    project: EIC/detectors/ecce
+    strategy: depend
