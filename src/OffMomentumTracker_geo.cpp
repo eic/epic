@@ -57,7 +57,7 @@ static Ref_t create_OffMomentumTracker(Detector& description, xml_h e, Sensitive
     xml_dim_t   support_pos(x_support.child(_U(position), false));
     xml_dim_t   support_rot(x_support.child(_U(rotation), false));
     Solid       support_solid;
-    if (x_support.hasChild("shape")) {
+    if (x_support.hasChild(_U(shape))) {
       xml_comp_t shape(x_support.child(_U(shape)));
       string     shape_type = shape.typeStr();
       support_solid         = xml::createShape(description, shape_type, shape);
@@ -102,7 +102,7 @@ static Ref_t create_OffMomentumTracker(Detector& description, xml_h e, Sensitive
     m_volume.setVisAttributes(description.visAttributes(x_mod.visStr()));
 
     // Solid  frame_s;
-    if (x_mod.hasChild("frame")) {
+    if (x_mod.hasChild(_U(frame))) {
       // todo
       // build frame from trd (assumed to be smaller)
       // xml_comp_t m_frame         = x_mod.child(_U(frame));

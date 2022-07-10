@@ -39,8 +39,8 @@ static Ref_t build_magnet(Detector& dtor, xml_h e, SensitiveDetector /* sens */)
 
   const string module_name = "Quad_magnet";
 
-  const string yoke_vis = dd4hep::getAttrOrDefault(x_det, _Unicode(vis), "GreenVis");
-  const string coil_vis = dd4hep::getAttrOrDefault(coil, _Unicode(vis), "RedVis");
+  const string yoke_vis = dd4hep::getAttrOrDefault<std::string>(x_det, _Unicode(vis), "GreenVis");
+  const string coil_vis = dd4hep::getAttrOrDefault<std::string>(coil, _Unicode(vis), "RedVis");
 
   sdet.setAttributes(dtor, assembly, x_det.regionStr(), x_det.limitsStr(), yoke_vis);
 

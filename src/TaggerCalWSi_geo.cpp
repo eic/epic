@@ -1,4 +1,3 @@
-
 #include "DD4hep/DetFactoryHelper.h"
 #include "DD4hep/OpticalSurfaces.h"
 #include "DD4hep/Printout.h"
@@ -64,7 +63,7 @@ static Ref_t createDetector(Detector& desc, xml_h e, SensitiveDetector sens)
   }
 
   // mother volume for calorimeter
-  std::string   mother_nam = dd4hep::getAttrOrDefault(x_det, _Unicode(place_into), "");
+  std::string   mother_nam = dd4hep::getAttrOrDefault<std::string>(x_det, _Unicode(place_into), "");
   VolumeManager man        = VolumeManager::getVolumeManager(desc);
   DetElement    mdet       = man.detector().child(mother_nam);
 

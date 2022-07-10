@@ -74,7 +74,7 @@ static Ref_t create_B0Tracker(Detector& description, xml_h e, SensitiveDetector 
     m_volume.setVisAttributes(description.visAttributes(x_mod.visStr()));
 
     Solid frame_s;
-    if (x_mod.hasChild("frame")) {
+    if (x_mod.hasChild(_U(frame))) {
       // build frame from trd (assumed to be smaller)
       xml_comp_t m_frame         = x_mod.child(_U(frame));
       xml_comp_t f_pos           = m_frame.child(_U(position));

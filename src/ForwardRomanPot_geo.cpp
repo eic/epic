@@ -60,7 +60,7 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
       c_vol.setVisAttributes(description.visAttributes(c.visStr()));
 
       Position c_position(0, 0.0, comp_z_pos + c_thick / 2.0);
-      if (c.hasChild("position")) {
+      if (c.hasChild(_U(position))) {
         xml_comp_t c_pos = c.child(_U(position));
         c_position       = Position(c_pos.x(), c_pos.y(), c_pos.z());
       }
@@ -97,7 +97,7 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
       double      dz         = getAttrOrDefault(x_array, _Unicode(dz), 0 * mm);
       double      arr_width  = getAttrOrDefault(x_array, _Unicode(width), 3.2 * cm);
       double      arr_height = getAttrOrDefault(x_array, _Unicode(height), 3.2 * cm);
-      std::string arr_module = getAttrOrDefault(x_array, _Unicode(module), "");
+      std::string arr_module = getAttrOrDefault<std::string>(x_array, _Unicode(module), "");
       // TODO: add check here
       auto        arr_vol  = modules[arr_module];
       Placements& sensVols = sensitives[arr_module];
@@ -156,7 +156,7 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
       xml_comp_t c_pos  = x_comp.position(false);
 
       // string     ma_name = x_comp.nameStr();
-      string comp_assembly = getAttrOrDefault(x_comp, _Unicode(assembly), "");
+      string comp_assembly = getAttrOrDefault<std::string>(x_comp, _Unicode(assembly), "");
 
       auto comp_vol = module_assemblies[comp_assembly];
       // auto de       = ;

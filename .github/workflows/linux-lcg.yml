@@ -1,0 +1,42 @@
+name: linux-lcg
+
+on: [push, pull_request]
+
+jobs:
+  ubuntu-2004:
+    runs-on: ubuntu-20.04
+    strategy:
+      fail-fast: false
+      matrix:
+        LCG: ["LCG_101/x86_64-ubuntu2004-gcc9-opt",
+              "LCG_99/x86_64-ubuntu2004-gcc9-opt"]
+    steps:
+    - uses: actions/checkout@v2
+    - uses: cvmfs-contrib/github-action-cvmfs@v2
+      with:
+        cvmfs_repositories: 'sft.cern.ch,geant4.cern.ch'
+    - uses: aidasoft/run-lcg-view@v1
+      with:
+        release-platform: ${{ matrix.LCG }}
+        run: |
+          cmake -B build -S .
+          cmake --build build -- install
+
+  ubuntu-2204:
+    runs-on: ubuntu-22.04
+    strategy:
+      fail-fast: false
+      matrix:
+        LCG: ["LCG_101/x86_64-ubuntu2004-gcc9-opt",
+              "LCG_99/x86_64-ubuntu2004-gcc9-opt"]
+    steps:
+    - uses: actions/checkout@v2
+    - uses: cvmfs-contrib/github-action-cvmfs@v2
+      with:
+        cvmfs_repositories: 'sft.cern.ch,geant4.cern.ch'
+    - uses: aidasoft/run-lcg-view@v1
+      with:
+        release-platform: ${{ matrix.LCG }}
+        run: |
+          cmake -B build -S .
+          cmake --build build -- install

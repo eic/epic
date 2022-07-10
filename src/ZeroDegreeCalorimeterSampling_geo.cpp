@@ -73,7 +73,7 @@ static Ref_t createDetector(Detector& desc, xml_h e, SensitiveDetector sens)
         ++slice_num;
       }
 
-      string layer_vis = dd4hep::getAttrOrDefault(x_layer, _Unicode(vis), "InvisibleWithDaughters");
+      string layer_vis = dd4hep::getAttrOrDefault<std::string>(x_layer, _Unicode(vis), "InvisibleWithDaughters");
       layer_vol.setAttributes(desc, x_layer.regionStr(), x_layer.limitsStr(), layer_vis);
       pv = envelopeVol.placeVolume(
           layer_vol,
