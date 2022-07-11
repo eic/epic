@@ -31,6 +31,7 @@ endif()
 # Export compile commands as json for run-clang-tidy
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
+# Dependencies
 find_package(DD4hep REQUIRED COMPONENTS DDCore DDG4)
 find_package(ActsDD4hep)
 if(ActsDD4hep_FOUND)
