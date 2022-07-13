@@ -27,3 +27,13 @@ jobs:
           ln -sf ${PWD}/eic_ip6/install/share/ip6/ip6 install/share/ecce/ip6
           # test
           checkOverlaps -c install/share/ecce/ecce.xml
+
+  trigger-detector-benchmarks:
+    needs: build-and-check-overlap
+    runs-on: ubuntu-latest
+    steps:
+    - uses: eic/trigger-gitlab-ci@v1
+      with:
+        url: https://eicweb.phy.anl.gov
+        token: ${{ secrets.TOKEN }}
+        project_id: 399
