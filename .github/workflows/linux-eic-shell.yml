@@ -35,5 +35,5 @@ jobs:
     - uses: eic/trigger-gitlab-ci@v1
       with:
         url: https://eicweb.phy.anl.gov
-        token: ${{ secrets.TOKEN }}
+        token: ${{ secrets.EICWEB_DETECTOR_BENCHMARK_TRIGGER }}
         project_id: 399
