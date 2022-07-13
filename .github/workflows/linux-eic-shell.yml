@@ -36,6 +36,7 @@ jobs:
       with:
         url: https://eicweb.phy.anl.gov
         token: ${{ secrets.EICWEB_DETECTOR_BENCHMARK_TRIGGER }}
+        ref_name: master
         project_id: 399
         variables: |
           JUGGLER_DETECTOR=ecce
