@@ -45,7 +45,6 @@ jobs:
       with:
         platform-release: "jug_xl:nightly"
         run: |
-          ls -al install/
           source install/setup.sh
           mkdir -p geo
           python scripts/convert_to_gdml.py --compact ${DETECTOR_PATH}/${DETECTOR}.xml --output geo/${DETECTOR}.gdml
