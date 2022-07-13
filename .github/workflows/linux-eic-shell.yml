@@ -32,7 +32,7 @@ jobs:
     needs: build-and-check-overlap
     runs-on: ubuntu-latest
     steps:
-    - uses: eic/trigger-gitlab-ci@v1
+    - uses: eic/trigger-gitlab-ci@main
       with:
         url: https://eicweb.phy.anl.gov
         token: ${{ secrets.EICWEB_DETECTOR_BENCHMARK_TRIGGER }}
