@@ -69,3 +69,17 @@ install(DIRECTORY ip6/
 install(FILES eic_ip6.xml
     DESTINATION share/${PROJECT_NAME}/
     )
+
+#-----------------------------------------------------------------------------------
+# Configure and install beamline setup script
+#
+execute_process(
+  COMMAND git rev-parse --abbrev-ref HEAD
+  WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
+  OUTPUT_VARIABLE GIT_BRANCH
+  OUTPUT_STRIP_TRAILING_WHITESPACE
+)
+configure_file(templates/setup.sh.in ${CMAKE_CURRENT_BINARY_DIR}/setup.sh @ONLY)
+install(FILES ${CMAKE_CURRENT_BINARY_DIR}/setup.sh
+    DESTINATION ${CMAKE_INSTALL_PREFIX}/ip6
+)
