@@ -3,7 +3,7 @@ name: linux-eic-shell
 on: [push, pull_request]
 
 jobs:
-  build-and-check-overlap:
+  build-test:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
@@ -25,5 +25,96 @@ jobs:
           export LD_LIBRARY_PATH=${PWD}/install/lib:${LD_LIBRARY_PATH}
           # link ip6 into install
           ln -sf ${PWD}/eic_ip6/install/share/ip6/ip6 install/share/ecce/ip6
-          # test
-          checkOverlaps -c install/share/ecce/ecce.xml
+    - uses: actions/upload-artifact@v3
+      with:
+        name: geometry
+        path: install/
+        if-no-files-found: error
+
+  convert-to-gdml:
+    runs-on: ubuntu-latest
+    needs: build-test
+    steps:
+    - uses: actions/checkout@v2
+    - uses: actions/download-artifact@v3
+      with:
+        name: geometry
+        path: install/
+    - uses: cvmfs-contrib/github-action-cvmfs@v2
+    - uses: eic/run-cvmfs-osg-eic-shell@main
+      with:
+        platform-release: "jug_xl:nightly"
+        run: |
+          mkdir -p geo
+          python scripts/convert_to_gdml.py --compact ${DETECTOR_PATH}/${DETECTOR}.xml --output geo/${DETECTOR}.gdml
+    - uses: actions/upload-artifact@v3
+      with:
+        name: geometry-gdml
+        path: geo/
+        if-no-files-found: error
+
+  convert-to-tgeo:
+    runs-on: ubuntu-latest
+    needs: build-test
+    steps:
+    - uses: actions/checkout@v2
+    - uses: actions/download-artifact@v3
+      with:
+        name: geometry
+        path: install/
+    - uses: cvmfs-contrib/github-action-cvmfs@v2
+    - uses: eic/run-cvmfs-osg-eic-shell@main
+      with:
+        platform-release: "jug_xl:nightly"
+        run: |
+          mkdir -p geo
+          dd_web_display --output geo/${DETECTOR_PATH}/${DETECTOR}.root ${DETECTOR_PATH}/${DETECTOR}.xml
+    - uses: actions/upload-artifact@v3
+      with:
+        name: geometry-root
+        path: geo/
+        if-no-files-found: error
+
+  check-overlap-tgeo:
+    runs-on: ubuntu-latest
+    needs: build-test
+    steps:
+    - uses: actions/checkout@v2
+    - uses: actions/download-artifact@v3
+      with:
+        name: geometry
+        path: install/
+    - uses: cvmfs-contrib/github-action-cvmfs@v2
+    - uses: eic/run-cvmfs-osg-eic-shell@main
+      with:
+        platform-release: "jug_xl:nightly"
+        run: |
+          source install/setup.sh
+          mkdir -p out
+          sed -i '/<fiber/,+6d' ${DETECTOR_PATH}/compact/ecal_barrel_interlayers.xml
+          sed -i '/<fiber/,+4d' ${DETECTOR_PATH}/ip6/far_forward/ZDC_Ecal_WSciFi.xml
+          checkOverlaps -c ${DETECTOR_PATH}/${DETECTOR_CONFIG}.xml | tee doc/overlap_check_tgeo.out
+          echo "$(cat doc/overlap_check_tgeo.out | grep ovlp | wc -l) overlaps..."
+          if [[ "$(cat doc/overlap_check_tgeo.out | grep ovlp | wc -l)" -gt "0" ]] ; then echo "Overlaps exist!" && false ; fi
+
+  check-overlap-geant4:
+    runs-on: ubuntu-latest
+    needs: build-test
+    steps:
+    - uses: actions/checkout@v2
+    - uses: actions/download-artifact@v3
+      with:
+        name: geometry
+        path: install/
+    - uses: cvmfs-contrib/github-action-cvmfs@v2
+    - uses: eic/run-cvmfs-osg-eic-shell@main
+      with:
+        platform-release: "jug_xl:nightly"
+        run: |
+          source install/setup.sh
+          mkdir -p out
+          sed -i '/<fiber/,+6d' ${DETECTOR_PATH}/compact/ecal_barrel_interlayers.xml
+          sed -i '/<fiber/,+4d' ${DETECTOR_PATH}/ip6/far_forward/ZDC_Ecal_WSciFi.xml
+          python scripts/checkOverlaps.py -c ${DETECTOR_PATH}/${DETECTOR_CONFIG}.xml | tee doc/overlap_check_geant4.out
+          echo "$(cat doc/overlap_check_geant4.out | grep GeomVol1002 | wc -l) overlaps..."
+          if [[ "$(cat doc/overlap_check_geant4.out | grep GeomVol1002 | wc -l)" -gt "0" ]] ; then echo "Overlaps exist!" && false ; fi
