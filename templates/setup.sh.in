@@ -1,0 +1,18 @@
+#!/bin/sh
+
+export DETECTOR=@PROJECT_NAME@
+export DETECTOR_PATH=@CMAKE_INSTALL_PREFIX@/share/@PROJECT_NAME@
+export DETECTOR_CONFIG=@PROJECT_NAME@
+export DETECTOR_VERSION=@GIT_BRANCH@
+
+## note: we will phase out the JUGGLER_* flavor of variables in the future
+export JUGGLER_DETECTOR=$DETECTOR
+export JUGGLER_DETECTOR_CONFIG=$DETECTOR_CONFIG
+export JUGGLER_DETECTOR_VERSION=$DETECTOR_VERSION
+export JUGGLER_DETECTOR_PATH=$DETECTOR_PATH
+
+## Export detector libraries
+export LD_LIBRARY_PATH=@CMAKE_INSTALL_PREFIX@/lib${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}
+
+## Source beamline setup
+test -r $DETECTOR_PATH/ip6/setup.sh && source $DETECTOR_PATH/ip6/setup.sh

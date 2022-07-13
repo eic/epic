@@ -108,3 +108,17 @@ install(DIRECTORY compact/
 install(DIRECTORY calibrations/
     DESTINATION share/${PROJECT_NAME}/calibrations
     )
+
+#-----------------------------------------------------------------------------------
+# Configure and install detector setup script
+#
+execute_process(
+  COMMAND git rev-parse --abbrev-ref HEAD
+  WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
+  OUTPUT_VARIABLE GIT_BRANCH
+  OUTPUT_STRIP_TRAILING_WHITESPACE
+)
+configure_file(templates/setup.sh.in ${CMAKE_CURRENT_BINARY_DIR}/setup.sh @ONLY)
+install(FILES ${CMAKE_CURRENT_BINARY_DIR}/setup.sh
+    DESTINATION ${CMAKE_INSTALL_PREFIX}
+)
