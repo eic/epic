@@ -45,6 +45,8 @@ jobs:
       with:
         platform-release: "jug_xl:nightly"
         run: |
+          ls -al install/
+          source install/setup.sh
           mkdir -p geo
           python scripts/convert_to_gdml.py --compact ${DETECTOR_PATH}/${DETECTOR}.xml --output geo/${DETECTOR}.gdml
     - uses: actions/upload-artifact@v3
@@ -67,6 +69,7 @@ jobs:
       with:
         platform-release: "jug_xl:nightly"
         run: |
+          source install/setup.sh
           mkdir -p geo
           dd_web_display --output geo/${DETECTOR_PATH}/${DETECTOR}.root ${DETECTOR_PATH}/${DETECTOR}.xml
     - uses: actions/upload-artifact@v3
