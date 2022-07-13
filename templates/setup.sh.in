@@ -15,4 +15,4 @@ export JUGGLER_DETECTOR_PATH=$DETECTOR_PATH
 export LD_LIBRARY_PATH=@CMAKE_INSTALL_PREFIX@/lib${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}
 
 ## Source beamline setup
-test -r $DETECTOR_PATH/ip6/setup.sh && source $DETECTOR_PATH/ip6/setup.sh
+test -r $DETECTOR_PATH/ip6/setup.sh && source $DETECTOR_PATH/ip6/setup.sh || echo "Warning: ip6 not loaded!"
