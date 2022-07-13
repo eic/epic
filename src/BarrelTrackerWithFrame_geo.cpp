@@ -166,8 +166,8 @@ static Ref_t create_BarrelTrackerWithFrame(Detector& description, xml_h e, Sensi
 
     double thickness_so_far = 0.0;
     double thickness_sum    = -total_thickness / 2.0;
-    for (xml_coll_t ci(x_mod, _U(module_component)); ci; ++ci, ++ncomponents) {
-      xml_comp_t   x_comp = ci;
+    for (xml_coll_t mci(x_mod, _U(module_component)); mci; ++mci, ++ncomponents) {
+      xml_comp_t   x_comp = mci;
       xml_comp_t   x_pos  = x_comp.position(false);
       xml_comp_t   x_rot  = x_comp.rotation(false);
       const string c_nam  = _toString(ncomponents, "component%d");

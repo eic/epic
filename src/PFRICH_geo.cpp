@@ -272,9 +272,8 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
     service_vol.setVisAttributes(desc, x_service.visStr());
 
     // Compute service total thickness from components
-    double     total_thickness = 0;
-    xml_coll_t ci(x_service, _Unicode(component));
-    for (ci.reset(), total_thickness = 0.0; ci; ++ci) {
+    double total_thickness = 0;
+    for (xml_coll_t ci(x_service, _Unicode(component)); ci; ++ci) {
       total_thickness += xml_comp_t(ci).thickness();
     }
 

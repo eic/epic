@@ -49,8 +49,8 @@ static Ref_t createDetector(Detector& desc, xml_h e, SensitiveDetector sens)
   DetElement det(det_name, det_id);
   Volume     mother_vol = desc.pickMotherVolume(det);
 
-  Transform3D  tr(RotationZYX(0, dirc_rot.theta(), 0.0), Position(0.0, 0.0, dirc_pos.z()));
-  PlacedVolume det_plvol = mother_vol.placeVolume(det_volume, tr);
+  Transform3D  tr_global(RotationZYX(0, dirc_rot.theta(), 0.0), Position(0.0, 0.0, dirc_pos.z()));
+  PlacedVolume det_plvol = mother_vol.placeVolume(det_volume, tr_global);
 
   det_plvol.addPhysVolID("system", det_id);
   det.setPlacement(det_plvol);

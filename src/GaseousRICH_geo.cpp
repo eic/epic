@@ -109,7 +109,8 @@ void build_mirrors(Detector& desc, DetElement& sdet, Volume& env, xml::Component
 
   // optical surface
   OpticalSurfaceManager surfMgr = desc.surfaceManager();
-  auto surf = surfMgr.opticalSurface(dd4hep::getAttrOrDefault<std::string>(plm, _Unicode(surface), "MirrorOpticalSurface"));
+  auto                  surf =
+      surfMgr.opticalSurface(dd4hep::getAttrOrDefault<std::string>(plm, _Unicode(surface), "MirrorOpticalSurface"));
 
   // placements
   auto gpos = get_xml_xyz(plm, _Unicode(position)) + offset;
