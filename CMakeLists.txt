@@ -34,7 +34,7 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 # Set required DD4hep components based on user input
 set(USE_DDG4 "TRUE" CACHE BOOL "Require DD4hep DDG4 component")
 set(DD4hep_required_components DDCore DDRec)
-if( ${USE_DDG4} )
+if(${USE_DDG4})
   list(APPEND DD4hep_required_components DDG4)
 endif()
 
