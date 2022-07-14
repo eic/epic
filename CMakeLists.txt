@@ -31,8 +31,20 @@ endif()
 # Export compile commands as json for run-clang-tidy
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
+# Set required DD4hep components based on user input
+set(USE_DDG4 "TRUE" CACHE BOOL "Require DD4hep DDG4 component")
+set(DD4hep_required_components DDCore DDRec)
+if(${USE_DDG4})
+  list(APPEND DD4hep_required_components DDG4)
+endif()
+
+# The items passed to target_link_libraries below need DD4hep:: prepended
+set(DD4hep_required_libraries ${DD4hep_required_components})
+list(TRANSFORM DD4hep_required_libraries PREPEND DD4hep::)
+
+
 # Dependencies
-find_package(DD4hep REQUIRED COMPONENTS DDCore DDG4)
+find_package(DD4hep REQUIRED COMPONENTS ${DD4hep_required_components})
 find_package(ActsDD4hep)
 if(ActsDD4hep_FOUND)
   add_compile_definitions(USE_ACTSDD4HEP)
@@ -54,7 +66,7 @@ dd4hep_add_plugin(${a_lib_name}
   USES ${ActsDD4hep} ROOT::Core ROOT::Gdml
   )
 target_link_libraries(${a_lib_name}
-  PUBLIC DD4hep::DDCore DD4hep::DDRec DD4hep::DDG4
+  PUBLIC ${DD4hep_required_libraries}
   )
 
 #-----------------------------------------------------------------------------------
