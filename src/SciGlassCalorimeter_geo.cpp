@@ -217,20 +217,20 @@ static Ref_t create_detector(Detector& desc, xml::Handle_t handle, SensitiveDete
     // place around phi
     for (size_t j_phi = 0; j_phi < n_phi; j_phi++) {
       // azimuthal and polar angles
-      const auto phi   = dphi * j_phi;
-      const auto theta = 0.5 * (theta_min + theta_max);
+      const auto phi       = dphi * j_phi;
+      const auto avg_theta = 0.5 * (theta_min + theta_max);
 
       // module center position
-      const auto r = rmin + 0.5 * mod_x1 * sin(mod_phi_projectivity_tilt) + 0.5 * mod_y1 * sin(theta) +
-                     0.5 * mod_length * cos(theta);
+      const auto r = rmin + 0.5 * mod_x1 * sin(mod_phi_projectivity_tilt) + 0.5 * mod_y1 * sin(avg_theta) +
+                     0.5 * mod_length * cos(avg_theta);
       const auto x = r * cos(phi);
       const auto y = r * sin(phi);
-      const auto z = r / tan(M_PI_2 - theta);
+      const auto z = r / tan(M_PI_2 - avg_theta);
 
       // place negative module
       if (k_eta < n_eta_neg) {
         Transform3D tr_neg = Translation3D(x, y, -det_pos.z() + mod_eta_projectivity_offset - z) *
-                             RotationZ(phi + mod_phi_projectivity_tilt) * RotationY(M_PI_2 + theta);
+                             RotationZ(phi + mod_phi_projectivity_tilt) * RotationY(M_PI_2 + avg_theta);
         auto pv_neg = env.placeVolume(mod_env, tr_neg);
         pv_neg.addPhysVolID("sector", n_eta_neg + n_eta_pos - k_eta - 1);
         pv_neg.addPhysVolID("module", j_phi);
@@ -239,7 +239,7 @@ static Ref_t create_detector(Detector& desc, xml::Handle_t handle, SensitiveDete
       // place positive module
       if (k_eta < n_eta_pos) {
         Transform3D tr_pos = Translation3D(x, y, -det_pos.z() + mod_eta_projectivity_offset + z) *
-                             RotationZ(phi + mod_phi_projectivity_tilt) * RotationY(M_PI_2 - theta);
+                             RotationZ(phi + mod_phi_projectivity_tilt) * RotationY(M_PI_2 - avg_theta);
         auto pv_pos = env.placeVolume(mod_env, tr_pos);
         pv_pos.addPhysVolID("sector", k_eta);
         pv_pos.addPhysVolID("module", j_phi);

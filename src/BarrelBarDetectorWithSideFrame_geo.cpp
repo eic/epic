@@ -93,8 +93,8 @@ static Ref_t create_BarrelBarDetectorWithSideFrame(Detector& description, xml_h 
     double thickness_so_far    = 0.0;
     double thickness_sum       = -total_thickness / 2.0;
     double max_component_width = 0;
-    for (xml_coll_t ci(x_mod, _U(module_component)); ci; ++ci, ++ncomponents) {
-      xml_comp_t x_comp = ci;
+    for (xml_coll_t mci(x_mod, _U(module_component)); mci; ++mci, ++ncomponents) {
+      xml_comp_t x_comp = mci;
       string     c_nam  = _toString(ncomponents, "component%d");
 
       double box_width    = x_comp.width() - 2 * frame_width;

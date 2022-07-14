@@ -52,8 +52,8 @@ static Ref_t create_detector(Detector& desc, xml_h e, SensitiveDetector sens)
   Volume     motherVol = desc.pickMotherVolume(sdet);
 
   Assembly     envelope(det_name);
-  Transform3D  tr      = Translation3D(0, 0, offset) * RotationZ(hphi);
-  PlacedVolume env_phv = motherVol.placeVolume(envelope, tr);
+  Transform3D  tr_global = Translation3D(0, 0, offset) * RotationZ(hphi);
+  PlacedVolume env_phv   = motherVol.placeVolume(envelope, tr_global);
   sens.setType("calorimeter");
 
   env_phv.addPhysVolID("system", det_id);
@@ -179,7 +179,7 @@ void buildFibers(Detector& desc, SensitiveDetector& sens, Volume& s_vol, xml_com
   double      f_spacing_x                  = getAttrOrDefault(x_fiber, _Unicode(spacing_x), 0.122 * cm);
   double      f_spacing_z                  = getAttrOrDefault(x_fiber, _Unicode(spacing_z), 0.134 * cm);
   std::string f_id_grid                    = getAttrOrDefault<std::string>(x_fiber, _Unicode(identifier_grid), "grid");
-  std::string f_id_fiber                   = getAttrOrDefault<std::string>(x_fiber, _Unicode(identifier_fiber), "fiber");
+  std::string f_id_fiber = getAttrOrDefault<std::string>(x_fiber, _Unicode(identifier_fiber), "fiber");
 
   // Set up the readout grid for the fiber layers
   // Trapezoid is divided into segments with equal dz and equal number of divisions in x
