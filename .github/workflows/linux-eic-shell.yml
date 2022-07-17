@@ -69,6 +69,7 @@ jobs:
       with:
         platform-release: "jug_xl:nightly"
         run: |
+          cat install/setup.sh
           source install/setup.sh
           mkdir -p geo
           dd_web_display --output geo/${DETECTOR_PATH}/${DETECTOR}.root ${DETECTOR_PATH}/${DETECTOR}.xml
@@ -92,6 +93,7 @@ jobs:
       with:
         platform-release: "jug_xl:nightly"
         run: |
+          cat install/setup.sh
           source install/setup.sh
           mkdir -p out
           sed -i '/<fiber/,+6d' ${DETECTOR_PATH}/compact/ecal_barrel_interlayers.xml
@@ -114,6 +116,7 @@ jobs:
       with:
         platform-release: "jug_xl:nightly"
         run: |
+          cat install/setup.sh
           source install/setup.sh
           mkdir -p out
           sed -i '/<fiber/,+6d' ${DETECTOR_PATH}/compact/ecal_barrel_interlayers.xml
