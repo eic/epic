@@ -447,7 +447,6 @@ Examples:
     <comment> Forward RICH region </comment>
     <constant name="ForwardRICHRegion_zmin"       value="ForwardTOFRegion_zmin + ForwardTOFRegion_length" />
     <constant name="ForwardRICHRegion_length"     value="ForwardPIDRegion_length - ForwardTOFRegion_length" />
-    <constant name="ForwardRICHRegion_rmax"       value="ForwardPIDRegion_rmax" />
     <comment> tangent of the opening angle at the front and back of the RICH </comment>
     <constant name="ForwardRICHRegion_tan1"        value="CentralTrackingRegionP_tan * 0.88" />
     <constant name="ForwardRICHRegion_tan2"        value="Eta3_6_tan * 0.89" />

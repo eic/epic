@@ -11,7 +11,7 @@
 <constant name="DRICH_wall_thickness"     value="0.5*cm"/>  <!-- thickness of radial walls -->
 <constant name="DRICH_window_thickness"   value="0.1*cm"/>  <!-- thickness of entrance and exit walls -->
 <!-- tank geometry: cylinder, holding the majority of detector components -->
-<constant name="DRICH_rmax2"              value="ForwardRICHRegion_rmax"/>  <!-- cylinder radius -->
+<constant name="DRICH_rmax2"              value="ForwardPIDRegion_rmax"/>  <!-- cylinder radius -->
 <!-- snout geometry: cone with front radius rmax0 and back radius of rmax1 -->
 <constant name="DRICH_SnoutLength"        value="20.0*cm"/>
 <constant name="DRICH_SnoutSlope"         value="DRICH_rmax2 / DRICH_zmax"/>
