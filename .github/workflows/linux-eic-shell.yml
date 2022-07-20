@@ -45,8 +45,10 @@ jobs:
       with:
         platform-release: "jug_xl:nightly"
         run: |
+          ls -alR install/
           cat install/setup.sh
           source install/setup.sh
+          echo "LD_LIBRARY_PATH=$LD_LIBRARY_PATH
           mkdir -p geo
           python scripts/convert_to_gdml.py --compact ${DETECTOR_PATH}/${DETECTOR}.xml --output geo/${DETECTOR}.gdml
     - uses: actions/upload-artifact@v3
