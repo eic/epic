@@ -91,7 +91,7 @@ jobs:
         platform-release: "jug_xl:nightly"
         setup: install/setup.sh
         run: |
-          mkdir -p out
+          mkdir -p doc
           sed -i '/<fiber/,+6d' ${DETECTOR_PATH}/compact/ecal_barrel_interlayers.xml
           sed -i '/<fiber/,+4d' ${DETECTOR_PATH}/ip6/far_forward/ZDC_Ecal_WSciFi.xml
           checkOverlaps -c ${DETECTOR_PATH}/${DETECTOR_CONFIG}.xml | tee doc/overlap_check_tgeo.out
@@ -113,7 +113,7 @@ jobs:
         platform-release: "jug_xl:nightly"
         setup: install/setup.sh
         run: |
-          mkdir -p out
+          mkdir -p doc
           sed -i '/<fiber/,+6d' ${DETECTOR_PATH}/compact/ecal_barrel_interlayers.xml
           sed -i '/<fiber/,+4d' ${DETECTOR_PATH}/ip6/far_forward/ZDC_Ecal_WSciFi.xml
           python scripts/checkOverlaps.py -c ${DETECTOR_PATH}/${DETECTOR_CONFIG}.xml | tee doc/overlap_check_geant4.out
