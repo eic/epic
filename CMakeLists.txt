@@ -57,7 +57,6 @@ find_package(fmt REQUIRED)
 if(DEFINED IRT_AUXFILE)
   add_compile_definitions(IRT_AUXFILE)
   find_package(IRT REQUIRED)
-  include_directories( ${CMAKE_INSTALL_PREFIX}/include ${CMAKE_INSTALL_PREFIX}/include/IRT)
 endif()
 
 #-----------------------------------------------------------------------------------
