@@ -43,11 +43,8 @@ jobs:
     - uses: eic/run-cvmfs-osg-eic-shell@main
       with:
         platform-release: "jug_xl:nightly"
+        setup: install/setup.sh
         run: |
-          ls -alR install/
-          cat install/setup.sh
-          source install/setup.sh
-          echo "LD_LIBRARY_PATH=$LD_LIBRARY_PATH"
           mkdir -p geo
           python scripts/convert_to_gdml.py --compact ${DETECTOR_PATH}/${DETECTOR}.xml --output geo/${DETECTOR}.gdml
     - uses: actions/upload-artifact@v3
@@ -69,11 +66,10 @@ jobs:
     - uses: eic/run-cvmfs-osg-eic-shell@main
       with:
         platform-release: "jug_xl:nightly"
+        setup: install/setup.sh
         run: |
-          cat install/setup.sh
-          source install/setup.sh
           mkdir -p geo
-          dd_web_display --output geo/${DETECTOR_PATH}/${DETECTOR}.root ${DETECTOR_PATH}/${DETECTOR}.xml
+          dd_web_display --output geo/${DETECTOR}.root ${DETECTOR_PATH}/${DETECTOR}.xml
     - uses: actions/upload-artifact@v3
       with:
         name: geometry-root
@@ -93,9 +89,8 @@ jobs:
     - uses: eic/run-cvmfs-osg-eic-shell@main
       with:
         platform-release: "jug_xl:nightly"
+        setup: install/setup.sh
         run: |
-          cat install/setup.sh
-          source install/setup.sh
           mkdir -p out
           sed -i '/<fiber/,+6d' ${DETECTOR_PATH}/compact/ecal_barrel_interlayers.xml
           sed -i '/<fiber/,+4d' ${DETECTOR_PATH}/ip6/far_forward/ZDC_Ecal_WSciFi.xml
@@ -116,9 +111,8 @@ jobs:
     - uses: eic/run-cvmfs-osg-eic-shell@main
       with:
         platform-release: "jug_xl:nightly"
+        setup: install/setup.sh
         run: |
-          cat install/setup.sh
-          source install/setup.sh
           mkdir -p out
           sed -i '/<fiber/,+6d' ${DETECTOR_PATH}/compact/ecal_barrel_interlayers.xml
           sed -i '/<fiber/,+4d' ${DETECTOR_PATH}/ip6/far_forward/ZDC_Ecal_WSciFi.xml
