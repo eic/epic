@@ -49,7 +49,7 @@ jobs:
           python scripts/convert_to_gdml.py --compact ${DETECTOR_PATH}/${DETECTOR}.xml --output geo/${DETECTOR}.gdml
     - uses: actions/upload-artifact@v3
       with:
-        name: geometry-gdml
+        name: ecce.gdml.zip
         path: geo/
         if-no-files-found: error
 
@@ -72,7 +72,7 @@ jobs:
           dd_web_display --output geo/${DETECTOR}.root ${DETECTOR_PATH}/${DETECTOR}.xml
     - uses: actions/upload-artifact@v3
       with:
-        name: geometry-root
+        name: ecce.root.zip
         path: geo/
         if-no-files-found: error
 
