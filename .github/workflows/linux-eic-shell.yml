@@ -132,8 +132,8 @@ jobs:
         token: ${{ secrets.EICWEB_DETECTOR_BENCHMARK_TRIGGER }}
         ref_name: master
         variables: |
-          JUGGLER_DETECTOR_REPOSITORYURL: ${{ github.repositoryUrl }}
-          JUGGLER_DETECTOR_VERSION: ${{ github.ref_name }}
+          JUGGLER_DETECTOR_REPOSITORYURL=${{ github.repositoryUrl }}
+          JUGGLER_DETECTOR_VERSION=${{ github.ref_name }}
     - uses: peter-evans/commit-comment@v2
       with:
         body: |
