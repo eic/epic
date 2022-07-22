@@ -240,6 +240,7 @@ jobs:
     strategy:
       matrix:
         view: [view1, view2, view3, view6, view7, view11, view12, view13, view14, view15]
+      fail-fast: false
     steps:
     - uses: actions/checkout@v2
     - uses: actions/download-artifact@v3
@@ -266,6 +267,7 @@ jobs:
       matrix:
         view: [view12, view14, view15]
         slice: [100, 300, 500, 700, 900, 1100, 1300, 1500, 1700, 1900]
+      fail-fast: false
     steps:
     - uses: actions/checkout@v2
     - uses: actions/download-artifact@v3
