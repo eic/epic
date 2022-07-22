@@ -157,11 +157,10 @@ jobs:
         run: |
           python -m pip install psutil
           bin/generate_prim_file -o prim -D -t detector_view
-          zip prim/detector_view.prim.zip prim/detector_view.prim
     - uses: actions/upload-artifact@v3
       with:
-        name: prim
-        path: prim/
+        name: detector_view.prim
+        path: prim/detector_view.prim
         if-no-files-found: error
         retention-days: 1
 
@@ -172,7 +171,7 @@ jobs:
     - uses: actions/checkout@v2
     - uses: actions/download-artifact@v3
       with:
-        name: prim
+        name: detector_view.prim
         path: prim/
     - uses: cvmfs-contrib/github-action-cvmfs@v2
     - uses: eic/run-cvmfs-osg-eic-shell@main
@@ -180,5 +179,4 @@ jobs:
         platform-release: "jug_xl:nightly"
         setup: install/setup.sh
         run: |
-          unzip prim/detector_view.prim.zip
           bin/make_dawn_views -i prim/detector_view.prim -t view11 -d scripts/view11 -D
