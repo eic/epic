@@ -116,7 +116,7 @@ jobs:
         run: |
           mkdir -p doc
           npdet_info dump ${DETECTOR_PATH}/ecce.xml | grep -v '^\s' | grep '=' | cut -d= -f1-2 | tee doc/constants.toml
-          python bin/make_detector_parameter_table
+          python bin/make_detector_parameter_table | tee doc/DetectorParameterTable.csv
     - uses: actions/upload-artifact@v3
       with:
         name: constants.toml
