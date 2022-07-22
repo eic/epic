@@ -167,6 +167,9 @@ jobs:
   dawn-view:
     runs-on: ubuntu-latest
     needs: generate-prim-file
+    strategy:
+      matrix:
+        view: [view1, view2, view3, view6, view7, view11, view12, view13, view14, view15, view20]
     steps:
     - uses: actions/checkout@v2
     - uses: actions/download-artifact@v3
@@ -177,6 +180,11 @@ jobs:
     - uses: eic/run-cvmfs-osg-eic-shell@main
       with:
         platform-release: "jug_xl:nightly"
-        setup: install/setup.sh
         run: |
-          bin/make_dawn_views -i prim/detector_view.prim -t view11 -d scripts/view11 -D
+          mkdir -p images
+          bin/make_dawn_views -i prim/detector_view.prim -t ${{ matrix.view }} -d scripts/${{ matrix.view }} -D
+    - uses: actions/upload-artifact@v3
+      with:
+        name: ${{ matrix.view }}
+        path: images/
+        if-no-files-found: error
