@@ -1,4 +1,4 @@
-#!/usr/local/bin/python
+#!/usr/bin/env python
 
 # same as make_dawn_views but stops at generating the prim file.
 # W. Armstrong (ANL), original bash script
