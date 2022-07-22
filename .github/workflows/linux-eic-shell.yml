@@ -155,7 +155,6 @@ jobs:
         platform-release: "jug_xl:nightly"
         setup: install/setup.sh
         run: |
-          python -m pip install psutil
           bin/generate_prim_file -o prim -D -t detector_view
     - uses: actions/upload-artifact@v3
       with:
