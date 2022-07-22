@@ -12,7 +12,7 @@ default:
   before_script:
     - source .local/bin/env.sh
   artifacts:
-    expire_in: 72 hours 
+    expire_in: 72 hours
     paths:
       - .local/detector
       - .local/lib
@@ -32,23 +32,23 @@ stages:
   - config
   - initialize
   - build
-  - test 
+  - test
   - docs
   - collect
-  - finalize 
+  - finalize
   - deploy
 
 common:setup:
   stage: config
   rules:
-    - if: '$CI_SERVER_HOST == "eicweb.phy.anl.gov"' 
+    - if: '$CI_SERVER_HOST == "eicweb.phy.anl.gov"'
   before_script:
-    - git clone https://eicweb.phy.anl.gov/EIC/benchmarks/common_bench.git setup 
+    - git clone https://eicweb.phy.anl.gov/EIC/benchmarks/common_bench.git setup
   script:
     - |
       source setup/bin/env.sh && ./setup/bin/install_common.sh
       export BEAMLINE_CONFIG="ip6"
-      if [[ -z "${JUGGLER_DETECTOR}" ]]; then 
+      if [[ -z "${JUGGLER_DETECTOR}" ]]; then
         export JUGGLER_DETECTOR="athena"
       fi
       if [[ "x${CI_PIPELINE_SOURCE}" == "xmerge_request_event"  || "$CI_COMMIT_BRANCH" == "master" ]]; then
@@ -68,7 +68,7 @@ common:setup:
       fi
     - |
       source .local/bin/env.sh
-      mkdir -p build && cd build && cmake ../. -DCMAKE_INSTALL_PREFIX=${LOCAL_PREFIX} && make -j20  || exit -1 
+      mkdir -p build && cd build && cmake ../. -DCMAKE_INSTALL_PREFIX=${LOCAL_PREFIX} && make -j20  || exit -1
       make install  && cd ..
       mkdir_local_data_link sim_output
       ls -lrth
@@ -101,10 +101,10 @@ include:
 
 dump_constants:
   stage: test
-  needs: 
+  needs:
     - ["common:detector"]
   script:
-    - npdet_info dump eic_ip6.xml  | tee doc/constants.out 
+    - npdet_info dump ip6.xml  | tee doc/constants.out
 
 dump_geometry:
   stage: test
@@ -113,29 +113,29 @@ dump_geometry:
   script:
    - echo "dumping geometry"
    - mkdir -p geo
-   - dd_web_display --output geo/detector_geo_full.root eic_ip6.xml
+   - dd_web_display --output geo/detector_geo_full.root ip6.xml
    - echo "Geometry viewer at https://eic.phy.anl.gov/geoviewer/index.htm?file=https://eicweb.phy.anl.gov/EIC/detectors/ip6/-/jobs/${CI_JOB_ID}/artifacts/raw/geo/detector_geo_full.root?job=dump_geometry&item=default;1&opt=transp30;zoom75;ROTY290;ROTZ350;trz0;trr0;ctrl;all&"
 
 xmllint:
   stage: test
-  needs: 
+  needs:
     - ["common:detector"]
   script:
-    - xmllint ip6/*.xml eic_ip6.xml > /dev/null
+    - xmllint ip6/*.xml ip6.xml > /dev/null
 
 overlap_check:
   stage: test
-  needs: 
+  needs:
     - ["common:detector"]
   script:
-    - checkOverlaps -c eic_ip6.xml 
+    - checkOverlaps -c ip6.xml
 
 overlap_check_geant4:
   stage: test
-  needs: 
+  needs:
     - ["common:detector"]
   script:
-    - python scripts/checkOverlaps.py -c eic_ip6.xml | tee doc/overlap_check_geant4.out
+    - python scripts/checkOverlaps.py -c ip6.xml | tee doc/overlap_check_geant4.out
     - echo "$(cat doc/overlap_check_geant4.out | grep GeomVol1002 | wc -l) overlaps..."
     - if [[ "$(cat doc/overlap_check_geant4.out | grep GeomVol1002 | wc -l)" -gt "0" ]] ; then echo "Overlaps exist!" && false ; fi
 

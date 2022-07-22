@@ -15,11 +15,11 @@
       Change this to 275/100/41 to change the field setup
     </comment>
     <include ref="ip6/far_forward/fields_275.xml"/>
-      
+
     <constant name="tracker_region_zmax" value="10*m"/>
     <constant name="tracker_region_rmax" value="1*m"/>
-    
-    <documentation> 
+
+    <documentation>
       #### (150-169) Far Forward Detectors
 
       - Forward Roman Pot     ID: 150
@@ -46,7 +46,7 @@
 
     <documentation>
       #### (170-189) Far Forward Beamline Magnets
-    </documentation> 
+    </documentation>
     <constant name="B0PF_ID"  value="170"/>
     <constant name="B0APF_ID" value="171"/>
     <constant name="Q1APF_ID" value="172"/>
@@ -75,7 +75,7 @@
     <constant name="TaggerTracker_2_ID"      value="198"/>
     <constant name="TaggerCalorimeter_2_ID"  value="199"/>
 
-    <documentation> 
+    <documentation>
       #### (200-219) Far Backward Beamline Magnets
     </documentation>
     <constant name="Pipe_to_Q1eR_ID"        value="200"/>
