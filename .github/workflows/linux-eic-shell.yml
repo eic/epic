@@ -3,8 +3,18 @@ name: linux-eic-shell
 on: [push, pull_request]
 
 jobs:
+  xmllint-before-build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - run: |
+        sudo apt-get update
+        sudo apt-get install -y libxml2-utils
+        xmllint compact/*.xml > /dev/null
+
   build-test:
     runs-on: ubuntu-latest
+    needs: xmllint-before-build
     steps:
     - uses: actions/checkout@v2
     - uses: cvmfs-contrib/github-action-cvmfs@v2
@@ -29,6 +39,19 @@ jobs:
         name: install
         path: install/
         if-no-files-found: error
+
+  xmllint-after-build:
+    runs-on: ubuntu-latest
+    needs: build-test
+    steps:
+    - uses: actions/download-artifact@v3
+      with:
+        name: install
+        path: install/
+    - run: |
+        sudo apt-get update
+        sudo apt-get install -y libxml2-utils
+        xmllint install/share/ecce/*.xml > /dev/null
 
   convert-to-gdml:
     runs-on: ubuntu-latest
