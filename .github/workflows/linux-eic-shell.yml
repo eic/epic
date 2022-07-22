@@ -5,7 +5,7 @@ on: [push, pull_request]
 jobs:
   xmllint:
     runs-on: ubuntu-latest
-    stpes:
+    steps:
     - uses: actions/checkout@v2
     - run: |
         sudo apt-get update
