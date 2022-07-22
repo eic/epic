@@ -239,7 +239,7 @@ jobs:
     needs: generate-prim-file
     strategy:
       matrix:
-        view: [view1, view2, view3, view6, view7, view11, view12, view13, view14, view15]
+        view: [view1, view2, view3, view6, view7, view11, view13]
       fail-fast: false
     steps:
     - uses: actions/checkout@v2
