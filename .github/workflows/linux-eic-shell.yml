@@ -138,3 +138,47 @@ jobs:
       with:
         body: |
           Detector benchmarks started at ${{ steps.trigger.outputs.web_url }}
+
+  generate-prim-file:
+    runs-on: ubuntu-latest
+    needs: build-test
+    #needs: [check-overlap-tgeo, check-overlap-geant4]
+    steps:
+    - uses: actions/checkout@v2
+    - uses: actions/download-artifact@v3
+      with:
+        name: geometry
+        path: install/
+    - uses: cvmfs-contrib/github-action-cvmfs@v2
+    - uses: eic/run-cvmfs-osg-eic-shell@main
+      with:
+        platform-release: "jug_xl:nightly"
+        setup: install/setup.sh
+        run: |
+          python -m pip install psutil
+          bin/generate_prim_file -o prim -D -t detector_view
+          zip prim/detector_view.prim.zip prim/detector_view.prim
+    - uses: actions/upload-artifact@v3
+      with:
+        name: prim
+        path: prim/
+        if-no-files-found: error
+        retention-days: 1
+
+  dawn-view:
+    runs-on: ubuntu-latest
+    needs: generate-prim-file
+    steps:
+    - uses: actions/checkout@v2
+    - uses: actions/download-artifact@v3
+      with:
+        name: prim
+        path: prim/
+    - uses: cvmfs-contrib/github-action-cvmfs@v2
+    - uses: eic/run-cvmfs-osg-eic-shell@main
+      with:
+        platform-release: "jug_xl:nightly"
+        setup: install/setup.sh
+        run: |
+          unzip prim/detector_view.prim.zip
+          bin/make_dawn_views -i prim/detector_view.prim -t view11 -d scripts/view11 -D
