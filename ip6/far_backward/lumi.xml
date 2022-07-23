@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <lccdd>
-  
+
   <define>
 
 <comment>
@@ -23,7 +23,7 @@
 
     <comment>
 
-    <detector name="LumiMag_shape" type="CylindricalDipoleMagnet">
+    <detector name="LumiMag_shape" type="ip6_CylindricalDipoleMagnet">
       <placement  x="0" y="0" z="LumiMag_cen_Z" theta="0"/>
       <dimensions x="LumiMag_R*4" y="LumiMag_R*4" z="LumiMag_DZ" r="2*LumiMag_R"/>
       <apperture  x="LumiMag_R*2" y="LumiMag_R*2" r="LumiMag_R"/>
@@ -56,6 +56,5 @@
     </field>
   </fields>
   </comment>
-  
-</lccdd>
 
+</lccdd>
