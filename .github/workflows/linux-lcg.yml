@@ -30,6 +30,11 @@ jobs:
           cmake --build build -- install
           # link ip6 into install
           ln -sf ../ip6/ip6 ${PREFIX}/share/ecce/ip6
+    - uses: actions/upload-artifact@v3
+      with:
+        name: install-ubuntu2004
+        path: install/
+        if-no-files-found: error
 
   ubuntu-2204:
     runs-on: ubuntu-22.04
@@ -57,4 +62,9 @@ jobs:
           cmake -B build -S . -DCMAKE_INSTALL_PREFIX=${PREFIX}
           cmake --build build -- install
           # link ip6 into install
-          ln -sf ../ip6/ip6 ${PREFIX}/share/ecce/ip6
+          ln -sf ../ip6/ip6 ${PREFIX}/share/ecce/ip6ip6
+    - uses: actions/upload-artifact@v3
+      with:
+        name: install-ubuntu2204
+        path: install/
+        if-no-files-found: error
