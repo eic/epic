@@ -18,8 +18,18 @@ jobs:
       with:
         release-platform: ${{ matrix.LCG }}
         run: |
-          cmake -B build -S .
+          PREFIX=${PWD}/install
+          # install ip6 repo
+          git clone https://github.com/eic/ip6.git eic_ip6
+          pushd eic_ip6
+          cmake -B build -S . -DCMAKE_INSTALL_PREFIX=${PREFIX}
           cmake --build build -- install
+          popd
+          # install this repo
+          cmake -B build -S . -DCMAKE_INSTALL_PREFIX=${PREFIX}
+          cmake --build build -- install
+          # link ip6 into install
+          ln -sf ../ip6/ip6 ${PREFIX}/share/ecce/ip6
 
   ubuntu-2204:
     runs-on: ubuntu-22.04
@@ -38,3 +48,4 @@ jobs:
         run: |
           cmake -B build -S .
           cmake --build build -- install
+
