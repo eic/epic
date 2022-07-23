@@ -8,8 +8,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        LCG: ["LCG_101/x86_64-ubuntu2004-gcc9-opt",
-              "LCG_99/x86_64-ubuntu2004-gcc9-opt"]
+        LCG: ["LCG_101/x86_64-ubuntu2004-gcc9-opt"]
     steps:
     - uses: actions/checkout@v2
     - uses: cvmfs-contrib/github-action-cvmfs@v2
@@ -27,8 +26,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        LCG: ["LCG_101/x86_64-ubuntu2004-gcc9-opt",
-              "LCG_99/x86_64-ubuntu2004-gcc9-opt"]
+        LCG: ["LCG_101/x86_64-ubuntu2004-gcc9-opt"]
     steps:
     - uses: actions/checkout@v2
     - uses: cvmfs-contrib/github-action-cvmfs@v2
