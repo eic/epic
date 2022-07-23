@@ -3,7 +3,7 @@ name: linux-lcg
 on: [push, pull_request]
 
 jobs:
-  ubuntu-2004:
+  build-lcg-ubuntu-2004:
     runs-on: ubuntu-20.04
     strategy:
       fail-fast: false
@@ -30,13 +30,16 @@ jobs:
           cmake --build build -- install
           # link ip6 into install
           ln -sf ../ip6/ip6 ${PREFIX}/share/ecce/ip6
+          # check geometry
+          source ${PREFIX}/setup.sh
+          checkGeometry -c ${DETECTOR_PATH}/${DETECTOR}.xml
     - uses: actions/upload-artifact@v3
       with:
-        name: install-ubuntu2004
+        name: build-lcg-ubuntu2004
         path: install/
         if-no-files-found: error
 
-  ubuntu-2204:
+  build-lcg-ubuntu-2204:
     runs-on: ubuntu-22.04
     strategy:
       fail-fast: false
@@ -63,8 +66,11 @@ jobs:
           cmake --build build -- install
           # link ip6 into install
           ln -sf ../ip6/ip6 ${PREFIX}/share/ecce/ip6ip6
+          # check geometry
+          source ${PREFIX}/setup.sh
+          checkGeometry -c ${DETECTOR_PATH}/${DETECTOR}.xml
     - uses: actions/upload-artifact@v3
       with:
-        name: install-ubuntu2204
+        name: build-lcg-ubuntu2204
         path: install/
         if-no-files-found: error
