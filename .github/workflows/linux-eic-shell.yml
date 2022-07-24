@@ -1,6 +1,6 @@
 name: linux-eic-shell
 
-on: [push, pull_request]
+on: [push, pull_request, workflow_dispatch]
 
 jobs:
   xmllint-before-build:
