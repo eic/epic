@@ -3,13 +3,12 @@ name: linux-lcg
 on: [push, pull_request]
 
 jobs:
-  ubuntu-2004:
+  build-lcg-ubuntu-2004:
     runs-on: ubuntu-20.04
     strategy:
       fail-fast: false
       matrix:
-        LCG: ["LCG_101/x86_64-ubuntu2004-gcc9-opt",
-              "LCG_99/x86_64-ubuntu2004-gcc9-opt"]
+        LCG: ["LCG_101/x86_64-ubuntu2004-gcc9-opt"]
     steps:
     - uses: actions/checkout@v2
     - uses: cvmfs-contrib/github-action-cvmfs@v2
@@ -19,16 +18,33 @@ jobs:
       with:
         release-platform: ${{ matrix.LCG }}
         run: |
-          cmake -B build -S .
+          PREFIX=${PWD}/install
+          # install ip6 repo
+          git clone https://github.com/eic/ip6.git eic_ip6
+          pushd eic_ip6
+          cmake -B build -S . -DCMAKE_INSTALL_PREFIX=${PREFIX}
           cmake --build build -- install
+          popd
+          # install this repo
+          cmake -B build -S . -DCMAKE_INSTALL_PREFIX=${PREFIX}
+          cmake --build build -- install
+          # link ip6 into install
+          ln -sf ../ip6/ip6 ${PREFIX}/share/ecce/ip6
+          # check geometry
+          source ${PREFIX}/setup.sh
+          checkGeometry -c ${DETECTOR_PATH}/${DETECTOR}.xml
+    - uses: actions/upload-artifact@v3
+      with:
+        name: build-lcg-ubuntu2004
+        path: install/
+        if-no-files-found: error
 
-  ubuntu-2204:
+  build-lcg-ubuntu-2204:
     runs-on: ubuntu-22.04
     strategy:
       fail-fast: false
       matrix:
-        LCG: ["LCG_101/x86_64-ubuntu2004-gcc9-opt",
-              "LCG_99/x86_64-ubuntu2004-gcc9-opt"]
+        LCG: ["LCG_101/x86_64-ubuntu2004-gcc9-opt"]
     steps:
     - uses: actions/checkout@v2
     - uses: cvmfs-contrib/github-action-cvmfs@v2
@@ -38,5 +54,23 @@ jobs:
       with:
         release-platform: ${{ matrix.LCG }}
         run: |
-          cmake -B build -S .
+          PREFIX=${PWD}/install
+          # install ip6 repo
+          git clone https://github.com/eic/ip6.git eic_ip6
+          pushd eic_ip6
+          cmake -B build -S . -DCMAKE_INSTALL_PREFIX=${PREFIX}
           cmake --build build -- install
+          popd
+          # install this repo
+          cmake -B build -S . -DCMAKE_INSTALL_PREFIX=${PREFIX}
+          cmake --build build -- install
+          # link ip6 into install
+          ln -sf ../ip6/ip6 ${PREFIX}/share/ecce/ip6
+          # check geometry
+          source ${PREFIX}/setup.sh
+          checkGeometry -c ${DETECTOR_PATH}/${DETECTOR}.xml
+    - uses: actions/upload-artifact@v3
+      with:
+        name: build-lcg-ubuntu2204
+        path: install/
+        if-no-files-found: error
