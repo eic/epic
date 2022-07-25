@@ -3,8 +3,7 @@ name: linux-eic-shell
 on:
 - push
 - pull_request
-- repository_dispatch:
-    types: [external-trigger]
+- workflow_dispatch
 
 jobs:
   xmllint-before-build:
