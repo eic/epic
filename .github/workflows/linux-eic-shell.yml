@@ -132,6 +132,7 @@ jobs:
         platform-release: "jug_xl:nightly"
         setup: install/setup.sh
         run: |
+          sed -i '/<fiber/,+4d' ${BEAMLINE_PATH}/ip6/far_forward/ZDC_Ecal_WSciFi.xml
           bin/generate_prim_file -o prim -D -t detector_view -c ip6.xml
     - uses: actions/upload-artifact@v3
       with:
