@@ -3,23 +3,8 @@ name: linux-eic-shell
 on:
 - push
 - pull_request
-- workflow_dispatch:
-    inputs:
-      platform-release:
-        description: 'eic-shell release'
-        type: string
-        required: false
-        default: 'jug_xl:nightly'
-      beamline:
-        description: 'beamline (repository)'
-        type: string
-        required: false
-        default: 'eic/ip6'
-      beamline_version:
-        description: 'beamline version (branch)'
-        type: string
-        required: false
-        default: 'master'
+- repository_dispatch:
+    types: [external-trigger]
 
 jobs:
   xmllint-before-build:
