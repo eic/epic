@@ -1,8 +1,13 @@
 name: linux-eic-shell
 
 on:
-- pull_request
-- workflow_dispatch
+  push:
+    branches:
+      - main
+    tags:
+      - '*'
+  pull_request:
+  workflow_dispatch:
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
