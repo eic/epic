@@ -37,7 +37,7 @@ jobs:
           cmake --build build -- install
     - uses: actions/upload-artifact@v3
       with:
-        name: install
+        name: build-eic-shell
         path: install/
         if-no-files-found: error
 
@@ -48,7 +48,7 @@ jobs:
     - uses: actions/checkout@v2
     - uses: actions/download-artifact@v3
       with:
-        name: install
+        name: build-eic-shell
         path: install/
     - uses: cvmfs-contrib/github-action-cvmfs@v2
     - uses: eic/run-cvmfs-osg-eic-shell@main
@@ -71,7 +71,7 @@ jobs:
     - uses: actions/checkout@v2
     - uses: actions/download-artifact@v3
       with:
-        name: install
+        name: build-eic-shell
         path: install/
     - uses: cvmfs-contrib/github-action-cvmfs@v2
     - uses: eic/run-cvmfs-osg-eic-shell@main
@@ -94,7 +94,7 @@ jobs:
     - uses: actions/checkout@v2
     - uses: actions/download-artifact@v3
       with:
-        name: install
+        name: build-eic-shell
         path: install/
     - uses: cvmfs-contrib/github-action-cvmfs@v2
     - uses: eic/run-cvmfs-osg-eic-shell@main
@@ -114,7 +114,7 @@ jobs:
     - uses: actions/checkout@v2
     - uses: actions/download-artifact@v3
       with:
-        name: install
+        name: build-eic-shell
         path: install/
     - uses: cvmfs-contrib/github-action-cvmfs@v2
     - uses: eic/run-cvmfs-osg-eic-shell@main
@@ -134,7 +134,7 @@ jobs:
     - uses: actions/checkout@v2
     - uses: actions/download-artifact@v3
       with:
-        name: install
+        name: build-eic-shell
         path: install/
     - uses: cvmfs-contrib/github-action-cvmfs@v2
     - uses: eic/run-cvmfs-osg-eic-shell@main
