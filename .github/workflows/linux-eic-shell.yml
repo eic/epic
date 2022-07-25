@@ -20,9 +20,6 @@ on:
         type: string
         required: false
         default: 'master'
-- repository_dispatch:
-    types: [external-trigger]
-
 
 jobs:
   xmllint-before-build:
