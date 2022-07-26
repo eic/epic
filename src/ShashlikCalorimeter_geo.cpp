@@ -167,8 +167,8 @@ static void add_disk_shashlik(Detector& desc, Assembly& env, xml::Collection_t& 
   double phimin                     = dd4hep::getAttrOrDefault<double>(plm, _Unicode(phimin), 0.);
   double phimax                     = dd4hep::getAttrOrDefault<double>(plm, _Unicode(phimax), 2. * M_PI);
 
-  auto points = (nsides == 6) ? ecce::geo::fillHexagons({0., 0.}, sidelen, rmin, rmax, phimin, phimax)
-                              : ecce::geo::fillSquares({0., 0.}, sidelen * 1.414, rmin, rmax, phimin, phimax);
+  auto points = (nsides == 6) ? epic::geo::fillHexagons({0., 0.}, sidelen, rmin, rmax, phimin, phimax)
+                              : epic::geo::fillSquares({0., 0.}, sidelen * 1.414, rmin, rmax, phimin, phimax);
   // placement to mother
   auto pos = get_xml_xyz(plm, _Unicode(position));
   auto rot = get_xml_xyz(plm, _Unicode(rotation));

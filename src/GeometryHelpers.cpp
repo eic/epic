@@ -1,7 +1,7 @@
 #include "GeometryHelpers.h"
 
 // some utility functions that can be shared
-namespace ecce::geo {
+namespace epic::geo {
 
   typedef ROOT::Math::XYPoint Point;
 
@@ -148,4 +148,4 @@ namespace ecce::geo {
     return res;
   }
 
-} // namespace ecce::geo
+} // namespace epic::geo

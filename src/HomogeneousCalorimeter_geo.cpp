@@ -330,7 +330,7 @@ static std::tuple<int, int> add_disk(Detector& desc, Assembly& env, xml::Collect
 
   // local placement of modules
   int  mid    = 0;
-  auto points = ecce::geo::fillRectangles({0., 0.}, modSize.x(), modSize.y(), rmin, rmax, phimin, phimax);
+  auto points = epic::geo::fillRectangles({0., 0.}, modSize.x(), modSize.y(), rmin, rmax, phimin, phimax);
   for (auto& p : points) {
     Transform3D tr_local = RotationZYX(0.0, 0.0, 0.0) * Translation3D(p.x(), p.y(), 0.0);
     auto modPV = (has_envelope ? env_vol.placeVolume(modVol, tr_local) : env.placeVolume(modVol, tr_global * tr_local));
