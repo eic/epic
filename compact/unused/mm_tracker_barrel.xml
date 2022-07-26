@@ -26,7 +26,7 @@
   </display>
 
   <detectors>
-    <detector id="MMTrackerBarrel_ID" name="MMTrackerBarrel" type="ecce_MMTrackerBarrel" readout="MMTrackerBarrelHits">
+    <detector id="MMTrackerBarrel_ID" name="MMTrackerBarrel" type="epic_MMTrackerBarrel" readout="MMTrackerBarrelHits">
       <module name="Module1" vis="AnlGold">
         <module_envelope rmin="TrackerBarrel_rmax" length="MMTrackerBarrelLayer1_length" thickness="MMTrackerBarrel_delta"
           phi="90*degree" />

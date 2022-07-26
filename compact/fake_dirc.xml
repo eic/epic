@@ -38,7 +38,7 @@
   </display>
 
   <detectors>
-    <detector id="BarrelDIRC_ID" name="FakeDIRC" type="ecce_FakeDIRC" readout="DIRCBarHits" vis="DIRCVis">
+    <detector id="BarrelDIRC_ID" name="FakeDIRC" type="epic_FakeDIRC" readout="DIRCBarHits" vis="DIRCVis">
       <dimensions rmin="DIRC_rmin" rmax="DIRC_rmax" length="DIRC_length" />
       <position x="0" y="0" z="DIRC_offset" />
       <comment> Fake DIRC modules </comment>

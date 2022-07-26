@@ -15,7 +15,7 @@
     <detector
       id="ForwardTRD_ID"
       name="ForwardTRD"
-      type="ecce_DiskTracker"
+      type="epic_DiskTracker"
       insideTrackingVolume="true"
       reflect="false"
       vis="AnlRed">

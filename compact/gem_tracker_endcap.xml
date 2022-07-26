@@ -89,7 +89,7 @@
     <detector
       id="TrackerEndcapP_3_ID"
       name="GEMTrackerEndcapP"
-      type="ecce_GEMTrackerEndcap"
+      type="epic_GEMTrackerEndcap"
       readout="GEMTrackerEndcapHits"
       vis="TrackerVis"
       reflect="false">
@@ -153,7 +153,7 @@
     <detector
       id="TrackerEndcapN_3_ID"
       name="GEMTrackerEndcapN"
-      type="ecce_GEMTrackerEndcap"
+      type="epic_GEMTrackerEndcap"
       readout="GEMTrackerEndcapHits"
       vis="TrackerVis"
       reflect="true">
