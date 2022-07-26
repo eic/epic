@@ -136,6 +136,10 @@ install(DIRECTORY calibrations/
 # Handle ECCE compatibility mode
 if(EPIC_ECCE_LEGACY_COMPAT)
   install(CODE "execute_process(COMMAND ${CMAKE_COMMAND} -E create_symlink ./${PROJECT_NAME} ${CMAKE_INSTALL_PREFIX}/share/ecce)")
+  set(EPIC_ECCE_ORIGINAL_CONFIGURATIONS "" _18x275 _calorimeters _central _dirc_only _drich_only _full _imaging _inner_detector _ip6 _pfrich_only _pid_only _sciglass _tof_only _tracking_only _vertex_only)
+  foreach(ecce_configuration ${EPIC_ECCE_ORIGINAL_CONFIGURATIONS})
+    install(CODE "execute_process(COMMAND ${CMAKE_COMMAND} -E create_symlink ./${PROJECT_NAME}${ecce_configuration}.xml ${CMAKE_INSTALL_PREFIX}/share/ecce/ecce${ecce_configuration}.xml)")
+  endforeach()
 endif()
 
 #-----------------------------------------------------------------------------------
