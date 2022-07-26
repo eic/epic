@@ -135,7 +135,7 @@ install(DIRECTORY calibrations/
 
 # Handle ECCE compatibility mode
 if(EPIC_ECCE_LEGACY_COMPAT)
-  install(CODE "execute_process(COMMAND ${CMAKE_COMMAND} -E create_symlink ./epic ${CMAKE_INSTALL_PREFIX}/share/ecce)")
+  install(CODE "execute_process(COMMAND ${CMAKE_COMMAND} -E create_symlink ./${PROJECT_NAME} ${CMAKE_INSTALL_PREFIX}/share/ecce)")
 endif()
 
 #-----------------------------------------------------------------------------------
