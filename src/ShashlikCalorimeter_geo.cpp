@@ -182,4 +182,7 @@ static void add_disk_shashlik(Detector& desc, Assembly& env, xml::Collection_t& 
   }
 }
 
+#ifdef EPIC_ECCE_LEGACY_COMPAT
 DECLARE_DETELEMENT(ecce_ShashlikCalorimeter, create_detector)
+#endif
+DECLARE_DETELEMENT(epic_ShashlikCalorimeter, create_detector)

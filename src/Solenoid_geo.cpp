@@ -86,4 +86,7 @@ static Ref_t create_detector(Detector& description, xml_h e, [[maybe_unused]] Se
   return sdet;
 }
 
+#ifdef EPIC_ECCE_LEGACY_COMPAT
 DECLARE_DETELEMENT(ecce_Solenoid, create_detector)
+#endif
+DECLARE_DETELEMENT(epic_Solenoid, create_detector)

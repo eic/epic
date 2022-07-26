@@ -246,5 +246,11 @@ static Ref_t create_BarrelBarDetectorWithSideFrame(Detector& description, xml_h 
 
 //@}
 // clang-format off
+#ifdef EPIC_ECCE_LEGACY_COMPAT
 DECLARE_DETELEMENT(ecce_BarrelBarDetectorWithSideFrame, create_BarrelBarDetectorWithSideFrame)
+#endif
+DECLARE_DETELEMENT(epic_BarrelBarDetectorWithSideFrame, create_BarrelBarDetectorWithSideFrame)
+#ifdef EPIC_ECCE_LEGACY_COMPAT
 DECLARE_DETELEMENT(ecce_FakeDIRC, create_BarrelBarDetectorWithSideFrame)
+#endif
+DECLARE_DETELEMENT(epic_FakeDIRC, create_BarrelBarDetectorWithSideFrame)

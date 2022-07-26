@@ -8,6 +8,8 @@ PROJECT(epic
   DESCRIPTION "DD4hep Geometry Description of the EPIC Experiment"
   )
 
+option(EPIC_ECCE_LEGACY_COMPAT "Preserve some compatibility with ECCE" ON)
+
 # C++ standard
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD 17 CACHE STRING "Set the C++ standard to be used")
@@ -75,6 +77,9 @@ target_link_libraries(${a_lib_name}
 if(DEFINED IRT_AUXFILE)
   target_link_libraries(${a_lib_name} PUBLIC IRT)
 endif()
+if(EPIC_ECCE_LEGACY_COMPAT)
+  target_compile_definitions(${a_lib_name} PUBLIC EPIC_ECCE_LEGACY_COMPAT)
+endif()
 
 #-----------------------------------------------------------------------------------
 # Parse jinja templates: once by default, and once for all yml files
@@ -127,6 +132,11 @@ install(DIRECTORY compact/
 install(DIRECTORY calibrations/
     DESTINATION share/${PROJECT_NAME}/calibrations
     )
+
+# Handle ECCE compatibility mode
+if(EPIC_ECCE_LEGACY_COMPAT)
+  install(CODE "execute_process(COMMAND ${CMAKE_COMMAND} -E create_symlink ./epic ${CMAKE_INSTALL_PREFIX}/share/ecce)")
+endif()
 
 #-----------------------------------------------------------------------------------
 # Configure and install detector setup script
