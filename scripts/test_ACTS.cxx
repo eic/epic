@@ -17,7 +17,7 @@
  *
  *
  */
-void test_ACTS(const char* compact = "ecce.xml")
+void test_ACTS(const char* compact = "epic.xml")
 {
 
   using namespace ROOT::Math;

@@ -3,9 +3,9 @@ cmake_minimum_required(VERSION 3.12 FATAL_ERROR)
 # CMP0074: find_package() uses <PackageName>_ROOT variables
 cmake_policy(SET CMP0074 NEW)
 
-PROJECT(ecce
+PROJECT(epic
   LANGUAGES CXX
-  DESCRIPTION "A template dd4hep+acts detector"
+  DESCRIPTION "DD4hep Geometry Description of the EPIC Experiment"
   )
 
 # C++ standard
