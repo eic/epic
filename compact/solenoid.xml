@@ -326,7 +326,7 @@
   </detectors>
 
   <fields>
-    <field type="ecce_FieldMapBrBz" name="GlobalSolenoid" field_type="magnetic"
+    <field type="epic_FieldMapBrBz" name="GlobalSolenoid" field_type="magnetic"
            field_map="fieldmaps/sPHENIX.2d.dat"
            url="https://eicweb.phy.anl.gov/EIC/detectors/ecce/uploads/f8d8ab9f8d8353a84862584bf1d2d27f/sPHENIX.2d.dat"
            scale="1.0">
