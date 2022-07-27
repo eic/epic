@@ -3,10 +3,12 @@ cmake_minimum_required(VERSION 3.12 FATAL_ERROR)
 # CMP0074: find_package() uses <PackageName>_ROOT variables
 cmake_policy(SET CMP0074 NEW)
 
-PROJECT(ecce
+PROJECT(epic
   LANGUAGES CXX
-  DESCRIPTION "A template dd4hep+acts detector"
+  DESCRIPTION "DD4hep Geometry Description of the EPIC Experiment"
   )
+
+option(EPIC_ECCE_LEGACY_COMPAT "Preserve some compatibility with ECCE" ON)
 
 # C++ standard
 set(CMAKE_CXX_STANDARD 17)
@@ -75,6 +77,9 @@ target_link_libraries(${a_lib_name}
 if(DEFINED IRT_AUXFILE)
   target_link_libraries(${a_lib_name} PUBLIC IRT)
 endif()
+if(EPIC_ECCE_LEGACY_COMPAT)
+  target_compile_definitions(${a_lib_name} PUBLIC EPIC_ECCE_LEGACY_COMPAT)
+endif()
 
 #-----------------------------------------------------------------------------------
 # Parse jinja templates: once by default, and once for all yml files
@@ -127,6 +132,16 @@ install(DIRECTORY compact/
 install(DIRECTORY calibrations/
     DESTINATION share/${PROJECT_NAME}/calibrations
     )
+
+# Handle ECCE compatibility mode
+if(EPIC_ECCE_LEGACY_COMPAT)
+  install(CODE "execute_process(COMMAND ${CMAKE_COMMAND} -E create_symlink ./${PROJECT_NAME} ${CMAKE_INSTALL_PREFIX}/share/ecce)")
+  set(EPIC_ECCE_ORIGINAL_CONFIGURATIONS 18x275 calorimeters central dirc_only drich_only full imaging inner_detector ip6 pfrich_only pid_only sciglass tof_only tracking_only vertex_only)
+  install(CODE "execute_process(COMMAND ${CMAKE_COMMAND} -E create_symlink ./${PROJECT_NAME}.xml ${CMAKE_INSTALL_PREFIX}/share/ecce/ecce.xml)")
+  foreach(ecce_configuration ${EPIC_ECCE_ORIGINAL_CONFIGURATIONS})
+    install(CODE "execute_process(COMMAND ${CMAKE_COMMAND} -E create_symlink ./${PROJECT_NAME}_${ecce_configuration}.xml ${CMAKE_INSTALL_PREFIX}/share/ecce/ecce_${ecce_configuration}.xml)")
+  endforeach()
+endif()
 
 #-----------------------------------------------------------------------------------
 # Configure and install detector setup script

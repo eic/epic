@@ -29,7 +29,7 @@
     </comment>
     <detector id="ECalBarrel_ID"
       name="ECalBarrel"
-      type="ecce_SciGlassCalorimeter"
+      type="epic_SciGlassCalorimeter"
       vis="InvisibleWithDaughters"
       calorimeterType="EM_BARREL"
       readout="EcalBarrelHits">

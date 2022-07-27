@@ -66,7 +66,7 @@
     <detector
       id="BarrelTOF_ID"
       name="BarrelTOF"
-      type="ecce_TOFBarrel"
+      type="epic_TOFBarrel"
       readout="TOFBarrelHits"
       insideTrackingVolume="true">
       <dimensions

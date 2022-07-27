@@ -1,6 +1,6 @@
 Overview
 --------
-The ECCE Detector at IP6 for Electron-Ion Collider experiment.
+The EPIC Detector at IP6 for Electron-Ion Collider experiment.
 
 **Detector geometry viewer:**
 - [Central detector](https://eic.phy.anl.gov/geoviewer/index.htm?nobrowser&file=https://eicweb.phy.anl.gov/EIC/detectors/ecce/-/jobs/artifacts/main/raw/geo/detector_geo_central.root?job=dump_geometry&item=default;1&opt=clipx;clipy;transp30;zoom120;ROTY320;ROTZ340;trz0;trr0;ctrl;all)
@@ -37,9 +37,9 @@ Getting Started
 
 You will  likely want to use this repository along with the IP6 repository:
 ```bash
-git clone https://github.com/eic/ecce.git
+git clone https://github.com/eic/epic.git
 git clone https://github.com/eic/ip6.git
-ln -s ../ip6/ip6 ecce/ip6
+ln -s ../ip6/ip6 epic/ip6
 ```
 
 ### Adding/changing detector geometry

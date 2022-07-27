@@ -257,4 +257,7 @@ static Ref_t create_detector(Detector& desc, xml::Handle_t handle, SensitiveDete
   return det;
 }
 
+#ifdef EPIC_ECCE_LEGACY_COMPAT
 DECLARE_DETELEMENT(ecce_SciGlassCalorimeter, create_detector)
+#endif
+DECLARE_DETELEMENT(epic_SciGlassCalorimeter, create_detector)

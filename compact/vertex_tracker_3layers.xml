@@ -81,7 +81,7 @@ Simple carbon fiber support shell.
     <detector
       id="VertexBarrel_0_ID"
       name="VertexBarrel"
-      type="ecce_VertexBarrel"
+      type="epic_VertexBarrel"
       readout="VertexBarrelHits"
       insideTrackingVolume="true">
       <dimensions

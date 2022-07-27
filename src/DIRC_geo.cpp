@@ -337,7 +337,10 @@ static Ref_t createDetector(Detector& desc, xml_h e, SensitiveDetector sens)
   return det;
 }
 
+#ifdef EPIC_ECCE_LEGACY_COMPAT
 DECLARE_DETELEMENT(ecce_cb_DIRC, createDetector)
+#endif
+DECLARE_DETELEMENT(epic_cb_DIRC, createDetector)
 
 dd4hep::Trap MakeTrap(const std::string& pName, double pZ, double pY, double pX, double pLTX)
 {

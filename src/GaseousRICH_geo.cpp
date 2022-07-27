@@ -193,7 +193,7 @@ void build_sensors(Detector& desc, Volume& env, xml::Component plm, const Positi
 
     // fill sensors to the piece
     auto points =
-        ecce::geo::fillRectangles({0., 0.}, sx + gap, sy + gap, rmin - gap, rmax + gap, -phiw / 2., phiw / 2.);
+        epic::geo::fillRectangles({0., 0.}, sx + gap, sy + gap, rmin - gap, rmax + gap, -phiw / 2., phiw / 2.);
     int imod = 1;
     for (auto& p : points) {
       // transofrms are in a reversed order
@@ -211,4 +211,7 @@ void build_sensors(Detector& desc, Volume& env, xml::Component plm, const Positi
 //@}
 
 // clang-format off
+#ifdef EPIC_ECCE_LEGACY_COMPAT
 DECLARE_DETELEMENT(ecce_GaseousRICH, createDetector)
+#endif
+DECLARE_DETELEMENT(epic_GaseousRICH, createDetector)

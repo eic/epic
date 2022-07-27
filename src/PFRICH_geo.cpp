@@ -308,4 +308,7 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
 }
 
 // clang-format off
+#ifdef EPIC_ECCE_LEGACY_COMPAT
 DECLARE_DETELEMENT(ecce_PFRICH, createDetector)
+#endif
+DECLARE_DETELEMENT(epic_PFRICH, createDetector)

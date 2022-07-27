@@ -92,7 +92,7 @@
     <detector
       id="ECalBarrel_ID"
       name="EcalBarrelImaging"
-      type="ecce_EcalBarrelInterlayers"
+      type="epic_EcalBarrelInterlayers"
       readout="EcalBarrelHits"
       calorimeterType="EM_BARREL"
       vis="EcalBarrelEnvelopeVis"
@@ -120,7 +120,7 @@
     <detector
       id="ECalBarrel2_ID"
       name="EcalBarrelScFi"
-      type="ecce_EcalBarrelInterlayers"
+      type="epic_EcalBarrelInterlayers"
       readout="EcalBarrelScFiHits"
       calorimeterType="EM_BARREL"
       vis="EcalBarrelEnvelopeVis"

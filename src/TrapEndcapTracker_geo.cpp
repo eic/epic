@@ -326,5 +326,11 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
 
 //@}
 // clang-format off
+#ifdef EPIC_ECCE_LEGACY_COMPAT
 DECLARE_DETELEMENT(ecce_TrapEndcapTracker, create_detector)
+#endif
+DECLARE_DETELEMENT(epic_TrapEndcapTracker, create_detector)
+#ifdef EPIC_ECCE_LEGACY_COMPAT
 DECLARE_DETELEMENT(ecce_GEMTrackerEndcap, create_detector)
+#endif
+DECLARE_DETELEMENT(epic_GEMTrackerEndcap, create_detector)

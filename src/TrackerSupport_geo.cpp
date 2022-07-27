@@ -119,4 +119,7 @@ static Ref_t create_TrackerSupport(Detector& description, xml_h e, [[maybe_unuse
 }
 
 // clang-format off
+#ifdef EPIC_ECCE_LEGACY_COMPAT
 DECLARE_DETELEMENT(ecce_TrackerSupport, create_TrackerSupport)
+#endif
+DECLARE_DETELEMENT(epic_TrackerSupport, create_TrackerSupport)

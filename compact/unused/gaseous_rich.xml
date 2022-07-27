@@ -15,7 +15,7 @@
     <detector
         id="ForwardRICH_ID"
         name="GaseousRICH"
-        type="ecce_GaseousRICH"
+        type="epic_GaseousRICH"
         readout="ForwardRICHHits"
         gas="N2cherenkov"
         vis="RICHVis">

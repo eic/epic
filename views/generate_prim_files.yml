@@ -42,7 +42,7 @@ view_prim:calorimeters:
   extends: .views
   stage: test
   script:
-    - ./bin/generate_prim_file -c ${DETECTOR_PATH}/ecce_calorimeters.xml -o ${LOCAL_DATA_PATH} -D -t calorimeters_view
+    - ./bin/generate_prim_file -c ${DETECTOR_PATH}/epic_calorimeters.xml -o ${LOCAL_DATA_PATH} -D -t calorimeters_view
     - ls -lrth && ls -lrth ${LOCAL_DATA_PATH}
 
 view_prim:calorimeters_ev001:
@@ -51,7 +51,7 @@ view_prim:calorimeters_ev001:
   rules:
     - if: '$DETECTOR_EVENT_VIEWS == "ON"'
   script:
-    - ./bin/generate_prim_file -c ${DETECTOR_PATH}/ecce_calorimeters.xml -o ${LOCAL_DATA_PATH} -t calorimeters_view_ev001 -s 1
+    - ./bin/generate_prim_file -c ${DETECTOR_PATH}/epic_calorimeters.xml -o ${LOCAL_DATA_PATH} -t calorimeters_view_ev001 -s 1
 
 view_prim:calorimeters_ev002:
   extends: .views
@@ -59,4 +59,4 @@ view_prim:calorimeters_ev002:
   rules:
     - if: '$DETECTOR_EVENT_VIEWS == "ON"'
   script:
-    - ./bin/generate_prim_file -c ${DETECTOR_PATH}/ecce_calorimeters.xml -o ${LOCAL_DATA_PATH} -t calorimeters_view_ev002 -s 2
+    - ./bin/generate_prim_file -c ${DETECTOR_PATH}/epic_calorimeters.xml -o ${LOCAL_DATA_PATH} -t calorimeters_view_ev002 -s 2

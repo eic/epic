@@ -345,7 +345,19 @@ static Ref_t create_BarrelTrackerWithFrame(Detector& description, xml_h e, Sensi
 
 //@}
 // clang-format off
+#ifdef EPIC_ECCE_LEGACY_COMPAT
 DECLARE_DETELEMENT(ecce_BarrelTrackerWithFrame, create_BarrelTrackerWithFrame)
+#endif
+DECLARE_DETELEMENT(epic_BarrelTrackerWithFrame, create_BarrelTrackerWithFrame)
+#ifdef EPIC_ECCE_LEGACY_COMPAT
 DECLARE_DETELEMENT(ecce_TrackerBarrel,   create_BarrelTrackerWithFrame)
+#endif
+DECLARE_DETELEMENT(epic_TrackerBarrel,   create_BarrelTrackerWithFrame)
+#ifdef EPIC_ECCE_LEGACY_COMPAT
 DECLARE_DETELEMENT(ecce_VertexBarrel,    create_BarrelTrackerWithFrame)
+#endif
+DECLARE_DETELEMENT(epic_VertexBarrel,    create_BarrelTrackerWithFrame)
+#ifdef EPIC_ECCE_LEGACY_COMPAT
 DECLARE_DETELEMENT(ecce_TOFBarrel,       create_BarrelTrackerWithFrame)
+#endif
+DECLARE_DETELEMENT(epic_TOFBarrel,       create_BarrelTrackerWithFrame)
