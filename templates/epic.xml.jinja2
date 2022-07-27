@@ -118,7 +118,11 @@
   {% endif -%}
 
   {% if features is not defined or features['pid'] is none or 'drich' in features['pid'] %}
+  {%- if features is not defined or features['pid'] is none or features['pid']['drich'] is none %}
   <include ref="compact/drich.xml"/>
+  {% else %}
+  <include ref="{{ features['pid']['drich'] }}"/>
+  {% endif -%}
   {% endif -%}
 
   {% if features is not defined or features['pid'] is none or 'mrich' in features['pid'] %}
