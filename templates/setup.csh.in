@@ -11,8 +11,12 @@ setenv JUGGLER_DETECTOR_CONFIG $DETECTOR_CONFIG
 setenv JUGGLER_DETECTOR_VERSION $DETECTOR_VERSION
 setenv JUGGLER_DETECTOR_PATH $DETECTOR_PATH
 
-## setenv detector libraries (FIXME: incorrect when LD_LIBRARY_PATH empty)
-setenv LD_LIBRARY_PATH @CMAKE_INSTALL_PREFIX@/lib:${LD_LIBRARY_PATH}
+## setenv detector libraries
+if ( ${?LD_LIBRARY_PATH} ) then
+  setenv LD_LIBRARY_PATH @CMAKE_INSTALL_PREFIX@/lib:${LD_LIBRARY_PATH}
+else
+  setenv LD_LIBRARY_PATH @CMAKE_INSTALL_PREFIX@/lib
+endif
 
 ## Source beamline setup
 test -r $DETECTOR_PATH/ip6/setup.csh && source $DETECTOR_PATH/ip6/setup.csh || echo "Warning: ip6 not loaded!"
