@@ -3,6 +3,7 @@
   <define>
     <comment>
       Main parameters - this is for the design from the ECCE proposal
+	    FIXME needs updating to more realistic design
     </comment>
 
     <constant name="SagittaBarrelMod_rmin"              value="SagittaBarrel_rmin"/>
@@ -57,7 +58,7 @@
     <detector
       id="TrackerBarrel_0_ID"
       name="SagittaBarrel"
-      type="eic_TrackerBarrel"
+      type="epic_TrackerBarrel"
       readout="SagittaBarrelHits"
       insideTrackingVolume="true">
       <dimensions

@@ -55,7 +55,7 @@
     <detector
       id="TrackerEndcapP_0_ID"
       name="InnerTrackerEndcapP"
-      type="eic_TrapEndcapTracker"
+      type="epic_TrapEndcapTracker"
       readout="InnerTrackerEndcapPHits"
       vis="TrackerVis"
       reflect="false">
@@ -83,7 +83,7 @@
     <detector
       id="TrackerEndcapN_0_ID"
       name="InnerTrackerEndcapN"
-      type="eic_TrapEndcapTracker"
+      type="epic_TrapEndcapTracker"
       readout="InnerTrackerEndcapNHits"
       vis="TrackerVis"
       reflect="true">
@@ -183,7 +183,7 @@
     <detector
       id="TrackerEndcapP_1_ID"
       name="TrackerEndcapP"
-      type="eic_TrapEndcapTracker"
+      type="epic_TrapEndcapTracker"
       readout="TrackerEndcapPHits"
       vis="TrackerVis"
       reflect="false">
@@ -271,7 +271,7 @@
     <detector
       id="TrackerEndcapN_1_ID"
       name="TrackerEndcapN"
-      type="eic_TrapEndcapTracker"
+      type="epic_TrapEndcapTracker"
       readout="TrackerEndcapNHits"
       vis="TrackerVis"
       reflect="true">

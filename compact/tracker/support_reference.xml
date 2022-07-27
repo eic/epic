@@ -87,7 +87,7 @@
   </define>
 
   <detectors>
-    <detector type="eic_SupportServiceMaterial"
+    <detector type="epic_SupportServiceMaterial"
       name="InnerTrackerSupport"
       id="84"
     >

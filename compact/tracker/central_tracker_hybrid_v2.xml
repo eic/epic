@@ -286,7 +286,7 @@ total X0 0.24% per disk layer （4 sectors per disk):
 
   </define>
   <detectors>
-    <detector type="eic_SupportServiceMaterial"
+    <detector type="epic_SupportServiceMaterial"
       name="SupportCone"
       id="84"
     >

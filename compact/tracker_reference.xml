@@ -167,6 +167,6 @@
   <include ref="tracker/vertex_its3_3layers.xml"/>
   <include ref="tracker/sagitta_its3_curved.xml"/>
   <include ref="tracker/disks_its3_5fw4bw.xml"/>
-  <include ref="tracker/support_ecce.xml"/>
+  <include ref="tracker/support_reference.xml"/>
 
 </lccdd>
