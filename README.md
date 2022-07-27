@@ -42,6 +42,23 @@ git clone https://github.com/eic/ip6.git
 ln -s ../ip6/ip6 epic/ip6
 ```
 
+### Compilation
+
+To configure, build, and install the geometry (to the `install` directory), use the following commands:
+```bash
+cmake -B build -S . -D CMAKE_INSTALL_PREFIX=install
+cmake --build build
+cmake --install build
+```
+To load the geometry, you can use the scripts in the `install` directory:
+```bash
+source install/setup.sh
+```
+or
+```tcsh
+source install/setup.csh
+```
+
 ### Adding/changing detector geometry
 
 Hint: **Use the CI/CD pipelines**.
