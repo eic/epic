@@ -7,14 +7,13 @@
     <comment> Vertex Support </comment>
     <constant name="VertexSupportCyl_length"              value="2*VertexSupportCyl_rmin/tan(TrackerPrimaryAngle)" />
     <constant name="VertexSupportCyl_zmax"                value="VertexSupportCyl_length/2." />
-    <constant name="VertexSupportCylCF_thickness"         value="300.0*um" />
     <constant name="VertexSupportCyl_thickness"           value="VertexSupportCylCF_thickness" />
 
-    <comment> Sagitta Support </comment>
-    <constant name="SagittaSupportCyl_length"             value="2*SagittaSupportCyl_rmin/tan(TrackerPrimaryAngle) - SagittaBarrel_dz" />
-    <constant name="SagittaSupportCyl_zmax"               value="SagittaSupportCyl_length/2." />
-    <constant name="SagittaSupportCylCF_thickness"        value="300.0*um" />
-    <constant name="SagittaSupportCyl_thickness"          value="SagittaSupportCylCF_thickness" />
+    <comment> SiBarrel Support </comment>
+    <constant name="SiBarrelSupportCyl_length"             value="2*SiBarrelSupportCyl_rmin/tan(TrackerPrimaryAngle) - SiBarrel_dz" />
+    <constant name="SiBarrelSupportCyl_zmax"               value="SiBarrelSupportCyl_length/2." />
+    <constant name="SiBarrelSupportCylCF_thickness"        value="300.0*um" />
+    <constant name="SiBarrelSupportCyl_thickness"          value="SiBarrelSupportCylCF_thickness" />
 
     <comment> Inner tracker service/support cone </comment>
     <constant name="InnerSupportCone_rmin1"               value="VertexSupportCyl_rmin" />
@@ -101,13 +100,13 @@
           <component material="CarbonFiber" thickness="VertexSupportCylCF_thickness" name="Carbon Fiber Shell" vis="TrackerSupportVis"/>
       </support>
       <support type="Cylinder"
-        name="SagittaSupportCyl"
+        name="SiBarrelSupportCyl"
         vis="TrackerSupportVis"
-        rmin="SagittaSupportCyl_rmin"
-        length="SagittaSupportCyl_length"
-        thickness="SagittaSupportCyl_thickness">
+        rmin="SiBarrelSupportCyl_rmin"
+        length="SiBarrelSupportCyl_length"
+        thickness="SiBarrelSupportCyl_thickness">
           <position x="0*cm" y="0*cm" z="0*cm" />
-          <component material="CarbonFiber" thickness="SagittaSupportCylCF_thickness" name="Carbon Fiber Shell" vis="TrackerSupportVis"/>
+          <component material="CarbonFiber" thickness="SiBarrelSupportCylCF_thickness" name="Carbon Fiber Shell" vis="TrackerSupportVis"/>
       </support>
       <support type="Cone"
         name="InnerSupportConeEndcapN"

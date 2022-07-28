@@ -132,6 +132,6 @@ static Ref_t create_SupportServiceMaterial(Detector& description, xml_h e, [[may
 
 // clang-format off
 #ifdef EPIC_ECCE_LEGACY_COMPAT
-DECLARE_DETELEMENT(ecce_TrackerSupport, create_TrackerSupport)
+DECLARE_DETELEMENT(ecce_SupportServiceMaterial, create_SupportServiceMaterial)
 #endif
-DECLARE_DETELEMENT(epic_TrackerSupport, create_TrackerSupport)
+DECLARE_DETELEMENT(epic_SupportServiceMaterial, create_SupportServiceMaterial)

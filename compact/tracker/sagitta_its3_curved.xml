@@ -74,6 +74,13 @@
                           length="SagittaBarrelMod1_length"
                           thickness="SiSagittaSensor_thickness" 
                           vis="TrackerLayerVis" />
+	<module_component name="Service" 
+	                  material="Aluminum" 
+		          sensitive="false"
+    		          width="InnerTrackerBarrelMod_width" 
+		          length="InnerTrackerBarrelMod1_length" 
+		thickness="0.4*mm" 
+	    vis="TrackerServiceVis"/>
       </module>
       <module name="Module2" vis="TrackerLayerVis">
         <module_component name="ITS3"
