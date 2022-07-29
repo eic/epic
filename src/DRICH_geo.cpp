@@ -44,13 +44,20 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
 
   // attributes, from compact file =============================================
   // - vessel
-  double vesselZmin      = dims.attr<double>(_Unicode(zmin));
-  double vesselLength    = dims.attr<double>(_Unicode(length));
-  double vesselRmin0     = dims.attr<double>(_Unicode(rmin0));
-  double vesselRmin1     = dims.attr<double>(_Unicode(rmin1));
-  double vesselRmax0     = dims.attr<double>(_Unicode(rmax0));
-  double vesselRmax1     = dims.attr<double>(_Unicode(rmax1));
-  double vesselRmax2     = dims.attr<double>(_Unicode(rmax2));
+  // double vesselZmin      = dims.attr<double>(_Unicode(zmin));
+  // double vesselLength    = dims.attr<double>(_Unicode(length));
+  // double vesselRmin0     = dims.attr<double>(_Unicode(rmin0));
+  // double vesselRmin1     = dims.attr<double>(_Unicode(rmin1));
+  // double vesselRmax0     = dims.attr<double>(_Unicode(rmax0));
+  // double vesselRmax1     = dims.attr<double>(_Unicode(rmax1));
+  // double vesselRmax2     = dims.attr<double>(_Unicode(rmax2));
+  double vesselZmin      = 195*cm; // DEBUG: override large ATHENA dimensions (which will overlap other subsystems)
+  double vesselLength    = 30*cm;
+  double vesselRmin0     = 20*cm;
+  double vesselRmin1     = 20*cm;
+  double vesselRmax0     = 60*cm;
+  double vesselRmax1     = 70*cm;
+  double vesselRmax2     = 170*cm;
   double snoutLength     = dims.attr<double>(_Unicode(snout_length));
   int    nSectors        = dims.attr<int>(_Unicode(nsectors));
   double wallThickness   = dims.attr<double>(_Unicode(wall_thickness));
@@ -63,8 +70,8 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
   auto   radiatorElem       = detElem.child(_Unicode(radiator));
   double radiatorRmin       = radiatorElem.attr<double>(_Unicode(rmin));
   double radiatorRmax       = radiatorElem.attr<double>(_Unicode(rmax));
-  double radiatorPitch      = radiatorElem.attr<double>(_Unicode(pitch));
-  double radiatorFrontplane = radiatorElem.attr<double>(_Unicode(frontplane));
+  // double radiatorPitch      = radiatorElem.attr<double>(_Unicode(pitch));
+  // double radiatorFrontplane = radiatorElem.attr<double>(_Unicode(frontplane));
   // - aerogel
   auto   aerogelElem      = radiatorElem.child(_Unicode(aerogel));
   auto   aerogelMat       = desc.material(aerogelElem.attr<std::string>(_Unicode(material)));
@@ -79,7 +86,7 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
   auto   mirrorElem      = detElem.child(_Unicode(mirror));
   auto   mirrorMat       = desc.material(mirrorElem.attr<std::string>(_Unicode(material)));
   auto   mirrorVis       = desc.visAttributes(mirrorElem.attr<std::string>(_Unicode(vis)));
-  auto   mirrorSurf      = surfMgr.opticalSurface(mirrorElem.attr<std::string>(_Unicode(surface)));
+  // auto   mirrorSurf      = surfMgr.opticalSurface(mirrorElem.attr<std::string>(_Unicode(surface)));
   double mirrorBackplane = mirrorElem.attr<double>(_Unicode(backplane));
   double mirrorThickness = mirrorElem.attr<double>(_Unicode(thickness));
   double mirrorRmin      = mirrorElem.attr<double>(_Unicode(rmin));
@@ -308,26 +315,26 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
   // aerogel placement and surface properties
   // TODO [low-priority]: define skin properties for aerogel and filter
   // FIXME: radiatorPitch might not be working correctly (not yet used)
-  auto radiatorPos      = Position(0., 0., radiatorFrontplane) + originFront;
-  auto aerogelPlacement = Translation3D(radiatorPos.x(), radiatorPos.y(), radiatorPos.z()) * // re-center to originFront
-                          RotationY(radiatorPitch); // change polar angle to specified pitch
-  auto       aerogelPV = gasvolVol.placeVolume(aerogelVol, aerogelPlacement);
-  DetElement aerogelDE(det, "aerogel_de", 0);
-  aerogelDE.setPlacement(aerogelPV);
+  // auto radiatorPos      = Position(0., 0., radiatorFrontplane) + originFront;
+  // auto aerogelPlacement = Translation3D(radiatorPos.x(), radiatorPos.y(), radiatorPos.z()) * // re-center to originFront
+  //                         RotationY(radiatorPitch); // change polar angle to specified pitch
+  // auto       aerogelPV = gasvolVol.placeVolume(aerogelVol, aerogelPlacement);
+  // DetElement aerogelDE(det, "aerogel_de", 0);
+  // aerogelDE.setPlacement(aerogelPV);
   // SkinSurface aerogelSkin(desc, aerogelDE, "mirror_optical_surface", aerogelSurf, aerogelVol);
   // aerogelSkin.isValid();
 
   // filter placement and surface properties
   PlacedVolume filterPV;
   if (!debugOptics) {
-    auto filterPlacement =
-        Translation3D(0., 0., airGap) *                                    // add an air gap
-        Translation3D(radiatorPos.x(), radiatorPos.y(), radiatorPos.z()) * // re-center to originFront
-        RotationY(radiatorPitch) *                                         // change polar angle
-        Translation3D(0., 0., (aerogelThickness + filterThickness) / 2.);  // move to aerogel backplane
-    filterPV = gasvolVol.placeVolume(filterVol, filterPlacement);
-    DetElement filterDE(det, "filter_de", 0);
-    filterDE.setPlacement(filterPV);
+    // auto filterPlacement =
+    //     Translation3D(0., 0., airGap) *                                    // add an air gap
+    //     Translation3D(radiatorPos.x(), radiatorPos.y(), radiatorPos.z()) * // re-center to originFront
+    //     RotationY(radiatorPitch) *                                         // change polar angle
+    //     Translation3D(0., 0., (aerogelThickness + filterThickness) / 2.);  // move to aerogel backplane
+    // filterPV = gasvolVol.placeVolume(filterVol, filterPlacement);
+    // DetElement filterDE(det, "filter_de", 0);
+    // filterDE.setPlacement(filterPV);
     // SkinSurface filterSkin(desc, filterDE, "mirror_optical_surface", filterSurf, filterVol);
     // filterSkin.isValid();
   };
@@ -487,6 +494,8 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
               Translation3D(sensorSphRadius, 0., 0.) * // push radially to spherical surface
               RotationY(M_PI / 2) *                    // rotate sensor to be compatible with generator coords
               RotationZ(-M_PI / 2);                    // correction for readout segmentation mapping
+
+if((imod==1256 || imod==1257) && isec==0) { // DEBUG: restrict to overlapping sensors
           auto sensorPV = gasvolVol.placeVolume(sensorVol, sensorPlacement);
 
           // generate LUT for module number -> sensor position, for readout mapping tests
@@ -504,6 +513,7 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
             SkinSurface sensorSkin(desc, sensorDE, Form("sensor_optical_surface%d", isec), sensorSurf, sensorVol);
             sensorSkin.isValid();
           };
+}; ////////////////////////// END sensor restriction
 
 #ifdef IRT_AUXFILE
           // IRT sensors
@@ -650,14 +660,14 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
     // mirror volume, attributes, and placement
     Volume mirrorVol(detName + "_mirror_" + secName, mirrorSolid2, mirrorMat);
     mirrorVol.setVisAttributes(mirrorVis);
-    auto mirrorSectorPlacement = RotationZ(sectorRotation) * Translation3D(0, 0, 0); // rotate about beam axis to sector
-    auto mirrorPV              = gasvolVol.placeVolume(mirrorVol, mirrorSectorPlacement);
+    // auto mirrorSectorPlacement = RotationZ(sectorRotation) * Translation3D(0, 0, 0); // rotate about beam axis to sector
+    // auto mirrorPV              = gasvolVol.placeVolume(mirrorVol, mirrorSectorPlacement);
 
     // properties
-    DetElement mirrorDE(det, Form("mirror_de%d", isec), isec);
-    mirrorDE.setPlacement(mirrorPV);
-    SkinSurface mirrorSkin(desc, mirrorDE, Form("mirror_optical_surface%d", isec), mirrorSurf, mirrorVol);
-    mirrorSkin.isValid();
+    // DetElement mirrorDE(det, Form("mirror_de%d", isec), isec);
+    // mirrorDE.setPlacement(mirrorPV);
+    // SkinSurface mirrorSkin(desc, mirrorDE, Form("mirror_optical_surface%d", isec), mirrorSurf, mirrorVol);
+    // mirrorSkin.isValid();
 
 #ifdef IRT_AUXFILE
     // get mirror center coordinates, w.r.t. IP
