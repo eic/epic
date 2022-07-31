@@ -266,7 +266,8 @@ jobs:
         ref_name: master
         variables: |
           BEAMLINE_REPOSITORYURL=${{ github.server_url }}/ip6.git
-          BEAMLINE_VERSION=master
+          BEAMLINE_CONFIG=ip6
+          BEAMLINE_CONFIG_VERSION=master
           JUGGLER_DETECTOR_REPOSITORYURL=${{ github.server_url }}/${{ github.repository }}
           JUGGLER_DETECTOR_VERSION=${{ github.ref_name }}
     - uses: peter-evans/commit-comment@v2
