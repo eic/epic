@@ -265,6 +265,8 @@ jobs:
         token: ${{ secrets.EICWEB_DETECTOR_BENCHMARK_TRIGGER }}
         ref_name: master
         variables: |
+          BEAMLINE_REPOSITORYURL=${{ github.server_url }}/ip6.git
+          BEAMLINE_VERSION=master
           JUGGLER_DETECTOR_REPOSITORYURL=${{ github.server_url }}/${{ github.repository }}
           JUGGLER_DETECTOR_VERSION=${{ github.ref_name }}
     - uses: peter-evans/commit-comment@v2
