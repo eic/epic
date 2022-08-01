@@ -267,6 +267,7 @@ jobs:
         variables: |
           JUGGLER_DETECTOR_REPOSITORYURL=${{ github.server_url }}/${{ github.repository }}
           JUGGLER_DETECTOR_VERSION=${{ github.ref_name }}
+          GITHUB_REPOSITORY=${{ github.repository }}
           GITHUB_SHA=${{ github.event.pull_request.head.sha || github.sha }}
     - run: |
         gh api \
@@ -275,7 +276,7 @@ jobs:
           /repos/${{ github.repository }}/statuses/${{ github.event.pull_request.head.sha || github.sha }} \
           -f state='pending' \
           -f target_url=${{ steps.trigger.outputs.web_url }} \
-          -f description='The detector benchmarks are running...' \
+          -f description='The detector benchmarks have been triggered...' \
           -f context='eicweb/detector_benchmarks'
       env:
         GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
