@@ -31,6 +31,9 @@ endif()
 # Export compile commands as json for run-clang-tidy
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
+# Install into GNU standard directories
+include(GNUInstallDirs)
+
 # Set required DD4hep components based on user input
 set(USE_DDG4 "TRUE" CACHE BOOL "Require DD4hep DDG4 component")
 set(DD4hep_required_components DDCore DDRec)
@@ -71,15 +74,15 @@ target_link_libraries(${a_lib_name}
 
 #-----------------------------------------------------------------------------------
 install(DIRECTORY ip6/
-    DESTINATION share/${PROJECT_NAME}/${a_lib_name}
+    DESTINATION ${CMAKE_INSTALL_DATADIR}/${PROJECT_NAME}/${a_lib_name}
     FILES_MATCHING PATTERN "*.xml"
     )
 install(DIRECTORY ip6/
-    DESTINATION share/${PROJECT_NAME}/ip6
+    DESTINATION ${CMAKE_INSTALL_DATADIR}/${PROJECT_NAME}/ip6
     FILES_MATCHING PATTERN "*.xml"
     )
 install(FILES ip6.xml
-    DESTINATION share/${PROJECT_NAME}/
+    DESTINATION ${CMAKE_INSTALL_DATADIR}/${PROJECT_NAME}/
     )
 
 #-----------------------------------------------------------------------------------
@@ -93,7 +96,7 @@ execute_process(
 )
 configure_file(templates/setup.sh.in ${CMAKE_CURRENT_BINARY_DIR}/setup.sh @ONLY)
 install(FILES ${CMAKE_CURRENT_BINARY_DIR}/setup.sh
-    DESTINATION ${CMAKE_INSTALL_PREFIX}/share/ip6/ip6
+    DESTINATION ${CMAKE_INSTALL_DATADIR}/ip6/ip6
 )
 install(FILES ${CMAKE_CURRENT_BINARY_DIR}/setup.sh
     DESTINATION ${CMAKE_INSTALL_PREFIX}
