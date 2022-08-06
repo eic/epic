@@ -1,4 +1,4 @@
-#!/usr/local/bin/python
+#!/usr/bin/env python3
 
 # get dawn view of detectors
 # W. Armstrong (ANL), original bash script
