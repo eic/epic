@@ -35,7 +35,7 @@
 - `DRICH_create_irt_file`: 1 = create an auxiliary IRT config ROOT file; 0 = off
                                - the file name is set by detector attribute `irt_filename` below
 </comment>
-<constant name="DRICH_debug_optics"    value="0"/>
+<constant name="DRICH_debug_optics"    value="4"/>
 <constant name="DRICH_debug_mirror"    value="0"/>
 <constant name="DRICH_debug_sensors"   value="0"/>
 <constant name="DRICH_create_irt_file" value="0"/>

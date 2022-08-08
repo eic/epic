@@ -131,6 +131,9 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
     case 3:
       vesselMat = aerogelMat = filterMat = gasvolMat = desc.material("VacuumOptical");
       break;
+    case 4:
+      vesselMat = aerogelMat = filterMat = gasvolMat = desc.material("VacuumOptical");
+      break;
     default:
       printout(FATAL, "DRICH_geo", "UNKNOWN debugOpticsMode");
       return det;
@@ -249,6 +252,10 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
     break; // `!debugOptics`
   case 1:
   case 3:
+    vesselSolid = vesselBox;
+    gasvolSolid = gasvolBox;
+    break;
+  case 4:
     vesselSolid = vesselBox;
     gasvolSolid = gasvolBox;
     break;
@@ -399,15 +406,8 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
     };
 
     // solid and volume: single sensor module
-    Box    sensorSolid(sensorSide / 2., sensorSide / 2., sensorThickness / 2.);
-    Volume sensorVol(detName + "_sensor_" + secName, sensorSolid, sensorMat);
-    sensorVol.setVisAttributes(sensorVis);
-
     auto sensorSphPos = Position(sensorSphCenterX, 0., sensorSphCenterZ) + originFront;
 
-    // sensitivity
-    if (!debugOptics || debugOpticsMode == 3)
-      sensorVol.setSensitiveDetector(sens);
 
     // SENSOR MODULE LOOP ------------------------
     /* ALGORITHM: generate sphere of positions
@@ -432,54 +432,61 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
     // initialize module number for this sector
     int imod = 0;
 
-    // thetaGen loop: iterate less than "0.5 circumference / sensor size" times
-    double nTheta = M_PI * sensorSphRadius / (sensorSide + sensorGap);
-    for (int t = 0; t < (int)(nTheta + 0.5); t++) {
-      double thetaGen = t / ((double)nTheta) * M_PI;
-
-      // phiGen loop: iterate less than "circumference at this latitude / sensor size" times
-      double nPhi = 2 * M_PI * sensorSphRadius * std::sin(thetaGen) / (sensorSide + sensorGap);
-      for (int p = 0; p < (int)(nPhi + 0.5); p++) {
-        double phiGen = p / ((double)nPhi) * 2 * M_PI - M_PI; // shift to [-pi,pi]
-
-        // determine global phi and theta
-        // - convert {radius,thetaGen,phiGen} -> {xGen,yGen,zGen}
-        double xGen = sensorSphRadius * std::sin(thetaGen) * std::cos(phiGen);
-        double yGen = sensorSphRadius * std::sin(thetaGen) * std::sin(phiGen);
-        double zGen = sensorSphRadius * std::cos(thetaGen);
-        // - convert {xGen,yGen,zGen} -> global {x,y,z} via rotation
-        double x = zGen;
-        double y = xGen;
-        double z = yGen;
-        // - convert global {x,y,z} -> global {phi,theta}
-        // double phi   = std::atan2(y, x);
-        // double theta = std::acos(z / sensorSphRadius);
-
-        // shift global coordinates so we can apply spherical patch cuts
-        double zCheck   = z + sensorSphCenterZ;
-        double xCheck   = x + sensorSphCenterX;
-        double yCheck   = y;
-        double rCheck   = std::hypot(xCheck, yCheck);
-        double phiCheck = std::atan2(yCheck, xCheck);
-
-        // patch cut
-        bool patchCut = std::fabs(phiCheck) < sensorSphPatchPhiw && zCheck > sensorSphPatchZmin &&
-                        rCheck > sensorSphPatchRmin && rCheck < sensorSphPatchRmax;
-        if (debugSensors)
-          patchCut = std::fabs(phiCheck) < sensorSphPatchPhiw;
-        if (patchCut) {
-
-          // append sensor position to centroid calculation
-          if (isec == 0) {
-            sensorCentroidX += xCheck;
-            sensorCentroidZ += zCheck;
-            sensorCount++;
-          };
-
-          // placement (note: transformations are in reverse order)
-          // - transformations operate on global coordinates; the corresponding
-          //   generator coordinates are provided in the comments
-          auto sensorPlacement =
+    if(debugOpticsMode != 4){
+      Box    sensorSolid(sensorSide / 2., sensorSide / 2., sensorThickness / 2.);
+      Volume sensorVol(detName + "_sensor_" + secName, sensorSolid, sensorMat);
+      sensorVol.setVisAttributes(sensorVis);
+      if (!debugOptics || debugOpticsMode == 3)
+	sensorVol.setSensitiveDetector(sens);
+      
+      // thetaGen loop: iterate less than "0.5 circumference / sensor size" times
+      double nTheta = M_PI * sensorSphRadius / (sensorSide + sensorGap);
+      for (int t = 0; t < (int)(nTheta + 0.5); t++) {
+	double thetaGen = t / ((double)nTheta) * M_PI;
+	
+	// phiGen loop: iterate less than "circumference at this latitude / sensor size" times
+	double nPhi = 2 * M_PI * sensorSphRadius * std::sin(thetaGen) / (sensorSide + sensorGap);
+	for (int p = 0; p < (int)(nPhi + 0.5); p++) {
+	  double phiGen = p / ((double)nPhi) * 2 * M_PI - M_PI; // shift to [-pi,pi]
+	  
+	  // determine global phi and theta
+	  // - convert {radius,thetaGen,phiGen} -> {xGen,yGen,zGen}
+	  double xGen = sensorSphRadius * std::sin(thetaGen) * std::cos(phiGen);
+	  double yGen = sensorSphRadius * std::sin(thetaGen) * std::sin(phiGen);
+	  double zGen = sensorSphRadius * std::cos(thetaGen);
+	  // - convert {xGen,yGen,zGen} -> global {x,y,z} via rotation
+	  double x = zGen;
+	  double y = xGen;
+	  double z = yGen;
+	  // - convert global {x,y,z} -> global {phi,theta}
+	  // double phi   = std::atan2(y, x);
+	  // double theta = std::acos(z / sensorSphRadius);
+	  
+	  // shift global coordinates so we can apply spherical patch cuts
+	  double zCheck   = z + sensorSphCenterZ;
+	  double xCheck   = x + sensorSphCenterX;
+	  double yCheck   = y;
+	  double rCheck   = std::hypot(xCheck, yCheck);
+	  double phiCheck = std::atan2(yCheck, xCheck);
+	  
+	  // patch cut
+	  bool patchCut = std::fabs(phiCheck) < sensorSphPatchPhiw && zCheck > sensorSphPatchZmin &&
+	    rCheck > sensorSphPatchRmin && rCheck < sensorSphPatchRmax;
+	  if (debugSensors)
+	    patchCut = std::fabs(phiCheck) < sensorSphPatchPhiw;
+	  if (patchCut) {
+	    
+	    // append sensor position to centroid calculation
+	    if (isec == 0) {
+	      sensorCentroidX += xCheck;
+	      sensorCentroidZ += zCheck;
+	      sensorCount++;
+	    };
+	    
+	    // placement (note: transformations are in reverse order)
+	    // - transformations operate on global coordinates; the corresponding
+	    //   generator coordinates are provided in the comments
+	    auto sensorPlacement =
               RotationZ(sectorRotation) *                                           // rotate about beam axis to sector
               Translation3D(sensorSphPos.x(), sensorSphPos.y(), sensorSphPos.z()) * // move sphere to reference position
               RotationX(phiGen) *                                                   // rotate about `zGen`
@@ -487,70 +494,98 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
               Translation3D(sensorSphRadius, 0., 0.) * // push radially to spherical surface
               RotationY(M_PI / 2) *                    // rotate sensor to be compatible with generator coords
               RotationZ(-M_PI / 2);                    // correction for readout segmentation mapping
-          auto sensorPV = gasvolVol.placeVolume(sensorVol, sensorPlacement);
+	    auto sensorPV = gasvolVol.placeVolume(sensorVol, sensorPlacement);
+	    
+	    // generate LUT for module number -> sensor position, for readout mapping tests
+	    // if(isec==0) printf("%d %f %f\n",imod,sensorPV.position().x(),sensorPV.position().y());
 
-          // generate LUT for module number -> sensor position, for readout mapping tests
-          // if(isec==0) printf("%d %f %f\n",imod,sensorPV.position().x(),sensorPV.position().y());
-
-          // cellID encoding of (sector,module)
-          uint64_t imodsec =
+	    // cellID encoding of (sector,module)
+	    uint64_t imodsec =
               ((uint64_t(imod) << moduleBits.offset()) | (uint64_t(isec) << sectorBits.offset())) & cellMask;
-
-          // properties
-          sensorPV.addPhysVolID("sector", isec).addPhysVolID("module", imod);
-          DetElement sensorDE(det, Form("sensor_de%d_%d", isec, imod), imodsec);
-          sensorDE.setPlacement(sensorPV);
-          if (!debugOptics || debugOpticsMode == 3) {
-            SkinSurface sensorSkin(desc, sensorDE, Form("sensor_optical_surface%d", isec), sensorSurf, sensorVol);
-            sensorSkin.isValid();
-          };
-
+	    
+	    // properties
+	    sensorPV.addPhysVolID("sector", isec).addPhysVolID("module", imod);
+	    DetElement sensorDE(det, Form("sensor_de%d_%d", isec, imod), imodsec);
+	    sensorDE.setPlacement(sensorPV);
+	    if (!debugOptics || debugOpticsMode == 3) {
+	      SkinSurface sensorSkin(desc, sensorDE, Form("sensor_optical_surface%d", isec), sensorSurf, sensorVol);
+	      sensorSkin.isValid();
+	    };
+	    
 #ifdef IRT_AUXFILE
-          // IRT sensors
-          FlatSurface* sensorFlatSurface;
-          if (createIrtFile) {
-            // get sensor position, w.r.t. IP
-            // - sensorGlobalPos X and Y are equivalent to sensorPV.position()
-            double sensorLocalPos[3] = {0.0, 0.0, 0.0};
-            double sensorBufferPos[3];
-            double sensorGlobalPos[3];
-            sensorPV.ptr()->LocalToMaster(sensorLocalPos, sensorBufferPos);
-            vesselPV.ptr()->LocalToMaster(sensorBufferPos, sensorGlobalPos);
-
-            // get sensor flat surface normX and normY
-            // - ignore vessel transformation, since it is a pure translation
-            double sensorLocalNormX[3] = {1.0, 0.0, 0.0};
-            double sensorLocalNormY[3] = {0.0, 1.0, 0.0};
-            double sensorGlobalNormX[3], sensorGlobalNormY[3];
-            sensorPV.ptr()->LocalToMasterVect(sensorLocalNormX, sensorGlobalNormX);
-            sensorPV.ptr()->LocalToMasterVect(sensorLocalNormY, sensorGlobalNormY);
-
-            // create the IRT sensor geometry
-            sensorFlatSurface = new FlatSurface((1 / mm) * TVector3(sensorGlobalPos), TVector3(sensorGlobalNormX),
-                                                TVector3(sensorGlobalNormY));
-            irtDetector->CreatePhotonDetectorInstance(isec,              // sector
-                                                      irtPhotonDetector, // CherenkovPhotonDetector
-                                                      imodsec,           // copy number
-                                                      sensorFlatSurface  // surface
-            );
-            /* // (sensor printout is verbose, uncomment to enable)
-            if(imod==0) {
-              printout(ALWAYS, "IRTLOG", "");
-              printout(ALWAYS, "IRTLOG", "  SECTOR %d SENSORS:", isec);
-            }
-            printout(ALWAYS, "IRTLOG", "    sensor (imodsec,x,y,z) = 0x%08x  %5.2f  %5.2f  %5.2f cm",
-                imodsec, sensorGlobalPos[0], sensorGlobalPos[1], sensorGlobalPos[2]);
-            */
-          }
+	    // IRT sensors
+	    FlatSurface* sensorFlatSurface;
+	    if (createIrtFile) {
+	      // get sensor position, w.r.t. IP
+	      // - sensorGlobalPos X and Y are equivalent to sensorPV.position()
+	      double sensorLocalPos[3] = {0.0, 0.0, 0.0};
+	      double sensorBufferPos[3];
+	      double sensorGlobalPos[3];
+	      sensorPV.ptr()->LocalToMaster(sensorLocalPos, sensorBufferPos);
+	      vesselPV.ptr()->LocalToMaster(sensorBufferPos, sensorGlobalPos);
+	      
+	      // get sensor flat surface normX and normY
+	      // - ignore vessel transformation, since it is a pure translation
+	      double sensorLocalNormX[3] = {1.0, 0.0, 0.0};
+	      double sensorLocalNormY[3] = {0.0, 1.0, 0.0};
+	      double sensorGlobalNormX[3], sensorGlobalNormY[3];
+	      sensorPV.ptr()->LocalToMasterVect(sensorLocalNormX, sensorGlobalNormX);
+	      sensorPV.ptr()->LocalToMasterVect(sensorLocalNormY, sensorGlobalNormY);
+	      
+	      // create the IRT sensor geometry
+	      sensorFlatSurface = new FlatSurface((1 / mm) * TVector3(sensorGlobalPos), TVector3(sensorGlobalNormX),
+						  TVector3(sensorGlobalNormY));
+	      irtDetector->CreatePhotonDetectorInstance(isec,              // sector
+							irtPhotonDetector, // CherenkovPhotonDetector
+							imodsec,           // copy number
+							sensorFlatSurface  // surface
+							);
+	      /* // (sensor printout is verbose, uncomment to enable)
+		 if(imod==0) {
+		 printout(ALWAYS, "IRTLOG", "");
+		 printout(ALWAYS, "IRTLOG", "  SECTOR %d SENSORS:", isec);
+		 }
+		 printout(ALWAYS, "IRTLOG", "    sensor (imodsec,x,y,z) = 0x%08x  %5.2f  %5.2f  %5.2f cm",
+		 imodsec, sensorGlobalPos[0], sensorGlobalPos[1], sensorGlobalPos[2]);
+	      */
+	    }
 #endif
+	    
+	    // increment sensor module number
+	    imod++;
+	    
+	  }; // end patch cuts
+	};   // end phiGen loop
+      };     // end thetaGen loop
+    };
+    if(debugOpticsMode == 4){
+      Box    sensorSolid(sensorSide*100., sensorSide*100., sensorThickness*100.);
+      Volume sensorVol(detName + "_sensor_" + secName, sensorSolid, sensorMat);
+      sensorVol.setVisAttributes(sensorVis);
+      if (!debugOptics || debugOpticsMode == 3 || debugOpticsMode == 4 )
+        sensorVol.setSensitiveDetector(sens);
 
-          // increment sensor module number
-          imod++;
-
-        }; // end patch cuts
-      };   // end phiGen loop
-    };     // end thetaGen loop
-
+      double thetaGen = 0.52;
+      double phiGen = 0;
+      auto sensorPlacement =
+	RotationZ(sectorRotation) *                                           // rotate about beam axis to sector                                                                                     
+	Translation3D(sensorSphPos.x()-50, sensorSphPos.y(), sensorSphPos.z()) * // move sphere to reference position                                                                                    
+	RotationX(phiGen) *                                                   // rotate about `zGen`                                                                                                  
+	RotationZ(thetaGen) *                                                 // rotate about `yGen`                                                                                                  
+	Translation3D(sensorSphRadius, 0., 0.) * // push radially to spherical surface                                                                                                                
+	//RotationY(M_PI / 2) *                    // rotate sensor to be compatible with generator coords                                                                                              
+	RotationZ(-M_PI / 2);                    // correction for readout segmentation mapping                                                                                                       
+      auto sensorPV = gasvolVol.placeVolume(sensorVol, sensorPlacement);
+      sensorPV.addPhysVolID("sector", isec).addPhysVolID("module", imod);
+      DetElement sensorDE(det, Form("sensor_de%d_%d", isec, imod), 0);
+      sensorDE.setPlacement(sensorPV);
+      if (!debugOptics || debugOpticsMode == 3 || debugOpticsMode == 4) {
+	SkinSurface sensorSkin(desc, sensorDE, Form("sensor_optical_surface%d", isec), sensorSurf, sensorVol);
+	sensorSkin.isValid();
+      };
+      
+    };
+        
     // calculate centroid sensor position
     if (isec == 0) {
       sensorCentroidX /= sensorCount;
