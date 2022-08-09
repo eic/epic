@@ -12,6 +12,7 @@
 #include "DD4hep/DetFactoryHelper.h"
 #include "DD4hep/OpticalSurfaces.h"
 #include "DD4hep/Printout.h"
+#include "DD4hep/CartesianGridXY.h"
 #include "DDRec/DetectorData.h"
 #include "DDRec/Surface.h"
 
@@ -149,6 +150,17 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
   uint64_t    cellMask   = moduleBits.mask() | sectorBits.mask();
   printout(DEBUG, "DRICH_geo", "sectorMask, sectorOffset, moduleMask, moduleOffset = 0x%x %d 0x%x %d",
            sectorBits.mask(), sectorBits.offset(), moduleBits.mask(), moduleBits.offset());
+
+  // if debugging optics, we may have a non-standard sensor size; if so, re-scale the readout pixels:
+  double sensorRescale = 0;
+  if (debugOpticsMode == 4) sensorRescale = 200;
+  if (sensorRescale > 0) {
+    auto seg = (CartesianGridXY) desc.readout(readoutName).segmentation();
+    seg.setGridSizeX(sensorRescale * seg.gridSizeX());
+    seg.setGridSizeY(sensorRescale * seg.gridSizeY());
+    seg.setOffsetX(sensorRescale * seg.offsetX());
+    seg.setOffsetY(sensorRescale * seg.offsetY());
+  }
 
 #ifdef IRT_AUXFILE
   // IRT geometry auxiliary file ===========================================================
@@ -559,7 +571,7 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
       };     // end thetaGen loop
     };
     if(debugOpticsMode == 4){
-      Box    sensorSolid(sensorSide*100., sensorSide*100., sensorThickness*100.);
+      Box    sensorSolid(sensorRescale * sensorSide / 2., sensorRescale * sensorSide / 2., sensorRescale * sensorThickness / 2.);
       Volume sensorVol(detName + "_sensor_" + secName, sensorSolid, sensorMat);
       sensorVol.setVisAttributes(sensorVis);
       if (!debugOptics || debugOpticsMode == 3 || debugOpticsMode == 4 )
