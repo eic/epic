@@ -154,7 +154,9 @@
   <include ref="${DETECTOR_PATH}/compact/ecal_backward_hybrid.xml"/>
   {% endif -%}
 
-  {% if features is not defined or features['ecal'] is none or 'barrel_sciglass' in features['ecal'] %}
+  {% if features is not defined or features['ecal'] is none or 'barrel_sciglass_tiltless' in features['ecal'] %}
+  <include ref="${DETECTOR_PATH}/compact/ecal_barrel_sciglass_tiltless.xml"/>
+  {% elif features is not defined or features['ecal'] is none or 'barrel_sciglass' in features['ecal'] %}
   <include ref="${DETECTOR_PATH}/compact/ecal_barrel_sciglass_panda.xml"/>
   {% elif 'barrel_interlayers' in features['ecal'] -%}
   <include ref="${DETECTOR_PATH}/compact/ecal_barrel_interlayers.xml"/>

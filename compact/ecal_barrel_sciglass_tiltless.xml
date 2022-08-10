@@ -1,0 +1,76 @@
+<lccdd>
+  <comment>
+    Implementation of the barrel SciGlass calorimeter
+  </comment>
+
+  <define>
+    <documentation>
+      The EcalBarrel eta limits cut into the barrel shape.
+    </documentation>
+    <constant name="EcalBarrel_etamin" value="-3.5"/>
+    <constant name="EcalBarrel_etamax" value="+1.4"/>
+  </define>
+
+  <display>
+    <vis name="det_vis" alpha="1.0" r="1.0" g="0.0" b="0.0" showDaughters="true" visible="false" />
+    <vis name="family1" alpha="1.0" r="0.22" g="0.54" b="0.71" showDaughters="true" visible="true" />
+    <vis name="family2" alpha="1.0" r="0.90" g="0.48" b="0.47" showDaughters="true" visible="true" />
+    <vis name="family3" alpha="1.0" r="0.87" g="0.49" b="0.09" showDaughters="true" visible="true" />
+    <vis name="family4" alpha="1.0" r="0.94" g="0.48" b="0.73" showDaughters="true" visible="true" />
+    <vis name="family5" alpha="1.0" r="0.44" g="0.63" b="0.44" showDaughters="true" visible="true" />
+    <vis name="family6" alpha="1.0" r="0.50" g="0.35" b="0.76" showDaughters="true" visible="true" />
+  </display>
+
+  <detectors>
+    <comment>
+      An EM calorimeter with SciGlass blocks
+    </comment>
+
+    <detector id="4" name="EcalBarrel" type="epic_SciGlassCalorimeterTiltless" readout="EcalBarrelHits" vis="det_vis" calorimeterType="EM_BARREL">
+      <comment>
+        Global detector dimensions from https://eic.jlab.org/Geometry/Detector/Detector-20220624102507.html
+      </comment>
+
+      <dimensions rmin="79.5 * cm" rmax="125.5 * cm"
+                  zmax="195 * cm" zmin="-285 * cm"
+                  etamin="EcalBarrel_etamin" etamax="EcalBarrel_etamax"/>
+
+      <sectors number="24" phi0="0." deltaphi="pi / 12">
+        <comment>
+          Rows within a sector are supposed to have smaller gaps than edge rows of two adjacent sectors
+        </comment>
+
+        <rows number="5" deltaphi="2.92 * degree">
+          <dimensions inner_r="79.5 * cm"  gap="1 * mm" />
+
+          <comment>
+            Families in each row are constructed in two directions `dir_sign` - negative and positive rapidity - starting from the center.
+            The towers have the shape of truncated pyramids that have an opening angle in theta `flare_angle_polar`.
+            The towers are stacked in a row with their edges parallel to the edges of their neighbors, `gap` distance apart.
+            Families of towers are groups of towers having identical shape, i.e. the same tower is repeated `number` amount of times.
+            The front and rear faces are similar isosceles trapezoids only slightly deviating from a rectangular shape by an amount parametrized with `flare_angle_at_face`.
+          </comment>
+
+          <family dir_sign="+1" x1="2 * cm" y1="2 * cm" z_length="45.5 * cm" number="10" flare_angle_polar="1.16 * degree"  flare_angle_at_face="0.3059 * degree" vis="family1" />
+          <family dir_sign="+1" x1="2 * cm" y1="2 * cm" z_length="45.5 * cm" number="6"  flare_angle_polar="1.045 * degree" flare_angle_at_face="0.7058 * degree" vis="family2" />
+          <family dir_sign="+1" x1="2 * cm" y1="2 * cm" z_length="45.5 * cm" number="5"  flare_angle_polar="0.929 * degree" flare_angle_at_face="0.8892 * degree" vis="family3" />
+          <family dir_sign="+1" x1="2 * cm" y1="2 * cm" z_length="45.5 * cm" number="5"  flare_angle_polar="0.82 * degree"  flare_angle_at_face="1.0258 * degree" vis="family4" />
+          <family dir_sign="+1" x1="2 * cm" y1="2 * cm" z_length="45.5 * cm" number="3"  flare_angle_polar="0.70 * degree"  flare_angle_at_face="1.126 * degree"  vis="family5" />
+          <family dir_sign="-1" x1="2 * cm" y1="2 * cm" z_length="45.5 * cm" number="10" flare_angle_polar="1.16 * degree"  flare_angle_at_face="0.3059 * degree" vis="family1" />
+          <family dir_sign="-1" x1="2 * cm" y1="2 * cm" z_length="45.5 * cm" number="6"  flare_angle_polar="1.045 * degree" flare_angle_at_face="0.7058 * degree" vis="family2" />
+          <family dir_sign="-1" x1="2 * cm" y1="2 * cm" z_length="45.5 * cm" number="5"  flare_angle_polar="0.929 * degree" flare_angle_at_face="0.8892 * degree" vis="family3" />
+          <family dir_sign="-1" x1="2 * cm" y1="2 * cm" z_length="45.5 * cm" number="5"  flare_angle_polar="0.82 * degree"  flare_angle_at_face="1.0258 * degree" vis="family4" />
+          <family dir_sign="-1" x1="2 * cm" y1="2 * cm" z_length="45.5 * cm" number="5"  flare_angle_polar="0.70 * degree"  flare_angle_at_face="1.126 * degree"  vis="family5" />
+          <family dir_sign="-1" x1="2 * cm" y1="2 * cm" z_length="45.5 * cm" number="6"  flare_angle_polar="0.586 * degree" flare_angle_at_face="1.1914 * degree" vis="family6" />
+        </rows>
+      </sectors>
+    </detector>
+  </detectors>
+
+  <readouts>
+    <readout name="EcalBarrelHits">
+      <segmentation type="NoSegmentation"/>
+      <id>system:8,sector:8,row:8,tower:-8</id>
+    </readout>
+  </readouts>
+</lccdd>
