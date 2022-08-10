@@ -29,8 +29,8 @@
     </comment>
     <detector id="ECalBarrel_ID"
       name="ECalBarrel"
-      type="epic_SciGlassCalorimeter"
-      vis="EcalBarrelEnvelopeVis"
+      type="epic_SciGlassCalorimeterPanda"
+      vis="InvisibleWithDaughters"
       calorimeterType="EM_BARREL"
       readout="EcalBarrelHits">
       <dimensions rmin="EcalBarrel_rmin" rmax="EcalBarrel_rmax" r0="EcalBarrel_rmin + EcalBarrel_inner_margin"

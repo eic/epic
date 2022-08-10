@@ -54,17 +54,17 @@ static Ref_t create_detector(Detector& desc, xml::Handle_t handle, SensitiveDete
   auto                theta = [](const auto eta) { return 2.0 * atan(exp(-eta)); };
 
   // backward nose cone
-  printout(DEBUG, "SciGlassCalorimeter", "etamin cutout: etamin = %f, thetamin = %f", etamin, theta(etamin));
+  printout(DEBUG, "SciGlassCalorimeterPanda", "etamin cutout: etamin = %f, thetamin = %f", etamin, theta(etamin));
   if (-zmin * sin(theta(etamin)) < rmin) {
     // no cutout: regular end face
-    printout(DEBUG, "SciGlassCalorimeter", "no etamin cutout: zmin * sin(theta(etamin)) = %f < rmin = %f",
+    printout(DEBUG, "SciGlassCalorimeterPanda", "no etamin cutout: zmin * sin(theta(etamin)) = %f < rmin = %f",
              zmin * sin(theta(etamin)), rmin);
     v_z.emplace_back(zmin);
     v_rmin.emplace_back(rmin);
     v_rmax.emplace_back(rmax);
   } else {
     // with cutout: first add zmin side
-    printout(DEBUG, "SciGlassCalorimeter", "etamin cutout: zmin * sin(theta(etamin)) = %f > rmin = %f",
+    printout(DEBUG, "SciGlassCalorimeterPanda", "etamin cutout: zmin * sin(theta(etamin)) = %f > rmin = %f",
              zmin * sin(theta(etamin)), rmin);
     auto z = std::max(zmin, rmax / tan(theta(etamin))); // zmin or furthest backwards
     v_z.emplace_back(z);
@@ -77,17 +77,17 @@ static Ref_t create_detector(Detector& desc, xml::Handle_t handle, SensitiveDete
   }
 
   // forward nose cone
-  printout(DEBUG, "SciGlassCalorimeter", "etamax cutout: etamax = %f, thetamax = %f", etamax, theta(etamax));
+  printout(DEBUG, "SciGlassCalorimeterPanda", "etamax cutout: etamax = %f, thetamax = %f", etamax, theta(etamax));
   if (zmax * sin(theta(etamax)) < rmin) {
     // no cutout: regular end face
-    printout(DEBUG, "SciGlassCalorimeter", "no etamax cutout: zmax * sin(theta(etamin)) = %f < rmin = %f",
+    printout(DEBUG, "SciGlassCalorimeterPanda", "no etamax cutout: zmax * sin(theta(etamin)) = %f < rmin = %f",
              zmax * sin(theta(etamax)), rmin);
     v_z.emplace_back(zmax);
     v_rmin.emplace_back(rmin);
     v_rmax.emplace_back(rmax);
   } else {
     // with cutout: first add where cutout starts
-    printout(DEBUG, "SciGlassCalorimeter", "etamax cutout: zmax * sin(theta(etamax)) = %f > rmin = %f",
+    printout(DEBUG, "SciGlassCalorimeterPanda", "etamax cutout: zmax * sin(theta(etamax)) = %f > rmin = %f",
              zmax * sin(theta(etamax)), rmin);
     v_z.emplace_back(rmin / tan(theta(etamax)));
     v_rmin.emplace_back(rmin);
@@ -117,7 +117,7 @@ static Ref_t create_detector(Detector& desc, xml::Handle_t handle, SensitiveDete
   auto dphi      = 2.0 * M_PI / n_phi;
   auto r0        = getAttrOrDefault<float>(dim, _U(r0), rmin); // dd4hep::xml::Dimension::r0 is missing implementation in DD4hep
   auto xcrd_dphi = r0 * xcrd(dphi); // size of module around phi around inscribed circle
-  printout(DEBUG, "SciGlassCalorimeter", "r0 = %f, dphi = %f, xcrd_dphi = %f", r0, dphi, xcrd_dphi);
+  printout(DEBUG, "SciGlassCalorimeterPanda", "r0 = %f, dphi = %f, xcrd_dphi = %f", r0, dphi, xcrd_dphi);
 
   // module parameters
   auto mod_name                    = x_mod.nameStr();
@@ -125,7 +125,7 @@ static Ref_t create_detector(Detector& desc, xml::Handle_t handle, SensitiveDete
   auto mod_round_backface_to       = getAttrOrDefault<float>(x_mod, _Unicode(round_backface_to), 0.0);
   auto mod_phi_projectivity_tilt   = getAttrOrDefault<float>(x_mod, _Unicode(phi_projectivity_tilt), 0.0);
   auto mod_eta_projectivity_offset = getAttrOrDefault<float>(x_mod, _Unicode(eta_projectivity_offset), 0.0);
-  printout(DEBUG, "SciGlassCalorimeter", "Proj: phi = %f, eta = %f", mod_phi_projectivity_tilt,
+  printout(DEBUG, "SciGlassCalorimeterPanda", "Proj: phi = %f, eta = %f", mod_phi_projectivity_tilt,
            mod_eta_projectivity_offset);
 
   // solver (secant's method)
@@ -162,7 +162,7 @@ static Ref_t create_detector(Detector& desc, xml::Handle_t handle, SensitiveDete
     };
     const auto [dtheta, valid] = solve_secant(f, dtheta0, dtheta1);
     if (!valid) {
-      printout(WARNING, "SciGlassCalorimeter", "cannot solve for dtheta");
+      printout(WARNING, "SciGlassCalorimeterPanda", "cannot solve for dtheta");
     }
     theta_max = theta_min + dtheta;
 
@@ -176,7 +176,7 @@ static Ref_t create_detector(Detector& desc, xml::Handle_t handle, SensitiveDete
       mod_y2        = std::floor(mod_y2 / mod_round_backface_to) * mod_round_backface_to;
       mod_expansion = (mod_x2 / mod_x1 - 1.0) / mod_length;
     }
-    printout(DEBUG, "SciGlassCalorimeter", "Trd2: x1 = %f, x2 = %f, y1 = %f, y2 = %f", mod_x1, mod_x2, mod_y1, mod_y2);
+    printout(DEBUG, "SciGlassCalorimeterPanda", "Trd2: x1 = %f, x2 = %f, y1 = %f, y2 = %f", mod_x1, mod_x2, mod_y1, mod_y2);
 
     // create module envelope
     Trd2     mod_env_trd(mod_x1 / 2.0, mod_x2 / 2.0, mod_y1 / 2.0, mod_y2 / 2.0, mod_length / 2.0);
@@ -258,7 +258,15 @@ static Ref_t create_detector(Detector& desc, xml::Handle_t handle, SensitiveDete
   return det;
 }
 
+static Ref_t create_detector_deprecated(Detector& desc, xml::Handle_t handle, SensitiveDetector sens) {
+  printout(WARNING, "SciGlassCalorimeter", "#########################################################################################");
+  printout(WARNING, "SciGlassCalorimeter", "\"SciGlassCalorimeter\" is a deprecated name, please use \"SciGlassCalorimeterPanda\" instead");
+  printout(WARNING, "SciGlassCalorimeter", "#########################################################################################");
+  return create_detector(desc, handle, sens);
+}
+
 #ifdef EPIC_ECCE_LEGACY_COMPAT
-DECLARE_DETELEMENT(ecce_SciGlassCalorimeter, create_detector)
+DECLARE_DETELEMENT(ecce_SciGlassCalorimeter, create_detector_deprecated)
 #endif
-DECLARE_DETELEMENT(epic_SciGlassCalorimeter, create_detector)
+DECLARE_DETELEMENT(epic_SciGlassCalorimeter, create_detector_deprecated)
+DECLARE_DETELEMENT(epic_SciGlassCalorimeterPanda, create_detector)
