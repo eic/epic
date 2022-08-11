@@ -15,7 +15,7 @@ jobs:
         echo "::set-output name::diff_tree=${diff_tree}"
     - name: Check SPDX license header
       run: |
-        for file in ${{ setps.files.outputs.diff_tree }} ; do
+        for file in ${{ steps.files.outputs.diff_tree }} ; do
           if [[ -f "${file}" ]] ; then
             if      [[ "${file}" =~ .*\.cpp ]] ; then
               head -n 1 "${file}" | grep "^// SPDX-License-Identifier: LGPL-3.0-or-later$"
