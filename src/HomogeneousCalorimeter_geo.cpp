@@ -1,3 +1,6 @@
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (C) 2022 Chao Peng, Dmitry Romanov
+
 //==========================================================================
 //  A general implementation for homogeneous calorimeter
 //  it supports three types of placements

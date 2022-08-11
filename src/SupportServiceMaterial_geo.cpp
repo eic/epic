@@ -1,3 +1,6 @@
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (C) 2022 Sylvester Joosten
+
 /** \addtogroup Trackers Trackers
  * \brief Type: **BarrelTrackerWithFrame**.
  * \author W. Armstrong
