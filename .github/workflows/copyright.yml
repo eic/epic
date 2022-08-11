@@ -11,7 +11,7 @@ jobs:
       id: files
       run: |
         diff_tree=$(git diff-tree --no-commit-id --name-only -r ${{ github.sha }})
-        echo "diff_tree=${diff_tree}
+        echo "diff_tree=${diff_tree}"
         echo "::set-output name::diff_tree=${diff_tree}"
     - name: Check SPDX license header
       run: |
