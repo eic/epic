@@ -1,3 +1,6 @@
+<!-- SPDX-License-Identifier: LGPL-3.0-or-later -->
+<!-- Copyright (C) 2022 Wouter Deconinck -->
+
 <lccdd>
   <define>
     <constant name="EcalEndcapN_CrystalModule_width" value="20.00*mm"/>
