@@ -1,0 +1,30 @@
+on:
+  push:
+  pull_request:
+
+jobs:
+  copyright:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    - name: Get changed files
+      id: files
+      run: |
+        diff_tree=$(git diff-tree --no-commit-id --name-only -r ${{ github.sha }})
+        echo "diff_tree=${diff_tree}
+        echo "::set-output name::diff_tree=${diff_tree}"
+    - name: Check SPDX license header
+      run: |
+        for file in ${{ setps.files.outputs.diff_tree }} ; do
+          if [[ -f "${file}" ]] ; then
+            if      [[ "${file}" =~ .*\.cpp ]] ; then
+              head -n 1 "${file}" | grep "^// SPDX-License-Identifier: LGPL-3.0-or-later$"
+            else if [[ "${file}" =~ .*\.xml ]] ; then
+              head -n 1 "${file}" | grep "^<!-- SPDX-License-Identifier: LGPL-3.0-or-later -->$"
+            else
+              echo "No prescribed SPDX license header for ${file}"
+            fi
+          else
+            echo "Skipped SPDX license header check on ${file}"
+          fi
+        done
