@@ -1,0 +1,12 @@
+on:
+  schedule:
+    - cron:  '30 11 * * 3' # 11:30 UTC = 07:30 EDT on Wednesday
+  workflow_dispatch:
+
+jobs:
+  generate-weekly-meeting-slides:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: eic/generate-meeting-slides@v2
+      with:
+        since: "1 week ago"
