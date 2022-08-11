@@ -9,7 +9,7 @@ jobs:
     - name: Get changed files
       id: files
       run: |
-        diff_tree=$(git diff-tree --no-commit-id --name-only -r ${{ github.event.pull_request.base.sha }} ${{ github.event.pull_request.head.ref}}) 
+        diff_tree=$(git diff-tree --no-commit-id --name-only -r ${{ github.event.pull_request.base.ref }} ${{ github.event.pull_request.head.ref}}) 
         echo "diff_tree=${diff_tree}"
         echo "::set-output name::diff_tree=${diff_tree}"
     - name: Check SPDX license header
