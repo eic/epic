@@ -175,6 +175,7 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
   if (createIrtFile) {
     irtBoundary = new FlatSurface((1 / mm) * TVector3(0, 0, vesselZmin), normX, normY);
     for (int isec = 0; isec < nSectors; isec++) {
+      printout(ALWAYS, "IRTLOG", "============ BOUND: entrance");
       auto rad = irtGeometry->SetContainerVolume(
           irtDetector,             // Cherenkov detector
           "GasVolume",             // name
@@ -188,10 +189,9 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
   }
 
   // photon detector // FIXME: args (G4Solid,G4Material) inaccessible?
-  CherenkovPhotonDetector* irtPhotonDetector;
+  CherenkovPhotonDetector* irtPhotonDetector = new CherenkovPhotonDetector(nullptr, nullptr);
   if (createIrtFile) {
     irtDetector->SetReadoutCellMask(cellMask); // readout mask
-    irtPhotonDetector = new CherenkovPhotonDetector(nullptr, nullptr);
     irtGeometry->AddPhotonDetector(irtDetector,      // Cherenkov detector
                                    nullptr,          // G4LogicalVolume (inaccessible?)
                                    irtPhotonDetector // photon detector
@@ -268,7 +268,7 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
   // - the vessel is created such that the center of the cylindrical tank volume
   //   coincides with the origin; this is called the "origin position" of the vessel
   // - when the vessel (and its children volumes) is placed, it is translated in
-  //   the z-direction to be in the proper ATHENA-integration location
+  //   the z-direction to be in the proper EPIC-integration location
   // - these reference positions are for the frontplane and backplane of the vessel,
   //   with respect to the vessel origin position
   auto originFront = Position(0., 0., -tankLength / 2.0 - snoutLength);
@@ -345,6 +345,7 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
     aerogelFlatSurface    = new FlatSurface((1 / mm) * TVector3(0, 0, irtAerogelZpos), normX, normY);
     filterFlatSurface     = new FlatSurface((1 / mm) * TVector3(0, 0, irtFilterZpos), normX, normY);
     for (int isec = 0; isec < nSectors; isec++) {
+      printout(ALWAYS, "IRTLOG", "============ BOUND: aerogel");
       auto aerogelFlatRadiator = irtGeometry->AddFlatRadiator(
           irtDetector,             // Cherenkov detector
           "Aerogel",               // name
@@ -354,6 +355,7 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
           aerogelFlatSurface,      // surface
           aerogelThickness / mm    // surface thickness
       );
+      printout(ALWAYS, "IRTLOG", "============ BOUND: filter");
       auto filterFlatRadiator = irtGeometry->AddFlatRadiator(
           irtDetector,             // Cherenkov detector
           "Filter",                // name
@@ -412,7 +414,7 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
     // SENSOR MODULE LOOP ------------------------
     /* ALGORITHM: generate sphere of positions
      * - NOTE: there are two coordinate systems here:
-     *   - "global" the main ATHENA coordinate system
+     *   - "global" the main EPIC coordinate system
      *   - "generator" (vars end in `Gen`) is a local coordinate system for
      *     generating points on a sphere; it is related to the global system by
      *     a rotation; we do this so the "patch" (subset of generated
@@ -676,6 +678,7 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
                                                   mirrorSphericalSurface,            // surface
                                                   false                              // bool refractive
       );
+      printout(ALWAYS, "IRTLOG", "============ BOUND: mirror");
       irtDetector->AddOpticalBoundary(isec, mirrorOpticalBoundary);
       printout(ALWAYS, "IRTLOG", "");
       printout(ALWAYS, "IRTLOG", "  SECTOR %d MIRROR:", isec);
@@ -707,6 +710,11 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
         rad->SetReferenceRefractiveIndex(rIndex);
     }
     // write
+    for(auto sss : irtDetector->_m_OpticalBoundaries) {
+      for(auto bound : sss.second) {
+        printout(ALWAYS, "IRTLOG", "stored boundary: %s", bound->GetSurface()->GetName());
+      }
+    }
     irtGeometry->Write();
     irtAuxFile->Close();
   }
