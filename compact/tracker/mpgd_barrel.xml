@@ -65,7 +65,7 @@
 
   <detectors>
     <detector
-      id="TrackerBarrel_1_ID"
+      id="TrackerBarrel_2_ID"
       name="InnerMPGDBarrel"
       type="epic_TrackerBarrel"
       readout="InnerMPGDBarrelHits"
@@ -100,7 +100,7 @@
       </layer>
     </detector>
     <detector
-      id="TrackerBarrel_3_ID"
+      id="TrackerBarrel_4_ID"
       name="OuterMPGDBarrel"
       type="epic_TrackerBarrel"
       readout="OuterMPGDBarrelHits"

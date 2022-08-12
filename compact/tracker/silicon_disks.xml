@@ -1,8 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <lccdd>
   <comment>
-    Main parameters. This is the setup from the ECCE proposal, with 
-    the first disk in the inner tracking assembly, and the following 4 disks
+    Main parameters. This is the setup from the ECCE proposal combined with the
+    June 2022 barrel setup. Here to comply with the ACTS translation onion structure we have:
+      - the first disk in the inner tracking assembly, 
+      - the second silicon disk in the middle silicon tracking assembly
+      - the and the following 3 disks in the outer silicon tracking assembly
     in their own tracking assembly. 
   </comment>
 
@@ -111,7 +114,8 @@
   </detectors>
 
   <comment>
-    ## Main endcap disks
+    ## Main endcap disks, split into a middle and outer part
+       to comply with the ACTS translation
   </comment>
   <define>
     <constant name="TrackerEndcapPMod1_zmin"   value="TrackerEndcapPDisk1_zmin" />
@@ -182,31 +186,13 @@
   <detectors>
     <detector
       id="TrackerEndcapP_1_ID"
-      name="TrackerEndcapP"
+      name="MiddleTrackerEndcapP"
       type="epic_TrapEndcapTracker"
-      readout="TrackerEndcapPHits"
+      readout="MiddleTrackerEndcapPHits"
       vis="TrackerVis"
       reflect="false">
       <module name="Module1" vis="TrackerModuleVis">
         <trd x1="TrackerEndcapPMod1_x1/2" x2="TrackerEndcapPMod1_x2/2" z="TrackerEndcapPMod1_y/2" />
-        <module_component thickness="SiTrackerEndcapCF_thickness" material="CarbonFiber" vis="TrackerSupportVis" />
-        <module_component thickness="SiTrackerEndcapAl_thickness" material="Aluminum" vis="TrackerServiceVis" />
-        <module_component thickness="SiTrackerSensor_thickness" material="Silicon" sensitive="true" vis="TrackerLayerVis" />
-      </module>
-      <module name="Module2" vis="TrackerModuleVis">
-        <trd x1="TrackerEndcapPMod2_x1/2" x2="TrackerEndcapPMod2_x2/2" z="TrackerEndcapPMod2_y/2" />
-        <module_component thickness="SiTrackerEndcapCF_thickness" material="CarbonFiber" vis="TrackerSupportVis" />
-        <module_component thickness="SiTrackerEndcapAl_thickness" material="Aluminum" vis="TrackerServiceVis" />
-        <module_component thickness="SiTrackerSensor_thickness" material="Silicon" sensitive="true" vis="TrackerLayerVis" />
-      </module>
-      <module name="Module3" vis="TrackerModuleVis">
-        <trd x1="TrackerEndcapPMod3_x1/2" x2="TrackerEndcapPMod3_x2/2" z="TrackerEndcapPMod3_y/2" />
-        <module_component thickness="SiTrackerEndcapCF_thickness" material="CarbonFiber" vis="TrackerSupportVis" />
-        <module_component thickness="SiTrackerEndcapAl_thickness" material="Aluminum" vis="TrackerServiceVis" />
-        <module_component thickness="SiTrackerSensor_thickness" material="Silicon" sensitive="true" vis="TrackerLayerVis" />
-      </module>
-      <module name="Module4" vis="TrackerModuleVis">
-        <trd x1="TrackerEndcapPMod4_x1/2" x2="TrackerEndcapPMod4_x2/2" z="TrackerEndcapPMod4_y/2" />
         <module_component thickness="SiTrackerEndcapCF_thickness" material="CarbonFiber" vis="TrackerSupportVis" />
         <module_component thickness="SiTrackerEndcapAl_thickness" material="Aluminum" vis="TrackerServiceVis" />
         <module_component thickness="SiTrackerSensor_thickness" material="Silicon" sensitive="true" vis="TrackerLayerVis" />
@@ -225,6 +211,60 @@
           dz="SiTrackerEndcapMod_dz"
           module="Module1" />
       </layer>
+    </detector>
+    <detector
+      id="TrackerEndcapN_1_ID"
+      name="MiddleTrackerEndcapN"
+      type="epic_TrapEndcapTracker"
+      readout="MiddleTrackerEndcapNHits"
+      vis="TrackerVis"
+      reflect="true">
+      <module name="Module1" vis="TrackerModuleVis">
+        <trd x1="TrackerEndcapNMod1_x1/2" x2="TrackerEndcapNMod1_x2/2" z="TrackerEndcapNMod1_y/2" />
+        <module_component thickness="SiTrackerEndcapCF_thickness" material="CarbonFiber" vis="TrackerSupportVis" />
+        <module_component thickness="SiTrackerEndcapAl_thickness" material="Aluminum" vis="TrackerServiceVis" />
+        <module_component thickness="SiTrackerSensor_thickness" material="Silicon" sensitive="true" vis="TrackerLayerVis" />
+      </module>
+      <layer id="1">
+        <envelope vis="TrackerLayerVis"
+          rmin="TrackerEndcapNLayer1_rmin"
+          rmax="TrackerEndcapNLayer1_rmax"
+          length="SiTrackerEndcapLayer_thickness"
+          zstart="TrackerEndcapNLayer1_zmin" />
+        <layer_material surface="representing" binning="binPhi,binR" bins0="20*SiTrackerEndcapMod_count" bins1="256"/>
+        <ring
+          r="TrackerEndcapNMod1_rmin + TrackerEndcapNMod1_y/2"
+          zstart="0"
+          nmodules="SiTrackerEndcapMod_count"
+          dz="SiTrackerEndcapMod_dz"
+          module="Module1" />
+      </layer>
+    </detector>
+    <detector
+      id="TrackerEndcapP_2_ID"
+      name="OuterTrackerEndcapP"
+      type="epic_TrapEndcapTracker"
+      readout="OuterTrackerEndcapPHits"
+      vis="TrackerVis"
+      reflect="false">
+      <module name="Module2" vis="TrackerModuleVis">
+        <trd x1="TrackerEndcapPMod2_x1/2" x2="TrackerEndcapPMod2_x2/2" z="TrackerEndcapPMod2_y/2" />
+        <module_component thickness="SiTrackerEndcapCF_thickness" material="CarbonFiber" vis="TrackerSupportVis" />
+        <module_component thickness="SiTrackerEndcapAl_thickness" material="Aluminum" vis="TrackerServiceVis" />
+        <module_component thickness="SiTrackerSensor_thickness" material="Silicon" sensitive="true" vis="TrackerLayerVis" />
+      </module>
+      <module name="Module3" vis="TrackerModuleVis">
+        <trd x1="TrackerEndcapPMod3_x1/2" x2="TrackerEndcapPMod3_x2/2" z="TrackerEndcapPMod3_y/2" />
+        <module_component thickness="SiTrackerEndcapCF_thickness" material="CarbonFiber" vis="TrackerSupportVis" />
+        <module_component thickness="SiTrackerEndcapAl_thickness" material="Aluminum" vis="TrackerServiceVis" />
+        <module_component thickness="SiTrackerSensor_thickness" material="Silicon" sensitive="true" vis="TrackerLayerVis" />
+      </module>
+      <module name="Module4" vis="TrackerModuleVis">
+        <trd x1="TrackerEndcapPMod4_x1/2" x2="TrackerEndcapPMod4_x2/2" z="TrackerEndcapPMod4_y/2" />
+        <module_component thickness="SiTrackerEndcapCF_thickness" material="CarbonFiber" vis="TrackerSupportVis" />
+        <module_component thickness="SiTrackerEndcapAl_thickness" material="Aluminum" vis="TrackerServiceVis" />
+        <module_component thickness="SiTrackerSensor_thickness" material="Silicon" sensitive="true" vis="TrackerLayerVis" />
+      </module>
       <layer id="2">
         <envelope vis="TrackerLayerVis"
           rmin="TrackerEndcapPLayer2_rmin"
@@ -269,18 +309,12 @@
       </layer>
     </detector>
     <detector
-      id="TrackerEndcapN_1_ID"
-      name="TrackerEndcapN"
+      id="TrackerEndcapN_2_ID"
+      name="OuterTrackerEndcapN"
       type="epic_TrapEndcapTracker"
-      readout="TrackerEndcapNHits"
+      readout="OuterTrackerEndcapNHits"
       vis="TrackerVis"
       reflect="true">
-      <module name="Module1" vis="TrackerModuleVis">
-        <trd x1="TrackerEndcapNMod1_x1/2" x2="TrackerEndcapNMod1_x2/2" z="TrackerEndcapNMod1_y/2" />
-        <module_component thickness="SiTrackerEndcapCF_thickness" material="CarbonFiber" vis="TrackerSupportVis" />
-        <module_component thickness="SiTrackerEndcapAl_thickness" material="Aluminum" vis="TrackerServiceVis" />
-        <module_component thickness="SiTrackerSensor_thickness" material="Silicon" sensitive="true" vis="TrackerLayerVis" />
-      </module>
       <module name="Module2" vis="TrackerModuleVis">
         <trd x1="TrackerEndcapNMod2_x1/2" x2="TrackerEndcapNMod2_x2/2" z="TrackerEndcapNMod2_y/2" />
         <module_component thickness="SiTrackerEndcapCF_thickness" material="CarbonFiber" vis="TrackerSupportVis" />
@@ -293,20 +327,6 @@
         <module_component thickness="SiTrackerEndcapAl_thickness" material="Aluminum" vis="TrackerServiceVis" />
         <module_component thickness="SiTrackerSensor_thickness" material="Silicon" sensitive="true" vis="TrackerLayerVis" />
       </module>
-      <layer id="1">
-        <envelope vis="TrackerLayerVis"
-          rmin="TrackerEndcapNLayer1_rmin"
-          rmax="TrackerEndcapNLayer1_rmax"
-          length="SiTrackerEndcapLayer_thickness"
-          zstart="TrackerEndcapNLayer1_zmin" />
-        <layer_material surface="representing" binning="binPhi,binR" bins0="20*SiTrackerEndcapMod_count" bins1="256"/>
-        <ring
-          r="TrackerEndcapNMod1_rmin + TrackerEndcapNMod1_y/2"
-          zstart="0"
-          nmodules="SiTrackerEndcapMod_count"
-          dz="SiTrackerEndcapMod_dz"
-          module="Module1" />
-      </layer>
       <layer id="2">
         <envelope vis="TrackerLayerVis"
           rmin="TrackerEndcapNLayer2_rmin"
@@ -347,11 +367,19 @@
       <segmentation type="CartesianGridXZ" grid_size_x="0.010*mm" grid_size_z="0.010*mm" />
       <id>system:8,layer:4,module:12,sensor:2,x:32:-16,z:-16</id>
     </readout>
-    <readout name="TrackerEndcapPHits">
+    <readout name="MiddleTrackerEndcapPHits">
       <segmentation type="CartesianGridXZ" grid_size_x="0.010*mm" grid_size_z="0.010*mm" />
       <id>system:8,layer:4,module:12,sensor:2,x:32:-16,z:-16</id>
     </readout>
-    <readout name="TrackerEndcapNHits">
+    <readout name="MiddleTrackerEndcapNHits">
+      <segmentation type="CartesianGridXZ" grid_size_x="0.010*mm" grid_size_z="0.010*mm" />
+      <id>system:8,layer:4,module:12,sensor:2,x:32:-16,z:-16</id>
+    </readout>
+    <readout name="OuterTrackerEndcapPHits">
+      <segmentation type="CartesianGridXZ" grid_size_x="0.010*mm" grid_size_z="0.010*mm" />
+      <id>system:8,layer:4,module:12,sensor:2,x:32:-16,z:-16</id>
+    </readout>
+    <readout name="OuterTrackerEndcapNHits">
       <segmentation type="CartesianGridXZ" grid_size_x="0.010*mm" grid_size_z="0.010*mm" />
       <id>system:8,layer:4,module:12,sensor:2,x:32:-16,z:-16</id>
     </readout>
