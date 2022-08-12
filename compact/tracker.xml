@@ -38,8 +38,8 @@
     <constant name="VertexSupportCylCF_thickness"    value="300.0*um" />
     <constant name="TrackerSupportCyl_rmin"          value="41.5*cm"/>
     <comment> These may belong in definitions.xml </comment>
-    <constant name="InnerTrackerEndcapP_zmax"        value="173.0*cm"/>
-    <constant name="InnerTrackerEndcapN_zmax"        value="147.47*cm"/>
+    <constant name="InnerTrackerEndcapP_zmax"        value="CentralTrackingRegionP_zmax"/>
+    <constant name="InnerTrackerEndcapN_zmax"        value="CentralTrackingRegionN_zmax"/>
     <comment> Endcap structures </comment>
     <comment> The forward outer cone is NOT projective </comment>
     <constant name="ForwardEndcapSupportCone_rmin1"  value="85*cm" />
