@@ -73,6 +73,7 @@
 
     <constant name="ForwardEndcapSupportCone_zmin"        value="ForwardEndcapSupportRing_zmax" />
     <constant name="ForwardEndcapSupportCone_z"           value="0.5*(ForwardEndcapSupportCone_zmin + ForwardEndcapSupportCone_zmax)" />
+    <constant name="ForwardEndcapSupportCone_rmin2"       value="ForwardEndcapSupportCone_zmax*tan(atan2(ForwardEndcapSupportCone_rmin1, ForwardEndcapSupportCone_zmin))" />
     <constant name="ForwardEndcapSupportCone_length"      value="ForwardEndcapSupportCone_zmax - ForwardEndcapSupportCone_zmin" />
 
     <comment> Backward service cylinder </comment>
