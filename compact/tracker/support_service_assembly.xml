@@ -29,8 +29,8 @@
 
     <comment> Tracker disk support cylinder </comment>
     <constant name="TrackerSupportCyl_zmin"               value="InnerSupportCone_zmax" />
-    <constant name="TrackerSupportCylEndcapP_zmax"        value="TrackerSupportCyl_rmin/tan(TrackerForwardAngle1)" />
-    <constant name="TrackerSupportCylEndcapN_zmax"        value="TrackerSupportCyl_rmin/tan(TrackerBackwardAngle1)" />
+    <constant name="TrackerSupportCylEndcapP_zmax"        value="TrackerSupportCyl_rmin/tan(TrackerForwardAngle)" />
+    <constant name="TrackerSupportCylEndcapN_zmax"        value="TrackerSupportCyl_rmin/tan(TrackerBackwardAngle)" />
     <constant name="TrackerSupportCylEndcapP_z"           value="0.5*(TrackerSupportCyl_zmin + TrackerSupportCylEndcapP_zmax)" />
     <constant name="TrackerSupportCylEndcapN_z"           value="0.5*(TrackerSupportCyl_zmin + TrackerSupportCylEndcapN_zmax)" />
     <constant name="TrackerSupportCylEndcapP_length"      value="TrackerSupportCylEndcapP_zmax - TrackerSupportCyl_zmin" />
@@ -47,8 +47,8 @@
     <constant name="TrackerSupportConeEndcapN_zmax"       value="InnerTrackerEndcapN_zmax" />
     <constant name="TrackerSupportConeEndcapP_rmin1"      value="TrackerSupportCyl_rmin" />  
     <constant name="TrackerSupportConeEndcapN_rmin1"      value="TrackerSupportCyl_rmin" />  
-    <constant name="TrackerSupportConeEndcapP_rmin2"      value="TrackerSupportConeEndcapP_zmax * tan(TrackerForwardAngle1)" />  
-    <constant name="TrackerSupportConeEndcapN_rmin2"      value="TrackerSupportConeEndcapN_zmax * tan(TrackerBackwardAngle1)" />  
+    <constant name="TrackerSupportConeEndcapP_rmin2"      value="TrackerSupportConeEndcapP_zmax * tan(TrackerForwardAngle)" />  
+    <constant name="TrackerSupportConeEndcapN_rmin2"      value="TrackerSupportConeEndcapN_zmax * tan(TrackerBackwardAngle)" />  
     <constant name="TrackerSupportConeCF_thickness"       value="TrackerSupportCylCF_thickness" />
     <comment> Effective Aluminum for services for now </comment>
     <constant name="TrackerSupportConeAl_thickness"       value="TrackerSupportCylAl_thickness" />

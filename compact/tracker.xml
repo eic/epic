@@ -6,8 +6,8 @@
     <comment> Primary directions for the tracker </comment>
     <comment> TODO: use actual design angles rather than calculated projective directions </comment>
     <constant name="TrackerPrimaryAngle"             value="2*atan(exp(-1.109))" />
-    <constant name="TrackerForwardAngle1"            value="2*atan(exp(-1.6472))" />
-    <constant name="TrackerBackwardAngle1"           value="2*atan(exp(-1.5166))" />
+    <constant name="TrackerForwardAngle"             value="2*atan(exp(-1.6472))" />
+    <constant name="TrackerBackwardAngle"            value="2*atan(exp(-1.5166))" />
 
     <comment> Main parameters for the vertex tracker </comment>
     <constant name="VertexBarrel_length"             value="270.0*mm"/>
@@ -24,13 +24,10 @@
     <comment> Main parameters for the MPGD layer geometries </comment>
     <constant name="InnerMPGDBarrel_rmin"            value="51.0*cm"/>
     <constant name="InnerMPGDBarrel_dz"              value="8.0*cm"/>
-    <constant name="InnerMPGDBarrel_angle"           value="TrackerBackwardAngle1"/>
     <comment> barrel length: 2R/tan(angle) - dz </comment>
 
     <comment> Position in center of space behind DIRC </comment>
     <constant name="OuterMPGDBarrel_rmin"            value="EcalBarrel_rmin - BarrelExtraSpace_thickness / 2."/>
-    <constant name="OuterMPGDBarrel_fwangle"         value="TrackerForwardAngle1"/>
-    <constant name="OuterMPGDBarrel_bwangle"         value="TrackerBackwardAngle1"/>
     <comment> barrel asymmetryc between forward and backward lengths </comment>
 
     <comment> Service/Support setup </comment>
@@ -60,10 +57,10 @@
     <constant name="TrackerEndcapPDisk2_rmax"        value="TrackerSupportCyl_rmin * .98" />
     <constant name="TrackerEndcapPDisk3_zmin"        value="106.0*cm" />
     <constant name="TrackerEndcapPDisk3_rmin"        value="Beampipe_rmax + 23.2*mm" />
-    <constant name="TrackerEndcapPDisk3_rmax"        value="TrackerEndcapPDisk3_zmin * tan(TrackerForwardAngle1) * 0.98" />
+    <constant name="TrackerEndcapPDisk3_rmax"        value="TrackerEndcapPDisk3_zmin * tan(TrackerForwardAngle) * 0.98" />
     <constant name="TrackerEndcapPDisk4_zmin"        value="125.0*cm" />
     <constant name="TrackerEndcapPDisk4_rmin"        value="Beampipe_rmax + 43.2*mm" />
-    <constant name="TrackerEndcapPDisk4_rmax"        value="TrackerEndcapPDisk4_zmin * tan(TrackerForwardAngle1) * 0.87" />
+    <constant name="TrackerEndcapPDisk4_rmax"        value="TrackerEndcapPDisk4_zmin * tan(TrackerForwardAngle) * 0.87" />
 
     <comment> Main parameters for the negative silicon disks (will be reflected, so positive z-values here)
               Values such that the disk dimensions are identical to the positive endcap. 
@@ -145,6 +142,6 @@
   <include ref="tracker/silicon_barrel.xml"/>
   <include ref="tracker/mpgd_barrel.xml"/>
   <include ref="tracker/silicon_disks.xml"/>
-  <include ref="tracker/support_reference.xml"/>
+  <include ref="tracker/support_service_assembly.xml"/>
 
 </lccdd>

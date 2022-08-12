@@ -11,12 +11,9 @@
     </comment>
 
     <constant name="InnerMPGDBarrelMod_rmin"                value="InnerMPGDBarrel_rmin"/>
-    <constant name="InnerMPGDBarrelMod_angle"               value="InnerMPGDBarrel_angle"/>
     <constant name="InnerMPGDBarrelMod_dz"                  value="InnerMPGDBarrel_dz"/>
 
     <constant name="OuterMPGDBarrelMod_rmin"                value="OuterMPGDBarrel_rmin"/>
-    <constant name="OuterMPGDBarrelMod_fwangle"             value="OuterMPGDBarrel_fwangle"/>
-    <constant name="OuterMPGDBarrelMod_bwangle"             value="OuterMPGDBarrel_bwangle"/>
 
     <comment> Gem disk setup.
       Note: some GEM disk z-positions are moved slightly (below in the parametrization)
@@ -24,16 +21,16 @@
             @FIXME
     </comment>
 
-    <constant name="InnerMPGDBarrelMod_length"              value="2 * InnerMPGDBarrelMod_rmin / tan(InnerMPGDBarrel_angle) - InnerMPGDBarrel_dz" />
+    <constant name="InnerMPGDBarrelMod_length"              value="2 * InnerMPGDBarrelMod_rmin / tan(TrackerBackwardAngle) - InnerMPGDBarrel_dz" />
     <constant name="InnerMPGDBarrelLayer_length"            value="InnerMPGDBarrelMod_length + 1*um" />
     <constant name="InnerMPGDBarrelLayer_thickness"         value="2*cm" />
     <constant name="InnerMPGDBarrelLayer_rmin"              value="InnerMPGDBarrelMod_rmin - InnerMPGDBarrelLayer_thickness / 2.0"/>
     <constant name="InnerMPGDBarrelLayer_rmax"              value="InnerMPGDBarrelLayer_rmin + InnerMPGDBarrelLayer_thickness"/>
 
-    <constant name="OuterMPGDBarrelMod_zmin1"               value="OuterMPGDBarrelMod_rmin / tan(OuterMPGDBarrel_fwangle)" />
-    <constant name="OuterMPGDBarrelMod_zmin2"               value="OuterMPGDBarrelMod_rmin / tan(OuterMPGDBarrel_bwangle)" />
+    <constant name="OuterMPGDBarrelMod_zmin1"               value="CentralTrackingRegionP_zmax" />
+    <constant name="OuterMPGDBarrelMod_zmin2"               value="OuterMPGDBarrelMod_rmin / tan(TrackerBackwardAngle)" />
     <constant name="OuterMPGDBarrelMod_length"              value="OuterMPGDBarrelMod_zmin1 + OuterMPGDBarrelMod_zmin2" />
-    <constant name="OuterMPGDBarrelMod_zoffset"             value="(OuterMPGDBarrelMod_zmin2 - OuterMPGDBarrelMod_zmin1)/2" />
+    <constant name="OuterMPGDBarrelMod_zoffset"             value="(OuterMPGDBarrelMod_zmin1 - OuterMPGDBarrelMod_zmin2)/2" />
     <constant name="OuterMPGDBarrelLayer_length"            value="OuterMPGDBarrelMod_length + 1*um" />
     <constant name="OuterMPGDBarrelLayer_thickness"         value="2*cm" />
     <constant name="OuterMPGDBarrelLayer_rmin"              value="OuterMPGDBarrelMod_rmin - OuterMPGDBarrelLayer_thickness / 2.0"/>
