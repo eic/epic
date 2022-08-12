@@ -132,12 +132,10 @@
   {% endif -%}
 
   {% if features is defined and features['pid'] is not none and 'tof_endcap' in features['pid'] %}
-<!-- SJJ disabled for now as it needs re-integration with the tracker
   <include ref="${DETECTOR_PATH}/compact/tof_endcap.xml"/>
--->
   {% endif -%}
 
-  {% if features is not defined or features['pid'] is none or 'tof_barrel' in features['pid'] %}
+  {% if features is defined and features['pid'] is none or 'tof_barrel' in features['pid'] %}
   <include ref="${DETECTOR_PATH}/compact/tof_barrel.xml"/>
   {% endif -%}
 {% endif -%}
