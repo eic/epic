@@ -9,6 +9,7 @@ PROJECT(epic
   )
 
 option(EPIC_ECCE_LEGACY_COMPAT "Preserve some compatibility with ECCE" ON)
+option(IRT_AUXFILE "Build auxiliary config file for dRICH IRT" OFF)
 
 # C++ standard
 set(CMAKE_CXX_STANDARD 17)
@@ -59,7 +60,7 @@ else()
 endif()
 find_package(fmt REQUIRED)
 
-if(DEFINED IRT_AUXFILE)
+if(IRT_AUXFILE)
   add_compile_definitions(IRT_AUXFILE)
   find_package(IRT REQUIRED)
 endif()
@@ -77,7 +78,7 @@ dd4hep_add_plugin(${a_lib_name}
 target_link_libraries(${a_lib_name}
   PUBLIC ${DD4hep_required_libraries} fmt::fmt
   )
-if(DEFINED IRT_AUXFILE)
+if(IRT_AUXFILE)
   target_link_libraries(${a_lib_name} PUBLIC IRT)
 endif()
 if(EPIC_ECCE_LEGACY_COMPAT)
