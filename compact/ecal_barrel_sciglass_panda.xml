@@ -28,7 +28,7 @@
       An EM calorimeter with projective SciGlass blocks
     </comment>
     <detector id="ECalBarrel_ID"
-      name="ECalBarrel"
+      name="EcalBarrel"
       type="epic_SciGlassCalorimeterPanda"
       vis="InvisibleWithDaughters"
       calorimeterType="EM_BARREL"
