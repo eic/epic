@@ -10,17 +10,17 @@
     <comment>
       Tracking Visualizations
     </comment>
-    <vis name="TrackerVis"        ref="AnlRed"      />
+    <vis name="TrackerVis"        ref="AnlGold"      />
     <vis name="TrackerSupportVis" ref="AnlBlue"         visible="true"  showDaughters="false" />
-    <vis name="TrackerServiceVis" ref="AnlGold"         showDaughters="false" />
-    <vis name="TrackerLayerVis"   ref="AnlGray"         visible="true"  showDaughters="true" />
+    <vis name="TrackerServiceVis" ref="AnlViolet"         showDaughters="false" />
+    <vis name="TrackerLayerVis"   ref="AnlGold"         visible="true"  showDaughters="false" />
     <vis name="TrackerModuleVis"  ref="TrackerLayerVis" visible="true"  showDaughters="true" />
     <vis name="TrackerMPGDVis"    ref="AnlRed"          visible="true"  showDaughters="true" />
     <comment> Simple visualization for Barrel MMGAS (apply to layers) and GEM endcap (apply to modules) for better performance </comment>
     <vis name="TrackerGEMModuleVis"  ref="TrackerMPGDVis"   visible="true"  showDaughters="false" />
     <vis name="TrackerMMGASLayerVis" ref="TrackerMPGDVis"   visible="true"  showDaughters="false" />
 
-    <vis name="VertexLayerVis"        ref="AnlGray"         visible="true"  showDaughters="false" />
+    <vis name="VertexLayerVis"        ref="AnlGold"         visible="true"  showDaughters="false" />
     <vis name="VertexSupportLayerVis" ref="AnlBlue"         visible="true"  showDaughters="false" />
     <vis name="VertexSupportVis"      ref="VertexSupportLayerVis" visible="true"  showDaughters="true" />
     <vis name="VertexModuleVis"       ref="TrackerLayerVis" visible="true"  showDaughters="true" />
@@ -52,7 +52,7 @@
       ECal Vis
     </comment>
     <vis name="EcalBarrelLayerVis"      ref="AnlGold"   showDaughters="false" visible="true"/>
-    <vis name="EcalBarrelEnvelopeVis"   ref="AnlGold"   showDaughters="true" visible="false" />
+    <vis name="EcalBarrelEnvelopeVis"   ref="AnlGold"   showDaughters="false" visible="true" />
     <vis name="EcalBarrelStaveVis"      ref="AnlGold"   showDaughters="true" visible="true" />
     <vis name="EcalBarrelFiberLayerVis" ref="AnlGold"   showDaughters="false" visible="true" />
     <vis name="EcalBarrelSliceVis"      ref="AnlGray"/>
