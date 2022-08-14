@@ -175,7 +175,6 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
   if (createIrtFile) {
     irtBoundary = new FlatSurface((1 / mm) * TVector3(0, 0, vesselZmin), normX, normY);
     for (int isec = 0; isec < nSectors; isec++) {
-      printout(ALWAYS, "IRTLOG", "============ BOUND: entrance");
       auto rad = irtGeometry->SetContainerVolume(
           irtDetector,             // Cherenkov detector
           "GasVolume",             // name
@@ -345,7 +344,6 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
     aerogelFlatSurface    = new FlatSurface((1 / mm) * TVector3(0, 0, irtAerogelZpos), normX, normY);
     filterFlatSurface     = new FlatSurface((1 / mm) * TVector3(0, 0, irtFilterZpos), normX, normY);
     for (int isec = 0; isec < nSectors; isec++) {
-      printout(ALWAYS, "IRTLOG", "============ BOUND: aerogel");
       auto aerogelFlatRadiator = irtGeometry->AddFlatRadiator(
           irtDetector,             // Cherenkov detector
           "Aerogel",               // name
@@ -355,7 +353,6 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
           aerogelFlatSurface,      // surface
           aerogelThickness / mm    // surface thickness
       );
-      printout(ALWAYS, "IRTLOG", "============ BOUND: filter");
       auto filterFlatRadiator = irtGeometry->AddFlatRadiator(
           irtDetector,             // Cherenkov detector
           "Filter",                // name
@@ -678,7 +675,6 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
                                                   mirrorSphericalSurface,            // surface
                                                   false                              // bool refractive
       );
-      printout(ALWAYS, "IRTLOG", "============ BOUND: mirror");
       irtDetector->AddOpticalBoundary(isec, mirrorOpticalBoundary);
       printout(ALWAYS, "IRTLOG", "");
       printout(ALWAYS, "IRTLOG", "  SECTOR %d MIRROR:", isec);
@@ -710,10 +706,14 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
         rad->SetReferenceRefractiveIndex(rIndex);
     }
     // write
-    for(auto sss : irtDetector->_m_OpticalBoundaries) {
-      for(auto bound : sss.second) {
-        printout(ALWAYS, "IRTLOG", "stored boundary: %s", bound->GetSurface()->GetName());
+    for(auto sector_bounds : irtDetector->_m_OpticalBoundaries) {
+      for(auto bound : sector_bounds.second) {
+        auto surface = bound->GetSurface();
+        printout(ALWAYS, "IRTLOG", "stored boundary: %s", surface->GetName());
+        printf("IRTLOG                   normal: "); surface->GetNormal(TVector3()).Print();
+        printf("IRTLOG                   center: "); surface->GetCenter().Print();
       }
+      printout(ALWAYS, "IRTLOG", "---");
     }
     irtGeometry->Write();
     irtAuxFile->Close();
