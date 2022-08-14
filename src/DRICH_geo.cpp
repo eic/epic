@@ -376,9 +376,9 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
 
   // initialize sensor centroids (used for mirror parameterization below); this is
   // the average (x,y,z) of the placed sensors, w.r.t. originFront
-  double sensorCentroidX = 0;
-  double sensorCentroidZ = 0;
-  int    sensorCount     = 0;
+  // double sensorCentroidX = 0;
+  // double sensorCentroidZ = 0;
+  // int    sensorCount     = 0;
 
   for (int isec = 0; isec < nSectors; isec++) {
 
@@ -469,11 +469,11 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
         if (patchCut) {
 
           // append sensor position to centroid calculation
-          if (isec == 0) {
-            sensorCentroidX += xCheck;
-            sensorCentroidZ += zCheck;
-            sensorCount++;
-          };
+          // if (isec == 0) {
+          //   sensorCentroidX += xCheck;
+          //   sensorCentroidZ += zCheck;
+          //   sensorCount++;
+          // };
 
           // placement (note: transformations are in reverse order)
           // - transformations operate on global coordinates; the corresponding
@@ -551,10 +551,10 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
     };     // end thetaGen loop
 
     // calculate centroid sensor position
-    if (isec == 0) {
-      sensorCentroidX /= sensorCount;
-      sensorCentroidZ /= sensorCount;
-    };
+    // if (isec == 0) {
+    //   sensorCentroidX /= sensorCount;
+    //   sensorCentroidZ /= sensorCount;
+    // };
 
     // END SENSOR MODULE LOOP ------------------------
 
