@@ -390,6 +390,137 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
     double      sectorRotation = isec * 360 / nSectors * degree;
     std::string secName        = "sec" + std::to_string(isec);
 
+    // BUILD MIRRORS ====================================================================
+
+    // derive spherical mirror parameters `(zM,xM,rM)`, for given image point
+    // coordinates `(zI,xI)` and `dO`, defined as the z-distance between the
+    // object and the mirror surface
+    // - all coordinates are specified w.r.t. the object point coordinates
+    // - this is point-to-point focusing, but it can be used to effectively steer
+    //   parallel-to-point focusing
+    double zM, xM, rM;
+    auto   FocusMirror = [&zM, &xM, &rM](double zI, double xI, double dO) {
+      zM = dO * zI / (2 * dO - zI);
+      xM = dO * xI / (2 * dO - zI);
+      rM = dO - zM;
+    };
+
+    // attributes, re-defined w.r.t. IP, needed for mirror positioning
+    double zS = sensorSphCenterZ + vesselZmin; // sensor sphere attributes
+    double xS = sensorSphCenterX;
+    // double rS = sensorSphRadius;
+    double B = vesselZmax - mirrorBackplane; // distance between IP and mirror back plane
+
+    // focus 1: set mirror to focus IP on center of sensor sphere `(zS,xS)`
+    /*double zF = zS;
+    double xF = xS;
+    FocusMirror(zF,xF,B);*/
+
+    // focus 2: move focal region along sensor sphere radius, according to `focusTuneLong`
+    // - specifically, along the radial line which passes through the approximate centroid
+    //   of the sensor region `(sensorCentroidZ,sensorCentroidX)`
+    // - `focusTuneLong` is the distance to move, given as a fraction of `sensorSphRadius`
+    // - `focusTuneLong==0` means `(zF,xF)==(zS,xS)`
+    // - `focusTuneLong==1` means `(zF,xF)` will be on the sensor sphere, near the centroid
+    /*
+    double zC = sensorCentroidZ + vesselZmin;
+    double xC = sensorCentroidX;
+    double slopeF = (xC-xS) / (zC-zS);
+    double thetaF = std::atan(std::fabs(slopeF));
+    double zF = zS + focusTuneLong * sensorSphRadius * std::cos(thetaF);
+    double xF = xS - focusTuneLong * sensorSphRadius * std::sin(thetaF);
+    //FocusMirror(zF,xF,B);
+
+    // focus 3: move along line perpendicular to focus 2's radial line,
+    // according to `focusTunePerp`, with the same numerical scale as `focusTuneLong`
+    zF += focusTunePerp * sensorSphRadius * std::cos(M_PI/2-thetaF);
+    xF += focusTunePerp * sensorSphRadius * std::sin(M_PI/2-thetaF);
+    FocusMirror(zF,xF,B);
+    */
+
+    // focus 4: use (z,x) coordinates for tune parameters
+    double zF = zS + focusTuneZ;
+    double xF = xS + focusTuneX;
+    FocusMirror(zF, xF, B);
+
+    // re-define mirror attributes to be w.r.t vessel front plane
+    double mirrorCenterZ = zM - vesselZmin;
+    double mirrorCenterX = xM;
+    double mirrorRadius  = rM;
+
+    // spherical mirror patch cuts and rotation
+    double mirrorThetaRot = std::asin(mirrorCenterX / mirrorRadius);
+    double mirrorTheta1   = mirrorThetaRot - std::asin((mirrorCenterX - mirrorRmin) / mirrorRadius);
+    double mirrorTheta2   = mirrorThetaRot + std::asin((mirrorRmax - mirrorCenterX) / mirrorRadius);
+
+    // if debugging, draw full sphere
+    if (debugMirror) {
+      mirrorTheta1 = 0;
+      mirrorTheta2 = M_PI; /*mirrorPhiw=2*M_PI;*/
+    };
+
+    // solid : create sphere at origin, with specified angular limits;
+    // phi limits are increased to fill gaps (overlaps are cut away later)
+    Sphere mirrorSolid1(mirrorRadius, mirrorRadius + mirrorThickness, mirrorTheta1, mirrorTheta2, -40 * degree,
+                        40 * degree);
+
+    // print mirror attributes for sector 0
+    // if(isec==0) printf("dRICH mirror (zM, xM, rM) = (%f, %f, %f)\n",zM,xM,rM); // coords w.r.t. IP
+
+    // mirror placement transformation (note: transformations are in reverse order)
+    auto mirrorPos = Position(mirrorCenterX, 0., mirrorCenterZ) + originFront;
+    auto mirrorPlacement(Translation3D(mirrorPos.x(), mirrorPos.y(), mirrorPos.z()) // re-center to specified position
+                         * RotationY(-mirrorThetaRot) // rotate about vertical axis, to be within vessel radial walls
+    );
+
+    // cut overlaps with other sectors using "pie slice" wedges, to the extent specified
+    // by `mirrorPhiw`
+    Tube              pieSlice(0.01 * cm, vesselRmax2, tankLength / 2.0, -mirrorPhiw / 2.0, mirrorPhiw / 2.0);
+    IntersectionSolid mirrorSolid2(pieSlice, mirrorSolid1, mirrorPlacement);
+
+    // mirror volume, attributes, and placement
+    Volume mirrorVol(detName + "_mirror_" + secName, mirrorSolid2, mirrorMat);
+    mirrorVol.setVisAttributes(mirrorVis);
+    auto mirrorSectorPlacement = RotationZ(sectorRotation) * Translation3D(0, 0, 0); // rotate about beam axis to sector
+    auto mirrorPV              = gasvolVol.placeVolume(mirrorVol, mirrorSectorPlacement);
+
+    // properties
+    DetElement mirrorDE(det, Form("mirror_de%d", isec), isec);
+    mirrorDE.setPlacement(mirrorPV);
+    SkinSurface mirrorSkin(desc, mirrorDE, Form("mirror_optical_surface%d", isec), mirrorSurf, mirrorVol);
+    mirrorSkin.isValid();
+
+#ifdef IRT_AUXFILE
+    // get mirror center coordinates, w.r.t. IP
+    /* - we have sector 0 coordinates `(zM,xM,rM)`, but here we try to access the numbers more generally,
+     *   so we get the mirror centers after sectorRotation
+     * - FIXME: boolean solids make this a bit tricky, both here and from `GeoSvc`, is there an easier way?
+     */
+    SphericalSurface* mirrorSphericalSurface;
+    OpticalBoundary*  mirrorOpticalBoundary;
+    if (createIrtFile) {
+      auto mirrorFinalPlacement = mirrorSectorPlacement * mirrorPlacement;
+      auto mirrorFinalCenter    = vesselPos + mirrorFinalPlacement.Translation().Vect(); // w.r.t. IP
+      mirrorSphericalSurface    = new SphericalSurface(
+          (1 / mm) * TVector3(mirrorFinalCenter.x(), mirrorFinalCenter.y(), mirrorFinalCenter.z()), mirrorRadius / mm);
+      mirrorOpticalBoundary = new OpticalBoundary(irtDetector->GetContainerVolume(), // CherenkovRadiator radiator
+                                                  mirrorSphericalSurface,            // surface
+                                                  false                              // bool refractive
+      );
+      irtDetector->AddOpticalBoundary(isec, mirrorOpticalBoundary);
+      printout(ALWAYS, "IRTLOG", "");
+      printout(ALWAYS, "IRTLOG", "  SECTOR %d MIRROR:", isec);
+      printout(ALWAYS, "IRTLOG", "    mirror x = %f cm", mirrorFinalCenter.x());
+      printout(ALWAYS, "IRTLOG", "    mirror y = %f cm", mirrorFinalCenter.y());
+      printout(ALWAYS, "IRTLOG", "    mirror z = %f cm", mirrorFinalCenter.z());
+      printout(ALWAYS, "IRTLOG", "    mirror R = %f cm", mirrorRadius);
+    }
+
+    // IRT: complete the radiator volume description; this is the rear side of the container gas volume
+    if (createIrtFile)
+      irtDetector->GetRadiator("GasVolume")->m_Borders[isec].second = mirrorSphericalSurface;
+#endif
+
     // BUILD SENSORS ====================================================================
 
     // if debugging sphere properties, restrict number of sensors drawn
@@ -558,136 +689,6 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
 
     // END SENSOR MODULE LOOP ------------------------
 
-    // BUILD MIRRORS ====================================================================
-
-    // derive spherical mirror parameters `(zM,xM,rM)`, for given image point
-    // coordinates `(zI,xI)` and `dO`, defined as the z-distance between the
-    // object and the mirror surface
-    // - all coordinates are specified w.r.t. the object point coordinates
-    // - this is point-to-point focusing, but it can be used to effectively steer
-    //   parallel-to-point focusing
-    double zM, xM, rM;
-    auto   FocusMirror = [&zM, &xM, &rM](double zI, double xI, double dO) {
-      zM = dO * zI / (2 * dO - zI);
-      xM = dO * xI / (2 * dO - zI);
-      rM = dO - zM;
-    };
-
-    // attributes, re-defined w.r.t. IP, needed for mirror positioning
-    double zS = sensorSphCenterZ + vesselZmin; // sensor sphere attributes
-    double xS = sensorSphCenterX;
-    // double rS = sensorSphRadius;
-    double B = vesselZmax - mirrorBackplane; // distance between IP and mirror back plane
-
-    // focus 1: set mirror to focus IP on center of sensor sphere `(zS,xS)`
-    /*double zF = zS;
-    double xF = xS;
-    FocusMirror(zF,xF,B);*/
-
-    // focus 2: move focal region along sensor sphere radius, according to `focusTuneLong`
-    // - specifically, along the radial line which passes through the approximate centroid
-    //   of the sensor region `(sensorCentroidZ,sensorCentroidX)`
-    // - `focusTuneLong` is the distance to move, given as a fraction of `sensorSphRadius`
-    // - `focusTuneLong==0` means `(zF,xF)==(zS,xS)`
-    // - `focusTuneLong==1` means `(zF,xF)` will be on the sensor sphere, near the centroid
-    /*
-    double zC = sensorCentroidZ + vesselZmin;
-    double xC = sensorCentroidX;
-    double slopeF = (xC-xS) / (zC-zS);
-    double thetaF = std::atan(std::fabs(slopeF));
-    double zF = zS + focusTuneLong * sensorSphRadius * std::cos(thetaF);
-    double xF = xS - focusTuneLong * sensorSphRadius * std::sin(thetaF);
-    //FocusMirror(zF,xF,B);
-
-    // focus 3: move along line perpendicular to focus 2's radial line,
-    // according to `focusTunePerp`, with the same numerical scale as `focusTuneLong`
-    zF += focusTunePerp * sensorSphRadius * std::cos(M_PI/2-thetaF);
-    xF += focusTunePerp * sensorSphRadius * std::sin(M_PI/2-thetaF);
-    FocusMirror(zF,xF,B);
-    */
-
-    // focus 4: use (z,x) coordinates for tune parameters
-    double zF = zS + focusTuneZ;
-    double xF = xS + focusTuneX;
-    FocusMirror(zF, xF, B);
-
-    // re-define mirror attributes to be w.r.t vessel front plane
-    double mirrorCenterZ = zM - vesselZmin;
-    double mirrorCenterX = xM;
-    double mirrorRadius  = rM;
-
-    // spherical mirror patch cuts and rotation
-    double mirrorThetaRot = std::asin(mirrorCenterX / mirrorRadius);
-    double mirrorTheta1   = mirrorThetaRot - std::asin((mirrorCenterX - mirrorRmin) / mirrorRadius);
-    double mirrorTheta2   = mirrorThetaRot + std::asin((mirrorRmax - mirrorCenterX) / mirrorRadius);
-
-    // if debugging, draw full sphere
-    if (debugMirror) {
-      mirrorTheta1 = 0;
-      mirrorTheta2 = M_PI; /*mirrorPhiw=2*M_PI;*/
-    };
-
-    // solid : create sphere at origin, with specified angular limits;
-    // phi limits are increased to fill gaps (overlaps are cut away later)
-    Sphere mirrorSolid1(mirrorRadius, mirrorRadius + mirrorThickness, mirrorTheta1, mirrorTheta2, -40 * degree,
-                        40 * degree);
-
-    // print mirror attributes for sector 0
-    // if(isec==0) printf("dRICH mirror (zM, xM, rM) = (%f, %f, %f)\n",zM,xM,rM); // coords w.r.t. IP
-
-    // mirror placement transformation (note: transformations are in reverse order)
-    auto mirrorPos = Position(mirrorCenterX, 0., mirrorCenterZ) + originFront;
-    auto mirrorPlacement(Translation3D(mirrorPos.x(), mirrorPos.y(), mirrorPos.z()) // re-center to specified position
-                         * RotationY(-mirrorThetaRot) // rotate about vertical axis, to be within vessel radial walls
-    );
-
-    // cut overlaps with other sectors using "pie slice" wedges, to the extent specified
-    // by `mirrorPhiw`
-    Tube              pieSlice(0.01 * cm, vesselRmax2, tankLength / 2.0, -mirrorPhiw / 2.0, mirrorPhiw / 2.0);
-    IntersectionSolid mirrorSolid2(pieSlice, mirrorSolid1, mirrorPlacement);
-
-    // mirror volume, attributes, and placement
-    Volume mirrorVol(detName + "_mirror_" + secName, mirrorSolid2, mirrorMat);
-    mirrorVol.setVisAttributes(mirrorVis);
-    auto mirrorSectorPlacement = RotationZ(sectorRotation) * Translation3D(0, 0, 0); // rotate about beam axis to sector
-    auto mirrorPV              = gasvolVol.placeVolume(mirrorVol, mirrorSectorPlacement);
-
-    // properties
-    DetElement mirrorDE(det, Form("mirror_de%d", isec), isec);
-    mirrorDE.setPlacement(mirrorPV);
-    SkinSurface mirrorSkin(desc, mirrorDE, Form("mirror_optical_surface%d", isec), mirrorSurf, mirrorVol);
-    mirrorSkin.isValid();
-
-#ifdef IRT_AUXFILE
-    // get mirror center coordinates, w.r.t. IP
-    /* - we have sector 0 coordinates `(zM,xM,rM)`, but here we try to access the numbers more generally,
-     *   so we get the mirror centers after sectorRotation
-     * - FIXME: boolean solids make this a bit tricky, both here and from `GeoSvc`, is there an easier way?
-     */
-    SphericalSurface* mirrorSphericalSurface;
-    OpticalBoundary*  mirrorOpticalBoundary;
-    if (createIrtFile) {
-      auto mirrorFinalPlacement = mirrorSectorPlacement * mirrorPlacement;
-      auto mirrorFinalCenter    = vesselPos + mirrorFinalPlacement.Translation().Vect(); // w.r.t. IP
-      mirrorSphericalSurface    = new SphericalSurface(
-          (1 / mm) * TVector3(mirrorFinalCenter.x(), mirrorFinalCenter.y(), mirrorFinalCenter.z()), mirrorRadius / mm);
-      mirrorOpticalBoundary = new OpticalBoundary(irtDetector->GetContainerVolume(), // CherenkovRadiator radiator
-                                                  mirrorSphericalSurface,            // surface
-                                                  false                              // bool refractive
-      );
-      irtDetector->AddOpticalBoundary(isec, mirrorOpticalBoundary);
-      printout(ALWAYS, "IRTLOG", "");
-      printout(ALWAYS, "IRTLOG", "  SECTOR %d MIRROR:", isec);
-      printout(ALWAYS, "IRTLOG", "    mirror x = %f cm", mirrorFinalCenter.x());
-      printout(ALWAYS, "IRTLOG", "    mirror y = %f cm", mirrorFinalCenter.y());
-      printout(ALWAYS, "IRTLOG", "    mirror z = %f cm", mirrorFinalCenter.z());
-      printout(ALWAYS, "IRTLOG", "    mirror R = %f cm", mirrorRadius);
-    }
-
-    // IRT: complete the radiator volume description; this is the rear side of the container gas volume
-    if (createIrtFile)
-      irtDetector->GetRadiator("GasVolume")->m_Borders[isec].second = mirrorSphericalSurface;
-#endif
 
   }; // END SECTOR LOOP //////////////////////////
 
