@@ -376,6 +376,9 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
 
   // initialize sensor centroids (used for mirror parameterization below); this is
   // the average (x,y,z) of the placed sensors, w.r.t. originFront
+  // - deprecated, but is still here in case we want it later; the IRT auxfile
+  //   requires sensors to be built after the mirrors, but if we want to use
+  //   `sensorCentroid*`, the sensor positions must be known before mirror focusing
   // double sensorCentroidX = 0;
   // double sensorCentroidZ = 0;
   // int    sensorCount     = 0;
@@ -707,15 +710,6 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
         rad->SetReferenceRefractiveIndex(rIndex);
     }
     // write
-    for(auto sector_bounds : irtDetector->_m_OpticalBoundaries) {
-      for(auto bound : sector_bounds.second) {
-        auto surface = bound->GetSurface();
-        printout(ALWAYS, "IRTLOG", "stored boundary: %s", surface->GetName());
-        printf("IRTLOG                   normal: "); surface->GetNormal(TVector3()).Print();
-        printf("IRTLOG                   center: "); surface->GetCenter().Print();
-      }
-      printout(ALWAYS, "IRTLOG", "---");
-    }
     irtGeometry->Write();
     irtAuxFile->Close();
   }
