@@ -40,7 +40,7 @@ static Ref_t create_detector(Detector& desc, xml::Handle_t handle, SensitiveDete
   auto det_pos = get_xml_xyz(x_det, _U(position));
   auto det_rot = get_xml_xyz(x_det, _U(rotation));
 
-  // envelop
+  // envelope
   auto                dim    = x_det.dimensions();
   auto                rmin   = dim.rmin();
   auto                rmax   = dim.rmax();
@@ -58,7 +58,7 @@ static Ref_t create_detector(Detector& desc, xml::Handle_t handle, SensitiveDete
   if (-zmin * sin(theta(etamin)) < rmin) {
     // no cutout: regular end face
     printout(DEBUG, "SciGlassCalorimeterPanda", "no etamin cutout: zmin * sin(theta(etamin)) = %f < rmin = %f",
-             zmin * sin(theta(etamin)), rmin);
+             -zmin * sin(theta(etamin)), rmin);
     v_z.emplace_back(zmin);
     v_rmin.emplace_back(rmin);
     v_rmax.emplace_back(rmax);
