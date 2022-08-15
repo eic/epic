@@ -68,18 +68,18 @@
                length="SiBarrelMod1_length"
                thickness="SiBarrelMod1Frame_thickness" />
         <module_component name="ITS3"
-                          material="Silicon" 
+                          material="Silicon"
                           sensitive="true"
-                          width="SiBarrelStave1_width" 
+                          width="SiBarrelStave1_width"
                           length="SiBarrelMod1_length"
-                          thickness="SiBarrelSensor_thickness" 
+                          thickness="SiBarrelSensor_thickness"
                           vis="TrackerLayerVis" />
-        <module_component name="Service" 
-                          material="Aluminum" 
+        <module_component name="Service"
+                          material="Aluminum"
                           sensitive="false"
-                          width="SiBarrelStave1_width" 
-                          length="SiBarrelMod1_length" 
-                          thickness="SiBarrelMod1Service_thickness" 
+                          width="SiBarrelStave1_width"
+                          length="SiBarrelMod1_length"
+                          thickness="SiBarrelMod1Service_thickness"
                           vis="TrackerLayerVis"/>
       </module>
       <comment> Layers composed of many arrayed modules  </comment>
@@ -125,18 +125,18 @@
                length="SiBarrelMod2_length"
                thickness="SiBarrelMod2Frame_thickness" />
         <module_component name="ITS3"
-                          material="Silicon" 
+                          material="Silicon"
                           sensitive="true"
-                          width="SiBarrelStave2_width" 
+                          width="SiBarrelStave2_width"
                           length="SiBarrelMod2_length"
-                          thickness="SiBarrelSensor_thickness" 
+                          thickness="SiBarrelSensor_thickness"
                           vis="TrackerLayerVis" />
-        <module_component name="Service" 
-                          material="Aluminum" 
+        <module_component name="Service"
+                          material="Aluminum"
                           sensitive="false"
-                          width="SiBarrelStave2_width" 
-                          length="SiBarrelMod2_length" 
-                          thickness="SiBarrelMod2Service_thickness" 
+                          width="SiBarrelStave2_width"
+                          length="SiBarrelMod2_length"
+                          thickness="SiBarrelMod2Service_thickness"
                           vis="TrackerLayerVis"/>
       </module>
       <comment> Layers composed of many arrayed modules  </comment>
@@ -165,11 +165,11 @@
   <readouts>
     <readout name="SagittaSiBarrelHits">
       <segmentation type="CartesianGridXY" grid_size_x="0.010*mm" grid_size_y="0.010*mm" />
-      <id>system:8,layer:4,module:12,sensor:2,x:32:-16,y:-16</id>
+      <id>system:8,layer:4,module:12,sensor:2,x:32:-12,y:-20</id>
     </readout>
     <readout name="OuterSiBarrelHits">
       <segmentation type="CartesianGridXY" grid_size_x="0.010*mm" grid_size_y="0.010*mm" />
-      <id>system:8,layer:4,module:12,sensor:2,x:32:-16,y:-16</id>
+      <id>system:8,layer:4,module:12,sensor:2,x:32:-12,y:-20</id>
     </readout>
   </readouts>
 
