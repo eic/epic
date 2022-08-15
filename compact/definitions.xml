@@ -435,12 +435,12 @@ Examples:
 
     <comment> Global PID regions with suballocations for TOF and RICH detectors </comment>
     <constant name="ForwardPIDRegion_zmin"        value="CentralTrackingRegionP_zmax" />
-    <constant name="ForwardPIDRegion_length"      value="155.0*cm" />
+    <constant name="ForwardPIDRegion_length"      value="142.0*cm" />
     <constant name="ForwardPIDRegion_rmax"        value="180.0*cm" />
 
     <comment> Forward TOF region currenlty empty for future upgrades </comment>
     <constant name="ForwardTOFRegion_zmin"        value="ForwardPIDRegion_zmin" />
-    <constant name="ForwardTOFRegion_length"      value="35.0*cm" />
+    <constant name="ForwardTOFRegion_length"      value="22.0*cm" />
     <constant name="ForwardTOFRegion_rmax"        value="CentralTrackingRegion_rmax" />
     <constant name="ForwardTOFRegion_tan"         value="CentralTrackingRegionP_tan" />
 
