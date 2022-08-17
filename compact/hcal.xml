@@ -1,154 +1,17 @@
 <lccdd>
 
-  <define>
-    <constant name="HcalBarrelAvailThickness" value="HcalBarrel_thickness"/>
-
-    <documentation>
-      #### Material Thickness
-    </documentation>
-    <constant name="HcalBarrelSteelThickness"        value="2.0 * cm"/>
-    <constant name="HcalBarrelPolystyreneThickness"  value="0.5 * cm"/>
-    <constant name="HcalEndcapNSteelThickness"       value="HcalBarrelSteelThickness"/>
-    <constant name="HcalEndcapNPolystyreneThickness" value="HcalBarrelPolystyreneThickness"/>
-    <constant name="HcalEndcapPSteelThickness"       value="HcalBarrelSteelThickness"/>
-    <constant name="HcalEndcapPPolystyreneThickness" value="0.3 * cm"/>
-
-    <documentation>
-      - Hcal Barrel Layers and computed Thickness
-    </documentation>
-    <constant name="HcalBarrelSingleLayerThickness"
-             value="HcalBarrelSteelThickness + HcalBarrelPolystyreneThickness"/>
-    <constant name="HcalBarrelLayer_NRepeat" value="floor(HcalBarrelAvailThickness / HcalBarrelSingleLayerThickness)"/>
-    <constant name="HcalBarrelThickness" value="HcalBarrelLayer_NRepeat * HcalBarrelSingleLayerThickness"/>
-
-    <documentation>
-      - Hcal Endcap N Layers and computed Thickness
-    </documentation>
-    <constant name="HcalEndcapNSingleLayerThickness"
-             value="HcalEndcapNSteelThickness + HcalEndcapNPolystyreneThickness"/>
-    <constant name="HcalEndcapNLayer_NRepeat" value="floor(HcalEndcapN_length / HcalEndcapNSingleLayerThickness)"/>
-    <constant name="HcalEndcapN_thickness" value="HcalEndcapNLayer_NRepeat * HcalEndcapNSingleLayerThickness"/>
-
-    <documentation>
-      - Hcal Endcap P Layers and computed Thickness
-    </documentation>
-    <constant name="HcalEndcapPSingleLayerThickness"
-             value="HcalEndcapPSteelThickness + HcalEndcapPPolystyreneThickness"/>
-    <constant name="HcalEndcapPLayer_NRepeat" value="floor(HcalEndcapP_length / HcalEndcapPSingleLayerThickness)"/>
-    <constant name="HcalEndcapP_thickness" value="HcalEndcapPLayer_NRepeat * HcalEndcapPSingleLayerThickness"/>
-
-  </define>
-
-  <limits>
-  </limits>
-
-  <regions>
-  </regions>
-
   <display>
   </display>
+  <define>
+  </define>
 
-  <!-- Define detector -->
-  <detectors>
+  <documentation level="10">
+    ### Hcal configuration
+  </documentation>
+  <include ref="hcal_forward.xml"/>
 
-    <detector
-      id="HCalBarrel_ID"
-      name="HcalBarrel"
-      type="epic_EcalBarrel"
-      readout="HcalBarrelHits"
-      vis="HcalBarrelVis"
-      calorimeterType="HAD_BARREL"
-      offset="HcalBarrel_offset"
-      gap="0.*cm"
-      material="Steel235">
-      <dimensions
-        numsides="CaloSides"
-        rmin="HcalBarrel_rmin"
-        z="HcalBarrel_length"/>
-      <staves vis="HcalBarrelStaveVis"/>
-      <layer repeat="HcalBarrelLayer_NRepeat" vis="HcalBarrelLayerVis">
-        <slice material="Steel235" thickness="HcalBarrelSteelThickness" vis="HcalAbsorberVis"/>
-        <slice material="Polystyrene" thickness="HcalBarrelPolystyreneThickness" vis="HcalSensorVis" sensitive="yes" limits="cal_limits"/>
-      </layer>
-    </detector>
+  <include ref="hcal_backward.xml"/>
 
-    <detector
-      id="HCalEndcapP_ID"
-      name="HcalEndcapP"
-      type="epic_PolyhedraEndcapCalorimeter2"
-      readout="HcalEndcapPHits"
-      vis="HcalEndcapVis"
-      calorimeterType="HAD_ENDCAP"
-      reflect="false">
-      <position x="0" y="0" z="0"/>
-      <dimensions
-        numsides="CaloSides"
-        zmin="HcalEndcapP_zmin"
-        rmin="HcalEndcapP_rmin"
-        rmax="HcalBarrel_rmax"/>
-      <layer repeat="HcalEndcapPLayer_NRepeat" vis="HcalEndcapLayerVis" >
-        <slice material="Steel235" thickness="HcalEndcapPSteelThickness" vis="HcalAbsorberVis"/>
-        <slice material="Polystyrene" thickness="HcalEndcapPPolystyreneThickness" vis="HcalSensorVis" sensitive="yes" limits="cal_limits"/>
-      </layer>
-    </detector>
+  <include ref="hcal_barrel.xml"/>
 
-    <detector
-      id="PassiveSteelRingEndcapP_ID"
-      name="PassiveSteelRingEndcapP"
-      type="epic_PolyhedraEndcapCalorimeter2"
-      vis="PassiveSteelVis"
-      calorimeterType="HAD_ENDCAP"
-      reflect="false">
-      <position x="0" y="0" z="0"/>
-      <dimensions
-        numsides="CaloSides"
-        zmin="EcalEndcapP_zmin"
-        rmin="EcalEndcapP_rmax"
-        rmax="HcalBarrel_rmax"/>
-      <layer repeat="1">
-        <slice material="Steel235" thickness="EcalEndcapP_length" vis="HcalAbsorberVis"/>
-      </layer>
-    </detector>
-
-    <detector
-      id="HCalEndcapN_ID"
-      name="HcalEndcapN"
-      type="epic_PolyhedraEndcapCalorimeter2"
-      readout="HcalEndcapNHits"
-      vis="HcalEndcapVis"
-      calorimeterType="HAD_ENDCAP" reflect="true">
-      <position x="0" y="0" z="0"/>
-      <dimensions
-        numsides="CaloSides"
-        zmin="HcalEndcapN_zmin"
-        rmin="HcalEndcapN_rmin"
-        rmax="HcalBarrel_rmax"/>
-      <layer repeat="HcalEndcapNLayer_NRepeat" vis="HcalEndcapLayerVis" >
-        <slice material="Steel235" thickness="HcalEndcapNSteelThickness" vis="HcalAbsorberVis"/>
-        <slice material="Polystyrene" thickness="HcalEndcapNPolystyreneThickness" vis="HcalSensorVis" sensitive="yes" limits="cal_limits"/>
-      </layer>
-    </detector>
-
-  </detectors>
-  <!--  Definition of the readout segmentation/definition  -->
-  <readouts>
-    <readout name="HcalBarrelHits">
-      <segmentation type="CartesianGridXY" grid_size_x="100* mm" grid_size_y="100 * mm"/>
-      <id>system:8,barrel:3,module:4,layer:8,slice:5,x:32:-16,y:-16</id>
-    </readout>
-    <readout name="HcalEndcapPHits">
-      <segmentation type="CartesianGridXY" grid_size_x="100 * mm" grid_size_y="100 * mm"/>
-      <id>system:8,barrel:3,module:4,layer:8,slice:5,x:32:-16,y:-16</id>
-    </readout>
-    <readout name="HcalEndcapNHits">
-      <segmentation type="CartesianGridXY" grid_size_x="100 * mm" grid_size_y ="100 * mm"/>
-      <id>system:8,barrel:3,module:4,layer:8,slice:5,x:32:-16,y:-16</id>
-    </readout>
-  </readouts>
-
-  <plugins>
-  </plugins>
-
-  <fields>
-  </fields>
 </lccdd>
