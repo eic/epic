@@ -8,10 +8,10 @@
   <documentation level="10">
     ### Hcal configuration
   </documentation>
-  <include ref="hcal_forward.xml"/>
+  <include ref="hcal/hcal_forward.xml"/>
 
-  <include ref="hcal_backward.xml"/>
+  <include ref="hcal/hcal_backward.xml"/>
 
-  <include ref="hcal_barrel.xml"/>
+  <include ref="hcal/hcal_barrel.xml"/>
 
 </lccdd>
