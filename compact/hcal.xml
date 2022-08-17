@@ -10,6 +10,8 @@
   </documentation>
   <include ref="hcal/hcal_forward.xml"/>
 
+  <include ref="hcal/hcal_forward_insert.xml"/>
+
   <include ref="hcal/hcal_backward.xml"/>
 
   <include ref="hcal/hcal_barrel.xml"/>

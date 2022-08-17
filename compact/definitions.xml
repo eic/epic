@@ -191,6 +191,7 @@ The unused IDs below are saved for future use.
     <constant name="HCalEndcapP_ID"     value="112"/>
     <constant name="HCalEndcapN_ID"     value="113"/>
     <constant name="PassiveSteelRingEndcapP_ID" value="114"/>
+    <constant name="HCalEndcapPInsert_ID" value="115"/>
     <documentation>
       #### (120-129) (near) Forward reserved
 
