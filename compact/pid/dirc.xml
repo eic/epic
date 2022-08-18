@@ -3,6 +3,12 @@
 
 <lccdd>
 
+  <info name="dirc.xml"
+        title="High Performance DIRC"
+        author="rdom"
+        url="https://github.com/rdom"
+  />
+  
   <comment>
     DIRC consists of 12 (default) identical modules making a barrel.
     Each DIRC module consists of:
