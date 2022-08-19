@@ -557,6 +557,13 @@ Service gaps in FW direction (before endcapP ECAL) and BW direction (before endc
     <comment> HcalEndcapP needs to clear the expanding beampipe with 2 * crossing angle + its radius of BeampipeOD / 2 + a flange</comment>
     <constant name="HcalEndcapP_rmin"     value="(HcalEndcapP_zmin + HcalEndcapP_length) * tan(2.0 * abs(CrossingAngle)) + BeampipeOD / 2.0 + 2.0 * cm"/>
 
+    <constant name="HcalEndcapPInsert_zmin"     value="HcalEndcapP_zmin"/>
+    <constant name="HcalEndcapPInsert_length"   value="118.61*cm"/>
+    <constant name="HcalEndcapPInsert_zmax"     value="HcalEndcapPInsert_zmin + HcalEndcapPInsert_length"/>
+    <constant name="HcalEndcapPInsert_width"    value="59.6*cm"/>
+    <constant name="HcalEndcapPInsert_height"    value="59.7485*cm"/>
+    <constant name="HcalEndcapPInsert_xposition"    value="-10*cm"/>
+
     <constant name="HcalEndcapN_zmin"     value="BackwardServiceGap_zmax"/>
     <constant name="HcalEndcapN_length"   value="20.0*cm"/> <!-- FIXME just the size of ECCE backward field return -->
     <constant name="HcalEndcapN_zmax"     value="HcalEndcapN_zmin + HcalEndcapN_length"/>
