@@ -1,5 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <lccdd>
+  <info name="mpgd_barrel.xml"
+        title="Micropattern gas detector barrel layers"
+        author="mposik1983"
+        url="https://github.com/mposik1983"
+  />
   <define>
     <comment>
       Main parameters - Geo based on the original ECCE design, while for now
