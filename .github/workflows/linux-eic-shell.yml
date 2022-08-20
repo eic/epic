@@ -87,8 +87,8 @@ jobs:
         token: ${{ secrets.EICWEB_GEOVIEWER_TRIGGER }}
         ref_name: main
         variables: |
-          JUGGLER_DETECTOR_REPOSITORYURL=${{ github.server_url }}/${{ github.repository }}
-          JUGGLER_DETECTOR_VERSION=${{ github.ref_name }}
+          DETECTOR_REPOSITORYURL=${{ github.server_url }}/${{ github.repository }}
+          DETECTOR_VERSION=${{ github.ref_name }}
           GITHUB_REPOSITORY=${{ github.repository }}
           GITHUB_SHA=${{ github.event.pull_request.head.sha || github.sha }}
     - run: |
