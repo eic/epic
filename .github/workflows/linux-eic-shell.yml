@@ -75,6 +75,34 @@ jobs:
         sudo apt-get install -y libxml2-utils
         xmllint install/share/ecce/*.xml > /dev/null
 
+  trigger-geoviewer:
+    runs-on: ubuntu-latest
+    needs: [xmllint-after-build]
+    steps:
+    - uses: eic/trigger-gitlab-ci@v2
+      id: trigger
+      with:
+        url: https://eicweb.phy.anl.gov
+        project_id: 539
+        token: ${{ secrets.EICWEB_GEOVIEWER_TRIGGER }}
+        ref_name: main
+        variables: |
+          JUGGLER_DETECTOR_REPOSITORYURL=${{ github.server_url }}/${{ github.repository }}
+          JUGGLER_DETECTOR_VERSION=${{ github.ref_name }}
+          GITHUB_REPOSITORY=${{ github.repository }}
+          GITHUB_SHA=${{ github.event.pull_request.head.sha || github.sha }}
+    - run: |
+        gh api \
+           --method POST \
+          -H "Accept: application/vnd.github+json" \
+          /repos/${{ github.repository }}/statuses/${{ github.event.pull_request.head.sha || github.sha }} \
+          -f state='pending' \
+          -f target_url=${{ steps.trigger.outputs.web_url }} \
+          -f description='The geoviewer exports have been triggered...' \
+          -f context='eicweb/geoviewer'
+      env:
+        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
   convert-to-gdml:
     runs-on: ubuntu-latest
     needs: build-test
