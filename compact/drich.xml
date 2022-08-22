@@ -146,13 +146,13 @@
   material="Acrylic_DRICH"
   surface="MirrorSurface_DRICH"
   vis="DRICH_mirror_vis"
-  backplane="DRICH_window_thickness + 0.71*cm"
+  backplane="DRICH_window_thickness + 2.0*cm"
   rmin="DRICH_rmin1 + DRICH_wall_thickness - 1.0*cm"
   rmax="DRICH_rmax2 - DRICH_wall_thickness - 3.0*cm"
   phiw="59.5*degree"
   thickness="0.2*cm"
-  focus_tune_x="69.78*cm"
-  focus_tune_z="51.45*cm"
+  focus_tune_x="-5.0*cm"
+  focus_tune_z="0.0*cm"
   />
 
 <!-- /detectors/detector/sensors -->
@@ -205,15 +205,15 @@
     - `zmin`: z-plane cut
 </documentation>
 <sphere
-  centerz="-168.07*cm + DRICH_SnoutLength + (DRICH_Length-DRICH_SnoutLength)/2.0"
-  centerx="124.98*cm"
-  radius="140*cm"
+  centerz="-50.0*cm"
+  centerx="180.0*cm"
+  radius="100.0*cm"
   />
 <sphericalpatch
   phiw="14*degree"
   rmin="DRICH_rmax1 + 2.0*cm"
   rmax="DRICH_rmax2 - 5.0*cm"
-  zmin="DRICH_SnoutLength + 3.0*cm"
+  zmin="DRICH_SnoutLength + 5.0*cm"
   />
 
 
