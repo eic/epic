@@ -153,7 +153,8 @@ static Ref_t create_BarrelTrackerWithFrame(Detector& description, xml_h e, Sensi
       double frame_width     = m_frame.width();
       double frame_height    = getAttrOrDefault<double>(m_frame, _U(height), 5.0 * mm);
       double tanth           = frame_height / (frame_width / 2.0);
-      double frame_height2   = frame_height - frame_thickness - frame_thickness / tanth;
+      double costh           = 1./sqrt(1+tanth*tanth);
+      double frame_height2   = frame_height - frame_thickness - frame_thickness / costh;
       double frame_width2    = 2.0 * frame_height2 / tanth;
 
       Trd1 moduleframe_part1(frame_width / 2, 0.001 * mm, m_frame.length() / 2, frame_height / 2);
