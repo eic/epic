@@ -3,7 +3,8 @@
   <info name="mpgd_barrel.xml"
         title="Micropattern gas detector barrel layers"
         author="mposik1983"
-        url="https://github.com/mposik1983"
+	url="https://github.com/mposik1983"
+        status="development"
   />
   <define>
     <comment>
