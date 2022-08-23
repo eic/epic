@@ -23,7 +23,7 @@ static Ref_t createDetector(Detector& desc, xml_h handle, SensitiveDetector sens
 
   xml_dim_t  pos        = detElem.position(); // Position in global coordinates
 
-  Material   air     = desc.material("Air");
+  Material   air        = desc.material("Air");
   
   // Getting beampipe hole dimensions
   const xml::Component &beampipe_hole_xml = detElem.child(
@@ -61,19 +61,20 @@ static Ref_t createDetector(Detector& desc, xml_h handle, SensitiveDetector sens
         Treats the beginning of the insert as z = 0
         At z = 0 (beginning of first layer), hole radius is hole_radius_initial
         The radius is hole_radius_final at the beginning of the backplate, 
-        i.e. z = length - backplate_thickness
+          i.e. z = length - backplate_thickness
     */
-    double slope = (hole_radius_final != hole_radius_initial) ? 
-                    (hole_radius_final - hole_radius_initial) /
-                    (length - backplate_thickness) : 
-                    0.;
+    double slope = (hole_radius_final - hole_radius_initial) / (length - backplate_thickness);
     return slope * z_pos + hole_radius_initial;
   };
+
+  // Defining envelope
   Box envelope(width / 2.0, height / 2.0, length / 2.0);
 
-  // Hole initial x-position in local coordinate system
-  // x = 0 in local coordinate system is x = HcalEndcapPInsert_xposition (default -10 cm) in global coordinate system
-  // Hole starts at x = -7.29 cm in global system
+  /*
+    Hole initial x-position in local coordinate system
+    x = 0 in local coordinate system is x = HcalEndcapPInsert_xposition in global coordinate system
+    Hole starts at x = -7.29 cm in global system
+  */
   const double initial_hole_x = -7.29 - pos.x();
   
   // Keeps track of the hole's x location for each layer
@@ -81,13 +82,14 @@ static Ref_t createDetector(Detector& desc, xml_h handle, SensitiveDetector sens
 
   // Keeps track of the z location as we move longiduinally through the insert
   // Will use this tracking variable as input to get_hole_radius 
-  // get_hole_radius treats the front of the insert as z = 0
-  // z_distance_traversed is a good fit for its parameter
   double z_distance_traversed = 0.;
 
-  // Cutting out the hole from the envelope
-  // Cut out hole layer-by-layer to get exact shape
-  // Subtracting a cone is difficult since the cone would have to be angled towards the negative x direction
+  /* 
+    Cutting out the hole from the envelope
+    Cut out hole layer-by-layer to get exact desired shape
+    Subtracting a cone is difficult since the cone would have to be angled towards the negative x direction
+  */
+
   // Looping through all the different layer sections (W/Sc, Steel/Sc, backplate)
   for(xml_coll_t c(detElem,_U(layer)); c; ++c) 
   {
@@ -102,7 +104,6 @@ static Ref_t createDetector(Detector& desc, xml_h handle, SensitiveDetector sens
       Tube layer_hole(0., hole_radius, layer_thickness / 2.);
       
       /*
-
         X-Position:
         The hole starts at x = 2.71 cm with respect to local coordinate system.
         The hole shifts by -.0569 cm with each layer
@@ -114,25 +115,26 @@ static Ref_t createDetector(Detector& desc, xml_h handle, SensitiveDetector sens
           (i.e. where to put the cutout shape)
       */
 
-      SubtractionSolid envelope_with_insert(
+      SubtractionSolid envelope_with_hole(
         envelope, 
         layer_hole, 
         Position(
           hole_x_tracker,
           0., 
-          (-length + layer_thickness)/2 + z_distance_traversed 
+          (-length + layer_thickness)/2. + z_distance_traversed 
         )
       );
-      // Removing the beampipe shape layer by layer from envelope
-      envelope = envelope_with_insert;
+      // Removing the hole layer by layer from envelope
+      envelope = envelope_with_hole;
 
       z_distance_traversed += layer_thickness; // Moving hole along z
       hole_x_tracker -= 0.0569; // Moving hole along x
     }
   }
 
+  // Defining envelope volume
   Volume envelopeVol(detName, envelope, air); 
-  // Setting layer attributes
+  // Setting envelope attributes
   envelopeVol.setAttributes(
     desc,
     detElem.regionStr(),
@@ -142,13 +144,14 @@ static Ref_t createDetector(Detector& desc, xml_h handle, SensitiveDetector sens
 
   PlacedVolume pv;
 
-  // Resetting trackers for building the layers
+  // Resetting trackers for layer construction
   hole_x_tracker = initial_hole_x;
   z_distance_traversed = 0.;
+
   int layer_num = 1;
   
   // Looping through all the different layer sections (W/Sc, Steel/Sc, backplate)
-  for(xml_coll_t c(detElem,_U(layer)); c; ++c) 
+  for(xml_coll_t c(detElem,_U(layer)); c; ++c)
   {
     xml_comp_t x_layer = c;
     int repeat = x_layer.repeat();  
@@ -166,37 +169,38 @@ static Ref_t createDetector(Detector& desc, xml_h handle, SensitiveDetector sens
 
       // Removing beampipe shape from each layer
       Tube layer_hole(0., hole_radius, layer_thickness / 2.);
-      SubtractionSolid layer_with_insert(
+      SubtractionSolid layer_with_hole(
         layer,
         layer_hole,
         Position(hole_x_tracker, 0., 0.)
       );
-      Volume layer_vol(layer_name, layer_with_insert, air);
+      Volume layer_vol(layer_name, layer_with_hole, air);
 
       int slice_num = 1;
-      double slice_z = -layer_thickness/2.;
+      double slice_z = -layer_thickness / 2.; // Keeps track of slices' z locations in each layer
 
-      // Loop over each layer's slices
+      // Looping over each layer's slices
       for(xml_coll_t l(x_layer,_U(slice)); l; ++l) 
       {
-
         xml_comp_t x_slice = l;
         double slice_thickness = x_slice.thickness();
         std::string slice_name = layer_name + _toString(slice_num, "slice%d");
         Material slice_mat = desc.material(x_slice.materialStr());		
-        slice_z += slice_thickness/2.;
+        slice_z += slice_thickness/2.; // Going to slice halfway point
 
         // Each slice within a layer has the same hole radius
         Box slice(width/2., height/2., slice_thickness/2.);
         Tube slice_hole(0., hole_radius, slice_thickness / 2.);
-        SubtractionSolid slice_with_insert(
-            slice,
-            slice_hole,
-            Position(hole_x_tracker, 0., 0.));
-        Volume slice_vol (slice_name, slice_with_insert, slice_mat);
+        SubtractionSolid slice_with_hole(
+          slice,
+          slice_hole,
+          Position(hole_x_tracker, 0., 0.)
+        );
+        Volume slice_vol (slice_name, slice_with_hole, slice_mat);
         
-        // Setting appropriate slices as sensitive (default is polystyrene slices)
-        if(x_slice.isSensitive()) {
+        // Setting appropriate slices as sensitive
+        if(x_slice.isSensitive())
+        {
           sens.setType("calorimeter");
           slice_vol.setSensitiveDetector(sens);
         }
@@ -210,18 +214,16 @@ static Ref_t createDetector(Detector& desc, xml_h handle, SensitiveDetector sens
         );
 
         // Placing slice within layer
-        // z_distance_traversed - layer_z - layer_thickness/2. gives the front of each already placed slice
-        // + slice_thickness/2. is the position of the slice about to be placed
         pv = layer_vol.placeVolume(
-            slice_vol,
-            Transform3D(
-                RotationZYX(0, 0, 0),
-                Position(
-                  0.,
-                  0.,
-                  slice_z
-                )
-              )
+          slice_vol,
+          Transform3D(
+            RotationZYX(0, 0, 0),
+            Position(
+              0.,
+              0.,
+              slice_z
+            )
+          )
         );
         pv.addPhysVolID("slice", slice_num);
         slice_z += slice_thickness/2.;
@@ -265,8 +267,7 @@ static Ref_t createDetector(Detector& desc, xml_h handle, SensitiveDetector sens
   Volume motherVol = desc.pickMotherVolume(det);
   
   // Placing insert in world volume
-  auto tr = Transform3D(Position(pos.x(), pos.y(), pos.z() + length/2.));
-
+  auto tr = Transform3D(Position(pos.x(), pos.y(), pos.z() + length / 2.));
   PlacedVolume phv = motherVol.placeVolume(envelopeVol, tr);
   phv.addPhysVolID("system", detID);
   det.setPlacement(phv);
