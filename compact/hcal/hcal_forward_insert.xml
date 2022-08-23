@@ -4,18 +4,19 @@
         title="Forward HCal Insert Calorimeter"
         author="rymilton"
         url="https://github.com/rymilton"
+        status="development"
   /> -->
 
   <define>
      <documentation>
       #### Material Thickness
     </documentation>
-    <constant name="HcalEndcapPInsertAirThickness"      value="0.02*cm"/>
-    <constant name="HcalEndcapPInsertAbsorberThickness" value="1.61*cm"/>
+    <constant name="HcalEndcapPInsertAirThickness"               value="0.02*cm"/>
+    <constant name="HcalEndcapPInsertAbsorberThickness"          value="1.61*cm"/>
     <constant name="HcalEndcapPInsertScintillatorCoverThickness" value="0.2*cm"/>
-    <constant name="HcalEndcapPInsertPolystyreneThickness"    value="0.30*cm"/>
-    <constant name="HcalEndcapPInsertPCBThickness"      value="0.16*cm"/>
-    <constant name="HcalEndcapPInsertESRFoilThickness"      value="0.015*cm"/>
+    <constant name="HcalEndcapPInsertPolystyreneThickness"       value="0.30*cm"/>
+    <constant name="HcalEndcapPInsertPCBThickness"               value="0.16*cm"/>
+    <constant name="HcalEndcapPInsertESRFoilThickness"           value="0.015*cm"/>
     
     
 
@@ -67,7 +68,7 @@
       id="HCalEndcapPInsert_ID" 
       name="HcalEndcapPInsert" 
       type="epic_InsertCalorimeter"
-      vis="HcalEndcapVis"
+      vis="HcalEndcapInsertVis"
       readout="HcalEndcapPInsertHits"
       calorimeterType="HAD_ENDCAP"
     >
@@ -77,13 +78,13 @@
         y="HcalEndcapPInsert_height"
         z="HcalEndcapPInsert_length"
       />
-      <constant name = backplate_thickness value="HcalEndcapPInsertBackplateThickness"/>
+      <constant name = "backplate_thickness" value="HcalEndcapPInsertBackplateThickness"/>
       <comment> Tungsten/Scintillator layers </comment>
       <comment> Slices will be ordered according to the slice order listed here </comment>
       <layer repeat= "HcalEndcapPInsertLayer_NTungstenRepeat" thickness = "HcalEndcapPInsertSingleLayerThickness">
         <slice material="Tungsten" thickness="HcalEndcapPInsertAbsorberThickness" vis="HcalAbsorberVis"/>
         <slice material="Air" thickness="HcalEndcapPInsertAirThickness"/>
-        <slice material="Polystyrole" thickness="HcalEndcapPInsertESRFoilThickness"/> 
+        <slice material="Polystyrene" thickness="HcalEndcapPInsertESRFoilThickness"/> 
         <slice material="Aluminum" thickness="HcalEndcapPInsertScintillatorCoverThickness"/> 
         <slice material="Polystyrene" thickness="HcalEndcapPInsertPolystyreneThickness" vis="HcalSensorVis" sensitive="true" limits="cal_limits"/>
         <slice material="Polystyrene" thickness="HcalEndcapPInsertESRFoilThickness"/>
@@ -94,7 +95,7 @@
       <layer repeat="HcalEndcapPInsertLayer_NSteelRepeat" thickness = "HcalEndcapPInsertSingleLayerThickness">
         <slice material="Steel235" thickness="HcalEndcapPInsertAbsorberThickness" vis="HcalAbsorberVis"/>
         <slice material="Air" thickness="HcalEndcapPInsertAirThickness"/>
-        <slice material="Polystyrole" thickness="HcalEndcapPInsertESRFoilThickness"/> 
+        <slice material="Polystyrene" thickness="HcalEndcapPInsertESRFoilThickness"/> 
         <slice material="Aluminum" thickness="HcalEndcapPInsertScintillatorCoverThickness"/> 
         <slice material="Polystyrene" thickness="HcalEndcapPInsertPolystyreneThickness" vis="HcalSensorVis" sensitive="true" limits="cal_limits"/>
         <slice material="Polystyrene" thickness="HcalEndcapPInsertESRFoilThickness"/>
@@ -105,8 +106,6 @@
       <layer repeat="1" thickness = "HcalEndcapPInsertBackplateThickness">
         <slice material="Steel235" thickness="HcalEndcapPInsertBackplateThickness" vis="HcalAbsorberVis"/>
       </layer>
-      <comment>FIXME: Hardcoded values</comment>
-      <comment> Can maybe get beampipe values from ip6 files</comment>
       <documentation>
         initial_hole_radius: Hole radius in first layer
         final_hole_radius: Hole radius in steel backplate
