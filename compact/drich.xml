@@ -210,7 +210,7 @@
   radius="100.0*cm"
   />
 <sphericalpatch
-  phiw="14*degree"
+  phiw="18*degree"
   rmin="DRICH_rmax1 + 2.0*cm"
   rmax="DRICH_rmax2 - 5.0*cm"
   zmin="DRICH_SnoutLength + 5.0*cm"
