@@ -3,6 +3,14 @@
 
 <lccdd>
 
+<info name="drich.xml"
+      title="Dual RICH"
+      author="c-dilks"
+      url="https://github.com/c-dilks"
+      status="development"
+      version="1.0"
+/>
+
 <define>
 <!-- vessel (=snout+tank) geometry -->
 <constant name="DRICH_length"             value="ForwardRICHRegion_length"/>  <!-- overall vessel length -->
