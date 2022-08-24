@@ -419,8 +419,8 @@ Examples:
     </documentation>
 
     <constant name="CentralTrackingRegion_rmax"   value="715.0*mm" />
-    <constant name="CentralTrackingRegionP_zmax"  value="1600.0*mm" />
-    <constant name="CentralTrackingRegionN_zmax"  value="1350.0*mm" />
+    <constant name="CentralTrackingRegionP_zmax"  value="1730.0*mm" />
+    <constant name="CentralTrackingRegionN_zmax"  value="1474.7*mm" />
     <constant name="CentralTrackingRegion_length" value="CentralTrackingRegionP_zmax + CentralTrackingRegionN_zmax" />
     <comment>
       tan(theta) to determine rmin in the outer tracking region (due to tapered beampipe)
@@ -435,12 +435,12 @@ Examples:
 
     <comment> Global PID regions with suballocations for TOF and RICH detectors </comment>
     <constant name="ForwardPIDRegion_zmin"        value="CentralTrackingRegionP_zmax" />
-    <constant name="ForwardPIDRegion_length"      value="155.0*cm" />
+    <constant name="ForwardPIDRegion_length"      value="142.0*cm" />
     <constant name="ForwardPIDRegion_rmax"        value="180.0*cm" />
 
     <comment> Forward TOF region currenlty empty for future upgrades </comment>
     <constant name="ForwardTOFRegion_zmin"        value="ForwardPIDRegion_zmin" />
-    <constant name="ForwardTOFRegion_length"      value="35.0*cm" />
+    <constant name="ForwardTOFRegion_length"      value="22.0*cm" />
     <constant name="ForwardTOFRegion_rmax"        value="CentralTrackingRegion_rmax" />
     <constant name="ForwardTOFRegion_tan"         value="CentralTrackingRegionP_tan" />
 
@@ -466,7 +466,7 @@ Examples:
 
     <comment> Note: PID has space for DIRC, ExtraSpace sits past the PID</comment>
     <constant name="BarrelPIDRegion_thickness"    value="7.0 * cm" />
-    <constant name="BarrelExtraSpace_thickness"   value="2.0 * cm" />
+    <constant name="BarrelExtraSpace_thickness"   value="5.0 * cm" />
 
     <documentation>
     ## Forward/backward tracking region behind the PID detectors
@@ -539,7 +539,7 @@ Service gaps in FW direction (before endcapP ECAL) and BW direction (before endc
   </documentation>
     <constant name="DIRCReadout_length"         value="30*cm"/>
     <constant name="DIRCForward_length"         value="0*cm"/>
-    <constant name="DIRCForward_zmax"           value="ForwardRICHRegion_zmin"/>
+    <constant name="DIRCForward_zmax"           value="CentralTrackingRegionP_zmax"/>
     <constant name="DIRCBackward_zmax"          value="BackwardServiceGap_zmin"/>
     <constant name="DIRC_length"                value="DIRCForward_zmax + DIRCBackward_zmax"/>
     <constant name="DIRC_offset"                value="(DIRCForward_zmax - DIRCBackward_zmax)/2"/>

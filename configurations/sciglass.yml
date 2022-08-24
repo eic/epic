@@ -5,7 +5,8 @@ features:
     fake_dirc:
     mrich:
     drich:
-    tof_barrel:
+      #SJJ: disabled as it needs re-integrating with the tracker
+      #    tof_barrel:
   ecal:
     forward_scifi:
     barrel_sciglass:
