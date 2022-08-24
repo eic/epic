@@ -54,7 +54,7 @@
     <constant name="MMFudgeInnerMPGDBarrel_thickness"                      value="570*um"/>
 
     <comment> FIXME: No support material is here, so fudge factor used to bring material budget to ~1% for barrel </comment>
-    <constant name="MMFudgeOuterMPGDBarrel_thickness"                      value="2.50*mm"/>
+    <constant name="MMFudgeOuterMPGDBarrel_thickness"                      value="115*um"/>
 
     <comment>
       Extra parameters to approximate a cylinder as a set of skinny staves
@@ -120,7 +120,7 @@
         <module_component name="DriftCuElectrode" thickness="MMDriftCuElectrode_thickness" material="Copper" width="OuterMPGDBarrelStave_width" length="OuterMPGDBarrelMod_length"/>
         <module_component name="GasGap" thickness="MMGasGap_thickness" material="Ar90IsoButane" sensitive="True" width="OuterMPGDBarrelStave_width" length="OuterMPGDBarrelMod_length"/>
         <module_component name="Mesh" thickness="MMMesh_thickness" material="MMGAS_InoxForMesh" width="OuterMPGDBarrelStave_width" length="OuterMPGDBarrelMod_length"/>
-        <module_component name="Fudge" thickness="MMFudgeOuterMPGDBarrel_thickness" material="Kapton" width="OuterMPGDBarrelStave_width" length="OuterMPGDBarrelMod_length"/>
+	<module_component name="Fudge" thickness="MMFudgeOuterMPGDBarrel_thickness" material="Copper" width="OuterMPGDBarrelStave_width" length="OuterMPGDBarrelMod_length"/>
         <module_component name="Gas" thickness="MMGas_thickness" material="Ar90IsoButane" width="OuterMPGDBarrelStave_width" length="OuterMPGDBarrelMod_length"/>
         <module_component name="ResistiveStrips" thickness="MMResistiveStrip_thickness" material="MMGAS_ResistivePaste" width="OuterMPGDBarrelStave_width" length="OuterMPGDBarrelMod_length"/>
         <module_component name="KaptonStrips" thickness="MMKaptonStrip_thickness" material="Kapton" width="OuterMPGDBarrelStave_width" length="OuterMPGDBarrelMod_length"/>
