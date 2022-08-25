@@ -9,7 +9,7 @@
       url="https://github.com/c-dilks"
       status="development"
       version="1.0"
-/>
+><comment/></info>
 
 <define>
 <!-- vessel (=snout+tank) geometry -->
