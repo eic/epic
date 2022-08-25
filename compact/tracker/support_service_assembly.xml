@@ -1,24 +1,35 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <lccdd>
   <comment>
-    Tracker support as in the ECCE proposal.
+    <!-- Tracker support as in the ECCE proposal. -->
+    Tracker support optimized from ECCE proposal.
   </comment>
   <define>
-    <comment> Inner vertex Support </comment>
-    <constant name="VertexSupportCyl1_length"             value="2*VertexSupportCyl1_rmin/tan(TrackerPrimaryAngle)" />
+    <comment> Inner vertex Support</comment>
+    <comment> get rid of the inner vertex support barrel </comment>
+<!--     <constant name="VertexSupportCyl1_length"             value="2*VertexSupportCyl1_rmin/tan(TrackerPrimaryAngle)" />
     <constant name="VertexSupportCyl1_zmax"               value="VertexSupportCyl1_length/2." />
     <constant name="VertexSupportCyl1_thickness"          value="VertexSupportCylCF_thickness" />
-
-    <comment> Outer Vertex Support </comment>
+ -->
+    <comment> Outer Vertex Support Barrel</comment>
     <constant name="VertexSupportCyl2_length"             value="2*VertexSupportCyl2_rmin/tan(TrackerPrimaryAngle) - SiBarrel_dz" />
     <constant name="VertexSupportCyl2_zmax"               value="VertexSupportCyl2_length/2." />
     <constant name="VertexSupportCyl2_thickness"          value="VertexSupportCylCF_thickness" />
 
+    <comment> use a disk to connect vertex barrels to cone</comment>
+    <constant name="VertexSupportRingCF_thickness"         value="2.0*mm" />
+    <constant name="VertexSupportRingAl_thickness"         value="1.5*mm" />
+    <constant name="VertexSupportRing_thickness"           value="VertexSupportRingCF_thickness+VertexSupportRingAl_thickness+2*um" />
+    <constant name="VertexSupportRing_zmin"        value="VertexBarrel_length/2.+ 2*um" />
+    <constant name="VertexSupportRing_zmax"        value="VertexSupportRing_zmin + VertexSupportRing_thickness" />
+    <constant name="VertexSupportRing_rmin"        value="VertexBarrel_rmin+2*um" />
+    <constant name="VertexSupportRing_rmax"        value="VertexSupportCyl2_rmin-2*um" />
+    <constant name="VertexSupportRing_z"           value="0.5*(VertexSupportRing_zmin + VertexSupportRing_zmax)" />
 
     <comment> Inner tracker service/support cone </comment>
-    <constant name="InnerSupportCone_rmin1"               value="VertexSupportCyl1_rmin" />
+    <constant name="InnerSupportCone_rmin1"               value="VertexSupportCyl2_rmin" />
     <constant name="InnerSupportCone_rmin2"               value="TrackerSupportCyl_rmin" />
-    <constant name="InnerSupportCone_zmin"                value="VertexSupportCyl1_zmax" />
+    <constant name="InnerSupportCone_zmin"                value="VertexSupportCyl2_zmax" />
     <constant name="InnerSupportCone_zmax"                value="InnerSupportCone_rmin2/tan(TrackerPrimaryAngle)" />
     <constant name="InnerSupportCone_z"                   value="0.5*(InnerSupportCone_zmax + InnerSupportCone_zmin)" />
     <constant name="InnerSupportCone_length"              value="InnerSupportCone_zmax - InnerSupportCone_zmin" />
@@ -37,7 +48,7 @@
     <constant name="TrackerSupportCylEndcapN_length"      value="TrackerSupportCylEndcapN_zmax - TrackerSupportCyl_zmin" />
     <constant name="TrackerSupportCylCF_thickness"        value="InnerSupportConeCF_thickness" />
     <comment> Effective Aluminum for services for now </comment>
-    <constant name="TrackerSupportCylAl_thickness"        value="InnerSupportConeAl_thickness" />
+    <constant name="TrackerSupportCylAl_thickness"        value="4*mm" />
     <constant name="TrackerSupportCyl_thickness"          value="TrackerSupportCylAl_thickness + TrackerSupportCylCF_thickness" />
 
     <comment> Tracker endcap cones </comment>
@@ -91,7 +102,7 @@
       name="InnerTrackerSupport"
       id="84"
     >
-      <support type="Cylinder"
+<!--       <support type="Cylinder"
         name="VertexSupportCyl1"
         vis="TrackerSupportVis"
         rmin="VertexSupportCyl1_rmin"
@@ -99,6 +110,28 @@
         thickness="VertexSupportCyl1_thickness">
           <position x="0*cm" y="0*cm" z="0*cm" />
           <component material="CarbonFiber" thickness="VertexSupportCylCF_thickness" name="Carbon Fiber Shell" vis="TrackerSupportVis"/>
+      </support> -->
+      <comment> Forward </comment>
+      <support type="Disk"
+        name="VertexSupportRingForward"
+        vis="TrackerSupportVis"
+        rmin="VertexSupportRing_rmin"
+        rmax="VertexSupportRing_rmax"
+        thickness="VertexSupportRing_thickness">
+          <position x="0*cm" y="0*cm" z="VertexSupportRing_z" />
+          <component material="CarbonFiber" thickness="VertexSupportRingCF_thickness" name="Support" vis="TrackerSupportVis"/>
+          <component material="Aluminum" thickness="VertexSupportRingAl_thickness" name="Services" vis="TrackerServiceVis" />
+      </support>
+      <comment> Backward </comment>
+      <support type="Disk"
+        name="VertexSupportRingBackward"
+        vis="TrackerSupportVis"
+        rmin="VertexSupportRing_rmin"
+        rmax="VertexSupportRing_rmax"
+        thickness="VertexSupportRing_thickness">
+          <position x="0*cm" y="0*cm" z="-VertexSupportRing_z-VertexSupportRingAl_thickness-VertexSupportRingCF_thickness" />
+          <component material="Aluminum" thickness="VertexSupportRingAl_thickness" name="Services" vis="TrackerServiceVis" />
+          <component material="CarbonFiber" thickness="VertexSupportRingCF_thickness" name="Support" vis="TrackerSupportVis"/>
       </support>
       <support type="Cylinder"
         name="VertexSupportCyl2"

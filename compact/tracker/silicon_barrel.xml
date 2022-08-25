@@ -12,9 +12,8 @@
 
     <constant name="SiBarrelSensor_thickness"      value="40*um"/>
 
-    <comment> Module one has roughlty 50% of the support/service thickness compared to module two </comment>
-    <constant name="SiBarrelMod1Service_thickness" value="0.2*mm"/>
-    <constant name="SiBarrelMod2Service_thickness" value="0.4*mm"/>
+    <constant name="SiBarrelMod1Service_thickness" value="0.15*mm"/>
+    <constant name="SiBarrelMod2Service_thickness" value="0.37*mm"/>
     <constant name="SiBarrelMod1Frame_thickness"   value="0.06*mm"/>
     <constant name="SiBarrelMod2Frame_thickness"   value="0.12*mm"/>
     <constant name="SiBarrelMod1Frame_height"      value="0.8*cm"/>
@@ -34,11 +33,11 @@
     <constant name="SiBarrelEnvelope_length"    value="SiBarrelLayer2_length + 1*um" />
 
     <constant name="SiBarrelLayer_thickness"    value="2.0*cm"/>
-
-    <constant name="SiBarrelLayer1_rmin"        value="SiBarrelMod1_rmin - SiBarrelLayer_thickness/2.0"/>
-    <constant name="SiBarrelLayer1_rmax"        value="SiBarrelLayer1_rmin + SiBarrelLayer_thickness"/>
-    <constant name="SiBarrelLayer2_rmin"        value="SiBarrelMod2_rmin - SiBarrelLayer_thickness/2.0"/>
-    <constant name="SiBarrelLayer2_rmax"        value="SiBarrelLayer2_rmin + SiBarrelLayer_thickness"/>
+    <comment> the sensitive layer (silicon) is at the bottom of the truss triangle stave (rmin) </comment>
+    <constant name="SiBarrelLayer1_rmin"        value="SiBarrelMod1_rmin"/>
+    <constant name="SiBarrelLayer1_rmax"        value="SiBarrelLayer1_rmin + SiBarrelLayer_thickness*1.5"/>
+    <constant name="SiBarrelLayer2_rmin"        value="SiBarrelMod2_rmin "/>
+    <constant name="SiBarrelLayer2_rmax"        value="SiBarrelLayer2_rmin + SiBarrelLayer_thickness*1.5"/>
 
     <constant name="SiBarrelStaveTilt_angle"     value="3.0*degree"/>
     <constant name="SiBarrelStave1_count"        value="floor(180.*degree/asin(SiBarrelStave1_width*cos(SiBarrelStaveTilt_angle)/2/SiBarrelMod1_rmin))+2"/>
@@ -88,7 +87,7 @@
           inner_r="SiBarrelLayer1_rmin"
           outer_r="SiBarrelLayer1_rmax"
           z_length="SiBarrelLayer1_length" />
-        <layer_material surface="outer" binning="binPhi,binZ" bins0="SiBarrelStave1_count" bins1="100" />
+        <layer_material surface="inner" binning="binPhi,binZ" bins0="SiBarrelStave1_count" bins1="100" />
         <comment>
           phi0     : Starting phi of first module.
           phi_tilt : Phi tilt of a module.
@@ -145,7 +144,7 @@
           inner_r="SiBarrelLayer2_rmin"
           outer_r="SiBarrelLayer2_rmax"
           z_length="SiBarrelLayer2_length" />
-        <layer_material surface="outer" binning="binPhi,binZ" bins0="SiBarrelStave2_count" bins1="100" />
+        <layer_material surface="inner" binning="binPhi,binZ" bins0="SiBarrelStave2_count" bins1="100" />
         <comment>
           phi0     : Starting phi of first module.
           phi_tilt : Phi tilt of a module.

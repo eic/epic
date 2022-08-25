@@ -32,8 +32,8 @@
 
     <comment> Service/Support setup </comment>
     <constant name="VertexSupportCyl1_rmin"          value="VertexBarrel_rmin + 2.1*cm"/>
-    <constant name="VertexSupportCyl2_rmin"          value="VertexBarrel_rmax"/>
-    <constant name="VertexSupportCylCF_thickness"    value="300.0*um" />
+    <constant name="VertexSupportCyl2_rmin"          value="VertexBarrel_rmax-0.3*cm"/>
+    <constant name="VertexSupportCylCF_thickness"    value="100.0*um" />
     <constant name="TrackerSupportCyl_rmin"          value="41.5*cm"/>
     <comment> These may belong in definitions.xml </comment>
     <constant name="InnerTrackerEndcapP_zmax"        value="CentralTrackingRegionP_zmax"/>
@@ -48,16 +48,16 @@
     <constant name="InnerTrackerEndcapP_zmin"        value="25.0*cm" />
     <constant name="InnerTrackerEndcapP_rmin"        value="Beampipe_rmax + 3.2*mm" />
     <constant name="InnerTrackerEndcapP_rmax"        value="InnerTrackerEndcapP_zmin * tan(TrackerPrimaryAngle) * .9995" />
-    <constant name="TrackerEndcapPDisk1_zmin"        value="52.0*cm" />
+    <constant name="TrackerEndcapPDisk1_zmin"        value="45.0*cm" />
     <constant name="TrackerEndcapPDisk1_rmin"        value="Beampipe_rmax + 3.2*mm" />
     <constant name="TrackerEndcapPDisk1_rmax"        value="TrackerEndcapPDisk1_zmin * tan(TrackerPrimaryAngle) * .96" />
-    <constant name="TrackerEndcapPDisk2_zmin"        value="73.0*cm" />
+    <constant name="TrackerEndcapPDisk2_zmin"        value="70.0*cm" />
     <constant name="TrackerEndcapPDisk2_rmin"        value="Beampipe_rmax + 13.2*mm" />
     <constant name="TrackerEndcapPDisk2_rmax"        value="TrackerSupportCyl_rmin * .98" />
-    <constant name="TrackerEndcapPDisk3_zmin"        value="106.0*cm" />
+    <constant name="TrackerEndcapPDisk3_zmin"        value="100.0*cm" />
     <constant name="TrackerEndcapPDisk3_rmin"        value="Beampipe_rmax + 23.2*mm" />
     <constant name="TrackerEndcapPDisk3_rmax"        value="TrackerEndcapPDisk3_zmin * tan(TrackerForwardAngle) * 0.98" />
-    <constant name="TrackerEndcapPDisk4_zmin"        value="125.0*cm" />
+    <constant name="TrackerEndcapPDisk4_zmin"        value="135.0*cm" />
     <constant name="TrackerEndcapPDisk4_rmin"        value="Beampipe_rmax + 43.2*mm" />
     <constant name="TrackerEndcapPDisk4_rmax"        value="TrackerEndcapPDisk4_zmin * tan(TrackerForwardAngle) * 0.87" />
 
@@ -77,7 +77,9 @@
     <constant name="TrackerEndcapNDisk3_zmin"        value="TrackerEndcapPDisk3_zmin" />
     <constant name="TrackerEndcapNDisk3_rmin"        value="TrackerEndcapPDisk3_rmin" />
     <constant name="TrackerEndcapNDisk3_rmax"        value="TrackerEndcapPDisk3_rmax" />
-
+    <constant name="TrackerEndcapNDisk4_zmin"        value="TrackerEndcapPDisk4_zmin" />
+    <constant name="TrackerEndcapNDisk4_rmin"        value="TrackerEndcapPDisk4_rmin" />
+    <constant name="TrackerEndcapNDisk4_rmax"        value="TrackerEndcapPDisk4_rmax" />
   </define>
 
   <detectors>
