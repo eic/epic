@@ -2,9 +2,17 @@
 <!-- Copyright (C) 2022 Whitney Armstrong, Chao Peng, Sylvester Joosten -->
 
 <lccdd>
-  <comment>
-    Simplified homogenous implementation of the forward ScFi calorimeter
-  </comment>
+  <info name="ecal_forward_homogeneous.xml"
+        title="Forward ECAL - Homogeneous Equivalent Description"
+        author="jizhongling"
+        url="https://github.com/jizhongling"
+        status="development"
+        version="1.0"
+  >
+    <comment>
+      Simplified homogenous implementation of the forward ScFi calorimeter
+    </comment>
+  </info>
 
   <define>
     <constant name="EcalEndcapP_FiberRadius" value="0.235*cm"/>
