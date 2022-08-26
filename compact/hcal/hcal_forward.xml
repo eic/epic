@@ -1,11 +1,13 @@
 <lccdd>
-  <!-- <info name="hcal_forward.xml"
+
+  <info name="hcal_forward.xml"
         title="ECCE LFHCAL with insert cutout"
-        author="rymilton"
+        author="@rymilton"
         url="https://github.com/rymilton"
         status="development"
         version="1.0"
-  /> -->
+  ><comment/></info>
+
   <define>
     <documentation>
       #### Material Thickness
