@@ -88,7 +88,7 @@ jobs:
         ref_name: main
         variables: |
           DETECTOR_REPOSITORYURL=${{ github.server_url }}/${{ github.repository }}
-          DETECTOR_VERSION=${{ github.ref_name }}
+          DETECTOR_VERSION=${{ github.event.pull_request.ref || github.ref_name }}
           GITHUB_REPOSITORY=${{ github.repository }}
           GITHUB_SHA=${{ github.event.pull_request.head.sha || github.sha }}
     - run: |
