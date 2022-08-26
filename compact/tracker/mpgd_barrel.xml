@@ -1,5 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<lccdd>
+<lccdd>	
+<info name="mpgd_barrel.xml"
+      title="Micro Pattern Gas Detectors"
+      author="mposik1983"
+      url="https://github.com/mposik1983"
+      status="development"
+      version="1.0"
+><comment/>
+</info>	
+
   <define>
     <comment>
       Main parameters - Geo based on the original ECCE design, while for now
