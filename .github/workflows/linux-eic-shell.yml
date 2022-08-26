@@ -47,14 +47,34 @@ jobs:
   build-test:
     runs-on: ubuntu-latest
     needs: xmllint-before-build
+    env:
+      PREFIX: install
     steps:
     - uses: actions/checkout@v3
+    - uses: actions/checkout@v3
+      with:
+        repository: https://github.com/eic/ip6.git
+        ref: master
+        path: eic_ip6
+    - uses: actions/cache@v3
+      id: cache-epic
+      with:
+        path: build
+        key: epic-${{ runner.os }}-${{ hashFiles('src/*.cpp') }}
+        restore-keys: epic-${{ runner.os }}
+    - uses: actions/cache@v3
+      id: cache-ip6
+      with:
+        path: eic_ip6/build
+        key: ip6-${{ runner.os }}-${{ hashFiles('eic_ip6/src/*.cpp') }}
+        restore-keys: ip6-${{ runner.os }}
     - uses: cvmfs-contrib/github-action-cvmfs@v3
+      if: steps.cache-epic.outputs.cache-hit != 'true' || steps.cache-ip6.outputs.cache-hit != 'true'
     - uses: eic/run-cvmfs-osg-eic-shell@main
+      if: steps.cache-ip6.outputs.cache-hit != 'true'
       with:
         platform-release: "jug_xl:nightly"
         run: |
-          PREFIX=${PWD}/install
           # install ip6 repo
           git clone ${{ inputs.beamline_repositoryurl || 'https://github.com/eic/ip6.git' }} eic_ip6
           pushd eic_ip6
@@ -62,6 +82,11 @@ jobs:
           cmake -B build -S . -DCMAKE_INSTALL_PREFIX=${PREFIX}
           cmake --build build -- install
           popd
+    - uses: eic/run-cvmfs-osg-eic-shell@main
+      if: steps.cache-epic.outputs.cache-hit != 'true'
+      with:
+        platform-release: "jug_xl:nightly"
+        run: |
           # install this repo
           cmake -B build -S . -DCMAKE_INSTALL_PREFIX=${PREFIX}
           cmake --build build -- install
