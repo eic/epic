@@ -53,7 +53,7 @@ jobs:
     - uses: actions/checkout@v3
     - uses: actions/checkout@v3
       with:
-        repository: https://github.com/eic/ip6.git
+        repository: eic/ip6
         ref: master
         path: eic_ip6
     - uses: actions/cache@v3
