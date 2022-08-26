@@ -24,6 +24,21 @@ jobs:
         sudo apt-get install -y libxml2-utils
         find compact/ -name "*.xml" -exec xmllint {} \; > /dev/null
 
+  xmllint-code-owners:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    - run: |
+        find compact -name "*.xml" \
+             -printf "%p " \
+             -exec xmllint --xpath "string(/*/info/@author)" {} \; \
+        | sort > .github/CODEOWNERS
+    - uses: actions/upload-artifact@v3
+      with:
+        name: CODEOWNERS
+        path: .github/CODEOWNERS
+        if-no-files-found: error
+
   list-detector-configs:
     runs-on: ubuntu-latest
     outputs:
