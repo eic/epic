@@ -5,7 +5,7 @@
 <lccdd>
   <info name="ecal_barrel_interlayers.xml"
         title="Barrel ECAL - Imaging Calorimeter"
-        author="mariakzurek"
+        author="@mariakzurek"
         url="https://github.com/mariakzurek"
         status="development"
         version="1.0"

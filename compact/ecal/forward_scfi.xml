@@ -4,7 +4,7 @@
 <lccdd>
   <info name="ecal_forward_scfi.xml"
         title="Forward ECAL - Detailed ScFi Description"
-        author="jizhongling"
+        author="@jizhongling"
         url="https://github.com/jizhongling"
         status="development"
         version="1.0"
