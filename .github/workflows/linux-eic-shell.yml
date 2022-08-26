@@ -21,7 +21,7 @@ jobs:
     - run: |
         sudo apt-get update
         sudo apt-get install -y libxml2-utils
-        xmllint compact/*.xml > /dev/null
+        find compact/ -name "*.xml" -exec xmllint {} \; > /dev/null
 
   build-test:
     runs-on: ubuntu-latest
@@ -73,7 +73,7 @@ jobs:
     - run: |
         sudo apt-get update
         sudo apt-get install -y libxml2-utils
-        xmllint install/share/ecce/*.xml > /dev/null
+        find install/share -name "*.xml" -exec xmllint {} \; > /dev/null
 
   convert-to-gdml:
     runs-on: ubuntu-latest
