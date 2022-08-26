@@ -2,6 +2,14 @@
 <!-- Copyright (C) 2022 Whitney Armstrong, Chao Peng, Sylvester Joosten -->
 
 <lccdd>
+  <info name="ecal_forward_scfi.xml"
+        title="Forward ECAL - Detailed ScFi Description"
+        author="jizhongling"
+        url="https://github.com/jizhongling"
+        status="development"
+        version="1.0"
+  ><comment/></info>
+
   <define>
     <constant name="EcalEndcapP_FiberRadius" value="0.235*cm"/>
     <constant name="EcalEndcapP_FiberOffset" value="0.5*mm"/>
