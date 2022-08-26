@@ -9,7 +9,7 @@
         url="https://github.com/rdom"
         status="development"
         version="1.0"
-  />
+  ><comment/></info>
   
   <comment>
     DIRC consists of 12 (default) identical modules making a barrel.
