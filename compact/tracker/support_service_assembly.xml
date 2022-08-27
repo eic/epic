@@ -1,20 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <lccdd>
   <comment>
-    <!-- Tracker support as in the ECCE proposal. -->
     Tracker support optimized from ECCE proposal.
   </comment>
   <define>
     <comment> Inner vertex Support</comment>
     <comment> get rid of the inner vertex support barrel </comment>
-<!--     <constant name="VertexSupportCyl1_length"             value="2*VertexSupportCyl1_rmin/tan(TrackerPrimaryAngle)" />
-    <constant name="VertexSupportCyl1_zmax"               value="VertexSupportCyl1_length/2." />
-    <constant name="VertexSupportCyl1_thickness"          value="VertexSupportCylCF_thickness" />
- -->
     <comment> Outer Vertex Support Barrel</comment>
     <constant name="VertexSupportCyl2_length"             value="2*VertexSupportCyl2_rmin/tan(TrackerPrimaryAngle) - SiBarrel_dz" />
     <constant name="VertexSupportCyl2_zmax"               value="VertexSupportCyl2_length/2." />
-    <!-- <constant name="VertexSupportCyl2_thickness"          value="VertexSupportCylCF_thickness" /> -->
 
     <comment> use a disk to connect vertex barrels to cone</comment>
     <constant name="VertexSupportRingCF_thickness"         value="2.0*mm" />
@@ -102,15 +96,6 @@
       name="InnerTrackerSupport"
       id="84"
     >
-<!--       <support type="Cylinder"
-        name="VertexSupportCyl1"
-        vis="TrackerSupportVis"
-        rmin="VertexSupportCyl1_rmin"
-        length="VertexSupportCyl1_length"
-        thickness="VertexSupportCyl1_thickness">
-          <position x="0*cm" y="0*cm" z="0*cm" />
-          <component material="CarbonFiber" thickness="VertexSupportCylCF_thickness" name="Carbon Fiber Shell" vis="TrackerSupportVis"/>
-      </support> -->
       <comment> Forward </comment>
       <support type="Disk"
         name="VertexSupportRingForward"
