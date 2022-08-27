@@ -14,7 +14,7 @@
     <comment> Outer Vertex Support Barrel</comment>
     <constant name="VertexSupportCyl2_length"             value="2*VertexSupportCyl2_rmin/tan(TrackerPrimaryAngle) - SiBarrel_dz" />
     <constant name="VertexSupportCyl2_zmax"               value="VertexSupportCyl2_length/2." />
-    <constant name="VertexSupportCyl2_thickness"          value="VertexSupportCylCF_thickness" />
+    <!-- <constant name="VertexSupportCyl2_thickness"          value="VertexSupportCylCF_thickness" /> -->
 
     <comment> use a disk to connect vertex barrels to cone</comment>
     <constant name="VertexSupportRingCF_thickness"         value="2.0*mm" />
