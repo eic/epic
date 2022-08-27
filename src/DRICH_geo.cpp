@@ -17,16 +17,6 @@
 
 #include <XML/Helper.h>
 
-#ifdef IRT_AUXFILE
-#include <CherenkovDetectorCollection.h>
-#include <CherenkovPhotonDetector.h>
-#include <CherenkovRadiator.h>
-#include <OpticalBoundary.h>
-#include <ParametricSurface.h>
-
-#include <TFile.h>
-#endif
-
 using namespace dd4hep;
 using namespace dd4hep::rec;
 
@@ -111,11 +101,6 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
   long debugOpticsMode = desc.constantAsLong("DRICH_debug_optics");
   bool debugMirror     = desc.constantAsLong("DRICH_debug_mirror") == 1;
   bool debugSensors    = desc.constantAsLong("DRICH_debug_sensors") == 1;
-#ifdef IRT_AUXFILE
-  // - IRT auxiliary file
-  auto irtAuxFileName = detElem.attr<std::string>(_Unicode(irt_filename));
-  bool createIrtFile  = desc.constantAsLong("DRICH_create_irt_file") == 1;
-#endif
 
   // if debugging optics, override some settings
   bool debugOptics = debugOpticsMode > 0;
@@ -147,56 +132,17 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
   printout(DEBUG, "DRICH_geo", "sectorMask, sectorOffset, moduleMask, moduleOffset = 0x%x %d 0x%x %d",
            sectorBits.mask(), sectorBits.offset(), moduleBits.mask(), moduleBits.offset());
 
-#ifdef IRT_AUXFILE
-  // IRT geometry auxiliary file ===========================================================
-  /* - optionally generate an auxiliary ROOT file, storing geometry objects for IRT
-   * - use compact file variable `DRICH_create_irt_file` to control this
+  // define reconstruction geometry constants `DRICH_RECON_*`
+  /* - these are the numbers needed to rebuild the geometry in the
+   *   reconstruction, in particular, the optical surfaces encountered by the
+   *   Cherenkov photons
+   * - positions are w.r.t. the IP
+   * - check the values of all of the `DRICH_RECON_*` constants after any change
+   *   to the geometry
    */
-  TFile*                       irtAuxFile  = nullptr;
-  CherenkovDetectorCollection* irtGeometry = nullptr;
-  CherenkovDetector*           irtDetector = nullptr;
-  if (createIrtFile) {
-    irtAuxFile = new TFile(irtAuxFileName.c_str(), "RECREATE");
-    printout(ALWAYS, "IRTLOG", "Producing auxiliary ROOT file for IRT: %s", irtAuxFileName.c_str());
-    irtGeometry = new CherenkovDetectorCollection();
-    irtDetector = irtGeometry->AddNewDetector(detName.c_str());
-  }
-
-  // container volume (envelope?)
-  /* FIXME: have no connection to GEANT G4LogicalVolume pointers; however all is needed
-   * is to make them unique so that std::map work internally; resort to using integers,
-   * who cares; material pointer can seemingly be '0', and effective refractive index
-   * for all radiators will be assigned at the end by hand; FIXME: should assign it on
-   * per-photon basis, at birth, like standalone GEANT code does;
-   */
-  FlatSurface* irtBoundary;
-  TVector3     normX(1, 0, 0); // normal vectors
-  TVector3     normY(0, -1, 0);
-  if (createIrtFile) {
-    irtBoundary = new FlatSurface((1 / mm) * TVector3(0, 0, vesselZmin), normX, normY);
-    for (int isec = 0; isec < nSectors; isec++) {
-      auto rad = irtGeometry->SetContainerVolume(
-          irtDetector,             // Cherenkov detector
-          "GasVolume",             // name
-          isec,                    // path
-          (G4LogicalVolume*)(0x0), // G4LogicalVolume (inaccessible? use an integer instead)
-          nullptr,                 // G4RadiatorMaterial (inaccessible?)
-          irtBoundary              // surface
-      );
-      rad->SetAlternativeMaterialName(gasvolMat.ptr()->GetName());
-    }
-  }
-
-  // photon detector // FIXME: args (G4Solid,G4Material) inaccessible?
-  CherenkovPhotonDetector* irtPhotonDetector = new CherenkovPhotonDetector(nullptr, nullptr);
-  if (createIrtFile) {
-    irtDetector->SetReadoutCellMask(cellMask); // readout mask
-    irtGeometry->AddPhotonDetector(irtDetector,      // Cherenkov detector
-                                   nullptr,          // G4LogicalVolume (inaccessible?)
-                                   irtPhotonDetector // photon detector
-    );
-  }
-#endif
+  desc.add(Constant("DRICH_RECON_nSectors", std::to_string(nSectors)));
+  desc.add(Constant("DRICH_RECON_zmin", std::to_string(vesselZmin)));
+  desc.add(Constant("DRICH_RECON_gasvolMaterial", gasvolMat.ptr()->GetName()));
 
   // BUILD VESSEL ====================================================================
   /* - `vessel`: aluminum enclosure, the mother volume of the dRICh
@@ -331,46 +277,15 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
     // filterSkin.isValid();
   };
 
-#ifdef IRT_AUXFILE
-  // IRT aerogel + filter
-  /* AddFlatRadiator will create a pair of flat refractive surfaces internally;
-   * FIXME: should make a small gas gap at the upstream end of the gas volume;
-   */
-  FlatSurface* aerogelFlatSurface;
-  FlatSurface* filterFlatSurface;
-  if (createIrtFile) {
-    double irtAerogelZpos = vesselPos.z() + aerogelPV.position().z(); // center of aerogel, w.r.t. IP
-    double irtFilterZpos  = vesselPos.z() + filterPV.position().z();  // center of filter, w.r.t. IP
-    aerogelFlatSurface    = new FlatSurface((1 / mm) * TVector3(0, 0, irtAerogelZpos), normX, normY);
-    filterFlatSurface     = new FlatSurface((1 / mm) * TVector3(0, 0, irtFilterZpos), normX, normY);
-    for (int isec = 0; isec < nSectors; isec++) {
-      auto aerogelFlatRadiator = irtGeometry->AddFlatRadiator(
-          irtDetector,             // Cherenkov detector
-          "Aerogel",               // name
-          isec,                    // path
-          (G4LogicalVolume*)(0x1), // G4LogicalVolume (inaccessible? use an integer instead)
-          nullptr,                 // G4RadiatorMaterial
-          aerogelFlatSurface,      // surface
-          aerogelThickness / mm    // surface thickness
-      );
-      auto filterFlatRadiator = irtGeometry->AddFlatRadiator(
-          irtDetector,             // Cherenkov detector
-          "Filter",                // name
-          isec,                    // path
-          (G4LogicalVolume*)(0x2), // G4LogicalVolume (inaccessible? use an integer instead)
-          nullptr,                 // G4RadiatorMaterial
-          filterFlatSurface,       // surface
-          filterThickness / mm     // surface thickness
-      );
-      aerogelFlatRadiator->SetAlternativeMaterialName(aerogelMat.ptr()->GetName());
-      filterFlatRadiator->SetAlternativeMaterialName(filterMat.ptr()->GetName());
-    }
-    printout(ALWAYS, "IRTLOG", "irtAerogelZpos = %f cm", irtAerogelZpos);
-    printout(ALWAYS, "IRTLOG", "irtFilterZpos  = %f cm", irtFilterZpos);
-    printout(ALWAYS, "IRTLOG", "aerogel thickness = %f cm", aerogelThickness);
-    printout(ALWAYS, "IRTLOG", "filter thickness  = %f cm", filterThickness);
-  }
-#endif
+  // reconstruction constants (w.r.t. IP)
+  double aerogelZpos = vesselPos.z() + aerogelPV.position().z();
+  double filterZpos  = vesselPos.z() + filterPV.position().z();
+  desc.add(Constant("DRICH_RECON_aerogelZpos",      std::to_string(aerogelZpos)));
+  desc.add(Constant("DRICH_RECON_aerogelThickness", std::to_string(aerogelThickness)));
+  desc.add(Constant("DRICH_RECON_aerogelMaterial",  aerogelMat.ptr()->GetName()));
+  desc.add(Constant("DRICH_RECON_filterZpos",       std::to_string(filterZpos)));
+  desc.add(Constant("DRICH_RECON_filterThickness",  std::to_string(filterThickness)));
+  desc.add(Constant("DRICH_RECON_filterMaterial",   filterMat.ptr()->GetName()));
 
   // SECTOR LOOP //////////////////////////////////////////////////////////////////////
 
@@ -493,36 +408,15 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
     SkinSurface mirrorSkin(desc, mirrorDE, Form("mirror_optical_surface%d", isec), mirrorSurf, mirrorVol);
     mirrorSkin.isValid();
 
-#ifdef IRT_AUXFILE
-    // get mirror center coordinates, w.r.t. IP
-    /* - we have sector 0 coordinates `(zM,xM,rM)`, but here we try to access the numbers more generally,
-     *   so we get the mirror centers after sectorRotation
-     * - FIXME: boolean solids make this a bit tricky, both here and from `GeoSvc`, is there an easier way?
-     */
-    SphericalSurface* mirrorSphericalSurface;
-    OpticalBoundary*  mirrorOpticalBoundary;
-    if (createIrtFile) {
-      auto mirrorFinalPlacement = mirrorSectorPlacement * mirrorPlacement;
-      auto mirrorFinalCenter    = vesselPos + mirrorFinalPlacement.Translation().Vect(); // w.r.t. IP
-      mirrorSphericalSurface    = new SphericalSurface(
-          (1 / mm) * TVector3(mirrorFinalCenter.x(), mirrorFinalCenter.y(), mirrorFinalCenter.z()), mirrorRadius / mm);
-      mirrorOpticalBoundary = new OpticalBoundary(irtDetector->GetContainerVolume(), // CherenkovRadiator radiator
-                                                  mirrorSphericalSurface,            // surface
-                                                  false                              // bool refractive
-      );
-      irtDetector->AddOpticalBoundary(isec, mirrorOpticalBoundary);
-      printout(ALWAYS, "IRTLOG", "");
-      printout(ALWAYS, "IRTLOG", "  SECTOR %d MIRROR:", isec);
-      printout(ALWAYS, "IRTLOG", "    mirror x = %f cm", mirrorFinalCenter.x());
-      printout(ALWAYS, "IRTLOG", "    mirror y = %f cm", mirrorFinalCenter.y());
-      printout(ALWAYS, "IRTLOG", "    mirror z = %f cm", mirrorFinalCenter.z());
-      printout(ALWAYS, "IRTLOG", "    mirror R = %f cm", mirrorRadius);
-    }
-
-    // IRT: complete the radiator volume description; this is the rear side of the container gas volume
-    if (createIrtFile)
-      irtDetector->GetRadiator("GasVolume")->m_Borders[isec].second = mirrorSphericalSurface;
-#endif
+    // reconstruction constants (w.r.t. IP)
+    // - access sector center after `sectorRotation`
+    auto mirrorFinalPlacement = mirrorSectorPlacement * mirrorPlacement;
+    auto mirrorFinalCenter    = vesselPos + mirrorFinalPlacement.Translation().Vect();
+    desc.add(Constant("DRICH_RECON_mirrorCenterX_sec"+std::to_string(isec), std::to_string(mirrorFinalCenter.x())));
+    desc.add(Constant("DRICH_RECON_mirrorCenterY_sec"+std::to_string(isec), std::to_string(mirrorFinalCenter.y())));
+    desc.add(Constant("DRICH_RECON_mirrorCenterZ_sec"+std::to_string(isec), std::to_string(mirrorFinalCenter.z())));
+    if(isec==0)
+      desc.add(Constant("DRICH_RECON_mirrorRadius", std::to_string(mirrorRadius)));
 
     // BUILD SENSORS ====================================================================
 
@@ -638,45 +532,6 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
             sensorSkin.isValid();
           };
 
-#ifdef IRT_AUXFILE
-          // IRT sensors
-          FlatSurface* sensorFlatSurface;
-          if (createIrtFile) {
-            // get sensor position, w.r.t. IP
-            // - sensorGlobalPos X and Y are equivalent to sensorPV.position()
-            double sensorLocalPos[3] = {0.0, 0.0, 0.0};
-            double sensorBufferPos[3];
-            double sensorGlobalPos[3];
-            sensorPV.ptr()->LocalToMaster(sensorLocalPos, sensorBufferPos);
-            vesselPV.ptr()->LocalToMaster(sensorBufferPos, sensorGlobalPos);
-
-            // get sensor flat surface normX and normY
-            // - ignore vessel transformation, since it is a pure translation
-            double sensorLocalNormX[3] = {1.0, 0.0, 0.0};
-            double sensorLocalNormY[3] = {0.0, 1.0, 0.0};
-            double sensorGlobalNormX[3], sensorGlobalNormY[3];
-            sensorPV.ptr()->LocalToMasterVect(sensorLocalNormX, sensorGlobalNormX);
-            sensorPV.ptr()->LocalToMasterVect(sensorLocalNormY, sensorGlobalNormY);
-
-            // create the IRT sensor geometry
-            sensorFlatSurface = new FlatSurface((1 / mm) * TVector3(sensorGlobalPos), TVector3(sensorGlobalNormX),
-                                                TVector3(sensorGlobalNormY));
-            irtDetector->CreatePhotonDetectorInstance(isec,              // sector
-                                                      irtPhotonDetector, // CherenkovPhotonDetector
-                                                      imodsec,           // copy number
-                                                      sensorFlatSurface  // surface
-            );
-            /* // (sensor printout is verbose, uncomment to enable)
-            if(imod==0) {
-              printout(ALWAYS, "IRTLOG", "");
-              printout(ALWAYS, "IRTLOG", "  SECTOR %d SENSORS:", isec);
-            }
-            printout(ALWAYS, "IRTLOG", "    sensor (imodsec,x,y,z) = 0x%08x  %5.2f  %5.2f  %5.2f cm",
-                imodsec, sensorGlobalPos[0], sensorGlobalPos[1], sensorGlobalPos[2]);
-            */
-          }
-#endif
-
           // increment sensor module number
           imod++;
 
@@ -694,26 +549,6 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
 
 
   }; // END SECTOR LOOP //////////////////////////
-
-#ifdef IRT_AUXFILE
-  // write IRT auxiliary file
-  if (createIrtFile) {
-    // set refractive indices
-    // FIXME: are these (weighted) averages? can we automate this?
-    std::map<std::string, double> rIndices;
-    rIndices.insert({"GasVolume", 1.0008});
-    rIndices.insert({"Aerogel", 1.0190});
-    rIndices.insert({"Filter", 1.5017});
-    for (auto const& [rName, rIndex] : rIndices) {
-      auto rad = irtDetector->GetRadiator(rName.c_str());
-      if (rad)
-        rad->SetReferenceRefractiveIndex(rIndex);
-    }
-    // write
-    irtGeometry->Write();
-    irtAuxFile->Close();
-  }
-#endif
 
   return det;
 }
