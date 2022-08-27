@@ -32,12 +32,11 @@
     <constant name="SiBarrelLayer2_length"      value="SiBarrelMod2_length + 1*um"/>
     <constant name="SiBarrelEnvelope_length"    value="SiBarrelLayer2_length + 1*um" />
 
-    <constant name="SiBarrelLayer_thickness"    value="2.0*cm"/>
-    <comment> the sensitive layer (silicon) is at the bottom of the truss triangle stave (rmin) </comment>
-    <constant name="SiBarrelLayer1_rmin"        value="SiBarrelMod1_rmin"/>
-    <constant name="SiBarrelLayer1_rmax"        value="SiBarrelLayer1_rmin + SiBarrelLayer_thickness*1.5"/>
+    <constant name="SiBarrelLayer_thickness"    value="3.0*cm"/>
+    <constant name="SiBarrelLayer1_rmin"        value="SiBarrelMod1_rmin "/>
+    <constant name="SiBarrelLayer1_rmax"        value="SiBarrelLayer1_rmin + SiBarrelLayer_thickness"/>
     <constant name="SiBarrelLayer2_rmin"        value="SiBarrelMod2_rmin "/>
-    <constant name="SiBarrelLayer2_rmax"        value="SiBarrelLayer2_rmin + SiBarrelLayer_thickness*1.5"/>
+    <constant name="SiBarrelLayer2_rmax"        value="SiBarrelLayer2_rmin + SiBarrelLayer_thickness"/>
 
     <constant name="SiBarrelStaveTilt_angle"     value="3.0*degree"/>
     <constant name="SiBarrelStave1_count"        value="floor(180.*degree/asin(SiBarrelStave1_width*cos(SiBarrelStaveTilt_angle)/2/SiBarrelMod1_rmin))+2"/>
@@ -84,7 +83,7 @@
       <comment> Layers composed of many arrayed modules  </comment>
       <layer module="Module1" id="1" vis="TrackerLayerVis">
         <barrel_envelope
-          inner_r="SiBarrelLayer1_rmin"
+          inner_r="SiBarrelLayer1_rmin-0.5*mm"
           outer_r="SiBarrelLayer1_rmax"
           z_length="SiBarrelLayer1_length" />
         <layer_material surface="inner" binning="binPhi,binZ" bins0="SiBarrelStave1_count" bins1="100" />
@@ -141,7 +140,7 @@
       <comment> Layers composed of many arrayed modules  </comment>
       <layer module="Module1" id="1" vis="TrackerLayerVis">
         <barrel_envelope
-          inner_r="SiBarrelLayer2_rmin"
+          inner_r="SiBarrelLayer2_rmin-1.0*mm"
           outer_r="SiBarrelLayer2_rmax"
           z_length="SiBarrelLayer2_length" />
         <layer_material surface="inner" binning="binPhi,binZ" bins0="SiBarrelStave2_count" bins1="100" />
