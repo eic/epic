@@ -60,18 +60,16 @@ jobs:
       id: cache-epic
       with:
         path: build
-        key: epic-${{ runner.os }}-${{ hashFiles('src/*.cpp') }}
+        key: epic-${{ runner.os }}-${{ hashFiles('CMakeLists.txt', 'src/*.cpp', 'compact/*.xml') }}
         restore-keys: epic-${{ runner.os }}
     - uses: actions/cache@v3
       id: cache-ip6
       with:
         path: eic_ip6/build
-        key: ip6-${{ runner.os }}-${{ hashFiles('eic_ip6/src/*.cpp') }}
+        key: ip6-${{ runner.os }}-${{ hashFiles('eic_ip6/CMakeLists.txt', 'eic_ip6/src/*.cpp', 'eic_ip6/ip6/*.xml') }}
         restore-keys: ip6-${{ runner.os }}
     - uses: cvmfs-contrib/github-action-cvmfs@v3
-      if: steps.cache-epic.outputs.cache-hit != 'true' || steps.cache-ip6.outputs.cache-hit != 'true'
     - uses: eic/run-cvmfs-osg-eic-shell@main
-      if: steps.cache-ip6.outputs.cache-hit != 'true'
       with:
         platform-release: "jug_xl:nightly"
         run: |
@@ -83,7 +81,6 @@ jobs:
           cmake --build build -- install
           popd
     - uses: eic/run-cvmfs-osg-eic-shell@main
-      if: steps.cache-epic.outputs.cache-hit != 'true'
       with:
         platform-release: "jug_xl:nightly"
         run: |
