@@ -15,7 +15,7 @@ on:
         default: 'https://github.com/eic/ip6'
         type: string
       beamline_version:
-        description: 'Branch for beamline repository'
+        description: 'Branch in beamline repository'
         required: false
         default: 'master'
         type: string
