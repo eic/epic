@@ -195,6 +195,7 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
                                    nullptr,          // G4LogicalVolume (inaccessible?)
                                    irtPhotonDetector // photon detector
     );
+    printout(ALWAYS, "IRTLOG", "cellMask = 0x%X", cellMask);
   }
 #endif
 
@@ -666,14 +667,13 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
                                                       imodsec,           // copy number
                                                       sensorFlatSurface  // surface
             );
-            /* // (sensor printout is verbose, uncomment to enable)
-            if(imod==0) {
-              printout(ALWAYS, "IRTLOG", "");
-              printout(ALWAYS, "IRTLOG", "  SECTOR %d SENSORS:", isec);
-            }
-            printout(ALWAYS, "IRTLOG", "    sensor (imodsec,x,y,z) = 0x%08x  %5.2f  %5.2f  %5.2f cm",
+            // (sensor printout is verbose, uncomment to enable)
+            printout(ALWAYS, "IRTLOG", "    sensor (imodsec,x,y,z) = 0x%X  %5.2f  %5.2f  %5.2f cm",
                 imodsec, sensorGlobalPos[0], sensorGlobalPos[1], sensorGlobalPos[2]);
-            */
+            printout(ALWAYS, "IRTLOG", "                     normX = %5.2f  %5.2f  %5.2f",
+                sensorGlobalNormX[0], sensorGlobalNormX[1], sensorGlobalNormX[2]);
+            printout(ALWAYS, "IRTLOG", "                     normY = %5.2f  %5.2f  %5.2f",
+                sensorGlobalNormY[0], sensorGlobalNormY[1], sensorGlobalNormY[2]);
           }
 #endif
 
