@@ -124,13 +124,23 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
     gasvolVis = vesselVis = desc.invisible();
   };
 
-  // readout decoder
-  auto        decoder    = desc.readout(readoutName).idSpec().decoder();
-  const auto& moduleBits = (*decoder)["module"];
-  const auto& sectorBits = (*decoder)["sector"];
-  uint64_t    cellMask   = moduleBits.mask() | sectorBits.mask();
-  printout(DEBUG, "DRICH_geo", "sectorMask, sectorOffset, moduleMask, moduleOffset = 0x%x %d 0x%x %d",
-           sectorBits.mask(), sectorBits.offset(), moduleBits.mask(), moduleBits.offset());
+  // readout coder <-> unique sensor ID
+  /* - `sensorIDfields` is a list of readout fields used to specify a unique sensor ID
+   * - `cellMask` is defined such that a hit's `cellID & cellMask` is the corresponding sensor's unique ID
+   */
+  std::vector<std::string> sensorIDfields = {"module", "sector"};
+  auto readoutCoder = desc.readout(readoutName).idSpec().decoder();
+  // determine `cellMask` based on `sensorIDfields`
+  uint64_t cellMask = 0;
+  for(const auto& idField : sensorIDfields)
+    cellMask |= (*readoutCoder)[idField].mask();
+  // create a unique sensor ID from a sensor's PlacedVolume::volIDs
+  auto encodeSensorID = [&readoutCoder](auto ids){
+    uint64_t enc = 0;
+    for(const auto& [idField,idValue] : ids)
+      enc |= uint64_t(idValue) << (*readoutCoder)[idField].offset();
+    return enc;
+  };
 
   // define reconstruction geometry constants `DRICH_RECON_*`
   /* - these are the numbers needed to rebuild the geometry in the
@@ -143,6 +153,7 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
   desc.add(Constant("DRICH_RECON_nSectors", std::to_string(nSectors)));
   desc.add(Constant("DRICH_RECON_zmin", std::to_string(vesselZmin)));
   desc.add(Constant("DRICH_RECON_gasvolMaterial", gasvolMat.ptr()->GetName(), "string"));
+  desc.add(Constant("DRICH_RECON_cellMask", std::to_string(cellMask)));
 
   // BUILD VESSEL ====================================================================
   /* - `vessel`: aluminum enclosure, the mother volume of the dRICh
@@ -519,12 +530,9 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
           // generate LUT for module number -> sensor position, for readout mapping tests
           // if(isec==0) printf("%d %f %f\n",imod,sensorPV.position().x(),sensorPV.position().y());
 
-          // cellID encoding of (sector,module)
-          uint64_t imodsec =
-              ((uint64_t(imod) << moduleBits.offset()) | (uint64_t(isec) << sectorBits.offset())) & cellMask;
-
           // properties
           sensorPV.addPhysVolID("sector", isec).addPhysVolID("module", imod); // NOTE: must be consistent with `sensorIDfields`
+          auto imodsec = encodeSensorID(sensorPV.volIDs());
           DetElement sensorDE(det, Form("sensor_de%d_%d", isec, imod), imodsec);
           sensorDE.setPlacement(sensorPV);
           if (!debugOptics || debugOpticsMode == 3) {
