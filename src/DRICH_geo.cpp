@@ -142,7 +142,7 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
    */
   desc.add(Constant("DRICH_RECON_nSectors", std::to_string(nSectors)));
   desc.add(Constant("DRICH_RECON_zmin", std::to_string(vesselZmin)));
-  desc.add(Constant("DRICH_RECON_gasvolMaterial", gasvolMat.ptr()->GetName()));
+  desc.add(Constant("DRICH_RECON_gasvolMaterial", gasvolMat.ptr()->GetName(), "string"));
 
   // BUILD VESSEL ====================================================================
   /* - `vessel`: aluminum enclosure, the mother volume of the dRICh
@@ -282,10 +282,10 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
   double filterZpos  = vesselPos.z() + filterPV.position().z();
   desc.add(Constant("DRICH_RECON_aerogelZpos",      std::to_string(aerogelZpos)));
   desc.add(Constant("DRICH_RECON_aerogelThickness", std::to_string(aerogelThickness)));
-  desc.add(Constant("DRICH_RECON_aerogelMaterial",  aerogelMat.ptr()->GetName()));
+  desc.add(Constant("DRICH_RECON_aerogelMaterial",  aerogelMat.ptr()->GetName(), "string"));
   desc.add(Constant("DRICH_RECON_filterZpos",       std::to_string(filterZpos)));
   desc.add(Constant("DRICH_RECON_filterThickness",  std::to_string(filterThickness)));
-  desc.add(Constant("DRICH_RECON_filterMaterial",   filterMat.ptr()->GetName()));
+  desc.add(Constant("DRICH_RECON_filterMaterial",   filterMat.ptr()->GetName(), "string"));
 
   // SECTOR LOOP //////////////////////////////////////////////////////////////////////
 
