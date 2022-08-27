@@ -47,10 +47,10 @@
 
     <comment> Main parameters for the positive silicon disks </comment>
     <constant name="InnerTrackerEndcapP_zmin"        value="25.0*cm" />
-    <constant name="InnerTrackerEndcapP_rmin"        value="Beampipe_rmax + 3.2*mm" />
+    <constant name="InnerTrackerEndcapP_rmin"        value="Beampipe_rmax + 5*mm" />
     <constant name="InnerTrackerEndcapP_rmax"        value="InnerTrackerEndcapP_zmin * tan(TrackerPrimaryAngle) * .9995" />
     <constant name="TrackerEndcapPDisk1_zmin"        value="45.0*cm" />
-    <constant name="TrackerEndcapPDisk1_rmin"        value="Beampipe_rmax + 3.2*mm" />
+    <constant name="TrackerEndcapPDisk1_rmin"        value="Beampipe_rmax + 5*mm" />
     <constant name="TrackerEndcapPDisk1_rmax"        value="TrackerEndcapPDisk1_zmin * tan(TrackerPrimaryAngle) * .96" />
     <constant name="TrackerEndcapPDisk2_zmin"        value="70.0*cm" />
     <constant name="TrackerEndcapPDisk2_rmin"        value="Beampipe_rmax + 13.2*mm" />
@@ -72,7 +72,7 @@
     <constant name="TrackerEndcapNDisk1_zmin"        value="TrackerEndcapPDisk1_zmin" />
     <constant name="TrackerEndcapNDisk1_rmin"        value="TrackerEndcapPDisk1_rmin" />
     <constant name="TrackerEndcapNDisk1_rmax"        value="TrackerEndcapPDisk1_rmax" />
-    <constant name="TrackerEndcapNDisk2_zmin"        value="79.0*cm" />
+    <constant name="TrackerEndcapNDisk2_zmin"        value="TrackerEndcapPDisk2_zmin" />
     <constant name="TrackerEndcapNDisk2_rmin"        value="TrackerEndcapPDisk2_rmin" />
     <constant name="TrackerEndcapNDisk2_rmax"        value="TrackerEndcapPDisk2_rmax" />
     <constant name="TrackerEndcapNDisk3_zmin"        value="TrackerEndcapPDisk3_zmin" />
