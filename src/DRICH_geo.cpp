@@ -316,8 +316,8 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
       continue;
 
     // sector rotation about z axis
-    double      sectorRotation = isec * 360 / nSectors * degree;
-    std::string secName        = "sec" + std::to_string(isec);
+    RotationZ sectorRotation(isec * 2 * M_PI / nSectors);
+    std::string secName = "sec" + std::to_string(isec);
 
     // BUILD MIRRORS ====================================================================
 
@@ -410,7 +410,7 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
     // mirror volume, attributes, and placement
     Volume mirrorVol(detName + "_mirror_" + secName, mirrorSolid2, mirrorMat);
     mirrorVol.setVisAttributes(mirrorVis);
-    auto mirrorSectorPlacement = RotationZ(sectorRotation) * Translation3D(0, 0, 0); // rotate about beam axis to sector
+    auto mirrorSectorPlacement = sectorRotation * Translation3D(0, 0, 0); // rotate about beam axis to sector
     auto mirrorPV              = gasvolVol.placeVolume(mirrorVol, mirrorSectorPlacement);
 
     // properties
@@ -423,9 +423,9 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
     // - access sector center after `sectorRotation`
     auto mirrorFinalPlacement = mirrorSectorPlacement * mirrorPlacement;
     auto mirrorFinalCenter    = vesselPos + mirrorFinalPlacement.Translation().Vect();
-    desc.add(Constant("DRICH_RECON_mirrorCenterX_sec"+std::to_string(isec), std::to_string(mirrorFinalCenter.x())));
-    desc.add(Constant("DRICH_RECON_mirrorCenterY_sec"+std::to_string(isec), std::to_string(mirrorFinalCenter.y())));
-    desc.add(Constant("DRICH_RECON_mirrorCenterZ_sec"+std::to_string(isec), std::to_string(mirrorFinalCenter.z())));
+    desc.add(Constant("DRICH_RECON_mirrorCenterX_"+secName, std::to_string(mirrorFinalCenter.x())));
+    desc.add(Constant("DRICH_RECON_mirrorCenterY_"+secName, std::to_string(mirrorFinalCenter.y())));
+    desc.add(Constant("DRICH_RECON_mirrorCenterZ_"+secName, std::to_string(mirrorFinalCenter.z())));
     if(isec==0)
       desc.add(Constant("DRICH_RECON_mirrorRadius", std::to_string(mirrorRadius)));
 
@@ -446,6 +446,14 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
     // sensitivity
     if (!debugOptics || debugOpticsMode == 3)
       sensorVol.setSensitiveDetector(sens);
+
+    // reconstruction constants
+    auto sensorSphFinalCenter = sectorRotation * Position(xS, 0.0, zS);
+    desc.add(Constant("DRICH_RECON_sensorSphCenterX_"+secName, std::to_string(sensorSphFinalCenter.x())));
+    desc.add(Constant("DRICH_RECON_sensorSphCenterY_"+secName, std::to_string(sensorSphFinalCenter.y())));
+    desc.add(Constant("DRICH_RECON_sensorSphCenterZ_"+secName, std::to_string(sensorSphFinalCenter.z())));
+    if(isec==0)
+      desc.add(Constant("DRICH_RECON_sensorSphRadius", std::to_string(sensorSphRadius)));
 
     // SENSOR MODULE LOOP ------------------------
     /* ALGORITHM: generate sphere of positions
@@ -518,7 +526,7 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
           // - transformations operate on global coordinates; the corresponding
           //   generator coordinates are provided in the comments
           auto sensorPlacement =
-              RotationZ(sectorRotation) *                                           // rotate about beam axis to sector
+              sectorRotation *                                                      // rotate about beam axis to sector
               Translation3D(sensorSphPos.x(), sensorSphPos.y(), sensorSphPos.z()) * // move sphere to reference position
               RotationX(phiGen) *                                                   // rotate about `zGen`
               RotationZ(thetaGen) *                                                 // rotate about `yGen`
