@@ -5,8 +5,8 @@
       Main parameters - this is for the more realistic June 2022 design
     </comment>
 
-    <constant name="SiBarrelMod1_rmin"             value="SiBarrel1_rmin"/>
-    <constant name="SiBarrelMod2_rmin"             value="SiBarrel2_rmin"/>
+    <constant name="SiBarrelMod1_rmin"             value="SiBarrel1_rmin+1*mm"/>
+    <constant name="SiBarrelMod2_rmin"             value="SiBarrel2_rmin+1*cm"/>
     <constant name="SiBarrelMod_angle"             value="SiBarrel_angle"/>
     <constant name="SiBarrelMod_dz"                value="SiBarrel_dz"/>
 
@@ -26,7 +26,8 @@
     </comment>
 
     <constant name="SiBarrelMod1_length"        value="2 * SiBarrelMod1_rmin / tan(SiBarrelMod_angle) - SiBarrel_dz"/>
-    <constant name="SiBarrelMod2_length"        value="2 * SiBarrelMod2_rmin / tan(SiBarrelMod_angle) - SiBarrel_dz"/>
+    <comment> 84cm=2*42cm is the engineer max </comment>
+    <constant name="SiBarrelMod2_length"        value="84*cm"/>
 
     <constant name="SiBarrelLayer1_length"      value="SiBarrelMod1_length + 1*um"/>
     <constant name="SiBarrelLayer2_length"      value="SiBarrelMod2_length + 1*um"/>
