@@ -414,9 +414,9 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
     auto mirrorPV              = gasvolVol.placeVolume(mirrorVol, mirrorSectorPlacement);
 
     // properties
-    DetElement mirrorDE(det, Form("mirror_de%d", isec), isec);
+    DetElement mirrorDE(det, "mirror_de_" + secName, isec);
     mirrorDE.setPlacement(mirrorPV);
-    SkinSurface mirrorSkin(desc, mirrorDE, Form("mirror_optical_surface%d", isec), mirrorSurf, mirrorVol);
+    SkinSurface mirrorSkin(desc, mirrorDE, "mirror_optical_surface_" + secName, mirrorSurf, mirrorVol);
     mirrorSkin.isValid();
 
     // reconstruction constants (w.r.t. IP)
@@ -533,10 +533,11 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
           // properties
           sensorPV.addPhysVolID("sector", isec).addPhysVolID("module", imod); // NOTE: must be consistent with `sensorIDfields`
           auto imodsec = encodeSensorID(sensorPV.volIDs());
-          DetElement sensorDE(det, Form("sensor_de%d_%d", isec, imod), imodsec);
+          std::string modsecName = secName + "_" + std::to_string(imod);
+          DetElement sensorDE(det, "sensor_de_" + modsecName, imodsec);
           sensorDE.setPlacement(sensorPV);
           if (!debugOptics || debugOpticsMode == 3) {
-            SkinSurface sensorSkin(desc, sensorDE, Form("sensor_optical_surface%d", isec), sensorSurf, sensorVol);
+            SkinSurface sensorSkin(desc, sensorDE, "sensor_optical_surface_" + modsecName, sensorSurf, sensorVol);
             sensorSkin.isValid();
           };
 
