@@ -668,12 +668,13 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
                                                       sensorFlatSurface  // surface
             );
             // (sensor printout is verbose, uncomment to enable)
-            printout(ALWAYS, "IRTLOG", "    sensor (imodsec,x,y,z) = 0x%X  %5.2f  %5.2f  %5.2f cm",
-                imodsec, sensorGlobalPos[0], sensorGlobalPos[1], sensorGlobalPos[2]);
-            printout(ALWAYS, "IRTLOG", "                     normX = %5.2f  %5.2f  %5.2f",
-                sensorGlobalNormX[0], sensorGlobalNormX[1], sensorGlobalNormX[2]);
-            printout(ALWAYS, "IRTLOG", "                     normY = %5.2f  %5.2f  %5.2f",
-                sensorGlobalNormY[0], sensorGlobalNormY[1], sensorGlobalNormY[2]);
+            printout(ALWAYS, "IRTLOG",
+                "sensor: id=0x%08X pos=(%5.2f, %5.2f, %5.2f) normX=(%5.2f, %5.2f, %5.2f) normY=(%5.2f, %5.2f, %5.2f)",
+                imodsec,
+                sensorGlobalPos[0],   sensorGlobalPos[1],   sensorGlobalPos[2],
+                sensorGlobalNormX[0], sensorGlobalNormX[1], sensorGlobalNormX[2],
+                sensorGlobalNormY[0], sensorGlobalNormY[1], sensorGlobalNormY[2]
+                );
           }
 #endif
 
