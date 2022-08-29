@@ -11,7 +11,7 @@
     This configuration needs attention!
   </documentation>
 
-  <include ref="rwell_tracker_barrel.xml">
+  <include ref="rwell_tracker_barrel.xml"/>
   <!--include ref="compact/ce_GEM.xml"/-->
   <!--include ref="compact/mm_tracker_barrel.xml"/-->
   <!--include ref="compact/cb_VTX_Barrel.xml"/-->
