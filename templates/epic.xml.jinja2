@@ -44,15 +44,15 @@
       The ip6 (or other ip) defines should be included first.
       These files have only a define tags.
   </documentation>
-    <include ref="ip6/definitions.xml" />
-    <include ref="ip6/far_forward/fields_{{ pbeam | default("275", true) }}.xml" />
-    <include ref="compact/definitions.xml" />
+    <include ref="${BEAMLINE_PATH}/ip6/definitions.xml" />
+    <include ref="${BEAMLINE_PATH}/ip6/far_forward/fields_{{ pbeam | default("275", true) }}.xml" />
+    <include ref="${DETECTOR_PATH}/compact/definitions.xml" />
   </define>
 
   <includes>
-    <gdmlFile ref="compact/elements.xml"/>
-    <gdmlFile ref="compact/materials.xml"/>
-    <file     ref="compact/optical_materials.xml"/>
+    <gdmlFile ref="${DETECTOR_PATH}/compact/elements.xml"/>
+    <gdmlFile ref="${DETECTOR_PATH}/compact/materials.xml"/>
+    <file     ref="${DETECTOR_PATH}/compact/optical_materials.xml"/>
   </includes>
 
   <limits>
@@ -69,8 +69,8 @@
   </limits>
 
   <display>
-    <include ref="compact/{{colors | default("colors.xml", true) }}"/>
-    <include ref="compact/{{display | default("display.xml", true) }}"/>
+    <include ref="${DETECTOR_PATH}/compact/{{colors | default("colors.xml", true) }}"/>
+    <include ref="${DETECTOR_PATH}/compact/{{display | default("display.xml", true) }}"/>
   </display>
 
   <documentation level="0">
@@ -97,14 +97,14 @@
   <documentation level="5">
     ## Main magnet
   </documentation>
-  <include ref="compact/solenoid.xml"/>
+  <include ref="${DETECTOR_PATH}/compact/solenoid.xml"/>
 {% endif -%}
 
 {% if features is not defined or 'tracking' in features %}
   <documentation level="10">
     ## Central tracking detectors
   </documentation>
-  <include ref="compact/tracking_config.xml"/>
+  <include ref="${DETECTOR_PATH}/compact/tracker.xml"/>
 {% endif -%}
 
 {% if features is not defined or 'pid' in features %}
@@ -112,31 +112,31 @@
     ## PID detectors
   </documentation>
   {% if features is not defined or features['pid'] is none or 'fake_dirc' in features['pid'] %}
-  <include ref="compact/fake_dirc.xml"/>
+  <include ref="${DETECTOR_PATH}/compact/fake_dirc.xml"/>
   {% elif 'dirc' in features['pid'] -%}
-  <include ref="compact/dirc.xml"/>
+  <include ref="${DETECTOR_PATH}/compact/dirc.xml"/>
   {% endif -%}
 
   {% if features is not defined or features['pid'] is none or 'drich' in features['pid'] %}
   {%- if features is not defined or features['pid'] is none or features['pid']['drich'] is none %}
-  <include ref="compact/drich.xml"/>
+  <include ref="${DETECTOR_PATH}/compact/drich.xml"/>
   {% else %}
   <include ref="{{ features['pid']['drich'] }}"/>
   {% endif -%}
   {% endif -%}
 
   {% if features is not defined or features['pid'] is none or 'mrich' in features['pid'] %}
-  <include ref="compact/mrich.xml"/>
+  <include ref="${DETECTOR_PATH}/compact/mrich.xml"/>
   {% elif 'pfrich' in features['pid'] -%}
-  <include ref="compact/pfrich.xml"/>
+  <include ref="${DETECTOR_PATH}/compact/pfrich.xml"/>
   {% endif -%}
 
   {% if features is defined and features['pid'] is not none and 'tof_endcap' in features['pid'] %}
-  <include ref="compact/tof_endcap.xml"/>
+  <include ref="${DETECTOR_PATH}/compact/tof_endcap.xml"/>
   {% endif -%}
 
-  {% if features is not defined or features['pid'] is none or 'tof_barrel' in features['pid'] %}
-  <include ref="compact/tof_barrel.xml"/>
+  {% if features is defined and features['pid'] is not none and 'tof_barrel' in features['pid'] %}
+  <include ref="${DETECTOR_PATH}/compact/tof_barrel.xml"/>
   {% endif -%}
 {% endif -%}
 
@@ -145,21 +145,21 @@
     ## Central EM calorimetry
   </documentation>
   {% if features is not defined or features['ecal'] is none or 'forward_scifi' in features['ecal'] %}
-  <include ref="compact/ecal_forward_scfi.xml"/>
+  <include ref="${DETECTOR_PATH}/compact/ecal_forward_scfi.xml"/>
   {% elif 'forward_homogenous' in features['ecal'] -%}
-  <include ref="compact/ecal_forward_homogenous.xml"/>
+  <include ref="${DETECTOR_PATH}/compact/ecal_forward_homogenous.xml"/>
   {% endif -%}
 
   {% if features is not defined or features['ecal'] is none or 'backward_PbWO4' in features['ecal'] %}
-  <include ref="compact/ecal_backward_PbWO4.xml"/>
+  <include ref="${DETECTOR_PATH}/compact/ecal_backward_PbWO4.xml"/>
   {% elif 'backward_hybrid' in features['ecal'] -%}
-  <include ref="compact/ecal_backward_hybrid.xml"/>
+  <include ref="${DETECTOR_PATH}/compact/ecal_backward_hybrid.xml"/>
   {% endif -%}
 
   {% if features is not defined or features['ecal'] is none or 'barrel_sciglass' in features['ecal'] %}
-  <include ref="compact/ecal_barrel_sciglass.xml"/>
+  <include ref="${DETECTOR_PATH}/compact/ecal_barrel_sciglass.xml"/>
   {% elif 'barrel_interlayers' in features['ecal'] -%}
-  <include ref="compact/ecal_barrel_interlayers.xml"/>
+  <include ref="${DETECTOR_PATH}/compact/ecal_barrel_interlayers.xml"/>
   {% endif -%}
 {% endif -%}
 
@@ -167,29 +167,28 @@
   <documentation level="10">
     ## Central hadronic calorimetry
   </documentation>
-  <!-- FIXME hcal needs splitting -->
-  <include ref="compact/hcal.xml"/>
+  <include ref="${DETECTOR_PATH}/compact/hcal.xml"/>
 {% endif -%}
 
 {% if features is not defined or 'beampipe' in features %}
   <documentation level="11">
     ## Central beam pipe
   </documentation>
-  <include ref="ip6/central_beampipe.xml"/>
+  <include ref="${BEAMLINE_PATH}/ip6/central_beampipe.xml"/>
 {% endif -%}
 
 {% if features is not defined or 'farforward' in features %}
   <documentation level="11">
     ## Far foward detectors
   </documentation>
-  <include ref="ip6/far_forward.xml"/>
+  <include ref="${BEAMLINE_PATH}/ip6/far_forward.xml"/>
 {% endif -%}
 
 {% if features is not defined or 'farbackward' in features %}
   <documentation level="11">
     ## Far backward detectors
   </documentation>
-  <include ref="ip6/far_backward.xml"/>
+  <include ref="${BEAMLINE_PATH}/ip6/far_backward.xml"/>
 {% endif -%}
 
 </lccdd>

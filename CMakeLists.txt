@@ -9,6 +9,7 @@ PROJECT(epic
   )
 
 option(EPIC_ECCE_LEGACY_COMPAT "Preserve some compatibility with ECCE" ON)
+option(IRT_AUXFILE "Build auxiliary config file for dRICH IRT" OFF)
 
 # C++ standard
 set(CMAKE_CXX_STANDARD 17)
@@ -33,6 +34,9 @@ endif()
 # Export compile commands as json for run-clang-tidy
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
+# Install into GNU standards
+include(GNUInstallDirs)
+
 # Set required DD4hep components based on user input
 set(USE_DDG4 "TRUE" CACHE BOOL "Require DD4hep DDG4 component")
 set(DD4hep_required_components DDCore DDRec)
@@ -56,7 +60,7 @@ else()
 endif()
 find_package(fmt REQUIRED)
 
-if(DEFINED IRT_AUXFILE)
+if(IRT_AUXFILE)
   add_compile_definitions(IRT_AUXFILE)
   find_package(IRT REQUIRED)
 endif()
@@ -74,7 +78,7 @@ dd4hep_add_plugin(${a_lib_name}
 target_link_libraries(${a_lib_name}
   PUBLIC ${DD4hep_required_libraries} fmt::fmt
   )
-if(DEFINED IRT_AUXFILE)
+if(IRT_AUXFILE)
   target_link_libraries(${a_lib_name} PUBLIC IRT)
 endif()
 if(EPIC_ECCE_LEGACY_COMPAT)
@@ -99,7 +103,7 @@ add_custom_command(TARGET ${PROJECT_NAME}.xml
     COMMENT "Creating default ${PROJECT_NAME}.xml geometry"
     )
 install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/${PROJECT_NAME}.xml
-    DESTINATION share/${PROJECT_NAME}/
+    DESTINATION ${CMAKE_INSTALL_DATADIR}/${PROJECT_NAME}/
     )
 
 file(GLOB CONFIG_YMLS ${CMAKE_CURRENT_SOURCE_DIR}/configurations/*.yml)
@@ -116,21 +120,21 @@ foreach(config_yml ${CONFIG_YMLS})
         COMMENT "Creating configuration ${config} for ${PROJECT_NAME}"
         )
     install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/${PROJECT_NAME}_${config}.xml
-        DESTINATION share/${PROJECT_NAME}/
+        DESTINATION ${CMAKE_INSTALL_DATADIR}/${PROJECT_NAME}/
         )
 endforeach()
 
 #-----------------------------------------------------------------------------------
 # Install the detector description files.
 install(DIRECTORY compact/
-    DESTINATION share/${PROJECT_NAME}/compact
+    DESTINATION ${CMAKE_INSTALL_DATADIR}/${PROJECT_NAME}/compact
     FILES_MATCHING PATTERN "*.xml"
     )
 
 #-----------------------------------------------------------------------------------
 # Install the detector calibration files.
 install(DIRECTORY calibrations/
-    DESTINATION share/${PROJECT_NAME}/calibrations
+    DESTINATION ${CMAKE_INSTALL_DATADIR}/${PROJECT_NAME}/calibrations
     )
 
 # Handle ECCE compatibility mode

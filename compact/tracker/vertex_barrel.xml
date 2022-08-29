@@ -5,29 +5,22 @@
       Main parameters
     </comment>
 
+    <constant name="VertexBarrelMod_length"             value="VertexBarrel_length"/>
+    <constant name="VertexBarrelMod_rmin"               value="VertexBarrel_rmin"/>
+
     <constant name="SiVertexSensor_thickness"           value="40*um"/>
-    <constant name="VertexBarrelMod_length"             value="280.0*mm"/>
-    <constant name="VertexBarrelMod_rmin"               value="3.3*cm"/>
-    <constant name="VertexBarrelMod_offset"             value="1.05*cm"/>
-    <constant name="VertexBarrelMod_count"              value="3"/>
-    <constant name="VertexBarrelShell_thickness"        value="300.0*um"/>
+
+
+    <constant name="VertexBarrelMod1_rmin"              value="VertexBarrelMod_rmin"/>
+    <constant name="VertexBarrelMod2_rmin"              value="VertexBarrelMod_rmin + 1.2*cm"/>
+    <constant name="VertexBarrelMod3_rmin"              value="12.3*cm"/>
+
+    <comment> ensure we are within the vertex envelope with some margin. </comment>
+    <constant name="VertexCheck"                        value="sqrt(VertexBarrel_rmax - VertexBarrelMod3_rmin - .1*cm)"/>
 
     <documentation>
-      #### Vertex Tracker Barrel Parameters
-
-- The sensor modules are 2 half-cylinders.
-- There are 2 sensitive layers
-- Each sensor has a thickness is 40um
-- There is an outer shell for structural support 300um thick.
-- The ID of this shell is set (arbitrarily) to 10 cm.
-
-      ##### Sensor layers
-
-Currently there are 2 sensor layers. Each is composed of 2 half-cylinders modules with only 40um of silicon thickness.
-
-      ##### Support shell
-
-Simple carbon fiber support shell.
+      - Currently there are 3 sensor layers. Each is composed of 2 half-cylinders modules with only 40um of silicon thickness.
+      - Both support shells are 300um thick, implemented as the integrated tracker support/service setup
 
     </documentation>
 
@@ -37,42 +30,25 @@ Simple carbon fiber support shell.
     <constant name="VertexBarrelLayer_thickness"    value="0.2*cm"/>
     <constant name="VertexBarrelMod_thickness"      value="0.1*cm"/>
 
-    <constant name="VertexBarrelMod1_rmin"          value="VertexBarrelMod_rmin"/>
-    <constant name="VertexBarrelMod2_rmin"          value="VertexBarrelMod_rmin + 1 * VertexBarrelMod_offset"/>
-    <constant name="VertexBarrelMod3_rmin"          value="VertexBarrelMod_rmin + 2 * VertexBarrelMod_offset"/>
+    <comment> Layer 3 already set as main parameter </comment>
 
-    <constant name="VertexBarrelLayer1_rmin"        value="VertexBarrelMod_rmin - VertexBarrelLayer_thickness/2.0"/>
+    <constant name="VertexBarrelLayer1_rmin"        value="VertexBarrelMod1_rmin - VertexBarrelLayer_thickness/2.0"/>
     <constant name="VertexBarrelLayer1_rmax"        value="VertexBarrelLayer1_rmin + VertexBarrelLayer_thickness"/>
-    <constant name="VertexBarrelLayer2_rmin"        value="VertexBarrelLayer1_rmin + 1 * VertexBarrelMod_offset"/>
+    <constant name="VertexBarrelLayer2_rmin"        value="VertexBarrelMod2_rmin - VertexBarrelLayer_thickness/2.0"/>
     <constant name="VertexBarrelLayer2_rmax"        value="VertexBarrelLayer2_rmin + VertexBarrelLayer_thickness"/>
-    <constant name="VertexBarrelLayer3_rmin"        value="VertexBarrelLayer1_rmin + 2 * VertexBarrelMod_offset"/>
+    <constant name="VertexBarrelLayer3_rmin"        value="VertexBarrelMod3_rmin - VertexBarrelLayer_thickness/2.0"/>
     <constant name="VertexBarrelLayer3_rmax"        value="VertexBarrelLayer3_rmin + VertexBarrelLayer_thickness"/>
-
-    <comment>
-      "Support" is to "shell" like "layer" is to "module", and is need for the flat stave barrel implementation.
-    </comment>
-    <constant name="VertexBarrelShell_rmin"         value="VertexBarrelMod_rmin + VertexBarrelMod_count * VertexBarrelMod_offset"/>
-    <constant name="VertexBarrelShell_rmax"         value="VertexBarrelShell_rmin + VertexBarrelShell_thickness"/>
-    <constant name="VertexBarrelShell_length"       value="VertexBarrelMod_length"/>
-
-    <constant name="VertexBarrelSupport_thickness"  value="0.1*cm"/>
-    <constant name="VertexBarrelSupport_rmin"       value="VertexBarrelShell_rmin-VertexBarrelSupport_thickness/2.0"/>
-    <constant name="VertexBarrelSupport_rmax"       value="VertexBarrelSupport_rmin + VertexBarrelSupport_thickness"/>
-    <constant name="VertexBarrelSupport_length"     value="VertexBarrelLayer_length"/>
 
     <comment>
       Extra parameters to approximate a cylinder as a set of skinny staves
       due to ACTS limitations.
+      FIXME: this shouldn't be needed anymore, need to update the cylindrical plugin.
     </comment>
     <constant name="VertexBarrelStave_count"       value="128"/>
     <constant name="VertexBarrelStave1_width"      value="2*VertexBarrelMod1_rmin * tan(180*degree/VertexBarrelStave_count)"/>
     <constant name="VertexBarrelStave2_width"      value="2*VertexBarrelMod2_rmin * tan(180*degree/VertexBarrelStave_count)"/>
     <constant name="VertexBarrelStave3_width"      value="2*VertexBarrelMod3_rmin * tan(180*degree/VertexBarrelStave_count)"/>
-    <constant name="VertexBarrelShellStave_width"  value="2*VertexBarrelShell_rmin * tan(180*degree/VertexBarrelStave_count)"/>
   </define>
-
-  <display>
-  </display>
 
   <detectors>
     <documentation level="5">
@@ -86,7 +62,7 @@ Simple carbon fiber support shell.
       insideTrackingVolume="true">
       <dimensions
         rmin="VertexBarrelLayer1_rmin"
-        rmax="VertexBarrelSupport_rmax"
+        rmax="VertexBarrelLayer3_rmax"
         length="VertexBarrelEnvelope_length" />
       <comment>Vertex Barrel Modules</comment>
       <module name="Module1" vis="VertexLayerVis">
@@ -115,15 +91,6 @@ Simple carbon fiber support shell.
                           length="VertexBarrelMod_length"
                           thickness="SiVertexSensor_thickness"
                           vis="VertexLayerVis" />
-      </module>
-      <module name="SupportShell" vis="VertexSupportVis">
-        <module_component name="CF Shell"
-                          material="CarbonFiber"
-                          sensitive="false"
-                          width="VertexBarrelShellStave_width"
-                          length="VertexBarrelShell_length"
-                          thickness="VertexBarrelShell_thickness"
-                          vis="VertexSupportVis" />
       </module>
       <comment> Layers composed of many arrayed modules  </comment>
       <layer module="Module1" id="1" vis="VertexLayerVis">
@@ -154,22 +121,13 @@ Simple carbon fiber support shell.
         <rphi_layout phi_tilt="0.0*degree" nphi="VertexBarrelStave_count" phi0="0.0" rc="VertexBarrelMod2_rmin" dr="0.0 * mm"/>
         <z_layout dr="0.0 * mm" z0="0.0 * mm" nz="1"/>
       </layer>
-      <layer module="Module3" id="3" vis="VertexLayerVis">
+      <layer module="Module3" id="4" vis="VertexLayerVis">
         <barrel_envelope
           inner_r="VertexBarrelLayer3_rmin"
           outer_r="VertexBarrelLayer3_rmax"
           z_length="VertexBarrelLayer_length" />
         <layer_material surface="outer" binning="binPhi,binZ" bins0="VertexBarrelStave_count" bins1="100" />
         <rphi_layout phi_tilt="0.0*degree" nphi="VertexBarrelStave_count" phi0="0.0" rc="VertexBarrelMod3_rmin" dr="0.0 * mm"/>
-        <z_layout dr="0.0 * mm" z0="0.0 * mm" nz="1"/>
-      </layer>
-      <layer module="SupportShell" id="VertexBarrelMod_count + 1" vis="VertexSupportLayerVis">
-        <barrel_envelope
-          inner_r="VertexBarrelSupport_rmin"
-          outer_r="VertexBarrelSupport_rmax"
-          z_length="VertexBarrelSupport_length" />
-        <layer_material surface="outer" binning="binPhi,binZ" bins0="VertexBarrelStave_count" bins1="100" />
-        <rphi_layout phi_tilt="0.0*degree" nphi="VertexBarrelStave_count" phi0="0.0" rc="VertexBarrelShell_rmin" dr="0.0 * mm"/>
         <z_layout dr="0.0 * mm" z0="0.0 * mm" nz="1"/>
       </layer>
     </detector>

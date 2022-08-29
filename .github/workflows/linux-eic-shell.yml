@@ -17,17 +17,17 @@ jobs:
   xmllint-before-build:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
     - run: |
         sudo apt-get update
         sudo apt-get install -y libxml2-utils
-        xmllint compact/*.xml > /dev/null
+        find compact/ -name "*.xml" -exec xmllint {} \; > /dev/null
 
   build-test:
     runs-on: ubuntu-latest
     needs: xmllint-before-build
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
     - uses: cvmfs-contrib/github-action-cvmfs@v2
     - uses: eic/run-cvmfs-osg-eic-shell@main
       with:
@@ -73,13 +73,13 @@ jobs:
     - run: |
         sudo apt-get update
         sudo apt-get install -y libxml2-utils
-        xmllint install/share/ecce/*.xml > /dev/null
+        find install/share -name "*.xml" -exec xmllint {} \; > /dev/null
 
   convert-to-gdml:
     runs-on: ubuntu-latest
     needs: build-test
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
     - uses: actions/download-artifact@v3
       with:
         name: build-full-eic-shell
@@ -102,7 +102,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: build-test
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
     - uses: actions/download-artifact@v3
       with:
         name: build-full-eic-shell
@@ -125,7 +125,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: build-test
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
     - uses: actions/download-artifact@v3
       with:
         name: build-full-eic-shell
@@ -148,7 +148,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: build-test
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
     - uses: actions/download-artifact@v3
       with:
         name: build-full-eic-shell
@@ -177,7 +177,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: build-test
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
     - uses: actions/download-artifact@v3
       with:
         name: build-full-eic-shell
@@ -197,7 +197,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: build-test
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
     - uses: actions/download-artifact@v3
       with:
         name: build-full-eic-shell
@@ -217,7 +217,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: build-test
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
     - uses: actions/download-artifact@v3
       with:
         name: build-fast-eic-shell
@@ -237,7 +237,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: build-test
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
     - uses: actions/download-artifact@v3
       with:
         name: build-full-eic-shell
@@ -270,16 +270,25 @@ jobs:
           BEAMLINE_CONFIG_VERSION=master
           JUGGLER_DETECTOR_REPOSITORYURL=${{ github.server_url }}/${{ github.repository }}
           JUGGLER_DETECTOR_VERSION=${{ github.ref_name }}
-    - uses: peter-evans/commit-comment@v2
-      with:
-        body: |
-          Detector benchmarks started at ${{ steps.trigger.outputs.web_url }}
+          GITHUB_REPOSITORY=${{ github.repository }}
+          GITHUB_SHA=${{ github.event.pull_request.head.sha || github.sha }}
+    - run: |
+        gh api \
+           --method POST \
+          -H "Accept: application/vnd.github+json" \
+          /repos/${{ github.repository }}/statuses/${{ github.event.pull_request.head.sha || github.sha }} \
+          -f state='pending' \
+          -f target_url=${{ steps.trigger.outputs.web_url }} \
+          -f description='The detector benchmarks have been triggered...' \
+          -f context='eicweb/detector_benchmarks'
+      env:
+        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
   generate-prim-file:
     runs-on: ubuntu-latest
     needs: build-test
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
     - uses: actions/download-artifact@v3
       with:
         name: build-fast-eic-shell
@@ -306,7 +315,7 @@ jobs:
         view: [view1, view2, view3, view6, view7, view11, view13]
       fail-fast: false
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
     - uses: actions/download-artifact@v3
       with:
         name: detector_view.prim
@@ -333,7 +342,7 @@ jobs:
         slice: [100, 300, 500, 700, 900, 1100, 1300, 1500, 1700, 1900]
       fail-fast: false
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
     - uses: actions/download-artifact@v3
       with:
         name: detector_view.prim

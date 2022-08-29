@@ -46,7 +46,7 @@ ln -s ../ip6/ip6 epic/ip6
 
 To configure, build, and install the geometry (to the `install` directory), use the following commands:
 ```bash
-cmake -B build -S . -D CMAKE_INSTALL_PREFIX=install
+cmake -B build -S . -DCMAKE_INSTALL_PREFIX=install -DEPIC_ECCE_LEGACY_COMPAT=OFF
 cmake --build build
 cmake --install build
 ```

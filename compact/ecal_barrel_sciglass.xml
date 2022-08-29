@@ -30,7 +30,7 @@
     <detector id="ECalBarrel_ID"
       name="ECalBarrel"
       type="epic_SciGlassCalorimeter"
-      vis="InvisibleWithDaughters"
+      vis="EcalBarrelEnvelopeVis"
       calorimeterType="EM_BARREL"
       readout="EcalBarrelHits">
       <dimensions rmin="EcalBarrel_rmin" rmax="EcalBarrel_rmax"
