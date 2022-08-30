@@ -5,16 +5,15 @@
       Main parameters - this is for the more realistic June 2022 design
     </comment>
 
-    <constant name="SiBarrelMod1_rmin"             value="SiBarrel1_rmin"/>
-    <constant name="SiBarrelMod2_rmin"             value="SiBarrel2_rmin"/>
+    <constant name="SiBarrelMod1_rmin"             value="SiBarrel1_rmin+1*mm"/>
+    <constant name="SiBarrelMod2_rmin"             value="SiBarrel2_rmin+1*cm"/>
     <constant name="SiBarrelMod_angle"             value="SiBarrel_angle"/>
     <constant name="SiBarrelMod_dz"                value="SiBarrel_dz"/>
 
     <constant name="SiBarrelSensor_thickness"      value="40*um"/>
 
-    <comment> Module one has roughlty 50% of the support/service thickness compared to module two </comment>
-    <constant name="SiBarrelMod1Service_thickness" value="0.2*mm"/>
-    <constant name="SiBarrelMod2Service_thickness" value="0.4*mm"/>
+    <constant name="SiBarrelMod1Service_thickness" value="0.15*mm"/>
+    <constant name="SiBarrelMod2Service_thickness" value="0.37*mm"/>
     <constant name="SiBarrelMod1Frame_thickness"   value="0.06*mm"/>
     <constant name="SiBarrelMod2Frame_thickness"   value="0.12*mm"/>
     <constant name="SiBarrelMod1Frame_height"      value="0.8*cm"/>
@@ -27,17 +26,17 @@
     </comment>
 
     <constant name="SiBarrelMod1_length"        value="2 * SiBarrelMod1_rmin / tan(SiBarrelMod_angle) - SiBarrel_dz"/>
-    <constant name="SiBarrelMod2_length"        value="2 * SiBarrelMod2_rmin / tan(SiBarrelMod_angle) - SiBarrel_dz"/>
+    <comment> 84cm=2*42cm is the engineer max </comment>
+    <constant name="SiBarrelMod2_length"        value="84*cm"/>
 
     <constant name="SiBarrelLayer1_length"      value="SiBarrelMod1_length + 1*um"/>
     <constant name="SiBarrelLayer2_length"      value="SiBarrelMod2_length + 1*um"/>
     <constant name="SiBarrelEnvelope_length"    value="SiBarrelLayer2_length + 1*um" />
 
-    <constant name="SiBarrelLayer_thickness"    value="2.0*cm"/>
-
-    <constant name="SiBarrelLayer1_rmin"        value="SiBarrelMod1_rmin - SiBarrelLayer_thickness/2.0"/>
+    <constant name="SiBarrelLayer_thickness"    value="3.0*cm"/>
+    <constant name="SiBarrelLayer1_rmin"        value="SiBarrelMod1_rmin "/>
     <constant name="SiBarrelLayer1_rmax"        value="SiBarrelLayer1_rmin + SiBarrelLayer_thickness"/>
-    <constant name="SiBarrelLayer2_rmin"        value="SiBarrelMod2_rmin - SiBarrelLayer_thickness/2.0"/>
+    <constant name="SiBarrelLayer2_rmin"        value="SiBarrelMod2_rmin "/>
     <constant name="SiBarrelLayer2_rmax"        value="SiBarrelLayer2_rmin + SiBarrelLayer_thickness"/>
 
     <constant name="SiBarrelStaveTilt_angle"     value="3.0*degree"/>
@@ -85,10 +84,10 @@
       <comment> Layers composed of many arrayed modules  </comment>
       <layer module="Module1" id="1" vis="TrackerLayerVis">
         <barrel_envelope
-          inner_r="SiBarrelLayer1_rmin"
+          inner_r="SiBarrelLayer1_rmin-0.5*mm"
           outer_r="SiBarrelLayer1_rmax"
           z_length="SiBarrelLayer1_length" />
-        <layer_material surface="outer" binning="binPhi,binZ" bins0="SiBarrelStave1_count" bins1="100" />
+        <layer_material surface="inner" binning="binPhi,binZ" bins0="SiBarrelStave1_count" bins1="100" />
         <comment>
           phi0     : Starting phi of first module.
           phi_tilt : Phi tilt of a module.
@@ -142,10 +141,10 @@
       <comment> Layers composed of many arrayed modules  </comment>
       <layer module="Module1" id="1" vis="TrackerLayerVis">
         <barrel_envelope
-          inner_r="SiBarrelLayer2_rmin"
+          inner_r="SiBarrelLayer2_rmin-1.0*mm"
           outer_r="SiBarrelLayer2_rmax"
           z_length="SiBarrelLayer2_length" />
-        <layer_material surface="outer" binning="binPhi,binZ" bins0="SiBarrelStave2_count" bins1="100" />
+        <layer_material surface="inner" binning="binPhi,binZ" bins0="SiBarrelStave2_count" bins1="100" />
         <comment>
           phi0     : Starting phi of first module.
           phi_tilt : Phi tilt of a module.
