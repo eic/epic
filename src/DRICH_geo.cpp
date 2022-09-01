@@ -153,7 +153,7 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
 
   // if debugging optics, we may have a non-standard sensor size; if so, re-scale the readout pixels:
   double sensorRescale = 0;
-  if (debugOpticsMode == 4) sensorRescale = 200;
+  if (debugOpticsMode == 4) sensorRescale = 250;
   if (sensorRescale > 0) {
     auto seg = (CartesianGridXY) desc.readout(readoutName).segmentation();
     seg.setGridSizeX(sensorRescale * seg.gridSizeX());
@@ -293,7 +293,7 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
   auto originFront = Position(0., 0., -tankLength / 2.0 - snoutLength);
   // auto originBack  = Position(0., 0., tankLength / 2.0);
   auto vesselPos = Position(0, 0, vesselZmin) - originFront;
-
+  
   // place gas volume
   PlacedVolume gasvolPV = vesselVol.placeVolume(gasvolVol, Position(0, 0, 0));
   DetElement   gasvolDE(det, "gasvol_de", 0);
@@ -443,8 +443,9 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
 
     // initialize module number for this sector
     int imod = 0;
-
-    if(debugOpticsMode != 4){
+    bool makeNormalSensors = true;
+    bool drawFP = true;
+    if(debugOpticsMode != 4 || (debugOpticsMode == 4 && makeNormalSensors) ){
       Box    sensorSolid(sensorSide / 2., sensorSide / 2., sensorThickness / 2.);
       Volume sensorVol(detName + "_sensor_" + secName, sensorSolid, sensorMat);
       sensorVol.setVisAttributes(sensorVis);
@@ -570,23 +571,25 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
 	};   // end phiGen loop
       };     // end thetaGen loop
     };
-    if(debugOpticsMode == 4){
-      Box    sensorSolid(sensorRescale * sensorSide / 2., sensorRescale * sensorSide / 2., sensorRescale * sensorThickness / 2.);
+    if(debugOpticsMode == 4 && !makeNormalSensors){
+      Box    sensorSolid(sensorRescale * sensorSide / 2., sensorRescale * sensorSide / 2., sensorThickness / 2.);
       Volume sensorVol(detName + "_sensor_" + secName, sensorSolid, sensorMat);
       sensorVol.setVisAttributes(sensorVis);
       if (!debugOptics || debugOpticsMode == 3 || debugOpticsMode == 4 )
         sensorVol.setSensitiveDetector(sens);
-
-      double thetaGen = 0.52;
+      
+      //double thetaGen = 0.52;
       double phiGen = 0;
+
       auto sensorPlacement =
 	RotationZ(sectorRotation) *                                           // rotate about beam axis to sector                                                                                     
-	Translation3D(sensorSphPos.x()-50, sensorSphPos.y(), sensorSphPos.z()) * // move sphere to reference position                                                                                    
+	Translation3D(sensorSphPos.x()+100, sensorSphPos.y(), sensorSphPos.z()-125) * // move sphere to reference position                                                                                    
 	RotationX(phiGen) *                                                   // rotate about `zGen`                                                                                                  
-	RotationZ(thetaGen) *                                                 // rotate about `yGen`                                                                                                  
-	Translation3D(sensorSphRadius, 0., 0.) * // push radially to spherical surface                                                                                                                
+	//RotationZ(thetaGen) *                                                 // rotate about `yGen`                                                                                                  
+	Translation3D(sensorSphRadius, 0., 0.)* // push radially to spherical surface                                                                                                                
 	//RotationY(M_PI / 2) *                    // rotate sensor to be compatible with generator coords                                                                                              
-	RotationZ(-M_PI / 2);                    // correction for readout segmentation mapping                                                                                                       
+	RotationZ(0);                    // correction for readout segmentation mapping
+      
       auto sensorPV = gasvolVol.placeVolume(sensorVol, sensorPlacement);
       sensorPV.addPhysVolID("sector", isec).addPhysVolID("module", imod);
       DetElement sensorDE(det, Form("sensor_de%d_%d", isec, imod), 0);
@@ -594,10 +597,32 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
       if (!debugOptics || debugOpticsMode == 3 || debugOpticsMode == 4) {
 	SkinSurface sensorSkin(desc, sensorDE, Form("sensor_optical_surface%d", isec), sensorSurf, sensorVol);
 	sensorSkin.isValid();
-      };
-      
+      };            
     };
-        
+    if(std::getenv("FPPLOT_FILE")!=NULL && drawFP){      
+      Box FPsolid(1.,1.,1.);
+      Volume FPvol(detName + "_FPpos_" + secName, FPsolid, aerogelMat);      
+      
+      FILE * fptxt = fopen(std::getenv("FPPLOT_FILE"),"r");
+      double fpx, fpy, fpz;
+      int fpnum=0;
+
+      while(fscanf(fptxt,"%lf %lf %lf", &fpx, &fpy, &fpz)!=EOF){
+
+	if( std::abs(fpx) < 1000  && std::abs(fpy) < 1000 && std::abs(fpz) < 1000){
+	  auto FPPlacement =
+	    RotationZ(0) * // rotate about beam axis to sector                            
+	    Translation3D(fpx, fpy, fpz-vesselPos.z()); // move sphere to reference position 
+	  auto FPPV = gasvolVol.placeVolume(FPvol, FPPlacement);
+	  FPPV.addPhysVolID("sector", isec).addPhysVolID("module", imod);
+	  DetElement FPDE(det, Form("FP_de%d_%d", isec, fpnum), 0);
+	  FPDE.setPlacement(FPPV);
+	  fpnum++;
+	}
+      };
+    };
+    
+    
     // calculate centroid sensor position
     if (isec == 0) {
       sensorCentroidX /= sensorCount;
@@ -681,7 +706,7 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
                         40 * degree);
 
     // print mirror attributes for sector 0
-    // if(isec==0) printf("dRICH mirror (zM, xM, rM) = (%f, %f, %f)\n",zM,xM,rM); // coords w.r.t. IP
+    //if(isec==0) printf("dRICH mirror (zM, xM, rM) = (%f, %f, %f)\n",zM,xM,rM); // coords w.r.t. IP
 
     // mirror placement transformation (note: transformations are in reverse order)
     auto mirrorPos = Position(mirrorCenterX, 0., mirrorCenterZ) + originFront;
