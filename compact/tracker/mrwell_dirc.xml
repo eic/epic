@@ -1,0 +1,313 @@
+<lccdd>
+<info name="mrwell_dirc.xml"
+      title="Micro Resistive Well Gas Detector for aiding DIRC PID"
+      author="mposik1983"
+      url="https://github.com/mposik1983"
+      status="development"
+      version="1.0"
+><comment/>
+</info>
+
+  <define>
+    
+    <comment> Needed constants if DIRC is not used </comment>
+    <constant name="DIRCFrame_rmax"                   value="75.5*cm"/>
+    <constant name="DIRCFrame_thickness"               value="4.0*cm"/>
+    <constant name="DIRCModule_rmin"                  value="72.5*cm"/>
+    <constant name="DIRCBar_length"                   value="507.0*cm"/>
+    <constant name="DIRCModule_count"                 value="12"/>
+    <constant name="DIRCModule_width"                 value="38.317*cm"/>
+    <comment> End DIRC constants </comment>
+    
+
+    <constant name="mRwellDIRCFrame_width"            value="20*mm"/>
+    <constant name="mRwellDIRCFrame_thickness"        value="7*mm"/>
+    <constant name="mRwellDIRCModule_allowed_space"   value="2*cm"/>
+
+    <constant name="mRwellDIRC_rmin"                  value="DIRCModule_rmin + DIRCFrame_thickness/2"/>-->
+	  <!--<constant name="mRwellDIRC_rmax"                  value="mRwellDIRC_rmin + DIRCBar_thickness/2" /> works -->
+    <constant name="mRwellDIRC_rmax"                  value="DIRCFrame_rmax" />
+	  <!--<constant name="mRwellDIRC_length"                value="DIRCBar_length/2 + mRwellDIRCFrame_width" />-->
+    <constant name="mRwellDIRC_length"                value="DIRCBar_length/2" />
+    <constant name="mRwellDIRCModule_count"           value="DIRCModule_count" />
+
+    <constant name="mRwellDIRCModule_rmin"            value="mRwellDIRC_rmin + mRwellDIRCFrame_thickness"/>
+    <constant name="mRwellDIRCModule_length"          value="mRwellDIRC_length + 2*mRwellDIRCFrame_width" />
+
+    <constant name="mRwellDIRCModule_halfangle"       value="180*degree/mRwellDIRCModule_count" />
+    <constant name="mRwellDIRCModule_width"           value="DIRCModule_width - 2*mRwellDIRCFrame_width"/>
+	  <!--<constant name="mRwellDIRCModule_width"           value="2*(DIRC_rmin) * tan(mRwellDIRCModule_halfangle)"/>-->
+
+    <constant name="mRwellDIRCWindow_thickness"	          value="50*um"/>
+    <constant name="mRwellDIRCWindowGap_thickness"        value="2*mm"/>
+    <constant name="mRwellDIRCDriftGap_thickness"         value="3*mm"/>
+    <constant name="mRwellDIRCFoilCu_thickness"	          value="5*um"/>
+    <constant name="mRwellDIRCReadOutElectrode_thickness" value="10*um"/>
+    <constant name="mRwellDIRCFoilKapton_thickness"       value="50*um"/>
+    <constant name="mRwellDIRCReadOutNomex_thickness"     value="50*um"/>
+    <constant name="mRwellDIRCReadOutKapton_thickness"    value="50*um"/>
+    <constant name="mRwellDIRCPCB_thickness"              value="3*mm"/>
+
+    <constant name="mRwellDIRCCathode_thickness"          value="mRwellDIRCFoilKapton_thickness + mRwellDIRCFoilCu_thickness"/>
+    <constant name="mRwellDIRCFoil_thickness"             value="mRwellDIRCFoilKapton_thickness + mRwellDIRCFoilCu_thickness"/>
+    <constant name="mRwellDIRCReadOut_thickness"          value="mRwellDIRCReadOutNomex_thickness + mRwellDIRCReadOutElectrode_thickness + mRwellDIRCReadOutKapton_thickness"/> 
+    <constant name="mRwellDIRCModule_thickness"           value="mRwellDIRCWindow_thickness + mRwellDIRCCathode_thickness + 
+	                                                         mRwellDIRCFoil_thickness + mRwellDIRCReadOut_thickness + 
+	                                                         mRwellDIRCPCB_thickness + mRwellDIRCFrame_thickness" />
+ 
+  </define>
+
+
+  <materials>
+  </materials>
+
+  <limits>
+  </limits>
+
+  <regions>
+  </regions>
+
+  <display>
+  </display>
+
+  <detectors>
+    <detector id="BarrelmRwellDIRC_0_ID" name="mRwellDIRC_0" type="epic_mRwellDIRC" readout="mRwellDIRCBarHits" vis="TrackerVis">
+	    <dimensions rmin="mRwellDIRC_rmin" rmax="mRwellDIRC_rmax" length="mRwellDIRCModule_length/2" />
+	    <position x="0" y="0" z="mRwellDIRCModule_length/2 + DIRC_offset" />
+      <comment> mRwell DIRC modules </comment>
+    
+      <module name="mRwellDIRCModule" vis="TrackerVis">
+        <module_component name="DriftGap"
+               material="Ar80CO220"
+               sensitive="true"
+               width="mRwellDIRCModule_width"
+               thickness="mRwellDIRCDriftGap_thickness"
+               vis="TrackerMPGDGasVis"
+               length="mRwellDIRCModule_length" />
+        <module_component name="WindowGasGap"
+               material="Ar80CO220"
+               sensitive="false"
+               width="mRwellDIRCModule_width"
+	       thickness="mRwellDIRCWindowGap_thickness"
+               vis="TrackerMPGDGasVis"
+		length="mRwellDIRCModule_length" />
+        <module_component name="Window"
+               material="Kapton"
+               sensitive="false"
+               width="mRwellDIRCModule_width"
+	       thickness="mRwellDIRCWindow_thickness"
+               vis="TrackerVis"
+               length="mRwellDIRCModule_length" />
+        <module_component name="Cathode_Kapton"
+               material="Kapton"
+               sensitive="false"
+               width="mRwellDIRCModule_width"
+	       thickness="mRwellDIRCFoilKapton_thickness"
+               vis="TrackerVis"
+               length="mRwellDIRCModule_length" />
+        <module_component name="Cathode_Cu"
+               material="Copper"
+               sensitive="false"
+               width="mRwellDIRCModule_width"
+	       thickness="mRwellDIRCFoilCu_thickness"
+               vis="TrackerVis"
+               length="mRwellDIRCModule_length" />
+        <module_component name="RWELL_Cu"
+               material="Copper"
+               sensitive="false"
+               width="mRwellDIRCModule_width"
+	       thickness="mRwellDIRCFoilCu_thickness"
+               vis="TrackerVis"
+               length="mRwellDIRCModule_length" />
+        <module_component name="RWELL_Kapton"
+               material="Kapton"
+               sensitive="false"
+               width="mRwellDIRCModule_width"
+	       thickness="mRwellDIRCFoilKapton_thickness"
+               vis="TrackerVis"
+               length="mRwellDIRCModule_length" />
+        <module_component name="Nomex"
+               material="Nomex"
+               sensitive="false"
+               width="mRwellDIRCModule_width"
+	       thickness="mRwellDIRCReadOutNomex_thickness"
+               vis="TrackerVis"
+               length="mRwellDIRCModule_length" />
+        <module_component name="ReadOutElectrodes"
+               material="Copper"
+               sensitive="false"
+               width="mRwellDIRCModule_width"
+	       thickness="mRwellDIRCReadOutElectrode_thickness" 
+               vis="TrackerVis"
+               length="mRwellDIRCModule_length" />
+        <module_component name="ReadOutKapton"
+               material="Kapton"
+               sensitive="false"
+               width="mRwellDIRCModule_width"
+	       thickness="mRwellDIRCReadOutKapton_thickness" 
+               vis="TrackerVis"
+               length="mRwellDIRCModule_length" />
+        <module_component name="PCB"
+               material="Fr4"
+               sensitive="false"
+               width="mRwellDIRCModule_width"
+	       thickness="mRwellDIRCPCB_thickness" 
+               vis="TrackerVis"
+	       length="mRwellDIRCModule_length" />
+
+        <comment> Frame width gets subtracted from the gas module volumes
+		see src/BarrelBarwithFrame.cpp 
+        </comment>
+        <frame material="Fr4"
+               width="mRwellDIRCFrame_width"
+               vis="TrackerSupportVis"
+		thickness="mRwellDIRCFrame_thickness"/>
+
+      </module>
+      <comment> mRwell DIRC layers </comment>
+      <layer module="mRwellDIRCModule" id="0" vis="TrackerVis">
+        <barrel_envelope
+          inner_r="mRwellDIRC_rmin"
+          outer_r="mRwellDIRC_rmax"
+          z_length="mRwellDIRCModule_length" />
+        <rphi_layout
+          phi_tilt="0"
+          nphi="mRwellDIRCModule_count"
+          phi0="0"
+          rc="0.5*(mRwellDIRC_rmin + mRwellDIRC_rmax)"
+          dr="0" />
+        <z_layout
+          dr="0.0*mm"
+          z0="mRwellDIRCFrame_width"
+          nz="1" />
+      </layer>
+    </detector>
+
+
+        <detector id="BarrelmRwellDIRC_1_ID" name="mRwellDIRC_1" type="epic_mRwellDIRC" readout="mRwellDIRCBarHits" vis="TrackerVis">
+	    <dimensions rmin="mRwellDIRC_rmin" rmax="mRwellDIRC_rmax" length="mRwellDIRCModule_length/2" />
+	    <position x="0" y="0" z="-mRwellDIRCModule_length/2  + DIRC_offset" />
+      <comment> mRwell DIRC modules </comment>
+
+      <module name="mRwellDIRCModule" vis="TrackerVis">
+        <module_component name="DriftGap"
+               material="Ar80CO220"
+               sensitive="true"
+               width="mRwellDIRCModule_width"
+               thickness="mRwellDIRCDriftGap_thickness"
+               vis="TrackerMPGDGasVis"
+               length="mRwellDIRCModule_length" />
+        <module_component name="WindowGasGap"
+               material="Ar80CO220"
+               sensitive="false"
+               width="mRwellDIRCModule_width"
+	       thickness="mRwellDIRCWindowGap_thickness"
+               vis="TrackerMPGDGasVis"
+		length="mRwellDIRCModule_length" />
+        <module_component name="Window"
+               material="Kapton"
+               sensitive="false"
+               width="mRwellDIRCModule_width"
+	       thickness="mRwellDIRCWindow_thickness"
+               vis="TrackerVis"
+               length="mRwellDIRCModule_length" />
+        <module_component name="Cathode_Kapton"
+               material="Kapton"
+               sensitive="false"
+               width="mRwellDIRCModule_width"
+	       thickness="mRwellDIRCFoilKapton_thickness"
+               vis="TrackerVis"
+               length="mRwellDIRCModule_length" />
+        <module_component name="Cathode_Cu"
+               material="Copper"
+               sensitive="false"
+               width="mRwellDIRCModule_width"
+	       thickness="mRwellDIRCFoilCu_thickness"
+               vis="TrackerVis"
+               length="mRwellDIRCModule_length" />
+        <module_component name="RWELL_Cu"
+               material="Copper"
+               sensitive="false"
+               width="mRwellDIRCModule_width"
+	       thickness="mRwellDIRCFoilCu_thickness"
+               vis="TrackerVis"
+               length="mRwellDIRCModule_length" />
+        <module_component name="RWELL_Kapton"
+               material="Kapton"
+               sensitive="false"
+               width="mRwellDIRCModule_width"
+	       thickness="mRwellDIRCFoilKapton_thickness"
+               vis="TrackerVis"
+               length="mRwellDIRCModule_length" />
+        <module_component name="Nomex"
+               material="Nomex"
+               sensitive="false"
+               width="mRwellDIRCModule_width"
+	       thickness="mRwellDIRCReadOutNomex_thickness"
+               vis="TrackerVis"
+               length="mRwellDIRCModule_length" />
+        <module_component name="ReadOutElectrodes"
+               material="Copper"
+               sensitive="false"
+               width="mRwellDIRCModule_width"
+	       thickness="mRwellDIRCReadOutElectrode_thickness" 
+               vis="TrackerVis"
+               length="mRwellDIRCModule_length" />
+        <module_component name="ReadOutKapton"
+               material="Kapton"
+               sensitive="false"
+               width="mRwellDIRCModule_width"
+	       thickness="mRwellDIRCReadOutKapton_thickness" 
+               vis="TrackerVis"
+               length="mRwellDIRCModule_length" />
+        <module_component name="PCB"
+               material="Fr4"
+               sensitive="false"
+               width="mRwellDIRCModule_width"
+	       thickness="mRwellDIRCPCB_thickness" 
+               vis="TrackerVis"
+	       length="mRwellDIRCModule_length" />
+
+        <comment> Frame width gets subtracted from the gas module volumes
+		see src/BarrelBarwithFrame.cpp 
+        </comment>
+        <frame material="Fr4"
+               width="mRwellDIRCFrame_width"
+               vis="TrackerSupportVis"
+		thickness="mRwellDIRCFrame_thickness"/>
+
+      </module>
+
+      <comment> mRwell DIRC layers </comment>
+      <layer module="mRwellDIRCModule" id="1" vis="TrackerVis">
+        <barrel_envelope
+          inner_r="mRwellDIRC_rmin"
+          outer_r="mRwellDIRC_rmax"
+          z_length="mRwellDIRCModule_length" />
+        <rphi_layout
+          phi_tilt="0"
+          nphi="mRwellDIRCModule_count"
+          phi0="0"
+          rc="0.5*(mRwellDIRC_rmin + mRwellDIRC_rmax) + mRwellDIRCModule_thickness/2"
+          dr="0" />
+        <z_layout
+          dr="0.0*mm"
+          z0="-mRwellDIRCFrame_width"
+          nz="1" />
+      </layer>
+   </detector>
+  </detectors>
+
+  <readouts>
+    <readout name="mRwellDIRCBarHits">
+      <segmentation type="CartesianGridXY" grid_size_x="1.0*mm" grid_size_y="1.0*mm" />
+      <id>system:8,layer:4,module:8,section:4,x:32:-16,y:-16</id>
+    </readout>
+  </readouts>
+
+  <plugins>
+  </plugins>
+
+  <fields>
+  </fields>
+</lccdd>

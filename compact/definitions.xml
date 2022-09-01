@@ -146,15 +146,19 @@ The unused IDs below are saved for future use.
     <documentation>
     #### (90-99) Barrel PID IDs
 
-    - DIRC subsystem       ID: 90
-    - Barrel TRD subsystem ID: 91
-    - Barrel TOF subsystem ID: 92
-    - Unused IDs: 93-99
+    - DIRC subsystem         ID: 90
+    - Barrel TRD subsystem   ID: 91
+    - Barrel TOF subsystem   ID: 92
+    - TOF sub assembly       ID: 93
+    - MPGD for use with DIRC ID: 94
+    - Unused IDs: 96-99
     </documentation>
-    <constant name="BarrelDIRC_ID" value="90"/>
-    <constant name="BarrelTRD_ID"  value="91"/>
-    <constant name="BarrelTOF_ID"  value="92"/>
-    <constant name="TOFSubAssembly_ID" value="93"/>
+    <constant name="BarrelDIRC_ID"         value="90"/>
+    <constant name="BarrelTRD_ID"          value="91"/>
+    <constant name="BarrelTOF_ID"          value="92"/>
+    <constant name="TOFSubAssembly_ID"     value="93"/>
+    <constant name="BarrelmRwellDIRC_0_ID" value="94"/>
+    <constant name="BarrelmRwellDIRC_1_ID" value="95"/>
 
     <documentation>
       #### (100-109) Electromagnetic Calorimeter
