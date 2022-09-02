@@ -135,6 +135,9 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
     case 4:
       vesselMat = aerogelMat = filterMat = gasvolMat = desc.material("VacuumOptical");
       break;
+    case 5:
+      vesselMat = aerogelMat = filterMat = gasvolMat = desc.material("VacuumOptical");
+      break;      
     default:
       printout(FATAL, "DRICH_geo", "UNKNOWN debugOpticsMode");
       return det;
@@ -443,9 +446,8 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
 
     // initialize module number for this sector
     int imod = 0;
-    bool makeNormalSensors = true;
-    bool drawFP = true;
-    if(debugOpticsMode != 4 || (debugOpticsMode == 4 && makeNormalSensors) ){
+    
+    if( debugOpticsMode != 4 ){
       Box    sensorSolid(sensorSide / 2., sensorSide / 2., sensorThickness / 2.);
       Volume sensorVol(detName + "_sensor_" + secName, sensorSolid, sensorMat);
       sensorVol.setVisAttributes(sensorVis);
@@ -571,7 +573,7 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
 	};   // end phiGen loop
       };     // end thetaGen loop
     };
-    if(debugOpticsMode == 4 && !makeNormalSensors){
+    if(debugOpticsMode == 4){
       Box    sensorSolid(sensorRescale * sensorSide / 2., sensorRescale * sensorSide / 2., sensorThickness / 2.);
       Volume sensorVol(detName + "_sensor_" + secName, sensorSolid, sensorMat);
       sensorVol.setVisAttributes(sensorVis);
@@ -599,7 +601,7 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
 	sensorSkin.isValid();
       };            
     };
-    if(std::getenv("FPPLOT_FILE")!=NULL && drawFP){      
+    if(std::getenv("FPPLOT_FILE")!=NULL && debugOpticsMode == 5){      
       Box FPsolid(1.,1.,1.);
       Volume FPvol(detName + "_FPpos_" + secName, FPsolid, aerogelMat);      
       

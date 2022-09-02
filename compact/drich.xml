@@ -29,6 +29,8 @@
 - `DRICH_debug_optics`:    1 = all components become vacuum, except for mirrors; test opticalphotons from IP
                            2 = all components become vacuum, except for mirrors and `gasvol`, test charged particles from IP
                            3 = all components become vacuum, except for mirrors and sensors, test reflected trajectories' hits
+			   4 = all components become vacuum, except for mirrors and sensors, oversized sensor created to catch all photons
+			   5 = all components created normally, calculated focal points from mode 4 drawn if environment variable set
                            0 = off
 - `DRICH_debug_mirror`:    1 = draw full mirror shape for single sector; 0 = off
 - `DRICH_debug_sensors`:   1 = draw full sensor sphere for a single sector; 0 = off
