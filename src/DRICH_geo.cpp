@@ -152,9 +152,9 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
   /* - optionally generate an auxiliary ROOT file, storing geometry objects for IRT
    * - use compact file variable `DRICH_create_irt_file` to control this
    */
-  TFile*                       irtAuxFile = nullptr;
-  CherenkovDetectorCollection* irtGeometry;
-  CherenkovDetector*           irtDetector;
+  TFile*                       irtAuxFile  = nullptr;
+  CherenkovDetectorCollection* irtGeometry = nullptr;
+  CherenkovDetector*           irtDetector = nullptr;
   if (createIrtFile) {
     irtAuxFile = new TFile(irtAuxFileName.c_str(), "RECREATE");
     printout(ALWAYS, "IRTLOG", "Producing auxiliary ROOT file for IRT: %s", irtAuxFileName.c_str());
