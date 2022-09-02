@@ -50,7 +50,7 @@
     <constant name="InnerTrackerEndcapP_rmax"        value="24.0*cm" />
     <constant name="TrackerEndcapPDisk1_zmin"        value="45.0*cm" />
     <constant name="TrackerEndcapPDisk1_rmin"        value="Beampipe_rmax + 5*mm" />
-    <constant name="TrackerEndcapPDisk1_rmax"        value="TrackerSupportCyl_rmin * .98" />
+    <constant name="TrackerEndcapPDisk1_rmax"        value="TrackerSupportCyl_rmin - 15*mm" />
     <constant name="TrackerEndcapPDisk2_zmin"        value="70.0*cm" />
     <constant name="TrackerEndcapPDisk2_rmin"        value="Beampipe_rmax + 9*mm" />
     <constant name="TrackerEndcapPDisk2_rmax"        value="TrackerSupportCyl_rmin * .98" />
@@ -135,7 +135,7 @@
     <plugin name="epic_FileLoader">
       <arg value="cache:$DETECTOR_PATH"/>
       <arg value="file:calibrations/materials-map.cbor"/>
-      <arg value="url:https://eicweb.phy.anl.gov/EIC/detectors/athena/uploads/4a4e7c8eb6089b634d762d112c89bd5d/material-maps.cbor"/>
+      <arg value="url:https://eicweb.phy.anl.gov/EIC/detectors/athena/uploads/56b64d544442a93904488e7292aa509d/material-maps.cbor"/>
     </plugin>
   </plugins>
 
