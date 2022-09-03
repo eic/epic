@@ -44,7 +44,7 @@ jobs:
           cmake -B build -S . -DCMAKE_INSTALL_PREFIX=${PREFIX}
           cmake --build build -- install
           # link ip6 into install
-          ln -sf ../ip6/ip6 ${PREFIX}/share/ecce/ip6
+          ln -sf ../ip6/ip6 ${PREFIX}/share/epic/ip6
     - uses: actions/upload-artifact@v3
       with:
         name: build-full-eic-shell
@@ -94,7 +94,7 @@ jobs:
           python scripts/convert_to_gdml.py --compact ${DETECTOR_PATH}/${DETECTOR}.xml --output geo/${DETECTOR}.gdml
     - uses: actions/upload-artifact@v3
       with:
-        name: ecce.gdml
+        name: epic.gdml
         path: geo/
         if-no-files-found: error
 
@@ -117,7 +117,7 @@ jobs:
           dd_web_display --output geo/${DETECTOR}.root ${DETECTOR_PATH}/${DETECTOR}.xml
     - uses: actions/upload-artifact@v3
       with:
-        name: ecce.root
+        name: epic.root
         path: geo/
         if-no-files-found: error
 
@@ -137,7 +137,7 @@ jobs:
         setup: install/setup.sh
         run: |
           mkdir -p doc
-          npdet_info dump ${DETECTOR_PATH}/ecce.xml | tee doc/constants.out
+          npdet_info dump ${DETECTOR_PATH}/epic.xml | tee doc/constants.out
     - uses: actions/upload-artifact@v3
       with:
         name: constants.out
@@ -160,7 +160,7 @@ jobs:
         setup: install/setup.sh
         run: |
           mkdir -p doc
-          npdet_info dump ${DETECTOR_PATH}/ecce.xml | grep -v '^\s' | grep '=' | cut -d= -f1-2 | tee doc/constants.toml
+          npdet_info dump ${DETECTOR_PATH}/epic.xml | grep -v '^\s' | grep '=' | cut -d= -f1-2 | tee doc/constants.toml
           python bin/make_detector_parameter_table | tee doc/DetectorParameterTable.csv
     - uses: actions/upload-artifact@v3
       with:
