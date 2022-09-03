@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - main
+      - auto-update-pull-requests
 
 jobs:
   auto-update-pull-requests:
