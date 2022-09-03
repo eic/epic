@@ -28,7 +28,7 @@ jobs:
     needs: xmllint-before-build
     steps:
     - uses: actions/checkout@v3
-    - uses: cvmfs-contrib/github-action-cvmfs@v2
+    - uses: cvmfs-contrib/github-action-cvmfs@v3
     - uses: eic/run-cvmfs-osg-eic-shell@main
       with:
         platform-release: "jug_xl:nightly"
@@ -84,7 +84,7 @@ jobs:
       with:
         name: build-full-eic-shell
         path: install/
-    - uses: cvmfs-contrib/github-action-cvmfs@v2
+    - uses: cvmfs-contrib/github-action-cvmfs@v3
     - uses: eic/run-cvmfs-osg-eic-shell@main
       with:
         platform-release: "jug_xl:nightly"
@@ -107,7 +107,7 @@ jobs:
       with:
         name: build-full-eic-shell
         path: install/
-    - uses: cvmfs-contrib/github-action-cvmfs@v2
+    - uses: cvmfs-contrib/github-action-cvmfs@v3
     - uses: eic/run-cvmfs-osg-eic-shell@main
       with:
         platform-release: "jug_xl:nightly"
@@ -130,7 +130,7 @@ jobs:
       with:
         name: build-full-eic-shell
         path: install/
-    - uses: cvmfs-contrib/github-action-cvmfs@v2
+    - uses: cvmfs-contrib/github-action-cvmfs@v3
     - uses: eic/run-cvmfs-osg-eic-shell@main
       with:
         platform-release: "jug_xl:nightly"
@@ -153,7 +153,7 @@ jobs:
       with:
         name: build-full-eic-shell
         path: install/
-    - uses: cvmfs-contrib/github-action-cvmfs@v2
+    - uses: cvmfs-contrib/github-action-cvmfs@v3
     - uses: eic/run-cvmfs-osg-eic-shell@main
       with:
         platform-release: "jug_xl:nightly"
@@ -182,7 +182,7 @@ jobs:
       with:
         name: build-full-eic-shell
         path: install/
-    - uses: cvmfs-contrib/github-action-cvmfs@v2
+    - uses: cvmfs-contrib/github-action-cvmfs@v3
     - uses: eic/run-cvmfs-osg-eic-shell@main
       with:
         platform-release: "jug_xl:nightly"
@@ -202,7 +202,7 @@ jobs:
       with:
         name: build-full-eic-shell
         path: install/
-    - uses: cvmfs-contrib/github-action-cvmfs@v2
+    - uses: cvmfs-contrib/github-action-cvmfs@v3
     - uses: eic/run-cvmfs-osg-eic-shell@main
       with:
         platform-release: "jug_xl:nightly"
@@ -222,7 +222,7 @@ jobs:
       with:
         name: build-fast-eic-shell
         path: install/
-    - uses: cvmfs-contrib/github-action-cvmfs@v2
+    - uses: cvmfs-contrib/github-action-cvmfs@v3
     - uses: eic/run-cvmfs-osg-eic-shell@main
       with:
         platform-release: "jug_xl:nightly"
@@ -242,7 +242,7 @@ jobs:
       with:
         name: build-full-eic-shell
         path: install/
-    - uses: cvmfs-contrib/github-action-cvmfs@v2
+    - uses: cvmfs-contrib/github-action-cvmfs@v3
     - uses: eic/run-cvmfs-osg-eic-shell@main
       with:
         platform-release: "jug_xl:nightly"
@@ -290,7 +290,7 @@ jobs:
       with:
         name: build-fast-eic-shell
         path: install/
-    - uses: cvmfs-contrib/github-action-cvmfs@v2
+    - uses: cvmfs-contrib/github-action-cvmfs@v3
     - uses: eic/run-cvmfs-osg-eic-shell@main
       with:
         platform-release: "jug_xl:nightly"
@@ -317,7 +317,7 @@ jobs:
       with:
         name: detector_view.prim
         path: prim/
-    - uses: cvmfs-contrib/github-action-cvmfs@v2
+    - uses: cvmfs-contrib/github-action-cvmfs@v3
     - uses: eic/run-cvmfs-osg-eic-shell@main
       with:
         platform-release: "jug_xl:nightly"
@@ -344,7 +344,7 @@ jobs:
       with:
         name: detector_view.prim
         path: prim/
-    - uses: cvmfs-contrib/github-action-cvmfs@v2
+    - uses: cvmfs-contrib/github-action-cvmfs@v3
     - uses: eic/run-cvmfs-osg-eic-shell@main
       with:
         platform-release: "jug_xl:nightly"

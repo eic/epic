@@ -21,7 +21,7 @@ jobs:
         LCG: ["LCG_101/x86_64-ubuntu2004-gcc9-opt"]
     steps:
     - uses: actions/checkout@v3
-    - uses: cvmfs-contrib/github-action-cvmfs@v2
+    - uses: cvmfs-contrib/github-action-cvmfs@v3
       with:
         cvmfs_repositories: 'sft.cern.ch,geant4.cern.ch'
     - uses: aidasoft/run-lcg-view@v1
