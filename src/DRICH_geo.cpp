@@ -40,7 +40,7 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
   xml::Component        dims    = detElem.dimensions();
   OpticalSurfaceManager surfMgr = desc.surfaceManager();
   DetElement            det(detName, detID);
-  sens.setType("opticaltracker");
+  sens.setType("tracker");
 
   // attributes, from compact file =============================================
   // - vessel
