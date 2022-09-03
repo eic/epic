@@ -8,6 +8,17 @@ on:
       - '*'
   pull_request:
   workflow_dispatch:
+    inputs:
+      beamline_repositoryurl:
+        description: 'Repository URL for beamline'
+        required: false
+        default: 'https://github.com/eic/ip6'
+        type: string
+      beamline_version:
+        description: 'Branch in beamline repository'
+        required: false
+        default: 'master'
+        type: string
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
@@ -35,8 +46,9 @@ jobs:
         run: |
           PREFIX=${PWD}/install
           # install ip6 repo
-          git clone https://github.com/eic/ip6.git eic_ip6
+          git clone ${{ inputs.beamline_repositoryurl || 'https://github.com/eic/ip6.git' }} eic_ip6
           pushd eic_ip6
+          git checkout ${{ inputs.beamline_version || 'master' }}
           cmake -B build -S . -DCMAKE_INSTALL_PREFIX=${PREFIX}
           cmake --build build -- install
           popd
