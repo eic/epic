@@ -19,6 +19,16 @@ on:
         required: false
         default: 'master'
         type: string
+      github_repository:
+        description: 'Submitting GitHub repository'
+        required: false
+        default: ''
+        type: string
+      github_sha:
+        description: 'Submitting GitHub sha'
+        required: false
+        default: ''
+        type: string
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
@@ -279,8 +289,8 @@ jobs:
         variables: |
           JUGGLER_DETECTOR_REPOSITORYURL=${{ github.server_url }}/${{ github.repository }}
           JUGGLER_DETECTOR_VERSION=${{ github.ref_name }}
-          GITHUB_REPOSITORY=${{ github.repository }}
-          GITHUB_SHA=${{ github.event.pull_request.head.sha || github.sha }}
+          GITHUB_REPOSITORY=${{ inputs.github_repository || github.repository }}
+          GITHUB_SHA=${{ inputs.github_sha || github.event.pull_request.head.sha || github.sha }}
     - run: |
         gh api \
            --method POST \
