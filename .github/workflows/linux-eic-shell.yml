@@ -74,7 +74,6 @@ jobs:
         platform-release: "jug_xl:nightly"
         run: |
           # install ip6 repo
-          git clone ${{ inputs.beamline_repositoryurl || 'https://github.com/eic/ip6.git' }} eic_ip6
           pushd eic_ip6
           git checkout ${{ inputs.beamline_version || 'master' }}
           cmake -B build -S . -DCMAKE_INSTALL_PREFIX=${PREFIX}
