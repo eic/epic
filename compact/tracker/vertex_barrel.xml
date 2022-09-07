@@ -13,7 +13,7 @@
 
     <constant name="VertexBarrelMod1_rmin"              value="VertexBarrelMod_rmin"/>
     <constant name="VertexBarrelMod2_rmin"              value="VertexBarrelMod_rmin + 1.2*cm"/>
-    <constant name="VertexBarrelMod3_rmin"              value="12.3*cm"/>
+    <constant name="VertexBarrelMod3_rmin"              value="12.0*cm"/>
 
     <comment> ensure we are within the vertex envelope with some margin. </comment>
     <constant name="VertexCheck"                        value="sqrt(VertexBarrel_rmax - VertexBarrelMod3_rmin - .1*cm)"/>
@@ -98,7 +98,7 @@
           inner_r="VertexBarrelLayer1_rmin"
           outer_r="VertexBarrelLayer1_rmax"
           z_length="VertexBarrelLayer_length" />
-        <layer_material surface="outer" binning="binPhi,binZ" bins0="VertexBarrelStave_count" bins1="100" />
+        <layer_material surface="inner" binning="binPhi,binZ" bins0="VertexBarrelStave_count" bins1="100" />
         <comment>
           phi0     : Starting phi of first module.
           phi_tilt : Phi tilt of a module.
@@ -117,7 +117,7 @@
           inner_r="VertexBarrelLayer2_rmin"
           outer_r="VertexBarrelLayer2_rmax"
           z_length="VertexBarrelLayer_length" />
-        <layer_material surface="outer" binning="binPhi,binZ" bins0="VertexBarrelStave_count" bins1="100" />
+        <layer_material surface="inner" binning="binPhi,binZ" bins0="VertexBarrelStave_count" bins1="100" />
         <rphi_layout phi_tilt="0.0*degree" nphi="VertexBarrelStave_count" phi0="0.0" rc="VertexBarrelMod2_rmin" dr="0.0 * mm"/>
         <z_layout dr="0.0 * mm" z0="0.0 * mm" nz="1"/>
       </layer>
@@ -126,7 +126,7 @@
           inner_r="VertexBarrelLayer3_rmin"
           outer_r="VertexBarrelLayer3_rmax"
           z_length="VertexBarrelLayer_length" />
-        <layer_material surface="outer" binning="binPhi,binZ" bins0="VertexBarrelStave_count" bins1="100" />
+        <layer_material surface="inner" binning="binPhi,binZ" bins0="VertexBarrelStave_count" bins1="100" />
         <rphi_layout phi_tilt="0.0*degree" nphi="VertexBarrelStave_count" phi0="0.0" rc="VertexBarrelMod3_rmin" dr="0.0 * mm"/>
         <z_layout dr="0.0 * mm" z0="0.0 * mm" nz="1"/>
       </layer>
