@@ -1,4 +1,4 @@
-# ECCE Detector
+# EPIC Detector
 
 
 {% for image_path in images %}

@@ -16,6 +16,7 @@
 #include "DDRec/DetectorData.h"
 #include "DDRec/Surface.h"
 #include "XML/Layering.h"
+#include <array>
 
 using namespace std;
 using namespace dd4hep;
@@ -84,7 +85,7 @@ static Ref_t create_BarrelBarDetectorWithSideFrame(Detector& description, xml_h 
     // Get frame width, as it impacts the main module for being built. We
     // construct the actual frame structure later (once we know the module width)
     double frame_width = 0;
-    if (x_mod.hasChild("frame")) {
+    if (x_mod.hasChild(_U(frame))) {
       xml_comp_t m_frame = x_mod.child(_U(frame));
       frame_width        = m_frame.width();
     }
@@ -92,8 +93,8 @@ static Ref_t create_BarrelBarDetectorWithSideFrame(Detector& description, xml_h 
     double thickness_so_far    = 0.0;
     double thickness_sum       = -total_thickness / 2.0;
     double max_component_width = 0;
-    for (xml_coll_t ci(x_mod, _U(module_component)); ci; ++ci, ++ncomponents) {
-      xml_comp_t x_comp = ci;
+    for (xml_coll_t mci(x_mod, _U(module_component)); mci; ++mci, ++ncomponents) {
+      xml_comp_t x_comp = mci;
       string     c_nam  = _toString(ncomponents, "component%d");
 
       double box_width    = x_comp.width() - 2 * frame_width;
@@ -131,7 +132,7 @@ static Ref_t create_BarrelBarDetectorWithSideFrame(Detector& description, xml_h 
       thickness_so_far += x_comp.thickness();
     }
     // Now add-on the frame
-    if (x_mod.hasChild("frame")) {
+    if (x_mod.hasChild(_U(frame))) {
       xml_comp_t m_frame         = x_mod.child(_U(frame));
       double     frame_thickness = getAttrOrDefault<double>(m_frame, _U(thickness), total_thickness);
 
@@ -245,5 +246,11 @@ static Ref_t create_BarrelBarDetectorWithSideFrame(Detector& description, xml_h 
 
 //@}
 // clang-format off
+#ifdef EPIC_ECCE_LEGACY_COMPAT
 DECLARE_DETELEMENT(ecce_BarrelBarDetectorWithSideFrame, create_BarrelBarDetectorWithSideFrame)
+#endif
+DECLARE_DETELEMENT(epic_BarrelBarDetectorWithSideFrame, create_BarrelBarDetectorWithSideFrame)
+#ifdef EPIC_ECCE_LEGACY_COMPAT
 DECLARE_DETELEMENT(ecce_FakeDIRC, create_BarrelBarDetectorWithSideFrame)
+#endif
+DECLARE_DETELEMENT(epic_FakeDIRC, create_BarrelBarDetectorWithSideFrame)

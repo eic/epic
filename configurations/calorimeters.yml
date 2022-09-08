@@ -1,0 +1,8 @@
+features:
+- beampipe
+- solenoid
+- ecal:
+  - forward_scifi
+  - barrel_sciglass
+  - backward_PbWO4
+- hcal

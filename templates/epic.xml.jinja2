@@ -1,0 +1,194 @@
+{#
+   This is the master template for the geometry description
+
+   Template variables can be defined in yml or json files,
+   or they can be applied on the command line with `-D`.
+
+   The default geometry definition is obtained when this
+   template is evaluated without any yml or json file, and
+   without any other variables defined.
+-#}
+
+<lccdd xmlns:compact="http://www.lcsim.org/schemas/compact/1.0"
+       xmlns:xs="http://www.w3.org/2001/XMLSchema"
+       xs:noNamespaceSchemaLocation="http://www.lcsim.org/schemas/compact/1.0/compact.xsd">
+
+  <debug>
+    <type name="surface"       value="0"/>
+    <type name="material"      value="0"/>
+    <type name="readout"       value="0"/>
+    <type name="segmentation"  value="0"/>
+    <type name="limits"        value="0"/>
+    <type name="region"        value="0"/>
+    <type name="includes"      value="0"/>
+  </debug>
+
+  <documentation level="-1">
+  # EPIC Detector
+  - https://github.com/eic/epic
+  - https://github.com/eic/ip6
+  </documentation>
+
+  <!-- Some information about detector  -->
+  <info name="EPIC Detector" title="EPIC Detector"
+        author="EPIC Collaboration"
+	url="https://github.com/eic/epic"
+	status="development"
+	version="v1 2021-03-16">
+  <comment> EPIC </comment>
+  </info>
+  <define>
+  <documentation level="2">
+      ## Main Constant Definitions
+
+      The ip6 (or other ip) defines should be included first.
+      These files have only a define tags.
+  </documentation>
+    <include ref="${BEAMLINE_PATH}/ip6/definitions.xml" />
+    <include ref="${BEAMLINE_PATH}/ip6/far_forward/fields_{{ pbeam | default("275", true) }}.xml" />
+    <include ref="${DETECTOR_PATH}/compact/definitions.xml" />
+  </define>
+
+  <includes>
+    <gdmlFile ref="${DETECTOR_PATH}/compact/elements.xml"/>
+    <gdmlFile ref="${DETECTOR_PATH}/compact/materials.xml"/>
+    <file     ref="${DETECTOR_PATH}/compact/optical_materials.xml"/>
+  </includes>
+
+  <limits>
+    <limitset name="EICBeamlineLimits">
+      <limit name="step_length_max" particles="*" value="1.0" unit="mm" />
+      <limit name="track_length_max" particles="*" value="1.0" unit="mm" />
+      <limit name="time_max" particles="*" value="0.1" unit="ns" />
+      <limit name="ekin_min" particles="*" value="0.001" unit="MeV" />
+      <limit name="range_min" particles="*" value="0.1" unit="mm" />
+    </limitset>
+    <limitset name="cal_limits">
+      <limit name="step_length_max" particles="*" value="5.0" unit="mm"/>
+    </limitset>
+  </limits>
+
+  <display>
+    <include ref="${DETECTOR_PATH}/compact/{{colors | default("colors.xml", true) }}"/>
+    <include ref="${DETECTOR_PATH}/compact/{{display | default("display.xml", true) }}"/>
+  </display>
+
+  <documentation level="0">
+    ## Detector Subsystems
+
+    ### IP Subsystems
+
+    The interaction point subsystems are included before the central detector subsystems.
+    This is becuase the IP subsystems, for example the beampipe, will define paramters
+    which are subsquently used in the central detector construction -- e.g. the vertex tracker
+    uses the beampipe OD to help define its placement.
+
+    The IP subsystems include the Far forward and backward regions. The list of subsystem includes:
+     - Interaction region beampipe
+     - B0 tracker
+     - Off-momentum tracker
+     - Far forward roman pots
+     - Zero Degree Calorimeter
+     - Beam line magnets.
+     - and more...
+  </documentation>
+
+{% if features is not defined or 'solenoid' in features %}
+  <documentation level="5">
+    ## Main magnet
+  </documentation>
+  <include ref="${DETECTOR_PATH}/compact/solenoid.xml"/>
+{% endif -%}
+
+{% if features is not defined or 'tracking' in features %}
+  <documentation level="10">
+    ## Central tracking detectors
+  </documentation>
+  <include ref="${DETECTOR_PATH}/compact/tracker.xml"/>
+{% endif -%}
+
+{% if features is not defined or 'pid' in features %}
+  <documentation level="10">
+    ## PID detectors
+  </documentation>
+  {% if features is not defined or features['pid'] is none or 'fake_dirc' in features['pid'] %}
+  <include ref="${DETECTOR_PATH}/compact/fake_dirc.xml"/>
+  {% elif 'dirc' in features['pid'] -%}
+  <include ref="${DETECTOR_PATH}/compact/dirc.xml"/>
+  {% endif -%}
+
+  {% if features is not defined or features['pid'] is none or 'drich' in features['pid'] %}
+  {%- if features is not defined or features['pid'] is none or features['pid']['drich'] is none %}
+  <include ref="${DETECTOR_PATH}/compact/drich.xml"/>
+  {% else %}
+  <include ref="{{ features['pid']['drich'] }}"/>
+  {% endif -%}
+  {% endif -%}
+
+  {% if features is not defined or features['pid'] is none or 'mrich' in features['pid'] %}
+  <include ref="${DETECTOR_PATH}/compact/mrich.xml"/>
+  {% elif 'pfrich' in features['pid'] -%}
+  <include ref="${DETECTOR_PATH}/compact/pfrich.xml"/>
+  {% endif -%}
+
+  {% if features is defined and features['pid'] is not none and 'tof_endcap' in features['pid'] %}
+  <include ref="${DETECTOR_PATH}/compact/tof_endcap.xml"/>
+  {% endif -%}
+
+  {% if features is defined and features['pid'] is not none and 'tof_barrel' in features['pid'] %}
+  <include ref="${DETECTOR_PATH}/compact/tof_barrel.xml"/>
+  {% endif -%}
+{% endif -%}
+
+{% if features is not defined or 'ecal' in features %}
+  <documentation level="10">
+    ## Central EM calorimetry
+  </documentation>
+  {% if features is not defined or features['ecal'] is none or 'forward_scifi' in features['ecal'] %}
+  <include ref="${DETECTOR_PATH}/compact/ecal_forward_scfi.xml"/>
+  {% elif 'forward_homogenous' in features['ecal'] -%}
+  <include ref="${DETECTOR_PATH}/compact/ecal_forward_homogenous.xml"/>
+  {% endif -%}
+
+  {% if features is not defined or features['ecal'] is none or 'backward_PbWO4' in features['ecal'] %}
+  <include ref="${DETECTOR_PATH}/compact/ecal_backward_PbWO4.xml"/>
+  {% elif 'backward_hybrid' in features['ecal'] -%}
+  <include ref="${DETECTOR_PATH}/compact/ecal_backward_hybrid.xml"/>
+  {% endif -%}
+
+  {% if features is not defined or features['ecal'] is none or 'barrel_sciglass' in features['ecal'] %}
+  <include ref="${DETECTOR_PATH}/compact/ecal_barrel_sciglass.xml"/>
+  {% elif 'barrel_interlayers' in features['ecal'] -%}
+  <include ref="${DETECTOR_PATH}/compact/ecal_barrel_interlayers.xml"/>
+  {% endif -%}
+{% endif -%}
+
+{% if features is not defined or 'hcal' in features %}
+  <documentation level="10">
+    ## Central hadronic calorimetry
+  </documentation>
+  <include ref="${DETECTOR_PATH}/compact/hcal.xml"/>
+{% endif -%}
+
+{% if features is not defined or 'beampipe' in features %}
+  <documentation level="11">
+    ## Central beam pipe
+  </documentation>
+  <include ref="${BEAMLINE_PATH}/ip6/central_beampipe.xml"/>
+{% endif -%}
+
+{% if features is not defined or 'farforward' in features %}
+  <documentation level="11">
+    ## Far foward detectors
+  </documentation>
+  <include ref="${BEAMLINE_PATH}/ip6/far_forward.xml"/>
+{% endif -%}
+
+{% if features is not defined or 'farbackward' in features %}
+  <documentation level="11">
+    ## Far backward detectors
+  </documentation>
+  <include ref="${BEAMLINE_PATH}/ip6/far_backward.xml"/>
+{% endif -%}
+
+</lccdd>

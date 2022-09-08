@@ -266,15 +266,14 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
   // END SENSOR MODULE LOOP ------------------------
   //
   // Add service material if desired
-  if (detElem.child("sensors").hasChild("services")) {
+  if (detElem.child("sensors").hasChild(_Unicode(services))) {
     xml_comp_t x_service = detElem.child("sensors").child(_Unicode(services));
     Assembly   service_vol("services");
     service_vol.setVisAttributes(desc, x_service.visStr());
 
     // Compute service total thickness from components
-    double     total_thickness = 0;
-    xml_coll_t ci(x_service, _Unicode(component));
-    for (ci.reset(), total_thickness = 0.0; ci; ++ci) {
+    double total_thickness = 0;
+    for (xml_coll_t ci(x_service, _Unicode(component)); ci; ++ci) {
       total_thickness += xml_comp_t(ci).thickness();
     }
 
@@ -306,7 +305,10 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
   det.setPlacement(vesselPV);
 
   return det;
-};
+}
 
 // clang-format off
+#ifdef EPIC_ECCE_LEGACY_COMPAT
 DECLARE_DETELEMENT(ecce_PFRICH, createDetector)
+#endif
+DECLARE_DETELEMENT(epic_PFRICH, createDetector)

@@ -1,0 +1,562 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<lccdd>
+  <documentation>
+    ### Silicon Tracker
+
+#### Some references:
+
+- With some added info on ITS3 chip from https://indico.bnl.gov/event/10677/contributions/45591/attachments/33204/53254/20210318-IR2%40EIC-SVT.pdf
+To be used as standin until we get more detailed specs from the working group on the tracker.
+- https://wiki.bnl.gov/athena/index.php/Tracking
+
+Note: initial implementation with hard-coded values,
+TODO: add parametrization
+
+#### ITS3 sensors
+
+ITS3 sensor thickness:
+- 40um, pixel size: 10um (segmentation)
+- total X0 0.55% per barrel layer:
+-  0.35 mm aluminum ~ 0.4% X0.
+-  2 x carbonfiber (RL ~ 28) 0.12 mm (!!! material scan shows ~0.17mm, need to check later) to match Si (RL~9) of 0.04mm ~ 0.04%
+
+total X0 0.24% per disk layer （4 sectors per disk):
+  - 0.15 mm aluminum ~ 0.16% X0.
+  - 1 x carbonfiber (RL ~ 28) 0.12 mm to match Si (RL~9) of 0.04mm ~ 0.04%
+
+  </documentation>
+
+  <define>
+    <constant name="CentralTrackerSensor_thickness"      value="40*um"/>
+    <constant name="TrackerCarbon_thickness"         value="0.12*mm"/>
+    <constant name="TrackerEndcapAluminum_thickness" value="0.15*mm"/>
+
+    <comment>
+      Layer_rOffset is used to add inside space so the _rmin value is the nominal sensor radius.
+      TrackerBarrelSpaceFrame_height must be smaller than {_rmin2 - _rmin1 - Layer_rOffset - 1mm - stave_thickness}
+    </comment>
+
+    <constant name="TrackerBarrelLayer_rOffset"     value="0.5*cm"/>
+    <constant name="TrackerBarrelSpaceFrame_width"  value="4.0*cm"/>
+    <constant name="TrackerBarrelSpaceFrame_height" value="1.0*cm"/>
+    <constant name="TrackerSensor_thickness"        value="CentralTrackerSensor_thickness"/>
+
+    <constant name="TrackerBarrelInner_rmin1"       value="21.0*cm"/>
+    <constant name="TrackerBarrelInner_rmin2"       value="22.68*cm"/>
+    <constant name="TrackerBarrelInner_length1"     value="54.0*cm"/>
+    <constant name="TrackerBarrelInner_length2"     value="60.0*cm"/>
+
+    <constant name="TrackerBarrelOuter_rmin1"       value="39.3*cm"/>
+    <constant name="TrackerBarrelOuter_rmin2"       value="43.23*cm"/>
+    <constant name="TrackerBarrelOuter_length1"     value="105.0*cm"/>
+    <constant name="TrackerBarrelOuter_length2"     value="114.0*cm"/>
+
+    <constant name="TrackerBarrelInner_thickness"   value="TrackerBarrelInner_rmin2 - TrackerBarrelInner_rmin1"/>
+    <constant name="TrackerBarrelOuter_thickness"   value="TrackerBarrelOuter_rmin2 - TrackerBarrelOuter_rmin1"/>
+    <constant name="TrackerBarrelInner_length"      value="TrackerBarrelInner_length2+0.5*cm"/>
+    <constant name="TrackerBarrelOuter_length"      value="TrackerBarrelOuter_length2+0.5*cm"/>
+
+    <comment>
+      Here we are assuming the two endcaps (P and N) are symmetric.
+    </comment>
+    <constant name="TrackerEndcapInner_nLayers"          value="1"/>
+    <constant name="TrackerEndcapOuter_nLayers"          value="3"/>
+    <constant name="TrackerEndcapLayer_dz"               value="2*cm"/>
+
+    <constant name="TrackerEndcapInner_zmin"            value="49*cm"/>
+    <constant name="TrackerEndcapInner_zmax"            value="TrackerEndcapInner_zmin+TrackerEndcapLayer_dz"/>
+    <constant name="TrackerEndcapInner_length"          value="TrackerEndcapLayer_dz"/>
+    <constant name="TrackerEndcapInnerLayer_thickness"  value="min(3.0*cm,TrackerEndcapLayer_dz - 0.5*cm)"/>
+
+    <constant name="TrackerEndcapOuter_zmin1"            value="73*cm"/>
+    <constant name="TrackerEndcapOuter_zmin2"            value="97*cm"/>
+    <constant name="TrackerEndcapOuter_zmin3"            value="121*cm"/>
+    <constant name="TrackerEndcapOuter_zmin"             value="TrackerEndcapOuter_zmin1"/>
+    <constant name="TrackerEndcapOuter_zmax"             value="TrackerEndcapOuter_zmin3 + TrackerEndcapLayer_dz"/>
+    <constant name="TrackerEndcapOuterLayer_thickness"   value="min(5.0*cm,TrackerEndcapLayer_dz - 1.0*cm)"/>
+
+    <comment> Note, the -1.0*cm is so the layers do not touch surfaces.
+      This is a limitation of ACTS geometry which will likely go away in the future.</comment>
+
+
+    <constant name="TrackerEndcapInner_rmin1" value="Beampipe_rmax+1.0*cm"/>
+    <!-- <constant name="TrackerEndcapInner_rmin2" value="Beampipe_rmax+1.0*cm"/> -->
+    <comment> this can be parametrized as a function of z. From acts check: rmin must > 3.57627cm which is beampipe_max+0.4cm</comment>
+    <constant name="TrackerEndcapOuter_rmin1" value="3.6*cm"/>
+    <constant name="TrackerEndcapOuter_rmin2" value="4.7*cm"/>
+    <constant name="TrackerEndcapOuter_rmin3" value="5.91*cm"/>
+
+    <constant name="TrackerEndcapInner_rmax1"  value="36.26*cm-5.0*mm"/>
+    <constant name="TrackerEndcapOuter_rmax1"  value="43.23*cm"/>
+    <constant name="TrackerEndcapOuter_rmax2"  value="43.23*cm"/>
+    <constant name="TrackerEndcapOuter_rmax3"  value="43.23*cm"/>
+
+    <comment> build the cone from vertex endcap to inner barrel endcap </comment>
+    <constant name="TrackerSupportCarbon_thickness"    value="2*mm"/>
+    <constant name="TrackerEndcapInnerCone_zmax"       value="TrackerEndcapInner_zmin-0.5*cm"/>
+    <constant name="TrackerEndcapInnerCone_zmin"       value="TrackerBarrelInner_length2/2+0.5*cm"/>
+    <constant name="TrackerEndcapInnerCone_rmin1"      value="TrackerBarrelInner_rmin1"/>
+    <constant name="TrackerEndcapInnerCone_rmin2"      value="TrackerEndcapInner_rmax1"/>
+    <constant name="TrackerEndcapInnerCone_length"     value="TrackerEndcapInnerCone_zmax - TrackerEndcapInnerCone_zmin"/>
+    <constant name="TrackerEndcapInnerConeService_rmin1"      value="TrackerEndcapInnerCone_rmin1+TrackerSupportCarbon_thickness+0.1*mm"/>
+    <constant name="TrackerEndcapInnerConeService_rmin2"      value="TrackerEndcapInnerCone_rmin2+TrackerSupportCarbon_thickness+0.1*mm"/>
+    <constant name="TrackerEndcapInnerConeService_thickness"  value="2.5*mm"/>
+
+    <comment> The carbonfiber shell covers the outer 3 disks and intercepts with the diagonal cone at TrackerEndcapOuter_rmax1 * TrackerEndcapInner_zmin/TrackerEndcapInner_rmax1 ~ 60cm </comment>
+    <constant name="TrackerEndcapOuterShell_rmin"       value="TrackerEndcapOuter_rmax3 + 0.5*cm"/>
+    <constant name="TrackerEndcapOuterShell_zmin"      value="TrackerEndcapOuter_rmax1 * TrackerEndcapInner_zmin/TrackerEndcapInner_rmax1+1*cm"/>
+    <constant name="TrackerEndcapOuterShell_length"    value="TrackerEndcapOuter_zmax - TrackerEndcapOuterShell_zmin"/>
+
+    <comment> build the cone from inner barrel endcap to outer barrel endcap1. For now can not make zmin start at the inner endcap location, will overlap with outer barrel volume </comment>
+    <!-- <constant name="TrackerEndcapOuterCone_zmax"       value="TrackerEndcapOuterShell_zmin-0.2*cm"/> -->
+    <constant name="TrackerEndcapOuterCone_zmin"       value="TrackerBarrelOuter_length/2.0+0.1*cm"/>
+    <constant name="TrackerEndcapOuterCone_zmax"       value="TrackerEndcapOuterShell_zmin -0.1*cm"/>
+    <constant name="TrackerEndcapOuterCone_rmin1"      value="TrackerEndcapOuterCone_zmin * TrackerEndcapInner_rmax1 / TrackerEndcapInner_zmin"/>
+    <!-- <constant name="TrackerEndcapOuterCone_rmin1"      value="TrackerEndcapInner_rmax1"/> -->
+    <constant name="TrackerEndcapOuterCone_rmin2"      value="TrackerEndcapOuterShell_rmin"/>
+    <constant name="TrackerEndcapOuterConeService_rmin1"      value="TrackerEndcapOuterCone_rmin1+TrackerSupportCarbon_thickness+0.1*mm"/>
+    <constant name="TrackerEndcapOuterConeService_rmin2"      value="TrackerEndcapOuterCone_rmin2+TrackerSupportCarbon_thickness+0.1*mm"/>
+    <constant name="TrackerEndcapOuterConeService_thickness"      value="2*mm"/>
+    <constant name="TrackerEndcapOuterCone_length"     value="TrackerEndcapOuterCone_zmax - TrackerEndcapOuterCone_zmin"/>
+
+
+    <comment> Barrel staves, nmodules = np.pi/np.arcsin(frame_width*np.cos(tilt_angle)/2.0/R) </comment>
+    <constant name="TrackerBarrel_StaveTiltAngle" value="5.0*degree"/>
+    <constant name="TrackerBarrelInner_NModules1" value="33"/>
+    <constant name="TrackerBarrelInner_NModules2" value="36"/>
+    <constant name="TrackerBarrelOuter_NModules1" value="62"/>
+    <constant name="TrackerBarrelOuter_NModules2" value="68"/>
+
+    <comment> endcap panels, with z offset of 2.5mm each panel, and 0.5 degree overlap </comment>
+    <constant name="TrackerEndcap_NModules" value="12"/>
+    <constant name="TrackerEndcapModule_dz"               value="2.5*mm"/>
+    <constant name="TrackerEndcapInnerModOpeningAngle"    value="360.0/TrackerEndcap_NModules*degree + 0.5*degree"/>
+    <constant name="TrackerEndcapInnerMod1_x1"            value="2.0*TrackerEndcapInner_rmin1*sin(TrackerEndcapInnerModOpeningAngle/2.0)"/>
+    <constant name="TrackerEndcapInnerMod1_x2"            value="2.0*TrackerEndcapInner_rmax1*sin(TrackerEndcapInnerModOpeningAngle/2.0)"/>
+    <constant name="TrackerEndcapInnerMod1_y"             value="TrackerEndcapInner_rmax1*cos(TrackerEndcapInnerModOpeningAngle/2.0) - TrackerEndcapInner_rmin1"/>
+
+    <constant name="TrackerEndcapOuterModOpeningAngle" value="360.0/TrackerEndcap_NModules*degree + 0.5*degree"/>
+    <constant name="TrackerEndcapOuterMod1_x1"            value="2.0*TrackerEndcapOuter_rmin1*sin(TrackerEndcapOuterModOpeningAngle/2.0)"/>
+    <constant name="TrackerEndcapOuterMod1_x2"            value="2.0*TrackerEndcapOuter_rmax1*sin(TrackerEndcapOuterModOpeningAngle/2.0)"/>
+    <constant name="TrackerEndcapOuterMod1_y"             value="TrackerEndcapOuter_rmax1*cos(TrackerEndcapOuterModOpeningAngle/2.0) - TrackerEndcapOuter_rmin1"/>
+    <constant name="TrackerEndcapOuterMod2_x1"            value="2.0*TrackerEndcapOuter_rmin2*sin(TrackerEndcapOuterModOpeningAngle/2.0)"/>
+    <constant name="TrackerEndcapOuterMod2_x2"            value="2.0*TrackerEndcapOuter_rmax2*sin(TrackerEndcapOuterModOpeningAngle/2.0)"/>
+    <constant name="TrackerEndcapOuterMod2_y"             value="TrackerEndcapOuter_rmax2*cos(TrackerEndcapOuterModOpeningAngle/2.0) - TrackerEndcapOuter_rmin2"/>
+    <constant name="TrackerEndcapOuterMod3_x1"            value="2.0*TrackerEndcapOuter_rmin3*sin(TrackerEndcapOuterModOpeningAngle/2.0)"/>
+    <constant name="TrackerEndcapOuterMod3_x2"            value="2.0*TrackerEndcapOuter_rmax3*sin(TrackerEndcapOuterModOpeningAngle/2.0)"/>
+    <constant name="TrackerEndcapOuterMod3_y"             value="TrackerEndcapOuter_rmax3*cos(TrackerEndcapOuterModOpeningAngle/2.0) - TrackerEndcapOuter_rmin3"/>
+
+  </define>
+
+  <display>
+  </display>
+
+  <detectors>
+
+
+    <comment>
+      #### Inner Tracker Subassembly
+    </comment>
+
+    <detector
+      id="TrackerBarrel_0_ID"
+      name="TrackerBarrel_Inner"
+      type="epic_TrackerBarrel"
+      readout="TrackerBarrelHits"
+      insideTrackingVolume="true">
+      <dimensions
+        rmin="TrackerBarrelInner_rmin1-TrackerBarrelLayer_rOffset"
+        rmax="TrackerBarrelInner_rmin2-TrackerBarrelLayer_rOffset + TrackerBarrelInner_thickness"
+        length="TrackerBarrelInner_length"/>
+      <comment>
+        Tracker Barrel Modules
+      </comment>
+      <module name="TrackerBarrelInner_Module1" vis="TrackerModuleVis">
+        <frame material="CarbonFiber" vis="TrackerSupportVis"
+          width="TrackerBarrelSpaceFrame_width"
+          height="TrackerBarrelSpaceFrame_height"
+          length="TrackerBarrelInner_length1"
+          thickness="TrackerCarbon_thickness" />
+        <module_component name="aluminum1" material="Aluminum" sensitive="false"
+          width="TrackerBarrelSpaceFrame_width" length="TrackerBarrelInner_length1-4*mm" thickness="0.4*mm" />
+        <module_component name="silicon"
+          width="TrackerBarrelSpaceFrame_width"
+          length="TrackerBarrelInner_length1-5*mm" thickness="TrackerSensor_thickness" material="Silicon" sensitive="true">
+          <!--position z="-0.025*mm" y="0*mm"/-->
+        </module_component>
+      </module>
+      <module name="TrackerBarrelInner_Module2" vis="TrackerModuleVis">
+        <frame material="CarbonFiber" vis="TrackerSupportVis"
+          width="TrackerBarrelSpaceFrame_width"
+          height="TrackerBarrelSpaceFrame_height"
+          length="TrackerBarrelInner_length2"
+          thickness="TrackerCarbon_thickness" />
+        <module_component name="aluminum1" material="Aluminum" sensitive="false"
+          width="TrackerBarrelSpaceFrame_width" length="TrackerBarrelInner_length2-4*mm" thickness="0.4*mm" />
+        <module_component name="silicon"
+          width="TrackerBarrelSpaceFrame_width"
+          length="TrackerBarrelInner_length2-5*mm" thickness="TrackerSensor_thickness" material="Silicon" sensitive="true">
+          <!--position z="-0.025*mm" y="0*mm"/-->
+        </module_component>
+      </module>
+      <comment>
+        Tracker Barrel Inner Layers
+      </comment>
+      <layer module="TrackerBarrelInner_Module1" id="1" vis="TrackerLayerVis">
+        <barrel_envelope
+          inner_r="TrackerBarrelInner_rmin1-TrackerBarrelLayer_rOffset"
+          outer_r="TrackerBarrelInner_rmin1-TrackerBarrelLayer_rOffset + TrackerBarrelInner_thickness-1.0*mm"
+          z_length="TrackerBarrelInner_length1"/>
+        <layer_material surface="outer" binning="binPhi,binZ" bins0="100*TrackerBarrelInner_NModules1" bins1="100" />
+        <rphi_layout phi_tilt="TrackerBarrel_StaveTiltAngle" nphi="TrackerBarrelInner_NModules1" phi0="0.0" rc="TrackerBarrelInner_rmin1" dr="0.0 * mm"/>
+        <z_layout dr="0.0 * mm" z0="0.0 * mm" nz="1"/>
+      </layer>
+      <layer module="TrackerBarrelInner_Module2" id="2" vis="TrackerLayerVis">
+        <barrel_envelope
+          inner_r="TrackerBarrelInner_rmin2-TrackerBarrelLayer_rOffset"
+          outer_r="TrackerBarrelInner_rmin2-TrackerBarrelLayer_rOffset + TrackerBarrelInner_thickness"
+          z_length="TrackerBarrelInner_length2"/>
+        <layer_material surface="outer" binning="binPhi,binZ" bins0="100*TrackerBarrelInner_NModules2" bins1="100" />
+        <rphi_layout phi_tilt="TrackerBarrel_StaveTiltAngle" nphi="TrackerBarrelInner_NModules2" phi0="0.0" rc="TrackerBarrelInner_rmin2" dr="0.0 * mm"/>
+        <z_layout dr="0.0 * mm" z0="0.0 * mm" nz="1"/>
+      </layer>
+    </detector>
+
+    <detector
+      id="TrackerEndcapP_0_ID"
+      name="TrackerEndcapP_Inner"
+      type="epic_TrapEndcapTracker"
+      readout="TrackerEndcapHits"
+      vis="TrackerVis"
+      reflect="false">
+
+      <support  material="CarbonFiber" name="sup_cone" vis="TrackerSupportVis">
+        <shape type="Cone"
+          rmin1="TrackerEndcapInnerCone_rmin1" rmax1="TrackerEndcapInnerCone_rmin1 + TrackerSupportCarbon_thickness"
+          rmin2="TrackerEndcapInnerCone_rmin2" rmax2="TrackerEndcapInnerCone_rmin2 + TrackerSupportCarbon_thickness" z="TrackerEndcapInnerCone_length/2.0"/>
+        <position x="0*cm"  y="0*cm"   z="(TrackerEndcapInnerCone_zmax+TrackerEndcapInnerCone_zmin)/2.0"/>
+      </support>
+      <support  material="Aluminum" name="sup_cone_service" vis="TrackerSupportVis">
+      <shape type="Cone"
+          rmin1="TrackerEndcapInnerConeService_rmin1" rmax1="TrackerEndcapInnerConeService_rmin1 + TrackerEndcapInnerConeService_thickness"
+          rmin2="TrackerEndcapInnerConeService_rmin2" rmax2="TrackerEndcapInnerConeService_rmin2 + TrackerEndcapInnerConeService_thickness" z="TrackerEndcapInnerCone_length/2.0"/>
+        <position x="0*cm"  y="0*cm"   z="(TrackerEndcapInnerCone_zmax+TrackerEndcapInnerCone_zmin)/2.0"/>
+      </support>
+
+      <module name="Module1" vis="AnlProcess_Blue">
+        <trd x1="TrackerEndcapInnerMod1_x1/2.0" x2="TrackerEndcapInnerMod1_x2/2.0" z="TrackerEndcapInnerMod1_y/2"/>
+        <module_component thickness="CentralTrackerSensor_thickness" material="Silicon" sensitive="true"/>
+       <module_component thickness="TrackerEndcapAluminum_thickness"  material="Aluminum"/>
+        <module_component thickness="TrackerCarbon_thickness"          material="CarbonFiber"/>
+      </module>
+      <layer id="1">
+        <envelope  vis="TrackerVis"
+          rmin="TrackerEndcapInner_rmin1"
+          rmax="TrackerEndcapInner_rmax1"
+          length="TrackerEndcapInnerLayer_thickness"
+          zstart="TrackerEndcapInner_zmin" />
+        <layer_material surface="representing" binning="binPhi,binR" bins0="20*TrackerEndcap_NModules" bins1="256"/>
+        <ring vis="TrackerVis"
+          r="TrackerEndcapInner_rmin1+TrackerEndcapInnerMod1_y/2.0"
+          zstart="0.0"
+          nmodules="TrackerEndcap_NModules" dz="TrackerEndcapModule_dz" module="Module1" />
+      </layer>
+    </detector>
+
+    <detector
+      id="TrackerEndcapN_0_ID"
+      name="TrackerEndcapN_Inner"
+      type="epic_TrapEndcapTracker"
+      readout="TrackerEndcapHits"
+      vis="TrackerVis"
+      reflect="true">
+      <support  material="CarbonFiber" name="sup_cone" vis="TrackerSupportVis">
+        <shape type="Cone"
+          rmin2="TrackerEndcapInnerCone_rmin1" rmax2="TrackerEndcapInnerCone_rmin1 + TrackerSupportCarbon_thickness"
+          rmin1="TrackerEndcapInnerCone_rmin2" rmax1="TrackerEndcapInnerCone_rmin2 + TrackerSupportCarbon_thickness" z="TrackerEndcapInnerCone_length/2.0"/>
+        <position x="0*cm"  y="0*cm"   z="-1.0*(TrackerEndcapInnerCone_zmax+TrackerEndcapInnerCone_zmin)/2.0"/>
+      </support>
+      <support  material="Aluminum" name="sup_cone_service" vis="TrackerSupportVis">
+      <shape type="Cone"
+          rmin2="TrackerEndcapInnerConeService_rmin1" rmax2="TrackerEndcapInnerConeService_rmin1 + TrackerEndcapInnerConeService_thickness"
+          rmin1="TrackerEndcapInnerConeService_rmin2" rmax1="TrackerEndcapInnerConeService_rmin2 + TrackerEndcapInnerConeService_thickness" z="TrackerEndcapInnerCone_length/2.0"/>
+        <position x="0*cm"  y="0*cm"   z="-1.0*(TrackerEndcapInnerCone_zmax+TrackerEndcapInnerCone_zmin)/2.0"/>
+      </support>
+
+
+      <module name="Module1" vis="AnlProcess_Blue">
+        <trd x1="TrackerEndcapInnerMod1_x1/2.0" x2="TrackerEndcapInnerMod1_x2/2.0" z="TrackerEndcapInnerMod1_y/2"/>
+        <module_component thickness="CentralTrackerSensor_thickness" material="Silicon" sensitive="true"/>
+        <module_component thickness="TrackerEndcapAluminum_thickness"  material="Aluminum"/>
+        <module_component thickness="TrackerCarbon_thickness"          material="CarbonFiber"/>
+      </module>
+      <layer id="1">
+        <envelope  vis="TrackerVis"
+          rmin="TrackerEndcapInner_rmin1"
+          rmax="TrackerEndcapInner_rmax1"
+          length="TrackerEndcapInnerLayer_thickness"
+          zstart="TrackerEndcapInner_zmin" />
+        <layer_material surface="representing" binning="binPhi,binR" bins0="20*TrackerEndcap_NModules" bins1="256"/>
+        <ring vis="TrackerVis"
+          r="TrackerEndcapInner_rmin1+TrackerEndcapInnerMod1_y/2.0"
+          zstart="0"
+          nmodules="TrackerEndcap_NModules" dz="TrackerEndcapModule_dz" module="Module1" />
+      </layer>
+    </detector>
+
+    <comment>
+      -----------------------------------
+      Outer Tracker Subassembly (group 2)
+      -----------------------------------
+    </comment>
+    <detector
+      id="TrackerBarrel_1_ID"
+      name="TrackerBarrel_Outer"
+      type="epic_TrackerBarrel"
+      readout="TrackerBarrelHits"
+      insideTrackingVolume="true">
+      <dimensions
+        rmin="TrackerBarrelOuter_rmin1-TrackerBarrelLayer_rOffset"
+        rmax="TrackerBarrelOuter_rmin2-TrackerBarrelLayer_rOffset + TrackerBarrelOuter_thickness"
+        length="TrackerBarrelOuter_length"/>
+      <comment>
+        Tracker Barrel Modules
+      </comment>
+      <module name="TrackerBarrelOuter_Module1" vis="TrackerModuleVis">
+        <frame  material="CarbonFiber" vis="TrackerSupportVis"
+          width="TrackerBarrelSpaceFrame_width"
+          height="TrackerBarrelSpaceFrame_height"
+          length="TrackerBarrelOuter_length1"
+          thickness="TrackerCarbon_thickness" />
+        <module_component name="aluminum1" material="Aluminum" sensitive="false"
+          width="TrackerBarrelSpaceFrame_width" length="TrackerBarrelOuter_length1-0.1*mm" thickness="0.40*mm" />
+        <module_component name="silicon"
+          width="TrackerBarrelSpaceFrame_width"
+          length="TrackerBarrelOuter_length1-0.1*mm"
+          thickness="TrackerSensor_thickness" material="Silicon" sensitive="true">
+        </module_component>
+      </module>
+      <module name="TrackerBarrelOuter_Module2" vis="TrackerModuleVis">
+        <frame  material="CarbonFiber" vis="TrackerSupportVis"
+          width="TrackerBarrelSpaceFrame_width"
+          height="TrackerBarrelSpaceFrame_height"
+          length="TrackerBarrelOuter_length2"
+          thickness="TrackerCarbon_thickness" />
+        <module_component name="aluminum1" material="Aluminum" sensitive="false"
+          width="TrackerBarrelSpaceFrame_width" length="TrackerBarrelOuter_length2-0.1*mm" thickness="0.40*mm" />
+        <module_component name="silicon"
+          width="TrackerBarrelSpaceFrame_width"
+          length="TrackerBarrelOuter_length1-0.1*mm"
+          thickness="TrackerSensor_thickness" material="Silicon" sensitive="true">
+        </module_component>
+      </module>
+      <comment>
+        Tracker Barrel Outer Layers
+      </comment>
+      <layer module="TrackerBarrelOuter_Module1" id="1" vis="TrackerLayerVis">
+        <barrel_envelope
+          inner_r="TrackerBarrelOuter_rmin1-TrackerBarrelLayer_rOffset"
+          outer_r="TrackerBarrelOuter_rmin1-TrackerBarrelLayer_rOffset + TrackerBarrelOuter_thickness-1.0*mm"
+          z_length="TrackerBarrelOuter_length1"/>
+        <layer_material surface="outer" binning="binPhi,binZ" bins0="100*TrackerBarrelOuter_NModules1" bins1="100" />
+        <rphi_layout phi_tilt="TrackerBarrel_StaveTiltAngle" nphi="TrackerBarrelOuter_NModules1" phi0="0.0" rc="TrackerBarrelOuter_rmin1" dr="0.0 * mm"/>
+        <z_layout dr="0.0 * mm" z0="0.0 * mm" nz="1"/>
+      </layer>
+      <layer module="TrackerBarrelOuter_Module2" id="2" vis="TrackerLayerVis">
+        <barrel_envelope
+          inner_r="TrackerBarrelOuter_rmin2-TrackerBarrelLayer_rOffset"
+          outer_r="TrackerBarrelOuter_rmin2-TrackerBarrelLayer_rOffset + TrackerBarrelOuter_thickness"
+          z_length="TrackerBarrelOuter_length2"/>
+        <layer_material surface="outer" binning="binPhi,binZ" bins0="100*TrackerBarrelOuter_NModules2" bins1="100" />
+        <rphi_layout phi_tilt="TrackerBarrel_StaveTiltAngle" nphi="TrackerBarrelOuter_NModules2" phi0="0.0" rc="TrackerBarrelOuter_rmin2" dr="0.0 * mm"/>
+        <z_layout dr="0.0 * mm" z0="0.0 * mm" nz="1"/>
+      </layer>
+    </detector>
+
+    <detector
+      id="TrackerEndcapP_1_ID"
+      name="TrackerEndcapP_Outer"
+      type="epic_TrapEndcapTracker"
+      readout="TrackerEndcapHits"
+      vis="TrackerVis"
+      reflect="false">
+
+      <support vis="TrackerSupportVis"  material="CarbonFiber" name="sup_cylinder"
+        rmin="TrackerEndcapOuterShell_rmin"
+        thickness="TrackerSupportCarbon_thickness" length="TrackerEndcapOuterShell_length" zstart="TrackerEndcapOuterShell_zmin" />
+      <support vis="TrackerSupportVis"  material="Aluminum" name="sup_cylinder_service"
+        rmin="TrackerEndcapOuterShell_rmin+1.0*mm+TrackerSupportCarbon_thickness"
+        thickness="2.0*mm" length="TrackerEndcapOuterShell_length" zstart="TrackerEndcapOuterShell_zmin" />
+
+      <support  material="CarbonFiber" name="sup_cone" vis="TrackerSupportVis">
+        <shape type="Cone"
+          rmin1="TrackerEndcapOuterCone_rmin1" rmax1="TrackerEndcapOuterCone_rmin1+TrackerSupportCarbon_thickness"
+          rmin2="TrackerEndcapOuterCone_rmin2" rmax2="TrackerEndcapOuterCone_rmin2+TrackerSupportCarbon_thickness" z="TrackerEndcapOuterCone_length/2.0"/>
+        <position x="0*cm"  y="0*cm"   z="(TrackerEndcapOuterCone_zmin+TrackerEndcapOuterCone_zmax)/2.0"/>
+      </support>
+      <support  material="Aluminum" name="sup_cone_service" vis="TrackerSupportVis">
+        <shape type="Cone"
+          rmin1="TrackerEndcapOuterConeService_rmin1" rmax1="TrackerEndcapOuterConeService_rmin1+TrackerEndcapOuterConeService_thickness"
+          rmin2="TrackerEndcapOuterConeService_rmin2" rmax2="TrackerEndcapOuterConeService_rmin2+TrackerEndcapOuterConeService_thickness" z="TrackerEndcapOuterCone_length/2.0"/>
+        <position x="0*cm"  y="0*cm"   z="(TrackerEndcapOuterCone_zmin+TrackerEndcapOuterCone_zmax)/2.0"/>
+      </support>
+
+      <module name="Module1" vis="AnlProcess_Blue">
+        <trd x1="TrackerEndcapOuterMod1_x1/2.0" x2="TrackerEndcapOuterMod1_x2/2.0" z="TrackerEndcapOuterMod1_y/2"/>
+        <module_component thickness="CentralTrackerSensor_thickness" material="Silicon" sensitive="true"/>
+       <module_component thickness="TrackerEndcapAluminum_thickness"  material="Aluminum"/>
+        <module_component thickness="TrackerCarbon_thickness"          material="CarbonFiber"/>
+      </module>
+      <module name="Module2" vis="AnlProcess_Blue">
+        <trd x1="TrackerEndcapOuterMod2_x1/2.0" x2="TrackerEndcapOuterMod2_x2/2.0" z="TrackerEndcapOuterMod2_y/2"/>
+        <module_component thickness="CentralTrackerSensor_thickness" material="Silicon" sensitive="true"/>
+       <module_component thickness="TrackerEndcapAluminum_thickness"  material="Aluminum"/>
+        <module_component thickness="TrackerCarbon_thickness"          material="CarbonFiber"/>
+      </module>
+      <module name="Module3" vis="AnlProcess_Blue">
+        <trd x1="TrackerEndcapOuterMod3_x1/2.0" x2="TrackerEndcapOuterMod3_x2/2.0" z="TrackerEndcapOuterMod3_y/2"/>
+        <module_component thickness="CentralTrackerSensor_thickness" material="Silicon" sensitive="true"/>
+       <module_component thickness="TrackerEndcapAluminum_thickness"  material="Aluminum"/>
+        <module_component thickness="TrackerCarbon_thickness"          material="CarbonFiber"/>
+      </module>
+      <layer id="1">
+        <envelope  vis="TrackerVis"
+          rmin="TrackerEndcapOuter_rmin1"
+          rmax="TrackerEndcapOuter_rmax1"
+          length="TrackerEndcapOuterLayer_thickness"
+          zstart="TrackerEndcapOuter_zmin1" />
+        <layer_material surface="representing" binning="binPhi,binR" bins0="20*TrackerEndcap_NModules" bins1="256"/>
+        <ring vis="TrackerVis"
+          r="TrackerEndcapOuter_rmin1+TrackerEndcapOuterMod1_y/2.0"
+          zstart="0.0*mm"
+          nmodules="TrackerEndcap_NModules" dz="TrackerEndcapModule_dz" module="Module1" />
+      </layer>
+      <layer id="2">
+        <envelope  vis="TrackerVis"
+          rmin="TrackerEndcapOuter_rmin2"
+          rmax="TrackerEndcapOuter_rmax2"
+          length="TrackerEndcapOuterLayer_thickness"
+          zstart="TrackerEndcapOuter_zmin2" />
+        <layer_material surface="representing" binning="binPhi,binR" bins0="20*TrackerEndcap_NModules" bins1="256"/>
+        <ring vis="TrackerVis"
+          r="TrackerEndcapOuter_rmin2+TrackerEndcapOuterMod2_y/2.0"
+          zstart="0.0*mm"
+          nmodules="TrackerEndcap_NModules" dz="TrackerEndcapModule_dz" module="Module2" />
+      </layer>
+      <layer id="3">
+        <envelope  vis="TrackerVis"
+          rmin="TrackerEndcapOuter_rmin3"
+          rmax="TrackerEndcapOuter_rmax3"
+          length="TrackerEndcapOuterLayer_thickness"
+          zstart="TrackerEndcapOuter_zmin3" />
+        <layer_material surface="representing" binning="binPhi,binR" bins0="20*TrackerEndcap_NModules" bins1="256"/>
+        <ring vis="TrackerVis"
+          r="TrackerEndcapOuter_rmin3+TrackerEndcapOuterMod3_y/2.0"
+          zstart="0.0*mm"
+          nmodules="TrackerEndcap_NModules" dz="TrackerEndcapModule_dz" module="Module3" />
+      </layer>
+    </detector>
+
+    <detector
+      id="TrackerEndcapN_1_ID"
+      name="TrackerEndcapN_Outer"
+      type="epic_TrapEndcapTracker"
+      readout="TrackerEndcapHits"
+      vis="TrackerVis"
+      reflect="true">
+
+      <support vis="TrackerSupportVis"  material="CarbonFiber" name="sup_cylinder"
+        rmin="TrackerEndcapOuterShell_rmin"
+        thickness="TrackerSupportCarbon_thickness" length="TrackerEndcapOuterShell_length" zstart="TrackerEndcapOuterShell_zmin" />
+      <support vis="TrackerSupportVis"  material="Aluminum" name="sup_cylinder_service"
+        rmin="TrackerEndcapOuterShell_rmin+1.0*mm+TrackerSupportCarbon_thickness"
+        thickness="2.0*mm" length="TrackerEndcapOuterShell_length" zstart="TrackerEndcapOuterShell_zmin" />
+        <comment>the cone can not be reflected. need to flip z explicitly</comment>
+      <support  material="CarbonFiber" name="sup_cone" vis="TrackerSupportVis">
+        <shape type="Cone"
+          rmin2="TrackerEndcapOuterCone_rmin1" rmax2="TrackerEndcapOuterCone_rmin1+TrackerSupportCarbon_thickness"
+          rmin1="TrackerEndcapOuterCone_rmin2" rmax1="TrackerEndcapOuterCone_rmin2+TrackerSupportCarbon_thickness" z="TrackerEndcapOuterCone_length/2.0"/>
+        <position x="0*cm"  y="0*cm"   z="-1.0*(TrackerEndcapOuterCone_zmin+TrackerEndcapOuterCone_zmax)/2.0"/>
+      </support>
+      <support  material="Aluminum" name="sup_cone_service" vis="TrackerSupportVis">
+        <shape type="Cone"
+          rmin2="TrackerEndcapOuterConeService_rmin1" rmax2="TrackerEndcapOuterConeService_rmin1+TrackerEndcapOuterConeService_thickness"
+          rmin1="TrackerEndcapOuterConeService_rmin2" rmax1="TrackerEndcapOuterConeService_rmin2+TrackerEndcapOuterConeService_thickness" z="TrackerEndcapOuterCone_length/2.0"/>
+        <position x="0*cm"  y="0*cm"   z="-1.0*(TrackerEndcapOuterCone_zmin+TrackerEndcapOuterCone_zmax)/2.0"/>
+      </support>
+
+
+
+      <module name="Module1" vis="AnlProcess_Blue">
+        <trd x1="TrackerEndcapOuterMod1_x1/2.0" x2="TrackerEndcapOuterMod1_x2/2.0" z="TrackerEndcapOuterMod1_y/2"/>
+        <module_component thickness="CentralTrackerSensor_thickness" material="Silicon" sensitive="true"/>
+       <module_component thickness="TrackerEndcapAluminum_thickness"  material="Aluminum"/>
+        <module_component thickness="TrackerCarbon_thickness"          material="CarbonFiber"/>
+      </module>
+      <module name="Module2" vis="AnlProcess_Blue">
+        <trd x1="TrackerEndcapOuterMod2_x1/2.0" x2="TrackerEndcapOuterMod2_x2/2.0" z="TrackerEndcapOuterMod2_y/2"/>
+        <module_component thickness="CentralTrackerSensor_thickness" material="Silicon" sensitive="true"/>
+       <module_component thickness="TrackerEndcapAluminum_thickness"  material="Aluminum"/>
+        <module_component thickness="TrackerCarbon_thickness"          material="CarbonFiber"/>
+      </module>
+      <module name="Module3" vis="AnlProcess_Blue">
+        <trd x1="TrackerEndcapOuterMod3_x1/2.0" x2="TrackerEndcapOuterMod3_x2/2.0" z="TrackerEndcapOuterMod3_y/2"/>
+        <module_component thickness="CentralTrackerSensor_thickness" material="Silicon" sensitive="true"/>
+       <module_component thickness="TrackerEndcapAluminum_thickness"  material="Aluminum"/>
+        <module_component thickness="TrackerCarbon_thickness"          material="CarbonFiber"/>
+      </module>
+      <layer id="1">
+        <envelope  vis="TrackerVis"
+          rmin="TrackerEndcapOuter_rmin1"
+          rmax="TrackerEndcapOuter_rmax1"
+          length="TrackerEndcapOuterLayer_thickness"
+          zstart="TrackerEndcapOuter_zmin1" />
+        <layer_material surface="representing" binning="binPhi,binR" bins0="20*TrackerEndcap_NModules" bins1="256"/>
+        <ring vis="TrackerVis"
+          r="TrackerEndcapOuter_rmin1+TrackerEndcapOuterMod1_y/2.0"
+          zstart="0.0*mm"
+          nmodules="TrackerEndcap_NModules" dz="TrackerEndcapModule_dz" module="Module1" />
+      </layer>
+      <layer id="2">
+        <envelope  vis="TrackerVis"
+          rmin="TrackerEndcapOuter_rmin2"
+          rmax="TrackerEndcapOuter_rmax2"
+          length="TrackerEndcapOuterLayer_thickness"
+          zstart="TrackerEndcapOuter_zmin2" />
+        <layer_material surface="representing" binning="binPhi,binR" bins0="20*TrackerEndcap_NModules" bins1="256"/>
+        <ring vis="TrackerVis"
+          r="TrackerEndcapOuter_rmin2+TrackerEndcapOuterMod2_y/2.0"
+          zstart="0.0*mm"
+          nmodules="TrackerEndcap_NModules" dz="TrackerEndcapModule_dz" module="Module2" />
+      </layer>
+      <layer id="3">
+        <envelope  vis="TrackerVis"
+          rmin="TrackerEndcapOuter_rmin3"
+          rmax="TrackerEndcapOuter_rmax3"
+          length="TrackerEndcapOuterLayer_thickness"
+          zstart="TrackerEndcapOuter_zmin3" />
+        <layer_material surface="representing" binning="binPhi,binR" bins0="20*TrackerEndcap_NModules" bins1="256"/>
+        <ring vis="TrackerVis"
+          r="TrackerEndcapOuter_rmin3+TrackerEndcapOuterMod3_y/2.0"
+          zstart="0.0*mm"
+          nmodules="TrackerEndcap_NModules" dz="TrackerEndcapModule_dz" module="Module3" />
+      </layer>
+    </detector>
+
+  </detectors>
+
+  <readouts>
+    <readout name="TrackerBarrelHits">
+      <segmentation type="CartesianGridXY" grid_size_x="0.010*mm" grid_size_y="0.010*mm" />
+      <id>system:8,layer:4,module:12,sensor:2,x:32:-14,y:-18</id>
+    </readout>
+    <readout name="TrackerEndcapHits">
+      <segmentation type="CartesianGridXZ" grid_size_x="0.010*mm" grid_size_z="0.010*mm" />
+      <id>system:8,layer:4,module:12,sensor:2,x:32:-16,z:-16</id>
+
+
+    </readout>
+  </readouts>
+
+
+</lccdd>

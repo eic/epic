@@ -60,7 +60,7 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
   double rmax2        = dims.attr<double>(_Unicode(rmax2));
   double snout_length = dims.attr<double>(_Unicode(snout_length));
   // fill envelope with radiator materials (need optical property for optical photons)
-  auto gasMat = desc.material(dd4hep::getAttrOrDefault(detElem, _Unicode(gas), "AirOptical"));
+  auto gasMat = desc.material(dd4hep::getAttrOrDefault<std::string>(detElem, _Unicode(gas), "AirOptical"));
 
   Cone snout(snout_length / 2.0, rmin, rmax0, rmin, rmax1);
   Tube tank(rmin, rmax2, (length - snout_length) / 2., 0., 2 * M_PI);
@@ -109,7 +109,8 @@ void build_mirrors(Detector& desc, DetElement& sdet, Volume& env, xml::Component
 
   // optical surface
   OpticalSurfaceManager surfMgr = desc.surfaceManager();
-  auto surf = surfMgr.opticalSurface(dd4hep::getAttrOrDefault(plm, _Unicode(surface), "MirrorOpticalSurface"));
+  auto                  surf =
+      surfMgr.opticalSurface(dd4hep::getAttrOrDefault<std::string>(plm, _Unicode(surface), "MirrorOpticalSurface"));
 
   // placements
   auto gpos = get_xml_xyz(plm, _Unicode(position)) + offset;
@@ -192,7 +193,7 @@ void build_sensors(Detector& desc, Volume& env, xml::Component plm, const Positi
 
     // fill sensors to the piece
     auto points =
-        ecce::geo::fillRectangles({0., 0.}, sx + gap, sy + gap, rmin - gap, rmax + gap, -phiw / 2., phiw / 2.);
+        epic::geo::fillRectangles({0., 0.}, sx + gap, sy + gap, rmin - gap, rmax + gap, -phiw / 2., phiw / 2.);
     int imod = 1;
     for (auto& p : points) {
       // transofrms are in a reversed order
@@ -210,4 +211,7 @@ void build_sensors(Detector& desc, Volume& env, xml::Component plm, const Positi
 //@}
 
 // clang-format off
+#ifdef EPIC_ECCE_LEGACY_COMPAT
 DECLARE_DETELEMENT(ecce_GaseousRICH, createDetector)
+#endif
+DECLARE_DETELEMENT(epic_GaseousRICH, createDetector)

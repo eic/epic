@@ -330,7 +330,7 @@ static std::tuple<int, int> add_disk(Detector& desc, Assembly& env, xml::Collect
 
   // local placement of modules
   int  mid    = 0;
-  auto points = ecce::geo::fillRectangles({0., 0.}, modSize.x(), modSize.y(), rmin, rmax, phimin, phimax);
+  auto points = epic::geo::fillRectangles({0., 0.}, modSize.x(), modSize.y(), rmin, rmax, phimin, phimax);
   for (auto& p : points) {
     Transform3D tr_local = RotationZYX(0.0, 0.0, 0.0) * Translation3D(p.x(), p.y(), 0.0);
     auto modPV = (has_envelope ? env_vol.placeVolume(modVol, tr_local) : env.placeVolume(modVol, tr_global * tr_local));
@@ -360,7 +360,7 @@ static std::tuple<int, int> add_lines(Detector& desc, Assembly& env, xml::Collec
                  dd4hep::getAttrOrDefault<double>(pl, _Unicode(roty), 0.),
                  dd4hep::getAttrOrDefault<double>(pl, _Unicode(rotz), 0.));
     // determine axis
-    std::string axis = dd4hep::getAttrOrDefault(pl, _Unicode(axis), "x");
+    std::string axis = dd4hep::getAttrOrDefault<std::string>(pl, _Unicode(axis), "x");
     std::transform(axis.begin(), axis.end(), axis.begin(), [](char c) { return std::tolower(c); });
     if ((axis != "x") && (axis != "y") && (axis != "z")) {
       std::cerr << "HomogeneousCalorimeter Error: cannot determine axis of line " << axis
@@ -409,4 +409,7 @@ static std::tuple<int, int> add_lines(Detector& desc, Assembly& env, xml::Collec
   return {sector_id, mid};
 }
 //@}
+#ifdef EPIC_ECCE_LEGACY_COMPAT
 DECLARE_DETELEMENT(ecce_HomogeneousCalorimeter, create_detector)
+#endif
+DECLARE_DETELEMENT(epic_HomogeneousCalorimeter, create_detector)

@@ -13,6 +13,7 @@
 #include "DDRec/Surface.h"
 #include "XML/Layering.h"
 #include "XML/Utilities.h"
+#include <array>
 #include <map>
 
 #if defined(USE_ACTSDD4HEP)
@@ -84,7 +85,7 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
     xml_dim_t   pos(x_support.child(_U(position), false));
     xml_dim_t   rot(x_support.child(_U(rotation), false));
     Solid       support_solid;
-    if (x_support.hasChild("shape")) {
+    if (x_support.hasChild(_U(shape))) {
       xml_comp_t shape(x_support.child(_U(shape)));
       string     shape_type = shape.typeStr();
       support_solid         = xml::createShape(description, shape_type, shape);
@@ -133,7 +134,7 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
     m_volume.setVisAttributes(description.visAttributes(x_mod.visStr()));
 
     Solid frame_s;
-    if (x_mod.hasChild("frame")) {
+    if (x_mod.hasChild(_U(frame))) {
       // build frame from trd (assumed to be smaller)
       xml_comp_t m_frame         = x_mod.child(_U(frame));
       xml_comp_t f_pos           = m_frame.child(_U(position));
@@ -325,5 +326,11 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
 
 //@}
 // clang-format off
+#ifdef EPIC_ECCE_LEGACY_COMPAT
 DECLARE_DETELEMENT(ecce_TrapEndcapTracker, create_detector)
+#endif
+DECLARE_DETELEMENT(epic_TrapEndcapTracker, create_detector)
+#ifdef EPIC_ECCE_LEGACY_COMPAT
 DECLARE_DETELEMENT(ecce_GEMTrackerEndcap, create_detector)
+#endif
+DECLARE_DETELEMENT(epic_GEMTrackerEndcap, create_detector)

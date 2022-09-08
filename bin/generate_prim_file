@@ -1,4 +1,4 @@
-#!/usr/local/bin/python
+#!/usr/bin/env python3
 
 # same as make_dawn_views but stops at generating the prim file.
 # W. Armstrong (ANL), original bash script
@@ -29,7 +29,7 @@ def readline_nonblocking(output):
 parser = argparse.ArgumentParser()
 
 parser.add_argument('-c', '--compact-file', type=str, dest='compact',
-        default=os.path.join(os.environ.get('DETECTOR_PATH', '.'), 'ecce.xml'),
+        default=os.path.join(os.environ.get('DETECTOR_PATH', '.'), 'epic.xml'),
         help='Top level compact file for detectors')
 
 parser.add_argument('-s', '--skip', type=int,

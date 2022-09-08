@@ -54,16 +54,17 @@ long load_file(Detector& /* desc */, int argc, char** argv)
   // if file or url is empty, do nothing
   if (file.empty()) {
     printout(WARNING, "FileLoader", "no file specified");
-    return 0;
   }
   if (url.empty()) {
     printout(WARNING, "FileLoader", "no url specified");
-    return 0;
   }
 
   EnsureFileFromURLExists(url, file, cache, cmd);
 
-  return 0;
+  return 1;
 }
 
+#ifdef EPIC_ECCE_LEGACY_COMPAT
 DECLARE_APPLY(ecce_FileLoader, load_file)
+#endif
+DECLARE_APPLY(epic_FileLoader, load_file)

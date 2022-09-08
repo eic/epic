@@ -1,0 +1,11 @@
+blank_issues_enabled: false
+contact_links:
+  - name: EIC Detector Collaboration Mattermost
+    url: https://eic.cloud.mattermost.com
+    about: Please ask and answer questions here.
+  - name: EIC Detector Collaboration Computing and Software Meetings
+    url: https://indico.bnl.gov/category/410
+    about: We hold weekly computing and software meetings.
+  - name: EIC Detector Collaboration Simulation, Production and QA Meetings
+    url: https://indico.bnl.gov/category/416
+    about: We hold weekly simulation, software, and QA meetings.

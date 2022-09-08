@@ -3,19 +3,20 @@
 
 <define>
 <!-- vessel (=snout+tank) geometry -->
-<constant name="DRICH_zmin"               value="ForwardRICHRegion_zmin"/> <!-- vessel front -->
-<constant name="DRICH_Length"             value="ForwardRICHRegion_length"/>  <!-- overall vessel length (including snout) -->
-<constant name="DRICH_rmin0"              value="ForwardRICHRegion_zmin * ForwardRICHRegion_tan1"/>  <!-- bore radius at dRICh vessel frontplane -->
-<constant name="DRICH_rmin1"              value="(ForwardRICHRegion_zmin + ForwardRICHRegion_length) * ForwardRICHRegion_tan2"/>  <!-- bore radius at dRICh vessel backplane -->
+<constant name="DRICH_Length"             value="ForwardRICHRegion_length"/>  <!-- overall vessel length -->
+<constant name="DRICH_zmin"               value="ForwardRICHRegion_zmin"/>
+<constant name="DRICH_zmax"               value="DRICH_zmin + DRICH_Length"/>
+<constant name="DRICH_rmin0"              value="DRICH_zmin * ForwardRICHRegion_tan1"/>  <!-- bore radius at dRICh entrance -->
+<constant name="DRICH_rmin1"              value="DRICH_zmax * ForwardRICHRegion_tan2"/>  <!-- bore radius at dRICh exit -->
 <constant name="DRICH_wall_thickness"     value="0.5*cm"/>  <!-- thickness of radial walls -->
 <constant name="DRICH_window_thickness"   value="0.1*cm"/>  <!-- thickness of entrance and exit walls -->
-<!-- tank geometry: cylinder, holding the majority of detector components -->
-<constant name="DRICH_rmax2"              value="HcalBarrel_rmin-2*cm"/>  <!-- cylinder radius, near maximal to fit HCal barrel inner polygon -->
 <!-- snout geometry: cone with front radius rmax0 and back radius of rmax1 -->
+<constant name="DRICH_rmax0"              value="95.0*cm"/>
 <constant name="DRICH_SnoutLength"        value="20.0*cm"/>
-<constant name="DRICH_SnoutSlope"         value="DRICH_rmax2 / (DRICH_zmin + DRICH_Length)"/>
-<constant name="DRICH_rmax0"              value="DRICH_SnoutSlope * DRICH_zmin"/>
-<constant name="DRICH_rmax1"              value="DRICH_SnoutSlope * ( DRICH_zmin + DRICH_SnoutLength)"/>
+<constant name="DRICH_SnoutSlope"         value="DRICH_rmax0 / DRICH_zmin"/> <!-- TODO: increase slope to allow more space for aerogel cones ? -->
+<constant name="DRICH_rmax1"              value="DRICH_rmax0 + DRICH_SnoutLength * DRICH_SnoutSlope"/>
+<!-- tank geometry: cylinder, holding the majority of detector components -->
+<constant name="DRICH_rmax2"              value="ForwardPIDRegion_rmax"/>  <!-- cylinder radius -->
 <!-- additional parameters -->
 <constant name="DRICH_aerogel_thickness"  value="4.0*cm"/>  <!-- aerogel thickness -->
 <constant name="DRICH_sensor_size"        value="25.8*mm"/> <!-- sensor side length -->
@@ -23,17 +24,21 @@
 <constant name="DRICH_num_px"             value="8"/> <!-- number of pixels along one side of the sensor -->
 <constant name="DRICH_sensor_pixel_pitch" value="3.2*mm"/> <!-- center-to-center distance between SiPMs in a 8x8 panel -->
 <constant name="DRICH_sensor_pixel_size"  value="3.0*mm"/> <!-- a single SiPM pixel size -->
-<!-- debugging switches -->
+<!-- settings and switches -->
 <comment>
-- `DRICH_debug_optics`:  1 = all components become vacuum, except for mirrors; test opticalphotons from IP
-                         2 = all components become vacuum, except for mirrors and `gasvol`, test charged particles from IP
-                         0 = off
-- `DRICH_debug_mirror`:  1 = draw full mirror shape for single sector; 0 = off
-- `DRICH_debug_sensors`: 1 = draw full sensor sphere for a single sector; 0 = off
+- `DRICH_debug_optics`:    1 = all components become vacuum, except for mirrors; test opticalphotons from IP
+                           2 = all components become vacuum, except for mirrors and `gasvol`, test charged particles from IP
+                           3 = all components become vacuum, except for mirrors and sensors, test reflected trajectories' hits
+                           0 = off
+- `DRICH_debug_mirror`:    1 = draw full mirror shape for single sector; 0 = off
+- `DRICH_debug_sensors`:   1 = draw full sensor sphere for a single sector; 0 = off
+- `DRICH_create_irt_file`: 1 = create an auxiliary IRT config ROOT file; 0 = off
+                               - the file name is set by detector attribute `irt_filename` below
 </comment>
-<constant name="DRICH_debug_optics"  value="0"/>
-<constant name="DRICH_debug_mirror"  value="0"/>
-<constant name="DRICH_debug_sensors" value="0"/>
+<constant name="DRICH_debug_optics"    value="0"/>
+<constant name="DRICH_debug_mirror"    value="0"/>
+<constant name="DRICH_debug_sensors"   value="0"/>
+<constant name="DRICH_create_irt_file" value="0"/>
 </define>
 
 
@@ -47,13 +52,13 @@
 <detector
   id="ForwardRICH_ID"
   name="DRICH"
-  type="ecce_DRICH"
+  type="epic_DRICH"
   readout="DRICHHits"
   gas="C2F6_DRICH"
   material="Aluminum"
   vis_vessel="DRICH_vessel_vis"
   vis_gas="DRICH_gas_vis"
-  debug_optics="DRICH_debug_optics"
+  irt_filename="irt-drich.root"
   >
 
 
@@ -98,14 +103,12 @@
 - dimensions:
   - `frontplane`: front of the aerogel, w.r.t. front plane of the vessel envelope
   - `rmin` and `rmax`: inner and outer radius (at the front plane; radial bounds are conical)
-  - `phiw`: azimuthal width of wedge
   - `thickness`: radiator thickness, defined separately for aerogel and filter
   - `pitch`: controls the angle of the radiator (0=vertical)
 </documentation>
 <radiator
   rmin="DRICH_rmin0 + DRICH_wall_thickness + 0.2*cm"
   rmax="DRICH_rmax0 - DRICH_wall_thickness - 0.2*cm"
-  phiw="60*degree"
   frontplane="DRICH_window_thickness + 0.5*DRICH_aerogel_thickness"
   pitch="0*degree"
   >
@@ -138,21 +141,18 @@
     - `focus_tune_z` and `focus_tune_x` will move the focal region, with respect
       to the sensor sphere center (i.e., set both to zero for focus at the sensor sphere center
       (ignoring spherical aberrations effects))
-- other settings:
-  - `debug`: set to 1 so draw reference sphere instead, view with y-clipping
 </documentation>
 <mirror
   material="Acrylic_DRICH"
   surface="MirrorSurface_DRICH"
   vis="DRICH_mirror_vis"
-  backplane="DRICH_window_thickness + 0.71*cm"
+  backplane="DRICH_window_thickness + 2.0*cm"
   rmin="DRICH_rmin1 + DRICH_wall_thickness - 1.0*cm"
   rmax="DRICH_rmax2 - DRICH_wall_thickness - 3.0*cm"
   phiw="59.5*degree"
   thickness="0.2*cm"
-  focus_tune_x="69.78*cm"
-  focus_tune_z="51.45*cm"
-  debug="DRICH_debug_mirror"
+  focus_tune_x="-5.0*cm"
+  focus_tune_z="0.0*cm"
   />
 
 <!-- /detectors/detector/sensors -->
@@ -198,8 +198,6 @@
     - `centerx` and `centerz`: sphere center, defined w.r.t. vessel front plane,
       for the sector on +x axis
     - `radius`: radius of the sensor sphere
-  - other settings:
-    - `debug`: set to 1 so draw reference sphere instead, view with y-clipping
 - sensors will be limited to a patch of the sphere
   - patch dimensions:
     - `phiw`: defines half the angle between the azimuthal boundaries
@@ -207,16 +205,15 @@
     - `zmin`: z-plane cut
 </documentation>
 <sphere
-  centerz="-168.07*cm + DRICH_SnoutLength + (DRICH_Length-DRICH_SnoutLength)/2.0"
-  centerx="124.98*cm"
-  radius="140*cm"
-  debug="DRICH_debug_sensors"
+  centerz="-50.0*cm"
+  centerx="180.0*cm"
+  radius="100.0*cm"
   />
 <sphericalpatch
-  phiw="14*degree"
+  phiw="18*degree"
   rmin="DRICH_rmax1 + 2.0*cm"
   rmax="DRICH_rmax2 - 5.0*cm"
-  zmin="DRICH_SnoutLength + 3.0*cm"
+  zmin="DRICH_SnoutLength + 5.0*cm"
   />
 
 

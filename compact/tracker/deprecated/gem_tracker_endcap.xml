@@ -1,0 +1,230 @@
+<lccdd>
+
+  <comment> Endcap Tracker for Acadia  </comment>
+
+  <define>
+    <constant name="GEMTrackerEndcapP_thickness"      value="min(10.0*cm,ForwardTrackingRegion_length)" />
+    <constant name="GEMTrackerEndcapN_thickness"      value="min(10.0*cm,BackwardTrackingRegion_length)" />
+    <constant name="GEMTrackerEndcapP_zmin"           value="ForwardTrackingRegion_zmin"/>
+    <constant name="GEMTrackerEndcapN_zmin"           value="BackwardTrackingRegion_zmin"/>
+    <constant name="GEMTrackerEndcapP_rmin"           value="19*cm" />
+    <constant name="GEMTrackerEndcapN_rmin"           value="10*cm" />
+    <constant name="GEMTrackerEndcapP_rmax"           value="200*cm" />
+    <constant name="GEMTrackerEndcapN_rmax"           value="BackwardPIDRegion_rmax" />
+    <constant name="GEMTrackerEndcapOpeningAngle"     value="30.4*degree"/>
+    <constant name="GEMTrackerEndcap_dz"              value="15*mm" />
+    <comment>
+      ____X2____
+      \        /
+       \      /    Y (=z for the trd)
+        \_X1_/
+    </comment>
+    <constant name="GEMTrackerEndcapP_x1"          value="2.0*GEMTrackerEndcapP_rmin*sin(GEMTrackerEndcapOpeningAngle/2.0)"/>
+    <constant name="GEMTrackerEndcapP_x2"          value="2.0*GEMTrackerEndcapP_rmax*sin(GEMTrackerEndcapOpeningAngle/2.0)"/>
+    <constant name="GEMTrackerEndcapP_y"           value="GEMTrackerEndcapP_rmax*cos(GEMTrackerEndcapOpeningAngle/2.0) - GEMTrackerEndcapP_rmin"/>
+    <constant name="GEMTrackerEndcapN_x1"          value="2.0*GEMTrackerEndcapN_rmin*sin(GEMTrackerEndcapOpeningAngle/2.0)"/>
+    <constant name="GEMTrackerEndcapN_x2"          value="2.0*GEMTrackerEndcapN_rmax*sin(GEMTrackerEndcapOpeningAngle/2.0)"/>
+    <constant name="GEMTrackerEndcapN_y"           value="GEMTrackerEndcapN_rmax*cos(GEMTrackerEndcapOpeningAngle/2.0) - GEMTrackerEndcapN_rmin"/>
+
+    <comment>
+              Needs implimentation:
+	      Carbon fiber support ring and spokes
+              Initial preliminary details can be found here: https://www.dropbox.com/s/grt9p8feqlsh52f/GEM-RD-GEMWheel.pdf?dl=0
+              This design is still very much preliminary
+
+      // Frame parameters accoring to Kondo's sbsCrossSection.pdf file),
+      //frame thickness is from 1*3mm (drift gap) + 5*2mm frames
+    </comment>
+
+    <constant name="GEMTrackerEndcapFrame_thickness"     value="13.0 * mm"/>
+    <constant name="GEMTrackerEndcapFrameBotEdge_width"  value="10.0 * mm"/>
+    <constant name="GEMTrackerEndcapFrameTopEdge_width"  value="15.0 * mm"/>
+    <constant name="GEMTrackerEndcapFrameSideEdge_width" value=" 8.0 * mm"/>
+    <comment> Account for the fact that GEMs have holes, so they are not solid volumes </comment>
+    <constant name="GEMAreaFactor" value="0.80" />
+    <comment>
+      From https://github.com/eic/EicToyModel/blob/master/source/eicroot/GEMGeoParData.cxx
+
+      // FIXME: put aluminum layer later as well),
+      mEntranceWindowMaterial     ( "GEMKapton"),
+      mEntranceWindowThickness    (   50.0 * etm::um),
+
+      // Use evaristo.pdf p.10 for the foil parameters:
+      //  - drift foil    : 50um kapton + 3um copper)
+      //  - GEM foil      : 30um kapton + 3um copper (80% area fraction))
+      //  - readout foils : 30um kapton + 3um copper total)
+      mDriftFoilKaptonThickness   (   50.0 * etm::um),
+      mDriftFoilCopperThickness   (    3.0 * etm::um),
+      mGEMFoilAreaFraction        (   0.80),
+      mGEMFoilKaptonThickness     (   30.0 * etm::um),
+      mGEMFoilCopperThickness     (    3.0 * etm::um),
+
+      mReadoutG10Thickness        (    0.0 * etm::mm),
+      mReadoutKaptonThickness     (   30.0 * etm::um),
+      mReadoutCopperThickness     (    3.0 * etm::um),
+
+      // 3mm thick Nomex honeycomb for SBS GEMs),
+      mReadoutSupportMaterial     ( "GEMNomex"),
+      mReadoutSupportThickness    (    3.0 * etm::mm),
+
+      mEntranceRegionLength       (    3.0 * etm::mm),
+      mDriftRegionLength          (    3.0 * etm::mm),
+      // Assume triple GEM layout),
+      mFirstTransferRegionLength  (    2.0 * etm::mm),
+      mSecondTransferRegionLength (    2.0 * etm::mm),
+      mInductionRegionLength      (    2.0 * etm::mm)
+    </comment>
+  </define>
+
+  <limits>
+  </limits>
+
+  <regions>
+  </regions>
+
+  <display>
+  </display>
+
+  <detectors>
+    <detector
+      id="TrackerEndcapP_3_ID"
+      name="GEMTrackerEndcapP"
+      type="epic_GEMTrackerEndcap"
+      readout="GEMTrackerEndcapHits"
+      vis="TrackerVis"
+      reflect="false">
+      <module name="GEMModule1" vis="TrackerLayerVis">
+        <trd x1="GEMTrackerEndcapP_x1/2.0" x2="GEMTrackerEndcapP_x2/2.0" z="GEMTrackerEndcapP_y/2"/>
+        <comment>
+          Frame disabled as it gives issue with the ACTS geometry conversion
+        <frame material="G10" thickness="GEMTrackerEndcapFrame_thickness" vis="TrackerSupportVis">
+          <position x="0"  y="0" z="0" />
+          <trd x1="GEMTrackerEndcapP_x1/2.0 - GEMTrackerEndcapFrameSideEdge_width/cos(GEMTrackerEndcapOpeningAngle)
+                                              + GEMTrackerEndcapFrameBotEdge_width*tan(GEMTrackerEndcapOpeningAngle)"
+               x2="GEMTrackerEndcapP_x2/2.0 - GEMTrackerEndcapFrameSideEdge_width/cos(GEMTrackerEndcapOpeningAngle)
+                                              - GEMTrackerEndcapFrameTopEdge_width*tan(GEMTrackerEndcapOpeningAngle)"
+               z="GEMTrackerEndcapP_y/2    - (GEMTrackerEndcapFrameBotEdge_width +GEMTrackerEndcapFrameTopEdge_width)/2.0 ">
+            <position x="0" y="0" z="0" />
+          </trd>
+        </frame>
+        </comment>
+        <comment> Going from HV side to readout side</comment>
+	      <module_component thickness="25.0*um" material="Mylar" name="entrance_window" vis="TrackerLayerVis"/>
+	      <module_component thickness=" 2.0*mm" material="Ar10CO2" name="entrance_region" />
+        <module_component thickness="50.0*um" material="Kapton" name="cathode_foil"/>
+	      <module_component thickness=" 5.0*um" material="Copper" name="cathode_cu"/>
+        <module_component thickness=" 3.0*mm" material="Ar10CO2" sensitive="true" name="drift_region" vis="AnlProcess_Blue"/>
+        <module_component thickness="GEMAreaFactor*50.0*um" material="Kapton"  name="gem_foil_1"/>
+        <module_component thickness="GEMAreaFactor*10.0*um" material="Copper"  name="gem_foil_1_cu"/>
+        <module_component thickness=" 2.0*mm" material="Ar10CO2" name="transfer_region_I"/>
+        <module_component thickness="GEMAreaFactor*50.0*um" material="Kapton"  name="gem_foil_2"/>
+        <module_component thickness="GEMAreaFactor*10.0*um" material="Copper"  name="gem_foil_2_cu"/>
+        <module_component thickness=" 2.0*mm" material="Ar10CO2" name="transfer_region_II"/>
+        <module_component thickness="GEMAreaFactor*50.0*um" material="Kapton"  name="gem_foil_3"/>
+        <module_component thickness="GEMAreaFactor*10.0*um" material="Copper"  name="gem_foil_3_cu"/>
+        <module_component thickness=" 2.0*mm" material="Ar10CO2" name="induction_region"/>
+        <module_component thickness="50.0*um" material="Kapton"  name="readout_foil"/>
+	      <module_component thickness=" 5.0*um" material="Copper"  name="readout_cu"/>
+	      <module_component thickness=" 2.0*mm" material="Ar10CO2" name="exit_region"/>
+        <module_component thickness="25.0*um" material="Mylar" name="exit_window" vis="TrackerLayerVis"/>
+      </module>
+      <module name="GEMSupportSpokes" vis="TrackerSupportVis">
+        <trd x1="GEMTrackerEndcapFrameSideEdge_width" x2="GEMTrackerEndcapFrameSideEdge_width" z="GEMTrackerEndcapP_y/2"/>
+        <module_component thickness="1.0*mm" material="Mylar" vis="TrackerSupportVis"/>
+      </module>
+      <layer id="1" >
+        <envelope vis="TrackerVis"
+          rmin = "GEMTrackerEndcapP_rmin"
+          rmax = "GEMTrackerEndcapP_rmax"
+          length="GEMTrackerEndcapP_thickness"
+          zstart="GEMTrackerEndcapP_zmin" />
+        <layer_material surface="representing" binning="binPhi,binR" bins0="40*12" bins1="1024"/>
+        <ring vis="TrackerVis" module="GEMModule1"
+          r="GEMTrackerEndcapP_rmin+GEMTrackerEndcapP_y/2.0"
+          zstart="0"
+          nmodules="12" dz="GEMTrackerEndcap_dz" />
+        <ring vis="AnlBlue" phi0="GEMTrackerEndcapOpeningAngle/2."  module="GEMSupportSpokes"
+          r="GEMTrackerEndcapP_rmin+GEMTrackerEndcapP_y/2.0"
+          zstart="0"
+          nmodules="12" dz="0*mm" />
+      </layer>
+    </detector>
+
+    <detector
+      id="TrackerEndcapN_3_ID"
+      name="GEMTrackerEndcapN"
+      type="epic_GEMTrackerEndcap"
+      readout="GEMTrackerEndcapHits"
+      vis="TrackerVis"
+      reflect="true">
+      <module name="GEMModule1" vis="TrackerLayerVis">
+        <trd x1="GEMTrackerEndcapN_x1/2.0" x2="GEMTrackerEndcapN_x2/2.0" z="GEMTrackerEndcapN_y/2"/>
+        <comment>
+          Frame disabled as it gives issue with the ACTS geometry conversion
+        <frame material="G10" thickness="GEMTrackerEndcapFrame_thickness" vis="TrackerSupportVis">
+          <position x="0"  y="0" z="0" />
+          <trd x1="GEMTrackerEndcapN_x1/2.0 - GEMTrackerEndcapFrameSideEdge_width/cos(GEMTrackerEndcapOpeningAngle)
+                                              + GEMTrackerEndcapFrameBotEdge_width*tan(GEMTrackerEndcapOpeningAngle)"
+               x2="GEMTrackerEndcapN_x2/2.0 - GEMTrackerEndcapFrameSideEdge_width/cos(GEMTrackerEndcapOpeningAngle)
+                                              - GEMTrackerEndcapFrameTopEdge_width*tan(GEMTrackerEndcapOpeningAngle)"
+               z="GEMTrackerEndcapN_y/2    - (GEMTrackerEndcapFrameBotEdge_width +GEMTrackerEndcapFrameTopEdge_width)/2.0 ">
+            <position x="0" y="0" z="0" />
+          </trd>
+        </frame>
+        </comment>
+        <comment> Going from HV side to readout side</comment>
+        <module_component thickness="25.0*um" material="Mylar" name="entrance_window" vis="TrackerLayerVis"/>
+	      <module_component thickness=" 2.0*mm" material="Ar10CO2" name="entrance_region" />
+        <module_component thickness="50.0*um" material="Kapton" name="cathode_foil"/>
+	      <module_component thickness=" 5.0*um" material="Copper" name="cathode_cu"/>
+        <module_component thickness=" 3.0*mm" material="Ar10CO2" sensitive="true" name="drift_region" vis="AnlProcess_Blue"/>
+        <module_component thickness="GEMAreaFactor*50.0*um" material="Kapton"  name="gem_foil_1"/>
+        <module_component thickness="GEMAreaFactor*10.0*um" material="Copper"  name="gem_foil_1_cu"/>
+        <module_component thickness=" 2.0*mm" material="Ar10CO2" name="transfer_region_I"/>
+        <module_component thickness="GEMAreaFactor*50.0*um" material="Kapton"  name="gem_foil_2"/>
+        <module_component thickness="GEMAreaFactor*10.0*um" material="Copper"  name="gem_foil_2_cu"/>
+        <module_component thickness=" 2.0*mm" material="Ar10CO2" name="transfer_region_II"/>
+        <module_component thickness="GEMAreaFactor*50.0*um" material="Kapton"  name="gem_foil_3"/>
+        <module_component thickness="GEMAreaFactor*10.0*um" material="Copper"  name="gem_foil_3_cu"/>
+        <module_component thickness=" 2.0*mm" material="Ar10CO2" name="induction_region"/>
+        <module_component thickness="50.0*um" material="Kapton"  name="readout_foil"/>
+	      <module_component thickness=" 5.0*um" material="Copper"  name="readout_cu"/>
+	      <module_component thickness=" 2.0*mm" material="Ar10CO2" name="exit_region"/>
+        <module_component thickness="25.0*um" material="Mylar" name="exit_window" vis="TrackerLayerVis"/>
+      </module>
+      <module name="GEMSupportSpokes" vis="TrackerSupportVis">
+        <trd x1="GEMTrackerEndcapFrameSideEdge_width" x2="GEMTrackerEndcapFrameSideEdge_width" z="GEMTrackerEndcapN_y/2"/>
+        <module_component thickness="1.0*mm" material="Mylar" vis="TrackerSupportVis"/>
+      </module>
+      <layer id="1" >
+        <envelope vis="TrackerVis"
+          rmin = "GEMTrackerEndcapN_rmin"
+          rmax = "GEMTrackerEndcapN_rmax"
+          length="GEMTrackerEndcapN_thickness"
+          zstart="GEMTrackerEndcapN_zmin" />
+        <layer_material surface="representing" binning="binPhi,binR" bins0="40*12" bins1="1024"/>
+        <ring vis="TrackerVis" module="GEMModule1"
+          r="GEMTrackerEndcapN_rmin+GEMTrackerEndcapN_y/2.0"
+          zstart="0.1"
+          nmodules="12" dz="GEMTrackerEndcap_dz" />
+        <ring vis="AnlBlue" phi0="GEMTrackerEndcapOpeningAngle/2."  module="GEMSupportSpokes"
+          r="GEMTrackerEndcapN_rmin+GEMTrackerEndcapN_y/2.0"
+          zstart="0.1"
+          nmodules="12" dz="0*mm" />
+      </layer>
+    </detector>
+  </detectors>
+
+  <readouts>
+    <readout name="GEMTrackerEndcapHits">
+      <segmentation type="CartesianGridXZ" grid_size_x="50*um" grid_size_z="250*um" />
+      <id>system:8,layer:4,module:12,sensor:2,x:32:-16,z:-16</id>
+    </readout>
+  </readouts>
+
+  <plugins>
+  </plugins>
+
+  <fields>
+  </fields>
+</lccdd>

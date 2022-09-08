@@ -136,8 +136,8 @@ static Ref_t createDetector(Detector& description, xml::Handle_t e, SensitiveDet
     z_placement += aerogel_length / 2.0;
 
     // optical surfaces
-    auto aerogel_surf =
-        surfMgr.opticalSurface(dd4hep::getAttrOrDefault(x_aerogel, _Unicode(surface), "MRICH_AerogelOpticalSurface"));
+    auto aerogel_surf = surfMgr.opticalSurface(
+        dd4hep::getAttrOrDefault<std::string>(x_aerogel, _Unicode(surface), "MRICH_AerogelOpticalSurface"));
     SkinSurface skin_surf(description, aerogel_de, Form("MRICH_aerogel_skin_surface_%d", 1), aerogel_surf, aerogel_vol);
     skin_surf.isValid();
   }
@@ -204,8 +204,8 @@ static Ref_t createDetector(Detector& description, xml::Handle_t e, SensitiveDet
     z_placement += lens_thickness / 2.0;
 
     // optical surfaces
-    auto lens_surf =
-        surfMgr.opticalSurface(dd4hep::getAttrOrDefault(x_lens, _Unicode(surface), "MRICH_LensOpticalSurface"));
+    auto lens_surf = surfMgr.opticalSurface(
+        dd4hep::getAttrOrDefault<std::string>(x_lens, _Unicode(surface), "MRICH_LensOpticalSurface"));
     SkinSurface skin_surf(description, lens_de, Form("MRichFresnelLens_skin_surface_%d", 1), lens_surf, lens_vol);
     skin_surf.isValid();
   }
@@ -243,8 +243,8 @@ static Ref_t createDetector(Detector& description, xml::Handle_t e, SensitiveDet
     z_placement += mirror_length / 2.0;
 
     // optical surfaces
-    auto mirror_surf =
-        surfMgr.opticalSurface(dd4hep::getAttrOrDefault(x_mirror, _Unicode(surface), "MRICH_MirrorOpticalSurface"));
+    auto mirror_surf = surfMgr.opticalSurface(
+        dd4hep::getAttrOrDefault<std::string>(x_mirror, _Unicode(surface), "MRICH_MirrorOpticalSurface"));
     SkinSurface skin_surf(description, mirror_de, Form("MRICH_mirror_skin_surface_%d", 1), mirror_surf, mirror_vol);
     skin_surf.isValid();
   }
@@ -323,7 +323,7 @@ static Ref_t createDetector(Detector& description, xml::Handle_t e, SensitiveDet
   // end module
 
   // place modules in the sectors (disk)
-  auto points = ecce::geo::fillSquares({0., 0.}, mod_width, rmin, rmax);
+  auto points = epic::geo::fillSquares({0., 0.}, mod_width, rmin, rmax);
 
   // mod_name = ...
   auto mod_v = modules[mod_name];
@@ -353,17 +353,20 @@ static Ref_t createDetector(Detector& description, xml::Handle_t e, SensitiveDet
 
   // place modules
   int i_mod = 1; // starts at 1
-  for (auto& p : positions) {
+  for (auto& position : positions) {
 
     // get positions in one quadrant
-    double x  = std::get<0>(p);
-    double y  = std::get<1>(p);
-    double z0 = std::get<2>(p);
+    double position_x  = std::get<0>(position);
+    double position_y  = std::get<1>(position);
+    double position_z0 = std::get<2>(position);
 
-    // and place in all quadrants (intentional shadowing)
-    for (auto& p : decltype(positions){{x, y, z0}, {y, -x, z0}, {-x, -y, z0}, {-y, x, z0}}) {
+    // and place in all quadrants
+    for (auto& p : decltype(positions){{position_x, position_y, position_z0},
+                                       {position_y, -position_x, position_z0},
+                                       {-position_x, -position_y, position_z0},
+                                       {-position_y, position_x, position_z0}}) {
 
-      // get positions (intentional shadowing)
+      // get positions
       double x  = std::get<0>(p);
       double y  = std::get<1>(p);
       double z0 = std::get<2>(p);
@@ -456,4 +459,7 @@ static Ref_t createDetector(Detector& description, xml::Handle_t e, SensitiveDet
 // }
 
 // clang-format off
+#ifdef EPIC_ECCE_LEGACY_COMPAT
 DECLARE_DETELEMENT(ecce_MRICH, createDetector)
+#endif
+DECLARE_DETELEMENT(epic_MRICH, createDetector)

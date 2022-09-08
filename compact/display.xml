@@ -10,19 +10,19 @@
     <comment>
       Tracking Visualizations
     </comment>
-    <vis name="TrackerVis"        ref="AnlRed" />
+    <vis name="TrackerVis"        ref="AnlGold" />
     <vis name="TrackerSupportVis" ref="AnlBlue"         visible="true"  showDaughters="true" />
-    <vis name="TrackerServiceVis" ref="AnlGold"         showDaughters="false" />
-    <vis name="TrackerLayerVis"   ref="AnlGray"         visible="true"  showDaughters="true" />
+    <vis name="TrackerServiceVis" ref="AnlViolet"         showDaughters="false" />
+    <vis name="TrackerLayerVis"   ref="AnlGold"         visible="true"  showDaughters="true" />
     <vis name="TrackerModuleVis"  ref="TrackerLayerVis" visible="true"  showDaughters="false" />
     <vis name="TrackerMPGDVis"    ref="AnlRed"          visible="true"  showDaughters="false" />
     <comment> Visualization for Barrel MMGAS (apply to layers) and GEM endcap (apply to modules) </comment>
     <vis name="TrackerGEMModuleVis"  ref="TrackerMPGDVis"  visible="true"  showDaughters="false" />
     <vis name="TrackerMMGASLayerVis" ref="TrackerMPGDVis"  visible="true"  showDaughters="false" />
 
+    <vis name="VertexLayerVis"   ref="AnlGold"         visible="true"  showDaughters="true" />
     <vis name="VertexSupportLayerVis" ref="AnlBlue"         visible="true"  showDaughters="false" />
     <vis name="VertexSupportVis"      ref="VertexSupportLayerVis" visible="true"  showDaughters="true" />
-    <vis name="VertexLayerVis"   ref="AnlGray"         visible="true"  showDaughters="true" />
     <vis name="VertexModuleVis"  ref="TrackerLayerVis" visible="true"  showDaughters="false" />
 
     <vis name="TOFVis"            ref="AnlTeal"             visible="true"  showDaughters="true"/>
@@ -145,8 +145,6 @@
     <vis name="MRICH_mirror_vis"  ref="AnlGray" showDaughters="true" visible="true" />
 
     <vis name="RICHServiceVis"  ref="AnlGray" showDaughters="true" visible="true" />
-
-  </display>
 
     <comment>
       Deprecated colors.

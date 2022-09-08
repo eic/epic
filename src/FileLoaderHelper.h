@@ -50,7 +50,7 @@ inline void EnsureFileFromURLExists(std::string url, std::string file, std::stri
     if (fs::create_directories(parent_path) == false) {
       printout(ERROR, "FileLoader", "parent path " + parent_path.string() + " cannot be created");
       printout(ERROR, "FileLoader", "check permissions and retry");
-      std::quick_exit(1);
+      std::_Exit(EXIT_FAILURE);
     }
   }
 
@@ -82,7 +82,7 @@ inline void EnsureFileFromURLExists(std::string url, std::string file, std::stri
             printout(ERROR, "FileLoader",
                      "unable to link from " + hash_path.string() + " to " + cache_hash_path.string());
             printout(ERROR, "FileLoader", "check permissions and retry");
-            std::quick_exit(1);
+            std::_Exit(EXIT_FAILURE);
           }
           break;
         }
@@ -101,7 +101,7 @@ inline void EnsureFileFromURLExists(std::string url, std::string file, std::stri
       printout(ERROR, "FileLoader", "value returned was ", ret);
       printout(ERROR, "FileLoader", "check command and retry");
       printout(ERROR, "FileLoader", "hint: allow insecure connections with -k");
-      std::quick_exit(1);
+      std::_Exit(EXIT_FAILURE);
     }
   }
 
@@ -118,14 +118,14 @@ inline void EnsureFileFromURLExists(std::string url, std::string file, std::stri
         if (fs::remove(file_path) == false) {
           printout(ERROR, "FileLoader", "unable to remove symlink " + file_path.string());
           printout(ERROR, "FileLoader", "check permissions or remove manually");
-          std::quick_exit(1);
+          std::_Exit(EXIT_FAILURE);
         }
       }
     } else {
       // file exists but not symlink
       printout(ERROR, "FileLoader", "will not remove actual file " + file_path.string());
       printout(ERROR, "FileLoader", "check content, remove manually, and retry");
-      std::quick_exit(1);
+      std::_Exit(EXIT_FAILURE);
     }
   }
   // file_path now does not exist
@@ -137,6 +137,6 @@ inline void EnsureFileFromURLExists(std::string url, std::string file, std::stri
   } catch (const fs::filesystem_error&) {
     printout(ERROR, "FileLoader", "unable to link from " + file_path.string() + " to " + hash_path.string());
     printout(ERROR, "FileLoader", "check permissions and retry");
-    std::quick_exit(1);
+    std::_Exit(EXIT_FAILURE);
   }
 }

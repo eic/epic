@@ -65,7 +65,6 @@ common:detector:
   needs:
     - common:setup
   script:
-    #- source .local/bin/env.sh && build_detector.sh
     - build_detector.sh
     - mkdir -p results
     - mkdir -p config
@@ -122,45 +121,28 @@ dump_geometry:
   needs:
     - common:detector
   script:
-    - echo "dumping geometry"
-    ## DEBUG
-    - echo "LD_LIBRARY_PATH - $LD_LIBRARY_PATH"
-    - echo "PATH - $PATH"
-    - print_env.sh
-    ## DEBUG
     - mkdir -p geo
     - |
-      sed -i -e '/<detectors>/,/<\/detectors>/d' ${DETECTOR_PATH}/compact/tracking_config*.xml
-      mv ${DETECTOR_PATH}/compact/display_geoviewer.xml ${DETECTOR_PATH}/compact/display.xml
-      for xml in ${DETECTOR_PATH}/compact/subsystem_views/*.xml; do
-        echo $xml
-        geo_name=`basename $xml .xml`_geo.root
-        cp $xml ${DETECTOR_PATH}/geo.xml
-        dd_web_display --output geo/${geo_name} ${DETECTOR_PATH}/geo.xml
+      geo_base_file="geo/detector_geo"
+      dd_web_display --output ${geo_base_file}.root ${DETECTOR_PATH}/${CI_PROJECT_NAME}.xml
+      for yml in ${DETECTOR_PATH}/configurations/*.yml; do
+        name=`basename $yml .yml`
+        xml_file=${CI_PROJECT_NAME}_${name}.xml
+        geo_file=${geo_base_file}_${name}.root
+        dd_web_display --output ${geo_file} ${DETECTOR_PATH}/${xml_file}
       done
-    ## Lower-resolution display of the pfRICH sensors for global views
-    - sed -i 's/_default"\/>/_lores"\/>/' ${DETECTOR_PATH}/compact/pfrich.xml
-    ## full geo with downstream beamline
-    - dd_web_display --output geo/detector_geo_full.root ${DETECTOR_PATH}/ecce.xml
-    ## only central detector geo
-    - sed -i '/forward_ion_beamline/d' ${DETECTOR_PATH}/ecce.xml
-    - sed -i '/beampipe_hadron_B0/d' ${DETECTOR_PATH}/ecce.xml
-    - sed -i '/B0_/d' ${DETECTOR_PATH}/ecce.xml
-    - sed -i '/far_forward_offM/d' ${DETECTOR_PATH}/ecce.xml
-    - sed -i '/far_forward_detectors/d' ${DETECTOR_PATH}/ecce.xml
-    - sed -i '/roman_pots/d' ${DETECTOR_PATH}/ecce.xml
-    - sed -i '/inner_vacuum_FF_magnets/d' ${DETECTOR_PATH}/ecce.xml
-    - dd_web_display --output geo/detector_geo.root ${DETECTOR_PATH}/ecce.xml
-    ## print some useful output
     - |
-      echo "Geometry viewer at:"
-      echo "https://eic.phy.anl.gov/geoviewer/index.htm?file=https://eicweb.phy.anl.gov/EIC/detectors/ecce/-/jobs/${CI_JOB_ID}/artifacts/raw/geo/detector_geo_full.root?job=dump_geometry&item=default;1&opt=clipx;clipy;transp30;zoom75;ROTY290;ROTZ350;trz0;trr0;ctrl;all"
-      echo " - Central detector view at: "
-      echo "https://eic.phy.anl.gov/geoviewer/index.htm?file=https://eicweb.phy.anl.gov/EIC/detectors/ecce/-/jobs/${CI_JOB_ID}/artifacts/raw/geo/detector_geo.root?job=dump_geometry&item=default;1&opt=clipx;clipy;transp30;zoom120;ROTY320;ROTZ340;trz0;trr0;ctrl;all"
-      for xml in ${DETECTOR_PATH}/compact/subsystem_views/*.xml; do
-        geo_name=`basename $xml .xml`_geo.root
-        echo " - Subsystem view for `basename $xml .xml` at:"
-        echo "   https://eic.phy.anl.gov/geoviewer/index.htm?file=https://eicweb.phy.anl.gov/EIC/detectors/ecce/-/jobs/${CI_JOB_ID}/artifacts/raw/geo/${geo_name}?job=dump_geometry&item=default;1&opt=clipx;clipy;transp30;zoom75;ROTY320;ROTZ340;trz0;trr0;ctrl;all"
+      geoviewer="https://eic.phy.anl.gov/geoviewer/index.htm"
+      geo_base_url="${CI_PROJECT_URL}/-/jobs/${CI_JOB_ID}/artifacts/raw/${geo_base_file}"
+      geo_suffix="?job=${CI_JOB_NAME}&item=default;1&opt=clipx;clipy;transp30;zoom75;ROTY320;ROTZ340;trz0;trr0;ctrl;all"
+      echo " - Default subsystem view at:"
+      echo "   ${geoviewer}?file=${geo_base_url}.root${geo_suffix}"
+      for yml in ${DETECTOR_PATH}/configurations/*.yml; do
+        name=`basename $yml .yml`
+        xml_file=${CI_PROJECT_NAME}_${name}.xml
+        geo_url=${geo_base_url}_${name}.root
+        echo " - Subsystem view for ${xml_file} at:"
+        echo "   ${geoviewer}?file=${geo_url}${geo_suffix}"
       done
 
 detector_documentation:
@@ -205,20 +187,15 @@ dump_constants:
   needs:
     - ["common:detector"]
   script:
-    - npdet_info dump ${DETECTOR_PATH}/ecce.xml  | tee doc/constants.out
+    - npdet_info dump ${DETECTOR_PATH}/ecce.xml | tee doc/constants.out
 
 dump_parameter_table:
   stage: test
   needs:
     - ["common:detector"]
   script:
-    # discard lines starting with spaces and require '='
-    # to prevent dangling long expressions with newlines
-    - npdet_info dump --all ${DETECTOR_PATH}/ecce.xml | grep -v '^\s' | grep '=' | cut -d= -f1-2 | tee doc/constants.toml
-    - pip install jinja2-cli toml
-    - jinja2 --strict --outfile doc/DetectorParameterTable.csv
-      templates/DetectorParameterTable.csv.jinja2
-      doc/constants.toml
+    - npdet_info dump ${DETECTOR_PATH}/ecce.xml | grep -v '^\s' | grep '=' | cut -d= -f1-2 | tee doc/constants.toml
+    - python bin/make_detector_parameter_table
 
 overlap_check_tgeo:
   stage: test
@@ -254,8 +231,7 @@ overlap_check_geant4:inner_detector:
   needs:
     - ["common:detector"]
   script:
-    - cp ${DETECTOR_PATH}/compact/subsystem_views/inner_detector.xml ${DETECTOR_PATH}/inner_detector.xml
-    - python scripts/checkOverlaps.py -c ${DETECTOR_PATH}/inner_detector.xml | tee doc/overlap_check_geant4.out
+    - python scripts/checkOverlaps.py -c ${DETECTOR_PATH}/ecce_inner_detector.xml | tee doc/overlap_check_geant4.out
     - echo "$(cat doc/overlap_check_geant4.out | grep GeomVol1002 | wc -l) overlaps..."
     - if [[ "$(cat doc/overlap_check_geant4.out | grep GeomVol1002 | wc -l)" -gt "0" ]] ; then echo "Overlaps exist!" && false ; fi
 
@@ -296,3 +272,8 @@ benchmarks:detector:
   needs:
     - overlap_check_geant4:full_fast
     - common:detector
+  parallel:
+    matrix:
+      - JUGGLER_DETECTOR_CONFIG:
+        - "${JUGGLER_DETECTOR}"
+        - "${JUGGLER_DETECTOR}_imaging"

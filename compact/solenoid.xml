@@ -1,4 +1,3 @@
-
 <?xml version="1.0" encoding="UTF-8"?>
 <lccdd>
   <define>
@@ -120,7 +119,7 @@
     <detector
       id="Solenoid_ID"
       name="SolenoidBarrel"
-      type="ecce_Solenoid"
+      type="epic_Solenoid"
       insideTrackingVolume="false">
       <position x="0" y="0" z="Solenoid_offset"/>
       <dimensions rmin="Solenoid_rmin" rmax="Solenoid_rmax" length="Solenoid_length"/>
@@ -223,7 +222,7 @@
     <detector
       id="Solenoid_ID"
       name="SolenoidEndcapP"
-      type="ecce_SolenoidEndcap"
+      type="epic_SolenoidEndcap"
       insideTrackingVolume="false"
       reflect="false"
       vis="SolenoidCryostatVis">
@@ -275,7 +274,7 @@
     <detector
       id="Solenoid_ID"
       name="SolenoidEndcapN"
-      type="ecce_SolenoidEndcap"
+      type="epic_SolenoidEndcap"
       insideTrackingVolume="false"
       reflect="true"
       vis="SolenoidCryostatVis">
@@ -327,7 +326,7 @@
   </detectors>
 
   <fields>
-    <field type="ecce_FieldMapBrBz" name="GlobalSolenoid" field_type="magnetic"
+    <field type="epic_FieldMapBrBz" name="GlobalSolenoid" field_type="magnetic"
            field_map="fieldmaps/sPHENIX.2d.dat"
            url="https://eicweb.phy.anl.gov/EIC/detectors/ecce/uploads/f8d8ab9f8d8353a84862584bf1d2d27f/sPHENIX.2d.dat"
            scale="1.0">

@@ -419,8 +419,8 @@ Examples:
     </documentation>
 
     <constant name="CentralTrackingRegion_rmax"   value="715.0*mm" />
-    <constant name="CentralTrackingRegionP_zmax"  value="1600.0*mm" />
-    <constant name="CentralTrackingRegionN_zmax"  value="1350.0*mm" />
+    <constant name="CentralTrackingRegionP_zmax"  value="1730.0*mm" />
+    <constant name="CentralTrackingRegionN_zmax"  value="1474.7*mm" />
     <constant name="CentralTrackingRegion_length" value="CentralTrackingRegionP_zmax + CentralTrackingRegionN_zmax" />
     <comment>
       tan(theta) to determine rmin in the outer tracking region (due to tapered beampipe)
@@ -435,11 +435,12 @@ Examples:
 
     <comment> Global PID regions with suballocations for TOF and RICH detectors </comment>
     <constant name="ForwardPIDRegion_zmin"        value="CentralTrackingRegionP_zmax" />
-    <constant name="ForwardPIDRegion_length"      value="120.0*cm" />
+    <constant name="ForwardPIDRegion_length"      value="142.0*cm" />
+    <constant name="ForwardPIDRegion_rmax"        value="180.0*cm" />
 
     <comment> Forward TOF region currenlty empty for future upgrades </comment>
     <constant name="ForwardTOFRegion_zmin"        value="ForwardPIDRegion_zmin" />
-    <constant name="ForwardTOFRegion_length"      value="20.0*cm" />
+    <constant name="ForwardTOFRegion_length"      value="22.0*cm" />
     <constant name="ForwardTOFRegion_rmax"        value="CentralTrackingRegion_rmax" />
     <constant name="ForwardTOFRegion_tan"         value="CentralTrackingRegionP_tan" />
 
@@ -465,7 +466,7 @@ Examples:
 
     <comment> Note: PID has space for DIRC, ExtraSpace sits past the PID</comment>
     <constant name="BarrelPIDRegion_thickness"    value="7.0 * cm" />
-    <constant name="BarrelExtraSpace_thickness"   value="2.0 * cm" />
+    <constant name="BarrelExtraSpace_thickness"   value="5.0 * cm" />
 
     <documentation>
     ## Forward/backward tracking region behind the PID detectors
@@ -490,6 +491,11 @@ Service gaps in FW direction (before endcapP ECAL) and BW direction (before endc
     <constant name="ForwardServiceGap_length"     value="8.0*cm"/>
     <constant name="ForwardServiceGap_zmin"       value="ForwardPIDRegion_zmin + ForwardInnerEndcapRegion_length"/>
     <constant name="ForwardServiceGap_zmax"       value="ForwardServiceGap_zmin + ForwardServiceGap_length"/>
+
+    <comment> Radial service gap between dRICH and HcalBarrel </comment>
+    <constant name="ForwardServiceGap_thickness"  value="15.0*cm"/>
+    <constant name="ForwardServiceGap_rmin"       value="ForwardPIDRegion_rmax"/>
+    <constant name="ForwardServiceGap_rmax"       value="ForwardServiceGap_rmin + ForwardServiceGap_thickness"/>
 
     <constant name="BackwardServiceGap_length"    value="10.0 * cm"/>
     <constant name="BackwardServiceGap_zmin"      value="320.0 * cm"/> <!-- FIXME hardcoded -->
@@ -533,8 +539,8 @@ Service gaps in FW direction (before endcapP ECAL) and BW direction (before endc
   </documentation>
     <constant name="DIRCReadout_length"         value="30*cm"/>
     <constant name="DIRCForward_length"         value="0*cm"/>
-    <constant name="DIRCForward_zmax"           value="ForwardRICHRegion_zmin"/>
-    <constant name="DIRCBackward_zmax"          value="BackwardServiceGap_zmin"/>
+    <constant name="DIRCForward_zmax"           value="CentralTrackingRegionP_zmax"/>
+    <constant name="DIRCBackward_zmax"          value="287*cm"/>
     <constant name="DIRC_length"                value="DIRCForward_zmax + DIRCBackward_zmax"/>
     <constant name="DIRC_offset"                value="(DIRCForward_zmax - DIRCBackward_zmax)/2"/>
     <constant name="DIRC_rmin"                  value="CentralTrackingRegion_rmax"/>
@@ -557,7 +563,7 @@ Service gaps in FW direction (before endcapP ECAL) and BW direction (before endc
     <constant name="HcalEndcapN_rmin"     value="max((HcalEndcapN_zmin + HcalEndcapN_length) * tan(abs(CrossingAngle)) + 22.25 * mm, 11 * cm)"/>
 
     <constant name="HcalBarrel_thickness" value="88.0*cm"/> <!-- ref: ECCE proposal -->
-    <constant name="HcalBarrel_rmin"      value="182*cm"/> <!-- ref: ECCE proposal -->
+    <constant name="HcalBarrel_rmin"      value="ForwardServiceGap_rmax"/>
     <constant name="HcalBarrel_rmax"      value="HcalBarrel_rmin + HcalBarrel_thickness"/>
     <constant name="HcalBarrelForward_zmax"  value="ForwardServiceGap_zmin"/>
     <constant name="HcalBarrelBackward_zmax" value="BackwardServiceGap_zmin"/>

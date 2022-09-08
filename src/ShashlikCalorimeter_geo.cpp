@@ -67,7 +67,7 @@ std::tuple<Volume, int, double, double> build_shashlik(Detector& desc, xml::Coll
 {
   auto mod = plm.child(_Unicode(module));
   // a modular volume
-  std::string shape = dd4hep::getAttrOrDefault(mod, _Unicode(shape), "square");
+  std::string shape = dd4hep::getAttrOrDefault<std::string>(mod, _Unicode(shape), "square");
   std::transform(shape.begin(), shape.end(), shape.begin(), [](char c) { return std::tolower(c); });
   int nsides = 4;
   if (shape == "hexagon") {
@@ -84,7 +84,7 @@ std::tuple<Volume, int, double, double> build_shashlik(Detector& desc, xml::Coll
   // wrapper info
   PolyhedraRegular mpoly(nsides, 0., rmax, len);
   Volume           mvol("shashlik_module_vol", mpoly, desc.air());
-  mvol.setVisAttributes(desc.visAttributes(dd4hep::getAttrOrDefault(mod, _Unicode(vis), "GreenVis")));
+  mvol.setVisAttributes(desc.visAttributes(dd4hep::getAttrOrDefault<std::string>(mod, _Unicode(vis), "GreenVis")));
 
   double gap = 0.;
   Volume wvol("shashlik_wrapper_vol");
@@ -94,7 +94,7 @@ std::tuple<Volume, int, double, double> build_shashlik(Detector& desc, xml::Coll
     if (gap > 1e-6 * mm) {
       wvol.setSolid(PolyhedraRegular(nsides, 0., rmax + gap, len));
       wvol.setMaterial(desc.material(wrap.attr<std::string>(_Unicode(material))));
-      wvol.setVisAttributes(desc.visAttributes(dd4hep::getAttrOrDefault(wrap, _Unicode(vis), "WhiteVis")));
+      wvol.setVisAttributes(desc.visAttributes(dd4hep::getAttrOrDefault<std::string>(wrap, _Unicode(vis), "WhiteVis")));
       wvol.placeVolume(mvol, Position{0., 0., 0.});
     }
   }
@@ -121,14 +121,14 @@ std::tuple<Volume, int, double, double> build_shashlik(Detector& desc, xml::Coll
         PolyhedraRegular spoly(nsides, 0., rmax, sthick);
         Volume           svol(sname, spoly, desc.material(si.attr<std::string>(_Unicode(material))));
 
-        std::string issens = dd4hep::getAttrOrDefault(si, _Unicode(sensitive), "no");
+        std::string issens = dd4hep::getAttrOrDefault<std::string>(si, _Unicode(sensitive), "no");
         std::transform(issens.begin(), issens.end(), issens.begin(), [](char c) { return std::tolower(c); });
         if ((issens == "yes") || (issens == "y") || (issens == "true")) {
           svol.setSensitiveDetector(sens);
         }
-        svol.setAttributes(desc, dd4hep::getAttrOrDefault(si, _Unicode(region), ""),
-                           dd4hep::getAttrOrDefault(si, _Unicode(limits), ""),
-                           dd4hep::getAttrOrDefault(si, _Unicode(vis), "InvisibleNoDaughters"));
+        svol.setAttributes(desc, dd4hep::getAttrOrDefault<std::string>(si, _Unicode(region), ""),
+                           dd4hep::getAttrOrDefault<std::string>(si, _Unicode(limits), ""),
+                           dd4hep::getAttrOrDefault<std::string>(si, _Unicode(vis), "InvisibleNoDaughters"));
 
         // Slice placement.
         auto slicePV = lvol.placeVolume(svol, Position(0, 0, sz + sthick / 2.));
@@ -138,9 +138,9 @@ std::tuple<Volume, int, double, double> build_shashlik(Detector& desc, xml::Coll
       }
 
       // Set region, limitset, and vis of layer.
-      lvol.setAttributes(desc, dd4hep::getAttrOrDefault(li, _Unicode(region), ""),
-                         dd4hep::getAttrOrDefault(li, _Unicode(limits), ""),
-                         dd4hep::getAttrOrDefault(li, _Unicode(vis), "InvisibleNoDaughters"));
+      lvol.setAttributes(desc, dd4hep::getAttrOrDefault<std::string>(li, _Unicode(region), ""),
+                         dd4hep::getAttrOrDefault<std::string>(li, _Unicode(limits), ""),
+                         dd4hep::getAttrOrDefault<std::string>(li, _Unicode(vis), "InvisibleNoDaughters"));
 
       auto layerPV = mvol.placeVolume(lvol, Position(0, 0, lz + lthick / 2));
       layerPV.addPhysVolID("layer", lnum++);
@@ -167,8 +167,8 @@ static void add_disk_shashlik(Detector& desc, Assembly& env, xml::Collection_t& 
   double phimin                     = dd4hep::getAttrOrDefault<double>(plm, _Unicode(phimin), 0.);
   double phimax                     = dd4hep::getAttrOrDefault<double>(plm, _Unicode(phimax), 2. * M_PI);
 
-  auto points = (nsides == 6) ? ecce::geo::fillHexagons({0., 0.}, sidelen, rmin, rmax, phimin, phimax)
-                              : ecce::geo::fillSquares({0., 0.}, sidelen * 1.414, rmin, rmax, phimin, phimax);
+  auto points = (nsides == 6) ? epic::geo::fillHexagons({0., 0.}, sidelen, rmin, rmax, phimin, phimax)
+                              : epic::geo::fillSquares({0., 0.}, sidelen * 1.414, rmin, rmax, phimin, phimax);
   // placement to mother
   auto pos = get_xml_xyz(plm, _Unicode(position));
   auto rot = get_xml_xyz(plm, _Unicode(rotation));
@@ -182,4 +182,7 @@ static void add_disk_shashlik(Detector& desc, Assembly& env, xml::Collection_t& 
   }
 }
 
+#ifdef EPIC_ECCE_LEGACY_COMPAT
 DECLARE_DETELEMENT(ecce_ShashlikCalorimeter, create_detector)
+#endif
+DECLARE_DETELEMENT(epic_ShashlikCalorimeter, create_detector)
