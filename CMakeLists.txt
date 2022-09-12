@@ -8,7 +8,7 @@ PROJECT(epic
   DESCRIPTION "DD4hep Geometry Description of the EPIC Experiment"
   )
 
-option(EPIC_ECCE_LEGACY_COMPAT "Preserve some compatibility with ECCE" ON)
+option(EPIC_ECCE_LEGACY_COMPAT "Preserve some compatibility with ECCE" OFF)
 option(IRT_AUXFILE "Build auxiliary config file for dRICH IRT" OFF)
 
 # C++ standard
