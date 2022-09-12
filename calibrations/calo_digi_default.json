@@ -31,6 +31,14 @@
         "pedestalSigma": 0.8,
         "thresholdValue": 3
     },
+    "hcal_pos_endcap_insert": {
+        "readout": "tile",
+        "dynamicRange": "200*MeV",
+        "capacityBitsADC": 15,
+        "pedestalMean": 400,
+        "pedestalSigma": 10,
+        "thresholdValue": 0
+    },
     "ecal_barrel_sciglass": {
         "readout": "module",
         "dynamicRange": "20*GeV",
