@@ -26,20 +26,11 @@
     <constant name="HcalEndcapPLayer_NTungstenRepeat" value="10"/>
   </define>
 
-  <limits>
-  </limits>
-
-  <regions>
-  </regions>
-
-  <display>
-  </display>
-
   <!-- Define detector -->
   <detectors>
     <documentation>
       ### Forward (Positive Z) Endcap Hadronic Calorimeter
-      
+
       This is the ECCE LFHCAL design without individual tower placements and electronics
       The original design was 60 layers of Steel/Sc and 10 layers of W/Sc, both 1.6 cm/0.4 cm
       This is too long, so 10 layers of steel were removed as a placeholder until the final design is chosen
@@ -101,8 +92,5 @@
       <id>system:8,barrel:3,module:4,layer:8,slice:5,x:32:-16,y:-16</id>
     </readout>
   </readouts>
-
-  <plugins>
-  </plugins>
 
 </lccdd>

@@ -2,7 +2,7 @@
 
   <info name="hcal_forward_insert.xml"
         title="Forward HCal Insert Calorimeter"
-        author="@ rymilton"
+        author="@rymilton"
         url="https://github.com/rymilton"
         status="development"
         version="1.0"
@@ -18,18 +18,18 @@
     <constant name="HcalEndcapPInsertPolystyreneThickness"       value="0.30*cm"/>
     <constant name="HcalEndcapPInsertPCBThickness"               value="0.16*cm"/>
     <constant name="HcalEndcapPInsertESRFoilThickness"           value="0.015*cm"/>
-    
-    
+
+
 
     <documentation>
       - Insert N Layers and computed Thickness
     </documentation>
 
-    <constant name="HcalEndcapPInsertSingleLayerThickness" 
-      value="HcalEndcapPInsertAirThickness + 
+    <constant name="HcalEndcapPInsertSingleLayerThickness"
+      value="HcalEndcapPInsertAirThickness +
              HcalEndcapPInsertAbsorberThickness +
              HcalEndcapPInsertESRFoilThickness +
-             HcalEndcapPInsertScintillatorCoverThickness + 
+             HcalEndcapPInsertScintillatorCoverThickness +
              HcalEndcapPInsertPolystyreneThickness +
              HcalEndcapPInsertESRFoilThickness +
              HcalEndcapPInsertPCBThickness +
@@ -41,40 +41,31 @@
     <constant name="HcalEndcapPInsertLayer_NSteelRepeat" value="HcalEndcapPInsertLayer_NRepeat * .4"/>
   </define>
 
-  <limits>
-  </limits>
-
-  <regions>
-  </regions>
-
-  <display>
-  </display>
-
   <detectors>
      <documentation>
       ### Forward (Positive Z) Endcap Insert for Hadronic Calorimeter
       Insert goes in the middle of the forward endcap HCal -- around the beampipe
 
-      Insert is 30 layers of W/Sc + 20 layers of Steel/Sc + 1 backplate of steel 
+      Insert is 30 layers of W/Sc + 20 layers of Steel/Sc + 1 backplate of steel
       Each of the 50 layers includes air gaps (front and back of each layer),
       ESR foil (front and back of scintillator), a PCB, and an aluminum scitnillator cover
 
-      Circular hole is cut out from each layer to account for the beampipe 
-      Hole will change in size and position throughout layers 
+      Circular hole is cut out from each layer to account for the beampipe
+      Hole will change in size and position throughout layers
       Due to angled (from crossing angle) and cone-shaped beampipe
       Hole radius is beampipe radius + 3.85 cm of clearance
-      
+
     </documentation>
     <detector
-      id="HCalEndcapPInsert_ID" 
-      name="HcalEndcapPInsert" 
+      id="HCalEndcapPInsert_ID"
+      name="HcalEndcapPInsert"
       type="epic_InsertCalorimeter"
       vis="HcalEndcapInsertVis"
       readout="HcalEndcapPInsertHits"
       calorimeterType="HAD_ENDCAP"
     >
       <position x="HcalEndcapPInsert_xposition" y="0*m" z="HcalEndcapPInsert_zmin"/>
-      <dimensions 
+      <dimensions
         x="HcalEndcapPInsert_width"
         y="HcalEndcapPInsert_height"
         z="HcalEndcapPInsert_length"
@@ -85,8 +76,8 @@
       <layer repeat= "HcalEndcapPInsertLayer_NTungstenRepeat" thickness = "HcalEndcapPInsertSingleLayerThickness">
         <slice material="Tungsten" thickness="HcalEndcapPInsertAbsorberThickness" vis="HcalAbsorberVis"/>
         <slice material="Air" thickness="HcalEndcapPInsertAirThickness"/>
-        <slice material="Polystyrene" thickness="HcalEndcapPInsertESRFoilThickness"/> 
-        <slice material="Aluminum" thickness="HcalEndcapPInsertScintillatorCoverThickness"/> 
+        <slice material="Polystyrene" thickness="HcalEndcapPInsertESRFoilThickness"/>
+        <slice material="Aluminum" thickness="HcalEndcapPInsertScintillatorCoverThickness"/>
         <slice material="Polystyrene" thickness="HcalEndcapPInsertPolystyreneThickness" vis="HcalSensorVis" sensitive="true" limits="cal_limits"/>
         <slice material="Polystyrene" thickness="HcalEndcapPInsertESRFoilThickness"/>
         <slice material="Fr4" thickness="HcalEndcapPInsertPCBThickness"/>
@@ -96,8 +87,8 @@
       <layer repeat="HcalEndcapPInsertLayer_NSteelRepeat" thickness = "HcalEndcapPInsertSingleLayerThickness">
         <slice material="Steel235" thickness="HcalEndcapPInsertAbsorberThickness" vis="HcalAbsorberVis"/>
         <slice material="Air" thickness="HcalEndcapPInsertAirThickness"/>
-        <slice material="Polystyrene" thickness="HcalEndcapPInsertESRFoilThickness"/> 
-        <slice material="Aluminum" thickness="HcalEndcapPInsertScintillatorCoverThickness"/> 
+        <slice material="Polystyrene" thickness="HcalEndcapPInsertESRFoilThickness"/>
+        <slice material="Aluminum" thickness="HcalEndcapPInsertScintillatorCoverThickness"/>
         <slice material="Polystyrene" thickness="HcalEndcapPInsertPolystyreneThickness" vis="HcalSensorVis" sensitive="true" limits="cal_limits"/>
         <slice material="Polystyrene" thickness="HcalEndcapPInsertESRFoilThickness"/>
         <slice material="Fr4" thickness="HcalEndcapPInsertPCBThickness"/>
@@ -111,7 +102,7 @@
         initial_hole_radius: Hole radius in first layer
         final_hole_radius: Hole radius in steel backplate
       </documentation>
-      <beampipe_hole 
+      <beampipe_hole
         initial_hole_radius="14.67*cm"
         final_hole_radius="16.92*cm"
       />
@@ -120,20 +111,14 @@
 
   <readouts>
     <readout name="HcalEndcapPInsertHits">
-      <segmentation 
+      <segmentation
         type="CartesianGridXY"
         grid_size_x="3.*cm"
         grid_size_y="3.*cm"
       />
-      <id>system:8,barrel:3,module:4,layer:8,slice:5,x:32:-16,y:-16</id>  
+      <id>system:8,barrel:3,module:4,layer:8,slice:5,x:32:-16,y:-16</id>
     </readout>
 
   </readouts>
-
-  <plugins>
-  </plugins>
-
-  <fields>
-  </fields>
 
 </lccdd>
