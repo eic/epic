@@ -64,7 +64,7 @@
       readout="HcalEndcapPInsertHits"
       calorimeterType="HAD_ENDCAP"
     >
-      <position x="HcalEndcapPInsert_xposition" y="0*m" z="HcalEndcapPInsert_zmin"/>
+      <position x="HcalEndcapPInsert_xposition" y="HcalEndcapPInsert_yposition" z="HcalEndcapPInsert_zmin"/>
       <dimensions
         x="HcalEndcapPInsert_width"
         y="HcalEndcapPInsert_height"
@@ -101,10 +101,16 @@
       <documentation>
         initial_hole_radius: Hole radius in first layer
         final_hole_radius: Hole radius in steel backplate
+        initial_hole_x/y: Hole x/y position (global coordinates) in first layer
+        final_hole_x/y: Hole x/y position (global coordinates) in steel backplate
       </documentation>
       <beampipe_hole
         initial_hole_radius="14.67*cm"
         final_hole_radius="16.92*cm"
+        initial_hole_x="-7.29*cm"
+        final_hole_x="-10.135*cm"
+        initial_hole_y="0.*cm"
+        final_hole_y="0.*cm"
       />
     </detector>
   </detectors>
