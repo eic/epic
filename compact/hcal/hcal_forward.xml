@@ -48,7 +48,7 @@
       <dimensions
         z="HcalEndcapP_length"
         rmin="0*cm"
-        rmax="HcalBarrel_rmax"/>
+        rmax="HcalEndcapP_rmax"/>
       <layer repeat="HcalEndcapPLayer_NSteelRepeat" vis="HcalEndcapLayerVis" thickness="HcalEndcapPSingleLayerThickness">
         <slice material="Steel235" thickness="HcalEndcapPAbsorberThickness" vis="HcalAbsorberVis"/>
         <slice material="Polystyrene" thickness="HcalEndcapPPolystyreneThickness" vis="HcalSensorVis" sensitive="yes" limits="cal_limits"/>
