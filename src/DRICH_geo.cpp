@@ -630,7 +630,7 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
               ((uint64_t(imod) << moduleBits.offset()) | (uint64_t(isec) << sectorBits.offset())) & cellMask;
 
           // properties
-          sensorPV.addPhysVolID("sector", isec).addPhysVolID("module", imod);
+          sensorPV.addPhysVolID("sector", isec).addPhysVolID("module", imod); // NOTE: must be consistent with `sensorIDfields`
           DetElement sensorDE(det, Form("sensor_de%d_%d", isec, imod), imodsec);
           sensorDE.setPlacement(sensorPV);
           if (!debugOptics || debugOpticsMode == 3) {
