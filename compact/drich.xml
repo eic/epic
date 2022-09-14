@@ -222,19 +222,9 @@
 <documentation level="10">
 #### Readout
 - segmentation: square matrix of pixels
-  - `grid_size_x,y`: size of each sensor, but note we must divide sensor size
-    by 1 less than the number of pixels, to account for fenceposting
-  - `offset_x,y`: specified such that the `x` and `y` indicators are unsigned
-- indicators and `cellID` bits:
-
-  | indicator | offset | length |
-  |-----------|--------|--------|
-  | dRICh ID  | 0      | 8      |
-  | sector    | 8      | 3      |
-  | sensor    | 11     | 12     |
-  | x pixel   | 23     | 16     |
-  | y pixel   | 39     | 16     |
-
+  - `grid_size_x,y`: size of each sensor pixel
+  - `offset_x,y`: specified such that the `x` and `y` values are unsigned
+    (except for very rare hits on the sensor sides)
 </documentation>
 <readouts>
   <readout name="DRICHHits">
