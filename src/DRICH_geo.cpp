@@ -65,6 +65,11 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
   auto   filterMat       = desc.material(filterElem.attr<std::string>(_Unicode(material)));
   auto   filterVis       = desc.visAttributes(filterElem.attr<std::string>(_Unicode(vis)));
   double filterThickness = filterElem.attr<double>(_Unicode(thickness));
+  // - airgap between filter and aerogel // TODO: use these to place an airgap volume
+  auto   airgapElem      = radiatorElem.child(_Unicode(airgap));
+  // auto   airgapMat       = desc.material(airgapElem.attr<std::string>(_Unicode(material))); // TODO
+  // auto   airgapVis       = desc.visAttributes(airgapElem.attr<std::string>(_Unicode(vis))); // TODO
+  double airgapThickness = airgapElem.attr<double>(_Unicode(thickness));
   // - mirror
   auto   mirrorElem      = detElem.child(_Unicode(mirror));
   auto   mirrorMat       = desc.material(mirrorElem.attr<std::string>(_Unicode(material)));
@@ -129,16 +134,16 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
    * - `cellMask` is defined such that a hit's `cellID & cellMask` is the corresponding sensor's unique ID
    */
   std::vector<std::string> sensorIDfields = {"module", "sector"};
-  auto readoutCoder = desc.readout(readoutName).idSpec().decoder();
+  const auto& readoutCoder = *desc.readout(readoutName).idSpec().decoder();
   // determine `cellMask` based on `sensorIDfields`
   uint64_t cellMask = 0;
   for(const auto& idField : sensorIDfields)
-    cellMask |= (*readoutCoder)[idField].mask();
+    cellMask |= readoutCoder[idField].mask();
   // create a unique sensor ID from a sensor's PlacedVolume::volIDs
   auto encodeSensorID = [&readoutCoder](auto ids){
     uint64_t enc = 0;
     for(const auto& [idField,idValue] : ids)
-      enc |= uint64_t(idValue) << (*readoutCoder)[idField].offset();
+      enc |= uint64_t(idValue) << readoutCoder[idField].offset();
     return enc;
   };
 
@@ -149,11 +154,13 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
    * - positions are w.r.t. the IP
    * - check the values of all of the `DRICH_RECON_*` constants after any change
    *   to the geometry
+   * - some `DRICH_RECON_*` constants are redundant, but are defined to make
+   *   it clear that the reconstruction code depends on them
    */
-  desc.add(Constant("DRICH_RECON_nSectors", std::to_string(nSectors)));
-  desc.add(Constant("DRICH_RECON_zmin", std::to_string(vesselZmin)));
+  desc.add(Constant("DRICH_RECON_nSectors",       std::to_string(nSectors)));
+  desc.add(Constant("DRICH_RECON_zmin",           std::to_string(vesselZmin)));
   desc.add(Constant("DRICH_RECON_gasvolMaterial", gasvolMat.ptr()->GetName(), "string"));
-  desc.add(Constant("DRICH_RECON_cellMask", std::to_string(cellMask)));
+  desc.add(Constant("DRICH_RECON_cellMask",       std::to_string(cellMask)));
 
   // BUILD VESSEL ====================================================================
   /* - `vessel`: aluminum enclosure, the mother volume of the dRICh
@@ -244,17 +251,14 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
 
   // BUILD RADIATOR ====================================================================
 
-  // attributes
-  double airGap = 0.01 * mm; // air gap between aerogel and filter (FIXME? actually it's currently a gas gap)
-
   // solid and volume: create aerogel and filter
   Cone aerogelSolid(aerogelThickness / 2, radiatorRmin, radiatorRmax,
                     radiatorRmin + boreDelta * aerogelThickness / vesselLength,
                     radiatorRmax + snoutDelta * aerogelThickness / snoutLength);
-  Cone filterSolid(filterThickness / 2, radiatorRmin + boreDelta * (aerogelThickness + airGap) / vesselLength,
-                   radiatorRmax + snoutDelta * (aerogelThickness + airGap) / snoutLength,
-                   radiatorRmin + boreDelta * (aerogelThickness + airGap + filterThickness) / vesselLength,
-                   radiatorRmax + snoutDelta * (aerogelThickness + airGap + filterThickness) / snoutLength);
+  Cone filterSolid(filterThickness / 2, radiatorRmin + boreDelta * (aerogelThickness + airgapThickness) / vesselLength,
+                   radiatorRmax + snoutDelta * (aerogelThickness + airgapThickness) / snoutLength,
+                   radiatorRmin + boreDelta * (aerogelThickness + airgapThickness + filterThickness) / vesselLength,
+                   radiatorRmax + snoutDelta * (aerogelThickness + airgapThickness + filterThickness) / snoutLength);
 
   Volume aerogelVol(detName + "_aerogel", aerogelSolid, aerogelMat);
   Volume filterVol(detName + "_filter", filterSolid, filterMat);
@@ -277,7 +281,7 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
   PlacedVolume filterPV;
   if (!debugOptics) {
     auto filterPlacement =
-        Translation3D(0., 0., airGap) *                                    // add an air gap
+        Translation3D(0., 0., airgapThickness) *                           // add an air gap
         Translation3D(radiatorPos.x(), radiatorPos.y(), radiatorPos.z()) * // re-center to originFront
         RotationY(radiatorPitch) *                                         // change polar angle
         Translation3D(0., 0., (aerogelThickness + filterThickness) / 2.);  // move to aerogel backplane
