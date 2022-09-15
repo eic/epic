@@ -9,7 +9,6 @@ PROJECT(epic
   )
 
 option(EPIC_ECCE_LEGACY_COMPAT "Preserve some compatibility with ECCE" OFF)
-option(IRT_AUXFILE "Build auxiliary config file for dRICH IRT" OFF)
 
 # C++ standard
 set(CMAKE_CXX_STANDARD 17)
