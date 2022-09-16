@@ -67,6 +67,12 @@ jobs:
         key: ccache-${{ steps.ccache_cache_timestamp.outputs.timestamp }}
         restore-keys: |
              ccache-
+    - name: Configure ccache
+      run: |
+        ccache --set-config=cache_dir=${{ github.workspace }}/.ccache
+        ccache --set-config=max_size=500MB
+        ccache --set-config=compression=true
+        ccache --show-config
     - uses: cvmfs-contrib/github-action-cvmfs@v3
     - uses: eic/run-cvmfs-osg-eic-shell@main
       with:
