@@ -412,7 +412,7 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
     // mirror volume, attributes, and placement
     Volume mirrorVol(detName + "_mirror_" + secName, mirrorSolid2, mirrorMat);
     mirrorVol.setVisAttributes(mirrorVis);
-    auto mirrorSectorPlacement = sectorRotation * Translation3D(0, 0, 0); // rotate about beam axis to sector
+    auto mirrorSectorPlacement = Transform3D(sectorRotation); // rotate about beam axis to sector
     auto mirrorPV              = gasvolVol.placeVolume(mirrorVol, mirrorSectorPlacement);
 
     // properties
