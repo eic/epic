@@ -306,9 +306,7 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
 
   // initialize sensor centroids (used for mirror parameterization below); this is
   // the average (x,y,z) of the placed sensors, w.r.t. originFront
-  // - deprecated, but is still here in case we want it later; the IRT auxfile
-  //   requires sensors to be built after the mirrors, but if we want to use
-  //   `sensorCentroid*`, the sensor positions must be known before mirror focusing
+  // - deprecated, but is still here in case we want it later
   // double sensorCentroidX = 0;
   // double sensorCentroidZ = 0;
   // int    sensorCount     = 0;
