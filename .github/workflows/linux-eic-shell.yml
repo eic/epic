@@ -56,18 +56,17 @@ jobs:
         repository: eic/ip6
         ref: master
         path: eic_ip6
-    - uses: actions/cache@v3
-      id: cache-epic
+    - name: Prepare ccache timestamp
+      id: ccache_cache_timestamp
+      run: |
+        echo "::set-output name=timestamp::$(date --iso-8601)"
+    - name: Retrieve ccache cache files
+      uses: actions/cache@v3
       with:
-        path: build
-        key: epic-${{ runner.os }}-${{ hashFiles('CMakeLists.txt', 'src/*.cpp', 'compact/*.xml') }}
-        restore-keys: epic-${{ runner.os }}
-    - uses: actions/cache@v3
-      id: cache-ip6
-      with:
-        path: eic_ip6/build
-        key: ip6-${{ runner.os }}-${{ hashFiles('eic_ip6/CMakeLists.txt', 'eic_ip6/src/*.cpp', 'eic_ip6/ip6/*.xml') }}
-        restore-keys: ip6-${{ runner.os }}
+        path: .ccache
+        key: ccache-${{ steps.ccache_cache_timestamp.outputs.timestamp }}
+        restore-keys: |
+             ccache-
     - uses: cvmfs-contrib/github-action-cvmfs@v3
     - uses: eic/run-cvmfs-osg-eic-shell@main
       with:
@@ -76,7 +75,7 @@ jobs:
           # install ip6 repo
           pushd eic_ip6
           git checkout ${{ inputs.beamline_version || 'master' }}
-          cmake -B build -S . -DCMAKE_INSTALL_PREFIX=${PREFIX}
+          cmake -B build -S . -DCMAKE_INSTALL_PREFIX=${PREFIX} -DCMAKE_C_COMPILER_LAUNCHER=ccache -DCMAKE_CXX_COMPILER_LAUNCHER=ccache
           cmake --build build -- install
           popd
     - uses: eic/run-cvmfs-osg-eic-shell@main
@@ -84,7 +83,7 @@ jobs:
         platform-release: "jug_xl:nightly"
         run: |
           # install this repo
-          cmake -B build -S . -DCMAKE_INSTALL_PREFIX=${PREFIX}
+          cmake -B build -S . -DCMAKE_INSTALL_PREFIX=${PREFIX} -DCMAKE_C_COMPILER_LAUNCHER=ccache -DCMAKE_CXX_COMPILER_LAUNCHER=ccache
           cmake --build build -- install
           # link ip6 into install
           ln -sf ../ip6/ip6 ${PREFIX}/share/epic/ip6
