@@ -375,6 +375,7 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
     FocusMirror(zF, xF, B);
 
     // re-define mirror attributes to be w.r.t vessel front plane
+    // - `(zM,xM)` is the mirror center w.r.t. to the IP
     double mirrorCenterZ = zM - vesselZmin;
     double mirrorCenterX = xM;
     double mirrorRadius  = rM;
@@ -394,9 +395,6 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
     // phi limits are increased to fill gaps (overlaps are cut away later)
     Sphere mirrorSolid1(mirrorRadius, mirrorRadius + mirrorThickness, mirrorTheta1, mirrorTheta2, -40 * degree,
                         40 * degree);
-
-    // print mirror attributes for sector 0
-    // if(isec==0) printf("dRICH mirror (zM, xM, rM) = (%f, %f, %f)\n",zM,xM,rM); // coords w.r.t. IP
 
     // mirror placement transformation (note: transformations are in reverse order)
     auto mirrorPos = Position(mirrorCenterX, 0., mirrorCenterZ) + originFront;
