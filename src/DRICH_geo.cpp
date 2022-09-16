@@ -456,8 +456,10 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
     desc.add(Constant("DRICH_RECON_sensorSphCenterX_"+secName, std::to_string(sensorSphFinalCenter.x())));
     desc.add(Constant("DRICH_RECON_sensorSphCenterY_"+secName, std::to_string(sensorSphFinalCenter.y())));
     desc.add(Constant("DRICH_RECON_sensorSphCenterZ_"+secName, std::to_string(sensorSphFinalCenter.z())));
-    if(isec==0)
+    if(isec==0) {
       desc.add(Constant("DRICH_RECON_sensorSphRadius", std::to_string(sensorSphRadius)));
+      desc.add(Constant("DRICH_RECON_sensorThickness", std::to_string(sensorThickness)));
+    }
 
     // SENSOR MODULE LOOP ------------------------
     /* ALGORITHM: generate sphere of positions
@@ -534,9 +536,10 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
               Translation3D(sensorSphPos.x(), sensorSphPos.y(), sensorSphPos.z()) * // move sphere to reference position
               RotationX(phiGen) *                                                   // rotate about `zGen`
               RotationZ(thetaGen) *                                                 // rotate about `yGen`
-              Translation3D(sensorSphRadius, 0., 0.) * // push radially to spherical surface
-              RotationY(M_PI / 2) *                    // rotate sensor to be compatible with generator coords
-              RotationZ(-M_PI / 2);                    // correction for readout segmentation mapping
+              Translation3D(-sensorThickness / 2.0, 0., 0.) * // pull back so sensor active surface is at spherical surface
+              Translation3D(sensorSphRadius, 0., 0.) *        // push radially to spherical surface
+              RotationY(M_PI / 2) *                           // rotate sensor to be compatible with generator coords
+              RotationZ(-M_PI / 2);                           // correction for readout segmentation mapping
           auto sensorPV = gasvolVol.placeVolume(sensorVol, sensorPlacement);
 
           // generate LUT for module number -> sensor position, for readout mapping tests
