@@ -76,8 +76,8 @@
       <layer repeat= "HcalEndcapPInsertLayer_NTungstenRepeat" thickness = "HcalEndcapPInsertSingleLayerThickness">
         <slice material="Tungsten" thickness="HcalEndcapPInsertAbsorberThickness" vis="HcalAbsorberVis"/>
         <slice material="Air" thickness="HcalEndcapPInsertAirThickness"/>
-        <slice material="Polystyrene" thickness="HcalEndcapPInsertESRFoilThickness"/>
         <slice material="Aluminum" thickness="HcalEndcapPInsertScintillatorCoverThickness"/>
+        <slice material="Polystyrene" thickness="HcalEndcapPInsertESRFoilThickness"/>
         <slice material="Polystyrene" thickness="HcalEndcapPInsertPolystyreneThickness" vis="HcalSensorVis" sensitive="true" limits="cal_limits"/>
         <slice material="Polystyrene" thickness="HcalEndcapPInsertESRFoilThickness"/>
         <slice material="Fr4" thickness="HcalEndcapPInsertPCBThickness"/>
@@ -87,8 +87,8 @@
       <layer repeat="HcalEndcapPInsertLayer_NSteelRepeat" thickness = "HcalEndcapPInsertSingleLayerThickness">
         <slice material="Steel235" thickness="HcalEndcapPInsertAbsorberThickness" vis="HcalAbsorberVis"/>
         <slice material="Air" thickness="HcalEndcapPInsertAirThickness"/>
-        <slice material="Polystyrene" thickness="HcalEndcapPInsertESRFoilThickness"/>
         <slice material="Aluminum" thickness="HcalEndcapPInsertScintillatorCoverThickness"/>
+        <slice material="Polystyrene" thickness="HcalEndcapPInsertESRFoilThickness"/>
         <slice material="Polystyrene" thickness="HcalEndcapPInsertPolystyreneThickness" vis="HcalSensorVis" sensitive="true" limits="cal_limits"/>
         <slice material="Polystyrene" thickness="HcalEndcapPInsertESRFoilThickness"/>
         <slice material="Fr4" thickness="HcalEndcapPInsertPCBThickness"/>
