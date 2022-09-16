@@ -1,0 +1,14 @@
+<lccdd>
+
+  <display>
+  </display>
+  <define>
+  </define>
+
+  <documentation level="10">
+    ### Barrel Hcal configuration
+  </documentation>
+
+  <include ref="hcal/hcal_barrel_gdml.xml"/>
+
+</lccdd>
