@@ -291,7 +291,7 @@ jobs:
         ref_name: master
         variables: |
           DETECTOR_REPOSITORYURL=${{ github.server_url }}/${{ github.repository }}
-          DETECTOR_VERSION=${{ github.ref_name }}
+          DETECTOR_VERSION=${{ github.event.pull_request.head.ref || github.ref_name }}
           DETECTOR_CONFIG=${{ matrix.detector_config }}
           GITHUB_REPOSITORY=${{ inputs.github_repository || github.repository }}
           GITHUB_SHA=${{ inputs.github_sha || github.event.pull_request.head.sha || github.sha }}
