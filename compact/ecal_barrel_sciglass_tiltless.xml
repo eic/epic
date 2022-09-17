@@ -41,7 +41,7 @@
         </comment>
 
         <rows number="5" deltaphi="2.92 * degree">
-          <dimensions inner_r="79.5 * cm"  gap="1 * mm" />
+          <dimensions inner_r="80.5 * cm"  gap="1 * mm" />
 
           <comment>
             Families in each row are constructed in two directions `dir_sign` - negative and positive rapidity - starting from the center.
