@@ -7,6 +7,8 @@
 #include "DD4hep/DetFactoryHelper.h"
 #include <XML/Helper.h>
 #include <XML/Layering.h>
+#include <tuple>
+#include <vector>
 
 using namespace dd4hep;
 
@@ -53,11 +55,11 @@ static Ref_t createDetector(Detector& desc, xml_h handle, SensitiveDetector sens
   auto get_hole_rxy = [hole_radii_parameters, hole_x_parameters, hole_y_parameters, length,
                        backplate_thickness](double z_pos) {
     /*
-        radius = (hole_radius_final - hole_radius_initial)/(length) * z_pos +  hole_radius_initial
-        Treats the beginning of the insert as z = 0
-        At z = 0 (beginning of first layer), hole radius is hole_radius_initial
-        The radius is hole_radius_final at the beginning of the backplate,
-          i.e. z = length - backplate_thickness
+      radius = (hole_radius_final - hole_radius_initial)/(length) * z_pos +  hole_radius_initial
+      Treats the beginning of the insert as z = 0
+      At z = 0 (beginning of first layer), hole radius is hole_radius_initial
+      The radius is hole_radius_final at the beginning of the backplate,
+        i.e. z = length - backplate_thickness
     */
     double hole_radius_slope =
         (hole_radii_parameters.second - hole_radii_parameters.first) / (length - backplate_thickness);
@@ -73,64 +75,19 @@ static Ref_t createDetector(Detector& desc, xml_h handle, SensitiveDetector sens
     return hole_rxy;
   };
 
-  // Defining envelope
-  Box envelope(width / 2.0, height / 2.0, length / 2.0);
+  // Assembly that will contain all the layers
+  Assembly assembly(detName);
+
+  PlacedVolume pv;
 
   // Keeps track of the z location as we move longiduinally through the insert
   // Will use this tracking variable as input to get_hole_rxy
   double z_distance_traversed = 0.;
 
-  /*
-    Cutting out the hole from the envelope
-    Cut out hole layer-by-layer to get exact desired shape
-    Subtracting a cone is difficult since the cone would have to be angled towards the negative x direction
-  */
-  // Looping through all the different layer sections (W/Sc, Steel/Sc, backplate)
-  for (xml_coll_t c(detElem, _U(layer)); c; ++c) {
-    xml_comp_t x_layer         = c;
-    int        repeat          = x_layer.repeat();
-    double     layer_thickness = x_layer.thickness();
-
-    // Looping through the number of repeated layers in each section
-    for (int ilayer = 0; ilayer < repeat; ilayer++) {
-      const auto hole_rxy = get_hole_rxy(z_distance_traversed);
-      double     hole_r   = std::get<0>(hole_rxy);
-      double     hole_x   = std::get<1>(hole_rxy);
-      double     hole_y   = std::get<2>(hole_rxy);
-      Tube       layer_hole(0., hole_r, layer_thickness / 2.);
-
-      /*
-        z-position:
-        -length / 2. is front of insert,
-        +z_distance_traversed goes to the front of each layer,
-        +layer_thickness / 2. is the half-length of a layer
-          (i.e. where to put the cutout shape)
-      */
-
-      SubtractionSolid envelope_with_hole(
-          envelope, layer_hole, Position(hole_x, hole_y, (-length + layer_thickness) / 2. + z_distance_traversed));
-
-      // Removing the hole layer by layer from envelope
-      envelope = envelope_with_hole;
-
-      z_distance_traversed += layer_thickness; // Moving hole along z
-    }
-  }
-
-  // Defining envelope volume
-  Volume envelopeVol(detName, envelope, air);
-  // Setting envelope attributes
-  envelopeVol.setAttributes(desc, detElem.regionStr(), detElem.limitsStr(), detElem.visStr());
-
-  PlacedVolume pv;
-
-  // Resetting trackers for layer construction
-  z_distance_traversed = 0.;
-
   int layer_num = 1;
 
   // Looping through all the different layer sections (W/Sc, Steel/Sc, backplate)
-  for (xml_coll_t c(detElem, _U(layer)); c; ++c) {
+  for (xml_coll_t c(detElem, _U(layer)); c; c++) {
     xml_comp_t x_layer         = c;
     int        repeat          = x_layer.repeat();
     double     layer_thickness = x_layer.thickness();
@@ -155,7 +112,7 @@ static Ref_t createDetector(Detector& desc, xml_h handle, SensitiveDetector sens
       double slice_z   = -layer_thickness / 2.; // Keeps track of slices' z locations in each layer
 
       // Looping over each layer's slices
-      for (xml_coll_t l(x_layer, _U(slice)); l; ++l) {
+      for (xml_coll_t l(x_layer, _U(slice)); l; l++) {
         xml_comp_t  x_slice         = l;
         double      slice_thickness = x_slice.thickness();
         std::string slice_name      = layer_name + _toString(slice_num, "slice%d");
@@ -182,20 +139,22 @@ static Ref_t createDetector(Detector& desc, xml_h handle, SensitiveDetector sens
         pv.addPhysVolID("slice", slice_num);
         slice_z += slice_thickness / 2.;
         z_distance_traversed += slice_thickness;
-        ++slice_num;
+        slice_num++;
       }
 
       // Setting layer attributes
       layer_vol.setAttributes(desc, x_layer.regionStr(), x_layer.limitsStr(), x_layer.visStr());
-      // Placing each layer inside the envelope volume
-      // -length/2. is front of detector in global coordinate system
-      // + (z_distance_traversed - layer_thickness) goes to the front of each layer
-      // + layer_thickness/2. places layer in correct spot
-      // Example: After placement of slices in first layer, z_distance_traversed = layer_thickness
-      //          Subtracting layer_thickness goes back to the front of the first slice (Now, z = -length/2)
-      //          Adding layer_thickness/2. goes to half the first layer thickness (proper place to put layer)
-      //          Each loop over repeat will increases z_distance_traversed by layer_thickness
-      pv = envelopeVol.placeVolume(
+      /*
+        Placing each layer inside assembly
+        -length/2. is front of detector in global coordinate system
+        + (z_distance_traversed - layer_thickness) goes to the front of each layer
+        + layer_thickness/2. places layer in correct spot
+        Example: After placement of slices in first layer, z_distance_traversed = layer_thickness
+                 Subtracting layer_thickness goes back to the front of the first slice (Now, z = -length/2)
+                 Adding layer_thickness / 2. goes to half the first layer thickness (proper place to put layer)
+                 Each loop over repeat will increases z_distance_traversed by layer_thickness
+      */
+      pv = assembly.placeVolume(
           layer_vol,
           Transform3D(
               RotationZYX(0, 0, 0),
@@ -211,7 +170,7 @@ static Ref_t createDetector(Detector& desc, xml_h handle, SensitiveDetector sens
 
   // Placing insert in world volume
   auto         tr  = Transform3D(Position(pos.x(), pos.y(), pos.z() + length / 2.));
-  PlacedVolume phv = motherVol.placeVolume(envelopeVol, tr);
+  PlacedVolume phv = motherVol.placeVolume(assembly, tr);
   phv.addPhysVolID("system", detID);
   det.setPlacement(phv);
 
