@@ -64,8 +64,9 @@ jobs:
       uses: actions/cache@v3
       with:
         path: .ccache
-        key: ccache-${{ steps.ccache_cache_timestamp.outputs.timestamp }}
+        key: ccache-${{ github.ref_name }}-${{ steps.ccache_cache_timestamp.outputs.timestamp }}
         restore-keys: |
+             ccache-${{ github.ref_name }}-
              ccache-
     - name: Configure ccache
       run: |
@@ -74,7 +75,14 @@ jobs:
         echo "max_size=500MB" >> ~/.ccache/ccache.conf
         echo "compression=true" >> ~/.ccache/ccache.conf
     - uses: cvmfs-contrib/github-action-cvmfs@v3
-    - uses: eic/run-cvmfs-osg-eic-shell@main
+    - name: Setup CVMFS OSG eic-shell environment
+      uses: eic/run-cvmfs-osg-eic-shell@main
+      with:
+        platform-release: "jug_xl:nightly"
+        run: |
+          eic-info
+    - name: Build beamline geometry
+      uses: eic/run-cvmfs-osg-eic-shell@main
       with:
         platform-release: "jug_xl:nightly"
         run: |
@@ -84,7 +92,8 @@ jobs:
           cmake -B build -S . -DCMAKE_INSTALL_PREFIX=${PREFIX} -DCMAKE_C_COMPILER_LAUNCHER=ccache -DCMAKE_CXX_COMPILER_LAUNCHER=ccache
           cmake --build build -- install
           popd
-    - uses: eic/run-cvmfs-osg-eic-shell@main
+    - name: Build detector geometry
+      uses: eic/run-cvmfs-osg-eic-shell@main
       with:
         platform-release: "jug_xl:nightly"
         run: |
