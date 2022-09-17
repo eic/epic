@@ -70,11 +70,9 @@ jobs:
     - name: Configure ccache
       run: |
         mkdir -p ~/.ccache/
-        cat <<| EOF > ~/.ccache/ccache.conf
-        cache_dir=${{ github.workspace }}/.ccache
-        max_size=500MB
-        compression=true
-        EOF
+        echo "cache_dir=${{ github.workspace }}/.ccache" >> ~/.ccache/ccache.conf
+        echo "max_size=500MB" >> ~/.ccache/ccache.conf
+        echo "compression=true" >> ~/.ccache/ccache.conf
     - uses: cvmfs-contrib/github-action-cvmfs@v3
     - uses: eic/run-cvmfs-osg-eic-shell@main
       with:
