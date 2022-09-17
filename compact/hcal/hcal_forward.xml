@@ -58,7 +58,7 @@
         <slice material="Polystyrene" thickness="HcalEndcapPPolystyreneThickness" vis="HcalSensorVis" sensitive="yes" limits="cal_limits"/>
       </layer>
       <insert>
-        <position x="HcalEndcapPInsert_xposition" y="0" z ="0"/>
+        <position x="HcalEndcapPInsert_xposition" y="HcalEndcapPInsert_yposition" z ="0"/>
         <dimensions
           x="HcalEndcapPInsert_width"
           y="HcalEndcapPInsert_height"
