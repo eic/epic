@@ -3,16 +3,16 @@
   <comment>
     Main parameters. June 2022 setup with symmetric disk locations.
     Here to comply with the ACTS translation onion structure we have:
-      - the first disk in the inner tracking assembly, 
+      - the first disk in the inner tracking assembly,
       - the second silicon disk in the middle silicon tracking assembly
       - the and the following 3 disks in the outer silicon tracking assembly
-    in their own tracking assembly. 
+    in their own tracking assembly.
   </comment>
 
   <define>
 
     <comment> Main tracker disk setup </comment>
-    
+
     <comment> Support/service thicknesses from ATHENA disks for now </comment>
     <constant name="SiTrackerEndcapAl_thickness"    value="0.15*mm"/>
     <constant name="SiTrackerEndcapCF_thickness"    value="0.12*mm"/>
@@ -59,7 +59,7 @@
       id="TrackerEndcapP_0_ID"
       name="InnerTrackerEndcapP"
       type="epic_TrapEndcapTracker"
-      readout="InnerTrackerEndcapPHits"
+      readout="TrackerEndcapHits"
       vis="TrackerVis"
       reflect="false">
       <module name="Module1" vis="TrackerModuleVis">
@@ -87,7 +87,7 @@
       id="TrackerEndcapN_0_ID"
       name="InnerTrackerEndcapN"
       type="epic_TrapEndcapTracker"
-      readout="InnerTrackerEndcapNHits"
+      readout="TrackerEndcapHits"
       vis="TrackerVis"
       reflect="true">
       <module name="Module1" vis="TrackerModuleVis">
@@ -199,7 +199,7 @@
       id="TrackerEndcapP_1_ID"
       name="MiddleTrackerEndcapP"
       type="epic_TrapEndcapTracker"
-      readout="MiddleTrackerEndcapPHits"
+      readout="TrackerEndcapHits"
       vis="TrackerVis"
       reflect="false">
       <module name="Module1" vis="TrackerModuleVis">
@@ -227,7 +227,7 @@
       id="TrackerEndcapN_1_ID"
       name="MiddleTrackerEndcapN"
       type="epic_TrapEndcapTracker"
-      readout="MiddleTrackerEndcapNHits"
+      readout="TrackerEndcapHits"
       vis="TrackerVis"
       reflect="true">
       <module name="Module1" vis="TrackerModuleVis">
@@ -255,7 +255,7 @@
       id="TrackerEndcapP_2_ID"
       name="OuterTrackerEndcapP"
       type="epic_TrapEndcapTracker"
-      readout="OuterTrackerEndcapPHits"
+      readout="TrackerEndcapHits"
       vis="TrackerVis"
       reflect="false">
       <module name="Module2" vis="TrackerModuleVis">
@@ -323,7 +323,7 @@
       id="TrackerEndcapN_2_ID"
       name="OuterTrackerEndcapN"
       type="epic_TrapEndcapTracker"
-      readout="OuterTrackerEndcapNHits"
+      readout="TrackerEndcapHits"
       vis="TrackerVis"
       reflect="true">
       <module name="Module2" vis="TrackerModuleVis">
@@ -390,27 +390,7 @@
   </detectors>
 
   <readouts>
-    <readout name="InnerTrackerEndcapPHits">
-      <segmentation type="CartesianGridXZ" grid_size_x="0.010*mm" grid_size_z="0.010*mm" />
-      <id>system:8,layer:4,module:12,sensor:2,x:32:-16,z:-16</id>
-    </readout>
-    <readout name="InnerTrackerEndcapNHits">
-      <segmentation type="CartesianGridXZ" grid_size_x="0.010*mm" grid_size_z="0.010*mm" />
-      <id>system:8,layer:4,module:12,sensor:2,x:32:-16,z:-16</id>
-    </readout>
-    <readout name="MiddleTrackerEndcapPHits">
-      <segmentation type="CartesianGridXZ" grid_size_x="0.010*mm" grid_size_z="0.010*mm" />
-      <id>system:8,layer:4,module:12,sensor:2,x:32:-16,z:-16</id>
-    </readout>
-    <readout name="MiddleTrackerEndcapNHits">
-      <segmentation type="CartesianGridXZ" grid_size_x="0.010*mm" grid_size_z="0.010*mm" />
-      <id>system:8,layer:4,module:12,sensor:2,x:32:-16,z:-16</id>
-    </readout>
-    <readout name="OuterTrackerEndcapPHits">
-      <segmentation type="CartesianGridXZ" grid_size_x="0.010*mm" grid_size_z="0.010*mm" />
-      <id>system:8,layer:4,module:12,sensor:2,x:32:-16,z:-16</id>
-    </readout>
-    <readout name="OuterTrackerEndcapNHits">
+    <readout name="TrackerEndcapHits">
       <segmentation type="CartesianGridXZ" grid_size_x="0.010*mm" grid_size_z="0.010*mm" />
       <id>system:8,layer:4,module:12,sensor:2,x:32:-16,z:-16</id>
     </readout>
