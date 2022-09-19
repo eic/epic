@@ -48,7 +48,7 @@ set(DD4hep_required_libraries ${DD4hep_required_components})
 list(TRANSFORM DD4hep_required_libraries PREPEND DD4hep::)
 
 # Dependencies
-find_package(DD4hep REQUIRED COMPONENTS ${DD4hep_required_components})
+find_package(DD4hep 1.21 REQUIRED COMPONENTS ${DD4hep_required_components})
 find_package(ActsDD4hep)
 if(ActsDD4hep_FOUND)
   add_compile_definitions(USE_ACTSDD4HEP)
