@@ -48,7 +48,11 @@ set(DD4hep_required_libraries ${DD4hep_required_components})
 list(TRANSFORM DD4hep_required_libraries PREPEND DD4hep::)
 
 # Dependencies
-find_package(DD4hep 1.21 REQUIRED COMPONENTS ${DD4hep_required_components})
+find_package(DD4hep REQUIRED COMPONENTS ${DD4hep_required_components})
+if(${DD4hep_VERSION} VERSION_LESS 1.21)
+  message(WARNING "DD4hep before 1.21 does not write collections correctly \n"
+                  "More info at https://github.com/AIDASoft/DD4hep/pull/922")
+endif()
 find_package(ActsDD4hep)
 if(ActsDD4hep_FOUND)
   add_compile_definitions(USE_ACTSDD4HEP)
