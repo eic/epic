@@ -508,7 +508,7 @@ Service gaps in FW direction (before endcapP ECAL) and BW direction (before endc
   <documentation level="3">
 ## Calorimeter Parameters
   </documentation>
-    <constant name="CaloSides"                      value="12"/>
+    <constant name="CaloSides"                      value="24"/>
 
     <constant name="EcalEndcapP_zmin"               value="ForwardServiceGap_zmax" />
     <constant name="EcalEndcapP_length"             value="30*cm" />
