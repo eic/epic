@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<lccdd>	
+<lccdd>
 <info name="mpgd_barrel.xml"
       title="Micro Pattern Gas Detectors"
       author="mposik1983"
@@ -7,14 +7,14 @@
       status="development"
       version="1.0"
 ><comment/>
-</info>	
+</info>
 
   <define>
     <comment>
       Main parameters - Geo based on the original ECCE design, while for now
                         using the ATHENA MMGAS design for the layers (FIXME)
 
-      Note: the inner and outer layers are implemented as separate detectors, as they 
+      Note: the inner and outer layers are implemented as separate detectors, as they
       belong to different ACTS tracking volumes. If this restriction goes away
       in the future they could be put together in a single tag.
     </comment>
@@ -58,7 +58,7 @@
     <constant name="MMDriftCuElectrode_thickness"           value="5*um"/>
     <constant name="MMDriftKapton_thickness"                value="250*um"/>
     <constant name="MMDriftCuGround_thickness"              value="0.41*um"/>
-    
+
     <comment> FIXME: No support material is here, so fudge factor used to bring material budget to ~0.5% for barrel </comment>
     <constant name="MMFudgeInnerMPGDBarrel_thickness"                      value="570*um"/>
 
@@ -70,9 +70,9 @@
       due to ACTS limitations.
       FIXME: this shouldn't be needed anymore, need to update the cylindrical plugin.
     </comment>
-    <constant name="MPGDBarrelStave_count"       value="128"/>
-    <constant name="InnerMPGDBarrelStave_width"       value="2*InnerMPGDBarrelMod_rmin * tan(180*degree/MPGDBarrelStave_count)"/>
-    <constant name="OuterMPGDBarrelStave_width"       value="2*OuterMPGDBarrelMod_rmin * tan(180*degree/MPGDBarrelStave_count)"/>
+    <constant name="MPGDBarrelStave_count"            value="128"/>
+    <constant name="InnerMPGDBarrelStave_width"       value="2*InnerMPGDBarrelLayer_rmin * tan(180*degree/MPGDBarrelStave_count)"/>
+    <constant name="OuterMPGDBarrelStave_width"       value="2*OuterMPGDBarrelLayer_rmin * tan(180*degree/MPGDBarrelStave_count)"/>
   </define>
 
   <detectors>
@@ -107,7 +107,7 @@
           inner_r="InnerMPGDBarrelLayer_rmin"
           outer_r="InnerMPGDBarrelLayer_rmax"
           z_length="InnerMPGDBarrelLayer_length"/>
-        <layer_material surface="outer" binning="binPhi,binZ" bins0="10*MPGDBarrelStave_count" bins1="100" />
+        <layer_material surface="inner" binning="binPhi,binZ" bins0="MPGDBarrelStave_count" bins1="100" />
         <rphi_layout phi_tilt="0" nphi="MPGDBarrelStave_count" phi0="0.0" rc="InnerMPGDBarrelMod_rmin" dr="0.0 * mm"/>
         <z_layout dr="0.0 * mm" z0="0.0 * mm" nz="1"/>
       </layer>
@@ -144,7 +144,7 @@
           outer_r="OuterMPGDBarrelLayer_rmax"
           z_length="OuterMPGDBarrelLayer_length"
           z0="OuterMPGDBarrelMod_zoffset"/>
-        <layer_material surface="outer" binning="binPhi,binZ" bins0="10*MPGDBarrelStave_count" bins1="100" />
+        <layer_material surface="inner" binning="binPhi,binZ" bins0="MPGDBarrelStave_count" bins1="100" />
         <rphi_layout phi_tilt="0" nphi="MPGDBarrelStave_count" phi0="0.0" rc="OuterMPGDBarrelMod_rmin" dr="0.0 * mm"/>
         <z_layout dr="0.0 * mm" z0="0.0 * mm" nz="1"/>
       </layer>
