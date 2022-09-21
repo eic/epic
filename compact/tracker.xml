@@ -136,11 +136,13 @@
       <arg value="url:https://eicweb.phy.anl.gov/EIC/detectors/athena/uploads/4a4e7c8eb6089b634d762d112c89bd5d/material-maps.cbor"/>
     </plugin>
   </plugins>
-
+  <!--
 	    <include ref="tracker/vertex_barrel.xml"/>  
 	    <include ref="tracker/silicon_barrel.xml"/>
 	    <include ref="tracker/mpgd_barrel.xml"/> 
 	    <include ref="tracker/silicon_disks.xml"/>
 	    <include ref="tracker/support_service_assembly.xml"/>
-
+  -->
+            <include ref="tracker/mrwell_dirc.xml"/>
+	    <!--<include ref="fake_dirc.xml"/>-->
 </lccdd>

@@ -284,12 +284,6 @@
     <composite n="1" ref="W"/>
     <composite n="4" ref="O"/>
   </material>
-  <material name="Ar80CO220">
-    <D type="density" value="1.823" unit="mg/cm3"/>
-    <composit n="0.783"  ref="Argon"/>
-    <composit n="0.073"  ref="C"/>
-    <composit n="0.144"  ref="O"/>
-    </material>  
   <material name="Ar10CO2">
     <D type="density" value="1.802" unit="mg / cm3"/>
     <composite n="0.891" ref="Argon"/>

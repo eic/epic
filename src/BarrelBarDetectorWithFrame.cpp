@@ -43,7 +43,7 @@ static Ref_t create_BarrelDetectorWithFrame(Detector& description, xml_h e, Sens
   map<string, std::vector<rec::VolPlane>> volplane_surfaces;
   PlacedVolume                            pv;
   dd4hep::xml::Dimension                  dimensions(x_det.dimensions());
-  xml_dim_t                               dirc_pos = x_det.position();
+  xml_dim_t                               mrwell_dirc_pos = x_det.position();
 
   map<string, std::array<double, 2>> module_thicknesses;
 
@@ -96,7 +96,7 @@ static Ref_t create_BarrelDetectorWithFrame(Detector& description, xml_h e, Sens
     double thickness_sum       = -total_thickness / 2.0;
     double max_component_width = 0;
     double max_component_length = 0;
-
+    double gas_thickness = 0.0;
     for (xml_coll_t mci(x_mod, _U(module_component)); mci; ++mci, ++ncomponents) {
       xml_comp_t x_comp = mci;
       string     c_nam  = _toString(ncomponents, "component%d");
@@ -104,7 +104,6 @@ static Ref_t create_BarrelDetectorWithFrame(Detector& description, xml_h e, Sens
 
       double box_width = x_comp.width();
       double box_length = x_comp.length();
-
       Box c_box;
       //Since MPGD frames are layed over the MPGD foils, the foil material is pressent under the frame as well. 
       //The gas volumes are not present under the frames, so our frames must eat only the gas module areas
@@ -121,12 +120,21 @@ static Ref_t create_BarrelDetectorWithFrame(Detector& description, xml_h e, Sens
       //need to have frame thickness subtracted.
       if( (comp_name == "DriftGap" || comp_name == "WindowGasGap") ){
 	box_width = x_comp.width() - 2.0 * frame_width;
-	box_length = x_comp.length() - 2.0 * frame_width;
+	box_length = x_comp.length()- 2.0 * frame_width;
 	max_component_width = box_width;
 	max_component_length = box_length;
+	gas_thickness += x_comp.thickness();
         c_box = {box_width / 2, box_length / 2, x_comp.thickness() / 2};
+	cout << "gas: " << comp_name << " \n";
+	cout << "box_width: " << box_width << endl;
+	cout << "box_length: " << box_length << endl;
+	cout << "box_thickness: " << x_comp.thickness() << endl;
       }else{
         c_box = {x_comp.width() / 2, x_comp.length() / 2, x_comp.thickness() / 2};
+	cout << "Not gas: " << comp_name << " \n";
+	cout << "box_comp_width: " << x_comp.width() << endl;
+	cout << "box_comp_length: " << x_comp.length() << endl;
+	cout << "box_comp_thickness: " << x_comp.thickness() << endl;
       }
       Volume c_vol{c_nam, c_box, description.material(x_comp.materialStr())};
       pv = m_vol.placeVolume(c_vol, Position(0, 0, thickness_sum + x_comp.thickness() / 2.0));
@@ -162,10 +170,10 @@ static Ref_t create_BarrelDetectorWithFrame(Detector& description, xml_h e, Sens
       xml_comp_t m_frame         = x_mod.child(_U(frame));
       double     frame_thickness = getAttrOrDefault<double>(m_frame, _U(thickness), total_thickness);
 
-        Box lframe_box{m_frame.width() / 2., (max_component_length + 2*m_frame.width()) / 2., frame_thickness / 2.};
-        Box rframe_box{m_frame.width() / 2., (max_component_length + 2*m_frame.width()) / 2., frame_thickness / 2.};
-        Box tframe_box{max_component_width / 2., m_frame.width() / 2., frame_thickness / 2.};
-        Box bframe_box{max_component_width / 2., m_frame.width() / 2., frame_thickness / 2.};
+        Box lframe_box{m_frame.width() / 2.0, (max_component_length + 2.0*m_frame.width()) / 2.0, frame_thickness / 2.0};
+        Box rframe_box{m_frame.width() / 2.0, (max_component_length + 2.0*m_frame.width()) / 2.0, frame_thickness / 2.0};
+        Box tframe_box{max_component_width / 2.0, m_frame.width() / 2.0, frame_thickness / 2.0};
+        Box bframe_box{max_component_width / 2.0, m_frame.width() / 2.0, frame_thickness / 2.0};
       
       // Keep track of frame with so we can adjust the module bars appropriately
 
@@ -179,15 +187,18 @@ static Ref_t create_BarrelDetectorWithFrame(Detector& description, xml_h e, Sens
         tframe_vol.setVisAttributes(description, m_frame.visStr());
         bframe_vol.setVisAttributes(description, m_frame.visStr());
 
+        cout << "frame_thickness: " << frame_thickness << endl;
+        cout << "total_thickness: " << total_thickness << endl;
+        cout << "frame_thickness/2 - total_thickness/2: " << frame_thickness/2 - total_thickness/2 << endl;
 
-        m_vol.placeVolume(lframe_vol, Position(frame_width / 2. + max_component_width / 2, 0.,
-                                               frame_thickness / 2. - total_thickness / 2.0));
-        m_vol.placeVolume(rframe_vol, Position(-frame_width / 2. - max_component_width / 2, 0.,
-                                                frame_thickness / 2. - total_thickness / 2.0));
-        m_vol.placeVolume(tframe_vol, Position(0,frame_width / 2. + max_component_length/2,
-                                               frame_thickness / 2. - total_thickness / 2.0));
-        m_vol.placeVolume(bframe_vol, Position(0,-frame_width / 2. - max_component_length/2,
-                                               frame_thickness / 2. - total_thickness / 2.0));
+        m_vol.placeVolume(lframe_vol, Position(frame_width / 2.0 + max_component_width / 2, 0.0,
+                                               frame_thickness / 2.0 - total_thickness / 2.0 - gas_thickness/ 2.0));
+        m_vol.placeVolume(rframe_vol, Position(-frame_width / 2.0 - max_component_width / 2.0, 0.0,
+                                                frame_thickness / 2.0 - total_thickness / 2.0 - gas_thickness/2.0));
+        m_vol.placeVolume(tframe_vol, Position(0.0, frame_width / 2.0 + max_component_length/2,
+                                               frame_thickness / 2.0 - total_thickness / 2.0 - gas_thickness/2.0));
+        m_vol.placeVolume(bframe_vol, Position(0.0,-frame_width / 2.0 - max_component_length/2.0,
+                                               frame_thickness / 2.0 - total_thickness / 2.0 - gas_thickness/2.0));
 					       
     }
   }
@@ -277,7 +288,8 @@ static Ref_t create_BarrelDetectorWithFrame(Detector& description, xml_h e, Sens
   }
   sdet.setAttributes(description, assembly, x_det.regionStr(), x_det.limitsStr(), x_det.visStr());
   assembly.setVisAttributes(description.invisible());
-  pv = description.pickMotherVolume(sdet).placeVolume(assembly, Position(0, 0, dirc_pos.z()));
+  //assembly.setVisAttributes(description.invisible());
+  pv = description.pickMotherVolume(sdet).placeVolume(assembly, Position(0, 0, mrwell_dirc_pos.z()));
   pv.addPhysVolID("system", det_id); // Set the subdetector system ID.
   sdet.setPlacement(pv);
   return sdet;
