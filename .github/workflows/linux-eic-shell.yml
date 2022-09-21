@@ -290,9 +290,9 @@ jobs:
         token: ${{ secrets.EICWEB_DETECTOR_BENCHMARK_TRIGGER }}
         ref_name: master
         variables: |
-          BEAMLINE_REPOSITORYURL=${{ github.server_url }}/ip6.git
+          BEAMLINE_REPOSITORYURL=${{ inputs.beamline_repositoryurl || github.server_url/github.repository }}
           BEAMLINE_CONFIG=ip6
-          BEAMLINE_CONFIG_VERSION=master
+          BEAMLINE_CONFIG_VERSION=${{ inputs.beamline_version || 'master' }}
           DETECTOR_REPOSITORYURL=${{ github.server_url }}/${{ github.repository }}
           DETECTOR_VERSION=${{ github.event.pull_request.head.ref || github.ref_name }}
           DETECTOR_CONFIG=${{ matrix.detector_config }}
