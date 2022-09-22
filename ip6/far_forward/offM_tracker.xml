@@ -25,7 +25,7 @@
       id="ForwardOffMTracker_station_1_ID"
       name="ForwardOffMTracker_station_1"
       type="ip6_OffMomentumTracker"
-      readout="ForwardOffMTrackerHits1"
+      readout="ForwardOffMTrackerHits"
       vis="FFTrackerVis"
       reflect="false">
       <position x="-780.0*mm" y="0" z="22500*mm"/>
@@ -41,7 +41,7 @@
         <module_component material="Aluminum"     vis="FFTrackerShieldingVis" thickness="ForwardOffMTracker_RFShieldThickness"/>
       </module>
       <layer id="1" module="Module1">
-        <envelope vis="FFTrackerLayerVis" x="10.0*cm" y="20.0*cm" length="1.0*cm" 
+        <envelope vis="FFTrackerLayerVis" x="10.0*cm" y="20.0*cm" length="1.0*cm"
           zstart="0.0/2.0" />
       </layer>
     </detector>
@@ -50,7 +50,7 @@
       id="ForwardOffMTracker_station_2_ID"
       name="ForwardOffMTracker_station_2"
       type="ip6_OffMomentumTracker"
-      readout="ForwardOffMTrackerHits2"
+      readout="ForwardOffMTrackerHits"
       vis="AnlRed"
       reflect="false">
       <position x="-780.0*mm" y="0" z="22520*mm"/>
@@ -65,17 +65,17 @@
         <module_component material="Aluminum"     vis="FFTrackerShieldingVis" thickness="ForwardOffMTracker_RFShieldThickness"/>
       </module>
       <layer id="1" module="Module1">
-         <envelope vis="FFTrackerLayerVis" x="10.0*cm" y="20.0*cm" length="3.2*mm" 
+         <envelope vis="FFTrackerLayerVis" x="10.0*cm" y="20.0*cm" length="3.2*mm"
            zstart="0.0/2.0" />
       </layer>
-      
+
     </detector>
 
     <detector
       id="ForwardOffMTracker_station_3_ID"
       name="ForwardOffMTracker_station_3"
       type="ip6_OffMomentumTracker"
-      readout="ForwardOffMTrackerHits3"
+      readout="ForwardOffMTrackerHits"
       vis="FFTrackerVis"
       reflect="false">
       <position x="-870.0*mm" y="0" z="24500*mm"/>
@@ -90,17 +90,17 @@
         <module_component material="Aluminum"     vis="FFTrackerShieldingVis" thickness="ForwardOffMTracker_RFShieldThickness"/>
       </module>
       <layer id="1" module="Module1">
-         <envelope vis="FFTrackerLayerVis" x="10.0*cm" y="20.0*cm" length="3.2*mm" 
+         <envelope vis="FFTrackerLayerVis" x="10.0*cm" y="20.0*cm" length="3.2*mm"
           zstart="0.0/2.0" />
       </layer>
-      
+
     </detector>
 
     <detector
       id="ForwardOffMTracker_station_4_ID"
       name="ForwardOffMTracker_station_4"
       type="ip6_OffMomentumTracker"
-      readout="ForwardOffMTrackerHits4"
+      readout="ForwardOffMTrackerHits"
       vis="FFTrackerVis"
       reflect="false">
       <position x="-870.0*mm" y="0" z="24520*mm"/>
@@ -115,31 +115,19 @@
         <module_component material="Aluminum"     vis="FFTrackerShieldingVis" thickness="ForwardOffMTracker_RFShieldThickness"/>
       </module>
       <layer id="1" module="Module1">
-         <envelope vis="FFTrackerLayerVis" x="10.0*cm" y="20.0*cm" length="3.2*mm" 
+         <envelope vis="FFTrackerLayerVis" x="10.0*cm" y="20.0*cm" length="3.2*mm"
           zstart="0.0/2.0" />
       </layer>
-      
+
     </detector>
 
 
   </detectors>
 
   <readouts>
-    <readout name="ForwardOffMTrackerHits1">
+    <readout name="ForwardOffMTrackerHits">
       <segmentation type="CartesianGridXY" grid_size_x="0.5*mm" grid_size_y="0.5*mm" />
-      <id>system:8,layer:5,module:5,slice:4,x:32:-16,y:-16</id>  
-    </readout>
-    <readout name="ForwardOffMTrackerHits2">
-      <segmentation type="CartesianGridXY" grid_size_x="0.5*mm" grid_size_y="0.5*mm" />
-      <id>system:8,layer:5,module:5,slice:4,x:32:-16,y:-16</id>  
-    </readout>
-    <readout name="ForwardOffMTrackerHits3">
-      <segmentation type="CartesianGridXY" grid_size_x="0.5*mm" grid_size_y="0.5*mm" />
-      <id>system:8,layer:5,module:5,slice:4,x:32:-16,y:-16</id>  
-    </readout>
-    <readout name="ForwardOffMTrackerHits4">
-      <segmentation type="CartesianGridXY" grid_size_x="0.5*mm" grid_size_y="0.5*mm" />
-      <id>system:8,layer:5,module:5,slice:4,x:32:-16,y:-16</id>  
+      <id>system:8,layer:5,module:5,slice:4,x:32:-16,y:-16</id>
     </readout>
   </readouts>
 
