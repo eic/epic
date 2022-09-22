@@ -111,9 +111,7 @@
   <documentation level="10">
     ## PID detectors
   </documentation>
-  {% if features is not defined or features['pid'] is none or 'fake_dirc' in features['pid'] %}
-  <include ref="${DETECTOR_PATH}/compact/fake_dirc.xml"/>
-  {% elif 'dirc' in features['pid'] -%}
+  {% if features is defined and 'dirc' in features['pid'] -%}
   <include ref="${DETECTOR_PATH}/compact/dirc.xml"/>
   {% endif -%}
 
