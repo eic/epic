@@ -770,7 +770,7 @@
       <property name="RINDEX"    ref="RINDEX__Acrylic_DRICH"/>
       <property name="ABSLENGTH" ref="ABSLENGTH__Acrylic_DRICH"/>
     </material>
-    <!-- END dRICH material definitions -->
+    <!-- END dRICH and pfRICH material definitions -->
     <material name="QuartzOptical">
       <D type="density" value="2.2" unit="g/cm3"/>
       <composite n="1" ref="Si"/>
