@@ -373,10 +373,10 @@
       1240*eV/210  10*mm
       1240*eV/200  0*mm
       "/>
-    <!-- BEGIN dRICH and pfRICH material properties
-         - dumped from fun4all implementation
-         - see https://github.com/cisbani/dRICh/blob/main/share/source/g4dRIChOptics.hh
-         -->
+    <!-- BEGIN dRICH and pfRICH material optical properties
+      - to generate, follow: https://github.com/eic/drich-dev/blob/main/doc/material_tables.md
+      - original source for ATHENA/ECCE: https://github.com/cisbani/dRICh/blob/main/share/source/g4dRIChOptics.hh
+    -->
     <!-- dRICH gas -->
     <matrix name="RINDEX__C2F6_DRICH" coldim="2" values="
       1.7712*eV   1.00075
@@ -584,7 +584,7 @@
       6.11103*eV    2.510*mm
       6.19921*eV    2.370*mm
       "/>
-    <!-- dRICH acrylic -->
+    <!-- dRICH acrylic filter -->
     <matrix name="RINDEX__Acrylic_DRICH" coldim="2" values="
       4.13281*eV  1.5017
       4.22099*eV  1.5017
@@ -689,7 +689,7 @@
       8.36529*eV  0.166779*mm
       8.45347*eV  0.166779*mm
       "/>
-    <!-- END dRICH optical properties -->
+    <!-- END dRICH and pfRICH material optical properties -->
   </properties>
   <materials>
     <material name="AirOptical">
@@ -847,7 +847,10 @@
       -->
     </opticalsurface>
 
-    <!-- BEGIN dRICH surface definitions -->
+    <!-- BEGIN dRICH and pfRICH optical surface properties
+      - to generate, follow: https://github.com/eic/drich-dev/blob/main/doc/material_tables.md
+      - original source for ATHENA/ECCE: https://github.com/cisbani/dRICh/blob/main/share/source/g4dRIChOptics.hh
+    -->
     <opticalsurface name="MirrorSurface_DRICH" model="unified" finish="polished" type="dielectric_metal">
       <property name="REFLECTIVITY" coldim="2" values="
         1*eV  0.9
@@ -869,7 +872,7 @@
         7*eV  1
         "/>
     </opticalsurface>
-    <!-- END dRICH surface definitions -->
+    <!-- END dRICH and pfRICH optical surface properties -->
 
   </surfaces>
 </lccdd>
