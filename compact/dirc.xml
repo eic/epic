@@ -52,9 +52,9 @@
     <constant name="DIRCLens_height"        value="DIRCPrism_long_edge"/>
     <constant name="DIRCLens_width"         value="DIRCPrism_width"/>
     <constant name="DIRCLens_thickness"     value="12 * mm"/>
-    <constant name="DIRCLens_r1"            value="33 * mm"/>
-    <constant name="DIRCLens_r2"            value="24 * mm"/>
-    <constant name="DIRCLens_shight"        value="25 * mm" comment="Is 'shight' from UK urban dictionary???"/>
+    <constant name="DIRCLens_r1"            value="62 * mm"/>
+    <constant name="DIRCLens_r2"            value="36 * mm"/>
+    <constant name="DIRCLens_height"        value="50 * mm"/>
 
     <!-- FD (Foto detectors?) -->
     <constant name="DIRCFd_height"          value="DIRCPrism_height"/>
