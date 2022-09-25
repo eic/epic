@@ -6,15 +6,15 @@
     <constant name="MRICH_length" value="BackwardPIDRegion_length"/>
     <constant name="MRICH_zmin"   value="BackwardPIDRegion_zmin"/>
 
-    <constant name="MRICHAerogel_thickness"           value="30.0*mm"/>
-    <constant name="MRICHAerogel_width"               value="126.5*mm"/>
-    <constant name="MRICHFoam_thickness"              value="2*mm"/>
+    <constant name="MRICHAerogel_thickness"           value="40.0*mm"/>
+    <constant name="MRICHAerogel_width"               value="100.0*mm"/>
+    <constant name="MRICHFoam_thickness"              value="1*mm"/>
     <constant name="MRICHFresnelLens_thickness"       value="0.06*inch"/>
     <constant name="MRICHAerogelLensGap_thickness"    value="2*mm"/>
     <constant name="MRICHLensMirrorGap_thickness"     value="2*mm"/>
     <constant name="MRICHPhotoDet_thickness"          value="1.5*mm"/>
     <constant name="MRICHPhotoDet_length"             value="48.5*mm"/>
-    <constant name="MRICHGlassWindow_width"           value="103.5*mm"/>
+    <constant name="MRICHGlassWindow_width"           value="100*mm"/>
     <constant name="MRICHGlassPhotoDet_thickness"     value="5.0*mm"/>
     <constant name="MRICHPhotoDetMCPlate_thickness"   value="0.3*mm"/> <!-- FIXME: should be 1.2*mm with PyrexGlass25 -->
     <constant name="MRICHPhotoDetAnode_thickness"     value="3.8*mm"/>
@@ -24,7 +24,8 @@
     <constant name="MRICHRearExtraSpace_thickness"    value="0.3*mm"/>
     <constant name="MRICHLensPhotoDet_length"         value="136.4*mm"/>
     <constant name="MRICHMirror_thickness"            value="2.0*mm"/>
-    <constant name="MRICHMirror_length"               value="MRICHLensPhotoDet_length - MRICHLensMirrorGap_thickness"/>
+   <!-- <constant name="MRICHMirror_length"               value="MRICHLensPhotoDet_length - MRICHLensMirrorGap_thickness"/>-->
+    <constant name="MRICHMirror_length"               value="2*inch">
     <constant name="MRICHMirror_width1"               value="MRICHAerogel_width "/>
     <constant name="MRICHMirror_width2"               value="MRICHGlassWindow_width"/>
 
