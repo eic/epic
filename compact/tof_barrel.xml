@@ -72,7 +72,7 @@
       <dimensions
         rmin="BarrelTOF_rmin-BarrelTOF_rOffset"
         rmax="BarrelTOF_rmax+BarrelTOF_rOffset"
-	length="BarrelTOF_length"/>
+        length="BarrelTOF_length"/>
       <comment>
         Tracker Barrel Modules
       </comment>
