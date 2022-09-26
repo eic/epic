@@ -25,7 +25,7 @@
     <constant name="MRICHLensPhotoDet_length"         value="136.4*mm"/>
     <constant name="MRICHMirror_thickness"            value="2.0*mm"/>
    <!-- <constant name="MRICHMirror_length"               value="MRICHLensPhotoDet_length - MRICHLensMirrorGap_thickness"/>-->
-    <constant name="MRICHMirror_length"               value="2*inch">
+    <constant name="MRICHMirror_length"               value="2.54*cm">
     <constant name="MRICHMirror_width1"               value="MRICHAerogel_width "/>
     <constant name="MRICHMirror_width2"               value="MRICHGlassWindow_width"/>
 
