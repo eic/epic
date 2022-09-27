@@ -43,7 +43,7 @@
         numsides="HcalEndcapN_CaloSides"
         zmin="HcalEndcapN_zmin"
         rmin="HcalEndcapN_rmin"
-        rmax="HcalBarrel_rmax"/>
+        rmax="HcalEndcapN_rmax"/>
       <layer repeat="HcalEndcapNLayer_NRepeat" vis="HcalEndcapLayerVis" >
         <slice material="Steel235" thickness="HcalEndcapNSteelThickness" vis="HcalAbsorberVis"/>
         <slice material="Polystyrene" thickness="HcalEndcapNPolystyreneThickness" vis="HcalSensorVis" sensitive="yes" limits="cal_limits"/>
@@ -54,8 +54,12 @@
   <!--  Definition of the readout segmentation/definition  -->
   <readouts>
     <readout name="HcalEndcapNHits">
+      <!--<segmentation type="PolarGridRPhi2"
+      grid_r_values="HcalEndcapN_rmin 90.9878*cm 100.89*cm 111.395*cm 122.516*cm 134.229*cm 146.58*cm 159.546*cm 173.155*cm 187.424*cm 202.377*cm 218.019*cm 234.353*cm 251.444*cm HcalEndcapN_rmax"
+      grid_phi_values="6*deg 6*deg 6*deg 6*deg 6*deg 6*deg 6*deg 6*deg 6*deg 6*deg 6*deg 6*deg 6*deg 6*deg 6*deg 6*deg 6*deg 6*deg 6*deg 6*deg 6*deg 6*deg 6*deg 6*deg 6*deg 6*deg 6*deg 6*deg 6*deg 6*deg 6*deg 6*deg 6*deg 6*deg 6*deg 6*deg"
+      offset_phi="0.0*deg"/>-->
       <segmentation type="PolarGridRPhi2"
-      grid_r_values="HcalEndcapN_rmin 90.9878*cm 100.89*cm 111.395*cm 122.516*cm 134.229*cm 146.58*cm 159.546*cm 173.155*cm 187.424*cm 202.377*cm 218.019*cm 234.353*cm 251.444*cm HcalBarrel_rmax"
+      grid_r_values="90.9878*cm 100.89*cm 111.395*cm 122.516*cm 134.229*cm 146.58*cm 159.546*cm 173.155*cm 187.424*cm 202.377*cm 218.019*cm 234.353*cm 251.444*cm"
       grid_phi_values="6*deg 6*deg 6*deg 6*deg 6*deg 6*deg 6*deg 6*deg 6*deg 6*deg 6*deg 6*deg 6*deg 6*deg 6*deg 6*deg 6*deg 6*deg 6*deg 6*deg 6*deg 6*deg 6*deg 6*deg 6*deg 6*deg 6*deg 6*deg 6*deg 6*deg 6*deg 6*deg 6*deg 6*deg 6*deg 6*deg"
       offset_phi="0.0*deg"/>
       <id>system:8,barrel:3,module:4,layer:8,slice:5,r:32:-16,phi:-16</id>
