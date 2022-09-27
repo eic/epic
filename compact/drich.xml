@@ -6,8 +6,8 @@
 <constant name="DRICH_Length"             value="ForwardRICHRegion_length"/>  <!-- overall vessel length -->
 <constant name="DRICH_zmin"               value="ForwardRICHRegion_zmin"/>
 <constant name="DRICH_zmax"               value="DRICH_zmin + DRICH_Length"/>
-<constant name="DRICH_rmin0"              value="DRICH_zmin * ForwardRICHRegion_tan1"/>  <!-- bore radius at dRICh entrance -->
-<constant name="DRICH_rmin1"              value="DRICH_zmax * ForwardRICHRegion_tan2"/>  <!-- bore radius at dRICh exit -->
+<constant name="DRICH_rmin0"              value="DRICH_zmin * ForwardRICHRegion_tan1"/>  <!-- bore radius at dRICH entrance -->
+<constant name="DRICH_rmin1"              value="DRICH_zmax * ForwardRICHRegion_tan2"/>  <!-- bore radius at dRICH exit -->
 <constant name="DRICH_wall_thickness"     value="0.5*cm"/>  <!-- thickness of radial walls -->
 <constant name="DRICH_window_thickness"   value="0.1*cm"/>  <!-- thickness of entrance and exit walls -->
 <!-- snout geometry: cone with front radius rmax0 and back radius of rmax1 -->
@@ -49,7 +49,7 @@
 
 <!-- /detectors/detector -->
 <documentation level="10">
-### dRICh: ***d***ual ***R***ing ***I***maging ***Ch***erenkov detector
+### dRICH: ***d***ual ***R***ing ***I***maging ***Ch***erenkov detector
 </documentation>
 <detector
   id="ForwardRICH_ID"
@@ -66,7 +66,7 @@
 <!-- /detectors/detector/dimensions -->
 <documentation level="10">
 #### Vessel
-- the dRICh vessel is composed of two parts:
+- the dRICH vessel is composed of two parts:
   - tank: cylindrical region containing most of the detector components
   - snout: conical region at the front of the vessel, containing the aerogel
 - dimensions:
