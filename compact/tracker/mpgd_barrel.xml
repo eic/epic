@@ -42,7 +42,7 @@
     <constant name="OuterMPGDBarrelMod_zoffset"             value="(OuterMPGDBarrelMod_zmin1 - OuterMPGDBarrelMod_zmin2)/2" />
     <constant name="OuterMPGDBarrelLayer_length"            value="OuterMPGDBarrelMod_length + 1*um" />
     <constant name="OuterMPGDBarrelLayer_thickness"         value="2*cm" />
-    <constant name="OuterMPGDBarrelLayer_rmin"              value="OuterMPGDBarrelMod_rmin"/>
+    <constant name="OuterMPGDBarrelLayer_rmin"              value="OuterMPGDBarrelMod_rmin - OuterMPGDBarrelLayer_thickness / 2.0"/>
     <constant name="OuterMPGDBarrelLayer_rmax"              value="OuterMPGDBarrelLayer_rmin + OuterMPGDBarrelLayer_thickness"/>
 
     <comment> MMGAS tracker parameters </comment>
