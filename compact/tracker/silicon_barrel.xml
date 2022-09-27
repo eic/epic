@@ -52,7 +52,7 @@
       id="TrackerBarrel_0_ID"
       name="SagittaSiBarrel"
       type="epic_TrackerBarrel"
-      readout="SagittaSiBarrelHits"
+      readout="SiBarrelHits"
       insideTrackingVolume="true">
       <dimensions
         rmin="SiBarrelLayer1_rmin"
@@ -109,7 +109,7 @@
       id="TrackerBarrel_1_ID"
       name="OuterSiBarrel"
       type="epic_TrackerBarrel"
-      readout="OuterSiBarrelHits"
+      readout="SiBarrelHits"
       insideTrackingVolume="true">
       <dimensions
         rmin="SiBarrelLayer2_rmin"
@@ -162,11 +162,7 @@
   </detectors>
 
   <readouts>
-    <readout name="SagittaSiBarrelHits">
-      <segmentation type="CartesianGridXY" grid_size_x="0.010*mm" grid_size_y="0.010*mm" />
-      <id>system:8,layer:4,module:12,sensor:2,x:32:-12,y:-20</id>
-    </readout>
-    <readout name="OuterSiBarrelHits">
+    <readout name="SiBarrelHits">
       <segmentation type="CartesianGridXY" grid_size_x="0.010*mm" grid_size_y="0.010*mm" />
       <id>system:8,layer:4,module:12,sensor:2,x:32:-12,y:-20</id>
     </readout>
