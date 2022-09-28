@@ -32,7 +32,7 @@
       For W/SiFi (sPHENIX): X0 ~ 0.7 cm (but different fiber orientation)
     </comment>
     <constant name="EcalBarrel_RadiatorThickness"    value="EcalBarrel_FiberZSpacing*13"/>
-    <constant name="EcalBarrel_ModRepeat"            value="CaloSides"/>
+    <constant name="EcalBarrel_ModRepeat"            value="EcalBarrelStavesN"/>
     <constant name="EcalBarrel_ModLength"            value="0.5*m"/>
     <constant name="EcalBarrel_ModWidth"             value="0.5*m"/>
     <constant name="EcalBarrel_AvailThickness"       value="EcalBarrelRegion_thickness-EcalBarrel_Support_thickness"/>
