@@ -9,7 +9,7 @@
     ### Ecal configuration
   </documentation>
   <!--include ref="ecal_forward_scfi.xml"/-->
-  <include ref="ecal_forward_homogenous.xml"/>
+  <include ref="ecal_forward_homogeneous.xml"/>
 
   <!--include ref="ecal_backward_hybrid.xml"/-->
   <include ref="ecal_backward_PbWO4.xml"/>
