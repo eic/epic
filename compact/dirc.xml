@@ -21,7 +21,7 @@
   </comment>
 
   <define>
-    <constant name="DIRC_rmin"              value="BarrelTracking_rmax-11*cm"/>
+    <constant name="DIRC_rmin"              value="CentralTrackingRegion_rmax"/>
     <constant name="DIRC_rotation"          value="pi" comment="Allows DIRC flip"/>
     <!-- CLEANUP THIS if not sure. This is from the initial implementation
     <constant name="DIRC_length"            value="285.500*cm"/>
