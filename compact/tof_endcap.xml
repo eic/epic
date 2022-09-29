@@ -11,10 +11,6 @@
     <constant name="ForwardTOF_zmin"             value="ForwardTOFRegion_zmin + ForwardTOFRegion_length - ForwardTOF_length - 1*cm"/>
     <constant name="ForwardTOF_nlayers"          value="1"/>
     <constant name="ForwardTOFMod_offset"        value="1.2*cm"/>
-    <constant name="BackwardTOF_length"          value="min(BackwardTOFRegion_length, 2.*cm)"/>
-    <constant name="BackwardTOF_zmin"            value="BackwardTOFRegion_zmin + 0.5*cm"/>
-    <constant name="BackwardTOF_nlayers"         value="1"/>
-    <constant name="BackwardTOFMod_offset"       value="1.2*cm"/>
 
     <comment> LGAD parameters for the endcap TOFs </comment>
     <constant name="TOFEndcapSensor_thickness"   value="300*um" />
@@ -22,6 +18,10 @@
     <constant name="TOFEndcapMod_count"          value="36" />
     <constant name="TOFEndcapMod_dz"             value="0" />
     <constant name="TOFEndcapMod_overlap"        value="0" />
+
+    <constant name="TOFEndcap_cooling_plate_height"        value="1*mm" />
+    <constant name="TOFEndcap_diameter_coolingtube"        value="5*mm" />
+    <constant name="TOFEndcap_wallthickness_coolingtube"        value="1*mm" />
   </define>
 
   <documentation>
@@ -51,29 +51,27 @@
     <constant name="ForwardTOFLayer1_zmin"      value="ForwardTOFMod1_zmin - TOFEndcapLayer_thickness / 2" />
     <constant name="ForwardTOFLayer2_zmin"      value="ForwardTOFMod2_zmin - TOFEndcapLayer_thickness / 2" />
 
-    <constant name="BackwardTOFMod_rmin"        value="BackwardPIDRegion_tan * BackwardTOF_zmin" />
-    <constant name="BackwardTOFMod_rmax"        value="BackwardPIDRegion_rmax" />
-    <constant name="BackwardTOFMod_x1"          value="2 * BackwardTOFMod_rmin * tan(TOFEndcapMod_angle/2)" />
-    <constant name="BackwardTOFMod_x2"          value="2 * BackwardTOFMod_rmax * sin(TOFEndcapMod_angle/2)" />
-    <constant name="BackwardTOFMod_y"           value="BackwardTOFMod_rmax * cos(TOFEndcapMod_angle/2) - BackwardTOFMod_rmin" />
-    <constant name="BackwardTOFMod1_zmin"       value="BackwardTOF_zmin" />
-    <constant name="BackwardTOFMod2_zmin"       value="BackwardTOF_zmin + BackwardTOFMod_offset" />
-    <constant name="BackwardTOFLayer_rmin"      value="BackwardTOFMod_rmin - 1*um" />
-    <constant name="BackwardTOFLayer_rmax"      value="BackwardTOFMod_rmax + 1*um" />
-    <constant name="BackwardTOFLayer1_zmin"     value="BackwardTOFMod1_zmin - TOFEndcapLayer_thickness / 2" />
-    <constant name="BackwardTOFLayer2_zmin"     value="BackwardTOFMod2_zmin - TOFEndcapLayer_thickness / 2" />
+
+    <constant name="ForwardTOF_rMin"        value="7*cm" />
+    <constant name="ForwardTOF_rMax"        value="87*cm" />
+    <constant name="ForwardTOF_xOffset"        value="-2.75*cm" />
+    <constant name="ForwardTOF_det_height"        value="2.0*cm" />
+
   </define>
 
   <detectors>
       <detector
         id="ForwardTOF_ID"
         name="ForwardTOF"
-        type="epic_TrapEndcapTracker"
+        type="epic_TOFEndcap"
         readout="TOFEndcapHits"
         vis="TOFVis"
         reflect="false">
         <module name="ForwardModule" vis="TOFModuleVis">
           <trd x1="ForwardTOFMod_x1/2.0" x2="ForwardTOFMod_x2/2.0" z="ForwardTOFMod_y/2"/>
+          <diskdimension rMin="ForwardTOF_rMin" rMax="ForwardTOF_rMax" xOffset="ForwardTOF_xOffset" det_height="ForwardTOF_det_height" zPos="ForwardTOF_zmin" cooling_plate_height="TOFEndcap_cooling_plate_height" wallthickness_coolingtube="TOFEndcap_wallthickness_coolingtube" diameter_coolingtube="TOFEndcap_diameter_coolingtube" material="Aluminum"/>
+
+
           <comment> TRDs are built back-to-front </comment>
           <module_component thickness="TOFEndcapService_thickness" material="Silicon" vis="TOFVis"/>
           <module_component thickness="TOFEndcapSensor_thickness" material="Silicon" sensitive="true" vis="TOFSensorVis"/>
@@ -90,33 +88,6 @@
             nmodules="TOFEndcapMod_count"
             dz="TOFEndcapMod_dz"
             module="ForwardModule" />
-        </layer>
-      </detector>
-      <detector
-        id="BackwardTOF_ID"
-        name="BackwardTOF"
-        type="epic_TrapEndcapTracker"
-        readout="TOFEndcapHits"
-        vis="TOFVis"
-        reflect="true">
-        <module name="BackwardModule" vis="TOFModuleVis">
-          <trd x1="BackwardTOFMod_x1/2.0" x2="BackwardTOFMod_x2/2.0" z="BackwardTOFMod_y/2"/>
-          <comment> TRDs are built back-to-front </comment>
-          <module_component thickness="TOFEndcapService_thickness" material="Silicon" vis="TOFVis"/>
-          <module_component thickness="TOFEndcapSensor_thickness" material="Silicon" sensitive="true" vis="TOFSensorVis"/>
-        </module>
-        <layer id="1">
-          <envelope  vis="TOFLayerVis"
-            rmin="BackwardTOFLayer_rmin"
-            rmax="BackwardTOFLayer_rmax"
-            length="TOFEndcapLayer_thickness"
-            zstart="BackwardTOFLayer1_zmin" />
-          <ring
-            r="BackwardTOFMod_rmin + BackwardTOFMod_y/2.0"
-            zstart="0"
-            nmodules="TOFEndcapMod_count"
-            dz="TOFEndcapMod_dz"
-            module="BackwardModule" />
         </layer>
       </detector>
   </detectors>
