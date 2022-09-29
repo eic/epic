@@ -258,6 +258,41 @@
       4.75035*eV   1.85713
       4.93961*eV   1.87039
       "/>
+    
+    <matrix name="RINDEX__VM2000" coldim="2" values="
+      1.37760*eV   1.42
+      1.45864*eV   1.42
+      1.54980*eV   1.42
+      1.65312*eV   1.42
+      1.71013*eV   1.42
+      1.77120*eV   1.42
+      1.83680*eV   1.42
+      1.90745*eV   1.42
+      1.98375*eV   1.42
+      2.06640*eV   1.42
+      2.10143*eV   1.42
+      2.13766*eV   1.42
+      2.17516*eV   1.42
+      2.21400*eV   1.42
+      2.25426*eV   1.42
+      2.29600*eV   1.42
+      2.33932*eV   1.42
+      2.38431*eV   1.42
+      2.43106*eV   1.42
+      2.47968*eV   1.42
+      2.53029*eV   1.42
+      2.58300*eV   1.42
+      2.63796*eV   1.42
+      2.69531*eV   1.42
+      2.75520*eV   1.42
+      2.81782*eV   1.42
+      2.88335*eV   1.42
+      2.95200*eV   1.42
+      3.09960*eV   1.42
+      3.54241*eV   1.42
+      4.13281*eV   1.42
+      "/>
+    
     <matrix name="ABSLENGTH__DIRCNlak33a" coldim="2" values="
       1.0*eV       371813*mm
       1.2511*eV    352095*mm
@@ -373,11 +408,11 @@
       1240*eV/210  10*mm
       1240*eV/200  0*mm
       "/>
-    <!-- BEGIN dRICH and pfRICH material optical properties
-      - to generate, follow: https://github.com/eic/drich-dev/blob/main/doc/material_tables.md
-      - original source for ATHENA/ECCE: https://github.com/cisbani/dRICh/blob/main/share/source/g4dRIChOptics.hh
-    -->
-    <!-- dRICH gas -->
+    <!-- BEGIN dRICh and pfRICh material properties
+         - dumped from fun4all implementation
+         - see https://github.com/cisbani/dRICh/blob/main/share/source/g4dRIChOptics.hh
+         -->
+    <!-- dRICh gas -->
     <matrix name="RINDEX__C2F6_DRICH" coldim="2" values="
       1.7712*eV   1.00075
       1.92389*eV  1.00075
@@ -402,7 +437,7 @@
       4.85156*eV  10.0*m
       6.19921*eV  10.0*m
       "/>
-    <!-- pfRICH gas -->
+    <!-- pfRICh gas -->
     <matrix name="RINDEX__C4F10_PFRICH" coldim="2" values="
       1.7712*eV   1.0013
       1.92389*eV  1.0013
@@ -427,7 +462,7 @@
       4.85156*eV  6.0*m
       6.19921*eV  6.0*m
       "/>
-    <!-- dRICH aerogel, for density=0.11 g/cm3 -->
+    <!-- dRICh aerogel, for density=0.11 g/cm3 -->
     <matrix name="RINDEX__Aerogel_DRICH" coldim="2" values="
       1.87855*eV  1.01852
       1.96673*eV  1.01856
@@ -584,7 +619,7 @@
       6.11103*eV    2.510*mm
       6.19921*eV    2.370*mm
       "/>
-    <!-- dRICH acrylic filter -->
+    <!-- dRICh acrylic -->
     <matrix name="RINDEX__Acrylic_DRICH" coldim="2" values="
       4.13281*eV  1.5017
       4.22099*eV  1.5017
@@ -689,7 +724,7 @@
       8.36529*eV  0.166779*mm
       8.45347*eV  0.166779*mm
       "/>
-    <!-- END dRICH and pfRICH material optical properties -->
+    <!-- END dRICh optical properties -->
   </properties>
   <materials>
     <material name="AirOptical">
@@ -738,7 +773,7 @@
       <property name="RINDEX" ref="RINDEX__Acrylic"/>
       <property name="ABSLENGTH" ref="ABSLENGTH__Acrylic"/>
     </material>
-    <!-- BEGIN dRICH and pfRICH material definitions -->
+    <!-- BEGIN dRICh and pfRICh material definitions -->
     <material name="C2F6_DRICH">
       <D type="density" value="0.005734" unit="g/cm3"/>
       <composite n="2" ref="C"/>
@@ -770,7 +805,7 @@
       <property name="RINDEX"    ref="RINDEX__Acrylic_DRICH"/>
       <property name="ABSLENGTH" ref="ABSLENGTH__Acrylic_DRICH"/>
     </material>
-    <!-- END dRICH and pfRICH material definitions -->
+    <!-- END dRICh material definitions -->
     <material name="QuartzOptical">
       <D type="density" value="2.2" unit="g/cm3"/>
       <composite n="1" ref="Si"/>
@@ -802,6 +837,31 @@
         Nlak33aMaterial->AddElement(O, natoms = 2);
       -->
     </material>
+    <material name="VM2000">
+      <D type="density" value="1.43" unit="g / cm3"/>
+      <composite n="2" ref="C"/>
+      <composite n="2" ref="H"/>
+      <composite n="2" ref="F"/>
+      <property name="RINDEX" ref="RINDEX__VM2000"/>
+      <property name="REFLECTIVITY" coldim="2"
+                values="1.776*eV  0.95
+                        4.143*eV  0.95"/>
+    </material>
+    <material name="leadtungsten_optical">
+      <D type="density" value="8.3" unit="g / cm3"/>
+      <composite n="1" ref="Pb"/>
+      <composite n="1" ref="W"/>
+      <composite n="4" ref="O"/>
+      <property name="RINDEX" coldim="2"
+                values="1.551*eV  2.4
+                        3.545*eV  2.40"/>
+      <property name="ABSLENGTH" coldim="2"
+                values="1.551*eV  200.0*cm
+                        3.545*eV  200.0*cm"/>
+      <constant name="SCINTILLATIONYIELD"  value="200.0/MeV"/>
+      <constant name="RESOLUTIONSCALE"     value="1.0"/>
+      <constant name="FASTTIMECONSTANT"    value="6.0*ns"/>
+    </material>    
   </materials>
   <surfaces>
     <opticalsurface finish="polished" model="glisur" name="MirrorOpticalSurface" type="dielectric_metal" value="0">
@@ -847,10 +907,7 @@
       -->
     </opticalsurface>
 
-    <!-- BEGIN dRICH and pfRICH optical surface properties
-      - to generate, follow: https://github.com/eic/drich-dev/blob/main/doc/material_tables.md
-      - original source for ATHENA/ECCE: https://github.com/cisbani/dRICh/blob/main/share/source/g4dRIChOptics.hh
-    -->
+    <!-- BEGIN dRICh surface definitions -->
     <opticalsurface name="MirrorSurface_DRICH" model="unified" finish="polished" type="dielectric_metal">
       <property name="REFLECTIVITY" coldim="2" values="
         1*eV  0.9
@@ -872,7 +929,7 @@
         7*eV  1
         "/>
     </opticalsurface>
-    <!-- END dRICH and pfRICH optical surface properties -->
+    <!-- END dRICh surface definitions -->
 
   </surfaces>
 </lccdd>
