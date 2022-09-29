@@ -30,6 +30,7 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
   xml_det_t     x_det             = e;
   int           det_id            = x_det.id();
   string        det_name          = x_det.nameStr();
+  Material      air               = description.air();
 
   // get the solids section for this detector
   xml_comp_t    x_solids         = x_det.child("solids"); 
@@ -37,12 +38,26 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
   DetElement       sdet(det_name, det_id);
   Volume           motherVol = description.pickMotherVolume(sdet);
 
+  std::string   string_rmin      = dd4hep::xml::_toString(x_det.attr_value(x_det.getAttr("rmin"))); 
+  std::string   string_rmax      = dd4hep::xml::_toString(x_det.attr_value(x_det.getAttr("rmax"))); 
+  std::string   string_length    = dd4hep::xml::_toString(x_det.attr_value(x_det.getAttr("length"))); 
+
+  double           rmin = (dd4hep::xml::_toDouble(string_rmin.c_str()))*dd4hep::mm;
+  double           rmax = (dd4hep::xml::_toDouble(string_rmax.c_str()))*dd4hep::mm;
+  double           length = (dd4hep::xml::_toDouble(string_length.c_str()))*dd4hep::mm;
+
+  Tube             etube(rmin,rmax, length);
+  Volume           envelope(det_name, etube, air);
+  PlacedVolume     env_phv = motherVol.placeVolume(envelope);
+  env_phv.addPhysVolID("system", det_id);
+  env_phv.addPhysVolID("barrel", 0);
+  sdet.setPlacement(env_phv);
+
   // Storage for sectors and tile assemblies
-  Volume        ChimneySector; 
-  Volume        Sector; 
+  Assembly      ChimneySector("ChimneySector"); 
+  Assembly      Sector("Sector"); 
   Assembly      TileAssembly24("TileAssembly24"); 
   Assembly      TileAssembly24Chimney("TileAssembly24Chimney"); 
-
 
   xml_comp_t    det_define           = x_det.child("define");
 
@@ -150,16 +165,16 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
       xml_comp_t pos = j;
 
       // create the vertex point
-      // Note that we trivially rotate everything by swapping the z coordinate
-      Tessellated::Vertex_t thisPoint(dd4hep::xml::_toDouble(pos.attr_value(pos.getAttr("x")))*dd4hep::mm - offset_x,
-				      dd4hep::xml::_toDouble(pos.attr_value(pos.getAttr("y")))*dd4hep::mm - offset_y,
-				      -(dd4hep::xml::_toDouble(pos.attr_value(pos.getAttr("z")))*dd4hep::mm - offset_z)); 
+      // Note that we trivially rotate everything about y by taking the negative of the x,z coordinate
+      Tessellated::Vertex_t thisPoint(-(dd4hep::xml::_toDouble(pos.attr_value(pos.getAttr("x")))*dd4hep::mm - offset_x),
+      				      dd4hep::xml::_toDouble(pos.attr_value(pos.getAttr("y")))*dd4hep::mm - offset_y,
+      				      -(dd4hep::xml::_toDouble(pos.attr_value(pos.getAttr("z")))*dd4hep::mm - offset_z)); 
     
       vertices.push_back(thisPoint);
 
     }
 
-    TessellatedSolid solid(vertices);
+    TessellatedSolid solid(solid_name.c_str(),vertices);
 
     for(xml_coll_t i(tessellated, _Unicode(triangular)); i; ++i){
       xml_comp_t triang = i; 
@@ -200,11 +215,36 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
     // Complete the shape
     solid->CloseShape(true,true,false); 
     Volume           solidVolume(solid_name, solid, solid_material);
+    solidVolume.setVisAttributes(description, x_det.visStr());
+
+    //printout(WARNING, "BarrelHCalCalorimeter", "tesselated solid name %s", solid_name.c_str());
+
+    if(solid_name == "HCAL_Chimney_Sector_Half_Plate"){
+
+      ChimneySector.placeVolume(solidVolume, 0, Transform3D(RotationZ(sectorRotate*dd4hep::deg), Translation3D(0, 0, 0) ));
  
-    if(solid_name == "HCAL_Chimney_Sector")
-      ChimneySector = solidVolume; 
-    else if(solid_name == "HCAL_Sector")
-      Sector = solidVolume; 
+      //ChimneySector.placeVolume(solidVolume, 1, Transform3D(RotationZ((9.5*2*M_PI / 320) + sectorRotate*dd4hep::deg), Translation3D(0, 0, 0) ));
+ 
+    }
+    else if(solid_name == "HCAL_Chimney_Sector_Plate"){
+
+      for(int i=5; i<6; i++)
+        ChimneySector.placeVolume(solidVolume, i, Transform3D(RotationZ((i*2*M_PI / 320) + sectorRotate*dd4hep::deg), Translation3D(0, 0, 0) ));
+
+    }
+    else if(solid_name == "HCAL_Sector_Half_Plate"){
+
+      Sector.placeVolume(solidVolume, 0, Transform3D(RotationZ(sectorRotate*dd4hep::deg), Translation3D(0, 0, 0) ));
+ 
+      Sector.placeVolume(solidVolume, 1, Transform3D(RotationZ((9.5*2*M_PI / 320) + sectorRotate*dd4hep::deg), Translation3D(0, 0, 0) ));
+
+    }
+    else if(solid_name == "HCAL_Sector_Plate"){
+
+      for(int i=0; i<9; i++)
+	Sector.placeVolume(solidVolume, i, Transform3D(RotationZ((i*2*M_PI / 320) + sectorRotate*dd4hep::deg), Translation3D(0, 0, 0) ));
+
+    }
     else{
 
       // If it's not sectors then it's a tile - for these we build an assembly to get the full array of tiles
@@ -231,7 +271,7 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
 	      TileAssembly24Chimney.placeVolume(solidVolume,2,Transform3D(RotationY(0.0), 
 									  Translation3D(xposTileS[tnum]*dd4hep::mm, yposTileS[tnum]*dd4hep::mm, zposTileS[tnum]*dd4hep::mm) ));
 	      TileAssembly24Chimney.placeVolume(solidVolume,3,Transform3D(RotationY(180.0*dd4hep::deg), 
-									  Translation3D(xposTileN[tnum]*dd4hep::mm, yposTileN[tnum]*dd4hep::mm, zposTileN[tnum]*dd4hep::mm) ));
+	      							  Translation3D(xposTileN[tnum]*dd4hep::mm, yposTileN[tnum]*dd4hep::mm, zposTileN[tnum]*dd4hep::mm) ));
 	    }
 	    else{
 	      TileAssembly24Chimney.placeVolume(solidVolume,3,Transform3D(RotationY(180.0*dd4hep::deg), 
@@ -259,7 +299,7 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
 
   }
 
-  // Rotate the tile assemlies
+  // Rotate the tile assemblies
 
   Assembly TileAssembly24Rotated("TileAssembly24Rotated"); 
   TileAssembly24Rotated.placeVolume(TileAssembly24,0,Transform3D(RotationX(tilePlaneRotate*dd4hep::deg), Translation3D(0.0,0.0,0.0) ));
@@ -269,43 +309,78 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
 
   // Place the sectors into the mother volume
 
+  sens.setType("calorimeter");
+  DetElement sector_det("sector0", det_id);
+
   // Chimney sectors
-  for(int i=-1; i<2; i++){
-    PlacedVolume     env_phv = motherVol.placeVolume(ChimneySector, Transform3D(RotationZ((i*2*M_PI / 32) + sectorRotate*dd4hep::deg), Translation3D(0, 0, 0) ));
-    env_phv.addPhysVolID("system", det_id);
-    env_phv.addPhysVolID("barrel", 0);
-    env_phv.addPhysVolID("sector", i+1);
-    sdet.setPlacement(env_phv);
+  for(int i=-1; i<0; i++){
+    PlacedVolume     sect_phv = envelope.placeVolume(ChimneySector, i+1, Transform3D(RotationZ((i*2*M_PI / 32)), Translation3D(0, 0, 0) ));
+    sect_phv.addPhysVolID("system", det_id);
+    sect_phv.addPhysVolID("barrel", 0);
+    sect_phv.addPhysVolID("module", i+1);
+    DetElement sd = sector_det.clone(_toString(i+1, "sector%d")); 
+    sd.setPlacement(sect_phv);
+    sdet.add(sd);
   }
 
+  /*
   // Normal sectors
   for(int i=4; i<33; i++){
-    PlacedVolume     env_phv = motherVol.placeVolume(Sector, RotationZYX((i*2*M_PI/32)+ sectorRotate*dd4hep::deg,0,0) );
+    PlacedVolume     env_phv = motherVol.placeVolume(Sector, i-1, RotationZYX((i*2*M_PI/32)+ sectorRotate*dd4hep::deg,0,0) );
     env_phv.addPhysVolID("system", det_id);
     env_phv.addPhysVolID("barrel", 0);
     env_phv.addPhysVolID("sector", i-1);
     sdet.setPlacement(env_phv);
   }
+  */
 
   // Place the tile assemblies
 
-  PlacedVolume     env_phv_c = motherVol.placeVolume(TileAssembly24ChimneyRotated, 
-						     Transform3D(RotationY(90.0*dd4hep::deg), Translation3D(xposOuter[0]*dd4hep::mm, yposOuter[0]*dd4hep::mm, 0.0)) );
-  env_phv_c.addPhysVolID("system", det_id);
-  env_phv_c.addPhysVolID("barrel", 0);
-  env_phv_c.addPhysVolID("row", 0);
-  sdet.setPlacement(env_phv_c);
+  /*
+  for(int i=0; i<18; i++){
 
-  // PlacedVolume     env_phv = motherVol.placeVolume(TileAssembly24, 
-  // 						   RotationY(90.0*dd4hep::deg)*
-  // 						   Transform3D(RotationZ(2*(360.0/320.0)*dd4hep::deg), Translation3D(xposOuter[1]*dd4hep::mm, yposOuter[1]*dd4hep::mm, 0.0) ));
-  // env_phv.addPhysVolID("system", det_id);
-  // env_phv.addPhysVolID("barrel", 0);
-  // env_phv.addPhysVolID("row", 1);
-  // sdet.setPlacement(env_phv);
+    PlacedVolume     tile_phv = envelope.placeVolume(TileAssembly24ChimneyRotated, i, 
+						       RotationZ((i-0.5)*(360.0/320.0)*dd4hep::deg)*
+						       Transform3D(RotationY(90.0*dd4hep::deg), Translation3D(xposOuter[0]*dd4hep::mm, yposOuter[0]*dd4hep::mm, 0.0)) );
+    tile_phv.addPhysVolID("system", det_id);
+    tile_phv.addPhysVolID("barrel", 0);
+    tile_phv.addPhysVolID("tilerow", i+1);
+    DetElement sd = sector_det.clone(_toString(i+1, "tilerow%d")); 
+    sd.setPlacement(tile_phv);
+    sdet.add(sd);
 
-  sens.setType("calorimeter");
+  }
+  */
+  
+  /*
 
+  for(int i=18; i<308; i++){
+
+    PlacedVolume     env_phv_c = motherVol.placeVolume(TileAssembly24Rotated, i, 
+						       RotationZ((i-0.5)*(360.0/320.0)*dd4hep::deg)*
+						       Transform3D(RotationY(90.0*dd4hep::deg), Translation3D(xposOuter[0]*dd4hep::mm, yposOuter[0]*dd4hep::mm, 0.0)) );
+    env_phv_c.addPhysVolID("system", det_id);
+    env_phv_c.addPhysVolID("barrel", 0);
+    env_phv_c.addPhysVolID("row", i);
+    sdet.setPlacement(env_phv_c);
+
+  }
+
+  for(int i=309; i<320; i++){
+
+    PlacedVolume     env_phv_c = motherVol.placeVolume(TileAssembly24ChimneyRotated, i, 
+						       RotationZ((i-0.5)*(360.0/320.0)*dd4hep::deg)*
+						       Transform3D(RotationY(90.0*dd4hep::deg), Translation3D(xposOuter[0]*dd4hep::mm, yposOuter[0]*dd4hep::mm, 0.0)) );
+    env_phv_c.addPhysVolID("system", det_id);
+    env_phv_c.addPhysVolID("barrel", 0);
+    env_phv_c.addPhysVolID("row", i);
+    sdet.setPlacement(env_phv_c);
+
+  }
+
+  */
+
+  envelope.setAttributes(description, x_det.regionStr(), x_det.limitsStr(), x_det.visStr());
   return sdet;
 
 }
