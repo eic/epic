@@ -170,23 +170,28 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
         sensor_length,
         sensor_length,
         baseplate_length - 0.2 * mm};
-    bool layerActive[nLayers] = {
-        false, false, false, false, false, true, false, false};
+    // bool layerActive[nLayers] = {
+    //     false, false, false, false, false, true, false, false};
 
-    double thicknessDet = 0;
+    double thicknessDet1 = 0;
+    double thicknessDet2 = 0;
     for (int ilay = 0; ilay < nLayers; ilay++)
     {
-      thicknessDet += thicknessLayer[ilay];
+      if(ilay<5 )thicknessDet1 += thicknessLayer[ilay];
+      if(ilay>5 )thicknessDet2 += thicknessLayer[ilay];
     }
 
     double segmentlength = baseplate_length;  //(detlength - 10 * cm) / 6;//
-    Box box_sensor_stack(baseplate_length / 2, baseplate_width / 2, thicknessDet / 2);
-    Solid     sol_sensor_stack = box_sensor_stack;
-    Volume log_sensor_stack("log_sensor_stack", sol_sensor_stack, air);
-    log_sensor_stack.setVisAttributes(description.visAttributes("TOFActiveMat"));
+    Box box_sensor_stack1(baseplate_length / 2, baseplate_width / 2, thicknessDet1 / 2);
+    Box box_sensor_stack2(baseplate_length / 2, baseplate_width / 2, thicknessDet2 / 2);
+    Volume log_sensor_stack1("log_sensor_stack1", box_sensor_stack1, air);
+    Volume log_sensor_stack2("log_sensor_stack2", box_sensor_stack2, air);
+    log_sensor_stack1.setVisAttributes(description.visAttributes("TOFLayers"));
+    log_sensor_stack2.setVisAttributes(description.visAttributes("TOFLayers"));
 
 
-    double z_start = -thicknessDet / 2;
+    double z_start1 = -thicknessDet1 / 2;
+    double z_start2 = -thicknessDet2 / 2;
     for (int ilay = 0; ilay < nLayers; ilay++)
     {
       const std::string layer_name = "sensor_stack_" + strLayerName[ilay];
@@ -196,36 +201,15 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
       Solid     sol_Module_Layer_Raw = box_Module_Layer_Raw;
       Volume Log_Layer(layer_name + "_Log", sol_Module_Layer_Raw, materialLayer[ilay]);
 
-      pv = log_sensor_stack.placeVolume(Log_Layer, Position(0, -offsetLayer[ilay], z_start + thicknessLayer[ilay] / 2));
-      z_start += thicknessLayer[ilay];
-      Log_Layer.setVisAttributes(description.visAttributes("TOFLayers"));
-
-      if (layerActive[ilay])
-      {
-        Log_Layer.setSensitiveDetector(sens);
-        sens.setType("tracker");
-        sensitives[m_nam].push_back(pv);
-        pv.addPhysVolID("sensor", 1);
-        // -------- create a measurement plane for the tracking surface attched to the sensitive volume -----
-        Vector3D u(0., 0., -1.);
-        Vector3D v(-1., 0., 0.);
-        Vector3D n(0., 1., 0.);
-
-        // compute the inner and outer thicknesses that need to be assigned to the tracking surface
-        // depending on wether the support is above or below the sensor
-        double inner_thickness = 0;
-        double outer_thickness = thicknessLayer[ilay];
-
-        SurfaceType type(SurfaceType::Sensitive);
-
-        // if( isStripDetector )
-        //  type.setProperty( SurfaceType::Measurement1D , true ) ;
-
-        VolPlane surf(Log_Layer, type, inner_thickness, outer_thickness, u, v, n); //,o ) ;
-        volplane_surfaces[m_nam].push_back(surf);
-
-      //   //--------------------------------------------
+      if(ilay<5 ){
+        pv = log_sensor_stack1.placeVolume(Log_Layer, Position(0, -offsetLayer[ilay], z_start1 + thicknessLayer[ilay] / 2));
+        z_start1 += thicknessLayer[ilay];
       }
+      if(ilay>5 ){
+        pv = log_sensor_stack2.placeVolume(Log_Layer, Position(0, -offsetLayer[ilay], z_start2 + thicknessLayer[ilay] / 2));
+        z_start2 += thicknessLayer[ilay];
+      }
+      Log_Layer.setVisAttributes(description.visAttributes("TOFLayers"));
     }
   
   
@@ -289,23 +273,17 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
 
     double fullsensor_width = baseSH_width+baseplate_width;
 
-    Box box_sensor_and_readout(segmentlength / 2,fullsensor_width / 2,thicknessDet_SH / 2);
-    Volume log_sensor_and_readout("log_sensor_and_readout", box_sensor_and_readout, air);
-
-    log_sensor_and_readout.setVisAttributes(description.visAttributes("InvisibleWithDaughters"));
-
-    log_sensor_and_readout.placeVolume(log_sensor_stack, Position(0, -fullsensor_width/2 + baseplate_width/2, -thicknessDet_SH/2+thicknessDet/2));
-    log_sensor_and_readout.placeVolume(log_SH_stack, Position(0,  fullsensor_width/2 - baseplate_width/4, 0));
-
     // RegisterPhysicalVolume(new G4PVPlacement(0, G4ThreeVector(0, fullsensor_width/2 - baseplate_width/4, 0),
-    //                     log_SH_stack, "ServiceHybridPlacedPhysical", log_sensor_and_readout, false, 0, overlapcheck_sector),false);
+    //                     log_SH_stack, "ServiceHybridPlacedPhysical", log_sensor_and_readout_C, false, 0, overlapcheck_sector),false);
 
 
   double offsetzFront = cooling_tube_diameter/2 + cooling_plate_height + thicknessDet_SH / 2;
   double offsetzBack = -cooling_tube_diameter/2 - cooling_plate_height - thicknessDet_SH / 2;
   // number of towers in radial direction (on y axis)
   int rowYdir = (int) ( (disk_rMax-(fullsensor_width/2)) / fullsensor_width);
+  int sensorCount = 0;
   for(int row=rowYdir;row>=-rowYdir;row--){
+    cout << sensorCount << " " << row << endl;
   // for(int row=0;row>=-rowYdir;row--){
     // pythagoras -> get available length in circular mother volume for towers
     // divide given length by tower width -> get number of towers that can be placed
@@ -315,6 +293,7 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
     if ( numSensorsRow % 2 == 0) numSensorsRow-=1;
 
     if( ( (abs(row)*fullsensor_width) -(fullsensor_width/2)) < disk_rMin ){
+      cout << "\t in rows around cutout" << endl;
         // pythagoras -> get available length in circular mother volume for towers
         // divide given length by tower width -> get number of towers that can be placed
         int numSensorLeftAdd = ceil( (disk_xOffset -(segmentlength/2) - sqrt(pow(disk_rMin,2)-pow( (abs(row)*fullsensor_width)-(fullsensor_width/2) ,2)) ) / segmentlength );
@@ -324,48 +303,235 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
         // create mother volume with space for numSensorsRow towers along x-axis
         int nSensLeft = ((numSensorsRow-1) /2 + numSensorLeftAdd);
         Box TTLDetRowLeftSolid((nSensLeft) * segmentlength / 2.0,fullsensor_width / 2.0,thicknessDet_SH / 2.0);
-        Volume TTLDetRowLeftLogical("TTLDetRowLeftLogical" + std::to_string(row), TTLDetRowLeftSolid, air);
-        TTLDetRowLeftLogical.setVisAttributes(description.visAttributes("InvisibleWithDaughters"));
+        Volume TTLDetRowLeftLogical_Front("TTLDetRowLeftLogical_Front" + std::to_string(row), TTLDetRowLeftSolid, air);
+        TTLDetRowLeftLogical_Front.setVisAttributes(description.visAttributes("InvisibleWithDaughters"));
 
-        //place log_sensor_and_readout in TTLDetRowLeftLogical
+        //place log_sensor_and_readout_L in TTLDetRowLeftLogical_Front
         for(int sensor = 0; sensor < nSensLeft; sensor++) {
-            //place log_sensor_and_readout in TTLDetRowLeftLogical
-            Position pos_sensor((sensor - (nSensLeft - 1) / 2.0) * segmentlength, 0, 0);
-            // PlacedVolume sensor_phys = 
-            TTLDetRowLeftLogical.placeVolume(log_sensor_and_readout, pos_sensor);
+          Box box_sensor_and_readout_L(segmentlength / 2,fullsensor_width / 2,thicknessDet_SH / 2);
+          Volume log_sensor_and_readout_L("log_sensor_and_readout_LF_" + std::to_string(row)+"_"+ std::to_string(sensorCount), box_sensor_and_readout_L, air);
+
+          log_sensor_and_readout_L.setVisAttributes(description.visAttributes("InvisibleWithDaughters"));
+
+          log_sensor_and_readout_L.placeVolume(log_sensor_stack1, Position(0, -fullsensor_width/2 + baseplate_width/2, -thicknessDet_SH/2+thicknessDet1/2));
+          log_sensor_and_readout_L.placeVolume(log_sensor_stack2, Position(0, -fullsensor_width/2 + baseplate_width/2, -thicknessDet_SH/2+thicknessDet1+thicknessLayer[5]+thicknessDet2/2));
+          log_sensor_and_readout_L.placeVolume(log_SH_stack, Position(0,  fullsensor_width/2 - baseplate_width/4, 0));
+
+
+          // make active sensor solid and volume
+          int senslayer=5;
+          Box sol_ACLGAD_Sens(lengthLayer[senslayer] / 2,widthLayer[senslayer] / 2,thicknessLayer[senslayer] / 2);
+          Volume log_ACLGAD_Sens_L("log_ACLGAD_Sens_LF_" + std::to_string(row)+"_"+  std::to_string(sensorCount), sol_ACLGAD_Sens, materialLayer[senslayer]);
+          log_ACLGAD_Sens_L.setVisAttributes(description.visAttributes("TOFActiveMat"));
+
+
+          pv = log_sensor_and_readout_L.placeVolume(log_ACLGAD_Sens_L, Position(0, -fullsensor_width/2 + baseplate_width/2 -offsetLayer[senslayer], -thicknessDet_SH/2+thicknessDet1+thicknessLayer[5]/2));
+
+
+          pv.addPhysVolID("sensor", sensorCount);
+          sens.setType("tracker");
+          log_ACLGAD_Sens_L.setSensitiveDetector(sens);
+          sensitives[m_nam].push_back(pv);
+          // pv.addPhysVolID("layer", 0);
+          // pv.addPhysVolID("module", row);
+          // -------- create a measurement plane for the tracking surface attched to the sensitive volume -----
+          Vector3D u(0., 0., -1.);
+          Vector3D v(-1., 0., 0.);
+          Vector3D n(0., 1., 0.);
+
+          // compute the inner and outer thicknesses that need to be assigned to the tracking surface
+          // depending on wether the support is above or below the sensor
+          double inner_thickness = 0;
+          double outer_thickness = thicknessLayer[senslayer];
+
+          SurfaceType type(SurfaceType::Sensitive);
+          VolPlane surf(log_ACLGAD_Sens_L, type, inner_thickness, outer_thickness, u, v, n); //,o ) ;
+          volplane_surfaces[m_nam].push_back(surf);
+
+          //place log_sensor_and_readout_L in TTLDetRowLeftLogical_Front
+          Position pos_sensor((sensor - (nSensLeft - 1) / 2.0) * segmentlength, 0, 0);
+          pv = TTLDetRowLeftLogical_Front.placeVolume(log_sensor_and_readout_L, pos_sensor);
+          sensorCount++;
+
         }
 
-        //place TTLDetRowLeftLogical in assembly, roate every second row
+        //place TTLDetRowLeftLogical_Front in assembly, roate every second row
         Transform3D  transfrow(RotationZYX(row%2==0 ? - M_PI : 0,0, 0), Translation3D( - ( (nSensLeft) * segmentlength / 2.0 + segmentlength / 2.0 - (numSensorLeftAdd* segmentlength)), (row*fullsensor_width), disk_zPos+offsetzFront));
-        assembly.placeVolume(TTLDetRowLeftLogical, transfrow);
+        assembly.placeVolume(TTLDetRowLeftLogical_Front, transfrow);
+        pv.addPhysVolID("layer", 0);
+        pv.addPhysVolID("module", row);
 
-        //place TTLDetRowLeftLogical on other side in assembly, roate every second row
+
+        Volume TTLDetRowLeftLogical_Back("TTLDetRowLeftLogical_Back" + std::to_string(row), TTLDetRowLeftSolid, air);
+        TTLDetRowLeftLogical_Back.setVisAttributes(description.visAttributes("InvisibleWithDaughters"));
+
+        //place log_sensor_and_readout_L in TTLDetRowLeftLogical_Back
+        for(int sensor = 0; sensor < nSensLeft; sensor++) {
+          Box box_sensor_and_readout_L(segmentlength / 2,fullsensor_width / 2,thicknessDet_SH / 2);
+          Volume log_sensor_and_readout_L("log_sensor_and_readout_LB_" + std::to_string(row)+"_"+ std::to_string(sensorCount), box_sensor_and_readout_L, air);
+
+          log_sensor_and_readout_L.setVisAttributes(description.visAttributes("InvisibleWithDaughters"));
+
+          log_sensor_and_readout_L.placeVolume(log_sensor_stack1, Position(0, -fullsensor_width/2 + baseplate_width/2, -thicknessDet_SH/2+thicknessDet1/2));
+          log_sensor_and_readout_L.placeVolume(log_sensor_stack2, Position(0, -fullsensor_width/2 + baseplate_width/2, -thicknessDet_SH/2+thicknessDet1+thicknessLayer[5]+thicknessDet2/2));
+          log_sensor_and_readout_L.placeVolume(log_SH_stack, Position(0,  fullsensor_width/2 - baseplate_width/4, 0));
+
+
+          // make active sensor solid and volume
+          int senslayer=5;
+          Box sol_ACLGAD_Sens(lengthLayer[senslayer] / 2,widthLayer[senslayer] / 2,thicknessLayer[senslayer] / 2);
+          Volume log_ACLGAD_Sens_L("log_ACLGAD_Sens_LB_" + std::to_string(row)+"_"+  std::to_string(sensorCount), sol_ACLGAD_Sens, materialLayer[senslayer]);
+          log_ACLGAD_Sens_L.setVisAttributes(description.visAttributes("TOFActiveMat"));
+
+
+          pv = log_sensor_and_readout_L.placeVolume(log_ACLGAD_Sens_L, Position(0, -fullsensor_width/2 + baseplate_width/2 -offsetLayer[senslayer], -thicknessDet_SH/2+thicknessDet1+thicknessLayer[5]/2));
+
+
+          pv.addPhysVolID("sensor", sensorCount);
+          sens.setType("tracker");
+          log_ACLGAD_Sens_L.setSensitiveDetector(sens);
+          sensitives[m_nam].push_back(pv);
+          // pv.addPhysVolID("layer", 0);
+          // pv.addPhysVolID("module", row);
+          // -------- create a measurement plane for the tracking surface attched to the sensitive volume -----
+          Vector3D u(0., 0., -1.);
+          Vector3D v(-1., 0., 0.);
+          Vector3D n(0., 1., 0.);
+
+          // compute the inner and outer thicknesses that need to be assigned to the tracking surface
+          // depending on wether the support is above or below the sensor
+          double inner_thickness = 0;
+          double outer_thickness = thicknessLayer[senslayer];
+
+          SurfaceType type(SurfaceType::Sensitive);
+          VolPlane surf(log_ACLGAD_Sens_L, type, inner_thickness, outer_thickness, u, v, n); //,o ) ;
+          volplane_surfaces[m_nam].push_back(surf);
+
+          //place log_sensor_and_readout_L in TTLDetRowLeftLogical_Back
+          Position pos_sensor((sensor - (nSensLeft - 1) / 2.0) * segmentlength, 0, 0);
+          pv = TTLDetRowLeftLogical_Back.placeVolume(log_sensor_and_readout_L, pos_sensor);
+          sensorCount++;
+
+        }
+
+        //place TTLDetRowLeftLogical_Back on other side in assembly, roate every second row
         Transform3D  transfrow2(RotationZYX(row%2==0 ? - M_PI : 0,0,-M_PI), Translation3D( - ( (nSensLeft) * segmentlength / 2.0 + segmentlength / 2.0 - (numSensorLeftAdd* segmentlength)), (row*fullsensor_width), disk_zPos+offsetzBack));
-        assembly.placeVolume(TTLDetRowLeftLogical, transfrow2);
+        assembly.placeVolume(TTLDetRowLeftLogical_Back, transfrow2);
+        pv.addPhysVolID("layer", 1);
+        pv.addPhysVolID("module", row);
       
 
         // we want an odd number of towers to be symmetrically centered around 0
         // create mother volume with space for numSensorsRow towers along x-axis
         int nSensRight = ((numSensorsRow-1) /2 - numSensorRightAdd);
         Box TTLDetRowRightSolid( nSensRight * segmentlength / 2.0,fullsensor_width / 2.0,thicknessDet_SH / 2.0);
-        Volume TTLDetRowRightLogical("TTLDetRowRightLogical" + std::to_string(row), TTLDetRowLeftSolid, air);
-        TTLDetRowRightLogical.setVisAttributes(description.visAttributes("InvisibleWithDaughters"));
+        Volume TTLDetRowRightLogical_Front("TTLDetRowRightLogical_Front" + std::to_string(row), TTLDetRowLeftSolid, air);
+        TTLDetRowRightLogical_Front.setVisAttributes(description.visAttributes("InvisibleWithDaughters"));
 
-        //place log_sensor_and_readout in TTLDetRowRightLogical
+        //place log_sensor_and_readout_R in TTLDetRowRightLogical_Front
         for(int sensor = 0; sensor < nSensRight; sensor++) {
-            //place log_sensor_and_readout in TTLDetRowRightLogical
-            Position pos_sensor((sensor - (nSensRight - 1) / 2.0) * segmentlength, 0, 0);
-            // PlacedVolume sensor_phys = 
-            TTLDetRowRightLogical.placeVolume(log_sensor_and_readout, pos_sensor);
+          Box box_sensor_and_readout_R(segmentlength / 2,fullsensor_width / 2,thicknessDet_SH / 2);
+          Volume log_sensor_and_readout_R("log_sensor_and_readout_RF_" + std::to_string(row)+"_"+ std::to_string(sensorCount), box_sensor_and_readout_R, air);
+
+          log_sensor_and_readout_R.setVisAttributes(description.visAttributes("InvisibleWithDaughters"));
+
+          log_sensor_and_readout_R.placeVolume(log_sensor_stack1, Position(0, -fullsensor_width/2 + baseplate_width/2, -thicknessDet_SH/2+thicknessDet1/2));
+          log_sensor_and_readout_R.placeVolume(log_sensor_stack2, Position(0, -fullsensor_width/2 + baseplate_width/2, -thicknessDet_SH/2+thicknessDet1+thicknessLayer[5]+thicknessDet2/2));
+          log_sensor_and_readout_R.placeVolume(log_SH_stack, Position(0,  fullsensor_width/2 - baseplate_width/4, 0));
+
+
+          // make active sensor solid and volume
+          int senslayer=5;
+          Box sol_ACLGAD_Sens(lengthLayer[senslayer] / 2,widthLayer[senslayer] / 2,thicknessLayer[senslayer] / 2);
+          Volume log_ACLGAD_Sens_R("log_ACLGAD_Sens_RF_" + std::to_string(row)+"_"+ std::to_string(sensorCount), sol_ACLGAD_Sens, materialLayer[senslayer]);
+          log_ACLGAD_Sens_R.setVisAttributes(description.visAttributes("TOFActiveMat"));
+
+          pv = log_sensor_and_readout_R.placeVolume(log_ACLGAD_Sens_R, Position(0, -fullsensor_width/2 + baseplate_width/2 -offsetLayer[senslayer], -thicknessDet_SH/2+thicknessDet1+thicknessLayer[5]/2));
+          pv.addPhysVolID("sensor", sensorCount);
+          sens.setType("tracker");
+          log_ACLGAD_Sens_R.setSensitiveDetector(sens);
+          sensitives[m_nam].push_back(pv);
+          // -------- create a measurement plane for the tracking surface attched to the sensitive volume -----
+          Vector3D u(0., 0., -1.);
+          Vector3D v(-1., 0., 0.);
+          Vector3D n(0., 1., 0.);
+
+          // compute the inner and outer thicknesses that need to be assigned to the tracking surface
+          // depending on wether the support is above or below the sensor
+          double inner_thickness = 0;
+          double outer_thickness = thicknessLayer[senslayer];
+
+          SurfaceType type(SurfaceType::Sensitive);
+          VolPlane surf(log_ACLGAD_Sens_R, type, inner_thickness, outer_thickness, u, v, n); //,o ) ;
+          volplane_surfaces[m_nam].push_back(surf);
+
+          //place log_sensor_and_readout_R in TTLDetRowRightLogical_Front
+          Position pos_sensor((sensor - (nSensRight - 1) / 2.0) * segmentlength, 0, 0);
+          // PlacedVolume sensor_phys = 
+          pv = TTLDetRowRightLogical_Front.placeVolume(log_sensor_and_readout_R, pos_sensor);
+          sensorCount++;
         }
 
-        //place TTLDetRowRightLogical in assembly, roate every second row
+        //place TTLDetRowRightLogical_Front in assembly, roate every second row
         Transform3D  transfrowR(RotationZYX(row%2==0 ? - M_PI : 0,0, 0), Translation3D(( nSensRight * segmentlength / 2.0 + segmentlength / 2.0 + (numSensorRightAdd* segmentlength)), (row*fullsensor_width), disk_zPos+offsetzFront));
-        assembly.placeVolume(TTLDetRowRightLogical, transfrowR);
+        pv = assembly.placeVolume(TTLDetRowRightLogical_Front, transfrowR);
+        pv.addPhysVolID("layer", 0);
+        pv.addPhysVolID("module", row);
 
-        //place TTLDetRowRightLogical on other side in assembly, roate every second row
+
+        Volume TTLDetRowRightLogical_Back("TTLDetRowRightLogical_Back" + std::to_string(row), TTLDetRowLeftSolid, air);
+        TTLDetRowRightLogical_Back.setVisAttributes(description.visAttributes("InvisibleWithDaughters"));
+
+        //place log_sensor_and_readout_R in TTLDetRowRightLogical_Back
+        for(int sensor = 0; sensor < nSensRight; sensor++) {
+          Box box_sensor_and_readout_R(segmentlength / 2,fullsensor_width / 2,thicknessDet_SH / 2);
+          Volume log_sensor_and_readout_R("log_sensor_and_readout_RB_" + std::to_string(row)+"_"+ std::to_string(sensorCount), box_sensor_and_readout_R, air);
+
+          log_sensor_and_readout_R.setVisAttributes(description.visAttributes("InvisibleWithDaughters"));
+
+          log_sensor_and_readout_R.placeVolume(log_sensor_stack1, Position(0, -fullsensor_width/2 + baseplate_width/2, -thicknessDet_SH/2+thicknessDet1/2));
+          log_sensor_and_readout_R.placeVolume(log_sensor_stack2, Position(0, -fullsensor_width/2 + baseplate_width/2, -thicknessDet_SH/2+thicknessDet1+thicknessLayer[5]+thicknessDet2/2));
+          log_sensor_and_readout_R.placeVolume(log_SH_stack, Position(0,  fullsensor_width/2 - baseplate_width/4, 0));
+
+
+          // make active sensor solid and volume
+          int senslayer=5;
+          Box sol_ACLGAD_Sens(lengthLayer[senslayer] / 2,widthLayer[senslayer] / 2,thicknessLayer[senslayer] / 2);
+          Volume log_ACLGAD_Sens_R("log_ACLGAD_Sens_RB_" + std::to_string(row)+"_"+ std::to_string(sensorCount), sol_ACLGAD_Sens, materialLayer[senslayer]);
+          log_ACLGAD_Sens_R.setVisAttributes(description.visAttributes("TOFActiveMat"));
+
+          pv = log_sensor_and_readout_R.placeVolume(log_ACLGAD_Sens_R, Position(0, -fullsensor_width/2 + baseplate_width/2 -offsetLayer[senslayer], -thicknessDet_SH/2+thicknessDet1+thicknessLayer[5]/2));
+          pv.addPhysVolID("sensor", sensorCount);
+          sens.setType("tracker");
+          log_ACLGAD_Sens_R.setSensitiveDetector(sens);
+          sensitives[m_nam].push_back(pv);
+          // -------- create a measurement plane for the tracking surface attched to the sensitive volume -----
+          Vector3D u(0., 0., -1.);
+          Vector3D v(-1., 0., 0.);
+          Vector3D n(0., 1., 0.);
+
+          // compute the inner and outer thicknesses that need to be assigned to the tracking surface
+          // depending on wether the support is above or below the sensor
+          double inner_thickness = 0;
+          double outer_thickness = thicknessLayer[senslayer];
+
+          SurfaceType type(SurfaceType::Sensitive);
+          VolPlane surf(log_ACLGAD_Sens_R, type, inner_thickness, outer_thickness, u, v, n); //,o ) ;
+          volplane_surfaces[m_nam].push_back(surf);
+
+          //place log_sensor_and_readout_R in TTLDetRowRightLogical_Back
+          Position pos_sensor((sensor - (nSensRight - 1) / 2.0) * segmentlength, 0, 0);
+          // PlacedVolume sensor_phys = 
+          pv = TTLDetRowRightLogical_Back.placeVolume(log_sensor_and_readout_R, pos_sensor);
+          sensorCount++;
+        }
+
+
+        //place TTLDetRowRightLogical_Back on other side in assembly, roate every second row
         Transform3D  transfrowR2(RotationZYX(row%2==0 ? - M_PI : 0,0,-M_PI), Translation3D(( nSensRight * segmentlength / 2.0 + segmentlength / 2.0 + (numSensorRightAdd* segmentlength)), (row*fullsensor_width), disk_zPos+offsetzBack));
-        assembly.placeVolume(TTLDetRowRightLogical, transfrowR2);
+        pv = assembly.placeVolume(TTLDetRowRightLogical_Back, transfrowR2);
+        pv.addPhysVolID("layer", 1);
+        pv.addPhysVolID("module", row);
 
 
 
@@ -412,25 +578,116 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
     } else {
         // create mother volume with space for numSensorsRow towers along x-axis
         Box TTLDetRowSolid(numSensorsRow * segmentlength / 2.0,fullsensor_width / 2.0,thicknessDet_SH / 2.0);
-        Volume TTLDetRowLogical("TTLDetRowLogical" + std::to_string(row), TTLDetRowSolid, air);
-        TTLDetRowLogical.setVisAttributes(description.visAttributes("InvisibleWithDaughters"));
+        Volume TTLDetRowLogical_Front("TTLDetRowLogical_Front" + std::to_string(row), TTLDetRowSolid, air);
+        TTLDetRowLogical_Front.setVisAttributes(description.visAttributes("InvisibleWithDaughters"));
 
-        //place log_sensor_and_readout in TTLDetRowLogical
+        //place log_sensor_and_readout_C in TTLDetRowLogical_Front
         for(int sensor = 0; sensor < numSensorsRow; sensor++) {
-            //place log_sensor_and_readout in TTLDetRowLogical
-            Position pos_sensor((sensor - (numSensorsRow - 1) / 2.0) * segmentlength, 0, 0);
-            // PlacedVolume sensor_phys = 
-            TTLDetRowLogical.placeVolume(log_sensor_and_readout, pos_sensor);
+          Box box_sensor_and_readout_C(segmentlength / 2,fullsensor_width / 2,thicknessDet_SH / 2);
+          Volume log_sensor_and_readout_C("log_sensor_and_readout_CF_" + std::to_string(row)+"_"+ std::to_string(sensorCount), box_sensor_and_readout_C, air);
+
+          log_sensor_and_readout_C.setVisAttributes(description.visAttributes("InvisibleWithDaughters"));
+
+          log_sensor_and_readout_C.placeVolume(log_sensor_stack1, Position(0, -fullsensor_width/2 + baseplate_width/2, -thicknessDet_SH/2+thicknessDet1/2));
+          log_sensor_and_readout_C.placeVolume(log_sensor_stack2, Position(0, -fullsensor_width/2 + baseplate_width/2, -thicknessDet_SH/2+thicknessDet1+thicknessLayer[5]+thicknessDet2/2));
+          log_sensor_and_readout_C.placeVolume(log_SH_stack, Position(0,  fullsensor_width/2 - baseplate_width/4, 0));
+
+          // make active sensor solid and volume
+          int senslayer=5;
+          Box sol_ACLGAD_Sens(lengthLayer[senslayer] / 2,widthLayer[senslayer] / 2,thicknessLayer[senslayer] / 2);
+          Volume log_ACLGAD_Sens_C("log_ACLGAD_Sens_CF_" + std::to_string(row)+"_"+ std::to_string(sensorCount), sol_ACLGAD_Sens, materialLayer[senslayer]);
+          log_ACLGAD_Sens_C.setVisAttributes(description.visAttributes("TOFActiveMat"));
+
+          pv = log_sensor_and_readout_C.placeVolume(log_ACLGAD_Sens_C, Position(0, -fullsensor_width/2 + baseplate_width/2 -offsetLayer[senslayer], -thicknessDet_SH/2+thicknessDet1+thicknessLayer[5]/2));
+
+          pv.addPhysVolID("sensor", sensorCount);
+          sens.setType("tracker");
+          log_ACLGAD_Sens_C.setSensitiveDetector(sens);
+          sensitives[m_nam].push_back(pv);
+
+          // -------- create a measurement plane for the tracking surface attched to the sensitive volume -----
+          Vector3D u(0., 0., -1.);
+          Vector3D v(-1., 0., 0.);
+          Vector3D n(0., 1., 0.);
+
+          // compute the inner and outer thicknesses that need to be assigned to the tracking surface
+          // depending on wether the support is above or below the sensor
+          double inner_thickness = 0;
+          double outer_thickness = thicknessLayer[senslayer];
+
+          SurfaceType type(SurfaceType::Sensitive);
+          VolPlane surf(log_ACLGAD_Sens_C, type, inner_thickness, outer_thickness, u, v, n); //,o ) ;
+          volplane_surfaces[m_nam].push_back(surf);
+
+
+          //place log_sensor_and_readout_C in TTLDetRowLogical_Front
+          Position pos_sensor((sensor - (numSensorsRow - 1) / 2.0) * segmentlength, 0, 0);
+          // PlacedVolume sensor_phys = 
+          pv = TTLDetRowLogical_Front.placeVolume(log_sensor_and_readout_C, pos_sensor);
+          sensorCount++;
         }
 
-        //place TTLDetRowLogical in assembly, roate every second row
+        //place TTLDetRowLogical_Front in assembly, roate every second row
         Transform3D  transfrow(RotationZYX(row%2==0 ? - M_PI : 0,0, 0), Translation3D(0, row * fullsensor_width, disk_zPos+offsetzFront));
-        assembly.placeVolume(TTLDetRowLogical, transfrow);
+        pv = assembly.placeVolume(TTLDetRowLogical_Front, transfrow);
+        pv.addPhysVolID("layer", 0);
+        pv.addPhysVolID("module", row);
 
-        //place TTLDetRowLogical on other side in assembly, roate every second row
+
+        Volume TTLDetRowLogical_Back("TTLDetRowLogical_Back" + std::to_string(row), TTLDetRowSolid, air);
+        TTLDetRowLogical_Back.setVisAttributes(description.visAttributes("InvisibleWithDaughters"));
+
+        //place log_sensor_and_readout_C in TTLDetRowLogical_Back
+        for(int sensor = 0; sensor < numSensorsRow; sensor++) {
+          Box box_sensor_and_readout_C(segmentlength / 2,fullsensor_width / 2,thicknessDet_SH / 2);
+          Volume log_sensor_and_readout_C("log_sensor_and_readout_CB_" + std::to_string(row)+"_"+ std::to_string(sensorCount), box_sensor_and_readout_C, air);
+
+          log_sensor_and_readout_C.setVisAttributes(description.visAttributes("InvisibleWithDaughters"));
+
+          log_sensor_and_readout_C.placeVolume(log_sensor_stack1, Position(0, -fullsensor_width/2 + baseplate_width/2, -thicknessDet_SH/2+thicknessDet1/2));
+          log_sensor_and_readout_C.placeVolume(log_sensor_stack2, Position(0, -fullsensor_width/2 + baseplate_width/2, -thicknessDet_SH/2+thicknessDet1+thicknessLayer[5]+thicknessDet2/2));
+          log_sensor_and_readout_C.placeVolume(log_SH_stack, Position(0,  fullsensor_width/2 - baseplate_width/4, 0));
+
+          // make active sensor solid and volume
+          int senslayer=5;
+          Box sol_ACLGAD_Sens(lengthLayer[senslayer] / 2,widthLayer[senslayer] / 2,thicknessLayer[senslayer] / 2);
+          Volume log_ACLGAD_Sens_C("log_ACLGAD_Sens_CB_" + std::to_string(row)+"_"+ std::to_string(sensorCount), sol_ACLGAD_Sens, materialLayer[senslayer]);
+          log_ACLGAD_Sens_C.setVisAttributes(description.visAttributes("TOFActiveMat"));
+
+          pv = log_sensor_and_readout_C.placeVolume(log_ACLGAD_Sens_C, Position(0, -fullsensor_width/2 + baseplate_width/2 -offsetLayer[senslayer], -thicknessDet_SH/2+thicknessDet1+thicknessLayer[5]/2));
+
+          pv.addPhysVolID("sensor", sensorCount);
+          sens.setType("tracker");
+          log_ACLGAD_Sens_C.setSensitiveDetector(sens);
+          sensitives[m_nam].push_back(pv);
+
+          // -------- create a measurement plane for the tracking surface attched to the sensitive volume -----
+          Vector3D u(0., 0., -1.);
+          Vector3D v(-1., 0., 0.);
+          Vector3D n(0., 1., 0.);
+
+          // compute the inner and outer thicknesses that need to be assigned to the tracking surface
+          // depending on wether the support is above or below the sensor
+          double inner_thickness = 0;
+          double outer_thickness = thicknessLayer[senslayer];
+
+          SurfaceType type(SurfaceType::Sensitive);
+          VolPlane surf(log_ACLGAD_Sens_C, type, inner_thickness, outer_thickness, u, v, n); //,o ) ;
+          volplane_surfaces[m_nam].push_back(surf);
+
+
+          //place log_sensor_and_readout_C in TTLDetRowLogical_Back
+          Position pos_sensor((sensor - (numSensorsRow - 1) / 2.0) * segmentlength, 0, 0);
+          // PlacedVolume sensor_phys = 
+          pv = TTLDetRowLogical_Back.placeVolume(log_sensor_and_readout_C, pos_sensor);
+          sensorCount++;
+        }
+
+        //place TTLDetRowLogical_Back on other side in assembly, roate every second row
         Transform3D  transfrow2(RotationZYX(row%2==0 ? - M_PI : 0,0,-M_PI), Translation3D(0, row * fullsensor_width, disk_zPos+offsetzBack));
-        assembly.placeVolume(TTLDetRowLogical, transfrow2);
-
+        pv = assembly.placeVolume(TTLDetRowLogical_Back, transfrow2);
+        pv.addPhysVolID("layer", 1);
+        pv.addPhysVolID("module", row);
 
 
         Box sol_cutout_tube(2.5*sqrt(pow(disk_rMax,2)-pow( (abs(row)*fullsensor_width) - (fullsensor_width/2.0) + cooling_tube_diameter ,2))/2, (cooling_tube_diameter - 2*cooling_tube_thickness) / 2, (cooling_tube_diameter - 2*cooling_tube_thickness) / 2);

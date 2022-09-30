@@ -95,7 +95,7 @@
   <readouts>
     <readout name="TOFEndcapHits">
       <segmentation type="CartesianGridXZ" grid_size_x="50*um" grid_size_z="50*um" />
-      <id>system:8,layer:4,module:12,sensor:2,x:32:-16,z:-16</id>
+      <id>system:8,layer:2,module:6,sensor:16,x:32:-16,z:-16</id>
     </readout>
   </readouts>
 
