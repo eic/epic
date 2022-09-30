@@ -56,10 +56,10 @@
     <constant name="ForwardTOFLayer2_zmin"      value="ForwardTOFMod2_zmin - TOFEndcapLayer_thickness / 2" />
 
 
-    <constant name="ForwardTOF_rMin"        value="7*cm" />
-    <constant name="ForwardTOF_rMax"        value="87*cm" />
-    <constant name="ForwardTOF_xOffset"        value="-2.75*cm" />
-    <constant name="ForwardTOF_det_height"        value="2.0*cm" />
+    <constant name="ForwardTOF_rMin"            value="7*cm" />
+    <constant name="ForwardTOF_rMax"            value="87*cm" />
+    <constant name="ForwardTOF_xOffset"         value="-2.75*cm" />
+    <constant name="ForwardTOF_det_height"      value="2.0*cm" />
 
     <constant name="BackwardTOFMod_rmin"        value="BackwardPIDRegion_tan * BackwardTOF_zmin" />
     <constant name="BackwardTOFMod_rmax"        value="BackwardPIDRegion_rmax" />
@@ -73,10 +73,10 @@
     <constant name="BackwardTOFLayer1_zmin"     value="BackwardTOFMod1_zmin - TOFEndcapLayer_thickness / 2" />
     <constant name="BackwardTOFLayer2_zmin"     value="BackwardTOFMod2_zmin - TOFEndcapLayer_thickness / 2" />
 
-    <constant name="BackwardTOF_rMin"        value="6*cm" />
-    <constant name="BackwardTOF_rMax"        value="64*cm" />
+    <constant name="BackwardTOF_rMin"           value="6*cm" />
+    <constant name="BackwardTOF_rMax"           value="64*cm" />
     <constant name="BackwardTOF_xOffset"        value="0.0*cm" />
-    <constant name="BackwardTOF_det_height"        value="2.0*cm" />  </define>
+    <constant name="BackwardTOF_det_height"     value="2.0*cm" />  </define>
 
   <detectors>
       <detector
@@ -89,8 +89,6 @@
         <module name="ForwardModule" vis="TOFModuleVis">
           <trd x1="ForwardTOFMod_x1/2.0" x2="ForwardTOFMod_x2/2.0" z="ForwardTOFMod_y/2"/>
           <diskdimension rMin="ForwardTOF_rMin" rMax="ForwardTOF_rMax" xOffset="ForwardTOF_xOffset" det_height="ForwardTOF_det_height" zPos="ForwardTOF_zmin" cooling_plate_height="TOFEndcap_cooling_plate_height" wallthickness_coolingtube="TOFEndcap_wallthickness_coolingtube" diameter_coolingtube="TOFEndcap_diameter_coolingtube" material="Aluminum"/>
-
-
           <comment> TRDs are built back-to-front </comment>
           <module_component thickness="TOFEndcapService_thickness" material="Silicon" vis="TOFVis"/>
           <module_component thickness="TOFEndcapSensor_thickness" material="Silicon" sensitive="true" vis="TOFSensorVis"/>
