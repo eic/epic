@@ -59,7 +59,7 @@
       grid_phi_values="6*deg 6*deg 6*deg 6*deg 6*deg 6*deg 6*deg 6*deg 6*deg 6*deg 6*deg 6*deg 6*deg 6*deg 6*deg 6*deg 6*deg 6*deg 6*deg 6*deg 6*deg 6*deg 6*deg 6*deg 6*deg 6*deg 6*deg 6*deg 6*deg 6*deg 6*deg 6*deg 6*deg 6*deg 6*deg 6*deg"
       offset_phi="0.0*deg"/>-->
       <segmentation type="PolarGridRPhi2"
-      grid_r_values="90.9878*cm 100.89*cm 111.395*cm 122.516*cm 134.229*cm 146.58*cm 159.546*cm 173.155*cm 187.424*cm 202.377*cm 218.019*cm 234.353*cm 251.444*cm"
+      grid_r_values="16.4659*cm 20.9917*cm 25.9011*cm 31.2172*cm 36.9628*cm 43.1604*cm 49.8319*cm 56.9981*cm 64.6789*cm 72.893*cm 81.6575*cm 90.9878*cm 100.89*cm 111.395*cm 122.516*cm 134.229*cm 146.58*cm 159.546*cm 173.155*cm 187.424*cm 202.377*cm 218.019*cm 234.353*cm 251.444*cm"
       grid_phi_values="6*deg 6*deg 6*deg 6*deg 6*deg 6*deg 6*deg 6*deg 6*deg 6*deg 6*deg 6*deg 6*deg 6*deg 6*deg 6*deg 6*deg 6*deg 6*deg 6*deg 6*deg 6*deg 6*deg 6*deg 6*deg 6*deg 6*deg 6*deg 6*deg 6*deg 6*deg 6*deg 6*deg 6*deg 6*deg 6*deg"
       offset_phi="0.0*deg"/>
       <id>system:8,barrel:3,module:4,layer:8,slice:5,r:32:-16,phi:-16</id>
