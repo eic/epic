@@ -119,7 +119,7 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
 
     // create the volumes and set visualization options
     Volume ttl_cooling_plate_volume_1("ttl_cooling_plate_1", ttl_cooling_plate_1, disk_mat);
-    Volume ttl_cooling_plate_volume_2("ttl_cooling_plate_2", ttl_cooling_plate_solid_2, disk_mat);
+    Volume ttl_cooling_plate_volume_2("ttl_cooling_plate_2", ttl_cooling_plate_2, disk_mat);
     ttl_cooling_plate_volume_1.setVisAttributes(description.visAttributes("TOFAluminum"));
     ttl_cooling_plate_volume_2.setVisAttributes(description.visAttributes("TOFAluminum"));
 
