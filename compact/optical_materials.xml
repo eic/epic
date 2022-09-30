@@ -258,7 +258,6 @@
       4.75035*eV   1.85713
       4.93961*eV   1.87039
       "/>
-    
     <matrix name="RINDEX__VM2000" coldim="2" values="
       1.37760*eV   1.42
       1.45864*eV   1.42
@@ -292,7 +291,6 @@
       3.54241*eV   1.42
       4.13281*eV   1.42
       "/>
-    
     <matrix name="ABSLENGTH__DIRCNlak33a" coldim="2" values="
       1.0*eV       371813*mm
       1.2511*eV    352095*mm
@@ -408,11 +406,11 @@
       1240*eV/210  10*mm
       1240*eV/200  0*mm
       "/>
-    <!-- BEGIN dRICh and pfRICh material properties
-         - dumped from fun4all implementation
-         - see https://github.com/cisbani/dRICh/blob/main/share/source/g4dRIChOptics.hh
-         -->
-    <!-- dRICh gas -->
+    <!-- BEGIN dRICH and pfRICH material optical properties
+      - to generate, follow: https://github.com/eic/drich-dev/blob/main/doc/material_tables.md
+      - original source for ATHENA/ECCE: https://github.com/cisbani/dRICh/blob/main/share/source/g4dRIChOptics.hh
+    -->
+    <!-- dRICH gas -->
     <matrix name="RINDEX__C2F6_DRICH" coldim="2" values="
       1.7712*eV   1.00075
       1.92389*eV  1.00075
@@ -437,7 +435,7 @@
       4.85156*eV  10.0*m
       6.19921*eV  10.0*m
       "/>
-    <!-- pfRICh gas -->
+    <!-- pfRICH gas -->
     <matrix name="RINDEX__C4F10_PFRICH" coldim="2" values="
       1.7712*eV   1.0013
       1.92389*eV  1.0013
@@ -462,7 +460,7 @@
       4.85156*eV  6.0*m
       6.19921*eV  6.0*m
       "/>
-    <!-- dRICh aerogel, for density=0.11 g/cm3 -->
+    <!-- dRICH aerogel, for density=0.11 g/cm3 -->
     <matrix name="RINDEX__Aerogel_DRICH" coldim="2" values="
       1.87855*eV  1.01852
       1.96673*eV  1.01856
@@ -619,7 +617,7 @@
       6.11103*eV    2.510*mm
       6.19921*eV    2.370*mm
       "/>
-    <!-- dRICh acrylic -->
+    <!-- dRICH acrylic filter -->
     <matrix name="RINDEX__Acrylic_DRICH" coldim="2" values="
       4.13281*eV  1.5017
       4.22099*eV  1.5017
@@ -724,7 +722,7 @@
       8.36529*eV  0.166779*mm
       8.45347*eV  0.166779*mm
       "/>
-    <!-- END dRICh optical properties -->
+    <!-- END dRICH and pfRICH material optical properties -->
   </properties>
   <materials>
     <material name="AirOptical">
@@ -773,7 +771,7 @@
       <property name="RINDEX" ref="RINDEX__Acrylic"/>
       <property name="ABSLENGTH" ref="ABSLENGTH__Acrylic"/>
     </material>
-    <!-- BEGIN dRICh and pfRICh material definitions -->
+    <!-- BEGIN dRICH and pfRICH material definitions -->
     <material name="C2F6_DRICH">
       <D type="density" value="0.005734" unit="g/cm3"/>
       <composite n="2" ref="C"/>
@@ -805,7 +803,7 @@
       <property name="RINDEX"    ref="RINDEX__Acrylic_DRICH"/>
       <property name="ABSLENGTH" ref="ABSLENGTH__Acrylic_DRICH"/>
     </material>
-    <!-- END dRICh material definitions -->
+    <!-- END dRICH and pfRICH material definitions -->
     <material name="QuartzOptical">
       <D type="density" value="2.2" unit="g/cm3"/>
       <composite n="1" ref="Si"/>
@@ -861,7 +859,7 @@
       <constant name="SCINTILLATIONYIELD"  value="200.0/MeV"/>
       <constant name="RESOLUTIONSCALE"     value="1.0"/>
       <constant name="FASTTIMECONSTANT"    value="6.0*ns"/>
-    </material>    
+    </material>        
   </materials>
   <surfaces>
     <opticalsurface finish="polished" model="glisur" name="MirrorOpticalSurface" type="dielectric_metal" value="0">
@@ -907,7 +905,10 @@
       -->
     </opticalsurface>
 
-    <!-- BEGIN dRICh surface definitions -->
+    <!-- BEGIN dRICH and pfRICH optical surface properties
+      - to generate, follow: https://github.com/eic/drich-dev/blob/main/doc/material_tables.md
+      - original source for ATHENA/ECCE: https://github.com/cisbani/dRICh/blob/main/share/source/g4dRIChOptics.hh
+    -->
     <opticalsurface name="MirrorSurface_DRICH" model="unified" finish="polished" type="dielectric_metal">
       <property name="REFLECTIVITY" coldim="2" values="
         1*eV  0.9
@@ -929,7 +930,7 @@
         7*eV  1
         "/>
     </opticalsurface>
-    <!-- END dRICh surface definitions -->
+    <!-- END dRICH and pfRICH optical surface properties -->
 
   </surfaces>
 </lccdd>
