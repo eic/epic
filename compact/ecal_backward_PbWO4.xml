@@ -6,7 +6,7 @@
     <constant name="EcalEndcapN_CrystalModule_wrap_thickness" value="0.05*mm"/>
     <constant name="EcalEndcapN_CrystalModule_carbon_length" value="20.00*mm"/>
 
-    <constant name="structure_ring_length" value="40.00*cm"/>
+    <constant name="structure_ring_length" value="60.00*cm"/>
     <constant name="structure_ring_max" value="65.00*cm"/>
     <constant name="structure_ring_min" value="EcalEndcapN_rmax"/>
     
@@ -33,7 +33,8 @@
             rmax="EcalEndcapN_rmax"
             r12min="structure_ring_min"
             r12max="structure_ring_max"
-            length="structure_ring_length"
+            SFlength="structure_ring_length"
+            CMlength="EcalEndcapN_CrystalModule_length + 2.*EcalEndcapN_CrystalModule_wrap_thickness" 
             envelope="true"
             vis_struc="RPVis"
             vis_steel_gap="AnlGray"
@@ -50,7 +51,7 @@
             sizex="EcalEndcapN_CrystalModule_width"
             sizey="EcalEndcapN_CrystalModule_width"
             sizez="EcalEndcapN_CrystalModule_length"
-            material="PbWO4"
+            material="leadtungsten_optical"
             cryvis="GreenVis"/>
           <wrapper
             carbon_thickness="EcalEndcapN_CrystalModule_carbon_thickness"
