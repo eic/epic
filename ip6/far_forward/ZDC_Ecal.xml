@@ -13,8 +13,8 @@
       <dimensions x="ZDCEcal_width" z="ZDCEcal_length"/>
       <layer repeat="ZDC_SiWSciFi_NRepeat">
         <slice name="Silicon_1_slice" material="Silicon"           thickness="ZDC_Silicon_1_Thickness" vis="RedVis"  sensitive="true"/>
-	<slice name="Glue_1_slice"    material="ZDC_EpoxyGlue"     thickness="ZDC_Glue_1_Thickness"    vis="AnlGold"/>
-	<slice name="FPC_slice"       material="ZDC_EpoxyGlue"     thickness="ZDC_FPC_Thickness"       vis="AnlGold"/>
+	<slice name="Glue_1_slice"    material="ZDC_PET"           thickness="ZDC_Glue_1_Thickness"    vis="AnlGold"/>
+	<slice name="FPC_slice"       material="ZDC_PET"           thickness="ZDC_FPC_Thickness"       vis="AnlGold"/>
 	<slice name="Air_1_slice"     material="Air"               thickness="ZDC_Air_1_Thickness"     vis="InvisibleNoDaughters"/>
         <slice name="WSciFi_slice"    material="ZDC_WSciFiMixture" thickness="ZDC_WSciFi_Thickness"    vis="AnlGold" sensitive="true"/> <!-- now this is a WSciFi mixture -->
 	<slice name="Air_2_slice"     material="Air"               thickness="ZDC_Air_2_Thickness"     vis="InvisibleNoDaughters"/>
