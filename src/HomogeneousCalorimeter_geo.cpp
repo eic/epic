@@ -404,7 +404,8 @@ static std::tuple<int, int> add_12surface_disk(Detector& desc, Assembly& env, xm
   double rmax            = plm.attr<double>(_Unicode(rmax));
   double r12min          = plm.attr<double>(_Unicode(r12min));
   double r12max          = plm.attr<double>(_Unicode(r12max));
-  double length          = plm.attr<double>(_Unicode(length));
+  double structure_frame_length = plm.attr<double>(_Unicode(SFlength));
+  double calo_module_length = plm.attr<double>(_Unicode(CMlength));
   double phimin          = dd4hep::getAttrOrDefault<double>(plm, _Unicode(phimin), 0.);
   double phimax          = dd4hep::getAttrOrDefault<double>(plm, _Unicode(phimax), 2. * M_PI);
 
@@ -415,35 +416,59 @@ static std::tuple<int, int> add_12surface_disk(Detector& desc, Assembly& env, xm
   // auto rot = get_xml_xyz(plm, _Unicode(rotation));
 
   
-  // optional envelope volume
+  // optional envelope volume and the supporting frame
   //
   bool        has_envelope = dd4hep::getAttrOrDefault<bool>(plm, _Unicode(envelope), false);
-  // Material    envelope_material     = desc.material(getAttrOrDefault<std::string>(plm, _U(material), "Air"));
   Material    ring_material     = desc.material(getAttrOrDefault<std::string>(plm, _U(material), "StainlessSteel"));
-  PolyhedraRegular solid_world(12, 0., r12min, length/2.);
-  Tube solid_sub(0., 8.5*cm, length/2., phimin, phimax);
+  PolyhedraRegular solid_world(12, 0., r12min, calo_module_length);
+  Tube solid_sub(0., 8.5*cm, calo_module_length/2., phimin, phimax);
   SubtractionSolid calo_subtract(solid_world, solid_sub, Position(0., 0., 0.));
   Volume      env_vol(std::string(env.name()) + "_envelope", calo_subtract, ring_material);
   Transform3D tr_global = RotationZYX(15.*degree, 0., 0.) * Translation3D(0., 0., 0.);
   env_vol.setVisAttributes(desc.visAttributes(plm.attr<std::string>(_Unicode(vis_steel_gap))));
+
   
-  PolyhedraRegular        solid_ring12(12, r12min, r12max, length);
-  Volume      ring12_vol("ring12", solid_ring12, ring_material);
-  Transform3D tr_global_ring = RotationZYX(15.*degree, 0., 0.) * Translation3D(0., 0., -10.*cm);
+  // Outer supporting frame
+  //
+  PolyhedraRegular solid_ring12(12, r12min, r12max, structure_frame_length);
+  Volume ring12_vol("ring12", solid_ring12, ring_material);
+  Transform3D tr_global_Oring = RotationZYX(15.*degree, 0., 0.) * Translation3D(0., 0., -20.*cm);
   ring12_vol.setVisAttributes(desc.visAttributes(plm.attr<std::string>(_Unicode(vis_struc))));
 
-  Tube        Ssolid_ring12(8.*cm, 8.5*cm, length/2., phimin, phimax);
+  
+  // Inner supporting frame
+  //
+  Tube        Ssolid_ring12(8.*cm, 8.5*cm, 10.*cm, phimin, phimax);
   Volume      Sring12_vol("Sring12", Ssolid_ring12, ring_material);
   Sring12_vol.setVisAttributes(desc.visAttributes(plm.attr<std::string>(_Unicode(vis_struc))));
+  Transform3D tr_global_Iring = RotationZYX(0., 0., 0.) * Translation3D(0., 0., 0.);
 
+  
+  // Supporting frame for the cabling
+  //
+  // PolyhedraRegular cabling_support12(12, r12max, 70.*cm, 25.4/2.*cm);
+  // Box hole(135./2.*mm, 25.4/2.*mm, 25.4/2.*cm);
+  // Rotation3D rot3D(RotationZYX(60.*degree, 0., 0.));
+  
+  // SubtractionSolid cabling_support_subtract_0(cabling_support12, hole, Transform3D(RotationZ(15.*degree) * Position(-82.5*mm, 675.*mm, 0.)));
+  // SubtractionSolid cabling_support_subtract_0(cabling_support12, hole, RotationZYX(-90.*degree, 0., 0.) * Position(-95.013975*mm, 673.352504*mm, 0.));
+  // SubtractionSolid cabling_support_subtract_1(cabling_support_subtract_0, hole, Position(95.013975*mm, -673.352504*mm, 0.));
+  // Volume cabling_support_subtract_V("cabling_support_subtract_V", hole, ring_material);
+  // Transform3D tr_global_cabling_ring = RotationZYX(15.*degree, 0., 0.) * Translation3D(0., 100.*cm, -10.*cm);
+
+  
+  // Place frames and mother volume of modules into the world volume
+  //
   if (has_envelope) 
     {
       env.placeVolume(env_vol, tr_global);
-      env.placeVolume(ring12_vol, tr_global_ring);
-      env.placeVolume(Sring12_vol, tr_global_ring);
+      env.placeVolume(ring12_vol, tr_global_Oring);
+      env.placeVolume(Sring12_vol, tr_global_Iring);
+
     }
 
     
+
   
   // local placement of modules
   //
@@ -476,6 +501,7 @@ static std::tuple<int, int> add_12surface_disk(Detector& desc, Assembly& env, xm
       modPV.addPhysVolID("sector", sector_id).addPhysVolID("module", total_id);
     }
 
+  
     
   return {sector_id, mid};
 }
