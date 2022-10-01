@@ -115,7 +115,7 @@ static Ref_t create_detector(Detector &lcdd, xml_h handle,
   for (; sector < sectors_handle.number();
        sector++, sector_phi += sectors_handle.deltaphi()) {
     int row = 0;
-    double row_phi = -rows_handle.deltaphi() / 2 * rows_handle.number();
+    double row_phi = -rows_handle.deltaphi() / 2 * (rows_handle.number() - 1);
     for (; row < rows_handle.number();
          row++, row_phi += rows_handle.deltaphi()) {
 
