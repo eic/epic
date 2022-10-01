@@ -278,9 +278,6 @@ jobs:
   trigger-detector-benchmarks:
     runs-on: ubuntu-latest
     needs: [check-overlap-tgeo, check-overlap-geant4-fast]
-    strategy:
-      matrix:
-        detector_config: [epic_sciglass, epic_imaging]
     steps:
     - uses: eic/trigger-gitlab-ci@v2
       id: trigger
@@ -290,9 +287,8 @@ jobs:
         token: ${{ secrets.EICWEB_DETECTOR_BENCHMARK_TRIGGER }}
         ref_name: master
         variables: |
-          DETECTOR_REPOSITORYURL=${{ github.server_url }}/${{ github.repository }}
-          DETECTOR_VERSION=${{ github.event.pull_request.head.ref || github.ref_name }}
-          DETECTOR_CONFIG=${{ matrix.detector_config }}
+          JUGGLER_DETECTOR_REPOSITORYURL=${{ github.server_url }}/${{ github.repository }}
+          JUGGLER_DETECTOR_VERSION=${{ github.ref_name }}
           GITHUB_REPOSITORY=${{ inputs.github_repository || github.repository }}
           GITHUB_SHA=${{ inputs.github_sha || github.event.pull_request.head.sha || github.sha }}
     - run: |
@@ -302,8 +298,8 @@ jobs:
           /repos/${{ github.repository }}/statuses/${{ github.event.pull_request.head.sha || github.sha }} \
           -f state='pending' \
           -f target_url=${{ steps.trigger.outputs.web_url }} \
-          -f description='The detector benchmarks for ${{ matrix.detector_config }} have been triggered...' \
-          -f context='eicweb/detector_benchmarks (${{ matrix.detector_config }})'
+          -f description='The detector benchmarks have been triggered...' \
+          -f context='eicweb/detector_benchmarks'
       env:
         GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
