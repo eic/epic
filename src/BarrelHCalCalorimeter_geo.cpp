@@ -38,9 +38,9 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
   DetElement       sdet(det_name, det_id);
   Volume           motherVol = description.pickMotherVolume(sdet);
 
-  std::string   string_rmin      = dd4hep::xml::_toString(x_det.attr_value(x_det.getAttr("rmin"))); 
-  std::string   string_rmax      = dd4hep::xml::_toString(x_det.attr_value(x_det.getAttr("rmax"))); 
-  std::string   string_length    = dd4hep::xml::_toString(x_det.attr_value(x_det.getAttr("length"))); 
+  std::string   string_rmin      = getAttrOrDefault(x_det, _Unicode(rmin), "1780"); 
+  std::string   string_rmax      = getAttrOrDefault(x_det, _Unicode(rmax), "2660"); 
+  std::string   string_length    = getAttrOrDefault(x_det, _Unicode(length), "3160"); 
 
   double           rmin = (dd4hep::xml::_toDouble(string_rmin.c_str()))*dd4hep::mm;
   double           rmax = (dd4hep::xml::_toDouble(string_rmax.c_str()))*dd4hep::mm;
@@ -73,8 +73,9 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
 
   for(xml_coll_t i(det_define, _Unicode(constant)); i; ++i){
     xml_comp_t  x_const = i; 
-    std::string   const_name      = dd4hep::xml::_toString(x_const.attr_value(x_const.getAttr("name"))); 
-    std::string   const_value     = dd4hep::xml::_toString(x_const.attr_value(x_const.getAttr("value"))); 
+
+    std::string   const_name      = getAttrOrDefault(x_const, _Unicode(name), " "); 
+    std::string   const_value     = getAttrOrDefault(x_const, _Unicode(value), " "); 
 
     if(const_name == "ctilePlaneRotate")
       ctilePlaneRotate = dd4hep::xml::_toDouble(const_value.c_str());
@@ -84,6 +85,9 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
       csectorRotate = dd4hep::xml::_toDouble(const_value.c_str());
     else if(const_name == "sectorRotate")
       sectorRotate = dd4hep::xml::_toDouble(const_value.c_str());
+    else
+      printout(WARNING, "BarrelHCalCalorimeter", "unrecognized <constant> data!");
+
 
   }
 
@@ -107,9 +111,10 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
 
   for(xml_coll_t i(det_define, _Unicode(matrix)); i; ++i){
     xml_comp_t  x_mtrx = i; 
-    std::string   mtrx_name       = dd4hep::xml::_toString(x_mtrx.attr_value(x_mtrx.getAttr("name"))); 
-    std::string   mtrx_values     = dd4hep::xml::_toString(x_mtrx.attr_value(x_mtrx.getAttr("values"))); 
-    
+
+    std::string   mtrx_name       = getAttrOrDefault(x_mtrx, _Unicode(name), " "); 
+    std::string   mtrx_values     = getAttrOrDefault(x_mtrx, _Unicode(values), " "); 
+
     std::vector<double> *aptr = NULL; 
 
     if(mtrx_name == "xposOuter") 
@@ -160,13 +165,14 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
     // get the sector solid definitions
     xml_comp_t    define           = x_solid.child("define");
     xml_comp_t    tessellated      = x_solid.child("tessellated"); 
-    std::string   solid_name       = dd4hep::xml::_toString(x_solid.attr_value(x_solid.getAttr("name"))); 
-    std::string   solidMatString   = dd4hep::xml::_toString(x_solid.attr_value(x_solid.getAttr("material"))); 
+
+    std::string   solid_name       = getAttrOrDefault(x_solid, _Unicode(name), " "); 
+    std::string   solidMatString   = getAttrOrDefault(x_solid, _Unicode(material), " "); 
     Material      solid_material   = description.material(solidMatString); 
 
-    double offset_x = dd4hep::xml::_toDouble(x_solid.attr_value(x_solid.getAttr("x")))*dd4hep::mm; 
-    double offset_y = dd4hep::xml::_toDouble(x_solid.attr_value(x_solid.getAttr("y")))*dd4hep::mm; 
-    double offset_z = dd4hep::xml::_toDouble(x_solid.attr_value(x_solid.getAttr("z")))*dd4hep::mm; 
+    double offset_x = dd4hep::xml::_toDouble(getAttrOrDefault(x_solid, _Unicode(x), "0"))*dd4hep::mm; 
+    double offset_y = dd4hep::xml::_toDouble(getAttrOrDefault(x_solid, _Unicode(y), "0"))*dd4hep::mm; 
+    double offset_z = dd4hep::xml::_toDouble(getAttrOrDefault(x_solid, _Unicode(z), "0"))*dd4hep::mm; 
 
     //double srmin = 100000.0;
     //double srmax = 0.0; 
@@ -179,10 +185,10 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
 
       // create the vertex point
 
-      double xp = dd4hep::xml::_toDouble(pos.attr_value(pos.getAttr("x")))*dd4hep::mm - offset_x;
-      double yp = dd4hep::xml::_toDouble(pos.attr_value(pos.getAttr("y")))*dd4hep::mm - offset_y;
-      double zp = dd4hep::xml::_toDouble(pos.attr_value(pos.getAttr("z")))*dd4hep::mm - offset_z; 
-    
+      double xp = dd4hep::xml::_toDouble(getAttrOrDefault(pos, _Unicode(x), "0"))*dd4hep::mm - offset_x;
+      double yp = dd4hep::xml::_toDouble(getAttrOrDefault(pos, _Unicode(y), "0"))*dd4hep::mm - offset_y;
+      double zp = dd4hep::xml::_toDouble(getAttrOrDefault(pos, _Unicode(z), "0"))*dd4hep::mm - offset_z; 
+
       // for the sector plates  we perform a rotation around y - the chimney cutout should be in the 
       // electron arm 
 
@@ -198,12 +204,11 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
     
       vertices.push_back(thisPoint);
 
-      //double r = sqrt( pow ((dd4hep::xml::_toDouble(pos.attr_value(pos.getAttr("x")))*dd4hep::mm - offset_x),2) + 
-      //	       pow (dd4hep::xml::_toDouble(pos.attr_value(pos.getAttr("y")))*dd4hep::mm - offset_y,2) ); 
+      //double r = sqrt( pow(xp,2) + pow(yp,2) ); 
       //if(r<srmin) srmin = r; 
       //if(r>srmax) srmax = r; 
-      //if(fabs((dd4hep::xml::_toDouble(pos.attr_value(pos.getAttr("z")))*dd4hep::mm - offset_z))>szmax) 
-      //szmax = fabs((dd4hep::xml::_toDouble(pos.attr_value(pos.getAttr("z")))*dd4hep::mm - offset_z));
+      //if(fabs(zp)>szmax) 
+      //szmax = zp;
 
     }
 
@@ -218,15 +223,15 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
       int vtx2 = -1; 
       int vtx3 = -1; 
 
-      std::string facetName1 = dd4hep::xml::_toString(triang.attr_value(triang.getAttr("vertex1"))); 
-      std::string facetName2 = dd4hep::xml::_toString(triang.attr_value(triang.getAttr("vertex2"))); 
-      std::string facetName3 = dd4hep::xml::_toString(triang.attr_value(triang.getAttr("vertex3"))); 
+      std::string facetName1 = getAttrOrDefault(triang, _Unicode(vertex1), "0"); 
+      std::string facetName2 = getAttrOrDefault(triang, _Unicode(vertex2), "0"); 
+      std::string facetName3 = getAttrOrDefault(triang, _Unicode(vertex3), "0"); 
 
       // Search the define collection to match things up
       int idx = 0; 
       for(xml_coll_t j(define, _Unicode(position)); j; ++j){
 	xml_comp_t pos = j;
-	std::string posName = dd4hep::xml::_toString(pos.attr_value(pos.getAttr("name"))); 
+	std::string posName = getAttrOrDefault(pos, _Unicode(name), " "); 
 
 	if( posName == facetName1 ) vtx1 = idx; 
 	if( posName == facetName2 ) vtx2 = idx; 
@@ -404,7 +409,7 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
     sdet.add(sd);
   }
 
-  std::string   env_vis = dd4hep::xml::_toString(x_det.attr_value(x_det.getAttr("env_vis"))); 
+  std::string   env_vis = getAttrOrDefault(x_det, _Unicode(env_vis), "HcalBarrelEnvelopeVis"); 
   envelope.setAttributes(description, x_det.regionStr(), x_det.limitsStr(), env_vis);
   return sdet;
 
