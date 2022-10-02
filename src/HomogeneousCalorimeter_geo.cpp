@@ -10,6 +10,14 @@
 //  Author: Chao Peng (ANL)
 //  Date: 06/09/2021
 //==========================================================================
+//==========================================================================
+//  Add the new geometry and the supporting structue
+//  Adapted the single module with additional wrraper and supporting structure
+//--------------------------------------------------------------------------
+//  Author: WANG Pu-Kai, ZHU Yuwei (IJClab)
+//  Date: 03/10/2022
+//==========================================================================
+
 
 #include "DD4hep/DetFactoryHelper.h"
 #include "GeometryHelpers.h"
@@ -418,8 +426,9 @@ static std::tuple<int, int> add_12surface_disk(Detector& desc, Assembly& env, xm
   
   // optional envelope volume and the supporting frame
   //
-  bool        has_envelope = dd4hep::getAttrOrDefault<bool>(plm, _Unicode(envelope), false);
-  Material    ring_material     = desc.material(getAttrOrDefault<std::string>(plm, _U(material), "StainlessSteel"));
+  bool has_envelope = dd4hep::getAttrOrDefault<bool>(plm, _Unicode(envelope), false);
+  Material ring_material     = desc.material(getAttrOrDefault<std::string>(plm, _U(material), "StainlessSteel"));
+  Material hole_material     = desc.material(getAttrOrDefault<std::string>(plm, _U(material), "Air"));
   PolyhedraRegular solid_world(12, 0., r12min, calo_module_length);
   Tube solid_sub(0., 8.5*cm, calo_module_length/2., phimin, phimax);
   SubtractionSolid calo_subtract(solid_world, solid_sub, Position(0., 0., 0.));
@@ -446,25 +455,33 @@ static std::tuple<int, int> add_12surface_disk(Detector& desc, Assembly& env, xm
   
   // Supporting frame for the cabling
   //
-  // PolyhedraRegular cabling_support12(12, r12max, 70.*cm, 25.4/2.*cm);
-  // Box hole(135./2.*mm, 25.4/2.*mm, 25.4/2.*cm);
-  // Rotation3D rot3D(RotationZYX(60.*degree, 0., 0.));
+  PolyhedraRegular cabling_support12(12, r12max, 70.*cm, 2.54*cm);
+  Volume cabling_support12_V("cabling_support12_V", cabling_support12, ring_material);
+  Transform3D tr_global_csfront = RotationZYX(15.*degree, 0., 0.) * Translation3D(0., 0., 9.*cm);
+  Transform3D tr_global_csback = RotationZYX(15.*degree, 0., 0.) * Translation3D(0., 0., -49.*cm);
   
-  // SubtractionSolid cabling_support_subtract_0(cabling_support12, hole, Transform3D(RotationZ(15.*degree) * Position(-82.5*mm, 675.*mm, 0.)));
-  // SubtractionSolid cabling_support_subtract_0(cabling_support12, hole, RotationZYX(-90.*degree, 0., 0.) * Position(-95.013975*mm, 673.352504*mm, 0.));
-  // SubtractionSolid cabling_support_subtract_1(cabling_support_subtract_0, hole, Position(95.013975*mm, -673.352504*mm, 0.));
-  // Volume cabling_support_subtract_V("cabling_support_subtract_V", hole, ring_material);
-  // Transform3D tr_global_cabling_ring = RotationZYX(15.*degree, 0., 0.) * Translation3D(0., 100.*cm, -10.*cm);
+  Box hole(13.5/2.*cm, 2.54/2.*cm, 2.54/2.*cm);
+  Volume hole_V("hole_V", hole, hole_material);
+  Transform3D hole_pos = RotationZYX(0., 0., 0.) * Translation3D(0., 0., 0.);
 
-  
+
   // Place frames and mother volume of modules into the world volume
   //
   if (has_envelope) 
     {
-      env.placeVolume(env_vol, tr_global);
-      env.placeVolume(ring12_vol, tr_global_Oring);
-      env.placeVolume(Sring12_vol, tr_global_Iring);
+      env.placeVolume(env_vol, tr_global);                      // Place the mother volume for all modules
+      env.placeVolume(ring12_vol, tr_global_Oring);             // Place the outer supporting frame
+      env.placeVolume(Sring12_vol, tr_global_Iring);            // Place the inner supporting frame
+      env.placeVolume(cabling_support12_V, tr_global_csfront);  // Place the front cabling frame(Only the holes are visible)
+      env.placeVolume(cabling_support12_V, tr_global_csback);   // Place the back cabling frame(Only the holes are visible)
 
+      for(int i = 0 ; i < 12 ; i++)
+        {
+          hole_pos = RotationZYX((15. + i * 30.)*degree, 0., 0.) * Translation3D(82.5*mm, 675.*mm, 0.);
+          cabling_support12_V.placeVolume(hole_V, hole_pos);
+          hole_pos = RotationZYX((15. + i * 30.)*degree, 0., 0.) * Translation3D(-82.5*mm, 675.*mm, 0.);
+          cabling_support12_V.placeVolume(hole_V, hole_pos);
+        }
     }
 
     
