@@ -42,9 +42,9 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
   std::string   string_rmax      = getAttrOrDefault(x_det, _Unicode(rmax), "2660"); 
   std::string   string_length    = getAttrOrDefault(x_det, _Unicode(length), "3160"); 
 
-  double           rmin = (dd4hep::xml::_toDouble(string_rmin.c_str()))*dd4hep::mm;
-  double           rmax = (dd4hep::xml::_toDouble(string_rmax.c_str()))*dd4hep::mm;
-  double           length = (dd4hep::xml::_toDouble(string_length.c_str()))*dd4hep::mm;
+  double           rmin = (atof(string_rmin.c_str()))*dd4hep::mm;
+  double           rmax = (atof(string_rmax.c_str()))*dd4hep::mm;
+  double           length = (atof(string_length.c_str()))*dd4hep::mm;
 
   Tube             etube(rmin,rmax, length);
   Volume           envelope(det_name, etube, air);
@@ -78,13 +78,13 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
     std::string   const_value     = getAttrOrDefault(x_const, _Unicode(value), " "); 
 
     if(const_name == "ctilePlaneRotate")
-      ctilePlaneRotate = dd4hep::xml::_toDouble(const_value.c_str());
+      ctilePlaneRotate = atof(const_value.c_str());
     else if(const_name == "tilePlaneRotate")
-      tilePlaneRotate = dd4hep::xml::_toDouble(const_value.c_str());
+      tilePlaneRotate = atof(const_value.c_str());
     else if(const_name == "csectorRotate")
-      csectorRotate = dd4hep::xml::_toDouble(const_value.c_str());
+      csectorRotate = atof(const_value.c_str());
     else if(const_name == "sectorRotate")
-      sectorRotate = dd4hep::xml::_toDouble(const_value.c_str());
+      sectorRotate = atof(const_value.c_str());
     else
       printout(WARNING, "BarrelHCalCalorimeter", "unrecognized <constant> data!");
 
@@ -149,10 +149,10 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
     std::string token;
     while ((pos = mtrx_values.find(delimiter)) != std::string::npos) {
       token = mtrx_values.substr(0, pos);
-      aptr->push_back(dd4hep::xml::_toDouble(token.c_str())); 
+      aptr->push_back(atof(token.c_str())); 
       mtrx_values.erase(0, pos + delimiter.length());
     }
-    aptr->push_back(dd4hep::xml::_toDouble(mtrx_values.c_str())); 
+    aptr->push_back(atof(mtrx_values.c_str())); 
 
   }
 
@@ -170,9 +170,9 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
     std::string   solidMatString   = getAttrOrDefault(x_solid, _Unicode(material), " "); 
     Material      solid_material   = description.material(solidMatString); 
 
-    double offset_x = dd4hep::xml::_toDouble(getAttrOrDefault(x_solid, _Unicode(x), "0"))*dd4hep::mm; 
-    double offset_y = dd4hep::xml::_toDouble(getAttrOrDefault(x_solid, _Unicode(y), "0"))*dd4hep::mm; 
-    double offset_z = dd4hep::xml::_toDouble(getAttrOrDefault(x_solid, _Unicode(z), "0"))*dd4hep::mm; 
+    double offset_x = atof(getAttrOrDefault(x_solid, _Unicode(x), "0"))*dd4hep::mm; 
+    double offset_y = atof(getAttrOrDefault(x_solid, _Unicode(y), "0"))*dd4hep::mm; 
+    double offset_z = atof(getAttrOrDefault(x_solid, _Unicode(z), "0"))*dd4hep::mm; 
 
     //double srmin = 100000.0;
     //double srmax = 0.0; 
@@ -185,9 +185,9 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
 
       // create the vertex point
 
-      double xp = dd4hep::xml::_toDouble(getAttrOrDefault(pos, _Unicode(x), "0"))*dd4hep::mm - offset_x;
-      double yp = dd4hep::xml::_toDouble(getAttrOrDefault(pos, _Unicode(y), "0"))*dd4hep::mm - offset_y;
-      double zp = dd4hep::xml::_toDouble(getAttrOrDefault(pos, _Unicode(z), "0"))*dd4hep::mm - offset_z; 
+      double xp = atof(getAttrOrDefault(pos, _Unicode(x), "0"))*dd4hep::mm - offset_x;
+      double yp = atof(getAttrOrDefault(pos, _Unicode(y), "0"))*dd4hep::mm - offset_y;
+      double zp = atof(getAttrOrDefault(pos, _Unicode(z), "0"))*dd4hep::mm - offset_z; 
 
       // for the sector plates  we perform a rotation around y - the chimney cutout should be in the 
       // electron arm 
@@ -297,7 +297,7 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
 	if( type=="OuterHCalTile" || type=="OuterHCalChimneyTile" ){
 
 	  std::string stnum = solid_name.substr(solid_name.size()-2,solid_name.size());
-	  int tnum = dd4hep::xml::_toInt(stnum.c_str())-1; 
+	  int tnum = atoi(stnum.c_str())-1; 
 	  
 	  if(type=="OuterHCalTile"){
 
