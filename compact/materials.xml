@@ -412,6 +412,7 @@
   	<fraction n="0.822" ref="C"/>
    	<fraction n="0.032" ref="N"/>
    	<fraction n="0.055" ref="O"/>
+     <constant name="BirksConstant" value="0.126*mm/MeV"/>
   </material>
   <material name="SciFiPb_PbGlue">
     <D type="density" value="8.558" unit="g / cm3"/>
