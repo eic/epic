@@ -1,4 +1,5 @@
 features:
+- solenoid
 - beampipe
 - bhcal
 
