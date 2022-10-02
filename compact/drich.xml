@@ -6,8 +6,8 @@
 <constant name="DRICH_Length"             value="ForwardRICHRegion_length"/>  <!-- overall vessel length -->
 <constant name="DRICH_zmin"               value="ForwardRICHRegion_zmin"/>
 <constant name="DRICH_zmax"               value="DRICH_zmin + DRICH_Length"/>
-<constant name="DRICH_rmin0"              value="DRICH_zmin * ForwardRICHRegion_tan1"/>  <!-- bore radius at dRICh entrance -->
-<constant name="DRICH_rmin1"              value="DRICH_zmax * ForwardRICHRegion_tan2"/>  <!-- bore radius at dRICh exit -->
+<constant name="DRICH_rmin0"              value="DRICH_zmin * ForwardRICHRegion_tan1"/>  <!-- bore radius at dRICH entrance -->
+<constant name="DRICH_rmin1"              value="DRICH_zmax * ForwardRICHRegion_tan2"/>  <!-- bore radius at dRICH exit -->
 <constant name="DRICH_wall_thickness"     value="0.5*cm"/>  <!-- thickness of radial walls -->
 <constant name="DRICH_window_thickness"   value="0.1*cm"/>  <!-- thickness of entrance and exit walls -->
 <!-- snout geometry: cone with front radius rmax0 and back radius of rmax1 -->
@@ -17,8 +17,10 @@
 <constant name="DRICH_rmax1"              value="DRICH_rmax0 + DRICH_SnoutLength * DRICH_SnoutSlope"/>
 <!-- tank geometry: cylinder, holding the majority of detector components -->
 <constant name="DRICH_rmax2"              value="ForwardPIDRegion_rmax"/>  <!-- cylinder radius -->
-<!-- aerogel geometry -->
+<!-- aerogel+filter geometry -->
 <constant name="DRICH_aerogel_thickness"  value="4.0*cm"/>  <!-- aerogel thickness -->
+<constant name="DRICH_filter_thickness"   value="0.3*mm"/>  <!-- filter thickness -->
+<constant name="DRICH_aerogel_filter_gap" value="0.01*mm"/> <!-- air gap between aerogel and filter FIXME: currently a gas gap -->
 <!-- sensor geometry; model = S13361-3050NE-08 SiPM -->
 <constant name="DRICH_sensor_size"           value="25.8*mm"/> <!-- full length of the sensor side FIXME: resin base should be this size -->
 <constant name="DRICH_pixel_gap"             value="0.2*mm"/> <!-- size of gaps between adjacent pixels AND gaps between edge pixels and sensor side -->
@@ -35,13 +37,10 @@
                            0 = off
 - `DRICH_debug_mirror`:    1 = draw full mirror shape for single sector; 0 = off
 - `DRICH_debug_sensors`:   1 = draw full sensor sphere for a single sector; 0 = off
-- `DRICH_create_irt_file`: 1 = create an auxiliary IRT config ROOT file; 0 = off
-                               - the file name is set by detector attribute `irt_filename` below
 </comment>
 <constant name="DRICH_debug_optics"    value="0"/>
 <constant name="DRICH_debug_mirror"    value="0"/>
 <constant name="DRICH_debug_sensors"   value="0"/>
-<constant name="DRICH_create_irt_file" value="0"/>
 </define>
 
 
@@ -50,7 +49,7 @@
 
 <!-- /detectors/detector -->
 <documentation level="10">
-### dRICh: ***d***ual ***R***ing ***I***maging ***Ch***erenkov detector
+### dRICH: ***d***ual ***R***ing ***I***maging ***Ch***erenkov detector
 </documentation>
 <detector
   id="ForwardRICH_ID"
@@ -61,14 +60,13 @@
   material="Aluminum"
   vis_vessel="DRICH_vessel_vis"
   vis_gas="DRICH_gas_vis"
-  irt_filename="irt-drich.root"
   >
 
 
 <!-- /detectors/detector/dimensions -->
 <documentation level="10">
 #### Vessel
-- the dRICh vessel is composed of two parts:
+- the dRICH vessel is composed of two parts:
   - tank: cylindrical region containing most of the detector components
   - snout: conical region at the front of the vessel, containing the aerogel
 - dimensions:
@@ -102,7 +100,7 @@
 #### Radiator
 - radiator is defined in a wedge of azimuthal space, composed of aerogel and a
   filter; the filter is applied to the back of the aerogel, so that it separates
-  the aerogel and gas radiators
+  the aerogel and gas radiators; an airgap is defined between the aerogel and filter
 - dimensions:
   - `frontplane`: front of the aerogel, w.r.t. front plane of the vessel envelope
   - `rmin` and `rmax`: inner and outer radius (at the front plane; radial bounds are conical)
@@ -120,10 +118,15 @@
     vis="DRICH_aerogel_vis"
     thickness="DRICH_aerogel_thickness"
     />
+  <airgap
+    material="AirOptical"
+    vis="DRICH_gas_vis"
+    thickness="DRICH_aerogel_filter_gap"
+    />
   <filter
     material="Acrylic_DRICH"
     vis="DRICH_filter_vis"
-    thickness="0.3*mm"
+    thickness="DRICH_filter_thickness"
     />
 </radiator>
 
