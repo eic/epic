@@ -27,7 +27,7 @@
 	  id="HCalBarrel_ID"
 	  name="HcalBarrel"
 	  type="epic_oHcalBarrel"
-	  readout="HcalBarrelHits"
+	  readout="oHcalBarrelHits"
 	  vis="HcalBarrelVis"
 	  env_vis="HcalBarrelEnvelopeVis"
 	  rmin="1780"
@@ -11353,9 +11353,8 @@
 
   <!--  Definition of the readout segmentation/definition  -->
   <readouts>
-    <readout name="HcalBarrelHits">
-      <segmentation type="CartesianGridXY" grid_size_x="100* mm" grid_size_y="100 * mm"/>
-      <id>system:8,barrel:3,module:4,layer:8,slice:5,x:32:-16,y:-16</id>
+    <readout name="oHcalBarrelHits">
+      <id>system:8,barrel:3,sector:6,tilerow:4,tile:6,x:32:-16,y:-16</id>
     </readout>
   </readouts>
 
