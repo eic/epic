@@ -59,6 +59,7 @@
           <zplane z="BeampipeDownstreamStraightLength + 0.5 * BeampipeOD * tan(abs(CrossingAngle))" OD="BeampipeOD"/>
           <zplane z="1750.00 * mm" OD=" 92.06 * mm"/>
           <zplane z="4455.80 * mm" OD="257.92 * mm"/>
+          <zplane z="5000.00 * mm" OD="340.60 * mm"/>
         </outgoing_hadron>
         <additional_subtraction thickness="4.0*mm"
                                 crossing_angle="CrossingAngle">
