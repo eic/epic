@@ -125,7 +125,7 @@
       vis="TrackerSubAssemblyVis">
       <composite name="BarrelTOF"/>
       <composite name="ForwardTOF"/>
-      <!--composite name="BackwardTOF"/-->
+      <composite name="BackwardTOF"/>
     </detector>
     <detector id="TrackerSubAssembly_5_ID"
       name="OuterMPGDSubSubAssembly"
@@ -152,5 +152,6 @@
   <include ref="tracker/mpgd_barrel.xml"/>
   <include ref="tracker/silicon_disks.xml"/>
   <include ref="tracker/support_service_assembly.xml"/>
-  <include ref="tof.xml"/>
+  <include ref="tof_barrel.xml"/>
+  <include ref="tof_endcap.xml"/>
 </lccdd>
