@@ -399,20 +399,20 @@
     <fraction n="0.96" ref="W"/>
     <fraction n="0.04" ref="Polystyrene"/>
   </material>
-  <material name="SciFiPb_Glue">
-    <D type="density" value="1.180" unit="g / cm3"/>
+  <material name="SciFiPb_Scintillator">
+    <D type="density" value="1.049" unit="g / cm3"/>
     <fraction n="0.077" ref="H"/>
   	<fraction n="0.921" ref="C"/>
    	<fraction n="0.001" ref="N"/>
    	<fraction n="0.001" ref="O"/>
+    <constant name="BirksConstant" value="0.126*mm/MeV"/>
   </material>
-  <material name="SciFiPb_Scintillator">
-    <D type="density" value="1.049" unit="g / cm3"/>
+  <material name="SciFiPb_Glue">
+    <D type="density" value="1.180" unit="g / cm3"/>
     <fraction n="0.091" ref="H"/>
   	<fraction n="0.822" ref="C"/>
    	<fraction n="0.032" ref="N"/>
-   	<fraction n="0.055" ref="O"/>
-     <constant name="BirksConstant" value="0.126*mm/MeV"/>
+   	<fraction n="0.055" ref="O"/>   
   </material>
   <material name="SciFiPb_PbGlue">
     <D type="density" value="8.558" unit="g / cm3"/>
