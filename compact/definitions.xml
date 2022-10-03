@@ -252,9 +252,12 @@ The unused IDs below are saved for future use.
     <constant name="ForwardOffMTracker_station_2_ID" value="160"/>
     <constant name="ForwardOffMTracker_station_3_ID" value="161"/>
     <constant name="ForwardOffMTracker_station_4_ID" value="162"/>
-    <constant name="ZDCEcal_ID"              value="163"/>
-    <constant name="ZDCHcal_ID"              value="164"/>
-    <constant name="VacuumMagnetElement_1_ID"        value="165"/>
+    <constant name="ZDC_1stSilicon_ID"           value="163"/>
+    <constant name="ZDC_Crystal_ID"              value="164"/>
+    <constant name="ZDC_WSi_ID"                  value="165"/>
+    <constant name="ZDC_PbSi_ID"                 value="166"/>
+    <constant name="ZDC_PbSci_ID"                value="167"/>
+    <constant name="VacuumMagnetElement_1_ID"        value="168"/>
 
     <documentation>
       #### (170-189) Far Forward Beamline Magnets
@@ -467,7 +470,7 @@ Examples:
 
     <comment> Note: PID has space for DIRC, ExtraSpace sits past the PID</comment>
     <constant name="BarrelPIDRegion_thickness"    value="7.0 * cm" />
-    <constant name="BarrelExtraSpace_thickness"   value="5.0 * cm" />
+    <constant name="BarrelExtraSpace_thickness"   value="1.0 * cm" />
 
     <documentation>
     ## Forward/backward tracking region behind the PID detectors
@@ -526,8 +529,9 @@ Service gaps in FW direction (before endcapP ECAL) and BW direction (before endc
     <constant name="EcalEndcapN_rmin"               value="max(EcalEndcapN_rmin1, EcalEndcapN_rmin2)"/>
     <constant name="EcalEndcapN_rmax"               value="63*cm"/> <!-- FIXME hardcoded -->
 
-    <constant name="EcalBarrelRegion_thickness"     value="50.0*cm"/>
+    <constant name="EcalBarrelRegion_thickness"     value="54.0*cm"/>
     <constant name="EcalBarrel_rmin"                value="CentralTrackingRegion_rmax + BarrelPIDRegion_thickness + BarrelExtraSpace_thickness"/>
+    <constant name="EcalBarrel_inner_margin"        value="1*cm"/>
     <constant name="EcalBarrel_rmax"                value="EcalBarrel_rmin + EcalBarrelRegion_thickness"/>
     <constant name="EcalBarrelForward_zmax"         value="ForwardRICHRegion_zmin"/> <!-- FIXME currently unable to accommodate actual position -->
     <constant name="EcalBarrelBackward_zmax"        value="BackwardServiceGap_zmax"/> <!-- FIXME should be -389 cm -->

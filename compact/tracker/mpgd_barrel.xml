@@ -80,7 +80,7 @@
       id="TrackerBarrel_2_ID"
       name="InnerMPGDBarrel"
       type="epic_TrackerBarrel"
-      readout="InnerMPGDBarrelHits"
+      readout="MPGDBarrelHits"
       insideTrackingVolume="true">
       <dimensions
         rmin="InnerMPGDBarrelLayer_rmin"
@@ -116,7 +116,7 @@
       id="TrackerBarrel_4_ID"
       name="OuterMPGDBarrel"
       type="epic_TrackerBarrel"
-      readout="OuterMPGDBarrelHits"
+      readout="MPGDBarrelHits"
       insideTrackingVolume="true">
       <dimensions
         rmin="OuterMPGDBarrelLayer_rmin"
@@ -153,11 +153,7 @@
 
 
   <readouts>
-    <readout name="InnerMPGDBarrelHits">
-      <segmentation type="CartesianGridXY" grid_size_x="0.150*mm*sqrt(12)" grid_size_y="0.150*mm*sqrt(12)" />
-      <id>system:8,layer:4,module:12,sensor:2,x:32:-14,y:-18</id>
-    </readout>
-    <readout name="OuterMPGDBarrelHits">
+    <readout name="MPGDBarrelHits">
       <segmentation type="CartesianGridXY" grid_size_x="0.150*mm*sqrt(12)" grid_size_y="0.150*mm*sqrt(12)" />
       <id>system:8,layer:4,module:12,sensor:2,x:32:-14,y:-18</id>
     </readout>

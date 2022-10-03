@@ -1,5 +1,5 @@
 //==========================================================================
-//  dRICh: Dual Ring Imaging Cherenkov Detector
+//  dRICH: Dual Ring Imaging Cherenkov Detector
 //--------------------------------------------------------------------------
 //
 // Author: Christopher Dilks (Duke University)
@@ -163,10 +163,10 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
   desc.add(Constant("DRICH_RECON_cellMask",       std::to_string(cellMask)));
 
   // BUILD VESSEL ====================================================================
-  /* - `vessel`: aluminum enclosure, the mother volume of the dRICh
+  /* - `vessel`: aluminum enclosure, the mother volume of the dRICH
    * - `gasvol`: gas volume, which fills `vessel`; all other volumes defined below
    *   are children of `gasvol`
-   * - the dRICh vessel geometry has two regions: the snout refers to the conic region
+   * - the dRICH vessel geometry has two regions: the snout refers to the conic region
    *   in the front, housing the aerogel, while the tank refers to the cylindrical
    *   region, housing the rest of the detector components
    */
