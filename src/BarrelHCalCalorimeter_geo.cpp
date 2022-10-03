@@ -268,7 +268,8 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
     }
     else if(solid_name == "HCAL_Chimney_Sector_Plate"){
 
-      for(int i=0; i<9; i++)
+      for(int i=5; i<6; i++)
+	//for(int i=0; i<9; i++)
         ChimneySector.placeVolume(solidVolume, i, Transform3D(RotationZ((i*2*M_PI / 320) + csectorRotate*dd4hep::deg), Translation3D(0, 0, 0) ));
 
     }
@@ -383,6 +384,7 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
   sens.setType("calorimeter");
   DetElement sector_det("sector0", det_id);
 
+  /*
   // match the tile and sector plate geometry
   double ctileRotateStart = 5.40*(360.0/320.0)*dd4hep::deg;
   double tileRotateStart = 20.55*(360.0/320.0)*dd4hep::deg + ctileRotateStart; 
@@ -410,11 +412,12 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
     sdet.add(sd);
 
   }
+  */
 
   // Place the sectors into the envelope
 
   // Chimney sectors
-  for(int i=-1; i<2; i++){
+  for(int i=-1; i<0; i++){
     PlacedVolume     sect_phv = envelope.placeVolume(ChimneySector, i+1, Transform3D(RotationZ(((i-1)*2*M_PI/32)), Translation3D(0, 0, 0) ));
     sect_phv.addPhysVolID("system", det_id);
     sect_phv.addPhysVolID("barrel", 0);
@@ -424,6 +427,7 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
     sdet.add(sd);
   }
 
+  /*
   // Normal sectors
   for(int i=3; i<32; i++){
     PlacedVolume     sect_phv = envelope.placeVolume(Sector, i, RotationZYX((-2.095*M_PI/32) + (i-3)*(2*M_PI/32),0,0) );
@@ -434,6 +438,7 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
     sd.setPlacement(sect_phv);
     sdet.add(sd);
   }
+  */
 
   std::string   env_vis = getAttrOrDefault(x_det, _Unicode(env_vis), "HcalBarrelEnvelopeVis"); 
   envelope.setAttributes(description, x_det.regionStr(), x_det.limitsStr(), env_vis);
