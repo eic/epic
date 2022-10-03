@@ -2,8 +2,8 @@
 
   <info name="ecal_forward_homogeneous.xml"
         title="Homogeneous forward ECal"
-        author="@rymilton"
-        url="https://github.com/rymilton"
+        author="@jizhongling"
+        url="https://github.com/jizhongling"
         status="development"
         version="1.0"
   ><comment/></info>
@@ -68,7 +68,7 @@
         <slice name="Scintillator_slice" material="AvgTungstenScFi" thickness="EcalEndcapPScintillatorThickness" vis="AnlOrange" sensitive="true"/>
       </layer>
       <insert>
-        <position x="EcalEndcapPInsert_xposition" y="0" z = "0"/>
+        <position x="EcalEndcapPInsert_xposition" y="0" z="0"/>
         <dimensions
           x="EcalEndcapPInsert_width"
           y="EcalEndcapPInsert_height"
