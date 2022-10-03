@@ -233,7 +233,7 @@ static Ref_t create_detector(Detector &lcdd, xml_h handle,
                          Trap{z, theta, phi, y1, x1, x2, alpha1, y2, x3, x4,
                               alpha2},
                          lcdd.material("SciGlass")},
-                  Transform3D{RotationZ{sector_phi + row_phi}} *
+                  Transform3D{RotationZ{-M_PI_2 + sector_phi + row_phi}} *
                       Transform3D{Position{0. * cm, row_rmin, dir_sign * dz}} *
                       Transform3D{RotationX{-M_PI / 2 + dir_sign * beta}} *
                       Transform3D{Position{0, dir_sign * y1, z}})
