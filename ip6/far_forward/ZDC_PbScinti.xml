@@ -34,7 +34,7 @@
   </detectors>
 
   <readouts>
-    <readout name="ZDC_PbSci_Hits">
+    <readout name="ZDCHcalHits">
       <segmentation type="CartesianGridXY" grid_size_x="10.*cm" grid_size_y="10.*cm"/>
       <id>system:8,scinti:6,x:24:-12,y:-12</id>
     </readout>
