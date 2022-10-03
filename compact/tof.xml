@@ -12,9 +12,7 @@
 
   </documentation>
 
-  <!--include ref="tof_endcap.xml"/-->
   <include ref="tof_barrel.xml"/>
-  <include ref="tof_forward.xml"/>
-  <!--include ref="tof_backward.xml"/-->
+  <include ref="tof_endcap.xml"/>
 
 </lccdd>
