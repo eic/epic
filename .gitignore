@@ -1,6 +1,6 @@
 !*.png
 
-*.xml
+/*.xml
 *.prim
 */*.eps
 */*/*.eps

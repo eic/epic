@@ -182,42 +182,6 @@ total X0 0.24% per disk layer （4 sectors per disk):
         rmin="InnerTrackerBarrelEnvelope_rmin"
         rmax="InnerTrackerBarrelEnvelope_rmax"
         length="InnerTrackerBarrelEnvelope_length"/>
-      <support material="Aluminum" name="serv_cone_pos" vis="TrackerServiceVis">
-        <shape type="Cone"
-          rmin1="InnerTrackerBarrelServiceCone_rmin1"
-          rmax1="InnerTrackerBarrelServiceCone_rmax1"
-          rmin2="InnerTrackerBarrelServiceCone_rmin2"
-          rmax2="InnerTrackerBarrelServiceCone_rmax2"
-          z="InnerTrackerBarrelCone_length/2"/>
-        <position x="0*cm" y="0*cm" z="InnerTrackerBarrelCone_z" />
-      </support>
-      <support material="CarbonFiber" name="sup_cone_pos" vis="TrackerSupportVis">
-        <shape type="Cone"
-          rmin1="InnerTrackerBarrelSupportCone_rmin1"
-          rmax1="InnerTrackerBarrelSupportCone_rmax1"
-          rmin2="InnerTrackerBarrelSupportCone_rmin2"
-          rmax2="InnerTrackerBarrelSupportCone_rmax2"
-          z="InnerTrackerBarrelCone_length/2"/>
-        <position x="0*cm" y="0*cm" z="InnerTrackerBarrelCone_z" />
-      </support>
-      <support material="Aluminum" name="serv_cone_neg" vis="TrackerServiceVis">
-        <shape type="Cone"
-          rmin1="InnerTrackerBarrelServiceCone_rmin2"
-          rmax1="InnerTrackerBarrelServiceCone_rmax2"
-          rmin2="InnerTrackerBarrelServiceCone_rmin1"
-          rmax2="InnerTrackerBarrelServiceCone_rmax1"
-          z="InnerTrackerBarrelCone_length/2"/>
-        <position x="0*cm" y="0*cm" z="-InnerTrackerBarrelCone_z" />
-      </support>
-      <support material="CarbonFiber" name="sup_cone_neg" vis="TrackerSupportVis">
-        <shape type="Cone"
-          rmin1="InnerTrackerBarrelSupportCone_rmin2"
-          rmax1="InnerTrackerBarrelSupportCone_rmax2"
-          rmin2="InnerTrackerBarrelSupportCone_rmin1"
-          rmax2="InnerTrackerBarrelSupportCone_rmax1"
-          z="InnerTrackerBarrelCone_length/2"/>
-        <position x="0*cm" y="0*cm" z="-InnerTrackerBarrelCone_z" />
-      </support>
       <comment>
         Tracker Barrel Modules
       </comment>
@@ -322,41 +286,59 @@ total X0 0.24% per disk layer （4 sectors per disk):
 
   </define>
   <detectors>
+    <detector type="epic_SupportServiceMaterial"
+      name="SupportCone"
+      id="84"
+    >
+      <support type="Cone"
+        name="serv_cone_dmmy_neg"
+        vis="TrackerServiceVis"
+        rmin1="SiTrackerServiceCyl_rmin"
+        rmin2="InnerTrackerBarrelSupportCone_rmin1"
+        length="InnerTrackerBarrelCone_length+InnerTrackerEndcapCone_length"
+        thickness="0.1*cm">
+          <position x="0*cm" y="0*cm" z="-(InnerTrackerBarrelCone_z + InnerTrackerEndcapCone_z)/2" />
+          <component material="Aluminum" thickness="SiTrackerServiceConeAl_thickness" name="al_support_serv" vis="TrackerServiceVis" />
+          <component material="CarbonFiber" thickness="SiTrackerSupportConeCF_thickness" name="al_support_serv2" vis="TrackerSupportVis"/>
+      </support>
+      <support type="Cone"
+        name="serv_cone_dmmy_pos"
+        vis="TrackerSupportVis"
+        rmin1="InnerTrackerBarrelSupportCone_rmin1"
+        rmin2="SiTrackerServiceCyl_rmin"
+        length="InnerTrackerBarrelCone_length+InnerTrackerEndcapCone_length"
+        thickness="0.1*cm">
+      <position x="0*cm" y="0*cm" z="(InnerTrackerBarrelCone_z + InnerTrackerEndcapCone_z)/2" />
+          <component material="Aluminum" thickness="SiTrackerServiceConeAl_thickness" name="al_support_serv" vis="TrackerServiceVis" />
+          <component material="CarbonFiber" thickness="SiTrackerSupportConeCF_thickness" name="al_support_serv2" vis="TrackerSupportVis"/>
+      </support>
+      <support type="Tube"
+        name="serv_cyl_pos"
+        rmin="SiTrackerServiceCyl_rmin"
+        thickness="0.1*cm"
+        length="InnerTrackerEndcapCyl_length">
+          <position x="0*cm" y="0*cm" z="InnerTrackerEndcapCyl_zmin" />
+          <component material="Aluminum" thickness="SiTrackerServiceCylAl_thickness" vis="TrackerServiceVis" />
+          <component material="CarbonFiber" thickness="SiTrackerSupportCylCF_thickness" vis="TrackerSupportVis" />
+      </support>
+      <support 
+        name="serv_cyl_neg"
+        type="Tube"
+        rmin="SiTrackerServiceCyl_rmin"
+        thickness="0.1*cm"
+        length="InnerTrackerEndcapCyl_length">
+          <position x="0*cm" y="0*cm" z="-InnerTrackerEndcapCyl_zmin" />
+          <component material="Aluminum" thickness="SiTrackerServiceCylAl_thickness" vis="TrackerServiceVis" />
+          <component material="CarbonFiber" thickness="SiTrackerSupportCylCF_thickness" vis="TrackerSupportVis" />
+      </support>
+    </detector>
     <detector
       id="TrackerEndcapP_0_ID"
       name="InnerTrackerEndcapP"
       type="epic_TrapEndcapTracker"
-      readout="TrackerEndcapHits1"
+      readout="TrackerEndcapHits"
       vis="TrackerVis"
       reflect="false">
-      <support material="Aluminum" name="serv_cone_pos" vis="TrackerServiceVis">
-        <shape type="Cone"
-          rmin1="InnerTrackerEndcapServiceCone_rmin1"
-          rmax1="InnerTrackerEndcapServiceCone_rmax1"
-          rmin2="InnerTrackerEndcapServiceCone_rmin2"
-          rmax2="InnerTrackerEndcapServiceCone_rmax2"
-          z="InnerTrackerEndcapCone_length/2"/>
-        <position x="0*cm" y="0*cm" z="InnerTrackerEndcapCone_z" />
-      </support>
-      <support material="CarbonFiber" name="sup_cone_pos" vis="TrackerSupportVis">
-        <shape type="Cone"
-          rmin1="InnerTrackerEndcapSupportCone_rmin1"
-          rmax1="InnerTrackerEndcapSupportCone_rmax1"
-          rmin2="InnerTrackerEndcapSupportCone_rmin2"
-          rmax2="InnerTrackerEndcapSupportCone_rmax2"
-          z="InnerTrackerEndcapCone_length/2"/>
-        <position x="0*cm" y="0*cm" z="InnerTrackerEndcapCone_z" />
-      </support>
-      <support material="Aluminum" name="serv_cyl_pos" vis="TrackerServiceVis"
-          rmin="SiTrackerServiceCyl_rmin"
-          thickness="SiTrackerServiceCylAl_thickness"
-          length="InnerTrackerEndcapCyl_length"
-          zstart="InnerTrackerEndcapCyl_zmin" />
-      <support material="CarbonFiber" name="sup_cyl_pos" vis="TrackerSupportVis"
-          rmin="SiTrackerSupportCyl_rmin"
-          thickness="SiTrackerSupportCylCF_thickness"
-          length="InnerTrackerEndcapCyl_length"
-          zstart="InnerTrackerEndcapCyl_zmin" />
       <module name="Module1" vis="TrackerModuleVis">
         <trd x1="InnerTrackerEndcapMod1_x1/2" x2="InnerTrackerEndcapMod1_x2/2" z="InnerTrackerEndcapMod1_y/2" />
         <module_component thickness="SiTrackerEndcapCF_thickness" material="CarbonFiber" vis="TrackerSupportVis" />
@@ -402,7 +384,7 @@ total X0 0.24% per disk layer （4 sectors per disk):
       id="TrackerEndcapN_0_ID"
       name="InnerTrackerEndcapN"
       type="epic_TrapEndcapTracker"
-      readout="TrackerEndcapHits2"
+      readout="TrackerEndcapHits"
       vis="TrackerVis"
       reflect="true">
       <support material="Aluminum" name="serv_cone_neg" vis="TrackerServiceVis">
@@ -513,7 +495,7 @@ total X0 0.24% per disk layer （4 sectors per disk):
       id="TrackerBarrel_1_ID"
       name="MedialTrackerBarrel"
       type="epic_TrackerBarrel"
-      readout="MPGDTrackerBarrelHits1"
+      readout="MPGDTrackerBarrelHits"
       insideTrackingVolume="true">
       <dimensions
         rmin="MedialTrackerBarrelEnvelope_rmin"
@@ -609,7 +591,7 @@ total X0 0.24% per disk layer （4 sectors per disk):
       id="TrackerEndcapP_1_ID"
       name="MedialTrackerEndcapP"
       type="epic_TrapEndcapTracker"
-      readout="TrackerEndcapHits3"
+      readout="TrackerEndcapHits"
       vis="TrackerVis"
       reflect="false">
       <support material="Aluminum" name="serv_cyl_pos" vis="TrackerServiceVis"
@@ -647,7 +629,7 @@ total X0 0.24% per disk layer （4 sectors per disk):
       id="TrackerEndcapN_1_ID"
       name="MedialTrackerEndcapN"
       type="epic_TrapEndcapTracker"
-      readout="TrackerEndcapHits4"
+      readout="TrackerEndcapHits"
       vis="TrackerVis"
       reflect="true">
       <support material="Aluminum" name="serv_cyl_neg" vis="TrackerServiceVis"
@@ -711,7 +693,7 @@ total X0 0.24% per disk layer （4 sectors per disk):
       id="TrackerBarrel_2_ID"
       name="OuterTrackerBarrel"
       type="epic_TrackerBarrel"
-      readout="MPGDTrackerBarrelHits2"
+      readout="MPGDTrackerBarrelHits"
       insideTrackingVolume="true">
       <dimensions
         rmin="OuterTrackerBarrelEnvelope_rmin"
@@ -843,7 +825,7 @@ total X0 0.24% per disk layer （4 sectors per disk):
       id="TrackerEndcapP_2_ID"
       name="OuterTrackerEndcapP"
       type="epic_TrapEndcapTracker"
-      readout="TrackerEndcapHits5"
+      readout="TrackerEndcapHits"
       vis="TrackerVis"
       reflect="false">
       <support material="Aluminum" name="serv_cyl_pos" vis="TrackerServiceVis"
@@ -921,7 +903,7 @@ total X0 0.24% per disk layer （4 sectors per disk):
       id="TrackerEndcapN_2_ID"
       name="OuterTrackerEndcapN"
       type="epic_TrapEndcapTracker"
-      readout="TrackerEndcapHits6"
+      readout="TrackerEndcapHits"
       vis="TrackerVis"
       reflect="true">
       <support material="Aluminum" name="serv_cyl_pos" vis="TrackerServiceVis"
@@ -1056,7 +1038,7 @@ total X0 0.24% per disk layer （4 sectors per disk):
       id="TrackerEndcapP_3_ID"
       name="GEMEndcapP"
       type="epic_TrapEndcapTracker"
-      readout="GEMTrackerEndcapHits1"
+      readout="GEMTrackerEndcapHits"
       vis="TrackerVis"
       reflect="false">
       <module name="RingModule" vis="TrackerGEMModuleVis">
@@ -1170,7 +1152,7 @@ total X0 0.24% per disk layer （4 sectors per disk):
       id="TrackerEndcapN_3_ID"
       name="GEMEndcapN"
       type="epic_TrapEndcapTracker"
-      readout="GEMTrackerEndcapHits2"
+      readout="GEMTrackerEndcapHits"
       vis="TrackerVis"
       reflect="true">
       <module name="RingModule" vis="TrackerGEMModuleVis">
@@ -1318,7 +1300,7 @@ total X0 0.24% per disk layer （4 sectors per disk):
       id="TrackerEndcapP_4_ID"
       name="ForwardGEM"
       type="epic_TrapEndcapTracker"
-      readout="GEMTrackerEndcapHits3"
+      readout="GEMTrackerEndcapHits"
       vis="TrackerVis"
       reflect="false">
       <module name="LargeModule" vis="TrackerGEMModuleVis">
@@ -1397,47 +1379,15 @@ total X0 0.24% per disk layer （4 sectors per disk):
       <segmentation type="CartesianGridXY" grid_size_x="0.010*mm" grid_size_y="0.010*mm" />
       <id>system:8,layer:4,module:12,sensor:2,x:32:-14,y:-18</id>
     </readout>
-    <readout name="TrackerEndcapHits1">
+    <readout name="TrackerEndcapHits">
       <segmentation type="CartesianGridXZ" grid_size_x="0.010*mm" grid_size_z="0.010*mm" />
       <id>system:8,layer:4,module:12,sensor:2,x:32:-16,z:-16</id>
     </readout>
-    <readout name="TrackerEndcapHits2">
-      <segmentation type="CartesianGridXZ" grid_size_x="0.010*mm" grid_size_z="0.010*mm" />
-      <id>system:8,layer:4,module:12,sensor:2,x:32:-16,z:-16</id>
-    </readout>
-    <readout name="TrackerEndcapHits3">
-      <segmentation type="CartesianGridXZ" grid_size_x="0.010*mm" grid_size_z="0.010*mm" />
-      <id>system:8,layer:4,module:12,sensor:2,x:32:-16,z:-16</id>
-    </readout>
-    <readout name="TrackerEndcapHits4">
-      <segmentation type="CartesianGridXZ" grid_size_x="0.010*mm" grid_size_z="0.010*mm" />
-      <id>system:8,layer:4,module:12,sensor:2,x:32:-16,z:-16</id>
-    </readout>
-    <readout name="TrackerEndcapHits5">
-      <segmentation type="CartesianGridXZ" grid_size_x="0.010*mm" grid_size_z="0.010*mm" />
-      <id>system:8,layer:4,module:12,sensor:2,x:32:-16,z:-16</id>
-    </readout>
-    <readout name="TrackerEndcapHits6">
-      <segmentation type="CartesianGridXZ" grid_size_x="0.010*mm" grid_size_z="0.010*mm" />
-      <id>system:8,layer:4,module:12,sensor:2,x:32:-16,z:-16</id>
-    </readout>
-    <readout name="MPGDTrackerBarrelHits1">
+    <readout name="MPGDTrackerBarrelHits">
       <segmentation type="CartesianGridXY" grid_size_x="0.150*mm*sqrt(12)" grid_size_y="0.150*mm*sqrt(12)" />
       <id>system:8,layer:4,module:12,sensor:2,x:32:-14,y:-18</id>
     </readout>
-    <readout name="MPGDTrackerBarrelHits2">
-      <segmentation type="CartesianGridXY" grid_size_x="0.150*mm*sqrt(12)" grid_size_y="0.150*mm*sqrt(12)" />
-      <id>system:8,layer:4,module:12,sensor:2,x:32:-14,y:-18</id>
-    </readout>
-    <readout name="GEMTrackerEndcapHits1">
-      <segmentation type="CartesianGridXZ" grid_size_x="0.050*mm*sqrt(12)" grid_size_z="0.250*mm*sqrt(12)" />
-      <id>system:8,layer:4,module:12,sensor:2,x:32:-16,z:-16</id>
-    </readout>
-    <readout name="GEMTrackerEndcapHits2">
-      <segmentation type="CartesianGridXZ" grid_size_x="0.050*mm*sqrt(12)" grid_size_z="0.250*mm*sqrt(12)" />
-      <id>system:8,layer:4,module:12,sensor:2,x:32:-16,z:-16</id>
-    </readout>
-    <readout name="GEMTrackerEndcapHits3">
+    <readout name="GEMTrackerEndcapHits">
       <segmentation type="CartesianGridXZ" grid_size_x="0.050*mm*sqrt(12)" grid_size_z="0.250*mm*sqrt(12)" />
       <id>system:8,layer:4,module:12,sensor:2,x:32:-16,z:-16</id>
     </readout>

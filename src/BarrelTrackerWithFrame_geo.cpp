@@ -77,8 +77,9 @@ static Ref_t create_BarrelTrackerWithFrame(Detector& description, xml_h e, Sensi
     sdet.addExtension<Acts::ActsExtension>(detWorldExt);
   }
 
-  Tube   topVolumeShape(dimensions.rmin(), dimensions.rmax(), dimensions.length() * 0.5);
-  Volume assembly(det_name, topVolumeShape, air);
+  //Tube topVolumeShape(dimensions.rmin(), dimensions.rmax(), dimensions.length() * 0.5);
+  //Volume assembly(det_name,topVolumeShape,air);
+  Assembly assembly(det_name);
 
   sens.setType("tracker");
 
@@ -152,7 +153,8 @@ static Ref_t create_BarrelTrackerWithFrame(Detector& description, xml_h e, Sensi
       double frame_width     = m_frame.width();
       double frame_height    = getAttrOrDefault<double>(m_frame, _U(height), 5.0 * mm);
       double tanth           = frame_height / (frame_width / 2.0);
-      double frame_height2   = frame_height - frame_thickness - frame_thickness / tanth;
+      double costh           = 1./sqrt(1+tanth*tanth);
+      double frame_height2   = frame_height - frame_thickness - frame_thickness / costh;
       double frame_width2    = 2.0 * frame_height2 / tanth;
 
       Trd1 moduleframe_part1(frame_width / 2, 0.001 * mm, m_frame.length() / 2, frame_height / 2);
@@ -240,6 +242,7 @@ static Ref_t create_BarrelTrackerWithFrame(Detector& description, xml_h e, Sensi
     string     lay_nam  = _toString(x_layer.id(), "layer%d");
     Tube       lay_tub(x_barrel.inner_r(), x_barrel.outer_r(), x_barrel.z_length() / 2.0);
     Volume     lay_vol(lay_nam, lay_tub, air); // Create the layer envelope volume.
+    Position   lay_pos(0, 0, getAttrOrDefault(x_barrel, _U(z0), 0.));
     lay_vol.setVisAttributes(description.visAttributes(x_layer.visStr()));
 
     double phi0     = x_layout.phi0();     // Starting phi of first module.
@@ -330,7 +333,7 @@ static Ref_t create_BarrelTrackerWithFrame(Detector& description, xml_h e, Sensi
       module_z = -z0;   // Reset the Z placement parameter for module.
     }
     // Create the PhysicalVolume for the layer.
-    pv = assembly.placeVolume(lay_vol); // Place layer in mother
+    pv = assembly.placeVolume(lay_vol, lay_pos); // Place layer in mother
     pv.addPhysVolID("layer", lay_id);   // Set the layer ID.
     lay_elt.setAttributes(description, lay_vol, x_layer.regionStr(), x_layer.limitsStr(), x_layer.visStr());
     lay_elt.setPlacement(pv);

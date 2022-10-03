@@ -6,8 +6,8 @@
 <constant name="DRICH_Length"             value="ForwardRICHRegion_length"/>  <!-- overall vessel length -->
 <constant name="DRICH_zmin"               value="ForwardRICHRegion_zmin"/>
 <constant name="DRICH_zmax"               value="DRICH_zmin + DRICH_Length"/>
-<constant name="DRICH_rmin0"              value="DRICH_zmin * ForwardRICHRegion_tan1"/>  <!-- bore radius at dRICh entrance -->
-<constant name="DRICH_rmin1"              value="DRICH_zmax * ForwardRICHRegion_tan2"/>  <!-- bore radius at dRICh exit -->
+<constant name="DRICH_rmin0"              value="DRICH_zmin * ForwardRICHRegion_tan1"/>  <!-- bore radius at dRICH entrance -->
+<constant name="DRICH_rmin1"              value="DRICH_zmax * ForwardRICHRegion_tan2"/>  <!-- bore radius at dRICH exit -->
 <constant name="DRICH_wall_thickness"     value="0.5*cm"/>  <!-- thickness of radial walls -->
 <constant name="DRICH_window_thickness"   value="0.1*cm"/>  <!-- thickness of entrance and exit walls -->
 <!-- snout geometry: cone with front radius rmax0 and back radius of rmax1 -->
@@ -17,13 +17,18 @@
 <constant name="DRICH_rmax1"              value="DRICH_rmax0 + DRICH_SnoutLength * DRICH_SnoutSlope"/>
 <!-- tank geometry: cylinder, holding the majority of detector components -->
 <constant name="DRICH_rmax2"              value="ForwardPIDRegion_rmax"/>  <!-- cylinder radius -->
-<!-- additional parameters -->
+<!-- aerogel+filter geometry -->
 <constant name="DRICH_aerogel_thickness"  value="4.0*cm"/>  <!-- aerogel thickness -->
-<constant name="DRICH_sensor_size"        value="25.8*mm"/> <!-- sensor side length -->
-<constant name="DRICH_sensor_thickness"   value="0.5*mm"/> <!-- sensor thickness -->
-<constant name="DRICH_num_px"             value="8"/> <!-- number of pixels along one side of the sensor -->
-<constant name="DRICH_sensor_pixel_pitch" value="3.2*mm"/> <!-- center-to-center distance between SiPMs in a 8x8 panel -->
-<constant name="DRICH_sensor_pixel_size"  value="3.0*mm"/> <!-- a single SiPM pixel size -->
+<constant name="DRICH_filter_thickness"   value="0.3*mm"/>  <!-- filter thickness -->
+<constant name="DRICH_aerogel_filter_gap" value="0.01*mm"/> <!-- air gap between aerogel and filter FIXME: currently a gas gap -->
+<!-- sensor geometry; model = S13361-3050NE-08 SiPM -->
+<constant name="DRICH_sensor_size"           value="25.8*mm"/> <!-- full length of the sensor side FIXME: resin base should be this size -->
+<constant name="DRICH_pixel_gap"             value="0.2*mm"/> <!-- size of gaps between adjacent pixels AND gaps between edge pixels and sensor side -->
+<constant name="DRICH_sensor_sensitive_size" value="DRICH_sensor_size - DRICH_pixel_gap"/> <!-- side length of photosensitive surface (to be segmented) -->
+<constant name="DRICH_sensor_thickness"      value="0.5*mm"/>  <!-- sensor thickness FIXME: use the real thickness + resin -->
+<constant name="DRICH_num_px"                value="8"/>       <!-- number of pixels along one side of the sensor -->
+<constant name="DRICH_pixel_size"            value="3.0*mm"/>  <!-- a single SiPM pixel size -->
+<constant name="DRICH_pixel_pitch"           value="DRICH_pixel_size + DRICH_pixel_gap"/>  <!-- center-to-center distance between SiPMs in a 8x8 panel -->
 <!-- settings and switches -->
 <comment>
 - `DRICH_debug_optics`:    1 = all components become vacuum, except for mirrors; test opticalphotons from IP
@@ -32,13 +37,10 @@
                            0 = off
 - `DRICH_debug_mirror`:    1 = draw full mirror shape for single sector; 0 = off
 - `DRICH_debug_sensors`:   1 = draw full sensor sphere for a single sector; 0 = off
-- `DRICH_create_irt_file`: 1 = create an auxiliary IRT config ROOT file; 0 = off
-                               - the file name is set by detector attribute `irt_filename` below
 </comment>
 <constant name="DRICH_debug_optics"    value="0"/>
 <constant name="DRICH_debug_mirror"    value="0"/>
 <constant name="DRICH_debug_sensors"   value="0"/>
-<constant name="DRICH_create_irt_file" value="0"/>
 </define>
 
 
@@ -47,7 +49,7 @@
 
 <!-- /detectors/detector -->
 <documentation level="10">
-### dRICh: ***d***ual ***R***ing ***I***maging ***Ch***erenkov detector
+### dRICH: ***d***ual ***R***ing ***I***maging ***Ch***erenkov detector
 </documentation>
 <detector
   id="ForwardRICH_ID"
@@ -58,14 +60,13 @@
   material="Aluminum"
   vis_vessel="DRICH_vessel_vis"
   vis_gas="DRICH_gas_vis"
-  irt_filename="irt-drich.root"
   >
 
 
 <!-- /detectors/detector/dimensions -->
 <documentation level="10">
 #### Vessel
-- the dRICh vessel is composed of two parts:
+- the dRICH vessel is composed of two parts:
   - tank: cylindrical region containing most of the detector components
   - snout: conical region at the front of the vessel, containing the aerogel
 - dimensions:
@@ -99,7 +100,7 @@
 #### Radiator
 - radiator is defined in a wedge of azimuthal space, composed of aerogel and a
   filter; the filter is applied to the back of the aerogel, so that it separates
-  the aerogel and gas radiators
+  the aerogel and gas radiators; an airgap is defined between the aerogel and filter
 - dimensions:
   - `frontplane`: front of the aerogel, w.r.t. front plane of the vessel envelope
   - `rmin` and `rmax`: inner and outer radius (at the front plane; radial bounds are conical)
@@ -117,10 +118,15 @@
     vis="DRICH_aerogel_vis"
     thickness="DRICH_aerogel_thickness"
     />
+  <airgap
+    material="AirOptical"
+    vis="DRICH_gas_vis"
+    thickness="DRICH_aerogel_filter_gap"
+    />
   <filter
     material="Acrylic_DRICH"
     vis="DRICH_filter_vis"
-    thickness="0.3*mm"
+    thickness="DRICH_filter_thickness"
     />
 </radiator>
 
@@ -146,13 +152,13 @@
   material="Acrylic_DRICH"
   surface="MirrorSurface_DRICH"
   vis="DRICH_mirror_vis"
-  backplane="DRICH_window_thickness + 0.71*cm"
+  backplane="DRICH_window_thickness + 2.0*cm"
   rmin="DRICH_rmin1 + DRICH_wall_thickness - 1.0*cm"
   rmax="DRICH_rmax2 - DRICH_wall_thickness - 3.0*cm"
   phiw="59.5*degree"
   thickness="0.2*cm"
-  focus_tune_x="69.78*cm"
-  focus_tune_z="51.45*cm"
+  focus_tune_x="-5.0*cm"
+  focus_tune_z="0.0*cm"
   />
 
 <!-- /detectors/detector/sensors -->
@@ -165,12 +171,6 @@
 <!-- /detectors/detector/sensors/module -->
 <documentation level="10">
 ##### Sensor module
-- based on [Hamamatsu H13700 MAPMT](https://www.hamamatsu.com/us/en/product/type/H13700/index.html):
-  - not ideal for a magnetic field, SiPM matrix would be better
-  - effective area: 48.5x48.5 mm
-  - enclosure size: 52x52 mm
-  - 16x16 channel matrix (cf. readout segmentation below)
-  - pixel size: 3x3 mm
 - dimensions:
   - `side`: side length of the square module
   - `thickness`: thickness of the sensor module
@@ -183,7 +183,7 @@
   material="AirOptical"
   surface="SensorSurface_DRICH"
   vis="DRICH_sensor_vis"
-  side="DRICH_sensor_size"
+  side="DRICH_sensor_sensitive_size"
   thickness="DRICH_sensor_thickness"
   gap="0.2*mm"
   />
@@ -205,15 +205,15 @@
     - `zmin`: z-plane cut
 </documentation>
 <sphere
-  centerz="-168.07*cm + DRICH_SnoutLength + (DRICH_Length-DRICH_SnoutLength)/2.0"
-  centerx="124.98*cm"
-  radius="140*cm"
+  centerz="-50.0*cm"
+  centerx="180.0*cm"
+  radius="100.0*cm"
   />
 <sphericalpatch
-  phiw="14*degree"
+  phiw="18*degree"
   rmin="DRICH_rmax1 + 2.0*cm"
   rmax="DRICH_rmax2 - 5.0*cm"
-  zmin="DRICH_SnoutLength + 3.0*cm"
+  zmin="DRICH_SnoutLength + 5.0*cm"
   />
 
 
@@ -225,30 +225,20 @@
 <documentation level="10">
 #### Readout
 - segmentation: square matrix of pixels
-  - `grid_size_x,y`: size of each sensor, but note we must divide sensor size
-    by 1 less than the number of pixels, to account for fenceposting
-  - `offset_x,y`: specified such that the `x` and `y` indicators are unsigned
-- indicators and `cellID` bits:
-
-  | indicator | offset | length |
-  |-----------|--------|--------|
-  | dRICh ID  | 0      | 8      |
-  | sector    | 8      | 3      |
-  | sensor    | 11     | 12     |
-  | x pixel   | 23     | 16     |
-  | y pixel   | 39     | 16     |
-
+  - `grid_size_x,y`: size of each sensor pixel
+  - `offset_x,y`: specified such that the `x` and `y` values are unsigned
+    (except for very rare hits on the sensor sides)
 </documentation>
 <readouts>
   <readout name="DRICHHits">
     <segmentation
       type="CartesianGridXY"
-      grid_size_x="DRICH_sensor_pixel_pitch*DRICH_num_px/(DRICH_num_px-1)"
-      grid_size_y="DRICH_sensor_pixel_pitch*DRICH_num_px/(DRICH_num_px-1)"
-      offset_x="-DRICH_sensor_pixel_pitch*DRICH_num_px/2.0"
-      offset_y="-DRICH_sensor_pixel_pitch*DRICH_num_px/2.0"
+      grid_size_x="DRICH_pixel_pitch"
+      grid_size_y="DRICH_pixel_pitch"
+      offset_x="-0.5*(DRICH_num_px-1)*DRICH_pixel_pitch"
+      offset_y="-0.5*(DRICH_num_px-1)*DRICH_pixel_pitch"
       />
-    <id>system:8,sector:3,module:12,x:23:16,y:16</id>
+    <id>system:8,sector:3,module:12,x:32:-16,y:-16</id>
   </readout>
 </readouts>
 

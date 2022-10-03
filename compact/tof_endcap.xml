@@ -9,11 +9,11 @@
     <comment> Forward/backward TOF position </comment>
     <constant name="ForwardTOF_length"           value="min(ForwardTOFRegion_length, 2.*cm)"/>
     <constant name="ForwardTOF_zmin"             value="ForwardTOFRegion_zmin + ForwardTOFRegion_length - ForwardTOF_length - 1*cm"/>
-    <constant name="ForwardTOF_nlayers"          value="2"/>
+    <constant name="ForwardTOF_nlayers"          value="1"/>
     <constant name="ForwardTOFMod_offset"        value="1.2*cm"/>
     <constant name="BackwardTOF_length"          value="min(BackwardTOFRegion_length, 2.*cm)"/>
     <constant name="BackwardTOF_zmin"            value="BackwardTOFRegion_zmin + 0.5*cm"/>
-    <constant name="BackwardTOF_nlayers"         value="2"/>
+    <constant name="BackwardTOF_nlayers"         value="1"/>
     <constant name="BackwardTOFMod_offset"       value="1.2*cm"/>
 
     <comment> LGAD parameters for the endcap TOFs </comment>
@@ -91,19 +91,6 @@
             dz="TOFEndcapMod_dz"
             module="ForwardModule" />
         </layer>
-        <layer id="2">
-          <envelope  vis="TOFLayerVis"
-            rmin="ForwardTOFLayer_rmin"
-            rmax="ForwardTOFLayer_rmax"
-            length="TOFEndcapLayer_thickness"
-            zstart="ForwardTOFLayer2_zmin" />
-          <ring
-            r="ForwardTOFMod_rmin + ForwardTOFMod_y/2.0"
-            zstart="0"
-            nmodules="TOFEndcapMod_count"
-            dz="TOFEndcapMod_dz"
-            module="ForwardModule" />
-        </layer>
       </detector>
       <detector
         id="BackwardTOF_ID"
@@ -124,19 +111,6 @@
             rmax="BackwardTOFLayer_rmax"
             length="TOFEndcapLayer_thickness"
             zstart="BackwardTOFLayer1_zmin" />
-          <ring
-            r="BackwardTOFMod_rmin + BackwardTOFMod_y/2.0"
-            zstart="0"
-            nmodules="TOFEndcapMod_count"
-            dz="TOFEndcapMod_dz"
-            module="BackwardModule" />
-        </layer>
-        <layer id="2">
-          <envelope  vis="TOFLayerVis"
-            rmin="BackwardTOFLayer_rmin"
-            rmax="BackwardTOFLayer_rmax"
-            length="TOFEndcapLayer_thickness"
-            zstart="BackwardTOFLayer2_zmin" />
           <ring
             r="BackwardTOFMod_rmin + BackwardTOFMod_y/2.0"
             zstart="0"

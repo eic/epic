@@ -8,7 +8,7 @@ PROJECT(epic
   DESCRIPTION "DD4hep Geometry Description of the EPIC Experiment"
   )
 
-option(EPIC_ECCE_LEGACY_COMPAT "Preserve some compatibility with ECCE" ON)
+option(EPIC_ECCE_LEGACY_COMPAT "Preserve some compatibility with ECCE" OFF)
 
 # C++ standard
 set(CMAKE_CXX_STANDARD 17)
@@ -49,6 +49,10 @@ list(TRANSFORM DD4hep_required_libraries PREPEND DD4hep::)
 
 # Dependencies
 find_package(DD4hep REQUIRED COMPONENTS ${DD4hep_required_components})
+if(${DD4hep_VERSION} VERSION_LESS 1.21)
+  message(WARNING "DD4hep before 1.21 does not write collections correctly \n"
+                  "More info at https://github.com/AIDASoft/DD4hep/pull/922")
+endif()
 find_package(ActsDD4hep)
 if(ActsDD4hep_FOUND)
   add_compile_definitions(USE_ACTSDD4HEP)
@@ -58,11 +62,6 @@ else()
   set(ActsDD4hep ActsCore ActsPluginDD4hep)
 endif()
 find_package(fmt REQUIRED)
-
-if(DEFINED IRT_AUXFILE)
-  add_compile_definitions(IRT_AUXFILE)
-  find_package(IRT REQUIRED)
-endif()
 
 #-----------------------------------------------------------------------------------
 set(a_lib_name ${PROJECT_NAME})
@@ -77,9 +76,6 @@ dd4hep_add_plugin(${a_lib_name}
 target_link_libraries(${a_lib_name}
   PUBLIC ${DD4hep_required_libraries} fmt::fmt
   )
-if(DEFINED IRT_AUXFILE)
-  target_link_libraries(${a_lib_name} PUBLIC IRT)
-endif()
 if(EPIC_ECCE_LEGACY_COMPAT)
   target_compile_definitions(${a_lib_name} PUBLIC EPIC_ECCE_LEGACY_COMPAT)
 endif()
