@@ -99,7 +99,7 @@
   </define>
 
   <includes>
-    <gdmlFile ref="ip6/elements.xml"/>
+    <gdmlFile ref="${DD4hepINSTALL}/DDDetectors/compact/elements.xml"/>
     <gdmlFile ref="ip6/materials.xml"/>
   </includes>
 
