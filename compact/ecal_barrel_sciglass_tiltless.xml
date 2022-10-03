@@ -13,6 +13,7 @@
 
   <display>
     <vis name="det_vis" alpha="1.0" r="1.0" g="0.0" b="0.0" showDaughters="true" visible="false" />
+    <vis name="becal_wedge" alpha="1.1" r="0.82" g="0.84" b="0.86" showDaughters="true" visible="true" />
     <vis name="family1" alpha="1.0" r="0.22" g="0.54" b="0.71" showDaughters="true" visible="true" />
     <vis name="family2" alpha="1.0" r="0.90" g="0.48" b="0.47" showDaughters="true" visible="true" />
     <vis name="family3" alpha="1.0" r="0.87" g="0.49" b="0.09" showDaughters="true" visible="true" />
@@ -34,6 +35,8 @@
       <dimensions rmin="EcalBarrel_rmin" rmax="EcalBarrel_rmax"
                   zmax="195 * cm" zmin="-285 * cm"
                   etamin="EcalBarrel_etamin" etamax="EcalBarrel_etamax"/>
+
+      <wedge-box inner_r="80.0 * cm" thickness="2 * mm" vis="becal_wedge" material="Aluminum5083" />
 
       <sectors number="24" phi0="0." deltaphi="pi / 12">
         <comment>

@@ -31,6 +31,7 @@ using namespace dd4hep;
 static Ref_t create_detector(Detector &lcdd, xml_h handle,
                              SensitiveDetector sens) {
   xml_det_t det_handle = handle;
+  xml_dim_t envelope_handle = det_handle.dimensions();
   xml_dim_t sectors_handle = det_handle.child(_Unicode(sectors));
   xml_dim_t rows_handle = sectors_handle.child(_Unicode(rows));
   xml_dim_t dim_handle = rows_handle.dimensions();
@@ -109,6 +110,63 @@ static Ref_t create_detector(Detector &lcdd, xml_h handle,
   det_element.setPlacement(envelope_pv);
 
   sens.setType("calorimeter");
+
+  if (det_handle.hasChild(_Unicode(wedge-box))) {
+    xml_comp_t wedge_box_handle = det_handle.child(_Unicode(wedge-box));
+    Material wedge_box_mat = lcdd.material(wedge_box_handle.materialStr());
+
+    // Approximate bottoms of wedge boxes with a single tube common for all sectors
+    // The actual wedge bottom may have to be a plane, not a tube section
+
+    Tube wedge_box_tube_full_shape {
+      wedge_box_handle.inner_r(),
+      wedge_box_handle.inner_r() + wedge_box_handle.thickness(),
+      (envelope_handle.zmax() - envelope_handle.zmin()) / 2
+    };
+    IntersectionSolid wedge_box_tube_shape{
+      wedge_box_tube_full_shape,
+      envelope_shape,
+    };
+
+    Volume wedge_box_tube_v {"wedge_box_placeholder", wedge_box_tube_shape, wedge_box_mat};
+    wedge_box_tube_v.setVisAttributes(lcdd.visAttributes(wedge_box_handle.visStr()));
+    envelope_v.placeVolume(wedge_box_tube_v);
+
+    // The sides of the box are also shared between each pair of the adjacent sectors
+
+    const double side_rmin = wedge_box_handle.inner_r() + wedge_box_handle.thickness();
+    const double side_rmax = dd4hep::getAttrOrDefault<double>(
+      wedge_box_handle, _U(outer_r),
+      envelope_handle.rmax()
+      );
+
+    Box wedge_box_side_box_shape{
+      (side_rmax - side_rmin) / 2,
+      // It would make sense for a shared side to have double thickness, but we seemingly don't have space for that
+      wedge_box_handle.thickness() / 2,
+      (envelope_handle.zmax() - envelope_handle.zmin()) / 2
+    };
+    IntersectionSolid wedge_box_side_shape{
+      envelope_shape,
+      wedge_box_side_box_shape,
+      Position{(side_rmax + side_rmin) / 2, 0, (envelope_handle.zmax() + envelope_handle.zmin()) / 2}
+    };
+
+    Volume wedge_box_side_v {"wedge_box_side", wedge_box_side_shape, wedge_box_mat};
+    wedge_box_side_v.setVisAttributes(lcdd.visAttributes(wedge_box_handle.visStr()));
+
+    int sector = 0;
+    double sector_phi = sectors_handle.phi0();
+    for (; sector < sectors_handle.number();
+         sector++, sector_phi += sectors_handle.deltaphi()) {
+      envelope_v.placeVolume(
+        wedge_box_side_v,
+        Transform3D{RotationZ{sector_phi + sectors_handle.deltaphi() / 2}}
+        );
+    }
+
+    // TODO: The endcap sides of the box are not implemented
+  }
 
   int sector = 0;
   double sector_phi = sectors_handle.phi0();
