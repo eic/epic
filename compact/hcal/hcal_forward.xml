@@ -22,7 +22,7 @@
     <constant name="HcalEndcapPSingleLayerThickness"
              value="HcalEndcapPAbsorberThickness + HcalEndcapPPolystyreneThickness"/>
     <comment> FIXME: Need actual values once they are decided upon </comment>
-    <constant name="HcalEndcapPLayer_NSteelRepeat" value="50"/>
+    <constant name="HcalEndcapPLayer_NSteelRepeat" value="55"/>
     <constant name="HcalEndcapPLayer_NTungstenRepeat" value="10"/>
   </define>
 

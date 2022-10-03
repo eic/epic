@@ -556,11 +556,11 @@ Service gaps in FW direction (before endcapP ECAL) and BW direction (before endc
     </documentation>
 
     <constant name="HcalEndcapP_zmin"     value="EcalEndcapP_zmin + EcalEndcapP_length"/>
-    <constant name="HcalEndcapP_length"   value="120.0*cm"/>
+    <constant name="HcalEndcapP_length"   value="130.0*cm"/>
     <constant name="HcalEndcapP_zmax"     value="HcalEndcapP_zmin + HcalEndcapP_length"/>
 
     <constant name="HcalEndcapPInsert_zmin"     value="HcalEndcapP_zmin"/>
-    <constant name="HcalEndcapPInsert_length"   value="118.61*cm"/>
+    <constant name="HcalEndcapPInsert_length"   value="127.97*cm"/>
     <constant name="HcalEndcapPInsert_zmax"     value="HcalEndcapPInsert_zmin + HcalEndcapPInsert_length"/>
     <constant name="HcalEndcapPInsert_width"    value="59.6*cm"/>
     <constant name="HcalEndcapPInsert_height"    value="59.7485*cm"/>
