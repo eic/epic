@@ -20,7 +20,7 @@
 	name="ZDC_PbSci"
 	type="ZDC_SamplingCal"
 	vis="ZDC_PbSci_Vis"
-	readout="ZDC_PbSci_Hits">
+	readout="ZDCHcalHits">
       <position x="ZDC_PbSci_x_pos"         y="ZDC_PbSci_y_pos"         z="ZDC_PbSci_z_pos"/>
       <rotation x="ZDC_PbSci_rotateX_angle" y="ZDC_PbSci_rotateY_angle" z="ZDC_PbSci_rotateZ_angle"/>
       <dimensions x="ZDC_PbSci_x" y="ZDC_PbSci_y" z="ZDC_PbSci_z"/>
