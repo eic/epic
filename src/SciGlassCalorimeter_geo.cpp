@@ -115,8 +115,9 @@ static Ref_t create_detector(Detector& desc, xml::Handle_t handle, SensitiveDete
 
   // angular size in phi
   auto dphi      = 2.0 * M_PI / n_phi;
-  auto xcrd_dphi = rmin * xcrd(dphi); // size of module around phi around inscribed circle
-  printout(DEBUG, "SciGlassCalorimeter", "rmin = %f, dphi = %f, xcrd_dphi = %f", rmin, dphi, xcrd_dphi);
+  auto r0        = getAttrOrDefault<float>(dim, _U(r0), rmin); // dd4hep::xml::Dimension::r0 is missing implementation in DD4hep
+  auto xcrd_dphi = r0 * xcrd(dphi); // size of module around phi around inscribed circle
+  printout(DEBUG, "SciGlassCalorimeter", "r0 = %f, dphi = %f, xcrd_dphi = %f", r0, dphi, xcrd_dphi);
 
   // module parameters
   auto mod_name                    = x_mod.nameStr();
@@ -153,8 +154,8 @@ static Ref_t create_detector(Detector& desc, xml::Handle_t handle, SensitiveDete
     // instead of Trd2 with x1 and x2, we may need a Trap with x1, x2, x3, x4
 
     // theta_max update
-    // dtheta is the solution of sin(dtheta / 2.0) / cos(theta_min + dtheta) = mod_y1 / 2.0 / rmin
-    const auto dtheta0 = mod_y1 / 2.0 / rmin;
+    // dtheta is the solution of sin(dtheta / 2.0) / cos(theta_min + dtheta) = mod_y1 / 2.0 / r0
+    const auto dtheta0 = mod_y1 / 2.0 / r0;
     const auto dtheta1 = 2.0 * asin(dtheta0);
     const auto f       = [&theta_min, &dtheta0](const auto& dtheta) {
       return sin(dtheta / 2.0) / cos(theta_min + dtheta) - dtheta0;
@@ -166,7 +167,7 @@ static Ref_t create_detector(Detector& desc, xml::Handle_t handle, SensitiveDete
     theta_max = theta_min + dtheta;
 
     // outer face (default to radial extension to square face)
-    auto mod_expansion = cos(theta_max) / rmin;
+    auto mod_expansion = cos(theta_max) / r0;
     auto mod_x2        = getAttrOrDefault<float>(x_mod, _Unicode(x2), mod_x1 * (1 + mod_expansion * mod_length));
     auto mod_y2        = getAttrOrDefault<float>(x_mod, _Unicode(y2), mod_y1 * (1 + mod_expansion * mod_length));
     // round down to nearest multiple for limited block families
@@ -185,7 +186,7 @@ static Ref_t create_detector(Detector& desc, xml::Handle_t handle, SensitiveDete
 
     // place slices in module
     auto s_num   = 1u;
-    auto s_rmin  = rmin;
+    auto s_r     = r0;
     auto s_x1    = mod_x1;
     auto s_y1    = mod_y1;
     auto s_x2    = mod_x2;
@@ -209,7 +210,7 @@ static Ref_t create_detector(Detector& desc, xml::Handle_t handle, SensitiveDete
       mod_env.placeVolume(s_vol, Position(0, 0, s_pos_z));
       s_pos_z += s_thickness / 2.0;
       // set starting face for next slice
-      s_rmin += s_thickness / cos(dtheta / 2.0) * cos(M_PI_2 - theta_max);
+      s_r += s_thickness / cos(dtheta / 2.0) * cos(M_PI_2 - theta_max);
       s_x1 = s_x2;
       s_y1 = s_y2;
     }
@@ -221,7 +222,7 @@ static Ref_t create_detector(Detector& desc, xml::Handle_t handle, SensitiveDete
       const auto avg_theta = 0.5 * (theta_min + theta_max);
 
       // module center position
-      const auto r = rmin + 0.5 * mod_x1 * sin(mod_phi_projectivity_tilt) + 0.5 * mod_y1 * sin(avg_theta) +
+      const auto r = r0 + 0.5 * mod_x1 * sin(mod_phi_projectivity_tilt) + 0.5 * mod_y1 * sin(avg_theta) +
                      0.5 * mod_length * cos(avg_theta);
       const auto x = r * cos(phi);
       const auto y = r * sin(phi);

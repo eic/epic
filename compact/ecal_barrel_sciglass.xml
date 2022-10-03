@@ -33,7 +33,7 @@
       vis="EcalBarrelEnvelopeVis"
       calorimeterType="EM_BARREL"
       readout="EcalBarrelHits">
-      <dimensions rmin="EcalBarrel_rmin" rmax="EcalBarrel_rmax"
+      <dimensions rmin="EcalBarrel_rmin" rmax="EcalBarrel_rmax" r0="EcalBarrel_rmin + EcalBarrel_inner_margin"
                   zmin="-EcalBarrelBackward_zmax" zmax="EcalBarrelForward_zmax"
                   etamin="EcalBarrel_etamin" etamax="EcalBarrel_etamax"/>
       <comment>
