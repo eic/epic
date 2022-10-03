@@ -38,9 +38,9 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
   DetElement       sdet(det_name, det_id);
   Volume           motherVol = description.pickMotherVolume(sdet);
 
-  std::string   string_rmin      = getAttrOrDefault(x_det, _Unicode(rmin), "1780"); 
-  std::string   string_rmax      = getAttrOrDefault(x_det, _Unicode(rmax), "2660"); 
-  std::string   string_length    = getAttrOrDefault(x_det, _Unicode(length), "3160"); 
+  std::string   string_rmin      = getAttrOrDefault<std::string>(x_det, _Unicode(rmin), "1780"); 
+  std::string   string_rmax      = getAttrOrDefault<std::string>(x_det, _Unicode(rmax), "2660"); 
+  std::string   string_length    = getAttrOrDefault<std::string>(x_det, _Unicode(length), "3160"); 
 
   double           rmin = (atof(string_rmin.c_str()))*dd4hep::mm;
   double           rmax = (atof(string_rmax.c_str()))*dd4hep::mm;
@@ -74,8 +74,8 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
   for(xml_coll_t i(det_define, _Unicode(constant)); i; ++i){
     xml_comp_t  x_const = i; 
 
-    std::string   const_name      = getAttrOrDefault(x_const, _Unicode(name), " "); 
-    std::string   const_value     = getAttrOrDefault(x_const, _Unicode(value), " "); 
+    std::string   const_name      = getAttrOrDefault<std::string>(x_const, _Unicode(name), " "); 
+    std::string   const_value     = getAttrOrDefault<std::string>(x_const, _Unicode(value), " "); 
 
     if(const_name == "ctilePlaneRotate")
       ctilePlaneRotate = atof(const_value.c_str());
@@ -112,8 +112,8 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
   for(xml_coll_t i(det_define, _Unicode(matrix)); i; ++i){
     xml_comp_t  x_mtrx = i; 
 
-    std::string   mtrx_name       = getAttrOrDefault(x_mtrx, _Unicode(name), " "); 
-    std::string   mtrx_values     = getAttrOrDefault(x_mtrx, _Unicode(values), " "); 
+    std::string   mtrx_name       = getAttrOrDefault<std::string>(x_mtrx, _Unicode(name), " "); 
+    std::string   mtrx_values     = getAttrOrDefault<std::string>(x_mtrx, _Unicode(values), " "); 
 
     std::vector<double> *aptr = NULL; 
 
@@ -166,13 +166,13 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
     xml_comp_t    define           = x_solid.child("define");
     xml_comp_t    tessellated      = x_solid.child("tessellated"); 
 
-    std::string   solid_name       = getAttrOrDefault(x_solid, _Unicode(name), " "); 
-    std::string   solidMatString   = getAttrOrDefault(x_solid, _Unicode(material), " "); 
+    std::string   solid_name       = getAttrOrDefault<std::string>(x_solid, _Unicode(name), " "); 
+    std::string   solidMatString   = getAttrOrDefault<std::string>(x_solid, _Unicode(material), " "); 
     Material      solid_material   = description.material(solidMatString); 
 
-    double offset_x = atof(getAttrOrDefault(x_solid, _Unicode(x), "0"))*dd4hep::mm; 
-    double offset_y = atof(getAttrOrDefault(x_solid, _Unicode(y), "0"))*dd4hep::mm; 
-    double offset_z = atof(getAttrOrDefault(x_solid, _Unicode(z), "0"))*dd4hep::mm; 
+    double offset_x = atof(getAttrOrDefault<std::string>(x_solid, _Unicode(x), "0").c_str())*dd4hep::mm; 
+    double offset_y = atof(getAttrOrDefault<std::string>(x_solid, _Unicode(y), "0").c_str())*dd4hep::mm; 
+    double offset_z = atof(getAttrOrDefault<std::string>(x_solid, _Unicode(z), "0").c_str())*dd4hep::mm; 
 
     //double srmin = 100000.0;
     //double srmax = 0.0; 
@@ -185,9 +185,9 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
 
       // create the vertex point
 
-      double xp = atof(getAttrOrDefault(pos, _Unicode(x), "0"))*dd4hep::mm - offset_x;
-      double yp = atof(getAttrOrDefault(pos, _Unicode(y), "0"))*dd4hep::mm - offset_y;
-      double zp = atof(getAttrOrDefault(pos, _Unicode(z), "0"))*dd4hep::mm - offset_z; 
+      double xp = atof(getAttrOrDefault<std::string>(pos, _Unicode(x), "0").c_str())*dd4hep::mm - offset_x;
+      double yp = atof(getAttrOrDefault<std::string>(pos, _Unicode(y), "0").c_str())*dd4hep::mm - offset_y;
+      double zp = atof(getAttrOrDefault<std::string>(pos, _Unicode(z), "0").c_str())*dd4hep::mm - offset_z; 
 
       // for the sector plates  we perform a rotation around y - the chimney cutout should be in the 
       // electron arm 
@@ -223,15 +223,15 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
       int vtx2 = -1; 
       int vtx3 = -1; 
 
-      std::string facetName1 = getAttrOrDefault(triang, _Unicode(vertex1), "0"); 
-      std::string facetName2 = getAttrOrDefault(triang, _Unicode(vertex2), "0"); 
-      std::string facetName3 = getAttrOrDefault(triang, _Unicode(vertex3), "0"); 
+      std::string facetName1 = getAttrOrDefault<std::string>(triang, _Unicode(vertex1), "0"); 
+      std::string facetName2 = getAttrOrDefault<std::string>(triang, _Unicode(vertex2), "0"); 
+      std::string facetName3 = getAttrOrDefault<std::string>(triang, _Unicode(vertex3), "0"); 
 
       // Search the define collection to match things up
       int idx = 0; 
       for(xml_coll_t j(define, _Unicode(position)); j; ++j){
 	xml_comp_t pos = j;
-	std::string posName = getAttrOrDefault(pos, _Unicode(name), " "); 
+	std::string posName = getAttrOrDefault<std::string>(pos, _Unicode(name), " "); 
 
 	if( posName == facetName1 ) vtx1 = idx; 
 	if( posName == facetName2 ) vtx2 = idx; 
@@ -435,7 +435,7 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
     sdet.add(sd);
   }
 
-  std::string   env_vis = getAttrOrDefault(x_det, _Unicode(env_vis), "HcalBarrelEnvelopeVis"); 
+  std::string   env_vis = getAttrOrDefault<std::string>(x_det, _Unicode(env_vis), "HcalBarrelEnvelopeVis"); 
   envelope.setAttributes(description, x_det.regionStr(), x_det.limitsStr(), env_vis);
   return sdet;
 
