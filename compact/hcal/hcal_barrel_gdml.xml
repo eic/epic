@@ -24,7 +24,7 @@
       ### Barrel Hadronic Calorimeter
       </documentation>
       <detector
-	  id="HCalBarrel_ID"
+	  id="oHCalBarrel_ID"
 	  name="oHcalBarrel"
 	  type="epic_oHcalBarrel"
 	  readout="oHcalBarrelHits"
