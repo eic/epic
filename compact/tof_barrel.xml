@@ -45,7 +45,7 @@
     <constant name="BarrelTOF_Coolant_position"    value="BarrelTOF_scale * BarrelTOF_Coolant_position_design"/>
     <constant name="BarrelTOF_Service_position"    value="BarrelTOF_scale * BarrelTOF_Service_position_design"/>
     <constant name="BarrelTOF_Module_width"        value="BarrelTOF_scale*BarrelTOF_Module_width_design"/>
-    <constant name="BarrelTOF_Module_tiltangle"    value="18.0*degree"/>
+    <constant name="BarrelTOF_Module_tiltangle"    value="20*degree"/>
     <constant name="BarrelTOF_Module_nphi"         value="144"/>
     <constant name="BarrelTOF_Module_nz"           value="1"/>
 
