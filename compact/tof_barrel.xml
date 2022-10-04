@@ -61,9 +61,9 @@
     <constant name="BarrelTOF_rmin"                value="BarrelTOF_radius"/>
     <constant name="BarrelTOF_rmax"                value="BarrelTOF_rmin+BarrelTOF_Module_width*tan(BarrelTOF_Module_tiltangle)"/>
     <constant name="BarrelTOF_thickness"           value="BarrelTOF_rmax-BarrelTOF_rmin"/>
-    <constant name="BarrelTOF_rOffset"             value="16.0*mm"/>
-    <constant name="BarrelTOF_length1"             value="2 * 134.9 * cm"/>
-    <constant name="BarrelTOF_length2"             value="2 * 135.0 * cm"/>
+    <constant name="BarrelTOF_rOffset"             value="16.5*mm"/>
+    <constant name="BarrelTOF_length1"             value="2 * 129 * cm"/>
+    <constant name="BarrelTOF_length2"             value="2 * 130 * cm"/>
     <constant name="BarrelTOF_length"              value="BarrelTOF_length2"/>
 
   </define>
