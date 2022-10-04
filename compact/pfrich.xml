@@ -139,7 +139,7 @@
 <module
   material="Silicon"
   surface="SensorSurface_PFRICH"
-  vis="PFRICH_sensor_vis"
+  vis="DRICH_sensor_vis"
   side="PFRICH_sensor_active_size"
   thickness="PFRICH_sensor_thickness"
   gap="0.5*(PFRICH_sensor_full_size-PFRICH_sensor_active_size) + 0.5*mm"
