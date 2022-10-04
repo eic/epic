@@ -172,7 +172,7 @@
     </readout>
     <readout name="EcalBarrelScFiHits">
       <segmentation type="CartesianStripZ" strip_size_x="1.0*cm" identifier_x="z"/>
-      <id>system:8,module:6,layer:6,slice:6,grid:10,fiber:16,z:-12</id>
+      <id>system:8,module:6,layer:6,slice:4,grid:10,fiber:16,z:-14</id>
     </readout>
   </readouts>
 
