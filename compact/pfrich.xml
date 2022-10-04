@@ -3,16 +3,18 @@
 
 <define>
 <!-- vessel geometry -->
-<constant name="PFRICH_Length"             value="BackwardRICHRegion_length"/>  <!-- vessel z-length -->
-<constant name="PFRICH_zmin"               value="-BackwardRICHRegion_zmin"/> <!-- vessel front -->
-<constant name="PFRICH_zmax"               value="PFRICH_zmin - PFRICH_Length"/>  <!-- vessel back -->
-<constant name="PFRICH_rmin0"              value="BackwardPIDRegion_tan * BackwardRICHRegion_zmin"/>  <!-- bore radius at vessel frontplane -->
-<constant name="PFRICH_rmin1"              value="BackwardPIDRegion_tan * (BackwardRICHRegion_zmin + BackwardRICHRegion_length)"/>  <!-- bore radius at vessel backplane -->
-<constant name="PFRICH_rmax"               value="BackwardPIDRegion_rmax - 2*cm"/>  <!-- vessel backplane radius -->
-<constant name="PFRICH_wall_thickness"     value="0.5*cm"/>  <!-- thickness of radial walls -->
-<constant name="PFRICH_window_thickness"   value="0.1*cm"/>  <!-- thickness of entrance and exit walls -->
-<!-- additional parameters -->
-<constant name="PFRICH_aerogel_thickness"  value="3.0*cm"/>  <!-- aerogel thickness -->
+<constant name="PFRICH_Length"            value="BackwardRICHRegion_length"/>             <!-- vessel z-length -->
+<constant name="PFRICH_zmin"              value="-BackwardRICHRegion_zmin"/>              <!-- vessel front -->
+<constant name="PFRICH_zmax"              value="PFRICH_zmin - PFRICH_Length"/>           <!-- vessel back -->
+<constant name="PFRICH_rmin0"             value="-PFRICH_zmin * BackwardPIDRegion_tan1"/> <!-- bore radius at vessel frontplane -->
+<constant name="PFRICH_rmin1"             value="-PFRICH_zmax * BackwardPIDRegion_tan2"/> <!-- bore radius at vessel backplane -->
+<constant name="PFRICH_rmax"              value="BackwardPIDRegion_rmax - 1*cm"/>         <!-- vessel backplane radius -->
+<constant name="PFRICH_proximity_gap"     value="30*cm"/>                                 <!-- distance between aerogel exit plane and sensor entrance plane -->
+<constant name="PFRICH_services_length"   value="20*cm"/>                                 <!-- span of service materials behind the sensors -->
+<constant name="PFRICH_wall_thickness"    value="0.5*cm"/>                                <!-- thickness of radial walls -->
+<constant name="PFRICH_window_thickness"  value="0.1*cm"/>                                <!-- thickness of entrance and exit walls -->
+<constant name="PFRICH_aerogel_thickness" value="3.0*cm"/>                                <!-- aerogel thickness -->
+<!-- sensor geometry -->
 <constant name="PFRICH_sensor_active_size_default" value="24.0*mm"/> <!-- sensor side length (effective area) -->
 <constant name="PFRICH_sensor_full_size_default"   value="25.8*mm"/> <!-- sensor side length (full size, with enclosure) -->
 <!-- lores values are used for global vizualizations _only_ -->
@@ -21,14 +23,11 @@
 <!-- actual values used by the parametrization -->
 <constant name="PFRICH_sensor_active_size" value="PFRICH_sensor_active_size_default"/>
 <constant name="PFRICH_sensor_full_size"   value="PFRICH_sensor_full_size_default"/>
-
-
 <constant name="PFRICH_sensor_thickness"   value="1.5*mm"/> <!-- sensor thickness -->
-<constant name="PFRICH_sensor_dist"        value="40*cm"/> <!-- distance between aerogel exit plane and sensor entrance plane -->
 <constant name="PFRICH_num_px"             value="8"/> <!-- number of pixels along one side of the sensor -->
 <!-- debugging switches -->
 <comment>
-- `PFRICH_debug_optics`:  1 = all components become vacuum; test opticalphotons from IP
+- `PFRICH_debug_optics`: 1 = all components become vacuum; test opticalphotons from IP
                          2 = all components become vacuum, except for `gasvol`, test charged particles from IP
                          0 = off
 </comment>
@@ -64,6 +63,7 @@
   - `length`: overall z-length of the full vessel
   - `rmin0` and `rmin1`: bore radius at front plane and back plane, respectively
   - `rmax0` and `rmax1`: outer radius of vessel, at front plane and back plane, respectively
+  - `proximity_gap`: z-distance between aerogel backplane and sensor-surface plane
   - `wall_thickness`: thickness of radial walls
   - `window_thickness`: thickness of entrance and exit disks
 </documentation>
@@ -75,6 +75,7 @@
   rmin1="PFRICH_rmin1"
   rmax0="PFRICH_rmax"
   rmax1="PFRICH_rmax"
+  proximity_gap="PFRICH_proximity_gap"
   wall_thickness="PFRICH_wall_thickness"
   window_thickness="PFRICH_window_thickness"
   />
@@ -151,26 +152,24 @@
 ##### Sensor plane
 - sensors will be placed on a plane
   - plane dimensions:
-    - `sensordist`: distance between sensor plane active surface (e.g., photocathode) and aerogel backplane
     - `rmin`: minimum radial position of a sensor's centroid
     - `rmax`: maximum radial position of a sensor's centroid
 </documentation>
 <plane
-  sensordist="PFRICH_sensor_dist"
   rmin="PFRICH_rmin1 + 2*cm"
   rmax="PFRICH_rmax  - 4*cm"
   />
 
 <services>
   <comment>
-    Material should be equivallent with 3x0.5cm Al, spread over the entire available distance.
+    Material should be equivallent with 3x0.5cm Al, spread over the entire available distance (`PFRICH_services_length`).
     This was confirmed by Silvia.
   </comment>
-  <component name="aluminum" thickness="5*mm" vis="RICHServiceVis" material="Aluminum"/>
-  <component name="air" thickness="40*mm" vis="InvisibleNoDaughters" material="Air"/>
-  <component name="aluminum" thickness="5*mm" vis="RICHServiceVis" material="Aluminum"/>
-  <component name="air" thickness="40*mm" vis="InvisibleNoDaughters" material="Air"/>
-  <component name="aluminum" thickness="5*mm" vis="RICHServiceVis" material="Aluminum"/>
+  <component name="aluminum" thickness="0.5*cm" vis="RICHServiceVis" material="Aluminum"/>
+  <component name="air" thickness="(PFRICH_services_length - 3*0.5*cm) / 2.0" vis="InvisibleNoDaughters" material="Air"/>
+  <component name="aluminum" thickness="0.5*cm" vis="RICHServiceVis" material="Aluminum"/>
+  <component name="air" thickness="(PFRICH_services_length - 3*0.5*cm) / 2.0" vis="InvisibleNoDaughters" material="Air"/>
+  <component name="aluminum" thickness="0.5*cm" vis="RICHServiceVis" material="Aluminum"/>
 </services>
 
 </sensors>

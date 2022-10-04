@@ -426,7 +426,7 @@ Examples:
 
     <constant name="CentralTrackingRegion_rmax"   value="700.0*mm" />
     <constant name="CentralTrackingRegionP_zmax"  value="1730.0*mm" />
-    <constant name="CentralTrackingRegionN_zmax"  value="1474.7*mm" />
+    <constant name="CentralTrackingRegionN_zmax"  value="1186.0*mm" />
     <constant name="CentralTrackingRegion_length" value="CentralTrackingRegionP_zmax + CentralTrackingRegionN_zmax" />
     <comment>
       tan(theta) to determine rmin in the outer tracking region (due to tapered beampipe)
@@ -461,13 +461,14 @@ Examples:
     <constant name="ForwardRICHRegion_tan2"        value="Eta3_6_tan * 0.89" />
 
     <constant name="BackwardPIDRegion_zmin"       value="CentralTrackingRegionN_zmax" />
-    <constant name="BackwardPIDRegion_length"     value="25.0*cm" />
+    <constant name="BackwardPIDRegion_length"     value="54.1*cm" />
     <constant name="BackwardPIDRegion_rmax"       value="64.0*cm" /> <!-- FIXME hardcoded, was CentralTrackingRegion_rmax -->
-    <constant name="BackwardPIDRegion_tan"        value="CentralTrackingRegionN_tan * 0.92" />
+    <constant name="BackwardPIDRegion_tan1"       value="Eta3_9_tan * 0.95" />
+    <constant name="BackwardPIDRegion_tan2"       value="Eta3_9_tan * 0.85" />
 
     <comment> Backward RICH region </comment>
     <constant name="BackwardRICHRegion_zmin"       value="BackwardPIDRegion_zmin" />
-    <constant name="BackwardRICHRegion_length"     value="25.0*cm" />
+    <constant name="BackwardRICHRegion_length"     value="BackwardPIDRegion_length" />
 
     <comment> Backward TOF region, currently empty for upgrades </comment>
     <constant name="BackwardTOFRegion_zmin"        value="BackwardRICHRegion_zmin + BackwardRICHRegion_length" />

@@ -38,6 +38,7 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
   double vesselRmin1     = dims.attr<double>(_Unicode(rmin1));
   double vesselRmax0     = dims.attr<double>(_Unicode(rmax0));
   double vesselRmax1     = dims.attr<double>(_Unicode(rmax1));
+  double proximityGap    = dims.attr<double>(_Unicode(proximity_gap));
   double wallThickness   = dims.attr<double>(_Unicode(wall_thickness));
   double windowThickness = dims.attr<double>(_Unicode(window_thickness));
   auto   vesselMat       = desc.material(detElem.attr<std::string>(_Unicode(material)));
@@ -72,7 +73,6 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
   double sensorThickness = sensorElem.attr<double>(_Unicode(thickness));
   // - sensor plane
   auto   sensorPlaneElem = detElem.child(_Unicode(sensors)).child(_Unicode(plane));
-  double sensorPlaneDist = sensorPlaneElem.attr<double>(_Unicode(sensordist));
   double sensorPlaneRmin = sensorPlaneElem.attr<double>(_Unicode(rmin));
   double sensorPlaneRmax = sensorPlaneElem.attr<double>(_Unicode(rmax));
   // - debugging switches
@@ -209,9 +209,9 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
   if (!debug_optics)
     sensorVol.setSensitiveDetector(sens);
 
-  // sensor plane positioning: we want `sensorPlaneDist` to be the distance between the
+  // sensor plane positioning: we want `proximityGap` to be the distance between the
   // aerogel backplane (i.e., aerogel/filter boundary) and the sensor active surface (e.g, photocathode)
-  double sensorZpos     = radiatorFrontplane - aerogelThickness - sensorPlaneDist - 0.5 * sensorThickness;
+  double sensorZpos     = radiatorFrontplane - aerogelThickness - proximityGap - 0.5 * sensorThickness;
   auto   sensorPlanePos = Position(0., 0., sensorZpos) + originFront; // reference position
   // miscellaneous
   int    imod    = 0;           // module number
@@ -290,7 +290,7 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
     }
     gasvolVol.placeVolume(service_vol,
                           Transform3D(Translation3D(sensorPlanePos.x(), sensorPlanePos.y(),
-                                                    sensorPlanePos.z() - sensorThickness - total_thickness)));
+                                                    sensorPlanePos.z() - sensorThickness / 2 - total_thickness / 2)));
   }
 
   // place gas volume
