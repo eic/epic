@@ -14,6 +14,7 @@
   <display>
     <vis name="det_vis" alpha="1.0" r="1.0" g="0.0" b="0.0" showDaughters="true" visible="false" />
     <vis name="becal_wedge" alpha="1.1" r="0.82" g="0.84" b="0.86" showDaughters="true" visible="true" />
+    <vis name="carbon_fiber" alpha="0.9" r="0.1" g="0.1" b="0.1" showDaughters="true" visible="true" />
     <vis name="family1" alpha="1.0" r="0.22" g="0.54" b="0.71" showDaughters="true" visible="true" />
     <vis name="family2" alpha="1.0" r="0.90" g="0.48" b="0.47" showDaughters="true" visible="true" />
     <vis name="family3" alpha="1.0" r="0.87" g="0.49" b="0.09" showDaughters="true" visible="true" />
@@ -66,6 +67,26 @@
           <family dir_sign="-1" x1="2 * cm" y1="2 * cm" z_length="45.5 * cm" number="5"  flare_angle_polar="0.70 * degree"  flare_angle_at_face="1.126 * degree"  vis="family5" />
           <family dir_sign="-1" x1="2 * cm" y1="2 * cm" z_length="45.5 * cm" number="6"  flare_angle_polar="0.586 * degree" flare_angle_at_face="1.1914 * degree" vis="family6" />
         </rows>
+
+        <comment>
+          The gaps between towers contain fiber support.
+          In current geometry, the supports are represented by double-thickness layers shared between towers.
+          As Air-gapped towers are preferred, cut outs are implemented with margins that were roughly estimated from a preliminary CAD drawing.
+        </comment>
+
+        <carbon-fiber-support
+            thickness="0.5 * mm"
+            overhang_top="4 * cm"
+            overhang_bottom="0.2 * cm"
+            vis="carbon_fiber"
+            material="CarbonFiber"
+            >
+          <cut-out
+            margin_horizontal="1 * cm"
+            margin_top="5 * cm"
+            margin_bottom="1.6 * cm"
+            />
+        </carbon-fiber-support>
       </sectors>
     </detector>
   </detectors>
