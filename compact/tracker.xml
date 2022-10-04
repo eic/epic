@@ -154,4 +154,5 @@
   <include ref="tracker/support_service_assembly.xml"/>
   <include ref="tof_barrel.xml"/>
   <include ref="tof_endcap.xml"/>
+
 </lccdd>
