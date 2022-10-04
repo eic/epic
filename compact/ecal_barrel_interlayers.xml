@@ -136,8 +136,8 @@
       <layer repeat="EcalBarrelImagingLayers_num-1" vis="EcalBarrelLayerVis"
        space_between="EcalBarrel_ImagingLayerThickness + EcalBarrel_SpaceBetween"
        space_before="EcalBarrel_ImagingLayerThickness + EcalBarrel_SpaceBetween/2.">
-        <slice material="Lead" thickness="EcalBarrel_RadiatorThickness" vis="EcalBarrelFiberLayerVis">
-          <fiber material="PlasticScint"
+        <slice material="SciFiPb_PbGlue" thickness="EcalBarrel_RadiatorThickness" vis="EcalBarrelFiberLayerVis">
+          <fiber material="SciFiPb_Scintillator"
             sensitive="yes"
             radius="EcalBarrel_FiberRadius"
             spacing_x="EcalBarrel_FiberXSpacing"
@@ -150,10 +150,10 @@
       </layer>
       <layer repeat="EcalBarrel_FiberChunkLayers_num" vis="EcalBarrelLayerVis"
           space_before="EcalBarrel_ImagingLayerThickness + EcalBarrel_SpaceBetween">
-        <slice material="Lead"
+        <slice material="SciFiPb_PbGlue"
           thickness="EcalBarrel_ScFiPartThickness/EcalBarrel_FiberChunkLayers_num"
           vis="EcalBarrelFiberLayerVis">
-          <fiber material="PlasticScint"
+          <fiber material="SciFiPb_Scintillator"
             sensitive="yes"
             radius="EcalBarrel_FiberRadius"
             spacing_x="EcalBarrel_FiberXSpacing"
