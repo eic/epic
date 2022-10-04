@@ -70,7 +70,7 @@
         y="HcalEndcapPInsert_height"
         z="HcalEndcapPInsert_length"
       />
-      <constant name = "backplate_thickness" value="HcalEndcapPInsertBackplateThickness" vis="HcalEndcapInsertVis"/>
+      <constant name = "backplate_thickness" value="HcalEndcapPInsertBackplateThickness"/>
       <comment> Tungsten/Scintillator layers </comment>
       <comment> Slices will be ordered according to the slice order listed here </comment>
       <layer repeat= "HcalEndcapPInsertLayer_NTungstenRepeat" thickness = "HcalEndcapPInsertSingleLayerThickness">
@@ -84,7 +84,7 @@
         <slice material="Air" thickness="HcalEndcapPInsertAirThickness"/>
       </layer>
       <comment> Steel/Sc layers </comment>
-      <layer repeat="HcalEndcapPInsertLayer_NSteelRepeat" thickness = "HcalEndcapPInsertSingleLayerThickness" vis="HcalEndcapInsertVis">
+      <layer repeat="HcalEndcapPInsertLayer_NSteelRepeat" thickness = "HcalEndcapPInsertSingleLayerThickness">
         <slice material="Steel235" thickness="HcalEndcapPInsertAbsorberThickness" />
         <slice material="Air" thickness="HcalEndcapPInsertAirThickness"/>
         <slice material="Aluminum" thickness="HcalEndcapPInsertScintillatorCoverThickness"/>
@@ -95,7 +95,7 @@
         <slice material="Air" thickness="HcalEndcapPInsertAirThickness"/>
       </layer>
       <comment> Final layer of steel </comment>
-      <layer repeat="1" thickness = "HcalEndcapPInsertBackplateThickness" vis="HcalEndcapInsertVis">
+      <layer repeat="1" thickness = "HcalEndcapPInsertBackplateThickness">
         <slice material="Steel235" thickness="HcalEndcapPInsertBackplateThickness" />
       </layer>
       <documentation>
