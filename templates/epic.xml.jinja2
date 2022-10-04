@@ -127,11 +127,23 @@
   {% endif -%}
   {% endif -%}
 
+  {# FIXME: stupid workaround for now; need to conform to https://github.com/eic/epic/pull/126 #}
+{% if false %}
+  {# prioritize mRICH in default config #}
   {% if features is not defined or features['pid'] is none or 'mrich' in features['pid'] %}
   <include ref="${DETECTOR_PATH}/compact/mrich.xml"/>
   {% elif 'pfrich' in features['pid'] -%}
   <include ref="${DETECTOR_PATH}/compact/pfrich.xml"/>
   {% endif -%}
+{% endif -%}
+{% if true %}
+  {# prioritize pfRICH in default config #}
+  {% if features is not defined or features['pid'] is none or 'pfrich' in features['pid'] %}
+  <include ref="${DETECTOR_PATH}/compact/pfrich.xml"/>
+  {% elif 'mrich' in features['pid'] -%}
+  <include ref="${DETECTOR_PATH}/compact/mrich.xml"/>
+  {% endif -%}
+{% endif -%}
 
   {% if features is defined and features['pid'] is not none and 'tof_endcap' in features['pid'] %}
   <include ref="${DETECTOR_PATH}/compact/tof_endcap.xml"/>

@@ -3,7 +3,8 @@ features:
   tracking:
   pid:
     dirc:
-    mrich:
+    # mrich: # TEMPORARY, FOR TESTING
+    pfrich:
     drich:
   ecal:
     forward_scifi:

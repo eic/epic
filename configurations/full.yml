@@ -5,7 +5,8 @@ features:
     dirc:
     tof_endcap:
     tof_barrel:
-    mrich:
+    # mrich: # TEMPORARY, FOR TESTING
+    pfrich:
     drich:
   ecal:
     forward_scifi:

@@ -1,5 +1,7 @@
 <lccdd>
 
+<!-- FIXME: this file not used anywhere... delete it? -->
+
 <!--include ref="dirc.xml"/-->
 <include ref="drich.xml"/>
 <!--include ref="pfrich.xml"/-->
