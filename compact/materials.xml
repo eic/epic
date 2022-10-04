@@ -354,7 +354,7 @@
     <fraction n="0.038" ref="Ni"/>
     <fraction n="0.019" ref="Cu"/>
   </material>
-  <material name="ZDC_EpoxyGlue">
+  <material name="ZDC_PET">
     <D type="density" value="1.38" unit="g/cm3"/>
     <composite n="8"  ref="H"/>
     <composite n="10" ref="C"/>
@@ -364,6 +364,11 @@
     <D type="density" value="1.032" unit="g/cm3"/>
     <composite n="8" ref="C"/>
     <composite n="8" ref="H"/>
+  </material>
+  <material name="ZDC_Polyethylene">
+    <D type="density" value="0.96" unit="g/cm3"/>
+    <composite n="2" ref="C"/>
+    <composite n="4" ref="H"/>
   </material>
   <material name="MMGAS_ResistivePaste">
     <D type="density" unit="g/cm3" value="0.77906"/>
