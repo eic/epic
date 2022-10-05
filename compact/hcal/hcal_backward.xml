@@ -40,7 +40,7 @@
       calorimeterType="HAD_ENDCAP" reflect="true">
       <position x="0" y="0" z="0"/>
       <dimensions
-        numsides="CaloSides"
+        numsides="HcalBarrelStavesN"
         zmin="HcalEndcapN_zmin"
         rmin="HcalEndcapN_rmin"
         rmax="HcalBarrel_rmax"/>
