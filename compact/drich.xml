@@ -110,7 +110,7 @@
 <radiator
   rmin="DRICH_rmin0 + DRICH_wall_thickness + 0.2*cm"
   rmax="DRICH_rmax0 - DRICH_wall_thickness - 0.2*cm"
-  frontplane="DRICH_window_thickness + 0.5*DRICH_aerogel_thickness"
+  frontplane="DRICH_window_thickness"
   pitch="0*degree"
   >
   <aerogel
