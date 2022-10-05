@@ -55,10 +55,10 @@ static Ref_t create_detector(Detector &lcdd, xml_h handle,
 
     // backward nose cone
     printout(DEBUG, "SciGlassCalorimeterTiltless", "etamin cutout: etamin = %f, thetamin = %f", etamin, theta(etamin));
-    if (-zmin * sin(theta(etamin)) < rmin) {
+    if (zmin * sin(theta(etamin)) < rmin) {
       // no cutout: regular end face
       printout(DEBUG, "SciGlassCalorimeterTiltless", "no etamin cutout: zmin * sin(theta(etamin)) = %f < rmin = %f",
-               -zmin * sin(theta(etamin)), rmin);
+               zmin * sin(theta(etamin)), rmin);
       v_z.emplace_back(zmin);
       v_rmin.emplace_back(rmin);
       v_rmax.emplace_back(rmax);
