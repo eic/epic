@@ -159,9 +159,9 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
         materialLayer[i_slice]  = description.material(x_slice.materialStr());
         strLayerName[i_slice]   = getAttrOrDefault<std::string>(x_slice, _U(name), "slice" + std::to_string(i_slice));
         thicknessLayer[i_slice] = x_slice.thickness();
-        widthLayer[i_slice] = getAttrOrDefault(sensparams, _Unicode(width), 0.);
-        offsetLayer[i_slice] = getAttrOrDefault(sensparams, _Unicode(offset), 0.);
-        lengthLayer[i_slice] = getAttrOrDefault(sensparams, _Unicode(length), 0.);
+        widthLayer[i_slice] = getAttrOrDefault(x_slice, _Unicode(width), 0.);
+        offsetLayer[i_slice] = getAttrOrDefault(x_slice, _Unicode(offset), 0.);
+        lengthLayer[i_slice] = getAttrOrDefault(x_slice, _Unicode(length), 0.);
       }
     }
 
@@ -185,8 +185,8 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
     Box box_sensor_stack2(baseplate_length / 2, baseplate_width / 2, thicknessDet2 / 2);
     Volume log_sensor_stack1("log_sensor_stack1", box_sensor_stack1, air);
     Volume log_sensor_stack2("log_sensor_stack2", box_sensor_stack2, air);
-    log_sensor_stack1.setVisAttributes(description.visAttributes("TOFLayers"));
-    log_sensor_stack2.setVisAttributes(description.visAttributes("TOFLayers"));
+    log_sensor_stack1.setVisAttributes(description.visAttributes("InvisibleWithDaughters"));
+    log_sensor_stack2.setVisAttributes(description.visAttributes("InvisibleWithDaughters"));
 
     // individual layers will be placed in subsequent order and z_start is increased by the thickness of the previous layer
     double z_start1 = -thicknessDet1 / 2;
@@ -236,9 +236,10 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
         materialLayer_SH[i_slice]  = description.material(x_slice.materialStr());
         strLayerName_SH[i_slice]   = getAttrOrDefault<std::string>(x_slice, _U(name), "slice" + std::to_string(i_slice));
         thicknessLayer_SH[i_slice] = x_slice.thickness();
-        widthLayer_SH[i_slice] = getAttrOrDefault(sensparams, _Unicode(width), 0.);
-        offsetLayer_SH[i_slice] = getAttrOrDefault(sensparams, _Unicode(offset), 0.);
-        lengthLayer_SH[i_slice] = getAttrOrDefault(sensparams, _Unicode(length), 0.);
+        widthLayer_SH[i_slice] = getAttrOrDefault(x_slice, _Unicode(width), 0.);
+        offsetLayer_SH[i_slice] = getAttrOrDefault(x_slice, _Unicode(offset), 0.);
+        lengthLayer_SH[i_slice] = getAttrOrDefault(x_slice, _Unicode(length), 0.);
+        // std::cout << "SH: " << strLayerName_SH[i_slice] << "\tthick: " << thicknessLayer_SH[i_slice] << "\twidth: " << widthLayer_SH[i_slice] << "\toffset: " << offsetLayer_SH[i_slice] << "\tlength: " << lengthLayer_SH[i_slice] << std::endl;
       }
     }
 
@@ -323,7 +324,7 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
           Volume log_ACLGAD_Sens_L("log_ACLGAD_Sens_LF_" + std::to_string(row)+"_"+  std::to_string(sensorCount), sol_ACLGAD_Sens, materialLayer[senslayer]);
           log_ACLGAD_Sens_L.setVisAttributes(description.visAttributes("TOFActiveMat"));
 
-          pv = log_sensor_and_readout_L.placeVolume(log_ACLGAD_Sens_L, Position(0, -fullsensor_width/2 + baseplate_width/2 -offsetLayer[senslayer], -thicknessDet_SH/2+thicknessDet1+thicknessLayer[5]/2));
+          pv = log_sensor_and_readout_L.placeVolume(log_ACLGAD_Sens_L, Position(0, -fullsensor_width/2 + baseplate_width/2 - offsetLayer[senslayer], -thicknessDet_SH/2+thicknessDet1+thicknessLayer[5]/2));
 
           // make sensor sensitive, set ID, type and add to sensitive volumes
           pv.addPhysVolID("sensor", sensorCount);
@@ -424,7 +425,7 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
         // create mother volume with space for numSensorsRow towers along x-axis
         int nSensRight = ((numSensorsRow-1) /2 - numSensorRightAdd);
         Box TTLDetRowRightSolid( nSensRight * segmentlength / 2.0,fullsensor_width / 2.0,thicknessDet_SH / 2.0);
-        Volume TTLDetRowRightLogical_Front("TTLDetRowRightLogical_Front" + std::to_string(row), TTLDetRowLeftSolid, air);
+        Volume TTLDetRowRightLogical_Front("TTLDetRowRightLogical_Front" + std::to_string(row), TTLDetRowRightSolid, air);
         TTLDetRowRightLogical_Front.setVisAttributes(description.visAttributes("InvisibleWithDaughters"));
 
         //place log_sensor_and_readout_R in TTLDetRowRightLogical_Front
@@ -478,7 +479,7 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
         pv.addPhysVolID("module", row);
 
 
-        Volume TTLDetRowRightLogical_Back("TTLDetRowRightLogical_Back" + std::to_string(row), TTLDetRowLeftSolid, air);
+        Volume TTLDetRowRightLogical_Back("TTLDetRowRightLogical_Back" + std::to_string(row), TTLDetRowRightSolid, air);
         TTLDetRowRightLogical_Back.setVisAttributes(description.visAttributes("InvisibleWithDaughters"));
 
         //place log_sensor_and_readout_R in TTLDetRowRightLogical_Back

@@ -91,7 +91,7 @@
     <constant name="SH_ConnSp_length"       value="TOFEndcap_baseplate_length" />
 
     <constant name="SH_PB_thickness"        value="3.1*mm" />
-    <constant name="SH_PB_width"            value="TOFEndcap_sensor_width/2" />
+    <constant name="SH_PB_width"            value="TOFEndcap_baseplate_width/2" />
     <constant name="SH_PB_offset"           value="0.0*mm" />
     <constant name="SH_PB_length"           value="TOFEndcap_baseplate_length" />
 
