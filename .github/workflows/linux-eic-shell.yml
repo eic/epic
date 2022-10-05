@@ -112,8 +112,8 @@ jobs:
         platform-release: "jug_xl:nightly"
         setup: install/setup.sh
         run: |
-          root -b -q "scripts/test_ACTS.cxx+(\"${DETECTOR_PATH}/${DETECTOR_CONFIG}.xml\")" | tee geo/check_tracking_geometry.out
-          bin/acts_geo_check geo/check_tracking_geometry.out
+          root -b -q "scripts/test_ACTS.cxx+(\"${DETECTOR_PATH}/${DETECTOR_CONFIG}.xml\")" | tee check_tracking_geometry.out
+          bin/acts_geo_check check_tracking_geometry.out
 
   convert-to-gdml:
     runs-on: ubuntu-latest
