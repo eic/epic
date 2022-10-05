@@ -2,7 +2,7 @@ features:
 - beampipe
 - solenoid
 - ecal:
-  - forward_scifi
+  - forward_homogeneous
   - barrel_sciglass
   - backward_PbWO4
 - hcal
