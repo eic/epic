@@ -124,14 +124,19 @@
       type="DD4hep_SubdetectorAssembly"
       vis="TrackerSubAssemblyVis">
       <composite name="BarrelTOF"/>
-      <composite name="ForwardTOF"/>
-      <composite name="BackwardTOF"/>
     </detector>
     <detector id="TrackerSubAssembly_5_ID"
       name="OuterMPGDSubSubAssembly"
       type="DD4hep_SubdetectorAssembly"
       vis="TrackerSubAssemblyVis">
       <composite name="OuterMPGDBarrel"/>
+    </detector>
+    <detector id="TrackerSubAssembly_6_ID"
+      name="EndcapTOFSubSubAssembly"
+      type="DD4hep_SubdetectorAssembly"
+      vis="TrackerSubAssemblyVis">
+      <composite name="ForwardTOF"/>
+      <composite name="BackwardTOF"/>
     </detector>
   </detectors>
 
