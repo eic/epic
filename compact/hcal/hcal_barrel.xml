@@ -43,7 +43,7 @@
       gap="0.*cm"
       material="Steel235">
       <dimensions
-        numsides="CaloSides"
+        numsides="HcalBarrelStavesN"
         rmin="HcalBarrel_rmin"
         z="HcalBarrel_length"/>
       <staves vis="HcalBarrelStaveVis"/>
