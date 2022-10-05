@@ -7,7 +7,7 @@ features:
       #SJJ: disabled as it needs re-integrating with the tracker
       #    tof_barrel:
   ecal:
-    forward_scifi:
+    forward_homogeneous:
     barrel_sciglass:
     backward_PbWO4:
   solenoid:
