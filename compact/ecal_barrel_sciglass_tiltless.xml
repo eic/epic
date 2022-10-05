@@ -34,7 +34,7 @@
       </comment>
 
       <dimensions rmin="EcalBarrel_rmin" rmax="EcalBarrel_rmax"
-                  zmax="195 * cm" zmin="-285 * cm"
+                  zmax="EcalBarrelForward_zmax" zmin="-EcalBarrelBackward_zmax"
                   etamin="EcalBarrel_etamin" etamax="EcalBarrel_etamax"/>
 
       <wedge-box inner_r="80.0 * cm" thickness="2 * mm" vis="becal_wedge" material="Aluminum5083" />
