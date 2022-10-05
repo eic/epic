@@ -111,8 +111,8 @@ static Ref_t create_detector(Detector &lcdd, xml_h handle,
 
   sens.setType("calorimeter");
 
-  if (det_handle.hasChild(_Unicode(wedge-box))) {
-    xml_comp_t wedge_box_handle = det_handle.child(_Unicode(wedge-box));
+  if (det_handle.hasChild(_Unicode(wedge_box))) {
+    xml_comp_t wedge_box_handle = det_handle.child(_Unicode(wedge_box));
     Material wedge_box_mat = lcdd.material(wedge_box_handle.materialStr());
 
     // Approximate bottoms of wedge boxes with a single tube common for all sectors
@@ -246,9 +246,9 @@ static Ref_t create_detector(Detector &lcdd, xml_h handle,
               .setSensitiveDetector(sens)
               .setVisAttributes(lcdd.visAttributes(family_dim_handle.visStr()));
 
-          if (sectors_handle.hasChild(_Unicode(carbon-fiber-support))) {
-            xml_comp_t carbon_fiber_support_handle = sectors_handle.child(_Unicode(carbon-fiber-support));
-            xml_comp_t cut_out_handle = carbon_fiber_support_handle.child(_Unicode(cut-out));
+          if (sectors_handle.hasChild(_Unicode(carbon_fiber_support))) {
+            xml_comp_t carbon_fiber_support_handle = sectors_handle.child(_Unicode(carbon_fiber_support));
+            xml_comp_t cut_out_handle = carbon_fiber_support_handle.child(_Unicode(cut_out));
             Material carbon_fiber_support_mat = lcdd.material(carbon_fiber_support_handle.materialStr());
 
             const double margin_horizontal = cut_out_handle.attr<double>(_Unicode(margin_horizontal));

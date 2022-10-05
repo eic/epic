@@ -37,7 +37,7 @@
                   zmax="EcalBarrelForward_zmax" zmin="-EcalBarrelBackward_zmax"
                   etamin="EcalBarrel_etamin" etamax="EcalBarrel_etamax"/>
 
-      <wedge-box inner_r="80.0 * cm" thickness="2 * mm" vis="becal_wedge" material="Aluminum5083" />
+      <wedge_box inner_r="80.0 * cm" thickness="2 * mm" vis="becal_wedge" material="Aluminum5083" />
 
       <sectors number="24" phi0="0." deltaphi="pi / 12">
         <comment>
@@ -74,19 +74,19 @@
           As Air-gapped towers are preferred, cut outs are implemented with margins that were roughly estimated from a preliminary CAD drawing.
         </comment>
 
-        <carbon-fiber-support
+        <carbon_fiber_support
             thickness="0.5 * mm"
             overhang_top="4 * cm"
             overhang_bottom="0.2 * cm"
             vis="carbon_fiber"
             material="CarbonFiber"
             >
-          <cut-out
+          <cut_out
             margin_horizontal="1 * cm"
             margin_top="5 * cm"
             margin_bottom="1.6 * cm"
             />
-        </carbon-fiber-support>
+        </carbon_fiber_support>
       </sectors>
     </detector>
   </detectors>
