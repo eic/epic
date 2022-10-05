@@ -55,17 +55,17 @@ static Ref_t create_detector(Detector& desc, xml::Handle_t handle, SensitiveDete
 
   // backward nose cone
   printout(DEBUG, "SciGlassCalorimeterPanda", "etamin cutout: etamin = %f, thetamin = %f", etamin, theta(etamin));
-  if (zmin * sin(theta(etamin)) < rmin) {
+  if (zmin * tan(theta(etamin)) < rmin) {
     // no cutout: regular end face
-    printout(DEBUG, "SciGlassCalorimeterPanda", "no etamin cutout: zmin * sin(theta(etamin)) = %f < rmin = %f",
-             zmin * sin(theta(etamin)), rmin);
+    printout(DEBUG, "SciGlassCalorimeterPanda", "no etamin cutout: zmin * tan(theta(etamin)) = %f < rmin = %f",
+             zmin * tan(theta(etamin)), rmin);
     v_z.emplace_back(zmin);
     v_rmin.emplace_back(rmin);
     v_rmax.emplace_back(rmax);
   } else {
     // with cutout: first add zmin side
-    printout(DEBUG, "SciGlassCalorimeterPanda", "etamin cutout: zmin * sin(theta(etamin)) = %f > rmin = %f",
-             zmin * sin(theta(etamin)), rmin);
+    printout(DEBUG, "SciGlassCalorimeterPanda", "etamin cutout: zmin * tan(theta(etamin)) = %f > rmin = %f",
+             zmin * tan(theta(etamin)), rmin);
     auto z = std::max(zmin, rmax / tan(theta(etamin))); // zmin or furthest backwards
     v_z.emplace_back(z);
     v_rmin.emplace_back(std::max(rmin, z * tan(theta(etamin))));
@@ -78,17 +78,17 @@ static Ref_t create_detector(Detector& desc, xml::Handle_t handle, SensitiveDete
 
   // forward nose cone
   printout(DEBUG, "SciGlassCalorimeterPanda", "etamax cutout: etamax = %f, thetamax = %f", etamax, theta(etamax));
-  if (zmax * sin(theta(etamax)) < rmin) {
+  if (zmax * tan(theta(etamax)) < rmin) {
     // no cutout: regular end face
-    printout(DEBUG, "SciGlassCalorimeterPanda", "no etamax cutout: zmax * sin(theta(etamin)) = %f < rmin = %f",
-             zmax * sin(theta(etamax)), rmin);
+    printout(DEBUG, "SciGlassCalorimeterPanda", "no etamax cutout: zmax * tan(theta(etamin)) = %f < rmin = %f",
+             zmax * tan(theta(etamax)), rmin);
     v_z.emplace_back(zmax);
     v_rmin.emplace_back(rmin);
     v_rmax.emplace_back(rmax);
   } else {
     // with cutout: first add where cutout starts
-    printout(DEBUG, "SciGlassCalorimeterPanda", "etamax cutout: zmax * sin(theta(etamax)) = %f > rmin = %f",
-             zmax * sin(theta(etamax)), rmin);
+    printout(DEBUG, "SciGlassCalorimeterPanda", "etamax cutout: zmax * tan(theta(etamax)) = %f > rmin = %f",
+             zmax * tan(theta(etamax)), rmin);
     v_z.emplace_back(rmin / tan(theta(etamax)));
     v_rmin.emplace_back(rmin);
     v_rmax.emplace_back(rmax);

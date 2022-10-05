@@ -55,17 +55,17 @@ static Ref_t create_detector(Detector &lcdd, xml_h handle,
 
     // backward nose cone
     printout(DEBUG, "SciGlassCalorimeterTiltless", "etamin cutout: etamin = %f, thetamin = %f", etamin, theta(etamin));
-    if (zmin * sin(theta(etamin)) < rmin) {
+    if (zmin * tan(theta(etamin)) < rmin) {
       // no cutout: regular end face
-      printout(DEBUG, "SciGlassCalorimeterTiltless", "no etamin cutout: zmin * sin(theta(etamin)) = %f < rmin = %f",
-               zmin * sin(theta(etamin)), rmin);
+      printout(DEBUG, "SciGlassCalorimeterTiltless", "no etamin cutout: zmin * tan(theta(etamin)) = %f < rmin = %f",
+               zmin * tan(theta(etamin)), rmin);
       v_z.emplace_back(zmin);
       v_rmin.emplace_back(rmin);
       v_rmax.emplace_back(rmax);
     } else {
       // with cutout: first add zmin side
-      printout(DEBUG, "SciGlassCalorimeterTiltless", "etamin cutout: zmin * sin(theta(etamin)) = %f > rmin = %f",
-               zmin * sin(theta(etamin)), rmin);
+      printout(DEBUG, "SciGlassCalorimeterTiltless", "etamin cutout: zmin * tan(theta(etamin)) = %f > rmin = %f",
+               zmin * tan(theta(etamin)), rmin);
       auto z = std::max(zmin, rmax / tan(theta(etamin))); // zmin or furthest backwards
       v_z.emplace_back(z);
       v_rmin.emplace_back(std::max(rmin, z * tan(theta(etamin))));
@@ -78,17 +78,17 @@ static Ref_t create_detector(Detector &lcdd, xml_h handle,
 
     // forward nose cone
     printout(DEBUG, "SciGlassCalorimeterTiltless", "etamax cutout: etamax = %f, thetamax = %f", etamax, theta(etamax));
-    if (zmax * sin(theta(etamax)) < rmin) {
+    if (zmax * tan(theta(etamax)) < rmin) {
       // no cutout: regular end face
-      printout(DEBUG, "SciGlassCalorimeterTiltless", "no etamax cutout: zmax * sin(theta(etamin)) = %f < rmin = %f",
-               zmax * sin(theta(etamax)), rmin);
+      printout(DEBUG, "SciGlassCalorimeterTiltless", "no etamax cutout: zmax * tan(theta(etamin)) = %f < rmin = %f",
+               zmax * tan(theta(etamax)), rmin);
       v_z.emplace_back(zmax);
       v_rmin.emplace_back(rmin);
       v_rmax.emplace_back(rmax);
     } else {
       // with cutout: first add where cutout starts
-      printout(DEBUG, "SciGlassCalorimeterTiltless", "etamax cutout: zmax * sin(theta(etamax)) = %f > rmin = %f",
-               zmax * sin(theta(etamax)), rmin);
+      printout(DEBUG, "SciGlassCalorimeterTiltless", "etamax cutout: zmax * tan(theta(etamax)) = %f > rmin = %f",
+               zmax * tan(theta(etamax)), rmin);
       v_z.emplace_back(rmin / tan(theta(etamax)));
       v_rmin.emplace_back(rmin);
       v_rmax.emplace_back(rmax);
