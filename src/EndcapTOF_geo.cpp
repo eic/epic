@@ -24,7 +24,6 @@
 #include "Acts/Plugins/DD4hep/ConvertDD4hepMaterial.hpp"
 #endif
 
-using namespace std;
 using namespace dd4hep;
 using namespace dd4hep::rec;
 using namespace dd4hep::detail;
@@ -36,24 +35,22 @@ using namespace dd4hep::detail;
  */
 static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector sens)
 {
-  typedef vector<PlacedVolume> Placements;
-  xml_det_t                    x_det    = e;
-  // Material                     vacuum   = description.vacuum();
-  int                          det_id   = x_det.id();
-  string                       det_name = x_det.nameStr();
-  bool                         reflect  = x_det.reflect(false);
-  DetElement                   sdet(det_name, det_id);
-  Assembly                     assembly(det_name);
-
+  typedef std::vector<PlacedVolume> Placements;
+  xml_det_t x_det = e;
+  int det_id   = x_det.id();
+  std::string det_name = x_det.nameStr();
+  bool reflect  = x_det.reflect(false);
+  DetElement sdet(det_name, det_id);
+  Assembly assembly(det_name);
   Material air = description.material("Air");
-  // Volume      assembly    (det_name,Box(10000,10000,10000),vacuum);
-  Volume                             motherVol = description.pickMotherVolume(sdet);
-  int                                m_id = 0;//, c_id = 0, n_sensor = 0;
-  map<string, Volume>                modules;
-  map<string, Placements>            sensitives;
-  map<string, std::vector<VolPlane>> volplane_surfaces;
-  map<string, std::array<double, 2>> module_thicknesses;
-  PlacedVolume                       pv;
+  Volume motherVol = description.pickMotherVolume(sdet);
+
+  int m_id = 0;
+  std::map<std::string, Volume>  modules;
+  std::map<std::string, Placements> sensitives;
+  std::map<std::string, std::vector<VolPlane>> volplane_surfaces;
+  std::map<std::string, std::array<double, 2>> module_thicknesses;
+  PlacedVolume pv;
 
   // ACTS extension
   {
@@ -77,8 +74,8 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
   // this loop creates the forward and the backward disk
   for (xml_coll_t mi(x_det, _U(module)); mi; ++mi, ++m_id) {
     xml_comp_t x_mod = mi;
-    string     m_nam = x_mod.nameStr();
-    xml_comp_t diskdimension       = x_mod.child(_Unicode(diskdimension));
+    std::string     m_nam = x_mod.nameStr();
+    xml_comp_t diskdimension       = x_mod.dimensions();
 
     // load all information from the diskdimension definitions
     double     disk_zPos            = getAttrOrDefault(diskdimension, _Unicode(zPos), 0.);
@@ -93,7 +90,7 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
     if(reflect) disk_zPos = -disk_zPos;
 
     // some debug output
-    // cout << "\tdisk_rMin = " << disk_rMin
+    // std::cout << "\tdisk_rMin = " << disk_rMin
     // << "\n\tdisk_rMax = " << disk_rMax
     // << "\n\tdisk_xOffset = " << disk_xOffset
     // << "\n\tdisk_zPos = " << disk_zPos
@@ -101,7 +98,7 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
     // << "\n\tdisk_det_height = " << disk_det_height
     // << "\n\tcooling_tube_thickness = " << cooling_tube_thickness
     // << "\n\tcooling_tube_diameter = " << cooling_tube_diameter
-    // << endl;
+    // << std::endl;
 
     // create a solid for the beampipe cutout
     Tube beampipe_cutout(0, disk_rMin,disk_det_height, 0, 2. * M_PI);
@@ -130,47 +127,46 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
     // ---------------------------------------
     // Create Sensor Module Stack:
     // ---------------------------------------
-    double sensor_width = 21.2 * mm;
-    double sensor_length = 42.0 * mm;
-    double baseplate_length = 43.1 * mm;
-    double baseplate_width = 56.5 * mm / 2;
 
-    const int nLayers = 8;
-    std::string strLayerName[nLayers] = {
-      "ThermalPad","ALN","LairdFilm","ROC","Solder","Sensor","Epoxy","AIN"
-      };
-    Material materialLayer[nLayers] = {
-      description.material("Graphite"), description.material("AluminumNitrate"), description.material("Graphite"), description.material("Plexiglass"), description.material("Tin"), description.material("Silicon"), description.material("Epoxy"), description.material("AluminumNitrate")
-    };
-    double thicknessLayer[nLayers] = {
-        0.25 * mm, 0.79 * mm, 0.08 * mm, 0.25 * mm, 0.03 * mm, 0.3 * mm, 0.08 * mm, 0.51 * mm};
-    double widthLayer[nLayers] = {
-        baseplate_width - 0.3 * mm,
-        baseplate_width,
-        sensor_width + 1 * mm,
-        sensor_width + 1 * mm,
-        sensor_width - 0.2 * mm,
-        sensor_width,
-        sensor_width,
-        baseplate_width - 4 * mm};
-    double offsetLayer[nLayers] = {
-        0.3 * mm / 2,
-        0,
-        (baseplate_width - widthLayer[2]) / 2 - 0.2 * mm,
-        (baseplate_width - widthLayer[3]) / 2 - 0.2 * mm,
-        (baseplate_width - widthLayer[4]) / 2 - 0.1 * mm,
-        (baseplate_width - widthLayer[5] - 0.1 * mm) / 2,
-        (baseplate_width - widthLayer[6] - 0.1 * mm) / 2,
-        4 * mm / 2 - 0.2 * mm};
-    double lengthLayer[nLayers] = {
-        baseplate_length - 0.2 * mm,
-        baseplate_length,
-        sensor_length + 0.2 * mm,
-        sensor_length + 0.2 * mm,
-        sensor_length - 0.2 * mm,
-        sensor_length,
-        sensor_length,
-        baseplate_length - 0.2 * mm};
+    xml_comp_t sensparams   = x_mod.child(_Unicode(sensorparameters));;
+
+    // load all information from the sensparams definitions
+    // double sensor_width     = getAttrOrDefault(sensparams, _Unicode(width), 0.);
+    // double sensor_length    = getAttrOrDefault(sensparams, _Unicode(length), 0.);
+    double baseplate_length = getAttrOrDefault(sensparams, _Unicode(baseplate_length), 100.);
+    double baseplate_width  = getAttrOrDefault(sensparams, _Unicode(baseplate_width), 0.);
+
+
+
+    std::string strLayerName[10];
+    Material materialLayer[10];
+    double thicknessLayer[10];
+    double widthLayer[10];
+    double offsetLayer[10];
+    double lengthLayer[10];
+    int nLayers = 0;
+    for (xml_coll_t l_iter(x_det, _U(layer)); l_iter; ++l_iter) {
+      xml_comp_t x_layer = l_iter;
+      if(x_layer.id()!=2) continue;
+
+      nLayers = getAttrOrDefault(x_layer, _Unicode(numslices), 0.);
+
+      int    i_slice     = 0;
+      for (xml_coll_t s_iter(x_layer, _U(slice)); s_iter; ++s_iter, ++i_slice) {
+        // If slices are only given a thickness attribute, they are radially concentric slices
+        // If slices are given an inner_z attribute, they are longitudinal slices with equal rmin
+        xml_comp_t x_slice      = s_iter;
+        materialLayer[i_slice]  = description.material(x_slice.materialStr());
+        strLayerName[i_slice]   = getAttrOrDefault<std::string>(x_slice, _U(name), "slice" + std::to_string(i_slice));
+        thicknessLayer[i_slice] = x_slice.thickness();
+        widthLayer[i_slice] = getAttrOrDefault(sensparams, _Unicode(width), 0.);
+        offsetLayer[i_slice] = getAttrOrDefault(sensparams, _Unicode(offset), 0.);
+        lengthLayer[i_slice] = getAttrOrDefault(sensparams, _Unicode(length), 0.);
+      }
+    }
+
+
+
 
     // need to define two thicknesses here as the sensors have to be placed separately from the rest of the stack
     // this is done to properly assign sensor IDs to the placed volumes
@@ -219,31 +215,35 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
     // ---------------------------------------
     // Create Service Hybrid Module Stack:
     // ---------------------------------------
-    const int nLayers_SH = 4;
+    std::string strLayerName_SH[10];
+    Material materialLayer_SH[10];
+    double thicknessLayer_SH[10];
+    double widthLayer_SH[10];
+    double offsetLayer_SH[10];
+    double lengthLayer_SH[10];
+    int nLayers_SH = 0;
+    for (xml_coll_t l_iter(x_det, _U(layer)); l_iter; ++l_iter) {
+      xml_comp_t x_layer = l_iter;
+      if(x_layer.id()!=3) continue;
+
+      nLayers_SH = getAttrOrDefault(x_layer, _Unicode(numslices), 0.);
+
+      int    i_slice     = 0;
+      for (xml_coll_t s_iter(x_layer, _U(slice)); s_iter; ++s_iter, ++i_slice) {
+        // If slices are only given a thickness attribute, they are radially concentric slices
+        // If slices are given an inner_z attribute, they are longitudinal slices with equal rmin
+        xml_comp_t x_slice      = s_iter;
+        materialLayer_SH[i_slice]  = description.material(x_slice.materialStr());
+        strLayerName_SH[i_slice]   = getAttrOrDefault<std::string>(x_slice, _U(name), "slice" + std::to_string(i_slice));
+        thicknessLayer_SH[i_slice] = x_slice.thickness();
+        widthLayer_SH[i_slice] = getAttrOrDefault(sensparams, _Unicode(width), 0.);
+        offsetLayer_SH[i_slice] = getAttrOrDefault(sensparams, _Unicode(offset), 0.);
+        lengthLayer_SH[i_slice] = getAttrOrDefault(sensparams, _Unicode(length), 0.);
+      }
+    }
+
 
     double baseSH_width = baseplate_width / 2;
-    std::string strLayerName_SH[nLayers_SH] = {
-      "ThermalPad","HighSpeedBoard","ConnectorSpace","Powerboard"
-    };
-    Material materialLayer_SH[nLayers_SH] = {
-      description.material("Graphite"), description.material("Polystyrene"), air, description.material("Polystyrene")
-    };
-    double thicknessLayer_SH[nLayers_SH] = {
-        0.25 * mm,
-        1.00 * mm,
-        1.50 * mm,
-        3.10 * mm};
-    double widthLayer_SH[nLayers_SH] = {
-        baseSH_width - 0.2 * mm,
-        baseSH_width - 0.2 * mm,
-        baseSH_width - 0.35 * mm,
-        baseSH_width};
-    double offsetLayer_SH[nLayers_SH] = {
-        0.2 * mm / 2,
-        0.2 * mm / 2,
-        0.35 * mm / 2,
-        0};
-
     double thicknessDet_SH = 0;
     for (int ilay = 0; ilay < nLayers_SH; ilay++)
     {
@@ -261,7 +261,7 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
       const std::string layer_name = "SH_stack_" + strLayerName_SH[ilay];
       const std::string layer_name_Solid = "sol_" + layer_name;
 
-      Box sol_Module_Layer_Raw(baseplate_length / 2,widthLayer_SH[ilay] / 2,thicknessLayer_SH[ilay] / 2);
+      Box sol_Module_Layer_Raw(lengthLayer_SH[ilay] / 2,widthLayer_SH[ilay] / 2,thicknessLayer_SH[ilay] / 2);
       Volume Log_Layer(layer_name + "_Log", sol_Module_Layer_Raw, materialLayer_SH[ilay]);
 
       pv = log_SH_stack.placeVolume(Log_Layer, Position(0, -offsetLayer_SH[ilay], z_start_SH + thicknessLayer_SH[ilay] / 2));
