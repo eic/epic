@@ -21,11 +21,7 @@
   </comment>
 
   <define>
-    <constant name="DIRC_rmin"              value="CentralTrackingRegion_rmax"/>
     <constant name="DIRC_rotation"          value="pi" comment="Allows DIRC flip"/>
-    <!-- CLEANUP THIS if not sure. This is from the initial implementation
-    <constant name="DIRC_length"            value="285.500*cm"/>
-    <constant name="DIRC_rmin"              value="71.51*cm"/>
 
     <!-- Prism -->
     <constant name="DIRCPrism_width"        value="350*mm"/>
@@ -34,10 +30,6 @@
     <constant name="DIRCPrism_angle"        value="32*deg"/>
     <constant name="DIRCPrism_long_edge"    value="DIRCPrism_short_edge + DIRCPrism_length * tan(DIRCPrism_angle)"/>
     <constant name="DIRCPrism_height"       value="DIRCPrism_long_edge"/>
-
-    <!-- DIRC length -->
-    <constant name="DIRCMain_length"        value="DIRC_length"/>
-    <constant name="DIRC_offset"            value="DIRC_offset+15*cm"/>
 
     <!-- Box - main DIRC modules -->
     <constant name="DIRCBox_count"          value="12"  comment="Number of DIRC boxes per... DIRC. 12 - default"/>
@@ -49,12 +41,11 @@
     <constant name="DIRCMirror_thickness"   value="1 * mm"/>
 
     <!-- Lens -->
-    <constant name="DIRCLens_height"        value="DIRCPrism_long_edge"/>
-    <constant name="DIRCLens_width"         value="DIRCPrism_width"/>
     <constant name="DIRCLens_thickness"     value="12 * mm"/>
     <constant name="DIRCLens_r1"            value="62 * mm"/>
     <constant name="DIRCLens_r2"            value="36 * mm"/>
     <constant name="DIRCLens_height"        value="50 * mm"/>
+    <constant name="DIRCLens_width"         value="DIRCPrism_width"/>
 
     <!-- FD (Foto detectors?) -->
     <constant name="DIRCFd_height"          value="DIRCPrism_height"/>
@@ -63,7 +54,7 @@
 
     <!-- Bar - Each DIRC box consists of N "bars" -->
     <!-- BarAssembly - Bars + Glue -->
-    <constant name="DIRCBarAssm_length"     value="DIRCMain_length - DIRCPrism_length - DIRCMirror_thickness - DIRCLens_thickness - DIRCFd_thickness" comment="Length of bars+glue assembly"/>
+    <constant name="DIRCBarAssm_length"     value="DIRC_length - DIRCPrism_length - DIRCMirror_thickness - DIRCLens_thickness - DIRCFd_thickness" comment="Length of bars+glue assembly"/>
     <constant name="DIRCBar_count"          value="10" comment="Number of bars per box"/>
     <constant name="DIRCBar_gap"            value="0.15 * mm"/>
     <constant name="DIRCBar_height"         value="17 * mm"/>
@@ -71,12 +62,6 @@
     <constant name="DIRCGlue_thickness"     value="0.05 * mm"/>
     <constant name="DIRCBar_length"         value="(DIRCBarAssm_length-4*DIRCGlue_thickness)/4"/>
 
-    <!-- dirc outer volume -->
-    <comment>
-      RMax is calculated according to "rectangle inside ring" problem solution
-      https://math.stackexchange.com/questions/4222684/calculate-rectangle-inside-ring-parameters/4222691#4222691
-    </comment>
-    <constant name="DIRC_rmax"              value="sqrt( (DIRC_rmin+DIRCPrism_height)^2 + 0.25*(DIRCPrism_height)^2 )"/>
   </define>
 
   <materials>
@@ -119,7 +104,7 @@
 
   <detectors>
     <detector id="BarrelDIRC_ID" name="cb_DIRC" type="epic_DIRC" readout="DIRCBarHits" vis="DIRCTube">
-      <dimensions rmin="DIRC_rmin" rmax="DIRC_rmax" length="DIRCMain_length" radius="DIRCRadius" dx="DIRCBars_DX" dy="DIRCBars_DY" number="DIRCNum" deltaphi="DIRCDPhi"/>
+      <dimensions rmin="DIRC_rmin" rmax="DIRC_rmax" length="DIRC_length" radius="DIRCRadius" dx="DIRCBars_DX" dy="DIRCBars_DY" number="DIRCNum" deltaphi="DIRCDPhi"/>
       <position x="0" y="0" z="DIRC_offset"/>
       <rotation theta="DIRC_rotation"/>
       <module name="DircBox" R="DIRCRadius" repeat="DIRCBox_count" width="DIRCPrism_width + 1*mm" height="DIRCPrism_height*2" length="DIRCBarAssm_length + 550*mm" vis="DIRCBox">
