@@ -75,7 +75,7 @@
       reflect="false">
       <position x="0" y="0" z="0"/>
       <dimensions
-        numsides="CaloSides"
+        numsides="HcalBarrelStavesN"
         zmin="EcalEndcapP_zmin"
         rmin="EcalEndcapP_rmax"
         rmax="HcalBarrel_rmax"/>
