@@ -105,6 +105,7 @@ jobs:
       with:
         name: build-fast-eic-shell
         path: install/
+    - uses: cvmfs-contrib/github-action-cvmfs@v3
     - uses: eic/run-cvmfs-osg-eic-shell@main
       with:
         platform-release: "jug_xl:nightly"
