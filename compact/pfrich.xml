@@ -14,17 +14,18 @@
 <constant name="PFRICH_wall_thickness"    value="0.5*cm"/>                                <!-- thickness of radial walls -->
 <constant name="PFRICH_window_thickness"  value="0.1*cm"/>                                <!-- thickness of entrance and exit walls -->
 <constant name="PFRICH_aerogel_thickness" value="3.0*cm"/>                                <!-- aerogel thickness -->
-<!-- sensor geometry -->
-<constant name="PFRICH_sensor_active_size_default" value="24.0*mm"/> <!-- sensor side length (effective area) -->
-<constant name="PFRICH_sensor_full_size_default"   value="25.8*mm"/> <!-- sensor side length (full size, with enclosure) -->
-<!-- lores values are used for global vizualizations _only_ -->
-<constant name="PFRICH_sensor_active_size_lores" value="PFRICH_sensor_active_size_default * 4"/>
-<constant name="PFRICH_sensor_full_size_lores"   value="PFRICH_sensor_full_size_default * 4"/>
-<!-- actual values used by the parametrization -->
-<constant name="PFRICH_sensor_active_size" value="PFRICH_sensor_active_size_default"/>
-<constant name="PFRICH_sensor_full_size"   value="PFRICH_sensor_full_size_default"/>
-<constant name="PFRICH_sensor_thickness"   value="1.5*mm"/> <!-- sensor thickness -->
-<constant name="PFRICH_num_px"             value="8"/> <!-- number of pixels along one side of the sensor -->
+<constant name="PFRICH_filter_thickness"  value="0.3*mm"/>                                <!-- filter thickness -->
+<!-- sensor geometry; model = S13361-3050NE-08 SiPM -->
+<!-- FIXME: change to LAPPD(?) -->
+<constant name="PFRICH_sensor_size_default"   value="25.8*mm"/>                               <!-- sensor side length (full size, with enclosure) -->
+<constant name="PFRICH_sensor_size_lores"     value="PFRICH_sensor_size_default * 4"/>        <!-- lores sensor size, used for global vizualizations _only_ -->
+<constant name="PFRICH_sensor_size"           value="PFRICH_sensor_size_default"/>
+<constant name="PFRICH_pixel_gap"             value="0.2*mm"/>                                <!-- size of gaps between adjacent pixels AND gaps between edge pixels and sensor side -->
+<constant name="PFRICH_sensor_sensitive_size" value="PFRICH_sensor_size - PFRICH_pixel_gap"/> <!-- side length of photosensitive surface (to be segmented) -->
+<constant name="PFRICH_sensor_thickness"      value="0.5*mm"/>
+<constant name="PFRICH_num_px"                value="8"/>                                     <!-- number of pixels along one side of the sensor -->
+<constant name="PFRICH_pixel_size"            value="3.0*mm"/>                                <!-- a single SiPM pixel size -->
+<constant name="PFRICH_pixel_pitch"           value="PFRICH_pixel_size + PFRICH_pixel_gap"/>  <!-- center-to-center distance between SiPMs in a 8x8 panel -->
 <!-- debugging switches -->
 <comment>
 - `PFRICH_debug_optics`: 1 = all components become vacuum; test opticalphotons from IP
@@ -51,7 +52,6 @@
   material="Aluminum"
   vis_vessel="DRICH_vessel_vis"
   vis_gas="DRICH_gas_vis"
-  debug_optics="PFRICH_debug_optics"
   >
 
 
@@ -90,15 +90,13 @@
 - dimensions:
   - `frontplane`: front of the aerogel, w.r.t. front plane of the vessel envelope
   - `rmin` and `rmax`: inner and outer radius (at the front plane; radial bounds are conical)
-  - `phiw`: azimuthal width of wedge
   - `thickness`: radiator thickness, defined separately for aerogel and filter
   - `pitch`: controls the angle of the radiator (0=vertical)
 </documentation>
 <radiator
-  frontplane="-PFRICH_window_thickness"
   rmin="PFRICH_rmin0 + PFRICH_wall_thickness + 0.2*cm"
   rmax="(PFRICH_rmax/PFRICH_zmax)*PFRICH_zmin + 8.0*cm"
-  phiw="60*degree"
+  frontplane="-PFRICH_window_thickness"
   pitch="0*degree"
   >
   <aerogel
@@ -109,7 +107,7 @@
   <filter
     material="Acrylic_DRICH"
     vis="DRICH_filter_vis"
-    thickness="0.3*mm"
+    thickness="PFRICH_filter_thickness"
     />
 </radiator>
 
@@ -125,11 +123,6 @@
 <!-- /detectors/detector/sensors/module -->
 <documentation level="10">
 ##### Sensor module
-- based on Hamamatsu S13361-3050AE-08
-  - effective area: 24.0 x 24.0 mm
-  - enclosure size: 25.8 x 25.8 mm
-  - pixel size: 3x3 mm (8x8 matrix)
-  - thickness: 1.5 mm
 - dimensions:
   - `side`: side length of the square module
   - `thickness`: thickness of the sensor module
@@ -138,12 +131,12 @@
     sensor placement algorithm will try to place as many as it can in the specified region
 </documentation>
 <module
-  material="Silicon"
-  surface="SensorSurface_PFRICH"
+  material="AirOptical"
+  surface="SensorSurface_DRICH"
   vis="DRICH_sensor_vis"
-  side="PFRICH_sensor_active_size"
+  side="PFRICH_sensor_sensitive_size"
   thickness="PFRICH_sensor_thickness"
-  gap="0.5*(PFRICH_sensor_full_size-PFRICH_sensor_active_size) + 0.5*mm"
+  gap="0.2*mm"
   />
 
 
@@ -179,29 +172,20 @@
 <documentation level="10">
 #### Readout
 - segmentation: square matrix of pixels
-  - `grid_size_x,y`: size of each sensor, but note we must divide sensor size
-    by 1 less than the number of pixels, to account for fenceposting
-  - `offset_x,y`: specified such that the `x` and `y` indicators are unsigned
-- indicators and `cellID` bits:
-
-  | indicator | offset | length |
-  |-----------|--------|--------|
-  | pfRICH ID | 0      | 8      |
-  | sensor    | 8      | 12     |
-  | x pixel   | 20     | 16     |
-  | y pixel   | 36     | 16     |
-
+  - `grid_size_x,y`: size of each sensor pixel
+  - `offset_x,y`: specified such that the `x` and `y` values are unsigned
+    (except for very rare hits on the sensor sides (FIXME))
 </documentation>
 <readouts>
   <readout name="PFRICHHits">
     <segmentation
       type="CartesianGridXY"
-      grid_size_x="PFRICH_sensor_active_size/(PFRICH_num_px-1)"
-      grid_size_y="PFRICH_sensor_active_size/(PFRICH_num_px-1)"
-      offset_x="-PFRICH_sensor_active_size/2.0"
-      offset_y="-PFRICH_sensor_active_size/2.0"
+      grid_size_x="PFRICH_pixel_pitch"
+      grid_size_y="PFRICH_pixel_pitch"
+      offset_x="-0.5*(PFRICH_num_px-1)*PFRICH_pixel_pitch"
+      offset_y="-0.5*(PFRICH_num_px-1)*PFRICH_pixel_pitch"
       />
-    <id>system:8,module:12,x:20:16,y:16</id>
+    <id>system:8,module:12,x:32:-16,y:-16</id>
   </readout>
 </readouts>
 

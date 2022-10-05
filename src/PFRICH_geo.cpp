@@ -49,8 +49,6 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
   auto   radiatorElem = detElem.child(_Unicode(radiator));
   double radiatorRmin = radiatorElem.attr<double>(_Unicode(rmin));
   double radiatorRmax = radiatorElem.attr<double>(_Unicode(rmax));
-  // FIXME unused
-  // double radiatorPhiw       = radiatorElem.attr<double>(_Unicode(phiw));
   double radiatorPitch      = radiatorElem.attr<double>(_Unicode(pitch));
   double radiatorFrontplane = radiatorElem.attr<double>(_Unicode(frontplane));
   // - aerogel
@@ -76,7 +74,7 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
   double sensorPlaneRmin = sensorPlaneElem.attr<double>(_Unicode(rmin));
   double sensorPlaneRmax = sensorPlaneElem.attr<double>(_Unicode(rmax));
   // - debugging switches
-  int debug_optics_mode = detElem.attr<int>(_Unicode(debug_optics));
+  long debug_optics_mode = desc.constantAsLong("PFRICH_debug_optics");
 
   // if debugging optics, override some settings
   bool debug_optics = debug_optics_mode > 0;
