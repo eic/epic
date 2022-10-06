@@ -401,7 +401,6 @@ Examples:
 
     <documentation>
       ## Tracking Detector Parameters
-
     </documentation>
 
     <documentation>
@@ -548,8 +547,9 @@ Service gaps in FW direction (before endcapP ECAL) and BW direction (before endc
     <constant name="DIRCBackward_zmax"          value="287*cm"/>
     <constant name="DIRC_length"                value="DIRCForward_zmax + DIRCBackward_zmax"/>
     <constant name="DIRC_offset"                value="(DIRCForward_zmax - DIRCBackward_zmax)/2"/>
-    <constant name="DIRC_rmin"                  value="CentralTrackingRegion_rmax"/>
+    <constant name="DIRC_rmin"                  value="70*cm"/> <!--support starts at r= 65cm, was CentralTrackingRegion_rmax, 70 cm starts DIRC Bars-->
     <constant name="DIRC_rmax"                  value="DIRC_rmin + BarrelPIDRegion_thickness"/>
+    <constant name="DIRCBar_thickness"             value="3*cm"/> <!--DIRC bar thickness--> 
 
     <documentation>
       ## Hadronic Calorimeter Parameters

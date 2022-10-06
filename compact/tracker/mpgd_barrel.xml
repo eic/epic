@@ -36,14 +36,16 @@
     <constant name="InnerMPGDBarrelLayer_rmin"              value="InnerMPGDBarrelMod_rmin - InnerMPGDBarrelLayer_thickness / 2.0"/>
     <constant name="InnerMPGDBarrelLayer_rmax"              value="InnerMPGDBarrelLayer_rmin + InnerMPGDBarrelLayer_thickness"/>
 
-    <constant name="OuterMPGDBarrelMod_zmin1"               value="CentralTrackingRegionP_zmax" />
-    <constant name="OuterMPGDBarrelMod_zmin2"               value="OuterMPGDBarrelMod_rmin / tan(TrackerBackwardAngle)" />
+    <constant name="OuterMPGDBarrelMod_zmin1"               value="145*cm" />
+    <constant name="OuterMPGDBarrelMod_zmin2"               value="197*cm" />
+    <!--<constant name="OuterMPGDBarrelMod_zmin1"               value="CentralTrackingRegionP_zmax" />-->
+    <!--<constant name="OuterMPGDBarrelMod_zmin2"               value="OuterMPGDBarrelMod_rmin / tan(TrackerBackwardAngle)" />-->
     <constant name="OuterMPGDBarrelMod_length"              value="OuterMPGDBarrelMod_zmin1 + OuterMPGDBarrelMod_zmin2" />
     <constant name="OuterMPGDBarrelMod_zoffset"             value="(OuterMPGDBarrelMod_zmin1 - OuterMPGDBarrelMod_zmin2)/2" />
     <constant name="OuterMPGDBarrelLayer_length"            value="OuterMPGDBarrelMod_length + 1*um" />
     <constant name="OuterMPGDBarrelLayer_thickness"         value="2*cm" />
-    <constant name="OuterMPGDBarrelLayer_rmin"              value="OuterMPGDBarrelMod_rmin - OuterMPGDBarrelLayer_thickness / 2.0"/>
-    <constant name="OuterMPGDBarrelLayer_rmax"              value="OuterMPGDBarrelLayer_rmin + OuterMPGDBarrelLayer_thickness"/>
+    <constant name="OuterMPGDBarrelLayer_rmin"              value="OuterMPGDBarrelMod_rmin"/>
+    <constant name="OuterMPGDBarrelLayer_rmax"              value="OuterMPGDBarrelMod_rmin + OuterMPGDBarrelLayer_thickness"/>
 
     <comment> MMGAS tracker parameters </comment>
     <constant name="MMKaptonOverlay_thickness"              value="50*um"/>
@@ -145,7 +147,7 @@
           z_length="OuterMPGDBarrelLayer_length"
           z0="OuterMPGDBarrelMod_zoffset"/>
         <layer_material surface="inner" binning="binPhi,binZ" bins0="MPGDBarrelStave_count" bins1="100" />
-        <rphi_layout phi_tilt="0" nphi="MPGDBarrelStave_count" phi0="0.0" rc="OuterMPGDBarrelMod_rmin" dr="0.0 * mm"/>
+	<rphi_layout phi_tilt="0" nphi="MPGDBarrelStave_count" phi0="0.0" rc="OuterMPGDBarrelMod_rmin + OuterMPGDBarrelLayer_thickness/2" dr="0.0 * mm"/>
         <z_layout dr="0.0 * mm" z0="0.0 * mm" nz="1"/>
       </layer>
     </detector>
