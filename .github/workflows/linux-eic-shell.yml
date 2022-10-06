@@ -132,6 +132,24 @@ jobs:
         sudo apt-get install -y libxml2-utils
         find install/share -name "*.xml" -exec xmllint {} \; > /dev/null
 
+  check-tracking-geometry:
+    runs-on: ubuntu-latest
+    needs: build-test
+    steps:
+    - uses: actions/checkout@v3
+    - uses: actions/download-artifact@v3
+      with:
+        name: build-fast-eic-shell
+        path: install/
+    - uses: cvmfs-contrib/github-action-cvmfs@v3
+    - uses: eic/run-cvmfs-osg-eic-shell@main
+      with:
+        platform-release: "jug_xl:nightly"
+        setup: install/setup.sh
+        run: |
+          root -b -q "scripts/test_ACTS.cxx+(\"${DETECTOR_PATH}/${DETECTOR_CONFIG}.xml\")" | tee check_tracking_geometry.out
+          bin/acts_geo_check check_tracking_geometry.out
+
   convert-to-gdml:
     runs-on: ubuntu-latest
     needs: build-test
