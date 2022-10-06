@@ -94,7 +94,7 @@
   <readouts>
     <readout name="EcalBarrelHits">
       <segmentation type="NoSegmentation"/>
-      <id>system:8,module:8,slice:8,tower:-8</id>
+      <id>system:8,sector:8,module:8,slice:-8</id>
     </readout>
   </readouts>
 </lccdd>
