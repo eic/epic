@@ -508,17 +508,28 @@ Service gaps in FW direction (before endcapP ECAL) and BW direction (before endc
   <documentation level="3">
 ## Calorimeter Parameters
   </documentation>
-    <constant name="CaloSides"                      value="12"/>
+    <constant name="EcalBarrelStavesN"              value="24"/>
+
     <constant name="EcalEndcapP_zmin"               value="ForwardServiceGap_zmax" />
     <constant name="EcalEndcapP_length"             value="30*cm" />
     <constant name="EcalEndcapP_zmax"               value="EcalEndcapP_zmin + EcalEndcapP_length"/>
     <constant name="EcalEndcapP_rmin"               value="200.0*mm" />
     <comment> extra 50cm rmax that "protrudes" into the HCAL</comment>
     <constant name="EcalEndcapP_rmax"               value="floor(Eta1_1_tan * EcalEndcapP_zmin)"/>
+    <constant name="EcalEndcapP_numLayers"          value="1"/>
+
+    <constant name="EcalEndcapPInsert_zmin"                   value="EcalEndcapP_zmin"/>
+    <constant name="EcalEndcapPInsert_xposition"              value="-10*cm"/>
+    <constant name="EcalEndcapPInsert_width"                  value="60.*cm"/>
+    <constant name="EcalEndcapPInsert_height"                 value="60.*cm"/>
+    <constant name="EcalEndcapPInsert_numLayers"              value="1"/>
+    <constant name="EcalEndcapPInsert_opening_hole_radius"    value="15.*cm"/>
+    <constant name="EcalEndcapPInsert_final_hole_radius"      value="15.*cm"/>
 
     <constant name="EcalEndcapN_zmin"               value="BackwardPIDRegion_zmin + BackwardInnerEndcapRegion_length"/>
     <constant name="EcalEndcapN_length"             value="60*cm" />
     <constant name="EcalEndcapN_zmax"               value="EcalEndcapN_zmin + EcalEndcapN_length"/>
+
     <comment>
       rmin1: rmin round electron pipe (ignoring the hadron pipe)
       rmin2: rmin around both beam pipes
@@ -554,6 +565,7 @@ Service gaps in FW direction (before endcapP ECAL) and BW direction (before endc
       ## Hadronic Calorimeter Parameters
     </documentation>
 
+    <constant name="HcalBarrelStavesN"          value="12"/>
     <constant name="HcalEndcapP_zmin"     value="EcalEndcapP_zmin + EcalEndcapP_length"/>
     <constant name="HcalEndcapP_length"   value="120.0*cm"/>
     <constant name="HcalEndcapP_zmax"     value="HcalEndcapP_zmin + HcalEndcapP_length"/>
