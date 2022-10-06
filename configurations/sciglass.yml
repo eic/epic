@@ -3,8 +3,7 @@ features:
   tracking:
   pid:
     dirc:
-    # mrich: # TEMPORARY, FOR TESTING
-    pfrich:
+    mrich:
     drich:
       #SJJ: disabled as it needs re-integrating with the tracker
       #    tof_barrel:
