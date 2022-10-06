@@ -50,7 +50,7 @@
   </define>
 
   <includes>
-    <gdmlFile ref="${DETECTOR_PATH}/compact/elements.xml"/>
+    <gdmlFile ref="${DD4hepINSTALL}/DDDetectors/compact/elements.xml"/>
     <gdmlFile ref="${DETECTOR_PATH}/compact/materials.xml"/>
     <file     ref="${DETECTOR_PATH}/compact/optical_materials.xml"/>
   </includes>
@@ -142,10 +142,10 @@
   <documentation level="10">
     ## Central EM calorimetry
   </documentation>
-  {% if features is not defined or features['ecal'] is none or 'forward_scifi' in features['ecal'] %}
+  {% if features is not defined or features['ecal'] is none or 'forward_homogeneous' in features['ecal'] %}
+  <include ref="${DETECTOR_PATH}/compact/ecal_forward_homogeneous.xml"/>
+  {% elif 'forward_scifi' in features['ecal'] -%}
   <include ref="${DETECTOR_PATH}/compact/ecal_forward_scfi.xml"/>
-  {% elif 'forward_homogenous' in features['ecal'] -%}
-  <include ref="${DETECTOR_PATH}/compact/ecal_forward_homogenous.xml"/>
   {% endif -%}
 
   {% if features is not defined or features['ecal'] is none or 'backward_PbWO4' in features['ecal'] %}
