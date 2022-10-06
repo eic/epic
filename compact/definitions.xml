@@ -423,7 +423,7 @@ Examples:
     </documentation>
 
     <constant name="CentralTrackingRegion_rmax"   value="715.0*mm" />
-    <constant name="CentralTrackingRegionP_zmax"  value="1730.0*mm" />
+    <constant name="CentralTrackingRegionP_zmax"  value="1800.0*mm" />
     <constant name="CentralTrackingRegionN_zmax"  value="1474.7*mm" />
     <constant name="CentralTrackingRegion_length" value="CentralTrackingRegionP_zmax + CentralTrackingRegionN_zmax" />
     <comment>
@@ -439,12 +439,12 @@ Examples:
 
     <comment> Global PID regions with suballocations for TOF and RICH detectors </comment>
     <constant name="ForwardPIDRegion_zmin"        value="CentralTrackingRegionP_zmax" />
-    <constant name="ForwardPIDRegion_length"      value="142.0*cm" />
+    <constant name="ForwardPIDRegion_length"      value="135.0*cm" />
     <constant name="ForwardPIDRegion_rmax"        value="180.0*cm" />
 
     <comment> Forward TOF region currenlty empty for future upgrades </comment>
     <constant name="ForwardTOFRegion_zmin"        value="ForwardPIDRegion_zmin" />
-    <constant name="ForwardTOFRegion_length"      value="22.0*cm" />
+    <constant name="ForwardTOFRegion_length"      value="15.0*cm" />
     <constant name="ForwardTOFRegion_rmax"        value="CentralTrackingRegion_rmax" />
     <constant name="ForwardTOFRegion_tan"         value="CentralTrackingRegionP_tan" />
 
@@ -492,7 +492,7 @@ Examples:
 
 Service gaps in FW direction (before endcapP ECAL) and BW direction (before endcapN HCAL)
     </documentation>
-    <constant name="ForwardServiceGap_length"     value="8.0*cm"/>
+    <constant name="ForwardServiceGap_length"     value="10.0*cm"/>
     <constant name="ForwardServiceGap_zmin"       value="ForwardPIDRegion_zmin + ForwardInnerEndcapRegion_length"/>
     <constant name="ForwardServiceGap_zmax"       value="ForwardServiceGap_zmin + ForwardServiceGap_length"/>
 
