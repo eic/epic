@@ -239,7 +239,6 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
         widthLayer_SH[i_slice] = getAttrOrDefault(x_slice, _Unicode(width), 0.);
         offsetLayer_SH[i_slice] = getAttrOrDefault(x_slice, _Unicode(offset), 0.);
         lengthLayer_SH[i_slice] = getAttrOrDefault(x_slice, _Unicode(length), 0.);
-        // std::cout << "SH: " << strLayerName_SH[i_slice] << "\tthick: " << thicknessLayer_SH[i_slice] << "\twidth: " << widthLayer_SH[i_slice] << "\toffset: " << offsetLayer_SH[i_slice] << "\tlength: " << lengthLayer_SH[i_slice] << std::endl;
       }
     }
 
