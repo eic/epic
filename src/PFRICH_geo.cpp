@@ -126,9 +126,10 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
    * - some `PFRICH_RECON_*` constants are redundant, but are defined to make
    *   it clear that the reconstruction code depends on them
    */
-  desc.add(Constant("PFRICH_RECON_zmin",           std::to_string(vesselZmin)));
-  desc.add(Constant("PFRICH_RECON_gasvolMaterial", gasvolMat.ptr()->GetName(), "string"));
-  desc.add(Constant("PFRICH_RECON_cellMask",       std::to_string(cellMask)));
+  desc.add(Constant("PFRICH_RECON_zmin",             std::to_string(vesselZmin)));
+  desc.add(Constant("PFRICH_RECON_gasvolMaterial",  gasvolMat.ptr()->GetName(), "string"));
+  desc.add(Constant("PFRICH_RECON_cellMask",        std::to_string(cellMask)));
+  desc.add(Constant("PFRICH_RECON_sensorThickness", std::to_string(sensorThickness)));
 
   // BUILD VESSEL //////////////////////////////////////
   /* - `vessel`: aluminum enclosure, the mother volume of the pfRICH
