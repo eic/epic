@@ -259,7 +259,8 @@ The unused IDs below are saved for future use.
     <constant name="ZDC_PbSi_ID"                 value="166"/>
     <constant name="ZDC_PbSci_ID"                value="167"/>
     <constant name="VacuumMagnetElement_1_ID"        value="168"/>
-
+    <constant name="B0ECal_ID" value="169"/>
+    
     <documentation>
       #### (170-189) Far Forward Beamline Magnets
     </documentation>
