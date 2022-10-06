@@ -38,17 +38,16 @@ Weight: Calculated as 30% silicon(balance is air & support system)"
 ,HD Time of Flight/Tracker,,6.10.03,,,,,,,,,AC/LGAD,"Offset: measured from face nearest to interaction point
 Weight: based on parametric estimate from SBS Gem"
 ,Silicon Tracker,,6.10.03,,,,,,,,,MAPS,Weight: calculated as 3% aluminum and 3% silicon (balance is air)
+,Modular RICH,,6.10.04,{{MRICH_length}},{{MRICH_rmin}},{{MRICH_rmax}},,-{{MRICH_zmin}},,,,Aerogel,"Offset: measured from face nearest to interaction point
+Weight: based on parametric estimate from CLAS LTCC"
 {% if false %}
-{# 
-  FIXME: stupid workaround; need to figure out how to have both PFRICH and MRICH
+{# FIXME: Disable pfRICH, since we need to figure out how to have both PFRICH and MRICH
   simultaneously (idea: make some configurations/.yml file that includes EVERYTHING, so
   ALL constants can be written to constants.toml using this config)
 #}
-,Modular RICH,,6.10.04,{{MRICH_length}},{{MRICH_rmin}},{{MRICH_rmax}},,-{{MRICH_zmin}},,,,Aerogel,"Offset: measured from face nearest to interaction point
-Weight: based on parametric estimate from CLAS LTCC"
-{% endif %}
 ,Proximity Focusing RICH,Alternative Technology to mRICH,6.10.04,{{PFRICH_Length}},{{PFRICH_rmin0}},{{PFRICH_rmax}},,{{PFRICH_zmin}},{{PFRICH_zmin-PFRICH_Length}},,,Aerogel/Gas,"Offset: measured from face nearest to interaction point
 Weight: based on parametric estimate from CLAS LTCC"
+{% endif %}
 ,LD Time of Flight/Tracker,,6.10.03,,,,,,,,,AC/LGAD,"Offset: measured from face nearest to interaction point
 Weight: based on parametric estimate from SBS Gem"
 ,LD EMCal,,6.10.05,{{EcalEndcapN_length}},{{EcalEndcapN_rmin}},{{EcalEndcapN_rmax}},,-{{EcalEndcapN_zmin}},-{{EcalEndcapN_zmax}},,,PbWO4,"Offset: measured from face nearest to interaction point
