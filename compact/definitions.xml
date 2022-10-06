@@ -549,7 +549,7 @@ Service gaps in FW direction (before endcapP ECAL) and BW direction (before endc
     <constant name="DIRC_offset"                value="(DIRCForward_zmax - DIRCBackward_zmax)/2"/>
     <constant name="DIRC_rmin"                  value="70*cm"/> <!--support starts at r= 65cm, was CentralTrackingRegion_rmax, 70 cm starts DIRC Bars-->
     <constant name="DIRC_rmax"                  value="DIRC_rmin + BarrelPIDRegion_thickness"/>
-    <constant name="DIRCBar_thickness"             value="3*cm"/> <!--DIRC bar thickness--> 
+    <constant name="DIRC_thickness"             value="3*cm"/> <!-- DIRC bar box thickness, not expansion volumes --> 
 
     <documentation>
       ## Hadronic Calorimeter Parameters
