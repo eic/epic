@@ -52,7 +52,7 @@
     </documentation>
     <detector id="ECalEndcapP_ID"
       name="EcalEndcapP"
-      type="epic_EndcapCalorimeterWithInsert"
+      type="epic_EndcapCalorimeterWithInsertCutout"
       readout="EcalEndcapPHits">
       <position x="0" y="0" z="EcalEndcapP_zmin"/>
       <dimensions
