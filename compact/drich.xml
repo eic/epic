@@ -11,7 +11,7 @@
 <constant name="DRICH_wall_thickness"     value="0.5*cm"/>  <!-- thickness of radial walls -->
 <constant name="DRICH_window_thickness"   value="0.1*cm"/>  <!-- thickness of entrance and exit walls -->
 <!-- snout geometry: cone with front radius rmax0 and back radius of rmax1 -->
-<constant name="DRICH_rmax0"              value="110.0*cm"/>
+<constant name="DRICH_rmax0"              value="95.0*cm"/>
 <constant name="DRICH_SnoutLength"        value="20.0*cm"/>
 <constant name="DRICH_SnoutSlope"         value="DRICH_rmax0 / DRICH_zmin"/> <!-- TODO: increase slope to allow more space for aerogel cones ? -->
 <constant name="DRICH_rmax1"              value="DRICH_rmax0 + DRICH_SnoutLength * DRICH_SnoutSlope"/>
