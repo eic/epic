@@ -522,21 +522,13 @@ Service gaps in FW direction (before endcapP ECAL) and BW direction (before endc
     <constant name="EcalEndcapP_rmax"               value="floor(Eta1_1_tan * EcalEndcapP_zmin)"/>
     <constant name="EcalEndcapP_numLayers"          value="1"/>
 
-    <constant name="EcalEndcapPInsert_zmin"                   value="EcalEndcapP_zmin"/>
-    <constant name="EcalEndcapPInsert_xposition"              value="-10*cm"/>
-    <constant name="EcalEndcapPInsert_width"                  value="60.*cm"/>
-    <constant name="EcalEndcapPInsert_height"                 value="60.*cm"/>
-    <constant name="EcalEndcapPInsert_numLayers"              value="1"/>
-    <constant name="EcalEndcapPInsert_opening_hole_radius"    value="15.*cm"/>
-    <constant name="EcalEndcapPInsert_final_hole_radius"      value="15.*cm"/>
-
     <constant name="EcalEndcapPInsert_zmin"           value="EcalEndcapP_zmin"/>
     <constant name="EcalEndcapPInsert_length"         value="EcalEndcapP_length"/>
     <constant name="EcalEndcapPInsert_zmax"           value="EcalEndcapPInsert_zmin + EcalEndcapPInsert_length"/>
-    <constant name="EcalEndcapPInsert_xposition"      value="-10.0*cm"/>
-    <constant name="EcalEndcapPInsert_yposition"      value="0.0*cm"/>
     <constant name="EcalEndcapPInsert_width"          value="60.0*cm"/>
     <constant name="EcalEndcapPInsert_height"         value="60.0*cm"/>
+    <constant name="EcalEndcapPInsert_xposition"      value="-10.0*cm"/>
+    <constant name="EcalEndcapPInsert_yposition"      value="0.0*cm"/>
     <constant name="EcalEndcapPInsert_hole_radius"    value="14.67*cm"/>
     <constant name="EcalEndcapPInsert_hole_xposition" value="-7.29*cm"/>
     <constant name="EcalEndcapPInsert_hole_yposition" value="0.0*cm"/>
