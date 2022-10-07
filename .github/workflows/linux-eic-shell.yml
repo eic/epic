@@ -233,33 +233,6 @@ jobs:
           noverlaps="$(grep -c ovlp doc/overlap_check_tgeo.out || true)"
           if [[ "${noverlaps}" -gt "0" ]] ; then echo "${noverlaps} overlaps found!" && false ; fi
 
-  check-geometry-fast:
-    runs-on: ubuntu-latest
-    needs: build-test
-    if: github.ref == 'refs/heads/main'
-    steps:
-    - uses: actions/checkout@v3
-    - uses: actions/download-artifact@v3
-      with:
-        name: build-fast-eic-shell
-        path: install/
-    - uses: cvmfs-contrib/github-action-cvmfs@v3
-    - uses: eic/run-cvmfs-osg-eic-shell@main
-      with:
-        platform-release: "jug_xl:nightly"
-        setup: install/setup.sh
-        run: |
-          mkdir -p doc
-          checkGeometry -f true -c ${DETECTOR_PATH}/${DETECTOR_CONFIG}.xml | tee geometry_check_fast.out
-          mv statistics.root geometry_check_fast.root
-    - uses: actions/upload-artifact@v3
-      with:
-        name: check-geometry-fast
-        path: |
-          geometry_check_fast.out
-          geometry_check_fast.root
-        if-no-files-found: error
-
   check-geometry-full:
     runs-on: ubuntu-latest
     needs: build-test
