@@ -152,6 +152,10 @@
   <include ref="${DETECTOR_PATH}/compact/ecal_forward_scfi.xml"/>
   {% endif -%}
 
+  {% if features is not defined or features['ecal'] is none or 'forward_insert' in features['ecal'] %}
+  <include ref="${DETECTOR_PATH}/compact/ecal_forward_insert_homogeneous.xml"/>
+  {% endif -%}
+
   {% if features is not defined or features['ecal'] is none or 'backward_PbWO4' in features['ecal'] %}
   <include ref="${DETECTOR_PATH}/compact/ecal_backward_PbWO4.xml"/>
   {% elif 'backward_hybrid' in features['ecal'] -%}

@@ -43,7 +43,7 @@
     <detector
       id="HCalEndcapP_ID"
       name="HcalEndcapP"
-      type="epic_EndcapCalorimeterWithInsert"
+      type="epic_EndcapCalorimeterWithInsertCutout"
       readout="HcalEndcapPHits"
       vis="HcalEndcapVis"
       calorimeterType="HAD_ENDCAP">
