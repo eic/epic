@@ -83,7 +83,7 @@
         <slice material="Air" thickness="HcalEndcapPInsertAirThickness"/>
       </layer>
       <comment> Steel/Sc layers </comment>
-      <layer repeat="HcalEndcapPInsertLayer_NSteelRepeat" thickness = "HcalEndcapPInsertSingleLayerThickness">
+      <layer repeat="HcalEndcapPInsertLayer_NSteelRepeat" thickness="HcalEndcapPInsertSingleLayerThickness">
         <slice material="Steel235" thickness="HcalEndcapPInsertAbsorberThickness" />
         <slice material="Air" thickness="HcalEndcapPInsertAirThickness"/>
         <slice material="Aluminum" thickness="HcalEndcapPInsertScintillatorCoverThickness"/>
