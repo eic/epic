@@ -72,7 +72,7 @@
       <constant name="backplate_thickness" value="HcalEndcapPInsertBackplateThickness"/>
       <comment> Tungsten/Scintillator layers </comment>
       <comment> Slices will be ordered according to the slice order listed here </comment>
-      <layer repeat= "HcalEndcapPInsertLayer_NTungstenRepeat" thickness = "HcalEndcapPInsertSingleLayerThickness">
+      <layer repeat="HcalEndcapPInsertLayer_NTungstenRepeat" thickness="HcalEndcapPInsertSingleLayerThickness">
         <slice material="Tungsten" thickness="HcalEndcapPInsertAbsorberThickness"/>
         <slice material="Air" thickness="HcalEndcapPInsertAirThickness"/>
         <slice material="Aluminum" thickness="HcalEndcapPInsertScintillatorCoverThickness"/>
