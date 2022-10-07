@@ -10,6 +10,7 @@
 #include <cstdlib>
 #include <filesystem>
 #include <iostream>
+#include <regex>
 #include <string>
 
 namespace fs = std::filesystem;
@@ -17,26 +18,32 @@ namespace fs = std::filesystem;
 using namespace dd4hep;
 
 // Function to download files
-inline void EnsureFileFromURLExists(std::string url, std::string file, std::string cache = "",
+inline void EnsureFileFromURLExists(std::string url, std::string file, std::string cache_str = "",
                                     std::string cmd = "curl --retry 5 -f {0} -o {1}")
 {
   // parse cache for environment variables
   auto pos = std::string::npos;
-  while ((pos = cache.find('$')) != std::string::npos) {
-    auto after = cache.find_first_not_of("ABCDEFGHIJKLMNOPQRSTUVWXYZ"
-                                         "abcdefghijklmnopqrstuvwxyz"
-                                         "0123456789"
-                                         "_",
-                                         pos + 1);
+  while ((pos = cache_str.find('$')) != std::string::npos) {
+    auto after = cache_str.find_first_not_of("ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+                                             "abcdefghijklmnopqrstuvwxyz"
+                                             "0123456789"
+                                             "_",
+                                             pos + 1);
     if (after == std::string::npos)
-      after = cache.size(); // cache ends on env var
-    const std::string env_name(cache.substr(pos + 1, after - pos - 1));
+      after = cache_str.size(); // cache ends on env var
+    const std::string env_name(cache_str.substr(pos + 1, after - pos - 1));
     auto              env_ptr = std::getenv(env_name.c_str());
     const std::string env_value(env_ptr != nullptr ? env_ptr : "");
-    cache.erase(pos, after - pos);
-    cache.insert(pos, env_value);
+    cache_str.erase(pos, after - pos);
+    cache_str.insert(pos, env_value);
     printout(INFO, "FileLoader", "$" + env_name + " -> " + env_value);
   }
+
+  // tokenize cache on regex
+  std::regex cache_sep(":");
+  std::sregex_token_iterator cache_iter(cache_str.begin(), cache_str.end(), cache_sep, -1);
+  std::sregex_token_iterator cache_end;
+  std::vector<std::string> cache_vec(cache_iter, cache_end);
 
   // create file path
   fs::path file_path(file);
@@ -63,30 +70,35 @@ inline void EnsureFileFromURLExists(std::string url, std::string file, std::stri
 
   // if hash does not exist, we try to retrieve file from cache
   if (!fs::exists(hash_path)) {
-    // recursive loop into cache directory
-    fs::path cache_path(cache);
-    printout(INFO, "FileLoader", "Cache " + cache_path.string());
-    if (fs::exists(cache_path)) {
-      for (auto const& dir_entry : fs::recursive_directory_iterator(cache_path)) {
-        if (!dir_entry.is_directory())
-          continue;
-        fs::path cache_dir_path = cache_path / dir_entry;
-        printout(INFO, "FileLoader", "Checking " + cache_dir_path.string());
-        fs::path cache_hash_path = cache_dir_path / hash;
-        if (fs::exists(cache_hash_path)) {
-          // symlink hash to cache/.../hash
-          printout(INFO, "FileLoader", "File " + file + " with hash " + hash + " found in " + cache_hash_path.string());
-          try {
-            fs::create_symlink(cache_hash_path, hash_path);
-          } catch (const fs::filesystem_error&) {
-            printout(ERROR, "FileLoader",
-                     "unable to link from " + hash_path.string() + " to " + cache_hash_path.string());
-            printout(ERROR, "FileLoader", "check permissions and retry");
-            std::_Exit(EXIT_FAILURE);
+    // recursive loop into cache directories
+    bool success = false;
+    for (auto cache : cache_vec) {
+      fs::path cache_path(cache);
+      printout(INFO, "FileLoader", "Cache " + cache_path.string());
+      if (fs::exists(cache_path)) {
+        for (auto const& dir_entry : fs::recursive_directory_iterator(cache_path)) {
+          if (!dir_entry.is_directory())
+            continue;
+          fs::path cache_dir_path = cache_path / dir_entry;
+          printout(INFO, "FileLoader", "Checking " + cache_dir_path.string());
+          fs::path cache_hash_path = cache_dir_path / hash;
+          if (fs::exists(cache_hash_path)) {
+            // symlink hash to cache/.../hash
+            printout(INFO, "FileLoader", "File " + file + " with hash " + hash + " found in " + cache_hash_path.string());
+            try {
+              fs::create_symlink(cache_hash_path, hash_path);
+              success = true;
+            } catch (const fs::filesystem_error&) {
+              printout(ERROR, "FileLoader",
+                       "unable to link from " + hash_path.string() + " to " + cache_hash_path.string());
+              printout(ERROR, "FileLoader", "check permissions and retry");
+              std::_Exit(EXIT_FAILURE);
+            }
+            break;
           }
-          break;
         }
       }
+      if (success) break;
     }
   }
 
