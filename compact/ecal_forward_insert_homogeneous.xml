@@ -23,7 +23,7 @@
     </documentation>
 
     <constant name="EcalEndcapPInsertSingleLayerThickness"
-      value = "EcalEndcapPInsertCoverThickness +
+      value="EcalEndcapPInsertCoverThickness +
                EcalEndcapPInsertAirThickness +
                EcalEndcapPInsertPCBThickness +
                EcalEndcapPInsertLightGuideThickness +
