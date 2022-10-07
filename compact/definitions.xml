@@ -185,7 +185,7 @@ The unused IDs below are saved for future use.
       - EndcapP  subassembly ID: 112
       - EndcapN  subassembly ID: 113
 
-      - Unused IDs: 115-119
+      - Unused IDs: 116-119
     </documentation>
     <constant name="HCalSubAssembly_ID" value="110"/>
     <constant name="HCalBarrel_ID"      value="111"/>
