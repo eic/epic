@@ -166,7 +166,7 @@ The unused IDs below are saved for future use.
       Crystal  subassembly ID: 104
       Barrel2  subassembly ID: 105
 
-      Unused IDs: 106-109
+      Unused IDs: 107-109
 
     </documentation>
     <constant name="ECalSubAssembly_ID"   value="100"/>
