@@ -329,6 +329,7 @@
     <field type="epic_FieldMapBrBz" name="GlobalSolenoid" field_type="magnetic"
            field_map="fieldmaps/sPHENIX.2d.dat"
            url="https://eicweb.phy.anl.gov/EIC/detectors/ecce/uploads/f8d8ab9f8d8353a84862584bf1d2d27f/sPHENIX.2d.dat"
+           cache="$DETECTOR_PATH"
            scale="1.0">
       <dimensions>
         <transverse step="2.0*cm" rmin="0*cm" rmax="300*cm" />
