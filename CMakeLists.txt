@@ -135,7 +135,7 @@ install(DIRECTORY calibrations/
 # Handle ECCE compatibility mode
 if(EPIC_ECCE_LEGACY_COMPAT)
   install(CODE "execute_process(COMMAND ${CMAKE_COMMAND} -E create_symlink ./${PROJECT_NAME} ${CMAKE_INSTALL_PREFIX}/share/ecce)")
-  set(EPIC_ECCE_ORIGINAL_CONFIGURATIONS 18x275 calorimeters central dirc_only drich_only full imaging inner_detector ip6 pfrich_only pid_only sciglass tof_only tracking_only vertex_only)
+  set(EPIC_ECCE_ORIGINAL_CONFIGURATIONS arches brycecanyon 18x275 calorimeters central dirc_only drich_only full imaging inner_detector ip6 pfrich_only pid_only sciglass tof_only tracking_only vertex_only)
   install(CODE "execute_process(COMMAND ${CMAKE_COMMAND} -E create_symlink ./${PROJECT_NAME}.xml ${CMAKE_INSTALL_PREFIX}/share/ecce/ecce.xml)")
   foreach(ecce_configuration ${EPIC_ECCE_ORIGINAL_CONFIGURATIONS})
     install(CODE "execute_process(COMMAND ${CMAKE_COMMAND} -E create_symlink ./${PROJECT_NAME}_${ecce_configuration}.xml ${CMAKE_INSTALL_PREFIX}/share/ecce/ecce_${ecce_configuration}.xml)")
