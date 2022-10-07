@@ -40,6 +40,11 @@
     <composite n="19" ref="C"/>
     <composite n="21" ref="H"/>
   </material>
+  <material name="Water">
+    <D value="1.00" unit="g/cm3"/>
+    <composite n="1" ref="O"/>
+    <composite n="2" ref="H"/>
+  </material>
   <material name="Steel235">
     <D value="7.85" unit="g/cm3"/>
     <fraction n="0.998" ref="Fe"/>
@@ -86,6 +91,11 @@
     <D type="density" value="3.89" unit="g/cm3"/>
     <composite n="2" ref="Al"/>
     <composite n="3" ref="O"/>
+  </material>
+  <material name="AluminumNitrate">
+    <D type="density" value="3.255" unit="g/cm3"/>
+    <composite n="1" ref="Al"/>
+    <composite n="1" ref="N"/>
   </material>
   <material name="ArsenicOxide">
     <D type="density" value="3.738" unit="g/cm3"/>
