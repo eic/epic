@@ -446,8 +446,11 @@ Examples:
     <comment> Forward TOF region currenlty empty for future upgrades </comment>
     <constant name="ForwardTOFRegion_zmin"        value="ForwardPIDRegion_zmin" />
     <constant name="ForwardTOFRegion_length"      value="22.0*cm" />
-    <constant name="ForwardTOFRegion_rmax"        value="CentralTrackingRegion_rmax" />
     <constant name="ForwardTOFRegion_tan"         value="CentralTrackingRegionP_tan" />
+    <constant name="ForwardTOFRegion_minR"            value="8*cm" />
+    <constant name="ForwardTOFRegion_maxR"            value="67*cm" />
+    <constant name="ForwardTOF_xOffset"         value="-2.75*cm" />
+    <constant name="ForwardTOF_det_height"      value="2.0*cm" />
 
     <comment> Forward RICH region </comment>
     <constant name="ForwardRICHRegion_zmin"       value="ForwardTOFRegion_zmin + ForwardTOFRegion_length" />
@@ -509,7 +512,7 @@ Service gaps in FW direction (before endcapP ECAL) and BW direction (before endc
   <documentation level="3">
 ## Calorimeter Parameters
   </documentation>
-    <constant name="CaloSides"                      value="12"/>
+    <constant name="EcalBarrelStavesN"              value="24"/>
 
     <constant name="EcalEndcapP_zmin"               value="ForwardServiceGap_zmax" />
     <constant name="EcalEndcapP_length"             value="30*cm" />
@@ -517,6 +520,15 @@ Service gaps in FW direction (before endcapP ECAL) and BW direction (before endc
     <constant name="EcalEndcapP_rmin"               value="200.0*mm" />
     <comment> extra 50cm rmax that "protrudes" into the HCAL</comment>
     <constant name="EcalEndcapP_rmax"               value="floor(Eta1_1_tan * EcalEndcapP_zmin)"/>
+    <constant name="EcalEndcapP_numLayers"          value="1"/>
+
+    <constant name="EcalEndcapPInsert_zmin"                   value="EcalEndcapP_zmin"/>
+    <constant name="EcalEndcapPInsert_xposition"              value="-10*cm"/>
+    <constant name="EcalEndcapPInsert_width"                  value="60.*cm"/>
+    <constant name="EcalEndcapPInsert_height"                 value="60.*cm"/>
+    <constant name="EcalEndcapPInsert_numLayers"              value="1"/>
+    <constant name="EcalEndcapPInsert_opening_hole_radius"    value="15.*cm"/>
+    <constant name="EcalEndcapPInsert_final_hole_radius"      value="15.*cm"/>
 
     <constant name="EcalEndcapPInsert_zmin"           value="EcalEndcapP_zmin"/>
     <constant name="EcalEndcapPInsert_length"         value="EcalEndcapP_length"/>
@@ -532,6 +544,7 @@ Service gaps in FW direction (before endcapP ECAL) and BW direction (before endc
     <constant name="EcalEndcapN_zmin"               value="BackwardPIDRegion_zmin + BackwardInnerEndcapRegion_length"/>
     <constant name="EcalEndcapN_length"             value="60*cm" />
     <constant name="EcalEndcapN_zmax"               value="EcalEndcapN_zmin + EcalEndcapN_length"/>
+
     <comment>
       rmin1: rmin round electron pipe (ignoring the hadron pipe)
       rmin2: rmin around both beam pipes
@@ -567,20 +580,23 @@ Service gaps in FW direction (before endcapP ECAL) and BW direction (before endc
       ## Hadronic Calorimeter Parameters
     </documentation>
 
+    <constant name="HcalBarrelStavesN"          value="12"/>
     <constant name="HcalEndcapP_zmin"     value="EcalEndcapP_zmin + EcalEndcapP_length"/>
-    <constant name="HcalEndcapP_length"   value="120.0*cm"/>
+    <comment> HCalEndcapP is 140 cm total, but current implementation leaves the final 10 cm empty </comment>
+    <constant name="HcalEndcapP_length"   value="140.0*cm"/>
     <constant name="HcalEndcapP_zmax"     value="HcalEndcapP_zmin + HcalEndcapP_length"/>
 
-    <constant name="HcalEndcapPInsert_zmin"      value="HcalEndcapP_zmin"/>
-    <constant name="HcalEndcapPInsert_length"    value="118.61*cm"/>
-    <constant name="HcalEndcapPInsert_zmax"      value="HcalEndcapPInsert_zmin + HcalEndcapPInsert_length"/>
-    <constant name="HcalEndcapPInsert_width"     value="59.6*cm"/>
+    <constant name="HcalEndcapPInsert_zmin"     value="HcalEndcapP_zmin"/>
+    <constant name="HcalEndcapPInsert_length"   value="127.97*cm"/>
+    <constant name="HcalEndcapPInsert_zmax"     value="HcalEndcapPInsert_zmin + HcalEndcapPInsert_length"/>
+    <constant name="HcalEndcapPInsert_width"    value="59.6*cm"/>
     <constant name="HcalEndcapPInsert_height"    value="59.7485*cm"/>
     <constant name="HcalEndcapPInsert_xposition" value="EcalEndcapPInsert_xposition"/>
     <constant name="HcalEndcapPInsert_yposition" value="EcalEndcapPInsert_yposition"/>
 
+    <constant name="HcalEndcapN_CaloSides"	value="60"/>
     <constant name="HcalEndcapN_zmin"     value="BackwardServiceGap_zmax"/>
-    <constant name="HcalEndcapN_length"   value="20.0*cm"/> <!-- FIXME just the size of ECCE backward field return -->
+    <constant name="HcalEndcapN_length"   value="44.0*cm"/>
     <constant name="HcalEndcapN_zmax"     value="HcalEndcapN_zmin + HcalEndcapN_length"/>
     <comment> HcalEndcapN needs to clear the straight beampipe with 1 * crossing angle + its radius of 22.25 mm </comment>
     <constant name="HcalEndcapN_rmin"     value="max((HcalEndcapN_zmin + HcalEndcapN_length) * tan(abs(CrossingAngle)) + 22.25 * mm, 11 * cm)"/>

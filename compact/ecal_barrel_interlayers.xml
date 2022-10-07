@@ -32,7 +32,7 @@
       For W/SiFi (sPHENIX): X0 ~ 0.7 cm (but different fiber orientation)
     </comment>
     <constant name="EcalBarrel_RadiatorThickness"    value="EcalBarrel_FiberZSpacing*13"/>
-    <constant name="EcalBarrel_ModRepeat"            value="CaloSides"/>
+    <constant name="EcalBarrel_ModRepeat"            value="EcalBarrelStavesN"/>
     <constant name="EcalBarrel_ModLength"            value="0.5*m"/>
     <constant name="EcalBarrel_ModWidth"             value="0.5*m"/>
     <constant name="EcalBarrel_AvailThickness"       value="EcalBarrelRegion_thickness-EcalBarrel_Support_thickness"/>
@@ -171,8 +171,8 @@
       <id>system:8,module:8,layer:8,slice:8,x:32:-16,y:-16</id>
     </readout>
     <readout name="EcalBarrelScFiHits">
-      <segmentation type="NoSegmentation"/>
-      <id>system:8,module:8,layer:8,slice:8,grid:16,fiber:16</id>
+      <segmentation type="CartesianStripZ" strip_size_x="1.0*cm" identifier_x="z"/>
+      <id>system:8,module:6,layer:6,slice:4,grid:10,fiber:16,z:-14</id>
     </readout>
   </readouts>
 
