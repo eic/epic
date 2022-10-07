@@ -43,7 +43,7 @@ static Ref_t createDetector(Detector& desc, xml_h handle, SensitiveDetector sens
 
   int    layer_num = 1;
   double layer_z   = -length / 2.; // Keeps track of layers' local z locations
-  // Looping through all the different layer sections (Steel/Sc, W/Sc)
+  // Looping through all the different layer sections
   for (xml_coll_t c(detElem, _U(layer)); c; ++c) {
     xml_comp_t x_layer         = c;
     int        repeat          = x_layer.repeat();
@@ -124,4 +124,4 @@ static Ref_t createDetector(Detector& desc, xml_h handle, SensitiveDetector sens
 
   return det;
 }
-DECLARE_DETELEMENT(epic_EndcapCalorimeterWithInsert, createDetector)
+DECLARE_DETELEMENT(epic_EndcapCalorimeterWithInsertCutout, createDetector)
