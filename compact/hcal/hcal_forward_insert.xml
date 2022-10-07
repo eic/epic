@@ -94,7 +94,7 @@
         <slice material="Air" thickness="HcalEndcapPInsertAirThickness"/>
       </layer>
       <comment> Final layer of steel </comment>
-      <layer repeat="1" thickness = "HcalEndcapPInsertBackplateThickness">
+      <layer repeat="1" thickness="HcalEndcapPInsertBackplateThickness">
         <slice material="Steel235" thickness="HcalEndcapPInsertBackplateThickness" />
       </layer>
       <documentation>
