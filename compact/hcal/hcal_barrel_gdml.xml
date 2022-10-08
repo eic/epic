@@ -7666,7 +7666,7 @@
   <!--  Definition of the readout segmentation/definition  -->
   <readouts>
     <readout name="oHcalBarrelHits">
-      <id>system:8,barrel:3,sector:6,tilerow:4,tile:6,x:32:-16,y:-16</id>
+      <id>system:8,barrel:3,sector:6,tower:5,x:32:-16,y:-16</id>
     </readout>
   </readouts>
 
