@@ -53,6 +53,7 @@ jobs:
     - uses: eic/run-cvmfs-osg-eic-shell@main
       with:
         platform-release: "jug_xl:nightly"
+        network_types: "none"
         run: |
           PREFIX=${PWD}/install
           # install ip6 repo
@@ -110,6 +111,7 @@ jobs:
     - uses: eic/run-cvmfs-osg-eic-shell@main
       with:
         platform-release: "jug_xl:nightly"
+        network_types: "none"
         setup: install/setup.sh
         run: |
           root -b -q "scripts/test_ACTS.cxx+(\"${DETECTOR_PATH}/${DETECTOR_CONFIG}.xml\")" | tee check_tracking_geometry.out
@@ -128,6 +130,7 @@ jobs:
     - uses: eic/run-cvmfs-osg-eic-shell@main
       with:
         platform-release: "jug_xl:nightly"
+        network_types: "none"
         setup: install/setup.sh
         run: |
           mkdir -p geo
@@ -151,6 +154,7 @@ jobs:
     - uses: eic/run-cvmfs-osg-eic-shell@main
       with:
         platform-release: "jug_xl:nightly"
+        network_types: "none"
         setup: install/setup.sh
         run: |
           mkdir -p geo
@@ -174,6 +178,7 @@ jobs:
     - uses: eic/run-cvmfs-osg-eic-shell@main
       with:
         platform-release: "jug_xl:nightly"
+        network_types: "none"
         setup: install/setup.sh
         run: |
           mkdir -p doc
@@ -197,6 +202,7 @@ jobs:
     - uses: eic/run-cvmfs-osg-eic-shell@main
       with:
         platform-release: "jug_xl:nightly"
+        network_types: "none"
         setup: install/setup.sh
         run: |
           mkdir -p doc
@@ -226,6 +232,7 @@ jobs:
     - uses: eic/run-cvmfs-osg-eic-shell@main
       with:
         platform-release: "jug_xl:nightly"
+        network_types: "none"
         setup: install/setup.sh
         run: |
           mkdir -p doc
@@ -246,6 +253,7 @@ jobs:
     - uses: eic/run-cvmfs-osg-eic-shell@main
       with:
         platform-release: "jug_xl:nightly"
+        network_types: "none"
         setup: install/setup.sh
         run: |
           mkdir -p doc
@@ -266,6 +274,7 @@ jobs:
     - uses: eic/run-cvmfs-osg-eic-shell@main
       with:
         platform-release: "jug_xl:nightly"
+        network_types: "none"
         setup: install/setup.sh
         run: |
           mkdir -p doc
@@ -286,6 +295,7 @@ jobs:
     - uses: eic/run-cvmfs-osg-eic-shell@main
       with:
         platform-release: "jug_xl:nightly"
+        network_types: "none"
         setup: install/setup.sh
         run: |
           mkdir -p doc
@@ -338,6 +348,7 @@ jobs:
     - uses: eic/run-cvmfs-osg-eic-shell@main
       with:
         platform-release: "jug_xl:nightly"
+        network_types: "none"
         setup: install/setup.sh
         run: |
           bin/generate_prim_file -o prim -D -t detector_view
@@ -365,6 +376,7 @@ jobs:
     - uses: eic/run-cvmfs-osg-eic-shell@main
       with:
         platform-release: "jug_xl:nightly"
+        network_types: "none"
         run: |
           mkdir -p images
           bin/make_dawn_views -i prim/detector_view.prim -t ${{ matrix.view }} -d scripts/${{ matrix.view }} -D
@@ -392,6 +404,7 @@ jobs:
     - uses: eic/run-cvmfs-osg-eic-shell@main
       with:
         platform-release: "jug_xl:nightly"
+        network_types: "none"
         run: |
           mkdir -p images
           bin/make_dawn_views -i prim/detector_view.prim -t ${{ matrix.view }} -d scripts/${{ matrix.view }} -D -- ${{ matrix.slice }}
