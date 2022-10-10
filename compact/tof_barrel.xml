@@ -63,7 +63,7 @@
     <constant name="BarrelTOF_thickness"           value="BarrelTOF_rmax-BarrelTOF_rmin"/>
     <constant name="BarrelTOF_rOffset"             value="16.5*mm"/>
     <constant name="BarrelTOF_length1"             value="2 * 120 * cm"/>
-    <constant name="BarrelTOF_length2"             value="2 * 120 * cm"/>
+    <constant name="BarrelTOF_length2"             value="BarrelTOF_length1"/>
     <constant name="BarrelTOF_length"              value="BarrelTOF_length2"/>
 
   </define>
