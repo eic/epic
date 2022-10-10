@@ -119,11 +119,24 @@
       vis="TrackerSubAssemblyVis">
       <composite name="InnerMPGDBarrel"/>
     </detector>
+    <detector id="TrackerSubAssembly_4_ID"
+      name="BarrelTOFSubAssembly"
+      type="DD4hep_SubdetectorAssembly"
+      vis="TrackerSubAssemblyVis">
+      <composite name="BarrelTOF"/>
+    </detector>
     <detector id="TrackerSubAssembly_5_ID"
       name="OuterMPGDSubSubAssembly"
       type="DD4hep_SubdetectorAssembly"
       vis="TrackerSubAssemblyVis">
       <composite name="OuterMPGDBarrel"/>
+    </detector>
+    <detector id="TrackerSubAssembly_6_ID"
+      name="EndcapTOFSubSubAssembly"
+      type="DD4hep_SubdetectorAssembly"
+      vis="TrackerSubAssemblyVis">
+      <composite name="ForwardTOF"/>
+      <composite name="BackwardTOF"/>
     </detector>
   </detectors>
 
@@ -133,7 +146,7 @@
   </documentation>
   <plugins>
     <plugin name="epic_FileLoader">
-      <arg value="cache:$DETECTOR_PATH:/opt/detector"/>
+      <arg value="cache:$DETECTOR_PATH"/>
       <arg value="file:calibrations/materials-map.cbor"/>
       <arg value="url:https://eicweb.phy.anl.gov/EIC/detectors/athena/uploads/56b64d544442a93904488e7292aa509d/material-maps.cbor"/>
     </plugin>
@@ -144,5 +157,7 @@
   <include ref="tracker/mpgd_barrel.xml"/>
   <include ref="tracker/silicon_disks.xml"/>
   <include ref="tracker/support_service_assembly.xml"/>
+  <include ref="tof_barrel.xml"/>
+  <include ref="tof_endcap.xml"/>
 
 </lccdd>
