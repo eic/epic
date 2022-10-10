@@ -856,9 +856,9 @@
       <property name="ABSLENGTH" coldim="2"
                 values="1.551*eV  200.0*cm
                         3.545*eV  200.0*cm"/>
-      <constant name="SCINTILLATIONYIELD"  value="200.0/MeV"/>
+      <constant name="kSCINTILLATIONYIELD1"  value="200.0/MeV"/>
+      <constant name="kSCINTILLATIONTIMECONSTANT1"    value="6.0*ns"/>
       <constant name="RESOLUTIONSCALE"     value="1.0"/>
-      <constant name="FASTTIMECONSTANT"    value="6.0*ns"/>
     </material>        
   </materials>
   <surfaces>
