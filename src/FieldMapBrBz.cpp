@@ -183,10 +183,11 @@ static Ref_t create_field_map_brbz(Detector& /*lcdd*/, xml::Handle_t handle)
   xml_comp_t r_dim = x_dim.child(_Unicode(transverse));
   xml_comp_t z_dim = x_dim.child(_Unicode(longitudinal));
 
-  std::string field_map_file = x_par.attr<std::string>(_Unicode(field_map));
-  std::string field_map_url  = x_par.attr<std::string>(_Unicode(url));
+  std::string field_map_file  = x_par.attr<std::string>(_Unicode(field_map));
+  std::string field_map_url   = x_par.attr<std::string>(_Unicode(url));
+  std::string field_map_cache = getAttrOrDefault<std::string>(x_par, _Unicode(cache), "");
 
-  EnsureFileFromURLExists(field_map_url, field_map_file);
+  EnsureFileFromURLExists(field_map_url, field_map_file, field_map_cache);
 
   double field_map_scale = x_par.attr<double>(_Unicode(scale));
 
