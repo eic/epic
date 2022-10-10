@@ -232,7 +232,7 @@ jobs:
     - uses: eic/run-cvmfs-osg-eic-shell@main
       with:
         platform-release: "jug_xl:nightly"
-        network_types: "none"
+        network_types: "bridge" # this job must succeed even when new artifacts
         setup: install/setup.sh
         run: |
           mkdir -p doc
@@ -253,7 +253,7 @@ jobs:
     - uses: eic/run-cvmfs-osg-eic-shell@main
       with:
         platform-release: "jug_xl:nightly"
-        network_types: "none"
+        network_types: "bridge" # this job must succeed even when new artifacts
         setup: install/setup.sh
         run: |
           mkdir -p doc
