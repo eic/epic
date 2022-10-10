@@ -8,6 +8,8 @@ features:
       #    tof_barrel:
   ecal:
     forward_scifi:
+    forward_homogeneous:
+    forward_insert:
     barrel_interlayers:
     backward_PbWO4:
   solenoid:

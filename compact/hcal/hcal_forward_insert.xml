@@ -36,9 +36,8 @@
              HcalEndcapPInsertAirThickness "
     />
     <constant name="HcalEndcapPInsertBackplateThickness" value="HcalEndcapPInsertAbsorberThickness"/>
-    <constant name="HcalEndcapPInsertLayer_NRepeat" value="floor(HcalEndcapPInsert_length / HcalEndcapPInsertSingleLayerThickness)"/>
-    <constant name="HcalEndcapPInsertLayer_NTungstenRepeat" value="HcalEndcapPInsertLayer_NRepeat * .6"/>
-    <constant name="HcalEndcapPInsertLayer_NSteelRepeat" value="HcalEndcapPInsertLayer_NRepeat * .4"/>
+    <constant name="HcalEndcapPInsertLayer_NTungstenRepeat" value="30"/>
+    <constant name="HcalEndcapPInsertLayer_NSteelRepeat" value="24"/>
   </define>
 
   <detectors>
@@ -46,7 +45,7 @@
       ### Forward (Positive Z) Endcap Insert for Hadronic Calorimeter
       Insert goes in the middle of the forward endcap HCal -- around the beampipe
 
-      Insert is 30 layers of W/Sc + 20 layers of Steel/Sc + 1 backplate of steel
+      Insert is 30 layers of W/Sc + 24 layers of Steel/Sc + 1 backplate of steel
       Each of the 50 layers includes air gaps (front and back of each layer),
       ESR foil (front and back of scintillator), a PCB, and an aluminum scitnillator cover
 
@@ -70,10 +69,10 @@
         y="HcalEndcapPInsert_height"
         z="HcalEndcapPInsert_length"
       />
-      <constant name = "backplate_thickness" value="HcalEndcapPInsertBackplateThickness" vis="HcalEndcapInsertVis"/>
+      <constant name="backplate_thickness" value="HcalEndcapPInsertBackplateThickness"/>
       <comment> Tungsten/Scintillator layers </comment>
       <comment> Slices will be ordered according to the slice order listed here </comment>
-      <layer repeat= "HcalEndcapPInsertLayer_NTungstenRepeat" thickness = "HcalEndcapPInsertSingleLayerThickness">
+      <layer repeat="HcalEndcapPInsertLayer_NTungstenRepeat" thickness="HcalEndcapPInsertSingleLayerThickness">
         <slice material="Tungsten" thickness="HcalEndcapPInsertAbsorberThickness"/>
         <slice material="Air" thickness="HcalEndcapPInsertAirThickness"/>
         <slice material="Aluminum" thickness="HcalEndcapPInsertScintillatorCoverThickness"/>
@@ -84,7 +83,7 @@
         <slice material="Air" thickness="HcalEndcapPInsertAirThickness"/>
       </layer>
       <comment> Steel/Sc layers </comment>
-      <layer repeat="HcalEndcapPInsertLayer_NSteelRepeat" thickness = "HcalEndcapPInsertSingleLayerThickness" vis="HcalEndcapInsertVis">
+      <layer repeat="HcalEndcapPInsertLayer_NSteelRepeat" thickness="HcalEndcapPInsertSingleLayerThickness">
         <slice material="Steel235" thickness="HcalEndcapPInsertAbsorberThickness" />
         <slice material="Air" thickness="HcalEndcapPInsertAirThickness"/>
         <slice material="Aluminum" thickness="HcalEndcapPInsertScintillatorCoverThickness"/>
@@ -95,7 +94,7 @@
         <slice material="Air" thickness="HcalEndcapPInsertAirThickness"/>
       </layer>
       <comment> Final layer of steel </comment>
-      <layer repeat="1" thickness = "HcalEndcapPInsertBackplateThickness" vis="HcalEndcapInsertVis">
+      <layer repeat="1" thickness="HcalEndcapPInsertBackplateThickness">
         <slice material="Steel235" thickness="HcalEndcapPInsertBackplateThickness" />
       </layer>
       <documentation>
@@ -103,13 +102,14 @@
         final_hole_radius: Hole radius in steel backplate
         initial_hole_x/y: Hole x/y position (global coordinates) in first layer
         final_hole_x/y: Hole x/y position (global coordinates) in steel backplate
+        Initial hole parameters are the same for the hole in the ecal insert
       </documentation>
       <beampipe_hole
-        initial_hole_radius="14.67*cm"
-        final_hole_radius="16.92*cm"
-        initial_hole_x="-7.29*cm"
-        final_hole_x="-10.135*cm"
-        initial_hole_y="0.*cm"
+        initial_hole_radius="EcalEndcapPInsert_hole_radius"
+        final_hole_radius="17.1*cm"
+        initial_hole_x="EcalEndcapPInsert_hole_xposition"
+        final_hole_x="-10.363*cm"
+        initial_hole_y="EcalEndcapPInsert_hole_yposition"
         final_hole_y="0.*cm"
       />
     </detector>
