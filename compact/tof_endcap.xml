@@ -135,6 +135,14 @@
   </define>
 
   <detectors>
+    <detector id="BackwardTOF_ID"
+      name="BackwardNullTracker"
+      type="epic_CompositeTracker"
+      actsType="endcap"
+      vis="TrackerSubAssemblyVis">
+      <position x="0*cm" y="0*cm" z="-1*um" />
+    </detector>
+
       <detector
         id="ForwardTOF_ID"
         name="ForwardTOF"
@@ -187,7 +195,7 @@
 
   <readouts>
     <readout name="TOFEndcapHits">
-      <segmentation type="CartesianGridXZ" grid_size_x="50*um" grid_size_z="50*um" />
+      <segmentation type="CartesianGridXZ" grid_size_x="100*um" grid_size_z="100*um" />
       <id>system:8,layer:2,module:6,sensor:16,x:32:-16,z:-16</id>
     </readout>
   </readouts>

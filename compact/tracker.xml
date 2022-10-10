@@ -120,7 +120,7 @@
       <composite name="InnerMPGDBarrel"/>
     </detector>
     <detector id="TrackerSubAssembly_4_ID"
-      name="TOFSubAssembly"
+      name="BarrelTOFSubAssembly"
       type="DD4hep_SubdetectorAssembly"
       vis="TrackerSubAssemblyVis">
       <composite name="BarrelTOF"/>
@@ -136,7 +136,7 @@
       type="DD4hep_SubdetectorAssembly"
       vis="TrackerSubAssemblyVis">
       <composite name="ForwardTOF"/>
-      <composite name="BackwardTOF"/>
+      <composite name="BackwardNullTracker"/>
     </detector>
   </detectors>
 
