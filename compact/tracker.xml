@@ -136,7 +136,7 @@
       type="DD4hep_SubdetectorAssembly"
       vis="TrackerSubAssemblyVis">
       <composite name="ForwardTOF"/>
-      <composite name="BackwardNullTracker"/>
+      <composite name="BackwardTOF"/>
     </detector>
   </detectors>
 
