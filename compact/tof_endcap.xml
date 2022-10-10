@@ -33,7 +33,7 @@
     Actual detector implementation.
   </comment>
   <define>
-
+    <constant name="ForwardTOFRegion_rmax"        value="CentralTrackingRegion_rmax" />
     <constant name="TOFEndcapMod_thickness"     value="TOFEndcapSensor_thickness + TOFEndcapService_thickness" />
     <constant name="TOFEndcapMod_angle"         value="360.0*degree / TOFEndcapMod_count * (1 + TOFEndcapMod_overlap)" />
     <comment> 1 um padding to not have layer and module touch (ACTS requirement) </comment>
