@@ -2,8 +2,8 @@ features:
   beampipe:
   tracking:
   pid:
-    tof_endcap:
-    tof_barrel:
+    #tof_endcap:
+    #tof_barrel:
     mrich:
     drich:
       #SJJ: disabled as it needs re-integrating with the tracker
