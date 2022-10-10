@@ -7,7 +7,7 @@
     <documentation>
       The EcalBarrel eta limits cut into the barrel shape.
     </documentation>
-    <constant name="EcalBarrel_etamin" value="-3.5"/>
+    <constant name="EcalBarrel_etamin" value="-1.9"/>
     <constant name="EcalBarrel_etamax" value="+1.4"/>
   </define>
 
