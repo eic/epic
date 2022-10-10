@@ -136,7 +136,7 @@
 
   <detectors>
     <detector id="BackwardTOF_ID"
-      name="BackwardNullTracker"
+      name="BackwardTOF"
       type="epic_CompositeTracker"
       actsType="endcap"
       vis="TrackerSubAssemblyVis">
