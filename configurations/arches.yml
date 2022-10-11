@@ -15,5 +15,5 @@ features:
   solenoid:
   hcal:
   farforward:
-    - arches
+    arches
   farbackward:
