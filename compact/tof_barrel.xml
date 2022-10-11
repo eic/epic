@@ -25,7 +25,7 @@
     <constant name="BarrelTOF_Module_thickness"       value="BarrelTOF_Sensor_thickness+2*BarrelTOF_Hybrid_thickness+2*BarrelTOF_CFSkin_thickness+BarrelTOF_CFoam_thickness+BarrelTOF_CoolingTube_thickness+BarrelTOF_Coolant_thickness"/>
 
     <constant name="BarrelTOF_zOffset"                 value="0*cm"/>
-    <constant name="BarrelTOF_radius_design"           value="63.0*cm"/>
+    <constant name="BarrelTOF_radius_design"           value="64.5*cm"/>
     <constant name="BarrelTOF_Module_width_design"     value="56.0*mm"/>
     <constant name="BarrelTOF_Sensor_width_design"     value="32.0*mm"/>
     <constant name="BarrelTOF_CFoam_width_design"      value="BarrelTOF_Sensor_width_design-5.0*mm"/>
@@ -61,7 +61,7 @@
     <constant name="BarrelTOF_rmin"                value="BarrelTOF_radius"/>
     <constant name="BarrelTOF_rmax"                value="BarrelTOF_rmin+BarrelTOF_Module_width*tan(BarrelTOF_Module_tiltangle)"/>
     <constant name="BarrelTOF_thickness"           value="BarrelTOF_rmax-BarrelTOF_rmin"/>
-    <constant name="BarrelTOF_rOffset"             value="16.5*mm"/>
+    <constant name="BarrelTOF_rOffset"             value="1.5*cm"/>
     <constant name="BarrelTOF_length1"             value="2 * 120 * cm"/>
     <constant name="BarrelTOF_length2"             value="BarrelTOF_length1"/>
     <constant name="BarrelTOF_length"              value="BarrelTOF_length2"/>
@@ -79,7 +79,7 @@
       readout="TOFBarrelHits"
       insideTrackingVolume="true">
       <dimensions
-        rmin="BarrelTOF_rmin-BarrelTOF_rOffset"
+        rmin="BarrelTOF_rmin"
         rmax="BarrelTOF_rmax+BarrelTOF_rOffset"
         length="BarrelTOF_length"/>
       <comment>
