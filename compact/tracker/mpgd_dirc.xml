@@ -58,10 +58,10 @@
   </regions>
 
   <display>
-	  </display>
+  </display>
 
-	  <detectors>
-    <detector id="MPGDDIRC_0_ID" name="MPGDDIRC_0" type="epic_MPGDDIRC" readout="MPGDDIRCHits" vis="TrackerVis">
+   <detectors>
+   <detector id="MPGDDIRC_0_ID" name="MPGDDIRC_0" type="epic_MPGDDIRC" readout="MPGDDIRCHits" vis="TrackerVis">
 	    <dimensions width="MPGDDIRCModule_width" length="MPGDDIRCModule_length" height="MPGDDIRCModule_allowed_space" />
 	    <position x="0" y="0" z="MPGDDIRCModule_offset" />
 
