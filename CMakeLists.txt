@@ -88,6 +88,12 @@ install(DIRECTORY ip6/
 install(FILES ip6.xml
     DESTINATION ${CMAKE_INSTALL_DATADIR}/${PROJECT_NAME}/
     )
+install(FILES ip6_arches.xml
+    DESTINATION ${CMAKE_INSTALL_DATADIR}/${PROJECT_NAME}/
+    )
+install(FILES ip6_brycecanyon.xml
+    DESTINATION ${CMAKE_INSTALL_DATADIR}/${PROJECT_NAME}/
+    )
 
 #-----------------------------------------------------------------------------------
 # Configure and install beamline setup script

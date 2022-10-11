@@ -48,7 +48,6 @@
     <constant name="VacuumMagnetElement_1_ID"        value="168"/>
     <constant name="B0ECal_ID" value="169"/>
 
-
     <documentation>
       #### (170-189) Far Forward Beamline Magnets
     </documentation>
@@ -118,7 +117,7 @@
   <comment>
     Far Forward
   </comment>
-  <include ref="ip6/far_forward.xml"/>
+  <include ref="ip6/far_forward_arches.xml"/>
 
   <comment>
     Far Backward

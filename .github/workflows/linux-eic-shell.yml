@@ -45,6 +45,10 @@ jobs:
   convert-to-tgeo:
     runs-on: ubuntu-latest
     needs: build-test
+    strategy:
+      matrix:
+        geo: [_arches, _brycecanyon, ]
+      fail-fast: false
     steps:
     - uses: actions/checkout@v2
     - uses: actions/download-artifact@v3
@@ -58,16 +62,20 @@ jobs:
         setup: install/setup.sh
         run: |
           mkdir -p geo
-          dd_web_display --output geo/${BEAMLINE}.root ${BEAMLINE_PATH}/${BEAMLINE}.xml
+          dd_web_display --output geo/${BEAMLINE}${{ matrix.geo }}.root ${BEAMLINE_PATH}/${BEAMLINE}${{ matrix.geo }}.xml
     - uses: actions/upload-artifact@v3
       with:
-        name: ip6.root
+        name: ip6${{ matrix.geo }}.root
         path: geo/
         if-no-files-found: error
 
   dump-constants:
     runs-on: ubuntu-latest
     needs: build-test
+    strategy:
+      matrix:
+        geo: [_arches, _brycecanyon, ]
+      fail-fast: false
     steps:
     - uses: actions/checkout@v2
     - uses: actions/download-artifact@v3
@@ -81,16 +89,20 @@ jobs:
         setup: install/setup.sh
         run: |
           mkdir -p doc
-          npdet_info dump ${BEAMLINE_PATH}/${BEAMLINE}.xml | tee doc/constants.out
+          npdet_info dump ${BEAMLINE_PATH}/${BEAMLINE}${{ matrix.geo }}.xml | tee doc/constants${{ matrix.geo }}.out
     - uses: actions/upload-artifact@v3
       with:
-        name: constants.out
-        path: doc/constants.out
+        name: constants${{ matrix.geo }}.out
+        path: doc/constants${{ matrix.geo }}.out
         if-no-files-found: error
 
   check-overlap-tgeo:
     runs-on: ubuntu-latest
     needs: build-test
+    strategy:
+      matrix:
+        geo: [_arches, _brycecanyon, ]
+      fail-fast: false
     steps:
     - uses: actions/checkout@v2
     - uses: actions/download-artifact@v3
@@ -104,13 +116,17 @@ jobs:
         setup: install/setup.sh
         run: |
           mkdir -p doc
-          checkOverlaps -c ${BEAMLINE_PATH}/${BEAMLINE_CONFIG}.xml | tee doc/overlap_check_tgeo.out
-          noverlaps="$(grep -c ovlp doc/overlap_check_tgeo.out || true)"
+          checkOverlaps -c ${BEAMLINE_PATH}/${BEAMLINE_CONFIG}${{ matrix.geo }}.xml | tee doc/overlap_check_tgeo${{ matrix.geo }}.out
+          noverlaps="$(grep -c ovlp doc/overlap_check_tgeo${{ matrix.geo }}.out || true)"
           if [[ "${noverlaps}" -gt "0" ]] ; then echo "${noverlaps} overlaps found!" && false ; fi
 
   check-overlap-geant4:
     runs-on: ubuntu-latest
     needs: [check-overlap-tgeo]
+    strategy:
+      matrix:
+        geo: [_arches, _brycecanyon, ]
+      fail-fast: false
     steps:
     - uses: actions/checkout@v2
     - uses: actions/download-artifact@v3
@@ -124,8 +140,8 @@ jobs:
         setup: install/setup.sh
         run: |
           mkdir -p doc
-          python scripts/checkOverlaps.py -c ${BEAMLINE_PATH}/${BEAMLINE_CONFIG}.xml | tee doc/overlap_check_geant4.out
-          noverlaps="$(grep -c GeomVol1002 doc/overlap_check_geant4.out || true)"
+          python scripts/checkOverlaps.py -c ${BEAMLINE_PATH}/${BEAMLINE_CONFIG}${{ matrix.geo }}.xml | tee doc/overlap_check_geant4${{ matrix.geo }}.out
+          noverlaps="$(grep -c GeomVol1002 doc/overlap_check_geant4${{ matrix.geo }}.out || true)"
           if [[ "${noverlaps}" -gt "0" ]] ; then echo "${noverlaps} overlaps found!" && false ; fi
 
   trigger-detector:
@@ -158,6 +174,10 @@ jobs:
   generate-prim-file:
     runs-on: ubuntu-latest
     needs: build-test
+    strategy:
+      matrix:
+        geo: [_arches, _brycecanyon, ]
+      fail-fast: false    
     steps:
     - uses: actions/checkout@v2
     - uses: actions/download-artifact@v3
@@ -171,11 +191,11 @@ jobs:
         setup: install/setup.sh
         run: |
           sed -i '/<fiber/,+4d' ${BEAMLINE_PATH}/ip6/far_forward/ZDC_Ecal_WSciFi.xml
-          bin/generate_prim_file -o prim -D -t detector_view -c ${BEAMLINE_PATH}/${BEAMLINE}.xml
+          bin/generate_prim_file -o prim -D -t detector_view${{ matrix.geo }} -c ${BEAMLINE_PATH}/${BEAMLINE}${{ matrix.geo }}.xml
     - uses: actions/upload-artifact@v3
       with:
-        name: detector_view.prim
-        path: prim/detector_view.prim
+        name: detector_view${{ matrix.geo }}.prim
+        path: prim/detector_view${{ matrix.geo }}.prim
         if-no-files-found: error
         retention-days: 1
 
@@ -185,12 +205,13 @@ jobs:
     strategy:
       matrix:
         view: [view50]
+        geo: [_arches, _brycecanyon, ]
       fail-fast: false
     steps:
     - uses: actions/checkout@v2
     - uses: actions/download-artifact@v3
       with:
-        name: detector_view.prim
+        name: detector_view${{ matrix.geo }}.prim
         path: prim/
     - uses: cvmfs-contrib/github-action-cvmfs@v2
     - uses: eic/run-cvmfs-osg-eic-shell@main
@@ -198,9 +219,9 @@ jobs:
         platform-release: "jug_xl:nightly"
         run: |
           mkdir -p images
-          bin/make_dawn_views -i prim/detector_view.prim -t ${{ matrix.view }} -d views/${{ matrix.view }} -D
+          bin/make_dawn_views -i prim/detector_view${{ matrix.geo }}.prim -t ${{ matrix.view }}${{ matrix.geo }} -d views/${{ matrix.view }} -D
     - uses: actions/upload-artifact@v3
       with:
-        name: ${{ matrix.view }}
+        name: ${{ matrix.view }}${{ matrix.geo }}
         path: images/
         if-no-files-found: error
