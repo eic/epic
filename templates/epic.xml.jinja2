@@ -37,20 +37,24 @@
 	version="v1 2021-03-16">
   <comment> EPIC </comment>
   </info>
+
+  <!-- Standard environmental conditions: 20 °C, 1 atm -->
+  <std_conditions type="NTP"/>
+
   <define>
-  <documentation level="2">
+    <documentation level="2">
       ## Main Constant Definitions
 
       The ip6 (or other ip) defines should be included first.
       These files have only a define tags.
-  </documentation>
+    </documentation>
     <include ref="${BEAMLINE_PATH}/ip6/definitions.xml" />
     <include ref="${BEAMLINE_PATH}/ip6/far_forward/fields_{{ pbeam | default("275", true) }}.xml" />
     <include ref="${DETECTOR_PATH}/compact/definitions.xml" />
   </define>
 
   <includes>
-    <gdmlFile ref="${DETECTOR_PATH}/compact/elements.xml"/>
+    <gdmlFile ref="${DD4hepINSTALL}/DDDetectors/compact/elements.xml"/>
     <gdmlFile ref="${DETECTOR_PATH}/compact/materials.xml"/>
     <file     ref="${DETECTOR_PATH}/compact/optical_materials.xml"/>
   </includes>
@@ -142,10 +146,14 @@
   <documentation level="10">
     ## Central EM calorimetry
   </documentation>
-  {% if features is not defined or features['ecal'] is none or 'forward_scifi' in features['ecal'] %}
+  {% if features is not defined or features['ecal'] is none or 'forward_homogeneous' in features['ecal'] %}
+  <include ref="${DETECTOR_PATH}/compact/ecal_forward_homogeneous.xml"/>
+  {% elif 'forward_scifi' in features['ecal'] -%}
   <include ref="${DETECTOR_PATH}/compact/ecal_forward_scfi.xml"/>
-  {% elif 'forward_homogenous' in features['ecal'] -%}
-  <include ref="${DETECTOR_PATH}/compact/ecal_forward_homogenous.xml"/>
+  {% endif -%}
+
+  {% if features is not defined or features['ecal'] is none or 'forward_insert' in features['ecal'] %}
+  <include ref="${DETECTOR_PATH}/compact/ecal_forward_insert_homogeneous.xml"/>
   {% endif -%}
 
   {% if features is not defined or features['ecal'] is none or 'backward_PbWO4' in features['ecal'] %}
