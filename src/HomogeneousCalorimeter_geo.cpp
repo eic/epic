@@ -423,15 +423,19 @@ static std::tuple<int, int> add_12surface_disk(Detector& desc, Assembly& env, xm
   // auto pos = get_xml_xyz(plm, _Unicode(position));
   // auto rot = get_xml_xyz(plm, _Unicode(rotation));
 
+
   
+  //=========================================================
   // optional envelope volume and the supporting frame
+  //=========================================================
+  // The mother volume of modules
   //
   bool has_envelope = dd4hep::getAttrOrDefault<bool>(plm, _Unicode(envelope), false);
   Material ring_material     = desc.material(getAttrOrDefault<std::string>(plm, _U(material), "StainlessSteel"));
-  Material hole_material     = desc.material(getAttrOrDefault<std::string>(plm, _U(material), "Air"));
+  // Material hole_material     = desc.material(getAttrOrDefault<std::string>(plm, _U(material), "Air"));
   PolyhedraRegular solid_world(12, 0., r12min, calo_module_length);
-  Tube solid_sub(0., 8.5*cm, calo_module_length/2., phimin, phimax);
-  SubtractionSolid calo_subtract(solid_world, solid_sub, Position(0., 0., 0.));
+  Tube solid_sub(0., rmin, calo_module_length/2., phimin, phimax);
+  SubtractionSolid calo_subtract(solid_world, solid_sub, Position(0., 0., 0.)); 
   Volume      env_vol(std::string(env.name()) + "_envelope", calo_subtract, ring_material);
   Transform3D tr_global = RotationZYX(15.*degree, 0., 0.) * Translation3D(0., 0., 0.);
   env_vol.setVisAttributes(desc.visAttributes(plm.attr<std::string>(_Unicode(vis_steel_gap))));
@@ -447,22 +451,23 @@ static std::tuple<int, int> add_12surface_disk(Detector& desc, Assembly& env, xm
   
   // Inner supporting frame
   //
-  Tube        Ssolid_ring12(8.*cm, 8.5*cm, 10.*cm, phimin, phimax);
+  Tube        Ssolid_ring12(8.5*cm, rmin, calo_module_length/2., phimin, phimax);
   Volume      Sring12_vol("Sring12", Ssolid_ring12, ring_material);
   Sring12_vol.setVisAttributes(desc.visAttributes(plm.attr<std::string>(_Unicode(vis_struc))));
   Transform3D tr_global_Iring = RotationZYX(0., 0., 0.) * Translation3D(0., 0., 0.);
 
   
   // Supporting frame for the cabling
+  // Having overlapped with tracker barrelendcapsupporting structure, comment here until the size and position determined
   //
-  PolyhedraRegular cabling_support12(12, r12max, 70.*cm, 2.54*cm);
-  Volume cabling_support12_V("cabling_support12_V", cabling_support12, ring_material);
-  Transform3D tr_global_csfront = RotationZYX(15.*degree, 0., 0.) * Translation3D(0., 0., 9.*cm);
-  Transform3D tr_global_csback = RotationZYX(15.*degree, 0., 0.) * Translation3D(0., 0., -49.*cm);
+  // PolyhedraRegular cabling_support12(12, r12max, 70.*cm, 2.54*cm);
+  // Volume cabling_support12_V("cabling_support12_V", cabling_support12, ring_material);
+  // Transform3D tr_global_csfront = RotationZYX(15.*degree, 0., 0.) * Translation3D(0., 0., 9.*cm);
+  // Transform3D tr_global_csback = RotationZYX(15.*degree, 0., 0.) * Translation3D(0., 0., -49.*cm);
   
-  Box hole(13.5/2.*cm, 2.54/2.*cm, 2.54/2.*cm);
-  Volume hole_V("hole_V", hole, hole_material);
-  Transform3D hole_pos = RotationZYX(0., 0., 0.) * Translation3D(0., 0., 0.);
+  // Box hole(13.5/2.*cm, 2.54/2.*cm, 2.54/2.*cm);
+  // Volume hole_V("hole_V", hole, hole_material);
+  // Transform3D hole_pos = RotationZYX(0., 0., 0.) * Translation3D(0., 0., 0.);
 
 
   // Place frames and mother volume of modules into the world volume
@@ -472,16 +477,17 @@ static std::tuple<int, int> add_12surface_disk(Detector& desc, Assembly& env, xm
       env.placeVolume(env_vol, tr_global);                      // Place the mother volume for all modules
       env.placeVolume(ring12_vol, tr_global_Oring);             // Place the outer supporting frame
       env.placeVolume(Sring12_vol, tr_global_Iring);            // Place the inner supporting frame
-      env.placeVolume(cabling_support12_V, tr_global_csfront);  // Place the front cabling frame(Only the holes are visible)
-      env.placeVolume(cabling_support12_V, tr_global_csback);   // Place the back cabling frame(Only the holes are visible)
 
-      for(int i = 0 ; i < 12 ; i++)
-        {
-          hole_pos = RotationZYX((15. + i * 30.)*degree, 0., 0.) * Translation3D(82.5*mm, 675.*mm, 0.);
-          cabling_support12_V.placeVolume(hole_V, hole_pos);
-          hole_pos = RotationZYX((15. + i * 30.)*degree, 0., 0.) * Translation3D(-82.5*mm, 675.*mm, 0.);
-          cabling_support12_V.placeVolume(hole_V, hole_pos);
-        }
+      // env.placeVolume(cabling_support12_V, tr_global_csfront);  // Place the front cabling frame(Only the holes are visible)
+      // env.placeVolume(cabling_support12_V, tr_global_csback);   // Place the back cabling frame(Only the holes are visible)
+
+      // for(int i = 0 ; i < 12 ; i++)
+      //   {
+      //     hole_pos = RotationZYX((15. + i * 30.)*degree, 0., 0.) * Translation3D(82.5*mm, 675.*mm, 0.);
+      //     cabling_support12_V.placeVolume(hole_V, hole_pos);
+      //     hole_pos = RotationZYX((15. + i * 30.)*degree, 0., 0.) * Translation3D(-82.5*mm, 675.*mm, 0.);
+      //     cabling_support12_V.placeVolume(hole_V, hole_pos);
+      //   }
     }
 
     
@@ -503,10 +509,11 @@ static std::tuple<int, int> add_12surface_disk(Detector& desc, Assembly& env, xm
       modPV = (has_envelope ? env_vol.placeVolume(modVol, tr_local) : env.placeVolume(modVol, tr_global * tr_local));
       total_id = id_begin + mid++;
       modPV.addPhysVolID("sector", sector_id).addPhysVolID("module", total_id);      
-      // std::cout << total_id << ", " << p.x() << ", " << p.y() << std::endl; 
     }
 
+  
   // Add the modules manually in the gap
+  //
   const int add_N_mod = 51;  
   double addX[add_N_mod] = {-16.4,-18.45,-20.5,-38.95,-43.05,-45.1,-47.15,-49.2,-59.45,-61.5,-61.5,-61.5,16.4,18.45,20.5,38.95,43.05,45.1,47.15,49.2,59.45,61.5,61.5,61.5,-16.4,-18.45,-20.5,-38.95,-43.05,-45.1,-47.15,-49.2,-59.45,-61.5,-61.5,-61.5,16.4,18.45,20.5,38.95,43.05,45.1,47.15,49.2,59.45,61.5,61.5,61.5,14.35,14.35,-14.35};
   double addY[add_N_mod] = {61.5,61.5,59.45,49.2,47.15,45.1,43.05,38.95,20.5,14.35,16.4,18.45,61.5,61.5,59.45,49.2,47.15,45.1,43.05,38.95,20.5,14.35,16.4,18.45,-61.5,-61.5,-59.45,-49.2,-47.15,-45.1,-43.05,-38.95,-20.5,-14.35,-16.4,-18.45,-61.5,-61.5,-59.45,-49.2,-47.15,-45.1,-43.05,-38.95,-20.5,-14.35,-16.4,-18.45,-61.5,61.5,-61.5};
