@@ -7,7 +7,7 @@
       --------------------------
     </comment>
     <comment> Forward/backward TOF position </comment>
-    <constant name="ForwardTOF_length"              value="min(ForwardTOFRegion_length, 3.*cm)"/>
+    <constant name="ForwardTOF_length"              value="min(ForwardTOFRegion_length, 2.*cm)"/>
     <constant name="ForwardTOF_zmin"                value="ForwardTOFRegion_zmin + ForwardTOFRegion_length - ForwardTOF_length - 1*cm"/>
     <constant name="ForwardTOF_nlayers"             value="1"/>
     <constant name="ForwardTOFMod_offset"           value="1.2*cm"/>
@@ -130,11 +130,41 @@
     <constant name="BackwardTOFLayer1_zmin"     value="BackwardTOFMod1_zmin - TOFEndcapLayer_thickness / 2" />
     <constant name="BackwardTOFLayer2_zmin"     value="BackwardTOFMod2_zmin - TOFEndcapLayer_thickness / 2" />
 
+    <constant name="ForwardTOFMod_x1"           value="2 * ForwardTOFMod_rmin * tan(TOFEndcapMod_angle/2)" />
+    <constant name="ForwardTOFMod_x2"           value="2 * ForwardTOFMod_rmax * sin(TOFEndcapMod_angle/2)" />
+    <constant name="ForwardTOFMod_y"            value="ForwardTOFMod_rmax * cos(TOFEndcapMod_angle/2) - ForwardTOFMod_rmin" />
     <constant name="BackwardTOF_xOffset"        value="0.0*cm" />
     <constant name="BackwardTOF_det_height"     value="2.0*cm" />
   </define>
 
   <detectors>
+      <!--detector
+        id="ForwardTOF_ID"
+        name="ForwardTOF"
+        type="epic_TrapEndcapTracker"
+        readout="TOFEndcapHits"
+        vis="TOFVis"
+        reflect="false">
+        <module name="ForwardModule" vis="TOFModuleVis">
+          <trd x1="ForwardTOFMod_x1/2.0" x2="ForwardTOFMod_x2/2.0" z="ForwardTOFMod_y/2"/>
+          <comment> TRDs are built back-to-front </comment>
+          <module_component thickness="TOFEndcapService_thickness" material="Silicon" vis="TOFVis"/>
+          <module_component thickness="TOFEndcapSensor_thickness" material="Silicon" sensitive="true" vis="TOFSensorVis"/>
+        </module>
+        <layer id="1">
+          <envelope  vis="TOFLayerVis"
+            rmin="ForwardTOFLayer_rmin"
+            rmax="ForwardTOFLayer_rmax"
+            length="TOFEndcapLayer_thickness"
+            zstart="ForwardTOFLayer1_zmin" />
+          <ring
+            r="ForwardTOFMod_rmin + ForwardTOFMod_y/2.0"
+            zstart="0"
+            nmodules="TOFEndcapMod_count"
+            dz="TOFEndcapMod_dz"
+            module="ForwardModule" />
+        </layer>
+      </detector-->
       <detector id="BackwardTOF_ID"
         name="BackwardTOF"
         type="epic_CompositeTracker"
