@@ -30,8 +30,8 @@
 	  readout="oHcalBarrelHits"
 	  vis="HcalBarrelVis"
 	  env_vis="HcalBarrelEnvelopeVis"
-	  rmin="1770"
-	  rmax="2670"
+	  rmin="1767"
+	  rmax="2690"
 	  length="3170" 
 	  calorimeterType="HAD_BARREL">
 	
@@ -46,19 +46,19 @@
 
     <matrix name="xposTileN" unit="mm" coldim="1" values="0.8 -167.9 -339.7 -508.2 -683.7 -865.2 -1053.4 -1250.8 -1556.9 -1793.1 -2044.2 -2286.4"/>
     <matrix name="yposTileN" unit="mm" coldim="1" values="1.295 1.296 1.296 1.295 1.295 1.295 1.3 1.298 122.0 122.0 122.0 122.1"/>
-    <matrix name="zposTileN" unit="mm" coldim="1" values="5.5 5.5 5.5 5.5 5.5 5.5 5.5 5.5 4.0 4.0 4.0 4.0"/>
+    <matrix name="zposTileN" unit="mm" coldim="1" values="5.5 5.5 5.5 5.5 5.5 5.5 5.5 5.5 5.5 5.5 5.5 5.5"/>
 
     <matrix name="xposChimneyTileS" unit="mm" coldim="1" values="1556.3 1792.25 2043.4 2285.6"/>
     <matrix name="yposChimneyTileS" unit="mm" coldim="1" values="123.85 123.26 123.26 123.26"/>
     <matrix name="zposChimneyTileS" unit="mm" coldim="1" values="-1.5 -1.5 -1.5 -1.5"/>
 
-    <constant name="ctilePlaneRotate" unit="deg" value="-14.13"/>
-    <constant name="tilePlaneRotate" unit="deg" value="-14.33"/>
+    <constant name="ctilePlaneRotate" unit="deg" value="-14.355"/>
+    <constant name="tilePlaneRotate" unit="deg" value="-14.555"/>
     <constant name="csectorRotate" unit="deg" value="6.086"/>
-    <constant name="sectorRotate" unit="deg" value="6.286"/>
+    <constant name="sectorRotate" unit="deg" value="6.100"/>
     
-    <matrix name="plates_x" unit="mm" coldim="1" values="161.935 118.175 -741.606 -771.304"/>
-    <matrix name="plates_y" unit="mm" coldim="1" values="2295.048 2267.198 2160.230 2119.177"/>
+    <matrix name="plates_x" unit="mm" coldim="1" values="161.935 118.175 -741.606 -771.303"/>
+    <matrix name="plates_y" unit="mm" coldim="1" values="2295.048 2267.198 2160.230 2119.176"/>
     <matrix name="plates_z" unit="mm" coldim="1" values="235.587 253.54 0.0 0.0"/>
    
   </define>
@@ -167,7 +167,7 @@
   </tessellated>
   </solid>
 
-  <solid name="HCAL_Sector_Half_Plate" material="Steel235" unit="mm" x="771.304" y="6119.177" z="0.0">
+  <solid name="HCAL_Sector_Half_Plate" material="Steel235" unit="mm" x="741.606" y="6160.230" z="0.0">
   <define>
   <position name="Mesh2Tess_0" unit="mm" x="666.5825805664062" y="5657.37109375" z="-1493.47998046875"/>
   <position name="Mesh2Tess_1" unit="mm" x="683.9190063476562" y="5788.16796875" z="3158.10009765625"/>
@@ -218,7 +218,7 @@
   </tessellated>
   </solid>
 
-  <solid name="HCAL_Sector_Plate" material="Steel235" unit="mm" x="741.606" y="6160.230" z="0.0">
+  <solid name="HCAL_Sector_Plate" material="Steel235" unit="mm" x="771.303" y="6119.176" z="0.0">
   <define>
   <position name="Mesh2Tess_0" unit="mm" x="688.0108642578125" y="5657.857421875" z="1500.0"/>
   <position name="Mesh2Tess_1" unit="mm" x="731.9955444335938" y="5769.51708984375" z="3120.0"/>
