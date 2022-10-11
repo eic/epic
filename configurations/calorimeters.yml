@@ -2,9 +2,9 @@ features:
   beampipe:
   solenoid:
   ecal:
-    forward_scifi:
-    forward_homogeneous:
-    forward_insert:
-    barrel_sciglass:
-    backward_PbWO4:
+    forward_scifi
+    forward_homogeneous
+    forward_insert
+    barrel_sciglass
+    backward_PbWO4
   hcal:
