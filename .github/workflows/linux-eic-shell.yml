@@ -53,6 +53,7 @@ jobs:
     - uses: eic/run-cvmfs-osg-eic-shell@main
       with:
         platform-release: "jug_xl:nightly"
+        network_types: "none"
         run: |
           PREFIX=${PWD}/install
           # install ip6 repo
@@ -97,6 +98,25 @@ jobs:
         sudo apt-get install -y libxml2-utils
         find install/share -name "*.xml" -exec xmllint {} \; > /dev/null
 
+  check-tracking-geometry:
+    runs-on: ubuntu-latest
+    needs: build-test
+    steps:
+    - uses: actions/checkout@v3
+    - uses: actions/download-artifact@v3
+      with:
+        name: build-fast-eic-shell
+        path: install/
+    - uses: cvmfs-contrib/github-action-cvmfs@v3
+    - uses: eic/run-cvmfs-osg-eic-shell@main
+      with:
+        platform-release: "jug_xl:nightly"
+        network_types: "none"
+        setup: install/setup.sh
+        run: |
+          root -b -q "scripts/test_ACTS.cxx+(\"${DETECTOR_PATH}/${DETECTOR_CONFIG}.xml\")" | tee check_tracking_geometry.out
+          bin/acts_geo_check check_tracking_geometry.out
+
   convert-to-gdml:
     runs-on: ubuntu-latest
     needs: build-test
@@ -110,6 +130,7 @@ jobs:
     - uses: eic/run-cvmfs-osg-eic-shell@main
       with:
         platform-release: "jug_xl:nightly"
+        network_types: "none"
         setup: install/setup.sh
         run: |
           mkdir -p geo
@@ -133,6 +154,7 @@ jobs:
     - uses: eic/run-cvmfs-osg-eic-shell@main
       with:
         platform-release: "jug_xl:nightly"
+        network_types: "none"
         setup: install/setup.sh
         run: |
           mkdir -p geo
@@ -156,6 +178,7 @@ jobs:
     - uses: eic/run-cvmfs-osg-eic-shell@main
       with:
         platform-release: "jug_xl:nightly"
+        network_types: "none"
         setup: install/setup.sh
         run: |
           mkdir -p doc
@@ -179,6 +202,7 @@ jobs:
     - uses: eic/run-cvmfs-osg-eic-shell@main
       with:
         platform-release: "jug_xl:nightly"
+        network_types: "none"
         setup: install/setup.sh
         run: |
           mkdir -p doc
@@ -208,12 +232,40 @@ jobs:
     - uses: eic/run-cvmfs-osg-eic-shell@main
       with:
         platform-release: "jug_xl:nightly"
+        network_types: "bridge" # this job must succeed even when new artifacts
         setup: install/setup.sh
         run: |
           mkdir -p doc
           checkOverlaps -c ${DETECTOR_PATH}/${DETECTOR_CONFIG}.xml | tee doc/overlap_check_tgeo.out
           noverlaps="$(grep -c ovlp doc/overlap_check_tgeo.out || true)"
           if [[ "${noverlaps}" -gt "0" ]] ; then echo "${noverlaps} overlaps found!" && false ; fi
+
+  check-geometry-full:
+    runs-on: ubuntu-latest
+    needs: build-test
+    if: github.ref == 'refs/heads/main'
+    steps:
+    - uses: actions/checkout@v3
+    - uses: actions/download-artifact@v3
+      with:
+        name: build-full-eic-shell
+        path: install/
+    - uses: cvmfs-contrib/github-action-cvmfs@v3
+    - uses: eic/run-cvmfs-osg-eic-shell@main
+      with:
+        platform-release: "jug_xl:nightly"
+        setup: install/setup.sh
+        run: |
+          mkdir -p doc
+          checkGeometry -f true -c ${DETECTOR_PATH}/${DETECTOR_CONFIG}.xml | tee geometry_check_full.out
+          mv statistics.root geometry_check_full.root
+    - uses: actions/upload-artifact@v3
+      with:
+        name: check-geometry-full
+        path: |
+          geometry_check_full.out
+          geometry_check_full.root
+        if-no-files-found: error
 
   check-overlap-geant4:
     runs-on: ubuntu-latest
@@ -228,6 +280,7 @@ jobs:
     - uses: eic/run-cvmfs-osg-eic-shell@main
       with:
         platform-release: "jug_xl:nightly"
+        network_types: "bridge" # this job must succeed even when new artifacts
         setup: install/setup.sh
         run: |
           mkdir -p doc
@@ -248,6 +301,7 @@ jobs:
     - uses: eic/run-cvmfs-osg-eic-shell@main
       with:
         platform-release: "jug_xl:nightly"
+        network_types: "bridge" # this job must succeed even when new artifacts
         setup: install/setup.sh
         run: |
           mkdir -p doc
@@ -268,6 +322,7 @@ jobs:
     - uses: eic/run-cvmfs-osg-eic-shell@main
       with:
         platform-release: "jug_xl:nightly"
+        network_types: "none"
         setup: install/setup.sh
         run: |
           mkdir -p doc
@@ -320,6 +375,7 @@ jobs:
     - uses: eic/run-cvmfs-osg-eic-shell@main
       with:
         platform-release: "jug_xl:nightly"
+        network_types: "none"
         setup: install/setup.sh
         run: |
           bin/generate_prim_file -o prim -D -t detector_view
@@ -347,6 +403,7 @@ jobs:
     - uses: eic/run-cvmfs-osg-eic-shell@main
       with:
         platform-release: "jug_xl:nightly"
+        network_types: "none"
         run: |
           mkdir -p images
           bin/make_dawn_views -i prim/detector_view.prim -t ${{ matrix.view }} -d scripts/${{ matrix.view }} -D
@@ -374,6 +431,7 @@ jobs:
     - uses: eic/run-cvmfs-osg-eic-shell@main
       with:
         platform-release: "jug_xl:nightly"
+        network_types: "none"
         run: |
           mkdir -p images
           bin/make_dawn_views -i prim/detector_view.prim -t ${{ matrix.view }} -d scripts/${{ matrix.view }} -D -- ${{ matrix.slice }}
