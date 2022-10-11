@@ -164,7 +164,7 @@
 
   {% if features is not defined or features['ecal'] is none or 'barrel_sciglass' in features['ecal'] %}
   <include ref="${DETECTOR_PATH}/compact/ecal_barrel_sciglass.xml"/>
-  {% elif 'barrel_interlayers' in features['ecal'] -%}
+  {% elif 'barrel_interlayers' in features['ecal'] %}
   <include ref="${DETECTOR_PATH}/compact/ecal_barrel_interlayers.xml"/>
   {% endif -%}
 {% endif -%}
