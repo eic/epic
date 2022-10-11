@@ -442,7 +442,7 @@ Examples:
     <comment> Global PID regions with suballocations for TOF and RICH detectors </comment>
     <constant name="ForwardPIDRegion_zmin"        value="CentralTrackingRegionP_zmax" />
     <constant name="ForwardPIDRegion_length"      value="142.0*cm" />
-    <constant name="ForwardPIDRegion_rmax"        value="180.0*cm" />
+    <constant name="ForwardPIDRegion_rmax"        value="185.0*cm" />
 
     <comment> Forward TOF region currenlty empty for future upgrades </comment>
     <constant name="ForwardTOFRegion_zmin"        value="ForwardPIDRegion_zmin" />
@@ -502,7 +502,7 @@ Service gaps in FW direction (before endcapP ECAL) and BW direction (before endc
     <constant name="ForwardServiceGap_zmax"       value="ForwardServiceGap_zmin + ForwardServiceGap_length"/>
 
     <comment> Radial service gap between dRICH and HcalBarrel </comment>
-    <constant name="ForwardServiceGap_thickness"  value="15.0*cm"/>
+    <constant name="ForwardServiceGap_thickness"  value="10.0*cm"/>
     <constant name="ForwardServiceGap_rmin"       value="ForwardPIDRegion_rmax"/>
     <constant name="ForwardServiceGap_rmax"       value="ForwardServiceGap_rmin + ForwardServiceGap_thickness"/>
 
