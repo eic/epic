@@ -28,8 +28,7 @@
     <comment> barrel length: 2R/tan(angle) - dz </comment>
 
     <comment> Position in center of space behind DIRC </comment>
-    <constant name="MPGDDIRC_rmin"            value="73*cm"/>
-	    <!--<constant name="MPGDDIRC_rmin"            value="DIRC_rmin + DIRC_thickness"/>-->
+    <constant name="MPGDDIRC_rmin"            value="DIRC_rmin + DIRC_thickness"/>
     <comment> barrel asymmetryc between forward and backward lengths </comment>I
 
     <comment> Service/Support setup </comment>
