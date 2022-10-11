@@ -40,9 +40,9 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
   DetElement       sdet(det_name, det_id);
   Volume           motherVol = description.pickMotherVolume(sdet);
 
-  std::string   string_rmin      = getAttrOrDefault(x_det, _Unicode(rmin), "1780"); 
-  std::string   string_rmax      = getAttrOrDefault(x_det, _Unicode(rmax), "2660"); 
-  std::string   string_length    = getAttrOrDefault(x_det, _Unicode(length), "3160"); 
+  std::string   string_rmin      = getAttrOrDefault<std::string>(x_det, _Unicode(rmin), "1780"); 
+  std::string   string_rmax      = getAttrOrDefault<std::string>(x_det, _Unicode(rmax), "2660"); 
+  std::string   string_length    = getAttrOrDefault<std::string>(x_det, _Unicode(length), "3160"); 
 
   double           rmin = (atof(string_rmin.c_str()))*dd4hep::mm;
   double           rmax = (atof(string_rmax.c_str()))*dd4hep::mm;
@@ -225,7 +225,7 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
       std::string facetName1 = getAttrOrDefault<std::string>(triang, _Unicode(vertex1), " "); 
       std::string facetName2 = getAttrOrDefault<std::string>(triang, _Unicode(vertex2), " "); 
       std::string facetName3 = getAttrOrDefault<std::string>(triang, _Unicode(vertex3), " "); 
-
+      
       // Search the define collection to match things up
       int idx = 0; 
       for(xml_coll_t j(define, _Unicode(position)); j; ++j){
