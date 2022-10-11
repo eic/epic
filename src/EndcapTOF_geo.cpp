@@ -550,9 +550,10 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
 
         //place Log_water_cooling_left in assembly
         Transform3D  transfrowCL(RotationZYX(row%2==0 ? - M_PI : 0,0, 0), Translation3D(- ( (nSensLeft) * segmentlength / 2.0 + segmentlength / 2.0 - (numSensorLeftAdd* segmentlength)), row>0 ? (row*fullsensor_width) - (fullsensor_width/2.0) : (row*fullsensor_width) + (fullsensor_width/2.0), disk_zPos));
-        assembly.placeVolume(Log_cooling_tube_left, transfrowCL);
-        assembly.placeVolume(Log_water_cooling_left, transfrowCL);
-
+        if(row!=0){
+          assembly.placeVolume(Log_cooling_tube_left, transfrowCL);
+          assembly.placeVolume(Log_water_cooling_left, transfrowCL);
+        }
 
 
         Box sol_cutout_tube_right(1.3*(sqrt(pow(disk_rMax,2)-pow( (abs(row)*fullsensor_width) - (fullsensor_width/2.0) ,2))- sqrt(pow(disk_rMin,2)-pow( (abs(row)*fullsensor_width)-(fullsensor_width/2) ,2)) - disk_xOffset)/2,(cooling_tube_diameter - 2*cooling_tube_thickness) / 2,(cooling_tube_diameter - 2*cooling_tube_thickness) / 2);
@@ -571,9 +572,10 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
 
         //place Log_water_cooling_right in assembly
         Transform3D  transfrowCR(RotationZYX(row%2==0 ? - M_PI : 0,0, 0), Translation3D(( (nSensRight) * segmentlength / 2.0 + segmentlength / 2.0 + (numSensorRightAdd* segmentlength)), row>0 ? (row*fullsensor_width) - (fullsensor_width/2.0) : (row*fullsensor_width) + (fullsensor_width/2.0), disk_zPos));
-        assembly.placeVolume(Log_cooling_tube_right, transfrowCR);
-        assembly.placeVolume(Log_water_cooling_right, transfrowCR);
-
+        if(row!=0){
+          assembly.placeVolume(Log_cooling_tube_right, transfrowCR);
+          assembly.placeVolume(Log_water_cooling_right, transfrowCR);
+        }
       } else {
           // create mother volume with space for numSensorsRow towers along x-axis
           Box TTLDetRowSolid(numSensorsRow * segmentlength / 2.0,fullsensor_width / 2.0,thicknessDet_SH / 2.0);
