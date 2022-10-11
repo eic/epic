@@ -1,18 +1,18 @@
 <lccdd>
 
   <comment>
-    DIRC consists of 16 (default) identical modules making a barrel.
+    DIRC consists of 12 (default) identical modules making a barrel.
     Each DIRC module consists of:
     _______
     [  |   \
     [  |    \
-    [FD|Prizm|Lens|--------bars+glue-----|mirror]
+    [FD|Prism|Lens|--------bars+glue-----|mirror]
 
     Main constants to control DIRC global geometry:
       - DIRC_length
       - DIRC_offset
       - DIRC_rmin
-      - DIRCBox_count  (16 full dirc, 1 - a single module)
+      - DIRCBox_count  (12 full dirc, 1 - a single module)
       - DIRC_rotation  (allows to flip the DIRC)
 
     When DIRC_length is set, it affects bars length (all other lengths are fixed)
@@ -21,27 +21,18 @@
   </comment>
 
   <define>
-    <constant name="DIRCFake_rmin"             value="BarrelTracking_rmax-11*cm"/>
-    <constant name="DIRC_rotation"         value="pi" comment="Allows DIRC flip"/>
-    <!-- <constant name="cb_DIRC_length"    value="DIRCLength"/> -->
-    <!-- CLEANUP THIS if not sure. This is from the initial implementation
-    <constant name="DIRC_length"            value="285.500*cm"/>
-    <constant name="DIRCFake_rmin"              value="82.00*cm"/>-->
+    <constant name="DIRC_rotation"          value="pi" comment="Allows DIRC flip"/>
 
     <!-- Prism -->
-    <constant name="DIRCPrism_width"        value="360*mm"/>
+    <constant name="DIRCPrism_width"        value="350*mm"/>
     <constant name="DIRCPrism_length"       value="300*mm"/>
     <constant name="DIRCPrism_short_edge"   value="50*mm"/>
     <constant name="DIRCPrism_angle"        value="32*deg"/>
     <constant name="DIRCPrism_long_edge"    value="DIRCPrism_short_edge + DIRCPrism_length * tan(DIRCPrism_angle)"/>
     <constant name="DIRCPrism_height"       value="DIRCPrism_long_edge"/>
 
-    <!-- DIRC length -->
-    <constant name="DIRCMain_length"           value="DIRC_length"/>
-    <constant name="DIRCFake_offset"           value="DIRC_offset+15*cm"/>
-
     <!-- Box - main DIRC modules -->
-    <constant name="DIRCBox_count"          value="16"  comment="Number of DIRC boxes per... DIRC. 16 - default"/>
+    <constant name="DIRCBox_count"          value="12"  comment="Number of DIRC boxes per... DIRC. 12 - default"/>
     <constant name="DIRCBox_width"          value="DIRCPrism_width"/>
 
     <!-- Mirror -->
@@ -50,12 +41,11 @@
     <constant name="DIRCMirror_thickness"   value="1 * mm"/>
 
     <!-- Lens -->
-    <constant name="DIRCLens_height"        value="DIRCPrism_long_edge"/>
-    <constant name="DIRCLens_width"         value="DIRCPrism_width"/>
     <constant name="DIRCLens_thickness"     value="12 * mm"/>
-    <constant name="DIRCLens_r1"            value="33 * mm"/>
-    <constant name="DIRCLens_r2"            value="24 * mm"/>
-    <constant name="DIRCLens_shight"        value="25 * mm" comment="Is 'shight' from UK urban dictionary???"/>
+    <constant name="DIRCLens_r1"            value="62 * mm"/>
+    <constant name="DIRCLens_r2"            value="36 * mm"/>
+    <constant name="DIRCLens_height"        value="50 * mm"/>
+    <constant name="DIRCLens_width"         value="DIRCPrism_width"/>
 
     <!-- FD (Foto detectors?) -->
     <constant name="DIRCFd_height"          value="DIRCPrism_height"/>
@@ -64,20 +54,14 @@
 
     <!-- Bar - Each DIRC box consists of N "bars" -->
     <!-- BarAssembly - Bars + Glue -->
-    <constant name="DIRCBarAssm_length"     value="DIRCMain_length - DIRCPrism_length - DIRCMirror_thickness - DIRCLens_thickness - DIRCFd_thickness" comment="Length of bars+glue assembly"/>
-    <constant name="DIRCBar_count"          value="11" comment="Number of bars per box"/>
+    <constant name="DIRCBarAssm_length"     value="DIRC_length - DIRCPrism_length - DIRCMirror_thickness - DIRCLens_thickness - DIRCFd_thickness" comment="Length of bars+glue assembly"/>
+    <constant name="DIRCBar_count"          value="10" comment="Number of bars per box"/>
     <constant name="DIRCBar_gap"            value="0.15 * mm"/>
     <constant name="DIRCBar_height"         value="17 * mm"/>
     <constant name="DIRCBar_width"          value="(DIRCPrism_width - (DIRCBar_count - 1) * DIRCBar_gap) / DIRCBar_count"/>
     <constant name="DIRCGlue_thickness"     value="0.05 * mm"/>
     <constant name="DIRCBar_length"         value="(DIRCBarAssm_length-4*DIRCGlue_thickness)/4"/>
 
-    <!-- dirc outer volume -->
-    <comment>
-      RMax is calculated according to "rectangle inside ring" problem solution
-      https://math.stackexchange.com/questions/4222684/calculate-rectangle-inside-ring-parameters/4222691#4222691
-    </comment>
-    <constant name="DIRCFake_rmax"              value="sqrt( (DIRCFake_rmin+DIRCPrism_height)^2 + 0.25*(DIRCPrism_height)^2 )"/>
   </define>
 
   <materials>
@@ -86,7 +70,6 @@
       See optical_materials.xml for optical ones
       -
     </comment>
-
     <material name="Epotek">
       <D type="density" value="1.2" unit="g/cm3"/>
       <composite n="5" ref="H"/>
@@ -120,9 +103,9 @@
   </display>
 
   <detectors>
-    <detector id="BarrelDIRC_ID" name="cb_DIRC" type="epic_cb_DIRC" readout="DIRCBarHits" vis="DIRCTube">
-      <dimensions rmin="DIRCFake_rmin" rmax="DIRCFake_rmax" length="DIRCMain_length" radius="DIRCRadius" dx="DIRCBars_DX" dy="DIRCBars_DY" number="DIRCNum" deltaphi="DIRCDPhi"/>
-      <position x="0" y="0" z="DIRCFake_offset"/>
+    <detector id="BarrelDIRC_ID" name="cb_DIRC" type="epic_DIRC" readout="DIRCBarHits" vis="DIRCTube">
+      <dimensions rmin="DIRC_rmin" rmax="DIRC_rmax" length="DIRC_length" radius="DIRCRadius" dx="DIRCBars_DX" dy="DIRCBars_DY" number="DIRCNum" deltaphi="DIRCDPhi"/>
+      <position x="0" y="0" z="DIRC_offset"/>
       <rotation theta="DIRC_rotation"/>
       <module name="DircBox" R="DIRCRadius" repeat="DIRCBox_count" width="DIRCPrism_width + 1*mm" height="DIRCPrism_height*2" length="DIRCBarAssm_length + 550*mm" vis="DIRCBox">
         <!-- Mirror (at the end of the module) -->
@@ -157,7 +140,13 @@
           r2="DIRCLens_r2"
         />
 
-        <prism/> <!-- TODO parametrize here -->
+        <prism
+          width="DIRCPrism_width"
+          length="DIRCPrism_length"
+          angle="DIRCPrism_angle"
+          long_edge="DIRCPrism_long_edge"
+          short_edge="DIRCPrism_short_edge"
+        />
 
         <fd
           height="DIRCFd_height"

@@ -27,7 +27,6 @@
     <constant name="InnerMPGDBarrelLayer_rmin"              value="InnerMPGDBarrelMod_rmin - InnerMPGDBarrelLayer_thickness / 2.0"/>
     <constant name="InnerMPGDBarrelLayer_rmax"              value="InnerMPGDBarrelLayer_rmin + InnerMPGDBarrelLayer_thickness"/>
 
-    <comment> MPGD tracker parameters </comment>
     <constant name="MMKaptonOverlay_thickness"              value="50*um"/>
     <constant name="MMCuGround_thickness"                   value="1.58*um"/>
     <constant name="MMPCB_thickness"                        value="100*um"/>
@@ -91,6 +90,7 @@
         <z_layout dr="0.0 * mm" z0="0.0 * mm" nz="1"/>
       </layer>
     </detector>
+
   </detectors>
 
 
