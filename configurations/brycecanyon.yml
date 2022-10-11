@@ -16,5 +16,6 @@ features:
     backward_PbWO4:
   solenoid:
   hcal:
-  farforward: brycecanyon
+  farforward:
+    - brycecanyon
   farbackward:
