@@ -18,6 +18,8 @@
 #include "XML/Layering.h"
 #include "DD4hep/Printout.h"
 
+#include "TVector3.h"
+
 using namespace std;
 using namespace dd4hep;
 using namespace dd4hep::detail;
@@ -57,8 +59,8 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
   // Storage for sectors and tile assemblies
   Assembly      ChimneySector("ChimneySector"); 
   Assembly      Sector("Sector"); 
-  Assembly      TileAssembly24("TileAssembly24"); 
-  Assembly      TileAssembly24Chimney("TileAssembly24Chimney"); 
+  Assembly      ChimneyTowerPair[24][2]; 
+  Assembly      TowerPair[24][2]; 
 
   xml_comp_t    det_define           = x_det.child("define");
 
@@ -108,6 +110,9 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
   std::vector<double> yposChimneyTileS; 
   std::vector<double> zposChimneyTileS; 
 
+  std::vector<double> plates_x; 
+  std::vector<double> plates_y; 
+  std::vector<double> plates_z; 
 
   for(xml_coll_t i(det_define, _Unicode(matrix)); i; ++i){
     xml_comp_t  x_mtrx = i; 
@@ -139,6 +144,12 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
       aptr = &yposChimneyTileS;
     else if(mtrx_name == "zposChimneyTileS") 
       aptr = &zposChimneyTileS;
+    else if(mtrx_name == "plates_x") 
+      aptr = &plates_x;
+    else if(mtrx_name == "plates_y") 
+      aptr = &plates_y;
+    else if(mtrx_name == "plates_z") 
+      aptr = &plates_z;
     else{
       printout(WARNING, "BarrelHCalCalorimeter", "unknown <matrix> data!");
       continue;
@@ -174,10 +185,6 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
     double offset_y = atof(getAttrOrDefault<std::string>(x_solid, _Unicode(y), "0").c_str())*dd4hep::mm; 
     double offset_z = atof(getAttrOrDefault<std::string>(x_solid, _Unicode(z), "0").c_str())*dd4hep::mm; 
 
-    //double srmin = 100000.0;
-    //double srmax = 0.0; 
-    //double szmax = 0.0; 
-
     // Get the vertices
     std::vector<Tessellated::Vertex_t> vertices; 
     for(xml_coll_t j(define, _Unicode(position)); j; ++j){
@@ -204,15 +211,7 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
     
       vertices.push_back(thisPoint);
 
-      //double r = sqrt( pow(xp,2) + pow(yp,2) ); 
-      //if(r<srmin) srmin = r; 
-      //if(r>srmax) srmax = r; 
-      //if(fabs(zp)>szmax) 
-      //szmax = zp;
-
     }
-
-    //printout(WARNING, "BarrelHCalCalorimeter", "%s %f %f %f", solid_name.c_str(), srmin, srmax, szmax);
     
     TessellatedSolid solid(solid_name.c_str(),vertices);
 
@@ -223,10 +222,10 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
       int vtx2 = -1; 
       int vtx3 = -1; 
 
-      std::string facetName1 = getAttrOrDefault<std::string>(triang, _Unicode(vertex1), "0"); 
-      std::string facetName2 = getAttrOrDefault<std::string>(triang, _Unicode(vertex2), "0"); 
-      std::string facetName3 = getAttrOrDefault<std::string>(triang, _Unicode(vertex3), "0"); 
-
+      std::string facetName1 = getAttrOrDefault<std::string>(triang, _Unicode(vertex1), " "); 
+      std::string facetName2 = getAttrOrDefault<std::string>(triang, _Unicode(vertex2), " "); 
+      std::string facetName3 = getAttrOrDefault<std::string>(triang, _Unicode(vertex3), " "); 
+      
       // Search the define collection to match things up
       int idx = 0; 
       for(xml_coll_t j(define, _Unicode(position)); j; ++j){
@@ -245,15 +244,19 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
 
       // Add the facet to the solid
 
-      if( (vtx1>=0) && (vtx2>=0) && (vtx3>=0) && (vtx1!=vtx2) && (vtx1!=vtx3) && (vtx2!=vtx3) )
+      if( (vtx1>=0) && (vtx2>=0) && (vtx3>=0) && (vtx1!=vtx2) && (vtx1!=vtx3) && (vtx2!=vtx3) ){
+
 	solid->AddFacet(vtx1,vtx2,vtx3); 
+	
+      }
       else
 	printout(WARNING, "BarrelHCalCalorimeter", "bad facet! %d %d %d", vtx1, vtx2, vtx3);
 
     }
 
     // Complete the shape
-    solid->CloseShape(true,true,false); 
+    solid->CloseShape(true,true,true); 
+
     Volume           solidVolume(solid_name, solid, solid_material);
     solidVolume.setVisAttributes(description, x_det.visStr());
 
@@ -261,28 +264,34 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
 
     if(solid_name == "HCAL_Chimney_Sector_Half_Plate"){
 
-      ChimneySector.placeVolume(solidVolume, 0, Transform3D(RotationZ(csectorRotate*dd4hep::deg), Translation3D(0, 0, 0) ));
+      ChimneySector.placeVolume(solidVolume, 0, 
+      			RotationZ(csectorRotate*dd4hep::deg)*Transform3D(RotationZ(0.0), Translation3D(plates_x[0]*dd4hep::mm, plates_y[0]*dd4hep::mm, plates_z[0]*dd4hep::mm) ));
  
-      ChimneySector.placeVolume(solidVolume, 1, Transform3D(RotationZ((9.5*2*M_PI / 320) + csectorRotate*dd4hep::deg), Translation3D(0, 0, 0) ));
+      ChimneySector.placeVolume(solidVolume, 1, 
+     				RotationZ((9.60*2*M_PI / 320) + csectorRotate*dd4hep::deg)*Transform3D(RotationZ(0.0), Translation3D(plates_x[0]*dd4hep::mm, plates_y[0]*dd4hep::mm, plates_z[0]*dd4hep::mm) ));
  
     }
     else if(solid_name == "HCAL_Chimney_Sector_Plate"){
 
       for(int i=0; i<9; i++)
-        ChimneySector.placeVolume(solidVolume, i, Transform3D(RotationZ((i*2*M_PI / 320) + csectorRotate*dd4hep::deg), Translation3D(0, 0, 0) ));
+        ChimneySector.placeVolume(solidVolume, i, 
+				  RotationZ((i*2*M_PI / 320) + csectorRotate*dd4hep::deg)*Transform3D(RotationZ(0.0), Translation3D(plates_x[1]*dd4hep::mm, plates_y[1]*dd4hep::mm, plates_z[1]*dd4hep::mm) ));
 
     }
     else if(solid_name == "HCAL_Sector_Half_Plate"){
 
-      Sector.placeVolume(solidVolume, 0, Transform3D(RotationZ(sectorRotate*dd4hep::deg), Translation3D(0, 0, 0) ));
+      Sector.placeVolume(solidVolume, 0, 
+			 RotationZ(sectorRotate*dd4hep::deg)*Transform3D(RotationZ(0.4*dd4hep::deg), Translation3D(plates_x[2]*dd4hep::mm, plates_y[2]*dd4hep::mm, plates_z[2]*dd4hep::mm) ));
  
-      Sector.placeVolume(solidVolume, 1, Transform3D(RotationZ((9.5*2*M_PI / 320) + sectorRotate*dd4hep::deg), Translation3D(0, 0, 0) ));
+      Sector.placeVolume(solidVolume, 1, 
+      	 RotationZ((9.60*2*M_PI / 320) + sectorRotate*dd4hep::deg)*Transform3D(RotationZ(0.4*dd4hep::deg), Translation3D(plates_x[2]*dd4hep::mm, plates_y[2]*dd4hep::mm, plates_z[2]*dd4hep::mm) ));
 
     }
     else if(solid_name == "HCAL_Sector_Plate"){
 
       for(int i=0; i<9; i++)
-	Sector.placeVolume(solidVolume, i, Transform3D(RotationZ((i*2*M_PI / 320) + sectorRotate*dd4hep::deg), Translation3D(0, 0, 0) ));
+      	Sector.placeVolume(solidVolume, i, 
+      	   RotationZ((i*2*M_PI / 320) + sectorRotate*dd4hep::deg)*Transform3D(RotationZ(0.4*dd4hep::deg), Translation3D(plates_x[3]*dd4hep::mm, plates_y[3]*dd4hep::mm, plates_z[3]*dd4hep::mm) ));
 
     }
     else{
@@ -299,63 +308,93 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
 	  std::string stnum = solid_name.substr(solid_name.size()-2,solid_name.size());
 	  int tnum = atoi(stnum.c_str())-1; 
 	  
-	  DetElement tile_det("tile0", det_id);
+	  double ctileRotateStart = 5.495*(360.0/320.0)*dd4hep::deg;
+	  double tileRotateStart = 20.400*(360.0/320.0)*dd4hep::deg + ctileRotateStart; 
+
+	  Assembly TempTower1a(_toString(11-tnum,"Tower%i")); 
+	  Assembly TempTower1b(_toString(11-tnum+24,"Tower%i")); 
+	  Assembly TempTower2a(_toString(12+tnum,"Tower%i")); 
+	  Assembly TempTower2b(_toString(12+tnum+24,"Tower%i")); 
+	  Assembly TempChimneyTower1a(_toString(11-tnum,"ChimneyTower%i")); 
+	  Assembly TempChimneyTower1b(_toString(11-tnum+24,"ChimneyTower%i")); 
+	  Assembly TempChimneyTower2a(_toString(12+tnum,"ChimneyTower%i")); 
+	  Assembly TempChimneyTower2b(_toString(12+tnum+24,"ChimneyTower%i")); 
 
 	  if(type=="OuterHCalTile"){
 
-	    PlacedVolume phv = TileAssembly24.placeVolume(solidVolume,0,Transform3D(RotationY(0.0), 
-								 Translation3D((xposTileS[tnum]+(tnum+1)*tile_tolerance)*dd4hep::mm, yposTileS[tnum]*dd4hep::mm, zposTileS[tnum]*dd4hep::mm) ));
-
-	    DetElement sd = tile_det.clone(_toString(tnum-1, "tile%d")); 
-	    sd.setPlacement(phv);
-	    sdet.add(sd);
-
-	    phv = TileAssembly24.placeVolume(solidVolume,1,Transform3D(RotationY(180.0*dd4hep::deg),
-	    							 Translation3D((xposTileN[tnum]-(tnum+1)*tile_tolerance)*dd4hep::mm, yposTileN[tnum]*dd4hep::mm, zposTileN[tnum]*dd4hep::mm)  )); 
-
-	    sd = tile_det.clone(_toString(tnum-1+12, "tile%d")); 
-	    sd.setPlacement(phv);
-	    sdet.add(sd);
-
-	    if(tnum<=7){
-
-	      phv = TileAssembly24Chimney.placeVolume(solidVolume,2,Transform3D(RotationY(0.0), 
-									  Translation3D((xposTileS[tnum]+(tnum+1)*tile_tolerance)*dd4hep::mm, yposTileS[tnum]*dd4hep::mm, zposTileS[tnum]*dd4hep::mm) ));
-
-	      sd = tile_det.clone(_toString(tnum-1+24, "tile%d")); 
-	      sd.setPlacement(phv);
-	      sdet.add(sd);
-
-	      phv = TileAssembly24Chimney.placeVolume(solidVolume,3,Transform3D(RotationY(180.0*dd4hep::deg), 
-									  Translation3D((xposTileN[tnum]-(tnum+1)*tile_tolerance)*dd4hep::mm, yposTileN[tnum]*dd4hep::mm, zposTileN[tnum]*dd4hep::mm) ));
-	      sd = tile_det.clone(_toString(tnum-1+36, "tile%d")); 
-	      sd.setPlacement(phv);
-	      sdet.add(sd);
-
+	    TowerPair[11-tnum][0] = TempTower1a; 
+	    TowerPair[11-tnum][1] = TempTower1b; 
+	    TowerPair[12+tnum][0] = TempTower2a; 
+	    TowerPair[12+tnum][1] = TempTower2b; 
+	    if(tnum<=7) {
+	      ChimneyTowerPair[11-tnum][0] = TempChimneyTower1a; 
+	      ChimneyTowerPair[11-tnum][1] = TempChimneyTower1b; 
+	      ChimneyTowerPair[12+tnum][0] = TempChimneyTower2a;  
+	      ChimneyTowerPair[12+tnum][1] = TempChimneyTower2b;  
 	    }
 	    else{
-	      phv = TileAssembly24Chimney.placeVolume(solidVolume,3,Transform3D(RotationY(180.0*dd4hep::deg), 
-									  Translation3D((xposTileN[tnum]-(tnum+1)*tile_tolerance)*dd4hep::mm, yposTileN[tnum]*dd4hep::mm, zposTileN[tnum]*dd4hep::mm) ));
-	      sd = tile_det.clone(_toString(tnum-1+36, "tile%d")); 
-	      sd.setPlacement(phv);
-	      sdet.add(sd);
+	      ChimneyTowerPair[12+tnum][0] = TempChimneyTower2a; 
+	      ChimneyTowerPair[12+tnum][1] = TempChimneyTower2b; 
+	    }
+
+	    for(int i=0; i<10; i++){ 
+
+	      int ptower = 0; 
+	      if(i>4) ptower = 1; 
+
+	      TowerPair[11-tnum][ptower].placeVolume(solidVolume,i,RotationZ(tileRotateStart + i*(360.0/320.0)*dd4hep::deg)*
+				      Transform3D(RotationY(90.0*dd4hep::deg), Translation3D(xposOuter[0]*dd4hep::mm, yposOuter[0]*dd4hep::mm, 0.0))*
+				      RotationX(-tilePlaneRotate*dd4hep::deg)*Transform3D(RotationY(0.0), 
+				      Translation3D((xposTileS[tnum]+(tnum+1)*tile_tolerance)*dd4hep::mm, yposTileS[tnum]*dd4hep::mm, zposTileS[tnum]*dd4hep::mm) ));
+
+	      TowerPair[12+tnum][ptower].placeVolume(solidVolume,i,RotationZ(tileRotateStart + i*(360.0/320.0)*dd4hep::deg)*
+				      Transform3D(RotationY(90.0*dd4hep::deg), Translation3D(xposOuter[0]*dd4hep::mm, yposOuter[0]*dd4hep::mm, 0.0))*
+				      RotationX(-tilePlaneRotate*dd4hep::deg)*Transform3D(RotationY(180.0*dd4hep::deg), 
+				      Translation3D((xposTileN[tnum]-(tnum+1)*tile_tolerance)*dd4hep::mm, yposTileN[tnum]*dd4hep::mm, zposTileN[tnum]*dd4hep::mm) ));
+
+	      if(tnum<=7){
+		ChimneyTowerPair[11-tnum][ptower].placeVolume(solidVolume,i,RotationZ(ctileRotateStart + i*(360.0/320.0)*dd4hep::deg)*
+				      Transform3D(RotationY(90.0*dd4hep::deg), Translation3D(xposOuter[0]*dd4hep::mm, yposOuter[0]*dd4hep::mm, 0.0))*
+				      RotationX(-ctilePlaneRotate*dd4hep::deg)*Transform3D(RotationY(0.0), 
+	      		      Translation3D((xposTileS[tnum]+(tnum+1)*tile_tolerance)*dd4hep::mm, yposTileS[tnum]*dd4hep::mm, zposTileS[tnum]*dd4hep::mm) ));
+
+		ChimneyTowerPair[12+tnum][ptower].placeVolume(solidVolume,i,RotationZ(ctileRotateStart + i*(360.0/320.0)*dd4hep::deg)*
+				      Transform3D(RotationY(90.0*dd4hep::deg), Translation3D(xposOuter[0]*dd4hep::mm, yposOuter[0]*dd4hep::mm, 0.0))*
+				      RotationX(-ctilePlaneRotate*dd4hep::deg)*Transform3D(RotationY(180.0*dd4hep::deg), 
+	      		      Translation3D((xposTileN[tnum]-(tnum+1)*tile_tolerance)*dd4hep::mm, yposTileN[tnum]*dd4hep::mm, zposTileN[tnum]*dd4hep::mm) ));
+	      }
+	      else{
+
+		ChimneyTowerPair[12+tnum][ptower].placeVolume(solidVolume,i,RotationZ(ctileRotateStart + i*(360.0/320.0)*dd4hep::deg)*
+				      Transform3D(RotationY(90.0*dd4hep::deg), Translation3D(xposOuter[0]*dd4hep::mm, yposOuter[0]*dd4hep::mm, 0.0))*
+				      RotationX(-ctilePlaneRotate*dd4hep::deg)*Transform3D(RotationY(180.0*dd4hep::deg), 
+	      		      Translation3D((xposTileN[tnum]-(tnum+1)*tile_tolerance)*dd4hep::mm, yposTileN[tnum]*dd4hep::mm, zposTileN[tnum]*dd4hep::mm) ));
+
+	      }
 
 	    }
-	      
 
 	  }
 
-	  if( (tnum>7) && (type=="OuterHCalChimneyTile") ){
-	    
-	    PlacedVolume phv = TileAssembly24Chimney.placeVolume(solidVolume,0,Transform3D(RotationY(0.0),
+	  if((tnum>7) && (type=="OuterHCalChimneyTile") ){
+
+	    ChimneyTowerPair[11-tnum][0] = TempChimneyTower1a;
+	    ChimneyTowerPair[11-tnum][1] = TempChimneyTower1b;
+
+	    for(int i=0; i<10; i++){ 
+
+	      int ptower = 0; 
+	      if(i>4) ptower = 1; 
+
+	      ChimneyTowerPair[11-tnum][ptower].placeVolume(solidVolume,i,RotationZ(ctileRotateStart + i*(360.0/320.0)*dd4hep::deg)*
+				      Transform3D(RotationY(90.0*dd4hep::deg), Translation3D(xposOuter[0]*dd4hep::mm, yposOuter[0]*dd4hep::mm, 0.0))*
+				      RotationX(-ctilePlaneRotate*dd4hep::deg)*Transform3D(RotationY(0.0), 
 											   Translation3D((xposChimneyTileS[tnum-8]+(tnum+1)*tile_tolerance)*dd4hep::mm, 
-													 yposChimneyTileS[tnum-8]*dd4hep::mm, zposChimneyTileS[tnum-8]*dd4hep::mm)));
-	    DetElement sd = tile_det.clone(_toString(tnum-1+24, "tile%d")); 
-	    sd.setPlacement(phv);
-	    sdet.add(sd);
+													  yposChimneyTileS[tnum-8]*dd4hep::mm, 
+													  zposChimneyTileS[tnum-8]*dd4hep::mm) ));
+	    }
 
 	  }
-	  
 
 	}
 	else	 
@@ -370,49 +409,49 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
 
   }
 
-  // Rotate the tile assemblies
 
-  Assembly TileAssembly24Rotated("TileAssembly24Rotated"); 
-  TileAssembly24Rotated.placeVolume(TileAssembly24,0,Transform3D(RotationX(-tilePlaneRotate*dd4hep::deg), Translation3D(0.0,0.0,0.0) ));
-
-  Assembly TileAssembly24ChimneyRotated("TileAssembly24ChimneyRotated"); 
-  TileAssembly24ChimneyRotated.placeVolume(TileAssembly24Chimney,0,Transform3D(RotationX(-ctilePlaneRotate*dd4hep::deg), Translation3D(0.0,0.0,0.0) ));
-
-  // Place the tile assemblies into the sectors
+  // Place the sector tile assemblies into the sectors
 
   sens.setType("calorimeter");
-  DetElement sector_det("sector0", det_id);
+  
+  DetElement tower_det("tower0", det_id);
 
-  // match the tile and sector plate geometry
-  double ctileRotateStart = 5.40*(360.0/320.0)*dd4hep::deg;
-  double tileRotateStart = 20.55*(360.0/320.0)*dd4hep::deg + ctileRotateStart; 
+  for(int i=0; i<24; i++){ 
 
-  for(int i=0; i<10; i++){ 
+    PlacedVolume     tower_phv0 = ChimneySector.placeVolume(ChimneyTowerPair[i][0], i, Transform3D(RotationY(0.0), Translation3D(0.0,0.0,0.0)) );
+    tower_phv0.addPhysVolID("tower", i);
+    DetElement sd0 = tower_det.clone(_toString(i, "tower%d")); 
+    sd0.setPlacement(tower_phv0);
+    sdet.add(sd0);
 
-    PlacedVolume     tile_phv = ChimneySector.placeVolume(TileAssembly24ChimneyRotated, i, 
-							  RotationZ(ctileRotateStart + i*(360.0/320.0)*dd4hep::deg)*
-							  Transform3D(RotationY(90.0*dd4hep::deg), Translation3D(xposOuter[0]*dd4hep::mm, yposOuter[0]*dd4hep::mm, 0.0)) );
-    tile_phv.addPhysVolID("tilerow", i);
-    DetElement sd = sector_det.clone(_toString(10+i, "tilerow%d")); 
-    sd.setPlacement(tile_phv);
-    sdet.add(sd);
-
-  }
-
-  for(int i=0; i<10; i++){ 
-
-    PlacedVolume     tile_phv = Sector.placeVolume(TileAssembly24Rotated, i, 
-						   RotationZ(tileRotateStart + i*(360.0/320.0)*dd4hep::deg)*
-						   Transform3D(RotationY(90.0*dd4hep::deg), Translation3D(xposOuter[0]*dd4hep::mm, yposOuter[0]*dd4hep::mm, 0.0)) );
-    tile_phv.addPhysVolID("tilerow", 10+i);
-    DetElement sd = sector_det.clone(_toString(i, "tilerow%d")); 
-    sd.setPlacement(tile_phv);
-    sdet.add(sd);
+    PlacedVolume     tower_phv1 = ChimneySector.placeVolume(ChimneyTowerPair[i][1], i+24, Transform3D(RotationY(0.0), Translation3D(0.0,0.0,0.0)) );
+    tower_phv1.addPhysVolID("tower", i+24);
+    DetElement sd1 = tower_det.clone(_toString(i+24, "tower%d")); 
+    sd1.setPlacement(tower_phv1);
+    sdet.add(sd1);
 
   }
 
+  for(int i=0; i<24; i++){ 
+
+    PlacedVolume     tower_phv0 = Sector.placeVolume(TowerPair[i][0], i, Transform3D(RotationY(0.0), Translation3D(0.0,0.0,0.0)) );
+    tower_phv0.addPhysVolID("tower", i+48);
+    DetElement sd0 = tower_det.clone(_toString(i+48, "tower%d")); 
+    sd0.setPlacement(tower_phv0);
+    sdet.add(sd0);
+
+    PlacedVolume     tower_phv1 = Sector.placeVolume(TowerPair[i][1], i+24, Transform3D(RotationY(0.0), Translation3D(0.0,0.0,0.0)) );
+    tower_phv1.addPhysVolID("tower", i+72);
+    DetElement sd1 = tower_det.clone(_toString(i+72, "tower%d")); 
+    sd1.setPlacement(tower_phv1);
+    sdet.add(sd1);
+
+  }
+  
   // Place the sectors into the envelope
 
+  DetElement sector_det("sector0", det_id);
+  
   // Chimney sectors
   for(int i=-1; i<2; i++){
     PlacedVolume     sect_phv = envelope.placeVolume(ChimneySector, i+1, Transform3D(RotationZ(((i-1)*2*M_PI/32)), Translation3D(0, 0, 0) ));
@@ -426,7 +465,7 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
 
   // Normal sectors
   for(int i=3; i<32; i++){
-    PlacedVolume     sect_phv = envelope.placeVolume(Sector, i, RotationZYX((-2.095*M_PI/32) + (i-3)*(2*M_PI/32),0,0) );
+    PlacedVolume     sect_phv = envelope.placeVolume(Sector, i, RotationZYX((-2.075*M_PI/32) + (i-3)*(2*M_PI/32),0,0) );
     sect_phv.addPhysVolID("system", det_id);
     sect_phv.addPhysVolID("barrel", 0);
     sect_phv.addPhysVolID("sector", i);
