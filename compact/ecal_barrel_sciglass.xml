@@ -7,6 +7,10 @@
     <documentation>
       The EcalBarrel eta limits cut into the barrel shape.
     </documentation>
+    <comment>
+      The current numbers are not based on any design in particular, but
+      provide some extra space for other detectors.
+    </comment>
     <constant name="EcalBarrel_etamin" value="-1.9"/>
     <constant name="EcalBarrel_etamax" value="+1.4"/>
   </define>
@@ -67,11 +71,18 @@
           <family dir_sign="-1" x1="2 * cm" y1="2 * cm" z_length="45.5 * cm" number="5"  flare_angle_polar="0.82 * degree"  flare_angle_at_face="1.0258 * degree" vis="family4" />
           <family dir_sign="-1" x1="2 * cm" y1="2 * cm" z_length="45.5 * cm" number="5"  flare_angle_polar="0.70 * degree"  flare_angle_at_face="1.126 * degree"  vis="family5" />
           <family dir_sign="-1" x1="2 * cm" y1="2 * cm" z_length="45.5 * cm" number="6"  flare_angle_polar="0.586 * degree" flare_angle_at_face="1.1914 * degree" vis="family6" />
+          <comment>
+            Family 7 is not based on any design in particular. The polar
+            flaring angle was adjusted according to the trend to avoid overlaps
+            and provide gaps needed to place the supports.
+          <comment>
           <family dir_sign="-1" x1="2 * cm" y1="2 * cm" z_length="45.5 * cm" number="2"  flare_angle_polar="0.46 * degree" flare_angle_at_face="1.1914 * degree" vis="family7" />
         </rows>
 
+        <documentation>
+          This describes the carbon fiber supports that are placed in the gaps between the towers.
+        </documentation>
         <comment>
-          The gaps between towers contain fiber support.
           In current geometry, the supports are represented by double-thickness layers shared between towers.
           As Air-gapped towers are preferred, cut outs are implemented with margins that were roughly estimated from a preliminary CAD drawing.
         </comment>
