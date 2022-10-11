@@ -202,19 +202,7 @@ static Ref_t CylinderTrackerBarrel_create_detector(Detector& description, xml_h 
 }
 
 // clang-format off
-#ifdef EPIC_ECCE_LEGACY_COMPAT
-DECLARE_DETELEMENT(ecce_CylinderTrackerBarrel, CylinderTrackerBarrel_create_detector)
-#endif
 DECLARE_DETELEMENT(epic_CylinderTrackerBarrel, CylinderTrackerBarrel_create_detector)
-#ifdef EPIC_ECCE_LEGACY_COMPAT
-DECLARE_DETELEMENT(ecce_MMTrackerBarrel,       CylinderTrackerBarrel_create_detector)
-#endif
 DECLARE_DETELEMENT(epic_MMTrackerBarrel,       CylinderTrackerBarrel_create_detector)
-#ifdef EPIC_ECCE_LEGACY_COMPAT
-DECLARE_DETELEMENT(ecce_RWellTrackerBarrel,    CylinderTrackerBarrel_create_detector)
-#endif
 DECLARE_DETELEMENT(epic_RWellTrackerBarrel,    CylinderTrackerBarrel_create_detector)
-#ifdef EPIC_ECCE_LEGACY_COMPAT
-DECLARE_DETELEMENT(ecce_CylinderVertexBarrel,  CylinderTrackerBarrel_create_detector)
-#endif
 DECLARE_DETELEMENT(epic_CylinderVertexBarrel,  CylinderTrackerBarrel_create_detector)
