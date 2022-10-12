@@ -221,7 +221,4 @@ static Ref_t create_field_map_brbz(Detector& /*lcdd*/, xml::Handle_t handle)
   return field;
 }
 
-#ifdef EPIC_ECCE_LEGACY_COMPAT
-DECLARE_XMLELEMENT(ecce_FieldMapBrBz, create_field_map_brbz)
-#endif
 DECLARE_XMLELEMENT(epic_FieldMapBrBz, create_field_map_brbz)
