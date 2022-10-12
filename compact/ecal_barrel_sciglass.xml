@@ -75,7 +75,7 @@
             Family 7 is not based on any design in particular. The polar
             flaring angle was adjusted according to the trend to avoid overlaps
             and provide gaps needed to place the supports.
-          <comment>
+          </comment>
           <family dir_sign="-1" x1="2 * cm" y1="2 * cm" z_length="45.5 * cm" number="2"  flare_angle_polar="0.46 * degree" flare_angle_at_face="1.1914 * degree" vis="family7" />
         </rows>
 
