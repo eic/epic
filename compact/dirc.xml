@@ -154,14 +154,15 @@
           long_edge="DIRCPrism_long_edge"
           short_edge="DIRCPrism_short_edge"
           material="Quartz"
+          vis="DIRCPrism"
         />
 
         <mcp
           height="DIRCMCP_height"
           width="DIRCMCP_width"
           thickness="DIRCMCP_thickness"
-          vis="DIRCMCP"
           material="Quartz"
+          vis="DIRCMCP"
         />
       </module>
     </detector>
