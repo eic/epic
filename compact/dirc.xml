@@ -3,10 +3,10 @@
   <comment>
     DIRC consists of 12 (default) identical modules making a barrel.
     Each DIRC module consists of:
-    _______
-    [  |   \
-    [  |    \
-    [FD|Prism|Lens|--------bars+glue-----|mirror]
+    ________
+    [   |   \
+    [   |    \
+    [MCP|Prism|Lens|--------bars+glue-----|mirror]
 
     Main constants to control DIRC global geometry:
       - DIRC_length
@@ -47,20 +47,21 @@
     <constant name="DIRCLens_height"        value="50 * mm"/>
     <constant name="DIRCLens_width"         value="DIRCPrism_width"/>
 
-    <!-- FD (Foto detectors?) -->
-    <constant name="DIRCFd_height"          value="DIRCPrism_height"/>
-    <constant name="DIRCFd_width"           value="DIRCPrism_width"/>
-    <constant name="DIRCFd_thickness"       value="1*mm"/>
+    <!-- MCP -->
+    <constant name="DIRCMCP_height"          value="DIRCPrism_height"/>
+    <constant name="DIRCMCP_width"           value="DIRCPrism_width"/>
+    <constant name="DIRCMCP_thickness"       value="1*mm"/>
 
     <!-- Bar - Each DIRC box consists of N "bars" -->
     <!-- BarAssembly - Bars + Glue -->
-    <constant name="DIRCBarAssm_length"     value="DIRC_length - DIRCPrism_length - DIRCMirror_thickness - DIRCLens_thickness - DIRCFd_thickness" comment="Length of bars+glue assembly"/>
-    <constant name="DIRCBar_count"          value="10" comment="Number of bars per box"/>
+    <constant name="DIRCBarAssm_length"     value="DIRC_length - DIRCPrism_length - DIRCMirror_thickness - DIRCLens_thickness - DIRCMCP_thickness" comment="Length of bars+glue assembly"/>
+    <constant name="DIRCBar_count_y"        value="10" comment="Number of bars per box in y direction"/>
+    <constant name="DIRCBar_count_z"        value="4" comment="Number of bars per box in z direction"/>
     <constant name="DIRCBar_gap"            value="0.15 * mm"/>
     <constant name="DIRCBar_height"         value="17 * mm"/>
-    <constant name="DIRCBar_width"          value="(DIRCPrism_width - (DIRCBar_count - 1) * DIRCBar_gap) / DIRCBar_count"/>
+    <constant name="DIRCBar_width"          value="(DIRCPrism_width - (DIRCBar_count_y - 1) * DIRCBar_gap) / DIRCBar_count_y"/>
     <constant name="DIRCGlue_thickness"     value="0.05 * mm"/>
-    <constant name="DIRCBar_length"         value="(DIRCBarAssm_length-4*DIRCGlue_thickness)/4"/>
+    <constant name="DIRCBar_length"         value="(DIRCBarAssm_length - 4 * DIRCGlue_thickness)/4"/>
 
   </define>
 
@@ -99,15 +100,14 @@
     <vis name="DIRCGlue"   ref="AnlViolet" visible="true"  showDaughters="false"  lineStyle="solid" drawingStyle="solid" />
     <vis name="DIRCMirror" ref="AnlGray" visible="true"  showDaughters="false"  lineStyle="solid" drawingStyle="solid" />
     <vis name="DIRCPrism"  ref="AnlTeal" visible="true"  showDaughters="false"  lineStyle="solid" drawingStyle="solid" />
-    <vis name="DIRCFd"     ref="AnlRed" visible="true"  showDaughters="false" />
+    <vis name="DIRCMCP"    ref="AnlRed" visible="true"  showDaughters="false" />
   </display>
 
   <detectors>
     <detector id="BarrelDIRC_ID" name="cb_DIRC" type="epic_DIRC" readout="DIRCBarHits" vis="DIRCTube">
-      <dimensions rmin="DIRC_rmin" rmax="DIRC_rmax" length="DIRC_length" radius="DIRCRadius" dx="DIRCBars_DX" dy="DIRCBars_DY" number="DIRCNum" deltaphi="DIRCDPhi"/>
+      <dimensions rmin="DIRC_rmin" rmax="DIRC_rmin + DIRCBar_height" length="DIRC_length"/>
       <position x="0" y="0" z="DIRC_offset"/>
-      <rotation theta="DIRC_rotation"/>
-      <module name="DircBox" R="DIRCRadius" repeat="DIRCBox_count" width="DIRCPrism_width + 1*mm" height="DIRCPrism_height*2" length="DIRCBarAssm_length + 550*mm" vis="DIRCBox">
+      <module name="DIRCBox" repeat="DIRCBox_count" width="DIRCPrism_width + 1*mm" height="DIRCPrism_height*2" length="DIRCBarAssm_length + 550*mm" vis="DIRCBox">
         <!-- Mirror (at the end of the module) -->
         <mirror
           height="DIRCMirror_height"
@@ -123,7 +123,8 @@
           height="DIRCBar_height"
           width="DIRCBar_width"
           length="DIRCBar_length"
-          repeat="DIRCBar_count"
+          repeat_y="DIRCBar_count_y"
+          repeat_z="DIRCBar_count_z"
           gap="DIRCBar_gap"
           material="Quartz"
           vis="DIRCBar"
@@ -138,6 +139,12 @@
           thickness="DIRCLens_thickness"
           r1="DIRCLens_r1"
           r2="DIRCLens_r2"
+          material1="Quartz"
+          material2="Nlak33a"
+          material3="Quartz"
+          vis1="DIRCLens1"
+          vis2="DIRCLens2"
+          vis3="DIRCLens3"
         />
 
         <prism
@@ -146,13 +153,14 @@
           angle="DIRCPrism_angle"
           long_edge="DIRCPrism_long_edge"
           short_edge="DIRCPrism_short_edge"
+          material="Quartz"
         />
 
-        <fd
-          height="DIRCFd_height"
-          width="DIRCFd_width"
-          thickness="DIRCFd_thickness"
-          vis="DIRCFd"
+        <mcp
+          height="DIRCMCP_height"
+          width="DIRCMCP_width"
+          thickness="DIRCMCP_thickness"
+          vis="DIRCMCP"
           material="Quartz"
         />
       </module>

@@ -19,116 +19,87 @@ dd4hep::Trap MakeTrap(const std::string& pName, double pZ, double pY, double pX,
 
 static Ref_t createDetector(Detector& desc, xml_h e, SensitiveDetector sens)
 {
-  xml_det_t xml_det  = e;
-  string    det_name = xml_det.nameStr();
-  int       det_id   = xml_det.id();
+  xml_det_t xml_det = e;
+
+  string     det_name = xml_det.nameStr();
+  int        det_id   = xml_det.id();
+  DetElement det(det_name, det_id);
 
   // Main detector xml element
   xml_dim_t dirc_dim = xml_det.dimensions();
   xml_dim_t dirc_pos = xml_det.position();
-  xml_dim_t dirc_rot = xml_det.rotation();
-  double    det_rin  = dirc_dim.rmin();
-  double    det_rout = dirc_dim.rmax();
+  double    det_rmin = dirc_dim.rmin();
+  double    det_rmax = dirc_dim.rmax();
+  double    det_ravg = (det_rmin + det_rmax) / 2;
 
-  Material quartz       = desc.material("Quartz");
-  Material nlak33a      = desc.material("Nlak33a");
-  auto&    bar_material = quartz;
+  sens.setType("tracker");
 
+  // Entire DIRC assembly
   Assembly det_volume("DIRC");
   det_volume.setVisAttributes(desc.visAttributes(xml_det.visStr()));
+  Transform3D tr(RotationY(M_PI), Position(0.0, 0.0, dirc_pos.z()));
+  printout(INFO, "DIRC", "Placing DIRC at (0,0,%f)", dirc_pos.z());
+  det.setPlacement(desc.pickMotherVolume(det).placeVolume(det_volume, tr).addPhysVolID("system", det_id));
 
-  DetElement det(det_name, det_id);
-  Volume     mother_vol = desc.pickMotherVolume(det);
+  // Construct module
+  xml_comp_t xml_module = xml_det.child(_U(module));
 
-  Transform3D  tr_global(RotationZYX(0, dirc_rot.theta(), 0.0), Position(0.0, 0.0, dirc_pos.z()));
-  PlacedVolume det_plvol = mother_vol.placeVolume(det_volume, tr_global);
-
-  det_plvol.addPhysVolID("system", det_id);
-  det.setPlacement(det_plvol);
-
-  // Parts dimensions
-
-  // double fdTilt = 80 * deg;
-
-  double fMcpTotal[3];
-  double fMcpActive[3];
-  fMcpTotal[0] = fMcpTotal[1] = 53 + 4;
-  fMcpTotal[2]                = 1 * mm;
-  fMcpActive[0] = fMcpActive[1] = 53;
-  fMcpActive[2]                 = 1 * mm;
-
-  double box_placement_radius = (det_rin + det_rout) / 2;
-
-  // Getting box XML
-  xml_comp_t   xml_box_module = xml_det.child(_U(module));
-  const int    box_repeat     = xml_box_module.repeat();
-  const double box_width      = xml_box_module.width();
-  // FIXME unused box height and length
-  // const double box_height = xml_box_module.height();
-  // const double box_length = xml_box_module.length() + 550 * mm;
-
-  // The DIRC
   Assembly dirc_module("DIRCModule");
-
-  // Volume lDirc("lDirc", gDirc, air);
-  dirc_module.setVisAttributes(desc.visAttributes(xml_box_module.visStr()));
-
-  // FD... whatever F and D is
-  xml_comp_t xml_fd = xml_box_module.child(_Unicode(fd));
-  Box        gFd("gFd", xml_fd.height() / 2, xml_fd.width() / 2, xml_fd.thickness() / 2);
-  Volume     lFd("lFd", gFd, desc.material(xml_fd.materialStr()));
-  lFd.setVisAttributes(desc.visAttributes(xml_fd.visStr()));
-  // lFd.setSensitiveDetector(sens);
+  dirc_module.setVisAttributes(desc.visAttributes(xml_module.visStr()));
 
   // Bar
-  xml_comp_t xml_bar    = xml_box_module.child(_Unicode(bar));
+  xml_comp_t xml_bar    = xml_module.child(_Unicode(bar));
   double     bar_height = xml_bar.height();
   double     bar_width  = xml_bar.width();
   double     bar_length = xml_bar.length();
-  Box        gBar("gBar", bar_height / 2, bar_width / 2, bar_length / 2);
-  Volume     lBar("lBar", gBar, desc.material(xml_bar.materialStr()));
-  lBar.setVisAttributes(desc.visAttributes(xml_bar.visStr()));
+  Box        bar_box("bar_box", bar_height / 2, bar_width / 2, bar_length / 2);
+  Volume     bar_vol("bar_vol", bar_box, desc.material(xml_bar.materialStr()));
+  bar_vol.setVisAttributes(desc.visAttributes(xml_bar.visStr())).setSensitiveDetector(sens);
 
   // Glue
-  xml_comp_t xml_glue       = xml_box_module.child(_Unicode(glue));
-  double     glue_thickness = xml_glue.thickness(); // 0.05 * mm;
-  Box        gGlue("gGlue", bar_height / 2, bar_width / 2, glue_thickness / 2);
-  Volume     lGlue("lGlue", gGlue, desc.material(xml_glue.materialStr()));
-  lGlue.setVisAttributes(desc.visAttributes(xml_glue.visStr()));
+  xml_comp_t xml_glue       = xml_module.child(_Unicode(glue));
+  double     glue_thickness = xml_glue.thickness();
+  Box        glue_box("glue_box", bar_height / 2, bar_width / 2, glue_thickness / 2);
+  Volume     glue_vol("glue_vol", glue_box, desc.material(xml_glue.materialStr()));
+  glue_vol.setVisAttributes(desc.visAttributes(xml_glue.visStr()));
 
-  sens.setType("tracker");
-  lBar.setSensitiveDetector(sens);
-
-  int    bars_repeat_z   = 4; // TODO parametrize!
-  double bar_assm_length = (bar_length + glue_thickness) * bars_repeat_z;
-  int    fNBar           = xml_bar.repeat();
-  double bar_gap         = xml_bar.gap();
-  for (int y_index = 0; y_index < fNBar; y_index++) {
-    double shift_y = y_index * (bar_width + bar_gap) - 0.5 * box_width + 0.5 * bar_width;
-    for (int z_index = 0; z_index < bars_repeat_z; z_index++) {
-      double z          = -0.5 * bar_assm_length + 0.5 * bar_length + (bar_length + glue_thickness) * z_index;
-      auto   placed_bar = dirc_module.placeVolume(lBar, Position(0, shift_y, z));
-      dirc_module.placeVolume(lGlue, Position(0, shift_y, z + 0.5 * (bar_length + glue_thickness)));
-      placed_bar.addPhysVolID("section", z_index);
-      placed_bar.addPhysVolID("bar", y_index);
+  // Place bars + glue into module assembly
+  // FIXME place bars + glue into separate box volume
+  auto bar_repeat_y    = xml_bar.attr<int>(_Unicode(repeat_y));
+  auto bar_repeat_z    = xml_bar.attr<int>(_Unicode(repeat_z));
+  auto bar_gap         = xml_bar.gap();
+  auto bar_assm_width  = (bar_width + bar_gap) * bar_repeat_y - bar_gap;
+  auto bar_assm_length = (bar_length + glue_thickness) * bar_repeat_z;
+  for (int y_index = 0; y_index < bar_repeat_y; y_index++) {
+    double y = -0.5 * bar_assm_width + 0.5 * bar_width + (bar_width + bar_gap) * y_index;
+    for (int z_index = 0; z_index < bar_repeat_z; z_index++) {
+      double z = -0.5 * bar_assm_length + 0.5 * bar_length + (bar_length + glue_thickness) * z_index;
+      dirc_module.placeVolume(glue_vol, Position(0, y, z + 0.5 * (bar_length + glue_thickness)));
+      printout(INFO, "DIRC", "Placing bar at (0,%f,%f)", y, z);
+      dirc_module.placeVolume(bar_vol, Position(0, y, z)).addPhysVolID("section", z_index).addPhysVolID("bar", y_index);
     }
   }
 
   // Mirror construction
-  xml_comp_t xml_mirror = xml_box_module.child(_Unicode(mirror));
-  Box        gMirror("gMirror", xml_mirror.height() / 2, xml_mirror.width() / 2, xml_mirror.thickness() / 2);
-  Volume     lMirror("lMirror", gMirror, desc.material(xml_mirror.materialStr()));
-  dirc_module.placeVolume(lMirror, Position(0, 0, -0.5 * (bar_assm_length - xml_mirror.thickness())));
-  lMirror.setVisAttributes(desc.visAttributes(xml_mirror.visStr()));
+  xml_comp_t xml_mirror       = xml_module.child(_Unicode(mirror));
+  auto       mirror_width     = xml_mirror.width();
+  auto       mirror_height    = xml_mirror.height();
+  auto       mirror_thickness = xml_mirror.thickness();
+  Box        mirror_box("mirror_box", mirror_height / 2, mirror_width / 2, mirror_thickness / 2);
+  Volume     mirror_vol("mirror_vol", mirror_box, desc.material(xml_mirror.materialStr()));
+  mirror_vol.setVisAttributes(desc.visAttributes(xml_mirror.visStr()));
 
   // Mirror optical surface
-  OpticalSurfaceManager surfMgr = desc.surfaceManager();
-  auto                  surf    = surfMgr.opticalSurface("MirrorOpticalSurface");
-  SkinSurface           skin(desc, det, Form("dirc_mirror_optical_surface"), surf, lMirror);
+  auto        surfMgr = desc.surfaceManager();
+  auto        surf    = surfMgr.opticalSurface("MirrorOpticalSurface");
+  SkinSurface skin(desc, det, Form("dirc_mirror_optical_surface"), surf, mirror_vol);
   skin.isValid();
 
+  // Place mirror
+  dirc_module.placeVolume(mirror_vol, Position(0, 0, -0.5 * (bar_assm_length + mirror_thickness)));
+
   // Prism variables
-  xml_comp_t xml_prism        = xml_box_module.child(_Unicode(prism));
+  xml_comp_t xml_prism        = xml_module.child(_Unicode(prism));
   double     prism_angle      = xml_prism.angle();
   double     prism_width      = xml_prism.width();
   double     prism_length     = xml_prism.length();
@@ -136,7 +107,7 @@ static Ref_t createDetector(Detector& desc, xml_h e, SensitiveDetector sens)
   double     prism_long_edge  = prism_short_edge + prism_length * tan(prism_angle);
 
   // Lens variables
-  xml_comp_t xml_lens    = xml_box_module.child(_Unicode(lens));
+  xml_comp_t xml_lens    = xml_module.child(_Unicode(lens));
   double     lens_height = getAttrOrDefault(xml_lens, _Unicode(height), 50 * mm);
   // double lens_width = getAttrOrDefault(xml_lens, _Unicode(width), 25 * mm);
   double lens_thickness = getAttrOrDefault(xml_lens, _Unicode(thickness), 12 * mm);
@@ -145,128 +116,95 @@ static Ref_t createDetector(Detector& desc, xml_h e, SensitiveDetector sens)
 
   // Lens construction
 
-  // lensMinThickness is distance from face to r1, and from r1 to r2 at lens top edge
-  double lensMinThickness = 0.5 * mm;
-  double layer01          = 1.0 * lensMinThickness;
-  double layer12          = 2.0 * lensMinThickness;
+  // lens_min_thickness is distance from face to r1, and from r1 to r2 at lens top edge
+  double lens_min_thickness = 0.5 * mm;
+  double layer01            = 1.0 * lens_min_thickness;
+  double layer12            = 2.0 * lens_min_thickness;
 
-  Position zTrans1(0, 0,
-                   -lens_thickness / 2. - sqrt(lens_r1 * lens_r1 - lens_height / 2. * lens_height / 2.) + layer01);
-  Position zTrans2(0, 0,
-                   -lens_thickness / 2. - sqrt(lens_r2 * lens_r2 - lens_height / 2. * lens_height / 2.) + layer12);
+  // ztrans1 and ztrans2 are the z shifts of the lens center for r1 and r2
+  double ztrans1 = -lens_thickness / 2. - sqrt(lens_r1 * lens_r1 - lens_height / 2. * lens_height / 2.) + layer01;
+  double ztrans2 = -lens_thickness / 2. - sqrt(lens_r2 * lens_r2 - lens_height / 2. * lens_height / 2.) + layer12;
 
   Box gfbox("fbox", 0.5 * prism_short_edge, 0.5 * prism_width, 0.5 * lens_thickness);
   Box gcbox("cbox", 0.5 * prism_short_edge, 0.5 * prism_width + 1 * mm, 0.5 * lens_thickness);
-
-  //  Volume gfbox_volume("gfbox_volume", gfbox, bar_material);
-  //  lDirc.placeVolume(gfbox_volume, Position(0, 0, 0));
-  //
-  //  Volume gcbox_volume("gcbox_volume", gcbox, bar_material);
-  //  lDirc.placeVolume(gcbox_volume, Position(0, 0, 50));
 
   Position         tTrans1(0.5 * (prism_short_edge + lens_height), 0, -lens_thickness + layer12);
   Position         tTrans0(-0.5 * (prism_short_edge + lens_height), 0, -lens_thickness + layer12);
   SubtractionSolid tubox("tubox", gfbox, gcbox, tTrans1);
   SubtractionSolid gubox("gubox", tubox, gcbox, tTrans0);
 
-  //  Volume tubox_volume("tubox_volume", tubox, bar_material);
-  //  lDirc.placeVolume(tubox_volume, Position(0, 0, 100));
-  //
-  //  Volume gubox_volume("gubox_volume", gubox, bar_material);
-  //  lDirc.placeVolume(gubox_volume, Position(0, 0, 150));
+  Tube gcylinder1("Cylinder1", 0, lens_r1, 0.5 * prism_width, 0 * deg, 360 * deg);
+  Tube gcylinder2("Cylinder2", 0, lens_r2, 0.5 * prism_width - 0.5 * mm, 0 * deg, 360 * deg);
+  Tube gcylinder1c("Cylinder1c", 0, lens_r1, 0.5 * prism_width + 0.5 * mm, 0 * deg, 360 * deg);
+  Tube gcylinder2c("Cylinder2c", 0, lens_r2, 0.5 * prism_width + 0.5 * mm, 0 * deg, 360 * deg);
 
-  Tube      gcylinder1("Cylinder1", 0, lens_r1, 0.5 * prism_width, 0 * deg, 360 * deg);
-  Tube      gcylinder2("Cylinder2", 0, lens_r2, 0.5 * prism_width - 0.5 * mm, 0 * deg, 360 * deg);
-  Tube      gcylinder1c("Cylinder1c", 0, lens_r1, 0.5 * prism_width + 0.5 * mm, 0 * deg, 360 * deg);
-  Tube      gcylinder2c("Cylinder2c", 0, lens_r2, 0.5 * prism_width + 0.5 * mm, 0 * deg, 360 * deg);
-  RotationX xRot(-M_PI / 2.);
+  IntersectionSolid lens_layer1_solid("lens_layer1_solid", gubox, gcylinder1,
+                                      Transform3D(RotationX(-M_PI / 2.), Position(0, 0, ztrans1)));
+  SubtractionSolid  gLenst("temp", gubox, gcylinder1c, Transform3D(RotationX(-M_PI / 2.), Position(0, 0, ztrans1)));
 
-  IntersectionSolid gLens1("Lens1", gubox, gcylinder1, Transform3D(xRot, zTrans1));
-  SubtractionSolid  gLenst("temp", gubox, gcylinder1c, Transform3D(xRot, zTrans1));
+  IntersectionSolid lens_layer2_solid("lens_layer2_solid", gLenst, gcylinder2,
+                                      Transform3D(RotationX(-M_PI / 2.), Position(0, 0, ztrans2)));
+  SubtractionSolid  lens_layer3_solid("lens_layer3_solid", gLenst, gcylinder2c,
+                                      Transform3D(RotationX(-M_PI / 2.), Position(0, 0, ztrans2)));
 
-  //  Volume gLens1_volume("gLens1_volume", gLens1, bar_material);
-  //  lDirc.placeVolume(gLens1_volume, Position(0, 0, 200));
-  //
-  //  Volume gLenst_volume("gLenst_volume", gLenst, bar_material);
-  //  lDirc.placeVolume(gLenst_volume, Position(0, 0, 250));
+  Volume lens_layer1_vol("lens_layer1_vol", lens_layer1_solid,
+                         desc.material(xml_lens.attr<std::string>(_Unicode(material1))));
+  Volume lens_layer2_vol("lens_layer2_vol", lens_layer2_solid,
+                         desc.material(xml_lens.attr<std::string>(_Unicode(material2))));
+  Volume lens_layer3_vol("lens_layer3_vol", lens_layer3_solid,
+                         desc.material(xml_lens.attr<std::string>(_Unicode(material3))));
 
-  IntersectionSolid gLens2("Lens2", gLenst, gcylinder2, Transform3D(xRot, zTrans2));
-  SubtractionSolid  gLens3("Lens3", gLenst, gcylinder2c, Transform3D(xRot, zTrans2));
+  lens_layer1_vol.setVisAttributes(desc.visAttributes(xml_lens.attr<std::string>(_Unicode(vis1))));
+  lens_layer2_vol.setVisAttributes(desc.visAttributes(xml_lens.attr<std::string>(_Unicode(vis2))));
+  lens_layer3_vol.setVisAttributes(desc.visAttributes(xml_lens.attr<std::string>(_Unicode(vis3))));
 
-  Volume lLens1("lLens1", gLens1, bar_material);
-  Volume lLens2("lLens2", gLens2, nlak33a);
-  Volume lLens3("lLens3", gLens3, bar_material);
-
-  lLens1.setVisAttributes(desc.visAttributes("DIRCLens1"));
-  lLens2.setVisAttributes(desc.visAttributes("DIRCLens2"));
-  lLens3.setVisAttributes(desc.visAttributes("DIRCLens3"));
-
-  double shifth = 0.5 * (bar_assm_length + lens_thickness);
-
-  lLens1.setVisAttributes(desc.visAttributes("AnlTeal"));
-  dirc_module.placeVolume(lLens1, Position(0, 0, shifth));
-  dirc_module.placeVolume(lLens2, Position(0, 0, shifth));
-  dirc_module.placeVolume(lLens3, Position(0, 0, shifth));
+  double   lens_position_z = 0.5 * (bar_assm_length + lens_thickness);
+  Position lens_position(0, 0, lens_position_z);
+  dirc_module.placeVolume(lens_layer1_vol, lens_position);
+  dirc_module.placeVolume(lens_layer2_vol, lens_position);
+  dirc_module.placeVolume(lens_layer3_vol, lens_position);
 
   // Prism construction
-  Trap   gPrism = MakeTrap("gPrism", prism_width, prism_length, prism_long_edge, prism_short_edge);
-  Volume lPrism("lPrism", gPrism, bar_material);
-  lPrism.setVisAttributes(desc.visAttributes("DIRCPrism"));
+  Trap   prism_tube = MakeTrap("prism_tube", prism_width, prism_length, prism_long_edge, prism_short_edge);
+  Volume prism_vol("prism_vol", prism_tube, desc.material(xml_prism.materialStr()));
+  prism_vol.setVisAttributes(desc.visAttributes("DIRCPrism"));
 
-  double evshiftz = 0.5 * bar_assm_length + prism_length + fMcpActive[2] / 2. + lens_thickness;
-  double evshiftx = -3 * mm;
+  double    prism_position_x = (prism_long_edge + prism_short_edge) / 4. - 0.5 * prism_short_edge + 1.5 * mm;
+  double    prism_position_z = 0.5 * (bar_assm_length + prism_length) + lens_thickness;
+  RotationX prism_rotation(-M_PI / 2.);
+  Position  prism_position(prism_position_x, 0, prism_position_z);
+  dirc_module.placeVolume(prism_vol, Transform3D(prism_rotation, prism_position));
 
-  double prism_shift_x = (prism_long_edge + prism_short_edge) / 4. - 0.5 * prism_short_edge + 1.5 * mm;
-  double prism_shift_z = 0.5 * (bar_assm_length + prism_length) + lens_thickness;
+  // MCP variables
+  xml_comp_t xml_mcp       = xml_module.child(_Unicode(mcp));
+  double     mcp_thickness = xml_mcp.thickness();
+  double     mcp_height    = xml_mcp.height();
+  double     mcp_width     = xml_mcp.width();
 
-  Position fPrismShift(prism_shift_x, 0, prism_shift_z);
-  dirc_module.placeVolume(lPrism, Transform3D(xRot, fPrismShift));
-  dirc_module.placeVolume(lFd, Position(0.5 * prism_long_edge - 0.5 * prism_short_edge - evshiftx, 0, evshiftz));
+  // MCP construction
+  Box    mcp_box("mcp_box", mcp_height / 2, mcp_width / 2, mcp_thickness / 2);
+  Volume mcp_vol("mcp_vol", mcp_box, desc.material(xml_mcp.materialStr()));
+  mcp_vol.setVisAttributes(desc.visAttributes(xml_mcp.visStr())).setSensitiveDetector(sens);
 
-  double dphi = 2 * M_PI / (double)box_repeat;
-  for (int i = 0; i < box_repeat; i++) {
+  double   mcp_position_x = 0.5 * prism_long_edge - 0.5 * prism_short_edge + 3 * mm; // FIXME hardcoded
+  double   mcp_position_z = 0.5 * bar_assm_length + lens_thickness + prism_length + 0.5 * mcp_thickness;
+  Position mcp_position(mcp_position_x, 0, mcp_position_z);
+  dirc_module.placeVolume(mcp_vol, mcp_position);
+
+  // Place modules
+  const int    module_repeat = xml_module.repeat();
+  const double dphi          = 2. * M_PI / module_repeat;
+  for (int i = 0; i < module_repeat; i++) {
     double phi = dphi * i;
-    double dx  = -box_placement_radius * cos(phi);
-    double dy  = -box_placement_radius * sin(phi);
+    double x   = det_ravg * cos(phi);
+    double y   = det_ravg * sin(phi);
 
-    // G4RotationMatrix *tRot = new G4RotationMatrix();
+    printout(INFO, "DIRC", "Placing module at (%f,%f)", x, y);
 
-    Transform3D  tr(RotationZ(phi + M_PI), Position(dx, dy, 0));
-    PlacedVolume box_placement = det_volume.placeVolume(dirc_module, tr);
-    box_placement.addPhysVolID("module", i);
-
-    // fmt::print("placing dircbox # {} -tphi={:.0f} dx={:.0f}, dy={:.0f}\n", i, phi/deg, dx/cm, dy/cm);
-
-    // new G4PVPlacement(tRot, G4ThreeVector(dx, dy, 0), lDirc, "wDirc", lExpHall, false, i);
+    Transform3D tr(RotationZ(phi), Position(x, y, 0));
+    det_volume.placeVolume(dirc_module, tr).addPhysVolID("module", i);
   }
 
-  //////////////////
-  // DIRC Bars
-  //////////////////
-
-  // double bar_radius   = 83.65 * cm;
-  // double bar_length   = SizeZ;
-  // double bar_width    = 42. * cm;
-  // double bar_thicknes = 1.7 * cm;
-  // int    bar_count    = 2 * M_PI * bar_radius / bar_width;
-  // double bar_dphi     = 2 * 3.1415926 / bar_count;
-  // Material bar_material = desc.material("Quartz");
-
-  // Box    bar_geo(bar_thicknes / 2., bar_width / 2., bar_length / 2.);
-  // Volume bar_volume("cb_DIRC_bars_Logix", bar_geo, bar_material);
-  // bar_volume.setVisAttributes(desc.visAttributes(xml_det.visStr()));
-  // sens.setType("tracker");
-  // bar_volume.setSensitiveDetector(sens);
-
-  // for (int ia = 0; ia < bar_count; ia++) {
-  //   double phi = (ia * (bar_dphi));
-  //   double x   = -bar_radius * cos(phi);
-  //   double y   = -bar_radius * sin(phi);
-
-  //   Transform3D  tr(RotationZ(bar_dphi * ia), Position(x, y, 0));
-  //   PlacedVolume barPV = det_volume.placeVolume(bar_volume, tr);
-  //   barPV.addPhysVolID("module", ia);
-  // }
   return det;
 }
 
