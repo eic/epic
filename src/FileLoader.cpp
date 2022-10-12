@@ -64,7 +64,4 @@ long load_file(Detector& /* desc */, int argc, char** argv)
   return 1;
 }
 
-#ifdef EPIC_ECCE_LEGACY_COMPAT
-DECLARE_APPLY(ecce_FileLoader, load_file)
-#endif
 DECLARE_APPLY(epic_FileLoader, load_file)
