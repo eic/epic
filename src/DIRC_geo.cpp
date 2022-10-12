@@ -12,6 +12,8 @@
 using namespace std;
 using namespace dd4hep;
 
+static dd4hep::Trap MakeTrap(const std::string& pName, double pZ, double pY, double pX, double pLTX);
+
 static Ref_t createDetector(Detector& desc, xml_h e, SensitiveDetector sens)
 {
   xml_det_t xml_det = e;
@@ -118,14 +120,14 @@ static Ref_t createDetector(Detector& desc, xml_h e, SensitiveDetector sens)
   double layer12            = 2.0 * lens_min_thickness;
 
   // ztrans1 and ztrans2 are the z shifts of the lens center for r1 and r2
-  double ztrans1 = -lens_thickness / 2. - sqrt(lens_r1 * lens_r1 - lens_height / 2. * lens_height / 2.) + layer01;
-  double ztrans2 = -lens_thickness / 2. - sqrt(lens_r2 * lens_r2 - lens_height / 2. * lens_height / 2.) + layer12;
+  double ztrans1 = lens_thickness / 2. + sqrt(lens_r1 * lens_r1 - lens_height / 2. * lens_height / 2.) - layer01;
+  double ztrans2 = lens_thickness / 2. + sqrt(lens_r2 * lens_r2 - lens_height / 2. * lens_height / 2.) - layer12;
 
   Box gfbox("fbox", 0.5 * prism_short_edge, 0.5 * prism_width, 0.5 * lens_thickness);
   Box gcbox("cbox", 0.5 * prism_short_edge, 0.5 * prism_width + 1 * mm, 0.5 * lens_thickness);
 
-  Position         tTrans1(0.5 * (prism_short_edge + lens_height), 0, -lens_thickness + layer12);
-  Position         tTrans0(-0.5 * (prism_short_edge + lens_height), 0, -lens_thickness + layer12);
+  Position         tTrans1(0.5 * (prism_short_edge + lens_height), 0, lens_thickness - layer12);
+  Position         tTrans0(-0.5 * (prism_short_edge + lens_height), 0, lens_thickness - layer12);
   SubtractionSolid tubox("tubox", gfbox, gcbox, tTrans1);
   SubtractionSolid gubox("gubox", tubox, gcbox, tTrans0);
 
@@ -135,13 +137,13 @@ static Ref_t createDetector(Detector& desc, xml_h e, SensitiveDetector sens)
   Tube gcylinder2c("Cylinder2c", 0, lens_r2, 0.5 * prism_width + 0.5 * mm, 0 * deg, 360 * deg);
 
   IntersectionSolid lens_layer1_solid("lens_layer1_solid", gubox, gcylinder1,
-                                      Transform3D(RotationX(-M_PI / 2.), Position(0, 0, ztrans1)));
-  SubtractionSolid  gLenst("temp", gubox, gcylinder1c, Transform3D(RotationX(-M_PI / 2.), Position(0, 0, ztrans1)));
+                                      Transform3D(RotationX(M_PI / 2.), Position(0, 0, ztrans1)));
+  SubtractionSolid  gLenst("temp", gubox, gcylinder1c, Transform3D(RotationX(M_PI / 2.), Position(0, 0, ztrans1)));
 
   IntersectionSolid lens_layer2_solid("lens_layer2_solid", gLenst, gcylinder2,
-                                      Transform3D(RotationX(-M_PI / 2.), Position(0, 0, ztrans2)));
+                                      Transform3D(RotationX(M_PI / 2.), Position(0, 0, ztrans2)));
   SubtractionSolid  lens_layer3_solid("lens_layer3_solid", gLenst, gcylinder2c,
-                                      Transform3D(RotationX(-M_PI / 2.), Position(0, 0, ztrans2)));
+                                      Transform3D(RotationX(M_PI / 2.), Position(0, 0, ztrans2)));
 
   Volume lens_layer1_vol("lens_layer1_vol", lens_layer1_solid,
                          desc.material(xml_lens.attr<std::string>(_Unicode(material1))));
@@ -161,8 +163,8 @@ static Ref_t createDetector(Detector& desc, xml_h e, SensitiveDetector sens)
   dirc_module.placeVolume(lens_layer3_vol, lens_position);
 
   // Prism construction
-  Trap   prism_tube = Trap("prism_tube", prism_width, prism_length, prism_long_edge, prism_short_edge);
-  Volume prism_vol("prism_vol", prism_tube, desc.material(xml_prism.materialStr()));
+  Trap   prism_trap = MakeTrap("prism_trap", prism_width, prism_length, prism_long_edge, prism_short_edge);
+  Volume prism_vol("prism_vol", prism_trap, desc.material(xml_prism.materialStr()));
   prism_vol.setVisAttributes(desc.visAttributes(xml_prism.visStr()));
 
   double    prism_position_x = (prism_long_edge + prism_short_edge) / 4. - 0.5 * prism_short_edge + 1.5 * mm;
@@ -202,5 +204,25 @@ static Ref_t createDetector(Detector& desc, xml_h e, SensitiveDetector sens)
   return det;
 }
 
+static dd4hep::Trap MakeTrap(const std::string& pName, double pZ, double pY, double pX, double pLTX)
+{
+  // Fixed Trap constructor. This function is a workaround of this bug:
+  // https://github.com/AIDASoft/DD4hep/issues/850
+  // Should be used instead of dd4hep::Trap(pName, pZ, pY, pX, pLTX) constructor
+
+  double fDz         = 0.5 * pZ;
+  double fTthetaCphi = 0;
+  double fTthetaSphi = 0;
+  double fDy1        = 0.5 * pY;
+  double fDx1        = 0.5 * pX;
+  double fDx2        = 0.5 * pLTX;
+  double fTalpha1    = atan(0.5 * (pLTX - pX) / pY);
+  double fDy2        = fDy1;
+  double fDx3        = fDx1;
+  double fDx4        = fDx2;
+  double fTalpha2    = fTalpha1;
+
+  return Trap(pName, fDz, fTthetaCphi, fTthetaSphi, fDy1, fDx1, fDx2, fTalpha1, fDy2, fDx3, fDx4, fTalpha2);
+}
 
 DECLARE_DETELEMENT(epic_DIRC, createDetector)
