@@ -359,10 +359,10 @@ static Ref_t create_detector(Detector &lcdd, xml_h handle,
                     Transform3D{Position{0, dir_sign * carbon_fiber_support_handle.thickness() / 2, z + (overhang_top + non_overlap_long - overhang_bottom) / 2}})
                 .volume()
                 .setVisAttributes(lcdd.visAttributes(carbon_fiber_support_handle.visStr()));
-
-            beta_prev = beta;
-            flare_angle_polar_prev = flare_angle_polar;
           }
+
+          beta_prev = beta;
+          flare_angle_polar_prev = flare_angle_polar;
         }
       }
     }
