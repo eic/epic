@@ -106,6 +106,7 @@ static Ref_t createDetector(Detector& desc, xml_h e, SensitiveDetector sens)
   // Lens variables
   xml_comp_t xml_lens    = xml_module.child(_Unicode(lens));
   double     lens_height = getAttrOrDefault(xml_lens, _Unicode(height), 50 * mm);
+  double     lens_shift  = getAttrOrDefault(xml_lens, _Unicode(shift), 0 * mm);
   // double lens_width = getAttrOrDefault(xml_lens, _Unicode(width), 25 * mm);
   double lens_thickness = getAttrOrDefault(xml_lens, _Unicode(thickness), 12 * mm);
   double lens_r1        = getAttrOrDefault(xml_lens, _Unicode(r1), 62 * mm);
@@ -156,8 +157,9 @@ static Ref_t createDetector(Detector& desc, xml_h e, SensitiveDetector sens)
   lens_layer2_vol.setVisAttributes(desc.visAttributes(xml_lens.attr<std::string>(_Unicode(vis2))));
   lens_layer3_vol.setVisAttributes(desc.visAttributes(xml_lens.attr<std::string>(_Unicode(vis3))));
 
+  double   lens_position_x = lens_shift;
   double   lens_position_z = -0.5 * (bar_assm_length + lens_thickness);
-  Position lens_position(0, 0, lens_position_z);
+  Position lens_position(lens_position_x, 0, lens_position_z);
   dirc_module.placeVolume(lens_layer1_vol, lens_position);
   dirc_module.placeVolume(lens_layer2_vol, lens_position);
   dirc_module.placeVolume(lens_layer3_vol, lens_position);
@@ -167,7 +169,7 @@ static Ref_t createDetector(Detector& desc, xml_h e, SensitiveDetector sens)
   Volume prism_vol("prism_vol", prism_trap, desc.material(xml_prism.materialStr()));
   prism_vol.setVisAttributes(desc.visAttributes(xml_prism.visStr()));
 
-  double    prism_position_x = (prism_long_edge + prism_short_edge) / 4. - 0.5 * prism_short_edge + 1.5 * mm;
+  double    prism_position_x = (prism_long_edge + prism_short_edge) / 4. - 0.5 * prism_short_edge + lens_shift;
   double    prism_position_z = -0.5 * (bar_assm_length + prism_length) - lens_thickness;
   RotationX prism_rotation(M_PI / 2.);
   Position  prism_position(prism_position_x, 0, prism_position_z);
@@ -184,7 +186,7 @@ static Ref_t createDetector(Detector& desc, xml_h e, SensitiveDetector sens)
   Volume mcp_vol("mcp_vol", mcp_box, desc.material(xml_mcp.materialStr()));
   mcp_vol.setVisAttributes(desc.visAttributes(xml_mcp.visStr())).setSensitiveDetector(sens);
 
-  double   mcp_position_x = 0.5 * prism_long_edge - 0.5 * prism_short_edge + 3 * mm; // FIXME hardcoded
+  double   mcp_position_x = 0.5 * prism_long_edge - 0.5 * prism_short_edge + lens_shift;
   double   mcp_position_z = -0.5 * bar_assm_length - lens_thickness - prism_length - 0.5 * mcp_thickness;
   Position mcp_position(mcp_position_x, 0, mcp_position_z);
   dirc_module.placeVolume(mcp_vol, mcp_position);

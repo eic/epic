@@ -42,6 +42,7 @@
     <constant name="DIRCLens_r1"            value="62 * mm"/>
     <constant name="DIRCLens_r2"            value="36 * mm"/>
     <constant name="DIRCLens_height"        value="50 * mm"/>
+    <constant name="DIRCLens_shift"         value="10 * mm" comment="Shift of optical axis compared to bar center"/>
     <constant name="DIRCLens_width"         value="DIRCPrism_width"/>
 
     <!-- MCP -->
@@ -133,6 +134,7 @@
         <lens
           height="DIRCLens_height"
           width="DIRCLens_width"
+          shift="DIRCLens_shift"
           thickness="DIRCLens_thickness"
           r1="DIRCLens_r1"
           r2="DIRCLens_r2"
