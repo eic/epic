@@ -118,11 +118,5 @@ static Ref_t SimpleDiskDetector_create_detector(Detector& description, xml_h e, 
   return sdet;
 }
 
-#ifdef EPIC_ECCE_LEGACY_COMPAT
-DECLARE_DETELEMENT(ecce_ref_SolenoidEndcap, SimpleDiskDetector_create_detector)
-#endif
 DECLARE_DETELEMENT(epic_ref_SolenoidEndcap, SimpleDiskDetector_create_detector)
-#ifdef EPIC_ECCE_LEGACY_COMPAT
-DECLARE_DETELEMENT(ecce_SolenoidEndcap, SimpleDiskDetector_create_detector)
-#endif
 DECLARE_DETELEMENT(epic_SolenoidEndcap, SimpleDiskDetector_create_detector)
