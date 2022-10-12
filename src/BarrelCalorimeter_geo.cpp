@@ -227,11 +227,5 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
   return sdet;
 }
 
-#ifdef EPIC_ECCE_LEGACY_COMPAT
-DECLARE_DETELEMENT(ecce_EcalBarrel, create_detector)
-#endif
 DECLARE_DETELEMENT(epic_EcalBarrel, create_detector)
-#ifdef EPIC_ECCE_LEGACY_COMPAT
-DECLARE_DETELEMENT(ecce_HcalBarrel, create_detector)
-#endif
 DECLARE_DETELEMENT(epic_HcalBarrel, create_detector)

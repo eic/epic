@@ -459,7 +459,4 @@ static Ref_t createDetector(Detector& description, xml::Handle_t e, SensitiveDet
 // }
 
 // clang-format off
-#ifdef EPIC_ECCE_LEGACY_COMPAT
-DECLARE_DETELEMENT(ecce_MRICH, createDetector)
-#endif
 DECLARE_DETELEMENT(epic_MRICH, createDetector)
