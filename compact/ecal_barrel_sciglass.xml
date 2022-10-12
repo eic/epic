@@ -7,13 +7,17 @@
     <documentation>
       The EcalBarrel eta limits cut into the barrel shape.
     </documentation>
-    <constant name="EcalBarrel_etamin" value="-3.5"/>
+    <comment>
+      The current numbers are not based on any design in particular, but
+      provide some extra space for other detectors.
+    </comment>
+    <constant name="EcalBarrel_etamin" value="-1.9"/>
     <constant name="EcalBarrel_etamax" value="+1.4"/>
   </define>
 
   <display>
     <vis name="det_vis" alpha="1.0" r="1.0" g="0.0" b="0.0" showDaughters="true" visible="false" />
-    <vis name="becal_wedge" alpha="1.1" r="0.82" g="0.84" b="0.86" showDaughters="true" visible="true" />
+    <vis name="becal_wedge" alpha="1.0" r="0.82" g="0.84" b="0.86" showDaughters="true" visible="true" />
     <vis name="carbon_fiber" alpha="0.9" r="0.1" g="0.1" b="0.1" showDaughters="true" visible="true" />
     <vis name="family1" alpha="1.0" r="0.22" g="0.54" b="0.71" showDaughters="true" visible="true" />
     <vis name="family2" alpha="1.0" r="0.90" g="0.48" b="0.47" showDaughters="true" visible="true" />
@@ -21,6 +25,7 @@
     <vis name="family4" alpha="1.0" r="0.94" g="0.48" b="0.73" showDaughters="true" visible="true" />
     <vis name="family5" alpha="1.0" r="0.44" g="0.63" b="0.44" showDaughters="true" visible="true" />
     <vis name="family6" alpha="1.0" r="0.50" g="0.35" b="0.76" showDaughters="true" visible="true" />
+    <vis name="family7" alpha="1.0" r="0.76" g="0.35" b="0.50" showDaughters="true" visible="true" />
   </display>
 
   <detectors>
@@ -66,10 +71,18 @@
           <family dir_sign="-1" x1="2 * cm" y1="2 * cm" z_length="45.5 * cm" number="5"  flare_angle_polar="0.82 * degree"  flare_angle_at_face="1.0258 * degree" vis="family4" />
           <family dir_sign="-1" x1="2 * cm" y1="2 * cm" z_length="45.5 * cm" number="5"  flare_angle_polar="0.70 * degree"  flare_angle_at_face="1.126 * degree"  vis="family5" />
           <family dir_sign="-1" x1="2 * cm" y1="2 * cm" z_length="45.5 * cm" number="6"  flare_angle_polar="0.586 * degree" flare_angle_at_face="1.1914 * degree" vis="family6" />
+          <comment>
+            Family 7 is not based on any design in particular. The polar
+            flaring angle was adjusted according to the trend to avoid overlaps
+            and provide gaps needed to place the supports.
+          </comment>
+          <family dir_sign="-1" x1="2 * cm" y1="2 * cm" z_length="45.5 * cm" number="2"  flare_angle_polar="0.46 * degree" flare_angle_at_face="1.1914 * degree" vis="family7" />
         </rows>
 
+        <documentation>
+          This describes the carbon fiber supports that are placed in the gaps between the towers.
+        </documentation>
         <comment>
-          The gaps between towers contain fiber support.
           In current geometry, the supports are represented by double-thickness layers shared between towers.
           As Air-gapped towers are preferred, cut outs are implemented with margins that were roughly estimated from a preliminary CAD drawing.
         </comment>
