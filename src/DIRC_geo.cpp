@@ -52,7 +52,7 @@ static Ref_t createDetector(Detector& desc, xml_h e, SensitiveDetector sens)
   double     bar_length = xml_bar.length();
   Box        bar_box("bar_box", bar_height / 2, bar_width / 2, bar_length / 2);
   Volume     bar_vol("bar_vol", bar_box, desc.material(xml_bar.materialStr()));
-  bar_vol.setVisAttributes(desc.visAttributes(xml_bar.visStr())).setSensitiveDetector(sens);
+  bar_vol.setVisAttributes(desc.visAttributes(xml_bar.visStr()));
 
   // Glue
   xml_comp_t xml_glue       = xml_module.child(_Unicode(glue));
