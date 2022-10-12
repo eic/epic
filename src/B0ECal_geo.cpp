@@ -19,7 +19,7 @@ using std::vector;
 using std::map;
 using namespace dd4hep;
 
-tuple<Volume, Position> build_module(Detector& desc, xml_coll_t& plm, SensitiveDetector& sens);
+static tuple<Volume, Position> build_module(Detector& desc, xml_coll_t& plm, SensitiveDetector& sens);
 
 static Ref_t createDetector(Detector& desc, xml_h e, SensitiveDetector sens)
 {
@@ -69,7 +69,7 @@ static Ref_t createDetector(Detector& desc, xml_h e, SensitiveDetector sens)
 }
 
 // helper function to build module with or w/o wrapper
-tuple<Volume, Position> build_module(Detector& desc, xml::Collection_t& plm, SensitiveDetector& sens)
+static tuple<Volume, Position> build_module(Detector& desc, xml::Collection_t& plm, SensitiveDetector& sens)
 {
   auto   mod = plm.child(_Unicode(module));
   auto   sx  = mod.attr<double>(_Unicode(sizex));
