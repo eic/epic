@@ -600,7 +600,4 @@ static std::tuple<int, int> add_lines(Detector& desc, Assembly& env, xml::Collec
   return {sector_id, mid};
 }
 //@}
-#ifdef EPIC_ECCE_LEGACY_COMPAT
-DECLARE_DETELEMENT(ecce_HomogeneousCalorimeter, create_detector)
-#endif
 DECLARE_DETELEMENT(epic_HomogeneousCalorimeter, create_detector)

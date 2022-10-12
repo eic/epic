@@ -1,82 +1,113 @@
 <lccdd>
   <comment>
-    Implementation of the projective barrel SciGlass calorimeter
+    Implementation of the barrel SciGlass calorimeter
   </comment>
 
   <define>
-    <constant name="EcalBarrel_Support_thickness" value="5*cm"/>
-
     <documentation>
       The EcalBarrel eta limits cut into the barrel shape.
     </documentation>
-    <constant name="EcalBarrel_etamin" value="-3.5"/>
+    <comment>
+      The current numbers are not based on any design in particular, but
+      provide some extra space for other detectors.
+    </comment>
+    <constant name="EcalBarrel_etamin" value="-1.9"/>
     <constant name="EcalBarrel_etamax" value="+1.4"/>
   </define>
 
-  <limits>
-  </limits>
-
-  <regions>
-  </regions>
-
   <display>
+    <vis name="det_vis" alpha="1.0" r="1.0" g="0.0" b="0.0" showDaughters="true" visible="false" />
+    <vis name="becal_wedge" alpha="1.0" r="0.82" g="0.84" b="0.86" showDaughters="true" visible="true" />
+    <vis name="carbon_fiber" alpha="0.9" r="0.1" g="0.1" b="0.1" showDaughters="true" visible="true" />
+    <vis name="family1" alpha="1.0" r="0.22" g="0.54" b="0.71" showDaughters="true" visible="true" />
+    <vis name="family2" alpha="1.0" r="0.90" g="0.48" b="0.47" showDaughters="true" visible="true" />
+    <vis name="family3" alpha="1.0" r="0.87" g="0.49" b="0.09" showDaughters="true" visible="true" />
+    <vis name="family4" alpha="1.0" r="0.94" g="0.48" b="0.73" showDaughters="true" visible="true" />
+    <vis name="family5" alpha="1.0" r="0.44" g="0.63" b="0.44" showDaughters="true" visible="true" />
+    <vis name="family6" alpha="1.0" r="0.50" g="0.35" b="0.76" showDaughters="true" visible="true" />
+    <vis name="family7" alpha="1.0" r="0.76" g="0.35" b="0.50" showDaughters="true" visible="true" />
   </display>
 
   <detectors>
-
     <comment>
-      An EM calorimeter with projective SciGlass blocks
+      An EM calorimeter with SciGlass blocks
     </comment>
-    <detector id="ECalBarrel_ID"
-      name="ECalBarrel"
-      type="epic_SciGlassCalorimeter"
-      vis="EcalBarrelEnvelopeVis"
-      calorimeterType="EM_BARREL"
-      readout="EcalBarrelHits">
-      <dimensions rmin="EcalBarrel_rmin" rmax="EcalBarrel_rmax"
-                  zmin="-EcalBarrelBackward_zmax" zmax="EcalBarrelForward_zmax"
-                  etamin="EcalBarrel_etamin" etamax="EcalBarrel_etamax"/>
+
+    <detector id="4" name="EcalBarrel" type="epic_SciGlassCalorimeter" readout="EcalBarrelHits" vis="det_vis" calorimeterType="EM_BARREL">
       <comment>
-          Modules are specified by layers and slices:
-          - Slices are e.g. sciglass, PMT windows along radial direction.
-          - Layers are e.g. mylar foils, tedlar, air gaps between modules (not implemented).
+        Global detector dimensions from https://eic.jlab.org/Geometry/Detector/Detector-20220624102507.html
       </comment>
-      <!-- FIXME should be repeat_eta_neg="39" repeat_eta_pos="31" but overlap at ECCE proposal dimensions -->
-      <!-- FIXME should be x1=y1="4.0*cm" but overlap with neighboring blocks at ECCE proposal dimensions -->
-      <module name="SciGlassModule"
-              material="Air"
-              repeat_phi="128"
-              repeat_eta_pos="28"
-              repeat_eta_neg="40"
-              length="461*mm"
-              x1="3.9*cm"
-              y1="3.9*cm"
-              phi_projectivity_tilt="10*degree"
-              eta_projectivity_offset="-10*cm"
-              round_backface_to="0.1*cm"
-              >
-        <slice material="SciGlass"
-               thickness="455*mm"
-               sensitive="true"/>
-        <slice material="Silicon"
-               thickness="2*mm"/>
-        <slice material="Quartz"
-               thickness="2*mm"/>
-        <slice material="Carbon"
-               thickness="2*mm"/>
-      </module>
+
+      <dimensions rmin="EcalBarrel_rmin" rmax="EcalBarrel_rmax"
+                  zmax="EcalBarrelForward_zmax" zmin="-EcalBarrelBackward_zmax"
+                  etamin="EcalBarrel_etamin" etamax="EcalBarrel_etamax"/>
+
+      <wedge_box inner_r="80.0 * cm" thickness="2 * mm" vis="becal_wedge" material="Aluminum5083" />
+
+      <sectors number="24" phi0="0." deltaphi="pi / 12">
+        <comment>
+          Rows within a sector are supposed to have smaller gaps than edge rows of two adjacent sectors
+        </comment>
+
+        <rows number="5" deltaphi="2.92 * degree">
+          <dimensions inner_r="EcalBarrel_rmin + EcalBarrel_inner_margin"  gap="1 * mm" />
+
+          <comment>
+            Families in each row are constructed in two directions `dir_sign` - negative and positive rapidity - starting from the center.
+            The towers have the shape of truncated pyramids that have an opening angle in theta `flare_angle_polar`.
+            The towers are stacked in a row with their edges parallel to the edges of their neighbors, `gap` distance apart.
+            Families of towers are groups of towers having identical shape, i.e. the same tower is repeated `number` amount of times.
+            The front and rear faces are similar isosceles trapezoids only slightly deviating from a rectangular shape by an amount parametrized with `flare_angle_at_face`.
+          </comment>
+
+          <family dir_sign="+1" x1="2 * cm" y1="2 * cm" z_length="45.5 * cm" number="10" flare_angle_polar="1.16 * degree"  flare_angle_at_face="0.3059 * degree" vis="family1" />
+          <family dir_sign="+1" x1="2 * cm" y1="2 * cm" z_length="45.5 * cm" number="6"  flare_angle_polar="1.045 * degree" flare_angle_at_face="0.7058 * degree" vis="family2" />
+          <family dir_sign="+1" x1="2 * cm" y1="2 * cm" z_length="45.5 * cm" number="5"  flare_angle_polar="0.929 * degree" flare_angle_at_face="0.8892 * degree" vis="family3" />
+          <family dir_sign="+1" x1="2 * cm" y1="2 * cm" z_length="45.5 * cm" number="5"  flare_angle_polar="0.82 * degree"  flare_angle_at_face="1.0258 * degree" vis="family4" />
+          <family dir_sign="+1" x1="2 * cm" y1="2 * cm" z_length="45.5 * cm" number="3"  flare_angle_polar="0.70 * degree"  flare_angle_at_face="1.126 * degree"  vis="family5" />
+          <family dir_sign="-1" x1="2 * cm" y1="2 * cm" z_length="45.5 * cm" number="10" flare_angle_polar="1.16 * degree"  flare_angle_at_face="0.3059 * degree" vis="family1" />
+          <family dir_sign="-1" x1="2 * cm" y1="2 * cm" z_length="45.5 * cm" number="6"  flare_angle_polar="1.045 * degree" flare_angle_at_face="0.7058 * degree" vis="family2" />
+          <family dir_sign="-1" x1="2 * cm" y1="2 * cm" z_length="45.5 * cm" number="5"  flare_angle_polar="0.929 * degree" flare_angle_at_face="0.8892 * degree" vis="family3" />
+          <family dir_sign="-1" x1="2 * cm" y1="2 * cm" z_length="45.5 * cm" number="5"  flare_angle_polar="0.82 * degree"  flare_angle_at_face="1.0258 * degree" vis="family4" />
+          <family dir_sign="-1" x1="2 * cm" y1="2 * cm" z_length="45.5 * cm" number="5"  flare_angle_polar="0.70 * degree"  flare_angle_at_face="1.126 * degree"  vis="family5" />
+          <family dir_sign="-1" x1="2 * cm" y1="2 * cm" z_length="45.5 * cm" number="6"  flare_angle_polar="0.586 * degree" flare_angle_at_face="1.1914 * degree" vis="family6" />
+          <comment>
+            Family 7 is not based on any design in particular. The polar
+            flaring angle was adjusted according to the trend to avoid overlaps
+            and provide gaps needed to place the supports.
+          </comment>
+          <family dir_sign="-1" x1="2 * cm" y1="2 * cm" z_length="45.5 * cm" number="2"  flare_angle_polar="0.46 * degree" flare_angle_at_face="1.1914 * degree" vis="family7" />
+        </rows>
+
+        <documentation>
+          This describes the carbon fiber supports that are placed in the gaps between the towers.
+        </documentation>
+        <comment>
+          In current geometry, the supports are represented by double-thickness layers shared between towers.
+          As Air-gapped towers are preferred, cut outs are implemented with margins that were roughly estimated from a preliminary CAD drawing.
+        </comment>
+
+        <carbon_fiber_support
+            thickness="0.5 * mm"
+            overhang_top="4 * cm"
+            overhang_bottom="0.2 * cm"
+            vis="carbon_fiber"
+            material="CarbonFiber"
+            >
+          <cut_out
+            margin_horizontal="1 * cm"
+            margin_top="5 * cm"
+            margin_bottom="1.6 * cm"
+            />
+        </carbon_fiber_support>
+      </sectors>
     </detector>
   </detectors>
 
-  <!--  Definition of the readout segmentation/definition  -->
   <readouts>
     <readout name="EcalBarrelHits">
       <segmentation type="NoSegmentation"/>
-      <id>system:8,sector:8,module:8,slice:4</id>
+      <id>system:8,sector:8,module:8,slice:-8</id>
     </readout>
   </readouts>
-
-  <plugins>
-  </plugins>
-
 </lccdd>

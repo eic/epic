@@ -36,6 +36,11 @@
     <vis name="TOFHybridVis"      ref="AnlGold"             visible="true"  showDaughters="true"/>
     <vis name="TOFCoolingTube"    ref="AnlRed"              visible="true"  showDaughters="true"/>
     <vis name="TOFCoolant"        ref="TrackerServiceVis"   visible="true"  showDaughters="true"/>
+    <vis name="TOFWater"          ref="AnlBlue"   visible="true"  showDaughters="true"/>
+    <vis name="TOFAluminum"        ref="AnlLightGray"   visible="true"  showDaughters="true"/>
+    <vis name="TOFActiveMat"        ref="AnlGreen"   visible="true"  showDaughters="true"/>
+    <vis name="TOFLayers"        ref="AnlBlue"   visible="true"  showDaughters="true"/>
+    <vis name="TOFSensorAndReadoutLadder"        ref="AnlGold"   visible="true"  showDaughters="true"/>
     <vis name="TOFCSkinVis"       ref="TrackerSupportVis"   visible="true"  showDaughters="true"/>
     <vis name="TOFCFoamVis"       ref="TrackerSupportVis"   visible="true"  showDaughters="true"/>
     <vis name="TOFCHoneycombVis"  ref="TrackerServiceVis"   visible="true"  showDaughters="true"/>
@@ -86,7 +91,7 @@
     <vis name="HcalEndcapLayerVis"    ref="AnlBlue"   showDaughters="false" visible="true"/>
     <vis name="HcalSensorVis"         ref="AnlBlue"   showDaughters="false" visible="false"/>
     <vis name="HcalAbsorberVis"       ref="AnlGray"   showDaughters="false" visible="false"/>
-    <vis name="HcalEndcapInsertVis"   ref="AnlGray"   showDaughters="true"  visible="true" />
+    <vis name="HcalEndcapInsertVis"   ref="AnlGray"   showDaughters="false" visible="true"/>
 
     <comment>
       Passive steel for flux return

@@ -16,7 +16,6 @@ lib/
 share/
 
 images/*
-doc/*
 
 accelerator
 eic_ip6

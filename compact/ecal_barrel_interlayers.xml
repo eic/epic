@@ -32,7 +32,7 @@
       For W/SiFi (sPHENIX): X0 ~ 0.7 cm (but different fiber orientation)
     </comment>
     <constant name="EcalBarrel_RadiatorThickness"    value="EcalBarrel_FiberZSpacing*13"/>
-    <constant name="EcalBarrel_ModRepeat"            value="CaloSides"/>
+    <constant name="EcalBarrel_ModRepeat"            value="EcalBarrelStavesN"/>
     <constant name="EcalBarrel_ModLength"            value="0.5*m"/>
     <constant name="EcalBarrel_ModWidth"             value="0.5*m"/>
     <constant name="EcalBarrel_AvailThickness"       value="EcalBarrelRegion_thickness-EcalBarrel_Support_thickness"/>
@@ -136,8 +136,8 @@
       <layer repeat="EcalBarrelImagingLayers_num-1" vis="EcalBarrelLayerVis"
        space_between="EcalBarrel_ImagingLayerThickness + EcalBarrel_SpaceBetween"
        space_before="EcalBarrel_ImagingLayerThickness + EcalBarrel_SpaceBetween/2.">
-        <slice material="Lead" thickness="EcalBarrel_RadiatorThickness" vis="EcalBarrelFiberLayerVis">
-          <fiber material="PlasticScint"
+        <slice material="SciFiPb_PbGlue" thickness="EcalBarrel_RadiatorThickness" vis="EcalBarrelFiberLayerVis">
+          <fiber material="SciFiPb_Scintillator"
             sensitive="yes"
             radius="EcalBarrel_FiberRadius"
             spacing_x="EcalBarrel_FiberXSpacing"
@@ -150,10 +150,10 @@
       </layer>
       <layer repeat="EcalBarrel_FiberChunkLayers_num" vis="EcalBarrelLayerVis"
           space_before="EcalBarrel_ImagingLayerThickness + EcalBarrel_SpaceBetween">
-        <slice material="Lead"
+        <slice material="SciFiPb_PbGlue"
           thickness="EcalBarrel_ScFiPartThickness/EcalBarrel_FiberChunkLayers_num"
           vis="EcalBarrelFiberLayerVis">
-          <fiber material="PlasticScint"
+          <fiber material="SciFiPb_Scintillator"
             sensitive="yes"
             radius="EcalBarrel_FiberRadius"
             spacing_x="EcalBarrel_FiberXSpacing"
@@ -171,8 +171,8 @@
       <id>system:8,module:8,layer:8,slice:8,x:32:-16,y:-16</id>
     </readout>
     <readout name="EcalBarrelScFiHits">
-      <segmentation type="NoSegmentation"/>
-      <id>system:8,module:8,layer:8,slice:8,grid:16,fiber:16</id>
+      <segmentation type="CartesianStripZ" strip_size_x="1.0*cm" identifier_x="z"/>
+      <id>system:8,module:6,layer:6,slice:4,grid:10,fiber:16,z:-14</id>
     </readout>
   </readouts>
 

@@ -8,8 +8,6 @@ PROJECT(epic
   DESCRIPTION "DD4hep Geometry Description of the EPIC Experiment"
   )
 
-option(EPIC_ECCE_LEGACY_COMPAT "Preserve some compatibility with ECCE" OFF)
-
 # C++ standard
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD 17 CACHE STRING "Set the C++ standard to be used")
@@ -76,9 +74,6 @@ dd4hep_add_plugin(${a_lib_name}
 target_link_libraries(${a_lib_name}
   PUBLIC ${DD4hep_required_libraries} fmt::fmt
   )
-if(EPIC_ECCE_LEGACY_COMPAT)
-  target_compile_definitions(${a_lib_name} PUBLIC EPIC_ECCE_LEGACY_COMPAT)
-endif()
 
 #-----------------------------------------------------------------------------------
 # Parse jinja templates: once by default, and once for all yml files
@@ -131,16 +126,6 @@ install(DIRECTORY compact/
 install(DIRECTORY calibrations/
     DESTINATION ${CMAKE_INSTALL_DATADIR}/${PROJECT_NAME}/calibrations
     )
-
-# Handle ECCE compatibility mode
-if(EPIC_ECCE_LEGACY_COMPAT)
-  install(CODE "execute_process(COMMAND ${CMAKE_COMMAND} -E create_symlink ./${PROJECT_NAME} ${CMAKE_INSTALL_PREFIX}/share/ecce)")
-  set(EPIC_ECCE_ORIGINAL_CONFIGURATIONS 18x275 calorimeters central dirc_only drich_only full imaging inner_detector ip6 pfrich_only pid_only sciglass tof_only tracking_only vertex_only)
-  install(CODE "execute_process(COMMAND ${CMAKE_COMMAND} -E create_symlink ./${PROJECT_NAME}.xml ${CMAKE_INSTALL_PREFIX}/share/ecce/ecce.xml)")
-  foreach(ecce_configuration ${EPIC_ECCE_ORIGINAL_CONFIGURATIONS})
-    install(CODE "execute_process(COMMAND ${CMAKE_COMMAND} -E create_symlink ./${PROJECT_NAME}_${ecce_configuration}.xml ${CMAKE_INSTALL_PREFIX}/share/ecce/ecce_${ecce_configuration}.xml)")
-  endforeach()
-endif()
 
 #-----------------------------------------------------------------------------------
 # Configure and install detector setup script

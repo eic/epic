@@ -1,5 +1,5 @@
 //==========================================================================
-//  Implementation of forward HCal insert calorimeter
+//  Implementation of forward insert calorimeter
 //--------------------------------------------------------------------------
 //  Author: Ryan Milton (UCR)
 //==========================================================================
@@ -32,14 +32,14 @@ static Ref_t createDetector(Detector& desc, xml_h handle, SensitiveDetector sens
   const double          hole_radius_initial =
       dd4hep::getAttrOrDefault<double>(beampipe_hole_xml, _Unicode(initial_hole_radius), 14.67 * cm);
   const double hole_radius_final =
-      dd4hep::getAttrOrDefault<double>(beampipe_hole_xml, _Unicode(final_hole_radius), 16.92 * cm);
+      dd4hep::getAttrOrDefault<double>(beampipe_hole_xml, _Unicode(final_hole_radius), 17.1 * cm);
   const std::pair<double, double> hole_radii_parameters(hole_radius_initial, hole_radius_final);
 
   // Subtract by pos.x() and pos.y() to convert from global to local coordinates
   const double hole_x_initial =
-      dd4hep::getAttrOrDefault<double>(beampipe_hole_xml, _Unicode(initial_hole_x), 7.29 * cm) - pos.x();
+      dd4hep::getAttrOrDefault<double>(beampipe_hole_xml, _Unicode(initial_hole_x), -7.29 * cm) - pos.x();
   const double hole_x_final =
-      dd4hep::getAttrOrDefault<double>(beampipe_hole_xml, _Unicode(final_hole_x), 10.135 * cm) - pos.x();
+      dd4hep::getAttrOrDefault<double>(beampipe_hole_xml, _Unicode(final_hole_x), -10.363 * cm) - pos.x();
   const std::pair<double, double> hole_x_parameters(hole_x_initial, hole_x_final);
 
   const double hole_y_initial =
@@ -49,7 +49,7 @@ static Ref_t createDetector(Detector& desc, xml_h handle, SensitiveDetector sens
   const std::pair<double, double> hole_y_parameters(hole_y_initial, hole_y_final);
 
   // Getting thickness of backplate
-  auto backplate_thickness = dd4hep::getAttrOrDefault<double>(detElem, _Unicode(backplate_thickness), 1.61 * cm);
+  auto backplate_thickness = dd4hep::getAttrOrDefault<double>(detElem, _Unicode(backplate_thickness), 0. * cm);
 
   // Function that returns a linearly interpolated hole radius, x-position, and y-position at a given z
   auto get_hole_rxy = [hole_radii_parameters, hole_x_parameters, hole_y_parameters, length,
