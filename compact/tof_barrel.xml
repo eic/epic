@@ -79,7 +79,7 @@
       readout="TOFBarrelHits"
       insideTrackingVolume="true">
       <dimensions
-        rmin="BarrelTOF_rmin"
+        rmin="BarrelTOF_rmin-BarrelTOF_rOffset-1*mm"
         rmax="BarrelTOF_rmax+BarrelTOF_rOffset"
         length="BarrelTOF_length"/>
       <comment>
