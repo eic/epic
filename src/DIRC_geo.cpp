@@ -202,7 +202,5 @@ static Ref_t createDetector(Detector& desc, xml_h e, SensitiveDetector sens)
   return det;
 }
 
-#ifdef EPIC_ECCE_LEGACY_COMPAT
-DECLARE_DETELEMENT(ecce_DIRC, createDetector)
-#endif
+
 DECLARE_DETELEMENT(epic_DIRC, createDetector)
