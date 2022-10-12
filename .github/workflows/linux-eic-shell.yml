@@ -222,6 +222,9 @@ jobs:
   check-overlap-tgeo:
     runs-on: ubuntu-latest
     needs: build-test
+    strategy:
+      matrix:
+        detector_config: [epic_sciglass, epic_imaging]
     steps:
     - uses: actions/checkout@v3
     - uses: actions/download-artifact@v3
@@ -236,7 +239,7 @@ jobs:
         setup: install/setup.sh
         run: |
           mkdir -p doc
-          checkOverlaps -c ${DETECTOR_PATH}/${DETECTOR_CONFIG}.xml | tee doc/overlap_check_tgeo.out
+          checkOverlaps -c ${DETECTOR_PATH}/{{ matrix.detector_config }}.xml | tee doc/overlap_check_tgeo.out
           noverlaps="$(grep -c ovlp doc/overlap_check_tgeo.out || true)"
           if [[ "${noverlaps}" -gt "0" ]] ; then echo "${noverlaps} overlaps found!" && false ; fi
 
