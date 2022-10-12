@@ -53,7 +53,7 @@
     <matrix name="zposChimneyTileS" unit="mm" coldim="1" values="-1.5 -1.5 -1.5 -1.5"/>
 
     <constant name="ctilePlaneRotate" unit="deg" value="-14.355"/>
-    <constant name="tilePlaneRotate" unit="deg" value="-14.555"/>
+    <constant name="tilePlaneRotate" unit="deg" value="-14.545"/>
     <constant name="csectorRotate" unit="deg" value="6.086"/>
     <constant name="sectorRotate" unit="deg" value="6.100"/>
     

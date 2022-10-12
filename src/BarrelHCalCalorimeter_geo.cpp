@@ -309,7 +309,8 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
 	  int tnum = atoi(stnum.c_str())-1; 
 	  
 	  double ctileRotateStart = 5.495*(360.0/320.0)*dd4hep::deg;
-	  double tileRotateStart = 20.400*(360.0/320.0)*dd4hep::deg + ctileRotateStart; 
+	  //double tileRotateStart = 20.400*(360.0/320.0)*dd4hep::deg + ctileRotateStart; 
+	  double tileRotateStart = 20.40125*(360.0/320.0)*dd4hep::deg + ctileRotateStart; 
 
 	  Assembly TempTower1a(_toString(11-tnum,"Tower%i")); 
 	  Assembly TempTower1b(_toString(11-tnum+24,"Tower%i")); 
