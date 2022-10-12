@@ -13,7 +13,6 @@
       - DIRC_offset
       - DIRC_rmin
       - DIRCBox_count  (12 full dirc, 1 - a single module)
-      - DIRC_rotation  (allows to flip the DIRC)
 
     When DIRC_length is set, it affects bars length (all other lengths are fixed)
     The width of each DIRC module is derived from DIRCPrism_width
@@ -21,8 +20,6 @@
   </comment>
 
   <define>
-    <constant name="DIRC_rotation"          value="pi" comment="Allows DIRC flip"/>
-
     <!-- Prism -->
     <constant name="DIRCPrism_width"        value="350*mm"/>
     <constant name="DIRCPrism_length"       value="300*mm"/>
