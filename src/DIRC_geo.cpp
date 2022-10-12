@@ -12,33 +12,29 @@
 using namespace std;
 using namespace dd4hep;
 
-// Fixed Trap constructor. This function is a workaround of this bug:
-// https://github.com/AIDASoft/DD4hep/issues/850
-// Should be used instead of dd4hep::Trap(pName, pZ, pY, pX, pLTX) constructor
-dd4hep::Trap MakeTrap(const std::string& pName, double pZ, double pY, double pX, double pLTX);
-
 static Ref_t createDetector(Detector& desc, xml_h e, SensitiveDetector sens)
 {
   xml_det_t xml_det = e;
 
+  // Detector element
   string     det_name = xml_det.nameStr();
   int        det_id   = xml_det.id();
   DetElement det(det_name, det_id);
 
-  // Main detector xml element
+  // Detector dimension, position, rotation
   xml_dim_t dirc_dim = xml_det.dimensions();
   xml_dim_t dirc_pos = xml_det.position();
   double    det_rmin = dirc_dim.rmin();
   double    det_rmax = dirc_dim.rmax();
   double    det_ravg = (det_rmin + det_rmax) / 2;
 
+  // Detector type
   sens.setType("tracker");
 
   // Entire DIRC assembly
   Assembly det_volume("DIRC");
   det_volume.setVisAttributes(desc.visAttributes(xml_det.visStr()));
-  Transform3D det_tr(RotationY(M_PI), Position(0.0, 0.0, dirc_pos.z()));
-  printout(INFO, "DIRC", "Placing DIRC at (0,0,%f)", dirc_pos.z());
+  Transform3D det_tr(RotationY(0), Position(0.0, 0.0, dirc_pos.z()));
   det.setPlacement(desc.pickMotherVolume(det).placeVolume(det_volume, det_tr).addPhysVolID("system", det_id));
 
   // Construct module
@@ -71,11 +67,10 @@ static Ref_t createDetector(Detector& desc, xml_h e, SensitiveDetector sens)
   auto bar_assm_width  = (bar_width + bar_gap) * bar_repeat_y - bar_gap;
   auto bar_assm_length = (bar_length + glue_thickness) * bar_repeat_z;
   for (int y_index = 0; y_index < bar_repeat_y; y_index++) {
-    double y = -0.5 * bar_assm_width + 0.5 * bar_width + (bar_width + bar_gap) * y_index;
+    double y = 0.5 * bar_assm_width - 0.5 * bar_width - (bar_width + bar_gap) * y_index;
     for (int z_index = 0; z_index < bar_repeat_z; z_index++) {
-      double z = -0.5 * bar_assm_length + 0.5 * bar_length + (bar_length + glue_thickness) * z_index;
-      dirc_module.placeVolume(glue_vol, Position(0, y, z + 0.5 * (bar_length + glue_thickness)));
-      printout(INFO, "DIRC", "Placing bar at (0,%f,%f)", y, z);
+      double z = 0.5 * bar_assm_length - 0.5 * bar_length - (bar_length + glue_thickness) * z_index;
+      dirc_module.placeVolume(glue_vol, Position(0, y, z - 0.5 * (bar_length + glue_thickness)));
       dirc_module.placeVolume(bar_vol, Position(0, y, z)).addPhysVolID("section", z_index).addPhysVolID("bar", y_index);
     }
   }
@@ -96,7 +91,7 @@ static Ref_t createDetector(Detector& desc, xml_h e, SensitiveDetector sens)
   skin.isValid();
 
   // Place mirror
-  dirc_module.placeVolume(mirror_vol, Position(0, 0, -0.5 * (bar_assm_length + mirror_thickness)));
+  dirc_module.placeVolume(mirror_vol, Position(0, 0, 0.5 * (bar_assm_length + mirror_thickness)));
 
   // Prism variables
   xml_comp_t xml_prism        = xml_module.child(_Unicode(prism));
@@ -115,6 +110,7 @@ static Ref_t createDetector(Detector& desc, xml_h e, SensitiveDetector sens)
   double lens_r2        = getAttrOrDefault(xml_lens, _Unicode(r2), 36 * mm);
 
   // Lens construction
+  // FIXME avoid negative impact of booleans by putting lens inside box
 
   // lens_min_thickness is distance from face to r1, and from r1 to r2 at lens top edge
   double lens_min_thickness = 0.5 * mm;
@@ -158,20 +154,20 @@ static Ref_t createDetector(Detector& desc, xml_h e, SensitiveDetector sens)
   lens_layer2_vol.setVisAttributes(desc.visAttributes(xml_lens.attr<std::string>(_Unicode(vis2))));
   lens_layer3_vol.setVisAttributes(desc.visAttributes(xml_lens.attr<std::string>(_Unicode(vis3))));
 
-  double   lens_position_z = 0.5 * (bar_assm_length + lens_thickness);
+  double   lens_position_z = -0.5 * (bar_assm_length + lens_thickness);
   Position lens_position(0, 0, lens_position_z);
   dirc_module.placeVolume(lens_layer1_vol, lens_position);
   dirc_module.placeVolume(lens_layer2_vol, lens_position);
   dirc_module.placeVolume(lens_layer3_vol, lens_position);
 
   // Prism construction
-  Trap   prism_tube = MakeTrap("prism_tube", prism_width, prism_length, prism_long_edge, prism_short_edge);
+  Trap   prism_tube = Trap("prism_tube", prism_width, prism_length, prism_long_edge, prism_short_edge);
   Volume prism_vol("prism_vol", prism_tube, desc.material(xml_prism.materialStr()));
-  prism_vol.setVisAttributes(desc.visAttributes("DIRCPrism"));
+  prism_vol.setVisAttributes(desc.visAttributes(xml_prism.visStr()));
 
   double    prism_position_x = (prism_long_edge + prism_short_edge) / 4. - 0.5 * prism_short_edge + 1.5 * mm;
-  double    prism_position_z = 0.5 * (bar_assm_length + prism_length) + lens_thickness;
-  RotationX prism_rotation(-M_PI / 2.);
+  double    prism_position_z = -0.5 * (bar_assm_length + prism_length) - lens_thickness;
+  RotationX prism_rotation(M_PI / 2.);
   Position  prism_position(prism_position_x, 0, prism_position_z);
   dirc_module.placeVolume(prism_vol, Transform3D(prism_rotation, prism_position));
 
@@ -187,7 +183,7 @@ static Ref_t createDetector(Detector& desc, xml_h e, SensitiveDetector sens)
   mcp_vol.setVisAttributes(desc.visAttributes(xml_mcp.visStr())).setSensitiveDetector(sens);
 
   double   mcp_position_x = 0.5 * prism_long_edge - 0.5 * prism_short_edge + 3 * mm; // FIXME hardcoded
-  double   mcp_position_z = 0.5 * bar_assm_length + lens_thickness + prism_length + 0.5 * mcp_thickness;
+  double   mcp_position_z = -0.5 * bar_assm_length - lens_thickness - prism_length - 0.5 * mcp_thickness;
   Position mcp_position(mcp_position_x, 0, mcp_position_z);
   dirc_module.placeVolume(mcp_vol, mcp_position);
 
@@ -198,8 +194,6 @@ static Ref_t createDetector(Detector& desc, xml_h e, SensitiveDetector sens)
     double phi = dphi * i;
     double x   = det_ravg * cos(phi);
     double y   = det_ravg * sin(phi);
-
-    printout(INFO, "DIRC", "Placing module at (%f,%f)", x, y);
 
     Transform3D tr(RotationZ(phi), Position(x, y, 0));
     det_volume.placeVolume(dirc_module, tr).addPhysVolID("module", i);
@@ -212,24 +206,3 @@ static Ref_t createDetector(Detector& desc, xml_h e, SensitiveDetector sens)
 DECLARE_DETELEMENT(ecce_DIRC, createDetector)
 #endif
 DECLARE_DETELEMENT(epic_DIRC, createDetector)
-
-dd4hep::Trap MakeTrap(const std::string& pName, double pZ, double pY, double pX, double pLTX)
-{
-  // Fixed Trap constructor. This function is a workaround of this bug:
-  // https://github.com/AIDASoft/DD4hep/issues/850
-  // Should be used instead of dd4hep::Trap(pName, pZ, pY, pX, pLTX) constructor
-
-  double fDz         = 0.5 * pZ;
-  double fTthetaCphi = 0;
-  double fTthetaSphi = 0;
-  double fDy1        = 0.5 * pY;
-  double fDx1        = 0.5 * pX;
-  double fDx2        = 0.5 * pLTX;
-  double fTalpha1    = 0.5 * (pLTX - pX) / pY;
-  double fDy2        = fDy1;
-  double fDx3        = fDx1;
-  double fDx4        = fDx2;
-  double fTalpha2    = fTalpha1;
-
-  return Trap(pName, fDz, fTthetaCphi, fTthetaSphi, fDy1, fDx1, fDx2, fTalpha1, fDy2, fDx3, fDx4, fTalpha2);
-}
