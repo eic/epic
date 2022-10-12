@@ -181,7 +181,4 @@ std::tuple<Volume, Position> build_module(const Detector& desc, const xml::Compo
   return std::make_tuple(modVol, Position{sx, sy, sz});
 }
 
-#ifdef EPIC_ECCE_LEGACY_COMPAT
-DECLARE_DETELEMENT(ecce_ScFiCalorimeter, create_detector)
-#endif
 DECLARE_DETELEMENT(epic_ScFiCalorimeter, create_detector)

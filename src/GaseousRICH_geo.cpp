@@ -211,7 +211,4 @@ void build_sensors(Detector& desc, Volume& env, xml::Component plm, const Positi
 //@}
 
 // clang-format off
-#ifdef EPIC_ECCE_LEGACY_COMPAT
-DECLARE_DETELEMENT(ecce_GaseousRICH, createDetector)
-#endif
 DECLARE_DETELEMENT(epic_GaseousRICH, createDetector)
