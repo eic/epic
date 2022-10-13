@@ -2,6 +2,6 @@ features:
   beampipe:
   tracking:
   ecal:
-  - barrel_sciglass
-  - backward_PbWO4
+    barrel_sciglass
+    backward_PbWO4
   pid:
