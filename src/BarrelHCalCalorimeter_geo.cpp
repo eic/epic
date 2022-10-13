@@ -121,6 +121,7 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
 
   std::vector<double> tweak_tiles; 
   std::vector<double> tweak_chimney_tiles; 
+  std::vector<double> tweak_sectors; 
 
   for(xml_coll_t i(det_define, _Unicode(matrix)); i; ++i){
     xml_comp_t  x_mtrx = i; 
@@ -162,6 +163,8 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
       aptr = &tweak_tiles;
     else if(mtrx_name == "tweak_chimney_tiles") 
       aptr = &tweak_chimney_tiles;
+    else if(mtrx_name == "tweak_sectors") 
+      aptr = &tweak_sectors;
     else{
       printout(WARNING, "BarrelHCalCalorimeter", "unknown <matrix> data!");
       continue;
@@ -438,7 +441,7 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
   
   // Chimney sectors
   for(int i=-1; i<2; i++){
-    PlacedVolume     sect_phv = envelope.placeVolume(ChimneySector, i+1, Transform3D(RotationZ(((i-1)*2*M_PI/32)), Translation3D(0, 0, 0) ));
+    PlacedVolume     sect_phv = envelope.placeVolume(ChimneySector, i+1, Transform3D(RotationZ(((i-1)*2*M_PI/32) + tweak_sectors[i+1]), Translation3D(0, 0, 0) ));
     sect_phv.addPhysVolID("system", det_id);
     sect_phv.addPhysVolID("barrel", 0);
     sect_phv.addPhysVolID("sector", i+1);
@@ -449,7 +452,8 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
 
   // Normal sectors
   for(int i=3; i<32; i++){
-    PlacedVolume     sect_phv = envelope.placeVolume(Sector, i, RotationZYX((-2.075*M_PI/32) + (i-3)*(2*M_PI/32),0,0) );
+    PlacedVolume     sect_phv = envelope.placeVolume(Sector, i, Transform3D(RotationZ((-2.075*M_PI/32) + (i-3)*(2*M_PI/32) + tweak_sectors[i]), Translation3D(0, 0, 0) ));
+    //PlacedVolume     sect_phv = envelope.placeVolume(Sector, i, RotationZYX((-2.075*M_PI/32) + (i-3)*(2*M_PI/32),0,0) );
     sect_phv.addPhysVolID("system", det_id);
     sect_phv.addPhysVolID("barrel", 0);
     sect_phv.addPhysVolID("sector", i);

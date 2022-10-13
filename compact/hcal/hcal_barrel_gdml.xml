@@ -60,6 +60,10 @@
     <matrix name="plates_x" unit="mm" coldim="1" values="161.935 118.175 -741.606 -771.303"/>
     <matrix name="plates_y" unit="mm" coldim="1" values="2295.048 2267.198 2160.230 2119.176"/>
     <matrix name="plates_z" unit="mm" coldim="1" values="235.587 253.54 0.0 0.0"/>
+    
+    <matrix name="tweak_tiles" unit="rad" values="0.0 0.0 0.0 0.0 0.0 0.0001 0.0 0.0 0.0 0.0 0.0001 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0002"/> 
+    <matrix name="tweak_chimney_tiles" unit="rad" values="-0.0002 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0"/> 
+    <matrix name="tweak_sectors" unit="rad" values="0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 -0.00004 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0"/> 
    
   </define>
 
