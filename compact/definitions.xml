@@ -460,8 +460,9 @@ Examples:
     <constant name="ForwardRICHRegion_tan1"        value="CentralTrackingRegionP_tan * 0.88" />
     <constant name="ForwardRICHRegion_tan2"        value="Eta3_6_tan * 0.89" />
 
-    <constant name="BackwardPIDRegion_zmin"       value="CentralTrackingRegionN_zmax" />
     <constant name="BackwardPIDRegion_length"     value="25.0*cm" />
+    <constant name="BackwardPIDRegion_zmin"       value="CentralTrackingRegionN_zmax" />
+    <constant name="BackwardPIDRegion_zmax"       value="BackwardPIDRegion_zmin+BackwardPIDRegion_length" />
     <constant name="BackwardPIDRegion_rmax"       value="64.0*cm" /> <!-- FIXME hardcoded, was CentralTrackingRegion_rmax -->
     <constant name="BackwardPIDRegion_tan"        value="CentralTrackingRegionN_tan * 0.92" />
 
@@ -559,7 +560,7 @@ Service gaps in FW direction (before endcapP ECAL) and BW direction (before endc
     <constant name="EcalBarrel_offset"              value="(EcalBarrelForward_zmax - EcalBarrelBackward_zmax)/2.0"/>
     <constant name="EcalBarrelReadout_length"       value="20*cm"/>
 
-    
+
   <documentation level="3">
     ## Special DIRC parameters (depend on the ECAL setup)
   </documentation>
