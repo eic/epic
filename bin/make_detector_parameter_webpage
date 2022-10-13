@@ -6,6 +6,11 @@ require 'csv'
 # arguments
 csvFile   = ARGV.length>=1 ? ARGV[0] : 'doc/DetectorParameterTable.csv'
 htmlFile  = ARGV.length>=2 ? ARGV[1] : csvFile.gsub(/csv$/, 'html')
+puts """
+#{$0}
+#{'-'*$0.length}
+CONVERT: #{csvFile} -> #{htmlFile}
+"""
 
 # start the html file; CSS
 html = File.open htmlFile, 'w'
