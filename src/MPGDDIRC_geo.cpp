@@ -123,16 +123,16 @@ static Ref_t create_MPGDDIRC_geo(Detector& description, xml_h e, SensitiveDetect
         max_component_length = box_length;
         gas_thickness += x_comp.thickness();
         c_box = {box_width / 2, box_length / 2, x_comp.thickness() / 2};
-        // cout << "gas: " << comp_name << " \n";
-        // cout << "box_width: " << box_width << endl;
-        // cout << "box_length: " << box_length << endl;
-        // cout << "box_thickness: " << x_comp.thickness() << endl;
+        printout(DEBUG, "MPGDDIRC_geo", "gas: %f", comp_name);
+        printout(DEBUG, "MPGDDIRC_geo", "box_width: %f", box_width);
+        printout(DEBUG, "MPGDDIRC_geo", "box_length: %%f", box_length);
+        printout(DEBUG, "MPGDDIRC_geo", "box_thickness: %f", x_comp.thickness());
       } else {
         c_box = {x_comp.width() / 2, x_comp.length() / 2, x_comp.thickness() / 2};
-        // cout << "Not gas: " << comp_name << " \n";
-        // cout << "box_comp_width: " << x_comp.width() << endl;
-        // cout << "box_comp_length: " << x_comp.length() << endl;
-        // cout << "box_comp_thickness: " << x_comp.thickness() << endl;
+        printout(DEBUG, "MPGDDIRC_geo", "Not gas: %f", comp_name);
+        printout(DEBUG, "MPGDDIRC_geo", "box_comp_width: %f", x_comp.width());
+        printout(DEBUG, "MPGDDIRC_geo", "box_comp_length: %f", x_comp.length());
+        printout(DEBUG, "MPGDDIRC_geo", "box_comp_thickness: %f", x_comp.thickness());
       }
       Volume c_vol{c_nam, c_box, description.material(x_comp.materialStr())};
       pv = m_vol.placeVolume(c_vol, Position(0, 0, thickness_sum + x_comp.thickness() / 2.0));
@@ -187,9 +187,9 @@ static Ref_t create_MPGDDIRC_geo(Detector& description, xml_h e, SensitiveDetect
       tframe_vol.setVisAttributes(description, m_frame.visStr());
       bframe_vol.setVisAttributes(description, m_frame.visStr());
 
-      cout << "frame_thickness: " << frame_thickness << endl;
-      cout << "total_thickness: " << total_thickness << endl;
-      cout << "frame_thickness + total_thickness: " << frame_thickness + total_thickness << endl;
+      printout(DEBUG, "MPGDDIRC_geo", "frame_thickness: %f", frame_thickness);
+      printout(DEBUG, "MPGDDIRC_geo", "total_thickness: %f", total_thickness);
+      printout(DEBUG, "MPGDDIRC_geo", "frame_thickness + total_thickness: %f", frame_thickness + total_thickness);
 
       m_vol.placeVolume(lframe_vol, Position(frame_width / 2.0 + max_component_width / 2, 0.0,
                                              frame_thickness / 2.0 - total_thickness / 2.0 - gas_thickness / 2.0));
