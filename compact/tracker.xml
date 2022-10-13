@@ -125,6 +125,15 @@
       vis="TrackerSubAssemblyVis">
       <composite name="BarrelTOF"/>
     </detector>
+    <comment>
+      <comment>FIXME update the OuterMPGDBarrel to use the MPGDDIRC detector</comment>
+      <detector id="TrackerSubAssembly_5_ID"
+        name="OuterMPGDSubSubAssembly"
+        type="DD4hep_SubdetectorAssembly"
+        vis="TrackerSubAssemblyVis">
+        <composite name="OuterMPGDBarrel"/>
+      </detector>
+    </comment>
     <detector id="TrackerSubAssembly_5_ID"
       name="OuterMPGDSubSubAssembly"
       type="DD4hep_SubdetectorAssembly"
