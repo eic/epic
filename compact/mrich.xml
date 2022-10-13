@@ -71,7 +71,7 @@
       projective="true"
       vis="InvisibleWithDaughters"
       material="Air">
-      <dimensions rmin="MRICH_rmin" rmax="MRICH_rmax" length="abs(MRICH_length)" zmin="MRICH_zmin"/>
+      <dimensions rmin="MRICH_rmin" rmax="MRICH_rmax" length="MRICH_length" zmin="MRICH_zmin"/>
       <module name="MRICH_module1"
               vis="InvisibleWithDaughters"
               width="MRICHCarbonFrame_width"
