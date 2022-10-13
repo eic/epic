@@ -1,4 +1,4 @@
 features:
-- beampipe
-- pid:
-    - dirc
+  beampipe:
+  pid:
+    dirc:
