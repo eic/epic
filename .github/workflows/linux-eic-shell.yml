@@ -208,6 +208,7 @@ jobs:
           mkdir -p doc
           npdet_info dump ${DETECTOR_PATH}/epic.xml | grep -v '^\s' | grep '=' | cut -d= -f1-2 | tee doc/constants.toml
           python bin/make_detector_parameter_table | tee doc/DetectorParameterTable.csv
+          bin/make_detector_parameter_webpage doc/DetectorParameterTable.csv
     - uses: actions/upload-artifact@v3
       with:
         name: constants.toml
@@ -215,8 +216,8 @@ jobs:
         if-no-files-found: error
     - uses: actions/upload-artifact@v3
       with:
-        name: DetectorParameterTable.csv
-        path: doc/DetectorParameterTable.csv
+        name: DetectorParameterTable
+        path: doc/DetectorParameterTable.*
         if-no-files-found: error
 
   check-overlap-tgeo:
