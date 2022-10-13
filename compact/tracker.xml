@@ -52,13 +52,13 @@
     <constant name="TrackerEndcapPDisk1_rmin"        value="Beampipe_rmax + 5*mm" />
     <constant name="TrackerEndcapPDisk1_rmax"        value="TrackerSupportCyl_rmin - 15*mm" />
     <constant name="TrackerEndcapPDisk2_zmin"        value="70.0*cm" />
-    <constant name="TrackerEndcapPDisk2_rmin"        value="Beampipe_rmax + 9*mm" />
+    <constant name="TrackerEndcapPDisk2_rmin"        value="Beampipe_rmax + 5.6*mm" />
     <constant name="TrackerEndcapPDisk2_rmax"        value="TrackerSupportCyl_rmin * .98" />
     <constant name="TrackerEndcapPDisk3_zmin"        value="100.0*cm" />
-    <constant name="TrackerEndcapPDisk3_rmin"        value="Beampipe_rmax + 22.0*mm" />
+    <constant name="TrackerEndcapPDisk3_rmin"        value="Beampipe_rmax + 12.87*mm" />
     <constant name="TrackerEndcapPDisk3_rmax"        value="TrackerSupportCyl_rmin * .98" />
     <constant name="TrackerEndcapPDisk4_zmin"        value="135.0*cm" />
-    <constant name="TrackerEndcapPDisk4_rmin"        value="Beampipe_rmax + 39.0*mm" />
+    <constant name="TrackerEndcapPDisk4_rmin"        value="Beampipe_rmax + 24.5*mm" />
     <constant name="TrackerEndcapPDisk4_rmax"        value="TrackerSupportCyl_rmin * .98" />
 
     <comment> Main parameters for the negative silicon disks (will be reflected, so positive z-values here)
@@ -71,13 +71,13 @@
     <constant name="TrackerEndcapNDisk1_zmin"        value="TrackerEndcapPDisk1_zmin" />
     <constant name="TrackerEndcapNDisk1_rmin"        value="TrackerEndcapPDisk1_rmin" />
     <constant name="TrackerEndcapNDisk1_rmax"        value="TrackerEndcapPDisk1_rmax" />
-    <constant name="TrackerEndcapNDisk2_zmin"        value="TrackerEndcapPDisk2_zmin" />
+    <constant name="TrackerEndcapNDisk2_zmin"        value="65*cm" />
     <constant name="TrackerEndcapNDisk2_rmin"        value="TrackerEndcapPDisk2_rmin" />
     <constant name="TrackerEndcapNDisk2_rmax"        value="TrackerEndcapPDisk2_rmax" />
-    <constant name="TrackerEndcapNDisk3_zmin"        value="TrackerEndcapPDisk3_zmin" />
+    <constant name="TrackerEndcapNDisk3_zmin"        value="90*cm" />
     <constant name="TrackerEndcapNDisk3_rmin"        value="TrackerEndcapPDisk3_rmin" />
     <constant name="TrackerEndcapNDisk3_rmax"        value="TrackerEndcapPDisk3_rmax" />
-    <constant name="TrackerEndcapNDisk4_zmin"        value="TrackerEndcapPDisk4_zmin" />
+    <constant name="TrackerEndcapNDisk4_zmin"        value="115*cm" />
     <constant name="TrackerEndcapNDisk4_rmin"        value="TrackerEndcapPDisk4_rmin" />
     <constant name="TrackerEndcapNDisk4_rmax"        value="TrackerEndcapPDisk4_rmax" />
   </define>
