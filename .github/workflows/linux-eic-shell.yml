@@ -60,11 +60,11 @@ jobs:
           git clone ${{ inputs.beamline_repositoryurl || 'https://github.com/eic/ip6.git' }} eic_ip6
           pushd eic_ip6
           git checkout ${{ inputs.beamline_version || 'master' }}
-          C=gcc CXX=g++ cmake -B build -S . -DCMAKE_INSTALL_PREFIX=${PREFIX}
+          CC=gcc CXX=g++ cmake -B build -S . -DCMAKE_INSTALL_PREFIX=${PREFIX}
           cmake --build build -- install
           popd
           # install this repo
-          C=gcc CXX=g++ cmake -B build -S . -DCMAKE_INSTALL_PREFIX=${PREFIX}
+          CC=gcc CXX=g++ cmake -B build -S . -DCMAKE_INSTALL_PREFIX=${PREFIX}
           cmake --build build -- install
           # link ip6 into install
           ln -sf ../ip6/ip6 ${PREFIX}/share/epic/ip6
@@ -102,12 +102,12 @@ jobs:
           pushd eic_ip6
           git checkout ${{ inputs.beamline_version || 'master' }}
           # FIXME clang{++}-14 while we install the unversioned links in the container
-          C=clang-14 CXX=clang++-14 cmake -B build -S . -DCMAKE_INSTALL_PREFIX=${PREFIX}
+          CC=clang-14 CXX=clang++-14 cmake -B build -S . -DCMAKE_INSTALL_PREFIX=${PREFIX}
           cmake --build build -- install
           popd
           # install this repo
           # FIXME clang{++}-14 while we install the unversioned links in the container
-          C=clang-14 CXX=clang++-14 cmake -B build -S . -DCMAKE_INSTALL_PREFIX=${PREFIX}
+          CC=clang-14 CXX=clang++-14 cmake -B build -S . -DCMAKE_INSTALL_PREFIX=${PREFIX}
           cmake --build build -- install
           # link ip6 into install
           ln -sf ../ip6/ip6 ${PREFIX}/share/epic/ip6
