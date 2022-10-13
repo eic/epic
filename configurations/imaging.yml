@@ -2,6 +2,7 @@ features:
   beampipe:
   tracking:
   pid:
+    dirc:
     mrich:
     drich:
   ecal:
