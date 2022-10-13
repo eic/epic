@@ -66,7 +66,4 @@ static Ref_t create_element(Detector& description, xml_h e, Ref_t)
   return sdet;
 }
 
-#ifdef EPIC_ECCE_LEGACY_COMPAT
-DECLARE_DETELEMENT(ecce_CompositeTracker, create_element)
-#endif
 DECLARE_DETELEMENT(epic_CompositeTracker, create_element)
