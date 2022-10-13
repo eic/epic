@@ -443,7 +443,7 @@ Examples:
     <comment> Global PID regions with suballocations for TOF and RICH detectors </comment>
     <constant name="ForwardPIDRegion_zmin"        value="CentralTrackingRegionP_zmax" />
     <constant name="ForwardPIDRegion_length"      value="142.0*cm" />
-    <constant name="ForwardPIDRegion_rmax"        value="180.0*cm" />
+    <constant name="ForwardPIDRegion_rmax"        value="185.0*cm" />
 
     <comment> Forward TOF region currenlty empty for future upgrades </comment>
     <constant name="ForwardTOFRegion_zmin"        value="ForwardPIDRegion_zmin" />
@@ -503,13 +503,14 @@ Service gaps in FW direction (before endcapP ECAL) and BW direction (before endc
     <constant name="ForwardServiceGap_zmax"       value="ForwardServiceGap_zmin + ForwardServiceGap_length"/>
 
     <comment> Radial service gap between dRICH and HcalBarrel </comment>
-    <constant name="ForwardServiceGap_thickness"  value="15.0*cm"/>
+    <constant name="ForwardServiceGap_thickness"  value="10.0*cm"/>
     <constant name="ForwardServiceGap_rmin"       value="ForwardPIDRegion_rmax"/>
     <constant name="ForwardServiceGap_rmax"       value="ForwardServiceGap_rmin + ForwardServiceGap_thickness"/>
 
     <constant name="BackwardServiceGap_length"    value="10.0 * cm"/>
     <constant name="BackwardServiceGap_zmin"      value="320.0 * cm"/> <!-- FIXME hardcoded -->
     <constant name="BackwardServiceGap_zmax"      value="BackwardServiceGap_zmin + BackwardServiceGap_length"/>
+
 
   <documentation level="3">
 ## Calorimeter Parameters
@@ -535,8 +536,9 @@ Service gaps in FW direction (before endcapP ECAL) and BW direction (before endc
     <constant name="EcalEndcapPInsert_hole_xposition" value="-7.29*cm"/>
     <constant name="EcalEndcapPInsert_hole_yposition" value="0.0*cm"/>
 
-    <constant name="EcalEndcapN_zmin"               value="BackwardPIDRegion_zmin + BackwardInnerEndcapRegion_length"/>
-    <constant name="EcalEndcapN_length"             value="60*cm" />
+    <!-- <constant name="EcalEndcapN_zmin"               value="BackwardPIDRegion_zmin + BackwardInnerEndcapRegion_length"/> -->
+    <constant name="EcalEndcapN_zmin"               value="174*cm"/>   <!-- Currently fix value hardcoded -->
+    <constant name="EcalEndcapN_length"             value="60*cm" />   <!-- Currently fix value hardcoded -->
     <constant name="EcalEndcapN_zmax"               value="EcalEndcapN_zmin + EcalEndcapN_length"/>
 
     <comment>
@@ -545,8 +547,8 @@ Service gaps in FW direction (before endcapP ECAL) and BW direction (before endc
     </comment>
     <constant name="EcalEndcapN_rmin1"              value="Eta4_6_tan * EcalEndcapN_zmin"/>
     <constant name="EcalEndcapN_rmin2"              value="Eta3_9_tan * EcalEndcapN_zmin"/>
-    <constant name="EcalEndcapN_rmin"               value="max(EcalEndcapN_rmin1, EcalEndcapN_rmin2)"/>
-    <constant name="EcalEndcapN_rmax"               value="63*cm"/> <!-- FIXME hardcoded -->
+    <constant name="EcalEndcapN_rmin"               value="9.*cm"/>    <!-- Currently fix value hardcoded -->
+    <constant name="EcalEndcapN_rmax"               value="63.*cm"/>   <!-- Currently fix value hardcoded -->
 
     <constant name="EcalBarrelRegion_thickness"     value="54.0*cm"/>
     <constant name="EcalBarrel_rmin"                value="CentralTrackingRegion_rmax + BarrelPIDRegion_thickness + BarrelExtraSpace_thickness"/>
@@ -558,6 +560,7 @@ Service gaps in FW direction (before endcapP ECAL) and BW direction (before endc
     <constant name="EcalBarrel_offset"              value="(EcalBarrelForward_zmax - EcalBarrelBackward_zmax)/2.0"/>
     <constant name="EcalBarrelReadout_length"       value="20*cm"/>
 
+    
   <documentation level="3">
     ## Special DIRC parameters (depend on the ECAL setup)
   </documentation>
@@ -574,6 +577,7 @@ Service gaps in FW direction (before endcapP ECAL) and BW direction (before endc
     <documentation>
       ## Hadronic Calorimeter Parameters
     </documentation>
+
     <constant name="HcalBarrelStavesN"          value="12"/>
     <constant name="HcalEndcapP_zmin"     value="EcalEndcapP_zmin + EcalEndcapP_length"/>
     <comment> HCalEndcapP is 140 cm total, but current implementation leaves the final 10 cm empty </comment>
