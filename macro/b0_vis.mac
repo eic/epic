@@ -40,7 +40,7 @@
 /gps/pos/halfz  1 cm
 /gps/position 0 0 0 cm
 
-#/gps/direction 0 0.1 1.0 
+/gps/direction 0 0.1 1.0 
 /gps/ang/type iso
 /gps/ang/rot1 -0.999688 0 -0.0249974
 /gps/ang/rot2  0 1 0 

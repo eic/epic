@@ -45,42 +45,42 @@
 
     <detector id="Pipe_to_Q1eR_ID" name="Pipe_to_Q1eR" type="BackwardsBeamPipe">
       <Pipe wall_thickness="2*mm" outerD1="Q1eR_InnerRadius*2" outerD2="Center_Beampipe_Rad*2"
-        end1="Center_Beampipe_End" end2="Q1eR_CenterPosition+Q1eR_Length/2"/>
+        end1z="Center_Beampipe_End" end2z="Q1eR_CenterPosition+Q1eR_Length/2"/>
     </detector>
 
     <detector id="Pipe_in_Q1eR_ID" name="Pipe_in_Q1eR" type="BackwardsBeamPipe">
       <Pipe wall_thickness="2*mm" outerD1="Q1eR_InnerRadius*2" outerD2="Q1eR_InnerRadius*2"
-        end1="Q1eR_CenterPosition+Q1eR_Length/2" end2="Q1eR_CenterPosition-Q1eR_Length/2"/>
+        end1z="Q1eR_CenterPosition+Q1eR_Length/2" end2z="Q1eR_CenterPosition-Q1eR_Length/2"/>
     </detector>
 
     <detector id="Pipe_Q1eR_to_Q2eR_ID" name="Pipe_Q1eR_to_Q2eR" type="BackwardsBeamPipe">
       <Pipe wall_thickness="2*mm" outerD1="Q2eR_InnerRadius*2" outerD2="Q1eR_InnerRadius*2"
-        end1="Q1eR_CenterPosition-Q1eR_Length/2" end2="Q2eR_CenterPosition+Q2eR_Length/2"/>
+        end1z="Q1eR_CenterPosition-Q1eR_Length/2" end2z="Q2eR_CenterPosition+Q2eR_Length/2"/>
     </detector>
 
     <detector id="Pipe_in_Q2eR_ID" name="Pipe_in_Q2eR" type="BackwardsBeamPipe">
       <Pipe wall_thickness="2*mm" outerD1="Q2eR_InnerRadius*2" outerD2="Q2eR_InnerRadius*2"
-        end1="Q2eR_CenterPosition+Q2eR_Length/2" end2="Q2eR_CenterPosition-Q2eR_Length/2"/>
+        end1z="Q2eR_CenterPosition+Q2eR_Length/2" end2z="Q2eR_CenterPosition-Q2eR_Length/2"/>
     </detector>
 
     <detector id="Pipe_Q2eR_to_B2AeR_ID" name="Pipe_Q2eR_to_B2AeR" type="BackwardsBeamPipe">
       <Pipe wall_thickness="2*mm" outerD1="B2AeR_InnerRadius*2" outerD2="Q2eR_InnerRadius*2"
-        end1="Q2eR_CenterPosition-Q2eR_Length/2" end2="B2AeR_CenterPosition+B2AeR_Length/2"/>
+        end1z="Q2eR_CenterPosition-Q2eR_Length/2" end2z="B2AeR_CenterPosition+B2AeR_Length/2"/>
     </detector>
 
     <detector id="Pipe_in_B2AeR_ID" name="Pipe_in_B2AeR" type="BackwardsBeamPipe">
       <Pipe wall_thickness="2*mm" outerD1="B2AeR_InnerRadius*2" outerD2="B2AeR_InnerRadius*2"
-        end1="B2AeR_CenterPosition+B2AeR_Length/2" end2="B2AeR_CenterPosition-B2AeR_Length/2"/>
+        end1z="B2AeR_CenterPosition+B2AeR_Length/2" end2z="B2AeR_CenterPosition-B2AeR_Length/2"/>
     </detector>
 
     <detector id="Pipe_B2AeR_to_B2BeR_ID" name="Pipe_B2AeR_to_B2BeR" type="BackwardsBeamPipe">
       <Pipe wall_thickness="2*mm" outerD1="B2BeR_InnerRadius*2" outerD2="B2AeR_InnerRadius*2"
-        end1="B2AeR_CenterPosition-B2AeR_Length/2" end2="B2BeR_CenterPosition+B2BeR_Length/2"/>
+        end1z="B2AeR_CenterPosition-B2AeR_Length/2" end2z="B2BeR_CenterPosition+B2BeR_Length/2"/>
     </detector>
 
     <detector id="Pipe_in_B2BeR_ID" name="Pipe_in_B2BeR" type="BackwardsBeamPipe">
       <Pipe wall_thickness="2*mm" outerD1="B2BeR_InnerRadius*2" outerD2="B2BeR_InnerRadius*2"
-        end1="B2BeR_CenterPosition+B2BeR_Length/2" end2="B2BeR_CenterPosition-B2BeR_Length/2"/>
+        end1z="B2BeR_CenterPosition+B2BeR_Length/2" end2z="B2BeR_CenterPosition-B2BeR_Length/2"/>
     </detector>
 
     <detector name="Q3eRvac" type="DD4hep_TubeSegment" vis="Shape1_vis">

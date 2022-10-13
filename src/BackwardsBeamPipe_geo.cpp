@@ -1,11 +1,14 @@
 //==========================================================================
-//
-//      <detector name ="DetName" type="Beampipe" >
-//      <layer id="#(int)" inner_r="#(double)" outer_z="#(double)" >
-//      <slice material="string" thickness="#(double)" >
-//      </layer>
-//      </detector>
+//   Beampipe described by end points with different radii at either end
 //==========================================================================
+//
+//      <detector id="Pipe_in" name ="DetName" type="BackwardsBeamPipe" >
+//        <Pipe wall_thickness="pipe_thickness" outerD1="start_radius" outerD2="end_radius"
+//        end1z="start_z" end2z="end_z" end1x="start_x" end2x="end_x"/>
+//      </detector>
+//
+//==========================================================================
+
 #include "DD4hep/DetFactoryHelper.h"
 #include "DD4hep/Printout.h"
 #include "TMath.h"
@@ -14,20 +17,6 @@
 using namespace std;
 using namespace dd4hep;
 
-/** \addtogroup beamline Beamline Instrumentation
- */
-
-/** \addtogroup IRChamber Interaction Region Vacuum Chamber.
- * \brief Type: **IRChamber**.
- * \ingroup beamline
- *
- *
- * \code
- *   <detector>
- *   </detector>
- * \endcode
- *
- */
 static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector /* sens */)
 {
 
@@ -38,23 +27,27 @@ static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector /* sens *
   Assembly   assembly(det_name + "_assembly");
   Material   m_Al     = det.material("Aluminum");
   Material   m_Vacuum = det.material("Vacuum");
-  string     vis_name = x_det.visStr();
+  string     vis_name = dd4hep::getAttrOrDefault(x_det, _Unicode(vis), "GrayVis");
 
-  xml::Component IP_pipe_c = x_det.child(_Unicode(Pipe));
+  xml::Component Pipe_c = x_det.child(_Unicode(Pipe));
 
-  // IP
-  double thickness = IP_pipe_c.attr<double>(_Unicode(wall_thickness));
-  double innerD1   = IP_pipe_c.hasAttr(_Unicode(innerD1)) ? IP_pipe_c.attr<double>(_Unicode(innerD1))
-                                                          : IP_pipe_c.attr<double>(_Unicode(outerD1)) - 2 * thickness;
-  double innerD2   = IP_pipe_c.hasAttr(_Unicode(innerD2)) ? IP_pipe_c.attr<double>(_Unicode(innerD2))
-                                                          : IP_pipe_c.attr<double>(_Unicode(outerD2)) - 2 * thickness;
-  double end1      = IP_pipe_c.attr<double>(_Unicode(end1));
-  double end2      = IP_pipe_c.attr<double>(_Unicode(end2));
+  // Get pipe dimensions from xml
+  double thickness = Pipe_c.attr<double>(_Unicode(wall_thickness));
+  double innerD1   = Pipe_c.hasAttr(_Unicode(innerD1)) ? Pipe_c.attr<double>(_Unicode(innerD1))
+                                                          : Pipe_c.attr<double>(_Unicode(outerD1)) - 2 * thickness;
+  double innerD2   = Pipe_c.hasAttr(_Unicode(innerD2)) ? Pipe_c.attr<double>(_Unicode(innerD2))
+                                                          : Pipe_c.attr<double>(_Unicode(outerD2)) - 2 * thickness;
 
-  double length = abs(end2 - end1);
+  double end1z     = Pipe_c.attr<double>(_Unicode(end1z));
+  double end2z     = Pipe_c.attr<double>(_Unicode(end2z));
+  double end1x     = dd4hep::getAttrOrDefault(Pipe_c, _Unicode(end1x), 0.0 );
+  double end2x     = dd4hep::getAttrOrDefault(Pipe_c, _Unicode(end2x), 0.0 );
+  
+  double length = sqrt((end1z-end2z)*(end1z-end2z)+(end1x-end2x)*(end1x-end2x));
+  double yrot   = atan((end1x-end2x)/(end1z-end2z));
 
   // -----------------------------
-  // IP beampipe
+  // Make beampipe shape
   ConeSegment tube_vacuum(length / 2.0, 0.0, innerD1 / 2.0, 0.0, innerD2 / 2.0);
   ConeSegment tube_tube(length / 2.0, innerD1 / 2.0, innerD1 / 2.0 + thickness, innerD2 / 2.0,
                         innerD2 / 2.0 + thickness);
@@ -65,11 +58,11 @@ static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector /* sens *
   sdet.setAttributes(det, v_tube, x_det.regionStr(), x_det.limitsStr(), vis_name);
 
   assembly.placeVolume(v_vacuum, Position(0, 0, -length / 2.0));
-  assembly.placeVolume(v_tube, Position(0, 0, -length / 2.0));
+  assembly.placeVolume(v_tube,   Position(0, 0, -length / 2.0));
 
   // -----------------------------
   // final placement
-  auto pv_assembly = det.pickMotherVolume(sdet).placeVolume(assembly, Position(0.0, 0.0, end1));
+  auto pv_assembly = det.pickMotherVolume(sdet).placeVolume(assembly, Transform3D(RotationY(yrot),Position(end1x, 0.0, end1z)));
   pv_assembly.addPhysVolID("system", sdet.id()).addPhysVolID("barrel", 1);
   sdet.setPlacement(pv_assembly);
   assembly->GetShape()->ComputeBBox();

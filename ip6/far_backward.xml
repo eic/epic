@@ -6,5 +6,6 @@
   <include ref="far_backward/vacuum.xml"/>
   <include ref="far_backward/taggers.xml"/>
   <include ref="far_backward/lumi.xml"/>
+  <include ref="far_backward/beamline_hadron.xml"/>
 
 </lccdd>

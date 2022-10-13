@@ -8,33 +8,71 @@
     <constant name="Center_Beampipe_End"  value="-4560.17 * mm"/>
     <constant name="Center_Beampipe_Rad"  value="47.60 * mm"/>
 
-    <!-- Magnet dimensions and positions -->
+    <constant name="Hadron_Beampipe_End"        value="-4490.35 * mm"/>
+    <constant name="Hadron_Beampipe_Rad"        value="20 * mm"/>
+    <constant name="Hadron_Beampipe_Thickness"  value="1.64 * mm"/>
 
-    <constant name="Q1eR_InnerRadius"  value="55.5*mm"/>
-    <constant name="Q1eR_Length"  value="1.78*m"/>
+    <!-- Electron magnet dimensions and positions -->
+
+    <constant name="Q1eR_InnerRadius"     value="55.5*mm"/>
+    <constant name="Q1eR_Length"          value="1.78*m"/>
     <constant name="Q1eR_CenterPosition"  value="-6.2*m"/>
 
-    <constant name="Q2eR_InnerRadius"  value="64.5*mm"/>
-    <constant name="Q2eR_Length"  value="1.4*m"/>
+    <constant name="Q2eR_InnerRadius"     value="64.5*mm"/>
+    <constant name="Q2eR_Length"          value="1.4*m"/>
     <constant name="Q2eR_CenterPosition"  value="-8.3*m"/>
 
-    <constant name="B2AeR_InnerRadius"  value="70.0*mm"/>
-    <constant name="B2AeR_Length"  value="1.78*m"/>
-    <constant name="B2AeR_CenterPosition"  value="-10.5*m"/>
+    <constant name="B2AeR_InnerRadius"    value="70.0*mm"/>
+    <constant name="B2AeR_Length"         value="1.78*m"/>
+    <constant name="B2AeR_CenterPosition" value="-10.5*m"/>
 
-    <constant name="B2BeR_InnerRadius"  value="98.0*mm"/>
-    <constant name="B2BeR_Length"  value="3.18*m"/>
-    <constant name="B2BeR_CenterPosition"  value="-13.275*m"/>
+    <constant name="B2BeR_InnerRadius"    value="98.0*mm"/>
+    <constant name="B2BeR_Length"         value="3.18*m"/>
+    <constant name="B2BeR_CenterPosition" value="-13.275*m"/>
 
-    <constant name="Q3eR_InnerRadius"  value="0.05*m"/>
-    <constant name="Q3eR_Length"  value="0.6*m"/>
-    <constant name="Q3eR_StartZ"  value="-37.696067*m"/>
-    <constant name="Q3eR_StartX"  value="-0.460027*m"/>
-    <constant name="Q3eR_EndZ"  value="-38.295969*m"/>
-    <constant name="Q3eR_EndX"  value="-0.470873*m"/>
-    <constant name="Q3eR_XPosition"  value="-0.46545*m"/>
-    <constant name="Q3eR_Theta"  value="0.0180766389*rad"/>
+    <constant name="Q3eR_InnerRadius"     value="0.05*m"/>
+    <constant name="Q3eR_Length"          value="0.6*m"/>
+    <constant name="Q3eR_StartZ"          value="-37.696067*m"/>
+    <constant name="Q3eR_StartX"          value="-0.460027*m"/>
+    <constant name="Q3eR_EndZ"            value="-38.295969*m"/>
+    <constant name="Q3eR_EndX"            value="-0.470873*m"/>
+    <constant name="Q3eR_XPosition"       value="-0.46545*m"/>
+    <constant name="Q3eR_Theta"           value="0.0180766389*rad"/>
     <constant name="Q3eR_CenterPosition"  value="-37.996018*m"/>
+
+    <!-- Hadron magnet dimensions and positions -->
+
+    <constant name="Q1APR_InnerRadius"     value="Hadron_Beampipe_Rad"/>
+    <constant name="Q1APR_Length"          value="1.8*m"/>
+    <constant name="Q1APR_StartZ"          value="-5.29834383626*m"/>
+    <constant name="Q1APR_StartX"          value="0.13248619835*m"/>
+    <constant name="Q1APR_EndZ"            value="-7.09778136555*m"/>
+    <constant name="Q1APR_EndX"            value="0.17748151099*m"/>
+    <constant name="Q1APR_Theta"           value="CrossingAngle"/>
+
+    <constant name="Q1BPR_InnerRadius"     value="Hadron_Beampipe_Rad"/>
+    <constant name="Q1BPR_Length"          value="1.4*m"/>
+    <constant name="Q1BPR_StartZ"          value="-7.59762512369533560*m"/>
+    <constant name="Q1BPR_StartX"          value="0.189980208951863655*m"/>
+    <constant name="Q1BPR_EndZ"            value="-8.99718764648131852*m"/>
+    <constant name="Q1BPR_EndX"            value="0.224976563232413274*m"/>
+    <constant name="Q1BPR_Theta"           value="CrossingAngle"/>
+
+    <constant name="Q2PR_InnerRadius"     value="Hadron_Beampipe_Rad"/>
+    <constant name="Q2PR_Length"          value="4.5*m"/>
+    <constant name="Q2PR_StartZ"          value="-10.4967189208948746*m"/>
+    <constant name="Q2PR_StartX"          value="0.262472657104463214*m"/>
+    <constant name="Q2PR_EndZ"            value="-14.9953127441355356*m"/>
+    <constant name="Q2PR_EndX"            value="0.374960938720726777*m"/>
+    <constant name="Q2PR_Theta"           value="CrossingAngle"/>
+
+    <constant name="Q3PR_InnerRadius"     value="Hadron_Beampipe_Rad"/>
+    <constant name="Q3PR_Length"          value="1.5*m"/>
+    <constant name="Q3PR_StartZ"          value="-37.9887505859252528*m"/>
+    <constant name="Q3PR_StartX"          value="0.949916672201157830*m"/>
+    <constant name="Q3PR_EndZ"            value="-39.4882818603388088*m"/>
+    <constant name="Q3PR_EndX"            value="0.987412766073207715*m"/>
+    <constant name="Q3PR_Theta"           value="CrossingAngle"/>
 
   </define>
 
