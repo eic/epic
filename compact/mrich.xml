@@ -4,7 +4,8 @@
     <constant name="MRICH_rmin"   value="10*cm"/>
     <constant name="MRICH_rmax"   value="BackwardPIDRegion_rmax"/>
     <constant name="MRICH_length" value="BackwardPIDRegion_length"/>
-    <constant name="MRICH_zmin"   value="BackwardPIDRegion_zmin"/>
+    <constant name="MRICH_zmax"   value="BackwardPIDRegion_zmax"/>
+    <constant name="MRICH_zmin"   value="MRICH_zmax-MRICH_length"/>
 
     <constant name="MRICHAerogel_thickness"           value="40.0*mm"/>
     <constant name="MRICHAerogel_width"               value="100.0*mm"/>
