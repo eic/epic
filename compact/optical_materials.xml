@@ -258,6 +258,10 @@
       4.75035*eV   1.85713
       4.93961*eV   1.87039
       "/>
+    <matrix name="RINDEX__VM2000" coldim="2" values="
+      1.37760*eV   1.42
+      4.13281*eV   1.42
+      "/>
     <matrix name="ABSLENGTH__DIRCNlak33a" coldim="2" values="
       1.0*eV       371813*mm
       1.2511*eV    352095*mm
@@ -802,6 +806,31 @@
         Nlak33aMaterial->AddElement(O, natoms = 2);
       -->
     </material>
+    <material name="VM2000">
+      <D type="density" value="1.43" unit="g / cm3"/>
+      <composite n="2" ref="C"/>
+      <composite n="2" ref="H"/>
+      <composite n="2" ref="F"/>
+      <property name="RINDEX" ref="RINDEX__VM2000"/>
+      <property name="REFLECTIVITY" coldim="2"
+                values="1.776*eV  0.95
+                        4.143*eV  0.95"/>
+    </material>
+    <material name="leadtungsten_optical">
+      <D type="density" value="8.3" unit="g / cm3"/>
+      <composite n="1" ref="Pb"/>
+      <composite n="1" ref="W"/>
+      <composite n="4" ref="O"/>
+      <property name="RINDEX" coldim="2"
+                values="1.551*eV  2.4
+                        3.545*eV  2.40"/>
+      <property name="ABSLENGTH" coldim="2"
+                values="1.551*eV  200.0*cm
+                        3.545*eV  200.0*cm"/>
+      <property name="SCINTILLATIONYIELD1"  value="200.0/MeV"/>
+      <property name="SCINTILLATIONTIMECONSTANT1"    value="6.0*ns"/>
+      <property name="RESOLUTIONSCALE"     value="1.0"/>
+    </material>        
   </materials>
   <surfaces>
     <opticalsurface finish="polished" model="glisur" name="MirrorOpticalSurface" type="dielectric_metal" value="0">
