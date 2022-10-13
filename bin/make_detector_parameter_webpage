@@ -60,9 +60,10 @@ CSV.foreach(csvFile).with_index do |row,r|
   html.puts '<tbody>' if r==1
   html.puts '<tr>'
   # loop over cells, re-formatting some of them
-  row.each_with_index do |cell,c|
-    cellF = cell.nil? ? '' :
-      cell.gsub(/\n/, '<br />')
+  row.each do |cell|
+    cellF = cell.nil? ? '' : cell
+      .gsub(/\n/, '<br />')
+      .gsub(/m3/, 'm<sup>3</sup>')
     t = r==0 ? 'th' : 'td'
     html.puts "<#{t}>#{cellF}</#{t}>"
   end
