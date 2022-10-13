@@ -475,7 +475,7 @@ Examples:
 
     <comment> Note: PID has space for DIRC, ExtraSpace sits past the PID</comment>
     <constant name="BarrelPIDRegion_thickness"    value="7.0 * cm" />
-    <constant name="BarrelExtraSpace_thickness"   value="2.5 * cm" />
+    <constant name="BarrelExtraSpace_thickness"   value="1.5 * cm" />
 
     <documentation>
     ## Forward/backward tracking region behind the PID detectors
@@ -551,7 +551,7 @@ Service gaps in FW direction (before endcapP ECAL) and BW direction (before endc
 
     <constant name="EcalBarrelRegion_thickness"     value="54.0*cm"/>
     <constant name="EcalBarrel_rmin"                value="CentralTrackingRegion_rmax + BarrelPIDRegion_thickness + BarrelExtraSpace_thickness"/>
-    <constant name="EcalBarrel_inner_margin"        value="1*cm"/>
+    <constant name="EcalBarrel_inner_margin"        value="2*cm"/>
     <constant name="EcalBarrel_rmax"                value="EcalBarrel_rmin + EcalBarrelRegion_thickness"/>
     <constant name="EcalBarrelForward_zmax"         value="ForwardRICHRegion_zmin"/> <!-- FIXME currently unable to accommodate actual position -->
     <constant name="EcalBarrelBackward_zmax"        value="BackwardServiceGap_zmax"/> <!-- FIXME should be -389 cm -->
