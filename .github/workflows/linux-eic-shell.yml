@@ -444,9 +444,9 @@ jobs:
 #TODO view20
 
   build-artifacts-page:
+    runs-on: ubuntu-latest
     needs:
     - dawn-view
-    runs-on: ubuntu-latest
     steps:
     - uses: actions/download-artifact@v3
       with:
@@ -468,7 +468,9 @@ jobs:
         retention-days: 7
 
   deploy-artifacts-page:
-    if: github.ref == 'refs/heads/main'
+    needs:
+    - build-artifacts-page
+    if: github.ref == 'refs/heads/main' || 
     permissions:
       pages: write
       id-token: write
