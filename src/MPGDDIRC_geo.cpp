@@ -123,13 +123,13 @@ static Ref_t create_MPGDDIRC_geo(Detector& description, xml_h e, SensitiveDetect
         max_component_length = box_length;
         gas_thickness += x_comp.thickness();
         c_box = {box_width / 2, box_length / 2, x_comp.thickness() / 2};
-        printout(DEBUG, "MPGDDIRC_geo", "gas: %f", comp_name);
+        printout(DEBUG, "MPGDDIRC_geo", "gas: %s", comp_name.c_str());
         printout(DEBUG, "MPGDDIRC_geo", "box_width: %f", box_width);
-        printout(DEBUG, "MPGDDIRC_geo", "box_length: %%f", box_length);
+        printout(DEBUG, "MPGDDIRC_geo", "box_length: %f", box_length);
         printout(DEBUG, "MPGDDIRC_geo", "box_thickness: %f", x_comp.thickness());
       } else {
         c_box = {x_comp.width() / 2, x_comp.length() / 2, x_comp.thickness() / 2};
-        printout(DEBUG, "MPGDDIRC_geo", "Not gas: %f", comp_name);
+        printout(DEBUG, "MPGDDIRC_geo", "Not gas: %s", comp_name.c_str());
         printout(DEBUG, "MPGDDIRC_geo", "box_comp_width: %f", x_comp.width());
         printout(DEBUG, "MPGDDIRC_geo", "box_comp_length: %f", x_comp.length());
         printout(DEBUG, "MPGDDIRC_geo", "box_comp_thickness: %f", x_comp.thickness());
