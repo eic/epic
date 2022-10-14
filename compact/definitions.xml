@@ -560,17 +560,20 @@ Service gaps in FW direction (before endcapP ECAL) and BW direction (before endc
     <constant name="EcalBarrel_offset"              value="(EcalBarrelForward_zmax - EcalBarrelBackward_zmax)/2.0"/>
     <constant name="EcalBarrelReadout_length"       value="20*cm"/>
 
-    
-  <documentation level="3">
-    ## Special DIRC parameters (depend on the ECAL setup)
-  </documentation>
+    <documentation level="3">
+      ## Special DIRC parameters (depend on the ECAL setup)
+    </documentation>
     <constant name="DIRCReadout_length"         value="30*cm"/>
     <constant name="DIRCForward_length"         value="0*cm"/>
     <constant name="DIRCForward_zmax"           value="CentralTrackingRegionP_zmax + 5*cm"/>
     <constant name="DIRCBackward_zmax"          value="287*cm"/>
+    <constant name="DIRC_thickness"             value="3*cm"/>
     <constant name="DIRC_length"                value="DIRCForward_zmax + DIRCBackward_zmax"/>
     <constant name="DIRC_offset"                value="(DIRCForward_zmax - DIRCBackward_zmax)/2"/>
-    <constant name="DIRC_thickness"             value="3*cm"/> <!-- DIRC bar box thickness, not readout -->
+    <comment>
+      The DIRC_rmin/rmax values are defined at the center of each stave, such that
+      the DIRC_rmax can also be used as the OuterBarrelMPGD_rmin value. 
+    </comment>
     <constant name="DIRC_rmin"                  value="CentralTrackingRegion_rmax"/>
     <constant name="DIRC_rmax"                  value="DIRC_rmin + DIRC_thickness"/>
 
