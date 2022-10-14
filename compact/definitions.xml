@@ -603,7 +603,7 @@ Service gaps in FW direction (before endcapP ECAL) and BW direction (before endc
     <constant name="HcalEndcapN_rmin"     value="max((HcalEndcapN_zmin + HcalEndcapN_length) * tan(abs(CrossingAngle)) + 22.25 * mm, 11 * cm)"/>
 
     <constant name="HcalBarrel_thickness" value="93.0*cm"/> <!-- ref: as-built CAD, plus a little room for the longer half-plates -->
-    <constant name="HcalBarrel_rmin"      value="176.7*cm"/><!-- TODO:Fixme to avoid hard-coded value -->
+    <constant name="HcalBarrel_rmin"      value="Solenoid_rmax"/>
     <constant name="HcalBarrel_rmax"      value="HcalBarrel_rmin + HcalBarrel_thickness"/>
     <constant name="HcalBarrelForward_zmax"  value="ForwardServiceGap_zmin"/>
     <constant name="HcalBarrelBackward_zmax" value="BackwardServiceGap_zmin"/>
