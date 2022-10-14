@@ -120,10 +120,10 @@ jobs:
            --method POST \
           -H "Accept: application/vnd.github+json" \
           /repos/${{ github.repository }}/statuses/${{ github.event.pull_request.head.sha || github.sha }} \
-          -f state='pending' \
-          -f target_url=${{ steps.trigger.outputs.web_url }} \
-          -f description='The geoviewer exports have been triggered...' \
-          -f context='eicweb/geoviewer'
+          -f state="pending" \
+          -f target_url="${{ steps.trigger.outputs.web_url }}" \
+          -f description='Triggered... $(TZ=America/New_York date)" \
+          -f context="eicweb/geoviewer"
       env:
         GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
@@ -384,10 +384,10 @@ jobs:
            --method POST \
           -H "Accept: application/vnd.github+json" \
           /repos/${{ github.repository }}/statuses/${{ github.event.pull_request.head.sha || github.sha }} \
-          -f state='pending' \
-          -f target_url=${{ steps.trigger.outputs.web_url }} \
-          -f description='The detector benchmarks for ${{ matrix.detector_config }} have been triggered...' \
-          -f context='eicweb/detector_benchmarks (${{ matrix.detector_config }})'
+          -f state="pending" \
+          -f target_url="${{ steps.trigger.outputs.web_url }}" \
+          -f description="Triggered... $(TZ=America/New_York date)" \
+          -f context="eicweb/detector_benchmarks (${{ matrix.detector_config }})"
       env:
         GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
