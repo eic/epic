@@ -6,10 +6,10 @@
       ### Barrel Hadronic Calorimeter
       </documentation>
       <detector
-	  id="oHCalBarrel_ID"
-	  name="oHcalBarrel"
-	  type="epic_oHcalBarrel"
-	  readout="oHcalBarrelHits"
+	  id="HCalBarrel_ID"
+	  name="HcalBarrel"
+	  type="epic_HcalBarrel"
+	  readout="HcalBarrelHits"
 	  vis="HcalBarrelVis"
 	  env_vis="HcalBarrelEnvelopeVis"
 	  rmin="1767"
@@ -7651,7 +7651,7 @@
 
   <!--  Definition of the readout segmentation/definition  -->
   <readouts>
-    <readout name="oHcalBarrelHits">
+    <readout name="HcalBarrelHits">
       <id>system:8,barrel:3,sector:6,tower:5,x:32:-16,y:-16</id>
     </readout>
   </readouts>
