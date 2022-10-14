@@ -1,5 +1,5 @@
 features:
-- solenoid
-- beampipe
-- bhcal
+  solenoid: 
+  beampipe:
+  hcal_barrel_gdml:
 
