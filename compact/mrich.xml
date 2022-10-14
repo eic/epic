@@ -106,17 +106,17 @@
         Modules are only listed here for one quadrant. The modules point back to the
         z0 position (should be their actual position, but breaks parametrization).
       </comment>
-      <positions scale="0.905" z0="0.5*(MRICH_zmin+MRICH_zmax)">
+      <positions scale="0.80" z0="0.5*(MRICH_zmin+MRICH_zmax)">
         <position x="-41.3250000000"  y="178.6750000000"/>
         <position x=" 96.0250000001"  y="178.6750000000"/>
       </positions>
-      <positions scale="0.865" z0="0.5*(MRICH_zmin+MRICH_zmax)">
+      <positions scale="0.81" z0="0.5*(MRICH_zmin+MRICH_zmax)">
         <position x="-41.3250000000"  y="316.0250000001"/>
         <position x=" 96.0250000001"  y="316.0250000001"/>
         <position x="233.3750000002"  y="178.6750000000"/>
         <position x="233.3750000002"  y="316.0250000001"/>
       </positions>
-      <positions scale="0.855" z0="0.5*(MRICH_zmin+MRICH_zmax)">
+      <positions scale="0.82" z0="0.5*(MRICH_zmin+MRICH_zmax)">
         <position x="-41.3250000000"  y="453.3750000002"/>
         <position x=" 96.0250000001"  y="453.3750000002"/>
         <position x="233.3750000002"  y="453.3750000002"/>
@@ -124,7 +124,7 @@
         <position x="370.7250000003"  y="316.0250000001"/>
         <position x="370.7250000003"  y="178.6750000000"/>
       </positions>
-      <positions scale="0.85" z0="0.5*(MRICH_zmin+MRICH_zmax)">
+      <positions scale="0.82" z0="0.5*(MRICH_zmin+MRICH_zmax)">
         <position x="-41.3250000000"  y="590.7250000003"/>
         <position x=" 96.0250000001"  y="590.7250000003"/>
         <position x="233.3750000002"  y="590.7250000003"/>
