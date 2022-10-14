@@ -471,7 +471,7 @@ jobs:
         path: html/
         if-no-files-found: error
     - uses: actions/upload-pages-artifact@v1
-      if: github.ref == 'refs/heads/main'
+      # if: github.ref == 'refs/heads/main'
       with:
         path: html/
         retention-days: 7
@@ -479,7 +479,7 @@ jobs:
   deploy-artifacts-page:
     needs:
     - build-artifacts-page
-    if: github.ref == 'refs/heads/main'
+    # if: github.ref == 'refs/heads/main'
     permissions:
       pages: write
       id-token: write
