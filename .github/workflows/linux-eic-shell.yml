@@ -223,7 +223,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        option: ['', 's']
+        option: ['m', 's']
     needs: build-test
     steps:
     - uses: actions/checkout@v3
