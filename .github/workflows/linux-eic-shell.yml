@@ -122,7 +122,7 @@ jobs:
           /repos/${{ github.repository }}/statuses/${{ github.event.pull_request.head.sha || github.sha }} \
           -f state="pending" \
           -f target_url="${{ steps.trigger.outputs.web_url }}" \
-          -f description='Triggered... $(TZ=America/New_York date)" \
+          -f description="Triggered... $(TZ=America/New_York date)" \
           -f context="eicweb/geoviewer"
       env:
         GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
