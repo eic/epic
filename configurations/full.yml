@@ -3,8 +3,6 @@ features:
   tracking:
   pid:
     dirc:
-    tof_endcap:
-    tof_barrel:
     mrich:
     drich:
   ecal:
