@@ -448,6 +448,7 @@ jobs:
     runs-on: ubuntu-latest
     needs:
     - dawn-view
+    - dump-constants
     steps:
     - uses: actions/download-artifact@v3
       with:
@@ -457,6 +458,13 @@ jobs:
       with:
         name: view2
         path: html/
+    - uses: actions/download-artifact@v3
+      with:
+        name: DetectorParameterTable
+        path: html/
+    - name: build-webpage
+      run: |
+        ls -R html
     - uses: actions/upload-artifact@v3
       with:
         name: artifacts-page
