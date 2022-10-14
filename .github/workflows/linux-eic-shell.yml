@@ -462,9 +462,9 @@ jobs:
       with:
         name: DetectorParameterTable
         path: html/
-    - name: build-webpage
+    - name: cull
       run: |
-        ls -R html
+        rm -v html/*.pdf
     - uses: actions/upload-artifact@v3
       with:
         name: artifacts-page
