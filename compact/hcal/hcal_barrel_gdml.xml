@@ -8,19 +8,19 @@
       <detector
 	  id="HCalBarrel_ID"
 	  name="HcalBarrel"
-	  type="epic_HcalBarrel"
+	  type="epic_HcalBarrelGDML"
 	  readout="HcalBarrelHits"
 	  vis="HcalBarrelVis"
 	  env_vis="HcalBarrelEnvelopeVis"
-	  rmin="1767"
-	  rmax="2690"
-	  length="3170" 
+	  rmin="176.7"
+	  rmax="269.0"
+	  length="634.0" 
 	  calorimeterType="HAD_BARREL">
 	
   <define>
 
-    <matrix name="xposOuter" coldim="1" values="23.6005"/>
-    <matrix name="yposOuter" coldim="1" values="1802.84"/>
+    <matrix name="xposOuter" unit="mm" coldim="1" values="23.6005"/>
+    <matrix name="yposOuter" unit="mm" coldim="1" values="1802.84"/>
 
     <matrix name="xposTileS" unit="mm" coldim="1" values="0.05 166.9 338.8 507.2 682.6 864.3 1052.5 1249.7 1556.3 1792.25 2043.2 2285.8"/>
     <matrix name="yposTileS" unit="mm" coldim="1" values="2.965 1.5 1.5 1.6 1.5 2.965 2.55 2.5 124.3 124.25 123.79 124.326"/>
@@ -43,6 +43,7 @@
     <matrix name="plates_y" unit="mm" coldim="1" values="2295.048 2267.198 2160.230 2119.176"/>
     <matrix name="plates_z" unit="mm" coldim="1" values="235.587 253.54 0.0 0.0"/>
     
+    <!--These offsets are used to tweak the tower and sector positions by ~100um to avoid numerical issues when looking for overlaps--> 
     <matrix name="tweak_tiles" unit="rad" values="0.0 0.0 0.0 0.0 0.0 0.0001 0.0 0.0 0.0 0.0 0.0001 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0002"/> 
     <matrix name="tweak_chimney_tiles" unit="rad" values="-0.0002 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0"/> 
     <matrix name="tweak_sectors" unit="rad" values="0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 -0.00008 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0"/> 
@@ -7655,9 +7656,6 @@
       <id>system:8,barrel:3,sector:6,tower:5,x:32:-16,y:-16</id>
     </readout>
   </readouts>
-
-  <plugins>
-  </plugins>
 
 
 </lccdd>

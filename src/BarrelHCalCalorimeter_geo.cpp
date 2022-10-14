@@ -40,15 +40,17 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
   DetElement       sdet(det_name, det_id);
   Volume           motherVol = description.pickMotherVolume(sdet);
 
-  std::string   string_rmin      = getAttrOrDefault<std::string>(x_det, _Unicode(rmin), "1780"); 
-  std::string   string_rmax      = getAttrOrDefault<std::string>(x_det, _Unicode(rmax), "2660"); 
-  std::string   string_length    = getAttrOrDefault<std::string>(x_det, _Unicode(length), "3160"); 
+  std::string   string_rmin      = getAttrOrDefault<std::string>(x_det, _Unicode(rmin), "178"); 
+  std::string   string_rmax      = getAttrOrDefault<std::string>(x_det, _Unicode(rmax), "269"); 
+  std::string   string_length    = getAttrOrDefault<std::string>(x_det, _Unicode(length), "317"); 
 
-  double           rmin = (atof(string_rmin.c_str()))*dd4hep::mm;
-  double           rmax = (atof(string_rmax.c_str()))*dd4hep::mm;
-  double           length = (atof(string_length.c_str()))*dd4hep::mm;
+  double           rmin = (atof(string_rmin.c_str()))*dd4hep::cm;
+  double           rmax = (atof(string_rmax.c_str()))*dd4hep::cm;
+  double           length = (atof(string_length.c_str()))*dd4hep::cm;
 
-  Tube             etube(rmin,rmax, length);
+  //printout(WARNING, "BarrelHCalCalorimeter", "%i %f %f %f %s %s %s", det_id, rmin, rmax, length, string_rmin.c_str(), string_rmax.c_str(), string_length.c_str());
+
+  Tube             etube(rmin,rmax, length/2);
   Volume           envelope(det_name, etube, air);
 
   PlacedVolume     env_phv = motherVol.placeVolume(envelope);
@@ -468,5 +470,5 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
 
 }
 
-DECLARE_DETELEMENT(epic_oHcalBarrel, create_detector)
+DECLARE_DETELEMENT(epic_HcalBarrelGDML, create_detector)
 
