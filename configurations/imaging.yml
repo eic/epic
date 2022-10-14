@@ -2,12 +2,13 @@ features:
   beampipe:
   tracking:
   pid:
+    dirc:
     mrich:
     drich:
-      #SJJ: disabled as it needs re-integrating with the tracker
-      #    tof_barrel:
   ecal:
+    forward_scifi:
     forward_homogeneous:
+    forward_insert:
     barrel_interlayers:
     backward_PbWO4:
   solenoid:

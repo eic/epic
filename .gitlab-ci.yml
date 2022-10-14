@@ -44,7 +44,6 @@ common:setup:
   before_script:
     - git clone https://eicweb.phy.anl.gov/EIC/benchmarks/common_bench.git setup
   script:
-    - export JUGGLER_DETECTOR="ecce"
     - |
       #      if [[ "x${CI_PIPELINE_SOURCE}" == "xmerge_request_event"  || "$CI_COMMIT_BRANCH" == "main" ]]; then
         export JUGGLER_DETECTOR_VERSION="${CI_COMMIT_REF_NAME}"
@@ -153,7 +152,7 @@ detector_documentation:
     - mkdir -p doc
     - bash bin/build_documentation | tee doc/detector.md
       #- |
-      #  xmllint --format --xpath '//comment/text()' ${DETECTOR_PATH}/ecce.xml | sed -re 's/<\/?\w+>//g' | sed 's/^[[:space:]]*#/#/' | tee  doc/detector.md
+      #  xmllint --format --xpath '//comment/text()' ${DETECTOR_PATH}/epic.xml | sed -re 's/<\/?\w+>//g' | sed 's/^[[:space:]]*#/#/' | tee  doc/detector.md
       #  xmllint --format --xpath '//comment/text()' ${DETECTOR_PATH}/ip6/definitions.xml | sed -re 's/<\/?\w+>//g' | sed 's/^[[:space:]]*#/#/' | tee -a doc/detector.md || true
       #  for afile in ${DETECTOR_PATH}/compact/*.xml ; do
       #    xmllint --format --xpath '//comment/text()' ${afile} | sed -re 's/<\/?\w+>//g' | sed 's/^[[:space:]]*#/#/' | tee -a doc/detector.md || true
@@ -187,14 +186,14 @@ dump_constants:
   needs:
     - ["common:detector"]
   script:
-    - npdet_info dump ${DETECTOR_PATH}/ecce.xml | tee doc/constants.out
+    - npdet_info dump ${DETECTOR_PATH}/epic.xml | tee doc/constants.out
 
 dump_parameter_table:
   stage: test
   needs:
     - ["common:detector"]
   script:
-    - npdet_info dump ${DETECTOR_PATH}/ecce.xml | grep -v '^\s' | grep '=' | cut -d= -f1-2 | tee doc/constants.toml
+    - npdet_info dump ${DETECTOR_PATH}/epic.xml | grep -v '^\s' | grep '=' | cut -d= -f1-2 | tee doc/constants.toml
     - python bin/make_detector_parameter_table
 
 overlap_check_tgeo:
@@ -205,7 +204,7 @@ overlap_check_tgeo:
     ## disable fibers in ECAL for normal overlap check
     - sed -i '/<fiber/,+6d' ${DETECTOR_PATH}/compact/ecal_barrel_interlayers.xml
     - sed -i '/<fiber/,+4d' ${DETECTOR_PATH}/ip6/far_forward/ZDC_Ecal_WSciFi.xml
-    - checkOverlaps -c ${DETECTOR_PATH}/ecce.xml  | tee doc/overlap_check_tgeo.out
+    - checkOverlaps -c ${DETECTOR_PATH}/epic.xml  | tee doc/overlap_check_tgeo.out
     - echo "$(cat doc/overlap_check_tgeo.out | grep ovlp | wc -l) overlaps..."
     - if [[ "$(cat doc/overlap_check_tgeo.out | grep ovlp | wc -l)" -gt "0" ]] ; then echo "Overlaps exist!" && false ; fi
 
@@ -220,7 +219,7 @@ overlap_check_geant4:full_fast:
     ## reduce the number of fibers in Hadron EMCal for overlap check
     ## not needed, as we are running with a different setup now
     #- sed -i 's/radius="EcalEndcapP_FiberRadius"/radius="EcalEndcapP_FiberRadius*10"/' ${DETECTOR_PATH}/compact/ci_ecal_scfi.xml
-    - python scripts/checkOverlaps.py -c ${DETECTOR_PATH}/ecce.xml | tee doc/overlap_check_geant4.out
+    - python scripts/checkOverlaps.py -c ${DETECTOR_PATH}/epic.xml | tee doc/overlap_check_geant4.out
     - echo "$(cat doc/overlap_check_geant4.out | grep GeomVol1002 | wc -l) overlaps..."
     - if [[ "$(cat doc/overlap_check_geant4.out | grep GeomVol1002 | wc -l)" -gt "0" ]] ; then echo "Overlaps exist!" && false ; fi
 
@@ -231,7 +230,7 @@ overlap_check_geant4:inner_detector:
   needs:
     - ["common:detector"]
   script:
-    - python scripts/checkOverlaps.py -c ${DETECTOR_PATH}/ecce_inner_detector.xml | tee doc/overlap_check_geant4.out
+    - python scripts/checkOverlaps.py -c ${DETECTOR_PATH}/epic_inner_detector.xml | tee doc/overlap_check_geant4.out
     - echo "$(cat doc/overlap_check_geant4.out | grep GeomVol1002 | wc -l) overlaps..."
     - if [[ "$(cat doc/overlap_check_geant4.out | grep GeomVol1002 | wc -l)" -gt "0" ]] ; then echo "Overlaps exist!" && false ; fi
 
@@ -241,14 +240,14 @@ convert_to_gdml:
     - ["common:detector"]
   script:
     - mkdir -p geo
-    - python scripts/convert_to_gdml.py --compact ${DETECTOR_PATH}/ecce.xml --output geo/ecce.gdml
+    - python scripts/convert_to_gdml.py --compact ${DETECTOR_PATH}/epic.xml --output geo/epic.gdml
 
 tracking_geometry_debug:
   stage: test
   needs:
     - ["common:detector"]
   script:
-    - root -b -q "scripts/test_ACTS.cxx+(\"${DETECTOR_PATH}/ecce.xml\")" | tee geo/tracking_geometry_debug.out
+    - root -b -q "scripts/test_ACTS.cxx+(\"${DETECTOR_PATH}/epic.xml\")" | tee geo/tracking_geometry_debug.out
     - ./bin/acts_geo_check geo/tracking_geometry_debug.out
 
 detector:config_testing:
@@ -256,7 +255,7 @@ detector:config_testing:
   needs:
     - ["common:detector"]
   script:
-    - checkOverlaps -o 's' -c ${DETECTOR_PATH}/ecce.xml  | tee doc/overlap_check.out | wc -l
+    - checkOverlaps -o 's' -c ${DETECTOR_PATH}/epic.xml  | tee doc/overlap_check.out | wc -l
     - cat doc/overlap_check.out
 
 benchmarks:detector:
