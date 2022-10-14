@@ -44,7 +44,9 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
   double rmax = x_det.rmax(); 
   double length = x_det.z(); 
 
-  Tube             etube(rmin,rmax, length/2);
+  //printout(WARNING, "BarrelHCalCalorimeter", "%f %f %f", rmin, rmax, length);
+
+  Tube             etube(rmin,rmax, length/2.0);
   Volume           envelope(det_name, etube, air);
 
   PlacedVolume     env_phv = motherVol.placeVolume(envelope);

@@ -2,5 +2,4 @@ features:
   solenoid: 
   beampipe:
   hcal:
-    hcal_barrel_gdml:
 

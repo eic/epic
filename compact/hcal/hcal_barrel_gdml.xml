@@ -7653,7 +7653,8 @@
   <!--  Definition of the readout segmentation/definition  -->
   <readouts>
     <readout name="HcalBarrelHits">
-      <id>system:8,barrel:3,sector:6,tower:5,x:32:-16,y:-16</id>
+      <segmentation type="NoSegmentation"/>
+      <id>system:8,sector:6,tower:6</id>
     </readout>
   </readouts>
 

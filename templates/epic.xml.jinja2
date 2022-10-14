@@ -171,14 +171,9 @@
 
 {% if features is not defined or 'hcal' in features %}
   <documentation level="10">
-    ## Central hadronic calorimetry
+    ## hadronic calorimetry
   </documentation>
-  {% if features is not defined or 'hcal' in features['hcal'] %}
-     <include ref="${DETECTOR_PATH}/compact/hcal.xml"/>
-  {% endif -%}
-  {% if features is not defined or 'hcal_barrel_gdml' in features['hcal'] %}
-     <include ref="${DETECTOR_PATH}/compact/hcal_barrel_gdml.xml"/>
-  {% endif -%}
+  <include ref="${DETECTOR_PATH}/compact/hcal.xml"/>
 {% endif -%}
 
 {% if features is not defined or 'beampipe' in features %}
