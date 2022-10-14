@@ -477,3 +477,43 @@ jobs:
         if-no-files-found: error
 
 #TODO view20
+
+  build-artifacts-page:
+    runs-on: ubuntu-latest
+    needs:
+    - dawn-view
+    steps:
+    - uses: actions/download-artifact@v3
+      with:
+        name: view1
+        path: html/
+    - uses: actions/download-artifact@v3
+      with:
+        name: view2
+        path: html/
+    - uses: actions/upload-artifact@v3
+      with:
+        name: artifacts-page
+        path: html/
+        if-no-files-found: error
+    - uses: actions/upload-pages-artifact@v1
+      if: github.ref == 'refs/heads/main'
+      with:
+        path: html/
+        retention-days: 7
+
+  deploy-artifacts-page:
+    needs:
+    - build-artifacts-page
+    if: github.ref == 'refs/heads/main'
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    steps:
+    - name: Deploy to GitHub Pages
+      id: deployment
+      uses: actions/deploy-pages@v1
