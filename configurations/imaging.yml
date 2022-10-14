@@ -13,5 +13,6 @@ features:
     backward_PbWO4:
   solenoid:
   hcal:
+    hcal_barrel_gdml:
   farforward:
   farbackward:
