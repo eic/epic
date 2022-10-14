@@ -116,7 +116,7 @@
         <position x="233.3750000002"  y="178.6750000000"/>
         <position x="233.3750000002"  y="316.0250000001"/>
       </positions>
-      <positions scale="0.85" z0="0.5*(MRICH_zmin+MRICH_zmax)">
+      <positions scale="0.855" z0="0.5*(MRICH_zmin+MRICH_zmax)">
         <position x="-41.3250000000"  y="453.3750000002"/>
         <position x=" 96.0250000001"  y="453.3750000002"/>
         <position x="233.3750000002"  y="453.3750000002"/>
