@@ -449,7 +449,4 @@ vector<tuple<int, Point, Point, Point, Point>> gridPoints(int div_x, int div_z, 
   return points;
 }
 
-#ifdef EPIC_ECCE_LEGACY_COMPAT
-DECLARE_DETELEMENT(ecce_EcalBarrelInterlayers, create_detector)
-#endif
 DECLARE_DETELEMENT(epic_EcalBarrelInterlayers, create_detector)

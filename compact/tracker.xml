@@ -28,7 +28,7 @@
     <comment> barrel length: 2R/tan(angle) - dz </comment>
 
     <comment> Position in center of space behind DIRC </comment>
-    <constant name="OuterMPGDBarrel_rmin"            value="CentralTrackingRegion_rmax"/>
+    <constant name="MPGDDIRC_rmin"            value="DIRC_rmin + DIRC_thickness"/>
     <comment> barrel asymmetryc between forward and backward lengths </comment>
 
     <comment> Service/Support setup </comment>
@@ -119,11 +119,27 @@
       vis="TrackerSubAssemblyVis">
       <composite name="InnerMPGDBarrel"/>
     </detector>
-    <detector id="TrackerSubAssembly_5_ID"
-      name="OuterMPGDSubSubAssembly"
+    <detector id="TrackerSubAssembly_4_ID"
+      name="BarrelTOFSubAssembly"
       type="DD4hep_SubdetectorAssembly"
       vis="TrackerSubAssemblyVis">
-      <composite name="OuterMPGDBarrel"/>
+      <composite name="BarrelTOF"/>
+    </detector>
+    <comment>
+      <comment>FIXME update the OuterMPGDBarrel to use the MPGDDIRC detector</comment>
+      <detector id="TrackerSubAssembly_5_ID"
+        name="OuterMPGDSubSubAssembly"
+        type="DD4hep_SubdetectorAssembly"
+        vis="TrackerSubAssemblyVis">
+        <composite name="OuterMPGDBarrel"/>
+      </detector>
+    </comment>
+    <detector id="TrackerSubAssembly_6_ID"
+      name="EndcapTOFSubSubAssembly"
+      type="DD4hep_SubdetectorAssembly"
+      vis="TrackerSubAssemblyVis">
+      <composite name="ForwardTOF"/>
+      <composite name="BackwardTOF"/>
     </detector>
   </detectors>
 
@@ -133,7 +149,7 @@
   </documentation>
   <plugins>
     <plugin name="epic_FileLoader">
-      <arg value="cache:$DETECTOR_PATH"/>
+      <arg value="cache:$DETECTOR_PATH:/opt/detector"/>
       <arg value="file:calibrations/materials-map.cbor"/>
       <arg value="url:https://eicweb.phy.anl.gov/EIC/detectors/athena/uploads/56b64d544442a93904488e7292aa509d/material-maps.cbor"/>
     </plugin>
@@ -142,7 +158,10 @@
   <include ref="tracker/vertex_barrel.xml"/>
   <include ref="tracker/silicon_barrel.xml"/>
   <include ref="tracker/mpgd_barrel.xml"/>
+  <include ref="tracker/mpgd_dirc.xml"/>
   <include ref="tracker/silicon_disks.xml"/>
   <include ref="tracker/support_service_assembly.xml"/>
+  <include ref="tof_barrel.xml"/>
+  <include ref="tof_endcap.xml"/>
 
 </lccdd>

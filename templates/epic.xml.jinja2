@@ -37,13 +37,17 @@
 	version="v1 2021-03-16">
   <comment> EPIC </comment>
   </info>
+
+  <!-- Standard environmental conditions: 20 °C, 1 atm -->
+  <std_conditions type="NTP"/>
+
   <define>
-  <documentation level="2">
+    <documentation level="2">
       ## Main Constant Definitions
 
       The ip6 (or other ip) defines should be included first.
       These files have only a define tags.
-  </documentation>
+    </documentation>
     <include ref="${BEAMLINE_PATH}/ip6/definitions.xml" />
     <include ref="${BEAMLINE_PATH}/ip6/far_forward/fields_{{ pbeam | default("275", true) }}.xml" />
     <include ref="${DETECTOR_PATH}/compact/definitions.xml" />
@@ -146,6 +150,10 @@
   <include ref="${DETECTOR_PATH}/compact/ecal_forward_homogeneous.xml"/>
   {% elif 'forward_scifi' in features['ecal'] -%}
   <include ref="${DETECTOR_PATH}/compact/ecal_forward_scfi.xml"/>
+  {% endif -%}
+
+  {% if features is not defined or features['ecal'] is none or 'forward_insert' in features['ecal'] %}
+  <include ref="${DETECTOR_PATH}/compact/ecal_forward_insert_homogeneous.xml"/>
   {% endif -%}
 
   {% if features is not defined or features['ecal'] is none or 'backward_PbWO4' in features['ecal'] %}
