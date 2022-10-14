@@ -22,8 +22,8 @@ The EPIC Detector at IP6 for Electron-Ion Collider experiment.
 </a>
 
 <br />
-<a href="https://eicweb.phy.anl.gov/EIC/detectors/ecce/-/jobs/artifacts/main/raw/images/view01_top.pdf?job=report">
-<img src="https://eicweb.phy.anl.gov/EIC/detectors/ecce/-/jobs/artifacts/main/raw/images/view01_top.png?job=report" width="400px" />
+<a href="https://eic.github.io/epic/view1_top.pdf">
+<img src="https://eic.github.io/epic/view1_top.png" width="400px" />
 </a>
 
 [Browse latest](https://eicweb.phy.anl.gov/EIC/detectors/ecce/-/jobs/artifacts/main/browse/images?job=report)
