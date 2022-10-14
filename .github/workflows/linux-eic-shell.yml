@@ -464,7 +464,7 @@ jobs:
         path: html/
     - name: cull
       run: |
-        rm -v html/*.pdf
+        rm -vf html/*.pdf
     - uses: actions/upload-artifact@v3
       with:
         name: artifacts-page
