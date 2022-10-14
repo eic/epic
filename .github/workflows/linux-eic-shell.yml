@@ -85,109 +85,109 @@ jobs:
         path: install/
         if-no-files-found: error
 
-  xmllint-after-build:
-    runs-on: ubuntu-latest
-    needs: build-test
-    steps:
-    - uses: actions/download-artifact@v3
-      with:
-        name: build-full-eic-shell
-        path: install/
-    - run: |
-        sudo apt-get update
-        sudo apt-get install -y libxml2-utils
-        find install/share -name "*.xml" -exec xmllint {} \; > /dev/null
+#   xmllint-after-build:
+#     runs-on: ubuntu-latest
+#     needs: build-test
+#     steps:
+#     - uses: actions/download-artifact@v3
+#       with:
+#         name: build-full-eic-shell
+#         path: install/
+#     - run: |
+#         sudo apt-get update
+#         sudo apt-get install -y libxml2-utils
+#         find install/share -name "*.xml" -exec xmllint {} \; > /dev/null
 
-  # check-tracking-geometry:
-  #   runs-on: ubuntu-latest
-  #   needs: build-test
-  #   steps:
-  #   - uses: actions/checkout@v3
-  #   - uses: actions/download-artifact@v3
-  #     with:
-  #       name: build-fast-eic-shell
-  #       path: install/
-  #   - uses: cvmfs-contrib/github-action-cvmfs@v3
-  #   - uses: eic/run-cvmfs-osg-eic-shell@main
-  #     with:
-  #       platform-release: "jug_xl:nightly"
-  #       network_types: "none"
-  #       setup: install/setup.sh
-  #       run: |
-  #         root -b -q "scripts/test_ACTS.cxx+(\"${DETECTOR_PATH}/${DETECTOR_CONFIG}.xml\")" | tee check_tracking_geometry.out
-  #         bin/acts_geo_check check_tracking_geometry.out
+#   check-tracking-geometry:
+#     runs-on: ubuntu-latest
+#     needs: build-test
+#     steps:
+#     - uses: actions/checkout@v3
+#     - uses: actions/download-artifact@v3
+#       with:
+#         name: build-fast-eic-shell
+#         path: install/
+#     - uses: cvmfs-contrib/github-action-cvmfs@v3
+#     - uses: eic/run-cvmfs-osg-eic-shell@main
+#       with:
+#         platform-release: "jug_xl:nightly"
+#         network_types: "none"
+#         setup: install/setup.sh
+#         run: |
+#           root -b -q "scripts/test_ACTS.cxx+(\"${DETECTOR_PATH}/${DETECTOR_CONFIG}.xml\")" | tee check_tracking_geometry.out
+#           bin/acts_geo_check check_tracking_geometry.out
 
-  # convert-to-gdml:
-  #   runs-on: ubuntu-latest
-  #   needs: build-test
-  #   steps:
-  #   - uses: actions/checkout@v3
-  #   - uses: actions/download-artifact@v3
-  #     with:
-  #       name: build-full-eic-shell
-  #       path: install/
-  #   - uses: cvmfs-contrib/github-action-cvmfs@v3
-  #   - uses: eic/run-cvmfs-osg-eic-shell@main
-  #     with:
-  #       platform-release: "jug_xl:nightly"
-  #       network_types: "none"
-  #       setup: install/setup.sh
-  #       run: |
-  #         mkdir -p geo
-  #         python scripts/convert_to_gdml.py --compact ${DETECTOR_PATH}/${DETECTOR}.xml --output geo/${DETECTOR}.gdml
-  #   - uses: actions/upload-artifact@v3
-  #     with:
-  #       name: epic.gdml
-  #       path: geo/
-  #       if-no-files-found: error
+#   convert-to-gdml:
+#     runs-on: ubuntu-latest
+#     needs: build-test
+#     steps:
+#     - uses: actions/checkout@v3
+#     - uses: actions/download-artifact@v3
+#       with:
+#         name: build-full-eic-shell
+#         path: install/
+#     - uses: cvmfs-contrib/github-action-cvmfs@v3
+#     - uses: eic/run-cvmfs-osg-eic-shell@main
+#       with:
+#         platform-release: "jug_xl:nightly"
+#         network_types: "none"
+#         setup: install/setup.sh
+#         run: |
+#           mkdir -p geo
+#           python scripts/convert_to_gdml.py --compact ${DETECTOR_PATH}/${DETECTOR}.xml --output geo/${DETECTOR}.gdml
+#     - uses: actions/upload-artifact@v3
+#       with:
+#         name: epic.gdml
+#         path: geo/
+#         if-no-files-found: error
 
-  # convert-to-tgeo:
-  #   runs-on: ubuntu-latest
-  #   needs: build-test
-  #   steps:
-  #   - uses: actions/checkout@v3
-  #   - uses: actions/download-artifact@v3
-  #     with:
-  #       name: build-full-eic-shell
-  #       path: install/
-  #   - uses: cvmfs-contrib/github-action-cvmfs@v3
-  #   - uses: eic/run-cvmfs-osg-eic-shell@main
-  #     with:
-  #       platform-release: "jug_xl:nightly"
-  #       network_types: "none"
-  #       setup: install/setup.sh
-  #       run: |
-  #         mkdir -p geo
-  #         dd_web_display --output geo/${DETECTOR}.root ${DETECTOR_PATH}/${DETECTOR}.xml
-  #   - uses: actions/upload-artifact@v3
-  #     with:
-  #       name: epic.root
-  #       path: geo/
-  #       if-no-files-found: error
+#   convert-to-tgeo:
+#     runs-on: ubuntu-latest
+#     needs: build-test
+#     steps:
+#     - uses: actions/checkout@v3
+#     - uses: actions/download-artifact@v3
+#       with:
+#         name: build-full-eic-shell
+#         path: install/
+#     - uses: cvmfs-contrib/github-action-cvmfs@v3
+#     - uses: eic/run-cvmfs-osg-eic-shell@main
+#       with:
+#         platform-release: "jug_xl:nightly"
+#         network_types: "none"
+#         setup: install/setup.sh
+#         run: |
+#           mkdir -p geo
+#           dd_web_display --output geo/${DETECTOR}.root ${DETECTOR_PATH}/${DETECTOR}.xml
+#     - uses: actions/upload-artifact@v3
+#       with:
+#         name: epic.root
+#         path: geo/
+#         if-no-files-found: error
 
-  dump-constants:
-    runs-on: ubuntu-latest
-    needs: build-test
-    steps:
-    - uses: actions/checkout@v3
-    - uses: actions/download-artifact@v3
-      with:
-        name: build-full-eic-shell
-        path: install/
-    - uses: cvmfs-contrib/github-action-cvmfs@v3
-    - uses: eic/run-cvmfs-osg-eic-shell@main
-      with:
-        platform-release: "jug_xl:nightly"
-        network_types: "none"
-        setup: install/setup.sh
-        run: |
-          mkdir -p doc
-          npdet_info dump ${DETECTOR_PATH}/epic.xml | tee doc/constants.out
-    - uses: actions/upload-artifact@v3
-      with:
-        name: constants.out
-        path: doc/constants.out
-        if-no-files-found: error
+#   dump-constants:
+#     runs-on: ubuntu-latest
+#     needs: build-test
+#     steps:
+#     - uses: actions/checkout@v3
+#     - uses: actions/download-artifact@v3
+#       with:
+#         name: build-full-eic-shell
+#         path: install/
+#     - uses: cvmfs-contrib/github-action-cvmfs@v3
+#     - uses: eic/run-cvmfs-osg-eic-shell@main
+#       with:
+#         platform-release: "jug_xl:nightly"
+#         network_types: "none"
+#         setup: install/setup.sh
+#         run: |
+#           mkdir -p doc
+#           npdet_info dump ${DETECTOR_PATH}/epic.xml | tee doc/constants.out
+#     - uses: actions/upload-artifact@v3
+#       with:
+#         name: constants.out
+#         path: doc/constants.out
+#         if-no-files-found: error
 
   dump-parameter-table:
     runs-on: ubuntu-latest
@@ -220,244 +220,244 @@ jobs:
         path: doc/DetectorParameterTable.*
         if-no-files-found: error
 
-  check-overlap-tgeo:
-    runs-on: ubuntu-latest
-    needs: build-test
-    steps:
-    - uses: actions/checkout@v3
-    - uses: actions/download-artifact@v3
-      with:
-        name: build-full-eic-shell
-        path: install/
-    - uses: cvmfs-contrib/github-action-cvmfs@v3
-    - uses: eic/run-cvmfs-osg-eic-shell@main
-      with:
-        platform-release: "jug_xl:nightly"
-        network_types: "bridge" # this job must succeed even when new artifacts
-        setup: install/setup.sh
-        run: |
-          mkdir -p doc
-          checkOverlaps -c ${DETECTOR_PATH}/${DETECTOR_CONFIG}.xml | tee doc/overlap_check_tgeo.out
-          noverlaps="$(grep -c ovlp doc/overlap_check_tgeo.out || true)"
-          if [[ "${noverlaps}" -gt "0" ]] ; then echo "${noverlaps} overlaps found!" && false ; fi
+#   check-overlap-tgeo:
+#     runs-on: ubuntu-latest
+#     needs: build-test
+#     steps:
+#     - uses: actions/checkout@v3
+#     - uses: actions/download-artifact@v3
+#       with:
+#         name: build-full-eic-shell
+#         path: install/
+#     - uses: cvmfs-contrib/github-action-cvmfs@v3
+#     - uses: eic/run-cvmfs-osg-eic-shell@main
+#       with:
+#         platform-release: "jug_xl:nightly"
+#         network_types: "bridge" # this job must succeed even when new artifacts
+#         setup: install/setup.sh
+#         run: |
+#           mkdir -p doc
+#           checkOverlaps -c ${DETECTOR_PATH}/${DETECTOR_CONFIG}.xml | tee doc/overlap_check_tgeo.out
+#           noverlaps="$(grep -c ovlp doc/overlap_check_tgeo.out || true)"
+#           if [[ "${noverlaps}" -gt "0" ]] ; then echo "${noverlaps} overlaps found!" && false ; fi
 
-  # check-geometry-full:
-  #   runs-on: ubuntu-latest
-  #   needs: build-test
-  #   if: github.ref == 'refs/heads/main'
-  #   steps:
-  #   - uses: actions/checkout@v3
-  #   - uses: actions/download-artifact@v3
-  #     with:
-  #       name: build-full-eic-shell
-  #       path: install/
-  #   - uses: cvmfs-contrib/github-action-cvmfs@v3
-  #   - uses: eic/run-cvmfs-osg-eic-shell@main
-  #     with:
-  #       platform-release: "jug_xl:nightly"
-  #       setup: install/setup.sh
-  #       run: |
-  #         mkdir -p doc
-  #         checkGeometry -f true -c ${DETECTOR_PATH}/${DETECTOR_CONFIG}.xml | tee geometry_check_full.out
-  #         mv statistics.root geometry_check_full.root
-  #   - uses: actions/upload-artifact@v3
-  #     with:
-  #       name: check-geometry-full
-  #       path: |
-  #         geometry_check_full.out
-  #         geometry_check_full.root
-  #       if-no-files-found: error
+#   check-geometry-full:
+#     runs-on: ubuntu-latest
+#     needs: build-test
+#     if: github.ref == 'refs/heads/main'
+#     steps:
+#     - uses: actions/checkout@v3
+#     - uses: actions/download-artifact@v3
+#       with:
+#         name: build-full-eic-shell
+#         path: install/
+#     - uses: cvmfs-contrib/github-action-cvmfs@v3
+#     - uses: eic/run-cvmfs-osg-eic-shell@main
+#       with:
+#         platform-release: "jug_xl:nightly"
+#         setup: install/setup.sh
+#         run: |
+#           mkdir -p doc
+#           checkGeometry -f true -c ${DETECTOR_PATH}/${DETECTOR_CONFIG}.xml | tee geometry_check_full.out
+#           mv statistics.root geometry_check_full.root
+#     - uses: actions/upload-artifact@v3
+#       with:
+#         name: check-geometry-full
+#         path: |
+#           geometry_check_full.out
+#           geometry_check_full.root
+#         if-no-files-found: error
 
-  check-overlap-geant4:
-    runs-on: ubuntu-latest
-    needs: build-test
-    steps:
-    - uses: actions/checkout@v3
-    - uses: actions/download-artifact@v3
-      with:
-        name: build-full-eic-shell
-        path: install/
-    - uses: cvmfs-contrib/github-action-cvmfs@v3
-    - uses: eic/run-cvmfs-osg-eic-shell@main
-      with:
-        platform-release: "jug_xl:nightly"
-        network_types: "bridge" # this job must succeed even when new artifacts
-        setup: install/setup.sh
-        run: |
-          mkdir -p doc
-          python scripts/checkOverlaps.py -c ${DETECTOR_PATH}/${DETECTOR_CONFIG}.xml | tee doc/overlap_check_geant4.out
-          noverlaps="$(grep -c GeomVol1002 doc/overlap_check_geant4.out || true)"
-          if [[ "${noverlaps}" -gt "0" ]] ; then echo "${noverlaps} overlaps found!" && false ; fi
+#   check-overlap-geant4:
+#     runs-on: ubuntu-latest
+#     needs: build-test
+#     steps:
+#     - uses: actions/checkout@v3
+#     - uses: actions/download-artifact@v3
+#       with:
+#         name: build-full-eic-shell
+#         path: install/
+#     - uses: cvmfs-contrib/github-action-cvmfs@v3
+#     - uses: eic/run-cvmfs-osg-eic-shell@main
+#       with:
+#         platform-release: "jug_xl:nightly"
+#         network_types: "bridge" # this job must succeed even when new artifacts
+#         setup: install/setup.sh
+#         run: |
+#           mkdir -p doc
+#           python scripts/checkOverlaps.py -c ${DETECTOR_PATH}/${DETECTOR_CONFIG}.xml | tee doc/overlap_check_geant4.out
+#           noverlaps="$(grep -c GeomVol1002 doc/overlap_check_geant4.out || true)"
+#           if [[ "${noverlaps}" -gt "0" ]] ; then echo "${noverlaps} overlaps found!" && false ; fi
 
-  check-overlap-geant4-fast:
-    runs-on: ubuntu-latest
-    needs: build-test
-    steps:
-    - uses: actions/checkout@v3
-    - uses: actions/download-artifact@v3
-      with:
-        name: build-fast-eic-shell
-        path: install/
-    - uses: cvmfs-contrib/github-action-cvmfs@v3
-    - uses: eic/run-cvmfs-osg-eic-shell@main
-      with:
-        platform-release: "jug_xl:nightly"
-        network_types: "bridge" # this job must succeed even when new artifacts
-        setup: install/setup.sh
-        run: |
-          mkdir -p doc
-          python scripts/checkOverlaps.py -c ${DETECTOR_PATH}/${DETECTOR_CONFIG}.xml | tee doc/overlap_check_geant4.out
-          noverlaps="$(grep -c GeomVol1002 doc/overlap_check_geant4.out || true)"
-          if [[ "${noverlaps}" -gt "0" ]] ; then echo "${noverlaps} overlaps found!" && false ; fi
+#   check-overlap-geant4-fast:
+#     runs-on: ubuntu-latest
+#     needs: build-test
+#     steps:
+#     - uses: actions/checkout@v3
+#     - uses: actions/download-artifact@v3
+#       with:
+#         name: build-fast-eic-shell
+#         path: install/
+#     - uses: cvmfs-contrib/github-action-cvmfs@v3
+#     - uses: eic/run-cvmfs-osg-eic-shell@main
+#       with:
+#         platform-release: "jug_xl:nightly"
+#         network_types: "bridge" # this job must succeed even when new artifacts
+#         setup: install/setup.sh
+#         run: |
+#           mkdir -p doc
+#           python scripts/checkOverlaps.py -c ${DETECTOR_PATH}/${DETECTOR_CONFIG}.xml | tee doc/overlap_check_geant4.out
+#           noverlaps="$(grep -c GeomVol1002 doc/overlap_check_geant4.out || true)"
+#           if [[ "${noverlaps}" -gt "0" ]] ; then echo "${noverlaps} overlaps found!" && false ; fi
 
-  check-overlap-geant4-inner-detector:
-    runs-on: ubuntu-latest
-    needs: build-test
-    steps:
-    - uses: actions/checkout@v3
-    - uses: actions/download-artifact@v3
-      with:
-        name: build-full-eic-shell
-        path: install/
-    - uses: cvmfs-contrib/github-action-cvmfs@v3
-    - uses: eic/run-cvmfs-osg-eic-shell@main
-      with:
-        platform-release: "jug_xl:nightly"
-        network_types: "none"
-        setup: install/setup.sh
-        run: |
-          mkdir -p doc
-          python scripts/checkOverlaps.py -c ${DETECTOR_PATH}/${DETECTOR_CONFIG}_inner_detector.xml | tee doc/overlap_check_geant4.out
-          noverlaps="$(grep -c GeomVol1002 doc/overlap_check_geant4.out || true)"
-          if [[ "${noverlaps}" -gt "0" ]] ; then echo "${noverlaps} overlaps found!" && false ; fi
+#   check-overlap-geant4-inner-detector:
+#     runs-on: ubuntu-latest
+#     needs: build-test
+#     steps:
+#     - uses: actions/checkout@v3
+#     - uses: actions/download-artifact@v3
+#       with:
+#         name: build-full-eic-shell
+#         path: install/
+#     - uses: cvmfs-contrib/github-action-cvmfs@v3
+#     - uses: eic/run-cvmfs-osg-eic-shell@main
+#       with:
+#         platform-release: "jug_xl:nightly"
+#         network_types: "none"
+#         setup: install/setup.sh
+#         run: |
+#           mkdir -p doc
+#           python scripts/checkOverlaps.py -c ${DETECTOR_PATH}/${DETECTOR_CONFIG}_inner_detector.xml | tee doc/overlap_check_geant4.out
+#           noverlaps="$(grep -c GeomVol1002 doc/overlap_check_geant4.out || true)"
+#           if [[ "${noverlaps}" -gt "0" ]] ; then echo "${noverlaps} overlaps found!" && false ; fi
 
-  trigger-detector-benchmarks:
-    runs-on: ubuntu-latest
-    needs: [check-overlap-tgeo, check-overlap-geant4-fast]
-    strategy:
-      matrix:
-        detector_config: [epic_sciglass, epic_imaging]
-    steps:
-    - uses: eic/trigger-gitlab-ci@v2
-      id: trigger
-      with:
-        url: https://eicweb.phy.anl.gov
-        project_id: 399
-        token: ${{ secrets.EICWEB_DETECTOR_BENCHMARK_TRIGGER }}
-        ref_name: master
-        variables: |
-          DETECTOR_REPOSITORYURL=${{ github.server_url }}/${{ github.repository }}
-          DETECTOR_VERSION=${{ github.event.pull_request.head.ref || github.ref_name }}
-          DETECTOR_CONFIG=${{ matrix.detector_config }}
-          GITHUB_REPOSITORY=${{ inputs.github_repository || github.repository }}
-          GITHUB_SHA=${{ inputs.github_sha || github.event.pull_request.head.sha || github.sha }}
-    - run: |
-        gh api \
-           --method POST \
-          -H "Accept: application/vnd.github+json" \
-          /repos/${{ github.repository }}/statuses/${{ github.event.pull_request.head.sha || github.sha }} \
-          -f state='pending' \
-          -f target_url=${{ steps.trigger.outputs.web_url }} \
-          -f description='The detector benchmarks for ${{ matrix.detector_config }} have been triggered...' \
-          -f context='eicweb/detector_benchmarks (${{ matrix.detector_config }})'
-      env:
-        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+#   trigger-detector-benchmarks:
+#     runs-on: ubuntu-latest
+#     needs: [check-overlap-tgeo, check-overlap-geant4-fast]
+#     strategy:
+#       matrix:
+#         detector_config: [epic_sciglass, epic_imaging]
+#     steps:
+#     - uses: eic/trigger-gitlab-ci@v2
+#       id: trigger
+#       with:
+#         url: https://eicweb.phy.anl.gov
+#         project_id: 399
+#         token: ${{ secrets.EICWEB_DETECTOR_BENCHMARK_TRIGGER }}
+#         ref_name: master
+#         variables: |
+#           DETECTOR_REPOSITORYURL=${{ github.server_url }}/${{ github.repository }}
+#           DETECTOR_VERSION=${{ github.event.pull_request.head.ref || github.ref_name }}
+#           DETECTOR_CONFIG=${{ matrix.detector_config }}
+#           GITHUB_REPOSITORY=${{ inputs.github_repository || github.repository }}
+#           GITHUB_SHA=${{ inputs.github_sha || github.event.pull_request.head.sha || github.sha }}
+#     - run: |
+#         gh api \
+#            --method POST \
+#           -H "Accept: application/vnd.github+json" \
+#           /repos/${{ github.repository }}/statuses/${{ github.event.pull_request.head.sha || github.sha }} \
+#           -f state='pending' \
+#           -f target_url=${{ steps.trigger.outputs.web_url }} \
+#           -f description='The detector benchmarks for ${{ matrix.detector_config }} have been triggered...' \
+#           -f context='eicweb/detector_benchmarks (${{ matrix.detector_config }})'
+#       env:
+#         GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-  generate-prim-file:
-    runs-on: ubuntu-latest
-    needs: build-test
-    steps:
-    - uses: actions/checkout@v3
-    - uses: actions/download-artifact@v3
-      with:
-        name: build-fast-eic-shell
-        path: install/
-    - uses: cvmfs-contrib/github-action-cvmfs@v3
-    - uses: eic/run-cvmfs-osg-eic-shell@main
-      with:
-        platform-release: "jug_xl:nightly"
-        network_types: "none"
-        setup: install/setup.sh
-        run: |
-          bin/generate_prim_file -o prim -D -t detector_view
-    - uses: actions/upload-artifact@v3
-      with:
-        name: detector_view.prim
-        path: prim/detector_view.prim
-        if-no-files-found: error
-        retention-days: 1
+#   generate-prim-file:
+#     runs-on: ubuntu-latest
+#     needs: build-test
+#     steps:
+#     - uses: actions/checkout@v3
+#     - uses: actions/download-artifact@v3
+#       with:
+#         name: build-fast-eic-shell
+#         path: install/
+#     - uses: cvmfs-contrib/github-action-cvmfs@v3
+#     - uses: eic/run-cvmfs-osg-eic-shell@main
+#       with:
+#         platform-release: "jug_xl:nightly"
+#         network_types: "none"
+#         setup: install/setup.sh
+#         run: |
+#           bin/generate_prim_file -o prim -D -t detector_view
+#     - uses: actions/upload-artifact@v3
+#       with:
+#         name: detector_view.prim
+#         path: prim/detector_view.prim
+#         if-no-files-found: error
+#         retention-days: 1
 
-  dawn-view:
-    runs-on: ubuntu-latest
-    needs: generate-prim-file
-    strategy:
-      matrix:
-        view: [view1, view2, view3, view6, view7, view11, view13]
-      fail-fast: false
-    steps:
-    - uses: actions/checkout@v3
-    - uses: actions/download-artifact@v3
-      with:
-        name: detector_view.prim
-        path: prim/
-    - uses: cvmfs-contrib/github-action-cvmfs@v3
-    - uses: eic/run-cvmfs-osg-eic-shell@main
-      with:
-        platform-release: "jug_xl:nightly"
-        network_types: "none"
-        run: |
-          mkdir -p images
-          bin/make_dawn_views -i prim/detector_view.prim -t ${{ matrix.view }} -d scripts/${{ matrix.view }} -D
-    - uses: actions/upload-artifact@v3
-      with:
-        name: ${{ matrix.view }}
-        path: images/
-        if-no-files-found: error
+#   dawn-view:
+#     runs-on: ubuntu-latest
+#     needs: generate-prim-file
+#     strategy:
+#       matrix:
+#         view: [view1, view2, view3, view6, view7, view11, view13]
+#       fail-fast: false
+#     steps:
+#     - uses: actions/checkout@v3
+#     - uses: actions/download-artifact@v3
+#       with:
+#         name: detector_view.prim
+#         path: prim/
+#     - uses: cvmfs-contrib/github-action-cvmfs@v3
+#     - uses: eic/run-cvmfs-osg-eic-shell@main
+#       with:
+#         platform-release: "jug_xl:nightly"
+#         network_types: "none"
+#         run: |
+#           mkdir -p images
+#           bin/make_dawn_views -i prim/detector_view.prim -t ${{ matrix.view }} -d scripts/${{ matrix.view }} -D
+#     - uses: actions/upload-artifact@v3
+#       with:
+#         name: ${{ matrix.view }}
+#         path: images/
+#         if-no-files-found: error
 
-  dawn-view-slices:
-    runs-on: ubuntu-latest
-    needs: generate-prim-file
-    strategy:
-      matrix:
-        view: [view12, view14, view15]
-        slice: [100, 300, 500, 700, 900, 1100, 1300, 1500, 1700, 1900]
-      fail-fast: false
-    steps:
-    - uses: actions/checkout@v3
-    - uses: actions/download-artifact@v3
-      with:
-        name: detector_view.prim
-        path: prim/
-    - uses: cvmfs-contrib/github-action-cvmfs@v3
-    - uses: eic/run-cvmfs-osg-eic-shell@main
-      with:
-        platform-release: "jug_xl:nightly"
-        network_types: "none"
-        run: |
-          mkdir -p images
-          bin/make_dawn_views -i prim/detector_view.prim -t ${{ matrix.view }} -d scripts/${{ matrix.view }} -D -- ${{ matrix.slice }}
-    - uses: actions/upload-artifact@v3
-      with:
-        name: ${{ matrix.view }}
-        path: images/
-        if-no-files-found: error
+#   dawn-view-slices:
+#     runs-on: ubuntu-latest
+#     needs: generate-prim-file
+#     strategy:
+#       matrix:
+#         view: [view12, view14, view15]
+#         slice: [100, 300, 500, 700, 900, 1100, 1300, 1500, 1700, 1900]
+#       fail-fast: false
+#     steps:
+#     - uses: actions/checkout@v3
+#     - uses: actions/download-artifact@v3
+#       with:
+#         name: detector_view.prim
+#         path: prim/
+#     - uses: cvmfs-contrib/github-action-cvmfs@v3
+#     - uses: eic/run-cvmfs-osg-eic-shell@main
+#       with:
+#         platform-release: "jug_xl:nightly"
+#         network_types: "none"
+#         run: |
+#           mkdir -p images
+#           bin/make_dawn_views -i prim/detector_view.prim -t ${{ matrix.view }} -d scripts/${{ matrix.view }} -D -- ${{ matrix.slice }}
+#     - uses: actions/upload-artifact@v3
+#       with:
+#         name: ${{ matrix.view }}
+#         path: images/
+#         if-no-files-found: error
 
 #TODO view20
 
   build-artifacts-page:
     runs-on: ubuntu-latest
     needs:
-    - dawn-view
+    # - dawn-view
     - dump-parameter-table
     steps:
-    - uses: actions/download-artifact@v3
-      with:
-        name: view1
-        path: html/
-    - uses: actions/download-artifact@v3
-      with:
-        name: view2
-        path: html/
+    # - uses: actions/download-artifact@v3
+    #   with:
+    #     name: view1
+    #     path: html/
+    # - uses: actions/download-artifact@v3
+    #   with:
+    #     name: view2
+    #     path: html/
     - uses: actions/download-artifact@v3
       with:
         name: DetectorParameterTable
@@ -485,7 +485,8 @@ jobs:
       id-token: write
     environment:
       name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
+      # url: ${{ steps.deployment.outputs.page_url }}
+      url: http://epic-eic.org/
     runs-on: ubuntu-latest
     steps:
     - name: Deploy to GitHub Pages
