@@ -55,13 +55,13 @@
     <constant name="TrackerEndcapPDisk1_rmin"        value="Beampipe_rmax + Beampipe_bakeout_buffer" />
     <constant name="TrackerEndcapPDisk1_rmax"        value="TrackerSupportCyl_rmin - 15*mm" />
     <constant name="TrackerEndcapPDisk2_zmin"        value="70.0*cm" />
-    <constant name="TrackerEndcapPDisk2_rmin"        value="Beampipe_rmax + Beampipe_bakeout_buffer + 0.6*mm" />
+    <constant name="TrackerEndcapPDisk2_rmin"        value="32.86*mm + Beampipe_bakeout_buffer + 0.6*mm" />
     <constant name="TrackerEndcapPDisk2_rmax"        value="TrackerSupportCyl_rmin * .98" />
     <constant name="TrackerEndcapPDisk3_zmin"        value="100.0*cm" />
-    <constant name="TrackerEndcapPDisk3_rmin"        value="Beampipe_rmax + Beampipe_bakeout_buffer + 7.87*mm" />
+    <constant name="TrackerEndcapPDisk3_rmin"        value="40.58*mm + Beampipe_bakeout_buffer + 7.85*mm" />
     <constant name="TrackerEndcapPDisk3_rmax"        value="TrackerSupportCyl_rmin * .98" />
     <constant name="TrackerEndcapPDisk4_zmin"        value="135.0*cm" />
-    <constant name="TrackerEndcapPDisk4_rmin"        value="Beampipe_rmax + Beampipe_bakeout_buffer + 24*mm" />
+    <constant name="TrackerEndcapPDisk4_rmin"        value="49.12*mm + Beampipe_bakeout_buffer + 16.02*mm" />
     <constant name="TrackerEndcapPDisk4_rmax"        value="TrackerSupportCyl_rmin * .98" />
 
     <comment> Main parameters for the negative silicon disks (will be reflected, so positive z-values here)
@@ -84,7 +84,7 @@
     <constant name="TrackerEndcapNDisk4_rmin"        value="38.043*mm + Beampipe_bakeout_buffer + 3.310*mm" />
     <constant name="TrackerEndcapNDisk4_rmax"        value="TrackerEndcapPDisk4_rmax" />
   </define>
-
+  
   <detectors>
     <detector id="VertexSubAssembly_0_ID"
       name="VertexBarrelSubAssembly"
