@@ -7654,7 +7654,7 @@
   <readouts>
     <readout name="HcalBarrelHits">
       <segmentation type="NoSegmentation"/>
-      <id>system:8,sector:6,tower:6</id>
+      <id>system:8,barrel:3,sector:6,tower:6</id>
     </readout>
   </readouts>
 

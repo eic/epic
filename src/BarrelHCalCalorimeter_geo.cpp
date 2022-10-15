@@ -441,6 +441,7 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
   for(int i=-1; i<2; i++){
     PlacedVolume     sect_phv = envelope.placeVolume(ChimneySector, i+1, Transform3D(RotationZ(((i-1)*2*M_PI/32) + tweak_sectors[i+1]), Translation3D(0, 0, 0) ));
     sect_phv.addPhysVolID("system", det_id);
+    sect_phv.addPhysVolID("barrel", 0);
     sect_phv.addPhysVolID("sector", i+1);
     DetElement sd = sector_det.clone(_toString(i+1, "sector%d")); 
     sd.setPlacement(sect_phv);
@@ -452,6 +453,7 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
     PlacedVolume     sect_phv = envelope.placeVolume(Sector, i, Transform3D(RotationZ((-2.075*M_PI/32) + (i-3)*(2*M_PI/32) + tweak_sectors[i]), Translation3D(0, 0, 0) ));
     //PlacedVolume     sect_phv = envelope.placeVolume(Sector, i, RotationZYX((-2.075*M_PI/32) + (i-3)*(2*M_PI/32),0,0) );
     sect_phv.addPhysVolID("system", det_id);
+    sect_phv.addPhysVolID("barrel", 0);
     sect_phv.addPhysVolID("sector", i);
     DetElement sd = sector_det.clone(_toString(i, "sector%d")); 
     sd.setPlacement(sect_phv);
