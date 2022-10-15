@@ -62,8 +62,7 @@ static Ref_t create_BarrelTrackerWithFrame(Detector& description, xml_h e, Sensi
   map<string, std::vector<VolPlane>> volplane_surfaces;
   map<string, std::array<double, 2>> module_thicknesses;
 
-  PlacedVolume           pv;
-  dd4hep::xml::Dimension dimensions(x_det.dimensions());
+  PlacedVolume pv;
 
   // ACTS extension
   {
@@ -77,8 +76,9 @@ static Ref_t create_BarrelTrackerWithFrame(Detector& description, xml_h e, Sensi
     sdet.addExtension<Acts::ActsExtension>(detWorldExt);
   }
 
-  //Tube topVolumeShape(dimensions.rmin(), dimensions.rmax(), dimensions.length() * 0.5);
-  //Volume assembly(det_name,topVolumeShape,air);
+  // dd4hep::xml::Dimension dimensions(x_det.dimensions());
+  // Tube topVolumeShape(dimensions.rmin(), dimensions.rmax(), dimensions.length() * 0.5);
+  // Volume assembly(det_name,topVolumeShape,air);
   Assembly assembly(det_name);
 
   sens.setType("tracker");
@@ -153,7 +153,7 @@ static Ref_t create_BarrelTrackerWithFrame(Detector& description, xml_h e, Sensi
       double frame_width     = m_frame.width();
       double frame_height    = getAttrOrDefault<double>(m_frame, _U(height), 5.0 * mm);
       double tanth           = frame_height / (frame_width / 2.0);
-      double costh           = 1./sqrt(1+tanth*tanth);
+      double costh           = 1. / sqrt(1 + tanth * tanth);
       double frame_height2   = frame_height - frame_thickness - frame_thickness / costh;
       double frame_width2    = 2.0 * frame_height2 / tanth;
 
@@ -334,7 +334,7 @@ static Ref_t create_BarrelTrackerWithFrame(Detector& description, xml_h e, Sensi
     }
     // Create the PhysicalVolume for the layer.
     pv = assembly.placeVolume(lay_vol, lay_pos); // Place layer in mother
-    pv.addPhysVolID("layer", lay_id);   // Set the layer ID.
+    pv.addPhysVolID("layer", lay_id);            // Set the layer ID.
     lay_elt.setAttributes(description, lay_vol, x_layer.regionStr(), x_layer.limitsStr(), x_layer.visStr());
     lay_elt.setPlacement(pv);
   }

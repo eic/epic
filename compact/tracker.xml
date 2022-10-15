@@ -23,7 +23,7 @@
     <comment> barrel length: 2R/tan(angle) - dz </comment>
 
     <comment> Main parameters for the MPGD layer geometries </comment>
-    <constant name="InnerMPGDBarrel_rmin"            value="51.0*cm"/>
+    <constant name="InnerMPGDBarrel_rmin"            value="55.0*cm"/>
     <constant name="InnerMPGDBarrel_dz"              value="8.0*cm"/>
     <comment> barrel length: 2R/tan(angle) - dz </comment>
 
@@ -119,6 +119,12 @@
       vis="TrackerSubAssemblyVis">
       <composite name="InnerMPGDBarrel"/>
     </detector>
+    <detector id="TrackerSubAssembly_4_ID"
+      name="BarrelTOFSubAssembly"
+      type="DD4hep_SubdetectorAssembly"
+      vis="TrackerSubAssemblyVis">
+      <composite name="BarrelTOF"/>
+    </detector>
     <comment>
       <comment>FIXME update the OuterMPGDBarrel to use the MPGDDIRC detector</comment>
       <detector id="TrackerSubAssembly_5_ID"
@@ -128,6 +134,13 @@
         <composite name="OuterMPGDBarrel"/>
       </detector>
     </comment>
+    <detector id="TrackerSubAssembly_6_ID"
+      name="EndcapTOFSubSubAssembly"
+      type="DD4hep_SubdetectorAssembly"
+      vis="TrackerSubAssemblyVis">
+      <composite name="ForwardTOF"/>
+      <composite name="BackwardTOF"/>
+    </detector>
   </detectors>
 
   <documentation>
@@ -148,5 +161,7 @@
   <include ref="tracker/mpgd_dirc.xml"/>
   <include ref="tracker/silicon_disks.xml"/>
   <include ref="tracker/support_service_assembly.xml"/>
+  <include ref="tof_barrel.xml"/>
+  <include ref="tof_endcap.xml"/>
 
 </lccdd>

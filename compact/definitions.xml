@@ -95,53 +95,54 @@ The unused IDs below are saved for future use.
     <constant name="TrackerSubAssembly_3_ID"      value="43"/>
     <constant name="TrackerSubAssembly_4_ID"      value="44"/>
     <constant name="TrackerSubAssembly_5_ID"      value="45"/>
+    <constant name="TrackerSubAssembly_6_ID"      value="46"/>
 
-    <constant name="TrackerCompositeBarrel_0_ID"  value="46"/>
-    <constant name="TrackerCompositeBarrel_1_ID"  value="47"/>
-    <constant name="TrackerCompositeBarrel_2_ID"  value="48"/>
-    <constant name="TrackerCompositeBarrel_3_ID"  value="49"/>
-    <constant name="TrackerCompositeEndcapN_0_ID" value="50"/>
-    <constant name="TrackerCompositeEndcapN_1_ID" value="51"/>
-    <constant name="TrackerCompositeEndcapN_2_ID" value="52"/>
-    <constant name="TrackerCompositeEndcapN_3_ID" value="53"/>
-    <constant name="TrackerCompositeEndcapP_0_ID" value="54"/>
-    <constant name="TrackerCompositeEndcapP_1_ID" value="55"/>
-    <constant name="TrackerCompositeEndcapP_2_ID" value="56"/>
-    <constant name="TrackerCompositeEndcapP_3_ID" value="57"/>
+    <constant name="TrackerCompositeBarrel_0_ID"  value="47"/>
+    <constant name="TrackerCompositeBarrel_1_ID"  value="48"/>
+    <constant name="TrackerCompositeBarrel_2_ID"  value="49"/>
+    <constant name="TrackerCompositeBarrel_3_ID"  value="50"/>
+    <constant name="TrackerCompositeEndcapN_0_ID" value="51"/>
+    <constant name="TrackerCompositeEndcapN_1_ID" value="52"/>
+    <constant name="TrackerCompositeEndcapN_2_ID" value="53"/>
+    <constant name="TrackerCompositeEndcapN_3_ID" value="54"/>
+    <constant name="TrackerCompositeEndcapP_0_ID" value="55"/>
+    <constant name="TrackerCompositeEndcapP_1_ID" value="56"/>
+    <constant name="TrackerCompositeEndcapP_2_ID" value="57"/>
+    <constant name="TrackerCompositeEndcapP_3_ID" value="58"/>
 
-    <constant name="TrackerBarrel_0_ID"           value="58"/>
-    <constant name="TrackerBarrel_1_ID"           value="59"/>
-    <constant name="TrackerBarrel_2_ID"           value="60"/>
-    <constant name="TrackerBarrel_3_ID"           value="61"/>
-    <constant name="TrackerBarrel_4_ID"           value="62"/>
-    <constant name="TrackerBarrel_5_ID"           value="63"/>
-    <constant name="TrackerBarrel_6_ID"           value="64"/>
-    <constant name="TrackerBarrel_7_ID"           value="65"/>
-    <constant name="TrackerBarrel_8_ID"           value="66"/>
-    <constant name="TrackerEndcapN_0_ID"          value="67"/>
-    <constant name="TrackerEndcapN_1_ID"          value="68"/>
-    <constant name="TrackerEndcapN_2_ID"          value="69"/>
-    <constant name="TrackerEndcapN_3_ID"          value="70"/>
-    <constant name="TrackerEndcapN_4_ID"          value="71"/>
-    <constant name="TrackerEndcapN_5_ID"          value="72"/>
-    <constant name="TrackerEndcapN_6_ID"          value="73"/>
-    <constant name="TrackerEndcapN_7_ID"          value="74"/>
-    <constant name="TrackerEndcapN_8_ID"          value="75"/>
-    <constant name="TrackerEndcapP_0_ID"          value="76"/>
-    <constant name="TrackerEndcapP_1_ID"          value="77"/>
-    <constant name="TrackerEndcapP_2_ID"          value="78"/>
-    <constant name="TrackerEndcapP_3_ID"          value="79"/>
-    <constant name="TrackerEndcapP_4_ID"          value="80"/>
-    <constant name="TrackerEndcapP_5_ID"          value="81"/>
-    <constant name="TrackerEndcapP_6_ID"          value="82"/>
-    <constant name="TrackerEndcapP_7_ID"          value="83"/>
-    <constant name="TrackerEndcapP_8_ID"          value="84"/>
-    <constant name="MPGDDIRC_0_ID"                value="85"/>
+    <constant name="TrackerBarrel_0_ID"           value="59"/>
+    <constant name="TrackerBarrel_1_ID"           value="60"/>
+    <constant name="TrackerBarrel_2_ID"           value="61"/>
+    <constant name="TrackerBarrel_3_ID"           value="62"/>
+    <constant name="TrackerBarrel_4_ID"           value="63"/>
+    <constant name="TrackerBarrel_5_ID"           value="64"/>
+    <constant name="TrackerBarrel_6_ID"           value="65"/>
+    <constant name="TrackerBarrel_7_ID"           value="66"/>
+    <constant name="TrackerBarrel_8_ID"           value="67"/>
+    <constant name="TrackerEndcapN_0_ID"          value="68"/>
+    <constant name="TrackerEndcapN_1_ID"          value="69"/>
+    <constant name="TrackerEndcapN_2_ID"          value="70"/>
+    <constant name="TrackerEndcapN_3_ID"          value="71"/>
+    <constant name="TrackerEndcapN_4_ID"          value="72"/>
+    <constant name="TrackerEndcapN_5_ID"          value="73"/>
+    <constant name="TrackerEndcapN_6_ID"          value="74"/>
+    <constant name="TrackerEndcapN_7_ID"          value="75"/>
+    <constant name="TrackerEndcapN_8_ID"          value="76"/>
+    <constant name="TrackerEndcapP_0_ID"          value="77"/>
+    <constant name="TrackerEndcapP_1_ID"          value="78"/>
+    <constant name="TrackerEndcapP_2_ID"          value="79"/>
+    <constant name="TrackerEndcapP_3_ID"          value="80"/>
+    <constant name="TrackerEndcapP_4_ID"          value="81"/>
+    <constant name="TrackerEndcapP_5_ID"          value="82"/>
+    <constant name="TrackerEndcapP_6_ID"          value="83"/>
+    <constant name="TrackerEndcapP_7_ID"          value="84"/>
+    <constant name="TrackerEndcapP_8_ID"          value="85"/>
+    <constant name="MPGDDIRC_0_ID"                value="86"/>
 
     <documentation>
-    #### (86-99) Reserved IDs
+    #### (87-99) Reserved IDs
 
-    - Unused IDs: 85-89
+    - Unused IDs: 87-89
     TBD
     </documentation>
     <documentation>
@@ -460,8 +461,9 @@ Examples:
     <constant name="ForwardRICHRegion_tan1"        value="CentralTrackingRegionP_tan * 0.88" />
     <constant name="ForwardRICHRegion_tan2"        value="Eta3_6_tan * 0.89" />
 
-    <constant name="BackwardPIDRegion_zmin"       value="CentralTrackingRegionN_zmax" />
     <constant name="BackwardPIDRegion_length"     value="25.0*cm" />
+    <constant name="BackwardPIDRegion_zmin"       value="CentralTrackingRegionN_zmax" />
+    <constant name="BackwardPIDRegion_zmax"       value="BackwardPIDRegion_zmin+BackwardPIDRegion_length" />
     <constant name="BackwardPIDRegion_rmax"       value="64.0*cm" /> <!-- FIXME hardcoded, was CentralTrackingRegion_rmax -->
     <constant name="BackwardPIDRegion_tan"        value="CentralTrackingRegionN_tan * 0.92" />
 
@@ -559,17 +561,20 @@ Service gaps in FW direction (before endcapP ECAL) and BW direction (before endc
     <constant name="EcalBarrel_offset"              value="(EcalBarrelForward_zmax - EcalBarrelBackward_zmax)/2.0"/>
     <constant name="EcalBarrelReadout_length"       value="20*cm"/>
 
-    
-  <documentation level="3">
-    ## Special DIRC parameters (depend on the ECAL setup)
-  </documentation>
+    <documentation level="3">
+      ## Special DIRC parameters (depend on the ECAL setup)
+    </documentation>
     <constant name="DIRCReadout_length"         value="30*cm"/>
     <constant name="DIRCForward_length"         value="0*cm"/>
     <constant name="DIRCForward_zmax"           value="CentralTrackingRegionP_zmax + 5*cm"/>
     <constant name="DIRCBackward_zmax"          value="287*cm"/>
+    <constant name="DIRC_thickness"             value="3*cm"/>
     <constant name="DIRC_length"                value="DIRCForward_zmax + DIRCBackward_zmax"/>
     <constant name="DIRC_offset"                value="(DIRCForward_zmax - DIRCBackward_zmax)/2"/>
-    <constant name="DIRC_thickness"             value="3*cm"/> <!-- DIRC bar box thickness, not readout -->
+    <comment>
+      The DIRC_rmin/rmax values are defined at the center of each stave, such that
+      the DIRC_rmax can also be used as the OuterBarrelMPGD_rmin value. 
+    </comment>
     <constant name="DIRC_rmin"                  value="CentralTrackingRegion_rmax"/>
     <constant name="DIRC_rmax"                  value="DIRC_rmin + DIRC_thickness"/>
 
