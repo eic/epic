@@ -84,7 +84,6 @@
     <constant name="TrackerEndcapNDisk4_rmin"        value="38.043*mm + Beampipe_bakeout_buffer + 3.310*mm" />
     <constant name="TrackerEndcapNDisk4_rmax"        value="TrackerEndcapPDisk4_rmax" />
   </define>
-  
   <detectors>
     <detector id="VertexSubAssembly_0_ID"
       name="VertexBarrelSubAssembly"
