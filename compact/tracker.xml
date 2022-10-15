@@ -23,7 +23,7 @@
     <comment> barrel length: 2R/tan(angle) - dz </comment>
 
     <comment> Main parameters for the MPGD layer geometries </comment>
-    <constant name="InnerMPGDBarrel_rmin"            value="51.0*cm"/>
+    <constant name="InnerMPGDBarrel_rmin"            value="55.0*cm"/>
     <constant name="InnerMPGDBarrel_dz"              value="8.0*cm"/>
     <comment> barrel length: 2R/tan(angle) - dz </comment>
 
