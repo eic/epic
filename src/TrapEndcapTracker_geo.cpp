@@ -126,7 +126,6 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
       total_thickness += xml_comp_t(ci).thickness();
 
     double    thickness_so_far = 0.0;
-    double    thickness_sum    = -total_thickness / 2.0;
     double    y1               = total_thickness / 2;
     double    y2               = total_thickness / 2;
     Trapezoid m_solid(x1, x2, y1, y2, z);
@@ -208,7 +207,6 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
         //--------------------------------------------
       }
       posY += c_thick;
-      thickness_sum += c_thick;
       thickness_so_far += c_thick;
     }
     modules[m_nam] = m_volume;
