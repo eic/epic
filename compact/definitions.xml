@@ -463,7 +463,7 @@ Examples:
 
     <constant name="BackwardPIDRegion_zmin"       value="CentralTrackingRegionN_zmax" />
     <constant name="BackwardPIDRegion_length"     value="54.1*cm" />
-    <constant name="BackwardPIDRegion_rmax"       value="64.0*cm" /> <!-- FIXME hardcoded, was CentralTrackingRegion_rmax -->
+    <constant name="BackwardPIDRegion_rmax"       value="63.0*cm" /> <!-- FIXME hardcoded, was CentralTrackingRegion_rmax -->
     <constant name="BackwardPIDRegion_tan1"       value="Eta3_9_tan * 0.95" />
     <constant name="BackwardPIDRegion_tan2"       value="Eta3_9_tan * 0.85" />
 
