@@ -48,15 +48,9 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
   double length1 = x_det.z1(); 
   double length2 = x_det.z2();
   
-  std::vector<double> rmins; 
-  rmins[0] = rmin1; 
-  rmins[1] = rmin2; 
-  std::vector<double> rmaxs; 
-  rmaxs[0] = rmax; 
-  rmaxs[1] = rmax; 
-  std::vector<double> zs; 
-  zs[0] = length1; 
-  zs[1] = length2; 
+  std::vector<double> rmins = {rmin1,rmin2}; 
+  std::vector<double> rmaxs = {rmax,rmax};  
+  std::vector<double> zs = {length1, length2};  
   
   Polycone ptube(0.0,2.0*M_PI,rmins,rmaxs,zs);
   Volume   envelope(det_name, ptube, air);
