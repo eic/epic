@@ -2,8 +2,7 @@ features:
   beampipe:
   tracking:
   pid:
-    tof_endcap:
-    tof_barrel:
+    dirc:
     mrich:
     drich:
   ecal:
