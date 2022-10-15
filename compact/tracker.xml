@@ -61,7 +61,7 @@
     <constant name="TrackerEndcapPDisk3_rmin"        value="Beampipe_rmax + Beampipe_bakeout_buffer + 7.87*mm" />
     <constant name="TrackerEndcapPDisk3_rmax"        value="TrackerSupportCyl_rmin * .98" />
     <constant name="TrackerEndcapPDisk4_zmin"        value="135.0*cm" />
-    <constant name="TrackerEndcapPDisk4_rmin"        value="Beampipe_rmax + Beampipe_bakeout_buffer + 20*mm" />
+    <constant name="TrackerEndcapPDisk4_rmin"        value="Beampipe_rmax + Beampipe_bakeout_buffer + 24*mm" />
     <constant name="TrackerEndcapPDisk4_rmax"        value="TrackerSupportCyl_rmin * .98" />
 
     <comment> Main parameters for the negative silicon disks (will be reflected, so positive z-values here)
