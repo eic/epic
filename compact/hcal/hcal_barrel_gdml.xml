@@ -12,9 +12,11 @@
 	  readout="HcalBarrelHits"
 	  vis="HcalBarrelVis"
 	  env_vis="HcalBarrelEnvelopeVis"
-	  rmin="HcalBarrel_rmin"
+	  rmin1="HcalBarrel_rmin"
+	  rmin2="ForwardServiceGap_rmax"
 	  rmax="HcalBarrel_rmax"
-	  z="HcalBarrel_length" 
+	  z1="SolenoidBarrel_length" 
+	  z2="HcalBarrel_length" 
 	  calorimeterType="HAD_BARREL">
 	
   <define>

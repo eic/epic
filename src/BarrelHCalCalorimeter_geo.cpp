@@ -40,14 +40,26 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
   DetElement       sdet(det_name, det_id);
   Volume           motherVol = description.pickMotherVolume(sdet);
 
-  double rmin = x_det.rmin(); 
+  // Create envelope to hold HCAL barrel 
+
+  double rmin1 = x_det.rmin1(); 
+  double rmin2 = x_det.rmin1(); 
   double rmax = x_det.rmax(); 
-  double length = x_det.z(); 
-
-  //printout(WARNING, "BarrelHCalCalorimeter", "%f %f %f", rmin, rmax, length);
-
-  Tube             etube(rmin,rmax, length/2.0);
-  Volume           envelope(det_name, etube, air);
+  double length1 = x_det.z1(); 
+  double length2 = x_det.z2();
+  
+  std::vector<double> rmins; 
+  rmins[0] = rmin1; 
+  rmins[1] = rmin2; 
+  std::vector<double> rmaxs; 
+  rmaxs[0] = rmax; 
+  rmaxs[1] = rmax; 
+  std::vector<double> zs; 
+  zs[0] = length1; 
+  zs[1] = length2; 
+  
+  Polycone ptube(0.0,2.0*M_PI,rmins,rmaxs,zs);
+  Volume   envelope(det_name, ptube, air);
 
   PlacedVolume     env_phv = motherVol.placeVolume(envelope);
   env_phv.addPhysVolID("system", det_id);
@@ -451,7 +463,6 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
   // Normal sectors
   for(int i=3; i<32; i++){
     PlacedVolume     sect_phv = envelope.placeVolume(Sector, i, Transform3D(RotationZ((-2.075*M_PI/32) + (i-3)*(2*M_PI/32) + tweak_sectors[i]), Translation3D(0, 0, 0) ));
-    //PlacedVolume     sect_phv = envelope.placeVolume(Sector, i, RotationZYX((-2.075*M_PI/32) + (i-3)*(2*M_PI/32),0,0) );
     sect_phv.addPhysVolID("system", det_id);
     sect_phv.addPhysVolID("barrel", 0);
     sect_phv.addPhysVolID("sector", i);
