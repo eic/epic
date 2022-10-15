@@ -427,8 +427,7 @@ Examples:
 
     <constant name="CentralTrackingRegion_rmax"   value="700.0*mm" />
     <constant name="CentralTrackingRegionP_zmax"  value="1730.0*mm" />
-    <constant name="CentralTrackingRegionN_zmax"  value="1186.0*mm" />
-    <constant name="CentralTrackingRegion_length" value="CentralTrackingRegionP_zmax + CentralTrackingRegionN_zmax" />
+    <!-- zmin and length defined in backward PID section -->
     <comment>
       tan(theta) to determine rmin in the outer tracking region (due to tapered beampipe)
     </comment>
@@ -461,18 +460,23 @@ Examples:
     <constant name="ForwardRICHRegion_tan1"        value="CentralTrackingRegionP_tan * 0.88" />
     <constant name="ForwardRICHRegion_tan2"        value="Eta3_6_tan * 0.89" />
 
-    <constant name="BackwardPIDRegion_zmin"       value="CentralTrackingRegionN_zmax" />
-    <constant name="BackwardPIDRegion_length"     value="54.1*cm" />
+    <constant name="MRICH_length"                 value="25.0*cm" />
+    <constant name="PFRICH_length"                value="54.1*cm" />
+    <constant name="BackwardPIDRegion_length"     value="max(MRICH_length,PFRICH_length)" /> <!-- FIXME: should this depend on brycecanyon vs. arches -->
+    <constant name="BackwardPIDRegion_zmax"       value="172.7" /> <!-- fixed position between arches and brycecanyon -->
+    <constant name="BackwardPIDRegion_zmin"       value="BackwardPIDRegion_zmax - BackwardPIDRegion_length" />
     <constant name="BackwardPIDRegion_rmax"       value="63.0*cm" /> <!-- FIXME hardcoded, was CentralTrackingRegion_rmax -->
-    <constant name="BackwardPIDRegion_tan1"       value="Eta3_9_tan * 0.95" />
-    <constant name="BackwardPIDRegion_tan2"       value="Eta3_9_tan * 0.85" />
+    <constant name="BackwardPIDRegion_tan"        value="CentralTrackingRegionN_tan * 0.92" />
+    <!-- central tracking constants which depend on backward PID constants -->
+    <constant name="CentralTrackingRegionN_zmax"  value="BackwardPIDRegion_zmin" />
+    <constant name="CentralTrackingRegion_length" value="CentralTrackingRegionP_zmax + CentralTrackingRegionN_zmax" />
 
     <comment> Backward RICH region </comment>
-    <constant name="BackwardRICHRegion_zmin"       value="BackwardPIDRegion_zmin" />
+    <constant name="BackwardRICHRegion_zmax"       value="BackwardPIDRegion_zmax" />
     <constant name="BackwardRICHRegion_length"     value="BackwardPIDRegion_length" />
 
     <comment> Backward TOF region, currently empty for upgrades </comment>
-    <constant name="BackwardTOFRegion_zmin"        value="BackwardRICHRegion_zmin + BackwardRICHRegion_length" />
+    <constant name="BackwardTOFRegion_zmin"        value="BackwardRICHRegion_zmax" />
     <constant name="BackwardTOFRegion_length"      value="BackwardPIDRegion_length - BackwardRICHRegion_length" />
 
     <comment> Note: PID has space for DIRC, ExtraSpace sits past the PID</comment>
