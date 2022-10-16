@@ -4,7 +4,7 @@
   <include ref="far_forward/ion_beamline.xml" />
   <include ref="far_forward/beampipe_hadron_B0.xml" />
   <include ref="far_forward/B0_tracker.xml"/>
-  <include ref="far_forward/B0_preshower.xml"/>
+  <include ref="far_forward/B0_ECal.xml"/>
   <include ref="far_forward/offM_tracker.xml"/>
   <include ref="far_forward/ZDC.xml"/>
   <include ref="far_forward/roman_pots_eRD24_design.xml"/>

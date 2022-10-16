@@ -14,7 +14,7 @@
     <comment>
       Change this to 275/100/41 to change the field setup
     </comment>
-    <include ref="ip6/far_forward/fields_275.xml"/>
+    <include ref="ip6/far_forward/fields_41.xml"/>
 
     <constant name="tracker_region_zmax" value="10*m"/>
     <constant name="tracker_region_rmax" value="1*m"/>
