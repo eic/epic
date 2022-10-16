@@ -43,16 +43,17 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
   // Create envelope to hold HCAL barrel 
 
   double rmin1 = x_det.rmin1(); 
-  double rmin2 = x_det.rmin1(); 
+  double rmin2 = x_det.rmin2(); 
   double rmax = x_det.rmax(); 
   double length1 = x_det.z1(); 
   double length2 = x_det.z2();
   
-  std::vector<double> rmins = {rmin1,rmin2}; 
-  std::vector<double> rmaxs = {rmax,rmax};  
-  std::vector<double> zs = {length1, length2};  
-  
+  std::vector<double> rmins = {rmin2,rmin1,rmin2,rmin2}; 
+  std::vector<double> rmaxs = {rmax,rmax,rmax,rmax};  
+  std::vector<double> zs = {-length2,-length1,length1,length2};  
+
   Polycone ptube(0.0,2.0*M_PI,rmins,rmaxs,zs);
+  //Tube ptube(rmin1,rmax,length2);
   Volume   envelope(det_name, ptube, air);
 
   PlacedVolume     env_phv = motherVol.placeVolume(envelope);

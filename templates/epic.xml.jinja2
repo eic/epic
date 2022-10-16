@@ -173,7 +173,11 @@
   <documentation level="10">
     ## hadronic calorimetry
   </documentation>
+  {% if features is not defined or features['hcal'] is none or 'hcal' in features['hcal'] %}
   <include ref="${DETECTOR_PATH}/compact/hcal.xml"/>
+  {% elif 'hcal_gdml' in features['hcal'] -%}
+  <include ref="${DETECTOR_PATH}/compact/hcal_gdml.xml"/>
+  {% endif -%}
 {% endif -%}
 
 {% if features is not defined or 'beampipe' in features %}
