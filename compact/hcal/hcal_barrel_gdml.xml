@@ -13,7 +13,7 @@
 	  vis="HcalBarrelVis"
 	  env_vis="HcalBarrelEnvelopeVis"
 	  rmin1="HcalBarrel_rmin"
-	  rmin2="ForwardServiceGap_rmax"
+	  rmin2="ForwardServiceGap_rmax - 5.0"
 	  rmax="HcalBarrel_rmax"
 	  z1="SolenoidBarrel_length" 
 	  z2="HcalBarrel_length" 

@@ -48,9 +48,11 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
   double length1 = x_det.z1(); 
   double length2 = x_det.z2();
   
-  std::vector<double> rmins = {rmin2,rmin1,rmin2,rmin2}; 
-  std::vector<double> rmaxs = {rmax,rmax,rmax,rmax};  
-  std::vector<double> zs = {-length2,-length1,length1,length2};  
+  std::vector<double> rmins = {rmin2,rmin2,rmin1,rmin1,rmin2,rmin2}; 
+  std::vector<double> rmaxs = {rmax,rmax,rmax,rmax,rmax,rmax};  
+  std::vector<double> zs = {-length2/2.,-length1/2.,-length1/2.,length1/2.,length1/2.,length2/2.};  
+
+  //printout(WARNING, "BarrelHCalCalorimeter", "%f %f %f %f %f", rmin1, rmin2, rmax, length1/2., length2/2.);
 
   Polycone ptube(0.0,2.0*M_PI,rmins,rmaxs,zs);
   //Tube ptube(rmin1,rmax,length2);
