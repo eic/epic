@@ -183,11 +183,21 @@
   <include ref="${BEAMLINE_PATH}/ip6/central_beampipe.xml"/>
 {% endif -%}
 
-{% if features is not defined or 'farforward' in features %}
+{% if features is not defined or 'farforward' not in features or features['farforward'] is none %}
   <documentation level="11">
     ## Far foward detectors
   </documentation>
   <include ref="${BEAMLINE_PATH}/ip6/far_forward.xml"/>
+{% elif 'arches' in features['farforward'] %}
+  <documentation level="11">
+    ## Far foward detectors
+  </documentation>
+  <include ref="${BEAMLINE_PATH}/ip6/far_forward_arches.xml"/>
+{% elif 'brycecanyon' in features['farforward'] %}
+  <documentation level="11">
+    ## Far foward detectors
+  </documentation>
+  <include ref="${BEAMLINE_PATH}/ip6/far_forward_brycecanyon.xml"/>
 {% endif -%}
 
 {% if features is not defined or 'farbackward' in features %}
