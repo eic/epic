@@ -65,8 +65,6 @@
     <constant name="TrackerEndcapPDisk4_rmax"        value="TrackerSupportCyl_rmin * .98" />
 
     <comment> Main parameters for the negative silicon disks (will be reflected, so positive z-values here)
-              Values such that the disk dimensions are identical to the positive endcap. 
-              This currently leads to rather large gaps with the support/service material etc.
     </comment>
     <constant name="InnerTrackerEndcapN_zmin"        value="InnerTrackerEndcapP_zmin" />
     <constant name="InnerTrackerEndcapN_rmin"        value="InnerTrackerEndcapP_rmin" />
@@ -153,7 +151,7 @@
     <plugin name="epic_FileLoader">
       <arg value="cache:$DETECTOR_PATH:/opt/detector"/>
       <arg value="file:calibrations/materials-map.cbor"/>
-      <arg value="url:https://eicweb.phy.anl.gov/EIC/detectors/athena/uploads/56b64d544442a93904488e7292aa509d/material-maps.cbor"/>
+      <arg value="url:https://eicweb.phy.anl.gov/EIC/detectors/athena/uploads/77bd16bef5d811f31256279a3601c9d5/material-maps.cbor"/>
     </plugin>
   </plugins>
 
