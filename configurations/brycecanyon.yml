@@ -5,7 +5,7 @@ features:
   tracking:
   pid:
     dirc:
-    mrich:
+    pfrich:
     drich:
   ecal:
     forward_scifi:
