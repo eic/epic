@@ -338,7 +338,7 @@ jobs:
     needs: [check-overlap-tgeo, check-overlap-geant4-fast]
     strategy:
       matrix:
-        detector_config: [epic_sciglass, epic_imaging]
+        detector_config: [epic_sciglass, epic_imaging, epic_arches, epic_brycecanyon]
     steps:
     - uses: eic/trigger-gitlab-ci@v2
       id: trigger
