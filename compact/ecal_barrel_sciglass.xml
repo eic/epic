@@ -42,7 +42,12 @@
                   zmax="EcalBarrelForward_zmax" zmin="-EcalBarrelBackward_zmax"
                   etamin="EcalBarrel_etamin" etamax="EcalBarrel_etamax"/>
 
-      <wedge_box inner_r="80.0 * cm" thickness="2 * mm" vis="becal_wedge" material="Aluminum5083" />
+      <comment>
+	The current implementation of the wedge box approximates flat inner
+	surfaces of individual wedge boxes with a single shared tube at a fixed
+        `inner_r`, which allows for ~17 mm air gap before the towers.
+      </comment>
+      <wedge_box inner_r="78.55 * cm" thickness="3 * mm" vis="becal_wedge" material="Aluminum5083" />
 
       <sectors number="24" phi0="0." deltaphi="pi / 12">
         <comment>
