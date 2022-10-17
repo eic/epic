@@ -184,7 +184,7 @@
 {% endif -%}
 
 {% if features is not defined or 'farforward' in features %}
-{% if features is not defined or features['farforward'] is none %}
+{%- if features is not defined or features['farforward'] is none %}
   <documentation level="11">
     ## Far foward detectors
   </documentation>
@@ -199,7 +199,7 @@
     ## Far foward detectors
   </documentation>
   <include ref="${BEAMLINE_PATH}/ip6/far_forward_brycecanyon.xml"/>
-{% endif %}
+{% endif -%}
 {% endif -%}
 
 {% if features is not defined or 'farbackward' in features %}
