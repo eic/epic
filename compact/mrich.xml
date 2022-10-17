@@ -3,7 +3,7 @@
   <define>
     <constant name="MRICH_rmin"   value="8*cm"/>
     <constant name="MRICH_rmax"   value="min(63*cm, BackwardPIDRegion_rmax)"/>
-    <constant name="MRICH_length" value="BackwardRICHRegion_length"/>
+    <constant name="MRICH_length" value="min(42.7*cm, BackwardRICHRegion_length)"/>
     <constant name="MRICH_zmax"   value="BackwardRICHRegion_zmax"/>
     <constant name="MRICH_zmin"   value="MRICH_zmax-MRICH_length"/>
 
