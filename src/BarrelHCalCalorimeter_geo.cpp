@@ -445,7 +445,8 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
   // Place the sectors into the envelope
 
   DetElement sector_det("sector0", det_id);
-  
+ 
+ 
   // Chimney sectors
   for(int i=-1; i<2; i++){
     PlacedVolume     sect_phv = envelope.placeVolume(ChimneySector, i+1, Transform3D(RotationZ(((i-1)*2*M_PI/32) + tweak_sectors[i+1]), Translation3D(0, 0, 0) ));
