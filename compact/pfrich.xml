@@ -4,7 +4,7 @@
 <define>
 <!-- vessel geometry -->
 <constant name="PFRICH_length"             value="BackwardRICHRegion_length" />       <!-- vessel z-length -->
-<constant name="PFRICH_zmax"               value="-BackwardPIDRegion_zmax"/>          <!-- vessel front -->
+<constant name="PFRICH_zmax"               value="-BackwardRICHRegion_zmax"/>         <!-- vessel front -->
 <constant name="PFRICH_zmin"               value="PFRICH_zmax + PFRICH_length"/>      <!-- vessel back -->
 <constant name="PFRICH_rmin0"              value="-PFRICH_zmin * Eta3_9_tan * 0.95"/> <!-- bore radius at vessel frontplane -->
 <constant name="PFRICH_rmin1"              value="-PFRICH_zmax * Eta3_9_tan * 0.85"/> <!-- bore radius at vessel backplane -->

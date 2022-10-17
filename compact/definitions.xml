@@ -468,11 +468,11 @@ Examples:
     <constant name="BackwardPIDRegion_tan"        value="CentralTrackingRegionN_tan * 0.92" />
 
     <comment> Backward RICH region </comment>
-    <constant name="BackwardRICHRegion_zmin"       value="BackwardPIDRegion_zmin" />
+    <constant name="BackwardRICHRegion_zmax"       value="BackwardPIDRegion_zmax" />
     <constant name="BackwardRICHRegion_length"     value="BackwardPIDRegion_length" />
 
     <comment> Backward TOF region, currently empty for upgrades </comment>
-    <constant name="BackwardTOFRegion_zmin"        value="BackwardRICHRegion_zmin + BackwardRICHRegion_length" />
+    <constant name="BackwardTOFRegion_zmin"        value="BackwardRICHRegion_zmax" />
     <constant name="BackwardTOFRegion_length"      value="BackwardPIDRegion_length - BackwardRICHRegion_length" />
 
     <comment> Note: PID has space for DIRC, ExtraSpace sits past the PID</comment>
