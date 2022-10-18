@@ -224,12 +224,13 @@
 
 <documentation level="10">
 #### Readout
-- segmentation: square matrix of pixels
+- sensor segmentation: square matrix of pixels
   - `grid_size_x,y`: size of each sensor pixel
   - `offset_x,y`: specified such that the `x` and `y` values are unsigned
     (except for very rare hits on the sensor sides)
 </documentation>
 <readouts>
+  <!-- sensor pixels (Cartesian matrix): for photon hits -->
   <readout name="DRICHHits">
     <segmentation
       type="CartesianGridXY"
@@ -240,6 +241,25 @@
       />
     <id>system:8,sector:3,module:12,x:32:-16,y:-16</id>
   </readout>
+  <!-- radiator z-slices: for charged particle trajectories -->
+  <readout name="DRICHTracks">
+    <segmentation
+      type="CartesianStripZ"
+      strip_size_x="DRICH_aerogel_thickness / 5.0"
+      offset_x="0.0"
+      identifier_x="slice"
+      />
+    <id>system:8,sector:3,module:12,slice:32:-32</id>
+  </readout>
+  <!-- <readout name="DRICHGasTracks"> -->
+  <!--   <segmentation -->
+  <!--     type="CartesianStripZ" -->
+  <!--     strip_size_x="(DRICH_Length - DRICH_aerogel_thickness) / 10.0" -->
+  <!--     offset_x="0.0" -->
+  <!--     identifier_x="slice" -->
+  <!--     /> -->
+  <!--   <id>system:8,radiator:3,slice:32:-32</id> -->
+  <!-- </readout> -->
 </readouts>
 
 

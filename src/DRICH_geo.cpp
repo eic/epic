@@ -164,8 +164,7 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
 
   // BUILD VESSEL ====================================================================
   /* - `vessel`: aluminum enclosure, the mother volume of the dRICH
-   * - `gasvol`: gas volume, which fills `vessel`; all other volumes defined below
-   *   are children of `gasvol`
+   * - `gasvol`: gas volume, which fills `vessel`
    * - the dRICH vessel geometry has two regions: the snout refers to the conic region
    *   in the front, housing the aerogel, while the tank refers to the cylindrical
    *   region, housing the rest of the detector components
@@ -238,16 +237,17 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
   // auto originBack  = Position(0., 0., tankLength / 2.0);
   auto vesselPos = Position(0, 0, vesselZmin) - originFront;
 
-  // place gas volume
-  PlacedVolume gasvolPV = vesselVol.placeVolume(gasvolVol, Position(0, 0, 0));
-  DetElement   gasvolDE(det, "gasvol_de", 0);
-  gasvolDE.setPlacement(gasvolPV);
-
   // place mother volume (vessel)
   Volume       motherVol = desc.pickMotherVolume(det);
   PlacedVolume vesselPV  = motherVol.placeVolume(vesselVol, vesselPos);
   vesselPV.addPhysVolID("system", detID);
   det.setPlacement(vesselPV);
+
+  // place gas volume
+  PlacedVolume gasvolPV = vesselVol.placeVolume(gasvolVol, Position(0, 0, 0));
+  DetElement   gasvolDE(det, "gasvol_de", 0);
+  gasvolDE.setPlacement(gasvolPV);
+
 
   // BUILD RADIATOR ====================================================================
 
@@ -271,7 +271,7 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
   auto radiatorPos      = Position(0., 0., radiatorFrontplane) + originFront;
   auto aerogelPlacement = Translation3D(radiatorPos.x(), radiatorPos.y(), radiatorPos.z()) * // re-center to originFront
                           RotationY(radiatorPitch); // change polar angle to specified pitch
-  auto       aerogelPV = gasvolVol.placeVolume(aerogelVol, aerogelPlacement);
+  auto       aerogelPV = vesselVol.placeVolume(aerogelVol, aerogelPlacement);
   DetElement aerogelDE(det, "aerogel_de", 0);
   aerogelDE.setPlacement(aerogelPV);
   // SkinSurface aerogelSkin(desc, aerogelDE, "mirror_optical_surface", aerogelSurf, aerogelVol);
@@ -285,12 +285,20 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
         Translation3D(radiatorPos.x(), radiatorPos.y(), radiatorPos.z()) * // re-center to originFront
         RotationY(radiatorPitch) *                                         // change polar angle
         Translation3D(0., 0., (aerogelThickness + filterThickness) / 2.);  // move to aerogel backplane
-    filterPV = gasvolVol.placeVolume(filterVol, filterPlacement);
+    filterPV = vesselVol.placeVolume(filterVol, filterPlacement);
     DetElement filterDE(det, "filter_de", 0);
     filterDE.setPlacement(filterPV);
     // SkinSurface filterSkin(desc, filterDE, "mirror_optical_surface", filterSurf, filterVol);
     // filterSkin.isValid();
   };
+
+  // make the radiators sensitive, to get actual charged particle tracks
+  // aerogelPV.addPhysVolID("radiator",0);
+  // gasvolPV.addPhysVolID("radiator",1);
+  aerogelPV.addPhysVolID("sector",7).addPhysVolID("module",0);
+  gasvolPV.addPhysVolID("sector",7).addPhysVolID("module",1);
+  aerogelVol.setSensitiveDetector(sens);
+  gasvolVol.setSensitiveDetector(sens);
 
   // reconstruction constants (w.r.t. IP)
   double aerogelZpos = vesselPos.z() + aerogelPV.position().z();
@@ -411,7 +419,7 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
     Volume mirrorVol(detName + "_mirror_" + secName, mirrorSolid2, mirrorMat);
     mirrorVol.setVisAttributes(mirrorVis);
     auto mirrorSectorPlacement = Transform3D(sectorRotation); // rotate about beam axis to sector
-    auto mirrorPV              = gasvolVol.placeVolume(mirrorVol, mirrorSectorPlacement);
+    auto mirrorPV              = vesselVol.placeVolume(mirrorVol, mirrorSectorPlacement);
 
     // properties
     DetElement mirrorDE(det, "mirror_de_" + secName, isec);
@@ -536,7 +544,7 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
               Translation3D(sensorSphRadius, 0., 0.) *        // push radially to spherical surface
               RotationY(M_PI / 2) *                           // rotate sensor to be compatible with generator coords
               RotationZ(-M_PI / 2);                           // correction for readout segmentation mapping
-          auto sensorPV = gasvolVol.placeVolume(sensorVol, sensorPlacement);
+          auto sensorPV = vesselVol.placeVolume(sensorVol, sensorPlacement);
 
           // generate LUT for module number -> sensor position, for readout mapping tests
           // if(isec==0) printf("%d %f %f\n",imod,sensorPV.position().x(),sensorPV.position().y());
