@@ -293,10 +293,10 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
   };
 
   // make the radiators sensitive, to get actual charged particle tracks
-  // aerogelPV.addPhysVolID("radiator",0);
-  // gasvolPV.addPhysVolID("radiator",1);
-  aerogelPV.addPhysVolID("sector",7).addPhysVolID("module",0);
-  gasvolPV.addPhysVolID("sector",7).addPhysVolID("module",1);
+  aerogelPV.addPhysVolID("radiator",0);
+  gasvolPV.addPhysVolID("radiator",1);
+  aerogelPV.addPhysVolID("sector",0).addPhysVolID("module",0);
+  gasvolPV.addPhysVolID("sector",0).addPhysVolID("module",0);
   aerogelVol.setSensitiveDetector(sens);
   gasvolVol.setSensitiveDetector(sens);
 
@@ -550,7 +550,7 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
           // if(isec==0) printf("%d %f %f\n",imod,sensorPV.position().x(),sensorPV.position().y());
 
           // properties
-          sensorPV.addPhysVolID("sector", isec).addPhysVolID("module", imod); // NOTE: must be consistent with `sensorIDfields`
+          sensorPV.addPhysVolID("radiator",7).addPhysVolID("sector", isec).addPhysVolID("module", imod); // NOTE: must be consistent with `sensorIDfields`
           auto imodsec = encodeSensorID(sensorPV.volIDs());
           std::string modsecName = secName + "_" + std::to_string(imod);
           DetElement sensorDE(det, "sensor_de_" + modsecName, imodsec);

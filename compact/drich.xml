@@ -230,36 +230,27 @@
     (except for very rare hits on the sensor sides)
 </documentation>
 <readouts>
-  <!-- sensor pixels (Cartesian matrix): for photon hits -->
   <readout name="DRICHHits">
-    <segmentation
-      type="CartesianGridXY"
-      grid_size_x="DRICH_pixel_pitch"
-      grid_size_y="DRICH_pixel_pitch"
-      offset_x="-0.5*(DRICH_num_px-1)*DRICH_pixel_pitch"
-      offset_y="-0.5*(DRICH_num_px-1)*DRICH_pixel_pitch"
-      />
-    <id>system:8,sector:3,module:12,x:32:-16,y:-16</id>
+    <segmentation type="MultiSegmentation" key="radiator">
+      <segmentation name="AerogelZslices" key_value="0" type="CartesianStripZ"
+        strip_size_x="DRICH_aerogel_thickness / 5.0"
+        offset_x="0.0"
+        identifier_x="x"
+        />
+      <segmentation name="GasZslices" key_value="1" type="CartesianStripZ"
+        strip_size_x="(DRICH_Length - DRICH_aerogel_thickness) / 10.0"
+        offset_x="0.0"
+        identifier_x="x"
+        />
+      <segmentation name="SensorPixels" key_value="7" type="CartesianGridXY"
+        grid_size_x="DRICH_pixel_pitch"
+        grid_size_y="DRICH_pixel_pitch"
+        offset_x="-0.5*(DRICH_num_px-1)*DRICH_pixel_pitch"
+        offset_y="-0.5*(DRICH_num_px-1)*DRICH_pixel_pitch"
+        />
+    </segmentation>
+    <id>system:8,radiator:3,sector:3,module:12,x:32:-16,y:-16</id>
   </readout>
-  <!-- radiator z-slices: for charged particle trajectories -->
-  <readout name="DRICHTracks">
-    <segmentation
-      type="CartesianStripZ"
-      strip_size_x="DRICH_aerogel_thickness / 5.0"
-      offset_x="0.0"
-      identifier_x="slice"
-      />
-    <id>system:8,sector:3,module:12,slice:32:-32</id>
-  </readout>
-  <!-- <readout name="DRICHGasTracks"> -->
-  <!--   <segmentation -->
-  <!--     type="CartesianStripZ" -->
-  <!--     strip_size_x="(DRICH_Length - DRICH_aerogel_thickness) / 10.0" -->
-  <!--     offset_x="0.0" -->
-  <!--     identifier_x="slice" -->
-  <!--     /> -->
-  <!--   <id>system:8,radiator:3,slice:32:-32</id> -->
-  <!-- </readout> -->
 </readouts>
 
 
