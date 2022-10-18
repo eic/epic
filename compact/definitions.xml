@@ -255,11 +255,15 @@ The unused IDs below are saved for future use.
     <constant name="ForwardOffMTracker_station_2_ID" value="160"/>
     <constant name="ForwardOffMTracker_station_3_ID" value="161"/>
     <constant name="ForwardOffMTracker_station_4_ID" value="162"/>
+    <!--
     <constant name="ZDC_1stSilicon_ID"           value="163"/>
     <constant name="ZDC_Crystal_ID"              value="164"/>
     <constant name="ZDC_WSi_ID"                  value="165"/>
     <constant name="ZDC_PbSi_ID"                 value="166"/>
     <constant name="ZDC_PbSci_ID"                value="167"/>
+    -->
+    <constant name="ZDCEcal_ID"              value="163"/>
+    <constant name="ZDCHcal_ID"              value="164"/>
     <constant name="VacuumMagnetElement_1_ID"        value="168"/>
     <constant name="B0ECal_ID" value="169"/>
 
