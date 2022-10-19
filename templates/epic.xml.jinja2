@@ -115,7 +115,7 @@
   <documentation level="10">
     ## PID detectors
   </documentation>
-  {% if features is defined and features['pid'] is not none and 'dirc' in features['pid'] -%}
+  {% if features is not defined or features['pid'] is none or 'dirc' in features['pid'] -%}
   <include ref="${DETECTOR_PATH}/compact/dirc.xml"/>
   {% endif -%}
 
@@ -183,21 +183,17 @@
   <include ref="${BEAMLINE_PATH}/ip6/central_beampipe.xml"/>
 {% endif -%}
 
-{% if features is not defined or 'farforward' not in features or features['farforward'] is none %}
+{% if features is not defined or 'farforward' in features %}
   <documentation level="11">
     ## Far foward detectors
   </documentation>
+  {% if features is not defined or features['farforward'] is none %}
   <include ref="${BEAMLINE_PATH}/ip6/far_forward.xml"/>
-{% elif 'arches' in features['farforward'] %}
-  <documentation level="11">
-    ## Far foward detectors
-  </documentation>
+  {% elif 'arches' in features['farforward'] %}
   <include ref="${BEAMLINE_PATH}/ip6/far_forward_arches.xml"/>
-{% elif 'brycecanyon' in features['farforward'] %}
-  <documentation level="11">
-    ## Far foward detectors
-  </documentation>
+  {% elif 'brycecanyon' in features['farforward'] %}
   <include ref="${BEAMLINE_PATH}/ip6/far_forward_brycecanyon.xml"/>
+  {% endif -%}
 {% endif -%}
 
 {% if features is not defined or 'farbackward' in features %}
