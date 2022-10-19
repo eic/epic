@@ -214,7 +214,6 @@
           <component material="Aluminum" thickness="EndcapSupportAl_thickness" name="Services" vis="TrackerServiceVis" />
           <component material="CarbonFiber" thickness="EndcapSupportCF_thickness" name="Support" vis="TrackerSupportVis"/>
       </support>
-      <!--
       <support type="Cylinder"
         name="BackwardEndcapSupportCyl"
         vis="TrackerSupportVis"
@@ -225,7 +224,6 @@
           <component material="Aluminum" thickness="EndcapSupportAl_thickness" name="Services" vis="TrackerServiceVis" />
           <component material="CarbonFiber" thickness="EndcapSupportCF_thickness" name="Support" vis="TrackerSupportVis"/>
       </support>
-      -->
     </detector>
   </detectors>
 
