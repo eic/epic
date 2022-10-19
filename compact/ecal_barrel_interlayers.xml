@@ -12,7 +12,17 @@
       To change the number of imaging layers from, e.g., 9 to 6,
       change EcalBarrelImagingLayers_nMax variable
     </comment>
-    <constant name="EcalBarrelImagingLayers_nMax"  value="6"/>
+    <constant name="EcalBarrelImagingLayers_nMax"   value="6"/>
+    <constant name="EcalBarrel_Calorimeter_zmin"    
+      value="min(257*cm, EcalBarrelBackward_zmax)"/>
+    <constant name="EcalBarrel_Calorimeter_zmax"    
+      value="min(177.5*cm, EcalBarrelForward_zmax)"/>
+    <constant name="EcalBarrel_Readout_zmin"        value="272*cm"/>
+    <constant name="EcalBarrel_Readout_zmax"        value="192.5*cm"/>
+    <constant name="EcalBarrel_Calorimeter_length"
+      value="EcalBarrel_Calorimeter_zmax + EcalBarrel_Calorimeter_zmin"/>
+    <constant name="EcalBarrel_Calorimeter_offset"
+      value="(EcalBarrel_Calorimeter_zmax - EcalBarrel_Calorimeter_zmin)/2.0"/>
 
     <constant name="EcalBarrel_Support_thickness"    value="5*cm"/>
     <constant name="EcalBarrel_SiliconThickness"     value="500*um"/>
@@ -96,10 +106,10 @@
       readout="EcalBarrelHits"
       calorimeterType="EM_BARREL"
       vis="EcalBarrelEnvelopeVis"
-      offset="EcalBarrel_offset">
+      offset="EcalBarrel_Calorimeter_offset">
       <dimensions numsides="EcalBarrel_ModRepeat"
         rmin="EcalBarrel_rmin"
-        z="EcalBarrel_length"/>
+        z="EcalBarrel_Calorimeter_length"/>
       <layer repeat="EcalBarrelImagingLayers_num" vis="EcalBarrelLayerVis"
         space_between="EcalBarrel_ScFiLayerThickness + EcalBarrel_SpaceBetween"
         space_before="0.*cm">
@@ -124,10 +134,10 @@
       readout="EcalBarrelScFiHits"
       calorimeterType="EM_BARREL"
       vis="EcalBarrelEnvelopeVis"
-      offset="EcalBarrel_offset">
+      offset="EcalBarrel_Calorimeter_offset">
       <dimensions numsides="EcalBarrel_ModRepeat"
         rmin="EcalBarrel_rmin"
-        z="EcalBarrel_length"/>
+        z="EcalBarrel_Calorimeter_length"/>
       <staves vis="EcalBarrelStaveVis">
         <support material="Steel235" vis="EcalBarrelSupportVis" n_beams="3" grid_size="25.0*cm"
           thickness="EcalBarrel_Support_thickness" beam_thickness="EcalBarrel_Support_thickness/4" >
