@@ -430,7 +430,7 @@ Examples:
     </documentation>
 
     <constant name="CentralTrackingRegion_rmax"   value="700.0*mm" />
-    <constant name="CentralTrackingRegionP_zmax"  value="1730.0*mm" />
+    <constant name="CentralTrackingRegionP_zmax"  value="1800.0*mm" />
     <constant name="CentralTrackingRegionN_zmax"  value="1186.0*mm" />
     <constant name="CentralTrackingRegion_length" value="CentralTrackingRegionP_zmax + CentralTrackingRegionN_zmax" />
     <comment>
@@ -446,12 +446,12 @@ Examples:
 
     <comment> Global PID regions with suballocations for TOF and RICH detectors </comment>
     <constant name="ForwardPIDRegion_zmin"        value="CentralTrackingRegionP_zmax" />
-    <constant name="ForwardPIDRegion_length"      value="142.0*cm" />
+    <constant name="ForwardPIDRegion_length"      value="135.0*cm" />
     <constant name="ForwardPIDRegion_rmax"        value="185.0*cm" />
 
     <comment> Forward TOF region currenlty empty for future upgrades </comment>
     <constant name="ForwardTOFRegion_zmin"        value="ForwardPIDRegion_zmin" />
-    <constant name="ForwardTOFRegion_length"      value="22.0*cm" />
+    <constant name="ForwardTOFRegion_length"      value="15.0*cm" />
     <constant name="ForwardTOFRegion_tan"         value="CentralTrackingRegionP_tan" />
     <constant name="ForwardTOFRegion_minR"            value="8*cm" />
     <constant name="ForwardTOFRegion_maxR"            value="67*cm" />

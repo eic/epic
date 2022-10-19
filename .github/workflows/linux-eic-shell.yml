@@ -61,11 +61,11 @@ jobs:
           pushd eic_ip6
           git checkout ${{ inputs.beamline_version || 'master' }}
           CC=gcc CXX=g++ cmake -B build -S . -DCMAKE_INSTALL_PREFIX=${PREFIX}
-          cmake --build build -- install
+          cmake --build build -- -j 2 install
           popd
           # install this repo
           CC=gcc CXX=g++ cmake -B build -S . -DCMAKE_INSTALL_PREFIX=${PREFIX}
-          cmake --build build -- install
+          cmake --build build -- -j 2 install
           # link ip6 into install
           ln -sf ../ip6/ip6 ${PREFIX}/share/epic/ip6
     - uses: actions/upload-artifact@v3
@@ -102,11 +102,11 @@ jobs:
           pushd eic_ip6
           git checkout ${{ inputs.beamline_version || 'master' }}
           CC=clang CXX=clang++ cmake -B build -S . -DCMAKE_INSTALL_PREFIX=${PREFIX}
-          cmake --build build -- install
+          cmake --build build -- -j 2 install
           popd
           # install this repo
           CC=clang CXX=clang++ cmake -B build -S . -DCMAKE_INSTALL_PREFIX=${PREFIX}
-          cmake --build build -- install
+          cmake --build build -- -j 2 install
           # link ip6 into install
           ln -sf ../ip6/ip6 ${PREFIX}/share/epic/ip6
     - uses: actions/upload-artifact@v3
