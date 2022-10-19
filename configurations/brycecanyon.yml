@@ -5,13 +5,13 @@ features:
   tracking:
   pid:
     dirc:
-    mrich:
+    pfrich:
     drich:
   ecal:
     forward_scifi:
     forward_homogeneous:
     forward_insert:
-    barrel_sciglass:
+    barrel_interlayers:
     backward_PbWO4:
   solenoid:
   hcal:
