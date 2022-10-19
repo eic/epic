@@ -23,7 +23,7 @@
     <comment> barrel length: 2R/tan(angle) - dz </comment>
 
     <comment> Main parameters for the MPGD layer geometries </comment>
-    <constant name="InnerMPGDBarrel_rmin"            value="51.0*cm"/>
+    <constant name="InnerMPGDBarrel_rmin"            value="55.0*cm"/>
     <constant name="InnerMPGDBarrel_dz"              value="8.0*cm"/>
     <comment> barrel length: 2R/tan(angle) - dz </comment>
 
@@ -42,28 +42,32 @@
     <comment> The forward outer cone is projective from the starting rmin1 </comment>
     <constant name="ForwardEndcapSupportCone_rmin1"  value="85*cm" />
     <constant name="ForwardEndcapSupportCone_zmax"   value="190*cm" />
-    <constant name="BackwardEndcapSupportCyl_zmax"   value="300*cm" />
+    <comment> Discontinuity for the cone to the cylinder to avoid overlaps FIXME </comment>
+    <constant name="BackwardEndcapSupportCyl_rmin"   value="65*cm" />
+    <constant name="BackwardEndcapSupportCyl_zmin"   value="BackwardPIDRegion_zmin + 5*cm" />
+    <constant name="BackwardEndcapSupportCyl_zmax"   value="BackwardPIDRegion_zmax" />
 
     <comment> Main parameters for the positive silicon disks </comment>
+    <comment> assume the disk are centered along z. The inner radii are larger than designed to account for the beampipe offset. Need to be fixed later </comment>
+    <constant name="Beampipe_bakeout_buffer"        value="5*mm" />
+
     <constant name="InnerTrackerEndcapP_zmin"        value="25.0*cm" />
-    <constant name="InnerTrackerEndcapP_rmin"        value="Beampipe_rmax + 5*mm" />
+    <constant name="InnerTrackerEndcapP_rmin"        value="Beampipe_rmax + Beampipe_bakeout_buffer" />
     <constant name="InnerTrackerEndcapP_rmax"        value="24.0*cm" />
     <constant name="TrackerEndcapPDisk1_zmin"        value="45.0*cm" />
-    <constant name="TrackerEndcapPDisk1_rmin"        value="Beampipe_rmax + 5*mm" />
+    <constant name="TrackerEndcapPDisk1_rmin"        value="Beampipe_rmax + Beampipe_bakeout_buffer" />
     <constant name="TrackerEndcapPDisk1_rmax"        value="TrackerSupportCyl_rmin - 15*mm" />
     <constant name="TrackerEndcapPDisk2_zmin"        value="70.0*cm" />
-    <constant name="TrackerEndcapPDisk2_rmin"        value="Beampipe_rmax + 9*mm" />
+    <constant name="TrackerEndcapPDisk2_rmin"        value="32.86*mm + Beampipe_bakeout_buffer + 0.6*mm" />
     <constant name="TrackerEndcapPDisk2_rmax"        value="TrackerSupportCyl_rmin * .98" />
     <constant name="TrackerEndcapPDisk3_zmin"        value="100.0*cm" />
-    <constant name="TrackerEndcapPDisk3_rmin"        value="Beampipe_rmax + 22.0*mm" />
+    <constant name="TrackerEndcapPDisk3_rmin"        value="40.58*mm + Beampipe_bakeout_buffer + 7.85*mm" />
     <constant name="TrackerEndcapPDisk3_rmax"        value="TrackerSupportCyl_rmin * .98" />
     <constant name="TrackerEndcapPDisk4_zmin"        value="135.0*cm" />
-    <constant name="TrackerEndcapPDisk4_rmin"        value="Beampipe_rmax + 39.0*mm" />
+    <constant name="TrackerEndcapPDisk4_rmin"        value="49.12*mm + Beampipe_bakeout_buffer + 16.02*mm" />
     <constant name="TrackerEndcapPDisk4_rmax"        value="TrackerSupportCyl_rmin * .98" />
 
     <comment> Main parameters for the negative silicon disks (will be reflected, so positive z-values here)
-              Values such that the disk dimensions are identical to the positive endcap. 
-              This currently leads to rather large gaps with the support/service material etc.
     </comment>
     <constant name="InnerTrackerEndcapN_zmin"        value="InnerTrackerEndcapP_zmin" />
     <constant name="InnerTrackerEndcapN_rmin"        value="InnerTrackerEndcapP_rmin" />
@@ -71,17 +75,16 @@
     <constant name="TrackerEndcapNDisk1_zmin"        value="TrackerEndcapPDisk1_zmin" />
     <constant name="TrackerEndcapNDisk1_rmin"        value="TrackerEndcapPDisk1_rmin" />
     <constant name="TrackerEndcapNDisk1_rmax"        value="TrackerEndcapPDisk1_rmax" />
-    <constant name="TrackerEndcapNDisk2_zmin"        value="TrackerEndcapPDisk2_zmin" />
-    <constant name="TrackerEndcapNDisk2_rmin"        value="TrackerEndcapPDisk2_rmin" />
+    <constant name="TrackerEndcapNDisk2_zmin"        value="65*cm" />
+    <constant name="TrackerEndcapNDisk2_rmin"        value="Beampipe_rmax + Beampipe_bakeout_buffer"   />
     <constant name="TrackerEndcapNDisk2_rmax"        value="TrackerEndcapPDisk2_rmax" />
-    <constant name="TrackerEndcapNDisk3_zmin"        value="TrackerEndcapPDisk3_zmin" />
-    <constant name="TrackerEndcapNDisk3_rmin"        value="TrackerEndcapPDisk3_rmin" />
+    <constant name="TrackerEndcapNDisk3_zmin"        value="90*cm" />
+    <constant name="TrackerEndcapNDisk3_rmin"        value="34.244*mm + Beampipe_bakeout_buffer + 0.817*mm" />
     <constant name="TrackerEndcapNDisk3_rmax"        value="TrackerEndcapPDisk3_rmax" />
-    <constant name="TrackerEndcapNDisk4_zmin"        value="TrackerEndcapPDisk4_zmin" />
-    <constant name="TrackerEndcapNDisk4_rmin"        value="TrackerEndcapPDisk4_rmin" />
+    <constant name="TrackerEndcapNDisk4_zmin"        value="115*cm" />
+    <constant name="TrackerEndcapNDisk4_rmin"        value="38.043*mm + Beampipe_bakeout_buffer + 3.310*mm" />
     <constant name="TrackerEndcapNDisk4_rmax"        value="TrackerEndcapPDisk4_rmax" />
   </define>
-
   <detectors>
     <detector id="VertexSubAssembly_0_ID"
       name="VertexBarrelSubAssembly"
@@ -119,6 +122,12 @@
       vis="TrackerSubAssemblyVis">
       <composite name="InnerMPGDBarrel"/>
     </detector>
+    <detector id="TrackerSubAssembly_4_ID"
+      name="BarrelTOFSubAssembly"
+      type="DD4hep_SubdetectorAssembly"
+      vis="TrackerSubAssemblyVis">
+      <composite name="BarrelTOF"/>
+    </detector>
     <comment>
       <comment>FIXME update the OuterMPGDBarrel to use the MPGDDIRC detector</comment>
       <detector id="TrackerSubAssembly_5_ID"
@@ -128,6 +137,13 @@
         <composite name="OuterMPGDBarrel"/>
       </detector>
     </comment>
+    <detector id="TrackerSubAssembly_6_ID"
+      name="EndcapTOFSubSubAssembly"
+      type="DD4hep_SubdetectorAssembly"
+      vis="TrackerSubAssemblyVis">
+      <composite name="ForwardTOF"/>
+      <composite name="BackwardTOF"/>
+    </detector>
   </detectors>
 
   <documentation>
@@ -138,7 +154,7 @@
     <plugin name="epic_FileLoader">
       <arg value="cache:$DETECTOR_PATH:/opt/detector"/>
       <arg value="file:calibrations/materials-map.cbor"/>
-      <arg value="url:https://eicweb.phy.anl.gov/EIC/detectors/athena/uploads/56b64d544442a93904488e7292aa509d/material-maps.cbor"/>
+      <arg value="url:https://eicweb.phy.anl.gov/EIC/detectors/athena/uploads/77bd16bef5d811f31256279a3601c9d5/material-maps.cbor"/>
     </plugin>
   </plugins>
 
@@ -148,5 +164,7 @@
   <include ref="tracker/mpgd_dirc.xml"/>
   <include ref="tracker/silicon_disks.xml"/>
   <include ref="tracker/support_service_assembly.xml"/>
+  <include ref="tof_barrel.xml"/>
+  <include ref="tof_endcap.xml"/>
 
 </lccdd>

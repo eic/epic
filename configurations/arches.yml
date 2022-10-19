@@ -1,3 +1,5 @@
+ebeam: 18
+pbeam: 275
 features:
   beampipe:
   tracking:
@@ -9,9 +11,10 @@ features:
     forward_scifi:
     forward_homogeneous:
     forward_insert:
-    barrel_interlayers:
+    barrel_sciglass:
     backward_PbWO4:
   solenoid:
   hcal:
   farforward:
+    arches
   farbackward:
