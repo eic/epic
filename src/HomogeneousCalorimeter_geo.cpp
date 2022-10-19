@@ -20,6 +20,7 @@
 
 
 #include "DD4hep/DetFactoryHelper.h"
+#include "DD4hep/Printout.h"
 #include "GeometryHelpers.h"
 #include <XML/Helper.h>
 #include <algorithm>
@@ -229,14 +230,9 @@ std::tuple<Volume, Position> build_module(Detector& desc, xml::Collection_t& plm
   crystalVol.setVisAttributes(desc.visAttributes(cry.attr<std::string>(_Unicode(cryvis))));
   crystalVol.setSensitiveDetector(sens);
 
-
-  std::cout << "build...." << std::endl;
-  std::cout << !plm.hasChild(_Unicode(wrapper)) << std::endl;
-  
-
   if (!plm.hasChild(_Unicode(wrapper)))    // no wrapper
     {
-      std::cout << "without wrapper" << std::endl;
+      printout(DEBUG, "HomogeneousCalorimeter", "without wrapper");
       
       return std::make_tuple(modVol, Position{sx, sy, sz});
 
@@ -279,7 +275,7 @@ std::tuple<Volume, Position> build_module(Detector& desc, xml::Collection_t& plm
       wrpVol.setVisAttributes(desc.visAttributes(wrp.attr<std::string>(_Unicode(vis_wrap))));
       gapVol.setVisAttributes(desc.visAttributes(wrp.attr<std::string>(_Unicode(vis_gap))));
 
-      std::cout << "with wrapper" << std::endl;
+      printout(DEBUG, "HomogeneousCalorimeter", "with wrapper");
 
       return std::make_tuple(modVol, Position{sx, sy, sz});
     }
