@@ -50,7 +50,7 @@
     <comment> Tracker endcap cones </comment>
     <constant name="TrackerSupportConeEndcapP_zmin"       value="TrackerSupportCylEndcapP_zmax" />  
     <constant name="TrackerSupportConeEndcapN_zmin"       value="TrackerSupportCylEndcapN_zmax" />  
-    <constant name="TrackerSupportConeEndcapP_zmax"       value="InnerTrackerEndcapP_zmax" />
+    <constant name="TrackerSupportConeEndcapP_zmax"       value="ForwardRICHRegion_zmin" />
     <constant name="TrackerSupportConeEndcapN_zmax"       value="InnerTrackerEndcapN_zmax" />
     <constant name="TrackerSupportConeEndcapP_rmin1"      value="TrackerSupportCyl_rmin" />  
     <constant name="TrackerSupportConeEndcapN_rmin1"      value="TrackerSupportCyl_rmin" />  
@@ -72,22 +72,24 @@
     <constant name="EndcapSupport_thickness"       value="EndcapSupportAl_thickness + EndcapSupportCF_thickness" />
 
     <comment> Forward expansion ring and cone </comment>
-    <constant name="ForwardEndcapSupportRing_zmin"        value="TrackerSupportConeEndcapP_zmax" />
-    <constant name="ForwardEndcapSupportRing_zmax"        value="ForwardEndcapSupportRing_zmin + EndcapSupport_thickness" />
-    <constant name="ForwardEndcapSupportRing_rmin"        value="TrackerSupportConeEndcapP_rmin2" />
-    <constant name="ForwardEndcapSupportRing_rmax"        value="ForwardEndcapSupportCone_rmin1" />
-    <constant name="ForwardEndcapSupportRing_z"           value="0.5*(ForwardEndcapSupportRing_zmin + ForwardEndcapSupportRing_zmax)" />
+    <comment> Ring and cone are disabled for now 
+      <constant name="ForwardEndcapSupportRing_zmin"        value="TrackerSupportConeEndcapP_zmax" />
+      <constant name="ForwardEndcapSupportRing_zmax"        value="ForwardEndcapSupportRing_zmin + EndcapSupport_thickness" />
+      <constant name="ForwardEndcapSupportRing_rmin"        value="TrackerSupportConeEndcapP_rmin2" />
+      <constant name="ForwardEndcapSupportRing_rmax"        value="ForwardEndcapSupportCone_rmin1" />
+      <constant name="ForwardEndcapSupportRing_z"           value="0.5*(ForwardEndcapSupportRing_zmin + ForwardEndcapSupportRing_zmax)" />
 
-    <constant name="ForwardEndcapSupportCone_zmin"        value="ForwardEndcapSupportRing_zmax" />
-    <constant name="ForwardEndcapSupportCone_z"           value="0.5*(ForwardEndcapSupportCone_zmin + ForwardEndcapSupportCone_zmax)" />
-    <constant name="ForwardEndcapSupportCone_rmin2"       value="ForwardEndcapSupportCone_zmax*tan(atan2(ForwardEndcapSupportCone_rmin1, ForwardEndcapSupportCone_zmin))" />
-    <constant name="ForwardEndcapSupportCone_length"      value="ForwardEndcapSupportCone_zmax - ForwardEndcapSupportCone_zmin" />
+      <constant name="ForwardEndcapSupportCone_zmin"        value="ForwardEndcapSupportRing_zmax" />
+      <constant name="ForwardEndcapSupportCone_z"           value="0.5*(ForwardEndcapSupportCone_zmin + ForwardEndcapSupportCone_zmax)" />
+      <constant name="ForwardEndcapSupportCone_rmin2"       value="ForwardEndcapSupportCone_zmax*tan(atan2(ForwardEndcapSupportCone_rmin1, ForwardEndcapSupportCone_zmin))" />
+      <constant name="ForwardEndcapSupportCone_length"      value="ForwardEndcapSupportCone_zmax - ForwardEndcapSupportCone_zmin" />
+    </comment>
 
     <comment> Backward service cylinder </comment>
-    <constant name="BackwardEndcapSupportCyl_zmin"        value="TrackerSupportConeEndcapN_zmax" />
+    <!--constant name="BackwardEndcapSupportCyl_zmin"        value="TrackerSupportConeEndcapN_zmax" /-->
     <constant name="BackwardEndcapSupportCyl_z"           value="0.5*(BackwardEndcapSupportCyl_zmin+BackwardEndcapSupportCyl_zmax)" />
     <constant name="BackwardEndcapSupportCyl_length"      value="BackwardEndcapSupportCyl_zmax-BackwardEndcapSupportCyl_zmin" />
-    <constant name="BackwardEndcapSupportCyl_rmin"        value="TrackerSupportConeEndcapN_rmin2" />
+    <!--constant name="BackwardEndcapSupportCyl_rmin"        value="TrackerSupportConeEndcapN_rmin2" /-->
 
 
 
@@ -193,27 +195,29 @@
           <component material="Aluminum" thickness="TrackerSupportConeAl_thickness" name="Services" vis="TrackerServiceVis" />
           <component material="CarbonFiber" thickness="TrackerSupportConeCF_thickness" name="Support" vis="TrackerSupportVis"/>
       </support>
-      <support type="Disk"
-        name="ForwardEndcapSupportRing"
-        vis="TrackerSupportVis"
-        rmin="ForwardEndcapSupportRing_rmin"
-        rmax="ForwardEndcapSupportRing_rmax"
-        thickness="EndcapSupport_thickness">
-          <position x="0*cm" y="0*cm" z="ForwardEndcapSupportRing_z" />
-          <component material="CarbonFiber" thickness="EndcapSupportCF_thickness" name="Support" vis="TrackerSupportVis"/>
-          <component material="Aluminum" thickness="EndcapSupportAl_thickness" name="Services" vis="TrackerServiceVis" />
-      </support>
-      <support type="Cone"
-        name="ForwardEndcapSupportCone"
-        vis="TrackerSupportVis"
-        rmin1="ForwardEndcapSupportCone_rmin1"
-        rmin2="ForwardEndcapSupportCone_rmin2"
-        length="ForwardEndcapSupportCone_length"
-        thickness="EndcapSupport_thickness">
-          <position x="0*cm" y="0*cm" z="ForwardEndcapSupportCone_z" />
-          <component material="Aluminum" thickness="EndcapSupportAl_thickness" name="Services" vis="TrackerServiceVis" />
-          <component material="CarbonFiber" thickness="EndcapSupportCF_thickness" name="Support" vis="TrackerSupportVis"/>
-      </support>
+      <comment> Disabled forward ring and final cone
+        <support type="Disk"
+          name="ForwardEndcapSupportRing"
+          vis="TrackerSupportVis"
+          rmin="ForwardEndcapSupportRing_rmin"
+          rmax="ForwardEndcapSupportRing_rmax"
+          thickness="EndcapSupport_thickness">
+            <position x="0*cm" y="0*cm" z="ForwardEndcapSupportRing_z" />
+            <component material="CarbonFiber" thickness="EndcapSupportCF_thickness" name="Support" vis="TrackerSupportVis"/>
+            <component material="Aluminum" thickness="EndcapSupportAl_thickness" name="Services" vis="TrackerServiceVis" />
+        </support>
+        <support type="Cone"
+          name="ForwardEndcapSupportCone"
+          vis="TrackerSupportVis"
+          rmin1="ForwardEndcapSupportCone_rmin1"
+          rmin2="ForwardEndcapSupportCone_rmin2"
+          length="ForwardEndcapSupportCone_length"
+          thickness="EndcapSupport_thickness">
+            <position x="0*cm" y="0*cm" z="ForwardEndcapSupportCone_z" />
+            <component material="Aluminum" thickness="EndcapSupportAl_thickness" name="Services" vis="TrackerServiceVis" />
+            <component material="CarbonFiber" thickness="EndcapSupportCF_thickness" name="Support" vis="TrackerSupportVis"/>
+        </support>
+      </comment>
       <support type="Cylinder"
         name="BackwardEndcapSupportCyl"
         vis="TrackerSupportVis"
