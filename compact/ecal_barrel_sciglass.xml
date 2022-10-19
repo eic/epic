@@ -11,7 +11,7 @@
       The current numbers are not based on any design in particular, but
       provide some extra space for other detectors.
     </comment>
-    <constant name="EcalBarrel_etamin" value="-1.9"/>
+    <constant name="EcalBarrel_etamin" value="-1.87"/>
     <constant name="EcalBarrel_etamax" value="+1.4"/>
   </define>
 
