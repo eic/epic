@@ -112,7 +112,7 @@
 
   {% if features is defined and features['tracking'] is not none -%}
   {%   for tracker in features['tracking'] -%}
-  <include ref="${DETECTOR_PATH}/compact/tracking/{{ tracker }}"/>
+  <include ref="${DETECTOR_PATH}/compact/tracking/{{ tracker }}.xml"/>
   {%   endfor -%}
   {% endif -%}
 {% endif -%}
