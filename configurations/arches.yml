@@ -10,7 +10,6 @@ features:
   ecal:
     forward_scifi:
     forward_homogeneous:
-    forward_insert:
     barrel_sciglass:
     backward_PbWO4:
   solenoid:
