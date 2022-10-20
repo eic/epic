@@ -1,4 +1,4 @@
 features:
-- beampipe
-- farforward
-- farbackward
+  beampipe:
+  farforward:
+  farbackward:
