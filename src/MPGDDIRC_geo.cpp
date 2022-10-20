@@ -232,7 +232,6 @@ static Ref_t create_MPGDDIRC_geo(Detector& description, xml_h e, SensitiveDetect
     Placements& sensVols = sensitives[m_nam];
 
     int module = 1;
-    cout << "module: " << module << endl;
     // loop over the modules in phi
     for (int ii = 0; ii < nphi; ii++) {
       double xc = rc * std::cos(phic);              //Basic x position of module
