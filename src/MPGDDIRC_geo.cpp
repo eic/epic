@@ -24,7 +24,6 @@
 using namespace std;
 using namespace dd4hep;
 using namespace dd4hep::rec;
-//using namespace dd4hep::detail;
 
 /** Barrel Bar detector with optional frame
  *
@@ -56,7 +55,6 @@ static Ref_t create_MPGDDIRC_geo(Detector& description, xml_h e, SensitiveDetect
   for (xml_coll_t mi(x_det, _U(module)); mi; ++mi) {
     xml_comp_t x_mod = mi;
     string     m_nam = x_mod.nameStr();
-    cout << "module: " << mi << endl; //mp
 
     if (volumes.find(m_nam) != volumes.end()) {
       printout(ERROR, "MPGDDIRC_geo",
@@ -144,8 +142,7 @@ static Ref_t create_MPGDDIRC_geo(Detector& description, xml_h e, SensitiveDetect
       c_vol.setLimitSet(description, x_comp.limitsStr());
       c_vol.setVisAttributes(description, x_comp.visStr());
 
-      pv = m_vol.placeVolume(c_vol, Position(0, 0, thickness_sum + x_comp.thickness() / 2.0));//mp
-      //m_vol.placeVolume(c_vol, Position(0, 0, thickness_sum + x_comp.thickness() / 2.0));//mp
+      pv = m_vol.placeVolume(c_vol, Position(0, 0, thickness_sum + x_comp.thickness() / 2.0));
       
       if (x_comp.isSensitive()) {
 	pv.addPhysVolID("sensor",sensor_number++);      
@@ -154,9 +151,6 @@ static Ref_t create_MPGDDIRC_geo(Detector& description, xml_h e, SensitiveDetect
         module_thicknesses[m_nam] = {thickness_so_far + x_comp.thickness() / 2.0,
                                      total_thickness - thickness_so_far - x_comp.thickness() / 2.0};
         // -------- create a measurement plane for the tracking surface attched to the sensitive volume -----
-        //Vector3D u(0., 1., 0.);
-        //Vector3D v(0., 0., 1.);
-        //Vector3D n(1., 0., 0.);
         Vector3D u(-1., 0., 0.);
         Vector3D v(0., -1., 0.);
         Vector3D n(0., 0., 1.);
@@ -211,10 +205,9 @@ static Ref_t create_MPGDDIRC_geo(Detector& description, xml_h e, SensitiveDetect
       m_vol.placeVolume(bframe_vol, Position(0.0, -frame_width / 2.0 - max_component_length / 2.0,
                                              frame_thickness / 2.0 - total_thickness / 2.0 - gas_thickness / 2.0));
     }
-    //pv = assembly.placeVolume(m_vol);
   }
 
-  // build layers
+  // build the layers the modules will be arranged around
   for (xml_coll_t li(x_det, _U(layer)); li; ++li) {
     xml_comp_t x_layer  = li;
     xml_comp_t x_layout = x_layer.child(_U(rphi_layout));
@@ -232,7 +225,7 @@ static Ref_t create_MPGDDIRC_geo(Detector& description, xml_h e, SensitiveDetect
     double phic      = phi0;                // Phi of the module
     double nz        = z_layout.nz();	    // Number of modules placed in z
     double z_dr      = z_layout.dr();	    // Radial offest of modules in z
-    double z0       = z_layout.z0();	    // Module starting place in z
+    double z0       = z_layout.z0();	    // Sets how much overlap in z the nz modules have
 
     Volume      module_env = volumes[m_nam];
     DetElement  lay_elt(sdet, lay_nam, lay_id);
@@ -240,22 +233,22 @@ static Ref_t create_MPGDDIRC_geo(Detector& description, xml_h e, SensitiveDetect
 
     int module = 1;
     cout << "module: " << module << endl;
-    // loop over phi modules
+    // loop over the modules in phi
     for (int ii = 0; ii < nphi; ii++) {
       double xc = rc * std::cos(phic);              //Basic x position of module
       double yc = rc * std::sin(phic);              //Basic y position of module
       double dx = z_dr * std::cos(phic + phi_tilt); //Deta x of module position
       double dy = z_dr * std::sin(phic + phi_tilt); //Deta y of module position
-
+      //loop over the modules in z
       for (int j = 0; j < nz; j++) {
         string module_name = _toString(module, "module%d");
         DetElement mod_elt(lay_elt, module_name, module);
         double mod_z = 0.5 * dimensions.length();
-        double z_placement = mod_z - j * nz * mod_z;
-	double z_offset = z_placement > 0 ? -z0/2.0 : z0/2.0;  
+        double z_placement = mod_z - j * nz * mod_z;          //z location for module placement
+	double z_offset = z_placement > 0 ? -z0/2.0 : z0/2.0; // determine the amount of overlap in z the z nz modules have 
+
         Transform3D tr(RotationZYX(0.0, ((M_PI / 2) - phic - phi_tilt), -M_PI / 2),
-                       Position(xc, yc, mpgd_dirc_pos.z() + mod_z - j * nz * mod_z + z_offset)); // in x-y plane,
-                       //Position(xc, yc, mpgd_dirc_pos.z() + 0.5 * dimensions.length())); // in x-y plane,
+                       Position(xc, yc, mpgd_dirc_pos.z() + z_placement + z_offset)); // in x-y plane,
         pv = assembly.placeVolume(module_env,tr);
         pv.addPhysVolID("module",module);
 	mod_elt.setPlacement(pv);
@@ -264,35 +257,21 @@ static Ref_t create_MPGDDIRC_geo(Detector& description, xml_h e, SensitiveDetect
           DetElement  comp_de(mod_elt, std::string("de_") + sens_pv.volume().name(),module);
           comp_de.setPlacement(sens_pv);
         }
-        	
+        //increas module counter	
         module++;
 	//adjust x and y coordinates
 	xc += dx;
 	yc += dy;
       }
-      //sdet.setAttributes(description, assembly, x_det.regionStr(), x_det.limitsStr(), x_det.visStr());
-      // assembly.setVisAttributes(description.invisible());
-      //pv = description.pickMotherVolume(sdet).placeVolume(assembly, tr);
-      //pv.addPhysVolID("system", det_id); // Set the subdetector system ID.
-
-      /*
-      // place N-side modules
-      Transform3D tr2(RotationZYX(0.0, ((M_PI / 2) - phic - phi_tilt), -M_PI / 2),
-                      Position(xc, yc, mpgd_dirc_pos.z() - 0.5 * dimensions.length()));
-      pv = description.pickMotherVolume(sdet).placeVolume(assembly, tr2);
-      pv.addPhysVolID("system", det_id); // Set the subdetector system ID.
-      */
-
       // increment counters
       phic += phi_incr;
       rc += rphi_dr;
     }
-    //pv = assembly.placeVolume(module_env, lay_pos);
   }
   sdet.setAttributes(description, assembly, x_det.regionStr(), x_det.limitsStr(), x_det.visStr());
   assembly.setVisAttributes(description.invisible());
   pv = description.pickMotherVolume(sdet).placeVolume(assembly);
-  pv.addPhysVolID("system", det_id); 
+  pv.addPhysVolID("system", det_id);//Set the subdetector system ID
   sdet.setPlacement(pv);
   return sdet;
 }
