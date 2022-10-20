@@ -46,9 +46,9 @@
     <matrix name="plates_z" unit="mm" coldim="1" values="235.587 253.54 0.0 0.0"/>
     
     <!--These offsets are used to tweak the tower and sector positions by ~100um to avoid numerical issues when looking for overlaps--> 
-    <matrix name="tweak_tiles" unit="rad" values="0.0 0.0 0.0 0.0 0.0 0.0000925 0.0 0.0 0.0 0.0 0.000075 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0002"/> 
+    <matrix name="tweak_tiles" unit="rad" values="0.0 0.0 0.0 0.0 0.00000925 0.0000925 0.0 0.0 0.0 0.0 0.000075 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0002"/> 
     <matrix name="tweak_chimney_tiles" unit="rad" values="-0.0002 0.0 0.0 -0.0001 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0001 0.0 0.0 0.0 0.0 0.0"/> 
-    <matrix name="tweak_sectors" unit="rad" values="0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 -0.00008 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0"/> 
+    <matrix name="tweak_sectors" unit="rad" values="0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 -0.00008 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 -0.000008"/> 
    
   </define>
 
@@ -7656,7 +7656,7 @@
   <readouts>
     <readout name="HcalBarrelHits">
       <segmentation type="NoSegmentation"/>
-      <id>system:8,barrel:3,sector:6,tower:6</id>
+      <id>system:8,barrel:3,sector:6,tower:6,tile:9</id>
     </readout>
   </readouts>
 
