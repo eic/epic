@@ -177,6 +177,9 @@ jobs:
   trigger-geoviewer:
     runs-on: ubuntu-latest
     needs: [xmllint-after-build]
+    strategy:
+      matrix:
+        detector_config: [epic_arches, epic_brycecanyon]
     steps:
     - uses: eic/trigger-gitlab-ci@v2
       id: trigger
