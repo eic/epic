@@ -158,13 +158,13 @@
     </plugin>
   </plugins>
 
-  <include ref="tracker/vertex_barrel.xml"/>
-  <include ref="tracker/silicon_barrel.xml"/>
-  <include ref="tracker/mpgd_barrel.xml"/>
-  <include ref="tracker/mpgd_dirc.xml"/>
-  <include ref="tracker/silicon_disks.xml"/>
-  <include ref="tracker/support_service_assembly.xml"/>
-  <include ref="tof_barrel.xml"/>
-  <include ref="tof_endcap.xml"/>
+	    <include ref="tracker/vertex_barrel.xml"/>
+	    <include ref="tracker/silicon_barrel.xml"/>
+	    <include ref="tracker/mpgd_barrel.xml"/>
+            <include ref="tracker/mpgd_dirc.xml"/>
+	    <include ref="tracker/silicon_disks.xml"/>
+	    <include ref="tracker/support_service_assembly.xml"/>
+	    <include ref="tof_barrel.xml"/>
+	    <include ref="tof_endcap.xml"/>
 
 </lccdd>
