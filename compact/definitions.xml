@@ -491,7 +491,7 @@ Examples:
     <constant name="BackwardTrackingRegion_zmin"    value="BackwardPIDRegion_zmin + BackwardPIDRegion_length" />
     <constant name="ForwardTrackingRegion_tan"      value="ForwardRICHRegion_tan2" />
     <constant name="ForwardTrackingRegion_zmin"     value="ForwardPIDRegion_zmin + ForwardPIDRegion_length" />
-    <constant name="ForwardTrackingRegion_length"   value="10.0*cm" />
+    <constant name="ForwardTrackingRegion_length"   value="0.0*cm" />
     <constant name="BackwardTrackingRegion_length"  value="15.0*cm" />
 
     <comment> Total length of the endcap detectors in front of the calorimeter</comment>
@@ -503,8 +503,9 @@ Examples:
 
 Service gaps in FW direction (before endcapP ECAL) and BW direction (before endcapN HCAL)
     </documentation>
+    <constant name="ForwardInnerEndcapRegionExtraSpace_length" value="4.6*cm"/>
     <constant name="ForwardServiceGap_length"     value="10.0*cm"/>
-    <constant name="ForwardServiceGap_zmin"       value="ForwardPIDRegion_zmin + ForwardInnerEndcapRegion_length"/>
+    <constant name="ForwardServiceGap_zmin"       value="ForwardPIDRegion_zmin + ForwardInnerEndcapRegion_length + ForwardInnerEndcapRegionExtraSpace_length"/>
     <constant name="ForwardServiceGap_zmax"       value="ForwardServiceGap_zmin + ForwardServiceGap_length"/>
 
     <comment> Radial service gap between dRICH and HcalBarrel </comment>
@@ -577,7 +578,7 @@ Service gaps in FW direction (before endcapP ECAL) and BW direction (before endc
     <constant name="DIRC_offset"                value="(DIRCForward_zmax - DIRCBackward_zmax)/2"/>
     <comment>
       The DIRC_rmin/rmax values are defined at the center of each stave, such that
-      the DIRC_rmax can also be used as the OuterBarrelMPGD_rmin value. 
+      the DIRC_rmax can also be used as the OuterBarrelMPGD_rmin value.
     </comment>
     <constant name="DIRC_rmin"                  value="CentralTrackingRegion_rmax"/>
     <constant name="DIRC_rmax"                  value="DIRC_rmin + DIRC_thickness"/>
