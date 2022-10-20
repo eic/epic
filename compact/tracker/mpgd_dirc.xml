@@ -158,14 +158,18 @@
                thickness="MPGDDIRCFrame_thickness"/>
    
 </module>
-<comment> MPGD DIRC layers </comment>
+<comment> Layout for MPGD DIRC layers </comment>
       <layer module="MPGDDIRCModule" id="0" vis="TrackerSupportVis">
    <rphi_layout
           phi_tilt="0"
           nphi="MPGDDIRCModule_count"
           phi0="0"
-          rc="MPGDDIRCModule_rmin"
-          dr="0" />
+	   rc="MPGDDIRCModule_rmin"
+	  dr="0" />
+   <z_layout
+	  dr = "0.0 * cm"
+	  z0 = "0.0 * cm"
+	  nz = "2"/>
    </layer>
 </detector>
 </detectors>
@@ -173,7 +177,8 @@
   <readouts>
     <readout name="MPGDDIRCHits">
       <segmentation type="CartesianGridXY" grid_size_x="0.150*mm*sqrt(12)" grid_size_y="0.150*mm*sqrt(12)" />
-      <id>system:8,layer:4,module:8,section:4,x:32:-16,y:-16</id>
+      <id>system:8,layer:4,module:12,sensor:2,x:32:-14,y:-18</id>
+      <!--<id>system:8,layer:4,module:8,section:4,x:32:-16,y:-16</id>-->
     </readout>
   </readouts>
 

@@ -23,6 +23,8 @@
 
 using namespace std;
 using namespace dd4hep;
+using namespace dd4hep::rec;
+//using namespace dd4hep::detail;
 
 /** Barrel Bar detector with optional frame
  *
@@ -34,8 +36,8 @@ using namespace dd4hep;
 static Ref_t create_MPGDDIRC_geo(Detector& description, xml_h e, SensitiveDetector sens)
 {
   typedef vector<PlacedVolume> Placements;
-  xml_det_t                    x_det = e;
-  //  Material                                air      = description.air();
+  xml_det_t                               x_det    = e;
+  //Material                                air      = description.air();
   int                                     det_id   = x_det.id();
   string                                  det_name = x_det.nameStr();
   DetElement                              sdet(det_name, det_id);
@@ -54,6 +56,7 @@ static Ref_t create_MPGDDIRC_geo(Detector& description, xml_h e, SensitiveDetect
   for (xml_coll_t mi(x_det, _U(module)); mi; ++mi) {
     xml_comp_t x_mod = mi;
     string     m_nam = x_mod.nameStr();
+    cout << "module: " << mi << endl; //mp
 
     if (volumes.find(m_nam) != volumes.end()) {
       printout(ERROR, "MPGDDIRC_geo",
@@ -62,6 +65,7 @@ static Ref_t create_MPGDDIRC_geo(Detector& description, xml_h e, SensitiveDetect
     }
 
     int    ncomponents     = 0;
+    int    sensor_number   = 1;
     double total_thickness = 0;
 
     // Compute module total thickness from components
@@ -135,29 +139,33 @@ static Ref_t create_MPGDDIRC_geo(Detector& description, xml_h e, SensitiveDetect
         printout(DEBUG, "MPGDDIRC_geo", "box_comp_thickness: %f", x_comp.thickness());
       }
       Volume c_vol{c_nam, c_box, description.material(x_comp.materialStr())};
-      pv = m_vol.placeVolume(c_vol, Position(0, 0, thickness_sum + x_comp.thickness() / 2.0));
 
       c_vol.setRegion(description, x_comp.regionStr());
       c_vol.setLimitSet(description, x_comp.limitsStr());
       c_vol.setVisAttributes(description, x_comp.visStr());
+
+      pv = m_vol.placeVolume(c_vol, Position(0, 0, thickness_sum + x_comp.thickness() / 2.0));//mp
+      //m_vol.placeVolume(c_vol, Position(0, 0, thickness_sum + x_comp.thickness() / 2.0));//mp
+      
       if (x_comp.isSensitive()) {
+	pv.addPhysVolID("sensor",sensor_number++);      
         c_vol.setSensitiveDetector(sens);
         sensitives[m_nam].push_back(pv);
         module_thicknesses[m_nam] = {thickness_so_far + x_comp.thickness() / 2.0,
                                      total_thickness - thickness_so_far - x_comp.thickness() / 2.0};
         // -------- create a measurement plane for the tracking surface attched to the sensitive volume -----
-        rec::Vector3D u(0., 1., 0.);
-        rec::Vector3D v(0., 0., 1.);
-        rec::Vector3D n(1., 0., 0.);
+        Vector3D u(0., 1., 0.);
+        Vector3D v(0., 0., 1.);
+        Vector3D n(1., 0., 0.);
 
         // compute the inner and outer thicknesses that need to be assigned to the tracking surface
         // depending on wether the support is above or below the sensor
         double inner_thickness = module_thicknesses[m_nam][0];
         double outer_thickness = module_thicknesses[m_nam][1];
 
-        rec::SurfaceType type(rec::SurfaceType::Sensitive);
+        SurfaceType type(rec::SurfaceType::Sensitive);
 
-        rec::VolPlane surf(c_vol, type, inner_thickness, outer_thickness, u, v, n); //,o ) ;
+        VolPlane surf(c_vol, type, inner_thickness, outer_thickness, u, v, n); //,o ) ;
         volplane_surfaces[m_nam].push_back(surf);
       }
       thickness_sum += x_comp.thickness();
@@ -200,43 +208,88 @@ static Ref_t create_MPGDDIRC_geo(Detector& description, xml_h e, SensitiveDetect
       m_vol.placeVolume(bframe_vol, Position(0.0, -frame_width / 2.0 - max_component_length / 2.0,
                                              frame_thickness / 2.0 - total_thickness / 2.0 - gas_thickness / 2.0));
     }
-    pv = assembly.placeVolume(m_vol);
+    //pv = assembly.placeVolume(m_vol);
   }
 
   // build layers
   for (xml_coll_t li(x_det, _U(layer)); li; ++li) {
     xml_comp_t x_layer  = li;
     xml_comp_t x_layout = x_layer.child(_U(rphi_layout));
+    xml_comp_t z_layout = x_layer.child(_U(z_layout));
+    int        lay_id   = x_layer.id();
+    string     m_nam    = x_layer.moduleStr();
+    string     lay_nam  = _toString(x_layer.id(), "layer%d");
 
-    double phi0     = x_layout.phi0();     // starting phi of first module
-    double phi_tilt = x_layout.phi_tilt(); // Phi tilit of module
-    double rc       = x_layout.rc();       // Radius of the module
-    int    nphi     = x_layout.nphi();     // Number of modules in phi
-    double rphi_dr  = x_layout.dr();       // The delta radius of every other module
-    double phi_incr = (2 * M_PI) / nphi;   // Phi increment for one module
-    double phic     = phi0;                // Phi of the module
+    double phi0      = x_layout.phi0();     // starting phi of first module
+    double phi_tilt  = x_layout.phi_tilt(); // Phi tilit of module
+    double rc        = x_layout.rc();       // Radius of the module
+    int    nphi      = x_layout.nphi();     // Number of modules in phi
+    double rphi_dr   = x_layout.dr();       // The delta radius of every other module
+    double phi_incr  = (2 * M_PI) / nphi;   // Phi increment for one module
+    double phic      = phi0;                // Phi of the module
+    double nz        = z_layout.nz();	    // Number of modules placed in z
+    double z_dr      = z_layout.dr();	    // Radial offest of modules in z
+    double z0       = z_layout.z0();	    // Module starting place in z
 
+    Volume      module_env = volumes[m_nam];
+    DetElement  lay_elt(sdet, lay_nam, lay_id);
+    //Placements& sensVols = sensitives[m_nam];
+
+    int module = 1;
+    cout << "module: " << module << endl;
     // loop over phi modules
     for (int ii = 0; ii < nphi; ii++) {
-      double xc = rc * std::cos(phic);
-      double yc = rc * std::sin(phic);
-      // place P-side moduels
-      Transform3D tr(RotationZYX(0.0, ((M_PI / 2) - phic - phi_tilt), -M_PI / 2),
-                     Position(xc, yc, mpgd_dirc_pos.z() + 0.5 * dimensions.length())); // in x-y plane,
-      sdet.setAttributes(description, assembly, x_det.regionStr(), x_det.limitsStr(), x_det.visStr());
+      double xc = rc * std::cos(phic);              //Basic x position of module
+      double yc = rc * std::sin(phic);              //Basic y position of module
+      double dx = z_dr * std::cos(phic + phi_tilt); //Deta x of module position
+      double dy = z_dr * std::sin(phic + phi_tilt); //Deta y of module position
+
+      for (int j = 0; j < nz; j++) {
+        string module_name = _toString(module, "module%d");
+        DetElement mod_elt(lay_elt, module_name, module);
+        double mod_z = 0.5 * dimensions.length();
+        double z_placement = mod_z - j * nz * mod_z;
+	double z_offset = z_placement > 0 ? -z0/2.0 : z0/2.0;  
+        Transform3D tr(RotationZYX(0.0, ((M_PI / 2) - phic - phi_tilt), -M_PI / 2),
+                       Position(xc, yc, mpgd_dirc_pos.z() + mod_z - j * nz * mod_z + z_offset)); // in x-y plane,
+                       //Position(xc, yc, mpgd_dirc_pos.z() + 0.5 * dimensions.length())); // in x-y plane,
+        assembly.placeVolume(module_env,tr);
+        pv.addPhysVolID("module",module);
+	/*
+        for (size_t ic =0; ic < sensVols.size(); ++ic) {
+          PlacedVolume sens_pv = sensVols[ic];
+          DetElement  comp_de(mod_elt, std::string("de_") + sens_pv.volume().name(),module);
+          comp_de.setPlacement(sens_pv);
+        }
+        */	
+        module++;
+	//adjust x and y coordinates
+	xc += dx;
+	yc += dy;
+      }
+      //sdet.setAttributes(description, assembly, x_det.regionStr(), x_det.limitsStr(), x_det.visStr());
       // assembly.setVisAttributes(description.invisible());
-      pv = description.pickMotherVolume(sdet).placeVolume(assembly, tr);
-      pv.addPhysVolID("system", det_id); // Set the subdetector system ID.
+      //pv = description.pickMotherVolume(sdet).placeVolume(assembly, tr);
+      //pv.addPhysVolID("system", det_id); // Set the subdetector system ID.
+
+      /*
       // place N-side modules
       Transform3D tr2(RotationZYX(0.0, ((M_PI / 2) - phic - phi_tilt), -M_PI / 2),
                       Position(xc, yc, mpgd_dirc_pos.z() - 0.5 * dimensions.length()));
       pv = description.pickMotherVolume(sdet).placeVolume(assembly, tr2);
       pv.addPhysVolID("system", det_id); // Set the subdetector system ID.
+      */
+
       // increment counters
       phic += phi_incr;
       rc += rphi_dr;
     }
+    //pv = assembly.placeVolume(lay_vol, lay_pos);
   }
+  sdet.setAttributes(description, assembly, x_det.regionStr(), x_det.limitsStr(), x_det.visStr());
+  assembly.setVisAttributes(description.invisible());
+  pv = description.pickMotherVolume(sdet).placeVolume(assembly);
+  pv.addPhysVolID("system", det_id); 
   sdet.setPlacement(pv);
   return sdet;
 }
