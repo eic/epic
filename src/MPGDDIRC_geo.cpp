@@ -154,9 +154,12 @@ static Ref_t create_MPGDDIRC_geo(Detector& description, xml_h e, SensitiveDetect
         module_thicknesses[m_nam] = {thickness_so_far + x_comp.thickness() / 2.0,
                                      total_thickness - thickness_so_far - x_comp.thickness() / 2.0};
         // -------- create a measurement plane for the tracking surface attched to the sensitive volume -----
-        Vector3D u(0., 1., 0.);
-        Vector3D v(0., 0., 1.);
-        Vector3D n(1., 0., 0.);
+        //Vector3D u(0., 1., 0.);
+        //Vector3D v(0., 0., 1.);
+        //Vector3D n(1., 0., 0.);
+        Vector3D u(-1., 0., 0.);
+        Vector3D v(0., -1., 0.);
+        Vector3D n(0., 0., 1.);
 
         // compute the inner and outer thicknesses that need to be assigned to the tracking surface
         // depending on wether the support is above or below the sensor
@@ -233,7 +236,7 @@ static Ref_t create_MPGDDIRC_geo(Detector& description, xml_h e, SensitiveDetect
 
     Volume      module_env = volumes[m_nam];
     DetElement  lay_elt(sdet, lay_nam, lay_id);
-    //Placements& sensVols = sensitives[m_nam];
+    Placements& sensVols = sensitives[m_nam];
 
     int module = 1;
     cout << "module: " << module << endl;
@@ -253,15 +256,15 @@ static Ref_t create_MPGDDIRC_geo(Detector& description, xml_h e, SensitiveDetect
         Transform3D tr(RotationZYX(0.0, ((M_PI / 2) - phic - phi_tilt), -M_PI / 2),
                        Position(xc, yc, mpgd_dirc_pos.z() + mod_z - j * nz * mod_z + z_offset)); // in x-y plane,
                        //Position(xc, yc, mpgd_dirc_pos.z() + 0.5 * dimensions.length())); // in x-y plane,
-        assembly.placeVolume(module_env,tr);
+        pv = assembly.placeVolume(module_env,tr);
         pv.addPhysVolID("module",module);
-	/*
+	mod_elt.setPlacement(pv);
         for (size_t ic =0; ic < sensVols.size(); ++ic) {
           PlacedVolume sens_pv = sensVols[ic];
           DetElement  comp_de(mod_elt, std::string("de_") + sens_pv.volume().name(),module);
           comp_de.setPlacement(sens_pv);
         }
-        */	
+        	
         module++;
 	//adjust x and y coordinates
 	xc += dx;
@@ -284,7 +287,7 @@ static Ref_t create_MPGDDIRC_geo(Detector& description, xml_h e, SensitiveDetect
       phic += phi_incr;
       rc += rphi_dr;
     }
-    //pv = assembly.placeVolume(lay_vol, lay_pos);
+    //pv = assembly.placeVolume(module_env, lay_pos);
   }
   sdet.setAttributes(description, assembly, x_det.regionStr(), x_det.limitsStr(), x_det.visStr());
   assembly.setVisAttributes(description.invisible());
