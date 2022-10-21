@@ -108,7 +108,13 @@
   <documentation level="10">
     ## Central tracking detectors
   </documentation>
-  <include ref="${DETECTOR_PATH}/compact/tracker.xml"/>
+  <include ref="${DETECTOR_PATH}/compact/tracking/definitions.xml"/>
+
+  {% if features is defined and features['tracking'] is not none -%}
+  {%   for tracker in features['tracking'] -%}
+  <include ref="${DETECTOR_PATH}/compact/tracking/{{ tracker }}.xml"/>
+  {%   endfor -%}
+  {% endif -%}
 {% endif -%}
 
 {% if features is not defined or 'pid' in features %}
@@ -131,14 +137,6 @@
   <include ref="${DETECTOR_PATH}/compact/mrich.xml"/>
   {% elif 'pfrich' in features['pid'] -%}
   <include ref="${DETECTOR_PATH}/compact/pfrich.xml"/>
-  {% endif -%}
-
-  {% if features is defined and features['pid'] is not none and 'tof_endcap' in features['pid'] %}
-  <include ref="${DETECTOR_PATH}/compact/tof_endcap.xml"/>
-  {% endif -%}
-
-  {% if features is defined and features['pid'] is not none and 'tof_barrel' in features['pid'] %}
-  <include ref="${DETECTOR_PATH}/compact/tof_barrel.xml"/>
   {% endif -%}
 {% endif -%}
 
