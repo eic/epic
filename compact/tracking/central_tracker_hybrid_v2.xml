@@ -321,7 +321,7 @@ total X0 0.24% per disk layer （4 sectors per disk):
           <component material="Aluminum" thickness="SiTrackerServiceCylAl_thickness" vis="TrackerServiceVis" />
           <component material="CarbonFiber" thickness="SiTrackerSupportCylCF_thickness" vis="TrackerSupportVis" />
       </support>
-      <support 
+      <support
         name="serv_cyl_neg"
         type="Tube"
         rmin="SiTrackerServiceCyl_rmin"
