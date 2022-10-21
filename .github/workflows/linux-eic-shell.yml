@@ -333,7 +333,7 @@ jobs:
     needs: build-gcc
     strategy:
       matrix:
-        option: ['m', 's']
+        option: ['m'] #, 's'] # FIXME
         detector_config: [epic_arches, epic_brycecanyon]
       fail-fast: false
     steps:
