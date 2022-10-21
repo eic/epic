@@ -179,10 +179,6 @@
   <include ref="${DETECTOR_PATH}/compact/hcal/hcal_forward_insert.xml"/>
   {% endif -%}
 
-  {% if features is not defined or features['hcal'] is none or 'barrel' in features['hcal'] %}
-  <include ref="${DETECTOR_PATH}/compact/hcal/hcal_barrel.xml"/>
-  {% endif -%}
-
   {% if features is not defined or features['hcal'] is none or 'barrel_gdml' in features['hcal'] %}
   <include ref="${DETECTOR_PATH}/compact/hcal/hcal_barrel_gdml.xml"/>
   {% endif -%}
