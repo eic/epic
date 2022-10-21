@@ -330,12 +330,10 @@ jobs:
 
   check-overlap-tgeo:
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        option: ['m', 's']
     needs: build-gcc
     strategy:
       matrix:
+        option: ['m', 's']
         detector_config: [epic_arches, epic_brycecanyon]
       fail-fast: false
     steps:
