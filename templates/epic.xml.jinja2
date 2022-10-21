@@ -171,7 +171,21 @@
   <documentation level="10">
     ## Central hadronic calorimetry
   </documentation>
-  <include ref="${DETECTOR_PATH}/compact/hcal.xml"/>
+  {% if features is not defined or features['hcal'] is none or 'forward' in features['hcal'] %}
+  <include ref="${DETECTOR_PATH}/compact/hcal/hcal_forward.xml"/>
+  {% endif -%}
+
+  {% if features is not defined or features['hcal'] is none or 'forward_insert' in features['hcal'] %}
+  <include ref="${DETECTOR_PATH}/compact/hcal/hcal_forward_insert.xml"/>
+  {% endif -%}
+
+  {% if features is not defined or features['hcal'] is none or 'barrel' in features['hcal'] %}
+  <include ref="${DETECTOR_PATH}/compact/hcal/hcal_barrel.xml"/>
+  {% endif -%}
+
+  {% if features is not defined or features['hcal'] is none or 'backward' in features['hcal'] %}
+  <include ref="${DETECTOR_PATH}/compact/hcal/hcal_backward.xml"/>
+  {% endif -%}
 {% endif -%}
 
 {% if features is not defined or 'beampipe' in features %}
