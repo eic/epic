@@ -3,6 +3,13 @@ pbeam: 41
 features:
   beampipe:
   tracking:
+    vertex_barrel:
+    silicon_barrel:
+    mpgd_barrel:
+    silicon_disks:
+    support_service_assembly:
+    tof_barrel:
+    tof_endcap:
   pid:
     dirc:
     pfrich:
