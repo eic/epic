@@ -111,6 +111,34 @@ static Ref_t create_detector(Detector &lcdd, xml_h handle,
 
   sens.setType("calorimeter");
 
+  double support_inner_r = std::numeric_limits<double>::max();
+
+  if (det_handle.hasChild(_Unicode(outer_supports))) {
+    xml_comp_t outer_supports = det_handle.child(_Unicode(outer_supports));
+
+    for (xml_coll_t layer_handle{outer_supports, _Unicode(layer)};
+         layer_handle; ++layer_handle) {
+      xml_comp_t outer_support_handle = layer_handle;
+      Material outer_support_mat = lcdd.material(outer_support_handle.materialStr());
+
+      Tube outer_support_tube_full_shape {
+        outer_support_handle.inner_r(),
+        outer_support_handle.inner_r() + outer_support_handle.thickness(),
+        (envelope_handle.zmax() - envelope_handle.zmin()) / 2
+      };
+      IntersectionSolid outer_support_tube_shape{
+        outer_support_tube_full_shape,
+        envelope_shape,
+      };
+
+      support_inner_r = std::min(support_inner_r, outer_support_handle.inner_r());
+
+      Volume outer_support_tube_v {"outer_support", outer_support_tube_shape, outer_support_mat};
+      outer_support_tube_v.setVisAttributes(lcdd.visAttributes(outer_support_handle.visStr()));
+      envelope_v.placeVolume(outer_support_tube_v);
+    }
+  }
+
   if (det_handle.hasChild(_Unicode(wedge_box))) {
     xml_comp_t wedge_box_handle = det_handle.child(_Unicode(wedge_box));
     Material wedge_box_mat = lcdd.material(wedge_box_handle.materialStr());
@@ -135,9 +163,15 @@ static Ref_t create_detector(Detector &lcdd, xml_h handle,
     // The sides of the box are also shared between each pair of the adjacent sectors
 
     const double side_rmin = wedge_box_handle.inner_r() + wedge_box_handle.thickness();
+    const double side_rmax_default =
+      std::min(
+        envelope_handle.rmax(),
+        // subtract a unit of thickness to avoid an overlap
+        support_inner_r - wedge_box_handle.thickness()
+      );
     const double side_rmax = dd4hep::getAttrOrDefault<double>(
       wedge_box_handle, _U(outer_r),
-      envelope_handle.rmax()
+      side_rmax_default
       );
 
     Box wedge_box_side_box_shape{
