@@ -171,10 +171,24 @@
   <documentation level="10">
     ## hadronic calorimetry
   </documentation>
-  {% if features is not defined or features['hcal'] is none or 'hcal' in features['hcal'] %}
-  <include ref="${DETECTOR_PATH}/compact/hcal.xml"/>
-  {% elif 'hcal_gdml' in features['hcal'] -%}
-  <include ref="${DETECTOR_PATH}/compact/hcal_gdml.xml"/>
+  {% if features is not defined or features['hcal'] is none or 'forward' in features['hcal'] %}
+  <include ref="${DETECTOR_PATH}/compact/hcal/hcal_forward.xml"/>
+  {% endif -%}
+
+  {% if features is not defined or features['hcal'] is none or 'forward_insert' in features['hcal'] %}
+  <include ref="${DETECTOR_PATH}/compact/hcal/hcal_forward_insert.xml"/>
+  {% endif -%}
+
+  {% if features is not defined or features['hcal'] is none or 'barrel' in features['hcal'] %}
+  <include ref="${DETECTOR_PATH}/compact/hcal/hcal_barrel.xml"/>
+  {% endif -%}
+
+  {% if features is not defined or features['hcal'] is none or 'barrel_gdml' in features['hcal'] %}
+  <include ref="${DETECTOR_PATH}/compact/hcal/hcal_barrel_gdml.xml"/>
+  {% endif -%}
+
+  {% if features is not defined or features['hcal'] is none or 'backward' in features['hcal'] %}
+  <include ref="${DETECTOR_PATH}/compact/hcal/hcal_backward.xml"/>
   {% endif -%}
 {% endif -%}
 

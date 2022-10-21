@@ -8,3 +8,7 @@ features:
     barrel_sciglass
     backward_PbWO4
   hcal:
+    forward:
+    forward_insert:
+    barrel_gdml:
+    backward:

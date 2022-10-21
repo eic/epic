@@ -21,5 +21,9 @@ features:
     backward_PbWO4:
   solenoid:
   hcal:
+    forward:
+    forward_insert:
+    barrel_gdml:
+    backward:
   farforward:
   farbackward:
