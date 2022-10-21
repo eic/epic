@@ -330,6 +330,9 @@ jobs:
 
   check-overlap-tgeo:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        option: ['m', 's']
     needs: build-gcc
     strategy:
       matrix:
@@ -349,7 +352,7 @@ jobs:
         setup: install/setup.sh
         run: |
           mkdir -p doc
-          checkOverlaps -c ${DETECTOR_PATH}/${{ matrix.detector_config }}.xml | tee doc/overlap_check_tgeo.out
+          checkOverlaps --option ${{ matrix.option }} -c ${DETECTOR_PATH}/${{ matrix.detector_config }}.xml | tee doc/overlap_check_tgeo.out
           noverlaps="$(grep -c ovlp doc/overlap_check_tgeo.out || true)"
           if [[ "${noverlaps}" -gt "0" ]] ; then echo "${noverlaps} overlaps found!" && false ; fi
 
