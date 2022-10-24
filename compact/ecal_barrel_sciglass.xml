@@ -125,7 +125,7 @@
   </detectors>
 
   <readouts>
-    <readout name="EcalBarrelHits">
+    <readout name="EcalBarrelSciGlassHits">
       <segmentation type="NoSegmentation"/>
       <id>system:8,sector:8,module:8,slice:-8</id>
     </readout>
