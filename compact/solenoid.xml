@@ -7,21 +7,21 @@
       --------------------------
     </comment>
     <comment>Solenoid Barrel Parameters</comment>
-    <constant name="SolenoidBarrelInnerVacuumVesselThickness"   value=" 20.0 * mm"/>
+    <constant name="SolenoidBarrelInnerVacuumVesselThickness"   value=" 10.0 * mm"/>
     <constant name="SolenoidBarrelInnerSecondMLILayerThickness" value=" 20.0 * mm"/>
-    <constant name="SolenoidBarrelInnerThermalShieldThickness"  value=" 10.0 * mm"/>
-    <constant name="SolenoidBarrelInnerFirstMLILayerThickness"  value=" 10.0 * mm"/>
-    <constant name="SolenoidBarrelInnerHeliumVesselThickness"   value=" 10.0 * mm"/>
+    <constant name="SolenoidBarrelInnerThermalShieldThickness"  value="  5.0 * mm"/>
+    <constant name="SolenoidBarrelInnerFirstMLILayerThickness"  value=" 32.0 * mm"/>
+    <constant name="SolenoidBarrelInnerHeliumVesselThickness"   value="  3.0 * mm"/>
     <constant name="SolenoidBarrelInnerHeliumThickness"         value=" 15.0 * mm"/>
-    <constant name="SolenoidBarrelCoilFormerThickness"          value=" 10.0 * mm"/>
-    <constant name="SolenoidBarrelCoilThickness"                value="100.0 * mm"/>
-    <constant name="SolenoidBarrelCoilOverbindThickness"        value=" 40.0 * mm"/>
+    <constant name="SolenoidBarrelCoilFormerThickness"          value="  0.0 * mm"/>
+    <constant name="SolenoidBarrelCoilThickness"                value=" 33.6 * mm"/>
+    <constant name="SolenoidBarrelCoilOverbindThickness"        value=" 30.0 * mm"/>
     <constant name="SolenoidBarrelOuterHeliumThickness"         value=" 15.0 * mm"/>
     <constant name="SolenoidBarrelOuterHeliumVesselThickness"   value=" 10.0 * mm"/>
     <constant name="SolenoidBarrelOuterFirstMLILayerThickness"  value=" 10.0 * mm"/>
-    <constant name="SolenoidBarrelOuterThermalShieldThickness"  value=" 10.0 * mm"/>
-    <constant name="SolenoidBarrelOuterSecondMLILayerThickness" value=" 20.0 * mm"/>
-    <constant name="SolenoidBarrelOuterVacuumVesselThickness"   value=" 20.0 * mm"/>
+    <constant name="SolenoidBarrelOuterThermalShieldThickness"  value="  5.0 * mm"/>
+    <constant name="SolenoidBarrelOuterSecondMLILayerThickness" value=" 62.5 * mm"/>
+    <constant name="SolenoidBarrelOuterVacuumVesselThickness"   value=" 25.0 * mm"/>
 
     <comment>Solenoid Endcap Parameters</comment>
     <constant name="SolenoidEndcapCoilEndSupportThickness"  value="20.0 * mm"/>
