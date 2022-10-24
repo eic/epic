@@ -103,7 +103,7 @@
       id="ECalBarrel_ID"
       name="EcalBarrelImaging"
       type="epic_EcalBarrelInterlayers"
-      readout="EcalBarrelHits"
+      readout="EcalBarrelImagingHits"
       calorimeterType="EM_BARREL"
       vis="EcalBarrelEnvelopeVis"
       offset="EcalBarrel_Calorimeter_offset">
@@ -176,7 +176,7 @@
   </detectors>
 
   <readouts>
-    <readout name="EcalBarrelHits">
+    <readout name="EcalBarrelImagingHits">
       <segmentation type="CartesianGridXY" grid_size_x="0.5 * mm" grid_size_y="0.5 * mm"/>
       <id>system:8,module:8,layer:8,slice:8,x:32:-16,y:-16</id>
     </readout>
