@@ -350,7 +350,7 @@ jobs:
         setup: install/setup.sh
         run: |
           mkdir -p doc
-          checkOverlaps --option ${{ matrix.option }} -c ${DETECTOR_PATH}/${{ matrix.detector_config }}.xml | tee doc/overlap_check_tgeo.out
+          checkOverlaps --option ${{ matrix.option }} -t 0.01 -c ${DETECTOR_PATH}/${{ matrix.detector_config }}.xml | tee doc/overlap_check_tgeo.out
           noverlaps="$(grep -c ovlp doc/overlap_check_tgeo.out || true)"
           if [[ "${noverlaps}" -gt "0" ]] ; then echo "${noverlaps} overlaps found!" && false ; fi
 
@@ -398,7 +398,7 @@ jobs:
         setup: install/setup.sh
         run: |
           mkdir -p doc
-          python scripts/checkOverlaps.py -c ${DETECTOR_PATH}/${DETECTOR_CONFIG}.xml | tee doc/overlap_check_geant4.out
+          python scripts/checkOverlaps.py -t 0.01 -c ${DETECTOR_PATH}/${DETECTOR_CONFIG}.xml | tee doc/overlap_check_geant4.out
           noverlaps="$(grep -c GeomVol1002 doc/overlap_check_geant4.out || true)"
           if [[ "${noverlaps}" -gt "0" ]] ; then echo "${noverlaps} overlaps found!" && false ; fi
 
@@ -423,7 +423,7 @@ jobs:
         setup: install/setup.sh
         run: |
           mkdir -p doc
-          python scripts/checkOverlaps.py -c ${DETECTOR_PATH}/${{ matrix.detector_config }}.xml | tee doc/overlap_check_geant4.out
+          python scripts/checkOverlaps.py -t 0.01 -c ${DETECTOR_PATH}/${{ matrix.detector_config }}.xml | tee doc/overlap_check_geant4.out
           noverlaps="$(grep -c GeomVol1002 doc/overlap_check_geant4.out || true)"
           if [[ "${noverlaps}" -gt "0" ]] ; then echo "${noverlaps} overlaps found!" && false ; fi
 
