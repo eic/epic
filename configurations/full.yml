@@ -1,6 +1,14 @@
 features:
   beampipe:
   tracking:
+    vertex_barrel:
+    silicon_barrel:
+    mpgd_barrel:
+    mpgd_dirc:
+    silicon_disks:
+    support_service_assembly:
+    tof_barrel:
+    tof_endcap:
   pid:
     dirc:
     mrich:
@@ -13,5 +21,9 @@ features:
     backward_PbWO4:
   solenoid:
   hcal:
+    forward:
+    forward_insert:
+    barrel:
+    backward:
   farforward:
   farbackward:
