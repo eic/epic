@@ -180,7 +180,7 @@
     spherical patch below
 </documentation>
 <module
-  material="AirOptical"
+  material="SiPM"
   surface="SensorSurface_DRICH"
   vis="DRICH_sensor_vis"
   side="DRICH_sensor_sensitive_size"
