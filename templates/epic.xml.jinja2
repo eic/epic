@@ -114,6 +114,14 @@
   {%   for tracker in features['tracking'] -%}
   <include ref="${DETECTOR_PATH}/compact/tracking/{{ tracker }}.xml"/>
   {%   endfor -%}
+  {% else -%}
+  <include ref="${DETECTOR_PATH}/compact/tracking/silicon_barrel.xml"/>
+  <include ref="${DETECTOR_PATH}/compact/tracking/mpgd_barrel.xml"/>
+  <include ref="${DETECTOR_PATH}/compact/tracking/mpgd_dirc.xml"/>
+  <include ref="${DETECTOR_PATH}/compact/tracking/silicon_disks.xml"/>
+  <include ref="${DETECTOR_PATH}/compact/tracking/support_service_assembly.xml"/>
+  <include ref="${DETECTOR_PATH}/compact/tracking/tof_barrel.xml"/>
+  <include ref="${DETECTOR_PATH}/compact/tracking/tof_endcap.xml"/>
   {% endif -%}
 {% endif -%}
 
