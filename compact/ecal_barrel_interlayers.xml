@@ -103,7 +103,7 @@
       id="ECalBarrel_ID"
       name="EcalBarrelImaging"
       type="epic_EcalBarrelInterlayers"
-      readout="EcalBarrelHits"
+      readout="EcalBarrelImagingHits"
       calorimeterType="EM_BARREL"
       vis="EcalBarrelEnvelopeVis"
       offset="EcalBarrel_Calorimeter_offset">
