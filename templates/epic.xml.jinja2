@@ -3,49 +3,7 @@
 
    Template variables can be defined in yml or json files,
    or they can be applied on the command line with `-D`.
-
-   The default geometry definition is obtained when this
-   template is evaluated without any yml or json file, and
-   without any other variables defined.
 -#}
-
-{# Absolute default configuration, defines features -#}
-{% if features is not defined -%}
-{%   set features = ( {
-   'beampipe': '',
-   'tracking': {
-    'vertex_barrel': '',
-    'silicon_barrel': '',
-    'mpgd_barrel': '',
-    'mpgd_dirc': '',
-    'silicon_disks': '',
-    'support_service_assembly': '',
-    'tof_barrel': '',
-    'tof_endcap': '',
-  },
-  'pid': {
-    'dirc': '',
-    'mrich': '',
-    'drich': '',
-  },
-  'hcal': {
-    'hcal_backward': '',
-    'hcal_barrel': '',
-    'hcal_forward_insert': '',
-    'hcal_forward': '',
-  },
-  'ecal': {
-    'forward_homogeneous': '',
-    'barrel_sciglass': '',
-    'backward_PbWO4': '',
-  },
-  'solenoid': '',
-  'farforward': {
-    'arches': '',
-  },
-  'farbackward': ''
-} ) -%}
-{% endif -%}
 
 <lccdd xmlns:compact="http://www.lcsim.org/schemas/compact/1.0"
        xmlns:xs="http://www.w3.org/2001/XMLSchema"
@@ -148,19 +106,9 @@
   </documentation>
   <include ref="${DETECTOR_PATH}/compact/tracking/definitions.xml"/>
 
-  {% if features is defined and features['tracking'] is not none -%}
-  {%   for tracker in features['tracking'] -%}
+  {% for tracker in features['tracking'] -%}
   <include ref="${DETECTOR_PATH}/compact/tracking/{{ tracker }}.xml"/>
-  {%   endfor -%}
-  {% else -%}
-  <include ref="${DETECTOR_PATH}/compact/tracking/silicon_barrel.xml"/>
-  <include ref="${DETECTOR_PATH}/compact/tracking/mpgd_barrel.xml"/>
-  <include ref="${DETECTOR_PATH}/compact/tracking/mpgd_dirc.xml"/>
-  <include ref="${DETECTOR_PATH}/compact/tracking/silicon_disks.xml"/>
-  <include ref="${DETECTOR_PATH}/compact/tracking/support_service_assembly.xml"/>
-  <include ref="${DETECTOR_PATH}/compact/tracking/tof_barrel.xml"/>
-  <include ref="${DETECTOR_PATH}/compact/tracking/tof_endcap.xml"/>
-  {% endif -%}
+  {% endfor -%}
 {% endif -%}
 
 {% if 'pid' in features %}
@@ -176,10 +124,10 @@
   <documentation level="10">
     ## Central EM calorimetry
   </documentation>
-  {%  {% for ecal in features['ecal'] -%}
+  {% for ecal in features['ecal'] -%}
   <include ref="${DETECTOR_PATH}/compact/ecal/{{ ecal }}.xml"/>
   {% endfor -%}
- endif -%}
+{% endif -%}
 
 {% if 'hcal' in features %}
   <documentation level="10">
