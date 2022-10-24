@@ -145,7 +145,7 @@
   <include ref="${BEAMLINE_PATH}/ip6/central_beampipe.xml"/>
 {% endif -%}
 
-{% if 'farforward' in features %}
+{% if 'far_forward' in features %}
   <documentation level="11">
     ## Far foward detectors
   </documentation>
@@ -154,7 +154,7 @@
   {% endfor -%}
 {% endif -%}
 
-{% if 'farbackward' in features %}
+{% if 'far_backward' in features %}
   <documentation level="11">
     ## Far backward detectors
   </documentation>
