@@ -8,10 +8,7 @@
 #include "DD4hep/Printout.h"
 #include "DDRec/DetectorData.h"
 #include "DDRec/Surface.h"
-#include "GeometryHelpers.h"
-#include "Math/Point2D.h"
-#include "TMath.h"
-#include "TString.h"
+
 #include <XML/Helper.h>
 
 using namespace dd4hep;
@@ -20,24 +17,24 @@ using namespace dd4hep::rec;
 // create the detector
 static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetector sens)
 {
-  xml::DetElement detElem = handle;
-  std::string     detName = detElem.nameStr();
-  int             detID   = detElem.id();
 
-  DetElement            det(detName, detID);
+  xml::DetElement       detElem = handle;
+  std::string           detName = detElem.nameStr();
+  int                   detID   = detElem.id();
   xml::Component        dims    = detElem.dimensions();
   OpticalSurfaceManager surfMgr = desc.surfaceManager();
+  DetElement            det(detName, detID);
+  sens.setType("tracker");
 
   // attributes -----------------------------------------------------------
   // - vessel
-  double vesselLength = dims.attr<double>(_Unicode(length));
-  double vesselZmin   = dims.attr<double>(_Unicode(zmin));
-  // FIXME unused
-  // double vesselZmax      = dims.attr<double>(_Unicode(zmax));
+  double vesselZmin      = dims.attr<double>(_Unicode(zmin));
+  double vesselLength    = dims.attr<double>(_Unicode(length));
   double vesselRmin0     = dims.attr<double>(_Unicode(rmin0));
   double vesselRmin1     = dims.attr<double>(_Unicode(rmin1));
   double vesselRmax0     = dims.attr<double>(_Unicode(rmax0));
   double vesselRmax1     = dims.attr<double>(_Unicode(rmax1));
+  double proximityGap    = dims.attr<double>(_Unicode(proximity_gap));
   double wallThickness   = dims.attr<double>(_Unicode(wall_thickness));
   double windowThickness = dims.attr<double>(_Unicode(window_thickness));
   auto   vesselMat       = desc.material(detElem.attr<std::string>(_Unicode(material)));
@@ -45,11 +42,9 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
   auto   vesselVis       = desc.visAttributes(detElem.attr<std::string>(_Unicode(vis_vessel)));
   auto   gasvolVis       = desc.visAttributes(detElem.attr<std::string>(_Unicode(vis_gas)));
   // - radiator (applies to aerogel and filter)
-  auto   radiatorElem = detElem.child(_Unicode(radiator));
-  double radiatorRmin = radiatorElem.attr<double>(_Unicode(rmin));
-  double radiatorRmax = radiatorElem.attr<double>(_Unicode(rmax));
-  // FIXME unused
-  // double radiatorPhiw       = radiatorElem.attr<double>(_Unicode(phiw));
+  auto   radiatorElem       = detElem.child(_Unicode(radiator));
+  double radiatorRmin       = radiatorElem.attr<double>(_Unicode(rmin));
+  double radiatorRmax       = radiatorElem.attr<double>(_Unicode(rmax));
   double radiatorPitch      = radiatorElem.attr<double>(_Unicode(pitch));
   double radiatorFrontplane = radiatorElem.attr<double>(_Unicode(frontplane));
   // - aerogel
@@ -62,6 +57,11 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
   auto   filterMat       = desc.material(filterElem.attr<std::string>(_Unicode(material)));
   auto   filterVis       = desc.visAttributes(filterElem.attr<std::string>(_Unicode(vis)));
   double filterThickness = filterElem.attr<double>(_Unicode(thickness));
+  // - airgap between filter and aerogel // TODO: use these to place an airgap volume
+  auto   airgapElem      = radiatorElem.child(_Unicode(airgap));
+  // auto   airgapMat       = desc.material(airgapElem.attr<std::string>(_Unicode(material))); // TODO
+  // auto   airgapVis       = desc.visAttributes(airgapElem.attr<std::string>(_Unicode(vis))); // TODO
+  double airgapThickness = airgapElem.attr<double>(_Unicode(thickness));
   // - sensor module
   auto   sensorElem      = detElem.child(_Unicode(sensors)).child(_Unicode(module));
   auto   sensorMat       = desc.material(sensorElem.attr<std::string>(_Unicode(material)));
@@ -70,13 +70,13 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
   double sensorSide      = sensorElem.attr<double>(_Unicode(side));
   double sensorGap       = sensorElem.attr<double>(_Unicode(gap));
   double sensorThickness = sensorElem.attr<double>(_Unicode(thickness));
+  auto   readoutName     = detElem.attr<std::string>(_Unicode(readout));
   // - sensor plane
   auto   sensorPlaneElem = detElem.child(_Unicode(sensors)).child(_Unicode(plane));
-  double sensorPlaneDist = sensorPlaneElem.attr<double>(_Unicode(sensordist));
   double sensorPlaneRmin = sensorPlaneElem.attr<double>(_Unicode(rmin));
   double sensorPlaneRmax = sensorPlaneElem.attr<double>(_Unicode(rmax));
   // - debugging switches
-  int debug_optics_mode = detElem.attr<int>(_Unicode(debug_optics));
+  long debug_optics_mode = desc.constantAsLong("PFRICH_debug_optics");
 
   // if debugging optics, override some settings
   bool debug_optics = debug_optics_mode > 0;
@@ -96,6 +96,40 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
     aerogelVis = sensorVis;
     gasvolVis = vesselVis = desc.invisible();
   };
+
+  // readout coder <-> unique sensor ID
+  /* - `sensorIDfields` is a list of readout fields used to specify a unique sensor ID
+   * - `cellMask` is defined such that a hit's `cellID & cellMask` is the corresponding sensor's unique ID
+   * - this redundant generalization is for future flexibility, and consistency with dRICH
+   */
+  std::vector<std::string> sensorIDfields = {"module"};
+  const auto& readoutCoder = *desc.readout(readoutName).idSpec().decoder();
+  // determine `cellMask` based on `sensorIDfields`
+  uint64_t cellMask = 0;
+  for(const auto& idField : sensorIDfields)
+    cellMask |= readoutCoder[idField].mask();
+  // create a unique sensor ID from a sensor's PlacedVolume::volIDs
+  auto encodeSensorID = [&readoutCoder](auto ids){
+    uint64_t enc = 0;
+    for(const auto& [idField,idValue] : ids)
+      enc |= uint64_t(idValue) << readoutCoder[idField].offset();
+    return enc;
+  };
+
+  // define reconstruction geometry constants `PFRICH_RECON_*`
+  /* - these are the numbers needed to rebuild the geometry in the
+   *   reconstruction, in particular, the optical surfaces encountered by the
+   *   Cherenkov photons
+   * - positions are w.r.t. the IP
+   * - check the values of all of the `PFRICH_RECON_*` constants after any change
+   *   to the geometry
+   * - some `PFRICH_RECON_*` constants are redundant, but are defined to make
+   *   it clear that the reconstruction code depends on them
+   */
+  desc.add(Constant("PFRICH_RECON_zmin",             std::to_string(vesselZmin)));
+  desc.add(Constant("PFRICH_RECON_gasvolMaterial",  gasvolMat.ptr()->GetName(), "string"));
+  desc.add(Constant("PFRICH_RECON_cellMask",        std::to_string(cellMask)));
+  desc.add(Constant("PFRICH_RECON_sensorThickness", std::to_string(sensorThickness)));
 
   // BUILD VESSEL //////////////////////////////////////
   /* - `vessel`: aluminum enclosure, the mother volume of the pfRICH
@@ -140,20 +174,25 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
   // - the vessel is created such that the center of the cylindrical tank volume
   //   coincides with the origin; this is called the "origin position" of the vessel
   // - when the vessel (and its children volumes) is placed, it is translated in
-  //   the z-direction to be in the proper ATHENA-integration location
+  //   the z-direction to be in the proper EPIC-integration location
   // - these reference positions are for the frontplane and backplane of the vessel,
   //   with respect to the vessel origin position
   auto originFront = Position(0., 0., vesselLength / 2.0);
-  // FIXME unused
   // auto originBack = Position(0., 0., -vesselLength / 2.0);
+  auto vesselPos = Position(0, 0, vesselZmin) - originFront;
 
-  // sensitive detector type
-  sens.setType("tracker");
+  // place gas volume
+  PlacedVolume gasvolPV = vesselVol.placeVolume(gasvolVol, Position(0, 0, 0));
+  DetElement   gasvolDE(det, "gasvol_de", 0);
+  gasvolDE.setPlacement(gasvolPV);
+
+  // place mother volume (vessel)
+  Volume       motherVol = desc.pickMotherVolume(det);
+  PlacedVolume vesselPV  = motherVol.placeVolume(vesselVol, vesselPos);
+  vesselPV.addPhysVolID("system", detID);
+  det.setPlacement(vesselPV);
 
   // BUILD RADIATOR //////////////////////////////////////
-
-  // attributes
-  double airGap = 0.01 * mm; // air gap between aerogel and filter (FIXME? actually it's currently a gas gap)
 
   // solid and volume: create aerogel and filter
   Cone aerogelSolid(aerogelThickness / 2, radiatorRmin + boreDelta * aerogelThickness / vesselLength, /* at backplane */
@@ -161,8 +200,8 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
                     radiatorRmax);
   Cone filterSolid(
       filterThickness / 2,
-      radiatorRmin + boreDelta * (aerogelThickness + airGap + filterThickness) / vesselLength, /* at backplane */
-      radiatorRmax, radiatorRmin + boreDelta * (aerogelThickness + airGap) / vesselLength,     /* at frontplane */
+      radiatorRmin + boreDelta * (aerogelThickness + airgapThickness + filterThickness) / vesselLength, /* at backplane */
+      radiatorRmax, radiatorRmin + boreDelta * (aerogelThickness + airgapThickness) / vesselLength,     /* at frontplane */
       radiatorRmax);
   Volume aerogelVol(detName + "_aerogel", aerogelSolid, aerogelMat);
   Volume filterVol(detName + "_filter", filterSolid, filterMat);
@@ -171,32 +210,40 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
 
   // aerogel placement and surface properties
   // TODO [low-priority]: define skin properties for aerogel and filter
-  auto radiatorPos = Position(0., 0., radiatorFrontplane - 0.5 * aerogelThickness) + originFront;
-  auto aerogelPV   = gasvolVol.placeVolume(
-      aerogelVol,
-      Translation3D(radiatorPos.x(), radiatorPos.y(), radiatorPos.z()) // re-center to originFront
-          *
-          RotationY(
-              radiatorPitch) // change polar angle to specified pitch // (FIXME: probably broken, currently not in use)
-  );
+  // FIXME: radiatorPitch might not be working correctly (not yet used)
+  auto radiatorPos      = Position(0., 0., radiatorFrontplane - 0.5 * aerogelThickness) + originFront;
+  auto aerogelPlacement = Translation3D(radiatorPos.x(), radiatorPos.y(), radiatorPos.z()) * // re-center to originFront
+                          RotationY(radiatorPitch); // change polar angle to specified pitch
+  auto aerogelPV = gasvolVol.placeVolume(aerogelVol, aerogelPlacement);
   DetElement aerogelDE(det, "aerogel_de", 0);
   aerogelDE.setPlacement(aerogelPV);
   // SkinSurface aerogelSkin(desc, aerogelDE, "mirror_optical_surface", aerogelSurf, aerogelVol);
   // aerogelSkin.isValid();
 
   // filter placement and surface properties
+  PlacedVolume filterPV;
   if (!debug_optics) {
-    auto filterPV = gasvolVol.placeVolume(
-        filterVol, Translation3D(0., 0., -airGap) // add an airgap (FIXME: actually a gas gap)
-                       * Translation3D(radiatorPos.x(), radiatorPos.y(), radiatorPos.z())  // re-center to originFront
-                       * RotationY(radiatorPitch)                                          // change polar angle
-                       * Translation3D(0., 0., -(aerogelThickness + filterThickness) / 2.) // move to aerogel backplane
-    );
+    auto filterPlacement =
+      Translation3D(0., 0., -airgapThickness) *                          // add an airgap
+      Translation3D(radiatorPos.x(), radiatorPos.y(), radiatorPos.z()) * // re-center to originFront
+      RotationY(radiatorPitch) *                                         // change polar angle
+      Translation3D(0., 0., -(aerogelThickness + filterThickness) / 2.); // move to aerogel backplane
+    filterPV = gasvolVol.placeVolume(filterVol, filterPlacement);
     DetElement filterDE(det, "filter_de", 0);
     filterDE.setPlacement(filterPV);
     // SkinSurface filterSkin(desc, filterDE, "mirror_optical_surface", filterSurf, filterVol);
     // filterSkin.isValid();
   };
+
+  // reconstruction constants (w.r.t. IP)
+  double aerogelZpos = vesselPos.z() + aerogelPV.position().z();
+  double filterZpos  = vesselPos.z() + filterPV.position().z();
+  desc.add(Constant("PFRICH_RECON_aerogelZpos",      std::to_string(aerogelZpos)));
+  desc.add(Constant("PFRICH_RECON_aerogelThickness", std::to_string(aerogelThickness)));
+  desc.add(Constant("PFRICH_RECON_aerogelMaterial",  aerogelMat.ptr()->GetName(), "string"));
+  desc.add(Constant("PFRICH_RECON_filterZpos",       std::to_string(filterZpos)));
+  desc.add(Constant("PFRICH_RECON_filterThickness",  std::to_string(filterThickness)));
+  desc.add(Constant("PFRICH_RECON_filterMaterial",   filterMat.ptr()->GetName(), "string"));
 
   // BUILD SENSORS ///////////////////////
 
@@ -209,9 +256,9 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
   if (!debug_optics)
     sensorVol.setSensitiveDetector(sens);
 
-  // sensor plane positioning: we want `sensorPlaneDist` to be the distance between the
+  // sensor plane positioning: we want `proximityGap` to be the distance between the
   // aerogel backplane (i.e., aerogel/filter boundary) and the sensor active surface (e.g, photocathode)
-  double sensorZpos     = radiatorFrontplane - aerogelThickness - sensorPlaneDist - 0.5 * sensorThickness;
+  double sensorZpos     = radiatorFrontplane - aerogelThickness - proximityGap - 0.5 * sensorThickness;
   auto   sensorPlanePos = Position(0., 0., sensorZpos) + originFront; // reference position
   // miscellaneous
   int    imod    = 0;           // module number
@@ -238,22 +285,22 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
             continue;
 
           // placement (note: transformations are in reverse order)
-          auto sensorPV = gasvolVol.placeVolume(
-              sensorVol, Transform3D(Translation3D(sensorPlanePos.x(), sensorPlanePos.y(),
-                                                   sensorPlanePos.z()) // move to reference position
-                                     * Translation3D(sx, sy, 0.)       // move to grid position
-                                     ));
+          auto sensorPlacement = Transform3D(
+              Translation3D(sensorPlanePos.x(), sensorPlanePos.y(), sensorPlanePos.z()) * // move to reference position
+              Translation3D(sx, sy, 0.) // move to grid position
+              );
+          auto sensorPV = gasvolVol.placeVolume(sensorVol, sensorPlacement);
 
           // generate LUT for module number -> sensor position, for readout mapping tests
           // printf("%d %f %f\n",imod,sensorPV.position().x(),sensorPV.position().y());
 
           // properties
-          sensorPV.addPhysVolID("module", imod);
-          DetElement sensorDE(det, Form("sensor_de_%d", imod), imod);
+          sensorPV.addPhysVolID("module", imod); // NOTE: must be consistent with `sensorIDfields`
+          auto imodEnc = encodeSensorID(sensorPV.volIDs());
+          DetElement sensorDE(det, "sensor_de_"+std::to_string(imod), imodEnc);
           sensorDE.setPlacement(sensorPV);
           if (!debug_optics) {
-            SkinSurface sensorSkin(desc, sensorDE, "sensor_optical_surface", sensorSurf,
-                                   sensorVol); // TODO: 3rd arg needs `imod`?
+            SkinSurface sensorSkin(desc, sensorDE, "sensor_optical_surface_"+std::to_string(imod), sensorSurf, sensorVol);
             sensorSkin.isValid();
           };
 
@@ -290,19 +337,8 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
     }
     gasvolVol.placeVolume(service_vol,
                           Transform3D(Translation3D(sensorPlanePos.x(), sensorPlanePos.y(),
-                                                    sensorPlanePos.z() - sensorThickness - total_thickness)));
+                                                    sensorPlanePos.z() - sensorThickness / 2 - total_thickness / 2)));
   }
-
-  // place gas volume
-  PlacedVolume gasvolPV = vesselVol.placeVolume(gasvolVol, Position(0, 0, 0));
-  DetElement   gasvolDE(det, "gasvol_de", 0);
-  gasvolDE.setPlacement(gasvolPV);
-
-  // place mother volume (vessel)
-  Volume       motherVol = desc.pickMotherVolume(det);
-  PlacedVolume vesselPV  = motherVol.placeVolume(vesselVol, Position(0, 0, vesselZmin) - originFront);
-  vesselPV.addPhysVolID("system", detID);
-  det.setPlacement(vesselPV);
 
   return det;
 }

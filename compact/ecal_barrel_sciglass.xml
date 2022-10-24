@@ -11,13 +11,15 @@
       The current numbers are not based on any design in particular, but
       provide some extra space for other detectors.
     </comment>
-    <constant name="EcalBarrel_etamin" value="-1.9"/>
+    <constant name="EcalBarrel_etamin" value="-1.87"/>
     <constant name="EcalBarrel_etamax" value="+1.4"/>
   </define>
 
   <display>
     <vis name="det_vis" alpha="1.0" r="1.0" g="0.0" b="0.0" showDaughters="true" visible="false" />
     <vis name="becal_wedge" alpha="1.0" r="0.82" g="0.84" b="0.86" showDaughters="true" visible="true" />
+    <vis name="outer_support_aluminum" alpha="1.0" r="0.82" g="0.84" b="0.86" showDaughters="true" visible="true" />
+    <vis name="outer_support_steel" alpha="1.0" r="0.55" g="0.25" b="0.00" showDaughters="true" visible="true" />
     <vis name="carbon_fiber" alpha="0.9" r="0.1" g="0.1" b="0.1" showDaughters="true" visible="true" />
     <vis name="family1" alpha="1.0" r="0.22" g="0.54" b="0.71" showDaughters="true" visible="true" />
     <vis name="family2" alpha="1.0" r="0.90" g="0.48" b="0.47" showDaughters="true" visible="true" />
@@ -94,7 +96,7 @@
 
         <carbon_fiber_support
             thickness="0.5 * mm"
-            overhang_top="4 * cm"
+            overhang_top="2 * cm"
             overhang_bottom="0.2 * cm"
             vis="carbon_fiber"
             material="CarbonFiber"
@@ -106,6 +108,19 @@
             />
         </carbon_fiber_support>
       </sectors>
+
+      <outer_supports>
+        <comment>
+	  "EMCal Outer Surface" from the menagerie and tower support before it.
+	  Extra 1.5 cm is supposed to represent the aluminum tower support,
+          which is supposed to have a more complicated shape.
+        </comment>
+        <layer inner_r="129.0 * cm" thickness="(1 * cm) + (1.5 * cm)" material="Aluminum5083" vis="outer_support_aluminum" />
+        <comment>
+          This implements the "EMCal Outer Support" from the menagerie.
+        </comment>
+        <layer inner_r="132.0 * cm" thickness="9 * cm" material="StainlessSteel_20percent" vis="outer_support_steel" />
+      </outer_supports>
     </detector>
   </detectors>
 

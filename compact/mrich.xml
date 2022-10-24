@@ -3,7 +3,7 @@
   <define>
     <constant name="MRICH_rmin"   value="8*cm"/>
     <constant name="MRICH_rmax"   value="min(63*cm, BackwardPIDRegion_rmax)"/>
-    <constant name="MRICH_length" value="BackwardPIDRegion_length"/>
+    <constant name="MRICH_length" value="BackwardPIDRegion_length-11.4*cm"/>
     <constant name="MRICH_zmax"   value="BackwardPIDRegion_zmax"/>
     <constant name="MRICH_zmin"   value="MRICH_zmax-MRICH_length"/>
 
@@ -106,52 +106,52 @@
         Modules are only listed here for one quadrant. The modules point back to the
         z0 position (should be their actual position, but breaks parametrization).
       </comment>
-      <positions scale="0.81" z0="0.5*(MRICH_zmin+MRICH_zmax)">
-        <position x="-41.3250000000"  y="178.6750000000"/>
-        <position x=" 96.0250000001"  y="178.6750000000"/>
+      <positions scale="0.815" z0="0.5*(MRICH_zmin+MRICH_zmax)">
+        <position x="-41.325"  y="178.675"/>
+        <position x=" 96.025"  y="178.675"/>
       </positions>
-      <positions scale="0.812" z0="0.5*(MRICH_zmin+MRICH_zmax)">
-        <position x="-41.3250000000"  y="316.0250000001"/>
-        <position x=" 96.0250000001"  y="316.0250000001"/>
-        <position x="233.3750000002"  y="178.6750000000"/>
-        <position x="233.3750000002"  y="316.0250000001"/>
+      <positions scale="0.815" z0="0.5*(MRICH_zmin+MRICH_zmax)">
+        <position x="-41.325"  y="316.025"/>
+        <position x=" 96.025"  y="316.025"/>
+        <position x="233.375"  y="178.675"/>
+        <position x="233.375"  y="316.025"/>
       </positions>
-      <positions scale="0.82" z0="0.5*(MRICH_zmin+MRICH_zmax)">
-        <position x="-41.3250000000"  y="453.3750000002"/>
-        <position x=" 96.0250000001"  y="453.3750000002"/>
-        <position x="233.3750000002"  y="453.3750000002"/>
-        <position x="370.7250000003"  y="453.3750000002"/>
-        <position x="370.7250000003"  y="316.0250000001"/>
-        <position x="370.7250000003"  y="178.6750000000"/>
+      <positions scale="0.825" z0="0.5*(MRICH_zmin+MRICH_zmax)">
+        <position x="-41.325"  y="453.375"/>
+        <position x=" 96.025"  y="453.375"/>
+        <position x="233.375"  y="453.375"/>
+        <position x="370.725"  y="453.375"/>
+        <position x="370.725"  y="316.025"/>
+        <position x="370.725"  y="178.675"/>
       </positions>
       <positions scale="0.83" z0="0.5*(MRICH_zmin+MRICH_zmax)">
-        <position x="-41.3250000000"  y="590.7250000003"/>
-        <position x=" 96.0250000001"  y="590.7250000003"/>
-        <position x="233.3750000002"  y="590.7250000003"/>
-        <!--position x="370.7250000003"  y="590.7250000003"/-->
-        <!--position x="508.0750000004"  y="590.7250000003"/-->
-        <position x="508.0750000004"  y="178.6750000000"/>
-        <position x="508.0750000004"  y="316.0250000001"/>
-        <!--position x="508.0750000004"  y="453.3750000002"/-->
+        <position x="-41.325"  y="590.725"/>
+        <position x=" 96.025"  y="590.725"/>
+        <position x="233.375"  y="590.725"/>
+        <!--position x="370.725"  y="590.725"/-->
+        <!--position x="508.075"  y="590.725"/-->
+        <position x="508.075"  y="178.675"/>
+        <position x="508.075"  y="316.025"/>
+        <!--position x="508.075"  y="453.375"/-->
       </positions>
       <positions scale="1.09" z0="0.5*(MRICH_zmin+MRICH_zmax)">
-        <!--position x="-41.3250000000"  y="728.0750000004"/-->
-        <!--position x=" 96.0250000001"  y="728.0750000004"/-->
-        <!--position x="233.3750000002"  y="728.0750000004"/-->
-        <!--position x="370.7250000003"  y="728.0750000004"/-->
-        <!--position x="508.0750000004"  y="728.0750000004"/-->
-        <!--position x="645.4250000005"  y="590.7250000003"/-->
-        <!--position x="645.4250000005"  y="453.3750000002"/-->
-        <!--position x="645.4250000005"  y="316.0250000001"/-->
-        <!--position x="645.4250000005"  y="178.6750000000"/-->
+        <!--position x="-41.325"  y="728.075"/-->
+        <!--position x=" 96.025"  y="728.075"/-->
+        <!--position x="233.375"  y="728.075"/-->
+        <!--position x="370.725"  y="728.075"/-->
+        <!--position x="508.075"  y="728.075"/-->
+        <!--position x="645.425"  y="590.725"/-->
+        <!--position x="645.425"  y="453.375"/-->
+        <!--position x="645.425"  y="316.025"/-->
+        <!--position x="645.425"  y="178.675"/-->
       </positions>
       <positions scale="1.095" z0="0.5*(MRICH_zmin+MRICH_zmax)">
-        <!--position x="-41.3250000000"  y="865.4250000005"/-->
-        <!--position x=" 96.0250000001"  y="865.4250000005"/-->
-        <!--position x="233.3750000002"  y="865.4250000005"/-->
-        <!--position x="782.7750000006"  y="178.6750000000"/-->
-        <!--position x="782.7750000006"  y="316.0250000001"/-->
-        <!--position x="782.7750000006"  y="453.3750000002"/-->
+        <!--position x="-41.325"  y="865.425"/-->
+        <!--position x=" 96.025"  y="865.425"/-->
+        <!--position x="233.375"  y="865.425"/-->
+        <!--position x="782.775"  y="178.675"/-->
+        <!--position x="782.775"  y="316.025"/-->
+        <!--position x="782.775"  y="453.375"/-->
       </positions>
       <layer thickness="MRICHCarbonFrame_thickness" material="CarbonFiber"/>
     </detector>

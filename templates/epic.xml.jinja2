@@ -108,14 +108,20 @@
   <documentation level="10">
     ## Central tracking detectors
   </documentation>
-  <include ref="${DETECTOR_PATH}/compact/tracker.xml"/>
+  <include ref="${DETECTOR_PATH}/compact/tracking/definitions.xml"/>
+
+  {% if features is defined and features['tracking'] is not none -%}
+  {%   for tracker in features['tracking'] -%}
+  <include ref="${DETECTOR_PATH}/compact/tracking/{{ tracker }}.xml"/>
+  {%   endfor -%}
+  {% endif -%}
 {% endif -%}
 
 {% if features is not defined or 'pid' in features %}
   <documentation level="10">
     ## PID detectors
   </documentation>
-  {% if features is defined and features['pid'] is not none and 'dirc' in features['pid'] -%}
+  {% if features is not defined or features['pid'] is none or 'dirc' in features['pid'] -%}
   <include ref="${DETECTOR_PATH}/compact/dirc.xml"/>
   {% endif -%}
 
@@ -131,14 +137,6 @@
   <include ref="${DETECTOR_PATH}/compact/mrich.xml"/>
   {% elif 'pfrich' in features['pid'] -%}
   <include ref="${DETECTOR_PATH}/compact/pfrich.xml"/>
-  {% endif -%}
-
-  {% if features is defined and features['pid'] is not none and 'tof_endcap' in features['pid'] %}
-  <include ref="${DETECTOR_PATH}/compact/tof_endcap.xml"/>
-  {% endif -%}
-
-  {% if features is defined and features['pid'] is not none and 'tof_barrel' in features['pid'] %}
-  <include ref="${DETECTOR_PATH}/compact/tof_barrel.xml"/>
   {% endif -%}
 {% endif -%}
 
@@ -173,7 +171,21 @@
   <documentation level="10">
     ## Central hadronic calorimetry
   </documentation>
-  <include ref="${DETECTOR_PATH}/compact/hcal.xml"/>
+  {% if features is not defined or features['hcal'] is none or 'forward' in features['hcal'] %}
+  <include ref="${DETECTOR_PATH}/compact/hcal/hcal_forward.xml"/>
+  {% endif -%}
+
+  {% if features is not defined or features['hcal'] is none or 'forward_insert' in features['hcal'] %}
+  <include ref="${DETECTOR_PATH}/compact/hcal/hcal_forward_insert.xml"/>
+  {% endif -%}
+
+  {% if features is not defined or features['hcal'] is none or 'barrel' in features['hcal'] %}
+  <include ref="${DETECTOR_PATH}/compact/hcal/hcal_barrel.xml"/>
+  {% endif -%}
+
+  {% if features is not defined or features['hcal'] is none or 'backward' in features['hcal'] %}
+  <include ref="${DETECTOR_PATH}/compact/hcal/hcal_backward.xml"/>
+  {% endif -%}
 {% endif -%}
 
 {% if features is not defined or 'beampipe' in features %}

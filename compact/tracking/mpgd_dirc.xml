@@ -10,11 +10,11 @@
 </info>
 
 <define>
-    <comment> frames </comment>   
+    <comment> frames </comment>
     <constant name="MPGDDIRCFrame_width"            value="20*mm"/>
     <constant name="MPGDDIRCFrame_thickness"        value="7*mm"/>
 
-    <comment> module constants </comment>   
+    <comment> module constants </comment>
     <constant name="MPGDDIRCModule_count"                   value="12" />
     <constant name="MPGDDIRCModule_allowed_space"           value="2*cm"/>
     <constant name="MPGDDIRCModule_rmin"                    value="MPGDDIRC_rmin"/>
@@ -27,7 +27,7 @@
 
 
 
-    <comment> layer parameters </comment>   
+    <comment> layer parameters </comment>
     <constant name="MPGDDIRCWindow_thickness"             value="50*um"/>
     <constant name="MPGDDIRCWindowGap_thickness"          value="2*mm"/>
     <constant name="MPGDDIRCDriftGap_thickness"           value="3*mm"/>
@@ -38,12 +38,12 @@
     <constant name="MPGDDIRCReadOutKapton_thickness"      value="50*um"/>
     <constant name="MPGDDIRCPCB_thickness"                value="3*mm"/>
 
-    <comment> Thickness values </comment>   
+    <comment> Thickness values </comment>
     <constant name="MPGDDIRCCathode_thickness"          value="MPGDDIRCFoilKapton_thickness + MPGDDIRCFoilCu_thickness"/>
     <constant name="MPGDDIRCFoil_thickness"             value="MPGDDIRCFoilKapton_thickness + MPGDDIRCFoilCu_thickness"/>
-    <constant name="MPGDDIRCReadOut_thickness"          value="MPGDDIRCReadOutNomex_thickness + MPGDDIRCReadOutElectrode_thickness + MPGDDIRCReadOutKapton_thickness"/> 
-    <constant name="MPGDDIRCModule_thickness"           value="MPGDDIRCWindow_thickness + MPGDDIRCCathode_thickness + 
-                                                            MPGDDIRCFoil_thickness + MPGDDIRCReadOut_thickness + 
+    <constant name="MPGDDIRCReadOut_thickness"          value="MPGDDIRCReadOutNomex_thickness + MPGDDIRCReadOutElectrode_thickness + MPGDDIRCReadOutKapton_thickness"/>
+    <constant name="MPGDDIRCModule_thickness"           value="MPGDDIRCWindow_thickness + MPGDDIRCCathode_thickness +
+                                                            MPGDDIRCFoil_thickness + MPGDDIRCReadOut_thickness +
                                                             MPGDDIRCPCB_thickness + MPGDDIRCFrame_thickness" />
   </define>
 
@@ -75,7 +75,7 @@
                thickness="MPGDDIRCDriftGap_thickness"
                vis="TrackerMPGDGasVis"
                length="MPGDDIRCModule_length"/>
-   
+
         <module_component name="WindowGasGap"
                material="Ar"
                sensitive="false"
@@ -83,7 +83,7 @@
                thickness="MPGDDIRCWindowGap_thickness"
                vis="TrackerMPGDGasVis"
                length="MPGDDIRCModule_length" />
-   
+
         <module_component name="Window"
                material="Kapton"
                sensitive="false"
@@ -130,42 +130,46 @@
                material="Copper"
                sensitive="false"
                width="MPGDDIRCModule_width"
-               thickness="MPGDDIRCReadOutElectrode_thickness" 
+               thickness="MPGDDIRCReadOutElectrode_thickness"
                vis="TrackerVis"
                length="MPGDDIRCModule_length" />
         <module_component name="ReadOutKapton"
                material="Kapton"
                sensitive="false"
                width="MPGDDIRCModule_width"
-               thickness="MPGDDIRCReadOutKapton_thickness" 
+               thickness="MPGDDIRCReadOutKapton_thickness"
                vis="TrackerVis"
                length="MPGDDIRCModule_length" />
         <module_component name="PCB"
                material="Fr4"
                sensitive="false"
                width="MPGDDIRCModule_width"
-               thickness="MPGDDIRCPCB_thickness" 
+               thickness="MPGDDIRCPCB_thickness"
                vis="TrackerVis"
                length="MPGDDIRCModule_length" />
-   
+
    <comment> Frame width gets subtracted from the gas module volumes
-      see src/MPGDDIRC_geo.cpp 
+      see src/MPGDDIRC_geo.cpp
         </comment>
-      
+
         <frame material="Fr4"
                width="MPGDDIRCFrame_width"
                vis="TrackerSupportVis"
                thickness="MPGDDIRCFrame_thickness"/>
-   
+
 </module>
-<comment> MPGD DIRC layers </comment>
+<comment> Layout for MPGD DIRC layers </comment>
       <layer module="MPGDDIRCModule" id="0" vis="TrackerSupportVis">
    <rphi_layout
           phi_tilt="0"
           nphi="MPGDDIRCModule_count"
           phi0="0"
-          rc="MPGDDIRCModule_rmin"
-          dr="0" />
+	   rc="MPGDDIRCModule_rmin"
+	  dr="0" />
+   <z_layout
+	  dr = "0.0 * cm"
+	  z0 = "0.0 * cm"
+	  nz = "2"/>
    </layer>
 </detector>
 </detectors>
@@ -173,7 +177,7 @@
   <readouts>
     <readout name="MPGDDIRCHits">
       <segmentation type="CartesianGridXY" grid_size_x="0.150*mm*sqrt(12)" grid_size_y="0.150*mm*sqrt(12)" />
-      <id>system:8,layer:4,module:8,section:4,x:32:-16,y:-16</id>
+      <id>system:8,layer:4,module:12,sensor:2,x:32:-14,y:-18</id>
     </readout>
   </readouts>
 

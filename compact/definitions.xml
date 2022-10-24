@@ -430,8 +430,8 @@ Examples:
     </documentation>
 
     <constant name="CentralTrackingRegion_rmax"   value="700.0*mm" />
-    <constant name="CentralTrackingRegionP_zmax"  value="1730.0*mm" />
-    <constant name="CentralTrackingRegionN_zmax"  value="1474.7*mm" />
+    <constant name="CentralTrackingRegionP_zmax"  value="1800.0*mm" />
+    <constant name="CentralTrackingRegionN_zmax"  value="1186.0*mm" />
     <constant name="CentralTrackingRegion_length" value="CentralTrackingRegionP_zmax + CentralTrackingRegionN_zmax" />
     <comment>
       tan(theta) to determine rmin in the outer tracking region (due to tapered beampipe)
@@ -446,12 +446,12 @@ Examples:
 
     <comment> Global PID regions with suballocations for TOF and RICH detectors </comment>
     <constant name="ForwardPIDRegion_zmin"        value="CentralTrackingRegionP_zmax" />
-    <constant name="ForwardPIDRegion_length"      value="142.0*cm" />
+    <constant name="ForwardPIDRegion_length"      value="135.0*cm" />
     <constant name="ForwardPIDRegion_rmax"        value="185.0*cm" />
 
     <comment> Forward TOF region currenlty empty for future upgrades </comment>
     <constant name="ForwardTOFRegion_zmin"        value="ForwardPIDRegion_zmin" />
-    <constant name="ForwardTOFRegion_length"      value="22.0*cm" />
+    <constant name="ForwardTOFRegion_length"      value="15.0*cm" />
     <constant name="ForwardTOFRegion_tan"         value="CentralTrackingRegionP_tan" />
     <constant name="ForwardTOFRegion_minR"            value="8*cm" />
     <constant name="ForwardTOFRegion_maxR"            value="67*cm" />
@@ -465,18 +465,18 @@ Examples:
     <constant name="ForwardRICHRegion_tan1"        value="CentralTrackingRegionP_tan * 0.88" />
     <constant name="ForwardRICHRegion_tan2"        value="Eta3_6_tan * 0.89" />
 
-    <constant name="BackwardPIDRegion_length"     value="25.0*cm" />
+    <constant name="BackwardPIDRegion_length"     value="54.1*cm" />
     <constant name="BackwardPIDRegion_zmin"       value="CentralTrackingRegionN_zmax" />
     <constant name="BackwardPIDRegion_zmax"       value="BackwardPIDRegion_zmin+BackwardPIDRegion_length" />
-    <constant name="BackwardPIDRegion_rmax"       value="64.0*cm" /> <!-- FIXME hardcoded, was CentralTrackingRegion_rmax -->
+    <constant name="BackwardPIDRegion_rmax"       value="63.0*cm" /> <!-- FIXME hardcoded, was CentralTrackingRegion_rmax -->
     <constant name="BackwardPIDRegion_tan"        value="CentralTrackingRegionN_tan * 0.92" />
 
     <comment> Backward RICH region </comment>
-    <constant name="BackwardRICHRegion_zmin"       value="BackwardPIDRegion_zmin" />
-    <constant name="BackwardRICHRegion_length"     value="25.0*cm" />
+    <constant name="BackwardRICHRegion_zmax"       value="BackwardPIDRegion_zmax" />
+    <constant name="BackwardRICHRegion_length"     value="BackwardPIDRegion_length" />
 
     <comment> Backward TOF region, currently empty for upgrades </comment>
-    <constant name="BackwardTOFRegion_zmin"        value="BackwardRICHRegion_zmin + BackwardRICHRegion_length" />
+    <constant name="BackwardTOFRegion_zmin"        value="BackwardRICHRegion_zmax" />
     <constant name="BackwardTOFRegion_length"      value="BackwardPIDRegion_length - BackwardRICHRegion_length" />
 
     <comment> Note: PID has space for DIRC, ExtraSpace sits past the PID</comment>
@@ -491,7 +491,7 @@ Examples:
     <constant name="BackwardTrackingRegion_zmin"    value="BackwardPIDRegion_zmin + BackwardPIDRegion_length" />
     <constant name="ForwardTrackingRegion_tan"      value="ForwardRICHRegion_tan2" />
     <constant name="ForwardTrackingRegion_zmin"     value="ForwardPIDRegion_zmin + ForwardPIDRegion_length" />
-    <constant name="ForwardTrackingRegion_length"   value="10.0*cm" />
+    <constant name="ForwardTrackingRegion_length"   value="0.0*cm" />
     <constant name="BackwardTrackingRegion_length"  value="15.0*cm" />
 
     <comment> Total length of the endcap detectors in front of the calorimeter</comment>
@@ -503,8 +503,9 @@ Examples:
 
 Service gaps in FW direction (before endcapP ECAL) and BW direction (before endcapN HCAL)
     </documentation>
-    <constant name="ForwardServiceGap_length"     value="8.0*cm"/>
-    <constant name="ForwardServiceGap_zmin"       value="ForwardPIDRegion_zmin + ForwardInnerEndcapRegion_length"/>
+    <constant name="ForwardInnerEndcapRegionExtraSpace_length" value="4.6*cm"/>
+    <constant name="ForwardServiceGap_length"     value="10.0*cm"/>
+    <constant name="ForwardServiceGap_zmin"       value="ForwardPIDRegion_zmin + ForwardInnerEndcapRegion_length + ForwardInnerEndcapRegionExtraSpace_length"/>
     <constant name="ForwardServiceGap_zmax"       value="ForwardServiceGap_zmin + ForwardServiceGap_length"/>
 
     <comment> Radial service gap between dRICH and HcalBarrel </comment>
@@ -555,7 +556,7 @@ Service gaps in FW direction (before endcapP ECAL) and BW direction (before endc
     <constant name="EcalEndcapN_rmin"               value="9.*cm"/>    <!-- Currently fix value hardcoded -->
     <constant name="EcalEndcapN_rmax"               value="63.*cm"/>   <!-- Currently fix value hardcoded -->
 
-    <constant name="EcalBarrelRegion_thickness"     value="54.0*cm"/>
+    <constant name="EcalBarrelRegion_thickness"     value="61.5*cm"/>
     <constant name="EcalBarrel_rmin"                value="CentralTrackingRegion_rmax + BarrelPIDRegion_thickness + BarrelExtraSpace_thickness"/>
     <constant name="EcalBarrel_inner_margin"        value="2*cm"/>
     <constant name="EcalBarrel_rmax"                value="EcalBarrel_rmin + EcalBarrelRegion_thickness"/>
@@ -577,7 +578,7 @@ Service gaps in FW direction (before endcapP ECAL) and BW direction (before endc
     <constant name="DIRC_offset"                value="(DIRCForward_zmax - DIRCBackward_zmax)/2"/>
     <comment>
       The DIRC_rmin/rmax values are defined at the center of each stave, such that
-      the DIRC_rmax can also be used as the OuterBarrelMPGD_rmin value. 
+      the DIRC_rmax can also be used as the OuterBarrelMPGD_rmin value.
     </comment>
     <constant name="DIRC_rmin"                  value="CentralTrackingRegion_rmax"/>
     <constant name="DIRC_rmax"                  value="DIRC_rmin + DIRC_thickness"/>

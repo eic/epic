@@ -3,18 +3,29 @@ pbeam: 41
 features:
   beampipe:
   tracking:
+    vertex_barrel:
+    silicon_barrel:
+    mpgd_barrel:
+    silicon_disks:
+    support_service_assembly:
+    tof_barrel:
+    tof_endcap:
   pid:
     dirc:
-    mrich:
+    pfrich:
     drich:
   ecal:
     forward_scifi:
     forward_homogeneous:
     forward_insert:
-    barrel_sciglass:
+    barrel_interlayers:
     backward_PbWO4:
   solenoid:
   hcal:
+    forward:
+    forward_insert:
+    barrel:
+    backward:
   farforward:
     brycecanyon
   farbackward:
