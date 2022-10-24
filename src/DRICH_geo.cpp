@@ -268,7 +268,7 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
   // aerogel placement and surface properties
   // TODO [low-priority]: define skin properties for aerogel and filter
   // FIXME: radiatorPitch might not be working correctly (not yet used)
-  auto radiatorPos      = Position(0., 0., radiatorFrontplane) + originFront;
+  auto radiatorPos      = Position(0., 0., radiatorFrontplane + 0.5 * aerogelThickness) + originFront;
   auto aerogelPlacement = Translation3D(radiatorPos.x(), radiatorPos.y(), radiatorPos.z()) * // re-center to originFront
                           RotationY(radiatorPitch); // change polar angle to specified pitch
   auto       aerogelPV = gasvolVol.placeVolume(aerogelVol, aerogelPlacement);
@@ -574,7 +574,4 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
 }
 
 // clang-format off
-#ifdef EPIC_ECCE_LEGACY_COMPAT
-DECLARE_DETELEMENT(ecce_DRICH, createDetector)
-#endif
 DECLARE_DETELEMENT(epic_DRICH, createDetector)

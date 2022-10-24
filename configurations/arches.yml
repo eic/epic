@@ -1,3 +1,5 @@
+ebeam: 18
+pbeam: 275
 features:
   beampipe:
   tracking:
@@ -10,15 +12,19 @@ features:
     tof_barrel:
     tof_endcap:
   pid:
+    dirc:
+    mrich:
+    drich:
   ecal:
-    forward_scifi
-    forward_homogeneous
-    forward_insert
-    barrel_sciglass
-    backward_PbWO4
+    forward_scifi:
+    forward_homogeneous:
+    barrel_sciglass:
+    backward_PbWO4:
   solenoid:
   hcal:
     forward:
-    forward_insert:
     barrel:
     backward:
+  farforward:
+    arches
+  farbackward:

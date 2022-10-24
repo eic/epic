@@ -1,264 +1,410 @@
-#include <DD4hep/DetFactoryHelper.h>
-#include <DD4hep/OpticalSurfaces.h>
-#include <DD4hep/Printout.h>
-#include <Math/AxisAngle.h>
-#include <Math/Vector3D.h>
-#include <Math/VectorUtil.h>
-#include <XML/Helper.h>
-#include <algorithm>
-#include <iostream>
+/*
+ * This file is part of EPIC Sci-Glass BECal Detector Description.
+ *
+ * EPIC Sci-Glass BECal Detector Description is free software: you can
+ * redistribute it and/or modify it under the terms of the GNU Lesser
+ * General Public License as published by the Free Software
+ * Foundation, either version 3 of the License, or (at your option)
+ * any later version.
+ *
+ * EPIC Sci-Glass BECal Detector Description is distributed in the
+ * hope that it will be useful, but WITHOUT ANY WARRANTY; without even
+ * the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
+ * PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ *
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this file. If not, see
+ * <https://www.gnu.org/licenses/>.
+ */
+
+#include <array>
 #include <limits>
-#include <math.h>
-#include <tuple>
+#include <string>
 
-#include "GeometryHelpers.h"
+#include <DD4hep/DetFactoryHelper.h>
+#include <DD4hep/Printout.h>
 
+using std::string;
 using namespace dd4hep;
 
-// helper function to get x, y, z if defined in a xml component
-template <class XmlComp>
-Position get_xml_xyz(const XmlComp& comp, dd4hep::xml::Strng_t name)
-{
-  Position pos(0., 0., 0.);
-  if (comp.hasChild(name)) {
-    auto child = comp.child(name);
-    pos.SetX(dd4hep::getAttrOrDefault<double>(child, _Unicode(x), 0.));
-    pos.SetY(dd4hep::getAttrOrDefault<double>(child, _Unicode(y), 0.));
-    pos.SetZ(dd4hep::getAttrOrDefault<double>(child, _Unicode(z), 0.));
-  }
-  return pos;
-}
+static Ref_t create_detector(Detector &lcdd, xml_h handle,
+                             SensitiveDetector sens) {
+  xml_det_t det_handle = handle;
+  xml_dim_t envelope_handle = det_handle.dimensions();
+  xml_dim_t sectors_handle = det_handle.child(_Unicode(sectors));
+  xml_dim_t rows_handle = sectors_handle.child(_Unicode(rows));
+  xml_dim_t dim_handle = rows_handle.dimensions();
+  double row_rmin = dim_handle.inner_r();
+  DetElement det_element{det_handle.nameStr(), det_handle.id()};
 
-static Ref_t create_detector(Detector& desc, xml::Handle_t handle, SensitiveDetector sens)
-{
-  xml_det_t  x_det    = handle;
-  auto       det_name = x_det.nameStr();
-  DetElement det(det_name, x_det.id());
-  sens.setType("calorimeter");
-
-  // detector position and rotation
-  auto det_pos = get_xml_xyz(x_det, _U(position));
-  auto det_rot = get_xml_xyz(x_det, _U(rotation));
-
-  // envelop
-  auto                dim    = x_det.dimensions();
-  auto                rmin   = dim.rmin();
-  auto                rmax   = dim.rmax();
-  auto                zmin   = dim.zmin();
-  auto                zmax   = dim.zmax();
-  auto                etamin = dd4hep::getAttrOrDefault<double>(x_det.child(_U(dimensions)), _Unicode(etamin),
-                                                 -std::numeric_limits<double>::max());
-  auto                etamax = dd4hep::getAttrOrDefault<double>(x_det.child(_U(dimensions)), _Unicode(etamax),
-                                                 +std::numeric_limits<double>::max());
+  // envelope
   std::vector<double> v_rmin, v_rmax, v_z;
-  auto                theta = [](const auto eta) { return 2.0 * atan(exp(-eta)); };
 
-  // backward nose cone
-  printout(DEBUG, "SciGlassCalorimeter", "etamin cutout: etamin = %f, thetamin = %f", etamin, theta(etamin));
-  if (-zmin * sin(theta(etamin)) < rmin) {
-    // no cutout: regular end face
-    printout(DEBUG, "SciGlassCalorimeter", "no etamin cutout: zmin * sin(theta(etamin)) = %f < rmin = %f",
-             zmin * sin(theta(etamin)), rmin);
-    v_z.emplace_back(zmin);
-    v_rmin.emplace_back(rmin);
-    v_rmax.emplace_back(rmax);
-  } else {
-    // with cutout: first add zmin side
-    printout(DEBUG, "SciGlassCalorimeter", "etamin cutout: zmin * sin(theta(etamin)) = %f > rmin = %f",
-             zmin * sin(theta(etamin)), rmin);
-    auto z = std::max(zmin, rmax / tan(theta(etamin))); // zmin or furthest backwards
-    v_z.emplace_back(z);
-    v_rmin.emplace_back(std::max(rmin, z * tan(theta(etamin))));
-    v_rmax.emplace_back(rmax);
-    // then where cutout starts
-    v_z.emplace_back(rmin / tan(theta(etamin)));
-    v_rmin.emplace_back(rmin);
-    v_rmax.emplace_back(rmax);
-  }
+  {
+    auto                dim    = det_handle.dimensions();
+    auto                rmin   = dim.rmin();
+    auto                rmax   = dim.rmax();
+    auto                zmin   = dim.zmin();
+    auto                zmax   = dim.zmax();
+    auto                etamin = dd4hep::getAttrOrDefault<double>(det_handle.child(_U(dimensions)), _Unicode(etamin),
+                                                   -std::numeric_limits<double>::max());
+    auto                etamax = dd4hep::getAttrOrDefault<double>(det_handle.child(_U(dimensions)), _Unicode(etamax),
+                                                   +std::numeric_limits<double>::max());
+    auto                theta = [](const auto eta) { return 2.0 * atan(exp(-eta)); };
 
-  // forward nose cone
-  printout(DEBUG, "SciGlassCalorimeter", "etamax cutout: etamax = %f, thetamax = %f", etamax, theta(etamax));
-  if (zmax * sin(theta(etamax)) < rmin) {
-    // no cutout: regular end face
-    printout(DEBUG, "SciGlassCalorimeter", "no etamax cutout: zmax * sin(theta(etamin)) = %f < rmin = %f",
-             zmax * sin(theta(etamax)), rmin);
-    v_z.emplace_back(zmax);
-    v_rmin.emplace_back(rmin);
-    v_rmax.emplace_back(rmax);
-  } else {
-    // with cutout: first add where cutout starts
-    printout(DEBUG, "SciGlassCalorimeter", "etamax cutout: zmax * sin(theta(etamax)) = %f > rmin = %f",
-             zmax * sin(theta(etamax)), rmin);
-    v_z.emplace_back(rmin / tan(theta(etamax)));
-    v_rmin.emplace_back(rmin);
-    v_rmax.emplace_back(rmax);
-    // then add zmax side
-    auto z = std::min(zmax, rmax / tan(theta(etamax))); // zmax or furthest forward
-    v_z.emplace_back(z);
-    v_rmin.emplace_back(std::max(rmin, z * tan(theta(etamax))));
-    v_rmax.emplace_back(rmax);
+    // backward nose cone
+    printout(DEBUG, "SciGlassCalorimeter", "etamin cutout: etamin = %f, thetamin = %f", etamin, theta(etamin));
+    if (zmin * tan(theta(etamin)) < rmin) {
+      // no cutout: regular end face
+      printout(DEBUG, "SciGlassCalorimeter", "no etamin cutout: zmin * tan(theta(etamin)) = %f < rmin = %f",
+               zmin * tan(theta(etamin)), rmin);
+      v_z.emplace_back(zmin);
+      v_rmin.emplace_back(rmin);
+      v_rmax.emplace_back(rmax);
+    } else {
+      // with cutout: first add zmin side
+      printout(DEBUG, "SciGlassCalorimeter", "etamin cutout: zmin * tan(theta(etamin)) = %f > rmin = %f",
+               zmin * tan(theta(etamin)), rmin);
+      auto z = std::max(zmin, rmax / tan(theta(etamin))); // zmin or furthest backwards
+      v_z.emplace_back(z);
+      v_rmin.emplace_back(std::max(rmin, z * tan(theta(etamin))));
+      v_rmax.emplace_back(rmax);
+      // then where cutout starts
+      v_z.emplace_back(rmin / tan(theta(etamin)));
+      v_rmin.emplace_back(rmin);
+      v_rmax.emplace_back(rmax);
+    }
+
+    // forward nose cone
+    printout(DEBUG, "SciGlassCalorimeter", "etamax cutout: etamax = %f, thetamax = %f", etamax, theta(etamax));
+    if (zmax * tan(theta(etamax)) < rmin) {
+      // no cutout: regular end face
+      printout(DEBUG, "SciGlassCalorimeter", "no etamax cutout: zmax * tan(theta(etamin)) = %f < rmin = %f",
+               zmax * tan(theta(etamax)), rmin);
+      v_z.emplace_back(zmax);
+      v_rmin.emplace_back(rmin);
+      v_rmax.emplace_back(rmax);
+    } else {
+      // with cutout: first add where cutout starts
+      printout(DEBUG, "SciGlassCalorimeter", "etamax cutout: zmax * tan(theta(etamax)) = %f > rmin = %f",
+               zmax * tan(theta(etamax)), rmin);
+      v_z.emplace_back(rmin / tan(theta(etamax)));
+      v_rmin.emplace_back(rmin);
+      v_rmax.emplace_back(rmax);
+      // then add zmax side
+      auto z = std::min(zmax, rmax / tan(theta(etamax))); // zmax or furthest forward
+      v_z.emplace_back(z);
+      v_rmin.emplace_back(std::max(rmin, z * tan(theta(etamax))));
+      v_rmax.emplace_back(rmax);
+    }
   }
 
   // create polycone
-  Polycone envShape(0.0, 2 * M_PI, v_rmin, v_rmax, v_z);
-  Volume   env(det_name + "_envelope", envShape, desc.material("Air"));
-  env.setVisAttributes(desc.visAttributes(x_det.visStr()));
+  Polycone envelope_shape(0.0, 2 * M_PI, v_rmin, v_rmax, v_z);
+  Volume envelope_v{det_handle.nameStr(), envelope_shape, lcdd.material("Air")};
 
-  // number of modules (default to 128 in phi, and 1 in eta so one ring is placed)
-  xml_comp_t x_mod     = x_det.child(_U(module));
-  auto       n_phi     = getAttrOrDefault<size_t>(x_mod, _Unicode(repeat_phi), 128);
-  auto       n_eta_pos = getAttrOrDefault<size_t>(x_mod, _Unicode(repeat_eta_pos), 1);
-  auto       n_eta_neg = getAttrOrDefault<size_t>(x_mod, _Unicode(repeat_eta_neg), 1);
+  PlacedVolume envelope_pv =
+      lcdd.pickMotherVolume(det_element).placeVolume(envelope_v);
+  envelope_pv.addPhysVolID("system", det_handle.id());
+  det_element.setPlacement(envelope_pv);
 
-  // angle to exscribed chord
-  auto xcrd = [](const float& phi) { return 2.0 * tan(phi / 2.0); }; // unsafe for phi = pi, no exscribed chord
+  sens.setType("calorimeter");
 
-  // angular size in phi
-  auto dphi      = 2.0 * M_PI / n_phi;
-  auto r0        = getAttrOrDefault<float>(dim, _U(r0), rmin); // dd4hep::xml::Dimension::r0 is missing implementation in DD4hep
-  auto xcrd_dphi = r0 * xcrd(dphi); // size of module around phi around inscribed circle
-  printout(DEBUG, "SciGlassCalorimeter", "r0 = %f, dphi = %f, xcrd_dphi = %f", r0, dphi, xcrd_dphi);
+  double support_inner_r = std::numeric_limits<double>::max();
 
-  // module parameters
-  auto mod_name                    = x_mod.nameStr();
-  auto mod_length                  = getAttrOrDefault<float>(x_mod, _Unicode(length), 0.0);
-  auto mod_round_backface_to       = getAttrOrDefault<float>(x_mod, _Unicode(round_backface_to), 0.0);
-  auto mod_phi_projectivity_tilt   = getAttrOrDefault<float>(x_mod, _Unicode(phi_projectivity_tilt), 0.0);
-  auto mod_eta_projectivity_offset = getAttrOrDefault<float>(x_mod, _Unicode(eta_projectivity_offset), 0.0);
-  printout(DEBUG, "SciGlassCalorimeter", "Proj: phi = %f, eta = %f", mod_phi_projectivity_tilt,
-           mod_eta_projectivity_offset);
+  if (det_handle.hasChild(_Unicode(outer_supports))) {
+    xml_comp_t outer_supports = det_handle.child(_Unicode(outer_supports));
 
-  // solver (secant's method)
-  auto solve_secant = [](const auto& f, auto x0, auto x1, const float eps = 1e-4f, const size_t n = 10u) {
-    size_t i  = 0;
-    auto   x2 = x1;
-    while (fabs(x1 - x0) > eps && ++i < n) {
-      x2 -= f(x1) * (x1 - x0) / (f(x1) - f(x0));
-      x0 = x1;
-      x1 = x2;
+    for (xml_coll_t layer_handle{outer_supports, _Unicode(layer)};
+         layer_handle; ++layer_handle) {
+      xml_comp_t outer_support_handle = layer_handle;
+      Material outer_support_mat = lcdd.material(outer_support_handle.materialStr());
+
+      Tube outer_support_tube_full_shape {
+        outer_support_handle.inner_r(),
+        outer_support_handle.inner_r() + outer_support_handle.thickness(),
+        (envelope_handle.zmax() - envelope_handle.zmin()) / 2
+      };
+      IntersectionSolid outer_support_tube_shape{
+        outer_support_tube_full_shape,
+        envelope_shape,
+      };
+
+      support_inner_r = std::min(support_inner_r, outer_support_handle.inner_r());
+
+      Volume outer_support_tube_v {"outer_support", outer_support_tube_shape, outer_support_mat};
+      outer_support_tube_v.setVisAttributes(lcdd.visAttributes(outer_support_handle.visStr()));
+      envelope_v.placeVolume(outer_support_tube_v);
     }
-    return std::pair{x2, i != n};
-  };
+  }
 
-  // start at center and move outwards in eta
-  auto theta_min = 0.0;
-  auto theta_max = 0.0;
-  for (unsigned int k_eta = 0; k_eta < std::max(n_eta_neg, n_eta_pos); k_eta++) {
-    // previous theta_max is current theta_min
-    theta_min = theta_max;
+  if (det_handle.hasChild(_Unicode(wedge_box))) {
+    xml_comp_t wedge_box_handle = det_handle.child(_Unicode(wedge_box));
+    Material wedge_box_mat = lcdd.material(wedge_box_handle.materialStr());
 
-    // inner face (default to touching blocks with square face)
-    const auto mod_x1 = getAttrOrDefault<float>(x_mod, _Unicode(x1), xcrd_dphi * cos(mod_phi_projectivity_tilt));
-    const auto mod_y1 = getAttrOrDefault<float>(x_mod, _Unicode(y1), mod_x1);
-    // FIXME base should not be square or leakage will be present even for phi_projectivity_tilt == 0
-    // instead of Trd2 with x1 and x2, we may need a Trap with x1, x2, x3, x4
+    // Approximate bottoms of wedge boxes with a single tube common for all sectors
+    // The actual wedge bottom may have to be a plane, not a tube section
 
-    // theta_max update
-    // dtheta is the solution of sin(dtheta / 2.0) / cos(theta_min + dtheta) = mod_y1 / 2.0 / r0
-    const auto dtheta0 = mod_y1 / 2.0 / r0;
-    const auto dtheta1 = 2.0 * asin(dtheta0);
-    const auto f       = [&theta_min, &dtheta0](const auto& dtheta) {
-      return sin(dtheta / 2.0) / cos(theta_min + dtheta) - dtheta0;
+    Tube wedge_box_tube_full_shape {
+      wedge_box_handle.inner_r(),
+      wedge_box_handle.inner_r() + wedge_box_handle.thickness(),
+      (envelope_handle.zmax() - envelope_handle.zmin()) / 2
     };
-    const auto [dtheta, valid] = solve_secant(f, dtheta0, dtheta1);
-    if (!valid) {
-      printout(WARNING, "SciGlassCalorimeter", "cannot solve for dtheta");
-    }
-    theta_max = theta_min + dtheta;
+    IntersectionSolid wedge_box_tube_shape{
+      wedge_box_tube_full_shape,
+      envelope_shape,
+    };
 
-    // outer face (default to radial extension to square face)
-    auto mod_expansion = cos(theta_max) / r0;
-    auto mod_x2        = getAttrOrDefault<float>(x_mod, _Unicode(x2), mod_x1 * (1 + mod_expansion * mod_length));
-    auto mod_y2        = getAttrOrDefault<float>(x_mod, _Unicode(y2), mod_y1 * (1 + mod_expansion * mod_length));
-    // round down to nearest multiple for limited block families
-    if (mod_round_backface_to > 0.0) {
-      mod_x2        = std::floor(mod_x2 / mod_round_backface_to) * mod_round_backface_to;
-      mod_y2        = std::floor(mod_y2 / mod_round_backface_to) * mod_round_backface_to;
-      mod_expansion = (mod_x2 / mod_x1 - 1.0) / mod_length;
-    }
-    printout(DEBUG, "SciGlassCalorimeter", "Trd2: x1 = %f, x2 = %f, y1 = %f, y2 = %f", mod_x1, mod_x2, mod_y1, mod_y2);
+    Volume wedge_box_tube_v {"wedge_box_placeholder", wedge_box_tube_shape, wedge_box_mat};
+    wedge_box_tube_v.setVisAttributes(lcdd.visAttributes(wedge_box_handle.visStr()));
+    envelope_v.placeVolume(wedge_box_tube_v);
 
-    // create module envelope
-    Trd2     mod_env_trd(mod_x1 / 2.0, mod_x2 / 2.0, mod_y1 / 2.0, mod_y2 / 2.0, mod_length / 2.0);
-    Material mod_env_mat(desc.material(x_mod.materialStr()));
-    Volume   mod_env(mod_name + _toString((signed)k_eta, "_sector%d"), mod_env_trd, mod_env_mat);
-    mod_env.setVisAttributes(desc.visAttributes(x_mod.visStr()));
+    // The sides of the box are also shared between each pair of the adjacent sectors
 
-    // place slices in module
-    auto s_num   = 1u;
-    auto s_r     = r0;
-    auto s_x1    = mod_x1;
-    auto s_y1    = mod_y1;
-    auto s_x2    = mod_x2;
-    auto s_y2    = mod_y2;
-    auto s_pos_z = -mod_length / 2.0;
-    for (xml_coll_t si(x_mod, _U(slice)); si; ++si) {
-      xml_comp_t x_slice     = si;
-      auto       s_name      = Form("slice%d", s_num);
-      const auto s_material  = desc.material(x_slice.materialStr());
-      const auto s_thickness = dd4hep::getAttrOrDefault<float>(x_slice, _Unicode(thickness), 0.);
-      s_x2                   = s_x1 * (1 + mod_expansion * s_thickness);
-      s_y2                   = s_y1 * (1 + mod_expansion * s_thickness);
-      Trd2   s_trd(s_x1 / 2.0, s_x2 / 2.0, s_y1 / 2.0, s_y2 / 2.0, s_thickness / 2.0);
-      Volume s_vol(s_name, s_trd, s_material);
-      s_vol.setVisAttributes(desc.visAttributes(x_slice.visStr()));
-      if (x_slice.isSensitive()) {
-        s_vol.setSensitiveDetector(sens);
-      }
-      // DetElement slice(stave_det, s_name, det_id);
-      s_pos_z += s_thickness / 2.0;
-      mod_env.placeVolume(s_vol, Position(0, 0, s_pos_z));
-      s_pos_z += s_thickness / 2.0;
-      // set starting face for next slice
-      s_r += s_thickness / cos(dtheta / 2.0) * cos(M_PI_2 - theta_max);
-      s_x1 = s_x2;
-      s_y1 = s_y2;
+    const double side_rmin = wedge_box_handle.inner_r() + wedge_box_handle.thickness();
+    const double side_rmax_default =
+      std::min(
+        envelope_handle.rmax(),
+        // subtract a unit of thickness to avoid an overlap
+        support_inner_r - wedge_box_handle.thickness()
+      );
+    const double side_rmax = dd4hep::getAttrOrDefault<double>(
+      wedge_box_handle, _U(outer_r),
+      side_rmax_default
+      );
+
+    Box wedge_box_side_box_shape{
+      (side_rmax - side_rmin) / 2,
+      // It would make sense for a shared side to have double thickness, but we seemingly don't have space for that
+      wedge_box_handle.thickness() / 2,
+      (envelope_handle.zmax() - envelope_handle.zmin()) / 2
+    };
+    IntersectionSolid wedge_box_side_shape{
+      envelope_shape,
+      wedge_box_side_box_shape,
+      Position{(side_rmax + side_rmin) / 2, 0, (envelope_handle.zmax() + envelope_handle.zmin()) / 2}
+    };
+
+    Volume wedge_box_side_v {"wedge_box_side", wedge_box_side_shape, wedge_box_mat};
+    wedge_box_side_v.setVisAttributes(lcdd.visAttributes(wedge_box_handle.visStr()));
+
+    int sector = 0;
+    double sector_phi = sectors_handle.phi0();
+    for (; sector < sectors_handle.number();
+         sector++, sector_phi += sectors_handle.deltaphi()) {
+      envelope_v.placeVolume(
+        wedge_box_side_v,
+        Transform3D{RotationZ{sector_phi + sectors_handle.deltaphi() / 2}}
+        );
     }
 
-    // place around phi
-    for (size_t j_phi = 0; j_phi < n_phi; j_phi++) {
-      // azimuthal and polar angles
-      const auto phi       = dphi * j_phi;
-      const auto avg_theta = 0.5 * (theta_min + theta_max);
+    // TODO: The endcap sides of the box are not implemented
+  }
 
-      // module center position
-      const auto r = r0 + 0.5 * mod_x1 * sin(mod_phi_projectivity_tilt) + 0.5 * mod_y1 * sin(avg_theta) +
-                     0.5 * mod_length * cos(avg_theta);
-      const auto x = r * cos(phi);
-      const auto y = r * sin(phi);
-      const auto z = r / tan(M_PI_2 - avg_theta);
+  int sector = 0;
+  double sector_phi = sectors_handle.phi0();
+  for (; sector < sectors_handle.number();
+       sector++, sector_phi += sectors_handle.deltaphi()) {
+    int row = 0;
+    double row_phi = -rows_handle.deltaphi() / 2 * (rows_handle.number() - 1);
+    for (; row < rows_handle.number();
+         row++, row_phi += rows_handle.deltaphi()) {
 
-      // place negative module
-      if (k_eta < n_eta_neg) {
-        Transform3D tr_neg = Translation3D(x, y, -det_pos.z() + mod_eta_projectivity_offset - z) *
-                             RotationZ(phi + mod_phi_projectivity_tilt) * RotationY(M_PI_2 + avg_theta);
-        auto pv_neg = env.placeVolume(mod_env, tr_neg);
-        pv_neg.addPhysVolID("sector", n_eta_neg + n_eta_pos - k_eta - 1);
-        pv_neg.addPhysVolID("module", j_phi);
-      }
+      const double tower_gap_longitudinal = dim_handle.gap();
 
-      // place positive module
-      if (k_eta < n_eta_pos) {
-        Transform3D tr_pos = Translation3D(x, y, -det_pos.z() + mod_eta_projectivity_offset + z) *
-                             RotationZ(phi + mod_phi_projectivity_tilt) * RotationY(M_PI_2 - avg_theta);
-        auto pv_pos = env.placeVolume(mod_env, tr_pos);
-        pv_pos.addPhysVolID("sector", k_eta);
-        pv_pos.addPhysVolID("module", j_phi);
+      // negative rapidity towers will be counted backwards from -1
+      std::array<int, 2> tower_ids = {-1, 0};
+      std::array<double, 2> betas = {0., 0.};
+      std::array<double, 2> beta_prevs = {0., 0.};
+      std::array<double, 2> dzs = {0., 0.};
+      std::array<double, 2> flare_angle_polar_prevs = {0., 0.};
+
+      for (xml_coll_t family_handle{rows_handle, _Unicode(family)};
+           family_handle; ++family_handle) {
+        const int dir_sign = family_handle.attr<double>(_Unicode(dir_sign));
+        int &tower_id = tower_ids[(dir_sign > 0) ? 1 : 0];
+        double &beta = betas[(dir_sign > 0) ? 1 : 0];
+        double &beta_prev = beta_prevs[(dir_sign > 0) ? 1 : 0];
+        double &dz = dzs[(dir_sign > 0) ? 1 : 0];
+        double &flare_angle_polar_prev =
+            flare_angle_polar_prevs[(dir_sign > 0) ? 1 : 0];
+
+        xml_dim_t family_dim_handle = family_handle;
+        const double length = family_dim_handle.z_length();
+        const auto flare_angle_polar =
+            family_dim_handle.attr<double>(_Unicode(flare_angle_polar));
+        const unsigned int number = family_dim_handle.number();
+        const auto flare_angle_at_face =
+            family_dim_handle.attr<double>(_Unicode(flare_angle_at_face));
+
+        const double z = length / 2;
+        const double y1 = family_dim_handle.y1();
+        const double y2 = y1 + length * tan(flare_angle_polar);
+        const double x1 =
+            family_dim_handle.x1() +
+            (dir_sign < 0) * (2 * y1) * tan(flare_angle_at_face);
+        const double x2 =
+            family_dim_handle.x1() +
+            (dir_sign > 0) * (2 * y1) * tan(flare_angle_at_face);
+        const double x3 = x1 * (y2 / y1);
+        const double x4 = x2 * (y2 / y1);
+        const double theta = 0.;
+        const double phi = 0.;
+        const double alpha1 = 0.;
+        const double alpha2 = 0.;
+
+        for (unsigned int tower = 0; tower < number; tower++, tower_id += dir_sign) {
+          // see https://github.com/eic/epic/blob/main/doc/sciglass_tower_stacking.svg
+          beta += flare_angle_polar_prev + flare_angle_polar;
+          const double gamma = M_PI_2 - flare_angle_polar_prev - beta_prev;
+
+          const double dz_prev = dz;
+          dz += (tower_gap_longitudinal / cos(flare_angle_polar) + 2 * y1) *
+                sin(M_PI - gamma - beta) / sin(gamma);
+          const string t_name = _toString(sector, "sector%d") + _toString(row, "_row%d") + _toString(tower_id, "_tower%d");
+          envelope_v
+              .placeVolume(
+                  Volume{t_name,
+                         Trap{z, theta, phi, y1, x1, x2, alpha1, y2, x3, x4,
+                              alpha2},
+                         lcdd.material("SciGlass")},
+                  Transform3D{RotationZ{-M_PI_2 + sector_phi + row_phi}} *
+                      Transform3D{Position{0. * cm, row_rmin, dir_sign * dz}} *
+                      Transform3D{RotationX{-M_PI / 2 + dir_sign * beta}} *
+                      Transform3D{Position{0, dir_sign * y1, z}})
+              .addPhysVolID("sector", sector)
+              .addPhysVolID("module", row)
+              .addPhysVolID("slice", tower_id)
+              .volume()
+              .setSensitiveDetector(sens)
+              .setVisAttributes(lcdd.visAttributes(family_dim_handle.visStr()));
+
+          if (sectors_handle.hasChild(_Unicode(carbon_fiber_support))) {
+            xml_comp_t carbon_fiber_support_handle = sectors_handle.child(_Unicode(carbon_fiber_support));
+            xml_comp_t cut_out_handle = carbon_fiber_support_handle.child(_Unicode(cut_out));
+            Material carbon_fiber_support_mat = lcdd.material(carbon_fiber_support_handle.materialStr());
+
+            const double margin_horizontal = cut_out_handle.attr<double>(_Unicode(margin_horizontal));
+            const double margin_top = cut_out_handle.attr<double>(_Unicode(margin_top));
+            const double margin_bottom = cut_out_handle.attr<double>(_Unicode(margin_bottom));
+            const double overhang_top = carbon_fiber_support_handle.attr<double>(_Unicode(overhang_top));
+            const double overhang_bottom = carbon_fiber_support_handle.attr<double>(_Unicode(overhang_bottom));
+
+            const double y1_long =
+              y1 + tower_gap_longitudinal / 2 / cos(flare_angle_polar) - overhang_bottom * tan(flare_angle_polar);
+            const double y2_long =
+              y2 + tower_gap_longitudinal / 2 / cos(flare_angle_polar) + overhang_top * tan(flare_angle_polar);
+
+            Trap trap_long_1{
+              z + (overhang_top + overhang_bottom) / 2,
+              theta,
+              phi,
+              y1_long,
+              carbon_fiber_support_handle.thickness() / 2,
+              carbon_fiber_support_handle.thickness() / 2,
+              alpha1,
+              y2_long,
+              carbon_fiber_support_handle.thickness() / 2,
+              carbon_fiber_support_handle.thickness() / 2,
+              alpha2
+            };
+            Trap trap_long_2{
+              z - (margin_top + margin_bottom) / 2,
+              theta,
+              phi,
+              y1_long - margin_horizontal / 2, // FIXME: y1_long/y2_long do not account for reduction of z by the vertical margins
+              carbon_fiber_support_handle.thickness(), // no division by 2 to ensure subtrahend volume is thicker than the minuend
+              carbon_fiber_support_handle.thickness(),
+              alpha1,
+              y2_long - margin_horizontal / 2,
+              carbon_fiber_support_handle.thickness(),
+              carbon_fiber_support_handle.thickness(),
+              alpha2
+            };
+            SubtractionSolid trap_long{
+              trap_long_1, trap_long_2,
+              Position{0., 0., (margin_bottom - margin_top) / 2}
+            };
+
+            for (int side = (row == 0) ? 0 : 1; side <= 1; side++) {
+              envelope_v
+                  .placeVolume(
+                      Volume{"fiber_structure_longitudinal", trap_long, carbon_fiber_support_mat},
+                      Transform3D{RotationZ{-M_PI_2 + sector_phi + row_phi + (2 * side - 1) * rows_handle.deltaphi() / 2}} *
+                      Transform3D{Position{0. * cm, row_rmin, dir_sign * dz}} *
+                      Transform3D{RotationX{-M_PI / 2 + dir_sign * beta}} *
+                      Transform3D{Position{0, dir_sign * y1, z + (overhang_top - overhang_bottom) / 2}})
+                  .volume()
+                  .setVisAttributes(lcdd.visAttributes(carbon_fiber_support_handle.visStr()));
+            }
+
+            const double dz_trans = dz_prev
+              + (tower_gap_longitudinal / 2 + carbon_fiber_support_handle.thickness() / 2) / cos(flare_angle_polar)
+              * sin(M_PI - gamma - beta) / sin(gamma);
+
+            const double non_overlap_long = sin(beta) * (tower_gap_longitudinal / cos(flare_angle_polar) + 2 * y1) / sin(gamma);
+
+            const double beta_trans = beta_prev + flare_angle_polar_prev;
+            const double x1_trans =
+              tan(rows_handle.deltaphi() / 2) * (row_rmin - overhang_bottom * cos(beta_trans))
+              - carbon_fiber_support_handle.thickness() / 2 / cos(rows_handle.deltaphi() / 2);
+            const double x2_trans =
+              tan(rows_handle.deltaphi() / 2) * (row_rmin + (2 * z + overhang_top + non_overlap_long) * cos(beta_trans))
+              - carbon_fiber_support_handle.thickness() / 2 / cos(rows_handle.deltaphi() / 2);
+
+            Trap trap_trans_1 {
+              z + (overhang_top + non_overlap_long + overhang_bottom) / 2,
+              theta,
+              phi,
+              carbon_fiber_support_handle.thickness() / 2,
+              x1_trans,
+              x1_trans,
+              alpha1,
+              carbon_fiber_support_handle.thickness() / 2,
+              x2_trans,
+              x2_trans,
+              alpha2
+            };
+            Trap trap_trans_2{
+              z - (margin_top + 2 * non_overlap_long + margin_bottom) / 2,
+              theta,
+              phi,
+              carbon_fiber_support_handle.thickness(), // no division by 2 to ensure subtrahend volume is thicker than the minuend
+              x1_trans - margin_horizontal / 2, // FIXME: x1_trans/x2_trans do not account for reduction of z by the vertical margins
+              x1_trans - margin_horizontal / 2,
+              alpha1,
+              carbon_fiber_support_handle.thickness(),
+              x2_trans - margin_horizontal / 2,
+              x2_trans - margin_horizontal / 2,
+              alpha2
+            };
+            SubtractionSolid trap_trans{
+              trap_trans_1, trap_trans_2,
+              Position{0., 0., (margin_bottom + non_overlap_long - margin_top) / 2}
+            };
+
+            envelope_v
+                .placeVolume(
+                    Volume{"fiber_structure_transverse" + t_name, trap_trans, carbon_fiber_support_mat},
+                    Transform3D{RotationZ{-M_PI_2 + sector_phi + row_phi}} *
+                    Transform3D{Position{0. * cm, row_rmin, dir_sign * dz_trans}} *
+                    Transform3D{RotationX{-M_PI / 2 + dir_sign * beta_trans}} *
+                    Transform3D{Position{0, dir_sign * carbon_fiber_support_handle.thickness() / 2, z + (overhang_top + non_overlap_long - overhang_bottom) / 2}})
+                .volume()
+                .setVisAttributes(lcdd.visAttributes(carbon_fiber_support_handle.visStr()));
+          }
+
+          beta_prev = beta;
+          flare_angle_polar_prev = flare_angle_polar;
+        }
       }
     }
   }
 
-  // placement
-  Volume      motherVol = desc.pickMotherVolume(det);
-  Transform3D tr =
-      Translation3D(det_pos.x(), det_pos.y(), det_pos.z()) * RotationZYX(det_rot.z(), det_rot.y(), det_rot.x());
-  auto pv_env = motherVol.placeVolume(env, tr);
-  pv_env.addPhysVolID("system", det.id());
-  det.setPlacement(pv_env);
-  return det;
+  envelope_v.setVisAttributes(lcdd.visAttributes(det_handle.visStr()));
+
+  return det_element;
 }
 
-#ifdef EPIC_ECCE_LEGACY_COMPAT
-DECLARE_DETELEMENT(ecce_SciGlassCalorimeter, create_detector)
-#endif
 DECLARE_DETELEMENT(epic_SciGlassCalorimeter, create_detector)

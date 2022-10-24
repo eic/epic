@@ -14,7 +14,7 @@
     </documentation>
     <constant name="HcalEndcapPAbsorberThickness"       value="1.6 * cm"/>
     <constant name="HcalEndcapPPolystyreneThickness"    value="0.4 * cm"/>
-
+    <constant name="HCalEndcapPElectronicsThickness"    value="10.0 * cm"/>
     <documentation>
       - Hcal Endcap N Layers and computed Thickness
     </documentation>
@@ -22,7 +22,7 @@
     <constant name="HcalEndcapPSingleLayerThickness"
              value="HcalEndcapPAbsorberThickness + HcalEndcapPPolystyreneThickness"/>
     <comment> FIXME: Need actual values once they are decided upon </comment>
-    <constant name="HcalEndcapPLayer_NSteelRepeat" value="50"/>
+    <constant name="HcalEndcapPLayer_NSteelRepeat" value="55"/>
     <constant name="HcalEndcapPLayer_NTungstenRepeat" value="10"/>
   </define>
 
@@ -36,17 +36,20 @@
       This is too long, so 10 layers of steel were removed as a placeholder until the final design is chosen
 
       The HCal forward insert shape is cut out from this detector
+
+      Currently don't have an implementation of electronics, so just leave that area (final 10 cm) empty
+      So then, actual detector area is "HcalEndcapP_length - HCalEndcapPElectronicsThickness" long
     </documentation>
     <detector
       id="HCalEndcapP_ID"
       name="HcalEndcapP"
-      type="epic_EndcapCalorimeterWithInsert"
+      type="epic_EndcapCalorimeterWithInsertCutout"
       readout="HcalEndcapPHits"
       vis="HcalEndcapVis"
       calorimeterType="HAD_ENDCAP">
       <position x="0" y="0" z="HcalEndcapP_zmin"/>
       <dimensions
-        z="HcalEndcapP_length"
+        z="HcalEndcapP_length - HCalEndcapPElectronicsThickness"
         rmin="0*cm"
         rmax="HcalEndcapP_rmax"/>
       <layer repeat="HcalEndcapPLayer_NSteelRepeat" vis="HcalEndcapLayerVis" thickness="HcalEndcapPSingleLayerThickness">
@@ -75,7 +78,7 @@
       reflect="false">
       <position x="0" y="0" z="0"/>
       <dimensions
-        numsides="CaloSides"
+        numsides="HcalBarrelStavesN"
         zmin="EcalEndcapP_zmin"
         rmin="EcalEndcapP_rmax"
         rmax="HcalBarrel_rmax"/>
