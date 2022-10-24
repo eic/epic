@@ -13,3 +13,6 @@ features:
     barrel_sciglass
     backward_PbWO4
   pid:
+    dirc:
+    mrich:
+    drich:
