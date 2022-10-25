@@ -81,9 +81,9 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
   double tile_tolerance = 0.2; // Tile tolerance in mm to avoid overlaps 
 
   // Tile rotation starting points to align with sector plates
-  double ctileRotateStart  = 5.495*(360.0/320.0)*dd4hep::deg;
-  double octileRotateStart = 5.520*(360.0/320.0)*dd4hep::deg;
-  double tileRotateStart  = 20.40125*(360.0/320.0)*dd4hep::deg + ctileRotateStart; 
+  double ctileRotateStart  = 5.4420*(360.0/320.0)*dd4hep::deg;
+  double octileRotateStart = 5.4420*(360.0/320.0)*dd4hep::deg;
+  double tileRotateStart  = 20.38875*(360.0/320.0)*dd4hep::deg + ctileRotateStart; 
 
   for(xml_coll_t i(det_define, _Unicode(constant)); i; ++i){
     xml_comp_t  x_const = i; 
@@ -97,7 +97,7 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
       tilePlaneRotate = atof(const_value.c_str());
     else if(const_name == "csectorRotate")
       csectorRotate = atof(const_value.c_str());
-    else if(const_name == "sectorRotate")
+      else if(const_name == "sectorRotate")
       sectorRotate = atof(const_value.c_str());
     else
       printout(WARNING, "BarrelHCalCalorimeter", "unrecognized <constant> data!");
@@ -296,9 +296,9 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
     else if(solid_name == "HCAL_Chimney_Sector_Plate"){
 
       for(int i=0; i<9; i++)
-      ChimneySector.placeVolume(solidVolume, i, 
+        ChimneySector.placeVolume(solidVolume, i, 
       			  RotationZ((i*2*M_PI / 320) + csectorRotate*dd4hep::deg)*Transform3D(RotationZ(0.0), Translation3D(plates_x[1]*dd4hep::mm, plates_y[1]*dd4hep::mm, plates_z[1]*dd4hep::mm) ));
-
+    
     }
     else if(solid_name == "HCAL_Sector_Half_Plate"){
 
@@ -312,8 +312,8 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
     else if(solid_name == "HCAL_Sector_Plate"){
 
       for(int i=0; i<9; i++)
-      Sector.placeVolume(solidVolume, i, 
-         RotationZ((i*2*M_PI / 320) + sectorRotate*dd4hep::deg)*Transform3D(RotationZ(0.4*dd4hep::deg), Translation3D(plates_x[3]*dd4hep::mm, plates_y[3]*dd4hep::mm, plates_z[3]*dd4hep::mm) ));
+        Sector.placeVolume(solidVolume, i, 
+           RotationZ((i*2*M_PI / 320) + sectorRotate*dd4hep::deg)*Transform3D(RotationZ(0.4*dd4hep::deg), Translation3D(plates_x[3]*dd4hep::mm, plates_y[3]*dd4hep::mm, plates_z[3]*dd4hep::mm) ));
 
     }
     else{
@@ -344,26 +344,56 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
 
 	    for(int i=0; i<5; i++){ 
  
-	      PlacedVolume phv0 = Tower[11-tnum].placeVolume(solidVolume,i,RotationZ(octileRotateStart + i*(360.0/320.0)*dd4hep::deg)*
-					 Transform3D(RotationY(90.0*dd4hep::deg), Translation3D(xposOuter[0]*dd4hep::mm, yposOuter[0]*dd4hep::mm, 0.0))*
-					 RotationX(-tilePlaneRotate*dd4hep::deg)*Transform3D(RotationY(0.0), 
-											     Translation3D((xposTileS[tnum]+(tnum+1)*tile_tolerance)*dd4hep::mm, 
-													   yposTileS[tnum]*dd4hep::mm, zposTileS[tnum]*dd4hep::mm) ));
+	      if(tnum<8){
 
-	      phv0.addPhysVolID("tile", i + (11-tnum)*10);
-	      DetElement sd0 = tile_det.clone(_toString(i + (11-tnum)*10, "tile%d")); 
-	      sd0.setPlacement(phv0);
-	      sdet.add(sd0);
+		PlacedVolume phv0 = Tower[11-tnum].placeVolume(solidVolume,i,RotationZ(octileRotateStart + i*(360.0/320.0)*dd4hep::deg)*
+							       Transform3D(RotationY(90.0*dd4hep::deg), Translation3D(xposOuter[0]*dd4hep::mm, yposOuter[0]*dd4hep::mm, 0.0))*
+							       RotationX(-tilePlaneRotate*dd4hep::deg)*Transform3D(RotationY(0.0), 
+														   Translation3D((xposTileS[tnum]+(tnum+1)*tile_tolerance)*dd4hep::mm, 
+																 yposTileS[tnum]*dd4hep::mm, zposTileS[tnum]*dd4hep::mm) ));
 
-	      PlacedVolume phv1 = Tower[12+tnum].placeVolume(solidVolume,i+5,RotationZ(octileRotateStart + i*(360.0/320.0)*dd4hep::deg)*
-					 Transform3D(RotationY(90.0*dd4hep::deg), Translation3D(xposOuter[0]*dd4hep::mm, yposOuter[0]*dd4hep::mm, 0.0))*
-					 RotationX(-tilePlaneRotate*dd4hep::deg)*Transform3D(RotationY(180.0*dd4hep::deg), 
-											     Translation3D((xposTileN[tnum]-(tnum+1)*tile_tolerance)*dd4hep::mm, 
-													   yposTileN[tnum]*dd4hep::mm, zposTileN[tnum]*dd4hep::mm) ));
-	      phv1.addPhysVolID("tile", i+5 + (12+tnum)*10);
-	      DetElement sd1 = tile_det.clone(_toString(i+5+(12+tnum)*10, "tile%d")); 
-	      sd1.setPlacement(phv1);
-	      sdet.add(sd1);
+		phv0.addPhysVolID("tile", i + (11-tnum)*10);
+		DetElement sd0 = tile_det.clone(_toString(i + (11-tnum)*10, "tile%d")); 
+		sd0.setPlacement(phv0);
+		sdet.add(sd0);
+
+		PlacedVolume phv1 = Tower[12+tnum].placeVolume(solidVolume,i+5,RotationZ(octileRotateStart + i*(360.0/320.0)*dd4hep::deg)*
+							       Transform3D(RotationY(90.0*dd4hep::deg), Translation3D(xposOuter[0]*dd4hep::mm, yposOuter[0]*dd4hep::mm, 0.0))*
+							       RotationX(-tilePlaneRotate*dd4hep::deg)*Transform3D(RotationY(180.0*dd4hep::deg), 
+														   Translation3D((xposTileN[tnum]-(tnum+1)*tile_tolerance)*dd4hep::mm, 
+																 yposTileN[tnum]*dd4hep::mm, zposTileN[tnum]*dd4hep::mm) ));
+		phv1.addPhysVolID("tile", i+5 + (12+tnum)*10);
+		DetElement sd1 = tile_det.clone(_toString(i+5+(12+tnum)*10, "tile%d")); 
+		sd1.setPlacement(phv1);
+		sdet.add(sd1);
+
+
+	      }
+	      else{
+
+		PlacedVolume phv0 = Tower[11-tnum].placeVolume(solidVolume,i,RotationZ(octileRotateStart + i*(360.0/320.0)*dd4hep::deg)*
+							       Transform3D(RotationY(90.0*dd4hep::deg), Translation3D(xposOuter[0]*dd4hep::mm, yposOuter[0]*dd4hep::mm, 0.0))*
+							       RotationX(-tilePlaneRotate*dd4hep::deg)*Transform3D(RotationY(180.0*dd4hep::deg), 
+														   Translation3D((xposTileS[tnum]+(tnum+1)*tile_tolerance)*dd4hep::mm, 
+																 yposTileS[tnum]*dd4hep::mm, zposTileS[tnum]*dd4hep::mm) ));
+
+		phv0.addPhysVolID("tile", i + (11-tnum)*10);
+		DetElement sd0 = tile_det.clone(_toString(i + (11-tnum)*10, "tile%d")); 
+		sd0.setPlacement(phv0);
+		sdet.add(sd0);
+
+		PlacedVolume phv1 = Tower[12+tnum].placeVolume(solidVolume,i+5,RotationZ(octileRotateStart + i*(360.0/320.0)*dd4hep::deg)*
+							       Transform3D(RotationY(90.0*dd4hep::deg), Translation3D(xposOuter[0]*dd4hep::mm, yposOuter[0]*dd4hep::mm, 0.0))*
+							       RotationX(-tilePlaneRotate*dd4hep::deg)*Transform3D(RotationY(0.0), 
+														   Translation3D((xposTileN[tnum]-(tnum+1)*tile_tolerance)*dd4hep::mm, 
+																 yposTileN[tnum]*dd4hep::mm, zposTileN[tnum]*dd4hep::mm) ));
+		phv1.addPhysVolID("tile", i+5 + (12+tnum)*10);
+		DetElement sd1 = tile_det.clone(_toString(i+5+(12+tnum)*10, "tile%d")); 
+		sd1.setPlacement(phv1);
+		sdet.add(sd1);
+
+	      }
+	      
 
 	    }
 
