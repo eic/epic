@@ -49,7 +49,7 @@
 	surfaces of individual wedge boxes with a single shared tube at a fixed
         `inner_r`, which allows for ~17 mm air gap before the towers.
       </comment>
-      <wedge_box inner_r="78.55 * cm" thickness="3 * mm" vis="becal_wedge" material="Aluminum5083" />
+      <wedge_box inner_r="78.55 * cm" thickness="3 * mm" gap="6 * mm" vis="becal_wedge" material="Aluminum5083" />
 
       <sectors number="24" phi0="0." deltaphi="pi / 12">
         <comment>
