@@ -185,7 +185,7 @@
   vis="DRICH_sensor_vis"
   side="DRICH_sensor_sensitive_size"
   thickness="DRICH_sensor_thickness"
-  gap="0.2*mm"
+  gap="0.3*mm"
   />
 
 
