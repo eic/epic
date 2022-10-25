@@ -49,7 +49,7 @@ static Ref_t createDetector(Detector& desc, xml_h handle, SensitiveDetector sens
   const std::pair<double, double> hole_y_parameters(hole_y_initial, hole_y_final);
 
   // Getting thickness of backplate
-  auto backplate_thickness = dd4hep::getAttrOrDefault<double>(detElem, _Unicode(backplate_thickness), 0. * cm);
+  auto backplate_thickness = detElem.hasChild(_Unicode(backplate))? detElem.child(_Unicode(backplate)).attr<double>(_Unicode(thickness)) : 0.;
 
   // Function that returns a linearly interpolated hole radius, x-position, and y-position at a given z
   auto get_hole_rxy = [hole_radii_parameters, hole_x_parameters, hole_y_parameters, length,
