@@ -115,6 +115,7 @@
   <include ref="${DETECTOR_PATH}/compact/tracking/{{ tracker }}.xml"/>
   {%   endfor -%}
   {% else -%}
+  <include ref="${DETECTOR_PATH}/compact/tracking/vertex_barrel.xml"/>
   <include ref="${DETECTOR_PATH}/compact/tracking/silicon_barrel.xml"/>
   <include ref="${DETECTOR_PATH}/compact/tracking/mpgd_barrel.xml"/>
   <include ref="${DETECTOR_PATH}/compact/tracking/mpgd_dirc.xml"/>
