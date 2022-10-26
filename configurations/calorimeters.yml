@@ -3,7 +3,7 @@ features:
   solenoid:
   ecal:
     forward_homogeneous:
-    forward_insert:
+    forward_insert_homogeneous:
     barrel_sciglass:
     backward_PbWO4:
   hcal:
