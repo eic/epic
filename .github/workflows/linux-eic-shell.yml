@@ -74,7 +74,7 @@ jobs:
     - name: Prepare ccache timestamp
       id: ccache_cache_timestamp
       run: |
-        echo "::set-output name=timestamp::$(date --iso-8601=minutes)"
+        echo "timestamp=$(date --iso-8601=minutes)" >> $GITHUB_OUTPUT
     - name: Retrieve ccache cache files
       uses: actions/cache@v3
       with:
