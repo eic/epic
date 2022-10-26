@@ -44,6 +44,18 @@ jobs:
         sudo apt-get install -y libxml2-utils
         find compact/ -name "*.xml" -exec xmllint {} \; > /dev/null
 
+  list-detector-configs:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    - run: |
+        CONFIGS=$((
+          echo '{ "configs": ['
+          ls -1 configurations | xargs | sed 's/.yml /, /g' | xargs -n 1 echo | sed -r 's/^([^,]*)(,?)$/"\1"\2/'
+          echo ' ]}'
+        ) | jq -c .)
+        echo "configs=$CONFIGS" | tee -a $GITHUB_OUTPUT
+
   build-gcc:
     runs-on: ubuntu-latest
     needs: xmllint-before-build
@@ -207,32 +219,14 @@ jobs:
       env:
         GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-  check-geometry:
+  check-geometry-configs:
     runs-on: ubuntu-latest
     needs:
       - build-gcc
+      - list-detector-configs
     strategy:
       matrix:
-        detector_config:
-          - 18x275
-          - arches
-          - brycecanyon
-          - calorimeters
-          - central
-          - dirc_only
-          - drich_only
-          - full
-          - imaging
-          - inner_detector
-          - ip6
-          - mrich_only
-          - pfrich_only
-          - pid_only
-          - sciglass
-          - tof_endcap_only
-          - tof_only
-          - tracking_only
-          - vertex_only
+        detector_config: ${{ fromJson(needs.list-detector-configs.outputs.configs) }}
       fail-fast: false
     steps:
     - uses: actions/checkout@v3
