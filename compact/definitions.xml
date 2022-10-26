@@ -538,8 +538,8 @@ Service gaps in FW direction (before endcapP ECAL) and BW direction (before endc
     <constant name="EcalEndcapPInsert_height"         value="60.0*cm"/>
     <constant name="EcalEndcapPInsert_xposition"      value="-10.0*cm"/>
     <constant name="EcalEndcapPInsert_yposition"      value="0.0*cm"/>
-    <constant name="EcalEndcapPInsert_hole_radius"    value="14.67*cm"/>
-    <constant name="EcalEndcapPInsert_hole_xposition" value="-7.29*cm"/>
+    <constant name="EcalEndcapPInsert_hole_radius"    value="14.61*cm"/>
+    <constant name="EcalEndcapPInsert_hole_xposition" value="-7.20*cm"/>
     <constant name="EcalEndcapPInsert_hole_yposition" value="0.0*cm"/>
 
     <!-- <constant name="EcalEndcapN_zmin"               value="BackwardPIDRegion_zmin + BackwardInnerEndcapRegion_length"/> -->
