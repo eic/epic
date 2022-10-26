@@ -1,6 +1,6 @@
 <lccdd>
 
-  <info name="hcal_forward_insert.xml"
+  <info name="forward_insert.xml"
         title="Forward HCal Insert Calorimeter"
         author="@rymilton"
         url="https://github.com/rymilton"
