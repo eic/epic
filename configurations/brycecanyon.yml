@@ -15,7 +15,7 @@ features:
     pfrich:
     drich:
   ecal:
-    forward_scifi:
+    forward_scfi:
     forward_homogeneous:
     forward_insert:
     barrel_interlayers:
