@@ -54,7 +54,7 @@ jobs:
       run: |
         CONFIGS=$((
           echo '{ "detector_config": ['
-          ls -1 configurations | xargs | sed 's/.yml /, /g' | xargs -n 1 echo | sed -r 's/^([^,]*)(,?)$/"\1"\2/'
+          ls -1 configurations | xargs | sed 's/\.yml//g;s/ /, /g' | xargs -n 1 echo | sed -r 's/^([^,]*)(,?)$/"\1"\2/'
           echo ' ]}'
         ) | jq -c .)
         echo "configs=$CONFIGS" | tee -a $GITHUB_OUTPUT
