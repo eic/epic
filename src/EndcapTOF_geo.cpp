@@ -46,10 +46,8 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
   Volume motherVol = description.pickMotherVolume(sdet);
 
   int m_id = 0;
-  std::map<std::string, Volume>  modules;
   std::map<std::string, Placements> sensitives;
   std::map<std::string, std::vector<VolPlane>> volplane_surfaces;
-  std::map<std::string, std::array<double, 2>> module_thicknesses;
   PlacedVolume pv;
 
   // ACTS extension
