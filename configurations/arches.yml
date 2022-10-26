@@ -16,7 +16,6 @@ features:
     mrich:
     drich:
   ecal:
-    forward_scfi:
     forward_homogeneous:
     barrel_sciglass:
     backward_PbWO4:
