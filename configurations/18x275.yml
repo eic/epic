@@ -26,5 +26,7 @@ features:
     forward_insert:
     barrel:
     backward:
-  farforward:
-  farbackward:
+  far_forward:
+    far_forward:
+  far_backward:
+    far_backward:
