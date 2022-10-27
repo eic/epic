@@ -14,9 +14,8 @@ features:
     mrich:
     drich:
   ecal:
-    forward_scifi:
     forward_homogeneous:
-    forward_insert:
+    forward_insert_homogeneous:
     barrel_sciglass:
     backward_PbWO4:
   solenoid:
@@ -25,5 +24,7 @@ features:
     forward_insert:
     barrel_gdml:
     backward:
-  farforward:
-  farbackward:
+  far_forward:
+    far_forward:
+  far_backward:
+    far_backward:

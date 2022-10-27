@@ -1,6 +1,6 @@
 <lccdd>
 
-  <info name="ecal_forward_insert_homogeneous.xml"
+  <info name="forward_insert_homogeneous.xml"
         title="Forward ECal Insert Calorimeter"
         author="@rymilton"
         url="https://github.com/rymilton"

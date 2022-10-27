@@ -1,6 +1,6 @@
 <lccdd>
 
-  <info name="hcal_forward.xml"
+  <info name="forward.xml"
         title="ECCE LFHCAL with insert cutout"
         author="@rymilton"
         url="https://github.com/rymilton"
