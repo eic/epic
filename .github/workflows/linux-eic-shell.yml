@@ -372,6 +372,32 @@ jobs:
     strategy:
       matrix:
         option: ['m'] #, 's'] # FIXME
+        detector_config: [epic_arches_no_barrel_hcal, epic_brycecanyon_no_barrel_hcal] # FIXME
+      fail-fast: false
+    steps:
+    - uses: actions/checkout@v3
+    - uses: actions/download-artifact@v3
+      with:
+        name: build-gcc-full-eic-shell
+        path: install/
+    - uses: cvmfs-contrib/github-action-cvmfs@v3
+    - uses: eic/run-cvmfs-osg-eic-shell@main
+      with:
+        platform-release: "jug_xl:nightly"
+        network_types: "bridge" # this job must succeed even when new artifacts
+        setup: install/setup.sh
+        run: |
+          mkdir -p doc
+          checkOverlaps --option ${{ matrix.option }} -c ${DETECTOR_PATH}/${{ matrix.detector_config }}.xml | tee doc/overlap_check_tgeo.out
+          noverlaps="$(grep -c ovlp doc/overlap_check_tgeo.out || true)"
+          if [[ "${noverlaps}" -gt "0" ]] ; then echo "${noverlaps} overlaps found!" && false ; fi
+
+  check-overlap-tgeo-with-hcal:
+    runs-on: ubuntu-latest
+    needs: build-gcc
+    strategy:
+      matrix:
+        option: ['m'] #, 's'] # FIXME
         detector_config: [epic_arches, epic_brycecanyon]
       fail-fast: false
     steps:
