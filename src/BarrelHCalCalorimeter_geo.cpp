@@ -83,7 +83,8 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
   // Tile rotation starting points to align with sector plates
   double ctileRotateStart  = 5.4420*(360.0/320.0)*dd4hep::deg;
   double octileRotateStart = 5.4420*(360.0/320.0)*dd4hep::deg;
-  double tileRotateStart  = 20.38875*(360.0/320.0)*dd4hep::deg + ctileRotateStart; 
+  //double tileRotateStart  = 20.38875*(360.0/320.0)*dd4hep::deg + ctileRotateStart; 
+  double tileRotateStart  = 20.38675*(360.0/320.0)*dd4hep::deg + ctileRotateStart; 
 
   for(xml_coll_t i(det_define, _Unicode(constant)); i; ++i){
     xml_comp_t  x_const = i; 
