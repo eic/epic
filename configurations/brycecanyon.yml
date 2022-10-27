@@ -15,9 +15,8 @@ features:
     pfrich:
     drich:
   ecal:
-    forward_scifi:
     forward_homogeneous:
-    forward_insert:
+    forward_insert_homogeneous:
     barrel_interlayers:
     backward_PbWO4:
   solenoid:
@@ -26,6 +25,7 @@ features:
     forward_insert:
     barrel:
     backward:
-  farforward:
-    brycecanyon
-  farbackward:
+  far_forward:
+    far_forward_brycecanyon:
+  far_backward:
+    far_backward:

@@ -1,6 +1,6 @@
 <lccdd>
 
-  <info name="ecal_forward_homogeneous.xml"
+  <info name="forward_homogeneous.xml"
         title="Homogeneous forward ECal"
         author="@jizhongling"
         url="https://github.com/jizhongling"

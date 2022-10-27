@@ -3,10 +3,6 @@
 
    Template variables can be defined in yml or json files,
    or they can be applied on the command line with `-D`.
-
-   The default geometry definition is obtained when this
-   template is evaluated without any yml or json file, and
-   without any other variables defined.
 -#}
 
 <lccdd xmlns:compact="http://www.lcsim.org/schemas/compact/1.0"
@@ -97,131 +93,74 @@
      - and more...
   </documentation>
 
-{% if features is not defined or 'solenoid' in features %}
+{% if 'solenoid' in features %}
   <documentation level="5">
     ## Main magnet
   </documentation>
   <include ref="${DETECTOR_PATH}/compact/solenoid.xml"/>
 {% endif -%}
 
-{% if features is not defined or 'tracking' in features %}
+{% if 'tracking' in features %}
   <documentation level="10">
     ## Central tracking detectors
   </documentation>
   <include ref="${DETECTOR_PATH}/compact/tracking/definitions.xml"/>
 
-  {% if features is defined and features['tracking'] is not none -%}
-  {%   for tracker in features['tracking'] -%}
+  {% for tracker in features['tracking'] -%}
   <include ref="${DETECTOR_PATH}/compact/tracking/{{ tracker }}.xml"/>
-  {%   endfor -%}
-  {% else -%}
-  <include ref="${DETECTOR_PATH}/compact/tracking/vertex_barrel.xml"/>
-  <include ref="${DETECTOR_PATH}/compact/tracking/silicon_barrel.xml"/>
-  <include ref="${DETECTOR_PATH}/compact/tracking/mpgd_barrel.xml"/>
-  <include ref="${DETECTOR_PATH}/compact/tracking/mpgd_dirc.xml"/>
-  <include ref="${DETECTOR_PATH}/compact/tracking/silicon_disks.xml"/>
-  <include ref="${DETECTOR_PATH}/compact/tracking/support_service_assembly.xml"/>
-  <include ref="${DETECTOR_PATH}/compact/tracking/tof_barrel.xml"/>
-  <include ref="${DETECTOR_PATH}/compact/tracking/tof_endcap.xml"/>
-  {% endif -%}
+  {% endfor -%}
 {% endif -%}
 
-{% if features is not defined or 'pid' in features %}
+{% if 'pid' in features %}
   <documentation level="10">
     ## PID detectors
   </documentation>
-  {% if features is not defined or features['pid'] is none or 'dirc' in features['pid'] -%}
-  <include ref="${DETECTOR_PATH}/compact/dirc.xml"/>
-  {% endif -%}
-
-  {% if features is not defined or features['pid'] is none or 'drich' in features['pid'] %}
-  {%- if features is not defined or features['pid'] is none or features['pid']['drich'] is none %}
-  <include ref="${DETECTOR_PATH}/compact/drich.xml"/>
-  {% else %}
-  <include ref="{{ features['pid']['drich'] }}"/>
-  {% endif -%}
-  {% endif -%}
-
-  {% if features is not defined or features['pid'] is none or 'mrich' in features['pid'] %}
-  <include ref="${DETECTOR_PATH}/compact/mrich.xml"/>
-  {% elif 'pfrich' in features['pid'] -%}
-  <include ref="${DETECTOR_PATH}/compact/pfrich.xml"/>
-  {% endif -%}
+  {% for pid in features['pid'] -%}
+  <include ref="${DETECTOR_PATH}/compact/pid/{{ pid }}.xml"/>
+  {% endfor -%}
 {% endif -%}
 
-{% if features is not defined or 'ecal' in features %}
+{% if 'ecal' in features %}
   <documentation level="10">
     ## Central EM calorimetry
   </documentation>
-  {% if features is not defined or features['ecal'] is none or 'forward_homogeneous' in features['ecal'] %}
-  <include ref="${DETECTOR_PATH}/compact/ecal_forward_homogeneous.xml"/>
-  {% elif 'forward_scifi' in features['ecal'] -%}
-  <include ref="${DETECTOR_PATH}/compact/ecal_forward_scfi.xml"/>
-  {% endif -%}
-
-  {% if features is not defined or features['ecal'] is none or 'forward_insert' in features['ecal'] %}
-  <include ref="${DETECTOR_PATH}/compact/ecal_forward_insert_homogeneous.xml"/>
-  {% endif -%}
-
-  {% if features is not defined or features['ecal'] is none or 'backward_PbWO4' in features['ecal'] %}
-  <include ref="${DETECTOR_PATH}/compact/ecal_backward_PbWO4.xml"/>
-  {% elif 'backward_hybrid' in features['ecal'] -%}
-  <include ref="${DETECTOR_PATH}/compact/ecal_backward_hybrid.xml"/>
-  {% endif -%}
-
-  {% if features is not defined or features['ecal'] is none or 'barrel_sciglass' in features['ecal'] %}
-  <include ref="${DETECTOR_PATH}/compact/ecal_barrel_sciglass.xml"/>
-  {% elif 'barrel_interlayers' in features['ecal'] -%}
-  <include ref="${DETECTOR_PATH}/compact/ecal_barrel_interlayers.xml"/>
-  {% endif -%}
+  {% for ecal in features['ecal'] -%}
+  <include ref="${DETECTOR_PATH}/compact/ecal/{{ ecal }}.xml"/>
+  {% endfor -%}
 {% endif -%}
 
-{% if features is not defined or 'hcal' in features %}
+{% if 'hcal' in features %}
   <documentation level="10">
     ## Central hadronic calorimetry
   </documentation>
-  {% if features is not defined or features['hcal'] is none or 'forward' in features['hcal'] %}
-  <include ref="${DETECTOR_PATH}/compact/hcal/hcal_forward.xml"/>
-  {% endif -%}
-
-  {% if features is not defined or features['hcal'] is none or 'forward_insert' in features['hcal'] %}
-  <include ref="${DETECTOR_PATH}/compact/hcal/hcal_forward_insert.xml"/>
-  {% endif -%}
-
-  {% if features is not defined or features['hcal'] is none or 'barrel' in features['hcal'] %}
-  <include ref="${DETECTOR_PATH}/compact/hcal/hcal_barrel.xml"/>
-  {% endif -%}
-
-  {% if features is not defined or features['hcal'] is none or 'backward' in features['hcal'] %}
-  <include ref="${DETECTOR_PATH}/compact/hcal/hcal_backward.xml"/>
-  {% endif -%}
+  {% for hcal in features['hcal'] -%}
+  <include ref="${DETECTOR_PATH}/compact/hcal/{{ hcal }}.xml"/>
+  {% endfor -%}
 {% endif -%}
 
-{% if features is not defined or 'beampipe' in features %}
+{% if 'beampipe' in features %}
   <documentation level="11">
     ## Central beam pipe
   </documentation>
   <include ref="${BEAMLINE_PATH}/ip6/central_beampipe.xml"/>
 {% endif -%}
 
-{% if features is not defined or 'farforward' in features %}
+{% if 'far_forward' in features %}
   <documentation level="11">
     ## Far foward detectors
   </documentation>
-  {% if features is not defined or features['farforward'] is none %}
-  <include ref="${BEAMLINE_PATH}/ip6/far_forward.xml"/>
-  {% elif 'arches' in features['farforward'] %}
-  <include ref="${BEAMLINE_PATH}/ip6/far_forward_arches.xml"/>
-  {% elif 'brycecanyon' in features['farforward'] %}
-  <include ref="${BEAMLINE_PATH}/ip6/far_forward_brycecanyon.xml"/>
-  {% endif -%}
+  {% for ff in features['far_forward'] -%}
+  <include ref="${BEAMLINE_PATH}/ip6/{{ ff }}.xml"/>
+  {% endfor -%}
 {% endif -%}
 
-{% if features is not defined or 'farbackward' in features %}
+{% if 'far_backward' in features %}
   <documentation level="11">
     ## Far backward detectors
   </documentation>
-  <include ref="${BEAMLINE_PATH}/ip6/far_backward.xml"/>
+  {% for fb in features['far_backward'] -%}
+  <include ref="${BEAMLINE_PATH}/ip6/{{ fb }}.xml"/>
+  {% endfor -%}
 {% endif -%}
 
 </lccdd>
