@@ -99,7 +99,7 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
   double sensor_margin    = 0.15*mm; //getAttrOrDefault(sensparams, _Unicode(margin), 0.);
   double baseplate_xdim = getAttrOrDefault(sensparams, _Unicode(baseplate_length), 100.);
   double baseplate_ydim  = getAttrOrDefault(sensparams, _Unicode(baseplate_width), 0.);
-  std::cout << "sensor_xdim: " << sensor_xdim << "\tsensor_ydim: " << sensor_ydim << std::endl;
+  printout(DEBUG, "EndcapTOF", "sensor_xdim: %f\tsensor_ydim: %f", sensor_xdim, sensor_ydim);
   double sensor_hybrid_ydim = baseplate_ydim+baseplate_ydim/2.;
 
 
