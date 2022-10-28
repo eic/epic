@@ -1,0 +1,20 @@
+<lccdd>
+
+  <display>
+  </display>
+  <define>
+  </define>
+
+  <documentation level="10">
+    ### Hcal configuration
+  </documentation>
+
+  <include ref="hcal/hcal_forward.xml"/>
+
+  <include ref="hcal/hcal_forward_insert.xml"/>
+
+  <include ref="hcal/hcal_backward.xml"/>
+
+  <include ref="hcal/hcal_barrel_gdml.xml"/>
+
+</lccdd>

@@ -22,7 +22,7 @@ features:
   solenoid:
   hcal:
     forward:
-    barrel:
+    barrel_gdml:
     backward:
   far_forward:
     far_forward_arches:

@@ -22,5 +22,5 @@ features:
   hcal:
     forward:
     forward_insert:
-    barrel:
+    barrel_gdml:
     backward:
