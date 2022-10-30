@@ -367,7 +367,7 @@ static Ref_t create_detector(Detector &lcdd, xml_h handle,
               alpha2
             };
             Trap trap_trans_2{
-              z - (margin_top + 2 * non_overlap_long + margin_bottom) / 2,
+              z - (margin_top + non_overlap_long + margin_bottom) / 2,
               theta,
               phi,
               carbon_fiber_support_handle.thickness(), // no division by 2 to ensure subtrahend volume is thicker than the minuend
@@ -381,7 +381,7 @@ static Ref_t create_detector(Detector &lcdd, xml_h handle,
             };
             SubtractionSolid trap_trans{
               trap_trans_1, trap_trans_2,
-              Position{0., 0., (margin_bottom + non_overlap_long - margin_top) / 2}
+              Position{0., 0., (margin_bottom - margin_top) / 2 + (overhang_bottom - overhang_top) / 2}
             };
 
             envelope_v
