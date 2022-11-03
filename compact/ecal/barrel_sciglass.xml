@@ -49,14 +49,14 @@
 	surfaces of individual wedge boxes with a single shared tube at a fixed
         `inner_r`, which allows for ~17 mm air gap before the towers.
       </comment>
-      <wedge_box inner_r="78.55 * cm" thickness="3 * mm" vis="becal_wedge" material="Aluminum5083" />
+      <wedge_box inner_r="78.55 * cm" thickness="3 * mm" gap="6 * mm" vis="becal_wedge" material="Aluminum5083" />
 
       <sectors number="24" phi0="0." deltaphi="pi / 12">
         <comment>
           Rows within a sector are supposed to have smaller gaps than edge rows of two adjacent sectors
         </comment>
 
-        <rows number="5" deltaphi="2.92 * degree">
+        <rows number="5" deltaphi="2.811 * degree">
           <dimensions inner_r="EcalBarrel_rmin + EcalBarrel_inner_margin"  gap="1 * mm" />
 
           <comment>
@@ -67,23 +67,23 @@
             The front and rear faces are similar isosceles trapezoids only slightly deviating from a rectangular shape by an amount parametrized with `flare_angle_at_face`.
           </comment>
 
-          <family dir_sign="+1" x1="2 * cm" y1="2 * cm" z_length="45.5 * cm" number="10" flare_angle_polar="1.16 * degree"  flare_angle_at_face="0.3059 * degree" vis="family1" />
-          <family dir_sign="+1" x1="2 * cm" y1="2 * cm" z_length="45.5 * cm" number="6"  flare_angle_polar="1.045 * degree" flare_angle_at_face="0.7058 * degree" vis="family2" />
-          <family dir_sign="+1" x1="2 * cm" y1="2 * cm" z_length="45.5 * cm" number="5"  flare_angle_polar="0.929 * degree" flare_angle_at_face="0.8892 * degree" vis="family3" />
-          <family dir_sign="+1" x1="2 * cm" y1="2 * cm" z_length="45.5 * cm" number="5"  flare_angle_polar="0.82 * degree"  flare_angle_at_face="1.0258 * degree" vis="family4" />
-          <family dir_sign="+1" x1="2 * cm" y1="2 * cm" z_length="45.5 * cm" number="3"  flare_angle_polar="0.70 * degree"  flare_angle_at_face="1.126 * degree"  vis="family5" />
-          <family dir_sign="-1" x1="2 * cm" y1="2 * cm" z_length="45.5 * cm" number="10" flare_angle_polar="1.16 * degree"  flare_angle_at_face="0.3059 * degree" vis="family1" />
-          <family dir_sign="-1" x1="2 * cm" y1="2 * cm" z_length="45.5 * cm" number="6"  flare_angle_polar="1.045 * degree" flare_angle_at_face="0.7058 * degree" vis="family2" />
-          <family dir_sign="-1" x1="2 * cm" y1="2 * cm" z_length="45.5 * cm" number="5"  flare_angle_polar="0.929 * degree" flare_angle_at_face="0.8892 * degree" vis="family3" />
-          <family dir_sign="-1" x1="2 * cm" y1="2 * cm" z_length="45.5 * cm" number="5"  flare_angle_polar="0.82 * degree"  flare_angle_at_face="1.0258 * degree" vis="family4" />
-          <family dir_sign="-1" x1="2 * cm" y1="2 * cm" z_length="45.5 * cm" number="5"  flare_angle_polar="0.70 * degree"  flare_angle_at_face="1.126 * degree"  vis="family5" />
-          <family dir_sign="-1" x1="2 * cm" y1="2 * cm" z_length="45.5 * cm" number="6"  flare_angle_polar="0.586 * degree" flare_angle_at_face="1.1914 * degree" vis="family6" />
+          <family dir_sign="+1" x1="1.925 * cm" y1="2 * cm" z_length="45.5 * cm" number="10" flare_angle_polar="1.16 * degree"  flare_angle_at_face="0.3059 * degree" vis="family1" />
+          <family dir_sign="+1" x1="1.925 * cm" y1="2 * cm" z_length="45.5 * cm" number="6"  flare_angle_polar="1.045 * degree" flare_angle_at_face="0.7058 * degree" vis="family2" />
+          <family dir_sign="+1" x1="1.925 * cm" y1="2 * cm" z_length="45.5 * cm" number="5"  flare_angle_polar="0.929 * degree" flare_angle_at_face="0.8892 * degree" vis="family3" />
+          <family dir_sign="+1" x1="1.925 * cm" y1="2 * cm" z_length="45.5 * cm" number="5"  flare_angle_polar="0.82 * degree"  flare_angle_at_face="1.0258 * degree" vis="family4" />
+          <family dir_sign="+1" x1="1.925 * cm" y1="2 * cm" z_length="45.5 * cm" number="3"  flare_angle_polar="0.70 * degree"  flare_angle_at_face="1.126 * degree"  vis="family5" />
+          <family dir_sign="-1" x1="1.925 * cm" y1="2 * cm" z_length="45.5 * cm" number="10" flare_angle_polar="1.16 * degree"  flare_angle_at_face="0.3059 * degree" vis="family1" />
+          <family dir_sign="-1" x1="1.925 * cm" y1="2 * cm" z_length="45.5 * cm" number="6"  flare_angle_polar="1.045 * degree" flare_angle_at_face="0.7058 * degree" vis="family2" />
+          <family dir_sign="-1" x1="1.925 * cm" y1="2 * cm" z_length="45.5 * cm" number="5"  flare_angle_polar="0.929 * degree" flare_angle_at_face="0.8892 * degree" vis="family3" />
+          <family dir_sign="-1" x1="1.925 * cm" y1="2 * cm" z_length="45.5 * cm" number="5"  flare_angle_polar="0.82 * degree"  flare_angle_at_face="1.0258 * degree" vis="family4" />
+          <family dir_sign="-1" x1="1.925 * cm" y1="2 * cm" z_length="45.5 * cm" number="5"  flare_angle_polar="0.70 * degree"  flare_angle_at_face="1.126 * degree"  vis="family5" />
+          <family dir_sign="-1" x1="1.925 * cm" y1="2 * cm" z_length="45.5 * cm" number="6"  flare_angle_polar="0.586 * degree" flare_angle_at_face="1.1914 * degree" vis="family6" />
           <comment>
             Family 7 is not based on any design in particular. The polar
             flaring angle was adjusted according to the trend to avoid overlaps
             and provide gaps needed to place the supports.
           </comment>
-          <family dir_sign="-1" x1="2 * cm" y1="2 * cm" z_length="45.5 * cm" number="2"  flare_angle_polar="0.46 * degree" flare_angle_at_face="1.1914 * degree" vis="family7" />
+          <family dir_sign="-1" x1="1.925 * cm" y1="2 * cm" z_length="45.5 * cm" number="2"  flare_angle_polar="0.46 * degree" flare_angle_at_face="1.1914 * degree" vis="family7" />
         </rows>
 
         <documentation>

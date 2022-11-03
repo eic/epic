@@ -193,10 +193,13 @@ static Ref_t create_detector(Detector &lcdd, xml_h handle,
     double sector_phi = sectors_handle.phi0();
     for (; sector < sectors_handle.number();
          sector++, sector_phi += sectors_handle.deltaphi()) {
-      envelope_v.placeVolume(
-        wedge_box_side_v,
-        Transform3D{RotationZ{sector_phi + sectors_handle.deltaphi() / 2}}
-        );
+      for (int side = -1; side <= 1; side += 2) {
+        envelope_v.placeVolume(
+          wedge_box_side_v,
+          Transform3D{RotationZ{sector_phi + side * sectors_handle.deltaphi() / 2}} *
+          Transform3D{Position{0., - side * wedge_box_handle.gap() / 2, 0.}}
+          );
+      }
     }
 
     // TODO: The endcap sides of the box are not implemented
