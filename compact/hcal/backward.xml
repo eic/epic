@@ -5,7 +5,7 @@
     </documentation>
     <constant name="HcalEndcapNSteelThickness"       value="4.0 * cm"/>
     <constant name="HcalEndcapNPolystyreneThickness" value="0.4 * cm"/>
-    
+
     <constant name="HcalEndcapN_segments_rmin"     value="19.9431*cm"/>
     <constant name="HcalEndcapN_segments_rmax"     value="251.444*cm"/>
 
