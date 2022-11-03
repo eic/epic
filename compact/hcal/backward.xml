@@ -36,7 +36,7 @@
       <dimensions
         numsides="HcalEndcapN_CaloSides"
         zmin="HcalEndcapN_zmin"
-        rmin=HcalEndcapN_segments_rmin
+        rmin="HcalEndcapN_segments_rmin"
         rmax="HcalEndcapN_segments_rmax"/>
       <layer repeat="HcalEndcapNLayer_NRepeat" vis="HcalEndcapLayerVis" >
         <slice material="Steel235" thickness="HcalEndcapNSteelThickness" vis="HcalAbsorberVis"/>
