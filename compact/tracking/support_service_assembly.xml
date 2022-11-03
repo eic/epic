@@ -13,7 +13,7 @@
 
     <comment> use a disk to connect vertex barrels to cone</comment>
     <constant name="VertexSupportRingCF_thickness"         value="2.0*mm" />
-    <constant name="VertexSupportRingAl_thickness"         value="1.5*mm" />
+    <constant name="VertexSupportRingAl_thickness"         value="1.0*mm" />
     <constant name="VertexSupportRing_thickness"           value="VertexSupportRingCF_thickness+VertexSupportRingAl_thickness+2*um" />
     <constant name="VertexSupportRing_zmin"        value="VertexBarrel_length/2.+ 2*um" />
     <constant name="VertexSupportRing_zmax"        value="VertexSupportRing_zmin + VertexSupportRing_thickness" />
@@ -25,7 +25,7 @@
     <comment> Inner tracker service/support cone </comment>
     <constant name="InnerSupportConeCF_thickness"         value="2.0*mm" />
     <comment> Effective Aluminum for services for now </comment>
-    <constant name="InnerSupportConeAl_thickness"         value="2.5*mm" />
+    <constant name="InnerSupportConeAl_thickness"         value="2.0*mm" />
     <constant name="InnerSupportCone_thickness"           value="InnerSupportConeAl_thickness + InnerSupportConeCF_thickness" />
     <constant name="InnerSupportCone_rmin2"               value="TrackerSupportCyl_rmin-InnerSupportCone_thickness" />
     <constant name="InnerSupportCone_zmin"                value="VertexSupportCyl2_zmax+2*um" />
@@ -44,7 +44,7 @@
     <constant name="TrackerSupportCylEndcapN_length"      value="TrackerSupportCylEndcapN_zmax - TrackerSupportCyl_zmin" />
     <constant name="TrackerSupportCylCF_thickness"        value="InnerSupportConeCF_thickness" />
     <comment> Effective Aluminum for services for now </comment>
-    <constant name="TrackerSupportCylAl_thickness"        value="4*mm" />
+    <constant name="TrackerSupportCylAl_thickness"        value="5.0*mm" />
     <constant name="TrackerSupportCyl_thickness"          value="TrackerSupportCylAl_thickness + TrackerSupportCylCF_thickness" />
 
     <comment> Tracker endcap cones </comment>
@@ -58,7 +58,7 @@
     <constant name="TrackerSupportConeEndcapN_rmin2"      value="TrackerSupportConeEndcapN_zmax * tan(TrackerBackwardAngle)" />
     <constant name="TrackerSupportConeCF_thickness"       value="TrackerSupportCylCF_thickness" />
     <comment> Effective Aluminum for services for now </comment>
-    <constant name="TrackerSupportConeAl_thickness"       value="TrackerSupportCylAl_thickness" />
+    <constant name="TrackerSupportConeAl_thickness"       value="5.0*mm" />
     <constant name="TrackerSupportCone_thickness"         value="TrackerSupportConeAl_thickness + TrackerSupportConeCF_thickness" />
     <constant name="TrackerSupportConeEndcapP_z"          value="0.5*(TrackerSupportConeEndcapP_zmin + TrackerSupportConeEndcapP_zmax)" />
     <constant name="TrackerSupportConeEndcapN_z"          value="0.5*(TrackerSupportConeEndcapN_zmin + TrackerSupportConeEndcapN_zmax)" />
