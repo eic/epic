@@ -16,15 +16,15 @@ features:
     mrich:
     drich:
   ecal:
-    forward_scifi:
     forward_homogeneous:
     barrel_sciglass:
     backward_PbWO4:
   solenoid:
   hcal:
     forward:
-    barrel:
+    barrel_gdml:
     backward:
-  farforward:
-    arches
-  farbackward:
+  far_forward:
+    far_forward_arches:
+  far_backward:
+    far_backward:

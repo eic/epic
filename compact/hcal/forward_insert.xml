@@ -1,6 +1,6 @@
 <lccdd>
 
-  <info name="hcal_forward_insert.xml"
+  <info name="forward_insert.xml"
         title="Forward HCal Insert Calorimeter"
         author="@rymilton"
         url="https://github.com/rymilton"
@@ -69,7 +69,7 @@
         y="HcalEndcapPInsert_height"
         z="HcalEndcapPInsert_length"
       />
-      <constant name="backplate_thickness" value="HcalEndcapPInsertBackplateThickness"/>
+      <backplate thickness="HcalEndcapPInsertBackplateThickness"/>
       <comment> Tungsten/Scintillator layers </comment>
       <comment> Slices will be ordered according to the slice order listed here </comment>
       <layer repeat="HcalEndcapPInsertLayer_NTungstenRepeat" thickness="HcalEndcapPInsertSingleLayerThickness">
@@ -106,9 +106,9 @@
       </documentation>
       <beampipe_hole
         initial_hole_radius="EcalEndcapPInsert_hole_radius"
-        final_hole_radius="17.1*cm"
+        final_hole_radius="17.04*cm"
         initial_hole_x="EcalEndcapPInsert_hole_xposition"
-        final_hole_x="-10.363*cm"
+        final_hole_x="-10.27*cm"
         initial_hole_y="EcalEndcapPInsert_hole_yposition"
         final_hole_y="0.*cm"
       />

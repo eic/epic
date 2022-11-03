@@ -10,6 +10,9 @@ features:
     tof_barrel:
     tof_endcap:
   ecal:
-    barrel_sciglass
-    backward_PbWO4
+    barrel_sciglass:
+    backward_PbWO4:
   pid:
+    dirc:
+    mrich:
+    drich:
