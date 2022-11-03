@@ -2,199 +2,51 @@
 <lccdd>
 
   <define>
-
-    <!-- Q3eR top and bottom at its front -->
-    <constant name="Q3eR_ZT" value="Q3eR_StartZ - Q3eR_InnerRadius*sin(Q3eR_Theta)"/>
-    <constant name="Q3eR_XT" value="Q3eR_StartX + Q3eR_InnerRadius*cos(Q3eR_Theta)"/>
-    <constant name="Q3eR_ZB" value="Q3eR_StartZ + Q3eR_InnerRadius*sin(Q3eR_Theta)"/>
-    <constant name="Q3eR_XB" value="Q3eR_StartX - Q3eR_InnerRadius*cos(Q3eR_Theta)"/>
-
-    <!-- Exit window front side -->
-    <constant name="ExitWin_Z" value="-18.5*m"/>
-    <constant name="ExitWin_XB" value="-0.037*m"/>
-
-    <!-- B2BeR end -->
-    <constant name="B2BeR_Z" value="-14.865*m"/>
-    <constant name="B2BeR_XB" value="-0.098*m"/>
-
-    <!-- Auxiliary point in front of drift vacuum section -->
-    <constant name="ExitWin_XA" value="B2BeR_XB-(B2BeR_Z-ExitWin_Z)*(B2BeR_XB-Q3eR_XB)/(B2BeR_Z-Q3eR_ZB)"/>
-
-    <!-- Tagger 1 -->
-    <constant name="Tag1_size_X" value="0.4*m"/>
-    <constant name="Tag1_size_Y" value="0.4*m"/>
-    <constant name="Tag1_pos_Z" value="-24*m"/>
-    <constant name="Tag1_Theta"  value="0.0180766389*rad"/>
-    <constant name="Tag1_Length" value="0.35*m"/>
-
-    <constant name="Tag1_XT" value="B2BeR_XB-(B2BeR_Z-Tag1_pos_Z)*(B2BeR_XB-Q3eR_XB)/(B2BeR_Z-Q3eR_ZB)"/>
-    <constant name="Tag1_ZB" value="Tag1_pos_Z+Tag1_size_X*sin(Tag1_Theta)"/>
-    <constant name="Tag1_XB" value="Tag1_XT-Tag1_size_X*cos(Tag1_Theta)"/>
-
-    <!-- Tagger 2 -->
-    <constant name="Tag2_size_X" value="0.3*m"/>
-    <constant name="Tag2_size_Y" value="0.2*m"/>
-    <constant name="Tag2_pos_Z" value="-36*m"/>
-    <constant name="Tag2_Theta"  value="0.0180766389*rad"/>
-    <constant name="Tag2_Length" value="Tag1_Length"/>
-
-    <constant name="Tag2_XT" value="B2BeR_XB-(B2BeR_Z-Tag2_pos_Z)*(B2BeR_XB-Q3eR_XB)/(B2BeR_Z-Q3eR_ZB)"/>
-    <constant name="Tag2_ZB" value="Tag2_pos_Z+Tag2_size_X*sin(Tag2_Theta)"/>
-    <constant name="Tag2_XB" value="Tag2_XT-Tag2_size_X*cos(Tag2_Theta)"/>
-
-    <!-- Luminosity exit window -->
-    <constant name="LumiWin_Z" value="-18.5*m"/>
-    <constant name="LumiWin_XY" value="0.074*m"/>
-    <constant name="LumiWin_DZ" value="0.29*m"/>
-
-    <!-- Luminosity dipole magnet -->
-    <constant name="LumiMag_cen_Z" value="-28*m"/>
-    <constant name="LumiMag_R" value="0.1*m"/>
-    <constant name="LumiMag_DZ" value="0.6*m"/>
-
-    <!-- Luminosity spectrometers up and down -->
-    <constant name="LumiSpec_Z" value="-36.4*m"/>
-    <constant name="LumiSpec_XY" value="0.2*m"/>
-    <constant name="LumiSpec_DZ" value="0.35*m"/>
-    <constant name="LumiSpec_cen_Y" value="0.142*m"/>
-
-    <!-- Luminosity direct photon detector -->
-    <constant name="LumiD_Z" value="-37*m"/>
-    <constant name="LumiD_XY" value="0.2*m"/>
-    <constant name="LumiD_DZ" value="0.35*m"/>
-
+   
   </define>
 
   <detectors>
 
-    <detector name="vac_b2b_window" type="BackwardsVacBox" ysiz="Tag1_size_Y" vis="Shape1_vis">
-      <points win_xmin="ExitWin_XA" />
-    </detector>
-
-    <detector name="vac_b2b_drift" type="BackwardsVacDrift" ysiz="Tag1_size_Y" vis="Shape1_vis">
-      <points
-        zQT="Q3eR_ZT"
-        xQT="Q3eR_XT"
-        zQB="Q3eR_ZB"
-        xQB="Q3eR_XB"
-        zW="ExitWin_Z"
-        xW="ExitWin_XB"
-        zA="ExitWin_Z"
-        xA="ExitWin_XA"
+    <comment> Main vacuum volume </comment>
+    <detector id="Tagger_ID" name="BackwardsTaggerVacuum" type="BackwardsVacuum" wall="2*mm" lumi="true" vis="BackwardsBox">
+      <focus      x="Dipole_Focus_X"    y="Dipole_Focus_Y"    z="Dipole_Focus_Z" />
+      <bounding  
+        xmin="Vacuum_BB_MinX"
+        xmax="Vacuum_BB_MaxX"
+        ymin="Vacuum_BB_MinY"
+        ymax="Vacuum_BB_MaxY"
+        zmin="Vacuum_BB_MinZ"
+        zmax="Vacuum_BB_MaxZ"
       />
-    </detector>
+      <rotation   theta="Beam_Theta"/>
+      <dimensions xL="Beam_WidthL" xR="Beam_WidthR" y="Beam_Height" z="Beam_Length"/>
 
-    <detector name="vac_tag1_win" type="BackwardsTagWin" ysiz="Tag1_size_Y" vis="Shape1_vis">
-      <points
-        zB="B2BeR_Z"
-        xB="B2BeR_XB"
-        zT="Tag1_pos_Z"
-        xT="Tag1_XT"
-        zTB="Tag1_ZB"
-        xTB="Tag1_XB"
-      />
-    </detector>
+      <comment> Vacuum volume joining with lumi </comment>
+      <exitdim    x="Exit_Width"   y="Exit_Height"  lumiZ="LumiWin_Z" lumiR="LumiWin_R" maxTheta="Exit_Theta"/>
 
-    <detector name="vac_tag2_win" type="BackwardsTagWin" ysiz="Tag2_size_Y" vis="Shape1_vis">
-      <points
-        zB="Tag1_pos_Z-Tag1_Length"
-        xB="B2BeR_XB-(B2BeR_Z-(Tag1_pos_Z-Tag1_Length))*(B2BeR_XB-Q3eR_XB)/(B2BeR_Z-Q3eR_ZB)"
-        zT="Tag2_pos_Z"
-        xT="Tag2_XT"
-        zTB="Tag2_ZB"
-        xTB="Tag2_XB"
-      />
-    </detector>
+      <comment> Vacuum volume extention around taggers </comment>
+      <module id="1"
+        modname="Tagger1"
+        theta_min="Tagger1_Min_Theta"
+        max_align="false"
+        offset_min="Tagger1_Min_Offset"
+        extend_vacuum="true"
+        >
+        <dimensions x="Tagger1_Width/2" y="Tagger1_Height/2" z="Tagger1_Length"/>
+      </module>
 
-    <detector name="Tagger1box" type="DD4hep_BoxSegment" vis="Shape1_vis">
-      <material name="Vacuum"/>
-      <box      x="Tag1_size_X/2" y="Tag1_size_Y/2" z="Tag1_Length/2"/>
-      <position
-        x="Tag1_XT-0.5*sqrt(Tag1_Length*Tag1_Length+Tag1_size_X*Tag1_size_X)*sin(atan(Tag1_size_X/Tag1_Length)+Tag1_Theta)"
-        y="0"
-        z="Tag1_pos_Z-0.5*sqrt(Tag1_Length*Tag1_Length+Tag1_size_X*Tag1_size_X)*cos(atan(Tag1_size_X/Tag1_Length)+Tag1_Theta)"/>
-      <rotation x="0" y="Tag1_Theta" z="0"/>
-    </detector>
+      <module id="2"
+        modname="Tagger2"
+        theta_min="Tagger2_Min_Theta"
+        max_align="true"
+        offset_min="Tagger2_Min_Offset"
+        extend_vacuum="true"
+        >
+        <dimensions x="Tagger2_Width/2" y="Tagger2_Height/2" z="Tagger2_Length"/>
+      </module>
 
-    <detector name="Tagger2box" type="DD4hep_BoxSegment" vis="Shape1_vis">
-      <material name="Vacuum"/>
-      <box      x="Tag2_size_X/2" y="Tag2_size_Y/2" z="Tag2_Length/2"/>
-      <position
-        x="Tag2_XT-0.5*sqrt(Tag2_Length*Tag2_Length+Tag2_size_X*Tag2_size_X)*sin(atan(Tag2_size_X/Tag2_Length)+Tag2_Theta)"
-        y="0"
-        z="Tag2_pos_Z-0.5*sqrt(Tag2_Length*Tag2_Length+Tag2_size_X*Tag2_size_X)*cos(atan(Tag2_size_X/Tag2_Length)+Tag2_Theta)"/>
-      <rotation x="0" y="Tag2_Theta" z="0"/>
     </detector>
-
-    <detector name="ExitWinBox" type="DD4hep_BoxSegment" vis="Shape2_vis">
-      <material name="Vacuum"/>
-      <box x="LumiWin_XY/2" y="LumiWin_XY/2" z="LumiWin_DZ/2"/>
-      <position x="0" y="0" z="LumiWin_Z-LumiWin_DZ/2"/>
-      <rotation x="0" y="0" z="0"/>
-    </detector>
-
-    <detector name="LumiMagvac" type="DD4hep_TubeSegment" vis="Shape1_vis">
-      <material name="Vacuum"/>
-      <tubs rmin="0" rmax="LumiMag_R" zhalf="LumiMag_DZ/2"/>
-      <position x="0" y="0" z="LumiMag_cen_Z"/>
-      <rotation x="0" y="0" z="0"/>
-    </detector>
-
-    <detector name="LumiSUbox" type="DD4hep_BoxSegment" vis="Shape2_vis">
-      <material name="Vacuum"/>
-      <box x="LumiSpec_XY/2" y="LumiSpec_XY/2" z="LumiSpec_DZ/2"/>
-      <position x="0" y="LumiSpec_cen_Y" z="LumiSpec_Z-LumiSpec_DZ/2"/>
-      <rotation x="0" y="0" z="0"/>
-    </detector>
-
-    <detector name="LumiSDbox" type="DD4hep_BoxSegment" vis="Shape2_vis">
-      <material name="Vacuum"/>
-      <box x="LumiSpec_XY/2" y="LumiSpec_XY/2" z="LumiSpec_DZ/2"/>
-      <position x="0" y="-LumiSpec_cen_Y" z="LumiSpec_Z-LumiSpec_DZ/2"/>
-      <rotation x="0" y="0" z="0"/>
-    </detector>
-
-    <detector name="LumiDbox" type="DD4hep_BoxSegment" vis="Shape2_vis">
-      <material name="Vacuum"/>
-      <box x="LumiD_XY/2" y="LumiD_XY/2" z="LumiD_DZ/2"/>
-      <position x="0" y="0" z="LumiD_Z-LumiD_DZ/2"/>
-      <rotation x="0" y="0" z="0"/>
-    </detector>
-
-    <detector name="vac_lumi_win_mag" type="BackwardsLumiVac" z0="LumiWin_Z-LumiWin_DZ" z1="LumiMag_cen_Z+LumiMag_DZ/2">
-      <points
-        dX0="LumiWin_XY/2"
-        dY0="LumiWin_XY/2"
-        dX1="LumiMag_R"
-        dY1="LumiMag_R"
-      />
-    </detector>
-
-    <detector name="vac_lumi_mag_spec" type="BackwardsLumiVac" z0="LumiMag_cen_Z-LumiMag_DZ/2" z1="LumiSpec_Z">
-      <points
-        dX0="LumiMag_R"
-        dY0="LumiMag_R"
-        dX1="LumiSpec_XY/2"
-        dY1="LumiSpec_cen_Y+LumiSpec_XY/2"
-      />
-    </detector>
-
-    <detector name="vac_lumi_spec_phot" type="BackwardsLumiVac" z0="LumiSpec_Z-LumiSpec_DZ" z1="LumiD_Z">
-      <points
-        dX0="LumiSpec_XY/2"
-        dY0="LumiSpec_cen_Y-LumiSpec_XY/2"
-        dX1="LumiD_XY/2"
-        dY1="LumiD_XY/2"
-      />
-    </detector>
-
-    <detector name="vac_lumi_spec_mid" type="DD4hep_BoxSegment" vis="Shape1_vis">
-      <material name="Vacuum"/>
-      <box x="LumiSpec_XY/2" y="LumiSpec_cen_Y-LumiSpec_XY/2" z="LumiSpec_DZ/2"/>
-      <position x="0" y="0" z="LumiSpec_Z-LumiSpec_DZ/2"/>
-      <rotation x="0" y="0" z="0"/>
-    </detector>
-
+     
   </detectors>
 
 </lccdd>

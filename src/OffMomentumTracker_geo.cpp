@@ -48,10 +48,10 @@ static Ref_t create_OffMomentumTracker(Detector& description, xml_h e, Sensitive
 
   for (xml_coll_t su(x_det, _U(support)); su; ++su) {
     xml_comp_t  x_support         = su;
-    double      support_thickness = getAttrOrDefault(x_support, _U(thickness), 2.0 * mm);
-    double      support_length    = getAttrOrDefault(x_support, _U(length), 2.0 * mm);
-    double      support_rmin      = getAttrOrDefault(x_support, _U(rmin), 2.0 * mm);
-    double      support_zstart    = getAttrOrDefault(x_support, _U(zstart), 2.0 * mm);
+    double      support_thickness = getAttrOrDefault<double>(x_support, _U(thickness), 2.0 * mm);
+    double      support_length    = getAttrOrDefault<double>(x_support, _U(length), 2.0 * mm);
+    double      support_rmin      = getAttrOrDefault<double>(x_support, _U(rmin), 2.0 * mm);
+    double      support_zstart    = getAttrOrDefault<double>(x_support, _U(zstart), 2.0 * mm);
     std::string support_name      = getAttrOrDefault<std::string>(x_support, _Unicode(name), "support_tube");
     std::string support_vis       = getAttrOrDefault<std::string>(x_support, _Unicode(vis), "AnlRed");
     xml_dim_t   support_pos(x_support.child(_U(position), false));

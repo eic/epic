@@ -29,8 +29,8 @@ static Ref_t build_magnet(Detector& dtor, xml_h e, SensitiveDetector /* sens */)
   xml_dim_t coil      = x_det.child(_Unicode(coil));
   double    coil_x    = coil.dx();
   double    coil_y    = coil.dy();
-  Material  iron      = dtor.material("Vacuum");
-  Material  niobium   = dtor.material("Vacuum");
+  Material  iron      = dtor.material("Iron");
+  Material  niobium   = dtor.material("Niobium");
 
   // std::cout << det_name << " positioned at z=" << pos.z() << ", x=" << pos.x() << "\n";
 
@@ -39,8 +39,8 @@ static Ref_t build_magnet(Detector& dtor, xml_h e, SensitiveDetector /* sens */)
 
   const string module_name = "Quad_magnet";
 
-  const string yoke_vis = dd4hep::getAttrOrDefault<std::string>(x_det, _Unicode(vis), "GreenVis");
-  const string coil_vis = dd4hep::getAttrOrDefault<std::string>(coil, _Unicode(vis), "RedVis");
+  const string yoke_vis = dd4hep::getAttrOrDefault<std::string>(x_det, _Unicode(vis), "FFMagnetVis");
+  const string coil_vis = dd4hep::getAttrOrDefault<std::string>(coil,  _Unicode(vis), "FFMagnetCoilVis");
 
   sdet.setAttributes(dtor, assembly, x_det.regionStr(), x_det.limitsStr(), yoke_vis);
 

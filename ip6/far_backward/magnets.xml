@@ -3,45 +3,45 @@
 
   <detectors>
 
-    <!-- Magnet volumes -->
+    <comment> Magnet volumes </comment>
 
-    <detector id="Magnet_Q1eR_ID" name="Magnet_Q1eR" type="ip6_CylindricalDipoleMagnet" vis="RedVis">
+    <detector id="Magnet_Q1eR_ID" name="Magnet_Q1eR" type="ip6_CylindricalDipoleMagnet" vis="FFMagnetVis">
       <placement  x="0" y="0" z="Q1eR_CenterPosition" theta="0*rad"/>
-      <dimensions x="Q1eR_InnerRadius*4" y="Q1eR_InnerRadius*4" z="Q1eR_Length" r="2.0*Q1eR_InnerRadius" />
+      <dimensions x="Q1eR_InnerRadius*4" y="Q1eR_InnerRadius*4" z="Q1eR_Length" r="1.5*Q1eR_InnerRadius" />
       <apperture  x="Q1eR_InnerRadius*2" y="Q1eR_InnerRadius*2" r="Q1eR_InnerRadius" />
       <coil dx="2*cm" dy="1.5*cm" /><!--unchecked-->
     </detector>
 
-    <detector id="Magnet_Q2eR_ID" name="Magnet_Q2eR" type="ip6_CylindricalDipoleMagnet" vis="RedVis">
+    <detector id="Magnet_Q2eR_ID" name="Magnet_Q2eR" type="ip6_CylindricalDipoleMagnet" vis="FFMagnetVis">
       <placement  x="0" y="0" z="Q2eR_CenterPosition" theta="0*rad"/>
-      <dimensions x="Q2eR_InnerRadius*4" y="Q2eR_InnerRadius*4" z="Q2eR_Length" r="2.0*Q2eR_InnerRadius"/>
+      <dimensions x="Q2eR_InnerRadius*4" y="Q2eR_InnerRadius*4" z="Q2eR_Length" r="1.5*Q2eR_InnerRadius"/>
       <apperture  x="Q2eR_InnerRadius*2" y="Q2eR_InnerRadius*2" r="Q2eR_InnerRadius"/>
       <coil dx="2*cm" dy="1.5*cm" /><!--unchecked-->
     </detector>
 
-    <detector id="Magnet_B2AeR_ID" name="Magnet_B2AeR" type="ip6_CylindricalDipoleMagnet" vis="RedVis">
+    <detector id="Magnet_B2AeR_ID" name="Magnet_B2AeR" type="ip6_CylindricalDipoleMagnet" vis="FFMagnetVis">
       <placement  x="0" y="0" z="B2AeR_CenterPosition" theta="0*rad"/>
-      <dimensions x="B2AeR_InnerRadius*4" y="B2AeR_InnerRadius*4" z="B2AeR_Length" r="2.0*B2AeR_InnerRadius"/>
+      <dimensions x="B2AeR_InnerRadius*4" y="B2AeR_InnerRadius*4" z="B2AeR_Length" r="1.5*B2AeR_InnerRadius"/>
       <apperture  x="B2AeR_InnerRadius*2" y="B2AeR_InnerRadius*2" r="B2AeR_InnerRadius"/>
       <coil dx="2*cm" dy="1.5*cm" /><!--unchecked-->
     </detector>
 
-    <detector id="Magnet_B2BeR_ID" name="Magnet_B2BeR" type="ip6_CylindricalDipoleMagnet" vis="RedVis">
+    <detector id="Magnet_B2BeR_ID" name="Magnet_B2BeR" type="ip6_CylindricalDipoleMagnet" vis="FFMagnetVis">
       <placement  x="0" y="0" z="B2BeR_CenterPosition" theta="0*rad"/>
-      <dimensions x="B2BeR_InnerRadius*4" y="B2BeR_InnerRadius*4" z="B2BeR_Length" r="2.0*B2BeR_InnerRadius"/>
+      <dimensions x="B2BeR_InnerRadius*4" y="B2BeR_InnerRadius*4" z="B2BeR_Length" r="1.5*B2BeR_InnerRadius"/>
       <apperture  x="B2BeR_InnerRadius*2" y="B2BeR_InnerRadius*2" r="B2BeR_InnerRadius"/>
       <coil dx="2*cm" dy="1.5*cm" /><!--unchecked-->
     </detector>
 
-    <detector id="Magnet_Q3eR_ID" name="Magnet_Q3eR" type="ip6_CylindricalDipoleMagnet" vis="RedVis">
+    <detector id="Magnet_Q3eR_ID" name="Magnet_Q3eR" type="ip6_CylindricalDipoleMagnet" vis="FFMagnetVis">
       <placement  x="(Q3eR_StartX+Q3eR_EndX)/2" y="0" z="(Q3eR_StartZ+Q3eR_EndZ)/2" theta="Q3eR_Theta"/>
-      <dimensions x="Q3eR_InnerRadius*4" y="Q3eR_InnerRadius*4" z="Q3eR_Length" r="2.0*Q3eR_InnerRadius"/>
+      <dimensions x="Q3eR_InnerRadius*4" y="Q3eR_InnerRadius*4" z="Q3eR_Length" r="1.5*Q3eR_InnerRadius"/>
       <apperture  x="Q3eR_InnerRadius*2" y="Q3eR_InnerRadius*2" r="Q3eR_InnerRadius"/>
       <coil dx="2*cm" dy="1.5*cm" /><!--unchecked-->
     </detector>
 
 
-    <!-- Inner vacuum for magnets -->
+    <comment> Inner vacuum for magnets </comment>
 
     <detector id="Pipe_to_Q1eR_ID" name="Pipe_to_Q1eR" type="BackwardsBeamPipe">
       <Pipe wall_thickness="2*mm" outerD1="Q1eR_InnerRadius*2" outerD2="Center_Beampipe_Rad*2"
@@ -83,9 +83,9 @@
         end1z="B2BeR_CenterPosition+B2BeR_Length/2" end2z="B2BeR_CenterPosition-B2BeR_Length/2"/>
     </detector>
 
-    <detector name="Q3eRvac" type="DD4hep_TubeSegment" vis="Shape1_vis">
+    <detector name="Q3eRvac" type="DD4hep_TubeSegment" vis="BeamPipeVis">
       <material name="Vacuum"/>
-      <tubs rmin="0" rmax="Q3eR_InnerRadius" zhalf="Q3eR_Length/2"/>
+      <tubs rmin="Q3eR_InnerRadius-2*mm" rmax="Q3eR_InnerRadius" zhalf="Q3eR_Length/2"/>
       <position x="-(Q3eR_StartX+Q3eR_EndX)/2" y="0" z="(Q3eR_StartZ+Q3eR_EndZ)/2"/>
       <rotation x="0*rad"  y="Q3eR_Theta"   z="0*rad"/>
     </detector>
@@ -94,7 +94,7 @@
 
   <fields>
 
-    <!-- Magnetic fields -->
+    <comment> Magnetic fields </comment>
 
     <field name="Magnet_Q1eR_Field" type="MultipoleMagnet">
       <shape type="Tube" rmax="Q1eR_InnerRadius" dz="Q1eR_Length/2"/>

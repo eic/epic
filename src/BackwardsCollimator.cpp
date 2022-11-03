@@ -36,7 +36,7 @@ static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector /* sens *
   string     det_name = x_det.nameStr();
   DetElement sdet(det_name, x_det.id());
   Assembly   assembly(det_name + "_assembly");
-  Material   m_Steel  = det.material("stainless_steel");
+  Material   m_Steel  = det.material("StainlessSteel");
   Material   m_Vacuum = det.material("Vacuum");
   string     vis_name = x_det.visStr();
 

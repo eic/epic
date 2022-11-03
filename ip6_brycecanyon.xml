@@ -78,10 +78,11 @@
     </documentation>
     <constant name="LumiCollimator_ID"       value="190"/>
     <constant name="LumiDipole_ID"           value="191"/>
-    <constant name="TaggerTracker_1_ID"      value="195"/>
-    <constant name="TaggerCalorimeter_1_ID"  value="196"/>
-    <constant name="TaggerTracker_2_ID"      value="198"/>
-    <constant name="TaggerCalorimeter_2_ID"  value="199"/>
+    <constant name="Tagger_ID"               value="195"/>
+    <!--constant name="TaggerTracker_1_ID"      value="195"/-->
+    <!--constant name="TaggerCalorimeter_1_ID"  value="196"/-->
+    <!--constant name="TaggerTracker_2_ID"      value="198"/-->
+    <!--constant name="TaggerCalorimeter_2_ID"  value="199"/-->
 
     <documentation>
       #### (200-219) Far Backward Beamline Magnets

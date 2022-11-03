@@ -27,7 +27,7 @@ static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector /* sens *
   Assembly   assembly(det_name + "_assembly");
   Material   m_Al     = det.material("Aluminum");
   Material   m_Vacuum = det.material("Vacuum");
-  string     vis_name = dd4hep::getAttrOrDefault(x_det, _Unicode(vis), "GrayVis");
+  string     vis_name = dd4hep::getAttrOrDefault<std::string>(x_det, _Unicode(vis), "BeamPipeVis");
 
   xml::Component Pipe_c = x_det.child(_Unicode(Pipe));
 
@@ -40,8 +40,8 @@ static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector /* sens *
 
   double end1z     = Pipe_c.attr<double>(_Unicode(end1z));
   double end2z     = Pipe_c.attr<double>(_Unicode(end2z));
-  double end1x     = dd4hep::getAttrOrDefault(Pipe_c, _Unicode(end1x), 0.0 );
-  double end2x     = dd4hep::getAttrOrDefault(Pipe_c, _Unicode(end2x), 0.0 );
+  double end1x     = dd4hep::getAttrOrDefault<double>(Pipe_c, _Unicode(end1x), 0.0 );
+  double end2x     = dd4hep::getAttrOrDefault<double>(Pipe_c, _Unicode(end2x), 0.0 );
   
   double length = sqrt((end1z-end2z)*(end1z-end2z)+(end1x-end2x)*(end1x-end2x));
   double yrot   = atan((end1x-end2x)/(end1z-end2z));

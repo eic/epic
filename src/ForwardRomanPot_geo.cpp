@@ -30,8 +30,8 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
   for (xml_coll_t mi(x_det, _U(module)); mi; ++mi, ++m_id) {
     xml_comp_t x_mod               = mi;
     string     m_nam               = x_mod.nameStr();
-    double     mod_width           = getAttrOrDefault(x_mod, _U(width), 3.2 * cm);
-    double     mod_height          = getAttrOrDefault(x_mod, _U(height), 3.2 * cm);
+    double     mod_width           = getAttrOrDefault<double>(x_mod, _U(width), 3.2 * cm);
+    double     mod_height          = getAttrOrDefault<double>(x_mod, _U(height), 3.2 * cm);
     double     mod_total_thickness = 0.;
 
     xml_coll_t ci(x_mod, _U(module_component));
@@ -48,8 +48,8 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
     for (ci.reset(), n_sensor = 1, c_id = 0; ci; ++ci, ++c_id) {
       xml_comp_t c       = ci;
       double     c_thick = c.thickness();
-      double     comp_x  = getAttrOrDefault(c, _Unicode(width), mod_width);
-      double     comp_y  = getAttrOrDefault(c, _Unicode(height), mod_height);
+      double     comp_x  = getAttrOrDefault<double>(c, _Unicode(width), mod_width);
+      double     comp_y  = getAttrOrDefault<double>(c, _Unicode(height), mod_height);
 
       Material c_mat  = description.material(c.materialStr());
       string   c_name = _toString(c_id, "component%d");
@@ -92,11 +92,11 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
     // array of modules
     for (xml_coll_t ai(x_ma, _Unicode(array)); ai; ++ai) {
       xml_comp_t  x_array    = ai;
-      double      nx         = getAttrOrDefault(x_array, _Unicode(nx), 1);
-      double      ny         = getAttrOrDefault(x_array, _Unicode(ny), 1);
-      double      dz         = getAttrOrDefault(x_array, _Unicode(dz), 0 * mm);
-      double      arr_width  = getAttrOrDefault(x_array, _Unicode(width), 3.2 * cm);
-      double      arr_height = getAttrOrDefault(x_array, _Unicode(height), 3.2 * cm);
+      double      nx         = getAttrOrDefault<double>(x_array, _Unicode(nx), 1);
+      double      ny         = getAttrOrDefault<double>(x_array, _Unicode(ny), 1);
+      double      dz         = getAttrOrDefault<double>(x_array, _Unicode(dz), 0 * mm);
+      double      arr_width  = getAttrOrDefault<double>(x_array, _Unicode(width), 3.2 * cm);
+      double      arr_height = getAttrOrDefault<double>(x_array, _Unicode(height), 3.2 * cm);
       std::string arr_module = getAttrOrDefault<std::string>(x_array, _Unicode(module), "");
       // TODO: add check here
       auto        arr_vol  = modules[arr_module];

@@ -17,7 +17,7 @@ using namespace std;
 using namespace dd4hep;
 
 // main
-static Ref_t create_detector(Detector& desc, xml::Handle_t handle, SensitiveDetector sens)
+static Ref_t create_detector(Detector& desc, xml_h handle, SensitiveDetector sens)
 {
   xml::DetElement detElem = handle;
   std::string     detName = detElem.nameStr();
