@@ -18,7 +18,7 @@
 "topic: documentation":
   - "**/*.md"
 
-"topic: far-forward":
+"topic: far-forward": []
 
 "topic: forward":
   - "compact/**/forward_*"
