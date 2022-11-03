@@ -116,10 +116,17 @@
           which is supposed to have a more complicated shape.
         </comment>
         <layer inner_r="129.0 * cm" thickness="(1 * cm) + (1.5 * cm)" material="Aluminum5083" vis="outer_support_aluminum" />
+        <documentation>
+          This implements material for the outer support (rails, etc.) of the
+          calorimeter
+        </documentation>
         <comment>
-          This implements the "EMCal Outer Support" from the menagerie.
+          According to the curernt manegerie,
+          https://eic.jlab.org/Geometry/Detector/Detector-20221013164359.html,
+          the "EMCal Outer Support" should be only 20% steel density of 9 cm
+          volume, but that's an outdated information.
         </comment>
-        <layer inner_r="132.0 * cm" thickness="9 * cm" material="StainlessSteel_20percent" vis="outer_support_steel" />
+        <layer inner_r="132.0 * cm" thickness="8 * cm" material="StainlessSteel" vis="outer_support_steel" />
       </outer_supports>
     </detector>
   </detectors>
