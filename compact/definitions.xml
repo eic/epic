@@ -522,7 +522,6 @@ Service gaps in FW direction (before endcapP ECAL) and BW direction (before endc
 ## Calorimeter Parameters
   </documentation>
     <constant name="EcalBarrelStavesN"              value="24"/>
-
     <constant name="EcalEndcapP_zmin"               value="ForwardServiceGap_zmax" />
     <constant name="EcalEndcapP_length"             value="30*cm" />
     <constant name="EcalEndcapP_zmax"               value="EcalEndcapP_zmin + EcalEndcapP_length"/>
@@ -615,7 +614,6 @@ Service gaps in FW direction (before endcapP ECAL) and BW direction (before endc
     <constant name="HcalBarrelBackward_zmax" value="BackwardServiceGap_zmin"/>
     <constant name="HcalBarrel_length"    value="HcalBarrelForward_zmax + HcalBarrelBackward_zmax"/>
     <constant name="HcalBarrel_offset"    value="(HcalBarrelForward_zmax - HcalBarrelBackward_zmax)/2"/>
-
     <constant name="HcalEndcapN_rmax"     value="HcalBarrel_rmax"/>
     <constant name="HcalEndcapP_rmax"     value="HcalBarrel_rmax"/>
 
