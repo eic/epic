@@ -1,0 +1,38 @@
+<lccdd>
+  <comment>
+    //////////////////////////////////////////////////
+    // Far Forward Ion Zero Degree Calorimeter
+    // Silicon/PbWO4 for Ecal
+    //////////////////////////////////////////////////
+  </comment>
+
+  <detectors>
+    <detector id="ZDCEcal_ID" name="ZDCEcal" type="ZDC_Sampling" readout="ZDCEcal_Hits" vis="ZDCEcal_Vis">
+      <position x="ZDCEcal_x_pos" y="ZDCEcal_y_pos" z="ZDCEcal_z_pos"/>
+      <rotation x="ZDCEcal_rotateX_angle" y="ZDCEcal_rotateY_angle" z="ZDCEcal_rotateZ_angle"/>
+      <dimensions x="ZDCEcal_width" z="ZDCEcal_length"/>
+      <layer repeat="ZDC_SiWSciFi_NRepeat">
+        <slice name="Silicon_1_slice" material="Silicon"           thickness="ZDC_Silicon_1_Thickness" vis="RedVis"  sensitive="true"/>
+	<slice name="Glue_1_slice"    material="ZDC_PET"           thickness="ZDC_Glue_1_Thickness"    vis="AnlGold"/>
+	<slice name="FPC_slice"       material="ZDC_PET"           thickness="ZDC_FPC_Thickness"       vis="AnlGold"/>
+	<slice name="Air_1_slice"     material="Air"               thickness="ZDC_Air_1_Thickness"     vis="InvisibleNoDaughters"/>
+        <slice name="WSciFi_slice"    material="ZDC_WSciFiMixture" thickness="ZDC_WSciFi_Thickness"    vis="AnlGold" sensitive="true"/> <!-- now this is a WSciFi mixture -->
+	<slice name="Air_2_slice"     material="Air"               thickness="ZDC_Air_2_Thickness"     vis="InvisibleNoDaughters"/>
+      </layer>
+    </detector>
+  </detectors>
+
+  <readouts>
+    <readout name="ZDCEcal_Hits">
+      <segmentation type="MultiSegmentation" key="slice">
+        <segmentation name="Si_HG_grid"  type="CartesianGridXY" key_value="1"  grid_size_x="3.0*mm" grid_size_y="3.0*mm"/>
+        <segmentation name="WSciFi_grid" type="CartesianGridXY" key_value="5"  grid_size_x="2.5*cm" grid_size_y="2.5*cm"/>
+      </segmentation>
+      <hits_collections>
+	<hits_collection name="ZDCSiHits"     key="slice" key_value="1"/>
+        <hits_collection name="ZDCWSciFiHits" key="slice" key_value="5"/>
+      </hits_collections>
+      <id>system:8,layer:12,slice:12,x:32:-16,y:-16</id>
+    </readout>
+  </readouts>
+</lccdd>

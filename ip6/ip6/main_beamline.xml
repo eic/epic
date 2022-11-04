@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<lccdd>
+  <define>
+    <constant name="Pi" value="3.14159265359"/>
+    <constant name="world_side" value="30*m"/>
+    <constant name="world_x" value="world_side"/>
+    <constant name="world_y" value="world_side"/>
+    <constant name="world_z" value="100*m"/>
+  </define>
+
+  <includes>
+    <gdmlFile ref="elements.xml"/>
+    <gdmlFile ref="materials.xml"/>
+  </includes>
+  <include ref="ip6/forward_ion_beamline.xml" />
+
+</lccdd>

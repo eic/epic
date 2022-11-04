@@ -1,0 +1,38 @@
+view_prim:detector_only:
+  extends: .views
+  stage: test
+  script:
+    - ./bin/generate_prim_file -o ${LOCAL_DATA_PATH} -D -t detector_view -c ip6.xml
+    - ls -lrth && ls -lrth ${LOCAL_DATA_PATH}
+
+view_prim:ev001:
+  extends: .views
+  stage: test
+  rules:
+    - if: '$DETECTOR_EVENT_VIEWS == "ON"'
+  script:
+    - ./bin/generate_prim_file -o ${LOCAL_DATA_PATH} -t view_ev001 -s 1 -c ip6.xml
+
+view_prim:ev002:
+  extends: .views
+  stage: test
+  rules:
+    - if: '$DETECTOR_EVENT_VIEWS == "ON"'
+  script:
+    - ./bin/generate_prim_file -o ${LOCAL_DATA_PATH} -t view_ev002 -s 2 -c ip6.xml
+
+view_prim:ev003:
+  extends: .views
+  stage: test
+  rules:
+    - if: '$DETECTOR_EVENT_VIEWS == "ON"'
+  script:
+    - ./bin/generate_prim_file -o ${LOCAL_DATA_PATH} -t view_ev003 -s 3 -c ip6.xml
+
+view_prim:ev004:
+  extends: .views
+  stage: test
+  rules:
+    - if: '$DETECTOR_EVENT_VIEWS == "ON"'
+  script:
+    - ./bin/generate_prim_file -o ${LOCAL_DATA_PATH} -t view_ev004 -s 4 -c ip6.xml

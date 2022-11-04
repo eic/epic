@@ -1,0 +1,167 @@
+image: eicweb.phy.anl.gov:4567/eic/juggler/juggler:latest
+
+workflow:
+  rules:
+    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
+    - if: '$CI_PIPELINE_SOURCE == "web"'
+    - if: '$CI_PIPELINE_SOURCE == "webide"'
+    - if: '$CI_COMMIT_BRANCH == "master"'
+    - if: '$CI_COMMIT_TAG'
+
+default:
+  before_script:
+    - source .local/bin/env.sh
+  artifacts:
+    expire_in: 72 hours
+    paths:
+      - .local/detector
+      - .local/lib
+      - .local/bin
+      - .local/include
+      - .local/share
+      - results
+      - config
+      - images
+      - doc
+      - juggler.env
+      - geo
+    reports:
+      dotenv: juggler.env
+
+stages:
+  - config
+  - initialize
+  - build
+  - test
+  - docs
+  - collect
+  - finalize
+  - deploy
+
+common:setup:
+  stage: config
+  rules:
+    - if: '$CI_SERVER_HOST == "eicweb.phy.anl.gov"'
+  before_script:
+    - git clone https://eicweb.phy.anl.gov/EIC/benchmarks/common_bench.git setup
+  script:
+    - |
+      source setup/bin/env.sh && ./setup/bin/install_common.sh
+      export BEAMLINE_CONFIG="ip6"
+      if [[ -z "${JUGGLER_DETECTOR}" ]]; then
+        export JUGGLER_DETECTOR="athena"
+      fi
+      if [[ "x${CI_PIPELINE_SOURCE}" == "xmerge_request_event"  || "$CI_COMMIT_BRANCH" == "master" ]]; then
+        export BEAMLINE_CONFIG_VERSION=${CI_COMMIT_REF_NAME}
+        echo "BEAMLINE_CONFIG          = ${BEAMLINE_CONFIG}"
+        echo "BEAMLINE_CONFIG_VERSION  = ${CI_COMMIT_REF_NAME}"
+        echo "JUGGLER_DETECTOR         = ${JUGGLER_DETECTOR}"
+        # add to env file testing
+        echo "BEAMLINE_CONFIG_VERSION=$CI_COMMIT_REF_NAME" >> juggler.env
+        echo "BEAMLINE_CONFIG=$BEAMLINE_CONFIG" >> juggler.env
+        echo "JUGGLER_DETECTOR=$JUGGLER_DETECTOR" >> juggler.env
+        # if specific juggler version is requested
+        if [[ -n "${JUGGLER_DETECTOR_VERSION}" ]]; then
+          echo "JUGGLER_DETECTOR_VERSION = ${CI_COMMIT_REF_NAME}"
+          echo "JUGGLER_DETECTOR_VERSION=$CI_COMMIT_REF_NAME" >> juggler.env
+        fi
+      fi
+    - |
+      source .local/bin/env.sh
+      mkdir -p build && cd build && cmake ../. -DCMAKE_INSTALL_PREFIX=${LOCAL_PREFIX} && make -j20  || exit -1
+      make install  && cd ..
+      mkdir_local_data_link sim_output
+      ls -lrth
+      print_env.sh
+
+common:detector:
+  stage: initialize
+  needs: ["common:setup"]
+  script:
+    - source .local/bin/env.sh #&& build_detector.sh
+    - mkdir_local_data_link sim_output
+    - mkdir -p results
+    - mkdir -p config
+    - mkdir -p doc
+    - mkdir -p geo
+    - print_env.sh
+
+.views:
+  stage: docs
+  before_script:
+    - source .local/bin/env.sh
+    - env
+    - pip3 install psutil
+  needs:
+    - ["common:detector"]
+
+include:
+  - local: 'views/generate_prim_files.yml'
+  - local: 'views/view50.yml'
+
+dump_constants:
+  stage: test
+  needs:
+    - ["common:detector"]
+  script:
+    - npdet_info dump ip6.xml  | tee doc/constants.out
+
+dump_geometry:
+  stage: test
+  needs:
+    - common:detector
+  script:
+   - echo "dumping geometry"
+   - mkdir -p geo
+   - dd_web_display --output geo/detector_geo_full.root ip6.xml
+   - echo "Geometry viewer at https://eic.phy.anl.gov/geoviewer/index.htm?file=https://eicweb.phy.anl.gov/EIC/detectors/ip6/-/jobs/${CI_JOB_ID}/artifacts/raw/geo/detector_geo_full.root?job=dump_geometry&item=default;1&opt=transp30;zoom75;ROTY290;ROTZ350;trz0;trr0;ctrl;all&"
+
+xmllint:
+  stage: test
+  needs:
+    - ["common:detector"]
+  script:
+    - xmllint ip6/*.xml ip6.xml > /dev/null
+
+overlap_check:
+  stage: test
+  needs:
+    - ["common:detector"]
+  script:
+    - checkOverlaps -c ip6.xml
+
+overlap_check_geant4:
+  stage: test
+  needs:
+    - ["common:detector"]
+  script:
+    - python scripts/checkOverlaps.py -c ip6.xml | tee doc/overlap_check_geant4.out
+    - echo "$(cat doc/overlap_check_geant4.out | grep GeomVol1002 | wc -l) overlaps..."
+    - if [[ "$(cat doc/overlap_check_geant4.out | grep GeomVol1002 | wc -l)" -gt "0" ]] ; then echo "Overlaps exist!" && false ; fi
+
+
+detectors:athena:
+  stage: deploy
+  needs: ["overlap_check"]
+  variables:
+    JUGGLER_DETECTOR: "athena"
+    JUGGLER_DETECTOR_CONFIG: "athena"
+    JUGGLER_DETECTOR_VERSION: "master"
+    BEAMLINE_CONFIG: "$BEAMLINE_CONFIG"
+    BEAMLINE_CONFIG_VERSION: "$BEAMLINE_CONFIG_VERSION"
+  trigger:
+    project: EIC/detectors/athena
+    strategy: depend
+
+detectors:ecce:
+  stage: deploy
+  needs: ["overlap_check"]
+  variables:
+    JUGGLER_DETECTOR: "ecce"
+    JUGGLER_DETECTOR_CONFIG: "ecce"
+    JUGGLER_DETECTOR_VERSION: "main"
+    BEAMLINE_CONFIG: "$BEAMLINE_CONFIG"
+    BEAMLINE_CONFIG_VERSION: "$BEAMLINE_CONFIG_VERSION"
+  trigger:
+    project: EIC/detectors/ecce
+    strategy: depend

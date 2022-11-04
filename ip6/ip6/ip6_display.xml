@@ -1,0 +1,78 @@
+  <display>
+
+    <comment>
+      See compact/ip6_colors.xml for list of colors.
+    </comment>
+    <vis name="InvisibleNoDaughters"      showDaughters="false" visible="false"/>
+    <vis name="InvisibleWithDaughters"    showDaughters="true" visible="false"/>
+
+    <comment>
+      Tracker visualizations
+    </comment>
+    <vis name="TrackerVis"          ref="AnlRed" />
+    <vis name="TrackerSupportVis"   ref="AnlBlue"             visible="true"  showDaughters="false" />
+    <vis name="TrackerServiceVis"   ref="AnlGold"             showDaughters="false" />
+    <vis name="FFTrackerVis"        ref="AnlRed" />
+    <vis name="FFTrackerSupportVis" ref="AnlBlue"             visible="true"  showDaughters="false" />
+    <vis name="FFTrackerShieldingVis" ref="AnlGray"           visible="true"  showDaughters="false" />
+    <vis name="FFTrackerServiceVis" ref="AnlGold"             visible="true"  showDaughters="false" />
+    <vis name="FFTrackerLayerVis"   ref="TrackerVis"          visible="true"  showDaughters="true" />
+    <vis name="FFTrackerModuleVis"  ref="FFTrackerLayerVis"   visible="true"  showDaughters="true" />
+    <vis name="FFTrackerSurfaceVis" ref="FFTrackerLayerVis"   visible="true"  showDaughters="true" />
+    <comment> For shielded modules by default just display to module instead of 6 layers </comment>
+    <vis name="FFTrackerShieldedModuleVis" ref="FFTrackerModuleVis"   visible="true"  showDaughters="false" />
+
+    <comment>
+      Calorimeter visualization
+    </comment>
+
+    <comment>
+      ECal Vis
+    </comment>
+    <vis name="FFPreVis"            ref="AnlGold"             showDaughters="true" visible="true"/>
+    <vis name="FFPreLayerVis"       ref="FFPreVis"            showDaughters="true" visible="true"/>
+    <vis name="FFPreModuleVis"      ref="FFPreLayerVis"       showDaughters="true" visible="true"/>
+    <vis name="FFPreRadiatorVis"    ref="FFPreModuleVis"      showDaughters="true" visible="true"/>
+    <vis name="FFPreReadoutVis"     ref="FFTrackerSurfaceVis" showDaughters="true" visible="true"/>
+
+    <comment>
+      Magnet/beamline visualization
+    </comment>
+    <vis name="FFMagnetVis"         ref="AnlGreen"            showDaughters="true" visible="true"/>
+    <vis name="FFMagnetCoilVis"     ref="AnlRed"              showDaughters="true" visible="true"/>
+    <vis name="BeamPipeVis"         ref="AnlLight_Gray"       showDaughters="true" visible="true"/>
+
+
+    <comment>
+      ZDC visualization
+    </comment>
+    <vis name="ffi_ZDC_ECAL_Vis"        ref="AnlGreen" showDaughters="true"  visible="true"/>
+    <vis name="ffi_ZDC_ECAL_module_Vis" ref="AnlRed"   showDaughters="false" visible="true"/>
+    <vis name="ffi_ZDC_HCAL_Vis"        ref="AnlBlue"  showDaughters="true"  visible="true"/>
+
+    <comment>
+     Backwards vacuum
+    </comment>
+    <vis name="BackwardsBox"      alpha="0.3" ref="AnlLight_Gray"/>
+    <vis name="BackwardsAir"      alpha="0.7" ref="AnlBlue"/>
+
+
+
+    <comment>
+      Deprecated color scheme
+    vis name="GreenVis"       alpha="1.0"  r= "0.0" g="1.0" b="0.0" showDaughters="true" visible="true"/
+    vis name="RedVis"         alpha="0.2"  r= "1.0" g="0.0" b="0.0" showDaughters="true" visible="true"/
+    vis name="RPVis"          alpha="0.99"  r= "1.0" g="0.0" b="0.0" showDaughters="true" visible="true"/
+    vis name="RPLayerVis"     alpha="0.99"  r= "0.0" g="0.7" b="0.3" showDaughters="true" visible="true" lineStyle="solid" drawingStyle="solid" /
+    vis name="BlueVis"        alpha="1.0"  r= "0.0" g="0.0" b="1.0" showDaughters="true" visible="true"/
+    vis name="OrangeVis"      alpha="1.0"  r= "1.0" g="0.45" b="0.0" showDaughters="true" visible="true"/
+    vis name="RedGreenVis"    alpha="0.5"  r= "1.0" g="1.0" b="0.0" showDaughters="true" visible="true"/>
+    vis name="BlueGreenVis"   alpha="0.5"  r= "0.0" g="1.0" b="1.0" showDaughters="true" visible="true"/
+    vis name="PurpleVis"      alpha="1.0"  r= "1.0" g="0.0" b="1.0" showDaughters="true" visible="true"/
+    vis name="DoubleRedG"     alpha="0.5"  r= "2.0" g=".10" b="0.0" showDaughters="true" visible="true"/
+    vis name="RBG015"         alpha="0.5"  r= "0.0" g=".2"  b="1.0" showDaughters="true" visible="true"/
+    vis name="RBG510"         alpha="0.5"  r= "1.0" g=".2"  b="0.0" showDaughters="true" visible="true"/
+    vis name="RBG"            alpha="0.5"  r= "1.0" g="1.0" b="1.0" showDaughters="true" visible="true"/
+    vis name="GrayVis"        alpha="1.0"  r= "0.75" g="0.75" b="0.75" showDaughters="true" visible="true"/
+    </comment>
+  </display>

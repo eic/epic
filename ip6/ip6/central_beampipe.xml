@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<lccdd>
+  <define>
+    <constant name="BeampipeUpstreamStraightLength" value="800.0 * mm"/>
+    <constant name="BeampipeDownstreamStraightLength" value="670.0 * mm"/>
+  </define>
+
+  <display>
+  </display>
+
+  <detectors>
+
+    <detector id="BeamPipe_ID" name="BeamPipe" type="IP6BeamPipe" vis="BeamPipeVis">
+      <beampipe/>
+      <IP_pipe
+        OD="BeampipeOD"
+        wall_thickness="0.757*mm"
+        gold_thickness="5*um"
+        crossing_angle="CrossingAngle"
+        upstream_straight_length="BeampipeUpstreamStraightLength"
+        downstream_straight_length="BeampipeDownstreamStraightLength"
+      />
+
+      <comment> For upstream beampipe, we subtract the vacuum from the matter </comment>
+      <upstream reflect="true"
+                place_vacuum="true"
+                subtract_vacuum="true"
+                subtract_matter="false">
+        <outgoing_lepton thickness="2.0*mm">
+          <zplane z="BeampipeUpstreamStraightLength" OD="BeampipeOD"/>
+          <zplane z="2690.95 * mm" OD="85.616 * mm"/>
+          <zplane z="4560.17 * mm" OD="99.20 * mm"/>
+        </outgoing_lepton>
+        <incoming_hadron thickness="1.65*mm"
+                         crossing_angle="CrossingAngle">
+          <!-- avoid overlap with IP beampipe by starting slightly displaced -->
+          <zplane z="BeampipeUpstreamStraightLength + 0.5 * max(BeampipeOD, 24.714 * mm) * tan(abs(CrossingAngle))" OD="24.714 * mm"/>
+          <zplane z="2690.95 * mm" OD="24.714 * mm"/>
+          <zplane z="2710.75 * mm" OD="31.75 * mm"/>
+          <zplane z="2890.35 * mm" OD="31.75 * mm"/>
+          <zplane z="2940.35 * mm" OD="44.45 * mm"/>
+          <zplane z="4490.35 * mm" OD="44.45 * mm"/>
+        </incoming_hadron>
+      </upstream>
+
+      <comment> For downstream beampipe (where on is inside the vacuum of the other), we subtract the matter from the vacuum, and subtract an additional pipe to create the angled cutout</comment>
+      <downstream reflect="false"
+                  place_vacuum="true"
+                  subtract_vacuum="false"
+                  subtract_matter="true">
+        <incoming_lepton thickness="1.0*mm">
+          <zplane z="BeampipeDownstreamStraightLength" OD="BeampipeOD"/>
+          <zplane z="4484.25 * mm" OD="BeampipeOD"/>
+        </incoming_lepton>
+        <outgoing_hadron thickness="4.0*mm"
+                         axis_intersection="670.0 * mm"
+                         crossing_angle="CrossingAngle">
+          <!-- avoid overlap with IP beampipe by starting slightly displaced -->
+          <zplane z="BeampipeDownstreamStraightLength + 0.5 * BeampipeOD * tan(abs(CrossingAngle))" OD="BeampipeOD"/>
+          <zplane z="1750.00 * mm" OD=" 92.06 * mm"/>
+          <zplane z="4455.80 * mm" OD="257.92 * mm"/>
+          <zplane z="5000.00 * mm" OD="340.60 * mm"/>
+        </outgoing_hadron>
+        <additional_subtraction thickness="4.0*mm"
+                                crossing_angle="CrossingAngle">
+          <!-- these are somewhat arbitrary to get the right hole shape -->
+          <zplane z="BeampipeDownstreamStraightLength" OD="32. * mm"/>
+          <zplane z="4484.25 * mm" OD="120. * mm"/>
+        </additional_subtraction>
+      </downstream>
+    </detector>
+
+  </detectors>
+
+
+</lccdd>

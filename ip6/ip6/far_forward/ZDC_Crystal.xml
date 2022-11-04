@@ -1,0 +1,53 @@
+<lccdd>
+  <comment>
+    //////////////////////////////////////////////////
+    // Far Forward Zero Degree Calorimeter
+    // Crystal calorimeter
+    //////////////////////////////////////////////////
+  </comment>
+
+  <define>
+    <constant name="ZDC_Crystal_cell_width"     value="3.*cm"/>
+    <constant name="ZDC_Crystal_cell_length"    value="7.*cm"/>
+    <constant name="ZDC_Crystal_frame_thickness"  value="0.3*mm"/>
+    <constant name="ZDC_Crystal_active_x"       value="ZDC_width"/>
+    <constant name="ZDC_Crystal_active_y"       value="ZDC_width"/>
+    <constant name="ZDC_Crystal_nx"             value="ZDC_Crystal_active_x/ZDC_Crystal_cell_width"/>
+    <constant name="ZDC_Crystal_ny"             value="ZDC_Crystal_active_y/ZDC_Crystal_cell_width"/>
+    <constant name="ZDC_Crystal_APD_socket_z"   value="2.5*mm"/>
+    <constant name="ZDC_Crystal_space"          value="3*cm"/>
+  </define>
+
+  <detectors>
+    <detector
+	id="ZDC_Crystal_ID"
+	name="ZDC_Crystal"
+	type="ZDC_Crystal"
+	vis="ZDC_Crystal_Vis"
+	readout="ZDCEcalHits">
+      <position x="ZDC_Crystal_x_pos"         y="ZDC_Crystal_y_pos"         z="ZDC_Crystal_z_pos"/>
+      <rotation x="ZDC_Crystal_rotateX_angle" y="ZDC_Crystal_rotateY_angle" z="ZDC_Crystal_rotateZ_angle"/>
+      <dimensions x="ZDC_Crystal_nx * (ZDC_Crystal_cell_width + ZDC_Crystal_frame_thickness) + ZDC_Crystal_frame_thickness"
+		  y="ZDC_Crystal_ny * (ZDC_Crystal_cell_width + ZDC_Crystal_frame_thickness) + ZDC_Crystal_frame_thickness"
+		  z="ZDC_Crystal_cell_length + ZDC_Crystal_space"/>
+      <module name="tower" nx="ZDC_Crystal_nx" ny="ZDC_Crystal_ny">
+	<tower name="crystal"
+	       cellx="ZDC_Crystal_cell_width" celly="ZDC_Crystal_cell_width" thickness="ZDC_Crystal_cell_length"
+	       material="PbWO4" vis="AnlGold" sensitive="true"/>
+	<socket name="socket"
+		cellx="ZDC_Crystal_cell_width" celly="ZDC_Crystal_cell_width" thickness="ZDC_Crystal_APD_socket_z"
+		material="ZDC_Polyethylene" vis="AnlTeal" />
+      </module>
+      <support  material="CarbonFiber" vis="AnlLight_Gray" sizez="ZDC_Crystal_cell_length" thickness="ZDC_Crystal_frame_thickness"/>
+
+    </detector>
+  </detectors>
+
+  <readouts>
+    <readout name="ZDCEcalHits">
+      <segmentation type="NoSegmentation"/>
+      <id>system:8,module:2,crystal:12</id>
+    </readout>
+  </readouts>
+
+</lccdd>

@@ -1,6 +1,5 @@
 !*.png
 
-/*.xml
 *.prim
 */*.eps
 */*/*.eps
@@ -12,15 +11,11 @@ build/*
 */*.pyc
 **.pyc
 
-lib/
-share/
-
 images/*
+doc/*
 
 accelerator
-eic_ip6
 eic
-ip6_build
 
 *.swp
 
@@ -30,4 +25,6 @@ manifest.txt
 acts.txt
 acts2.txt
 
-materials-map.cbor
+# local install directories
+lib/
+share/

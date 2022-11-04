@@ -1,0 +1,26 @@
+<display>
+
+  <comment>
+    Colors tweaked to be displayable by geoViewer
+  </comment>
+  <vis name="AnlGreen"        alpha="1" r="100/256" g="200/256" b="0/256"/>
+  <vis name="AnlViolet"       alpha="1" r="100/256" g="0/256"   b="150/256"/>
+  <vis name="AnlProcess_Blue" alpha="1" r="0/256"   g="100/256" b="202/256"/>
+  <vis name="AnlOrange"       alpha="1" r="255/256" g="121/256" b="0"/>
+  <vis name="AnlRed"          alpha="1" r="205/256" g="45/256 " b="45/256"/>
+  <vis name="AnlGold"         alpha="1" r="248/256" g="188/256" b="0/256"/>
+  <vis name="AnlBlue"         alpha="1" r="0/256"   g="96/256"  b="156/256"/>
+  <vis name="AnlTeal"         alpha="1" r="0/256"   g="161/256" b="156/256"/>
+  <vis name="AnlGray"         alpha="1" r="102/256" g="102/256" b="102/256"/>
+  <vis name="AnlLight_Gray"   alpha="1" r="209/256" g="209/256" b="209/256"/>
+  <vis name="AnlLightGray"    ref="AnlLight_Gray" />
+  <!-- off-white (or white) don't work! -->
+  <!--vis name="AnlOff_White"    alpha="1" r="242/256" g="242/256" b="242/256"/-->
+  <vis name="AnlDarkRed"      alpha="1" r="161/256" g="45/256"  b="45/256"/>
+  <vis name="AnlDarkGreen"    alpha="1" r="0"       g="110/256" b="50/256"/>
+  <vis name="AnlDarkBlue"     alpha="1" r="45/256"   g="45/256"  b="110/256"/>
+  <vis name="AnlDelta_Red"    ref="AnlDarkRed"/>
+  <vis name="AnlDelta_Green"    ref="AnlDarkGreen"/>
+  <vis name="AnlDelta_Blue"    ref="AnlDarkBlue"/>
+
+</display>

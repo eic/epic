@@ -1,0 +1,27 @@
+#/vis/open DAWNFILE 1000x1000+600+400
+#/vis/scene/create
+#/vis/scene/add/volume
+#/vis/sceneHandler/attach
+#/vis/viewer/flush
+#/vis/scene/add/trajectories
+#/vis/scene/add/hits
+#/tracking/storeTrajectory 1
+#/vis/drawVolume
+#/vis/geometry/set/forceSolid all -1 true
+#/vis/geometry/set/visibility world_volume 0 0
+#/run/beamOn 1
+#/vis/viewer/flush
+/vis/open DAWNFILE
+/vis/scene/create
+/vis/scene/add/volume
+/vis/sceneHandler/attach
+#/vis/viewer/flush
+/vis/scene/add/trajectories
+/vis/scene/add/hits
+#/vis/scene/add/scale 1 m x 1 0 0 manual -0.5 -2 0 m
+#/vis/scene/add/scale 1 m y 1 0 0 manual 2 -0.75 -3 m
+#/vis/scene/add/scale 2 m z 1 0 0 manual 0 -2 0 m
+/tracking/storeTrajectory 1
+/run/beamOn 1
+
+exit

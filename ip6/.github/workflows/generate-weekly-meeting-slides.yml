@@ -1,0 +1,28 @@
+name: generate-weekly-meeting-slides
+on:
+  schedule:
+    - cron:  '30 16 * * 1' # 16:30 UTC = 12:30 EDT on Monday
+  workflow_dispatch:
+    inputs:
+      since:
+        description: 'Since when to generate slides'
+        required: false
+        type: string
+        default: '1 week ago'
+
+jobs:
+  generate-weekly-meeting-slides:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: eic/generate-meeting-slides@v2
+      with:
+        since: ${{ inputs.since || '1 week ago' }}
+        config: |
+          repos:
+            - name: ${{ github.repository }}
+              do_stale: true
+              stale_label: stale
+              wip_label: WIP
+              do_open_prs: true
+              do_merged_prs: true
+              do_recent_issues: true
