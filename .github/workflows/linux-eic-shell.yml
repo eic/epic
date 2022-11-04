@@ -9,16 +9,6 @@ on:
   pull_request:
   workflow_dispatch:
     inputs:
-      beamline_repositoryurl:
-        description: 'Repository URL for beamline'
-        required: false
-        default: 'https://github.com/eic/ip6'
-        type: string
-      beamline_version:
-        description: 'Branch in beamline repository'
-        required: false
-        default: 'master'
-        type: string
       github_repository:
         description: 'Submitting GitHub repository'
         required: false
@@ -66,11 +56,6 @@ jobs:
       PREFIX: ${{ github.workspace }}/install
     steps:
     - uses: actions/checkout@v3
-    - uses: actions/checkout@v3
-      with:
-        repository: eic/ip6
-        ref: master
-        path: eic_ip6
     - name: Prepare ccache timestamp
       id: ccache_cache_timestamp
       run: |
@@ -96,28 +81,13 @@ jobs:
         platform-release: "jug_xl:nightly"
         run: |
           eic-info
-    - name: Build beamline geometry
-      uses: eic/run-cvmfs-osg-eic-shell@main
-      with:
-        platform-release: "jug_xl:nightly"
-        network_types: "none"
-        run: |
-          # install ip6 repo
-          pushd eic_ip6
-          git checkout ${{ inputs.beamline_version || 'master' }}
-          CC=gcc CXX=g++ cmake -B build -S . -DCMAKE_INSTALL_PREFIX=${PREFIX} -DCMAKE_C_COMPILER_LAUNCHER=ccache -DCMAKE_CXX_COMPILER_LAUNCHER=ccache
-          cmake --build build -- -j 2 install
-          popd
     - name: Build detector geometry
       uses: eic/run-cvmfs-osg-eic-shell@main
       with:
         platform-release: "jug_xl:nightly"
         run: |
-          # install this repo
           CC=gcc CXX=g++ cmake -B build -S . -DCMAKE_INSTALL_PREFIX=${PREFIX} -DCMAKE_C_COMPILER_LAUNCHER=ccache -DCMAKE_CXX_COMPILER_LAUNCHER=ccache
           cmake --build build -- -j 2 install
-          # link ip6 into install
-          ln -sf ../ip6/ip6 ${PREFIX}/share/epic/ip6
     - uses: actions/upload-artifact@v3
       with:
         name: build-gcc-full-eic-shell
@@ -127,7 +97,7 @@ jobs:
         source install/setup.sh
         sed -i '/<fiber/,+6d' ${DETECTOR_PATH}/compact/ecal/barrel_interlayers.xml
         sed -i '/<fiber/,+4d' ${DETECTOR_PATH}/compact/ecal/forward_scfi.xml
-        sed -i '/<fiber/,+4d' ${DETECTOR_PATH}/ip6/far_forward/ZDC_Ecal_WSciFi.xml
+        sed -i '/<fiber/,+4d' ${DETECTOR_PATH}/compact/far_forward/ZDC_Ecal_WSciFi.xml
         sed -i '/<lens/,+4d' ${DETECTOR_PATH}/compact/pid/mrich.xml
     - uses: actions/upload-artifact@v3
       with:
@@ -147,18 +117,8 @@ jobs:
         network_types: "none"
         run: |
           PREFIX=${PWD}/install
-          # install ip6 repo
-          git clone ${{ inputs.beamline_repositoryurl || 'https://github.com/eic/ip6.git' }} eic_ip6
-          pushd eic_ip6
-          git checkout ${{ inputs.beamline_version || 'master' }}
           CC=clang CXX=clang++ cmake -B build -S . -DCMAKE_INSTALL_PREFIX=${PREFIX}
           cmake --build build -- -j 2 install
-          popd
-          # install this repo
-          CC=clang CXX=clang++ cmake -B build -S . -DCMAKE_INSTALL_PREFIX=${PREFIX}
-          cmake --build build -- -j 2 install
-          # link ip6 into install
-          ln -sf ../ip6/ip6 ${PREFIX}/share/epic/ip6
     - uses: actions/upload-artifact@v3
       with:
         name: build-clang-full-eic-shell
@@ -168,7 +128,7 @@ jobs:
         source install/setup.sh
         sed -i '/<fiber/,+6d' ${DETECTOR_PATH}/compact/ecal/barrel_interlayers.xml
         sed -i '/<fiber/,+4d' ${DETECTOR_PATH}/compact/ecal/forward_scfi.xml
-        sed -i '/<fiber/,+4d' ${DETECTOR_PATH}/ip6/far_forward/ZDC_Ecal_WSciFi.xml
+        sed -i '/<fiber/,+4d' ${DETECTOR_PATH}/compact/far_forward/ZDC_Ecal_WSciFi.xml
         sed -i '/<lens/,+4d' ${DETECTOR_PATH}/compact/pid/mrich.xml
     - uses: actions/upload-artifact@v3
       with:
