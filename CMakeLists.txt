@@ -69,7 +69,7 @@ dd4hep_configure_output()
 file(GLOB sources CONFIGURE_DEPENDS src/*.cpp)
 dd4hep_add_plugin(${a_lib_name}
   SOURCES ${sources}
-  USES ${ActsDD4hep}
+  USES ${ActsDD4hep} ROOT::Core ROOT::Gdml
   )
 target_link_libraries(${a_lib_name}
   PUBLIC ${DD4hep_required_libraries} fmt::fmt
