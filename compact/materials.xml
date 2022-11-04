@@ -404,6 +404,11 @@
     <composite n="0.009" ref="H"/>
     <composite n="0.041"  ref="C"/>
   </material>
+  <material name="ZDC_Polyethylene">
+    <D type="density" value="0.96" unit="g/cm3"/>
+    <composite n="2" ref="C"/>
+    <composite n="4" ref="H"/>
+  </material>
   <material name="WSciFi_UCLA_Abs">
     <D type="density" value="12.4" unit="g / cm3"/>
     <fraction n="0.96" ref="W"/>
@@ -422,7 +427,7 @@
     <fraction n="0.091" ref="H"/>
     <fraction n="0.822" ref="C"/>
     <fraction n="0.032" ref="N"/>
-    <fraction n="0.055" ref="O"/>   
+    <fraction n="0.055" ref="O"/>
   </material>
   <material name="SciFiPb_PbGlue">
     <D type="density" value="8.558" unit="g / cm3"/>
