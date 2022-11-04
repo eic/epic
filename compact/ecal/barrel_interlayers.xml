@@ -66,7 +66,7 @@
                      (EcalBarrel_ImagingLayerThickness + EcalBarrel_ScFiLayerThickness +
                       EcalBarrel_SpaceBetween)))"/>
     <comment>
-      Adjusting size of the ScFi back chunk to match number of imiaging layers
+      Adjusting size of the ScFi back chunk to match number of imaging layers
       and 20 radiation lengths in total
     </comment>
     <constant name="EcalBarrel_FiberChunkLayers_num" value = "EcalBarrel_TotalFiberLayers_num-EcalBarrelImagingLayers_num+1"/>
