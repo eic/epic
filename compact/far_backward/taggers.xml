@@ -9,7 +9,7 @@
 
   <detectors>
 
-    <detector id="1" type="BackwardsTracker" name="TagTrack1"
+    <detector id="Tagger1_ID" type="BackwardsTracker" name="TagTrack1"
       width="Tagger1_Width/2"
       height="Tagger1_Height/2"
       length="Tagger1_Length"
@@ -24,7 +24,7 @@
     </detector>
 
 
-    <detector id="2" type="BackwardsTracker" name="TagTrack2"
+    <detector id="Tagger2_ID" type="BackwardsTracker" name="TagTrack2"
       width="Tagger2_Width/2"
       height="Tagger2_Height/2"
       length="Tagger2_Length"
