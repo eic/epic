@@ -31,7 +31,7 @@ endif()
 # Export compile commands as json for run-clang-tidy
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
-# Install into GNU standards
+# Install into GNU standard directories
 include(GNUInstallDirs)
 
 # Set required DD4hep components based on user input
