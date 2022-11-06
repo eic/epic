@@ -31,3 +31,8 @@ acts.txt
 acts2.txt
 
 materials-map.cbor
+
+# local install directories
+lib/
+share/
+setup.sh
