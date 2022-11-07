@@ -17,14 +17,9 @@ The EPIC Detector at IP6 for Electron-Ion Collider experiment.
     - [Vertex detector](https://eic.phy.anl.gov/geoviewer/index.htm?nobrowser&file=https://eicweb.phy.anl.gov/EIC/detectors/ecce/-/jobs/artifacts/main/raw/geo/vertex_only_geo.root?job=dump_geometry&item=default;1&opt=clipx;clipy;transp30;zoom120;ROTY320;ROTZ340;trz0;trr0;ctrl;all)
   - [Far-forward](https://eic.phy.anl.gov/geoviewer/index.htm?nobrowser&file=https://eicweb.phy.anl.gov/EIC/detectors/ecce/-/jobs/artifacts/main/raw/geo/detector_geo_ip6.root?job=dump_geometry&item=default;1&opt=clipx;clipy;transp30;zoom40;ROTY290;ROTZ350;trz0;trr0;ctrl;all)
 
-<a href="https://eicweb.phy.anl.gov/EIC/detectors/ecce/-/jobs/artifacts/main/raw/images/view01.pdf?job=report">
-<img src="https://eicweb.phy.anl.gov/EIC/detectors/ecce/-/jobs/artifacts/main/raw/images/view01.png?job=report" width="400px" />
-</a>
-
-<br />
-<a href="https://eic.github.io/epic/view1_top.pdf">
-<img src="https://eic.github.io/epic/view1_top.png" width="400px" />
-</a>
+[![arches](https://eic.github.io/epic/view1_top.png "arches" =50%x)][arches_pdf] [![brycecanyon](https://eic.github.io/epic/view1_top.png "brycecanyon" =50%x)][brycecanyon_pdf]
+[arches_pdf]: https://eic.github.io/epic/arches/view1_top.pdf
+[brycecanyon_pdf]: https://eic.github.io/epic/brycecanyon/view1_top.pdf
 
 [Browse latest](https://eicweb.phy.anl.gov/EIC/detectors/ecce/-/jobs/artifacts/main/browse/images?job=report)
 

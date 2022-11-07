@@ -606,12 +606,28 @@ jobs:
     steps:
     - uses: actions/download-artifact@v3
       with:
-        name: view1
+        name: epic_arches_view1
         path: html/
     - uses: actions/download-artifact@v3
       with:
-        name: view2
+        name: epic_arches_view2
         path: html/
+    - uses: actions/download-artifact@v3
+      with:
+        name: epic_arches_view1
+        path: html/arches/
+    - uses: actions/download-artifact@v3
+      with:
+        name: epic_arches_view2
+        path: html/arches/
+    - uses: actions/download-artifact@v3
+      with:
+        name: epic_brycecanyon_view1
+        path: html/brycecanyon/
+    - uses: actions/download-artifact@v3
+      with:
+        name: epic_brycecanyon_view2
+        path: html/brycecanyon/
     - uses: actions/upload-artifact@v3
       with:
         name: artifacts-page
