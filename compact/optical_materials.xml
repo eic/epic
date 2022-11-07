@@ -830,7 +830,7 @@
       <property name="SCINTILLATIONYIELD1"  value="200.0/MeV"/>
       <property name="SCINTILLATIONTIMECONSTANT1"    value="6.0*ns"/>
       <property name="RESOLUTIONSCALE"     value="1.0"/>
-    </material>        
+    </material>
   </materials>
   <surfaces>
     <opticalsurface finish="polished" model="glisur" name="MirrorOpticalSurface" type="dielectric_metal" value="0">

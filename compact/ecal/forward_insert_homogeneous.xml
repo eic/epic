@@ -67,7 +67,7 @@
         <slice material="Air" thickness="EcalEndcapPInsertAirThickness"/>
         <slice material="Fr4" thickness="EcalEndcapPInsertPCBThickness"/>
         <slice material="Plexiglass" thickness="EcalEndcapPInsertLightGuideThickness"/>
-        <slice material="AvgTungstenScFi" thickness="EcalEndcapPInsertScintillatorThickness" sensitive="true"/> 
+        <slice material="AvgTungstenScFi" thickness="EcalEndcapPInsertScintillatorThickness" sensitive="true"/>
       </layer>
       <documentation>
         initial_hole_radius: Hole radius at front of first layer

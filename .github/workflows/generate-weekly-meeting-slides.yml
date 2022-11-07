@@ -19,7 +19,7 @@ jobs:
       with:
         since: ${{ inputs.since || '1 week ago' }}
         config: |
-          repos:  
+          repos:
             - name: ${{ github.repository }}
               do_stale: true
               stale_label: stale
