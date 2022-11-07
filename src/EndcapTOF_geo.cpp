@@ -179,7 +179,7 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
   DetElement layer_detEl(ttl_detEl, _toString(layer_id, "layer_%d"), x_det.id());
 
 
-  // NOTE: ACTS extension for the disk layer of the TTL 
+  // NOTE: ACTS extension for the disk layer of the TTL
   // also defining the coordinate system that differs between ACTS and Geant4 (zyx vs xyz)
   Acts::ActsExtension* detlayer = new Acts::ActsExtension("zyx");
   detlayer->addValue(-80. * mm, "r_min", "envelope");

@@ -218,7 +218,7 @@ std::tuple<Volume, Position> build_module(Detector& desc, xml::Collection_t& plm
   auto modMat = desc.material(mod.attr<std::string>(_Unicode(gmaterial)));
   Volume modVol("module_vol", modshape, modMat);
   modVol.setVisAttributes(desc.visAttributes(mod.attr<std::string>(_Unicode(vis))));
-  
+
   auto cry = plm.child(_Unicode(crystal));
   auto cryx  = cry.attr<double>(_Unicode(sizex));
   auto cryy  = cry.attr<double>(_Unicode(sizey));
@@ -233,7 +233,7 @@ std::tuple<Volume, Position> build_module(Detector& desc, xml::Collection_t& plm
   if (!plm.hasChild(_Unicode(wrapper)))    // no wrapper
     {
       printout(DEBUG, "HomogeneousCalorimeter", "without wrapper");
-      
+
       return std::make_tuple(modVol, Position{sx, sy, sz});
 
     }
@@ -249,7 +249,7 @@ std::tuple<Volume, Position> build_module(Detector& desc, xml::Collection_t& plm
 
       if (carbon_thickness < 1e-12 * mm)
         return std::make_tuple(modVol, Position{sx, sy, sz});
-      
+
       Box carbonShape(sx / 2., sy / 2., length_wrapper / 2.);
       Box carbonShape_sub((sx - 2.*carbon_thickness) / 2., (sy - 2.*carbon_thickness) / 2., length_wrapper / 2.);
       SubtractionSolid carbon_subtract(carbonShape, carbonShape_sub, Position(0., 0., 0.));
@@ -257,7 +257,7 @@ std::tuple<Volume, Position> build_module(Detector& desc, xml::Collection_t& plm
       Box wrpShape((sx - 2.*carbon_thickness) / 2., (sy - 2.*carbon_thickness) / 2., (sz + wrap_thickness) / 2.);
       Box wrpShape_sub((sx - 2.*carbon_thickness - 2.*wrap_thickness) / 2., (sy - 2.*carbon_thickness - 2.*wrap_thickness) / 2., sz / 2.);
       SubtractionSolid wrp_subtract(wrpShape, wrpShape_sub, Position(0., 0., -wrap_thickness));
-      
+
       Box gapShape(sx / 2., sy / 2., (sz - 2. * length_wrapper) / 2.);
       Box gapShape_sub((sx - 2.*carbon_thickness) / 2., (sy - 2.*carbon_thickness) / 2., (sz - 2. * length_wrapper) / 2.);
       SubtractionSolid gap_subtract(gapShape, gapShape_sub, Position(0., 0., 0.));
@@ -265,11 +265,11 @@ std::tuple<Volume, Position> build_module(Detector& desc, xml::Collection_t& plm
       Volume carbonVol("carbon_vol", carbon_subtract, carbonMat);
       Volume wrpVol("wrapper_vol", wrp_subtract, wrpMat);
       Volume gapVol("gap_vol", gap_subtract, gapMat);
-      
+
       modVol.placeVolume(carbonVol, Position(0., 0., (sz - length_wrapper - wrap_thickness) / 2.)); //put the wrap in the both ends of crystal
       modVol.placeVolume(carbonVol, Position(0., 0., (length_wrapper - sz - wrap_thickness) / 2.));
       modVol.placeVolume(wrpVol, Position(0., 0., wrap_thickness / 2.));
-      modVol.placeVolume(gapVol, Position(0., 0., -wrap_thickness / 2.)); //put the gap in the middle of crystal 
+      modVol.placeVolume(gapVol, Position(0., 0., -wrap_thickness / 2.)); //put the gap in the middle of crystal
 
       carbonVol.setVisAttributes(desc.visAttributes(wrp.attr<std::string>(_Unicode(vis_carbon))));
       wrpVol.setVisAttributes(desc.visAttributes(wrp.attr<std::string>(_Unicode(vis_wrap))));
@@ -380,21 +380,21 @@ static std::tuple<int, int> add_disk(Detector& desc, Assembly& env, xml::Collect
   Tube        solid(rmin, rmax, modSize.z() / 2.0, phimin, phimax);
   Volume      env_vol(std::string(env.name()) + "_envelope", solid, material);
   Transform3D tr_global = RotationZYX(rot.z(), rot.y(), rot.x()) * Translation3D(pos.x(), pos.y(), pos.z());
-  if (has_envelope) 
+  if (has_envelope)
     env.placeVolume(env_vol, tr_global);
- 
+
 
   // local placement of modules
   int mid = 0;
   auto points = epic::geo::fillRectangles({0., 0.}, modSize.x(), modSize.y(), rmin, rmax, phimin, phimax);
   for (auto& p : points)
-    {      
+    {
       Transform3D tr_local = RotationZYX(0.0, 0.0, 0.0) * Translation3D(p.x(), p.y(), 0.0);
       auto modPV = (has_envelope ? env_vol.placeVolume(modVol, tr_local) : env.placeVolume(modVol, tr_global * tr_local));
       modPV.addPhysVolID("sector", sector_id).addPhysVolID("module", id_begin + mid++);
     }
 
-  
+
   return {sector_id, mid};
 }
 
@@ -413,14 +413,14 @@ static std::tuple<int, int> add_12surface_disk(Detector& desc, Assembly& env, xm
   double phimin          = dd4hep::getAttrOrDefault<double>(plm, _Unicode(phimin), 0.);
   double phimax          = dd4hep::getAttrOrDefault<double>(plm, _Unicode(phimax), 2. * M_PI);
 
-  
+
   // placement inside mother
   //
   // auto pos = get_xml_xyz(plm, _Unicode(position));
   // auto rot = get_xml_xyz(plm, _Unicode(rotation));
 
 
-  
+
   //=========================================================
   // optional envelope volume and the supporting frame
   //=========================================================
@@ -431,12 +431,12 @@ static std::tuple<int, int> add_12surface_disk(Detector& desc, Assembly& env, xm
   // Material hole_material     = desc.material(getAttrOrDefault<std::string>(plm, _U(material), "Air"));
   PolyhedraRegular solid_world(12, 0., r12min, calo_module_length);
   Tube solid_sub(0., rmin, calo_module_length/2., phimin, phimax);
-  SubtractionSolid calo_subtract(solid_world, solid_sub, Position(0., 0., 0.)); 
+  SubtractionSolid calo_subtract(solid_world, solid_sub, Position(0., 0., 0.));
   Volume      env_vol(std::string(env.name()) + "_envelope", calo_subtract, ring_material);
   Transform3D tr_global = RotationZYX(15.*degree, 0., 0.) * Translation3D(0., 0., 0.);
   env_vol.setVisAttributes(desc.visAttributes(plm.attr<std::string>(_Unicode(vis_steel_gap))));
 
-  
+
   // Outer supporting frame
   //
   PolyhedraRegular solid_ring12(12, r12min, r12max, structure_frame_length);
@@ -444,7 +444,7 @@ static std::tuple<int, int> add_12surface_disk(Detector& desc, Assembly& env, xm
   Transform3D tr_global_Oring = RotationZYX(15.*degree, 0., 0.) * Translation3D(0., 0., -20.*cm);
   ring12_vol.setVisAttributes(desc.visAttributes(plm.attr<std::string>(_Unicode(vis_struc))));
 
-  
+
   // Inner supporting frame
   //
   Tube        Ssolid_ring12(8.5*cm, rmin, calo_module_length/2., phimin, phimax);
@@ -452,7 +452,7 @@ static std::tuple<int, int> add_12surface_disk(Detector& desc, Assembly& env, xm
   Sring12_vol.setVisAttributes(desc.visAttributes(plm.attr<std::string>(_Unicode(vis_struc))));
   Transform3D tr_global_Iring = RotationZYX(0., 0., 0.) * Translation3D(0., 0., 0.);
 
-  
+
   // Supporting frame for the cabling
   // Having overlapped with tracker barrelendcapsupporting structure, comment here until the size and position determined
   //
@@ -460,7 +460,7 @@ static std::tuple<int, int> add_12surface_disk(Detector& desc, Assembly& env, xm
   // Volume cabling_support12_V("cabling_support12_V", cabling_support12, ring_material);
   // Transform3D tr_global_csfront = RotationZYX(15.*degree, 0., 0.) * Translation3D(0., 0., 9.*cm);
   // Transform3D tr_global_csback = RotationZYX(15.*degree, 0., 0.) * Translation3D(0., 0., -49.*cm);
-  
+
   // Box hole(13.5/2.*cm, 2.54/2.*cm, 2.54/2.*cm);
   // Volume hole_V("hole_V", hole, hole_material);
   // Transform3D hole_pos = RotationZYX(0., 0., 0.) * Translation3D(0., 0., 0.);
@@ -468,7 +468,7 @@ static std::tuple<int, int> add_12surface_disk(Detector& desc, Assembly& env, xm
 
   // Place frames and mother volume of modules into the world volume
   //
-  if (has_envelope) 
+  if (has_envelope)
     {
       env.placeVolume(env_vol, tr_global);                      // Place the mother volume for all modules
       env.placeVolume(ring12_vol, tr_global_Oring);             // Place the outer supporting frame
@@ -486,12 +486,12 @@ static std::tuple<int, int> add_12surface_disk(Detector& desc, Assembly& env, xm
       //   }
     }
 
-    
 
-  
+
+
   // local placement of modules
   //
-  int mid = 0, total_id = 0;  
+  int mid = 0, total_id = 0;
   auto points = epic::geo::fillRectangles({0., 0.}, modSize.x(), modSize.y(), rmin, rmax, phimin, phimax);
 
   Transform3D add_local = RotationZYX(-15.*degree, 0.0, 0.0) * Translation3D(-14.35*cm, 61.5*cm, 0.0);
@@ -500,17 +500,17 @@ static std::tuple<int, int> add_12surface_disk(Detector& desc, Assembly& env, xm
 
   // Place the modules in the circle
   for (auto& p : points)
-    {            
+    {
       Transform3D tr_local = RotationZYX(-15.*degree, 0.0, 0.0) * Translation3D(p.x(), p.y(), 0.0);
       modPV = (has_envelope ? env_vol.placeVolume(modVol, tr_local) : env.placeVolume(modVol, tr_global * tr_local));
       total_id = id_begin + mid++;
-      modPV.addPhysVolID("sector", sector_id).addPhysVolID("module", total_id);      
+      modPV.addPhysVolID("sector", sector_id).addPhysVolID("module", total_id);
     }
 
-  
+
   // Add the modules manually in the gap
   //
-  const int add_N_mod = 51;  
+  const int add_N_mod = 51;
   double addX[add_N_mod] = {-16.4,-18.45,-20.5,-38.95,-43.05,-45.1,-47.15,-49.2,-59.45,-61.5,-61.5,-61.5,16.4,18.45,20.5,38.95,43.05,45.1,47.15,49.2,59.45,61.5,61.5,61.5,-16.4,-18.45,-20.5,-38.95,-43.05,-45.1,-47.15,-49.2,-59.45,-61.5,-61.5,-61.5,16.4,18.45,20.5,38.95,43.05,45.1,47.15,49.2,59.45,61.5,61.5,61.5,14.35,14.35,-14.35};
   double addY[add_N_mod] = {61.5,61.5,59.45,49.2,47.15,45.1,43.05,38.95,20.5,14.35,16.4,18.45,61.5,61.5,59.45,49.2,47.15,45.1,43.05,38.95,20.5,14.35,16.4,18.45,-61.5,-61.5,-59.45,-49.2,-47.15,-45.1,-43.05,-38.95,-20.5,-14.35,-16.4,-18.45,-61.5,-61.5,-59.45,-49.2,-47.15,-45.1,-43.05,-38.95,-20.5,-14.35,-16.4,-18.45,-61.5,61.5,-61.5};
   for(int im = 0 ; im < add_N_mod ; im++)
@@ -521,8 +521,8 @@ static std::tuple<int, int> add_12surface_disk(Detector& desc, Assembly& env, xm
       modPV.addPhysVolID("sector", sector_id).addPhysVolID("module", total_id);
     }
 
-  
-    
+
+
   return {sector_id, mid};
 }
 
