@@ -1,0 +1,5 @@
+features:
+  solenoid:
+  beampipe:
+  hcal:
+    barrel_gdml:

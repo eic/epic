@@ -1,0 +1,1396 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<lccdd>
+  <comment>
+    Master tracker parameters
+
+      Central Tracking region consists of:
+      |----------------------------------------------------------------------------|
+      |         |                       OuterBarrel                      |         |
+      |         |--------------------------------------------------------|         |
+      |         |         |            MedialBarrel            |         |         |
+      |         |         |------------------------------------|         |         |
+      |         |         |         |  InnerBarrel   |         |         |         |
+      |         |         |         |----------------|         |         |         |
+      |  Outer  | Medial  |  Inner  | Vertex Tracker |  Inner  | Medial  |  Outer  |
+      | EndcapN | EndcapN | EndcapN | Vertex Tracker | EndcapP | EndcapP | EndcapP |
+      |----------------------------------------------------------------------------|
+      ^                                                                            ^
+      CentralTrackingRegionN_zmax                          CentralTrackingRegionP_zmax
+
+  </comment>
+  <define>
+    <comment> Inner tracker setup </comment>
+    <constant name="InnerTrackerBarrel_rmin"                value="13.38*cm"/>
+    <constant name="InnerTrackerBarrel_offset"              value="4.62*cm"/>
+    <constant name="InnerTrackerBarrel_count"               value="2"/>
+    <constant name="InnerTrackerBarrelMod_width"            value="4.*cm"/>
+    <constant name="InnerTrackerBarrelCone_zmin"            value="16.8*cm"/>
+    <constant name="InnerTrackerBarrelCone_zmax"            value="24.54*cm"/>
+    <constant name="InnerTrackerEndcap_zmin"                value="25*cm"/>
+    <constant name="InnerTrackerEndcap_rmin"                value="Beampipe_rmax + 50*um"/>
+    <constant name="InnerTrackerEndcap_offset"              value="24*cm"/>
+    <constant name="InnerTrackerEndcap_count"               value="2"/>
+
+    <comment> Medial tracker setup </comment>
+    <constant name="MedialTrackerBarrel_rmin"               value="47.72*cm"/>
+    <constant name="MedialTrackerBarrel_offset"             value="1.85*cm"/>
+    <constant name="MedialTrackerBarrel_count"              value="2"/>
+    <constant name="MedialTrackerEndcap_zmin"               value="73*cm"/>
+    <constant name="MedialTrackerEndcap_offset"             value="0*cm"/>
+    <constant name="MedialTrackerEndcap_count"              value="1"/>
+    <constant name="MedialTrackerEndcapP_rmin"              value="Beampipe_rmax + 3*mm"/>
+    <constant name="MedialTrackerEndcapN_rmin"              value="InnerTrackerEndcap_rmin"/>
+
+    <comment> Outer tracker setup </comment>
+    <constant name="OuterTrackerBarrel_rmin"                value="65.61*cm"/>
+    <constant name="OuterTrackerBarrel_offset"              value="1.85*cm"/>
+    <constant name="OuterTrackerBarrel_count"               value="2"/>
+    <constant name="OuterTrackerEndcapP_zmin"               value="103.67*cm"/>
+    <constant name="OuterTrackerEndcapP_offset"             value="30.66*cm"/>
+    <constant name="OuterTrackerEndcapP_count"              value="3"/>
+    <constant name="OuterTrackerEndcapN_zmin"               value="109*cm"/>
+    <constant name="OuterTrackerEndcapN_offset"             value="10.00*cm"/>
+    <constant name="OuterTrackerEndcapN_count"              value="2"/>
+
+    <comment> Gem disk setup.
+      Note: some GEM disk z-positions are moved slightly (below in the parametrization)
+            to avoid vertical overlaps with the silicon disks (which is not allowed by ACTS).
+            @FIXME
+    </comment>
+    <constant name="GEMEndcapPDisk1_zmin"                   value="103*cm"/>
+    <constant name="GEMEndcapPDisk2_zmin"                   value="164.5"/>
+    <constant name="GEMEndcapPDisk3_zmin"                   value="ForwardTrackingRegion_zmin + 2*cm"/>
+    <constant name="GEMEndcapP_count"                       value="2"/>
+    <constant name="GEMEndcapN_zmin"                        value="90*cm"/>
+    <constant name="GEMEndcapN_offset"                      value="41.5*cm"/>
+    <constant name="GEMEndcapN_count"                       value="1"/>
+
+    <comment> Silicon tracker parameters </comment>
+    <constant name="SiTrackerBarrelSpaceFrameCF_thickness"  value="0.12*mm"/>
+    <constant name="SiTrackerBarrelSpaceFrame_height"       value="1.0*cm"/>
+    <constant name="SiTrackerEndcapAl_thickness"            value="0.15*mm"/>
+    <constant name="SiTrackerEndcapCF_thickness"            value="0.12*mm"/>
+    <constant name="SiTrackerEndcapMod_count"               value="36"/>
+    <constant name="SiTrackerEndcapMod_dz"                  value="0" />
+    <constant name="SiTrackerEndcapMod_overlap"             value="0"/>
+    <constant name="SiTrackerSensor_thickness"              value="40*um"/>
+    <constant name="SiTrackerCyl_rmin"                      value="43.23" />
+    <constant name="SiTrackerServiceConeAl_thickness"       value="2.5*mm" />
+    <constant name="SiTrackerServiceCylAl_thickness"        value="2.5*mm" />
+    <constant name="SiTrackerSupportConeCF_thickness"       value="2*mm" />
+    <constant name="SiTrackerSupportCylCF_thickness"        value="2*mm" />
+
+    <comment> MMGAS tracker parameters </comment>
+    <constant name="MMKaptonOverlay_thickness"              value="50*um"/>
+    <constant name="MMCuGround_thickness"                   value="1.58*um"/>
+    <constant name="MMPCB_thickness"                        value="100*um"/>
+    <constant name="MMCuStrip_thickness"                    value="12*um"/>
+    <constant name="MMKaptonStrip_thickness"                value="75*um"/>
+    <constant name="MMResistiveStrip_thickness"             value="128*um"/>
+    <constant name="MMGas_thickness"                        value="20*um"/>
+    <constant name="MMMesh_thickness"                       value="18*um"/>
+    <constant name="MMGasGap_thickness"                     value="3000*um"/>
+    <constant name="MMDriftCuElectrode_thickness"           value="5*um"/>
+    <constant name="MMDriftKapton_thickness"                value="250*um"/>
+    <constant name="MMDriftCuGround_thickness"              value="0.41*um"/>
+
+    <comment> GEM tracker parameters </comment>
+    <constant name="GEMEndcapMod_count"                     value="12"/>
+    <constant name="GEMFrame_thickness"                     value="13.0*mm"/>
+    <constant name="GEMFrameBotEdge_width"                  value="10.0*mm"/>
+    <constant name="GEMFrameTopEdge_width"                  value="50.0*mm"/>
+    <constant name="GEMFrameSideEdge_width"                 value="10.0*mm"/>
+    <constant name="GEMSpoke_thickness"                     value="1.0*mm"/>
+    <constant name="GEMSpoke_width"                         value="GEMFrameSideEdge_width"/>
+    <comment> Account for the fact that GEMs have holes, so they are not solid volumes </comment>
+    <constant name="GEMAreaFactor" value="0.80" />
+    <comment> GEM layers </comment>
+    <constant name="GEMMylar_thickness"                     value="25.0*um"/>
+    <constant name="GEMGas_thickness"                       value="2.0*mm"/>
+    <constant name="GEMDriftRegion_thickness"               value="3.0*mm"/>
+    <constant name="GEMKapton_thickness"                    value="50*um"/>
+    <constant name="GEMCuFoil_thickness"                    value="10*um"/>
+    <constant name="GEMCuElectrode_thickness"               value="5.0*um"/>
+
+  </define>
+
+  <documentation>
+    ## Inner silicon tracker barrel
+    ### Silicon Tracker
+
+#### Some references:
+
+- With some added info on ITS3 chip from https://indico.bnl.gov/event/10677/contributions/45591/attachments/33204/53254/20210318-IR2%40EIC-SVT.pdf
+To be used as standin until we get more detailed specs from the working group on the tracker.
+- https://wiki.bnl.gov/athena/index.php/Tracking
+
+#### ITS3 sensors
+
+ITS3 sensor thickness:
+- 40um, pixel size: 10um (segmentation)
+- total X0 0.55% per barrel layer:
+-  0.35 mm aluminum ~ 0.4% X0.
+-  2 x carbonfiber (RL ~ 28) 0.12 mm (!!! material scan shows ~0.17mm, need to check later) to match Si (RL~9) of 0.04mm ~ 0.04%
+
+total X0 0.24% per disk layer （4 sectors per disk):
+  - 0.15 mm aluminum ~ 0.16% X0.
+  - 1 x carbonfiber (RL ~ 28) 0.12 mm to match Si (RL~9) of 0.04mm ~ 0.04%
+
+  </documentation>
+  <define>
+    <constant name="InnerTrackerBarrelMod1_rmin"         value="InnerTrackerBarrel_rmin" />
+    <constant name="InnerTrackerBarrelMod2_rmin"         value="InnerTrackerBarrelMod1_rmin + 1 * InnerTrackerBarrel_offset" />
+    <constant name="InnerTrackerBarrelCone_length"       value="InnerTrackerBarrelCone_zmax - InnerTrackerBarrelCone_zmin" />
+    <constant name="InnerTrackerBarrelCone_z"            value="(InnerTrackerBarrelCone_zmax + InnerTrackerBarrelCone_zmin)/2" />
+    <constant name="InnerTrackerBarrelCone_thickness"    value="SiTrackerSupportConeCF_thickness + SiTrackerServiceConeAl_thickness" />
+    <comment> Shorten Module (with non-zero thickness!) to avoid overlaps with support cone</comment>
+    <constant name="InnerTrackerBarrelMod1_length"       value="2 * InnerTrackerBarrelMod1_rmin / CentralTrackingBarrel_tan - 0.5*cm - 2. * InnerTrackerBarrelCone_thickness" />
+    <constant name="InnerTrackerBarrelMod2_length"       value="2 * InnerTrackerBarrelMod2_rmin / CentralTrackingBarrel_tan - 0.5*cm - 2. * InnerTrackerBarrelCone_thickness" />
+    <constant name="InnerTrackerBarrelServiceCone_rmin1" value="InnerTrackerBarrelCone_zmin * CentralTrackingBarrel_tan" />
+    <constant name="InnerTrackerBarrelServiceCone_rmax1" value="InnerTrackerBarrelServiceCone_rmin1 + SiTrackerServiceConeAl_thickness" />
+    <constant name="InnerTrackerBarrelServiceCone_rmin2" value="InnerTrackerBarrelCone_zmax * CentralTrackingBarrel_tan" />
+    <constant name="InnerTrackerBarrelServiceCone_rmax2" value="InnerTrackerBarrelServiceCone_rmin2 + SiTrackerServiceConeAl_thickness" />
+    <constant name="InnerTrackerBarrelSupportCone_rmin1" value="InnerTrackerBarrelServiceCone_rmax1" />
+    <constant name="InnerTrackerBarrelSupportCone_rmax1" value="InnerTrackerBarrelSupportCone_rmin1 + SiTrackerSupportConeCF_thickness" />
+    <constant name="InnerTrackerBarrelSupportCone_rmin2" value="InnerTrackerBarrelServiceCone_rmax2" />
+    <constant name="InnerTrackerBarrelSupportCone_rmax2" value="InnerTrackerBarrelSupportCone_rmin2 + SiTrackerSupportConeCF_thickness" />
+    <constant name="InnerTrackerBarrelLayer1_length"     value="InnerTrackerBarrelMod1_length + 1*um" />
+    <constant name="InnerTrackerBarrelLayer2_length"     value="InnerTrackerBarrelMod2_length + 1*um" />
+    <constant name="InnerTrackerBarrelLayer_thickness"   value="1.1*cm" />
+    <comment> Place asymmetrically in the layer (module sits near the bottom). </comment>
+    <constant name="InnerTrackerBarrelLayer1_rmin"       value="InnerTrackerBarrelMod1_rmin - InnerTrackerBarrelLayer_thickness / 25" />
+    <constant name="InnerTrackerBarrelLayer2_rmin"       value="InnerTrackerBarrelMod2_rmin - InnerTrackerBarrelLayer_thickness / 25" />
+    <constant name="InnerTrackerBarrelLayer1_rmax"       value="InnerTrackerBarrelLayer1_rmin + InnerTrackerBarrelLayer_thickness" />
+    <constant name="InnerTrackerBarrelLayer2_rmax"       value="InnerTrackerBarrelLayer2_rmin + InnerTrackerBarrelLayer_thickness" />
+    <constant name="InnerTrackerBarrelEnvelope_length"   value="2 * InnerTrackerBarrelCone_zmax" />
+    <constant name="InnerTrackerBarrelEnvelope_rmin"     value="VertexTrackingRegion_rmax" />
+    <constant name="InnerTrackerBarrelEnvelope_rmax"     value="InnerTrackerBarrelLayer2_rmax" />
+    <comment> Barrel staves, nmodules = np.pi/np.arcsin(frame_width*np.cos(tilt_angle)/2.0/R) </comment>
+    <comment> (rounded up by 2 to avoid holes)</comment>
+    <constant name="InnerTrackerBarrelModTilt_angle"     value="3.0*degree"/>
+    <constant name="InnerTrackerBarrelMod1_count"        value="floor(180.*degree/asin(InnerTrackerBarrelMod_width*cos(InnerTrackerBarrelModTilt_angle)/2/InnerTrackerBarrelMod1_rmin))+2"/>
+    <constant name="InnerTrackerBarrelMod2_count"        value="floor(180.*degree/asin(InnerTrackerBarrelMod_width*cos(InnerTrackerBarrelModTilt_angle)/2/InnerTrackerBarrelMod2_rmin))+2"/>
+  </define>
+  <detectors>
+    <detector
+      id="TrackerBarrel_0_ID"
+      name="InnerTrackerBarrel"
+      type="epic_TrackerBarrel"
+      readout="TrackerBarrelHits"
+      insideTrackingVolume="true">
+      <dimensions
+        rmin="InnerTrackerBarrelEnvelope_rmin"
+        rmax="InnerTrackerBarrelEnvelope_rmax"
+        length="InnerTrackerBarrelEnvelope_length"/>
+      <comment>
+        Tracker Barrel Modules
+      </comment>
+      <module name="InnerTrackerBarrel_Mod1" vis="TrackerModuleVis">
+        <frame material="CarbonFiber" vis="TrackerSupportVis"
+          width="InnerTrackerBarrelMod_width"
+          height="SiTrackerBarrelSpaceFrame_height"
+          length="InnerTrackerBarrelMod1_length"
+          thickness="SiTrackerBarrelSpaceFrameCF_thickness" />
+        <module_component name="silicon"
+          width="InnerTrackerBarrelMod_width"
+          length="InnerTrackerBarrelMod1_length" thickness="SiTrackerSensor_thickness" material="Silicon" sensitive="true" vis="TrackerLayerVis" />
+        <module_component name="aluminum1" material="Aluminum" sensitive="false"
+          width="InnerTrackerBarrelMod_width" length="InnerTrackerBarrelMod1_length" thickness="0.4*mm" vis="TrackerServiceVis"/>
+      </module>
+      <module name="InnerTrackerBarrel_Mod2" vis="TrackerModuleVis">
+        <frame material="CarbonFiber" vis="TrackerSupportVis"
+          width="InnerTrackerBarrelMod_width"
+          height="SiTrackerBarrelSpaceFrame_height"
+          length="InnerTrackerBarrelMod2_length"
+          thickness="SiTrackerBarrelSpaceFrameCF_thickness" />
+        <module_component name="silicon"
+          width="InnerTrackerBarrelMod_width"
+          length="InnerTrackerBarrelMod2_length" thickness="SiTrackerSensor_thickness" material="Silicon" sensitive="true" vis="TrackerLayerVis" />
+        <module_component name="aluminum1" material="Aluminum" sensitive="false"
+          width="InnerTrackerBarrelMod_width" length="InnerTrackerBarrelMod2_length" thickness="0.4*mm" vis="TrackerServiceVis" />
+      </module>
+      <layer module="InnerTrackerBarrel_Mod1" id="1" vis="TrackerLayerVis">
+        <barrel_envelope
+          inner_r="InnerTrackerBarrelLayer1_rmin"
+          outer_r="InnerTrackerBarrelLayer1_rmax"
+          z_length="InnerTrackerBarrelLayer1_length"/>
+        <layer_material surface="outer" binning="binPhi,binZ" bins0="100*InnerTrackerBarrelMod1_count" bins1="100" />
+        <rphi_layout phi_tilt="InnerTrackerBarrelModTilt_angle" nphi="InnerTrackerBarrelMod1_count" phi0="0.0" rc="InnerTrackerBarrelMod1_rmin" dr="0.0 * mm"/>
+        <z_layout dr="0.0 * mm" z0="0.0 * mm" nz="1"/>
+      </layer>
+      <layer module="InnerTrackerBarrel_Mod2" id="2" vis="TrackerLayerVis">
+        <barrel_envelope
+          inner_r="InnerTrackerBarrelLayer2_rmin"
+          outer_r="InnerTrackerBarrelLayer2_rmax"
+          z_length="InnerTrackerBarrelLayer2_length"/>
+        <layer_material surface="outer" binning="binPhi,binZ" bins0="100*InnerTrackerBarrelMod2_count" bins1="100" />
+        <rphi_layout phi_tilt="InnerTrackerBarrelModTilt_angle" nphi="InnerTrackerBarrelMod2_count" phi0="0.0" rc="InnerTrackerBarrelMod2_rmin" dr="0.0 * mm"/>
+        <z_layout dr="0.0 * mm" z0="0.0 * mm" nz="1"/>
+      </layer>
+    </detector>
+  </detectors>
+  <documentation>
+    ## Inner silicon tracker disks, symmetric between N and P
+  </documentation>
+  <define>
+    <comment> Global Si endcap variables </comment>
+    <constant name="SiTrackerEndcapMod_thickness"   value="SiTrackerEndcapCF_thickness + SiTrackerEndcapAl_thickness + SiTrackerSensor_thickness" />
+    <constant name="SiTrackerEndcapMod_angle"       value="360.0*degree / SiTrackerEndcapMod_count * (1 + SiTrackerEndcapMod_overlap)" />
+    <constant name="SiTrackerEndcapLayer_thickness" value="SiTrackerEndcapMod_thickness + 2 * SiTrackerEndcapMod_dz + 1*um" />
+    <constant name="SiTrackerServiceCyl_rmin" value="SiTrackerCyl_rmin"/>
+    <constant name="SiTrackerServiceCyl_rmax" value="SiTrackerServiceCyl_rmin + SiTrackerServiceCylAl_thickness"/>
+    <constant name="SiTrackerSupportCyl_rmin" value="SiTrackerServiceCyl_rmax"/>
+    <constant name="SiTrackerSupportCyl_rmax" value="SiTrackerSupportCyl_rmin + SiTrackerSupportCylCF_thickness"/>
+
+    <comment> Inner Si endcap setup </comment>
+    <constant name="InnerTrackerEndcapMod1_zmin"  value="InnerTrackerEndcap_zmin" />
+    <constant name="InnerTrackerEndcapMod1_rmin"  value="InnerTrackerEndcap_rmin" />
+    <constant name="InnerTrackerEndcapMod1_rmax"  value="min(InnerTrackerEndcapMod1_zmin * CentralTrackingBarrel_tan * 0.995, SiTrackerCyl_rmin)" />
+    <constant name="InnerTrackerEndcapMod1_x1"    value="2 * InnerTrackerEndcapMod1_rmin * tan(SiTrackerEndcapMod_angle/2)" />
+    <constant name="InnerTrackerEndcapMod1_x2"    value="2 * InnerTrackerEndcapMod1_rmax * sin(SiTrackerEndcapMod_angle/2)" />
+    <constant name="InnerTrackerEndcapMod1_y"     value="InnerTrackerEndcapMod1_rmax * cos(SiTrackerEndcapMod_angle/2) - InnerTrackerEndcapMod1_rmin" />
+
+    <constant name="InnerTrackerEndcapMod2_zmin"  value="InnerTrackerEndcapMod1_zmin + 1 * InnerTrackerEndcap_offset" />
+    <constant name="InnerTrackerEndcapMod2_rmin"  value="InnerTrackerEndcap_rmin" />
+    <constant name="InnerTrackerEndcapMod2_rmax"  value="min(InnerTrackerEndcapMod2_zmin * CentralTrackingBarrel_tan * 0.995, SiTrackerCyl_rmin)" />
+    <constant name="InnerTrackerEndcapMod2_x1"    value="2 * InnerTrackerEndcapMod2_rmin * tan(SiTrackerEndcapMod_angle/2)" />
+    <constant name="InnerTrackerEndcapMod2_x2"    value="2 * InnerTrackerEndcapMod2_rmax * sin(SiTrackerEndcapMod_angle/2)" />
+    <constant name="InnerTrackerEndcapMod2_y"     value="InnerTrackerEndcapMod2_rmax * cos(SiTrackerEndcapMod_angle/2) - InnerTrackerEndcapMod2_rmin" />
+
+    <constant name="InnerTrackerEndcapLayer1_rmin"        value="InnerTrackerEndcapMod1_rmin - 1*um" />
+    <constant name="InnerTrackerEndcapLayer1_rmax"        value="InnerTrackerEndcapMod1_rmax + 1*um" />
+    <constant name="InnerTrackerEndcapLayer1_zmin"        value="InnerTrackerEndcapMod1_zmin - SiTrackerEndcapLayer_thickness/2" />
+    <constant name="InnerTrackerEndcapLayer2_rmin"        value="InnerTrackerEndcapMod2_rmin - 1*um" />
+    <constant name="InnerTrackerEndcapLayer2_rmax"        value="InnerTrackerEndcapMod2_rmax + 1*um" />
+    <constant name="InnerTrackerEndcapLayer2_zmin"        value="InnerTrackerEndcapMod2_zmin - SiTrackerEndcapLayer_thickness/2" />
+
+    <constant name="InnerTrackerEndcapCone_zmin"          value="InnerTrackerBarrelCone_zmax" />
+    <constant name="InnerTrackerEndcapServiceCone_rmin1"  value="InnerTrackerEndcapCone_zmin * CentralTrackingBarrel_tan" />
+    <constant name="InnerTrackerEndcapServiceCone_rmax1"  value="InnerTrackerEndcapServiceCone_rmin1 + SiTrackerServiceConeAl_thickness" />
+    <constant name="InnerTrackerEndcapServiceCone_rmin2"  value="SiTrackerServiceCyl_rmin" />
+    <constant name="InnerTrackerEndcapServiceCone_rmax2"  value="SiTrackerServiceCyl_rmax" />
+    <constant name="InnerTrackerEndcapCone_zmax"          value="InnerTrackerEndcapServiceCone_rmin2 / CentralTrackingBarrel_tan" />
+    <constant name="InnerTrackerEndcapCone_z"             value="(InnerTrackerEndcapCone_zmax + InnerTrackerEndcapCone_zmin)/2" />
+    <constant name="InnerTrackerEndcapCone_length"        value="InnerTrackerEndcapCone_zmax - InnerTrackerEndcapCone_zmin" />
+    <constant name="InnerTrackerEndcapSupportCone_rmin1"  value="InnerTrackerEndcapServiceCone_rmax1" />
+    <constant name="InnerTrackerEndcapSupportCone_rmax1"  value="InnerTrackerEndcapSupportCone_rmin1 + SiTrackerSupportConeCF_thickness" />
+    <constant name="InnerTrackerEndcapSupportCone_rmin2"  value="SiTrackerSupportCyl_rmin" />
+    <constant name="InnerTrackerEndcapSupportCone_rmax2"  value="SiTrackerSupportCyl_rmax" />
+
+    <comment> The tracker endcap ends at the same place as the medial tracker barrel that sits around it </comment>
+    <constant name="InnerTrackerEndcap_zmax"              value="MedialTrackerBarrel_rmin / CentralTrackingBarrel_tan" />
+    <constant name="InnerTrackerEndcapCyl_zmin"           value="InnerTrackerEndcapCone_zmax" />
+    <constant name="InnerTrackerEndcapCyl_zmax"           value="InnerTrackerEndcap_zmax" />
+    <constant name="InnerTrackerEndcapCyl_z"              value="(InnerTrackerEndcapCyl_zmin + InnerTrackerEndcapCyl_zmax)/2" />
+    <constant name="InnerTrackerEndcapCyl_length"         value="InnerTrackerEndcapCyl_zmax - InnerTrackerEndcapCyl_zmin" />
+
+  </define>
+  <detectors>
+    <detector type="epic_SupportServiceMaterial"
+      name="SupportCone"
+      id="84"
+    >
+      <support type="Cone"
+        name="serv_cone_dmmy_neg"
+        vis="TrackerServiceVis"
+        rmin1="SiTrackerServiceCyl_rmin"
+        rmin2="InnerTrackerBarrelSupportCone_rmin1"
+        length="InnerTrackerBarrelCone_length+InnerTrackerEndcapCone_length"
+        thickness="0.1*cm">
+          <position x="0*cm" y="0*cm" z="-(InnerTrackerBarrelCone_z + InnerTrackerEndcapCone_z)/2" />
+          <component material="Aluminum" thickness="SiTrackerServiceConeAl_thickness" name="al_support_serv" vis="TrackerServiceVis" />
+          <component material="CarbonFiber" thickness="SiTrackerSupportConeCF_thickness" name="al_support_serv2" vis="TrackerSupportVis"/>
+      </support>
+      <support type="Cone"
+        name="serv_cone_dmmy_pos"
+        vis="TrackerSupportVis"
+        rmin1="InnerTrackerBarrelSupportCone_rmin1"
+        rmin2="SiTrackerServiceCyl_rmin"
+        length="InnerTrackerBarrelCone_length+InnerTrackerEndcapCone_length"
+        thickness="0.1*cm">
+      <position x="0*cm" y="0*cm" z="(InnerTrackerBarrelCone_z + InnerTrackerEndcapCone_z)/2" />
+          <component material="Aluminum" thickness="SiTrackerServiceConeAl_thickness" name="al_support_serv" vis="TrackerServiceVis" />
+          <component material="CarbonFiber" thickness="SiTrackerSupportConeCF_thickness" name="al_support_serv2" vis="TrackerSupportVis"/>
+      </support>
+      <support type="Tube"
+        name="serv_cyl_pos"
+        rmin="SiTrackerServiceCyl_rmin"
+        thickness="0.1*cm"
+        length="InnerTrackerEndcapCyl_length">
+          <position x="0*cm" y="0*cm" z="InnerTrackerEndcapCyl_zmin" />
+          <component material="Aluminum" thickness="SiTrackerServiceCylAl_thickness" vis="TrackerServiceVis" />
+          <component material="CarbonFiber" thickness="SiTrackerSupportCylCF_thickness" vis="TrackerSupportVis" />
+      </support>
+      <support
+        name="serv_cyl_neg"
+        type="Tube"
+        rmin="SiTrackerServiceCyl_rmin"
+        thickness="0.1*cm"
+        length="InnerTrackerEndcapCyl_length">
+          <position x="0*cm" y="0*cm" z="-InnerTrackerEndcapCyl_zmin" />
+          <component material="Aluminum" thickness="SiTrackerServiceCylAl_thickness" vis="TrackerServiceVis" />
+          <component material="CarbonFiber" thickness="SiTrackerSupportCylCF_thickness" vis="TrackerSupportVis" />
+      </support>
+    </detector>
+    <detector
+      id="TrackerEndcapP_0_ID"
+      name="InnerTrackerEndcapP"
+      type="epic_TrapEndcapTracker"
+      readout="TrackerEndcapHits"
+      vis="TrackerVis"
+      reflect="false">
+      <module name="Module1" vis="TrackerModuleVis">
+        <trd x1="InnerTrackerEndcapMod1_x1/2" x2="InnerTrackerEndcapMod1_x2/2" z="InnerTrackerEndcapMod1_y/2" />
+        <module_component thickness="SiTrackerEndcapCF_thickness" material="CarbonFiber" vis="TrackerSupportVis" />
+        <module_component thickness="SiTrackerEndcapAl_thickness" material="Aluminum" vis="TrackerServiceVis" />
+        <module_component thickness="SiTrackerSensor_thickness" material="Silicon" sensitive="true" vis="TrackerLayerVis" />
+      </module>
+      <module name="Module2" vis="TrackerModuleVis">
+        <trd x1="InnerTrackerEndcapMod2_x1/2" x2="InnerTrackerEndcapMod2_x2/2" z="InnerTrackerEndcapMod2_y/2" />
+        <module_component thickness="SiTrackerEndcapCF_thickness" material="CarbonFiber" vis="TrackerSupportVis" />
+        <module_component thickness="SiTrackerEndcapAl_thickness" material="Aluminum" vis="TrackerServiceVis" />
+        <module_component thickness="SiTrackerSensor_thickness" material="Silicon" sensitive="true" vis="TrackerLayerVis" />
+      </module>
+      <layer id="1">
+        <envelope vis="TrackerLayerVis"
+          rmin="InnerTrackerEndcapLayer1_rmin"
+          rmax="InnerTrackerEndcapLayer1_rmax"
+          length="SiTrackerEndcapLayer_thickness"
+          zstart="InnerTrackerEndcapLayer1_zmin" />
+        <layer_material surface="representing" binning="binPhi,binR" bins0="20*SiTrackerEndcapMod_count" bins1="256"/>
+        <ring
+          r="InnerTrackerEndcapMod1_rmin + InnerTrackerEndcapMod1_y/2"
+          zstart="0"
+          nmodules="SiTrackerEndcapMod_count"
+          dz="SiTrackerEndcapMod_dz"
+          module="Module1" />
+      </layer>
+      <layer id="2">
+        <envelope vis="TrackerLayerVis"
+          rmin="InnerTrackerEndcapLayer2_rmin"
+          rmax="InnerTrackerEndcapLayer2_rmax"
+          length="SiTrackerEndcapLayer_thickness"
+          zstart="InnerTrackerEndcapLayer2_zmin" />
+        <layer_material surface="representing" binning="binPhi,binR" bins0="20*SiTrackerEndcapMod_count" bins1="256"/>
+        <ring
+          r="InnerTrackerEndcapMod2_rmin + InnerTrackerEndcapMod2_y/2"
+          zstart="0"
+          nmodules="SiTrackerEndcapMod_count"
+          dz="SiTrackerEndcapMod_dz"
+          module="Module2" />
+      </layer>
+    </detector>
+    <detector
+      id="TrackerEndcapN_0_ID"
+      name="InnerTrackerEndcapN"
+      type="epic_TrapEndcapTracker"
+      readout="TrackerEndcapHits"
+      vis="TrackerVis"
+      reflect="true">
+      <support material="Aluminum" name="serv_cone_neg" vis="TrackerServiceVis">
+        <shape type="Cone"
+          rmin1="InnerTrackerEndcapServiceCone_rmin2"
+          rmax1="InnerTrackerEndcapServiceCone_rmax2"
+          rmin2="InnerTrackerEndcapServiceCone_rmin1"
+          rmax2="InnerTrackerEndcapServiceCone_rmax1"
+          z="InnerTrackerEndcapCone_length/2"/>
+        <position x="0*cm" y="0*cm" z="-1*InnerTrackerEndcapCone_z" />
+      </support>
+      <support material="CarbonFiber" name="sup_cone_neg" vis="TrackerSupportVis">
+        <shape type="Cone"
+          rmin1="InnerTrackerEndcapSupportCone_rmin2"
+          rmax1="InnerTrackerEndcapSupportCone_rmax2"
+          rmin2="InnerTrackerEndcapSupportCone_rmin1"
+          rmax2="InnerTrackerEndcapSupportCone_rmax1"
+          z="InnerTrackerEndcapCone_length/2"/>
+        <position x="0*cm" y="0*cm" z="-1*InnerTrackerEndcapCone_z" />
+      </support>
+      <support material="Aluminum" name="serv_cyl_neg" vis="TrackerServiceVis"
+          rmin="SiTrackerServiceCyl_rmin"
+          thickness="SiTrackerServiceCylAl_thickness"
+          length="InnerTrackerEndcapCyl_length"
+          zstart="InnerTrackerEndcapCyl_zmin" />
+      <support material="CarbonFiber" name="sup_cyl_neg" vis="TrackerSupportVis"
+          rmin="SiTrackerSupportCyl_rmin"
+          thickness="SiTrackerSupportCylCF_thickness"
+          length="InnerTrackerEndcapCyl_length"
+          zstart="InnerTrackerEndcapCyl_zmin" />
+      <module name="Module1" vis="TrackerModuleVis">
+        <trd x1="InnerTrackerEndcapMod1_x1/2" x2="InnerTrackerEndcapMod1_x2/2" z="InnerTrackerEndcapMod1_y/2" />
+        <module_component thickness="SiTrackerEndcapCF_thickness" material="CarbonFiber" vis="TrackerSupportVis" />
+        <module_component thickness="SiTrackerEndcapAl_thickness" material="Aluminum" vis="TrackerServiceVis" />
+        <module_component thickness="SiTrackerSensor_thickness" material="Silicon" sensitive="true" vis="TrackerLayerVis" />
+      </module>
+      <module name="Module2" vis="TrackerModuleVis">
+        <trd x1="InnerTrackerEndcapMod2_x1/2" x2="InnerTrackerEndcapMod2_x2/2" z="InnerTrackerEndcapMod2_y/2" />
+        <module_component thickness="SiTrackerEndcapCF_thickness" material="CarbonFiber" vis="TrackerSupportVis" />
+        <module_component thickness="SiTrackerEndcapAl_thickness" material="Aluminum" vis="TrackerServiceVis" />
+        <module_component thickness="SiTrackerSensor_thickness" material="Silicon" sensitive="true" vis="TrackerLayerVis" />
+      </module>
+      <layer id="1">
+        <envelope vis="TrackerLayerVis"
+          rmin="InnerTrackerEndcapLayer1_rmin"
+          rmax="InnerTrackerEndcapLayer1_rmax"
+          length="SiTrackerEndcapLayer_thickness"
+          zstart="InnerTrackerEndcapLayer1_zmin" />
+        <layer_material surface="representing" binning="binPhi,binR" bins0="20*SiTrackerEndcapMod_count" bins1="256"/>
+        <ring
+          r="InnerTrackerEndcapMod1_rmin + InnerTrackerEndcapMod1_y/2"
+          zstart="0"
+          nmodules="SiTrackerEndcapMod_count"
+          dz="SiTrackerEndcapMod_dz"
+          module="Module1" />
+      </layer>
+      <layer id="2">
+        <envelope vis="TrackerLayerVis"
+          rmin="InnerTrackerEndcapLayer2_rmin"
+          rmax="InnerTrackerEndcapLayer2_rmax"
+          length="SiTrackerEndcapLayer_thickness"
+          zstart="InnerTrackerEndcapLayer2_zmin" />
+        <layer_material surface="representing" binning="binPhi,binR" bins0="20*SiTrackerEndcapMod_count" bins1="256"/>
+        <ring
+          r="InnerTrackerEndcapMod2_rmin + InnerTrackerEndcapMod2_y/2"
+          zstart="0"
+          nmodules="SiTrackerEndcapMod_count"
+          dz="SiTrackerEndcapMod_dz"
+          module="Module2" />
+      </layer>
+    </detector>
+  </detectors>
+  <documentation>
+    ## Medial barrel tracker (MMGAS)
+  </documentation>
+  <define>
+    <comment> Global MMGAS variables </comment>
+    <constant
+      name="MMTrackerBarrelMod_thickness"
+      value="MMKaptonOverlay_thickness + MMCuGround_thickness + MMPCB_thickness
+           + MMCuStrip_thickness + MMKaptonStrip_thickness + MMResistiveStrip_thickness
+           + MMGas_thickness + MMMesh_thickness + MMGasGap_thickness
+           + MMDriftCuElectrode_thickness + MMDriftKapton_thickness
+           + MMDriftCuGround_thickness" />
+    <comment> Medial barrel implementation </comment>
+    <comment> The value of InnerTrackerEndcap_zmax is calculated above based on the rmin of the MedialTrackerBarrel </comment>
+    <constant name="MedialTrackerBarrel_length"           value="2 * InnerTrackerEndcap_zmax"/>
+    <constant name="MedialTrackerBarrelMod1_rmin"         value="MedialTrackerBarrel_rmin"/>
+    <constant name="MedialTrackerBarrelMod_length"        value="MedialTrackerBarrel_length - 2*um" />
+    <constant name="MedialTrackerBarrelMod2_rmin"         value="MedialTrackerBarrel_rmin + 1 * MedialTrackerBarrel_offset"/>
+    <constant name="MedialTrackerBarrelMod_count"         value="128" />
+    <constant name="MedialTrackerBarrelMod1_width"        value="2*MedialTrackerBarrelMod1_rmin * tan(180*degree/MedialTrackerBarrelMod_count)" />
+    <constant name="MedialTrackerBarrelMod2_width"        value="2*MedialTrackerBarrelMod2_rmin * tan(180*degree/MedialTrackerBarrelMod_count)" />
+
+    <constant name="MedialTrackerBarrelLayer_length"      value="MedialTrackerBarrel_length"/>
+    <constant name="MedialTrackerBarrelLayer_thickness"   value="MMTrackerBarrelMod_thickness + 1.0*cm"/>
+    <constant name="MedialTrackerBarrelLayer1_rmin"       value="MedialTrackerBarrelMod1_rmin - MedialTrackerBarrelLayer_thickness / 5" />
+    <constant name="MedialTrackerBarrelLayer1_rmax"       value="MedialTrackerBarrelLayer1_rmin + MedialTrackerBarrelLayer_thickness" />
+    <constant name="MedialTrackerBarrelLayer2_rmin"       value="MedialTrackerBarrelMod2_rmin - MedialTrackerBarrelLayer_thickness / 5" />
+    <constant name="MedialTrackerBarrelLayer2_rmax"       value="MedialTrackerBarrelLayer2_rmin + MedialTrackerBarrelLayer_thickness" />
+
+    <constant name="MedialTrackerBarrelEnvelope_rmin"   value="MedialTrackerBarrelLayer1_rmin" />
+    <constant name="MedialTrackerBarrelEnvelope_rmax"   value="MedialTrackerBarrelLayer2_rmax" />
+    <constant name="MedialTrackerBarrelEnvelope_length" value="MedialTrackerBarrelLayer_length" />
+  </define>
+  <detectors>
+    <detector
+      id="TrackerBarrel_1_ID"
+      name="MedialTrackerBarrel"
+      type="epic_TrackerBarrel"
+      readout="MPGDTrackerBarrelHits"
+      insideTrackingVolume="true">
+      <dimensions
+        rmin="MedialTrackerBarrelEnvelope_rmin"
+        rmax="MedialTrackerBarrelEnvelope_rmax"
+        length="MedialTrackerBarrelEnvelope_length"/>
+      <module name="MedialTrackerBarrel_Mod1" vis="TrackerMPGDVis">
+        <comment> Going from the inside (sensitive) side to the readout side </comment>
+        <module_component name="DriftCuGround" thickness="MMDriftCuGround_thickness" material="Copper" vis="TrackerMPGDVis" width="MedialTrackerBarrelMod1_width" length="MedialTrackerBarrelMod_length"/>
+        <module_component name="DriftKapton" thickness="MMDriftKapton_thickness" material="Kapton" width="MedialTrackerBarrelMod1_width" length="MedialTrackerBarrelMod_length"/>
+        <module_component name="DriftCuElectrode" thickness="MMDriftCuElectrode_thickness" material="Copper" width="MedialTrackerBarrelMod1_width" length="MedialTrackerBarrelMod_length"/>
+        <module_component name="GasGap" thickness="MMGasGap_thickness" material="Ar90IsoButane" sensitive="True" width="MedialTrackerBarrelMod1_width" length="MedialTrackerBarrelMod_length"/>
+        <module_component name="Mesh" thickness="MMMesh_thickness" material="MMGAS_InoxForMesh" width="MedialTrackerBarrelMod1_width" length="MedialTrackerBarrelMod_length"/>
+        <module_component name="Gas" thickness="MMGas_thickness" material="Ar90IsoButane" width="MedialTrackerBarrelMod1_width" length="MedialTrackerBarrelMod_length"/>
+        <module_component name="ResistiveStrips" thickness="MMResistiveStrip_thickness" material="MMGAS_ResistivePaste" width="MedialTrackerBarrelMod1_width" length="MedialTrackerBarrelMod_length"/>
+        <module_component name="KaptonStrips" thickness="MMKaptonStrip_thickness" material="Kapton" width="MedialTrackerBarrelMod1_width" length="MedialTrackerBarrelMod_length"/>
+        <module_component name="CuStrips" thickness="MMCuStrip_thickness" material="Copper" width="MedialTrackerBarrelMod1_width" length="MedialTrackerBarrelMod_length"/>
+        <module_component name="PCB" thickness="MMPCB_thickness" material="Fr4" width="MedialTrackerBarrelMod1_width" length="MedialTrackerBarrelMod_length"/>
+        <module_component name="CuGround" thickness="MMCuGround_thickness" material="Copper" width="MedialTrackerBarrelMod1_width" length="MedialTrackerBarrelMod_length"/>
+        <module_component name="KaptonOverlay" thickness="MMKaptonOverlay_thickness" material="Kapton" vis="TrackerSupportVis" width="MedialTrackerBarrelMod1_width" length="MedialTrackerBarrelMod_length"/>
+      </module>
+      <module name="MedialTrackerBarrel_Mod2" vis="TrackerMPGDVis">
+        <comment> Going from the inside (sensitive) side to the readout side </comment>
+        <module_component name="DriftCuGround" thickness="MMDriftCuGround_thickness" material="Copper" vis="TrackerMPGDVis" width="MedialTrackerBarrelMod2_width" length="MedialTrackerBarrelMod_length"/>
+        <module_component name="DriftKapton" thickness="MMDriftKapton_thickness" material="Kapton" width="MedialTrackerBarrelMod2_width" length="MedialTrackerBarrelMod_length"/>
+        <module_component name="DriftCuElectrode" thickness="MMDriftCuElectrode_thickness" material="Copper" width="MedialTrackerBarrelMod2_width" length="MedialTrackerBarrelMod_length"/>
+        <module_component name="GasGap" thickness="MMGasGap_thickness" material="Ar90IsoButane" sensitive="True" width="MedialTrackerBarrelMod2_width" length="MedialTrackerBarrelMod_length"/>
+        <module_component name="Mesh" thickness="MMMesh_thickness" material="MMGAS_InoxForMesh" width="MedialTrackerBarrelMod2_width" length="MedialTrackerBarrelMod_length"/>
+        <module_component name="Gas" thickness="MMGas_thickness" material="Ar90IsoButane" width="MedialTrackerBarrelMod2_width" length="MedialTrackerBarrelMod_length"/>
+        <module_component name="ResistiveStrips" thickness="MMResistiveStrip_thickness" material="MMGAS_ResistivePaste" width="MedialTrackerBarrelMod2_width" length="MedialTrackerBarrelMod_length"/>
+        <module_component name="KaptonStrips" thickness="MMKaptonStrip_thickness" material="Kapton" width="MedialTrackerBarrelMod2_width" length="MedialTrackerBarrelMod_length"/>
+        <module_component name="CuStrips" thickness="MMCuStrip_thickness" material="Copper" width="MedialTrackerBarrelMod2_width" length="MedialTrackerBarrelMod_length"/>
+        <module_component name="PCB" thickness="MMPCB_thickness" material="Fr4" width="MedialTrackerBarrelMod2_width" length="MedialTrackerBarrelMod_length"/>
+        <module_component name="CuGround" thickness="MMCuGround_thickness" material="Copper" width="MedialTrackerBarrelMod2_width" length="MedialTrackerBarrelMod_length"/>
+        <module_component name="KaptonOverlay" thickness="MMKaptonOverlay_thickness" material="Kapton" vis="TrackerSupportVis" width="MedialTrackerBarrelMod2_width" length="MedialTrackerBarrelMod_length"/>
+      </module>
+      <layer module="MedialTrackerBarrel_Mod1" id="1" vis="TrackerMMGASLayerVis">
+        <barrel_envelope
+          inner_r="MedialTrackerBarrelLayer1_rmin"
+          outer_r="MedialTrackerBarrelLayer1_rmax"
+          z_length="MedialTrackerBarrelLayer_length"/>
+        <layer_material surface="outer" binning="binPhi,binZ" bins0="10*MedialTrackerBarrelMod_count" bins1="100" />
+        <rphi_layout phi_tilt="0" nphi="MedialTrackerBarrelMod_count" phi0="0.0" rc="MedialTrackerBarrelMod1_rmin" dr="0.0 * mm"/>
+        <z_layout dr="0.0 * mm" z0="0.0 * mm" nz="1"/>
+      </layer>
+      <layer module="MedialTrackerBarrel_Mod2" id="2" vis="TrackerMMGASLayerVis">
+        <barrel_envelope
+          inner_r="MedialTrackerBarrelLayer2_rmin"
+          outer_r="MedialTrackerBarrelLayer2_rmax"
+          z_length="MedialTrackerBarrelLayer_length"/>
+        <layer_material surface="outer" binning="binPhi,binZ" bins0="10*MedialTrackerBarrelMod_count" bins1="100" />
+        <rphi_layout phi_tilt="0" nphi="MedialTrackerBarrelMod_count" phi0="0.0" rc="MedialTrackerBarrelMod2_rmin" dr="0.0 * mm"/>
+        <z_layout dr="0.0 * mm" z0="0.0 * mm" nz="1"/>
+      </layer>
+    </detector>
+  </detectors>
+  <documentation>
+    ## Medial silicon tracker disks (1 each), symmetric between N and P except for disk rmin
+  </documentation>
+  <define>
+    <comment> Medial Si endcap setup </comment>
+    <constant name="MedialTrackerEndcapPMod1_zmin"  value="MedialTrackerEndcap_zmin" />
+    <constant name="MedialTrackerEndcapPMod1_rmin"  value="MedialTrackerEndcapP_rmin" />
+    <constant name="MedialTrackerEndcapPMod1_rmax"  value="min(MedialTrackerEndcapPMod1_zmin * CentralTrackingBarrel_tan * 0.995, SiTrackerCyl_rmin)" />
+    <constant name="MedialTrackerEndcapPMod1_x1"    value="2 * MedialTrackerEndcapPMod1_rmin * tan(SiTrackerEndcapMod_angle/2)" />
+    <constant name="MedialTrackerEndcapPMod1_x2"    value="2 * MedialTrackerEndcapPMod1_rmax * sin(SiTrackerEndcapMod_angle/2)" />
+    <constant name="MedialTrackerEndcapPMod1_y"     value="MedialTrackerEndcapPMod1_rmax * cos(SiTrackerEndcapMod_angle/2) - MedialTrackerEndcapPMod1_rmin" />
+
+    <constant name="MedialTrackerEndcapPLayer1_rmin"  value="MedialTrackerEndcapPMod1_rmin - 1*um" />
+    <constant name="MedialTrackerEndcapPLayer1_rmax"  value="MedialTrackerEndcapPMod1_rmax + 1*um" />
+    <constant name="MedialTrackerEndcapPLayer1_zmin"  value="MedialTrackerEndcapPMod1_zmin - SiTrackerEndcapLayer_thickness/2" />
+
+    <constant name="MedialTrackerEndcapNMod1_zmin"  value="MedialTrackerEndcap_zmin" />
+    <constant name="MedialTrackerEndcapNMod1_rmin"  value="MedialTrackerEndcapN_rmin" />
+    <constant name="MedialTrackerEndcapNMod1_rmax"  value="min(MedialTrackerEndcapNMod1_zmin * CentralTrackingBarrel_tan * 0.995, SiTrackerCyl_rmin)" />
+    <constant name="MedialTrackerEndcapNMod1_x1"    value="2 * MedialTrackerEndcapNMod1_rmin * tan(SiTrackerEndcapMod_angle/2)" />
+    <constant name="MedialTrackerEndcapNMod1_x2"    value="2 * MedialTrackerEndcapNMod1_rmax * sin(SiTrackerEndcapMod_angle/2)" />
+    <constant name="MedialTrackerEndcapNMod1_y"     value="MedialTrackerEndcapNMod1_rmax * cos(SiTrackerEndcapMod_angle/2) - MedialTrackerEndcapNMod1_rmin" />
+
+    <constant name="MedialTrackerEndcapNLayer1_rmin"  value="MedialTrackerEndcapNMod1_rmin - 1*um" />
+    <constant name="MedialTrackerEndcapNLayer1_rmax"  value="MedialTrackerEndcapNMod1_rmax + 1*um" />
+    <constant name="MedialTrackerEndcapNLayer1_zmin"  value="MedialTrackerEndcapNMod1_zmin - SiTrackerEndcapLayer_thickness/2" />
+
+    <comment> The tracker endcap ends at the same place as the outer tracker barrel that sits around it </comment>
+    <constant name="MedialTrackerEndcap_zmax"              value="OuterTrackerBarrel_rmin / CentralTrackingBarrel_tan" />
+    <constant name="MedialTrackerEndcapCyl_zmin"           value="InnerTrackerEndcap_zmax" />
+    <constant name="MedialTrackerEndcapCyl_zmax"           value="MedialTrackerEndcap_zmax" />
+    <constant name="MedialTrackerEndcapCyl_z"              value="(MedialTrackerEndcapCyl_zmin + MedialTrackerEndcapCyl_zmax)/2" />
+    <constant name="MedialTrackerEndcapCyl_length"         value="MedialTrackerEndcapCyl_zmax - MedialTrackerEndcapCyl_zmin" />
+
+  </define>
+  <detectors>
+    <detector
+      id="TrackerEndcapP_1_ID"
+      name="MedialTrackerEndcapP"
+      type="epic_TrapEndcapTracker"
+      readout="TrackerEndcapHits"
+      vis="TrackerVis"
+      reflect="false">
+      <support material="Aluminum" name="serv_cyl_pos" vis="TrackerServiceVis"
+          rmin="SiTrackerServiceCyl_rmin"
+          thickness="SiTrackerServiceCylAl_thickness"
+          length="MedialTrackerEndcapCyl_length"
+          zstart="MedialTrackerEndcapCyl_zmin" />
+      <support material="CarbonFiber" name="sup_cyl_pos" vis="TrackerSupportVis"
+          rmin="SiTrackerSupportCyl_rmin"
+          thickness="SiTrackerSupportCylCF_thickness"
+          length="MedialTrackerEndcapCyl_length"
+          zstart="MedialTrackerEndcapCyl_zmin" />
+      <module name="Module1" vis="TrackerModuleVis">
+        <trd x1="MedialTrackerEndcapPMod1_x1/2" x2="MedialTrackerEndcapPMod1_x2/2" z="MedialTrackerEndcapPMod1_y/2" />
+        <module_component thickness="SiTrackerEndcapCF_thickness" material="CarbonFiber" vis="TrackerSupportVis" />
+        <module_component thickness="SiTrackerEndcapAl_thickness" material="Aluminum" vis="TrackerServiceVis" />
+        <module_component thickness="SiTrackerSensor_thickness" material="Silicon" sensitive="true" vis="TrackerLayerVis" />
+      </module>
+      <layer id="1">
+        <envelope vis="TrackerLayerVis"
+          rmin="MedialTrackerEndcapPLayer1_rmin"
+          rmax="MedialTrackerEndcapPLayer1_rmax"
+          length="SiTrackerEndcapLayer_thickness"
+          zstart="MedialTrackerEndcapPLayer1_zmin" />
+        <layer_material surface="representing" binning="binPhi,binR" bins0="20*SiTrackerEndcapMod_count" bins1="256"/>
+        <ring
+          r="MedialTrackerEndcapPMod1_rmin + MedialTrackerEndcapPMod1_y/2"
+          zstart="0"
+          nmodules="SiTrackerEndcapMod_count"
+          dz="SiTrackerEndcapMod_dz"
+          module="Module1" />
+      </layer>
+    </detector>
+    <detector
+      id="TrackerEndcapN_1_ID"
+      name="MedialTrackerEndcapN"
+      type="epic_TrapEndcapTracker"
+      readout="TrackerEndcapHits"
+      vis="TrackerVis"
+      reflect="true">
+      <support material="Aluminum" name="serv_cyl_neg" vis="TrackerServiceVis"
+          rmin="SiTrackerServiceCyl_rmin"
+          thickness="SiTrackerServiceCylAl_thickness"
+          length="MedialTrackerEndcapCyl_length"
+          zstart="MedialTrackerEndcapCyl_zmin" />
+      <support material="CarbonFiber" name="sup_cyl_neg" vis="TrackerSupportVis"
+          rmin="SiTrackerSupportCyl_rmin"
+          thickness="SiTrackerSupportCylCF_thickness"
+          length="MedialTrackerEndcapCyl_length"
+          zstart="MedialTrackerEndcapCyl_zmin" />
+      <module name="Module1" vis="TrackerModuleVis">
+        <trd x1="MedialTrackerEndcapNMod1_x1/2" x2="MedialTrackerEndcapNMod1_x2/2" z="MedialTrackerEndcapNMod1_y/2" />
+        <module_component thickness="SiTrackerEndcapCF_thickness" material="CarbonFiber" vis="TrackerSupportVis" />
+        <module_component thickness="SiTrackerEndcapAl_thickness" material="Aluminum" vis="TrackerServiceVis" />
+        <module_component thickness="SiTrackerSensor_thickness" material="Silicon" sensitive="true" vis="TrackerLayerVis" />
+      </module>
+      <layer id="1">
+        <envelope vis="TrackerLayerVis"
+          rmin="MedialTrackerEndcapNLayer1_rmin"
+          rmax="MedialTrackerEndcapNLayer1_rmax"
+          length="SiTrackerEndcapLayer_thickness"
+          zstart="MedialTrackerEndcapNLayer1_zmin" />
+        <layer_material surface="representing" binning="binPhi,binR" bins0="20*SiTrackerEndcapMod_count" bins1="256"/>
+        <ring
+          r="MedialTrackerEndcapNMod1_rmin + MedialTrackerEndcapNMod1_y/2"
+          zstart="0"
+          nmodules="SiTrackerEndcapMod_count"
+          dz="SiTrackerEndcapMod_dz"
+          module="Module1" />
+      </layer>
+    </detector>
+  </detectors>
+  <documentation>
+    ## Outer barrel tracker (MMGAS)
+  </documentation>
+  <define>
+    <comment> The value of MedialTrackerEndcap_zmax is calculated above based on the rmin of the OuterTrackerBarrel </comment>
+    <constant name="OuterTrackerBarrel_length"            value="2 * MedialTrackerEndcap_zmax"/>
+    <constant name="OuterTrackerBarrelMod1_rmin"          value="OuterTrackerBarrel_rmin"/>
+    <constant name="OuterTrackerBarrelMod_length"         value="OuterTrackerBarrel_length - 2*um" />
+    <constant name="OuterTrackerBarrelMod2_rmin"          value="OuterTrackerBarrel_rmin + 1 * OuterTrackerBarrel_offset"/>
+    <constant name="OuterTrackerBarrelMod_count"          value="128" />
+    <constant name="OuterTrackerBarrelMod1_width"         value="2*OuterTrackerBarrelMod1_rmin * tan(180*degree/OuterTrackerBarrelMod_count)" />
+    <constant name="OuterTrackerBarrelMod2_width"         value="2*OuterTrackerBarrelMod2_rmin * tan(180*degree/OuterTrackerBarrelMod_count)" />
+
+    <constant name="OuterTrackerBarrelLayer_length"       value="OuterTrackerBarrel_length"/>
+    <constant name="OuterTrackerBarrelLayer_thickness"    value="MMTrackerBarrelMod_thickness + 1.0*cm"/>
+    <constant name="OuterTrackerBarrelLayer1_rmin"        value="OuterTrackerBarrelMod1_rmin - OuterTrackerBarrelLayer_thickness / 5" />
+    <constant name="OuterTrackerBarrelLayer1_rmax"        value="OuterTrackerBarrelLayer1_rmin + OuterTrackerBarrelLayer_thickness" />
+    <constant name="OuterTrackerBarrelLayer2_rmin"        value="OuterTrackerBarrelMod2_rmin - OuterTrackerBarrelLayer_thickness / 5" />
+    <constant name="OuterTrackerBarrelLayer2_rmax"        value="OuterTrackerBarrelLayer2_rmin + OuterTrackerBarrelLayer_thickness" />
+
+    <constant name="OuterTrackerBarrelEnvelope_rmin"    value="OuterTrackerBarrelLayer1_rmin" />
+    <constant name="OuterTrackerBarrelEnvelope_rmax"    value="OuterTrackerBarrelLayer2_rmax" />
+    <constant name="OuterTrackerBarrelEnvelope_length"  value="OuterTrackerBarrelLayer_length" />
+  </define>
+  <detectors>
+    <detector
+      id="TrackerBarrel_2_ID"
+      name="OuterTrackerBarrel"
+      type="epic_TrackerBarrel"
+      readout="MPGDTrackerBarrelHits"
+      insideTrackingVolume="true">
+      <dimensions
+        rmin="OuterTrackerBarrelEnvelope_rmin"
+        rmax="OuterTrackerBarrelEnvelope_rmax"
+        length="OuterTrackerBarrelEnvelope_length"/>
+      <module name="OuterTrackerBarrel_Mod1" vis="TrackerMPGDVis">
+        <comment> Going from the inside (sensitive) side to the readout side </comment>
+        <module_component name="DriftCuGround" thickness="MMDriftCuGround_thickness" material="Copper" vis="TrackerMPGDVis" width="OuterTrackerBarrelMod1_width" length="OuterTrackerBarrelMod_length"/>
+        <module_component name="DriftKapton" thickness="MMDriftKapton_thickness" material="Kapton" width="OuterTrackerBarrelMod1_width" length="OuterTrackerBarrelMod_length"/>
+        <module_component name="DriftCuElectrode" thickness="MMDriftCuElectrode_thickness" material="Copper" width="OuterTrackerBarrelMod1_width" length="OuterTrackerBarrelMod_length"/>
+        <module_component name="GasGap" thickness="MMGasGap_thickness" material="Ar90IsoButane" sensitive="True" width="OuterTrackerBarrelMod1_width" length="OuterTrackerBarrelMod_length"/>
+        <module_component name="Mesh" thickness="MMMesh_thickness" material="MMGAS_InoxForMesh" width="OuterTrackerBarrelMod1_width" length="OuterTrackerBarrelMod_length"/>
+        <module_component name="Gas" thickness="MMGas_thickness" material="Ar90IsoButane" width="OuterTrackerBarrelMod1_width" length="OuterTrackerBarrelMod_length"/>
+        <module_component name="ResistiveStrips" thickness="MMResistiveStrip_thickness" material="MMGAS_ResistivePaste" width="OuterTrackerBarrelMod1_width" length="OuterTrackerBarrelMod_length"/>
+        <module_component name="KaptonStrips" thickness="MMKaptonStrip_thickness" material="Kapton" width="OuterTrackerBarrelMod1_width" length="OuterTrackerBarrelMod_length"/>
+        <module_component name="CuStrips" thickness="MMCuStrip_thickness" material="Copper" width="OuterTrackerBarrelMod1_width" length="OuterTrackerBarrelMod_length"/>
+        <module_component name="PCB" thickness="MMPCB_thickness" material="Fr4" width="OuterTrackerBarrelMod1_width" length="OuterTrackerBarrelMod_length"/>
+        <module_component name="CuGround" thickness="MMCuGround_thickness" material="Copper" width="OuterTrackerBarrelMod1_width" length="OuterTrackerBarrelMod_length"/>
+        <module_component name="KaptonOverlay" thickness="MMKaptonOverlay_thickness" material="Kapton" vis="TrackerSupportVis" width="OuterTrackerBarrelMod1_width" length="OuterTrackerBarrelMod_length"/>
+      </module>
+      <module name="OuterTrackerBarrel_Mod2" vis="TrackerMPGDVis">
+        <comment> Going from the inside (sensitive) side to the readout side </comment>
+        <module_component name="DriftCuGround" thickness="MMDriftCuGround_thickness" material="Copper" vis="TrackerMPGDVis" width="OuterTrackerBarrelMod2_width" length="OuterTrackerBarrelMod_length"/>
+        <module_component name="DriftKapton" thickness="MMDriftKapton_thickness" material="Kapton" width="OuterTrackerBarrelMod2_width" length="OuterTrackerBarrelMod_length"/>
+        <module_component name="DriftCuElectrode" thickness="MMDriftCuElectrode_thickness" material="Copper" width="OuterTrackerBarrelMod2_width" length="OuterTrackerBarrelMod_length"/>
+        <module_component name="GasGap" thickness="MMGasGap_thickness" material="Ar90IsoButane" sensitive="True" width="OuterTrackerBarrelMod2_width" length="OuterTrackerBarrelMod_length"/>
+        <module_component name="Mesh" thickness="MMMesh_thickness" material="MMGAS_InoxForMesh" width="OuterTrackerBarrelMod2_width" length="OuterTrackerBarrelMod_length"/>
+        <module_component name="Gas" thickness="MMGas_thickness" material="Ar90IsoButane" width="OuterTrackerBarrelMod2_width" length="OuterTrackerBarrelMod_length"/>
+        <module_component name="ResistiveStrips" thickness="MMResistiveStrip_thickness" material="MMGAS_ResistivePaste" width="OuterTrackerBarrelMod2_width" length="OuterTrackerBarrelMod_length"/>
+        <module_component name="KaptonStrips" thickness="MMKaptonStrip_thickness" material="Kapton" width="OuterTrackerBarrelMod2_width" length="OuterTrackerBarrelMod_length"/>
+        <module_component name="CuStrips" thickness="MMCuStrip_thickness" material="Copper" width="OuterTrackerBarrelMod2_width" length="OuterTrackerBarrelMod_length"/>
+        <module_component name="PCB" thickness="MMPCB_thickness" material="Fr4" width="OuterTrackerBarrelMod2_width" length="OuterTrackerBarrelMod_length"/>
+        <module_component name="CuGround" thickness="MMCuGround_thickness" material="Copper" width="OuterTrackerBarrelMod2_width" length="OuterTrackerBarrelMod_length"/>
+        <module_component name="KaptonOverlay" thickness="MMKaptonOverlay_thickness" material="Kapton" vis="TrackerSupportVis" width="OuterTrackerBarrelMod2_width" length="OuterTrackerBarrelMod_length"/>
+      </module>
+      <layer module="OuterTrackerBarrel_Mod1" id="1" vis="TrackerMMGASLayerVis">
+        <barrel_envelope
+          inner_r="OuterTrackerBarrelLayer1_rmin"
+          outer_r="OuterTrackerBarrelLayer1_rmax"
+          z_length="OuterTrackerBarrelLayer_length"/>
+        <layer_material surface="outer" binning="binPhi,binZ" bins0="10*OuterTrackerBarrelMod_count" bins1="100" />
+        <rphi_layout phi_tilt="0" nphi="OuterTrackerBarrelMod_count" phi0="0.0" rc="OuterTrackerBarrelMod1_rmin" dr="0.0 * mm"/>
+        <z_layout dr="0.0 * mm" z0="0.0 * mm" nz="1"/>
+      </layer>
+      <layer module="OuterTrackerBarrel_Mod2" id="2" vis="TrackerMMGASLayerVis">
+        <barrel_envelope
+          inner_r="OuterTrackerBarrelLayer2_rmin"
+          outer_r="OuterTrackerBarrelLayer2_rmax"
+          z_length="OuterTrackerBarrelLayer_length"/>
+        <layer_material surface="outer" binning="binPhi,binZ" bins0="10*OuterTrackerBarrelMod_count" bins1="100" />
+        <rphi_layout phi_tilt="0" nphi="OuterTrackerBarrelMod_count" phi0="0.0" rc="OuterTrackerBarrelMod2_rmin" dr="0.0 * mm"/>
+        <z_layout dr="0.0 * mm" z0="0.0 * mm" nz="1"/>
+      </layer>
+    </detector>
+  </detectors>
+  <documentation>
+    ## Outer silicon tracker disks (3P, 2N)
+  </documentation>
+  <define>
+    <comment> Positive disks </comment>
+    <constant name="OuterTrackerEndcapPMod1_zmin" value="OuterTrackerEndcapP_zmin" />
+    <constant name="OuterTrackerEndcapPMod1_rmin" value="OuterTrackerEndcapPMod1_zmin * CentralTrackingRegionP_tan * 0.99" />
+    <constant name="OuterTrackerEndcapPMod1_rmax"  value="SiTrackerCyl_rmin" />
+    <constant name="OuterTrackerEndcapPMod1_x1"    value="2 * OuterTrackerEndcapPMod1_rmin * tan(SiTrackerEndcapMod_angle/2)" />
+    <constant name="OuterTrackerEndcapPMod1_x2"    value="2 * OuterTrackerEndcapPMod1_rmax * sin(SiTrackerEndcapMod_angle/2)" />
+    <constant name="OuterTrackerEndcapPMod1_y"     value="OuterTrackerEndcapPMod1_rmax * cos(SiTrackerEndcapMod_angle/2) - OuterTrackerEndcapPMod1_rmin" />
+    <constant name="OuterTrackerEndcapPLayer1_rmin"  value="OuterTrackerEndcapPMod1_rmin - 1*um" />
+    <constant name="OuterTrackerEndcapPLayer1_rmax"  value="OuterTrackerEndcapPMod1_rmax + 1*um" />
+    <constant name="OuterTrackerEndcapPLayer1_zmin"  value="OuterTrackerEndcapPMod1_zmin - SiTrackerEndcapLayer_thickness/2" />
+
+    <constant name="OuterTrackerEndcapPMod2_zmin" value="OuterTrackerEndcapP_zmin + 1 * OuterTrackerEndcapP_offset" />
+    <constant name="OuterTrackerEndcapPMod2_rmin" value="OuterTrackerEndcapPMod2_zmin * CentralTrackingRegionP_tan * 0.99" />
+    <constant name="OuterTrackerEndcapPMod2_rmax"  value="SiTrackerCyl_rmin" />
+    <constant name="OuterTrackerEndcapPMod2_x1"    value="2 * OuterTrackerEndcapPMod2_rmin * tan(SiTrackerEndcapMod_angle/2)" />
+    <constant name="OuterTrackerEndcapPMod2_x2"    value="2 * OuterTrackerEndcapPMod2_rmax * sin(SiTrackerEndcapMod_angle/2)" />
+    <constant name="OuterTrackerEndcapPMod2_y"     value="OuterTrackerEndcapPMod2_rmax * cos(SiTrackerEndcapMod_angle/2) - OuterTrackerEndcapPMod2_rmin" />
+    <constant name="OuterTrackerEndcapPLayer2_rmin"  value="OuterTrackerEndcapPMod2_rmin - 1*um" />
+    <constant name="OuterTrackerEndcapPLayer2_rmax"  value="OuterTrackerEndcapPMod2_rmax + 1*um" />
+    <constant name="OuterTrackerEndcapPLayer2_zmin"  value="OuterTrackerEndcapPMod2_zmin - SiTrackerEndcapLayer_thickness/2" />
+
+    <constant name="OuterTrackerEndcapPMod3_zmin" value="OuterTrackerEndcapP_zmin + 2 * OuterTrackerEndcapP_offset" />
+    <constant name="OuterTrackerEndcapPMod3_rmin" value="OuterTrackerEndcapPMod3_zmin * CentralTrackingRegionP_tan * 1.00" />
+    <constant name="OuterTrackerEndcapPMod3_rmax"  value="SiTrackerCyl_rmin" />
+    <constant name="OuterTrackerEndcapPMod3_x1"    value="2 * OuterTrackerEndcapPMod3_rmin * tan(SiTrackerEndcapMod_angle/2)" />
+    <constant name="OuterTrackerEndcapPMod3_x2"    value="2 * OuterTrackerEndcapPMod3_rmax * sin(SiTrackerEndcapMod_angle/2)" />
+    <constant name="OuterTrackerEndcapPMod3_y"     value="OuterTrackerEndcapPMod3_rmax * cos(SiTrackerEndcapMod_angle/2) - OuterTrackerEndcapPMod3_rmin" />
+    <constant name="OuterTrackerEndcapPLayer3_rmin"  value="OuterTrackerEndcapPMod3_rmin - 1*um" />
+    <constant name="OuterTrackerEndcapPLayer3_rmax"  value="OuterTrackerEndcapPMod3_rmax + 1*um" />
+    <constant name="OuterTrackerEndcapPLayer3_zmin"  value="OuterTrackerEndcapPMod3_zmin - SiTrackerEndcapLayer_thickness/2" />
+
+    <comment> The Si tracker endcap ends at position of the last disk </comment>
+    <constant name="OuterTrackerEndcapP_zmax"             value="OuterTrackerEndcapPLayer3_zmin + SiTrackerEndcapLayer_thickness" />
+    <constant name="OuterTrackerEndcapPCyl_zmin"           value="MedialTrackerEndcap_zmax" />
+    <constant name="OuterTrackerEndcapPCyl_zmax"           value="OuterTrackerEndcapP_zmax" />
+    <constant name="OuterTrackerEndcapPCyl_z"              value="(OuterTrackerEndcapPCyl_zmin + OuterTrackerEndcapPCyl_zmax)/2" />
+    <constant name="OuterTrackerEndcapPCyl_length"         value="OuterTrackerEndcapPCyl_zmax - OuterTrackerEndcapPCyl_zmin" />
+
+    <comment> Negative disks </comment>
+    <constant name="OuterTrackerEndcapNMod1_zmin" value="OuterTrackerEndcapN_zmin" />
+    <constant name="OuterTrackerEndcapNMod1_rmin" value="OuterTrackerEndcapNMod1_zmin * CentralTrackingRegionN_tan * 1.00" />
+    <constant name="OuterTrackerEndcapNMod1_rmax"  value="SiTrackerCyl_rmin" />
+    <constant name="OuterTrackerEndcapNMod1_x1"    value="2 * OuterTrackerEndcapNMod1_rmin * tan(SiTrackerEndcapMod_angle/2)" />
+    <constant name="OuterTrackerEndcapNMod1_x2"    value="2 * OuterTrackerEndcapNMod1_rmax * sin(SiTrackerEndcapMod_angle/2)" />
+    <constant name="OuterTrackerEndcapNMod1_y"     value="OuterTrackerEndcapNMod1_rmax * cos(SiTrackerEndcapMod_angle/2) - OuterTrackerEndcapNMod1_rmin" />
+    <constant name="OuterTrackerEndcapNLayer1_rmin"  value="OuterTrackerEndcapNMod1_rmin - 1*um" />
+    <constant name="OuterTrackerEndcapNLayer1_rmax"  value="OuterTrackerEndcapNMod1_rmax + 1*um" />
+    <constant name="OuterTrackerEndcapNLayer1_zmin"  value="OuterTrackerEndcapNMod1_zmin - SiTrackerEndcapLayer_thickness/2" />
+
+    <constant name="OuterTrackerEndcapNMod2_zmin" value="OuterTrackerEndcapN_zmin + 1 * OuterTrackerEndcapN_offset" />
+    <constant name="OuterTrackerEndcapNMod2_rmin" value="OuterTrackerEndcapNMod2_zmin * CentralTrackingRegionN_tan * 1.00" />
+    <constant name="OuterTrackerEndcapNMod2_rmax"  value="SiTrackerCyl_rmin" />
+    <constant name="OuterTrackerEndcapNMod2_x1"    value="2 * OuterTrackerEndcapNMod2_rmin * tan(SiTrackerEndcapMod_angle/2)" />
+    <constant name="OuterTrackerEndcapNMod2_x2"    value="2 * OuterTrackerEndcapNMod2_rmax * sin(SiTrackerEndcapMod_angle/2)" />
+    <constant name="OuterTrackerEndcapNMod2_y"     value="OuterTrackerEndcapNMod2_rmax * cos(SiTrackerEndcapMod_angle/2) - OuterTrackerEndcapNMod2_rmin" />
+    <constant name="OuterTrackerEndcapNLayer2_rmin"  value="OuterTrackerEndcapNMod2_rmin - 1*um" />
+    <constant name="OuterTrackerEndcapNLayer2_rmax"  value="OuterTrackerEndcapNMod2_rmax + 1*um" />
+    <constant name="OuterTrackerEndcapNLayer2_zmin"  value="OuterTrackerEndcapNMod2_zmin - SiTrackerEndcapLayer_thickness/2" />
+
+    <comment> The Si tracker endcap ends at position of the last disk </comment>
+    <constant name="OuterTrackerEndcapN_zmax"             value="OuterTrackerEndcapNLayer2_zmin + SiTrackerEndcapLayer_thickness" />
+    <constant name="OuterTrackerEndcapNCyl_zmin"           value="MedialTrackerEndcap_zmax" />
+    <constant name="OuterTrackerEndcapNCyl_zmax"           value="OuterTrackerEndcapN_zmax" />
+    <constant name="OuterTrackerEndcapNCyl_z"              value="(OuterTrackerEndcapNCyl_zmin + OuterTrackerEndcapNCyl_zmax)/2" />
+    <constant name="OuterTrackerEndcapNCyl_length"         value="OuterTrackerEndcapNCyl_zmax - OuterTrackerEndcapNCyl_zmin" />
+
+  </define>
+  <detectors>
+    <detector
+      id="TrackerEndcapP_2_ID"
+      name="OuterTrackerEndcapP"
+      type="epic_TrapEndcapTracker"
+      readout="TrackerEndcapHits"
+      vis="TrackerVis"
+      reflect="false">
+      <support material="Aluminum" name="serv_cyl_pos" vis="TrackerServiceVis"
+          rmin="SiTrackerServiceCyl_rmin"
+          thickness="SiTrackerServiceCylAl_thickness"
+          length="OuterTrackerEndcapPCyl_length"
+          zstart="OuterTrackerEndcapPCyl_zmin" />
+      <support material="CarbonFiber" name="sup_cyl_pos" vis="TrackerSupportVis"
+          rmin="SiTrackerSupportCyl_rmin"
+          thickness="SiTrackerSupportCylCF_thickness"
+          length="OuterTrackerEndcapPCyl_length"
+          zstart="OuterTrackerEndcapPCyl_zmin" />
+      <module name="Module1" vis="TrackerModuleVis">
+        <trd x1="OuterTrackerEndcapPMod1_x1/2" x2="OuterTrackerEndcapPMod1_x2/2" z="OuterTrackerEndcapPMod1_y/2" />
+        <module_component thickness="SiTrackerEndcapCF_thickness" material="CarbonFiber" vis="TrackerSupportVis" />
+        <module_component thickness="SiTrackerEndcapAl_thickness" material="Aluminum" vis="TrackerServiceVis" />
+        <module_component thickness="SiTrackerSensor_thickness" material="Silicon" sensitive="true" vis="TrackerLayerVis" />
+      </module>
+      <module name="Module2" vis="TrackerModuleVis">
+        <trd x1="OuterTrackerEndcapPMod2_x1/2" x2="OuterTrackerEndcapPMod2_x2/2" z="OuterTrackerEndcapPMod2_y/2" />
+        <module_component thickness="SiTrackerEndcapCF_thickness" material="CarbonFiber" vis="TrackerSupportVis" />
+        <module_component thickness="SiTrackerEndcapAl_thickness" material="Aluminum" vis="TrackerServiceVis" />
+        <module_component thickness="SiTrackerSensor_thickness" material="Silicon" sensitive="true" vis="TrackerLayerVis" />
+      </module>
+      <module name="Module3" vis="TrackerModuleVis">
+        <trd x1="OuterTrackerEndcapPMod3_x1/2" x2="OuterTrackerEndcapPMod3_x2/2" z="OuterTrackerEndcapPMod3_y/2" />
+        <module_component thickness="SiTrackerEndcapCF_thickness" material="CarbonFiber" vis="TrackerSupportVis" />
+        <module_component thickness="SiTrackerEndcapAl_thickness" material="Aluminum" vis="TrackerServiceVis" />
+        <module_component thickness="SiTrackerSensor_thickness" material="Silicon" sensitive="true" vis="TrackerLayerVis" />
+      </module>
+      <layer id="1">
+        <envelope vis="TrackerLayerVis"
+          rmin="OuterTrackerEndcapPLayer1_rmin"
+          rmax="OuterTrackerEndcapPLayer1_rmax"
+          length="SiTrackerEndcapLayer_thickness"
+          zstart="OuterTrackerEndcapPLayer1_zmin" />
+        <layer_material surface="representing" binning="binPhi,binR" bins0="20*SiTrackerEndcapMod_count" bins1="256"/>
+        <ring
+          r="OuterTrackerEndcapPMod1_rmin + OuterTrackerEndcapPMod1_y/2"
+          zstart="0"
+          nmodules="SiTrackerEndcapMod_count"
+          dz="SiTrackerEndcapMod_dz"
+          module="Module1" />
+      </layer>
+      <layer id="2">
+        <envelope vis="TrackerLayerVis"
+          rmin="OuterTrackerEndcapPLayer2_rmin"
+          rmax="OuterTrackerEndcapPLayer2_rmax"
+          length="SiTrackerEndcapLayer_thickness"
+          zstart="OuterTrackerEndcapPLayer2_zmin" />
+        <layer_material surface="representing" binning="binPhi,binR" bins0="20*SiTrackerEndcapMod_count" bins1="256"/>
+        <ring
+          r="OuterTrackerEndcapPMod2_rmin + OuterTrackerEndcapPMod2_y/2"
+          zstart="0"
+          nmodules="SiTrackerEndcapMod_count"
+          dz="SiTrackerEndcapMod_dz"
+          module="Module2" />
+      </layer>
+      <layer id="3">
+        <envelope vis="TrackerLayerVis"
+          rmin="OuterTrackerEndcapPLayer3_rmin"
+          rmax="OuterTrackerEndcapPLayer3_rmax"
+          length="SiTrackerEndcapLayer_thickness"
+          zstart="OuterTrackerEndcapPLayer3_zmin" />
+        <layer_material surface="representing" binning="binPhi,binR" bins0="20*SiTrackerEndcapMod_count" bins1="256"/>
+        <ring
+          r="OuterTrackerEndcapPMod3_rmin + OuterTrackerEndcapPMod3_y/2"
+          zstart="0"
+          nmodules="SiTrackerEndcapMod_count"
+          dz="SiTrackerEndcapMod_dz"
+          module="Module3" />
+      </layer>
+    </detector>
+    <detector
+      id="TrackerEndcapN_2_ID"
+      name="OuterTrackerEndcapN"
+      type="epic_TrapEndcapTracker"
+      readout="TrackerEndcapHits"
+      vis="TrackerVis"
+      reflect="true">
+      <support material="Aluminum" name="serv_cyl_pos" vis="TrackerServiceVis"
+          rmin="SiTrackerServiceCyl_rmin"
+          thickness="SiTrackerServiceCylAl_thickness"
+          length="OuterTrackerEndcapNCyl_length"
+          zstart="OuterTrackerEndcapNCyl_zmin" />
+      <support material="CarbonFiber" name="sup_cyl_pos" vis="TrackerSupportVis"
+          rmin="SiTrackerSupportCyl_rmin"
+          thickness="SiTrackerSupportCylCF_thickness"
+          length="OuterTrackerEndcapNCyl_length"
+          zstart="OuterTrackerEndcapNCyl_zmin" />
+      <module name="Module1" vis="TrackerModuleVis">
+        <trd x1="OuterTrackerEndcapNMod1_x1/2" x2="OuterTrackerEndcapNMod1_x2/2" z="OuterTrackerEndcapNMod1_y/2" />
+        <module_component thickness="SiTrackerEndcapCF_thickness" material="CarbonFiber" vis="TrackerSupportVis" />
+        <module_component thickness="SiTrackerEndcapAl_thickness" material="Aluminum" vis="TrackerServiceVis" />
+        <module_component thickness="SiTrackerSensor_thickness" material="Silicon" sensitive="true" vis="TrackerLayerVis" />
+      </module>
+      <module name="Module2" vis="TrackerModuleVis">
+        <trd x1="OuterTrackerEndcapNMod2_x1/2" x2="OuterTrackerEndcapNMod2_x2/2" z="OuterTrackerEndcapNMod2_y/2" />
+        <module_component thickness="SiTrackerEndcapCF_thickness" material="CarbonFiber" vis="TrackerSupportVis" />
+        <module_component thickness="SiTrackerEndcapAl_thickness" material="Aluminum" vis="TrackerServiceVis" />
+        <module_component thickness="SiTrackerSensor_thickness" material="Silicon" sensitive="true" vis="TrackerLayerVis" />
+      </module>
+      <layer id="1">
+        <envelope vis="TrackerLayerVis"
+          rmin="OuterTrackerEndcapNLayer1_rmin"
+          rmax="OuterTrackerEndcapNLayer1_rmax"
+          length="SiTrackerEndcapLayer_thickness"
+          zstart="OuterTrackerEndcapNLayer1_zmin" />
+        <layer_material surface="representing" binning="binPhi,binR" bins0="20*SiTrackerEndcapMod_count" bins1="256"/>
+        <ring
+          r="OuterTrackerEndcapNMod1_rmin + OuterTrackerEndcapNMod1_y/2"
+          zstart="0"
+          nmodules="SiTrackerEndcapMod_count"
+          dz="SiTrackerEndcapMod_dz"
+          module="Module1" />
+      </layer>
+      <layer id="2">
+        <envelope vis="TrackerLayerVis"
+          rmin="OuterTrackerEndcapNLayer2_rmin"
+          rmax="OuterTrackerEndcapNLayer2_rmax"
+          length="SiTrackerEndcapLayer_thickness"
+          zstart="OuterTrackerEndcapNLayer2_zmin" />
+        <layer_material surface="representing" binning="binPhi,binR" bins0="20*SiTrackerEndcapMod_count" bins1="256"/>
+        <ring
+          r="OuterTrackerEndcapNMod2_rmin + OuterTrackerEndcapNMod2_y/2"
+          zstart="0"
+          nmodules="SiTrackerEndcapMod_count"
+          dz="SiTrackerEndcapMod_dz"
+          module="Module2" />
+      </layer>
+    </detector>
+  </detectors>
+  <documentation>
+    ## GEM trackers (3P, 2N)
+  </documentation>
+  <define>
+    <constant
+      name="GEMEndcapMod_thickness"
+      value="GEMMylar_thickness * 2 + GEMGas_thickness * 5 + GEMDriftRegion_thickness * 1
+           + GEMKapton_thickness * (2 + 3 * GEMAreaFactor)
+           + GEMCuFoil_thickness * (3 * GEMAreaFactor)
+           + GEMCuElectrode_thickness * 2" />
+    <constant name="GEMEndcapMod_dz"                value="GEMEndcapMod_thickness/2 + GEMSpoke_thickness/2" />
+    <constant name="GEMEndcapMod_overlap"           value="0" />
+    <constant name="GEMEndcapMod_angle"             value="360.0*degree / GEMEndcapMod_count * (1 + GEMEndcapMod_overlap)" />
+    <constant name="GEMEndcapLayer_thickness"       value="GEMEndcapMod_thickness + 2 * GEMEndcapMod_dz + 1*um" />
+
+    <comment> Parameters for the "ring" GEMS around the silicon tracker, which are all identical </comment>
+    <constant name="GEMEndcapRingMod_rmin"          value="SiTrackerSupportCyl_rmax + GEMFrameBotEdge_width" />
+    <constant name="GEMEndcapRingMod_rmax"          value="min(min(GEMEndcapPDisk1_zmin, GEMEndcapN_zmin) * CentralTrackingBarrel_tan * 0.995, CentralTrackingRegion_rmax) - GEMFrameTopEdge_width" />
+    <constant name="GEMEndcapRingMod_x1"            value="2 * GEMEndcapRingMod_rmin * tan(GEMEndcapMod_angle/2)" />
+    <constant name="GEMEndcapRingMod_x2"            value="2 * GEMEndcapRingMod_rmax * sin(GEMEndcapMod_angle/2)" />
+    <constant name="GEMEndcapRingMod_y"             value="GEMEndcapRingMod_rmax * cos(GEMEndcapMod_angle/2) - GEMEndcapRingMod_rmin" />
+    <constant name="GEMEndcapRingModBotFrame_rmin"  value="SiTrackerSupportCyl_rmax" />
+    <constant name="GEMEndcapRingModBotFrame_y"     value="GEMFrameBotEdge_width" />
+    <constant name="GEMEndcapRingModBotFrame_rmax"  value="(GEMEndcapRingModBotFrame_rmin + GEMEndcapRingModBotFrame_y)/cos(GEMEndcapMod_angle/2)" />
+    <constant name="GEMEndcapRingModBotFrame_x1"    value="2 * GEMEndcapRingModBotFrame_rmin * tan(GEMEndcapMod_angle/2)" />
+    <constant name="GEMEndcapRingModBotFrame_x2"    value="2 * GEMEndcapRingModBotFrame_rmax * sin(GEMEndcapMod_angle/2)" />
+    <constant name="GEMEndcapRingModTopFrame_rmin"  value="GEMEndcapRingMod_rmin + GEMEndcapRingMod_y" />
+    <constant name="GEMEndcapRingModTopFrame_y"     value="GEMFrameTopEdge_width" />
+    <constant name="GEMEndcapRingModTopFrame_rmax"  value="(GEMEndcapRingModTopFrame_rmin + GEMEndcapRingModTopFrame_y)/cos(GEMEndcapMod_angle/2)" />
+    <constant name="GEMEndcapRingModTopFrame_x1"    value="GEMEndcapRingMod_x2" />
+    <constant name="GEMEndcapRingModTopFrame_x2"    value="2 * GEMEndcapRingModTopFrame_rmax * sin(GEMEndcapMod_angle/2)" />
+    <constant name="GEMEndcapRingModSpoke_length"   value="GEMEndcapRingMod_rmax - GEMEndcapRingModBotFrame_rmax" />
+    <constant name="GEMEndcapRingModSpoke_r"        value="(GEMEndcapRingMod_rmax + GEMEndcapRingModBotFrame_rmax)/2" />
+    <constant name="GEMEndcapRingLayer_rmin"        value="GEMEndcapRingModBotFrame_rmin - 1*um" />
+    <constant name="GEMEndcapRingLayer_rmax"        value="GEMEndcapRingModTopFrame_rmax + 1*um" />
+
+    <comment>
+      z position of the "ring" GEMS, note that some are offset slightly
+      to not overlap in z with the silicon disks (an ACTS limitation).
+    </comment>
+    <constant name="GEMEndcapPMod1_zmin"            value="GEMEndcapPDisk1_zmin + GEMEndcapLayer_thickness" />
+    <constant name="GEMEndcapPMod2_zmin"            value="GEMEndcapPDisk2_zmin - GEMEndcapLayer_thickness" />
+    <constant name="GEMEndcapNMod1_zmin"            value="GEMEndcapN_zmin" />
+    <constant name="GEMEndcapNMod2_zmin"            value="GEMEndcapN_zmin + 1 * GEMEndcapN_offset - GEMEndcapLayer_thickness" />
+    <constant name="GEMEndcapPLayer1_zmin"          value="GEMEndcapPMod1_zmin - GEMEndcapLayer_thickness/2" />
+    <constant name="GEMEndcapPLayer2_zmin"          value="GEMEndcapPMod2_zmin - GEMEndcapLayer_thickness/2" />
+    <constant name="GEMEndcapNLayer1_zmin"          value="GEMEndcapNMod1_zmin - GEMEndcapLayer_thickness/2" />
+    <constant name="GEMEndcapNLayer2_zmin"          value="GEMEndcapNMod2_zmin - GEMEndcapLayer_thickness/2" />
+
+    <comment> Large forward disk (behind the RICH) </comment>
+    <constant name="GEMEndcapPMod3_zmin"            value="GEMEndcapPDisk3_zmin" />
+    <constant name="GEMEndcapPLayer3_zmin"          value="GEMEndcapPMod3_zmin - GEMEndcapLayer_thickness/2" />
+
+    <constant name="GEMEndcapLargeModBotFrame_rmin"  value="GEMEndcapPMod3_zmin * ForwardTrackingRegion_tan" />
+    <constant name="GEMEndcapLargeModBotFrame_y"     value="GEMFrameBotEdge_width" />
+    <constant name="GEMEndcapLargeModBotFrame_rmax"  value="(GEMEndcapLargeModBotFrame_rmin + GEMEndcapLargeModBotFrame_y)/cos(GEMEndcapMod_angle/2)" />
+    <constant name="GEMEndcapLargeModBotFrame_x1"    value="2 * GEMEndcapLargeModBotFrame_rmin * sin(GEMEndcapMod_angle/2)" />
+    <constant name="GEMEndcapLargeModBotFrame_x2"    value="2 * GEMEndcapLargeModBotFrame_rmax * sin(GEMEndcapMod_angle/2)" />
+    <constant name="GEMEndcapLargeMod_rmin"          value="GEMEndcapPMod3_zmin * ForwardTrackingRegion_tan + GEMFrameBotEdge_width" />
+    <comment> Ensure there's always the length of the service gap in space available above the large GEM (top frame can extend into this at the corners). </comment>
+    <constant name="GEMEndcapLargeMod_rmax"          value="min(GEMEndcapPMod3_zmin * CentralTrackingBarrel_tan, Solenoid_rmax-ForwardServiceGap_length)" />
+    <constant name="GEMEndcapLargeMod_x1"            value="2 * GEMEndcapLargeMod_rmin * sin(GEMEndcapMod_angle/2)" />
+    <constant name="GEMEndcapLargeMod_x2"            value="2 * GEMEndcapLargeMod_rmax * sin(GEMEndcapMod_angle/2)" />
+    <constant name="GEMEndcapLargeMod_y"             value="GEMEndcapLargeMod_rmax * cos(GEMEndcapMod_angle/2) - GEMEndcapLargeMod_rmin" />
+    <constant name="GEMEndcapLargeModTopFrame_rmin"  value="GEMEndcapLargeMod_rmin + GEMEndcapLargeMod_y" />
+    <constant name="GEMEndcapLargeModTopFrame_y"     value="GEMFrameTopEdge_width" />
+    <constant name="GEMEndcapLargeModTopFrame_rmax"  value="(GEMEndcapLargeModTopFrame_rmin + GEMEndcapLargeModTopFrame_y)/cos(GEMEndcapMod_angle/2)" />
+    <constant name="GEMEndcapLargeModTopFrame_x1"    value="GEMEndcapLargeMod_x2" />
+    <constant name="GEMEndcapLargeModTopFrame_x2"    value="2 * GEMEndcapLargeModTopFrame_rmax * sin(GEMEndcapMod_angle/2)" />
+    <constant name="GEMEndcapLargeModSpoke_length"   value="GEMEndcapLargeMod_rmax - GEMEndcapLargeModBotFrame_rmax" />
+    <constant name="GEMEndcapLargeModSpoke_r"        value="(GEMEndcapLargeMod_rmax + GEMEndcapLargeModBotFrame_rmax)/2" />
+    <constant name="GEMEndcapLargeLayer_rmin"        value="GEMEndcapLargeModBotFrame_rmin - 1*um" />
+    <constant name="GEMEndcapLargeLayer_rmax"        value="GEMEndcapLargeModTopFrame_rmax + 1*um" />
+
+  </define>
+  <detectors>
+    <detector
+      id="TrackerEndcapP_3_ID"
+      name="GEMEndcapP"
+      type="epic_TrapEndcapTracker"
+      readout="GEMTrackerEndcapHits"
+      vis="TrackerVis"
+      reflect="false">
+      <module name="RingModule" vis="TrackerGEMModuleVis">
+        <trd x1="GEMEndcapRingMod_x1/2" x2="GEMEndcapRingMod_x2/2" z="GEMEndcapRingMod_y/2" />
+        <comment> going from back to front </comment>
+        <module_component name="exit_window"      thickness="GEMMylar_thickness"        material="Mylar" vis="TrackerServiceVis" />
+        <module_component name="exit_region"      thickness="GEMGas_thickness"          material="Ar10CO2"/>
+        <module_component name="readout_cu"       thickness="GEMCuElectrode_thickness"  material="Copper"/>
+        <module_component name="readout_foil"     thickness="GEMKapton_thickness"       material="Kapton"/>
+        <module_component name="induction_region" thickness="GEMGas_thickness"          material="Ar10CO2"/>
+        <module_component name="gem_foil_3_cu"    thickness="GEMCuElectrode_thickness * GEMAreaFactor"  material="Copper"/>
+        <module_component name="gem_foil_3"       thickness="GEMKapton_thickness * GEMAreaFactor"       material="Kapton"/>
+        <module_component name="transfer_region2" thickness="GEMGas_thickness"                          material="Ar10CO2"/>
+        <module_component name="gem_foil_2_cu"    thickness="GEMCuElectrode_thickness * GEMAreaFactor"  material="Copper"/>
+        <module_component name="gem_foil_2"       thickness="GEMKapton_thickness * GEMAreaFactor"       material="Kapton"/>
+        <module_component name="transfer_region1" thickness="GEMGas_thickness"                          material="Ar10CO2"/>
+        <module_component name="gem_foil_1_cu"    thickness="GEMCuElectrode_thickness * GEMAreaFactor"  material="Copper"/>
+        <module_component name="gem_foil_1"       thickness="GEMKapton_thickness * GEMAreaFactor"       material="Kapton"/>
+        <module_component name="drift_region"     thickness="GEMDriftRegion_thickness"                  material="Ar10CO2" sensitive="true"/>
+        <module_component name="cathode_cu"       thickness="GEMCuElectrode_thickness"  material="Copper"/>
+        <module_component name="cathode_foil"     thickness="GEMKapton_thickness"       material="Kapton"/>
+        <module_component name="entrance_region"  thickness="GEMGas_thickness"          material="Ar10CO2"/>
+        <module_component name="entrance_window"  thickness="GEMMylar_thickness"        material="Mylar" vis="TrackerMPGDVis" />
+      </module>
+      <module name="RingBotFrame" vis="TrackerSupportVis">
+        <trd x1="GEMEndcapRingModBotFrame_x1/2" x2="GEMEndcapRingModBotFrame_x2/2" z="GEMEndcapRingModBotFrame_y/2" />
+        <module_component name="frame" thickness="GEMFrame_thickness" material="CarbonFiber" vis="TrackerSupportVis" />
+      </module>
+      <module name="RingTopFrame" vis="TrackerSupportVis">
+        <trd x1="GEMEndcapRingModTopFrame_x1/2" x2="GEMEndcapRingModTopFrame_x2/2" z="GEMEndcapRingModTopFrame_y/2" />
+        <module_component name="frame" thickness="GEMFrame_thickness" material="CarbonFiber" vis="TrackerSupportVis" />
+      </module>
+      <module name="RingSpoke" vis="TrackerSupportVis">
+        <trd x1="GEMSpoke_width/2" x2="GEMSpoke_width/2" z="GEMEndcapRingModSpoke_length/2"/>
+        <module_component thickness="GEMSpoke_thickness" material="Mylar" vis="TrackerSupportVis"/>
+      </module>
+      <layer id="1">
+        <envelope vis="TrackerLayerVis"
+          rmin="GEMEndcapRingLayer_rmin"
+          rmax="GEMEndcapRingLayer_rmax"
+          length="GEMEndcapLayer_thickness"
+          zstart="GEMEndcapPLayer1_zmin" />
+        <layer_material surface="representing" binning="binPhi,binR" bins0="20*GEMEndcapMod_count" bins1="256"/>
+        <ring
+          r="GEMEndcapRingMod_rmin + GEMEndcapRingMod_y/2" zstart="0" dz="GEMEndcapMod_dz"
+          phi0="0*degree" dphi="GEMEndcapMod_angle" nmodules="GEMEndcapMod_count/2"
+          module="RingModule" />
+        <ring
+          r="GEMEndcapRingMod_rmin + GEMEndcapRingMod_y/2" zstart="0" dz="GEMEndcapMod_dz"
+          phi0="GEMEndcapMod_angle" dphi="GEMEndcapMod_angle" nmodules="GEMEndcapMod_count/2"
+          module="RingModule" />
+        <ring
+          r="GEMEndcapRingModBotFrame_rmin + GEMEndcapRingModBotFrame_y/2" zstart="0" dz="GEMEndcapMod_dz"
+          phi0="0*degree" dphi="GEMEndcapMod_angle" nmodules="GEMEndcapMod_count/2"
+          module="RingBotFrame" />
+        <ring
+          r="GEMEndcapRingModBotFrame_rmin + GEMEndcapRingModBotFrame_y/2" zstart="0" dz="GEMEndcapMod_dz"
+          phi0="GEMEndcapMod_angle" dphi="GEMEndcapMod_angle" nmodules="GEMEndcapMod_count/2"
+          module="RingBotFrame" />
+        <ring
+          r="GEMEndcapRingModTopFrame_rmin + GEMEndcapRingModTopFrame_y/2" zstart="0" dz="GEMEndcapMod_dz"
+          phi0="GEMEndcapMod_angle" dphi="GEMEndcapMod_angle" nmodules="GEMEndcapMod_count/2"
+          module="RingTopFrame" />
+        <ring
+          r="GEMEndcapRingModTopFrame_rmin + GEMEndcapRingModTopFrame_y/2" zstart="0" dz="GEMEndcapMod_dz"
+          phi0="0*degree" dphi="GEMEndcapMod_angle" nmodules="GEMEndcapMod_count/2"
+          module="RingTopFrame" />
+        <ring
+          r="GEMEndcapRingModSpoke_r" zstart="0" dz="0"
+          nmodules="GEMEndcapMod_count/2" phi0="3*GEMEndcapMod_angle/2"
+          module="RingSpoke" />
+      </layer>
+      <layer id="2">
+        <envelope vis="TrackerLayerVis"
+          rmin="GEMEndcapRingLayer_rmin"
+          rmax="GEMEndcapRingLayer_rmax"
+          length="GEMEndcapLayer_thickness"
+          zstart="GEMEndcapPLayer2_zmin" />
+        <layer_material surface="representing" binning="binPhi,binR" bins0="20*GEMEndcapMod_count" bins1="256"/>
+        <ring
+          r="GEMEndcapRingMod_rmin + GEMEndcapRingMod_y/2" zstart="0" dz="GEMEndcapMod_dz"
+          phi0="0*degree" dphi="GEMEndcapMod_angle" nmodules="GEMEndcapMod_count/2"
+          module="RingModule" />
+        <ring
+          r="GEMEndcapRingMod_rmin + GEMEndcapRingMod_y/2" zstart="0" dz="GEMEndcapMod_dz"
+          phi0="GEMEndcapMod_angle" dphi="GEMEndcapMod_angle" nmodules="GEMEndcapMod_count/2"
+          module="RingModule" />
+        <ring
+          r="GEMEndcapRingModBotFrame_rmin + GEMEndcapRingModBotFrame_y/2" zstart="0" dz="GEMEndcapMod_dz"
+          phi0="0*degree" dphi="GEMEndcapMod_angle" nmodules="GEMEndcapMod_count/2"
+          module="RingBotFrame" />
+        <ring
+          r="GEMEndcapRingModBotFrame_rmin + GEMEndcapRingModBotFrame_y/2" zstart="0" dz="GEMEndcapMod_dz"
+          phi0="GEMEndcapMod_angle" dphi="GEMEndcapMod_angle" nmodules="GEMEndcapMod_count/2"
+          module="RingBotFrame" />
+        <ring
+          r="GEMEndcapRingModTopFrame_rmin + GEMEndcapRingModTopFrame_y/2" zstart="0" dz="GEMEndcapMod_dz"
+          phi0="GEMEndcapMod_angle" dphi="GEMEndcapMod_angle" nmodules="GEMEndcapMod_count/2"
+          module="RingTopFrame" />
+        <ring
+          r="GEMEndcapRingModTopFrame_rmin + GEMEndcapRingModTopFrame_y/2" zstart="0" dz="GEMEndcapMod_dz"
+          phi0="0*degree" dphi="GEMEndcapMod_angle" nmodules="GEMEndcapMod_count/2"
+          module="RingTopFrame" />
+        <ring
+          r="GEMEndcapRingModSpoke_r" zstart="0" dz="0"
+          nmodules="GEMEndcapMod_count/2" phi0="3*GEMEndcapMod_angle/2"
+          module="RingSpoke" />
+      </layer>
+    </detector>
+    <detector
+      id="TrackerEndcapN_3_ID"
+      name="GEMEndcapN"
+      type="epic_TrapEndcapTracker"
+      readout="GEMTrackerEndcapHits"
+      vis="TrackerVis"
+      reflect="true">
+      <module name="RingModule" vis="TrackerGEMModuleVis">
+        <trd x1="GEMEndcapRingMod_x1/2" x2="GEMEndcapRingMod_x2/2" z="GEMEndcapRingMod_y/2" />
+        <comment> going from back to front </comment>
+        <module_component name="exit_window"      thickness="GEMMylar_thickness"        material="Mylar" vis="TrackerServiceVis" />
+        <module_component name="exit_region"      thickness="GEMGas_thickness"          material="Ar10CO2"/>
+        <module_component name="readout_cu"       thickness="GEMCuElectrode_thickness"  material="Copper"/>
+        <module_component name="readout_foil"     thickness="GEMKapton_thickness"       material="Kapton"/>
+        <module_component name="induction_region" thickness="GEMGas_thickness"          material="Ar10CO2"/>
+        <module_component name="gem_foil_3_cu"    thickness="GEMCuElectrode_thickness * GEMAreaFactor"  material="Copper"/>
+        <module_component name="gem_foil_3"       thickness="GEMKapton_thickness * GEMAreaFactor"       material="Kapton"/>
+        <module_component name="transfer_region2" thickness="GEMGas_thickness"                          material="Ar10CO2"/>
+        <module_component name="gem_foil_2_cu"    thickness="GEMCuElectrode_thickness * GEMAreaFactor"  material="Copper"/>
+        <module_component name="gem_foil_2"       thickness="GEMKapton_thickness * GEMAreaFactor"       material="Kapton"/>
+        <module_component name="transfer_region1" thickness="GEMGas_thickness"                          material="Ar10CO2"/>
+        <module_component name="gem_foil_1_cu"    thickness="GEMCuElectrode_thickness * GEMAreaFactor"  material="Copper"/>
+        <module_component name="gem_foil_1"       thickness="GEMKapton_thickness * GEMAreaFactor"       material="Kapton"/>
+        <module_component name="drift_region"     thickness="GEMDriftRegion_thickness"                  material="Ar10CO2" sensitive="true"/>
+        <module_component name="cathode_cu"       thickness="GEMCuElectrode_thickness"  material="Copper"/>
+        <module_component name="cathode_foil"     thickness="GEMKapton_thickness"       material="Kapton"/>
+        <module_component name="entrance_region"  thickness="GEMGas_thickness"          material="Ar10CO2"/>
+        <module_component name="entrance_window"  thickness="GEMMylar_thickness"        material="Mylar" vis="TrackerMPGDVis" />
+      </module>
+      <module name="RingBotFrame" vis="TrackerSupportVis">
+        <trd x1="GEMEndcapRingModBotFrame_x1/2" x2="GEMEndcapRingModBotFrame_x2/2" z="GEMEndcapRingModBotFrame_y/2" />
+        <module_component name="frame" thickness="GEMFrame_thickness" material="CarbonFiber" vis="TrackerSupportVis" />
+      </module>
+      <module name="RingTopFrame" vis="TrackerSupportVis">
+        <trd x1="GEMEndcapRingModTopFrame_x1/2" x2="GEMEndcapRingModTopFrame_x2/2" z="GEMEndcapRingModTopFrame_y/2" />
+        <module_component name="frame" thickness="GEMFrame_thickness" material="CarbonFiber" vis="TrackerSupportVis" />
+      </module>
+      <module name="RingSpoke" vis="TrackerSupportVis">
+        <trd x1="GEMSpoke_width/2" x2="GEMSpoke_width/2" z="GEMEndcapRingModSpoke_length/2"/>
+        <module_component thickness="GEMSpoke_thickness" material="Mylar" vis="TrackerSupportVis"/>
+      </module>
+      <module name="LargeModule" vis="TrackerGEMModuleVis">
+        <trd x1="GEMEndcapLargeMod_x1/2" x2="GEMEndcapLargeMod_x2/2" z="GEMEndcapLargeMod_y/2" />
+        <comment> going from back to front </comment>
+        <module_component name="exit_window"      thickness="GEMMylar_thickness"        material="Mylar" vis="TrackerServiceVis" />
+        <module_component name="exit_region"      thickness="GEMGas_thickness"          material="Ar10CO2"/>
+        <module_component name="readout_cu"       thickness="GEMCuElectrode_thickness"  material="Copper"/>
+        <module_component name="readout_foil"     thickness="GEMKapton_thickness"       material="Kapton"/>
+        <module_component name="induction_region" thickness="GEMGas_thickness"          material="Ar10CO2"/>
+        <module_component name="gem_foil_3_cu"    thickness="GEMCuElectrode_thickness * GEMAreaFactor"  material="Copper"/>
+        <module_component name="gem_foil_3"       thickness="GEMKapton_thickness * GEMAreaFactor"       material="Kapton"/>
+        <module_component name="transfer_region2" thickness="GEMGas_thickness"                          material="Ar10CO2"/>
+        <module_component name="gem_foil_2_cu"    thickness="GEMCuElectrode_thickness * GEMAreaFactor"  material="Copper"/>
+        <module_component name="gem_foil_2"       thickness="GEMKapton_thickness * GEMAreaFactor"       material="Kapton"/>
+        <module_component name="transfer_region1" thickness="GEMGas_thickness"                          material="Ar10CO2"/>
+        <module_component name="gem_foil_1_cu"    thickness="GEMCuElectrode_thickness * GEMAreaFactor"  material="Copper"/>
+        <module_component name="gem_foil_1"       thickness="GEMKapton_thickness * GEMAreaFactor"       material="Kapton"/>
+        <module_component name="drift_region"     thickness="GEMDriftRegion_thickness"                  material="Ar10CO2" sensitive="true"/>
+        <module_component name="cathode_cu"       thickness="GEMCuElectrode_thickness"  material="Copper"/>
+        <module_component name="cathode_foil"     thickness="GEMKapton_thickness"       material="Kapton"/>
+        <module_component name="entrance_region"  thickness="GEMGas_thickness"          material="Ar10CO2"/>
+        <module_component name="entrance_window"  thickness="GEMMylar_thickness"        material="Mylar" vis="TrackerMPGDVis" />
+      </module>
+      <module name="LargeBotFrame" vis="TrackerSupportVis">
+        <trd x1="GEMEndcapLargeModBotFrame_x1/2" x2="GEMEndcapLargeModBotFrame_x2/2" z="GEMEndcapLargeModBotFrame_y/2" />
+        <module_component name="frame" thickness="GEMFrame_thickness" material="CarbonFiber" vis="TrackerSupportVis" />
+      </module>
+      <module name="LargeTopFrame" vis="TrackerSupportVis">
+        <trd x1="GEMEndcapLargeModTopFrame_x1/2" x2="GEMEndcapLargeModTopFrame_x2/2" z="GEMEndcapLargeModTopFrame_y/2" />
+        <module_component name="frame" thickness="GEMFrame_thickness" material="CarbonFiber" vis="TrackerSupportVis" />
+      </module>
+      <module name="LargeSpoke" vis="TrackerSupportVis">
+        <trd x1="GEMSpoke_width/2" x2="GEMSpoke_width/2" z="GEMEndcapLargeModSpoke_length/2"/>
+        <module_component thickness="GEMSpoke_thickness" material="Mylar" vis="TrackerSupportVis"/>
+      </module>
+      <layer id="1">
+        <envelope vis="TrackerLayerVis"
+          rmin="GEMEndcapRingLayer_rmin"
+          rmax="GEMEndcapRingLayer_rmax"
+          length="GEMEndcapLayer_thickness"
+          zstart="GEMEndcapNLayer1_zmin" />
+        <layer_material surface="representing" binning="binPhi,binR" bins0="20*GEMEndcapMod_count" bins1="256"/>
+        <ring
+          r="GEMEndcapRingMod_rmin + GEMEndcapRingMod_y/2" zstart="0" dz="GEMEndcapMod_dz"
+          phi0="0*degree" dphi="GEMEndcapMod_angle" nmodules="GEMEndcapMod_count/2"
+          module="RingModule" />
+        <ring
+          r="GEMEndcapRingMod_rmin + GEMEndcapRingMod_y/2" zstart="0" dz="GEMEndcapMod_dz"
+          phi0="GEMEndcapMod_angle" dphi="GEMEndcapMod_angle" nmodules="GEMEndcapMod_count/2"
+          module="RingModule" />
+        <ring
+          r="GEMEndcapRingModBotFrame_rmin + GEMEndcapRingModBotFrame_y/2" zstart="0" dz="GEMEndcapMod_dz"
+          phi0="0*degree" dphi="GEMEndcapMod_angle" nmodules="GEMEndcapMod_count/2"
+          module="RingBotFrame" />
+        <ring
+          r="GEMEndcapRingModBotFrame_rmin + GEMEndcapRingModBotFrame_y/2" zstart="0" dz="GEMEndcapMod_dz"
+          phi0="GEMEndcapMod_angle" dphi="GEMEndcapMod_angle" nmodules="GEMEndcapMod_count/2"
+          module="RingBotFrame" />
+        <ring
+          r="GEMEndcapRingModTopFrame_rmin + GEMEndcapRingModTopFrame_y/2" zstart="0" dz="GEMEndcapMod_dz"
+          phi0="GEMEndcapMod_angle" dphi="GEMEndcapMod_angle" nmodules="GEMEndcapMod_count/2"
+          module="RingTopFrame" />
+        <ring
+          r="GEMEndcapRingModTopFrame_rmin + GEMEndcapRingModTopFrame_y/2" zstart="0" dz="GEMEndcapMod_dz"
+          phi0="0*degree" dphi="GEMEndcapMod_angle" nmodules="GEMEndcapMod_count/2"
+          module="RingTopFrame" />
+        <ring
+          r="GEMEndcapRingModSpoke_r" zstart="0" dz="0"
+          nmodules="GEMEndcapMod_count/2" phi0="3*GEMEndcapMod_angle/2"
+          module="RingSpoke" />
+      </layer>
+      <layer id="2">
+        <envelope vis="TrackerLayerVis"
+          rmin="GEMEndcapRingLayer_rmin"
+          rmax="GEMEndcapRingLayer_rmax"
+          length="GEMEndcapLayer_thickness"
+          zstart="GEMEndcapNLayer2_zmin" />
+        <layer_material surface="representing" binning="binPhi,binR" bins0="20*GEMEndcapMod_count" bins1="256"/>
+        <ring
+          r="GEMEndcapRingMod_rmin + GEMEndcapRingMod_y/2" zstart="0" dz="GEMEndcapMod_dz"
+          phi0="0*degree" dphi="GEMEndcapMod_angle" nmodules="GEMEndcapMod_count/2"
+          module="RingModule" />
+        <ring
+          r="GEMEndcapRingMod_rmin + GEMEndcapRingMod_y/2" zstart="0" dz="GEMEndcapMod_dz"
+          phi0="GEMEndcapMod_angle" dphi="GEMEndcapMod_angle" nmodules="GEMEndcapMod_count/2"
+          module="RingModule" />
+        <ring
+          r="GEMEndcapRingModBotFrame_rmin + GEMEndcapRingModBotFrame_y/2" zstart="0" dz="GEMEndcapMod_dz"
+          phi0="0*degree" dphi="GEMEndcapMod_angle" nmodules="GEMEndcapMod_count/2"
+          module="RingBotFrame" />
+        <ring
+          r="GEMEndcapRingModBotFrame_rmin + GEMEndcapRingModBotFrame_y/2" zstart="0" dz="GEMEndcapMod_dz"
+          phi0="GEMEndcapMod_angle" dphi="GEMEndcapMod_angle" nmodules="GEMEndcapMod_count/2"
+          module="RingBotFrame" />
+        <ring
+          r="GEMEndcapRingModTopFrame_rmin + GEMEndcapRingModTopFrame_y/2" zstart="0" dz="GEMEndcapMod_dz"
+          phi0="GEMEndcapMod_angle" dphi="GEMEndcapMod_angle" nmodules="GEMEndcapMod_count/2"
+          module="RingTopFrame" />
+        <ring
+          r="GEMEndcapRingModTopFrame_rmin + GEMEndcapRingModTopFrame_y/2" zstart="0" dz="GEMEndcapMod_dz"
+          phi0="0*degree" dphi="GEMEndcapMod_angle" nmodules="GEMEndcapMod_count/2"
+          module="RingTopFrame" />
+        <ring
+          r="GEMEndcapRingModSpoke_r" zstart="0" dz="0"
+          nmodules="GEMEndcapMod_count/2" phi0="3*GEMEndcapMod_angle/2"
+          module="RingSpoke" />
+      </layer>
+    </detector>
+    <detector
+      id="TrackerEndcapP_4_ID"
+      name="ForwardGEM"
+      type="epic_TrapEndcapTracker"
+      readout="GEMTrackerEndcapHits"
+      vis="TrackerVis"
+      reflect="false">
+      <module name="LargeModule" vis="TrackerGEMModuleVis">
+        <trd x1="GEMEndcapLargeMod_x1/2" x2="GEMEndcapLargeMod_x2/2" z="GEMEndcapLargeMod_y/2" />
+        <comment> going from back to front </comment>
+        <module_component name="exit_window"      thickness="GEMMylar_thickness"        material="Mylar" vis="TrackerServiceVis" />
+        <module_component name="exit_region"      thickness="GEMGas_thickness"          material="Ar10CO2"/>
+        <module_component name="readout_cu"       thickness="GEMCuElectrode_thickness"  material="Copper"/>
+        <module_component name="readout_foil"     thickness="GEMKapton_thickness"       material="Kapton"/>
+        <module_component name="induction_region" thickness="GEMGas_thickness"          material="Ar10CO2"/>
+        <module_component name="gem_foil_3_cu"    thickness="GEMCuElectrode_thickness * GEMAreaFactor"  material="Copper"/>
+        <module_component name="gem_foil_3"       thickness="GEMKapton_thickness * GEMAreaFactor"       material="Kapton"/>
+        <module_component name="transfer_region2" thickness="GEMGas_thickness"                          material="Ar10CO2"/>
+        <module_component name="gem_foil_2_cu"    thickness="GEMCuElectrode_thickness * GEMAreaFactor"  material="Copper"/>
+        <module_component name="gem_foil_2"       thickness="GEMKapton_thickness * GEMAreaFactor"       material="Kapton"/>
+        <module_component name="transfer_region1" thickness="GEMGas_thickness"                          material="Ar10CO2"/>
+        <module_component name="gem_foil_1_cu"    thickness="GEMCuElectrode_thickness * GEMAreaFactor"  material="Copper"/>
+        <module_component name="gem_foil_1"       thickness="GEMKapton_thickness * GEMAreaFactor"       material="Kapton"/>
+        <module_component name="drift_region"     thickness="GEMDriftRegion_thickness"                  material="Ar10CO2" sensitive="true"/>
+        <module_component name="cathode_cu"       thickness="GEMCuElectrode_thickness"  material="Copper"/>
+        <module_component name="cathode_foil"     thickness="GEMKapton_thickness"       material="Kapton"/>
+        <module_component name="entrance_region"  thickness="GEMGas_thickness"          material="Ar10CO2"/>
+        <module_component name="entrance_window"  thickness="GEMMylar_thickness"        material="Mylar" vis="TrackerMPGDVis" />
+      </module>
+      <module name="LargeBotFrame" vis="TrackerSupportVis">
+        <trd x1="GEMEndcapLargeModBotFrame_x1/2" x2="GEMEndcapLargeModBotFrame_x2/2" z="GEMEndcapLargeModBotFrame_y/2" />
+        <module_component name="frame" thickness="GEMFrame_thickness" material="CarbonFiber" vis="TrackerSupportVis" />
+      </module>
+      <module name="LargeTopFrame" vis="TrackerSupportVis">
+        <trd x1="GEMEndcapLargeModTopFrame_x1/2" x2="GEMEndcapLargeModTopFrame_x2/2" z="GEMEndcapLargeModTopFrame_y/2" />
+        <module_component name="frame" thickness="GEMFrame_thickness" material="CarbonFiber" vis="TrackerSupportVis" />
+      </module>
+      <module name="LargeSpoke" vis="TrackerSupportVis">
+        <trd x1="GEMSpoke_width/2" x2="GEMSpoke_width/2" z="GEMEndcapLargeModSpoke_length/2"/>
+        <module_component thickness="GEMSpoke_thickness" material="Mylar" vis="TrackerSupportVis"/>
+      </module>
+      <layer id="1">
+        <envelope vis="TrackerLayerVis"
+          rmin="GEMEndcapLargeLayer_rmin"
+          rmax="GEMEndcapLargeLayer_rmax"
+          length="GEMEndcapLayer_thickness"
+          zstart="GEMEndcapPLayer3_zmin" />
+        <layer_material surface="representing" binning="binPhi,binR" bins0="20*GEMEndcapMod_count" bins1="256"/>
+        <ring
+          r="GEMEndcapLargeMod_rmin + GEMEndcapLargeMod_y/2"
+          zstart="0"
+          nmodules="GEMEndcapMod_count"
+          dz="GEMEndcapMod_dz"
+          module="LargeModule" />
+        <ring
+          r="GEMEndcapLargeModBotFrame_rmin + GEMEndcapLargeModBotFrame_y/2"
+          zstart="0"
+          nmodules="GEMEndcapMod_count"
+          dz="GEMEndcapMod_dz"
+          module="LargeBotFrame" />
+        <ring
+          r="GEMEndcapLargeModTopFrame_rmin + GEMEndcapLargeModTopFrame_y/2"
+          zstart="0"
+          nmodules="GEMEndcapMod_count"
+          dz="GEMEndcapMod_dz"
+          module="LargeTopFrame" />
+        <ring
+          r="GEMEndcapLargeModSpoke_r"
+          zstart="0"
+          nmodules="GEMEndcapMod_count"
+          dz="0"
+          phi0="GEMEndcapMod_angle/2"
+          module="LargeSpoke" />
+      </layer>
+    </detector>
+  </detectors>
+
+
+  <readouts>
+    <readout name="TrackerBarrelHits">
+      <segmentation type="CartesianGridXY" grid_size_x="0.010*mm" grid_size_y="0.010*mm" />
+      <id>system:8,layer:4,module:12,sensor:2,x:32:-14,y:-18</id>
+    </readout>
+    <readout name="TrackerEndcapHits">
+      <segmentation type="CartesianGridXZ" grid_size_x="0.010*mm" grid_size_z="0.010*mm" />
+      <id>system:8,layer:4,module:12,sensor:2,x:32:-16,z:-16</id>
+    </readout>
+    <readout name="MPGDTrackerBarrelHits">
+      <segmentation type="CartesianGridXY" grid_size_x="0.150*mm*sqrt(12)" grid_size_y="0.150*mm*sqrt(12)" />
+      <id>system:8,layer:4,module:12,sensor:2,x:32:-14,y:-18</id>
+    </readout>
+    <readout name="GEMTrackerEndcapHits">
+      <segmentation type="CartesianGridXZ" grid_size_x="0.050*mm*sqrt(12)" grid_size_z="0.250*mm*sqrt(12)" />
+      <id>system:8,layer:4,module:12,sensor:2,x:32:-16,z:-16</id>
+    </readout>
+  </readouts>
+
+</lccdd>

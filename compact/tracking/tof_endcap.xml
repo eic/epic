@@ -1,0 +1,192 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<lccdd>
+  <define>
+    <comment>
+      --------------------------
+      Forward TOF Parameters
+      --------------------------
+    </comment>
+    <comment> Forward TOF position </comment>
+    <constant name="ForwardTOF_length"              value="min(ForwardTOFRegion_length, 2.*cm)"/>
+    <constant name="ForwardTOF_zmin"                value="ForwardTOFRegion_zmin + ForwardTOFRegion_length - ForwardTOF_length - 1*cm"/>
+    <constant name="ForwardTOF_nlayers"             value="1"/>
+    <constant name="ForwardTOFMod_offset"           value="1.2*cm"/>
+
+    <comment> LGAD parameters for the endcap TOFs </comment>
+    <constant name="TOFEndcapSensor_thickness"      value="300*um" />
+    <constant name="TOFEndcapService_thickness"     value="5.00/100*9.37*cm-TOFEndcapSensor_thickness" />
+    <constant name="TOFEndcapMod_count"             value="36" />
+    <constant name="TOFEndcapMod_dz"                value="0" />
+    <constant name="TOFEndcapMod_overlap"           value="0" />
+
+    <constant name="TOFEndcap_cooling_plate_height" value="1*mm" />
+    <constant name="TOFEndcap_diameter_coolingtube" value="5*mm" />
+    <constant name="TOFEndcap_wallthickness_coolingtube" value="1*mm" />
+    <constant name="TOFEndcap_sensor_width"         value="21.2*mm" />
+    <constant name="TOFEndcap_sensor_length"        value="42.0*mm" />
+    <constant name="TOFEndcap_baseplate_length"     value="43.1*mm" />
+    <constant name="TOFEndcap_baseplate_width"      value="56.5*mm/2" />
+
+
+    <comment> Layer definitions around the sensor for the endcap TOFs </comment>
+    <constant name="SS_TP_thickness"        value="0.25*mm" />
+    <constant name="SS_TP_width"            value="TOFEndcap_baseplate_width-0.3*mm" />
+    <constant name="SS_TP_offset"           value="0.3*mm/2" />
+    <constant name="SS_TP_length"           value="TOFEndcap_baseplate_length-0.2*mm" />
+
+    <constant name="SS_ALNBtm_thickness"            value="0.79*mm" />
+    <constant name="SS_ALNBtm_width"                value="TOFEndcap_baseplate_width" />
+    <constant name="SS_ALNBtm_offset"               value="0*mm" />
+    <constant name="SS_ALNBtm_length"               value="TOFEndcap_baseplate_length" />
+
+    <constant name="SS_LairdFilm_thickness"         value="0.08*mm" />
+    <constant name="SS_LairdFilm_width"             value="TOFEndcap_sensor_width+1*mm" />
+    <constant name="SS_LairdFilm_offset"            value="(TOFEndcap_baseplate_width-SS_LairdFilm_width)/2-0.2*mm" />
+    <constant name="SS_LairdFilm_length"            value="TOFEndcap_sensor_length+0.2*mm" />
+
+    <constant name="SS_ROC_thickness"               value="0.25*mm" />
+    <constant name="SS_ROC_width"                   value="TOFEndcap_sensor_width+1*mm" />
+    <constant name="SS_ROC_offset"                  value="(TOFEndcap_baseplate_width-SS_ROC_width)/2-0.2*mm" />
+    <constant name="SS_ROC_length"                  value="TOFEndcap_sensor_length+0.2*mm" />
+
+    <constant name="SS_Solder_thickness"            value="0.03*mm" />
+    <constant name="SS_Solder_width"                value="TOFEndcap_sensor_width-0.2*mm" />
+    <constant name="SS_Solder_offset"               value="(TOFEndcap_baseplate_width-SS_Solder_width)/2-0.1*mm" />
+    <constant name="SS_Solder_length"               value="TOFEndcap_sensor_length-0.2*mm" />
+
+    <constant name="SS_Sensor_thickness"            value="0.3*mm" />
+    <constant name="SS_Sensor_width"                value="TOFEndcap_sensor_width" />
+    <constant name="SS_Sensor_offset"               value="(TOFEndcap_baseplate_width-SS_Sensor_width-0.1*mm)/2" />
+    <constant name="SS_Sensor_length"               value="TOFEndcap_sensor_length" />
+
+    <constant name="SS_Epoxy_thickness"             value="0.08*mm" />
+    <constant name="SS_Epoxy_width"                 value="TOFEndcap_sensor_width" />
+    <constant name="SS_Epoxy_offset"                value="(TOFEndcap_baseplate_width-SS_Epoxy_width-0.1*mm)/2" />
+    <constant name="SS_Epoxy_length"                value="TOFEndcap_sensor_length" />
+
+    <constant name="SS_ALNTop_thickness"            value="0.51*mm" />
+    <constant name="SS_ALNTop_width"                value="TOFEndcap_baseplate_width-4*mm" />
+    <constant name="SS_ALNTop_offset"               value="4.0*mm/2-0.2*mm" />
+    <constant name="SS_ALNTop_length"               value="TOFEndcap_baseplate_length-0.2*mm" />
+
+
+    <comment> Service hybrid layer information. </comment>
+    <constant name="SH_TP_thickness"        value="0.25*mm" />
+    <constant name="SH_TP_width"            value="TOFEndcap_baseplate_width/2-0.2*mm" />
+    <constant name="SH_TP_offset"           value="0.2*mm/2" />
+    <constant name="SH_TP_length"           value="TOFEndcap_baseplate_length" />
+
+    <constant name="SH_HSB_thickness"       value="1.0*mm" />
+    <constant name="SH_HSB_width"           value="TOFEndcap_baseplate_width/2-0.2*mm" />
+    <constant name="SH_HSB_offset"          value="0.2*mm/2" />
+    <constant name="SH_HSB_length"          value="TOFEndcap_baseplate_length" />
+
+    <constant name="SH_ConnSp_thickness"    value="1.50*mm" />
+    <constant name="SH_ConnSp_width"        value="TOFEndcap_baseplate_width/2-0.35*mm" />
+    <constant name="SH_ConnSp_offset"       value="0.35*mm/2" />
+    <constant name="SH_ConnSp_length"       value="TOFEndcap_baseplate_length" />
+
+    <constant name="SH_PB_thickness"        value="3.1*mm" />
+    <constant name="SH_PB_width"            value="TOFEndcap_baseplate_width/2" />
+    <constant name="SH_PB_offset"           value="0.0*mm" />
+    <constant name="SH_PB_length"           value="TOFEndcap_baseplate_length" />
+
+  </define>
+
+  <documentation>
+    ## Forward TOF double-disks
+  </documentation>
+
+  <comment>
+    Actual detector implementation.
+  </comment>
+  <define>
+
+    <constant name="TOFEndcapMod_thickness"     value="TOFEndcapSensor_thickness + TOFEndcapService_thickness" />
+    <constant name="TOFEndcapMod_angle"         value="360.0*degree / TOFEndcapMod_count * (1 + TOFEndcapMod_overlap)" />
+    <comment> 1 um padding to not have layer and module touch (ACTS requirement) </comment>
+    <constant name="TOFEndcapLayer_thickness"   value="TOFEndcapMod_thickness + 2 * TOFEndcapMod_dz + 1 * um" />
+
+    <constant name="ForwardTOFMod_rmin"         value="ForwardTOFRegion_minR+5.0*mm" />
+    <constant name="ForwardTOFMod_rmax"         value="ForwardTOFRegion_maxR" />
+    <constant name="ForwardTOFMod1_zmin"        value="ForwardTOF_zmin" />
+    <constant name="ForwardTOFMod2_zmin"        value="ForwardTOF_zmin + ForwardTOFMod_offset" />
+    <constant name="ForwardTOFLayer_rmin"       value="ForwardTOFMod_rmin - 1*um" />
+    <constant name="ForwardTOFLayer_rmax"       value="ForwardTOFMod_rmax + 1*um" />
+    <constant name="ForwardTOFLayer1_zmin"      value="ForwardTOFMod1_zmin - TOFEndcapLayer_thickness / 2" />
+    <constant name="ForwardTOFLayer2_zmin"      value="ForwardTOFMod2_zmin - TOFEndcapLayer_thickness / 2" />
+
+    <constant name="ForwardTOFMod_x1"           value="2 * ForwardTOFMod_rmin * tan(TOFEndcapMod_angle/2)" />
+    <constant name="ForwardTOFMod_x2"           value="2 * ForwardTOFMod_rmax * sin(TOFEndcapMod_angle/2)" />
+    <constant name="ForwardTOFMod_y"            value="ForwardTOFMod_rmax * cos(TOFEndcapMod_angle/2) - ForwardTOFMod_rmin" />
+  </define>
+
+  <detectors>
+    <detector
+      id="BackwardTOF_ID"
+      name="BackwardTOF"
+      type="epic_CompositeTracker"
+      actsType="endcap"
+      vis="TrackerSubAssemblyVis">
+      <position x="0*cm" y="0*cm" z="-1*um" />
+    </detector>
+    <detector
+      id="ForwardTOF_ID"
+      name="ForwardTOF"
+      actsType="endcap"
+      type="epic_TOFEndcap"
+      readout="TOFEndcapHits"
+      vis="TOFVis"
+      reflect="false">
+      <position x="0*cm" y="0*cm" z="ForwardTOF_zmin" />
+      <module name="ForwardModule" vis="TOFModuleVis">
+        <dimensions
+          rMin="ForwardTOFMod_rmin"
+          rMax="ForwardTOFMod_rmax"
+          xOffset="ForwardTOF_xOffset"
+          det_height="ForwardTOF_det_height"
+          zPos="ForwardTOF_zmin"
+          cooling_plate_height="TOFEndcap_cooling_plate_height"
+          wallthickness_coolingtube="TOFEndcap_wallthickness_coolingtube"
+          diameter_coolingtube="TOFEndcap_diameter_coolingtube"
+          material="Aluminum"/>
+        <sensorparameters
+          width="TOFEndcap_sensor_width"
+          length="TOFEndcap_sensor_length"
+          baseplate_length="TOFEndcap_baseplate_length"
+          baseplate_width="TOFEndcap_baseplate_width"/>
+      </module>
+      <layer id="1">
+        <envelope  vis="TOFLayerVis"
+          rmin="ForwardTOFLayer_rmin"
+          rmax="ForwardTOFLayer_rmax"
+          length="TOFEndcapLayer_thickness"
+          zstart="ForwardTOFLayer1_zmin" />
+      </layer>
+      <layer id="2" name="SensorStack" thickness="SS_thickness" numslices="8"  binning="binPhi,binR" bins0="20" bins1="256">
+          <slice name="ThermalPad"  material="Graphite"         thickness="SS_TP_thickness" width="SS_TP_width" length="SS_TP_length" offset="SS_TP_offset" sensitive="no"/>
+          <slice name="ALNBtm"      material="AluminumNitrate"  thickness="SS_ALNBtm_thickness"     width="SS_ALNBtm_width"     length="SS_ALNBtm_length"     offset="SS_ALNBtm_offset"     sensitive="no"/>
+          <slice name="LairdFilm"   material="Graphite"         thickness="SS_LairdFilm_thickness"  width="SS_LairdFilm_width"  length="SS_LairdFilm_length"  offset="SS_LairdFilm_offset"  sensitive="no"/>
+          <slice name="ROC"         material="Plexiglass"       thickness="SS_ROC_thickness"        width="SS_ROC_width"        length="SS_ROC_length"        offset="SS_ROC_offset"        sensitive="no"/>
+          <slice name="Solder"      material="Tin"              thickness="SS_Solder_thickness"     width="SS_Solder_width"     length="SS_Solder_length"     offset="SS_Solder_offset"     sensitive="no"/>
+          <slice name="Sensor"      material="Silicon"          thickness="SS_Sensor_thickness"     width="SS_Sensor_width"     length="SS_Sensor_length"     offset="SS_Sensor_offset"     sensitive="yes"/>
+          <slice name="Epoxy"       material="Epoxy"            thickness="SS_Epoxy_thickness"      width="SS_Epoxy_width"      length="SS_Epoxy_length"      offset="SS_Epoxy_offset"      sensitive="no"/>
+          <slice name="ALNTop"      material="AluminumNitrate"  thickness="SS_ALNTop_thickness"     width="SS_ALNTop_width"     length="SS_ALNTop_length"     offset="SS_ALNTop_offset"     sensitive="no"/>
+        </layer>
+      <layer id="3" name="ServiceHybridStack" thickness="SH_thickness" numslices="4">
+          <slice name="ThermalPad"      material="Graphite"     thickness="SH_TP_thickness"     width="SH_TP_width"         length="SH_TP_length"         offset="SH_TP_offset"         sensitive="no"/>
+          <slice name="HighSpeedBoard"  material="Polystyrene"  thickness="SH_HSB_thickness"    width="SH_HSB_width"        length="SH_HSB_length"        offset="SH_HSB_offset"        sensitive="no"/>
+          <slice name="ConnectorSpace"  material="Air"          thickness="SH_ConnSp_thickness" width="SH_ConnSp_width"     length="SH_ConnSp_length"     offset="SH_ConnSp_offset"     sensitive="no"/>
+          <slice name="Powerboard"      material="Polystyrene"  thickness="SH_PB_thickness"     width="SH_PB_width"         length="SH_PB_length"         offset="SH_PB_offset"         sensitive="no"/>
+        </layer>
+    </detector>
+  </detectors>
+
+  <readouts>
+    <readout name="TOFEndcapHits">
+      <segmentation type="CartesianGridXZ" grid_size_x="100*um" grid_size_z="100*um" />
+      <id>system:8,layer:2,module:6,sensor:16,x:32:-16,z:-16</id>
+    </readout>
+  </readouts>
+
+</lccdd>

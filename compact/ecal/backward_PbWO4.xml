@@ -1,0 +1,83 @@
+<lccdd>
+  <define>
+    <constant name="EcalEndcapN_CrystalModule_width" value="20.00*mm"/>
+    <constant name="EcalEndcapN_CrystalModule_length" value="200.00*mm"/>
+    <constant name="EcalEndcapN_CrystalModule_carbon_thickness" value="0.20*mm"/>
+    <constant name="EcalEndcapN_CrystalModule_wrap_thickness" value="0.05*mm"/>
+    <constant name="EcalEndcapN_CrystalModule_carbon_length" value="20.00*mm"/>
+
+    <comment>The size of outer frame</comment>
+    <constant name="EcalEndcapN_structure_ring_length" value="EcalEndcapN_length"/>
+    <constant name="EcalEndcapN_structure_ring_max" value="65.00*cm"/>
+    <constant name="EcalEndcapN_structure_ring_min" value="EcalEndcapN_structure_ring_max - 0.9*cm"/>
+
+    <comment>FIXME currently unused</comment>
+    <constant name="EcalEndcapN_IonCutout_dphi" value="30*degree"/>
+
+  </define>
+
+  <detectors>
+
+    <documentation level="10">
+      #### Backwards Endcap EM Calorimeter
+    </documentation>
+    <detector
+        id="ECalEndcapN_ID"
+        name="EcalEndcapN"
+        type="epic_HomogeneousCalorimeter"
+        readout="EcalEndcapNHits">
+      <position x="0" y="0" z="-(EcalEndcapN_zmin + EcalEndcapN_CrystalModule_length/2.)"/>
+      <rotation x="0" y="0." z="0"/>
+      <placements>
+        <disk_12surface
+            rmin="EcalEndcapN_rmin"
+            rmax="EcalEndcapN_structure_ring_min"
+            r12min="EcalEndcapN_structure_ring_min"
+            r12max="EcalEndcapN_structure_ring_max"
+            SFlength="EcalEndcapN_structure_ring_length"
+            CMlength="EcalEndcapN_CrystalModule_length + 2.*EcalEndcapN_CrystalModule_wrap_thickness"
+            envelope="true"
+            vis_struc="RPVis"
+            vis_steel_gap="AnlGray"
+            ring_material="StainlessSteel"
+            sector="1">
+          <module
+            gx="EcalEndcapN_CrystalModule_width + 2.*EcalEndcapN_CrystalModule_carbon_thickness + 2.*EcalEndcapN_CrystalModule_wrap_thickness"
+            gy="EcalEndcapN_CrystalModule_width + 2.*EcalEndcapN_CrystalModule_carbon_thickness + 2.*EcalEndcapN_CrystalModule_wrap_thickness"
+            gz="EcalEndcapN_CrystalModule_length"
+            gdz="EcalEndcapN_CrystalModule_wrap_thickness"
+            gmaterial="Vacuum"
+            vis="BlueVis"/>
+          <crystal
+            sizex="EcalEndcapN_CrystalModule_width"
+            sizey="EcalEndcapN_CrystalModule_width"
+            sizez="EcalEndcapN_CrystalModule_length"
+            material="leadtungsten_optical"
+            cryvis="GreenVis"/>
+          <wrapper
+            carbon_thickness="EcalEndcapN_CrystalModule_carbon_thickness"
+            wrap_thickness="EcalEndcapN_CrystalModule_wrap_thickness"
+            length="EcalEndcapN_CrystalModule_carbon_length"
+            material_carbon="CarbonFiber"
+            material_wrap="VM2000"
+            material_gap="Air"
+            vis_carbon="PurpleVis"
+            vis_wrap="RPVis"
+            vis_gap="AnlGray"/>
+        </disk_12surface>
+      </placements>
+
+    </detector>
+
+  </detectors>
+
+  <readouts>
+    <comment>
+      No segmentation since module is the smallest readout segmentation
+    </comment>
+    <readout name="EcalEndcapNHits">
+      <segmentation type="NoSegmentation" key="sector"/>
+      <id>system:8,sector:4,module:20</id>
+    </readout>
+  </readouts>
+</lccdd>

@@ -1,0 +1,68 @@
+<lccdd>
+  <define>
+    <constant name="HcalBarrelAvailThickness" value="HcalBarrel_thickness"/>
+
+    <documentation>
+      #### Material Thickness
+    </documentation>
+    <constant name="HcalBarrelSteelThickness"        value="2.0 * cm"/>
+    <constant name="HcalBarrelPolystyreneThickness"  value="0.5 * cm"/>
+
+    <documentation>
+      - Hcal Barrel Layers and computed Thickness
+    </documentation>
+    <constant name="HcalBarrelSingleLayerThickness"
+             value="HcalBarrelSteelThickness + HcalBarrelPolystyreneThickness"/>
+    <constant name="HcalBarrelLayer_NRepeat" value="floor(HcalBarrelAvailThickness / HcalBarrelSingleLayerThickness)"/>
+    <constant name="HcalBarrelThickness" value="HcalBarrelLayer_NRepeat * HcalBarrelSingleLayerThickness"/>
+  </define>
+
+
+  <limits>
+  </limits>
+
+  <regions>
+  </regions>
+
+  <display>
+  </display>
+
+  <!-- Define detector -->
+  <detectors>
+    <documentation>
+      ### Barrel Hadronic Calorimeter
+    </documentation>
+    <detector
+      id="HCalBarrel_ID"
+      name="HcalBarrel"
+      type="epic_EcalBarrel"
+      readout="HcalBarrelHits"
+      vis="HcalBarrelVis"
+      calorimeterType="HAD_BARREL"
+      offset="HcalBarrel_offset"
+      gap="0.*cm"
+      material="Steel235">
+      <dimensions
+        numsides="HcalBarrelStavesN"
+        rmin="HcalBarrel_rmin"
+        z="HcalBarrel_length"/>
+      <staves vis="HcalBarrelStaveVis"/>
+      <layer repeat="HcalBarrelLayer_NRepeat" vis="HcalBarrelLayerVis">
+        <slice material="Steel235" thickness="HcalBarrelSteelThickness" vis="HcalAbsorberVis"/>
+        <slice material="Polystyrene" thickness="HcalBarrelPolystyreneThickness" vis="HcalSensorVis" sensitive="yes" limits="cal_limits"/>
+      </layer>
+    </detector>
+  </detectors>
+
+  <!--  Definition of the readout segmentation/definition  -->
+  <readouts>
+    <readout name="HcalBarrelHits">
+      <segmentation type="CartesianGridXY" grid_size_x="100* mm" grid_size_y="100 * mm"/>
+      <id>system:8,barrel:3,module:4,layer:8,slice:5,x:32:-16,y:-16</id>
+    </readout>
+  </readouts>
+
+  <plugins>
+  </plugins>
+
+</lccdd>

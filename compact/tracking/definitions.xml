@@ -1,0 +1,161 @@
+<lccdd>
+
+  <display>
+  </display>
+  <define>
+    <comment> Primary directions for the tracker </comment>
+    <comment> TODO: use actual design angles rather than calculated projective directions </comment>
+    <comment> projective cone at 45 degree </comment>
+    <constant name="TrackerPrimaryAngle"             value="atan(1)" />
+    <constant name="TrackerForwardAngle"             value="2*atan(exp(-1.6472))" />
+    <constant name="TrackerBackwardAngle"            value="2*atan(exp(-1.5166))" />
+
+    <comment> Main parameters for the vertex tracker </comment>
+    <constant name="VertexBarrel_length"             value="270.0*mm"/>
+    <constant name="VertexBarrel_rmin"               value="3.6*cm"/>
+    <constant name="VertexBarrel_rmax"               value="12.6*cm"/>
+
+    <comment> Main parameters for the SiBarrel layer geometry </comment>
+    <constant name="SiBarrel1_rmin"                  value="27.0*cm"/>
+    <constant name="SiBarrel2_rmin"                  value="42.0*cm"/>
+    <constant name="SiBarrel_angle"                  value="TrackerPrimaryAngle"/>
+    <constant name="SiBarrel_dz"                     value="2*cm"/>
+    <comment> barrel length: 2R/tan(angle) - dz </comment>
+
+    <comment> Main parameters for the MPGD layer geometries </comment>
+    <constant name="InnerMPGDBarrel_rmin"            value="55.0*cm"/>
+    <constant name="InnerMPGDBarrel_dz"              value="8.0*cm"/>
+    <comment> barrel length: 2R/tan(angle) - dz </comment>
+
+    <comment> Position in center of space behind DIRC </comment>
+    <constant name="MPGDDIRC_rmin"            value="DIRC_rmin + DIRC_thickness"/>
+    <comment> barrel asymmetryc between forward and backward lengths </comment>
+
+    <comment> Service/Support setup </comment>
+    <constant name="VertexSupportCyl2_thickness"     value="0.3*cm"/>
+    <constant name="VertexSupportCylCF_thickness"    value="100.0*um" />
+    <constant name="TrackerSupportCyl_rmin"          value="44.0*cm"/>
+    <comment> These may belong in definitions.xml </comment>
+    <constant name="InnerTrackerEndcapP_zmax"        value="CentralTrackingRegionP_zmax"/>
+    <constant name="InnerTrackerEndcapN_zmax"        value="CentralTrackingRegionN_zmax"/>
+    <comment> Endcap structures </comment>
+    <comment> The forward outer cone is projective from the starting rmin1 </comment>
+    <constant name="ForwardEndcapSupportCone_rmin1"  value="85*cm" />
+    <constant name="ForwardEndcapSupportCone_zmax"   value="190*cm" />
+    <comment> Discontinuity for the cone to the cylinder to avoid overlaps FIXME </comment>
+    <constant name="BackwardEndcapSupportCyl_rmin"   value="65*cm" />
+    <constant name="BackwardEndcapSupportCyl_zmin"   value="BackwardPIDRegion_zmin + 5*cm" />
+    <constant name="BackwardEndcapSupportCyl_zmax"   value="BackwardPIDRegion_zmax" />
+
+    <comment> Main parameters for the positive silicon disks </comment>
+    <comment> assume the disk are centered along z. The inner radii are larger than designed to account for the beampipe offset. Need to be fixed later </comment>
+    <constant name="Beampipe_bakeout_buffer"        value="5*mm" />
+
+    <constant name="InnerTrackerEndcapP_zmin"        value="25.0*cm" />
+    <constant name="InnerTrackerEndcapP_rmin"        value="Beampipe_rmax + Beampipe_bakeout_buffer" />
+    <constant name="InnerTrackerEndcapP_rmax"        value="24.0*cm" />
+    <constant name="TrackerEndcapPDisk1_zmin"        value="45.0*cm" />
+    <constant name="TrackerEndcapPDisk1_rmin"        value="Beampipe_rmax + Beampipe_bakeout_buffer" />
+    <constant name="TrackerEndcapPDisk1_rmax"        value="TrackerSupportCyl_rmin - 15*mm" />
+    <constant name="TrackerEndcapPDisk2_zmin"        value="70.0*cm" />
+    <constant name="TrackerEndcapPDisk2_rmin"        value="32.86*mm + Beampipe_bakeout_buffer + 0.6*mm" />
+    <constant name="TrackerEndcapPDisk2_rmax"        value="TrackerSupportCyl_rmin * .98" />
+    <constant name="TrackerEndcapPDisk3_zmin"        value="100.0*cm" />
+    <constant name="TrackerEndcapPDisk3_rmin"        value="40.58*mm + Beampipe_bakeout_buffer + 7.85*mm" />
+    <constant name="TrackerEndcapPDisk3_rmax"        value="TrackerSupportCyl_rmin * .98" />
+    <constant name="TrackerEndcapPDisk4_zmin"        value="135.0*cm" />
+    <constant name="TrackerEndcapPDisk4_rmin"        value="49.12*mm + Beampipe_bakeout_buffer + 16.02*mm" />
+    <constant name="TrackerEndcapPDisk4_rmax"        value="TrackerSupportCyl_rmin * .98" />
+
+    <comment> Main parameters for the negative silicon disks (will be reflected, so positive z-values here)
+    </comment>
+    <constant name="InnerTrackerEndcapN_zmin"        value="InnerTrackerEndcapP_zmin" />
+    <constant name="InnerTrackerEndcapN_rmin"        value="InnerTrackerEndcapP_rmin" />
+    <constant name="InnerTrackerEndcapN_rmax"        value="InnerTrackerEndcapP_rmax" />
+    <constant name="TrackerEndcapNDisk1_zmin"        value="TrackerEndcapPDisk1_zmin" />
+    <constant name="TrackerEndcapNDisk1_rmin"        value="TrackerEndcapPDisk1_rmin" />
+    <constant name="TrackerEndcapNDisk1_rmax"        value="TrackerEndcapPDisk1_rmax" />
+    <constant name="TrackerEndcapNDisk2_zmin"        value="65*cm" />
+    <constant name="TrackerEndcapNDisk2_rmin"        value="Beampipe_rmax + Beampipe_bakeout_buffer"   />
+    <constant name="TrackerEndcapNDisk2_rmax"        value="TrackerEndcapPDisk2_rmax" />
+    <constant name="TrackerEndcapNDisk3_zmin"        value="90*cm" />
+    <constant name="TrackerEndcapNDisk3_rmin"        value="34.244*mm + Beampipe_bakeout_buffer + 0.817*mm" />
+    <constant name="TrackerEndcapNDisk3_rmax"        value="TrackerEndcapPDisk3_rmax" />
+    <constant name="TrackerEndcapNDisk4_zmin"        value="115*cm" />
+    <constant name="TrackerEndcapNDisk4_rmin"        value="38.043*mm + Beampipe_bakeout_buffer + 3.310*mm" />
+    <constant name="TrackerEndcapNDisk4_rmax"        value="TrackerEndcapPDisk4_rmax" />
+  </define>
+  <detectors>
+    <detector id="VertexSubAssembly_0_ID"
+      name="VertexBarrelSubAssembly"
+      type="DD4hep_SubdetectorAssembly"
+      vis="TrackerSubAssemblyVis">
+      <composite name="VertexBarrel" />
+    </detector>
+    <detector id="TrackerSubAssembly_0_ID"
+      name="InnerSiTrackerSubAssembly"
+      type="DD4hep_SubdetectorAssembly"
+      vis="TrackerSubAssemblyVis">
+      <composite name="InnerTrackerEndcapN"/>
+      <composite name="InnerTrackerEndcapP"/>
+    </detector>
+    <detector id="TrackerSubAssembly_1_ID"
+      name="MiddleSiTrackerSubAssembly"
+      type="DD4hep_SubdetectorAssembly"
+      vis="TrackerSubAssemblyVis">
+      <composite name="MiddleTrackerEndcapN"/>
+      <composite name="SagittaSiBarrel"/>
+      <composite name="MiddleTrackerEndcapP"/>
+    </detector>
+    <detector id="TrackerSubAssembly_2_ID"
+      name="OuterSiTrackerSubAssembly"
+      type="DD4hep_SubdetectorAssembly"
+      vis="TrackerSubAssemblyVis">
+      <composite name="OuterTrackerEndcapN"/>
+      <composite name="OuterSiBarrel"/>
+      <composite name="OuterTrackerEndcapP"/>
+    </detector>
+    <comment>the following two could probably be merged, but we are keeping space for the TOF to be integrated (hence the skip over one ID number) </comment>
+    <detector id="TrackerSubAssembly_3_ID"
+      name="InnerMPGDSubAssembly"
+      type="DD4hep_SubdetectorAssembly"
+      vis="TrackerSubAssemblyVis">
+      <composite name="InnerMPGDBarrel"/>
+    </detector>
+    <detector id="TrackerSubAssembly_4_ID"
+      name="BarrelTOFSubAssembly"
+      type="DD4hep_SubdetectorAssembly"
+      vis="TrackerSubAssemblyVis">
+      <composite name="BarrelTOF"/>
+    </detector>
+    <comment>
+      <comment>FIXME update the OuterMPGDBarrel to use the MPGDDIRC detector</comment>
+      <detector id="TrackerSubAssembly_5_ID"
+        name="OuterMPGDSubSubAssembly"
+        type="DD4hep_SubdetectorAssembly"
+        vis="TrackerSubAssemblyVis">
+        <composite name="OuterMPGDBarrel"/>
+      </detector>
+    </comment>
+    <detector id="TrackerSubAssembly_6_ID"
+      name="EndcapTOFSubSubAssembly"
+      type="DD4hep_SubdetectorAssembly"
+      vis="TrackerSubAssemblyVis">
+      <composite name="ForwardTOF"/>
+      <composite name="BackwardTOF"/>
+    </detector>
+  </detectors>
+
+  <documentation>
+      ### Material map for ACTS
+      https://eicweb.phy.anl.gov/EIC/detectors/athena/-/issues/127
+  </documentation>
+  <plugins>
+    <plugin name="epic_FileLoader">
+      <arg value="cache:$DETECTOR_PATH:/opt/detector"/>
+      <arg value="file:calibrations/materials-map.cbor"/>
+      <arg value="url:https://eicweb.phy.anl.gov/EIC/detectors/athena/uploads/77bd16bef5d811f31256279a3601c9d5/material-maps.cbor"/>
+    </plugin>
+  </plugins>
+
+</lccdd>

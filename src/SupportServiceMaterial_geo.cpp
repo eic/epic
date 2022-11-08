@@ -41,7 +41,6 @@ namespace {
       const double thickness = getAttrOrDefault(x_child, _U(thickness), x_support.thickness());
       const double length    = getAttrOrDefault(x_child, _U(length), x_support.length());
       const double rmin      = getAttrOrDefault(x_child, _U(rmin), x_support.rmin()) + offset;
-      // std::cout << rmin << " " << length << std::endl;
       solid = Tube(rmin, rmin + thickness, length / 2);
     }
     // A disk is a cylinder, constructed differently
@@ -51,7 +50,6 @@ namespace {
       const double rmax      = getAttrOrDefault(x_child, _U(rmax), x_support.rmax());
       pos3D                  = pos3D + Position(0, 0, -x_support.thickness()/2 + thickness / 2 + offset);
       solid                  = Tube(rmin, rmax, thickness / 2);
-      std::cout << pos3D << std::endl;
     } else if (type == "Cone") {
       const double base_rmin1     = getAttrOrDefault(x_child, _U(rmin1), x_support.rmin1());
       const double base_rmin2     = getAttrOrDefault(x_child, _U(rmin2), x_support.rmin2());
@@ -134,7 +132,4 @@ static Ref_t create_SupportServiceMaterial(Detector& description, xml_h e, [[may
 }
 
 // clang-format off
-#ifdef EPIC_ECCE_LEGACY_COMPAT
-DECLARE_DETELEMENT(ecce_SupportServiceMaterial, create_SupportServiceMaterial)
-#endif
 DECLARE_DETELEMENT(epic_SupportServiceMaterial, create_SupportServiceMaterial)

@@ -1,0 +1,399 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<lccdd>
+  <comment>
+    Main parameters. June 2022 setup with symmetric disk locations.
+    Here to comply with the ACTS translation onion structure we have:
+      - the first disk in the inner tracking assembly,
+      - the second silicon disk in the middle silicon tracking assembly
+      - the and the following 3 disks in the outer silicon tracking assembly
+    in their own tracking assembly.
+  </comment>
+
+  <define>
+
+    <comment> Main tracker disk setup </comment>
+
+    <comment> Support/service thicknesses from ATHENA disks for now </comment>
+    <constant name="SiTrackerEndcapAl_thickness"    value="0.15*mm"/>
+    <constant name="SiTrackerEndcapCF_thickness"    value="0.12*mm"/>
+    <constant name="SiTrackerSensor_thickness"      value="40*um"/>
+
+    <comment> Currently parametrized as 36 pie-shaped modules to approximate disk </comment>
+    <constant name="SiTrackerEndcapMod_count"       value="36"/>
+    <constant name="SiTrackerEndcapMod_dz"          value="0" />
+    <constant name="SiTrackerEndcapMod_overlap"     value="0"/>
+
+    <comment> Global Si endcap variables </comment>
+    <constant name="SiTrackerEndcapMod_thickness"   value="SiTrackerEndcapCF_thickness + SiTrackerEndcapAl_thickness + SiTrackerSensor_thickness" />
+    <constant name="SiTrackerEndcapMod_angle"       value="360.0*degree / SiTrackerEndcapMod_count * (1 + SiTrackerEndcapMod_overlap)" />
+    <constant name="SiTrackerEndcapLayer_thickness" value="SiTrackerEndcapMod_thickness + 2 * SiTrackerEndcapMod_dz + 1*um" />
+
+  </define>
+
+  <comment>
+    Inner silicon tracker disks
+  </comment>
+  <define>
+    <constant name="InnerTrackerEndcapPMod1_zmin"   value="InnerTrackerEndcapP_zmin" />
+    <constant name="InnerTrackerEndcapPMod1_rmin"   value="InnerTrackerEndcapP_rmin" />
+    <constant name="InnerTrackerEndcapPMod1_rmax"   value="InnerTrackerEndcapP_rmax" />
+    <constant name="InnerTrackerEndcapPMod1_x1"     value="2 * InnerTrackerEndcapPMod1_rmin * tan(SiTrackerEndcapMod_angle/2)" />
+    <constant name="InnerTrackerEndcapPMod1_x2"     value="2 * InnerTrackerEndcapPMod1_rmax * sin(SiTrackerEndcapMod_angle/2)" />
+    <constant name="InnerTrackerEndcapPMod1_y"      value="InnerTrackerEndcapPMod1_rmax * cos(SiTrackerEndcapMod_angle/2) - InnerTrackerEndcapPMod1_rmin" />
+    <constant name="InnerTrackerEndcapPLayer1_rmin" value="InnerTrackerEndcapPMod1_rmin - 1*um" />
+    <constant name="InnerTrackerEndcapPLayer1_rmax" value="InnerTrackerEndcapPMod1_rmax + 1*um" />
+    <constant name="InnerTrackerEndcapPLayer1_zmin" value="InnerTrackerEndcapPMod1_zmin - SiTrackerEndcapLayer_thickness/2" />
+
+    <constant name="InnerTrackerEndcapNMod1_zmin"   value="InnerTrackerEndcapN_zmin" />
+    <constant name="InnerTrackerEndcapNMod1_rmin"   value="InnerTrackerEndcapN_rmin" />
+    <constant name="InnerTrackerEndcapNMod1_rmax"   value="InnerTrackerEndcapN_rmax" />
+    <constant name="InnerTrackerEndcapNMod1_x1"     value="2 * InnerTrackerEndcapNMod1_rmin * tan(SiTrackerEndcapMod_angle/2)" />
+    <constant name="InnerTrackerEndcapNMod1_x2"     value="2 * InnerTrackerEndcapNMod1_rmax * sin(SiTrackerEndcapMod_angle/2)" />
+    <constant name="InnerTrackerEndcapNMod1_y"      value="InnerTrackerEndcapNMod1_rmax * cos(SiTrackerEndcapMod_angle/2) - InnerTrackerEndcapNMod1_rmin" />
+    <constant name="InnerTrackerEndcapNLayer1_rmin" value="InnerTrackerEndcapNMod1_rmin - 1*um" />
+    <constant name="InnerTrackerEndcapNLayer1_rmax" value="InnerTrackerEndcapNMod1_rmax + 1*um" />
+    <constant name="InnerTrackerEndcapNLayer1_zmin" value="InnerTrackerEndcapNMod1_zmin - SiTrackerEndcapLayer_thickness/2" />
+  </define>
+  <detectors>
+    <detector
+      id="TrackerEndcapP_0_ID"
+      name="InnerTrackerEndcapP"
+      type="epic_TrapEndcapTracker"
+      readout="TrackerEndcapHits"
+      vis="TrackerVis"
+      reflect="false">
+      <module name="Module1" vis="TrackerModuleVis">
+        <trd x1="InnerTrackerEndcapPMod1_x1/2" x2="InnerTrackerEndcapPMod1_x2/2" z="InnerTrackerEndcapPMod1_y/2" />
+        <module_component thickness="SiTrackerEndcapCF_thickness" material="CarbonFiber" vis="TrackerSupportVis" />
+        <module_component thickness="SiTrackerEndcapAl_thickness" material="Aluminum" vis="TrackerServiceVis" />
+        <module_component thickness="SiTrackerSensor_thickness" material="Silicon" sensitive="true" vis="TrackerLayerVis" />
+      </module>
+      <layer id="1">
+        <envelope vis="TrackerLayerVis"
+          rmin="InnerTrackerEndcapPLayer1_rmin"
+          rmax="InnerTrackerEndcapPLayer1_rmax"
+          length="SiTrackerEndcapLayer_thickness"
+          zstart="InnerTrackerEndcapPLayer1_zmin" />
+        <layer_material surface="inner" binning="binPhi,binR" bins0="20*SiTrackerEndcapMod_count" bins1="256"/>
+        <ring
+          r="InnerTrackerEndcapPMod1_rmin + InnerTrackerEndcapPMod1_y/2"
+          zstart="0"
+          nmodules="SiTrackerEndcapMod_count"
+          dz="SiTrackerEndcapMod_dz"
+          module="Module1" />
+      </layer>
+    </detector>
+    <detector
+      id="TrackerEndcapN_0_ID"
+      name="InnerTrackerEndcapN"
+      type="epic_TrapEndcapTracker"
+      readout="TrackerEndcapHits"
+      vis="TrackerVis"
+      reflect="true">
+      <module name="Module1" vis="TrackerModuleVis">
+        <trd x1="InnerTrackerEndcapNMod1_x1/2" x2="InnerTrackerEndcapNMod1_x2/2" z="InnerTrackerEndcapNMod1_y/2" />
+        <module_component thickness="SiTrackerEndcapCF_thickness" material="CarbonFiber" vis="TrackerSupportVis" />
+        <module_component thickness="SiTrackerEndcapAl_thickness" material="Aluminum" vis="TrackerServiceVis" />
+        <module_component thickness="SiTrackerSensor_thickness" material="Silicon" sensitive="true" vis="TrackerLayerVis" />
+      </module>
+      <layer id="1">
+        <envelope vis="TrackerLayerVis"
+          rmin="InnerTrackerEndcapNLayer1_rmin"
+          rmax="InnerTrackerEndcapNLayer1_rmax"
+          length="SiTrackerEndcapLayer_thickness"
+          zstart="InnerTrackerEndcapNLayer1_zmin" />
+        <layer_material surface="inner" binning="binPhi,binR" bins0="20*SiTrackerEndcapMod_count" bins1="256"/>
+        <ring
+          r="InnerTrackerEndcapNMod1_rmin + InnerTrackerEndcapNMod1_y/2"
+          zstart="0"
+          nmodules="SiTrackerEndcapMod_count"
+          dz="SiTrackerEndcapMod_dz"
+          module="Module1" />
+      </layer>
+    </detector>
+  </detectors>
+
+  <comment>
+    ## Main endcap disks, split into a middle and outer part
+       to comply with the ACTS translation
+  </comment>
+  <define>
+    <constant name="TrackerEndcapPMod1_zmin"   value="TrackerEndcapPDisk1_zmin" />
+    <constant name="TrackerEndcapPMod1_rmin"   value="TrackerEndcapPDisk1_rmin" />
+    <constant name="TrackerEndcapPMod1_rmax"   value="TrackerEndcapPDisk1_rmax" />
+    <constant name="TrackerEndcapPMod1_x1"     value="2 * TrackerEndcapPMod1_rmin * tan(SiTrackerEndcapMod_angle/2)" />
+    <constant name="TrackerEndcapPMod1_x2"     value="2 * TrackerEndcapPMod1_rmax * sin(SiTrackerEndcapMod_angle/2)" />
+    <constant name="TrackerEndcapPMod1_y"      value="TrackerEndcapPMod1_rmax * cos(SiTrackerEndcapMod_angle/2) - TrackerEndcapPMod1_rmin" />
+    <constant name="TrackerEndcapPLayer1_rmin" value="TrackerEndcapPMod1_rmin - 1*um" />
+    <constant name="TrackerEndcapPLayer1_rmax" value="TrackerEndcapPMod1_rmax + 1*um" />
+    <constant name="TrackerEndcapPLayer1_zmin" value="TrackerEndcapPMod1_zmin - SiTrackerEndcapLayer_thickness/2" />
+    <constant name="TrackerEndcapPMod2_zmin"   value="TrackerEndcapPDisk2_zmin" />
+    <constant name="TrackerEndcapPMod2_rmin"   value="TrackerEndcapPDisk2_rmin" />
+    <constant name="TrackerEndcapPMod2_rmax"   value="TrackerEndcapPDisk2_rmax" />
+    <constant name="TrackerEndcapPMod2_x1"     value="2 * TrackerEndcapPMod2_rmin * tan(SiTrackerEndcapMod_angle/2)" />
+    <constant name="TrackerEndcapPMod2_x2"     value="2 * TrackerEndcapPMod2_rmax * sin(SiTrackerEndcapMod_angle/2)" />
+    <constant name="TrackerEndcapPMod2_y"      value="TrackerEndcapPMod2_rmax * cos(SiTrackerEndcapMod_angle/2) - TrackerEndcapPMod2_rmin" />
+    <constant name="TrackerEndcapPLayer2_rmin" value="TrackerEndcapPMod2_rmin - 1*um" />
+    <constant name="TrackerEndcapPLayer2_rmax" value="TrackerEndcapPMod2_rmax + 1*um" />
+    <constant name="TrackerEndcapPLayer2_zmin" value="TrackerEndcapPMod2_zmin - SiTrackerEndcapLayer_thickness/2" />
+    <constant name="TrackerEndcapPMod3_zmin"   value="TrackerEndcapPDisk3_zmin" />
+    <constant name="TrackerEndcapPMod3_rmin"   value="TrackerEndcapPDisk3_rmin" />
+    <constant name="TrackerEndcapPMod3_rmax"   value="TrackerEndcapPDisk3_rmax" />
+    <constant name="TrackerEndcapPMod3_x1"     value="2 * TrackerEndcapPMod3_rmin * tan(SiTrackerEndcapMod_angle/2)" />
+    <constant name="TrackerEndcapPMod3_x2"     value="2 * TrackerEndcapPMod3_rmax * sin(SiTrackerEndcapMod_angle/2)" />
+    <constant name="TrackerEndcapPMod3_y"      value="TrackerEndcapPMod3_rmax * cos(SiTrackerEndcapMod_angle/2) - TrackerEndcapPMod3_rmin" />
+    <constant name="TrackerEndcapPLayer3_rmin" value="TrackerEndcapPMod3_rmin - 1*um" />
+    <constant name="TrackerEndcapPLayer3_rmax" value="TrackerEndcapPMod3_rmax + 1*um" />
+    <constant name="TrackerEndcapPLayer3_zmin" value="TrackerEndcapPMod3_zmin - SiTrackerEndcapLayer_thickness/2" />
+    <constant name="TrackerEndcapPMod4_zmin"   value="TrackerEndcapPDisk4_zmin" />
+    <constant name="TrackerEndcapPMod4_rmin"   value="TrackerEndcapPDisk4_rmin" />
+    <constant name="TrackerEndcapPMod4_rmax"   value="TrackerEndcapPDisk4_rmax" />
+    <constant name="TrackerEndcapPMod4_x1"     value="2 * TrackerEndcapPMod4_rmin * tan(SiTrackerEndcapMod_angle/2)" />
+    <constant name="TrackerEndcapPMod4_x2"     value="2 * TrackerEndcapPMod4_rmax * sin(SiTrackerEndcapMod_angle/2)" />
+    <constant name="TrackerEndcapPMod4_y"      value="TrackerEndcapPMod4_rmax * cos(SiTrackerEndcapMod_angle/2) - TrackerEndcapPMod4_rmin" />
+    <constant name="TrackerEndcapPLayer4_rmin" value="TrackerEndcapPMod4_rmin - 1*um" />
+    <constant name="TrackerEndcapPLayer4_rmax" value="TrackerEndcapPMod4_rmax + 1*um" />
+    <constant name="TrackerEndcapPLayer4_zmin" value="TrackerEndcapPMod4_zmin - SiTrackerEndcapLayer_thickness/2" />
+
+    <constant name="TrackerEndcapNMod1_zmin"   value="TrackerEndcapNDisk1_zmin" />
+    <constant name="TrackerEndcapNMod1_rmin"   value="TrackerEndcapNDisk1_rmin" />
+    <constant name="TrackerEndcapNMod1_rmax"   value="TrackerEndcapNDisk1_rmax" />
+    <constant name="TrackerEndcapNMod1_x1"     value="2 * TrackerEndcapNMod1_rmin * tan(SiTrackerEndcapMod_angle/2)" />
+    <constant name="TrackerEndcapNMod1_x2"     value="2 * TrackerEndcapNMod1_rmax * sin(SiTrackerEndcapMod_angle/2)" />
+    <constant name="TrackerEndcapNMod1_y"      value="TrackerEndcapNMod1_rmax * cos(SiTrackerEndcapMod_angle/2) - TrackerEndcapNMod1_rmin" />
+    <constant name="TrackerEndcapNLayer1_rmin" value="TrackerEndcapNMod1_rmin - 1*um" />
+    <constant name="TrackerEndcapNLayer1_rmax" value="TrackerEndcapNMod1_rmax + 1*um" />
+    <constant name="TrackerEndcapNLayer1_zmin" value="TrackerEndcapNMod1_zmin - SiTrackerEndcapLayer_thickness/2" />
+    <constant name="TrackerEndcapNMod2_zmin"   value="TrackerEndcapNDisk2_zmin" />
+    <constant name="TrackerEndcapNMod2_rmin"   value="TrackerEndcapNDisk2_rmin" />
+    <constant name="TrackerEndcapNMod2_rmax"   value="TrackerEndcapNDisk2_rmax" />
+    <constant name="TrackerEndcapNMod2_x1"     value="2 * TrackerEndcapNMod2_rmin * tan(SiTrackerEndcapMod_angle/2)" />
+    <constant name="TrackerEndcapNMod2_x2"     value="2 * TrackerEndcapNMod2_rmax * sin(SiTrackerEndcapMod_angle/2)" />
+    <constant name="TrackerEndcapNMod2_y"      value="TrackerEndcapNMod2_rmax * cos(SiTrackerEndcapMod_angle/2) - TrackerEndcapNMod2_rmin" />
+    <constant name="TrackerEndcapNLayer2_rmin" value="TrackerEndcapNMod2_rmin - 1*um" />
+    <constant name="TrackerEndcapNLayer2_rmax" value="TrackerEndcapNMod2_rmax + 1*um" />
+    <constant name="TrackerEndcapNLayer2_zmin" value="TrackerEndcapNMod2_zmin - SiTrackerEndcapLayer_thickness/2" />
+    <constant name="TrackerEndcapNMod3_zmin"   value="TrackerEndcapNDisk3_zmin" />
+    <constant name="TrackerEndcapNMod3_rmin"   value="TrackerEndcapNDisk3_rmin" />
+    <constant name="TrackerEndcapNMod3_rmax"   value="TrackerEndcapNDisk3_rmax" />
+    <constant name="TrackerEndcapNMod3_x1"     value="2 * TrackerEndcapNMod3_rmin * tan(SiTrackerEndcapMod_angle/2)" />
+    <constant name="TrackerEndcapNMod3_x2"     value="2 * TrackerEndcapNMod3_rmax * sin(SiTrackerEndcapMod_angle/2)" />
+    <constant name="TrackerEndcapNMod3_y"      value="TrackerEndcapNMod3_rmax * cos(SiTrackerEndcapMod_angle/2) - TrackerEndcapNMod3_rmin" />
+    <constant name="TrackerEndcapNLayer3_rmin" value="TrackerEndcapNMod3_rmin - 1*um" />
+    <constant name="TrackerEndcapNLayer3_rmax" value="TrackerEndcapNMod3_rmax + 1*um" />
+    <constant name="TrackerEndcapNLayer3_zmin" value="TrackerEndcapNMod3_zmin - SiTrackerEndcapLayer_thickness/2" />
+    <commnet> symmetric N and P disks (5 each)</commnet>
+    <constant name="TrackerEndcapNMod4_zmin"   value="TrackerEndcapNDisk4_zmin" />
+    <constant name="TrackerEndcapNMod4_rmin"   value="TrackerEndcapNDisk4_rmin" />
+    <constant name="TrackerEndcapNMod4_rmax"   value="TrackerEndcapNDisk4_rmax" />
+    <constant name="TrackerEndcapNMod4_x1"     value="2 * TrackerEndcapNMod4_rmin * tan(SiTrackerEndcapMod_angle/2)" />
+    <constant name="TrackerEndcapNMod4_x2"     value="2 * TrackerEndcapNMod4_rmax * sin(SiTrackerEndcapMod_angle/2)" />
+    <constant name="TrackerEndcapNMod4_y"      value="TrackerEndcapNMod4_rmax * cos(SiTrackerEndcapMod_angle/2) - TrackerEndcapNMod4_rmin" />
+    <constant name="TrackerEndcapNLayer4_rmin" value="TrackerEndcapNMod4_rmin - 1*um" />
+    <constant name="TrackerEndcapNLayer4_rmax" value="TrackerEndcapNMod4_rmax + 1*um" />
+    <constant name="TrackerEndcapNLayer4_zmin" value="TrackerEndcapNMod4_zmin - SiTrackerEndcapLayer_thickness/2" />
+
+  </define>
+  <detectors>
+    <detector
+      id="TrackerEndcapP_1_ID"
+      name="MiddleTrackerEndcapP"
+      type="epic_TrapEndcapTracker"
+      readout="TrackerEndcapHits"
+      vis="TrackerVis"
+      reflect="false">
+      <module name="Module1" vis="TrackerModuleVis">
+        <trd x1="TrackerEndcapPMod1_x1/2" x2="TrackerEndcapPMod1_x2/2" z="TrackerEndcapPMod1_y/2" />
+        <module_component thickness="SiTrackerEndcapCF_thickness" material="CarbonFiber" vis="TrackerSupportVis" />
+        <module_component thickness="SiTrackerEndcapAl_thickness" material="Aluminum" vis="TrackerServiceVis" />
+        <module_component thickness="SiTrackerSensor_thickness" material="Silicon" sensitive="true" vis="TrackerLayerVis" />
+      </module>
+      <layer id="1">
+        <envelope vis="TrackerLayerVis"
+          rmin="TrackerEndcapPLayer1_rmin"
+          rmax="TrackerEndcapPLayer1_rmax"
+          length="SiTrackerEndcapLayer_thickness"
+          zstart="TrackerEndcapPLayer1_zmin" />
+        <layer_material surface="inner" binning="binPhi,binR" bins0="20*SiTrackerEndcapMod_count" bins1="256"/>
+        <ring
+          r="TrackerEndcapPMod1_rmin + TrackerEndcapPMod1_y/2"
+          zstart="0"
+          nmodules="SiTrackerEndcapMod_count"
+          dz="SiTrackerEndcapMod_dz"
+          module="Module1" />
+      </layer>
+    </detector>
+    <detector
+      id="TrackerEndcapN_1_ID"
+      name="MiddleTrackerEndcapN"
+      type="epic_TrapEndcapTracker"
+      readout="TrackerEndcapHits"
+      vis="TrackerVis"
+      reflect="true">
+      <module name="Module1" vis="TrackerModuleVis">
+        <trd x1="TrackerEndcapNMod1_x1/2" x2="TrackerEndcapNMod1_x2/2" z="TrackerEndcapNMod1_y/2" />
+        <module_component thickness="SiTrackerEndcapCF_thickness" material="CarbonFiber" vis="TrackerSupportVis" />
+        <module_component thickness="SiTrackerEndcapAl_thickness" material="Aluminum" vis="TrackerServiceVis" />
+        <module_component thickness="SiTrackerSensor_thickness" material="Silicon" sensitive="true" vis="TrackerLayerVis" />
+      </module>
+      <layer id="1">
+        <envelope vis="TrackerLayerVis"
+          rmin="TrackerEndcapNLayer1_rmin"
+          rmax="TrackerEndcapNLayer1_rmax"
+          length="SiTrackerEndcapLayer_thickness"
+          zstart="TrackerEndcapNLayer1_zmin" />
+        <layer_material surface="inner" binning="binPhi,binR" bins0="20*SiTrackerEndcapMod_count" bins1="256"/>
+        <ring
+          r="TrackerEndcapNMod1_rmin + TrackerEndcapNMod1_y/2"
+          zstart="0"
+          nmodules="SiTrackerEndcapMod_count"
+          dz="SiTrackerEndcapMod_dz"
+          module="Module1" />
+      </layer>
+    </detector>
+    <detector
+      id="TrackerEndcapP_2_ID"
+      name="OuterTrackerEndcapP"
+      type="epic_TrapEndcapTracker"
+      readout="TrackerEndcapHits"
+      vis="TrackerVis"
+      reflect="false">
+      <module name="Module2" vis="TrackerModuleVis">
+        <trd x1="TrackerEndcapPMod2_x1/2" x2="TrackerEndcapPMod2_x2/2" z="TrackerEndcapPMod2_y/2" />
+        <module_component thickness="SiTrackerEndcapCF_thickness" material="CarbonFiber" vis="TrackerSupportVis" />
+        <module_component thickness="SiTrackerEndcapAl_thickness" material="Aluminum" vis="TrackerServiceVis" />
+        <module_component thickness="SiTrackerSensor_thickness" material="Silicon" sensitive="true" vis="TrackerLayerVis" />
+      </module>
+      <module name="Module3" vis="TrackerModuleVis">
+        <trd x1="TrackerEndcapPMod3_x1/2" x2="TrackerEndcapPMod3_x2/2" z="TrackerEndcapPMod3_y/2" />
+        <module_component thickness="SiTrackerEndcapCF_thickness" material="CarbonFiber" vis="TrackerSupportVis" />
+        <module_component thickness="SiTrackerEndcapAl_thickness" material="Aluminum" vis="TrackerServiceVis" />
+        <module_component thickness="SiTrackerSensor_thickness" material="Silicon" sensitive="true" vis="TrackerLayerVis" />
+      </module>
+      <module name="Module4" vis="TrackerModuleVis">
+        <trd x1="TrackerEndcapPMod4_x1/2" x2="TrackerEndcapPMod4_x2/2" z="TrackerEndcapPMod4_y/2" />
+        <module_component thickness="SiTrackerEndcapCF_thickness" material="CarbonFiber" vis="TrackerSupportVis" />
+        <module_component thickness="SiTrackerEndcapAl_thickness" material="Aluminum" vis="TrackerServiceVis" />
+        <module_component thickness="SiTrackerSensor_thickness" material="Silicon" sensitive="true" vis="TrackerLayerVis" />
+      </module>
+      <layer id="2">
+        <envelope vis="TrackerLayerVis"
+          rmin="TrackerEndcapPLayer2_rmin"
+          rmax="TrackerEndcapPLayer2_rmax"
+          length="SiTrackerEndcapLayer_thickness"
+          zstart="TrackerEndcapPLayer2_zmin" />
+        <layer_material surface="inner" binning="binPhi,binR" bins0="12" bins1="20"/>
+        <ring
+          r="TrackerEndcapPMod2_rmin + TrackerEndcapPMod2_y/2"
+          zstart="0"
+          nmodules="SiTrackerEndcapMod_count"
+          dz="SiTrackerEndcapMod_dz"
+          module="Module2" />
+      </layer>
+      <layer id="3">
+        <envelope vis="TrackerLayerVis"
+          rmin="TrackerEndcapPLayer3_rmin"
+          rmax="TrackerEndcapPLayer3_rmax"
+          length="SiTrackerEndcapLayer_thickness"
+          zstart="TrackerEndcapPLayer3_zmin" />
+        <layer_material surface="inner" binning="binPhi,binR" bins0="12" bins1="20"/>
+        <ring
+          r="TrackerEndcapPMod3_rmin + TrackerEndcapPMod3_y/2"
+          zstart="0"
+          nmodules="SiTrackerEndcapMod_count"
+          dz="SiTrackerEndcapMod_dz"
+          module="Module3" />
+      </layer>
+      <layer id="4">
+        <envelope vis="TrackerLayerVis"
+          rmin="TrackerEndcapPLayer4_rmin"
+          rmax="TrackerEndcapPLayer4_rmax"
+          length="SiTrackerEndcapLayer_thickness"
+          zstart="TrackerEndcapPLayer4_zmin" />
+        <layer_material surface="inner" binning="binPhi,binR" bins0="12" bins1="10"/>
+        <ring
+          r="TrackerEndcapPMod4_rmin + TrackerEndcapPMod4_y/2"
+          zstart="0"
+          nmodules="SiTrackerEndcapMod_count"
+          dz="SiTrackerEndcapMod_dz"
+          module="Module4" />
+      </layer>
+    </detector>
+    <detector
+      id="TrackerEndcapN_2_ID"
+      name="OuterTrackerEndcapN"
+      type="epic_TrapEndcapTracker"
+      readout="TrackerEndcapHits"
+      vis="TrackerVis"
+      reflect="true">
+      <module name="Module2" vis="TrackerModuleVis">
+        <trd x1="TrackerEndcapNMod2_x1/2" x2="TrackerEndcapNMod2_x2/2" z="TrackerEndcapNMod2_y/2" />
+        <module_component thickness="SiTrackerEndcapCF_thickness" material="CarbonFiber" vis="TrackerSupportVis" />
+        <module_component thickness="SiTrackerEndcapAl_thickness" material="Aluminum" vis="TrackerServiceVis" />
+        <module_component thickness="SiTrackerSensor_thickness" material="Silicon" sensitive="true" vis="TrackerLayerVis" />
+      </module>
+      <module name="Module3" vis="TrackerModuleVis">
+        <trd x1="TrackerEndcapNMod3_x1/2" x2="TrackerEndcapNMod3_x2/2" z="TrackerEndcapNMod3_y/2" />
+        <module_component thickness="SiTrackerEndcapCF_thickness" material="CarbonFiber" vis="TrackerSupportVis" />
+        <module_component thickness="SiTrackerEndcapAl_thickness" material="Aluminum" vis="TrackerServiceVis" />
+        <module_component thickness="SiTrackerSensor_thickness" material="Silicon" sensitive="true" vis="TrackerLayerVis" />
+      </module>
+          <module name="Module4" vis="TrackerModuleVis">
+        <trd x1="TrackerEndcapNMod4_x1/2" x2="TrackerEndcapNMod4_x2/2" z="TrackerEndcapNMod4_y/2" />
+        <module_component thickness="SiTrackerEndcapCF_thickness" material="CarbonFiber" vis="TrackerSupportVis" />
+        <module_component thickness="SiTrackerEndcapAl_thickness" material="Aluminum" vis="TrackerServiceVis" />
+        <module_component thickness="SiTrackerSensor_thickness" material="Silicon" sensitive="true" vis="TrackerLayerVis" />
+      </module>
+      <layer id="2">
+        <envelope vis="TrackerLayerVis"
+          rmin="TrackerEndcapNLayer2_rmin"
+          rmax="TrackerEndcapNLayer2_rmax"
+          length="SiTrackerEndcapLayer_thickness"
+          zstart="TrackerEndcapNLayer2_zmin" />
+        <layer_material surface="inner" binning="binPhi,binR" bins0="12" bins1="20"/>
+        <ring
+          r="TrackerEndcapNMod2_rmin + TrackerEndcapNMod2_y/2"
+          zstart="0"
+          nmodules="SiTrackerEndcapMod_count"
+          dz="SiTrackerEndcapMod_dz"
+          module="Module2" />
+      </layer>
+      <layer id="3">
+        <envelope vis="TrackerLayerVis"
+          rmin="TrackerEndcapNLayer3_rmin"
+          rmax="TrackerEndcapNLayer3_rmax"
+          length="SiTrackerEndcapLayer_thickness"
+          zstart="TrackerEndcapNLayer3_zmin" />
+        <layer_material surface="inner" binning="binPhi,binR" bins0="12" bins1="20"/>
+        <ring
+          r="TrackerEndcapNMod3_rmin + TrackerEndcapNMod3_y/2"
+          zstart="0"
+          nmodules="SiTrackerEndcapMod_count"
+          dz="SiTrackerEndcapMod_dz"
+          module="Module3" />
+      </layer>
+      <layer id="4">
+        <envelope vis="TrackerLayerVis"
+          rmin="TrackerEndcapNLayer4_rmin"
+          rmax="TrackerEndcapNLayer4_rmax"
+          length="SiTrackerEndcapLayer_thickness"
+          zstart="TrackerEndcapNLayer4_zmin" />
+        <layer_material surface="inner" binning="binPhi,binR" bins0="12" bins1="10"/>
+        <ring
+          r="TrackerEndcapNMod4_rmin + TrackerEndcapNMod4_y/2"
+          zstart="0"
+          nmodules="SiTrackerEndcapMod_count"
+          dz="SiTrackerEndcapMod_dz"
+          module="Module4" />
+      </layer>
+    </detector>
+  </detectors>
+
+  <readouts>
+    <readout name="TrackerEndcapHits">
+      <segmentation type="CartesianGridXZ" grid_size_x="0.010*mm" grid_size_z="0.010*mm" />
+      <id>system:8,layer:4,module:12,sensor:2,x:32:-16,z:-16</id>
+    </readout>
+  </readouts>
+
+</lccdd>

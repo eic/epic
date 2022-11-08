@@ -1,0 +1,91 @@
+<lccdd>
+
+  <info name="forward_homogeneous.xml"
+        title="Homogeneous forward ECal"
+        author="@jizhongling"
+        url="https://github.com/jizhongling"
+        status="development"
+        version="1.0"
+  ><comment/></info>
+
+  <define>
+    <documentation>
+      #### Material Thickness
+    </documentation>
+    <constant name="EcalEndcapPCoverThickness"            value="0.1*cm"/>
+    <constant name="EcalEndcapPAirThickness"              value="10.15*cm"/>
+    <constant name="EcalEndcapPPCBThickness"              value="0.25*cm"/>
+    <constant name="EcalEndcapPLightGuideThickness"       value="2.5*cm"/>
+    <constant name="EcalEndcapPScintillatorThickness"     value="17.*cm"/>
+
+    <documentation>
+      - Ecal Endcap N Layers and computed Thickness
+    </documentation>
+    <constant name="EcalEndcapPSingleLayerThickness"
+      value = "EcalEndcapPCoverThickness +
+               EcalEndcapPAirThickness +
+               EcalEndcapPPCBThickness +
+               EcalEndcapPLightGuideThickness +
+               EcalEndcapPScintillatorThickness "
+    />
+    <constant name="EcalEndcapPLayer_NRepeat" value="EcalEndcapP_numLayers"/>
+  </define>
+
+  <limits>
+  </limits>
+
+  <regions>
+  </regions>
+
+  <display>
+  </display>
+
+  <detectors>
+
+    <documentation>
+      ### Forward (Positive Z) Endcap Electromagnetic Calorimeter
+
+      Simplified homogeneous implementation of the forward ScFi calorimeter
+      Each layer contains an aluminum cover, an air gap, PCB, light guides, and scintillating material
+
+      Insert shape is cut out from middle of detector
+    </documentation>
+    <detector id="ECalEndcapP_ID"
+      name="EcalEndcapP"
+      type="epic_EndcapCalorimeterWithInsertCutout"
+      readout="EcalEndcapPHits">
+      <position x="0" y="0" z="EcalEndcapP_zmin"/>
+      <dimensions
+        rmin="EcalEndcapP_rmin"
+        rmax="EcalEndcapP_rmax"
+        z="EcalEndcapPSingleLayerThickness * EcalEndcapPLayer_NRepeat"
+      />
+      <layer repeat="EcalEndcapPLayer_NRepeat" thickness = "EcalEndcapPSingleLayerThickness">
+        <slice name="Cover_slice" material="Aluminum" thickness="EcalEndcapPCoverThickness" vis="AnlRed"/>
+        <slice name="Air_slice" material="Air" thickness="EcalEndcapPAirThickness" vis="AnlRed"/>
+        <slice name="PCB_slice" material="Fr4" thickness="EcalEndcapPPCBThickness" vis="AnlRed"/>
+        <slice name="LightGuide_slice" material="Plexiglass" thickness="EcalEndcapPLightGuideThickness" vis="AnlBlue"/>
+        <slice name="Scintillator_slice" material="AvgTungstenScFi" thickness="EcalEndcapPScintillatorThickness" vis="AnlOrange" sensitive="true"/>
+      </layer>
+      <insert>
+        <position x="EcalEndcapPInsert_xposition" y="0" z="0"/>
+        <dimensions
+          x="EcalEndcapPInsert_width"
+          y="EcalEndcapPInsert_height"
+        />
+      </insert>
+    </detector>
+  </detectors>
+
+  <!--  Definition of the readout segmentation/definition  -->
+  <readouts>
+    <readout name="EcalEndcapPHits">
+      <segmentation type="CartesianGridXY" grid_size_x="24.925*mm" grid_size_y="24.65*mm"/>
+      <id>system:8,barrel:3,module:4,layer:8,slice:5,fiber_x:1,fiber_y:1,x:32:-16,y:-16</id>
+    </readout>
+  </readouts>
+
+  <plugins>
+  </plugins>
+
+</lccdd>

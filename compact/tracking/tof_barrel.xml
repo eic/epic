@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<lccdd>
+<info name="tof_barrel.xml"
+      title="AC-LGAD Detectors"
+      author="yezhenyu2003"
+      url="https://github.com/yezhenyu2003"
+      status="development"
+      version="1.0"
+><comment/>
+</info>
+
+  <define>
+    <comment>
+      --------------------------
+      Barrel TOF Parameters
+      --------------------------
+    </comment>
+    <constant name="BarrelTOF_Sensor_thickness"       value="0.3*mm"/>
+    <constant name="BarrelTOF_Hybrid_thickness"       value="2*0.008125*cm"/>
+    <constant name="BarrelTOF_CFSkin_thickness"       value="2*0.0075*cm"/>
+    <constant name="BarrelTOF_CFoam_thickness"        value="2*0.29*cm"/>
+    <constant name="BarrelTOF_CHoneycomb_thickness"   value="2*0.29*cm"/>
+    <constant name="BarrelTOF_CoolingTube_thickness"  value="0.08*cm"/>
+    <constant name="BarrelTOF_Coolant_thickness"      value="0.08*cm"/>
+    <constant name="BarrelTOF_Module_thickness"       value="BarrelTOF_Sensor_thickness+2*BarrelTOF_Hybrid_thickness+2*BarrelTOF_CFSkin_thickness+BarrelTOF_CFoam_thickness+BarrelTOF_CoolingTube_thickness+BarrelTOF_Coolant_thickness"/>
+
+    <constant name="BarrelTOF_zOffset"                 value="0*cm"/>
+    <constant name="BarrelTOF_radius_design"           value="64.6*cm"/>
+    <constant name="BarrelTOF_Module_width_design"     value="56.0*mm"/>
+    <constant name="BarrelTOF_Sensor_width_design"     value="32.0*mm"/>
+    <constant name="BarrelTOF_CFoam_width_design"      value="BarrelTOF_Sensor_width_design-5.0*mm"/>
+    <constant name="BarrelTOF_CHoneycomb_width_design" value="BarrelTOF_Module_width_design-BarrelTOF_CFoam_width_design"/>
+    <constant name="BarrelTOF_CoolingTube_width_design" value="0.75*cm"/>
+    <constant name="BarrelTOF_Coolant_width_design"    value="0.75*cm"/>
+
+    <constant name="BarrelTOF_Sensor_position_design"  value="0.5*(BarrelTOF_Sensor_width_design-BarrelTOF_Module_width_design)"/>
+    <constant name="BarrelTOF_CFoam_position_design"   value="0.5*(BarrelTOF_CFoam_width_design-BarrelTOF_Module_width_design)"/>
+    <constant name="BarrelTOF_CHoneycomb_position_design"  value="0.5*(BarrelTOF_Module_width_design-BarrelTOF_CHoneycomb_width_design)"/>
+    <constant name="BarrelTOF_CoolingTube_position_design"  value="BarrelTOF_CHoneycomb_position_design"/>
+    <constant name="BarrelTOF_Coolant_position_design" value="BarrelTOF_CHoneycomb_position_design"/>
+    <constant name="BarrelTOF_Service_position_design" value="0.0*mm"/>
+
+    <constant name="BarrelTOF_scale"               value="1.0"/>
+    <constant name="BarrelTOF_radius"              value="BarrelTOF_scale * BarrelTOF_radius_design"/>
+    <constant name="BarrelTOF_Sensor_width"        value="BarrelTOF_scale * BarrelTOF_Sensor_width_design"/>
+    <constant name="BarrelTOF_CFoam_width"         value="BarrelTOF_scale * BarrelTOF_CFoam_width_design"/>
+    <constant name="BarrelTOF_CHoneycomb_width"    value="BarrelTOF_scale * BarrelTOF_CHoneycomb_width_design"/>
+    <constant name="BarrelTOF_CoolingTube_width"   value="BarrelTOF_scale * BarrelTOF_CoolingTube_width_design"/>
+    <constant name="BarrelTOF_Coolant_width"       value="BarrelTOF_scale * BarrelTOF_Coolant_width_design"/>
+    <constant name="BarrelTOF_Sensor_position"     value="BarrelTOF_scale * BarrelTOF_Sensor_position_design"/>
+    <constant name="BarrelTOF_CFoam_position"      value="BarrelTOF_scale * BarrelTOF_CFoam_position_design"/>
+    <constant name="BarrelTOF_CHoneycomb_position" value="BarrelTOF_scale * BarrelTOF_CHoneycomb_position_design"/>
+    <constant name="BarrelTOF_CoolingTube_position" value="BarrelTOF_scale * BarrelTOF_CoolingTube_position_design"/>
+    <constant name="BarrelTOF_Coolant_position"    value="BarrelTOF_scale * BarrelTOF_Coolant_position_design"/>
+    <constant name="BarrelTOF_Service_position"    value="BarrelTOF_scale * BarrelTOF_Service_position_design"/>
+    <constant name="BarrelTOF_Module_width"        value="BarrelTOF_scale*BarrelTOF_Module_width_design"/>
+    <constant name="BarrelTOF_Module_tiltangle"    value="20*degree"/>
+    <constant name="BarrelTOF_Module_nphi"         value="144"/>
+    <constant name="BarrelTOF_Module_nz"           value="1"/>
+
+    <constant name="BarrelTOF_rOffset1"            value="1.6*cm"/>
+    <constant name="BarrelTOF_rOffset2"            value="1.4*cm"/>
+    <constant name="BarrelTOF_rmin"                value="BarrelTOF_radius-BarrelTOF_rOffset1"/>
+    <constant name="BarrelTOF_rmax"                value="BarrelTOF_radius+BarrelTOF_rOffset2"/>
+    <constant name="BarrelTOF_length1"             value="2 * 120 * cm"/>
+    <constant name="BarrelTOF_length2"             value="BarrelTOF_length1"/>
+    <constant name="BarrelTOF_length"              value="BarrelTOF_length2"/>
+
+  </define>
+
+  <display>
+  </display>
+
+  <detectors>
+    <detector
+      id="BarrelTOF_ID"
+      name="BarrelTOF"
+      type="epic_TOFBarrel"
+      readout="TOFBarrelHits"
+      insideTrackingVolume="true">
+      <dimensions
+        rmin="BarrelTOF_rmin"
+        rmax="BarrelTOF_rmax"
+        length="BarrelTOF_length"/>
+      <comment>
+        Tracker Barrel Modules
+      </comment>
+      <module name="BarrelTOF_Module1" vis="TOFBarrelModuleVis">
+        <module_component name="sensor" material="Silicon" sensitive="true" width="BarrelTOF_Sensor_width" length="BarrelTOF_length1" thickness="BarrelTOF_Sensor_thickness" vis="TOFSensorVis" >
+          <position x="BarrelTOF_Sensor_position" y="0" z="0" />
+        </module_component>
+        <module_component name="hybridtop" material="Kapton" sensitive="false" width="BarrelTOF_Module_width" length="BarrelTOF_length1" thickness="BarrelTOF_Hybrid_thickness" vis="TOFHybridVis" >
+          <position x="BarrelTOF_Service_position" y="0" z="0" />
+        </module_component>
+        <module_component name="cfskintop" material="CFRPMix2" sensitive="false" width="BarrelTOF_Module_width" length="BarrelTOF_length1" thickness="BarrelTOF_CFSkin_thickness" vis="TOFCSkinVis" >
+          <position x="BarrelTOF_Service_position" y="0" z="0" />
+        </module_component>
+        <module_component name="coolingtube" material="Aluminum" sensitive="false" width="BarrelTOF_CoolingTube_width" length="BarrelTOF_length1" thickness="BarrelTOF_CoolingTube_thickness" vis="TOFCoolingTubeVis" >
+          <position x="BarrelTOF_CoolingTube_position" y="0" z="0" />
+        </module_component>
+        <module_component name="coolant" material="NOVEC7200" sensitive="false" width="BarrelTOF_Coolant_width" length="BarrelTOF_length1" thickness="BarrelTOF_Coolant_thickness" vis="TOFCoolantVis" >
+          <position x="BarrelTOF_Coolant_position" y="0" z="0" />
+        </module_component>
+        <module_component name="cfoam" material="CarbonFoam" sensitive="false" width="BarrelTOF_CFoam_width" length="BarrelTOF_length1" thickness="BarrelTOF_CFoam_thickness" vis="TOFCFoamVis" >
+          <position x="BarrelTOF_CFoam_position" y="0" z="0" />
+        </module_component>
+        <module_component name="choneycomb" material="CFRPMix" sensitive="false" width="BarrelTOF_CHoneycomb_width" length="BarrelTOF_length1" thickness="BarrelTOF_CHoneycomb_thickness" vis="TOFCHoneycombVis" >
+          <position x="BarrelTOF_CHoneycomb_position" y="0" z="-1*BarrelTOF_CFoam_thickness" />
+        </module_component>
+        <module_component name="cfskinbottom" material="CFRPMix2" sensitive="false" width="BarrelTOF_Module_width" length="BarrelTOF_length1" thickness="BarrelTOF_CFSkin_thickness" vis="TOFCSkinVis" >
+          <position x="BarrelTOF_Service_position" y="0" z="0" />
+        </module_component>
+        <module_component name="hybridbottom" material="Kapton" sensitive="false" width="BarrelTOF_Module_width" length="BarrelTOF_length1" thickness="BarrelTOF_Hybrid_thickness" vis="TOFHybridVis" >
+          <position x="BarrelTOF_Service_position" y="0" z="0" />
+        </module_component>
+      </module>
+      <layer module="BarrelTOF_Module1" id="1" vis="TOFLayerVis">
+        <barrel_envelope
+          inner_r="BarrelTOF_rmin"
+          outer_r="BarrelTOF_rmax"
+          z_length="BarrelTOF_length+2*BarrelTOF_zOffset"/>
+        <rphi_layout phi_tilt="BarrelTOF_Module_tiltangle" nphi="BarrelTOF_Module_nphi" phi0="0.0" rc="BarrelTOF_radius" dr="0.0*mm"/>
+        <z_layout dr="0.0*mm" z0="BarrelTOF_zOffset" nz="BarrelTOF_Module_nz"/>
+      </layer>
+    </detector>
+  </detectors>
+
+  <readouts>
+    <readout name="TOFBarrelHits">
+      <segmentation type="CartesianGridXY" grid_size_x="0.1*mm" grid_size_y="1*cm" />
+      <id>system:8,layer:4,module:12,sensor:2,x:32:-16,y:-16</id>
+    </readout>
+  </readouts>
+
+</lccdd>

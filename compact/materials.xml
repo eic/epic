@@ -40,6 +40,11 @@
     <composite n="19" ref="C"/>
     <composite n="21" ref="H"/>
   </material>
+  <material name="Water">
+    <D value="1.00" unit="g/cm3"/>
+    <composite n="1" ref="O"/>
+    <composite n="2" ref="H"/>
+  </material>
   <material name="Steel235">
     <D value="7.85" unit="g/cm3"/>
     <fraction n="0.998" ref="Fe"/>
@@ -86,6 +91,11 @@
     <D type="density" value="3.89" unit="g/cm3"/>
     <composite n="2" ref="Al"/>
     <composite n="3" ref="O"/>
+  </material>
+  <material name="AluminumNitrate">
+    <D type="density" value="3.255" unit="g/cm3"/>
+    <composite n="1" ref="Al"/>
+    <composite n="1" ref="N"/>
   </material>
   <material name="ArsenicOxide">
     <D type="density" value="3.738" unit="g/cm3"/>
@@ -354,7 +364,7 @@
     <fraction n="0.038" ref="Ni"/>
     <fraction n="0.019" ref="Cu"/>
   </material>
-  <material name="ZDC_EpoxyGlue">
+  <material name="ZDC_PET">
     <D type="density" value="1.38" unit="g/cm3"/>
     <composite n="8"  ref="H"/>
     <composite n="10" ref="C"/>
@@ -364,6 +374,11 @@
     <D type="density" value="1.032" unit="g/cm3"/>
     <composite n="8" ref="C"/>
     <composite n="8" ref="H"/>
+  </material>
+  <material name="ZDC_Polyethylene">
+    <D type="density" value="0.96" unit="g/cm3"/>
+    <composite n="2" ref="C"/>
+    <composite n="4" ref="H"/>
   </material>
   <material name="MMGAS_ResistivePaste">
     <D type="density" unit="g/cm3" value="0.77906"/>
@@ -393,5 +408,25 @@
     <D type="density" value="12.4" unit="g / cm3"/>
     <fraction n="0.96" ref="W"/>
     <fraction n="0.04" ref="Polystyrene"/>
+  </material>
+  <material name="SciFiPb_Scintillator">
+    <D type="density" value="1.049" unit="g / cm3"/>
+    <fraction n="0.077" ref="H"/>
+    <fraction n="0.921" ref="C"/>
+    <fraction n="0.001" ref="N"/>
+    <fraction n="0.001" ref="O"/>
+    <constant name="BirksConstant" value="0.126*mm/MeV"/>
+  </material>
+  <material name="SciFiPb_Glue">
+    <D type="density" value="1.180" unit="g / cm3"/>
+    <fraction n="0.091" ref="H"/>
+    <fraction n="0.822" ref="C"/>
+    <fraction n="0.032" ref="N"/>
+    <fraction n="0.055" ref="O"/>
+  </material>
+  <material name="SciFiPb_PbGlue">
+    <D type="density" value="8.558" unit="g / cm3"/>
+    <fraction n="0.9622" ref="Pb"/>
+    <fraction n="0.0378" ref="SciFiPb_Glue"/>
   </material>
 </materials>

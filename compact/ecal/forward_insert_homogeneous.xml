@@ -1,0 +1,101 @@
+<lccdd>
+
+  <info name="forward_insert_homogeneous.xml"
+        title="Forward ECal Insert Calorimeter"
+        author="@rymilton"
+        url="https://github.com/rymilton"
+        status="development"
+        version="1.0"
+	  ><comment/></info>
+
+  <define>
+     <documentation>
+      #### Material Thickness
+    </documentation>
+    <constant name="EcalEndcapPInsertCoverThickness"            value="0.1*cm"/>
+    <constant name="EcalEndcapPInsertAirThickness"              value="10.15*cm"/>
+    <constant name="EcalEndcapPInsertPCBThickness"              value="0.25*cm"/>
+    <constant name="EcalEndcapPInsertLightGuideThickness"       value="2.5*cm"/>
+    <constant name="EcalEndcapPInsertScintillatorThickness"     value="17.*cm"/>
+
+    <documentation>
+      - Insert N Layers and computed Thickness
+    </documentation>
+
+    <constant name="EcalEndcapPInsertSingleLayerThickness"
+      value="EcalEndcapPInsertCoverThickness +
+               EcalEndcapPInsertAirThickness +
+               EcalEndcapPInsertPCBThickness +
+               EcalEndcapPInsertLightGuideThickness +
+               EcalEndcapPInsertScintillatorThickness "
+    />
+    <constant name="EcalEndcapPInsertLayer_NRepeat" value="1"/>
+  </define>
+
+  <detectors>
+     <documentation>
+      ### Forward (Positive Z) Endcap Insert for Electromagnetic Calorimeter
+      Insert goes in the middle of the forward endcap ECal -- around the beampipe
+
+      Has 5 sections:
+        - Aluminum cover
+        - Air gap
+        - PCB
+        - Light guides (plexiglass)
+        - Scintillating fibers (modeled as homogeneous material)
+
+      Circular hole is cut out from each layer to account for the beampipe
+      Hole radius is beampipe radius + 3.85 cm of clearance
+
+    </documentation>
+    <detector
+      id="ECalEndcapPInsert_ID"
+      name="EcalEndcapPInsert"
+      type="epic_InsertCalorimeter"
+      vis="HcalEndcapInsertVis"
+      readout="EcalEndcapPInsertHits"
+    >
+      <position x="EcalEndcapPInsert_xposition" y="EcalEndcapPInsert_yposition" z="EcalEndcapPInsert_zmin"/>
+      <dimensions
+        x="EcalEndcapPInsert_width"
+        y="EcalEndcapPInsert_height"
+        z="EcalEndcapPInsert_length"
+      />
+      <comment> Slices will be ordered according to the slice order listed here </comment>
+      <layer repeat="EcalEndcapPInsertLayer_NRepeat" thickness = "EcalEndcapPInsertSingleLayerThickness">
+        <slice material="Aluminum" thickness="EcalEndcapPInsertCoverThickness"/>
+        <slice material="Air" thickness="EcalEndcapPInsertAirThickness"/>
+        <slice material="Fr4" thickness="EcalEndcapPInsertPCBThickness"/>
+        <slice material="Plexiglass" thickness="EcalEndcapPInsertLightGuideThickness"/>
+        <slice material="AvgTungstenScFi" thickness="EcalEndcapPInsertScintillatorThickness" sensitive="true"/>
+      </layer>
+      <documentation>
+        initial_hole_radius: Hole radius at front of first layer
+        final_hole_radius: Hole radius at front of final layer. For the ecal insert, the hole radius is constant
+        initial_hole_x/y: Hole x/y position (global coordinates) in first layer
+        final_hole_x/y: Hole x/y position (global coordinates) in final layer. For the ecal insert, the hole does not change position
+      </documentation>
+      <beampipe_hole
+        initial_hole_radius="EcalEndcapPInsert_hole_radius"
+        final_hole_radius="EcalEndcapPInsert_hole_radius"
+        initial_hole_x="EcalEndcapPInsert_hole_xposition"
+        final_hole_x="EcalEndcapPInsert_hole_xposition"
+        initial_hole_y="EcalEndcapPInsert_hole_yposition"
+        final_hole_y="EcalEndcapPInsert_hole_yposition"
+      />
+    </detector>
+  </detectors>
+
+  <readouts>
+    <readout name="EcalEndcapPInsertHits">
+      <segmentation
+        type="CartesianGridXY"
+        grid_size_x="2.*cm"
+        grid_size_y="2.*cm"
+      />
+      <id>system:8,barrel:3,module:4,layer:8,slice:5,x:32:-16,y:-16</id>
+    </readout>
+
+  </readouts>
+
+</lccdd>

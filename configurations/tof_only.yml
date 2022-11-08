@@ -1,3 +1,4 @@
 features:
-- beampipe
-- tof
+  tracking:
+    tof_endcap:
+    tof_barrel:

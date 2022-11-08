@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<lccdd>
+<info name="mrwell_dirc.xml"
+      title="Micro-Pattern Gas Detector for aiding DIRC PID"
+      author="mposik1983"
+      url="https://github.com/mposik1983"
+      status="development"
+      version="1.0"
+><comment/>
+</info>
+
+<define>
+    <comment> frames </comment>
+    <constant name="MPGDDIRCFrame_width"            value="20*mm"/>
+    <constant name="MPGDDIRCFrame_thickness"        value="7*mm"/>
+
+    <comment> module constants </comment>
+    <constant name="MPGDDIRCModule_count"                   value="12" />
+    <constant name="MPGDDIRCModule_allowed_space"           value="2*cm"/>
+    <constant name="MPGDDIRCModule_rmin"                    value="MPGDDIRC_rmin"/>
+    <constant name="MPGDDIRCModule_rmax"                    value="MPGDDIRCModule_rmin + MPGDDIRCModule_allowed_space" />
+    <constant name="MPGDDIRCModule_zmin1"                   value="145.0*cm"/>
+    <constant name="MPGDDIRCModule_zmin2"                   value="197.0*cm"/>
+    <constant name="MPGDDIRCModule_width"                   value="36.2*cm"/>
+    <constant name="MPGDDIRCModule_length"                  value="0.5*(MPGDDIRCModule_zmin1 + MPGDDIRCModule_zmin2)"/>
+    <constant name="MPGDDIRCModule_offset"                  value="(MPGDDIRCModule_zmin1 - MPGDDIRCModule_zmin2)/2.0"/>
+
+
+
+    <comment> layer parameters </comment>
+    <constant name="MPGDDIRCWindow_thickness"             value="50*um"/>
+    <constant name="MPGDDIRCWindowGap_thickness"          value="2*mm"/>
+    <constant name="MPGDDIRCDriftGap_thickness"           value="3*mm"/>
+    <constant name="MPGDDIRCFoilCu_thickness"             value="5*um"/>
+    <constant name="MPGDDIRCReadOutElectrode_thickness"   value="10*um"/>
+    <constant name="MPGDDIRCFoilKapton_thickness"         value="50*um"/>
+    <constant name="MPGDDIRCReadOutNomex_thickness"       value="50*um"/>
+    <constant name="MPGDDIRCReadOutKapton_thickness"      value="50*um"/>
+    <constant name="MPGDDIRCPCB_thickness"                value="3*mm"/>
+
+    <comment> Thickness values </comment>
+    <constant name="MPGDDIRCCathode_thickness"          value="MPGDDIRCFoilKapton_thickness + MPGDDIRCFoilCu_thickness"/>
+    <constant name="MPGDDIRCFoil_thickness"             value="MPGDDIRCFoilKapton_thickness + MPGDDIRCFoilCu_thickness"/>
+    <constant name="MPGDDIRCReadOut_thickness"          value="MPGDDIRCReadOutNomex_thickness + MPGDDIRCReadOutElectrode_thickness + MPGDDIRCReadOutKapton_thickness"/>
+    <constant name="MPGDDIRCModule_thickness"           value="MPGDDIRCWindow_thickness + MPGDDIRCCathode_thickness +
+                                                            MPGDDIRCFoil_thickness + MPGDDIRCReadOut_thickness +
+                                                            MPGDDIRCPCB_thickness + MPGDDIRCFrame_thickness" />
+  </define>
+
+
+  <materials>
+  </materials>
+
+  <limits>
+  </limits>
+
+  <regions>
+  </regions>
+
+  <display>
+  </display>
+
+   <detectors>
+   <detector id="MPGDDIRC_0_ID" name="MPGDDIRC_0" type="epic_MPGDDIRC" readout="MPGDDIRCHits" vis="TrackerVis">
+     <dimensions width="MPGDDIRCModule_width" length="MPGDDIRCModule_length" height="MPGDDIRCModule_allowed_space" />
+     <position x="0" y="0" z="MPGDDIRCModule_offset" />
+
+    <comment> MPGD DIRC module components</comment>
+    <module name="MPGDDIRCModule" vis="TrackerVis">
+
+        <module_component name="DriftGap"
+               material="Ar"
+               sensitive="true"
+               width="MPGDDIRCModule_width"
+               thickness="MPGDDIRCDriftGap_thickness"
+               vis="TrackerMPGDGasVis"
+               length="MPGDDIRCModule_length"/>
+
+        <module_component name="WindowGasGap"
+               material="Ar"
+               sensitive="false"
+               width="MPGDDIRCModule_width"
+               thickness="MPGDDIRCWindowGap_thickness"
+               vis="TrackerMPGDGasVis"
+               length="MPGDDIRCModule_length" />
+
+        <module_component name="Window"
+               material="Kapton"
+               sensitive="false"
+               width="MPGDDIRCModule_width"
+               thickness="MPGDDIRCWindow_thickness"
+               vis="TrackerVis"
+               length="MPGDDIRCModule_length" />
+        <module_component name="Cathode_Kapton"
+               material="Kapton"
+               sensitive="false"
+               width="MPGDDIRCModule_width"
+               thickness="MPGDDIRCFoilKapton_thickness"
+               vis="TrackerVis"
+               length="MPGDDIRCModule_length" />
+        <module_component name="Cathode_Cu"
+               material="Copper"
+               sensitive="false"
+               width="MPGDDIRCModule_width"
+               thickness="MPGDDIRCFoilCu_thickness"
+               vis="TrackerVis"
+               length="MPGDDIRCModule_length" />
+        <module_component name="RWELL_Cu"
+               material="Copper"
+               sensitive="false"
+               width="MPGDDIRCModule_width"
+               thickness="MPGDDIRCFoilCu_thickness"
+               vis="TrackerVis"
+               length="MPGDDIRCModule_length" />
+        <module_component name="RWELL_Kapton"
+               material="Kapton"
+               sensitive="false"
+               width="MPGDDIRCModule_width"
+               thickness="MPGDDIRCFoilKapton_thickness"
+               vis="TrackerVis"
+               length="MPGDDIRCModule_length" />
+        <module_component name="Nomex"
+               material="Nomex"
+               sensitive="false"
+               width="MPGDDIRCModule_width"
+               thickness="MPGDDIRCReadOutNomex_thickness"
+               vis="TrackerVis"
+               length="MPGDDIRCModule_length" />
+        <module_component name="ReadOutElectrodes"
+               material="Copper"
+               sensitive="false"
+               width="MPGDDIRCModule_width"
+               thickness="MPGDDIRCReadOutElectrode_thickness"
+               vis="TrackerVis"
+               length="MPGDDIRCModule_length" />
+        <module_component name="ReadOutKapton"
+               material="Kapton"
+               sensitive="false"
+               width="MPGDDIRCModule_width"
+               thickness="MPGDDIRCReadOutKapton_thickness"
+               vis="TrackerVis"
+               length="MPGDDIRCModule_length" />
+        <module_component name="PCB"
+               material="Fr4"
+               sensitive="false"
+               width="MPGDDIRCModule_width"
+               thickness="MPGDDIRCPCB_thickness"
+               vis="TrackerVis"
+               length="MPGDDIRCModule_length" />
+
+   <comment> Frame width gets subtracted from the gas module volumes
+      see src/MPGDDIRC_geo.cpp
+        </comment>
+
+        <frame material="Fr4"
+               width="MPGDDIRCFrame_width"
+               vis="TrackerSupportVis"
+               thickness="MPGDDIRCFrame_thickness"/>
+
+</module>
+<comment> Layout for MPGD DIRC layers </comment>
+      <layer module="MPGDDIRCModule" id="0" vis="TrackerSupportVis">
+   <rphi_layout
+          phi_tilt="0"
+          nphi="MPGDDIRCModule_count"
+          phi0="0"
+	   rc="MPGDDIRCModule_rmin"
+	  dr="0" />
+   <z_layout
+	  dr = "0.0 * cm"
+	  z0 = "0.0 * cm"
+	  nz = "2"/>
+   </layer>
+</detector>
+</detectors>
+
+  <readouts>
+    <readout name="MPGDDIRCHits">
+      <segmentation type="CartesianGridXY" grid_size_x="0.150*mm*sqrt(12)" grid_size_y="0.150*mm*sqrt(12)" />
+      <id>system:8,layer:4,module:12,sensor:2,x:32:-14,y:-18</id>
+    </readout>
+  </readouts>
+
+  <plugins>
+  </plugins>
+
+  <fields>
+  </fields>
+</lccdd>

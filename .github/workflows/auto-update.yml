@@ -1,0 +1,15 @@
+name: Auto-update pull requests
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  auto-update-pull-requests:
+    name: Auto-update pull requests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: tibdex/auto-update@v2
+        with:
+          github_token: ${{ secrets.AUTO_UPDATE_PULL_REQUESTS_TOKEN }}

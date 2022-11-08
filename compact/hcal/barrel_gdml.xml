@@ -1,0 +1,1119 @@
+<lccdd>
+
+    <!-- Define detector -->
+    <detectors>
+      <documentation>
+      ### Barrel Hadronic Calorimeter
+      </documentation>
+      <detector
+	  id="HCalBarrel_ID"
+	  name="HcalBarrel"
+	  type="epic_HcalBarrelGDML"
+	  readout="HcalBarrelHits"
+	  vis="HcalBarrelVis"
+	  env_vis="HcalBarrelEnvelopeVis"
+	  rmin1="HcalBarrel_rmin"
+	  rmin2="ForwardServiceGap_rmax - 5.0"
+	  rmax="HcalBarrel_rmax"
+	  z1="SolenoidBarrel_length"
+	  z2="HcalBarrel_length"
+	  calorimeterType="HAD_BARREL">
+
+  <define>
+
+    <matrix name="xposOuter" unit="mm" coldim="1" values="23.6005"/>
+    <matrix name="yposOuter" unit="mm" coldim="1" values="1802.84"/>
+
+    <matrix name="xposTileS" unit="mm" coldim="1" values="102.707 310.850 520.610 732.802 952.594 1180.725 1418.405 1668.665 1980.199 2267.609 2530.727 2785.926"/>
+    <matrix name="yposTileS" unit="mm" coldim="1" values="426.850 426.422 427.080 426.818 426.866 426.919 426.976 426.824 482.037 481.908 470.159 432.797"/>
+    <matrix name="zposTileS" unit="mm" coldim="1" values="-5.4212 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0"/>
+
+    <matrix name="xposTileN" unit="mm" coldim="1" values="-102.707 -310.850 -520.610 -732.802 -952.594 -1180.725 -1418.405 -1668.665 -1980.199 -2267.609 -2530.727 -2785.926"/>
+    <matrix name="yposTileN" unit="mm" coldim="1" values="426.850 426.422 427.080 426.818 426.866 426.919 426.976 426.824 482.037 481.908 470.159 432.797"/>
+    <matrix name="zposTileN" unit="mm" coldim="1" values="5.4212 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0"/>
+
+    <matrix name="xposChimneyTileS" unit="mm" coldim="1" values="2118.192 2425.895 2711.635 2957.924"/>
+    <matrix name="yposChimneyTileS" unit="mm" coldim="1" values="645.634 645.645 642.964 607.790"/>
+    <matrix name="zposChimneyTileS" unit="mm" coldim="1" values="0.0 0.0 0.0 0.0"/>
+
+    <constant name="ctilePlaneRotate" unit="deg" value="-14.355"/>
+    <constant name="tilePlaneRotate" unit="deg" value="-14.355"/>
+    <constant name="csectorRotate" unit="deg" value="6.086"/>
+    <constant name="sectorRotate" unit="deg" value="6.100"/>
+
+    <matrix name="plates_x" unit="mm" coldim="1" values="161.935 118.175 -741.606 -771.303"/>
+    <matrix name="plates_y" unit="mm" coldim="1" values="2295.048 2267.198 2160.230 2119.176"/>
+    <matrix name="plates_z" unit="mm" coldim="1" values="235.587 253.54 0.0 0.0"/>
+
+    <!--These offsets are used to tweak the tower and sector positions by ~100um to avoid numerical issues when looking for overlaps-->
+    <matrix name="tweak_tiles" unit="rad" values="0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0"/>
+    <matrix name="tweak_chimney_tiles" unit="rad" values="0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0"/>
+    <matrix name="tweak_sectors" unit="rad" values="0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 -0.00008 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 -0.000008"/>
+
+  </define>
+
+  <solids>
+
+  <solid name="HCAL_Chimney_Sector_Half_Plate" material="Steel235" unit="mm" x="-161.935" y="6295.048" z="-235.587">
+  <define>
+  <position name="Mesh2Tess_0" unit="mm" x="-159.6141815185547" y="6253.822265625" z="3158.10009765625"/>
+  <position name="Mesh2Tess_1" unit="mm" x="-263.16046142578125" y="6641.623046875" z="-3158.10009765625"/>
+  <position name="Mesh2Tess_2" unit="mm" x="-33.956092834472656" y="5783.20849609375" z="-1493.47998046875"/>
+  <position name="Mesh2Tess_3" unit="mm" x="-142.97047424316406" y="6254.9873046875" z="1863.727294921875"/>
+  <position name="Mesh2Tess_4" unit="mm" x="-22.012544631958008" y="5783.45068359375" z="-1493.47998046875"/>
+  <position name="Mesh2Tess_5" unit="mm" x="-142.97047424316406" y="6254.9873046875" z="3158.10009765625"/>
+  <position name="Mesh2Tess_6" unit="mm" x="-22.012544631958008" y="5783.45068359375" z="1493.47998046875"/>
+  <position name="Mesh2Tess_7" unit="mm" x="-263.16046142578125" y="6641.623046875" z="3158.10009765625"/>
+  <position name="Mesh2Tess_8" unit="mm" x="-33.956092834472656" y="5783.20849609375" z="1493.47998046875"/>
+  <position name="Mesh2Tess_9" unit="mm" x="-67.99297332763672" y="5910.68310546875" z="-1593.593505859375"/>
+  <position name="Mesh2Tess_10" unit="mm" x="-67.99297332763672" y="5910.68310546875" z="-3158.10009765625"/>
+  <position name="Mesh2Tess_11" unit="mm" x="-54.76995086669922" y="5911.15087890625" z="-1593.7491455078125"/>
+  <position name="Mesh2Tess_12" unit="mm" x="-54.76995086669922" y="5911.15087890625" z="-3158.10009765625"/>
+  <position name="Mesh2Tess_13" unit="mm" x="-242.1497344970703" y="6641.623046875" z="3158.10009765625"/>
+  <position name="Mesh2Tess_14" unit="mm" x="-242.1497344970703" y="6641.623046875" z="-3158.10009765625"/>
+  <position name="Mesh2Tess_15" unit="mm" x="-159.6141815185547" y="6253.822265625" z="1863.0811767578125"/>
+  </define>
+  <tessellated name="HCAL_Chimney_Sector_Half_Plate">
+      <triangular vertex1="Mesh2Tess_3" vertex2="Mesh2Tess_0" vertex3="Mesh2Tess_15" type="ABSOLUTE"/>
+    <triangular vertex1="Mesh2Tess_3" vertex2="Mesh2Tess_5" vertex3="Mesh2Tess_0" type="ABSOLUTE"/>
+    <triangular vertex1="Mesh2Tess_15" vertex2="Mesh2Tess_0" vertex3="Mesh2Tess_7" type="ABSOLUTE"/>
+    <triangular vertex1="Mesh2Tess_9" vertex2="Mesh2Tess_8" vertex3="Mesh2Tess_15" type="ABSOLUTE"/>
+    <triangular vertex1="Mesh2Tess_9" vertex2="Mesh2Tess_2" vertex3="Mesh2Tess_8" type="ABSOLUTE"/>
+    <triangular vertex1="Mesh2Tess_1" vertex2="Mesh2Tess_10" vertex3="Mesh2Tess_9" type="ABSOLUTE"/>
+    <triangular vertex1="Mesh2Tess_1" vertex2="Mesh2Tess_9" vertex3="Mesh2Tess_15" type="ABSOLUTE"/>
+    <triangular vertex1="Mesh2Tess_7" vertex2="Mesh2Tess_1" vertex3="Mesh2Tess_15" type="ABSOLUTE"/>
+    <triangular vertex1="Mesh2Tess_4" vertex2="Mesh2Tess_6" vertex3="Mesh2Tess_8" type="ABSOLUTE"/>
+    <triangular vertex1="Mesh2Tess_4" vertex2="Mesh2Tess_8" vertex3="Mesh2Tess_2" type="ABSOLUTE"/>
+    <triangular vertex1="Mesh2Tess_10" vertex2="Mesh2Tess_11" vertex3="Mesh2Tess_9" type="ABSOLUTE"/>
+    <triangular vertex1="Mesh2Tess_12" vertex2="Mesh2Tess_11" vertex3="Mesh2Tess_10" type="ABSOLUTE"/>
+    <triangular vertex1="Mesh2Tess_9" vertex2="Mesh2Tess_11" vertex3="Mesh2Tess_2" type="ABSOLUTE"/>
+    <triangular vertex1="Mesh2Tess_2" vertex2="Mesh2Tess_11" vertex3="Mesh2Tess_4" type="ABSOLUTE"/>
+    <triangular vertex1="Mesh2Tess_3" vertex2="Mesh2Tess_13" vertex3="Mesh2Tess_5" type="ABSOLUTE"/>
+    <triangular vertex1="Mesh2Tess_11" vertex2="Mesh2Tess_3" vertex3="Mesh2Tess_6" type="ABSOLUTE"/>
+    <triangular vertex1="Mesh2Tess_11" vertex2="Mesh2Tess_6" vertex3="Mesh2Tess_4" type="ABSOLUTE"/>
+    <triangular vertex1="Mesh2Tess_14" vertex2="Mesh2Tess_11" vertex3="Mesh2Tess_12" type="ABSOLUTE"/>
+    <triangular vertex1="Mesh2Tess_14" vertex2="Mesh2Tess_13" vertex3="Mesh2Tess_3" type="ABSOLUTE"/>
+    <triangular vertex1="Mesh2Tess_14" vertex2="Mesh2Tess_3" vertex3="Mesh2Tess_11" type="ABSOLUTE"/>
+    <triangular vertex1="Mesh2Tess_10" vertex2="Mesh2Tess_1" vertex3="Mesh2Tess_14" type="ABSOLUTE"/>
+    <triangular vertex1="Mesh2Tess_10" vertex2="Mesh2Tess_14" vertex3="Mesh2Tess_12" type="ABSOLUTE"/>
+    <triangular vertex1="Mesh2Tess_8" vertex2="Mesh2Tess_6" vertex3="Mesh2Tess_3" type="ABSOLUTE"/>
+    <triangular vertex1="Mesh2Tess_8" vertex2="Mesh2Tess_3" vertex3="Mesh2Tess_15" type="ABSOLUTE"/>
+    <triangular vertex1="Mesh2Tess_13" vertex2="Mesh2Tess_1" vertex3="Mesh2Tess_7" type="ABSOLUTE"/>
+    <triangular vertex1="Mesh2Tess_13" vertex2="Mesh2Tess_14" vertex3="Mesh2Tess_1" type="ABSOLUTE"/>
+    <triangular vertex1="Mesh2Tess_13" vertex2="Mesh2Tess_0" vertex3="Mesh2Tess_5" type="ABSOLUTE"/>
+    <triangular vertex1="Mesh2Tess_13" vertex2="Mesh2Tess_7" vertex3="Mesh2Tess_0" type="ABSOLUTE"/>
+  </tessellated>
+  </solid>
+
+  <solid name="HCAL_Chimney_Sector_Plate" material="Steel235" unit="mm" x="-118.175" y="6267.198" z="-253.54">
+  <define>
+  <position name="Mesh2Tess_0" unit="mm" x="-45.00990295410156" y="5911.400390625" z="-3120.0"/>
+  <position name="Mesh2Tess_1" unit="mm" x="-45.00990295410156" y="5911.400390625" z="-1593.4134521484375"/>
+  <position name="Mesh2Tess_2" unit="mm" x="-178.73770141601562" y="6600.45068359375" z="3120.0"/>
+  <position name="Mesh2Tess_3" unit="mm" x="-133.2957763671875" y="6255.56982421875" z="3120.0"/>
+  <position name="Mesh2Tess_4" unit="mm" x="11.838549613952637" y="5791.87548828125" z="1500.0"/>
+  <position name="Mesh2Tess_5" unit="mm" x="-219.31109619140625" y="6590.8876953125" z="3120.0"/>
+  <position name="Mesh2Tess_6" unit="mm" x="-16.438724517822266" y="5911.85009765625" z="-1593.74951171875"/>
+  <position name="Mesh2Tess_7" unit="mm" x="-178.73770141601562" y="6600.45068359375" z="-3120.0"/>
+  <position name="Mesh2Tess_8" unit="mm" x="-16.438724517822266" y="5911.85009765625" z="-3120.0"/>
+  <position name="Mesh2Tess_9" unit="mm" x="-219.31109619140625" y="6590.8876953125" z="-3120.0"/>
+  <position name="Mesh2Tess_10" unit="mm" x="-133.2957763671875" y="6255.56982421875" z="1862.3551025390625"/>
+  <position name="Mesh2Tess_11" unit="mm" x="-97.87144470214844" y="6257.35205078125" z="1863.7286376953125"/>
+  <position name="Mesh2Tess_12" unit="mm" x="-14.344938278198242" y="5791.857421875" z="1500.0"/>
+  <position name="Mesh2Tess_13" unit="mm" x="-97.87144470214844" y="6257.35205078125" z="3120.0"/>
+  <position name="Mesh2Tess_14" unit="mm" x="11.838549613952637" y="5791.87548828125" z="-1500.0"/>
+  <position name="Mesh2Tess_15" unit="mm" x="-14.344938278198242" y="5791.857421875" z="-1500.0"/>
+  </define>
+  <tessellated name="HCAL_Chimney_Sector_Plate">
+      <triangular vertex1="Mesh2Tess_11" vertex2="Mesh2Tess_3" vertex3="Mesh2Tess_10" type="ABSOLUTE"/>
+    <triangular vertex1="Mesh2Tess_11" vertex2="Mesh2Tess_13" vertex3="Mesh2Tess_3" type="ABSOLUTE"/>
+    <triangular vertex1="Mesh2Tess_2" vertex2="Mesh2Tess_3" vertex3="Mesh2Tess_13" type="ABSOLUTE"/>
+    <triangular vertex1="Mesh2Tess_2" vertex2="Mesh2Tess_5" vertex3="Mesh2Tess_3" type="ABSOLUTE"/>
+    <triangular vertex1="Mesh2Tess_11" vertex2="Mesh2Tess_2" vertex3="Mesh2Tess_13" type="ABSOLUTE"/>
+    <triangular vertex1="Mesh2Tess_6" vertex2="Mesh2Tess_11" vertex3="Mesh2Tess_4" type="ABSOLUTE"/>
+    <triangular vertex1="Mesh2Tess_6" vertex2="Mesh2Tess_4" vertex3="Mesh2Tess_14" type="ABSOLUTE"/>
+    <triangular vertex1="Mesh2Tess_7" vertex2="Mesh2Tess_6" vertex3="Mesh2Tess_8" type="ABSOLUTE"/>
+    <triangular vertex1="Mesh2Tess_7" vertex2="Mesh2Tess_2" vertex3="Mesh2Tess_11" type="ABSOLUTE"/>
+    <triangular vertex1="Mesh2Tess_7" vertex2="Mesh2Tess_11" vertex3="Mesh2Tess_6" type="ABSOLUTE"/>
+    <triangular vertex1="Mesh2Tess_0" vertex2="Mesh2Tess_6" vertex3="Mesh2Tess_1" type="ABSOLUTE"/>
+    <triangular vertex1="Mesh2Tess_0" vertex2="Mesh2Tess_8" vertex3="Mesh2Tess_6" type="ABSOLUTE"/>
+    <triangular vertex1="Mesh2Tess_1" vertex2="Mesh2Tess_6" vertex3="Mesh2Tess_15" type="ABSOLUTE"/>
+    <triangular vertex1="Mesh2Tess_15" vertex2="Mesh2Tess_6" vertex3="Mesh2Tess_14" type="ABSOLUTE"/>
+    <triangular vertex1="Mesh2Tess_0" vertex2="Mesh2Tess_9" vertex3="Mesh2Tess_7" type="ABSOLUTE"/>
+    <triangular vertex1="Mesh2Tess_0" vertex2="Mesh2Tess_7" vertex3="Mesh2Tess_8" type="ABSOLUTE"/>
+    <triangular vertex1="Mesh2Tess_12" vertex2="Mesh2Tess_4" vertex3="Mesh2Tess_11" type="ABSOLUTE"/>
+    <triangular vertex1="Mesh2Tess_12" vertex2="Mesh2Tess_11" vertex3="Mesh2Tess_10" type="ABSOLUTE"/>
+    <triangular vertex1="Mesh2Tess_15" vertex2="Mesh2Tess_14" vertex3="Mesh2Tess_4" type="ABSOLUTE"/>
+    <triangular vertex1="Mesh2Tess_15" vertex2="Mesh2Tess_4" vertex3="Mesh2Tess_12" type="ABSOLUTE"/>
+    <triangular vertex1="Mesh2Tess_10" vertex2="Mesh2Tess_3" vertex3="Mesh2Tess_5" type="ABSOLUTE"/>
+    <triangular vertex1="Mesh2Tess_1" vertex2="Mesh2Tess_15" vertex3="Mesh2Tess_12" type="ABSOLUTE"/>
+    <triangular vertex1="Mesh2Tess_1" vertex2="Mesh2Tess_12" vertex3="Mesh2Tess_10" type="ABSOLUTE"/>
+    <triangular vertex1="Mesh2Tess_9" vertex2="Mesh2Tess_0" vertex3="Mesh2Tess_1" type="ABSOLUTE"/>
+    <triangular vertex1="Mesh2Tess_9" vertex2="Mesh2Tess_1" vertex3="Mesh2Tess_10" type="ABSOLUTE"/>
+    <triangular vertex1="Mesh2Tess_5" vertex2="Mesh2Tess_9" vertex3="Mesh2Tess_10" type="ABSOLUTE"/>
+    <triangular vertex1="Mesh2Tess_2" vertex2="Mesh2Tess_9" vertex3="Mesh2Tess_5" type="ABSOLUTE"/>
+    <triangular vertex1="Mesh2Tess_2" vertex2="Mesh2Tess_7" vertex3="Mesh2Tess_9" type="ABSOLUTE"/>
+  </tessellated>
+  </solid>
+
+  <solid name="HCAL_Sector_Half_Plate" material="Steel235" unit="mm" x="741.606" y="6160.230" z="0.0">
+  <define>
+  <position name="Mesh2Tess_0" unit="mm" x="666.5825805664062" y="5657.37109375" z="-1493.47998046875"/>
+  <position name="Mesh2Tess_1" unit="mm" x="683.9190063476562" y="5788.16796875" z="3158.10009765625"/>
+  <position name="Mesh2Tess_2" unit="mm" x="802.7377319335938" y="6530.115234375" z="-3158.10009765625"/>
+  <position name="Mesh2Tess_3" unit="mm" x="677.7097778320312" y="5653.02490234375" z="1493.47998046875"/>
+  <position name="Mesh2Tess_4" unit="mm" x="677.7097778320312" y="5653.02490234375" z="-1493.47998046875"/>
+  <position name="Mesh2Tess_5" unit="mm" x="802.7377319335938" y="6530.115234375" z="3158.10009765625"/>
+  <position name="Mesh2Tess_6" unit="mm" x="683.9190063476562" y="5788.16796875" z="-1593.593505859375"/>
+  <position name="Mesh2Tess_7" unit="mm" x="783.3263549804688" y="6538.15576171875" z="3158.10009765625"/>
+  <position name="Mesh2Tess_8" unit="mm" x="696.3145141601562" y="5783.53955078125" z="1593.7491455078125"/>
+  <position name="Mesh2Tess_9" unit="mm" x="696.3145141601562" y="5783.53955078125" z="3158.10009765625"/>
+  <position name="Mesh2Tess_10" unit="mm" x="696.3145141601562" y="5783.53955078125" z="-3158.10009765625"/>
+  <position name="Mesh2Tess_11" unit="mm" x="683.9190063476562" y="5788.16796875" z="1593.593505859375"/>
+  <position name="Mesh2Tess_12" unit="mm" x="696.3145141601562" y="5783.53955078125" z="-1593.7491455078125"/>
+  <position name="Mesh2Tess_13" unit="mm" x="783.3263549804688" y="6538.15576171875" z="-3158.10009765625"/>
+  <position name="Mesh2Tess_14" unit="mm" x="683.9190063476562" y="5788.16796875" z="-3158.10009765625"/>
+  <position name="Mesh2Tess_15" unit="mm" x="666.5825805664062" y="5657.37109375" z="1493.47998046875"/>
+  </define>
+  <tessellated name="HCAL_Sector_Half_Plate">
+      <triangular vertex1="Mesh2Tess_4" vertex2="Mesh2Tess_3" vertex3="Mesh2Tess_15" type="ABSOLUTE"/>
+    <triangular vertex1="Mesh2Tess_4" vertex2="Mesh2Tess_15" vertex3="Mesh2Tess_0" type="ABSOLUTE"/>
+    <triangular vertex1="Mesh2Tess_14" vertex2="Mesh2Tess_12" vertex3="Mesh2Tess_6" type="ABSOLUTE"/>
+    <triangular vertex1="Mesh2Tess_10" vertex2="Mesh2Tess_12" vertex3="Mesh2Tess_14" type="ABSOLUTE"/>
+    <triangular vertex1="Mesh2Tess_6" vertex2="Mesh2Tess_12" vertex3="Mesh2Tess_0" type="ABSOLUTE"/>
+    <triangular vertex1="Mesh2Tess_0" vertex2="Mesh2Tess_12" vertex3="Mesh2Tess_4" type="ABSOLUTE"/>
+    <triangular vertex1="Mesh2Tess_8" vertex2="Mesh2Tess_5" vertex3="Mesh2Tess_9" type="ABSOLUTE"/>
+    <triangular vertex1="Mesh2Tess_4" vertex2="Mesh2Tess_8" vertex3="Mesh2Tess_3" type="ABSOLUTE"/>
+    <triangular vertex1="Mesh2Tess_12" vertex2="Mesh2Tess_8" vertex3="Mesh2Tess_4" type="ABSOLUTE"/>
+    <triangular vertex1="Mesh2Tess_2" vertex2="Mesh2Tess_12" vertex3="Mesh2Tess_10" type="ABSOLUTE"/>
+    <triangular vertex1="Mesh2Tess_2" vertex2="Mesh2Tess_5" vertex3="Mesh2Tess_8" type="ABSOLUTE"/>
+    <triangular vertex1="Mesh2Tess_2" vertex2="Mesh2Tess_8" vertex3="Mesh2Tess_12" type="ABSOLUTE"/>
+    <triangular vertex1="Mesh2Tess_14" vertex2="Mesh2Tess_13" vertex3="Mesh2Tess_2" type="ABSOLUTE"/>
+    <triangular vertex1="Mesh2Tess_14" vertex2="Mesh2Tess_2" vertex3="Mesh2Tess_10" type="ABSOLUTE"/>
+    <triangular vertex1="Mesh2Tess_8" vertex2="Mesh2Tess_1" vertex3="Mesh2Tess_11" type="ABSOLUTE"/>
+    <triangular vertex1="Mesh2Tess_8" vertex2="Mesh2Tess_9" vertex3="Mesh2Tess_1" type="ABSOLUTE"/>
+    <triangular vertex1="Mesh2Tess_15" vertex2="Mesh2Tess_3" vertex3="Mesh2Tess_8" type="ABSOLUTE"/>
+    <triangular vertex1="Mesh2Tess_15" vertex2="Mesh2Tess_8" vertex3="Mesh2Tess_11" type="ABSOLUTE"/>
+    <triangular vertex1="Mesh2Tess_11" vertex2="Mesh2Tess_1" vertex3="Mesh2Tess_7" type="ABSOLUTE"/>
+    <triangular vertex1="Mesh2Tess_6" vertex2="Mesh2Tess_0" vertex3="Mesh2Tess_15" type="ABSOLUTE"/>
+    <triangular vertex1="Mesh2Tess_6" vertex2="Mesh2Tess_15" vertex3="Mesh2Tess_11" type="ABSOLUTE"/>
+    <triangular vertex1="Mesh2Tess_13" vertex2="Mesh2Tess_14" vertex3="Mesh2Tess_6" type="ABSOLUTE"/>
+    <triangular vertex1="Mesh2Tess_7" vertex2="Mesh2Tess_13" vertex3="Mesh2Tess_6" type="ABSOLUTE"/>
+    <triangular vertex1="Mesh2Tess_7" vertex2="Mesh2Tess_6" vertex3="Mesh2Tess_11" type="ABSOLUTE"/>
+    <triangular vertex1="Mesh2Tess_5" vertex2="Mesh2Tess_13" vertex3="Mesh2Tess_7" type="ABSOLUTE"/>
+    <triangular vertex1="Mesh2Tess_5" vertex2="Mesh2Tess_2" vertex3="Mesh2Tess_13" type="ABSOLUTE"/>
+    <triangular vertex1="Mesh2Tess_5" vertex2="Mesh2Tess_1" vertex3="Mesh2Tess_9" type="ABSOLUTE"/>
+    <triangular vertex1="Mesh2Tess_5" vertex2="Mesh2Tess_7" vertex3="Mesh2Tess_1" type="ABSOLUTE"/>
+  </tessellated>
+  </solid>
+
+  <solid name="HCAL_Sector_Plate" material="Steel235" unit="mm" x="771.303" y="6119.176" z="0.0">
+  <define>
+  <position name="Mesh2Tess_0" unit="mm" x="688.0108642578125" y="5657.857421875" z="1500.0"/>
+  <position name="Mesh2Tess_1" unit="mm" x="731.9955444335938" y="5769.51708984375" z="3120.0"/>
+  <position name="Mesh2Tess_2" unit="mm" x="845.56689453125" y="6467.81005859375" z="3120.0"/>
+  <position name="Mesh2Tess_3" unit="mm" x="804.42236328125" y="6474.501953125" z="-3120.0"/>
+  <position name="Mesh2Tess_4" unit="mm" x="731.9955444335938" y="5769.51708984375" z="1593.74951171875"/>
+  <position name="Mesh2Tess_5" unit="mm" x="688.0108642578125" y="5657.857421875" z="-1500.0"/>
+  <position name="Mesh2Tess_6" unit="mm" x="712.2080688476562" y="5647.85400390625" z="-1500.0"/>
+  <position name="Mesh2Tess_7" unit="mm" x="845.56689453125" y="6467.81005859375" z="-3120.0"/>
+  <position name="Mesh2Tess_8" unit="mm" x="731.9955444335938" y="5769.51708984375" z="-1593.74951171875"/>
+  <position name="Mesh2Tess_9" unit="mm" x="705.4271850585938" y="5780.03564453125" z="3120.0"/>
+  <position name="Mesh2Tess_10" unit="mm" x="731.9955444335938" y="5769.51708984375" z="-3120.0"/>
+  <position name="Mesh2Tess_11" unit="mm" x="705.4271850585938" y="5780.03564453125" z="1593.4134521484375"/>
+  <position name="Mesh2Tess_12" unit="mm" x="705.4271850585938" y="5780.03564453125" z="-3120.0"/>
+  <position name="Mesh2Tess_13" unit="mm" x="705.4271850585938" y="5780.03564453125" z="-1593.4134521484375"/>
+  <position name="Mesh2Tess_14" unit="mm" x="804.42236328125" y="6474.501953125" z="3120.0"/>
+  <position name="Mesh2Tess_15" unit="mm" x="712.2080688476562" y="5647.85400390625" z="1500.0"/>
+   </define>
+  <tessellated name="HCAL_Sector_Plate">
+      <triangular vertex1="Mesh2Tess_12" vertex2="Mesh2Tess_8" vertex3="Mesh2Tess_13" type="ABSOLUTE"/>
+    <triangular vertex1="Mesh2Tess_12" vertex2="Mesh2Tess_10" vertex3="Mesh2Tess_8" type="ABSOLUTE"/>
+    <triangular vertex1="Mesh2Tess_13" vertex2="Mesh2Tess_8" vertex3="Mesh2Tess_5" type="ABSOLUTE"/>
+    <triangular vertex1="Mesh2Tess_5" vertex2="Mesh2Tess_8" vertex3="Mesh2Tess_6" type="ABSOLUTE"/>
+    <triangular vertex1="Mesh2Tess_4" vertex2="Mesh2Tess_2" vertex3="Mesh2Tess_1" type="ABSOLUTE"/>
+    <triangular vertex1="Mesh2Tess_8" vertex2="Mesh2Tess_4" vertex3="Mesh2Tess_15" type="ABSOLUTE"/>
+    <triangular vertex1="Mesh2Tess_8" vertex2="Mesh2Tess_15" vertex3="Mesh2Tess_6" type="ABSOLUTE"/>
+    <triangular vertex1="Mesh2Tess_7" vertex2="Mesh2Tess_8" vertex3="Mesh2Tess_10" type="ABSOLUTE"/>
+    <triangular vertex1="Mesh2Tess_7" vertex2="Mesh2Tess_2" vertex3="Mesh2Tess_4" type="ABSOLUTE"/>
+    <triangular vertex1="Mesh2Tess_7" vertex2="Mesh2Tess_4" vertex3="Mesh2Tess_8" type="ABSOLUTE"/>
+    <triangular vertex1="Mesh2Tess_12" vertex2="Mesh2Tess_3" vertex3="Mesh2Tess_7" type="ABSOLUTE"/>
+    <triangular vertex1="Mesh2Tess_12" vertex2="Mesh2Tess_7" vertex3="Mesh2Tess_10" type="ABSOLUTE"/>
+    <triangular vertex1="Mesh2Tess_9" vertex2="Mesh2Tess_4" vertex3="Mesh2Tess_1" type="ABSOLUTE"/>
+    <triangular vertex1="Mesh2Tess_9" vertex2="Mesh2Tess_11" vertex3="Mesh2Tess_4" type="ABSOLUTE"/>
+    <triangular vertex1="Mesh2Tess_0" vertex2="Mesh2Tess_15" vertex3="Mesh2Tess_4" type="ABSOLUTE"/>
+    <triangular vertex1="Mesh2Tess_0" vertex2="Mesh2Tess_4" vertex3="Mesh2Tess_11" type="ABSOLUTE"/>
+    <triangular vertex1="Mesh2Tess_5" vertex2="Mesh2Tess_6" vertex3="Mesh2Tess_15" type="ABSOLUTE"/>
+    <triangular vertex1="Mesh2Tess_5" vertex2="Mesh2Tess_15" vertex3="Mesh2Tess_0" type="ABSOLUTE"/>
+    <triangular vertex1="Mesh2Tess_11" vertex2="Mesh2Tess_9" vertex3="Mesh2Tess_14" type="ABSOLUTE"/>
+    <triangular vertex1="Mesh2Tess_13" vertex2="Mesh2Tess_5" vertex3="Mesh2Tess_0" type="ABSOLUTE"/>
+    <triangular vertex1="Mesh2Tess_13" vertex2="Mesh2Tess_0" vertex3="Mesh2Tess_11" type="ABSOLUTE"/>
+    <triangular vertex1="Mesh2Tess_3" vertex2="Mesh2Tess_12" vertex3="Mesh2Tess_13" type="ABSOLUTE"/>
+    <triangular vertex1="Mesh2Tess_14" vertex2="Mesh2Tess_3" vertex3="Mesh2Tess_13" type="ABSOLUTE"/>
+    <triangular vertex1="Mesh2Tess_14" vertex2="Mesh2Tess_13" vertex3="Mesh2Tess_11" type="ABSOLUTE"/>
+    <triangular vertex1="Mesh2Tess_2" vertex2="Mesh2Tess_3" vertex3="Mesh2Tess_14" type="ABSOLUTE"/>
+    <triangular vertex1="Mesh2Tess_2" vertex2="Mesh2Tess_7" vertex3="Mesh2Tess_3" type="ABSOLUTE"/>
+    <triangular vertex1="Mesh2Tess_2" vertex2="Mesh2Tess_9" vertex3="Mesh2Tess_1" type="ABSOLUTE"/>
+    <triangular vertex1="Mesh2Tess_2" vertex2="Mesh2Tess_14" vertex3="Mesh2Tess_9" type="ABSOLUTE"/>
+  </tessellated>
+  </solid>
+
+  <solid name="OuterHCalTile01" material="PlasticScint" unit="mm" x="102.707" y="426.850" z="-5.4212">
+    <define>
+  <position name="Mesh2Tess_0" unit="mm" x="0.5" y="0.0" z="3.5" />
+  <position name="Mesh2Tess_1" unit="mm" x="238.98008728027344" y="808.344482421875" z="3.5" />
+  <position name="Mesh2Tess_2" unit="mm" x="0.5" y="808.344482421875" z="3.5" />
+  <position name="Mesh2Tess_3" unit="mm" x="67.038330078125" y="799.6744995117188" z="3.5" />
+  <position name="Mesh2Tess_4" unit="mm" x="166.52439880371094" y="6.134781810156198e-15" z="-3.5" />
+  <position name="Mesh2Tess_5" unit="mm" x="67.038330078125" y="808.344482421875" z="-3.5" />
+  <position name="Mesh2Tess_6" unit="mm" x="67.038330078125" y="808.344482421875" z="3.5" />
+  <position name="Mesh2Tess_7" unit="mm" x="166.52439880371094" y="6.134781810156198e-15" z="3.5" />
+  <position name="Mesh2Tess_8" unit="mm" x="138.50833129882812" y="808.344482421875" z="-3.5" />
+  <position name="Mesh2Tess_9" unit="mm" x="138.50833129882812" y="808.344482421875" z="3.5" />
+  <position name="Mesh2Tess_10" unit="mm" x="238.98008728027344" y="808.344482421875" z="-3.5" />
+  <position name="Mesh2Tess_11" unit="mm" x="138.50833129882812" y="799.6744995117188" z="-3.5" />
+  <position name="Mesh2Tess_12" unit="mm" x="138.50833129882812" y="799.6744995117188" z="3.5" />
+  <position name="Mesh2Tess_13" unit="mm" x="0.5" y="0.0" z="-3.5" />
+  <position name="Mesh2Tess_14" unit="mm" x="0.5" y="808.344482421875" z="-3.5" />
+  <position name="Mesh2Tess_15" unit="mm" x="67.038330078125" y="799.6744995117188" z="-3.5" />
+    </define>
+
+        <tessellated aunit="deg" lunit="mm" name="OuterHCalTile01_EJ200-SOL">
+      <triangular vertex1="Mesh2Tess_2" vertex2="Mesh2Tess_6" vertex3="Mesh2Tess_5" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_2" vertex2="Mesh2Tess_5" vertex3="Mesh2Tess_14" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_15" vertex2="Mesh2Tess_6" vertex3="Mesh2Tess_3" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_15" vertex2="Mesh2Tess_5" vertex3="Mesh2Tess_6" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_14" vertex2="Mesh2Tess_15" vertex3="Mesh2Tess_13" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_13" vertex2="Mesh2Tess_15" vertex3="Mesh2Tess_4" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_14" vertex2="Mesh2Tess_5" vertex3="Mesh2Tess_15" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_15" vertex2="Mesh2Tess_11" vertex3="Mesh2Tess_4" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_8" vertex2="Mesh2Tess_10" vertex3="Mesh2Tess_11" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_11" vertex2="Mesh2Tess_10" vertex3="Mesh2Tess_4" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_0" vertex2="Mesh2Tess_14" vertex3="Mesh2Tess_13" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_0" vertex2="Mesh2Tess_2" vertex3="Mesh2Tess_14" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_3" vertex2="Mesh2Tess_2" vertex3="Mesh2Tess_0" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_3" vertex2="Mesh2Tess_0" vertex3="Mesh2Tess_7" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_6" vertex2="Mesh2Tess_2" vertex3="Mesh2Tess_3" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_12" vertex2="Mesh2Tess_3" vertex3="Mesh2Tess_7" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_1" vertex2="Mesh2Tess_9" vertex3="Mesh2Tess_12" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_1" vertex2="Mesh2Tess_12" vertex3="Mesh2Tess_7" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_11" vertex2="Mesh2Tess_15" vertex3="Mesh2Tess_12" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_12" vertex2="Mesh2Tess_15" vertex3="Mesh2Tess_3" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_7" vertex2="Mesh2Tess_13" vertex3="Mesh2Tess_4" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_7" vertex2="Mesh2Tess_0" vertex3="Mesh2Tess_13" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_1" vertex2="Mesh2Tess_4" vertex3="Mesh2Tess_10" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_1" vertex2="Mesh2Tess_7" vertex3="Mesh2Tess_4" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_8" vertex2="Mesh2Tess_1" vertex3="Mesh2Tess_10" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_9" vertex2="Mesh2Tess_1" vertex3="Mesh2Tess_8" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_8" vertex2="Mesh2Tess_12" vertex3="Mesh2Tess_9" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_8" vertex2="Mesh2Tess_11" vertex3="Mesh2Tess_12" type="ABSOLUTE" />
+         </tessellated>
+  </solid>
+
+  <solid name="OuterHCalTile02" material="PlasticScint" unit="mm" x="310.850" y="426.422" z="0.0">
+    <define>
+  <position name="Mesh2Tess_0" unit="mm" x="484.6166687011719" y="808.344482421875" z="-3.5" />
+  <position name="Mesh2Tess_1" unit="mm" x="167.52841186523438" y="3.469446951953614e-17" z="3.5" />
+  <position name="Mesh2Tess_2" unit="mm" x="484.6166687011719" y="808.344482421875" z="3.5" />
+  <position name="Mesh2Tess_3" unit="mm" x="303.5716247558594" y="799.2944946289062" z="-3.5" />
+  <position name="Mesh2Tess_4" unit="mm" x="303.5716247558594" y="799.2944946289062" z="3.5" />
+  <position name="Mesh2Tess_5" unit="mm" x="338.91033935546875" y="0.0" z="-3.5" />
+  <position name="Mesh2Tess_6" unit="mm" x="375.0416259765625" y="808.344482421875" z="-3.5" />
+  <position name="Mesh2Tess_7" unit="mm" x="338.91033935546875" y="0.0" z="3.5" />
+  <position name="Mesh2Tess_8" unit="mm" x="375.0416259765625" y="808.344482421875" z="3.5" />
+  <position name="Mesh2Tess_9" unit="mm" x="239.98410034179688" y="808.344482421875" z="-3.5" />
+  <position name="Mesh2Tess_10" unit="mm" x="375.0416259765625" y="799.2944946289062" z="-3.5" />
+  <position name="Mesh2Tess_11" unit="mm" x="239.98410034179688" y="808.344482421875" z="3.5" />
+  <position name="Mesh2Tess_12" unit="mm" x="375.0416259765625" y="799.2944946289062" z="3.5" />
+  <position name="Mesh2Tess_13" unit="mm" x="167.52841186523438" y="3.469446951953614e-17" z="-3.5" />
+  <position name="Mesh2Tess_14" unit="mm" x="303.5716247558594" y="808.344482421875" z="-3.5" />
+  <position name="Mesh2Tess_15" unit="mm" x="303.5716247558594" y="808.344482421875" z="3.5" />
+    </define>
+
+        <tessellated aunit="deg" lunit="mm" name="OuterHCalTile02_EJ200-SOL">
+      <triangular vertex1="Mesh2Tess_3" vertex2="Mesh2Tess_14" vertex3="Mesh2Tess_4" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_4" vertex2="Mesh2Tess_14" vertex3="Mesh2Tess_15" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_9" vertex2="Mesh2Tess_3" vertex3="Mesh2Tess_13" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_13" vertex2="Mesh2Tess_3" vertex3="Mesh2Tess_5" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_9" vertex2="Mesh2Tess_14" vertex3="Mesh2Tess_3" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_3" vertex2="Mesh2Tess_10" vertex3="Mesh2Tess_5" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_6" vertex2="Mesh2Tess_0" vertex3="Mesh2Tess_10" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_10" vertex2="Mesh2Tess_0" vertex3="Mesh2Tess_5" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_11" vertex2="Mesh2Tess_15" vertex3="Mesh2Tess_14" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_11" vertex2="Mesh2Tess_14" vertex3="Mesh2Tess_9" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_4" vertex2="Mesh2Tess_11" vertex3="Mesh2Tess_1" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_4" vertex2="Mesh2Tess_1" vertex3="Mesh2Tess_7" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_15" vertex2="Mesh2Tess_11" vertex3="Mesh2Tess_4" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_12" vertex2="Mesh2Tess_4" vertex3="Mesh2Tess_7" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_2" vertex2="Mesh2Tess_8" vertex3="Mesh2Tess_12" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_2" vertex2="Mesh2Tess_12" vertex3="Mesh2Tess_7" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_10" vertex2="Mesh2Tess_4" vertex3="Mesh2Tess_12" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_10" vertex2="Mesh2Tess_3" vertex3="Mesh2Tess_4" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_2" vertex2="Mesh2Tess_5" vertex3="Mesh2Tess_0" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_2" vertex2="Mesh2Tess_7" vertex3="Mesh2Tess_5" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_5" vertex2="Mesh2Tess_1" vertex3="Mesh2Tess_13" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_7" vertex2="Mesh2Tess_1" vertex3="Mesh2Tess_5" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_1" vertex2="Mesh2Tess_9" vertex3="Mesh2Tess_13" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_1" vertex2="Mesh2Tess_11" vertex3="Mesh2Tess_9" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_6" vertex2="Mesh2Tess_10" vertex3="Mesh2Tess_8" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_8" vertex2="Mesh2Tess_10" vertex3="Mesh2Tess_12" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_8" vertex2="Mesh2Tess_2" vertex3="Mesh2Tess_0" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_8" vertex2="Mesh2Tess_0" vertex3="Mesh2Tess_6" type="ABSOLUTE" />
+        </tessellated>
+  </solid>
+
+  <solid name="OuterHCalTile03" material="PlasticScint" unit="mm" x="520.610" y="427.08" z="0.0">
+    <define>
+  <position name="Mesh2Tess_0" unit="mm" x="339.92645263671875" y="-4.683753385137379e-16" z="-3.5" />
+  <position name="Mesh2Tess_1" unit="mm" x="543.5171508789062" y="799.2944946289062" z="-3.5" />
+  <position name="Mesh2Tess_2" unit="mm" x="339.92645263671875" y="-4.683753385137379e-16" z="3.5" />
+  <position name="Mesh2Tess_3" unit="mm" x="614.9871826171875" y="808.344482421875" z="3.5" />
+  <position name="Mesh2Tess_4" unit="mm" x="727.8602905273438" y="808.344482421875" z="3.5" />
+  <position name="Mesh2Tess_5" unit="mm" x="543.5171508789062" y="799.2944946289062" z="3.5" />
+  <position name="Mesh2Tess_6" unit="mm" x="507.87432861328125" y="-5.030698080332741e-16" z="-3.5" />
+  <position name="Mesh2Tess_7" unit="mm" x="543.5171508789062" y="808.344482421875" z="-3.5" />
+  <position name="Mesh2Tess_8" unit="mm" x="507.87432861328125" y="-5.030698080332741e-16" z="3.5" />
+  <position name="Mesh2Tess_9" unit="mm" x="485.6327819824219" y="808.344482421875" z="-3.5" />
+  <position name="Mesh2Tess_10" unit="mm" x="543.5171508789062" y="808.344482421875" z="3.5" />
+  <position name="Mesh2Tess_11" unit="mm" x="614.9871826171875" y="799.2944946289062" z="-3.5" />
+  <position name="Mesh2Tess_12" unit="mm" x="614.9871826171875" y="799.2944946289062" z="3.5" />
+  <position name="Mesh2Tess_13" unit="mm" x="485.6327819824219" y="808.344482421875" z="3.5" />
+  <position name="Mesh2Tess_14" unit="mm" x="614.9871826171875" y="808.344482421875" z="-3.5" />
+  <position name="Mesh2Tess_15" unit="mm" x="727.8602905273438" y="808.344482421875" z="-3.5" />
+    </define>
+
+        <tessellated aunit="deg" lunit="mm" name="OuterHCalTile03_EJ200-SOL">
+      <triangular vertex1="Mesh2Tess_12" vertex2="Mesh2Tess_1" vertex3="Mesh2Tess_5" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_11" vertex2="Mesh2Tess_1" vertex3="Mesh2Tess_12" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_13" vertex2="Mesh2Tess_2" vertex3="Mesh2Tess_8" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_5" vertex2="Mesh2Tess_13" vertex3="Mesh2Tess_8" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_10" vertex2="Mesh2Tess_13" vertex3="Mesh2Tess_5" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_12" vertex2="Mesh2Tess_5" vertex3="Mesh2Tess_8" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_4" vertex2="Mesh2Tess_3" vertex3="Mesh2Tess_12" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_4" vertex2="Mesh2Tess_12" vertex3="Mesh2Tess_8" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_1" vertex2="Mesh2Tess_10" vertex3="Mesh2Tess_5" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_1" vertex2="Mesh2Tess_7" vertex3="Mesh2Tess_10" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_0" vertex2="Mesh2Tess_9" vertex3="Mesh2Tess_6" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_9" vertex2="Mesh2Tess_1" vertex3="Mesh2Tess_6" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_9" vertex2="Mesh2Tess_7" vertex3="Mesh2Tess_1" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_1" vertex2="Mesh2Tess_11" vertex3="Mesh2Tess_6" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_14" vertex2="Mesh2Tess_15" vertex3="Mesh2Tess_11" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_11" vertex2="Mesh2Tess_15" vertex3="Mesh2Tess_6" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_14" vertex2="Mesh2Tess_11" vertex3="Mesh2Tess_3" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_3" vertex2="Mesh2Tess_11" vertex3="Mesh2Tess_12" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_4" vertex2="Mesh2Tess_6" vertex3="Mesh2Tess_15" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_4" vertex2="Mesh2Tess_8" vertex3="Mesh2Tess_6" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_6" vertex2="Mesh2Tess_2" vertex3="Mesh2Tess_0" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_8" vertex2="Mesh2Tess_2" vertex3="Mesh2Tess_6" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_2" vertex2="Mesh2Tess_9" vertex3="Mesh2Tess_0" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_2" vertex2="Mesh2Tess_13" vertex3="Mesh2Tess_9" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_13" vertex2="Mesh2Tess_10" vertex3="Mesh2Tess_7" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_13" vertex2="Mesh2Tess_7" vertex3="Mesh2Tess_9" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_3" vertex2="Mesh2Tess_4" vertex3="Mesh2Tess_15" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_3" vertex2="Mesh2Tess_15" vertex3="Mesh2Tess_14" type="ABSOLUTE" />
+        </tessellated>
+  </solid>
+
+  <solid name="OuterHCalTile04" material="PlasticScint" unit="mm" x="732.802" y="426.818" z="0.0">
+    <define>
+  <position name="Mesh2Tess_0" unit="mm" x="856.9021606445312" y="799.2944946289062" z="3.5" />
+  <position name="Mesh2Tess_1" unit="mm" x="856.9021606445312" y="808.344482421875" z="-3.5" />
+  <position name="Mesh2Tess_2" unit="mm" x="856.9021606445312" y="808.344482421875" z="3.5" />
+  <position name="Mesh2Tess_3" unit="mm" x="785.43212890625" y="808.344482421875" z="3.5" />
+  <position name="Mesh2Tess_4" unit="mm" x="728.8966674804688" y="808.344482421875" z="3.5" />
+  <position name="Mesh2Tess_5" unit="mm" x="785.43212890625" y="808.344482421875" z="-3.5" />
+  <position name="Mesh2Tess_6" unit="mm" x="728.8966674804688" y="808.344482421875" z="-3.5" />
+  <position name="Mesh2Tess_7" unit="mm" x="980.078369140625" y="808.344482421875" z="-3.5" />
+  <position name="Mesh2Tess_8" unit="mm" x="785.43212890625" y="799.2944946289062" z="-3.5" />
+  <position name="Mesh2Tess_9" unit="mm" x="980.078369140625" y="808.344482421875" z="3.5" />
+  <position name="Mesh2Tess_10" unit="mm" x="508.9106750488281" y="3.5561831257524545e-15" z="-3.5" />
+  <position name="Mesh2Tess_11" unit="mm" x="785.43212890625" y="799.2944946289062" z="3.5" />
+  <position name="Mesh2Tess_12" unit="mm" x="683.914306640625" y="3.5214886562329184e-15" z="3.5" />
+  <position name="Mesh2Tess_13" unit="mm" x="683.914306640625" y="3.5214886562329184e-15" z="-3.5" />
+  <position name="Mesh2Tess_14" unit="mm" x="508.9106750488281" y="3.5561831257524545e-15" z="3.5" />
+  <position name="Mesh2Tess_15" unit="mm" x="856.9021606445312" y="799.2944946289062" z="-3.5" />
+    </define>
+
+        <tessellated aunit="deg" lunit="mm" name="OuterHCalTile04_EJ200-SOL">
+      <triangular vertex1="Mesh2Tess_0" vertex2="Mesh2Tess_8" vertex3="Mesh2Tess_11" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_15" vertex2="Mesh2Tess_8" vertex3="Mesh2Tess_0" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_4" vertex2="Mesh2Tess_14" vertex3="Mesh2Tess_12" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_11" vertex2="Mesh2Tess_4" vertex3="Mesh2Tess_12" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_3" vertex2="Mesh2Tess_4" vertex3="Mesh2Tess_11" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_0" vertex2="Mesh2Tess_11" vertex3="Mesh2Tess_12" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_9" vertex2="Mesh2Tess_2" vertex3="Mesh2Tess_0" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_9" vertex2="Mesh2Tess_0" vertex3="Mesh2Tess_12" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_8" vertex2="Mesh2Tess_3" vertex3="Mesh2Tess_11" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_8" vertex2="Mesh2Tess_5" vertex3="Mesh2Tess_3" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_10" vertex2="Mesh2Tess_6" vertex3="Mesh2Tess_13" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_6" vertex2="Mesh2Tess_8" vertex3="Mesh2Tess_13" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_6" vertex2="Mesh2Tess_5" vertex3="Mesh2Tess_8" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_8" vertex2="Mesh2Tess_15" vertex3="Mesh2Tess_13" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_1" vertex2="Mesh2Tess_7" vertex3="Mesh2Tess_15" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_15" vertex2="Mesh2Tess_7" vertex3="Mesh2Tess_13" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_1" vertex2="Mesh2Tess_15" vertex3="Mesh2Tess_2" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_2" vertex2="Mesh2Tess_15" vertex3="Mesh2Tess_0" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_9" vertex2="Mesh2Tess_13" vertex3="Mesh2Tess_7" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_9" vertex2="Mesh2Tess_12" vertex3="Mesh2Tess_13" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_12" vertex2="Mesh2Tess_10" vertex3="Mesh2Tess_13" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_12" vertex2="Mesh2Tess_14" vertex3="Mesh2Tess_10" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_14" vertex2="Mesh2Tess_6" vertex3="Mesh2Tess_10" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_14" vertex2="Mesh2Tess_4" vertex3="Mesh2Tess_6" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_6" vertex2="Mesh2Tess_3" vertex3="Mesh2Tess_5" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_4" vertex2="Mesh2Tess_3" vertex3="Mesh2Tess_6" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_2" vertex2="Mesh2Tess_9" vertex3="Mesh2Tess_7" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_2" vertex2="Mesh2Tess_7" vertex3="Mesh2Tess_1" type="ABSOLUTE" />
+        </tessellated>
+  </solid>
+
+  <solid name="OuterHCalTile05" material="PlasticScint" unit="mm" x="952.594" y="426.866" z="0.0">
+    <define>
+  <position name="Mesh2Tess_0" unit="mm" x="1171.66064453125" y="808.344482421875" z="-3.5" />
+  <position name="Mesh2Tess_1" unit="mm" x="1100.1905517578125" y="799.2944946289062" z="-3.5" />
+  <position name="Mesh2Tess_2" unit="mm" x="866.001220703125" y="0.0" z="3.5" />
+  <position name="Mesh2Tess_3" unit="mm" x="1171.66064453125" y="808.344482421875" z="3.5" />
+  <position name="Mesh2Tess_4" unit="mm" x="684.9793090820312" y="1.734723475976807e-17" z="-3.5" />
+  <position name="Mesh2Tess_5" unit="mm" x="866.001220703125" y="0.0" z="-3.5" />
+  <position name="Mesh2Tess_6" unit="mm" x="1100.1905517578125" y="799.2944946289062" z="3.5" />
+  <position name="Mesh2Tess_7" unit="mm" x="1100.1905517578125" y="808.344482421875" z="-3.5" />
+  <position name="Mesh2Tess_8" unit="mm" x="1100.1905517578125" y="808.344482421875" z="3.5" />
+  <position name="Mesh2Tess_9" unit="mm" x="981.1433715820312" y="808.344482421875" z="-3.5" />
+  <position name="Mesh2Tess_10" unit="mm" x="1240.965087890625" y="808.344482421875" z="-3.5" />
+  <position name="Mesh2Tess_11" unit="mm" x="1240.965087890625" y="808.344482421875" z="3.5" />
+  <position name="Mesh2Tess_12" unit="mm" x="981.1433715820312" y="808.344482421875" z="3.5" />
+  <position name="Mesh2Tess_13" unit="mm" x="1171.66064453125" y="799.2944946289062" z="-3.5" />
+  <position name="Mesh2Tess_14" unit="mm" x="1171.66064453125" y="799.2944946289062" z="3.5" />
+  <position name="Mesh2Tess_15" unit="mm" x="684.9793090820312" y="1.734723475976807e-17" z="3.5" />
+    </define>
+
+        <tessellated aunit="deg" lunit="mm" name="OuterHCalTile05_EJ200-SOL">
+      <triangular vertex1="Mesh2Tess_14" vertex2="Mesh2Tess_1" vertex3="Mesh2Tess_6" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_13" vertex2="Mesh2Tess_1" vertex3="Mesh2Tess_14" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_12" vertex2="Mesh2Tess_15" vertex3="Mesh2Tess_2" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_6" vertex2="Mesh2Tess_12" vertex3="Mesh2Tess_2" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_8" vertex2="Mesh2Tess_12" vertex3="Mesh2Tess_6" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_14" vertex2="Mesh2Tess_6" vertex3="Mesh2Tess_2" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_11" vertex2="Mesh2Tess_3" vertex3="Mesh2Tess_14" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_11" vertex2="Mesh2Tess_14" vertex3="Mesh2Tess_2" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_1" vertex2="Mesh2Tess_7" vertex3="Mesh2Tess_6" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_6" vertex2="Mesh2Tess_7" vertex3="Mesh2Tess_8" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_4" vertex2="Mesh2Tess_9" vertex3="Mesh2Tess_5" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_9" vertex2="Mesh2Tess_1" vertex3="Mesh2Tess_5" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_9" vertex2="Mesh2Tess_7" vertex3="Mesh2Tess_1" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_1" vertex2="Mesh2Tess_13" vertex3="Mesh2Tess_5" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_0" vertex2="Mesh2Tess_10" vertex3="Mesh2Tess_13" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_13" vertex2="Mesh2Tess_10" vertex3="Mesh2Tess_5" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_0" vertex2="Mesh2Tess_13" vertex3="Mesh2Tess_3" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_3" vertex2="Mesh2Tess_13" vertex3="Mesh2Tess_14" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_11" vertex2="Mesh2Tess_5" vertex3="Mesh2Tess_10" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_11" vertex2="Mesh2Tess_2" vertex3="Mesh2Tess_5" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_2" vertex2="Mesh2Tess_4" vertex3="Mesh2Tess_5" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_2" vertex2="Mesh2Tess_15" vertex3="Mesh2Tess_4" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_15" vertex2="Mesh2Tess_9" vertex3="Mesh2Tess_4" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_15" vertex2="Mesh2Tess_12" vertex3="Mesh2Tess_9" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_12" vertex2="Mesh2Tess_8" vertex3="Mesh2Tess_7" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_12" vertex2="Mesh2Tess_7" vertex3="Mesh2Tess_9" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_0" vertex2="Mesh2Tess_11" vertex3="Mesh2Tess_10" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_3" vertex2="Mesh2Tess_11" vertex3="Mesh2Tess_0" type="ABSOLUTE" />
+          </tessellated>
+  </solid>
+
+  <solid name="OuterHCalTile06" material="PlasticScint" unit="mm" x="1180.725" y="426.919" z="0.0">
+    <define>
+  <position name="Mesh2Tess_0" unit="mm" x="1511.50146484375" y="808.344482421875" z="-3.5" />
+  <position name="Mesh2Tess_1" unit="mm" x="867.1035766601562" y="4.128641872824801e-15" z="-3.5" />
+  <position name="Mesh2Tess_2" unit="mm" x="1511.50146484375" y="808.344482421875" z="3.5" />
+  <position name="Mesh2Tess_3" unit="mm" x="1295.924560546875" y="808.344482421875" z="-3.5" />
+  <position name="Mesh2Tess_4" unit="mm" x="1242.0673828125" y="808.344482421875" z="-3.5" />
+  <position name="Mesh2Tess_5" unit="mm" x="1054.8138427734375" y="4.128641872824801e-15" z="3.5" />
+  <position name="Mesh2Tess_6" unit="mm" x="1054.8138427734375" y="4.128641872824801e-15" z="-3.5" />
+  <position name="Mesh2Tess_7" unit="mm" x="867.1035766601562" y="4.128641872824801e-15" z="3.5" />
+  <position name="Mesh2Tess_8" unit="mm" x="1367.39453125" y="799.2944946289062" z="-3.5" />
+  <position name="Mesh2Tess_9" unit="mm" x="1367.39453125" y="799.2944946289062" z="3.5" />
+  <position name="Mesh2Tess_10" unit="mm" x="1242.0673828125" y="808.344482421875" z="3.5" />
+  <position name="Mesh2Tess_11" unit="mm" x="1295.924560546875" y="808.344482421875" z="3.5" />
+  <position name="Mesh2Tess_12" unit="mm" x="1367.39453125" y="808.344482421875" z="-3.5" />
+  <position name="Mesh2Tess_13" unit="mm" x="1295.924560546875" y="799.2944946289062" z="-3.5" />
+  <position name="Mesh2Tess_14" unit="mm" x="1295.924560546875" y="799.2944946289062" z="3.5" />
+  <position name="Mesh2Tess_15" unit="mm" x="1367.39453125" y="808.344482421875" z="3.5" />
+    </define>
+
+        <tessellated aunit="deg" lunit="mm" name="OuterHCalTile06_EJ200-SOL">
+      <triangular vertex1="Mesh2Tess_9" vertex2="Mesh2Tess_13" vertex3="Mesh2Tess_14" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_8" vertex2="Mesh2Tess_13" vertex3="Mesh2Tess_9" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_10" vertex2="Mesh2Tess_7" vertex3="Mesh2Tess_5" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_14" vertex2="Mesh2Tess_10" vertex3="Mesh2Tess_5" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_11" vertex2="Mesh2Tess_10" vertex3="Mesh2Tess_14" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_9" vertex2="Mesh2Tess_14" vertex3="Mesh2Tess_5" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_2" vertex2="Mesh2Tess_15" vertex3="Mesh2Tess_9" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_2" vertex2="Mesh2Tess_9" vertex3="Mesh2Tess_5" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_13" vertex2="Mesh2Tess_11" vertex3="Mesh2Tess_14" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_13" vertex2="Mesh2Tess_3" vertex3="Mesh2Tess_11" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_1" vertex2="Mesh2Tess_4" vertex3="Mesh2Tess_6" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_4" vertex2="Mesh2Tess_13" vertex3="Mesh2Tess_6" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_4" vertex2="Mesh2Tess_3" vertex3="Mesh2Tess_13" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_13" vertex2="Mesh2Tess_8" vertex3="Mesh2Tess_6" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_12" vertex2="Mesh2Tess_0" vertex3="Mesh2Tess_8" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_8" vertex2="Mesh2Tess_0" vertex3="Mesh2Tess_6" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_12" vertex2="Mesh2Tess_8" vertex3="Mesh2Tess_15" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_15" vertex2="Mesh2Tess_8" vertex3="Mesh2Tess_9" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_2" vertex2="Mesh2Tess_6" vertex3="Mesh2Tess_0" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_2" vertex2="Mesh2Tess_5" vertex3="Mesh2Tess_6" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_5" vertex2="Mesh2Tess_1" vertex3="Mesh2Tess_6" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_5" vertex2="Mesh2Tess_7" vertex3="Mesh2Tess_1" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_7" vertex2="Mesh2Tess_4" vertex3="Mesh2Tess_1" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_7" vertex2="Mesh2Tess_10" vertex3="Mesh2Tess_4" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_10" vertex2="Mesh2Tess_11" vertex3="Mesh2Tess_3" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_10" vertex2="Mesh2Tess_3" vertex3="Mesh2Tess_4" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_12" vertex2="Mesh2Tess_2" vertex3="Mesh2Tess_0" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_15" vertex2="Mesh2Tess_2" vertex3="Mesh2Tess_12" type="ABSOLUTE" />
+        </tessellated>
+  </solid>
+
+  <solid name="OuterHCalTile07" material="PlasticScint" unit="mm" x="1418.405" y="426.976" z="0.0">
+    <define>
+  <position name="Mesh2Tess_0" unit="mm" x="1638.95751953125" y="799.2944946289062" z="-3.5" />
+  <position name="Mesh2Tess_1" unit="mm" x="1795.1790771484375" y="808.344482421875" z="3.5" />
+  <position name="Mesh2Tess_2" unit="mm" x="1795.1790771484375" y="808.344482421875" z="-3.5" />
+  <position name="Mesh2Tess_3" unit="mm" x="1567.487548828125" y="799.2944946289062" z="3.5" />
+  <position name="Mesh2Tess_4" unit="mm" x="1638.95751953125" y="799.2944946289062" z="3.5" />
+  <position name="Mesh2Tess_5" unit="mm" x="1055.96240234375" y="1.0321604682062002e-15" z="3.5" />
+  <position name="Mesh2Tess_6" unit="mm" x="1512.6500244140625" y="808.344482421875" z="-3.5" />
+  <position name="Mesh2Tess_7" unit="mm" x="1567.487548828125" y="808.344482421875" z="-3.5" />
+  <position name="Mesh2Tess_8" unit="mm" x="1638.95751953125" y="808.344482421875" z="-3.5" />
+  <position name="Mesh2Tess_9" unit="mm" x="1055.96240234375" y="1.0321604682062002e-15" z="-3.5" />
+  <position name="Mesh2Tess_10" unit="mm" x="1512.6500244140625" y="808.344482421875" z="3.5" />
+  <position name="Mesh2Tess_11" unit="mm" x="1567.487548828125" y="808.344482421875" z="3.5" />
+  <position name="Mesh2Tess_12" unit="mm" x="1638.95751953125" y="808.344482421875" z="3.5" />
+  <position name="Mesh2Tess_13" unit="mm" x="1252.8128662109375" y="2.048137313163923e-15" z="-3.5" />
+  <position name="Mesh2Tess_14" unit="mm" x="1252.8128662109375" y="2.048137313163923e-15" z="3.5" />
+  <position name="Mesh2Tess_15" unit="mm" x="1567.487548828125" y="799.2944946289062" z="-3.5" />
+    </define>
+
+        <tessellated aunit="deg" lunit="mm" name="OuterHCalTile07_EJ200-SOL">
+      <triangular vertex1="Mesh2Tess_4" vertex2="Mesh2Tess_15" vertex3="Mesh2Tess_3" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_0" vertex2="Mesh2Tess_15" vertex3="Mesh2Tess_4" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_10" vertex2="Mesh2Tess_5" vertex3="Mesh2Tess_14" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_3" vertex2="Mesh2Tess_10" vertex3="Mesh2Tess_14" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_11" vertex2="Mesh2Tess_10" vertex3="Mesh2Tess_3" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_4" vertex2="Mesh2Tess_3" vertex3="Mesh2Tess_14" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_1" vertex2="Mesh2Tess_12" vertex3="Mesh2Tess_4" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_1" vertex2="Mesh2Tess_4" vertex3="Mesh2Tess_14" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_15" vertex2="Mesh2Tess_7" vertex3="Mesh2Tess_3" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_3" vertex2="Mesh2Tess_7" vertex3="Mesh2Tess_11" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_9" vertex2="Mesh2Tess_6" vertex3="Mesh2Tess_13" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_6" vertex2="Mesh2Tess_15" vertex3="Mesh2Tess_13" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_6" vertex2="Mesh2Tess_7" vertex3="Mesh2Tess_15" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_15" vertex2="Mesh2Tess_0" vertex3="Mesh2Tess_13" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_8" vertex2="Mesh2Tess_2" vertex3="Mesh2Tess_0" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_0" vertex2="Mesh2Tess_2" vertex3="Mesh2Tess_13" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_8" vertex2="Mesh2Tess_0" vertex3="Mesh2Tess_12" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_12" vertex2="Mesh2Tess_0" vertex3="Mesh2Tess_4" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_1" vertex2="Mesh2Tess_13" vertex3="Mesh2Tess_2" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_1" vertex2="Mesh2Tess_14" vertex3="Mesh2Tess_13" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_14" vertex2="Mesh2Tess_9" vertex3="Mesh2Tess_13" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_14" vertex2="Mesh2Tess_5" vertex3="Mesh2Tess_9" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_5" vertex2="Mesh2Tess_6" vertex3="Mesh2Tess_9" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_5" vertex2="Mesh2Tess_10" vertex3="Mesh2Tess_6" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_10" vertex2="Mesh2Tess_11" vertex3="Mesh2Tess_7" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_10" vertex2="Mesh2Tess_7" vertex3="Mesh2Tess_6" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_12" vertex2="Mesh2Tess_1" vertex3="Mesh2Tess_2" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_12" vertex2="Mesh2Tess_2" vertex3="Mesh2Tess_8" type="ABSOLUTE" />
+        </tessellated>
+  </solid>
+
+  <solid name="OuterHCalTile08" material="PlasticScint" unit="mm" x="1668.665" y="426.824" z="0.0">
+    <define>
+  <position name="Mesh2Tess_0" unit="mm" x="1852.807861328125" y="808.344482421875" z="-3.5" />
+  <position name="Mesh2Tess_1" unit="mm" x="1852.807861328125" y="808.344482421875" z="3.5" />
+  <position name="Mesh2Tess_2" unit="mm" x="1462.767822265625" y="0.0" z="-3.5" />
+  <position name="Mesh2Tess_3" unit="mm" x="1852.807861328125" y="799.2944946289062" z="-3.5" />
+  <position name="Mesh2Tess_4" unit="mm" x="1462.767822265625" y="0.0" z="3.5" />
+  <position name="Mesh2Tess_5" unit="mm" x="1254.01708984375" y="3.469446951953614e-17" z="-3.5" />
+  <position name="Mesh2Tess_6" unit="mm" x="1254.01708984375" y="3.469446951953614e-17" z="3.5" />
+  <position name="Mesh2Tess_7" unit="mm" x="1924.27783203125" y="808.344482421875" z="-3.5" />
+  <position name="Mesh2Tess_8" unit="mm" x="1852.807861328125" y="799.2944946289062" z="3.5" />
+  <position name="Mesh2Tess_9" unit="mm" x="1924.27783203125" y="808.344482421875" z="3.5" />
+  <position name="Mesh2Tess_10" unit="mm" x="1796.38330078125" y="808.344482421875" z="-3.5" />
+  <position name="Mesh2Tess_11" unit="mm" x="1796.38330078125" y="808.344482421875" z="3.5" />
+  <position name="Mesh2Tess_12" unit="mm" x="1924.27783203125" y="799.2944946289062" z="-3.5" />
+  <position name="Mesh2Tess_13" unit="mm" x="2094.974853515625" y="808.344482421875" z="-3.5" />
+  <position name="Mesh2Tess_14" unit="mm" x="2094.974853515625" y="808.344482421875" z="3.5" />
+  <position name="Mesh2Tess_15" unit="mm" x="1924.27783203125" y="799.2944946289062" z="3.5" />
+    </define>
+
+        <tessellated aunit="deg" lunit="mm" name="OuterHCalTile08_EJ200-SOL">
+      <triangular vertex1="Mesh2Tess_15" vertex2="Mesh2Tess_3" vertex3="Mesh2Tess_8" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_12" vertex2="Mesh2Tess_3" vertex3="Mesh2Tess_15" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_11" vertex2="Mesh2Tess_6" vertex3="Mesh2Tess_4" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_8" vertex2="Mesh2Tess_11" vertex3="Mesh2Tess_4" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_1" vertex2="Mesh2Tess_11" vertex3="Mesh2Tess_8" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_15" vertex2="Mesh2Tess_8" vertex3="Mesh2Tess_4" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_14" vertex2="Mesh2Tess_9" vertex3="Mesh2Tess_15" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_14" vertex2="Mesh2Tess_15" vertex3="Mesh2Tess_4" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_3" vertex2="Mesh2Tess_0" vertex3="Mesh2Tess_8" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_8" vertex2="Mesh2Tess_0" vertex3="Mesh2Tess_1" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_5" vertex2="Mesh2Tess_10" vertex3="Mesh2Tess_2" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_10" vertex2="Mesh2Tess_3" vertex3="Mesh2Tess_2" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_10" vertex2="Mesh2Tess_0" vertex3="Mesh2Tess_3" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_3" vertex2="Mesh2Tess_12" vertex3="Mesh2Tess_2" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_7" vertex2="Mesh2Tess_13" vertex3="Mesh2Tess_12" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_12" vertex2="Mesh2Tess_13" vertex3="Mesh2Tess_2" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_7" vertex2="Mesh2Tess_12" vertex3="Mesh2Tess_9" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_9" vertex2="Mesh2Tess_12" vertex3="Mesh2Tess_15" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_14" vertex2="Mesh2Tess_2" vertex3="Mesh2Tess_13" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_14" vertex2="Mesh2Tess_4" vertex3="Mesh2Tess_2" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_4" vertex2="Mesh2Tess_5" vertex3="Mesh2Tess_2" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_4" vertex2="Mesh2Tess_6" vertex3="Mesh2Tess_5" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_6" vertex2="Mesh2Tess_10" vertex3="Mesh2Tess_5" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_6" vertex2="Mesh2Tess_11" vertex3="Mesh2Tess_10" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_11" vertex2="Mesh2Tess_1" vertex3="Mesh2Tess_0" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_11" vertex2="Mesh2Tess_0" vertex3="Mesh2Tess_10" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_7" vertex2="Mesh2Tess_14" vertex3="Mesh2Tess_13" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_9" vertex2="Mesh2Tess_14" vertex3="Mesh2Tess_7" type="ABSOLUTE" />
+        </tessellated>
+  </solid>
+
+  <solid name="OuterHCalTile09" material="PlasticScint" unit="mm" x="-1980.199" y="482.037" z="0.0">
+    <define>
+  <position name="Mesh2Tess_0" unit="mm" x="-2413.33154296875" y="808.344482421875" z="-3.5" />
+  <position name="Mesh2Tess_1" unit="mm" x="-1560.988525390625" y="123.9625015258789" z="-3.5" />
+  <position name="Mesh2Tess_2" unit="mm" x="-2149.891845703125" y="808.344482421875" z="3.5" />
+  <position name="Mesh2Tess_3" unit="mm" x="-2096.244384765625" y="808.344482421875" z="3.5" />
+  <position name="Mesh2Tess_4" unit="mm" x="-2096.244384765625" y="808.344482421875" z="-3.5" />
+  <position name="Mesh2Tess_5" unit="mm" x="-2413.33154296875" y="808.344482421875" z="3.5" />
+  <position name="Mesh2Tess_6" unit="mm" x="-1795.8123779296875" y="123.9625015258789" z="-3.5" />
+  <position name="Mesh2Tess_7" unit="mm" x="-1795.8123779296875" y="123.9625015258789" z="3.5" />
+  <position name="Mesh2Tess_8" unit="mm" x="-1560.988525390625" y="123.9625015258789" z="3.5" />
+  <position name="Mesh2Tess_9" unit="mm" x="-2221.36181640625" y="808.344482421875" z="-3.5" />
+  <position name="Mesh2Tess_10" unit="mm" x="-2221.36181640625" y="808.344482421875" z="3.5" />
+  <position name="Mesh2Tess_11" unit="mm" x="-2221.36181640625" y="799.2944946289062" z="-3.5" />
+  <position name="Mesh2Tess_12" unit="mm" x="-2149.891845703125" y="799.2944946289062" z="-3.5" />
+  <position name="Mesh2Tess_13" unit="mm" x="-2149.891845703125" y="799.2944946289062" z="3.5" />
+  <position name="Mesh2Tess_14" unit="mm" x="-2221.36181640625" y="799.2944946289062" z="3.5" />
+  <position name="Mesh2Tess_15" unit="mm" x="-2149.891845703125" y="808.344482421875" z="-3.5" />
+    </define>
+
+        <tessellated aunit="deg" lunit="mm" name="OuterHCalTile09_EJ200-SOL">
+      <triangular vertex1="Mesh2Tess_4" vertex2="Mesh2Tess_15" vertex3="Mesh2Tess_2" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_4" vertex2="Mesh2Tess_2" vertex3="Mesh2Tess_3" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_13" vertex2="Mesh2Tess_15" vertex3="Mesh2Tess_12" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_13" vertex2="Mesh2Tess_2" vertex3="Mesh2Tess_15" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_8" vertex2="Mesh2Tess_3" vertex3="Mesh2Tess_7" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_3" vertex2="Mesh2Tess_13" vertex3="Mesh2Tess_7" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_3" vertex2="Mesh2Tess_2" vertex3="Mesh2Tess_13" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_13" vertex2="Mesh2Tess_14" vertex3="Mesh2Tess_7" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_10" vertex2="Mesh2Tess_5" vertex3="Mesh2Tess_14" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_14" vertex2="Mesh2Tess_5" vertex3="Mesh2Tess_7" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_1" vertex2="Mesh2Tess_3" vertex3="Mesh2Tess_8" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_1" vertex2="Mesh2Tess_4" vertex3="Mesh2Tess_3" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_4" vertex2="Mesh2Tess_1" vertex3="Mesh2Tess_6" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_12" vertex2="Mesh2Tess_4" vertex3="Mesh2Tess_6" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_15" vertex2="Mesh2Tess_4" vertex3="Mesh2Tess_12" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_11" vertex2="Mesh2Tess_12" vertex3="Mesh2Tess_6" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_0" vertex2="Mesh2Tess_9" vertex3="Mesh2Tess_11" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_0" vertex2="Mesh2Tess_11" vertex3="Mesh2Tess_6" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_14" vertex2="Mesh2Tess_13" vertex3="Mesh2Tess_11" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_11" vertex2="Mesh2Tess_13" vertex3="Mesh2Tess_12" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_9" vertex2="Mesh2Tess_0" vertex3="Mesh2Tess_5" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_9" vertex2="Mesh2Tess_5" vertex3="Mesh2Tess_10" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_10" vertex2="Mesh2Tess_14" vertex3="Mesh2Tess_9" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_9" vertex2="Mesh2Tess_14" vertex3="Mesh2Tess_11" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_6" vertex2="Mesh2Tess_8" vertex3="Mesh2Tess_7" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_6" vertex2="Mesh2Tess_1" vertex3="Mesh2Tess_8" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_5" vertex2="Mesh2Tess_6" vertex3="Mesh2Tess_7" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_0" vertex2="Mesh2Tess_6" vertex3="Mesh2Tess_5" type="ABSOLUTE" />
+        </tessellated>
+  </solid>
+
+  <solid name="OuterHCalTile10" material="PlasticScint" unit="mm" x="-2267.609" y="481.906" z="0.0">
+    <define>
+  <position name="Mesh2Tess_0" unit="mm" x="-2537.161865234375" y="808.344482421875" z="-3.5" />
+  <position name="Mesh2Tess_1" unit="mm" x="-2537.161865234375" y="808.344482421875" z="3.5" />
+  <position name="Mesh2Tess_2" unit="mm" x="-2414.678466796875" y="808.344482421875" z="3.5" />
+  <position name="Mesh2Tess_3" unit="mm" x="-2414.678466796875" y="808.344482421875" z="-3.5" />
+  <position name="Mesh2Tess_4" unit="mm" x="-2046.523193359375" y="123.9625015258789" z="-3.5" />
+  <position name="Mesh2Tess_5" unit="mm" x="-2537.161865234375" y="799.2944946289062" z="-3.5" />
+  <position name="Mesh2Tess_6" unit="mm" x="-2046.523193359375" y="123.9625015258789" z="3.5" />
+  <position name="Mesh2Tess_7" unit="mm" x="-2537.161865234375" y="799.2944946289062" z="3.5" />
+  <position name="Mesh2Tess_8" unit="mm" x="-1797.1593017578125" y="123.9625015258789" z="-3.5" />
+  <position name="Mesh2Tess_9" unit="mm" x="-2465.69189453125" y="799.2944946289062" z="-3.5" />
+  <position name="Mesh2Tess_10" unit="mm" x="-2750.239501953125" y="808.344482421875" z="-3.5" />
+  <position name="Mesh2Tess_11" unit="mm" x="-2750.239501953125" y="808.344482421875" z="3.5" />
+  <position name="Mesh2Tess_12" unit="mm" x="-1797.1593017578125" y="123.9625015258789" z="3.5" />
+  <position name="Mesh2Tess_13" unit="mm" x="-2465.69189453125" y="799.2944946289062" z="3.5" />
+  <position name="Mesh2Tess_14" unit="mm" x="-2465.69189453125" y="808.344482421875" z="-3.5" />
+  <position name="Mesh2Tess_15" unit="mm" x="-2465.69189453125" y="808.344482421875" z="3.5" />
+    </define>
+
+        <tessellated aunit="deg" lunit="mm" name="OuterHCalTile10_EJ200-SOL">
+      <triangular vertex1="Mesh2Tess_13" vertex2="Mesh2Tess_15" vertex3="Mesh2Tess_9" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_9" vertex2="Mesh2Tess_15" vertex3="Mesh2Tess_14" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_12" vertex2="Mesh2Tess_2" vertex3="Mesh2Tess_6" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_2" vertex2="Mesh2Tess_13" vertex3="Mesh2Tess_6" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_2" vertex2="Mesh2Tess_15" vertex3="Mesh2Tess_13" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_13" vertex2="Mesh2Tess_7" vertex3="Mesh2Tess_6" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_1" vertex2="Mesh2Tess_11" vertex3="Mesh2Tess_7" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_7" vertex2="Mesh2Tess_11" vertex3="Mesh2Tess_6" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_7" vertex2="Mesh2Tess_13" vertex3="Mesh2Tess_5" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_5" vertex2="Mesh2Tess_13" vertex3="Mesh2Tess_9" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_3" vertex2="Mesh2Tess_8" vertex3="Mesh2Tess_4" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_9" vertex2="Mesh2Tess_3" vertex3="Mesh2Tess_4" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_14" vertex2="Mesh2Tess_3" vertex3="Mesh2Tess_9" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_5" vertex2="Mesh2Tess_9" vertex3="Mesh2Tess_4" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_10" vertex2="Mesh2Tess_0" vertex3="Mesh2Tess_5" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_10" vertex2="Mesh2Tess_5" vertex3="Mesh2Tess_4" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_3" vertex2="Mesh2Tess_14" vertex3="Mesh2Tess_15" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_3" vertex2="Mesh2Tess_15" vertex3="Mesh2Tess_2" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_0" vertex2="Mesh2Tess_10" vertex3="Mesh2Tess_11" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_0" vertex2="Mesh2Tess_11" vertex3="Mesh2Tess_1" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_10" vertex2="Mesh2Tess_6" vertex3="Mesh2Tess_11" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_10" vertex2="Mesh2Tess_4" vertex3="Mesh2Tess_6" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_4" vertex2="Mesh2Tess_12" vertex3="Mesh2Tess_6" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_4" vertex2="Mesh2Tess_8" vertex3="Mesh2Tess_12" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_8" vertex2="Mesh2Tess_2" vertex3="Mesh2Tess_12" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_8" vertex2="Mesh2Tess_3" vertex3="Mesh2Tess_2" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_1" vertex2="Mesh2Tess_7" vertex3="Mesh2Tess_0" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_0" vertex2="Mesh2Tess_7" vertex3="Mesh2Tess_5" type="ABSOLUTE" />
+        </tessellated>
+  </solid>
+
+  <solid name="OuterHCalTile11" material="PlasticScint" unit="mm" x="-2530.727" y="470.159" z="0.0">
+   <define>
+  <position name="Mesh2Tess_0" unit="mm" x="-3016.282958984375" y="808.344482421875" z="3.5" />
+  <position name="Mesh2Tess_1" unit="mm" x="-2774.454833984375" y="799.2944946289062" z="-3.5" />
+  <position name="Mesh2Tess_2" unit="mm" x="-2845.9248046875" y="808.344482421875" z="-3.5" />
+  <position name="Mesh2Tess_3" unit="mm" x="-2774.454833984375" y="799.2944946289062" z="3.5" />
+  <position name="Mesh2Tess_4" unit="mm" x="-2845.9248046875" y="808.344482421875" z="3.5" />
+  <position name="Mesh2Tess_5" unit="mm" x="-2289.19580078125" y="123.9625015258789" z="-3.5" />
+  <position name="Mesh2Tess_6" unit="mm" x="-2047.95751953125" y="123.9625015258789" z="-3.5" />
+  <position name="Mesh2Tess_7" unit="mm" x="-2047.95751953125" y="123.9625015258789" z="3.5" />
+  <position name="Mesh2Tess_8" unit="mm" x="-2845.9248046875" y="799.2944946289062" z="-3.5" />
+  <position name="Mesh2Tess_9" unit="mm" x="-2751.673828125" y="808.344482421875" z="-3.5" />
+  <position name="Mesh2Tess_10" unit="mm" x="-2751.673828125" y="808.344482421875" z="3.5" />
+  <position name="Mesh2Tess_11" unit="mm" x="-2289.19580078125" y="123.9625015258789" z="3.5" />
+  <position name="Mesh2Tess_12" unit="mm" x="-2845.9248046875" y="799.2944946289062" z="3.5" />
+  <position name="Mesh2Tess_13" unit="mm" x="-2774.454833984375" y="808.344482421875" z="-3.5" />
+  <position name="Mesh2Tess_14" unit="mm" x="-2774.454833984375" y="808.344482421875" z="3.5" />
+  <position name="Mesh2Tess_15" unit="mm" x="-3016.282958984375" y="808.344482421875" z="-3.5" />
+    </define>
+
+        <tessellated aunit="deg" lunit="mm" name="OuterHCalTile11_EJ200-SOL">
+      <triangular vertex1="Mesh2Tess_9" vertex2="Mesh2Tess_13" vertex3="Mesh2Tess_14" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_9" vertex2="Mesh2Tess_14" vertex3="Mesh2Tess_10" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_3" vertex2="Mesh2Tess_14" vertex3="Mesh2Tess_1" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_1" vertex2="Mesh2Tess_14" vertex3="Mesh2Tess_13" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_7" vertex2="Mesh2Tess_10" vertex3="Mesh2Tess_11" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_10" vertex2="Mesh2Tess_3" vertex3="Mesh2Tess_11" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_10" vertex2="Mesh2Tess_14" vertex3="Mesh2Tess_3" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_3" vertex2="Mesh2Tess_12" vertex3="Mesh2Tess_11" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_4" vertex2="Mesh2Tess_0" vertex3="Mesh2Tess_12" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_12" vertex2="Mesh2Tess_0" vertex3="Mesh2Tess_11" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_6" vertex2="Mesh2Tess_10" vertex3="Mesh2Tess_7" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_6" vertex2="Mesh2Tess_9" vertex3="Mesh2Tess_10" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_9" vertex2="Mesh2Tess_6" vertex3="Mesh2Tess_5" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_1" vertex2="Mesh2Tess_9" vertex3="Mesh2Tess_5" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_13" vertex2="Mesh2Tess_9" vertex3="Mesh2Tess_1" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_8" vertex2="Mesh2Tess_1" vertex3="Mesh2Tess_5" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_15" vertex2="Mesh2Tess_2" vertex3="Mesh2Tess_8" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_15" vertex2="Mesh2Tess_8" vertex3="Mesh2Tess_5" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_12" vertex2="Mesh2Tess_1" vertex3="Mesh2Tess_8" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_12" vertex2="Mesh2Tess_3" vertex3="Mesh2Tess_1" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_4" vertex2="Mesh2Tess_12" vertex3="Mesh2Tess_2" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_2" vertex2="Mesh2Tess_12" vertex3="Mesh2Tess_8" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_2" vertex2="Mesh2Tess_15" vertex3="Mesh2Tess_0" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_2" vertex2="Mesh2Tess_0" vertex3="Mesh2Tess_4" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_15" vertex2="Mesh2Tess_11" vertex3="Mesh2Tess_0" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_15" vertex2="Mesh2Tess_5" vertex3="Mesh2Tess_11" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_5" vertex2="Mesh2Tess_7" vertex3="Mesh2Tess_11" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_5" vertex2="Mesh2Tess_6" vertex3="Mesh2Tess_7" type="ABSOLUTE" />
+        </tessellated>
+  </solid>
+
+  <solid name="OuterHCalTile12" material="PlasticScint" unit="mm" x="-2785.926" y="432.797" z="0.0">
+    <define>
+  <position name="Mesh2Tess_0" unit="mm" x="-3116.512451171875" y="808.344482421875" z="-3.5" />
+  <position name="Mesh2Tess_1" unit="mm" x="-3116.512451171875" y="808.344482421875" z="3.5" />
+  <position name="Mesh2Tess_2" unit="mm" x="-3039.54248046875" y="808.344482421875" z="-3.5" />
+  <position name="Mesh2Tess_3" unit="mm" x="-3111.012451171875" y="808.344482421875" z="-3.5" />
+  <position name="Mesh2Tess_4" unit="mm" x="-2290.65478515625" y="123.9625015258789" z="-3.5" />
+  <position name="Mesh2Tess_5" unit="mm" x="-2290.65478515625" y="123.9625015258789" z="3.5" />
+  <position name="Mesh2Tess_6" unit="mm" x="-3111.012451171875" y="808.344482421875" z="3.5" />
+  <position name="Mesh2Tess_7" unit="mm" x="-3116.512451171875" y="519.7784423828125" z="-3.5" />
+  <position name="Mesh2Tess_8" unit="mm" x="-3116.512451171875" y="519.7784423828125" z="3.5" />
+  <position name="Mesh2Tess_9" unit="mm" x="-3111.012451171875" y="799.2944946289062" z="-3.5" />
+  <position name="Mesh2Tess_10" unit="mm" x="-3039.54248046875" y="808.344482421875" z="3.5" />
+  <position name="Mesh2Tess_11" unit="mm" x="-3017.741943359375" y="808.344482421875" z="3.5" />
+  <position name="Mesh2Tess_12" unit="mm" x="-3039.54248046875" y="799.2944946289062" z="-3.5" />
+  <position name="Mesh2Tess_13" unit="mm" x="-3039.54248046875" y="799.2944946289062" z="3.5" />
+  <position name="Mesh2Tess_14" unit="mm" x="-3017.741943359375" y="808.344482421875" z="-3.5" />
+  <position name="Mesh2Tess_15" unit="mm" x="-3111.012451171875" y="799.2944946289062" z="3.5" />
+  <position name="Mesh2Tess_16" unit="mm" x="-2600.395263671875" y="123.9625015258789" z="-3.5" />
+  <position name="Mesh2Tess_17" unit="mm" x="-2600.395263671875" y="123.9625015258789" z="3.5" />
+    </define>
+
+        <tessellated aunit="deg" lunit="mm" name="OuterHCalTile12_EJ200-SOL">
+      <triangular vertex1="Mesh2Tess_9" vertex2="Mesh2Tess_13" vertex3="Mesh2Tess_12" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_15" vertex2="Mesh2Tess_13" vertex3="Mesh2Tess_9" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_14" vertex2="Mesh2Tess_4" vertex3="Mesh2Tess_16" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_14" vertex2="Mesh2Tess_16" vertex3="Mesh2Tess_7" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_12" vertex2="Mesh2Tess_14" vertex3="Mesh2Tess_7" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_2" vertex2="Mesh2Tess_14" vertex3="Mesh2Tess_12" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_9" vertex2="Mesh2Tess_12" vertex3="Mesh2Tess_7" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_0" vertex2="Mesh2Tess_3" vertex3="Mesh2Tess_9" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_0" vertex2="Mesh2Tess_9" vertex3="Mesh2Tess_7" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_13" vertex2="Mesh2Tess_10" vertex3="Mesh2Tess_12" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_12" vertex2="Mesh2Tess_10" vertex3="Mesh2Tess_2" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_5" vertex2="Mesh2Tess_11" vertex3="Mesh2Tess_17" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_17" vertex2="Mesh2Tess_11" vertex3="Mesh2Tess_8" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_11" vertex2="Mesh2Tess_13" vertex3="Mesh2Tess_8" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_11" vertex2="Mesh2Tess_10" vertex3="Mesh2Tess_13" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_13" vertex2="Mesh2Tess_15" vertex3="Mesh2Tess_8" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_6" vertex2="Mesh2Tess_1" vertex3="Mesh2Tess_15" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_15" vertex2="Mesh2Tess_1" vertex3="Mesh2Tess_8" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_6" vertex2="Mesh2Tess_15" vertex3="Mesh2Tess_3" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_3" vertex2="Mesh2Tess_15" vertex3="Mesh2Tess_9" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_0" vertex2="Mesh2Tess_8" vertex3="Mesh2Tess_1" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_0" vertex2="Mesh2Tess_7" vertex3="Mesh2Tess_8" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_7" vertex2="Mesh2Tess_17" vertex3="Mesh2Tess_8" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_7" vertex2="Mesh2Tess_16" vertex3="Mesh2Tess_17" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_16" vertex2="Mesh2Tess_5" vertex3="Mesh2Tess_17" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_16" vertex2="Mesh2Tess_4" vertex3="Mesh2Tess_5" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_4" vertex2="Mesh2Tess_11" vertex3="Mesh2Tess_5" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_4" vertex2="Mesh2Tess_14" vertex3="Mesh2Tess_11" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_14" vertex2="Mesh2Tess_2" vertex3="Mesh2Tess_10" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_14" vertex2="Mesh2Tess_10" vertex3="Mesh2Tess_11" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_3" vertex2="Mesh2Tess_0" vertex3="Mesh2Tess_1" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_3" vertex2="Mesh2Tess_1" vertex3="Mesh2Tess_6" type="ABSOLUTE" />
+        </tessellated>
+  </solid>
+
+  <solid name="OuterHCalChimneyTile09" material="PlasticScint" unit="mm" x="2118.192" y="645.632" z="0.0">
+    <define>
+  <position name="Mesh2Tess_0" unit="mm" x="2149.891845703125" y="799.2944946289062" z="3.5" />
+  <position name="Mesh2Tess_1" unit="mm" x="2221.36181640625" y="799.2944946289062" z="3.5" />
+  <position name="Mesh2Tess_2" unit="mm" x="2114.95849609375" y="477.66448974609375" z="3.5" />
+  <position name="Mesh2Tess_3" unit="mm" x="1837.6192626953125" y="477.66448974609375" z="-3.5" />
+  <position name="Mesh2Tess_4" unit="mm" x="1837.6192626953125" y="477.66448974609375" z="3.5" />
+  <position name="Mesh2Tess_5" unit="mm" x="2413.33154296875" y="808.344482421875" z="-3.5" />
+  <position name="Mesh2Tess_6" unit="mm" x="2096.244384765625" y="808.344482421875" z="-3.5" />
+  <position name="Mesh2Tess_7" unit="mm" x="2096.244384765625" y="808.344482421875" z="3.5" />
+  <position name="Mesh2Tess_8" unit="mm" x="2149.891845703125" y="808.344482421875" z="-3.5" />
+  <position name="Mesh2Tess_9" unit="mm" x="2413.33154296875" y="808.344482421875" z="3.5" />
+  <position name="Mesh2Tess_10" unit="mm" x="2221.36181640625" y="808.344482421875" z="-3.5" />
+  <position name="Mesh2Tess_11" unit="mm" x="2221.36181640625" y="808.344482421875" z="3.5" />
+  <position name="Mesh2Tess_12" unit="mm" x="2221.36181640625" y="799.2944946289062" z="-3.5" />
+  <position name="Mesh2Tess_13" unit="mm" x="2149.891845703125" y="808.344482421875" z="3.5" />
+  <position name="Mesh2Tess_14" unit="mm" x="2114.95849609375" y="477.66448974609375" z="-3.5" />
+  <position name="Mesh2Tess_15" unit="mm" x="2149.891845703125" y="799.2944946289062" z="-3.5" />
+    </define>
+
+        <tessellated aunit="deg" lunit="mm" name="OuterHCalChimneyTile09_EJ200-SOL">
+      <triangular vertex1="Mesh2Tess_1" vertex2="Mesh2Tess_15" vertex3="Mesh2Tess_0" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_12" vertex2="Mesh2Tess_15" vertex3="Mesh2Tess_1" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_7" vertex2="Mesh2Tess_4" vertex3="Mesh2Tess_2" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_0" vertex2="Mesh2Tess_7" vertex3="Mesh2Tess_2" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_13" vertex2="Mesh2Tess_7" vertex3="Mesh2Tess_0" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_1" vertex2="Mesh2Tess_0" vertex3="Mesh2Tess_2" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_9" vertex2="Mesh2Tess_11" vertex3="Mesh2Tess_1" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_9" vertex2="Mesh2Tess_1" vertex3="Mesh2Tess_2" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_15" vertex2="Mesh2Tess_8" vertex3="Mesh2Tess_0" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_0" vertex2="Mesh2Tess_8" vertex3="Mesh2Tess_13" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_3" vertex2="Mesh2Tess_6" vertex3="Mesh2Tess_14" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_6" vertex2="Mesh2Tess_15" vertex3="Mesh2Tess_14" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_6" vertex2="Mesh2Tess_8" vertex3="Mesh2Tess_15" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_15" vertex2="Mesh2Tess_12" vertex3="Mesh2Tess_14" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_10" vertex2="Mesh2Tess_5" vertex3="Mesh2Tess_12" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_12" vertex2="Mesh2Tess_5" vertex3="Mesh2Tess_14" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_10" vertex2="Mesh2Tess_12" vertex3="Mesh2Tess_11" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_11" vertex2="Mesh2Tess_12" vertex3="Mesh2Tess_1" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_9" vertex2="Mesh2Tess_14" vertex3="Mesh2Tess_5" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_9" vertex2="Mesh2Tess_2" vertex3="Mesh2Tess_14" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_2" vertex2="Mesh2Tess_3" vertex3="Mesh2Tess_14" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_2" vertex2="Mesh2Tess_4" vertex3="Mesh2Tess_3" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_4" vertex2="Mesh2Tess_6" vertex3="Mesh2Tess_3" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_4" vertex2="Mesh2Tess_7" vertex3="Mesh2Tess_6" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_7" vertex2="Mesh2Tess_13" vertex3="Mesh2Tess_8" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_7" vertex2="Mesh2Tess_8" vertex3="Mesh2Tess_6" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_11" vertex2="Mesh2Tess_9" vertex3="Mesh2Tess_5" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_11" vertex2="Mesh2Tess_5" vertex3="Mesh2Tess_10" type="ABSOLUTE" />
+        </tessellated>
+  </solid>
+
+  <solid name="OuterHCalChimneyTile10" material="PlasticScint" unit="mm" x="2425.895" y="645.645" z="0.0">
+  <define>
+  <position name="Mesh2Tess_0" unit="mm" x="2414.678466796875" y="808.344482421875" z="-3.5" />
+  <position name="Mesh2Tess_1" unit="mm" x="2414.678466796875" y="808.344482421875" z="3.5" />
+  <position name="Mesh2Tess_2" unit="mm" x="2537.161865234375" y="808.344482421875" z="3.5" />
+  <position name="Mesh2Tess_3" unit="mm" x="2537.161865234375" y="808.344482421875" z="-3.5" />
+  <position name="Mesh2Tess_4" unit="mm" x="2116.287353515625" y="477.6445007324219" z="-3.5" />
+  <position name="Mesh2Tess_5" unit="mm" x="2410.197021484375" y="477.6445007324219" z="3.5" />
+  <position name="Mesh2Tess_6" unit="mm" x="2750.239501953125" y="808.344482421875" z="3.5" />
+  <position name="Mesh2Tess_7" unit="mm" x="2537.161865234375" y="799.2944946289062" z="-3.5" />
+  <position name="Mesh2Tess_8" unit="mm" x="2465.69189453125" y="808.344482421875" z="3.5" />
+  <position name="Mesh2Tess_9" unit="mm" x="2465.69189453125" y="808.344482421875" z="-3.5" />
+  <position name="Mesh2Tess_10" unit="mm" x="2410.197021484375" y="477.6445007324219" z="-3.5" />
+  <position name="Mesh2Tess_11" unit="mm" x="2750.239501953125" y="808.344482421875" z="-3.5" />
+  <position name="Mesh2Tess_12" unit="mm" x="2465.69189453125" y="799.2944946289062" z="-3.5" />
+  <position name="Mesh2Tess_13" unit="mm" x="2116.287353515625" y="477.6445007324219" z="3.5" />
+  <position name="Mesh2Tess_14" unit="mm" x="2537.161865234375" y="799.2944946289062" z="3.5" />
+  <position name="Mesh2Tess_15" unit="mm" x="2465.69189453125" y="799.2944946289062" z="3.5" />
+    </define>
+
+        <tessellated aunit="deg" lunit="mm" name="OuterHCalChimneyTile10_EJ200-SOL">
+      <triangular vertex1="Mesh2Tess_14" vertex2="Mesh2Tess_12" vertex3="Mesh2Tess_15" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_7" vertex2="Mesh2Tess_12" vertex3="Mesh2Tess_14" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_1" vertex2="Mesh2Tess_13" vertex3="Mesh2Tess_5" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_15" vertex2="Mesh2Tess_1" vertex3="Mesh2Tess_5" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_8" vertex2="Mesh2Tess_1" vertex3="Mesh2Tess_15" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_14" vertex2="Mesh2Tess_15" vertex3="Mesh2Tess_5" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_6" vertex2="Mesh2Tess_2" vertex3="Mesh2Tess_14" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_6" vertex2="Mesh2Tess_14" vertex3="Mesh2Tess_5" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_12" vertex2="Mesh2Tess_9" vertex3="Mesh2Tess_15" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_15" vertex2="Mesh2Tess_9" vertex3="Mesh2Tess_8" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_4" vertex2="Mesh2Tess_0" vertex3="Mesh2Tess_10" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_0" vertex2="Mesh2Tess_12" vertex3="Mesh2Tess_10" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_0" vertex2="Mesh2Tess_9" vertex3="Mesh2Tess_12" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_12" vertex2="Mesh2Tess_7" vertex3="Mesh2Tess_10" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_3" vertex2="Mesh2Tess_11" vertex3="Mesh2Tess_7" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_7" vertex2="Mesh2Tess_11" vertex3="Mesh2Tess_10" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_3" vertex2="Mesh2Tess_7" vertex3="Mesh2Tess_2" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_2" vertex2="Mesh2Tess_7" vertex3="Mesh2Tess_14" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_6" vertex2="Mesh2Tess_10" vertex3="Mesh2Tess_11" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_6" vertex2="Mesh2Tess_5" vertex3="Mesh2Tess_10" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_10" vertex2="Mesh2Tess_13" vertex3="Mesh2Tess_4" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_5" vertex2="Mesh2Tess_13" vertex3="Mesh2Tess_10" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_13" vertex2="Mesh2Tess_0" vertex3="Mesh2Tess_4" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_13" vertex2="Mesh2Tess_1" vertex3="Mesh2Tess_0" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_1" vertex2="Mesh2Tess_8" vertex3="Mesh2Tess_9" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_1" vertex2="Mesh2Tess_9" vertex3="Mesh2Tess_0" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_2" vertex2="Mesh2Tess_6" vertex3="Mesh2Tess_11" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_2" vertex2="Mesh2Tess_11" vertex3="Mesh2Tess_3" type="ABSOLUTE" />
+        </tessellated>
+  </solid>
+
+  <solid name="OuterHCalChimneyTile11" material="PlasticScint" unit="mm" x="2711.635" y="642.964" z="0.0">
+    <define>
+  <position name="Mesh2Tess_0" unit="mm" x="2845.9248046875" y="799.2944946289062" z="-3.5" />
+  <position name="Mesh2Tess_1" unit="mm" x="2774.454833984375" y="799.2944946289062" z="-3.5" />
+  <position name="Mesh2Tess_2" unit="mm" x="2774.454833984375" y="799.2944946289062" z="3.5" />
+  <position name="Mesh2Tess_3" unit="mm" x="2774.454833984375" y="808.344482421875" z="3.5" />
+  <position name="Mesh2Tess_4" unit="mm" x="2845.9248046875" y="799.2944946289062" z="3.5" />
+  <position name="Mesh2Tess_5" unit="mm" x="3016.282958984375" y="808.344482421875" z="3.5" />
+  <position name="Mesh2Tess_6" unit="mm" x="3016.282958984375" y="808.344482421875" z="-3.5" />
+  <position name="Mesh2Tess_7" unit="mm" x="2845.9248046875" y="808.344482421875" z="-3.5" />
+  <position name="Mesh2Tess_8" unit="mm" x="2845.9248046875" y="808.344482421875" z="3.5" />
+  <position name="Mesh2Tess_9" unit="mm" x="2664.947509765625" y="477.6445007324219" z="-3.5" />
+  <position name="Mesh2Tess_10" unit="mm" x="2411.63134765625" y="477.6445007324219" z="-3.5" />
+  <position name="Mesh2Tess_11" unit="mm" x="2411.63134765625" y="477.6445007324219" z="3.5" />
+  <position name="Mesh2Tess_12" unit="mm" x="2774.454833984375" y="808.344482421875" z="-3.5" />
+  <position name="Mesh2Tess_13" unit="mm" x="2664.947509765625" y="477.6445007324219" z="3.5" />
+  <position name="Mesh2Tess_14" unit="mm" x="2751.673828125" y="808.344482421875" z="-3.5" />
+  <position name="Mesh2Tess_15" unit="mm" x="2751.673828125" y="808.344482421875" z="3.5" />
+    </define>
+
+        <tessellated aunit="deg" lunit="mm" name="OuterHCalChimneyTile11_EJ200-SOL">
+      <triangular vertex1="Mesh2Tess_0" vertex2="Mesh2Tess_2" vertex3="Mesh2Tess_4" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_0" vertex2="Mesh2Tess_1" vertex3="Mesh2Tess_2" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_15" vertex2="Mesh2Tess_11" vertex3="Mesh2Tess_13" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_2" vertex2="Mesh2Tess_15" vertex3="Mesh2Tess_13" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_3" vertex2="Mesh2Tess_15" vertex3="Mesh2Tess_2" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_4" vertex2="Mesh2Tess_2" vertex3="Mesh2Tess_13" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_5" vertex2="Mesh2Tess_8" vertex3="Mesh2Tess_4" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_5" vertex2="Mesh2Tess_4" vertex3="Mesh2Tess_13" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_1" vertex2="Mesh2Tess_12" vertex3="Mesh2Tess_2" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_2" vertex2="Mesh2Tess_12" vertex3="Mesh2Tess_3" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_10" vertex2="Mesh2Tess_14" vertex3="Mesh2Tess_9" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_14" vertex2="Mesh2Tess_1" vertex3="Mesh2Tess_9" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_14" vertex2="Mesh2Tess_12" vertex3="Mesh2Tess_1" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_1" vertex2="Mesh2Tess_0" vertex3="Mesh2Tess_9" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_7" vertex2="Mesh2Tess_6" vertex3="Mesh2Tess_0" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_0" vertex2="Mesh2Tess_6" vertex3="Mesh2Tess_9" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_7" vertex2="Mesh2Tess_0" vertex3="Mesh2Tess_8" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_8" vertex2="Mesh2Tess_0" vertex3="Mesh2Tess_4" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_5" vertex2="Mesh2Tess_9" vertex3="Mesh2Tess_6" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_5" vertex2="Mesh2Tess_13" vertex3="Mesh2Tess_9" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_13" vertex2="Mesh2Tess_10" vertex3="Mesh2Tess_9" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_13" vertex2="Mesh2Tess_11" vertex3="Mesh2Tess_10" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_11" vertex2="Mesh2Tess_14" vertex3="Mesh2Tess_10" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_11" vertex2="Mesh2Tess_15" vertex3="Mesh2Tess_14" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_15" vertex2="Mesh2Tess_3" vertex3="Mesh2Tess_12" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_15" vertex2="Mesh2Tess_12" vertex3="Mesh2Tess_14" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_8" vertex2="Mesh2Tess_5" vertex3="Mesh2Tess_6" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_8" vertex2="Mesh2Tess_6" vertex3="Mesh2Tess_7" type="ABSOLUTE" />
+         </tessellated>
+  </solid>
+
+  <solid name="OuterHCalChimneyTile12" material="PlasticScint" unit="mm" x="2957.924" y="607.790" z="0.0">
+    <define>
+  <position name="Mesh2Tess_0" unit="mm" x="3039.54248046875" y="799.2944946289062" z="-3.5" />
+  <position name="Mesh2Tess_1" unit="mm" x="3039.54248046875" y="799.2944946289062" z="3.5" />
+  <position name="Mesh2Tess_2" unit="mm" x="3116.512451171875" y="519.7784423828125" z="3.5" />
+  <position name="Mesh2Tess_3" unit="mm" x="3116.512451171875" y="519.7784423828125" z="-3.5" />
+  <position name="Mesh2Tess_4" unit="mm" x="3116.512451171875" y="808.344482421875" z="3.5" />
+  <position name="Mesh2Tess_5" unit="mm" x="3111.012451171875" y="799.2944946289062" z="-3.5" />
+  <position name="Mesh2Tess_6" unit="mm" x="3111.012451171875" y="799.2944946289062" z="3.5" />
+  <position name="Mesh2Tess_7" unit="mm" x="3017.741943359375" y="808.344482421875" z="-3.5" />
+  <position name="Mesh2Tess_8" unit="mm" x="3111.012451171875" y="808.344482421875" z="3.5" />
+  <position name="Mesh2Tess_9" unit="mm" x="3111.012451171875" y="808.344482421875" z="-3.5" />
+  <position name="Mesh2Tess_10" unit="mm" x="3061.598876953125" y="477.66448974609375" z="-3.5" />
+  <position name="Mesh2Tess_11" unit="mm" x="2666.427734375" y="477.66448974609375" z="-3.5" />
+  <position name="Mesh2Tess_12" unit="mm" x="3116.512451171875" y="808.344482421875" z="-3.5" />
+  <position name="Mesh2Tess_13" unit="mm" x="3039.54248046875" y="808.344482421875" z="-3.5" />
+  <position name="Mesh2Tess_14" unit="mm" x="3061.598876953125" y="477.66448974609375" z="3.5" />
+  <position name="Mesh2Tess_15" unit="mm" x="2666.427734375" y="477.66448974609375" z="3.5" />
+  <position name="Mesh2Tess_16" unit="mm" x="3017.741943359375" y="808.344482421875" z="3.5" />
+  <position name="Mesh2Tess_17" unit="mm" x="3039.54248046875" y="808.344482421875" z="3.5" />
+     </define>
+
+        <tessellated aunit="deg" lunit="mm" name="OuterHCalChimneyTile12_EJ200-SOL">
+      <triangular vertex1="Mesh2Tess_6" vertex2="Mesh2Tess_0" vertex3="Mesh2Tess_1" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_5" vertex2="Mesh2Tess_0" vertex3="Mesh2Tess_6" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_16" vertex2="Mesh2Tess_15" vertex3="Mesh2Tess_14" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_1" vertex2="Mesh2Tess_14" vertex3="Mesh2Tess_2" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_1" vertex2="Mesh2Tess_16" vertex3="Mesh2Tess_14" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_17" vertex2="Mesh2Tess_16" vertex3="Mesh2Tess_1" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_6" vertex2="Mesh2Tess_1" vertex3="Mesh2Tess_2" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_4" vertex2="Mesh2Tess_8" vertex3="Mesh2Tess_6" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_4" vertex2="Mesh2Tess_6" vertex3="Mesh2Tess_2" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_0" vertex2="Mesh2Tess_13" vertex3="Mesh2Tess_1" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_1" vertex2="Mesh2Tess_13" vertex3="Mesh2Tess_17" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_11" vertex2="Mesh2Tess_7" vertex3="Mesh2Tess_10" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_10" vertex2="Mesh2Tess_0" vertex3="Mesh2Tess_3" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_7" vertex2="Mesh2Tess_0" vertex3="Mesh2Tess_10" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_7" vertex2="Mesh2Tess_13" vertex3="Mesh2Tess_0" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_0" vertex2="Mesh2Tess_5" vertex3="Mesh2Tess_3" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_9" vertex2="Mesh2Tess_12" vertex3="Mesh2Tess_5" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_5" vertex2="Mesh2Tess_12" vertex3="Mesh2Tess_3" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_9" vertex2="Mesh2Tess_5" vertex3="Mesh2Tess_8" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_8" vertex2="Mesh2Tess_5" vertex3="Mesh2Tess_6" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_4" vertex2="Mesh2Tess_3" vertex3="Mesh2Tess_12" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_4" vertex2="Mesh2Tess_2" vertex3="Mesh2Tess_3" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_3" vertex2="Mesh2Tess_14" vertex3="Mesh2Tess_10" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_2" vertex2="Mesh2Tess_14" vertex3="Mesh2Tess_3" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_14" vertex2="Mesh2Tess_11" vertex3="Mesh2Tess_10" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_14" vertex2="Mesh2Tess_15" vertex3="Mesh2Tess_11" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_15" vertex2="Mesh2Tess_7" vertex3="Mesh2Tess_11" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_15" vertex2="Mesh2Tess_16" vertex3="Mesh2Tess_7" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_16" vertex2="Mesh2Tess_17" vertex3="Mesh2Tess_13" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_16" vertex2="Mesh2Tess_13" vertex3="Mesh2Tess_7" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_8" vertex2="Mesh2Tess_4" vertex3="Mesh2Tess_12" type="ABSOLUTE" />
+    <triangular vertex1="Mesh2Tess_8" vertex2="Mesh2Tess_12" vertex3="Mesh2Tess_9" type="ABSOLUTE" />
+        </tessellated>
+  </solid>
+
+  </solids>
+
+    </detector>
+  </detectors>
+
+  <!--  Definition of the readout segmentation/definition  -->
+  <readouts>
+    <readout name="HcalBarrelHits">
+      <segmentation type="NoSegmentation"/>
+      <id>system:8,barrel:3,sector:6,tower:6,tile:9</id>
+    </readout>
+  </readouts>
+
+
+</lccdd>

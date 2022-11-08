@@ -1,4 +1,3 @@
 features:
-- beampipe
-- pid:
-    - pfrich
+  pid:
+    pfrich:

@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<lccdd>
+  <define>
+    <comment>
+      Main parameters - this is for the more realistic June 2022 design
+    </comment>
+
+    <constant name="SiBarrelMod1_rmin"             value="SiBarrel1_rmin+1*mm"/>
+    <constant name="SiBarrelMod2_rmin"             value="SiBarrel2_rmin+1*cm"/>
+    <constant name="SiBarrelMod_angle"             value="SiBarrel_angle"/>
+    <constant name="SiBarrelMod_dz"                value="SiBarrel_dz"/>
+
+    <constant name="SiBarrelSensor_thickness"      value="40*um"/>
+
+    <constant name="SiBarrelMod1Service_thickness" value="0.15*mm"/>
+    <constant name="SiBarrelMod2Service_thickness" value="0.37*mm"/>
+    <constant name="SiBarrelMod1Frame_thickness"   value="0.06*mm"/>
+    <constant name="SiBarrelMod2Frame_thickness"   value="0.12*mm"/>
+    <constant name="SiBarrelMod1Frame_height"      value="0.8*cm"/>
+    <constant name="SiBarrelMod2Frame_height"      value="0.8*cm"/>
+    <constant name="SiBarrelStave1_width"          value="4*cm"/>
+    <constant name="SiBarrelStave2_width"          value="4*cm"/>
+
+    <comment>
+      Actual parametrization
+    </comment>
+
+    <constant name="SiBarrelMod1_length"        value="2 * SiBarrelMod1_rmin / tan(SiBarrelMod_angle) - SiBarrel_dz"/>
+    <comment> 84cm=2*42cm is the engineer max </comment>
+    <constant name="SiBarrelMod2_length"        value="84*cm"/>
+
+    <constant name="SiBarrelLayer1_length"      value="SiBarrelMod1_length + 1*um"/>
+    <constant name="SiBarrelLayer2_length"      value="SiBarrelMod2_length + 1*um"/>
+    <constant name="SiBarrelEnvelope_length"    value="SiBarrelLayer2_length + 1*um" />
+
+    <constant name="SiBarrelLayer_thickness"    value="3.0*cm"/>
+    <constant name="SiBarrelLayer1_rmin"        value="SiBarrelMod1_rmin "/>
+    <constant name="SiBarrelLayer1_rmax"        value="SiBarrelLayer1_rmin + SiBarrelLayer_thickness"/>
+    <constant name="SiBarrelLayer2_rmin"        value="SiBarrelMod2_rmin "/>
+    <constant name="SiBarrelLayer2_rmax"        value="SiBarrelLayer2_rmin + SiBarrelLayer_thickness"/>
+
+    <constant name="SiBarrelStaveTilt_angle"     value="3.0*degree"/>
+    <constant name="SiBarrelStave1_count"        value="floor(180.*degree/asin(SiBarrelStave1_width*cos(SiBarrelStaveTilt_angle)/2/SiBarrelMod1_rmin))+2"/>
+    <constant name="SiBarrelStave2_count"        value="floor(180.*degree/asin(SiBarrelStave2_width*cos(SiBarrelStaveTilt_angle)/2/SiBarrelMod2_rmin))+2"/>
+  </define>
+
+  <detectors>
+    <documentation level="5">
+        ### Actual detectors
+    </documentation>
+    <detector
+      id="TrackerBarrel_0_ID"
+      name="SagittaSiBarrel"
+      type="epic_TrackerBarrel"
+      readout="SiBarrelHits"
+      insideTrackingVolume="true">
+      <dimensions
+        rmin="SiBarrelLayer1_rmin"
+        rmax="SiBarrelLayer1_rmax"
+        length="SiBarrelLayer1_length" />
+      <comment>Silicon Barrel Modules</comment>
+      <module name="Module1" vis="TrackerLayerVis">
+        <frame material="CarbonFiber"
+               vis="TrackerSupportVis"
+               width="SiBarrelStave1_width"
+               height="SiBarrelMod1Frame_height"
+               length="SiBarrelMod1_length"
+               thickness="SiBarrelMod1Frame_thickness" />
+        <module_component name="ITS3"
+                          material="Silicon"
+                          sensitive="true"
+                          width="SiBarrelStave1_width"
+                          length="SiBarrelMod1_length"
+                          thickness="SiBarrelSensor_thickness"
+                          vis="TrackerLayerVis" />
+        <module_component name="Service"
+                          material="Aluminum"
+                          sensitive="false"
+                          width="SiBarrelStave1_width"
+                          length="SiBarrelMod1_length"
+                          thickness="SiBarrelMod1Service_thickness"
+                          vis="TrackerLayerVis"/>
+      </module>
+      <comment> Layers composed of many arrayed modules  </comment>
+      <layer module="Module1" id="1" vis="TrackerLayerVis">
+        <barrel_envelope
+          inner_r="SiBarrelLayer1_rmin-0.5*mm"
+          outer_r="SiBarrelLayer1_rmax"
+          z_length="SiBarrelLayer1_length" />
+        <layer_material surface="inner" binning="binPhi,binZ" bins0="SiBarrelStave1_count" bins1="100" />
+        <comment>
+          phi0     : Starting phi of first module.
+          phi_tilt : Phi tilt of a module.
+          rc       : Radius of the module center.
+          nphi     : Number of modules in phi.
+          rphi_dr  : The delta radius of every other module.
+          z0       : Z position of first module in phi.
+          nz       : Number of modules to place in z.
+          dr       : Radial displacement parameter, of every other module.
+        </comment>
+        <rphi_layout phi_tilt="SiBarrelStaveTilt_angle" nphi="SiBarrelStave1_count" phi0="0.0" rc="SiBarrelMod1_rmin" dr="0.0 * mm"/>
+        <z_layout dr="0.0 * mm" z0="0.0 * mm" nz="1"/>
+      </layer>
+    </detector>
+    <documentation level="5">
+        ### Actual detectors
+    </documentation>
+    <detector
+      id="TrackerBarrel_1_ID"
+      name="OuterSiBarrel"
+      type="epic_TrackerBarrel"
+      readout="SiBarrelHits"
+      insideTrackingVolume="true">
+      <dimensions
+        rmin="SiBarrelLayer2_rmin"
+        rmax="SiBarrelLayer2_rmax"
+        length="SiBarrelLayer2_length" />
+      <comment>Silicon Barrel Modules</comment>
+      <module name="Module1" vis="TrackerLayerVis">
+        <frame material="CarbonFiber"
+               vis="TrackerSupportVis"
+               width="SiBarrelStave2_width"
+               height="SiBarrelMod2Frame_height"
+               length="SiBarrelMod2_length"
+               thickness="SiBarrelMod2Frame_thickness" />
+        <module_component name="ITS3"
+                          material="Silicon"
+                          sensitive="true"
+                          width="SiBarrelStave2_width"
+                          length="SiBarrelMod2_length"
+                          thickness="SiBarrelSensor_thickness"
+                          vis="TrackerLayerVis" />
+        <module_component name="Service"
+                          material="Aluminum"
+                          sensitive="false"
+                          width="SiBarrelStave2_width"
+                          length="SiBarrelMod2_length"
+                          thickness="SiBarrelMod2Service_thickness"
+                          vis="TrackerLayerVis"/>
+      </module>
+      <comment> Layers composed of many arrayed modules  </comment>
+      <layer module="Module1" id="1" vis="TrackerLayerVis">
+        <barrel_envelope
+          inner_r="SiBarrelLayer2_rmin-1.0*mm"
+          outer_r="SiBarrelLayer2_rmax"
+          z_length="SiBarrelLayer2_length" />
+        <layer_material surface="inner" binning="binPhi,binZ" bins0="128" bins1="100" />
+        <comment>
+          phi0     : Starting phi of first module.
+          phi_tilt : Phi tilt of a module.
+          rc       : Radius of the module center.
+          nphi     : Number of modules in phi.
+          rphi_dr  : The delta radius of every other module.
+          z0       : Z position of first module in phi.
+          nz       : Number of modules to place in z.
+          dr       : Radial displacement parameter, of every other module.
+        </comment>
+        <rphi_layout phi_tilt="SiBarrelStaveTilt_angle" nphi="SiBarrelStave2_count" phi0="0.0" rc="SiBarrelMod2_rmin" dr="0.0 * mm"/>
+        <z_layout dr="0.0 * mm" z0="0.0 * mm" nz="1"/>
+      </layer>
+    </detector>
+  </detectors>
+
+  <readouts>
+    <readout name="SiBarrelHits">
+      <segmentation type="CartesianGridXY" grid_size_x="0.010*mm" grid_size_y="0.010*mm" />
+      <id>system:8,layer:4,module:12,sensor:2,x:32:-12,y:-20</id>
+    </readout>
+  </readouts>
+
+</lccdd>

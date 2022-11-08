@@ -8,9 +8,6 @@ PROJECT(epic
   DESCRIPTION "DD4hep Geometry Description of the EPIC Experiment"
   )
 
-option(EPIC_ECCE_LEGACY_COMPAT "Preserve some compatibility with ECCE" ON)
-option(IRT_AUXFILE "Build auxiliary config file for dRICH IRT" OFF)
-
 # C++ standard
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD 17 CACHE STRING "Set the C++ standard to be used")
@@ -50,6 +47,10 @@ list(TRANSFORM DD4hep_required_libraries PREPEND DD4hep::)
 
 # Dependencies
 find_package(DD4hep REQUIRED COMPONENTS ${DD4hep_required_components})
+if(${DD4hep_VERSION} VERSION_LESS 1.21)
+  message(WARNING "DD4hep before 1.21 does not write collections correctly \n"
+                  "More info at https://github.com/AIDASoft/DD4hep/pull/922")
+endif()
 find_package(ActsDD4hep)
 if(ActsDD4hep_FOUND)
   add_compile_definitions(USE_ACTSDD4HEP)
@@ -59,11 +60,6 @@ else()
   set(ActsDD4hep ActsCore ActsPluginDD4hep)
 endif()
 find_package(fmt REQUIRED)
-
-if(IRT_AUXFILE)
-  add_compile_definitions(IRT_AUXFILE)
-  find_package(IRT REQUIRED)
-endif()
 
 #-----------------------------------------------------------------------------------
 set(a_lib_name ${PROJECT_NAME})
@@ -78,12 +74,6 @@ dd4hep_add_plugin(${a_lib_name}
 target_link_libraries(${a_lib_name}
   PUBLIC ${DD4hep_required_libraries} fmt::fmt
   )
-if(IRT_AUXFILE)
-  target_link_libraries(${a_lib_name} PUBLIC IRT)
-endif()
-if(EPIC_ECCE_LEGACY_COMPAT)
-  target_compile_definitions(${a_lib_name} PUBLIC EPIC_ECCE_LEGACY_COMPAT)
-endif()
 
 #-----------------------------------------------------------------------------------
 # Parse jinja templates: once by default, and once for all yml files
@@ -92,19 +82,6 @@ endif()
 
 set(TEMPLATE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/templates)
 set(TEMPLATE_XML ${PROJECT_NAME}.xml.jinja2)
-
-add_custom_target(${PROJECT_NAME}.xml ALL)
-add_custom_command(TARGET ${PROJECT_NAME}.xml
-    COMMAND
-        ${CMAKE_CURRENT_SOURCE_DIR}/bin/make_detector_configuration
-            --dir ${TEMPLATE_DIR}
-            --template ${TEMPLATE_XML}
-            --output ${CMAKE_CURRENT_SOURCE_DIR}/${PROJECT_NAME}.xml
-    COMMENT "Creating default ${PROJECT_NAME}.xml geometry"
-    )
-install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/${PROJECT_NAME}.xml
-    DESTINATION ${CMAKE_INSTALL_DATADIR}/${PROJECT_NAME}/
-    )
 
 file(GLOB CONFIG_YMLS ${CMAKE_CURRENT_SOURCE_DIR}/configurations/*.yml)
 foreach(config_yml ${CONFIG_YMLS})
@@ -124,6 +101,11 @@ foreach(config_yml ${CONFIG_YMLS})
         )
 endforeach()
 
+install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/${PROJECT_NAME}_full.xml
+    DESTINATION ${CMAKE_INSTALL_DATADIR}/${PROJECT_NAME}/
+    RENAME ${PROJECT_NAME}.xml
+    )
+
 #-----------------------------------------------------------------------------------
 # Install the detector description files.
 install(DIRECTORY compact/
@@ -136,16 +118,6 @@ install(DIRECTORY compact/
 install(DIRECTORY calibrations/
     DESTINATION ${CMAKE_INSTALL_DATADIR}/${PROJECT_NAME}/calibrations
     )
-
-# Handle ECCE compatibility mode
-if(EPIC_ECCE_LEGACY_COMPAT)
-  install(CODE "execute_process(COMMAND ${CMAKE_COMMAND} -E create_symlink ./${PROJECT_NAME} ${CMAKE_INSTALL_PREFIX}/share/ecce)")
-  set(EPIC_ECCE_ORIGINAL_CONFIGURATIONS 18x275 calorimeters central dirc_only drich_only full imaging inner_detector ip6 pfrich_only pid_only sciglass tof_only tracking_only vertex_only)
-  install(CODE "execute_process(COMMAND ${CMAKE_COMMAND} -E create_symlink ./${PROJECT_NAME}.xml ${CMAKE_INSTALL_PREFIX}/share/ecce/ecce.xml)")
-  foreach(ecce_configuration ${EPIC_ECCE_ORIGINAL_CONFIGURATIONS})
-    install(CODE "execute_process(COMMAND ${CMAKE_COMMAND} -E create_symlink ./${PROJECT_NAME}_${ecce_configuration}.xml ${CMAKE_INSTALL_PREFIX}/share/ecce/ecce_${ecce_configuration}.xml)")
-  endforeach()
-endif()
 
 #-----------------------------------------------------------------------------------
 # Configure and install detector setup script

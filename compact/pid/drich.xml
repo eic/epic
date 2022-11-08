@@ -1,0 +1,246 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<lccdd>
+
+<define>
+<!-- vessel (=snout+tank) geometry -->
+<constant name="DRICH_Length"             value="ForwardRICHRegion_length"/>  <!-- overall vessel length -->
+<constant name="DRICH_zmin"               value="ForwardRICHRegion_zmin"/>
+<constant name="DRICH_zmax"               value="DRICH_zmin + DRICH_Length"/>
+<constant name="DRICH_rmin0"              value="DRICH_zmin * ForwardRICHRegion_tan1"/>  <!-- bore radius at dRICH entrance -->
+<constant name="DRICH_rmin1"              value="DRICH_zmax * ForwardRICHRegion_tan2"/>  <!-- bore radius at dRICH exit -->
+<constant name="DRICH_wall_thickness"     value="0.5*cm"/>  <!-- thickness of radial walls -->
+<constant name="DRICH_window_thickness"   value="0.1*cm"/>  <!-- thickness of entrance and exit walls -->
+<!-- snout geometry: cone with front radius rmax0 and back radius of rmax1 -->
+<constant name="DRICH_rmax0"              value="110.0*cm"/>
+<constant name="DRICH_SnoutLength"        value="20.0*cm"/>
+<constant name="DRICH_SnoutSlope"         value="DRICH_rmax0 / DRICH_zmin"/> <!-- TODO: increase slope to allow more space for aerogel cones ? -->
+<constant name="DRICH_rmax1"              value="DRICH_rmax0 + DRICH_SnoutLength * DRICH_SnoutSlope"/>
+<!-- tank geometry: cylinder, holding the majority of detector components -->
+<constant name="DRICH_rmax2"              value="ForwardPIDRegion_rmax"/>  <!-- cylinder radius -->
+<!-- aerogel+filter geometry -->
+<constant name="DRICH_aerogel_thickness"  value="4.0*cm"/>  <!-- aerogel thickness -->
+<constant name="DRICH_filter_thickness"   value="0.3*mm"/>  <!-- filter thickness -->
+<constant name="DRICH_aerogel_filter_gap" value="0.01*mm"/> <!-- air gap between aerogel and filter FIXME: currently a gas gap -->
+<!-- sensor geometry; model = S13361-3050NE-08 SiPM -->
+<constant name="DRICH_sensor_size"           value="25.8*mm"/> <!-- full length of the sensor side FIXME: resin base should be this size -->
+<constant name="DRICH_pixel_gap"             value="0.2*mm"/> <!-- size of gaps between adjacent pixels AND gaps between edge pixels and sensor side -->
+<constant name="DRICH_sensor_sensitive_size" value="DRICH_sensor_size - DRICH_pixel_gap"/> <!-- side length of photosensitive surface (to be segmented) -->
+<constant name="DRICH_sensor_thickness"      value="0.5*mm"/>  <!-- sensor thickness FIXME: use the real thickness + resin -->
+<constant name="DRICH_num_px"                value="8"/>       <!-- number of pixels along one side of the sensor -->
+<constant name="DRICH_pixel_size"            value="3.0*mm"/>  <!-- a single SiPM pixel size -->
+<constant name="DRICH_pixel_pitch"           value="DRICH_pixel_size + DRICH_pixel_gap"/>  <!-- center-to-center distance between SiPMs in a 8x8 panel -->
+<!-- settings and switches -->
+<comment>
+- `DRICH_debug_optics`:    1 = all components become vacuum, except for mirrors; test opticalphotons from IP
+                           2 = all components become vacuum, except for mirrors and `gasvol`, test charged particles from IP
+                           3 = all components become vacuum, except for mirrors and sensors, test reflected trajectories' hits
+                           0 = off
+- `DRICH_debug_mirror`:    1 = draw full mirror shape for single sector; 0 = off
+- `DRICH_debug_sensors`:   1 = draw full sensor sphere for a single sector; 0 = off
+</comment>
+<constant name="DRICH_debug_optics"    value="0"/>
+<constant name="DRICH_debug_mirror"    value="0"/>
+<constant name="DRICH_debug_sensors"   value="0"/>
+</define>
+
+
+<detectors>
+
+
+<!-- /detectors/detector -->
+<documentation level="10">
+### dRICH: ***d***ual ***R***ing ***I***maging ***Ch***erenkov detector
+</documentation>
+<detector
+  id="ForwardRICH_ID"
+  name="DRICH"
+  type="epic_DRICH"
+  readout="DRICHHits"
+  gas="C2F6_DRICH"
+  material="Aluminum"
+  vis_vessel="DRICH_vessel_vis"
+  vis_gas="DRICH_gas_vis"
+  >
+
+
+<!-- /detectors/detector/dimensions -->
+<documentation level="10">
+#### Vessel
+- the dRICH vessel is composed of two parts:
+  - tank: cylindrical region containing most of the detector components
+  - snout: conical region at the front of the vessel, containing the aerogel
+- dimensions:
+  - `zmin`: z-position of vessel front plane
+  - `length`: overall z-length of the full vessel
+  - `snout_length`: length of cone-shaped snout region, housing aerogel
+  - `rmin0` and `rmin1`: bore radius at front plane and back plane, respectively
+  - `rmax0` and `rmax1`: outer radius of snout at front plane and snout-back (tank-front) plane, respectively
+  - `rmax2`: outer radius of tank, the main cylindrical vessel volume
+  - `nsectors`: number of azimuthal sectors
+  - `wall_thickness`: thickness of radial walls
+  - `window_thickness`: thickness of entrance and exit disks
+</documentation>
+<dimensions
+  zmin="DRICH_zmin"
+  length="DRICH_Length"
+  snout_length="DRICH_SnoutLength"
+  rmin0="DRICH_rmin0"
+  rmin1="DRICH_rmin1"
+  rmax0="DRICH_rmax0"
+  rmax1="DRICH_rmax1"
+  rmax2="DRICH_rmax2"
+  nsectors="6"
+  wall_thickness="DRICH_wall_thickness"
+  window_thickness="DRICH_window_thickness"
+  />
+
+
+<!-- /detectors/detector/radiator -->
+<documentation level="10">
+#### Radiator
+- radiator is defined in a wedge of azimuthal space, composed of aerogel and a
+  filter; the filter is applied to the back of the aerogel, so that it separates
+  the aerogel and gas radiators; an airgap is defined between the aerogel and filter
+- dimensions:
+  - `frontplane`: front of the aerogel, w.r.t. front plane of the vessel envelope
+  - `rmin` and `rmax`: inner and outer radius (at the front plane; radial bounds are conical)
+  - `thickness`: radiator thickness, defined separately for aerogel and filter
+  - `pitch`: controls the angle of the radiator (0=vertical)
+</documentation>
+<radiator
+  rmin="DRICH_rmin0 + DRICH_wall_thickness + 0.2*cm"
+  rmax="DRICH_rmax0 - DRICH_wall_thickness - 0.2*cm"
+  frontplane="DRICH_window_thickness"
+  pitch="0*degree"
+  >
+  <aerogel
+    material="Aerogel_DRICH"
+    vis="DRICH_aerogel_vis"
+    thickness="DRICH_aerogel_thickness"
+    />
+  <airgap
+    material="AirOptical"
+    vis="DRICH_gas_vis"
+    thickness="DRICH_aerogel_filter_gap"
+    />
+  <filter
+    material="Acrylic_DRICH"
+    vis="DRICH_filter_vis"
+    thickness="DRICH_filter_thickness"
+    />
+</radiator>
+
+
+<!-- /detectors/detector/mirror -->
+<documentation level="10">
+#### Spherical mirror
+- spherical mirrors are built from spherical patches, and positioned near the
+  vessel back plane, separately for each sector
+- dimensions:
+  - `backplane`: the position of the maximum z-plane intersected by the sphere,
+    w.r.t. the back plane of vessel envelope
+  - `rmin` and `rmax`: polar angle boundaries
+  - `phiw`: azimuthal width of one sector
+  - `thickness` is the radial thickness of the mirror; note that `backplane` is given for the
+    reflective mirror surface, the inner radius of the sphere
+  - `focus_tune*` are tuning parameters for the focal region:
+    - `focus_tune_z` and `focus_tune_x` will move the focal region, with respect
+      to the sensor sphere center (i.e., set both to zero for focus at the sensor sphere center
+      (ignoring spherical aberrations effects))
+</documentation>
+<mirror
+  material="Acrylic_DRICH"
+  surface="MirrorSurface_DRICH"
+  vis="DRICH_mirror_vis"
+  backplane="DRICH_window_thickness + 2.0*cm"
+  rmin="DRICH_rmin1 + DRICH_wall_thickness - 1.0*cm"
+  rmax="DRICH_rmax2 - DRICH_wall_thickness - 3.0*cm"
+  phiw="59.5*degree"
+  thickness="0.2*cm"
+  focus_tune_x="-5.0*cm"
+  focus_tune_z="0.0*cm"
+  />
+
+<!-- /detectors/detector/sensors -->
+<documentation level="10">
+#### Sensors
+</documentation>
+<sensors>
+
+
+<!-- /detectors/detector/sensors/module -->
+<documentation level="10">
+##### Sensor module
+- dimensions:
+  - `side`: side length of the square module
+  - `thickness`: thickness of the sensor module
+  - `gap`: provides room between the squares, to help prevent them from overlapping
+  - note: the value of `side` will determine how many sensors there are, since the
+    sensor placement algorithm will try to place as many as it can in the specified
+    spherical patch below
+</documentation>
+<module
+  material="AirOptical"
+  surface="SensorSurface_DRICH"
+  vis="DRICH_sensor_vis"
+  side="DRICH_sensor_sensitive_size"
+  thickness="DRICH_sensor_thickness"
+  gap="0.3*mm"
+  />
+
+
+<!-- /detectors/detector/sensors/{sphere,sphericalpatch} -->
+<documentation level="10">
+##### Sensor sphere
+- sensors will be placed on a sphere, using a "disco ball" tiling algorithm; each
+  sector has its own sensor sphere
+  - sphere dimensions:
+    - `centerx` and `centerz`: sphere center, defined w.r.t. vessel front plane,
+      for the sector on +x axis
+    - `radius`: radius of the sensor sphere
+- sensors will be limited to a patch of the sphere
+  - patch dimensions:
+    - `phiw`: defines half the angle between the azimuthal boundaries
+    - `rmin` and `rmax`: radial cut boundaries
+    - `zmin`: z-plane cut
+</documentation>
+<sphere
+  centerz="-50.0*cm"
+  centerx="180.0*cm"
+  radius="100.0*cm"
+  />
+<sphericalpatch
+  phiw="18*degree"
+  rmin="DRICH_rmax1 + 2.0*cm"
+  rmax="DRICH_rmax2 - 5.0*cm"
+  zmin="DRICH_SnoutLength + 5.0*cm"
+  />
+
+
+</sensors>
+</detector>
+</detectors>
+
+
+<documentation level="10">
+#### Readout
+- segmentation: square matrix of pixels
+  - `grid_size_x,y`: size of each sensor pixel
+  - `offset_x,y`: specified such that the `x` and `y` values are unsigned
+    (except for very rare hits on the sensor sides)
+</documentation>
+<readouts>
+  <readout name="DRICHHits">
+    <segmentation
+      type="CartesianGridXY"
+      grid_size_x="DRICH_pixel_pitch"
+      grid_size_y="DRICH_pixel_pitch"
+      offset_x="-0.5*(DRICH_num_px-1)*DRICH_pixel_pitch"
+      offset_y="-0.5*(DRICH_num_px-1)*DRICH_pixel_pitch"
+      />
+    <id>system:8,sector:3,module:12,x:32:-16,y:-16</id>
+  </readout>
+</readouts>
+
+
+</lccdd>

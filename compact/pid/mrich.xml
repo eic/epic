@@ -1,0 +1,173 @@
+<lccdd>
+  <comment> MRICH </comment>
+  <define>
+    <constant name="MRICH_rmin"   value="8*cm"/>
+    <constant name="MRICH_rmax"   value="min(63*cm, BackwardPIDRegion_rmax)"/>
+    <constant name="MRICH_length" value="BackwardPIDRegion_length-11.4*cm"/>
+    <constant name="MRICH_zmax"   value="BackwardPIDRegion_zmax"/>
+    <constant name="MRICH_zmin"   value="MRICH_zmax-MRICH_length"/>
+
+    <constant name="MRICHAerogel_thickness"           value="40.0*mm"/>
+    <constant name="MRICHAerogel_width"               value="100.0*mm"/>
+    <constant name="MRICHFoam_thickness"              value="1*mm"/>
+    <constant name="MRICHFresnelLens_thickness"       value="0.06*inch"/>
+    <constant name="MRICHAerogelLensGap_thickness"    value="2*mm"/>
+    <constant name="MRICHLensMirrorGap_thickness"     value="2*mm"/>
+    <constant name="MRICHPhotoDet_thickness"          value="1.5*mm"/>
+    <constant name="MRICHPhotoDet_length"             value="48.5*mm"/>
+    <constant name="MRICHGlassWindow_width"           value="100*mm"/>
+    <constant name="MRICHGlassPhotoDet_thickness"     value="5.0*mm"/>
+    <constant name="MRICHPhotoDetMCPlate_thickness"   value="0.3*mm"/> <!-- FIXME: should be 1.2*mm with PyrexGlass25 -->
+    <constant name="MRICHPhotoDetAnode_thickness"     value="3.8*mm"/>
+    <constant name="MRICHPhotoDetPCB_thickness"       value="2.0*mm"/>
+    <constant name="MRICHPhotoDetCopper_thickness"    value="0.1*mm"/>
+    <constant name="MRICHPhotoDetKapton_thickness"    value="0.2*mm"/>
+    <constant name="MRICHRearExtraSpace_thickness"    value="0.3*mm"/>
+    <constant name="MRICHLensPhotoDet_length"         value="136.4*mm"/>
+    <constant name="MRICHMirror_thickness"            value="2.0*mm"/>
+    <constant name="MRICHMirror_length"               value="1.0*inch"/>
+    <constant name="MRICHMirror_width1"               value="MRICHAerogel_width "/>
+    <constant name="MRICHMirror_width2"               value="MRICHGlassWindow_width"/>
+
+    <constant name="MRICHFresnelLensEffectiveDiameter" value="6.0*inch"/>
+    <constant name="MRICHFresnelLensGroove_pitch"      value="inch/125"/>
+
+    <constant name="MRICHCarbonFrame_thickness"        value="1.0*mm"/>
+    <constant name="MRICHCarbonFrame_width"            value="MRICHAerogel_width+2.0*MRICHFoam_thickness + 2.0*MRICHCarbonFrame_thickness"/>
+
+    <constant name="MRICHModules_nx"                  value="floor((MRICH_rmax-MRICH_rmin)/MRICHCarbonFrame_width)"/>
+    <constant name="MRICHModules_ny"                  value="floor((MRICH_rmax-MRICH_rmin)/MRICHCarbonFrame_width)"/>
+
+    <constant name="MRICHCarbonFrame_length"
+      value="MRICHAerogel_thickness
+      + 2.0*MRICHCarbonFrame_thickness
+      + 2.0*MRICHFoam_thickness
+      + MRICHAerogelLensGap_thickness
+      + MRICHFresnelLens_thickness
+      + MRICHLensPhotoDet_length
+      + MRICHGlassPhotoDet_thickness
+      + 2.0*MRICHPhotoDetMCPlate_thickness
+      + MRICHPhotoDetAnode_thickness
+      + MRICHPhotoDetPCB_thickness
+      + MRICHPhotoDetCopper_thickness
+      + MRICHPhotoDetKapton_thickness
+      + MRICHRearExtraSpace_thickness "/>
+  </define>
+
+  <limits>
+  </limits>
+
+  <regions>
+  </regions>
+
+  <display>
+  </display>
+
+  <detectors>
+    <detector id="MRICH_ID" name="MRICH" type="epic_MRICH"
+      readout="MRICHHits"
+      reflect="true"
+      projective="true"
+      vis="InvisibleWithDaughters"
+      material="Air">
+      <dimensions rmin="MRICH_rmin" rmax="MRICH_rmax" length="MRICH_length" zmin="MRICH_zmin"/>
+      <module name="MRICH_module1"
+              vis="InvisibleWithDaughters"
+              width="MRICHCarbonFrame_width"
+              height="MRICHCarbonFrame_width"
+              length="MRICHCarbonFrame_length">
+        <frame vis="AnlGray" thickness="MRICHCarbonFrame_thickness" material="CarbonFiber"/>
+        <aerogel vis="MRICH_aerogel_vis"
+                 length="MRICHAerogel_thickness"
+                 width="MRICHAerogel_width"
+                 material="AerogelOptical">
+          <frame vis="MRICH_frame_vis" thickness="MRICHFoam_thickness" material="PolystyreneFoam" />
+        </aerogel>
+        <lens vis="MRICH_lens_vis" thickness="MRICHFresnelLens_thickness"
+              pitch="MRICHFresnelLensGroove_pitch" focal_length="6.0*inch"
+              effective_diameter="MRICHFresnelLensEffectiveDiameter"
+              width="MRICHAerogel_width"
+              material="AcrylicOptical"/>
+        <mirror vis="MRICH_mirror_vis"
+                x1="MRICHMirror_width1" x2="MRICHMirror_width2" length="MRICHMirror_length"
+                surface="MRICH_MirrorOpticalSurface" thickness="MRICHMirror_thickness"
+                material="AluminumOxide"/>
+        <photodet width="MRICHGlassWindow_width" thickness="MRICHGlassPhotoDet_thickness"  material="PyrexGlassOptical">
+          <sensor nx="2" ny="2" thickness="MRICHPhotoDet_thickness" width="MRICHPhotoDet_length" material="SiliconOxide"/>
+          <layer thickness="MRICHPhotoDetMCPlate_thickness" material="PyrexGlass"/> <!-- FIXME: should be PyrexGlass25 with 1.2*mm thickness -->
+          <layer thickness="MRICHPhotoDetMCPlate_thickness" material="PyrexGlass"/> <!-- FIXME: should be PyrexGlass25 with 1.2*mm thickness -->
+          <layer thickness="MRICHPhotoDetAnode_thickness"   material="AluminumOxide"/>
+          <layer thickness="MRICHPhotoDetPCB_thickness"     material="Fr4"/>
+          <layer thickness="MRICHPhotoDetCopper_thickness"  material="Copper"/>
+          <layer thickness="MRICHPhotoDetKapton_thickness"  material="Kapton"/>
+        </photodet>
+      </module>
+      <comment>
+        Modules are only listed here for one quadrant. The modules point back to the
+        z0 position (should be their actual position, but breaks parametrization).
+      </comment>
+      <positions scale="0.815" z0="0.5*(MRICH_zmin+MRICH_zmax)">
+        <position x="-41.325"  y="178.675"/>
+        <position x=" 96.025"  y="178.675"/>
+      </positions>
+      <positions scale="0.815" z0="0.5*(MRICH_zmin+MRICH_zmax)">
+        <position x="-41.325"  y="316.025"/>
+        <position x=" 96.025"  y="316.025"/>
+        <position x="233.375"  y="178.675"/>
+        <position x="233.375"  y="316.025"/>
+      </positions>
+      <positions scale="0.825" z0="0.5*(MRICH_zmin+MRICH_zmax)">
+        <position x="-41.325"  y="453.375"/>
+        <position x=" 96.025"  y="453.375"/>
+        <position x="233.375"  y="453.375"/>
+        <position x="370.725"  y="453.375"/>
+        <position x="370.725"  y="316.025"/>
+        <position x="370.725"  y="178.675"/>
+      </positions>
+      <positions scale="0.83" z0="0.5*(MRICH_zmin+MRICH_zmax)">
+        <position x="-41.325"  y="590.725"/>
+        <position x=" 96.025"  y="590.725"/>
+        <position x="233.375"  y="590.725"/>
+        <!--position x="370.725"  y="590.725"/-->
+        <!--position x="508.075"  y="590.725"/-->
+        <position x="508.075"  y="178.675"/>
+        <position x="508.075"  y="316.025"/>
+        <!--position x="508.075"  y="453.375"/-->
+      </positions>
+      <positions scale="1.09" z0="0.5*(MRICH_zmin+MRICH_zmax)">
+        <!--position x="-41.325"  y="728.075"/-->
+        <!--position x=" 96.025"  y="728.075"/-->
+        <!--position x="233.375"  y="728.075"/-->
+        <!--position x="370.725"  y="728.075"/-->
+        <!--position x="508.075"  y="728.075"/-->
+        <!--position x="645.425"  y="590.725"/-->
+        <!--position x="645.425"  y="453.375"/-->
+        <!--position x="645.425"  y="316.025"/-->
+        <!--position x="645.425"  y="178.675"/-->
+      </positions>
+      <positions scale="1.095" z0="0.5*(MRICH_zmin+MRICH_zmax)">
+        <!--position x="-41.325"  y="865.425"/-->
+        <!--position x=" 96.025"  y="865.425"/-->
+        <!--position x="233.375"  y="865.425"/-->
+        <!--position x="782.775"  y="178.675"/-->
+        <!--position x="782.775"  y="316.025"/-->
+        <!--position x="782.775"  y="453.375"/-->
+      </positions>
+      <layer thickness="MRICHCarbonFrame_thickness" material="CarbonFiber"/>
+    </detector>
+  </detectors>
+
+  <readouts>
+    <readout name="MRICHHits">
+      <segmentation type="CartesianGridXY" grid_size_x="3*mm" grid_size_y="3*mm" />
+      <id>system:8,module:14,sensor:8,x:32:-16,y:-16</id>
+    </readout>
+  </readouts>
+
+  <!--Globals>
+    <Parameter Name="mrichInfo" Value="mrichmod/mrich_1_geoparams-0-0-4294967295-1527211159.xml"/>
+  </Globals-->
+
+
+
+</lccdd>

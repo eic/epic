@@ -1,8 +1,13 @@
 features:
-- beampipe
-- solenoid
-- ecal:
-  - forward_scifi
-  - barrel_sciglass
-  - backward_PbWO4
-- hcal
+  beampipe:
+  solenoid:
+  ecal:
+    forward_homogeneous:
+    forward_insert_homogeneous:
+    barrel_sciglass:
+    backward_PbWO4:
+  hcal:
+    forward:
+    forward_insert:
+    barrel_gdml:
+    backward:
