@@ -328,4 +328,4 @@ static void Make_Tagger(Detector& desc, xml_coll_t& mod, Assembly& env, Sensitiv
 }
 
 
-DECLARE_DETELEMENT(BackwardsTaggers, create_detector)
+DECLARE_DETELEMENT(BackwardsTagger, create_detector)
