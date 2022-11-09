@@ -6,13 +6,16 @@
 #include <XML/Helper.h>
 
 //////////////////////////////////////////////////
-// Vacuum drift volume in far backwards region
+// Low Q2 taggers and vacuum drift volume in far backwards region
 //////////////////////////////////////////////////
 
 using namespace std;
 using namespace dd4hep;
 
-static Ref_t create_detector(Detector& desc, xml_h e, SensitiveDetector /*sens*/)
+// Helper function to make the tagger detectors
+static void Make_Tagger(Detector& desc, xml_coll_t& mod, Assembly& env, SensitiveDetector& sens);
+
+static Ref_t create_detector(Detector& desc, xml_h e, SensitiveDetector sens)
 {
 
   xml_det_t x_det   = e;
@@ -31,8 +34,8 @@ static Ref_t create_detector(Detector& desc, xml_h e, SensitiveDetector /*sens*/
   double Thickness = dim.z();
 
   // Materials
-  Material Vacuum = desc.material("Vacuum");
-  Material Steel  = desc.material("StainlessSteel");
+  Material Vacuum  = desc.material("Vacuum");
+  Material Steel   = desc.material("StainlessSteel");
 
   // Central focal point of the geometry
   xml::Component pos = x_det.child(_Unicode(focus));
@@ -167,11 +170,14 @@ static Ref_t create_detector(Detector& desc, xml_h e, SensitiveDetector /*sens*/
 
     Assembly TaggerAssembly("tagAssembly");
 
+    Make_Tagger(desc,mod,TaggerAssembly,sens);
+
     PlacedVolume pv_mod2 = mother.placeVolume(
         TaggerAssembly,
         Transform3D(rotate, Position(tagoffsetx, 0,
                                      tagoffsetz))); // Very strange y is not centered and offset needs correcting for...
     DetElement moddet(moduleName, moduleID);
+    pv_mod2.addPhysVolID("module", moduleID);
     moddet.setPlacement(pv_mod2);
     det.add(moddet);
   }
@@ -236,9 +242,90 @@ static Ref_t create_detector(Detector& desc, xml_h e, SensitiveDetector /*sens*/
   // placement in mother volume
   Transform3D  tr(RotationY(rot.theta()), Position(pos.x(), pos.y(), pos.z()));
   PlacedVolume detPV = desc.pickMotherVolume(det).placeVolume(backAssembly, tr);
+  detPV.addPhysVolID("system", detID);
+
   det.setPlacement(detPV);
+
 
   return det;
 }
 
-DECLARE_DETELEMENT(BackwardsVacuum, create_detector)
+
+
+static void Make_Tagger(Detector& desc, xml_coll_t& mod, Assembly& env, SensitiveDetector& sens){
+
+
+  Material Air     = desc.material("Air");
+  Material Silicon = desc.material("Silicon");
+
+  xml_dim_t moddim  = mod.child(_Unicode(dimensions));
+  double    tag_w       = moddim.x();
+  double    tag_h       = moddim.y();
+  double    tagboxL = moddim.z();
+  
+  Volume Tagger_Air;
+
+  double airThickness    = 0;
+  double vacuumThickness = tagboxL;
+
+  // Add window layer and air-vacuum boxes
+  for (xml_coll_t lay(mod, _Unicode(windowLayer)); lay; ++lay) {
+
+    string layerType      = dd4hep::getAttrOrDefault<std::string>(lay, _Unicode(type), "window");
+    string layerVis       = dd4hep::getAttrOrDefault<std::string>(lay, _Unicode(vis), "FFTrackerShieldingVis");
+    double layerZ         = dd4hep::getAttrOrDefault<double>(lay, _Unicode(z), 0 * mm);
+    double layerThickness = dd4hep::getAttrOrDefault<double>(lay, _Unicode(sensor_thickness), 1 * mm);
+    string layerMaterial  = dd4hep::getAttrOrDefault<std::string>(lay, _Unicode(material), "Copper");
+
+    Material WindowMaterial = desc.material(layerMaterial);
+
+    airThickness    = tagboxL - layerZ;
+    vacuumThickness = tagboxL - airThickness;
+
+    Box Box_Air(tag_w, tag_h, airThickness / 2);
+    Tagger_Air = Volume("AirVolume", Box_Air, Air);
+    Tagger_Air.setVisAttributes(desc.visAttributes("BackwardsAir"));
+    
+    Box    Window_Box(tag_w, tag_h, layerThickness / 2);
+    Volume layVol("WindowVolume", Window_Box, WindowMaterial);
+    layVol.setVisAttributes(desc.visAttributes(layerVis));
+
+    Tagger_Air.placeVolume(layVol, Position(0, 0, airThickness / 2 - layerThickness / 2));
+
+    env.placeVolume(Tagger_Air, Position(0, 0, tagboxL - airThickness / 2));
+  }
+
+  // Add Hodoscope layers
+  int N_layers = 0;
+  for (xml_coll_t lay(mod, _Unicode(trackLayer)); lay; ++lay, ++N_layers) {
+
+    int    layerID        = dd4hep::getAttrOrDefault<int>(lay, _Unicode(id), 0);
+    string layerType      = dd4hep::getAttrOrDefault<std::string>(lay, _Unicode(type), "timepix");
+    string layerVis       = dd4hep::getAttrOrDefault<std::string>(lay, _Unicode(vis), "FFTrackerLayerVis");
+    double layerZ         = dd4hep::getAttrOrDefault<double>(lay, _Unicode(z), 0 * mm);
+    double layerThickness = dd4hep::getAttrOrDefault<double>(lay, _Unicode(sensor_thickness), 200 * um);
+
+    Volume mother          = env;
+    double MotherThickness = tagboxL;
+
+    if (layerZ > vacuumThickness) {
+      mother = Tagger_Air;
+      layerZ -= vacuumThickness;
+      MotherThickness = airThickness / 2;
+    }
+
+    Box    Layer_Box(tag_w, tag_h, layerThickness / 2);
+    Volume layVol("TrackerVolume", Layer_Box, Silicon);
+    layVol.setSensitiveDetector(sens);
+    layVol.setVisAttributes(desc.visAttributes(layerVis));
+
+    // string module_name = detName + _toString(N_layers,"_TrackLayer_%d");
+
+    PlacedVolume pv_layer = mother.placeVolume(layVol, Position(0, 0, MotherThickness - layerZ + layerThickness / 2));
+    pv_layer.addPhysVolID("layer", layerID);
+  }
+
+}
+
+
+DECLARE_DETELEMENT(BackwardsTaggers, create_detector)
