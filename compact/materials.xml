@@ -358,10 +358,6 @@
     <fraction n="0.18" ref="Cr"/>
     <fraction n="0.08" ref="Ni"/>
   </material>
-  <material name="StainlessSteel_20percent">
-    <D type="density" value="1.66" unit="g / cm3"/>
-    <fraction n="1" ref="StainlessSteel"/>
-  </material>
   <material name="ZDC_Tungsten">
     <D type="density" value="18.73" unit="g / cm3"/>
     <fraction n="0.943" ref="W"/>
@@ -426,7 +422,7 @@
     <fraction n="0.091" ref="H"/>
     <fraction n="0.822" ref="C"/>
     <fraction n="0.032" ref="N"/>
-    <fraction n="0.055" ref="O"/>   
+    <fraction n="0.055" ref="O"/>
   </material>
   <material name="SciFiPb_PbGlue">
     <D type="density" value="8.558" unit="g / cm3"/>

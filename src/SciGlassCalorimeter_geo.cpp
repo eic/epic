@@ -193,10 +193,13 @@ static Ref_t create_detector(Detector &lcdd, xml_h handle,
     double sector_phi = sectors_handle.phi0();
     for (; sector < sectors_handle.number();
          sector++, sector_phi += sectors_handle.deltaphi()) {
-      envelope_v.placeVolume(
-        wedge_box_side_v,
-        Transform3D{RotationZ{sector_phi + sectors_handle.deltaphi() / 2}}
-        );
+      for (int side = -1; side <= 1; side += 2) {
+        envelope_v.placeVolume(
+          wedge_box_side_v,
+          Transform3D{RotationZ{sector_phi + side * sectors_handle.deltaphi() / 2}} *
+          Transform3D{Position{0., - side * wedge_box_handle.gap() / 2, 0.}}
+          );
+      }
     }
 
     // TODO: The endcap sides of the box are not implemented
@@ -367,7 +370,7 @@ static Ref_t create_detector(Detector &lcdd, xml_h handle,
               alpha2
             };
             Trap trap_trans_2{
-              z - (margin_top + 2 * non_overlap_long + margin_bottom) / 2,
+              z - (margin_top + non_overlap_long + margin_bottom) / 2,
               theta,
               phi,
               carbon_fiber_support_handle.thickness(), // no division by 2 to ensure subtrahend volume is thicker than the minuend
@@ -381,7 +384,7 @@ static Ref_t create_detector(Detector &lcdd, xml_h handle,
             };
             SubtractionSolid trap_trans{
               trap_trans_1, trap_trans_2,
-              Position{0., 0., (margin_bottom + non_overlap_long - margin_top) / 2}
+              Position{0., 0., (margin_bottom - margin_top) / 2 + (overhang_bottom - overhang_top) / 2}
             };
 
             envelope_v

@@ -187,7 +187,7 @@ The unused IDs below are saved for future use.
       - EndcapP  subassembly ID: 112
       - EndcapN  subassembly ID: 113
 
-      - Unused IDs: 116-119
+      - Unused IDs: 117-119
     </documentation>
     <constant name="HCalSubAssembly_ID" value="110"/>
     <constant name="HCalBarrel_ID"      value="111"/>
@@ -284,19 +284,17 @@ The unused IDs below are saved for future use.
     <documentation>
       #### (190-199) Far Backward Beamline Detectors
 
-      - Low-Q2 Tagger 1 Tracker      ID: 195
-      - Low-Q2 Tagger 1 Calorimeter  ID: 196
-      - Low-Q2 Tagger 2 Tracker      ID: 198
-      - Low-Q2 Tagger 2 Calorimeter  ID: 199
+      - Low-Q2 Tagger 1       ID: 195
+      - Low-Q2 Tagger 2       ID: 196
+      - Low-Q2 Tagger Vacuum  ID: 199
 
       TODO: A lot of the repeated ID's below should be pushed into a single detector
     </documentation>
     <constant name="LumiCollimator_ID"       value="190"/>
     <constant name="LumiDipole_ID"           value="191"/>
-    <constant name="TaggerTracker_1_ID"      value="195"/>
-    <constant name="TaggerCalorimeter_1_ID"  value="196"/>
-    <constant name="TaggerTracker_2_ID"      value="198"/>
-    <constant name="TaggerCalorimeter_2_ID"  value="199"/>
+    <constant name="Tagger1_ID"              value="195"/>
+    <constant name="Tagger2_ID"              value="196"/>
+    <constant name="TaggerVacuum_ID"         value="199"/>
 
     <documentation>
       #### (200-219) Far Backward Beamline Magnets
@@ -537,8 +535,8 @@ Service gaps in FW direction (before endcapP ECAL) and BW direction (before endc
     <constant name="EcalEndcapPInsert_height"         value="60.0*cm"/>
     <constant name="EcalEndcapPInsert_xposition"      value="-10.0*cm"/>
     <constant name="EcalEndcapPInsert_yposition"      value="0.0*cm"/>
-    <constant name="EcalEndcapPInsert_hole_radius"    value="14.67*cm"/>
-    <constant name="EcalEndcapPInsert_hole_xposition" value="-7.29*cm"/>
+    <constant name="EcalEndcapPInsert_hole_radius"    value="14.61*cm"/>
+    <constant name="EcalEndcapPInsert_hole_xposition" value="-7.20*cm"/>
     <constant name="EcalEndcapPInsert_hole_yposition" value="0.0*cm"/>
 
     <!-- <constant name="EcalEndcapN_zmin"               value="BackwardPIDRegion_zmin + BackwardInnerEndcapRegion_length"/> -->
@@ -607,14 +605,14 @@ Service gaps in FW direction (before endcapP ECAL) and BW direction (before endc
     <comment> HcalEndcapN needs to clear the straight beampipe with 1 * crossing angle + its radius of 22.25 mm </comment>
     <constant name="HcalEndcapN_rmin"     value="max((HcalEndcapN_zmin + HcalEndcapN_length) * tan(abs(CrossingAngle)) + 22.25 * mm, 11 * cm)"/>
 
-    <constant name="HcalBarrel_thickness" value="88.0*cm"/> <!-- ref: ECCE proposal -->
-    <constant name="HcalBarrel_rmin"      value="ForwardServiceGap_rmax"/>
+    <constant name="HcalBarrel_thickness" value="93.0*cm"/> <!-- ref: as-built CAD, plus a little room for the longer half-plates -->
+    <constant name="HcalBarrel_rmin"      value="Solenoid_rmax"/>
     <constant name="HcalBarrel_rmax"      value="HcalBarrel_rmin + HcalBarrel_thickness"/>
     <constant name="HcalBarrelForward_zmax"  value="ForwardServiceGap_zmin"/>
     <constant name="HcalBarrelBackward_zmax" value="BackwardServiceGap_zmin"/>
     <constant name="HcalBarrel_length"    value="HcalBarrelForward_zmax + HcalBarrelBackward_zmax"/>
     <constant name="HcalBarrel_offset"    value="(HcalBarrelForward_zmax - HcalBarrelBackward_zmax)/2"/>
-    
+
     <constant name="HcalEndcapN_rmax"     value="HcalBarrel_rmax"/>
     <constant name="HcalEndcapP_rmax"     value="HcalBarrel_rmax"/>
 

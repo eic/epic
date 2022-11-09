@@ -83,19 +83,6 @@ target_link_libraries(${a_lib_name}
 set(TEMPLATE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/templates)
 set(TEMPLATE_XML ${PROJECT_NAME}.xml.jinja2)
 
-add_custom_target(${PROJECT_NAME}.xml ALL)
-add_custom_command(TARGET ${PROJECT_NAME}.xml
-    COMMAND
-        ${CMAKE_CURRENT_SOURCE_DIR}/bin/make_detector_configuration
-            --dir ${TEMPLATE_DIR}
-            --template ${TEMPLATE_XML}
-            --output ${CMAKE_CURRENT_SOURCE_DIR}/${PROJECT_NAME}.xml
-    COMMENT "Creating default ${PROJECT_NAME}.xml geometry"
-    )
-install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/${PROJECT_NAME}.xml
-    DESTINATION ${CMAKE_INSTALL_DATADIR}/${PROJECT_NAME}/
-    )
-
 file(GLOB CONFIG_YMLS ${CMAKE_CURRENT_SOURCE_DIR}/configurations/*.yml)
 foreach(config_yml ${CONFIG_YMLS})
     get_filename_component(config ${config_yml} NAME_WE)
@@ -113,6 +100,11 @@ foreach(config_yml ${CONFIG_YMLS})
         DESTINATION ${CMAKE_INSTALL_DATADIR}/${PROJECT_NAME}/
         )
 endforeach()
+
+install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/${PROJECT_NAME}_full.xml
+    DESTINATION ${CMAKE_INSTALL_DATADIR}/${PROJECT_NAME}/
+    RENAME ${PROJECT_NAME}.xml
+    )
 
 #-----------------------------------------------------------------------------------
 # Install the detector description files.
