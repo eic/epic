@@ -293,6 +293,8 @@ static void Make_Tagger(Detector& desc, xml_coll_t& mod, Assembly& env, Sensitiv
     Tagger_Air.placeVolume(layVol, Position(0, 0, airThickness / 2 - layerThickness / 2));
 
     env.placeVolume(Tagger_Air, Position(0, 0, tagboxL - airThickness / 2));
+    //Currently only one "window" layer implemented
+    break;
   }
 
   // Add Hodoscope layers
