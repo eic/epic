@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<lccdd>
+  <define>
+    <comment>
+      ----------------------------------------
+      Beam-orbit tracker
+      ----------------------------------------
+    </comment>
+  </define>
+
+  <detectors>
+
+  <detector
+      id="ForwardBeamOrbitTracker_station_1_ID"
+      name="BeamOrbitTracker_station_1"
+      readout="BeamOrbitHits"
+      type="ip6_OffMomentumTracker"
+      insideTrackingVolume="true"
+      reflect="false"
+      vis="RedVis">
+      <position x="-217.98*mm" y="0" z="8498.952*mm"/> <!-- end of B0apf + 1mm -->
+      <rotation x="0*rad" y="-25.0*0.001*rad" z="0*rad"/>
+      <module name="Module1" vis="AnlProcess_Blue">
+        <shape x="20.0*cm" y="20.0*cm"/>
+        <module_component thickness="0.3*mm" material="SiliconOxide" sensitive="true" vis="RedVis" />
+      </module>
+      <layer id="1" module="Module1">
+        <envelope  vis="AnlRed" x="20.0*cm" y="20.0*cm" length="1.0*mm"
+          zstart="0.0/2.0" />
+      </layer>
+    </detector>
+
+
+  <detector
+      id="ForwardBeamOrbitTracker_station_2_ID"
+      name="BeamOrbitTracker_station_2"
+      readout="BeamOrbitHits"
+      type="ip6_OffMomentumTracker"
+      insideTrackingVolume="true"
+      reflect="false"
+      vis="RedVis">
+      <position x="-631.65*mm" y="0" z="22062.85*mm"/> <!-- end of B1apf + 1mm -->
+      <rotation x="0*rad" y="-25.0*0.001*rad" z="0*rad"/>
+      <module name="Module1" vis="AnlProcess_Blue">
+        <shape x="15.0*cm" y="20.0*cm"/>
+        <module_component thickness="0.3*mm" material="SiliconOxide" sensitive="true" vis="RedVis" />
+      </module>
+      <layer id="1" module="Module1">
+        <envelope  vis="AnlRed" x="20.0*cm" y="20.0*cm" length="1.0*mm"
+          zstart="0.0/2.0" />
+      </layer>
+    </detector>
+
+    </detectors>
+
+  <readouts>
+    <readout name="BeamOrbitHits">
+      <segmentation type="CartesianGridXY" grid_size_x="0.01*mm" grid_size_y="0.01*mm" />
+      <id>system:8,layer:5,module:5,slice:4,x:32:-16,y:-16</id>
+    </readout>
+  </readouts>
+
+</lccdd>

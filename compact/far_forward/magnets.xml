@@ -1,0 +1,60 @@
+<lccdd>
+  <fields>
+    <field name="B0PF_Magnet" type="MultipoleMagnet">
+      <position x="B0PF_XPosition" y="0" z="B0PF_CenterPosition"/>
+      <rotation x="0" y="B0PF_RotationAngle" z="0"/>
+      <shape type="Tube" rmin="0.0" rmax="B0PF_InnerRadius" dz="B0PF_Length*0.5"/>
+      <coefficient coefficient="B0PF_Bmax" skew="0.0*tesla"/>
+      <coefficient coefficient="B0PF_GradientMax" skew="0.0*tesla/m"/>
+    </field>
+    <field name="B0APF_Magnet" type="MultipoleMagnet">
+      <position x="B0APF_XPosition" y="0" z="B0APF_CenterPosition"/>
+      <rotation x="0" y="B0APF_RotationAngle" z="0"/>
+      <shape type="Tube" rmin="0.0" rmax="B0APF_InnerRadius" dz="B0APF_Length*0.5"/>
+      <coefficient coefficient="B0APF_Bmax" skew="0.0*tesla"/>
+          <coefficient coefficient="B0APF_GradientMax" skew="0.0*tesla"/>
+    </field>
+    <field name="Q1APF_Magnet" type="MultipoleMagnet">
+      <position x="Q1APF_XPosition" y="0" z="Q1APF_CenterPosition"/>
+      <rotation x="0" y="Q1APF_RotationAngle" z="0"/>
+      <shape type="Tube" rmin="0.0" rmax="Q1APF_InnerRadius" dz="Q1APF_Length*0.5"/>
+      <coefficient coefficient="Q1APF_Bmax" skew="0.0*tesla"/>
+      <coefficient coefficient="Q1APF_GradientMax" skew="0.0*tesla/m"/>
+    </field>
+    <field name="Q1BPF_Magnet" type="MultipoleMagnet">
+      <position x="Q1BPF_XPosition" y="0" z="Q1BPF_CenterPosition"/>
+      <rotation x="0" y="Q1BPF_RotationAngle" z="0"/>
+      <shape type="Tube" rmin="0.0" rmax="Q1BPF_InnerRadius" dz="Q1BPF_Length*0.5"/>
+      <coefficient coefficient="Q1BPF_Bmax" skew="0.0*tesla"/>
+      <coefficient coefficient="Q1BPF_GradientMax" skew="0.0*tesla/m"/>
+    </field>
+    <field name="Q2PF_Magnet" type="MultipoleMagnet">
+      <position x="Q2PF_XPosition" y="0" z="Q2PF_CenterPosition"/>
+      <rotation x="0" y="Q2PF_RotationAngle" z="0"/>
+      <shape type="Tube" rmin="0.0" rmax="Q2PF_InnerRadius" dz="Q2PF_Length*0.5"/>
+      <coefficient coefficient="Q2PF_Bmax" skew="0.0*tesla"/>
+      <coefficient coefficient="Q2PF_GradientMax" skew="0.0*tesla/m"/>
+    </field>
+    <field name="B1PF_Magnet" type="MultipoleMagnet">
+      <position x="B1PF_XPosition" y="0" z="B1PF_CenterPosition"/>
+      <rotation x="0" y="B1PF_RotationAngle" z="0"/>
+      <shape type="Tube" rmin="0.0" rmax="B1PF_InnerRadius" dz="B1PF_Length*0.5"/>
+      <coefficient coefficient="B1PF_Bmax" skew="0.0*tesla"/>
+          <coefficient coefficient="B1PF_GradientMax" skew="0.0*tesla/m"/>
+    </field>
+    <field name="B1APF_Magnet" type="MultipoleMagnet">
+      <position x="B1APF_XPosition" y="0" z="B1APF_CenterPosition"/>
+      <rotation x="0" y="B1APF_RotationAngle" z="0"/>
+      <shape type="Tube" rmin="0.0" rmax="B1APF_InnerRadius" dz="B1APF_Length*0.5"/>
+      <coefficient coefficient="B1APF_Bmax" skew="0.0*tesla"/>
+          <coefficient coefficient="B1APF_GradientMax" skew="0.0*tesla/m"/>
+    </field>
+    <field name="B2PF_Magnet" type="MultipoleMagnet">
+      <position x="B2PF_XPosition" y="0" z="B2PF_CenterPosition"/>
+      <rotation x="0" y="B2PF_RotationAngle" z="0"/>
+      <shape type="Tube" rmin="0.0" rmax="B2PF_InnerRadius" dz="B2PF_Length*0.5"/>
+      <coefficient coefficient="B2PF_Bmax" skew="0.0*tesla"/>
+      <coefficient coefficient="B2PF_GradientMax" skew="0.0*tesla/cm"/>
+    </field>
+  </fields>
+</lccdd>

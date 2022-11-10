@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<lccdd>
+
+  <define>
+
+    <constant name="tracker_pixel_size" value="55*um"/>
+
+  </define>
+
+  <detectors>
+
+    <detector id="Tagger1_ID" type="BackwardsTracker" name="TagTrack1"
+      width="Tagger1_Width/2"
+      height="Tagger1_Height/2"
+      length="Tagger1_Length"
+      place_into="BackwardsTaggerVacuum"
+      place_into2="Tagger1"
+      readout="TaggerTrackerHits">
+      <trackLayer  id="0" type="timepix" z="0*mm"   sensor_thickness="400*um"/>
+      <trackLayer  id="1" type="timepix" z="300*mm" sensor_thickness="400*um"/>
+      <trackLayer  id="2" type="timepix" z="600*mm" sensor_thickness="400*um"/>
+      <trackLayer  id="3" type="timepix" z="900*mm" sensor_thickness="400*um"/>
+      <!--windowLayer id="1" type="window"  z="0*mm"   thickness="1*mm" material="Copper"/-->
+    </detector>
+
+
+    <detector id="Tagger2_ID" type="BackwardsTracker" name="TagTrack2"
+      width="Tagger2_Width/2"
+      height="Tagger2_Height/2"
+      length="Tagger2_Length"
+      place_into="BackwardsTaggerVacuum"
+      place_into2="Tagger2"
+      readout="TaggerTrackerHits">
+      <trackLayer  id="0" type="timepix" z="0*mm"   sensor_thickness="400*um"/>
+      <trackLayer  id="1" type="timepix" z="300*mm" sensor_thickness="400*um"/>
+      <trackLayer  id="2" type="timepix" z="600*mm" sensor_thickness="400*um"/>
+      <trackLayer  id="3" type="timepix" z="900*mm" sensor_thickness="400*um"/>
+      <!--windowLayer id="1" type="window"  z="0*mm"   thickness="1*mm" material="Copper"/-->
+    </detector>
+
+  </detectors>
+
+  <readouts>
+
+    <readout name="TaggerTrackerHits">
+      <segmentation type="CartesianGridXY" grid_size_x="tracker_pixel_size" grid_size_y="tracker_pixel_size" />
+      <id>system:8,module:2,layer:4,sensor:4,x:32:-16,y:-16</id>
+    </readout>
+
+  </readouts>
+
+</lccdd>
