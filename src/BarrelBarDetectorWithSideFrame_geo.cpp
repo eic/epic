@@ -1,3 +1,6 @@
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (C) 2022 Wouter Deconinck
+
 /** \addtogroup PID
  * \brief Type: **Barrel bar detector (think DIRC) with longitudinal frame**.
  * \author S. Joosten

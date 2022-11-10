@@ -1,3 +1,6 @@
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (C) 2022 Wouter Deconinck
+
 //==========================================================================
 //  Implementation for shashlik calorimeter modules
 //  it supports disk placements with (rmin, rmax), and (phimin, phimax)

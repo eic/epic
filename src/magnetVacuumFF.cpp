@@ -1,3 +1,6 @@
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (C) 2022 Alex Jentsch, Whitney Armstrong, Wouter Deconinck
+
 //==========================================================================
 //
 //      <detector name ="DetName" type="Beampipe" >
@@ -54,12 +57,12 @@ static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector /* sens *
 
   //-----b0pf pipe----
 
-  double radius_b0pf   = 2.9;    // cm
-  double length_b0pf   = 120.0;  // 848.2683995; //290.0;    //cm
-  double rotation_b0pf = -0.025; // radians
-  double x_b0pf        = -16.5;  // cm
-  double y_b0pf        = 0.0;    // cm
-  double z_b0pf        = 640.0;  // cm
+  double radius_b0pf   = 2.9;     // cm
+  double length_b0pf   = 120.0;   // 848.2683995; //290.0;    //cm
+  double rotation_b0pf = -0.025;  // radians
+  double x_b0pf        = -16.5;   // cm
+  double y_b0pf        = 0.0;     // cm
+  double z_b0pf        = 640.0;   // cm
 
   double radius_b0apf   = 4.3;    // cm
   double length_b0apf   = 60.0;   // cm

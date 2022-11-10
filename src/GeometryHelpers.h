@@ -1,3 +1,6 @@
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (C) 2022 Wouter Deconinck
+
 #pragma once
 #include "Math/Point2D.h"
 #include <vector>

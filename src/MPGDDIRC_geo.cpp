@@ -1,3 +1,6 @@
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (C) 2022 Wouter Deconinck, Matt
+
 /** \addtogroup PID
  * \brief Type: **Barrel bar detector (rectangular geom.) with frames surrounding the perimeter.
  * \author S. Joosten
@@ -35,8 +38,8 @@ using namespace dd4hep::rec;
 static Ref_t create_MPGDDIRC_geo(Detector& description, xml_h e, SensitiveDetector sens)
 {
   typedef vector<PlacedVolume> Placements;
-  xml_det_t                               x_det    = e;
-  //Material                                air      = description.air();
+  xml_det_t                    x_det = e;
+  // Material                                air      = description.air();
   int                                     det_id   = x_det.id();
   string                                  det_name = x_det.nameStr();
   DetElement                              sdet(det_name, det_id);
@@ -145,7 +148,7 @@ static Ref_t create_MPGDDIRC_geo(Detector& description, xml_h e, SensitiveDetect
       pv = m_vol.placeVolume(c_vol, Position(0, 0, thickness_sum + x_comp.thickness() / 2.0));
 
       if (x_comp.isSensitive()) {
-	pv.addPhysVolID("sensor",sensor_number++);
+        pv.addPhysVolID("sensor", sensor_number++);
         c_vol.setSensitiveDetector(sens);
         sensitives[m_nam].push_back(pv);
         module_thicknesses[m_nam] = {thickness_so_far + x_comp.thickness() / 2.0,
@@ -216,16 +219,16 @@ static Ref_t create_MPGDDIRC_geo(Detector& description, xml_h e, SensitiveDetect
     string     m_nam    = x_layer.moduleStr();
     string     lay_nam  = _toString(x_layer.id(), "layer%d");
 
-    double phi0      = x_layout.phi0();     // starting phi of first module
-    double phi_tilt  = x_layout.phi_tilt(); // Phi tilit of module
-    double rc        = x_layout.rc();       // Radius of the module
-    int    nphi      = x_layout.nphi();     // Number of modules in phi
-    double rphi_dr   = x_layout.dr();       // The delta radius of every other module
-    double phi_incr  = (2 * M_PI) / nphi;   // Phi increment for one module
-    double phic      = phi0;                // Phi of the module
-    double nz        = z_layout.nz();	    // Number of modules placed in z
-    double z_dr      = z_layout.dr();	    // Radial offest of modules in z
-    double z0       = z_layout.z0();	    // Sets how much overlap in z the nz modules have
+    double phi0     = x_layout.phi0();     // starting phi of first module
+    double phi_tilt = x_layout.phi_tilt(); // Phi tilit of module
+    double rc       = x_layout.rc();       // Radius of the module
+    int    nphi     = x_layout.nphi();     // Number of modules in phi
+    double rphi_dr  = x_layout.dr();       // The delta radius of every other module
+    double phi_incr = (2 * M_PI) / nphi;   // Phi increment for one module
+    double phic     = phi0;                // Phi of the module
+    double nz       = z_layout.nz();       // Number of modules placed in z
+    double z_dr     = z_layout.dr();       // Radial offest of modules in z
+    double z0       = z_layout.z0();       // Sets how much overlap in z the nz modules have
 
     Volume      module_env = volumes[m_nam];
     DetElement  lay_elt(sdet, lay_nam, lay_id);
@@ -234,33 +237,34 @@ static Ref_t create_MPGDDIRC_geo(Detector& description, xml_h e, SensitiveDetect
     int module = 1;
     // loop over the modules in phi
     for (int ii = 0; ii < nphi; ii++) {
-      double xc = rc * std::cos(phic);              //Basic x position of module
-      double yc = rc * std::sin(phic);              //Basic y position of module
-      double dx = z_dr * std::cos(phic + phi_tilt); //Deta x of module position
-      double dy = z_dr * std::sin(phic + phi_tilt); //Deta y of module position
-      //loop over the modules in z
+      double xc = rc * std::cos(phic);              // Basic x position of module
+      double yc = rc * std::sin(phic);              // Basic y position of module
+      double dx = z_dr * std::cos(phic + phi_tilt); // Deta x of module position
+      double dy = z_dr * std::sin(phic + phi_tilt); // Deta y of module position
+      // loop over the modules in z
       for (int j = 0; j < nz; j++) {
-        string module_name = _toString(module, "module%d");
+        string     module_name = _toString(module, "module%d");
         DetElement mod_elt(lay_elt, module_name, module);
-        double mod_z = 0.5 * dimensions.length();
-        double z_placement = mod_z - j * nz * mod_z;          //z location for module placement
-	double z_offset = z_placement > 0 ? -z0/2.0 : z0/2.0; // determine the amount of overlap in z the z nz modules have
+        double     mod_z       = 0.5 * dimensions.length();
+        double     z_placement = mod_z - j * nz * mod_z; // z location for module placement
+        double     z_offset =
+            z_placement > 0 ? -z0 / 2.0 : z0 / 2.0;  // determine the amount of overlap in z the z nz modules have
 
         Transform3D tr(RotationZYX(0.0, ((M_PI / 2) - phic - phi_tilt), -M_PI / 2),
                        Position(xc, yc, mpgd_dirc_pos.z() + z_placement + z_offset)); // in x-y plane,
-        pv = assembly.placeVolume(module_env,tr);
-        pv.addPhysVolID("module",module);
-	mod_elt.setPlacement(pv);
-        for (size_t ic =0; ic < sensVols.size(); ++ic) {
+        pv = assembly.placeVolume(module_env, tr);
+        pv.addPhysVolID("module", module);
+        mod_elt.setPlacement(pv);
+        for (size_t ic = 0; ic < sensVols.size(); ++ic) {
           PlacedVolume sens_pv = sensVols[ic];
-          DetElement  comp_de(mod_elt, std::string("de_") + sens_pv.volume().name(),module);
+          DetElement   comp_de(mod_elt, std::string("de_") + sens_pv.volume().name(), module);
           comp_de.setPlacement(sens_pv);
         }
-        //increas module counter
+        // increas module counter
         module++;
-	//adjust x and y coordinates
-	xc += dx;
-	yc += dy;
+        // adjust x and y coordinates
+        xc += dx;
+        yc += dy;
       }
       // increment counters
       phic += phi_incr;
@@ -270,7 +274,7 @@ static Ref_t create_MPGDDIRC_geo(Detector& description, xml_h e, SensitiveDetect
   sdet.setAttributes(description, assembly, x_det.regionStr(), x_det.limitsStr(), x_det.visStr());
   assembly.setVisAttributes(description.invisible());
   pv = description.pickMotherVolume(sdet).placeVolume(assembly);
-  pv.addPhysVolID("system", det_id);//Set the subdetector system ID
+  pv.addPhysVolID("system", det_id); // Set the subdetector system ID
   sdet.setPlacement(pv);
   return sdet;
 }

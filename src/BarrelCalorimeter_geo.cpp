@@ -1,3 +1,6 @@
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (C) 2022 Wouter Deconinck
+
 //==========================================================================
 //  AIDA Detector description implementation
 //--------------------------------------------------------------------------
@@ -151,7 +154,7 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
         string l_name      = _toString(l_num, "layer%d");
         double l_thickness = layering.layer(l_num - 1)->thickness(); // Layer's thickness.
 
-        Position   l_pos(0, 0, l_pos_z + l_thickness / 2); // Position of the layer.
+        Position   l_pos(0, 0, l_pos_z + l_thickness / 2);           // Position of the layer.
         Box        l_box(l_dim_x - tolerance, stave_z - tolerance, l_thickness / 2 - tolerance);
         Volume     l_vol(l_name, l_box, air);
         DetElement layer(stave_det, l_name, det_id);

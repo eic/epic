@@ -1,3 +1,6 @@
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (C) 2022 Whitney Armstrong
+
 #include "DD4hep/DetFactoryHelper.h"
 #include "XML/Layering.h"
 #include "XML/Utilities.h"
