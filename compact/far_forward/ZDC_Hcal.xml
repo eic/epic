@@ -1,0 +1,28 @@
+<lccdd>
+  <comment>
+    ///////////////////////////////////////////////////////////
+    // Far Forward Ion Zero Degree Calorimeter
+    // Pb + Scintillator (Pb/Sci) sandwich sampling  for Hcal
+    ///////////////////////////////////////////////////////////
+  </comment>
+
+  <detectors>
+    <detector id="ZDCHcal_ID" name="ZDCHcal" type="ZDC_Sampling" readout="ZDCHcalHits" vis="ZDCHcal_Vis">
+      <position x="ZDCHcal_x_pos" y="ZDCHcal_y_pos" z="ZDCHcal_z_pos"/>
+      <rotation x="ZDCHcal_rotateX_angle" y="ZDCHcal_rotateY_angle" z="ZDCHcal_rotateZ_angle"/>
+      <dimensions x="ZDCHcal_width" z="ZDCHcal_length"/>
+      <layer repeat="ZDC_PbScint_NRepeat">
+        <slice name="Lead_slice"  material="Pb"           thickness="ZDC_Lead_Thickness"  vis="AnlGray"/>
+        <slice name="Scint_slice" material="PlasticScint" thickness="ZDC_Scint_Thickness" vis="AnlOrange" sensitive="true"/>
+	<slice name="Air_4_slice" material="Air"          thickness="ZDC_Air_4_Thickness" vis="InvisibleNoDaughters"/>
+      </layer>
+    </detector>
+  </detectors>
+
+  <readouts>
+    <readout name="ZDCHcalHits">
+      <segmentation type="CartesianGridXY" grid_size_x="10.0 * cm" grid_size_y="10.0 * cm"/>
+      <id>system:8,layer:12,slice:12,x:32:-16,y:-16</id>
+    </readout>
+  </readouts>
+</lccdd>

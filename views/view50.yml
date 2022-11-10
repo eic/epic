@@ -1,0 +1,40 @@
+dawn_view_50:detector:
+  extends: .views
+  needs:
+    - job: view_prim:detector_only
+      optional: false
+  script:
+    - ./bin/make_dawn_views -i ${LOCAL_DATA_PATH}/detector_view.prim -t view50 -d views/view50 -D
+
+dawn_view_50:ev001:
+  extends: .views
+  rules:
+    - if: '$DETECTOR_EVENT_VIEWS == "ON"'
+  needs:
+    - job: view_prim:ev001
+      optional: true
+  script:
+    - ./bin/make_dawn_views -i ${LOCAL_DATA_PATH}/view_ev001.prim -t view50_ev001 -d views/view50 -s 1
+
+dawn_view_50:ev002:
+  extends: .views
+  rules:
+    - if: '$DETECTOR_EVENT_VIEWS == "ON"'
+  needs:
+    - job: view_prim:ev002
+      optional: true
+  script:
+    - ./bin/make_dawn_views -i ${LOCAL_DATA_PATH}/view_ev002.prim -t view50_ev002 -d views/view50 -s 2
+
+view_50:
+  stage: collect
+  needs:
+    - job: dawn_view_50:detector
+      optional: false
+    - job: dawn_view_50:ev001
+      optional: true
+    - job: dawn_view_50:ev002
+      optional: true
+  script:
+    - ls -lrth *
+    - ls -lrth images/*

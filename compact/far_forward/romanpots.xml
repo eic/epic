@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<lccdd>
+  <define>
+    <comment>
+      ---------------------------------
+      Far Forward B0 Tracker Parameters
+      ---------------------------------
+    </comment>
+    <constant name="ForwardRomanPotA_zpos" value="B1APF_CenterPosition + B1APF_Length/2.0 + 20.0*cm"/>
+    <constant name="ForwardRomanPotA_xpos" value="B1APF_XPosition"/>
+    <constant name="ForwardRomanPotB_zpos" value="B2PF_CenterPosition - B2PF_Length/2.0 - 20.0*cm"/>
+    <constant name="ForwardRomanPotB_xpos" value="B2PF_XPosition "/>
+  </define>
+
+  <include ref="roman_pots_eRD24_design.xml"/>
+
+  <!--
+  <detectors>
+    <detector
+      id="ForwardRomanPotA_ID"
+      name="ForwardRomanPotA"
+      readout="ForwardRomanPotHits"
+      type="ip6_RectangularTracker"
+      insideTrackingVolume="true"
+      reflect="false"
+      vis="AnlRed">
+      <position x="ForwardRomanPotA_xpos" y="0" z="ForwardRomanPotA_zpos"/>
+      <layer id="1"
+        vis="AnlBlue"
+        x="20.0*cm"
+        y="10.0*cm" >
+        <slice material="Air" thickness="1.0*cm" vis="AnlBlue" sensitive="true" />
+        <slice material="Air" thickness="1.0*cm" vis="AnlBlue" sensitive="true" />
+        <slice material="Air" thickness="1.0*cm" vis="AnlBlue" sensitive="true" />
+        <slice material="Air" thickness="1.0*cm" vis="AnlBlue" sensitive="true" />
+      </layer>
+    </detector>
+    <detector
+      id="ForwardRomanPotB_ID"
+      name="ForwardRomanPotB"
+      readout="ForwardRomanPotHits"
+      type="ip6_RectangularTracker"
+      insideTrackingVolume="true"
+      reflect="false"
+      vis="AnlRed">
+      <position x="ForwardRomanPotB_xpos" y="0" z="ForwardRomanPotB_zpos"/>
+      <layer id="1"
+        vis="AnlBlue"
+        x="20.0*cm"
+        y="10.0*cm" >
+        <slice material="Air" thickness="1.0*cm" vis="AnlBlue" sensitive="true" />
+        <slice material="Air" thickness="1.0*cm" vis="AnlBlue" sensitive="true" />
+        <slice material="Air" thickness="1.0*cm" vis="AnlBlue" sensitive="true" />
+        <slice material="Air" thickness="1.0*cm" vis="AnlBlue" sensitive="true" />
+      </layer>
+    </detector>
+  </detectors>
+  -->
+
+  <!--
+  <readouts>
+    <readout name="ForwardRomanPotHits">
+      <segmentation type="CartesianGridXY" grid_size_x="1.0*mm" grid_size_y="1.0*mm" />
+      <id>system:8,barrel:3,layer:4,slice:4,x:32:-16,y:-16</id>
+    </readout>
+  </readouts>
+  -->
+
+</lccdd>

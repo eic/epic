@@ -1,0 +1,42 @@
+<lccdd>
+  <comment>
+    //////////////////////////////////////////////////
+    // Far Forward Ion Zero Degree Calorimeter
+    // W power + SciFi for Ecal
+    //////////////////////////////////////////////////
+  </comment>
+
+  <define>
+    <constant name="ZDCEcal_FiberRadius" value="0.235*mm"/>
+    <constant name="ZDCEcal_FiberOffset" value="0.5*mm"/>
+    <constant name="ZDCEcal_FiberSpaceX" value="0.265*mm"/>
+    <constant name="ZDCEcal_FiberSpaceY" value="0.425*mm"/>
+  </define>
+
+  <detectors>
+    <detector id="ZDCEcal_ID"
+      name="ZDCEcal"
+      type="ZDCEcalScFiCalorimeter"
+      vis="ZDCEcal_Vis"
+      readout="ZDCEcalHits">
+      <position x="ZDCEcal_x_pos" y="ZDCEcal_y_pos" z="ZDCEcal_z_pos"/>
+      <rotation x="ZDCEcal_rotateX_angle" y="ZDCEcal_rotateY_angle" z="ZDCEcal_rotateZ_angle"/>
+      <dimensions x="ZDCEcal_width" z="ZDCEcal_length"/>
+      <module sizex="25*mm" sizey="25*mm" sizez="170*mm" material="WSciFi_UCLA_Abs" vis="ZDCEcal_module_Vis">
+        <fiber material="Polystyrene"
+          radius="ZDCEcal_FiberRadius"
+          offset="ZDCEcal_FiberOffset"
+          spacex="ZDCEcal_FiberSpaceX"
+          spacey="ZDCEcal_FiberSpaceY"/>
+      </module>
+    </detector>
+  </detectors>
+
+  <readouts>
+    <readout name="ZDCEcalHits">
+      <segmentation type="NoSegmentation"/>
+      <id>system:8,module:28,fiber_x:8,fiber_y:8</id>
+    </readout>
+  </readouts>
+
+</lccdd>
