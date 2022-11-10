@@ -80,17 +80,21 @@ static Ref_t create_detector(Detector& desc, xml_h e, SensitiveDetector sens)
   Box Cut_Box(xbox, ybox, zbox);
 
   // Central pipe box
-  Box Extended_Beam_Box(Width + wall, Height + wall, Thickness);
+  //Tube Extended_Beam_Box(Width,Width+wall,Thickness);
+  Box Extended_Beam_Box(Width+wall,Height+wall,Thickness);
 
-  // Central vacuum box
-  Box Extended_Vacuum_Box(Width, Height, Thickness);
+  // Central vacuum box 
+  Box Extended_Vacuum_Box(Width,Height,Thickness);
+  //Tube Extended_Vacuum_Box(0,Width,Thickness);
 
   Solid Wall_Box   = Extended_Beam_Box;
   Solid Vacuum_Box = Extended_Vacuum_Box;
 
   Assembly DetAssembly(detName + "_assembly");
   Assembly DetAssemblyAir(detName + "_assembly_air");
-
+  int nVacuum = 0;
+  int nAir    = 0;
+  
   DetElement det(detName, detID);
 
   //-----------------------------------------------------------------
@@ -155,7 +159,7 @@ static Ref_t create_detector(Detector& desc, xml_h e, SensitiveDetector sens)
       //       tagoffsetz = vacoffsetz-(l+tagboxL/2)*cos(theta);
     }
 
-    Box TagWallBox(box_w, box_h, l + tagboxL);
+    Box TagWallBox(box_w, box_h, l + tagboxL+wall);
     Box TagVacBox(vac_w, vac_h, l + tagboxL);
 
     RotationY rotate(theta);
@@ -166,6 +170,10 @@ static Ref_t create_detector(Detector& desc, xml_h e, SensitiveDetector sens)
       Wall_Box   = UnionSolid(Wall_Box, TagWallBox, Transform3D(rotate, Position(offsetx, 0, offsetz)));
       Vacuum_Box = UnionSolid(Vacuum_Box, TagVacBox, Transform3D(rotate, Position(vacoffsetx, 0, vacoffsetz)));
       mother     = DetAssembly;
+      nVacuum++;
+    }
+    else{
+      nAir++;
     }
 
     Assembly TaggerAssembly("tagAssembly");
@@ -198,6 +206,8 @@ static Ref_t create_detector(Detector& desc, xml_h e, SensitiveDetector sens)
 
     Box  Entry_Beam_Box(ED_X + wall, ED_Y + wall, ED_Z);
     Box  Entry_Vacuum_Box(ED_X, ED_Y, ED_Z - wall);
+    //Tube Entry_Beam_Box(ED_X, ED_X + wall, ED_Z);
+    //Tube Entry_Vacuum_Box(0, ED_X, ED_Z - wall);
     Tube Lumi_Exit(0, Lumi_R, ED_Z);
 
     // Add entry boxes to main beamline volume
@@ -227,17 +237,22 @@ static Ref_t create_detector(Detector& desc, xml_h e, SensitiveDetector sens)
 
   IntersectionSolid Wall_Box_Sub(Wall_Box, Far_Backwards_Box, Transform3D(rotate2, position));
   IntersectionSolid Vacuum_Box_Sub(Vacuum_Box, Far_Backwards_Box, Transform3D(rotate2, position));
+  SubtractionSolid  Wall_Box_Out(Wall_Box_Sub, Vacuum_Box_Sub);
 
   Volume vacVol("Vacuum_Box", Vacuum_Box_Sub, Vacuum);
-  // vacVol.setVisAttributes(desc.visAttributes("RedGreenVis"));
-  vacVol.placeVolume(DetAssembly);
-  Volume wallVol("Tagger_Box", Wall_Box_Sub, Steel);
+  vacVol.setVisAttributes(desc.visAttributes("BackwardsVac"));
+  if(nVacuum>0)
+    vacVol.placeVolume(DetAssembly);
+  Volume wallVol("Tagger_Box", Wall_Box_Out, Steel);
   wallVol.setVisAttributes(desc.visAttributes(vis_name));
-  wallVol.placeVolume(vacVol);
+  //  wallVol.placeVolume(vacVol);
 
   Assembly backAssembly("assembly");
-  backAssembly.placeVolume(wallVol);
-  backAssembly.placeVolume(DetAssemblyAir);
+  backAssembly.placeVolume(wallVol);  
+  backAssembly.placeVolume(vacVol);
+
+  if(nAir>0)
+    backAssembly.placeVolume(DetAssemblyAir);
 
   // placement in mother volume
   Transform3D  tr(RotationY(rot.theta()), Position(pos.x(), pos.y(), pos.z()));
