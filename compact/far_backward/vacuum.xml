@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<lccdd>
+
+  <define>
+
+  </define>
+
+  <detectors>
+
+    <comment> Main vacuum volume </comment>
+    <detector id="TaggerVacuum_ID" name="BackwardsTaggerVacuum" type="BackwardsVacuum" wall="2*mm" lumi="true" vis="BackwardsBox">
+      <focus      x="Dipole_Focus_X"    y="Dipole_Focus_Y"    z="Dipole_Focus_Z" />
+      <bounding
+        xmin="Vacuum_BB_MinX"
+        xmax="Vacuum_BB_MaxX"
+        ymin="Vacuum_BB_MinY"
+        ymax="Vacuum_BB_MaxY"
+        zmin="Vacuum_BB_MinZ"
+        zmax="Vacuum_BB_MaxZ"
+      />
+      <rotation   theta="Beam_Theta"/>
+      <dimensions xL="Beam_WidthL" xR="Beam_WidthR" y="Beam_Height" z="Beam_Length"/>
+
+      <comment> Vacuum volume joining with lumi </comment>
+      <exitdim    x="Exit_Width"   y="Exit_Height"  lumiZ="LumiWin_Z" lumiR="LumiWin_R" maxTheta="Exit_Theta"/>
+
+      <comment> Vacuum volume extention around taggers </comment>
+      <module id="1"
+        modname="Tagger1"
+        theta_min="Tagger1_Min_Theta"
+        max_align="false"
+        offset_min="Tagger1_Min_Offset"
+        extend_vacuum="true"
+        >
+        <dimensions x="Tagger1_Width/2" y="Tagger1_Height/2" z="Tagger1_Length"/>
+      </module>
+
+      <module id="2"
+        modname="Tagger2"
+        theta_min="Tagger2_Min_Theta"
+        max_align="true"
+        offset_min="Tagger2_Min_Offset"
+        extend_vacuum="true"
+        >
+        <dimensions x="Tagger2_Width/2" y="Tagger2_Height/2" z="Tagger2_Length"/>
+      </module>
+
+    </detector>
+
+  </detectors>
+
+</lccdd>

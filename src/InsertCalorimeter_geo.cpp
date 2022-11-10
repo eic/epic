@@ -50,11 +50,11 @@ static Ref_t createDetector(Detector& desc, xml_h handle, SensitiveDetector sens
 
   // Getting thickness of backplate
   /*
-    The hole radius & position is determined by liner interpolation 
+    The hole radius & position is determined by liner interpolation
     The HCal insert has multiple layers; interpolation goes from front of insert to front of final layer
     So need final layer thickness (backplate thickness) for interpolation
-    
-    For the ECal insert, the hole radius & position is constant 
+
+    For the ECal insert, the hole radius & position is constant
     Also has only one layer so don't have a backplate_thickness there (so set to 0)
   */
   auto backplate_thickness = detElem.hasChild(_Unicode(backplate))? detElem.child(_Unicode(backplate)).attr<double>(_Unicode(thickness)) : 0.;

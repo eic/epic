@@ -1,0 +1,84 @@
+<lccdd>
+
+  <comment>Far Forward Hadron Detectors</comment>
+
+  <define>
+    <comment>
+      -------------------------------------------
+      Zero Degree Calorimeter General Parameters
+      -------------------------------------------
+    </comment>
+    <constant name="ZDC_z_pos"         value="3560.0 * cm"/> <!-- need to shift FORWARD toward IP to account for 50cm shift -->
+    <constant name="ZDC_x_pos"         value="ZDC_z_pos * ionCrossingAngle"/>
+    <constant name="ZDC_y_pos"         value="0.0 * cm"/>
+    <constant name="ZDC_rotateX_angle" value="0.0 * rad"/>
+    <constant name="ZDC_rotateY_angle" value="ionCrossingAngle"/>
+    <constant name="ZDC_rotateZ_angle" value="0.0 * rad"/>
+    <constant name="ZDC_width"         value="60.0 * cm"/>
+    <constant name="ZDC_length"        value="200.0 * cm"/>
+
+    <comment>
+      -------------------------------
+      Zero Degree Calorimeter - ECAL
+      -------------------------------
+    </comment>
+    <constant name="ZDC_1stSilicon_z_pos"        value="ZDC_z_pos"/>
+    <constant name="ZDC_1stSilicon_x_pos"        value="ZDC_1stSilicon_z_pos * ionCrossingAngle"/>
+    <constant name="ZDC_1stSilicon_y_pos"        value="ZDC_y_pos"/>
+    <constant name="ZDC_1stSilicon_rotateX_angle"   value="ZDC_rotateX_angle"/>
+    <constant name="ZDC_1stSilicon_rotateY_angle"   value="ZDC_rotateY_angle"/>
+    <constant name="ZDC_1stSilicon_rotateZ_angle"   value="ZDC_rotateZ_angle"/>
+
+    <constant name="ZDC_Crystal_z_pos"           value="ZDC_z_pos + 6 *cm "/>
+    <constant name="ZDC_Crystal_x_pos"           value="ZDC_Crystal_z_pos * ionCrossingAngle"/>
+    <constant name="ZDC_Crystal_y_pos"           value="ZDC_y_pos"/>
+    <constant name="ZDC_Crystal_rotateX_angle"   value="ZDC_rotateX_angle"/>
+    <constant name="ZDC_Crystal_rotateY_angle"   value="ZDC_rotateY_angle"/>
+    <constant name="ZDC_Crystal_rotateZ_angle"   value="ZDC_rotateZ_angle"/>
+    <constant name="ZDC_Crystal_width"           value="ZDC_width"/>
+
+    <constant name="ZDC_WSi_z_pos"               value="ZDC_Crystal_z_pos + 18. *cm"/>
+    <constant name="ZDC_WSi_x_pos"               value="ZDC_WSi_z_pos * ionCrossingAngle"/>
+    <constant name="ZDC_WSi_y_pos"               value="ZDC_y_pos"/>
+    <constant name="ZDC_WSi_rotateX_angle"       value="ZDC_rotateX_angle"/>
+    <constant name="ZDC_WSi_rotateY_angle"       value="ZDC_rotateY_angle"/>
+    <constant name="ZDC_WSi_rotateZ_angle"       value="ZDC_rotateZ_angle"/>
+    <constant name="ZDC_WSi_nblocks"             value="2"/>
+    <constant name="ZDC_WSi_pad_nlayers_per_block"         value="10"/>
+
+    <constant name="ZDC_PbSi_z_pos"               value="ZDC_WSi_z_pos + 35. *cm"/>
+    <constant name="ZDC_PbSi_x_pos"               value="ZDC_PbSi_z_pos * ionCrossingAngle"/>
+    <constant name="ZDC_PbSi_y_pos"               value="ZDC_y_pos"/>
+    <constant name="ZDC_PbSi_rotateX_angle"       value="ZDC_rotateX_angle"/>
+    <constant name="ZDC_PbSi_rotateY_angle"       value="ZDC_rotateY_angle"/>
+    <constant name="ZDC_PbSi_rotateZ_angle"       value="ZDC_rotateZ_angle"/>
+    <constant name="ZDC_PbSi_nlayers"             value="12"/>
+
+    <constant name="ZDC_PbSci_z_pos"               value="ZDC_PbSi_z_pos + 75. *cm"/>
+    <constant name="ZDC_PbSci_x_pos"               value="ZDC_PbSci_z_pos * ionCrossingAngle"/>
+    <constant name="ZDC_PbSci_y_pos"               value="ZDC_y_pos"/>
+    <constant name="ZDC_PbSci_rotateX_angle"       value="ZDC_rotateX_angle"/>
+    <constant name="ZDC_PbSci_rotateY_angle"       value="ZDC_rotateY_angle"/>
+    <constant name="ZDC_PbSci_rotateZ_angle"       value="ZDC_rotateZ_angle"/>
+    <constant name="ZDC_PbSci_nbox"                value="2"/>
+    <constant name="ZDC_PbSci_nlayers_per_box"     value="15"/>
+    <constant name="ZDC_PbSci_box_gap"             value="3.*cm"/>
+
+    <constant name="ZDC_pad_thickness"           value="320.0 * um"/>
+    <constant name="ZDC_pixel_thickness"         value="300.0 * um"/>
+    <constant name="ZDC_glue_thickness"          value="0.11 * mm"/>
+    <constant name="ZDC_PCB_thickness"           value="1.6 * mm"/>
+    <constant name="ZDC_Si_Air_thickness"        value="5. *mm"/>
+    <constant name="ZDC_Tungsten_thickness"      value="3.5 *mm"/>
+    <constant name="ZDC_Lead_thickness"          value="3. *cm"/>
+    <constant name="ZDC_Sci_thickness"           value="2.* mm"/>
+
+  </define>
+
+  <include ref="ZDC_1stSilicon.xml"/>
+  <include ref="ZDC_Crystal.xml"/>
+  <include ref="ZDC_WSi.xml"/>
+  <include ref="ZDC_PbSi.xml"/>
+  <include ref="ZDC_PbScinti.xml"/>
+
+</lccdd>

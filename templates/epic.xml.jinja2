@@ -44,8 +44,8 @@
       The ip6 (or other ip) defines should be included first.
       These files have only a define tags.
     </documentation>
-    <include ref="${BEAMLINE_PATH}/ip6/definitions.xml" />
-    <include ref="${BEAMLINE_PATH}/ip6/far_forward/fields_{{ pbeam | default("275", true) }}.xml" />
+    <include ref="${DETECTOR_PATH}/compact/far_forward/fields_{{ pbeam | default("275", true) }}.xml" />
+    <include ref="${DETECTOR_PATH}/compact/far_forward/definitions.xml" />
     <include ref="${DETECTOR_PATH}/compact/definitions.xml" />
   </define>
 
@@ -143,7 +143,7 @@
   <documentation level="11">
     ## Central beam pipe
   </documentation>
-  <include ref="${BEAMLINE_PATH}/ip6/central_beampipe.xml"/>
+  <include ref="${DETECTOR_PATH}/compact/central_beampipe.xml"/>
 {% endif -%}
 
 {% if 'far_forward' in features %}
@@ -151,7 +151,7 @@
     ## Far foward detectors
   </documentation>
   {% for ff in features['far_forward'] -%}
-  <include ref="${BEAMLINE_PATH}/ip6/{{ ff }}.xml"/>
+  <include ref="${DETECTOR_PATH}/compact/{{ ff }}.xml"/>
   {% endfor -%}
 {% endif -%}
 
@@ -160,7 +160,7 @@
     ## Far backward detectors
   </documentation>
   {% for fb in features['far_backward'] -%}
-  <include ref="${BEAMLINE_PATH}/ip6/{{ fb }}.xml"/>
+  <include ref="${DETECTOR_PATH}/compact/{{ fb }}.xml"/>
   {% endfor -%}
 {% endif -%}
 

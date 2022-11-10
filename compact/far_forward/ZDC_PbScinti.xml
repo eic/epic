@@ -1,0 +1,43 @@
+<lccdd>
+  <comment>
+    //////////////////////////////////////////////////
+    // Far Forward Zero Degree Calorimeter
+    // Crystal calorimeter
+    //////////////////////////////////////////////////
+  </comment>
+
+  <define>
+    <constant name="ZDC_PbSci_layer_thickness" value="ZDC_Lead_thickness + ZDC_Sci_thickness"/>
+    <constant name="ZDC_PbSci_x"       value="ZDC_width"/>
+    <constant name="ZDC_PbSci_y"       value="ZDC_width"/>
+    <constant name="ZDC_PbSci_z"
+	      value="ZDC_PbSci_nbox * (ZDC_PbSci_nlayers_per_box * ZDC_PbSci_layer_thickness + ZDC_PbSci_box_gap)"/>
+  </define>
+
+  <detectors>
+    <detector
+	id="ZDC_PbSci_ID"
+	name="ZDC_PbSci"
+	type="ZDC_SamplingCal"
+	vis="ZDC_PbSci_Vis"
+	readout="ZDCHcalHits">
+      <position x="ZDC_PbSci_x_pos"         y="ZDC_PbSci_y_pos"         z="ZDC_PbSci_z_pos"/>
+      <rotation x="ZDC_PbSci_rotateX_angle" y="ZDC_PbSci_rotateY_angle" z="ZDC_PbSci_rotateZ_angle"/>
+      <dimensions x="ZDC_PbSci_x" y="ZDC_PbSci_y" z="ZDC_PbSci_z"/>
+      <module nbox="ZDC_PbSci_nbox" gapspace="ZDC_PbSci_box_gap">
+	<layer nlayer="ZDC_PbSci_nlayers_per_box">
+	  <slice name="lead"      material="Lead"    thickness="ZDC_Lead_thickness"  vis="AnlLight_Gray"/>
+	  <slice name="scinti"    material="ZDC_Scintillator" thickness="ZDC_Sci_thickness"   vis="AnlGreen"  sensitive="true"/>
+	</layer>
+      </module>
+    </detector>
+  </detectors>
+
+  <readouts>
+    <readout name="ZDCHcalHits">
+      <segmentation type="CartesianGridXY" grid_size_x="10.*cm" grid_size_y="10.*cm"/>
+      <id>system:8,scinti:6,x:24:-12,y:-12</id>
+    </readout>
+  </readouts>
+
+</lccdd>

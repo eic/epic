@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<lccdd>
+
+  <include ref="far_forward/ion_beamline.xml" />
+  <include ref="far_forward/beampipe_hadron_B0.xml" />
+  <include ref="far_forward/B0_tracker.xml"/>
+  <include ref="far_forward/B0_ECal.xml"/>
+  <include ref="far_forward/offM_tracker.xml"/>
+  <include ref="far_forward/ZDC_Athena.xml"/>
+  <include ref="far_forward/roman_pots_eRD24_design.xml"/>
+  <include ref="far_forward/vacuum.xml"/>
+  <include ref="far_forward/magnets.xml"/>
+
+</lccdd>

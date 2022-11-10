@@ -134,6 +134,12 @@
     <vis name="ffi_ZDC_HCAL_Vis"        ref="AnlBlue"  showDaughters="true"  visible="true"/>
 
     <comment>
+      Backwards beamline vacuum
+    </comment>
+    <vis name="BackwardsBox"      alpha="0.3" ref="AnlLight_Gray"/>
+    <vis name="BackwardsAir"      alpha="0.7" ref="AnlBlue"/>
+
+    <comment>
       PID visualization
     </comment>
 

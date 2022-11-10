@@ -1,0 +1,109 @@
+  <define>
+    <constant name="CrossingAngle" value="-0.025*rad "/>
+    <constant name="ionCrossingAngle" value="CrossingAngle"/>
+    <constant name="electronCrossingAngle" value="0.0"/>
+    <constant name="CrossingSlope" value="CrossingAngle"/>
+
+    <constant name="IPBeampipe_rmax" value="2.501*25.4*mm/2.0"/>
+    <constant name="Beampipe_rmax"   value="IPBeampipe_rmax"/>
+    <constant name="BeampipeOD"      value="2.0*IPBeampipe_rmax"/>
+
+
+    <comment>
+                                    Hadron Magnets -- PRE BIG FLIP COORDINATES
+
+##   name    center_x center_y center_z rin(z-in) rin(z-out)  dout   length   angle      B      gradient
+##             [m]      [m]      [m]      [m]        [m]      [m]      [m]   [mrad]     [T]      [T/m]
+##
+
+     B0PF    0.132497   0.0    5.89913   0.2000    0.2000    0.5000   1.200   0.00    -1.300      0.000
+    B0APF    0.197995   0.0    7.69866   0.0430    0.0430    0.1860   0.600   25.0   -3.474      0.000
+    Q1APF    0.244734   0.0    9.22834   0.0560    0.0560    0.2120   1.460   19.5    0.000    -72.608
+    Q1BPF    0.300512   0.0    11.0629   0.0780    0.0780    0.2560   1.610   15.0    0.000    -66.180
+     Q2PF     0.39495   0.0    14.1673   0.1315    0.1315    0.3620   3.800   14.8    0.000     40.737
+     B1PF    0.490747   0.0    18.0667   0.1350    0.1350    0.3700   3.000   34.0   -3.400      0.000
+    B1APF    0.600444   0.0    20.8159   0.1680    0.1680    0.4360   1.500   25.0   -2.700      0.000
+    B2PF    1.522232   0.0    41.9092   0.2       0.2       0.5      5.76    25.0    5.94       0.000
+
+
+    Hadron magnets -- with BIG FLIP and 50cm shift
+
+    ##
+##   name    center_x center_y center_z rin(z-in) rin(z-out)  dout   length   angle      B      gradient
+##             [m]      [m]      [m]      [m]        [m]      [m]      [m]   [mrad]     [T]      [T/m]
+##
+
+     B0PF    -0.145779265   0.0    6.400000000   0.2000    0.2000    0.5000   1.200   0.00     1.1840539      0.000
+    B0PFq    -0.145779265   0.0    6.400000000   0.2000    0.2000    0.5000   1.200   0.00     0.0000000      -8.12238283
+	B0APF    -0.210480535   0.0    8.198946015   0.0430    0.0430    0.1860   0.600   -25.0    3.4314469      0.000
+    Q1APF    -0.254342857   0.0    9.628296939   0.0560    0.0560    0.2120   1.460   -19.5    0.0000000    -72.608
+    Q1BPF    -0.312840809   0.0    11.56243847   0.0780    0.0780    0.2560   1.610   -15.0    0.0000000    -63.24525402
+     Q2PF    -0.407362293    0.0   14.66604545   0.1315    0.1315    0.3620   3.800   -14.8    0.0000000     36.88301623
+     B1PF    -0.503165042   0.0    18.56486896   0.1350    0.1350    0.3700   3.000   -34.0    3.4479890      0.000
+    B1APF    -0.612903791   0.0    21.31298439   0.1680    0.1680    0.4360   1.500   -25.0    2.7000000      0.000
+    B2APF    -1.491239596   0.0    40.74293743   0.2       0.2       0.5      4.4    -28.22    -4.7890142      0.000
+
+  </comment>
+
+    <constant name="B0PF_InnerRadius"  value="20.0*cm"/>
+    <constant name="B0APF_InnerRadius" value="4.3*cm"/>
+    <constant name="Q1APF_InnerRadius" value="5.6*cm"/>
+    <constant name="Q1BPF_InnerRadius" value="7.8*cm"/>
+    <constant name="Q2PF_InnerRadius"  value="13.15*cm"/>
+    <constant name="B1PF_InnerRadius"  value="13.5*cm"/>
+    <constant name="B1APF_InnerRadius" value="16.8*cm"/>
+    <constant name="B2PF_InnerRadius"  value="20.0*cm"/>
+    <comment>
+      The inner radii are temporarily enlarged so the inner coils (UnionSolid) are not built with overlapping volumes
+      Overlapping boolean volumes may cause issues in DAWN view, even if they were good in simulation
+    </comment>
+    <!--<constant name="Q0EF_InnerRadius" value="0.02*cm"/>-->
+    <!--<constant name="Q1EF_InnerRadius"  value="0.485*cm"/>-->
+    <constant name="Q0EF_InnerRadius" value="2*cm"/>
+    <constant name="Q1EF_InnerRadius"  value="2*cm"/>
+
+    <constant name="B0PF_RotationAngle"  value="-0.0*0.001*rad"/>
+    <constant name="B0APF_RotationAngle" value="-25.0*0.001*rad"/>
+    <constant name="Q1APF_RotationAngle" value="-19.5*0.001*rad"/>
+    <constant name="Q1BPF_RotationAngle" value="-15.0*0.001*rad"/>
+    <constant name="Q2PF_RotationAngle"  value="-14.8*0.001*rad"/>
+    <constant name="B1PF_RotationAngle"  value="-34.0*0.001*rad"/>
+    <constant name="B1APF_RotationAngle" value="-25.0*0.001*rad"/>
+    <constant name="B2PF_RotationAngle" value="-28.22*0.001*rad"/>
+    <constant name="Q0EF_RotationAngle" value="-0.0*rad"/>
+    <constant name="Q1EF_RotationAngle"  value="-0.0*rad"/>
+
+    <constant name="B0PF_CenterPosition"  value="6.4*m"/>
+    <constant name="B0APF_CenterPosition" value="8.198946015*m"/>
+    <constant name="Q1APF_CenterPosition" value="9.628296939*m"/>
+    <constant name="Q1BPF_CenterPosition" value="11.56243847*m"/>
+    <constant name="Q2PF_CenterPosition"  value="14.66604545*m"/>
+    <constant name="B1PF_CenterPosition"  value="18.56486896*m"/>
+    <constant name="B1APF_CenterPosition" value="21.31298439*m"/>
+    <constant name="B2PF_CenterPosition" value="40.74293743*m"/>
+    <constant name="Q0EF_CenterPosition" value="5.8*m"/>
+    <constant name="Q1EF_CenterPosition"  value="10.76*m"/>
+
+    <constant name="B0PF_XPosition"  value="-0.145779265*m"/>
+    <constant name="B0APF_XPosition" value="-0.210480535*m"/>
+    <constant name="Q1APF_XPosition" value="-0.254342857*m"/>
+    <constant name="Q1BPF_XPosition" value="-0.312840809*m"/>
+    <constant name="Q2PF_XPosition"  value="-0.407362293*m"/>
+    <constant name="B1PF_XPosition"  value="-0.503165042*m"/>
+    <constant name="B1APF_XPosition" value="-0.612903791*m"/>
+    <constant name="B2PF_XPosition"  value="-1.491239596*m"/>
+    <constant name="Q0EF_XPosition" value="-0.0*m"/>
+    <constant name="Q1EF_XPosition"  value="-0.0*m"/>
+
+    <constant name="B0PF_Length"  value="1.2*m"/>
+    <constant name="B0APF_Length" value="0.6*m"/>
+    <constant name="Q1APF_Length" value="1.46*m"/>
+    <constant name="Q1BPF_Length" value="1.61*m"/>
+    <constant name="Q2PF_Length"  value="3.8*m"/>
+    <constant name="B1PF_Length"  value="3.0*m"/>
+    <constant name="B1APF_Length" value="1.5*m"/>
+    <constant name="B2PF_Length"  value="4.4*m"/>
+    <constant name="Q0EF_Length" value="1.2*m"/>
+    <constant name="Q1EF_Length"  value="1.61*m"/>
+
+  </define>

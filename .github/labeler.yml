@@ -18,7 +18,16 @@
 "topic: documentation":
   - "**/*.md"
 
-"topic: far-forward": []
+"topic: far-backward":
+  - "compact/far_backward"
+  - "src/Backwards*"
+
+"topic: far-forward":
+  - "compact/far_forward"
+  - "src/Forward*"
+  - "src/B0*"
+  - "src/ZDC*"
+  - "src/ZeroDegreeCalorimeter*"
 
 "topic: forward":
   - "compact/**/forward_*"

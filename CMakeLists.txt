@@ -31,7 +31,7 @@ endif()
 # Export compile commands as json for run-clang-tidy
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
-# Install into GNU standards
+# Install into GNU standard directories
 include(GNUInstallDirs)
 
 # Set required DD4hep components based on user input
@@ -69,7 +69,7 @@ dd4hep_configure_output()
 file(GLOB sources CONFIGURE_DEPENDS src/*.cpp)
 dd4hep_add_plugin(${a_lib_name}
   SOURCES ${sources}
-  USES ${ActsDD4hep}
+  USES ${ActsDD4hep} ROOT::Core ROOT::Gdml
   )
 target_link_libraries(${a_lib_name}
   PUBLIC ${DD4hep_required_libraries} fmt::fmt
