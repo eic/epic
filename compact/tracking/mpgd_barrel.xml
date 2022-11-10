@@ -1,7 +1,6 @@
 <!-- SPDX-License-Identifier: LGPL-3.0-or-later -->
 <!-- Copyright (C) 2022 Sylvester Joosten, Wouter Deconinck, Matt -->
 
-<?xml version="1.0" encoding="UTF-8"?>
 <lccdd>
 <info name="mpgd_barrel.xml"
       title="Micro Pattern Gas Detectors"
