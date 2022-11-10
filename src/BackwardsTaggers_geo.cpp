@@ -83,7 +83,7 @@ static Ref_t create_detector(Detector& desc, xml_h e, SensitiveDetector sens)
   //Tube Extended_Beam_Box(Width,Width+wall,Thickness);
   Box Extended_Beam_Box(Width+wall,Height+wall,Thickness);
 
-  // Central vacuum box 
+  // Central vacuum box
   Box Extended_Vacuum_Box(Width,Height,Thickness);
   //Tube Extended_Vacuum_Box(0,Width,Thickness);
 
@@ -94,7 +94,7 @@ static Ref_t create_detector(Detector& desc, xml_h e, SensitiveDetector sens)
   Assembly DetAssemblyAir(detName + "_assembly_air");
   int nVacuum = 0;
   int nAir    = 0;
-  
+
   DetElement det(detName, detID);
 
   //-----------------------------------------------------------------
@@ -248,7 +248,7 @@ static Ref_t create_detector(Detector& desc, xml_h e, SensitiveDetector sens)
   //  wallVol.placeVolume(vacVol);
 
   Assembly backAssembly("assembly");
-  backAssembly.placeVolume(wallVol);  
+  backAssembly.placeVolume(wallVol);
   backAssembly.placeVolume(vacVol);
 
   if(nAir>0)
@@ -278,7 +278,7 @@ static void Make_Tagger(Detector& desc, xml_coll_t& mod, Assembly& env, Sensitiv
   double    tag_w       = moddim.x();
   double    tag_h       = moddim.y();
   double    tagboxL = moddim.z();
-  
+
   Volume Tagger_Air;
 
   double airThickness    = 0;
@@ -301,7 +301,7 @@ static void Make_Tagger(Detector& desc, xml_coll_t& mod, Assembly& env, Sensitiv
     Box Box_Air(tag_w, tag_h, airThickness / 2);
     Tagger_Air = Volume("AirVolume", Box_Air, Air);
     Tagger_Air.setVisAttributes(desc.visAttributes("BackwardsAir"));
-    
+
     Box    Window_Box(tag_w, tag_h, layerThickness / 2);
     Volume layVol("WindowVolume", Window_Box, WindowMaterial);
     layVol.setVisAttributes(desc.visAttributes(layerVis));
