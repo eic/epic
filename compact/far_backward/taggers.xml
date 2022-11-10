@@ -10,7 +10,7 @@
   <detectors>
 
     <comment> Main vacuum volume </comment>
-    <detector id="TaggerTracker_ID" name="BackwardsTaggerVacuum" type="BackwardsTagger" wall="2*mm" lumi="true" vis="BackwardsBox">
+    <detector id="TaggerTracker_ID" name="BackwardsTaggerStation" type="BackwardsTagger" wall="2*mm" lumi="true" vis="BackwardsBox" readout="TaggerTrackerHits">
       <focus      x="Dipole_Focus_X"    y="Dipole_Focus_Y"    z="Dipole_Focus_Z" />
       <bounding
         xmin="Vacuum_BB_MinX"
