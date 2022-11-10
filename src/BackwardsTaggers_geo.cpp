@@ -269,6 +269,7 @@ static Ref_t create_detector(Detector& desc, xml_h e, SensitiveDetector sens)
 
 static void Make_Tagger(Detector& desc, xml_coll_t& mod, Assembly& env, SensitiveDetector& sens){
 
+  sens.setType("tracker");
 
   Material Air     = desc.material("Air");
   Material Silicon = desc.material("Silicon");
