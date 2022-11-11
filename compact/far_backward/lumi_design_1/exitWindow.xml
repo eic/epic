@@ -5,7 +5,7 @@
 
    <detectors>
 
-    <detector 
+    <detector
       id="LumiWin_ID"
       name="LumiWin"
       type="LumiWin"
@@ -18,4 +18,3 @@
   </detectors>
 
 </lccdd>
-

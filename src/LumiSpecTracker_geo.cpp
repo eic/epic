@@ -14,7 +14,7 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
   string        det_name        = x_det.nameStr();
   int           det_ID          = x_det.id();
 
-  // Create main detector element to be returned at the end 
+  // Create main detector element to be returned at the end
   DetElement    det( det_name, det_ID );
 
   // Mother volume
@@ -50,19 +50,19 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
       vol.setSensitiveDetector( sens );
 
       // place sensor into assembly
-      PlacedVolume sensor_pv = assembly.placeVolume( 
+      PlacedVolume sensor_pv = assembly.placeVolume(
           vol, Transform3D( RotationZYX(0.0,0.0,0.0), Position( posX, posY, posZ ) ) );
-      
+
       // Connect layer and sensor IDs
-      sensor_pv.addPhysVolID("layer", layer_id).addPhysVolID("sensor", sensor_id); 
+      sensor_pv.addPhysVolID("layer", layer_id).addPhysVolID("sensor", sensor_id);
 
     } // sensors
   } // layers
-  
+
   // Place assembly into mother volume.  Assembly is centered at origin
   PlacedVolume detPV = motherVol.placeVolume( assembly, Position(0.0, 0.0, 0.0) );
 
-  // Connect system ID 
+  // Connect system ID
   detPV.addPhysVolID( "system", det_ID );
 
   det.setPlacement( detPV );

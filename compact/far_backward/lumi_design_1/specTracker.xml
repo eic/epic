@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <lccdd>
-  
+
   <define>
     <constant name="Offset_Pos_Z" value="0.01*cm"/>
     <constant name="LumiSpecTracker2_Size_XY" value="LumiSpecCAL_DXY"/>
@@ -36,7 +36,7 @@
       </layer>
     </detector>
   </detectors>
-  
+
   <readouts>
     <readout name="LumiSpecTrackerHits">
       <segmentation type="CartesianGridXY" grid_size_x="0.5*mm" grid_size_y="0.5*mm"/>

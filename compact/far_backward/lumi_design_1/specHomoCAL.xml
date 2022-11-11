@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <lccdd>
   <detectors>
-    
+
     <detector id="LumiTopSpecCAL_ID" name="TopSpecCAL" type="HomoCAL" vis="FFPreVis" readout="HomoCALHits">
       <dimensions x="LumiSpecCAL_DXY" y="LumiSpecCAL_DXY" z="LumiSpecCALTower_DZ"/>
       <position x="0.0*cm" y="LumiSpecCAL_Y" z="LumiSpecCAL_Z"/>

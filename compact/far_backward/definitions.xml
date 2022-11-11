@@ -133,7 +133,7 @@
     <!-- <constant name="LumiWin_DZ"         value="0.29*m"/> -->
     <constant name="LumiWin_thickness"          value="1*cm" />
     <constant name="LumiWin_angleYaxis"         value="-1.3207963*rad" />
-   
+
     <!-- Lumi sweeper dipole Magnet -->
     <constant name="LumiSweepMag_R"             value="0*m"/>
     <constant name="LumiSweepMag_Z"             value="0*m"/>
@@ -153,7 +153,7 @@
     <constant name="LumiSpecTracker_DX"         value="15*cm" />
     <constant name="LumiSpecTracker_DY"         value="35*cm" />
     <constant name="LumiSpecTracker_DZ"         value="0.06*cm" />
-    
+
     <!-- Lumi spectrometer CAL -->
     <constant name="LumiSpecCAL_Y"              value="0.142*m"/>
     <constant name="LumiSpecCAL_Z"              value="-36.4*m"/>

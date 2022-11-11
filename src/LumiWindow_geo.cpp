@@ -33,7 +33,7 @@ static Ref_t create_detector(Detector& lccdd, xml_h e, SensitiveDetector /*sens*
   Box box( sizeX, sizeY, sizeZ );
   Volume vol( det_name + "_vol", box, lccdd.material( "Aluminum" ) );
   vol.setVisAttributes( x_det.visStr() );
-  
+
   Transform3D  pos( RotationZYX(rotX, rotY, rotZ), Position(posX, posY, posZ) );
 
   DetElement det(det_name, x_det.id());

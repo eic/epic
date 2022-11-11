@@ -61,7 +61,7 @@ static Ref_t create_detector(Detector& lccdd, xml_h e, SensitiveDetector sens){
 
       double 	mod_pos_x 	= xypos0 + ix*modSize.x();
       double	mod_pos_y 	= xypos0 + iy*modSize.y();
-      double 	mod_pos_z 	= 0.0*cm;	   
+      double 	mod_pos_z 	= 0.0*cm;
       PlacedVolume modPV 		= envLogic.placeVolume(modVol, Position(mod_pos_x, mod_pos_y, mod_pos_z) );
       modPV.addPhysVolID("row", ix+1).addPhysVolID("column", iy+1);
       // mod_id++;
@@ -93,7 +93,7 @@ tuple<Volume, Position> build_specHomoCAL_module( const Detector& lccdd, const x
 
   Box    modShape( (sx/2.0 -frame_size) , (sy/2.0 -frame_size) , sz/2.0 );
   auto   modMat = lccdd.material(mod_x.attr<std::string>(_Unicode(material)));
-  Volume modVol("module_vol", modShape, modMat); 
+  Volume modVol("module_vol", modShape, modMat);
 
   if (mod_x.hasAttr(_Unicode(vis))) {
     modVol.setVisAttributes(lccdd.visAttributes(mod_x.attr<std::string>(_Unicode(vis))));
