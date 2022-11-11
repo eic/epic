@@ -248,7 +248,7 @@ static Ref_t create_detector(Detector& desc, xml_h e, SensitiveDetector sens)
   //  wallVol.placeVolume(vacVol);
 
   Assembly backAssembly(detName + "_assembly");
-  backAssembly.placeVolume(wallVol);  
+  backAssembly.placeVolume(wallVol);
   backAssembly.placeVolume(vacVol);
 
   if(nAir>0)
