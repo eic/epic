@@ -83,18 +83,18 @@ static Ref_t create_detector(Detector& desc, xml_h e, SensitiveDetector sens)
   //Tube Extended_Beam_Box(Width,Width+wall,Thickness);
   Box Extended_Beam_Box(Width+wall,Height+wall,Thickness);
 
-  // Central vacuum box 
+  // Central vacuum box
   Box Extended_Vacuum_Box(Width,Height,Thickness);
   //Tube Extended_Vacuum_Box(0,Width,Thickness);
 
   Solid Wall_Box   = Extended_Beam_Box;
   Solid Vacuum_Box = Extended_Vacuum_Box;
 
-  Assembly DetAssembly("LowQ2_vacuum_assembly");
-  Assembly DetAssemblyAir("LowQ2_air_assembly");
+  Assembly DetAssembly("Tagger_vacuum_assembly");
+  Assembly DetAssemblyAir("Tagger_air_assembly");
   int nVacuum = 0;
   int nAir    = 0;
-  
+
   DetElement det(detName, detID);
 
   //-----------------------------------------------------------------
@@ -176,7 +176,7 @@ static Ref_t create_detector(Detector& desc, xml_h e, SensitiveDetector sens)
       nAir++;
     }
 
-    Assembly TaggerAssembly("LowQ2_module_assembly");
+    Assembly TaggerAssembly("Tagger_module_assembly");
 
     Make_Tagger(desc,mod,TaggerAssembly,sens);
 
@@ -278,7 +278,7 @@ static void Make_Tagger(Detector& desc, xml_coll_t& mod, Assembly& env, Sensitiv
   double    tag_w       = moddim.x();
   double    tag_h       = moddim.y();
   double    tagboxL = moddim.z();
-  
+
   Volume Tagger_Air;
 
   double airThickness    = 0;
@@ -301,7 +301,7 @@ static void Make_Tagger(Detector& desc, xml_coll_t& mod, Assembly& env, Sensitiv
     Box Box_Air(tag_w, tag_h, airThickness / 2);
     Tagger_Air = Volume("AirVolume", Box_Air, Air);
     Tagger_Air.setVisAttributes(desc.visAttributes("BackwardsAir"));
-    
+
     Box    Window_Box(tag_w, tag_h, layerThickness / 2);
     Volume layVol("WindowVolume", Window_Box, WindowMaterial);
     layVol.setVisAttributes(desc.visAttributes(layerVis));
@@ -333,7 +333,7 @@ static void Make_Tagger(Detector& desc, xml_coll_t& mod, Assembly& env, Sensitiv
     }
 
     Box    Layer_Box(tag_w, tag_h, layerThickness / 2);
-    Volume layVol("LowQ2_Tracker_Layer", Layer_Box, Silicon);
+    Volume layVol("Tagger_tracker_layer", Layer_Box, Silicon);
     layVol.setSensitiveDetector(sens);
     layVol.setVisAttributes(desc.visAttributes(layerVis));
 

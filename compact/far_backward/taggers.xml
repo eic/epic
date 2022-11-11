@@ -2,7 +2,7 @@
 <lccdd>
 
   <define>
- 
+
    <constant name="tracker_pixel_size" value="55*um"/>
 
   </define>
