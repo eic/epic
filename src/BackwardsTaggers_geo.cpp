@@ -239,11 +239,11 @@ static Ref_t create_detector(Detector& desc, xml_h e, SensitiveDetector sens)
   IntersectionSolid Vacuum_Box_Sub(Vacuum_Box, Far_Backwards_Box, Transform3D(rotate2, position));
   SubtractionSolid  Wall_Box_Out(Wall_Box_Sub, Vacuum_Box_Sub);
 
-  Volume vacVol("Vacuum_Box", Vacuum_Box_Sub, Vacuum);
+  Volume vacVol("TaggerStation_Vacuum", Vacuum_Box_Sub, Vacuum);
   vacVol.setVisAttributes(desc.visAttributes("BackwardsVac"));
   if(nVacuum>0)
     vacVol.placeVolume(DetAssembly);
-  Volume wallVol("Tagger_Box", Wall_Box_Out, Steel);
+  Volume wallVol("TaggerStation_Container", Wall_Box_Out, Steel);
   wallVol.setVisAttributes(desc.visAttributes(vis_name));
   //  wallVol.placeVolume(vacVol);
 
