@@ -90,8 +90,8 @@ static Ref_t create_detector(Detector& desc, xml_h e, SensitiveDetector sens)
   Solid Wall_Box   = Extended_Beam_Box;
   Solid Vacuum_Box = Extended_Vacuum_Box;
 
-  Assembly DetAssembly(detName + "_assembly");
-  Assembly DetAssemblyAir(detName + "_assembly_air");
+  Assembly DetAssembly("LowQ2_vacuum_assembly");
+  Assembly DetAssemblyAir("LowQ2_air_assembly");
   int nVacuum = 0;
   int nAir    = 0;
   
@@ -176,7 +176,7 @@ static Ref_t create_detector(Detector& desc, xml_h e, SensitiveDetector sens)
       nAir++;
     }
 
-    Assembly TaggerAssembly("tagAssembly");
+    Assembly TaggerAssembly("LowQ2_module_assembly");
 
     Make_Tagger(desc,mod,TaggerAssembly,sens);
 
@@ -247,7 +247,7 @@ static Ref_t create_detector(Detector& desc, xml_h e, SensitiveDetector sens)
   wallVol.setVisAttributes(desc.visAttributes(vis_name));
   //  wallVol.placeVolume(vacVol);
 
-  Assembly backAssembly("assembly");
+  Assembly backAssembly(detName + "_assembly");
   backAssembly.placeVolume(wallVol);  
   backAssembly.placeVolume(vacVol);
 
@@ -333,7 +333,7 @@ static void Make_Tagger(Detector& desc, xml_coll_t& mod, Assembly& env, Sensitiv
     }
 
     Box    Layer_Box(tag_w, tag_h, layerThickness / 2);
-    Volume layVol("TrackerVolume", Layer_Box, Silicon);
+    Volume layVol("LowQ2_Tracker_Layer", Layer_Box, Silicon);
     layVol.setSensitiveDetector(sens);
     layVol.setVisAttributes(desc.visAttributes(layerVis));
 
