@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: LGPL-3.0-or-later
-// Copyright (C) 2022 Wouter Deconinck, johnny8266
+// Copyright (C) 2022 Wouter Deconinck, Pu-Kai Wang
 
 //==========================================================================
 //  A general implementation for homogeneous calorimeter

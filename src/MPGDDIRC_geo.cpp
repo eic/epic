@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: LGPL-3.0-or-later
-// Copyright (C) 2022 Wouter Deconinck, Matt
+// Copyright (C) 2022 Wouter Deconinck, Matt Posik
 
 /** \addtogroup PID
  * \brief Type: **Barrel bar detector (rectangular geom.) with frames surrounding the perimeter.
