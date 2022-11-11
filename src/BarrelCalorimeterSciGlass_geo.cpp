@@ -140,6 +140,8 @@ static Ref_t create_detector(Detector &lcdd, xml_h handle,
     }
   }
 
+  double sector_rmin = envelope_handle.rmin();
+
   if (det_handle.hasChild(_Unicode(wedge_box))) {
     xml_comp_t wedge_box_handle = det_handle.child(_Unicode(wedge_box));
     Material wedge_box_mat = lcdd.material(wedge_box_handle.materialStr());
@@ -175,6 +177,8 @@ static Ref_t create_detector(Detector &lcdd, xml_h handle,
       side_rmax_default
       );
 
+    sector_rmin = side_rmin;
+
     Box wedge_box_side_box_shape{
       (side_rmax - side_rmin) / 2,
       // It would make sense for a shared side to have double thickness, but we seemingly don't have space for that
@@ -208,204 +212,226 @@ static Ref_t create_detector(Detector &lcdd, xml_h handle,
     // TODO: The endcap sides of the box are not implemented
   }
 
-  int sector = 0;
-  double sector_phi = sectors_handle.phi0();
-  for (; sector < sectors_handle.number();
-       sector++, sector_phi += sectors_handle.deltaphi()) {
-    int row = 0;
-    double row_phi = -rows_handle.deltaphi() / 2 * (rows_handle.number() - 1);
-    for (; row < rows_handle.number();
-         row++, row_phi += rows_handle.deltaphi()) {
+  int row = 0;
+  double row_phi = -rows_handle.deltaphi() / 2 * (rows_handle.number() - 1);
 
-      const double tower_gap_longitudinal = dim_handle.gap();
+  Tube sector_tube_shape {
+    sector_rmin,
+    std::min(support_inner_r, envelope_handle.rmax()),
+    (envelope_handle.zmax() - envelope_handle.zmin()) / 2,
+    -rows_handle.deltaphi() / 2 * rows_handle.number(),
+    rows_handle.deltaphi() / 2 * rows_handle.number()
+  };
+  IntersectionSolid sector_shape{
+    envelope_shape,
+    sector_tube_shape,
+    Position{0., 0., (envelope_handle.zmax() + envelope_handle.zmin()) / 2}
+  };
 
-      // negative rapidity towers will be counted backwards from -1
-      std::array<int, 2> tower_ids = {-1, 0};
-      std::array<double, 2> betas = {0., 0.};
-      std::array<double, 2> beta_prevs = {0., 0.};
-      std::array<double, 2> dzs = {0., 0.};
-      std::array<double, 2> flare_angle_polar_prevs = {0., 0.};
+  Volume sector_v{"sector", sector_shape, lcdd.material("Air")};
 
-      for (xml_coll_t family_handle{rows_handle, _Unicode(family)};
-           family_handle; ++family_handle) {
-        const int dir_sign = family_handle.attr<double>(_Unicode(dir_sign));
-        int &tower_id = tower_ids[(dir_sign > 0) ? 1 : 0];
-        double &beta = betas[(dir_sign > 0) ? 1 : 0];
-        double &beta_prev = beta_prevs[(dir_sign > 0) ? 1 : 0];
-        double &dz = dzs[(dir_sign > 0) ? 1 : 0];
-        double &flare_angle_polar_prev =
-            flare_angle_polar_prevs[(dir_sign > 0) ? 1 : 0];
+  for (; row < rows_handle.number();
+       row++, row_phi += rows_handle.deltaphi()) {
 
-        xml_dim_t family_dim_handle = family_handle;
-        const double length = family_dim_handle.z_length();
-        const auto flare_angle_polar =
-            family_dim_handle.attr<double>(_Unicode(flare_angle_polar));
-        const unsigned int number = family_dim_handle.number();
-        const auto flare_angle_at_face =
-            family_dim_handle.attr<double>(_Unicode(flare_angle_at_face));
+    const double tower_gap_longitudinal = dim_handle.gap();
 
-        const double z = length / 2;
-        const double y1 = family_dim_handle.y1();
-        const double y2 = y1 + length * tan(flare_angle_polar);
-        const double x1 =
-            family_dim_handle.x1() +
-            (dir_sign < 0) * (2 * y1) * tan(flare_angle_at_face);
-        const double x2 =
-            family_dim_handle.x1() +
-            (dir_sign > 0) * (2 * y1) * tan(flare_angle_at_face);
-        const double x3 = x1 * (y2 / y1);
-        const double x4 = x2 * (y2 / y1);
-        const double theta = 0.;
-        const double phi = 0.;
-        const double alpha1 = 0.;
-        const double alpha2 = 0.;
+    // negative rapidity towers will be counted backwards from -1
+    std::array<int, 2> tower_ids = {-1, 0};
+    std::array<double, 2> betas = {0., 0.};
+    std::array<double, 2> beta_prevs = {0., 0.};
+    std::array<double, 2> dzs = {0., 0.};
+    std::array<double, 2> flare_angle_polar_prevs = {0., 0.};
 
-        for (unsigned int tower = 0; tower < number; tower++, tower_id += dir_sign) {
-          // see https://github.com/eic/epic/blob/main/doc/sciglass_tower_stacking.svg
-          beta += flare_angle_polar_prev + flare_angle_polar;
-          const double gamma = M_PI_2 - flare_angle_polar_prev - beta_prev;
+    for (xml_coll_t family_handle{rows_handle, _Unicode(family)};
+         family_handle; ++family_handle) {
+      const int dir_sign = family_handle.attr<double>(_Unicode(dir_sign));
+      int &tower_id = tower_ids[(dir_sign > 0) ? 1 : 0];
+      double &beta = betas[(dir_sign > 0) ? 1 : 0];
+      double &beta_prev = beta_prevs[(dir_sign > 0) ? 1 : 0];
+      double &dz = dzs[(dir_sign > 0) ? 1 : 0];
+      double &flare_angle_polar_prev =
+          flare_angle_polar_prevs[(dir_sign > 0) ? 1 : 0];
 
-          const double dz_prev = dz;
-          dz += (tower_gap_longitudinal / cos(flare_angle_polar) + 2 * y1) *
-                sin(M_PI - gamma - beta) / sin(gamma);
-          const string t_name = _toString(sector, "sector%d") + _toString(row, "_row%d") + _toString(tower_id, "_tower%d");
-          envelope_v
-              .placeVolume(
-                  Volume{t_name,
-                         Trap{z, theta, phi, y1, x1, x2, alpha1, y2, x3, x4,
-                              alpha2},
-                         tower_mat},
-                  Transform3D{RotationZ{-M_PI_2 + sector_phi + row_phi}} *
-                      Transform3D{Position{0. * cm, row_rmin, dir_sign * dz}} *
-                      Transform3D{RotationX{-M_PI / 2 + dir_sign * beta}} *
-                      Transform3D{Position{0, dir_sign * y1, z}})
-              .addPhysVolID("sector", sector)
-              .addPhysVolID("row", row)
-              .addPhysVolID("tower", tower_id)
-              .volume()
-              .setSensitiveDetector(sens)
-              .setVisAttributes(lcdd.visAttributes(family_dim_handle.visStr()));
+      xml_dim_t family_dim_handle = family_handle;
+      const double length = family_dim_handle.z_length();
+      const auto flare_angle_polar =
+          family_dim_handle.attr<double>(_Unicode(flare_angle_polar));
+      const unsigned int number = family_dim_handle.number();
+      const auto flare_angle_at_face =
+          family_dim_handle.attr<double>(_Unicode(flare_angle_at_face));
 
-          if (sectors_handle.hasChild(_Unicode(carbon_fiber_support))) {
-            xml_comp_t carbon_fiber_support_handle = sectors_handle.child(_Unicode(carbon_fiber_support));
-            xml_comp_t cut_out_handle = carbon_fiber_support_handle.child(_Unicode(cut_out));
-            Material carbon_fiber_support_mat = lcdd.material(carbon_fiber_support_handle.materialStr());
+      const double z = length / 2;
+      const double y1 = family_dim_handle.y1();
+      const double y2 = y1 + length * tan(flare_angle_polar);
+      const double x1 =
+          family_dim_handle.x1() +
+          (dir_sign < 0) * (2 * y1) * tan(flare_angle_at_face);
+      const double x2 =
+          family_dim_handle.x1() +
+          (dir_sign > 0) * (2 * y1) * tan(flare_angle_at_face);
+      const double x3 = x1 * (y2 / y1);
+      const double x4 = x2 * (y2 / y1);
+      const double theta = 0.;
+      const double phi = 0.;
+      const double alpha1 = 0.;
+      const double alpha2 = 0.;
 
-            const double margin_horizontal = cut_out_handle.attr<double>(_Unicode(margin_horizontal));
-            const double margin_top = cut_out_handle.attr<double>(_Unicode(margin_top));
-            const double margin_bottom = cut_out_handle.attr<double>(_Unicode(margin_bottom));
-            const double overhang_top = carbon_fiber_support_handle.attr<double>(_Unicode(overhang_top));
-            const double overhang_bottom = carbon_fiber_support_handle.attr<double>(_Unicode(overhang_bottom));
+      for (unsigned int tower = 0; tower < number; tower++, tower_id += dir_sign) {
+        // see https://github.com/eic/epic/blob/main/doc/sciglass_tower_stacking.svg
+        beta += flare_angle_polar_prev + flare_angle_polar;
+        const double gamma = M_PI_2 - flare_angle_polar_prev - beta_prev;
 
-            const double y1_long =
-              y1 + tower_gap_longitudinal / 2 / cos(flare_angle_polar) - overhang_bottom * tan(flare_angle_polar);
-            const double y2_long =
-              y2 + tower_gap_longitudinal / 2 / cos(flare_angle_polar) + overhang_top * tan(flare_angle_polar);
+        const double dz_prev = dz;
+        dz += (tower_gap_longitudinal / cos(flare_angle_polar) + 2 * y1) *
+              sin(M_PI - gamma - beta) / sin(gamma);
+        const string t_name = _toString(row, "_row%d") + _toString(tower_id, "_tower%d");
+        sector_v
+            .placeVolume(
+                Volume{t_name,
+                       Trap{z, theta, phi, y1, x1, x2, alpha1, y2, x3, x4,
+                            alpha2},
+                       tower_mat},
+                Transform3D{RotationZ{-M_PI_2 + row_phi}} *
+                    Transform3D{Position{0. * cm, row_rmin, dir_sign * dz}} *
+                    Transform3D{RotationX{-M_PI / 2 + dir_sign * beta}} *
+                    Transform3D{Position{0, dir_sign * y1, z}})
+            .addPhysVolID("row", row)
+            .addPhysVolID("tower", tower_id)
+            .volume()
+            .setSensitiveDetector(sens)
+            .setVisAttributes(lcdd.visAttributes(family_dim_handle.visStr()));
 
-            Trap trap_long_1{
-              z + (overhang_top + overhang_bottom) / 2,
-              theta,
-              phi,
-              y1_long,
-              carbon_fiber_support_handle.thickness() / 2,
-              carbon_fiber_support_handle.thickness() / 2,
-              alpha1,
-              y2_long,
-              carbon_fiber_support_handle.thickness() / 2,
-              carbon_fiber_support_handle.thickness() / 2,
-              alpha2
-            };
-            Trap trap_long_2{
-              z - (margin_top + margin_bottom) / 2,
-              theta,
-              phi,
-              y1_long - margin_horizontal / 2, // FIXME: y1_long/y2_long do not account for reduction of z by the vertical margins
-              carbon_fiber_support_handle.thickness(), // no division by 2 to ensure subtrahend volume is thicker than the minuend
-              carbon_fiber_support_handle.thickness(),
-              alpha1,
-              y2_long - margin_horizontal / 2,
-              carbon_fiber_support_handle.thickness(),
-              carbon_fiber_support_handle.thickness(),
-              alpha2
-            };
-            SubtractionSolid trap_long{
-              trap_long_1, trap_long_2,
-              Position{0., 0., (margin_bottom - margin_top) / 2}
-            };
+        if (sectors_handle.hasChild(_Unicode(carbon_fiber_support))) {
+          xml_comp_t carbon_fiber_support_handle = sectors_handle.child(_Unicode(carbon_fiber_support));
+          xml_comp_t cut_out_handle = carbon_fiber_support_handle.child(_Unicode(cut_out));
+          Material carbon_fiber_support_mat = lcdd.material(carbon_fiber_support_handle.materialStr());
 
-            for (int side = (row == 0) ? 0 : 1; side <= 1; side++) {
-              envelope_v
-                  .placeVolume(
-                      Volume{"fiber_structure_longitudinal", trap_long, carbon_fiber_support_mat},
-                      Transform3D{RotationZ{-M_PI_2 + sector_phi + row_phi + (2 * side - 1) * rows_handle.deltaphi() / 2}} *
-                      Transform3D{Position{0. * cm, row_rmin, dir_sign * dz}} *
-                      Transform3D{RotationX{-M_PI / 2 + dir_sign * beta}} *
-                      Transform3D{Position{0, dir_sign * y1, z + (overhang_top - overhang_bottom) / 2}})
-                  .volume()
-                  .setVisAttributes(lcdd.visAttributes(carbon_fiber_support_handle.visStr()));
-            }
+          const double margin_horizontal = cut_out_handle.attr<double>(_Unicode(margin_horizontal));
+          const double margin_top = cut_out_handle.attr<double>(_Unicode(margin_top));
+          const double margin_bottom = cut_out_handle.attr<double>(_Unicode(margin_bottom));
+          const double overhang_top = carbon_fiber_support_handle.attr<double>(_Unicode(overhang_top));
+          const double overhang_bottom = carbon_fiber_support_handle.attr<double>(_Unicode(overhang_bottom));
 
-            const double dz_trans = dz_prev
-              + (tower_gap_longitudinal / 2 + carbon_fiber_support_handle.thickness() / 2) / cos(flare_angle_polar)
-              * sin(M_PI - gamma - beta) / sin(gamma);
+          const double y1_long =
+            y1 + tower_gap_longitudinal / 2 / cos(flare_angle_polar) - overhang_bottom * tan(flare_angle_polar);
+          const double y2_long =
+            y2 + tower_gap_longitudinal / 2 / cos(flare_angle_polar) + overhang_top * tan(flare_angle_polar);
 
-            const double non_overlap_long = sin(beta) * (tower_gap_longitudinal / cos(flare_angle_polar) + 2 * y1) / sin(gamma);
+          Trap trap_long_1{
+            z + (overhang_top + overhang_bottom) / 2,
+            theta,
+            phi,
+            y1_long,
+            carbon_fiber_support_handle.thickness() / 4,
+            carbon_fiber_support_handle.thickness() / 4,
+            alpha1,
+            y2_long,
+            carbon_fiber_support_handle.thickness() / 4,
+            carbon_fiber_support_handle.thickness() / 4,
+            alpha2
+          };
+          Trap trap_long_2{
+            z - (margin_top + margin_bottom) / 2,
+            theta,
+            phi,
+            y1_long - margin_horizontal / 2, // FIXME: y1_long/y2_long do not account for reduction of z by the vertical margins
+            carbon_fiber_support_handle.thickness(), // no division by 2 to ensure subtrahend volume is thicker than the minuend
+            carbon_fiber_support_handle.thickness(),
+            alpha1,
+            y2_long - margin_horizontal / 2,
+            carbon_fiber_support_handle.thickness(),
+            carbon_fiber_support_handle.thickness(),
+            alpha2
+          };
+          SubtractionSolid trap_long{
+            trap_long_1, trap_long_2,
+            Position{0., 0., (margin_bottom - margin_top) / 2}
+          };
 
-            const double beta_trans = beta_prev + flare_angle_polar_prev;
-            const double x1_trans =
-              tan(rows_handle.deltaphi() / 2) * (row_rmin - overhang_bottom * cos(beta_trans))
-              - carbon_fiber_support_handle.thickness() / 2 / cos(rows_handle.deltaphi() / 2);
-            const double x2_trans =
-              tan(rows_handle.deltaphi() / 2) * (row_rmin + (2 * z + overhang_top + non_overlap_long) * cos(beta_trans))
-              - carbon_fiber_support_handle.thickness() / 2 / cos(rows_handle.deltaphi() / 2);
-
-            Trap trap_trans_1 {
-              z + (overhang_top + non_overlap_long + overhang_bottom) / 2,
-              theta,
-              phi,
-              carbon_fiber_support_handle.thickness() / 2,
-              x1_trans,
-              x1_trans,
-              alpha1,
-              carbon_fiber_support_handle.thickness() / 2,
-              x2_trans,
-              x2_trans,
-              alpha2
-            };
-            Trap trap_trans_2{
-              z - (margin_top + non_overlap_long + margin_bottom) / 2,
-              theta,
-              phi,
-              carbon_fiber_support_handle.thickness(), // no division by 2 to ensure subtrahend volume is thicker than the minuend
-              x1_trans - margin_horizontal / 2, // FIXME: x1_trans/x2_trans do not account for reduction of z by the vertical margins
-              x1_trans - margin_horizontal / 2,
-              alpha1,
-              carbon_fiber_support_handle.thickness(),
-              x2_trans - margin_horizontal / 2,
-              x2_trans - margin_horizontal / 2,
-              alpha2
-            };
-            SubtractionSolid trap_trans{
-              trap_trans_1, trap_trans_2,
-              Position{0., 0., (margin_bottom - margin_top) / 2 + (overhang_bottom - overhang_top) / 2}
-            };
-
-            envelope_v
+          for (int side = -1; side <= 1; side += 2) {
+            sector_v
                 .placeVolume(
-                    Volume{"fiber_structure_transverse" + t_name, trap_trans, carbon_fiber_support_mat},
-                    Transform3D{RotationZ{-M_PI_2 + sector_phi + row_phi}} *
-                    Transform3D{Position{0. * cm, row_rmin, dir_sign * dz_trans}} *
-                    Transform3D{RotationX{-M_PI / 2 + dir_sign * beta_trans}} *
-                    Transform3D{Position{0, dir_sign * carbon_fiber_support_handle.thickness() / 2, z + (overhang_top + non_overlap_long - overhang_bottom) / 2}})
+                    Volume{"fiber_structure_longitudinal", trap_long, carbon_fiber_support_mat},
+                    Transform3D{RotationZ{-M_PI_2 + row_phi + side * rows_handle.deltaphi() / 2}} *
+                    Transform3D{Position{0. * cm, row_rmin, dir_sign * dz}} *
+                    Transform3D{RotationX{-M_PI / 2 + dir_sign * beta}} *
+                    Transform3D{Position{side * carbon_fiber_support_handle.thickness() / 4, dir_sign * y1, z + (overhang_top - overhang_bottom) / 2}})
                 .volume()
                 .setVisAttributes(lcdd.visAttributes(carbon_fiber_support_handle.visStr()));
           }
 
-          beta_prev = beta;
-          flare_angle_polar_prev = flare_angle_polar;
+          const double dz_trans = dz_prev
+            + (tower_gap_longitudinal / 2 + carbon_fiber_support_handle.thickness() / 2) / cos(flare_angle_polar)
+            * sin(M_PI - gamma - beta) / sin(gamma);
+
+          const double non_overlap_long = sin(beta) * (tower_gap_longitudinal / cos(flare_angle_polar) + 2 * y1) / sin(gamma);
+
+          const double beta_trans = beta_prev + flare_angle_polar_prev;
+          const double x1_trans =
+            tan(rows_handle.deltaphi() / 2) * (row_rmin - overhang_bottom * cos(beta_trans))
+            - carbon_fiber_support_handle.thickness() / 2 / cos(rows_handle.deltaphi() / 2);
+          const double x2_trans =
+            tan(rows_handle.deltaphi() / 2) * (row_rmin + (2 * z + overhang_top + non_overlap_long) * cos(beta_trans))
+            - carbon_fiber_support_handle.thickness() / 2 / cos(rows_handle.deltaphi() / 2);
+
+          Trap trap_trans_1 {
+            z + (overhang_top + non_overlap_long + overhang_bottom) / 2,
+            theta,
+            phi,
+            carbon_fiber_support_handle.thickness() / 2,
+            x1_trans,
+            x1_trans,
+            alpha1,
+            carbon_fiber_support_handle.thickness() / 2,
+            x2_trans,
+            x2_trans,
+            alpha2
+          };
+          Trap trap_trans_2{
+            z - (margin_top + non_overlap_long + margin_bottom) / 2,
+            theta,
+            phi,
+            carbon_fiber_support_handle.thickness(), // no division by 2 to ensure subtrahend volume is thicker than the minuend
+            x1_trans - margin_horizontal / 2, // FIXME: x1_trans/x2_trans do not account for reduction of z by the vertical margins
+            x1_trans - margin_horizontal / 2,
+            alpha1,
+            carbon_fiber_support_handle.thickness(),
+            x2_trans - margin_horizontal / 2,
+            x2_trans - margin_horizontal / 2,
+            alpha2
+          };
+          SubtractionSolid trap_trans{
+            trap_trans_1, trap_trans_2,
+            Position{0., 0., (margin_bottom - margin_top) / 2 + (overhang_bottom - overhang_top) / 2}
+          };
+
+          sector_v
+              .placeVolume(
+                  Volume{"fiber_structure_transverse" + t_name, trap_trans, carbon_fiber_support_mat},
+                  Transform3D{RotationZ{-M_PI_2 + row_phi}} *
+                  Transform3D{Position{0. * cm, row_rmin, dir_sign * dz_trans}} *
+                  Transform3D{RotationX{-M_PI / 2 + dir_sign * beta_trans}} *
+                  Transform3D{Position{0, dir_sign * carbon_fiber_support_handle.thickness() / 2, z + (overhang_top + non_overlap_long - overhang_bottom) / 2}})
+              .volume()
+              .setVisAttributes(lcdd.visAttributes(carbon_fiber_support_handle.visStr()));
         }
+
+        beta_prev = beta;
+        flare_angle_polar_prev = flare_angle_polar;
       }
     }
+  }
+
+  int sector = 0;
+  double sector_phi = sectors_handle.phi0();
+  for (; sector < sectors_handle.number();
+       sector++, sector_phi += sectors_handle.deltaphi()) {
+    envelope_v
+        .placeVolume(
+          sector_v,
+          Transform3D{RotationZ{sector_phi}}
+          )
+        .addPhysVolID("sector", sector);
   }
 
   envelope_v.setVisAttributes(lcdd.visAttributes(det_handle.visStr()));
