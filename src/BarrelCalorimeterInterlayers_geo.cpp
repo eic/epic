@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: LGPL-3.0-or-later
-// Copyright (C) 2022 Wouter Deconinck
+// Copyright (C) 2022 Chao Peng, Maria Zurek, Whitney Armstrong
 
 // Detector plugin to support a hybrid central barrel calorimeter
 // The detector consists of interlayers of Pb/ScFi (segmentation in global r, phi) and W/Si (segmentation in local x, y)
