@@ -1,0 +1,47 @@
+<?xml version="1.0"?>
+<lccdd>
+  
+  <define>
+    <constant name="Offset_Pos_Z" value="0.01*cm"/>
+    <constant name="LumiSpecTracker2_Size_XY" value="LumiSpecCAL_DXY"/>
+    <constant name="LumiSpecTracker2_Pos_Y" value="LumiSpecCAL_Y"/>
+    <constant name="LumiSpecTracker2_Pos_Z" value="LumiSpecCAL_Z + (LumiSpecCALTower_DZ/2.0) + (LumiSpecTracker_DZ/2.0)"/>
+    <constant name="LumiSpecTracker1_Size_XY" value="LumiSpecTracker2_Size_XY/2.0"/>
+    <constant name="LumiSpecTracker1_Pos_Y" value="LumiSpecCAL_Y/2.0"/>
+    <constant name="DistSpecMag2_SpecCAL" value="( (LumiSpecMag_Z - LumiSpecMag_DZ/2.0) - (LumiSpecCAL_Z + (LumiSpecCALTower_DZ/2.0) ) ) "/>
+    <constant name="LumiSpecTracker1_Pos_Z" value=" LumiSpecCAL_Z + (DistSpecMag2_SpecCAL/2.0)"/>
+  </define>
+
+  <detectors>
+    <detector id="LumiSpecTracker_ID" name="LumiSpecTracker" type="LumiSpecTracker" readout="LumiSpecTrackerHits" vis="TrackerVis">
+      <layer id="1">
+        <sensor id="1">
+          <position x="0.0" y="LumiSpecTracker1_Pos_Y" z="LumiSpecTracker1_Pos_Z"/>
+          <dimensions x="LumiSpecTracker1_Size_XY/2.0" y="LumiSpecTracker1_Size_XY/2.0" z="LumiSpecTracker_DZ/2.0"/>
+        </sensor>
+        <sensor id="2">
+          <position x="0.0" y="-1*LumiSpecTracker1_Pos_Y" z="LumiSpecTracker1_Pos_Z"/>
+          <dimensions x="LumiSpecTracker1_Size_XY/2.0" y="LumiSpecTracker1_Size_XY/2.0" z="LumiSpecTracker_DZ/2.0"/>
+        </sensor>
+      </layer>
+      <layer id="2">
+        <sensor id="1">
+          <position x="0.0" y="LumiSpecTracker2_Pos_Y" z="LumiSpecTracker2_Pos_Z + Offset_Pos_Z"/>
+          <dimensions x="LumiSpecTracker2_Size_XY/2.0" y="LumiSpecTracker2_Size_XY/2.0" z="LumiSpecTracker_DZ/2.0"/>
+        </sensor>
+        <sensor id="2">
+          <position x="0.0" y="-1*LumiSpecTracker2_Pos_Y" z="LumiSpecTracker2_Pos_Z + Offset_Pos_Z"/>
+          <dimensions x="LumiSpecTracker2_Size_XY/2.0" y="LumiSpecTracker2_Size_XY/2.0" z="LumiSpecTracker_DZ/2.0"/>
+        </sensor>
+      </layer>
+    </detector>
+  </detectors>
+  
+  <readouts>
+    <readout name="LumiSpecTrackerHits">
+      <segmentation type="CartesianGridXY" grid_size_x="0.5*mm" grid_size_y="0.5*mm"/>
+      <id>system:8,layer:4,sensor:4,x:32:-16,y:-16</id>
+    </readout>
+  </readouts>
+
+</lccdd>

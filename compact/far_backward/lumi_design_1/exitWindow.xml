@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<lccdd>
+
+<!-- Luminosity exit window -->
+
+   <detectors>
+
+    <detector 
+      id="LumiWin_ID"
+      name="LumiWin"
+      type="LumiWin"
+      vis="Shape1_vis">
+      <dimensions x="LumiWin_DXY/2" y="LumiWin_DXY/2" z="LumiWin_thickness/2" />
+      <position   x="0" y="0" z="LumiWin_Z" />
+      <rotation   x="0*rad" y="0*rad" z="0*rad" />
+    </detector>
+
+  </detectors>
+
+</lccdd>
+
