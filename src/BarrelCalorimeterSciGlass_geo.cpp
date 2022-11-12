@@ -229,6 +229,7 @@ static Ref_t create_detector(Detector &lcdd, xml_h handle,
   };
 
   Volume sector_v{"sector", sector_shape, lcdd.material("Air")};
+  sector_v.setVisAttributes(lcdd.visAttributes(det_handle.visStr()));
 
   for (; row < rows_handle.number();
        row++, row_phi += rows_handle.deltaphi()) {
