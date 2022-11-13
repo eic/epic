@@ -180,14 +180,17 @@ static Ref_t create_detector(Detector &lcdd, xml_h handle,
       wedge_box_handle.thickness() / 2,
       (envelope_handle.zmax() - envelope_handle.zmin()) / 2
     };
-    IntersectionSolid wedge_box_side_shape{
-      envelope_shape,
-      wedge_box_side_box_shape,
-      Position{(side_rmax + side_rmin) / 2, 0, (envelope_handle.zmax() + envelope_handle.zmin()) / 2}
-    };
+    Volume wedge_box_side_v[2];
+    for (int side = -1; side <= 1; side += 2) {
+      IntersectionSolid wedge_box_side_shape{
+        envelope_shape,
+        wedge_box_side_box_shape,
+        Position{(side_rmax + side_rmin) / 2, side * wedge_box_handle.gap() / 2, (envelope_handle.zmax() + envelope_handle.zmin()) / 2}
+      };
 
-    Volume wedge_box_side_v {"wedge_box_side", wedge_box_side_shape, wedge_box_mat};
-    wedge_box_side_v.setVisAttributes(lcdd.visAttributes(wedge_box_handle.visStr()));
+      wedge_box_side_v[(side + 1) / 2] = Volume({"wedge_box_side", wedge_box_side_shape, wedge_box_mat});
+      wedge_box_side_v[(side + 1) / 2].setVisAttributes(lcdd.visAttributes(wedge_box_handle.visStr()));
+    }
 
     int sector = 0;
     double sector_phi = sectors_handle.phi0();
@@ -195,9 +198,8 @@ static Ref_t create_detector(Detector &lcdd, xml_h handle,
          sector++, sector_phi += sectors_handle.deltaphi()) {
       for (int side = -1; side <= 1; side += 2) {
         envelope_v.placeVolume(
-          wedge_box_side_v,
-          Transform3D{RotationZ{sector_phi + side * sectors_handle.deltaphi() / 2}} *
-          Transform3D{Position{0., - side * wedge_box_handle.gap() / 2, 0.}}
+          wedge_box_side_v[(side + 1) / 2],
+          Transform3D{RotationZ{sector_phi + side * sectors_handle.deltaphi() / 2}}
           );
       }
     }
