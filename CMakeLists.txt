@@ -47,10 +47,15 @@ list(TRANSFORM DD4hep_required_libraries PREPEND DD4hep::)
 
 # Dependencies
 find_package(DD4hep REQUIRED COMPONENTS ${DD4hep_required_components})
+include(${DD4hep_DIR}/cmake/DD4hep.cmake)
+include(${DD4hep_DIR}/cmake/DD4hepBuild.cmake)
+dd4hep_configure_output()
+dd4hep_set_compiler_flags()
 if(${DD4hep_VERSION} VERSION_LESS 1.21)
   message(WARNING "DD4hep before 1.21 does not write collections correctly \n"
                   "More info at https://github.com/AIDASoft/DD4hep/pull/922")
 endif()
+
 find_package(ActsDD4hep)
 if(ActsDD4hep_FOUND)
   add_compile_definitions(USE_ACTSDD4HEP)
@@ -59,21 +64,16 @@ else()
   find_package(Acts REQUIRED COMPONENTS Core PluginIdentification PluginTGeo PluginDD4hep)
   set(ActsDD4hep ActsCore ActsPluginDD4hep)
 endif()
+
 find_package(fmt REQUIRED)
 
 #-----------------------------------------------------------------------------------
-set(a_lib_name ${PROJECT_NAME})
-
-dd4hep_configure_output()
 
 file(GLOB sources CONFIGURE_DEPENDS src/*.cpp)
-dd4hep_add_plugin(${a_lib_name}
+dd4hep_add_plugin(${PROJECT_NAME}
   SOURCES ${sources}
-  USES ${ActsDD4hep} ROOT::Core ROOT::Gdml
-  )
-target_link_libraries(${a_lib_name}
-  PUBLIC ${DD4hep_required_libraries} fmt::fmt
-  )
+  USES ${ActsDD4hep} ${DD4hep_required_libraries} ROOT::Core ROOT::Gdml fmt::fmt
+)
 
 #-----------------------------------------------------------------------------------
 # Parse jinja templates: once by default, and once for all yml files
