@@ -327,8 +327,8 @@
 
   <fields>
     <field type="epic_FieldMapBrBz" name="GlobalSolenoid" field_type="magnetic"
-           field_map="fieldmaps/MARCO_v.6.4.1.1.2_1.7T_Magnetic_Field_Map_2022_10_05_rad_coords_cm_T.txt"
-           url="https://wiki.bnl.gov/EPIC/images/3/3a/MARCO_v.6.4.1.1.2_1.7T_Magnetic_Field_Map_2022_10_05_rad_coords_cm_T.txt"
+           field_map="fieldmaps/MARCO_v.6.4.1.1.3_1.7T_Magnetic_Field_Map_2022_11_14_rad_coords_cm_T.txt"
+           url="https://wiki.bnl.gov/EPIC/images/f/fd/MARCO_v.6.4.1.1.3_1.7T_Magnetic_Field_Map_2022_11_14_rad_coords_cm_T.txt"
            cache="$DETECTOR_PATH:/opt/detector"
            scale="1.0">
       <dimensions>
