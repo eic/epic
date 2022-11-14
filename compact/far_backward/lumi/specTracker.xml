@@ -40,7 +40,7 @@
   <readouts>
     <readout name="LumiSpecTrackerHits">
       <segmentation type="CartesianGridXY" grid_size_x="0.5*mm" grid_size_y="0.5*mm"/>
-      <id>system:8,layer:4,sensor:4,x:32:-16,y:-16</id>
+      <id>system:8,module:4,layer:4,sensor:4,x:32:-16,y:-16</id>
     </readout>
   </readouts>
 

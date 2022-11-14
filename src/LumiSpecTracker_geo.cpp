@@ -54,7 +54,7 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
           vol, Transform3D( RotationZYX(0.0,0.0,0.0), Position( posX, posY, posZ ) ) );
 
       // Connect layer and sensor IDs
-      sensor_pv.addPhysVolID("layer", layer_id).addPhysVolID("sensor", sensor_id);
+      sensor_pv.addPhysVolID("module", layer_id).addPhysVolID("layer", sensor_id);
 
     } // sensors
   } // layers

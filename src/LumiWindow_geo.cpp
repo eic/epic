@@ -10,7 +10,7 @@
 using namespace std;
 using namespace dd4hep;
 
-static Ref_t create_detector(Detector& lccdd, xml_h e, SensitiveDetector /*sens*/)
+static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector /*sens*/)
 {
 
   xml_det_t     x_det           = e;
@@ -19,6 +19,7 @@ static Ref_t create_detector(Detector& lccdd, xml_h e, SensitiveDetector /*sens*
   xml_comp_t    x_rot           = x_det.rotation();
   //
   string        det_name        = x_det.nameStr();
+  string        mat_name        = dd4hep::getAttrOrDefault<string>( x_det, _U(material), "Aluminum" );
   //
   double        sizeX           = x_dim.x();
   double        sizeY           = x_dim.y();
@@ -31,13 +32,13 @@ static Ref_t create_detector(Detector& lccdd, xml_h e, SensitiveDetector /*sens*
   double        rotZ            = x_rot.z();
 
   Box box( sizeX, sizeY, sizeZ );
-  Volume vol( det_name + "_vol", box, lccdd.material( "Aluminum" ) );
+  Volume vol( det_name + "_vol", box, description.material( mat_name ) );
   vol.setVisAttributes( x_det.visStr() );
 
   Transform3D  pos( RotationZYX(rotX, rotY, rotZ), Position(posX, posY, posZ) );
 
   DetElement det(det_name, x_det.id());
-  Volume motherVol = lccdd.pickMotherVolume( det );
+  Volume motherVol = description.pickMotherVolume( det );
   PlacedVolume phv = motherVol.placeVolume( vol, pos );
 
   det.setPlacement(phv);
@@ -45,4 +46,4 @@ static Ref_t create_detector(Detector& lccdd, xml_h e, SensitiveDetector /*sens*
   return det;
 }
 
-DECLARE_DETELEMENT(LumiWin, create_detector)
+DECLARE_DETELEMENT(LumiWindow, create_detector)

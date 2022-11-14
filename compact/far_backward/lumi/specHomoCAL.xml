@@ -2,19 +2,19 @@
 <lccdd>
   <detectors>
 
-    <detector id="LumiTopSpecCAL_ID" name="TopSpecCAL" type="HomoCAL" vis="FFPreVis" readout="HomoCALHits">
+    <detector id="LumiTopSpecCAL_ID" name="TopSpecCAL" type="HomoSpecCAL" vis="FFPreVis" readout="HomoCALHits">
       <dimensions x="LumiSpecCAL_DXY" y="LumiSpecCAL_DXY" z="LumiSpecCALTower_DZ"/>
       <position x="0.0*cm" y="LumiSpecCAL_Y" z="LumiSpecCAL_Z"/>
       <rotation x="0.0*rad" y="0.0*rad" z="0.0*rad"/>
-      <module sizex="LumiSpecCALTower_DXY" sizey="LumiSpecCALTower_DXY" sizez="LumiSpecCALTower_DZ" material="PbWO4" vis="FFPreModuleVis">
+      <module sizex="LumiSpecCALTower_DXY" sizey="LumiSpecCALTower_DXY" sizez="LumiSpecCALTower_DZ" frameSize="0.05*mm" material="PbWO4" vis="FFPreModuleVis">
   </module>
     </detector>
 
-    <detector id="LumiBotSpecCAL_ID" name="BotSpecCAL" type="HomoCAL" vis="FFPreVis" readout="HomoCALHits">
+    <detector id="LumiBotSpecCAL_ID" name="BotSpecCAL" type="HomoSpecCAL" vis="FFPreVis" readout="HomoCALHits">
       <dimensions x="LumiSpecCAL_DXY" y="LumiSpecCAL_DXY" z="LumiSpecCALTower_DZ"/>
       <position x="0.0*cm" y="-1*LumiSpecCAL_Y" z="LumiSpecCAL_Z"/>
       <rotation x="0.0*rad" y="0.0*rad" z="0.0*rad"/>
-      <module sizex="LumiSpecCALTower_DXY" sizey="LumiSpecCALTower_DXY" sizez="LumiSpecCALTower_DZ" material="PbWO4" vis="FFPreModuleVis">
+      <module sizex="LumiSpecCALTower_DXY" sizey="LumiSpecCALTower_DXY" sizez="LumiSpecCALTower_DZ" frameSize="0.05*mm" material="PbWO4" vis="FFPreModuleVis">
   </module>
     </detector>
 
@@ -23,7 +23,7 @@
   <readouts>
     <readout name="HomoCALHits">
       <segmentation type="NoSegmentation"/>
-      <id> system:8,row:8,column:8</id>
+      <id> system:8,module:8</id>
     </readout>
   </readouts>
 

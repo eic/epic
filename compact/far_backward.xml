@@ -10,6 +10,6 @@
   <include ref="far_backward/taggers.xml"/>
 
   <!-- Luminosity detector -->
-  <include ref="far_backward/lumi_design_1.xml"/>
+  <include ref="far_backward/lumi.xml"/>
 
 </lccdd>
