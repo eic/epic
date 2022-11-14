@@ -43,7 +43,7 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
 
   // Mother volume
   Volume        motherVol = description.pickMotherVolume( det );
-  
+
   // Detector assembly
   Assembly      assembly( det_name );
   assembly.setVisAttributes( description.invisible() );
@@ -61,10 +61,10 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
       double 	mod_pos_x 	= xypos0 + ix*modSize.x();
       double	mod_pos_y 	= xypos0 + iy*modSize.y();
       double 	mod_pos_z 	= 0.0*cm;
-      
+
       PlacedVolume modPV = assembly.placeVolume(
           modVol, Position( mod_pos_x, mod_pos_y, mod_pos_z ) );
-      
+
       modPV.addPhysVolID("module", mod_id + 1);
       mod_id++;
     }
@@ -75,7 +75,7 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
   PlacedVolume detPV = motherVol.placeVolume( assembly, tr );
 
   detPV.addPhysVolID("system", det_ID);
-  
+
   det.setPlacement(detPV);
 
   return det;
