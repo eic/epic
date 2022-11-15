@@ -22,7 +22,7 @@
       <dimensions xL="Beam_WidthL" xR="Beam_WidthR" y="Beam_Height" z="Beam_Length"/>
 
       <comment> Vacuum volume joining with lumi </comment>
-      <exitdim    x="Exit_Width"   y="Exit_Height"  lumiZ="LumiWin_Z" lumiR="LumiWin_thickness" maxTheta="Exit_Theta"/>
+      <exitdim    x="Exit_Width"   y="Exit_Height"  lumiZ="LumiWin_Z" lumiR="LumiWin_R" maxTheta="Exit_Theta"/>
 
       <comment> Vacuum volume extention around taggers </comment>
       <module id="1"

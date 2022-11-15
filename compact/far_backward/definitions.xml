@@ -129,6 +129,7 @@
 
     <!-- Lumi Exit Window -->
     <constant name="LumiWin_Z"            value="-18.5*m"/>
+    <constant name="LumiWin_R"            value="1*cm"/>
     <constant name="LumiWin_DXY"          value="0.074*m"/>
     <constant name="LumiWin_thickness"    value="1*cm" />
     <constant name="LumiWin_angleYaxis"   value="-1.3207963*rad" />

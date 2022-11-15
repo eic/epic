@@ -102,4 +102,4 @@ tuple<Volume, Position> build_specHomoCAL_module( const Detector& description, c
   return make_tuple(modVol, Position{sx, sy, sz} );
 }
 
-DECLARE_DETELEMENT(HomoSpecCAL, create_detector) //(det_type, driver func)
+DECLARE_DETELEMENT(LumiSpecHomoCAL, create_detector) //(det_type, driver func)
