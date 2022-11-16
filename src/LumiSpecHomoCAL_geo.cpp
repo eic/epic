@@ -57,7 +57,7 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
 
     xml_comp_t x_pos = x_sector.position();
     xml_comp_t x_rot = x_sector.rotation();
-    
+
     for(int ix=0; ix< nxy; ix++){
       for(int iy=0; iy< nxy; iy++){
 
