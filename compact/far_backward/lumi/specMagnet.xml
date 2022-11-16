@@ -18,7 +18,7 @@
     <field name="LumiDipoleMag" type="MultipoleMagnet">
       <position x="0*cm" y="0*cm" z="LumiSpecMag_Z"/>
       <rotation x="0" y="0" z="0"/>
-      <shape type="Box" dx="LumiSpecMag_R" dy="LumiSpecMag_R" dz="LumiSpecMag_DZ/2"/>
+      <shape type="Tube" rmax="LumiSpecMag_R" dz="LumiSpecMag_DZ/2"/>
       <coefficient coefficient="0" skew="LumiSpecMag_B"/>
     </field>
   </fields>

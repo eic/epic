@@ -4,6 +4,7 @@
   <!-- Luminosity exit window -->
 
   <define>
+    <!-- gap between vacuum box and LumiWindow -->
     <constant name="LumiWin_gap" value="1*mm"/>
   </define>
 

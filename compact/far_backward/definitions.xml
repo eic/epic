@@ -159,8 +159,8 @@
     <constant name="LumiSpecCAL_Z"        value="-36.4*m"/>
     <constant name="LumiSpecCAL_DXY"      value="0.2*m"/>
     <constant name="LumiSpecCAL_DZ"       value="0.35*m"/>
-    <constant name="LumiSpecCALTower_DXY" value= "0.025*m"/>
-    <constant name="LumiSpecCALTower_DZ"  value= "0.23*m"/>
+    <constant name="LumiSpecCALTower_DXY" value="0.025*m"/>
+    <constant name="LumiSpecCALTower_DZ"  value="0.23*m"/>
 
     <!-- Lumi direct photon detector -->
     <constant name="LumiDirect_Z"         value="-37*m"/>
