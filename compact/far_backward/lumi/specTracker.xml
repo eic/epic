@@ -14,33 +14,33 @@
 
   <detectors>
     <detector id="LumiSpecTracker_ID" name="LumiSpecTracker" type="LumiSpecTracker" readout="LumiSpecTrackerHits" vis="TrackerVis">
-      <layer id="1">
-        <sensor id="1">
+      <module id="0">
+        <sector id="0">
           <position x="0.0" y="LumiSpecTracker1_Pos_Y" z="LumiSpecTracker1_Pos_Z"/>
           <dimensions x="LumiSpecTracker1_Size_XY/2.0" y="LumiSpecTracker1_Size_XY/2.0" z="LumiSpecTracker_DZ/2.0"/>
-        </sensor>
-        <sensor id="2">
+        </sector>
+        <sector id="1">
           <position x="0.0" y="-1*LumiSpecTracker1_Pos_Y" z="LumiSpecTracker1_Pos_Z"/>
           <dimensions x="LumiSpecTracker1_Size_XY/2.0" y="LumiSpecTracker1_Size_XY/2.0" z="LumiSpecTracker_DZ/2.0"/>
-        </sensor>
-      </layer>
-      <layer id="2">
-        <sensor id="1">
+        </sector>
+      </module>
+      <module id="1">
+        <sector id="0">
           <position x="0.0" y="LumiSpecTracker2_Pos_Y" z="LumiSpecTracker2_Pos_Z + Offset_Pos_Z"/>
           <dimensions x="LumiSpecTracker2_Size_XY/2.0" y="LumiSpecTracker2_Size_XY/2.0" z="LumiSpecTracker_DZ/2.0"/>
-        </sensor>
-        <sensor id="2">
+        </sector>
+        <sector id="1">
           <position x="0.0" y="-1*LumiSpecTracker2_Pos_Y" z="LumiSpecTracker2_Pos_Z + Offset_Pos_Z"/>
           <dimensions x="LumiSpecTracker2_Size_XY/2.0" y="LumiSpecTracker2_Size_XY/2.0" z="LumiSpecTracker_DZ/2.0"/>
-        </sensor>
-      </layer>
+        </sector>
+      </module>
     </detector>
   </detectors>
 
   <readouts>
     <readout name="LumiSpecTrackerHits">
       <segmentation type="CartesianGridXY" grid_size_x="0.5*mm" grid_size_y="0.5*mm"/>
-      <id>system:8,module:4,layer:4,sensor:4,x:32:-16,y:-16</id>
+      <id>system:8,sector:8,module:8,x:32:-16,y:-16</id>
     </readout>
   </readouts>
 

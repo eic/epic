@@ -9,31 +9,24 @@
 
 // Essential Header Files
 #include "DD4hep/DetFactoryHelper.h"
-//#include "GeometryHelpers.h"
 #include <XML/Helper.h>
 #include <algorithm>
 #include <iostream>
 #include <math.h>
 #include <tuple>
 
-//Additional Header Files
-
 using namespace std;
 using namespace dd4hep;
-//using Point = ROOT::Math::XYPoint;
 
-//Definition of function to build the modules
+// Definition of function to build the modules
 tuple<Volume, Position> build_specHomoCAL_module(const Detector& description, const xml::Component& mod_x, SensitiveDetector& sens);
 
-//Driver Function
+// Driver Function
 static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector sens)
 {
   sens.setType("calorimeter");
 
   xml_det_t 	x_det 		= 	e;
-  //xml_dim_t 	x_dim 		= 	x_det.dimensions();
-  xml_dim_t	x_pos		= 	x_det.position();
-  xml_dim_t	x_rot		= 	x_det.rotation();
   xml_comp_t    x_mod           =       x_det.child( _Unicode(module) );
   string        det_name	= 	x_det.nameStr();
   int		det_ID		=	x_det.id();
@@ -48,35 +41,46 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
   Assembly      assembly( det_name );
   assembly.setVisAttributes( description.invisible() );
 
-  //Create Modules
+  // Create Modules
   int nxy = 8;
-  int sector_id = x_mod.attr<int>( _Unicode( sector ) );
-  int mod_id = 0;
 
   auto [modVol, modSize] = build_specHomoCAL_module(description, x_mod, sens);
-  double xypos0 = -(nxy*modSize.x())/2.0 + modSize.x()/2.0 ;
+  double xypos0 = -nxy*modSize.x()/2.0 + modSize.x()/2.0;
 
-  for(int ix=0; ix< nxy; ix++){
-    for(int iy=0; iy< nxy; iy++){
+  // Build detector components
+  // loop over sectors
+  for( xml_coll_t si(x_det, _Unicode(sector)); si; si++) { // sectors (top,bottom)
 
-      double 	mod_pos_x 	= xypos0 + ix*modSize.x();
-      double	mod_pos_y 	= xypos0 + iy*modSize.y();
-      double 	mod_pos_z 	= 0.0*cm;
+    xml_comp_t x_sector( si );
+    int sector_id = x_sector.id();
+    int mod_id = 0;
 
-      PlacedVolume modPV = assembly.placeVolume(
-          modVol, Position( mod_pos_x, mod_pos_y, mod_pos_z ) );
+    xml_comp_t x_pos = x_sector.position();
+    xml_comp_t x_rot = x_sector.rotation();
+    
+    for(int ix=0; ix< nxy; ix++){
+      for(int iy=0; iy< nxy; iy++){
 
-      modPV.addPhysVolID( "sector", sector_id ).addPhysVolID( "module", mod_id );
-      mod_id++;
+        double 	mod_pos_x 	= x_pos.x() + xypos0 + ix*modSize.x();
+        double	mod_pos_y 	= x_pos.y() + xypos0 + iy*modSize.y();
+        double 	mod_pos_z 	= x_pos.z() + 0.0*cm;
+
+        PlacedVolume modPV = assembly.placeVolume(
+            modVol, Transform3D( RotationZYX( x_rot.x(), x_rot.y(), x_rot.z()), Position( mod_pos_x, mod_pos_y, mod_pos_z ) ) );
+
+        modPV.addPhysVolID( "sector", sector_id ).addPhysVolID( "module", mod_id );
+        mod_id++;
+      }
     }
-  }
 
 
-  Transform3D tr( RotationZYX( x_rot.x(), x_rot.y(), x_rot.z() ), Position( x_pos.x(), x_pos.y(), x_pos.z() ) ) ;
-  PlacedVolume detPV = motherVol.placeVolume( assembly, tr );
+  } // sectors
 
+  // Place assembly into mother volume.  Assembly is centered at origin
+  PlacedVolume detPV = motherVol.placeVolume( assembly, Position(0.0, 0.0, 0.0) );
   detPV.addPhysVolID("system", det_ID);
 
+  // Connect to system ID
   det.setPlacement(detPV);
 
   return det;

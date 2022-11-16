@@ -294,8 +294,7 @@ The unused IDs below are saved for future use.
     <constant name="LumiDipole_ID"           value="191"/>
     <constant name="LumiWindow_ID"           value="192"/>
     <constant name="LumiSpecTracker_ID"      value="193"/>
-    <constant name="LumiTopSpecCAL_ID"       value="194"/>
-    <constant name="LumiBotSpecCAL_ID"       value="195"/>
+    <constant name="LumiSpecCAL_ID"          value="194"/>
 
     <constant name="Tagger1_ID"              value="196"/>
     <constant name="Tagger2_ID"              value="197"/>

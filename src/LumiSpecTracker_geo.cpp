@@ -25,39 +25,39 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
   assembly.setVisAttributes( description.invisible() );
 
   // Build detector components
-  // loop over layers
-  for( xml_coll_t li(x_det, _U(layer)); li; li++) { // layers
+  // loop over modules
+  for( xml_coll_t mi(x_det, _Unicode(module)); mi; mi++) { // modules
 
-    xml_comp_t x_layer( li );
-    int layer_id = x_layer.id();
+    xml_comp_t x_mod( mi );
+    int module_id = x_mod.id();
 
-    // loop over sensors within each layer
-    for( xml_coll_t sensor( li, _U(sensor)); sensor; sensor++) { // sensors
+    // loop over sectors within each module
+    for( xml_coll_t si( mi, _Unicode(sector)); si; si++) { // sectors
 
-      xml_comp_t x_sensor( sensor );
-      int sensor_id = x_sensor.id();
+      xml_comp_t x_sector( si );
+      int sector_id = x_sector.id();
 
-      double posX = x_sensor.position().x();
-      double posY = x_sensor.position().y();
-      double posZ = x_sensor.position().z();
-      double sizeX = x_sensor.dimensions().x();
-      double sizeY = x_sensor.dimensions().y();
-      double sizeZ = x_sensor.dimensions().z();
+      double posX = x_sector.position().x();
+      double posY = x_sector.position().y();
+      double posZ = x_sector.position().z();
+      double sizeX = x_sector.dimensions().x();
+      double sizeY = x_sector.dimensions().y();
+      double sizeZ = x_sector.dimensions().z();
 
       Box box( sizeX, sizeY, sizeZ );
       Volume vol( det_name + "_vol", box, description.material( "Silicon" ) );
       vol.setVisAttributes( description.visAttributes( x_det.visStr() ) );
       vol.setSensitiveDetector( sens );
 
-      // place sensor into assembly
-      PlacedVolume sensor_pv = assembly.placeVolume(
+      // place into assembly
+      PlacedVolume pv = assembly.placeVolume(
           vol, Transform3D( RotationZYX(0.0,0.0,0.0), Position( posX, posY, posZ ) ) );
 
-      // Connect layer and sensor IDs
-      sensor_pv.addPhysVolID("module", layer_id).addPhysVolID("layer", sensor_id);
+      // Connect sector and module IDs
+      pv.addPhysVolID("sector", sector_id).addPhysVolID("module", module_id);
 
-    } // sensors
-  } // layers
+    } // sectors
+  } // modules
 
   // Place assembly into mother volume.  Assembly is centered at origin
   PlacedVolume detPV = motherVol.placeVolume( assembly, Position(0.0, 0.0, 0.0) );
