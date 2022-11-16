@@ -34,7 +34,7 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
   //xml_dim_t 	x_dim 		= 	x_det.dimensions();
   xml_dim_t	x_pos		= 	x_det.position();
   xml_dim_t	x_rot		= 	x_det.rotation();
-
+  xml_comp_t    x_mod           =       x_det.child( _Unicode(module) );
   string        det_name	= 	x_det.nameStr();
   int		det_ID		=	x_det.id();
 
@@ -50,9 +50,10 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
 
   //Create Modules
   int nxy = 8;
+  int sector_id = x_mod.attr<int>( _Unicode( sector ) );
   int mod_id = 0;
 
-  auto [modVol, modSize] = build_specHomoCAL_module(description, x_det.child( _Unicode(module) ), sens);
+  auto [modVol, modSize] = build_specHomoCAL_module(description, x_mod, sens);
   double xypos0 = -(nxy*modSize.x())/2.0 + modSize.x()/2.0 ;
 
   for(int ix=0; ix< nxy; ix++){
@@ -65,7 +66,7 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
       PlacedVolume modPV = assembly.placeVolume(
           modVol, Position( mod_pos_x, mod_pos_y, mod_pos_z ) );
 
-      modPV.addPhysVolID("module", mod_id + 1);
+      modPV.addPhysVolID( "sector", sector_id ).addPhysVolID( "module", mod_id );
       mod_id++;
     }
   }
