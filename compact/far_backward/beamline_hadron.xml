@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<lccdd>
+
+  <comment>
+     Incident hadron beamline
+     Implemented to allow overlap checks with the far backwards systems
+     No fields are currently implemented
+  </comment>
+
+
+  <detectors>
+
+    <!-- Magnets -->
+    <!-- Q1APR -->
+    <detector name="Pipe_to_Q1APR" type="BackwardsBeamPipe">
+      <Pipe wall_thickness="Hadron_Beampipe_Thickness" outerD1="Hadron_Beampipe_Rad" outerD2="Hadron_Beampipe_Rad"
+        end1z="Hadron_Beampipe_End" end2z="Q1APR_StartZ" end1x="Hadron_Beampipe_End*sin(CrossingAngle)" end2x="Q1APR_StartX"/>
+    </detector>
+
+  <comment>
+    <detector name="Magnet_Q1APR" type="ip6_CylindricalDipoleMagnet" vis="RedVis">
+      <placement  x="(Q1APR_StartX+Q1APR_EndX)/2" y="0" z="(Q1APR_StartZ+Q1APR_EndZ)/2" theta="Q1APR_Theta"/>
+      <dimensions x="Q1APR_InnerRadius*4" y="Q1APR_InnerRadius*4" z="Q1APR_Length" r="2.0*Q1APR_InnerRadius"/>
+      <apperture  x="Q1APR_InnerRadius*2" y="Q1APR_InnerRadius*2" r="Q1APR_InnerRadius"/>
+      <coil dx="2*cm" dy="1.5*cm" />
+    </detector>
+  </comment>
+
+    <detector name="Pipe_in_Q1APR" type="BackwardsBeamPipe">
+      <Pipe wall_thickness="Hadron_Beampipe_Thickness" outerD1="Hadron_Beampipe_Rad" outerD2="Hadron_Beampipe_Rad"
+        end1z="Q1APR_StartZ" end2z="Q1APR_EndZ" end1x="Q1APR_StartX" end2x="Q1APR_EndX"/>
+    </detector>
+
+
+    <!-- Q1BPR -->
+    <detector name="Pipe_Q1APR_to_Q1BPR" type="BackwardsBeamPipe">
+      <Pipe wall_thickness="Hadron_Beampipe_Thickness" outerD1="Hadron_Beampipe_Rad" outerD2="Hadron_Beampipe_Rad"
+        end1z="Q1APR_EndZ" end2z="Q1BPR_StartZ" end1x="Q1APR_EndX" end2x="Q1BPR_StartX"/>
+    </detector>
+
+  <comment>
+    <detector name="Magnet_Q1BPR" type="ip6_CylindricalDipoleMagnet" vis="RedVis">
+      <placement  x="(Q1BPR_StartX+Q1BPR_EndX)/2" y="0" z="(Q1BPR_StartZ+Q1BPR_EndZ)/2" theta="Q1APR_Theta"/>
+      <dimensions x="Q1BPR_InnerRadius*4" y="Q1BPR_InnerRadius*4" z="Q1BPR_Length" r="2.0*Q1BPR_InnerRadius"/>
+      <apperture  x="Q1BPR_InnerRadius*2" y="Q1BPR_InnerRadius*2" r="Q1BPR_InnerRadius"/>
+      <coil dx="2*cm" dy="1.5*cm" />
+    </detector>
+  </comment>
+
+    <detector name="Pipe_in_Q1BPR" type="BackwardsBeamPipe">
+      <Pipe wall_thickness="Hadron_Beampipe_Thickness" outerD1="Hadron_Beampipe_Rad" outerD2="Hadron_Beampipe_Rad"
+        end1z="Q1BPR_StartZ" end2z="Q1BPR_EndZ" end1x="Q1BPR_StartX" end2x="Q1BPR_EndX"/>
+    </detector>
+
+
+    <!-- Q2PR -->
+    <detector name="Pipe_Q1BPR_to_Q2PR" type="BackwardsBeamPipe">
+      <Pipe wall_thickness="Hadron_Beampipe_Thickness" outerD1="Hadron_Beampipe_Rad" outerD2="Hadron_Beampipe_Rad"
+        end1z="Q1BPR_EndZ" end2z="Q2PR_StartZ" end1x="Q1BPR_EndX" end2x="Q2PR_StartX"/>
+    </detector>
+
+    <detector name="Magnet_Q2PR" type="ip6_CylindricalDipoleMagnet" vis="RedVis">
+      <placement  x="(Q2PR_StartX+Q2PR_EndX)/2" y="0" z="(Q2PR_StartZ+Q2PR_EndZ)/2" theta="Q1BPR_Theta"/>
+      <dimensions x="Q2PR_InnerRadius*4" y="Q2PR_InnerRadius*4" z="Q2PR_Length" r="2.0*Q2PR_InnerRadius"/>
+      <apperture  x="Q2PR_InnerRadius*2" y="Q2PR_InnerRadius*2" r="Q2PR_InnerRadius"/>
+      <coil dx="2*cm" dy="1.5*cm" />
+    </detector>
+
+    <detector name="Pipe_in_Q2PR" type="BackwardsBeamPipe">
+      <Pipe wall_thickness="Hadron_Beampipe_Thickness" outerD1="Hadron_Beampipe_Rad" outerD2="Hadron_Beampipe_Rad"
+        end1z="Q2PR_StartZ" end2z="Q2PR_EndZ" end1x="Q2PR_StartX" end2x="Q2PR_EndX"/>
+    </detector>
+
+
+    <!-- Q3PR -->
+    <detector name="Pipe_Q2PR_to_Q3PR" type="BackwardsBeamPipe">
+      <Pipe wall_thickness="Hadron_Beampipe_Thickness" outerD1="Hadron_Beampipe_Rad" outerD2="Hadron_Beampipe_Rad"
+        end1z="Q2PR_EndZ" end2z="Q3PR_StartZ" end1x="Q2PR_EndX" end2x="Q3PR_StartX"/>
+    </detector>
+
+    <detector name="Magnet_Q3PR" type="ip6_CylindricalDipoleMagnet" vis="RedVis">
+      <placement  x="(Q3PR_StartX+Q3PR_EndX)/2" y="0" z="(Q3PR_StartZ+Q3PR_EndZ)/2" theta="Q2PR_Theta"/>
+      <dimensions x="Q3PR_InnerRadius*4" y="Q3PR_InnerRadius*4" z="Q3PR_Length" r="2.0*Q3PR_InnerRadius"/>
+      <apperture  x="Q3PR_InnerRadius*2" y="Q3PR_InnerRadius*2" r="Q3PR_InnerRadius"/>
+      <coil dx="2*cm" dy="1.5*cm" />
+    </detector>
+
+    <detector name="Pipe_in_Q3PR" type="BackwardsBeamPipe">
+      <Pipe wall_thickness="Hadron_Beampipe_Thickness" outerD1="Hadron_Beampipe_Rad" outerD2="Hadron_Beampipe_Rad"
+        end1z="Q3PR_StartZ" end2z="Q3PR_EndZ" end1x="Q3PR_StartX" end2x="Q3PR_EndX"/>
+    </detector>
+
+  </detectors>
+</lccdd>

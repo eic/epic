@@ -1,0 +1,70 @@
+<lccdd>
+  <define>
+    <constant name="B0ECal_rotation" value="ionCrossingAngle"/>
+    <constant name="B0ECal_IP_distance" value="683*cm"/>
+    <constant name="B0ECal_xcenter" value="B0ECal_IP_distance*sin(ionCrossingAngle)"/>
+    <constant name="B0ECal_zcenter" value="B0ECal_IP_distance*cos(ionCrossingAngle)"/>
+    <constant name="B0ECal_length" value="10*cm"/>
+    <constant name="B0ECal_CrystalModule_width" value="2*cm"/>
+    <constant name="B0ECal_CrystalModule_length" value="B0ECal_length"/>
+    <constant name="B0ECal_CrystalModule_wrap" value="0.50*mm"/>
+    <constant name="B0ECal_packman_rmin" value="3.7*cm"/>
+    <constant name="B0ECal_packman_small_rmax" value="8*cm"/>
+    <constant name="B0ECal_packman_large_rmax" value="15*cm"/>
+    <constant name="B0ECal_packman_large_phimin" value="-120*deg"/>
+    <constant name="B0ECal_packman_large_phimax" value="120*deg"/>
+    <constant name="B0ECal_r_envelopeclearance" value="1*mm+(B0ECal_CrystalModule_width+2*B0ECal_CrystalModule_wrap)*sqrt(2)"/>
+    <constant name="B0ECal_phi_envelopeclearance" value="(3.0*(B0ECal_CrystalModule_width+2*B0ECal_CrystalModule_wrap)*sqrt(2))/B0ECal_packman_small_rmax"/>
+  </define>
+
+  <detectors>
+
+    <documentation>
+      #### B0 Electromagnetic Calorimeter
+    </documentation>
+    <detector
+        id="B0ECal_ID"
+        name="B0ECal"
+        type="B0_ECAL"
+        readout="B0ECalHits">
+      <position x="B0ECal_xcenter" y="0" z="B0ECal_zcenter"/>
+      <rotation x="B0ECal_rotation" y="180*deg" z="0"/>
+      <placements>
+        <disk
+            rmin="B0ECal_packman_rmin"
+            rintermediate="B0ECal_packman_small_rmax"
+            rmax="B0ECal_packman_large_rmax"
+            phimin="B0ECal_packman_large_phimin"
+            phimax="B0ECal_packman_large_phimax"
+            envelope="false"
+            r_envelopeclearance="B0ECal_r_envelopeclearance"
+            phi_envelopeclearance="B0ECal_phi_envelopeclearance"
+            material="Vacuum"
+            sector="1">
+          <module
+            sizex="B0ECal_CrystalModule_width"
+            sizey="B0ECal_CrystalModule_width"
+            sizez="B0ECal_CrystalModule_length"
+            vis="GreenVis"
+            material="PbWO4"/>
+          <wrapper
+            thickness="B0ECal_CrystalModule_wrap"
+            material="Epoxy"
+            vis="GrayVis"/>
+        </disk>
+      </placements>
+
+    </detector>
+
+  </detectors>
+
+  <readouts>
+    <comment>
+      No segmentation since module is the smallest readout segmentation
+    </comment>
+    <readout name="B0ECalHits">
+      <segmentation type="NoSegmentation" key="sector"/>
+      <id>system:8,sector:4,module:20</id>
+    </readout>
+  </readouts>
+</lccdd>

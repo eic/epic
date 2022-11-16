@@ -1,0 +1,242 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<lccdd>
+  <define>
+    <comment>
+      ---------------------------------
+      Roman Pots Implementation from eRD24 RD Effort
+      Author: Alex Jentsch
+      Date of first commit: June 15th, 2021
+      ---------------------------------
+    </comment>
+
+    <!-- Global "station" location, rotation, position information -->
+
+    <constant name="ForwardRomanPotStation1_zpos" value="26.0*m"/>
+    <constant name="ForwardRomanPotStation1_xpos" value="-0.8333878326*m"/>
+	  <constant name="ForwardRomanPotStation2_zpos" value="28.0*m"/>
+    <constant name="ForwardRomanPotStation2_xpos" value="-0.924342804*m"/>
+
+	<constant name="ForwardRomanPotStation1_rotation" value="-0.047*rad"/>
+    <constant name="ForwardRomanPotStation2_rotation" value="-0.047*rad"/>
+
+    <constant name="ForwardRomanPotStation1_insertionPosition" value="0.0*cm"/>
+	<constant name="ForwardRomanPotStation2_insertionPosition" value="0.0*cm"/>
+
+	<!-- Module/layer information -->
+	<!-- Each module is simply a 3.2cm wide by 3.2cm tall square -->
+
+	<!-- Module insertion positions -->
+
+
+
+	<constant name="ForwardRomanPotStation1_insertion_outer" value="3.2*cm"/>
+    <constant name="ForwardRomanPotStation2_insertion_outer" value="3.2*cm"/>
+
+	<!-- HIGH ACCEPTANCE VALUES -->
+
+	<!--
+
+	<constant name="ForwardRomanPotStation1_insertion_intermediate" value="3.2*cm + 0.0*cm"/>
+    <constant name="ForwardRomanPotStation2_insertion_intermediate" value="3.2*cm + 0.0*cm"/>
+
+	<constant name="ForwardRomanPotStation1_insertion_central" value="3.2*cm + 0.8*cm"/>
+    <constant name="ForwardRomanPotStation2_insertion_central" value="3.2*cm + 0.8*cm"/>
+
+	-->
+
+	<!-- HIGH DIVERGENCE VALUES -->
+
+	<constant name="ForwardRomanPotStation1_insertion_intermediate" value="3.2*cm + 0.6*cm"/>
+    <constant name="ForwardRomanPotStation2_insertion_intermediate" value="3.2*cm + 0.6*cm"/>
+
+    <constant name="ForwardRomanPotStation1_insertion_central" value="3.2*cm + 0.7*cm"/>
+    <constant name="ForwardRomanPotStation2_insertion_central" value="3.2*cm + 0.7*cm"/>
+
+
+	<!-- Each module is a sandwich of 1mm aluminum, 0.3mm air, 0.3mm silicon, 0.3mm inactive silicon, 0.3mm copper, and 1mm aluminum -->
+	<!-- Vacuum is between each module -->
+
+	<!-- module size -->
+
+	<constant name="ForwardRomanPot_ModuleWidth"  value="32.0*mm"/>
+    <constant name="ForwardRomanPot_ModuleHeight"   value="32.0*mm"/>
+
+    <!-- materials -->
+	<!-- <constant name="ForwardRomanPot_RFShieldMat"     value="StainlessSteel"/> -->
+	<!-- <constant name="ForwardRomanPot_LGADMat"         value="SiliconOxide"/>   -->
+	<!-- <constant name="ForwardRomanPot_ASICMat"         value="SiliconOxide"/>   -->
+	<!-- <constant name="ForwardRomanPot_ThermalStripMat" value="Copper"/>         -->
+
+	<!-- Thicknesses -->
+	<constant name="ForwardRomanPot_RFShieldThickness"          value="1.0*mm"/>
+    <constant name="ForwardRomanPot_LGADThickness"              value="0.3*mm"/>
+    <constant name="ForwardRomanPot_ASICThickness"              value="0.3*mm"/>
+    <constant name="ForwardRomanPot_ThermalStripThickness"      value="0.3*mm"/>
+  	<constant name="ForwardRomanPot_ShieldingAirLayerThickness" value="0.3*mm"/>
+	<constant name="ForwardRomanPot_LayerSeparationThickness" value="1.0*cm"/>
+
+  </define>
+
+
+  <detectors>
+    <detector id="ForwardRomanPot_Station_1_ID"
+      name="ForwardRomanPot_Station_1"
+      readout="ForwardRomanPotHits"
+      type="ip6_ForwardRomanPot"
+      insideTrackingVolume="true"
+      reflect="false" vis="FFTrackerVis">
+    <position x="ForwardRomanPotStation1_xpos" y="0" z="ForwardRomanPotStation1_zpos" />
+    <rotation x="0" y="ForwardRomanPotStation1_rotation" z="0" />
+    <module name="Module1" vis="FFTrackerShieldedModuleVis" nx="2" ny="2" width="ForwardRomanPot_ModuleWidth" height="ForwardRomanPot_ModuleHeight">
+        <module_component material="Aluminum"     vis="FFTrackerShieldingVis" thickness="ForwardRomanPot_RFShieldThickness"/>
+        <module_component material="Copper"       vis="FFTrackerServiceVis"   thickness="ForwardRomanPot_ThermalStripThickness" />
+        <module_component material="SiliconOxide" vis="FFTrackerServiceVis"   thickness="ForwardRomanPot_ASICThickness"  />
+        <module_component material="SiliconOxide" vis="FFTrackerSurfaceVis"   thickness="ForwardRomanPot_LGADThickness" sensitive="true"/>
+        <module_component material="Vacuum"       vis="InvisibleNoDaughters"  thickness="ForwardRomanPot_ShieldingAirLayerThickness"/>
+        <module_component material="Aluminum"     vis="FFTrackerShieldingVis" thickness="ForwardRomanPot_RFShieldThickness"/>
+      <!--<module_component material="Vacuum"       thickness="ForwardRomanPot_LayerSeparationThickness"/>	-->
+    </module>
+    <module_assembly name="Station1Top">
+      <array nx="2" ny="2" module="Module1" width="2*ForwardRomanPot_ModuleWidth" height="2*ForwardRomanPot_ModuleHeight">
+        <position x="(6*ForwardRomanPot_ModuleWidth)/2.0" y="ForwardRomanPotStation1_insertion_outer"/>
+      </array>
+      <array nx="2" ny="2" module="Module1" width="2*ForwardRomanPot_ModuleWidth" height="2*ForwardRomanPot_ModuleHeight">
+        <position x="-((4*ForwardRomanPot_ModuleWidth)/2.0 + (2*ForwardRomanPot_ModuleWidth)/2.0)" y="ForwardRomanPotStation1_insertion_outer"/>
+      </array>
+      <array nx="2" ny="2" module="Module1" width="2*ForwardRomanPot_ModuleWidth" height="2*ForwardRomanPot_ModuleHeight">
+        <position x="0" y="ForwardRomanPotStation1_insertion_central"/>
+      </array>
+	  <array nx="1" ny="2" module="Module1" width="ForwardRomanPot_ModuleWidth" height="2*ForwardRomanPot_ModuleHeight">
+        <position x="3.0*ForwardRomanPot_ModuleWidth/2.0" y="ForwardRomanPotStation1_insertion_intermediate"/>
+      </array>
+	  <array nx="1" ny="2" module="Module1" width="ForwardRomanPot_ModuleWidth" height="2*ForwardRomanPot_ModuleHeight">
+        <position x="-3.0*ForwardRomanPot_ModuleWidth/2.0" y="ForwardRomanPotStation1_insertion_intermediate"/>
+      </array>
+    </module_assembly>
+    <module_assembly name="Station1Bottom">
+      <array nx="2" ny="2" module="Module1" width="2*ForwardRomanPot_ModuleWidth" height="2*ForwardRomanPot_ModuleHeight">
+        <position x="(4*ForwardRomanPot_ModuleWidth)/2.0 + (2*ForwardRomanPot_ModuleWidth)/2.0" y="-ForwardRomanPotStation1_insertion_outer"/>
+      </array>
+      <array nx="2" ny="2" module="Module1" width="2*ForwardRomanPot_ModuleWidth" height="2*ForwardRomanPot_ModuleHeight">
+        <position x="-((4*ForwardRomanPot_ModuleWidth)/2.0 + (2*ForwardRomanPot_ModuleWidth)/2.0)" y="-ForwardRomanPotStation1_insertion_outer"/>
+      </array>
+      <array nx="2" ny="2" module="Module1" width="2*ForwardRomanPot_ModuleWidth" height="2*ForwardRomanPot_ModuleHeight">
+        <position x="0" y="-ForwardRomanPotStation1_insertion_central"/>
+      </array>
+      <array nx="1" ny="2" module="Module1" width="ForwardRomanPot_ModuleWidth" height="2*ForwardRomanPot_ModuleHeight">
+        <position x="3.0*ForwardRomanPot_ModuleWidth/2.0" y="-ForwardRomanPotStation1_insertion_intermediate"/>
+      </array>
+      <array nx="1" ny="2" module="Module1" width="ForwardRomanPot_ModuleWidth" height="2*ForwardRomanPot_ModuleHeight">
+        <position x="-3.0*ForwardRomanPot_ModuleWidth/2.0" y="-ForwardRomanPotStation1_insertion_intermediate"/>
+      </array>
+    </module_assembly>
+
+    <layer id="1" vis="FFTrackerLayerVis">
+      <position x="0" y="0" z="0.0*cm"/>
+      <component assembly="Station1Top">
+        <position x="0" y="0" z="0.0*cm"/>
+      </component>
+      <component assembly="Station1Bottom">
+        <position x="0" y="0" z="0.0*cm"/>
+      </component>
+    </layer>
+    <layer id="2" vis="FFTrackerLayerVis">
+      <position x="0" y="0" z="0.0*cm"/>
+      <component assembly="Station1Top">
+        <position x="0" y="0" z="20.0*mm"/>
+      </component>
+      <component assembly="Station1Bottom">
+        <position x="0" y="0" z="20.0*mm"/>
+      </component>
+    </layer>
+
+  </detector>
+
+  <detector
+      id="ForwardRomanPot_Station_2_ID"
+      name="ForwardRomanPot_Station_2"
+      readout="ForwardRomanPotHits"
+      type="ip6_ForwardRomanPot"
+      insideTrackingVolume="true"
+      reflect="false"
+      vis="FFTrackerVis">
+      <position x="ForwardRomanPotStation2_xpos" y="0" z="ForwardRomanPotStation2_zpos" />
+    <rotation x="0" y="ForwardRomanPotStation1_rotation" z="0" />
+    <module name="Module1" vis="FFTrackerShieldedModuleVis" nx="2" ny="2" width="ForwardRomanPot_ModuleWidth" height="ForwardRomanPot_ModuleHeight">
+      <module_component material="Aluminum"     vis="FFTrackerShieldingVis" thickness="ForwardRomanPot_RFShieldThickness"/>
+      <module_component material="Copper"       vis="FFTrackerServiceVis"   thickness="ForwardRomanPot_ThermalStripThickness" />
+      <module_component material="SiliconOxide" vis="FFTrackerServiceVis"   thickness="ForwardRomanPot_ASICThickness"  />
+      <module_component material="SiliconOxide" vis="FFTrackerSurfaceVis"   thickness="ForwardRomanPot_LGADThickness" sensitive="true"/>
+      <module_component material="Vacuum"       vis="InvisibleNoDaughters"  thickness="ForwardRomanPot_ShieldingAirLayerThickness"/>
+      <module_component material="Aluminum"     vis="FFTrackerShieldingVis" thickness="ForwardRomanPot_RFShieldThickness"/>
+    </module>
+	<module_assembly name="Station2Top">
+		<array nx="2" ny="2" module="Module1" width="2*ForwardRomanPot_ModuleWidth" height="2*ForwardRomanPot_ModuleHeight">
+        <position x="(4*ForwardRomanPot_ModuleWidth)/2.0 + (2*ForwardRomanPot_ModuleWidth)/2.0" y="ForwardRomanPotStation1_insertion_outer"/>
+      </array>
+      <array nx="2" ny="2" module="Module1" width="2*ForwardRomanPot_ModuleWidth" height="2*ForwardRomanPot_ModuleHeight">
+        <position x="-((4*ForwardRomanPot_ModuleWidth)/2.0 + (2*ForwardRomanPot_ModuleWidth)/2.0)" y="ForwardRomanPotStation1_insertion_outer"/>
+      </array>
+      <array nx="2" ny="2" module="Module1" width="2*ForwardRomanPot_ModuleWidth" height="2*ForwardRomanPot_ModuleHeight">
+        <position x="0" y="ForwardRomanPotStation1_insertion_central"/>
+      </array>
+      <array nx="1" ny="2" module="Module1" width="ForwardRomanPot_ModuleWidth" height="2*ForwardRomanPot_ModuleHeight">
+        <position x="3.0*ForwardRomanPot_ModuleWidth/2.0" y="ForwardRomanPotStation1_insertion_intermediate"/>
+      </array>
+      <array nx="1" ny="2" module="Module1" width="ForwardRomanPot_ModuleWidth" height="2*ForwardRomanPot_ModuleHeight">
+        <position x="-3.0*ForwardRomanPot_ModuleWidth/2.0" y="ForwardRomanPotStation1_insertion_intermediate"/>
+      </array>
+    </module_assembly>
+    <module_assembly name="Station2Bottom">
+      <array nx="2" ny="2" module="Module1" width="2*ForwardRomanPot_ModuleWidth" height="2*ForwardRomanPot_ModuleHeight">
+        <position x="(4*ForwardRomanPot_ModuleWidth)/2.0 + (2*ForwardRomanPot_ModuleWidth)/2.0" y="-ForwardRomanPotStation1_insertion_outer"/>
+      </array>
+      <array nx="2" ny="2" module="Module1" width="2*ForwardRomanPot_ModuleWidth" height="2*ForwardRomanPot_ModuleHeight">
+        <position x="-((4*ForwardRomanPot_ModuleWidth)/2.0 + (2*ForwardRomanPot_ModuleWidth)/2.0)" y="-ForwardRomanPotStation1_insertion_outer"/>
+      </array>
+      <array nx="2" ny="2" module="Module1" width="2*ForwardRomanPot_ModuleWidth" height="2*ForwardRomanPot_ModuleHeight">
+        <position x="0" y="-ForwardRomanPotStation1_insertion_central"/>
+      </array>
+      <array nx="1" ny="2" module="Module1" width="ForwardRomanPot_ModuleWidth" height="2*ForwardRomanPot_ModuleHeight">
+        <position x="3.0*ForwardRomanPot_ModuleWidth/2.0" y="-ForwardRomanPotStation1_insertion_intermediate"/>
+      </array>
+      <array nx="1" ny="2" module="Module1" width="ForwardRomanPot_ModuleWidth" height="2*ForwardRomanPot_ModuleHeight">
+        <position x="-3.0*ForwardRomanPot_ModuleWidth/2.0" y="-ForwardRomanPotStation1_insertion_intermediate"/>
+      </array>
+    </module_assembly>
+
+
+    <layer id="1" vis="FFTrackerLayerVis">
+      <position x="0" y="0" z="0.0*cm"/>
+      <component assembly="Station2Top">
+        <position x="0" y="0" z="0.0*cm"/>
+      </component>
+      <component assembly="Station2Bottom">
+        <position x="0" y="0" z="0.0*cm"/>
+      </component>
+    </layer>
+    <layer id="2" vis="FFTrackerLayerVis">
+      <position x="0" y="0" z="0.0*cm"/>
+      <component assembly="Station2Top">
+        <position x="0" y="0" z="20.0*mm"/>
+      </component>
+      <component assembly="Station2Bottom">
+        <position x="0" y="0" z="20.0*mm"/>
+	  </component>
+    </layer>
+  </detector>
+
+
+</detectors>
+
+
+
+
+  <readouts>
+    <readout name="ForwardRomanPotHits">
+      <segmentation type="CartesianGridXY" grid_size_x="0.5*mm" grid_size_y="0.5*mm" />
+      <id>system:8,assembly:3,layer:4,module:4,sensor:4,x:32:-16,y:-16</id>
+    </readout>
+  </readouts>
+
+</lccdd>

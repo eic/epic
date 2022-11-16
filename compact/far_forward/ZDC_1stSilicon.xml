@@ -1,0 +1,41 @@
+<lccdd>
+  <comment>
+    //////////////////////////////////////////////////
+    // Far Forward Zero Degree Calorimeter
+    // Crystal calorimeter
+    //////////////////////////////////////////////////
+  </comment>
+
+  <define>
+    <constant name="ZDC_1stSilicon_x"       value="ZDC_width"/>
+    <constant name="ZDC_1stSilicon_y"       value="ZDC_width"/>
+    <constant name="ZDC_1stSilicon_z"       value="ZDC_pixel_thickness + ZDC_glue_thickness + ZDC_PCB_thickness + ZDC_Si_Air_thickness"/>
+  </define>
+
+  <detectors>
+    <detector
+	id="ZDC_1stSilicon_ID"
+	name="ZDC_1stSilicon"
+	type="ZDC_ImagingCal"
+	vis="ZDC_SiliconPix_Vis"
+	readout="ZDC_SiliconPix_Hits">
+      <position x="ZDC_1stSilicon_x_pos"         y="ZDC_1stSilicon_y_pos"         z="ZDC_1stSilicon_z_pos"/>
+      <rotation x="ZDC_1stSilicon_rotateX_angle" y="ZDC_1stSilicon_rotateY_angle" z="ZDC_1stSilicon_rotateZ_angle"/>
+      <dimensions x="ZDC_1stSilicon_x" y="ZDC_1stSilicon_y" z="ZDC_1stSilicon_z"/>
+      <layer nlayer="1" gapspace="ZDC_Si_Air_thickness">
+	<slice name="silicon" material="Silicon" thickness="ZDC_pixel_thickness" vis="AnlRed"  sensitive="true"/>
+	<slice name="glue"  material="G10"     thickness="ZDC_glue_thickness"  vis="AnlLight_Gray"/>
+	<slice name="pcb"   material="ZDC_PET" thickness="ZDC_PCB_thickness"   vis="AnlGreen"/>
+      </layer>
+
+    </detector>
+  </detectors>
+
+  <readouts>
+    <readout name="ZDC_SiliconPix_Hits">
+      <segmentation type="CartesianGridXY" grid_size_x="3.*mm" grid_size_y="3.*mm"/>
+      <id>system:8,silicon:6,x:24:-12,y:-12</id>
+    </readout>
+  </readouts>
+
+</lccdd>

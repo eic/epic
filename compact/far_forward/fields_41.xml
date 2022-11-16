@@ -1,0 +1,31 @@
+<define>
+
+  <constant name="IonBeamEnergy" value="41*GeV" />
+
+  <comment>
+      These are the values from Scott's tables for the 50cm shifted hadron FF 41 GeV proton lattice. Notice they mostly do not scale with beam energy in the staightforward way from the previous lattice.
+  </comment>
+
+  <constant name="B0PF_GradientMax"  value="-8.12238283*tesla/m"/>
+  <constant name="B0APF_GradientMax" value="0.0*tesla/m"/>
+  <constant name="Q1APF_GradientMax" value="-15.381768*tesla/m"/>
+  <constant name="Q1BPF_GradientMax" value="0.0*tesla/m"/> <!-- need to check with Scott on this one -->
+  <constant name="Q2PF_GradientMax"  value="5.40545729*tesla/m"/>
+  <constant name="B1PF_GradientMax"  value="0.0*tesla/m"/>
+  <constant name="B1APF_GradientMax" value="0.0*tesla/m"/>
+  <constant name="B2PF_GradientMax"  value="0.0*tesla/m"/>
+  <constant name="Q0EF_GradientMax" value="-1.957395164*tesla/m"/>
+  <constant name="Q1EF_GradientMax"  value="0.8723145091*tesla/m"/>
+
+  <constant name="B0PF_Bmax"  value="1.1840539*tesla"/>
+  <constant name="B0APF_Bmax" value="-2.559005681*tesla"/> <!-- need to check with Scott on this one -->
+  <constant name="Q1APF_Bmax" value="0.0*tesla"/>
+  <constant name="Q1BPF_Bmax" value="0.0*tesla"/>
+  <constant name="Q2PF_Bmax"  value="0.0*tesla"/>
+  <constant name="B1PF_Bmax"  value="0.5920021*tesla"/>
+  <constant name="B1APF_Bmax" value="0.40244238*tesla"/>
+  <constant name="B2PF_Bmax" value="-0.71381565*tesla"/>
+  <constant name="Q0EF_BMax" value="0.0*tesla"/>
+  <constant name="Q1EF_BMax"  value="0.0*tesla"/>
+
+</define>

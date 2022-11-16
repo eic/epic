@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<lccdd>
+  <define>
+  </define>
+
+  <comment>
+      =====================================
+      (170-177) Forward Hadron Beamline Magnets (up to B0pf)
+      =====================================
+
+	  =====================================
+	  (180-189) Forward Electron Beamline Magnets
+	  =====================================
+  </comment>
+
+  <comment>
+      =====================================
+      (190-199) Backward Beamline Magnets
+      =====================================
+  </comment>
+  <detectors>
+    <detector id="B0PF_ID" name="B0PF_BeamlineMagnet" vis="FFMagnetVis" type="ip6_CylindricalDipoleMagnet">
+      <placement x="B0PF_XPosition" y="0*m" z="B0PF_CenterPosition" theta="B0PF_RotationAngle" />
+      <dimensions x="B0PF_InnerRadius*4" y="B0PF_InnerRadius*4" z="B0PF_Length" r="B0PF_InnerRadius*2.0" />
+      <apperture x="B0PF_InnerRadius" y="B0PF_InnerRadius" r="B0PF_InnerRadius" />
+      <coil vis="FFMagnetCoilVis" dx="2*cm" dy="1.5*cm" />
+    </detector>
+      <detector id="B0APF_ID" name="B0APF_BeamlineMagnet" vis="FFMagnetVis" type="ip6_CylindricalDipoleMagnet">
+      <placement x="B0APF_XPosition" y="0*m" z="B0APF_CenterPosition" theta="B0APF_RotationAngle" />
+      <dimensions x="B0APF_InnerRadius*4" y="B0APF_InnerRadius*4" z="B0APF_Length" r="B0APF_InnerRadius*2.0" />
+      <apperture x="B0APF_InnerRadius" y="B0APF_InnerRadius" r="B0APF_InnerRadius" />
+      <coil vis="FFMagnetCoilVis" dx="2*cm" dy="1.5*cm" />
+    </detector>
+      <detector id="Q1APF_ID" name="Q1APF_BeamlineMagnet" vis="FFMagnetVis" type="ip6_CylindricalDipoleMagnet">
+      <placement x="Q1APF_XPosition" y="0*m" z="Q1APF_CenterPosition" theta="Q1APF_RotationAngle" />
+      <dimensions x="Q1APF_InnerRadius*4" y="Q1APF_InnerRadius*4" z="Q1APF_Length" r="2.0*Q1APF_InnerRadius"/>
+      <apperture x="Q1APF_InnerRadius*2" y="Q1APF_InnerRadius*2"  r="Q1APF_InnerRadius"/>
+      <coil vis="FFMagnetCoilVis" dx="2*cm" dy="1.5*cm" />
+    </detector>
+    <detector id="Q1BPF_ID" name="Q1BPF_BeamlineMagnet" vis="FFMagnetVis" type="ip6_CylindricalDipoleMagnet">
+      <placement x="Q1BPF_XPosition" y="0*m" z="Q1BPF_CenterPosition" theta="Q1BPF_RotationAngle" />
+      <dimensions x="Q1BPF_InnerRadius*4" y="Q1BPF_InnerRadius*4" z="Q1BPF_Length"  r="2.0*Q1BPF_InnerRadius"/>
+      <apperture x="Q1BPF_InnerRadius*2" y="Q1BPF_InnerRadius*2"  r="Q1BPF_InnerRadius"/>
+      <coil vis="FFMagnetCoilVis" dx="1*cm" dy="0.5*cm" />
+    </detector>
+    <detector id="Q2PF_ID" name="Q2PF_BeamlineMagnet" vis="FFMagnetVis" type="ip6_CylindricalDipoleMagnet">
+      <placement x="Q2PF_XPosition" y="0*m" z="Q2PF_CenterPosition" theta="Q2PF_RotationAngle" />
+      <dimensions x="Q2PF_InnerRadius*4" y="Q2PF_InnerRadius*4" z="Q2PF_Length" r="2.0*Q2PF_InnerRadius" />
+      <apperture x="Q2PF_InnerRadius*2" y="Q2PF_InnerRadius*2"  r="Q2PF_InnerRadius"/>
+      <coil vis="FFMagnetCoilVis" dx="1*cm" dy="0.5*cm" />
+    </detector>
+    <detector id="B1PF_ID" name="B1PF_BeamlineMagnet" vis="FFMagnetVis" type="ip6_CylindricalDipoleMagnet">
+      <placement x="B1PF_XPosition" y="0*m" z="B1PF_CenterPosition" theta="B1PF_RotationAngle" />
+      <dimensions x="B1PF_InnerRadius*4" y="B1PF_InnerRadius*4" z="B1PF_Length" r="2.0*B1PF_InnerRadius"  />
+      <apperture x="B1PF_InnerRadius*2" y="B1PF_InnerRadius*2"  r="B1PF_InnerRadius" />
+      <coil vis="FFMagnetCoilVis" dx="1*cm" dy="0.5*cm" />
+    </detector>
+    <detector id="B1APF_ID" name="B1APF_BeamlineMagnet" vis="FFMagnetVis" type="ip6_CylindricalDipoleMagnet">
+      <placement x="B1APF_XPosition" y="0*m" z="B1APF_CenterPosition" theta="B1APF_RotationAngle" />
+      <dimensions x="B1APF_InnerRadius*4" y="B1APF_InnerRadius*4" z="B1APF_Length" r="2.0*B1APF_InnerRadius" />
+      <apperture x="B1APF_InnerRadius*2" y="B1APF_InnerRadius*2"  r="B1APF_InnerRadius"/>
+      <coil vis="FFMagnetCoilVis" dx="1*cm" dy="0.5*cm" />
+    </detector>
+    <detector id="B2PF_ID" name="B2PF_BeamlineMagnet" vis="FFMagnetVis" type="ip6_CylindricalDipoleMagnet">
+      <placement x="B2PF_XPosition" y="0*m" z="B2PF_CenterPosition" theta="B2PF_RotationAngle" />
+      <dimensions x="B2PF_InnerRadius*4" y="B2PF_InnerRadius*4" z="B2PF_Length" r="2.0*B2PF_InnerRadius" />
+      <apperture x="B2PF_InnerRadius*2" y="B2PF_InnerRadius*2"  r="B2PF_InnerRadius"/>
+      <coil vis="FFMagnetCoilVis" dx="1*cm" dy="0.5*cm" />
+    </detector>
+	<detector id="Q0EF_ID" name="Q0EF_BeamlineMagnet" vis="FFMagnetVis" type="ip6_CylindricalDipoleMagnet">
+      <placement x="Q0EF_XPosition" y="0*m" z="Q0EF_CenterPosition" theta="Q0EF_RotationAngle" />
+      <dimensions x="5.0*cm" y="5.0*cm" z="Q0EF_Length" r="2.5*cm" />
+      <apperture x="Q0EF_InnerRadius*2" y="Q0EF_InnerRadius*2"  r="Q0EF_InnerRadius"/>
+      <coil vis="FFMagnetCoilVis" dx="0.4*cm" dy="0.2*cm" />
+    </detector>
+	<detector id="Q1EF_ID" name="Q1EF_BeamlineMagnet" vis="FFMagnetVis" type="ip6_CylindricalDipoleMagnet">
+      <placement x="Q1EF_XPosition" y="0*m" z="Q1EF_CenterPosition" theta="Q1EF_RotationAngle" />
+      <dimensions x="6.0*cm" y="6.0*cm" z="Q1EF_Length" r="3.0*cm" />
+      <apperture x="Q1EF_InnerRadius*2" y="Q1EF_InnerRadius*2"  r="Q1EF_InnerRadius"/>
+      <coil vis="FFMagnetCoilVis" dx="0.4*cm" dy="0.2*cm" />
+    </detector>
+
+  </detectors>
+
+</lccdd>

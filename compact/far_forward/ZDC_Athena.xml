@@ -1,0 +1,78 @@
+<lccdd>
+
+  <comment>Far Forward Hadron Detectors</comment>
+
+  <define>
+    <comment>
+      -------------------------------------------
+      Zero Degree Calorimeter General Parameters
+      -------------------------------------------
+    </comment>
+    <constant name="ZDC_z_pos"         value="3560.0 * cm"/> <!-- need to shift FORWARD toward IP to account for 50cm shift -->
+    <constant name="ZDC_x_pos"         value="ZDC_z_pos * ionCrossingAngle"/>
+    <constant name="ZDC_y_pos"         value="0.0 * cm"/>
+    <constant name="ZDC_rotateX_angle" value="0.0 * rad"/>
+    <constant name="ZDC_rotateY_angle" value="ionCrossingAngle"/>
+    <constant name="ZDC_rotateZ_angle" value="0.0 * rad"/>
+    <constant name="ZDC_width"         value="60.0 * cm"/>
+    <constant name="ZDC_length"        value="200.0 * cm"/>
+
+    <comment>
+      -------------------------------
+      Zero Degree Calorimeter - ECAL
+      -------------------------------
+    </comment>
+    <constant name="ZDCEcal_z_pos"           value="ZDC_z_pos"/>
+    <constant name="ZDCEcal_x_pos"           value="ZDCEcal_z_pos * ionCrossingAngle"/>
+    <constant name="ZDCEcal_y_pos"           value="ZDC_y_pos"/>
+    <constant name="ZDCEcal_rotateX_angle"   value="ZDC_rotateX_angle"/>
+    <constant name="ZDCEcal_rotateY_angle"   value="ZDC_rotateY_angle"/>
+    <constant name="ZDCEcal_rotateZ_angle"   value="ZDC_rotateZ_angle"/>
+    <constant name="ZDCEcal_width"           value="ZDC_width"/>
+
+    <constant name="ZDC_SiWSciFi_NRepeat"     value="1"/>
+
+    <constant name="ZDC_Silicon_1_Thickness"  value="300.0 * um"/>
+    <constant name="ZDC_WSciFi_Thickness"     value="170.0 * mm"/> <!-- length of WSciFi tower block -->
+    <constant name="ZDC_Glue_1_Thickness"     value="0.11 * mm"/>
+    <constant name="ZDC_FPC_Thickness"        value="0.28 * mm"/>
+    <constant name="ZDC_Air_1_Thickness"      value="1.2 * mm"/>
+    <constant name="ZDC_Air_2_Thickness"      value="3.0 * cm"/>
+
+    <constant name="ZDCEcal_layer_thickness" value="ZDC_Silicon_1_Thickness + ZDC_Glue_1_Thickness + ZDC_FPC_Thickness +
+                                                    ZDC_Air_1_Thickness + ZDC_WSciFi_Thickness + ZDC_Air_2_Thickness"/>
+    <!--<constant name="ZDCEcal_length"          value="ZDC_SiWSciFi_NRepeat * ZDCEcal_layer_thickness"/>-->
+    <constant name="ZDCEcal_length"          value="170.0 * mm"/> <!-- 1 interaction length -->
+
+    <comment>
+      -------------------------------
+      Zero Degree Calorimeter - HCAL
+      -------------------------------
+    </comment>
+    <constant name="ZDCHcal_x_pos"           value="ZDCEcal_x_pos"/>
+    <constant name="ZDCHcal_y_pos"           value="ZDCEcal_y_pos"/>
+    <constant name="ZDCHcal_z_pos"           value="ZDCEcal_z_pos + ZDCEcal_length + 10.0 * cm"/>
+    <constant name="ZDCHcal_rotateX_angle"   value="ZDC_rotateX_angle"/>
+    <constant name="ZDCHcal_rotateY_angle"   value="ZDC_rotateY_angle"/>
+    <constant name="ZDCHcal_rotateZ_angle"   value="ZDC_rotateZ_angle"/>
+    <constant name="ZDCHcal_width"           value="ZDC_width"/>
+    <constant name="ZDCHcal_length"          value="ZDC_length"/>
+
+    <constant name="ZDC_SiPb_NRepeat"         value="0"/> <!-- changed from 12 -->
+    <constant name="ZDC_PbScint_NRepeat"      value="120"/> <!-- 7 interaction length -->
+    <constant name="ZDC_Gap_NRepeat"          value="0"/>
+
+    <constant name="ZDC_Silicon_2_Thickness"  value="320.0 * um"/>
+    <constant name="ZDC_Tungsten_Thickness"   value="3.5 * mm"/>
+    <constant name="ZDC_Glue_2_Thickness"     value="0.13 * mm"/>
+    <constant name="ZDC_Air_3_Thickness"      value="1.0 * mm"/>
+    <constant name="ZDC_Air_4_Thickness"      value="0.0013 * mm"/>
+    <constant name="ZDC_Lead_Thickness"       value="10.0 * mm"/>
+    <constant name="ZDC_Scint_Thickness"      value="2.5 * mm"/> <!-- a quarter of Lead thickness -->
+    <constant name="ZDC_Gap_Thickness"        value="2.0 * cm"/>
+  </define>
+
+  <include ref="ZDC_Ecal_WSciFi.xml"/>
+  <include ref="ZDC_Hcal.xml"/>
+
+</lccdd>
