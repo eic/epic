@@ -1,9 +1,11 @@
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (C) 2022 Dhevan Gangadharan
+
 #include "DD4hep/DetFactoryHelper.h"
 #include "DD4hep/Printout.h"
 #include "DD4hep/Shapes.h"
 #include "DDRec/DetectorData.h"
 #include "DDRec/Surface.h"
-#include "TMath.h"
 #include "XML/Layering.h"
 #include <XML/Helper.h>
 

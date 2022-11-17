@@ -1,25 +1,20 @@
-/*
- Written by - Aranya Giri
- University of Houston
- Start Date - 10/31/2022
- Homogeneous PbWO4 (EM Calorimeter) Pair Spectrometer
- Note : Solid, Logical & Physical Volumes are the three component of detector,
- The following abbriviations will reflect the proper usage of these 3.
-*/
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (C) 2022 Aranya Giri
 
-// Essential Header Files
+// Start Date - 10/31/2022
+// Homogeneous PbWO4 (EM Calorimeter) Pair Spectrometer
+
 #include "DD4hep/DetFactoryHelper.h"
 #include <XML/Helper.h>
 #include <algorithm>
 #include <iostream>
-#include <math.h>
 #include <tuple>
 
 using namespace std;
 using namespace dd4hep;
 
 // Definition of function to build the modules
-tuple<Volume, Position> build_specHomoCAL_module(const Detector& description, const xml::Component& mod_x, SensitiveDetector& sens);
+static tuple<Volume, Position> build_specHomoCAL_module(const Detector& description, const xml::Component& mod_x, SensitiveDetector& sens);
 
 // Driver Function
 static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector sens)
@@ -88,7 +83,7 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
 
 //--------------------------------------------------------------------
 //Function for building the module
-tuple<Volume, Position> build_specHomoCAL_module( const Detector& description, const xml::Component& mod_x, SensitiveDetector& sens){
+static tuple<Volume, Position> build_specHomoCAL_module( const Detector& description, const xml::Component& mod_x, SensitiveDetector& sens){
 
   double sx = mod_x.attr<double>(_Unicode(sizex));
   double sy = mod_x.attr<double>(_Unicode(sizey));

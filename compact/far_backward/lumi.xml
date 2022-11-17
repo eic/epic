@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <lccdd>
 
-   <include ref="lumi/exitWindow.xml"/>
-   <include ref="lumi/specMagnet.xml"/>
-   <include ref="lumi/specTracker.xml"/>
-   <include ref="lumi/specHomoCAL.xml"/>
+   <include ref="lumi/exit_window.xml"/>
+   <include ref="lumi/spec_magnet.xml"/>
+   <include ref="lumi/spec_tracker.xml"/>
+   <include ref="lumi/spec_homo_cal.xml"/>
 
 </lccdd>

@@ -1,6 +1,8 @@
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (C) 2022 Dhevan Gangadharan
+
 #include "DD4hep/DetFactoryHelper.h"
 #include "DD4hep/Printout.h"
-#include "TMath.h"
 #include <XML/Helper.h>
 
 using namespace std;
