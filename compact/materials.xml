@@ -39,6 +39,7 @@
     <D value="1.032" unit="g/cm3"/>
     <composite n="19" ref="C"/>
     <composite n="21" ref="H"/>
+    <constant name="BirksConstant" value="0.126*mm/MeV"/>
   </material>
   <material name="Water">
     <D value="1.00" unit="g/cm3"/>
@@ -140,6 +141,7 @@
     <fraction n="0.2146" ref="Gd"/>
     <fraction n="0.1369" ref="Si"/>
     <fraction n="0.2610" ref="O"/>
+    <constant name="BirksConstant" value="0.0333*mm/MeV"/>
   </material>
   <documentation level="3">
     #### Material for TOF
@@ -287,12 +289,14 @@
     <D type="density" unit="g/cm3" value="1.032"/>
     <composite n="9" ref="C"/>
     <composite n="10" ref="H"/>
+    <constant name="BirksConstant" value="0.126*mm/MeV"/>
   </material>
   <material name="PbWO4">
     <D type="density" value="8.3" unit="g / cm3"/>
     <composite n="1" ref="Pb"/>
     <composite n="1" ref="W"/>
     <composite n="4" ref="O"/>
+    <constant name="BirksConstant" value="0.0333*mm/MeV"/>
   </material>
   <material name="Ar10CO2">
     <D type="density" value="1.802" unit="mg / cm3"/>
