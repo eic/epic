@@ -19,7 +19,7 @@ using namespace dd4hep;
 
 // Function to download files
 inline void EnsureFileFromURLExists(std::string url, std::string file, std::string cache_str = "",
-                                    std::string cmd = "curl --retry 5 -f {0} -o {1}")
+                                    std::string cmd = "curl --silent --retry 5 -f {0} -o {1}")
 {
   // parse cache for environment variables
   auto pos = std::string::npos;
@@ -92,6 +92,7 @@ inline void EnsureFileFromURLExists(std::string url, std::string file, std::stri
               printout(ERROR, "FileLoader",
                        "unable to link from " + hash_path.string() + " to " + cache_hash_path.string());
               printout(ERROR, "FileLoader", "check permissions and retry");
+              printout(ERROR, "FileLoader", "hint: may be resolved by removing directory " + parent_path.string());
               std::_Exit(EXIT_FAILURE);
             }
             break;
