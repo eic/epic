@@ -412,4 +412,4 @@ static Ref_t create_detector(Detector &lcdd, xml_h handle,
   return det_element;
 }
 
-DECLARE_DETELEMENT(epic_SciGlassCalorimeter, create_detector)
+DECLARE_DETELEMENT(epic_EcalBarrelSciGlass, create_detector)
