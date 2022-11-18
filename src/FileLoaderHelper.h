@@ -157,4 +157,12 @@ inline void EnsureFileFromURLExists(std::string url, std::string file, std::stri
     printout(ERROR, "FileLoader", "check permissions and retry");
     std::_Exit(EXIT_FAILURE);
   }
+
+  // final check of the file size
+  if (fs::file_size(file_path) == 0) {
+    printout(ERROR, "FileLoader", "zero file size of symlink from " + file_path.string() + " to " + hash_path.string());
+    printout(ERROR, "FileLoader", "hint: check whether the file " + hash_path.string() + " has any content");
+    printout(ERROR, "FileLoader", "hint: check whether the URL " + url + " has any content");
+    std::_Exit(EXIT_FAILURE);
+  }
 }
