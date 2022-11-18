@@ -3,8 +3,12 @@
 
   <include ref="far_backward/definitions.xml"/>
   <include ref="far_backward/magnets.xml"/>
-  <include ref="far_backward/taggers.xml"/>
-  <!-- include ref="far_backward/lumi.xml"/ -->
   <include ref="far_backward/beamline_hadron.xml"/>
+
+  <!-- Scattered electron taggers -->
+  <include ref="far_backward/taggers.xml"/>
+
+  <!-- Luminosity detector -->
+  <include ref="far_backward/lumi.xml"/>
 
 </lccdd>

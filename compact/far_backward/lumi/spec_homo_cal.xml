@@ -1,0 +1,27 @@
+<!-- SPDX-License-Identifier: LGPL-3.0-or-later -->
+<!-- Copyright (C) 2022 Aranya Giri -->
+
+<lccdd>
+
+  <detectors>
+    <detector id="LumiSpecCAL_ID" name="LumiSpecCAL" type="LumiSpecHomoCAL" vis="FFPreVis" readout="LumiSpecCALHits">
+      <module sizex="LumiSpecCALTower_DXY" sizey="LumiSpecCALTower_DXY" sizez="LumiSpecCALTower_DZ" frameSize="0.05*mm" material="PbWO4" vis="FFPreModuleVis"/>
+      <sector id="0">
+        <position x="0.0*cm" y="LumiSpecCAL_Y" z="LumiSpecCAL_Z"/>
+        <rotation x="0.0*rad" y="0.0*rad" z="0.0*rad"/>
+      </sector>
+      <sector id="1">
+        <position x="0.0*cm" y="-1*LumiSpecCAL_Y" z="LumiSpecCAL_Z"/>
+        <rotation x="0.0*rad" y="0.0*rad" z="0.0*rad"/>
+      </sector>
+    </detector>
+  </detectors>
+
+  <readouts>
+    <readout name="LumiSpecCALHits">
+      <segmentation type="NoSegmentation"/>
+      <id> system:8,sector:8,module:8</id>
+    </readout>
+  </readouts>
+
+</lccdd>
