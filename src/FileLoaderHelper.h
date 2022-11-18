@@ -133,7 +133,7 @@ inline void EnsureFileFromURLExists(std::string url, std::string file, std::stri
           printout(ERROR, "FileLoader", "we tried to create a symlink " + file_path.string() + " to the actual resource, " +
                                         "but a symlink already exists there and points to an incorrect location");
           printout(ERROR, "FileLoader", "hint: this may be resolved by removing directory " + parent_path.string());
-          printout(ERROR, "FileLoader", "hint: or in that directory removing the file or link " + cache_hash_path.string());
+          printout(ERROR, "FileLoader", "hint: or in that directory removing the file or link " + file_path.string());
           std::_Exit(EXIT_FAILURE);
         }
       }
