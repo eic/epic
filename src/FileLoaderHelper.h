@@ -56,7 +56,7 @@ inline void EnsureFileFromURLExists(std::string url, std::string file, std::stri
   if (!fs::exists(parent_path)) {
     if (fs::create_directories(parent_path) == false) {
       printout(ERROR, "FileLoader", "parent path " + parent_path.string() + " cannot be created");
-      printout(ERROR, "FileLoader", "check permissions and retry");
+      printout(ERROR, "FileLoader", "hint: try running 'mkdir -p " + parent_path.string() + "'");
       std::_Exit(EXIT_FAILURE);
     }
   }
@@ -64,7 +64,7 @@ inline void EnsureFileFromURLExists(std::string url, std::string file, std::stri
   // if file exists and is symlink to correct hash
   fs::path hash_path(parent_path / hash);
   if (fs::exists(file_path) && fs::equivalent(file_path, hash_path)) {
-    printout(INFO, "FileLoader", "Link " + file + " -> hash " + hash + " already exists");
+    printout(INFO, "FileLoader", "link " + file + " -> hash " + hash + " already exists");
     return;
   }
 
@@ -74,25 +74,25 @@ inline void EnsureFileFromURLExists(std::string url, std::string file, std::stri
     bool success = false;
     for (auto cache : cache_vec) {
       fs::path cache_path(cache);
-      printout(INFO, "FileLoader", "Cache " + cache_path.string());
+      printout(INFO, "FileLoader", "cache " + cache_path.string());
       if (fs::exists(cache_path)) {
         for (auto const& dir_entry : fs::recursive_directory_iterator(cache_path)) {
           if (!dir_entry.is_directory())
             continue;
           fs::path cache_dir_path = cache_path / dir_entry;
-          printout(INFO, "FileLoader", "Checking " + cache_dir_path.string());
+          printout(INFO, "FileLoader", "checking " + cache_dir_path.string());
           fs::path cache_hash_path = cache_dir_path / hash;
           if (fs::exists(cache_hash_path)) {
             // symlink hash to cache/.../hash
-            printout(INFO, "FileLoader", "File " + file + " with hash " + hash + " found in " + cache_hash_path.string());
+            printout(INFO, "FileLoader", "file " + file + " with hash " + hash + " found in " + cache_hash_path.string());
             try {
               fs::create_symlink(cache_hash_path, hash_path);
               success = true;
             } catch (const fs::filesystem_error&) {
               printout(ERROR, "FileLoader",
                        "unable to link from " + hash_path.string() + " to " + cache_hash_path.string());
-              printout(ERROR, "FileLoader", "check permissions and retry");
-              printout(ERROR, "FileLoader", "hint: may be resolved by removing directory " + parent_path.string());
+              printout(ERROR, "FileLoader", "hint: this may be resolved by removing directory " + parent_path.string());
+              printout(ERROR, "FileLoader", "hint: or in that directory removing the file or link " + cache_hash_path.string());
               std::_Exit(EXIT_FAILURE);
             }
             break;
@@ -106,14 +106,14 @@ inline void EnsureFileFromURLExists(std::string url, std::string file, std::stri
   // if hash does not exist, we try to retrieve file from url
   if (!fs::exists(hash_path)) {
     cmd = fmt::format(cmd, url, hash_path.c_str()); // TODO: Use c++20 std::fmt
-    printout(INFO, "FileLoader", "Downloading " + file + " as hash " + hash + " with " + cmd);
+    printout(INFO, "FileLoader", "downloading " + file + " as hash " + hash + " with " + cmd);
     // run cmd
     auto ret = std::system(cmd.c_str());
     if (!fs::exists(hash_path)) {
-      printout(ERROR, "FileLoader", "unable to run cmd " + cmd);
-      printout(ERROR, "FileLoader", "value returned was ", ret);
-      printout(ERROR, "FileLoader", "check command and retry");
-      printout(ERROR, "FileLoader", "hint: allow insecure connections with -k");
+      printout(ERROR, "FileLoader", "unable to run the download command " + cmd);
+      printout(ERROR, "FileLoader", "the return value was ", ret);
+      printout(ERROR, "FileLoader", "hint: check the command and try running manually");
+      printout(ERROR, "FileLoader", "hint: allow insecure connections on some systems with the flag -k");
       std::_Exit(EXIT_FAILURE);
     }
   }
@@ -130,14 +130,19 @@ inline void EnsureFileFromURLExists(std::string url, std::string file, std::stri
         // link points to incorrect path
         if (fs::remove(file_path) == false) {
           printout(ERROR, "FileLoader", "unable to remove symlink " + file_path.string());
-          printout(ERROR, "FileLoader", "check permissions or remove manually");
+          printout(ERROR, "FileLoader", "we tried to create a symlink " + file_path.string() + " to the actual resource, " +
+                                        "but a symlink already exists there and points to an incorrect location");
+          printout(ERROR, "FileLoader", "hint: this may be resolved by removing directory " + parent_path.string());
+          printout(ERROR, "FileLoader", "hint: or in that directory removing the file or link " + cache_hash_path.string());
           std::_Exit(EXIT_FAILURE);
         }
       }
     } else {
       // file exists but not symlink
-      printout(ERROR, "FileLoader", "will not remove actual file " + file_path.string());
-      printout(ERROR, "FileLoader", "check content, remove manually, and retry");
+      printout(ERROR, "FileLoader", "file " + file_path.string() + " already exists but is not a symlink");
+      printout(ERROR, "FileLoader", "we tried to create a symlink " + file_path.string() + " to the actual resource, " +
+                                    "but a file already exists there and we will not remove it automatically");
+      printout(ERROR, "FileLoader", "hint: backup the file, remove it manually, and retry");
       std::_Exit(EXIT_FAILURE);
     }
   }
