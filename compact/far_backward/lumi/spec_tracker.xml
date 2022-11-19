@@ -1,0 +1,49 @@
+<!-- SPDX-License-Identifier: LGPL-3.0-or-later -->
+<!-- Copyright (C) 2022 Dhevan Gangadharan -->
+
+<lccdd>
+
+  <define>
+    <constant name="Offset_Pos_Z" value="0.01*cm"/>
+    <constant name="LumiSpecTracker2_Size_XY" value="LumiSpecCAL_DXY"/>
+    <constant name="LumiSpecTracker2_Pos_Y" value="LumiSpecCAL_Y"/>
+    <constant name="LumiSpecTracker2_Pos_Z" value="LumiSpecCAL_Z + (LumiSpecCALTower_DZ/2.0) + (LumiSpecTracker_DZ/2.0)"/>
+    <constant name="LumiSpecTracker1_Size_XY" value="LumiSpecTracker2_Size_XY/2.0"/>
+    <constant name="LumiSpecTracker1_Pos_Y" value="LumiSpecCAL_Y/2.0"/>
+    <constant name="DistSpecMag2_SpecCAL" value="( (LumiSpecMag_Z - LumiSpecMag_DZ/2.0) - (LumiSpecCAL_Z + (LumiSpecCALTower_DZ/2.0) ) ) "/>
+    <constant name="LumiSpecTracker1_Pos_Z" value=" LumiSpecCAL_Z + (DistSpecMag2_SpecCAL/2.0)"/>
+  </define>
+
+  <detectors>
+    <detector id="LumiSpecTracker_ID" name="LumiSpecTracker" type="LumiSpecTracker" readout="LumiSpecTrackerHits" vis="TrackerVis">
+      <module id="0">
+        <sector id="0">
+          <position x="0.0" y="LumiSpecTracker1_Pos_Y" z="LumiSpecTracker1_Pos_Z"/>
+          <dimensions x="LumiSpecTracker1_Size_XY/2.0" y="LumiSpecTracker1_Size_XY/2.0" z="LumiSpecTracker_DZ/2.0"/>
+        </sector>
+        <sector id="1">
+          <position x="0.0" y="-1*LumiSpecTracker1_Pos_Y" z="LumiSpecTracker1_Pos_Z"/>
+          <dimensions x="LumiSpecTracker1_Size_XY/2.0" y="LumiSpecTracker1_Size_XY/2.0" z="LumiSpecTracker_DZ/2.0"/>
+        </sector>
+      </module>
+      <module id="1">
+        <sector id="0">
+          <position x="0.0" y="LumiSpecTracker2_Pos_Y" z="LumiSpecTracker2_Pos_Z + Offset_Pos_Z"/>
+          <dimensions x="LumiSpecTracker2_Size_XY/2.0" y="LumiSpecTracker2_Size_XY/2.0" z="LumiSpecTracker_DZ/2.0"/>
+        </sector>
+        <sector id="1">
+          <position x="0.0" y="-1*LumiSpecTracker2_Pos_Y" z="LumiSpecTracker2_Pos_Z + Offset_Pos_Z"/>
+          <dimensions x="LumiSpecTracker2_Size_XY/2.0" y="LumiSpecTracker2_Size_XY/2.0" z="LumiSpecTracker_DZ/2.0"/>
+        </sector>
+      </module>
+    </detector>
+  </detectors>
+
+  <readouts>
+    <readout name="LumiSpecTrackerHits">
+      <segmentation type="CartesianGridXY" grid_size_x="0.5*mm" grid_size_y="0.5*mm"/>
+      <id>system:8,sector:8,module:8,x:32:-16,y:-16</id>
+    </readout>
+  </readouts>
+
+</lccdd>
