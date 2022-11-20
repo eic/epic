@@ -95,9 +95,10 @@
 
 {% if 'solenoid' in features %}
   <documentation level="5">
-    ## Main magnet
+    ## Main magnet and its field
   </documentation>
   <include ref="${DETECTOR_PATH}/compact/solenoid.xml"/>
+  <include ref="${DETECTOR_PATH}/compact/fields/marco.xml"/>
 {% endif -%}
 
 {% if 'tracking' in features %}
