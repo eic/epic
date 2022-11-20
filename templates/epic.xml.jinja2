@@ -101,6 +101,15 @@
   <include ref="${DETECTOR_PATH}/compact/fields/marco.xml"/>
 {% endif -%}
 
+{% if 'fields' in features %}
+  <documentation level="5">
+    ## Electric and magnetic fields
+  </documentation>
+  {% for field in features['fields'] -%}
+  <include ref="${DETECTOR_PATH}/compact/fields/{{ field }}.xml"/>
+  {% endfor -%}
+{% endif -%}
+
 {% if 'tracking' in features %}
   <documentation level="10">
     ## Central tracking detectors
