@@ -447,11 +447,19 @@ static std::tuple<int, int> add_12surface_disk(Detector& desc, Assembly& env, xm
 
   // Inner supporting frame
   //
-  Tube   Ssolid_ring12(8.5 * cm, rmin, calo_module_length / 2., phimin, phimax);
-  Volume Sring12_vol("Sring12", Ssolid_ring12, ring_material);
-  Sring12_vol.setVisAttributes(desc.visAttributes(plm.attr<std::string>(_Unicode(vis_struc))));
-  Transform3D tr_global_Iring = RotationZYX(0., 0., 0.) * Translation3D(0., 0., 0.);
+  // Tube        Ssolid_ring12(8.5*cm, rmin, calo_module_length/2., phimin, phimax);
+  // Volume      Sring12_vol("Sring12", Ssolid_ring12, ring_material);
+  // Sring12_vol.setVisAttributes(desc.visAttributes(plm.attr<std::string>(_Unicode(vis_struc))));
+  // Transform3D tr_global_Iring = RotationZYX(0., 0., 0.) * Translation3D(0., 0., 0.);
 
+  EllipticalTube   inner_elliptical_support_a(7.*cm, 7.5*cm, 10.*cm);
+  EllipticalTube   inner_elliptical_support_b(6.5*cm, 7.*cm, 10.*cm);
+  SubtractionSolid inner_elliptical_support_substract(inner_elliptical_support_a, inner_elliptical_support_b, Position(0., 0., 0.));
+  Volume           inner_elliptical_vol("inner_elliptical", inner_elliptical_support_substract, ring_material);   
+  inner_elliptical_vol.setVisAttributes(desc.visAttributes(plm.attr<std::string>(_Unicode(vis_struc))));
+  Transform3D tr_global_Iring_elli = RotationZYX(0., 0., 0.) * Translation3D(1.*cm, 0., 0.);
+  
+  
   // Supporting frame for the cabling
   // Having overlapped with tracker barrelendcapsupporting structure, comment here until the size and position
   // determined
@@ -467,23 +475,28 @@ static std::tuple<int, int> add_12surface_disk(Detector& desc, Assembly& env, xm
 
   // Place frames and mother volume of modules into the world volume
   //
-  if (has_envelope) {
-    env.placeVolume(env_vol, tr_global);           // Place the mother volume for all modules
-    env.placeVolume(ring12_vol, tr_global_Oring);  // Place the outer supporting frame
-    env.placeVolume(Sring12_vol, tr_global_Iring); // Place the inner supporting frame
+  if (has_envelope)
+    {
+      env.placeVolume(env_vol, tr_global);                          // Place the mother volume for all modules
+      env.placeVolume(ring12_vol, tr_global_Oring);                 // Place the outer supporting frame
+      // env.placeVolume(Sring12_vol, tr_global_Iring);                // Place the inner supporting frame
 
-    // env.placeVolume(cabling_support12_V, tr_global_csfront);  // Place the front cabling frame(Only the holes are
-    // visible) env.placeVolume(cabling_support12_V, tr_global_csback);   // Place the back cabling frame(Only the holes
-    // are visible)
+      env.placeVolume(inner_elliptical_vol, tr_global_Iring_elli);  // Place the inner supporting frame
+      
+      // env.placeVolume(cabling_support12_V, tr_global_csfront);  // Place the front cabling frame(Only the holes are visible)
+      // env.placeVolume(cabling_support12_V, tr_global_csback);   // Place the back cabling frame(Only the holes are visible)
 
-    // for(int i = 0 ; i < 12 ; i++)
-    //   {
-    //     hole_pos = RotationZYX((15. + i * 30.)*degree, 0., 0.) * Translation3D(82.5*mm, 675.*mm, 0.);
-    //     cabling_support12_V.placeVolume(hole_V, hole_pos);
-    //     hole_pos = RotationZYX((15. + i * 30.)*degree, 0., 0.) * Translation3D(-82.5*mm, 675.*mm, 0.);
-    //     cabling_support12_V.placeVolume(hole_V, hole_pos);
-    //   }
-  }
+      // for(int i = 0 ; i < 12 ; i++)
+      //   {
+      //     hole_pos = RotationZYX((15. + i * 30.)*degree, 0., 0.) * Translation3D(82.5*mm, 675.*mm, 0.);
+      //     cabling_support12_V.placeVolume(hole_V, hole_pos);
+      //     hole_pos = RotationZYX((15. + i * 30.)*degree, 0., 0.) * Translation3D(-82.5*mm, 675.*mm, 0.);
+      //     cabling_support12_V.placeVolume(hole_V, hole_pos);
+      //   }
+    }
+
+
+
 
   // local placement of modules
   //
@@ -495,12 +508,16 @@ static std::tuple<int, int> add_12surface_disk(Detector& desc, Assembly& env, xm
   modPV.addPhysVolID("sector", sector_id).addPhysVolID("module", total_id);
 
   // Place the modules in the circle
-  for (auto& p : points) {
-    Transform3D tr_local = RotationZYX(-15. * degree, 0.0, 0.0) * Translation3D(p.x(), p.y(), 0.0);
-    modPV    = (has_envelope ? env_vol.placeVolume(modVol, tr_local) : env.placeVolume(modVol, tr_global * tr_local));
-    total_id = id_begin + mid++;
-    modPV.addPhysVolID("sector", sector_id).addPhysVolID("module", total_id);
-  }
+  for (auto& p : points)
+    {
+      Transform3D tr_local = RotationZYX(-15.*degree, 0.0, 0.0) * Translation3D(p.x(), p.y(), 0.0);
+      modPV = (has_envelope ? env_vol.placeVolume(modVol, tr_local) : env.placeVolume(modVol, tr_global * tr_local));
+      total_id = id_begin + mid++;
+      modPV.addPhysVolID("sector", sector_id).addPhysVolID("module", total_id);
+
+      // std::cout << p.x() << " || " << p.y() << std::endl;
+    }
+
 
   // Add the modules manually in the gap
   //
