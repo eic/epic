@@ -318,6 +318,21 @@ The unused IDs below are saved for future use.
     <constant name="Magnet_Q3eR_ID"         value="212"/>
     <constant name="Vacuum_in_Q3eR_ID"      value="213"/>
 
+    <constant name="Pipe_Q3eR_to_B7eR_ID"   value="226"/>
+    
+    <constant name="Pipe_Q3eR_to_Q4eR_ID"   value="214"/>
+    <constant name="Magnet_Q4eR_ID"         value="215"/>
+    <constant name="Pipe_Q4eR_to_B3eR_ID"   value="216"/>
+    <constant name="Magnet_B3eR_ID"         value="217"/>
+    <constant name="Pipe_B3eR_to_B4eR_ID"   value="218"/>
+    <constant name="Magnet_B4eR_ID"         value="219"/>
+    <constant name="Pipe_B4eR_to_B5eR_ID"   value="220"/>
+    <constant name="Magnet_B5eR_ID"         value="221"/>
+    <constant name="Pipe_B5eR_to_B6eR_ID"   value="222"/>
+    <constant name="Magnet_B6eR_ID"         value="223"/>
+    <constant name="Pipe_B6eR_to_B7eR_ID"   value="224"/>
+    <constant name="Magnet_B7eR_ID"         value="225"/>
+
     <documentation>
 ## Detector Definition Parameters
 

@@ -40,6 +40,51 @@
     <constant name="Q3eR_Theta"           value="0.0180766389*rad"/>
     <constant name="Q3eR_CenterPosition"  value="-37.996018*m"/>
 
+    <constant name="Q4eR_CenterZ"      value="-45.32*m"/>
+    <constant name="Q4eR_CenterX"      value="-0.58*m"/>
+    <constant name="Q4eR_Length"          value="0.6*m"/>
+    <constant name="Q4eR_InnerRadius"     value="0.05*m"/>
+    <constant name="Q4eR_OuterRadius"     value="0.075*m"/>
+    <constant name="Q4eR_Theta"      value="Q3eR_Theta"/>
+
+    <constant name="B3eR_CenterZ"      value="-50.01*m"/>
+    <constant name="B3eR_CenterX"      value="-0.67*m"/>
+    <constant name="B3eR_Length"      value="1.2*m"/>
+    <constant name="B3eR_InnerRadius"      value="0.05*m"/>
+    <constant name="B3eR_OuterRadius"      value="0.24*m"/>
+    <constant name="B3eR_Theta"      value="Q3eR_Theta*7/8"/>
+
+    <constant name="B4eR_CenterZ"      value="-55*m"/>
+    <constant name="B4eR_CenterX"      value="-0.79*m"/>
+    <constant name="B4eR_Length"      value="1.2*m"/>
+    <constant name="B4eR_InnerRadius"      value="0.05*m"/>
+    <constant name="B4eR_OuterRadius"      value="0.24*m"/>
+    <constant name="B4eR_Theta"      value="Q3eR_Theta*6/8"/>
+
+    <constant name="B5eR_CenterZ"      value="-59.98*m"/>
+    <constant name="B5eR_CenterX"      value="-0.93*m"/>
+    <constant name="B5eR_Length"      value="1.2*m"/>
+    <constant name="B5eR_InnerRadius"      value="0.05*m"/>
+    <constant name="B5eR_OuterRadius"      value="0.24*m"/>
+    <constant name="B5eR_Theta"      value="Q3eR_Theta*5/8"/>
+
+    <constant name="B6eR_CenterZ"      value="-64.97*m"/>
+    <constant name="B6eR_CenterX"      value="-1.05*m"/>
+    <constant name="B6eR_Length"      value="1.2*m"/>
+    <constant name="B6eR_InnerRadius"      value="0.05*m"/>
+    <constant name="B6eR_OuterRadius"      value="0.24*m"/>
+    <constant name="B6eR_Theta"      value="Q3eR_Theta*4/8"/>
+
+    <constant name="B7eR_CenterZ"      value="-69.96*m"/>
+    <constant name="B7eR_CenterX"      value="-1.19*m"/>
+    <constant name="B7eR_Length"      value="1.2*m"/>
+    <constant name="B7eR_InnerRadius"      value="0.05*m"/>
+    <constant name="B7eR_OuterRadius"      value="0.24*m"/>
+    <constant name="B7eR_Theta"      value="Q3eR_Theta*3/8"/>
+
+
+
+
     <comment> Hadron magnet dimensions and positions </comment>
 
     <constant name="Q1APR_InnerRadius"    value="Hadron_Beampipe_Rad"/>

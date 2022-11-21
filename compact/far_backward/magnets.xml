@@ -1,6 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <lccdd>
 
+<define>
+   <constant name="Rreduction" value="4*mm"/>
+   <constant name="Zreduction" value="0.5*mm"/>
+   </define>
+
   <detectors>
 
     <comment> Magnet volumes </comment>
@@ -37,6 +42,49 @@
       <placement  x="(Q3eR_StartX+Q3eR_EndX)/2" y="0" z="(Q3eR_StartZ+Q3eR_EndZ)/2" theta="Q3eR_Theta"/>
       <dimensions x="Q3eR_InnerRadius*4" y="Q3eR_InnerRadius*4" z="Q3eR_Length" r="1.5*Q3eR_InnerRadius"/>
       <apperture  x="Q3eR_InnerRadius*2" y="Q3eR_InnerRadius*2" r="Q3eR_InnerRadius"/>
+      <coil dx="2*cm" dy="1.5*cm" /><!--unchecked-->
+    </detector>
+
+
+    <detector id="Magnet_Q4eR_ID" name="Magnet_Q4eR" type="ip6_CylindricalDipoleMagnet" vis="FFMagnetVis">
+      <placement  x="Q4eR_CenterX" y="0" z="Q4eR_CenterZ" theta="Q4eR_Theta"/>
+      <dimensions x="0" y="0" z="Q4eR_Length" r="Q4eR_OuterRadius"/>
+      <apperture  x="0" y="0" r="Q4eR_InnerRadius"/>
+      <coil dx="2*cm" dy="1.5*cm" /><!--unchecked-->
+    </detector>
+
+    <detector id="Magnet_B3eR_ID" name="Magnet_B3eR" type="ip6_CylindricalDipoleMagnet" vis="FFMagnetVis">
+      <placement  x="B3eR_CenterX" y="0" z="B3eR_CenterZ" theta="B3eR_Theta"/>
+      <dimensions x="0" y="0" z="B3eR_Length" r="B3eR_OuterRadius"/>
+      <apperture  x="0" y="0" r="B3eR_InnerRadius"/>
+      <coil dx="2*cm" dy="1.5*cm" /><!--unchecked-->
+    </detector>
+
+    <detector id="Magnet_B4eR_ID" name="Magnet_B4eR" type="ip6_CylindricalDipoleMagnet" vis="FFMagnetVis">
+      <placement  x="B4eR_CenterX" y="0" z="B4eR_CenterZ" theta="B4eR_Theta"/>
+      <dimensions x="0" y="0" z="B4eR_Length" r="B4eR_OuterRadius"/>
+      <apperture  x="0" y="0" r="B4eR_InnerRadius"/>
+      <coil dx="2*cm" dy="1.5*cm" /><!--unchecked-->
+    </detector>
+
+    <detector id="Magnet_B5eR_ID" name="Magnet_B5eR" type="ip6_CylindricalDipoleMagnet" vis="FFMagnetVis">
+      <placement  x="B5eR_CenterX" y="0" z="B5eR_CenterZ" theta="B5eR_Theta"/>
+      <dimensions x="0" y="0" z="B5eR_Length" r="B5eR_OuterRadius"/>
+      <apperture  x="0" y="0" r="B5eR_InnerRadius"/>
+      <coil dx="2*cm" dy="1.5*cm" /><!--unchecked-->
+    </detector>
+    
+    <detector id="Magnet_B6eR_ID" name="Magnet_B6eR" type="ip6_CylindricalDipoleMagnet" vis="FFMagnetVis">
+      <placement  x="B6eR_CenterX" y="0" z="B6eR_CenterZ" theta="B6eR_Theta"/>
+      <dimensions x="0" y="0" z="B6eR_Length" r="B6eR_OuterRadius"/>
+      <apperture  x="0" y="0" r="B6eR_InnerRadius"/>
+      <coil dx="2*cm" dy="1.5*cm" /><!--unchecked-->
+    </detector>
+    
+    <detector id="Magnet_B7eR_ID" name="Magnet_B7eR" type="ip6_CylindricalDipoleMagnet" vis="FFMagnetVis">
+      <placement  x="B7eR_CenterX" y="0" z="B7eR_CenterZ" theta="B7eR_Theta"/>
+      <dimensions x="0" y="0" z="B7eR_Length" r="B7eR_OuterRadius"/>
+      <apperture  x="0" y="0" r="B7eR_InnerRadius"/>
       <coil dx="2*cm" dy="1.5*cm" /><!--unchecked-->
     </detector>
 
@@ -83,14 +131,79 @@
         end1z="B2BeR_CenterPosition+B2BeR_Length/2" end2z="B2BeR_CenterPosition-B2BeR_Length/2"/>
     </detector>
 
-    <detector name="Q3eRvac" type="DD4hep_TubeSegment" vis="BeamPipeVis">
+    <!-- <detector name="Q3eRvac" type="DD4hep_TubeSegment" vis="BeamPipeVis">
       <material name="Vacuum"/>
       <tubs rmin="Q3eR_InnerRadius-2*mm" rmax="Q3eR_InnerRadius" zhalf="Q3eR_Length/2"/>
       <position x="-(Q3eR_StartX+Q3eR_EndX)/2" y="0" z="(Q3eR_StartZ+Q3eR_EndZ)/2"/>
       <rotation x="0*rad"  y="Q3eR_Theta"   z="0*rad"/>
+    </detector> -->
+
+    <detector id="Pipe_Q3eR_to_B7eR_ID" name="Pipe_Q3eR_to_B7eR" type="FarBackwardsBeamPipes" wall_thickness="2*mm">
+      <pipe id="0" name="Pipe_Q3eR"
+        end1x="Q3eR_StartX" end2x="Q3eR_EndX"
+        end1z="Q3eR_StartZ" end2z="Q3eR_EndZ"
+        rout1="Q3eR_InnerRadius" rout2="Q3eR_InnerRadius">
+      </pipe>
+      <!--<pipe id="1" name="Pipe_Q3eR_to_Q4eR"
+        end1x="Q3eR_EndX" end2x="Q4eR_CenterX - Q4eR_Length/2*sin(Q4eR_Theta)"
+        end1z="Q3eR_EndZ" end2z="Q4eR_CenterZ - Q4eR_Length/2*cos(Q4eR_Theta)"
+        rout1="Q3eR_InnerRadius" rout2="Q4eR_InnerRadius">
+      </pipe>-->
+      <pipe id="2" name="Pipe_Q4eR"
+        end1x="Q4eR_CenterX + Q4eR_Length/2*sin(Q4eR_Theta)" end2x="Q4eR_CenterX - Q4eR_Length/2*sin(Q4eR_Theta)"
+        end1z="Q4eR_CenterZ + Q4eR_Length/2*cos(Q4eR_Theta)" end2z="Q4eR_CenterZ - Q4eR_Length/2*cos(Q4eR_Theta)"
+        rout1="Q4eR_InnerRadius" rout2="Q4eR_InnerRadius">
+      </pipe>
+      <!--<pipe id="3" name="Pipe_Q4eR_to_B3eR"
+        end1x="Q4eR_CenterX + Q4eR_Length/2*sin(Q4eR_Theta)" end2x="B3eR_CenterX - B3eR_Length/2*sin(B3eR_Theta)"
+        end1z="Q4eR_CenterZ - Q4eR_Length/2*cos(Q4eR_Theta)" end2z="B3eR_CenterZ + B3eR_Length/2*cos(B3eR_Theta)"
+        rout1="Q4eR_InnerRadius" rout2="B3eR_InnerRadius">
+      </pipe>-->
     </detector>
 
+
+    <!--
+    <detector id="Pipe_Q3eR_to_Q4eR_ID" name="Pipe_Q3eR_to_Q4eR" type="BackwardsBeamPipe">
+      <Pipe wall_thickness="2*mm" outerD1="2*Q4eR_InnerRadius - Rreduction" outerD2="2*Q4eR_InnerRadius - Rreduction"
+        end1x="(Q3eR_StartX + Q3eR_EndX)/2" end2x="Q4eR_CenterX"
+        end1z="Q3eR_EndZ - Zreduction" end2z="Q4eR_CenterZ + Zreduction"/>
+    </detector>
+
+    <detector id="Pipe_Q4eR_to_B3eR_ID" name="Pipe_Q4eR_to_B3eR" type="BackwardsBeamPipe">
+      <Pipe wall_thickness="2*mm" outerD1="2*Q4eR_InnerRadius - Rreduction" outerD2="2*B3eR_InnerRadius - Rreduction"
+        end1x="Q4eR_CenterX" end2x="B3eR_CenterX"
+        end1z="Q4eR_CenterZ - Zreduction" end2z="B3eR_CenterZ + Zreduction"/>
+    </detector>
+
+    <detector id="Pipe_B3eR_to_B4eR_ID" name="Pipe_B3eR_to_B4eR" type="BackwardsBeamPipe">
+      <Pipe wall_thickness="2*mm" outerD1="2*B3eR_InnerRadius - Rreduction" outerD2="2*B4eR_InnerRadius - Rreduction"
+        end1x="B3eR_CenterX" end2x="B4eR_CenterX"
+        end1z="B3eR_CenterZ - Zreduction" end2z="B4eR_CenterZ + Zreduction"/>
+    </detector>
+
+    <detector id="Pipe_B4eR_to_B5eR_ID" name="Pipe_B4eR_to_B5eR" type="BackwardsBeamPipe">
+      <Pipe wall_thickness="2*mm" outerD1="2*B4eR_InnerRadius - Rreduction" outerD2="2*B5eR_InnerRadius - Rreduction"
+        end1x="B4eR_CenterX" end2x="B5eR_CenterX"
+        end1z="B4eR_CenterZ - Zreduction" end2z="B5eR_CenterZ + Zreduction"/>
+    </detector>
+
+
+    <detector id="Pipe_B5eR_to_B6eR_ID" name="Pipe_B5eR_to_B6eR" type="BackwardsBeamPipe">
+      <Pipe wall_thickness="2*mm" outerD1="2*B5eR_InnerRadius - Rreduction" outerD2="2*B6eR_InnerRadius - Rreduction"
+        end1x="B5eR_CenterX" end2x="B6eR_CenterX"
+        end1z="B5eR_CenterZ - Zreduction" end2z="B6eR_CenterZ + Zreduction"/>
+    </detector>
+
+    <detector id="Pipe_B6eR_to_B7eR_ID" name="Pipe_B6eR_to_B7eR" type="BackwardsBeamPipe">
+      <Pipe wall_thickness="2*mm" outerD1="2*B6eR_InnerRadius - Rreduction" outerD2="2*B7eR_InnerRadius - Rreduction"
+        end1x="B6eR_CenterX" end2x="B7eR_CenterX"
+        end1z="B6eR_CenterZ - Zreduction" end2z="B7eR_CenterZ + Zreduction"/>
+    </detector>
+-->
+
   </detectors>
+
+
 
   <fields>
 
