@@ -44,6 +44,11 @@
                   zmax="EcalBarrelForward_zmax" zmin="-EcalBarrelBackward_zmax"
                   etamin="EcalBarrel_etamin" etamax="EcalBarrel_etamax"/>
 
+      <documentation>
+        Pick the material for the towers
+      </documentation>
+      <material name="SciGlass" />
+
       <comment>
 	The current implementation of the wedge box approximates flat inner
 	surfaces of individual wedge boxes with a single shared tube at a fixed
@@ -111,8 +116,8 @@
 
       <outer_supports>
         <comment>
-	  "EMCal Outer Surface" from the menagerie and tower support before it.
-	  Extra 1.5 cm is supposed to represent the aluminum tower support,
+          "EMCal Outer Surface" from the menagerie and tower support before it.
+          Extra 1.5 cm is supposed to represent the aluminum tower support,
           which is supposed to have a more complicated shape.
         </comment>
         <layer inner_r="129.0 * cm" thickness="(1 * cm) + (1.5 * cm)" material="Aluminum5083" vis="outer_support_aluminum" />
