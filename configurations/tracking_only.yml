@@ -1,4 +1,6 @@
 features:
+  fields:
+    marco:
   tracking:
     vertex_barrel:
     silicon_barrel:

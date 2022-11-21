@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<lccdd>
+  <fields>
+    <field type="epic_FieldMapBrBz" name="GlobalSolenoid" field_type="magnetic"
+           field_map="fieldmaps/MARCO_v.6.4.1.1.3_1.7T_Magnetic_Field_Map_2022_11_14_rad_coords_cm_T.txt"
+           url="https://github.com/eic/epic-data/raw/64b7ca6306b138b7f000e696c82bd8f72db1da56/MARCO_v.6.4.1.1.3_1.7T_Magnetic_Field_Map_2022_11_14_rad_coords_cm_T.txt"
+           cache="$DETECTOR_PATH:/opt/detector"
+           scale="1.0">
+      <dimensions>
+        <transverse step="2.0*cm" rmin="0*cm" rmax="998*cm" />
+        <longitudinal step="2.0*cm" zmin="-800*cm" zmax="798*cm" />
+        <translation x="0.0*cm" y="0.0*cm" z="0.0*cm" />
+        <rotation x="0" y="0" z="0" />
+      </dimensions>
+    </field>
+  </fields>
+</lccdd>
