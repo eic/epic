@@ -279,8 +279,8 @@ static Ref_t create_detector(Detector &lcdd, xml_h handle,
                       Transform3D{RotationX{-M_PI / 2 + dir_sign * beta}} *
                       Transform3D{Position{0, dir_sign * y1, z}})
               .addPhysVolID("sector", sector)
-              .addPhysVolID("module", row)
-              .addPhysVolID("slice", tower_id)
+              .addPhysVolID("row", row)
+              .addPhysVolID("tower", tower_id)
               .volume()
               .setSensitiveDetector(sens)
               .setVisAttributes(lcdd.visAttributes(family_dim_handle.visStr()));
