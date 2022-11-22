@@ -15,7 +15,7 @@
     <constant name="ZDC_Crystal_nx"             value="ZDC_Crystal_active_x/ZDC_Crystal_cell_width"/>
     <constant name="ZDC_Crystal_ny"             value="ZDC_Crystal_active_y/ZDC_Crystal_cell_width"/>
     <constant name="ZDC_Crystal_APD_socket_z"   value="2.5*mm"/>
-    <constant name="ZDC_Crystal_space"          value="3*cm"/>
+    <constant name="ZDC_Crystal_space"          value="2.8*cm"/>
   </define>
 
   <detectors>

@@ -29,7 +29,7 @@
     <constant name="ZDC_1stSilicon_rotateY_angle"   value="ZDC_rotateY_angle"/>
     <constant name="ZDC_1stSilicon_rotateZ_angle"   value="ZDC_rotateZ_angle"/>
 
-    <constant name="ZDC_Crystal_r_pos"           value="ZDC_r_pos + 5 *cm "/>
+    <constant name="ZDC_Crystal_r_pos"           value="ZDC_r_pos + 5.9 *cm "/>
     <constant name="ZDC_Crystal_z_pos"           value="ZDC_Crystal_r_pos * cos(ionCrossingAngle)"/>
     <constant name="ZDC_Crystal_x_pos"           value="-1.* ZDC_Crystal_r_pos * sin(ionCrossingAngle)"/>
     <constant name="ZDC_Crystal_y_pos"           value="ZDC_y_pos"/>
@@ -38,7 +38,7 @@
     <constant name="ZDC_Crystal_rotateZ_angle"   value="ZDC_rotateZ_angle"/>
     <constant name="ZDC_Crystal_width"           value="ZDC_width"/>
 
-    <constant name="ZDC_WSi_r_pos"               value="ZDC_r_pos + 23 . *cm"/>
+    <constant name="ZDC_WSi_r_pos"               value="ZDC_r_pos + 23*cm"/>
     <constant name="ZDC_WSi_z_pos"               value="ZDC_WSi_r_pos * cos(ionCrossingAngle)"/>
     <constant name="ZDC_WSi_x_pos"               value="-1. * ZDC_WSi_r_pos * sin(ionCrossingAngle)"/>
     <constant name="ZDC_WSi_y_pos"               value="ZDC_y_pos"/>
