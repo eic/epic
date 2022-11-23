@@ -74,21 +74,119 @@
 
     <!-- Q3PR -->
     <detector name="Pipe_Q2PR_to_Q3PR" type="BackwardsBeamPipe">
-      <Pipe wall_thickness="Hadron_Beampipe_Thickness" outerD1="Hadron_Beampipe_Rad" outerD2="Hadron_Beampipe_Rad"
+      <Pipe wall_thickness="Hadron_Beampipe_Thickness" outerD1="2*Hadron_Beampipe_Rad" outerD2="2*Hadron_Beampipe_Rad"
         end1z="Q2PR_EndZ" end2z="Q3PR_StartZ" end1x="Q2PR_EndX" end2x="Q3PR_StartX"/>
     </detector>
 
     <detector name="Magnet_Q3PR" type="ip6_CylindricalDipoleMagnet" vis="RedVis">
-      <placement  x="(Q3PR_StartX+Q3PR_EndX)/2" y="0" z="(Q3PR_StartZ+Q3PR_EndZ)/2" theta="Q2PR_Theta"/>
-      <dimensions x="Q3PR_InnerRadius*4" y="Q3PR_InnerRadius*4" z="Q3PR_Length" r="2.0*Q3PR_InnerRadius"/>
-      <apperture  x="Q3PR_InnerRadius*2" y="Q3PR_InnerRadius*2" r="Q3PR_InnerRadius"/>
+      <placement  x="(Q3PR_StartX+Q3PR_EndX)/2" y="0" z="(Q3PR_StartZ+Q3PR_EndZ)/2" theta="Q3PR_Theta"/>
+      <dimensions x="0" y="0" z="Q3PR_Length" r="Q3PR_OuterRadius"/>
+      <apperture  x="0" y="0" r="Q3PR_InnerRadius"/>
       <coil dx="2*cm" dy="1.5*cm" />
     </detector>
 
-    <detector name="Pipe_in_Q3PR" type="BackwardsBeamPipe">
+    <!--<detector name="Pipe_in_Q3PR" type="BackwardsBeamPipe">
       <Pipe wall_thickness="Hadron_Beampipe_Thickness" outerD1="Hadron_Beampipe_Rad" outerD2="Hadron_Beampipe_Rad"
         end1z="Q3PR_StartZ" end2z="Q3PR_EndZ" end1x="Q3PR_StartX" end2x="Q3PR_EndX"/>
-    </detector>
+    </detector> -->
+
+
+ <detector name="Magnet_Crab1PR" type="ip6_CylindricalDipoleMagnet" vis="RedVis">
+ <placement  x="Crab1PR_CenterX" y="0" z="Crab1PR_CenterZ" theta="Crab1PR_Theta"/>
+      <dimensions x="0" y="0" z="Crab1PR_Length" r="Crab1PR_OuterRadius"/>
+      <apperture  x="0" y="0" r="Crab1PR_InnerRadius"/>
+      <coil dx="2*cm" dy="1.5*cm" /><!--unchecked-->
+ </detector>
+<detector name="Magnet_Crab2PR" type="ip6_CylindricalDipoleMagnet" vis="RedVis">
+ <placement  x="Crab2PR_CenterX" y="0" z="Crab2PR_CenterZ" theta="Crab2PR_Theta"/>
+      <dimensions x="0" y="0" z="Crab2PR_Length" r="Crab2PR_OuterRadius"/>
+      <apperture  x="0" y="0" r="Crab2PR_InnerRadius"/>
+      <coil dx="2*cm" dy="1.5*cm" /><!--unchecked-->
+ </detector>
+<detector name="Magnet_Crab3PR" type="ip6_CylindricalDipoleMagnet" vis="RedVis">
+ <placement  x="Crab3PR_CenterX" y="0" z="Crab3PR_CenterZ" theta="Crab3PR_Theta"/>
+      <dimensions x="0" y="0" z="Crab3PR_Length" r="Crab3PR_OuterRadius"/>
+      <apperture  x="0" y="0" r="Crab3PR_InnerRadius"/>
+      <coil dx="2*cm" dy="1.5*cm" /><!--unchecked-->
+ </detector>
+<detector name="Magnet_Q4PR" type="ip6_CylindricalDipoleMagnet" vis="RedVis">
+ <placement  x="Q4PR_CenterX" y="0" z="Q4PR_CenterZ" theta="Q4PR_Theta"/>
+      <dimensions x="0" y="0" z="Q4PR_Length" r="Q4PR_OuterRadius"/>
+      <apperture  x="0" y="0" r="Q4PR_InnerRadius"/>
+      <coil dx="2*cm" dy="1.5*cm" /><!--unchecked-->
+ </detector>
+<detector name="Magnet_B1PR" type="ip6_CylindricalDipoleMagnet" vis="RedVis">
+ <placement  x="B1PR_CenterX" y="0" z="B1PR_CenterZ" theta="B1PR_Theta"/>
+      <dimensions x="0" y="0" z="B1PR_Length" r="B1PR_OuterRadius"/>
+      <apperture  x="0" y="0" r="B1PR_InnerRadius"/>
+      <coil dx="2*cm" dy="1.5*cm" /><!--unchecked-->
+ </detector>
+
+
+ <!-- Far backward ion beam pipes -->
+ 
+ <detector id="Pipe_Q3PR_to_B1PR_ID" name="Pipe_Q3PR_to_B1PR" type="FarBackwardsBeamPipes" wall_thickness="2*mm">
+      <pipe id="0" name="Pipe_Q3PR"
+        xcenter="Q3PR_CenterX" zcenter="Q3PR_CenterZ" 
+        length="Q3PR_Length" theta="Q3PR_Theta"
+        rout1="Q3PR_InnerRadius" rout2="Q3PR_InnerRadius">
+      </pipe>
+      <pipe id="1" name="Pipe_Q3PR_to_Crab1PR"
+        xcenter="( Q3PR_CenterX - Q3PR_Length/2*sin(Q3PR_Theta) + Crab1PR_CenterX + Crab1PR_Length/2*sin(Crab1PR_Theta) )/2" 
+        zcenter="( Q3PR_CenterZ - Q3PR_Length/2*cos(Q3PR_Theta) + Crab1PR_CenterZ + Crab1PR_Length/2*cos(Crab1PR_Theta) )/2"
+        length="sqrt( pow(Q3PR_CenterX - Crab1PR_CenterX, 2) + pow(Q3PR_CenterZ - Crab1PR_CenterZ - (Q3PR_Length + Crab1PR_Length)/2, 2) ) - 1.5*cm" 
+        theta="CrossingAngle"
+        rout1="Q3PR_InnerRadius" rout2="Crab1PR_InnerRadius">
+      </pipe>
+      <pipe id="2" name="Pipe_Crab1PR"
+        xcenter="Crab1PR_CenterX" zcenter="Crab1PR_CenterZ" 
+        length="Crab1PR_Length" theta="Crab1PR_Theta"
+        rout1="Crab1PR_InnerRadius" rout2="Crab1PR_InnerRadius">
+      </pipe>
+      <pipe id="3" name="Pipe_Crab2PR"
+        xcenter="Crab2PR_CenterX" zcenter="Crab2PR_CenterZ" 
+        length="Crab2PR_Length" theta="Crab2PR_Theta"
+        rout1="Crab2PR_InnerRadius" rout2="Crab2PR_InnerRadius">
+      </pipe>
+      <pipe id="4" name="Pipe_Crab2PR_to_Crab3PR"
+        xcenter="( Crab2PR_CenterX - Crab2PR_Length/2*sin(Crab2PR_Theta) + Crab3PR_CenterX + Crab3PR_Length/2*sin(Crab3PR_Theta) )/2" 
+        zcenter="( Crab2PR_CenterZ - Crab2PR_Length/2*cos(Crab2PR_Theta) + Crab3PR_CenterZ + Crab3PR_Length/2*cos(Crab3PR_Theta) )/2"
+        length="sqrt( pow(Crab2PR_CenterX - Crab3PR_CenterX, 2) + pow(Crab2PR_CenterZ - Crab3PR_CenterZ - (Crab2PR_Length + Crab3PR_Length)/2, 2) ) - 1.5*cm" 
+        theta="CrossingAngle"
+        rout1="Crab2PR_InnerRadius" rout2="Crab3PR_InnerRadius">
+      </pipe>
+      <pipe id="5" name="Pipe_Crab3PR"
+        xcenter="Crab3PR_CenterX" zcenter="Crab3PR_CenterZ" 
+        length="Crab3PR_Length" theta="Crab3PR_Theta"
+        rout1="Crab3PR_InnerRadius" rout2="Crab3PR_InnerRadius">
+      </pipe>
+      <pipe id="6" name="Pipe_Crab3PR_to_Q4PR"
+        xcenter="( Crab3PR_CenterX - Crab3PR_Length/2*sin(Crab3PR_Theta) + Q4PR_CenterX + Q4PR_Length/2*sin(Q4PR_Theta) )/2" 
+        zcenter="( Crab3PR_CenterZ - Crab3PR_Length/2*cos(Crab3PR_Theta) + Q4PR_CenterZ + Q4PR_Length/2*cos(Q4PR_Theta) )/2"
+        length="sqrt( pow(Crab3PR_CenterX - Q4PR_CenterX, 2) + pow(Crab3PR_CenterZ - Q4PR_CenterZ - (Crab3PR_Length + Q4PR_Length)/2, 2) ) - 1.5*cm" 
+        theta="CrossingAngle"
+        rout1="Crab3PR_InnerRadius" rout2="Q4PR_InnerRadius">
+      </pipe>
+      <pipe id="7" name="Pipe_Q4PR"
+        xcenter="Q4PR_CenterX" zcenter="Q4PR_CenterZ" 
+        length="Q4PR_Length" theta="Q4PR_Theta"
+        rout1="Q4PR_InnerRadius" rout2="Q4PR_InnerRadius">
+      </pipe>
+      <pipe id="8" name="Pipe_Q4PR_to_B1PR"
+        xcenter="( Q4PR_CenterX - Q4PR_Length/2*sin(Q4PR_Theta) + B1PR_CenterX + B1PR_Length/2*sin(B1PR_Theta) )/2" 
+        zcenter="( Q4PR_CenterZ - Q4PR_Length/2*cos(Q4PR_Theta) + B1PR_CenterZ + B1PR_Length/2*cos(B1PR_Theta) )/2"
+        length="sqrt( pow(Q4PR_CenterX - B1PR_CenterX, 2) + pow(Q4PR_CenterZ - B1PR_CenterZ - (Q4PR_Length + B1PR_Length)/2, 2) ) - 1.5*cm" 
+        theta="CrossingAngle"
+        rout1="Q4PR_InnerRadius" rout2="B1PR_InnerRadius">
+      </pipe>
+      <pipe id="9" name="Pipe_B1PR"
+        xcenter="B1PR_CenterX" zcenter="B1PR_CenterZ" 
+        length="B1PR_Length" theta="B1PR_Theta"
+        rout1="B1PR_InnerRadius" rout2="B1PR_InnerRadius">
+      </pipe>
+</detector>
+
+
 
   </detectors>
 </lccdd>

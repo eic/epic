@@ -40,8 +40,8 @@
 
     <detector id="Magnet_Q3eR_ID" name="Magnet_Q3eR" type="ip6_CylindricalDipoleMagnet" vis="FFMagnetVis">
       <placement  x="(Q3eR_StartX+Q3eR_EndX)/2" y="0" z="(Q3eR_StartZ+Q3eR_EndZ)/2" theta="Q3eR_Theta"/>
-      <dimensions x="Q3eR_InnerRadius*4" y="Q3eR_InnerRadius*4" z="Q3eR_Length" r="1.5*Q3eR_InnerRadius"/>
-      <apperture  x="Q3eR_InnerRadius*2" y="Q3eR_InnerRadius*2" r="Q3eR_InnerRadius"/>
+      <dimensions x="0" y="0" z="Q3eR_Length" r="4*Q3eR_InnerRadius"/>
+      <apperture  x="0" y="0" r="Q3eR_InnerRadius"/>
       <coil dx="2*cm" dy="1.5*cm" /><!--unchecked-->
     </detector>
 
@@ -131,76 +131,90 @@
         end1z="B2BeR_CenterPosition+B2BeR_Length/2" end2z="B2BeR_CenterPosition-B2BeR_Length/2"/>
     </detector>
 
-    <!-- <detector name="Q3eRvac" type="DD4hep_TubeSegment" vis="BeamPipeVis">
-      <material name="Vacuum"/>
-      <tubs rmin="Q3eR_InnerRadius-2*mm" rmax="Q3eR_InnerRadius" zhalf="Q3eR_Length/2"/>
-      <position x="-(Q3eR_StartX+Q3eR_EndX)/2" y="0" z="(Q3eR_StartZ+Q3eR_EndZ)/2"/>
-      <rotation x="0*rad"  y="Q3eR_Theta"   z="0*rad"/>
-    </detector> -->
 
+    <!-- Beam pipe going from Q3eR to B7eR -->
     <detector id="Pipe_Q3eR_to_B7eR_ID" name="Pipe_Q3eR_to_B7eR" type="FarBackwardsBeamPipes" wall_thickness="2*mm">
       <pipe id="0" name="Pipe_Q3eR"
-        end1x="Q3eR_StartX" end2x="Q3eR_EndX"
-        end1z="Q3eR_StartZ" end2z="Q3eR_EndZ"
+        xcenter="Q3eR_XPosition" zcenter="Q3eR_CenterPosition" 
+        length="Q3eR_Length" theta="Q3eR_Theta"
         rout1="Q3eR_InnerRadius" rout2="Q3eR_InnerRadius">
       </pipe>
-      <!--<pipe id="1" name="Pipe_Q3eR_to_Q4eR"
-        end1x="Q3eR_EndX" end2x="Q4eR_CenterX - Q4eR_Length/2*sin(Q4eR_Theta)"
-        end1z="Q3eR_EndZ" end2z="Q4eR_CenterZ - Q4eR_Length/2*cos(Q4eR_Theta)"
+      <pipe id="1" name="Pipe_Q3eR_to_Q4eR"
+        xcenter="( Q3eR_XPosition - Q3eR_Length/2*sin(Q3eR_Theta) + Q4eR_CenterX + Q4eR_Length/2*sin(Q4eR_Theta) )/2" 
+        zcenter="( Q3eR_CenterPosition - Q3eR_Length/2*cos(Q3eR_Theta) + Q4eR_CenterZ + Q4eR_Length/2*cos(Q4eR_Theta) )/2"
+        length="sqrt( pow(Q3eR_XPosition - Q4eR_CenterX, 2) + pow(Q3eR_CenterPosition - Q4eR_CenterZ - (Q3eR_Length + Q4eR_Length)/2, 2) ) - 1*cm" 
+        theta="atan( (Q3eR_XPosition - Q4eR_CenterX) / (Q3eR_CenterPosition - Q4eR_CenterZ - Q3eR_Length + Q4eR_Length) )"
         rout1="Q3eR_InnerRadius" rout2="Q4eR_InnerRadius">
-      </pipe>-->
+      </pipe>
       <pipe id="2" name="Pipe_Q4eR"
-        end1x="Q4eR_CenterX + Q4eR_Length/2*sin(Q4eR_Theta)" end2x="Q4eR_CenterX - Q4eR_Length/2*sin(Q4eR_Theta)"
-        end1z="Q4eR_CenterZ + Q4eR_Length/2*cos(Q4eR_Theta)" end2z="Q4eR_CenterZ - Q4eR_Length/2*cos(Q4eR_Theta)"
+        xcenter="Q4eR_CenterX" zcenter="Q4eR_CenterZ" 
+        length="Q4eR_Length" theta="Q4eR_Theta"
         rout1="Q4eR_InnerRadius" rout2="Q4eR_InnerRadius">
       </pipe>
-      <!--<pipe id="3" name="Pipe_Q4eR_to_B3eR"
-        end1x="Q4eR_CenterX + Q4eR_Length/2*sin(Q4eR_Theta)" end2x="B3eR_CenterX - B3eR_Length/2*sin(B3eR_Theta)"
-        end1z="Q4eR_CenterZ - Q4eR_Length/2*cos(Q4eR_Theta)" end2z="B3eR_CenterZ + B3eR_Length/2*cos(B3eR_Theta)"
+      <pipe id="3" name="Pipe_Q4eR_to_B3eR"
+        xcenter="( Q4eR_CenterX - Q4eR_Length/2*sin(Q4eR_Theta) + B3eR_CenterX + B3eR_Length/2*sin(B3eR_Theta) )/2" 
+        zcenter="( Q4eR_CenterZ - Q4eR_Length/2*cos(Q4eR_Theta) + B3eR_CenterZ + B3eR_Length/2*cos(B3eR_Theta) )/2"
+        length="sqrt( pow(Q4eR_CenterX - B3eR_CenterX, 2) + pow(Q4eR_CenterZ - B3eR_CenterZ - (Q4eR_Length + B3eR_Length)/2, 2) )-1*cm" 
+        theta="atan( (Q4eR_CenterX - B3eR_CenterX) / (Q4eR_CenterZ - B3eR_CenterZ - Q4eR_Length + B3eR_Length) )"
         rout1="Q4eR_InnerRadius" rout2="B3eR_InnerRadius">
-      </pipe>-->
+      </pipe>
+      <pipe id="4" name="Pipe_B3eR"
+        xcenter="B3eR_CenterX" zcenter="B3eR_CenterZ" 
+        length="B3eR_Length" theta="B3eR_Theta"
+        rout1="B3eR_InnerRadius" rout2="B3eR_InnerRadius">
+      </pipe>
+      <pipe id="5" name="Pipe_B3eR_to_B4eR"
+        xcenter="( B3eR_CenterX - B3eR_Length/2*sin(B3eR_Theta) + B4eR_CenterX + B4eR_Length/2*sin(B4eR_Theta) )/2" 
+        zcenter="( B3eR_CenterZ - B3eR_Length/2*cos(B3eR_Theta) + B4eR_CenterZ + B4eR_Length/2*cos(B4eR_Theta) )/2"
+        length="sqrt( pow(B3eR_CenterX - B4eR_CenterX, 2) + pow(B3eR_CenterZ - B4eR_CenterZ - (B3eR_Length+B4eR_Length)/2, 2) ) - 1*cm" 
+        theta="atan( (B3eR_CenterX - B4eR_CenterX) / (B3eR_CenterZ - B4eR_CenterZ - B3eR_Length + B4eR_Length) )"
+        rout1="B3eR_InnerRadius" rout2="B4eR_InnerRadius">
+      </pipe>
+      <pipe id="6" name="Pipe_B4eR"
+        xcenter="B4eR_CenterX" zcenter="B4eR_CenterZ" 
+        length="B4eR_Length" theta="B4eR_Theta"
+        rout1="B4eR_InnerRadius" rout2="B4eR_InnerRadius">
+      </pipe>
+      <pipe id="7" name="Pipe_B4eR_to_B5eR"
+        xcenter="( B4eR_CenterX - B4eR_Length/2*sin(B4eR_Theta) + B5eR_CenterX + B5eR_Length/2*sin(B5eR_Theta) )/2" 
+        zcenter="( B4eR_CenterZ - B4eR_Length/2*cos(B4eR_Theta) + B5eR_CenterZ + B5eR_Length/2*cos(B5eR_Theta) )/2"
+        length="sqrt( pow(B4eR_CenterX - B5eR_CenterX, 2) + pow(B4eR_CenterZ - B5eR_CenterZ - (B4eR_Length+B5eR_Length)/2, 2) ) - 1*cm" 
+        theta="atan( (B4eR_CenterX - B5eR_CenterX) / (B4eR_CenterZ - B5eR_CenterZ - B4eR_Length + B5eR_Length) )"
+        rout1="B4eR_InnerRadius" rout2="B5eR_InnerRadius">
+      </pipe>
+      <pipe id="8" name="Pipe_B5eR"
+        xcenter="B5eR_CenterX" zcenter="B5eR_CenterZ" 
+        length="B5eR_Length" theta="B5eR_Theta"
+        rout1="B5eR_InnerRadius" rout2="B5eR_InnerRadius">
+      </pipe>
+      <pipe id="9" name="Pipe_B5eR_to_B6eR"
+        xcenter="( B5eR_CenterX - B5eR_Length/2*sin(B5eR_Theta) + B6eR_CenterX + B6eR_Length/2*sin(B6eR_Theta) )/2" 
+        zcenter="( B5eR_CenterZ - B5eR_Length/2*cos(B5eR_Theta) + B6eR_CenterZ + B6eR_Length/2*cos(B6eR_Theta) )/2"
+        length="sqrt( pow(B5eR_CenterX - B6eR_CenterX, 2) + pow(B5eR_CenterZ - B6eR_CenterZ - (B5eR_Length+B6eR_Length)/2, 2) ) - 1*cm" 
+        theta="atan( (B5eR_CenterX - B6eR_CenterX) / (B5eR_CenterZ - B6eR_CenterZ - B5eR_Length + B6eR_Length) )"
+        rout1="B5eR_InnerRadius" rout2="B6eR_InnerRadius">
+      </pipe>
+      <pipe id="10" name="Pipe_B6eR"
+        xcenter="B6eR_CenterX" zcenter="B6eR_CenterZ" 
+        length="B6eR_Length" theta="B6eR_Theta"
+        rout1="B6eR_InnerRadius" rout2="B6eR_InnerRadius">
+      </pipe>
+      <pipe id="11" name="Pipe_B6eR_to_B7eR"
+        xcenter="( B6eR_CenterX - B6eR_Length/2*sin(B6eR_Theta) + B7eR_CenterX + B7eR_Length/2*sin(B7eR_Theta) )/2" 
+        zcenter="( B6eR_CenterZ - B6eR_Length/2*cos(B6eR_Theta) + B7eR_CenterZ + B7eR_Length/2*cos(B7eR_Theta) )/2"
+        length="sqrt( pow(B6eR_CenterX - B7eR_CenterX, 2) + pow(B6eR_CenterZ - B7eR_CenterZ - (B6eR_Length+B7eR_Length)/2, 2) ) - 1*cm" 
+        theta="atan( (B6eR_CenterX - B7eR_CenterX) / (B6eR_CenterZ - B7eR_CenterZ - B6eR_Length + B7eR_Length) )"
+        rout1="B6eR_InnerRadius" rout2="B7eR_InnerRadius">
+      </pipe>
+      <pipe id="12" name="Pipe_B7eR"
+        xcenter="B7eR_CenterX" zcenter="B7eR_CenterZ" 
+        length="B7eR_Length" theta="B7eR_Theta"
+        rout1="B7eR_InnerRadius" rout2="B7eR_InnerRadius">
+      </pipe> 
     </detector>
 
 
-    <!--
-    <detector id="Pipe_Q3eR_to_Q4eR_ID" name="Pipe_Q3eR_to_Q4eR" type="BackwardsBeamPipe">
-      <Pipe wall_thickness="2*mm" outerD1="2*Q4eR_InnerRadius - Rreduction" outerD2="2*Q4eR_InnerRadius - Rreduction"
-        end1x="(Q3eR_StartX + Q3eR_EndX)/2" end2x="Q4eR_CenterX"
-        end1z="Q3eR_EndZ - Zreduction" end2z="Q4eR_CenterZ + Zreduction"/>
-    </detector>
-
-    <detector id="Pipe_Q4eR_to_B3eR_ID" name="Pipe_Q4eR_to_B3eR" type="BackwardsBeamPipe">
-      <Pipe wall_thickness="2*mm" outerD1="2*Q4eR_InnerRadius - Rreduction" outerD2="2*B3eR_InnerRadius - Rreduction"
-        end1x="Q4eR_CenterX" end2x="B3eR_CenterX"
-        end1z="Q4eR_CenterZ - Zreduction" end2z="B3eR_CenterZ + Zreduction"/>
-    </detector>
-
-    <detector id="Pipe_B3eR_to_B4eR_ID" name="Pipe_B3eR_to_B4eR" type="BackwardsBeamPipe">
-      <Pipe wall_thickness="2*mm" outerD1="2*B3eR_InnerRadius - Rreduction" outerD2="2*B4eR_InnerRadius - Rreduction"
-        end1x="B3eR_CenterX" end2x="B4eR_CenterX"
-        end1z="B3eR_CenterZ - Zreduction" end2z="B4eR_CenterZ + Zreduction"/>
-    </detector>
-
-    <detector id="Pipe_B4eR_to_B5eR_ID" name="Pipe_B4eR_to_B5eR" type="BackwardsBeamPipe">
-      <Pipe wall_thickness="2*mm" outerD1="2*B4eR_InnerRadius - Rreduction" outerD2="2*B5eR_InnerRadius - Rreduction"
-        end1x="B4eR_CenterX" end2x="B5eR_CenterX"
-        end1z="B4eR_CenterZ - Zreduction" end2z="B5eR_CenterZ + Zreduction"/>
-    </detector>
-
-
-    <detector id="Pipe_B5eR_to_B6eR_ID" name="Pipe_B5eR_to_B6eR" type="BackwardsBeamPipe">
-      <Pipe wall_thickness="2*mm" outerD1="2*B5eR_InnerRadius - Rreduction" outerD2="2*B6eR_InnerRadius - Rreduction"
-        end1x="B5eR_CenterX" end2x="B6eR_CenterX"
-        end1z="B5eR_CenterZ - Zreduction" end2z="B6eR_CenterZ + Zreduction"/>
-    </detector>
-
-    <detector id="Pipe_B6eR_to_B7eR_ID" name="Pipe_B6eR_to_B7eR" type="BackwardsBeamPipe">
-      <Pipe wall_thickness="2*mm" outerD1="2*B6eR_InnerRadius - Rreduction" outerD2="2*B7eR_InnerRadius - Rreduction"
-        end1x="B6eR_CenterX" end2x="B7eR_CenterX"
-        end1z="B6eR_CenterZ - Zreduction" end2z="B7eR_CenterZ + Zreduction"/>
-    </detector>
--->
-
+   
   </detectors>
 
 
