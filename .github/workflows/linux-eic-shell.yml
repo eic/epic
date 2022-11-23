@@ -25,6 +25,20 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+  meta:
+    steps:
+    - name: Save metadata
+      run: |
+        echo "GITHUB_SERVER_URL=${{ github.server_url }}" >> meta.env
+        echo "GITHUB_REPOSITORY=${{ github.repository }}" >> meta.env
+        echo "GITHUB_REF=${{ github.ref }}" >> meta.env
+        echo "GITHUB_REF_NAME=${{ github.event.pull_request.head.ref || github.ref_name }}" >> meta.env
+        echo "GITHUB_SHA=${{ github.event.pull_request.head.sha || github.sha }}" >> meta.env
+    - uses: actions/upload-artifact@v2
+      with:
+        name: meta
+        path: meta.env
+
   xmllint-before-build:
     runs-on: ubuntu-latest
     steps:
@@ -479,38 +493,6 @@ jobs:
           python scripts/checkOverlaps.py -c ${DETECTOR_PATH}/${{ matrix.detector_config }}.xml | tee doc/overlap_check_geant4.out
           noverlaps="$(grep -c GeomVol1002 doc/overlap_check_geant4.out || true)"
           if [[ "${noverlaps}" -gt "0" ]] ; then echo "${noverlaps} overlaps found!" && false ; fi
-
-  trigger-detector-benchmarks:
-    runs-on: ubuntu-latest
-    needs: [check-overlap-tgeo, check-overlap-geant4-fast]
-    strategy:
-      matrix:
-        detector_config: [epic_arches, epic_brycecanyon]
-    steps:
-    - uses: eic/trigger-gitlab-ci@v2
-      id: trigger
-      with:
-        url: https://eicweb.phy.anl.gov
-        project_id: 399
-        token: ${{ secrets.EICWEB_DETECTOR_BENCHMARK_TRIGGER }}
-        ref_name: master
-        variables: |
-          DETECTOR_REPOSITORYURL=${{ github.server_url }}/${{ github.repository }}
-          DETECTOR_VERSION=${{ github.event.pull_request.head.ref || github.ref_name }}
-          DETECTOR_CONFIG=${{ matrix.detector_config }}
-          GITHUB_REPOSITORY=${{ inputs.github_repository || github.repository }}
-          GITHUB_SHA=${{ inputs.github_sha || github.event.pull_request.head.sha || github.sha }}
-    - run: |
-        gh api \
-           --method POST \
-          -H "Accept: application/vnd.github+json" \
-          /repos/${{ github.repository }}/statuses/${{ github.event.pull_request.head.sha || github.sha }} \
-          -f state="pending" \
-          -f target_url="${{ steps.trigger.outputs.web_url }}" \
-          -f description="Triggered... $(TZ=America/New_York date)" \
-          -f context="eicweb/detector_benchmarks (${{ matrix.detector_config }})"
-      env:
-        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
   generate-prim-file:
     runs-on: ubuntu-latest
