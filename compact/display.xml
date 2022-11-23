@@ -136,8 +136,9 @@
     <comment>
       Backwards beamline vacuum
     </comment>
-    <vis name="BackwardsBox"      alpha="0.3" ref="AnlLight_Gray"/>
-    <vis name="BackwardsAir"      alpha="0.7" ref="AnlBlue"/>
+    <vis name="BackwardsBox"      alpha="0.3" ref="AnlGray"       showDaughters="true" visible="true"/>
+    <vis name="BackwardsAir"      alpha="0.7" ref="AnlBlue"       showDaughters="true" visible="true"/>
+    <vis name="BackwardsVac"      alpha="0.1" ref="AnlLight_Gray" showDaughters="true" visible="true"/>
 
     <comment>
       PID visualization
