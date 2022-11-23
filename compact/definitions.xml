@@ -296,9 +296,8 @@ The unused IDs below are saved for future use.
     <constant name="LumiSpecTracker_ID"      value="193"/>
     <constant name="LumiSpecCAL_ID"          value="194"/>
 
-    <constant name="Tagger1_ID"              value="196"/>
-    <constant name="Tagger2_ID"              value="197"/>
-    <constant name="TaggerVacuum_ID"         value="198"/>
+    <constant name="TaggerTracker_ID"        value="198"/>
+    <constant name="TaggerCalorimeter_ID"    value="199"/>
 
     <documentation>
       #### (200-219) Far Backward Beamline Magnets
