@@ -1,7 +1,7 @@
 <!-- SPDX-License-Identifier: LGPL-3.0-or-later -->
 <!-- Copyright (C) 2022 Whitney Armstrong, Sylvester Joosten, Wouter Deconinck, Zhenyu Ye -->
 
-  <define>
+   <define>
     <constant name="world_side" value="30*m"/>
     <constant name="world_x" value="world_side"/>
     <constant name="world_y" value="world_side"/>
@@ -295,12 +295,9 @@ The unused IDs below are saved for future use.
     </documentation>
     <constant name="LumiCollimator_ID"       value="190"/>
     <constant name="LumiDipole_ID"           value="191"/>
-    <constant name="LumiWindow_ID"           value="192"/>
-    <constant name="LumiSpecTracker_ID"      value="193"/>
-    <constant name="LumiSpecCAL_ID"          value="194"/>
-
-    <constant name="TaggerTracker_ID"        value="198"/>
-    <constant name="TaggerCalorimeter_ID"    value="199"/>
+    <constant name="Tagger1_ID"              value="195"/>
+    <constant name="Tagger2_ID"              value="196"/>
+    <constant name="TaggerVacuum_ID"         value="199"/>
 
     <documentation>
       #### (200-219) Far Backward Beamline Magnets
@@ -605,8 +602,8 @@ Service gaps in FW direction (before endcapP ECAL) and BW direction (before endc
     <constant name="HcalEndcapPInsert_yposition" value="EcalEndcapPInsert_yposition"/>
 
     <constant name="HcalEndcapN_CaloSides"	value="60"/>
-    <constant name="HcalEndcapN_zmin"     value="BackwardServiceGap_zmax"/>
-    <constant name="HcalEndcapN_length"   value="44.0*cm"/>
+    <constant name="HcalEndcapN_zmin"     value="329.6*cm"/> <!-- from latest Menagerie database (13.10.2022)-->
+    <constant name="HcalEndcapN_length"   value="45.0*cm"/>
     <constant name="HcalEndcapN_zmax"     value="HcalEndcapN_zmin + HcalEndcapN_length"/>
     <comment> HcalEndcapN needs to clear the straight beampipe with 1 * crossing angle + its radius of 22.25 mm </comment>
     <constant name="HcalEndcapN_rmin"     value="max((HcalEndcapN_zmin + HcalEndcapN_length) * tan(abs(CrossingAngle)) + 22.25 * mm, 11 * cm)"/>

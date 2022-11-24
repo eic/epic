@@ -7,11 +7,11 @@
       #### Material Thickness
     </documentation>
     <constant name="HcalEndcapNSteelThickness"       value="4.0 * cm"/>
-    <constant name="HcalEndcapNPolystyreneThickness" value="0.4 * cm"/>
+    <constant name="HcalEndcapNPolystyreneThickness" value="0.5 * cm"/>
 
-    <constant name="HcalEndcapN_polyhedron_rmax"     value="251.444*cm"/>
-    <constant name="HcalEndcapN_segments_rmin"     value="19.9431*cm"/>
-    <constant name="HcalEndcapN_segments_rmax"     value="HcalEndcapN_polyhedron_rmax/(cos(180*deg/HcalEndcapN_CaloSides))"/>
+    <constant name="HcalEndcapN_polyhedron_rmax"     value="275.0*cm"/>
+    <constant name="HcalEndcapN_polyhedron_rmin"     value="12.4*cm"/>
+    <!--constant name="HcalEndcapN_segments_rmax"     value="HcalEndcapN_polyhedron_rmax/(cos(180*deg/HcalEndcapN_CaloSides))"/-->
 
     <documentation>
       - Hcal Endcap N Layers and computed Thickness
@@ -34,17 +34,31 @@
       name="HcalEndcapN"
       type="epic_PolyhedraEndcapCalorimeter2"
       readout="HcalEndcapNHits"
-      vis="HcalEndcapVis"
+      vis="RedVis"
       calorimeterType="HAD_ENDCAP" reflect="true">
       <position x="0" y="0" z="0"/>
       <dimensions
         numsides="HcalEndcapN_CaloSides"
         zmin="HcalEndcapN_zmin"
-        rmin="HcalEndcapN_segments_rmin"
+        rmin="HcalEndcapN_polyhedron_rmin"
         rmax="HcalEndcapN_polyhedron_rmax"/>
-      <layer repeat="HcalEndcapNLayer_NRepeat" vis="HcalEndcapLayerVis">
-        <slice material="Steel235" thickness="HcalEndcapNSteelThickness" vis="HcalAbsorberVis"/>
-        <slice material="Polystyrene" thickness="HcalEndcapNPolystyreneThickness" vis="HcalSensorVis" sensitive="yes" limits="cal_limits"/>
+      <layer repeat="HcalEndcapNLayer_NRepeat" vis="GreyVis">
+        <slice material="Steel235" thickness="HcalEndcapNSteelThickness" vis="PurpleVis"/>
+        <slice material="Air" thickness="HcalEndcapNPolystyreneThickness" vis="GreenVis" sensitive="yes" limits="cal_limits">
+         <tiles material="Polystyrene"
+            sensitive="yes"
+            eta_values="3.97368, 3.82929, 3.65542, 3.48947, 3.33106, 3.17987, 
+            3.03556, 2.89782, 2.76635, 2.64086, 2.52109, 2.40676, 2.29764,
+            2.19349, 2.09299, 1.99721, 1.90582, 1.81882, 1.7357, 1.65646, 
+            1.58079, 1.50851, 1.43941, 1.3734, 1.3104, 1.25011, 1.19095, 1.1158"
+            phi_width="0.10472"
+            nbins_eta="27"
+            nbins_phi="60"
+            vis="HcalSensorVis"
+            limits="cal_limits">
+          </tiles>
+        </slice>
+        <!-- slice material="Polystyrene" thickness="HcalEndcapNPolystyreneThickness" vis="HcalSensorVis" sensitive="yes" limits="cal_limits"/ -->
       </layer>
     </detector>
   </detectors>
@@ -52,19 +66,11 @@
   <!--  Definition of the readout segmentation/definition  -->
   <readouts>
     <readout name="HcalEndcapNHits">
-      <segmentation type="PolarGridRPhi2"
-      grid_r_values="HcalEndcapN_segments_rmin 23.7336*cm 28.0062*cm 32.7836*cm 38.0859*cm 43.9297*cm 50.3297*cm 57.2972*cm 64.8401*cm 72.966*cm
-      81.6805*cm 90.9878*cm 100.89*cm 111.395*cm 122.516*cm 134.229*cm 146.58*cm 159.546*cm 173.155*cm 187.424*cm
-      202.377*cm 218.019*cm 234.353*cm HcalEndcapN_segments_rmax"
-      grid_phi_values="6*deg 6*deg 6*deg 6*deg 6*deg 6*deg 6*deg 6*deg 6*deg 6*deg
-      6*deg 6*deg 6*deg 6*deg 6*deg 6*deg 6*deg 6*deg 6*deg 6*deg
-      6*deg 6*deg 6*deg 6*deg 6*deg 6*deg 6*deg 6*deg 6*deg 6*deg
-      6*deg 6*deg 6*deg 6*deg 6*deg 6*deg 6*deg 6*deg 6*deg 6*deg
-      6*deg 6*deg 6*deg 6*deg 6*deg 6*deg 6*deg 6*deg 6*deg 6*deg
-      6*deg 6*deg 6*deg 6*deg 6*deg 6*deg 6*deg 6*deg 6*deg 6*deg"
-      offset_phi="0.0*deg"/>
-      <id>system:8,barrel:3,module:4,layer:8,slice:5,r:32:-16,phi:-16</id>
+      <segmentation type="NoSegmentation"/>
+      <id>system:8,barrel:3,module:4,layer:8,slice:5,tile:32</id>
+
     </readout>
   </readouts>
 
 </lccdd>
+
