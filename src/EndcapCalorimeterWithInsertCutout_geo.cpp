@@ -1,3 +1,6 @@
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (C) 2022 Ryan Milton
+
 //==========================================================================
 //  Implementation of forward calorimeter with the insert shape cut out
 //--------------------------------------------------------------------------
