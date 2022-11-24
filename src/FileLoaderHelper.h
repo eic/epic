@@ -1,3 +1,6 @@
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (C) 2022 Wouter Deconinck
+
 #pragma once
 
 #include <DD4hep/DetFactoryHelper.h>
@@ -40,10 +43,10 @@ inline void EnsureFileFromURLExists(std::string url, std::string file, std::stri
   }
 
   // tokenize cache on regex
-  std::regex cache_sep(":");
+  std::regex                 cache_sep(":");
   std::sregex_token_iterator cache_iter(cache_str.begin(), cache_str.end(), cache_sep, -1);
   std::sregex_token_iterator cache_end;
-  std::vector<std::string> cache_vec(cache_iter, cache_end);
+  std::vector<std::string>   cache_vec(cache_iter, cache_end);
 
   // create file path
   fs::path file_path(file);
@@ -84,7 +87,8 @@ inline void EnsureFileFromURLExists(std::string url, std::string file, std::stri
           fs::path cache_hash_path = cache_dir_path / hash;
           if (fs::exists(cache_hash_path)) {
             // symlink hash to cache/.../hash
-            printout(INFO, "FileLoader", "file " + file + " with hash " + hash + " found in " + cache_hash_path.string());
+            printout(INFO, "FileLoader",
+                     "file " + file + " with hash " + hash + " found in " + cache_hash_path.string());
             try {
               fs::create_symlink(cache_hash_path, hash_path);
               success = true;
@@ -99,7 +103,8 @@ inline void EnsureFileFromURLExists(std::string url, std::string file, std::stri
           }
         }
       }
-      if (success) break;
+      if (success)
+        break;
     }
   }
 

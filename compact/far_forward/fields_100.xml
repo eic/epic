@@ -1,3 +1,6 @@
+<!-- SPDX-License-Identifier: LGPL-3.0-or-later -->
+<!-- Copyright (C) 2022 Sylvester Joosten, Alex Jentsch, Whitney Armstrong -->
+
 <define>
 
   <constant name="IonBeamEnergy" value="100*GeV" />
