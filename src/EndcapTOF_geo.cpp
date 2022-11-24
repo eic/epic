@@ -180,11 +180,11 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
   int      layer_id = 0;
   Assembly layer_assembly("layer_assembly" + _toString(layer_id, "_%d"));
 
-  DetElement layer_detEl(ttl_detEl, _toString(layer_id, "layer_%d"), x_det.id());
+  DetElement layer_detEl(ttl_detEl, _toString(layer_id, "layer_%d"), layer_id);
 
   // NOTE: ACTS extension for the disk layer of the TTL
   // also defining the coordinate system that differs between ACTS and Geant4 (zyx vs xyz)
-  Acts::ActsExtension* detlayer = new Acts::ActsExtension("zyx");
+  Acts::ActsExtension* detlayer = new Acts::ActsExtension();
   detlayer->addValue(-80. * mm, "r_min", "envelope");
   detlayer->addValue(670. * mm, "r_max", "envelope");
   detlayer->addValue(10. * mm, "z_min", "envelope");
@@ -348,11 +348,11 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
 
       pv.addPhysVolID("module", layer_id).addPhysVolID("sensor", isensor);
 
-      DetElement sensor_detEl_front(layer_detEl, sens_name_front, x_det.id());
+      DetElement sensor_detEl_front(layer_detEl, sens_name_front, isensor);
       sensor_detEl_front.setPlacement(pv);
       volSurfaceList(sensor_detEl_front)->push_back(surf_front);
 
-      Acts::ActsExtension* sensorExtension_front = new Acts::ActsExtension();
+      Acts::ActsExtension* sensorExtension_front = new Acts::ActsExtension("XZY");
       sensor_detEl_front.addExtension<Acts::ActsExtension>(sensorExtension_front);
 
       isensor++;
@@ -406,11 +406,11 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
 
       pv.addPhysVolID("module", layer_id).addPhysVolID("sensor", isensor);
 
-      DetElement sensor_detEl_back(layer_detEl, sens_name_back, x_det.id());
+      DetElement sensor_detEl_back(layer_detEl, sens_name_back, isensor);
       sensor_detEl_back.setPlacement(pv);
       volSurfaceList(sensor_detEl_back)->push_back(surf_back);
 
-      Acts::ActsExtension* sensorExtension_back = new Acts::ActsExtension();
+      Acts::ActsExtension* sensorExtension_back = new Acts::ActsExtension("XZY");
       sensor_detEl_back.addExtension<Acts::ActsExtension>(sensorExtension_back);
 
       isensor++;

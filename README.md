@@ -28,11 +28,9 @@ The EPIC Detector at IP6 for Electron-Ion Collider experiment.
 Getting Started
 ---------------
 
-You will  likely want to use this repository along with the IP6 repository:
+Get a copy of the latest version from this repository:
 ```bash
 git clone https://github.com/eic/epic.git
-git clone https://github.com/eic/ip6.git
-ln -s ../ip6/ip6 epic/ip6
 ```
 
 ### Compilation

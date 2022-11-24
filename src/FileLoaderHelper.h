@@ -22,7 +22,7 @@ using namespace dd4hep;
 
 // Function to download files
 inline void EnsureFileFromURLExists(std::string url, std::string file, std::string cache_str = "",
-                                    std::string cmd = "curl --retry 5 -f {0} -o {1}")
+                                    std::string cmd = "curl --retry 5 --location --fail {0} --output {1}")
 {
   // parse cache for environment variables
   auto pos = std::string::npos;

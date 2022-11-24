@@ -44,7 +44,8 @@
       For Pb/SiFi (GlueX):  X0 ~ 1.45 cm
       For W/SiFi (sPHENIX): X0 ~ 0.7 cm (but different fiber orientation)
     </comment>
-    <constant name="EcalBarrel_RadiatorThickness"    value="EcalBarrel_FiberZSpacing*13"/>
+    <constant name="EcalBarrel_RadiatorThickness"    value="EcalBarrel_FiberZSpacing*16"/>
+    <constant name="EcalBarrel_TotalFiberLayers_num" value="16"/>
     <constant name="EcalBarrel_ModRepeat"            value="EcalBarrelStavesN"/>
     <constant name="EcalBarrel_ModLength"            value="0.5*m"/>
     <constant name="EcalBarrel_ModWidth"             value="0.5*m"/>
@@ -68,10 +69,10 @@
                      (EcalBarrel_ImagingLayerThickness + EcalBarrel_ScFiLayerThickness +
                       EcalBarrel_SpaceBetween)))"/>
     <comment>
-      Adjusting size of the ScFi back chunk to match number of imiaging layers
+      Adjusting size of the ScFi back chunk to match number of imaging layers
       and 20 radiation lengths in total
     </comment>
-    <constant name="EcalBarrel_FiberChunkLayers_num" value = "20-EcalBarrelImagingLayers_num+1"/>
+    <constant name="EcalBarrel_FiberChunkLayers_num" value = "EcalBarrel_TotalFiberLayers_num-EcalBarrelImagingLayers_num+1"/>
 
     <constant name="EcalBarrel_ImagingPartThickness"
         value="(EcalBarrelImagingLayers_num-1)*(EcalBarrel_ImagingLayerThickness + EcalBarrel_ScFiLayerThickness + EcalBarrel_SpaceBetween)
@@ -80,7 +81,7 @@
         value="max(0, EcalBarrel_AvailThickness-EcalBarrel_ImagingPartThickness)"/>
     <constant name="EcalBarrel_ScFiPartThickness"
         value="min(EcalBarrel_ScFiPartThickness_max,
-         EcalBarrel_FiberZSpacing*13*EcalBarrel_FiberChunkLayers_num)"/>
+         EcalBarrel_RadiatorThickness*EcalBarrel_FiberChunkLayers_num)"/>
     <constant name="EcalBarrel_SensitiveLayers_rmax"
         value="EcalBarrel_rmin + EcalBarrel_ImagingPartThickness + EcalBarrel_ScFiPartThickness"/>
   </define>
