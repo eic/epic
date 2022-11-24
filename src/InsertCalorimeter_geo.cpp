@@ -1,3 +1,6 @@
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (C) 2022 Ryan Milton
+
 //==========================================================================
 //  Implementation of forward insert calorimeter
 //--------------------------------------------------------------------------
@@ -19,9 +22,9 @@ static Ref_t createDetector(Detector& desc, xml_h handle, SensitiveDetector sens
   int         detID   = detElem.id();
 
   xml_dim_t dim    = detElem.dimensions();
-  double    width  = dim.x(); // Size along x-axis
-  double    height = dim.y(); // Size along y-axis
-  double    length = dim.z(); // Size along z-axis
+  double    width  = dim.x();         // Size along x-axis
+  double    height = dim.y();         // Size along y-axis
+  double    length = dim.z();         // Size along z-axis
 
   xml_dim_t pos = detElem.position(); // Position in global coordinates
 
@@ -57,7 +60,8 @@ static Ref_t createDetector(Detector& desc, xml_h handle, SensitiveDetector sens
     For the ECal insert, the hole radius & position is constant
     Also has only one layer so don't have a backplate_thickness there (so set to 0)
   */
-  auto backplate_thickness = detElem.hasChild(_Unicode(backplate))? detElem.child(_Unicode(backplate)).attr<double>(_Unicode(thickness)) : 0.;
+  auto backplate_thickness =
+      detElem.hasChild(_Unicode(backplate)) ? detElem.child(_Unicode(backplate)).attr<double>(_Unicode(thickness)) : 0.;
 
   // Function that returns a linearly interpolated hole radius, x-position, and y-position at a given z
   auto get_hole_rxy = [hole_radii_parameters, hole_x_parameters, hole_y_parameters, length,

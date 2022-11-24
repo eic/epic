@@ -1,4 +1,6 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<!-- SPDX-License-Identifier: LGPL-3.0-or-later -->
+<!-- Copyright (C) 2022 Dmitry Kalinkin, Wouter Deconinck, Whitney Armstrong -->
+
 <lccdd>
   <fields>
     <field type="epic_FieldMapBrBz" name="GlobalSolenoid" field_type="magnetic"
