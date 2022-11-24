@@ -1,3 +1,6 @@
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (C) 2022 Wouter Deconinck, Simon Gardner, Whitney Armstrong
+
 //==========================================================================
 //   Beampipe described by end points with different radii at either end
 //==========================================================================

@@ -1,11 +1,16 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<!-- SPDX-License-Identifier: LGPL-3.0-or-later -->
+<!-- Copyright (C) 2022 Wouter Deconinck, Simon Gardner -->
+
 <lccdd>
 
   <include ref="far_backward/definitions.xml"/>
   <include ref="far_backward/magnets.xml"/>
-  <include ref="far_backward/vacuum.xml"/>
-  <include ref="far_backward/taggers.xml"/>
-  <!-- include ref="far_backward/lumi.xml"/ -->
   <include ref="far_backward/beamline_hadron.xml"/>
+
+  <!-- Scattered electron taggers -->
+  <include ref="far_backward/taggers.xml"/>
+
+  <!-- Luminosity detector -->
+  <include ref="far_backward/lumi.xml"/>
 
 </lccdd>
