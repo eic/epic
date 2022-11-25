@@ -119,21 +119,6 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
     return enc;
   };
 
-  // define reconstruction geometry constants `PFRICH_RECON_*`
-  /* - these are the numbers needed to rebuild the geometry in the
-   *   reconstruction, in particular, the optical surfaces encountered by the
-   *   Cherenkov photons
-   * - positions are w.r.t. the IP
-   * - check the values of all of the `PFRICH_RECON_*` constants after any change
-   *   to the geometry
-   * - some `PFRICH_RECON_*` constants are redundant, but are defined to make
-   *   it clear that the reconstruction code depends on them
-   */
-  desc.add(Constant("PFRICH_RECON_zmin", std::to_string(vesselZmin)));
-  desc.add(Constant("PFRICH_RECON_gasvolMaterial", gasvolMat.ptr()->GetName(), "string"));
-  desc.add(Constant("PFRICH_RECON_cellMask", std::to_string(cellMask)));
-  desc.add(Constant("PFRICH_RECON_sensorThickness", std::to_string(sensorThickness)));
-
   // BUILD VESSEL //////////////////////////////////////
   /* - `vessel`: aluminum enclosure, the mother volume of the pfRICH
    * - `gasvol`: gas volume, which fills `vessel`; all other volumes defined below
@@ -183,6 +168,7 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
   auto originFront = Position(0., 0., vesselLength / 2.0);
   // auto originBack = Position(0., 0., -vesselLength / 2.0);
   auto vesselPos = Position(0, 0, vesselZmin) - originFront;
+  double vesselZmax = vesselZmin - vesselLength;
 
   // place gas volume
   PlacedVolume gasvolPV = vesselVol.placeVolume(gasvolVol, Position(0, 0, 0));
@@ -194,6 +180,22 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
   PlacedVolume vesselPV  = motherVol.placeVolume(vesselVol, vesselPos);
   vesselPV.addPhysVolID("system", detID);
   det.setPlacement(vesselPV);
+
+  // define reconstruction geometry constants `PFRICH_RECON_*`
+  /* - these are the numbers needed to rebuild the geometry in the
+   *   reconstruction, in particular, the optical surfaces encountered by the
+   *   Cherenkov photons
+   * - positions are w.r.t. the IP
+   * - check the values of all of the `PFRICH_RECON_*` constants after any change
+   *   to the geometry
+   * - some `PFRICH_RECON_*` constants are redundant, but are defined to make
+   *   it clear that the reconstruction code depends on them
+   */
+  desc.add(Constant("PFRICH_RECON_zmin", std::to_string(vesselZmin)));
+  desc.add(Constant("PFRICH_RECON_zmax", std::to_string(vesselZmax)));
+  desc.add(Constant("PFRICH_RECON_gasvolMaterial", gasvolMat.ptr()->GetName(), "string"));
+  desc.add(Constant("PFRICH_RECON_cellMask", std::to_string(cellMask)));
+  desc.add(Constant("PFRICH_RECON_sensorThickness", std::to_string(sensorThickness)));
 
   // BUILD RADIATOR //////////////////////////////////////
 

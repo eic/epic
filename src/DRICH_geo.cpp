@@ -150,21 +150,6 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
     return enc;
   };
 
-  // define reconstruction geometry constants `DRICH_RECON_*`
-  /* - these are the numbers needed to rebuild the geometry in the
-   *   reconstruction, in particular, the optical surfaces encountered by the
-   *   Cherenkov photons
-   * - positions are w.r.t. the IP
-   * - check the values of all of the `DRICH_RECON_*` constants after any change
-   *   to the geometry
-   * - some `DRICH_RECON_*` constants are redundant, but are defined to make
-   *   it clear that the reconstruction code depends on them
-   */
-  desc.add(Constant("DRICH_RECON_nSectors", std::to_string(nSectors)));
-  desc.add(Constant("DRICH_RECON_zmin", std::to_string(vesselZmin)));
-  desc.add(Constant("DRICH_RECON_gasvolMaterial", gasvolMat.ptr()->GetName(), "string"));
-  desc.add(Constant("DRICH_RECON_cellMask", std::to_string(cellMask)));
-
   // BUILD VESSEL ====================================================================
   /* - `vessel`: aluminum enclosure, the mother volume of the dRICH
    * - `gasvol`: gas volume, which fills `vessel`; all other volumes defined below
@@ -251,6 +236,22 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
   PlacedVolume vesselPV  = motherVol.placeVolume(vesselVol, vesselPos);
   vesselPV.addPhysVolID("system", detID);
   det.setPlacement(vesselPV);
+
+  // define reconstruction geometry constants `DRICH_RECON_*`
+  /* - these are the numbers needed to rebuild the geometry in the
+   *   reconstruction, in particular, the optical surfaces encountered by the
+   *   Cherenkov photons
+   * - positions are w.r.t. the IP
+   * - check the values of all of the `DRICH_RECON_*` constants after any change
+   *   to the geometry
+   * - some `DRICH_RECON_*` constants are redundant, but are defined to make
+   *   it clear that the reconstruction code depends on them
+   */
+  desc.add(Constant("DRICH_RECON_nSectors", std::to_string(nSectors)));
+  desc.add(Constant("DRICH_RECON_zmin", std::to_string(vesselZmin)));
+  desc.add(Constant("DRICH_RECON_zmax", std::to_string(vesselZmax)));
+  desc.add(Constant("DRICH_RECON_gasvolMaterial", gasvolMat.ptr()->GetName(), "string"));
+  desc.add(Constant("DRICH_RECON_cellMask", std::to_string(cellMask)));
 
   // BUILD RADIATOR ====================================================================
 
