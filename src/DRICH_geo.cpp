@@ -250,6 +250,12 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
   desc.add(Constant("DRICH_RECON_nSectors", std::to_string(nSectors)));
   desc.add(Constant("DRICH_RECON_zmin", std::to_string(vesselZmin)));
   desc.add(Constant("DRICH_RECON_zmax", std::to_string(vesselZmax)));
+  desc.add(Constant("DRICH_RECON_rmin0", std::to_string(vesselRmin0)));
+  desc.add(Constant("DRICH_RECON_rmin1", std::to_string(vesselRmin1)));
+  desc.add(Constant("DRICH_RECON_rmax0", std::to_string(vesselRmax0)));
+  desc.add(Constant("DRICH_RECON_rmax1", std::to_string(vesselRmax1)));
+  desc.add(Constant("DRICH_RECON_rmax2", std::to_string(vesselRmax2)));
+  desc.add(Constant("DRICH_RECON_snoutLength", std::to_string(snoutLength)));
   desc.add(Constant("DRICH_RECON_gasvolMaterial", gasvolMat.ptr()->GetName(), "string"));
   desc.add(Constant("DRICH_RECON_cellMask", std::to_string(cellMask)));
 

@@ -193,6 +193,10 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
    */
   desc.add(Constant("PFRICH_RECON_zmin", std::to_string(vesselZmin)));
   desc.add(Constant("PFRICH_RECON_zmax", std::to_string(vesselZmax)));
+  desc.add(Constant("PFRICH_RECON_rmin0", std::to_string(vesselRmin0)));
+  desc.add(Constant("PFRICH_RECON_rmin1", std::to_string(vesselRmin1)));
+  desc.add(Constant("PFRICH_RECON_rmax0", std::to_string(vesselRmax0)));
+  desc.add(Constant("PFRICH_RECON_rmax1", std::to_string(vesselRmax1)));
   desc.add(Constant("PFRICH_RECON_gasvolMaterial", gasvolMat.ptr()->GetName(), "string"));
   desc.add(Constant("PFRICH_RECON_cellMask", std::to_string(cellMask)));
   desc.add(Constant("PFRICH_RECON_sensorThickness", std::to_string(sensorThickness)));
