@@ -92,7 +92,7 @@
     <vis name="HcalBarrelLayerVis"    ref="AnlBlue"   showDaughters="false" visible="true"/>
     <vis name="HcalEndcapVis"         ref="AnlBlue"   showDaughters="false" visible="true"/>
     <vis name="HcalEndcapLayerVis"    ref="AnlBlue"   showDaughters="false" visible="true"/>
-    <vis name="HcalSensorVis"         ref="AnlBlue"   showDaughters="false" visible="true"/>
+    <vis name="HcalSensorVis"         ref="AnlBlue"   showDaughters="false" visible="false"/>
     <vis name="HcalAbsorberVis"       ref="AnlGray"   showDaughters="false" visible="false"/>
     <vis name="HcalEndcapInsertVis"   ref="AnlGray"   showDaughters="false" visible="true"/>
 

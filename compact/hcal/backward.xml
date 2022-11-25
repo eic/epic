@@ -7,7 +7,7 @@
       #### Material Thickness
     </documentation>
     <constant name="HcalEndcapNSteelThickness"       value="4.0 * cm"/>
-    <constant name="HcalEndcapNPolystyreneThickness" value="0.5 * cm"/>
+    <constant name="HcalEndcapNPolystyreneThickness" value="0.4 * cm"/>
 
     <constant name="HcalEndcapN_polyhedron_rmax"     value="275.0*cm"/>
     <constant name="HcalEndcapN_polyhedron_rmin"     value="12.4*cm"/>
@@ -34,7 +34,7 @@
       name="HcalEndcapN"
       type="epic_PolyhedraEndcapCalorimeter2"
       readout="HcalEndcapNHits"
-      vis="RedVis"
+      vis="HcalEndcapVis"
       calorimeterType="HAD_ENDCAP" reflect="true">
       <position x="0" y="0" z="0"/>
       <dimensions
@@ -42,9 +42,9 @@
         zmin="HcalEndcapN_zmin"
         rmin="HcalEndcapN_polyhedron_rmin"
         rmax="HcalEndcapN_polyhedron_rmax"/>
-      <layer repeat="HcalEndcapNLayer_NRepeat" vis="GreyVis">
-        <slice material="Steel235" thickness="HcalEndcapNSteelThickness" vis="PurpleVis"/>
-        <slice material="Air" thickness="HcalEndcapNPolystyreneThickness" vis="GreenVis" sensitive="yes" limits="cal_limits">
+      <layer repeat="HcalEndcapNLayer_NRepeat" vis="HcalEndcapLayerVis">
+        <slice material="Steel235" thickness="HcalEndcapNSteelThickness" vis="HcalAbsorberVis"/>
+        <slice material="Air" thickness="HcalEndcapNPolystyreneThickness" vis="AnlLight_Gray" sensitive="yes" limits="cal_limits">
          <tiles material="Polystyrene"
             sensitive="yes"
             eta_values="3.97368, 3.82929, 3.65542, 3.48947, 3.33106, 3.17987, 

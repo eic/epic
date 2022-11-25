@@ -62,9 +62,9 @@ void buildTiles(Detector& desc, SensitiveDetector &sens, Volume &s_vol, DetEleme
   eta_out = -1.0*eta_values[i+1];
   double R = z_slice*tan(2*atan(exp(-1*(eta_in))));
   double delR = z_slice*(tan(2*atan(exp(-1*(eta_out))))-tan(2*atan(exp(-1*(eta_in)))));
-  double f_trd_x1 = 2*R*tan(f_spacing_phi/2.);
-  double f_trd_x2 = 2*(R+delR)*tan(f_spacing_phi/2.);
-  double f_trd_y = delR/cos(f_spacing_phi/2.);
+  double f_trd_x1 = 2*R*tan(f_spacing_phi/2.)/2.0;
+  double f_trd_x2 = 2*(R+delR)*tan(f_spacing_phi/2.)/2.0;
+  double f_trd_y = delR/cos(f_spacing_phi/2.)/2.0;
   //double f_trd_y2 = f_trd_y1;
   double f_trd_z = 0.2;
 
