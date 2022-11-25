@@ -63,7 +63,6 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
   }
 
   assembly.setVisAttributes(description.invisible());
-  sens.setType("tracker");
 
   for (xml_coll_t su(x_det, _U(support)); su; ++su) {
     xml_comp_t  x_support         = su;
