@@ -16,6 +16,7 @@
 #include "DDRec/Surface.h"
 #include "XML/Layering.h"
 #include "XML/Utilities.h"
+#include "DD4hepDetectorHelper.h"
 #include <array>
 #include <map>
 
@@ -41,7 +42,6 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
   Assembly                     assembly(det_name);
 
   Material air = description.material("Air");
-  // Volume      assembly    (det_name,Box(10000,10000,10000),vacuum);
   Volume                             motherVol = description.pickMotherVolume(sdet);
   int                                m_id = 0, c_id = 0, n_sensor = 0;
   map<string, Volume>                modules;
@@ -50,20 +50,16 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
   map<string, std::array<double, 2>> module_thicknesses;
   PlacedVolume                       pv;
 
-  // ACTS extension
-  {
-    Acts::ActsExtension* detWorldExt = new Acts::ActsExtension();
-    detWorldExt->addType("endcap", "detector");
-    // SJJ probably need to set the envelope here, as ACTS can't figure
-    // that out for Assembly volumes. May also need binning to properly pick up
-    // on the support material @TODO
-    //
-    // Add the volume boundary material if configured
-    for (xml_coll_t bmat(x_det, _Unicode(boundary_material)); bmat; ++bmat) {
-      xml_comp_t x_boundary_material = bmat;
-      Acts::xmlToProtoSurfaceMaterial(x_boundary_material, *detWorldExt, "boundary_material");
-    }
-    sdet.addExtension<Acts::ActsExtension>(detWorldExt);
+  // Set detector type flag
+  dd4hep::xml::setDetectorTypeFlag(x_det, sdet);
+  auto &params = DD4hepDetectorHelper::ensureExtension<dd4hep::rec::VariantParameters>(
+      sdet);
+  
+  // Add the volume boundary material if configured
+  for (xml_coll_t bmat(x_det, _Unicode(boundary_material)); bmat; ++bmat) {
+    xml_comp_t x_boundary_material = bmat;
+    DD4hepDetectorHelper::xmlToProtoSurfaceMaterial(x_boundary_material, params,
+                                         "boundary_material");
   }
 
   assembly.setVisAttributes(description.invisible());
