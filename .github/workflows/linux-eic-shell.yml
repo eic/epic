@@ -289,7 +289,7 @@ jobs:
         setup: install/setup.sh
         run: |
           mkdir -p doc
-          npdet_info dump ${DETECTOR_PATH}/epic_brycecanyon.xml | tee doc/constants.out
+          npdet_info dump ${DETECTOR_PATH}/epic.xml | tee doc/constants.out
     - uses: actions/upload-artifact@v3
       with:
         name: constants.out
