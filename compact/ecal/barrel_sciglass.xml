@@ -1,3 +1,6 @@
+<!-- SPDX-License-Identifier: LGPL-3.0-or-later -->
+<!-- Copyright (C) 2022 Dmitry Kalinkin, Wouter Deconinck -->
+
 <lccdd>
   <comment>
     Implementation of the barrel SciGlass calorimeter
@@ -35,7 +38,7 @@
       An EM calorimeter with SciGlass blocks
     </comment>
 
-    <detector id="4" name="EcalBarrel" type="epic_SciGlassCalorimeter" readout="EcalBarrelSciGlassHits" vis="det_vis" calorimeterType="EM_BARREL">
+    <detector id="4" name="EcalBarrel" type="epic_EcalBarrelSciGlass" readout="EcalBarrelSciGlassHits" vis="det_vis" calorimeterType="EM_BARREL">
       <comment>
         Global detector dimensions from https://eic.jlab.org/Geometry/Detector/Detector-20220624102507.html
       </comment>
@@ -44,19 +47,24 @@
                   zmax="EcalBarrelForward_zmax" zmin="-EcalBarrelBackward_zmax"
                   etamin="EcalBarrel_etamin" etamax="EcalBarrel_etamax"/>
 
+      <documentation>
+        Pick the material for the towers
+      </documentation>
+      <material name="SciGlass" />
+
       <comment>
 	The current implementation of the wedge box approximates flat inner
 	surfaces of individual wedge boxes with a single shared tube at a fixed
         `inner_r`, which allows for ~17 mm air gap before the towers.
       </comment>
-      <wedge_box inner_r="78.55 * cm" thickness="3 * mm" vis="becal_wedge" material="Aluminum5083" />
+      <wedge_box inner_r="78.55 * cm" thickness="3 * mm" gap="6 * mm" vis="becal_wedge" material="Aluminum5083" />
 
       <sectors number="24" phi0="0." deltaphi="pi / 12">
         <comment>
           Rows within a sector are supposed to have smaller gaps than edge rows of two adjacent sectors
         </comment>
 
-        <rows number="5" deltaphi="2.92 * degree">
+        <rows number="5" deltaphi="2.811 * degree">
           <dimensions inner_r="EcalBarrel_rmin + EcalBarrel_inner_margin"  gap="1 * mm" />
 
           <comment>
@@ -67,23 +75,23 @@
             The front and rear faces are similar isosceles trapezoids only slightly deviating from a rectangular shape by an amount parametrized with `flare_angle_at_face`.
           </comment>
 
-          <family dir_sign="+1" x1="2 * cm" y1="2 * cm" z_length="45.5 * cm" number="10" flare_angle_polar="1.16 * degree"  flare_angle_at_face="0.3059 * degree" vis="family1" />
-          <family dir_sign="+1" x1="2 * cm" y1="2 * cm" z_length="45.5 * cm" number="6"  flare_angle_polar="1.045 * degree" flare_angle_at_face="0.7058 * degree" vis="family2" />
-          <family dir_sign="+1" x1="2 * cm" y1="2 * cm" z_length="45.5 * cm" number="5"  flare_angle_polar="0.929 * degree" flare_angle_at_face="0.8892 * degree" vis="family3" />
-          <family dir_sign="+1" x1="2 * cm" y1="2 * cm" z_length="45.5 * cm" number="5"  flare_angle_polar="0.82 * degree"  flare_angle_at_face="1.0258 * degree" vis="family4" />
-          <family dir_sign="+1" x1="2 * cm" y1="2 * cm" z_length="45.5 * cm" number="3"  flare_angle_polar="0.70 * degree"  flare_angle_at_face="1.126 * degree"  vis="family5" />
-          <family dir_sign="-1" x1="2 * cm" y1="2 * cm" z_length="45.5 * cm" number="10" flare_angle_polar="1.16 * degree"  flare_angle_at_face="0.3059 * degree" vis="family1" />
-          <family dir_sign="-1" x1="2 * cm" y1="2 * cm" z_length="45.5 * cm" number="6"  flare_angle_polar="1.045 * degree" flare_angle_at_face="0.7058 * degree" vis="family2" />
-          <family dir_sign="-1" x1="2 * cm" y1="2 * cm" z_length="45.5 * cm" number="5"  flare_angle_polar="0.929 * degree" flare_angle_at_face="0.8892 * degree" vis="family3" />
-          <family dir_sign="-1" x1="2 * cm" y1="2 * cm" z_length="45.5 * cm" number="5"  flare_angle_polar="0.82 * degree"  flare_angle_at_face="1.0258 * degree" vis="family4" />
-          <family dir_sign="-1" x1="2 * cm" y1="2 * cm" z_length="45.5 * cm" number="5"  flare_angle_polar="0.70 * degree"  flare_angle_at_face="1.126 * degree"  vis="family5" />
-          <family dir_sign="-1" x1="2 * cm" y1="2 * cm" z_length="45.5 * cm" number="6"  flare_angle_polar="0.586 * degree" flare_angle_at_face="1.1914 * degree" vis="family6" />
+          <family dir_sign="+1" x1="1.925 * cm" y1="2 * cm" z_length="45.5 * cm" number="10" flare_angle_polar="1.16 * degree"  flare_angle_at_face="0.3059 * degree" vis="family1" />
+          <family dir_sign="+1" x1="1.925 * cm" y1="2 * cm" z_length="45.5 * cm" number="6"  flare_angle_polar="1.045 * degree" flare_angle_at_face="0.7058 * degree" vis="family2" />
+          <family dir_sign="+1" x1="1.925 * cm" y1="2 * cm" z_length="45.5 * cm" number="5"  flare_angle_polar="0.929 * degree" flare_angle_at_face="0.8892 * degree" vis="family3" />
+          <family dir_sign="+1" x1="1.925 * cm" y1="2 * cm" z_length="45.5 * cm" number="5"  flare_angle_polar="0.82 * degree"  flare_angle_at_face="1.0258 * degree" vis="family4" />
+          <family dir_sign="+1" x1="1.925 * cm" y1="2 * cm" z_length="45.5 * cm" number="3"  flare_angle_polar="0.70 * degree"  flare_angle_at_face="1.126 * degree"  vis="family5" />
+          <family dir_sign="-1" x1="1.925 * cm" y1="2 * cm" z_length="45.5 * cm" number="10" flare_angle_polar="1.16 * degree"  flare_angle_at_face="0.3059 * degree" vis="family1" />
+          <family dir_sign="-1" x1="1.925 * cm" y1="2 * cm" z_length="45.5 * cm" number="6"  flare_angle_polar="1.045 * degree" flare_angle_at_face="0.7058 * degree" vis="family2" />
+          <family dir_sign="-1" x1="1.925 * cm" y1="2 * cm" z_length="45.5 * cm" number="5"  flare_angle_polar="0.929 * degree" flare_angle_at_face="0.8892 * degree" vis="family3" />
+          <family dir_sign="-1" x1="1.925 * cm" y1="2 * cm" z_length="45.5 * cm" number="5"  flare_angle_polar="0.82 * degree"  flare_angle_at_face="1.0258 * degree" vis="family4" />
+          <family dir_sign="-1" x1="1.925 * cm" y1="2 * cm" z_length="45.5 * cm" number="5"  flare_angle_polar="0.70 * degree"  flare_angle_at_face="1.126 * degree"  vis="family5" />
+          <family dir_sign="-1" x1="1.925 * cm" y1="2 * cm" z_length="45.5 * cm" number="6"  flare_angle_polar="0.586 * degree" flare_angle_at_face="1.1914 * degree" vis="family6" />
           <comment>
             Family 7 is not based on any design in particular. The polar
             flaring angle was adjusted according to the trend to avoid overlaps
             and provide gaps needed to place the supports.
           </comment>
-          <family dir_sign="-1" x1="2 * cm" y1="2 * cm" z_length="45.5 * cm" number="2"  flare_angle_polar="0.46 * degree" flare_angle_at_face="1.1914 * degree" vis="family7" />
+          <family dir_sign="-1" x1="1.925 * cm" y1="2 * cm" z_length="45.5 * cm" number="2"  flare_angle_polar="0.46 * degree" flare_angle_at_face="1.1914 * degree" vis="family7" />
         </rows>
 
         <documentation>
@@ -111,15 +119,22 @@
 
       <outer_supports>
         <comment>
-	  "EMCal Outer Surface" from the menagerie and tower support before it.
-	  Extra 1.5 cm is supposed to represent the aluminum tower support,
+          "EMCal Outer Surface" from the menagerie and tower support before it.
+          Extra 1.5 cm is supposed to represent the aluminum tower support,
           which is supposed to have a more complicated shape.
         </comment>
         <layer inner_r="129.0 * cm" thickness="(1 * cm) + (1.5 * cm)" material="Aluminum5083" vis="outer_support_aluminum" />
+        <documentation>
+          This implements material for the outer support (rails, etc.) of the
+          calorimeter
+        </documentation>
         <comment>
-          This implements the "EMCal Outer Support" from the menagerie.
+          According to the curernt manegerie,
+          https://eic.jlab.org/Geometry/Detector/Detector-20221013164359.html,
+          the "EMCal Outer Support" should be only 20% steel density of 9 cm
+          volume, but that's an outdated information.
         </comment>
-        <layer inner_r="132.0 * cm" thickness="9 * cm" material="StainlessSteel_20percent" vis="outer_support_steel" />
+        <layer inner_r="132.0 * cm" thickness="8 * cm" material="StainlessSteel" vis="outer_support_steel" />
       </outer_supports>
     </detector>
   </detectors>
@@ -127,7 +142,7 @@
   <readouts>
     <readout name="EcalBarrelSciGlassHits">
       <segmentation type="NoSegmentation"/>
-      <id>system:8,sector:8,module:8,slice:-8</id>
+      <id>system:8,sector:8,row:8,tower:-8</id>
     </readout>
   </readouts>
 </lccdd>

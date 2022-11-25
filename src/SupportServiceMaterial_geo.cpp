@@ -1,3 +1,6 @@
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (C) 2022 Sylvester Joosten
+
 /** \addtogroup Trackers Trackers
  * \brief Type: **BarrelTrackerWithFrame**.
  * \author W. Armstrong
@@ -41,30 +44,30 @@ namespace {
       const double thickness = getAttrOrDefault(x_child, _U(thickness), x_support.thickness());
       const double length    = getAttrOrDefault(x_child, _U(length), x_support.length());
       const double rmin      = getAttrOrDefault(x_child, _U(rmin), x_support.rmin()) + offset;
-      solid = Tube(rmin, rmin + thickness, length / 2);
+      solid                  = Tube(rmin, rmin + thickness, length / 2);
     }
     // A disk is a cylinder, constructed differently
     else if (type == "Disk") {
       const double thickness = getAttrOrDefault(x_child, _U(thickness), x_support.thickness());
       const double rmin      = getAttrOrDefault(x_child, _U(rmin), x_support.rmin());
       const double rmax      = getAttrOrDefault(x_child, _U(rmax), x_support.rmax());
-      pos3D                  = pos3D + Position(0, 0, -x_support.thickness()/2 + thickness / 2 + offset);
+      pos3D                  = pos3D + Position(0, 0, -x_support.thickness() / 2 + thickness / 2 + offset);
       solid                  = Tube(rmin, rmax, thickness / 2);
     } else if (type == "Cone") {
-      const double base_rmin1     = getAttrOrDefault(x_child, _U(rmin1), x_support.rmin1());
-      const double base_rmin2     = getAttrOrDefault(x_child, _U(rmin2), x_support.rmin2());
-      const double length    = getAttrOrDefault(x_child, _U(length), x_support.length());
+      const double base_rmin1 = getAttrOrDefault(x_child, _U(rmin1), x_support.rmin1());
+      const double base_rmin2 = getAttrOrDefault(x_child, _U(rmin2), x_support.rmin2());
+      const double length     = getAttrOrDefault(x_child, _U(length), x_support.length());
       // Account for the fact that the distance between base_rmin1 and rmax2 is the projection
       // of the thickness on the transverse direction
-      const double thickness = getAttrOrDefault(x_child, _U(thickness), x_support.thickness());
+      const double thickness            = getAttrOrDefault(x_child, _U(thickness), x_support.thickness());
       const double transverse_thickness = thickness / cos(atan2(fabs(base_rmin2 - base_rmin1), length));
       // also account that the same is true for the offset
       const double transverse_offset = offset / cos(atan2(fabs(base_rmin2 - base_rmin1), length));
-      const double rmin1 = base_rmin1 + transverse_offset;
-      const double rmin2 = base_rmin2 + transverse_offset;
-      const double rmax1 = rmin1 + transverse_thickness;
-      const double rmax2 = rmin2 + transverse_thickness;
-      solid              = Cone(length / 2, rmin1, rmax1, rmin2, rmax2);
+      const double rmin1             = base_rmin1 + transverse_offset;
+      const double rmin2             = base_rmin2 + transverse_offset;
+      const double rmax1             = rmin1 + transverse_thickness;
+      const double rmax2             = rmin2 + transverse_thickness;
+      solid                          = Cone(length / 2, rmin1, rmax1, rmin2, rmax2);
     } else {
       printout(ERROR, x_det.nameStr(), "Unknown support type: %s", type.c_str());
       std::exit(1);

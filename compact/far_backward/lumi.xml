@@ -1,0 +1,11 @@
+<!-- SPDX-License-Identifier: LGPL-3.0-or-later -->
+<!-- Copyright (C) 2022 Jaroslav Adam -->
+
+<lccdd>
+
+   <include ref="lumi/exit_window.xml"/>
+   <include ref="lumi/spec_magnet.xml"/>
+   <include ref="lumi/spec_tracker.xml"/>
+   <include ref="lumi/spec_homo_cal.xml"/>
+
+</lccdd>

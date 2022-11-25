@@ -1,3 +1,6 @@
+<!-- SPDX-License-Identifier: LGPL-3.0-or-later -->
+<!-- Copyright (C) 2022 Whitney Armstrong, Sylvester Joosten, Wouter Deconinck, Zhenyu Ye -->
+
   <define>
     <constant name="world_side" value="30*m"/>
     <constant name="world_x" value="world_side"/>
@@ -284,19 +287,20 @@ The unused IDs below are saved for future use.
     <documentation>
       #### (190-199) Far Backward Beamline Detectors
 
-      - Low-Q2 Tagger 1 Tracker      ID: 195
-      - Low-Q2 Tagger 1 Calorimeter  ID: 196
-      - Low-Q2 Tagger 2 Tracker      ID: 198
-      - Low-Q2 Tagger 2 Calorimeter  ID: 199
+      - Low-Q2 Tagger 1       ID: 195
+      - Low-Q2 Tagger 2       ID: 196
+      - Low-Q2 Tagger Vacuum  ID: 199
 
       TODO: A lot of the repeated ID's below should be pushed into a single detector
     </documentation>
     <constant name="LumiCollimator_ID"       value="190"/>
     <constant name="LumiDipole_ID"           value="191"/>
-    <constant name="TaggerTracker_1_ID"      value="195"/>
-    <constant name="TaggerCalorimeter_1_ID"  value="196"/>
-    <constant name="TaggerTracker_2_ID"      value="198"/>
-    <constant name="TaggerCalorimeter_2_ID"  value="199"/>
+    <constant name="LumiWindow_ID"           value="192"/>
+    <constant name="LumiSpecTracker_ID"      value="193"/>
+    <constant name="LumiSpecCAL_ID"          value="194"/>
+
+    <constant name="TaggerTracker_ID"        value="198"/>
+    <constant name="TaggerCalorimeter_ID"    value="199"/>
 
     <documentation>
       #### (200-219) Far Backward Beamline Magnets
@@ -522,7 +526,6 @@ Service gaps in FW direction (before endcapP ECAL) and BW direction (before endc
 ## Calorimeter Parameters
   </documentation>
     <constant name="EcalBarrelStavesN"              value="24"/>
-
     <constant name="EcalEndcapP_zmin"               value="ForwardServiceGap_zmax" />
     <constant name="EcalEndcapP_length"             value="30*cm" />
     <constant name="EcalEndcapP_zmax"               value="EcalEndcapP_zmin + EcalEndcapP_length"/>
@@ -615,7 +618,6 @@ Service gaps in FW direction (before endcapP ECAL) and BW direction (before endc
     <constant name="HcalBarrelBackward_zmax" value="BackwardServiceGap_zmin"/>
     <constant name="HcalBarrel_length"    value="HcalBarrelForward_zmax + HcalBarrelBackward_zmax"/>
     <constant name="HcalBarrel_offset"    value="(HcalBarrelForward_zmax - HcalBarrelBackward_zmax)/2"/>
-
     <constant name="HcalEndcapN_rmax"     value="HcalBarrel_rmax"/>
     <constant name="HcalEndcapP_rmax"     value="HcalBarrel_rmax"/>
 

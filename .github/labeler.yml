@@ -1,0 +1,64 @@
+"topic: backward":
+  - "compact/**/backward_*"
+
+"topic: barrel":
+  - "compact/**/barrel_*"
+  - "compact/**/*_barrel.xml"
+  - "compact/**/dirc*"
+  - "compact/hcal_gdml.xml"
+  - "src/Barrel*"
+  - "src/SciGlassCalorimeter_geo.cpp"
+
+"topic: calorimetry":
+  - "compact/ecal/**/*"
+  - "compact/hcal/**/*"
+  - "compact/hcal_gdml.xml"
+  - "src/*Calorimeter*"
+
+"topic: documentation":
+  - "**/*.md"
+
+"topic: far-backward":
+  - "compact/far_backward"
+  - "src/Backwards*"
+
+"topic: far-forward":
+  - "compact/far_forward"
+  - "src/Forward*"
+  - "src/B0*"
+  - "src/ZDC*"
+  - "src/ZeroDegreeCalorimeter*"
+
+"topic: forward":
+  - "compact/**/forward_*"
+  - "compact/**/*rich*"
+  - "src/*Tracker*"
+
+"topic: infrastructure":
+  - ".*"
+  - ".github/**/*"
+  - "CMakeLists.txt"
+  - "bin/**/*"
+  - "doc/**/*"
+  - "macro/**/*"
+  - "reports/**/*"
+  - "requirements.txt"
+  - "scripts/**/*"
+  - "templates/setup.sh.in"
+  - "views/**/*"
+
+"topic: materials":
+  - "compact/materials.xml"
+  - "compact/optical_materials.xml"
+
+"topic: PID":
+  - "compact/pid/**/*"
+  - "compact/tracking/**/tof_*"
+  - "src/*RICH*"
+  - "src/*DIRC*"
+  - "src/*TOF*"
+  - "src/MRich*"
+
+"topic: tracking":
+  - any: ["compact/tracking/**/*", "!compact/tracking/**/tof_*"]
+  - "src/*Tracker*"

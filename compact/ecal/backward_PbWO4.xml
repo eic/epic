@@ -1,3 +1,6 @@
+<!-- SPDX-License-Identifier: LGPL-3.0-or-later -->
+<!-- Copyright (C) 2022 Pu-Kai Wang, Wouter Deconinck -->
+
 <lccdd>
   <define>
     <constant name="EcalEndcapN_CrystalModule_width" value="20.00*mm"/>
@@ -10,7 +13,7 @@
     <constant name="EcalEndcapN_structure_ring_length" value="EcalEndcapN_length"/>
     <constant name="EcalEndcapN_structure_ring_max" value="65.00*cm"/>
     <constant name="EcalEndcapN_structure_ring_min" value="EcalEndcapN_structure_ring_max - 0.9*cm"/>
-    
+
     <comment>FIXME currently unused</comment>
     <constant name="EcalEndcapN_IonCutout_dphi" value="30*degree"/>
 
@@ -35,7 +38,7 @@
             r12min="EcalEndcapN_structure_ring_min"
             r12max="EcalEndcapN_structure_ring_max"
             SFlength="EcalEndcapN_structure_ring_length"
-            CMlength="EcalEndcapN_CrystalModule_length + 2.*EcalEndcapN_CrystalModule_wrap_thickness" 
+            CMlength="EcalEndcapN_CrystalModule_length + 2.*EcalEndcapN_CrystalModule_wrap_thickness"
             envelope="true"
             vis_struc="RPVis"
             vis_steel_gap="AnlGray"
@@ -47,7 +50,7 @@
             gz="EcalEndcapN_CrystalModule_length"
             gdz="EcalEndcapN_CrystalModule_wrap_thickness"
             gmaterial="Vacuum"
-            vis="BlueVis"/>              
+            vis="BlueVis"/>
           <crystal
             sizex="EcalEndcapN_CrystalModule_width"
             sizey="EcalEndcapN_CrystalModule_width"
@@ -57,7 +60,7 @@
           <wrapper
             carbon_thickness="EcalEndcapN_CrystalModule_carbon_thickness"
             wrap_thickness="EcalEndcapN_CrystalModule_wrap_thickness"
-            length="EcalEndcapN_CrystalModule_carbon_length"  
+            length="EcalEndcapN_CrystalModule_carbon_length"
             material_carbon="CarbonFiber"
             material_wrap="VM2000"
             material_gap="Air"

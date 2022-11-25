@@ -1,0 +1,21 @@
+<!-- SPDX-License-Identifier: LGPL-3.0-or-later -->
+<!-- Copyright (C) 2022 Whitney Armstrong, Alex Jentsch -->
+
+<lccdd>
+  <define>
+  </define>
+
+  <display>
+  </display>
+
+  <detectors>
+
+    <detector id="VacuumMagnetElement_1_ID" name="VacuumMagnetElement" type="magnetElementInnerVacuum" vis="InvisibleNoDaughters">
+      <position x="0.0" y="0.0" z="0.0" />
+      <rotation x="0*rad" y="0*rad" z="0*rad" />
+    </detector>
+
+  </detectors>
+
+
+</lccdd>

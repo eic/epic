@@ -17,14 +17,7 @@ The EPIC Detector at IP6 for Electron-Ion Collider experiment.
     - [Vertex detector](https://eic.phy.anl.gov/geoviewer/index.htm?nobrowser&file=https://eicweb.phy.anl.gov/EIC/detectors/ecce/-/jobs/artifacts/main/raw/geo/vertex_only_geo.root?job=dump_geometry&item=default;1&opt=clipx;clipy;transp30;zoom120;ROTY320;ROTZ340;trz0;trr0;ctrl;all)
   - [Far-forward](https://eic.phy.anl.gov/geoviewer/index.htm?nobrowser&file=https://eicweb.phy.anl.gov/EIC/detectors/ecce/-/jobs/artifacts/main/raw/geo/detector_geo_ip6.root?job=dump_geometry&item=default;1&opt=clipx;clipy;transp30;zoom40;ROTY290;ROTZ350;trz0;trr0;ctrl;all)
 
-<a href="https://eicweb.phy.anl.gov/EIC/detectors/ecce/-/jobs/artifacts/main/raw/images/view01.pdf?job=report">
-<img src="https://eicweb.phy.anl.gov/EIC/detectors/ecce/-/jobs/artifacts/main/raw/images/view01.png?job=report" width="400px" />
-</a>
-
-<br />
-<a href="https://eic.github.io/epic/view1_top.pdf">
-<img src="https://eic.github.io/epic/view1_top.png" width="400px" />
-</a>
+[<img title="arches" src="https://eic.github.io/epic/arches/view1_top.png" width="49%">](https://eic.github.io/epic/arches/view1_top.pdf) [<img title="brycecanyon" src="https://eic.github.io/epic/brycecanyon/view1_top.png" width="49%">](https://eic.github.io/epic/brycecanyon/view1_top.pdf)
 
 [Browse latest](https://eicweb.phy.anl.gov/EIC/detectors/ecce/-/jobs/artifacts/main/browse/images?job=report)
 
@@ -35,11 +28,9 @@ The EPIC Detector at IP6 for Electron-Ion Collider experiment.
 Getting Started
 ---------------
 
-You will  likely want to use this repository along with the IP6 repository:
+Get a copy of the latest version from this repository:
 ```bash
 git clone https://github.com/eic/epic.git
-git clone https://github.com/eic/ip6.git
-ln -s ../ip6/ip6 epic/ip6
 ```
 
 ### Compilation

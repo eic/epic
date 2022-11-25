@@ -1,0 +1,50 @@
+/run/initialize
+
+#/vis/open OGL 800x800-0+0
+/vis/open OGLSQt 800x800-0+0
+
+/vis/drawVolume
+/vis/viewer/set/viewpointThetaPhi 45  45
+/vis/viewer/zoom 1.5
+#/vis/viewer/set/style wireframe
+#/vis/scene/add/axes 0 0 0 1 m
+/vis/scene/add/trajectories rich smooth
+/vis/modeling/trajectories/create/drawByCharge
+#/vis/modeling/trajectories/drawByCharge-0/default/setDrawStepPts true
+#/vis/modeling/trajectories/drawByCharge-0/default/setStepPtsSize 2
+/vis/scene/add/hits
+/vis/scene/endOfEventAction accumulate 2
+
+#/vis/filtering/trajectories/create/particleFilter
+#/vis/filtering/trajectories/particleFilter-0/add gamma
+#/vis/filtering/trajectories/particleFilter-0/invert true
+#/vis/filtering/trajectories/particleFilter-0/verbose true
+#/vis/filtering/trajectories/particleFilter-0/active true
+
+/vis/ogl/set/displayListLimit 50000
+
+/vis/viewer/flush
+
+/gps/verbose 2
+/gps/particle proton
+/gps/number 1
+
+/gps/ene/type Gauss
+/gps/ene/mono  270.0 GeV
+/gps/ene/sigma 5.0 GeV
+
+/gps/pos/type Volume
+/gps/pos/shape Cylinder
+/gps/pos/centre 0.0 0.0 0.0 cm
+/gps/pos/radius 0.001 cm
+/gps/pos/halfz  1 cm
+/gps/position 0 0 0 cm
+
+/gps/direction 0 0.1 1.0
+/gps/ang/type iso
+/gps/ang/rot1 -0.999688 0 -0.0249974
+/gps/ang/rot2  0 1 0
+/gps/ang/mintheta  0 degree
+/gps/ang/maxtheta  0.0001 degree
+
+/run/beamOn 1
