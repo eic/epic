@@ -312,7 +312,4 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
   return sdet;
 }
 
-//@}
-// clang-format off
 DECLARE_DETELEMENT(epic_TrapEndcapTracker, create_detector)
-DECLARE_DETELEMENT(epic_GEMTrackerEndcap, create_detector)
