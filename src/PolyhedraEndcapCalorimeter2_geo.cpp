@@ -24,7 +24,7 @@ using namespace std;
 using namespace dd4hep;
 using namespace dd4hep::detail;
 
-void buildTiles(Detector& desc, SensitiveDetector &sens, Volume &s_vol, DetElement &slice, int det_id, xml_comp_t x_tiles, double sliceZ)
+void buildTiles(Detector& desc, SensitiveDetector &sens, Volume &s_vol, DetElement &slice, int det_id, xml_comp_t x_tiles, double sliceZ, vector<PlacedVolume> sens_volumes)
 {
   //auto [s_dim_x, s_dim_y, s_dim_z] = dimensions;
   //double f_radius = s_pos;
@@ -148,15 +148,19 @@ void buildTiles(Detector& desc, SensitiveDetector &sens, Volume &s_vol, DetEleme
 		Volume     f_vol(f_name, f_shape, desc.material(x_tiles.materialStr()));
 		DetElement tower(slice, f_name, det_id);
 
-        if ( x_tiles.isSensitive() ) {
-        	f_vol.setSensitiveDetector(sens);
-        }
+        
         f_vol.setAttributes(desc, x_tiles.regionStr(), x_tiles.limitsStr(), x_tiles.visStr());
 
         // Slice placement.
 
         
         PlacedVolume tower_phv = s_vol.placeVolume(f_vol, Transform3D(RotationZYX(0, j*f_spacing_phi, -M_PI / 2), Position(xcent, ycent, 0.0)));
+        
+        if ( x_tiles.isSensitive() ) {
+          sens.setType("calorimeter");
+          f_vol.setSensitiveDetector(sens);
+          sens_volumes.push_back(tower_phv);
+        }
         tower_phv.addPhysVolID("tile", f_num);
         tower.setPlacement(tower_phv);
         
@@ -342,7 +346,7 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
        ////////////////end
 
        if (x_slice.hasChild(_Unicode(tiles))) {
-              buildTiles(description, sens, s_vol, slice, det_id, x_slice.child(_Unicode(tiles)), z_slice);
+              buildTiles(description, sens, s_vol, slice, det_id, x_slice.child(_Unicode(tiles)), z_slice, sensitives);
           }
 
        PlacedVolume s_phv = l_vol.placeVolume(s_vol, Position(0, 0, sliceZ));
