@@ -44,7 +44,7 @@
         rmax="HcalEndcapN_polyhedron_rmax"/>
       <layer repeat="HcalEndcapNLayer_NRepeat" vis="HcalEndcapLayerVis">
         <slice material="Steel235" thickness="HcalEndcapNSteelThickness" vis="HcalAbsorberVis"/>
-        <slice material="Air" thickness="HcalEndcapNPolystyreneThickness" vis="AnlLight_Gray" sensitive="yes" limits="cal_limits">
+        <slice material="Air" thickness="HcalEndcapNPolystyreneThickness" vis="AnlLight_Gray" sensitive="no" limits="cal_limits">
          <tiles material="Polystyrene"
             sensitive="yes"
             eta_values="3.97368, 3.82929, 3.65542, 3.48947, 3.33106, 3.17987, 
