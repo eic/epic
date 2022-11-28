@@ -1,3 +1,6 @@
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (C) 2022 Wouter Deconinck, Whitney Armstrong, Sylvester Joosten
+
 //==========================================================================
 //
 //      <detector name ="DetName" type="Beampipe" >

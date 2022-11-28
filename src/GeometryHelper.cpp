@@ -1,3 +1,6 @@
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (C) 2022 Sakib Rahman, Chao Peng, Whitney Armstrong
+
 #include "GeometryHelper.h"
 
 namespace ip6::geo {

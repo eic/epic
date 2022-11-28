@@ -34,19 +34,8 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 # Install into GNU standard directories
 include(GNUInstallDirs)
 
-# Set required DD4hep components based on user input
-set(USE_DDG4 "TRUE" CACHE BOOL "Require DD4hep DDG4 component")
-set(DD4hep_required_components DDCore DDRec)
-if(${USE_DDG4})
-  list(APPEND DD4hep_required_components DDG4)
-endif()
-
-# The items passed to target_link_libraries below need DD4hep:: prepended
-set(DD4hep_required_libraries ${DD4hep_required_components})
-list(TRANSFORM DD4hep_required_libraries PREPEND DD4hep::)
-
 # Dependencies
-find_package(DD4hep REQUIRED COMPONENTS ${DD4hep_required_components})
+find_package(DD4hep REQUIRED COMPONENTS DDCore DDG4 DDRec)
 if(${DD4hep_VERSION} VERSION_LESS 1.21)
   message(WARNING "DD4hep before 1.21 does not write collections correctly \n"
                   "More info at https://github.com/AIDASoft/DD4hep/pull/922")
@@ -72,7 +61,7 @@ dd4hep_add_plugin(${a_lib_name}
   USES ${ActsDD4hep} ROOT::Core ROOT::Gdml
   )
 target_link_libraries(${a_lib_name}
-  PUBLIC ${DD4hep_required_libraries} fmt::fmt
+  PUBLIC DD4hep::DDCore DD4hep::DDRec fmt::fmt
   )
 
 #-----------------------------------------------------------------------------------
