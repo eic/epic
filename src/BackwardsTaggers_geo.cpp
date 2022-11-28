@@ -106,7 +106,10 @@ static Ref_t create_detector(Detector& desc, xml_h e, SensitiveDetector sens)
     string moduleName = dd4hep::getAttrOrDefault<std::string>(mod, _Unicode(modname), "Tagger0");
 
     // Offset from the electron beam
-    double tagoff = dd4hep::getAttrOrDefault<double>(mod, _Unicode(offset_min), 50.0 * mm);
+    double tagoff  = dd4hep::getAttrOrDefault<double>(mod, _Unicode(offset_min), 50.0 * mm);
+
+    // Overlap left beyond theta setting
+    double overlap = dd4hep::getAttrOrDefault<double>(mod, _Unicode(overlap), 0.0 * mm);
 
     // Theta coverage expected
     double thetamin = dd4hep::getAttrOrDefault<double>(mod, _Unicode(theta_min), 0.030 * rad) - rot.theta();
@@ -133,14 +136,16 @@ static Ref_t create_detector(Detector& desc, xml_h e, SensitiveDetector sens)
     auto box_w = w + wall;
     auto box_h = h + wall;
 
+    // Angle in relation to the main beam
     auto theta      = thetamin;
+
+    
     auto offsetx    = -(box_w - wall) * (cos(theta));
     auto offsetz    = (box_w - wall) * (sin(theta));
     auto vacoffsetx = -vac_w * (cos(theta));
     auto vacoffsetz = vac_w * (sin(theta));
     auto l          = (tagoff) / (sin(theta));
-    //    auto l          = (tagoff)/(sin(theta));
-
+    
     auto tagoffsetx = vacoffsetx - (l + tagboxL) * sin(theta);
     auto tagoffsetz = vacoffsetz - (l + tagboxL) * cos(theta);
     //     auto tagoffsetx = vacoffsetx-(l+tagboxL/2)*sin(theta);
@@ -148,10 +153,10 @@ static Ref_t create_detector(Detector& desc, xml_h e, SensitiveDetector sens)
 
     if (max_align) {
       theta      = thetamax;
-      offsetx    = (box_w - wall) * (cos(theta));
-      offsetz    = -(box_w - wall) * (sin(theta));
-      vacoffsetx = vac_w * (cos(theta));
-      vacoffsetz = -vac_w * (sin(theta));
+      offsetx    = (overlap+box_w - wall) * (cos(theta));
+      offsetz    = -(overlap+box_w - wall) * (sin(theta));
+      vacoffsetx = (overlap+vac_w) * (cos(theta));
+      vacoffsetz = -(overlap+vac_w) * (sin(theta));
       l          = (2 * offsetx + tagoff) / sin(theta);
       tagoffsetx = vacoffsetx - (l + tagboxL) * sin(theta);
       tagoffsetz = vacoffsetz - (l + tagboxL) * cos(theta);

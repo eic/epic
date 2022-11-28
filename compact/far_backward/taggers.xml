@@ -45,9 +45,11 @@
       <module id="2"
         modname="Tagger2"
         theta_min="Tagger2_Min_Theta"
+        theta_max="Tagger1_Min_Theta"
         max_align="true"
         offset_min="Tagger2_Min_Offset"
         extend_vacuum="true"
+        overlap=-20*mm
         >
         <dimensions x="Tagger2_Width/2" y="Tagger2_Height/2" z="Tagger2_Length"/>
         <trackLayer  id="0" type="timepix" z="0*mm"   sensor_thickness="400*um"/>
@@ -59,6 +61,45 @@
 
     </detector>
 
+    <comment> Calorimeters </comment>
+    <detector id="TaggerCalorimeter_ID" name="BackwardsTaggerCalorimeter" type="BackwardsTaggerCalorimeter" wall="2*mm" lumi="true" vis="BackwardsBox" readout="TaggerCalorimeterHits">
+      <focus      x="Dipole_Focus_X"    y="Dipole_Focus_Y"    z="Dipole_Focus_Z" />
+      <rotation   theta="Beam_Theta"/>
+  
+  
+      <comment> Tagger calorimeter stations </comment>
+      <module id="1"
+        modname="TagCal1"
+        theta_min="Tagger1_Min_Theta"
+        max_align="false"
+        offset_min="Tagger1_Min_Offset"
+        nrow="8"
+        ncol="8"
+        material="leadtungsten_optical"
+        cryvis="GreenVis"
+        >
+        <dimensions  x="Tagger1_Width/2" y="Tagger1_Height/2" z="Tag_Cal_1_Depth"/>
+        <offset      x="-100*mm" y="0" z="-Tagger1_Length-100*mm"/>
+      </module>
+
+      <module id="2"
+        modname="TagCal2"
+        theta_min="Tagger2_Min_Theta"
+        theta_max="Tagger1_Min_Theta"
+        max_align="true"
+        offset_min="Tagger2_Min_Offset"
+        nrow="8"
+        ncol="8"
+        material="leadtungsten_optical"
+        cryvis="GreenVis"
+        overlap=-20*mm
+        >
+        <dimensions x="Tagger2_Width/2" y="Tagger2_Height/2" z="Tag_Cal_2_Depth"/>
+        <offset     x="-100*mm" y="0" z="-Tagger2_Length-100*mm"/>
+      </module>
+
+    </detector>
+
   </detectors>
 
   <readouts>
@@ -66,6 +107,11 @@
     <readout name="TaggerTrackerHits">
       <segmentation type="CartesianGridXY" grid_size_x="tracker_pixel_size" grid_size_y="tracker_pixel_size" />
       <id>system:8,module:2,layer:4,sensor:4,x:32:-16,y:-16</id>
+    </readout>
+
+    <readout name="TaggerCalorimeterHits">
+      <segmentation type="NoSegmentation"/>
+      <id>system:8,module:2,crystal:8,x:32:-16,y:-16</id>
     </readout>
 
   </readouts>
