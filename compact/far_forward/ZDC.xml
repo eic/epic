@@ -1,6 +1,3 @@
-<!-- SPDX-License-Identifier: LGPL-3.0-or-later -->
-<!-- Copyright (C) 2022 Shima Shimizu, Wouter Deconinck, Whitney Armstrong -->
-
 <lccdd>
 
   <comment>Far Forward Hadron Detectors</comment>
@@ -14,7 +11,7 @@
     <constant name="ZDC_r_pos"         value="3550.0 * cm"/> <!-- Make it match to the CAD figure 22/Nov/22 -->
     <constant name="ZDC_y_pos"         value="0.0 * cm"/>
     <constant name="ZDC_rotateX_angle" value="0.0 * rad"/>
-    <constant name="ZDC_rotateY_angle" value="ionCrossingAngle"/>
+    <constant name="ZDC_rotateY_angle" value="-1.* ionCrossingAngle"/>
     <constant name="ZDC_rotateZ_angle" value="0.0 * rad"/>
     <constant name="ZDC_width"         value="60.0 * cm"/>
     <constant name="ZDC_length"        value="200.0 * cm"/>
@@ -26,7 +23,7 @@
     </comment>
     <constant name="ZDC_1stSilicon_r_pos"        value="ZDC_r_pos+0.5*cm"/>
     <constant name="ZDC_1stSilicon_z_pos"        value="ZDC_1stSilicon_r_pos * cos(ionCrossingAngle)"/>
-    <constant name="ZDC_1stSilicon_x_pos"        value=" -1. * ZDC_1stSilicon_r_pos * sin(ionCrossingAngle)"/>
+    <constant name="ZDC_1stSilicon_x_pos"        value="ZDC_1stSilicon_r_pos * sin(ionCrossingAngle)"/>
     <constant name="ZDC_1stSilicon_y_pos"        value="ZDC_y_pos"/>
     <constant name="ZDC_1stSilicon_rotateX_angle"   value="ZDC_rotateX_angle"/>
     <constant name="ZDC_1stSilicon_rotateY_angle"   value="ZDC_rotateY_angle"/>
@@ -34,7 +31,7 @@
 
     <constant name="ZDC_Crystal_r_pos"           value="ZDC_r_pos + 5.9 *cm "/>
     <constant name="ZDC_Crystal_z_pos"           value="ZDC_Crystal_r_pos * cos(ionCrossingAngle)"/>
-    <constant name="ZDC_Crystal_x_pos"           value="-1.* ZDC_Crystal_r_pos * sin(ionCrossingAngle)"/>
+    <constant name="ZDC_Crystal_x_pos"           value="ZDC_Crystal_r_pos * sin(ionCrossingAngle)"/>
     <constant name="ZDC_Crystal_y_pos"           value="ZDC_y_pos"/>
     <constant name="ZDC_Crystal_rotateX_angle"   value="ZDC_rotateX_angle"/>
     <constant name="ZDC_Crystal_rotateY_angle"   value="ZDC_rotateY_angle"/>
@@ -43,7 +40,7 @@
 
     <constant name="ZDC_WSi_r_pos"               value="ZDC_r_pos + 23*cm"/>
     <constant name="ZDC_WSi_z_pos"               value="ZDC_WSi_r_pos * cos(ionCrossingAngle)"/>
-    <constant name="ZDC_WSi_x_pos"               value="-1. * ZDC_WSi_r_pos * sin(ionCrossingAngle)"/>
+    <constant name="ZDC_WSi_x_pos"               value="ZDC_WSi_r_pos * sin(ionCrossingAngle)"/>
     <constant name="ZDC_WSi_y_pos"               value="ZDC_y_pos"/>
     <constant name="ZDC_WSi_rotateX_angle"       value="ZDC_rotateX_angle"/>
     <constant name="ZDC_WSi_rotateY_angle"       value="ZDC_rotateY_angle"/>
@@ -53,7 +50,7 @@
 
     <constant name="ZDC_PbSi_r_pos"               value="ZDC_r_pos + 59. *cm"/>
     <constant name="ZDC_PbSi_z_pos"               value="ZDC_PbSi_r_pos * cos(ionCrossingAngle)"/>
-    <constant name="ZDC_PbSi_x_pos"               value="-1. * ZDC_PbSi_r_pos * sin(ionCrossingAngle)"/>
+    <constant name="ZDC_PbSi_x_pos"               value="ZDC_PbSi_r_pos * sin(ionCrossingAngle)"/>
     <constant name="ZDC_PbSi_y_pos"               value="ZDC_y_pos"/>
     <constant name="ZDC_PbSi_rotateX_angle"       value="ZDC_rotateX_angle"/>
     <constant name="ZDC_PbSi_rotateY_angle"       value="ZDC_rotateY_angle"/>
@@ -62,7 +59,7 @@
 
     <constant name="ZDC_PbSci_r_pos"               value="ZDC_r_pos + 137. *cm"/>
     <constant name="ZDC_PbSci_z_pos"               value="ZDC_PbSci_r_pos * cos(ionCrossingAngle)"/>
-    <constant name="ZDC_PbSci_x_pos"               value="-1. *ZDC_PbSci_r_pos * sin(ionCrossingAngle)"/>
+    <constant name="ZDC_PbSci_x_pos"               value="ZDC_PbSci_r_pos * sin(ionCrossingAngle)"/>
     <constant name="ZDC_PbSci_y_pos"               value="ZDC_y_pos"/>
     <constant name="ZDC_PbSci_rotateX_angle"       value="ZDC_rotateX_angle"/>
     <constant name="ZDC_PbSci_rotateY_angle"       value="ZDC_rotateY_angle"/>
