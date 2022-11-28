@@ -1,3 +1,6 @@
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (C) 2022 Chao Peng, Whitney Armstrong
+
 #include "GeometryHelpers.h"
 
 // some utility functions that can be shared

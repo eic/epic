@@ -1,4 +1,6 @@
 features:
+  fields:
+    marco:
   pid:
     dirc:
     mrich:

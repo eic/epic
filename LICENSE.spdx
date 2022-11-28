@@ -1,0 +1,7 @@
+SPDXVersion: SPDX-2.1
+DataLicense: CC0-1.0
+DocumentNamespace: https://github.com/eic/epic/LICENSE.spdx-75ac9ba2-1dcd-4162-b628-e91d803eb423
+PackageName: EPIC
+PackageOriginator: Person: Wouter Deconinck, Sylvester Joosten
+PackageHomePage: https://github.com/eic/epic
+PackageLicenseDeclared: LGPL-3.0-or-later

@@ -1,5 +1,5 @@
 <!-- SPDX-License-Identifier: LGPL-3.0-or-later -->
-<!-- Copyright (C) 2022 Simon Gardner, Dhevan Gangadharan -->
+<!-- Copyright (C) 2022 Simon Gardner -->
 
 <lccdd>
 
@@ -14,7 +14,7 @@
       <Pipe wall_thickness="Hadron_Beampipe_Thickness" outerD1="Hadron_Beampipe_Rad" outerD2="Hadron_Beampipe_Rad"
         end1z="Hadron_Beampipe_End" end2z="Q1APR_StartZ" end1x="Hadron_Beampipe_End*sin(CrossingAngle)" end2x="Q1APR_StartX"/>
     </detector>
-  
+
     <detector name="Pipe_in_Q1APR" type="BackwardsBeamPipe">
       <Pipe wall_thickness="Hadron_Beampipe_Thickness" outerD1="Hadron_Beampipe_Rad" outerD2="Hadron_Beampipe_Rad"
         end1z="Q1APR_StartZ" end2z="Q1APR_EndZ" end1x="Q1APR_StartX" end2x="Q1APR_EndX"/>
@@ -24,7 +24,7 @@
       <Pipe wall_thickness="Hadron_Beampipe_Thickness" outerD1="Hadron_Beampipe_Rad" outerD2="Hadron_Beampipe_Rad"
         end1z="Q1APR_EndZ" end2z="Q1BPR_StartZ" end1x="Q1APR_EndX" end2x="Q1BPR_StartX"/>
     </detector>
-  
+
     <detector name="Pipe_in_Q1BPR" type="BackwardsBeamPipe">
       <Pipe wall_thickness="Hadron_Beampipe_Thickness" outerD1="Hadron_Beampipe_Rad" outerD2="Hadron_Beampipe_Rad"
         end1z="Q1BPR_StartZ" end2z="Q1BPR_EndZ" end1x="Q1BPR_StartX" end2x="Q1BPR_EndX"/>
@@ -34,7 +34,7 @@
       <Pipe wall_thickness="Hadron_Beampipe_Thickness" outerD1="Hadron_Beampipe_Rad" outerD2="Hadron_Beampipe_Rad"
         end1z="Q1BPR_EndZ" end2z="Q2PR_StartZ" end1x="Q1BPR_EndX" end2x="Q2PR_StartX"/>
     </detector>
-    
+
     <detector name="Pipe_in_Q2PR" type="BackwardsBeamPipe">
       <Pipe wall_thickness="Hadron_Beampipe_Thickness" outerD1="Hadron_Beampipe_Rad" outerD2="Hadron_Beampipe_Rad"
         end1z="Q2PR_StartZ" end2z="Q2PR_EndZ" end1x="Q2PR_StartX" end2x="Q2PR_EndX"/>
