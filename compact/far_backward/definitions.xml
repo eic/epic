@@ -43,8 +43,8 @@
     <constant name="Q3eR_CenterPosition"  value="-37.996018*m"/>
 
     <comment> Note: Placements for Q4eR, B3eR, B4eR, B5eR, B6eR, B7eR
-              are approximate (valid to within ~1 cm).  
-              Should be updated with detailed input from the accelerator group 
+              are approximate (valid to within ~1 cm).
+              Should be updated with detailed input from the accelerator group
     </comment>
 
     <constant name="Q4eR_CenterZ"         value="-45.32*m"/>
@@ -128,8 +128,8 @@
     <constant name="Q3PR_Theta"           value="CrossingAngle"/>
 
     <comment> Note: Placements for Crab1PR, Crab2PR, Crab3PR, Q4PR, B1PR
-              are approximate (valid to within ~1 cm).  
-              Should be updated with detailed input from the accelerator group 
+              are approximate (valid to within ~1 cm).
+              Should be updated with detailed input from the accelerator group
     </comment>
 
     <constant name="Crab1PR_CenterZ"      value="-42.43*m"/>
@@ -152,7 +152,7 @@
     <constant name="Crab3PR_InnerRadius"  value="0.05*m"/>
     <constant name="Crab3PR_OuterRadius"  value="0.68*m"/>
     <constant name="Crab3PR_Theta"        value="CrossingAngle"/>
-    
+
     <constant name="Q4PR_CenterZ"         value="-56.35*m"/>
     <constant name="Q4PR_CenterX"         value="1.42*m"/>
     <constant name="Q4PR_Length"          value="1.5*m"/>

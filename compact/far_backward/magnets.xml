@@ -69,14 +69,14 @@
       <apperture  x="0" y="0" r="B5eR_InnerRadius"/>
       <coil dx="2*cm" dy="1.5*cm" /><!--unchecked-->
     </detector>
-    
+
     <detector id="Magnet_B6eR_ID" name="Magnet_B6eR" type="ip6_CylindricalDipoleMagnet" vis="FFMagnetVis">
       <placement  x="B6eR_CenterX" y="0" z="B6eR_CenterZ" theta="B6eR_Theta"/>
       <dimensions x="0" y="0" z="B6eR_Length" r="B6eR_OuterRadius"/>
       <apperture  x="0" y="0" r="B6eR_InnerRadius"/>
       <coil dx="2*cm" dy="1.5*cm" /><!--unchecked-->
     </detector>
-    
+
     <detector id="Magnet_B7eR_ID" name="Magnet_B7eR" type="ip6_CylindricalDipoleMagnet" vis="FFMagnetVis">
       <placement  x="B7eR_CenterX" y="0" z="B7eR_CenterZ" theta="B7eR_Theta"/>
       <dimensions x="0" y="0" z="B7eR_Length" r="B7eR_OuterRadius"/>
@@ -84,7 +84,7 @@
       <coil dx="2*cm" dy="1.5*cm" /><!--unchecked-->
     </detector>
 
-    
+
     <comment> Hadron side beam magnet volumes </comment>
     <!--
     <detector name="Magnet_Q1APR" type="ip6_CylindricalDipoleMagnet" vis="RedVis">
@@ -138,14 +138,14 @@
       <apperture  x="0" y="0" r="Crab3PR_InnerRadius"/>
       <coil dx="2*cm" dy="1.5*cm" /><!--unchecked-->
     </detector>
-    
+
     <detector name="Magnet_Q4PR" type="ip6_CylindricalDipoleMagnet" vis="RedVis">
       <placement  x="Q4PR_CenterX" y="0" z="Q4PR_CenterZ" theta="Q4PR_Theta"/>
       <dimensions x="0" y="0" z="Q4PR_Length" r="Q4PR_OuterRadius"/>
       <apperture  x="0" y="0" r="Q4PR_InnerRadius"/>
       <coil dx="2*cm" dy="1.5*cm" /><!--unchecked-->
     </detector>
-   
+
     <detector name="Magnet_B1PR" type="ip6_CylindricalDipoleMagnet" vis="RedVis">
       <placement  x="B1PR_CenterX" y="0" z="B1PR_CenterZ" theta="B1PR_Theta"/>
       <dimensions x="0" y="0" z="B1PR_Length" r="B1PR_OuterRadius"/>

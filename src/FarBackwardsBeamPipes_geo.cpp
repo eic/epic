@@ -64,7 +64,7 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector /
       rOuters2.push_back( 0 );
     }
   }
-  
+
   // Calculate parameters for connecting pipes in between magnets
   for( uint pipeN = 0; pipeN < names.size(); pipeN++ ) {
 
@@ -76,12 +76,12 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector /
     double deltaX = (xCenters[pipeN-1] - lengths[pipeN-1]/2.*sin(thetas[pipeN-1])) - (xCenters[pipeN+1] + lengths[pipeN+1]/2.*sin(thetas[pipeN+1]));
     double deltaZ = (zCenters[pipeN-1] - lengths[pipeN-1]/2.*cos(thetas[pipeN-1])) - (zCenters[pipeN+1] + lengths[pipeN+1]/2.*cos(thetas[pipeN+1]));
     double l = sqrt( pow(deltaX, 2) + pow(deltaZ, 2) );
-    
+
     // Small air gap between connecting and magnet beam pipes to avoid G4 overlap errors
-    l -= 0.5;     
-    
+    l -= 0.5;
+
     double theta = atan( deltaX / deltaZ );
-       
+
     xCenters[pipeN] = x;
     zCenters[pipeN] = z;
     lengths[pipeN] = l;
@@ -89,13 +89,13 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector /
     rOuters1[pipeN] = rOuters2[pipeN-1];
     rOuters2[pipeN] = rOuters1[pipeN+1];
   }
- 
+
   // Add all pipes to the assembly
   for( uint pipeN = 0; pipeN < xCenters.size(); pipeN++ ) {
 
     ConeSegment s_tube( lengths[pipeN] / 2.0, rOuters1[pipeN] - thickness, rOuters1[pipeN], rOuters2[pipeN] - thickness, rOuters2[pipeN] );
     ConeSegment s_vacuum( lengths[pipeN] / 2.0, 0, rOuters1[pipeN] - thickness, 0, rOuters2[pipeN] - thickness );
-    
+
     Volume v_tube("v_tube_" + names[pipeN], s_tube, m_Al);
     Volume v_vacuum("v_vacuum_" + names[pipeN], s_vacuum, m_Vacuum);
 

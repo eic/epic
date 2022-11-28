@@ -51,52 +51,52 @@
     </detector>
 
     <!-- Beam pipe going from Q3eR to B7eR -->
-    <detector 
-    id="Pipe_Q3eR_to_B7eR_ID" 
-    name="Pipe_Q3eR_to_B7eR" 
-    type="FarBackwardsBeamPipes" 
+    <detector
+    id="Pipe_Q3eR_to_B7eR_ID"
+    name="Pipe_Q3eR_to_B7eR"
+    type="FarBackwardsBeamPipes"
     wall_thickness="2*mm">
       <pipe id="0" name="Pipe_in_Q3eR" magnetpipe="1"
-        xcenter="Q3eR_XPosition" zcenter="Q3eR_CenterPosition" 
+        xcenter="Q3eR_XPosition" zcenter="Q3eR_CenterPosition"
         length="Q3eR_Length" theta="Q3eR_Theta"
         rout1="Q3eR_InnerRadius" rout2="Q3eR_InnerRadius">
       </pipe>
       <pipe id="1" name="Pipe_Q3eR_to_Q4eR" magnetpipe="0"/>
       <pipe id="2" name="Pipe_in_Q4eR" magnetpipe="1"
-        xcenter="Q4eR_CenterX" zcenter="Q4eR_CenterZ" 
+        xcenter="Q4eR_CenterX" zcenter="Q4eR_CenterZ"
         length="Q4eR_Length" theta="Q4eR_Theta"
         rout1="Q4eR_InnerRadius" rout2="Q4eR_InnerRadius">
       </pipe>
       <pipe id="3" name="Pipe_Q4eR_to_B3eR"  magnetpipe="0"/>
       <pipe id="4" name="Pipe_in_B3eR" magnetpipe="1"
-        xcenter="B3eR_CenterX" zcenter="B3eR_CenterZ" 
+        xcenter="B3eR_CenterX" zcenter="B3eR_CenterZ"
         length="B3eR_Length" theta="B3eR_Theta"
         rout1="B3eR_InnerRadius" rout2="B3eR_InnerRadius">
       </pipe>
       <pipe id="5" name="Pipe_B3eR_to_B4eR" magnetpipe="0"/>
       <pipe id="6" name="Pipe_in_B4eR" magnetpipe="1"
-        xcenter="B4eR_CenterX" zcenter="B4eR_CenterZ" 
+        xcenter="B4eR_CenterX" zcenter="B4eR_CenterZ"
         length="B4eR_Length" theta="B4eR_Theta"
         rout1="B4eR_InnerRadius" rout2="B4eR_InnerRadius">
       </pipe>
       <pipe id="7" name="Pipe_B4eR_to_B5eR" magnetpipe="0"/>
       <pipe id="8" name="Pipe_in_B5eR" magnetpipe="1"
-        xcenter="B5eR_CenterX" zcenter="B5eR_CenterZ" 
+        xcenter="B5eR_CenterX" zcenter="B5eR_CenterZ"
         length="B5eR_Length" theta="B5eR_Theta"
         rout1="B5eR_InnerRadius" rout2="B5eR_InnerRadius">
       </pipe>
       <pipe id="9" name="Pipe_B5eR_to_B6eR" magnetpipe="0"/>
       <pipe id="10" name="Pipe_in_B6eR" magnetpipe="1"
-        xcenter="B6eR_CenterX" zcenter="B6eR_CenterZ" 
+        xcenter="B6eR_CenterX" zcenter="B6eR_CenterZ"
         length="B6eR_Length" theta="B6eR_Theta"
         rout1="B6eR_InnerRadius" rout2="B6eR_InnerRadius">
       </pipe>
       <pipe id="11" name="Pipe_B6eR_to_B7eR" magnetpipe="0"/>
       <pipe id="12" name="Pipe_in_B7eR" magnetpipe="1"
-        xcenter="B7eR_CenterX" zcenter="B7eR_CenterZ" 
+        xcenter="B7eR_CenterX" zcenter="B7eR_CenterZ"
         length="B7eR_Length" theta="B7eR_Theta"
         rout1="B7eR_InnerRadius" rout2="B7eR_InnerRadius">
-      </pipe> 
+      </pipe>
     </detector>
 
   </detectors>
