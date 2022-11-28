@@ -40,49 +40,52 @@
     <constant name="Q3eR_Theta"           value="0.0180766389*rad"/>
     <constant name="Q3eR_CenterPosition"  value="-37.996018*m"/>
 
-    <constant name="Q4eR_CenterZ"      value="-45.32*m"/>
-    <constant name="Q4eR_CenterX"      value="-0.58*m"/>
+    <comment> Note: Placements for Q4eR, B3eR, B4eR, B5eR, B6eR, B7eR
+              are approximate (valid to within ~1 cm).  
+              Should be updated with detailed input from the accelerator group 
+    </comment>
+
+    <constant name="Q4eR_CenterZ"         value="-45.32*m"/>
+    <constant name="Q4eR_CenterX"         value="-0.58*m"/>
     <constant name="Q4eR_Length"          value="0.6*m"/>
     <constant name="Q4eR_InnerRadius"     value="0.05*m"/>
     <constant name="Q4eR_OuterRadius"     value="0.2*m"/>
-    <constant name="Q4eR_Theta"      value="Q3eR_Theta"/>
+    <constant name="Q4eR_Theta"           value="Q3eR_Theta"/>
 
-    <constant name="B3eR_CenterZ"      value="-50.01*m"/>
-    <constant name="B3eR_CenterX"      value="-0.67*m"/>
-    <constant name="B3eR_Length"      value="1.2*m"/>
-    <constant name="B3eR_InnerRadius"      value="0.05*m"/>
-    <constant name="B3eR_OuterRadius"      value="0.24*m"/>
-    <constant name="B3eR_Theta"      value="Q3eR_Theta*7/8"/>
+    <constant name="B3eR_CenterZ"         value="-50.01*m"/>
+    <constant name="B3eR_CenterX"         value="-0.67*m"/>
+    <constant name="B3eR_Length"          value="1.2*m"/>
+    <constant name="B3eR_InnerRadius"     value="0.05*m"/>
+    <constant name="B3eR_OuterRadius"     value="0.24*m"/>
+    <constant name="B3eR_Theta"           value="Q3eR_Theta*7/8"/>
 
-    <constant name="B4eR_CenterZ"      value="-55*m"/>
-    <constant name="B4eR_CenterX"      value="-0.79*m"/>
-    <constant name="B4eR_Length"      value="1.2*m"/>
-    <constant name="B4eR_InnerRadius"      value="0.05*m"/>
-    <constant name="B4eR_OuterRadius"      value="0.24*m"/>
-    <constant name="B4eR_Theta"      value="Q3eR_Theta*6/8"/>
+    <constant name="B4eR_CenterZ"         value="-55*m"/>
+    <constant name="B4eR_CenterX"         value="-0.79*m"/>
+    <constant name="B4eR_Length"          value="1.2*m"/>
+    <constant name="B4eR_InnerRadius"     value="0.05*m"/>
+    <constant name="B4eR_OuterRadius"     value="0.24*m"/>
+    <constant name="B4eR_Theta"           value="Q3eR_Theta*6/8"/>
 
-    <constant name="B5eR_CenterZ"      value="-59.98*m"/>
-    <constant name="B5eR_CenterX"      value="-0.93*m"/>
-    <constant name="B5eR_Length"      value="1.2*m"/>
-    <constant name="B5eR_InnerRadius"      value="0.05*m"/>
-    <constant name="B5eR_OuterRadius"      value="0.24*m"/>
-    <constant name="B5eR_Theta"      value="Q3eR_Theta*5/8"/>
+    <constant name="B5eR_CenterZ"         value="-59.98*m"/>
+    <constant name="B5eR_CenterX"         value="-0.93*m"/>
+    <constant name="B5eR_Length"          value="1.2*m"/>
+    <constant name="B5eR_InnerRadius"     value="0.05*m"/>
+    <constant name="B5eR_OuterRadius"     value="0.24*m"/>
+    <constant name="B5eR_Theta"           value="Q3eR_Theta*5/8"/>
 
-    <constant name="B6eR_CenterZ"      value="-64.97*m"/>
-    <constant name="B6eR_CenterX"      value="-1.05*m"/>
-    <constant name="B6eR_Length"      value="1.2*m"/>
-    <constant name="B6eR_InnerRadius"      value="0.05*m"/>
-    <constant name="B6eR_OuterRadius"      value="0.24*m"/>
-    <constant name="B6eR_Theta"      value="Q3eR_Theta*4/8"/>
+    <constant name="B6eR_CenterZ"         value="-64.97*m"/>
+    <constant name="B6eR_CenterX"         value="-1.05*m"/>
+    <constant name="B6eR_Length"          value="1.2*m"/>
+    <constant name="B6eR_InnerRadius"     value="0.05*m"/>
+    <constant name="B6eR_OuterRadius"     value="0.24*m"/>
+    <constant name="B6eR_Theta"           value="Q3eR_Theta*4/8"/>
 
-    <constant name="B7eR_CenterZ"      value="-69.96*m"/>
-    <constant name="B7eR_CenterX"      value="-1.19*m"/>
-    <constant name="B7eR_Length"      value="1.2*m"/>
-    <constant name="B7eR_InnerRadius"      value="0.05*m"/>
-    <constant name="B7eR_OuterRadius"      value="0.24*m"/>
-    <constant name="B7eR_Theta"      value="Q3eR_Theta*3/8"/>
-
-
+    <constant name="B7eR_CenterZ"         value="-69.96*m"/>
+    <constant name="B7eR_CenterX"         value="-1.19*m"/>
+    <constant name="B7eR_Length"          value="1.2*m"/>
+    <constant name="B7eR_InnerRadius"     value="0.05*m"/>
+    <constant name="B7eR_OuterRadius"     value="0.24*m"/>
+    <constant name="B7eR_Theta"           value="Q3eR_Theta*3/8"/>
 
 
     <comment> Hadron magnet dimensions and positions </comment>
@@ -111,8 +114,8 @@
     <constant name="Q2PR_EndX"            value="0.374960938720726777*m"/>
     <constant name="Q2PR_Theta"           value="CrossingAngle"/>
 
-    <constant name="Q3PR_CenterX"          value="0.9686*m"/>
-    <constant name="Q3PR_CenterZ"          value="-38.7385*m"/>
+    <constant name="Q3PR_CenterX"         value="0.9686*m"/>
+    <constant name="Q3PR_CenterZ"         value="-38.7385*m"/>
     <constant name="Q3PR_InnerRadius"     value="Hadron_Beampipe_Rad"/>
     <constant name="Q3PR_OuterRadius"     value="0.29*m"/>
     <constant name="Q3PR_Length"          value="1.5*m"/>
@@ -122,42 +125,45 @@
     <constant name="Q3PR_EndX"            value="0.987412766073207715*m"/>
     <constant name="Q3PR_Theta"           value="CrossingAngle"/>
 
+    <comment> Note: Placements for Crab1PR, Crab2PR, Crab3PR, Q4PR, B1PR
+              are approximate (valid to within ~1 cm).  
+              Should be updated with detailed input from the accelerator group 
+    </comment>
+
     <constant name="Crab1PR_CenterZ"      value="-42.43*m"/>
     <constant name="Crab1PR_CenterX"      value="1.07*m"/>
-    <constant name="Crab1PR_Length"      value="5*m"/>
-    <constant name="Crab1PR_InnerRadius"      value="0.05*m"/>
-    <constant name="Crab1PR_OuterRadius"      value="0.5*m"/>
-    <constant name="Crab1PR_Theta"      value="CrossingAngle"/>
+    <constant name="Crab1PR_Length"       value="5*m"/>
+    <constant name="Crab1PR_InnerRadius"  value="0.05*m"/>
+    <constant name="Crab1PR_OuterRadius"  value="0.5*m"/>
+    <constant name="Crab1PR_Theta"        value="CrossingAngle"/>
 
     <constant name="Crab2PR_CenterZ"      value="-47.315*m"/>
     <constant name="Crab2PR_CenterX"      value="1.21*m"/>
-    <constant name="Crab2PR_Length"      value="4.75*m"/>
-    <constant name="Crab2PR_InnerRadius"      value="0.05*m"/>
-    <constant name="Crab2PR_OuterRadius"      value="0.68*m"/>
-    <constant name="Crab2PR_Theta"      value="CrossingAngle"/>
+    <constant name="Crab2PR_Length"       value="4.75*m"/>
+    <constant name="Crab2PR_InnerRadius"  value="0.05*m"/>
+    <constant name="Crab2PR_OuterRadius"  value="0.68*m"/>
+    <constant name="Crab2PR_Theta"        value="CrossingAngle"/>
 
     <constant name="Crab3PR_CenterZ"      value="-52.5*m"/>
     <constant name="Crab3PR_CenterX"      value="1.33*m"/>
-    <constant name="Crab3PR_Length"      value="4.75*m"/>
-    <constant name="Crab3PR_InnerRadius"      value="0.05*m"/>
-    <constant name="Crab3PR_OuterRadius"      value="0.68*m"/>
-    <constant name="Crab3PR_Theta"      value="CrossingAngle"/>
+    <constant name="Crab3PR_Length"       value="4.75*m"/>
+    <constant name="Crab3PR_InnerRadius"  value="0.05*m"/>
+    <constant name="Crab3PR_OuterRadius"  value="0.68*m"/>
+    <constant name="Crab3PR_Theta"        value="CrossingAngle"/>
     
-    <constant name="Q4PR_CenterZ"      value="-56.35*m"/>
-    <constant name="Q4PR_CenterX"      value="1.42*m"/>
-    <constant name="Q4PR_Length"      value="1.5*m"/>
-    <constant name="Q4PR_InnerRadius"      value="0.05*m"/>
-    <constant name="Q4PR_OuterRadius"      value="0.29*m"/>
-    <constant name="Q4PR_Theta"      value="CrossingAngle"/>
+    <constant name="Q4PR_CenterZ"         value="-56.35*m"/>
+    <constant name="Q4PR_CenterX"         value="1.42*m"/>
+    <constant name="Q4PR_Length"          value="1.5*m"/>
+    <constant name="Q4PR_InnerRadius"     value="0.05*m"/>
+    <constant name="Q4PR_OuterRadius"     value="0.29*m"/>
+    <constant name="Q4PR_Theta"           value="CrossingAngle"/>
 
-    <constant name="B1PR_CenterZ"      value="-75.59*m"/>
-    <constant name="B1PR_CenterX"      value="1.86*m"/>
-    <constant name="B1PR_Length"      value="3.7*m"/>
-    <constant name="B1PR_InnerRadius"      value="0.05*m"/>
-    <constant name="B1PR_OuterRadius"      value="0.4*m"/>
-    <constant name="B1PR_Theta"      value="CrossingAngle"/>
-
-
+    <constant name="B1PR_CenterZ"         value="-75.59*m"/>
+    <constant name="B1PR_CenterX"         value="1.86*m"/>
+    <constant name="B1PR_Length"          value="3.7*m"/>
+    <constant name="B1PR_InnerRadius"     value="0.05*m"/>
+    <constant name="B1PR_OuterRadius"     value="0.4*m"/>
+    <constant name="B1PR_Theta"           value="CrossingAngle"/>
 
     <comment>
       --------------------------

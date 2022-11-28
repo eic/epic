@@ -1,11 +1,12 @@
-//==========================================================================
-//   Beampipe described by end points with different radii at either end
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (C) 2022 Dhevan Gangadharan
+
 //==========================================================================
 //
-//      <detector id="Pipe_in" name ="DetName" type="BackwardsBeamPipe" >
-//        <Pipe wall_thickness="pipe_thickness" outerD1="start_radius" outerD2="end_radius"
-//        end1z="start_z" end2z="end_z" end1x="start_x" end2x="end_x"/>
-//      </detector>
+// Places far-backward beam pipes within and between the beamline magnets.
+//
+// Approximation used for beam pipes in between magnets.
+// Right-angled ends with a small air gap to avoid G4 overlap errors
 //
 //==========================================================================
 
@@ -28,85 +29,89 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector /
   Material   m_Al     = description.material("Aluminum");
   Material   m_Vacuum = description.material("Vacuum");
   string     vis_name = dd4hep::getAttrOrDefault<std::string>(x_det, _Unicode(vis), "BeamPipeVis");
+  double thickness = getAttrOrDefault<double>(x_det, _Unicode(wall_thickness), 0);
 
-  //cout<<m_Al.Z()<<endl;
+  vector<string> names;
+  vector<double> xCenters;
+  vector<double> zCenters;
+  vector<double> lengths;
+  vector<double> thetas;
+  vector<double> rOuters1;
+  vector<double> rOuters2;
 
-  //double preX = 0;
-  //double preZ = 0;
-  //double preRot = 0;
-  //double firstX = 0, firstZ = 0, firstRot = 0;
-
-  //BooleanSolid full_tube;
-  //BooleanSolid full_vacuum;
-
+  // Grab info for beamline magnets
   for( xml_coll_t pipe_coll(x_det, _Unicode(pipe)); pipe_coll; pipe_coll++ ) { // pipes
-   
+
     xml_comp_t pipe( pipe_coll );
+
+    names.push_back( getAttrOrDefault<string>(pipe, _Unicode(name), "") );
+    int IsMagnetPipe = getAttrOrDefault<double>(pipe, _Unicode(magnetpipe), 0);
+
+    if( IsMagnetPipe ) { // Beam pipes inside the magnets
+      xCenters.push_back( getAttrOrDefault<double>(pipe, _Unicode(xcenter), 0) );
+      zCenters.push_back( getAttrOrDefault<double>(pipe, _Unicode(zcenter), 0) );
+      lengths.push_back( getAttrOrDefault<double>(pipe, _Unicode(length), 0) );
+      thetas.push_back( getAttrOrDefault<double>(pipe, _Unicode(theta), 0) );
+      rOuters1.push_back( getAttrOrDefault<double>(pipe, _Unicode(rout1), 0) );
+      rOuters2.push_back( getAttrOrDefault<double>(pipe, _Unicode(rout2), 0) );
+    }
+    else{ // Left blank in xml and to be calculated below
+      xCenters.push_back( 0 );
+      zCenters.push_back( 0 );
+      lengths.push_back( 0 );
+      thetas.push_back( 0 );
+      rOuters1.push_back( 0 );
+      rOuters2.push_back( 0 );
+    }
+  }
+  
+  // Calculate parameters for connecting pipes in between magnets
+  for( uint pipeN = 0; pipeN < names.size(); pipeN++ ) {
+
+    if( ! lengths[pipeN] == 0 ) { continue; }
+    if( int(pipeN-1) < 0 ) { continue; }
+
+    double x = ( xCenters[pipeN-1] - lengths[pipeN-1]/2.*sin(thetas[pipeN-1]) + xCenters[pipeN+1] + lengths[pipeN+1]/2.*sin(thetas[pipeN+1]) ) / 2.;
+    double z = ( zCenters[pipeN-1] - lengths[pipeN-1]/2.*cos(thetas[pipeN-1]) + zCenters[pipeN+1] + lengths[pipeN+1]/2.*cos(thetas[pipeN+1]) ) / 2.;
+    double deltaX = (xCenters[pipeN-1] - lengths[pipeN-1]/2.*sin(thetas[pipeN-1])) - (xCenters[pipeN+1] + lengths[pipeN+1]/2.*sin(thetas[pipeN+1]));
+    double deltaZ = (zCenters[pipeN-1] - lengths[pipeN-1]/2.*cos(thetas[pipeN-1])) - (zCenters[pipeN+1] + lengths[pipeN+1]/2.*cos(thetas[pipeN+1]));
+    double l = sqrt( pow(deltaX, 2) + pow(deltaZ, 2) );
     
-    double x = getAttrOrDefault<double>(pipe, _Unicode(xcenter), 0);
-    double z = getAttrOrDefault<double>(pipe, _Unicode(zcenter), 0);
-    double length = getAttrOrDefault<double>(pipe, _Unicode(length), 0);
-    double yrot = getAttrOrDefault<double>(pipe, _Unicode(theta), 0);
-    double r1 = getAttrOrDefault<double>(pipe, _Unicode(rout1), 0);
-    double r2 = getAttrOrDefault<double>(pipe, _Unicode(rout2), 0);
-    double thickness = getAttrOrDefault<double>(x_det, _Unicode(wall_thickness), 0);
-
-    ConeSegment s_tube( length / 2.0, r1 - thickness, r1, r2 - thickness, r2 );
-    ConeSegment s_vacuum( length / 2.0, 0, r1 - thickness, 0, r2 - thickness );
-    Volume v_tube("v_tube", s_tube, m_Al);
-    Volume v_vacuum("v_vacuum", s_vacuum, m_Vacuum);
+    // Small air gap between connecting and magnet beam pipes to avoid G4 overlap errors
+    l -= 0.5;     
     
-    //sdet.setAttributes(det, v_tube, x_det.regionStr(), x_det.limitsStr(), vis_name);
-    v_tube.setVisAttributes(description.visAttributes( vis_name ) );
-
-    assembly.placeVolume(v_tube, Transform3D( RotationY(yrot), Position(x, 0, z)));
-    assembly.placeVolume(v_vacuum, Transform3D( RotationY(yrot), Position(x, 0, z)));
-
-    //if( ! full_tube ) {
-    //   full_tube = IntersectionSolid( s_tube, s_tube );
-    //   //full_vacuum = IntersectionSolid( s_vacuum, s_vacuum );
-    //   //firstX = (x1 + x2)/2.;
-    //   //firstZ = (z1 + z2)/2.;
-    //   //firstX = x;
-    //   //firstZ = z;
-    //   //firstRot = yrot;
-    //} else {
-    //  //full_tube = UnionSolid( full_tube, s_tube, Transform3D( Translation3D( (x1+x2)/2. - preX, 0, (z1+z2)/2. - preZ ) * RotationY( preRot - yrot ) ) );
-    //  full_tube = UnionSolid( full_tube, s_tube, Transform3D( RotationY( preRot - yrot ), Translation3D( x - preX, 0, z - preZ ) ) );
-    //  //full_vacuum = UnionSolid( full_vacuum, s_vacuum, Transform3D( Translation3D( (x1+x2)/2., 0, (z1+z2)/2. ) * RotationY( yrot) ) );
-    //
-    //  //Volume v_vacuum("v_vacuum", full_vacuum, m_Vacuum);
-    //  //Volume v_tube("v_tube", full_tube, m_Al);
-
-    //  //assembly.placeVolume(v_vacuum, Transform3D( RotationZYX(0.0,0.0,0.0), Position(0, 0, -30*m)));
-    //  //assembly.placeVolume(v_tube, Transform3D( RotationZYX(0.0,0.0,0.0), Position(0, 0, -30*m)));
-    //}
-    //
-    ////preX = (x1+x2)/2.;
-    ////preZ = (z1+z2)/2.;
-    //preX = x;
-    //preZ = z;
-    //preRot = yrot;
-    //cout<<preX<<"  "<<preZ<<"  "<<preRot<<endl;
-    
-
+    double theta = atan( deltaX / deltaZ );
+       
+    xCenters[pipeN] = x;
+    zCenters[pipeN] = z;
+    lengths[pipeN] = l;
+    thetas[pipeN] = theta;
+    rOuters1[pipeN] = rOuters2[pipeN-1];
+    rOuters2[pipeN] = rOuters1[pipeN+1];
   }
  
+  // Add all pipes to the assembly
+  for( uint pipeN = 0; pipeN < xCenters.size(); pipeN++ ) {
 
-  //Volume v_vacuum("v_vacuum", full_vacuum, m_Vacuum);
-  //Volume v_tube("v_tube", full_tube, m_Al);
+    ConeSegment s_tube( lengths[pipeN] / 2.0, rOuters1[pipeN] - thickness, rOuters1[pipeN], rOuters2[pipeN] - thickness, rOuters2[pipeN] );
+    ConeSegment s_vacuum( lengths[pipeN] / 2.0, 0, rOuters1[pipeN] - thickness, 0, rOuters2[pipeN] - thickness );
+    
+    Volume v_tube("v_tube_" + names[pipeN], s_tube, m_Al);
+    Volume v_vacuum("v_vacuum_" + names[pipeN], s_vacuum, m_Vacuum);
 
-  //sdet.setAttributes(det, v_tube, x_det.regionStr(), x_det.limitsStr(), vis_name);
+    v_tube.setVisAttributes(description.visAttributes( vis_name ) );
 
-  //assembly.placeVolume(v_tube, Transform3D( RotationY(firstRot), Position(firstX, 0, firstZ)));
+    assembly.placeVolume(v_tube, Transform3D( RotationY(thetas[pipeN]), Position(xCenters[pipeN], 0, zCenters[pipeN])));
+    assembly.placeVolume(v_vacuum, Transform3D( RotationY(thetas[pipeN]), Position(xCenters[pipeN], 0, zCenters[pipeN])));
 
-  // -----------------------------
-  // final placement
+  }
+
+  // Final placement
   auto pv_assembly =
-      description.pickMotherVolume(sdet).placeVolume( assembly, Position(0.0, 0.0, 0.0));
-  
+    description.pickMotherVolume(sdet).placeVolume( assembly, Position(0.0, 0.0, 0.0));
+
   sdet.setPlacement(pv_assembly);
-  
+
   assembly->GetShape()->ComputeBBox();
 
   return sdet;

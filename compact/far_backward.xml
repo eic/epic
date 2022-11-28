@@ -4,6 +4,7 @@
   <include ref="far_backward/definitions.xml"/>
   <include ref="far_backward/magnets.xml"/>
   <include ref="far_backward/beamline_hadron.xml"/>
+  <include ref="far_backward/beamline_electron.xml"/>
   <include ref="far_backward/vacuum.xml"/>
 
   <!-- Scattered electron taggers -->
