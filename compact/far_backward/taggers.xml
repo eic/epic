@@ -49,7 +49,7 @@
         max_align="true"
         offset_min="Tagger2_Min_Offset"
         extend_vacuum="true"
-        overlap=-20*mm
+        overlap="-20*mm"
         >
         <dimensions x="Tagger2_Width/2" y="Tagger2_Height/2" z="Tagger2_Length"/>
         <trackLayer  id="0" type="timepix" z="0*mm"   sensor_thickness="400*um"/>
@@ -76,10 +76,10 @@
         nrow="8"
         ncol="8"
         material="leadtungsten_optical"
-        cryvis="GreenVis"
+        cryvis="EcalVis"
         >
         <dimensions  x="Tagger1_Width/2" y="Tagger1_Height/2" z="Tag_Cal_1_Depth"/>
-        <offset      x="-100*mm" y="0" z="-Tagger1_Length-100*mm"/>
+        <offset      x="-50*mm" y="0" z="-Tagger1_Length-10*mm"/>
       </module>
 
       <module id="2"
@@ -91,11 +91,11 @@
         nrow="8"
         ncol="8"
         material="leadtungsten_optical"
-        cryvis="GreenVis"
-        overlap=-20*mm
+        cryvis="EcalVis"
+        overlap=-"20*mm"
         >
         <dimensions x="Tagger2_Width/2" y="Tagger2_Height/2" z="Tag_Cal_2_Depth"/>
-        <offset     x="-100*mm" y="0" z="-Tagger2_Length-100*mm"/>
+        <offset     x="-50*mm" y="0" z="-Tagger2_Length-10*mm"/>
       </module>
 
     </detector>
