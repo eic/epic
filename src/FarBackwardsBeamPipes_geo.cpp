@@ -68,7 +68,7 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector /
   // Calculate parameters for connecting pipes in between magnets
   for( uint pipeN = 0; pipeN < names.size(); pipeN++ ) {
 
-    if( ! lengths[pipeN] == 0 ) { continue; }
+    if( lengths[pipeN] > 0 ) { continue; }
     if( int(pipeN-1) < 0 ) { continue; }
 
     double x = ( xCenters[pipeN-1] - lengths[pipeN-1]/2.*sin(thetas[pipeN-1]) + xCenters[pipeN+1] + lengths[pipeN+1]/2.*sin(thetas[pipeN+1]) ) / 2.;
