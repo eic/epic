@@ -240,16 +240,14 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
     DetElement layer_element(sdet, layer_name, l_id);
     layer_element.setPlacement(layer_pv);
 
-    Acts::ActsExtension* layerExtension = new Acts::ActsExtension();
-    layerExtension->addType("sensitive disk", "layer");
-    // layerExtension->addType("axes", "definitions", "XZY");
-    // layerExtension->addType("sensitive disk", "layer");
-    // layerExtension->addType("axes", "definitions", "XZY");
+    auto &layerParams =
+        DD4hepDetectorHelper::ensureExtension<dd4hep::rec::VariantParameters>(
+            layer_element);
+
     for (xml_coll_t lmat(x_layer, _Unicode(layer_material)); lmat; ++lmat) {
       xml_comp_t x_layer_material = lmat;
-      xmlToProtoSurfaceMaterial(x_layer_material, *layerExtension, "layer_material");
+      DD4hepDetectorHelper::xmlToProtoSurfaceMaterial(x_layer_material, layerParams, "layer_material");
     }
-    layer_element.addExtension<Acts::ActsExtension>(layerExtension);
 
     for (xml_coll_t ri(x_layer, _U(ring)); ri; ++ri) {
       xml_comp_t  x_ring   = ri;
@@ -279,9 +277,6 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
             PlacedVolume sens_pv = sensVols[ic];
             DetElement   comp_elt(module, sens_pv.volume().name(), mod_num);
             comp_elt.setPlacement(sens_pv);
-            // std::cout << " adding ACTS extension" << "\n";
-            Acts::ActsExtension* moduleExtension = new Acts::ActsExtension("XZY");
-            comp_elt.addExtension<Acts::ActsExtension>(moduleExtension);
             volSurfaceList(comp_elt)->push_back(volplane_surfaces[m_nam][ic]);
           }
         } else {
@@ -294,9 +289,6 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
             PlacedVolume sens_pv = sensVols[ic];
             DetElement   comp_elt(r_module, sens_pv.volume().name(), mod_num);
             comp_elt.setPlacement(sens_pv);
-            // std::cout << " adding ACTS extension" << "\n";
-            Acts::ActsExtension* moduleExtension = new Acts::ActsExtension("XZY");
-            comp_elt.addExtension<Acts::ActsExtension>(moduleExtension);
             volSurfaceList(comp_elt)->push_back(volplane_surfaces[m_nam][ic]);
           }
         }
