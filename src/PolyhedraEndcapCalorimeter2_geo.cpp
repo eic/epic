@@ -68,7 +68,7 @@ void buildTiles(Detector& desc, SensitiveDetector &sens, Volume &s_vol, DetEleme
   //double f_trd_y2 = f_trd_y1;
   double f_trd_z = 0.2;
 
-  cout << R << "   " << (R + delR) << endl;
+  cout << R << "   " << (R + delR) <<  "   " << z_slice*(tan(2*atan(exp(-1*(eta_out))))) << endl;
 
 	double phi_lo = -f_spacing_phi;
 	double phi_hi = phi_lo + f_spacing_phi;
@@ -87,8 +87,8 @@ void buildTiles(Detector& desc, SensitiveDetector &sens, Volume &s_vol, DetEleme
 
 		//double dx = xmax-xmin; // phi
 		//double dy = ymax-ymin; // eta
-		double xcent = (R + (delR/2.0))*cos(M_PI/2.0 - j*f_spacing_phi);
-		double ycent = (R + (delR/2.0))*sin(M_PI/2.0 - j*f_spacing_phi);
+		double xcent = (R + (delR/2.0))*cos(M_PI/2.0 - ((2*j)+1)*(f_spacing_phi/2.0));
+		double ycent = (R + (delR/2.0))*sin(M_PI/2.0 - ((2*j)+1)*(f_spacing_phi/2.0));
     
 
     //cout<<"xcent = "<<xcent<<endl;
@@ -154,7 +154,7 @@ void buildTiles(Detector& desc, SensitiveDetector &sens, Volume &s_vol, DetEleme
         // Slice placement.
 
         
-        PlacedVolume tower_phv = s_vol.placeVolume(f_vol, Transform3D(RotationZYX(0, j*f_spacing_phi, -M_PI / 2), Position(xcent, ycent, 0.0)));
+        PlacedVolume tower_phv = s_vol.placeVolume(f_vol, Transform3D(RotationZYX(0, ((2*j)+1)*(f_spacing_phi/2.0), -M_PI / 2.0), Position(xcent, ycent, 0.0)));
         
         if ( x_tiles.isSensitive() ) {
           sens.setType("calorimeter");
@@ -313,7 +313,8 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
        const std::vector< double > r_min_s = { -1*z_slice_start*(tan(2*atan(exp(-1*(eta_max))))), -1*z_slice_end*(tan(2*atan(exp(-1*(eta_max))))) };
        const std::vector< double > r_max_s = { -1*z_slice_start*tan(2*atan(exp(-1*(eta_min)))) , -1*z_slice_end*tan(2*atan(exp(-1*(eta_min))))  };
        
-       double z_slice = -0.5*(z_slice_start + z_slice_end);
+       //double z_slice = -0.5*(z_slice_start + z_slice_end);
+       double z_slice = -1.0*z_slice_start;
        
        Volume     s_vol(s_name, Polyhedra(numsides, 0.0, 2*M_PI , z_s , r_min_s, r_max_s), s_mat);
        Volume     s_vol_forward(s_name, PolyhedraRegular(numsides, rmin, rmax, s_thick), s_mat);
