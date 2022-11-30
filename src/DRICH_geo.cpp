@@ -1,6 +1,3 @@
-// SPDX-License-Identifier: LGPL-3.0-or-later
-// Copyright (C) 2022 Christopher Dilks
-
 //==========================================================================
 //  dRICH: Dual Ring Imaging Cherenkov Detector
 //--------------------------------------------------------------------------
@@ -69,9 +66,9 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
   auto   filterVis       = desc.visAttributes(filterElem.attr<std::string>(_Unicode(vis)));
   double filterThickness = filterElem.attr<double>(_Unicode(thickness));
   // - airgap between filter and aerogel // TODO: use these to place an airgap volume
-  auto airgapElem = radiatorElem.child(_Unicode(airgap));
-  // auto   airgapMat       = desc.material(airgapElem.attr<std::string>(_Unicode(material))); // TODO
-  // auto   airgapVis       = desc.visAttributes(airgapElem.attr<std::string>(_Unicode(vis))); // TODO
+  auto   airgapElem      = radiatorElem.child(_Unicode(airgap));
+  auto   airgapMat       = desc.material(airgapElem.attr<std::string>(_Unicode(material))); // TODO
+  auto   airgapVis       = desc.visAttributes(airgapElem.attr<std::string>(_Unicode(vis))); // TODO
   double airgapThickness = airgapElem.attr<double>(_Unicode(thickness));
   // - mirror
   auto   mirrorElem      = detElem.child(_Unicode(mirror));
@@ -137,15 +134,15 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
    * - `cellMask` is defined such that a hit's `cellID & cellMask` is the corresponding sensor's unique ID
    */
   std::vector<std::string> sensorIDfields = {"module", "sector"};
-  const auto&              readoutCoder   = *desc.readout(readoutName).idSpec().decoder();
+  const auto& readoutCoder = *desc.readout(readoutName).idSpec().decoder();
   // determine `cellMask` based on `sensorIDfields`
   uint64_t cellMask = 0;
-  for (const auto& idField : sensorIDfields)
+  for(const auto& idField : sensorIDfields)
     cellMask |= readoutCoder[idField].mask();
   // create a unique sensor ID from a sensor's PlacedVolume::volIDs
-  auto encodeSensorID = [&readoutCoder](auto ids) {
+  auto encodeSensorID = [&readoutCoder](auto ids){
     uint64_t enc = 0;
-    for (const auto& [idField, idValue] : ids)
+    for(const auto& [idField,idValue] : ids)
       enc |= uint64_t(idValue) << readoutCoder[idField].offset();
     return enc;
   };
@@ -160,10 +157,10 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
    * - some `DRICH_RECON_*` constants are redundant, but are defined to make
    *   it clear that the reconstruction code depends on them
    */
-  desc.add(Constant("DRICH_RECON_nSectors", std::to_string(nSectors)));
-  desc.add(Constant("DRICH_RECON_zmin", std::to_string(vesselZmin)));
+  desc.add(Constant("DRICH_RECON_nSectors",       std::to_string(nSectors)));
+  desc.add(Constant("DRICH_RECON_zmin",           std::to_string(vesselZmin)));
   desc.add(Constant("DRICH_RECON_gasvolMaterial", gasvolMat.ptr()->GetName(), "string"));
-  desc.add(Constant("DRICH_RECON_cellMask", std::to_string(cellMask)));
+  desc.add(Constant("DRICH_RECON_cellMask",       std::to_string(cellMask)));
 
   // BUILD VESSEL ====================================================================
   /* - `vessel`: aluminum enclosure, the mother volume of the dRICH
@@ -258,14 +255,20 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
   Cone aerogelSolid(aerogelThickness / 2, radiatorRmin, radiatorRmax,
                     radiatorRmin + boreDelta * aerogelThickness / vesselLength,
                     radiatorRmax + snoutDelta * aerogelThickness / snoutLength);
+  Cone airgapSolid(airgapThickness / 2, radiatorRmin + boreDelta * aerogelThickness / vesselLength,
+                   radiatorRmax + snoutDelta * aerogelThickness / snoutLength,
+                   radiatorRmin + boreDelta * (aerogelThickness + airgapThickness) / vesselLength,
+                   radiatorRmax + snoutDelta * (aerogelThickness + airgapThickness) / snoutLength);
   Cone filterSolid(filterThickness / 2, radiatorRmin + boreDelta * (aerogelThickness + airgapThickness) / vesselLength,
                    radiatorRmax + snoutDelta * (aerogelThickness + airgapThickness) / snoutLength,
                    radiatorRmin + boreDelta * (aerogelThickness + airgapThickness + filterThickness) / vesselLength,
                    radiatorRmax + snoutDelta * (aerogelThickness + airgapThickness + filterThickness) / snoutLength);
 
   Volume aerogelVol(detName + "_aerogel", aerogelSolid, aerogelMat);
+  Volume airgapVol(detName + "_airgap", airgapSolid, airgapMat);
   Volume filterVol(detName + "_filter", filterSolid, filterMat);
   aerogelVol.setVisAttributes(aerogelVis);
+  airgapVol.setVisAttributes(airgapVis);
   filterVol.setVisAttributes(filterVis);
 
   // aerogel placement and surface properties
@@ -279,6 +282,18 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
   aerogelDE.setPlacement(aerogelPV);
   // SkinSurface aerogelSkin(desc, aerogelDE, "mirror_optical_surface", aerogelSurf, aerogelVol);
   // aerogelSkin.isValid();
+
+  // airgap placement and surface properties
+  PlacedVolume airgapPV;
+  if (!debugOptics) {
+    auto airgapPlacement =
+        Translation3D(radiatorPos.x(), radiatorPos.y(), radiatorPos.z()) * // re-center to originFront
+        RotationY(radiatorPitch) *                                         // change polar angle
+        Translation3D(0., 0., (aerogelThickness + airgapThickness) / 2.);  // move to aerogel backplane
+    airgapPV = gasvolVol.placeVolume(airgapVol, airgapPlacement);
+    DetElement airgapDE(det, "airgap_de", 0);
+    airgapDE.setPlacement(airgapPV);
+  }
 
   // filter placement and surface properties
   PlacedVolume filterPV;
@@ -297,13 +312,17 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
 
   // reconstruction constants (w.r.t. IP)
   double aerogelZpos = vesselPos.z() + aerogelPV.position().z();
+  double airgapZpos  = vesselPos.z() + airgapPV.position().z();
   double filterZpos  = vesselPos.z() + filterPV.position().z();
-  desc.add(Constant("DRICH_RECON_aerogelZpos", std::to_string(aerogelZpos)));
+  desc.add(Constant("DRICH_RECON_aerogelZpos",      std::to_string(aerogelZpos)));
   desc.add(Constant("DRICH_RECON_aerogelThickness", std::to_string(aerogelThickness)));
-  desc.add(Constant("DRICH_RECON_aerogelMaterial", aerogelMat.ptr()->GetName(), "string"));
-  desc.add(Constant("DRICH_RECON_filterZpos", std::to_string(filterZpos)));
-  desc.add(Constant("DRICH_RECON_filterThickness", std::to_string(filterThickness)));
-  desc.add(Constant("DRICH_RECON_filterMaterial", filterMat.ptr()->GetName(), "string"));
+  desc.add(Constant("DRICH_RECON_aerogelMaterial",  aerogelMat.ptr()->GetName(), "string"));
+  desc.add(Constant("DRICH_RECON_airgapZpos",       std::to_string(airgapZpos)));
+  desc.add(Constant("DRICH_RECON_airgapThickness",  std::to_string(airgapThickness)));
+  desc.add(Constant("DRICH_RECON_airgapMaterial",   airgapMat.ptr()->GetName(), "string"));
+  desc.add(Constant("DRICH_RECON_filterZpos",       std::to_string(filterZpos)));
+  desc.add(Constant("DRICH_RECON_filterThickness",  std::to_string(filterThickness)));
+  desc.add(Constant("DRICH_RECON_filterMaterial",   filterMat.ptr()->GetName(), "string"));
 
   // SECTOR LOOP //////////////////////////////////////////////////////////////////////
 
@@ -321,7 +340,7 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
       continue;
 
     // sector rotation about z axis
-    RotationZ   sectorRotation(isec * 2 * M_PI / nSectors);
+    RotationZ sectorRotation(isec * 2 * M_PI / nSectors);
     std::string secName = "sec" + std::to_string(isec);
 
     // BUILD MIRRORS ====================================================================
@@ -426,10 +445,10 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
     // - access sector center after `sectorRotation`
     auto mirrorFinalPlacement = mirrorSectorPlacement * mirrorPlacement;
     auto mirrorFinalCenter    = vesselPos + mirrorFinalPlacement.Translation().Vect();
-    desc.add(Constant("DRICH_RECON_mirrorCenterX_" + secName, std::to_string(mirrorFinalCenter.x())));
-    desc.add(Constant("DRICH_RECON_mirrorCenterY_" + secName, std::to_string(mirrorFinalCenter.y())));
-    desc.add(Constant("DRICH_RECON_mirrorCenterZ_" + secName, std::to_string(mirrorFinalCenter.z())));
-    if (isec == 0)
+    desc.add(Constant("DRICH_RECON_mirrorCenterX_"+secName, std::to_string(mirrorFinalCenter.x())));
+    desc.add(Constant("DRICH_RECON_mirrorCenterY_"+secName, std::to_string(mirrorFinalCenter.y())));
+    desc.add(Constant("DRICH_RECON_mirrorCenterZ_"+secName, std::to_string(mirrorFinalCenter.z())));
+    if(isec==0)
       desc.add(Constant("DRICH_RECON_mirrorRadius", std::to_string(mirrorRadius)));
 
     // BUILD SENSORS ====================================================================
@@ -452,10 +471,10 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
 
     // reconstruction constants
     auto sensorSphFinalCenter = sectorRotation * Position(xS, 0.0, zS);
-    desc.add(Constant("DRICH_RECON_sensorSphCenterX_" + secName, std::to_string(sensorSphFinalCenter.x())));
-    desc.add(Constant("DRICH_RECON_sensorSphCenterY_" + secName, std::to_string(sensorSphFinalCenter.y())));
-    desc.add(Constant("DRICH_RECON_sensorSphCenterZ_" + secName, std::to_string(sensorSphFinalCenter.z())));
-    if (isec == 0) {
+    desc.add(Constant("DRICH_RECON_sensorSphCenterX_"+secName, std::to_string(sensorSphFinalCenter.x())));
+    desc.add(Constant("DRICH_RECON_sensorSphCenterY_"+secName, std::to_string(sensorSphFinalCenter.y())));
+    desc.add(Constant("DRICH_RECON_sensorSphCenterZ_"+secName, std::to_string(sensorSphFinalCenter.z())));
+    if(isec==0) {
       desc.add(Constant("DRICH_RECON_sensorSphRadius", std::to_string(sensorSphRadius)));
       desc.add(Constant("DRICH_RECON_sensorThickness", std::to_string(sensorThickness)));
     }
@@ -535,22 +554,20 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
               Translation3D(sensorSphPos.x(), sensorSphPos.y(), sensorSphPos.z()) * // move sphere to reference position
               RotationX(phiGen) *                                                   // rotate about `zGen`
               RotationZ(thetaGen) *                                                 // rotate about `yGen`
-              Translation3D(-sensorThickness / 2.0, 0.,
-                            0.) *                      // pull back so sensor active surface is at spherical surface
-              Translation3D(sensorSphRadius, 0., 0.) * // push radially to spherical surface
-              RotationY(M_PI / 2) *                    // rotate sensor to be compatible with generator coords
-              RotationZ(-M_PI / 2);                    // correction for readout segmentation mapping
+              Translation3D(-sensorThickness / 2.0, 0., 0.) * // pull back so sensor active surface is at spherical surface
+              Translation3D(sensorSphRadius, 0., 0.) *        // push radially to spherical surface
+              RotationY(M_PI / 2) *                           // rotate sensor to be compatible with generator coords
+              RotationZ(-M_PI / 2);                           // correction for readout segmentation mapping
           auto sensorPV = gasvolVol.placeVolume(sensorVol, sensorPlacement);
 
           // generate LUT for module number -> sensor position, for readout mapping tests
           // if(isec==0) printf("%d %f %f\n",imod,sensorPV.position().x(),sensorPV.position().y());
 
           // properties
-          sensorPV.addPhysVolID("sector", isec)
-              .addPhysVolID("module", imod); // NOTE: must be consistent with `sensorIDfields`
-          auto        imodsec    = encodeSensorID(sensorPV.volIDs());
+          sensorPV.addPhysVolID("sector", isec).addPhysVolID("module", imod); // NOTE: must be consistent with `sensorIDfields`
+          auto imodsec = encodeSensorID(sensorPV.volIDs());
           std::string modsecName = secName + "_" + std::to_string(imod);
-          DetElement  sensorDE(det, "sensor_de_" + modsecName, imodsec);
+          DetElement sensorDE(det, "sensor_de_" + modsecName, imodsec);
           sensorDE.setPlacement(sensorPV);
           if (!debugOptics || debugOpticsMode == 3) {
             SkinSurface sensorSkin(desc, sensorDE, "sensor_optical_surface_" + modsecName, sensorSurf, sensorVol);
@@ -571,6 +588,7 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
     // };
 
     // END SENSOR MODULE LOOP ------------------------
+
 
   }; // END SECTOR LOOP //////////////////////////
 
