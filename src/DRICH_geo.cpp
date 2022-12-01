@@ -68,10 +68,10 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
   auto   filterMat       = desc.material(filterElem.attr<std::string>(_Unicode(material)));
   auto   filterVis       = desc.visAttributes(filterElem.attr<std::string>(_Unicode(vis)));
   double filterThickness = filterElem.attr<double>(_Unicode(thickness));
-  // - airgap between filter and aerogel // TODO: use these to place an airgap volume
+  // - airgap between filter and aerogel
   auto   airgapElem      = radiatorElem.child(_Unicode(airgap));
-  auto   airgapMat       = desc.material(airgapElem.attr<std::string>(_Unicode(material))); // TODO
-  auto   airgapVis       = desc.visAttributes(airgapElem.attr<std::string>(_Unicode(vis))); // TODO
+  auto   airgapMat       = desc.material(airgapElem.attr<std::string>(_Unicode(material)));
+  auto   airgapVis       = desc.visAttributes(airgapElem.attr<std::string>(_Unicode(vis)));
   double airgapThickness = airgapElem.attr<double>(_Unicode(thickness));
   // - mirror
   auto   mirrorElem      = detElem.child(_Unicode(mirror));
