@@ -208,19 +208,35 @@ static Ref_t create_detector(Detector& lcdd, xml_h handle, SensitiveDetector sen
       double&   dz                     = dzs[(dir_sign > 0) ? 1 : 0];
       double&   flare_angle_polar_prev = flare_angle_polar_prevs[(dir_sign > 0) ? 1 : 0];
 
-      xml_dim_t          family_dim_handle   = family_handle;
-      const double       length              = family_dim_handle.z_length();
-      const auto         flare_angle_polar   = family_dim_handle.attr<double>(_Unicode(flare_angle_polar));
-      const unsigned int number              = family_dim_handle.number();
-      const auto         flare_angle_at_face = family_dim_handle.attr<double>(_Unicode(flare_angle_at_face));
+      xml_dim_t          family_dim_handle     = family_handle;
+      const double       length                = family_dim_handle.z_length();
+      const auto         flare_angle_azimuthal = family_dim_handle.attr<double>(_Unicode(flare_angle_azimuthal), NAN);
+      const auto         flare_angle_polar     = family_dim_handle.attr<double>(_Unicode(flare_angle_polar));
+      const unsigned int number                = family_dim_handle.number();
+      const auto         flare_angle_at_face   = family_dim_handle.attr<double>(_Unicode(flare_angle_at_face));
 
-      const double z      = length / 2;
-      const double y1     = family_dim_handle.y1();
-      const double y2     = y1 + length * tan(flare_angle_polar);
-      const double x1     = family_dim_handle.x1() + (dir_sign < 0) * (2 * y1) * tan(flare_angle_at_face);
-      const double x2     = family_dim_handle.x1() + (dir_sign > 0) * (2 * y1) * tan(flare_angle_at_face);
-      const double x3     = x1 * (y2 / y1);
-      const double x4     = x2 * (y2 / y1);
+      const double z  = length / 2;
+      const double y1 = family_dim_handle.y1();
+      const double y2 = y1 + length * tan(flare_angle_polar);
+      double       x1 = family_dim_handle.x1();
+      double       x2 = family_dim_handle.x1() + (2 * y1) * tan(flare_angle_at_face);
+      double       x3, x4;
+      if (!std::isnan(flare_angle_azimuthal)) {
+        //  Azimuthal flaring defined
+        x3 = x1 + length * (tan(flare_angle_azimuthal) - tan(flare_angle_polar) * tan(flare_angle_at_face));
+        x4 = x2 + length * (tan(flare_angle_azimuthal) + tan(flare_angle_polar) * tan(flare_angle_at_face));
+      } else {
+        // Pyramidal shape
+        // corresponds to: tan(flare_angle_azimuthal) = (x1 / y1 + tan(flare_angle_at_face)) * tan(flare_angle_polar)
+        x3 = x1 * (y2 / y1);
+        x4 = x2 * (y2 / y1);
+      }
+
+      if (dir_sign < 0) {
+        // Mirror towers going towards negative rapidities
+        std::swap(x1, x2);
+        std::swap(x3, x4);
+      }
       const double theta  = 0.;
       const double phi    = 0.;
       const double alpha1 = 0.;
