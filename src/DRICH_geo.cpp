@@ -137,15 +137,15 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
    * - `cellMask` is defined such that a hit's `cellID & cellMask` is the corresponding sensor's unique ID
    */
   std::vector<std::string> sensorIDfields = {"module", "sector"};
-  const auto& readoutCoder = *desc.readout(readoutName).idSpec().decoder();
+  const auto&              readoutCoder   = *desc.readout(readoutName).idSpec().decoder();
   // determine `cellMask` based on `sensorIDfields`
   uint64_t cellMask = 0;
-  for(const auto& idField : sensorIDfields)
+  for (const auto& idField : sensorIDfields)
     cellMask |= readoutCoder[idField].mask();
   // create a unique sensor ID from a sensor's PlacedVolume::volIDs
-  auto encodeSensorID = [&readoutCoder](auto ids){
+  auto encodeSensorID = [&readoutCoder](auto ids) {
     uint64_t enc = 0;
-    for(const auto& [idField,idValue] : ids)
+    for (const auto& [idField, idValue] : ids)
       enc |= uint64_t(idValue) << readoutCoder[idField].offset();
     return enc;
   };
@@ -160,10 +160,10 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
    * - some `DRICH_RECON_*` constants are redundant, but are defined to make
    *   it clear that the reconstruction code depends on them
    */
-  desc.add(Constant("DRICH_RECON_nSectors",       std::to_string(nSectors)));
-  desc.add(Constant("DRICH_RECON_zmin",           std::to_string(vesselZmin)));
+  desc.add(Constant("DRICH_RECON_nSectors", std::to_string(nSectors)));
+  desc.add(Constant("DRICH_RECON_zmin", std::to_string(vesselZmin)));
   desc.add(Constant("DRICH_RECON_gasvolMaterial", gasvolMat.ptr()->GetName(), "string"));
-  desc.add(Constant("DRICH_RECON_cellMask",       std::to_string(cellMask)));
+  desc.add(Constant("DRICH_RECON_cellMask", std::to_string(cellMask)));
 
   // BUILD VESSEL ====================================================================
   /* - `vessel`: aluminum enclosure, the mother volume of the dRICH
@@ -182,7 +182,7 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
   double boreDelta  = vesselRmin1 - vesselRmin0;
   double snoutDelta = vesselRmax1 - vesselRmax0;
   Cone   vesselSnout(snoutLength / 2.0, vesselRmin0, vesselRmax0, vesselRmin0 + boreDelta * snoutLength / vesselLength,
-                     vesselRmax1);
+                   vesselRmax1);
   Cone   gasvolSnout(
       /* note: `gasvolSnout` extends a bit into the tank, so it touches `gasvolTank`
        * - the extension distance is equal to the tank `windowThickness`, so the
@@ -317,15 +317,15 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
   double aerogelZpos = vesselPos.z() + aerogelPV.position().z();
   double airgapZpos  = vesselPos.z() + airgapPV.position().z();
   double filterZpos  = vesselPos.z() + filterPV.position().z();
-  desc.add(Constant("DRICH_RECON_aerogelZpos",      std::to_string(aerogelZpos)));
+  desc.add(Constant("DRICH_RECON_aerogelZpos", std::to_string(aerogelZpos)));
   desc.add(Constant("DRICH_RECON_aerogelThickness", std::to_string(aerogelThickness)));
-  desc.add(Constant("DRICH_RECON_aerogelMaterial",  aerogelMat.ptr()->GetName(), "string"));
-  desc.add(Constant("DRICH_RECON_airgapZpos",       std::to_string(airgapZpos)));
-  desc.add(Constant("DRICH_RECON_airgapThickness",  std::to_string(airgapThickness)));
-  desc.add(Constant("DRICH_RECON_airgapMaterial",   airgapMat.ptr()->GetName(), "string"));
-  desc.add(Constant("DRICH_RECON_filterZpos",       std::to_string(filterZpos)));
-  desc.add(Constant("DRICH_RECON_filterThickness",  std::to_string(filterThickness)));
-  desc.add(Constant("DRICH_RECON_filterMaterial",   filterMat.ptr()->GetName(), "string"));
+  desc.add(Constant("DRICH_RECON_aerogelMaterial", aerogelMat.ptr()->GetName(), "string"));
+  desc.add(Constant("DRICH_RECON_airgapZpos", std::to_string(airgapZpos)));
+  desc.add(Constant("DRICH_RECON_airgapThickness", std::to_string(airgapThickness)));
+  desc.add(Constant("DRICH_RECON_airgapMaterial", airgapMat.ptr()->GetName(), "string"));
+  desc.add(Constant("DRICH_RECON_filterZpos", std::to_string(filterZpos)));
+  desc.add(Constant("DRICH_RECON_filterThickness", std::to_string(filterThickness)));
+  desc.add(Constant("DRICH_RECON_filterMaterial", filterMat.ptr()->GetName(), "string"));
 
   // SECTOR LOOP //////////////////////////////////////////////////////////////////////
 
@@ -343,7 +343,7 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
       continue;
 
     // sector rotation about z axis
-    RotationZ sectorRotation(isec * 2 * M_PI / nSectors);
+    RotationZ   sectorRotation(isec * 2 * M_PI / nSectors);
     std::string secName = "sec" + std::to_string(isec);
 
     // BUILD MIRRORS ====================================================================
@@ -448,10 +448,10 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
     // - access sector center after `sectorRotation`
     auto mirrorFinalPlacement = mirrorSectorPlacement * mirrorPlacement;
     auto mirrorFinalCenter    = vesselPos + mirrorFinalPlacement.Translation().Vect();
-    desc.add(Constant("DRICH_RECON_mirrorCenterX_"+secName, std::to_string(mirrorFinalCenter.x())));
-    desc.add(Constant("DRICH_RECON_mirrorCenterY_"+secName, std::to_string(mirrorFinalCenter.y())));
-    desc.add(Constant("DRICH_RECON_mirrorCenterZ_"+secName, std::to_string(mirrorFinalCenter.z())));
-    if(isec==0)
+    desc.add(Constant("DRICH_RECON_mirrorCenterX_" + secName, std::to_string(mirrorFinalCenter.x())));
+    desc.add(Constant("DRICH_RECON_mirrorCenterY_" + secName, std::to_string(mirrorFinalCenter.y())));
+    desc.add(Constant("DRICH_RECON_mirrorCenterZ_" + secName, std::to_string(mirrorFinalCenter.z())));
+    if (isec == 0)
       desc.add(Constant("DRICH_RECON_mirrorRadius", std::to_string(mirrorRadius)));
 
     // BUILD SENSORS ====================================================================
@@ -474,10 +474,10 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
 
     // reconstruction constants
     auto sensorSphFinalCenter = sectorRotation * Position(xS, 0.0, zS);
-    desc.add(Constant("DRICH_RECON_sensorSphCenterX_"+secName, std::to_string(sensorSphFinalCenter.x())));
-    desc.add(Constant("DRICH_RECON_sensorSphCenterY_"+secName, std::to_string(sensorSphFinalCenter.y())));
-    desc.add(Constant("DRICH_RECON_sensorSphCenterZ_"+secName, std::to_string(sensorSphFinalCenter.z())));
-    if(isec==0) {
+    desc.add(Constant("DRICH_RECON_sensorSphCenterX_" + secName, std::to_string(sensorSphFinalCenter.x())));
+    desc.add(Constant("DRICH_RECON_sensorSphCenterY_" + secName, std::to_string(sensorSphFinalCenter.y())));
+    desc.add(Constant("DRICH_RECON_sensorSphCenterZ_" + secName, std::to_string(sensorSphFinalCenter.z())));
+    if (isec == 0) {
       desc.add(Constant("DRICH_RECON_sensorSphRadius", std::to_string(sensorSphRadius)));
       desc.add(Constant("DRICH_RECON_sensorThickness", std::to_string(sensorThickness)));
     }
@@ -557,20 +557,22 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
               Translation3D(sensorSphPos.x(), sensorSphPos.y(), sensorSphPos.z()) * // move sphere to reference position
               RotationX(phiGen) *                                                   // rotate about `zGen`
               RotationZ(thetaGen) *                                                 // rotate about `yGen`
-              Translation3D(-sensorThickness / 2.0, 0., 0.) * // pull back so sensor active surface is at spherical surface
-              Translation3D(sensorSphRadius, 0., 0.) *        // push radially to spherical surface
-              RotationY(M_PI / 2) *                           // rotate sensor to be compatible with generator coords
-              RotationZ(-M_PI / 2);                           // correction for readout segmentation mapping
+              Translation3D(-sensorThickness / 2.0, 0.,
+                            0.) *                      // pull back so sensor active surface is at spherical surface
+              Translation3D(sensorSphRadius, 0., 0.) * // push radially to spherical surface
+              RotationY(M_PI / 2) *                    // rotate sensor to be compatible with generator coords
+              RotationZ(-M_PI / 2);                    // correction for readout segmentation mapping
           auto sensorPV = gasvolVol.placeVolume(sensorVol, sensorPlacement);
 
           // generate LUT for module number -> sensor position, for readout mapping tests
           // if(isec==0) printf("%d %f %f\n",imod,sensorPV.position().x(),sensorPV.position().y());
 
           // properties
-          sensorPV.addPhysVolID("sector", isec).addPhysVolID("module", imod); // NOTE: must be consistent with `sensorIDfields`
-          auto imodsec = encodeSensorID(sensorPV.volIDs());
+          sensorPV.addPhysVolID("sector", isec)
+              .addPhysVolID("module", imod); // NOTE: must be consistent with `sensorIDfields`
+          auto        imodsec    = encodeSensorID(sensorPV.volIDs());
           std::string modsecName = secName + "_" + std::to_string(imod);
-          DetElement sensorDE(det, "sensor_de_" + modsecName, imodsec);
+          DetElement  sensorDE(det, "sensor_de_" + modsecName, imodsec);
           sensorDE.setPlacement(sensorPV);
           if (!debugOptics || debugOpticsMode == 3) {
             SkinSurface sensorSkin(desc, sensorDE, "sensor_optical_surface_" + modsecName, sensorSurf, sensorVol);
@@ -591,7 +593,6 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
     // };
 
     // END SENSOR MODULE LOOP ------------------------
-
 
   }; // END SECTOR LOOP //////////////////////////
 
