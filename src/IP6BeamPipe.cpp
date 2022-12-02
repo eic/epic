@@ -13,6 +13,7 @@
 #include "DD4hep/Printout.h"
 #include "TMath.h"
 #include <XML/Helper.h>
+#include "DD4hepDetectorHelper.h"
 
 #if defined(USE_ACTSDD4HEP)
 #include "ActsDD4hep/ActsExtension.hpp"
@@ -71,15 +72,14 @@ static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector /* sens *
   const double central_offset = -.5 * (upstream_straight_length - downstream_straight_length);
   DetElement   central_det(sdet, "acts_beampipe_central", 1);
 
-  // Add extension for the beampipe
-  {
-    Acts::ActsExtension* beamPipeExtension = new Acts::ActsExtension();
-    // beamPipeExtension->addType("barrel", "detector");
-    // beamPipeExtension->addType("beampipe", "beampipe");
-    // beamPipeExtension->addType("passive cylinder", "layer");
-    beamPipeExtension->addType("beampipe", "layer");
-    central_det.addExtension<Acts::ActsExtension>(beamPipeExtension);
-    // TODO add material binning
+  dd4hep::xml::setDetectorTypeFlag(xml, central_det);
+  auto &params = ODDHelper::ensureExtension<dd4hep::rec::VariantParameters>(
+      central_det);
+  
+  for (xml_coll_t lmat(x_det_tubs, _Unicode(layer_material)); lmat; ++lmat) {
+    xml_comp_t x_layer_material = lmat;
+    DD4hepDetectorHelper::xmlToProtoSurfaceMaterial(x_layer_material, params,
+                                         "layer_material");
   }
 
   // -----------------------------
