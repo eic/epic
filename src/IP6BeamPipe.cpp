@@ -73,7 +73,7 @@ static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector /* sens *
   DetElement   central_det(sdet, "acts_beampipe_central", 1);
 
   dd4hep::xml::setDetectorTypeFlag(xml, central_det);
-  auto &params = ODDHelper::ensureExtension<dd4hep::rec::VariantParameters>(
+  auto &params = DD4hepDetectorHelper::ensureExtension<dd4hep::rec::VariantParameters>(
       central_det);
 
   for (xml_coll_t lmat(x_det_tubs, _Unicode(layer_material)); lmat; ++lmat) {
