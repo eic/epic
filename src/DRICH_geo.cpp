@@ -142,6 +142,7 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
   uint64_t cellMask = 0;
   for (const auto& idField : sensorIDfields)
     cellMask |= readoutCoder[idField].mask();
+  desc.add(Constant("DRICH_cell_mask", std::to_string(cellMask)));
   // create a unique sensor ID from a sensor's PlacedVolume::volIDs
   auto encodeSensorID = [&readoutCoder](auto ids) {
     uint64_t enc = 0;
@@ -237,28 +238,6 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
   vesselPV.addPhysVolID("system", detID);
   det.setPlacement(vesselPV);
 
-  // define reconstruction geometry constants `DRICH_RECON_*`
-  /* - these are the numbers needed to rebuild the geometry in the
-   *   reconstruction, in particular, the optical surfaces encountered by the
-   *   Cherenkov photons
-   * - positions are w.r.t. the IP
-   * - check the values of all of the `DRICH_RECON_*` constants after any change
-   *   to the geometry
-   * - some `DRICH_RECON_*` constants are redundant, but are defined to make
-   *   it clear that the reconstruction code depends on them
-   */
-  desc.add(Constant("DRICH_RECON_nSectors", std::to_string(nSectors)));
-  desc.add(Constant("DRICH_RECON_zmin", std::to_string(vesselZmin)));
-  desc.add(Constant("DRICH_RECON_zmax", std::to_string(vesselZmax)));
-  desc.add(Constant("DRICH_RECON_rmin0", std::to_string(vesselRmin0)));
-  desc.add(Constant("DRICH_RECON_rmin1", std::to_string(vesselRmin1)));
-  desc.add(Constant("DRICH_RECON_rmax0", std::to_string(vesselRmax0)));
-  desc.add(Constant("DRICH_RECON_rmax1", std::to_string(vesselRmax1)));
-  desc.add(Constant("DRICH_RECON_rmax2", std::to_string(vesselRmax2)));
-  desc.add(Constant("DRICH_RECON_snoutLength", std::to_string(snoutLength)));
-  desc.add(Constant("DRICH_RECON_gasvolMaterial", gasvolMat.ptr()->GetName(), "string"));
-  desc.add(Constant("DRICH_RECON_cellMask", std::to_string(cellMask)));
-
   // BUILD RADIATOR ====================================================================
 
   // solid and volume: create aerogel and filter
@@ -320,19 +299,19 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
     // filterSkin.isValid();
   };
 
-  // reconstruction constants (w.r.t. IP)
+  // radiator z-positions (w.r.t. IP)
   double aerogelZpos = vesselPos.z() + aerogelPV.position().z();
   double airgapZpos  = vesselPos.z() + airgapPV.position().z();
   double filterZpos  = vesselPos.z() + filterPV.position().z();
-  desc.add(Constant("DRICH_RECON_aerogelZpos", std::to_string(aerogelZpos)));
-  desc.add(Constant("DRICH_RECON_aerogelThickness", std::to_string(aerogelThickness)));
-  desc.add(Constant("DRICH_RECON_aerogelMaterial", aerogelMat.ptr()->GetName(), "string"));
-  desc.add(Constant("DRICH_RECON_airgapZpos", std::to_string(airgapZpos)));
-  desc.add(Constant("DRICH_RECON_airgapThickness", std::to_string(airgapThickness)));
-  desc.add(Constant("DRICH_RECON_airgapMaterial", airgapMat.ptr()->GetName(), "string"));
-  desc.add(Constant("DRICH_RECON_filterZpos", std::to_string(filterZpos)));
-  desc.add(Constant("DRICH_RECON_filterThickness", std::to_string(filterThickness)));
-  desc.add(Constant("DRICH_RECON_filterMaterial", filterMat.ptr()->GetName(), "string"));
+  desc.add(Constant("DRICH_aerogel_zpos", std::to_string(aerogelZpos)));
+  desc.add(Constant("DRICH_airgap_zpos", std::to_string(airgapZpos)));
+  desc.add(Constant("DRICH_filter_zpos", std::to_string(filterZpos)));
+
+  // radiator material names
+  desc.add(Constant("DRICH_aerogel_material", aerogelMat.ptr()->GetName(), "string"));
+  desc.add(Constant("DRICH_airgap_material", airgapMat.ptr()->GetName(), "string"));
+  desc.add(Constant("DRICH_filter_material", filterMat.ptr()->GetName(), "string"));
+  desc.add(Constant("DRICH_gasvol_material", gasvolMat.ptr()->GetName(), "string"));
 
   // SECTOR LOOP //////////////////////////////////////////////////////////////////////
 
@@ -455,11 +434,11 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
     // - access sector center after `sectorRotation`
     auto mirrorFinalPlacement = mirrorSectorPlacement * mirrorPlacement;
     auto mirrorFinalCenter    = vesselPos + mirrorFinalPlacement.Translation().Vect();
-    desc.add(Constant("DRICH_RECON_mirrorCenterX_" + secName, std::to_string(mirrorFinalCenter.x())));
-    desc.add(Constant("DRICH_RECON_mirrorCenterY_" + secName, std::to_string(mirrorFinalCenter.y())));
-    desc.add(Constant("DRICH_RECON_mirrorCenterZ_" + secName, std::to_string(mirrorFinalCenter.z())));
+    desc.add(Constant("DRICH_mirror_center_x_" + secName, std::to_string(mirrorFinalCenter.x())));
+    desc.add(Constant("DRICH_mirror_center_y_" + secName, std::to_string(mirrorFinalCenter.y())));
+    desc.add(Constant("DRICH_mirror_center_z_" + secName, std::to_string(mirrorFinalCenter.z())));
     if (isec == 0)
-      desc.add(Constant("DRICH_RECON_mirrorRadius", std::to_string(mirrorRadius)));
+      desc.add(Constant("DRICH_mirror_radius", std::to_string(mirrorRadius)));
 
     // BUILD SENSORS ====================================================================
 
@@ -481,13 +460,11 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
 
     // reconstruction constants
     auto sensorSphFinalCenter = sectorRotation * Position(xS, 0.0, zS);
-    desc.add(Constant("DRICH_RECON_sensorSphCenterX_" + secName, std::to_string(sensorSphFinalCenter.x())));
-    desc.add(Constant("DRICH_RECON_sensorSphCenterY_" + secName, std::to_string(sensorSphFinalCenter.y())));
-    desc.add(Constant("DRICH_RECON_sensorSphCenterZ_" + secName, std::to_string(sensorSphFinalCenter.z())));
-    if (isec == 0) {
-      desc.add(Constant("DRICH_RECON_sensorSphRadius", std::to_string(sensorSphRadius)));
-      desc.add(Constant("DRICH_RECON_sensorThickness", std::to_string(sensorThickness)));
-    }
+    desc.add(Constant("DRICH_sensor_sph_center_x_" + secName, std::to_string(sensorSphFinalCenter.x())));
+    desc.add(Constant("DRICH_sensor_sph_center_y_" + secName, std::to_string(sensorSphFinalCenter.y())));
+    desc.add(Constant("DRICH_sensor_sph_center_z_" + secName, std::to_string(sensorSphFinalCenter.z())));
+    if (isec == 0)
+      desc.add(Constant("DRICH_sensor_sph_radius", std::to_string(sensorSphRadius)));
 
     // SENSOR MODULE LOOP ------------------------
     /* ALGORITHM: generate sphere of positions
