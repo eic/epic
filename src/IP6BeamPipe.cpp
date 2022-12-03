@@ -76,7 +76,7 @@ static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector /* sens *
   int nBinPhi = 144; // fix later. Should take this from a xml tag
   int nBinZ = 10;  // fix later. Should take this from a xml tag
   params.set("layer_material", true);
-  params.set<bool>("layer_material_representing"), true);
+  params.set<bool>("layer_material_representing", true);
   params.set<int>("layer_material_representing_binPhi", nBinPhi);
   params.set<int>("layer_material_representing_binZ", nBinZ);
 
