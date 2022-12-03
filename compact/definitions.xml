@@ -34,12 +34,12 @@ The unused IDs below are saved for future use.
     </documentation>
 
     <documentation>
-      Include ACTS type flag definitions 
+      Include ACTS type flag definitions
     </documentation>
     <includes>
       <gdmlFile ref="${DD4hepINSTALL}/DDDetectors/compact/detector_types.xml"/>
     </includes>
-    
+
     <documentation>
 
       ### Allocated IDs
