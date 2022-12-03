@@ -33,6 +33,28 @@ The space of IDs for the subassemblies starts at (Subassembly_ID*10+101).
 The unused IDs below are saved for future use.
     </documentation>
 
+    <documentation>
+      ACTS type flag definitions copied from
+      https://github.com/AIDASoft/DD4hep/blob/master/DDDetectors/compact/detector_types.xml
+    </documentation>
+    <constant name="DetType_TRACKER"         value =  " 0x1 "/>
+    <constant name="DetType_CALORIMETER"     value =  " 0x2 "/>
+    <constant name="DetType_CHERENKOV"       value =  " 0x4 "/>
+    <constant name="DetType_ENDCAP"          value =  " 0x8 "/>
+    <constant name="DetType_BARREL"          value =  " 0x10 "/>
+    <constant name="DetType_FORWARD"         value =  " 0x20 "/>
+    <constant name="DetType_VERTEX"          value =  " 0x40 "/>
+    <constant name="DetType_STRIP"           value =  " 0x80 "/>
+    <constant name="DetType_PIXEL"           value =  " 0x100 "/>
+    <constant name="DetType_GASEOUS"         value =  " 0x200 "/>
+    <constant name="DetType_WIRE"            value =  " 0x400 "/>
+    <constant name="DetType_ELECTROMAGNETIC" value =  " 0x800 "/>
+    <constant name="DetType_HADRONIC"        value =  " 0x1000 "/>
+    <constant name="DetType_MUON"            value =  " 0x2000 "/>
+    <constant name="DetType_SUPPORT"         value =  " 0x4000 "/>
+    <constant name="DetType_BEAMPIPE"        value =  " 0x8000 "/>
+    <constant name="DetType_COIL"            value =  " 0x10000 "/>
+    <constant name="DetType_AUXILIARY"       value =  " 0x20000 "/>
 
     <documentation>
 
