@@ -47,11 +47,11 @@
     <include ref="${DETECTOR_PATH}/compact/far_forward/fields_{{ pbeam | default("275", true) }}.xml" />
     <include ref="${DETECTOR_PATH}/compact/far_forward/definitions.xml" />
     <include ref="${DETECTOR_PATH}/compact/definitions.xml" />
+    <include ref="${DD4hepINSTALL}/DDDetectors/compact/detector_types.xml"/>
   </define>
 
   <includes>
     <gdmlFile ref="${DD4hepINSTALL}/DDDetectors/compact/elements.xml"/>
-    <file     ref="${DD4hepINSTALL}/DDDetectors/compact/detector_types.xml"/>
     <gdmlFile ref="${DETECTOR_PATH}/compact/materials.xml"/>
     <file     ref="${DETECTOR_PATH}/compact/optical_materials.xml"/>
   </includes>
