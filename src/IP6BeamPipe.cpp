@@ -13,7 +13,7 @@
 #include "DD4hep/Printout.h"
 #include "TMath.h"
 #include <XML/Helper.h>
-#include "DD4hepDetectorHelper.h"
+#include "XML/Utilities.h"
 
 using namespace std;
 using namespace dd4hep;
