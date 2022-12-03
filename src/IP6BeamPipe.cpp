@@ -39,7 +39,7 @@ static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector /* sens *
   using namespace ROOT::Math;
   xml_det_t  x_det    = e;
   string     det_name = x_det.nameStr();
-  xml_comp_t  x_dettype = x_det.child(dd4hep::xml::Strng_t("type_flags");
+  xml_comp_t  x_dettype = x_det.child(dd4hep::xml::Strng_t("type_flags"));
   unsigned int typeFlag = x_dettype.type();
   DetElement sdet(det_name, x_det.id());
   Assembly   assembly(det_name + "_assembly");
