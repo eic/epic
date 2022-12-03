@@ -3,7 +3,7 @@
 
 //==========================================================================
 //
-// Places a chain of far-backward beamline magnets 
+// Places a chain of far-backward beamline magnets
 //
 //==========================================================================
 
@@ -59,7 +59,7 @@ static Ref_t build_magnet(Detector& description, xml_h e, SensitiveDetector /* s
   sdet.setPlacement(pv_assembly);
 
   assembly->GetShape()->ComputeBBox();
-  
+
   return sdet;
 }
 
