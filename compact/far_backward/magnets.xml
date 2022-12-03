@@ -35,54 +35,41 @@
       <coil dx="2*cm" dy="1.5*cm" /><!--unchecked-->
     </detector>
 
-    <detector id="Magnet_Q3eR_ID" name="Magnet_Q3eR" type="ip6_CylindricalDipoleMagnet" vis="FFMagnetVis">
-      <placement  x="(Q3eR_StartX+Q3eR_EndX)/2" y="0" z="(Q3eR_StartZ+Q3eR_EndZ)/2" theta="Q3eR_Theta"/>
-      <dimensions x="0" y="0" z="Q3eR_Length" r="4*Q3eR_InnerRadius"/>
-      <apperture  x="0" y="0" r="Q3eR_InnerRadius"/>
-      <coil dx="2*cm" dy="1.5*cm" /><!--unchecked-->
+    <detector
+    id="Magnets_Q3eR_to_B7eR_ID"
+    name="Magnets_Q3eR_to_B7eR"
+    type="CylindricalDipoleMagnetChain"
+    vis="RedVis">
+      <magnet id="0" name="Magnet_Q3eR"
+        x="(Q3eR_StartX+Q3eR_EndX)/2" y="0" z="(Q3eR_StartZ+Q3eR_EndZ)/2" theta="Q3eR_Theta"
+        length="Q3eR_Length" rin="Q3eR_InnerRadius" rout="4*Q3eR_InnerRadius">
+      </magnet>
+      <magnet id="1" name="Magnet_Q4eR"
+        x="Q4eR_CenterX" y="0" z="Q4eR_CenterZ" theta="Q4eR_Theta"
+        length="Q4eR_Length" rin="Q4eR_InnerRadius" rout="Q4eR_OuterRadius">
+      </magnet>
+      <magnet id="2" name="Magnet_B3eR"
+        x="B3eR_CenterX" y="0" z="B3eR_CenterZ" theta="B3eR_Theta"
+        length="B3eR_Length" rin="B3eR_InnerRadius" rout="B3eR_OuterRadius">
+      </magnet>
+      <magnet id="3" name="Magnet_B4eR"
+        x="B4eR_CenterX" y="0" z="B4eR_CenterZ" theta="B4eR_Theta"
+        length="B4eR_Length" rin="B4eR_InnerRadius" rout="B4eR_OuterRadius">
+      </magnet>
+      <magnet id="4" name="Magnet_B5eR"
+        x="B5eR_CenterX" y="0" z="B5eR_CenterZ" theta="B5eR_Theta"
+        length="B5eR_Length" rin="B5eR_InnerRadius" rout="B5eR_OuterRadius">
+      </magnet>
+      <magnet id="5" name="Magnet_B6eR"
+        x="B6eR_CenterX" y="0" z="B6eR_CenterZ" theta="B6eR_Theta"
+        length="B6eR_Length" rin="B6eR_InnerRadius" rout="B6eR_OuterRadius">
+      </magnet>
+      <magnet id="6" name="Magnet_B7eR"
+        x="B7eR_CenterX" y="0" z="B7eR_CenterZ" theta="B7eR_Theta"
+        length="B7eR_Length" rin="B7eR_InnerRadius" rout="B7eR_OuterRadius">
+      </magnet>
     </detector>
 
-    <detector id="Magnet_Q4eR_ID" name="Magnet_Q4eR" type="ip6_CylindricalDipoleMagnet" vis="FFMagnetVis">
-      <placement  x="Q4eR_CenterX" y="0" z="Q4eR_CenterZ" theta="Q4eR_Theta"/>
-      <dimensions x="0" y="0" z="Q4eR_Length" r="Q4eR_OuterRadius"/>
-      <apperture  x="0" y="0" r="Q4eR_InnerRadius"/>
-      <coil dx="2*cm" dy="1.5*cm" /><!--unchecked-->
-    </detector>
-
-    <detector id="Magnet_B3eR_ID" name="Magnet_B3eR" type="ip6_CylindricalDipoleMagnet" vis="FFMagnetVis">
-      <placement  x="B3eR_CenterX" y="0" z="B3eR_CenterZ" theta="B3eR_Theta"/>
-      <dimensions x="0" y="0" z="B3eR_Length" r="B3eR_OuterRadius"/>
-      <apperture  x="0" y="0" r="B3eR_InnerRadius"/>
-      <coil dx="2*cm" dy="1.5*cm" /><!--unchecked-->
-    </detector>
-
-    <detector id="Magnet_B4eR_ID" name="Magnet_B4eR" type="ip6_CylindricalDipoleMagnet" vis="FFMagnetVis">
-      <placement  x="B4eR_CenterX" y="0" z="B4eR_CenterZ" theta="B4eR_Theta"/>
-      <dimensions x="0" y="0" z="B4eR_Length" r="B4eR_OuterRadius"/>
-      <apperture  x="0" y="0" r="B4eR_InnerRadius"/>
-      <coil dx="2*cm" dy="1.5*cm" /><!--unchecked-->
-    </detector>
-
-    <detector id="Magnet_B5eR_ID" name="Magnet_B5eR" type="ip6_CylindricalDipoleMagnet" vis="FFMagnetVis">
-      <placement  x="B5eR_CenterX" y="0" z="B5eR_CenterZ" theta="B5eR_Theta"/>
-      <dimensions x="0" y="0" z="B5eR_Length" r="B5eR_OuterRadius"/>
-      <apperture  x="0" y="0" r="B5eR_InnerRadius"/>
-      <coil dx="2*cm" dy="1.5*cm" /><!--unchecked-->
-    </detector>
-
-    <detector id="Magnet_B6eR_ID" name="Magnet_B6eR" type="ip6_CylindricalDipoleMagnet" vis="FFMagnetVis">
-      <placement  x="B6eR_CenterX" y="0" z="B6eR_CenterZ" theta="B6eR_Theta"/>
-      <dimensions x="0" y="0" z="B6eR_Length" r="B6eR_OuterRadius"/>
-      <apperture  x="0" y="0" r="B6eR_InnerRadius"/>
-      <coil dx="2*cm" dy="1.5*cm" /><!--unchecked-->
-    </detector>
-
-    <detector id="Magnet_B7eR_ID" name="Magnet_B7eR" type="ip6_CylindricalDipoleMagnet" vis="FFMagnetVis">
-      <placement  x="B7eR_CenterX" y="0" z="B7eR_CenterZ" theta="B7eR_Theta"/>
-      <dimensions x="0" y="0" z="B7eR_Length" r="B7eR_OuterRadius"/>
-      <apperture  x="0" y="0" r="B7eR_InnerRadius"/>
-      <coil dx="2*cm" dy="1.5*cm" /><!--unchecked-->
-    </detector>
 
 
     <comment> Hadron side beam magnet volumes </comment>
@@ -111,47 +98,36 @@
       <coil dx="2*cm" dy="1.5*cm" />
     </detector>
 
-    <detector name="Magnet_Q3PR" type="ip6_CylindricalDipoleMagnet" vis="RedVis">
-      <placement  x="(Q3PR_StartX+Q3PR_EndX)/2" y="0" z="(Q3PR_StartZ+Q3PR_EndZ)/2" theta="Q3PR_Theta"/>
-      <dimensions x="0" y="0" z="Q3PR_Length" r="Q3PR_OuterRadius"/>
-      <apperture  x="0" y="0" r="Q3PR_InnerRadius"/>
-      <coil dx="2*cm" dy="1.5*cm" />
-    </detector>
-
-    <detector name="Magnet_Crab1PR" type="ip6_CylindricalDipoleMagnet" vis="RedVis">
-      <placement  x="Crab1PR_CenterX" y="0" z="Crab1PR_CenterZ" theta="Crab1PR_Theta"/>
-      <dimensions x="0" y="0" z="Crab1PR_Length" r="Crab1PR_OuterRadius"/>
-      <apperture  x="0" y="0" r="Crab1PR_InnerRadius"/>
-      <coil dx="2*cm" dy="1.5*cm" /><!--unchecked-->
-    </detector>
-
-    <detector name="Magnet_Crab2PR" type="ip6_CylindricalDipoleMagnet" vis="RedVis">
-      <placement  x="Crab2PR_CenterX" y="0" z="Crab2PR_CenterZ" theta="Crab2PR_Theta"/>
-      <dimensions x="0" y="0" z="Crab2PR_Length" r="Crab2PR_OuterRadius"/>
-      <apperture  x="0" y="0" r="Crab2PR_InnerRadius"/>
-      <coil dx="2*cm" dy="1.5*cm" /><!--unchecked-->
-    </detector>
-
-    <detector name="Magnet_Crab3PR" type="ip6_CylindricalDipoleMagnet" vis="RedVis">
-      <placement  x="Crab3PR_CenterX" y="0" z="Crab3PR_CenterZ" theta="Crab3PR_Theta"/>
-      <dimensions x="0" y="0" z="Crab3PR_Length" r="Crab3PR_OuterRadius"/>
-      <apperture  x="0" y="0" r="Crab3PR_InnerRadius"/>
-      <coil dx="2*cm" dy="1.5*cm" /><!--unchecked-->
-    </detector>
-
-    <detector name="Magnet_Q4PR" type="ip6_CylindricalDipoleMagnet" vis="RedVis">
-      <placement  x="Q4PR_CenterX" y="0" z="Q4PR_CenterZ" theta="Q4PR_Theta"/>
-      <dimensions x="0" y="0" z="Q4PR_Length" r="Q4PR_OuterRadius"/>
-      <apperture  x="0" y="0" r="Q4PR_InnerRadius"/>
-      <coil dx="2*cm" dy="1.5*cm" /><!--unchecked-->
-    </detector>
-
-    <detector name="Magnet_B1PR" type="ip6_CylindricalDipoleMagnet" vis="RedVis">
-      <placement  x="B1PR_CenterX" y="0" z="B1PR_CenterZ" theta="B1PR_Theta"/>
-      <dimensions x="0" y="0" z="B1PR_Length" r="B1PR_OuterRadius"/>
-      <apperture  x="0" y="0" r="B1PR_InnerRadius"/>
-      <coil dx="2*cm" dy="1.5*cm" /><!--unchecked-->
-    </detector>
+    <detector
+    id="Magnets_Q3PR_to_B1PR_ID"
+    name="Magnets_Q3PR_to_B1PR"
+    type="CylindricalDipoleMagnetChain"
+    vis="FFMagnetVis">
+      <magnet id="0" name="Magnet_Q3PR"
+        x="(Q3PR_StartX+Q3PR_EndX)/2" y="0" z="(Q3PR_StartZ+Q3PR_EndZ)/2" theta="Q3PR_Theta"
+        length="Q3PR_Length" rin="Q3PR_InnerRadius" rout="Q3PR_OuterRadius">
+      </magnet>
+      <magnet id="0" name="Magnet_Crab1PR"
+        x="Crab1PR_CenterX" y="0" z="Crab1PR_CenterZ" theta="Crab1PR_Theta"
+        length="Crab1PR_Length" rin="Crab1PR_InnerRadius" rout="Crab1PR_OuterRadius">
+      </magnet>
+      <magnet id="0" name="Magnet_Crab2PR"
+        x="Crab2PR_CenterX" y="0" z="Crab2PR_CenterZ" theta="Crab2PR_Theta"
+        length="Crab2PR_Length" rin="Crab2PR_InnerRadius" rout="Crab2PR_OuterRadius">
+      </magnet>
+      <magnet id="0" name="Magnet_Crab3PR"
+        x="Crab3PR_CenterX" y="0" z="Crab3PR_CenterZ" theta="Crab3PR_Theta"
+        length="Crab3PR_Length" rin="Crab3PR_InnerRadius" rout="Crab3PR_OuterRadius">
+      </magnet>
+      <magnet id="0" name="Magnet_Q4PR"
+        x="Q4PR_CenterX" y="0" z="Q4PR_CenterZ" theta="Q4PR_Theta"
+        length="Q4PR_Length" rin="Q4PR_InnerRadius" rout="Q4PR_OuterRadius">
+      </magnet>
+      <magnet id="0" name="Magnet_B1PR"
+        x="B1PR_CenterX" y="0" z="B1PR_CenterZ" theta="B1PR_Theta"
+        length="B1PR_Length" rin="B1PR_InnerRadius" rout="B1PR_OuterRadius">
+      </magnet>
+     </detector>
 
   </detectors>
 
