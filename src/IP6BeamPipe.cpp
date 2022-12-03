@@ -72,15 +72,13 @@ static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector /* sens *
   const double central_offset = -.5 * (upstream_straight_length - downstream_straight_length);
   DetElement   central_det(sdet, "acts_beampipe_central", 1);
 
-  dd4hep::xml::setDetectorTypeFlag(xml, central_det);
-  auto &params = DD4hepDetectorHelper::ensureExtension<dd4hep::rec::VariantParameters>(
-      central_det);
-
-  for (xml_coll_t lmat(x_det_tubs, _Unicode(layer_material)); lmat; ++lmat) {
-    xml_comp_t x_layer_material = lmat;
-    DD4hepDetectorHelper::xmlToProtoSurfaceMaterial(x_layer_material, params,
-                                         "layer_material");
-  }
+  auto &params = DD4hepDetectorHelper::ensureExtension<dd4hep::rec::VariantParameters>(central_det);
+  int nBinPhi = 144; // fix later. Should take this from a xml tag
+  int nBinZ = 10;  // fix later. Should take this from a xml tag
+  params.set("layer_material", true);
+  params.set<bool>("layer_material_representing"), true);
+  params.set<int>("layer_material_representing_binPhi", nBinPhi);
+  params.set<int>("layer_material_representing_binZ", nBinZ);
 
   // -----------------------------
   // IP beampipe
