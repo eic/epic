@@ -39,6 +39,8 @@ static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector /* sens *
   using namespace ROOT::Math;
   xml_det_t  x_det    = e;
   string     det_name = x_det.nameStr();
+  xml_comp_t  x_dettype = x_det.child(dd4hep::xml::Strng_t("type_flags");
+  unsigned int typeFlag = x_dettype.type();
   DetElement sdet(det_name, x_det.id());
   Assembly   assembly(det_name + "_assembly");
   Material   m_Al     = det.material("Aluminum");
@@ -68,7 +70,7 @@ static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector /* sens *
   DetElement   central_det(sdet, "acts_beampipe_central", 1);
 
   // Set dd4hep variant parameters for conversion to ACTS tracking geometry
-  dd4hep::xml::setDetectorTypeFlag(e, central_det);
+  central_det.setTypeFlag(typeFlag);
   auto &params = DD4hepDetectorHelper::ensureExtension<dd4hep::rec::VariantParameters>(central_det);
   int nBinPhi = 144; // fix later. Should take this from a xml tag
   int nBinZ = 10;  // fix later. Should take this from a xml tag
