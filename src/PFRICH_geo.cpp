@@ -111,6 +111,7 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
   uint64_t cellMask = 0;
   for (const auto& idField : sensorIDfields)
     cellMask |= readoutCoder[idField].mask();
+  desc.add(Constant("PFRICH_cell_mask", std::to_string(cellMask)));
   // create a unique sensor ID from a sensor's PlacedVolume::volIDs
   auto encodeSensorID = [&readoutCoder](auto ids) {
     uint64_t enc = 0;
@@ -118,21 +119,6 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
       enc |= uint64_t(idValue) << readoutCoder[idField].offset();
     return enc;
   };
-
-  // define reconstruction geometry constants `PFRICH_RECON_*`
-  /* - these are the numbers needed to rebuild the geometry in the
-   *   reconstruction, in particular, the optical surfaces encountered by the
-   *   Cherenkov photons
-   * - positions are w.r.t. the IP
-   * - check the values of all of the `PFRICH_RECON_*` constants after any change
-   *   to the geometry
-   * - some `PFRICH_RECON_*` constants are redundant, but are defined to make
-   *   it clear that the reconstruction code depends on them
-   */
-  desc.add(Constant("PFRICH_RECON_zmin", std::to_string(vesselZmin)));
-  desc.add(Constant("PFRICH_RECON_gasvolMaterial", gasvolMat.ptr()->GetName(), "string"));
-  desc.add(Constant("PFRICH_RECON_cellMask", std::to_string(cellMask)));
-  desc.add(Constant("PFRICH_RECON_sensorThickness", std::to_string(sensorThickness)));
 
   // BUILD VESSEL //////////////////////////////////////
   /* - `vessel`: aluminum enclosure, the mother volume of the pfRICH
@@ -239,15 +225,16 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
     // filterSkin.isValid();
   };
 
-  // reconstruction constants (w.r.t. IP)
+  // radiator z-positions (w.r.t. IP)
   double aerogelZpos = vesselPos.z() + aerogelPV.position().z();
   double filterZpos  = vesselPos.z() + filterPV.position().z();
-  desc.add(Constant("PFRICH_RECON_aerogelZpos", std::to_string(aerogelZpos)));
-  desc.add(Constant("PFRICH_RECON_aerogelThickness", std::to_string(aerogelThickness)));
-  desc.add(Constant("PFRICH_RECON_aerogelMaterial", aerogelMat.ptr()->GetName(), "string"));
-  desc.add(Constant("PFRICH_RECON_filterZpos", std::to_string(filterZpos)));
-  desc.add(Constant("PFRICH_RECON_filterThickness", std::to_string(filterThickness)));
-  desc.add(Constant("PFRICH_RECON_filterMaterial", filterMat.ptr()->GetName(), "string"));
+  desc.add(Constant("PFRICH_aerogel_zpos", std::to_string(aerogelZpos)));
+  desc.add(Constant("PFRICH_filter_zpos", std::to_string(filterZpos)));
+
+  // radiator material names
+  desc.add(Constant("PFRICH_aerogel_material", aerogelMat.ptr()->GetName(), "string"));
+  desc.add(Constant("PFRICH_filter_material", filterMat.ptr()->GetName(), "string"));
+  desc.add(Constant("PFRICH_gasvol_material", gasvolMat.ptr()->GetName(), "string"));
 
   // BUILD SENSORS ///////////////////////
 
