@@ -14,6 +14,7 @@
 #include "TMath.h"
 #include <XML/Helper.h>
 #include "XML/Utilities.h"
+#include "DD4hepDetectorHelper.h"
 
 using namespace std;
 using namespace dd4hep;
