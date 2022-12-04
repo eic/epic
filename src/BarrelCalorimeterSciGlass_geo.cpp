@@ -208,12 +208,11 @@ static Ref_t create_detector(Detector& lcdd, xml_h handle, SensitiveDetector sen
       double&   dz                     = dzs[(dir_sign > 0) ? 1 : 0];
       double&   flare_angle_polar_prev = flare_angle_polar_prevs[(dir_sign > 0) ? 1 : 0];
 
-      xml_dim_t          family_dim_handle     = family_handle;
-      const double       length                = family_dim_handle.z_length();
-      const auto         flare_angle_azimuthal = family_dim_handle.attr<double>(_Unicode(flare_angle_azimuthal), NAN);
-      const auto         flare_angle_polar     = family_dim_handle.attr<double>(_Unicode(flare_angle_polar));
-      const unsigned int number                = family_dim_handle.number();
-      const auto         flare_angle_at_face   = family_dim_handle.attr<double>(_Unicode(flare_angle_at_face));
+      xml_dim_t          family_dim_handle   = family_handle;
+      const double       length              = family_dim_handle.z_length();
+      const auto         flare_angle_polar   = family_dim_handle.attr<double>(_Unicode(flare_angle_polar));
+      const unsigned int number              = family_dim_handle.number();
+      const auto         flare_angle_at_face = family_dim_handle.attr<double>(_Unicode(flare_angle_at_face));
 
       const double z  = length / 2;
       // Face parameters (see doc/sciglass_tower_front_view.svg for definitions)
@@ -222,8 +221,9 @@ static Ref_t create_detector(Detector& lcdd, xml_h handle, SensitiveDetector sen
       double       x1 = family_dim_handle.x1();
       double       x2 = family_dim_handle.x1() + (2 * y1) * tan(flare_angle_at_face);
       double       x3, x4;
-      if (!std::isnan(flare_angle_azimuthal)) {
-        // Azimuthal flaring defined
+      if (family_dim_handle.hasAttr(_Unicode(flare_angle_azimuthal))) {
+        // Azimuthal flaring independently defined
+        const auto flare_angle_azimuthal = family_dim_handle.attr<double>(_Unicode(flare_angle_azimuthal));
         x3 = x1 + length * (tan(flare_angle_azimuthal) - tan(flare_angle_polar) * tan(flare_angle_at_face));
         x4 = x2 + length * (tan(flare_angle_azimuthal) + tan(flare_angle_polar) * tan(flare_angle_at_face));
       } else {
