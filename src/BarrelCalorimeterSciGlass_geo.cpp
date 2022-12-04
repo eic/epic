@@ -216,13 +216,14 @@ static Ref_t create_detector(Detector& lcdd, xml_h handle, SensitiveDetector sen
       const auto         flare_angle_at_face   = family_dim_handle.attr<double>(_Unicode(flare_angle_at_face));
 
       const double z  = length / 2;
+      // Face parameters (see doc/sciglass_tower_front_view.svg for definitions)
       const double y1 = family_dim_handle.y1();
       const double y2 = y1 + length * tan(flare_angle_polar);
       double       x1 = family_dim_handle.x1();
       double       x2 = family_dim_handle.x1() + (2 * y1) * tan(flare_angle_at_face);
       double       x3, x4;
       if (!std::isnan(flare_angle_azimuthal)) {
-        //  Azimuthal flaring defined
+        // Azimuthal flaring defined
         x3 = x1 + length * (tan(flare_angle_azimuthal) - tan(flare_angle_polar) * tan(flare_angle_at_face));
         x4 = x2 + length * (tan(flare_angle_azimuthal) + tan(flare_angle_polar) * tan(flare_angle_at_face));
       } else {
