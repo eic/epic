@@ -51,7 +51,6 @@ static Ref_t create_B0Tracker(Detector& description, xml_h e, SensitiveDetector 
   sdet.addExtension<Acts::ActsExtension>(detWorldExt);
 
   // assembly.setVisAttributes(description.invisible());
-  sens.setType("tracker");
 
   for (xml_coll_t mi(x_det, _U(module)); mi; ++mi, ++m_id) {
     xml_comp_t x_mod = mi;
