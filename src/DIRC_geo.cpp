@@ -55,7 +55,7 @@ static Ref_t createDetector(Detector& desc, xml_h e, SensitiveDetector sens)
   double     bar_length = xml_bar.length();
   Box        bar_box("bar_box", bar_height / 2, bar_width / 2, bar_length / 2);
   Volume     bar_vol("bar_vol", bar_box, desc.material(xml_bar.materialStr()));
-  bar_vol.setVisAttributes(desc.visAttributes(xml_bar.visStr()));
+  bar_vol.setVisAttributes(desc.visAttributes(xml_bar.visStr())).setSensitiveDetector(sens);
 
   // Glue
   xml_comp_t xml_glue       = xml_module.child(_Unicode(glue));
@@ -77,6 +77,7 @@ static Ref_t createDetector(Detector& desc, xml_h e, SensitiveDetector sens)
       double z = 0.5 * bar_assm_length - 0.5 * bar_length - (bar_length + glue_thickness) * z_index;
       dirc_module.placeVolume(glue_vol, Position(0, y, z - 0.5 * (bar_length + glue_thickness)));
       dirc_module.placeVolume(bar_vol, Position(0, y, z)).addPhysVolID("section", z_index).addPhysVolID("bar", y_index);
+      bar_vol.setSensitiveDetector(sens);
     }
   }
 
@@ -187,7 +188,7 @@ static Ref_t createDetector(Detector& desc, xml_h e, SensitiveDetector sens)
   // MCP construction
   Box    mcp_box("mcp_box", mcp_height / 2, mcp_width / 2, mcp_thickness / 2);
   Volume mcp_vol("mcp_vol", mcp_box, desc.material(xml_mcp.materialStr()));
-  mcp_vol.setVisAttributes(desc.visAttributes(xml_mcp.visStr())).setSensitiveDetector(sens);
+  mcp_vol.setVisAttributes(desc.visAttributes(xml_mcp.visStr()));
 
   double   mcp_position_x = 0.5 * prism_long_edge - 0.5 * prism_short_edge + lens_shift;
   double   mcp_position_z = -0.5 * bar_assm_length - lens_thickness - prism_length - 0.5 * mcp_thickness;

@@ -267,6 +267,9 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
   auto aerogelPlacement = Translation3D(radiatorPos.x(), radiatorPos.y(), radiatorPos.z()) * // re-center to originFront
                           RotationY(radiatorPitch); // change polar angle to specified pitch
   auto       aerogelPV = gasvolVol.placeVolume(aerogelVol, aerogelPlacement);
+
+  aerogelPV.addPhysVolID("sector", 0);
+  aerogelVol.setSensitiveDetector(sens);
   DetElement aerogelDE(det, "aerogel_de", 0);
   aerogelDE.setPlacement(aerogelPV);
   // SkinSurface aerogelSkin(desc, aerogelDE, "mirror_optical_surface", aerogelSurf, aerogelVol);
@@ -455,8 +458,8 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
     auto sensorSphPos = Position(sensorSphCenterX, 0., sensorSphCenterZ) + originFront;
 
     // sensitivity
-    if (!debugOptics || debugOpticsMode == 3)
-      sensorVol.setSensitiveDetector(sens);
+    // if (!debugOptics || debugOpticsMode == 3)
+    //   sensorVol.setSensitiveDetector(sens);
 
     // reconstruction constants
     auto sensorSphFinalCenter = sectorRotation * Position(xS, 0.0, zS);

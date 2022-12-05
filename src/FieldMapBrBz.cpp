@@ -106,6 +106,13 @@ void FieldMapBrBz::LoadMap(const std::string& map_file, double scale)
   if (!input) {
     std::cout << "FieldMapBrBz Error: file \"" << map_file << "\" cannot be read." << std::endl;
   }
+  std::cout << "FieldMapBrBz file \"" << map_file << "\" is used." << std::endl;
+  if(input.rdbuf()->in_avail() == 0) {
+    std::cout << "FieldMapBrBz Error: file \"" << map_file << "\" is empty." << std::endl;
+  } else {
+    std::cout << "FieldMapBrBz file \"" << map_file << "\" is not empty." << std::endl;
+  }
+  // std::cout << input.rdbuf();
 
   double r, z, br, bz;
   int    ir, iz;
@@ -124,6 +131,8 @@ void FieldMapBrBz::LoadMap(const std::string& map_file, double scale)
       // std::cout << ir << ", " << iz << ", " << br << ", " << bz << std::endl;
     }
   }
+  std::cout << "FieldMapBrBz file \"" << map_file << "\" done being used." << std::endl;
+
 }
 
 // get field components
@@ -171,13 +180,14 @@ void FieldMapBrBz::fieldComponents(const double* pos, double* field)
 static Ref_t create_field_map_brbz(Detector& /*lcdd*/, xml::Handle_t handle)
 {
   xml_comp_t x_par(handle);
-
+  std::cout << "\n\nCreating field map\n\n" << std::endl;
   if (!x_par.hasAttr(_Unicode(field_map))) {
     throw std::runtime_error("FieldMapBrBz Error: must have an xml attribute \"field_map\" for the field map.");
   }
 
   CartesianField field;
   std::string    field_type = x_par.attr<std::string>(_Unicode(field_type));
+  std::cout << "\n\nCreating field map - line " << __LINE__ << "\n\n" << std::endl;
 
   // dimensions
   xml_comp_t x_dim = x_par.dimensions();
@@ -187,10 +197,11 @@ static Ref_t create_field_map_brbz(Detector& /*lcdd*/, xml::Handle_t handle)
   xml_comp_t z_dim = x_dim.child(_Unicode(longitudinal));
 
   std::string field_map_file  = x_par.attr<std::string>(_Unicode(field_map));
-  std::string field_map_url   = x_par.attr<std::string>(_Unicode(url));
+  // std::string field_map_url   = x_par.attr<std::string>(_Unicode(url));
   std::string field_map_cache = getAttrOrDefault<std::string>(x_par, _Unicode(cache), "");
 
-  EnsureFileFromURLExists(field_map_url, field_map_file, field_map_cache);
+  // EnsureFileFromURLExists(field_map_url, field_map_file, field_map_cache);
+  std::cout << "\n\nCreating field map - line " << __LINE__ << "\n\n" << std::endl;
 
   double field_map_scale = x_par.attr<double>(_Unicode(scale));
 
@@ -199,6 +210,7 @@ static Ref_t create_field_map_brbz(Detector& /*lcdd*/, xml::Handle_t handle)
     printout(ERROR, "FieldMapBrBz", "use a FileLoader plugin before the field element");
     std::_Exit(EXIT_FAILURE);
   }
+  std::cout << "\n\nCreating field map - line " << __LINE__ << "\n\n" << std::endl;
 
   auto map = new FieldMapBrBz(field_type);
   map->Configure(r_dim.rmin(), r_dim.rmax(), r_dim.step(), z_dim.zmin(), z_dim.zmax(), z_dim.step());
@@ -210,6 +222,7 @@ static Ref_t create_field_map_brbz(Detector& /*lcdd*/, xml::Handle_t handle)
     xml_comp_t rot_dim = x_dim.child(_Unicode(rotation));
     rot                = RotationZYX(rot_dim.z() * deg2r, rot_dim.y() * deg2r, rot_dim.x() * deg2r);
   }
+  std::cout << "\n\nCreating field map - line " << __LINE__ << "\n\n" << std::endl;
 
   Translation3D trans(0., 0., 0.);
   if (x_dim.hasChild(_Unicode(translation))) {
@@ -217,9 +230,11 @@ static Ref_t create_field_map_brbz(Detector& /*lcdd*/, xml::Handle_t handle)
     trans                = Translation3D(trans_dim.x(), trans_dim.y(), trans_dim.z());
   }
   map->SetTransform(trans * rot);
+  std::cout << "\n\nCreating field map - line " << __LINE__ << "\n\n" << std::endl;
 
   map->LoadMap(field_map_file, field_map_scale);
   field.assign(map, x_par.nameStr(), "FieldMapBrBz");
+  std::cout << "\n\nCreating field map - line " << __LINE__ << "\n\n" << std::endl;
 
   return field;
 }

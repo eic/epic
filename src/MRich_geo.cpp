@@ -135,6 +135,12 @@ static Ref_t createDetector(Detector& description, xml::Handle_t e, SensitiveDet
     pv = m_volume.placeVolume(aerogel_vol, Position(0, 0, z_placement));
     DetElement aerogel_de(mod_de, mod_name + std::string("_aerogel_de") + std::to_string(1), 1);
     aerogel_de.setPlacement(pv);
+
+
+    pv.addPhysVolID("module", 0);
+    aerogel_vol.setSensitiveDetector(sens);
+    sensitives[mod_name].push_back(pv);
+
     // update position
     z_placement += aerogel_length / 2.0;
 
