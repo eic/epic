@@ -563,7 +563,7 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
           resinDE.setPlacement(resinPV);
 
           if (!debugOptics || debugOpticsMode == 3) {
-            SkinSurface resinSkin(desc, resinDE, "resin_optical_surface_" + resinsecName, resinSurf, resinVol);
+            SkinSurface resinSkin(desc, resinDE, "resin_optical_surface_" + modsecName, resinSurf, resinVol);
             resinSkin.isValid();
           };
 
