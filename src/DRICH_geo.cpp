@@ -161,22 +161,6 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
       enc |= uint64_t(idValue) << readoutCoder[idField].offset();
     return enc;
   };
-  
-
-  // define reconstruction geometry constants `DRICH_RECON_*`
-  /* - these are the numbers needed to rebuild the geometry in the
-   *   reconstruction, in particular, the optical surfaces encountered by the
-   *   Cherenkov photons
-   * - positions are w.r.t. the IP
-   * - check the values of all of the `DRICH_RECON_*` constants after any change
-   *   to the geometry
-   * - some `DRICH_RECON_*` constants are redundant, but are defined to make
-   *   it clear that the reconstruction code depends on them
-   */
-  desc.add(Constant("DRICH_RECON_nSectors",       std::to_string(nSectors)));
-  desc.add(Constant("DRICH_RECON_zmin",           std::to_string(vesselZmin)));
-  desc.add(Constant("DRICH_RECON_gasvolMaterial", gasvolMat.ptr()->GetName(), "string"));
-  desc.add(Constant("DRICH_RECON_cellMask",       std::to_string(cellMask)));
 
   // BUILD VESSEL ====================================================================
   /* - `vessel`: aluminum enclosure, the mother volume of the dRICH
@@ -455,7 +439,6 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
 
     auto sensorSphPos = Position(sensorSphCenterX, 0., sensorSphCenterZ) + originFront;
 
-
     // sensitivity
     if (!debugOptics || debugOpticsMode == 3)
       sensorVol.setSensitiveDetector(sens);
@@ -467,12 +450,6 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
     desc.add(Constant("DRICH_sensor_sph_center_z_" + secName, std::to_string(sensorSphFinalCenter.z())));
     if (isec == 0)
       desc.add(Constant("DRICH_sensor_sph_radius", std::to_string(sensorSphRadius)));
-
-    // reconstruction constants for resin
-    if(isec==0) {
-      desc.add(Constant("DRICH_RECON_resinMaterial",  resinMat.ptr()->GetName(), "string"));
-      desc.add(Constant("DRICH_RECON_resinThickness", std::to_string(resinThickness)));
-    }
 
     // SENSOR MODULE LOOP ------------------------
     /* ALGORITHM: generate sphere of positions
@@ -496,7 +473,6 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
 
     // initialize module number for this sector
     int imod = 0;
-    int iresin = 0;
 
     // thetaGen loop: iterate less than "0.5 circumference / sensor size" times
     double nTheta = M_PI * sensorSphRadius / (sensorSide + sensorGap);
@@ -583,8 +559,7 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
               RotationZ(-M_PI / 2);                           // correction for readout segmentation mapping
           auto resinPV = gasvolVol.placeVolume(resinVol, resinPlacement);
 
-          std::string resinsecName = secName + "_" + std::to_string(iresin);
-          DetElement resinDE(det, "resin_de_" + resinsecName, iresin);
+          DetElement resinDE(det, "resin_de_" + modsecName, imodsec);
           resinDE.setPlacement(resinPV);
 
           if (!debugOptics || debugOpticsMode == 3) {
@@ -594,7 +569,6 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
           
           // increment sensor module number
           imod++;
-          iresin++;
 
         } // end patch cuts
       }   // end phiGen loop

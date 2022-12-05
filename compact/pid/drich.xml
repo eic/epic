@@ -29,7 +29,7 @@
 <constant name="DRICH_pixel_gap"             value="0.2*mm"/> <!-- size of gaps between adjacent pixels AND gaps between edge pixels and sensor side -->
 <constant name="DRICH_sensor_sensitive_size" value="DRICH_sensor_size - DRICH_pixel_gap"/> <!-- side length of photosensitive surface (to be segmented) -->
 <constant name="DRICH_sensor_thickness"      value="1.34*mm"/>  <!-- sensor thickness FIXME: use the real thickness + resin -->
-<constant name="DRICH_resin_thickness"      value="0.01*mm"/>  <!-- resin thickness FIXME: use the real resin thickness -->
+<constant name="DRICH_resin_thickness"       value="0.01*mm"/>  <!-- resin thickness FIXME: use the real resin thickness -->
 <constant name="DRICH_num_px"                value="8"/>       <!-- number of pixels along one side of the sensor -->
 <constant name="DRICH_pixel_size"            value="3.0*mm"/>  <!-- a single SiPM pixel size -->
 <constant name="DRICH_pixel_pitch"           value="DRICH_pixel_size + DRICH_pixel_gap"/>  <!-- center-to-center distance between SiPMs in a 8x8 panel -->
@@ -167,15 +167,11 @@
   focus_tune_z="-2.00*cm"
   />
 
-
-
-
 <!-- /detectors/detector/sensors -->
 <documentation level="10">
 #### Sensors
 </documentation>
 <sensors>
-
 
 
 <!-- /detectors/detector/sensors/module -->
