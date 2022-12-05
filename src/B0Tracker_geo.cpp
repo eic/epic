@@ -198,7 +198,7 @@ static Ref_t create_B0Tracker(Detector& description, xml_h e, SensitiveDetector 
     //}
     DetElement layer_element(sdet, layer_name, l_id);
     layer_element.setPlacement(layer_pv);
-    
+
     auto &layerParams =
         DD4hepDetectorHelper::ensureExtension<dd4hep::rec::VariantParameters>(
             layer_element);
