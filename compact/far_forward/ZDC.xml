@@ -1,3 +1,6 @@
+<!-- SPDX-License-Identifier: LGPL-3.0-or-later -->
+<!-- Copyright (C) 2022 Shima Shimizu, Wouter Deconinck, Whitney Armstrong -->
+
 <lccdd>
 
   <comment>Far Forward Hadron Detectors</comment>
@@ -11,7 +14,7 @@
     <constant name="ZDC_r_pos"         value="3550.0 * cm"/> <!-- Make it match to the CAD figure 22/Nov/22 -->
     <constant name="ZDC_y_pos"         value="0.0 * cm"/>
     <constant name="ZDC_rotateX_angle" value="0.0 * rad"/>
-    <constant name="ZDC_rotateY_angle" value="-1.* ionCrossingAngle"/>
+    <constant name="ZDC_rotateY_angle" value="ionCrossingAngle"/>
     <constant name="ZDC_rotateZ_angle" value="0.0 * rad"/>
     <constant name="ZDC_width"         value="60.0 * cm"/>
     <constant name="ZDC_length"        value="200.0 * cm"/>
