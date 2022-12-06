@@ -117,4 +117,4 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector /
   return sdet;
 }
 
-DECLARE_DETELEMENT(FarBackwardsBeamPipes, create_detector)
+DECLARE_DETELEMENT(BackwardsBeamPipeChain, create_detector)

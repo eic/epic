@@ -54,7 +54,7 @@
     <detector
     id="Pipe_Q3eR_to_B7eR_ID"
     name="Pipe_Q3eR_to_B7eR"
-    type="FarBackwardsBeamPipes"
+    type="BackwardsBeamPipeChain"
     wall_thickness="2*mm">
       <pipe id="0" name="Pipe_in_Q3eR" magnetpipe="1"
         xcenter="Q3eR_XPosition" zcenter="Q3eR_CenterPosition"

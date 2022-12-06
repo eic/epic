@@ -71,26 +71,8 @@
     </detector>
 
 
-
     <comment> Hadron side beam magnet volumes </comment>
-    <!--
-    <detector name="Magnet_Q1APR" type="ip6_CylindricalDipoleMagnet" vis="RedVis">
-    <placement  x="(Q1APR_StartX+Q1APR_EndX)/2" y="0" z="(Q1APR_StartZ+Q1APR_EndZ)/2" theta="Q1APR_Theta"/>
-    <dimensions x="Q1APR_InnerRadius*4" y="Q1APR_InnerRadius*4" z="Q1APR_Length" r="2.0*Q1APR_InnerRadius"/>
-    <apperture  x="Q1APR_InnerRadius*2" y="Q1APR_InnerRadius*2" r="Q1APR_InnerRadius"/>
-    <coil dx="2*cm" dy="1.5*cm" />
-    </detector>
-    -->
-
-    <!--
-    <detector name="Magnet_Q1BPR" type="ip6_CylindricalDipoleMagnet" vis="RedVis">
-    <placement  x="(Q1BPR_StartX+Q1BPR_EndX)/2" y="0" z="(Q1BPR_StartZ+Q1BPR_EndZ)/2" theta="Q1APR_Theta"/>
-    <dimensions x="Q1BPR_InnerRadius*4" y="Q1BPR_InnerRadius*4" z="Q1BPR_Length" r="2.0*Q1BPR_InnerRadius"/>
-    <apperture  x="Q1BPR_InnerRadius*2" y="Q1BPR_InnerRadius*2" r="Q1BPR_InnerRadius"/>
-    <coil dx="2*cm" dy="1.5*cm" />
-    </detector>
-    -->
-
+ 
     <detector name="Magnet_Q2PR" type="ip6_CylindricalDipoleMagnet" vis="RedVis">
       <placement  x="(Q2PR_StartX+Q2PR_EndX)/2" y="0" z="(Q2PR_StartZ+Q2PR_EndZ)/2" theta="Q1BPR_Theta"/>
       <dimensions x="Q2PR_InnerRadius*4" y="Q2PR_InnerRadius*4" z="Q2PR_Length" r="2.0*Q2PR_InnerRadius"/>
