@@ -56,6 +56,7 @@
       type="epic_TrackerBarrel"
       readout="SiBarrelHits"
       insideTrackingVolume="true">
+      <type_flags type="DetType_TRACKER + DetType_BARREL"/>
       <dimensions
         rmin="SiBarrelLayer1_rmin"
         rmax="SiBarrelLayer1_rmax"
@@ -113,6 +114,7 @@
       type="epic_TrackerBarrel"
       readout="SiBarrelHits"
       insideTrackingVolume="true">
+      <type_flags type="DetType_TRACKER + DetType_BARREL"/>
       <dimensions
         rmin="SiBarrelLayer2_rmin"
         rmax="SiBarrelLayer2_rmax"
