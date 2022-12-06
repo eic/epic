@@ -1,6 +1,5 @@
 // SPDX-License-Identifier: LGPL-3.0-or-later
 // Copyright (C) 2022 Chao Peng, Dmitry Romanov, Pu-Kai Wang
-
 //==========================================================================
 //  A general implementation for homogeneous calorimeter
 //  it supports three types of placements
@@ -406,13 +405,13 @@ static std::tuple<int, int> add_disk(Detector& desc, Assembly& env, xml::Collect
 static std::tuple<int, int> add_12surface_disk(Detector& desc, Assembly& env, xml::Collection_t& plm,
                                                SensitiveDetector& sens, int sid)
 {
-  auto [modVol, modSize]        = build_module(desc, plm, sens);
-  int    sector_id              = dd4hep::getAttrOrDefault<int>(plm, _Unicode(sector), sid);
-  int    id_begin               = dd4hep::getAttrOrDefault<int>(plm, _Unicode(id_begin), 1);
-  double rmin                   = plm.attr<double>(_Unicode(rmin));
-  double rmax                   = plm.attr<double>(_Unicode(rmax));
-  double r12min                 = plm.attr<double>(_Unicode(r12min));
-  double r12max                 = plm.attr<double>(_Unicode(r12max));
+  auto [modVol, modSize] = build_module(desc, plm, sens);
+  int    sector_id       = dd4hep::getAttrOrDefault<int>(plm, _Unicode(sector), sid);
+  int    id_begin        = dd4hep::getAttrOrDefault<int>(plm, _Unicode(id_begin), 1);
+  // double rmin            = plm.attr<double>(_Unicode(rmin));
+  double rmax            = plm.attr<double>(_Unicode(rmax));
+  double r12min          = plm.attr<double>(_Unicode(r12min));
+  double r12max          = plm.attr<double>(_Unicode(r12max));
   double structure_frame_length = plm.attr<double>(_Unicode(SFlength));
   double calo_module_length     = plm.attr<double>(_Unicode(CMlength));
   double phimin                 = dd4hep::getAttrOrDefault<double>(plm, _Unicode(phimin), 0.);
@@ -430,7 +429,8 @@ static std::tuple<int, int> add_12surface_disk(Detector& desc, Assembly& env, xm
   //
   bool has_envelope = dd4hep::getAttrOrDefault<bool>(plm, _Unicode(envelope), false);
   Material ring_material     = desc.material(getAttrOrDefault<std::string>(plm, _U(material), "StainlessSteel"));
-  Material hole_material     = desc.material(getAttrOrDefault<std::string>(plm, _U(material), "Air"));
+  // Material hole_material     = desc.material(getAttrOrDefault<std::string>(plm, _U(material), "Air"));
+  Material hole_material     = desc.material(getAttrOrDefault<std::string>(plm, _U(material), "Vacuum"));
 
   // Tube solid_sub(0., rmin, calo_module_length/2., phimin, phimax);
   // EllipticalTube  solid_sub(9.*cm, 7.5*cm, calo_module_length/2.);
@@ -459,15 +459,17 @@ static std::tuple<int, int> add_12surface_disk(Detector& desc, Assembly& env, xm
   SubtractionSolid inner_elliptical_support_substract(inner_elliptical_support_a, inner_elliptical_support_b, Position(0., 0., 0.));
   Volume           inner_elliptical_vol("inner_elliptical", inner_elliptical_support_substract, ring_material);   
   inner_elliptical_vol.setVisAttributes(desc.visAttributes(plm.attr<std::string>(_Unicode(vis_struc))));
-  Transform3D tr_global_Iring_elli = RotationZYX(0., 0., 0.) * Translation3D(1.*cm, 0., 0.);
-
+  // Transform3D tr_global_Iring_elli = RotationZYX(0., 0., 0.) * Translation3D(2.05*cm, 0., 0.);
+  Transform3D tr_global_Iring_elli = RotationZYX(-15.*degree, 0., 0.) * Translation3D(2.05*cm, 0., 0.);
+  
 
   // Air inside the supporting frame
   //
   EllipticalTube   inner_elliptical_air(8.5*cm, 7.*cm, calo_module_length/2.);
   Volume           inner_elliptical_air_vol("inner_elliptical_air_vol", inner_elliptical_air, hole_material);   
   inner_elliptical_vol.setVisAttributes(desc.visAttributes(plm.attr<std::string>(_Unicode(vis_struc))));
-  Transform3D tr_global_Iring_elli_air = RotationZYX(0., 0., 0.) * Translation3D(1.*cm, 0., 0.);
+  // Transform3D tr_global_Iring_elli_air = RotationZYX(15.*degree, 0., 0.) * Translation3D(1.*cm, 0., 0.);
+  Transform3D tr_global_Iring_elli_air = RotationZYX(-15.*degree, 0., 0.) * Translation3D(2.05*cm, 0., 0.);
 
   
   
@@ -549,16 +551,16 @@ static std::tuple<int, int> add_12surface_disk(Detector& desc, Assembly& env, xm
 
   // Add the modules manually in the gap [Inner]
   //
-  const int add_N_mod_inner = 35;
-  double addX_inner[add_N_mod_inner] = {-10.25,6.15,4.1,2.05,0,-2.05,-4.1,-6.15,8.2,6.15,-4.1,-6.15,-8.2,10.25,-10.25,-8.2,-10.25,-10.25,6.15,4.1,2.05,0,-2.05,-4.1,-6.15,8.2,6.15,-4.1,-6.15,-8.2,10.25,-10.25,-8.2,-10.25,-10.25};
-  double addY_inner[add_N_mod_inner] = {0.,10.25,10.25,10.25,10.25,10.25,10.25,10.25,8.2,8.2,8.2,8.2,8.2,6.15,6.15,6.15,4.1,2.05,-10.25,-10.25,-10.25,-10.25,-10.25,-10.25,-10.25,-8.2,-8.2,-8.2,-8.2,-8.2,-6.15,-6.15,-6.15,-4.1,-2.05};
-  for(int im = 0 ; im < add_N_mod_inner ; im++)
-    {
-      total_id++;
-      add_local = RotationZYX(-15.*degree, 0.0, 0.0) * Translation3D(addX_inner[im]*cm, addY_inner[im]*cm, 0.0);
-      modPV = env_vol.placeVolume(modVol, add_local);
-      modPV.addPhysVolID("sector", sector_id).addPhysVolID("module", total_id);
-    }
+  // const int add_N_mod_inner = 35;
+  // double addX_inner[add_N_mod_inner] = {-10.25,6.15,4.1,2.05,0,-2.05,-4.1,-6.15,8.2,6.15,-4.1,-6.15,-8.2,10.25,-10.25,-8.2,-10.25,-10.25,6.15,4.1,2.05,0,-2.05,-4.1,-6.15,8.2,6.15,-4.1,-6.15,-8.2,10.25,-10.25,-8.2,-10.25,-10.25};
+  // double addY_inner[add_N_mod_inner] = {0.,10.25,10.25,10.25,10.25,10.25,10.25,10.25,8.2,8.2,8.2,8.2,8.2,6.15,6.15,6.15,4.1,2.05,-10.25,-10.25,-10.25,-10.25,-10.25,-10.25,-10.25,-8.2,-8.2,-8.2,-8.2,-8.2,-6.15,-6.15,-6.15,-4.1,-2.05};
+  // for(int im = 0 ; im < add_N_mod_inner ; im++)
+  //   {
+  //     total_id++;
+  //     add_local = RotationZYX(-15.*degree, 0.0, 0.0) * Translation3D(addX_inner[im]*cm, addY_inner[im]*cm, 0.0);
+  //     modPV = env_vol.placeVolume(modVol, add_local);
+  //     modPV.addPhysVolID("sector", sector_id).addPhysVolID("module", total_id);
+  //   }
 
   
 
