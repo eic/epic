@@ -214,13 +214,30 @@ static Ref_t create_detector(Detector& lcdd, xml_h handle, SensitiveDetector sen
       const unsigned int number              = family_dim_handle.number();
       const auto         flare_angle_at_face = family_dim_handle.attr<double>(_Unicode(flare_angle_at_face));
 
-      const double z      = length / 2;
-      const double y1     = family_dim_handle.y1();
-      const double y2     = y1 + length * tan(flare_angle_polar);
-      const double x1     = family_dim_handle.x1() + (dir_sign < 0) * (2 * y1) * tan(flare_angle_at_face);
-      const double x2     = family_dim_handle.x1() + (dir_sign > 0) * (2 * y1) * tan(flare_angle_at_face);
-      const double x3     = x1 * (y2 / y1);
-      const double x4     = x2 * (y2 / y1);
+      const double z  = length / 2;
+      // Face parameters (see doc/sciglass_tower_front_view.svg for definitions)
+      const double y1 = family_dim_handle.y1();
+      const double y2 = y1 + length * tan(flare_angle_polar);
+      double       x1 = family_dim_handle.x1();
+      double       x2 = family_dim_handle.x1() + (2 * y1) * tan(flare_angle_at_face);
+      double       x3, x4;
+      if (family_dim_handle.hasAttr(_Unicode(flare_angle_azimuthal))) {
+        // Azimuthal flaring independently defined
+        const auto flare_angle_azimuthal = family_dim_handle.attr<double>(_Unicode(flare_angle_azimuthal));
+        x3 = x1 + length * (tan(flare_angle_azimuthal) - tan(flare_angle_polar) * tan(flare_angle_at_face));
+        x4 = x2 + length * (tan(flare_angle_azimuthal) + tan(flare_angle_polar) * tan(flare_angle_at_face));
+      } else {
+        // Pyramidal shape
+        // corresponds to: tan(flare_angle_azimuthal) = (x1 / y1 + tan(flare_angle_at_face)) * tan(flare_angle_polar)
+        x3 = x1 * (y2 / y1);
+        x4 = x2 * (y2 / y1);
+      }
+
+      if (dir_sign < 0) {
+        // Mirror towers going towards negative rapidities
+        std::swap(x1, x2);
+        std::swap(x3, x4);
+      }
       const double theta  = 0.;
       const double phi    = 0.;
       const double alpha1 = 0.;
