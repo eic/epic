@@ -235,7 +235,7 @@ static Ref_t create_BarrelTrackerWithFrame(Detector& description, xml_h e, Sensi
     xml_comp_t z_layout = x_layer.child(_U(z_layout)); // Get the <z_layout> element.
     int        lay_id   = x_layer.id();
     string     m_nam    = x_layer.moduleStr();
-    string     lay_nam  = _toString(x_layer.id(), "layer%d");
+    string     lay_nam  = det_name + _toString(x_layer.id(), "_layer%d");
     Tube       lay_tub(x_barrel.inner_r(), x_barrel.outer_r(), x_barrel.z_length() / 2.0);
     Volume     lay_vol(lay_nam, lay_tub, air); // Create the layer envelope volume.
     Position   lay_pos(0, 0, getAttrOrDefault(x_barrel, _U(z0), 0.));
