@@ -1,5 +1,7 @@
 "topic: backward":
   - "compact/**/backward_*"
+  - "compact/**/mrich*"
+  - "compact/**/pfrich*"
 
 "topic: barrel":
   - "compact/**/barrel_*"
@@ -31,7 +33,7 @@
 
 "topic: forward":
   - "compact/**/forward_*"
-  - "compact/**/*rich*"
+  - "compact/**/drich*"
   - "src/*Tracker*"
 
 "topic: infrastructure":
