@@ -3,7 +3,7 @@
 
 //==========================================================================
 //
-// Places far-backward beam pipes within and between the beamline magnets.
+// Places a chain of beam pipe segments within and between the beamline magnets.
 //
 // Approximation used for beam pipes in between magnets.
 // Right-angled ends with a small air gap to avoid G4 overlap errors
@@ -117,4 +117,4 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector /
   return sdet;
 }
 
-DECLARE_DETELEMENT(BackwardsBeamPipeChain, create_detector)
+DECLARE_DETELEMENT(BeamPipeChain, create_detector)

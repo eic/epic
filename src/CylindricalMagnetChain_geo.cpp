@@ -3,7 +3,7 @@
 
 //==========================================================================
 //
-// Places a chain of far-backward beamline magnets
+// Places a chain of cylindrical beamline magnets
 //
 //==========================================================================
 
@@ -63,4 +63,4 @@ static Ref_t build_magnet(Detector& description, xml_h e, SensitiveDetector /* s
   return sdet;
 }
 
-DECLARE_DETELEMENT(CylindricalDipoleMagnetChain, build_magnet)
+DECLARE_DETELEMENT(CylindricalMagnetChain, build_magnet)

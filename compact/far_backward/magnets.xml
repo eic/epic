@@ -38,7 +38,7 @@
     <detector
     id="Magnets_Q3eR_to_B7eR_ID"
     name="Magnets_Q3eR_to_B7eR"
-    type="CylindricalDipoleMagnetChain"
+    type="CylindricalMagnetChain"
     vis="RedVis">
       <magnet id="0" name="Magnet_Q3eR"
         x="(Q3eR_StartX+Q3eR_EndX)/2" y="0" z="(Q3eR_StartZ+Q3eR_EndZ)/2" theta="Q3eR_Theta"
@@ -83,7 +83,7 @@
     <detector
     id="Magnets_Q3PR_to_B1PR_ID"
     name="Magnets_Q3PR_to_B1PR"
-    type="CylindricalDipoleMagnetChain"
+    type="CylindricalMagnetChain"
     vis="FFMagnetVis">
       <magnet id="0" name="Magnet_Q3PR"
         x="(Q3PR_StartX+Q3PR_EndX)/2" y="0" z="(Q3PR_StartZ+Q3PR_EndZ)/2" theta="Q3PR_Theta"
