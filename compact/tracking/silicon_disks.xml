@@ -423,7 +423,7 @@
       <argument value="layer_pattern: str=OuterTrackerEndcapN_layer\d_N"/>
     </plugin>
   </plugins>
-  
+
   <readouts>
     <readout name="TrackerEndcapHits">
       <segmentation type="CartesianGridXZ" grid_size_x="0.010*mm" grid_size_z="0.010*mm" />
