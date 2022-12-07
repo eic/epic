@@ -2,3 +2,5 @@ features:
   beampipe:
   tracking:
     silicon_disks:
+    silicon_barrel:
+    vertex_barrel:
