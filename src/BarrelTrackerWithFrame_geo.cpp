@@ -260,7 +260,7 @@ static Ref_t create_BarrelTrackerWithFrame(Detector& description, xml_h e, Sensi
     // see http://acts.web.cern.ch/ACTS/latest/doc/group__DD4hepPlugins.html
     auto &layerParams =
         DD4hepDetectorHelper::ensureExtension<dd4hep::rec::VariantParameters>(
-            layer_element);
+            lay_elt);
 
     for (xml_coll_t lmat(x_layer, _Unicode(layer_material)); lmat; ++lmat) {
       xml_comp_t x_layer_material = lmat;
