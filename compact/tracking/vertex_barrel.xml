@@ -136,7 +136,7 @@
     </detector>
   </detectors>
 
-   <plugins>
+  <plugins>
     <plugin name="DD4hep_ParametersPlugin">
       <argument value="VertexBarrel"/>
       <argument value="layer_pattern: str=VertexBarrel_layer\d"/>
