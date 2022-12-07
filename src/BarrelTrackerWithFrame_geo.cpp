@@ -297,7 +297,7 @@ static Ref_t create_BarrelTrackerWithFrame(Detector& description, xml_h e, Sensi
           DetElement   comp_de(mod_elt, std::string("de_") + sens_pv.volume().name(), module);
           comp_de.setPlacement(sens_pv);
 
-          auto &params = DD4hepDetectorHelper::ensureExtension<dd4hep::rec::VariantParameters>(comp_elt);
+          auto &params = DD4hepDetectorHelper::ensureExtension<dd4hep::rec::VariantParameters>(comp_de);
           // comp_de.setAttributes(description, sens_pv.volume(), x_layer.regionStr(), x_layer.limitsStr(),
           //                       xml_det_t(xmleles[m_nam]).visStr());
           //
