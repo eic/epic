@@ -62,6 +62,7 @@
       type="epic_VertexBarrel"
       readout="VertexBarrelHits"
       insideTrackingVolume="true">
+      <type_flags type="DetType_TRACKER + DetType_BARREL"/>
       <dimensions
         rmin="VertexBarrelLayer1_rmin"
         rmax="VertexBarrelLayer3_rmax"
