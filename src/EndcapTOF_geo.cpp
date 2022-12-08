@@ -18,14 +18,7 @@
 #include "XML/Utilities.h"
 #include <array>
 #include <map>
-
-#if defined(USE_ACTSDD4HEP)
-#include "ActsDD4hep/ActsExtension.hpp"
-#include "ActsDD4hep/ConvertMaterial.hpp"
-#else
-#include "Acts/Plugins/DD4hep/ActsExtension.hpp"
-#include "Acts/Plugins/DD4hep/ConvertDD4hepMaterial.hpp"
-#endif
+#include "DD4hepDetectorHelper.h"
 
 using namespace dd4hep;
 using namespace dd4hep::rec;
@@ -41,11 +34,16 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
   Material     air = description.material("Air");
   PlacedVolume pv;
 
-  // NOTE: ACTS extension for the basic endcap volume
-  {
-    Acts::ActsExtension* detWorldExt = new Acts::ActsExtension();
-    detWorldExt->addType("endcap", "detector");
-    ttl_detEl.addExtension<Acts::ActsExtension>(detWorldExt);
+  // Set detector type flag
+  dd4hep::xml::setDetectorTypeFlag(x_det, sdet);
+  auto &params = DD4hepDetectorHelper::ensureExtension<dd4hep::rec::VariantParameters>(
+      sdet);
+
+  // Add the volume boundary material if configured
+  for (xml_coll_t bmat(x_det, _Unicode(boundary_material)); bmat; ++bmat) {
+    xml_comp_t x_boundary_material = bmat;
+    DD4hepDetectorHelper::xmlToProtoSurfaceMaterial(x_boundary_material, params,
+                                         "boundary_material");
   }
 
   xml_comp_t  x_mod         = x_det.child(_Unicode(module));
