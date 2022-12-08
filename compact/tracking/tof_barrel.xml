@@ -134,7 +134,7 @@
       <argument value="layer_pattern: str=BarrelTOF_layer\d"/>
     </plugin>
   </plugins>
-      
+
   <readouts>
     <readout name="TOFBarrelHits">
       <segmentation type="CartesianGridXY" grid_size_x="0.1*mm" grid_size_y="1*cm" />
