@@ -164,6 +164,17 @@
       </layer>
     </detector>
   </detectors>
+  
+  <plugins>
+    <plugin name="DD4hep_ParametersPlugin">
+      <argument value="SagittaSiBarrel"/>
+      <argument value="layer_pattern: str=SagittaSiBarrel_layer\d"/>
+    </plugin>
+    <plugin name="DD4hep_ParametersPlugin">
+      <argument value="OuterSiBarrel"/>
+      <argument value="layer_pattern: str=OuterSiBarrel_layer\d"/>
+    </plugin>
+  </plugins>
 
   <readouts>
     <readout name="SiBarrelHits">
