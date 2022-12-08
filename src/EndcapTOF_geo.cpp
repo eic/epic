@@ -182,13 +182,12 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
 
   // NOTE: ACTS extension for the disk layer of the TTL
   // also defining the coordinate system that differs between ACTS and Geant4 (zyx vs xyz)
-  Acts::ActsExtension* detlayer = new Acts::ActsExtension();
-  detlayer->addValue(-80. * mm, "r_min", "envelope");
-  detlayer->addValue(670. * mm, "r_max", "envelope");
-  detlayer->addValue(10. * mm, "z_min", "envelope");
-  detlayer->addValue(10. * mm, "z_max", "envelope");
-  detlayer->addType("sensitive plane", "layer");
-  layer_detEl.addExtension<Acts::ActsExtension>(detlayer);
+  auto &layerParams = DD4hepDetectorHelper::ensureExtension<dd4hep::rec::VariantParameters>(
+                      layer_detEl);
+  layerParams.set<double>("envelope_r_min", -80. * mm);
+  layerParams.set<double>("envelope_r_max", 670. * mm);
+  layerParams.set<double>("envelope_z_min", 10. * mm);
+  layerParams.set<double>("envelope_z_max", 10. * mm);
 
   pv = assembly.placeVolume(layer_assembly);
   pv.addPhysVolID("layer", layer_id);
@@ -350,8 +349,8 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
       sensor_detEl_front.setPlacement(pv);
       volSurfaceList(sensor_detEl_front)->push_back(surf_front);
 
-      Acts::ActsExtension* sensorExtension_front = new Acts::ActsExtension("XZY");
-      sensor_detEl_front.addExtension<Acts::ActsExtension>(sensorExtension_front);
+      auto &params = DD4hepDetectorHelper::ensureExtension<dd4hep::rec::VariantParameters>(sensor_detEl_front);
+      params.set<string>("axis_definitions", "XZY");
 
       isensor++;
 
@@ -408,8 +407,8 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
       sensor_detEl_back.setPlacement(pv);
       volSurfaceList(sensor_detEl_back)->push_back(surf_back);
 
-      Acts::ActsExtension* sensorExtension_back = new Acts::ActsExtension("XZY");
-      sensor_detEl_back.addExtension<Acts::ActsExtension>(sensorExtension_back);
+      auto &params = DD4hepDetectorHelper::ensureExtension<dd4hep::rec::VariantParameters>(sensor_detEl_front);
+      params.set<string>("axis_definitions", "XZY");
 
       isensor++;
 
