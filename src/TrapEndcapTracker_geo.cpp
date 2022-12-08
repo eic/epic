@@ -277,7 +277,7 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
             PlacedVolume sens_pv = sensVols[ic];
             DetElement   comp_elt(module, sens_pv.volume().name(), mod_num);
             auto &params = DD4hepDetectorHelper::ensureExtension<dd4hep::rec::VariantParameters>(comp_elt);
-            params.set("axis_definitions", "XZY");
+            params.set<string>("axis_definitions", "XZY");
             comp_elt.setPlacement(sens_pv);
             volSurfaceList(comp_elt)->push_back(volplane_surfaces[m_nam][ic]);
           }
@@ -291,7 +291,7 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
             PlacedVolume sens_pv = sensVols[ic];
             DetElement   comp_elt(r_module, sens_pv.volume().name(), mod_num);
             auto &params = DD4hepDetectorHelper::ensureExtension<dd4hep::rec::VariantParameters>(comp_elt);
-            params.set("axis_definitions", "XZY");
+            params.set<string>("axis_definitions", "XZY");
             comp_elt.setPlacement(sens_pv);
             volSurfaceList(comp_elt)->push_back(volplane_surfaces[m_nam][ic]);
           }
