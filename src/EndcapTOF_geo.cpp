@@ -35,9 +35,9 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
   PlacedVolume pv;
 
   // Set detector type flag
-  dd4hep::xml::setDetectorTypeFlag(x_det, sdet);
+  dd4hep::xml::setDetectorTypeFlag(x_det, ttl_detEl);
   auto &params = DD4hepDetectorHelper::ensureExtension<dd4hep::rec::VariantParameters>(
-      sdet);
+      ttl_detEl);
 
   // Add the volume boundary material if configured
   for (xml_coll_t bmat(x_det, _Unicode(boundary_material)); bmat; ++bmat) {
