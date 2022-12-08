@@ -130,6 +130,7 @@
       type="epic_CompositeTracker"
       actsType="endcap"
       vis="TrackerSubAssemblyVis">
+      <type_flags type="DetType_TRACKER + DetType_ENDCAP"/>
       <position x="0*cm" y="0*cm" z="-1*um" />
     </detector>
     <detector
@@ -140,6 +141,7 @@
       readout="TOFEndcapHits"
       vis="TOFVis"
       reflect="false">
+      <type_flags type="DetType_TRACKER + DetType_ENDCAP"/>
       <position x="0*cm" y="0*cm" z="ForwardTOF_zmin" />
       <module name="ForwardModule" vis="TOFModuleVis">
         <dimensions
