@@ -50,6 +50,18 @@ static Ref_t create_MPGDDIRC_geo(Detector& description, xml_h e, SensitiveDetect
   dd4hep::xml::Dimension                  dimensions(x_det.dimensions());
   xml_dim_t                               mpgd_dirc_pos = x_det.position();
   Assembly                                assembly(det_name);
+  
+  // Set detector type flag
+  dd4hep::xml::setDetectorTypeFlag(x_det, sdet);
+  auto &params = DD4hepDetectorHelper::ensureExtension<dd4hep::rec::VariantParameters>(
+      sdet);
+
+  // Add the volume boundary material if configured
+  for (xml_coll_t bmat(x_det, _Unicode(boundary_material)); bmat; ++bmat) {
+    xml_comp_t x_boundary_material = bmat;
+    DD4hepDetectorHelper::xmlToProtoSurfaceMaterial(x_boundary_material, params,
+                                         "boundary_material");
+  }
 
   map<string, std::array<double, 2>> module_thicknesses;
   sens.setType("tracker");
@@ -217,7 +229,7 @@ static Ref_t create_MPGDDIRC_geo(Detector& description, xml_h e, SensitiveDetect
     xml_comp_t z_layout = x_layer.child(_U(z_layout));
     int        lay_id   = x_layer.id();
     string     m_nam    = x_layer.moduleStr();
-    string     lay_nam  = _toString(x_layer.id(), "layer%d");
+    string     lay_nam  = det_name + _toString(x_layer.id(), "layer%d");
 
     double phi0     = x_layout.phi0();     // starting phi of first module
     double phi_tilt = x_layout.phi_tilt(); // Phi tilit of module
@@ -233,6 +245,15 @@ static Ref_t create_MPGDDIRC_geo(Detector& description, xml_h e, SensitiveDetect
     Volume      module_env = volumes[m_nam];
     DetElement  lay_elt(sdet, lay_nam, lay_id);
     Placements& sensVols = sensitives[m_nam];
+    
+    auto &layerParams =
+        DD4hepDetectorHelper::ensureExtension<dd4hep::rec::VariantParameters>(
+            lay_elt);
+
+    for (xml_coll_t lmat(x_layer, _Unicode(layer_material)); lmat; ++lmat) {
+      xml_comp_t x_layer_material = lmat;
+      DD4hepDetectorHelper::xmlToProtoSurfaceMaterial(x_layer_material, layerParams, "layer_material");
+    }
 
     int module = 1;
     // loop over the modules in phi
@@ -258,6 +279,8 @@ static Ref_t create_MPGDDIRC_geo(Detector& description, xml_h e, SensitiveDetect
         for (size_t ic = 0; ic < sensVols.size(); ++ic) {
           PlacedVolume sens_pv = sensVols[ic];
           DetElement   comp_de(mod_elt, std::string("de_") + sens_pv.volume().name(), module);
+          auto &params = DD4hepDetectorHelper::ensureExtension<dd4hep::rec::VariantParameters>(comp_de);
+          params.set<string>("axis_definitions", "XYZ");
           comp_de.setPlacement(sens_pv);
         }
         // increas module counter
