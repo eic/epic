@@ -163,6 +163,7 @@
 </module>
 <comment> Layout for MPGD DIRC layers </comment>
       <layer module="MPGDDIRCModule" id="0" vis="TrackerSupportVis">
+   <layer_material surface="inner" binning="binPhi,binZ" bins0="MPGDDIRCModule_count" bins1="100" />
    <rphi_layout
           phi_tilt="0"
           nphi="MPGDDIRCModule_count"
