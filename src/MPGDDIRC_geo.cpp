@@ -23,6 +23,7 @@
 #include "DDRec/Surface.h"
 #include "XML/Layering.h"
 #include <array>
+#include "DD4hepDetectorHelper.h"
 
 using namespace std;
 using namespace dd4hep;
