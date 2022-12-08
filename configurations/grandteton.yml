@@ -5,3 +5,4 @@ features:
     silicon_barrel:
     vertex_barrel:
     mpgd_barrel:
+    tof_barrel:
