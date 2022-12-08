@@ -164,7 +164,7 @@
       </layer>
     </detector>
   </detectors>
-  
+
   <plugins>
     <plugin name="DD4hep_ParametersPlugin">
       <argument value="SagittaSiBarrel"/>
