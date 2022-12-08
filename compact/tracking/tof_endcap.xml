@@ -186,6 +186,13 @@
     </detector>
   </detectors>
 
+  <plugins>
+    <plugin name="DD4hep_ParametersPlugin">
+      <argument value="ForwardTOF"/>
+      <argument value="layer_pattern: str=layer_\d"/>
+    </plugin>
+  </plugins>
+  
   <readouts>
     <readout name="TOFEndcapHits">
       <segmentation type="CartesianGridXZ" grid_size_x="100*um" grid_size_z="100*um" />
