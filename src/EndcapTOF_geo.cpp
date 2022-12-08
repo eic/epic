@@ -20,6 +20,7 @@
 #include <map>
 #include "DD4hepDetectorHelper.h"
 
+using namespace std;
 using namespace dd4hep;
 using namespace dd4hep::rec;
 using namespace dd4hep::detail;
@@ -349,8 +350,8 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
       sensor_detEl_front.setPlacement(pv);
       volSurfaceList(sensor_detEl_front)->push_back(surf_front);
 
-      auto &params = DD4hepDetectorHelper::ensureExtension<dd4hep::rec::VariantParameters>(sensor_detEl_front);
-      params.set<string>("axis_definitions", "XZY");
+      auto &front_params = DD4hepDetectorHelper::ensureExtension<dd4hep::rec::VariantParameters>(sensor_detEl_front);
+      front_params.set<string>("axis_definitions", "XZY");
 
       isensor++;
 
@@ -407,8 +408,8 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
       sensor_detEl_back.setPlacement(pv);
       volSurfaceList(sensor_detEl_back)->push_back(surf_back);
 
-      auto &params = DD4hepDetectorHelper::ensureExtension<dd4hep::rec::VariantParameters>(sensor_detEl_front);
-      params.set<string>("axis_definitions", "XZY");
+      auto &back_params = DD4hepDetectorHelper::ensureExtension<dd4hep::rec::VariantParameters>(sensor_detEl_front);
+      back_params.set<string>("axis_definitions", "XZY");
 
       isensor++;
 
