@@ -50,7 +50,7 @@ static Ref_t create_MPGDDIRC_geo(Detector& description, xml_h e, SensitiveDetect
   dd4hep::xml::Dimension                  dimensions(x_det.dimensions());
   xml_dim_t                               mpgd_dirc_pos = x_det.position();
   Assembly                                assembly(det_name);
-  
+
   // Set detector type flag
   dd4hep::xml::setDetectorTypeFlag(x_det, sdet);
   auto &params = DD4hepDetectorHelper::ensureExtension<dd4hep::rec::VariantParameters>(
@@ -245,7 +245,7 @@ static Ref_t create_MPGDDIRC_geo(Detector& description, xml_h e, SensitiveDetect
     Volume      module_env = volumes[m_nam];
     DetElement  lay_elt(sdet, lay_nam, lay_id);
     Placements& sensVols = sensitives[m_nam];
-    
+
     auto &layerParams =
         DD4hepDetectorHelper::ensureExtension<dd4hep::rec::VariantParameters>(
             lay_elt);
