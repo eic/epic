@@ -231,7 +231,7 @@ static Ref_t create_MPGDDIRC_geo(Detector& description, xml_h e, SensitiveDetect
     xml_comp_t z_layout = x_layer.child(_U(z_layout));
     int        lay_id   = x_layer.id();
     string     m_nam    = x_layer.moduleStr();
-    string     lay_nam  = det_name + _toString(x_layer.id(), "layer%d");
+    string     lay_nam  = det_name + _toString(x_layer.id(), "_layer%d");
 
     double phi0     = x_layout.phi0();     // starting phi of first module
     double phi_tilt = x_layout.phi_tilt(); // Phi tilit of module
