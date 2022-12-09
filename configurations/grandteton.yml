@@ -6,3 +6,4 @@ features:
     vertex_barrel:
     mpgd_barrel:
     tof_barrel:
+    tof_endcap:
