@@ -28,7 +28,6 @@ static Ref_t create_element(Detector& description, xml_h e, Ref_t)
 
   const bool usePos = x_det.hasChild(_U(position));
 
-  sdet.setType("compound");
   // Set detector type flag
   dd4hep::xml::setDetectorTypeFlag(x_det, sdet);
   auto &params = DD4hepDetectorHelper::ensureExtension<dd4hep::rec::VariantParameters>(
