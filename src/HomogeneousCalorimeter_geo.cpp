@@ -428,58 +428,79 @@ static std::tuple<int, int> add_12surface_disk(Detector& desc, Assembly& env, xm
   // The mother volume of modules
   //
   bool has_envelope = dd4hep::getAttrOrDefault<bool>(plm, _Unicode(envelope), false);
-  Material ring_material     = desc.material(getAttrOrDefault<std::string>(plm, _U(material), "StainlessSteel"));
-  // Material hole_material     = desc.material(getAttrOrDefault<std::string>(plm, _U(material), "Air"));
+  Material outer_ring_material     = desc.material(getAttrOrDefault<std::string>(plm, _U(material), "StainlessSteel"));
+  Material inner_ring_material     = desc.material(getAttrOrDefault<std::string>(plm, _U(material), "StainlessSteel"));
   Material hole_material     = desc.material(getAttrOrDefault<std::string>(plm, _U(material), "Vacuum"));
 
   // Tube solid_sub(0., rmin, calo_module_length/2., phimin, phimax);
   // EllipticalTube  solid_sub(9.*cm, 7.5*cm, calo_module_length/2.);
   // SubtractionSolid calo_subtract(solid_world, solid_sub, Position(-1.*cm, 0., 0.));
   PolyhedraRegular solid_world(12, 0., r12min, calo_module_length);
-  Volume      env_vol(std::string(env.name()) + "_envelope", solid_world, ring_material);
+  Volume      env_vol(std::string(env.name()) + "_envelope", solid_world, outer_ring_material);
   Transform3D tr_global = RotationZYX(15.*degree, 0., 0.) * Translation3D(0., 0., 0.);
   env_vol.setVisAttributes(desc.visAttributes(plm.attr<std::string>(_Unicode(vis_steel_gap))));
 
+
+  //==============================
   // Outer supporting frame
-  //
+  //==============================
+  
   PolyhedraRegular solid_ring12(12, r12min, r12max, structure_frame_length);
-  Volume           ring12_vol("ring12", solid_ring12, ring_material);
-  Transform3D      tr_global_Oring = RotationZYX(15. * degree, 0., 0.) * Translation3D(0., 0., -20. * cm);
+  Volume ring12_vol("ring12", solid_ring12, outer_ring_material);
+  Transform3D tr_global_Oring = RotationZYX(15.*degree, 0., 0.) * Translation3D(0., 0., -20.*cm);
   ring12_vol.setVisAttributes(desc.visAttributes(plm.attr<std::string>(_Unicode(vis_struc))));
 
-  // Inner supporting frame
-  //
+
+  
+
+  // ============================
+  // Inner supporting frame 
+  // ============================
+  
+  // // Version1: circle shape
+  // //  
   // Tube        Ssolid_ring12(8.5*cm, rmin, calo_module_length/2., phimin, phimax);
-  // Volume      Sring12_vol("Sring12", Ssolid_ring12, ring_material);
+  // Volume      Sring12_vol("Sring12", Ssolid_ring12, inner_ring_material);
   // Sring12_vol.setVisAttributes(desc.visAttributes(plm.attr<std::string>(_Unicode(vis_struc))));
   // Transform3D tr_global_Iring = RotationZYX(0., 0., 0.) * Translation3D(0., 0., 0.);
 
-  EllipticalTube   inner_elliptical_support_a(9.*cm, 7.5*cm, calo_module_length/2.);
-  EllipticalTube   inner_elliptical_support_b(8.5*cm, 7.*cm, calo_module_length/2.);
-  SubtractionSolid inner_elliptical_support_substract(inner_elliptical_support_a, inner_elliptical_support_b, Position(0., 0., 0.));
-  Volume           inner_elliptical_vol("inner_elliptical", inner_elliptical_support_substract, ring_material);   
-  inner_elliptical_vol.setVisAttributes(desc.visAttributes(plm.attr<std::string>(_Unicode(vis_struc))));
-  // Transform3D tr_global_Iring_elli = RotationZYX(0., 0., 0.) * Translation3D(2.05*cm, 0., 0.);
-  Transform3D tr_global_Iring_elli = RotationZYX(-15.*degree, 0., 0.) * Translation3D(2.05*cm, 0., 0.);
+
+  // // Version2: elliptical shape
+  // //
+  // EllipticalTube   inner_elliptical_support_a(9.*cm, 7.5*cm, calo_module_length/2.);
+  // EllipticalTube   inner_elliptical_support_b(8.5*cm, 7.*cm, calo_module_length/2.);
+  // SubtractionSolid inner_elliptical_support_substract(inner_elliptical_support_a, inner_elliptical_support_b, Position(0., 0., 0.));
+  // Volume           inner_elliptical_vol("inner_elliptical", inner_elliptical_support_substract, inner_ring_material);   
+  // inner_elliptical_vol.setVisAttributes(desc.visAttributes(plm.attr<std::string>(_Unicode(vis_struc))));
+  // Transform3D tr_global_Iring_elli = RotationZYX(-15.*degree, 0., 0.) * Translation3D(2.05*cm, 0., 0.);
   
 
-  // Air inside the supporting frame
+  // Version3: solid with elliptical inside
   //
-  EllipticalTube   inner_elliptical_air(8.5*cm, 7.*cm, calo_module_length/2.);
-  Volume           inner_elliptical_air_vol("inner_elliptical_air_vol", inner_elliptical_air, hole_material);   
-  inner_elliptical_vol.setVisAttributes(desc.visAttributes(plm.attr<std::string>(_Unicode(vis_struc))));
-  // Transform3D tr_global_Iring_elli_air = RotationZYX(15.*degree, 0., 0.) * Translation3D(1.*cm, 0., 0.);
-  Transform3D tr_global_Iring_elli_air = RotationZYX(-15.*degree, 0., 0.) * Translation3D(2.05*cm, 0., 0.);
+  // Box inner_support_main(8.2*cm, 6.15*cm, calo_module_length/2.);  // Original size
+  Box inner_support_main(8.2*cm, 5.125*cm, calo_module_length/2.);  // Adapted size
+  EllipticalTube   subtract_a(8.*cm, 5.*cm, calo_module_length/2.);
+  SubtractionSolid inner_support_substract(inner_support_main, subtract_a, Position(0., 0., 0.));
+  Volume           inner_support_vol("inner_support_vol", inner_support_substract, inner_ring_material);   
+  inner_support_vol.setVisAttributes(desc.visAttributes(plm.attr<std::string>(_Unicode(vis_struc))));
+  Transform3D tr_global_Iring_elli = RotationZYX(-15.*degree, 0., 0.) * Translation3D(1.025*cm, 0., 0.);
+  
+
+  // The vacuum inside the inner structure
+  //
+  EllipticalTube   inner_elliptical_vacuum(8.*cm, 5.*cm, calo_module_length/2.);
+  Volume           inner_elliptical_vacuum_vol("inner_elliptical_vacuum_vol", inner_elliptical_vacuum, hole_material);   
+  inner_elliptical_vacuum_vol.setVisAttributes(desc.visAttributes(plm.attr<std::string>(_Unicode(vis_struc))));
+  Transform3D tr_global_Iring_elli_vacuum = RotationZYX(-15.*degree, 0., 0.) * Translation3D(1.025*cm, 0., 0.);
 
   
   
   
-  // Supporting frame for the cabling
-  // Having overlapped with tracker barrelendcapsupporting structure, comment here until the size and position
-  // determined
-  //
+  // // Supporting frame for the cabling
+  // // Having overlapped with tracker barrelendcapsupporting structure, comment here until the size and position determined
+  // //
   // PolyhedraRegular cabling_support12(12, r12max, 70.*cm, 2.54*cm);
-  // Volume cabling_support12_V("cabling_support12_V", cabling_support12, ring_material);
+  // Volume cabling_support12_V("cabling_support12_V", cabling_support12, inner_ring_material);
   // Transform3D tr_global_csfront = RotationZYX(15.*degree, 0., 0.) * Translation3D(0., 0., 9.*cm);
   // Transform3D tr_global_csback = RotationZYX(15.*degree, 0., 0.) * Translation3D(0., 0., -49.*cm);
 
@@ -493,10 +514,11 @@ static std::tuple<int, int> add_12surface_disk(Detector& desc, Assembly& env, xm
     {
       env.placeVolume(env_vol, tr_global);                          // Place the mother volume for all modules
       env.placeVolume(ring12_vol, tr_global_Oring);                 // Place the outer supporting frame
-      // env.placeVolume(Sring12_vol, tr_global_Iring);                // Place the inner supporting frame
+      // env.placeVolume(Sring12_vol, tr_global_Iring);                // Place the version1 inner supporting frame
+      // env_vol.placeVolume(inner_elliptical_vol, tr_global_Iring_elli);  // Place the version2 inner supporting frame
+      env_vol.placeVolume(inner_support_vol, tr_global_Iring_elli);  // Place the version3 inner supporting frame
+      env_vol.placeVolume(inner_elliptical_vacuum_vol, tr_global_Iring_elli_vacuum);  // Place the inner air
 
-      env_vol.placeVolume(inner_elliptical_vol, tr_global_Iring_elli);  // Place the inner supporting frame
-      env_vol.placeVolume(inner_elliptical_air_vol, tr_global_Iring_elli_air);  // Place the inner air
       
       // env.placeVolume(cabling_support12_V, tr_global_csfront);  // Place the front cabling frame(Only the holes are visible)
       // env.placeVolume(cabling_support12_V, tr_global_csback);   // Place the back cabling frame(Only the holes are visible)
@@ -517,7 +539,7 @@ static std::tuple<int, int> add_12surface_disk(Detector& desc, Assembly& env, xm
   //
   int mid = 0, total_id = 0;
 
-  auto points = epic::geo::fillRectangles({0., 0.}, modSize.x(), modSize.y(), 11.*cm, rmax, phimin, phimax);
+  auto points = epic::geo::fillRectangles({0., 0.}, modSize.x(), modSize.y(), 9.*cm, rmax, phimin, phimax);
 
   Transform3D add_local = RotationZYX(-15. * degree, 0.0, 0.0) * Translation3D(-14.35 * cm, 61.5 * cm, 0.0);
   auto        modPV     = env_vol.placeVolume(modVol, add_local);
@@ -551,16 +573,22 @@ static std::tuple<int, int> add_12surface_disk(Detector& desc, Assembly& env, xm
 
   // Add the modules manually in the gap [Inner]
   //
+  // version2: hardcord
   // const int add_N_mod_inner = 35;
   // double addX_inner[add_N_mod_inner] = {-10.25,6.15,4.1,2.05,0,-2.05,-4.1,-6.15,8.2,6.15,-4.1,-6.15,-8.2,10.25,-10.25,-8.2,-10.25,-10.25,6.15,4.1,2.05,0,-2.05,-4.1,-6.15,8.2,6.15,-4.1,-6.15,-8.2,10.25,-10.25,-8.2,-10.25,-10.25};
   // double addY_inner[add_N_mod_inner] = {0.,10.25,10.25,10.25,10.25,10.25,10.25,10.25,8.2,8.2,8.2,8.2,8.2,6.15,6.15,6.15,4.1,2.05,-10.25,-10.25,-10.25,-10.25,-10.25,-10.25,-10.25,-8.2,-8.2,-8.2,-8.2,-8.2,-6.15,-6.15,-6.15,-4.1,-2.05};
-  // for(int im = 0 ; im < add_N_mod_inner ; im++)
-  //   {
-  //     total_id++;
-  //     add_local = RotationZYX(-15.*degree, 0.0, 0.0) * Translation3D(addX_inner[im]*cm, addY_inner[im]*cm, 0.0);
-  //     modPV = env_vol.placeVolume(modVol, add_local);
-  //     modPV.addPhysVolID("sector", sector_id).addPhysVolID("module", total_id);
-  //   }
+
+
+  const int add_N_mod_inner = 37;
+  double addX_inner[add_N_mod_inner] = {-8.2,-8.2,-8.2,-8.2,-8.2,-8.2,-8.2,6.15,4.1,2.05,0.,-2.05,-4.1,-6.15,8.2,6.15,4.1,2.05,0.,-2.05,-4.1,-6.15,6.15,4.1,2.05,0.,-2.05,-4.1,-6.15,8.2,6.15,4.1,2.05,0.,-2.05,-4.1,-6.15};
+  double addY_inner[add_N_mod_inner] = {6.15,4.1,2.05,0.,-2.05,-4.1,-6.15,8.2,8.2,8.2,8.2,8.2,8.2,8.2,6.15,6.15,6.15,6.15,6.15,6.15,6.15,6.15,-8.2,-8.2,-8.2,-8.2,-8.2,-8.2,-8.2,-6.15,-6.15,-6.15,-6.15,-6.15,-6.15,-6.15,-6.15};
+  for(int im = 0 ; im < add_N_mod_inner ; im++)
+    {
+      total_id++;
+      add_local = RotationZYX(-15.*degree, 0.0, 0.0) * Translation3D(addX_inner[im]*cm, addY_inner[im]*cm, 0.0);
+      modPV = env_vol.placeVolume(modVol, add_local);
+      modPV.addPhysVolID("sector", sector_id).addPhysVolID("module", total_id);
+    }
 
   
 
