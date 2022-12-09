@@ -408,7 +408,7 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
       sensor_detEl_back.setPlacement(pv);
       volSurfaceList(sensor_detEl_back)->push_back(surf_back);
 
-      auto &back_params = DD4hepDetectorHelper::ensureExtension<dd4hep::rec::VariantParameters>(sensor_detEl_front);
+      auto &back_params = DD4hepDetectorHelper::ensureExtension<dd4hep::rec::VariantParameters>(sensor_detEl_back);
       back_params.set<string>("axis_definitions", "XZY");
 
       isensor++;
