@@ -429,12 +429,12 @@ static std::tuple<int, int> add_12surface_disk(Detector& desc, Assembly& env, xm
   //
   bool has_envelope = dd4hep::getAttrOrDefault<bool>(plm, _Unicode(envelope), false);
   Material outer_ring_material     = desc.material(getAttrOrDefault<std::string>(plm, _U(material), "StainlessSteel"));
-  Material inner_ring_material     = desc.material(getAttrOrDefault<std::string>(plm, _U(material), "StainlessSteel"));
+  Material inner_ring_material     = desc.material(getAttrOrDefault<std::string>(plm, _U(material), "Copper"));
   Material hole_material     = desc.material(getAttrOrDefault<std::string>(plm, _U(material), "Vacuum"));
 
   // Tube solid_sub(0., rmin, calo_module_length/2., phimin, phimax);
-  // EllipticalTube  solid_sub(9.*cm, 7.5*cm, calo_module_length/2.);
-  // SubtractionSolid calo_subtract(solid_world, solid_sub, Position(-1.*cm, 0., 0.));
+  // EllipticalTube  solid_sub(8.*cm, 5.*cm, calo_module_length/2.);
+  // SubtractionSolid calo_subtract(solid_world, solid_sub, Position(0., 0., 0.));
   PolyhedraRegular solid_world(12, 0., r12min, calo_module_length);
   Volume      env_vol(std::string(env.name()) + "_envelope", solid_world, outer_ring_material);
   Transform3D tr_global = RotationZYX(15.*degree, 0., 0.) * Translation3D(0., 0., 0.);
@@ -479,16 +479,21 @@ static std::tuple<int, int> add_12surface_disk(Detector& desc, Assembly& env, xm
   //
   // Box inner_support_main(8.2*cm, 6.15*cm, calo_module_length/2.);  // Original size
   Box inner_support_main(8.2*cm, 5.125*cm, calo_module_length/2.);  // Adapted size
-  EllipticalTube   subtract_a(8.*cm, 5.*cm, calo_module_length/2.);
-  SubtractionSolid inner_support_substract(inner_support_main, subtract_a, Position(0., 0., 0.));
-  Volume           inner_support_vol("inner_support_vol", inner_support_substract, inner_ring_material);   
+  Box subtract_corner(1.025*cm, 1.025*cm, calo_module_length/2.);
+  EllipticalTube   subtract_a(7.5*cm, 4.5*cm, calo_module_length/2.);
+  SubtractionSolid inner_support_substracta(inner_support_main, subtract_a, Position(0., 0., 0.));
+  SubtractionSolid inner_support_substractb1(inner_support_substracta, subtract_corner, Position(7.175*cm, 4.1*cm, 0.));
+  SubtractionSolid inner_support_substractb2(inner_support_substractb1, subtract_corner, Position(7.175*cm, -4.1*cm, 0.));
+  SubtractionSolid inner_support_substractb3(inner_support_substractb2, subtract_corner, Position(-7.175*cm, 4.1*cm, 0.));
+  SubtractionSolid inner_support_substractb4(inner_support_substractb3, subtract_corner, Position(-7.175*cm, -4.1*cm, 0.));
+  Volume           inner_support_vol("inner_support_vol", inner_support_substractb4, inner_ring_material);   
   inner_support_vol.setVisAttributes(desc.visAttributes(plm.attr<std::string>(_Unicode(vis_struc))));
   Transform3D tr_global_Iring_elli = RotationZYX(-15.*degree, 0., 0.) * Translation3D(1.025*cm, 0., 0.);
   
 
   // The vacuum inside the inner structure
   //
-  EllipticalTube   inner_elliptical_vacuum(8.*cm, 5.*cm, calo_module_length/2.);
+  EllipticalTube   inner_elliptical_vacuum(7.5*cm, 4.5*cm, calo_module_length/2.);
   Volume           inner_elliptical_vacuum_vol("inner_elliptical_vacuum_vol", inner_elliptical_vacuum, hole_material);   
   inner_elliptical_vacuum_vol.setVisAttributes(desc.visAttributes(plm.attr<std::string>(_Unicode(vis_struc))));
   Transform3D tr_global_Iring_elli_vacuum = RotationZYX(-15.*degree, 0., 0.) * Translation3D(1.025*cm, 0., 0.);
@@ -573,15 +578,15 @@ static std::tuple<int, int> add_12surface_disk(Detector& desc, Assembly& env, xm
 
   // Add the modules manually in the gap [Inner]
   //
-  // version2: hardcord
+  // version2: hardcode
   // const int add_N_mod_inner = 35;
   // double addX_inner[add_N_mod_inner] = {-10.25,6.15,4.1,2.05,0,-2.05,-4.1,-6.15,8.2,6.15,-4.1,-6.15,-8.2,10.25,-10.25,-8.2,-10.25,-10.25,6.15,4.1,2.05,0,-2.05,-4.1,-6.15,8.2,6.15,-4.1,-6.15,-8.2,10.25,-10.25,-8.2,-10.25,-10.25};
   // double addY_inner[add_N_mod_inner] = {0.,10.25,10.25,10.25,10.25,10.25,10.25,10.25,8.2,8.2,8.2,8.2,8.2,6.15,6.15,6.15,4.1,2.05,-10.25,-10.25,-10.25,-10.25,-10.25,-10.25,-10.25,-8.2,-8.2,-8.2,-8.2,-8.2,-6.15,-6.15,-6.15,-4.1,-2.05};
 
-
-  const int add_N_mod_inner = 37;
-  double addX_inner[add_N_mod_inner] = {-8.2,-8.2,-8.2,-8.2,-8.2,-8.2,-8.2,6.15,4.1,2.05,0.,-2.05,-4.1,-6.15,8.2,6.15,4.1,2.05,0.,-2.05,-4.1,-6.15,6.15,4.1,2.05,0.,-2.05,-4.1,-6.15,8.2,6.15,4.1,2.05,0.,-2.05,-4.1,-6.15};
-  double addY_inner[add_N_mod_inner] = {6.15,4.1,2.05,0.,-2.05,-4.1,-6.15,8.2,8.2,8.2,8.2,8.2,8.2,8.2,6.15,6.15,6.15,6.15,6.15,6.15,6.15,6.15,-8.2,-8.2,-8.2,-8.2,-8.2,-8.2,-8.2,-6.15,-6.15,-6.15,-6.15,-6.15,-6.15,-6.15,-6.15};
+  // version3: hardcode
+  const int add_N_mod_inner = 41;
+  double addX_inner[add_N_mod_inner] = {-8.2,-8.2,-8.2,-8.2,-8.2,-8.2,-8.2,6.15,4.1,2.05,0.,-2.05,-4.1,-6.15,8.2,6.15,4.1,2.05,0.,-2.05,-4.1,-6.15,6.15,4.1,2.05,0.,-2.05,-4.1,-6.15,8.2,6.15,4.1,2.05,0.,-2.05,-4.1,-6.15,8.2,-6.15,8.2,-6.15};
+  double addY_inner[add_N_mod_inner] = {6.15,4.1,2.05,0.,-2.05,-4.1,-6.15,8.2,8.2,8.2,8.2,8.2,8.2,8.2,6.15,6.15,6.15,6.15,6.15,6.15,6.15,6.15,-8.2,-8.2,-8.2,-8.2,-8.2,-8.2,-8.2,-6.15,-6.15,-6.15,-6.15,-6.15,-6.15,-6.15,-6.15,4.1,4.1,-4.1,-4.1};
   for(int im = 0 ; im < add_N_mod_inner ; im++)
     {
       total_id++;
