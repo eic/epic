@@ -10,7 +10,8 @@
 <constant name="PFRICH_zmin"               value="PFRICH_zmax + PFRICH_length"/>      <!-- vessel back -->
 <constant name="PFRICH_rmin0"              value="-PFRICH_zmin * Eta3_9_tan * 0.95"/> <!-- bore radius at vessel frontplane -->
 <constant name="PFRICH_rmin1"              value="-PFRICH_zmax * Eta3_9_tan * 0.85"/> <!-- bore radius at vessel backplane -->
-<constant name="PFRICH_rmax"               value="BackwardPIDRegion_rmax"/>           <!-- vessel backplane radius -->
+<constant name="PFRICH_rmax"               value="BackwardPIDRegion_rmax"/>           <!-- vessel radius -->
+<constant name="PFRICH_bore_slope"         value="(PFRICH_rmin1 - PFRICH_rmin0) / PFRICH_length"/> <!-- slope of bore radius -->
 <constant name="PFRICH_proximity_gap"      value="35*cm"/>                            <!-- distance between aerogel exit plane and sensor entrance plane -->
 <constant name="PFRICH_services_length"    value="15*cm"/>                            <!-- span of service materials behind the sensors -->
 <constant name="PFRICH_wall_thickness"     value="0.5*cm"/>                           <!-- thickness of radial walls -->
