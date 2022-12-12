@@ -36,7 +36,6 @@
     </detector>
 
     <detector
-    id="Magnets_Q3eR_to_B7eR_ID"
     name="Magnets_Q3eR_to_B7eR"
     type="CylindricalMagnetChain"
     vis="RedVis">
@@ -81,7 +80,6 @@
     </detector>
 
     <detector
-    id="Magnets_Q3PR_to_B1PR_ID"
     name="Magnets_Q3PR_to_B1PR"
     type="CylindricalMagnetChain"
     vis="FFMagnetVis">

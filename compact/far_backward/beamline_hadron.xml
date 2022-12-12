@@ -47,7 +47,6 @@
 
     <!-- Beam pipe going from Q3PR to B1PR -->
     <detector
-    id="Pipe_Q3PR_to_B1PR_ID"
     name="Pipe_Q3PR_to_B1PR"
     type="BeamPipeChain"
     wall_thickness="2*mm">

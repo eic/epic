@@ -52,7 +52,6 @@
 
     <!-- Beam pipe going from Q3eR to B7eR -->
     <detector
-    id="Pipe_Q3eR_to_B7eR_ID"
     name="Pipe_Q3eR_to_B7eR"
     type="BeamPipeChain"
     wall_thickness="2*mm">

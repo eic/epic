@@ -318,11 +318,6 @@ The unused IDs below are saved for future use.
     <constant name="Magnet_B2BeR_ID"        value="210"/>
     <constant name="Pipe_in_B2BeR_ID"       value="211"/>
 
-    <constant name="Magnets_Q3eR_to_B7eR_ID" value="212"/>
-    <constant name="Pipe_Q3eR_to_B7eR_ID"   value="213"/>
-    <constant name="Magnets_Q3PR_to_B1PR_ID" value="214"/>
-    <constant name="Pipe_Q3PR_to_B1PR_ID"   value="215"/>
-
     <documentation>
 ## Detector Definition Parameters
 
