@@ -409,8 +409,8 @@ static std::tuple<int, int> add_12surface_disk(Detector& desc, Assembly& env, xm
   auto [modVol, modSize] = build_module(desc, plm, sens);
   int    sector_id       = dd4hep::getAttrOrDefault<int>(plm, _Unicode(sector), sid);
   int    id_begin        = dd4hep::getAttrOrDefault<int>(plm, _Unicode(id_begin), 1);
-  // double rmin            = plm.attr<double>(_Unicode(rmin));
-  // double rmax            = plm.attr<double>(_Unicode(rmax));
+  double rmin            = plm.attr<double>(_Unicode(rmin));
+  double rmax            = plm.attr<double>(_Unicode(rmax));
   double r12min          = plm.attr<double>(_Unicode(r12min));
   double r12max          = plm.attr<double>(_Unicode(r12max));
   double structure_frame_length = plm.attr<double>(_Unicode(SFlength));
@@ -426,7 +426,7 @@ static std::tuple<int, int> add_12surface_disk(Detector& desc, Assembly& env, xm
   // Material for the structure and mother space
   //
   Material outer_ring_material     = desc.material(getAttrOrDefault<std::string>(plm, _U(material), "StainlessSteel"));
-  // Material inner_ring_material     = desc.material(getAttrOrDefault<std::string>(plm, _U(material), "Copper"));
+  Material inner_ring_material     = desc.material(getAttrOrDefault<std::string>(plm, _U(material), "Copper"));
   // Material hole_material     = desc.material(getAttrOrDefault<std::string>(plm, _U(material), "Vacuum"));
 
 
@@ -476,11 +476,10 @@ static std::tuple<int, int> add_12surface_disk(Detector& desc, Assembly& env, xm
   SubtractionSolid inner_support_substractb2(inner_support_substractb1, subtract_corner, Position(7.175*cm, -5.125*cm, 0.));
   SubtractionSolid inner_support_substractb3(inner_support_substractb2, subtract_corner, Position(-7.175*cm, 5.125*cm, 0.));
   SubtractionSolid inner_support_substractb4(inner_support_substractb3, subtract_corner, Position(-7.175*cm, -5.125*cm, 0.));
-  // SubtractionSolid inner_support_substracta(inner_support_substractb4, subtract_a, Position(0., 0., 0.));
-  // Volume           inner_support_vol("inner_support_vol", inner_support_substracta, inner_ring_material);   
-  // inner_support_vol.setVisAttributes(desc.visAttributes(plm.attr<std::string>(_Unicode(vis_struc))));
-  // // Transform3D tr_global_Iring_elli = RotationZYX(-15.*degree, 0., 0.) * Translation3D(1.025*cm, 0., 0.);
-  // Transform3D tr_global_Iring_elli = RotationZYX(-15.*degree, 0., 0.) * Translation3D(0., 0., 0.);
+  SubtractionSolid inner_support_substracta(inner_support_substractb4, subtract_a, Position(0., 0., 0.));
+  Volume           inner_support_vol("inner_support_vol", inner_support_substracta, inner_ring_material);   
+  inner_support_vol.setVisAttributes(desc.visAttributes(plm.attr<std::string>(_Unicode(vis_struc))));
+  Transform3D tr_global_Iring_elli = RotationZYX(-15.*degree, 0., 0.) * Translation3D(0., 0., 0.);
   
 
   // // The vacuum inside the inner structure
@@ -497,14 +496,11 @@ static std::tuple<int, int> add_12surface_disk(Detector& desc, Assembly& env, xm
   bool has_envelope = dd4hep::getAttrOrDefault<bool>(plm, _Unicode(envelope), false);
   PolyhedraRegular solid_world(12, 0., r12min, calo_module_length);
   EllipticalTube  solid_sub(7.5*cm, 5.5*cm, calo_module_length/2.);
-  // Transform3D subtract_pos = RotationZYX(-15.*degree, 0., 0.) * Translation3D(1.025*cm, 0., 0.);
   Transform3D subtract_pos = RotationZYX(-15.*degree, 0., 0.) * Translation3D(0., 0., 0.);
-  SubtractionSolid calo_subtract(solid_world, inner_support_substractb4, subtract_pos);
-  // SubtractionSolid calo_subtract(solid_world, solid_sub, Position(0., 0., 0.));
+  SubtractionSolid calo_subtract(solid_world, solid_sub, subtract_pos);
   Volume      env_vol(std::string(env.name()) + "_envelope", calo_subtract, outer_ring_material);
   Transform3D tr_global = RotationZYX(15.*degree, 0., 0.) * Translation3D(0., 0., 0.);
   env_vol.setVisAttributes(desc.visAttributes(plm.attr<std::string>(_Unicode(vis_steel_gap))));
-
 
   
   
@@ -530,8 +526,7 @@ static std::tuple<int, int> add_12surface_disk(Detector& desc, Assembly& env, xm
       env.placeVolume(ring12_vol, tr_global_Oring);                 // Place the outer supporting frame
       // env.placeVolume(Sring12_vol, tr_global_Iring);                // Place the version1 inner supporting frame
       // env_vol.placeVolume(inner_elliptical_vol, tr_global_Iring_elli);  // Place the version2 inner supporting frame
-      // env_vol.placeVolume(inner_support_vol, tr_global_Iring_elli);  // Place the version3 inner supporting frame
-      // env_vol.placeVolume(inner_elliptical_vacuum_vol, tr_global_Iring_elli_vacuum);  // Place the inner air
+      env_vol.placeVolume(inner_support_vol, tr_global_Iring_elli);  // Place the version3 inner supporting frame
 
       
       // env.placeVolume(cabling_support12_V, tr_global_csfront);  // Place the front cabling frame(Only the holes are visible)
@@ -561,90 +556,50 @@ static std::tuple<int, int> add_12surface_disk(Detector& desc, Assembly& env, xm
   // structures.
   //=====================================================================
 
-  // // Add the modules manually in the gap [Outer]
-  // //
-  // const int add_N_mod_outer = 35;
-  // float addX_outer[add_N_mod_outer] = {1.025, 3.075, 5.125, 7.175, 9.225, 11.275, 13.325, 15.375, 15.375, 17.425, 19.475, 21.525, 23.575, 33.825, 39.975, 42.025, 44.075, 44.075, 46.125, 46.125, 48.175, 52.275, 58.425, 58.425, 60.475, 60.475, 60.475, 62.525, 62.525, 62.525, 62.525, 62.525, 62.525, 62.525, 62.525};
-  // float addY_outer[add_N_mod_outer] = {62.525, 62.525, 62.525, 62.525, 62.525, 62.525, 62.525, 62.525, 60.475, 60.475, 60.475, 58.425, 58.425, 52.275, 48.175, 46.125, 46.125, 44.075, 44.075, 42.025, 39.975, 33.825, 23.575, 21.525, 19.475, 17.425, 15.375, 15.375, 13.325, 11.275, 9.225, 7.175, 5.125, 3.075, 1.025};
-
-  // Add the modules manually in the gap [Inner]
-  //
-  const int add_N_mod_inner = 13;
-  double addX_inner[add_N_mod_inner] = {9.225, 9.225, 9.225, 9.225, 7.175, 7.175, 7.175, 5.125, 5.125, 3.075, 3.075, 1.025, 1.025};
-  double addY_inner[add_N_mod_inner] = {1.025, 3.075, 5.125, 7.175, 5.125, 7.175, 9.225, 7.175, 9.225, 7.175, 9.225, 7.175, 9.225};
-
-  // Save the position values at 1st quadrant
+  // Add the modules followd the fillRectangles function
   //
   int mid = 0, total_id = 0;
   float half_modx = modSize.x() * 0.5, half_mody = modSize.y() * 0.5;
-  std::vector<float> quart_posx, quart_posy;
-  auto points = epic::geo::fillRectangles({0., 0.}, modSize.x(), modSize.y(), 9.*cm, 62.*cm, phimin, phimax);
+  auto points = epic::geo::fillRectangles({half_modx, half_mody}, modSize.x(), modSize.y(), rmin, rmax, phimin, phimax);
   for (auto& p : points)
     {
-      // small shift here is to match the mechanical design
-      float shiftx = p.x() + half_modx, shifty = p.y() + half_mody;
-      if( shiftx > 0. && shifty > 0. )
-        {
-          quart_posx.push_back(shiftx);
-          quart_posy.push_back(shifty);
-        }
+      Transform3D tr_local = RotationZYX(-15.*degree, 0.0, 0.0) * Translation3D(p.x(), p.y(), 0.0);
+      auto modPV = (has_envelope ? env_vol.placeVolume(modVol, tr_local) : env.placeVolume(modVol, tr_global * tr_local));
+      modPV.addPhysVolID("sector", sector_id).addPhysVolID("module", total_id);          
+      total_id = id_begin + mid++;      
+      // std::cout << total_id << " " << p.x() << " " << p.y() << std::endl;  // use for debug
     }
-  // for( int i = 0 ; i < add_N_mod_outer ; i++) // add the outer additional positions to the vector
-  //   {
-  //     float ax = addX_outer[i], ay = addY_outer[i];
-  //     quart_posx.push_back(ax);
-  //     quart_posy.push_back(ay);
-  //   }
-  for( int i = 0 ; i < add_N_mod_inner ; i++) // add the inner additional positions to the vector
-    {
-      float ax = addX_inner[i], ay = addY_inner[i];
-      quart_posx.push_back(ax);
-      quart_posy.push_back(ay);
-    }
-  int quarter_size = quart_posx.size();
 
-  
-  // Place the modules in 4 quadrants
+  // Add the modules manually in the gap [Outer]
   //
-  for( int i = 0 ; i < 4 ; i++ )
-    {
-      for( int j = 0 ; j < quarter_size ; j++)
-        {
-          float modposx, modposy;
-          if(i == 0)
-            {
-              modposx = quart_posx.at(j);
-              modposy = quart_posy.at(j);
-            }
-          else if(i == 1)
-            {
-              modposx = -1. * quart_posx.at(j);
-              modposy = quart_posy.at(j);
-            }
-          else if(i == 2)
-            {
-              modposx = -1. * quart_posx.at(j);
-              modposy = -1. * quart_posy.at(j);
-            }
-          else
-            {
-              modposx = quart_posx.at(j);
-              modposy = -1. * quart_posy.at(j);
-            }
-          
-          Transform3D tr_local = RotationZYX(-15.*degree, 0.0, 0.0) * Translation3D(modposx, modposy, 0.0);
-          auto modPV = (has_envelope ? env_vol.placeVolume(modVol, tr_local) : env.placeVolume(modVol, tr_global * tr_local));
-          // auto modPV = env_vol.placeVolume(modVol, tr_local);
-          modPV.addPhysVolID("sector", sector_id).addPhysVolID("module", total_id);          
+  const int add_N_mod_outer = 56;
+  float addX_outer[add_N_mod_outer] = {9.225, 11.275, 13.325, 15.375, 17.425, 19.475, 44.075, 46.125, 60.475, 60.475, 62.525, 62.525, 62.525, 62.525,  -9.225, -11.275, -13.325, -15.375, -17.425, -19.475, -44.075, -46.125, -60.475, -60.475, -62.525, -62.525, -62.525, -62.525,  -9.225, -11.275, -13.325, -15.375, -17.425, -19.475, -44.075, -46.125, -60.475, -60.475, -62.525, -62.525, -62.525, -62.525,  9.225, 11.275, 13.325, 15.375, 17.425, 19.475, 44.075, 46.125, 60.475, 60.475, 62.525, 62.525, 62.525, 62.525};
+  float addY_outer[add_N_mod_outer] = {62.525, 62.525, 62.525, 62.525, 60.475, 60.475, 46.125, 44.075, 19.475, 17.425, 15.375, 13.325, 11.275, 9.225,  62.525, 62.525, 62.525, 62.525, 60.475, 60.475, 46.125, 44.075, 19.475, 17.425, 15.375, 13.325, 11.275, 9.225,  -62.525, -62.525, -62.525, -62.525, -60.475, -60.475, -46.125, -44.075, -19.475, -17.425, -15.375, -13.325, -11.275, -9.225, -62.525, -62.525, -62.525, -62.525, -60.475, -60.475, -46.125, -44.075, -19.475, -17.425, -15.375, -13.325, -11.275, -9.225};
 
-          total_id = id_begin + mid++;
-          
-          // std::cout << total_id << " " << modposx << " " << modposy << std::endl;
-        }        
+  for (int im = 0; im < add_N_mod_outer; im++)
+    {
+      Transform3D add_local = RotationZYX(-15.*degree, 0.0, 0.0) * Translation3D(addX_outer[im] * cm, addY_outer[im] * cm, 0.0);
+      auto modPV = (has_envelope ? env_vol.placeVolume(modVol, add_local) : env.placeVolume(modVol, tr_global * add_local));
+      modPV.addPhysVolID("sector", sector_id).addPhysVolID("module", total_id);
+      total_id++;
     }
 
+  // Add the modules manually in the gap [Inner]
+  //
+  const int add_N_mod_inner = 36;
+  double addX_inner[add_N_mod_inner] = {1.025,1.025,3.075,3.075,5.125,7.175,7.175,9.225,9.225, -1.025,-1.025,-3.075,-3.075,-5.125,-7.175,-7.175,-9.225,-9.225, -1.025,-1.025,-3.075,-3.075,-5.125,-7.175,-7.175,-9.225,-9.225, 1.025,1.025,3.075,3.075,5.125,7.175,7.175,9.225,9.225};
+  double addY_inner[add_N_mod_inner] = {7.175,9.225,7.175,9.225,7.175,7.175,5.125,1.025,3.075, 7.175,9.225,7.175,9.225,7.175,7.175,5.125,1.025,3.075, -7.175,-9.225,-7.175,-9.225,-7.175,-7.175,-5.125,-1.025,-3.075, -7.175,-9.225,-7.175,-9.225,-7.175,-7.175,-5.125,-1.025,-3.075};
+
+  for (int im = 0; im < add_N_mod_inner; im++)
+    {
+      Transform3D add_local = RotationZYX(-15.*degree, 0.0, 0.0) * Translation3D(addX_inner[im] * cm, addY_inner[im] * cm, 0.0);
+      auto modPV = (has_envelope ? env_vol.placeVolume(modVol, add_local) : env.placeVolume(modVol, tr_global * add_local));
+      modPV.addPhysVolID("sector", sector_id).addPhysVolID("module", total_id);
+      total_id++;
+    }
   
 
+  
   return {sector_id, mid};
 }
 
