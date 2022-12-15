@@ -19,14 +19,6 @@
 //==========================================================================
 #include "DD4hep/DetFactoryHelper.h"
 
-#if defined(USE_ACTSDD4HEP)
-#include "ActsDD4hep/ActsExtension.hpp"
-#include "ActsDD4hep/ConvertMaterial.hpp"
-#else
-#include "Acts/Plugins/DD4hep/ActsExtension.hpp"
-#include "Acts/Plugins/DD4hep/ConvertDD4hepMaterial.hpp"
-#endif
-
 using namespace std;
 using namespace dd4hep;
 using namespace dd4hep::detail;
@@ -42,10 +34,6 @@ static Ref_t SimpleDiskDetector_create_detector(Detector& description, xml_h e, 
   PlacedVolume   pv;
   int            l_num = 0;
   xml::Component pos   = x_det.position();
-
-  Acts::ActsExtension* detWorldExt = new Acts::ActsExtension();
-  detWorldExt->addType("endcap", "detector");
-  sdet.addExtension<Acts::ActsExtension>(detWorldExt);
 
   for (xml_coll_t i(x_det, _U(layer)); i; ++i, ++l_num) {
     xml_comp_t x_layer    = i;
@@ -79,10 +67,7 @@ static Ref_t SimpleDiskDetector_create_detector(Detector& description, xml_h e, 
       layer_pv.addPhysVolID("barrel", 2).addPhysVolID("layer", l_num);
       layer.setPlacement(layer_pv);
       // DetElement layerR = layer.clone(l_nam+"_neg");
-      // sdet.add(layerR.setPlacement(pv));
-      Acts::ActsExtension* layerExtension = new Acts::ActsExtension();
-      layerExtension->addType("sensitive disk", "layer");
-      layer.addExtension<Acts::ActsExtension>(layerExtension);
+      // sdet.add(layerR.setPlacement(pv));   
     }
 
     double tot_thickness = -layerWidth / 2.0;
@@ -100,10 +85,7 @@ static Ref_t SimpleDiskDetector_create_detector(Detector& description, xml_h e, 
       DetElement slice_de(layer, s_nam, s_num);
       if (x_slice.isSensitive()) {
         sens.setType("tracker");
-        s_vol.setSensitiveDetector(sens);
-        Acts::ActsExtension* sensorExtension = new Acts::ActsExtension();
-        // sensorExtension->addType("sensor", "detector");
-        slice_de.addExtension<Acts::ActsExtension>(sensorExtension);
+        s_vol.setSensitiveDetector(sens); 
       }
       s_vol.setAttributes(description, x_slice.regionStr(), x_slice.limitsStr(), x_slice.visStr());
       pv = l_vol.placeVolume(s_vol, Position(0, 0, tot_thickness + thick / 2));
