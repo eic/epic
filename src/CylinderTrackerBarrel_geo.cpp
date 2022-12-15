@@ -153,7 +153,7 @@ static Ref_t CylinderTrackerBarrel_create_detector(Detector& description, xml_h 
           PlacedVolume sens_pv = sensVols[ic];
           DetElement   comp_elt(mod_elt, sens_pv.volume().name(), module);
           comp_elt.setPlacement(sens_pv);
-         
+
         }
 
         /// Increase counters etc.
