@@ -58,9 +58,6 @@ static Ref_t SimpleDiskDetector_create_detector(Detector& description, xml_h e, 
       layer_pv = assembly.placeVolume(l_vol, Position(0, 0, zmin + layerWidth / 2.));
       layer_pv.addPhysVolID("barrel", 3).addPhysVolID("layer", l_num);
       layer.setPlacement(layer_pv);
-      Acts::ActsExtension* layerExtension = new Acts::ActsExtension();
-      layerExtension->addType("sensitive disk", "layer");
-      layer.addExtension<Acts::ActsExtension>(layerExtension);
     } else {
       layer    = DetElement(sdet, l_nam + "_neg", l_num);
       layer_pv = assembly.placeVolume(l_vol, Transform3D(RotationY(M_PI), Position(0, 0, -zmin - layerWidth / 2)));
