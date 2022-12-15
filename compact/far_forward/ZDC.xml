@@ -11,8 +11,7 @@
       Zero Degree Calorimeter General Parameters
       -------------------------------------------
     </comment>
-    <constant name="ZDC_z_pos"         value="3560.0 * cm"/> <!-- need to shift FORWARD toward IP to account for 50cm shift -->
-    <constant name="ZDC_x_pos"         value="ZDC_z_pos * ionCrossingAngle"/>
+    <constant name="ZDC_r_pos"         value="3550.0 * cm"/> <!-- Make it match to the CAD figure 22/Nov/22 -->
     <constant name="ZDC_y_pos"         value="0.0 * cm"/>
     <constant name="ZDC_rotateX_angle" value="0.0 * rad"/>
     <constant name="ZDC_rotateY_angle" value="ionCrossingAngle"/>
@@ -25,23 +24,26 @@
       Zero Degree Calorimeter - ECAL
       -------------------------------
     </comment>
-    <constant name="ZDC_1stSilicon_z_pos"        value="ZDC_z_pos"/>
-    <constant name="ZDC_1stSilicon_x_pos"        value="ZDC_1stSilicon_z_pos * ionCrossingAngle"/>
+    <constant name="ZDC_1stSilicon_r_pos"        value="ZDC_r_pos+0.5*cm"/>
+    <constant name="ZDC_1stSilicon_z_pos"        value="ZDC_1stSilicon_r_pos * cos(ionCrossingAngle)"/>
+    <constant name="ZDC_1stSilicon_x_pos"        value="ZDC_1stSilicon_r_pos * sin(ionCrossingAngle)"/>
     <constant name="ZDC_1stSilicon_y_pos"        value="ZDC_y_pos"/>
     <constant name="ZDC_1stSilicon_rotateX_angle"   value="ZDC_rotateX_angle"/>
     <constant name="ZDC_1stSilicon_rotateY_angle"   value="ZDC_rotateY_angle"/>
     <constant name="ZDC_1stSilicon_rotateZ_angle"   value="ZDC_rotateZ_angle"/>
 
-    <constant name="ZDC_Crystal_z_pos"           value="ZDC_z_pos + 6 *cm "/>
-    <constant name="ZDC_Crystal_x_pos"           value="ZDC_Crystal_z_pos * ionCrossingAngle"/>
+    <constant name="ZDC_Crystal_r_pos"           value="ZDC_r_pos + 5.9 *cm "/>
+    <constant name="ZDC_Crystal_z_pos"           value="ZDC_Crystal_r_pos * cos(ionCrossingAngle)"/>
+    <constant name="ZDC_Crystal_x_pos"           value="ZDC_Crystal_r_pos * sin(ionCrossingAngle)"/>
     <constant name="ZDC_Crystal_y_pos"           value="ZDC_y_pos"/>
     <constant name="ZDC_Crystal_rotateX_angle"   value="ZDC_rotateX_angle"/>
     <constant name="ZDC_Crystal_rotateY_angle"   value="ZDC_rotateY_angle"/>
     <constant name="ZDC_Crystal_rotateZ_angle"   value="ZDC_rotateZ_angle"/>
     <constant name="ZDC_Crystal_width"           value="ZDC_width"/>
 
-    <constant name="ZDC_WSi_z_pos"               value="ZDC_Crystal_z_pos + 18. *cm"/>
-    <constant name="ZDC_WSi_x_pos"               value="ZDC_WSi_z_pos * ionCrossingAngle"/>
+    <constant name="ZDC_WSi_r_pos"               value="ZDC_r_pos + 23*cm"/>
+    <constant name="ZDC_WSi_z_pos"               value="ZDC_WSi_r_pos * cos(ionCrossingAngle)"/>
+    <constant name="ZDC_WSi_x_pos"               value="ZDC_WSi_r_pos * sin(ionCrossingAngle)"/>
     <constant name="ZDC_WSi_y_pos"               value="ZDC_y_pos"/>
     <constant name="ZDC_WSi_rotateX_angle"       value="ZDC_rotateX_angle"/>
     <constant name="ZDC_WSi_rotateY_angle"       value="ZDC_rotateY_angle"/>
@@ -49,23 +51,25 @@
     <constant name="ZDC_WSi_nblocks"             value="2"/>
     <constant name="ZDC_WSi_pad_nlayers_per_block"         value="10"/>
 
-    <constant name="ZDC_PbSi_z_pos"               value="ZDC_WSi_z_pos + 35. *cm"/>
-    <constant name="ZDC_PbSi_x_pos"               value="ZDC_PbSi_z_pos * ionCrossingAngle"/>
+    <constant name="ZDC_PbSi_r_pos"               value="ZDC_r_pos + 59. *cm"/>
+    <constant name="ZDC_PbSi_z_pos"               value="ZDC_PbSi_r_pos * cos(ionCrossingAngle)"/>
+    <constant name="ZDC_PbSi_x_pos"               value="ZDC_PbSi_r_pos * sin(ionCrossingAngle)"/>
     <constant name="ZDC_PbSi_y_pos"               value="ZDC_y_pos"/>
     <constant name="ZDC_PbSi_rotateX_angle"       value="ZDC_rotateX_angle"/>
     <constant name="ZDC_PbSi_rotateY_angle"       value="ZDC_rotateY_angle"/>
     <constant name="ZDC_PbSi_rotateZ_angle"       value="ZDC_rotateZ_angle"/>
     <constant name="ZDC_PbSi_nlayers"             value="12"/>
 
-    <constant name="ZDC_PbSci_z_pos"               value="ZDC_PbSi_z_pos + 75. *cm"/>
-    <constant name="ZDC_PbSci_x_pos"               value="ZDC_PbSci_z_pos * ionCrossingAngle"/>
+    <constant name="ZDC_PbSci_r_pos"               value="ZDC_r_pos + 137. *cm"/>
+    <constant name="ZDC_PbSci_z_pos"               value="ZDC_PbSci_r_pos * cos(ionCrossingAngle)"/>
+    <constant name="ZDC_PbSci_x_pos"               value="ZDC_PbSci_r_pos * sin(ionCrossingAngle)"/>
     <constant name="ZDC_PbSci_y_pos"               value="ZDC_y_pos"/>
     <constant name="ZDC_PbSci_rotateX_angle"       value="ZDC_rotateX_angle"/>
     <constant name="ZDC_PbSci_rotateY_angle"       value="ZDC_rotateY_angle"/>
     <constant name="ZDC_PbSci_rotateZ_angle"       value="ZDC_rotateZ_angle"/>
     <constant name="ZDC_PbSci_nbox"                value="2"/>
     <constant name="ZDC_PbSci_nlayers_per_box"     value="15"/>
-    <constant name="ZDC_PbSci_box_gap"             value="3.*cm"/>
+    <constant name="ZDC_PbSci_box_gap"             value="5.*cm"/>
 
     <constant name="ZDC_pad_thickness"           value="320.0 * um"/>
     <constant name="ZDC_pixel_thickness"         value="300.0 * um"/>
