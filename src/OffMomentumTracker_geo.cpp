@@ -203,7 +203,7 @@ static Ref_t create_OffMomentumTracker(Detector& description, xml_h e, Sensitive
       PlacedVolume sens_pv = sensVols[ic];
       DetElement   comp_elt(module, sens_pv.volume().name(), mod_num);
       comp_elt.setPlacement(sens_pv);
-  
+
     }
 
     // for (xml_coll_t ri(x_layer, _U(ring)); ri; ++ri) {
