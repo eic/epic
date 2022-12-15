@@ -7,28 +7,28 @@
 
     <comment> Electron side beam magnet volumes </comment>
 
-    <detector id="Magnet_Q1eR_ID" name="Magnet_Q1eR" type="ip6_CylindricalDipoleMagnet" vis="FFMagnetVis">
+    <detector name="Magnet_Q1eR" type="ip6_CylindricalDipoleMagnet" vis="FFMagnetVis">
       <placement  x="0" y="0" z="Q1eR_CenterPosition" theta="0*rad"/>
       <dimensions x="Q1eR_InnerRadius*4" y="Q1eR_InnerRadius*4" z="Q1eR_Length" r="1.5*Q1eR_InnerRadius" />
       <apperture  x="Q1eR_InnerRadius*2" y="Q1eR_InnerRadius*2" r="Q1eR_InnerRadius" />
       <coil dx="2*cm" dy="1.5*cm" /><!--unchecked-->
     </detector>
 
-    <detector id="Magnet_Q2eR_ID" name="Magnet_Q2eR" type="ip6_CylindricalDipoleMagnet" vis="FFMagnetVis">
+    <detector name="Magnet_Q2eR" type="ip6_CylindricalDipoleMagnet" vis="FFMagnetVis">
       <placement  x="0" y="0" z="Q2eR_CenterPosition" theta="0*rad"/>
       <dimensions x="Q2eR_InnerRadius*4" y="Q2eR_InnerRadius*4" z="Q2eR_Length" r="1.5*Q2eR_InnerRadius"/>
       <apperture  x="Q2eR_InnerRadius*2" y="Q2eR_InnerRadius*2" r="Q2eR_InnerRadius"/>
       <coil dx="2*cm" dy="1.5*cm" /><!--unchecked-->
     </detector>
 
-    <detector id="Magnet_B2AeR_ID" name="Magnet_B2AeR" type="ip6_CylindricalDipoleMagnet" vis="FFMagnetVis">
+    <detector name="Magnet_B2AeR" type="ip6_CylindricalDipoleMagnet" vis="FFMagnetVis">
       <placement  x="0" y="0" z="B2AeR_CenterPosition" theta="0*rad"/>
       <dimensions x="B2AeR_InnerRadius*4" y="B2AeR_InnerRadius*4" z="B2AeR_Length" r="1.5*B2AeR_InnerRadius"/>
       <apperture  x="B2AeR_InnerRadius*2" y="B2AeR_InnerRadius*2" r="B2AeR_InnerRadius"/>
       <coil dx="2*cm" dy="1.5*cm" /><!--unchecked-->
     </detector>
 
-    <detector id="Magnet_B2BeR_ID" name="Magnet_B2BeR" type="ip6_CylindricalDipoleMagnet" vis="FFMagnetVis">
+    <detector name="Magnet_B2BeR" type="ip6_CylindricalDipoleMagnet" vis="FFMagnetVis">
       <placement  x="0" y="0" z="B2BeR_CenterPosition" theta="0*rad"/>
       <dimensions x="B2BeR_InnerRadius*4" y="B2BeR_InnerRadius*4" z="B2BeR_Length" r="1.5*B2BeR_InnerRadius"/>
       <apperture  x="B2BeR_InnerRadius*2" y="B2BeR_InnerRadius*2" r="B2BeR_InnerRadius"/>

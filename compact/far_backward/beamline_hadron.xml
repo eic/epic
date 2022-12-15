@@ -1,5 +1,5 @@
 <!-- SPDX-License-Identifier: LGPL-3.0-or-later -->
-<!-- Copyright (C) 2022 Simon Gardner -->
+<!-- Copyright (C) 2022 Simon Gardner, Dhevan Gangadharan -->
 
 <lccdd>
 
@@ -10,76 +10,63 @@
 
   <detectors>
 
-    <detector name="Pipe_to_Q1APR" type="BackwardsBeamPipe">
-      <Pipe wall_thickness="Hadron_Beampipe_Thickness" outerD1="Hadron_Beampipe_Rad" outerD2="Hadron_Beampipe_Rad"
-        end1z="Hadron_Beampipe_End" end2z="Q1APR_StartZ" end1x="Hadron_Beampipe_End*sin(CrossingAngle)" end2x="Q1APR_StartX"/>
-    </detector>
-
-    <detector name="Pipe_in_Q1APR" type="BackwardsBeamPipe">
-      <Pipe wall_thickness="Hadron_Beampipe_Thickness" outerD1="Hadron_Beampipe_Rad" outerD2="Hadron_Beampipe_Rad"
-        end1z="Q1APR_StartZ" end2z="Q1APR_EndZ" end1x="Q1APR_StartX" end2x="Q1APR_EndX"/>
-    </detector>
-
-    <detector name="Pipe_Q1APR_to_Q1BPR" type="BackwardsBeamPipe">
-      <Pipe wall_thickness="Hadron_Beampipe_Thickness" outerD1="Hadron_Beampipe_Rad" outerD2="Hadron_Beampipe_Rad"
-        end1z="Q1APR_EndZ" end2z="Q1BPR_StartZ" end1x="Q1APR_EndX" end2x="Q1BPR_StartX"/>
-    </detector>
-
-    <detector name="Pipe_in_Q1BPR" type="BackwardsBeamPipe">
-      <Pipe wall_thickness="Hadron_Beampipe_Thickness" outerD1="Hadron_Beampipe_Rad" outerD2="Hadron_Beampipe_Rad"
-        end1z="Q1BPR_StartZ" end2z="Q1BPR_EndZ" end1x="Q1BPR_StartX" end2x="Q1BPR_EndX"/>
-    </detector>
-
-    <detector name="Pipe_Q1BPR_to_Q2PR" type="BackwardsBeamPipe">
-      <Pipe wall_thickness="Hadron_Beampipe_Thickness" outerD1="Hadron_Beampipe_Rad" outerD2="Hadron_Beampipe_Rad"
-        end1z="Q1BPR_EndZ" end2z="Q2PR_StartZ" end1x="Q1BPR_EndX" end2x="Q2PR_StartX"/>
-    </detector>
-
-    <detector name="Pipe_in_Q2PR" type="BackwardsBeamPipe">
-      <Pipe wall_thickness="Hadron_Beampipe_Thickness" outerD1="Hadron_Beampipe_Rad" outerD2="Hadron_Beampipe_Rad"
-        end1z="Q2PR_StartZ" end2z="Q2PR_EndZ" end1x="Q2PR_StartX" end2x="Q2PR_EndX"/>
-    </detector>
-
-    <detector name="Pipe_Q2PR_to_Q3PR" type="BackwardsBeamPipe">
-      <Pipe wall_thickness="Hadron_Beampipe_Thickness" outerD1="2*Hadron_Beampipe_Rad" outerD2="2*Hadron_Beampipe_Rad"
-        end1z="Q2PR_EndZ" end2z="Q3PR_StartZ" end1x="Q2PR_EndX" end2x="Q3PR_StartX"/>
-    </detector>
-
-    <!-- Beam pipe going from Q3PR to B1PR -->
     <detector
-    name="Pipe_Q3PR_to_B1PR"
+    name="Pipe_Q1APR_to_B1PR"
     type="BeamPipeChain"
     wall_thickness="2*mm">
-      <pipe id="0" name="Pipe_in_Q3PR" magnetpipe="1"
+      <pipe id="0" name="Pipe_to_Q1APR"
+        xcenter="(Hadron_Beampipe_End*sin(CrossingAngle) + Q1APR_StartX)/2." zcenter="(Hadron_Beampipe_End + Q1APR_StartZ)/2."
+        length="(Hadron_Beampipe_End - Q1APR_StartZ)/cos(CrossingAngle)" theta="CrossingAngle"
+        rout1="Hadron_Beampipe_Rad/2." rout2="Hadron_Beampipe_Rad/2.">
+      </pipe>
+      <pipe id="1" name="Pipe_in_Q1APR"
+        xcenter="(Q1APR_StartX + Q1APR_EndX)/2." zcenter="(Q1APR_StartZ + Q1APR_EndZ)/2."
+        length="Q1APR_Length" theta="Q1APR_Theta"
+        rout1="Q1APR_InnerRadius/2." rout2="Q1APR_InnerRadius">
+      </pipe>
+      <pipe id="2" name="Pipe_Q1APR_to_Q1BPR"/>
+      <pipe id="3" name="Pipe_in_Q1BPR"
+        xcenter="(Q1BPR_StartX + Q1BPR_EndX)/2." zcenter="(Q1BPR_StartZ + Q1BPR_EndZ)/2."
+        length="Q1BPR_Length" theta="Q1BPR_Theta"
+        rout1="Q1BPR_InnerRadius" rout2="Q1BPR_InnerRadius">
+      </pipe>
+      <pipe id="4" name="Pipe_Q1BPR_to_Q2PR"/>
+      <pipe id="5" name="Pipe_in_Q2PR"
+        xcenter="(Q2PR_StartX + Q2PR_EndX)/2." zcenter="(Q2PR_StartZ + Q2PR_EndZ)/2."
+        length="Q2PR_Length" theta="Q2PR_Theta"
+        rout1="Q2PR_InnerRadius" rout2="Q2PR_InnerRadius">
+      </pipe>
+      <pipe id="6" name="Pipe_Q2PR_to_Q3PR"/>
+      <pipe id="7" name="Pipe_in_Q3PR"
         xcenter="Q3PR_CenterX" zcenter="Q3PR_CenterZ"
         length="Q3PR_Length" theta="Q3PR_Theta"
         rout1="Q3PR_InnerRadius" rout2="Q3PR_InnerRadius">
       </pipe>
-      <pipe id="1" name="Pipe_Q3PR_to_Crab1PR" magnetpipe="0"/>
-      <pipe id="2" name="Pipe_in_Crab1PR" magnetpipe="1"
+      <pipe id="8" name="Pipe_Q3PR_to_Crab1PR"/>
+      <pipe id="9" name="Pipe_in_Crab1PR"
         xcenter="Crab1PR_CenterX" zcenter="Crab1PR_CenterZ"
         length="Crab1PR_Length" theta="Crab1PR_Theta"
         rout1="Crab1PR_InnerRadius" rout2="Crab1PR_InnerRadius">
       </pipe>
-      <pipe id="3" name="Pipe_in_Crab2PR" magnetpipe="1"
+      <pipe id="10" name="Pipe_in_Crab2PR"
         xcenter="Crab2PR_CenterX" zcenter="Crab2PR_CenterZ"
         length="Crab2PR_Length" theta="Crab2PR_Theta"
         rout1="Crab2PR_InnerRadius" rout2="Crab2PR_InnerRadius">
       </pipe>
-      <pipe id="4" name="Pipe_Crab2PR_to_Crab3PR" magnetpipe="0"/>
-      <pipe id="5" name="Pipe_in_Crab3PR" magnetpipe="1"
+      <pipe id="11" name="Pipe_Crab2PR_to_Crab3PR"/>
+      <pipe id="12" name="Pipe_in_Crab3PR"
         xcenter="Crab3PR_CenterX" zcenter="Crab3PR_CenterZ"
         length="Crab3PR_Length" theta="Crab3PR_Theta"
         rout1="Crab3PR_InnerRadius" rout2="Crab3PR_InnerRadius">
       </pipe>
-      <pipe id="6" name="Pipe_Crab3PR_to_Q4PR" magnetpipe="0"/>
-      <pipe id="7" name="Pipe_in_Q4PR" magnetpipe="1"
+      <pipe id="13" name="Pipe_Crab3PR_to_Q4PR"/>
+      <pipe id="14" name="Pipe_in_Q4PR"
         xcenter="Q4PR_CenterX" zcenter="Q4PR_CenterZ"
         length="Q4PR_Length" theta="Q4PR_Theta"
         rout1="Q4PR_InnerRadius" rout2="Q4PR_InnerRadius">
       </pipe>
-      <pipe id="8" name="Pipe_Q4PR_to_B1PR" magnetpipe="0"/>
-      <pipe id="9" name="Pipe_in_B1PR" magnetpipe="1"
+      <pipe id="15" name="Pipe_Q4PR_to_B1PR"/>
+      <pipe id="16" name="Pipe_in_B1PR"
         xcenter="B1PR_CenterX" zcenter="B1PR_CenterZ"
         length="B1PR_Length" theta="B1PR_Theta"
         rout1="B1PR_InnerRadius" rout2="B1PR_InnerRadius">
