@@ -67,7 +67,7 @@ static Ref_t SimpleDiskDetector_create_detector(Detector& description, xml_h e, 
       layer_pv.addPhysVolID("barrel", 2).addPhysVolID("layer", l_num);
       layer.setPlacement(layer_pv);
       // DetElement layerR = layer.clone(l_nam+"_neg");
-      // sdet.add(layerR.setPlacement(pv));   
+      // sdet.add(layerR.setPlacement(pv));
     }
 
     double tot_thickness = -layerWidth / 2.0;
@@ -85,7 +85,7 @@ static Ref_t SimpleDiskDetector_create_detector(Detector& description, xml_h e, 
       DetElement slice_de(layer, s_nam, s_num);
       if (x_slice.isSensitive()) {
         sens.setType("tracker");
-        s_vol.setSensitiveDetector(sens); 
+        s_vol.setSensitiveDetector(sens);
       }
       s_vol.setAttributes(description, x_slice.regionStr(), x_slice.limitsStr(), x_slice.visStr());
       pv = l_vol.placeVolume(s_vol, Position(0, 0, tot_thickness + thick / 2));
