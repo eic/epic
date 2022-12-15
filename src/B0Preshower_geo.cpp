@@ -180,7 +180,7 @@ static Ref_t create_B0Preshower(Detector& description, xml_h e, SensitiveDetecto
             PlacedVolume sens_pv = sensVols[ic];
             DetElement   comp_elt(module, sens_pv.volume().name(), mod_num);
             comp_elt.setPlacement(sens_pv);
-            
+
           }
         } else {
           pv = layer_vol.placeVolume(
@@ -192,7 +192,7 @@ static Ref_t create_B0Preshower(Detector& description, xml_h e, SensitiveDetecto
             PlacedVolume sens_pv = sensVols[ic];
             DetElement   comp_elt(r_module, sens_pv.volume().name(), mod_num);
             comp_elt.setPlacement(sens_pv);
-            
+
           }
         }
         dz = -dz;
