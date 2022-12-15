@@ -63,4 +63,4 @@ static Ref_t create_magnet(Detector& description, xml_h e, SensitiveDetector /* 
   return sdet;
 }
 
-DECLARE_DETELEMENT(CylindricalMagnetChain, build_magnet)
+DECLARE_DETELEMENT(CylindricalMagnetChain, create_magnet)
