@@ -527,8 +527,6 @@ static std::tuple<int, int> add_12surface_disk(Detector& desc, Assembly& env, xm
     {
       env.placeVolume(env_vol, tr_global);                          // Place the mother volume for all modules
       env.placeVolume(ring12_vol, tr_global_Oring);                 // Place the outer supporting frame
-      // env.placeVolume(Sring12_vol, tr_global_Iring);                // Place the version1 inner supporting frame
-      // env_vol.placeVolume(inner_elliptical_vol, tr_global_Iring_elli);  // Place the version2 inner supporting frame
       env_vol.placeVolume(inner_support_vol, tr_global_Iring_elli);  // Place the version3 inner supporting frame
 
 
@@ -570,7 +568,6 @@ static std::tuple<int, int> add_12surface_disk(Detector& desc, Assembly& env, xm
       auto modPV = (has_envelope ? env_vol.placeVolume(modVol, tr_local) : env.placeVolume(modVol, tr_global * tr_local));
       modPV.addPhysVolID("sector", sector_id).addPhysVolID("module", total_id);
       total_id = id_begin + mid++;
-      // std::cout << total_id << " " << p.x() << " " << p.y() << std::endl;  // use for debug
     }
 
   // Add the modules manually in the gap [Outer]
