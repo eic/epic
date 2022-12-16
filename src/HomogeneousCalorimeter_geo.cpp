@@ -414,9 +414,12 @@ static std::tuple<int, int> add_12surface_disk(Detector& desc, Assembly& env, xm
   double r12min          = plm.attr<double>(_Unicode(r12min));
   double r12max          = plm.attr<double>(_Unicode(r12max));
   double structure_frame_length = plm.attr<double>(_Unicode(SFlength));
-  double calo_module_length     = plm.attr<double>(_Unicode(CMlength));
-  double phimin                 = dd4hep::getAttrOrDefault<double>(plm, _Unicode(phimin), 0.);
-  double phimax                 = dd4hep::getAttrOrDefault<double>(plm, _Unicode(phimax), 2. * M_PI);
+  double calo_module_length = plm.attr<double>(_Unicode(CMlength));
+  double phimin          = dd4hep::getAttrOrDefault<double>(plm, _Unicode(phimin), 0.);
+  double phimax          = dd4hep::getAttrOrDefault<double>(plm, _Unicode(phimax), 2. * M_PI);
+
+
+
 
 
   //=========================================================
