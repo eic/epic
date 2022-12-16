@@ -438,21 +438,21 @@ static std::tuple<int, int> add_12surface_disk(Detector& desc, Assembly& env, xm
   //==============================
   // Outer supporting frame
   //==============================
-  
+
   PolyhedraRegular solid_ring12(12, r12min, r12max, structure_frame_length);
   Volume ring12_vol("ring12", solid_ring12, outer_ring_material);
   Transform3D tr_global_Oring = RotationZYX(15.*degree, 0., 0.) * Translation3D(0., 0., -20.*cm);
   ring12_vol.setVisAttributes(desc.visAttributes(plm.attr<std::string>(_Unicode(vis_struc))));
 
 
-  
+
 
   //=============================
-  // Inner supporting frame 
+  // Inner supporting frame
   //=============================
-  
+
   // // Version1: circle shape
-  // //  
+  // //
   // Tube        Ssolid_ring12(8.5*cm, rmin, calo_module_length/2., phimin, phimax);
   // Volume      Sring12_vol("Sring12", Ssolid_ring12, inner_ring_material);
   // Sring12_vol.setVisAttributes(desc.visAttributes(plm.attr<std::string>(_Unicode(vis_struc))));
@@ -464,10 +464,10 @@ static std::tuple<int, int> add_12surface_disk(Detector& desc, Assembly& env, xm
   // EllipticalTube   inner_elliptical_support_a(9.*cm, 7.5*cm, calo_module_length/2.);
   // EllipticalTube   inner_elliptical_support_b(8.5*cm, 7.*cm, calo_module_length/2.);
   // SubtractionSolid inner_elliptical_support_substract(inner_elliptical_support_a, inner_elliptical_support_b, Position(0., 0., 0.));
-  // Volume           inner_elliptical_vol("inner_elliptical", inner_elliptical_support_substract, inner_ring_material);   
+  // Volume           inner_elliptical_vol("inner_elliptical", inner_elliptical_support_substract, inner_ring_material);
   // inner_elliptical_vol.setVisAttributes(desc.visAttributes(plm.attr<std::string>(_Unicode(vis_struc))));
   // Transform3D tr_global_Iring_elli = RotationZYX(-15.*degree, 0., 0.) * Translation3D(2.05*cm, 0., 0.);
-  
+
 
   // Version3: solid with elliptical inside
   //
@@ -480,15 +480,15 @@ static std::tuple<int, int> add_12surface_disk(Detector& desc, Assembly& env, xm
   SubtractionSolid inner_support_substractb3(inner_support_substractb2, subtract_corner, Position(-7.175*cm, 5.125*cm, 0.));
   SubtractionSolid inner_support_substractb4(inner_support_substractb3, subtract_corner, Position(-7.175*cm, -5.125*cm, 0.));
   SubtractionSolid inner_support_substracta(inner_support_substractb4, subtract_a, Position(0., 0., 0.));
-  Volume           inner_support_vol("inner_support_vol", inner_support_substracta, inner_ring_material);   
+  Volume           inner_support_vol("inner_support_vol", inner_support_substracta, inner_ring_material);
   inner_support_vol.setVisAttributes(desc.visAttributes(plm.attr<std::string>(_Unicode(vis_struc))));
   Transform3D tr_global_Iring_elli = RotationZYX(-15.*degree, 0., 0.) * Translation3D(0., 0., 0.);
-  
+
 
   // // The vacuum inside the inner structure
   // //
   // EllipticalTube   inner_elliptical_vacuum(7.5*cm, 4.5*cm, calo_module_length/2.);
-  // Volume           inner_elliptical_vacuum_vol("inner_elliptical_vacuum_vol", inner_elliptical_vacuum, hole_material);   
+  // Volume           inner_elliptical_vacuum_vol("inner_elliptical_vacuum_vol", inner_elliptical_vacuum, hole_material);
   // inner_elliptical_vacuum_vol.setVisAttributes(desc.visAttributes(plm.attr<std::string>(_Unicode(vis_struc))));
   // Transform3D tr_global_Iring_elli_vacuum = RotationZYX(-15.*degree, 0., 0.) * Translation3D(1.025*cm, 0., 0.);
 
@@ -505,8 +505,8 @@ static std::tuple<int, int> add_12surface_disk(Detector& desc, Assembly& env, xm
   Transform3D tr_global = RotationZYX(15.*degree, 0., 0.) * Translation3D(0., 0., 0.);
   env_vol.setVisAttributes(desc.visAttributes(plm.attr<std::string>(_Unicode(vis_steel_gap))));
 
-  
-  
+
+
   // // =============================
   // // Supporting frame for the cabling
   // // =============================
@@ -531,7 +531,7 @@ static std::tuple<int, int> add_12surface_disk(Detector& desc, Assembly& env, xm
       // env_vol.placeVolume(inner_elliptical_vol, tr_global_Iring_elli);  // Place the version2 inner supporting frame
       env_vol.placeVolume(inner_support_vol, tr_global_Iring_elli);  // Place the version3 inner supporting frame
 
-      
+
       // env.placeVolume(cabling_support12_V, tr_global_csfront);  // Place the front cabling frame(Only the holes are visible)
       // env.placeVolume(cabling_support12_V, tr_global_csback);   // Place the back cabling frame(Only the holes are visible)
 
@@ -568,8 +568,8 @@ static std::tuple<int, int> add_12surface_disk(Detector& desc, Assembly& env, xm
     {
       Transform3D tr_local = RotationZYX(-15.*degree, 0.0, 0.0) * Translation3D(p.x(), p.y(), 0.0);
       auto modPV = (has_envelope ? env_vol.placeVolume(modVol, tr_local) : env.placeVolume(modVol, tr_global * tr_local));
-      modPV.addPhysVolID("sector", sector_id).addPhysVolID("module", total_id);          
-      total_id = id_begin + mid++;      
+      modPV.addPhysVolID("sector", sector_id).addPhysVolID("module", total_id);
+      total_id = id_begin + mid++;
       // std::cout << total_id << " " << p.x() << " " << p.y() << std::endl;  // use for debug
     }
 
@@ -600,9 +600,9 @@ static std::tuple<int, int> add_12surface_disk(Detector& desc, Assembly& env, xm
       modPV.addPhysVolID("sector", sector_id).addPhysVolID("module", total_id);
       total_id++;
     }
-  
 
-  
+
+
   return {sector_id, mid};
 }
 
