@@ -36,7 +36,7 @@
 
 	<!-- HIGH ACCEPTANCE VALUES -->
 
-	
+
 
 	<constant name="ForwardRomanPotStation1_insertion_intermediate" value="3.2*cm + 0.0*cm"/>
     <constant name="ForwardRomanPotStation2_insertion_intermediate" value="3.2*cm + 0.0*cm"/>
@@ -44,7 +44,7 @@
 	<constant name="ForwardRomanPotStation1_insertion_central" value="3.2*cm + 0.7*cm"/>
     <constant name="ForwardRomanPotStation2_insertion_central" value="3.2*cm + 0.7*cm"/>
 
-	
+
 
 	<!-- HIGH DIVERGENCE VALUES -->
 
