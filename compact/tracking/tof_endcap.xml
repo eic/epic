@@ -143,6 +143,7 @@
       reflect="false">
       <type_flags type="DetType_TRACKER + DetType_ENDCAP"/>
       <position x="0*cm" y="0*cm" z="ForwardTOF_zmin" />
+      <envelope r_min="-80*mm" r_max="670*mm" z_min="10*mm" z_max="10*mm"/>
       <module name="ForwardModule" vis="TOFModuleVis">
         <dimensions
           rMin="ForwardTOFMod_rmin"
