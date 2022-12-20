@@ -178,13 +178,6 @@
 </detector>
 </detectors>
 
-  <plugins>
-    <plugin name="DD4hep_ParametersPlugin">
-      <argument value="MPGDDIRC_0"/>
-      <argument value="layer_pattern: str=MPGDDIRC_0_layer\d"/>
-    </plugin>
-  </plugins>
-
   <readouts>
     <readout name="MPGDDIRCHits">
       <segmentation type="CartesianGridXY" grid_size_x="0.150*mm*sqrt(12)" grid_size_y="0.150*mm*sqrt(12)" />
