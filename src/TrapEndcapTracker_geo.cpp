@@ -63,6 +63,7 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
   }
 
   assembly.setVisAttributes(description.invisible());
+  sens.setType("tracker");
 
   for (xml_coll_t su(x_det, _U(support)); su; ++su) {
     xml_comp_t  x_support         = su;
@@ -171,7 +172,6 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
         // std::cout << " adding sensitive volume" << c_name << "\n";
         sdet.check(n_sensor > 2, "SiTrackerEndcap2::fromCompact: " + c_name + " Max of 2 modules allowed!");
         pv.addPhysVolID("sensor", n_sensor);
-        sens.setType("tracker");
         c_vol.setSensitiveDetector(sens);
         sensitives[m_nam].push_back(pv);
         ++n_sensor;
