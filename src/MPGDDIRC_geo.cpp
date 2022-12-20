@@ -52,6 +52,18 @@ static Ref_t create_MPGDDIRC_geo(Detector& description, xml_h e, SensitiveDetect
   dd4hep::xml::Dimension                  dimensions(x_det.dimensions());
   xml_dim_t                               mpgd_dirc_pos = x_det.position();
   Assembly                                assembly(det_name);
+  
+  // Set detector type flag
+  dd4hep::xml::setDetectorTypeFlag(x_det, sdet);
+  auto &params = DD4hepDetectorHelper::ensureExtension<dd4hep::rec::VariantParameters>(
+      sdet);
+
+  // Add the volume boundary material if configured
+  for (xml_coll_t bmat(x_det, _Unicode(boundary_material)); bmat; ++bmat) {
+    xml_comp_t x_boundary_material = bmat;
+    DD4hepDetectorHelper::xmlToProtoSurfaceMaterial(x_boundary_material, params,
+                                         "boundary_material");
+  }
 
   map<string, std::array<double, 2>> module_thicknesses;
   sens.setType("tracker");
@@ -232,9 +244,15 @@ static Ref_t create_MPGDDIRC_geo(Detector& description, xml_h e, SensitiveDetect
     double z_dr     = z_layout.dr();       // Radial offest of modules in z
     double z0       = z_layout.z0();       // Sets how much overlap in z the nz modules have
 
+    Assembly layer_assembly(lay_nam);
     Volume      module_env = volumes[m_nam];
     DetElement  lay_elt(sdet, lay_nam, lay_id);
     Placements& sensVols = sensitives[m_nam];
+    auto &layerParams = DD4hepDetectorHelper::ensureExtension<dd4hep::rec::VariantParameters>(lay_elt);
+    
+    pv = assembly.placeVolume(layer_assembly);
+    pv.addPhysVolID("layer", layer_id);
+    lay_elt.setPlacement(pv);
 
     int module = 1;
     // loop over the modules in phi
@@ -254,7 +272,7 @@ static Ref_t create_MPGDDIRC_geo(Detector& description, xml_h e, SensitiveDetect
 
         Transform3D tr(RotationZYX(0.0, ((M_PI / 2) - phic - phi_tilt), -M_PI / 2),
                        Position(xc, yc, mpgd_dirc_pos.z() + z_placement + z_offset)); // in x-y plane,
-        pv = assembly.placeVolume(module_env, tr);
+        pv = layer_assembly.placeVolume(module_env, tr);
         pv.addPhysVolID("module", module);
         mod_elt.setPlacement(pv);
         for (size_t ic = 0; ic < sensVols.size(); ++ic) {
