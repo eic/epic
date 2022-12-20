@@ -50,7 +50,7 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
   xml_comp_t  x_mod         = x_det.child(_Unicode(module));
   std::string m_nam         = x_mod.nameStr();
   xml_comp_t  diskdimension = x_mod.dimensions();
-  
+
   xml_comp_t  envelope      = x_det.child(_Unicode(envelope), false);
   double envelope_r_min     = 0;
   double envelope_r_max     = 0;
@@ -60,7 +60,7 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
     envelope_r_min = getAttrOrDefault(envelope, _Unicode(r_min), 0);
     envelope_r_max = getAttrOrDefault(envelope, _Unicode(r_max), 0);
     envelope_z_min = getAttrOrDefault(envelope, _Unicode(z_min), 0);
-    envelope_z_max = getAttrOrDefault(envelope, _Unicode(z_max), 0);     
+    envelope_z_max = getAttrOrDefault(envelope, _Unicode(z_max), 0);
   }
 
   // load all information from the diskdimension definitions
