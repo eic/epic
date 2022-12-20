@@ -251,7 +251,7 @@ static Ref_t create_MPGDDIRC_geo(Detector& description, xml_h e, SensitiveDetect
     auto &layerParams = DD4hepDetectorHelper::ensureExtension<dd4hep::rec::VariantParameters>(lay_elt);
     
     pv = assembly.placeVolume(layer_assembly);
-    pv.addPhysVolID("layer", layer_id);
+    pv.addPhysVolID("layer", lay_id);
     lay_elt.setPlacement(pv);
 
     int module = 1;
