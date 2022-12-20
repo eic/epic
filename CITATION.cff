@@ -1,0 +1,10 @@
+cff-version: 1.2.0
+title: 'EPIC Experiment Simulation '
+message: >-
+  If you use this software, please cite it using the
+  metadata from this file.
+type: software
+authors:
+  - given-names: EPIC Collaboration
+repository-code: 'https://github.com/eic/epic'
+abstract: DD4hep Geometry Description of the EPIC Experiment
