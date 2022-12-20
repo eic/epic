@@ -290,6 +290,7 @@ static Ref_t create_MPGDDIRC_geo(Detector& description, xml_h e, SensitiveDetect
       phic += phi_incr;
       rc += rphi_dr;
     }
+    layerParams.set<double>("envelope_r_min", 72*cm);
   }
   sdet.setAttributes(description, assembly, x_det.regionStr(), x_det.limitsStr(), x_det.visStr());
   assembly.setVisAttributes(description.invisible());
