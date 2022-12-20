@@ -11,7 +11,7 @@ using namespace dd4hep::detail;
 /*! B0 Preshower
  *
  * @author Whitney Armstrong
- * 
+ *
  * This geometric element has been deprecated. ACTS tracking interface has also been removed. - Sakib Rahman (Dec 20, 2022)
  */
 static Ref_t create_B0Preshower(Detector& description, xml_h e, SensitiveDetector sens)
