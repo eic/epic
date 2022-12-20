@@ -84,3 +84,4 @@ Related useful links
 - [EIC tutorial](https://eic.phy.anl.gov/tutorials/eic_tutorial)
 - [DD4hep repository](https://github.com/AIDAsoft/DD4hep)
 - [DD4hep user manual](https://dd4hep.web.cern.ch/dd4hep/usermanuals/DD4hepManual/DD4hepManual.pdf)
+- [ACTS DD4hep plugin documentation](https://acts.readthedocs.io/en/latest/plugins/dd4hep.html)
