@@ -185,10 +185,10 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
   // also defining the coordinate system that differs between ACTS and Geant4 (zyx vs xyz)
   auto &layerParams = DD4hepDetectorHelper::ensureExtension<dd4hep::rec::VariantParameters>(
                       layer_detEl);
-  layerParams.set<double>("envelope_r_min", -80. * mm);
-  layerParams.set<double>("envelope_r_max", 670. * mm);
-  layerParams.set<double>("envelope_z_min", 10. * mm);
-  layerParams.set<double>("envelope_z_max", 10. * mm);
+  layerParams.set<double>("envelope_r_min", envelope_r_min);
+  layerParams.set<double>("envelope_r_max", envelope_r_max);
+  layerParams.set<double>("envelope_z_min", envelope_z_min);
+  layerParams.set<double>("envelope_z_max", envelope_z_max);
 
   pv = assembly.placeVolume(layer_assembly);
   pv.addPhysVolID("layer", layer_id);
