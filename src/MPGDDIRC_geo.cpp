@@ -249,10 +249,6 @@ static Ref_t create_MPGDDIRC_geo(Detector& description, xml_h e, SensitiveDetect
     DetElement  lay_elt(sdet, lay_nam, lay_id);
     Placements& sensVols = sensitives[m_nam];
     auto &layerParams = DD4hepDetectorHelper::ensureExtension<dd4hep::rec::VariantParameters>(lay_elt);
-    layerParams.set<double>("envelope_r_min", 73. * cm);
-    layerParams.set<double>("envelope_r_max", 73. * cm);
-    layerParams.set<double>("envelope_z_min", -197 * cm);
-    layerParams.set<double>("envelope_z_max", 145 * cm);
     
     pv = assembly.placeVolume(layer_assembly);
     pv.addPhysVolID("layer", lay_id);
@@ -296,6 +292,10 @@ static Ref_t create_MPGDDIRC_geo(Detector& description, xml_h e, SensitiveDetect
     }
     layer_assembly->GetShape()->ComputeBBox();
     layerParams.set<double>("envelope_r_min", 72*cm);
+    layerParams.set<double>("envelope_r_max", 75.5*cm);
+    layerParams.set<double>("envelope_z_min", -198*cm);
+    layerParams.set<double>("envelope_z_max", 148*cm);
+    
   }
   sdet.setAttributes(description, assembly, x_det.regionStr(), x_det.limitsStr(), x_det.visStr());
   assembly.setVisAttributes(description.invisible());
