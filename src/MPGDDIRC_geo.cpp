@@ -291,10 +291,10 @@ static Ref_t create_MPGDDIRC_geo(Detector& description, xml_h e, SensitiveDetect
       rc += rphi_dr;
     }
     layer_assembly->GetShape()->ComputeBBox();
-    layerParams.set<double>("envelope_r_min", 72*cm);
-    layerParams.set<double>("envelope_r_max", 75.5*cm);
-    layerParams.set<double>("envelope_z_min", -198*cm);
-    layerParams.set<double>("envelope_z_max", 148*cm);
+    layerParams.set<double>("envelope_r_min", -40*mm);
+    layerParams.set<double>("envelope_r_max", 0*mm);
+    layerParams.set<double>("envelope_z_min", 0*mm);
+    layerParams.set<double>("envelope_z_max", 0*mm);
     
   }
   sdet.setAttributes(description, assembly, x_det.regionStr(), x_det.limitsStr(), x_det.visStr());
