@@ -232,6 +232,17 @@ static Ref_t create_MPGDDIRC_geo(Detector& description, xml_h e, SensitiveDetect
     int        lay_id   = x_layer.id();
     string     m_nam    = x_layer.moduleStr();
     string     lay_nam  = det_name + _toString(x_layer.id(), "_layer%d");
+    xml_comp_t  envelope_tolerance = x_layer.child(_Unicode(envelope_tolerance), false);
+    double envelope_r_min = 0;
+    double envelope_r_max = 0;
+    double envelope_z_min = 0;
+    double envelope_z_max = 0;
+    if(envelope_tolerance){
+      envelope_r_min = getAttrOrDefault(envelope_tolerance, _Unicode(r_min), 0);
+      envelope_r_max = getAttrOrDefault(envelope_tolerance, _Unicode(r_max), 0);
+      envelope_z_min = getAttrOrDefault(envelope_tolerance, _Unicode(z_min), 0);
+      envelope_z_max = getAttrOrDefault(envelope_tolerance, _Unicode(z_max), 0);
+    }
 
     double phi0     = x_layout.phi0();     // starting phi of first module
     double phi_tilt = x_layout.phi_tilt(); // Phi tilit of module
@@ -291,10 +302,10 @@ static Ref_t create_MPGDDIRC_geo(Detector& description, xml_h e, SensitiveDetect
       rc += rphi_dr;
     }
     layer_assembly->GetShape()->ComputeBBox();
-    layerParams.set<double>("envelope_r_min", -40*mm);
-    layerParams.set<double>("envelope_r_max", 0*mm);
-    layerParams.set<double>("envelope_z_min", 0*mm);
-    layerParams.set<double>("envelope_z_max", 0*mm);
+    layerParams.set<double>("envelope_r_min", envelope_r_min);
+    layerParams.set<double>("envelope_r_max", envelope_r_max);
+    layerParams.set<double>("envelope_z_min", envelope_z_min);
+    layerParams.set<double>("envelope_z_max", envelope_z_max);
 
   }
   sdet.setAttributes(description, assembly, x_det.regionStr(), x_det.limitsStr(), x_det.visStr());
