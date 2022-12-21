@@ -243,7 +243,7 @@ jobs:
         network_types: "none"
         setup: install/setup.sh
         run: |
-          geoConverter -compact2gdml --input ${DETECTOR_PATH}/${{ matrix.detector_config }}.xml --output ${{ matrix.detector_config }}.gdml
+          geoConverter -compact2gdml -input ${DETECTOR_PATH}/${{ matrix.detector_config }}.xml -output ${{ matrix.detector_config }}.gdml
     - uses: actions/upload-artifact@v3
       with:
         name: ${{ matrix.detector_config }}.gdml
@@ -269,7 +269,7 @@ jobs:
         network_types: "none"
         setup: install/setup.sh
         run: |
-          geoConverter -compact2tgeo --input ${DETECTOR_PATH}/${{ matrix.detector_config }}.xml --output ${{ matrix.detector_config }}.root
+          geoConverter -compact2tgeo -input ${DETECTOR_PATH}/${{ matrix.detector_config }}.xml -output ${{ matrix.detector_config }}.root
     - uses: actions/upload-artifact@v3
       with:
         name: ${{ matrix.detector_config }}.root
