@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+   <head>
+      <meta charset="utf-8">
+      <title>Read a ROOT file</title>
+      <link rel="shortcut icon" href="https://root.cern/js/latest/img/RootIcon.ico"/>
+   </head>
+   <body>
+      <div id="simpleGUI" path="./" files="arches/epic_arches.root;brycecanyon/epic_brycecanyon.root">
+         loading scripts ...
+      </div>
+      <script type="module">
+         import { buildGUI } from 'https://root.cern/js/latest/modules/gui.mjs';
+         buildGUI("simpleGUI");
+      </script>
+   </body>
+</html>
