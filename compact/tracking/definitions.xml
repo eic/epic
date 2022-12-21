@@ -147,7 +147,7 @@
       <composite name="ForwardTOF"/>
       <composite name="BackwardTOF"/>
     </detector>
-    <detector id="TrackerSubAssembly_7_ID"
+    <detector id="B0TrackerSubAssembly_ID"
       name="B0TrackerSubAssembly"
       type="DD4hep_SubdetectorAssembly"
       vis="TrackerSubAssemblyVis">
