@@ -307,9 +307,6 @@ static Ref_t create_MPGDDIRC_geo(Detector& description, xml_h e, SensitiveDetect
     layerParams.set<double>("envelope_z_min", envelope_z_min);
     layerParams.set<double>("envelope_z_max", envelope_z_max);
 
-    auto &layerParams = DD4hepDetectorHelper::ensureExtension<dd4hep::rec::VariantParameters>(
-                        lay_elt);
-
     for (xml_coll_t lmat(x_layer, _Unicode(layer_material)); lmat; ++lmat) {
       xml_comp_t x_layer_material = lmat;
       DD4hepDetectorHelper::xmlToProtoSurfaceMaterial(x_layer_material, layerParams, "layer_material");
