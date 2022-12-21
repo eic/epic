@@ -61,6 +61,15 @@
   </define>
 
   <detectors>
+    <detector
+      id="B0TrackerCompanion_ID"
+      name="B0TrackerCompanion"
+      type="epic_CompositeTracker"
+      actsType="endcap"
+      vis="TrackerSubAssemblyVis">
+      <type_flags type="DetType_TRACKER + DetType_ENDCAP"/>
+      <position x="0*cm" y="0*cm" z="-4*um" />
+    </detector>
 
     <detector
       id="B0Tracker_Station_1_ID"
