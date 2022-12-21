@@ -239,7 +239,7 @@ static Ref_t create_B0Tracker(Detector& description, xml_h e, SensitiveDetector 
           comp_elt.setPlacement(sens_pv);
           // std::cout << " adding ACTS extension" << "\n";
           auto &params = DD4hepDetectorHelper::ensureExtension<dd4hep::rec::VariantParameters>(comp_elt);
-          params.set("axis_definitions", "XZY");
+          params.set<std::string>("axis_definitions", "XZY");
           volSurfaceList(comp_elt)->push_back(volplane_surfaces[m_nam][ic]);
         }
         //} else {
