@@ -262,6 +262,11 @@ static Ref_t create_B0Tracker(Detector& description, xml_h e, SensitiveDetector 
         ++mod_num;
       }
     }
+    layer_vol->GetShape()->ComputeBBox();
+    layerParams.set<double>("envelope_r_min", 12*cm);
+    layerParams.set<double>("envelope_r_max", 36*cm);
+    layerParams.set<double>("envelope_z_min", 530*cm);
+    layerParams.set<double>("envelope_z_max", 710*cm);
   }
   Transform3D posAndRot(RotationZYX(rot.z(), rot.y(), rot.x()), Position(pos.x(), pos.y(), pos.z()));
   pv = motherVol.placeVolume(assembly, posAndRot);
