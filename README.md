@@ -3,10 +3,11 @@ Overview
 The EPIC Detector at IP6 for Electron-Ion Collider experiment.
 
 **Detector geometry viewer:**
-- [Central detector](https://eic.phy.anl.gov/geoviewer/index.htm?nobrowser&file=https://eicweb.phy.anl.gov/EIC/detectors/ecce/-/jobs/artifacts/main/raw/geo/detector_geo_central.root?job=dump_geometry&item=default;1&opt=clipx;clipy;transp30;zoom120;ROTY320;ROTZ340;trz0;trr0;ctrl;all)
-- [Full Detector (including beamline)](https://eic.phy.anl.gov/geoviewer/index.htm?nobrowser&file=https://eicweb.phy.anl.gov/EIC/detectors/ecce/-/jobs/artifacts/main/raw/geo/detector_geo_full.root?job=dump_geometry&item=default;1&opt=clipx;clipy;transp30;zoom75;ROTY290;ROTZ350;trz0;trr0;ctrl;all)
-- [Inner detector (without calorimetry)](https://eic.phy.anl.gov/geoviewer/index.htm?nobrowser&file=https://eicweb.phy.anl.gov/EIC/detectors/ecce/-/jobs/artifacts/main/raw/geo/detector_geo_inner_detector.root?job=dump_geometry&item=default;1&opt=clipx;clipy;transp30;zoom75;ROTY320;ROTZ340;trz0;trr0;ctrl;all)
-- Subsystem views:
+- [Viewer only](https://eic.github.io/epic/geoviewer.html)
+- [Arches](https://eic.github.io/epic/geoviewer.html?nobrowser&file=epic_arches.root&item=default;1&opt=clipx;clipy;transp30;zoom120;ROTY320;ROTZ340;trz0;trr0;ctrl;all)
+- [Brycecanyon](https://eic.github.io/epic/geoviewer.html?nobrowser&file=epic_brycecanyon.root&item=default;1&opt=clipx;clipy;transp30;zoom120;ROTY320;ROTZ340;trz0;trr0;ctrl;all)
+- Additional viewers:
+  - [Inner detector (without calorimetry)](https://eic.github.io/epic/geoviewer.html?nobrowser&file=epic_inner_detector.root&item=default;1&opt=clipx;clipy;transp30;zoom120;ROTY320;ROTZ340;trz0;trr0;ctrl;all)
   - [Calorimetry](https://eic.phy.anl.gov/geoviewer/index.htm?nobrowser&file=https://eicweb.phy.anl.gov/EIC/detectors/ecce/-/jobs/artifacts/main/raw/geo/detector_geo_calorimeters.root?job=dump_geometry&item=default;1&opt=clipx;clipy;transp30;zoom120;ROTY320;ROTZ340;trz0;trr0;ctrl;all)
   - [PID](https://eic.phy.anl.gov/geoviewer/index.htm?nobrowser&file=https://eicweb.phy.anl.gov/EIC/detectors/ecce/-/jobs/artifacts/main/raw/geo/detector_geo_pid_only.root?job=dump_geometry&item=default;1&opt=clipx;clipy;transp30;zoom75;ROTY320;ROTZ340;trz0;trr0;ctrl;all)
     - [dRICH](https://eic.phy.anl.gov/geoviewer/index.htm?nobrowser&file=https://eicweb.phy.anl.gov/EIC/detectors/ecce/-/jobs/artifacts/main/raw/geo/detector_geo_drich_only.root?job=dump_geometry&item=default;1&opt=clipx;clipy;transp30;zoom75;ROTY290;ROTZ350;trz0;trr0;ctrl;all)

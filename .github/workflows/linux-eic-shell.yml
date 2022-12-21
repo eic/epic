@@ -612,23 +612,31 @@ jobs:
     - uses: actions/checkout@v3
     - uses: actions/download-artifact@v3
       with:
-        name: epic_arches_view1
-        path: html/
-    - uses: actions/download-artifact@v3
-      with:
-        name: epic_arches_view2
-        path: html/
-    - uses: actions/download-artifact@v3
-      with:
-        name: epic_arches_view1
-        path: html/arches/
-    - uses: actions/download-artifact@v3
-      with:
-        name: epic_arches_view2
-        path: html/arches/
-    - uses: actions/download-artifact@v3
-      with:
         name: epic_arches.root
+        path: html/
+    - uses: actions/download-artifact@v3
+      with:
+        name: epic_brycecanyon.root
+        path: html/
+    - uses: actions/download-artifact@v3
+      with:
+        name: epic_inner_detector.root
+        path: html/
+    - uses: actions/download-artifact@v3
+      with:
+        name: epic_arches_view1
+        path: html/
+    - uses: actions/download-artifact@v3
+      with:
+        name: epic_arches_view2
+        path: html/
+    - uses: actions/download-artifact@v3
+      with:
+        name: epic_arches_view1
+        path: html/arches/
+    - uses: actions/download-artifact@v3
+      with:
+        name: epic_arches_view2
         path: html/arches/
     - uses: actions/download-artifact@v3
       with:
@@ -637,10 +645,6 @@ jobs:
     - uses: actions/download-artifact@v3
       with:
         name: epic_brycecanyon_view2
-        path: html/brycecanyon/
-    - uses: actions/download-artifact@v3
-      with:
-        name: epic_brycecanyon.root
         path: html/brycecanyon/
     - uses: actions/upload-artifact@v3
       with:
