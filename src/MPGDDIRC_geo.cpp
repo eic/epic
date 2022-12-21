@@ -306,7 +306,7 @@ static Ref_t create_MPGDDIRC_geo(Detector& description, xml_h e, SensitiveDetect
     layerParams.set<double>("envelope_r_max", envelope_r_max);
     layerParams.set<double>("envelope_z_min", envelope_z_min);
     layerParams.set<double>("envelope_z_max", envelope_z_max);
-    
+
     auto &layerParams = DD4hepDetectorHelper::ensureExtension<dd4hep::rec::VariantParameters>(
                         lay_elt);
 
