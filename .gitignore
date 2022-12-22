@@ -36,3 +36,9 @@ materials-map.cbor
 lib/
 share/
 setup.sh
+
+# jekyll
+vendor/
+.bundle
+.jekyll-cache
+_site/

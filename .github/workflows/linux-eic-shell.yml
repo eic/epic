@@ -613,48 +613,49 @@ jobs:
     - uses: actions/download-artifact@v3
       with:
         name: epic_arches.root
-        path: html/
+        path: _site/assets/geo/
     - uses: actions/download-artifact@v3
       with:
         name: epic_brycecanyon.root
-        path: html/
+        path: _site/assets/geo/
     - uses: actions/download-artifact@v3
       with:
         name: epic_inner_detector.root
-        path: html/
+        path: _site/assets/geo/
     - uses: actions/download-artifact@v3
       with:
         name: epic_arches_view1
-        path: html/
+        path: _site/assets/geo/
     - uses: actions/download-artifact@v3
       with:
         name: epic_arches_view2
-        path: html/
+        path: _site/assets/geo/
     - uses: actions/download-artifact@v3
       with:
         name: epic_arches_view1
-        path: html/arches/
+        path: _site/assets/geo/arches/
     - uses: actions/download-artifact@v3
       with:
         name: epic_arches_view2
-        path: html/arches/
+        path: _site/assets/geo/arches/
     - uses: actions/download-artifact@v3
       with:
         name: epic_brycecanyon_view1
-        path: html/brycecanyon/
+        path: _site/assets/geo/brycecanyon/
     - uses: actions/download-artifact@v3
       with:
         name: epic_brycecanyon_view2
-        path: html/brycecanyon/
+        path: _site/assets/geo/brycecanyon/
     - uses: actions/upload-artifact@v3
       with:
         name: artifacts-page
-        path: html/
+        path: _site/assets/geo/
         if-no-files-found: error
+    - uses: actions/jekyll-build-pages@v1
+      if: github.ref == 'refs/heads/main'
     - uses: actions/upload-pages-artifact@v1
       if: github.ref == 'refs/heads/main'
       with:
-        path: html/
         retention-days: 7
 
   deploy-artifacts-page:
