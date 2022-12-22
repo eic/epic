@@ -156,7 +156,7 @@
       <id>system:8,layer:4,module:12,sensor:2,x:32:-16,z:-16</id>
     </readout>
   </readouts>
-  
+
   <plugins>
     <plugin name="DD4hep_ParametersPlugin">
       <argument value="B0Tracker"/>
