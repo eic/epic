@@ -38,7 +38,10 @@ share/
 setup.sh
 
 # jekyll
+Gemfile.lock
 vendor/
 .bundle
-.jekyll-cache
+.jekyll-cache/
+.jekyll-metadata
+.sass-cache/
 _site/
