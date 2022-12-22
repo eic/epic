@@ -610,12 +610,10 @@ jobs:
     - convert-to-tgeo
     steps:
     - uses: actions/checkout@v3
-    - uses: actions/jekyll-build-pages@v1
-    - run: |
-        cp html/* _site/
     - uses: actions/download-artifact@v3
       with:
-        path: _site/assets/
+        path: artifacts/
+    - uses: actions/jekyll-build-pages@v1
     - uses: actions/upload-pages-artifact@v1
       with:
         retention-days: 7
