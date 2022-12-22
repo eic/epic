@@ -188,7 +188,7 @@ jobs:
       - list-detector-configs
     uses: ./.github/workflows/check-geometry-configs.yml
     with:
-      detector_configs: needs.list-detector-configs.outputs.configs
+      detector_configs: ${{ fromJson(needs.list-detector-configs.outputs.configs) }}
 
   check-tracking-geometry:
     runs-on: ubuntu-latest

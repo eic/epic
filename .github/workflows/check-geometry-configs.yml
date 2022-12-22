@@ -15,7 +15,7 @@ jobs:
   check-geometry-configs:
     runs-on: ubuntu-latest
     strategy:
-      matrix: ${{ fromJson(detector_configs) }}
+      matrix: detector_configs
       fail-fast: false
     steps:
     - uses: actions/checkout@v3
