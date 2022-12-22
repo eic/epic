@@ -15,7 +15,7 @@ jobs:
   check-geometry-configs:
     runs-on: ubuntu-latest
     strategy:
-      matrix: detector_configs
+      matrix: ${{fromJson(inputs.detector_configs)}}
       fail-fast: false
     steps:
     - uses: actions/checkout@v3
@@ -30,4 +30,4 @@ jobs:
         network_types: "none"
         setup: install/setup.sh
         run: |
-          checkGeometry -c ${DETECTOR_PATH}/${DETECTOR}_${{ matrix.detector_config }}.xml
+          checkGeometry -c ${DETECTOR_PATH}/${DETECTOR}_${{matrix.detector_config}}.xml
