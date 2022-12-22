@@ -3,6 +3,7 @@ pbeam: 41
 features:
   beampipe:
   tracking:
+    definitions_brycecanyon:
     vertex_barrel:
     silicon_barrel:
     mpgd_barrel:
