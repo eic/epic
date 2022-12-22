@@ -620,10 +620,6 @@ jobs:
         path: _site/assets/geo/
     - uses: actions/download-artifact@v3
       with:
-        name: epic_inner_detector.root
-        path: _site/assets/geo/
-    - uses: actions/download-artifact@v3
-      with:
         name: epic_arches_view1
         path: _site/assets/geo/
     - uses: actions/download-artifact@v3
