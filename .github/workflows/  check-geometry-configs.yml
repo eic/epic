@@ -1,0 +1,33 @@
+name: check-geometry-configs
+
+on:
+  workflow_call:
+    inputs:
+      detector_configs:
+        required: true
+        type: string
+
+concurrency:
+  group: check-geometry-configs-${{github.ref}}-${{github.event.pull_request.number || github.run_number}}
+  cancel-in-progress: true
+
+jobs:
+  check-geometry-configs:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix: ${{ fromJson(detector_configs) }}
+      fail-fast: false
+    steps:
+    - uses: actions/checkout@v3
+    - uses: actions/download-artifact@v3
+      with:
+        name: build-gcc-fast-eic-shell
+        path: install/
+    - uses: cvmfs-contrib/github-action-cvmfs@v3
+    - uses: eic/run-cvmfs-osg-eic-shell@main
+      with:
+        platform-release: "jug_xl:nightly"
+        network_types: "none"
+        setup: install/setup.sh
+        run: |
+          checkGeometry -c ${DETECTOR_PATH}/${DETECTOR}_${{ matrix.detector_config }}.xml
