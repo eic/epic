@@ -616,13 +616,7 @@ jobs:
     - uses: actions/download-artifact@v3
       with:
         path: _site/assets/
-    - uses: actions/upload-artifact@v3
-      with:
-        name: artifacts-page
-        path: _site/assets/geo/
-        if-no-files-found: error
     - uses: actions/jekyll-build-pages@v1
-    - run: ls -lR _site/
     - uses: actions/upload-pages-artifact@v1
       with:
         retention-days: 7
