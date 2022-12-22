@@ -610,47 +610,20 @@ jobs:
     - convert-to-tgeo
     steps:
     - uses: actions/checkout@v3
+    - run: |
+        mkdir -p _site/
+        cp html/* _site/
     - uses: actions/download-artifact@v3
       with:
-        name: epic_arches.root
-        path: _site/assets/geo/
-    - uses: actions/download-artifact@v3
-      with:
-        name: epic_brycecanyon.root
-        path: _site/assets/geo/
-    - uses: actions/download-artifact@v3
-      with:
-        name: epic_arches_view1
-        path: _site/assets/geo/
-    - uses: actions/download-artifact@v3
-      with:
-        name: epic_arches_view2
-        path: _site/assets/geo/
-    - uses: actions/download-artifact@v3
-      with:
-        name: epic_arches_view1
-        path: _site/assets/geo/arches/
-    - uses: actions/download-artifact@v3
-      with:
-        name: epic_arches_view2
-        path: _site/assets/geo/arches/
-    - uses: actions/download-artifact@v3
-      with:
-        name: epic_brycecanyon_view1
-        path: _site/assets/geo/brycecanyon/
-    - uses: actions/download-artifact@v3
-      with:
-        name: epic_brycecanyon_view2
-        path: _site/assets/geo/brycecanyon/
+        path: _site/assets/
     - uses: actions/upload-artifact@v3
       with:
         name: artifacts-page
         path: _site/assets/geo/
         if-no-files-found: error
     - uses: actions/jekyll-build-pages@v1
-      if: github.ref == 'refs/heads/main'
+    - run: ls -lR _site/
     - uses: actions/upload-pages-artifact@v1
-      if: github.ref == 'refs/heads/main'
       with:
         retention-days: 7
 
