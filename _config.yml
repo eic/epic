@@ -1,5 +1,16 @@
-url: https://wdconinc.github.io/
+title: EPIC
+description: DD4hep Geometry Description of the EPIC Experiment
+
+url: https://<USERNAME>.github.io
 baseurl: /epic
+
+theme: minima
+
+readme_index:
+  enabled:          true
+  remove_originals: true
+  with_frontmatter: false
+
 exclude:
   - .sass-cache/
   - .jekyll-cache/
