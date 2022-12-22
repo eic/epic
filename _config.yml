@@ -1,7 +1,7 @@
 title: EPIC
 description: DD4hep Geometry Description of the EPIC Experiment
 
-url: https://<USERNAME>.github.io
+url: https://wdconinc.github.io
 baseurl: /epic
 
 theme: minima
