@@ -28,9 +28,9 @@ The EPIC Detector at IP6 for Electron-Ion Collider experiment.
 [Detector views](https://eicweb.phy.anl.gov/EIC/detectors/ecce/-/jobs/artifacts/main/raw/doc/dawn_views.md?job=report)
 
 **Detector parameters:**
-- text: [Arches](https://https://eic.github.io/epic/artifacts/constants/epic_arches.out) [Brycecanyon](https://https://eic.github.io/epic/artifacts/constants/epic_brycecanyon.out)
-- toml: [Arches](https://https://eic.github.io/epic/artifacts/constants/epic_arches.toml) [Brycecanyon](https://https://eic.github.io/epic/artifacts/constants/epic_brycecanyon.toml)
-- csv: [Arches](https://https://eic.github.io/epic/artifacts/DetectorParameterTable/epic_arches.csv) [Brycecanyon](https://https://eic.github.io/epic/artifacts/DetectorParameterTable/epic_brycecanyon.csv)
+- text: [Arches](https://eic.github.io/epic/artifacts/constants/epic_arches.out) [Brycecanyon](https://eic.github.io/epic/artifacts/constants/epic_brycecanyon.out)
+- toml: [Arches](https://eic.github.io/epic/artifacts/constants/epic_arches.toml) [Brycecanyon](https://eic.github.io/epic/artifacts/constants/epic_brycecanyon.toml)
+- csv: [Arches](https://eic.github.io/epic/artifacts/DetectorParameterTable/epic_arches.csv) [Brycecanyon](https://eic.github.io/epic/artifacts/DetectorParameterTable/epic_brycecanyon.csv)
 
 
 Getting Started
