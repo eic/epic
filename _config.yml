@@ -12,6 +12,11 @@ readme_index:
   with_frontmatter: false
 
 exclude:
+  - bin/
+  - lib/
+  - share/
+  - install/
+  - artifacts/*.prim
   - artifacts/build*/
   - .sass-cache/
   - .jekyll-cache/
