@@ -260,7 +260,7 @@ static Ref_t create_B0Tracker(Detector& description, xml_h e, SensitiveDetector 
     layer_vol->GetShape()->ComputeBBox();
     layerParams.set<double>("envelope_r_min", layer_rmin);
     layerParams.set<double>("envelope_r_max", layer_rmax);
-    
+
     for (xml_coll_t lmat(x_layer, _Unicode(layer_material)); lmat; ++lmat) {
       xml_comp_t x_layer_material = lmat;
       DD4hepDetectorHelper::xmlToProtoSurfaceMaterial(x_layer_material, layerParams, "layer_material");
