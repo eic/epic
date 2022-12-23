@@ -170,6 +170,8 @@ static Ref_t create_B0Tracker(Detector& description, xml_h e, SensitiveDetector 
     std::string layer_vis = l_env.attr<std::string>(_Unicode(vis));
     double      layer_rmin_tolerance   = l_env.attr<double>(_Unicode(rmin_tolerance));
     double      layer_rmax_tolerance  = l_env.attr<double>(_Unicode(rmax_tolerance));
+    double      layer_rmin_tolerance   = l_env.attr<double>(_Unicode(zmin_tolerance));
+    double      layer_rmax_tolerance  = l_env.attr<double>(_Unicode(zmax_tolerance));
     double layer_length   = l_env.attr<double>(_Unicode(length));
     double layer_zstart   = l_env.attr<double>(_Unicode(zstart));
     double layer_center_z = layer_zstart + layer_length / 2.0;
@@ -260,6 +262,8 @@ static Ref_t create_B0Tracker(Detector& description, xml_h e, SensitiveDetector 
     layer_vol->GetShape()->ComputeBBox();
     layerParams.set<double>("envelope_r_min", layer_rmin_tolerance);
     layerParams.set<double>("envelope_r_max", layer_rmax_tolerance);
+    layerParams.set<double>("envelope_z_min", layer_zmin_tolerance);
+    layerParams.set<double>("envelope_z_max", layer_zmax_tolerance);
 
     for (xml_coll_t lmat(x_layer, _Unicode(layer_material)); lmat; ++lmat) {
       xml_comp_t x_layer_material = lmat;
