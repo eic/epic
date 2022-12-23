@@ -6,10 +6,25 @@ baseurl: /epic
 
 theme: minima
 
+plugins:
+- jekyll-titles-from-headings
+
 readme_index:
   enabled:          true
   remove_originals: true
   with_frontmatter: false
+
+titles_from_headings:
+  enabled:     true
+  strip_title: true
+  collections: true
+
+header_pages:
+  - README.md
+  - reports/artifacts.md
+  - reports/geoviewer.md
+  - reports/arches_views.md
+  - reports/brycecanyon_views.md
 
 exclude:
   - bin/
