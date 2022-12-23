@@ -17,7 +17,7 @@ exclude:
   - share/
   - install/
   - artifacts/*.prim
-  - artifacts/build*/
+  - artifacts/build**/
   - .sass-cache/
   - .jekyll-cache/
   - gemfiles/
