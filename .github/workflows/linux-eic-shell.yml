@@ -226,10 +226,11 @@ jobs:
 
   convert-to-gdml:
     runs-on: ubuntu-latest
-    needs: build-gcc
+    needs:
+      - build-gcc
+      - list-detector-configs
     strategy:
-      matrix:
-        detector_config: [epic_arches, epic_brycecanyon]
+      matrix: ${{ fromJson(needs.list-detector-configs.outputs.configs) }}
     steps:
     - uses: actions/checkout@v3
     - uses: actions/download-artifact@v3
@@ -246,16 +247,17 @@ jobs:
           geoConverter -compact2gdml -input ${DETECTOR_PATH}/${{ matrix.detector_config }}.xml -output ${{ matrix.detector_config }}.gdml
     - uses: actions/upload-artifact@v3
       with:
-        name: ${{ matrix.detector_config }}.gdml
+        name: gdml
         path: ${{ matrix.detector_config }}.gdml
         if-no-files-found: error
 
   convert-to-tgeo:
     runs-on: ubuntu-latest
-    needs: build-gcc
+    needs:
+      - build-gcc
+      - list-detector-configs
     strategy:
-      matrix:
-        detector_config: [epic_arches, epic_brycecanyon]
+      matrix: ${{ fromJson(needs.list-detector-configs.outputs.configs) }}
     steps:
     - uses: actions/checkout@v3
     - uses: actions/download-artifact@v3
@@ -272,7 +274,7 @@ jobs:
           geoConverter -compact2tgeo -input ${DETECTOR_PATH}/${{ matrix.detector_config }}.xml -output ${{ matrix.detector_config }}.root
     - uses: actions/upload-artifact@v3
       with:
-        name: ${{ matrix.detector_config }}.root
+        name: tgeo
         path: ${{ matrix.detector_config }}.root
         if-no-files-found: error
 
@@ -411,7 +413,9 @@ jobs:
 
   check-overlap-geant4:
     runs-on: ubuntu-latest
-    needs: build-gcc
+    needs:
+      - build-gcc
+      - list-detector-configs
     strategy:
       matrix:
         detector_config: [epic_arches, epic_brycecanyon, epic_arches_no_barrel_hcal, epic_brycecanyon_no_barrel_hcal] # FIXME
@@ -568,7 +572,7 @@ jobs:
           bin/make_dawn_views -i prim/${{ matrix.detector_config }}.prim -t ${{ matrix.view }} -d scripts/${{ matrix.view }} -D
     - uses: actions/upload-artifact@v3
       with:
-        name: ${{ matrix.detector_config }}_${{ matrix.view }}
+        name: ${{ matrix.detector_config }}_views
         path: images/
         if-no-files-found: error
 
@@ -597,7 +601,7 @@ jobs:
           bin/make_dawn_views -i prim/${{ matrix.detector_config }}.prim -t ${{ matrix.view }} -d scripts/${{ matrix.view }} -D -- ${{ matrix.slice }}
     - uses: actions/upload-artifact@v3
       with:
-        name: ${{ matrix.detector_config }}_${{ matrix.view }}
+        name: ${{ matrix.detector_config }}_views
         path: images/
         if-no-files-found: error
 
