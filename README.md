@@ -1,6 +1,5 @@
 Overview
 --------
-The EPIC Detector at IP6 for Electron-Ion Collider experiment.
 
 **Detector geometry viewer:**
 - [Viewer only](https://eic.github.io/epic/geoviewer)
@@ -22,10 +21,6 @@ The EPIC Detector at IP6 for Electron-Ion Collider experiment.
   - [Beamline](https://eic.github.io/epic/geoviewer?nobrowser&file=artifacts/tgeo/ip6.root&item=default;1&opt=clipx;clipy;transp30;zoom40;ROTY290;ROTZ350;trz0;trr0;ctrl;all)
 
 [<img title="arches" src="https://eic.github.io/epic/artifacts/epic_arches_views/view1_top.png" width="49%">](https://eic.github.io/epic/artifacts/epic_arches_views/view1_top.pdf) [<img title="brycecanyon" src="https://eic.github.io/epic/artifacts/epic_brycecanyon_views/view1_top.png" width="49%">](https://eic.github.io/epic/artifacts/epic_brycecanyon_views/view1_top.pdf)
-
-[Browse latest](https://eicweb.phy.anl.gov/EIC/detectors/ecce/-/jobs/artifacts/main/browse/images?job=report)
-
-[Detector views](https://eicweb.phy.anl.gov/EIC/detectors/ecce/-/jobs/artifacts/main/raw/doc/dawn_views.md?job=report)
 
 **Detector parameters:**
 - text: [Arches](https://eic.github.io/epic/artifacts/constants/epic_arches.out) [Brycecanyon](https://eic.github.io/epic/artifacts/constants/epic_brycecanyon.out)
