@@ -168,8 +168,8 @@ static Ref_t create_B0Tracker(Detector& description, xml_h e, SensitiveDetector 
     string     layer_name = det_name + std::string("_layer") + std::to_string(l_id);
 
     std::string layer_vis = l_env.attr<std::string>(_Unicode(vis));
-    // double      layer_rmin   = l_env.attr<double>(_Unicode(rmin));
-    // double      layer_rmax   = l_env.attr<double>(_Unicode(rmax));
+    double      layer_rmin   = l_env.attr<double>(_Unicode(rmin));
+    double      layer_rmax   = l_env.attr<double>(_Unicode(rmax));
     double layer_length   = l_env.attr<double>(_Unicode(length));
     double layer_zstart   = l_env.attr<double>(_Unicode(zstart));
     double layer_center_z = layer_zstart + layer_length / 2.0;
@@ -202,11 +202,6 @@ static Ref_t create_B0Tracker(Detector& description, xml_h e, SensitiveDetector 
     auto &layerParams =
         DD4hepDetectorHelper::ensureExtension<dd4hep::rec::VariantParameters>(
             layer_element);
-
-    for (xml_coll_t lmat(x_layer, _Unicode(layer_material)); lmat; ++lmat) {
-      xml_comp_t x_layer_material = lmat;
-      DD4hepDetectorHelper::xmlToProtoSurfaceMaterial(x_layer_material, layerParams, "layer_material");
-    }
 
     for (xml_coll_t ri(x_layer, _U(ring)); ri; ++ri) {
       xml_comp_t  x_ring   = ri;
@@ -263,10 +258,13 @@ static Ref_t create_B0Tracker(Detector& description, xml_h e, SensitiveDetector 
       }
     }
     layer_vol->GetShape()->ComputeBBox();
-    layerParams.set<double>("envelope_r_min", 12*cm);
-    layerParams.set<double>("envelope_r_max", 36*cm);
-    layerParams.set<double>("envelope_z_min", 530*cm);
-    layerParams.set<double>("envelope_z_max", 710*cm);
+    layerParams.set<double>("envelope_r_min", layer_rmin);
+    layerParams.set<double>("envelope_r_max", layer_rmax);
+    
+    for (xml_coll_t lmat(x_layer, _Unicode(layer_material)); lmat; ++lmat) {
+      xml_comp_t x_layer_material = lmat;
+      DD4hepDetectorHelper::xmlToProtoSurfaceMaterial(x_layer_material, layerParams, "layer_material");
+    }
   }
   Transform3D posAndRot(RotationZYX(rot.z(), rot.y(), rot.x()), Position(pos.x(), pos.y(), pos.z()));
   pv = motherVol.placeVolume(assembly, posAndRot);
