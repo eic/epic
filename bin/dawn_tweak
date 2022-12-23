@@ -11,8 +11,8 @@ function print_the_help {
   echo "            --theta    viewing angle"
   echo "            --phi      viewing angle"
   echo "            -x         targeted x coordinate position"
-  echo "            -y         targeted x coordinate position"
-  echo "            -z         targeted x coordinate position"
+  echo "            -y         targeted y coordinate position"
+  echo "            -z         targeted z coordinate position"
   echo "            --mag      magnification"
   echo "            --draw     draw style "
   echo "            -d,--dawn-dir <dawn_run_dir>  Directory with the .DAWN files and a generate script "
@@ -100,14 +100,14 @@ do
       shift # past value
       ;;
     --light-phi)
-      echo "updating drawing to ${2}"
+      echo "updating light phi to ${2}"
       sed -i '18d' ${DAWN_RUN_DIR}/${OUT_FILE}
       sed -i '18i'${2} ${DAWN_RUN_DIR}/${OUT_FILE}
       shift # past argument
       shift # past value
       ;;
     --light-theta)
-      echo "updating drawing to ${2}"
+      echo "updating light theta to ${2}"
       sed -i '19d' ${DAWN_RUN_DIR}/${OUT_FILE}
       sed -i '19i'${2} ${DAWN_RUN_DIR}/${OUT_FILE}
       shift # past argument
