@@ -12,6 +12,7 @@ readme_index:
   with_frontmatter: false
 
 exclude:
+  - artifacts/build*/
   - .sass-cache/
   - .jekyll-cache/
   - gemfiles/
