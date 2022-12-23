@@ -17,7 +17,10 @@ exclude:
   - share/
   - install/
   - artifacts/*.prim
-  - artifacts/build**/
+  - artifacts/build-gcc-full-eic-shell/
+  - artifacts/build-gcc-fast-eic-shell/
+  - artifacts/build-clang-full-eic-shell/
+  - artifacts/build-clang-fast-eic-shell/
   - .sass-cache/
   - .jekyll-cache/
   - gemfiles/
