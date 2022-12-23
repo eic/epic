@@ -111,7 +111,7 @@
         <module_component thickness="0.3*mm" material="SiliconOxide" vis="FFTrackerSurfaceVis" sensitive="true"/>
       </module>
       <layer id="1">
-        <envelope  vis="FFTrackerLayerVis" rmin_tolerance="12*cm" rmax_tolerance="36*cm"
+        <envelope  vis="FFTrackerLayerVis" rmin_tolerance="28*cm" rmax_tolerance="36*cm"
                    zmin_tolerance="B0TrackerLayer1_zstart-1*cm" zmax_tolerance="B0TrackerLayer1_zstart-1*cm" length="1.0*cm"
                    zstart="B0TrackerLayer1_zstart" />
         <ring phi0="B0TrackerLayerBigMod_phi0" dphi="B0TrackerModOpeningAngle"
@@ -123,7 +123,7 @@
         <layer_material surface="inner" binning="binPhi,binR" bins0="20*(B0TrackerLayerSmallMod_nModules)" bins1="256"/>
       </layer>
       <layer id="2" >
-        <envelope vis="FFTrackerLayerVis" rmin_tolerance="12*cm" rmax_tolerance="36*cm"
+        <envelope vis="FFTrackerLayerVis" rmin_tolerance="28*cm" rmax_tolerance="36*cm"
                   zmin_tolerance="B0TrackerLayer2_zstart-1*cm" zmax_tolerance="B0TrackerLayer2_zstart-1*cm" length="1.0*cm"
                   zstart="B0TrackerLayer2_zstart" />
         <ring phi0="B0TrackerLayerBigMod_phi0" dphi="B0TrackerModOpeningAngle"
@@ -135,7 +135,7 @@
         <layer_material surface="inner" binning="binPhi,binR" bins0="20*(B0TrackerLayerSmallMod_nModules)" bins1="256"/>
       </layer>
       <layer id="3" >
-        <envelope vis="FFTrackerLayerVis" rmin_tolerance="12*cm" rmax_tolerance="36*cm"
+        <envelope vis="FFTrackerLayerVis" rmin_tolerance="28*cm" rmax_tolerance="36*cm"
                   zmin_tolerance="B0TrackerLayer3_zstart-1*cm" zmax_tolerance="B0TrackerLayer3_zstart-1*cm" length="1.0*cm"
                   zstart="B0TrackerLayer3_zstart" />
         <ring phi0="B0TrackerLayerBigMod_phi0" dphi="B0TrackerModOpeningAngle"
@@ -147,7 +147,7 @@
         <layer_material surface="inner" binning="binPhi,binR" bins0="20*(B0TrackerLayerSmallMod_nModules)" bins1="256"/>
       </layer>
       <layer id="4" >
-        <envelope vis="FFTrackerLayerVis" rmin_tolerance="12*cm" rmax_tolerance="36*cm"
+        <envelope vis="FFTrackerLayerVis" rmin_tolerance="28*cm" rmax_tolerance="36*cm"
                   zmin_tolerance="B0TrackerLayer4_zstart-1*cm" zmax_tolerance="B0TrackerLayer4_zstart+1*cm" length="1.0*cm"
                   zstart="B0TrackerLayer4_zstart" />
         <ring phi0="B0TrackerLayerBigMod_phi0" dphi="B0TrackerModOpeningAngle"
