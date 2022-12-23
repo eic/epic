@@ -281,6 +281,9 @@ jobs:
   dump-constants:
     runs-on: ubuntu-latest
     needs: build-gcc
+    strategy:
+      matrix:
+        detector_config: [epic_arches, epic_brycecanyon]
     steps:
     - uses: actions/checkout@v3
     - uses: actions/download-artifact@v3
@@ -295,16 +298,19 @@ jobs:
         setup: install/setup.sh
         run: |
           mkdir -p doc
-          npdet_info dump ${DETECTOR_PATH}/epic.xml | tee doc/constants.out
+          npdet_info dump ${DETECTOR_PATH}/${{matrix.detector_config}}.xml | tee doc/${{matrix.detector_config}}_constants.out
     - uses: actions/upload-artifact@v3
       with:
-        name: constants.out
-        path: doc/constants.out
+        name: constants
+        path: doc/${{matrix.detector_config}}_constants.out
         if-no-files-found: error
 
   dump-parameter-table:
     runs-on: ubuntu-latest
     needs: build-gcc
+    strategy:
+      matrix:
+        detector_config: [epic_arches, epic_brycecanyon]
     steps:
     - uses: actions/checkout@v3
     - uses: actions/download-artifact@v3
@@ -319,17 +325,17 @@ jobs:
         setup: install/setup.sh
         run: |
           mkdir -p doc
-          npdet_info dump ${DETECTOR_PATH}/epic.xml | grep -v '^\s' | grep '=' | cut -d= -f1-2 | tee doc/constants.toml
-          python bin/make_detector_parameter_table | tee doc/DetectorParameterTable.csv
+          npdet_info dump ${DETECTOR_PATH}/epic.xml | grep -v '^\s' | grep '=' | cut -d= -f1-2 | tee doc/${{matrix.detector_config}}_constants.toml
+          python bin/make_detector_parameter_table | tee doc/${{matrix.detector_config}}.csv
     - uses: actions/upload-artifact@v3
       with:
-        name: constants.toml
-        path: doc/constants.toml
+        name: constants
+        path: doc/${{matrix.detector_config}}_constants.toml
         if-no-files-found: error
     - uses: actions/upload-artifact@v3
       with:
-        name: DetectorParameterTable.csv
-        path: doc/DetectorParameterTable.csv
+        name: DetectorParameterTable
+        path: doc/${{matrix.detector_config}}.csv
         if-no-files-found: error
 
   check-overlap-tgeo:
