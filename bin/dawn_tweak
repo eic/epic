@@ -8,12 +8,12 @@ OUT_FILE=".DAWN_1.history"
 function print_the_help {
   echo "USAGE: ${0} [-s <skip_events>] -d <dawn_run_dir> "
   echo "  OPTIONS: "
+  echo "            --theta    viewing angle"
+  echo "            --phi      viewing angle"
   echo "            -x         targeted x coordinate position"
   echo "            -y         targeted x coordinate position"
   echo "            -z         targeted x coordinate position"
-  echo "            --theta    viewing angle"
-  echo "            --phi      viewing angle"
-  echo "            -m,--mag   magnification"
+  echo "            --mag      magnification"
   echo "            --draw     draw style "
   echo "            -d,--dawn-dir <dawn_run_dir>  Directory with the .DAWN files and a generate script "
   exit
@@ -50,6 +50,20 @@ do
       shift # past argument
       print_the_help
       ;;
+    --theta)
+      echo "updating theta angle to ${2}"
+      sed -i '3d' ${DAWN_RUN_DIR}/${OUT_FILE}
+      sed -i '3i'${2} ${DAWN_RUN_DIR}/${OUT_FILE}
+      shift # past argument
+      shift # past value
+      ;;
+    --phi)
+      echo "updating phi angle to ${2}"
+      sed -i '2d' ${DAWN_RUN_DIR}/${OUT_FILE}
+      sed -i '2i'${2} ${DAWN_RUN_DIR}/${OUT_FILE}
+      shift # past argument
+      shift # past value
+      ;;
     -x)
       echo "updating x coordinate to ${2}"
       sed -i '5d' ${DAWN_RUN_DIR}/${OUT_FILE}
@@ -71,20 +85,6 @@ do
       shift # past argument
       shift # past value
       ;;
-    --theta)
-      echo "updating theta angle to ${2}"
-      sed -i '3d' ${DAWN_RUN_DIR}/${OUT_FILE}
-      sed -i '3i'${2} ${DAWN_RUN_DIR}/${OUT_FILE}
-      shift # past argument
-      shift # past value
-      ;;
-    --phi)
-      echo "updating phi angle to ${2}"
-      sed -i '2d' ${DAWN_RUN_DIR}/${OUT_FILE}
-      sed -i '2i'${2} ${DAWN_RUN_DIR}/${OUT_FILE}
-      shift # past argument
-      shift # past value
-      ;;
     --mag)
       echo "updating magnification to ${2}"
       sed -i '8d' ${DAWN_RUN_DIR}/${OUT_FILE}
@@ -99,17 +99,17 @@ do
       shift # past argument
       shift # past value
       ;;
-    --light-theta)
-      echo "updating drawing to ${2}"
-      sed -i '19d' ${DAWN_RUN_DIR}/${OUT_FILE}
-      sed -i '19i'${2} ${DAWN_RUN_DIR}/${OUT_FILE}
-      shift # past argument
-      shift # past value
-      ;;
     --light-phi)
       echo "updating drawing to ${2}"
       sed -i '18d' ${DAWN_RUN_DIR}/${OUT_FILE}
       sed -i '18i'${2} ${DAWN_RUN_DIR}/${OUT_FILE}
+      shift # past argument
+      shift # past value
+      ;;
+    --light-theta)
+      echo "updating drawing to ${2}"
+      sed -i '19d' ${DAWN_RUN_DIR}/${OUT_FILE}
+      sed -i '19i'${2} ${DAWN_RUN_DIR}/${OUT_FILE}
       shift # past argument
       shift # past value
       ;;
