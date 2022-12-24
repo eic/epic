@@ -325,7 +325,7 @@ jobs:
         setup: install/setup.sh
         run: |
           mkdir -p doc
-          npdet_info dump ${DETECTOR_PATH}/epic.xml | grep -v '^\s' | grep '=' | cut -d= -f1-2 | tee doc/${{matrix.detector_config}}_constants.toml
+          npdet_info dump ${DETECTOR_PATH}/${{matrix.detector_config}}.xml | grep -v '^\s' | grep '=' | cut -d= -f1-2 | tee doc/${{matrix.detector_config}}_constants.toml
           cp doc/${{matrix.detector_config}}_constants.toml doc/constants.toml
           python bin/make_detector_parameter_table | tee doc/${{matrix.detector_config}}.csv
     - uses: actions/upload-artifact@v3
