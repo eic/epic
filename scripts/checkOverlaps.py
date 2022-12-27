@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# SDX-License-Identifier: LGPL-3.0-or-later
+# SPDX-License-Identifier: LGPL-3.0-or-later
 # Copyright (C) 2022 Wouter Deconinck
 
 from __future__ import absolute_import, unicode_literals
