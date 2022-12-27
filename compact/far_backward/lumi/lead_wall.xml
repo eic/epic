@@ -1,0 +1,27 @@
+<!-- SPDX-License-Identifier: LGPL-3.0-or-later -->
+<!-- Copyright (C) 2023 Dhevan Gangadharan -->
+
+<lccdd>
+
+  <comment>
+  Lead wall to block secondaries produced upstream of lumi detectors.
+  Cutout in center for photon beam clearance.
+  </comment>
+
+  <detectors>
+    <detector 
+      name="LumiLeadWall_1"
+      type="LumiLeadWall"
+      vis="AnlGray">
+      <dimensions_outer x="LumiWall_DX/2." y="LumiWall_DY/2." z="LumiWall_DZ/2."/>
+      <dimensions_inner
+        x="LumiBeamDiv_pref * (fabs(LumiWall_Z) + LumiWall_DZ/2.)"
+        y="LumiBeamDiv_pref * (fabs(LumiWall_Z) + LumiWall_DZ/2.)"
+        z="LumiWall_DZ/2."/>
+      <position   x="0" y="0" z="LumiWall_Z"/>
+      <rotation   x="0*rad" y="0*rad" z="0*rad"/>
+    </detector>
+  </detectors>
+
+</lccdd>
+

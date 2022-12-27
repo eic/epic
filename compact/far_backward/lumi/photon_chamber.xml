@@ -1,0 +1,35 @@
+<!-- SPDX-License-Identifier: LGPL-3.0-or-later -->
+<!-- Copyright (C) 2023 Dhevan Gangadharan -->
+
+<lccdd>
+
+  <comment>
+    Chamber that encapsulates the lumi photons.  
+    For impact studies of air along photon's path to lumi detectors. 
+    dx and dy dimensions (half widths) claculated as 5*sigma of max electron beam divergence.
+  </comment>
+
+  <define>
+  </define>
+
+  <detectors>
+    <detector
+      name="LumiPhotonChamber1"
+      type="LumiPhotonChamber"
+      material="Vacuum"
+      vis="AnlLightGray">
+      <position z1="LumiChamber1_Z1" z2="LumiChamber1_Z2"/>
+      <dimensions dx1="LumiBeamDiv_pref * fabs(LumiChamber1_Z1)" dx2="LumiBeamDiv_pref * fabs(LumiChamber1_Z2)" dy1="LumiBeamDiv_pref * fabs(LumiChamber1_Z1)" dy2="LumiBeamDiv_pref * fabs(LumiChamber1_Z2)"/>
+    </detector>
+
+    <detector
+      name="LumiPhotonChamber2"
+      type="LumiPhotonChamber"
+      material="Vacuum"
+      vis="AnlLightGray">
+      <position z1="LumiChamber2_Z1" z2="LumiChamber2_Z2"/>
+      <dimensions dx1="LumiBeamDiv_pref * fabs(LumiChamber2_Z1)" dx2="LumiBeamDiv_pref * fabs(LumiChamber2_Z2)" dy1="LumiBeamDiv_pref * fabs(LumiChamber2_Z1)" dy2="LumiBeamDiv_pref * fabs(LumiChamber2_Z2)"/>
+    </detector>
+  </detectors>
+
+</lccdd>

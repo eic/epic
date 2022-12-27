@@ -1,39 +1,65 @@
 <!-- SPDX-License-Identifier: LGPL-3.0-or-later -->
-<!-- Copyright (C) 2022 Dhevan Gangadharan -->
+<!-- Copyright (C) 2022 Dhevan Gangadharan, Aranya Giri -->
 
 <lccdd>
 
   <define>
-    <constant name="Offset_Pos_Z" value="0.01*cm"/>
-    <constant name="LumiSpecTracker2_Size_XY" value="LumiSpecCAL_DXY"/>
-    <constant name="LumiSpecTracker2_Pos_Y" value="LumiSpecCAL_Y"/>
-    <constant name="LumiSpecTracker2_Pos_Z" value="LumiSpecCAL_Z + (LumiSpecCALTower_DZ/2.0) + (LumiSpecTracker_DZ/2.0)"/>
-    <constant name="LumiSpecTracker1_Size_XY" value="LumiSpecTracker2_Size_XY/2.0"/>
-    <constant name="LumiSpecTracker1_Pos_Y" value="LumiSpecCAL_Y/2.0"/>
-    <constant name="DistSpecMag2_SpecCAL" value="( (LumiSpecMag_Z - LumiSpecMag_DZ/2.0) - (LumiSpecCAL_Z + (LumiSpecCALTower_DZ/2.0) ) ) "/>
-    <constant name="LumiSpecTracker1_Pos_Z" value=" LumiSpecCAL_Z + (DistSpecMag2_SpecCAL/2.0)"/>
+
+    <constant name="Pos_Y1"     value="LumiSpecTracker_Y1"/>
+    <constant name="Pos_Z1"     value="LumiSpecTracker_Z1"/>
+    <constant name="Size_XY1"   value="LumiSpecTracker_DXY"/>
+    
+    <constant name="Pos_Y2"     value="LumiSpecTracker_Y2"/>
+    <constant name="Pos_Z2"     value="LumiSpecTracker_Z2"/>
+    <constant name="Size_XY2"   value="LumiSpecTracker_DXY"/>
+    
+    <constant name="Pos_Y3"     value="LumiSpecTracker_Y3"/>
+    <constant name="Pos_Z3"     value="LumiSpecTracker_Z3"/>
+    <constant name="Size_XY3"   value="LumiSpecTracker_DXY"/>
+
   </define>
 
+
   <detectors>
-    <detector id="LumiSpecTracker_ID" name="LumiSpecTracker" type="LumiSpecTracker" readout="LumiSpecTrackerHits" vis="TrackerVis">
+    <detector 
+    id="LumiSpecTracker_ID"
+    name="LumiSpecTracker"
+    type="LumiSpecTracker"
+    readout="LumiSpecTrackerHits"
+    vis="TrackerVis"
+    visCu="TrackerServiceVis"
+    materialSi="SiliconOxide"
+    materialCu="Copper"
+    thicknessSi="LumiSpecTracker_Si_DZ/2.0"
+    thicknessCu="LumiSpecTracker_Cu_DZ/2.0">
       <module id="0">
-        <sector id="0">
-          <position x="0.0" y="LumiSpecTracker1_Pos_Y" z="LumiSpecTracker1_Pos_Z"/>
-          <dimensions x="LumiSpecTracker1_Size_XY/2.0" y="LumiSpecTracker1_Size_XY/2.0" z="LumiSpecTracker_DZ/2.0"/>
+        <sector id="0" name="Top1">
+          <position   x="0" y="Pos_Y1" z="Pos_Z1"/>
+          <dimensions x="Size_XY1/2.0" y="Size_XY1/2.0"/>
         </sector>
-        <sector id="1">
-          <position x="0.0" y="-1*LumiSpecTracker1_Pos_Y" z="LumiSpecTracker1_Pos_Z"/>
-          <dimensions x="LumiSpecTracker1_Size_XY/2.0" y="LumiSpecTracker1_Size_XY/2.0" z="LumiSpecTracker_DZ/2.0"/>
+        <sector id="1" name="Bottom1">
+          <position   x="0" y="-1*Pos_Y1" z="Pos_Z1"/>
+          <dimensions x="Size_XY1/2.0" y="Size_XY1/2.0"/>
         </sector>
       </module>
       <module id="1">
-        <sector id="0">
-          <position x="0.0" y="LumiSpecTracker2_Pos_Y" z="LumiSpecTracker2_Pos_Z + Offset_Pos_Z"/>
-          <dimensions x="LumiSpecTracker2_Size_XY/2.0" y="LumiSpecTracker2_Size_XY/2.0" z="LumiSpecTracker_DZ/2.0"/>
+        <sector id="0" name="Top2">
+          <position   x="0" y="Pos_Y2" z="Pos_Z2"/>
+          <dimensions x="Size_XY2/2.0" y="Size_XY2/2.0"/>
         </sector>
-        <sector id="1">
-          <position x="0.0" y="-1*LumiSpecTracker2_Pos_Y" z="LumiSpecTracker2_Pos_Z + Offset_Pos_Z"/>
-          <dimensions x="LumiSpecTracker2_Size_XY/2.0" y="LumiSpecTracker2_Size_XY/2.0" z="LumiSpecTracker_DZ/2.0"/>
+        <sector id="1" name="Bottom2">
+          <position   x="0" y="-1*Pos_Y2" z="Pos_Z2"/>
+          <dimensions x="Size_XY2/2.0" y="Size_XY2/2.0"/>
+        </sector>
+      </module>
+      <module id="2">
+        <sector id="0" name="Top3">
+          <position   x="0" y="Pos_Y3" z="Pos_Z3"/>
+          <dimensions x="Size_XY3/2.0" y="Size_XY3/2.0"/>
+        </sector>
+        <sector id="1" name="Bottom3">
+          <position   x="0" y="-1*Pos_Y3" z="Pos_Z3"/>
+          <dimensions x="Size_XY3/2.0" y="Size_XY3/2.0"/>
         </sector>
       </module>
     </detector>
