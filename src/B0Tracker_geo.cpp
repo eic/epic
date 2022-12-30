@@ -29,14 +29,11 @@ static Ref_t create_B0Tracker(Detector& description, xml_h e, SensitiveDetector 
   Material                     vacuum   = description.vacuum();
   int                          det_id   = x_det.id();
   string                       det_name = x_det.nameStr();
-  // bool                         reflect  = false;
   DetElement     sdet(det_name, det_id);
   Assembly       assembly(det_name);
   xml::Component pos = x_det.position();
   xml::Component rot = x_det.rotation();
 
-  // Material  air  = description.material("Air");
-  //  Volume      assembly    (det_name,Box(10000,10000,10000),vacuum);
   Volume       motherVol = description.pickMotherVolume(sdet);
   int          m_id = 0, c_id = 0, n_sensor = 0;
   PlacedVolume pv;
@@ -58,7 +55,8 @@ static Ref_t create_B0Tracker(Detector& description, xml_h e, SensitiveDetector 
                                          "boundary_material");
   }
 
-  // assembly.setVisAttributes(description.invisible());
+  assembly.setVisAttributes(description.invisible());
+  sens.setType("tracker");
 
   for (xml_coll_t mi(x_det, _U(module)); mi; ++mi, ++m_id) {
     xml_comp_t x_mod = mi;
@@ -127,7 +125,6 @@ static Ref_t create_B0Tracker(Detector& description, xml_h e, SensitiveDetector 
         // std::cout << " adding sensitive volume" << c_name << "\n";
         sdet.check(n_sensor > 2, "SiTrackerEndcap2::fromCompact: " + c_name + " Max of 2 modules allowed!");
         pv.addPhysVolID("sensor", n_sensor);
-        sens.setType("tracker");
         c_vol.setSensitiveDetector(sens);
         sensitives[m_nam].push_back(pv);
         ++n_sensor;
@@ -180,24 +177,10 @@ static Ref_t create_B0Tracker(Detector& description, xml_h e, SensitiveDetector 
     // layer_length/dd4hep::mm << " mm thick )\n";
 
     Assembly layer_vol(layer_name);
-    // assembly.placeVolume(layer_assembly);
-    // Tube       layer_tub(layer_rmin, layer_rmax, layer_length / 2);
-    // Volume     layer_vol(layer_name, layer_tub, air); // Create the layer envelope volume.
-    // layer_vol.setVisAttributes(description.visAttributes(layer_vis));
-    // layer_vol.setVisAttributes(description.visAttributes(x_layer.visStr()));
-
     PlacedVolume layer_pv;
-    // if (reflect) {
-    //   layer_pv =
-    //       assembly.placeVolume(layer_vol, Transform3D(RotationZYX(0.0, -M_PI, 0.0), Position(0, 0,
-    //       -layer_center_z)));
-    //   layer_pv.addPhysVolID("barrel", 3).addPhysVolID("layer", l_id);
-    //   layer_name += "_N";
-    // } else {
     layer_pv = assembly.placeVolume(layer_vol, Position(0, 0, layer_center_z));
     layer_pv.addPhysVolID("layer", l_id);
     layer_name += "_P";
-    //}
     DetElement layer_element(sdet, layer_name, l_id);
     layer_element.setPlacement(layer_pv);
 
@@ -239,21 +222,6 @@ static Ref_t create_B0Tracker(Detector& description, xml_h e, SensitiveDetector 
           params.set<std::string>("axis_definitions", "XZY");
           volSurfaceList(comp_elt)->push_back(volplane_surfaces[m_nam][ic]);
         }
-        //} else {
-        //  pv = layer_vol.placeVolume(
-        //      m_vol, Transform3D(RotationZYX(0, -M_PI / 2 - phi, -M_PI / 2), Position(x, y, -zstart - dz)));
-        //  pv.addPhysVolID("layer", l_id).addPhysVolID("module", mod_num);
-        //  DetElement r_module(layer_element, m_base + "_neg", det_id);
-        //  r_module.setPlacement(pv);
-        //  for (size_t ic = 0; ic < sensVols.size(); ++ic) {
-        //    PlacedVolume sens_pv = sensVols[ic];
-        //    DetElement   comp_elt(r_module, sens_pv.volume().name(), mod_num);
-        //    comp_elt.setPlacement(sens_pv);
-        ////std::cout << " adding ACTS extension" << "\n";
-        //    Acts::ActsExtension* moduleExtension = new Acts::ActsExtension("XZY");
-        //    comp_elt.addExtension<Acts::ActsExtension>(moduleExtension);
-        //  }
-        //}
         dz = -dz;
         phi += dphi;
         ++mod_num;
