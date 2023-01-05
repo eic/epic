@@ -287,7 +287,7 @@
 
     <!-- Lumi photon chamber -->
     <constant name="LumiChamber_gas"      value="Vacuum" type="string"/>
-    <constant name="LumiChamber1_Z1"      value="LumiWin_Z - LumiWin_thickness/2."/>
+    <constant name="LumiChamber1_Z1"      value="LumiSweepMag_Z + LumiSweepMag_DZ/2.0"/>
     <constant name="LumiChamber1_Z2"      value="LumiConverter_Z + LumiConverter_DZ/2."/>
     <constant name="LumiChamber2_Z1"      value="LumiConverter_Z - LumiConverter_DZ/2."/>
     <constant name="LumiChamber2_Z2"      value="LumiSpecCAL_Z - LumiSpecCALTower_DZ"/>

@@ -62,7 +62,12 @@ Constructed as mainbody (subtraction solid of outer and inner block) + coil pane
 
   </detectors>
   
-   
+  
+  <comment> 
+  dz of fields is set to main body length, not panel length.
+  Approximates effect of Bx dL integral with non-uniform Bx.
+  </comment>
+
   <fields>
     <field name="LumiSweeperField" type="MultipoleMagnet">
       <position x="LumiSweepMag_X" y="LumiSweepMag_Y" z="LumiSweepMag_Z"/>
