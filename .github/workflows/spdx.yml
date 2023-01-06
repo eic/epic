@@ -1,0 +1,14 @@
+name: spdx
+
+on:
+  pull_request
+
+jobs:
+  check-spdx-headers:
+    runs-on: ubuntu-latest
+    steps:
+    - name: checkout
+      uses: actions/checkout@v3
+    - uses: enarx/spdx@266ce9351a52b27e4bce5e1dbeecb23498f33add
+      with:
+        licenses: LGPL-3.0-or-later
