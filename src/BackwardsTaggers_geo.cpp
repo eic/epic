@@ -8,15 +8,25 @@
 #include "DDRec/Surface.h"
 #include <XML/Helper.h>
 
+#if defined(USE_ACTSDD4HEP)
+#include "ActsDD4hep/ActsExtension.hpp"
+#include "ActsDD4hep/ConvertMaterial.hpp"
+#else
+#include "Acts/Plugins/DD4hep/ActsExtension.hpp"
+#include "Acts/Plugins/DD4hep/ConvertDD4hepMaterial.hpp"
+#endif
+
+
 //////////////////////////////////////////////////
 // Low Q2 taggers and vacuum drift volume in far backwards region
 //////////////////////////////////////////////////
 
 using namespace std;
 using namespace dd4hep;
+using namespace dd4hep::rec;
 
 // Helper function to make the tagger detectors
-static void Make_Tagger(Detector& desc, xml_coll_t& mod, Assembly& env, SensitiveDetector& sens);
+static void Make_Tagger(Detector& desc, xml_coll_t& mod, Assembly& env, DetElement modElement, SensitiveDetector& sens);
 
 static Ref_t create_detector(Detector& desc, xml_h e, SensitiveDetector sens)
 {
@@ -24,6 +34,16 @@ static Ref_t create_detector(Detector& desc, xml_h e, SensitiveDetector sens)
   xml_det_t x_det   = e;
   string    detName = x_det.nameStr();
   int       detID   = x_det.id();
+
+  DetElement det(detName, detID);
+
+  map<string, std::vector<VolPlane>> volplane_surfaces;
+  // ACTS extension
+  {
+    Acts::ActsExtension* detWorldExt = new Acts::ActsExtension();
+    detWorldExt->addType("endcap", "detector");
+    det.addExtension<Acts::ActsExtension>(detWorldExt);
+  }
 
   string vis_name = dd4hep::getAttrOrDefault<std::string>(x_det, _Unicode(vis), "BackwardsBox");
 
@@ -97,8 +117,6 @@ static Ref_t create_detector(Detector& desc, xml_h e, SensitiveDetector sens)
   Assembly DetAssemblyAir("Tagger_air_assembly");
   int      nVacuum = 0;
   int      nAir    = 0;
-
-  DetElement det(detName, detID);
 
   //-----------------------------------------------------------------
   // Add Tagger box containers and vacuum box extension for modules
@@ -184,16 +202,21 @@ static Ref_t create_detector(Detector& desc, xml_h e, SensitiveDetector sens)
     }
 
     Assembly TaggerAssembly("Tagger_module_assembly");
-    Make_Tagger(desc, mod, TaggerAssembly, sens);
-
+    
     PlacedVolume pv_mod2 = mother.placeVolume(
         TaggerAssembly,
         Transform3D(rotate, Position(tagoffsetx, 0,
                                      tagoffsetz))); // Very strange y is not centered and offset needs correcting for...
-    DetElement moddet(moduleName, moduleID);
+    DetElement moddet(det,moduleName, moduleID);
     pv_mod2.addPhysVolID("module", moduleID);
     moddet.setPlacement(pv_mod2);
-    det.add(moddet);
+
+    Acts::ActsExtension* moduleExtension = new Acts::ActsExtension();
+    moduleExtension->addType("module", "detector");
+    moddet.addExtension<Acts::ActsExtension>(moduleExtension);
+
+    Make_Tagger(desc, mod, TaggerAssembly, moddet, sens);
+
   }
 
   //-----------------------------------------------------------------
@@ -272,7 +295,7 @@ static Ref_t create_detector(Detector& desc, xml_h e, SensitiveDetector sens)
   return det;
 }
 
-static void Make_Tagger(Detector& desc, xml_coll_t& mod, Assembly& env, SensitiveDetector& sens)
+static void Make_Tagger(Detector& desc, xml_coll_t& mod, Assembly& env, DetElement modElement, SensitiveDetector& sens)
 {
 
   sens.setType("tracker");
@@ -315,6 +338,7 @@ static void Make_Tagger(Detector& desc, xml_coll_t& mod, Assembly& env, Sensitiv
     Tagger_Air.placeVolume(layVol, Position(0, 0, airThickness / 2 - layerThickness / 2));
 
     env.placeVolume(Tagger_Air, Position(0, 0, tagboxL - airThickness / 2));
+
     // Currently only one "window" layer implemented
     break;
   }
@@ -342,11 +366,25 @@ static void Make_Tagger(Detector& desc, xml_coll_t& mod, Assembly& env, Sensitiv
     Volume layVol("Tagger_tracker_layer", Layer_Box, Silicon);
     layVol.setSensitiveDetector(sens);
     layVol.setVisAttributes(desc.visAttributes(layerVis));
-
-    // string module_name = detName + _toString(N_layers,"_TrackLayer_%d");
+  
 
     PlacedVolume pv_layer = mother.placeVolume(layVol, Position(0, 0, MotherThickness - layerZ + layerThickness / 2));
     pv_layer.addPhysVolID("layer", layerID);
+
+    DetElement laydet(modElement,"layerName"+std::to_string(layerID), layerID);
+    laydet.setPlacement(pv_layer);
+
+    Vector3D u(0., 0., -1.);
+    Vector3D v(-1., 0., 0.);
+    Vector3D n(0., 1., 0.);
+
+    SurfaceType type(SurfaceType::Sensitive);
+    VolPlane surf(layVol, type, 0, layerThickness, u, v, n); //,o ) ;
+
+    Acts::ActsExtension* layerExtension = new Acts::ActsExtension("XZY");
+    laydet.addExtension<Acts::ActsExtension>(layerExtension);
+    volSurfaceList(laydet)->push_back(surf);
+
   }
 }
 
