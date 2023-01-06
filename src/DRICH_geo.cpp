@@ -127,10 +127,10 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
     default:
       printout(FATAL, "DRICH_geo", "UNKNOWN debugOpticsMode");
       return det;
-    };
+    }
     aerogelVis = sensorVis = mirrorVis;
     gasvolVis = vesselVis = desc.invisible();
-  };
+  }
 
   // readout coder <-> unique sensor ID
   /* - `sensorIDfields` is a list of readout fields used to specify a unique sensor ID
@@ -208,7 +208,7 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
     vesselSolid = vesselBox;
     gasvolSolid = gasvolUnion;
     break;
-  };
+  }
 
   // volumes
   Volume vesselVol(detName, vesselSolid, vesselMat);
@@ -272,9 +272,10 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
   // SkinSurface aerogelSkin(desc, aerogelDE, "mirror_optical_surface", aerogelSurf, aerogelVol);
   // aerogelSkin.isValid();
 
-  // airgap placement and surface properties
-  PlacedVolume airgapPV;
+  // airgap and filter placement and surface properties
+  PlacedVolume airgapPV, filterPV;
   if (!debugOptics) {
+
     auto airgapPlacement =
         Translation3D(radiatorPos.x(), radiatorPos.y(), radiatorPos.z()) * // re-center to originFront
         RotationY(radiatorPitch) *                                         // change polar angle
@@ -282,11 +283,7 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
     airgapPV = gasvolVol.placeVolume(airgapVol, airgapPlacement);
     DetElement airgapDE(det, "airgap_de", 0);
     airgapDE.setPlacement(airgapPV);
-  }
 
-  // filter placement and surface properties
-  PlacedVolume filterPV;
-  if (!debugOptics) {
     auto filterPlacement =
         Translation3D(0., 0., airgapThickness) *                           // add an air gap
         Translation3D(radiatorPos.x(), radiatorPos.y(), radiatorPos.z()) * // re-center to originFront
@@ -297,15 +294,16 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
     filterDE.setPlacement(filterPV);
     // SkinSurface filterSkin(desc, filterDE, "mirror_optical_surface", filterSurf, filterVol);
     // filterSkin.isValid();
-  };
 
-  // radiator z-positions (w.r.t. IP)
-  double aerogelZpos = vesselPos.z() + aerogelPV.position().z();
-  double airgapZpos  = vesselPos.z() + airgapPV.position().z();
-  double filterZpos  = vesselPos.z() + filterPV.position().z();
-  desc.add(Constant("DRICH_aerogel_zpos", std::to_string(aerogelZpos)));
-  desc.add(Constant("DRICH_airgap_zpos", std::to_string(airgapZpos)));
-  desc.add(Constant("DRICH_filter_zpos", std::to_string(filterZpos)));
+    // radiator z-positions (w.r.t. IP); only needed downstream if !debugOptics
+    double aerogelZpos = vesselPos.z() + aerogelPV.position().z();
+    double airgapZpos  = vesselPos.z() + airgapPV.position().z();
+    double filterZpos  = vesselPos.z() + filterPV.position().z();
+    desc.add(Constant("DRICH_aerogel_zpos", std::to_string(aerogelZpos)));
+    desc.add(Constant("DRICH_airgap_zpos", std::to_string(airgapZpos)));
+    desc.add(Constant("DRICH_filter_zpos", std::to_string(filterZpos)));
+    printout(INFO, "DRICH_geo", "HERE");
+  }
 
   // radiator material names
   desc.add(Constant("DRICH_aerogel_material", aerogelMat.ptr()->GetName(), "string"));
@@ -400,7 +398,7 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
     if (debugMirror) {
       mirrorTheta1 = 0;
       mirrorTheta2 = M_PI; /*mirrorPhiw=2*M_PI;*/
-    };
+    }
 
     // solid : create sphere at origin, with specified angular limits;
     // phi limits are increased to fill gaps (overlaps are cut away later)
@@ -445,7 +443,7 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
     // if debugging sphere properties, restrict number of sensors drawn
     if (debugSensors) {
       sensorSide = 2 * M_PI * sensorSphRadius / 64;
-    };
+    }
 
     // solid and volume: single sensor module
     Box    sensorSolid(sensorSide / 2., sensorSide / 2., sensorThickness / 2.);
@@ -531,7 +529,7 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
           //   sensorCentroidX += xCheck;
           //   sensorCentroidZ += zCheck;
           //   sensorCount++;
-          // };
+          // }
 
           // placement (note: transformations are in reverse order)
           // - transformations operate on global coordinates; the corresponding
@@ -561,24 +559,24 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
           if (!debugOptics || debugOpticsMode == 3) {
             SkinSurface sensorSkin(desc, sensorDE, "sensor_optical_surface_" + modsecName, sensorSurf, sensorVol);
             sensorSkin.isValid();
-          };
+          }
 
           // increment sensor module number
           imod++;
 
-        }; // end patch cuts
-      };   // end phiGen loop
-    };     // end thetaGen loop
+        } // end patch cuts
+      }   // end phiGen loop
+    }     // end thetaGen loop
 
     // calculate centroid sensor position
     // if (isec == 0) {
     //   sensorCentroidX /= sensorCount;
     //   sensorCentroidZ /= sensorCount;
-    // };
+    // }
 
     // END SENSOR MODULE LOOP ------------------------
 
-  }; // END SECTOR LOOP //////////////////////////
+  } // END SECTOR LOOP //////////////////////////
 
   return det;
 }
