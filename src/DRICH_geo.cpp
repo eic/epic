@@ -302,7 +302,6 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
     desc.add(Constant("DRICH_aerogel_zpos", std::to_string(aerogelZpos)));
     desc.add(Constant("DRICH_airgap_zpos", std::to_string(airgapZpos)));
     desc.add(Constant("DRICH_filter_zpos", std::to_string(filterZpos)));
-    printout(INFO, "DRICH_geo", "HERE");
   }
 
   // radiator material names
