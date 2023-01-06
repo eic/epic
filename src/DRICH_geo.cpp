@@ -273,14 +273,13 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
   // aerogelSkin.isValid();
 
   // airgap and filter placement and surface properties
-  PlacedVolume airgapPV, filterPV;
   if (!debugOptics) {
 
     auto airgapPlacement =
         Translation3D(radiatorPos.x(), radiatorPos.y(), radiatorPos.z()) * // re-center to originFront
         RotationY(radiatorPitch) *                                         // change polar angle
         Translation3D(0., 0., (aerogelThickness + airgapThickness) / 2.);  // move to aerogel backplane
-    airgapPV = gasvolVol.placeVolume(airgapVol, airgapPlacement);
+    auto airgapPV = gasvolVol.placeVolume(airgapVol, airgapPlacement);
     DetElement airgapDE(det, "airgap_de", 0);
     airgapDE.setPlacement(airgapPV);
 
@@ -289,7 +288,7 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
         Translation3D(radiatorPos.x(), radiatorPos.y(), radiatorPos.z()) * // re-center to originFront
         RotationY(radiatorPitch) *                                         // change polar angle
         Translation3D(0., 0., (aerogelThickness + filterThickness) / 2.);  // move to aerogel backplane
-    filterPV = gasvolVol.placeVolume(filterVol, filterPlacement);
+    auto filterPV = gasvolVol.placeVolume(filterVol, filterPlacement);
     DetElement filterDE(det, "filter_de", 0);
     filterDE.setPlacement(filterPV);
     // SkinSurface filterSkin(desc, filterDE, "mirror_optical_surface", filterSurf, filterVol);
