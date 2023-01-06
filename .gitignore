@@ -8,7 +8,6 @@
 */*/*.pdf
 *.root
 build/*
-.DAWN*
 */*.pyc
 **.pyc
 
@@ -36,3 +35,12 @@ materials-map.cbor
 lib/
 share/
 setup.sh
+
+# jekyll
+Gemfile.lock
+vendor/
+.bundle
+.jekyll-cache/
+.jekyll-metadata
+.sass-cache/
+_site/

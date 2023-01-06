@@ -64,6 +64,7 @@
 
    <detectors>
    <detector id="MPGDDIRC_0_ID" name="MPGDDIRC_0" type="epic_MPGDDIRC" readout="MPGDDIRCHits" vis="TrackerVis">
+     <type_flags type="DetType_TRACKER + DetType_BARREL"/>
      <dimensions width="MPGDDIRCModule_width" length="MPGDDIRCModule_length" height="MPGDDIRCModule_allowed_space" />
      <position x="0" y="0" z="MPGDDIRCModule_offset" />
 
@@ -161,14 +162,16 @@
 
 </module>
 <comment> Layout for MPGD DIRC layers </comment>
-      <layer module="MPGDDIRCModule" id="0" vis="TrackerSupportVis">
-   <rphi_layout
+  <layer module="MPGDDIRCModule" id="0" vis="TrackerSupportVis">
+    <envelope_tolerance r_min="-50*mm" r_max="0*mm" z_min="0*mm" z_max="0*mm"/>
+    <layer_material surface="inner" binning="binPhi,binZ" bins0="MPGDDIRCModule_count" bins1="100" />
+    <rphi_layout
           phi_tilt="0"
           nphi="MPGDDIRCModule_count"
           phi0="0"
 	   rc="MPGDDIRCModule_rmin"
 	  dr="0" />
-   <z_layout
+    <z_layout
 	  dr = "0.0 * cm"
 	  z0 = "0.0 * cm"
 	  nz = "2"/>
@@ -184,6 +187,10 @@
   </readouts>
 
   <plugins>
+    <plugin name="DD4hep_ParametersPlugin">
+      <argument value="MPGDDIRC_0"/>
+      <argument value="layer_pattern: str=MPGDDIRC_0_layer\d"/>
+    </plugin>
   </plugins>
 
   <fields>
