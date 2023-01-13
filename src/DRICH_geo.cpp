@@ -326,15 +326,13 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
   };
 
   // radiator z-positions (w.r.t. IP)
-  double aerogelZpos = vesselPos.z() + aerogelPV.position().z();
-  double airgapZpos, filterZpos;
   if (!debugOptics) {
-    airgapZpos  = vesselPos.z() + airgapPV.position().z();
+    auto airgapZpos  = vesselPos.z() + airgapPV.position().z();
     desc.add(Constant("DRICH_airgap_zpos", std::to_string(airgapZpos)));
-    filterZpos  = vesselPos.z() + filterPV.position().z();
+    auto filterZpos  = vesselPos.z() + filterPV.position().z();
     desc.add(Constant("DRICH_filter_zpos", std::to_string(filterZpos)));
   };
-
+  auto aerogelZpos = vesselPos.z() + aerogelPV.position().z();
   desc.add(Constant("DRICH_aerogel_zpos", std::to_string(aerogelZpos)));
   // radiator material names
   desc.add(Constant("DRICH_aerogel_material", aerogelMat.ptr()->GetName(), "string"));
