@@ -598,6 +598,7 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
 	};   // end phiGen loop
       };     // end thetaGen loop
     }; // end sensor loop
+
     // large sensor placement (for focal point testing):
     if (debugOpticsMode == 4){
       Box    sensorSolidScaled(sensorRescale * sensorSide / 2., sensorRescale * sensorSide / 2., sensorThickness / 2.);
