@@ -138,7 +138,7 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
     aerogelVis = sensorVis = mirrorVis;
     gasvolVis = vesselVis = desc.invisible();
   };
-  
+
   // sensor size rescaling for large sensor (catching all photons)
   double sensorRescale = 0;
   if (debugOpticsMode == 4) sensorRescale = 250;
@@ -209,7 +209,7 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
   //  extra solids for `debugOptics` only
   Box vesselBox(1001, 1001, 1001);
   Box gasvolBox(1000, 1000, 1000);
-  
+
   // choose vessel and gasvol solids (depending on `debugOpticsMode` (0=disabled))
   Solid vesselSolid, gasvolSolid;
   switch (debugOpticsMode) {
@@ -341,7 +341,7 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
   desc.add(Constant("DRICH_airgap_material", airgapMat.ptr()->GetName(), "string"));
   desc.add(Constant("DRICH_filter_material", filterMat.ptr()->GetName(), "string"));
   desc.add(Constant("DRICH_gasvol_material", gasvolMat.ptr()->GetName(), "string"));
-  
+
 
   // SECTOR LOOP //////////////////////////////////////////////////////////////////////
 
@@ -351,7 +351,7 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
   // double sensorCentroidX = 0;
   // double sensorCentroidZ = 0;
   // int    sensorCount     = 0;
-  
+
   for (int isec = 0; isec < nSectors; isec++) {
     // debugging filters, limiting the number of sectors
     if ((debugMirror || debugSensors || debugOptics) && isec != 0)
@@ -517,18 +517,18 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
 
     // initialize module number for this sector
     int imod = 0;
-    
+
     // thetaGen loop: iterate less than "0.5 circumference / sensor size" times
     double nTheta = M_PI * sensorSphRadius / (sensorSide + sensorGap);
     if(debugOpticsMode != 4){
       for (int t = 0; t < (int)(nTheta + 0.5); t++) {
 	double thetaGen = t / ((double)nTheta) * M_PI;
-	
+
 	// phiGen loop: iterate less than "circumference at this latitude / sensor size" times
 	double nPhi = 2 * M_PI * sensorSphRadius * std::sin(thetaGen) / (sensorSide + sensorGap);
 	for (int p = 0; p < (int)(nPhi + 0.5); p++) {
 	  double phiGen = p / ((double)nPhi) * 2 * M_PI - M_PI; // shift to [-pi,pi]
-	  
+
 	  // determine global phi and theta
 	  // - convert {radius,thetaGen,phiGen} -> {xGen,yGen,zGen}
 	  double xGen = sensorSphRadius * std::sin(thetaGen) * std::cos(phiGen);
@@ -541,28 +541,28 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
 	  // - convert global {x,y,z} -> global {phi,theta}
 	  // double phi   = std::atan2(y, x);
 	  // double theta = std::acos(z / sensorSphRadius);
-	  
+
 	  // shift global coordinates so we can apply spherical patch cuts
 	  double zCheck   = z + sensorSphCenterZ;
 	  double xCheck   = x + sensorSphCenterX;
 	  double yCheck   = y;
 	  double rCheck   = std::hypot(xCheck, yCheck);
 	  double phiCheck = std::atan2(yCheck, xCheck);
-	  
+
 	  // patch cut
 	  bool patchCut = std::fabs(phiCheck) < sensorSphPatchPhiw && zCheck > sensorSphPatchZmin &&
 	    rCheck > sensorSphPatchRmin && rCheck < sensorSphPatchRmax;
 	  if (debugSensors)
 	    patchCut = std::fabs(phiCheck) < sensorSphPatchPhiw;
 	  if (patchCut) {
-	    
+
 	    // append sensor position to centroid calculation
 	    // if (isec == 0) {
 	    //   sensorCentroidX += xCheck;
 	    //   sensorCentroidZ += zCheck;
 	    //   sensorCount++;
 	    // };
-	    
+
 	    // placement (note: transformations are in reverse order)
 	    // - transformations operate on global coordinates; the corresponding
 	    //   generator coordinates are provided in the comments
@@ -577,10 +577,10 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
               RotationY(M_PI / 2) *                    // rotate sensor to be compatible with generator coords
               RotationZ(-M_PI / 2);                    // correction for readout segmentation mapping
 	    auto sensorPV = gasvolVol.placeVolume(sensorVol, sensorPlacement);
-	    
+
 	    // generate LUT for module number -> sensor position, for readout mapping tests
 	    // if(isec==0) printf("%d %f %f\n",imod,sensorPV.position().x(),sensorPV.position().y());
-	    
+
 	    // properties
 	    sensorPV.addPhysVolID("sector", isec)
               .addPhysVolID("module", imod); // NOTE: must be consistent with `sensorIDfields`
@@ -592,10 +592,10 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
 	      SkinSurface sensorSkin(desc, sensorDE, "sensor_optical_surface_" + modsecName, sensorSurf, sensorVol);
 	      sensorSkin.isValid();
 	    };
-	    
+
 	    // increment sensor module number
 	    imod++;
-	    
+
 	  }; // end patch cuts
 	};   // end phiGen loop
       };     // end thetaGen loop
@@ -623,7 +623,7 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
       SkinSurface sensorSkin(desc, sensorDE, Form("sensor_optical_surface%d", isec), sensorSurf, sensorVolScaled);
       sensorSkin.isValid();
     }; // end large sensor placement
-    
+
     // for debugOpticsMode 5: drawing calculated focal points
     // of thrown beams of parallel photons
     if( std::getenv("FPPLOT_FILE")!=NULL && debugOpticsMode == 5){
@@ -650,7 +650,7 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
 	  zrot = 0;
           auto FPPlacement =
             RotationZ(0) *
-            Translation3D(fpx, fpy, fpz-vesselPos.z())*            
+            Translation3D(fpx, fpy, fpz-vesselPos.z())*
             RotationX(xrot)*
             RotationZ(zrot)
             ;
@@ -663,7 +663,7 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
         };
       };
     };
-    
+
     // calculate centroid sensor position
     // if (isec == 0) {
     //   sensorCentroidX /= sensorCount;
