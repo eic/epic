@@ -421,7 +421,7 @@ static std::tuple<int, int> add_12surface_disk(Detector& desc, Assembly& env, xm
   std::string iposy       = plm.attr<std::string>(_Unicode(inner_outer_add_posy));
 
 
-  
+
   //=========================================================
   // optional envelope volume and the supporting frame
   //=========================================================
@@ -587,7 +587,7 @@ static std::tuple<int, int> add_12surface_disk(Detector& desc, Assembly& env, xm
   std::string token;
   while ( (pos = iposx.find(delimiter)) != std::string::npos ) {
     token = iposx.substr(0, pos);
-    inner_outer_posx.push_back(atof(token.c_str()));    
+    inner_outer_posx.push_back(atof(token.c_str()));
     iposx.erase(0, pos + delimiter.length());
   }
   inner_outer_posx.push_back(atof(iposx.c_str()));
@@ -609,8 +609,8 @@ static std::tuple<int, int> add_12surface_disk(Detector& desc, Assembly& env, xm
       total_id++;
       im++;
     }
-  
-    
+
+
 
 
   return {sector_id, mid};
