@@ -417,11 +417,11 @@ static std::tuple<int, int> add_12surface_disk(Detector& desc, Assembly& env, xm
   double calo_module_length = plm.attr<double>(_Unicode(CMlength));
   double phimin          = dd4hep::getAttrOrDefault<double>(plm, _Unicode(phimin), 0.);
   double phimax          = dd4hep::getAttrOrDefault<double>(plm, _Unicode(phimax), 2. * M_PI);
+  std::string iposx       = plm.attr<std::string>(_Unicode(inner_outer_add_posx));
+  std::string iposy       = plm.attr<std::string>(_Unicode(inner_outer_add_posy));
 
 
-
-
-
+  
   //=========================================================
   // optional envelope volume and the supporting frame
   //=========================================================
@@ -553,8 +553,8 @@ static std::tuple<int, int> add_12surface_disk(Detector& desc, Assembly& env, xm
   // Since the inner and outer porfile is not the circle shape,
   // which means the modules placements can't be simply done by
   // fillRectangles functions. I hardcode the additional positions
-  // to fill all the gap between circular placement and supporting
-  // structures.
+  // at backward_PbWO4.xml to fill all the gap between circular
+  // placement and supporting structures.
   //=====================================================================
 
   // Add the modules followd the fillRectangles function
@@ -570,34 +570,41 @@ static std::tuple<int, int> add_12surface_disk(Detector& desc, Assembly& env, xm
       total_id = id_begin + mid++;
     }
 
-  // Add the modules manually in the gap [Outer]
-  //
-  const int add_N_mod_outer = 56;
-  float addX_outer[add_N_mod_outer] = {9.225, 11.275, 13.325, 15.375, 17.425, 19.475, 44.075, 46.125, 60.475, 60.475, 62.525, 62.525, 62.525, 62.525,  -9.225, -11.275, -13.325, -15.375, -17.425, -19.475, -44.075, -46.125, -60.475, -60.475, -62.525, -62.525, -62.525, -62.525,  -9.225, -11.275, -13.325, -15.375, -17.425, -19.475, -44.075, -46.125, -60.475, -60.475, -62.525, -62.525, -62.525, -62.525,  9.225, 11.275, 13.325, 15.375, 17.425, 19.475, 44.075, 46.125, 60.475, 60.475, 62.525, 62.525, 62.525, 62.525};
-  float addY_outer[add_N_mod_outer] = {62.525, 62.525, 62.525, 62.525, 60.475, 60.475, 46.125, 44.075, 19.475, 17.425, 15.375, 13.325, 11.275, 9.225,  62.525, 62.525, 62.525, 62.525, 60.475, 60.475, 46.125, 44.075, 19.475, 17.425, 15.375, 13.325, 11.275, 9.225,  -62.525, -62.525, -62.525, -62.525, -60.475, -60.475, -46.125, -44.075, -19.475, -17.425, -15.375, -13.325, -11.275, -9.225, -62.525, -62.525, -62.525, -62.525, -60.475, -60.475, -46.125, -44.075, -19.475, -17.425, -15.375, -13.325, -11.275, -9.225};
 
-  for (int im = 0; im < add_N_mod_outer; im++)
+  // Segment the position list[string] and save them as vector
+  //
+  std::vector<double> inner_outer_posx;
+  std::vector<double> inner_outer_posy;
+
+  std::string delimiter = " ";
+  size_t      pos       = 0;
+  std::string token;
+  while ( (pos = iposx.find(delimiter)) != std::string::npos ) {
+    token = iposx.substr(0, pos);
+    inner_outer_posx.push_back(atof(token.c_str()));    
+    iposx.erase(0, pos + delimiter.length());
+  }
+  inner_outer_posx.push_back(atof(iposx.c_str()));
+
+  pos = 0;
+  while ( (pos = iposy.find(delimiter)) != std::string::npos ) {
+    token = iposy.substr(0, pos);
+    inner_outer_posy.push_back(atof(token.c_str()));
+    iposy.erase(0, pos + delimiter.length());
+  }
+  inner_outer_posy.push_back(atof(iposy.c_str()));
+
+  int im = 0;
+  for (auto && value : inner_outer_posx )
     {
-      Transform3D add_local = RotationZYX(-15.*degree, 0.0, 0.0) * Translation3D(addX_outer[im] * cm, addY_outer[im] * cm, 0.0);
+      Transform3D add_local = RotationZYX(-15.*degree, 0.0, 0.0) * Translation3D(value * cm, inner_outer_posy[im] * cm, 0.0);
       auto modPV = (has_envelope ? env_vol.placeVolume(modVol, add_local) : env.placeVolume(modVol, tr_global * add_local));
       modPV.addPhysVolID("sector", sector_id).addPhysVolID("module", total_id);
       total_id++;
+      im++;
     }
-
-  // Add the modules manually in the gap [Inner]
-  //
-  const int add_N_mod_inner = 36;
-  double addX_inner[add_N_mod_inner] = {1.025,1.025,3.075,3.075,5.125,7.175,7.175,9.225,9.225, -1.025,-1.025,-3.075,-3.075,-5.125,-7.175,-7.175,-9.225,-9.225, -1.025,-1.025,-3.075,-3.075,-5.125,-7.175,-7.175,-9.225,-9.225, 1.025,1.025,3.075,3.075,5.125,7.175,7.175,9.225,9.225};
-  double addY_inner[add_N_mod_inner] = {7.175,9.225,7.175,9.225,7.175,7.175,5.125,1.025,3.075, 7.175,9.225,7.175,9.225,7.175,7.175,5.125,1.025,3.075, -7.175,-9.225,-7.175,-9.225,-7.175,-7.175,-5.125,-1.025,-3.075, -7.175,-9.225,-7.175,-9.225,-7.175,-7.175,-5.125,-1.025,-3.075};
-
-  for (int im = 0; im < add_N_mod_inner; im++)
-    {
-      Transform3D add_local = RotationZYX(-15.*degree, 0.0, 0.0) * Translation3D(addX_inner[im] * cm, addY_inner[im] * cm, 0.0);
-      auto modPV = (has_envelope ? env_vol.placeVolume(modVol, add_local) : env.placeVolume(modVol, tr_global * add_local));
-      modPV.addPhysVolID("sector", sector_id).addPhysVolID("module", total_id);
-      total_id++;
-    }
-
+  
+    
 
 
   return {sector_id, mid};
