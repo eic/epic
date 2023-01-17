@@ -471,6 +471,11 @@ static std::tuple<int, int> add_12surface_disk(Detector& desc, Assembly& env, xm
 
   // Version3: solid with elliptical inside
   //
+
+  // Position off1 = {0., 0.}, off2 = {0., 0.};
+  // std::vector<G4TwoVector> polygon = {{6.15*cm, 6.15*cm}, {8.2*cm, 4.1*cm}, {8.2*cm, -4.1*cm}, {6.15*cm, -6.15*cm}, {-6.15*cm, -6.15*cm}, {-8.2*cm, -4.1*cm}, {-8.2*cm, 4.1*cm}, {-6.15*cm, 6.15*cm}};
+  // ExtrudedSolid inner_support_main("innersupport", polygon, calo_module_length/2., off1, 1., off2, 1.)
+
   Box inner_support_main(8.2*cm, 6.15*cm, calo_module_length/2.);  // Original size
   // Box inner_support_main(8.2*cm, 5.125*cm, calo_module_length/2.);  // Adapted size
   Box subtract_corner(1.025*cm, 1.025*cm, calo_module_length/2.);
@@ -480,6 +485,7 @@ static std::tuple<int, int> add_12surface_disk(Detector& desc, Assembly& env, xm
   SubtractionSolid inner_support_substractb3(inner_support_substractb2, subtract_corner, Position(-7.175*cm, 5.125*cm, 0.));
   SubtractionSolid inner_support_substractb4(inner_support_substractb3, subtract_corner, Position(-7.175*cm, -5.125*cm, 0.));
   SubtractionSolid inner_support_substracta(inner_support_substractb4, subtract_a, Position(0., 0., 0.));
+  // SubtractionSolid inner_support_substracta(inner_support_main, subtract_a, Position(0., 0., 0.));
   Volume           inner_support_vol("inner_support_vol", inner_support_substracta, inner_ring_material);
   inner_support_vol.setVisAttributes(desc.visAttributes(plm.attr<std::string>(_Unicode(vis_struc))));
   Transform3D tr_global_Iring_elli = RotationZYX(-15.*degree, 0., 0.) * Translation3D(0., 0., 0.);
