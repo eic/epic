@@ -17,6 +17,8 @@
     <comment>FIXME currently unused</comment>
     <constant name="EcalEndcapN_IonCutout_dphi" value="30*degree"/>
 
+    
+    
   </define>
 
   <detectors>
@@ -40,10 +42,12 @@
             SFlength="EcalEndcapN_structure_ring_length"
             CMlength="EcalEndcapN_CrystalModule_length + 2.*EcalEndcapN_CrystalModule_wrap_thickness"
             envelope="true"
-            vis_struc="RPVis"
-            vis_steel_gap="AnlGray"
             ring_material="StainlessSteel"
-            sector="1">
+            inner_outer_add_posx="1.025 1.025 3.075 3.075 5.125 7.175 7.175 9.225 9.225 -1.025 -1.025 -3.075 -3.075 -5.125 -7.175 -7.175 -9.225 -9.225 -1.025 -1.025 -3.075 -3.075 -5.125 -7.175 -7.175 -9.225 -9.225 1.025 1.025 3.075 3.075 5.125 7.175 7.175 9.225 9.225 9.225 11.275 13.325 15.375 17.425 19.475 44.075 46.125 60.475 60.475 62.525 62.525 62.525 62.525 -9.225 -11.275 -13.325 -15.375 -17.425 -19.475 -44.075 -46.125 -60.475 -60.475 -62.525 -62.525 -62.525 -62.525 -9.225 -11.275 -13.325 -15.375 -17.425 -19.475 -44.075 -46.125 -60.475 -60.475 -62.525 -62.525 -62.525 -62.525 9.225 11.275 13.325 15.375 17.425 19.475 44.075 46.125 60.475 60.475 62.525 62.525 62.525 62.525"
+            inner_outer_add_posy="7.175 9.225 7.175 9.225 7.175 7.175 5.125 1.025 3.075 7.175 9.225 7.175 9.225 7.175 7.175 5.125 1.025 3.075 -7.175 -9.225 -7.175 -9.225 -7.175 -7.175 -5.125 -1.025 -3.075 -7.175 -9.225 -7.175 -9.225 -7.175 -7.175 -5.125 -1.025 -3.075 62.525 62.525 62.525 62.525 60.475 60.475 46.125 44.075 19.475 17.425 15.375 13.325 11.275 9.225 62.525 62.525 62.525 62.525 60.475 60.475 46.125 44.075 19.475 17.425 15.375 13.325 11.275 9.225 -62.525 -62.525 -62.525 -62.525 -60.475 -60.475 -46.125 -44.075 -19.475 -17.425 -15.375 -13.325 -11.275 -9.225 -62.525 -62.525 -62.525 -62.525 -60.475 -60.475 -46.125 -44.075 -19.475 -17.425 -15.375 -13.325 -11.275 -9.225"
+            sector="1"
+            vis_struc="RPVis"
+            vis_steel_gap="AnlGray">        
           <module
             gx="EcalEndcapN_CrystalModule_width + 2.*EcalEndcapN_CrystalModule_carbon_thickness + 2.*EcalEndcapN_CrystalModule_wrap_thickness"
             gy="EcalEndcapN_CrystalModule_width + 2.*EcalEndcapN_CrystalModule_carbon_thickness + 2.*EcalEndcapN_CrystalModule_wrap_thickness"
