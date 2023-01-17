@@ -477,7 +477,7 @@ static std::tuple<int, int> add_12surface_disk(Detector& desc, Assembly& env, xm
   std::vector<double> sec_x = {0., 0.};
   std::vector<double> sec_y = {0., 0.};
   std::vector<double> zscale = {1., 1.};
-  
+
   ExtrudedPolygon inner_support_main(pt_x, pt_y, sec_z, sec_x, sec_y, zscale);
   EllipticalTube   subtract_a(7.5*cm, 5.5*cm, calo_module_length/2.);
   SubtractionSolid inner_support_substracta(inner_support_main, subtract_a, Position(0., 0., 0.));
