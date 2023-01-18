@@ -20,11 +20,11 @@
     <constant name="EcalEndcapN_Oring_relative_shift" value="-20.*cm"/>
     <constant name="EcalEndcapN_Iring_axisA" value="7.5*cm"/>
     <constant name="EcalEndcapN_Iring_axisB" value="5.5*cm"/>
-    
+
     <comment>FIXME currently unused</comment>
     <constant name="EcalEndcapN_IonCutout_dphi" value="30*degree"/>
 
-    
+
 
 
   </define>
