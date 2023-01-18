@@ -415,10 +415,17 @@ static std::tuple<int, int> add_12surface_disk(Detector& desc, Assembly& env, xm
   double r12max          = plm.attr<double>(_Unicode(r12max));
   double structure_frame_length = plm.attr<double>(_Unicode(SFlength));
   double calo_module_length = plm.attr<double>(_Unicode(CMlength));
+  double NEEMC_Prot      = plm.attr<double>(_Unicode(NEEMC_PR));
+  double NEEMC_Nrot      = plm.attr<double>(_Unicode(NEEMC_NR));
+  double NEEMC_OR_shift  = plm.attr<double>(_Unicode(NEEMC_OR_RS));
+  double NEEMC_IR_a      = plm.attr<double>(_Unicode(Inner_a));
+  double NEEMC_IR_b      = plm.attr<double>(_Unicode(Inner_b));
   double phimin          = dd4hep::getAttrOrDefault<double>(plm, _Unicode(phimin), 0.);
   double phimax          = dd4hep::getAttrOrDefault<double>(plm, _Unicode(phimax), 2. * M_PI);
-  std::string iposx       = plm.attr<std::string>(_Unicode(inner_outer_add_posx));
-  std::string iposy       = plm.attr<std::string>(_Unicode(inner_outer_add_posy));
+  std::string polygonX   = plm.attr<std::string>(_Unicode(ptsX_extrudedpolygon));
+  std::string polygonY   = plm.attr<std::string>(_Unicode(ptsY_extrudedpolygon));
+  std::string iposx      = plm.attr<std::string>(_Unicode(inner_outer_add_posx));
+  std::string iposy      = plm.attr<std::string>(_Unicode(inner_outer_add_posy));
 
 
 
@@ -441,7 +448,7 @@ static std::tuple<int, int> add_12surface_disk(Detector& desc, Assembly& env, xm
 
   PolyhedraRegular solid_ring12(12, r12min, r12max, structure_frame_length);
   Volume ring12_vol("ring12", solid_ring12, outer_ring_material);
-  Transform3D tr_global_Oring = RotationZYX(15.*degree, 0., 0.) * Translation3D(0., 0., -20.*cm);
+  Transform3D tr_global_Oring = RotationZYX(NEEMC_Prot, 0., 0.) * Translation3D(0., 0., NEEMC_OR_shift);
   ring12_vol.setVisAttributes(desc.visAttributes(plm.attr<std::string>(_Unicode(vis_struc))));
 
 
@@ -466,24 +473,41 @@ static std::tuple<int, int> add_12surface_disk(Detector& desc, Assembly& env, xm
   // SubtractionSolid inner_elliptical_support_substract(inner_elliptical_support_a, inner_elliptical_support_b, Position(0., 0., 0.));
   // Volume           inner_elliptical_vol("inner_elliptical", inner_elliptical_support_substract, inner_ring_material);
   // inner_elliptical_vol.setVisAttributes(desc.visAttributes(plm.attr<std::string>(_Unicode(vis_struc))));
-  // Transform3D tr_global_Iring_elli = RotationZYX(-15.*degree, 0., 0.) * Translation3D(2.05*cm, 0., 0.);
+  // Transform3D tr_global_Iring_elli = RotationZYX(NEEMC_Nrot, 0., 0.) * Translation3D(2.05*cm, 0., 0.);
 
 
   // Version3: solid with elliptical inside
   //
-  std::vector<double> pt_x = {6.15*cm, 6.15*cm, 8.2*cm, 8.2*cm, 6.15*cm, 6.15*cm, -6.15*cm, -6.15*cm, -8.2*cm, -8.2*cm, -6.15*cm, -6.15*cm};
-  std::vector<double> pt_y = {6.15*cm, 4.1*cm, 4.1*cm, -4.1*cm, -4.1*cm, -6.15*cm, -6.15*cm, -4.1*cm, -4.1*cm, 4.1*cm, 4.1*cm, 6.15*cm};
+  std::vector<double> pt_x;
+  std::vector<double> pt_y;
+  std::string delimiter = " ";
+  size_t      pos       = 0;
+  std::string token;
+  while ( (pos = polygonX.find(delimiter)) != std::string::npos ) {
+    token = polygonX.substr(0, pos);
+    pt_x.push_back(atof(token.c_str()));
+    polygonX.erase(0, pos + delimiter.length());
+  }
+  pt_x.push_back(atof(polygonX.c_str()));
+
+  pos = 0;
+  while ( (pos = polygonY.find(delimiter)) != std::string::npos ) {
+    token = polygonY.substr(0, pos);
+    pt_y.push_back(atof(token.c_str()));
+    polygonY.erase(0, pos + delimiter.length());
+  }
+  pt_y.push_back(atof(polygonY.c_str()));
   std::vector<double> sec_z = {-calo_module_length/2., calo_module_length/2.};
   std::vector<double> sec_x = {0., 0.};
   std::vector<double> sec_y = {0., 0.};
   std::vector<double> zscale = {1., 1.};
 
   ExtrudedPolygon inner_support_main(pt_x, pt_y, sec_z, sec_x, sec_y, zscale);
-  EllipticalTube   subtract_a(7.5*cm, 5.5*cm, calo_module_length/2.);
+  EllipticalTube   subtract_a(NEEMC_IR_a, NEEMC_IR_b, calo_module_length/2.);
   SubtractionSolid inner_support_substracta(inner_support_main, subtract_a, Position(0., 0., 0.));
   Volume           inner_support_vol("inner_support_vol", inner_support_substracta, inner_ring_material);
   inner_support_vol.setVisAttributes(desc.visAttributes(plm.attr<std::string>(_Unicode(vis_struc))));
-  Transform3D tr_global_Iring_elli = RotationZYX(-15.*degree, 0., 0.) * Translation3D(0., 0., 0.);
+  Transform3D tr_global_Iring_elli = RotationZYX(NEEMC_Nrot, 0., 0.) * Translation3D(0., 0., 0.);
 
 
   // // The vacuum inside the inner structure
@@ -491,7 +515,7 @@ static std::tuple<int, int> add_12surface_disk(Detector& desc, Assembly& env, xm
   // EllipticalTube   inner_elliptical_vacuum(7.5*cm, 4.5*cm, calo_module_length/2.);
   // Volume           inner_elliptical_vacuum_vol("inner_elliptical_vacuum_vol", inner_elliptical_vacuum, hole_material);
   // inner_elliptical_vacuum_vol.setVisAttributes(desc.visAttributes(plm.attr<std::string>(_Unicode(vis_struc))));
-  // Transform3D tr_global_Iring_elli_vacuum = RotationZYX(-15.*degree, 0., 0.) * Translation3D(1.025*cm, 0., 0.);
+  // Transform3D tr_global_Iring_elli_vacuum = RotationZYX(NEEMC_Nrot, 0., 0.) * Translation3D(1.025*cm, 0., 0.);
 
 
   //=============================
@@ -499,11 +523,11 @@ static std::tuple<int, int> add_12surface_disk(Detector& desc, Assembly& env, xm
   //=============================
   bool has_envelope = dd4hep::getAttrOrDefault<bool>(plm, _Unicode(envelope), false);
   PolyhedraRegular solid_world(12, 0., r12min, calo_module_length);
-  EllipticalTube  solid_sub(7.5*cm, 5.5*cm, calo_module_length/2.);
-  Transform3D subtract_pos = RotationZYX(-15.*degree, 0., 0.) * Translation3D(0., 0., 0.);
+  EllipticalTube  solid_sub(NEEMC_IR_a, NEEMC_IR_b, calo_module_length/2.);
+  Transform3D subtract_pos = RotationZYX(NEEMC_Nrot, 0., 0.) * Translation3D(0., 0., 0.);
   SubtractionSolid calo_subtract(solid_world, solid_sub, subtract_pos);
   Volume      env_vol(std::string(env.name()) + "_envelope", calo_subtract, outer_ring_material);
-  Transform3D tr_global = RotationZYX(15.*degree, 0., 0.) * Translation3D(0., 0., 0.);
+  Transform3D tr_global = RotationZYX(NEEMC_Prot, 0., 0.) * Translation3D(0., 0., 0.);
   env_vol.setVisAttributes(desc.visAttributes(plm.attr<std::string>(_Unicode(vis_steel_gap))));
 
 
@@ -515,8 +539,8 @@ static std::tuple<int, int> add_12surface_disk(Detector& desc, Assembly& env, xm
   // //
   // PolyhedraRegular cabling_support12(12, r12max, 70.*cm, 2.54*cm);
   // Volume cabling_support12_V("cabling_support12_V", cabling_support12, inner_ring_material);
-  // Transform3D tr_global_csfront = RotationZYX(15.*degree, 0., 0.) * Translation3D(0., 0., 9.*cm);
-  // Transform3D tr_global_csback = RotationZYX(15.*degree, 0., 0.) * Translation3D(0., 0., -49.*cm);
+  // Transform3D tr_global_csfront = RotationZYX(NEEMC_Prot, 0., 0.) * Translation3D(0., 0., 9.*cm);
+  // Transform3D tr_global_csback = RotationZYX(NEEMC_Prot, 0., 0.) * Translation3D(0., 0., -49.*cm);
 
   // Box hole(13.5/2.*cm, 2.54/2.*cm, 2.54/2.*cm);
   // Volume hole_V("hole_V", hole, hole_material);
@@ -526,8 +550,8 @@ static std::tuple<int, int> add_12surface_disk(Detector& desc, Assembly& env, xm
   //
   if (has_envelope)
     {
-      env.placeVolume(env_vol, tr_global);                          // Place the mother volume for all modules
-      env.placeVolume(ring12_vol, tr_global_Oring);                 // Place the outer supporting frame
+      env.placeVolume(env_vol, tr_global);                           // Place the mother volume for all modules
+      env.placeVolume(ring12_vol, tr_global_Oring);                  // Place the outer supporting frame
       env_vol.placeVolume(inner_support_vol, tr_global_Iring_elli);  // Place the version3 inner supporting frame
 
 
@@ -565,7 +589,7 @@ static std::tuple<int, int> add_12surface_disk(Detector& desc, Assembly& env, xm
   auto points = epic::geo::fillRectangles({half_modx, half_mody}, modSize.x(), modSize.y(), rmin, rmax, phimin, phimax);
   for (auto& p : points)
     {
-      Transform3D tr_local = RotationZYX(-15.*degree, 0.0, 0.0) * Translation3D(p.x(), p.y(), 0.0);
+      Transform3D tr_local = RotationZYX(NEEMC_Nrot, 0.0, 0.0) * Translation3D(p.x(), p.y(), 0.0);
       auto modPV = (has_envelope ? env_vol.placeVolume(modVol, tr_local) : env.placeVolume(modVol, tr_global * tr_local));
       modPV.addPhysVolID("sector", sector_id).addPhysVolID("module", total_id);
       total_id = id_begin + mid++;
@@ -577,9 +601,7 @@ static std::tuple<int, int> add_12surface_disk(Detector& desc, Assembly& env, xm
   std::vector<double> inner_outer_posx;
   std::vector<double> inner_outer_posy;
 
-  std::string delimiter = " ";
-  size_t      pos       = 0;
-  std::string token;
+  pos = 0;
   while ( (pos = iposx.find(delimiter)) != std::string::npos ) {
     token = iposx.substr(0, pos);
     inner_outer_posx.push_back(atof(token.c_str()));
@@ -598,7 +620,7 @@ static std::tuple<int, int> add_12surface_disk(Detector& desc, Assembly& env, xm
   int im = 0;
   for (auto && value : inner_outer_posx )
     {
-      Transform3D add_local = RotationZYX(-15.*degree, 0.0, 0.0) * Translation3D(value * cm, inner_outer_posy[im] * cm, 0.0);
+      Transform3D add_local = RotationZYX(NEEMC_Nrot, 0.0, 0.0) * Translation3D(value * cm, inner_outer_posy[im] * cm, 0.0);
       auto modPV = (has_envelope ? env_vol.placeVolume(modVol, add_local) : env.placeVolume(modVol, tr_global * add_local));
       modPV.addPhysVolID("sector", sector_id).addPhysVolID("module", total_id);
       total_id++;
