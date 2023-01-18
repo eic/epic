@@ -458,24 +458,6 @@ static std::tuple<int, int> add_12surface_disk(Detector& desc, Assembly& env, xm
   // Inner supporting frame
   //=============================
 
-  // // Version1: circle shape
-  // //
-  // Tube        Ssolid_ring12(8.5*cm, rmin, calo_module_length/2., phimin, phimax);
-  // Volume      Sring12_vol("Sring12", Ssolid_ring12, inner_ring_material);
-  // Sring12_vol.setVisAttributes(desc.visAttributes(plm.attr<std::string>(_Unicode(vis_struc))));
-  // Transform3D tr_global_Iring = RotationZYX(0., 0., 0.) * Translation3D(0., 0., 0.);
-
-
-  // // Version2: elliptical shape
-  // //
-  // EllipticalTube   inner_elliptical_support_a(9.*cm, 7.5*cm, calo_module_length/2.);
-  // EllipticalTube   inner_elliptical_support_b(8.5*cm, 7.*cm, calo_module_length/2.);
-  // SubtractionSolid inner_elliptical_support_substract(inner_elliptical_support_a, inner_elliptical_support_b, Position(0., 0., 0.));
-  // Volume           inner_elliptical_vol("inner_elliptical", inner_elliptical_support_substract, inner_ring_material);
-  // inner_elliptical_vol.setVisAttributes(desc.visAttributes(plm.attr<std::string>(_Unicode(vis_struc))));
-  // Transform3D tr_global_Iring_elli = RotationZYX(NEEMC_Nrot, 0., 0.) * Translation3D(2.05*cm, 0., 0.);
-
-
   // Version3: solid with elliptical inside
   //
   std::vector<double> pt_x;
@@ -510,12 +492,7 @@ static std::tuple<int, int> add_12surface_disk(Detector& desc, Assembly& env, xm
   Transform3D tr_global_Iring_elli = RotationZYX(NEEMC_Nrot, 0., 0.) * Translation3D(0., 0., 0.);
 
 
-  // // The vacuum inside the inner structure
-  // //
-  // EllipticalTube   inner_elliptical_vacuum(7.5*cm, 4.5*cm, calo_module_length/2.);
-  // Volume           inner_elliptical_vacuum_vol("inner_elliptical_vacuum_vol", inner_elliptical_vacuum, hole_material);
-  // inner_elliptical_vacuum_vol.setVisAttributes(desc.visAttributes(plm.attr<std::string>(_Unicode(vis_struc))));
-  // Transform3D tr_global_Iring_elli_vacuum = RotationZYX(NEEMC_Nrot, 0., 0.) * Translation3D(1.025*cm, 0., 0.);
+
 
 
   //=============================
@@ -532,19 +509,7 @@ static std::tuple<int, int> add_12surface_disk(Detector& desc, Assembly& env, xm
 
 
 
-  // // =============================
-  // // Supporting frame for the cabling
-  // // =============================
-  // // Having overlapped with tracker barrelendcapsupporting structure, comment here until the size and position determined
-  // //
-  // PolyhedraRegular cabling_support12(12, r12max, 70.*cm, 2.54*cm);
-  // Volume cabling_support12_V("cabling_support12_V", cabling_support12, inner_ring_material);
-  // Transform3D tr_global_csfront = RotationZYX(NEEMC_Prot, 0., 0.) * Translation3D(0., 0., 9.*cm);
-  // Transform3D tr_global_csback = RotationZYX(NEEMC_Prot, 0., 0.) * Translation3D(0., 0., -49.*cm);
 
-  // Box hole(13.5/2.*cm, 2.54/2.*cm, 2.54/2.*cm);
-  // Volume hole_V("hole_V", hole, hole_material);
-  // Transform3D hole_pos = RotationZYX(0., 0., 0.) * Translation3D(0., 0., 0.);
 
   // Place frames and mother volume of modules into the world volume
   //
@@ -553,18 +518,6 @@ static std::tuple<int, int> add_12surface_disk(Detector& desc, Assembly& env, xm
       env.placeVolume(env_vol, tr_global);                           // Place the mother volume for all modules
       env.placeVolume(ring12_vol, tr_global_Oring);                  // Place the outer supporting frame
       env_vol.placeVolume(inner_support_vol, tr_global_Iring_elli);  // Place the version3 inner supporting frame
-
-
-      // env.placeVolume(cabling_support12_V, tr_global_csfront);  // Place the front cabling frame(Only the holes are visible)
-      // env.placeVolume(cabling_support12_V, tr_global_csback);   // Place the back cabling frame(Only the holes are visible)
-
-      // for(int i = 0 ; i < 12 ; i++)
-      //   {
-      //     hole_pos = RotationZYX((15. + i * 30.)*degree, 0., 0.) * Translation3D(82.5*mm, 675.*mm, 0.);
-      //     cabling_support12_V.placeVolume(hole_V, hole_pos);
-      //     hole_pos = RotationZYX((15. + i * 30.)*degree, 0., 0.) * Translation3D(-82.5*mm, 675.*mm, 0.);
-      //     cabling_support12_V.placeVolume(hole_V, hole_pos);
-      //   }
     }
 
 
