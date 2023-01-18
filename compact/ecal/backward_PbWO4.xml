@@ -14,9 +14,17 @@
     <constant name="EcalEndcapN_structure_ring_max" value="65.00*cm"/>
     <constant name="EcalEndcapN_structure_ring_min" value="EcalEndcapN_structure_ring_max - 0.9*cm"/>
 
+    <comment>Basic hardcoded parameters about rotation and shift</comment>
+    <constant name="EcalEndcapN_Protate" value="15.*degree"/>
+    <constant name="EcalEndcapN_Nrotate" value="-15.*degree"/>
+    <constant name="EcalEndcapN_Oring_relative_shift" value="-20.*cm"/>
+    <constant name="EcalEndcapN_Iring_axisA" value="7.5*cm"/>
+    <constant name="EcalEndcapN_Iring_axisB" value="5.5*cm"/>
+    
     <comment>FIXME currently unused</comment>
     <constant name="EcalEndcapN_IonCutout_dphi" value="30*degree"/>
 
+    
 
 
   </define>
@@ -41,8 +49,15 @@
             r12max="EcalEndcapN_structure_ring_max"
             SFlength="EcalEndcapN_structure_ring_length"
             CMlength="EcalEndcapN_CrystalModule_length + 2.*EcalEndcapN_CrystalModule_wrap_thickness"
+            NEEMC_PR="EcalEndcapN_Protate"
+            NEEMC_NR="EcalEndcapN_Nrotate"
+            NEEMC_OR_RS="EcalEndcapN_Oring_relative_shift"
+            Inner_a="EcalEndcapN_Iring_axisA"
+            Inner_b="EcalEndcapN_Iring_axisB"
             envelope="true"
             ring_material="StainlessSteel"
+            ptsX_extrudedpolygon="6.15*cm 6.15*cm 8.2*cm 8.2*cm 6.15*cm 6.15*cm -6.15*cm -6.15*cm -8.2*cm -8.2*cm -6.15*cm -6.15*cm"
+            ptsY_extrudedpolygon="6.15*cm 4.1*cm 4.1*cm -4.1*cm -4.1*cm -6.15*cm -6.15*cm -4.1*cm -4.1*cm 4.1*cm 4.1*cm 6.15*cm"
             inner_outer_add_posx="1.025 1.025 3.075 3.075 5.125 7.175 7.175 9.225 9.225 -1.025 -1.025 -3.075 -3.075 -5.125 -7.175 -7.175 -9.225 -9.225 -1.025 -1.025 -3.075 -3.075 -5.125 -7.175 -7.175 -9.225 -9.225 1.025 1.025 3.075 3.075 5.125 7.175 7.175 9.225 9.225 9.225 11.275 13.325 15.375 17.425 19.475 44.075 46.125 60.475 60.475 62.525 62.525 62.525 62.525 -9.225 -11.275 -13.325 -15.375 -17.425 -19.475 -44.075 -46.125 -60.475 -60.475 -62.525 -62.525 -62.525 -62.525 -9.225 -11.275 -13.325 -15.375 -17.425 -19.475 -44.075 -46.125 -60.475 -60.475 -62.525 -62.525 -62.525 -62.525 9.225 11.275 13.325 15.375 17.425 19.475 44.075 46.125 60.475 60.475 62.525 62.525 62.525 62.525"
             inner_outer_add_posy="7.175 9.225 7.175 9.225 7.175 7.175 5.125 1.025 3.075 7.175 9.225 7.175 9.225 7.175 7.175 5.125 1.025 3.075 -7.175 -9.225 -7.175 -9.225 -7.175 -7.175 -5.125 -1.025 -3.075 -7.175 -9.225 -7.175 -9.225 -7.175 -7.175 -5.125 -1.025 -3.075 62.525 62.525 62.525 62.525 60.475 60.475 46.125 44.075 19.475 17.425 15.375 13.325 11.275 9.225 62.525 62.525 62.525 62.525 60.475 60.475 46.125 44.075 19.475 17.425 15.375 13.325 11.275 9.225 -62.525 -62.525 -62.525 -62.525 -60.475 -60.475 -46.125 -44.075 -19.475 -17.425 -15.375 -13.325 -11.275 -9.225 -62.525 -62.525 -62.525 -62.525 -60.475 -60.475 -46.125 -44.075 -19.475 -17.425 -15.375 -13.325 -11.275 -9.225"
             sector="1"
