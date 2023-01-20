@@ -5,7 +5,6 @@
 
    <include ref="lumi/exit_window.xml"/>
    <include ref="lumi/collimator.xml"/>
-   <include ref="lumi/lead_wall.xml"/>
    <include ref="lumi/lumi_magnets.xml"/>
    <include ref="lumi/converter.xml"/>
    <include ref="lumi/spec_tracker.xml"/>
