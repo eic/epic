@@ -25,7 +25,7 @@
     id="LumiSpecTracker_ID"
     name="LumiSpecTracker"
     type="LumiSpecTracker"
-    readout="LumiSpecTrackerHits"
+    readout="TrackerLumiSpecHits"
     vis="TrackerVis"
     visCu="TrackerServiceVis"
     materialSi="SiliconOxide"
@@ -66,7 +66,7 @@
   </detectors>
 
   <readouts>
-    <readout name="LumiSpecTrackerHits">
+    <readout name="TrackerLumiSpecHits">
       <segmentation type="CartesianGridXY" grid_size_x="0.5*mm" grid_size_y="0.5*mm"/>
       <id>system:8,sector:8,module:8,x:32:-16,y:-16</id>
     </readout>
