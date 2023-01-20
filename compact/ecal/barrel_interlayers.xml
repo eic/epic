@@ -27,7 +27,7 @@
     <constant name="EcalBarrel_Calorimeter_offset"
       value="(EcalBarrel_Calorimeter_zmax - EcalBarrel_Calorimeter_zmin)/2.0"/>
 
-    <constant name="EcalBarrel_Support_thickness"    value="5*cm"/>
+    <constant name="EcalBarrel_Support_thickness"    value="0*cm"/>
     <constant name="EcalBarrel_SiliconThickness"     value="500*um"/>
     <constant name="EcalBarrel_ElectronicsThickness" value="150*um"/>
     <constant name="EcalBarrel_CopperThickness"      value="100*um"/>
@@ -143,11 +143,7 @@
       <dimensions numsides="EcalBarrel_ModRepeat"
         rmin="EcalBarrel_rmin"
         z="EcalBarrel_Calorimeter_length"/>
-      <staves vis="EcalBarrelStaveVis">
-        <support material="Steel235" vis="EcalBarrelSupportVis" n_beams="3" grid_size="25.0*cm"
-          thickness="EcalBarrel_Support_thickness" beam_thickness="EcalBarrel_Support_thickness/4" >
-        </support>
-      </staves>
+      <staves vis="EcalBarrelStaveVis"/>
       <layer repeat="EcalBarrelImagingLayers_num-1" vis="EcalBarrelLayerVis"
        space_between="EcalBarrel_ImagingLayerThickness + EcalBarrel_SpaceBetween"
        space_before="EcalBarrel_ImagingLayerThickness + EcalBarrel_SpaceBetween/2.">
