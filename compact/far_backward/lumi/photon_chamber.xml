@@ -21,15 +21,6 @@
       <position z1="LumiChamber1_Z1" z2="LumiChamber1_Z2"/>
       <dimensions dx1="LumiBeamDiv_pref * fabs(LumiChamber1_Z1)" dx2="LumiBeamDiv_pref * fabs(LumiChamber1_Z2)" dy1="LumiBeamDiv_pref * fabs(LumiChamber1_Z1)" dy2="LumiBeamDiv_pref * fabs(LumiChamber1_Z2)"/>
     </detector>
-
-    <detector
-      name="LumiPhotonChamber2"
-      type="LumiPhotonChamber"
-      material="Vacuum"
-      vis="AnlLightGray">
-      <position z1="LumiChamber2_Z1" z2="LumiChamber2_Z2"/>
-      <dimensions dx1="LumiBeamDiv_pref * fabs(LumiChamber2_Z1)" dx2="LumiBeamDiv_pref * fabs(LumiChamber2_Z2)" dy1="LumiBeamDiv_pref * fabs(LumiChamber2_Z1)" dy2="LumiBeamDiv_pref * fabs(LumiChamber2_Z2)"/>
-    </detector>
   </detectors>
 
 </lccdd>
