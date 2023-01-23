@@ -103,10 +103,11 @@ jobs:
         if-no-files-found: error
     - run: |
         source install/setup.sh
-        sed -i '/<fiber/,+6d' ${DETECTOR_PATH}/compact/ecal/barrel_interlayers.xml
-        sed -i '/<fiber/,+4d' ${DETECTOR_PATH}/compact/ecal/forward_scfi.xml
-        sed -i '/<fiber/,+4d' ${DETECTOR_PATH}/compact/far_forward/ZDC_Ecal_WSciFi.xml
-        sed -i '/<lens/,+4d' ${DETECTOR_PATH}/compact/pid/mrich.xml
+        sed -i 's%\(<fiber\|<lens\)%<comment>\1%g; s%\(/fiber>\|/lens>\)%\1</comment>%g' \
+          ${DETECTOR_PATH}/compact/ecal/barrel_interlayers.xml \
+          ${DETECTOR_PATH}/compact/ecal/forward_scfi.xml \
+          ${DETECTOR_PATH}/compact/far_forward/ZDC_Ecal_WSciFi.xml \
+          ${DETECTOR_PATH}/compact/pid/mrich.xml
     - uses: actions/upload-artifact@v3
       with:
         name: build-${{ matrix.CC }}-fast-eic-shell
