@@ -41,7 +41,8 @@
           radius="EcalEndcapP_FiberRadius"
           offset="EcalEndcapP_FiberOffset"
           spacex="EcalEndcapP_FiberSpaceX"
-          spacey="EcalEndcapP_FiberSpaceY"/>
+          spacey="EcalEndcapP_FiberSpaceY">
+        </fiber>
       </module>
     </detector>
   </detectors>
