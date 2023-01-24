@@ -179,6 +179,7 @@ void buildFibers(Detector& desc, SensitiveDetector& sens, Volume& s_vol, xml_com
 {
   auto [s_trd_x1, s_thick, s_length, hphi] = dimensions;
   double      f_radius                     = getAttrOrDefault(x_fiber, _U(radius), 0.1 * cm);
+  double      f_cladding_thickness         = getAttrOrDefault(x_fiber, _Unicode(cladding_thickness), 0.0 * cm);
   double      f_spacing_x                  = getAttrOrDefault(x_fiber, _Unicode(spacing_x), 0.122 * cm);
   double      f_spacing_z                  = getAttrOrDefault(x_fiber, _Unicode(spacing_z), 0.134 * cm);
   std::string f_id_grid                    = getAttrOrDefault<std::string>(x_fiber, _Unicode(identifier_grid), "grid");
@@ -195,8 +196,11 @@ void buildFibers(Detector& desc, SensitiveDetector& sens, Volume& s_vol, xml_com
   auto grid_div = getNdivisions(s_trd_x1, s_thick, 2.0 * cm, 2.0 * cm);
   // Calculate polygonal grid coordinates (vertices)
   auto   grid_vtx = gridPoints(grid_div.first, grid_div.second, s_trd_x1, s_thick, hphi);
-  Tube   f_tube(0, f_radius, s_length);
-  Volume f_vol("fiber_vol", f_tube, desc.material(x_fiber.materialStr()));
+  double f_radius_core = f_radius-f_cladding_thickness;
+  Tube   f_tube_clad(f_radius_core, f_radius, s_length);
+  Volume f_vol_clad("fiber_vol", f_tube_clad, desc.material(x_fiber.materialStr()));
+  Tube   f_tube_core(0, f_radius_core, s_length);
+  Volume f_vol_core("fiber_core_vol", f_tube_core, desc.material(x_fiber.materialStr()));
 
   vector<int> f_id_count(grid_div.first * grid_div.second, 0);
   auto        f_pos = fiberPositions(f_radius, f_spacing_x, f_spacing_z, s_trd_x1, s_thick, hphi);
@@ -208,7 +212,8 @@ void buildFibers(Detector& desc, SensitiveDetector& sens, Volume& s_vol, xml_com
     }
     double l_pos_y = line.front().y();
     // use assembly as intermediate volume container to reduce number of daughter volumes
-    Assembly lfibers(Form("fiber_array_line_%lu", il));
+    Assembly lfibers_clad(Form("fiber_clad_array_line_%lu", il));
+    Assembly lfibers_core(Form("fiber_core_array_line_%lu", il));
     for (auto& p : line) {
       int f_grid_id = -1;
       int f_id      = -1;
@@ -236,19 +241,22 @@ void buildFibers(Detector& desc, SensitiveDetector& sens, Volume& s_vol, xml_com
       }
 
       if (x_fiber.isSensitive()) {
-        f_vol.setSensitiveDetector(sens);
+        f_vol_core.setSensitiveDetector(sens);
       }
-      f_vol.setAttributes(desc, x_fiber.regionStr(), x_fiber.limitsStr(), x_fiber.visStr());
+      f_vol_core.setAttributes(desc, x_fiber.regionStr(), x_fiber.limitsStr(), x_fiber.visStr());
 
       // Fiber placement
       // Transform3D f_tr(RotationZYX(0,0,M_PI*0.5),Position(p.x(), 0, p.y()));
       // PlacedVolume fiber_phv = s_vol.placeVolume(f_vol, Position(p.x(), 0., p.y()));
-      PlacedVolume fiber_phv = lfibers.placeVolume(f_vol, Position(p.x(), 0., 0.));
-      fiber_phv.addPhysVolID(f_id_grid, f_grid_id + 1).addPhysVolID(f_id_fiber, f_id + 1);
+      PlacedVolume core_phv = lfibers_core.placeVolume(f_vol_core, Position(p.x(), 0., 0.));
+      core_phv.addPhysVolID(f_id_grid, f_grid_id + 1).addPhysVolID(f_id_fiber, f_id + 1);
+      lfibers_clad.placeVolume(f_vol_clad, Position(p.x(), 0., 0.));
     }
-    lfibers.ptr()->Voxelize("");
+    lfibers_core.ptr()->Voxelize("");
+    lfibers_clad.ptr()->Voxelize("");
     Transform3D l_tr(RotationZYX(0, 0, M_PI * 0.5), Position(0., 0, l_pos_y));
-    s_vol.placeVolume(lfibers, l_tr);
+    s_vol.placeVolume(lfibers_core, l_tr);
+    s_vol.placeVolume(lfibers_clad, l_tr);
   }
 }
 
