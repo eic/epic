@@ -68,6 +68,7 @@
       type="ip6_B0Tracker"
       readout="B0TrackerHits"
       vis="FFTrackerVis">
+      <type_flags type="DetType_TRACKER + DetType_ENDCAP"/>
       <position x="B0TrackerCenter_xpos" y="0" z="B0TrackerCenter_zpos"/>
       <rotation x="0*rad" y="B0Tracker_rotation" z="0*rad"/>
       <module name="Module1" vis="TrackerModuleVis"> <!-- AnlProcess_Blue-->
