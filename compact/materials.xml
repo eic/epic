@@ -440,4 +440,9 @@
     <fraction n="0.9622" ref="Pb"/>
     <fraction n="0.0378" ref="SciFiPb_Glue"/>
   </material>
+  <!--custom material for radiator layer of MPGD-TRD-->
+  <material name="radiatorMatCustom">
+    <D tyepe="density" value="0.083" unit="g / cm3"/>
+    <fraction n="1" ref="radiatorMatCustom"/>
+  </material>
 </materials>
