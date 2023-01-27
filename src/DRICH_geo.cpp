@@ -144,7 +144,7 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
   double sensorRescale = 0;
   if (debugOpticsMode == 4) sensorRescale = 250;
   if (sensorRescale > 0) {
-    auto seg = (CartesianGridXY) desc.readout(readoutName).segmentation();
+    auto seg = static_cast<CartesianGridXY>( desc.readout(readoutName).segmentation() );
     seg.setGridSizeX(sensorRescale * seg.gridSizeX());
     seg.setGridSizeY(sensorRescale * seg.gridSizeY());
     seg.setOffsetX(sensorRescale * seg.offsetX());
