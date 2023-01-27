@@ -111,7 +111,7 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
   bool debugMirror     = desc.constantAsLong("DRICH_debug_mirror") == 1;
   bool debugSensors    = desc.constantAsLong("DRICH_debug_sensors") == 1;
   std::string FPfile = desc.constantAsString("DRICH_FP_file");
-  
+
   // if debugging optics, override some settings
   bool debugOptics = debugOpticsMode > 0;
   if (debugOptics) {
@@ -621,14 +621,14 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
 
     // for debugOpticsMode 5: drawing calculated focal points
     // of thrown beams of parallel photons
-    if( FPfile!="0" && debugOpticsMode == 5){      
+    if( FPfile!="0" && debugOpticsMode == 5){
       Cone FPsolid(1.,0.25,0.5,1,1);
       Volume FPvol(detName + "_FPpos_" + secName, FPsolid, aerogelMat);
 
       std::ifstream fptxt(FPfile);
       double fpx, fpy, fpz, dirx, diry, dirz;
       int fpnum=0;
-      
+
       while(!fptxt.eof()){
 	fptxt >> fpx >> fpy >> fpz >> dirx >> diry >> dirz;
         if( std::abs(fpx) < 1000  && std::abs(fpy) < 1000 && std::abs(fpz) < 1000){
