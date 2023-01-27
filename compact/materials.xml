@@ -441,8 +441,14 @@
     <fraction n="0.0378" ref="SciFiPb_Glue"/>
   </material>
   <!--custom material for radiator layer of MPGD-TRD-->
+  <material name="CH2">
+    <D type="density" value="0.91" unit="g / cm3"/>
+    <fraction n="1" ref="C"/>
+    <fraction n="2" ref="H"/>
+  </material>
   <material name="radiatorMatCustom">
-    <D tyepe="density" value="0.083" unit="g / cm3"/>
-    <fraction n="1" ref="radiatorMatCustom"/>
+    <D type="density" value="0.083" unit="g /cm3"/>
+    <fraction n="1" ref="CH2"/>
+    <fraction n="1" ref="Air"/> 
   </material>
 </materials>
