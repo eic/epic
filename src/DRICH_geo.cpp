@@ -224,9 +224,6 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
     gasvolSolid = gasvolBox;
     break;
   case 4:
-    vesselSolid = vesselBox;
-    gasvolSolid = gasvolBox;
-    break;
   case 5:
     vesselSolid = vesselBox;
     gasvolSolid = gasvolBox;
