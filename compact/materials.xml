@@ -451,4 +451,14 @@
     <fraction n="1" ref="CH2"/>
     <fraction n="1" ref="Air"/> 
   </material>
+  <material name="CO2">
+    <D type="density" value="1.84205" unit="mg / cm3"/>
+    <composite n="1" ref="C"/>
+    <composite n="2" ref="O"/>
+  </material>
+  <material name="Xe20CO2">
+    <D type="density" value="5.0818" unit="mg /cm3"/>
+    <composite n="0.8" ref="Xenon"/>
+    <composite n="0.2" ref="CO2"/>
+  </material>
 </materials>
