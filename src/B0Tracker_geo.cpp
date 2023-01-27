@@ -228,10 +228,10 @@ static Ref_t create_B0Tracker(Detector& description, xml_h e, SensitiveDetector 
       }
     }
     layer_vol->GetShape()->ComputeBBox();
-    layerParams.set<double>("envelope_r_min", layer_rmin_tolerance);
-    layerParams.set<double>("envelope_r_max", layer_rmax_tolerance);
-    layerParams.set<double>("envelope_z_min", layer_zmin_tolerance);
-    layerParams.set<double>("envelope_z_max", layer_zmax_tolerance);
+    layerParams.set<double>("envelope_r_min", layer_rmin_tolerance/dd4hep::mm);
+    layerParams.set<double>("envelope_r_max", layer_rmax_tolerance/dd4hep::mm);
+    layerParams.set<double>("envelope_z_min", layer_zmin_tolerance/dd4hep::mm);
+    layerParams.set<double>("envelope_z_max", layer_zmax_tolerance/dd4hep::mm);
 
     for (xml_coll_t lmat(x_layer, _Unicode(layer_material)); lmat; ++lmat) {
       xml_comp_t x_layer_material = lmat;
