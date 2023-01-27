@@ -113,8 +113,7 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
   std::string FPfile = desc.constantAsString("DRICH_FP_file");
 
   // if debugging optics, override some settings
-  bool debugOptics = debugOpticsMode > 0;
-  if (debugOptics) {
+  if (debugOpticsMode != 0) {
     printout(WARNING, "DRICH_geo", "DEBUGGING DRICH OPTICS");
     switch (debugOpticsMode) {
     case 1:
@@ -295,7 +294,7 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
   // aerogelSkin.isValid();
 
   // airgap and filter placement and surface properties
-  if (!debugOptics) {
+  if (debugOpticsMode == 0) {
 
     auto airgapPlacement =
         Translation3D(radiatorPos.x(), radiatorPos.y(), radiatorPos.z()) * // re-center to originFront
@@ -343,7 +342,7 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
 
   for (int isec = 0; isec < nSectors; isec++) {
     // debugging filters, limiting the number of sectors
-    if ((debugMirror || debugSensors || debugOptics) && isec != 0)
+    if ((debugMirror || debugSensors || debugOpticsMode!=0) && isec != 0)
       continue;
 
     // sector rotation about z axis
@@ -473,7 +472,7 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
     auto sensorSphPos = Position(sensorSphCenterX, 0., sensorSphCenterZ) + originFront;
 
     // sensitivity
-    if (!debugOptics || debugOpticsMode == 3 || debugOpticsMode == 4)
+    if (debugOpticsMode == 0 || debugOpticsMode == 3 || debugOpticsMode == 4)
       sensorVol.setSensitiveDetector(sens);
 
     // reconstruction constants
@@ -577,7 +576,7 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
 	    std::string modsecName = secName + "_" + std::to_string(imod);
 	    DetElement  sensorDE(det, "sensor_de_" + modsecName, imodsec);
 	    sensorDE.setPlacement(sensorPV);
-	    if (!debugOptics || debugOpticsMode == 3 || debugOpticsMode == 5) {
+	    if (debugOpticsMode == 0 || debugOpticsMode == 3 || debugOpticsMode == 5) {
 	      SkinSurface sensorSkin(desc, sensorDE, "sensor_optical_surface_" + modsecName, sensorSurf, sensorVol);
 	      sensorSkin.isValid();
 	    }
