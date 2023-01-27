@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: LGPL-3.0-or-later
-// Copyright (C) 2022 Christopher Dilks, Junhuai Xu, Connor Pecar
+// Copyright (C) 2022, 2023 Christopher Dilks, Junhuai Xu, Connor Pecar
 
 //==========================================================================
 //  dRICH: Dual Ring Imaging Cherenkov Detector
