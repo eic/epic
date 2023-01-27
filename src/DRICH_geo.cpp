@@ -127,8 +127,6 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
       vesselMat = aerogelMat = filterMat = gasvolMat = desc.material("VacuumOptical");
       break;
     case 4:
-      vesselMat = aerogelMat = filterMat = gasvolMat = desc.material("VacuumOptical");
-      break;
     case 5:
       vesselMat = aerogelMat = filterMat = gasvolMat = desc.material("VacuumOptical");
       break;
