@@ -1,0 +1,137 @@
+<!-- SPDX-License-Identifier: LGPL-3.0-or-later -->
+<!-- Copyright (C) 2022 Whitney Armstrong, Sylvester Joosten, Matt Posik, Jihee Kim -->
+
+<lccdd>
+<info name="mpgd_trd_endcap.xml"
+      title="Micro-Pattern Gas Detector based Transition Radiation Detector for e/Pi discrimination and tracking"
+      author="mposik1983"
+      url="https://github.com/mposik1983"
+      status="development"
+      version="1.0"
+><comment/>
+</info>
+
+  <comment> Forward MPGD-TRD development for ePIC upgrade or EIC detector 2  </comment>
+  <comment>
+      ____X2____
+      \        /
+       \      /    Y (=z for the trd)
+        \_X1_/
+  </comment>
+
+  <define>
+
+    <comment> Main Parameters </comment>
+    <constant name="SiTrackerSensor_thickness"      value="40*um"/>
+    <constant name="Radiator_thickness"             value="15*cm"/>
+    <constant name="Driftgap_thickness"             value="3*cm"/>
+
+    <constant name="MPGDTRDEndcapPMod_count"       value="12"/>
+    <constant name="MPGDTRDEndcapPMod_dz"          value="0" />
+    <constant name="MPGDTRDEndcapPMod_overlap"     value="0"/>
+    <constant name="MPGDTRDEndcapPMod_zmin"        value="10*cm" />
+    <constant name="MPGDTRDEndcapP_rmin"           value="8.5*cm" />
+    <constant name="MPGDTRDEndcapP_rmax"           value="185*cm" />
+    <constant name="MPGDTRDEndcapP_RadiatorGap"    value="0"/>
+    <comment>
+	    zmin, rmin, rmax can be defined in compact/tracking/definition.xml relative to DIRC detector via
+            <constant name="MPGDTRDEndcapPMod_zmin"         value="DRICH_zmax" />
+            <constant name="MPGDTRDEndcapP_rmin"            value="DRICH_rmin0" />
+	    <constant name="MPGDTRDEndcapP_rmax"            value="DRICH_rmin1" />
+	    but will keep hard coded values for now
+    </comment>
+
+    <comment> Global Si endcap variables </comment>
+    <constant name="MPGDTRDEndcapPMod_thickness"   value="Radiator_thickness + Driftgap_thickness" />
+    <constant name="MPGDTRDEndcapPMod_angle"       value="360.0*degree / MPGDTRDEndcapPMod_count * (1 + MPGDTRDEndcapPMod_overlap)" />
+    <constant name="MPGDTRDEndcapLayer_thickness" value="MPGDTRDEndcapPMod_thickness + 2 * MPGDTRDEndcapPMod_dz" />
+
+  </define>
+
+  <comment>
+  </comment>
+  <define>
+    <constant name="MPGDTRDEndcapPMod1_zmin"   value="MPGDTRDEndcapPMod_zmin" />
+    <constant name="TrackerEndcapPMod1_rmax"   value="MPGDTRDEndcapP_rmax" />
+    <constant name="TrackerEndcapPMod1_x1"     value="2 * MPGDTRDEndcapP_rmin * tan(MPGDTRDEndcapPMod_angle/2)" />
+    <constant name="TrackerEndcapPMod1_x2"     value="2 * TrackerEndcapPMod1_rmax * sin(MPGDTRDEndcapPMod_angle/2)" />
+    <constant name="TrackerEndcapPMod1_y"      value="TrackerEndcapPMod1_rmax * cos(MPGDTRDEndcapPMod_angle/2) - MPGDTRDEndcapP_rmin" />
+    <constant name="TrackerEndcapPLayer2_rmin" value="MPGDTRDEndcapP_rmin - 1*um" />
+    <constant name="TrackerEndcapPLayer2_rmax" value="TrackerEndcapPMod1_rmax + 1*um" />
+    <constant name="TrackerEndcapPLayer2_zmin" value="MPGDTRDEndcapPMod1_zmin - MPGDTRDEndcapLayer_thickness/2" />
+    <constant name="TrackerEndcapPMod3_zmin"   value="MPGDTRDEndcapPMod_zmin + Radiator_thickness + MPGDTRDEndcapP_RadiatorGap" />
+    <constant name="TrackerEndcapPMod3_rmin"   value="MPGDTRDEndcapP_rmin" />
+    <constant name="TrackerEndcapPMod3_rmax"   value="MPGDTRDEndcapP_rmax" />
+    <constant name="TrackerEndcapPMod3_x1"     value="2 * TrackerEndcapPMod3_rmin * tan(MPGDTRDEndcapPMod_angle/2)" />
+    <constant name="TrackerEndcapPMod3_x2"     value="2 * TrackerEndcapPMod3_rmax * sin(MPGDTRDEndcapPMod_angle/2)" />
+    <constant name="TrackerEndcapPMod3_y"      value="TrackerEndcapPMod3_rmax * cos(MPGDTRDEndcapPMod_angle/2) - TrackerEndcapPMod3_rmin" />
+    <constant name="TrackerEndcapPLayer3_rmin" value="MPGDTRDEndcapP_rmin" />
+    <constant name="TrackerEndcapPLayer3_rmax" value="MPGDTRDEndcapP_rmax" />
+    <constant name="TrackerEndcapPLayer3_zmin" value="TrackerEndcapPMod3_zmin - MPGDTRDEndcapLayer_thickness/2" />
+
+  </define>
+  <detectors>
+    <detector
+      id="TrackerEndcapP_3_ID"
+      name="MPGDTRDEndcapP"
+      type="epic_TrapEndcapTracker"
+      readout="TrackerEndcapHits"
+      vis="TrackerVis"
+      reflect="false">
+      <type_flags type="DetType_TRACKER + DetType_ENDCAP"/>
+      <comment> TRD radiator </comment>
+      <module name="Module1" vis="TrackerSupportVis">
+        <trd x1="TrackerEndcapPMod1_x1/2" x2="TrackerEndcapPMod1_x2/2" z="TrackerEndcapPMod1_y/2" />
+        <module_component thickness="Radiator_thickness" material="radiatorMatCustom" vis="TrackerSupportVis" />
+      </module>
+      <comment> MPGD-TRD active layer </comment>
+      <module name="Module3" vis="TrackerModuleVis">
+        <trd x1="TrackerEndcapPMod3_x1/2" x2="TrackerEndcapPMod3_x2/2" z="TrackerEndcapPMod3_y/2" />
+        <module_component thickness="Driftgap_thickness" material="Xe20CO2" sensitive="true" vis="TrackerLayerVis" />
+      </module>
+      <layer id="2">
+        <envelope vis="TrackerSupportVis"
+          rmin="TrackerEndcapPLayer2_rmin"
+          rmax="TrackerEndcapPLayer2_rmax"
+          length="MPGDTRDEndcapLayer_thickness"
+          zstart="TrackerEndcapPLayer2_zmin" />
+        <layer_material surface="inner" binning="binPhi,binR" bins0="12" bins1="20"/>
+        <ring
+          r="MPGDTRDEndcapP_rmin + TrackerEndcapPMod1_y/2"
+          zstart="0"
+          nmodules="MPGDTRDEndcapPMod_count"
+          dz="MPGDTRDEndcapPMod_dz"
+          module="Module1" />
+      </layer>
+      <layer id="3">
+        <envelope vis="TrackerLayerVis"
+          rmin="TrackerEndcapPLayer3_rmin"
+          rmax="TrackerEndcapPLayer3_rmax"
+          length="MPGDTRDEndcapLayer_thickness"
+          zstart="TrackerEndcapPLayer3_zmin" />
+        <layer_material surface="inner" binning="binPhi,binR" bins0="12" bins1="20"/>
+        <ring
+          r="TrackerEndcapPMod3_rmin + TrackerEndcapPMod3_y/2"
+          zstart="0"
+          nmodules="MPGDTRDEndcapPMod_count"
+          dz="MPGDTRDEndcapPMod_dz"
+          module="Module3" />
+      </layer>
+    </detector>
+  </detectors>
+
+  <plugins>
+    <plugin name="DD4hep_ParametersPlugin">
+      <argument value="MPGDTRDEndcapP"/>
+      <argument value="layer_pattern: str=MPGDTRDEndcapP_layer\d_P"/>
+    </plugin>
+  </plugins>
+
+  <readouts>
+    <readout name="TrackerEndcapHits">
+      <segmentation type="CartesianGridXZ" grid_size_x="0.010*mm" grid_size_z="0.010*mm" />
+      <id>system:8,layer:4,module:12,sensor:2,x:32:-16,z:-16</id>
+    </readout>
+  </readouts>
+
+</lccdd>
