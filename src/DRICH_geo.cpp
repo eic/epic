@@ -620,11 +620,14 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
       Volume FPvol(detName + "_FPpos_" + secName, FPsolid, aerogelMat);
 
       std::ifstream fptxt(FPfile);
+      std::string fpstr;
       double fpx, fpy, fpz, dirx, diry, dirz;
       int fpnum=0;
-
-      while(!fptxt.eof()){
-	fptxt >> fpx >> fpy >> fpz >> dirx >> diry >> dirz;
+      
+      while(std::getline(fptxt,fpstr)){
+	if(fpstr[0]=='#') continue;
+	std::istringstream stringStream(fpstr);
+	stringStream >> fpx >> fpy >> fpz >> dirx >> diry >> dirz;
         if( std::abs(fpx) < 1000  && std::abs(fpy) < 1000 && std::abs(fpz) < 1000){
           double zrot = 0;
           if(dirx < 0){
