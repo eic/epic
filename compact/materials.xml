@@ -346,15 +346,15 @@
     <composite n="1" ref="Ti"/>
     <composite n="2" ref="O"/>
   </material>
-  
+
   <material name="Ti02Epoxy">
     <D type="density" value="2.3" unit="g/cm3"/>
     <fraction n="0.67" ref="Epoxy"/>
     <fraction n="0.33" ref="TiO2"/>
   </material>
 
-  
-  
+
+
   <material name="Cfrp_intt">
     <D type="density" value="1.69" unit="g/cm3"/>
     <composite n="10" ref="C"/>

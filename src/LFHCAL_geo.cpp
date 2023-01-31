@@ -19,12 +19,12 @@ struct moduleParamsStrct{
                       mod_BWThick(0.), mod_width(0.), mod_height(0.), mod_notchWidthAbsA(0.), mod_notchWidthAbsB(0.), mod_notchWidthAbsC (0.),
                       mod_notchWidthScin(0.), mod_notchDepth(0.), mod_sepDepth(0.),  mod_visStr(""), mod_regStr(""), mod_limStr("")
                       {}
-  moduleParamsStrct(   double BIwidth, double BIheight, double SWThick, double TWThick, double FWThick, double BWThick, double width, double height, 
-                       double notchWidthAbsA, double notchWidthAbsB, double notchWidthAbsC, double notchWidthScin, double notchDepth, double sepDepth, 
+  moduleParamsStrct(   double BIwidth, double BIheight, double SWThick, double TWThick, double FWThick, double BWThick, double width, double height,
+                       double notchWidthAbsA, double notchWidthAbsB, double notchWidthAbsC, double notchWidthScin, double notchDepth, double sepDepth,
                        std::string visStr, std::string regStr, std::string limStr){
       mod_BIwidth       = BIwidth;
       mod_BIheight      = BIheight;
-      mod_SWThick       = SWThick;  
+      mod_SWThick       = SWThick;
       mod_TWThick       = TWThick;
       mod_FWThick       = FWThick;
       mod_BWThick       = BWThick;
@@ -62,7 +62,7 @@ struct moduleParamsStrct{
 struct sliceParamsStrct{
   sliceParamsStrct(): layer_ID(0), slice_ID(0), slice_partID(0), slice_thick(0.), slice_offset(0.), slice_matStr(""), slice_visStr(""), slice_regStr(""), slice_limStr("")
                       {}
-  sliceParamsStrct(                   
+  sliceParamsStrct(
                       int l_ID, int sl_ID, int sl_partID, double sl_thick, double sl_off, std::string sl_matStr, std::string sl_visStr, std::string sl_regStr, std::string sl_limStr ){
       layer_ID      = l_ID;
       slice_ID      = sl_ID;
@@ -73,7 +73,7 @@ struct sliceParamsStrct{
       slice_visStr  = sl_visStr;
       slice_regStr  = sl_regStr;
       slice_limStr  = sl_limStr;
-      
+
   }
   int         layer_ID;
   int         slice_ID;
@@ -84,14 +84,14 @@ struct sliceParamsStrct{
   std::string slice_visStr;
   std::string slice_regStr;
   std::string slice_limStr;
-};  
+};
 
 
 //************************************************************************************************************
 //************************** Assembly for absorber plates for 8M modules *************************************
 //************************************************************************************************************
 Volume createAbsorberPlateEightM(Detector& desc,
-                                   std::string basename, 
+                                   std::string basename,
                                    double h_mod,
                                    double w_mod,
                                    double t_mod_tp,
@@ -107,7 +107,7 @@ Volume createAbsorberPlateEightM(Detector& desc,
                                    std::string vis,
                                    bool renderComp
 ){
-  
+
   double w_plate  = (w_mod/2-t_mod_sp)*2;
   double l_A = -w_plate/2;
   double l_B = -(w_plate/2-w_notchC);
@@ -118,10 +118,10 @@ Volume createAbsorberPlateEightM(Detector& desc,
   double r_B = w_plate/2-w_notchC;
   double r_C = w_plate/4+w_notchA/2;
   double r_D = w_plate/4-w_notchA/2;
-  double r_E = w_notchB/2; 
+  double r_E = w_notchB/2;
                                         // 0      1     2     3      4
   const std::vector<double> xCoord      = { l_A,  l_B,  l_B,  l_C,   l_C,
-                                        // 5      6     7     8      9 
+                                        // 5      6     7     8      9
                                             l_D,  l_D,  l_E,  l_E,   r_E,
                                         // 10     11    12    13     14
                                             r_E,  r_D,  r_D,  r_C,   r_C,
@@ -136,15 +136,15 @@ Volume createAbsorberPlateEightM(Detector& desc,
                                         //35
                                             l_A
                                         };
-                                        
+
   double topA = h_mod/2-t_mod_tp;
   double topB = h_mod/2-t_mod_tp-h_notch;
   double botA = -(h_mod/2-t_mod_tp);
   double botB = -(h_mod/2-t_mod_tp-h_notch);
                                         // 0       1       2      3       4
   const std::vector<double> yCoord      = { topA,  topA,   topB,  topB,   topA,
-                                        // 5       6       7      8       9 
-                                          topA,   topB,   topB,   topA,   topA, 
+                                        // 5       6       7      8       9
+                                          topA,   topB,   topB,   topA,   topA,
                                         // 10      11     12      13      14
                                           topB,   topB,   topA,   topA,   topB,
                                         // 15     16      17      18      19
@@ -158,14 +158,14 @@ Volume createAbsorberPlateEightM(Detector& desc,
                                          //35
                                           botA,
                                         };
-  
+
   const std::vector<double> zStep       = {-t_slice/2, t_slice/2};
   const std::vector<double> zStepX      = {0., 0.};
   const std::vector<double> zStepY      = {0., 0.};
   const std::vector<double> zStepScale  = {1., 1.};
-  
+
   ExtrudedPolygon absplate = ExtrudedPolygon( xCoord, yCoord, zStep, zStepX, zStepY, zStepScale);
-    
+
   Volume      absplate_vol(basename, absplate, slice_mat);
   // Setting slice attributes
   if (renderComp){
@@ -175,16 +175,16 @@ Volume createAbsorberPlateEightM(Detector& desc,
     absplate_vol.setLimitSet(desc,limit);
   }
 
-  
+
   return absplate_vol;
-  
+
 }
 
 //************************************************************************************************************
 //************************** Assembly for absorber plates for 4M modules *************************************
 //************************************************************************************************************
 Volume createAbsorberPlateFourM(Detector& desc,
-                                   std::string basename, 
+                                   std::string basename,
                                    double h_mod,
                                    double w_mod,
                                    double t_mod_tp,
@@ -200,33 +200,33 @@ Volume createAbsorberPlateFourM(Detector& desc,
                                    bool renderComp
 ){
                                           // 0                 1                         2                          3            4
-  const std::vector<double> xCoord      = { -(w_mod/2-t_mod_sp), -(w_mod/2-t_mod_sp-w_notchC),  -(w_mod/2-t_mod_sp-w_notchC),  -w_notchA/2,  -w_notchA/2,  
-    
-    
-                                        // 5                  6                         7                            8                              9 
-                                            w_notchA/2,    w_notchA/2,                w_mod/2-t_mod_sp-w_notchC,  w_mod/2-t_mod_sp-w_notchC,        w_mod/2-t_mod_sp, 
+  const std::vector<double> xCoord      = { -(w_mod/2-t_mod_sp), -(w_mod/2-t_mod_sp-w_notchC),  -(w_mod/2-t_mod_sp-w_notchC),  -w_notchA/2,  -w_notchA/2,
+
+
+                                        // 5                  6                         7                            8                              9
+                                            w_notchA/2,    w_notchA/2,                w_mod/2-t_mod_sp-w_notchC,  w_mod/2-t_mod_sp-w_notchC,        w_mod/2-t_mod_sp,
                                         // 10                   11                          12                              13           14
-                                            w_mod/2-t_mod_sp, w_mod/2-t_mod_sp-w_notchC,    w_mod/2-t_mod_sp-w_notchC, w_notchA/2, w_notchA/2,    
+                                            w_mod/2-t_mod_sp, w_mod/2-t_mod_sp-w_notchC,    w_mod/2-t_mod_sp-w_notchC, w_notchA/2, w_notchA/2,
                                         // 15          16          17                         18                            19
                                          -w_notchA/2, -w_notchA/2,  -(w_mod/2-t_mod_sp-w_notchC), -(w_mod/2-t_mod_sp-w_notchC),-(w_mod/2-t_mod_sp)
                                         };
                                         // 0                 1                         2                      3                           4
-  const std::vector<double> yCoord      = {h_mod/2-t_mod_tp, h_mod/2-t_mod_tp,  h_mod/2-t_mod_tp-h_notch,    h_mod/2-t_mod_tp-h_notch,   h_mod/2-t_mod_tp, 
-                                        // 5                  6                         7                            8                    9 
+  const std::vector<double> yCoord      = {h_mod/2-t_mod_tp, h_mod/2-t_mod_tp,  h_mod/2-t_mod_tp-h_notch,    h_mod/2-t_mod_tp-h_notch,   h_mod/2-t_mod_tp,
+                                        // 5                  6                         7                            8                    9
                                           h_mod/2-t_mod_tp,  h_mod/2-t_mod_tp-h_notch, h_mod/2-t_mod_tp-h_notch,    h_mod/2-t_mod_tp,    h_mod/2-t_mod_tp,
                                         // 10                   11                      12                              13                          14
                                           -(h_mod/2-t_mod_tp),  -(h_mod/2-t_mod_tp),    -(h_mod/2-t_mod_tp-h_notch),    -(h_mod/2-t_mod_tp-h_notch), -(h_mod/2-t_mod_tp),
                                         // 15                   16                          17                              18                        19
                                          -(h_mod/2-t_mod_tp),   -(h_mod/2-t_mod_tp-h_notch), -(h_mod/2-t_mod_tp-h_notch),   -(h_mod/2-t_mod_tp),    -(h_mod/2-t_mod_tp)
                                         };
-  
+
   const std::vector<double> zStep       = {-t_slice/2, t_slice/2};
   const std::vector<double> zStepX      = {0., 0.};
   const std::vector<double> zStepY      = {0., 0.};
   const std::vector<double> zStepScale  = {1., 1.};
-  
+
   ExtrudedPolygon absplate = ExtrudedPolygon( xCoord, yCoord, zStep, zStepX, zStepY, zStepScale);
-    
+
   Volume      absplate_vol(basename, absplate, slice_mat);
   // Setting slice attributes
   if (renderComp){
@@ -235,7 +235,7 @@ Volume createAbsorberPlateFourM(Detector& desc,
     absplate_vol.setRegion(desc,region);
     absplate_vol.setLimitSet(desc,limit);
   }
-  
+
   return absplate_vol;
 }
 
@@ -244,7 +244,7 @@ Volume createAbsorberPlateFourM(Detector& desc,
 //************************** Filler plate i.e. Tyvek/Air for 8M module ***************************************
 //************************************************************************************************************
 Volume createFillerPlateEightM( Detector& desc,
-                                   std::string basename, 
+                                   std::string basename,
                                    double h_mod,
                                    double w_mod,
                                    double t_mod_tp,
@@ -261,32 +261,32 @@ Volume createFillerPlateEightM( Detector& desc,
   double w_plate     = w_mod-2*t_mod_sp;
   double h_plate     = h_mod-2*t_mod_tp;
                                             // 0                 1                         2                          3                       4
-  const std::vector<double> xCoord      = { -w_plate/2,   -(w_plate/4+w_notch/2),       -(w_plate/4+w_notch/2),      -(w_plate/4-w_notch/2), -(w_plate/4-w_notch/2), 
-                                        // 5                    6                         7                            8                      9 
+  const std::vector<double> xCoord      = { -w_plate/2,   -(w_plate/4+w_notch/2),       -(w_plate/4+w_notch/2),      -(w_plate/4-w_notch/2), -(w_plate/4-w_notch/2),
+                                        // 5                    6                         7                            8                      9
                                           w_plate/4-w_notch/2,  w_plate/4-w_notch/2,    w_plate/4+w_notch/2,          w_plate/4+w_notch/2,    w_plate/2,
-                                        // 10                   11                    12                        13                  14            
+                                        // 10                   11                    12                        13                  14
                                         w_plate/2,          w_plate/4+w_notch/2,      w_plate/4+w_notch/2,   w_plate/4-w_notch/2,  w_plate/4-w_notch/2,
                                         // 15                   16                        17                      18                      19
                                         -(w_plate/4-w_notch/2), -(w_plate/4-w_notch/2),   -(w_plate/4+w_notch/2), -(w_plate/4+w_notch/2), -w_plate/2
-                                        };  
+                                        };
                                         // 0                     1                  2              3             4
-  const std::vector<double> yCoord      = { 
-                                        h_plate/2-h_notch,      h_plate/2-h_notch,  h_plate/2,   h_plate/2,     h_plate/2-h_notch,  
-                                        // 5                     6                 7                8                    9 
+  const std::vector<double> yCoord      = {
+                                        h_plate/2-h_notch,      h_plate/2-h_notch,  h_plate/2,   h_plate/2,     h_plate/2-h_notch,
+                                        // 5                     6                 7                8                    9
                                          h_plate/2-h_notch,      h_plate/2,        h_plate/2,    h_plate/2-h_notch,    h_plate/2-h_notch,
-                                        // 10                   11                    12                        13                  14            
+                                        // 10                   11                    12                        13                  14
                                         -(h_plate/2-h_notch),   -(h_plate/2-h_notch),  -h_plate/2,         -h_plate/2,  -(h_plate/2-h_notch),
                                         // 15                   16                   17              18                      19
                                          -(h_plate/2-h_notch),  -h_plate/2,      -h_plate/2,      -(h_plate/2-h_notch),        -(h_plate/2-h_notch)
                                         };
-  
+
   const std::vector<double> zStep       = {-t_slice/2, t_slice/2};
   const std::vector<double> zStepX      = {0., 0.};
   const std::vector<double> zStepY      = {0., 0.};
   const std::vector<double> zStepScale  = {1., 1.};
-  
+
   ExtrudedPolygon filler = ExtrudedPolygon( xCoord, yCoord, zStep, zStepX, zStepY, zStepScale);
-    
+
   Volume      filler_vol(basename, filler, slice_mat);
   // Setting slice attributes
   if (renderComp){
@@ -295,7 +295,7 @@ Volume createFillerPlateEightM( Detector& desc,
     filler_vol.setRegion(desc,region);
     filler_vol.setLimitSet(desc,limit);
   }
-  
+
   return filler_vol;
 }
 
@@ -303,7 +303,7 @@ Volume createFillerPlateEightM( Detector& desc,
 //************************** Filler plate i.e. Tyvek/Air for 4M module ***************************************
 //************************************************************************************************************
 Volume createFillerPlateFourM( Detector& desc,
-                                   std::string basename, 
+                                   std::string basename,
                                    double h_mod,
                                    double w_mod,
                                    double t_mod_tp,
@@ -318,29 +318,29 @@ Volume createFillerPlateFourM( Detector& desc,
                                    bool renderComp
 ){
                                               // 0                 1                         2                          3            4
-  const std::vector<double> xCoord      = { -(w_mod/2-t_mod_sp),   -w_notch/2,  -w_notch/2,  w_notch/2,    w_notch/2,      
-    
-    
-                                        // 5                  6                         7                            8                              9 
-                                        w_mod/2-t_mod_sp,   w_mod/2-t_mod_sp,  w_notch/2, w_notch/2,    -w_notch/2, 
-                                        // 10                   11             
+  const std::vector<double> xCoord      = { -(w_mod/2-t_mod_sp),   -w_notch/2,  -w_notch/2,  w_notch/2,    w_notch/2,
+
+
+                                        // 5                  6                         7                            8                              9
+                                        w_mod/2-t_mod_sp,   w_mod/2-t_mod_sp,  w_notch/2, w_notch/2,    -w_notch/2,
+                                        // 10                   11
                                         -w_notch/2,        -(w_mod/2-t_mod_sp)
                                         };
                                         // 0                           1                         2                   3                4
   const std::vector<double> yCoord      = {h_mod/2-t_mod_tp-h_notch,  h_mod/2-t_mod_tp-h_notch,   h_mod/2-t_mod_tp, h_mod/2-t_mod_tp, h_mod/2-t_mod_tp-h_notch,
-                                        // 5                          6                            7                            8                          9 
-                                            h_mod/2-t_mod_tp-h_notch, -(h_mod/2-t_mod_tp-h_notch), -(h_mod/2-t_mod_tp-h_notch), -(h_mod/2-t_mod_tp),  -(h_mod/2-t_mod_tp), 
-                                        // 10                   11                     
+                                        // 5                          6                            7                            8                          9
+                                            h_mod/2-t_mod_tp-h_notch, -(h_mod/2-t_mod_tp-h_notch), -(h_mod/2-t_mod_tp-h_notch), -(h_mod/2-t_mod_tp),  -(h_mod/2-t_mod_tp),
+                                        // 10                   11
                                         -(h_mod/2-t_mod_tp-h_notch),    -(h_mod/2-t_mod_tp-h_notch)
                                         };
-  
+
   const std::vector<double> zStep       = {-t_slice/2, t_slice/2};
   const std::vector<double> zStepX      = {0., 0.};
   const std::vector<double> zStepY      = {0., 0.};
   const std::vector<double> zStepScale  = {1., 1.};
-  
+
   ExtrudedPolygon filler = ExtrudedPolygon( xCoord, yCoord, zStep, zStepX, zStepY, zStepScale);
-    
+
   Volume      filler_vol(basename, filler, slice_mat);
   // Setting slice attributes
   if (renderComp){
@@ -357,7 +357,7 @@ Volume createFillerPlateFourM( Detector& desc,
 //************************** single scintillator plate for tower *********************************************
 //************************************************************************************************************
 Volume createScintillatorTower( Detector& desc,
-                                   std::string basename, 
+                                   std::string basename,
                                    double w_tow,
                                    double h_tow,
                                    double t_slice,
@@ -371,27 +371,27 @@ Volume createScintillatorTower( Detector& desc,
                                   bool renderComp
 ){
                                         // 0                1,              2,                3,          4
-  const std::vector<double> xCoord      = { -(w_tow/2),   w_tow/2-w_notch,  w_tow/2-w_notch,  w_tow/2,    w_tow/2,      
-                                        // 5                 
+  const std::vector<double> xCoord      = { -(w_tow/2),   w_tow/2-w_notch,  w_tow/2-w_notch,  w_tow/2,    w_tow/2,
+                                        // 5
                                        -(w_tow/2)
                                         };
                                         // 0                 1                  2        3        4
   const std::vector<double> yCoord      = {h_tow/2,  h_tow/2,   h_tow/2+h_notch, h_tow/2+h_notch, -h_tow/2,
-                                        // 5                         
+                                        // 5
                                           -h_tow/2,
                                         };
-  
+
   const std::vector<double> zStep       = {-t_slice/2, t_slice/2};
   const std::vector<double> zStepX      = {0., 0.};
   const std::vector<double> zStepY      = {0., 0.};
   const std::vector<double> zStepScale  = {1., 1.};
-  
+
   ExtrudedPolygon scintplate = ExtrudedPolygon( xCoord, yCoord, zStep, zStepX, zStepY, zStepScale);
-    
+
   Volume      slice_vol(basename, scintplate, slice_mat);
     // Setting appropriate slices as sensitive
   sens.setType("calorimeter");
-  slice_vol.setSensitiveDetector(sens);  
+  slice_vol.setSensitiveDetector(sens);
   // Setting slice attributes
   if (renderComp){
     slice_vol.setAttributes(desc, region, limit, vis);
@@ -400,14 +400,14 @@ Volume createScintillatorTower( Detector& desc,
     slice_vol.setLimitSet(desc,limit);
   }
   return slice_vol;
-  
-}  
+
+}
 
 //************************************************************************************************************
 //************************** create scintillator plate with separations for 8M *******************************
 //************************************************************************************************************
 Assembly createScintillatorPlateEightM( Detector& desc,
-                                        std::string basename, 
+                                        std::string basename,
 //                                         int modID,
                                         int layerID,
                                         double h_mod,
@@ -449,7 +449,7 @@ Assembly createScintillatorPlateEightM( Detector& desc,
                                        // 10              11               12               13                  14
                                        w_tow+0.5*t_sep,   w_tow+1.5*t_sep, w_tow+1.5*t_sep, w_mod/2-t_mod_sp,   w_mod/2-t_mod_sp,
                                         // 15             16                  17              18             19
-                                        w_tow+1.5*t_sep, w_tow+1.5*t_sep, w_tow+0.5*t_sep,  w_tow+0.5*t_sep,   t_sep/2, 
+                                        w_tow+1.5*t_sep, w_tow+1.5*t_sep, w_tow+0.5*t_sep,  w_tow+0.5*t_sep,   t_sep/2,
                                         // 20             21              22              23            24
                                           t_sep/2,         -t_sep/2,     -t_sep/2,   -(w_tow+0.5*t_sep),  -(w_tow+0.5*t_sep),
                                         // 25               26              27
@@ -457,25 +457,25 @@ Assembly createScintillatorPlateEightM( Detector& desc,
                                         };
                                         // 0           1            2                         3                     4
   const std::vector<double> yCoordTi      = { t_sep/2.,  t_sep/2.,   (h_tow+h_notch+t_sep/2), (h_tow+h_notch+t_sep/2), t_sep/2.,
-                                        // 5            6                    7                         8            9                         
+                                        // 5            6                    7                         8            9
                                           t_sep/2.,   (h_tow+t_sep/2),      (h_tow+t_sep/2),   t_sep/2.,    t_sep/2.,
                                         // 10              11                               12              13            14
                                          (h_tow+h_notch+t_sep/2), (h_tow+h_notch+t_sep/2),   t_sep/2.,    t_sep/2.,    -t_sep/2.,
                                          // 15         16                        17                       18            19
-                                        -t_sep/2.,   -(h_tow+h_notch+t_sep/2), -(h_tow+h_notch+t_sep/2),  -t_sep/2.,    -t_sep/2., 
+                                        -t_sep/2.,   -(h_tow+h_notch+t_sep/2), -(h_tow+h_notch+t_sep/2),  -t_sep/2.,    -t_sep/2.,
                                         // 20               21                       22              23            24
                                         -(h_tow+t_sep/2), -(h_tow+t_sep/2), -t_sep/2.,    -t_sep/2.,    -(h_tow+h_notch+t_sep/2),
                                         // 25             26              27
                                         -(h_tow+h_notch+t_sep/2), -t_sep/2.,    -t_sep/2.
                                         };
-                                        
+
   const std::vector<double> zStepTi       = {-t_slice/2, t_slice/2};
   const std::vector<double> zStepXTi      = {0., 0.};
   const std::vector<double> zStepYTi      = {0., 0.};
   const std::vector<double> zStepScaleTi  = {1., 1.};
-  
+
   ExtrudedPolygon tiOgrid = ExtrudedPolygon( xCoordTi, yCoordTi, zStepTi, zStepXTi, zStepYTi, zStepScaleTi);
-    
+
   Volume      ti0grid_vol(basename+"_Ti02Epoxy_"+_toString(layerID, "_layer_%d"), tiOgrid, slice_mat);
   // Setting slice attributes
   if (renderComp){
@@ -485,7 +485,7 @@ Assembly createScintillatorPlateEightM( Detector& desc,
     ti0grid_vol.setLimitSet(desc,limit);
   }
   pvm = modScintAssembly.placeVolume(ti0grid_vol, Position(0, 0, 0 ));
-  
+
   // 8M module placement of scintillator for tower
   double rotZ[8] = {0,    0, 0,     0,  0,    0,    0,    0};
   double rotY[8] = {M_PI, 0, M_PI,  0,  M_PI, 0,    M_PI, 0};
@@ -502,9 +502,9 @@ Assembly createScintillatorPlateEightM( Detector& desc,
   // loop over all towers within same module
   for (int i = 0; i < 8; i++){
 //     std::cout << basename << _toString(i, "_tower_%d") << "\t"<< modID << "\t" << i << "\t"<< layerID << std::endl;
-    Volume modScintTowerAss = createScintillatorTower( desc,  basename+ _toString(i, "_tower_%d"),  
+    Volume modScintTowerAss = createScintillatorTower( desc,  basename+ _toString(i, "_tower_%d"),
                                                             w_tow, h_tow, t_slice,
-                                                            h_notch, (w_notch-t_sep)/2, 
+                                                            h_notch, (w_notch-t_sep)/2,
                                                             slice_mat, region, limit, vis, sens, renderComp);
     pvm = modScintAssembly.placeVolume(modScintTowerAss, Transform3D(RotationZYX(rotZ[i], rotY[i], rotX[i]), Position(posX[i], posY[i], posZ[i] )));
     towerx = i%4;
@@ -512,15 +512,15 @@ Assembly createScintillatorPlateEightM( Detector& desc,
     if (i > 3) towery = 1;
     pvm.addPhysVolID("towerx", towerx).addPhysVolID("towery", towery).addPhysVolID("layerz", layerID).addPhysVolID("passive", 0);
   }
-  
-  return modScintAssembly;         
-}          
+
+  return modScintAssembly;
+}
 
 //************************************************************************************************************
 //************************** create scintillator plate with separations for 4M *******************************
 //************************************************************************************************************
 Assembly createScintillatorPlateFourM( Detector& desc,
-                                        std::string basename, 
+                                        std::string basename,
 //                                         int modID,
                                         int layerID,
                                         double h_mod,
@@ -536,7 +536,7 @@ Assembly createScintillatorPlateFourM( Detector& desc,
                                         std::string limit,
                                         std::string vis,
                                         SensitiveDetector sens,
-                                        bool renderComp 
+                                        bool renderComp
 ){
   // Tower placement in 4M module
   //==================================
@@ -554,7 +554,7 @@ Assembly createScintillatorPlateFourM( Detector& desc,
 
   // placement volumes
   PlacedVolume pvm;
-  
+
   // titanium-dioxide separations
   const std::vector<double> xCoordTi      = {-(w_mod/2-t_mod_sp),  -(t_sep/2.),        -(t_sep/2.),      t_sep/2.,  t_sep/2.,
                                         // 5                6                7                8           9
@@ -564,19 +564,19 @@ Assembly createScintillatorPlateFourM( Detector& desc,
                                         };
                                         // 0           1            2                         3                     4
   const std::vector<double> yCoordTi      = { t_sep/2.,  t_sep/2.,   (h_tow+h_notch+t_sep/2), (h_tow+h_notch+t_sep/2), t_sep/2.,
-                                        // 5            6           7             8                        9                         
+                                        // 5            6           7             8                        9
                                           t_sep/2.,    -t_sep/2.,   -t_sep/2.,    -(h_tow+h_notch+t_sep/2), -(h_tow+h_notch+t_sep/2),
                                         // 10               11
                                          -t_sep/2.,   -t_sep/2.,
                                         };
-  
+
   const std::vector<double> zStepTi       = {-t_slice/2, t_slice/2};
   const std::vector<double> zStepXTi      = {0., 0.};
   const std::vector<double> zStepYTi      = {0., 0.};
   const std::vector<double> zStepScaleTi  = {1., 1.};
-  
+
   ExtrudedPolygon tiOgrid = ExtrudedPolygon( xCoordTi, yCoordTi, zStepTi, zStepXTi, zStepYTi, zStepScaleTi);
-    
+
   Volume      ti0grid_vol(basename+"_Ti02Epoxy_"+_toString(layerID, "_layer_%d"), tiOgrid, slice_mat);
   // Setting slice attributes
   if (renderComp){
@@ -586,26 +586,26 @@ Assembly createScintillatorPlateFourM( Detector& desc,
    ti0grid_vol.setLimitSet(desc,limit);
   }
   pvm = modScintAssembly.placeVolume(ti0grid_vol, Position(0, 0, 0 ));
-  
+
   // 4M module placement of scintillator for tower
   double rotZ[4] = {0,    0, 0,     0   };
   double rotY[4] = {M_PI, 0, M_PI,  0   };
   double rotX[4] = {0,    0, M_PI,  M_PI};
-  double posX[4] = {(w_tow*0.5+0.5*t_sep),     -(w_tow*0.5+0.5*t_sep),  
+  double posX[4] = {(w_tow*0.5+0.5*t_sep),     -(w_tow*0.5+0.5*t_sep),
                     (w_tow*0.5+0.5*t_sep),     -(w_tow*0.5+0.5*t_sep)};
   double posY[4] = {0.5*(h_tow)+0.5*t_sep,    0.5*(h_tow)+0.5*t_sep,
                     -(0.5*(h_tow)+0.5*t_sep), -(0.5*(h_tow)+0.5*t_sep)};
-  double posZ[4] = {0,                              0,                  
+  double posZ[4] = {0,                              0,
                     0,                              0};
   int towerx  = 0;
   int towery  = 0;
   // loop over all towers within same module
-                    
+
   for (int i = 0; i < 4; i++){
 //     std::cout << basename << _toString(i, "_tower_%d") << "\t"<< modID << "\t" << i << "\t"<< layerID << std::endl;
-    Volume modScintTowerAss = createScintillatorTower( desc,  basename+ _toString(i, "_tower_%d"),  
+    Volume modScintTowerAss = createScintillatorTower( desc,  basename+ _toString(i, "_tower_%d"),
                                                             w_tow, h_tow, t_slice,
-                                                            h_notch, (w_notch-t_sep)/2., 
+                                                            h_notch, (w_notch-t_sep)/2.,
                                                             slice_mat, region, limit, vis, sens, renderComp);
     pvm = modScintAssembly.placeVolume(modScintTowerAss, Transform3D(RotationZYX(rotZ[i], rotY[i], rotX[i]), Position(posX[i], posY[i], posZ[i] )));
     towerx = i%2;
@@ -613,9 +613,9 @@ Assembly createScintillatorPlateFourM( Detector& desc,
     if (i > 1) towery = 1;
     pvm.addPhysVolID("towerx", towerx).addPhysVolID("towery", towery).addPhysVolID("layerz", layerID).addPhysVolID("passive", 0);
   }
-  
-  return modScintAssembly;         
-}          
+
+  return modScintAssembly;
+}
 
 
 //************************************************************************************************************
@@ -631,7 +631,7 @@ Volume createEightMModule ( Detector& desc,
                               bool allSen
 ){
   std::string baseName = "LFHCAL_8M";
-  
+
   // assembly definition
   Box         modBox( mod_params.mod_width / 2., mod_params.mod_height / 2., length / 2.);
   Volume  vol_mod(baseName,modBox,desc.material("Air"));
@@ -639,7 +639,7 @@ Volume createEightMModule ( Detector& desc,
 
   // placement operator
   PlacedVolume pvm;
-  
+
   // ********************************************************************************
   // Casing definition
   // ********************************************************************************
@@ -648,11 +648,11 @@ Volume createEightMModule ( Detector& desc,
   Box         modSidePlateL( mod_params.mod_SWThick / 2., mod_params.mod_height / 2., (length-mod_params.mod_FWThick-mod_params.mod_BWThick) / 2.);
   Box         modSidePlateR( mod_params.mod_SWThick / 2., mod_params.mod_height / 2., (length-mod_params.mod_FWThick-mod_params.mod_BWThick) / 2.);
   Box         modTopPlate( (mod_params.mod_width-2*mod_params.mod_SWThick) / 2., mod_params.mod_TWThick / 2., (length-mod_params.mod_FWThick-mod_params.mod_BWThick) / 2.);
-  Box         modBottomPlate( (mod_params.mod_width-2*mod_params.mod_SWThick) / 2., mod_params.mod_TWThick / 2., (length-mod_params.mod_FWThick-mod_params.mod_BWThick) / 2.);  
+  Box         modBottomPlate( (mod_params.mod_width-2*mod_params.mod_SWThick) / 2., mod_params.mod_TWThick / 2., (length-mod_params.mod_FWThick-mod_params.mod_BWThick) / 2.);
   Box         modBackCutOut( mod_params.mod_BIwidth / 2., mod_params.mod_BIheight / 2., mod_params.mod_BWThick / 2.);
   Box         modBackPlateFull( mod_params.mod_width / 2., mod_params.mod_height / 2., mod_params.mod_BWThick / 2.);
   SubtractionSolid modBackPlate(modBackPlateFull, modBackCutOut);
-  
+
   // volume definition 8M module casing
   Volume  vol_modFrontPlate(baseName+"_FrontPlate",modFrontPlate,desc.material("Steel235"));
   Volume  vol_modBackPlate(baseName+"_BackPlate",modBackPlate,desc.material("Steel235"));
@@ -660,17 +660,17 @@ Volume createEightMModule ( Detector& desc,
   Volume  vol_modSidePlateR(baseName+"_RightSidePlate",modSidePlateR,desc.material("Steel235"));
   Volume  vol_modTopPlate(baseName+"_TopPlate",modTopPlate,desc.material("Steel235"));
   Volume  vol_modBottomPlate(baseName+"_BottomPlate",modBottomPlate,desc.material("Steel235"));
-  
+
   if (allSen){
      sens.setType("calorimeter");
-     vol_modFrontPlate.setSensitiveDetector(sens);  
-     vol_modBackPlate.setSensitiveDetector(sens);  
-     vol_modSidePlateL.setSensitiveDetector(sens);  
-     vol_modSidePlateR.setSensitiveDetector(sens);  
-     vol_modTopPlate.setSensitiveDetector(sens);  
-     vol_modBottomPlate.setSensitiveDetector(sens);  
+     vol_modFrontPlate.setSensitiveDetector(sens);
+     vol_modBackPlate.setSensitiveDetector(sens);
+     vol_modSidePlateL.setSensitiveDetector(sens);
+     vol_modSidePlateR.setSensitiveDetector(sens);
+     vol_modTopPlate.setSensitiveDetector(sens);
+     vol_modBottomPlate.setSensitiveDetector(sens);
   }
-  
+
   if (renderComp){
     vol_modFrontPlate.setAttributes(desc, mod_params.mod_regStr, mod_params.mod_limStr, mod_params.mod_visStr);
     vol_modBackPlate.setAttributes(desc, mod_params.mod_regStr, mod_params.mod_limStr, mod_params.mod_visStr);
@@ -692,11 +692,11 @@ Volume createEightMModule ( Detector& desc,
     vol_modBottomPlate.setRegion(desc,mod_params.mod_regStr);
     vol_modBottomPlate.setLimitSet(desc,mod_params.mod_limStr);
   }
-  
-  
-  
+
+
+
   int    layer_num = 1;
-  
+
   double slice_z   = -length/2+mod_params.mod_FWThick; // Keeps track of layers' local z locations
   // Looping through the number of repeated layers & slices in each section
   for (int i = 0; i < (int)sl_params.size(); i++){
@@ -707,20 +707,20 @@ Volume createEightMModule ( Detector& desc,
     //*************************************************
     Material slice_mat = desc.material(sl_params[i].slice_matStr);
     if (sl_params[i].slice_partID == 1 ){
-      Volume modAbsAssembly = createAbsorberPlateEightM( desc, 
+      Volume modAbsAssembly = createAbsorberPlateEightM( desc,
                                                           baseName+"_Abs"+_toString(sl_params[i].layer_ID, "_layer_%d"),
                                                           mod_params.mod_height, mod_params.mod_width, mod_params.mod_TWThick, mod_params.mod_SWThick,
                                                           sl_params[i].slice_thick, mod_params.mod_notchDepth, mod_params.mod_notchWidthAbsA, mod_params.mod_notchWidthAbsB, mod_params.mod_notchWidthAbsC,
                                                           slice_mat, sl_params[i].slice_regStr, sl_params[i].slice_limStr, sl_params[i].slice_visStr, renderComp);
       // Placing slice within layer
-      if (allSen) modAbsAssembly.setSensitiveDetector(sens);  
+      if (allSen) modAbsAssembly.setSensitiveDetector(sens);
       pvm = vol_mod.placeVolume(modAbsAssembly, Transform3D(RotationZYX(0, 0, 0), Position(0., 0., slice_z)));
       if (allSen) pvm.addPhysVolID("towerx", 0).addPhysVolID("towery", 0).addPhysVolID("layerz", layer_num).addPhysVolID("passive", 1);
-    //*************************************************  
+    //*************************************************
     // air & tyvek
-    //*************************************************  
+    //*************************************************
     } else if (sl_params[i].slice_partID == 2 ){
-      Volume modFillAssembly =  createFillerPlateEightM( desc, 
+      Volume modFillAssembly =  createFillerPlateEightM( desc,
                                                           baseName+"_Fill"+_toString(sl_params[i].layer_ID, "_layer_%d")+_toString(sl_params[i].slice_ID, "slice_%d"),
                                                           mod_params.mod_height, mod_params.mod_width, mod_params.mod_TWThick, mod_params.mod_SWThick,
                                                           sl_params[i].slice_thick, mod_params.mod_notchDepth, mod_params.mod_notchWidthScin,
@@ -735,17 +735,17 @@ Volume createEightMModule ( Detector& desc,
     } else {
       Assembly modScintAssembly =  createScintillatorPlateEightM(  desc,
                                                                   baseName+"_ScintAssembly"+_toString(sl_params[i].layer_ID, "_layer_%d"),
-//                                                                   modID, 
-                                                                  layer_num, 
+//                                                                   modID,
+                                                                  layer_num,
                                                                   mod_params.mod_height, mod_params.mod_width, mod_params.mod_TWThick, mod_params.mod_SWThick,
-                                                                  sl_params[i].slice_thick, mod_params.mod_notchDepth, mod_params.mod_notchWidthScin, mod_params.mod_sepDepth, 
+                                                                  sl_params[i].slice_thick, mod_params.mod_notchDepth, mod_params.mod_notchWidthScin, mod_params.mod_sepDepth,
                                                                   slice_mat, sl_params[i].slice_regStr, sl_params[i].slice_limStr, sl_params[i].slice_visStr, sens, renderComp);
       // Placing slice within layer
       pvm = vol_mod.placeVolume(modScintAssembly, Transform3D(RotationZYX(0, 0, 0), Position(0., 0., slice_z)));
     }
     slice_z += sl_params[i].slice_thick / 2.;
   }
-  
+
   // placement 8M module casing
   pvm = vol_mod.placeVolume(vol_modFrontPlate, Position(0, 0, -( length-mod_params.mod_FWThick) / 2. ));
   if (allSen) pvm.addPhysVolID("towerx", 2).addPhysVolID("towery", 0).addPhysVolID("layerz", 0).addPhysVolID("passive", 1);
@@ -759,7 +759,7 @@ Volume createEightMModule ( Detector& desc,
   if (allSen) pvm.addPhysVolID("towerx", 1).addPhysVolID("towery", 1).addPhysVolID("layerz", 0).addPhysVolID("passive", 1);
   pvm = vol_mod.placeVolume(vol_modBottomPlate, Position(0, -(mod_params.mod_height-mod_params.mod_TWThick)/2., (mod_params.mod_FWThick-mod_params.mod_BWThick)/2));
   if (allSen) pvm.addPhysVolID("towerx", 2).addPhysVolID("towery", 1).addPhysVolID("layerz", 0).addPhysVolID("passive", 1);
-  
+
   return vol_mod;
 }
 
@@ -778,7 +778,7 @@ Volume createFourMModule ( Detector& desc,
 ){
 
   std::string baseName = "LFHCAL_4M";
-  
+
   // assembly definition
   Box         modBox( mod_params.mod_width / 2., mod_params.mod_height / 2., length / 2.);
   Volume  vol_mod(baseName,modBox,desc.material("Air"));
@@ -786,7 +786,7 @@ Volume createFourMModule ( Detector& desc,
 
   // placement operator
   PlacedVolume pvm;
-  
+
   // ********************************************************************************
   // Casing definition
   // ********************************************************************************
@@ -795,11 +795,11 @@ Volume createFourMModule ( Detector& desc,
   Box         modSidePlateL( mod_params.mod_SWThick / 2., mod_params.mod_height / 2., (length-mod_params.mod_FWThick-mod_params.mod_BWThick) / 2.);
   Box         modSidePlateR( mod_params.mod_SWThick / 2., mod_params.mod_height / 2., (length-mod_params.mod_FWThick-mod_params.mod_BWThick) / 2.);
   Box         modTopPlate( (mod_params.mod_width-2*mod_params.mod_SWThick) / 2., mod_params.mod_TWThick / 2., (length-mod_params.mod_FWThick-mod_params.mod_BWThick) / 2.);
-  Box         modBottomPlate( (mod_params.mod_width-2*mod_params.mod_SWThick) / 2., mod_params.mod_TWThick / 2., (length-mod_params.mod_FWThick-mod_params.mod_BWThick) / 2.);  
+  Box         modBottomPlate( (mod_params.mod_width-2*mod_params.mod_SWThick) / 2., mod_params.mod_TWThick / 2., (length-mod_params.mod_FWThick-mod_params.mod_BWThick) / 2.);
   Box         modBackCutOut( mod_params.mod_BIwidth / 2., mod_params.mod_BIheight / 2., mod_params.mod_BWThick / 2.);
   Box         modBackPlateFull( mod_params.mod_width / 2., mod_params.mod_height / 2., mod_params.mod_BWThick / 2.);
   SubtractionSolid modBackPlate(modBackPlateFull, modBackCutOut);
-  
+
   // volume definition 8M module casing
   Volume  vol_modFrontPlate(baseName+"_FrontPlate",modFrontPlate,desc.material("Steel235"));
   Volume  vol_modBackPlate(baseName+"_BackPlate",modBackPlate,desc.material("Steel235"));
@@ -807,18 +807,18 @@ Volume createFourMModule ( Detector& desc,
   Volume  vol_modSidePlateR(baseName+"_RightSidePlate",modSidePlateR,desc.material("Steel235"));
   Volume  vol_modTopPlate(baseName+"_TopPlate",modTopPlate,desc.material("Steel235"));
   Volume  vol_modBottomPlate(baseName+"_BottomPlate",modBottomPlate,desc.material("Steel235"));
-  
+
   if (allSen){
      sens.setType("calorimeter");
-     vol_modFrontPlate.setSensitiveDetector(sens);  
-     vol_modBackPlate.setSensitiveDetector(sens);  
-     vol_modSidePlateL.setSensitiveDetector(sens);  
-     vol_modSidePlateR.setSensitiveDetector(sens);  
-     vol_modTopPlate.setSensitiveDetector(sens);  
-     vol_modBottomPlate.setSensitiveDetector(sens);  
+     vol_modFrontPlate.setSensitiveDetector(sens);
+     vol_modBackPlate.setSensitiveDetector(sens);
+     vol_modSidePlateL.setSensitiveDetector(sens);
+     vol_modSidePlateR.setSensitiveDetector(sens);
+     vol_modTopPlate.setSensitiveDetector(sens);
+     vol_modBottomPlate.setSensitiveDetector(sens);
   }
 
-  
+
   if (renderComp){
     vol_modFrontPlate.setAttributes(desc, mod_params.mod_regStr, mod_params.mod_limStr, mod_params.mod_visStr);
     vol_modBackPlate.setAttributes(desc, mod_params.mod_regStr, mod_params.mod_limStr, mod_params.mod_visStr);
@@ -843,7 +843,7 @@ Volume createFourMModule ( Detector& desc,
 
   int    layer_num = 1;
   double slice_z   = -length/2+mod_params.mod_FWThick; // Keeps track of layers' local z locations
-  
+
   // Looping through the number of repeated layers & slices in each section
   for (int i = 0; i < (int)sl_params.size(); i++){
     slice_z += sl_params[i].slice_offset + sl_params[i].slice_thick/2. ; // Going to halfway point in layer
@@ -858,19 +858,19 @@ Volume createFourMModule ( Detector& desc,
                                                               sl_params[i].slice_thick, mod_params.mod_notchDepth, mod_params.mod_notchWidthAbsA, mod_params.mod_notchWidthAbsC,
                                                               slice_mat, sl_params[i].slice_regStr, sl_params[i].slice_limStr, sl_params[i].slice_visStr, renderComp);
       // Placing slice within layer
-      if (allSen) modAbsAssembly.setSensitiveDetector(sens);  
+      if (allSen) modAbsAssembly.setSensitiveDetector(sens);
       pvm = vol_mod.placeVolume(modAbsAssembly, Transform3D(RotationZYX(0, 0, 0), Position(0., 0., slice_z)));
       if (allSen) pvm.addPhysVolID("towerx", 0).addPhysVolID("towery", 0).addPhysVolID("layerz", layer_num).addPhysVolID("passive", 1);
-    //*************************************************  
+    //*************************************************
     // air & tyvek
-    //*************************************************  
+    //*************************************************
     } else if (sl_params[i].slice_partID == 2 ){
       Volume modFillAssembly =  createFillerPlateFourM( desc, baseName+"_Fill"+_toString(sl_params[i].layer_ID, "_layer_%d")+_toString(sl_params[i].slice_ID, "slice_%d"),
                                                               mod_params.mod_height, mod_params.mod_width, mod_params.mod_TWThick, mod_params.mod_SWThick,
                                                               sl_params[i].slice_thick, mod_params.mod_notchDepth, mod_params.mod_notchWidthScin,
                                                               slice_mat, sl_params[i].slice_regStr, sl_params[i].slice_limStr, sl_params[i].slice_visStr, renderComp);
       // Placing slice within layer
-      if (allSen) modFillAssembly.setSensitiveDetector(sens);  
+      if (allSen) modFillAssembly.setSensitiveDetector(sens);
       pvm = vol_mod.placeVolume(modFillAssembly, Transform3D(RotationZYX(0, 0, 0), Position(0., 0., slice_z)));
       if (allSen) pvm.addPhysVolID("towerx", 1).addPhysVolID("towery", 0).addPhysVolID("layerz", layer_num).addPhysVolID("passive", 1);
     //*************************************************
@@ -878,17 +878,17 @@ Volume createFourMModule ( Detector& desc,
     //*************************************************
     } else {
       Assembly modScintAssembly =  createScintillatorPlateFourM( desc,baseName+"_ScintAssembly"+_toString(sl_params[i].layer_ID, "_layer_%d"),
-//                                                                   modID,  
-                                                                 layer_num, 
+//                                                                   modID,
+                                                                 layer_num,
                                                                   mod_params.mod_height, mod_params.mod_width, mod_params.mod_TWThick, mod_params.mod_SWThick,
-                                                                  sl_params[i].slice_thick, mod_params.mod_notchDepth, mod_params.mod_notchWidthScin, mod_params.mod_sepDepth, 
+                                                                  sl_params[i].slice_thick, mod_params.mod_notchDepth, mod_params.mod_notchWidthScin, mod_params.mod_sepDepth,
                                                                   slice_mat, sl_params[i].slice_regStr, sl_params[i].slice_limStr, sl_params[i].slice_visStr, sens, renderComp);
       // Placing slice within layer
       pvm = vol_mod.placeVolume(modScintAssembly, Transform3D(RotationZYX(0, 0, 0), Position(0., 0., slice_z)));
     }
     slice_z += sl_params[i].slice_thick/2.;
   }
-  
+
   // placement 4M module casing
   pvm = vol_mod.placeVolume(vol_modFrontPlate, Position(0, 0, -( length-mod_params.mod_FWThick) / 2. ));
   if (allSen) pvm.addPhysVolID("towerx", 2).addPhysVolID("towery", 0).addPhysVolID("layerz", 0).addPhysVolID("passive", 1);
@@ -902,14 +902,14 @@ Volume createFourMModule ( Detector& desc,
   if (allSen) pvm.addPhysVolID("towerx", 1).addPhysVolID("towery", 1).addPhysVolID("layerz", 0).addPhysVolID("passive", 1);
   pvm = vol_mod.placeVolume(vol_modBottomPlate, Position(0, -(mod_params.mod_height-mod_params.mod_TWThick)/2., (mod_params.mod_FWThick-mod_params.mod_BWThick)/2));
   if (allSen) pvm.addPhysVolID("towerx", 2).addPhysVolID("towery", 1).addPhysVolID("layerz", 0).addPhysVolID("passive", 1);
-  
+
   return vol_mod;
 }
 
 //********************************************************************************************
 //*                                                                                          *
 //*                              Create detector                                             *
-//==============================  MAIN FUNCTION  ============================================= 
+//==============================  MAIN FUNCTION  =============================================
 //*                                                                                          *
 //********************************************************************************************
 static Ref_t createDetector(Detector& desc, xml_h handle, SensitiveDetector sens)
@@ -925,8 +925,8 @@ static Ref_t createDetector(Detector& desc, xml_h handle, SensitiveDetector sens
   xml_dim_t pos = detElem.position();
 
   std::cout<< "global LFHCal position" << pos.x() << "\t" << pos.y() << "\t" << pos.z()  << std::endl;
-  
-  
+
+
   bool renderComponents = getAttrOrDefault(detElem, _Unicode(renderComponents), 0.);
   bool allSensitive     = getAttrOrDefault(detElem, _Unicode(allSensitive), 0.);
   if (renderComponents) {
@@ -934,15 +934,15 @@ static Ref_t createDetector(Detector& desc, xml_h handle, SensitiveDetector sens
   } else {
     std::cout << "switchted off visualization" << std::endl;
   }
-  
+
   // 8M module specific loading
   xml_comp_t  eightM_xml        = detElem.child(_Unicode(eightmodule));
   xml_dim_t eightMmod_dim        = eightM_xml.dimensions();
-  moduleParamsStrct eightM_params(getAttrOrDefault(eightMmod_dim, _Unicode(widthBackInner), 0.), 
-                                  getAttrOrDefault(eightMmod_dim, _Unicode(heightBackInner), 0.), 
-                                  getAttrOrDefault(eightMmod_dim, _Unicode(widthSideWall), 0.), 
-                                  getAttrOrDefault(eightMmod_dim, _Unicode(widthTopWall), 0.), 
-                                  getAttrOrDefault(eightMmod_dim, _Unicode(thicknessFrontWall), 0.), 
+  moduleParamsStrct eightM_params(getAttrOrDefault(eightMmod_dim, _Unicode(widthBackInner), 0.),
+                                  getAttrOrDefault(eightMmod_dim, _Unicode(heightBackInner), 0.),
+                                  getAttrOrDefault(eightMmod_dim, _Unicode(widthSideWall), 0.),
+                                  getAttrOrDefault(eightMmod_dim, _Unicode(widthTopWall), 0.),
+                                  getAttrOrDefault(eightMmod_dim, _Unicode(thicknessFrontWall), 0.),
                                   getAttrOrDefault(eightMmod_dim, _Unicode(thicknessBackWall), 0.),
                                   getAttrOrDefault(eightMmod_dim, _Unicode(width), 0.),
                                   getAttrOrDefault(eightMmod_dim, _Unicode(height), 0.),
@@ -951,20 +951,20 @@ static Ref_t createDetector(Detector& desc, xml_h handle, SensitiveDetector sens
                                   getAttrOrDefault(eightMmod_dim, _Unicode(notchWidthAbsC), 0.),
                                   getAttrOrDefault(eightMmod_dim, _Unicode(notchWidthScin), 0.),
                                   getAttrOrDefault(eightMmod_dim, _Unicode(notchDepth), 0.),
-                                  getAttrOrDefault(eightMmod_dim, _Unicode(sepDepth), 0.), 
+                                  getAttrOrDefault(eightMmod_dim, _Unicode(sepDepth), 0.),
                                   eightM_xml.visStr(),
                                   eightM_xml.regionStr(),
                                   eightM_xml.limitsStr()
                                  );
-  
+
   // 4M module specific loading
   xml_comp_t  fourM_xml        = detElem.child(_Unicode(fourmodule));
   xml_dim_t fourMmod_dim        = fourM_xml.dimensions();
-  moduleParamsStrct fourM_params( getAttrOrDefault(fourMmod_dim, _Unicode(widthBackInner), 0.), 
-                                  getAttrOrDefault(fourMmod_dim, _Unicode(heightBackInner), 0.), 
-                                  getAttrOrDefault(fourMmod_dim, _Unicode(widthSideWall), 0.), 
-                                  getAttrOrDefault(fourMmod_dim, _Unicode(widthTopWall), 0.), 
-                                  getAttrOrDefault(fourMmod_dim, _Unicode(thicknessFrontWall), 0.), 
+  moduleParamsStrct fourM_params( getAttrOrDefault(fourMmod_dim, _Unicode(widthBackInner), 0.),
+                                  getAttrOrDefault(fourMmod_dim, _Unicode(heightBackInner), 0.),
+                                  getAttrOrDefault(fourMmod_dim, _Unicode(widthSideWall), 0.),
+                                  getAttrOrDefault(fourMmod_dim, _Unicode(widthTopWall), 0.),
+                                  getAttrOrDefault(fourMmod_dim, _Unicode(thicknessFrontWall), 0.),
                                   getAttrOrDefault(fourMmod_dim, _Unicode(thicknessBackWall), 0.),
                                   getAttrOrDefault(fourMmod_dim, _Unicode(width), 0.),
                                   getAttrOrDefault(fourMmod_dim, _Unicode(height), 0.),
@@ -973,7 +973,7 @@ static Ref_t createDetector(Detector& desc, xml_h handle, SensitiveDetector sens
                                   getAttrOrDefault(fourMmod_dim, _Unicode(notchWidthAbsC), 0.),
                                   getAttrOrDefault(fourMmod_dim, _Unicode(notchWidthScin), 0.),
                                   getAttrOrDefault(fourMmod_dim, _Unicode(notchDepth), 0.),
-                                  getAttrOrDefault(fourMmod_dim, _Unicode(sepDepth), 0.), 
+                                  getAttrOrDefault(fourMmod_dim, _Unicode(sepDepth), 0.),
                                   fourM_xml.visStr(),
                                   fourM_xml.regionStr(),
                                   fourM_xml.limitsStr());
@@ -986,34 +986,34 @@ static Ref_t createDetector(Detector& desc, xml_h handle, SensitiveDetector sens
     // Looping through the number of repeated layers in each section
     for (int i = 0; i < repeat; i++) {
       int    slice_num = 1;
-      
+
       // Looping over each layer's slices
       for (xml_coll_t l(x_layer, _U(slice)); l; ++l) {
         xml_comp_t  x_slice         = l;
-        sliceParamsStrct slice_param( layer_num,  slice_num, getAttrOrDefault(l, _Unicode(type), 0.), x_slice.thickness(), getAttrOrDefault(l, _Unicode(offset), 0.), 
+        sliceParamsStrct slice_param( layer_num,  slice_num, getAttrOrDefault(l, _Unicode(type), 0.), x_slice.thickness(), getAttrOrDefault(l, _Unicode(offset), 0.),
                                       x_slice.materialStr(), x_slice.visStr(), x_slice.regionStr(), x_slice.limitsStr());
         slice_Params.push_back(slice_param);
-        ++slice_num;  
+        ++slice_num;
       }
       layer_num++;
     }
   }
 
-  // create mother volume  
+  // create mother volume
   DetElement det(detName, detID);
-  
+
   Assembly assembly(detName);
   PlacedVolume phv;
 
   int moduleIDx = -1;
   int moduleIDy = -1;
 
-  
+
   int    moduleID   = 0;
   std::vector<double> xpos8M;
   std::vector<double> ypos8M;
   std::vector<double> zpos8M;
-  
+
   for(xml_coll_t i(handle, _Unicode(eightmodulepositions)); i; ++i){
     xml_comp_t  x_mtrx = i;
 
@@ -1058,7 +1058,7 @@ static Ref_t createDetector(Detector& desc, xml_h handle, SensitiveDetector sens
       }
       moduleIDx             = ((xpos8M[e] + 270) / 10);
       moduleIDy             = ((ypos8M[e] + 265) / 10);
-      
+
       // Placing modules in world volume
       auto tr8M = Transform3D(Position(pos.x()-xpos8M[e]*dd4hep::cm-0.5*eightM_params.mod_width, pos.y()-ypos8M[e]*dd4hep::cm, pos.z() +zpos8M[e]*dd4hep::cm + length / 2.));
       phv = assembly.placeVolume(eightMassembly, tr8M);
@@ -1067,7 +1067,7 @@ static Ref_t createDetector(Detector& desc, xml_h handle, SensitiveDetector sens
     }
   }
 
-  
+
   std::vector<double> xpos4M;
   std::vector<double> ypos4M;
   std::vector<double> zpos4M;
@@ -1109,7 +1109,7 @@ static Ref_t createDetector(Detector& desc, xml_h handle, SensitiveDetector sens
   } else {
     for (int f = 0; f < (int)xpos4M.size(); f++){
       if(f%20 == 0 )std::cout <<  "LFHCAL placing 4M module: " << f << "/"<< (int)xpos4M.size() << "\t" << xpos4M[f] << "\t" << ypos4M[f] << "\t" << zpos4M[f]<< std::endl;
-      
+
       moduleIDx             = ((xpos4M[f] + 265) / 10);
       moduleIDy             = ((ypos4M[f] + 265) / 10);
       if(moduleIDx<0 || moduleIDy<0){
@@ -1118,13 +1118,13 @@ static Ref_t createDetector(Detector& desc, xml_h handle, SensitiveDetector sens
       }
       auto tr4M = Transform3D(Position(pos.x()-xpos4M[f]*dd4hep::cm-0.5*fourM_params.mod_width, pos.y()-ypos4M[f]*dd4hep::cm, pos.z() +zpos4M[f]*dd4hep::cm + length / 2.));
       phv = assembly.placeVolume(fourMassembly, tr4M);
-      
+
       phv.addPhysVolID("moduleIDx", moduleIDx).addPhysVolID("moduleIDy", moduleIDy).addPhysVolID("moduletype", 1);
-  
+
       moduleID++;
     }
   }
-  
+
   Volume     motherVol = desc.pickMotherVolume(det);
   Transform3D  tr        = Translation3D(0., 0., 0.) * RotationZYX(0.,0.,0.);
   PlacedVolume envPV     = motherVol.placeVolume(assembly, tr);

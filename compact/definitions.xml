@@ -583,7 +583,7 @@ Service gaps in FW direction (before endcapP ECAL) and BW direction (before endc
     <constant name="LFHCAL_length"        value="140.0*cm"/>
     <constant name="LFHCAL_zmax"          value="LFHCAL_zmin + LFHCAL_length"/>
 
-    
+
     <constant name="HcalEndcapPInsert_zmin"     value="HcalEndcapP_zmin"/>
     <constant name="HcalEndcapPInsert_length"   value="127.97*cm"/>
     <constant name="HcalEndcapPInsert_zmax"     value="HcalEndcapPInsert_zmin + HcalEndcapPInsert_length"/>
@@ -609,7 +609,7 @@ Service gaps in FW direction (before endcapP ECAL) and BW direction (before endc
     <constant name="HcalEndcapN_rmax"     value="HcalBarrel_rmax"/>
     <constant name="HcalEndcapP_rmax"     value="HcalBarrel_rmax"/>
     <constant name="LFHCAL_rmax"          value="HcalBarrel_rmax"/>
-    
+
     <comment>
       These are used by ddsim, the region where we store all secondaries
 
