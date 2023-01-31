@@ -309,3 +309,4 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
 }
 
 DECLARE_DETELEMENT(epic_TrapEndcapTracker, create_detector)
+DECLARE_DETELEMENT(epic_MPGDTRDEndcap, create_detector)
