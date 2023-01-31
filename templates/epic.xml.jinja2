@@ -139,11 +139,11 @@
   {% endfor -%}
 {% endif -%}
 
-{% if 'hcal' in features %}
-  <documentation level="10">
-    ## hadronic calorimetry
-  </documentation>
 
+{% if features is not defined or 'hcal' in features %}
+  <documentation level="10">
+    ## Forward H calorimetry
+  </documentation>
   {% for hcal in features['hcal'] -%}
   <include ref="${DETECTOR_PATH}/compact/hcal/{{ hcal }}.xml"/>
   {% endfor -%}
