@@ -623,7 +623,7 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
       std::string fpstr;
       double fpx, fpy, fpz, dirx, diry, dirz;
       int fpnum=0;
-      
+
       while(std::getline(fptxt,fpstr)){
 	if(fpstr[0]=='#') continue;
 	std::istringstream stringStream(fpstr);
