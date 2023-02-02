@@ -21,10 +21,7 @@
 
   <define>
 
-    <comment> Main Parameters </comment>
-    <constant name="Radiator_thickness"             value="15*cm"/>
-    <constant name="Driftgap_thickness"             value="3*cm"/>
-
+    <comment> Main Detector Parameters </comment>
     <constant name="MPGDTRDEndcapPMod_count"       value="12"/>
     <constant name="MPGDTRDEndcapPMod_dz"          value="0" />
     <constant name="MPGDTRDEndcapPMod_overlap"     value="0"/>
@@ -39,18 +36,34 @@
 	    <constant name="MPGDTRDEndcapP_rmax"            value="DRICH_rmin1" />
 	    but will keep hard coded values for now
     </comment>
+    <comment> frame parameters -- to be implimented later </comment>
+    <constant name="MPGDTRDFrame_width"             value="20*mm"/>
+    <constant name="MPGDTRDFrame_thickness"         value="7*mm" />
 
-    <comment> Endcap variables </comment>
-    <constant name="MPGDTRDEndcapPMod_thickness"   value="Radiator_thickness + MPGDTRDEndcapP_RadiatorGap + Driftgap_thickness" />
-    <constant name="MPGDTRDEndcapLayer_Radiator_thickness"   value="Radiator_thickness" />
-    <constant name="MPGDTRDEndcapLayer_Drift_thickness"   value="Driftgap_thickness" />
+    <comment> MPGD-TRD Module Parameters </comment>
+    <constant name="MPGDTRDWindow_thickness"           value="0"    />
+    <constant name="MPGDTRDWindowGap_thickness"        value="0"    />
+    <constant name="MPGDTRDDriftgap_thickness"         value="3*cm" />
+    <constant name="MPGDTRDFoilCu_thickness"           value="5*um" />
+    <constant name="MPGDTRDFoilKapton_thickness"       value="50*um"/>
+    <constant name="MPGDTRDReadOutKapton_thickness"    value="50*um"/>
+    <constant name="MPGDTRDReadOutElectrode_thickness" value="10*um"/>
+    <constant name="MPGDTRDReadOutNomex_thickness"     value="50*um"/>
+    <constant name="MPGDTRDPCB_thickness"              value="3*mm" />
+
+    <constant name="MPGDTRDCathode_thickness"          value="MPGDTRDFoilKapton_thickness + MPGDTRDFoilCu_thickness"/>
+    <constant name="MPGDTRDFoil_thickness"             value="MPGDTRDFoilKapton_thickness + MPGDTRDFoilCu_thickness"/>
+    <constant name="MPGDTRDReadOut_thickness"          value="MPGDTRDReadOutNomex_thickness + MPGDTRDReadOutElectrode_thickness + MPGDTRDReadOutKapton_thickness"/>
+    <constant name="MPGDTRDModule_thickness"           value="MPGDTRDWindow_thickness + MPGDTRDCathode_thickness + MPGDTRDFoil_thickness + MPGDTRDDriftgap_thickness + 
+	                                                      MPGDTRDReadOut_thickness + MPGDTRDPCB_thickness + MPGDTRDFrame_thickness"/>
+	    <!-- <constant name="MPGDTRDModule_thickness"           value="MPGDTRDDriftgap_thickness"/>-->
+    <comment> Radiator Module Parameters </comment>
+    <constant name="Radiator_thickness"            value="15*cm"/>
+    <constant name="RadiatorModule_thickness"      value="Radiator_thickness"/>
+
+    <comment> Layer parameters </comment>
+    <constant name="MPGDTRDEndcapPMod_thickness"   value="RadiatorModule_thickness + MPGDTRDEndcapP_RadiatorGap + MPGDTRDModule_thickness" />
     <constant name="MPGDTRDEndcapPMod_angle"       value="360.0*degree / MPGDTRDEndcapPMod_count * (1 + MPGDTRDEndcapPMod_overlap)" />
-
-  </define>
-
-  <comment>
-  </comment>
-  <define>
     <constant name="MPGDTRDEndcapPMod1_zmin"   value="MPGDTRDEndcapPMod_zmin" />
     <constant name="TrackerEndcapPMod1_rmax"   value="MPGDTRDEndcapP_rmax" />
     <constant name="TrackerEndcapPMod1_x1"     value="2 * MPGDTRDEndcapP_rmin * tan(MPGDTRDEndcapPMod_angle/2)" />
@@ -59,8 +72,7 @@
     <constant name="TrackerEndcapPLayer1_rmin" value="MPGDTRDEndcapP_rmin - 1*um" />
     <constant name="TrackerEndcapPLayer1_rmax" value="TrackerEndcapPMod1_rmax + 1*um" />
     <constant name="TrackerEndcapPLayer1_zmin" value="MPGDTRDEndcapPMod1_zmin" />
-	  <!--<constant name="TrackerEndcapPLayer1_zmin" value="MPGDTRDEndcapPMod1_zmin - MPGDTRDEndcapLayer_thickness/2" />-->
-    <constant name="TrackerEndcapPMod2_zmin"   value="MPGDTRDEndcapPMod1_zmin + Radiator_thickness + MPGDTRDEndcapP_RadiatorGap" />
+    <constant name="TrackerEndcapPMod2_zmin"   value="MPGDTRDEndcapPMod1_zmin + RadiatorModule_thickness + MPGDTRDEndcapP_RadiatorGap + 0*MPGDTRDModule_thickness/2" />
     <constant name="TrackerEndcapPMod2_rmin"   value="MPGDTRDEndcapP_rmin" />
     <constant name="TrackerEndcapPMod2_rmax"   value="MPGDTRDEndcapP_rmax" />
     <constant name="TrackerEndcapPMod2_x1"     value="2 * TrackerEndcapPMod2_rmin * tan(MPGDTRDEndcapPMod_angle/2)" />
@@ -69,7 +81,6 @@
     <constant name="TrackerEndcapPLayer2_rmin" value="MPGDTRDEndcapP_rmin" />
     <constant name="TrackerEndcapPLayer2_rmax" value="MPGDTRDEndcapP_rmax" />
     <constant name="TrackerEndcapPLayer2_zmin" value="TrackerEndcapPMod2_zmin" />
-	  <!--<constant name="TrackerEndcapPLayer2_zmin" value="TrackerEndcapPMod2_zmin - MPGDTRDEndcapLayer_thickness/2" />-->
 
   </define>
   <detectors>
@@ -77,7 +88,7 @@
       id="TrackerEndcapP_3_ID"
       name="MPGDTRDEndcapP"
       type="epic_TrapEndcapTracker"
-      readout="TrackerEndcapHits"
+      readout="MPGDTRDEndcapHits"
       vis="TrackerVis"
       reflect="false">
       <type_flags type="DetType_TRACKER + DetType_ENDCAP"/>
@@ -89,13 +100,20 @@
       <comment> MPGD-TRD active layer </comment>
       <module name="Module2" vis="TrackerModuleVis">
         <trd x1="TrackerEndcapPMod2_x1/2" x2="TrackerEndcapPMod2_x2/2" z="TrackerEndcapPMod2_y/2" />
-        <module_component thickness="Driftgap_thickness" material="Xe20CO2" sensitive="true" vis="TrackerLayerVis" />
+	<module_component name="Cathode_Kapton"    thickness="MPGDTRDFoilKapton_thickness" material="Kapton" sensitive="false" vis="TrackerLayerVis" />
+	<module_component name="Cathode_Cu"        thickness="MPGDTRDFoilCu_thickness" material="Copper" sensitive="false" vis="TrackerLayerVis" />
+        <module_component name="DriftGap"          thickness="MPGDTRDDriftgap_thickness" material="Xe20CO2" sensitive="true" vis="TrackerLayerVis" />
+	<module_component name="MPGD_Cu"           thickness="MPGDTRDFoilCu_thickness" material="Copper" sensitive="false" vis="TrackerLayerVis" />
+	<module_component name="MPGD_Kapton"       thickness="MPGDTRDFoilKapton_thickness" material="Kapton" sensitive="false" vis="TrackerLayerVis" />
+	<module_component name="ReadOutElectrodes" thickness="MPGDTRDReadOutElectrode_thickness" material="Copper" sensitive="false" vis="TrackerLayerVis" />
+	<module_component name="ReadOutKapton"     thickness="MPGDTRDReadOutKapton_thickness" material="Kapton" sensitive="false" vis="TrackerLayerVis" /> 
+	<module_component name="PCB"               thickness="MPGDTRDPCB_thickness" material="Fr4" sensitive="false" vis="TrackerLayerVis" />
       </module>
       <layer id="1">
         <envelope vis="TrackerSupportVis"
           rmin="TrackerEndcapPLayer1_rmin"
           rmax="TrackerEndcapPLayer1_rmax"
-          length="MPGDTRDEndcapLayer_Radiator_thickness"
+          length="RadiatorModule_thickness"
           zstart="TrackerEndcapPLayer1_zmin" />
         <layer_material surface="inner" binning="binPhi,binR" bins0="12" bins1="20"/>
         <ring
@@ -109,7 +127,7 @@
         <envelope vis="TrackerLayerVis"
           rmin="TrackerEndcapPLayer2_rmin"
           rmax="TrackerEndcapPLayer2_rmax"
-          length="MPGDTRDEndcapLayer_Drift_thickness"
+          length="MPGDTRDModule_thickness"
           zstart="TrackerEndcapPLayer2_zmin" />
         <layer_material surface="inner" binning="binPhi,binR" bins0="12" bins1="20"/>
         <ring
@@ -130,7 +148,7 @@
   </plugins>
 
   <readouts>
-    <readout name="TrackerEndcapHits">
+    <readout name="MPGDTRDEndcapHits">
       <segmentation type="CartesianGridXZ" grid_size_x="0.150*mm*sqrt(12)" grid_size_z="0.150*mm*sqrt(12)" />
       <id>system:8,layer:4,module:12,sensor:2,x:32:-16,z:-16</id>
     </readout>
