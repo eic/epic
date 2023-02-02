@@ -56,7 +56,6 @@
     <constant name="MPGDTRDReadOut_thickness"          value="MPGDTRDReadOutNomex_thickness + MPGDTRDReadOutElectrode_thickness + MPGDTRDReadOutKapton_thickness"/>
     <constant name="MPGDTRDModule_thickness"           value="MPGDTRDWindow_thickness + MPGDTRDCathode_thickness + MPGDTRDFoil_thickness + MPGDTRDDriftgap_thickness + 
 	                                                      MPGDTRDReadOut_thickness + MPGDTRDPCB_thickness + MPGDTRDFrame_thickness"/>
-	    <!-- <constant name="MPGDTRDModule_thickness"           value="MPGDTRDDriftgap_thickness"/>-->
     <comment> Radiator Module Parameters </comment>
     <constant name="Radiator_thickness"            value="15*cm"/>
     <constant name="RadiatorModule_thickness"      value="Radiator_thickness"/>
@@ -91,7 +90,7 @@
       readout="MPGDTRDEndcapHits"
       vis="TrackerVis"
       reflect="false">
-      <type_flags type="DetType_TRACKER + DetType_ENDCAP"/>
+	    <!--<type_flags type="DetType_TRACKER + DetType_ENDCAP"/>-->
       <comment> TRD radiator </comment>
       <module name="Module1" vis="TrackerSupportVis">
         <trd x1="TrackerEndcapPMod1_x1/2" x2="TrackerEndcapPMod1_x2/2" z="TrackerEndcapPMod1_y/2" />
@@ -115,7 +114,7 @@
           rmax="TrackerEndcapPLayer1_rmax"
           length="RadiatorModule_thickness"
           zstart="TrackerEndcapPLayer1_zmin" />
-        <layer_material surface="inner" binning="binPhi,binR" bins0="12" bins1="20"/>
+	      <!--<layer_material surface="inner" binning="binPhi,binR" bins0="12" bins1="20"/>-->
         <ring
           r="MPGDTRDEndcapP_rmin + TrackerEndcapPMod1_y/2"
           zstart="0"
