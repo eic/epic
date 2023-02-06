@@ -104,10 +104,10 @@
         <module_component name="coolant" material="NOVEC7200" sensitive="false" width="BarrelTOF_Coolant_width" length="BarrelTOF_length1" thickness="BarrelTOF_Coolant_thickness" vis="TOFCoolantVis" >
           <position x="BarrelTOF_Coolant_position" y="0" z="0" />
         </module_component>
-        <module_component name="cfoam" material="CarbonFoam" sensitive="false" width="BarrelTOF_CFoam_width" length="BarrelTOF_length1" thickness="BarrelTOF_CFoam_thickness" vis="TOFCFoamVis" >
+        <module_component name="cfoam" material="CarbonFoamF8" sensitive="false" width="BarrelTOF_CFoam_width" length="BarrelTOF_length1" thickness="BarrelTOF_CFoam_thickness" vis="TOFCFoamVis" >
           <position x="BarrelTOF_CFoam_position" y="0" z="0" />
         </module_component>
-        <module_component name="choneycomb" material="CFRPMix" sensitive="false" width="BarrelTOF_CHoneycomb_width" length="BarrelTOF_length1" thickness="BarrelTOF_CHoneycomb_thickness" vis="TOFCHoneycombVis" >
+        <module_component name="choneycomb" material="CFRPMixF8" sensitive="false" width="BarrelTOF_CHoneycomb_width" length="BarrelTOF_length1" thickness="BarrelTOF_CHoneycomb_thickness" vis="TOFCHoneycombVis" >
           <position x="BarrelTOF_CHoneycomb_position" y="0" z="-1*BarrelTOF_CFoam_thickness" />
         </module_component>
         <module_component name="cfskinbottom" material="CFRPMix2" sensitive="false" width="BarrelTOF_Module_width" length="BarrelTOF_length1" thickness="BarrelTOF_CFSkin_thickness" vis="TOFCSkinVis" >

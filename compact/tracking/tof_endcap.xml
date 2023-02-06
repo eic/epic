@@ -1,6 +1,4 @@
-<!-- SPDX-License-Identifier: LGPL-3.0-or-later -->
-<!-- Copyright (C) 2022 Nicolas Schmidt -->
-
+<?xml version="1.0" encoding="UTF-8"?>
 <lccdd>
   <define>
     <comment>
@@ -8,15 +6,19 @@
       Forward TOF Parameters
       --------------------------
     </comment>
-    <comment> Forward TOF position </comment>
+    <comment> Forward/backward TOF position </comment>
     <constant name="ForwardTOF_length"              value="min(ForwardTOFRegion_length, 2.*cm)"/>
     <constant name="ForwardTOF_zmin"                value="ForwardTOFRegion_zmin + ForwardTOFRegion_length - ForwardTOF_length - 1*cm"/>
     <constant name="ForwardTOF_nlayers"             value="1"/>
     <constant name="ForwardTOFMod_offset"           value="1.2*cm"/>
+    <constant name="BackwardTOF_length"             value="min(BackwardTOFRegion_length, 2.*cm)"/>
+    <constant name="BackwardTOF_zmin"               value="BackwardTOFRegion_zmin + 0.5*cm"/>
+    <constant name="BackwardTOF_nlayers"            value="1"/>
+    <constant name="BackwardTOFMod_offset"          value="1.2*cm"/>
 
     <comment> LGAD parameters for the endcap TOFs </comment>
     <constant name="TOFEndcapSensor_thickness"      value="300*um" />
-    <constant name="TOFEndcapService_thickness"     value="5.00/100*9.37*cm-TOFEndcapSensor_thickness" />
+    <constant name="TOFEndcapService_thickness"     value="2.0*5.00/100*9.37*cm-TOFEndcapSensor_thickness" />
     <constant name="TOFEndcapMod_count"             value="36" />
     <constant name="TOFEndcapMod_dz"                value="0" />
     <constant name="TOFEndcapMod_overlap"           value="0" />
@@ -96,7 +98,8 @@
   </define>
 
   <documentation>
-    ## Forward TOF double-disks
+    ## Forward and backward TOF double-disks,
+    ## a potential ATHENA upgrade
   </documentation>
 
   <comment>
@@ -118,82 +121,93 @@
     <constant name="ForwardTOFLayer1_zmin"      value="ForwardTOFMod1_zmin - TOFEndcapLayer_thickness / 2" />
     <constant name="ForwardTOFLayer2_zmin"      value="ForwardTOFMod2_zmin - TOFEndcapLayer_thickness / 2" />
 
+    <constant name="BackwardTOFMod_rmin"        value="BackwardPIDRegion_tan * BackwardTOF_zmin" />
+    <constant name="BackwardTOFMod_rmax"        value="BackwardPIDRegion_rmax" />
+    <constant name="BackwardTOFMod1_zmin"       value="BackwardTOF_zmin" />
+    <constant name="BackwardTOFMod2_zmin"       value="BackwardTOF_zmin + BackwardTOFMod_offset" />
+    <constant name="BackwardTOFLayer_rmin"      value="BackwardTOFMod_rmin - 1*um" />
+    <constant name="BackwardTOFLayer_rmax"      value="BackwardTOFMod_rmax + 1*um" />
+    <constant name="BackwardTOFLayer1_zmin"     value="BackwardTOFMod1_zmin - TOFEndcapLayer_thickness / 2" />
+    <constant name="BackwardTOFLayer2_zmin"     value="BackwardTOFMod2_zmin - TOFEndcapLayer_thickness / 2" />
+
     <constant name="ForwardTOFMod_x1"           value="2 * ForwardTOFMod_rmin * tan(TOFEndcapMod_angle/2)" />
     <constant name="ForwardTOFMod_x2"           value="2 * ForwardTOFMod_rmax * sin(TOFEndcapMod_angle/2)" />
     <constant name="ForwardTOFMod_y"            value="ForwardTOFMod_rmax * cos(TOFEndcapMod_angle/2) - ForwardTOFMod_rmin" />
+    <constant name="BackwardTOFMod_x1"          value="2 * BackwardTOFMod_rmin * tan(TOFEndcapMod_angle/2)" />
+    <constant name="BackwardTOFMod_x2"          value="2 * BackwardTOFMod_rmax * sin(TOFEndcapMod_angle/2)" />
+    <constant name="BackwardTOFMod_y"           value="BackwardTOFMod_rmax * cos(TOFEndcapMod_angle/2) - BackwardTOFMod_rmin" />
   </define>
 
   <detectors>
-    <detector
-      id="BackwardTOF_ID"
-      name="BackwardTOF"
-      type="epic_CompositeTracker"
-      actsType="endcap"
-      vis="TrackerSubAssemblyVis">
-      <type_flags type="DetType_TRACKER + DetType_ENDCAP"/>
-      <position x="0*cm" y="0*cm" z="-1*um" />
-    </detector>
-    <detector
-      id="ForwardTOF_ID"
-      name="ForwardTOF"
-      actsType="endcap"
-      type="epic_TOFEndcap"
-      readout="TOFEndcapHits"
-      vis="TOFVis"
-      reflect="false">
-      <type_flags type="DetType_TRACKER + DetType_ENDCAP"/>
-      <position x="0*cm" y="0*cm" z="ForwardTOF_zmin" />
-      <envelope r_min="-80*mm" r_max="670*mm" z_min="10*mm" z_max="10*mm"/>
-      <module name="ForwardModule" vis="TOFModuleVis">
-        <dimensions
-          rMin="ForwardTOFMod_rmin"
-          rMax="ForwardTOFMod_rmax"
-          xOffset="ForwardTOF_xOffset"
-          det_height="ForwardTOF_det_height"
-          zPos="ForwardTOF_zmin"
-          cooling_plate_height="TOFEndcap_cooling_plate_height"
-          wallthickness_coolingtube="TOFEndcap_wallthickness_coolingtube"
-          diameter_coolingtube="TOFEndcap_diameter_coolingtube"
-          material="Aluminum"/>
-        <sensorparameters
-          width="TOFEndcap_sensor_width"
-          length="TOFEndcap_sensor_length"
-          baseplate_length="TOFEndcap_baseplate_length"
-          baseplate_width="TOFEndcap_baseplate_width"/>
-      </module>
-      <layer id="1">
-        <envelope  vis="TOFLayerVis"
-          rmin="ForwardTOFLayer_rmin"
-          rmax="ForwardTOFLayer_rmax"
-          length="TOFEndcapLayer_thickness"
-          zstart="ForwardTOFLayer1_zmin" />
-      </layer>
-      <layer id="2" name="SensorStack" thickness="SS_thickness" numslices="8"  binning="binPhi,binR" bins0="20" bins1="256">
-          <slice name="ThermalPad"  material="Graphite"         thickness="SS_TP_thickness" width="SS_TP_width" length="SS_TP_length" offset="SS_TP_offset" sensitive="no"/>
-          <slice name="ALNBtm"      material="AluminumNitrate"  thickness="SS_ALNBtm_thickness"     width="SS_ALNBtm_width"     length="SS_ALNBtm_length"     offset="SS_ALNBtm_offset"     sensitive="no"/>
-          <slice name="LairdFilm"   material="Graphite"         thickness="SS_LairdFilm_thickness"  width="SS_LairdFilm_width"  length="SS_LairdFilm_length"  offset="SS_LairdFilm_offset"  sensitive="no"/>
-          <slice name="ROC"         material="Plexiglass"       thickness="SS_ROC_thickness"        width="SS_ROC_width"        length="SS_ROC_length"        offset="SS_ROC_offset"        sensitive="no"/>
-          <slice name="Solder"      material="Tin"              thickness="SS_Solder_thickness"     width="SS_Solder_width"     length="SS_Solder_length"     offset="SS_Solder_offset"     sensitive="no"/>
-          <slice name="Sensor"      material="Silicon"          thickness="SS_Sensor_thickness"     width="SS_Sensor_width"     length="SS_Sensor_length"     offset="SS_Sensor_offset"     sensitive="yes"/>
-          <slice name="Epoxy"       material="Epoxy"            thickness="SS_Epoxy_thickness"      width="SS_Epoxy_width"      length="SS_Epoxy_length"      offset="SS_Epoxy_offset"      sensitive="no"/>
-          <slice name="ALNTop"      material="AluminumNitrate"  thickness="SS_ALNTop_thickness"     width="SS_ALNTop_width"     length="SS_ALNTop_length"     offset="SS_ALNTop_offset"     sensitive="no"/>
+      <detector
+        id="ForwardTOF_ID"
+        name="ForwardTOF"
+        type="epic_TrapEndcapTracker"
+        readout="TOFEndcapHits"
+        vis="TOFVis"
+        reflect="false">
+        <type_flags type="DetType_TRACKER + DetType_ENDCAP"/>
+        <module name="ForwardModule" vis="TOFModuleVis">
+          <trd x1="ForwardTOFMod_x1/2.0" x2="ForwardTOFMod_x2/2.0" z="ForwardTOFMod_y/2"/>
+          <comment> TRDs are built back-to-front </comment>
+          <module_component thickness="TOFEndcapService_thickness" material="Silicon" vis="TOFVis"/>
+          <module_component thickness="TOFEndcapSensor_thickness" material="Silicon" sensitive="true" vis="TOFSensorVis"/>
+        </module>
+        <layer id="1">
+          <envelope  vis="TOFLayerVis"
+            rmin="ForwardTOFLayer_rmin"
+            rmax="ForwardTOFLayer_rmax"
+            length="TOFEndcapLayer_thickness"
+            zstart="ForwardTOFLayer1_zmin" />
+          <ring
+            r="ForwardTOFMod_rmin + ForwardTOFMod_y/2.0"
+            zstart="0"
+            nmodules="TOFEndcapMod_count"
+            dz="TOFEndcapMod_dz"
+            module="ForwardModule" />
         </layer>
-      <layer id="3" name="ServiceHybridStack" thickness="SH_thickness" numslices="4">
-          <slice name="ThermalPad"      material="Graphite"     thickness="SH_TP_thickness"     width="SH_TP_width"         length="SH_TP_length"         offset="SH_TP_offset"         sensitive="no"/>
-          <slice name="HighSpeedBoard"  material="Polystyrene"  thickness="SH_HSB_thickness"    width="SH_HSB_width"        length="SH_HSB_length"        offset="SH_HSB_offset"        sensitive="no"/>
-          <slice name="ConnectorSpace"  material="Air"          thickness="SH_ConnSp_thickness" width="SH_ConnSp_width"     length="SH_ConnSp_length"     offset="SH_ConnSp_offset"     sensitive="no"/>
-          <slice name="Powerboard"      material="Polystyrene"  thickness="SH_PB_thickness"     width="SH_PB_width"         length="SH_PB_length"         offset="SH_PB_offset"         sensitive="no"/>
+      </detector>
+      <detector
+        id="BackwardTOF_ID"
+        name="BackwardTOF"
+        type="epic_TrapEndcapTracker"
+        readout="TOFEndcapHits"
+        vis="TOFVis"
+        reflect="true">
+        <type_flags type="DetType_TRACKER + DetType_ENDCAP"/>
+        <module name="BackwardModule" vis="TOFModuleVis">
+          <trd x1="BackwardTOFMod_x1/2.0" x2="BackwardTOFMod_x2/2.0" z="BackwardTOFMod_y/2"/>
+          <comment> TRDs are built back-to-front </comment>
+          <module_component thickness="TOFEndcapService_thickness" material="Silicon" vis="TOFVis"/>
+          <module_component thickness="TOFEndcapSensor_thickness" material="Silicon" sensitive="true" vis="TOFSensorVis"/>
+        </module>
+        <layer id="1">
+          <envelope  vis="TOFLayerVis"
+            rmin="BackwardTOFLayer_rmin"
+            rmax="BackwardTOFLayer_rmax"
+            length="TOFEndcapLayer_thickness"
+            zstart="BackwardTOFLayer1_zmin" />
+          <ring
+            r="BackwardTOFMod_rmin + BackwardTOFMod_y/2.0"
+            zstart="0"
+            nmodules="TOFEndcapMod_count"
+            dz="TOFEndcapMod_dz"
+            module="BackwardModule" />
         </layer>
-    </detector>
+      </detector>
   </detectors>
-
+  
   <plugins>
     <plugin name="DD4hep_ParametersPlugin">
       <argument value="ForwardTOF"/>
-      <argument value="layer_pattern: str=layer_\d"/>
+      <argument value="layer_pattern: str=ForwardTOF_layer\d_N"/>
+    </plugin>
+    <plugin name="DD4hep_ParametersPlugin">
+      <argument value="BackwardTOF"/>
+      <argument value="layer_pattern: str=BackwardTOF_layer\d_N"/>
     </plugin>
   </plugins>
-
+  
   <readouts>
     <readout name="TOFEndcapHits">
       <segmentation type="CartesianGridXZ" grid_size_x="100*um" grid_size_z="100*um" />
