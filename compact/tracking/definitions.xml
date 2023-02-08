@@ -144,6 +144,12 @@
       <composite name="ForwardTOF"/>
       <composite name="BackwardTOF"/>
     </detector>
+    <detector id="TrackerSubAssembly_7_ID"
+      name="EndcapMPGDTRDSubSubAssembly"
+      type="DD4hep_SubdetectorAssembly"
+      vis="TrackerSubAssemblyVis">
+      <composite name="MPGDTRDEndcapTrackerP"/>
+    </detector>
   </detectors>
 
   <documentation>
