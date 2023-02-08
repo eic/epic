@@ -90,7 +90,7 @@
       readout="MPGDTRDEndcapHits"
       vis="TrackerVis"
       reflect="false">
-	    <!--<type_flags type="DetType_TRACKER + DetType_ENDCAP"/>-->
+      <type_flags type="DetType_TRACKER + DetType_ENDCAP"/>
       <comment> TRD radiator </comment>
       <module name="Module1" vis="TrackerSupportVis">
         <trd x1="TrackerEndcapPMod1_x1/2" x2="TrackerEndcapPMod1_x2/2" z="TrackerEndcapPMod1_y/2" />
