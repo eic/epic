@@ -330,62 +330,29 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
 
     // BUILD MIRRORS ====================================================================
 
-    // derive spherical mirror parameters `(zM,xM,rM)`, for given image point
-    // coordinates `(zI,xI)` and `dO`, defined as the z-distance between the
-    // object and the mirror surface
-    // - all coordinates are specified w.r.t. the object point coordinates
-    // - this is point-to-point focusing, but it can be used to effectively steer
-    //   parallel-to-point focusing
-    double zM, xM, rM;
-    auto   FocusMirror = [&zM, &xM, &rM](double zI, double xI, double dO) {
-      zM = dO * zI / (2 * dO - zI);
-      xM = dO * xI / (2 * dO - zI);
-      rM = dO - zM;
-    };
-
-    // attributes, re-defined w.r.t. IP, needed for mirror positioning
-    double zS = sensorSphCenterZ + vesselZmin; // sensor sphere attributes
+    // mirror positioning attributes
+    // - sensor sphere center, w.r.t. IP
+    double zS = sensorSphCenterZ + vesselZmin;
     double xS = sensorSphCenterX;
-    // double rS = sensorSphRadius;
-    double B = vesselZmax - mirrorBackplane; // distance between IP and mirror back plane
-
-    // focus 1: set mirror to focus IP on center of sensor sphere `(zS,xS)`
-    /*double zF = zS;
-    double xF = xS;
-    FocusMirror(zF,xF,B);*/
-
-    // focus 2: move focal region along sensor sphere radius, according to `focusTuneLong`
-    // - specifically, along the radial line which passes through the approximate centroid
-    //   of the sensor region `(sensorCentroidZ,sensorCentroidX)`
-    // - `focusTuneLong` is the distance to move, given as a fraction of `sensorSphRadius`
-    // - `focusTuneLong==0` means `(zF,xF)==(zS,xS)`
-    // - `focusTuneLong==1` means `(zF,xF)` will be on the sensor sphere, near the centroid
-    /*
-    double zC = sensorCentroidZ + vesselZmin;
-    double xC = sensorCentroidX;
-    double slopeF = (xC-xS) / (zC-zS);
-    double thetaF = std::atan(std::fabs(slopeF));
-    double zF = zS + focusTuneLong * sensorSphRadius * std::cos(thetaF);
-    double xF = xS - focusTuneLong * sensorSphRadius * std::sin(thetaF);
-    //FocusMirror(zF,xF,B);
-
-    // focus 3: move along line perpendicular to focus 2's radial line,
-    // according to `focusTunePerp`, with the same numerical scale as `focusTuneLong`
-    zF += focusTunePerp * sensorSphRadius * std::cos(M_PI/2-thetaF);
-    xF += focusTunePerp * sensorSphRadius * std::sin(M_PI/2-thetaF);
-    FocusMirror(zF,xF,B);
-    */
-
-    // focus 4: use (z,x) coordinates for tune parameters
+    // - distance between IP and mirror back plane
+    double b = vesselZmax - mirrorBackplane;
+    // - desired focal region: sensor sphere center, offset by focus-tune (z,x) parameters
     double zF = zS + focusTuneZ;
     double xF = xS + focusTuneX;
-    FocusMirror(zF, xF, B);
 
-    // re-define mirror attributes to be w.r.t vessel front plane
-    // - `(zM,xM)` is the mirror center w.r.t. to the IP
-    double mirrorCenterZ = zM - vesselZmin;
-    double mirrorCenterX = xM;
-    double mirrorRadius  = rM;
+    // determine the mirror that focuses the IP to this desired region
+    /* - uses point-to-point focusing to derive spherical mirror center
+     *   `(mirrorCenterZ,mirrorCenterX)` and radius `mirrorRadius` for given
+     *   image point coordinates `(zF,xF)` and `b`, defined as the z-distance
+     *   between the object (IP) and the mirror surface
+     * - all coordinates are specified w.r.t. the object point (IP)
+     */
+    double mirrorCenterZ = b * zF / (2 * b - zF);
+    double mirrorCenterX = b * xF / (2 * b - zF);
+    double mirrorRadius  = b - mirrorCenterZ;
+
+    // translate mirror center to be w.r.t vessel front plane
+    mirrorCenterZ -= vesselZmin;
 
     // spherical mirror patch cuts and rotation
     double mirrorThetaRot = std::asin(mirrorCenterX / mirrorRadius);
