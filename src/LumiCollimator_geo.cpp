@@ -26,17 +26,17 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector /
 
   // Create outer box
   xml::Component box_dim = x_det.child(_Unicode(dimensions_outer));
-  double         height  = box_dim.attr<double>(_Unicode(y));;
-  double         width   = box_dim.attr<double>(_Unicode(x));;
-  double         depth   = box_dim.attr<double>(_Unicode(z));;
+  double         height  = box_dim.attr<double>(_Unicode(y));
+  double         width   = box_dim.attr<double>(_Unicode(x));
+  double         depth   = box_dim.attr<double>(_Unicode(z));
 
   Box box_outer(width, height, depth);
 
   // Create inner box
   xml::Component box_dim_2 = x_det.child(_Unicode(dimensions_inner));
-  double         height_2  = box_dim_2.attr<double>(_Unicode(y));;
-  double         width_2   = box_dim_2.attr<double>(_Unicode(x));;
-  double         depth_2   = box_dim_2.attr<double>(_Unicode(z));;
+  double         height_2  = box_dim_2.attr<double>(_Unicode(y));
+  double         width_2   = box_dim_2.attr<double>(_Unicode(x));
+  double         depth_2   = box_dim_2.attr<double>(_Unicode(z));
 
   Box box_inner(width_2, height_2, depth_2);
 
