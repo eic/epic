@@ -3,7 +3,7 @@
 
 <lccdd>
 
-<comment> 
+<comment>
 Construct a dipole magnet for the luminosity monitor in the style of the ZEUS design.
 Constructed as mainbody (subtraction solid of outer and inner block) + coil panels (subtraction solid of outer and inner block) + legs (subtraction solid of outer and inner block).
 </comment>
@@ -27,7 +27,7 @@ Constructed as mainbody (subtraction solid of outer and inner block) + coil pane
 
 <detectors>
 
-    <detector 
+    <detector
       name="SweeperMag"
       type="LumiMagnets"
       vis_name1="AnlGreen"
@@ -44,7 +44,7 @@ Constructed as mainbody (subtraction solid of outer and inner block) + coil pane
     </detector>
 
     <!-- 4 cm wider x opening than sweeper mag for allowance of 5 sigma photon beam -->
-    <detector 
+    <detector
       name="SpectrometerMag"
       type="LumiMagnets"
       vis_name1="AnlGreen"
@@ -61,9 +61,9 @@ Constructed as mainbody (subtraction solid of outer and inner block) + coil pane
     </detector>
 
   </detectors>
-  
-  
-  <comment> 
+
+
+  <comment>
   dz of fields is set to main body length, not panel length.
   Approximates effect of Bx dL integral with non-uniform Bx.
   </comment>
@@ -85,4 +85,3 @@ Constructed as mainbody (subtraction solid of outer and inner block) + coil pane
   </fields>
 
 </lccdd>
-

@@ -8,11 +8,11 @@
     <constant name="Pos_Y1"     value="LumiSpecTracker_Y1"/>
     <constant name="Pos_Z1"     value="LumiSpecTracker_Z1"/>
     <constant name="Size_XY1"   value="LumiSpecTracker_DXY"/>
-    
+
     <constant name="Pos_Y2"     value="LumiSpecTracker_Y2"/>
     <constant name="Pos_Z2"     value="LumiSpecTracker_Z2"/>
     <constant name="Size_XY2"   value="LumiSpecTracker_DXY"/>
-    
+
     <constant name="Pos_Y3"     value="LumiSpecTracker_Y3"/>
     <constant name="Pos_Z3"     value="LumiSpecTracker_Z3"/>
     <constant name="Size_XY3"   value="LumiSpecTracker_DXY"/>
@@ -21,7 +21,7 @@
 
 
   <detectors>
-    <detector 
+    <detector
     id="LumiSpecTracker_ID"
     name="LumiSpecTracker"
     type="LumiSpecTracker"

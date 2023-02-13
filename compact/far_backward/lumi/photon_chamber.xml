@@ -4,8 +4,8 @@
 <lccdd>
 
   <comment>
-    Chamber that encapsulates the lumi photons.  
-    For impact studies of air along photon's path to lumi detectors. 
+    Chamber that encapsulates the lumi photons.
+    For impact studies of air along photon's path to lumi detectors.
     dx and dy dimensions (half widths) claculated as 5*sigma of max electron beam divergence.
   </comment>
 

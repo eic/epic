@@ -268,7 +268,7 @@
     <constant name="LumiSpecCAL_DXY"      value="0.2*m"/>
     <constant name="LumiSpecCALTower_DXY" value="0.02*m"/>
     <constant name="LumiSpecCALTower_DZ"  value="0.2*m"/>
-    <constant name="LumiSpecCAL_FiveSigma" value="0.069*m"/> 
+    <constant name="LumiSpecCAL_FiveSigma" value="0.069*m"/>
     <constant name="LumiSpecCAL_Y"        value="LumiSpecCAL_FiveSigma + LumiSpecCAL_DXY/2.0"/>
     <constant name="LumiSpecCAL_Z"        value="-65*m"/>
 

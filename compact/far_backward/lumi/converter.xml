@@ -4,11 +4,11 @@
 <lccdd>
 
   <comment>
-  Bremstrahlung photon converter before the lumi spectrometer.  
+  Bremstrahlung photon converter before the lumi spectrometer.
   </comment>
 
   <detectors>
-    <detector 
+    <detector
       name="LumiConverter"
       type="LumiWindow"
       material="Aluminum"
@@ -20,4 +20,3 @@
   </detectors>
 
 </lccdd>
-

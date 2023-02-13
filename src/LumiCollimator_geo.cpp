@@ -59,9 +59,9 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector /
   // Final placement
   auto pv_assembly = description.pickMotherVolume(sdet).placeVolume(
       assembly, Transform3D(RotationZYX(0.0, 0.0, 0.0), Position(0, 0, 0)));
-  
+
   sdet.setPlacement(pv_assembly);
-  
+
   assembly->GetShape()->ComputeBBox();
 
   return sdet;

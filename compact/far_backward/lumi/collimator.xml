@@ -10,7 +10,7 @@
   </comment>
 
   <detectors>
-    <detector 
+    <detector
       name="LumiCollimator1"
       type="LumiCollimator"
       vis="Shape1_vis">
@@ -25,4 +25,3 @@
   </detectors>
 
 </lccdd>
-
