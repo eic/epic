@@ -3,6 +3,7 @@ pbeam: 275
 features:
   beampipe:
   tracking:
+    definitions:
     vertex_barrel:
     silicon_barrel:
     mpgd_barrel:
@@ -24,7 +25,7 @@ features:
   hcal:
     forward:
     forward_insert:
-    barrel:
+    barrel_gdml:
     backward:
   far_forward:
     far_forward:

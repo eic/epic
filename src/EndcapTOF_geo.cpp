@@ -18,15 +18,9 @@
 #include "XML/Utilities.h"
 #include <array>
 #include <map>
+#include "DD4hepDetectorHelper.h"
 
-#if defined(USE_ACTSDD4HEP)
-#include "ActsDD4hep/ActsExtension.hpp"
-#include "ActsDD4hep/ConvertMaterial.hpp"
-#else
-#include "Acts/Plugins/DD4hep/ActsExtension.hpp"
-#include "Acts/Plugins/DD4hep/ConvertDD4hepMaterial.hpp"
-#endif
-
+using namespace std;
 using namespace dd4hep;
 using namespace dd4hep::rec;
 using namespace dd4hep::detail;
@@ -41,16 +35,33 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
   Material     air = description.material("Air");
   PlacedVolume pv;
 
-  // NOTE: ACTS extension for the basic endcap volume
-  {
-    Acts::ActsExtension* detWorldExt = new Acts::ActsExtension();
-    detWorldExt->addType("endcap", "detector");
-    ttl_detEl.addExtension<Acts::ActsExtension>(detWorldExt);
+  // Set detector type flag
+  dd4hep::xml::setDetectorTypeFlag(x_det, ttl_detEl);
+  auto &params = DD4hepDetectorHelper::ensureExtension<dd4hep::rec::VariantParameters>(
+      ttl_detEl);
+
+  // Add the volume boundary material if configured
+  for (xml_coll_t bmat(x_det, _Unicode(boundary_material)); bmat; ++bmat) {
+    xml_comp_t x_boundary_material = bmat;
+    DD4hepDetectorHelper::xmlToProtoSurfaceMaterial(x_boundary_material, params,
+                                         "boundary_material");
   }
 
   xml_comp_t  x_mod         = x_det.child(_Unicode(module));
   std::string m_nam         = x_mod.nameStr();
   xml_comp_t  diskdimension = x_mod.dimensions();
+
+  xml_comp_t  envelope      = x_det.child(_Unicode(envelope), false);
+  double envelope_r_min     = 0;
+  double envelope_r_max     = 0;
+  double envelope_z_min     = 0;
+  double envelope_z_max     = 0;
+  if(envelope){
+    envelope_r_min = getAttrOrDefault(envelope, _Unicode(r_min), 0);
+    envelope_r_max = getAttrOrDefault(envelope, _Unicode(r_max), 0);
+    envelope_z_min = getAttrOrDefault(envelope, _Unicode(z_min), 0);
+    envelope_z_max = getAttrOrDefault(envelope, _Unicode(z_max), 0);
+  }
 
   // load all information from the diskdimension definitions
   double disk_zPos              = getAttrOrDefault(diskdimension, _Unicode(zPos), 0.);
@@ -184,13 +195,12 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
 
   // NOTE: ACTS extension for the disk layer of the TTL
   // also defining the coordinate system that differs between ACTS and Geant4 (zyx vs xyz)
-  Acts::ActsExtension* detlayer = new Acts::ActsExtension();
-  detlayer->addValue(-80. * mm, "r_min", "envelope");
-  detlayer->addValue(670. * mm, "r_max", "envelope");
-  detlayer->addValue(10. * mm, "z_min", "envelope");
-  detlayer->addValue(10. * mm, "z_max", "envelope");
-  detlayer->addType("sensitive plane", "layer");
-  layer_detEl.addExtension<Acts::ActsExtension>(detlayer);
+  auto &layerParams = DD4hepDetectorHelper::ensureExtension<dd4hep::rec::VariantParameters>(
+                      layer_detEl);
+  layerParams.set<double>("envelope_r_min", envelope_r_min);
+  layerParams.set<double>("envelope_r_max", envelope_r_max);
+  layerParams.set<double>("envelope_z_min", envelope_z_min);
+  layerParams.set<double>("envelope_z_max", envelope_z_max);
 
   pv = assembly.placeVolume(layer_assembly);
   pv.addPhysVolID("layer", layer_id);
@@ -352,8 +362,8 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
       sensor_detEl_front.setPlacement(pv);
       volSurfaceList(sensor_detEl_front)->push_back(surf_front);
 
-      Acts::ActsExtension* sensorExtension_front = new Acts::ActsExtension("XZY");
-      sensor_detEl_front.addExtension<Acts::ActsExtension>(sensorExtension_front);
+      auto &front_params = DD4hepDetectorHelper::ensureExtension<dd4hep::rec::VariantParameters>(sensor_detEl_front);
+      front_params.set<string>("axis_definitions", "XZY");
 
       isensor++;
 
@@ -410,8 +420,8 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
       sensor_detEl_back.setPlacement(pv);
       volSurfaceList(sensor_detEl_back)->push_back(surf_back);
 
-      Acts::ActsExtension* sensorExtension_back = new Acts::ActsExtension("XZY");
-      sensor_detEl_back.addExtension<Acts::ActsExtension>(sensorExtension_back);
+      auto &back_params = DD4hepDetectorHelper::ensureExtension<dd4hep::rec::VariantParameters>(sensor_detEl_back);
+      back_params.set<string>("axis_definitions", "XZY");
 
       isensor++;
 
