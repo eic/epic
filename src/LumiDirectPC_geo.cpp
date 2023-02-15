@@ -12,7 +12,7 @@
 using namespace std;
 using namespace dd4hep;
 
-static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector sens)
+static dd4hep::Ref_t create_detector(dd4hep::Detector& description, xml_h e, dd4hep::SensitiveDetector sens)
 {
   sens.setType("calorimeter");
 
@@ -49,4 +49,4 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
   return det;
 }
 
-DECLARE_DETELEMENT(LumiDirectPCAL, create_detector)
+DECLARE_DETELEMENT(LumiDirect_PCAL, create_detector)
