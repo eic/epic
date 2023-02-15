@@ -6,7 +6,7 @@
     <detector
       id="LumiDirectPCAL_ID"
       name="LumiDirectPCAL"
-      type="LumiDirectPCAL"
+      type="LumiDirect_PCAL"
       material="PbWO4"
       vis="EcalVis"
       readout="LumiDirectPCALHits">
