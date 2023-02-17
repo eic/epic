@@ -52,6 +52,7 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
   auto   gasvolMat       = desc.material(detElem.attr<std::string>(_Unicode(gas)));
   auto   vesselVis       = desc.visAttributes(detElem.attr<std::string>(_Unicode(vis_vessel)));
   auto   gasvolVis       = desc.visAttributes(detElem.attr<std::string>(_Unicode(vis_gas)));
+  auto   extrusionLength = desc.constantAsDouble("DRICH_extrusion_length");
   // - radiator (applies to aerogel and filter)
   auto   radiatorElem       = detElem.child(_Unicode(radiator));
   double radiatorRmin       = radiatorElem.attr<double>(_Unicode(rmin));
@@ -184,9 +185,28 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
   Cone gasvolTank(tankLength / 2.0 - windowThickness, gasvolSnout.rMin2(), vesselRmax2 - wallThickness,
                   vesselRmin1 + wallThickness, vesselRmax2 - wallThickness);
 
-  // snout + tank solids
-  UnionSolid vesselUnion(vesselTank, vesselSnout, Position(0., 0., -vesselLength / 2.));
-  UnionSolid gasvolUnion(gasvolTank, gasvolSnout, Position(0., 0., -vesselLength / 2. + windowThickness));
+  // extrusion solids
+  Cone vesselExtrusion(
+      extrusionLength / 2.0,
+      vesselSnout.rMax2(),
+      vesselRmax2,
+      vesselSnout.rMax2(),
+      vesselRmax2
+      );
+  Cone gasvolExtrusion(
+      extrusionLength / 2.0,
+      vesselSnout.rMax2() + wallThickness,
+      vesselRmax2 - wallThickness,
+      vesselSnout.rMax2() + wallThickness,
+      vesselRmax2 - wallThickness
+      );
+
+  // union1: snout + tank
+  UnionSolid vesselUnion1(vesselTank, vesselSnout, Position(0., 0., -vesselLength / 2.));
+  UnionSolid gasvolUnion1(gasvolTank, gasvolSnout, Position(0., 0., -vesselLength / 2. + windowThickness));
+  // final: union1 + extrusion
+  UnionSolid vesselFinal(vesselUnion1, vesselExtrusion, Position(0., 0., -(vesselLength+extrusionLength-snoutLength) / 2.));
+  UnionSolid gasvolFinal(gasvolUnion1, gasvolExtrusion, Position(0., 0., -(vesselLength+extrusionLength-snoutLength) / 2. + windowThickness));
 
   //  extra solids for `debugOptics` only
   Box vesselBox(1001, 1001, 1001);
@@ -196,8 +216,8 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
   Solid vesselSolid, gasvolSolid;
   switch (debugOpticsMode) {
   case 0:
-    vesselSolid = vesselUnion;
-    gasvolSolid = gasvolUnion;
+    vesselSolid = vesselFinal;
+    gasvolSolid = gasvolFinal;
     break; // `!debugOptics`
   case 1:
   case 3:
@@ -206,7 +226,7 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
     break;
   case 2:
     vesselSolid = vesselBox;
-    gasvolSolid = gasvolUnion;
+    gasvolSolid = gasvolFinal;
     break;
   }
 
