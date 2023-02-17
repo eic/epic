@@ -35,17 +35,17 @@ static dd4hep::Ref_t create_detector(dd4hep::Detector& description, xml_h e, dd4
   double        rotZ            = x_rot.z();
 
   Box box( sizeX, sizeY, sizeZ );
-  Volume vol( det_name + "_vol", box, description.material( mat_name ) );
-  vol.setVisAttributes( x_det.visStr() );
+  Volume vol( det_name + "_vol", box, desc.material( mat_name ) );
+  //vol.setVisAttributes( x_det.visStr() );
+  vol.setVisAttributes(desc.visAttributes(x_det.visStr()));
+  vol.setSensitiveDetector(sens);
 
   Transform3D  pos( RotationZYX(rotX, rotY, rotZ), Position(posX, posY, posZ) );
 
-  DetElement det(det_name, x_det.id());
-  Volume motherVol = description.pickMotherVolume( det );
+  Volume motherVol = desc.pickMotherVolume( det );
   PlacedVolume phv = motherVol.placeVolume( vol, pos );
-
+  phv.addPhysVolID("system", det_ID);
   det.setPlacement(phv);
-
   return det;
 }
 
