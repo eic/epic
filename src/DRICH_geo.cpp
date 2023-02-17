@@ -52,7 +52,11 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
   auto   gasvolMat       = desc.material(detElem.attr<std::string>(_Unicode(gas)));
   auto   vesselVis       = desc.visAttributes(detElem.attr<std::string>(_Unicode(vis_vessel)));
   auto   gasvolVis       = desc.visAttributes(detElem.attr<std::string>(_Unicode(vis_gas)));
-  auto   extrusionLength = desc.constantAsDouble("DRICH_extrusion_length");
+  // - vessel extrusion
+  auto extrusionLength     = desc.constantAsDouble("DRICH_extrusion_length");
+  auto extrusionPhiw       = desc.constantAsDouble("DRICH_extrusion_phiw");
+  auto extrusionRminOffset = desc.constantAsDouble("DRICH_extrusion_rmin_offset");
+  auto extrusionRmaxOffset = desc.constantAsDouble("DRICH_extrusion_rmax_offset");
   // - radiator (applies to aerogel and filter)
   auto   radiatorElem       = detElem.child(_Unicode(radiator));
   double radiatorRmin       = radiatorElem.attr<double>(_Unicode(rmin));
@@ -186,27 +190,72 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
                   vesselRmin1 + wallThickness, vesselRmax2 - wallThickness);
 
   // extrusion solids
+  // clang-format off
   Cone vesselExtrusion(
       extrusionLength / 2.0,
-      vesselSnout.rMax2(),
-      vesselRmax2,
+      vesselSnout.rMax2() + extrusionRminOffset,
+      vesselRmax2 + extrusionRmaxOffset,
       vesselSnout.rMax2(),
       vesselRmax2
       );
   Cone gasvolExtrusion(
       extrusionLength / 2.0,
-      vesselSnout.rMax2() + wallThickness,
-      vesselRmax2 - wallThickness,
+      vesselSnout.rMax2() + wallThickness + extrusionRminOffset,
+      vesselRmax2 - wallThickness + extrusionRmaxOffset,
       vesselSnout.rMax2() + wallThickness,
       vesselRmax2 - wallThickness
       );
 
-  // union1: snout + tank
-  UnionSolid vesselUnion1(vesselTank, vesselSnout, Position(0., 0., -vesselLength / 2.));
-  UnionSolid gasvolUnion1(gasvolTank, gasvolSnout, Position(0., 0., -vesselLength / 2. + windowThickness));
-  // final: union1 + extrusion
-  UnionSolid vesselFinal(vesselUnion1, vesselExtrusion, Position(0., 0., -(vesselLength+extrusionLength-snoutLength) / 2.));
-  UnionSolid gasvolFinal(gasvolUnion1, gasvolExtrusion, Position(0., 0., -(vesselLength+extrusionLength-snoutLength) / 2. + windowThickness));
+  // make sensor boxes, by applying azimuthal cuts on `extrusionSolid` and taking
+  // the boolean union with `motherSolid`, with relative position `zpos`; azimthal cuts
+  // are `extrusionPhiw` reduced by `azimuthalBuffer`
+  // FIXME: `azimuthalBuffer` will cause tapered walls in the sensor boxes; this is
+  // a bit tedious to correct and likely has little impact on material budget
+  auto addSensorBoxes = [&extrusionPhiw,&nSectors,&vesselLength] (
+      Cone extrusionSolid, auto motherSolid, double zpos, double azimuthalBuffer
+      )
+  {
+    UnionSolid result;
+    // for each sector, take the union with `motherSolid` and a sensor box
+    for (int isec = 0; isec < nSectors; isec++) {
+      // pie slice, used to make azimuthal cuts on `extrusionSolid` for this sector
+      Tube pie(
+        std::min(extrusionSolid.rMin1(), extrusionSolid.rMin2()),
+        std::max(extrusionSolid.rMax1(), extrusionSolid.rMax2()),
+        vesselLength,
+        2.0 * isec * M_PI / nSectors - extrusionPhiw / 2.0 - azimuthalBuffer,
+        2.0 * isec * M_PI / nSectors + extrusionPhiw / 2.0 + azimuthalBuffer
+        );
+      // make the azimuthal cuts
+      auto pieBool = IntersectionSolid(pie, extrusionSolid, Position(0.,0.,zpos));
+      // take the union with `motherSolid`
+      if(isec==0)
+        result = UnionSolid(motherSolid, pieBool);
+      else
+        result = UnionSolid(result, pieBool);
+    }
+    return result;
+  };
+
+  // union of tank + sensor boxes
+  auto vesselTankWithBoxes = addSensorBoxes(
+      vesselExtrusion,
+      vesselTank,
+      -(vesselLength+extrusionLength-snoutLength) / 2.,
+      2 * degree // FIXME: a guess
+      );
+  auto gasvolTankWithBoxes = addSensorBoxes(
+      gasvolExtrusion,
+      gasvolTank,
+      -(vesselLength+extrusionLength-snoutLength) / 2. + windowThickness,
+      1 * degree // FIXME: a guess
+      );
+
+  // union of snout + (tank + sensor boxes)
+  UnionSolid vesselFinal(vesselTankWithBoxes, vesselSnout, Position(0., 0., -vesselLength / 2.));
+  UnionSolid gasvolFinal(gasvolTankWithBoxes, gasvolSnout, Position(0., 0., -vesselLength / 2. + windowThickness));
+
+  // clang-format on
 
   //  extra solids for `debugOptics` only
   Box vesselBox(1001, 1001, 1001);

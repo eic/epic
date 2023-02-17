@@ -22,7 +22,10 @@
 <!-- tank geometry: cylinder, holding the majority of detector components -->
 <constant name="DRICH_rmax2"              value="ForwardPIDRegion_rmax"/>  <!-- cylinder radius -->
 <!-- sensor box geometry: an extrusion of the tank, to hold the sensors -->
-<constant name="DRICH_extrusion_length"   value="DRICH_snout_length"/> <!-- z-length of the extrusion -->
+<constant name="DRICH_extrusion_length"      value="DRICH_snout_length"/> <!-- z-length of the extrusion -->
+<constant name="DRICH_extrusion_phiw"        value="30*degree"/> <!-- azimuthal width -->
+<constant name="DRICH_extrusion_rmin_offset" value="10*cm"/> <!-- offset of rmin (w.r.t. rmax1) of extrusion frontplane -->
+<constant name="DRICH_extrusion_rmax_offset" value="20*cm"/> <!-- offset of rmax (w.r.t. rmax2) of extrusion frontplane -->
 <!-- aerogel+filter geometry -->
 <constant name="DRICH_aerogel_thickness"  value="4.0*cm"/>  <!-- aerogel thickness -->
 <constant name="DRICH_airgap_thickness"   value="0.01*mm"/> <!-- air gap between aerogel and filter -->
