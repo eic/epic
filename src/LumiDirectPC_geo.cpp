@@ -12,7 +12,7 @@
 using namespace std;
 using namespace dd4hep;
 
-static dd4hep::Ref_t create_detector(dd4hep::Detector& description, xml_h e, dd4hep::SensitiveDetector sens)
+static Ref_t create_detector(Detector& desc, xml_h e, SensitiveDetector sens)
 {
   sens.setType("calorimeter");
 
@@ -23,6 +23,8 @@ static dd4hep::Ref_t create_detector(dd4hep::Detector& description, xml_h e, dd4
   //
   string        det_name        = x_det.nameStr();
   string        mat_name        = dd4hep::getAttrOrDefault<string>( x_det, _U(material), "PbWO4" );
+  int		det_ID		=x_det.id();
+  DetElement det(det_name, det_ID);
   //
   double        sizeX           = x_dim.x();
   double        sizeY           = x_dim.y();
@@ -49,4 +51,4 @@ static dd4hep::Ref_t create_detector(dd4hep::Detector& description, xml_h e, dd4
   return det;
 }
 
-DECLARE_DETELEMENT(LumiDirect_PCAL, create_detector)
+DECLARE_DETELEMENT(LumiDirectPCAL, create_detector)
