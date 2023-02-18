@@ -208,9 +208,10 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
 
   // make sensor boxes, by applying azimuthal cuts on `extrusionSolid` and taking
   // the boolean union with `motherSolid`, with relative position `zpos`; azimthal cuts
-  // are `extrusionPhiw` reduced by `azimuthalBuffer`
-  // FIXME: `azimuthalBuffer` will cause tapered walls in the sensor boxes; this is
-  // a bit tedious to correct and likely has little impact on material budget
+  // are `extrusionPhiw`, reduced by `azimuthalBuffer`
+  // FIXME: `azimuthalBuffer` is a workaround to add thickness to the azimuthal walls,
+  // but they will be slightly tapered; doing it more correctly is not worth the effort yet
+  // and likely has negligible impact on material budget
   auto addSensorBoxes = [&extrusionPhiw,&nSectors,&vesselLength] (
       Cone extrusionSolid, auto motherSolid, double zpos, double azimuthalBuffer
       )
@@ -223,8 +224,8 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
         std::min(extrusionSolid.rMin1(), extrusionSolid.rMin2()),
         std::max(extrusionSolid.rMax1(), extrusionSolid.rMax2()),
         vesselLength,
-        2.0 * isec * M_PI / nSectors - extrusionPhiw / 2.0 - azimuthalBuffer,
-        2.0 * isec * M_PI / nSectors + extrusionPhiw / 2.0 + azimuthalBuffer
+        2.0 * isec * M_PI / nSectors - extrusionPhiw / 2.0 + azimuthalBuffer,
+        2.0 * isec * M_PI / nSectors + extrusionPhiw / 2.0 - azimuthalBuffer
         );
       // make the azimuthal cuts
       auto pieBool = IntersectionSolid(pie, extrusionSolid, Position(0.,0.,zpos));
@@ -242,13 +243,14 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
       vesselExtrusion,
       vesselTank,
       -(vesselLength+extrusionLength-snoutLength) / 2.,
-      2 * degree // FIXME: a guess
+      0.0
       );
   auto gasvolTankWithBoxes = addSensorBoxes(
       gasvolExtrusion,
       gasvolTank,
       -(vesselLength+extrusionLength-snoutLength) / 2. + windowThickness,
-      1 * degree // FIXME: a guess
+      wallThickness / vesselRmax1 // makes azimuthal wall thickness be `wallThickness` at `vesselRmax1`,
+                                  // and a bit bigger at `vesselRmax2`
       );
 
   // union of snout + (tank + sensor boxes)
@@ -552,10 +554,10 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
         double phiCheck = std::atan2(yCheck, xCheck);
 
         // patch cut
-        bool patchCut = std::fabs(phiCheck) < sensorSphPatchPhiw && zCheck > sensorSphPatchZmin &&
+        bool patchCut = std::fabs(phiCheck) < sensorSphPatchPhiw / 2.0 && zCheck > sensorSphPatchZmin &&
                         rCheck > sensorSphPatchRmin && rCheck < sensorSphPatchRmax;
         if (debugSensors)
-          patchCut = std::fabs(phiCheck) < sensorSphPatchPhiw;
+          patchCut = std::fabs(phiCheck) < sensorSphPatchPhiw / 2.0;
         if (patchCut) {
 
           // append sensor position to centroid calculation
