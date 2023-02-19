@@ -63,7 +63,6 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
 
   PlacedVolume env_phv = motherVol.placeVolume(envelope);
   env_phv.addPhysVolID("system", det_id);
-  //env_phv.addPhysVolID("barrel", 0);
   sdet.setPlacement(env_phv);
 
   // Storage for sectors and tile assemblies
