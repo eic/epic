@@ -19,22 +19,20 @@
 #include "TGeoPolygon.h"
 #include "XML/Layering.h"
 #include <functional>
-#include <boost/range/adaptor/filtered.hpp>
 
 using namespace std;
 using namespace dd4hep;
-using namespace dd4hep::detail;
 
 typedef ROOT::Math::XYPoint Point;
 // fiber placement helpers, defined below
 struct FiberGrid {
-  int ix = 0, iz = 0;
+  int ix = 0, iy = 0;
   vector<Point> points;
   Point mean_centroid = Point(0., 0.);
   Assembly *assembly_ptr = nullptr;
 
   // initialize with grid id and points
-  FiberGrid(int i, int j, const vector<Point> &pts) : ix(i), iz(j), points(pts) {
+  FiberGrid(int i, int j, const vector<Point> &pts) : ix(i), iy(j), points(pts) {
     if (pts.empty()) {
       return;
     }
@@ -244,15 +242,19 @@ void buildFibers(Detector& desc, SensitiveDetector& sens, Volume& s_vol, xml_com
 
   // build assembly for each grid and put fibers in
   for (auto &gr : grids) {
-    Assembly grid_vol(Form("fiber_grid_%i_%i", gr.ix, gr.iz));
+    Assembly grid_vol(Form("fiber_grid_%i_%i", gr.ix, gr.iy));
     // fiber is along y-axis of the layer volume, so grids are arranged on X-Z plane
     Transform3D gr_tr(RotationZYX(0, 0, M_PI * 0.5), Position(gr.mean_centroid.x(), 0, gr.mean_centroid.y()));
     auto grid_phv = s_vol.placeVolume(grid_vol, gr_tr);
-    grid_phv.addPhysVolID(f_id_grid, gr.ix + gr.iz * grid_div.first + 1);
+    grid_phv.addPhysVolID(f_id_grid, gr.ix + gr.iy * grid_div.first + 1);
 
     // loop over all fibers that are not assigned to a grid
     int f_id = 1;
-    for (auto &fi : fibers | boost::adaptors::filtered( [](const Fiber &f) {return not f.assigned;} )) {
+    for (auto &fi : fibers) {
+      if (fi.assigned) {
+        continue;
+      }
+
       // use TGeoPolygon to help check if fiber is inside a grid
       TGeoPolygon poly(gr.points.size());
       vector<double> vx, vy;
