@@ -546,7 +546,6 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
                              Transform3D(RotationZ((-2.075 * M_PI / 32) + (i - 3) * (2 * M_PI / 32) + tweak_sectors[i]),
                                          Translation3D(0, 0, 0)));
     sect_phv.addPhysVolID("system", det_id);
-    //sect_phv.addPhysVolID("barrel", 0);
     sect_phv.addPhysVolID("sector", i);
     DetElement sd = sector_det.clone(_toString(i, "sector%d"));
     sd.setPlacement(sect_phv);
