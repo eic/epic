@@ -18,7 +18,7 @@
 
 namespace fs = std::filesystem;
 
-using namespace dd4hep;
+using dd4hep::printout;
 
 // Function to download files
 inline void EnsureFileFromURLExists(std::string url, std::string file, std::string cache_str = "",
