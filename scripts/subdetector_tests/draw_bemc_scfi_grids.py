@@ -43,4 +43,3 @@ if __name__ == '__main__':
 
     # always terminate dd4hep kernel
     kernel.terminate()
-
