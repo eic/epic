@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: LGPL-3.0-or-later
-// Copyright (C) 2022 Anna Kowalewska
+// Copyright (C) 2023 Anna B. Kowalewska
 
 #include "DD4hep/DetFactoryHelper.h"
 #include "DD4hep/Printout.h"
@@ -38,7 +38,6 @@ static Ref_t create_detector(Detector& desc, xml_h e, SensitiveDetector sens)
 
   Box box( sizeX, sizeY, sizeZ );
   Volume vol( det_name + "_vol", box, desc.material( mat_name ) );
-  //vol.setVisAttributes( x_det.visStr() );
   vol.setVisAttributes(desc.visAttributes(x_det.visStr()));
   vol.setSensitiveDetector(sens);
 
