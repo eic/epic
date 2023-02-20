@@ -1,5 +1,6 @@
 '''
-    A script to visualize the fibers and of one grid from BEMC ScFi part
+    A script to visualize the fibers of some grids from BEMC ScFi part
+    02/19/2023
     Chao Peng (ANL)
 '''
 import os
@@ -28,7 +29,7 @@ def dict_to_cpp_vec(my_dict, dtype='int'):
 def get_fibers(detelem, id_desc, id_conv, id_dict, grid=1):
     gnode = detelem.volume().GetNode(grid-1)
     global_trans = detelem.nominal().worldTransformation()
-    print(gnode.GetName())
+    # print(gnode.GetName())
     # get grid
     id_dict.update({'grid': grid, 'fiber': 0})
     gid = id_desc.encode(dict_to_cpp_vec(id_dict))
