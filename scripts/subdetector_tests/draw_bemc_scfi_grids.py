@@ -166,4 +166,3 @@ if __name__ == '__main__':
     ax.set_title('{} around grid {}'.format(args.dpath, args.center_grid), fontsize=22)
 
     fig.savefig(os.path.join(args.outdir, 'grid_fibers.png'))
-
