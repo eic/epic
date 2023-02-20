@@ -552,8 +552,8 @@ static std::tuple<int, int> add_12surface_disk(Detector& desc, Assembly& env, xm
       min_ptsy = p.y();
     if( p.y() > max_ptsy )
       max_ptsy = p.y();
-  }  
-  
+  }
+
   for (auto& p : points){
     Transform3D tr_local = RotationZYX(NEEMC_Nrot, 0.0, 0.0) * Translation3D(p.x(), p.y(), 0.0);
     auto modPV = (has_envelope ? env_vol.placeVolume(modVol, tr_local) : env.placeVolume(modVol, tr_global * tr_local));
