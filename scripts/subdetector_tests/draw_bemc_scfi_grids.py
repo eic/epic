@@ -79,48 +79,43 @@ if __name__ == '__main__':
             help='Top-level xml file of the detector description.'
             )
     parser.add_argument(
-            '--dpath', default='EcalBarrelScFi/stave0/layer1/slice1',
-            dest='dpath',
-            help='Path to the closest DetElement (slice) that contains the grids and fibers.'
+            '--detector', default='EcalBarrelScFi',
+            dest='detector',
+            help='Detector name.'
+            )
+    parser.add_argument(
+            '--readout', default='EcalBarrelScFiHits',
+            help='Readout class for the detector.'
+            )
+    parser.add_argument(
+            '--vpath', default='stave1/layer1/slice1/grid3',
+            hlelp='Path down to a grid volume to be centered at the plot'
             )
     parser.add_argument(
             '--outdir',
             dest='outdir', default='.',
             help='Output directory.'
             )
-    parser.add_argument(
-            '--readout',
-            default='EcalBarrelScFiHits',
-            help='Readout class for the EcalBarrelScFi.'
-            )
-    parser.add_argument(
-            '--center-grid', dest='center_grid', type=int, default=2,
-            help='The grid number for centering in the plot.'
-            )
     args = parser.parse_args()
 
     # initialize dd4hep detector
     desc = dd4hep.Detector.getInstance()
     desc.fromXML(args.compact)
-    converter = DDRec.CellIDPositionConverter(desc)
 
-    # search the DetElement start from the world
-    det_names = args.dpath.split('/')
+    # search the detector
     det = desc.world()
-
-    for i, n in enumerate(det_names):
-        children = det.children()
-        try:
-            det = det.child(n)
-        except Exception:
-            print('Failed to find DetElement {} from {}'.format(n, '/'.join(['world'] + det_names[:i])))
-            print('Available children are listed below:')
-            for n, d in children:
-                print(' --- child: {}'.format(n))
-            exit(-1)
+    try:
+        det = det.child(args.detector)
+    except Exception:
+        print('Failed to find detector {} from \"{}\"'.format(args.detector, args.compact)
+        print('Available detectors are listed below:')
+        for n, d in desc.world().children:
+            print(' --- detector: {}'.format(n))
+        exit(-1)
 
     # build a volume manager so it triggers populating the volume IDs
     vman = dd4hep.VolumeManager(det, desc.readout(args.readout))
+    converter = DDRec.CellIDPositionConverter(desc)
 
     # manager instances
     readout = desc.readout(args.readout)
