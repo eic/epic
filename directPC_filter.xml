@@ -1,0 +1,19 @@
+<!-- SPDX-License-Identifier: LGPL-3.0-or-later -->
+<!-- Copyright (C) 2022 Yasir Ali -->
+
+<lccdd>
+ <detectors>
+    <detector
+      name="LumiDirectPCFilter"
+      type="LumiDirectPCFilter"
+      material="Graphite"
+      thickness="5*cm"
+      vis="Shape1_vis">
+      <dimensions x="LumiFilter_XY/2" y="LumiFilter_XY/2" z="LumiFilter_DZ/2" />
+      <position   x="0" y="0" z="LumiFilter_Z-LumiFilter_DZ/2" />
+      <rotation   x="0*rad" y="0*rad" z="0*rad" />   
+    </detector>
+  </detectors>
+  
+</lccdd>
+
