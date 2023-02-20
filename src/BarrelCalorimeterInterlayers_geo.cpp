@@ -244,7 +244,7 @@ void buildFibers(Detector& desc, SensitiveDetector& sens, Volume& s_vol, xml_com
   for (auto &gr : grids) {
     Assembly grid_vol(Form("fiber_grid_%i_%i", gr.ix, gr.iy));
     // fiber is along y-axis of the layer volume, so grids are arranged on X-Z plane
-    Transform3D gr_tr(RotationZYX(0, 0, M_PI * 0.5), Position(gr.mean_centroid.x(), 0, gr.mean_centroid.y()));
+    Transform3D gr_tr(RotationZYX(0, M_PI*0.5, 0.), Position(gr.mean_centroid.x(), 0, gr.mean_centroid.y()));
     auto grid_phv = s_vol.placeVolume(grid_vol, gr_tr);
     grid_phv.addPhysVolID(f_id_grid, gr.ix + gr.iy * grid_div.first + 1);
 
