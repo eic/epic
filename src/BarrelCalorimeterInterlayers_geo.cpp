@@ -243,10 +243,6 @@ void buildFibers(Detector& desc, SensitiveDetector& sens, Volume& s_vol, xml_com
   // build assembly for each grid and put fibers in
   for (auto &gr : grids) {
     Assembly grid_vol(Form("fiber_grid_%i_%i", gr.ix, gr.iy));
-    // fiber is along y-axis of the layer volume, so grids are arranged on X-Z plane
-    Transform3D gr_tr(RotationZYX(0., 0., M_PI*0.5), Position(gr.mean_centroid.x(), 0., gr.mean_centroid.y()));
-    auto grid_phv = s_vol.placeVolume(grid_vol, gr_tr);
-    grid_phv.addPhysVolID(f_id_grid, gr.ix + gr.iy * grid_div.first + 1);
 
     // loop over all fibers that are not assigned to a grid
     int f_id = 1;
@@ -276,8 +272,28 @@ void buildFibers(Detector& desc, SensitiveDetector& sens, Volume& s_vol, xml_com
       fi.assigned = true;
       f_id ++;
     }
-    grid_vol.ptr()->Voxelize("");
+
+    // only add this if this grid has fibers
+    if (f_id > 1) {
+        // fiber is along y-axis of the layer volume, so grids are arranged on X-Z plane
+        Transform3D gr_tr(RotationZYX(0., 0., M_PI*0.5), Position(gr.mean_centroid.x(), 0., gr.mean_centroid.y()));
+        auto grid_phv = s_vol.placeVolume(grid_vol, gr_tr);
+        grid_phv.addPhysVolID(f_id_grid, gr.ix + gr.iy * grid_div.first + 1);
+        grid_vol.ptr()->Voxelize("");
+    }
   }
+
+  /*
+  // sanity check
+  size_t missing_fibers = 0;
+  for (auto &fi : fibers) {
+    if (not fi.assigned) {
+      missing_fibers++;
+    }
+  }
+  std::cout << "built " << fibers.size() << " fibers, "
+            << missing_fibers << " of them failed to find a grid" << std::endl;
+  */
 }
 
 // DAWN view seems to have some issue with overlapping solids even if they were unions
