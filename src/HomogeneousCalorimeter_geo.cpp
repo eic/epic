@@ -540,13 +540,29 @@ static std::tuple<int, int> add_12surface_disk(Detector& desc, Assembly& env, xm
   int mid = 0, total_id = 0;
   float half_modx = modSize.x() * 0.5, half_mody = modSize.y() * 0.5;
   auto points = epic::geo::fillRectangles({half_modx, half_mody}, modSize.x(), modSize.y(), rmin, rmax, phimin, phimax);
-  for (auto& p : points)
-    {
-      Transform3D tr_local = RotationZYX(NEEMC_Nrot, 0.0, 0.0) * Translation3D(p.x(), p.y(), 0.0);
-      auto modPV = (has_envelope ? env_vol.placeVolume(modVol, tr_local) : env.placeVolume(modVol, tr_global * tr_local));
-      modPV.addPhysVolID("sector", sector_id).addPhysVolID("module", total_id);
-      total_id = id_begin + mid++;
-    }
+
+  float min_ptsx = 0., max_ptsx = 0., min_ptsy = 0., max_ptsy = 0.;
+
+  for(auto& p : points){
+    if( p.x() < min_ptsx )
+      min_ptsx = p.x();
+    if( p.x() > max_ptsx )
+      max_ptsx = p.x();
+    if( p.y() < min_ptsy )
+      min_ptsy = p.y();
+    if( p.y() > max_ptsy )
+      max_ptsy = p.y();
+  }  
+  
+  for (auto& p : points){
+    Transform3D tr_local = RotationZYX(NEEMC_Nrot, 0.0, 0.0) * Translation3D(p.x(), p.y(), 0.0);
+    auto modPV = (has_envelope ? env_vol.placeVolume(modVol, tr_local) : env.placeVolume(modVol, tr_global * tr_local));
+    modPV.addPhysVolID("sector", sector_id).addPhysVolID("module", total_id);
+    total_id = id_begin + mid++;
+
+    // Next: Addign the ID with the row and column information instead of sequential ID
+    // ID = row * 100 + column
+  }
 
 
   // Segment the position list[string] and save them as vector
@@ -571,14 +587,13 @@ static std::tuple<int, int> add_12surface_disk(Detector& desc, Assembly& env, xm
   inner_outer_posy.push_back(atof(iposy.c_str()));
 
   int im = 0;
-  for (auto && value : inner_outer_posx )
-    {
-      Transform3D add_local = RotationZYX(NEEMC_Nrot, 0.0, 0.0) * Translation3D(value * cm, inner_outer_posy[im] * cm, 0.0);
-      auto modPV = (has_envelope ? env_vol.placeVolume(modVol, add_local) : env.placeVolume(modVol, tr_global * add_local));
-      modPV.addPhysVolID("sector", sector_id).addPhysVolID("module", total_id);
-      total_id++;
-      im++;
-    }
+  for (auto && value : inner_outer_posx ){
+    Transform3D add_local = RotationZYX(NEEMC_Nrot, 0.0, 0.0) * Translation3D(value * cm, inner_outer_posy[im] * cm, 0.0);
+    auto modPV = (has_envelope ? env_vol.placeVolume(modVol, add_local) : env.placeVolume(modVol, tr_global * add_local));
+    modPV.addPhysVolID("sector", sector_id).addPhysVolID("module", total_id);
+    total_id++;
+    im++;
+  }
 
 
 
