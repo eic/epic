@@ -1,10 +1,9 @@
+# SPDX-License-Identifier: LGPL-3.0-or-later
+# Copyright (C) 2022 Chao Peng
 '''
     A script to visualize the fibers of some grids from BEMC ScFi part
     use case:
     python scripts/subdetector_tests/draw_bemc_scfi_grids.py -c epic_brycecanyon.xml
-
-    02/19/2023
-    Chao Peng (ANL)
 '''
 import os
 import ROOT
