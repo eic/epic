@@ -1,5 +1,8 @@
 '''
     A script to visualize the fibers of some grids from BEMC ScFi part
+    use case:
+    python scripts/subdetector_tests/draw_bemc_scfi_grids.py -c epic_brycecanyon.xml
+
     02/19/2023
     Chao Peng (ANL)
 '''
@@ -31,23 +34,26 @@ def dict_to_cpp_vec(my_dict, dtype='int'):
 def get_grid_fibers(det_elem, vol_man, id_conv, id_dict):
     # locate the nearest DetElement
     id_desc = vol_man.idSpec()
-    # get fiber radius
-    id_dict.update({'fiber': 1})
-    fid = id_desc.encode(dict_to_cpp_vec(id_dict))
-    # NOTE: for tube geometry, and it needs a cm to mm conversion
-    fr = id_conv.cellDimensions(fid)[0]/2./10.
+    try:
+        # get fiber radius
+        id_dict.update({'fiber': 1})
+        fid = id_desc.encode(dict_to_cpp_vec(id_dict))
+        # NOTE: for tube geometry, and it needs a cm to mm conversion
+        fr = id_conv.cellDimensions(fid)[0]/2./10.
 
-    # get the lowest level DetElement
-    sdet = id_conv.findDetElement(id_conv.position(fid))
-    gtrans = sdet.nominal().worldTransformation()
+        # get the lowest level DetElement
+        sdet = id_conv.findDetElement(id_conv.position(fid))
+        gtrans = sdet.nominal().worldTransformation()
 
-    # get grid node (it's not a DetElement)
-    id_dict.update({'fiber': 0})
-    gid = id_desc.encode(dict_to_cpp_vec(id_dict))
-    gnode = id_conv.findContext(gid).volumePlacement()
-    # print(id_desc.decoder().valueString(gid))
-    grpos = id_conv.position(gid)
-    grpos = np.array([grpos.X(), grpos.Y(), grpos.Z()])
+        # get grid node (it's not a DetElement)
+        id_dict.update({'fiber': 0})
+        gid = id_desc.encode(dict_to_cpp_vec(id_dict))
+        gnode = id_conv.findContext(gid).volumePlacement()
+        # print(id_desc.decoder().valueString(gid))
+        grpos = id_conv.position(gid)
+        grpos = np.array([grpos.X(), grpos.Y(), grpos.Z()])
+    except Exception:
+        return None, None
 
     # use TGeoNode to get center positions
     # here it can also use id_conv to do the same thing with cellIDs,
@@ -108,6 +114,21 @@ if __name__ == '__main__':
             dest='outdir', default='.',
             help='Output directory.'
             )
+    parser.add_argument(
+            '--adj-nlayers',
+            dest='nlayers', type=int, default=2,
+            help='number of adjacent layers to draw (+-n).'
+            )
+    parser.add_argument(
+            '--adj-ngrids',
+            dest='ngrids', type=int, default=2,
+            help='number of adjacent grids to draw (+-n).'
+            )
+    parser.add_argument(
+            '--window-size',
+            dest='wsize', type=float, default=4.,
+            help='Plot window size (mm).'
+            )
     args = parser.parse_args()
 
     # initialize dd4hep detector
@@ -132,10 +153,10 @@ if __name__ == '__main__':
     fields = OrderedDict([['system', det.id()]] + [v.split(':') for v in args.grid_path.split(',')])
     layer = int(fields.get('layer'))
     grid = int(fields.get('grid'))
-    # add adjacent layers and grids, put the central one at the first
+    # add adjacent layers and grids, always put the central one (0, 0) first
     id_dicts = []
-    for dl in [0, 1, 2, -1, -2]:
-        for dg in [0, 1, 2, -1, -2]:
+    for dl in np.hstack([np.arange(0, args.nlayers + 1), np.arange(-1, -args.nlayers - 1, step=-1)]):
+        for dg in np.hstack([np.arange(0, args.ngrids + 1), np.arange(-1, -args.ngrids - 1, step=-1)]):
             if layer + dl < 1 or grid + dg < 1:
                 continue
             new_dict = fields.copy()
@@ -150,7 +171,7 @@ if __name__ == '__main__':
         c = colors[i % len(colors)]
         fibers, gr_pos = get_grid_fibers(det, vman, converter, ids)
         if fibers is None:
-            print('ignored {} because the corresponding volume is not found.'.format(ids))
+            print('ignored {} because the volume might not exist.'.format(ids))
             continue
 
         patches = []
@@ -161,8 +182,8 @@ if __name__ == '__main__':
         ax.add_collection(p)
         # center at the first entry
         if i == 0:
-            ax.set_xlim(gr_pos[0] - 4., gr_pos[0] + 4.)
-            ax.set_ylim(gr_pos[1] - 4., gr_pos[1] + 4.)
+            ax.set_xlim(gr_pos[0] - args.wsize, gr_pos[0] + args.wsize)
+            ax.set_ylim(gr_pos[1] - args.wsize, gr_pos[1] + args.wsize)
 
     # ax.legend(fontsize=22)
     ax.tick_params(labelsize=20, direction='in')
