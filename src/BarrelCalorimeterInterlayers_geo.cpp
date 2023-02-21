@@ -48,12 +48,13 @@ struct FiberGrid {
   };
 };
 
-vector<Point> fiberPositions(double r, double sx, double sz, double trx, double trz, double phi, double stol = 1e-2);
+vector<Point> fiberPositions(double r, double sx, double sz, double trx, double trz, double phi,
+                             bool shift_first = false, double stol = 1e-2);
 std::pair<int, int>   getNdivisions(double x, double z, double dx, double dz);
 vector<FiberGrid> gridPoints(int div_x, int div_z, double x, double z, double phi);
 
 // geometry helpers
-void buildFibers(Detector& desc, SensitiveDetector& sens, Volume& mother, xml_comp_t x_fiber,
+void buildFibers(Detector& desc, SensitiveDetector& sens, Volume& mother, int layer_nunber, xml_comp_t x_fiber,
                  const std::tuple<double, double, double, double>& dimensions);
 void buildSupport(Detector& desc, Volume& mother, xml_comp_t x_support,
                   const std::tuple<double, double, double, double>& dimensions);
@@ -138,7 +139,7 @@ static Ref_t create_detector(Detector& desc, xml_h e, SensitiveDetector sens)
 
           // build fibers
           if (x_slice.hasChild(_Unicode(fiber))) {
-            buildFibers(desc, sens, s_vol, x_slice.child(_Unicode(fiber)), {s_trd_x1, s_thick, l_dim_y, hphi});
+            buildFibers(desc, sens, s_vol, l_num, x_slice.child(_Unicode(fiber)), {s_trd_x1, s_thick, l_dim_y, hphi});
           }
 
           if (x_slice.isSensitive()) {
@@ -196,7 +197,7 @@ static Ref_t create_detector(Detector& desc, xml_h e, SensitiveDetector sens)
   return sdet;
 }
 
-void buildFibers(Detector& desc, SensitiveDetector& sens, Volume& s_vol, xml_comp_t x_fiber,
+void buildFibers(Detector& desc, SensitiveDetector& sens, Volume& s_vol, int layer_number, xml_comp_t x_fiber,
                  const std::tuple<double, double, double, double>& dimensions)
 {
   auto [s_trd_x1, s_thick, s_length, hphi] = dimensions;
@@ -231,7 +232,7 @@ void buildFibers(Detector& desc, SensitiveDetector& sens, Volume& s_vol, xml_com
   // Calculate polygonal grid coordinates (vertices)
   auto        grids = gridPoints(grid_div.first, grid_div.second, s_trd_x1, s_thick, hphi);
   vector<int> f_id_count(grid_div.first * grid_div.second, 0);
-  auto        f_pos = fiberPositions(f_radius, f_spacing_x, f_spacing_z, s_trd_x1, s_thick, hphi);
+  auto        f_pos = fiberPositions(f_radius, f_spacing_x, f_spacing_z, s_trd_x1, s_thick, hphi, (layer_number % 2 == 0));
   // a helper struct to speed up searching
   struct Fiber {
     Point pos;
@@ -386,7 +387,7 @@ void buildSupport(Detector& desc, Volume& mod_vol, xml_comp_t x_support,
 }
 
 // Fill fiber lattice into trapezoid starting from position (0,0) in x-z coordinate system
-vector<Point> fiberPositions(double r, double sx, double sz, double trx, double trz, double phi, double stol)
+vector<Point> fiberPositions(double r, double sx, double sz, double trx, double trz, double phi, bool shift, double stol)
 {
   // r      - fiber radius
   // sx, sz - spacing between fibers in x, z
@@ -399,12 +400,13 @@ vector<Point> fiberPositions(double r, double sx, double sz, double trx, double 
   int z_layers = floor((trz / 2 - r - stol) / sz); // number of layers that fits in half trapezoid-z
 
   double px = 0., pz = 0.;
+  int start_line = shift ? 1 : 0;
 
   for (int l = -z_layers; l < z_layers + 1; l++) {
     vector<Point> xline;
     pz           = l * sz;
     double x_max = trx + (trz / 2. + pz) * tan(phi) - stol; // calculate max x at particular z_pos
-    (l % 2 == 0) ? px = 0. : px = sx / 2;                   // account for spacing/2 shift
+    (abs(l) % 2 == start_line) ? px = 0. : px = sx / 2;          // account for spacing/2 shift
 
     while (px < (x_max - r)) {
       xline.push_back(Point(px, pz));
