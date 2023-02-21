@@ -25,7 +25,7 @@ features:
   hcal:
     forward:
     forward_insert:
-    barrel:
+    barrel_gdml:
     backward:
   far_forward:
     far_forward:

@@ -95,7 +95,7 @@ jobs:
         platform-release: "jug_xl:nightly"
         run: |
           CC=${{ matrix.CC }} CXX=${{ matrix.CXX }} cmake -B build -S . -DCMAKE_INSTALL_PREFIX=${PREFIX} -DCMAKE_C_COMPILER_LAUNCHER=ccache -DCMAKE_CXX_COMPILER_LAUNCHER=ccache
-          cmake --build build -- -j 2 install
+          cmake --build build -- -k -j 2 install
     - uses: actions/upload-artifact@v3
       with:
         name: build-${{ matrix.CC }}-full-eic-shell
@@ -103,7 +103,7 @@ jobs:
         if-no-files-found: error
     - run: |
         source install/setup.sh
-        sed -i '/<fiber/,+6d' ${DETECTOR_PATH}/compact/ecal/barrel_interlayers.xml
+        sed -z 's|\(<fiber\)|<comment>\1|g; s|\(/fiber>\)|\1</comment>|g'
         sed -i '/<fiber/,+4d' ${DETECTOR_PATH}/compact/ecal/forward_scfi.xml
         sed -i '/<fiber/,+4d' ${DETECTOR_PATH}/compact/far_forward/ZDC_Ecal_WSciFi.xml
         sed -i '/<lens/,+4d' ${DETECTOR_PATH}/compact/pid/mrich.xml

@@ -127,10 +127,10 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
     default:
       printout(FATAL, "DRICH_geo", "UNKNOWN debugOpticsMode");
       return det;
-    };
+    }
     aerogelVis = sensorVis = mirrorVis;
     gasvolVis = vesselVis = desc.invisible();
-  };
+  }
 
   // readout coder <-> unique sensor ID
   /* - `sensorIDfields` is a list of readout fields used to specify a unique sensor ID
@@ -208,7 +208,7 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
     vesselSolid = vesselBox;
     gasvolSolid = gasvolUnion;
     break;
-  };
+  }
 
   // volumes
   Volume vesselVol(detName, vesselSolid, vesselMat);
@@ -272,40 +272,36 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
   // SkinSurface aerogelSkin(desc, aerogelDE, "mirror_optical_surface", aerogelSurf, aerogelVol);
   // aerogelSkin.isValid();
 
-  // airgap placement and surface properties
-  PlacedVolume airgapPV;
+  // airgap and filter placement and surface properties
   if (!debugOptics) {
+
     auto airgapPlacement =
         Translation3D(radiatorPos.x(), radiatorPos.y(), radiatorPos.z()) * // re-center to originFront
         RotationY(radiatorPitch) *                                         // change polar angle
         Translation3D(0., 0., (aerogelThickness + airgapThickness) / 2.);  // move to aerogel backplane
-    airgapPV = gasvolVol.placeVolume(airgapVol, airgapPlacement);
+    auto airgapPV = gasvolVol.placeVolume(airgapVol, airgapPlacement);
     DetElement airgapDE(det, "airgap_de", 0);
     airgapDE.setPlacement(airgapPV);
-  }
 
-  // filter placement and surface properties
-  PlacedVolume filterPV;
-  if (!debugOptics) {
     auto filterPlacement =
         Translation3D(0., 0., airgapThickness) *                           // add an air gap
         Translation3D(radiatorPos.x(), radiatorPos.y(), radiatorPos.z()) * // re-center to originFront
         RotationY(radiatorPitch) *                                         // change polar angle
         Translation3D(0., 0., (aerogelThickness + filterThickness) / 2.);  // move to aerogel backplane
-    filterPV = gasvolVol.placeVolume(filterVol, filterPlacement);
+    auto filterPV = gasvolVol.placeVolume(filterVol, filterPlacement);
     DetElement filterDE(det, "filter_de", 0);
     filterDE.setPlacement(filterPV);
     // SkinSurface filterSkin(desc, filterDE, "mirror_optical_surface", filterSurf, filterVol);
     // filterSkin.isValid();
-  };
 
-  // radiator z-positions (w.r.t. IP)
-  double aerogelZpos = vesselPos.z() + aerogelPV.position().z();
-  double airgapZpos  = vesselPos.z() + airgapPV.position().z();
-  double filterZpos  = vesselPos.z() + filterPV.position().z();
-  desc.add(Constant("DRICH_aerogel_zpos", std::to_string(aerogelZpos)));
-  desc.add(Constant("DRICH_airgap_zpos", std::to_string(airgapZpos)));
-  desc.add(Constant("DRICH_filter_zpos", std::to_string(filterZpos)));
+    // radiator z-positions (w.r.t. IP); only needed downstream if !debugOptics
+    double aerogelZpos = vesselPos.z() + aerogelPV.position().z();
+    double airgapZpos  = vesselPos.z() + airgapPV.position().z();
+    double filterZpos  = vesselPos.z() + filterPV.position().z();
+    desc.add(Constant("DRICH_aerogel_zpos", std::to_string(aerogelZpos)));
+    desc.add(Constant("DRICH_airgap_zpos", std::to_string(airgapZpos)));
+    desc.add(Constant("DRICH_filter_zpos", std::to_string(filterZpos)));
+  }
 
   // radiator material names
   desc.add(Constant("DRICH_aerogel_material", aerogelMat.ptr()->GetName(), "string"));
@@ -334,62 +330,29 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
 
     // BUILD MIRRORS ====================================================================
 
-    // derive spherical mirror parameters `(zM,xM,rM)`, for given image point
-    // coordinates `(zI,xI)` and `dO`, defined as the z-distance between the
-    // object and the mirror surface
-    // - all coordinates are specified w.r.t. the object point coordinates
-    // - this is point-to-point focusing, but it can be used to effectively steer
-    //   parallel-to-point focusing
-    double zM, xM, rM;
-    auto   FocusMirror = [&zM, &xM, &rM](double zI, double xI, double dO) {
-      zM = dO * zI / (2 * dO - zI);
-      xM = dO * xI / (2 * dO - zI);
-      rM = dO - zM;
-    };
-
-    // attributes, re-defined w.r.t. IP, needed for mirror positioning
-    double zS = sensorSphCenterZ + vesselZmin; // sensor sphere attributes
+    // mirror positioning attributes
+    // - sensor sphere center, w.r.t. IP
+    double zS = sensorSphCenterZ + vesselZmin;
     double xS = sensorSphCenterX;
-    // double rS = sensorSphRadius;
-    double B = vesselZmax - mirrorBackplane; // distance between IP and mirror back plane
-
-    // focus 1: set mirror to focus IP on center of sensor sphere `(zS,xS)`
-    /*double zF = zS;
-    double xF = xS;
-    FocusMirror(zF,xF,B);*/
-
-    // focus 2: move focal region along sensor sphere radius, according to `focusTuneLong`
-    // - specifically, along the radial line which passes through the approximate centroid
-    //   of the sensor region `(sensorCentroidZ,sensorCentroidX)`
-    // - `focusTuneLong` is the distance to move, given as a fraction of `sensorSphRadius`
-    // - `focusTuneLong==0` means `(zF,xF)==(zS,xS)`
-    // - `focusTuneLong==1` means `(zF,xF)` will be on the sensor sphere, near the centroid
-    /*
-    double zC = sensorCentroidZ + vesselZmin;
-    double xC = sensorCentroidX;
-    double slopeF = (xC-xS) / (zC-zS);
-    double thetaF = std::atan(std::fabs(slopeF));
-    double zF = zS + focusTuneLong * sensorSphRadius * std::cos(thetaF);
-    double xF = xS - focusTuneLong * sensorSphRadius * std::sin(thetaF);
-    //FocusMirror(zF,xF,B);
-
-    // focus 3: move along line perpendicular to focus 2's radial line,
-    // according to `focusTunePerp`, with the same numerical scale as `focusTuneLong`
-    zF += focusTunePerp * sensorSphRadius * std::cos(M_PI/2-thetaF);
-    xF += focusTunePerp * sensorSphRadius * std::sin(M_PI/2-thetaF);
-    FocusMirror(zF,xF,B);
-    */
-
-    // focus 4: use (z,x) coordinates for tune parameters
+    // - distance between IP and mirror back plane
+    double b = vesselZmax - mirrorBackplane;
+    // - desired focal region: sensor sphere center, offset by focus-tune (z,x) parameters
     double zF = zS + focusTuneZ;
     double xF = xS + focusTuneX;
-    FocusMirror(zF, xF, B);
 
-    // re-define mirror attributes to be w.r.t vessel front plane
-    // - `(zM,xM)` is the mirror center w.r.t. to the IP
-    double mirrorCenterZ = zM - vesselZmin;
-    double mirrorCenterX = xM;
-    double mirrorRadius  = rM;
+    // determine the mirror that focuses the IP to this desired region
+    /* - uses point-to-point focusing to derive spherical mirror center
+     *   `(mirrorCenterZ,mirrorCenterX)` and radius `mirrorRadius` for given
+     *   image point coordinates `(zF,xF)` and `b`, defined as the z-distance
+     *   between the object (IP) and the mirror surface
+     * - all coordinates are specified w.r.t. the object point (IP)
+     */
+    double mirrorCenterZ = b * zF / (2 * b - zF);
+    double mirrorCenterX = b * xF / (2 * b - zF);
+    double mirrorRadius  = b - mirrorCenterZ;
+
+    // translate mirror center to be w.r.t vessel front plane
+    mirrorCenterZ -= vesselZmin;
 
     // spherical mirror patch cuts and rotation
     double mirrorThetaRot = std::asin(mirrorCenterX / mirrorRadius);
@@ -400,7 +363,7 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
     if (debugMirror) {
       mirrorTheta1 = 0;
       mirrorTheta2 = M_PI; /*mirrorPhiw=2*M_PI;*/
-    };
+    }
 
     // solid : create sphere at origin, with specified angular limits;
     // phi limits are increased to fill gaps (overlaps are cut away later)
@@ -445,7 +408,7 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
     // if debugging sphere properties, restrict number of sensors drawn
     if (debugSensors) {
       sensorSide = 2 * M_PI * sensorSphRadius / 64;
-    };
+    }
 
     // solid and volume: single sensor module
     Box    sensorSolid(sensorSide / 2., sensorSide / 2., sensorThickness / 2.);
@@ -531,7 +494,7 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
           //   sensorCentroidX += xCheck;
           //   sensorCentroidZ += zCheck;
           //   sensorCount++;
-          // };
+          // }
 
           // placement (note: transformations are in reverse order)
           // - transformations operate on global coordinates; the corresponding
@@ -561,24 +524,24 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
           if (!debugOptics || debugOpticsMode == 3) {
             SkinSurface sensorSkin(desc, sensorDE, "sensor_optical_surface_" + modsecName, sensorSurf, sensorVol);
             sensorSkin.isValid();
-          };
+          }
 
           // increment sensor module number
           imod++;
 
-        }; // end patch cuts
-      };   // end phiGen loop
-    };     // end thetaGen loop
+        } // end patch cuts
+      }   // end phiGen loop
+    }     // end thetaGen loop
 
     // calculate centroid sensor position
     // if (isec == 0) {
     //   sensorCentroidX /= sensorCount;
     //   sensorCentroidZ /= sensorCount;
-    // };
+    // }
 
     // END SENSOR MODULE LOOP ------------------------
 
-  }; // END SECTOR LOOP //////////////////////////
+  } // END SECTOR LOOP //////////////////////////
 
   return det;
 }
