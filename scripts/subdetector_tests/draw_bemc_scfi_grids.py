@@ -1,5 +1,5 @@
 # SPDX-License-Identifier: LGPL-3.0-or-later
-# Copyright (C) 2022 Chao Peng
+# Copyright (C) 2023 Chao Peng
 '''
     A script to visualize the fibers of some grids from BEMC ScFi part
     use case:
