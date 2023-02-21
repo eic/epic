@@ -65,11 +65,6 @@ static Ref_t createDetector(Detector& desc, xml_h e, SensitiveDetector sens)
   Volume     glue_vol("glue_vol", glue_box, desc.material(xml_glue.materialStr()));
   glue_vol.setVisAttributes(desc.visAttributes(xml_glue.visStr()));
   glue_vol.setSensitiveDetector(sens);
-
-  auto bar_repeat_y    = xml_bar.attr<int>(_Unicode(repeat_y));
-  auto bar_repeat_z    = xml_bar.attr<int>(_Unicode(repeat_z));
-  auto bar_gap         = xml_bar.gap();
-  auto bar_assm_width  = (bar_width + bar_gap) * bar_repeat_y - bar_gap;
   auto bar_assm_length = (bar_length + glue_thickness) * bar_repeat_z;
 
   // Mirror construction

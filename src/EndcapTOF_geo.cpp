@@ -51,23 +51,24 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
   std::string m_nam         = x_mod.nameStr();
   xml_comp_t  diskdimension = x_mod.dimensions();
 
-  xml_comp_t  envelope      = x_det.child(_Unicode(envelope), false);
-  double envelope_r_min     = 0;
-  double envelope_r_max     = 0;
-  double envelope_z_min     = 0;
-  double envelope_z_max     = 0;
-  if(envelope){
-    envelope_r_min = getAttrOrDefault(envelope, _Unicode(r_min), 0);
-    envelope_r_max = getAttrOrDefault(envelope, _Unicode(r_max), 0);
-    envelope_z_min = getAttrOrDefault(envelope, _Unicode(z_min), 0);
-    envelope_z_max = getAttrOrDefault(envelope, _Unicode(z_max), 0);
-  }
+  // xml_comp_t  envelope      = x_det.child(_Unicode(envelope), false);
+  // double envelope_r_min     = 0;
+  // double envelope_r_max     = 0;
+  // double envelope_z_min     = 0;
+  // double envelope_z_max     = 0;
+  // if(envelope){
+  //   envelope_r_min = getAttrOrDefault(envelope, _Unicode(r_min), 0);
+  //   envelope_r_max = getAttrOrDefault(envelope, _Unicode(r_max), 0);
+  //   envelope_z_min = getAttrOrDefault(envelope, _Unicode(z_min), 0);
+  //   envelope_z_max = getAttrOrDefault(envelope, _Unicode(z_max), 0);
+  // }
 
   // load all information from the diskdimension definitions
   double disk_zPos              = getAttrOrDefault(diskdimension, _Unicode(zPos), 0.);
   double disk_rMin              = getAttrOrDefault(diskdimension, _Unicode(rMin), 0.);
   double disk_rMax              = getAttrOrDefault(diskdimension, _Unicode(rMax), 100.);
-  double disk_xOffset           = getAttrOrDefault(diskdimension, _Unicode(xOffset), 0.);
+  double disk_xOffset           = 0.0;
+  // double disk_xOffset           = getAttrOrDefault(diskdimension, _Unicode(xOffset), 0.);
   double disk_det_height        = getAttrOrDefault(diskdimension, _Unicode(det_height), 0.);
   double cooling_plate_height   = getAttrOrDefault(diskdimension, _Unicode(cooling_plate_height), 0.);
   double cooling_tube_thickness = getAttrOrDefault(diskdimension, _Unicode(wallthickness_coolingtube), 0.);
@@ -79,32 +80,75 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
 
   double disk_face_rel_z = cooling_tube_diameter / 2. + cooling_plate_height / 2.;
   // NOTE: Creation of aluminum disks with offset cutout for beampipe
-  {
-    // create a solid for the beampipe cutout
-    Tube beampipe_cutout(0, disk_rMin, disk_det_height, 0, 2. * M_PI);
-    // create solids for the cooling/mountin disks (two Al disks)
-    Tube ttl_plate_1(0, disk_rMax, cooling_plate_height / 2., 0, 2. * M_PI);
-    Tube ttl_plate_2(0, disk_rMax, cooling_plate_height / 2., 0, 2. * M_PI);
+  // create a solid for the beampipe cutout
+  // Tube beampipe_cutout(0, disk_rMin, disk_det_height*1.5, 0, 2*M_PI);
 
-    // create the offset cutout in the disks
-    Position         cutoutOffset(disk_xOffset, 0, 0);
-    SubtractionSolid ttl_cooling_plate_1(ttl_plate_1, beampipe_cutout, cutoutOffset);
-    SubtractionSolid ttl_cooling_plate_2(ttl_plate_2, beampipe_cutout, cutoutOffset);
+  // create solids for the cooling/mountin disks (two Al disks)
+  Tube ttl_plate_1(disk_rMin, disk_rMax, cooling_plate_height / 2., 0, 2 * M_PI);
+  Tube ttl_plate_2(disk_rMin, disk_rMax, cooling_plate_height / 2., 0, 2 * M_PI);
+  // Tube ttl_plate_1(0, disk_rMax, cooling_plate_height / 2., 0, 2 * M_PI);
+  // Tube ttl_plate_2(0, disk_rMax, cooling_plate_height / 2., 0, 2 * M_PI);
 
-    // set the material (Al)
-    Material disk_mat = description.material(diskdimension.materialStr());
+  // create the offset cutout in the disks
+  // Position         cutoutOffset(disk_xOffset, 0, 0);
+  // SubtractionSolid ttl_cooling_plate_1(ttl_plate_1, beampipe_cutout, cutoutOffset);
+  // SubtractionSolid ttl_cooling_plate_2(ttl_plate_2, beampipe_cutout, cutoutOffset);
 
-    // create the volumes and set visualization options
-    Volume ttl_cooling_plate_volume_1("ttl_cooling_plate_1", ttl_cooling_plate_1, disk_mat);
-    Volume ttl_cooling_plate_volume_2("ttl_cooling_plate_2", ttl_cooling_plate_2, disk_mat);
-    ttl_cooling_plate_volume_1.setVisAttributes(description.visAttributes("TOFAluminum"));
-    ttl_cooling_plate_volume_2.setVisAttributes(description.visAttributes("TOFAluminum"));
+  // set the material (Al)
+  Material disk_mat = description.material(diskdimension.materialStr());
 
-    // place disks in assembly
-    pv = assembly.placeVolume(ttl_cooling_plate_volume_1, Position(0, 0, -disk_face_rel_z));
-    pv = assembly.placeVolume(ttl_cooling_plate_volume_2, Position(0, 0, disk_face_rel_z));
-  }
+  // create the volumes and set visualization options
+  Volume ttl_cooling_plate_volume_1("ttl_cooling_plate_1", ttl_plate_1, disk_mat);
+  Volume ttl_cooling_plate_volume_2("ttl_cooling_plate_2", ttl_plate_2, disk_mat);
+  // Volume ttl_cooling_plate_volume_1("ttl_cooling_plate_1", ttl_cooling_plate_1, disk_mat);
+  // Volume ttl_cooling_plate_volume_2("ttl_cooling_plate_2", ttl_cooling_plate_2, disk_mat);
+  ttl_cooling_plate_volume_1.setVisAttributes(description.visAttributes("TOFAluminum"));
+  ttl_cooling_plate_volume_2.setVisAttributes(description.visAttributes("TOFAluminum"));
+
+  // place disks in assembly
+  pv = assembly.placeVolume(ttl_cooling_plate_volume_1, Position(0, 0, -disk_face_rel_z));
+  pv = assembly.placeVolume(ttl_cooling_plate_volume_2, Position(0, 0, disk_face_rel_z));
+
   disk_face_rel_z += cooling_plate_height / 2.;
+
+  double layerheight = (disk_det_height - cooling_tube_diameter - 2*cooling_plate_height) /2.;
+  // create solids for the cooling/mountin disks (two Al disks)
+
+  Tube ttl_layer_mvol_1(disk_rMin, disk_rMax, layerheight / 2., 0, 2. * M_PI);
+  Tube ttl_layer_mvol_2(disk_rMin, disk_rMax, layerheight / 2., 0, 2. * M_PI);
+  // Tube ttl_layer_mvol_1(0, disk_rMax, layerheight / 2., 0, 2. * M_PI);
+  // Tube ttl_layer_mvol_2(0, disk_rMax, layerheight / 2., 0, 2. * M_PI);
+
+  // create the offset cutout in the disks
+  // SubtractionSolid sub_layer_mvol_1(ttl_layer_mvol_1, beampipe_cutout, cutoutOffset);
+  // SubtractionSolid sub_layer_mvol_2(ttl_layer_mvol_2, beampipe_cutout, cutoutOffset);
+
+  // create the volumes and set visualization options
+  Volume layer_mvol_1(det_name + "_layer0", ttl_layer_mvol_1, air);
+  Volume layer_mvol_2(det_name + "_layer1", ttl_layer_mvol_2, air);
+  // Volume layer_mvol_1(det_name + "_layer_1", sub_layer_mvol_1, air);
+  // Volume layer_mvol_2(det_name + "_layer_2", sub_layer_mvol_2, air);
+  // ttl_cooling_plate_volume_1.setVisAttributes(description.visAttributes("TOFAluminum"));
+  // ttl_cooling_plate_volume_2.setVisAttributes(description.visAttributes("TOFAluminum"));
+
+  // place disks in assembly
+  string     lay_nam1 = det_name + _toString(0, "_layer%d");
+  DetElement lay_elt_1(ttl_detEl, lay_nam1, 0);
+  // auto&      layerParams1 = 
+  DD4hepDetectorHelper::ensureExtension<dd4hep::rec::VariantParameters>(lay_elt_1);
+  pv                     = assembly.placeVolume(layer_mvol_1, Position(0, 0, -disk_face_rel_z - layerheight / 2));
+  // lay_elt_1.setAttributes(description, layer_mvol_1, x_layer.regionStr(), x_layer.limitsStr(), x_layer.visStr());
+  lay_elt_1.setPlacement(pv);
+  pv.addPhysVolID("layer", 0);
+
+  string     lay_nam2 = det_name + _toString(1, "_layer%d");
+  DetElement lay_elt_2(ttl_detEl, lay_nam2, 1);
+  // auto&      layerParams2 = 
+  DD4hepDetectorHelper::ensureExtension<dd4hep::rec::VariantParameters>(lay_elt_2);
+  pv                     = assembly.placeVolume(layer_mvol_2, Position(0, 0, disk_face_rel_z + layerheight / 2));
+  // lay_elt_2.setAttributes(description, layer_mvol_2, x_layer.regionStr(), x_layer.limitsStr(), x_layer.visStr());
+  lay_elt_2.setPlacement(pv);
+  pv.addPhysVolID("layer", 1);
 
   xml_comp_t sensparams = x_mod.child(_Unicode(sensorparameters));
   ;
@@ -189,23 +233,15 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
   }
 
   int      layer_id = 0;
-  Assembly layer_assembly("layer_assembly" + _toString(layer_id, "_%d"));
+  // Assembly layer_assembly("layer_assembly" + _toString(layer_id, "_%d"));
 
-  DetElement layer_detEl(ttl_detEl, _toString(layer_id, "layer_%d"), layer_id);
 
   // NOTE: ACTS extension for the disk layer of the TTL
   // also defining the coordinate system that differs between ACTS and Geant4 (zyx vs xyz)
-  auto &layerParams = DD4hepDetectorHelper::ensureExtension<dd4hep::rec::VariantParameters>(
-                      layer_detEl);
-  layerParams.set<double>("envelope_r_min", envelope_r_min);
-  layerParams.set<double>("envelope_r_max", envelope_r_max);
-  layerParams.set<double>("envelope_z_min", envelope_z_min);
-  layerParams.set<double>("envelope_z_max", envelope_z_max);
-
-  pv = assembly.placeVolume(layer_assembly);
-  pv.addPhysVolID("layer", layer_id);
-
-  layer_detEl.setPlacement(pv);
+  // layerParams.set<double>("envelope_r_min", envelope_r_min);
+  // layerParams.set<double>("envelope_r_max", envelope_r_max);
+  // layerParams.set<double>("envelope_z_min", envelope_z_min);
+  // layerParams.set<double>("envelope_z_max", envelope_z_max);
 
   // NOTE: create envelopes for the sensor supporting layers (glue, kapton, etc.)
   Box    box_sensor_stack1(baseplate_xdim / 2, baseplate_ydim / 2, thicknessDet1 / 2);
@@ -276,9 +312,12 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
 
   // Definition of the sensitive surface of the sensor
   // the sensitive volume -----
-  Vector3D u(0., 0., -1.);
-  Vector3D v(-1., 0., 0.);
-  Vector3D n(0., 1., 0.);
+  Vector3D u(-1., 0., -1.);
+  Vector3D v(0, -1., 0.);
+  Vector3D n(0., 0., 1.);
+  // Vector3D u(0., 0., -1.);
+  // Vector3D v(-1., 0., 0.);
+  // Vector3D n(0., 1., 0.);
 
   // compute the inner and outer thicknesses that need to be assigned to the
   // tracking surface
@@ -295,13 +334,12 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
 
   // NOTE: create cooling tube and coolant to be placed with each sensor+SH element
   std::string cooling_tube_name = det_name + "_cooling_tube_" + std::to_string(layer_id);
-  Tube        sol_cooling_tube(cooling_tube_diameter / 2.0 - cooling_tube_thickness, cooling_tube_diameter / 2.0,
-                               baseplate_xdim / 2.0);
+  Cone        sol_cooling_tube(baseplate_xdim / 2.0, cooling_tube_diameter / 2.0 - cooling_tube_thickness, cooling_tube_diameter / 2.0,cooling_tube_diameter / 2.0 - cooling_tube_thickness, cooling_tube_diameter / 2.0);
   Volume      log_cooling_tube(cooling_tube_name, sol_cooling_tube, description.material("Aluminum"));
   log_cooling_tube.setVisAttributes(description.visAttributes("TOFAluminum"));
 
   std::string cooling_liquid_name = det_name + "_cooling_liquid_" + std::to_string(layer_id);
-  Tube        sol_cooling_liquid(0, cooling_tube_diameter / 2.0 - cooling_tube_thickness, baseplate_xdim / 2.0);
+  Cone        sol_cooling_liquid(baseplate_xdim / 2.0, 0, cooling_tube_diameter / 2.0 - cooling_tube_thickness, 0, cooling_tube_diameter / 2.0 - cooling_tube_thickness);
   Volume      log_cooling_liquid(cooling_liquid_name, sol_cooling_liquid, description.material("Water"));
   log_cooling_liquid.setVisAttributes(description.visAttributes("TOFWater"));
 
@@ -347,18 +385,18 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
                                     "_front_" + std::to_string(isensor);
       RotationZYX rot_front(0, 0, 0);
 
-      pv = layer_assembly.placeVolume(
+      pv = layer_mvol_1.placeVolume(
           sens_vol,
           Transform3D(rot_front, Position((ilay_x)*baseplate_xdim,
                                           ilay_y % 2 == 0 ? (ilay_y)*sensor_hybrid_ydim - sensor_hybrid_ydim / 2 +
                                                                 sensor_ydim / 2 + sensor_margin
                                                           : (ilay_y)*sensor_hybrid_ydim + sensor_hybrid_ydim / 2 -
                                                                 sensor_ydim / 2 - sensor_margin,
-                                          -disk_face_rel_z - thicknessDet1 - sensor_thickness / 2.0)));
+                                          layerheight/2 - thicknessDet1 - sensor_thickness / 2.0)));
 
       pv.addPhysVolID("module", layer_id).addPhysVolID("sensor", isensor);
 
-      DetElement sensor_detEl_front(layer_detEl, sens_name_front, isensor);
+      DetElement sensor_detEl_front(lay_elt_1, sens_name_front, isensor);
       sensor_detEl_front.setPlacement(pv);
       volSurfaceList(sensor_detEl_front)->push_back(surf_front);
 
@@ -372,51 +410,51 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
         RotationZYX rot_front_flip(M_PI, M_PI, 0);
         RotationZYX rot_front_flip2(0, M_PI, 0);
 
-        pv = layer_assembly.placeVolume(
+        pv = layer_mvol_1.placeVolume(
             log_sensor_stack1,
             Transform3D(ilay_y % 2 == 0 ? rot_front_flip2 : rot_front_flip,
                         Position((ilay_x)*baseplate_xdim,
                                  ilay_y % 2 == 0
                                      ? (ilay_y)*sensor_hybrid_ydim - sensor_hybrid_ydim / 2 + baseplate_ydim / 2
                                      : (ilay_y)*sensor_hybrid_ydim + sensor_hybrid_ydim / 2 - baseplate_ydim / 2,
-                                 -disk_face_rel_z - thicknessDet1 / 2.0)));
+                                 layerheight/2 - thicknessDet1 / 2.0)));
 
-        pv = layer_assembly.placeVolume(
+        pv = layer_mvol_1.placeVolume(
             log_sensor_stack2,
             Transform3D(ilay_y % 2 == 0 ? rot_front_flip2 : rot_front_flip,
                         Position((ilay_x)*baseplate_xdim,
                                  ilay_y % 2 == 0
                                      ? (ilay_y)*sensor_hybrid_ydim - sensor_hybrid_ydim / 2 + baseplate_ydim / 2
                                      : (ilay_y)*sensor_hybrid_ydim + sensor_hybrid_ydim / 2 - baseplate_ydim / 2,
-                                 -disk_face_rel_z - thicknessDet1 - sensor_thickness - thicknessDet2 / 2.0)));
+                                 layerheight/2 - thicknessDet1 - sensor_thickness - thicknessDet2 / 2.0)));
       }
       // NOTE: placement of service hybrids on front side
-      pv = layer_assembly.placeVolume(
+      pv = layer_mvol_1.placeVolume(
           log_SH_stack,
           Transform3D(rot_front,
                       Position((ilay_x)*baseplate_xdim,
                                ilay_y % 2 == 0
                                    ? (ilay_y)*sensor_hybrid_ydim + sensor_hybrid_ydim / 2 - baseplate_ydim / 4
                                    : (ilay_y)*sensor_hybrid_ydim - sensor_hybrid_ydim / 2 + baseplate_ydim / 4,
-                               -disk_face_rel_z - thicknessDet_SH / 2)));
+                               layerheight/2 - thicknessDet_SH / 2)));
 
       // NOTE: placement of sensors on back side of disk
       std::string sens_name_back = det_name + "_sensor_" + std::to_string(ilay_x) + "_" + std::to_string(ilay_y) +
                                    "_back_" + std::to_string(isensor);
       RotationZYX rot_back(0, M_PI, 0);
 
-      pv = layer_assembly.placeVolume(
+      pv = layer_mvol_2.placeVolume(
           sens_vol,
           Transform3D(rot_back, Position((ilay_x)*baseplate_xdim,
                                          ilay_y % 2 == 0 ? (ilay_y)*sensor_hybrid_ydim + sensor_hybrid_ydim / 2 -
                                                                sensor_ydim / 2 - sensor_margin
                                                          : (ilay_y)*sensor_hybrid_ydim - sensor_hybrid_ydim / 2 +
                                                                sensor_ydim / 2 + sensor_margin,
-                                         disk_face_rel_z + thicknessDet1 + sensor_thickness / 2.0)));
+                                         -layerheight/2 + thicknessDet1 + sensor_thickness / 2.0)));
 
       pv.addPhysVolID("module", layer_id).addPhysVolID("sensor", isensor);
 
-      DetElement sensor_detEl_back(layer_detEl, sens_name_back, isensor);
+      DetElement sensor_detEl_back(lay_elt_2, sens_name_back, isensor);
       sensor_detEl_back.setPlacement(pv);
       volSurfaceList(sensor_detEl_back)->push_back(surf_back);
 
@@ -430,49 +468,49 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
         RotationZYX rot_back_flip(0, 0, 0);
         RotationZYX rot_back_flip2(M_PI, 0, 0);
 
-        pv = layer_assembly.placeVolume(
+        pv = layer_mvol_2.placeVolume(
             log_sensor_stack1,
             Transform3D(ilay_y % 2 == 0 ? rot_back_flip2 : rot_back_flip,
                         Position((ilay_x)*baseplate_xdim,
                                  ilay_y % 2 == 0
                                      ? (ilay_y)*sensor_hybrid_ydim + sensor_hybrid_ydim / 2 - baseplate_ydim / 2
                                      : (ilay_y)*sensor_hybrid_ydim - sensor_hybrid_ydim / 2 + baseplate_ydim / 2,
-                                 disk_face_rel_z + thicknessDet1 / 2.0)));
+                                 -layerheight/2 + thicknessDet1 / 2.0)));
 
-        pv = layer_assembly.placeVolume(
+        pv = layer_mvol_2.placeVolume(
             log_sensor_stack2,
             Transform3D(ilay_y % 2 == 0 ? rot_back_flip2 : rot_back_flip,
                         Position((ilay_x)*baseplate_xdim,
                                  ilay_y % 2 == 0
                                      ? (ilay_y)*sensor_hybrid_ydim + sensor_hybrid_ydim / 2 - baseplate_ydim / 2
                                      : (ilay_y)*sensor_hybrid_ydim - sensor_hybrid_ydim / 2 + baseplate_ydim / 2,
-                                 disk_face_rel_z + thicknessDet1 + sensor_thickness + thicknessDet2 / 2.0)));
+                                 -layerheight/2 + thicknessDet1 + sensor_thickness + thicknessDet2 / 2.0)));
       }
 
       // NOTE: placement of service hybrids on back side
-      pv = layer_assembly.placeVolume(
+      pv = layer_mvol_2.placeVolume(
           log_SH_stack,
           Transform3D(rot_back,
                       Position((ilay_x)*baseplate_xdim,
                                ilay_y % 2 == 0
                                    ? (ilay_y)*sensor_hybrid_ydim - sensor_hybrid_ydim / 2 + baseplate_ydim / 4
                                    : (ilay_y)*sensor_hybrid_ydim + sensor_hybrid_ydim / 2 - baseplate_ydim / 4,
-                               disk_face_rel_z + thicknessDet_SH / 2.0)));
+                               -layerheight/2 + thicknessDet_SH / 2.0)));
 
       // NOTE: place cooling lines and liquid
-      RotationZYX rot_cooling(0, M_PI / 2.0, 0);
+      // RotationZYX rot_cooling(0, M_PI / 2.0, 0);
 
-      pv = layer_assembly.placeVolume(
-          log_cooling_liquid,
-          Transform3D(rot_cooling,
-                      Position((ilay_x)*baseplate_xdim, (ilay_y)*sensor_hybrid_ydim + sensor_hybrid_ydim / 2, 0.)));
-      pv = layer_assembly.placeVolume(
-          log_cooling_tube,
-          Transform3D(rot_cooling,
-                      Position((ilay_x)*baseplate_xdim, (ilay_y)*sensor_hybrid_ydim + sensor_hybrid_ydim / 2, 0.)));
+      // pv = layer_assembly.placeVolume(
+      //     log_cooling_liquid,
+      //     Transform3D(rot_cooling,
+      //                 Position((ilay_x)*baseplate_xdim, (ilay_y)*sensor_hybrid_ydim + sensor_hybrid_ydim / 2, 0.)));
+      // pv = layer_assembly.placeVolume(
+      //     log_cooling_tube,
+      //     Transform3D(rot_cooling,
+      //                 Position((ilay_x)*baseplate_xdim, (ilay_y)*sensor_hybrid_ydim + sensor_hybrid_ydim / 2, 0.)));
     }
   }
-  layer_assembly->GetShape()->ComputeBBox();
+  // layer_assembly->GetShape()->ComputeBBox();
 
   layer_id++;
 

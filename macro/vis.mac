@@ -6,6 +6,8 @@
 /vis/viewer/set/background white
 #/vis/viewer/set/style wireframe
 #/vis/scene/add/axes 0 0 0 1 m
+/vis/viewer/addCutawayPlane 0 0 0 m 1 0 0
+#/vis/viewer/addCutawayPlane 0 0 0 m 0 -1 0
 /vis/scene/add/trajectories rich smooth
 /vis/modeling/trajectories/create/drawByCharge
 #/vis/modeling/trajectories/drawByCharge-0/default/setDrawStepPts true
@@ -49,6 +51,7 @@
 
 /vis/viewer/flush
 
-/run/beamOn 1
+#/run/beamOn 1
 
 #/control/execute macro/gun.mac
+
