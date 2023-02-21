@@ -406,28 +406,26 @@ static std::tuple<int, int> add_disk(Detector& desc, Assembly& env, xml::Collect
 static std::tuple<int, int> add_12surface_disk(Detector& desc, Assembly& env, xml::Collection_t& plm,
                                                SensitiveDetector& sens, int sid)
 {
-  auto [modVol, modSize] = build_module(desc, plm, sens);
-  int    sector_id       = dd4hep::getAttrOrDefault<int>(plm, _Unicode(sector), sid);
-  int    id_begin        = dd4hep::getAttrOrDefault<int>(plm, _Unicode(id_begin), 1);
-  double rmin            = plm.attr<double>(_Unicode(rmin));
-  double rmax            = plm.attr<double>(_Unicode(rmax));
-  double r12min          = plm.attr<double>(_Unicode(r12min));
-  double r12max          = plm.attr<double>(_Unicode(r12max));
-  double structure_frame_length = plm.attr<double>(_Unicode(SFlength));
-  double calo_module_length = plm.attr<double>(_Unicode(CMlength));
-  double NEEMC_Prot      = plm.attr<double>(_Unicode(NEEMC_PR));
-  double NEEMC_Nrot      = plm.attr<double>(_Unicode(NEEMC_NR));
-  double NEEMC_OR_shift  = plm.attr<double>(_Unicode(NEEMC_OR_RS));
-  double NEEMC_IR_a      = plm.attr<double>(_Unicode(Inner_a));
-  double NEEMC_IR_b      = plm.attr<double>(_Unicode(Inner_b));
-  double phimin          = dd4hep::getAttrOrDefault<double>(plm, _Unicode(phimin), 0.);
-  double phimax          = dd4hep::getAttrOrDefault<double>(plm, _Unicode(phimax), 2. * M_PI);
-  std::string polygonX   = plm.attr<std::string>(_Unicode(ptsX_extrudedpolygon));
-  std::string polygonY   = plm.attr<std::string>(_Unicode(ptsY_extrudedpolygon));
-  std::string iposx      = plm.attr<std::string>(_Unicode(inner_outer_add_posx));
-  std::string iposy      = plm.attr<std::string>(_Unicode(inner_outer_add_posy));
-
-
+  auto [modVol, modSize]             = build_module(desc, plm, sens);
+  int         sector_id              = dd4hep::getAttrOrDefault<int>(plm, _Unicode(sector), sid);
+  int         id_begin               = dd4hep::getAttrOrDefault<int>(plm, _Unicode(id_begin), 1);
+  double      rmin                   = plm.attr<double>(_Unicode(rmin));
+  double      rmax                   = plm.attr<double>(_Unicode(rmax));
+  double      r12min                 = plm.attr<double>(_Unicode(r12min));
+  double      r12max                 = plm.attr<double>(_Unicode(r12max));
+  double      structure_frame_length = plm.attr<double>(_Unicode(SFlength));
+  double      calo_module_length     = plm.attr<double>(_Unicode(CMlength));
+  double      NEEMC_Prot             = plm.attr<double>(_Unicode(NEEMC_PR));
+  double      NEEMC_Nrot             = plm.attr<double>(_Unicode(NEEMC_NR));
+  double      NEEMC_OR_shift         = plm.attr<double>(_Unicode(NEEMC_OR_RS));
+  double      NEEMC_IR_a             = plm.attr<double>(_Unicode(Inner_a));
+  double      NEEMC_IR_b             = plm.attr<double>(_Unicode(Inner_b));
+  double      phimin                 = dd4hep::getAttrOrDefault<double>(plm, _Unicode(phimin), 0.);
+  double      phimax                 = dd4hep::getAttrOrDefault<double>(plm, _Unicode(phimax), 2. * M_PI);
+  std::string polygonX               = plm.attr<std::string>(_Unicode(ptsX_extrudedpolygon));
+  std::string polygonY               = plm.attr<std::string>(_Unicode(ptsY_extrudedpolygon));
+  std::string iposx                  = plm.attr<std::string>(_Unicode(inner_outer_add_posx));
+  std::string iposy                  = plm.attr<std::string>(_Unicode(inner_outer_add_posy));
 
   //=========================================================
   // optional envelope volume and the supporting frame
@@ -435,24 +433,18 @@ static std::tuple<int, int> add_12surface_disk(Detector& desc, Assembly& env, xm
 
   // Material for the structure and mother space
   //
-  Material outer_ring_material     = desc.material(getAttrOrDefault<std::string>(plm, _U(material), "StainlessSteel"));
-  Material inner_ring_material     = desc.material(getAttrOrDefault<std::string>(plm, _U(material), "Copper"));
+  Material outer_ring_material = desc.material(getAttrOrDefault<std::string>(plm, _U(material), "StainlessSteel"));
+  Material inner_ring_material = desc.material(getAttrOrDefault<std::string>(plm, _U(material), "Copper"));
   // Material hole_material     = desc.material(getAttrOrDefault<std::string>(plm, _U(material), "Vacuum"));
-
-
-
 
   //==============================
   // Outer supporting frame
   //==============================
 
   PolyhedraRegular solid_ring12(12, r12min, r12max, structure_frame_length);
-  Volume ring12_vol("ring12", solid_ring12, outer_ring_material);
-  Transform3D tr_global_Oring = RotationZYX(NEEMC_Prot, 0., 0.) * Translation3D(0., 0., NEEMC_OR_shift);
+  Volume           ring12_vol("ring12", solid_ring12, outer_ring_material);
+  Transform3D      tr_global_Oring = RotationZYX(NEEMC_Prot, 0., 0.) * Translation3D(0., 0., NEEMC_OR_shift);
   ring12_vol.setVisAttributes(desc.visAttributes(plm.attr<std::string>(_Unicode(vis_struc))));
-
-
-
 
   //=============================
   // Inner supporting frame
@@ -462,10 +454,10 @@ static std::tuple<int, int> add_12surface_disk(Detector& desc, Assembly& env, xm
   //
   std::vector<double> pt_x;
   std::vector<double> pt_y;
-  std::string delimiter = " ";
-  size_t      pos       = 0;
-  std::string token;
-  while ( (pos = polygonX.find(delimiter)) != std::string::npos ) {
+  std::string         delimiter = " ";
+  size_t              pos       = 0;
+  std::string         token;
+  while ((pos = polygonX.find(delimiter)) != std::string::npos) {
     token = polygonX.substr(0, pos);
     pt_x.push_back(atof(token.c_str()));
     polygonX.erase(0, pos + delimiter.length());
@@ -473,58 +465,43 @@ static std::tuple<int, int> add_12surface_disk(Detector& desc, Assembly& env, xm
   pt_x.push_back(atof(polygonX.c_str()));
 
   pos = 0;
-  while ( (pos = polygonY.find(delimiter)) != std::string::npos ) {
+  while ((pos = polygonY.find(delimiter)) != std::string::npos) {
     token = polygonY.substr(0, pos);
     pt_y.push_back(atof(token.c_str()));
     polygonY.erase(0, pos + delimiter.length());
   }
   pt_y.push_back(atof(polygonY.c_str()));
-  std::vector<double> sec_z = {-calo_module_length/2., calo_module_length/2.};
-  std::vector<double> sec_x = {0., 0.};
-  std::vector<double> sec_y = {0., 0.};
+  std::vector<double> sec_z  = {-calo_module_length / 2., calo_module_length / 2.};
+  std::vector<double> sec_x  = {0., 0.};
+  std::vector<double> sec_y  = {0., 0.};
   std::vector<double> zscale = {1., 1.};
 
-  ExtrudedPolygon inner_support_main(pt_x, pt_y, sec_z, sec_x, sec_y, zscale);
-  EllipticalTube   subtract_a(NEEMC_IR_a, NEEMC_IR_b, calo_module_length/2.);
+  ExtrudedPolygon  inner_support_main(pt_x, pt_y, sec_z, sec_x, sec_y, zscale);
+  EllipticalTube   subtract_a(NEEMC_IR_a, NEEMC_IR_b, calo_module_length / 2.);
   SubtractionSolid inner_support_substracta(inner_support_main, subtract_a, Position(0., 0., 0.));
   Volume           inner_support_vol("inner_support_vol", inner_support_substracta, inner_ring_material);
   inner_support_vol.setVisAttributes(desc.visAttributes(plm.attr<std::string>(_Unicode(vis_struc))));
   Transform3D tr_global_Iring_elli = RotationZYX(NEEMC_Nrot, 0., 0.) * Translation3D(0., 0., 0.);
 
-
-
-
-
   //=============================
   // The mother volume of modules
   //=============================
-  bool has_envelope = dd4hep::getAttrOrDefault<bool>(plm, _Unicode(envelope), false);
+  bool             has_envelope = dd4hep::getAttrOrDefault<bool>(plm, _Unicode(envelope), false);
   PolyhedraRegular solid_world(12, 0., r12min, calo_module_length);
-  EllipticalTube  solid_sub(NEEMC_IR_a, NEEMC_IR_b, calo_module_length/2.);
-  Transform3D subtract_pos = RotationZYX(NEEMC_Nrot, 0., 0.) * Translation3D(0., 0., 0.);
+  EllipticalTube   solid_sub(NEEMC_IR_a, NEEMC_IR_b, calo_module_length / 2.);
+  Transform3D      subtract_pos = RotationZYX(NEEMC_Nrot, 0., 0.) * Translation3D(0., 0., 0.);
   SubtractionSolid calo_subtract(solid_world, solid_sub, subtract_pos);
-  Volume      env_vol(std::string(env.name()) + "_envelope", calo_subtract, outer_ring_material);
-  Transform3D tr_global = RotationZYX(NEEMC_Prot, 0., 0.) * Translation3D(0., 0., 0.);
+  Volume           env_vol(std::string(env.name()) + "_envelope", calo_subtract, outer_ring_material);
+  Transform3D      tr_global = RotationZYX(NEEMC_Prot, 0., 0.) * Translation3D(0., 0., 0.);
   env_vol.setVisAttributes(desc.visAttributes(plm.attr<std::string>(_Unicode(vis_steel_gap))));
-
-
-
-
 
   // Place frames and mother volume of modules into the world volume
   //
-  if (has_envelope)
-    {
-      env.placeVolume(env_vol, tr_global);                           // Place the mother volume for all modules
-      env.placeVolume(ring12_vol, tr_global_Oring);                  // Place the outer supporting frame
-      env_vol.placeVolume(inner_support_vol, tr_global_Iring_elli);  // Place the version3 inner supporting frame
-    }
-
-
-
-
-
-
+  if (has_envelope) {
+    env.placeVolume(env_vol, tr_global);                          // Place the mother volume for all modules
+    env.placeVolume(ring12_vol, tr_global_Oring);                 // Place the outer supporting frame
+    env_vol.placeVolume(inner_support_vol, tr_global_Iring_elli); // Place the version3 inner supporting frame
+  }
 
   //=====================================================================
   // Placing The Modules
@@ -537,24 +514,24 @@ static std::tuple<int, int> add_12surface_disk(Detector& desc, Assembly& env, xm
 
   // Add the modules followd the fillRectangles function
   //
-  int mid = 0, total_id = 0;
+  int   mid = 0, total_id = 0;
   float half_modx = modSize.x() * 0.5, half_mody = modSize.y() * 0.5;
   auto points = epic::geo::fillRectangles({half_modx, half_mody}, modSize.x(), modSize.y(), rmin, rmax, phimin, phimax);
 
   float min_ptsx = 0., max_ptsx = 0., min_ptsy = 0., max_ptsy = 0.;
 
-  for(auto& p : points){
-    if( p.x() < min_ptsx )
+  for (auto& p : points) {
+    if (p.x() < min_ptsx)
       min_ptsx = p.x();
-    if( p.x() > max_ptsx )
+    if (p.x() > max_ptsx)
       max_ptsx = p.x();
-    if( p.y() < min_ptsy )
+    if (p.y() < min_ptsy)
       min_ptsy = p.y();
-    if( p.y() > max_ptsy )
+    if (p.y() > max_ptsy)
       max_ptsy = p.y();
   }
 
-  for (auto& p : points){
+  for (auto& p : points) {
     Transform3D tr_local = RotationZYX(NEEMC_Nrot, 0.0, 0.0) * Translation3D(p.x(), p.y(), 0.0);
     auto modPV = (has_envelope ? env_vol.placeVolume(modVol, tr_local) : env.placeVolume(modVol, tr_global * tr_local));
     modPV.addPhysVolID("sector", sector_id).addPhysVolID("module", total_id);
@@ -564,14 +541,13 @@ static std::tuple<int, int> add_12surface_disk(Detector& desc, Assembly& env, xm
     // ID = row * 100 + column
   }
 
-
   // Segment the position list[string] and save them as vector
   //
   std::vector<double> inner_outer_posx;
   std::vector<double> inner_outer_posy;
 
   pos = 0;
-  while ( (pos = iposx.find(delimiter)) != std::string::npos ) {
+  while ((pos = iposx.find(delimiter)) != std::string::npos) {
     token = iposx.substr(0, pos);
     inner_outer_posx.push_back(atof(token.c_str()));
     iposx.erase(0, pos + delimiter.length());
@@ -579,7 +555,7 @@ static std::tuple<int, int> add_12surface_disk(Detector& desc, Assembly& env, xm
   inner_outer_posx.push_back(atof(iposx.c_str()));
 
   pos = 0;
-  while ( (pos = iposy.find(delimiter)) != std::string::npos ) {
+  while ((pos = iposy.find(delimiter)) != std::string::npos) {
     token = iposy.substr(0, pos);
     inner_outer_posy.push_back(atof(token.c_str()));
     iposy.erase(0, pos + delimiter.length());
@@ -587,16 +563,15 @@ static std::tuple<int, int> add_12surface_disk(Detector& desc, Assembly& env, xm
   inner_outer_posy.push_back(atof(iposy.c_str()));
 
   int im = 0;
-  for (auto && value : inner_outer_posx ){
-    Transform3D add_local = RotationZYX(NEEMC_Nrot, 0.0, 0.0) * Translation3D(value * cm, inner_outer_posy[im] * cm, 0.0);
-    auto modPV = (has_envelope ? env_vol.placeVolume(modVol, add_local) : env.placeVolume(modVol, tr_global * add_local));
+  for (auto&& value : inner_outer_posx) {
+    Transform3D add_local =
+        RotationZYX(NEEMC_Nrot, 0.0, 0.0) * Translation3D(value * cm, inner_outer_posy[im] * cm, 0.0);
+    auto modPV =
+        (has_envelope ? env_vol.placeVolume(modVol, add_local) : env.placeVolume(modVol, tr_global * add_local));
     modPV.addPhysVolID("sector", sector_id).addPhysVolID("module", total_id);
     total_id++;
     im++;
   }
-
-
-
 
   return {sector_id, mid};
 }
