@@ -99,7 +99,7 @@
     </comment>
     <readout name="EcalEndcapNHits">
       <segmentation type="NoSegmentation" key="sector"/>
-      <id>system:8,sector:4,module:20</id>
+      <id>system:8,sector:4,row:10,column:10,module:20</id>
     </readout>
   </readouts>
 </lccdd>
