@@ -1,0 +1,18 @@
+ebeam: 18
+pbeam: 275
+features:
+  beampipe:
+  tracking:
+    vertex_barrel:
+    silicon_barrel:
+    mpgd_barrel:
+    mpgd_dirc:
+    silicon_disks:
+    support_service_assembly:
+    tof_barrel_1cm800umstrip:
+    tof_endcap_800um:
+  pid:
+    dirc:
+    mrich:
+    drich:
+  solenoid:
