@@ -1,0 +1,27 @@
+<!-- SPDX-License-Identifier: LGPL-3.0-or-later -->
+<!-- Copyright (C) 2022 Justin Chan -->
+
+<lccdd>
+
+  <comment>
+  Collimater outer dimensions chosen to match the ZEUS design for the Luminosity monitor.
+  Inner dimensions chosen to be 5*sigma for photon beam evaluated at far Z-end of collimator location, calculated using the max angular divergencies of the electron beam.
+  Outer dimensions are full lengths.  Inner ones are half lengths.
+  </comment>
+
+  <detectors>
+    <detector
+      name="LumiCollimator1"
+      type="LumiCollimator"
+      vis="Shape1_vis">
+      <dimensions_outer x="12.6/2.*cm" y="13/2.*cm" z="LumiColl_DZ/2."/>
+      <dimensions_inner
+        x="LumiBeamDiv_pref * (fabs(LumiColl_Z) + LumiColl_DZ/2.)"
+        y="LumiBeamDiv_pref * (fabs(LumiColl_Z) + LumiColl_DZ/2.)"
+        z="LumiColl_DZ/2."/>
+      <position   x="LumiColl_X" y="LumiColl_Y" z="LumiColl_Z"/>
+      <rotation   x="0*rad" y="0*rad" z="0*rad"/>
+    </detector>
+  </detectors>
+
+</lccdd>
