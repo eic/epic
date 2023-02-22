@@ -22,7 +22,7 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector /
   //xml_comp_t    x_dim           = x_det.dimensions();
   xml_comp_t    x_pos           = x_det.position();
   xml_comp_t    x_rot           = x_det.rotation();
-  
+
   //
   string        det_name        = x_det.nameStr();
   string        mat_name        = dd4hep::getAttrOrDefault<string>( x_det, _U(material), "Graphite" );
@@ -38,19 +38,19 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector /
   double        rotX            = x_rot.x();
   double        rotY            = x_rot.y();
   double        rotZ            = x_rot.z();
-  
+
   Box slice( sizeX, sizeY, sizeZ );
   Volume vol( det_name + "_vol", slice, description.material( mat_name ) );
   vol.setVisAttributes( x_det.visStr() );
 
-  Transform3D  filter_pos( RotationZYX(rotX, rotY, rotZ), Position(posX, posY, posZ ) ); 
+  Transform3D  filter_pos( RotationZYX(rotX, rotY, rotZ), Position(posX, posY, posZ ) );
 
   DetElement det(det_name, x_det.id());
   Volume motherVol = description.pickMotherVolume( det );
   PlacedVolume phv = motherVol.placeVolume( vol, filter_pos );
 
   det.setPlacement(phv);
-  
+
   return det;
 }
 
