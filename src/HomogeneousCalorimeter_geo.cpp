@@ -294,7 +294,7 @@ static std::tuple<int, int> add_12surface_disk(Detector& desc, Assembly& env, xm
   float half_modx = modSize.x() * 0.5, half_mody = modSize.y() * 0.5;
   auto points = epic::geo::fillRectangles({half_modx, half_mody}, modSize.x(), modSize.y(), rmin, rmax, phimin, phimax);
   float min_ptsx = 0., max_ptsx = 0., min_ptsy = 0., max_ptsy = 0.; // Find the min/max position X and Y
-  
+
   // Segment the position list[string] and save them as vector
   //
   std::vector<double> inner_outer_posx;
@@ -327,7 +327,7 @@ static std::tuple<int, int> add_12surface_disk(Detector& desc, Assembly& env, xm
       max_ptsy = p.y();
   }
 
-  
+
   // Place the modules, use row and column ID for each modules
   // row and column ID start from the top left corner
   //
@@ -339,7 +339,7 @@ static std::tuple<int, int> add_12surface_disk(Detector& desc, Assembly& env, xm
     auto modPV = (has_envelope ? env_vol.placeVolume(modVol, tr_local) : env.placeVolume(modVol, tr_global * tr_local));
     modPV.addPhysVolID("sector", sector_id).addPhysVolID("row", row).addPhysVolID("column", column);
   }
-  
+
   int im = 0;
   for (auto&& value : inner_outer_posx) {
     column = (value - min_ptsx) / modSize.x();
