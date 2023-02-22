@@ -183,7 +183,7 @@ static std::tuple<int, int> add_12surface_disk(Detector& desc, Assembly& env, xm
 {
   auto [modVol, modSize]             = build_module(desc, plm, sens);
   int         sector_id              = dd4hep::getAttrOrDefault<int>(plm, _Unicode(sector), sid);
-  int         id_begin               = dd4hep::getAttrOrDefault<int>(plm, _Unicode(id_begin), 1);
+  // int         id_begin               = dd4hep::getAttrOrDefault<int>(plm, _Unicode(id_begin), 1);
   double      rmin                   = plm.attr<double>(_Unicode(rmin));
   double      rmax                   = plm.attr<double>(_Unicode(rmax));
   double      r12min                 = plm.attr<double>(_Unicode(r12min));
@@ -289,33 +289,12 @@ static std::tuple<int, int> add_12surface_disk(Detector& desc, Assembly& env, xm
 
   // Add the modules followd the fillRectangles function
   //
-  int   mid = 0, total_id = 0;
+  int   mid = 0;
+  // int total_id = 0;
   float half_modx = modSize.x() * 0.5, half_mody = modSize.y() * 0.5;
   auto points = epic::geo::fillRectangles({half_modx, half_mody}, modSize.x(), modSize.y(), rmin, rmax, phimin, phimax);
-
-  float min_ptsx = 0., max_ptsx = 0., min_ptsy = 0., max_ptsy = 0.;
-
-  for (auto& p : points) {
-    if (p.x() < min_ptsx)
-      min_ptsx = p.x();
-    if (p.x() > max_ptsx)
-      max_ptsx = p.x();
-    if (p.y() < min_ptsy)
-      min_ptsy = p.y();
-    if (p.y() > max_ptsy)
-      max_ptsy = p.y();
-  }
-
-  for (auto& p : points) {
-    Transform3D tr_local = RotationZYX(NEEMC_Nrot, 0.0, 0.0) * Translation3D(p.x(), p.y(), 0.0);
-    auto modPV = (has_envelope ? env_vol.placeVolume(modVol, tr_local) : env.placeVolume(modVol, tr_global * tr_local));
-    modPV.addPhysVolID("sector", sector_id).addPhysVolID("module", total_id);
-    total_id = id_begin + mid++;
-
-    // Next: Addign the ID with the row and column information instead of sequential ID
-    // ID = row * 100 + column
-  }
-
+  float min_ptsx = 0., max_ptsx = 0., min_ptsy = 0., max_ptsy = 0.; // Find the min/max position X and Y
+  
   // Segment the position list[string] and save them as vector
   //
   std::vector<double> inner_outer_posx;
@@ -337,14 +316,37 @@ static std::tuple<int, int> add_12surface_disk(Detector& desc, Assembly& env, xm
   }
   inner_outer_posy.push_back(atof(iposy.c_str()));
 
+  for (auto& p : points) {
+    if (p.x() < min_ptsx)
+      min_ptsx = p.x();
+    if (p.x() > max_ptsx)
+      max_ptsx = p.x();
+    if (p.y() < min_ptsy)
+      min_ptsy = p.y();
+    if (p.y() > max_ptsy)
+      max_ptsy = p.y();
+  }
+
+  
+  // Place the modules, use row and column ID for each modules
+  // row and column ID start from the top left corner
+  //
+  int row = 0, column = 0;
+  for (auto& p : points) {
+    column = (p.x() - min_ptsx) / modSize.x();
+    row = (max_ptsy - p.y()) / modSize.y();
+    Transform3D tr_local = RotationZYX(NEEMC_Nrot, 0.0, 0.0) * Translation3D(p.x(), p.y(), 0.0);
+    auto modPV = (has_envelope ? env_vol.placeVolume(modVol, tr_local) : env.placeVolume(modVol, tr_global * tr_local));
+    modPV.addPhysVolID("sector", sector_id).addPhysVolID("row", row).addPhysVolID("column", column);
+  }
+  
   int im = 0;
   for (auto&& value : inner_outer_posx) {
-    Transform3D add_local =
-        RotationZYX(NEEMC_Nrot, 0.0, 0.0) * Translation3D(value * cm, inner_outer_posy[im] * cm, 0.0);
-    auto modPV =
-        (has_envelope ? env_vol.placeVolume(modVol, add_local) : env.placeVolume(modVol, tr_global * add_local));
-    modPV.addPhysVolID("sector", sector_id).addPhysVolID("module", total_id);
-    total_id++;
+    column = (value - min_ptsx) / modSize.x();
+    row = (max_ptsy - inner_outer_posy[im]) / modSize.y();
+    Transform3D add_local = RotationZYX(NEEMC_Nrot, 0.0, 0.0) * Translation3D(value * cm, inner_outer_posy[im] * cm, 0.0);
+    auto modPV = (has_envelope ? env_vol.placeVolume(modVol, add_local) : env.placeVolume(modVol, tr_global * add_local));
+    modPV.addPhysVolID("sector", sector_id).addPhysVolID("row", row).addPhysVolID("column", column);
     im++;
   }
 
