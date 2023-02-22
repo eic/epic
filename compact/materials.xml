@@ -20,6 +20,10 @@
     <fraction n="0.234" ref="O"/>
     <fraction n="0.012" ref="Ar"/>
   </material>
+  <material name="HeGas">
+    <D type="density" unit="g/cm3" value="0.0000838"/>
+    <fraction n="1" ref="He"/>
+  </material>
   <material name="Epoxy">
     <D type="density" value="1.3" unit="g/cm3"/>
     <composite n="44" ref="H"/>
