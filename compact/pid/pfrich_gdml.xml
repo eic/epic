@@ -3,7 +3,7 @@
 
 <lccdd>
   <detectors>
-    <detector detector id="BackwardRICH_ID" name="PFRICH" type="DD4hep_GdmlDetector" vis="InvisibleWithDaughters">
+    <detector id="BackwardRICH_ID" name="PFRICH" type="DD4hep_GdmlDetector" vis="InvisibleWithDaughters">
       <gdmlFile ref="pfrich.gdml">
       <parent name="/world"/>
     </detector>

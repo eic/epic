@@ -2,8 +2,8 @@
 <!-- Copyright (C) 2022 Wouter Deconinck -->
 
 <lccdd>
-  <detectors>
-    <detector detector id="MRICH_ID" name="MRICH" type="DD4hep_GdmlDetector" vis="InvisibleWithDaughters">
+  <detectors>detector
+    <detector id="MRICH_ID" name="MRICH" type="DD4hep_GdmlDetector" vis="InvisibleWithDaughters">
       <gdmlFile ref="mrich.gdml"/>
       <parent name="/world"/>
     </detector>
