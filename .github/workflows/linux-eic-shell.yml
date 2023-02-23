@@ -474,10 +474,12 @@ jobs:
 
   trigger-detector-benchmarks:
     runs-on: ubuntu-latest
-    needs: [check-overlap-tgeo, check-overlap-geant4-fast]
+    needs:
+      - check-overlap-tgeo
+      - check-overlap-geant4-fast
+      - list-detector-configs
     strategy:
-      matrix:
-        detector_config: [epic_arches, epic_brycecanyon]
+      matrix: ${{ fromJson(needs.list-detector-configs.outputs.configs) }}
     steps:
     - uses: eic/trigger-gitlab-ci@v2
       id: trigger
