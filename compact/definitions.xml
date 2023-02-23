@@ -189,7 +189,7 @@ The unused IDs below are saved for future use.
       - EndcapP  subassembly ID: 112
       - EndcapN  subassembly ID: 113
 
-      - Unused IDs: 117-119
+      - Unused IDs: 118-119
     </documentation>
     <constant name="HCalSubAssembly_ID" value="110"/>
     <constant name="HCalBarrel_ID"      value="111"/>
@@ -197,6 +197,8 @@ The unused IDs below are saved for future use.
     <constant name="HCalEndcapN_ID"     value="113"/>
     <constant name="PassiveSteelRingEndcapP_ID" value="114"/>
     <constant name="HCalEndcapPInsert_ID" value="115"/>
+    <constant name="LFHCAL_ID"     value="116"/>
+    <constant name="GFHCAL_ID"     value="117"/>
     <documentation>
       #### (120-129) (near) Forward reserved
 
@@ -578,6 +580,16 @@ Service gaps in FW direction (before endcapP ECAL) and BW direction (before endc
     <constant name="HcalEndcapP_length"   value="140.0*cm"/>
     <constant name="HcalEndcapP_zmax"     value="HcalEndcapP_zmin + HcalEndcapP_length"/>
 
+    <constant name="LFHCAL_zmin"          value="EcalEndcapP_zmin + EcalEndcapP_length"/>
+    <comment> LFHCAL is 140 cm total, but current implementation leaves the final 10 cm empty </comment>
+    <constant name="LFHCAL_length"        value="140.0*cm"/>
+    <constant name="LFHCAL_zmax"          value="LFHCAL_zmin + LFHCAL_length"/>
+
+    <constant name="GFHCAL_zmin"          value="EcalEndcapP_zmin + EcalEndcapP_length"/>
+    <comment> GFHCAL is 140 cm total, but current implementation leaves the final 10 cm empty </comment>
+    <constant name="GFHCAL_length"        value="140.0*cm"/>
+    <constant name="GFHCAL_zmax"          value="GFHCAL_zmin + GFHCAL_length"/>
+
     <constant name="HcalEndcapPInsert_zmin"     value="HcalEndcapP_zmin"/>
     <constant name="HcalEndcapPInsert_length"   value="127.97*cm"/>
     <constant name="HcalEndcapPInsert_zmax"     value="HcalEndcapPInsert_zmin + HcalEndcapPInsert_length"/>
@@ -602,7 +614,8 @@ Service gaps in FW direction (before endcapP ECAL) and BW direction (before endc
     <constant name="HcalBarrel_offset"    value="(HcalBarrelForward_zmax - HcalBarrelBackward_zmax)/2"/>
     <constant name="HcalEndcapN_rmax"     value="HcalBarrel_rmax"/>
     <constant name="HcalEndcapP_rmax"     value="HcalBarrel_rmax"/>
-
+    <constant name="LFHCAL_rmax"          value="HcalBarrel_rmax"/>
+    <constant name="GFHCAL_rmax"          value="HcalBarrel_rmax"/>
     <comment>
       These are used by ddsim, the region where we store all secondaries
 

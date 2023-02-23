@@ -1,0 +1,180 @@
+<lccdd>
+
+  <info name="gfhcal.xml"
+        title="EPIC GFHCAL"
+        author="@FriederikeBock"
+        url="https://github.com/FriederikeBock"
+        status="development"
+        version="1.0"
+  ><comment/></info>
+
+  <define>
+    <documentation>
+      #### Material Thickness
+    </documentation>
+    <constant name="GFHCALAbsorberThickness"       value="1.52* cm"/>
+    <constant name="GFHCALPolystyreneThickness"    value="0.4* cm"/>
+    <constant name="GFHCALTyvekThickness"          value="0.034* cm"/>
+    <constant name="GFHCALAirOffset"               value="0.046* cm"/>
+    <constant name="GFHCALElectronicsThickness"    value="10.0* cm"/>
+    <documentation>
+      - Hcal Endcap N Layers and computed Thickness
+    </documentation>
+
+    <comment> FIXME: Need actual values once they are decided upon </comment>
+    <constant name="GFHCALLayer_NSteelRepeat" value="1"/>
+    <constant name="GFHCALLayer_NTungstenRepeat" value="1"/>
+    <!-- <constant name="GFHCALLayer_NSteelRepeat" value="59"/>
+    <constant name="GFHCALLayer_NTungstenRepeat" value="5"/> -->
+
+    <constant name="Mod_SideWallThickness"   value="1.9812* mm"/>
+    <constant name="Mod_TopWallThickness"    value="0.5* mm"/>
+    <constant name="Mod_FrontWallThickness"  value="14* mm"/>
+    <constant name="Mod_BackWallThickness"   value="9.91* mm"/>
+    <constant name="Mod_NotchDepth"          value="1.25* mm"/>
+    <constant name="Mod_SepWidth"            value="0.5* mm"/>
+
+    <constant name="EightM_xArr"                value="4" />
+    <constant name="EightM_yArr"                value="2" />
+    <constant name="EightM_OuterWidth"          value="20.0* cm"/>
+    <constant name="EightM_OuterHeight"         value="10.0* cm"/>
+    <constant name="EightM_BackInnerWidth"      value="15.0* cm"/>
+    <constant name="EightM_BackInnerHeight"     value="7.5* cm"/>
+    <constant name="EightM_NotchWidthAbsA"      value="23* mm"/>
+    <constant name="EightM_NotchWidthAbsB"      value="10* mm"/>
+    <constant name="EightM_NotchWidthAbsC"      value="6.5* mm"/>
+    <constant name="EightM_NotchWidthScin"      value="29* mm"/>
+    <constant name="FourM_xArr"                value="4" />
+    <constant name="FourM_yArr"                value="2" />
+    <constant name="FourM_OuterWidth"          value="10.0* cm"/>
+    <constant name="FourM_OuterHeight"         value="10.0* cm"/>
+    <constant name="FourM_BackInnerWidth"      value="7.5* cm"/>
+    <constant name="FourM_BackInnerHeight"     value="7.5* cm"/>
+    <constant name="FourM_NotchWidthAbsA"      value="23* mm"/>
+    <constant name="FourM_NotchWidthAbsC"      value="6.5* mm"/>
+    <constant name="FourM_NotchWidthScin"      value="29* mm"/>
+  </define>
+
+  <!-- Define detector -->
+  <detectors>
+    <documentation>
+      ### Forward (Positive Z) Endcap Hadronic Calorimeter
+
+      This is the ECCE GFHCAL design without individual tower placements and electronics
+      The original design was 60 layers of Steel/Sc and 10 layers of W/Sc, both 1.6 cm/0.4 cm
+      This is too long, so 5 layers of tungsten were removed as a placeholder until the final design is chosen
+
+      The HCal forward insert shape is cut out from this detector
+
+      Currently don't have an implementation of electronics, so just leave that area (final 10 cm) empty
+      So then, actual detector area is "GFHCAL_length - GFHCALElectronicsThickness" long
+    </documentation>
+    <detector
+      id="GFHCAL_ID"
+      name="GFHCAL"
+      type="epic_GFHCAL"
+      readout="GFHCALHits"
+      vis="InvisibleWithDaughters"
+      calorimeterType="HAD_ENDCAP"
+      renderComponents="0"
+      doSamplingFractionStudies="1"
+      useMoreLayers="1">
+
+      <position x="0" y="0" z="GFHCAL_zmin"/>
+      <dimensions
+        z="GFHCAL_length"
+        rmin="20*cm"
+        rmax="GFHCAL_rmax"/>
+      <eightmodule name="8MModule" vis= "GFHCAL8MModVis" repeat="0" >
+        <dimensions
+        width="EightM_OuterWidth"
+        height="EightM_OuterHeight"
+        widthBackInner="EightM_BackInnerWidth"
+        heightBackInner="EightM_BackInnerHeight"
+        widthSideWall="Mod_SideWallThickness"
+        widthTopWall="Mod_TopWallThickness"
+        thicknessFrontWall="Mod_FrontWallThickness"
+        thicknessBackWall="Mod_BackWallThickness"
+        arrayX="EightM_xArr"
+        arrayY="EightM_yArr"
+        notchWidthAbsA="EightM_NotchWidthAbsA"
+        notchWidthAbsB="EightM_NotchWidthAbsB"
+        notchWidthAbsC="EightM_NotchWidthAbsC"
+        notchWidthScin="EightM_NotchWidthScin"
+        notchDepth="Mod_NotchDepth"
+        sepDepth="Mod_SepWidth"
+        />
+        <position x="50*cm" y="50*cm" z="GFHCAL_length - GFHCALElectronicsThickness" />
+      </eightmodule>
+      <fourmodule name="4MModule" vis= "GFHCAL4MModVis" repeat="2">
+        <dimensions
+        width="FourM_OuterWidth"
+        height="FourM_OuterHeight"
+        widthBackInner="FourM_BackInnerWidth"
+        heightBackInner="FourM_BackInnerHeight"
+        widthSideWall="Mod_SideWallThickness"
+        widthTopWall="Mod_TopWallThickness"
+        thicknessFrontWall="Mod_FrontWallThickness"
+        thicknessBackWall="Mod_BackWallThickness"
+        arrayX="FourM_xArr"
+        arrayY="FourM_yArr"
+        notchWidthAbsA="FourM_NotchWidthAbsA"
+        notchWidthAbsC="FourM_NotchWidthAbsC"
+        notchWidthScin="FourM_NotchWidthScin"
+        notchDepth="Mod_NotchDepth"
+        sepDepth="Mod_SepWidth"
+        />
+        <position x="50*cm" y="60*cm" z="GFHCAL_length - GFHCALElectronicsThickness" />
+      </fourmodule>
+
+
+      <layer repeat="1" vis="InvisibleWithDaughters" >
+        <slice material="Tyvek" thickness="GFHCALTyvekThickness" vis="GFHCALLayerTyvekVis"
+               type="2" offset="GFHCALAirOffset"/>
+        <slice material="Polystyrene" thickness="GFHCALPolystyreneThickness" vis="GFHCALLayerScintVis" sensitive=" yes"   limits="cal_limits" type="3"/>
+      </layer>
+      <layer repeat="GFHCALLayer_NSteelRepeat" vis="InvisibleWithDaughters" >
+        <slice material="Steel235" thickness="GFHCALAbsorberThickness" vis="GFHCALLayerSteelVis" type="1"/>
+        <slice material="Tyvek" thickness="GFHCALTyvekThickness" vis="GFHCALLayerTyvekVis" type="2" offset="GFHCALAirOffset"/>
+        <slice material="Polystyrene" thickness="GFHCALPolystyreneThickness" vis="GFHCALLayerScintVis" sensitive=" yes"   limits="cal_limits" type="3"/>
+      </layer>
+      <layer repeat="GFHCALLayer_NTungstenRepeat" vis="InvisibleWithDaughters" >
+        <slice material="Tungsten" thickness="GFHCALAbsorberThickness" vis="GFHCALLayerTungstenVis" type="1"/>
+        <slice material="Tyvek" thickness="GFHCALTyvekThickness" vis="GFHCALLayerTyvekVis" type="2" offset="GFHCALAirOffset"/>
+        <slice material="Polystyrene" thickness="GFHCALPolystyreneThickness" vis="GFHCALLayerScintVis" sensitive=" yes" limits="cal_limits" type="3"/>
+      </layer>
+      <layer repeat="1" vis="InvisibleWithDaughters" >
+        <slice material="Steel235" thickness="GFHCALAbsorberThickness" vis="GFHCALLayerSteelVis"  type="1"/>
+      </layer>
+
+      <documentation>
+      ### full size with inlay cutout GFHCAL R =260cm
+      </documentation>
+      <eightmodulepositions name="xpos" unit="cm" values="-70 -50 30 50 -100 -80 -60 -40 -20 0 20 40 60 80 -110 -90 -70 -50 30 50 70 90 -140 -120 -100 -80 -60 -40 -20 0 20 40 60 80 100 120 -150 -130 -110 -90 -70 -50 30 50 70 90 110 130 -160 -140 -120 -100 -80 -60 -40 -20 0 20 40 60 80 100 120 140 -170 -150 -130 -110 -90 -70 -50 30 50 70 90 110 130 150 -180 -160 -140 -120 -100 -80 -60 -40 -20 0 20 40 60 80 100 120 140 160 -190 -170 -150 -130 -110 -90 -70 -50 30 50 70 90 110 130 150 170 -200 -180 -160 -140 -120 -100 -80 -60 -40 -20 0 20 40 60 80 100 120 140 160 180 -210 -190 -170 -150 -130 -110 -90 -70 -50 30 50 70 90 110 130 150 170 190 -220 -200 -180 -160 -140 -120 -100 -80 -60 -40 -20 0 20 40 60 80 100 120 140 160 180 200 -230 -210 -190 -170 -150 -130 -110 -90 -70 -50 30 50 70 90 110 130 150 170 190 210 -240 -220 -200 -180 -160 -140 -120 -100 -80 -60 -40 -20 0 20 40 60 80 100 120 140 160 180 200 220 -250 -230 -210 -190 -170 -150 -130 -110 -90 -70 -50 30 50 70 90 110 130 150 170 190 210 230 -220 -200 -180 -160 -140 -120 -100 -80 -60 -40 -20 0 20 40 60 80 100 120 140 160 180 200 -250 -230 -210 -190 -170 -150 -130 -110 -90 -70 -50 30 50 70 90 110 130 150 170 190 210 230 -260 -240 -220 -200 -180 -160 -140 -120 -100 -80 -60 -40 -20 0 20 40 60 80 100 120 140 160 180 200 220 240 -230 -210 -190 -170 -150 -130 -110 -90 -70 -50 30 50 70 90 110 130 150 170 190 210 -260 -240 -220 -200 -180 -160 -140 -120 -100 -80 -60 -40 -20 0 20 40 60 80 100 120 140 160 180 200 220 240 -270 -250 -230 -210 -190 -170 -150 -130 -110 -90 -70 -50 30 50 70 90 110 130 150 170 190 210 230 250 -240 -220 -200 -180 -160 -140 -120 -100 -80 -60 -40 -20 0 20 40 60 80 100 120 140 160 180 200 220 -270 -250 -230 -210 -190 -170 -150 -130 -110 -90 -70 -50 30 50 70 90 110 130 150 170 190 210 230 250 -240 -220 -200 -180 -160 -140 -120 -100 -80 -60 -40 -20 0 20 40 60 80 100 120 140 160 180 200 220 -270 -250 -230 -210 -190 -170 -150 -130 -110 -90 -70 -50 -30 30 50 70 90 110 130 150 170 190 210 230 250 -240 -220 -200 -180 -160 -140 -120 -100 -80 -60 60 80 100 120 140 160 180 200 220 -270 -250 -230 -210 -190 -170 -150 -130 -110 -90 -70 -50 -30 30 50 70 90 110 130 150 170 190 210 230 250 -240 -220 -200 -180 -160 -140 -120 -100 -80 -60 60 80 100 120 140 160 180 200 220 -270 -250 -230 -210 -190 -170 -150 -130 -110 -90 -70 -50 30 50 70 90 110 130 150 170 190 210 230 250 -240 -220 -200 -180 -160 -140 -120 -100 -80 -60 -40 -20 0 20 40 60 80 100 120 140 160 180 200 220 -270 -250 -230 -210 -190 -170 -150 -130 -110 -90 -70 -50 30 50 70 90 110 130 150 170 190 210 230 250 -240 -220 -200 -180 -160 -140 -120 -100 -80 -60 -40 -20 0 20 40 60 80 100 120 140 160 180 200 220 -270 -250 -230 -210 -190 -170 -150 -130 -110 -90 -70 -50 30 50 70 90 110 130 150 170 190 210 230 250 -260 -240 -220 -200 -180 -160 -140 -120 -100 -80 -60 -40 -20 0 20 40 60 80 100 120 140 160 180 200 220 240 -230 -210 -190 -170 -150 -130 -110 -90 -70 -50 30 50 70 90 110 130 150 170 190 210 -260 -240 -220 -200 -180 -160 -140 -120 -100 -80 -60 -40 -20 0 20 40 60 80 100 120 140 160 180 200 220 240 -250 -230 -210 -190 -170 -150 -130 -110 -90 -70 -50 30 50 70 90 110 130 150 170 190 210 230 -220 -200 -180 -160 -140 -120 -100 -80 -60 -40 -20 0 20 40 60 80 100 120 140 160 180 200 -250 -230 -210 -190 -170 -150 -130 -110 -90 -70 -50 30 50 70 90 110 130 150 170 190 210 230 -240 -220 -200 -180 -160 -140 -120 -100 -80 -60 -40 -20 0 20 40 60 80 100 120 140 160 180 200 220 -230 -210 -190 -170 -150 -130 -110 -90 -70 -50 30 50 70 90 110 130 150 170 190 210 -220 -200 -180 -160 -140 -120 -100 -80 -60 -40 -20 0 20 40 60 80 100 120 140 160 180 200 -210 -190 -170 -150 -130 -110 -90 -70 -50 30 50 70 90 110 130 150 170 190 -200 -180 -160 -140 -120 -100 -80 -60 -40 -20 0 20 40 60 80 100 120 140 160 180 -190 -170 -150 -130 -110 -90 -70 -50 30 50 70 90 110 130 150 170 -180 -160 -140 -120 -100 -80 -60 -40 -20 0 20 40 60 80 100 120 140 160 -170 -150 -130 -110 -90 -70 -50 30 50 70 90 110 130 150 -160 -140 -120 -100 -80 -60 -40 -20 0 20 40 60 80 100 120 140 -150 -130 -110 -90 -70 -50 30 50 70 90 110 130 -140 -120 -100 -80 -60 -40 -20 0 20 40 60 80 100 120 -110 -90 -70 -50 30 50 70 90 -100 -80 -60 -40 -20 0 20 40 60 80 -70 -50 30 50"/>
+      <eightmodulepositions name="ypos" unit="cm" values="255 255 255 255 245 245 245 245 245 245 245 245 245 245 235 235 235 235 235 235 235 235 225 225 225 225 225 225 225 225 225 225 225 225 225 225 215 215 215 215 215 215 215 215 215 215 215 215 205 205 205 205 205 205 205 205 205 205 205 205 205 205 205 205 195 195 195 195 195 195 195 195 195 195 195 195 195 195 185 185 185 185 185 185 185 185 185 185 185 185 185 185 185 185 185 185 175 175 175 175 175 175 175 175 175 175 175 175 175 175 175 175 165 165 165 165 165 165 165 165 165 165 165 165 165 165 165 165 165 165 165 165 155 155 155 155 155 155 155 155 155 155 155 155 155 155 155 155 155 155 145 145 145 145 145 145 145 145 145 145 145 145 145 145 145 145 145 145 145 145 145 145 135 135 135 135 135 135 135 135 135 135 135 135 135 135 135 135 135 135 135 135 125 125 125 125 125 125 125 125 125 125 125 125 125 125 125 125 125 125 125 125 125 125 125 125 115 115 115 115 115 115 115 115 115 115 115 115 115 115 115 115 115 115 115 115 115 115 105 105 105 105 105 105 105 105 105 105 105 105 105 105 105 105 105 105 105 105 105 105 95 95 95 95 95 95 95 95 95 95 95 95 95 95 95 95 95 95 95 95 95 95 85 85 85 85 85 85 85 85 85 85 85 85 85 85 85 85 85 85 85 85 85 85 85 85 85 85 75 75 75 75 75 75 75 75 75 75 75 75 75 75 75 75 75 75 75 75 65 65 65 65 65 65 65 65 65 65 65 65 65 65 65 65 65 65 65 65 65 65 65 65 65 65 55 55 55 55 55 55 55 55 55 55 55 55 55 55 55 55 55 55 55 55 55 55 55 55 45 45 45 45 45 45 45 45 45 45 45 45 45 45 45 45 45 45 45 45 45 45 45 45 35 35 35 35 35 35 35 35 35 35 35 35 35 35 35 35 35 35 35 35 35 35 35 35 25 25 25 25 25 25 25 25 25 25 25 25 25 25 25 25 25 25 25 25 25 25 25 25 15 15 15 15 15 15 15 15 15 15 15 15 15 15 15 15 15 15 15 15 15 15 15 15 15 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 -5 -5 -5 -5 -5 -5 -5 -5 -5 -5 -5 -5 -5 -5 -5 -5 -5 -5 -5 -5 -5 -5 -5 -5 -5 -15 -15 -15 -15 -15 -15 -15 -15 -15 -15 -15 -15 -15 -15 -15 -15 -15 -15 -15 -25 -25 -25 -25 -25 -25 -25 -25 -25 -25 -25 -25 -25 -25 -25 -25 -25 -25 -25 -25 -25 -25 -25 -25 -35 -35 -35 -35 -35 -35 -35 -35 -35 -35 -35 -35 -35 -35 -35 -35 -35 -35 -35 -35 -35 -35 -35 -35 -45 -45 -45 -45 -45 -45 -45 -45 -45 -45 -45 -45 -45 -45 -45 -45 -45 -45 -45 -45 -45 -45 -45 -45 -55 -55 -55 -55 -55 -55 -55 -55 -55 -55 -55 -55 -55 -55 -55 -55 -55 -55 -55 -55 -55 -55 -55 -55 -65 -65 -65 -65 -65 -65 -65 -65 -65 -65 -65 -65 -65 -65 -65 -65 -65 -65 -65 -65 -65 -65 -65 -65 -75 -75 -75 -75 -75 -75 -75 -75 -75 -75 -75 -75 -75 -75 -75 -75 -75 -75 -75 -75 -75 -75 -75 -75 -75 -75 -85 -85 -85 -85 -85 -85 -85 -85 -85 -85 -85 -85 -85 -85 -85 -85 -85 -85 -85 -85 -95 -95 -95 -95 -95 -95 -95 -95 -95 -95 -95 -95 -95 -95 -95 -95 -95 -95 -95 -95 -95 -95 -95 -95 -95 -95 -105 -105 -105 -105 -105 -105 -105 -105 -105 -105 -105 -105 -105 -105 -105 -105 -105 -105 -105 -105 -105 -105 -115 -115 -115 -115 -115 -115 -115 -115 -115 -115 -115 -115 -115 -115 -115 -115 -115 -115 -115 -115 -115 -115 -125 -125 -125 -125 -125 -125 -125 -125 -125 -125 -125 -125 -125 -125 -125 -125 -125 -125 -125 -125 -125 -125 -135 -135 -135 -135 -135 -135 -135 -135 -135 -135 -135 -135 -135 -135 -135 -135 -135 -135 -135 -135 -135 -135 -135 -135 -145 -145 -145 -145 -145 -145 -145 -145 -145 -145 -145 -145 -145 -145 -145 -145 -145 -145 -145 -145 -155 -155 -155 -155 -155 -155 -155 -155 -155 -155 -155 -155 -155 -155 -155 -155 -155 -155 -155 -155 -155 -155 -165 -165 -165 -165 -165 -165 -165 -165 -165 -165 -165 -165 -165 -165 -165 -165 -165 -165 -175 -175 -175 -175 -175 -175 -175 -175 -175 -175 -175 -175 -175 -175 -175 -175 -175 -175 -175 -175 -185 -185 -185 -185 -185 -185 -185 -185 -185 -185 -185 -185 -185 -185 -185 -185 -195 -195 -195 -195 -195 -195 -195 -195 -195 -195 -195 -195 -195 -195 -195 -195 -195 -195 -205 -205 -205 -205 -205 -205 -205 -205 -205 -205 -205 -205 -205 -205 -215 -215 -215 -215 -215 -215 -215 -215 -215 -215 -215 -215 -215 -215 -215 -215 -225 -225 -225 -225 -225 -225 -225 -225 -225 -225 -225 -225 -235 -235 -235 -235 -235 -235 -235 -235 -235 -235 -235 -235 -235 -235 -245 -245 -245 -245 -245 -245 -245 -245 -255 -255 -255 -255 -255 -255 -255 -255 -255 -255 -265 -265 -265 -265"/>
+      <!-- <eightmodulepositions name="xpos" unit="cm" values="10"/>
+      <eightmodulepositions name="ypos" unit="cm" values="0"/> -->
+      <!-- <eightmodulepositions name="xpos" unit="cm" values="10 20 40 0 -10"/>
+      <eightmodulepositions name="ypos" unit="cm" values="0 -10 -10 -10 0"/> -->
+      <!-- <documentation> -->
+      <twelvemodulepositions name="xpos" unit="cm" values="245 245 245 245 245 245 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 -25 -25 -25 -25 -25 -25 -25 -25 -25 -25 -25 -25 -25 -25 -25 -25 -25 -25 -25 -25 -25 -25 -25 -25 -25 -265 -265 -265 -265 -265 -265 35 35 -35 -35 235 235 225 225 -245 -245 -255 -255"/>
+      <twelvemodulepositions name="ypos" unit="cm" values="45 25 5 -15 -35 -55 255 235 215 195 175 155 135 115 95 75 55 35 -25 -45 -65 -85 -105 -125 -145 -165 -185 -205 -225 -245 -265 255 235 215 195 175 155 135 115 95 75 55 35 -25 -45 -65 -85 -105 -125 -145 -165 -185 -205 -225 -245 -265 45 25 5 -15 -35 -55 5 -15 5 -15 75 -85 105 -115 105 -115 75 -85"/>
+      <!-- <twelvemodulepositions name="xpos" unit="cm" values="35"/>
+      <twelvemodulepositions name="ypos" unit="cm" values="0"/> -->
+      <!-- </documentation> -->
+    </detector>
+
+  </detectors>
+
+  <!--  Definition of the readout segmentation/definition  -->
+  <readouts>
+    <readout name="GFHCALHits">
+      <!-- <segmentation type="CartesianGridXYZ" grid_size_x="2.*mm"  grid_size_y="2*mm" grid_size_z="5*mm" /> -->
+      <segmentation type="NoSegmentation"/>
+
+      <!-- <id>system:8,modulex:6,moduley:6,passive:1,layerx:4,layery:2,layerz:5,x:32:-12,y:-12,z:-8</id> -->
+      <id>system:8,modulex:6,moduley:6,passive:2,layerx:4,layery:1,layerz:5</id>
+    </readout>
+  </readouts>
+
+</lccdd>
