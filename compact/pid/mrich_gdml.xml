@@ -7,5 +7,5 @@
       <gdmlFile ref="mrich.gdml"/>
       <parent name="/world"/>
     </detector>
-  </detectors>  
+  </detectors>
 </lccdd>
