@@ -3,9 +3,9 @@
 
 <lccdd>
   <detectors>
-    <detector id="BackwardRICH_ID" name="PFRICH" type="DD4hep_GdmlDetector" vis="InvisibleWithDaughters">
+    <detector id="BackwardRICH_ID" name="PFRICH" type="DD4hep_GdmlDetector">
       <gdmlFile ref="pfrich.gdml">
-      <parent name="/world"/>
+      <parent name="/world_volume"/>
     </detector>
   </detectors>
 </lccdd>
