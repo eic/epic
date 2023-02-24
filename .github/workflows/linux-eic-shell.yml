@@ -128,10 +128,11 @@ jobs:
 
   trigger-geoviewer:
     runs-on: ubuntu-latest
-    needs: [xmllint-after-build]
+    needs:
+      - xmllint-after-build
+      - list-detector-configs
     strategy:
-      matrix:
-        detector_config: [epic_arches, epic_brycecanyon]
+      matrix: ${{ fromJson(needs.list-detector-configs.outputs.configs) }}
     steps:
     - uses: eic/trigger-gitlab-ci@v2
       id: trigger
@@ -143,7 +144,7 @@ jobs:
         variables: |
           DETECTOR_REPOSITORYURL=${{ github.server_url }}/${{ github.repository }}
           DETECTOR_REPOSITORYREF=${{ github.ref }}
-          DETECTOR_CONFIG=${{ matrix.detector_config }}
+          DETECTOR_CONFIG=${{ github.repository }}_${{ matrix.detector_config }}
           DETECTOR_VERSION=${{ github.event.pull_request.head.ref || github.ref_name }}
           GITHUB_REPOSITORY=${{ github.repository }}
           GITHUB_SHA=${{ github.event.pull_request.head.sha || github.sha }}
@@ -474,12 +475,10 @@ jobs:
 
   trigger-detector-benchmarks:
     runs-on: ubuntu-latest
-    needs:
-      - check-overlap-tgeo
-      - check-overlap-geant4-fast
-      - list-detector-configs
+    needs: [check-overlap-tgeo, check-overlap-geant4-fast]
     strategy:
-      matrix: ${{ fromJson(needs.list-detector-configs.outputs.configs) }}
+      matrix:
+        detector_config: [epic_arches, epic_brycecanyon]
     steps:
     - uses: eic/trigger-gitlab-ci@v2
       id: trigger
