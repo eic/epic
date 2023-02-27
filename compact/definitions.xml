@@ -613,6 +613,7 @@ Service gaps in FW direction (before endcapP ECAL) and BW direction (before endc
     </comment>
 
     <constant name="tracker_region_rmax"   value="EcalBarrel_rmin"/>
-    <constant name="tracker_region_zmax"   value="EcalEndcapN_zmin"/>
+    <constant name="tracker_region_zmax"   value="+EcalEndcapP_zmin"/>
+    <constant name="tracker_region_zmin"   value="-EcalEndcapN_zmin"/>
 
   </define>
