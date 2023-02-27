@@ -29,7 +29,7 @@ def readline_nonblocking(output):
 parser = argparse.ArgumentParser()
 
 parser.add_argument('-c', '--compact-file', type=str, dest='compact',
-        default=f'{os.getenv("DETECTOR_PATH")}/{os.getenv("DETECTOR")}.xml'
+        default=f'{os.getenv("DETECTOR_PATH")}/{os.getenv("DETECTOR")}.xml',
         help='Top level compact file for detectors')
 
 parser.add_argument('-s', '--skip', type=int,
