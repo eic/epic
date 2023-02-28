@@ -83,7 +83,7 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
   double mirrorRmin      = mirrorsElem.attr<double>(_Unicode(rmin));
   double mirrorRmax      = mirrorsElem.attr<double>(_Unicode(rmax));
   double mirrorPhiw      = mirrorsElem.attr<double>(_Unicode(phiw));
-  int    spliceMode      = mirrorsElem.attr<int>(_Unicode(splice_mode)); 
+  int    spliceMode      = mirrorsElem.attr<int>(_Unicode(splice_mode));
   //double focusTuneZ      = mirrorElem.attr<double>(_Unicode(focus_tune_z));
   //double focusTuneX      = mirrorElem.attr<double>(_Unicode(focus_tune_x));
   // - sensor module
@@ -369,10 +369,10 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
         printf("SECTOR %d  MIRROR %d coordinates (w.r.t IP):\n",isec,iMir);
         printf(" centerZ = %.2f cm\n centerX = %.2f cm\n radius  = %.2f cm\n",mirrorCenterZ,mirrorCenterX,mirrorRadius);
       };
-	
+
 	  mirrorCoords.push_back(std::tuple<double,double,double>(mirrorCenterZ, mirrorCenterX, mirrorRadius ));
-	} // All mirror related information stored/ 
-	
+	} // All mirror related information stored/
+
 	spliceList.clear();
     double imirrorCenterZ[2], imirrorCenterX[2], imirrorRadius[2];
     double spliceBoxSize = 5*vesselRmax2;
@@ -451,15 +451,15 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
     iMir=0;
     for(auto mirrorC=mirrorCoords.begin();  mirrorC<mirrorCoords.end(); ++mirrorC, ++iMir) {// to be closed
       std::string mirName = "m" + std::to_string(iMir);
-  	  
+
 	  imirrorCenterZ[0] = std::get<0>(mirrorC[0]);
       imirrorCenterX[0] = std::get<1>(mirrorC[0]);
       imirrorRadius[0]  = std::get<2>(mirrorC[0]);
-	  
+
 	  // spherical mirror patch cuts and rotation
       double mirrorThetaRot = std::asin(imirrorCenterX[0] / imirrorRadius[0]);
       double mirrorTheta1   = mirrorThetaRot - std::asin((imirrorCenterX[0] - mirrorRmin) / imirrorRadius[0]);
-      double mirrorTheta2   = mirrorThetaRot + std::asin((mirrorRmax - imirrorCenterX[0]) / imirrorRadius[0]);	  
+      double mirrorTheta2   = mirrorThetaRot + std::asin((mirrorRmax - imirrorCenterX[0]) / imirrorRadius[0]);
       // if debugging, draw full sphere
       if (debugMirror) {
         mirrorTheta1 = 0;
@@ -519,7 +519,7 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
       if (isec == 0)
         desc.add(Constant("DRICH_mirror_radius", +iMir+"_" +std::to_string(imirrorRadius[0])));
 	} //end of mirror loop
-	 
+
     // BUILD SENSORS ====================================================================
 
     // if debugging sphere properties, restrict number of sensors drawn
