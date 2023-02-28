@@ -95,7 +95,7 @@ jobs:
         platform-release: "jug_xl:nightly"
         run: |
           CC=${{ matrix.CC }} CXX=${{ matrix.CXX }} cmake -B build -S . -DCMAKE_INSTALL_PREFIX=${PREFIX} -DCMAKE_C_COMPILER_LAUNCHER=ccache -DCMAKE_CXX_COMPILER_LAUNCHER=ccache
-          cmake --build build -- -j 2 install
+          cmake --build build -- -k -j 2 install
     - uses: actions/upload-artifact@v3
       with:
         name: build-${{ matrix.CC }}-full-eic-shell
@@ -128,10 +128,11 @@ jobs:
 
   trigger-geoviewer:
     runs-on: ubuntu-latest
-    needs: [xmllint-after-build]
+    needs:
+      - xmllint-after-build
+      - list-detector-configs
     strategy:
-      matrix:
-        detector_config: [epic_arches, epic_brycecanyon]
+      matrix: ${{ fromJson(needs.list-detector-configs.outputs.configs) }}
     steps:
     - uses: eic/trigger-gitlab-ci@v2
       id: trigger
@@ -143,7 +144,7 @@ jobs:
         variables: |
           DETECTOR_REPOSITORYURL=${{ github.server_url }}/${{ github.repository }}
           DETECTOR_REPOSITORYREF=${{ github.ref }}
-          DETECTOR_CONFIG=${{ matrix.detector_config }}
+          DETECTOR_CONFIG=epic_${{ matrix.detector_config }}
           DETECTOR_VERSION=${{ github.event.pull_request.head.ref || github.ref_name }}
           GITHUB_REPOSITORY=${{ github.repository }}
           GITHUB_SHA=${{ github.event.pull_request.head.sha || github.sha }}

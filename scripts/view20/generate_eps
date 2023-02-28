@@ -66,9 +66,9 @@ gs -o ${FILE_TAG}.pdf -sDEVICE=pdfwrite \
   -f ${FILE_TAG}_full.pdf
 pdftoppm ${FILE_TAG}.pdf ${FILE_TAG} -png -singlefile -cropbox -thinlinemode solid -aaVector yes
 
-#npdet_info print EcalEndcapN_z0 --value-only ../../athena.xml
+#npdet_info print EcalEndcapN_z0 --value-only ../../${DETECTOR}.xml
 #180.5 cm
-zcut=$(npdet_info print EcalEndcapN_z0 --value-only ${DETECTOR_PATH}/athena.xml )
+zcut=$(npdet_info print EcalEndcapN_z0 --value-only ${DETECTOR_PATH}/${DETECTOR}.xml )
 NMOD1=$(npdet_info print EcalEndcapN_NModules_Sector1 --value-only ${DETECTOR_PATH}/calorimeters.xml )
 NMOD2=$(npdet_info print EcalEndcapN_NModules_Sector2 --value-only ${DETECTOR_PATH}/calorimeters.xml )
 

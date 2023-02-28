@@ -18,20 +18,43 @@
 #include "Math/Point2D.h"
 #include "TGeoPolygon.h"
 #include "XML/Layering.h"
+#include <functional>
 
 using namespace std;
 using namespace dd4hep;
-using namespace dd4hep::detail;
 
 typedef ROOT::Math::XYPoint Point;
 // fiber placement helpers, defined below
-vector<vector<Point>> fiberPositions(double radius, double x_spacing, double z_spacing, double x, double z, double phi,
-                                     double spacing_tol = 1e-2);
+struct FiberGrid {
+  int ix = 0, iy = 0;
+  vector<Point> points;
+  Point mean_centroid = Point(0., 0.);
+  Assembly *assembly_ptr = nullptr;
+
+  // initialize with grid id and points
+  FiberGrid(int i, int j, const vector<Point> &pts) : ix(i), iy(j), points(pts) {
+    if (pts.empty()) {
+      return;
+    }
+
+    double mx = 0., my = 0.;
+    for (auto &p : pts) {
+      mx += p.x();
+      my += p.y();
+    }
+    mx /= static_cast<double>(pts.size());
+    my /= static_cast<double>(pts.size());
+    mean_centroid = Point(mx, my);
+  };
+};
+
+vector<Point> fiberPositions(double r, double sx, double sz, double trx, double trz, double phi,
+                             bool shift_first = false, double stol = 1e-2);
 std::pair<int, int>   getNdivisions(double x, double z, double dx, double dz);
-vector<tuple<int, Point, Point, Point, Point>> gridPoints(int div_x, int div_z, double x, double z, double phi);
+vector<FiberGrid> gridPoints(int div_x, int div_z, double x, double z, double phi);
 
 // geometry helpers
-void buildFibers(Detector& desc, SensitiveDetector& sens, Volume& mother, xml_comp_t x_fiber,
+void buildFibers(Detector& desc, SensitiveDetector& sens, Volume& mother, int layer_nunber, xml_comp_t x_fiber,
                  const std::tuple<double, double, double, double>& dimensions);
 void buildSupport(Detector& desc, Volume& mother, xml_comp_t x_support,
                   const std::tuple<double, double, double, double>& dimensions);
@@ -116,7 +139,7 @@ static Ref_t create_detector(Detector& desc, xml_h e, SensitiveDetector sens)
 
           // build fibers
           if (x_slice.hasChild(_Unicode(fiber))) {
-            buildFibers(desc, sens, s_vol, x_slice.child(_Unicode(fiber)), {s_trd_x1, s_thick, l_dim_y, hphi});
+            buildFibers(desc, sens, s_vol, l_num, x_slice.child(_Unicode(fiber)), {s_trd_x1, s_thick, l_dim_y, hphi});
           }
 
           if (x_slice.isSensitive()) {
@@ -174,7 +197,7 @@ static Ref_t create_detector(Detector& desc, xml_h e, SensitiveDetector sens)
   return sdet;
 }
 
-void buildFibers(Detector& desc, SensitiveDetector& sens, Volume& s_vol, xml_comp_t x_fiber,
+void buildFibers(Detector& desc, SensitiveDetector& sens, Volume& s_vol, int layer_number, xml_comp_t x_fiber,
                  const std::tuple<double, double, double, double>& dimensions)
 {
   auto [s_trd_x1, s_thick, s_length, hphi] = dimensions;
@@ -192,72 +215,86 @@ void buildFibers(Detector& desc, SensitiveDetector& sens, Volume& s_vol, xml_com
   // SiPM chip (for GlueX 13mmx13mm: 4x4 grid 3mmx3mm with 3600 50×50 μm pixels each)
   // See, e.g., https://arxiv.org/abs/1801.03088 Fig. 2d
 
-  // Calculate number of divisions
-  auto grid_div = getNdivisions(s_trd_x1, s_thick, 2.0 * cm, 2.0 * cm);
-  // Calculate polygonal grid coordinates (vertices)
-  auto   grid_vtx = gridPoints(grid_div.first, grid_div.second, s_trd_x1, s_thick, hphi);
-  double f_radius_core = f_radius-f_cladding_thickness;
+  // fiber and its cladding
+  double f_radius_core = f_radius - f_cladding_thickness;
   Tube   f_tube_clad(f_radius_core, f_radius, s_length);
   Volume f_vol_clad("fiber_vol", f_tube_clad, desc.material(x_fiber.materialStr()));
   Tube   f_tube_core(0, f_radius_core, s_length);
   Volume f_vol_core("fiber_core_vol", f_tube_core, desc.material(x_fiber.materialStr()));
-
-  vector<int> f_id_count(grid_div.first * grid_div.second, 0);
-  auto        f_pos = fiberPositions(f_radius, f_spacing_x, f_spacing_z, s_trd_x1, s_thick, hphi);
-  // std::cout << f_pos.size() << " lines, ~" << f_pos.front().size() << " fibers each line" << std::endl;
-  for (size_t il = 0; il < f_pos.size(); ++il) {
-    auto& line = f_pos[il];
-    if (line.empty()) {
-      continue;
-    }
-    double l_pos_y = line.front().y();
-    // use assembly as intermediate volume container to reduce number of daughter volumes
-    Assembly lfibers_clad(Form("fiber_clad_array_line_%lu", il));
-    Assembly lfibers_core(Form("fiber_core_array_line_%lu", il));
-    for (auto& p : line) {
-      int f_grid_id = -1;
-      int f_id      = -1;
-      // Check to which grid fiber belongs to
-      for (auto& poly_vtx : grid_vtx) {
-        if (p.y() != l_pos_y) {
-          std::cerr << Form("Expected the same y position from a same line: %.2f, but got %.2f", l_pos_y, p.y())
-                    << std::endl;
-          continue;
-        }
-        auto [grid_id, vtx_a, vtx_b, vtx_c, vtx_d] = poly_vtx;
-        double poly_x[4]                           = {vtx_a.x(), vtx_b.x(), vtx_c.x(), vtx_d.x()};
-        double poly_y[4]                           = {vtx_a.y(), vtx_b.y(), vtx_c.y(), vtx_d.y()};
-        double f_xy[2]                             = {p.x(), p.y()};
-
-        TGeoPolygon poly(4);
-        poly.SetXY(poly_x, poly_y);
-        poly.FinishPolygon();
-
-        if (poly.Contains(f_xy)) {
-          f_grid_id = grid_id;
-          f_id      = f_id_count[grid_id];
-          f_id_count[grid_id]++;
-        }
-      }
-
-      if (x_fiber.isSensitive()) {
-        f_vol_core.setSensitiveDetector(sens);
-      }
-      f_vol_core.setAttributes(desc, x_fiber.regionStr(), x_fiber.limitsStr(), x_fiber.visStr());
-
-      // Fiber placement
-      // Transform3D f_tr(RotationZYX(0,0,M_PI*0.5),Position(p.x(), 0, p.y()));
-      // PlacedVolume fiber_phv = s_vol.placeVolume(f_vol, Position(p.x(), 0., p.y()));
-      PlacedVolume core_phv = lfibers_core.placeVolume(f_vol_core, Position(p.x(), 0., 0.));
-      core_phv.addPhysVolID(f_id_grid, f_grid_id + 1).addPhysVolID(f_id_fiber, f_id + 1);
-      lfibers_clad.placeVolume(f_vol_clad, Position(p.x(), 0., 0.));
-    }
-    lfibers_core.ptr()->Voxelize("");
-    lfibers_clad.ptr()->Voxelize("");
-    Transform3D l_tr(RotationZYX(0, 0, M_PI * 0.5), Position(0., 0, l_pos_y));
-    s_vol.placeVolume(lfibers_core, l_tr);
-    s_vol.placeVolume(lfibers_clad, l_tr);
+  if (x_fiber.isSensitive()) {
+    f_vol_core.setSensitiveDetector(sens);
   }
+  f_vol_core.setAttributes(desc, x_fiber.regionStr(), x_fiber.limitsStr(), x_fiber.visStr());
+
+
+  // Calculate number of divisions
+  auto        grid_div = getNdivisions(s_trd_x1, s_thick, 2.0 * cm, 2.0 * cm);
+  // Calculate polygonal grid coordinates (vertices)
+  auto        grids = gridPoints(grid_div.first, grid_div.second, s_trd_x1, s_thick, hphi);
+  vector<int> f_id_count(grid_div.first * grid_div.second, 0);
+  auto        f_pos = fiberPositions(f_radius, f_spacing_x, f_spacing_z, s_trd_x1, s_thick, hphi, (layer_number % 2 == 0));
+  // a helper struct to speed up searching
+  struct Fiber {
+    Point pos;
+    bool assigned = false;
+    Fiber (const Point &p) : pos(p) {};
+  };
+  std::vector<Fiber> fibers(f_pos.begin(), f_pos.end());
+
+  // build assembly for each grid and put fibers in
+  for (auto &gr : grids) {
+    Assembly grid_vol(Form("fiber_grid_%i_%i", gr.ix, gr.iy));
+
+    // loop over all fibers that are not assigned to a grid
+    int f_id = 1;
+    for (auto &fi : fibers) {
+      if (fi.assigned) {
+        continue;
+      }
+
+      // use TGeoPolygon to help check if fiber is inside a grid
+      TGeoPolygon poly(gr.points.size());
+      vector<double> vx, vy;
+      transform(gr.points.begin(), gr.points.end(), back_inserter(vx), mem_fn(&Point::x));
+      transform(gr.points.begin(), gr.points.end(), back_inserter(vy), mem_fn(&Point::y));
+      poly.SetXY(vx.data(), vy.data());
+      poly.FinishPolygon();
+
+      double f_xy[2] = {fi.pos.x(), fi.pos.y()};
+      if (not poly.Contains(f_xy)) {
+        continue;
+      }
+
+      // place fiber in grid
+      auto p = fi.pos - gr.mean_centroid;
+      auto core_phv = grid_vol.placeVolume(f_vol_core, Position(p.x(), p.y(), 0.));
+      core_phv.addPhysVolID(f_id_fiber, f_id);
+      grid_vol.placeVolume(f_vol_clad, Position(p.x(), p.y(), 0.));
+      fi.assigned = true;
+      f_id ++;
+    }
+
+    // only add this if this grid has fibers
+    if (f_id > 1) {
+        // fiber is along y-axis of the layer volume, so grids are arranged on X-Z plane
+        Transform3D gr_tr(RotationZYX(0., 0., M_PI*0.5), Position(gr.mean_centroid.x(), 0., gr.mean_centroid.y()));
+        auto grid_phv = s_vol.placeVolume(grid_vol, gr_tr);
+        grid_phv.addPhysVolID(f_id_grid, gr.ix + gr.iy * grid_div.first + 1);
+        grid_vol.ptr()->Voxelize("");
+    }
+  }
+
+  /*
+  // sanity check
+  size_t missing_fibers = 0;
+  for (auto &fi : fibers) {
+    if (not fi.assigned) {
+      missing_fibers++;
+    }
+  }
+  std::cout << "built " << fibers.size() << " fibers, "
+            << missing_fibers << " of them failed to find a grid" << std::endl;
+  */
 }
 
 // DAWN view seems to have some issue with overlapping solids even if they were unions
@@ -350,36 +387,37 @@ void buildSupport(Detector& desc, Volume& mod_vol, xml_comp_t x_support,
 }
 
 // Fill fiber lattice into trapezoid starting from position (0,0) in x-z coordinate system
-vector<vector<Point>> fiberPositions(double radius, double x_spacing, double z_spacing, double x, double z, double phi,
-                                     double spacing_tol)
+vector<Point> fiberPositions(double r, double sx, double sz, double trx, double trz, double phi, bool shift, double stol)
 {
-  // z_spacing - distance between fiber layers in z
-  // x_spacing - distance between fiber centers in x
-  // x - half-length of the shorter (bottom) base of the trapezoid
-  // z - height of the trapezoid
-  // phi - angle between z and trapezoid arm
+  // r      - fiber radius
+  // sx, sz - spacing between fibers in x, z
+  // trx    - half-length of the shorter (bottom) base of the trapezoid
+  // trz    - height of the trapezoid
+  // phi    - angle between z and trapezoid arm
+  // stol   - spacing tolerance
 
-  vector<vector<Point>> positions;
-  int z_layers = floor((z / 2 - radius - spacing_tol) / z_spacing); // number of layers that fit in z/2
+  vector<Point> positions;
+  int z_layers = floor((trz / 2 - r - stol) / sz); // number of layers that fits in half trapezoid-z
 
-  double z_pos = 0.;
-  double x_pos = 0.;
+  double px = 0., pz = 0.;
+  int start_line = shift ? 1 : 0;
 
   for (int l = -z_layers; l < z_layers + 1; l++) {
     vector<Point> xline;
-    z_pos        = l * z_spacing;
-    double x_max = x + (z / 2. + z_pos) * tan(phi) - spacing_tol; // calculate max x at particular z_pos
-    (l % 2 == 0) ? x_pos = 0. : x_pos = x_spacing / 2;            // account for spacing/2 shift
+    pz           = l * sz;
+    double x_max = trx + (trz / 2. + pz) * tan(phi) - stol; // calculate max x at particular z_pos
+    (abs(l) % 2 == start_line) ? px = 0. : px = sx / 2;          // account for spacing/2 shift
 
-    while (x_pos < (x_max - radius)) {
-      xline.push_back(Point(x_pos, z_pos));
-      if (x_pos != 0.)
-        xline.push_back(Point(-x_pos, z_pos)); // using symmetry around x=0
-      x_pos += x_spacing;
+    while (px < (x_max - r)) {
+      xline.push_back(Point(px, pz));
+      if (px != 0.)
+        xline.push_back(Point(-px, pz)); // using symmetry around x=0
+      px += sx;
     }
+
     // Sort fiber IDs for a better organization
     sort(xline.begin(), xline.end(), [](const Point& p1, const Point& p2) { return p1.x() < p2.x(); });
-    positions.emplace_back(std::move(xline));
+    positions.insert(positions.end(), xline.begin(), xline.end());
   }
   return positions;
 }
@@ -418,13 +456,12 @@ std::pair<int, int> getNdivisions(double x, double z, double dx, double dz)
 }
 
 // Calculate dimensions of the polygonal grid in the cartesian coordinate system x-z
-vector<tuple<int, Point, Point, Point, Point>> gridPoints(int div_x, int div_z, double x, double z, double phi)
+vector<FiberGrid> gridPoints(int div_x, int div_z, double x, double z, double phi)
 {
   // x, z and phi defined as in vector<Point> fiberPositions
   // div_x, div_z - number of divisions in x and z
+  vector<FiberGrid> results;
   double dz = z / div_z;
-
-  std::vector<std::tuple<int, Point, Point, Point, Point>> points;
 
   for (int iz = 0; iz < div_z + 1; iz++) {
     for (int ix = 0; ix < div_x + 1; ix++) {
@@ -445,19 +482,17 @@ vector<tuple<int, Point, Point, Point, Point>> gridPoints(int div_x, int div_z, 
       double C_x = B_x + dx_for_z_plus_1;
       double D_x = A_x + dx_for_z;
 
-      int id = ix + div_x * iz;
-
       auto A = Point(A_x, A_z);
       auto B = Point(B_x, B_z);
       auto C = Point(C_x, C_z);
       auto D = Point(D_x, D_z);
 
       // vertex points filled in the clock-wise direction
-      points.push_back(make_tuple(id, A, B, C, D));
+      results.emplace_back(FiberGrid(ix, iz, {A, B, C, D}));
     }
   }
 
-  return points;
+  return results;
 }
 
 DECLARE_DETELEMENT(epic_EcalBarrelInterlayers, create_detector)
