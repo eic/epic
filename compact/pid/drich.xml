@@ -17,8 +17,7 @@
 <!-- snout geometry: cone with front radius rmax0 and back radius of rmax1 -->
 <constant name="DRICH_rmax0"              value="90.0*cm"/>
 <constant name="DRICH_snout_length"       value="20.0*cm"/>
-<constant name="DRICH_snout_slope"        value="0.733"/> <!--90 cm Aerogel and dRICH entrance position 195 cm are fixed and 200 mrad cone added-->
-<constant name="DRICH_rmax1"              value="DRICH_rmax0 + DRICH_snout_length * DRICH_snout_slope"/>
+<constant name="DRICH_rmax1"              value="DRICH_rmax0 + DRICH_snout_length * (tan(0.200+atan(DRICH_rmax0/DRICH_zmin))) "/>
 <!-- tank geometry: cylinder, holding the majority of detector components -->
 <constant name="DRICH_rmax2"              value="ForwardPIDRegion_rmax"/>  <!-- cylinder radius -->
 <!-- aerogel+filter geometry -->
