@@ -1,5 +1,5 @@
 <!-- SPDX-License-Identifier: LGPL-3.0-or-later -->
-<!-- Copyright (C) 2023 Christopher Dilks, Chandradoy Chatterjee -->
+<!-- Copyright (C) 2023 Christopher Dilks, Chandradoy Chatterjee, Junhuai Xu -->
 
 <lccdd>
 
@@ -25,14 +25,14 @@
 <constant name="DRICH_airgap_thickness"   value="0.01*mm"/> <!-- air gap between aerogel and filter -->
 <constant name="DRICH_filter_thickness"   value="0.3*mm"/>  <!-- filter thickness -->
 <!-- sensor geometry; model = S13361-3050NE-08 SiPM -->
-<constant name="DRICH_sensor_size"           value="25.8*mm"/> <!-- full length of the sensor side FIXME: resin base should be this size -->
-<constant name="DRICH_pixel_gap"             value="0.2*mm"/> <!-- size of gaps between adjacent pixels AND gaps between edge pixels and sensor side -->
-<constant name="DRICH_sensor_sensitive_size" value="DRICH_sensor_size - DRICH_pixel_gap"/> <!-- side length of photosensitive surface (to be segmented) -->
-<constant name="DRICH_sensor_thickness"      value="1.34*mm"/>  <!-- sensor thickness FIXME: use the real thickness + resin -->
-<constant name="DRICH_resin_thickness"       value="0.01*mm"/>  <!-- resin thickness FIXME: use the real resin thickness -->
-<constant name="DRICH_num_px"                value="8"/>       <!-- number of pixels along one side of the sensor -->
-<constant name="DRICH_pixel_size"            value="3.0*mm"/>  <!-- a single SiPM pixel size -->
-<constant name="DRICH_pixel_pitch"           value="DRICH_pixel_size + DRICH_pixel_gap"/>  <!-- center-to-center distance between SiPMs in a 8x8 panel -->
+<constant name="DRICH_sensor_resin_size"      value="25.8*mm"/> <!-- full length of the sensor+resin side -->
+<constant name="DRICH_pixel_gap"              value="0.2*mm"/> <!-- size of gaps between adjacent pixels AND gaps between edge pixels and sensor side -->
+<constant name="DRICH_sensor_size"            value="DRICH_sensor_resin_size - 2*DRICH_pixel_gap"/> <!-- side length of photosensitive surface (to be segmented) -->
+<constant name="DRICH_sensor_thickness"       value="0.1*mm"/> <!-- sensor thickness -->
+<constant name="DRICH_sensor_resin_thickness" value="1.35*mm"/> <!-- sensor+resin thickness -->
+<constant name="DRICH_num_px"                 value="8"/> <!-- number of pixels along one side of the sensor -->
+<constant name="DRICH_pixel_size"             value="3.0*mm"/> <!-- a single SiPM pixel size -->
+<constant name="DRICH_pixel_pitch"            value="DRICH_pixel_size + DRICH_pixel_gap"/> <!-- center-to-center distance between SiPMs in a 8x8 panel -->
 <!-- settings and switches -->
 <comment>
 - `DRICH_debug_optics`:    1 = all components become vacuum, except for mirrors; test opticalphotons from IP
@@ -176,7 +176,7 @@
 
 <!-- /detectors/detector/sensors/module -->
 <documentation level="10">
-##### Sensor module
+##### Sensor module: sensitive module + resin base
 - dimensions:
   - `side`: side length of the square module
   - `thickness`: thickness of the sensor module
@@ -189,17 +189,16 @@
   material="AirOptical"
   surface="SensorSurface_DRICH"
   vis="DRICH_sensor_vis"
-  side="DRICH_sensor_sensitive_size"
+  side="DRICH_sensor_size"
   thickness="DRICH_sensor_thickness"
   gap="0.3*mm"
   />
 <resin
   material="Epoxy"
-  surface="SensorSurface_DRICH"
-  vis="AirOptical"
-  thickness="DRICH_resin_thickness"
+  vis="DRICH_vessel_vis"
+  side="DRICH_sensor_resin_size"
+  thickness="DRICH_sensor_resin_thickness"
   />
-
 
 
 <!-- /detectors/detector/sensors/{sphere,sphericalpatch} -->
@@ -254,4 +253,5 @@
     <id>system:8,sector:3,module:12,x:32:-16,y:-16</id>
   </readout>
 </readouts>
+
 </lccdd>

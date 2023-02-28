@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: LGPL-3.0-or-later
-// Copyright (C) 2022 Christopher Dilks, Junhuai Xu
+// Copyright (C) 2023 Christopher Dilks, Junhuai Xu
 
 //==========================================================================
 //  dRICH: Dual Ring Imaging Cherenkov Detector
@@ -95,11 +95,11 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
   double sensorThickness = sensorElem.attr<double>(_Unicode(thickness));
   auto   readoutName     = detElem.attr<std::string>(_Unicode(readout));
   // - sensor resin
-  auto   resinElem      = detElem.child(_Unicode(sensors)).child(_Unicode(resin));
-  auto   resinMat       = desc.material(resinElem.attr<std::string>(_Unicode(material)));
-  auto   resinVis       = desc.visAttributes(resinElem.attr<std::string>(_Unicode(vis)));
-  double resinThickness = resinElem.attr<double>(_Unicode(thickness));
-  auto   resinSurf      = surfMgr.opticalSurface(resinElem.attr<std::string>(_Unicode(surface)));
+  auto   resinElem       = detElem.child(_Unicode(sensors)).child(_Unicode(resin));
+  auto   resinMat        = desc.material(resinElem.attr<std::string>(_Unicode(material)));
+  auto   resinVis        = desc.visAttributes(resinElem.attr<std::string>(_Unicode(vis)));
+  double resinSide       = resinElem.attr<double>(_Unicode(side));
+  double resinThickness  = resinElem.attr<double>(_Unicode(thickness));
   // - sensor sphere
   auto   sensorSphElem    = detElem.child(_Unicode(sensors)).child(_Unicode(sphere));
   double sensorSphRadius  = sensorSphElem.attr<double>(_Unicode(radius));
@@ -275,7 +275,7 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
   // TODO [low-priority]: define skin properties for aerogel and filter
   // FIXME: radiatorPitch might not be working correctly (not yet used)
   auto radiatorPos      = Position(0., 0., radiatorFrontplane + 0.5 * aerogelThickness) + originFront;
-  auto aerogelPlacement = Translation3D(radiatorPos.x(), radiatorPos.y(), radiatorPos.z()) * // re-center to originFront
+  auto aerogelPlacement = Translation3D(radiatorPos) * // re-center to originFront
                           RotationY(radiatorPitch); // change polar angle to specified pitch
   auto       aerogelPV = gasvolVol.placeVolume(aerogelVol, aerogelPlacement);
   DetElement aerogelDE(det, "aerogel_de", 0);
@@ -287,16 +287,16 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
   if (!debugOptics) {
 
     auto airgapPlacement =
-        Translation3D(radiatorPos.x(), radiatorPos.y(), radiatorPos.z()) * // re-center to originFront
-        RotationY(radiatorPitch) *                                         // change polar angle
-        Translation3D(0., 0., (aerogelThickness + airgapThickness) / 2.);  // move to aerogel backplane
+        Translation3D(radiatorPos) *                                      // re-center to originFront
+        RotationY(radiatorPitch) *                                        // change polar angle
+        Translation3D(0., 0., (aerogelThickness + airgapThickness) / 2.); // move to aerogel backplane
     auto airgapPV = gasvolVol.placeVolume(airgapVol, airgapPlacement);
     DetElement airgapDE(det, "airgap_de", 0);
     airgapDE.setPlacement(airgapPV);
 
     auto filterPlacement =
         Translation3D(0., 0., airgapThickness) *                           // add an air gap
-        Translation3D(radiatorPos.x(), radiatorPos.y(), radiatorPos.z()) * // re-center to originFront
+        Translation3D(radiatorPos) *                                       // re-center to originFront
         RotationY(radiatorPitch) *                                         // change polar angle
         Translation3D(0., 0., (aerogelThickness + filterThickness) / 2.);  // move to aerogel backplane
     auto filterPV = gasvolVol.placeVolume(filterVol, filterPlacement);
@@ -321,14 +321,6 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
   desc.add(Constant("DRICH_gasvol_material", gasvolMat.ptr()->GetName(), "string"));
 
   // SECTOR LOOP //////////////////////////////////////////////////////////////////////
-
-  // initialize sensor centroids (used for mirror parameterization below); this is
-  // the average (x,y,z) of the placed sensors, w.r.t. originFront
-  // - deprecated, but is still here in case we want it later
-  // double sensorCentroidX = 0;
-  // double sensorCentroidZ = 0;
-  // int    sensorCount     = 0;
-
   for (int isec = 0; isec < nSectors; isec++) {
 
     // debugging filters, limiting the number of sectors
@@ -383,8 +375,8 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
 
     // mirror placement transformation (note: transformations are in reverse order)
     auto mirrorPos = Position(mirrorCenterX, 0., mirrorCenterZ) + originFront;
-    auto mirrorPlacement(Translation3D(mirrorPos.x(), mirrorPos.y(), mirrorPos.z()) // re-center to specified position
-                         * RotationY(-mirrorThetaRot) // rotate about vertical axis, to be within vessel radial walls
+    auto mirrorPlacement(Translation3D(mirrorPos) * // re-center to specified position
+                         RotationY(-mirrorThetaRot) // rotate about vertical axis, to be within vessel radial walls
     );
 
     // cut overlaps with other sectors using "pie slice" wedges, to the extent specified
@@ -427,23 +419,20 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
     sensorVol.setVisAttributes(sensorVis);
 
     // solid and volume: single sensor resin
-    Box    resinSolid(sensorSide / 2., sensorSide / 2., resinThickness / 2.);
+    Box    resinSolid(resinSide / 2., resinSide / 2., resinThickness / 2.);
     Volume resinVol(detName + "_resin_" + secName, resinSolid, resinMat);
     resinVol.setVisAttributes(resinVis);
 
-    // // module + resin solids
-    // UnionSolid sensorSolid(moduleSolid, resinSolid, Position(0., 0., (sensorThickness+resinThickness) / 2.));
-    // Volume sensorVol(detName + "_sensor_" + secName,  moduleVol, resinVol);
-    // //sensorVol.setVisAttributes(sensorVis);
-
-
-    auto sensorSphPos = Position(sensorSphCenterX, 0., sensorSphCenterZ) + originFront;
+    // place sensorVol in resinVol
+    auto sensorPV = resinVol.placeVolume(sensorVol,
+        Transform3D(Translation3D(0., 0., resinThickness / 2.0 - sensorThickness / 2.0)));
 
     // sensitivity
     if (!debugOptics || debugOpticsMode == 3)
       sensorVol.setSensitiveDetector(sens);
 
     // reconstruction constants
+    auto sensorSphPos         = Position(sensorSphCenterX, 0., sensorSphCenterZ) + originFront;
     auto sensorSphFinalCenter = sectorRotation * Position(xS, 0.0, zS);
     desc.add(Constant("DRICH_sensor_sph_center_x_" + secName, std::to_string(sensorSphFinalCenter.x())));
     desc.add(Constant("DRICH_sensor_sph_center_y_" + secName, std::to_string(sensorSphFinalCenter.y())));
@@ -511,61 +500,44 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
           patchCut = std::fabs(phiCheck) < sensorSphPatchPhiw;
         if (patchCut) {
 
-          // append sensor position to centroid calculation
-          // if (isec == 0) {
-          //   sensorCentroidX += xCheck;
-          //   sensorCentroidZ += zCheck;
-          //   sensorCount++;
-          // }
-
           // placement (note: transformations are in reverse order)
           // - transformations operate on global coordinates; the corresponding
           //   generator coordinates are provided in the comments
+          // clang-format off
           auto sensorPlacement =
-              sectorRotation *                                                      // rotate about beam axis to sector
-              Translation3D(sensorSphPos.x(), sensorSphPos.y(), sensorSphPos.z()) * // move sphere to reference position
-              RotationX(phiGen) *                                                   // rotate about `zGen`
-              RotationZ(thetaGen) *                                                 // rotate about `yGen`
-              Translation3D(-sensorThickness / 2.0, 0.,
-                            0.) *                      // pull back so sensor active surface is at spherical surface
-              Translation3D(sensorSphRadius, 0., 0.) * // push radially to spherical surface
-              RotationY(M_PI / 2) *                    // rotate sensor to be compatible with generator coords
-              RotationZ(-M_PI / 2);                    // correction for readout segmentation mapping
-          auto sensorPV = gasvolVol.placeVolume(sensorVol, sensorPlacement);
+              sectorRotation *                               // rotate about beam axis to sector
+              Translation3D(sensorSphPos) *                  // move sphere to reference position
+              RotationX(phiGen) *                            // rotate about `zGen`
+              RotationZ(thetaGen) *                          // rotate about `yGen`
+              Translation3D(-resinThickness / 2.0, 0., 0.) * // pull back so sensor active surface is at spherical surface
+              Translation3D(sensorSphRadius, 0., 0.) *       // push radially to spherical surface
+              RotationY(M_PI / 2) *                          // rotate sensor to be compatible with generator coords
+              RotationZ(-M_PI / 2);                          // correction for readout segmentation mapping
+          auto resinPV  = gasvolVol.placeVolume(resinVol, sensorPlacement);
+          // clang-format on
 
           // generate LUT for module number -> sensor position, for readout mapping tests
           // if(isec==0) printf("%d %f %f\n",imod,sensorPV.position().x(),sensorPV.position().y());
 
           // properties
-          sensorPV.addPhysVolID("sector", isec)
-              .addPhysVolID("module", imod); // NOTE: must be consistent with `sensorIDfields`
+          sensorPV.addPhysVolID("sector", isec).addPhysVolID("module", imod); // NOTE: follow `sensorIDfields`
           auto        imodsec    = encodeSensorID(sensorPV.volIDs());
           std::string modsecName = secName + "_" + std::to_string(imod);
-          DetElement  sensorDE(det, "sensor_de_" + modsecName, imodsec);
+          DetElement resinDE(det,  "resin_de_"  + modsecName, imodsec);
+          DetElement sensorDE(det, "sensor_de_" + modsecName, imodsec);
+          resinDE.setPlacement(resinPV);
           sensorDE.setPlacement(sensorPV);
+
           if (!debugOptics || debugOpticsMode == 3) {
             SkinSurface sensorSkin(desc, sensorDE, "sensor_optical_surface_" + modsecName, sensorSurf, sensorVol);
             sensorSkin.isValid();
           }
 
-          auto resinPlacement =
-              sectorRotation *                                                      // rotate about beam axis to sector
-              Translation3D(sensorSphPos.x(), sensorSphPos.y(), sensorSphPos.z()) * // move sphere to reference position
-              RotationX(phiGen) *                                                   // rotate about `zGen`
-              RotationZ(thetaGen) *                                                 // rotate about `yGen`
-              Translation3D((-resinThickness / 2.0+sensorThickness), 0., 0.) * // pull back so sensor resin surface is at spherical surface
-              Translation3D(sensorSphRadius, 0., 0.) *        // push radially to spherical surface
-              RotationY(M_PI / 2) *                           // rotate sensor resin to be compatible with generator coords
-              RotationZ(-M_PI / 2);                           // correction for readout segmentation mapping
-          auto resinPV = gasvolVol.placeVolume(resinVol, resinPlacement);
-
-          DetElement resinDE(det, "resin_de_" + modsecName, imodsec);
-          resinDE.setPlacement(resinPV);
-
-          if (!debugOptics || debugOpticsMode == 3) {
-            SkinSurface resinSkin(desc, resinDE, "resin_optical_surface_" + modsecName, resinSurf, resinVol);
-            resinSkin.isValid();
-          };
+          // TODO: do we need to define a resin surface (as sensorSurf)?
+          // if (!debugOptics || debugOpticsMode == 3) {
+          //   SkinSurface resinSkin(desc, resinDE, "resin_optical_surface_" + modsecName, resinSurf, resinVol);
+          //   resinSkin.isValid();
+          // };
 
           // increment sensor module number
           imod++;
@@ -573,12 +545,6 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
         } // end patch cuts
       }   // end phiGen loop
     }     // end thetaGen loop
-
-    // calculate centroid sensor position
-    // if (isec == 0) {
-    //   sensorCentroidX /= sensorCount;
-    //   sensorCentroidZ /= sensorCount;
-    // }
 
     // END SENSOR MODULE LOOP ------------------------
 
