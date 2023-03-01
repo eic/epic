@@ -1,5 +1,5 @@
 <!-- SPDX-License-Identifier: LGPL-3.0-or-later -->
-<!-- Copyright (C) 2022 Christopher Dilks -->
+<!-- Copyright (C) 2023 Christopher Dilks, Chandradoy Chatterjee -->
 
 <lccdd>
 
@@ -16,9 +16,8 @@
 <constant name="DRICH_num_sectors"        value="6"/>  <!-- number of azimuthal sectors -->
 <!-- snout geometry: cone with front radius rmax0 and back radius of rmax1 -->
 <constant name="DRICH_rmax0"              value="90.0*cm"/>
-<constant name="DRICH_snout_length"       value="20*cm"/>
-<constant name="DRICH_snout_slope"        value="0.73"/>
-<constant name="DRICH_rmax1"              value="DRICH_rmax0 + DRICH_snout_length * DRICH_snout_slope"/>
+<constant name="DRICH_snout_length"       value="20.0*cm"/>
+<constant name="DRICH_rmax1"              value="DRICH_rmax0 + DRICH_snout_length * (tan(0.200+atan(DRICH_rmax0/DRICH_zmin))) "/>  <!--extra 0.200 takes into account the saturated cone of light from aerogel-->
 <!-- tank geometry: cylinder, holding the majority of detector components -->
 <constant name="DRICH_rmax2"              value="ForwardPIDRegion_rmax"/>  <!-- cylinder radius -->
 <!-- aerogel+filter geometry -->
@@ -166,6 +165,8 @@
   <mirror  backplane="DRICH_window_thickness+3.0*cm"  focus_tune_x="50.0*cm"  focus_tune_z="20.0*cm"  />
   <mirror  backplane="DRICH_window_thickness+1.0*cm"  focus_tune_x="30.0*cm"  focus_tune_z="35.0*cm"    />
 </mirrors>
+
+
 <!-- /detectors/detector/sensors -->
 <documentation level="10">
 #### Sensors
@@ -210,15 +211,15 @@
     - `zmin`: z-plane cut
 </documentation>
 <sphere
-  centerz="-80.0*cm"
-  centerx="140.0*cm"
-  radius="120.0*cm"
+  centerz="-50.0*cm"
+  centerx="180.0*cm"
+  radius="110.0*cm"
   />
 <sphericalpatch
-  phiw="12*degree"
-  rmin="DRICH_rmax1 + 1.0*cm"
-  rmax="DRICH_rmax2 - 1.0*cm"
-  zmin="DRICH_snout_length + 3.0*cm"
+  phiw="18*degree"
+  rmin="DRICH_rmax1 + 3.0*cm"
+  rmax="DRICH_rmax2 - 3.0*cm"
+  zmin="DRICH_snout_length + 5.0*cm"
   />
 
 
@@ -246,6 +247,4 @@
     <id>system:8,sector:3,module:12,x:32:-16,y:-16</id>
   </readout>
 </readouts>
-
-
 </lccdd>
