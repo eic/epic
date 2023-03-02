@@ -56,13 +56,26 @@
             Inner_b="EcalEndcapN_Iring_axisB"
             envelope="true"
             ring_material="StainlessSteel"
+            
             ptsX_extrudedpolygon="6.15*cm 6.15*cm 8.2*cm 8.2*cm 6.15*cm 6.15*cm -6.15*cm -6.15*cm -8.2*cm -8.2*cm -6.15*cm -6.15*cm"
             ptsY_extrudedpolygon="6.15*cm 4.1*cm 4.1*cm -4.1*cm -4.1*cm -6.15*cm -6.15*cm -4.1*cm -4.1*cm 4.1*cm 4.1*cm 6.15*cm"
+
             inner_outer_add_posx="1.025 1.025 3.075 3.075 5.125 7.175 7.175 9.225 9.225 -1.025 -1.025 -3.075 -3.075 -5.125 -7.175 -7.175 -9.225 -9.225 -1.025 -1.025 -3.075 -3.075 -5.125 -7.175 -7.175 -9.225 -9.225 1.025 1.025 3.075 3.075 5.125 7.175 7.175 9.225 9.225 9.225 11.275 13.325 15.375 17.425 19.475 44.075 46.125 60.475 60.475 62.525 62.525 62.525 62.525 -9.225 -11.275 -13.325 -15.375 -17.425 -19.475 -44.075 -46.125 -60.475 -60.475 -62.525 -62.525 -62.525 -62.525 -9.225 -11.275 -13.325 -15.375 -17.425 -19.475 -44.075 -46.125 -60.475 -60.475 -62.525 -62.525 -62.525 -62.525 9.225 11.275 13.325 15.375 17.425 19.475 44.075 46.125 60.475 60.475 62.525 62.525 62.525 62.525"
             inner_outer_add_posy="7.175 9.225 7.175 9.225 7.175 7.175 5.125 1.025 3.075 7.175 9.225 7.175 9.225 7.175 7.175 5.125 1.025 3.075 -7.175 -9.225 -7.175 -9.225 -7.175 -7.175 -5.125 -1.025 -3.075 -7.175 -9.225 -7.175 -9.225 -7.175 -7.175 -5.125 -1.025 -3.075 62.525 62.525 62.525 62.525 60.475 60.475 46.125 44.075 19.475 17.425 15.375 13.325 11.275 9.225 62.525 62.525 62.525 62.525 60.475 60.475 46.125 44.075 19.475 17.425 15.375 13.325 11.275 9.225 -62.525 -62.525 -62.525 -62.525 -60.475 -60.475 -46.125 -44.075 -19.475 -17.425 -15.375 -13.325 -11.275 -9.225 -62.525 -62.525 -62.525 -62.525 -60.475 -60.475 -46.125 -44.075 -19.475 -17.425 -15.375 -13.325 -11.275 -9.225"
             sector="1"
             vis_struc="RPVis"
             vis_steel_gap="AnlGray">
+
+          <comment>
+            The position information of extrudedpolygon
+          </comment>
+          
+          <comment>
+            The position information of additional modules to fill the gap
+            between the sensitive region and frame structure.
+          </comment>
+          
+          
           <module
             gx="EcalEndcapN_CrystalModule_width + 2.*EcalEndcapN_CrystalModule_carbon_thickness + 2.*EcalEndcapN_CrystalModule_wrap_thickness"
             gy="EcalEndcapN_CrystalModule_width + 2.*EcalEndcapN_CrystalModule_carbon_thickness + 2.*EcalEndcapN_CrystalModule_wrap_thickness"
@@ -99,7 +112,7 @@
     </comment>
     <readout name="EcalEndcapNHits">
       <segmentation type="NoSegmentation" key="sector"/>
-      <id>system:8,sector:4,row:10,column:10,module:20</id>
+      <id>system:8,sector:4,row:8,column:8</id>
     </readout>
   </readouts>
 </lccdd>
