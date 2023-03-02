@@ -289,65 +289,44 @@ static std::tuple<int, int> add_12surface_disk(Detector& desc, Assembly& env, xm
 
   // Add the modules followd the fillRectangles function
   //
-  int   mid = 0;
-  // int total_id = 0;
+  int mid = 0;
   float half_modx = modSize.x() * 0.5, half_mody = modSize.y() * 0.5;
   auto points = epic::geo::fillRectangles({half_modx, half_mody}, modSize.x(), modSize.y(), rmin, rmax, phimin, phimax);
-  float min_ptsx = 0., max_ptsx = 0., min_ptsy = 0., max_ptsy = 0.; // Find the min/max position X and Y
 
-  // Segment the position list[string] and save them as vector
-  //
-  std::vector<double> inner_outer_posx;
-  std::vector<double> inner_outer_posy;
-
-  pos = 0;
-  while ((pos = iposx.find(delimiter)) != std::string::npos) {
-    token = iposx.substr(0, pos);
-    inner_outer_posx.push_back(atof(token.c_str()));
-    iposx.erase(0, pos + delimiter.length());
+  size_t aposx = 0, aposy = 0;
+  while ((aposx = iposx.find(delimiter)) != std::string::npos) {    
+    token = iposx.substr(0, aposx);
+    auto addpxs = atof(token.c_str());
+    aposy = iposy.find(delimiter);
+    token = iposy.substr(0, aposy);
+    auto addpys = atof(token.c_str());
+    auto add_point = epic::geo::Point(addpxs, addpys);
+    points.push_back(add_point);
+    
+    iposx.erase(0, aposx + delimiter.length());
+    iposy.erase(0, aposy + delimiter.length());
   }
-  inner_outer_posx.push_back(atof(iposx.c_str()));
+  auto addpxs = atof(iposx.c_str());
+  auto addpys = atof(iposy.c_str());
+  auto add_point = epic::geo::Point(addpxs, addpys);
+  points.push_back(add_point);
+  
+  auto [minl_ptsx, maxl_ptsx] = std::minmax_element(points.begin(), points.end(), [](auto a, auto b){ return a.x() < b.x(); });
+  auto [minl_ptsy, maxl_ptsy] = std::minmax_element(points.begin(), points.end(), [](auto a, auto b){ return a.y() < b.y(); });  
 
-  pos = 0;
-  while ((pos = iposy.find(delimiter)) != std::string::npos) {
-    token = iposy.substr(0, pos);
-    inner_outer_posy.push_back(atof(token.c_str()));
-    iposy.erase(0, pos + delimiter.length());
-  }
-  inner_outer_posy.push_back(atof(iposy.c_str()));
-
-  for (auto& p : points) {
-    if (p.x() < min_ptsx)
-      min_ptsx = p.x();
-    if (p.x() > max_ptsx)
-      max_ptsx = p.x();
-    if (p.y() < min_ptsy)
-      min_ptsy = p.y();
-    if (p.y() > max_ptsy)
-      max_ptsy = p.y();
-  }
-
-
+  
   // Place the modules, use row and column ID for each modules
   // row and column ID start from the top left corner
   //
   int row = 0, column = 0;
   for (auto& p : points) {
-    column = (p.x() - min_ptsx) / modSize.x();
-    row = (max_ptsy - p.y()) / modSize.y();
+    column = std::round((p.x() - minl_ptsx[0].x()) / modSize.x());
+    row = std::round((maxl_ptsy[0].y() - p.y()) / modSize.y());
+
     Transform3D tr_local = RotationZYX(NEEMC_Nrot, 0.0, 0.0) * Translation3D(p.x(), p.y(), 0.0);
     auto modPV = (has_envelope ? env_vol.placeVolume(modVol, tr_local) : env.placeVolume(modVol, tr_global * tr_local));
     modPV.addPhysVolID("sector", sector_id).addPhysVolID("row", row).addPhysVolID("column", column);
-  }
-
-  int im = 0;
-  for (auto&& value : inner_outer_posx) {
-    column = (value - min_ptsx) / modSize.x();
-    row = (max_ptsy - inner_outer_posy[im]) / modSize.y();
-    Transform3D add_local = RotationZYX(NEEMC_Nrot, 0.0, 0.0) * Translation3D(value * cm, inner_outer_posy[im] * cm, 0.0);
-    auto modPV = (has_envelope ? env_vol.placeVolume(modVol, add_local) : env.placeVolume(modVol, tr_global * add_local));
-    modPV.addPhysVolID("sector", sector_id).addPhysVolID("row", row).addPhysVolID("column", column);
-    im++;
+    mid++; //remove in the next commit, since we use the row and column instead of module ID
   }
 
   return {sector_id, mid};
