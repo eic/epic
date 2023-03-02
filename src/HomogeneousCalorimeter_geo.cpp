@@ -294,7 +294,7 @@ static std::tuple<int, int> add_12surface_disk(Detector& desc, Assembly& env, xm
   auto points = epic::geo::fillRectangles({half_modx, half_mody}, modSize.x(), modSize.y(), rmin, rmax, phimin, phimax);
 
   size_t aposx = 0, aposy = 0;
-  while ((aposx = iposx.find(delimiter)) != std::string::npos) {    
+  while ((aposx = iposx.find(delimiter)) != std::string::npos) {
     token = iposx.substr(0, aposx);
     auto addpxs = atof(token.c_str());
     aposy = iposy.find(delimiter);
@@ -302,7 +302,7 @@ static std::tuple<int, int> add_12surface_disk(Detector& desc, Assembly& env, xm
     auto addpys = atof(token.c_str());
     auto add_point = epic::geo::Point(addpxs, addpys);
     points.push_back(add_point);
-    
+
     iposx.erase(0, aposx + delimiter.length());
     iposy.erase(0, aposy + delimiter.length());
   }
@@ -310,11 +310,11 @@ static std::tuple<int, int> add_12surface_disk(Detector& desc, Assembly& env, xm
   auto addpys = atof(iposy.c_str());
   auto add_point = epic::geo::Point(addpxs, addpys);
   points.push_back(add_point);
-  
-  auto [minl_ptsx, maxl_ptsx] = std::minmax_element(points.begin(), points.end(), [](auto a, auto b){ return a.x() < b.x(); });
-  auto [minl_ptsy, maxl_ptsy] = std::minmax_element(points.begin(), points.end(), [](auto a, auto b){ return a.y() < b.y(); });  
 
-  
+  auto [minl_ptsx, maxl_ptsx] = std::minmax_element(points.begin(), points.end(), [](auto a, auto b){ return a.x() < b.x(); });
+  auto [minl_ptsy, maxl_ptsy] = std::minmax_element(points.begin(), points.end(), [](auto a, auto b){ return a.y() < b.y(); });
+
+
   // Place the modules, use row and column ID for each modules
   // row and column ID start from the top left corner
   //

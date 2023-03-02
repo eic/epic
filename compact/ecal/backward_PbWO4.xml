@@ -56,7 +56,7 @@
             Inner_b="EcalEndcapN_Iring_axisB"
             envelope="true"
             ring_material="StainlessSteel"
-            
+
             ptsX_extrudedpolygon="6.15*cm 6.15*cm 8.2*cm 8.2*cm 6.15*cm 6.15*cm -6.15*cm -6.15*cm -8.2*cm -8.2*cm -6.15*cm -6.15*cm"
             ptsY_extrudedpolygon="6.15*cm 4.1*cm 4.1*cm -4.1*cm -4.1*cm -6.15*cm -6.15*cm -4.1*cm -4.1*cm 4.1*cm 4.1*cm 6.15*cm"
 
@@ -69,13 +69,13 @@
           <comment>
             The position information of extrudedpolygon
           </comment>
-          
+
           <comment>
             The position information of additional modules to fill the gap
             between the sensitive region and frame structure.
           </comment>
-          
-          
+
+
           <module
             gx="EcalEndcapN_CrystalModule_width + 2.*EcalEndcapN_CrystalModule_carbon_thickness + 2.*EcalEndcapN_CrystalModule_wrap_thickness"
             gy="EcalEndcapN_CrystalModule_width + 2.*EcalEndcapN_CrystalModule_carbon_thickness + 2.*EcalEndcapN_CrystalModule_wrap_thickness"
