@@ -87,7 +87,7 @@ static Ref_t create_detector(Detector& desc, xml::Handle_t handle, SensitiveDete
       sectorModuleNumbers[sector] = nmod;
     }
   };
-  
+
   int sector_id = 1;
   for (xml::Collection_t disk_12surface(plm, _Unicode(disk_12surface)); disk_12surface; ++disk_12surface) {
     // auto [sector, nmod] = add_12surface_disk(desc, assembly, disk_12surface, sens, sector_id++);
@@ -104,7 +104,7 @@ static Ref_t create_detector(Detector& desc, xml::Handle_t handle, SensitiveDete
   for (auto [sector, nrow, ncolumn] : sectorModuleNumbers) {
     desc.add(Constant(Form((detName + "_NModules_Sector%d").c_str(), sector), std::to_string(nrow), std::to_string(ncolumn)));
   }
-  
+
 
   // detector position and rotation
   auto         pos       = get_xml_xyz(detElem, _Unicode(position));
@@ -341,7 +341,7 @@ static std::tuple<int, int, int> add_12surface_disk(Detector& desc, Assembly& en
   int mid = 0;
 
   std::cout << N_row << " " << N_column << std::endl;
-  
+
   for (auto& p : points) {
     column = std::round((p.x() - minl_ptsx[0].x()) / modSize.x());
     row = std::round((maxl_ptsy[0].y() - p.y()) / modSize.y());
