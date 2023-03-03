@@ -38,7 +38,7 @@ using namespace dd4hep;
  */
 
 // headers
-static std::tuple<int, int> add_12surface_disk(Detector& desc, Assembly& env, xml::Collection_t& plm,
+static std::tuple<int, int, int> add_12surface_disk(Detector& desc, Assembly& env, xml::Collection_t& plm,
                                                SensitiveDetector& sens, int id);
 
 // helper function to get x, y, z if defined in a xml component
@@ -70,7 +70,16 @@ static Ref_t create_detector(Detector& desc, xml::Handle_t handle, SensitiveDete
   // module placement
   xml::Component     plm = detElem.child(_Unicode(placements));
   std::map<int, int> sectorModuleNumbers;
-  auto               addModuleNumbers = [&sectorModuleNumbers](int sector, int nmod) {
+  // auto               addModuleNumbers = [&sectorModuleNumbers](int sector, int nmod) {
+  //   auto it = sectorModuleNumbers.find(sector);
+  //   if (it != sectorModuleNumbers.end()) {
+  //     it->second += nmod;
+  //   } else {
+  //     sectorModuleNumbers[sector] = nmod;
+  //   }
+  // };
+
+  auto               addModuleNumbers = [&sectorModuleNumbers](int sector, int nrow, int ncolumn) {
     auto it = sectorModuleNumbers.find(sector);
     if (it != sectorModuleNumbers.end()) {
       it->second += nmod;
@@ -78,15 +87,24 @@ static Ref_t create_detector(Detector& desc, xml::Handle_t handle, SensitiveDete
       sectorModuleNumbers[sector] = nmod;
     }
   };
+  
   int sector_id = 1;
   for (xml::Collection_t disk_12surface(plm, _Unicode(disk_12surface)); disk_12surface; ++disk_12surface) {
-    auto [sector, nmod] = add_12surface_disk(desc, assembly, disk_12surface, sens, sector_id++);
-    addModuleNumbers(sector, nmod);
+    // auto [sector, nmod] = add_12surface_disk(desc, assembly, disk_12surface, sens, sector_id++);
+    // addModuleNumbers(sector, nmod);
+
+    auto [sector, nrow, ncolumn] = add_12surface_disk(desc, assembly, disk_12surface, sens, sector_id++);
+    addModuleNumbers(sector, nrow, ncolumn);
   }
 
-  for (auto [sector, nmods] : sectorModuleNumbers) {
-    desc.add(Constant(Form((detName + "_NModules_Sector%d").c_str(), sector), std::to_string(nmods)));
+  // for (auto [sector, nmods] : sectorModuleNumbers) {
+  //   desc.add(Constant(Form((detName + "_NModules_Sector%d").c_str(), sector), std::to_string(nmods)));
+  // }
+
+  for (auto [sector, nrow, ncolumn] : sectorModuleNumbers) {
+    desc.add(Constant(Form((detName + "_NModules_Sector%d").c_str(), sector), std::to_string(nrow), std::to_string(ncolumn)));
   }
+  
 
   // detector position and rotation
   auto         pos       = get_xml_xyz(detElem, _Unicode(position));
@@ -178,7 +196,7 @@ std::tuple<Volume, Position> build_module(Detector& desc, xml::Collection_t& plm
 }
 
 // place 12 surface disk of modules
-static std::tuple<int, int> add_12surface_disk(Detector& desc, Assembly& env, xml::Collection_t& plm,
+static std::tuple<int, int, int> add_12surface_disk(Detector& desc, Assembly& env, xml::Collection_t& plm,
                                                SensitiveDetector& sens, int sid)
 {
   auto [modVol, modSize]             = build_module(desc, plm, sens);
@@ -289,7 +307,6 @@ static std::tuple<int, int> add_12surface_disk(Detector& desc, Assembly& env, xm
 
   // Add the modules followd the fillRectangles function
   //
-  int mid = 0;
   float half_modx = modSize.x() * 0.5, half_mody = modSize.y() * 0.5;
   auto points = epic::geo::fillRectangles({half_modx, half_mody}, modSize.x(), modSize.y(), rmin, rmax, phimin, phimax);
 
@@ -319,6 +336,12 @@ static std::tuple<int, int> add_12surface_disk(Detector& desc, Assembly& env, xm
   // row and column ID start from the top left corner
   //
   int row = 0, column = 0;
+  int N_row =  std::round((maxl_ptsy[0].y() - minl_ptsy[0].y()) / modSize.y());
+  int N_column =  std::round((maxl_ptsx[0].x() - minl_ptsx[0].x()) / modSize.x());
+  int mid = 0;
+
+  std::cout << N_row << " " << N_column << std::endl;
+  
   for (auto& p : points) {
     column = std::round((p.x() - minl_ptsx[0].x()) / modSize.x());
     row = std::round((maxl_ptsy[0].y() - p.y()) / modSize.y());
@@ -329,7 +352,8 @@ static std::tuple<int, int> add_12surface_disk(Detector& desc, Assembly& env, xm
     mid++; //remove in the next commit, since we use the row and column instead of module ID
   }
 
-  return {sector_id, mid};
+  // return {sector_id, mid};
+  return {sector_id, N_row, N_column};
 }
 
 //@}
