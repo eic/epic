@@ -176,4 +176,3 @@ if __name__ == '__main__':
         z = r*np.sinh(eta)
         # print('({:.2f}, {:.2f}, {:.2f})'.format(x, y, z))
         print(material_scan(mat_manager, start_point, (x, y, z)).groupby('material')['thickness'].sum())
-
