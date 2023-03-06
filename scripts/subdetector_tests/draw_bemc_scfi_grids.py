@@ -167,7 +167,7 @@ if __name__ == '__main__':
             id_dicts.append(new_dict)
 
     # plot fibers in the grid
-    fig, ax = plt.subplots(figsize=(12, 12), dpi=360)
+    fig, ax = plt.subplots(figsize=(12, 12), dpi=160)
     # default color cycle
     colors = plt.rcParams['axes.prop_cycle'].by_key()['color']
     for i, ids in enumerate(id_dicts):
@@ -182,8 +182,9 @@ if __name__ == '__main__':
         patches = []
         for fi in fibers:
             patches.append(Circle((fi[0], fi[1]), fi[3]))
-        p = PatchCollection(patches, alpha=0.9, facecolors=(c,))#, edgecolors=('k',))
-        # ax.plot(gr_pos[0], gr_pos[1], marker='P', mfc=c, mec='k', ms=9, label='grid {}'.format(ids['grid']))
+        p = PatchCollection(patches, alpha=0.6, facecolors=(c,), edgecolors=('k',))
+        if not args.no_marker:
+            ax.plot(gr_pos[0], gr_pos[1], marker='P', mfc=c, mec='k', ms=9, label='grid {}'.format(ids['grid']))
         ax.add_collection(p)
         # center at the first entry
         if i == 0:
