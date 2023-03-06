@@ -95,15 +95,10 @@
                 x1="MRICHMirror_width1" x2="MRICHMirror_width2" length="MRICHMirror_length"
                 surface="MRICH_MirrorOpticalSurface" thickness="MRICHMirror_thickness"
                 material="AluminumOxide"/>
-        <photodet width="MRICHGlassWindow_width" thickness="MRICHGlassPhotoDet_thickness"  material="PyrexGlassOptical">
-          <sensor nx="2" ny="2" thickness="MRICHPhotoDet_thickness" width="MRICHPhotoDet_length" material="SiliconOxide"/>
-          <layer thickness="MRICHPhotoDetMCPlate_thickness" material="PyrexGlass"/> <!-- FIXME: should be PyrexGlass25 with 1.2*mm thickness -->
-          <layer thickness="MRICHPhotoDetMCPlate_thickness" material="PyrexGlass"/> <!-- FIXME: should be PyrexGlass25 with 1.2*mm thickness -->
-          <layer thickness="MRICHPhotoDetAnode_thickness"   material="AluminumOxide"/>
-          <layer thickness="MRICHPhotoDetPCB_thickness"     material="Fr4"/>
-          <layer thickness="MRICHPhotoDetCopper_thickness"  material="Copper"/>
-          <layer thickness="MRICHPhotoDetKapton_thickness"  material="Kapton"/>
-        </photodet>
+        <hrppd gdml="hrppd.112mm.gdml">
+          <position x="0" y="0" z="0"/>
+          <rotation x="0" y="0" z="0"/>
+        </hrppd>
       </module>
       <comment>
         Modules are only listed here for one quadrant. The modules point back to the

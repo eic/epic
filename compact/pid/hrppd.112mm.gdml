@@ -1,0 +1,295 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<gdml xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://service-spi.web.cern.ch/service-spi/app/releases/GDML/schema/gdml.xsd">
+
+  <define>
+    <matrix coldim="2" name="RINDEX0x2aa1560" values="1.26531e-06 1.45067 1.37017e-06 1.45168 1.45523e-06 1.45247 1.45882e-06 1.4525 1.49398e-06 1.45282 1.58974e-06 1.45367 1.65333e-06 1.45424 1.78597e-06 1.45542 1.83323e-06 1.45585 1.85075e-06 1.45601 1.88938e-06 1.45637 1.90769e-06 1.45653 1.91624e-06 1.45661 1.92606e-06 1.45671 1.95276e-06 1.45695 1.95954e-06 1.45702 1.97452e-06 1.45716 2.02647e-06 1.45765 2.08719e-06 1.45824 2.10419e-06 1.4584 2.11028e-06 1.45846 2.14459e-06 1.4588 2.27065e-06 1.46008 2.28151e-06 1.46019 2.33083e-06 1.46071 2.41011e-06 1.46156 2.42852e-06 1.46176 2.4716e-06 1.46223 2.49748e-06 1.46252 2.54098e-06 1.46301 2.55092e-06 1.46313 2.58333e-06 1.4635 2.60231e-06 1.46372 2.62323e-06 1.46397 2.66209e-06 1.46443 2.70801e-06 1.46498 2.80797e-06 1.46622 2.84534e-06 1.4667 2.98077e-06 1.46847 3.064e-06 1.46961 3.40847e-06 1.47472 3.49591e-06 1.47612 3.53176e-06 1.47671 3.53276e-06 1.47672 3.67843e-06 1.47919 3.81538e-06 1.48164 4.02597e-06 1.48564 4.66165e-06 1.49968 4.8249e-06 1.50383 5e-06 1.50855 5.08197e-06 1.51086 6.42487e-06 1.56077"/>
+    <matrix coldim="2" name="GROUPVEL0x2aa1e20" values="1.26531e-06 204.867 1.31774e-06 204.796 1.4127e-06 204.61 1.45703e-06 204.684 1.4764e-06 204.483 1.54186e-06 204.368 1.62154e-06 204.151 1.71965e-06 203.924 1.8096e-06 203.65 1.84199e-06 203.559 1.87006e-06 203.44 1.89854e-06 203.52 1.91197e-06 203.324 1.92115e-06 203.081 1.93941e-06 203.35 1.95615e-06 202.949 1.96703e-06 203.184 2.0005e-06 203.074 2.05683e-06 202.846 2.09569e-06 202.831 2.10724e-06 202.674 2.12743e-06 202.602 2.20762e-06 202.309 2.27608e-06 202.127 2.30617e-06 201.912 2.37047e-06 201.67 2.41931e-06 201.48 2.45006e-06 201.376 2.48454e-06 201.174 2.51923e-06 201.049 2.54595e-06 200.685 2.56712e-06 200.85 2.59282e-06 200.71 2.61277e-06 200.521 2.64266e-06 200.465 2.68505e-06 200.281 2.75799e-06 199.887 2.82666e-06 199.494 2.91306e-06 199.111 3.02238e-06 198.481 3.23623e-06 197.215 3.45219e-06 195.855 3.51383e-06 195.4 3.53226e-06 198.293 3.6056e-06 194.786 3.74691e-06 193.735 3.92068e-06 192.41 4.34381e-06 188.735 4.74328e-06 184.792 4.91245e-06 182.956 5.04098e-06 181.499 6.42487e-06 169.028"/>
+    <matrix coldim="2" name="RINDEX0x2b1b2f0" values="1.54975e-06 1.47 1.77114e-06 1.47 1.99254e-06 1.47 2.21393e-06 1.47 2.43532e-06 1.47 2.65671e-06 1.47 2.87811e-06 1.47 3.0995e-06 1.47 3.32089e-06 1.47 3.54229e-06 1.47 3.76368e-06 1.47 3.98507e-06 1.47 4.20646e-06 1.47 4.42786e-06 1.47 4.64925e-06 1.47 4.87064e-06 1.47 5.09204e-06 1.47 5.31343e-06 1.47 5.53482e-06 1.47 5.75621e-06 1.47 5.97761e-06 1.47 6.199e-06 1.47 6.42039e-06 1.47 6.64179e-06 1.47 6.86318e-06 1.47 7.08457e-06 1.47"/>
+    <matrix coldim="2" name="GROUPVEL0x2b1ba10" values="1.54975e-06 203.94 1.66045e-06 203.94 1.88184e-06 203.94 2.10323e-06 203.94 2.32462e-06 203.94 2.54602e-06 203.94 2.76741e-06 203.94 2.9888e-06 203.94 3.2102e-06 203.94 3.43159e-06 203.94 3.65298e-06 203.94 3.87437e-06 203.94 4.09577e-06 203.94 4.31716e-06 203.94 4.53855e-06 203.94 4.75995e-06 203.94 4.98134e-06 203.94 5.20273e-06 203.94 5.42412e-06 203.94 5.64552e-06 203.94 5.86691e-06 203.94 6.0883e-06 203.94 6.3097e-06 203.94 6.53109e-06 203.94 6.75248e-06 203.94 7.08457e-06 203.94"/>
+    <matrix coldim="2" name="RINDEX0x2a9f4d0" values="1.54975e-06 1.0003 1.77114e-06 1.0003 1.99254e-06 1.0003 2.21393e-06 1.0003 2.43532e-06 1.0003 2.65671e-06 1.0003 2.87811e-06 1.0003 3.0995e-06 1.0003 3.32089e-06 1.00031 3.54229e-06 1.00031 3.76368e-06 1.00031 3.98507e-06 1.00031 4.20646e-06 1.00031 4.42786e-06 1.00032 4.64925e-06 1.00032 4.87064e-06 1.00032 5.09204e-06 1.00032 5.31343e-06 1.00033 5.53482e-06 1.00033 5.75621e-06 1.00033 5.97761e-06 1.00034 6.199e-06 1.00034 6.42039e-06 1.00035 6.64179e-06 1.00035 6.86318e-06 1.00035 7.08457e-06 1.00036"/>
+    <matrix coldim="2" name="GROUPVEL0x2a9fbf0" values="1.54975e-06 299.702 1.66045e-06 299.702 1.88184e-06 299.701 2.10323e-06 299.7 2.32462e-06 299.699 2.54602e-06 299.698 2.76741e-06 299.697 2.9888e-06 299.696 3.2102e-06 299.694 3.43159e-06 299.693 3.65298e-06 299.691 3.87437e-06 299.689 4.09577e-06 299.687 4.31716e-06 299.685 4.53855e-06 299.682 4.75995e-06 299.68 4.98134e-06 299.677 5.20273e-06 299.674 5.42412e-06 299.67 5.64552e-06 299.667 5.86691e-06 299.663 6.0883e-06 299.658 6.3097e-06 299.654 6.53109e-06 299.648 6.75248e-06 299.643 7.08457e-06 299.636"/>
+  </define>
+
+  <materials>
+    <isotope N="28" Z="14" name="Si280x2a8a320">
+      <atom unit="g/mole" value="27.9769"/>
+    </isotope>
+    <isotope N="29" Z="14" name="Si290x2a89ed0">
+      <atom unit="g/mole" value="28.9765"/>
+    </isotope>
+    <isotope N="30" Z="14" name="Si300x2a8a3b0">
+      <atom unit="g/mole" value="29.9738"/>
+    </isotope>
+    <element name="Si0x2a8a0f0">
+      <fraction n="0.922296077703922" ref="Si280x2a8a320"/>
+      <fraction n="0.0468319531680468" ref="Si290x2a89ed0"/>
+      <fraction n="0.0308719691280309" ref="Si300x2a8a3b0"/>
+    </element>
+    <isotope N="16" Z="8" name="O160x2a89f60">
+      <atom unit="g/mole" value="15.9949"/>
+    </isotope>
+    <isotope N="17" Z="8" name="O170x2a89c70">
+      <atom unit="g/mole" value="16.9991"/>
+    </isotope>
+    <isotope N="18" Z="8" name="O180x2a89ff0">
+      <atom unit="g/mole" value="17.9992"/>
+    </isotope>
+    <element name="O0x2a89d00">
+      <fraction n="0.99757" ref="O160x2a89f60"/>
+      <fraction n="0.00038" ref="O170x2a89c70"/>
+      <fraction n="0.00205" ref="O180x2a89ff0"/>
+    </element>
+    <material name="FusedSilica0x2aa0030" state="solid">
+      <property name="RINDEX" ref="RINDEX0x2aa1560"/>
+      <property name="GROUPVEL" ref="GROUPVEL0x2aa1e20"/>
+      <T unit="K" value="293.15"/>
+      <MEE unit="eV" value="125.663004061076"/>
+      <D unit="g/cm3" value="2.2"/>
+      <fraction n="0.467433841791527" ref="Si0x2a8a0f0"/>
+      <fraction n="0.532566158208473" ref="O0x2a89d00"/>
+    </material>
+    <isotope N="27" Z="13" name="Al270x2a8a650">
+      <atom unit="g/mole" value="26.9815"/>
+    </isotope>
+    <element name="Al0x2a8a420">
+      <fraction n="1" ref="Al270x2a8a650"/>
+    </element>
+    <isotope N="40" Z="20" name="Ca400x2a8a8e0">
+      <atom unit="g/mole" value="39.9626"/>
+    </isotope>
+    <isotope N="42" Z="20" name="Ca420x2a8a5c0">
+      <atom unit="g/mole" value="41.9586"/>
+    </isotope>
+    <isotope N="43" Z="20" name="Ca430x2a8a920">
+      <atom unit="g/mole" value="42.9588"/>
+    </isotope>
+    <isotope N="44" Z="20" name="Ca440x2a8a9c0">
+      <atom unit="g/mole" value="43.9555"/>
+    </isotope>
+    <isotope N="46" Z="20" name="Ca460x2a8a060">
+      <atom unit="g/mole" value="45.9537"/>
+    </isotope>
+    <isotope N="48" Z="20" name="Ca480x2a8ab10">
+      <atom unit="g/mole" value="47.9525"/>
+    </isotope>
+    <element name="Ca0x2a8a6b0">
+      <fraction n="0.96941" ref="Ca400x2a8a8e0"/>
+      <fraction n="0.00647" ref="Ca420x2a8a5c0"/>
+      <fraction n="0.00135" ref="Ca430x2a8a920"/>
+      <fraction n="0.02086" ref="Ca440x2a8a9c0"/>
+      <fraction n="4e-05" ref="Ca460x2a8a060"/>
+      <fraction n="0.00187" ref="Ca480x2a8ab10"/>
+    </element>
+    <material name="Ceramic0x2b1bea0" state="solid">
+      <T unit="K" value="293.15"/>
+      <MEE unit="eV" value="123.32449358718"/>
+      <D unit="g/cm3" value="3.1"/>
+      <fraction n="0.5485" ref="O0x2a89d00"/>
+      <fraction n="0.3009" ref="Al0x2a8a420"/>
+      <fraction n="0.0886" ref="Si0x2a8a0f0"/>
+      <fraction n="0.062" ref="Ca0x2a8a6b0"/>
+    </material>
+    <isotope N="107" Z="47" name="Ag1070x2a9af40">
+      <atom unit="g/mole" value="106.905"/>
+    </isotope>
+    <isotope N="109" Z="47" name="Ag1090x2a9afb0">
+      <atom unit="g/mole" value="108.905"/>
+    </isotope>
+    <element name="Ag0x2a9ace0">
+      <fraction n="0.51839" ref="Ag1070x2a9af40"/>
+      <fraction n="0.48161" ref="Ag1090x2a9afb0"/>
+    </element>
+    <material name="G4_Ag0x2a9abf0" state="solid">
+      <T unit="K" value="293.15"/>
+      <MEE unit="eV" value="470"/>
+      <D unit="g/cm3" value="10.5"/>
+      <fraction n="1" ref="Ag0x2a9ace0"/>
+    </material>
+    <isotope N="23" Z="11" name="Na230x2a8adb0">
+      <atom unit="g/mole" value="22.9898"/>
+    </isotope>
+    <element name="Na0x2a8ab50">
+      <fraction n="1" ref="Na230x2a8adb0"/>
+    </element>
+    <isotope N="39" Z="19" name="K390x2a8b050">
+      <atom unit="g/mole" value="38.9637"/>
+    </isotope>
+    <isotope N="40" Z="19" name="K400x2a8ad40">
+      <atom unit="g/mole" value="39.964"/>
+    </isotope>
+    <isotope N="41" Z="19" name="K410x2a8b0e0">
+      <atom unit="g/mole" value="40.9618"/>
+    </isotope>
+    <element name="K0x2a8b150">
+      <fraction n="0.932581" ref="K390x2a8b050"/>
+      <fraction n="0.000117" ref="K400x2a8ad40"/>
+      <fraction n="0.067302" ref="K410x2a8b0e0"/>
+    </element>
+    <isotope N="121" Z="51" name="Sb1210x2a8fea0">
+      <atom unit="g/mole" value="120.904"/>
+    </isotope>
+    <isotope N="123" Z="51" name="Sb1230x2a8ff30">
+      <atom unit="g/mole" value="122.904"/>
+    </isotope>
+    <element name="Sb0x2a8adf0">
+      <fraction n="0.5721" ref="Sb1210x2a8fea0"/>
+      <fraction n="0.4279" ref="Sb1230x2a8ff30"/>
+    </element>
+    <material name="Bialkali0x2b19f60" state="solid">
+      <property name="RINDEX" ref="RINDEX0x2b1b2f0"/>
+      <property name="GROUPVEL" ref="GROUPVEL0x2b1ba10"/>
+      <T unit="K" value="293.15"/>
+      <MEE unit="eV" value="302.073738954529"/>
+      <D unit="g/cm3" value="1"/>
+      <fraction n="0.222297973339624" ref="Na0x2a8ab50"/>
+      <fraction n="0.189028859120033" ref="K0x2a8b150"/>
+      <fraction n="0.588673167540343" ref="Sb0x2a8adf0"/>
+    </material>
+    <isotope N="12" Z="6" name="C120x2a899e0">
+      <atom unit="g/mole" value="12"/>
+    </isotope>
+    <isotope N="13" Z="6" name="C130x2a89a50">
+      <atom unit="g/mole" value="13.0034"/>
+    </isotope>
+    <element name="C0x2a89780">
+      <fraction n="0.9893" ref="C120x2a899e0"/>
+      <fraction n="0.0107" ref="C130x2a89a50"/>
+    </element>
+    <material name="FR40x2b1f3b0" state="solid">
+      <T unit="K" value="293.15"/>
+      <MEE unit="eV" value="81"/>
+      <D unit="g/cm3" value="2.20087822505131"/>
+      <fraction n="1" ref="C0x2a89780"/>
+    </material>
+    <material name="G4_Si0x2a9d300" state="solid">
+      <T unit="K" value="293.15"/>
+      <MEE unit="eV" value="173"/>
+      <D unit="g/cm3" value="2.33"/>
+      <fraction n="1" ref="Si0x2a8a0f0"/>
+    </material>
+    <isotope N="14" Z="7" name="N140x2a89cc0">
+      <atom unit="g/mole" value="14.0031"/>
+    </isotope>
+    <isotope N="15" Z="7" name="N150x2a89930">
+      <atom unit="g/mole" value="15.0001"/>
+    </isotope>
+    <element name="N0x2a89a90">
+      <fraction n="0.99632" ref="N140x2a89cc0"/>
+      <fraction n="0.00368" ref="N150x2a89930"/>
+    </element>
+    <material name="Nitrogen0x2a9dcc0" state="gas">
+      <property name="RINDEX" ref="RINDEX0x2a9f4d0"/>
+      <property name="GROUPVEL" ref="GROUPVEL0x2a9fbf0"/>
+      <T unit="K" value="293.15"/>
+      <MEE unit="eV" value="82"/>
+      <D unit="g/cm3" value="0.00125"/>
+      <fraction n="1" ref="N0x2a89a90"/>
+    </material>
+  </materials>
+
+  <solids>
+    <box lunit="mm" name="QuartzWindow0x2ba63d0" x="112" y="112" z="5"/>
+    <box lunit="mm" name="CeramicBox0x2ba6b10" x="112" y="112" z="9"/>
+    <box lunit="mm" name="CeramicCut0x2ba6ba0" x="106" y="106" z="9"/>
+    <subtraction name="CeramicBody0x2ba6c30">
+      <first ref="CeramicBox0x2ba6b10"/>
+      <second ref="CeramicCut0x2ba6ba0"/>
+      <position name="CeramicBody0x2ba6c30_pos" unit="mm" x="0" y="0" z="-3"/>
+    </subtraction>
+    <box lunit="mm" name="Plating0x2ba6fc0" x="106" y="106" z="0.06"/>
+    <box lunit="mm" name="MCP0x2ba7150" x="106" y="106" z="0.36"/>
+    <box lunit="mm" name="FakePhotoDetector0x2ba78b0" x="100" y="100" z="0.01"/>
+    <box lunit="mm" name="PhotoDetector0x2ba7600" x="100" y="100" z="0.01"/>
+    <box lunit="mm" name="PCB0x2ba72e0" x="104" y="104" z="2"/>
+    <box lunit="mm" name="ASIC0x2ba7470" x="16" y="16" z="1"/>
+    <box lunit="mm" name="HRPPD0x2ba6240" x="112" y="112" z="30"/>
+  </solids>
+
+  <structure>
+    <volume name="QuartzWindow0x2ba6460">
+      <materialref ref="FusedSilica0x2aa0030"/>
+      <solidref ref="QuartzWindow0x2ba63d0"/>
+    </volume>
+    <volume name="CeramicBody0x2ba6e50">
+      <materialref ref="Ceramic0x2b1bea0"/>
+      <solidref ref="CeramicBody0x2ba6c30"/>
+    </volume>
+    <volume name="Plating0x2ba7050">
+      <materialref ref="G4_Ag0x2a9abf0"/>
+      <solidref ref="Plating0x2ba6fc0"/>
+    </volume>
+    <volume name="MCP0x2ba71e0">
+      <materialref ref="FusedSilica0x2aa0030"/>
+      <solidref ref="MCP0x2ba7150"/>
+    </volume>
+    <volume name="FakePhotoDetector0x2ba7950">
+      <materialref ref="Bialkali0x2b19f60"/>
+      <solidref ref="FakePhotoDetector0x2ba78b0"/>
+    </volume>
+    <volume name="PhotoDetector0x2ba7730">
+      <materialref ref="Bialkali0x2b19f60"/>
+      <solidref ref="PhotoDetector0x2ba7600"/>
+    </volume>
+    <volume name="PCB0x2ba7370">
+      <materialref ref="FR40x2b1f3b0"/>
+      <solidref ref="PCB0x2ba72e0"/>
+    </volume>
+    <volume name="ASIC0x2ba7500">
+      <materialref ref="G4_Si0x2a9d300"/>
+      <solidref ref="ASIC0x2ba7470"/>
+    </volume>
+    <volume name="HRPPD0x2ba62d0">
+      <materialref ref="Nitrogen0x2a9dcc0"/>
+      <solidref ref="HRPPD0x2ba6240"/>
+      <physvol name="QuartzWindow0x2ba7a50">
+        <volumeref ref="QuartzWindow0x2ba6460"/>
+        <position name="QuartzWindow0x2ba7a50_pos" unit="mm" x="0" y="0" z="-12.5"/>
+      </physvol>
+      <physvol name="CeramicBody0x2ba7af0">
+        <volumeref ref="CeramicBody0x2ba6e50"/>
+        <position name="CeramicBody0x2ba7af0_pos" unit="mm" x="0" y="0" z="-5.5"/>
+      </physvol>
+      <physvol name="Plating0x2ba7bb0">
+        <volumeref ref="Plating0x2ba7050"/>
+        <position name="Plating0x2ba7bb0_pos" unit="mm" x="0" y="0" z="-5.5"/>
+      </physvol>
+      <physvol name="MCP0x2ba7c80">
+        <volumeref ref="MCP0x2ba71e0"/>
+        <position name="MCP0x2ba7c80_pos" unit="mm" x="0" y="0" z="-5.29"/>
+      </physvol>
+      <physvol name="FakePhotoDetector0x2ba7d30">
+        <volumeref ref="FakePhotoDetector0x2ba7950"/>
+        <position name="FakePhotoDetector0x2ba7d30_pos" unit="mm" x="0" y="0" z="-9.995"/>
+      </physvol>
+      <physvol name="PhotoDetector0x2ba7df0">
+        <volumeref ref="PhotoDetector0x2ba7730"/>
+        <position name="PhotoDetector0x2ba7df0_pos" unit="mm" x="0" y="0" z="-9.985"/>
+      </physvol>
+      <physvol name="PCB0x2ba7e90">
+        <volumeref ref="PCB0x2ba7370"/>
+        <position name="PCB0x2ba7e90_pos" unit="mm" x="0" y="0" z="1"/>
+      </physvol>
+      <physvol name="ASIC0x2ba7f30">
+        <volumeref ref="ASIC0x2ba7500"/>
+        <position name="ASIC0x2ba7f30_pos" unit="mm" x="-26" y="-26" z="2.5"/>
+      </physvol>
+      <physvol copynumber="1" name="ASIC0x2ba7fd0">
+        <volumeref ref="ASIC0x2ba7500"/>
+        <position name="ASIC0x2ba7fd0_pos" unit="mm" x="-26" y="26" z="2.5"/>
+      </physvol>
+      <physvol copynumber="2" name="ASIC0x2ba8100">
+        <volumeref ref="ASIC0x2ba7500"/>
+        <position name="ASIC0x2ba8100_pos" unit="mm" x="26" y="-26" z="2.5"/>
+      </physvol>
+      <physvol copynumber="3" name="ASIC0x2ba81a0">
+        <volumeref ref="ASIC0x2ba7500"/>
+        <position name="ASIC0x2ba81a0_pos" unit="mm" x="26" y="26" z="2.5"/>
+      </physvol>
+    </volume>
+  </structure>
+
+  <setup name="Default" version="1.0">
+    <world ref="HRPPD0x2ba62d0"/>
+  </setup>
+
+</gdml>

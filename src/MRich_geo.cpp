@@ -13,8 +13,10 @@
 #include "Math/AxisAngle.h"
 #include "Math/Vector3D.h"
 #include "Math/VectorUtil.h"
+#include "TGDMLParse.h"
 #include "TMath.h"
 #include "TString.h"
+#include "TUri.h"
 #include <XML/Helper.h>
 
 using namespace std;
@@ -250,6 +252,36 @@ static Ref_t createDetector(Detector& description, xml::Handle_t e, SensitiveDet
         dd4hep::getAttrOrDefault<std::string>(x_mirror, _Unicode(surface), "MRICH_MirrorOpticalSurface"));
     SkinSurface skin_surf(description, mirror_de, Form("MRICH_mirror_skin_surface_%d", 1), mirror_surf, mirror_vol);
     skin_surf.isValid();
+  }
+
+  // HRPPD from GDML
+  if (x_mod.hasChild(_Unicode(hrppd))) {
+    xml_comp_t x_hrppd    = x_mod.child(_Unicode(hrppd));
+    auto       hrppd_vis  = getAttrOrDefault<std::string>(x_hrppd, _U(vis), std::string("AnlRed"));
+    string     hrppd_gdml = x_hrppd.attr<string>(_U(gdml));
+
+    xml_dim_t pos = x_hrppd.position();
+    xml_dim_t rot = x_hrppd.rotation();
+
+    TGDMLParse parser;
+    if (!hrppd_gdml.empty() && hrppd_gdml[0] == '/') {
+      TUri uri(hrppd_gdml.c_str());
+      hrppd_gdml = uri.GetRelativePart();
+    } else {
+      string path = xml::DocumentHandler::system_path(e, hrppd_gdml);
+      TUri   uri(path.c_str());
+      hrppd_gdml = uri.GetRelativePart();
+    }
+    Volume hrppd_vol = parser.GDMLReadFile(hrppd_gdml.c_str());
+    if (!hrppd_vol.isValid()) {
+      except("MRich_geo", "+++ Failed to parse GDML file:%s", hrppd_gdml.c_str());
+    }
+    hrppd_vol.import(); // We require the extensions in dd4hep.
+    printout(INFO, "MRich_geo", "+++ Attach GDML volume %s", hrppd_vol.name());
+
+    // place volume
+    Transform3D tr(RotationZYX(rot.z(), rot.y(), rot.x()), Position(pos.x(), pos.y(), pos.z()));
+    pv = m_volume.placeVolume(hrppd_vol, tr);
   }
 
   // photon detector
