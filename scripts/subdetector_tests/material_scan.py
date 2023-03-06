@@ -9,27 +9,35 @@ import os
 import json
 import argparse
 import subprocess
-import dd4hep
-import DDRec
 import pandas as pd
 import numpy as np
 from io import StringIO
 from collections import OrderedDict
+from matplotlib import pyplot as plt
 
+import ROOT
+import dd4hep
+import DDRec
 
 '''
     re-implementation of MaterialScan::Print in DD4Hep::DDRec
     MaterialScan does not have a python interface and that function is relatively simple, so here it is
-    mng: instance of DDRec::MaterialManager
+    desc: DD4hep::Detector
     start: 3D vector for start point
     end: 3D vector for end point
     epsilon: step size
 '''
-def material_scan(mng, start, end, epsilon=1e-4):
+def material_scan(desc, start, end, epsilon=1e-5):
+    rvec = ROOT.Math.XYZVector()
+    mat_mng = DDRec.MaterialManager(desc.worldVolume())
+    # id_conv = DDRec.CellIDPositionConverter(desc)
+    # det_dict = {d.id(): n for n, d in desc.world().children()}
+    # print(det_dict)
+
     p0 = np.array(start)
     p1 = np.array(end)
     direction = (p1 - p0)/np.linalg.norm(p1 - p0)
-    placements = mng.placementsBetween(tuple(p0), tuple(p1), epsilon);
+    placements = mat_mng.placementsBetween(tuple(p0), tuple(p1), epsilon);
 
     # calculate material layer by layer
     int_x0 = 0
@@ -37,9 +45,10 @@ def material_scan(mng, start, end, epsilon=1e-4):
     path_length = 0
     res = []
     cols = [
+        # 'detector',
         'material', 'Z', 'A', 'density',
-        'rad_length', 'int_length', 'thickness', 'path_length',
-        'int_X0', 'int_lamda', 'end_x', 'end_y', 'end_z'
+        'radl', 'intl', 'thickness', 'path_length',
+        'X0', 'lamda', 'end_x', 'end_y', 'end_z'
         ]
     for pv, l in placements:
         # print(pv, l)
@@ -48,11 +57,19 @@ def material_scan(mng, start, end, epsilon=1e-4):
         mat = pv.GetMedium().GetMaterial()
         radl = mat.GetRadLen()
         intl = mat.GetIntLen()
-        int_x0 += l/radl
-        int_lambda += l/intl
+        x0 = l/radl
+        lmd = l/intl
+        # try to locate the detector
+        # det_id = -1
+        # try:
+        #     rvec.SetCoordinates(pcurr)
+        #     det_id = id_conv.findDetElement(rvec).id()
+        # except Exception:
+        #     pass
         res.append([
+            # det_dict.get(det_id, 'Unknown'),
             mat.GetName(), mat.GetZ(), mat.GetA(), mat.GetDensity(), radl, intl,
-            l, path_length, int_x0, int_lambda, pcurr[0], pcurr[1], pcurr[2]
+            l, path_length, x0, lmd, pcurr[0], pcurr[1], pcurr[2],
             ])
     dft = pd.DataFrame(data=res, columns=cols)
     return dft
@@ -65,7 +82,7 @@ def material_scan(mng, start, end, epsilon=1e-4):
     end_point: a lit or tuple for 3D coordinates (cm, according to materialScan)
     return: a dataframe for materialScan results
 '''
-# NOTE: it is much slower than material_scan, so never used
+# NOTE: it is much slower than material_scan, so only used for testing
 def material_scan2(compact, start_point, end_point, timeout=200):
     EXEC_NAME = 'materialScan'
     cmd = '{} {} {} {} {} {} {} {}'.format(EXEC_NAME, compact, *np.hstack([start_point, end_point]))
@@ -96,19 +113,10 @@ def material_scan2(compact, start_point, end_point, timeout=200):
 
 
 DEFAULT_CONFIG = dict(
-    eta_range=[-1.5, 1.5, 0.5],
-    phi=0.,
-    path_r=118,
+    eta_range=[-2.0, 1.7, 0.01],
+    phi=70.,
+    path_r=120.,
     start_point=[0., 0., 0.],
-    detectors=OrderedDict([
-        ('BECal ScFi', dict(
-            materials=['SciFiPb*'],
-            geocuts=[
-                'math.sqrt(x**2 + y**2) >= {EcalBarrel_rmin}',
-                'math.sqrt(x**2 + y**2) <= {EcalBarrel_SensitiveLayers_rmax}',
-                'abs(z - {EcalBarrel_Calorimeter_offset}) <= {EcalBarrel_Calorimeter_length}/2.'],
-            )),
-        ])
     )
 
 if __name__ == '__main__':
@@ -132,47 +140,50 @@ if __name__ == '__main__':
     if args.config is not None:
         with open(args.config) as json_file:
             config = json.load(args.config)
-    if 'detectors' not in config:
-        print('No detectors defined in configuration file, draw all materials')
-        config['detectors'] = OrderedDict([
-            ('All Materials', dict(materials=['*'], geocuts=[])),
-            ])
 
     # geometry initialization
     desc = dd4hep.Detector.getInstance()
     desc.fromXML(args.compact)
-    mat_manager = DDRec.MaterialManager(desc.worldVolume())
-
-    # build a constants dictionary for geocuts
-    det_constants = {}
-    for key, _ in desc.constants():
-        try:
-            det_constants[key] = desc.constantAsDouble(key)
-        except Exception:
-            det_constants[key] = desc.constantAsString(key)
-
-    # update and compile geocuts
-    # NOTE: variables below (x, y, z) will be used by compiled cuts
-    x, y, z = 0., 0., 0.
-    for det, dconf in config['detectors'].items():
-        geocuts = []
-        for gcut in dconf['geocuts']:
-            cutstr = gcut.format(**det_constants)
-            # print(cutstr)
-            geocuts.append(compile(cutstr, '<string>', 'eval'))
-        config['detectors'][det]['geocuts'] = geocuts
 
     # scan materials
     eta_range = config.get('eta_range')
     etas = np.arange(*eta_range)
-    if etas[-1] < eta_range[1]:
-        etas = np.hstack([etas, eta_range[1]])
-    r = config.get('path_r')
+    path_r = config.get('path_r')
     phi = config.get('phi')
     start_point = config.get('start_point')
-    for eta in etas:
-        x = r*np.cos(phi/180.*np.pi)
-        y = r*np.sin(phi/180.*np.pi)
-        z = r*np.sinh(eta)
+    dets = [
+        # 'EcalBarrelImaging',
+        'EcalBarrelScFi',
+        ]
+    detmats = ['SciFiPb_PbGlue', 'SciFiPb_Scintillator']
+    # others for all detectors that are not listed above
+    dets.append('Others')
+    vals = np.zeros(shape=(len(etas), len(dets)))
+    for i, eta in enumerate(etas):
+        x = path_r*np.cos(phi/180.*np.pi)
+        y = path_r*np.sin(phi/180.*np.pi)
+        z = path_r*np.sinh(eta)
         # print('({:.2f}, {:.2f}, {:.2f})'.format(x, y, z))
-        print(material_scan(mat_manager, start_point, (x, y, z)).groupby('material')['thickness'].sum())
+        dfr = material_scan(desc, start_point, (x, y, z))
+        dmap = {k: 'Others' for k in dfr['material'].unique() if k not in detmats}
+        dmap.update({k: 'EcalBarrelScFi' for k in detmats})
+        dfr.loc[:, 'det2'] = dfr['material'].map(dmap)
+        x0_vals = dfr.groupby('det2')['X0'].sum().to_dict()
+        for k, det in enumerate(dets):
+            vals[i, k] = x0_vals.get(det, 0.)
+
+    # plot
+    fig, ax = plt.subplots(figsize=(16, 4), dpi=160, gridspec_kw={'top': 0.995, 'left': 0.08, 'right': 0.98})
+    hbins = np.hstack([etas, etas[-1] + eta_range[2]]) - eta_range[2]/2.
+    ax.hist(np.tile(etas, (len(dets), 1)).T, hbins, weights=vals, histtype='step',
+            stacked=True, fill=True, alpha=1.0, label=dets, color=['royalblue', 'indianred'])
+    ax.legend(loc="upper center", fontsize=22)
+    ax.tick_params(direction='in', labelsize=22)
+    ax.set_xlabel('$\eta$', fontsize=22)
+    ax.set_ylabel('X0', fontsize=22)
+    ax.grid(ls=':')
+    ax.set_axisbelow(True)
+    ax.set_xlim(-2.2, 1.8)
+    # ax.set_yscale('log')
+    fig.savefig('material_scan.png')
+

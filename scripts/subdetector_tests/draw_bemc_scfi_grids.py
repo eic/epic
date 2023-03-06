@@ -144,7 +144,7 @@ if __name__ == '__main__':
     except Exception:
         print('Failed to find detector {} from \"{}\"'.format(args.detector, args.compact))
         print('Available detectors are listed below:')
-        for n, d in desc.world().children:
+        for n, d in desc.world().children():
             print(' --- detector: {}'.format(n))
         exit(-1)
 
