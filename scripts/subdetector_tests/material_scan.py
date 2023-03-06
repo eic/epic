@@ -186,4 +186,3 @@ if __name__ == '__main__':
     ax.set_xlim(-2.2, 1.8)
     # ax.set_yscale('log')
     fig.savefig('material_scan.png')
-
