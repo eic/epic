@@ -91,8 +91,7 @@ def get_grid_fibers(det_elem, vol_man, id_conv, id_dict):
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument(
-            '-c', '--compact',
-            dest='compact', required=True,
+            'compact',
             help='Top-level xml file of the detector description.'
             )
     parser.add_argument(
