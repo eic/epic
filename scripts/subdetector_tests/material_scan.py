@@ -158,17 +158,17 @@ DEFAULT_CONFIG = dict(
         #         'z >= -{DIRCBackward_zmax}',
         #         ],
         #     )),
-        ('HcalEndcapN', dict(
-            materials=['Polystyrene', 'Steel235'],
-            geo=['z < {HcalEndcapN_zmin}'],
-            )),
-        ('EcalEndcapN', dict(
-            materials=['StainlessSteel', 'leadtungsten_optical', 'CarbonFiber', 'VM2000'],
-            geo=[
-                'math.sqrt(x**2 + y**2) < {EcalBarrel_rmin}',
-                'z < -{EcalEndcapN_zmin}',
-                ],
-            )),
+        # ('EcalEndcapN', dict(
+        #     materials=['StainlessSteel', 'leadtungsten_optical', 'CarbonFiber', 'VM2000'],
+        #     geo=[
+        #         'math.sqrt(x**2 + y**2) < {EcalBarrel_rmin}',
+        #         'z < -{EcalEndcapN_zmin}',
+        #         ],
+        #     )),
+        # ('HcalEndcapN', dict(
+        #     materials=['Polystyrene', 'Steel235'],
+        #     geo=['z < {HcalEndcapN_zmin}'],
+        #    )),
         # all other materials fall into this category
         ('Others', dict(
             materials=['*'],
@@ -292,7 +292,7 @@ if __name__ == '__main__':
 
     # plot
     pdf = matplotlib.backends.backend_pdf.PdfPages('material_scan_details.pdf')
-    colors = ['royalblue', 'indianred', 'forestgreen', 'darkviolet', 'goldenrod', 'silver', 'darkturquoise']
+    colors = ['royalblue', 'forestgreen', 'darkviolet', 'silver', 'indianred', 'goldenrod', 'darkturquoise']
 
     fig, ax = plt.subplots(figsize=(16, 5), dpi=160,
                            gridspec_kw={'top': 0.995, 'bottom': 0.2, 'left': 0.08, 'right': 0.98})
@@ -303,7 +303,7 @@ if __name__ == '__main__':
     for col, c in zip(dfa.columns, colors):
         ax.fill_between(dfa.index, bottom, dfa[col].values + bottom, label=col, step='mid', color=c)
         bottom += dfa[col].values
-    ax.tick_params(direction='in', labelsize=22)
+    ax.tick_params(which='both', direction='in', labelsize=22)
     ax.set_xlabel('$\eta$', fontsize=22)
     ax.set_ylabel('X0', fontsize=22)
     ax.xaxis.set_major_locator(MultipleLocator(0.5))
@@ -314,8 +314,8 @@ if __name__ == '__main__':
     ax.set_axisbelow(False)
     ax.set_xlim(-2.2, 1.8)
     ax.set_ylim(0., ax.get_ylim()[1]*1.1)
-    ax.legend(bbox_to_anchor=(0.0, 0.9, 0.9, 0.1), ncol=6, loc="upper left", fontsize=18,
-          borderpad=0.2, labelspacing=0.1, columnspacing=0.4, borderaxespad=0.05, handletextpad=0.4)
+    ax.legend(bbox_to_anchor=(0.0, 0.9, 1.0, 0.1), ncol=6, loc="upper center", fontsize=22,
+          borderpad=0.2, labelspacing=0.2, columnspacing=0.6, borderaxespad=0.05, handletextpad=0.4)
     # ax.set_yscale('log')
     fig.savefig('material_scan.png')
     pdf.savefig(fig)
@@ -336,7 +336,7 @@ if __name__ == '__main__':
             bottom += dfa[col].values
         ax.legend(bbox_to_anchor=(0.06, 1.02, 0.9, 0.1), ncol=5, loc="upper left", fontsize=18,
                   borderpad=0.3, labelspacing=0.2, columnspacing=0.8, borderaxespad=0.1, handletextpad=0.4)
-        ax.tick_params(direction='in', labelsize=22)
+        ax.tick_params(which='both', direction='in', labelsize=22)
         ax.set_xlabel('$\eta$', fontsize=22)
         ax.set_ylabel('X0', fontsize=22)
         ax.xaxis.set_major_locator(MultipleLocator(0.5))
