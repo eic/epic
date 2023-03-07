@@ -318,9 +318,6 @@ static Ref_t createDetector(Detector& description, xml::Handle_t e, SensitiveDet
     auto       hrppd_vis  = getAttrOrDefault<std::string>(x_hrppd, _U(vis), std::string("AnlRed"));
     string     hrppd_gdml = x_hrppd.attr<string>(_U(gdml));
 
-    xml_dim_t pos = x_hrppd.position();
-    xml_dim_t rot = x_hrppd.rotation();
-
     TGDMLParse parser;
     if (!hrppd_gdml.empty() && hrppd_gdml[0] == '/') {
       TUri uri(hrppd_gdml.c_str());
@@ -340,7 +337,7 @@ static Ref_t createDetector(Detector& description, xml::Handle_t e, SensitiveDet
     // update position
     z_placement += hrppd_vol.boundingBox().z();
     // place volume
-    Transform3D tr(RotationZYX(rot.z(), rot.y(), rot.x()), Position(pos.x(), pos.y(), z_placement + pos.z()));
+    Transform3D tr(Position(0, 0, z_placement));
     pv = m_volume.placeVolume(hrppd_vol, tr);
     // update position
     z_placement += hrppd_vol.boundingBox().z();
