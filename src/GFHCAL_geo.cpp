@@ -53,11 +53,11 @@ Volume createModule(Detector& desc, int modID_x, int modID_y, double length, Sen
   double miniframe_height    = modBox_height - 2 * miniframe_thickness;
 
   double tyvek_thickness   = 0.15 * mm;
-  double sciSeg_length_tot = 5 * cm;
+  double sciSeg_length_tot = 10 * cm;
   double sciSeg_width_tot  = 4 * mm + tyvek_thickness * 2;
   // double sciSeg_height_tot = 5 * cm;
 
-  double sciSeg_length = 5 * cm - tyvek_thickness * 2;
+  double sciSeg_length = sciSeg_length_tot - tyvek_thickness * 2;
   double sciSeg_width  = 4 * mm;
   double sciSeg_height = 5 * cm - tyvek_thickness - miniframe_thickness;
 
