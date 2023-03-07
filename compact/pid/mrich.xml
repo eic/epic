@@ -28,7 +28,7 @@
     <constant name="MRICHRearExtraSpace_thickness"    value="0.3*mm"/>
     <constant name="MRICHLensPhotoDet_length"         value="136.4*mm"/>
     <constant name="MRICHMirror_thickness"            value="2.0*mm"/>
-    <constant name="MRICHMirror_length"               value="1.0*inch"/>
+    <constant name="MRICHMirror_length"               value="4.5*inch"/>
     <constant name="MRICHMirror_width1"               value="MRICHAerogel_width "/>
     <constant name="MRICHMirror_width2"               value="MRICHGlassWindow_width"/>
 
@@ -76,8 +76,10 @@
       <dimensions rmin="MRICH_rmin" rmax="MRICH_rmax" length="MRICH_length" zmin="MRICH_zmin"/>
       <module name="MRICH_module1"
               vis="InvisibleWithDaughters"
-              width="MRICHCarbonFrame_width"
-              height="MRICHCarbonFrame_width"
+              width1="MRICHCarbonFrame_width"
+              height1="MRICHCarbonFrame_width"
+              width2="MRICHCarbonFrame_width*(1 + 0.9*MRICHCarbonFrame_length/MRICH_zmin)"
+              height2="MRICHCarbonFrame_width*(1 + 0.9*MRICHCarbonFrame_length/MRICH_zmin)"
               length="MRICHCarbonFrame_length">
         <frame vis="AnlGray" thickness="MRICHCarbonFrame_thickness" material="CarbonFiber"/>
         <aerogel vis="MRICH_aerogel_vis"
@@ -95,10 +97,7 @@
                 x1="MRICHMirror_width1" x2="MRICHMirror_width2" length="MRICHMirror_length"
                 surface="MRICH_MirrorOpticalSurface" thickness="MRICHMirror_thickness"
                 material="AluminumOxide"/>
-        <hrppd gdml="hrppd.112mm.gdml">
-          <position x="0" y="0" z="0"/>
-          <rotation x="0" y="0" z="0"/>
-        </hrppd>
+        <hrppd gdml="hrppd.112mm.gdml"/>
       </module>
       <comment>
         Modules are only listed here for one quadrant. The modules point back to the

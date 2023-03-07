@@ -70,14 +70,16 @@ static Ref_t createDetector(Detector& description, xml::Handle_t e, SensitiveDet
   }
 
   // expect only one module (for now)
-  xml_comp_t x_mod      = x_det.child(_U(module));
-  string     mod_name   = x_mod.nameStr();
-  double     mod_width  = getAttrOrDefault(x_mod, _U(width), 130.0 * mm);
-  double     mod_height = getAttrOrDefault(x_mod, _U(height), 130.0 * mm);
-  double     mod_length = getAttrOrDefault(x_mod, _U(length), 130.0 * mm);
+  xml_comp_t x_mod       = x_det.child(_U(module));
+  string     mod_name    = x_mod.nameStr();
+  double     mod_width1  = getAttrOrDefault(x_mod, _Unicode(width1), 130.0 * mm);
+  double     mod_height1 = getAttrOrDefault(x_mod, _Unicode(height1), 130.0 * mm);
+  double     mod_width2  = getAttrOrDefault(x_mod, _Unicode(width2), 130.0 * mm);
+  double     mod_height2 = getAttrOrDefault(x_mod, _Unicode(height2), 130.0 * mm);
+  double     mod_length  = getAttrOrDefault(x_mod, _Unicode(length), 130.0 * mm);
 
   // module
-  Box    m_solid(mod_width / 2.0, mod_height / 2.0, mod_length / 2.0);
+  Trd2   m_solid(mod_width1 / 2.0, mod_width2 / 2.0, mod_height1 / 2.0, mod_height2 / 2.0, mod_length / 2.0);
   Volume m_volume(mod_name, m_solid, air);
   m_volume.setVisAttributes(description.visAttributes(x_mod.visStr()));
   DetElement mod_de(mod_name + std::string("_mod_") + std::to_string(1), 1);
@@ -87,7 +89,8 @@ static Ref_t createDetector(Detector& description, xml::Handle_t e, SensitiveDet
   if (x_mod.hasChild(_Unicode(frame))) {
     xml_comp_t       x_frame         = x_mod.child(_Unicode(frame));
     double           frame_thickness = getAttrOrDefault(x_frame, _U(thickness), 2.0 * mm);
-    Box              frame_inside(mod_width / 2.0 - frame_thickness, mod_height / 2.0 - frame_thickness,
+    Trd2             frame_inside(mod_width1 / 2.0 - frame_thickness, mod_width2 / 2.0 - frame_thickness,
+                                  mod_height1 / 2.0 - frame_thickness, mod_height2 / 2.0 - frame_thickness,
                                   mod_length / 2.0 - frame_thickness);
     SubtractionSolid frame_solid(m_solid, frame_inside);
     Material         frame_mat = description.material(x_frame.materialStr());
@@ -254,36 +257,6 @@ static Ref_t createDetector(Detector& description, xml::Handle_t e, SensitiveDet
     skin_surf.isValid();
   }
 
-  // HRPPD from GDML
-  if (x_mod.hasChild(_Unicode(hrppd))) {
-    xml_comp_t x_hrppd    = x_mod.child(_Unicode(hrppd));
-    auto       hrppd_vis  = getAttrOrDefault<std::string>(x_hrppd, _U(vis), std::string("AnlRed"));
-    string     hrppd_gdml = x_hrppd.attr<string>(_U(gdml));
-
-    xml_dim_t pos = x_hrppd.position();
-    xml_dim_t rot = x_hrppd.rotation();
-
-    TGDMLParse parser;
-    if (!hrppd_gdml.empty() && hrppd_gdml[0] == '/') {
-      TUri uri(hrppd_gdml.c_str());
-      hrppd_gdml = uri.GetRelativePart();
-    } else {
-      string path = xml::DocumentHandler::system_path(e, hrppd_gdml);
-      TUri   uri(path.c_str());
-      hrppd_gdml = uri.GetRelativePart();
-    }
-    Volume hrppd_vol = parser.GDMLReadFile(hrppd_gdml.c_str());
-    if (!hrppd_vol.isValid()) {
-      except("MRich_geo", "+++ Failed to parse GDML file:%s", hrppd_gdml.c_str());
-    }
-    hrppd_vol.import(); // We require the extensions in dd4hep.
-    printout(INFO, "MRich_geo", "+++ Attach GDML volume %s", hrppd_vol.name());
-
-    // place volume
-    Transform3D tr(RotationZYX(rot.z(), rot.y(), rot.x()), Position(pos.x(), pos.y(), pos.z()));
-    pv = m_volume.placeVolume(hrppd_vol, tr);
-  }
-
   // photon detector
   if (x_mod.hasChild(_Unicode(photodet))) {
     xml_comp_t x_photodet         = x_mod.child(_Unicode(photodet));
@@ -339,6 +312,40 @@ static Ref_t createDetector(Detector& description, xml::Handle_t e, SensitiveDet
     }
   }
 
+  // HRPPD from GDML
+  if (x_mod.hasChild(_Unicode(hrppd))) {
+    xml_comp_t x_hrppd    = x_mod.child(_Unicode(hrppd));
+    auto       hrppd_vis  = getAttrOrDefault<std::string>(x_hrppd, _U(vis), std::string("AnlRed"));
+    string     hrppd_gdml = x_hrppd.attr<string>(_U(gdml));
+
+    xml_dim_t pos = x_hrppd.position();
+    xml_dim_t rot = x_hrppd.rotation();
+
+    TGDMLParse parser;
+    if (!hrppd_gdml.empty() && hrppd_gdml[0] == '/') {
+      TUri uri(hrppd_gdml.c_str());
+      hrppd_gdml = uri.GetRelativePart();
+    } else {
+      string path = xml::DocumentHandler::system_path(e, hrppd_gdml);
+      TUri   uri(path.c_str());
+      hrppd_gdml = uri.GetRelativePart();
+    }
+    Volume hrppd_vol = parser.GDMLReadFile(hrppd_gdml.c_str());
+    if (!hrppd_vol.isValid()) {
+      except("MRich_geo", "+++ Failed to parse GDML file:%s", hrppd_gdml.c_str());
+    }
+    hrppd_vol.import(); // We require the extensions in dd4hep.
+    printout(INFO, "MRich_geo", "+++ Attach GDML volume %s", hrppd_vol.name());
+
+    // update position
+    z_placement += hrppd_vol.boundingBox().z();
+    // place volume
+    Transform3D tr(RotationZYX(rot.z(), rot.y(), rot.x()), Position(pos.x(), pos.y(), z_placement + pos.z()));
+    pv = m_volume.placeVolume(hrppd_vol, tr);
+    // update position
+    z_placement += hrppd_vol.boundingBox().z();
+  }
+
   // for (size_t ic = 0; ic < sensVols.size(); ++ic) {
   //   PlacedVolume sens_pv = sensVols[ic];
   //   DetElement   comp_de(mod_de, std::string("de_") + sens_pv.volume().name(), ic + 1);
@@ -358,7 +365,7 @@ static Ref_t createDetector(Detector& description, xml::Handle_t e, SensitiveDet
   // end module
 
   // place modules in the sectors (disk)
-  auto points = epic::geo::fillSquares({0., 0.}, mod_width, rmin, rmax);
+  auto points = epic::geo::fillSquares({0., 0.}, max(mod_width1, mod_height1), rmin, rmax);
 
   // mod_name = ...
   auto mod_v = modules[mod_name];
@@ -375,11 +382,11 @@ static Ref_t createDetector(Detector& description, xml::Handle_t e, SensitiveDet
   }
   // if no positions, then autoplacement
   if (positions.empty()) {
-    for (double x = mod_width / 2.0; x < rmax - mod_width / 2.0; x += mod_width) {
-      for (double y = mod_width / 2.0; y < rmax - mod_width / 2.0; y += mod_width) {
-        if (pow(x + mod_width / 2.0, 2) + pow(y + mod_width / 2.0, 2) > rmax * rmax)
+    for (double x = mod_width1 / 2.0; x < rmax - mod_width1 / 2.0; x += mod_width1) {
+      for (double y = mod_height1 / 2.0; y < rmax - mod_height1 / 2.0; y += mod_height1) {
+        if (pow(x + mod_width1 / 2.0, 2) + pow(y + mod_height1 / 2.0, 2) > rmax * rmax)
           continue;
-        if (pow(x - mod_width / 2.0, 2) + pow(y - mod_width / 2.0, 2) < rmin * rmin)
+        if (pow(x - mod_width1 / 2.0, 2) + pow(y - mod_height1 / 2.0, 2) < rmin * rmin)
           continue;
         positions.push_back(std::make_tuple(x, y, 0));
       }
