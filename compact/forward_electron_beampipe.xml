@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<lccdd>
+
+  <define>
+
+    <!-- electron beam pipe wall thickness at positive z -->
+    <constant name="cen_pos_wall_dr" value="1.0*mm"/>
+
+    <!-- end of central section -->
+    <constant name="cen_pos_zmax" value="4484.25*mm"/>
+    <constant name="cen_pos_r1" value="BeampipeOD/2."/>
+
+    <!-- Q0eF quadrupole magnet -->
+    <constant name="Q0eF_StartZ" value="7000.*mm"/>
+    <constant name="Q0eF_EndZ" value="5800.*mm"/>
+    <constant name="Q0eF_InnerRadius" value="25.*mm"/>
+
+    <!-- Q1eF quadrupole magnet -->
+    <constant name="Q1eF_StartZ" value="12370.*mm"/>
+    <constant name="Q1eF_EndZ" value="10760.*mm"/>
+    <constant name="Q1eF_InnerRadius" value="63*mm"/>
+
+    <!-- beam section at forward region to +15 meters -->
+    <constant name="cen_pos_fwd_zmax" value="15000.*mm"/>
+
+  </define>
+
+  <detectors>
+
+    <!-- beam from central section at positive z to Q0eF -->
+    <detector name="cen_beam_Q0" type="ConeBeamEl"
+      rmin0="cen_pos_r1-cen_pos_wall_dr"
+      rmax0="cen_pos_r1"
+      rmin1="Q0eF_InnerRadius"
+      rmax1="Q0eF_InnerRadius+cen_pos_wall_dr"
+      dz="Q0eF_EndZ-cen_pos_zmax"
+      zpos="(Q0eF_EndZ+cen_pos_zmax)/2.">
+    </detector>
+
+    <!-- Q0eF magnet -->
+    <detector name="Q0eF" type="ip6_CylindricalDipoleMagnet" vis="RedVis">
+      <placement  x="0" y="0" z="(Q0eF_StartZ+Q0eF_EndZ)/2." theta="0"/>
+      <dimensions x="Q0eF_InnerRadius*4" y="Q0eF_InnerRadius*4" z="Q0eF_StartZ-Q0eF_EndZ" r="2.0*Q0eF_InnerRadius" />
+      <apperture  x="Q0eF_InnerRadius*2" y="Q0eF_InnerRadius*2" r="Q0eF_InnerRadius" />
+      <coil dx="2*cm" dy="1.5*cm" />!--unchecked--
+    </detector>
+
+    <!-- inner vacuum for Q0eF -->
+    <detector name="Q0eF_vac" type="DD4hep_TubeSegment" vis="VisFwElInvisible">
+      <material name="Vacuum"/>
+      <tubs rmin="0" rmax="Q0eF_InnerRadius" zhalf="(Q0eF_StartZ-Q0eF_EndZ)/2."/>
+      <position x="0" y="0" z="(Q0eF_StartZ+Q0eF_EndZ)/2."/>
+      <rotation x="0" y="0" z="0"/>
+    </detector>
+
+    <!-- beam between Q0eF and Q1eF magnets -->
+    <detector name="cen_beam_Q01" type="ConeBeamEl"
+      rmin0="Q0eF_InnerRadius"
+      rmax0="Q0eF_InnerRadius+cen_pos_wall_dr"
+      rmin1="Q1eF_InnerRadius"
+      rmax1="Q1eF_InnerRadius+cen_pos_wall_dr"
+      dz="Q1eF_EndZ-Q0eF_StartZ"
+      zpos="(Q1eF_EndZ+Q0eF_StartZ)/2.">
+    </detector>
+
+    <!-- Q1eF magnet -->
+    <detector name="Q1eF" type="ip6_CylindricalDipoleMagnet" vis="RedVis">
+      <placement  x="0" y="0" z="(Q1eF_StartZ+Q1eF_EndZ)/2." theta="0"/>
+      <dimensions x="Q1eF_InnerRadius*4" y="Q1eF_InnerRadius*4" z="Q1eF_StartZ-Q1eF_EndZ" r="2.0*Q1eF_InnerRadius" />
+      <apperture  x="Q1eF_InnerRadius*2" y="Q1eF_InnerRadius*2" r="Q1eF_InnerRadius" />
+      <coil dx="2*cm" dy="1.5*cm" />!--unchecked--
+    </detector>
+
+    <!-- inner vacuum for Q1eF -->
+    <detector name="Q1eF_vac" type="DD4hep_TubeSegment" vis="VisFwElInvisible">
+      <material name="Vacuum"/>
+      <tubs rmin="0" rmax="Q1eF_InnerRadius" zhalf="(Q1eF_StartZ-Q1eF_EndZ)/2."/>
+      <position x="0" y="0" z="(Q1eF_StartZ+Q1eF_EndZ)/2."/>
+      <rotation x="0" y="0" z="0"/>
+    </detector>
+
+    <!-- beam section at forward region to +15 meters -->
+    <detector name="cen_beam_fwd" type="ConeBeamEl"
+      rmin0="Q1eF_InnerRadius"
+      rmax0="Q1eF_InnerRadius+cen_pos_wall_dr"
+      rmin1="Q1eF_InnerRadius"
+      rmax1="Q1eF_InnerRadius+cen_pos_wall_dr"
+      dz="cen_pos_fwd_zmax-Q1eF_StartZ"
+      zpos="(cen_pos_fwd_zmax+Q1eF_StartZ)/2.">
+    </detector>
+
+  </detectors>
+
+  <fields>
+
+    <!-- Q0eF quadrupole field -->
+    <field name="Q0eF_field" type="MultipoleMagnet">
+      <shape type="Tube" rmax="Q0eF_InnerRadius" dz="(Q0eF_StartZ-Q0eF_EndZ)/2."/>
+      <position x="0" y="0" z="(Q0eF_StartZ+Q0eF_EndZ)/2."/>
+      <coefficient/>
+      <coefficient coefficient="-13.0961*tesla/meter"/>
+    </field>
+
+    <!-- Q1eF quadrupole field -->
+    <field name="Q1eF_field" type="MultipoleMagnet">
+      <shape type="Tube" rmax="Q1eF_InnerRadius" dz="(Q1eF_StartZ-Q1eF_EndZ)/2."/>
+      <position x="0" y="0" z="(Q1eF_StartZ+Q1eF_EndZ)/2."/>
+      <coefficient/>
+      <coefficient coefficient="6.0639*tesla/meter"/>
+    </field>
+
+  </fields>
+
+</lccdd>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
