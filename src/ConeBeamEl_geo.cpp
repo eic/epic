@@ -64,4 +64,3 @@ static Ref_t create_element(Detector& lccdd, xml_h e, SensitiveDetector /*sens*/
 }//create_element
 
 DECLARE_DETELEMENT(ConeBeamEl, create_element)
-
