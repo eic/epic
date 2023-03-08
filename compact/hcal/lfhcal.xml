@@ -170,13 +170,14 @@
 
       <documentation>
         ### for testing of a single module
-        <eightmodulepositions name="xpos" unit="cm" values="15"/>
-        <eightmodulepositions name="ypos" unit="cm" values="15"/>
-        <eightmodulepositions name="zpos" unit="cm" values="0"/>
-        <fourmodulepositions name="xpos" unit="cm" values="-25"/>
-        <fourmodulepositions name="ypos" unit="cm" values="-25"/>
-        <fourmodulepositions name="zpos" unit="cm" values="0"/>
       </documentation>
+<!--        <eightmodulepositions name="xpos" unit="cm" values="15 35"/>
+        <eightmodulepositions name="ypos" unit="cm" values="15 35"/>
+        <eightmodulepositions name="zpos" unit="cm" values="0 0"/>
+        <fourmodulepositions name="xpos" unit="cm" values="-25 -35"/>
+        <fourmodulepositions name="ypos" unit="cm" values="-25 -35"/>
+        <fourmodulepositions name="zpos" unit="cm" values="0 0"/>
+      -->
 
       <documentation>
       ### full area LFHCAL 

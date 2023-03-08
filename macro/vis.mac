@@ -1,8 +1,9 @@
 /vis/open OGL 800x800-0+0
-
+/vis/ogl/set/displayListLimit 1000000
 /vis/drawVolume
 /vis/viewer/set/viewpointThetaPhi 30 30
 #/vis/viewer/zoom 30.
+/vis/viewer/set/background white
 #/vis/viewer/set/style wireframe
 #/vis/scene/add/axes 0 0 0 1 m
 /vis/scene/add/trajectories rich smooth
@@ -18,8 +19,28 @@
 #/vis/filtering/trajectories/particleFilter-0/verbose true
 #/vis/filtering/trajectories/particleFilter-0/active true
 
+/vis/filtering/trajectories/create/attributeFilter
+/vis/filtering/trajectories/attributeFilter-0/setAttribute IMag
+/vis/filtering/trajectories/attributeFilter-0/addInterval 2 MeV 1000 GeV
 
-/vis/ogl/set/displayListLimit 500000
+/vis/modeling/trajectories/create/drawByParticleID
+/vis/modeling/trajectories/drawByParticleID-0/set e+ steelblue
+/vis/modeling/trajectories/drawByParticleID-0/set e- steelblue
+/vis/modeling/trajectories/drawByParticleID-0/set pi+ red
+/vis/modeling/trajectories/drawByParticleID-0/set pi- red
+/vis/modeling/trajectories/drawByParticleID-0/set kaon- mediumvioletred
+/vis/modeling/trajectories/drawByParticleID-0/set kaon+ mediumvioletred
+/vis/modeling/trajectories/drawByParticleID-0/set kaon0 mediumvioletred
+/vis/modeling/trajectories/drawByParticleID-0/set proton+ orange
+/vis/modeling/trajectories/drawByParticleID-0/set proton- orange
+/vis/modeling/trajectories/drawByParticleID-0/set neutron lightgrey
+/vis/modeling/trajectories/drawByParticleID-0/set gamma wheat
+
+/vis/filtering/trajectories/create/particleFilter
+/vis/filtering/trajectories/particleFilter-0/add neutrino
+/vis/filtering/trajectories/particleFilter-0/invert true
+
+/vis/ogl/set/displayListLimit 1000000
 
 /vis/viewer/flush
 

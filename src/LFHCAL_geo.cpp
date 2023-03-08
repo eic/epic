@@ -172,8 +172,7 @@ Volume createAbsorberPlateEightM(Detector& desc,
   if (renderComp){
     absplate_vol.setAttributes(desc, region, limit, vis);
   } else {
-    absplate_vol.setRegion(desc,region);
-    absplate_vol.setLimitSet(desc,limit);
+    absplate_vol.setAttributes(desc, region, limit, "InvisibleNoDaughters");
   }
 
   
@@ -233,8 +232,7 @@ Volume createAbsorberPlateFourM(Detector& desc,
   if (renderComp){
     absplate_vol.setAttributes(desc, region, limit, vis);
   } else {
-    absplate_vol.setRegion(desc,region);
-    absplate_vol.setLimitSet(desc,limit);
+    absplate_vol.setAttributes(desc, region, limit, "InvisibleNoDaughters");
   }
   
   return absplate_vol;
@@ -293,8 +291,7 @@ Volume createFillerPlateEightM( Detector& desc,
   if (renderComp){
     filler_vol.setAttributes(desc, region, limit, vis);
   } else {
-    filler_vol.setRegion(desc,region);
-    filler_vol.setLimitSet(desc,limit);
+    filler_vol.setAttributes(desc, region, limit, "InvisibleNoDaughters");
   }
   
   return filler_vol;
@@ -347,8 +344,7 @@ Volume createFillerPlateFourM( Detector& desc,
   if (renderComp){
     filler_vol.setAttributes(desc, region, limit, vis);
   } else {
-    filler_vol.setRegion(desc,region);
-    filler_vol.setLimitSet(desc,limit);
+    filler_vol.setAttributes(desc, region, limit, "InvisibleNoDaughters");
   }
   return filler_vol;
 }
@@ -396,8 +392,7 @@ Volume createScintillatorTower( Detector& desc,
   if (renderComp){
     slice_vol.setAttributes(desc, region, limit, vis);
   } else {
-    slice_vol.setRegion(desc,region);
-    slice_vol.setLimitSet(desc,limit);
+    slice_vol.setAttributes(desc, region, limit, "InvisibleNoDaughters");
   }
   return slice_vol;
   
@@ -482,8 +477,7 @@ Assembly createScintillatorPlateEightM( Detector& desc,
   if (renderComp){
     ti0grid_vol.setAttributes(desc, region, limit, "LFHCALLayerTiOVis");
   } else {
-    ti0grid_vol.setRegion(desc,region);
-    ti0grid_vol.setLimitSet(desc,limit);
+    ti0grid_vol.setAttributes(desc, region, limit, "InvisibleNoDaughters");
   }
   pvm = modScintAssembly.placeVolume(ti0grid_vol, Position(0, 0, 0 ));
   
@@ -584,8 +578,7 @@ Assembly createScintillatorPlateFourM( Detector& desc,
   if (renderComp){
     ti0grid_vol.setAttributes(desc, region, limit, "LFHCALLayerTiOVis");
   } else {
-   ti0grid_vol.setRegion(desc,region);
-   ti0grid_vol.setLimitSet(desc,limit);
+    ti0grid_vol.setAttributes(desc, region, limit, "InvisibleNoDaughters");
   }
   pvm = modScintAssembly.placeVolume(ti0grid_vol, Position(0, 0, 0 ));
   
@@ -636,7 +629,8 @@ Volume createEightMModule ( Detector& desc,
   // assembly definition
   Box         modBox( mod_params.mod_width / 2., mod_params.mod_height / 2., length / 2.);
   Volume  vol_mod(baseName,modBox,desc.material("Air"));
-  vol_mod.setVisAttributes(mod_params.mod_visStr);
+  std::cout << "visualization string module: " << mod_params.mod_visStr.data() << std::endl;
+  vol_mod.setVisAttributes(desc.visAttributes(mod_params.mod_visStr.data()));
 
   // placement operator
   PlacedVolume pvm;
@@ -679,18 +673,12 @@ Volume createEightMModule ( Detector& desc,
     vol_modTopPlate.setAttributes(desc, mod_params.mod_regStr, mod_params.mod_limStr, mod_params.mod_visStr);
     vol_modBottomPlate.setAttributes(desc, mod_params.mod_regStr, mod_params.mod_limStr, mod_params.mod_visStr);
   } else {
-    vol_modFrontPlate.setRegion(desc,mod_params.mod_regStr);
-    vol_modFrontPlate.setLimitSet(desc,mod_params.mod_limStr);
-    vol_modBackPlate.setRegion(desc,mod_params.mod_regStr);
-    vol_modBackPlate.setLimitSet(desc,mod_params.mod_limStr);
-    vol_modSidePlateL.setRegion(desc,mod_params.mod_regStr);
-    vol_modSidePlateL.setLimitSet(desc,mod_params.mod_limStr);
-    vol_modSidePlateR.setRegion(desc,mod_params.mod_regStr);
-    vol_modSidePlateR.setLimitSet(desc,mod_params.mod_limStr);
-    vol_modTopPlate.setRegion(desc,mod_params.mod_regStr);
-    vol_modTopPlate.setLimitSet(desc,mod_params.mod_limStr);
-    vol_modBottomPlate.setRegion(desc,mod_params.mod_regStr);
-    vol_modBottomPlate.setLimitSet(desc,mod_params.mod_limStr);
+    vol_modFrontPlate.setAttributes(desc, mod_params.mod_regStr, mod_params.mod_limStr, "InvisibleNoDaughters");
+    vol_modBackPlate.setAttributes(desc, mod_params.mod_regStr, mod_params.mod_limStr, "InvisibleNoDaughters");
+    vol_modSidePlateL.setAttributes(desc, mod_params.mod_regStr, mod_params.mod_limStr, "InvisibleNoDaughters");
+    vol_modSidePlateR.setAttributes(desc, mod_params.mod_regStr, mod_params.mod_limStr, "InvisibleNoDaughters");
+    vol_modTopPlate.setAttributes(desc, mod_params.mod_regStr, mod_params.mod_limStr, "InvisibleNoDaughters");
+    vol_modBottomPlate.setAttributes(desc, mod_params.mod_regStr, mod_params.mod_limStr, "InvisibleNoDaughters");
   }
   
   
@@ -781,7 +769,8 @@ Volume createFourMModule ( Detector& desc,
   // assembly definition
   Box         modBox( mod_params.mod_width / 2., mod_params.mod_height / 2., length / 2.);
   Volume  vol_mod(baseName,modBox,desc.material("Air"));
-  vol_mod.setVisAttributes(mod_params.mod_visStr);
+  std::cout << "visualization string module: " << mod_params.mod_visStr.data() << std::endl;
+  vol_mod.setVisAttributes(desc.visAttributes(mod_params.mod_visStr.data()));
 
   // placement operator
   PlacedVolume pvm;
@@ -825,18 +814,12 @@ Volume createFourMModule ( Detector& desc,
     vol_modTopPlate.setAttributes(desc, mod_params.mod_regStr, mod_params.mod_limStr, mod_params.mod_visStr);
     vol_modBottomPlate.setAttributes(desc, mod_params.mod_regStr, mod_params.mod_limStr, mod_params.mod_visStr);
   } else {
-    vol_modFrontPlate.setRegion(desc,mod_params.mod_regStr);
-    vol_modFrontPlate.setLimitSet(desc,mod_params.mod_limStr);
-    vol_modBackPlate.setRegion(desc,mod_params.mod_regStr);
-    vol_modBackPlate.setLimitSet(desc,mod_params.mod_limStr);
-    vol_modSidePlateL.setRegion(desc,mod_params.mod_regStr);
-    vol_modSidePlateL.setLimitSet(desc,mod_params.mod_limStr);
-    vol_modSidePlateR.setRegion(desc,mod_params.mod_regStr);
-    vol_modSidePlateR.setLimitSet(desc,mod_params.mod_limStr);
-    vol_modTopPlate.setRegion(desc,mod_params.mod_regStr);
-    vol_modTopPlate.setLimitSet(desc,mod_params.mod_limStr);
-    vol_modBottomPlate.setRegion(desc,mod_params.mod_regStr);
-    vol_modBottomPlate.setLimitSet(desc,mod_params.mod_limStr);
+    vol_modFrontPlate.setAttributes(desc, mod_params.mod_regStr, mod_params.mod_limStr, "InvisibleNoDaughters");
+    vol_modBackPlate.setAttributes(desc, mod_params.mod_regStr, mod_params.mod_limStr, "InvisibleNoDaughters");
+    vol_modSidePlateL.setAttributes(desc, mod_params.mod_regStr, mod_params.mod_limStr, "InvisibleNoDaughters");
+    vol_modSidePlateR.setAttributes(desc, mod_params.mod_regStr, mod_params.mod_limStr, "InvisibleNoDaughters");
+    vol_modTopPlate.setAttributes(desc, mod_params.mod_regStr, mod_params.mod_limStr, "InvisibleNoDaughters");
+    vol_modBottomPlate.setAttributes(desc, mod_params.mod_regStr, mod_params.mod_limStr, "InvisibleNoDaughters");
   }
 
   int    layer_num = 0;
