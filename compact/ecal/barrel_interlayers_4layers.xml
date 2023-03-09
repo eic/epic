@@ -93,7 +93,7 @@
 
   <limits>
   </limits>
- 
+
   <regions>
   </regions>
 
@@ -159,7 +159,7 @@
         rmin="EcalBarrel_rmin"
         z="EcalBarrel_Calorimeter_length"/>
       <staves vis="EcalBarrelStaveVis"/>
-      
+
       <layer repeat="2" vis="EcalBarrelLayerVis"
        space_before="EcalBarrel_ImagingLayerThickness_first + 0.5*EcalBarrel_SpaceBetween">
         <slice material="SciFiPb_PbGlue" thickness="EcalBarrel_RadiatorThickness" vis="EcalBarrelFiberLayerVis">
@@ -201,7 +201,7 @@
           </fiber>
         </slice>
       </layer>
-      
+
       <layer repeat="EcalBarrel_FiberChunkLayers_num" vis="EcalBarrelLayerVis"
           space_before="EcalBarrel_ImagingLayerThickness + EcalBarrel_SpaceBetween">
         <slice material="SciFiPb_PbGlue"

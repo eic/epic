@@ -82,7 +82,7 @@
 
     <constant name="EcalBarrel_ImagingPartThickness"
         value="(EcalBarrelImagingLayers_num-2)*(EcalBarrel_ImagingLayerThickness + EcalBarrel_ScFiLayerThickness + EcalBarrel_SpaceBetween)
-              + (EcalBarrel_ImagingLayerThickness_first + EcalBarrel_SpaceBetween) 
+              + (EcalBarrel_ImagingLayerThickness_first + EcalBarrel_SpaceBetween)
               + (EcalBarrel_FiberLayers_BeforeLastImg + EcalBarrel_ImagingLayerThickness + EcalBarrel_SpaceBetween)"/>
     <constant name="EcalBarrel_ScFiPartThickness_max"
         value="max(0, EcalBarrel_AvailThickness-EcalBarrel_ImagingPartThickness)"/>
@@ -152,7 +152,7 @@
         <slice material="Kapton" thickness="EcalBarrel_KaptonThickness"       vis="EcalBarrelSliceVis"/>
         <slice material="Epoxy" thickness="EcalBarrel_EpoxyThickness"         vis="EcalBarrelSliceVis"/>
         <slice material="CarbonFiber" thickness="EcalBarrel_CarbonThickness" vis="EcalBarrelSliceVis"/>
-      </layer> 
+      </layer>
     </detector>
 
     <comment>
@@ -200,7 +200,7 @@
           </fiber>
         </slice>
       </layer>
-      
+
       <layer repeat="EcalBarrel_FiberChunkLayers_num" vis="EcalBarrelLayerVis"
           space_before="EcalBarrel_ImagingLayerThickness + EcalBarrel_SpaceBetween">
         <slice material="SciFiPb_PbGlue"
