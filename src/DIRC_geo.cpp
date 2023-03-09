@@ -108,9 +108,9 @@ static Ref_t createDetector(Detector& desc, xml_h e, SensitiveDetector sens)
 
   // Lens variables
   xml_comp_t xml_lens    = xml_module.child(_Unicode(lens));
-  double     lens_height = getAttrOrDefault(xml_lens, _Unicode(height), 50 * mm);
+  //double     lens_height = getAttrOrDefault(xml_lens, _Unicode(height), 50 * mm);
   double     lens_shift  = getAttrOrDefault(xml_lens, _Unicode(shift), 0 * mm);
-  // double lens_width = getAttrOrDefault(xml_lens, _Unicode(width), 25 * mm);
+  double lens_width = getAttrOrDefault(xml_lens, _Unicode(width), 35 * mm);
   double lens_thickness = getAttrOrDefault(xml_lens, _Unicode(thickness), 12 * mm);
   double lens_r1        = getAttrOrDefault(xml_lens, _Unicode(r1), 62 * mm);
   double lens_r2        = getAttrOrDefault(xml_lens, _Unicode(r2), 36 * mm);
@@ -118,37 +118,33 @@ static Ref_t createDetector(Detector& desc, xml_h e, SensitiveDetector sens)
   // Lens construction
   // FIXME avoid negative impact of booleans by putting lens inside box
 
-  // lens_min_thickness is distance from face to r1, and from r1 to r2 at lens top edge
-  double lens_min_thickness = 0.5 * mm;
-  double layer01            = 1.0 * lens_min_thickness;
-  double layer12            = 2.0 * lens_min_thickness;
+  // 3-layer spherical lens ---
 
-  // ztrans1 and ztrans2 are the z shifts of the lens center for r1 and r2
-  double ztrans1 = lens_thickness / 2. + sqrt(lens_r1 * lens_r1 - lens_height / 2. * lens_height / 2.) - layer01;
-  double ztrans2 = lens_thickness / 2. + sqrt(lens_r2 * lens_r2 - lens_height / 2. * lens_height / 2.) - layer12;
+  double thight = bar_height;
+  double cr2 = sqrt(lens_width * lens_width / 4. + thight * thight / 4.);
 
-  Box gfbox("fbox", 0.5 * prism_short_edge, 0.5 * prism_width, 0.5 * lens_thickness);
-  Box gcbox("cbox", 0.5 * prism_short_edge, 0.5 * prism_width + 1 * mm, 0.5 * lens_thickness);
+  double lens_min_thickness = 2.0 * mm;
 
-  Position         tTrans1(0.5 * (prism_short_edge + lens_height), 0, lens_thickness - layer12);
-  Position         tTrans0(-0.5 * (prism_short_edge + lens_height), 0, lens_thickness - layer12);
-  SubtractionSolid tubox("tubox", gfbox, gcbox, tTrans1);
-  SubtractionSolid gubox("gubox", tubox, gcbox, tTrans0);
+  double ztrans1 = -lens_thickness / 2. - sqrt(lens_r1 * lens_r1 - cr2 * cr2) + lens_min_thickness;
+  double ztrans2 = -lens_thickness / 2. - sqrt(lens_r2 * lens_r2 - cr2 * cr2) + lens_min_thickness * 2;  
 
-  Tube gcylinder1("Cylinder1", 0, lens_r1, 0.5 * prism_width, 0 * deg, 360 * deg);
-  Tube gcylinder2("Cylinder2", 0, lens_r2, 0.5 * prism_width - 0.5 * mm, 0 * deg, 360 * deg);
-  Tube gcylinder1c("Cylinder1c", 0, lens_r1, 0.5 * prism_width + 0.5 * mm, 0 * deg, 360 * deg);
-  Tube gcylinder2c("Cylinder2c", 0, lens_r2, 0.5 * prism_width + 0.5 * mm, 0 * deg, 360 * deg);
+  Box gfbox("Fbox", 0.5 * prism_short_edge, 0.5 * lens_width, 0.5 * lens_thickness);
+  Tube gfstube("ftube", 0, cr2, 0.5 * lens_thickness, 0 * deg, 360 * deg);
 
-  IntersectionSolid lens_layer1_solid("lens_layer1_solid", gubox, gcylinder1,
-                                      Transform3D(RotationX(M_PI / 2.), Position(0, 0, ztrans1)));
-  SubtractionSolid  gLenst("temp", gubox, gcylinder1c, Transform3D(RotationX(M_PI / 2.), Position(0, 0, ztrans1)));
+  Sphere gsphere1("Sphere1", 0, lens_r1, 0 * deg, 180 * deg, 0 * deg, 360 * deg);
+  Sphere gsphere2("Sphere2", 0, lens_r2, 0 * deg, 180 * deg, 0 * deg, 360 * deg);
+  
+  IntersectionSolid gbbox("bbox", gfbox, gfbox, Position(0, 0, -lens_min_thickness * 2));
+  IntersectionSolid gsbox("sbox", gfstube, gfbox, Position(0, 0, lens_min_thickness * 2));
 
-  IntersectionSolid lens_layer2_solid("lens_layer2_solid", gLenst, gcylinder2,
-                                      Transform3D(RotationX(M_PI / 2.), Position(0, 0, ztrans2)));
-  SubtractionSolid  lens_layer3_solid("lens_layer3_solid", gLenst, gcylinder2c,
-                                      Transform3D(RotationX(M_PI / 2.), Position(0, 0, ztrans2)));
+  UnionSolid gubox("unionbox", gbbox, gsbox);
 
+  IntersectionSolid lens_layer1_solid("lens_layer1_solid", gubox, gsphere1, Position(0, 0, -ztrans1));
+  SubtractionSolid  gLenst("temp", gubox, gsphere1, Position(0, 0, -ztrans1));
+
+  IntersectionSolid lens_layer2_solid("lens_layer2_solid", gLenst, gsphere2, Position(0, 0, -ztrans2));
+  SubtractionSolid  lens_layer3_solid("lens_layer3_solid", gLenst, gsphere2, Position(0, 0, -ztrans2));
+  
   Volume lens_layer1_vol("lens_layer1_vol", lens_layer1_solid,
                          desc.material(xml_lens.attr<std::string>(_Unicode(material1))));
   Volume lens_layer2_vol("lens_layer2_vol", lens_layer2_solid,
@@ -162,11 +158,17 @@ static Ref_t createDetector(Detector& desc, xml_h e, SensitiveDetector sens)
 
   double   lens_position_x = lens_shift;
   double   lens_position_z = -0.5 * (bar_assm_length + lens_thickness);
-  Position lens_position(lens_position_x, 0, lens_position_z);
-  dirc_module.placeVolume(lens_layer1_vol, lens_position);
-  dirc_module.placeVolume(lens_layer2_vol, lens_position);
-  dirc_module.placeVolume(lens_layer3_vol, lens_position);
+  
+  for(int y_index = 0; y_index < bar_repeat_y; y_index++)
+    {
+      double lens_position_y = y_index*lens_width - 0.5*(prism_width - lens_width);
 
+      Position lens_position(lens_position_x, lens_position_y, lens_position_z);
+      dirc_module.placeVolume(lens_layer1_vol, lens_position);
+      dirc_module.placeVolume(lens_layer2_vol, lens_position);
+      dirc_module.placeVolume(lens_layer3_vol, lens_position);
+    }
+            
   // Prism construction
   Trap   prism_trap = MakeTrap("prism_trap", prism_width, prism_length, prism_long_edge, prism_short_edge);
   Volume prism_vol("prism_vol", prism_trap, desc.material(xml_prism.materialStr()));
