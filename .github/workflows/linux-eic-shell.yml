@@ -156,7 +156,7 @@ jobs:
           -f state="pending" \
           -f target_url="${{ steps.trigger.outputs.web_url }}" \
           -f description="Triggered... $(TZ=America/New_York date)" \
-          -f context="eicweb/geoviewer (${{ matrix.detector_config }})"
+          -f context="eicweb/geoviewer (epic_${{ matrix.detector_config }})"
       env:
         GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
