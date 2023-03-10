@@ -126,14 +126,14 @@ static Ref_t createDetector(Detector& desc, xml_h e, SensitiveDetector sens)
   double lens_min_thickness = 2.0 * mm;
 
   double ztrans1 = -lens_thickness / 2. - sqrt(lens_r1 * lens_r1 - cr2 * cr2) + lens_min_thickness;
-  double ztrans2 = -lens_thickness / 2. - sqrt(lens_r2 * lens_r2 - cr2 * cr2) + lens_min_thickness * 2;  
+  double ztrans2 = -lens_thickness / 2. - sqrt(lens_r2 * lens_r2 - cr2 * cr2) + lens_min_thickness * 2;
 
   Box gfbox("Fbox", 0.5 * prism_short_edge, 0.5 * lens_width, 0.5 * lens_thickness);
   Tube gfstube("ftube", 0, cr2, 0.5 * lens_thickness, 0 * deg, 360 * deg);
 
   Sphere gsphere1("Sphere1", 0, lens_r1, 0 * deg, 180 * deg, 0 * deg, 360 * deg);
   Sphere gsphere2("Sphere2", 0, lens_r2, 0 * deg, 180 * deg, 0 * deg, 360 * deg);
-  
+
   IntersectionSolid gbbox("bbox", gfbox, gfbox, Position(0, 0, -lens_min_thickness * 2));
   IntersectionSolid gsbox("sbox", gfstube, gfbox, Position(0, 0, lens_min_thickness * 2));
 
@@ -144,7 +144,7 @@ static Ref_t createDetector(Detector& desc, xml_h e, SensitiveDetector sens)
 
   IntersectionSolid lens_layer2_solid("lens_layer2_solid", gLenst, gsphere2, Position(0, 0, -ztrans2));
   SubtractionSolid  lens_layer3_solid("lens_layer3_solid", gLenst, gsphere2, Position(0, 0, -ztrans2));
-  
+
   Volume lens_layer1_vol("lens_layer1_vol", lens_layer1_solid,
                          desc.material(xml_lens.attr<std::string>(_Unicode(material1))));
   Volume lens_layer2_vol("lens_layer2_vol", lens_layer2_solid,
@@ -158,7 +158,7 @@ static Ref_t createDetector(Detector& desc, xml_h e, SensitiveDetector sens)
 
   double   lens_position_x = lens_shift;
   double   lens_position_z = -0.5 * (bar_assm_length + lens_thickness);
-  
+
   for(int y_index = 0; y_index < bar_repeat_y; y_index++)
     {
       double lens_position_y = y_index*lens_width - 0.5*(prism_width - lens_width);
@@ -168,7 +168,7 @@ static Ref_t createDetector(Detector& desc, xml_h e, SensitiveDetector sens)
       dirc_module.placeVolume(lens_layer2_vol, lens_position);
       dirc_module.placeVolume(lens_layer3_vol, lens_position);
     }
-  
+
   // Prism construction
   Trap   prism_trap = MakeTrap("prism_trap", prism_width, prism_length, prism_long_edge, prism_short_edge);
   Volume prism_vol("prism_vol", prism_trap, desc.material(xml_prism.materialStr()));
