@@ -508,6 +508,7 @@ jobs:
   generate-prim-file:
     runs-on: ubuntu-latest
     needs: build
+    if: github.ref == 'refs/heads/main'
     strategy:
       matrix:
         detector_config: [epic_arches, epic_brycecanyon]
@@ -536,6 +537,7 @@ jobs:
   dawn-view:
     runs-on: ubuntu-latest
     needs: generate-prim-file
+    if: github.ref == 'refs/heads/main'
     strategy:
       matrix:
         view: [view1, view2, view3, view6, view7, view11, view13, view50]
@@ -564,6 +566,7 @@ jobs:
   dawn-view-slices:
     runs-on: ubuntu-latest
     needs: generate-prim-file
+    if: github.ref == 'refs/heads/main'
     strategy:
       matrix:
         view: [view12, view14, view15]
