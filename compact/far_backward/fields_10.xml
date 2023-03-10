@@ -11,7 +11,7 @@
   </comment>
 
 
-  <!-- Beamline -->  
+  <!-- Beamline -->
   <constant name="Q1eR_Gradient"  value="-0.739741*tesla/meter/GeV*ElectronBeamEnergy"/>
   <constant name="Q2eR_Gradient"  value="0.66821*tesla/meter/GeV*ElectronBeamEnergy"/>
   <constant name="Q3eR_Gradient"  value="0.21674*tesla/meter/GeV*ElectronBeamEnergy"/>
