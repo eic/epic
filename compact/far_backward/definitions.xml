@@ -248,14 +248,12 @@
     <constant name="LumiSweepMag_Y"       value="0*m"/>
     <constant name="LumiSweepMag_Z"       value="-36*m"/>
     <constant name="LumiSweepMag_DZ"      value="0.78*m"/>
-    <constant name="LumiSweepMag_B"       value="0.5*tesla"/>
 
     <!-- Lumi spectrometer dipole Magnet -->
     <constant name="LumiSpecMag_X"        value="0*m"/>
     <constant name="LumiSpecMag_Y"        value="0*m"/>
     <constant name="LumiSpecMag_Z"        value="-56*m"/>
     <constant name="LumiSpecMag_DZ"       value="LumiSweepMag_DZ"/>
-    <constant name="LumiSpecMag_B"        value="0.5*tesla"/>
 
     <!-- Lumi converter -->
     <constant name="LumiConverter_X"      value="0*m"/>

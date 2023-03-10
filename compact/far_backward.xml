@@ -3,7 +3,6 @@
 
 <lccdd>
 
-  <include ref="far_backward/definitions.xml"/>
   <include ref="far_backward/magnets.xml"/>
   <include ref="far_backward/beamline_hadron.xml"/>
   <include ref="far_backward/beamline_electron.xml"/>

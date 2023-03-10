@@ -119,33 +119,33 @@
       <shape type="Tube" rmax="Q1eR_InnerRadius" dz="Q1eR_Length/2"/>
       <position x="0" y="0" z="Q1eR_CenterPosition"/>
       <coefficient/>
-      <coefficient coefficient="-13.3153*tesla/meter"/>
+      <coefficient coefficient="Q1eR_Gradient"/>
     </field>
 
     <field name="Magnet_Q2eR_Field" type="MultipoleMagnet">
       <shape type="Tube" rmax="Q2eR_InnerRadius" dz="Q2eR_Length/2"/>
       <position x="0" y="0" z="Q2eR_CenterPosition"/>
       <coefficient/>
-      <coefficient coefficient="12.0595*tesla/meter"/>
+      <coefficient coefficient="Q2eR_Gradient"/>
     </field>
 
     <field name="Magnet_Q3eR_Field" type="MultipoleMagnet">
       <shape type="Tube" rmax="Q3eR_InnerRadius" dz="Q3eR_Length/2"/>
       <position x="0" y="0" z="Q3eR_CenterPosition"/>
       <coefficient/>
-      <coefficient coefficient="12.0595*tesla/meter"/>
+      <coefficient coefficient="Q3eR_Gradient"/>
     </field>
 
     <field name="Magnet_B2AeR_Field" type="MultipoleMagnet">
       <shape type="Tube" rmax="B2AeR_InnerRadius" dz="B2AeR_Length/2"/>
       <position x="0" y="0" z="B2AeR_CenterPosition"/>
-      <coefficient coefficient="0.192*tesla"/>
+      <coefficient coefficient="B2AeR_B"/>
     </field>
 
     <field name="Magnet_B2BeR_Field" type="MultipoleMagnet">
       <shape type="Tube" rmax="B2BeR_InnerRadius" dz="B2BeR_Length/2"/>
       <position x="0" y="0" z="B2BeR_CenterPosition"/>
-      <coefficient coefficient="0.238*tesla"/>
+      <coefficient coefficient="B2BeR_B"/>
     </field>
 
   </fields>

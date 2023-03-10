@@ -46,6 +46,8 @@
     </documentation>
     <include ref="${DETECTOR_PATH}/compact/far_forward/fields_{{ pbeam | default("275", true) }}.xml" />
     <include ref="${DETECTOR_PATH}/compact/far_forward/definitions.xml" />
+    <include ref="${DETECTOR_PATH}/compact/far_backward/fields_{{ ebeam | default("18", true) }}.xml" />
+    <include ref="${DETECTOR_PATH}/compact/far_backward/definitions.xml" />
     <include ref="${DETECTOR_PATH}/compact/definitions.xml" />
     <include ref="${DD4hepINSTALL}/DDDetectors/compact/detector_types.xml"/>
   </define>
