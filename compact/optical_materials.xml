@@ -400,7 +400,7 @@
       5.62797*eV   1.87774
       5.81266*eV   1.88822
       6.00407*eV   1.89988
-      6.1992*eV    1.9127							   
+      6.1992*eV    1.9127
       "/>
     <matrix name="ABSLENGTH__DIRCSapphire" coldim="2" values="
       1.02212*eV   350.051*mm
@@ -930,7 +930,7 @@
       <composite n="2" ref="Al"/>
       <composite n="3" ref="O"/>
       <property name="RINDEX" ref="RINDEX__DIRCSapphire"/>
-      <property name="ABSLENGTH" ref="ABSLENGTH__DIRCSapphire"/>      
+      <property name="ABSLENGTH" ref="ABSLENGTH__DIRCSapphire"/>
     </material>
     <material name="VM2000">
       <D type="density" value="1.43" unit="g / cm3"/>
