@@ -35,7 +35,7 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 include(GNUInstallDirs)
 
 # Dependencies
-find_package(DD4hep 1.21 REQUIRED COMPONENTS DDCore DDG4 DDRec)
+find_package(DD4hep 1.21 REQUIRED COMPONENTS DDCore DDRec)
 find_package(fmt REQUIRED)
 
 #-----------------------------------------------------------------------------------
