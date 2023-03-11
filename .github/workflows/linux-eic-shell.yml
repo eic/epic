@@ -103,7 +103,7 @@ jobs:
         if-no-files-found: error
     - run: |
         source install/setup.sh
-        sed -z 's|\(<fiber\)|<comment>\1|g; s|\(/fiber>\)|\1</comment>|g'
+        sed -z 's|\(<fiber\)|<comment>\1|g; s|\(/fiber>\)|\1</comment>|g' ${DETECTOR_PATH}/compact/ecal/barrel_interlayers.xml
         sed -i '/<fiber/,+4d' ${DETECTOR_PATH}/compact/ecal/forward_scfi.xml
         sed -i '/<fiber/,+4d' ${DETECTOR_PATH}/compact/far_forward/ZDC_Ecal_WSciFi.xml
         sed -i '/<lens/,+4d' ${DETECTOR_PATH}/compact/pid/mrich.xml
