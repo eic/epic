@@ -564,6 +564,7 @@ jobs:
   dawn-view-slices:
     runs-on: ubuntu-latest
     needs: generate-prim-file
+    if: github.ref == 'refs/heads/main'
     strategy:
       matrix:
         view: [view12, view14, view15]
