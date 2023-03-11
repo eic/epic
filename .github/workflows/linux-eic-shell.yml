@@ -349,7 +349,7 @@ jobs:
     strategy:
       matrix:
         option: ['m'] #, 's'] # FIXME
-        detector_config: [epic_arches, epic_brycecanyon] # FIXME
+        detector_config: [epic_arches, epic_brycecanyon, epic_brycecanyon_pfrich_gdml] # FIXME
       fail-fast: false
     steps:
     - uses: actions/checkout@v3
@@ -403,7 +403,7 @@ jobs:
       - list-detector-configs
     strategy:
       matrix:
-        detector_config: [epic_arches, epic_brycecanyon, epic_arches_no_barrel_hcal, epic_brycecanyon_no_barrel_hcal] # FIXME
+        detector_config: [epic_arches, epic_brycecanyon, epic_brycecanyon_pfrich_gdml, epic_arches_no_barrel_hcal, epic_brycecanyon_no_barrel_hcal] # FIXME
       fail-fast: false
     steps:
     - uses: actions/checkout@v3
@@ -453,7 +453,7 @@ jobs:
     needs: build
     strategy:
       matrix:
-        detector_config: [epic_arches, epic_brycecanyon] # FIXME
+        detector_config: [epic_arches, epic_brycecanyon, epic_brycecanyon_pfrich_gdml] # FIXME
       fail-fast: false
     steps:
     - uses: actions/checkout@v3
@@ -510,7 +510,7 @@ jobs:
     needs: build
     strategy:
       matrix:
-        detector_config: [epic_arches, epic_brycecanyon]
+        detector_config: [epic_arches, epic_brycecanyon, epic_brycecanyon_pfrich_gdml]
       fail-fast: false
     steps:
     - uses: actions/checkout@v3
@@ -539,7 +539,7 @@ jobs:
     strategy:
       matrix:
         view: [view1, view2, view3, view6, view7, view11, view13, view50]
-        detector_config: [epic_arches, epic_brycecanyon]
+        detector_config: [epic_arches, epic_brycecanyon, epic_brycecanyon_pfrich_gdml]
       fail-fast: false
     steps:
     - uses: actions/checkout@v3
@@ -568,7 +568,7 @@ jobs:
       matrix:
         view: [view12, view14, view15]
         slice: [100, 300, 500, 700, 900, 1100, 1300, 1500, 1700, 1900]
-        detector_config: [epic_arches, epic_brycecanyon]
+        detector_config: [epic_arches, epic_brycecanyon, epic_brycecanyon_pfrich_gdml]
       fail-fast: false
     steps:
     - uses: actions/checkout@v3
