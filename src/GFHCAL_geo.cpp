@@ -17,8 +17,14 @@ using namespace dd4hep;
 //************************************************************************************************************
 //************************** create module assembly  ******************************************************
 //************************************************************************************************************
-Volume createModule(Detector& desc, int modID_x, int modID_y, double length, SensitiveDetector sens,
-                    int doSamplingFractionStudies, bool isLargeMod, bool useMoreLayers)
+Volume createModule(Detector& desc, 
+                    int modID_x, int modID_y, 
+                    double length, 
+                    SensitiveDetector sens,
+                    bool doSamplingFractionStudies, 
+                    int diffLayout,
+                    bool isLargeMod, 
+                    bool useMoreLayers)
 {
   double modBox_face_width      = 1.5*cm;
   double modBox_length_tot      = length - 2*modBox_face_width;
@@ -104,7 +110,7 @@ Volume createModule(Detector& desc, int modID_x, int modID_y, double length, Sen
 
   Box    steelAbsorberBox(absorber_thickness / 2., modBox_height / 2., modBox_steel_length / 2.);
   Volume vol_steelAbsorberBox(baseName + "_FeAbsorber" + modShrtName, steelAbsorberBox, desc.material("Steel235"));
-  if (doSamplingFractionStudies == 3)
+  if (diffLayout == 3)
     vol_steelAbsorberBox.setMaterial(desc.material("Tungsten"));
   if (visDetails) {
     vol_steelAbsorberBox.setVisAttributes(desc.visAttributes("AnlLight_Gray"));
@@ -114,7 +120,7 @@ Volume createModule(Detector& desc, int modID_x, int modID_y, double length, Sen
 
   Box    tungstenAbsorberBox(absorber_thickness / 2., modBox_height / 2., modBox_tungsten_length / 2.);
   Volume vol_tungstenAbsorberBox(baseName + "_WAbsorber" + modShrtName, tungstenAbsorberBox, desc.material("Tungsten"));
-  if (doSamplingFractionStudies == 2)
+  if (diffLayout == 2)
     vol_tungstenAbsorberBox.setMaterial(desc.material("Steel235"));
   if (visDetails) {
     if (isLargeMod) {
@@ -375,8 +381,10 @@ static Ref_t createDetector(Detector& desc, xml_h handle, SensitiveDetector sens
   int         det_id   = x_det.id();
   std::string det_name = x_det.nameStr();
 
-  int doSamplingFractionStudies = getAttrOrDefault(x_det, _Unicode(doSamplingFractionStudies), 0);
+  bool doSamplingFractionStudies = getAttrOrDefault(x_det, _Unicode(doSamplingFractionStudies), 0);
+  int layoutVersion = getAttrOrDefault(x_det, _Unicode(layoutVersion), 1);
   std::cout << "doSamplingFractionStudies = " << doSamplingFractionStudies << std::endl;
+  std::cout << "layoutVersion = " << layoutVersion << std::endl;
   int useMoreLayers = getAttrOrDefault(x_det, _Unicode(useMoreLayers), 0);
   std::cout << "useMoreLayers = " << useMoreLayers << std::endl;
 
@@ -447,7 +455,7 @@ static Ref_t createDetector(Detector& desc, xml_h handle, SensitiveDetector sens
         std::cout << "GFHCAL WRONG ID FOR 8M module: " << e << "/" << (int)xpos8M.size() << "\t" << moduleIDx << "\t"
                   << moduleIDy << std::endl;
       }
-      Volume eightMassembly = createModule(desc, moduleIDx, moduleIDy, length, sens, doSamplingFractionStudies, false, useMoreLayers);
+      Volume eightMassembly = createModule(desc, moduleIDx, moduleIDy, length, sens, doSamplingFractionStudies, layoutVersion, false, useMoreLayers);
       // Volume eightMassembly = createEightMModule(desc, moduleIDx, moduleIDy, length, sens,
       // doSamplingFractionStudies);
 
@@ -507,18 +515,18 @@ static Ref_t createDetector(Detector& desc, xml_h handle, SensitiveDetector sens
       moduleIDx = ((xpos12M[e] + 275) / 10);
       moduleIDy = ((ypos12M[e] + 265) / 10);
       if (moduleIDx < 0 || moduleIDy < 0) {
-        // std::cout << "GFHCAL placing 8M module: " << e << "/" << (int)xpos8M.size() << "\t" << xpos8M[e] << "\t"
-        //           << ypos8M[e] << "\t" << zpos8M[e] << std::endl;
-        std::cout << "GFHCAL WRONG ID FOR 8M module: " << e << "/" << (int)xpos8M.size() << "\t" << moduleIDx << "\t"
+        // std::cout << "GFHCAL placing 8M module: " << e << "/" << (int)xpos12M.size() << "\t" << xpos12M[e] << "\t"
+        //           << ypos12M[e] << "\t" << zpos8M[e] << std::endl;
+        std::cout << "GFHCAL WRONG ID FOR 8M module: " << e << "/" << (int)xpos12M.size() << "\t" << moduleIDx << "\t"
                   << moduleIDy << std::endl;
       }
-      Volume eightMassembly = createModule(desc, moduleIDx, moduleIDy, length, sens, doSamplingFractionStudies, true, useMoreLayers);
+      Volume twelveMassembly = createModule(desc, moduleIDx, moduleIDy, length, sens, doSamplingFractionStudies, layoutVersion, true, useMoreLayers);
       // Volume eightMassembly = createTwelveMModule(desc, moduleIDx, moduleIDy, length, sens,
       // doSamplingFractionStudies);
 
       auto tr12M = Transform3D(Position(pos.x() - xpos12M[e] * dd4hep::cm - 10 * cm, pos.y() - ypos12M[e] * dd4hep::cm,
                                         pos.z() + length / 2.));
-      phv        = assembly.placeVolume(eightMassembly, tr12M);
+      phv        = assembly.placeVolume(twelveMassembly, tr12M);
       phv.addPhysVolID("modulex", moduleIDx);
       phv.addPhysVolID("moduley", moduleIDy);
       phv.addPhysVolID("passive", 0);

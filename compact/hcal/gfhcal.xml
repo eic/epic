@@ -77,8 +77,9 @@
       vis="InvisibleWithDaughters"
       calorimeterType="HAD_ENDCAP"
       renderComponents="0"
-      doSamplingFractionStudies="0"
-      useMoreLayers="0">
+      doSamplingFractionStudies="1"
+      layoutVersion="1"
+      useMoreLayers="1">
 
       <position x="0" y="0" z="GFHCAL_zmin"/>
       <dimensions
