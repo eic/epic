@@ -8,3 +8,5 @@ features:
     tof_barrel:
   pid:
     pfrich_gdml:
+  ecal:
+    backward_PbWO4:
