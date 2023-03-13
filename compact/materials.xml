@@ -175,6 +175,50 @@
     <fraction n="0.023" ref="H"/>
     <fraction n="0.033" ref="Cl"/>
   </material>
+  <material name="CarbonFoamF2">
+    <D type="density" value="0.2284" unit="g/cm3"/>  #### 2%X0=(2-0.35)/(1-0.35)
+    <fraction n="1.00" ref="C"/>
+  </material>
+  <material name="CFRPMixF2">
+    <D type="density" value="0.0762" unit="g/cm3"/>
+    <fraction n="0.074" ref="O"/>
+    <fraction n="0.870" ref="C"/>
+    <fraction n="0.023" ref="H"/>
+    <fraction n="0.033" ref="Cl"/>
+  </material>
+  <material name="CarbonFoamF4">
+    <D type="density" value="0.5054" unit="g/cm3"/>  #### 4%X0=(4-0.35)/(1-0.35)
+    <fraction n="1.00" ref="C"/>
+  </material>
+  <material name="CFRPMixF4">
+    <D type="density" value="0.1685" unit="g/cm3"/>
+    <fraction n="0.074" ref="O"/>
+    <fraction n="0.870" ref="C"/>
+    <fraction n="0.023" ref="H"/>
+    <fraction n="0.033" ref="Cl"/>
+  </material>
+  <material name="CarbonFoamF8">
+    <D type="density" value="1.0592" unit="g/cm3"/>  #### 8%X0=(8-0.35)/(1-0.35)
+    <fraction n="1.00" ref="C"/>
+  </material>
+  <material name="CFRPMixF8">
+    <D type="density" value="0.3531" unit="g/cm3"/>
+    <fraction n="0.074" ref="O"/>
+    <fraction n="0.870" ref="C"/>
+    <fraction n="0.023" ref="H"/>
+    <fraction n="0.033" ref="Cl"/>
+  </material>
+  <material name="CarbonFoamF10">
+    <D type="density" value="2.5" unit="g/cm3"/>  #### 20%X0
+    <fraction n="1.00" ref="C"/>
+  </material>
+  <material name="CFRPMixF10">
+    <D type="density" value="0.84" unit="g/cm3"/>
+    <fraction n="0.074" ref="O"/>
+    <fraction n="0.870" ref="C"/>
+    <fraction n="0.023" ref="H"/>
+    <fraction n="0.033" ref="Cl"/>
+  </material>
   <material name="CFRPMix2">
     <D type="density" value="1.60" unit="g/cm3"/>
     <fraction n="0.074" ref="O"/>
@@ -475,3 +519,4 @@
     <fraction n="0.0378" ref="SciFiPb_Glue"/>
   </material>
 </materials>
+
