@@ -83,7 +83,7 @@
             <position x="-6.15" y="4.1"/>
             <position x="-6.15" y="6.15"/>
           </positions>
-          
+
           <comment>
             The position information[cm] of additional modules to fill the gap
             between the sensitive region and inner/outer frame structure. [92 posints in total]
@@ -98,7 +98,7 @@
             <position x="7.175"  y="5.125"/>
             <position x="9.225"  y="1.025"/>
             <position x="9.225"  y="3.075"/>
-            <position x="-1.025" y="7.175"/>            
+            <position x="-1.025" y="7.175"/>
             <position x="-1.025" y="9.225"/>
             <position x="-3.025" y="7.175"/>
             <position x="-3.075" y="9.225"/>
@@ -128,7 +128,7 @@
             <position x="9.225"  y="62.525"/>
             <position x="11.275" y="62.525"/>
             <position x="13.325" y="62.525"/>
-            <position x="15.375" y="62.525"/>            
+            <position x="15.375" y="62.525"/>
             <position x="17.425" y="60.475"/>
             <position x="19.475" y="60.475"/>
             <position x="44.075" y="46.125"/>
@@ -180,10 +180,10 @@
             <position x="62.525"  y="-15.375"/>
             <position x="62.525"  y="-13.325"/>
             <position x="62.525"  y="-11.275"/>
-            <position x="62.525"  y="-9.225"/>            
+            <position x="62.525"  y="-9.225"/>
           </positions>
 
-          
+
           <module
             gx="EcalEndcapN_CrystalModule_width + 2.*EcalEndcapN_CrystalModule_carbon_thickness + 2.*EcalEndcapN_CrystalModule_wrap_thickness"
             gy="EcalEndcapN_CrystalModule_width + 2.*EcalEndcapN_CrystalModule_carbon_thickness + 2.*EcalEndcapN_CrystalModule_wrap_thickness"

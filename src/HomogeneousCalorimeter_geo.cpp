@@ -210,12 +210,12 @@ static std::tuple<int, std::pair<int, int>> add_12surface_disk(Detector& desc, A
   std::string iposy                  = plm.attr<std::string>(_Unicode(inner_outer_add_posy));
 
 
-  
+
   for (xml_coll_t x_positions_i(plm, _Unicode(positions)); x_positions_i; ++x_positions_i){
     xml_comp_t x_positions = x_positions_i;
 
     std::cout << "start output: ";
-    
+
     for (xml_coll_t x_position_i(x_positions, _U(position)); x_position_i; ++x_position_i){
       xml_comp_t x_position = x_position_i;
       std::cout << x_position.x() << ", " << x_position.y() << std::endl;
@@ -223,7 +223,7 @@ static std::tuple<int, std::pair<int, int>> add_12surface_disk(Detector& desc, A
 
     std::cout << std::endl << std::endl;
   }
-  
+
   //=========================================================
   // optional envelope volume and the supporting frame
   //=========================================================
