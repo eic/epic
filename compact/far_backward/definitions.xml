@@ -260,8 +260,8 @@
     <!-- Lumi converter -->
     <constant name="LumiConverter_X"      value="0*m"/>
     <constant name="LumiConverter_Y"      value="0*m"/>
-    <constant name="LumiConverter_Z"      value="LumiSpecMag_Z + LumiSpecMag_DZ/2."/>
     <constant name="LumiConverter_DZ"     value="1*mm"/>
+    <constant name="LumiConverter_Z"      value="LumiSpecMag_Z + LumiSpecMag_DZ/2. + LumiConverter_DZ"/>
     <constant name="LumiConverter_DXY"    value="12*cm"/>
 
     <!-- Lumi spectrometer CAL -->
@@ -275,15 +275,15 @@
     <!-- Lumi spectrometer trackers -->
     <constant name="SpecMag_to_SpecCAL_DZ" value="(LumiSpecMag_Z - LumiSpecMag_DZ/2.0) - (LumiSpecCAL_Z + LumiSpecCALTower_DZ/2.0)"/>
     <constant name="LumiSpecTracker_DXY"  value="0.2*m"/>
-    <constant name="LumiSpecTracker_Z1"   value="LumiSpecMag_Z - LumiSpecMag_DZ/2.0 - 5/6.*SpecMag_to_SpecCAL_DZ"/>
-    <constant name="LumiSpecTracker_Z2"   value="LumiSpecMag_Z - LumiSpecMag_DZ/2.0 - 11/12.*SpecMag_to_SpecCAL_DZ"/>
+    <constant name="LumiSpecTracker_Z1"   value="LumiSpecCAL_Z + LumiSpecCALTower_DZ/2. + 21*cm "/>
+    <constant name="LumiSpecTracker_Z2"   value="LumiSpecCAL_Z + LumiSpecCALTower_DZ/2. + 11*cm"/>
     <constant name="LumiSpecTracker_Z3"   value="LumiSpecCAL_Z + LumiSpecCALTower_DZ/2. + 1*cm"/>
     <constant name="LumiSpecTracker_Y1"   value="LumiSpecCAL_FiveSigma + LumiSpecTracker_DXY/2."/>
     <constant name="LumiSpecTracker_Y2"   value="LumiSpecTracker_Y1"/>
     <constant name="LumiSpecTracker_Y3"   value="LumiSpecTracker_Y1"/>
 
     <constant name="LumiSpecTracker_Si_DZ"   value="0.03*cm"/>
-    <constant name="LumiSpecTracker_Cu_DZ"   value="0.014*cm"/>
+    <constant name="LumiSpecTracker_Cu_DZ"   value="0.000014*cm"/>
 
     <!-- Lumi photon chamber -->
     <constant name="LumiChamber_gas"      value="Vacuum" type="string"/>
