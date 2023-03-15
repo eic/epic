@@ -209,13 +209,13 @@ static std::tuple<int, std::pair<int, int>> add_12surface_disk(Detector& desc, A
   std::vector<double> pt_innerframe_y;
 
 
-  
-  //========================================================= 
+
+  //=========================================================
   // The modules' positions followd the fillRectangles function
   //=========================================================
   float half_modx = modSize.x() * 0.5, half_mody = modSize.y() * 0.5;
   auto points = epic::geo::fillRectangles({half_modx, half_mody}, modSize.x(), modSize.y(), rmin, rmax, phimin, phimax);
-  
+
 
   //=========================================================
   // Read the positions information from xml file
@@ -236,7 +236,7 @@ static std::tuple<int, std::pair<int, int>> add_12surface_disk(Detector& desc, A
       }
     }
   }
-  
+
 
   //=========================================================
   // optional envelope volume and the supporting frame
@@ -297,7 +297,7 @@ static std::tuple<int, std::pair<int, int>> add_12surface_disk(Detector& desc, A
 
 
 
-  
+
   //=====================================================================
   // Placing The Modules
   // Since the inner and outer porfile is not the circle shape,
@@ -306,7 +306,7 @@ static std::tuple<int, std::pair<int, int>> add_12surface_disk(Detector& desc, A
   // at backward_PbWO4.xml to fill all the gap between circular
   // placement and supporting structures.
   //=====================================================================
-  
+
   // retrieve the max and min position of modules
   auto [minl_ptsx, maxl_ptsx] = std::minmax_element(points.begin(), points.end(), [](auto a, auto b){ return a.x() < b.x(); });
   auto [minl_ptsy, maxl_ptsy] = std::minmax_element(points.begin(), points.end(), [](auto a, auto b){ return a.y() < b.y(); });
