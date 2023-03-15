@@ -204,25 +204,39 @@ static std::tuple<int, std::pair<int, int>> add_12surface_disk(Detector& desc, A
   double      NEEMC_IR_b             = plm.attr<double>(_Unicode(Inner_b));
   double      phimin                 = dd4hep::getAttrOrDefault<double>(plm, _Unicode(phimin), 0.);
   double      phimax                 = dd4hep::getAttrOrDefault<double>(plm, _Unicode(phimax), 2. * M_PI);
-  std::string polygonX               = plm.attr<std::string>(_Unicode(ptsX_extrudedpolygon));
-  std::string polygonY               = plm.attr<std::string>(_Unicode(ptsY_extrudedpolygon));
-  std::string iposx                  = plm.attr<std::string>(_Unicode(inner_outer_add_posx));
-  std::string iposy                  = plm.attr<std::string>(_Unicode(inner_outer_add_posy));
+
+  std::vector<double> pt_innerframe_x;
+  std::vector<double> pt_innerframe_y;
 
 
+  
+  //========================================================= 
+  // The modules' positions followd the fillRectangles function
+  //=========================================================
+  float half_modx = modSize.x() * 0.5, half_mody = modSize.y() * 0.5;
+  auto points = epic::geo::fillRectangles({half_modx, half_mody}, modSize.x(), modSize.y(), rmin, rmax, phimin, phimax);
+  
 
+  //=========================================================
+  // Read the positions information from xml file
+  //=========================================================
   for (xml_coll_t x_positions_i(plm, _Unicode(positions)); x_positions_i; ++x_positions_i){
     xml_comp_t x_positions = x_positions_i;
 
-    std::cout << "start output: ";
-
     for (xml_coll_t x_position_i(x_positions, _U(position)); x_position_i; ++x_position_i){
       xml_comp_t x_position = x_position_i;
-      std::cout << x_position.x() << ", " << x_position.y() << std::endl;
-    }
 
-    std::cout << std::endl << std::endl;
+      if( x_positions.nameStr() == "extrudedpolygon_pos" ){  // retrieve the position of extrudedpolygon shape supporting structure
+        pt_innerframe_x.push_back((x_position.x())*cm);
+        pt_innerframe_y.push_back((x_position.y())*cm);
+      }
+      else{  // retrieve the position of additional modules
+        auto add_point = epic::geo::Point((x_position.x())*cm, (x_position.y())*cm);
+        points.push_back(add_point);
+      }
+    }
   }
+  
 
   //=========================================================
   // optional envelope volume and the supporting frame
@@ -249,35 +263,16 @@ static std::tuple<int, std::pair<int, int>> add_12surface_disk(Detector& desc, A
 
   // Version3: solid with elliptical inside
   //
-  std::vector<double> pt_x;
-  std::vector<double> pt_y;
-  std::string         delimiter = " ";
-  size_t              pos       = 0;
-  std::string         token;
-  while ((pos = polygonX.find(delimiter)) != std::string::npos) {
-    token = polygonX.substr(0, pos);
-    pt_x.push_back(atof(token.c_str()));
-    polygonX.erase(0, pos + delimiter.length());
-  }
-  pt_x.push_back(atof(polygonX.c_str()));
-
-  pos = 0;
-  while ((pos = polygonY.find(delimiter)) != std::string::npos) {
-    token = polygonY.substr(0, pos);
-    pt_y.push_back(atof(token.c_str()));
-    polygonY.erase(0, pos + delimiter.length());
-  }
-  pt_y.push_back(atof(polygonY.c_str()));
   std::vector<double> sec_z  = {-calo_module_length / 2., calo_module_length / 2.};
   std::vector<double> sec_x  = {0., 0.};
   std::vector<double> sec_y  = {0., 0.};
   std::vector<double> zscale = {1., 1.};
 
-  ExtrudedPolygon  inner_support_main(pt_x, pt_y, sec_z, sec_x, sec_y, zscale);
+  ExtrudedPolygon  inner_support_main(pt_innerframe_x, pt_innerframe_y, sec_z, sec_x, sec_y, zscale);
   EllipticalTube   subtract_a(NEEMC_IR_a, NEEMC_IR_b, calo_module_length / 2.);
   SubtractionSolid inner_support_substracta(inner_support_main, subtract_a, Position(0., 0., 0.));
   Volume           inner_support_vol("inner_support_vol", inner_support_substracta, inner_ring_material);
-  inner_support_vol.setVisAttributes(desc.visAttributes(plm.attr<std::string>(_Unicode(vis_struc))));
+  // inner_support_vol.setVisAttributes(desc.visAttributes(plm.attr<std::string>(_Unicode(vis_struc))));
   Transform3D tr_global_Iring_elli = RotationZYX(NEEMC_Nrot, 0., 0.) * Translation3D(0., 0., 0.);
 
   //=============================
@@ -300,6 +295,9 @@ static std::tuple<int, std::pair<int, int>> add_12surface_disk(Detector& desc, A
     env_vol.placeVolume(inner_support_vol, tr_global_Iring_elli); // Place the version3 inner supporting frame
   }
 
+
+
+  
   //=====================================================================
   // Placing The Modules
   // Since the inner and outer porfile is not the circle shape,
@@ -308,33 +306,10 @@ static std::tuple<int, std::pair<int, int>> add_12surface_disk(Detector& desc, A
   // at backward_PbWO4.xml to fill all the gap between circular
   // placement and supporting structures.
   //=====================================================================
-
-  // Add the modules followd the fillRectangles function
-  //
-  float half_modx = modSize.x() * 0.5, half_mody = modSize.y() * 0.5;
-  auto points = epic::geo::fillRectangles({half_modx, half_mody}, modSize.x(), modSize.y(), rmin, rmax, phimin, phimax);
-
-  size_t aposx = 0, aposy = 0;
-  while ((aposx = iposx.find(delimiter)) != std::string::npos) {
-    token = iposx.substr(0, aposx);
-    auto addpxs = atof(token.c_str());
-    aposy = iposy.find(delimiter);
-    token = iposy.substr(0, aposy);
-    auto addpys = atof(token.c_str());
-    auto add_point = epic::geo::Point(addpxs, addpys);
-    points.push_back(add_point);
-
-    iposx.erase(0, aposx + delimiter.length());
-    iposy.erase(0, aposy + delimiter.length());
-  }
-  auto addpxs = atof(iposx.c_str());
-  auto addpys = atof(iposy.c_str());
-  auto add_point = epic::geo::Point(addpxs, addpys);
-  points.push_back(add_point);
-
+  
+  // retrieve the max and min position of modules
   auto [minl_ptsx, maxl_ptsx] = std::minmax_element(points.begin(), points.end(), [](auto a, auto b){ return a.x() < b.x(); });
   auto [minl_ptsy, maxl_ptsy] = std::minmax_element(points.begin(), points.end(), [](auto a, auto b){ return a.y() < b.y(); });
-
 
   // Place the modules, use row and column ID for each modules
   // row and column ID start from the top left corner
