@@ -2,14 +2,17 @@
 <!-- Copyright (C) 2022 Whitney Armstrong, Sylvester Joosten, Wouter Deconinck, Zhenyu Ye -->
 
   <define>
-    <constant name="world_side" value="30*m"/>
-    <constant name="world_x" value="world_side"/>
-    <constant name="world_y" value="world_side"/>
-    <constant name="world_z" value="100*m"/>
-
     <constant name="Pi" value="3.14159265359"/>
     <constant name="mil" value="0.0254*mm"/>
     <constant name="inch" value="2.54*cm"/>
+
+    <documentation>
+      ## World volume
+    </documentation>
+    <constant name="world_side" value="30*m"/>
+    <constant name="world_dx" value="world_side"/>
+    <constant name="world_dy" value="world_side"/>
+    <constant name="world_dz" value="100*m"/>
 
     <documentation>
       ## Detector IDs
@@ -611,6 +614,7 @@ Service gaps in FW direction (before endcapP ECAL) and BW direction (before endc
     </comment>
 
     <constant name="tracker_region_rmax"   value="EcalBarrel_rmin"/>
-    <constant name="tracker_region_zmax"   value="EcalEndcapN_zmin"/>
+    <constant name="tracker_region_zmax"   value="+EcalEndcapP_zmin"/>
+    <constant name="tracker_region_zmin"   value="-EcalEndcapN_zmin"/>
 
   </define>
