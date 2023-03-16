@@ -1,14 +1,13 @@
-
-//C++
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (C) 2022 Jaroslav Adam
 
 //DD4hep
 #include "DD4hep/DetFactoryHelper.h"
 
 using namespace dd4hep;
 
-static Ref_t create_element(Detector& lccdd, xml_h e, SensitiveDetector /*sens*/)  {
-
-
+static Ref_t create_element(Detector& lccdd, xml_h e, SensitiveDetector /*sens*/)
+{
   xml_det_t x_det = e;
   std::string name = x_det.nameStr();
 
@@ -49,18 +48,6 @@ static Ref_t create_element(Detector& lccdd, xml_h e, SensitiveDetector /*sens*/
   det.setPlacement(pv);
 
   return det;
-
-
-
-
-
-
-
-
-
-
-
-
 }//create_element
 
 DECLARE_DETELEMENT(ConeBeamEl, create_element)
