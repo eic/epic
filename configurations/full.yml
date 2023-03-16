@@ -27,6 +27,5 @@ features:
     backward:
   far_forward:
     far_forward:
-    electron_beamline:
   far_backward:
     far_backward:
