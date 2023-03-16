@@ -82,6 +82,9 @@
     <vis name="HcalBarrelStaveVis"    ref="AnlBlue"   showDaughters="false" visible="true"/>
     <vis name="HcalBarrelLayerVis"    ref="AnlBlue"   showDaughters="true"  visible="true"/>
     <vis name="HcalEndcapVis"         ref="AnlBlue"   showDaughters="false" visible="true"/>
+    <vis name="LFHCALVis"             ref="AnlRed"   showDaughters="true" visible="true"/>
+    <vis name="LFHCALLayerSteelVis"   ref="AnlBlue"   showDaughters="false" visible="true"/>
+    <vis name="LFHCALLayerTungstenVis" ref="AnlDarkBlue"   showDaughters="false" visible="true"/>
     <vis name="HcalEndcapLayerVis"    ref="AnlBlue"   showDaughters="true"  visible="true"/>
     <vis name="HcalSensorVis"         ref="AnlBlue"   showDaughters="true"  visible="true"/>
     <vis name="HcalAbsorberVis"       ref="AnlGray"   showDaughters="true"  visible="true"/>
