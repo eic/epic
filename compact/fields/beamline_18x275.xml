@@ -1,0 +1,4 @@
+<lccdd>
+  <include ref="${DETECTOR_PATH}/compact/far_backward/fields_18.xml"/>
+  <include ref="${DETECTOR_PATH}/compact/far_forward/fields_275.xml"/>
+</lccdd>
