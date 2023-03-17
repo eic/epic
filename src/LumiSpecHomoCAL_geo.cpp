@@ -37,9 +37,10 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
   assembly.setVisAttributes( description.invisible() );
 
   // Create Modules
-  int nxy = 8;
 
   auto [modVol, modSize] = build_specHomoCAL_module(description, x_mod, sens);
+  double detSizeXY = getAttrOrDefault( x_det, _Unicode(sizeXY), 20 );
+  int nxy = int( detSizeXY / modSize.x() );
   double xypos0 = -nxy*modSize.x()/2.0 + modSize.x()/2.0;
 
   // Build detector components

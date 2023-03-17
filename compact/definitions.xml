@@ -33,7 +33,6 @@ The space of IDs for the subassemblies starts at (Subassembly_ID*10+101).
 The unused IDs below are saved for future use.
     </documentation>
 
-
     <documentation>
 
       ### Allocated IDs
@@ -298,27 +297,10 @@ The unused IDs below are saved for future use.
     <constant name="LumiWindow_ID"           value="192"/>
     <constant name="LumiSpecTracker_ID"      value="193"/>
     <constant name="LumiSpecCAL_ID"          value="194"/>
+    <constant name="LumiDirectPCAL_ID"       value="195"/>
 
     <constant name="TaggerTracker_ID"        value="198"/>
     <constant name="TaggerCalorimeter_ID"    value="199"/>
-
-    <documentation>
-      #### (200-219) Far Backward Beamline Magnets
-    </documentation>
-    <constant name="Pipe_to_Q1eR_ID"        value="200"/>
-    <constant name="Magnet_Q1eR_ID"         value="201"/>
-    <constant name="Pipe_in_Q1eR_ID"        value="202"/>
-    <constant name="Pipe_Q1eR_to_Q2eR_ID"   value="203"/>
-    <constant name="Magnet_Q2eR_ID"         value="204"/>
-    <constant name="Pipe_in_Q2eR_ID"        value="205"/>
-    <constant name="Pipe_Q2eR_to_B2AeR_ID"  value="206"/>
-    <constant name="Magnet_B2AeR_ID"        value="207"/>
-    <constant name="Pipe_in_B2AeR_ID"       value="208"/>
-    <constant name="Pipe_B2AeR_to_B2BeR_ID" value="209"/>
-    <constant name="Magnet_B2BeR_ID"        value="210"/>
-    <constant name="Pipe_in_B2BeR_ID"       value="211"/>
-    <constant name="Magnet_Q3eR_ID"         value="212"/>
-    <constant name="Vacuum_in_Q3eR_ID"      value="213"/>
 
     <documentation>
 ## Detector Definition Parameters
@@ -629,6 +611,7 @@ Service gaps in FW direction (before endcapP ECAL) and BW direction (before endc
     </comment>
 
     <constant name="tracker_region_rmax"   value="EcalBarrel_rmin"/>
-    <constant name="tracker_region_zmax"   value="EcalEndcapN_zmin"/>
+    <constant name="tracker_region_zmax"   value="+EcalEndcapP_zmin"/>
+    <constant name="tracker_region_zmin"   value="-EcalEndcapN_zmin"/>
 
   </define>

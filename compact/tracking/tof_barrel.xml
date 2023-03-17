@@ -80,6 +80,7 @@
       type="epic_TOFBarrel"
       readout="TOFBarrelHits"
       insideTrackingVolume="true">
+      <type_flags type="DetType_TRACKER + DetType_BARREL"/>
       <dimensions
         rmin="BarrelTOF_rmin"
         rmax="BarrelTOF_rmax"
@@ -126,6 +127,13 @@
       </layer>
     </detector>
   </detectors>
+
+  <plugins>
+    <plugin name="DD4hep_ParametersPlugin">
+      <argument value="BarrelTOF"/>
+      <argument value="layer_pattern: str=BarrelTOF_layer\d"/>
+    </plugin>
+  </plugins>
 
   <readouts>
     <readout name="TOFBarrelHits">
