@@ -3,25 +3,44 @@
 
 <lccdd>
   <define>
-    <constant name="EcalEndcapN_CrystalModule_width" value="20.00*mm"/>
-    <constant name="EcalEndcapN_CrystalModule_length" value="200.00*mm"/>
-    <constant name="EcalEndcapN_CrystalModule_carbon_thickness" value="0.20*mm"/>
-    <constant name="EcalEndcapN_CrystalModule_wrap_thickness" value="0.05*mm"/>
-    <constant name="EcalEndcapN_CrystalModule_carbon_length" value="20.00*mm"/>
+    <comment>
+      The basic parameters of size [not half-length] of single module
+      The structure of a single module is arranged as followed: 
 
-    <comment>The size of outer frame</comment>
-    <constant name="EcalEndcapN_structure_ring_length" value="EcalEndcapN_length"/>
-    <constant name="EcalEndcapN_structure_ring_max" value="65.00*cm"/>
-    <constant name="EcalEndcapN_structure_ring_min" value="EcalEndcapN_structure_ring_max - 0.9*cm"/>
+            carbonfiber[ VM2000[ crystal ]VM2000 ]carbonfiber
 
-    <comment>Basic hardcoded parameters about rotation and shift</comment>
+    </comment>
+    <constant name="EcalEndcapN_crystalmodule_crystal_width" value="20.00*mm"/>
+    <constant name="EcalEndcapN_crystalmodule_crystal_length" value="200.00*mm"/>
+    <constant name="EcalEndcapN_crystalmodule_carbonfiber_thickness" value="0.20*mm"/>
+    <constant name="EcalEndcapN_crystalmodule_VM2000_thickness" value="0.05*mm"/>
+    <constant name="EcalEndcapN_crystalmodule_carbonfiber_length" value="20.00*mm"/>
+
+    
+    <comment>
+      Basic hardcoded parameters about supporting structures, rotation and shift
+        ** +15 deg rotation (Protate) make top side of outer supporting structure (Oring) and
+        the mother volume parallel to the x-z plane.
+        ** -15 deg rotation (Nrotate) used for offset the 15*deg rotation on the modules, since modules are the
+        daughter volumes with respect to mother volumn.
+        ** Inner supporting structure (Iring) is an elliptics.
+        ** The length of inner supporting structure (Iring) is shorter than outer supporting structure, so it needs
+        additional shft to align the surface.
+        ** some existed parameters are passed from "difinition.xml"
+    </comment>
+    <constant name="EcalEndcapN_structure_Oring_length" value="EcalEndcapN_length"/>
+    <constant name="EcalEndcapN_structure_Oring_max" value="65.00*cm"/>
+    <constant name="EcalEndcapN_structure_Oring_min" value="EcalEndcapN_structure_Oring_max - 0.9*cm"/>
     <constant name="EcalEndcapN_Protate" value="15.*degree"/>
     <constant name="EcalEndcapN_Nrotate" value="-15.*degree"/>
     <constant name="EcalEndcapN_Oring_relative_shift" value="-20.*cm"/>
     <constant name="EcalEndcapN_Iring_axisA" value="7.5*cm"/>
     <constant name="EcalEndcapN_Iring_axisB" value="5.5*cm"/>
 
-    <comment>FIXME currently unused</comment>
+    
+    <comment>
+      FIXME currently unused
+    </comment>
     <constant name="EcalEndcapN_IonCutout_dphi" value="30*degree"/>
 
 
@@ -39,162 +58,162 @@
         name="EcalEndcapN"
         type="epic_HomogeneousCalorimeter"
         readout="EcalEndcapNHits">
-      <position x="0" y="0" z="-(EcalEndcapN_zmin + EcalEndcapN_CrystalModule_length/2.)"/>
+      <position x="0" y="0" z="-(EcalEndcapN_zmin + (EcalEndcapN_crystalmodule_crystal_length + EcalEndcapN_crystalmodule_VM2000_thickness)/2.)"/>
       <rotation x="0" y="0." z="0"/>
       <placements>
         <disk_12surface
             rmin="EcalEndcapN_rmin"
-            rmax="EcalEndcapN_structure_ring_min"
-            r12min="EcalEndcapN_structure_ring_min"
-            r12max="EcalEndcapN_structure_ring_max"
-            SFlength="EcalEndcapN_structure_ring_length"
-            CMlength="EcalEndcapN_CrystalModule_length + 2.*EcalEndcapN_CrystalModule_wrap_thickness"
-            NEEMC_PR="EcalEndcapN_Protate"
-            NEEMC_NR="EcalEndcapN_Nrotate"
-            NEEMC_OR_RS="EcalEndcapN_Oring_relative_shift"
-            Inner_a="EcalEndcapN_Iring_axisA"
-            Inner_b="EcalEndcapN_Iring_axisB"
+            rmax="EcalEndcapN_structure_Oring_min"
+            r12min="EcalEndcapN_structure_Oring_min"
+            r12max="EcalEndcapN_structure_Oring_max"
+            outerringlength="EcalEndcapN_structure_Oring_length"
+            modulelength="EcalEndcapN_crystalmodule_crystal_length + EcalEndcapN_crystalmodule_VM2000_thickness"
+            protate="EcalEndcapN_Protate"
+            nrotate="EcalEndcapN_Nrotate"
+            outerringshift="EcalEndcapN_Oring_relative_shift"
+            inneradiusa="EcalEndcapN_Iring_axisA"
+            inneradiusb="EcalEndcapN_Iring_axisB"
             envelope="true"
-            ring_material="StainlessSteel"
+            ringmaterial="StainlessSteel"
             sector="1"
             vis_struc="RPVis"
             vis_steel_gap="AnlGray">
 
           <comment>
-            The position information[cm] of inner supporting structure [extrudedpolygon shape, 12 points in total]
+            The position information of inner supporting structure [extrudedpolygon shape, 12 points in total]
           </comment>
-          <positions name="extrudedpolygon_pos">
-            <position x="6.15"  y="6.15"/>
-            <position x="6.15"  y="4.1"/>
-            <position x="8.2"   y="4.1"/>
-            <position x="8.2"   y="-4.1"/>
-            <position x="6.15"  y="-4.1"/>
-            <position x="6.15"  y="-6.15"/>
-            <position x="-6.15" y="-6.15"/>
-            <position x="-6.15" y="-4.1"/>
-            <position x="-8.2"  y="-4.1"/>
-            <position x="-8.2"  y="4.1"/>
-            <position x="-6.15" y="4.1"/>
-            <position x="-6.15" y="6.15"/>
-          </positions>
+          <points_extrudedpolygon>
+            <position x="6.15*cm"  y="6.15*cm"/>
+            <position x="6.15*cm"  y="4.1*cm"/>
+            <position x="8.2*cm"   y="4.1*cm"/>
+            <position x="8.2*cm"   y="-4.1*cm"/>
+            <position x="6.15*cm"  y="-4.1*cm"/>
+            <position x="6.15*cm"  y="-6.15*cm"/>
+            <position x="-6.15*cm" y="-6.15*cm"/>
+            <position x="-6.15*cm" y="-4.1*cm"/>
+            <position x="-8.2*cm"  y="-4.1*cm"/>
+            <position x="-8.2*cm"  y="4.1*cm"/>
+            <position x="-6.15*cm" y="4.1*cm"/>
+            <position x="-6.15*cm" y="6.15*cm"/>
+          </points_extrudedpolygon>
 
           <comment>
-            The position information[cm] of additional modules to fill the gap
+            The position information of additional modules to fill the gap
             between the sensitive region and inner/outer frame structure. [92 posints in total]
           </comment>
-          <positions name="additionalmodule_pos">
-            <position x="1.025"  y="7.175"/>
-            <position x="1.025"  y="9.225"/>
-            <position x="3.075"  y="7.175"/>
-            <position x="3.075"  y="9.225"/>
-            <position x="5.125"  y="7.175"/>
-            <position x="7.175"  y="7.175"/>
-            <position x="7.175"  y="5.125"/>
-            <position x="9.225"  y="1.025"/>
-            <position x="9.225"  y="3.075"/>
-            <position x="-1.025" y="7.175"/>
-            <position x="-1.025" y="9.225"/>
-            <position x="-3.025" y="7.175"/>
-            <position x="-3.075" y="9.225"/>
-            <position x="-5.125" y="7.175"/>
-            <position x="-7.175" y="7.175"/>
-            <position x="-7.175" y="5.125"/>
-            <position x="-9.225" y="1.025"/>
-            <position x="-9.225" y="3.075"/>
-            <position x="-1.025" y="-7.175"/>
-            <position x="-1.025" y="-9.225"/>
-            <position x="-3.075" y="-7.175"/>
-            <position x="-3.075" y="-9.225"/>
-            <position x="-5.125" y="-7.175"/>
-            <position x="-7.175" y="-7.175"/>
-            <position x="-7.175" y="-5.125"/>
-            <position x="-9.225" y="-1.025"/>
-            <position x="-9.225" y="-3.075"/>
-            <position x="1.025"  y="-7.175"/>
-            <position x="1.025"  y="-9.225"/>
-            <position x="3.075"  y="-7.175"/>
-            <position x="3.075"  y="-9.225"/>
-            <position x="5.125"  y="-7.175"/>
-            <position x="7.175"  y="-7.175"/>
-            <position x="7.175"  y="-5.125"/>
-            <position x="9.225"  y="-1.025"/>
-            <position x="9.225"  y="-3.075"/>
-            <position x="9.225"  y="62.525"/>
-            <position x="11.275" y="62.525"/>
-            <position x="13.325" y="62.525"/>
-            <position x="15.375" y="62.525"/>
-            <position x="17.425" y="60.475"/>
-            <position x="19.475" y="60.475"/>
-            <position x="44.075" y="46.125"/>
-            <position x="46.125" y="44.075"/>
-            <position x="60.475" y="19.475"/>
-            <position x="60.475" y="17.425"/>
-            <position x="62.525" y="15.375"/>
-            <position x="62.525" y="13.325"/>
-            <position x="62.525" y="11.275"/>
-            <position x="62.525" y="9.225"/>
-            <position x="-9.225"  y="62.525"/>
-            <position x="-11.275" y="62.525"/>
-            <position x="-13.325" y="62.525"/>
-            <position x="-15.375" y="62.525"/>
-            <position x="-17.425" y="60.475"/>
-            <position x="-19.475" y="60.475"/>
-            <position x="-44.075" y="46.125"/>
-            <position x="-46.125" y="44.075"/>
-            <position x="-60.475" y="19.475"/>
-            <position x="-60.475" y="17.425"/>
-            <position x="-62.525" y="15.375"/>
-            <position x="-62.525" y="13.325"/>
-            <position x="-62.525" y="11.275"/>
-            <position x="-62.525" y="9.225"/>
-            <position x="-9.225"  y="-62.525"/>
-            <position x="-11.275" y="-62.525"/>
-            <position x="-13.325" y="-62.525"/>
-            <position x="-15.375" y="-62.525"/>
-            <position x="-17.425" y="-60.475"/>
-            <position x="-19.475" y="-60.475"/>
-            <position x="-44.075" y="-46.125"/>
-            <position x="-46.125" y="-44.075"/>
-            <position x="-60.475" y="-19.475"/>
-            <position x="-60.475" y="-17.425"/>
-            <position x="-62.525" y="-15.375"/>
-            <position x="-62.525" y="-13.325"/>
-            <position x="-62.525" y="-11.275"/>
-            <position x="-62.525" y="-9.225"/>
-            <position x="9.225"   y="-62.525"/>
-            <position x="11.275"  y="-62.525"/>
-            <position x="13.325"  y="-62.525"/>
-            <position x="15.375"  y="-62.525"/>
-            <position x="17.425"  y="-60.475"/>
-            <position x="19.475"  y="-60.475"/>
-            <position x="44.075"  y="-46.125"/>
-            <position x="46.125"  y="-44.075"/>
-            <position x="60.475"  y="-19.475"/>
-            <position x="60.475"  y="-17.425"/>
-            <position x="62.525"  y="-15.375"/>
-            <position x="62.525"  y="-13.325"/>
-            <position x="62.525"  y="-11.275"/>
-            <position x="62.525"  y="-9.225"/>
-          </positions>
+          <addmodulespos>
+            <position x="1.025*cm"  y="7.175*cm"/>
+            <position x="1.025*cm"  y="9.225*cm"/>
+            <position x="3.075*cm"  y="7.175*cm"/>
+            <position x="3.075*cm"  y="9.225*cm"/>
+            <position x="5.125*cm"  y="7.175*cm"/>
+            <position x="7.175*cm"  y="7.175*cm"/>
+            <position x="7.175*cm"  y="5.125*cm"/>
+            <position x="9.225*cm"  y="1.025*cm"/>
+            <position x="9.225*cm"  y="3.075*cm"/>
+            <position x="-1.025*cm" y="7.175*cm"/>
+            <position x="-1.025*cm" y="9.225*cm"/>
+            <position x="-3.025*cm" y="7.175*cm"/>
+            <position x="-3.075*cm" y="9.225*cm"/>
+            <position x="-5.125*cm" y="7.175*cm"/>
+            <position x="-7.175*cm" y="7.175*cm"/>
+            <position x="-7.175*cm" y="5.125*cm"/>
+            <position x="-9.225*cm" y="1.025*cm"/>
+            <position x="-9.225*cm" y="3.075*cm"/>
+            <position x="-1.025*cm" y="-7.175*cm"/>
+            <position x="-1.025*cm" y="-9.225*cm"/>
+            <position x="-3.075*cm" y="-7.175*cm"/>
+            <position x="-3.075*cm" y="-9.225*cm"/>
+            <position x="-5.125*cm" y="-7.175*cm"/>
+            <position x="-7.175*cm" y="-7.175*cm"/>
+            <position x="-7.175*cm" y="-5.125*cm"/>
+            <position x="-9.225*cm" y="-1.025*cm"/>
+            <position x="-9.225*cm" y="-3.075*cm"/>
+            <position x="1.025*cm"  y="-7.175*cm"/>
+            <position x="1.025*cm"  y="-9.225*cm"/>
+            <position x="3.075*cm"  y="-7.175*cm"/>
+            <position x="3.075*cm"  y="-9.225*cm"/>
+            <position x="5.125*cm"  y="-7.175*cm"/>
+            <position x="7.175*cm"  y="-7.175*cm"/>
+            <position x="7.175*cm"  y="-5.125*cm"/>
+            <position x="9.225*cm"  y="-1.025*cm"/>
+            <position x="9.225*cm"  y="-3.075*cm"/>
+            <position x="9.225*cm"  y="62.525*cm"/>
+            <position x="11.275*cm" y="62.525*cm"/>
+            <position x="13.325*cm" y="62.525*cm"/>
+            <position x="15.375*cm" y="62.525*cm"/>
+            <position x="17.425*cm" y="60.475*cm"/>
+            <position x="19.475*cm" y="60.475*cm"/>
+            <position x="44.075*cm" y="46.125*cm"/>
+            <position x="46.125*cm" y="44.075*cm"/>
+            <position x="60.475*cm" y="19.475*cm"/>
+            <position x="60.475*cm" y="17.425*cm"/>
+            <position x="62.525*cm" y="15.375*cm"/>
+            <position x="62.525*cm" y="13.325*cm"/>
+            <position x="62.525*cm" y="11.275*cm"/>
+            <position x="62.525*cm" y="9.225*cm"/>
+            <position x="-9.225*cm"  y="62.525*cm"/>
+            <position x="-11.275*cm" y="62.525*cm"/>
+            <position x="-13.325*cm" y="62.525*cm"/>
+            <position x="-15.375*cm" y="62.525*cm"/>
+            <position x="-17.425*cm" y="60.475*cm"/>
+            <position x="-19.475*cm" y="60.475*cm"/>
+            <position x="-44.075*cm" y="46.125*cm"/>
+            <position x="-46.125*cm" y="44.075*cm"/>
+            <position x="-60.475*cm" y="19.475*cm"/>
+            <position x="-60.475*cm" y="17.425*cm"/>
+            <position x="-62.525*cm" y="15.375*cm"/>
+            <position x="-62.525*cm" y="13.325*cm"/>
+            <position x="-62.525*cm" y="11.275*cm"/>
+            <position x="-62.525*cm" y="9.225*cm"/>
+            <position x="-9.225*cm"  y="-62.525*cm"/>
+            <position x="-11.275*cm" y="-62.525*cm"/>
+            <position x="-13.325*cm" y="-62.525*cm"/>
+            <position x="-15.375*cm" y="-62.525*cm"/>
+            <position x="-17.425*cm" y="-60.475*cm"/>
+            <position x="-19.475*cm" y="-60.475*cm"/>
+            <position x="-44.075*cm" y="-46.125*cm"/>
+            <position x="-46.125*cm" y="-44.075*cm"/>
+            <position x="-60.475*cm" y="-19.475*cm"/>
+            <position x="-60.475*cm" y="-17.425*cm"/>
+            <position x="-62.525*cm" y="-15.375*cm"/>
+            <position x="-62.525*cm" y="-13.325*cm"/>
+            <position x="-62.525*cm" y="-11.275*cm"/>
+            <position x="-62.525*cm" y="-9.225*cm"/>
+            <position x="9.225*cm"   y="-62.525*cm"/>
+            <position x="11.275*cm"  y="-62.525*cm"/>
+            <position x="13.325*cm"  y="-62.525*cm"/>
+            <position x="15.375*cm"  y="-62.525*cm"/>
+            <position x="17.425*cm"  y="-60.475*cm"/>
+            <position x="19.475*cm"  y="-60.475*cm"/>
+            <position x="44.075*cm"  y="-46.125*cm"/>
+            <position x="46.125*cm"  y="-44.075*cm"/>
+            <position x="60.475*cm"  y="-19.475*cm"/>
+            <position x="60.475*cm"  y="-17.425*cm"/>
+            <position x="62.525*cm"  y="-15.375*cm"/>
+            <position x="62.525*cm"  y="-13.325*cm"/>
+            <position x="62.525*cm"  y="-11.275*cm"/>
+            <position x="62.525*cm"  y="-9.225*cm"/>
+          </addmodulespos>
 
 
           <module
-            gx="EcalEndcapN_CrystalModule_width + 2.*EcalEndcapN_CrystalModule_carbon_thickness + 2.*EcalEndcapN_CrystalModule_wrap_thickness"
-            gy="EcalEndcapN_CrystalModule_width + 2.*EcalEndcapN_CrystalModule_carbon_thickness + 2.*EcalEndcapN_CrystalModule_wrap_thickness"
-            gz="EcalEndcapN_CrystalModule_length"
-            gdz="EcalEndcapN_CrystalModule_wrap_thickness"
+            modulex="EcalEndcapN_crystalmodule_crystal_width + 2.*EcalEndcapN_crystalmodule_carbonfiber_thickness + 2.*EcalEndcapN_crystalmodule_VM2000_thickness"
+            moduley="EcalEndcapN_crystalmodule_crystal_width + 2.*EcalEndcapN_crystalmodule_carbonfiber_thickness + 2.*EcalEndcapN_crystalmodule_VM2000_thickness"
+            modulez="EcalEndcapN_crystalmodule_crystal_length + EcalEndcapN_crystalmodule_VM2000_thickness"
+            moduleshift="EcalEndcapN_crystalmodule_VM2000_thickness"
             gmaterial="Vacuum"
             vis="BlueVis"/>
           <crystal
-            sizex="EcalEndcapN_CrystalModule_width"
-            sizey="EcalEndcapN_CrystalModule_width"
-            sizez="EcalEndcapN_CrystalModule_length"
+            sizex="EcalEndcapN_crystalmodule_crystal_width"
+            sizey="EcalEndcapN_crystalmodule_crystal_width"
+            sizez="EcalEndcapN_crystalmodule_crystal_length"
             material="leadtungsten_optical"
             cryvis="GreenVis"/>
           <wrapper
-            carbon_thickness="EcalEndcapN_CrystalModule_carbon_thickness"
-            wrap_thickness="EcalEndcapN_CrystalModule_wrap_thickness"
-            length="EcalEndcapN_CrystalModule_carbon_length"
+            carbonfiber_thickness="EcalEndcapN_crystalmodule_carbonfiber_thickness"
+            carbonfiber_length="EcalEndcapN_crystalmodule_carbonfiber_length"
+            VM2000_thickness="EcalEndcapN_crystalmodule_VM2000_thickness"
             material_carbon="CarbonFiber"
             material_wrap="VM2000"
             material_gap="Air"
