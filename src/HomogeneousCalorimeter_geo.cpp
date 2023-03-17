@@ -129,7 +129,7 @@ std::tuple<Volume, Position> build_module(Detector& desc, xml::Collection_t& plm
   crystalVol.setSensitiveDetector(sens);
 
   if (!plm.hasChild(_Unicode(wrapper))){  // no wrapper
-    printout(DEBUG, "HomogeneousCalorimeter", "without wrapper");    
+    printout(DEBUG, "HomogeneousCalorimeter", "without wrapper");
     return std::make_tuple(modVol, Position{mx, my, mz});
   }
   else{  // build wrapper
@@ -151,7 +151,7 @@ std::tuple<Volume, Position> build_module(Detector& desc, xml::Collection_t& plm
     Box gapShape(mx / 2., my / 2., (cryz - 2. * wrapcflength) / 2.);
     Box gapShape_sub((mx - 2. * wrapcfthickness) / 2., (my - 2. * wrapcfthickness) / 2., (cryz - 2. * wrapcflength) / 2.);
     SubtractionSolid gap_subtract(gapShape, gapShape_sub, Position(0., 0., 0.));
-    
+
     Box wrpVM2000((mx - 2. * wrapcfthickness) / 2., (my - 2. * wrapcfthickness) / 2., mz / 2.);
     Box wrpVM2000_sub((mx - 2. * wrapcfthickness - 2. * wrapVMthickness) / 2., (my - 2. * wrapcfthickness - 2. * wrapVMthickness) / 2., cryz / 2.);
     SubtractionSolid wrpVM2000_subtract(wrpVM2000, wrpVM2000_sub, Position(0., 0., -mdz / 2.));

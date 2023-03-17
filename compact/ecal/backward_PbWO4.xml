@@ -5,7 +5,7 @@
   <define>
     <comment>
       The basic parameters of size [not half-length] of single module
-      The structure of a single module is arranged as followed: 
+      The structure of a single module is arranged as followed:
 
             carbonfiber[ VM2000[ crystal ]VM2000 ]carbonfiber
 
@@ -16,7 +16,7 @@
     <constant name="EcalEndcapN_crystalmodule_VM2000_thickness" value="0.05*mm"/>
     <constant name="EcalEndcapN_crystalmodule_carbonfiber_length" value="20.00*mm"/>
 
-    
+
     <comment>
       Basic hardcoded parameters about supporting structures, rotation and shift
         ** +15 deg rotation (Protate) make top side of outer supporting structure (Oring) and
@@ -37,7 +37,7 @@
     <constant name="EcalEndcapN_Iring_axisA" value="7.5*cm"/>
     <constant name="EcalEndcapN_Iring_axisB" value="5.5*cm"/>
 
-    
+
     <comment>
       FIXME currently unused
     </comment>
