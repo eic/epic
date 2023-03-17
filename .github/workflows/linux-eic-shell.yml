@@ -128,10 +128,11 @@ jobs:
 
   trigger-geoviewer:
     runs-on: ubuntu-latest
-    needs: [xmllint-after-build]
+    needs:
+      - xmllint-after-build
+      - list-detector-configs
     strategy:
-      matrix:
-        detector_config: [epic_arches, epic_brycecanyon]
+      matrix: ${{ fromJson(needs.list-detector-configs.outputs.configs) }}
     steps:
     - uses: eic/trigger-gitlab-ci@v2
       id: trigger
@@ -143,7 +144,7 @@ jobs:
         variables: |
           DETECTOR_REPOSITORYURL=${{ github.server_url }}/${{ github.repository }}
           DETECTOR_REPOSITORYREF=${{ github.ref }}
-          DETECTOR_CONFIG=${{ matrix.detector_config }}
+          DETECTOR_CONFIG=epic_${{ matrix.detector_config }}
           DETECTOR_VERSION=${{ github.event.pull_request.head.ref || github.ref_name }}
           GITHUB_REPOSITORY=${{ github.repository }}
           GITHUB_SHA=${{ github.event.pull_request.head.sha || github.sha }}
@@ -155,7 +156,7 @@ jobs:
           -f state="pending" \
           -f target_url="${{ steps.trigger.outputs.web_url }}" \
           -f description="Triggered... $(TZ=America/New_York date)" \
-          -f context="eicweb/geoviewer (${{ matrix.detector_config }})"
+          -f context="eicweb/geoviewer (epic_${{ matrix.detector_config }})"
       env:
         GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
@@ -563,6 +564,7 @@ jobs:
   dawn-view-slices:
     runs-on: ubuntu-latest
     needs: generate-prim-file
+    if: github.ref == 'refs/heads/main'
     strategy:
       matrix:
         view: [view12, view14, view15]

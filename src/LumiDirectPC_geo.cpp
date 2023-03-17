@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: LGPL-3.0-or-later
-// Copyright (C) 2022 Dhevan Gangadharan
+// Copyright (C) 2023 Anna B. Kowalewska
 
 #include "DD4hep/DetFactoryHelper.h"
 #include "DD4hep/Printout.h"
@@ -12,8 +12,9 @@
 using namespace std;
 using namespace dd4hep;
 
-static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector /*sens*/)
+static Ref_t create_detector(Detector& desc, xml_h e, SensitiveDetector sens)
 {
+  sens.setType("calorimeter");
 
   xml_det_t     x_det           = e;
   xml_comp_t    x_dim           = x_det.dimensions();
@@ -21,7 +22,9 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector /
   xml_comp_t    x_rot           = x_det.rotation();
   //
   string        det_name        = x_det.nameStr();
-  string        mat_name        = dd4hep::getAttrOrDefault<string>( x_det, _U(material), "Aluminum" );
+  string        mat_name        = dd4hep::getAttrOrDefault<string>( x_det, _U(material), "PbWO4" );
+  int		det_ID		=x_det.id();
+  DetElement det(det_name, det_ID);
   //
   double        sizeX           = x_dim.x();
   double        sizeY           = x_dim.y();
@@ -34,18 +37,17 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector /
   double        rotZ            = x_rot.z();
 
   Box box( sizeX, sizeY, sizeZ );
-  Volume vol( det_name + "_vol", box, description.material( mat_name ) );
-  vol.setVisAttributes( description.visAttributes(x_det.visStr()) );
+  Volume vol( det_name + "_vol", box, desc.material( mat_name ) );
+  vol.setVisAttributes(desc.visAttributes(x_det.visStr()));
+  vol.setSensitiveDetector(sens);
 
   Transform3D  pos( RotationZYX(rotX, rotY, rotZ), Position(posX, posY, posZ) );
 
-  DetElement det(det_name, x_det.id());
-  Volume motherVol = description.pickMotherVolume( det );
+  Volume motherVol = desc.pickMotherVolume( det );
   PlacedVolume phv = motherVol.placeVolume( vol, pos );
-
+  phv.addPhysVolID("system", det_ID);
   det.setPlacement(phv);
-
   return det;
 }
 
-DECLARE_DETELEMENT(LumiWindow, create_detector)
+DECLARE_DETELEMENT(LumiDirectPCAL, create_detector)
