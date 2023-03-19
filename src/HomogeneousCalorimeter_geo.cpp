@@ -167,8 +167,8 @@ std::tuple<Volume, Position> build_module(Detector& desc, xml::Collection_t& plm
 
 
     carbonVol.setVisAttributes(desc.visAttributes(wrp.attr<std::string>(_Unicode(vis_carbon))));
-    wrpVol.setVisAttributes(desc.visAttributes(wrp.attr<std::string>(_Unicode(vis_wrap))));
     gapVol.setVisAttributes(desc.visAttributes(wrp.attr<std::string>(_Unicode(vis_gap))));
+    wrpVol.setVisAttributes(desc.visAttributes(wrp.attr<std::string>(_Unicode(vis_wrap))));
 
     printout(DEBUG, "HomogeneousCalorimeter", "with wrapper");
 
@@ -218,12 +218,12 @@ static std::tuple<int, std::pair<int, int>> add_12surface_disk(Detector& desc, A
     pt_innerframe_y.push_back((position_comp.y()));
   }
 
-  xml_coll_t positions_addmodules(plm, _Unicode(addmodulespos));
-  for (xml_coll_t position_i(positions_addmodules, _U(position)); position_i; ++position_i){
-    xml_comp_t position_comp = position_i;
-    auto add_point = epic::geo::Point((position_comp.x()), (position_comp.y()));
-    points.push_back(add_point);
-  }
+  // xml_coll_t positions_addmodules(plm, _Unicode(addmodulespos));
+  // for (xml_coll_t position_i(positions_addmodules, _U(position)); position_i; ++position_i){
+  //   xml_comp_t position_comp = position_i;
+  //   auto add_point = epic::geo::Point((position_comp.x()), (position_comp.y()));
+  //   points.push_back(add_point);
+  // }
 
 
   //=========================================================
