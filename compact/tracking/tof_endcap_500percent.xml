@@ -167,7 +167,15 @@
             module="ForwardModule" />
         </layer>
       </detector>
-      <detector
+    <detector
+      id="BackwardTOF_ID"
+      name="BackwardTOF"
+      type="epic_CompositeTracker"
+      vis="TrackerSubAssemblyVis">
+      <type_flags type="DetType_TRACKER + DetType_ENDCAP"/>
+      <position x="0*cm" y="0*cm" z="-1*um" />
+    </detector>
+      <!-- <detector
         id="BackwardTOF_ID"
         name="BackwardTOF"
         type="epic_TrapEndcapTracker"
@@ -194,18 +202,19 @@
             dz="TOFEndcapMod_dz"
             module="BackwardModule" />
         </layer>
-      </detector>
+      </detector> -->
   </detectors>
   
   <plugins>
     <plugin name="DD4hep_ParametersPlugin">
       <argument value="ForwardTOF"/>
-      <argument value="layer_pattern: str=ForwardTOF_layer\d_N"/>
+      <!-- <argument value="layer_pattern: str=ForwardTOF_layer\d_N"/> -->
+      <argument value="layer_pattern: str=layer\d"/>
     </plugin>
-    <plugin name="DD4hep_ParametersPlugin">
+    <!-- <plugin name="DD4hep_ParametersPlugin">
       <argument value="BackwardTOF"/>
       <argument value="layer_pattern: str=BackwardTOF_layer\d_N"/>
-    </plugin>
+    </plugin> -->
   </plugins>
   
   <readouts>
