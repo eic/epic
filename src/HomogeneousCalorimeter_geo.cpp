@@ -7,11 +7,15 @@
 //  Date: 06/09/2021
 //==========================================================================
 //==========================================================================
+//  Date: 03/10/2022
 //  Add the new geometry and the supporting structue
 //  Adapted the single module with additional wrraper and supporting structure
 //--------------------------------------------------------------------------
+//  Date: 20/03/2023
+//  Reorganize and optimize the scripts
+//  Adapted the inner supporting structure for improving low Q2 measurements
+//--------------------------------------------------------------------------
 //  Author: WANG Pu-Kai, ZHU Yuwei (IJClab)
-//  Date: 03/10/2022
 //==========================================================================
 
 #include "DD4hep/DetFactoryHelper.h"
@@ -196,7 +200,7 @@ static std::tuple<int, std::pair<int, int>> add_12surface_disk(Detector& desc, A
   double      phimin                 = dd4hep::getAttrOrDefault<double>(plm, _Unicode(phimin), 0.);
   double      phimax                 = dd4hep::getAttrOrDefault<double>(plm, _Unicode(phimax), 2. * M_PI);
 
-  std::vector<double> pt_innerframe_x;
+  std::vector<double> pt_innerframe_x;  //The points information for inner supporting frame
   std::vector<double> pt_innerframe_y;
 
 
@@ -218,12 +222,12 @@ static std::tuple<int, std::pair<int, int>> add_12surface_disk(Detector& desc, A
     pt_innerframe_y.push_back((position_comp.y()));
   }
 
-  // xml_coll_t positions_addmodules(plm, _Unicode(addmodulespos));
-  // for (xml_coll_t position_i(positions_addmodules, _U(position)); position_i; ++position_i){
-  //   xml_comp_t position_comp = position_i;
-  //   auto add_point = epic::geo::Point((position_comp.x()), (position_comp.y()));
-  //   points.push_back(add_point);
-  // }
+  xml_coll_t positions_addmodules(plm, _Unicode(addmodulespos));
+  for (xml_coll_t position_i(positions_addmodules, _U(position)); position_i; ++position_i){
+    xml_comp_t position_comp = position_i;
+    auto add_point = epic::geo::Point((position_comp.x()), (position_comp.y()));
+    points.push_back(add_point);
+  }
 
 
   //=========================================================
@@ -234,8 +238,7 @@ static std::tuple<int, std::pair<int, int>> add_12surface_disk(Detector& desc, A
   //
   Material outer_ring_material = desc.material(getAttrOrDefault<std::string>(plm, _U(material), "StainlessSteel"));
   Material inner_ring_material = desc.material(getAttrOrDefault<std::string>(plm, _U(material), "Copper"));
-  // Material hole_material     = desc.material(getAttrOrDefault<std::string>(plm, _U(material), "Vacuum"));
-
+  
   //==============================
   // Outer supporting frame
   //==============================
