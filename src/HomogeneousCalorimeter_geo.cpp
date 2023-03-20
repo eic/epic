@@ -238,7 +238,7 @@ static std::tuple<int, std::pair<int, int>> add_12surface_disk(Detector& desc, A
   //
   Material outer_ring_material = desc.material(getAttrOrDefault<std::string>(plm, _U(material), "StainlessSteel"));
   Material inner_ring_material = desc.material(getAttrOrDefault<std::string>(plm, _U(material), "Copper"));
-  
+
   //==============================
   // Outer supporting frame
   //==============================
