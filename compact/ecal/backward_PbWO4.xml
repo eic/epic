@@ -80,7 +80,7 @@
             vis_steel_gap="AnlGray">
 
           <comment>
-            The position information of inner supporting structure [extrudedpolygon shape, 12 points in total]
+            The points information for constructing inner supporting structure [extrudedpolygon shape, 12 points in total]
           </comment>
           <points_extrudedpolygon>
             <position x="6.15*cm"  y="6.15*cm"/>
@@ -99,9 +99,12 @@
 
           <comment>
             The position information of additional modules to fill the gap
-            between the sensitive region and inner/outer frame structure. [92 posints in total]
+            between the sensitive region and inner/outer supporting structure. [92 posints in total]
           </comment>
           <addmodulespos>
+            <comment>
+              The additional modules in the inner region (inner supporting structure)
+            </comment>
             <position x="1.025*cm"  y="7.175*cm"/>
             <position x="1.025*cm"  y="9.225*cm"/>
             <position x="3.075*cm"  y="7.175*cm"/>
@@ -110,16 +113,16 @@
             <position x="7.175*cm"  y="7.175*cm"/>
             <position x="7.175*cm"  y="5.125*cm"/>
             <position x="9.225*cm"  y="1.025*cm"/>
-            <position x="9.225*cm"  y="3.075*cm"/>
+            <position x="9.225*cm"  y="3.075*cm"/>            
             <position x="-1.025*cm" y="7.175*cm"/>
             <position x="-1.025*cm" y="9.225*cm"/>
-            <position x="-3.025*cm" y="7.175*cm"/>
+            <position x="-3.075*cm" y="7.175*cm"/>
             <position x="-3.075*cm" y="9.225*cm"/>
             <position x="-5.125*cm" y="7.175*cm"/>
             <position x="-7.175*cm" y="7.175*cm"/>
             <position x="-7.175*cm" y="5.125*cm"/>
             <position x="-9.225*cm" y="1.025*cm"/>
-            <position x="-9.225*cm" y="3.075*cm"/>
+            <position x="-9.225*cm" y="3.075*cm"/>            
             <position x="-1.025*cm" y="-7.175*cm"/>
             <position x="-1.025*cm" y="-9.225*cm"/>
             <position x="-3.075*cm" y="-7.175*cm"/>
@@ -128,7 +131,7 @@
             <position x="-7.175*cm" y="-7.175*cm"/>
             <position x="-7.175*cm" y="-5.125*cm"/>
             <position x="-9.225*cm" y="-1.025*cm"/>
-            <position x="-9.225*cm" y="-3.075*cm"/>
+            <position x="-9.225*cm" y="-3.075*cm"/>            
             <position x="1.025*cm"  y="-7.175*cm"/>
             <position x="1.025*cm"  y="-9.225*cm"/>
             <position x="3.075*cm"  y="-7.175*cm"/>
@@ -138,6 +141,10 @@
             <position x="7.175*cm"  y="-5.125*cm"/>
             <position x="9.225*cm"  y="-1.025*cm"/>
             <position x="9.225*cm"  y="-3.075*cm"/>
+
+            <comment>
+              The additional modules in the outer region (outer supporting structure)
+            </comment>
             <position x="9.225*cm"  y="62.525*cm"/>
             <position x="11.275*cm" y="62.525*cm"/>
             <position x="13.325*cm" y="62.525*cm"/>
@@ -151,7 +158,7 @@
             <position x="62.525*cm" y="15.375*cm"/>
             <position x="62.525*cm" y="13.325*cm"/>
             <position x="62.525*cm" y="11.275*cm"/>
-            <position x="62.525*cm" y="9.225*cm"/>
+            <position x="62.525*cm" y="9.225*cm"/>            
             <position x="-9.225*cm"  y="62.525*cm"/>
             <position x="-11.275*cm" y="62.525*cm"/>
             <position x="-13.325*cm" y="62.525*cm"/>
@@ -165,7 +172,7 @@
             <position x="-62.525*cm" y="15.375*cm"/>
             <position x="-62.525*cm" y="13.325*cm"/>
             <position x="-62.525*cm" y="11.275*cm"/>
-            <position x="-62.525*cm" y="9.225*cm"/>
+            <position x="-62.525*cm" y="9.225*cm"/>            
             <position x="-9.225*cm"  y="-62.525*cm"/>
             <position x="-11.275*cm" y="-62.525*cm"/>
             <position x="-13.325*cm" y="-62.525*cm"/>
@@ -179,8 +186,8 @@
             <position x="-62.525*cm" y="-15.375*cm"/>
             <position x="-62.525*cm" y="-13.325*cm"/>
             <position x="-62.525*cm" y="-11.275*cm"/>
-            <position x="-62.525*cm" y="-9.225*cm"/>
-            <position x="9.225*cm"   y="-62.525*cm"/>
+            <position x="-62.525*cm" y="-9.225*cm"/>            
+            <position x="9.225*cm"   y="-62.525*cm"/>            
             <position x="11.275*cm"  y="-62.525*cm"/>
             <position x="13.325*cm"  y="-62.525*cm"/>
             <position x="15.375*cm"  y="-62.525*cm"/>
