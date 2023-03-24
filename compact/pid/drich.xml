@@ -162,7 +162,7 @@
   splice_mode="1"
   debug="DRICH_debug_mirror"
   >
-  <mirror  backplane="DRICH_window_thickness+3.0*cm"  focus_tune_x="50.0*cm"  focus_tune_z="20.0*cm"  />
+  <mirror  backplane="DRICH_window_thickness+3.0*cm"  focus_tune_x="-50.0*cm"  focus_tune_z="20.0*cm"  />
   <mirror  backplane="DRICH_window_thickness+1.0*cm"  focus_tune_x="30.0*cm"  focus_tune_z="35.0*cm"    />
 </mirrors>
 

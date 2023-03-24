@@ -497,8 +497,19 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
         mirrorSolid4 = mirrorSolid3;
       };
 
+      /*
+      // DEBUG splicing: uncomment this section to draw splicing `Box`
+      mirrorSolid4 = mirrorSolid2; // undo splice cuts
+      if(iMir==0) { // place splice volume
+        Volume spliceVol(detName+"_splice_"+secName+"_"+mirName, spliceBox, mirrorMat);
+        auto splicePV = gasvolVol.placeVolume(spliceVol,spliceList[iMir].first);
+        DetElement spliceDE(det, Form("splice_de_%d_%d", isec, iMir), 10*isec+iMir);
+        spliceDE.setPlacement(splicePV);
+      };
+      */
+
       // mirror volume, attributes, and placement
-      Volume mirrorVol(detName + "_mirror_" + secName, mirrorSolid2, mirrorMat);
+      Volume mirrorVol(detName + "_mirror_" + secName, mirrorSolid4, mirrorMat);
       mirrorVol.setVisAttributes(mirrorVis);
       auto mirrorSectorPlacement = Transform3D(sectorRotation); // rotate about beam axis to sector
       auto mirrorPV              = gasvolVol.placeVolume(mirrorVol, mirrorSectorPlacement);
@@ -511,11 +522,11 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
 
       // reconstruction constants (w.r.t. IP)
       // - access sector center after `sectorRotation`
-      auto mirrorFinalPlacement = mirrorSectorPlacement * mirrorPlacement;
-      auto mirrorFinalCenter    = vesselPos + mirrorFinalPlacement.Translation().Vect();
-      desc.add(Constant("DRICH_mirror_center_x_" +iMir+"_"+ secName, std::to_string(mirrorFinalCenter.x())));
-      desc.add(Constant("DRICH_mirror_center_y_" +iMir+"_"+ secName, std::to_string(mirrorFinalCenter.y())));
-      desc.add(Constant("DRICH_mirror_center_z_" +iMir+"_"+ secName, std::to_string(mirrorFinalCenter.z())));
+      // auto mirrorFinalPlacement = mirrorSectorPlacement * mirrorPlacement;
+      // auto mirrorFinalCenter    = vesselPos + mirrorFinalPlacement.Translation().Vect();
+      // desc.add(Constant("DRICH_mirror_center_x_" +iMir+"_"+ secName, std::to_string(mirrorFinalCenter.x()))); // FIXME
+      // desc.add(Constant("DRICH_mirror_center_y_" +iMir+"_"+ secName, std::to_string(mirrorFinalCenter.y())));
+      // desc.add(Constant("DRICH_mirror_center_z_" +iMir+"_"+ secName, std::to_string(mirrorFinalCenter.z())));
       if (isec == 0)
         desc.add(Constant("DRICH_mirror_radius", +iMir+"_" +std::to_string(imirrorRadius[0])));
 	} //end of mirror loop
