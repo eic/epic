@@ -528,7 +528,7 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
       // desc.add(Constant("DRICH_mirror_center_y_" +iMir+"_"+ secName, std::to_string(mirrorFinalCenter.y())));
       // desc.add(Constant("DRICH_mirror_center_z_" +iMir+"_"+ secName, std::to_string(mirrorFinalCenter.z())));
       if (isec == 0)
-        desc.add(Constant("DRICH_mirror_radius", +iMir+"_" +std::to_string(imirrorRadius[0])));
+        desc.add(Constant("DRICH_mirror_radius_mir" + std::to_string(iMir), std::to_string(imirrorRadius[0])));
 	} //end of mirror loop
 
     // BUILD SENSORS ====================================================================
