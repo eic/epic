@@ -515,7 +515,7 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
       auto mirrorPV              = gasvolVol.placeVolume(mirrorVol, mirrorSectorPlacement);
 
       // properties
-      DetElement mirrorDE(det, "mirror_de_"+iMir + secName, isec);
+      DetElement mirrorDE(det, "mirror_de_mir" + std::to_string(iMir) + "_" + secName, isec);
       mirrorDE.setPlacement(mirrorPV);
       SkinSurface mirrorSkin(desc, mirrorDE, "mirror_optical_surface_" + secName, mirrorSurf, mirrorVol);
       mirrorSkin.isValid();
