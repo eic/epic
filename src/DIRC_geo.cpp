@@ -64,6 +64,14 @@ static Ref_t createDetector(Detector& desc, xml_h e, SensitiveDetector sens)
   Volume     glue_vol("glue_vol", glue_box, desc.material(xml_glue.materialStr()));
   glue_vol.setVisAttributes(desc.visAttributes(xml_glue.visStr()));
 
+  // Envelope for bars
+  Box Envelope_box("Envelope_box", (bar_height + 1*mm)/2, (bar_width + 1*mm)/2, (bar_length + 1*mm)/2);
+  Volume Envelope_vol("Envelope_vol", Envelope_box, desc.material("AirOptical"));
+  //Volume       motherVol = desc.pickMotherVolume(det);
+  //PlacedVolume EnvelopePV     = motherVol.placeVolume(Envelope_vol, det_tr);
+  dirc_module.placeVolume(Envelope_vol, Position(0,0,0));
+  //det.setPlacement(EnvelopePV);
+  
   // Place bars + glue into module assembly
   // FIXME place bars + glue into separate box volume
   auto bar_repeat_y    = xml_bar.attr<int>(_Unicode(repeat_y));
@@ -75,8 +83,10 @@ static Ref_t createDetector(Detector& desc, xml_h e, SensitiveDetector sens)
     double y = 0.5 * bar_assm_width - 0.5 * bar_width - (bar_width + bar_gap) * y_index;
     for (int z_index = 0; z_index < bar_repeat_z; z_index++) {
       double z = 0.5 * bar_assm_length - 0.5 * bar_length - (bar_length + glue_thickness) * z_index;
-      dirc_module.placeVolume(glue_vol, Position(0, y, z - 0.5 * (bar_length + glue_thickness)));
-      dirc_module.placeVolume(bar_vol, Position(0, y, z)).addPhysVolID("section", z_index).addPhysVolID("bar", y_index);
+      //dirc_module.placeVolume(glue_vol, Position(0, y, z - 0.5 * (bar_length + glue_thickness)));
+      //dirc_module.placeVolume(bar_vol, Position(0, y, z)).addPhysVolID("section", z_index).addPhysVolID("bar", y_index);
+      Envelope_vol.placeVolume(glue_vol, Position(0, y, z - 0.5 * (bar_length + glue_thickness)));
+      Envelope_vol.placeVolume(bar_vol, Position(0, y, z)).addPhysVolID("section", z_index).addPhysVolID("bar", y_index);
     }
   }
 
