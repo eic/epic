@@ -103,10 +103,11 @@ jobs:
         if-no-files-found: error
     - run: |
         source install/setup.sh
-        sed -z 's|\(<fiber\)|<comment>\1|g; s|\(/fiber>\)|\1</comment>|g'
-        sed -i '/<fiber/,+4d' ${DETECTOR_PATH}/compact/ecal/forward_scfi.xml
-        sed -i '/<fiber/,+4d' ${DETECTOR_PATH}/compact/far_forward/ZDC_Ecal_WSciFi.xml
-        sed -i '/<lens/,+4d' ${DETECTOR_PATH}/compact/pid/mrich.xml
+        sed -i 's%\(<fiber\|<lens\)%<comment>\1%g; s%\(/fiber>\|/lens>\)%\1</comment>%g' \
+          ${DETECTOR_PATH}/compact/ecal/barrel_interlayers.xml \
+          ${DETECTOR_PATH}/compact/ecal/forward_scfi.xml \
+          ${DETECTOR_PATH}/compact/far_forward/ZDC_Ecal_WSciFi.xml \
+          ${DETECTOR_PATH}/compact/pid/mrich.xml
     - uses: actions/upload-artifact@v3
       with:
         name: build-${{ matrix.CC }}-fast-eic-shell
@@ -156,7 +157,7 @@ jobs:
           -f state="pending" \
           -f target_url="${{ steps.trigger.outputs.web_url }}" \
           -f description="Triggered... $(TZ=America/New_York date)" \
-          -f context="eicweb/geoviewer (${{ matrix.detector_config }})"
+          -f context="eicweb/geoviewer (epic_${{ matrix.detector_config }})"
       env:
         GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
@@ -564,6 +565,7 @@ jobs:
   dawn-view-slices:
     runs-on: ubuntu-latest
     needs: generate-prim-file
+    if: github.ref == 'refs/heads/main'
     strategy:
       matrix:
         view: [view12, view14, view15]

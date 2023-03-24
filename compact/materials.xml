@@ -368,6 +368,10 @@
     <fraction n="0.18" ref="Cr"/>
     <fraction n="0.08" ref="Ni"/>
   </material>
+  <material name="Copper">
+    <D type="density" value="8.96" unit="g / cm3"/>
+    <fraction n="1." ref="Cu"/>
+  </material>
   <material name="ZDC_Tungsten">
     <D type="density" value="18.73" unit="g / cm3"/>
     <fraction n="0.943" ref="W"/>
