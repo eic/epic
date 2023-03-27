@@ -56,7 +56,6 @@
       type="epic_TrackerBarrel"
       readout="SiBarrelHits"
       insideTrackingVolume="true">
-      <type_flags type="DetType_TRACKER + DetType_BARREL"/>
       <dimensions
         rmin="SiBarrelLayer1_rmin"
         rmax="SiBarrelLayer1_rmax"
@@ -114,7 +113,6 @@
       type="epic_TrackerBarrel"
       readout="SiBarrelHits"
       insideTrackingVolume="true">
-      <type_flags type="DetType_TRACKER + DetType_BARREL"/>
       <dimensions
         rmin="SiBarrelLayer2_rmin"
         rmax="SiBarrelLayer2_rmax"
@@ -164,17 +162,6 @@
       </layer>
     </detector>
   </detectors>
-
-  <plugins>
-    <plugin name="DD4hep_ParametersPlugin">
-      <argument value="SagittaSiBarrel"/>
-      <argument value="layer_pattern: str=SagittaSiBarrel_layer\d"/>
-    </plugin>
-    <plugin name="DD4hep_ParametersPlugin">
-      <argument value="OuterSiBarrel"/>
-      <argument value="layer_pattern: str=OuterSiBarrel_layer\d"/>
-    </plugin>
-  </plugins>
 
   <readouts>
     <readout name="SiBarrelHits">

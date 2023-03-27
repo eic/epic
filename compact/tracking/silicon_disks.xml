@@ -64,7 +64,6 @@
       readout="TrackerEndcapHits"
       vis="TrackerVis"
       reflect="false">
-      <type_flags type="DetType_TRACKER + DetType_ENDCAP"/>
       <module name="Module1" vis="TrackerModuleVis">
         <trd x1="InnerTrackerEndcapPMod1_x1/2" x2="InnerTrackerEndcapPMod1_x2/2" z="InnerTrackerEndcapPMod1_y/2" />
         <module_component thickness="SiTrackerEndcapCF_thickness" material="CarbonFiber" vis="TrackerSupportVis" />
@@ -93,7 +92,6 @@
       readout="TrackerEndcapHits"
       vis="TrackerVis"
       reflect="true">
-      <type_flags type="DetType_TRACKER + DetType_ENDCAP"/>
       <module name="Module1" vis="TrackerModuleVis">
         <trd x1="InnerTrackerEndcapNMod1_x1/2" x2="InnerTrackerEndcapNMod1_x2/2" z="InnerTrackerEndcapNMod1_y/2" />
         <module_component thickness="SiTrackerEndcapCF_thickness" material="CarbonFiber" vis="TrackerSupportVis" />
@@ -206,7 +204,6 @@
       readout="TrackerEndcapHits"
       vis="TrackerVis"
       reflect="false">
-      <type_flags type="DetType_TRACKER + DetType_ENDCAP"/>
       <module name="Module1" vis="TrackerModuleVis">
         <trd x1="TrackerEndcapPMod1_x1/2" x2="TrackerEndcapPMod1_x2/2" z="TrackerEndcapPMod1_y/2" />
         <module_component thickness="SiTrackerEndcapCF_thickness" material="CarbonFiber" vis="TrackerSupportVis" />
@@ -235,7 +232,6 @@
       readout="TrackerEndcapHits"
       vis="TrackerVis"
       reflect="true">
-      <type_flags type="DetType_TRACKER + DetType_ENDCAP"/>
       <module name="Module1" vis="TrackerModuleVis">
         <trd x1="TrackerEndcapNMod1_x1/2" x2="TrackerEndcapNMod1_x2/2" z="TrackerEndcapNMod1_y/2" />
         <module_component thickness="SiTrackerEndcapCF_thickness" material="CarbonFiber" vis="TrackerSupportVis" />
@@ -264,7 +260,6 @@
       readout="TrackerEndcapHits"
       vis="TrackerVis"
       reflect="false">
-      <type_flags type="DetType_TRACKER + DetType_ENDCAP"/>
       <module name="Module2" vis="TrackerModuleVis">
         <trd x1="TrackerEndcapPMod2_x1/2" x2="TrackerEndcapPMod2_x2/2" z="TrackerEndcapPMod2_y/2" />
         <module_component thickness="SiTrackerEndcapCF_thickness" material="CarbonFiber" vis="TrackerSupportVis" />
@@ -333,7 +328,6 @@
       readout="TrackerEndcapHits"
       vis="TrackerVis"
       reflect="true">
-      <type_flags type="DetType_TRACKER + DetType_ENDCAP"/>
       <module name="Module2" vis="TrackerModuleVis">
         <trd x1="TrackerEndcapNMod2_x1/2" x2="TrackerEndcapNMod2_x2/2" z="TrackerEndcapNMod2_y/2" />
         <module_component thickness="SiTrackerEndcapCF_thickness" material="CarbonFiber" vis="TrackerSupportVis" />
@@ -396,33 +390,6 @@
       </layer>
     </detector>
   </detectors>
-
-  <plugins>
-    <plugin name="DD4hep_ParametersPlugin">
-      <argument value="MiddleTrackerEndcapP"/>
-      <argument value="layer_pattern: str=MiddleTrackerEndcapP_layer\d_P"/>
-    </plugin>
-    <plugin name="DD4hep_ParametersPlugin">
-      <argument value="MiddleTrackerEndcapN"/>
-      <argument value="layer_pattern: str=MiddleTrackerEndcapN_layer\d_N"/>
-    </plugin>
-    <plugin name="DD4hep_ParametersPlugin">
-      <argument value="InnerTrackerEndcapP"/>
-      <argument value="layer_pattern: str=InnerTrackerEndcapP_layer\d_P"/>
-    </plugin>
-    <plugin name="DD4hep_ParametersPlugin">
-      <argument value="InnerTrackerEndcapN"/>
-      <argument value="layer_pattern: str=InnerTrackerEndcapN_layer\d_N"/>
-    </plugin>
-    <plugin name="DD4hep_ParametersPlugin">
-      <argument value="OuterTrackerEndcapP"/>
-      <argument value="layer_pattern: str=OuterTrackerEndcapP_layer\d_P"/>
-    </plugin>
-    <plugin name="DD4hep_ParametersPlugin">
-      <argument value="OuterTrackerEndcapN"/>
-      <argument value="layer_pattern: str=OuterTrackerEndcapN_layer\d_N"/>
-    </plugin>
-  </plugins>
 
   <readouts>
     <readout name="TrackerEndcapHits">

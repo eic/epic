@@ -62,7 +62,6 @@
       type="epic_VertexBarrel"
       readout="VertexBarrelHits"
       insideTrackingVolume="true">
-      <type_flags type="DetType_TRACKER + DetType_BARREL"/>
       <dimensions
         rmin="VertexBarrelLayer1_rmin"
         rmax="VertexBarrelLayer3_rmax"
@@ -135,13 +134,6 @@
       </layer>
     </detector>
   </detectors>
-
-  <plugins>
-    <plugin name="DD4hep_ParametersPlugin">
-      <argument value="VertexBarrel"/>
-      <argument value="layer_pattern: str=VertexBarrel_layer\d"/>
-    </plugin>
-  </plugins>
 
   <readouts>
     <readout name="VertexBarrelHits">

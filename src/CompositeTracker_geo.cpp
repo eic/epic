@@ -13,7 +13,12 @@
 #include "DD4hep/DetFactoryHelper.h"
 #include "DD4hep/Printout.h"
 #include "XML/Utilities.h"
-#include "DD4hepDetectorHelper.h"
+
+#if defined(USE_ACTSDD4HEP)
+#include "ActsDD4hep/ActsExtension.hpp"
+#else
+#include "Acts/Plugins/DD4hep/ActsExtension.hpp"
+#endif
 
 using namespace dd4hep;
 using namespace dd4hep::detail;
@@ -28,16 +33,18 @@ static Ref_t create_element(Detector& description, xml_h e, Ref_t)
 
   const bool usePos = x_det.hasChild(_U(position));
 
-  // Set detector type flag
-  dd4hep::xml::setDetectorTypeFlag(x_det, sdet);
-  auto &params = DD4hepDetectorHelper::ensureExtension<dd4hep::rec::VariantParameters>(
-      sdet);
+  sdet.setType("compound");
+  xml::setDetectorTypeFlag(e, sdet);
 
-  // Add the volume boundary material if configured
-  for (xml_coll_t bmat(x_det, _Unicode(boundary_material)); bmat; ++bmat) {
-    xml_comp_t x_boundary_material = bmat;
-    DD4hepDetectorHelper::xmlToProtoSurfaceMaterial(x_boundary_material, params,
-                                         "boundary_material");
+  const std::string actsType = getAttrOrDefault<std::string>(x_det, _Unicode(actsType), "endcap");
+  printout(DEBUG, det_name, "+++ Creating composite tracking detector (type: " + actsType + ")");
+  assert(actsType == "barrel" || actsType == "endcap");
+
+  // ACTS extension
+  {
+    Acts::ActsExtension* detWorldExt = new Acts::ActsExtension();
+    detWorldExt->addType(actsType, "detector");
+    sdet.addExtension<Acts::ActsExtension>(detWorldExt);
   }
 
   if (usePos) {

@@ -35,7 +35,19 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 include(GNUInstallDirs)
 
 # Dependencies
-find_package(DD4hep 1.21 REQUIRED COMPONENTS DDCore DDG4 DDRec)
+find_package(DD4hep REQUIRED COMPONENTS DDCore DDG4 DDRec)
+if(${DD4hep_VERSION} VERSION_LESS 1.21)
+  message(WARNING "DD4hep before 1.21 does not write collections correctly \n"
+                  "More info at https://github.com/AIDASoft/DD4hep/pull/922")
+endif()
+find_package(ActsDD4hep)
+if(ActsDD4hep_FOUND)
+  add_compile_definitions(USE_ACTSDD4HEP)
+  set(ActsDD4hep ActsDD4hep::ActsDD4hep)
+else()
+  find_package(Acts REQUIRED COMPONENTS Core PluginIdentification PluginTGeo PluginDD4hep)
+  set(ActsDD4hep ActsCore ActsPluginDD4hep)
+endif()
 find_package(fmt REQUIRED)
 
 #-----------------------------------------------------------------------------------
@@ -46,7 +58,7 @@ dd4hep_configure_output()
 file(GLOB sources CONFIGURE_DEPENDS src/*.cpp)
 dd4hep_add_plugin(${a_lib_name}
   SOURCES ${sources}
-  USES ROOT::Core ROOT::Gdml
+  USES ${ActsDD4hep} ROOT::Core ROOT::Gdml
   )
 target_link_libraries(${a_lib_name}
   PUBLIC DD4hep::DDCore DD4hep::DDRec fmt::fmt

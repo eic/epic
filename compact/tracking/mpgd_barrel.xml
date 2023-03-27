@@ -62,7 +62,6 @@
       type="epic_TrackerBarrel"
       readout="MPGDBarrelHits"
       insideTrackingVolume="true">
-      <type_flags type="DetType_TRACKER + DetType_BARREL"/>
       <dimensions
         rmin="InnerMPGDBarrelLayer_rmin"
         rmax="InnerMPGDBarrelLayer_rmax"
@@ -93,14 +92,9 @@
         <z_layout dr="0.0 * mm" z0="0.0 * mm" nz="1"/>
       </layer>
     </detector>
+
   </detectors>
 
-  <plugins>
-    <plugin name="DD4hep_ParametersPlugin">
-      <argument value="InnerMPGDBarrel"/>
-      <argument value="layer_pattern: str=InnerMPGDBarrel_layer\d"/>
-    </plugin>
-  </plugins>
 
   <readouts>
     <readout name="MPGDBarrelHits">

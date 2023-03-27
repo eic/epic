@@ -8,6 +8,14 @@
 #include "DD4hep/DetFactoryHelper.h"
 #include "DD4hep/Printout.h"
 
+#if defined(USE_ACTSDD4HEP)
+#include "ActsDD4hep/ActsExtension.hpp"
+#include "ActsDD4hep/ConvertMaterial.hpp"
+#else
+#include "Acts/Plugins/DD4hep/ActsExtension.hpp"
+#include "Acts/Plugins/DD4hep/ConvertDD4hepMaterial.hpp"
+#endif
+
 using namespace std;
 using namespace dd4hep;
 using namespace dd4hep::detail;
@@ -26,6 +34,9 @@ static Ref_t CylinderTrackerBarrel_create_detector(Detector& description, xml_h 
   string     det_name = x_det.nameStr();
   DetElement sdet(det_name, det_id);
 
+  // Acts::ActsExtension* barrelExtension = new Acts::ActsExtension();
+  // barrelExtension->addType("barrel", "detector");
+  // sdet.addExtension<Acts::ActsExtension>(barrelExtension);
 
   Assembly                assembly(det_name);
   map<string, Volume>     mod_volumes;
@@ -118,6 +129,11 @@ static Ref_t CylinderTrackerBarrel_create_detector(Detector& description, xml_h 
     Volume     m_env    = mod_volumes[m_nam];
     DetElement lay_elt(sdet, _toString(x_layer.id(), "layer%d"), lay_id);
 
+    /// Acts::ActsExtension* layerExtension = new Acts::ActsExtension();
+    /// layerExtension->addType("sensitive cylinder", "layer");
+    /////// layerExtension->addValue(10. * Acts::UnitConstants::mm, "r", "envelope");
+    /// lay_elt.addExtension<Acts::ActsExtension>(layerExtension);
+
     Placements& sensVols = sensitives[m_nam];
 
     // Z increment for module placement along Z axis.
@@ -153,7 +169,8 @@ static Ref_t CylinderTrackerBarrel_create_detector(Detector& description, xml_h 
           PlacedVolume sens_pv = sensVols[ic];
           DetElement   comp_elt(mod_elt, sens_pv.volume().name(), module);
           comp_elt.setPlacement(sens_pv);
-
+          // Acts::ActsExtension* moduleExtension = new Acts::ActsExtension();
+          // comp_elt.addExtension<Acts::ActsExtension>(moduleExtension);
         }
 
         /// Increase counters etc.

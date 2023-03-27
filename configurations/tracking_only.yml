@@ -2,7 +2,6 @@ features:
   fields:
     marco:
   tracking:
-    definitions:
     vertex_barrel:
     silicon_barrel:
     mpgd_barrel:

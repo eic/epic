@@ -47,7 +47,6 @@
     <include ref="${DETECTOR_PATH}/compact/far_forward/fields_{{ pbeam | default("275", true) }}.xml" />
     <include ref="${DETECTOR_PATH}/compact/far_forward/definitions.xml" />
     <include ref="${DETECTOR_PATH}/compact/definitions.xml" />
-    <include ref="${DD4hepINSTALL}/DDDetectors/compact/detector_types.xml"/>
   </define>
 
   <includes>
@@ -115,6 +114,7 @@
   <documentation level="10">
     ## Central tracking detectors
   </documentation>
+  <include ref="${DETECTOR_PATH}/compact/tracking/definitions.xml"/>
 
   {% for tracker in features['tracking'] -%}
   <include ref="${DETECTOR_PATH}/compact/tracking/{{ tracker }}.xml"/>

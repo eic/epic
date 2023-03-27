@@ -17,7 +17,14 @@
 #include "XML/Layering.h"
 #include "XML/Utilities.h"
 #include <array>
-#include "DD4hepDetectorHelper.h"
+
+#if defined(USE_ACTSDD4HEP)
+#include "ActsDD4hep/ActsExtension.hpp"
+#include "ActsDD4hep/ConvertMaterial.hpp"
+#else
+#include "Acts/Plugins/DD4hep/ActsExtension.hpp"
+#include "Acts/Plugins/DD4hep/ConvertDD4hepMaterial.hpp"
+#endif
 
 using namespace std;
 using namespace dd4hep;
@@ -60,16 +67,16 @@ static Ref_t create_BarrelTrackerWithFrame(Detector& description, xml_h e, Sensi
 
   PlacedVolume pv;
 
-  // Set detector type flag
-  dd4hep::xml::setDetectorTypeFlag(x_det, sdet);
-  auto &params = DD4hepDetectorHelper::ensureExtension<dd4hep::rec::VariantParameters>(
-      sdet);
-
-  // Add the volume boundary material if configured
-  for (xml_coll_t bmat(x_det, _Unicode(boundary_material)); bmat; ++bmat) {
-    xml_comp_t x_boundary_material = bmat;
-    DD4hepDetectorHelper::xmlToProtoSurfaceMaterial(x_boundary_material, params,
-                                         "boundary_material");
+  // ACTS extension
+  {
+    Acts::ActsExtension* detWorldExt = new Acts::ActsExtension();
+    detWorldExt->addType("barrel", "detector");
+    // Add the volume boundary material if configured
+    for (xml_coll_t bmat(x_det, _Unicode(boundary_material)); bmat; ++bmat) {
+      xml_comp_t x_boundary_material = bmat;
+      Acts::xmlToProtoSurfaceMaterial(x_boundary_material, *detWorldExt, "boundary_material");
+    }
+    sdet.addExtension<Acts::ActsExtension>(detWorldExt);
   }
 
   // dd4hep::xml::Dimension dimensions(x_det.dimensions());
@@ -235,7 +242,7 @@ static Ref_t create_BarrelTrackerWithFrame(Detector& description, xml_h e, Sensi
     xml_comp_t z_layout = x_layer.child(_U(z_layout)); // Get the <z_layout> element.
     int        lay_id   = x_layer.id();
     string     m_nam    = x_layer.moduleStr();
-    string     lay_nam  = det_name + _toString(x_layer.id(), "_layer%d");
+    string     lay_nam  = _toString(x_layer.id(), "layer%d");
     Tube       lay_tub(x_barrel.inner_r(), x_barrel.outer_r(), x_barrel.z_length() / 2.0);
     Volume     lay_vol(lay_nam, lay_tub, air); // Create the layer envelope volume.
     Position   lay_pos(0, 0, getAttrOrDefault(x_barrel, _U(z0), 0.));
@@ -258,13 +265,16 @@ static Ref_t create_BarrelTrackerWithFrame(Detector& description, xml_h e, Sensi
 
     // the local coordinate systems of modules in dd4hep and acts differ
     // see http://acts.web.cern.ch/ACTS/latest/doc/group__DD4hepPlugins.html
-    auto &layerParams =
-        DD4hepDetectorHelper::ensureExtension<dd4hep::rec::VariantParameters>(
-            lay_elt);
-
-    for (xml_coll_t lmat(x_layer, _Unicode(layer_material)); lmat; ++lmat) {
-      xml_comp_t x_layer_material = lmat;
-      DD4hepDetectorHelper::xmlToProtoSurfaceMaterial(x_layer_material, layerParams, "layer_material");
+    {
+      Acts::ActsExtension* layerExtension = new Acts::ActsExtension();
+      // layer is simple tube so no need to set envelope
+      layerExtension->addType("sensitive cylinder", "layer");
+      // Add the proto layer material
+      for (xml_coll_t lmat(x_layer, _Unicode(layer_material)); lmat; ++lmat) {
+        xml_comp_t x_layer_material = lmat;
+        xmlToProtoSurfaceMaterial(x_layer_material, *layerExtension, "layer_material");
+      }
+      lay_elt.addExtension<Acts::ActsExtension>(layerExtension);
     }
 
     // Z increment for module placement along Z axis.
@@ -296,9 +306,12 @@ static Ref_t create_BarrelTrackerWithFrame(Detector& description, xml_h e, Sensi
           PlacedVolume sens_pv = sensVols[ic];
           DetElement   comp_de(mod_elt, std::string("de_") + sens_pv.volume().name(), module);
           comp_de.setPlacement(sens_pv);
-
-          auto &params = DD4hepDetectorHelper::ensureExtension<dd4hep::rec::VariantParameters>(comp_de);
-          params.set<string>("axis_definitions", "XYZ");
+          // ACTS extension
+          {
+            Acts::ActsExtension* sensorExtension = new Acts::ActsExtension();
+            // sensorExtension->addType("sensor", "detector");
+            comp_de.addExtension<Acts::ActsExtension>(sensorExtension);
+          }
           // comp_de.setAttributes(description, sens_pv.volume(), x_layer.regionStr(), x_layer.limitsStr(),
           //                       xml_det_t(xmleles[m_nam]).visStr());
           //

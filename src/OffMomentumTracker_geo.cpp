@@ -6,6 +6,11 @@
 #include "XML/Utilities.h"
 #include <map>
 
+#if defined(USE_ACTSDD4HEP)
+#include "ActsDD4hep/ActsExtension.hpp"
+#else
+#include "Acts/Plugins/DD4hep/ActsExtension.hpp"
+#endif
 using namespace std;
 using namespace dd4hep;
 using namespace dd4hep::detail;
@@ -36,6 +41,10 @@ static Ref_t create_OffMomentumTracker(Detector& description, xml_h e, Sensitive
   map<string, Volume>     modules;
   map<string, Placements> sensitives;
   PlacedVolume            pv;
+
+  Acts::ActsExtension* detWorldExt = new Acts::ActsExtension();
+  detWorldExt->addType("endcap", "detector");
+  sdet.addExtension<Acts::ActsExtension>(detWorldExt);
 
   assembly.setVisAttributes(description.invisible());
   sens.setType("tracker");
@@ -190,6 +199,12 @@ static Ref_t create_OffMomentumTracker(Detector& description, xml_h e, Sensitive
     //}
     DetElement layer_element(sdet, layer_name, l_id);
     layer_element.setPlacement(layer_pv);
+    Acts::ActsExtension* layerExtension = new Acts::ActsExtension();
+    layerExtension->addType("layer", "layer");
+    // layerExtension->addType("axes", "definitions", "XZY");
+    // layerExtension->addType("sensitive disk", "layer");
+    // layerExtension->addType("axes", "definitions", "XZY");
+    layer_element.addExtension<Acts::ActsExtension>(layerExtension);
 
     string      m_nam    = x_layer.moduleStr();
     Volume      m_vol    = modules[m_nam];
@@ -203,7 +218,8 @@ static Ref_t create_OffMomentumTracker(Detector& description, xml_h e, Sensitive
       PlacedVolume sens_pv = sensVols[ic];
       DetElement   comp_elt(module, sens_pv.volume().name(), mod_num);
       comp_elt.setPlacement(sens_pv);
-
+      Acts::ActsExtension* moduleExtension = new Acts::ActsExtension();
+      comp_elt.addExtension<Acts::ActsExtension>(moduleExtension);
     }
 
     // for (xml_coll_t ri(x_layer, _U(ring)); ri; ++ri) {

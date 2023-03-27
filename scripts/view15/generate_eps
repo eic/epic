@@ -1,25 +1,25 @@
 #!/bin/bash
 
 #trignometry
-sin ()
-{
-    echo "scale=5;s($1)" | bc -l
-}
-
-add ()
-{
-    echo "scale=5;$1 + $2" | bc -l
-}
-
-cos ()
-{
-    echo "scale=5;c($1)" | bc -l
-}
-
-tan ()
-{
-    echo "scale=5;s($1)/c($1)" | bc -l
-}
+#sin ()
+#{
+#    echo "scale=5;s($1)" | bc -l
+#}
+#
+#add ()
+#{
+#    echo "scale=5;$1 + $2" | bc -l
+#}
+#
+#cos ()
+#{
+#    echo "scale=5;c($1)" | bc -l
+#}
+#
+#tan ()
+#{
+#    echo "scale=5;s($1)/c($1)" | bc -l
+#}
 
 
 function print_the_help {

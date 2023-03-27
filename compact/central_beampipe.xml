@@ -13,7 +13,6 @@
   <detectors>
 
     <detector id="BeamPipe_ID" name="BeamPipe" type="IP6BeamPipe" vis="BeamPipeVis">
-      <type_flags type="DetType_TRACKER + DetType_BEAMPIPE" />
       <beampipe/>
       <IP_pipe
         OD="BeampipeOD"

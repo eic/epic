@@ -4,15 +4,20 @@
 #include "DD4hep/DetFactoryHelper.h"
 #include <map>
 
+#if defined(USE_ACTSDD4HEP)
+#include "ActsDD4hep/ActsExtension.hpp"
+#else
+#include "Acts/Plugins/DD4hep/ActsExtension.hpp"
+#endif
+
 using namespace std;
 using namespace dd4hep;
 using namespace dd4hep::detail;
 
-/*! B0 Preshower
+/*! B0 Tracker.
  *
  * @author Whitney Armstrong
  *
- * This geometric element has been deprecated. ACTS tracking interface has also been removed. - Sakib Rahman (Dec 20, 2022)
  */
 static Ref_t create_B0Preshower(Detector& description, xml_h e, SensitiveDetector sens)
 {
@@ -34,6 +39,10 @@ static Ref_t create_B0Preshower(Detector& description, xml_h e, SensitiveDetecto
   map<string, Volume>     modules;
   map<string, Placements> sensitives;
   PlacedVolume            pv;
+
+  Acts::ActsExtension* detWorldExt = new Acts::ActsExtension();
+  detWorldExt->addType("endcap", "detector");
+  sdet.addExtension<Acts::ActsExtension>(detWorldExt);
 
   assembly.setVisAttributes(description.invisible());
   sens.setType("tracker");
@@ -151,6 +160,12 @@ static Ref_t create_B0Preshower(Detector& description, xml_h e, SensitiveDetecto
     }
     DetElement layer_element(sdet, layer_name, l_id);
     layer_element.setPlacement(layer_pv);
+    Acts::ActsExtension* layerExtension = new Acts::ActsExtension();
+    layerExtension->addType("layer", "layer");
+    // layerExtension->addType("axes", "definitions", "XZY");
+    // layerExtension->addType("sensitive disk", "layer");
+    // layerExtension->addType("axes", "definitions", "XZY");
+    layer_element.addExtension<Acts::ActsExtension>(layerExtension);
 
     for (xml_coll_t ri(x_layer, _U(ring)); ri; ++ri) {
       xml_comp_t  x_ring   = ri;
@@ -181,7 +196,9 @@ static Ref_t create_B0Preshower(Detector& description, xml_h e, SensitiveDetecto
             PlacedVolume sens_pv = sensVols[ic];
             DetElement   comp_elt(module, sens_pv.volume().name(), mod_num);
             comp_elt.setPlacement(sens_pv);
-
+            // std::cout << " adding ACTS extension" << "\n";
+            Acts::ActsExtension* moduleExtension = new Acts::ActsExtension("XZY");
+            comp_elt.addExtension<Acts::ActsExtension>(moduleExtension);
           }
         } else {
           pv = layer_vol.placeVolume(
@@ -193,7 +210,9 @@ static Ref_t create_B0Preshower(Detector& description, xml_h e, SensitiveDetecto
             PlacedVolume sens_pv = sensVols[ic];
             DetElement   comp_elt(r_module, sens_pv.volume().name(), mod_num);
             comp_elt.setPlacement(sens_pv);
-
+            // std::cout << " adding ACTS extension" << "\n";
+            Acts::ActsExtension* moduleExtension = new Acts::ActsExtension("XZY");
+            comp_elt.addExtension<Acts::ActsExtension>(moduleExtension);
           }
         }
         dz = -dz;
