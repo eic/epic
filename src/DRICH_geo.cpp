@@ -525,9 +525,9 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
        auto mirrorFinalPlacement = mirrorSectorPlacement * mirrorPlacement;
        auto mirrorFinalCenter    = vesselPos + mirrorFinalPlacement.Translation().Vect();
 
-       auto MirrCenterX = "DRICH_mirror_center_x_" + std::to_string(iMir)+"_"; 
-       auto MirrCenterY = "DRICH_mirror_center_y_" + std::to_string(iMir)+"_"; 
-       auto MirrCenterZ = "DRICH_mirror_center_z_" + std::to_string(iMir)+"_"; 
+       auto MirrCenterX = "DRICH_mirror_center_x_" + std::to_string(iMir)+"_";
+       auto MirrCenterY = "DRICH_mirror_center_y_" + std::to_string(iMir)+"_";
+       auto MirrCenterZ = "DRICH_mirror_center_z_" + std::to_string(iMir)+"_";
 
       if(isec==0){
        desc.add(Constant(MirrCenterX+ secName, std::to_string(mirrorFinalCenter.x()))); // FIXME
