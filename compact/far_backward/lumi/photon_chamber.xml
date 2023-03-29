@@ -10,14 +10,13 @@
   </comment>
 
   <define>
-    <constant name="LumiChamber_gas"      value="Vacuum" type="string"/>
   </define>
 
   <detectors>
     <detector
       name="LumiPhotonChamber1"
       type="LumiPhotonChamber"
-      material="LumiChamber_gas"
+      material="Vacuum"
       vis="AnlLightGray">
       <position z1="LumiChamber1_Z1" z2="LumiChamber1_Z2"/>
       <dimensions dx1="LumiBeamDiv_pref * fabs(LumiChamber1_Z1)" dx2="LumiBeamDiv_pref * fabs(LumiChamber1_Z2)" dy1="LumiBeamDiv_pref * fabs(LumiChamber1_Z1)" dy2="LumiBeamDiv_pref * fabs(LumiChamber1_Z2)"/>
