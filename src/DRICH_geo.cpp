@@ -74,17 +74,18 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
   auto   airgapVis       = desc.visAttributes(airgapElem.attr<std::string>(_Unicode(vis)));
   double airgapThickness = airgapElem.attr<double>(_Unicode(thickness));
   // - mirror
-  auto   mirrorElem      = detElem.child(_Unicode(mirror));
-  auto   mirrorMat       = desc.material(mirrorElem.attr<std::string>(_Unicode(material)));
-  auto   mirrorVis       = desc.visAttributes(mirrorElem.attr<std::string>(_Unicode(vis)));
-  auto   mirrorSurf      = surfMgr.opticalSurface(mirrorElem.attr<std::string>(_Unicode(surface)));
-  double mirrorBackplane = mirrorElem.attr<double>(_Unicode(backplane));
-  double mirrorThickness = mirrorElem.attr<double>(_Unicode(thickness));
-  double mirrorRmin      = mirrorElem.attr<double>(_Unicode(rmin));
-  double mirrorRmax      = mirrorElem.attr<double>(_Unicode(rmax));
-  double mirrorPhiw      = mirrorElem.attr<double>(_Unicode(phiw));
-  double focusTuneZ      = mirrorElem.attr<double>(_Unicode(focus_tune_z));
-  double focusTuneX      = mirrorElem.attr<double>(_Unicode(focus_tune_x));
+  auto   mirrorsElem      = detElem.child(_Unicode(mirrors));
+  auto   mirrorMat       = desc.material(mirrorsElem.attr<std::string>(_Unicode(material)));
+  auto   mirrorVis       = desc.visAttributes(mirrorsElem.attr<std::string>(_Unicode(vis)));
+  auto   mirrorSurf      = surfMgr.opticalSurface(mirrorsElem.attr<std::string>(_Unicode(surface)));
+  //double mirrorBackplane = mirrorElem.attr<double>(_Unicode(backplane));
+  double mirrorThickness = mirrorsElem.attr<double>(_Unicode(thickness));
+  double mirrorRmin      = mirrorsElem.attr<double>(_Unicode(rmin));
+  double mirrorRmax      = mirrorsElem.attr<double>(_Unicode(rmax));
+  double mirrorPhiw      = mirrorsElem.attr<double>(_Unicode(phiw));
+  int    spliceMode      = mirrorsElem.attr<int>(_Unicode(splice_mode));
+  //double focusTuneZ      = mirrorElem.attr<double>(_Unicode(focus_tune_z));
+  //double focusTuneX      = mirrorElem.attr<double>(_Unicode(focus_tune_x));
   // - sensor module
   auto   sensorElem      = detElem.child(_Unicode(sensors)).child(_Unicode(module));
   auto   sensorMat       = desc.material(sensorElem.attr<std::string>(_Unicode(material)));
@@ -237,6 +238,8 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
   PlacedVolume vesselPV  = motherVol.placeVolume(vesselVol, vesselPos);
   vesselPV.addPhysVolID("system", detID);
   det.setPlacement(vesselPV);
+  std::vector<std::tuple<double,double,double>> mirrorCoords;
+  std::vector<std::pair<Transform3D,Transform3D>> spliceList;
 
   // BUILD RADIATOR ====================================================================
 
@@ -334,74 +337,206 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
     // - sensor sphere center, w.r.t. IP
     double zS = sensorSphCenterZ + vesselZmin;
     double xS = sensorSphCenterX;
-    // - distance between IP and mirror back plane
-    double b = vesselZmax - mirrorBackplane;
-    // - desired focal region: sensor sphere center, offset by focus-tune (z,x) parameters
-    double zF = zS + focusTuneZ;
-    double xF = xS + focusTuneX;
+	//Tube pieSlice(	0.01*cm, vesselRmax2,tankLength/2.0, -mirrorPhiw/2.0, mirrorPhiw/2.0);
+	//Looping over the mirrors
+	int iMir =0;
+	for(xml::Collection_t mirrorElem(mirrorsElem, _Unicode(mirror)); mirrorElem; ++mirrorElem, ++iMir){
 
-    // determine the mirror that focuses the IP to this desired region
-    /* - uses point-to-point focusing to derive spherical mirror center
-     *   `(mirrorCenterZ,mirrorCenterX)` and radius `mirrorRadius` for given
-     *   image point coordinates `(zF,xF)` and `b`, defined as the z-distance
-     *   between the object (IP) and the mirror surface
-     * - all coordinates are specified w.r.t. the object point (IP)
-     */
-    double mirrorCenterZ = b * zF / (2 * b - zF);
-    double mirrorCenterX = b * xF / (2 * b - zF);
-    double mirrorRadius  = b - mirrorCenterZ;
+	  double mirrorBackplane  =  mirrorElem.attr<double>(_Unicode(backplane));
+	  double focusTuneZ       =  mirrorElem.attr<double>(_Unicode(focus_tune_z));
+      double focusTuneX       =  mirrorElem.attr<double>(_Unicode(focus_tune_x));
+	  // - distance between IP and mirror back plane
+      double b = vesselZmax - mirrorBackplane;
+      // - desired focal region: sensor sphere center, offset by focus-tune (z,x) parameters
+      double zF = zS + focusTuneZ;
+      double xF = xS + focusTuneX;
 
-    // translate mirror center to be w.r.t vessel front plane
-    mirrorCenterZ -= vesselZmin;
+      // determine the mirror that focuses the IP to this desired region
+      /* - uses point-to-point focusing to derive spherical mirror center
+       *   `(mirrorCenterZ,mirrorCenterX)` and radius `mirrorRadius` for given
+       *   image point coordinates `(zF,xF)` and `b`, defined as the z-distance
+       *   between the object (IP) and the mirror surface
+       * - all coordinates are specified w.r.t. the object point (IP)
+       */
+      double mirrorCenterZ = b * zF / (2 * b - zF);
+      double mirrorCenterX = b * xF / (2 * b - zF);
+      double mirrorRadius  = b - mirrorCenterZ;
 
-    // spherical mirror patch cuts and rotation
-    double mirrorThetaRot = std::asin(mirrorCenterX / mirrorRadius);
-    double mirrorTheta1   = mirrorThetaRot - std::asin((mirrorCenterX - mirrorRmin) / mirrorRadius);
-    double mirrorTheta2   = mirrorThetaRot + std::asin((mirrorRmax - mirrorCenterX) / mirrorRadius);
+      // translate mirror center to be w.r.t vessel front plane
+      mirrorCenterZ -= vesselZmin;
+	  if(debugMirror && isec==0) {
+        printf("\n");
+        printf("SECTOR %d  MIRROR %d coordinates (w.r.t IP):\n",isec,iMir);
+        printf(" centerZ = %.2f cm\n centerX = %.2f cm\n radius  = %.2f cm\n",mirrorCenterZ,mirrorCenterX,mirrorRadius);
+      };
 
-    // if debugging, draw full sphere
-    if (debugMirror) {
-      mirrorTheta1 = 0;
-      mirrorTheta2 = M_PI; /*mirrorPhiw=2*M_PI;*/
-    }
+	  mirrorCoords.push_back(std::tuple<double,double,double>(mirrorCenterZ, mirrorCenterX, mirrorRadius ));
+	} // All mirror related information stored/
 
-    // solid : create sphere at origin, with specified angular limits;
-    // phi limits are increased to fill gaps (overlaps are cut away later)
-    Sphere mirrorSolid1(mirrorRadius, mirrorRadius + mirrorThickness, mirrorTheta1, mirrorTheta2, -40 * degree,
+	spliceList.clear();
+    double imirrorCenterZ[2], imirrorCenterX[2], imirrorRadius[2];
+    double spliceBoxSize = 5*vesselRmax2;
+    Box spliceBox = Box(spliceBoxSize,spliceBoxSize,spliceBoxSize);
+    for(auto mirrorC=mirrorCoords.begin();  mirrorC<mirrorCoords.end()-1; ++mirrorC) {
+      for(int i=0; i<=1; i++) {
+        imirrorCenterZ[i] = std::get<0>(mirrorC[i]);
+        imirrorCenterX[i] = std::get<1>(mirrorC[i]);
+        imirrorRadius[i]  = std::get<2>(mirrorC[i]);
+      };
+
+      // distance between mirror0 and mirror1 centers
+      double centerDist = std::hypot(
+          imirrorCenterX[1] - imirrorCenterX[0],
+          imirrorCenterZ[1] - imirrorCenterZ[0]
+          );
+
+      // polar angle of vector from mirror0 center to mirror1 center
+      double psi = std::atan2(
+          imirrorCenterX[1] - imirrorCenterX[0],
+          imirrorCenterZ[1] - imirrorCenterZ[0]
+          );
+      if(debugMirror && isec==0) printf("\nPSI = %f degrees\n\n",psi/degree);
+
+      // distance between mirror0 center and plane of intersection
+      double intersectionDist =
+          ( std::pow(imirrorRadius[0],2) - std::pow(imirrorRadius[1],2) + std::pow(centerDist,2) ) /
+          ( 2 * centerDist );
+
+      // define pair of splice surfaces, one for each mirror
+      // Box implementation (cf. HalfSpace below):
+      Translation3D spliceBoxPos[2];
+      int spliceDir;
+      for(int b=0; b<2; b++) {
+        // if mirrors intersect in a plane, there are two choices of mirror pairs, applied by `spliceDir`:
+        spliceDir = b==spliceMode ?
+          1:  // convergent choice: reflections tend to point toward each other
+          -1; // divergent choice:  reflections tend to point away from each other
+        spliceBoxPos[b] =
+          Translation3D(originFront) *
+          Translation3D(
+              imirrorCenterX[0] + (intersectionDist + spliceDir*spliceBoxSize) * std::sin(psi),
+              0.,
+              imirrorCenterZ[0] + (intersectionDist + spliceDir*spliceBoxSize) * std::cos(psi)
+              );
+      };
+      spliceList.push_back( std::pair<Transform3D,Transform3D> (
+          Transform3D( spliceBoxPos[0] * RotationY(psi) ),
+          Transform3D( spliceBoxPos[1] * RotationY(psi) )
+          ));
+
+      // HalfSpace implementation:
+      /* // TODO: use this instead, when `HalfSpace` is supported downstream
+      // -- position: start at mirror0 center and translate to intersection plane, along
+      //    the line containing both mirrors' centers
+      double halfSpacePos[3] = {
+        mirrorCenterX[0] + intersectionDist * std::sin(psi),
+        0.,
+        mirrorCenterZ[0] + intersectionDist * std::cos(psi) // NOTE: probably need to add `originFront`
+      };
+      // -- normals
+      double halfSpaceDir[2][3] = {
+        { (mirrorCenterX[0]-mirrorCenterX[1])/centerDist, 0., (mirrorCenterZ[0]-mirrorCenterZ[1])/centerDist }, // toward mirror0
+        { (mirrorCenterX[1]-mirrorCenterX[0])/centerDist, 0., (mirrorCenterZ[1]-mirrorCenterZ[0])/centerDist }  // toward mirror1
+      };
+      // -- definition
+      spliceList.push_back( std::pair<HalfSpace,HalfSpace> (
+          HalfSpace( halfSpacePos, halfSpaceDir[0] ), // normal vector points toward mirror0
+          HalfSpace( halfSpacePos, halfSpaceDir[1] ) // normal vector points toward mirror1
+          ));
+      */
+
+    }; // end mirror pair loop
+
+
+    iMir=0;
+    for(auto mirrorC=mirrorCoords.begin();  mirrorC<mirrorCoords.end(); ++mirrorC, ++iMir) {// to be closed
+      std::string mirName = "m" + std::to_string(iMir);
+
+	  imirrorCenterZ[0] = std::get<0>(mirrorC[0]);
+      imirrorCenterX[0] = std::get<1>(mirrorC[0]);
+      imirrorRadius[0]  = std::get<2>(mirrorC[0]);
+
+	  // spherical mirror patch cuts and rotation
+      double mirrorThetaRot = std::asin(imirrorCenterX[0] / imirrorRadius[0]);
+      double mirrorTheta1   = mirrorThetaRot - std::asin((imirrorCenterX[0] - mirrorRmin) / imirrorRadius[0]);
+      double mirrorTheta2   = mirrorThetaRot + std::asin((mirrorRmax - imirrorCenterX[0]) / imirrorRadius[0]);
+      // if debugging, draw full sphere
+      if (debugMirror) {
+        mirrorTheta1 = 0;
+        mirrorTheta2 = M_PI; /*mirrorPhiw=2*M_PI;*/
+      }
+
+      // solid : create sphere at origin, with specified angular limits;
+      // phi limits are increased to fill gaps (overlaps are cut away later)
+      Sphere mirrorSolid1(imirrorRadius[0], imirrorRadius[0] + mirrorThickness, mirrorTheta1, mirrorTheta2, -40 * degree,
                         40 * degree);
 
-    // mirror placement transformation (note: transformations are in reverse order)
-    auto mirrorPos = Position(mirrorCenterX, 0., mirrorCenterZ) + originFront;
-    auto mirrorPlacement(Translation3D(mirrorPos.x(), mirrorPos.y(), mirrorPos.z()) // re-center to specified position
+      // mirror placement transformation (note: transformations are in reverse order)
+      auto mirrorPos = Position(imirrorCenterX[0], 0., imirrorCenterZ[0]) + originFront;
+      auto mirrorPlacement(Translation3D(mirrorPos) // re-center to specified position
                          * RotationY(-mirrorThetaRot) // rotate about vertical axis, to be within vessel radial walls
-    );
+      );
 
-    // cut overlaps with other sectors using "pie slice" wedges, to the extent specified
-    // by `mirrorPhiw`
-    Tube              pieSlice(0.01 * cm, vesselRmax2, tankLength / 2.0, -mirrorPhiw / 2.0, mirrorPhiw / 2.0);
-    IntersectionSolid mirrorSolid2(pieSlice, mirrorSolid1, mirrorPlacement);
+      // cut overlaps with other sectors using "pie slice" wedges, to the extent specified
+      // by `mirrorPhiw`
+      Tube              pieSlice(0.01 * cm, vesselRmax2, tankLength / 2.0, -mirrorPhiw / 2.0, mirrorPhiw / 2.0);
+      IntersectionSolid mirrorSolid2(pieSlice, mirrorSolid1, mirrorPlacement);
+	  Solid mirrorSolid3;
+      if(mirrorC<mirrorCoords.end()-1) {
+        mirrorSolid3 = IntersectionSolid( mirrorSolid2, spliceBox, spliceList[iMir].first );
+        // note: if using `HalfSpace`, instead do `IntersectionSolid(spliceList[imir].first,mirrorSolid2)`
+      } else {
+        mirrorSolid3 = mirrorSolid2;
+      };
 
-    // mirror volume, attributes, and placement
-    Volume mirrorVol(detName + "_mirror_" + secName, mirrorSolid2, mirrorMat);
-    mirrorVol.setVisAttributes(mirrorVis);
-    auto mirrorSectorPlacement = Transform3D(sectorRotation); // rotate about beam axis to sector
-    auto mirrorPV              = gasvolVol.placeVolume(mirrorVol, mirrorSectorPlacement);
+      // if( not the first mirror ) cut with spliceList[imir-1].second
+      Solid mirrorSolid4;
+      if(mirrorC>mirrorCoords.begin()) {
+        mirrorSolid4 = IntersectionSolid( mirrorSolid3, spliceBox, spliceList[iMir-1].second );
+      } else {
+        mirrorSolid4 = mirrorSolid3;
+      };
 
-    // properties
-    DetElement mirrorDE(det, "mirror_de_" + secName, isec);
-    mirrorDE.setPlacement(mirrorPV);
-    SkinSurface mirrorSkin(desc, mirrorDE, "mirror_optical_surface_" + secName, mirrorSurf, mirrorVol);
-    mirrorSkin.isValid();
+      /*
+      // DEBUG splicing: uncomment this section to draw splicing `Box`
+      mirrorSolid4 = mirrorSolid2; // undo splice cuts
+      if(iMir==0) { // place splice volume
+        Volume spliceVol(detName+"_splice_"+secName+"_"+mirName, spliceBox, mirrorMat);
+        auto splicePV = gasvolVol.placeVolume(spliceVol,spliceList[iMir].first);
+        DetElement spliceDE(det, Form("splice_de_%d_%d", isec, iMir), 10*isec+iMir);
+        spliceDE.setPlacement(splicePV);
+      };
+      */
 
-    // reconstruction constants (w.r.t. IP)
-    // - access sector center after `sectorRotation`
-    auto mirrorFinalPlacement = mirrorSectorPlacement * mirrorPlacement;
-    auto mirrorFinalCenter    = vesselPos + mirrorFinalPlacement.Translation().Vect();
-    desc.add(Constant("DRICH_mirror_center_x_" + secName, std::to_string(mirrorFinalCenter.x())));
-    desc.add(Constant("DRICH_mirror_center_y_" + secName, std::to_string(mirrorFinalCenter.y())));
-    desc.add(Constant("DRICH_mirror_center_z_" + secName, std::to_string(mirrorFinalCenter.z())));
-    if (isec == 0)
-      desc.add(Constant("DRICH_mirror_radius", std::to_string(mirrorRadius)));
+      // mirror volume, attributes, and placement
+      Volume mirrorVol(detName + "_mirror_" + secName, mirrorSolid4, mirrorMat);
+      mirrorVol.setVisAttributes(mirrorVis);
+      auto mirrorSectorPlacement = Transform3D(sectorRotation); // rotate about beam axis to sector
+      auto mirrorPV              = gasvolVol.placeVolume(mirrorVol, mirrorSectorPlacement);
+
+      // properties
+      DetElement mirrorDE(det, "mirror_de_mir" + std::to_string(iMir) + "_" + secName, isec);
+      mirrorDE.setPlacement(mirrorPV);
+      SkinSurface mirrorSkin(desc, mirrorDE, "mirror_optical_surface_" + secName, mirrorSurf, mirrorVol);
+      mirrorSkin.isValid();
+
+      // reconstruction constants (w.r.t. IP)
+      // - access sector center after `sectorRotation`
+       auto mirrorFinalPlacement = mirrorSectorPlacement * mirrorPlacement;
+       auto mirrorFinalCenter    = vesselPos + mirrorFinalPlacement.Translation().Vect();
+
+       auto MirrCenterX = "DRICH_mirror_center_x_" + std::to_string(iMir)+"_";
+       auto MirrCenterY = "DRICH_mirror_center_y_" + std::to_string(iMir)+"_";
+       auto MirrCenterZ = "DRICH_mirror_center_z_" + std::to_string(iMir)+"_";
+
+      if(isec==0){
+       desc.add(Constant(MirrCenterX+ secName, std::to_string(mirrorFinalCenter.x()))); // FIXME
+       desc.add(Constant(MirrCenterY+ secName, std::to_string(mirrorFinalCenter.y())));
+       desc.add(Constant(MirrCenterZ+ secName, std::to_string(mirrorFinalCenter.z())));
+      }
+      if (isec == 0)
+        desc.add(Constant("DRICH_mirror_radius_mir" + std::to_string(iMir), std::to_string(imirrorRadius[0])));
+	} //end of mirror loop
 
     // BUILD SENSORS ====================================================================
 
@@ -423,9 +558,11 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
 
     // reconstruction constants
     auto sensorSphFinalCenter = sectorRotation * Position(xS, 0.0, zS);
-    desc.add(Constant("DRICH_sensor_sph_center_x_" + secName, std::to_string(sensorSphFinalCenter.x())));
-    desc.add(Constant("DRICH_sensor_sph_center_y_" + secName, std::to_string(sensorSphFinalCenter.y())));
-    desc.add(Constant("DRICH_sensor_sph_center_z_" + secName, std::to_string(sensorSphFinalCenter.z())));
+    if (isec == 0){
+      desc.add(Constant("DRICH_sensor_sph_center_x_" + secName, std::to_string(sensorSphFinalCenter.x())));
+      desc.add(Constant("DRICH_sensor_sph_center_y_" + secName, std::to_string(sensorSphFinalCenter.y())));
+      desc.add(Constant("DRICH_sensor_sph_center_z_" + secName, std::to_string(sensorSphFinalCenter.z())));
+    }
     if (isec == 0)
       desc.add(Constant("DRICH_sensor_sph_radius", std::to_string(sensorSphRadius)));
 
