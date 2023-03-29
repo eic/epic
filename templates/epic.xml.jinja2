@@ -52,8 +52,8 @@
   <includes>
     <gdmlFile ref="${DD4hepINSTALL}/DDDetectors/compact/elements.xml"/>
     <gdmlFile ref="${DETECTOR_PATH}/compact/materials.xml"/>
-    <file     ref="${DETECTOR_PATH}/compact/optical_materials.xml"/>
   </includes>
+  <include ref="${DETECTOR_PATH}/compact/optical_materials.xml"/>
 
   <limits>
     <limitset name="EICBeamlineLimits">
@@ -72,6 +72,15 @@
     <include ref="${DETECTOR_PATH}/compact/{{colors | default("colors.xml", true) }}"/>
     <include ref="${DETECTOR_PATH}/compact/{{display | default("display.xml", true) }}"/>
   </display>
+
+  <documentation level="0">
+    ## World Volume
+
+    The world is a simple box, but could be a union of multiple regions.
+  </documentation>
+  <world material="Air">
+    <shape type="Box" dx="world_dx" dy="world_dy" dz="world_dz"/>
+  </world>
 
   <documentation level="0">
     ## Detector Subsystems

@@ -1,0 +1,27 @@
+<!-- SPDX-License-Identifier: LGPL-3.0-or-later -->
+<!-- Copyright (C) 2023 Anna B. Kowalewska -->
+
+<lccdd>
+ <detectors>
+    <detector
+      id="LumiDirectPCAL_ID"
+      name="LumiDirectPCAL"
+      type="LumiDirectPCAL"
+      material="PbWO4"
+      vis="EcalVis"
+      readout="LumiDirectPCALHits">
+      <dimensions x="LumiDirect_XY/2" y="LumiDirect_XY/2" z="LumiDirect_DZ/2" />
+      <position   x="0" y="0" z="LumiDirect_Z-LumiDirect_DZ/2" />
+      <rotation   x="0*rad" y="0*rad" z="0*rad" />
+    </detector>
+  </detectors>
+
+  <readouts>
+    <readout name="LumiDirectPCALHits">
+      <segmentation type="NoSegmentation"/>
+      <id> system:8</id>
+    </readout>
+  </readouts>
+
+
+</lccdd>
