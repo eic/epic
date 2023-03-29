@@ -522,11 +522,18 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
 
       // reconstruction constants (w.r.t. IP)
       // - access sector center after `sectorRotation`
-      // auto mirrorFinalPlacement = mirrorSectorPlacement * mirrorPlacement;
-      // auto mirrorFinalCenter    = vesselPos + mirrorFinalPlacement.Translation().Vect();
-      // desc.add(Constant("DRICH_mirror_center_x_" +iMir+"_"+ secName, std::to_string(mirrorFinalCenter.x()))); // FIXME
-      // desc.add(Constant("DRICH_mirror_center_y_" +iMir+"_"+ secName, std::to_string(mirrorFinalCenter.y())));
-      // desc.add(Constant("DRICH_mirror_center_z_" +iMir+"_"+ secName, std::to_string(mirrorFinalCenter.z())));
+       auto mirrorFinalPlacement = mirrorSectorPlacement * mirrorPlacement;
+       auto mirrorFinalCenter    = vesselPos + mirrorFinalPlacement.Translation().Vect();
+
+       auto MirrCenterX = "DRICH_mirror_center_x_" + std::to_string(iMir)+"_"; 
+       auto MirrCenterY = "DRICH_mirror_center_y_" + std::to_string(iMir)+"_"; 
+       auto MirrCenterZ = "DRICH_mirror_center_z_" + std::to_string(iMir)+"_"; 
+
+      if(isec==0){
+       desc.add(Constant(MirrCenterX+ secName, std::to_string(mirrorFinalCenter.x()))); // FIXME
+       desc.add(Constant(MirrCenterY+ secName, std::to_string(mirrorFinalCenter.y())));
+       desc.add(Constant(MirrCenterZ+ secName, std::to_string(mirrorFinalCenter.z())));
+      }
       if (isec == 0)
         desc.add(Constant("DRICH_mirror_radius_mir" + std::to_string(iMir), std::to_string(imirrorRadius[0])));
 	} //end of mirror loop
@@ -551,9 +558,11 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
 
     // reconstruction constants
     auto sensorSphFinalCenter = sectorRotation * Position(xS, 0.0, zS);
-    desc.add(Constant("DRICH_sensor_sph_center_x_" + secName, std::to_string(sensorSphFinalCenter.x())));
-    desc.add(Constant("DRICH_sensor_sph_center_y_" + secName, std::to_string(sensorSphFinalCenter.y())));
-    desc.add(Constant("DRICH_sensor_sph_center_z_" + secName, std::to_string(sensorSphFinalCenter.z())));
+    if (isec == 0){
+      desc.add(Constant("DRICH_sensor_sph_center_x_" + secName, std::to_string(sensorSphFinalCenter.x())));
+      desc.add(Constant("DRICH_sensor_sph_center_y_" + secName, std::to_string(sensorSphFinalCenter.y())));
+      desc.add(Constant("DRICH_sensor_sph_center_z_" + secName, std::to_string(sensorSphFinalCenter.z())));
+    }
     if (isec == 0)
       desc.add(Constant("DRICH_sensor_sph_radius", std::to_string(sensorSphRadius)));
 
