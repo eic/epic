@@ -59,7 +59,7 @@
       </comment>
       <wedge_box inner_r="78.55 * cm" thickness="3 * mm" gap="6 * mm" vis="becal_wedge" material="Aluminum5083" />
 
-      <sectors number="24" phi0="0." deltaphi="pi / 12">
+      <sectors number="24" phi0="0." deltaphi="pi / 12" phi_tilt="0 * degree">
         <comment>
           Rows within a sector are supposed to have smaller gaps than edge rows of two adjacent sectors
         </comment>

@@ -20,6 +20,7 @@ static Ref_t create_detector(Detector& lcdd, xml_h handle, SensitiveDetector sen
   xml_dim_t  dim_handle      = rows_handle.dimensions();
   Material   tower_mat       = lcdd.material(det_handle.materialStr());
   double     row_rmin        = dim_handle.inner_r();
+  double     phi_tilt        = sectors_handle.attr<double>(_Unicode(phi_tilt));
   DetElement det_element{det_handle.nameStr(), det_handle.id()};
 
   // envelope
@@ -119,7 +120,8 @@ static Ref_t create_detector(Detector& lcdd, xml_h handle, SensitiveDetector sen
     }
   }
 
-  double sector_rmin = envelope_handle.rmin();
+  double sector_rmin  = envelope_handle.rmin();
+  double offset_alpha = 0.;
 
   if (det_handle.hasChild(_Unicode(wedge_box))) {
     xml_comp_t wedge_box_handle = det_handle.child(_Unicode(wedge_box));
@@ -150,15 +152,20 @@ static Ref_t create_detector(Detector& lcdd, xml_h handle, SensitiveDetector sen
 
     sector_rmin = side_rmin;
 
+    offset_alpha = atan((row_rmin - side_rmin) * tan(phi_tilt) / row_rmin);
+
     Box wedge_box_side_box_shape{
         (side_rmax - side_rmin) / 2,
         // It would make sense for a shared side to have double thickness, but we seemingly don't have space for that
         wedge_box_handle.thickness() / 2, (envelope_handle.zmax() - envelope_handle.zmin()) / 2};
     Volume wedge_box_side_v[2];
     for (int side = -1; side <= 1; side += 2) {
-      IntersectionSolid wedge_box_side_shape{envelope_shape, wedge_box_side_box_shape,
-                                             Position{(side_rmax + side_rmin) / 2, side * wedge_box_handle.gap() / 2,
-                                                      (envelope_handle.zmax() + envelope_handle.zmin()) / 2}};
+      IntersectionSolid wedge_box_side_shape{
+          envelope_shape, wedge_box_side_box_shape,
+          Transform3D{Position{side_rmin, side * wedge_box_handle.gap() / 2, 0.}} *
+              Transform3D{RotationZ{phi_tilt + offset_alpha}} *
+              Transform3D{
+                  Position{(side_rmax - side_rmin) / 2, 0., (envelope_handle.zmax() + envelope_handle.zmin()) / 2}}};
 
       wedge_box_side_v[(side + 1) / 2] = Volume({"wedge_box_side", wedge_box_side_shape, wedge_box_mat});
       wedge_box_side_v[(side + 1) / 2].setVisAttributes(lcdd.visAttributes(wedge_box_handle.visStr()));
@@ -177,7 +184,7 @@ static Ref_t create_detector(Detector& lcdd, xml_h handle, SensitiveDetector sen
   }
 
   int    row     = 0;
-  double row_phi = -rows_handle.deltaphi() / 2 * (rows_handle.number() - 1);
+  double row_phi = -rows_handle.deltaphi() / 2 * (rows_handle.number() - 1) + offset_alpha;
 
   Tube              sector_tube_shape{sector_rmin, std::min(support_inner_r, envelope_handle.rmax()),
                          (envelope_handle.zmax() - envelope_handle.zmin()) / 2,
@@ -186,7 +193,7 @@ static Ref_t create_detector(Detector& lcdd, xml_h handle, SensitiveDetector sen
   IntersectionSolid sector_shape{envelope_shape, sector_tube_shape,
                                  Position{0., 0., (envelope_handle.zmax() + envelope_handle.zmin()) / 2}};
 
-  Volume sector_v{"sector", sector_shape, lcdd.material("Air")};
+  Assembly sector_v{"sector"};
   sector_v.setVisAttributes(lcdd.visAttributes(det_handle.visStr()));
 
   for (; row < rows_handle.number(); row++, row_phi += rows_handle.deltaphi()) {
@@ -218,8 +225,8 @@ static Ref_t create_detector(Detector& lcdd, xml_h handle, SensitiveDetector sen
       // Face parameters (see doc/sciglass_tower_front_view.svg for definitions)
       const double y1 = family_dim_handle.y1();
       const double y2 = y1 + length * tan(flare_angle_polar);
-      double       x1 = family_dim_handle.x1();
-      double       x2 = family_dim_handle.x1() + (2 * y1) * tan(flare_angle_at_face);
+      double       x1 = cos(phi_tilt) * family_dim_handle.x1();
+      double       x2 = cos(phi_tilt) * (family_dim_handle.x1() + (2 * y1) * tan(flare_angle_at_face));
       double       x3, x4;
       if (family_dim_handle.hasAttr(_Unicode(flare_angle_azimuthal))) {
         // Azimuthal flaring independently defined
@@ -252,10 +259,11 @@ static Ref_t create_detector(Detector& lcdd, xml_h handle, SensitiveDetector sen
         dz += (tower_gap_longitudinal / cos(flare_angle_polar) + 2 * y1) * sin(M_PI - gamma - beta) / sin(gamma);
         const string t_name = _toString(row, "_row%d") + _toString(tower_id, "_tower%d");
         sector_v
-            .placeVolume(
-                Volume{t_name, Trap{z, theta, phi, y1, x1, x2, alpha1, y2, x3, x4, alpha2}, tower_mat},
-                Transform3D{RotationZ{-M_PI_2 + row_phi}} * Transform3D{Position{0. * cm, row_rmin, dir_sign * dz}} *
-                    Transform3D{RotationX{-M_PI / 2 + dir_sign * beta}} * Transform3D{Position{0, dir_sign * y1, z}})
+            .placeVolume(Volume{t_name, Trap{z, theta, phi, y1, x1, x2, alpha1, y2, x3, x4, alpha2}, tower_mat},
+                         Transform3D{RotationZ{-M_PI_2 + row_phi}} *
+                             Transform3D{Position{0. * cm, row_rmin, dir_sign * dz}} *
+                             Transform3D{RotationZ{phi_tilt}} * Transform3D{RotationX{-M_PI / 2 + dir_sign * beta}} *
+                             Transform3D{Position{0., dir_sign * y1, z}})
             .addPhysVolID("row", row)
             .addPhysVolID("tower", tower_id)
             .volume()
@@ -310,6 +318,7 @@ static Ref_t create_detector(Detector& lcdd, xml_h handle, SensitiveDetector sen
                 .placeVolume(Volume{"fiber_structure_longitudinal", trap_long, carbon_fiber_support_mat},
                              Transform3D{RotationZ{-M_PI_2 + row_phi + side * rows_handle.deltaphi() / 2}} *
                                  Transform3D{Position{0. * cm, row_rmin, dir_sign * dz}} *
+                                 Transform3D{RotationZ{phi_tilt}} *
                                  Transform3D{RotationX{-M_PI / 2 + dir_sign * beta}} *
                                  Transform3D{Position{side * carbon_fiber_support_handle.thickness() / 4, dir_sign * y1,
                                                       z + (overhang_top - overhang_bottom) / 2}})
@@ -324,9 +333,10 @@ static Ref_t create_detector(Detector& lcdd, xml_h handle, SensitiveDetector sen
               sin(beta) * (tower_gap_longitudinal / cos(flare_angle_polar) + 2 * y1) / sin(gamma);
 
           const double beta_trans = beta_prev + flare_angle_polar_prev;
-          const double x1_trans   = tan(rows_handle.deltaphi() / 2) * (row_rmin - overhang_bottom * cos(beta_trans)) -
-                                  carbon_fiber_support_handle.thickness() / 2 / cos(rows_handle.deltaphi() / 2);
-          const double x2_trans = tan(rows_handle.deltaphi() / 2) *
+          const double x1_trans =
+              cos(phi_tilt) * tan(rows_handle.deltaphi() / 2) * (row_rmin - overhang_bottom * cos(beta_trans)) -
+              carbon_fiber_support_handle.thickness() / 2 / cos(rows_handle.deltaphi() / 2);
+          const double x2_trans = cos(phi_tilt) * tan(rows_handle.deltaphi() / 2) *
                                       (row_rmin + (2 * z + overhang_top + non_overlap_long) * cos(beta_trans)) -
                                   carbon_fiber_support_handle.thickness() / 2 / cos(rows_handle.deltaphi() / 2);
 
@@ -363,6 +373,7 @@ static Ref_t create_detector(Detector& lcdd, xml_h handle, SensitiveDetector sen
               .placeVolume(Volume{"fiber_structure_transverse" + t_name, trap_trans, carbon_fiber_support_mat},
                            Transform3D{RotationZ{-M_PI_2 + row_phi}} *
                                Transform3D{Position{0. * cm, row_rmin, dir_sign * dz_trans}} *
+                               Transform3D{RotationZ{phi_tilt}} *
                                Transform3D{RotationX{-M_PI / 2 + dir_sign * beta_trans}} *
                                Transform3D{Position{0, dir_sign * carbon_fiber_support_handle.thickness() / 2,
                                                     z + (overhang_top + non_overlap_long - overhang_bottom) / 2}})
