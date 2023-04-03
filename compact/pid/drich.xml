@@ -213,14 +213,14 @@
     - `zmin`: z-plane cut
 </documentation>
 <sphere
-  centerz="-90.0*cm"
-  centerx="120.0*cm"
-  radius="130.0*cm"
+  centerz="138.4*cm - DRICH_zmin"
+  centerx="183.4*cm"
+  radius="110.0*cm"
   />
 <sphericalpatch
   phiw="DRICH_extrusion_phiw - 3*degree"
   rmin="DRICH_rmax1 + 10.0*cm"
-  rmax="DRICH_rmax2 - 0.0*cm"
+  rmax="DRICH_rmax2 - 5.0*cm"
   zmin="DRICH_snout_length - DRICH_extrusion_length + 5.0*cm"
   />
 
