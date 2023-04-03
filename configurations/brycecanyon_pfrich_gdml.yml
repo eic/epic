@@ -1,31 +1,32 @@
-ebeam: 18
-pbeam: 275
+ebeam: 5
+pbeam: 41
 features:
   beampipe:
   tracking:
-    definitions:
+    definitions_brycecanyon:
     vertex_barrel:
     silicon_barrel:
     mpgd_barrel:
-    mpgd_dirc:
     silicon_disks:
     support_service_assembly:
     tof_barrel:
     tof_endcap:
   pid:
     dirc:
-    mrich:
+    pfrich_gdml:
     drich:
   ecal:
     forward_homogeneous:
-    barrel_sciglass:
+    forward_insert_homogeneous:
+    barrel_interlayers:
     backward_PbWO4:
   solenoid:
   hcal:
     forward:
-    #barrel_gdml:
+    forward_insert:
+    barrel_gdml:
     backward:
   far_forward:
-    far_forward_arches:
+    far_forward_brycecanyon:
   far_backward:
     far_backward:

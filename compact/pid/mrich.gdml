@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<gdml xmlns:xs="http://www.w3.org/2001/XMLSchema-instance" xs:noNamespaceSchemaLocation="http://service-spi.web.cern.ch/service-spi/app/releases/GDML/schema/gdml.xsd">
+
+  <solids>
+    <polycone lunit="cm" aunit="deg" startphi="0" deltaphi="360" name="world_volume_shape">
+      <zplane rmin="8.0" rmax="63.0" z="-172.7"/>
+      <zplane rmin="8.0" rmax="63.0" z="-130.0"/>
+    </polycone>
+  </solids>
+
+  <structure>
+    <volume name="world_volume">
+      <solidref ref="world_volume_shape"/>
+    </volume>
+  </structure>
+
+  <setup name="default" version="1.0">
+    <world ref="world_volume"/>
+  </setup>
+
+</gdml>
