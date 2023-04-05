@@ -179,6 +179,8 @@
 
     <constant name="Beam_Theta"           value="Q3eR_Theta"/>
 
+    <constant name="Backwards_Box_Wall"   value="2*mm"/>
+
     <comment> Dipole focal point in global coordinates </comment>
     <constant name="Dipole_Focus_X"       value="0.0*mm"/>
     <constant name="Dipole_Focus_Y"       value="0.0*mm"/>
@@ -195,19 +197,23 @@
     <constant name="Exit_Width"           value="B2BeR_InnerRadius"/>
     <constant name="Exit_Theta"           value="0.07*rad"/>
 
+    <comment> Timepix4 ASIC dimensions </comment>
+    <constant name="Timepix4height"       value="28.16*mm"/>
+    <constant name="Timepix4width"        value="24.64*mm"/>
+
     <comment> Tagger box and dimensions and positions </comment>
-    <constant name="Tagger1_Width"        value="300*mm"/>
+    <constant name="Tagger1_Width"        value="147.84*mm"/>
     <constant name="Tagger1_Height"       value="200*mm"/>
 
     <constant name="Tag_Tracker_1_Depth"  value="905*mm"/>
     <constant name="Tag_Cal_1_Depth"      value="300*mm"/>
     <constant name="Tagger1_Length"       value="Tag_Tracker_1_Depth"/>
 
-    <constant name="Tagger1_Min_Theta"    value="0.028*rad"/>
+    <constant name="Tagger1_Min_Theta"    value="0.026*rad"/>
     <constant name="Tagger1_Max_Theta"    value="0.0410*rad"/>
-    <constant name="Tagger1_Min_Offset"   value="Q3eR_InnerRadius+20*mm"/>
+    <constant name="Tagger1_Min_Offset"   value="Q3eR_InnerRadius+Backwards_Box_Wall"/>
 
-    <constant name="Tagger2_Width"        value="240.0*mm"/>
+    <constant name="Tagger2_Width"        value="147.84*mm"/>
     <constant name="Tagger2_Height"       value="150.0*mm"/>
 
     <constant name="Tag_Tracker_2_Depth"  value="Tag_Tracker_1_Depth"/>
@@ -215,8 +221,8 @@
     <constant name="Tagger2_Length"       value="Tag_Tracker_2_Depth"/>
 
     <constant name="Tagger2_Min_Theta"    value="0.02*rad"/>
-    <constant name="Tagger2_Max_Theta"    value="Tagger1_Min_Theta+0.005*rad"/>
-    <constant name="Tagger2_Min_Offset"   value="Q3eR_InnerRadius-15*mm"/>
+    <constant name="Tagger2_Max_Theta"    value="Tagger1_Min_Theta+0.000*rad"/>
+    <constant name="Tagger2_Min_Offset"   value="Q3eR_InnerRadius+Backwards_Box_Wall"/>
 
     <!--  -->
     <!-- Luminosity System -->

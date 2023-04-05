@@ -8,25 +8,19 @@
 #include "DDRec/Surface.h"
 #include <XML/Helper.h>
 
-#if defined(USE_ACTSDD4HEP)
-#include "ActsDD4hep/ActsExtension.hpp"
-#include "ActsDD4hep/ConvertMaterial.hpp"
-#else
-#include "Acts/Plugins/DD4hep/ActsExtension.hpp"
-#include "Acts/Plugins/DD4hep/ConvertDD4hepMaterial.hpp"
-#endif
-
 
 //////////////////////////////////////////////////
-// Low Q2 taggers and vacuum drift volume in far backwards region
+// Far backwards vacuum drift volume
+// Low Q2 tagger trackers placed either in or out of vacuum
 //////////////////////////////////////////////////
 
 using namespace std;
 using namespace dd4hep;
 using namespace dd4hep::rec;
 
-// Helper function to make the tagger detectors
+// Helper function to make the tagger tracker detectors
 static void Make_Tagger(Detector& desc, xml_coll_t& mod, Assembly& env, DetElement modElement, SensitiveDetector& sens);
+
 
 static Ref_t create_detector(Detector& desc, xml_h e, SensitiveDetector sens)
 {
@@ -37,14 +31,6 @@ static Ref_t create_detector(Detector& desc, xml_h e, SensitiveDetector sens)
 
   DetElement det(detName, detID);
 
-  map<string, std::vector<VolPlane>> volplane_surfaces;
-  // ACTS extension
-  {
-    Acts::ActsExtension* detWorldExt = new Acts::ActsExtension();
-    detWorldExt->addType("endcap", "detector");
-    det.addExtension<Acts::ActsExtension>(detWorldExt);
-  }
-
   string vis_name = dd4hep::getAttrOrDefault<std::string>(x_det, _Unicode(vis), "BackwardsBox");
 
   // Dimensions of main beamline pipe
@@ -53,7 +39,7 @@ static Ref_t create_detector(Detector& desc, xml_h e, SensitiveDetector sens)
   double         WidthR = dim.attr<double>(_Unicode(xR));
 
   double Width     = (WidthL + WidthR) / 2;
-  double Height    = dim.y();
+  //double Height    = dim.y();
   double Thickness = dim.z();
 
   // Materials
@@ -88,7 +74,7 @@ static Ref_t create_detector(Detector& desc, xml_h e, SensitiveDetector sens)
   // Entry box geometry description joining magnet, taggers and lumi
   xml::Component EB     = x_det.child(_Unicode(exitdim));
   double         ED_X   = EB.x();
-  double         ED_Y   = EB.y();
+  //  double         ED_Y   = EB.y();
   double         ED_Z   = off - EB.attr<double>(_Unicode(lumiZ));
   double         Lumi_R = EB.attr<double>(_Unicode(lumiR));
 
@@ -103,13 +89,13 @@ static Ref_t create_detector(Detector& desc, xml_h e, SensitiveDetector sens)
   Box Cut_Box(xbox, ybox, zbox);
 
   // Central pipe box
-  // Tube Extended_Beam_Box(Width,Width+wall,Thickness);
-  Box Extended_Beam_Box(Width + wall, Height + wall, Thickness);
+  Tube Extended_Beam_Box(Width,Width+wall,Thickness);
+  //Box Extended_Beam_Box(Width + wall, Height + wall, Thickness);
 
   // Central vacuum box
-  Box Extended_Vacuum_Box(Width, Height, Thickness);
-  // Tube Extended_Vacuum_Box(0,Width,Thickness);
-
+  Tube Extended_Vacuum_Box(0,Width,Thickness);
+  //Box Extended_Vacuum_Box(Width, Height, Thickness);
+  
   Solid Wall_Box   = Extended_Beam_Box;
   Solid Vacuum_Box = Extended_Vacuum_Box;
 
@@ -211,10 +197,6 @@ static Ref_t create_detector(Detector& desc, xml_h e, SensitiveDetector sens)
     pv_mod2.addPhysVolID("module", moduleID);
     moddet.setPlacement(pv_mod2);
 
-    Acts::ActsExtension* moduleExtension = new Acts::ActsExtension();
-    moduleExtension->addType("module", "detector");
-    moddet.addExtension<Acts::ActsExtension>(moduleExtension);
-
     Make_Tagger(desc, mod, TaggerAssembly, moddet, sens);
 
   }
@@ -233,16 +215,20 @@ static Ref_t create_detector(Detector& desc, xml_h e, SensitiveDetector sens)
 
   if (addLumi) {
 
-    Box Entry_Beam_Box(ED_X + wall, ED_Y + wall, ED_Z);
-    Box Entry_Vacuum_Box(ED_X, ED_Y, ED_Z - wall);
-    // Tube Entry_Beam_Box(ED_X, ED_X + wall, ED_Z);
-    // Tube Entry_Vacuum_Box(0, ED_X, ED_Z - wall);
-    Tube Lumi_Exit(0, Lumi_R, ED_Z);
+//     double angle = 0;
+    double angle = -pi/4;
+
+    //     Box Entry_Beam_Box(ED_X + wall, ED_Y + wall, ED_Z);
+    //     Box Entry_Vacuum_Box(ED_X, ED_Y, ED_Z - wall);
+    CutTube Entry_Beam_Box  (ED_X, ED_X + wall, ED_Z,        0,2*pi, sin(angle),0,cos(angle), 0,0,1);
+    CutTube Entry_Vacuum_Box(0,    ED_X,        ED_Z - wall, 0,2*pi, sin(angle),0,cos(angle), 0,0,1);
+    CutTube Lumi_Exit       (0,    Lumi_R,      ED_Z,        0,2*pi, sin(angle),0,cos(angle), 0,0,1);
 
     // Add entry boxes to main beamline volume
     Wall_Box   = UnionSolid(Wall_Box, Entry_Beam_Box, Transform3D(RotationY(-rot.theta())));
     Vacuum_Box = UnionSolid(Vacuum_Box, Entry_Vacuum_Box, Transform3D(RotationY(-rot.theta())));
     Vacuum_Box = UnionSolid(Vacuum_Box, Lumi_Exit, Transform3D(RotationY(-rot.theta())));
+
   }
 
   //-----------------------------------------------------------------
@@ -372,18 +358,7 @@ static void Make_Tagger(Detector& desc, xml_coll_t& mod, Assembly& env, DetEleme
     pv_layer.addPhysVolID("layer", layerID);
 
     DetElement laydet(modElement,"layerName"+std::to_string(layerID), layerID);
-    laydet.setPlacement(pv_layer);
-
-    Vector3D u(0., 0., -1.);
-    Vector3D v(-1., 0., 0.);
-    Vector3D n(0., 1., 0.);
-
-    SurfaceType type(SurfaceType::Sensitive);
-    VolPlane surf(layVol, type, 0, layerThickness, u, v, n); //,o ) ;
-
-    Acts::ActsExtension* layerExtension = new Acts::ActsExtension("XZY");
-    laydet.addExtension<Acts::ActsExtension>(layerExtension);
-    volSurfaceList(laydet)->push_back(surf);
+    laydet.setPlacement(pv_layer);  
 
   }
 }

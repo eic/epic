@@ -11,16 +11,12 @@
 
   <detectors>
 
-    <comment> Main vacuum volume </comment>
-    <detector id="TaggerTracker_ID" name="BackwardsTaggerStation" type="BackwardsTagger" wall="2*mm" lumi="true" vis="BackwardsBox" readout="TaggerTrackerHits">
+    <comment> Main beamline vacuum volume spanning between B2BeR and Q3eR magnets</comment>
+    <detector id="TaggerTracker_ID" name="BackwardsTaggerStation" type="BackwardsTagger" wall="Backwards_Box_Wall" lumi="true" vis="BeamPipeVis" readout="TaggerTrackerHits">
       <focus      x="Dipole_Focus_X"    y="Dipole_Focus_Y"    z="Dipole_Focus_Z" />
-      <bounding
-        xmin="Vacuum_BB_MinX"
-        xmax="Vacuum_BB_MaxX"
-        ymin="Vacuum_BB_MinY"
-        ymax="Vacuum_BB_MaxY"
-        zmin="Vacuum_BB_MinZ"
-        zmax="Vacuum_BB_MaxZ"
+      <bounding   xmin="Vacuum_BB_MinX" xmax="Vacuum_BB_MaxX"
+                  ymin="Vacuum_BB_MinY" ymax="Vacuum_BB_MaxY"
+                  zmin="Vacuum_BB_MinZ" zmax="Vacuum_BB_MaxZ"
       />
       <rotation   theta="Beam_Theta"/>
       <dimensions xL="Beam_WidthL" xR="Beam_WidthR" y="Beam_Height" z="Beam_Length"/>
@@ -37,13 +33,12 @@
         extend_vacuum="true"
         >
         <dimensions x="Tagger1_Width/2" y="Tagger1_Height/2" z="Tagger1_Length"/>
-        <trackLayer  id="0" type="timepix" z="0*mm"   sensor_thickness="400*um"/>
-        <trackLayer  id="1" type="timepix" z="300*mm" sensor_thickness="400*um"/>
-        <trackLayer  id="2" type="timepix" z="600*mm" sensor_thickness="400*um"/>
-        <trackLayer  id="3" type="timepix" z="900*mm" sensor_thickness="400*um"/>
-        <!--windowLayer id="1" type="window"  z="-3*mm"   thickness="1*mm" material="Copper"/-->
+        <trackLayer  id="0" type="timepix" z="2*mm"   sensor_thickness="400*um"/>
+        <trackLayer  id="1" type="timepix" z="302*mm" sensor_thickness="400*um"/>
+        <trackLayer  id="2" type="timepix" z="602*mm" sensor_thickness="400*um"/>
+        <trackLayer  id="3" type="timepix" z="902*mm" sensor_thickness="400*um"/>
+        <windowLayer id="1" type="window"  z="0*mm"   thickness="1*mm" material="Copper"/>
       </module>
-
       <module id="2"
         modname="Tagger2"
         theta_min="Tagger2_Min_Theta"
@@ -54,18 +49,18 @@
         overlap="-20*mm"
         >
         <dimensions x="Tagger2_Width/2" y="Tagger2_Height/2" z="Tagger2_Length"/>
-        <trackLayer  id="0" type="timepix" z="0*mm"   sensor_thickness="400*um"/>
-        <trackLayer  id="1" type="timepix" z="300*mm" sensor_thickness="400*um"/>
-        <trackLayer  id="2" type="timepix" z="600*mm" sensor_thickness="400*um"/>
-        <trackLayer  id="3" type="timepix" z="900*mm" sensor_thickness="400*um"/>
-        <!--windowLayer id="1" type="window"  z="-3*mm"   thickness="1*mm" material="Copper"/-->
+        <trackLayer  id="0" type="timepix" z="2*mm"   sensor_thickness="400*um"/>
+        <trackLayer  id="1" type="timepix" z="302*mm" sensor_thickness="400*um"/>
+        <trackLayer  id="2" type="timepix" z="602*mm" sensor_thickness="400*um"/>
+        <trackLayer  id="3" type="timepix" z="902*mm" sensor_thickness="400*um"/>
+        <windowLayer id="1" type="window"  z="0*mm"   thickness="1*mm" material="Copper"/>
       </module>
 
     </detector>
 
     <comment> Calorimeters </comment>
     <comment>
-    <detector id="TaggerCalorimeter_ID" name="BackwardsTaggerCalorimeter" type="BackwardsTaggerCalorimeter" wall="2*mm" lumi="true" vis="BackwardsBox" readout="TaggerCalorimeterHits">
+    <detector id="TaggerCalorimeter_ID" name="BackwardsTaggerCalorimeter" type="BackwardsTaggerCalorimeter" wall="Backwards_Box_Wall" lumi="true" vis="BackwardsBox" readout="TaggerCalorimeterHits">
       <focus      x="Dipole_Focus_X"    y="Dipole_Focus_Y"    z="Dipole_Focus_Z" />
       <rotation   theta="Beam_Theta"/>
   
