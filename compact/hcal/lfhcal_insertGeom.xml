@@ -93,12 +93,12 @@
         thicknessFrontWall="Mod_FrontWallThickness"
         thicknessBackWall="Mod_BackWallThickness"
         arrayX="EightM_xArr"
-        arrayY="EightM_yArr" 
+        arrayY="EightM_yArr"
         notchWidthAbsA="EightM_NotchWidthAbsA"
         notchWidthAbsB="EightM_NotchWidthAbsB"
         notchWidthAbsC="EightM_NotchWidthAbsC"
         notchWidthScin="EightM_NotchWidthScin"
-        notchDepth="Mod_NotchDepth"    
+        notchDepth="Mod_NotchDepth"
         sepDepth="Mod_SepWidth"
         />
         <position x="50*cm" y="50*cm" z="LFHCAL_length - LFHCALElectronicsThickness" />
@@ -114,68 +114,68 @@
         thicknessFrontWall="Mod_FrontWallThickness"
         thicknessBackWall="Mod_BackWallThickness"
         arrayX="FourM_xArr"
-        arrayY="FourM_yArr" 
+        arrayY="FourM_yArr"
         notchWidthAbsA="FourM_NotchWidthAbsA"
         notchWidthAbsC="FourM_NotchWidthAbsC"
         notchWidthScin="FourM_NotchWidthScin"
-        notchDepth="Mod_NotchDepth"    
+        notchDepth="Mod_NotchDepth"
         sepDepth="Mod_SepWidth"
         />
         <position x="50*cm" y="60*cm" z="LFHCAL_length - LFHCALElectronicsThickness" />
       </fourmodule>
 
-      
+
       <layer repeat="1" vis="InvisibleWithDaughters" readoutlayer = "0">
         <slice material="Tyvek" thickness="LFHCALTyvekThickness" vis="LFHCALLayerTyvekVis"
                type="2" offset="LFHCALAirOffset"/>
         <slice material="Polystyrene" thickness="LFHCALPolystyreneThickness" vis="LFHCALLayerScintVis" sensitive=" yes"   limits="cal_limits" type="3" />
       </layer>
       <layer repeat="LFHCALLayer_NTungstenRepeat" vis="InvisibleWithDaughters" readoutlayer = "0" >
-        <slice material="Tungsten" thickness="LFHCALAbsorberThickness" vis="LFHCALLayerSteelVis" type="1"/> 
+        <slice material="Tungsten" thickness="LFHCALAbsorberThickness" vis="LFHCALLayerSteelVis" type="1"/>
         <slice material="Tyvek" thickness="LFHCALTyvekThickness" vis="LFHCALLayerTyvekVis" type="2" offset="LFHCALAirOffset"/>
         <slice material="Polystyrene" thickness="LFHCALPolystyreneThickness" vis="LFHCALLayerScintVis" sensitive=" yes" limits="cal_limits" type="3" />
       </layer>
       <layer repeat="LFHCALLayer_NSteelRepeatS" vis="InvisibleWithDaughters" readoutlayer = "1">
-        <slice material="Steel235" thickness="LFHCALAbsorberThickness" vis="LFHCALLayerSteelVis" type="1"/> 
+        <slice material="Steel235" thickness="LFHCALAbsorberThickness" vis="LFHCALLayerSteelVis" type="1"/>
         <slice material="Tyvek" thickness="LFHCALTyvekThickness" vis="LFHCALLayerTyvekVis" type="2" offset="LFHCALAirOffset"/>
         <slice material="Polystyrene" thickness="LFHCALPolystyreneThickness" vis="LFHCALLayerScintVis" sensitive=" yes"   limits="cal_limits" type="3" />
       </layer>
       <layer repeat="LFHCALLayer_NSteelRepeatS" vis="InvisibleWithDaughters" readoutlayer = "2">
-        <slice material="Steel235" thickness="LFHCALAbsorberThickness" vis="LFHCALLayerSteelVis" type="1"/> 
+        <slice material="Steel235" thickness="LFHCALAbsorberThickness" vis="LFHCALLayerSteelVis" type="1"/>
         <slice material="Tyvek" thickness="LFHCALTyvekThickness" vis="LFHCALLayerTyvekVis" type="2" offset="LFHCALAirOffset"/>
         <slice material="Polystyrene" thickness="LFHCALPolystyreneThickness" vis="LFHCALLayerScintVis" sensitive=" yes"   limits="cal_limits" type="3" />
       </layer>
       <layer repeat="LFHCALLayer_NSteelRepeatS" vis="InvisibleWithDaughters" readoutlayer = "3">
-        <slice material="Steel235" thickness="LFHCALAbsorberThickness" vis="LFHCALLayerSteelVis" type="1"/> 
+        <slice material="Steel235" thickness="LFHCALAbsorberThickness" vis="LFHCALLayerSteelVis" type="1"/>
         <slice material="Tyvek" thickness="LFHCALTyvekThickness" vis="LFHCALLayerTyvekVis" type="2" offset="LFHCALAirOffset"/>
         <slice material="Polystyrene" thickness="LFHCALPolystyreneThickness" vis="LFHCALLayerScintVis" sensitive=" yes"   limits="cal_limits" type="3" />
       </layer>
       <layer repeat="LFHCALLayer_NSteelRepeatS" vis="InvisibleWithDaughters" readoutlayer = "4">
-        <slice material="Steel235" thickness="LFHCALAbsorberThickness" vis="LFHCALLayerSteelVis" type="1"/> 
+        <slice material="Steel235" thickness="LFHCALAbsorberThickness" vis="LFHCALLayerSteelVis" type="1"/>
         <slice material="Tyvek" thickness="LFHCALTyvekThickness" vis="LFHCALLayerTyvekVis" type="2" offset="LFHCALAirOffset"/>
         <slice material="Polystyrene" thickness="LFHCALPolystyreneThickness" vis="LFHCALLayerScintVis" sensitive=" yes"   limits="cal_limits" type="3" />
       </layer>
       <layer repeat="LFHCALLayer_NSteelRepeatS" vis="InvisibleWithDaughters" readoutlayer = "5">
-        <slice material="Steel235" thickness="LFHCALAbsorberThickness" vis="LFHCALLayerSteelVis" type="1"/> 
+        <slice material="Steel235" thickness="LFHCALAbsorberThickness" vis="LFHCALLayerSteelVis" type="1"/>
         <slice material="Tyvek" thickness="LFHCALTyvekThickness" vis="LFHCALLayerTyvekVis" type="2" offset="LFHCALAirOffset"/>
         <slice material="Polystyrene" thickness="LFHCALPolystyreneThickness" vis="LFHCALLayerScintVis" sensitive=" yes"   limits="cal_limits" type="3" />
       </layer>
       <layer repeat="LFHCALLayer_NSteelRepeatS" vis="InvisibleWithDaughters" readoutlayer = "6">
-        <slice material="Steel235" thickness="LFHCALAbsorberThickness" vis="LFHCALLayerSteelVis" type="1"/> 
+        <slice material="Steel235" thickness="LFHCALAbsorberThickness" vis="LFHCALLayerSteelVis" type="1"/>
         <slice material="Tyvek" thickness="LFHCALTyvekThickness" vis="LFHCALLayerTyvekVis" type="2" offset="LFHCALAirOffset"/>
         <slice material="Polystyrene" thickness="LFHCALPolystyreneThickness" vis="LFHCALLayerScintVis" sensitive=" yes"   limits="cal_limits" type="3" />
       </layer>
       <layer repeat="1" vis="InvisibleWithDaughters" >
         <slice material="Steel235" thickness="LFHCALAbsorberThickness" vis="LFHCALLayerSteelVis"  type="1"/>
       </layer>
-      
+
       <documentation>
         ### for testing of a single module
       <eightmodulepositions name="xpos" unit="cm" values="10"/>
       <eightmodulepositions name="ypos" unit="cm" values="255"/>
       <eightmodulepositions name="zpos" unit="cm" values="0"/>
       </documentation>
-      
+
    <eightmodulepositions name="xpos" unit="cm" values="10 30 50 0 20 40 60 80 10 30 50 70 90 0 20 40 60 80 100 120 10 30 50 70 90 110 130 0 20 40 60 80 100 120 140 10 30 50 70 90 110 130 150 0 20 40 60 80 100 120 140 160 70 90 110 130 150 170 80 100 120 140 160 180 110 130 150 170 190 120 140 160 180 200 130 150 170 190 210 140 160 180 200 220 150 170 190 210 230 160 180 200 220 170 190 210 230 160 180 200 220 240 170 190 210 230 180 200 220 240 190 210 230 250 180 200 220 240 190 210 230 250 200 220 240 190 210 230 250 200 220 240 190 210 230 250 200 220 240 190 210 230 250 200 220 240 190 210 230 250 180 200 220 240 190 210 230 250 180 200 220 240 170 190 210 230 160 180 200 220 240 170 190 210 230 160 180 200 220 150 170 190 210 230 140 160 180 200 220 130 150 170 190 210 120 140 160 180 200 110 130 150 170 190 80 100 120 140 160 180 70 90 110 130 150 170 0 20 40 60 80 100 120 140 160 10 30 50 70 90 110 130 150 0 20 40 60 80 100 120 140 10 30 50 70 90 110 130 0 20 40 60 80 100 120 10 30 50 70 90 0 20 40 60 80 10 30 50 -30 -50 -70 -20 -40 -60 -80 -100 -30 -50 -70 -90 -110 -20 -40 -60 -80 -100 -120 -140 -30 -50 -70 -90 -110 -130 -150 -20 -40 -60 -80 -100 -120 -140 -160 -30 -50 -70 -90 -110 -130 -150 -170 -20 -40 -60 -80 -100 -120 -140 -160 -180 -90 -110 -130 -150 -170 -190 -100 -120 -140 -160 -180 -200 -130 -150 -170 -190 -210 -140 -160 -180 -200 -220 -150 -170 -190 -210 -230 -160 -180 -200 -220 -240 -170 -190 -210 -230 -250 -180 -200 -220 -240 -190 -210 -230 -250 -180 -200 -220 -240 -260 -190 -210 -230 -250 -200 -220 -240 -260 -210 -230 -250 -270 -200 -220 -240 -260 -210 -230 -250 -270 -220 -240 -260 -210 -230 -250 -270 -220 -240 -260 -210 -230 -250 -270 -220 -240 -260 -210 -230 -250 -270 -220 -240 -260 -210 -230 -250 -270 -200 -220 -240 -260 -210 -230 -250 -270 -200 -220 -240 -260 -190 -210 -230 -250 -180 -200 -220 -240 -260 -190 -210 -230 -250 -180 -200 -220 -240 -170 -190 -210 -230 -250 -160 -180 -200 -220 -240 -150 -170 -190 -210 -230 -140 -160 -180 -200 -220 -130 -150 -170 -190 -210 -100 -120 -140 -160 -180 -200 -90 -110 -130 -150 -170 -190 -20 -40 -60 -80 -100 -120 -140 -160 -180 -30 -50 -70 -90 -110 -130 -150 -170 -20 -40 -60 -80 -100 -120 -140 -160 -30 -50 -70 -90 -110 -130 -150 -20 -40 -60 -80 -100 -120 -140 -30 -50 -70 -90 -110 -20 -40 -60 -80 -100 -30 -50 -70 10 30 50 0 20 40 60 10 30 50 70 90 0 20 40 60 80 100 10 30 50 70 90 110 0 20 40 60 80 100 120 10 30 50 70 90 110 130 0 20 40 60 80 100 120 140 10 30 50 70 90 110 130 150 0 20 40 60 80 100 120 140 10 30 50 70 90 110 130 150 40 60 80 100 120 140 160 50 70 90 110 130 150 170 60 80 100 120 140 160 70 90 110 130 150 170 80 100 120 140 160 180 90 110 130 150 170 80 100 120 140 160 180 90 110 130 150 170 80 100 120 140 160 180 90 110 130 150 170 80 100 120 140 160 180 70 90 110 130 150 170 60 80 100 120 140 160 50 70 90 110 130 150 170 40 60 80 100 120 140 160 10 30 50 70 90 110 130 150 0 20 40 60 80 100 120 140 10 30 50 70 90 110 130 150 0 20 40 60 80 100 120 140 10 30 50 70 90 110 130 0 20 40 60 80 100 120 10 30 50 70 90 110 0 20 40 60 80 100 10 30 50 70 90 0 20 40 60 10 30 50 -30 -50 -70 -20 -40 -60 -80 -30 -50 -70 -90 -110 -20 -40 -60 -80 -100 -120 -30 -50 -70 -90 -110 -130 -20 -40 -60 -80 -100 -120 -140 -30 -50 -70 -90 -110 -130 -150 -20 -40 -60 -80 -100 -120 -140 -160 -30 -50 -70 -90 -110 -130 -150 -170 -20 -40 -60 -80 -100 -120 -140 -160 -30 -50 -70 -90 -110 -130 -150 -170 -60 -80 -100 -120 -140 -160 -180 -70 -90 -110 -130 -150 -170 -190 -80 -100 -120 -140 -160 -180 -90 -110 -130 -150 -170 -190 -100 -120 -140 -160 -180 -200 -110 -130 -150 -170 -190 -100 -120 -140 -160 -180 -200 -110 -130 -150 -170 -190 -100 -120 -140 -160 -180 -200 -110 -130 -150 -170 -190 -100 -120 -140 -160 -180 -200 -90 -110 -130 -150 -170 -190 -80 -100 -120 -140 -160 -180 -70 -90 -110 -130 -150 -170 -190 -60 -80 -100 -120 -140 -160 -180 -30 -50 -70 -90 -110 -130 -150 -170 -20 -40 -60 -80 -100 -120 -140 -160 -30 -50 -70 -90 -110 -130 -150 -170 -20 -40 -60 -80 -100 -120 -140 -160 -30 -50 -70 -90 -110 -130 -150 -20 -40 -60 -80 -100 -120 -140 -30 -50 -70 -90 -110 -130 -20 -40 -60 -80 -100 -120 -30 -50 -70 -90 -110 -20 -40 -60 -80 -30 -50 -70 0 0 0 0 0 10 10 10 10 20 20 20 20 20 30 30 30 30 40 40 40 40 40 40 50 50 50 50 50 60 60 60 60 70 70 70 -20 -20 -20 -20 -20 -30 -30 -30 -30 -40 -40 -40 -40 -40 -40 -40 -40 -50 -50 -50 -50 -50 -50 -50 -60 -60 -60 -60 -60 -60 -70 -70 -70 -70 -70 -80 -80 -80 -80 -90 -90 -90"/>
 
       <eightmodulepositions name="ypos" unit="cm" values="255 255 255 245 245 245 245 245 235 235 235 235 235 225 225 225 225 225 225 225 215 215 215 215 215 215 215 205 205 205 205 205 205 205 205 195 195 195 195 195 195 195 195 185 185 185 185 185 185 185 185 185 175 175 175 175 175 175 165 165 165 165 165 165 155 155 155 155 155 145 145 145 145 145 135 135 135 135 135 125 125 125 125 125 115 115 115 115 115 105 105 105 105 95 95 95 95 85 85 85 85 85 75 75 75 75 65 65 65 65 55 55 55 55 45 45 45 45 35 35 35 35 25 25 25 15 15 15 15 5 5 5 -5 -5 -5 -5 -15 -15 -15 -25 -25 -25 -25 -35 -35 -35 -45 -45 -45 -45 -55 -55 -55 -55 -65 -65 -65 -65 -75 -75 -75 -75 -85 -85 -85 -85 -95 -95 -95 -95 -95 -105 -105 -105 -105 -115 -115 -115 -115 -125 -125 -125 -125 -125 -135 -135 -135 -135 -135 -145 -145 -145 -145 -145 -155 -155 -155 -155 -155 -165 -165 -165 -165 -165 -175 -175 -175 -175 -175 -175 -185 -185 -185 -185 -185 -185 -195 -195 -195 -195 -195 -195 -195 -195 -195 -205 -205 -205 -205 -205 -205 -205 -205 -215 -215 -215 -215 -215 -215 -215 -215 -225 -225 -225 -225 -225 -225 -225 -235 -235 -235 -235 -235 -235 -235 -245 -245 -245 -245 -245 -255 -255 -255 -255 -255 -265 -265 -265 255 255 255 245 245 245 245 245 235 235 235 235 235 225 225 225 225 225 225 225 215 215 215 215 215 215 215 205 205 205 205 205 205 205 205 195 195 195 195 195 195 195 195 185 185 185 185 185 185 185 185 185 175 175 175 175 175 175 165 165 165 165 165 165 155 155 155 155 155 145 145 145 145 145 135 135 135 135 135 125 125 125 125 125 115 115 115 115 115 105 105 105 105 95 95 95 95 85 85 85 85 85 75 75 75 75 65 65 65 65 55 55 55 55 45 45 45 45 35 35 35 35 25 25 25 15 15 15 15 5 5 5 -5 -5 -5 -5 -15 -15 -15 -25 -25 -25 -25 -35 -35 -35 -45 -45 -45 -45 -55 -55 -55 -55 -65 -65 -65 -65 -75 -75 -75 -75 -85 -85 -85 -85 -95 -95 -95 -95 -95 -105 -105 -105 -105 -115 -115 -115 -115 -125 -125 -125 -125 -125 -135 -135 -135 -135 -135 -145 -145 -145 -145 -145 -155 -155 -155 -155 -155 -165 -165 -165 -165 -165 -175 -175 -175 -175 -175 -175 -185 -185 -185 -185 -185 -185 -195 -195 -195 -195 -195 -195 -195 -195 -195 -205 -205 -205 -205 -205 -205 -205 -205 -215 -215 -215 -215 -215 -215 -215 -215 -225 -225 -225 -225 -225 -225 -225 -235 -235 -235 -235 -235 -235 -235 -245 -245 -245 -245 -245 -255 -255 -255 -255 -255 -265 -265 -265 175 175 175 165 165 165 165 155 155 155 155 155 145 145 145 145 145 145 135 135 135 135 135 135 125 125 125 125 125 125 125 115 115 115 115 115 115 115 105 105 105 105 105 105 105 105 95 95 95 95 95 95 95 95 85 85 85 85 85 85 85 85 75 75 75 75 75 75 75 75 65 65 65 65 65 65 65 55 55 55 55 55 55 55 45 45 45 45 45 45 35 35 35 35 35 35 25 25 25 25 25 25 15 15 15 15 15 5 5 5 5 5 5 -5 -5 -5 -5 -5 -15 -15 -15 -15 -15 -15 -25 -25 -25 -25 -25 -35 -35 -35 -35 -35 -35 -45 -45 -45 -45 -45 -45 -55 -55 -55 -55 -55 -55 -65 -65 -65 -65 -65 -65 -65 -75 -75 -75 -75 -75 -75 -75 -85 -85 -85 -85 -85 -85 -85 -85 -95 -95 -95 -95 -95 -95 -95 -95 -105 -105 -105 -105 -105 -105 -105 -105 -115 -115 -115 -115 -115 -115 -115 -115 -125 -125 -125 -125 -125 -125 -125 -135 -135 -135 -135 -135 -135 -135 -145 -145 -145 -145 -145 -145 -155 -155 -155 -155 -155 -155 -165 -165 -165 -165 -165 -175 -175 -175 -175 -185 -185 -185 175 175 175 165 165 165 165 155 155 155 155 155 145 145 145 145 145 145 135 135 135 135 135 135 125 125 125 125 125 125 125 115 115 115 115 115 115 115 105 105 105 105 105 105 105 105 95 95 95 95 95 95 95 95 85 85 85 85 85 85 85 85 75 75 75 75 75 75 75 75 65 65 65 65 65 65 65 55 55 55 55 55 55 55 45 45 45 45 45 45 35 35 35 35 35 35 25 25 25 25 25 25 15 15 15 15 15 5 5 5 5 5 5 -5 -5 -5 -5 -5 -15 -15 -15 -15 -15 -15 -25 -25 -25 -25 -25 -35 -35 -35 -35 -35 -35 -45 -45 -45 -45 -45 -45 -55 -55 -55 -55 -55 -55 -65 -65 -65 -65 -65 -65 -65 -75 -75 -75 -75 -75 -75 -75 -85 -85 -85 -85 -85 -85 -85 -85 -95 -95 -95 -95 -95 -95 -95 -95 -105 -105 -105 -105 -105 -105 -105 -105 -115 -115 -115 -115 -115 -115 -115 -115 -125 -125 -125 -125 -125 -125 -125 -135 -135 -135 -135 -135 -135 -135 -145 -145 -145 -145 -145 -145 -155 -155 -155 -155 -155 -155 -165 -165 -165 -165 -165 -175 -175 -175 -175 -185 -185 -185 65 45 -35 -55 -75 55 35 -45 -65 65 45 -35 -55 -75 55 35 -45 -65 45 25 5 -15 -35 -55 35 15 -5 -25 -45 25 5 -15 -35 15 -5 -25 65 45 -35 -55 -75 55 35 -45 -65 65 45 25 5 -15 -35 -55 -75 55 35 15 -5 -25 -45 -65 45 25 5 -15 -35 -55 35 15 -5 -25 -45 25 5 -15 -35 15 -5 -25"/>
@@ -188,10 +188,10 @@
       <fourmodulepositions name="ypos" unit="cm" values="255"/>
       <fourmodulepositions name="zpos" unit="cm" values="0"/>
       </documentation>
-      
+
       <fourmodulepositions name="xpos" unit="cm" values="0 0 0 0 0 0 0 0 -10 -10 -10 -10 -10 -10 -10 -10 0 0 0 0 0 0 0 0 0 0 0 0 -10 -10 -10 -10 -10 -10 -10 -10 -10 -10 -10 -10 0 0 40 40 40 0 0 -10 -10 -30 -30 -30 -10 -10 -250 -260 -270 -270 -270 -270 -270 -270 -260 -250 240 250 260 260 260 260 260 260 250 240"/>
       <fourmodulepositions name="ypos" unit="cm" values="255 235 215 195 -205 -225 -245 -265 255 235 215 195 -205 -225 -245 -265 175 155 135 115 95 75 -85 -105 -125 -145 -165 -185 175 155 135 115 95 75 -85 -105 -125 -145 -165 -185 55 35 15 -5 -25 -45 -65 55 35 15 -5 -25 -45 -65 105 75 45 25 5 -15 -35 -55 -85 -115 105 75 45 25 5 -15 -35 -55 -85 -115"/>
-      <fourmodulepositions name="zpos" unit="cm" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0"/>      
+      <fourmodulepositions name="zpos" unit="cm" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0"/>
     </detector>
 
   </detectors>
@@ -199,7 +199,7 @@
   <!--  Definition of the readout segmentation/definition  -->
   <readouts>
     <readout name="LFHCALHits">
-      <segmentation type="NoSegmentation"/> 
+      <segmentation type="NoSegmentation"/>
       <id>system:8,moduleIDx:6,moduleIDy:6,moduletype:1,passive:1,towerx:2,towery:1,rlayerz:4,layerz:4</id>     </readout>
   </readouts>
 
