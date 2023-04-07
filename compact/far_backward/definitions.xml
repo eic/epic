@@ -283,7 +283,7 @@
     <constant name="LumiSpecTracker_Y3"   value="LumiSpecTracker_Y1"/>
 
     <constant name="LumiSpecTracker_Si_DZ"   value="0.03*cm"/>
-    <constant name="LumiSpecTracker_Cu_DZ"   value="0.000014*cm"/>
+    <constant name="LumiSpecTracker_Cu_DZ"   value="0.014*cm"/>
 
     <!-- Lumi photon chamber -->
     <constant name="LumiChamber_gas"      value="Vacuum" type="string"/>
