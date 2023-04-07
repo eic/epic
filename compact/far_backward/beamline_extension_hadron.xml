@@ -10,6 +10,49 @@
 
   <detectors>
 
+
+    <comment> Hadron side beam magnet volumes </comment>
+
+    <detector name="Magnet_Q2PR" type="ip6_CylindricalDipoleMagnet" vis="RedVis">
+      <placement  x="(Q2PR_StartX+Q2PR_EndX)/2" y="0" z="(Q2PR_StartZ+Q2PR_EndZ)/2" theta="Q1BPR_Theta"/>
+      <dimensions x="Q2PR_InnerRadius*4" y="Q2PR_InnerRadius*4" z="Q2PR_Length" r="2.0*Q2PR_InnerRadius"/>
+      <apperture  x="Q2PR_InnerRadius*2" y="Q2PR_InnerRadius*2" r="Q2PR_InnerRadius"/>
+      <coil dx="2*cm" dy="1.5*cm" />
+    </detector>
+
+    <detector
+    name="Magnets_Q3PR_to_B1PR"
+    type="CylindricalMagnetChain"
+    vis="FFMagnetVis">
+      <magnet id="0" name="Magnet_Q3PR"
+        x="(Q3PR_StartX+Q3PR_EndX)/2" y="0" z="(Q3PR_StartZ+Q3PR_EndZ)/2" theta="Q3PR_Theta"
+        length="Q3PR_Length" rin="Q3PR_InnerRadius" rout="Q3PR_OuterRadius">
+      </magnet>
+      <magnet id="0" name="Magnet_Crab1PR"
+        x="Crab1PR_CenterX" y="0" z="Crab1PR_CenterZ" theta="Crab1PR_Theta"
+        length="Crab1PR_Length" rin="Crab1PR_InnerRadius" rout="Crab1PR_OuterRadius">
+      </magnet>
+      <magnet id="0" name="Magnet_Crab2PR"
+        x="Crab2PR_CenterX" y="0" z="Crab2PR_CenterZ" theta="Crab2PR_Theta"
+        length="Crab2PR_Length" rin="Crab2PR_InnerRadius" rout="Crab2PR_OuterRadius">
+      </magnet>
+      <magnet id="0" name="Magnet_Crab3PR"
+        x="Crab3PR_CenterX" y="0" z="Crab3PR_CenterZ" theta="Crab3PR_Theta"
+        length="Crab3PR_Length" rin="Crab3PR_InnerRadius" rout="Crab3PR_OuterRadius">
+      </magnet>
+      <magnet id="0" name="Magnet_Q4PR"
+        x="Q4PR_CenterX" y="0" z="Q4PR_CenterZ" theta="Q4PR_Theta"
+        length="Q4PR_Length" rin="Q4PR_InnerRadius" rout="Q4PR_OuterRadius">
+      </magnet>
+      <magnet id="0" name="Magnet_B1PR"
+        x="B1PR_CenterX" y="0" z="B1PR_CenterZ" theta="B1PR_Theta"
+        length="B1PR_Length" rin="B1PR_InnerRadius" rout="B1PR_OuterRadius">
+      </magnet>
+     </detector>
+
+
+    <comment> Hadron side beam pipe volumes </comment>
+
     <detector
     name="Pipe_Q1APR_to_B1PR"
     type="BeamPipeChain"
