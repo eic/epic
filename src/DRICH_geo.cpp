@@ -107,6 +107,7 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
   double sensorSphPatchZmin = sensorSphPatchElem.attr<double>(_Unicode(zmin));
   // - settings and switches
   long debugOpticsMode = desc.constantAsLong("DRICH_debug_optics");
+  bool debugSector     = desc.constantAsLong("DRICH_debug_sector") == 1;
   bool debugMirror     = desc.constantAsLong("DRICH_debug_mirror") == 1;
   bool debugSensors    = desc.constantAsLong("DRICH_debug_sensors") == 1;
 
@@ -128,9 +129,13 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
       printout(FATAL, "DRICH_geo", "UNKNOWN debugOpticsMode");
       return det;
     }
-    aerogelVis = sensorVis = mirrorVis;
-    gasvolVis = vesselVis = desc.invisible();
   }
+
+  // if debugging anything, draw only one sector and adjust visibility
+  if (debugOptics || debugMirror || debugSensors)
+    debugSector = true;
+  if (debugSector)
+    gasvolVis = vesselVis = desc.invisible();
 
   // readout coder <-> unique sensor ID
   /* - `sensorIDfields` is a list of readout fields used to specify a unique sensor ID
@@ -321,7 +326,7 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
   for (int isec = 0; isec < nSectors; isec++) {
 
     // debugging filters, limiting the number of sectors
-    if ((debugMirror || debugSensors || debugOptics) && isec != 0)
+    if (debugSector && isec != 0)
       continue;
 
     // sector rotation about z axis
