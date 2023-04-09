@@ -124,46 +124,46 @@
         <position x="50*cm" y="60*cm" z="LFHCAL_length - LFHCALElectronicsThickness" />
       </fourmodule>
 
-      <layer repeat="1" vis="InvisibleWithDaughters" readoutlayer = "0">
+      <layer repeat="1" vis="InvisibleWithDaughters" readoutlayer="0">
         <slice material="Tyvek" thickness="LFHCALTyvekThickness" vis="LFHCALLayerTyvekVis"
                type="2" offset="LFHCALAirOffset"/>
-        <slice material="Polystyrene" thickness="LFHCALPolystyreneThickness" vis="LFHCALLayerScintVis" sensitive=" yes"   limits="cal_limits" type="3" />
+        <slice material="Polystyrene" thickness="LFHCALPolystyreneThickness" vis="LFHCALLayerScintVis" sensitive="yes"   limits="cal_limits" type="3" />
       </layer>
-      <layer repeat="LFHCALLayer_NTungstenRepeat" vis="InvisibleWithDaughters" readoutlayer = "0" >
+      <layer repeat="LFHCALLayer_NTungstenRepeat" vis="InvisibleWithDaughters" readoutlayer="0" >
         <slice material="Steel235" thickness="LFHCALAbsorberThickness" vis="LFHCALLayerSteelVis" type="1"/>
 <!--         <slice material="Tungsten" thickness="LFHCALAbsorberThickness" vis="LFHCALLayerSteelVis" type="1"/>  -->
         <slice material="Tyvek" thickness="LFHCALTyvekThickness" vis="LFHCALLayerTyvekVis" type="2" offset="LFHCALAirOffset"/>
-        <slice material="Polystyrene" thickness="LFHCALPolystyreneThickness" vis="LFHCALLayerScintVis" sensitive=" yes" limits="cal_limits" type="3" />
+        <slice material="Polystyrene" thickness="LFHCALPolystyreneThickness" vis="LFHCALLayerScintVis" sensitive="yes" limits="cal_limits" type="3" />
       </layer>
-      <layer repeat="LFHCALLayer_NSteelRepeatS" vis="InvisibleWithDaughters" readoutlayer = "1">
+      <layer repeat="LFHCALLayer_NSteelRepeatS" vis="InvisibleWithDaughters" readoutlayer="1">
         <slice material="Steel235" thickness="LFHCALAbsorberThickness" vis="LFHCALLayerSteelVis" type="1"/>
         <slice material="Tyvek" thickness="LFHCALTyvekThickness" vis="LFHCALLayerTyvekVis" type="2" offset="LFHCALAirOffset"/>
-        <slice material="Polystyrene" thickness="LFHCALPolystyreneThickness" vis="LFHCALLayerScintVis" sensitive=" yes"   limits="cal_limits" type="3" />
+        <slice material="Polystyrene" thickness="LFHCALPolystyreneThickness" vis="LFHCALLayerScintVis" sensitive="yes"   limits="cal_limits" type="3" />
       </layer>
-      <layer repeat="LFHCALLayer_NSteelRepeatS" vis="InvisibleWithDaughters" readoutlayer = "2">
+      <layer repeat="LFHCALLayer_NSteelRepeatS" vis="InvisibleWithDaughters" readoutlayer="2">
         <slice material="Steel235" thickness="LFHCALAbsorberThickness" vis="LFHCALLayerSteelVis" type="1"/>
         <slice material="Tyvek" thickness="LFHCALTyvekThickness" vis="LFHCALLayerTyvekVis" type="2" offset="LFHCALAirOffset"/>
-        <slice material="Polystyrene" thickness="LFHCALPolystyreneThickness" vis="LFHCALLayerScintVis" sensitive=" yes"   limits="cal_limits" type="3" />
+        <slice material="Polystyrene" thickness="LFHCALPolystyreneThickness" vis="LFHCALLayerScintVis" sensitive="yes"   limits="cal_limits" type="3" />
       </layer>
-      <layer repeat="LFHCALLayer_NSteelRepeatS" vis="InvisibleWithDaughters" readoutlayer = "3">
+      <layer repeat="LFHCALLayer_NSteelRepeatS" vis="InvisibleWithDaughters" readoutlayer="3">
         <slice material="Steel235" thickness="LFHCALAbsorberThickness" vis="LFHCALLayerSteelVis" type="1"/>
         <slice material="Tyvek" thickness="LFHCALTyvekThickness" vis="LFHCALLayerTyvekVis" type="2" offset="LFHCALAirOffset"/>
-        <slice material="Polystyrene" thickness="LFHCALPolystyreneThickness" vis="LFHCALLayerScintVis" sensitive=" yes"   limits="cal_limits" type="3" />
+        <slice material="Polystyrene" thickness="LFHCALPolystyreneThickness" vis="LFHCALLayerScintVis" sensitive="yes"   limits="cal_limits" type="3" />
       </layer>
-      <layer repeat="LFHCALLayer_NSteelRepeatS" vis="InvisibleWithDaughters" readoutlayer = "4">
+      <layer repeat="LFHCALLayer_NSteelRepeatS" vis="InvisibleWithDaughters" readoutlayer="4">
         <slice material="Steel235" thickness="LFHCALAbsorberThickness" vis="LFHCALLayerSteelVis" type="1"/>
         <slice material="Tyvek" thickness="LFHCALTyvekThickness" vis="LFHCALLayerTyvekVis" type="2" offset="LFHCALAirOffset"/>
-        <slice material="Polystyrene" thickness="LFHCALPolystyreneThickness" vis="LFHCALLayerScintVis" sensitive=" yes"   limits="cal_limits" type="3" />
+        <slice material="Polystyrene" thickness="LFHCALPolystyreneThickness" vis="LFHCALLayerScintVis" sensitive="yes"   limits="cal_limits" type="3" />
       </layer>
-      <layer repeat="LFHCALLayer_NSteelRepeatS" vis="InvisibleWithDaughters" readoutlayer = "5">
+      <layer repeat="LFHCALLayer_NSteelRepeatS" vis="InvisibleWithDaughters" readoutlayer="5">
         <slice material="Steel235" thickness="LFHCALAbsorberThickness" vis="LFHCALLayerSteelVis" type="1"/>
         <slice material="Tyvek" thickness="LFHCALTyvekThickness" vis="LFHCALLayerTyvekVis" type="2" offset="LFHCALAirOffset"/>
-        <slice material="Polystyrene" thickness="LFHCALPolystyreneThickness" vis="LFHCALLayerScintVis" sensitive=" yes"   limits="cal_limits" type="3" />
+        <slice material="Polystyrene" thickness="LFHCALPolystyreneThickness" vis="LFHCALLayerScintVis" sensitive="yes"   limits="cal_limits" type="3" />
       </layer>
-      <layer repeat="LFHCALLayer_NSteelRepeatS" vis="InvisibleWithDaughters" readoutlayer = "6">
+      <layer repeat="LFHCALLayer_NSteelRepeatS" vis="InvisibleWithDaughters" readoutlayer="6">
         <slice material="Steel235" thickness="LFHCALAbsorberThickness" vis="LFHCALLayerSteelVis" type="1"/>
         <slice material="Tyvek" thickness="LFHCALTyvekThickness" vis="LFHCALLayerTyvekVis" type="2" offset="LFHCALAirOffset"/>
-        <slice material="Polystyrene" thickness="LFHCALPolystyreneThickness" vis="LFHCALLayerScintVis" sensitive=" yes"   limits="cal_limits" type="3" />
+        <slice material="Polystyrene" thickness="LFHCALPolystyreneThickness" vis="LFHCALLayerScintVis" sensitive="yes"   limits="cal_limits" type="3" />
       </layer>
       <layer repeat="1" vis="InvisibleWithDaughters" >
         <slice material="Steel235" thickness="LFHCALAbsorberThickness" vis="LFHCALLayerSteelVis"  type="1"/>
