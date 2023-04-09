@@ -38,10 +38,12 @@
                            2 = all components become vacuum, except for mirrors and `gasvol`, test charged particles from IP
                            3 = all components become vacuum, except for mirrors and sensors, test reflected trajectories' hits
                            0 = off
+- `DRICH_debug_sector`:    1 = only include one sector (will be set automatically when `DRICH_debug_optics>0`)
 - `DRICH_debug_mirror`:    1 = draw full mirror shape for single sector; 0 = off
 - `DRICH_debug_sensors`:   1 = draw full sensor sphere for a single sector; 0 = off
 </comment>
 <constant name="DRICH_debug_optics"    value="0"/>
+<constant name="DRICH_debug_sector"    value="0"/>
 <constant name="DRICH_debug_mirror"    value="0"/>
 <constant name="DRICH_debug_sensors"   value="0"/>
 </define>
