@@ -16,16 +16,9 @@
 #include "DDRec/Surface.h"
 #include "XML/Layering.h"
 #include "XML/Utilities.h"
+#include "DD4hepDetectorHelper.h"
 #include <array>
 #include <map>
-
-#if defined(USE_ACTSDD4HEP)
-#include "ActsDD4hep/ActsExtension.hpp"
-#include "ActsDD4hep/ConvertMaterial.hpp"
-#else
-#include "Acts/Plugins/DD4hep/ActsExtension.hpp"
-#include "Acts/Plugins/DD4hep/ConvertDD4hepMaterial.hpp"
-#endif
 
 using namespace std;
 using namespace dd4hep;
@@ -49,7 +42,6 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
   Assembly                     assembly(det_name);
 
   Material air = description.material("Air");
-  // Volume      assembly    (det_name,Box(10000,10000,10000),vacuum);
   Volume                             motherVol = description.pickMotherVolume(sdet);
   int                                m_id = 0, c_id = 0, n_sensor = 0;
   map<string, Volume>                modules;
@@ -58,20 +50,16 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
   map<string, std::array<double, 2>> module_thicknesses;
   PlacedVolume                       pv;
 
-  // ACTS extension
-  {
-    Acts::ActsExtension* detWorldExt = new Acts::ActsExtension();
-    detWorldExt->addType("endcap", "detector");
-    // SJJ probably need to set the envelope here, as ACTS can't figure
-    // that out for Assembly volumes. May also need binning to properly pick up
-    // on the support material @TODO
-    //
-    // Add the volume boundary material if configured
-    for (xml_coll_t bmat(x_det, _Unicode(boundary_material)); bmat; ++bmat) {
-      xml_comp_t x_boundary_material = bmat;
-      Acts::xmlToProtoSurfaceMaterial(x_boundary_material, *detWorldExt, "boundary_material");
-    }
-    sdet.addExtension<Acts::ActsExtension>(detWorldExt);
+  // Set detector type flag
+  dd4hep::xml::setDetectorTypeFlag(x_det, sdet);
+  auto &params = DD4hepDetectorHelper::ensureExtension<dd4hep::rec::VariantParameters>(
+      sdet);
+
+  // Add the volume boundary material if configured
+  for (xml_coll_t bmat(x_det, _Unicode(boundary_material)); bmat; ++bmat) {
+    xml_comp_t x_boundary_material = bmat;
+    DD4hepDetectorHelper::xmlToProtoSurfaceMaterial(x_boundary_material, params,
+                                         "boundary_material");
   }
 
   assembly.setVisAttributes(description.invisible());
@@ -184,7 +172,6 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
         // std::cout << " adding sensitive volume" << c_name << "\n";
         sdet.check(n_sensor > 2, "SiTrackerEndcap2::fromCompact: " + c_name + " Max of 2 modules allowed!");
         pv.addPhysVolID("sensor", n_sensor);
-        sens.setType("tracker");
         c_vol.setSensitiveDetector(sens);
         sensitives[m_nam].push_back(pv);
         ++n_sensor;
@@ -253,16 +240,14 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
     DetElement layer_element(sdet, layer_name, l_id);
     layer_element.setPlacement(layer_pv);
 
-    Acts::ActsExtension* layerExtension = new Acts::ActsExtension();
-    layerExtension->addType("sensitive disk", "layer");
-    // layerExtension->addType("axes", "definitions", "XZY");
-    // layerExtension->addType("sensitive disk", "layer");
-    // layerExtension->addType("axes", "definitions", "XZY");
+    auto &layerParams =
+        DD4hepDetectorHelper::ensureExtension<dd4hep::rec::VariantParameters>(
+            layer_element);
+
     for (xml_coll_t lmat(x_layer, _Unicode(layer_material)); lmat; ++lmat) {
       xml_comp_t x_layer_material = lmat;
-      xmlToProtoSurfaceMaterial(x_layer_material, *layerExtension, "layer_material");
+      DD4hepDetectorHelper::xmlToProtoSurfaceMaterial(x_layer_material, layerParams, "layer_material");
     }
-    layer_element.addExtension<Acts::ActsExtension>(layerExtension);
 
     for (xml_coll_t ri(x_layer, _U(ring)); ri; ++ri) {
       xml_comp_t  x_ring   = ri;
@@ -294,9 +279,6 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
             auto &comp_elt_params = DD4hepDetectorHelper::ensureExtension<dd4hep::rec::VariantParameters>(comp_elt);
             comp_elt_params.set<string>("axis_definitions", "XZY");
             comp_elt.setPlacement(sens_pv);
-            // std::cout << " adding ACTS extension" << "\n";
-            Acts::ActsExtension* moduleExtension = new Acts::ActsExtension("XZY");
-            comp_elt.addExtension<Acts::ActsExtension>(moduleExtension);
             volSurfaceList(comp_elt)->push_back(volplane_surfaces[m_nam][ic]);
           }
         } else {
@@ -311,9 +293,6 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
             auto &comp_elt_params = DD4hepDetectorHelper::ensureExtension<dd4hep::rec::VariantParameters>(comp_elt);
             comp_elt_params.set<string>("axis_definitions", "XZY");
             comp_elt.setPlacement(sens_pv);
-            // std::cout << " adding ACTS extension" << "\n";
-            Acts::ActsExtension* moduleExtension = new Acts::ActsExtension("XZY");
-            comp_elt.addExtension<Acts::ActsExtension>(moduleExtension);
             volSurfaceList(comp_elt)->push_back(volplane_surfaces[m_nam][ic]);
           }
         }
@@ -329,7 +308,4 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
   return sdet;
 }
 
-//@}
-// clang-format off
 DECLARE_DETELEMENT(epic_TrapEndcapTracker, create_detector)
-DECLARE_DETELEMENT(epic_GEMTrackerEndcap, create_detector)

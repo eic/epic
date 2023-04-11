@@ -48,6 +48,7 @@
     <include ref="${DETECTOR_PATH}/compact/far_forward/definitions.xml" />
     <include ref="${DETECTOR_PATH}/compact/far_backward/definitions.xml" />
     <include ref="${DETECTOR_PATH}/compact/definitions.xml" />
+    <include ref="${DD4hepINSTALL}/DDDetectors/compact/detector_types.xml"/>
   </define>
 
 
@@ -80,15 +81,6 @@
 
     The world is a simple box, but could be a union of multiple regions.
   </documentation>
-  <world material="Vacuum">
-    <shape type="Box" dx="world_dx" dy="world_dy" dz="world_dz"/>
-  </world>
-
-  <!-- <world material="Air">
-    <shape type="Box" dx="world_dx" dy="world_dy" dz="world_dz"/>
-  </world>
-  !-->
-
   <world material="Air">
     <shape type="Box" dx="world_dx" dy="world_dy" dz="world_dz"/>
   </world>
@@ -134,7 +126,6 @@
   <documentation level="10">
     ## Central tracking detectors
   </documentation>
-  <include ref="${DETECTOR_PATH}/compact/tracking/definitions.xml"/>
 
   {% for tracker in features['tracking'] -%}
   <include ref="${DETECTOR_PATH}/compact/tracking/{{ tracker }}.xml"/>
