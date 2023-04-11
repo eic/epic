@@ -312,6 +312,9 @@ static Ref_t create_BarrelTrackerWithFrame(Detector& description, xml_h e, Sensi
             // sensorExtension->addType("sensor", "detector");
             comp_de.addExtension<Acts::ActsExtension>(sensorExtension);
           }
+
+          auto &comp_de_params = DD4hepDetectorHelper::ensureExtension<dd4hep::rec::VariantParameters>(comp_de);
+          comp_de_params.set<string>("axis_definitions", "XYZ");
           // comp_de.setAttributes(description, sens_pv.volume(), x_layer.regionStr(), x_layer.limitsStr(),
           //                       xml_det_t(xmleles[m_nam]).visStr());
           //

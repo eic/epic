@@ -48,12 +48,14 @@ else()
   find_package(Acts REQUIRED COMPONENTS Core PluginIdentification PluginTGeo PluginDD4hep)
   set(ActsDD4hep ActsCore ActsPluginDD4hep)
 endif()
+find_package(DD4hep 1.21 REQUIRED COMPONENTS DDCore DDRec)
 find_package(fmt REQUIRED)
 
 #-----------------------------------------------------------------------------------
 set(a_lib_name ${PROJECT_NAME})
 
 dd4hep_configure_output()
+dd4hep_set_compiler_flags()
 
 file(GLOB sources CONFIGURE_DEPENDS src/*.cpp)
 dd4hep_add_plugin(${a_lib_name}
@@ -99,7 +101,7 @@ install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/${PROJECT_NAME}_full.xml
 # Install the detector description files.
 install(DIRECTORY compact/
     DESTINATION ${CMAKE_INSTALL_DATADIR}/${PROJECT_NAME}/compact
-    FILES_MATCHING PATTERN "*.xml"
+    FILES_MATCHING PATTERN "*.xml" PATTERN "*.gdml"
     )
 
 #-----------------------------------------------------------------------------------

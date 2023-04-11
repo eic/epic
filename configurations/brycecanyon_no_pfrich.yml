@@ -13,7 +13,11 @@ features:
     tof_endcap:
   pid:
     dirc:
+<<<<<<<< HEAD:configurations/brycecanyon_no_pfrich.yml
     #pfrich_gdml:
+========
+    pfrich_gdml:
+>>>>>>>> origin/main:configurations/brycecanyon_pfrich_gdml.yml
     drich:
   ecal:
     forward_homogeneous:

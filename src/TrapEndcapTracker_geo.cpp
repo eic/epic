@@ -291,6 +291,8 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
           for (size_t ic = 0; ic < sensVols.size(); ++ic) {
             PlacedVolume sens_pv = sensVols[ic];
             DetElement   comp_elt(module, sens_pv.volume().name(), mod_num);
+            auto &comp_elt_params = DD4hepDetectorHelper::ensureExtension<dd4hep::rec::VariantParameters>(comp_elt);
+            comp_elt_params.set<string>("axis_definitions", "XZY");
             comp_elt.setPlacement(sens_pv);
             // std::cout << " adding ACTS extension" << "\n";
             Acts::ActsExtension* moduleExtension = new Acts::ActsExtension("XZY");
@@ -306,6 +308,8 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
           for (size_t ic = 0; ic < sensVols.size(); ++ic) {
             PlacedVolume sens_pv = sensVols[ic];
             DetElement   comp_elt(r_module, sens_pv.volume().name(), mod_num);
+            auto &comp_elt_params = DD4hepDetectorHelper::ensureExtension<dd4hep::rec::VariantParameters>(comp_elt);
+            comp_elt_params.set<string>("axis_definitions", "XZY");
             comp_elt.setPlacement(sens_pv);
             // std::cout << " adding ACTS extension" << "\n";
             Acts::ActsExtension* moduleExtension = new Acts::ActsExtension("XZY");
