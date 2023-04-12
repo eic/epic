@@ -925,7 +925,7 @@
         Nlak33aMaterial->AddElement(O, natoms = 2);
       -->
     </material>
-    <material name="SapphireOptical">
+    <material name="Sapphire">
       <D type="density" value="4.220" unit="g/cm3"/>
       <composite n="2" ref="Al"/>
       <composite n="3" ref="O"/>

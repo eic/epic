@@ -142,7 +142,7 @@
           r1="DIRCLens_r1"
           r2="DIRCLens_r2"
           material1="Quartz"
-          material2="SapphireOptical"
+          material2="Sapphire"
           material3="Quartz"
           vis1="DIRCLens1"
           vis2="DIRCLens2"
