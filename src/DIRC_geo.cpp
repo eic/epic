@@ -108,7 +108,6 @@ static Ref_t createDetector(Detector& desc, xml_h e, SensitiveDetector sens)
 
   // Lens variables
   xml_comp_t xml_lens    = xml_module.child(_Unicode(lens));
-  //double     lens_height = getAttrOrDefault(xml_lens, _Unicode(height), 50 * mm);
   double     lens_shift  = getAttrOrDefault(xml_lens, _Unicode(shift), 0 * mm);
   double lens_width = getAttrOrDefault(xml_lens, _Unicode(width), 35 * mm);
   double lens_thickness = getAttrOrDefault(xml_lens, _Unicode(thickness), 12 * mm);
