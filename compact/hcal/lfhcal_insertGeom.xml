@@ -51,7 +51,7 @@
     <constant name="FourM_NotchWidthAbsA"      value="23* mm"/>
     <constant name="FourM_NotchWidthAbsC"      value="6.5* mm"/>
     <constant name="FourM_NotchWidthScin"      value="29* mm"/>
-    
+
     <vis name="LFHCAL8MModVis"        ref="AnlBlue" showDaughters="false" visible="true"/>
     <vis name="LFHCAL4MModVis"        ref="AnlViolet" showDaughters="false" visible="true"/>
     <vis name="LFHCAL8MModOuter"      ref="AnlBlue" showDaughters="false" visible="false"/>

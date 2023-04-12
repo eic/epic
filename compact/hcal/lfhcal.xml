@@ -59,7 +59,7 @@
     <vis name="LFHCALLayerTungstenVis" ref="AnlViolet"   showDaughters="true" visible="false"/>
     <vis name="LFHCALLayerTyvekVis"   ref="AnlGold"   showDaughters="false" visible="false"/>
     <vis name="LFHCALLayerTiOVis"     ref="AnlDarkGreen"   showDaughters="false" visible="false"/>
-  
+
   </define>
 
   <!-- Define detector -->
