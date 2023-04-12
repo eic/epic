@@ -141,7 +141,7 @@
       </layer>
       <layer repeat="LFHCALLayer_NTungstenRepeat" vis="InvisibleWithDaughters" readoutlayer="0" >
 <!--         <slice material="Steel235" thickness="LFHCALAbsorberThickness" vis="LFHCALLayerSteelVis" type="1"/> -->
-        <slice material="Tungsten" thickness="LFHCALAbsorberThickness" vis="LFHCALLayerSteelVis" type="1"/> 
+        <slice material="Tungsten" thickness="LFHCALAbsorberThickness" vis="LFHCALLayerSteelVis" type="1"/>
         <slice material="Tyvek" thickness="LFHCALTyvekThickness" vis="LFHCALLayerTyvekVis" type="2" offset="LFHCALAirOffset"/>
         <slice material="Polystyrene" thickness="LFHCALPolystyreneThickness" vis="LFHCALLayerScintVis" sensitive="yes" limits="cal_limits" type="3" />
       </layer>
