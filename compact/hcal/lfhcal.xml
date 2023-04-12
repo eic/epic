@@ -206,7 +206,7 @@
   <!--  Definition of the readout segmentation/definition  -->
   <readouts>
     <readout name="LFHCALHits">
-       <segmentation type="NoSegmentation"/> -->
+       <segmentation type="NoSegmentation"/>
       <id>system:8,moduleIDx:6,moduleIDy:6,moduletype:1,passive:1,towerx:2,towery:1,rlayerz:4,layerz:4</id>
     </readout>
   </readouts>
