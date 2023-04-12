@@ -32,8 +32,12 @@
     <constant name="DIRCPrism_height"       value="DIRCPrism_long_edge"/>
 
     <!-- Box - main DIRC modules -->
-    <constant name="DIRCBox_count"          value="12"  comment="Number of DIRC boxes per... DIRC. 12 - default"/>
+    <constant name="DIRCBox_count"          value="12" comment="Number of DIRC boxes. 12 - default"/>
     <constant name="DIRCBox_width"          value="DIRCPrism_width"/>
+
+    <!-- Bar - number in each direction -->
+    <constant name="DIRCBar_count_y"        value="10" comment="Number of bars per box in y direction"/>
+    <constant name="DIRCBar_count_z"        value="4" comment="Number of bars per box in z direction"/>
 
     <!-- Mirror -->
     <constant name="DIRCMirror_height"      value="20 * mm"/>
@@ -46,7 +50,6 @@
     <constant name="DIRCLens_r2"            value="36 * mm"/>
     <constant name="DIRCLens_height"        value="50 * mm"/>
     <constant name="DIRCLens_shift"         value="0 * mm" comment="Shift of optical axis compared to bar center"/>
-    <constant name="DIRCBar_count_y"        value="10" comment="Number of bars per box in y direction"/>
     <constant name="DIRCLens_width"         value="DIRCPrism_width / DIRCBar_count_y"/>
 
     <!-- MCP -->
@@ -57,7 +60,6 @@
     <!-- Bar - Each DIRC box consists of N "bars" -->
     <!-- BarAssembly - Bars + Glue -->
     <constant name="DIRCBarAssm_length"     value="DIRC_length - DIRCPrism_length - DIRCMirror_thickness - DIRCLens_thickness - DIRCMCP_thickness" comment="Length of bars+glue assembly"/>
-    <constant name="DIRCBar_count_z"        value="4" comment="Number of bars per box in z direction"/>
     <constant name="DIRCBar_gap"            value="0.15 * mm"/>
     <constant name="DIRCBar_height"         value="17 * mm"/>
     <constant name="DIRCBar_width"          value="(DIRCPrism_width - (DIRCBar_count_y - 1) * DIRCBar_gap) / DIRCBar_count_y"/>
