@@ -1,29 +1,32 @@
 Overview
 --------
-The EPIC Detector at IP6 for Electron-Ion Collider experiment.
 
 **Detector geometry viewer:**
-- [Central detector](https://eic.phy.anl.gov/geoviewer/index.htm?nobrowser&file=https://eicweb.phy.anl.gov/EIC/detectors/ecce/-/jobs/artifacts/main/raw/geo/detector_geo_central.root?job=dump_geometry&item=default;1&opt=clipx;clipy;transp30;zoom120;ROTY320;ROTZ340;trz0;trr0;ctrl;all)
-- [Full Detector (including beamline)](https://eic.phy.anl.gov/geoviewer/index.htm?nobrowser&file=https://eicweb.phy.anl.gov/EIC/detectors/ecce/-/jobs/artifacts/main/raw/geo/detector_geo_full.root?job=dump_geometry&item=default;1&opt=clipx;clipy;transp30;zoom75;ROTY290;ROTZ350;trz0;trr0;ctrl;all)
-- [Inner detector (without calorimetry)](https://eic.phy.anl.gov/geoviewer/index.htm?nobrowser&file=https://eicweb.phy.anl.gov/EIC/detectors/ecce/-/jobs/artifacts/main/raw/geo/detector_geo_inner_detector.root?job=dump_geometry&item=default;1&opt=clipx;clipy;transp30;zoom75;ROTY320;ROTZ340;trz0;trr0;ctrl;all)
-- Subsystem views:
-  - [Calorimetry](https://eic.phy.anl.gov/geoviewer/index.htm?nobrowser&file=https://eicweb.phy.anl.gov/EIC/detectors/ecce/-/jobs/artifacts/main/raw/geo/detector_geo_calorimeters.root?job=dump_geometry&item=default;1&opt=clipx;clipy;transp30;zoom120;ROTY320;ROTZ340;trz0;trr0;ctrl;all)
-  - [PID](https://eic.phy.anl.gov/geoviewer/index.htm?nobrowser&file=https://eicweb.phy.anl.gov/EIC/detectors/ecce/-/jobs/artifacts/main/raw/geo/detector_geo_pid_only.root?job=dump_geometry&item=default;1&opt=clipx;clipy;transp30;zoom75;ROTY320;ROTZ340;trz0;trr0;ctrl;all)
-    - [dRICH](https://eic.phy.anl.gov/geoviewer/index.htm?nobrowser&file=https://eicweb.phy.anl.gov/EIC/detectors/ecce/-/jobs/artifacts/main/raw/geo/detector_geo_drich_only.root?job=dump_geometry&item=default;1&opt=clipx;clipy;transp30;zoom75;ROTY290;ROTZ350;trz0;trr0;ctrl;all)
-    - [pfRICH](https://eic.phy.anl.gov/geoviewer/index.htm?nobrowser&file=https://eicweb.phy.anl.gov/EIC/detectors/ecce/-/jobs/artifacts/main/raw/geo/detector_geo_pfrich_only.root?job=dump_geometry&item=default;1&opt=clipx;clipy;transp30;zoom55;ROTY49;ROTZ350;trz0;trr0;ctrl;all&)
-    - [DIRC](https://eic.phy.anl.gov/geoviewer/index.htm?nobrowser&file=https://eicweb.phy.anl.gov/EIC/detectors/ecce/-/jobs/artifacts/main/raw/geo/detector_geo_dirc_only.root?job=dump_geometry&item=default;1&opt=clipx;clipy;transp30;zoom120;ROTY320;ROTZ340;trz0;trr0;ctrl;all)
-    - [ToF](https://eic.phy.anl.gov/geoviewer/index.htm?nobrowser&file=https://eicweb.phy.anl.gov/EIC/detectors/ecce/-/jobs/artifacts/main/raw/geo/detector_geo_tof_only.root?job=dump_geometry&item=default;1&opt=clipx;clipy;transp30;zoom55;ROTY49;ROTZ350;trz0;trr0;ctrl;all&)
-  - [Tracking](https://eic.phy.anl.gov/geoviewer/index.htm?nobrowser&file=https://eicweb.phy.anl.gov/EIC/detectors/ecce/-/jobs/artifacts/main/raw/geo/detector_geo_tracking_only.root?job=dump_geometry&item=default;1&opt=clipx;clipy;transp30;zoom75;ROTY320;ROTZ340;trz0;trr0;ctrl;all)
-    - [Vertex detector](https://eic.phy.anl.gov/geoviewer/index.htm?nobrowser&file=https://eicweb.phy.anl.gov/EIC/detectors/ecce/-/jobs/artifacts/main/raw/geo/vertex_only_geo.root?job=dump_geometry&item=default;1&opt=clipx;clipy;transp30;zoom120;ROTY320;ROTZ340;trz0;trr0;ctrl;all)
-  - [Far-forward](https://eic.phy.anl.gov/geoviewer/index.htm?nobrowser&file=https://eicweb.phy.anl.gov/EIC/detectors/ecce/-/jobs/artifacts/main/raw/geo/detector_geo_ip6.root?job=dump_geometry&item=default;1&opt=clipx;clipy;transp30;zoom40;ROTY290;ROTZ350;trz0;trr0;ctrl;all)
+- [Viewer only](https://eic.github.io/epic/geoviewer)
+- Main configurations:
+  - [Arches](https://eic.github.io/epic/geoviewer?nobrowser&file=artifacts/tgeo/arches.root&item=default;1&opt=clipx;clipy;transp30;zoom120;ROTY320;ROTZ340;trz0;trr0;ctrl;all)
+  - [Brycecanyon](https://eic.github.io/epic/geoviewer?nobrowser&file=artifacts/tgeo/brycecanyon.root&item=default;1&opt=clipx;clipy;transp30;zoom120;ROTY320;ROTZ340;trz0;trr0;ctrl;all)
+- Additional viewers:
+  - [Inner detector (without calorimetry)](https://eic.github.io/epic/geoviewer?nobrowser&file=artifacts/tgeo/inner_detector.root&item=default;1&opt=clipx;clipy;transp30;zoom120;ROTY320;ROTZ340;trz0;trr0;ctrl;all)
+  - [Calorimetry](https://eic.github.io/epic/geoviewer?nobrowser&file=artifacts/tgeo/calorimeters.root&item=default;1&opt=clipx;clipy;transp30;zoom120;ROTY320;ROTZ340;trz0;trr0;ctrl;all)
+    - [Sciglass](https://eic.github.io/epic/geoviewer?nobrowser&file=artifacts/tgeo/sciglass_only.root&item=default;1&opt=clipx;clipy;transp30;zoom55;ROTY49;ROTZ350;trz0;trr0;ctrl;all)
+  - [PID](https://eic.github.io/epic/geoviewer?nobrowser&file=artifacts/tgeo/pid_only.root&item=default;1&opt=clipx;clipy;transp30;zoom75;ROTY320;ROTZ340;trz0;trr0;ctrl;all)
+    - [dRICH](https://eic.github.io/epic/geoviewer?nobrowser&file=artifacts/tgeo/drich_only.root&item=default;1&opt=clipx;clipy;transp30;zoom75;ROTY290;ROTZ350;trz0;trr0;ctrl;all)
+    - [mRICH](https://eic.github.io/epic/geoviewer?nobrowser&file=artifacts/tgeo/mrich_only.root&item=default;1&opt=clipx;clipy;transp30;zoom75;ROTY290;ROTZ350;trz0;trr0;ctrl;all)
+    - [pfRICH](https://eic.github.io/epic/geoviewer?nobrowser&file=artifacts/tgeo/pfrich_only.root&item=default;1&opt=clipx;clipy;transp30;zoom55;ROTY49;ROTZ350;trz0;trr0;ctrl;all)
+    - [DIRC](https://eic.github.io/epic/geoviewer?nobrowser&file=artifacts/tgeo/dirc_only.root&item=default;1&opt=clipx;clipy;transp30;zoom120;ROTY320;ROTZ340;trz0;trr0;ctrl;all)
+  - [Tracking](https://eic.github.io/epic/geoviewer?nobrowser&file=artifacts/tgeo/tracking_only.root&item=default;1&opt=clipx;clipy;transp30;zoom75;ROTY320;ROTZ340;trz0;trr0;ctrl;all)
+    - [Vertex](https://eic.github.io/epic/geoviewer?nobrowser&file=artifacts/tgeo/vertex_only.root&item=default;1&opt=clipx;clipy;transp30;zoom120;ROTY320;ROTZ340;trz0;trr0;ctrl;all)
+    - [ToF](https://eic.github.io/epic/geoviewer?nobrowser&file=artifacts/tgeo/tof_only.root&item=default;1&opt=clipx;clipy;transp30;zoom55;ROTY49;ROTZ350;trz0;trr0;ctrl;all)
+  - [Beamline](https://eic.github.io/epic/geoviewer?nobrowser&file=artifacts/tgeo/ip6.root&item=default;1&opt=clipx;clipy;transp30;zoom40;ROTY290;ROTZ350;trz0;trr0;ctrl;all)
 
-[<img title="arches" src="https://eic.github.io/epic/arches/view1_top.png" width="49%">](https://eic.github.io/epic/arches/view1_top.pdf) [<img title="brycecanyon" src="https://eic.github.io/epic/brycecanyon/view1_top.png" width="49%">](https://eic.github.io/epic/brycecanyon/view1_top.pdf)
+[<img title="arches" src="https://eic.github.io/epic/artifacts/epic_arches_views/view1_top.png" width="49%">](https://eic.github.io/epic/artifacts/epic_arches_views/view1_top.pdf) [<img title="brycecanyon" src="https://eic.github.io/epic/artifacts/epic_brycecanyon_views/view1_top.png" width="49%">](https://eic.github.io/epic/artifacts/epic_brycecanyon_views/view1_top.pdf)
 
-[Browse latest](https://eicweb.phy.anl.gov/EIC/detectors/ecce/-/jobs/artifacts/main/browse/images?job=report)
+**Detector parameters:**
+- text: [Arches](https://eic.github.io/epic/artifacts/constants/epic_arches.out) [Brycecanyon](https://eic.github.io/epic/artifacts/constants/epic_brycecanyon.out)
+- toml: [Arches](https://eic.github.io/epic/artifacts/constants/epic_arches.toml) [Brycecanyon](https://eic.github.io/epic/artifacts/constants/epic_brycecanyon.toml)
+- csv: [Arches](https://eic.github.io/epic/artifacts/DetectorParameterTable/epic_arches.csv) [Brycecanyon](https://eic.github.io/epic/artifacts/DetectorParameterTable/epic_brycecanyon.csv)
 
-[Detector views](https://eicweb.phy.anl.gov/EIC/detectors/ecce/-/jobs/artifacts/main/raw/doc/dawn_views.md?job=report)
-
-[Constants listing](https://eicweb.phy.anl.gov/EIC/detectors/ecce/-/jobs/artifacts/main/raw/doc/constants.out?job=report)
 
 Getting Started
 ---------------
@@ -84,3 +87,4 @@ Related useful links
 - [EIC tutorial](https://eic.phy.anl.gov/tutorials/eic_tutorial)
 - [DD4hep repository](https://github.com/AIDAsoft/DD4hep)
 - [DD4hep user manual](https://dd4hep.web.cern.ch/dd4hep/usermanuals/DD4hepManual/DD4hepManual.pdf)
+- [ACTS DD4hep plugin documentation](https://acts.readthedocs.io/en/latest/plugins/dd4hep.html)

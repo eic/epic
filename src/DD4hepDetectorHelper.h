@@ -53,4 +53,3 @@ inline void xmlToProtoSurfaceMaterial(const xml_comp_t& x_material,
 }
 
 }  // namespace DD4hepDetectorHelper
-

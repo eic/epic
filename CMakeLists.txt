@@ -35,30 +35,19 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 include(GNUInstallDirs)
 
 # Dependencies
-find_package(DD4hep REQUIRED COMPONENTS DDCore DDG4 DDRec)
-if(${DD4hep_VERSION} VERSION_LESS 1.21)
-  message(WARNING "DD4hep before 1.21 does not write collections correctly \n"
-                  "More info at https://github.com/AIDASoft/DD4hep/pull/922")
-endif()
-find_package(ActsDD4hep)
-if(ActsDD4hep_FOUND)
-  add_compile_definitions(USE_ACTSDD4HEP)
-  set(ActsDD4hep ActsDD4hep::ActsDD4hep)
-else()
-  find_package(Acts REQUIRED COMPONENTS Core PluginIdentification PluginTGeo PluginDD4hep)
-  set(ActsDD4hep ActsCore ActsPluginDD4hep)
-endif()
+find_package(DD4hep 1.21 REQUIRED COMPONENTS DDCore DDRec)
 find_package(fmt REQUIRED)
 
 #-----------------------------------------------------------------------------------
 set(a_lib_name ${PROJECT_NAME})
 
 dd4hep_configure_output()
+dd4hep_set_compiler_flags()
 
 file(GLOB sources CONFIGURE_DEPENDS src/*.cpp)
 dd4hep_add_plugin(${a_lib_name}
   SOURCES ${sources}
-  USES ${ActsDD4hep} ROOT::Core ROOT::Gdml
+  USES ROOT::Core ROOT::Gdml
   )
 target_link_libraries(${a_lib_name}
   PUBLIC DD4hep::DDCore DD4hep::DDRec fmt::fmt
@@ -99,7 +88,7 @@ install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/${PROJECT_NAME}_full.xml
 # Install the detector description files.
 install(DIRECTORY compact/
     DESTINATION ${CMAKE_INSTALL_DATADIR}/${PROJECT_NAME}/compact
-    FILES_MATCHING PATTERN "*.xml"
+    FILES_MATCHING PATTERN "*.xml" PATTERN "*.gdml"
     )
 
 #-----------------------------------------------------------------------------------
