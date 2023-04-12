@@ -69,6 +69,8 @@
       <apperture x="B2PF_InnerRadius*2" y="B2PF_InnerRadius*2"  r="B2PF_InnerRadius"/>
       <coil vis="FFMagnetCoilVis" dx="1*cm" dy="0.5*cm" />
     </detector>
+    <!-- Electron magnets commented out - misplaced, implemented properly in electron_beamline.xml -->
+    <comment>
 	<detector id="Q0EF_ID" name="Q0EF_BeamlineMagnet" vis="FFMagnetVis" type="ip6_CylindricalDipoleMagnet">
       <placement x="Q0EF_XPosition" y="0*m" z="Q0EF_CenterPosition" theta="Q0EF_RotationAngle" />
       <dimensions x="5.0*cm" y="5.0*cm" z="Q0EF_Length" r="2.5*cm" />
@@ -81,6 +83,7 @@
       <apperture x="Q1EF_InnerRadius*2" y="Q1EF_InnerRadius*2"  r="Q1EF_InnerRadius"/>
       <coil vis="FFMagnetCoilVis" dx="0.4*cm" dy="0.2*cm" />
     </detector>
+    </comment>
 
   </detectors>
 
