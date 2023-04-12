@@ -96,14 +96,6 @@
     <vis name="HcalAbsorberVis"       ref="AnlGray"   showDaughters="false" visible="false"/>
     <vis name="HcalEndcapInsertVis"   ref="AnlGray"   showDaughters="false" visible="true"/>
     <vis name="LFHCALVis"             ref="AnlBlue"   showDaughters="true" visible="true"/>
-    <vis name="LFHCAL8MModVis"        ref="AnlBlue" showDaughters="false" visible="true"/>
-    <vis name="LFHCAL4MModVis"        ref="AnlViolet" showDaughters="false" visible="true"/>
-    <vis name="LFHCAL8MModOuter"      ref="AnlBlue" showDaughters="false" visible="false"/>
-    <vis name="LFHCALLayerScintVis"   ref="AnlLight_Gray"   showDaughters="false" visible="false"/>
-    <vis name="LFHCALLayerSteelVis"   ref="AnlRed"   showDaughters="false" visible="false"/>
-    <vis name="LFHCALLayerTungstenVis" ref="AnlViolet"   showDaughters="true" visible="false"/>
-    <vis name="LFHCALLayerTyvekVis"   ref="AnlGold"   showDaughters="false" visible="false"/>
-    <vis name="LFHCALLayerTiOVis"     ref="AnlDarkGreen"   showDaughters="false" visible="false"/>
     <comment>
       Passive steel for flux return
     </comment>
