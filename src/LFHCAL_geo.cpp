@@ -1000,38 +1000,20 @@ static Ref_t createDetector(Detector& desc, xml_h handle, SensitiveDetector sens
 
 
   int    moduleID   = 0;
+  
+  
+  
+  
   std::vector<double> xpos8M;
   std::vector<double> ypos8M;
   std::vector<double> zpos8M;
 
-  for(xml_coll_t i(handle, _Unicode(eightmodulepositions)); i; ++i){
-    xml_comp_t  x_mtrx = i;
-
-    std::string   mtrx_name       = getAttrOrDefault<std::string>(x_mtrx, _Unicode(name), " ");
-    std::string   mtrx_values     = getAttrOrDefault<std::string>(x_mtrx, _Unicode(values), " ");
-
-    std::vector<double> *aptr = NULL;
-
-    if(mtrx_name == "xpos")
-      aptr = &xpos8M;
-    else if(mtrx_name == "ypos")
-      aptr = &ypos8M;
-    else if(mtrx_name == "zpos")
-      aptr = &zpos8M;
-    else{
-      printout(WARNING, "LFHCAL", "unknown <eightmodulepositions> data!");
-      continue;
-    }
-
-    std::string delimiter = " ";
-    size_t posC = 0;
-    std::string token;
-    while ((posC = mtrx_values.find(delimiter)) != std::string::npos) {
-      token = mtrx_values.substr(0, posC);
-      aptr->push_back(atof(token.c_str()));
-      mtrx_values.erase(0, posC + delimiter.length());
-    }
-    aptr->push_back(atof(mtrx_values.c_str()));
+  xml_coll_t eightMPos(detElem, _Unicode(eightmodulepositions));
+  for (xml_coll_t position_i(eightMPos, _U(position)); position_i; ++position_i){
+    xml_comp_t position_comp = position_i;
+    xpos8M.push_back((position_comp.x()));
+    ypos8M.push_back((position_comp.y()));
+    zpos8M.push_back((position_comp.z()));
   }
 
   // create 8M modules
@@ -1050,7 +1032,7 @@ static Ref_t createDetector(Detector& desc, xml_h handle, SensitiveDetector sens
       moduleIDy             = ((ypos8M[e] + 265) / 10);
 
       // Placing modules in world volume
-      auto tr8M = Transform3D(Position(pos.x()-xpos8M[e]*dd4hep::cm-0.5*eightM_params.mod_width, pos.y()-ypos8M[e]*dd4hep::cm, pos.z() +zpos8M[e]*dd4hep::cm + length / 2.));
+      auto tr8M = Transform3D(Position(pos.x()-xpos8M[e]-0.5*eightM_params.mod_width, pos.y()-ypos8M[e], pos.z() +zpos8M[e] + length / 2.));
       phv = assembly.placeVolume(eightMassembly, tr8M);
       phv.addPhysVolID("moduleIDx", moduleIDx).addPhysVolID("moduleIDy", moduleIDy).addPhysVolID("moduletype", 0);
       moduleID++;
@@ -1061,35 +1043,14 @@ static Ref_t createDetector(Detector& desc, xml_h handle, SensitiveDetector sens
   std::vector<double> ypos4M;
   std::vector<double> zpos4M;
 
-  for(xml_coll_t i(handle, _Unicode(fourmodulepositions)); i; ++i){
-    xml_comp_t  x_mtrx = i;
-
-    std::string   mtrx_name       = getAttrOrDefault<std::string>(x_mtrx, _Unicode(name), " ");
-    std::string   mtrx_values     = getAttrOrDefault<std::string>(x_mtrx, _Unicode(values), " ");
-    std::vector<double> *aptr = NULL;
-
-    if(mtrx_name == "xpos")
-      aptr = &xpos4M;
-    else if(mtrx_name == "ypos")
-      aptr = &ypos4M;
-    else if(mtrx_name == "zpos")
-      aptr = &zpos4M;
-    else{
-      printout(WARNING, "LFHCAL", "unknown <fourmodulepositions> data!");
-      continue;
-    }
-
-    std::string delimiter = " ";
-    size_t posC = 0;
-    std::string token;
-    while ((posC = mtrx_values.find(delimiter)) != std::string::npos) {
-      token = mtrx_values.substr(0, posC);
-      aptr->push_back(atof(token.c_str()));
-      mtrx_values.erase(0, posC + delimiter.length());
-    }
-    aptr->push_back(atof(mtrx_values.c_str()));
+  xml_coll_t fourMPos(detElem, _Unicode(fourmodulepositions));
+  for (xml_coll_t position_i(fourMPos, _U(position)); position_i; ++position_i){
+    xml_comp_t position_comp = position_i;
+    xpos4M.push_back((position_comp.x()));
+    ypos4M.push_back((position_comp.y()));
+    zpos4M.push_back((position_comp.z()));
   }
-
+  
   // create 4M modules
   Volume  fourMassembly = createFourMModule ( desc, fourM_params, slice_Params,  length, sens, renderComponents, allSensitive);
   if (xpos4M.size() != ypos4M.size() || xpos4M.size() != zpos4M.size()){
@@ -1105,11 +1066,9 @@ static Ref_t createDetector(Detector& desc, xml_h handle, SensitiveDetector sens
         std::cout << "LFHCAL WRONG ID FOR 4M module: " << f << "/" << (int)xpos4M.size() << "\t" << moduleIDx << "\t"
                   << moduleIDy << std::endl;
       }
-      auto tr4M = Transform3D(Position(pos.x()-xpos4M[f]*dd4hep::cm-0.5*fourM_params.mod_width, pos.y()-ypos4M[f]*dd4hep::cm, pos.z() +zpos4M[f]*dd4hep::cm + length / 2.));
+      auto tr4M = Transform3D(Position(pos.x()-xpos4M[f]-0.5*fourM_params.mod_width, pos.y()-ypos4M[f], pos.z() +zpos4M[f] + length / 2.));
       phv = assembly.placeVolume(fourMassembly, tr4M);
-
       phv.addPhysVolID("moduleIDx", moduleIDx).addPhysVolID("moduleIDy", moduleIDy).addPhysVolID("moduletype", 1);
-
       moduleID++;
     }
   }
