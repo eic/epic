@@ -416,7 +416,7 @@
           n - Refractive index of Sapphire
 
     </comment>
-    
+
     <matrix name="ABSLENGTH__DIRCSapphire" coldim="2" values="
       1.02212*eV   350.051*mm
       1.05518*eV   306.241*mm
