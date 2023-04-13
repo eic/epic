@@ -402,6 +402,21 @@
       6.00407*eV   1.89988
       6.1992*eV    1.9127
       "/>
+
+    <comment>
+    Absorption length is caculated using transmittance values for 2 mm thickness (crystan standard UV grade) from
+    https://www.crystran.co.uk/optical-materials/sapphire-al2o3
+
+    F = ((n - 1) * (n - 1)) / ((n + 1) * (n + 1))
+
+    Absorption length = (-1 / ln(transmittance + 2*F)) * 2 mm
+
+    where:
+          F - Fresnel reflection coefficient
+          n - Refractive index of Sapphire
+
+    </comment>
+    
     <matrix name="ABSLENGTH__DIRCSapphire" coldim="2" values="
       1.02212*eV   350.051*mm
       1.05518*eV   306.241*mm
