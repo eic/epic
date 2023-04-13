@@ -1000,10 +1000,10 @@ static Ref_t createDetector(Detector& desc, xml_h handle, SensitiveDetector sens
 
 
   int    moduleID   = 0;
-  
-  
-  
-  
+
+
+
+
   std::vector<double> xpos8M;
   std::vector<double> ypos8M;
   std::vector<double> zpos8M;
@@ -1050,7 +1050,7 @@ static Ref_t createDetector(Detector& desc, xml_h handle, SensitiveDetector sens
     ypos4M.push_back((position_comp.y()));
     zpos4M.push_back((position_comp.z()));
   }
-  
+
   // create 4M modules
   Volume  fourMassembly = createFourMModule ( desc, fourM_params, slice_Params,  length, sens, renderComponents, allSensitive);
   if (xpos4M.size() != ypos4M.size() || xpos4M.size() != zpos4M.size()){

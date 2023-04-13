@@ -190,10 +190,10 @@
         <fourmodulepositions name="zpos" unit="cm" values="0 0"/>
       -->
 
-      <documentation> 
-      ### positions of modules for full area LFHCAL 
+      <documentation>
+      ### positions of modules for full area LFHCAL
       </documentation>
-      <eightmodulepositions> 
+      <eightmodulepositions>
         <position x="-250*cm" y="-125*cm" z="0*cm"/>
         <position x="-270*cm" y="-65*cm" z="0*cm"/>
         <position x="-260*cm" y="-95*cm" z="0*cm"/>
@@ -1281,7 +1281,7 @@
         <position x="0*cm" y="25*cm" z="0*cm"/>
         <position x="10*cm" y="-25*cm" z="0*cm"/>
       </eightmodulepositions>
-      <fourmodulepositions> 
+      <fourmodulepositions>
         <position x="-270*cm" y="-55*cm" z="0*cm"/>
         <position x="-250*cm" y="-115*cm" z="0*cm"/>
         <position x="-270*cm" y="45*cm" z="0*cm"/>

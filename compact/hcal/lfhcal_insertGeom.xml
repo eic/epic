@@ -179,10 +179,10 @@
         <slice material="Steel235" thickness="LFHCALAbsorberThickness" vis="LFHCALLayerSteelVis"  type="1"/>
       </layer>
 
-      <documentation> 
+      <documentation>
       ### positions of modules for full area LFHCal with modules taken out to accommodate insert
       </documentation>
-      <eightmodulepositions> 
+      <eightmodulepositions>
         <position x="10*cm" y="255*cm" z="0*cm"/>
         <position x="30*cm" y="255*cm" z="0*cm"/>
         <position x="50*cm" y="255*cm" z="0*cm"/>
@@ -1260,7 +1260,7 @@
         <position x="-90*cm" y="-5*cm" z="0*cm"/>
         <position x="-90*cm" y="-25*cm" z="0*cm"/>
       </eightmodulepositions>
-      <fourmodulepositions> 
+      <fourmodulepositions>
         <position x="0*cm" y="255*cm" z="0*cm"/>
         <position x="0*cm" y="235*cm" z="0*cm"/>
         <position x="0*cm" y="215*cm" z="0*cm"/>
