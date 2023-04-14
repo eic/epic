@@ -119,7 +119,7 @@ static Ref_t createDetector(Detector& desc, xml_h e, SensitiveDetector sens)
 
   // 3-layer spherical lens ---
 
-  double cr2 = sqrt(lens_width * lens_width / 4. + bar_heigth * bar_heigth / 4.);
+  double cr2 = sqrt(lens_width * lens_width / 4. + bar_height * bar_height / 4.);
 
   double lens_min_thickness = 2.0 * mm;
 
