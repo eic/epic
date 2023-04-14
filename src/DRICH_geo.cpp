@@ -552,7 +552,6 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
     else if (imod != desc.constantAsLong("DRICH_num_sensors"))
       printout(WARNING, "DRICH_geo", "number of sensors is not the same for each sector");
 
-
   } // END SECTOR LOOP //////////////////////////
 
   return det;
