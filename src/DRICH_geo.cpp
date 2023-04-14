@@ -548,7 +548,10 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
 
     // add constant for access to the number of modules per sector
     if (isec == 0)
-      desc.add(Constant("DRICH_num_sensors", std::to_string(imod))); // per sector
+      desc.add(Constant("DRICH_num_sensors", std::to_string(imod)));
+    else if (imod != desc.constantAsLong("DRICH_num_sensors"))
+      printout(WARNING, "DRICH_geo", "number of sensors is not the same for each sector");
+
 
   } // END SECTOR LOOP //////////////////////////
 
