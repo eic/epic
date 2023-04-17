@@ -89,6 +89,7 @@ static Ref_t createDetector(Detector& desc, xml_h handle, SensitiveDetector sens
 
   // Assembly that will contain all the layers
   Assembly assembly(detName);
+  // Workaround for https://github.com/eic/epic/issues/411
   assembly.setVisAttributes(desc.visAttributes("InvisibleWithDaughters"));
   PlacedVolume pv;
 
