@@ -43,23 +43,23 @@ struct moduleParamsStrct{
       mod_regStr          = regStr;
       mod_limStr          = limStr;
   }
-  double      mod_BIwidth;
-  double      mod_BIheight;
-  double      mod_SWThick;
-  double      mod_TWThick;
-  double      mod_FWThick;
-  double      mod_BWThick;
-  double      mod_width;
-  double      mod_height;
-  double      mod_notchWidthAbsA;
-  double      mod_notchWidthAbsB;
-  double      mod_notchWidthAbsC;
-  double      mod_notchWidthScin;
-  double      mod_notchDepth;
-  double      mod_sepDepth;
-  std::string mod_visStr;
-  std::string mod_regStr;
-  std::string mod_limStr;
+  double      mod_BIwidth   = 0.;
+  double      mod_BIheight  = 0.;
+  double      mod_SWThick   = 0.;
+  double      mod_TWThick   = 0.;
+  double      mod_FWThick   = 0.;
+  double      mod_BWThick   = 0.;
+  double      mod_width     = 0.;
+  double      mod_height    = 0.;
+  double      mod_notchWidthAbsA = 0.;
+  double      mod_notchWidthAbsB = 0.;
+  double      mod_notchWidthAbsC = 0.;
+  double      mod_notchWidthScin = 0.;
+  double      mod_notchDepth  = 0.;
+  double      mod_sepDepth    = 0.;
+  std::string mod_visStr      = "";
+  std::string mod_regStr      = "";
+  std::string mod_limStr      = "";
 } ;
 
 struct sliceParamsStrct{
@@ -79,16 +79,16 @@ struct sliceParamsStrct{
       slice_limStr        = sl_limStr;
 
   }
-  int         layer_ID;
-  int         slice_ID;
-  int         slice_partID;
-  double      slice_thick;
-  double      slice_offset;
-  int         slice_readoutLayer;
-  std::string slice_matStr;
-  std::string slice_visStr;
-  std::string slice_regStr;
-  std::string slice_limStr;
+  int         layer_ID      = 0;
+  int         slice_ID      = 0;
+  int         slice_partID  = 0;
+  double      slice_thick   = 0.;  
+  double      slice_offset  = 0.;  
+  int         slice_readoutLayer  = 0;  
+  std::string slice_matStr  = "";
+  std::string slice_visStr  = "";
+  std::string slice_regStr  = "";
+  std::string slice_limStr  = "";
 };
 
 //************************************************************************************************************

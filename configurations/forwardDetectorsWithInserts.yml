@@ -16,5 +16,5 @@ features:
     forward_homogeneous:
     forward_insert_homogeneous:
   hcal:
-    lfhcal_insertGeom:
+    lfhcal_with_space_for_insert:
     forward_insert:
