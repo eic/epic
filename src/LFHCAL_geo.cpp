@@ -82,9 +82,9 @@ struct sliceParamsStrct{
   int         layer_ID      = 0;
   int         slice_ID      = 0;
   int         slice_partID  = 0;
-  double      slice_thick   = 0.;  
-  double      slice_offset  = 0.;  
-  int         slice_readoutLayer  = 0;  
+  double      slice_thick   = 0.;
+  double      slice_offset  = 0.;
+  int         slice_readoutLayer  = 0;
   std::string slice_matStr  = "";
   std::string slice_visStr  = "";
   std::string slice_regStr  = "";
