@@ -127,10 +127,10 @@ static Ref_t createDetector(Detector& desc, xml_h e, SensitiveDetector sens)
   double ztrans2 = -lens_thickness / 2. - sqrt(lens_r2 * lens_r2 - lens_radius * lens_radius) + lens_min_thickness * 2;
 
   Box  lens_symm_box("lens_symm_box", 0.5 * prism_short_edge, 0.5 * lens_width, 0.5 * lens_thickness);
-  Tube lens_symm_tube("lens_symm_tube", 0, lens_radius, 0.5 * lens_thickness);
+  Tube lens_symm_tube(0, lens_radius, 0.5 * lens_thickness);
 
-  Sphere lens_sphere1("lens_sphere1", 0, lens_r1);
-  Sphere lens_sphere2("lens_sphere2", 0, lens_r2);
+  Sphere lens_sphere1(0, lens_r1);
+  Sphere lens_sphere2(0, lens_r2);
 
   IntersectionSolid lens_box("lens_box", lens_symm_box, lens_symm_box, Position(0, 0, -lens_min_thickness * 2));
   IntersectionSolid lens_tube("sbox", lens_symm_tube, lens_symm_box, Position(0, 0, lens_min_thickness * 2));
