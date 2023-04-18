@@ -74,7 +74,12 @@ void buildTiles(Detector& desc, SensitiveDetector &sens, Volume &s_vol_outer, Vo
   //double f_trd_y2 = f_trd_y1;
   double f_trd_z = 0.2;
 
-  cout << R << "   " << delR <<  "   " << eta_in << "   " << eta_out << endl;
+  ///cout << R << "   " << delR <<  "   " << eta_in << "   " << eta_out << endl;
+  cout << 1 << "-" << 15 << "   " << delR << " " << "cm." << "  " << eta_in << "  " << eta_out <<  "     " << (R + (delR/2.0)) << " " << "cm." << "        "  << "(" << 2*f_trd_x1 << "," << 2*f_trd_x2 << "," << 2*f_trd_y << "," << 2*f_trd_y << ")" << " " << "cm." << endl ; 
+  ///cout << "Height" << "  " << delR <<  "   " << "Inner eta edge" << "   " << eta_in << "   " <<  "Outer eta edge" << "   " << eta_out << endl;
+  /////cout << "Tile no" << "  " << 1 << " " << "to" << " " << 15 << endl; 
+  /////cout << "Height" << "  " << delR <<  "   " << "Inner eta edge" << "   " << eta_in << "   " <<  "Outer eta edge" << "   " << eta_out << endl;
+  /////cout << " Edges" << "  " << 2*f_trd_x1 <<  "   " << 2*f_trd_x2 << "   " << 2*f_trd_y << "   " << 2*f_trd_y << endl;
 
 	double phi_lo = -4*f_spacing_phi;
 	double phi_hi = phi_lo + 4*f_spacing_phi;
@@ -146,7 +151,12 @@ void buildTiles(Detector& desc, SensitiveDetector &sens, Volume &s_vol_outer, Vo
   //double f_trd_y2 = f_trd_y1;
   double f_trd_z = 0.2;
 
-  cout << R << "   " << delR <<  "   " << eta_in << "   " << eta_out << endl;
+  /////cout << R << "   " << delR <<  "   " << eta_in << "   " << eta_out << endl;
+  /*cout << "Tile no" << "  " << 15+((30*(i-1))+1) << " " << "to" << " " << 15+((30*(i-1))+30) << endl; 
+  cout << "Height" << "  " << delR <<  "   " << "Inner eta edge" << "   " << eta_in << "  " <<  "Outer eta edge" << "   " << eta_out << endl;
+  cout << " Edges" << "  " << 2*f_trd_x1 <<  "   " << 2*f_trd_x2 << "   " << 2*f_trd_y << "   " << 2*f_trd_y << endl;*/
+  
+  cout << 15+((30*(i-1))+1) << "-" << 15+((30*(i-1))+30) << "   " << delR << " " << "cm." << "  " << eta_in << "  " << eta_out << "     " << (R + (delR/2.0)) << " " << "cm." <<  "        " <<  "(" << 2*f_trd_x1 << "," << 2*f_trd_x2 << "," << 2*f_trd_y << "," << 2*f_trd_y << ")" << " " << "cm." << endl ; 
 
 	double phi_lo = -2*f_spacing_phi;
 	double phi_hi = phi_lo + 2*f_spacing_phi;
@@ -209,7 +219,14 @@ void buildTiles(Detector& desc, SensitiveDetector &sens, Volume &s_vol_outer, Vo
   //double f_trd_y2 = f_trd_y1;
   double f_trd_z = 0.2;
 
-  cout << R << "   " << delR <<  "   " << eta_in << "   " << eta_out << endl;
+  /////cout << R << "   " << delR <<  "   " << eta_in << "   " << eta_out << endl;
+
+  /*cout << "Tile no" << "  " << 135+((f_nbins_phi*(i-5))+1) << " " << "to" << " " << 135+((f_nbins_phi*(i-5))+f_nbins_phi) << endl; 
+  cout << "Height" << "  " << delR <<  "   " << "Inner eta edge" << "   " << eta_in << "  " << "Outer eta edge" << "   " << eta_out << endl;
+  cout << " Edges" << "  " << 2*f_trd_x1 <<  "   " << 2*f_trd_x2 << "   " << 2*f_trd_y << "   " << 2*f_trd_y << endl;
+ */
+
+  cout << 135+((f_nbins_phi*(i-5))+1) << "-" << 135+((f_nbins_phi*(i-5))+f_nbins_phi) << "   " << delR << " " << "cm." << "  " << eta_in << "  " << eta_out << "     " << (R + (delR/2.0)) << " " << "cm." <<  "        " << "(" << 2*f_trd_x1 << "," << 2*f_trd_x2 << "," << 2*f_trd_y << "," << 2*f_trd_y << ")" << " " << "cm." << endl; 
 
 	double phi_lo = -f_spacing_phi;
 	double phi_hi = phi_lo + f_spacing_phi;
@@ -370,7 +387,11 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
 
 
         for (xml_coll_t xf(x_det, _U(layer)); xf; ++xf) {
-        std::cout << "l_num = " << l_num << endl;
+        std::cout << "Layer No. = " << l_num << endl;
+        cout << "Tile no" << "    " << "Height" << "    " << "eta_in" << "    " << "eta_out" << "   " << "Radial Coordinate" <<  "                  " << "Edges" << endl; 
+        //////cout << "Height" << "  " << delR <<  "   " << "Inner eta edge" << "   " << eta_in << "   " <<  "Outer eta edge" << "   " << eta_out << endl;
+        //////cout << " Edges" << "  " << 2*f_trd_x1 <<  "   " << 2*f_trd_x2 << "   " << 2*f_trd_y << "   " << 2*f_trd_y << endl;
+
        // std::cout << "xc = " << xc << "\n";
        x_layer = xf;
         double     l_thick = layering.layer(l_num - 1)->thickness();
@@ -405,7 +426,7 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
 
         vector<PlacedVolume> sensitives;
 
-        std::cout << z_l[0] << "  " << z_l[1] << "layer" << l_num << endl;
+        //////std::cout << z_l[0] << "  " << z_l[1] << "layer" << "   " << l_num << endl;
         //std::cout << r_min_l[0] << "  " << r_min_l[1] << "layer" << l_num << endl;
         //std::cout << r_max_l[0] << "  " << r_max_l[1] << "layer" << l_num << endl;
 
@@ -465,7 +486,7 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
        //DetElement   slice_inner(layer_inner, s_name, det_id);
 
 
-       std::cout << z_s[0] << "  " << z_s[1] << "slice" << s_num << endl;
+       /////std::cout << z_s[0] << "  " << z_s[1] << "slice" << s_num << endl;
        //std::cout << r_min_s[0] << "  " << r_min_s[1] << "slice" << s_num << endl ;
        //std::cout << r_max_s[0] << "  " << r_max_s[1] << "slice" << s_num << endl;
 
