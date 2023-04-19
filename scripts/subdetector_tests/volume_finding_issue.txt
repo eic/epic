@@ -1764,4 +1764,3 @@ material layers from EcalBarrelImaging. This issue does not appear in positive e
 873  EcalBarrelScFi  SciFiPb_Scintillator  109.148663  39.726865  11.634727  113.400278  25.140236  51.384727
 874  EcalBarrelScFi        SciFiPb_PbGlue  109.274514  39.772671  11.648142  113.531031  25.169224  51.398142
 875         Unknown                   Air  112.763114  41.042417  12.020010  117.155521  25.972754  51.770010
-
