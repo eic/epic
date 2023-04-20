@@ -632,7 +632,6 @@ Volume createEightMModule ( Detector& desc,
   // assembly definition
   Box         modBox( mod_params.mod_width / 2., mod_params.mod_height / 2., length / 2.);
   Volume  vol_mod(baseName,modBox,desc.material("Air"));
-  std::cout << "visualization string module: " << mod_params.mod_visStr.data() << std::endl;
   vol_mod.setVisAttributes(desc.visAttributes(mod_params.mod_visStr.data()));
 
   // placement operator
