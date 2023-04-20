@@ -499,7 +499,7 @@ Assembly createScintillatorPlateEightM( Detector& desc,
 
   // loop over all towers within same module
   for (int i = 0; i < 8; i++){
-//     std::cout << basename << _toString(i, "_tower_%d") << "\t"<< modID << "\t" << i << "\t"<< layerID << std::endl;
+    // printout(DEBUG, "LFHCAL_geo", basename + _toString(i, "_tower_%d") + "\t" + _toString(modID) + "\t" + _toString(i) + "\t" + _toString(layerID));
     Volume modScintTowerAss = createScintillatorTower( desc,  basename+ _toString(i, "_tower_%d"),
                                                             w_tow, h_tow, t_slice,
                                                             h_notch, (w_notch-t_sep)/2,
@@ -600,7 +600,7 @@ Assembly createScintillatorPlateFourM( Detector& desc,
   // loop over all towers within same module
 
   for (int i = 0; i < 4; i++){
-//     std::cout << basename << _toString(i, "_tower_%d") << "\t"<< modID << "\t" << i << "\t"<< layerID << std::endl;
+    // printout(DEBUG, "LFHCAL_geo", basename + _toString(i, "_tower_%d") + "\t" + _toString(modID) + "\t" + _toString(i) + "\t" + _toString(layerID));
     Volume modScintTowerAss = createScintillatorTower( desc,  basename+ _toString(i, "_tower_%d"),
                                                             w_tow, h_tow, t_slice,
                                                             h_notch, (w_notch-t_sep)/2.,
@@ -771,7 +771,7 @@ Volume createFourMModule ( Detector& desc,
   // assembly definition
   Box         modBox( mod_params.mod_width / 2., mod_params.mod_height / 2., length / 2.);
   Volume  vol_mod(baseName,modBox,desc.material("Air"));
-  std::cout << "visualization string module: " << mod_params.mod_visStr.data() << std::endl;
+  printout(DEBUG, "LFHCAL_geo", "visualization string module: " + mod_params.mod_visStr);
   vol_mod.setVisAttributes(desc.visAttributes(mod_params.mod_visStr.data()));
 
   // placement operator
@@ -907,15 +907,14 @@ static Ref_t createDetector(Detector& desc, xml_h handle, SensitiveDetector sens
   double    length = dim.z();    // Size along z-axis
   xml_dim_t pos = detElem.position();
 
-  std::cout<< "global LFHCal position" << pos.x() << "\t" << pos.y() << "\t" << pos.z()  << std::endl;
-
+  printout(DEBUG, "LFHCAL_geo", "global LFHCal position " + _toString(pos.x()) + "\t" + _toString(pos.y()) + "\t" + _toString(pos.z()));
 
   bool renderComponents = getAttrOrDefault(detElem, _Unicode(renderComponents), 0.);
   bool allSensitive     = getAttrOrDefault(detElem, _Unicode(allSensitive), 0.);
   if (renderComponents) {
-    std::cout << "enabled visualization" << std::endl;
+    printout(DEBUG, "LFHCAL_geo", "enabled visualization");
   } else {
-    std::cout << "switchted off visualization" << std::endl;
+    printout(DEBUG, "LFHCAL_geo", "switchted off visualization");
   }
 
   // 8M module specific loading
@@ -1018,14 +1017,13 @@ static Ref_t createDetector(Detector& desc, xml_h handle, SensitiveDetector sens
   // create 8M modules
   Volume  eightMassembly = createEightMModule ( desc, eightM_params, slice_Params, length, sens, renderComponents, allSensitive);
   if (xpos8M.size() != ypos8M.size() || xpos8M.size() != zpos8M.size()){
-    std::cout << xpos8M.size() << "\t" <<ypos8M.size() <<  "\t" << zpos8M.size() << std::endl;
-    std::cout <<  "idiot you can't count" << std::endl;
+    printout(DEBUG, "LFHCAL_geo", _toString((int)xpos8M.size()) + "\t" + _toString((int)ypos8M.size()) +  "\t" + _toString((int)zpos8M.size()));
   } else {
     for (int e = 0; e < (int)xpos8M.size(); e++){
-      if(e%20 == 0 ) std::cout <<  "LFHCAL placing 8M module: " << e << "/"<< (int)xpos8M.size() << "\t" << xpos8M[e] << "\t" << ypos8M[e] << "\t" << zpos8M[e]<< std::endl;
+      if(e%20 == 0 ) printout(DEBUG, "LFHCAL_geo", "LFHCAL placing 8M module: " + _toString(e) + "/" +  _toString((int)xpos8M.size()) + "\t" + _toString(xpos8M[e]) + "\t" + _toString(ypos8M[e]) + "\t" + _toString(zpos8M[e]));
         if(moduleIDx<0 || moduleIDy<0){
-        std::cout << "LFHCAL WRONG ID FOR 8M module: " << e << "/" << (int)xpos8M.size() << "\t" << moduleIDx << "\t"
-                  << moduleIDy << std::endl;
+        printout(DEBUG, "LFHCAL_geo", "LFHCAL WRONG ID FOR 8M module: " + _toString(e) + "/" + _toString((int)xpos8M.size()) + "\t" + _toString(moduleIDx) + "\t"
+                  + _toString(moduleIDy));
       }
       moduleIDx             = ((xpos8M[e] + 270) / 10);
       moduleIDy             = ((ypos8M[e] + 265) / 10);
@@ -1053,17 +1051,16 @@ static Ref_t createDetector(Detector& desc, xml_h handle, SensitiveDetector sens
   // create 4M modules
   Volume  fourMassembly = createFourMModule ( desc, fourM_params, slice_Params,  length, sens, renderComponents, allSensitive);
   if (xpos4M.size() != ypos4M.size() || xpos4M.size() != zpos4M.size()){
-    std::cout << xpos4M.size() << "\t" <<ypos4M.size() <<  "\t" << zpos4M.size() << std::endl;
-    std::cout <<  "idiot you can't count" << std::endl;
+    printout(DEBUG, "LFHCAL_geo", _toString((int)xpos4M.size()) + "\t" + _toString((int)ypos4M.size()) + "\t" + _toString((int)zpos4M.size()));
   } else {
     for (int f = 0; f < (int)xpos4M.size(); f++){
-      if(f%20 == 0 )std::cout <<  "LFHCAL placing 4M module: " << f << "/"<< (int)xpos4M.size() << "\t" << xpos4M[f] << "\t" << ypos4M[f] << "\t" << zpos4M[f]<< std::endl;
+      if(f%20 == 0 ) printout(DEBUG, "LFHCAL_geo", "LFHCAL placing 4M module: " + _toString(f) + "/" + _toString((int)xpos4M.size()) + "\t" + _toString(xpos4M[f]) + "\t" + _toString(ypos4M[f]) + "\t" + _toString(zpos4M[f]));
 
       moduleIDx             = ((xpos4M[f] + 265) / 10);
       moduleIDy             = ((ypos4M[f] + 265) / 10);
       if(moduleIDx<0 || moduleIDy<0){
-        std::cout << "LFHCAL WRONG ID FOR 4M module: " << f << "/" << (int)xpos4M.size() << "\t" << moduleIDx << "\t"
-                  << moduleIDy << std::endl;
+        printout(DEBUG, "LFHCAL_geo", "LFHCAL WRONG ID FOR 4M module: " + _toString(f) + "/" + _toString((int)xpos4M.size()) + "\t" + _toString(moduleIDx) + "\t"
+                  + _toString(moduleIDy));
       }
       auto tr4M = Transform3D(Position(pos.x()-xpos4M[f]-0.5*fourM_params.mod_width, pos.y()-ypos4M[f], pos.z() +zpos4M[f] + length / 2.));
       phv = assembly.placeVolume(fourMassembly, tr4M);
