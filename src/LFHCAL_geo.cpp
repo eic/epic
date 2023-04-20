@@ -1001,72 +1001,59 @@ static Ref_t createDetector(Detector& desc, xml_h handle, SensitiveDetector sens
 
 
 
+  struct position {
+    double x,y,z;
+  };
 
-  std::vector<double> xpos8M;
-  std::vector<double> ypos8M;
-  std::vector<double> zpos8M;
+  std::vector<position> pos8M;
 
   xml_coll_t eightMPos(detElem, _Unicode(eightmodulepositions));
   for (xml_coll_t position_i(eightMPos, _U(position)); position_i; ++position_i){
     xml_comp_t position_comp = position_i;
-    xpos8M.push_back((position_comp.x()));
-    ypos8M.push_back((position_comp.y()));
-    zpos8M.push_back((position_comp.z()));
+    pos8M.push_back({position_comp.x(), position_comp.y(), position_comp.z()});
   }
 
   // create 8M modules
   Volume  eightMassembly = createEightMModule ( desc, eightM_params, slice_Params, length, sens, renderComponents, allSensitive);
-  if (xpos8M.size() != ypos8M.size() || xpos8M.size() != zpos8M.size()){
-    printout(DEBUG, "LFHCAL_geo", _toString((int)xpos8M.size()) + "\t" + _toString((int)ypos8M.size()) +  "\t" + _toString((int)zpos8M.size()));
-  } else {
-    for (int e = 0; e < (int)xpos8M.size(); e++){
-      if(e%20 == 0 ) printout(DEBUG, "LFHCAL_geo", "LFHCAL placing 8M module: " + _toString(e) + "/" +  _toString((int)xpos8M.size()) + "\t" + _toString(xpos8M[e]) + "\t" + _toString(ypos8M[e]) + "\t" + _toString(zpos8M[e]));
-        if(moduleIDx<0 || moduleIDy<0){
-        printout(DEBUG, "LFHCAL_geo", "LFHCAL WRONG ID FOR 8M module: " + _toString(e) + "/" + _toString((int)xpos8M.size()) + "\t" + _toString(moduleIDx) + "\t"
-                  + _toString(moduleIDy));
-      }
-      moduleIDx             = ((xpos8M[e] + 270) / 10);
-      moduleIDy             = ((ypos8M[e] + 265) / 10);
-
-      // Placing modules in world volume
-      auto tr8M = Transform3D(Position(pos.x()-xpos8M[e]-0.5*eightM_params.mod_width, pos.y()-ypos8M[e], pos.z() +zpos8M[e] + length / 2.));
-      phv = assembly.placeVolume(eightMassembly, tr8M);
-      phv.addPhysVolID("moduleIDx", moduleIDx).addPhysVolID("moduleIDy", moduleIDy).addPhysVolID("moduletype", 0);
-      moduleID++;
+  for (int e = 0; e < (int)pos8M.size(); e++){
+    if(e%20 == 0 ) printout(DEBUG, "LFHCAL_geo", "LFHCAL placing 8M module: " + _toString(e) + "/" +  _toString((int)pos8M.size()) + "\t" + _toString(pos8M[e].x) + "\t" + _toString(pos8M[e].y) + "\t" + _toString(pos8M[e].z));
+      if(moduleIDx<0 || moduleIDy<0){
+      printout(DEBUG, "LFHCAL_geo", "LFHCAL WRONG ID FOR 8M module: " + _toString(e) + "/" + _toString((int)pos8M.size()) + "\t" + _toString(moduleIDx) + "\t"
+                + _toString(moduleIDy));
     }
+    moduleIDx             = ((pos8M[e].x + 270) / 10);
+    moduleIDy             = ((pos8M[e].y + 265) / 10);
+
+    // Placing modules in world volume
+    auto tr8M = Transform3D(Position(pos.x()-pos8M[e].x-0.5*eightM_params.mod_width, pos.y() - pos8M[e].y, pos.z() + pos8M[e].z + length / 2.));
+    phv = assembly.placeVolume(eightMassembly, tr8M);
+    phv.addPhysVolID("moduleIDx", moduleIDx).addPhysVolID("moduleIDy", moduleIDy).addPhysVolID("moduletype", 0);
+    moduleID++;
   }
 
-  std::vector<double> xpos4M;
-  std::vector<double> ypos4M;
-  std::vector<double> zpos4M;
+  std::vector<position> pos4M;
 
   xml_coll_t fourMPos(detElem, _Unicode(fourmodulepositions));
   for (xml_coll_t position_i(fourMPos, _U(position)); position_i; ++position_i){
     xml_comp_t position_comp = position_i;
-    xpos4M.push_back((position_comp.x()));
-    ypos4M.push_back((position_comp.y()));
-    zpos4M.push_back((position_comp.z()));
+    pos4M.push_back({position_comp.x(), position_comp.y(), position_comp.z()});
   }
 
   // create 4M modules
   Volume  fourMassembly = createFourMModule ( desc, fourM_params, slice_Params,  length, sens, renderComponents, allSensitive);
-  if (xpos4M.size() != ypos4M.size() || xpos4M.size() != zpos4M.size()){
-    printout(DEBUG, "LFHCAL_geo", _toString((int)xpos4M.size()) + "\t" + _toString((int)ypos4M.size()) + "\t" + _toString((int)zpos4M.size()));
-  } else {
-    for (int f = 0; f < (int)xpos4M.size(); f++){
-      if(f%20 == 0 ) printout(DEBUG, "LFHCAL_geo", "LFHCAL placing 4M module: " + _toString(f) + "/" + _toString((int)xpos4M.size()) + "\t" + _toString(xpos4M[f]) + "\t" + _toString(ypos4M[f]) + "\t" + _toString(zpos4M[f]));
+  for (int f = 0; f < (int)pos4M.size(); f++){
+    if(f%20 == 0 ) printout(DEBUG, "LFHCAL_geo", "LFHCAL placing 4M module: " + _toString(f) + "/" + _toString((int)pos4M.size()) + "\t" + _toString(pos4M[f].x) + "\t" + _toString(pos4M[f].y) + "\t" + _toString(pos4M[f].z));
 
-      moduleIDx             = ((xpos4M[f] + 265) / 10);
-      moduleIDy             = ((ypos4M[f] + 265) / 10);
-      if(moduleIDx<0 || moduleIDy<0){
-        printout(DEBUG, "LFHCAL_geo", "LFHCAL WRONG ID FOR 4M module: " + _toString(f) + "/" + _toString((int)xpos4M.size()) + "\t" + _toString(moduleIDx) + "\t"
-                  + _toString(moduleIDy));
-      }
-      auto tr4M = Transform3D(Position(pos.x()-xpos4M[f]-0.5*fourM_params.mod_width, pos.y()-ypos4M[f], pos.z() +zpos4M[f] + length / 2.));
-      phv = assembly.placeVolume(fourMassembly, tr4M);
-      phv.addPhysVolID("moduleIDx", moduleIDx).addPhysVolID("moduleIDy", moduleIDy).addPhysVolID("moduletype", 1);
-      moduleID++;
+    moduleIDx             = ((pos4M[f].x + 265) / 10);
+    moduleIDy             = ((pos4M[f].y + 265) / 10);
+    if(moduleIDx<0 || moduleIDy<0){
+      printout(DEBUG, "LFHCAL_geo", "LFHCAL WRONG ID FOR 4M module: " + _toString(f) + "/" + _toString((int)pos4M.size()) + "\t" + _toString(moduleIDx) + "\t"
+                + _toString(moduleIDy));
     }
+    auto tr4M = Transform3D(Position(pos.x()-pos4M[f].x-0.5*fourM_params.mod_width, pos.y()-pos4M[f].y, pos.z() + pos4M[f].z + length / 2.));
+    phv = assembly.placeVolume(fourMassembly, tr4M);
+    phv.addPhysVolID("moduleIDx", moduleIDx).addPhysVolID("moduleIDy", moduleIDy).addPhysVolID("moduletype", 1);
+    moduleID++;
   }
 
   Volume     motherVol = desc.pickMotherVolume(det);
