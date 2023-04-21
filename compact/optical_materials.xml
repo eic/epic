@@ -43,7 +43,7 @@
       3.7571*eV   1.0
       3.87451*eV  1.0
       3.99949*eV  1.0
-      4.13281*eV  1.0						     
+      4.13281*eV  1.0
       "/>
     <matrix name="ABSLENGTH__AirOptical" coldim="2" values="
       1.90745*eV  4.0*cm
@@ -81,7 +81,7 @@
       3.7571*eV   4.0*cm
       3.87451*eV  4.0*cm
       3.99949*eV  4.0*cm
-      4.13281*eV  4.0*cm							
+      4.13281*eV  4.0*cm
       "/>
     <matrix name="RINDEX__Air" coldim="2" values="
       1.0*eV 1.00029
