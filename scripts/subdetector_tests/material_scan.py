@@ -23,12 +23,12 @@ import ROOT
 import dd4hep
 import DDRec
 
-
+pd.set_option('display.max_rows', 1000)
 PROGRESS_STEP = 10
 
 
 '''
-    re-implementation of MaterialScan::Print in DD4Hep::DDRec
+    Re-implementation of MaterialScan::Print in DD4Hep::DDRec
     MaterialScan does not have a python interface and that function is relatively simple, so here it is
     desc: DD4hep::Detector
     start: 3D vector for start point
@@ -39,6 +39,8 @@ PROGRESS_STEP = 10
 # (too many mistakes and wrong assignments).
 def material_scan(desc, start, end, epsilon=1e-5):
     mat_mng = DDRec.MaterialManager(desc.worldVolume())
+    # only use the top-level detectors
+    dets = [d for n, d in desc.world().children()]
     # rvec = ROOT.Math.XYZVector()
     # id_conv = DDRec.CellIDPositionConverter(desc)
     # det_dict = {d.id(): n for n, d in desc.world().children()}
@@ -46,19 +48,23 @@ def material_scan(desc, start, end, epsilon=1e-5):
     p0 = np.array(start)
     p1 = np.array(end)
     direction = (p1 - p0)/np.linalg.norm(p1 - p0)
+    print(p0, p1, direction)
     placements = mat_mng.placementsBetween(tuple(p0), tuple(p1), epsilon);
 
     # calculate material layer by layer
     int_x0 = 0
     int_lambda = 0
     path_length = 0
+    # FIXME: this is a work-around to a known issue of dd4hep::rec::MaterialManager::placementsBetween
+    # It is GEOMETRY DEPENDENT (the thickness of the first vacuum material layer)
+    # It should be removed once the dd4hep issue is fixed, preparing a PR for that as of 04/21/2023
+    # to check the thickness, see the difference between
+    # materialScan epic_brycecanyon.xml 0 0 0 100  40  -0.01 | grep Vacuum
+    # materialScan epic_brycecanyon.xml 0 0 0 100  40  0.01 | grep Vacuum
+    if direction[2] < 0.:
+        path_length += np.sqrt(1./(direction[0]**2 + direction[1]**2))*2.8
+    # FIXME: work-around ended
     res = []
-    cols = [
-        # 'detector',
-        'material', 'Z', 'A', 'density',
-        'radl', 'intl', 'thickness', 'path_length',
-        'X0', 'lamda', 'x', 'y', 'z'
-        ]
     for pv, l in placements:
         # print(pv, l)
         path_length += l
@@ -68,6 +74,12 @@ def material_scan(desc, start, end, epsilon=1e-5):
         intl = mat.GetIntLen()
         x0 = l/radl
         lmd = l/intl
+        d0 = 'Unknown'
+        for d in dets:
+            local = d.nominal().worldToLocal(pcurr)
+            local = np.array([local.X(), local.Y(), local.Z()])
+            if d.volume().Contains(local):
+                d0 = d.GetName()
         # try to locate the detector
         # det_id = -1
         # try:
@@ -76,55 +88,31 @@ def material_scan(desc, start, end, epsilon=1e-5):
         # except Exception:
         #     pass
         res.append([
+            d0,
             # det_dict.get(det_id, 'Unknown'),
             mat.GetName(), mat.GetZ(), mat.GetA(), mat.GetDensity(), radl, intl,
-            l, path_length, x0, lmd, pcurr[0], pcurr[1], pcurr[2],
+            l, path_length, x0, lmd,
+            pcurr[0], pcurr[1], pcurr[2],
+            # local[0], local[1], local[2],
             ])
-    dft = pd.DataFrame(data=res, columns=cols)
-    return dft
-
-
-'''
-    A parser function to convert output from materialScan to a pandas dataframe
-    compact: is path to compact file
-    start_point: a list or tuple for 3D coordinates (cm, according to materialScan)
-    end_point: a lit or tuple for 3D coordinates (cm, according to materialScan)
-    return: a dataframe for materialScan results
-'''
-# NOTE: it is much slower than material_scan, so only used for testing
-def material_scan2(compact, start_point, end_point, timeout=200):
-    EXEC_NAME = 'materialScan'
-    cmd = '{} {} {} {} {} {} {} {}'.format(EXEC_NAME, compact, *np.hstack([start_point, end_point]))
-    byteout = subprocess.check_output(cmd.split(' '), timeout=timeout)
-    lines = []
-
-    # NOTE: the code below is for materialScan output as of 03/05/2023
-    # it may need change if the output format is changed
-    first_digit = False
-    for i, l in enumerate(byteout.decode('UTF-8').rstrip().split('\n')):
-        line = l.strip('| ')
-        if not first_digit and not line[:1].isdigit():
-            continue
-        first_digit = True
-        if not line[:1].isdigit():
-            break
-        # break coordinates for endpoint, which has a format of (x, y, z)
-        lines.append(line.strip('| ').translate({ord(i): None for i in '()'}).replace(',', ' '))
-
     cols = [
+        'detector',
         'material', 'Z', 'A', 'density',
-        'rad_length', 'int_length', 'thickness', 'path_length',
-        'int_X0', 'int_lamda', 'x', 'y', 'z'
+        'radl', 'intl', 'thickness', 'path_length',
+        'X0', 'lamda',
+        'x', 'y', 'z', 'r_xy',
+        # 'local_x', 'local_y', 'local_z'
         ]
-
-    dft = pd.read_csv(StringIO('\n'.join(lines)), sep='\s+', header=None, index_col=0, names=cols)
-    return dft.astype({key: np.float64 for key in cols[1:]})
+    dft = pd.DataFrame(data=res, columns=cols)
+    # print(dft[['detector', 'material', 'x', 'y', 'z', 'path_length', 'r_xy', 'local_x', 'local_y', 'local_z']].head(100))
+    # print(dft.groupby('detector')['X0'].sum())
+    return dft
 
 
 # a default configuraiton for bareel ecal of epic_brycecanyon
 DEFAULT_CONFIG = dict(
-    eta_range=[-2.0, 1.7, 0.001],
-    phi=70.,
+    eta_range=[-2.0, 1.7, 0.01],
+    phi=20.,
     path_r=120.,
     start_point=[0., 0., 0.],
     # The order defines the priority for assigning material layers to a detector
@@ -230,7 +218,9 @@ if __name__ == '__main__':
     path_r = config.get('path_r')
     phi = config.get('phi')
     start_point = config.get('start_point')
-    dets = list(config.get('detectors').keys())
+    # dets = list(config.get('detectors').keys())
+    dets = [n for n, _ in desc.world().children()]
+    dets.append('Unknown')
 
     # array for detailed data
     # materials in configuration maybe using wild-card matching, so just assign a large number to be safe
@@ -269,7 +259,7 @@ if __name__ == '__main__':
                     mdet = det
                     break
             mdets.append(mdet)
-        dfr.loc[:, 'detector'] = mdets
+        dfr.loc[:, 'detector2'] = mdets
         # print(dfr.groupby('detector')['X0'].sum())
         # aggregated values for detectors
         x0_vals = dfr.groupby('detector')['X0'].sum().to_dict()
@@ -288,6 +278,9 @@ if __name__ == '__main__':
 
     # aggregated_data
     dfa = pd.DataFrame(data=vals[:, :, 0], columns=dets, index=etas)
+    # sort columns by the total thickness (over eta range)
+    dets = list(dfa.sum().sort_values(ascending=False).index)
+    dfa = dfa[dets]
     dfa.to_csv('material_scan_agg.csv')
 
     # plot
@@ -339,6 +332,7 @@ if __name__ == '__main__':
         ax.tick_params(which='both', direction='in', labelsize=22)
         ax.set_xlabel('$\eta$', fontsize=22)
         ax.set_ylabel('X0', fontsize=22)
+        ax.set_title(det, fontsize=22)
         ax.xaxis.set_major_locator(MultipleLocator(0.5))
         ax.xaxis.set_minor_locator(MultipleLocator(0.1))
         ax.grid(ls=':', which='both')
