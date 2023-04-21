@@ -129,7 +129,7 @@
           repeat_y="DIRCBar_count_y"
           repeat_z="DIRCBar_count_z"
           gap="DIRCBar_gap"
-          material="Quartz"
+          material="QuartzOptical"
           vis="DIRCBar"
         />
 
@@ -143,9 +143,9 @@
           thickness="DIRCLens_thickness"
           r1="DIRCLens_r1"
           r2="DIRCLens_r2"
-          material1="Quartz"
+          material1="QuartzOptical"
           material2="Sapphire"
-          material3="Quartz"
+          material3="QuartzOptical"
           vis1="DIRCLens1"
           vis2="DIRCLens2"
           vis3="DIRCLens3"
@@ -157,7 +157,7 @@
           angle="DIRCPrism_angle"
           long_edge="DIRCPrism_long_edge"
           short_edge="DIRCPrism_short_edge"
-          material="Quartz"
+          material="QuartzOptical"
           vis="DIRCPrism"
         />
 
@@ -165,7 +165,7 @@
           height="DIRCMCP_height"
           width="DIRCMCP_width"
           thickness="DIRCMCP_thickness"
-          material="Quartz"
+          material="QuartzOptical"
           vis="DIRCMCP"
         />
       </module>

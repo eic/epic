@@ -7,6 +7,82 @@
       1.0*eV 1.0
       5.1*eV 1.0
       "/>
+    <matrix name="RINDEX__AirOptical" coldim="2" values="
+      1.90745*eV  1.0
+      1.93725*eV  1.0
+      1.968*eV    1.0
+      1.99974*eV  1.0
+      2.03253*eV  1.0
+      2.0664*eV   1.0
+      2.10143*eV  1.0
+      2.13766*eV  1.0
+      2.17516*eV  1.0
+      2.214*eV    1.0
+      2.25426*eV  1.0
+      2.296*eV    1.0
+      2.33932*eV  1.0
+      2.38431*eV  1.0
+      2.43106*eV  1.0
+      2.47968*eV  1.0
+      2.53029*eV  1.0
+      2.583*eV    1.0
+      2.63796*eV  1.0
+      2.69531*eV  1.0
+      2.7552*eV   1.0
+      2.81782*eV  1.0
+      2.88335*eV  1.0
+      2.952*eV    1.0
+      3.024*eV    1.0
+      3.0996*eV   1.0
+      3.17908*eV  1.0
+      3.26274*eV  1.0
+      3.35092*eV  1.0
+      3.44401*eV  1.0
+      3.54241*eV  1.0
+      3.64659*eV  1.0
+      3.7571*eV   1.0
+      3.87451*eV  1.0
+      3.99949*eV  1.0
+      4.13281*eV  1.0						     
+      "/>
+    <matrix name="ABSLENGTH__AirOptical" coldim="2" values="
+      1.90745*eV  4.0*cm
+      1.93725*eV  4.0*cm
+      1.968*eV    4.0*cm
+      1.99974*eV  4.0*cm
+      2.03253*eV  4.0*cm
+      2.0664*eV   4.0*cm
+      2.10143*eV  4.0*cm
+      2.13766*eV  4.0*cm
+      2.17516*eV  4.0*cm
+      2.214*eV    4.0*cm
+      2.25426*eV  4.0*cm
+      2.296*eV    4.0*cm
+      2.33932*eV  4.0*cm
+      2.38431*eV  4.0*cm
+      2.43106*eV  4.0*cm
+      2.47968*eV  4.0*cm
+      2.53029*eV  4.0*cm
+      2.583*eV    4.0*cm
+      2.63796*eV  4.0*cm
+      2.69531*eV  4.0*cm
+      2.7552*eV   4.0*cm
+      2.81782*eV  4.0*cm
+      2.88335*eV  4.0*cm
+      2.952*eV    4.0*cm
+      3.024*eV    4.0*cm
+      3.0996*eV   4.0*cm
+      3.17908*eV  4.0*cm
+      3.26274*eV  4.0*cm
+      3.35092*eV  4.0*cm
+      3.44401*eV  4.0*cm
+      3.54241*eV  4.0*cm
+      3.64659*eV  4.0*cm
+      3.7571*eV   4.0*cm
+      3.87451*eV  4.0*cm
+      3.99949*eV  4.0*cm
+      4.13281*eV  4.0*cm							
+      "/>
     <matrix name="RINDEX__Air" coldim="2" values="
       1.0*eV 1.00029
       5.1*eV 1.00029
@@ -835,8 +911,8 @@
       <fraction n="0.754" ref="N"/>
       <fraction n="0.234" ref="O"/>
       <fraction n="0.012" ref="Ar"/>
-      <property name="RINDEX" ref="RINDEX__Air"/>
-      <property name="ABSLENGTH"               coldim="2" values="1*eV  200*m  5*eV  200*m"/>
+      <property name="RINDEX" ref="RINDEX__AirOptical"/>
+      <property name="ABSLENGTH" ref="ABSLENGTH__AirOptical"/>
     </material>
     <material name="VacuumOptical">
       <D type="density" unit="g/cm3" value="0.0000000001"/>
