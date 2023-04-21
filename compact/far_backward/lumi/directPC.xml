@@ -19,7 +19,7 @@
   <readouts>
     <readout name="LumiDirectPCALHits">
       <segmentation type="NoSegmentation"/>
-      <id> system:8</id>
+      <id>system:8</id>
     </readout>
   </readouts>
 
