@@ -184,10 +184,10 @@ static Ref_t createDetector(Detector& desc, xml_h e, SensitiveDetector sens)
 
   // Envelope for prism + mcp
 
-  double Envelope_trap_width = prism_width;
+  double Envelope_trap_width = prism_width + 1*mm;
   double Envelope_trap_length = prism_length + 1*mm; // mcp thickness is 1 mm
-  double Envelope_trap_short_edge = prism_short_edge;
-  double Envelope_trap_long_edge = prism_long_edge;
+  double Envelope_trap_short_edge = prism_short_edge + 1*mm;
+  double Envelope_trap_long_edge = Envelope_trap_short_edge + Envelope_trap_length * tan(prism_angle);
 
   Trap Envelope_trap = MakeTrap("Envelope_trap", Envelope_trap_width, Envelope_trap_length, Envelope_trap_long_edge, Envelope_trap_short_edge);
   Position Envelope_trap_position(prism_position_x, 0, prism_position_z - 0.5*mm);
@@ -195,7 +195,7 @@ static Ref_t createDetector(Detector& desc, xml_h e, SensitiveDetector sens)
   Volume Envelope_trap_vol("Envelope_trap_vol", Envelope_trap, desc.material("AirOptical"));
   dirc_module.placeVolume(Envelope_trap_vol, Transform3D(prism_rotation, Envelope_trap_position));
 
-  Envelope_trap_vol.placeVolume(prism_vol, Position(0, 0, 0));
+  Envelope_trap_vol.placeVolume(prism_vol, Position(0, 0.5*mm, 0));
 
   // MCP variables
   xml_comp_t xml_mcp       = xml_module.child(_Unicode(mcp));
@@ -208,7 +208,7 @@ static Ref_t createDetector(Detector& desc, xml_h e, SensitiveDetector sens)
   Volume mcp_vol("mcp_vol", mcp_box, desc.material(xml_mcp.materialStr()));
   mcp_vol.setVisAttributes(desc.visAttributes(xml_mcp.visStr())).setSensitiveDetector(sens);
 
-  double mcp_position_z = -0.5 * (prism_length + mcp_thickness);
+  double mcp_position_z = -0.5 * prism_length;
   Position mcp_position(prism_position_x, mcp_position_z, 0);
   RotationX mcp_rotation(-M_PI / 2.);
 

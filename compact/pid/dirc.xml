@@ -133,7 +133,7 @@
           vis="DIRCBar"
         />
 
-        <glue thickness="DIRCGlue_thickness" material="Epotek" vis="DIRCGlue"/>
+        <glue thickness="DIRCGlue_thickness" material="EpotekOptical" vis="DIRCGlue"/>
 
         <!-- lens -->
         <lens
