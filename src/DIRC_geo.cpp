@@ -81,7 +81,7 @@ static Ref_t createDetector(Detector& desc, xml_h e, SensitiveDetector sens)
 
   // Mirror optical surface
   auto        surfMgr = desc.surfaceManager();
-  auto        surf    = surfMgr.opticalSurface("MirrorOpticalSurface");
+  auto        surf    = surfMgr.opticalSurface("DIRC_MirrorOpticalSurface");
   SkinSurface skin(desc, det, Form("dirc_mirror_optical_surface"), surf, mirror_vol);
   skin.isValid();
 

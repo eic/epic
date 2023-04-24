@@ -557,6 +557,44 @@
       4.0*eV  0.9
       5.1*eV  0.9
       "/>
+    <matrix name = "REFLECTIVITY_DIRC_mirror" coldim="2" values="
+      1.90745*eV  0.8755
+      1.93725*eV  0.882
+      1.968*eV    0.889
+      1.99974*eV  0.895
+      2.03253*eV  0.9
+      2.0664*eV   0.9025
+      2.10143*eV  0.91
+      2.13766*eV  0.913
+      2.17516*eV  0.9165
+      2.214*eV    0.92
+      2.25426*eV  0.923
+      2.296*eV    0.9245
+      2.33932*eV  0.9285
+      2.38431*eV  0.932
+      2.43106*eV  0.934
+      2.47968*eV  0.935
+      2.53029*eV  0.936
+      2.583*eV    0.9385
+      2.63796*eV  0.9395
+      2.69531*eV  0.94
+      2.7552*eV   0.9405
+      2.81782*eV  0.9405
+      2.88335*eV  0.9405
+      2.952*eV    0.9405
+      3.024*eV    0.94
+      3.0996*eV   0.9385
+      3.17908*eV  0.936
+      3.26274*eV  0.934
+      3.35092*eV  0.931
+      3.44401*eV  0.9295
+      3.54241*eV  0.928
+      3.64659*eV  0.928
+      3.7571*eV   0.921
+      3.87451*eV  0.92
+      3.99949*eV  0.927
+      4.13281*eV  0.9215
+      "/>
     <matrix name="RINDEX__Aerogel" coldim="2" values="
       1.0*eV 1.030
       4.0*eV 1.030
@@ -1062,6 +1100,9 @@
       <property name="RINDEX"                  coldim="2" values="1.034*eV  1.5   4.136*eV  1.5"/>
     </opticalsurface>
     -->
+    <opticalsurface finish="polished" model="glisur" name="DIRC_MirrorOpticalSurface" type="dielectric_metal" value="0">
+      <property name="REFLECTIVITY" ref="REFLECTIVITY_DIRC_mirror"/>
+    </opticalsurface>
 
     <opticalsurface finish="polished" model="unified" name="MRICH_MirrorOpticalSurface" type="dielectric_metal" value="0">
     </opticalsurface>
