@@ -216,8 +216,8 @@
   />
 <sphericalpatch
   phiw="30*degree"
-  rmin="DRICH_rmax1 + 3.0*cm"
-  rmax="DRICH_rmax2 - 3.0*cm"
+  rmin="110.0*cm"
+  rmax="179.0*cm"
   zmin="DRICH_snout_length + 3.0*cm"
   />
 
