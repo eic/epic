@@ -43,22 +43,25 @@ class ThicknessCorrector:
 
     def scan_missing_thickness(self, desc, pi=(0.,0.,0.), pf=(100.,40.,0.), dz=0.01):
         # assume negative eta is missed, maybe can do a more detailed check?
-        # pf1 = np.array(pf) + np.array([0., 0., dz])
-        # dft1 = material_scan(desc, pi, pf1)
-        # th1 = dft1['path_length'].iloc[0]
+        pf1 = np.array(pf) + np.array([0., 0., dz])
+        dft1 = material_scan(desc, pi, pf1)
+        th1 = dft1['path_length'].iloc[0]
         pf2 = np.array(pf) + np.array([0., 0., -dz])
         dft2 = material_scan(desc, pi, pf2)
         th2 = dft2['path_length'].iloc[0]
-        self.missing = th2
         self.scanned = True
+        # print(dft1.head(3))
+        # print(dft2.head(3))
+        if th1 != th2:
+            self.missing = th1
 
     def correct_path_length(self, direction, pl=0.):
         if direction[2] < 0.:
-            return pl + np.sqrt(1./(direction[0]**2 + direction[1]**2))*self.thickness
+            pl2 = pl + np.sqrt(1./(direction[0]**2 + direction[1]**2))*self.missing
+            print('correcting path length {:.2f} -> {:.2f}'.format(pl, pl2))
+            return pl2
         return pl
 
-
-TH_CORRECTOR = ThicknessCorrector()
 
 
 '''
@@ -69,7 +72,7 @@ TH_CORRECTOR = ThicknessCorrector()
     end: 3D vector for end point
     epsilon: step size
 '''
-def material_scan(desc, start, end, epsilon=1e-5):
+def material_scan(desc, start, end, epsilon=1e-5, thickness_corrector=None):
     mat_mng = DDRec.MaterialManager(desc.worldVolume())
     # only use the top-level detectors
     dets = [d for n, d in desc.world().children()]
@@ -86,11 +89,9 @@ def material_scan(desc, start, end, epsilon=1e-5):
     # calculate material layer by layer
     int_x0 = 0
     int_lambda = 0
-    # FIXME: work-around for dd4hep material scan issue, check ThicknessCorrector
-    # path_length = 0
-    if not TH_CORRECTOR.scanned:
-        TH_CORRECTOR.scan_missing_thickness(desc)
-    path_length = TH_CORRECTOR.correct_path_length(direction, 0.)
+    path_length = 0.
+    if thickness_corrector is not None:
+        path_length = thickness_corrector.correct_path_length(direction, path_length)
 
     res = []
     for pv, l in placements:
@@ -129,7 +130,7 @@ def material_scan(desc, start, end, epsilon=1e-5):
         'material', 'Z', 'A', 'density',
         'radl', 'intl', 'thickness', 'path_length',
         'X0', 'lamda',
-        'x', 'y', 'z', 'r_xy',
+        'x', 'y', 'z',
         # 'local_x', 'local_y', 'local_z'
         ]
     dft = pd.DataFrame(data=res, columns=cols)
@@ -140,7 +141,7 @@ def material_scan(desc, start, end, epsilon=1e-5):
 
 # a default configuraiton for bareel ecal of epic_brycecanyon
 DEFAULT_CONFIG = dict(
-    eta_range=[-2.0, 1.7, 0.01],
+    eta_range=[-2.0, 1.7, 0.1],
     phi=20.,
     path_r=120.,
     start_point=[0., 0., 0.],
@@ -247,6 +248,11 @@ if __name__ == '__main__':
     path_r = config.get('path_r')
     phi = config.get('phi')
     start_point = config.get('start_point')
+
+    # FIXME: work-around for dd4hep material scan issue, check ThicknessCorrector
+    th_corr = ThicknessCorrector()
+    th_corr.scan_missing_thickness(desc, start_point, np.array(start_point) + np.array([100., 50., 0.]), dz=0.0001)
+
     # dets = list(config.get('detectors').keys())
     dets = [n for n, _ in desc.world().children()]
     dets.append('Unknown')
@@ -265,7 +271,7 @@ if __name__ == '__main__':
         end_y = path_r*np.sin(phi/180.*np.pi)
         end_z = path_r*np.sinh(eta)
         # print('({:.2f}, {:.2f}, {:.2f})'.format(end_x, end_y, end_z))
-        dfr = material_scan(desc, start_point, (end_x, end_y, end_z))
+        dfr = material_scan(desc, start_point, (end_x, end_y, end_z), thickness_corrector=th_corr)
 
         # assign material layers to detectors
         mdets = []
