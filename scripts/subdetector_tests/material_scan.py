@@ -1,8 +1,7 @@
 # SPDX-License-Identifier: LGPL-3.0-or-later
 # Copyright (C) 2023 Chao Peng
 '''
-    A script to scan the materials and draw a plot for it
-    It reads a json configuration file that defines the scan range, step, and the material-detector correspondence
+    A script to scan the materials thickness (X0 or Lambda) over eta
 '''
 
 import os
@@ -27,6 +26,41 @@ pd.set_option('display.max_rows', 1000)
 PROGRESS_STEP = 10
 
 
+# FIXME: this is a work-around to an issue of dd4hep::rec::MaterialManager::placementsBetween
+# As of 04/21/2023, at negative eta (eta < 0.), the scan will miss the first material layer (vacuum, 2.8 cm)
+# To reporduce this issue, check the difference between:
+#   materialScan epic_brycecanyon.xml 0 0 0 100  40  -0.01 | grep Vacuum
+#   materialScan epic_brycecanyon.xml 0 0 0 100  40  0.01 | grep Vacuum
+# It is GEOMETRY DEPENDENT (the thickness of the first vacuum material layer)
+# This helper class can be removed once the issue is fixed
+# Plan to file a bug report for this (as of 04/21/2023)
+class ThicknessCorrector:
+    def __init__(self, desc=None):
+        self.missing = 0.
+        self.scanned = False
+        if desc is not None:
+            self.scan_missing_thickness(desc)
+
+    def scan_missing_thickness(self, desc, pi=(0.,0.,0.), pf=(100.,40.,0.), dz=0.01):
+        # assume negative eta is missed, maybe can do a more detailed check?
+        # pf1 = np.array(pf) + np.array([0., 0., dz])
+        # dft1 = material_scan(desc, pi, pf1)
+        # th1 = dft1['path_length'].iloc[0]
+        pf2 = np.array(pf) + np.array([0., 0., -dz])
+        dft2 = material_scan(desc, pi, pf2)
+        th2 = dft2['path_length'].iloc[0]
+        self.missing = th2
+        self.scanned = True
+
+    def correct_path_length(self, direction, pl=0.):
+        if direction[2] < 0.:
+            return pl + np.sqrt(1./(direction[0]**2 + direction[1]**2))*self.thickness
+        return pl
+
+
+TH_CORRECTOR = ThicknessCorrector()
+
+
 '''
     Re-implementation of MaterialScan::Print in DD4Hep::DDRec
     MaterialScan does not have a python interface and that function is relatively simple, so here it is
@@ -35,8 +69,6 @@ PROGRESS_STEP = 10
     end: 3D vector for end point
     epsilon: step size
 '''
-# NOTE: I tried to get detector information from placedVolume (or CellIDPositionConverter) but it is not useable
-# (too many mistakes and wrong assignments).
 def material_scan(desc, start, end, epsilon=1e-5):
     mat_mng = DDRec.MaterialManager(desc.worldVolume())
     # only use the top-level detectors
@@ -48,22 +80,18 @@ def material_scan(desc, start, end, epsilon=1e-5):
     p0 = np.array(start)
     p1 = np.array(end)
     direction = (p1 - p0)/np.linalg.norm(p1 - p0)
-    print(p0, p1, direction)
+    # print(p0, p1, direction)
     placements = mat_mng.placementsBetween(tuple(p0), tuple(p1), epsilon);
 
     # calculate material layer by layer
     int_x0 = 0
     int_lambda = 0
-    path_length = 0
-    # FIXME: this is a work-around to a known issue of dd4hep::rec::MaterialManager::placementsBetween
-    # It is GEOMETRY DEPENDENT (the thickness of the first vacuum material layer)
-    # It should be removed once the dd4hep issue is fixed, preparing a PR for that as of 04/21/2023
-    # to check the thickness, see the difference between
-    # materialScan epic_brycecanyon.xml 0 0 0 100  40  -0.01 | grep Vacuum
-    # materialScan epic_brycecanyon.xml 0 0 0 100  40  0.01 | grep Vacuum
-    if direction[2] < 0.:
-        path_length += np.sqrt(1./(direction[0]**2 + direction[1]**2))*2.8
-    # FIXME: work-around ended
+    # FIXME: work-around for dd4hep material scan issue, check ThicknessCorrector
+    # path_length = 0
+    if not TH_CORRECTOR.scanned:
+        TH_CORRECTOR.scan_missing_thickness(desc)
+    path_length = TH_CORRECTOR.correct_path_length(direction, 0.)
+
     res = []
     for pv, l in placements:
         # print(pv, l)
@@ -90,8 +118,9 @@ def material_scan(desc, start, end, epsilon=1e-5):
         res.append([
             d0,
             # det_dict.get(det_id, 'Unknown'),
-            mat.GetName(), mat.GetZ(), mat.GetA(), mat.GetDensity(), radl, intl,
-            l, path_length, x0, lmd,
+            mat.GetName(), mat.GetZ(), mat.GetA(), mat.GetDensity(),
+            radl, intl, l, path_length,
+            x0, lmd,
             pcurr[0], pcurr[1], pcurr[2],
             # local[0], local[1], local[2],
             ])
