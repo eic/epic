@@ -135,7 +135,7 @@ def material_scan(desc, start, end, epsilon, int_dets=None, thickness_corrector=
         'detector',
         'material', 'Z', 'A', 'density',
         'radl', 'intl', 'thickness', 'path_length',
-        'X0', 'lamda',
+        'X0', 'lambda',
         'x', 'y', 'z',
         # 'local_x', 'local_y', 'local_z'
         ]
@@ -145,8 +145,11 @@ def material_scan(desc, start, end, epsilon, int_dets=None, thickness_corrector=
     return dft
 
 
-# the allowed column names to plot
-ALLOWED_VALUE_TYPES = ['X0', 'lambda']
+# the allowed value types {name: [col_name, label_name, major_step, minor_step]}
+ALLOWED_VALUE_TYPES = {
+    'X0': ['X0', '$X_0$', 10, 5],
+    'lambda': ['lambda', '$\lambda$', 5, 1],
+}
 # execute the script
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
@@ -176,7 +179,7 @@ if __name__ == '__main__':
             )
     parser.add_argument(
             '--value-type', default='X0',
-            help='Choose one in {}.'.format(ALLOWED_VALUE_TYPES)
+            help='Choose one in {}.'.format(list(ALLOWED_VALUE_TYPES.keys()))
             )
     parser.add_argument(
             '--detectors',
@@ -192,6 +195,10 @@ if __name__ == '__main__':
 
     if not os.path.exists(args.compact):
         print('Cannot find {}'.format(args.compact))
+        exit(-1)
+
+    if args.value_type not in ALLOWED_VALUE_TYPES.keys():
+        print('Cannot find value {}, choose one in {}'.format(args.value_type, list(ALLOWED_VALUE_TYPES.keys())))
         exit(-1)
 
     # scan parameters
@@ -241,6 +248,7 @@ if __name__ == '__main__':
     vals = np.zeros(shape=(len(etas), len(dets) + 1, 50))
     dets2 = dets + [OTHERS_NAME]
     det_mats = {d: [] for d in dets2}
+    vt = ALLOWED_VALUE_TYPES[args.value_type]
 
     for i, eta in enumerate(etas):
         if i % PROGRESS_STEP == 0:
@@ -253,14 +261,13 @@ if __name__ == '__main__':
         # print('({:.2f}, {:.2f}, {:.2f})'.format(end_x, end_y, end_z))
         dfr = material_scan(desc, start_point, (end_x, end_y, end_z), epsilon=args.epsilon, int_dets=dets, thickness_corrector=th_corr)
 
-        # print(dfr.groupby('detector')['X0'].sum())
         # aggregated values for detectors
-        x0_vals = dfr.groupby('detector')['X0'].sum().to_dict()
+        x0_vals = dfr.groupby('detector')[vt[0]].sum().to_dict()
         for j, det in enumerate(dets2):
             vals[i, j, 0] = x0_vals.get(det, 0.)
             # update material dict
             dfd = dfr[dfr['detector'] == det]
-            x0_mats = dfd.groupby('material')['X0'].sum()
+            x0_mats = dfd.groupby('material')[vt[0]].sum()
             for mat in x0_mats.index:
                 if mat not in det_mats[det]:
                     det_mats[det] = det_mats[det] + [mat]
@@ -301,11 +308,11 @@ if __name__ == '__main__':
     # formatting
     ax.tick_params(which='both', direction='in', labelsize=22)
     ax.set_xlabel('$\eta$', fontsize=22)
-    ax.set_ylabel('X0', fontsize=22)
+    ax.set_ylabel(vt[1], fontsize=22)
     ax.xaxis.set_major_locator(MultipleLocator(0.5))
     ax.xaxis.set_minor_locator(MultipleLocator(0.1))
-    ax.yaxis.set_major_locator(MultipleLocator(10))
-    ax.yaxis.set_minor_locator(MultipleLocator(5))
+    ax.yaxis.set_major_locator(MultipleLocator(vt[2]))
+    ax.yaxis.set_minor_locator(MultipleLocator(vt[3]))
     ax.grid(ls=':', which='both')
     ax.set_axisbelow(False)
     ax.set_xlim(eta_range[0] - 0.1, eta_range[1] + 0.1)
@@ -344,10 +351,12 @@ if __name__ == '__main__':
                   borderpad=0.3, labelspacing=0.2, columnspacing=0.8, borderaxespad=0.1, handletextpad=0.4)
         ax.tick_params(which='both', direction='in', labelsize=22)
         ax.set_xlabel('$\eta$', fontsize=22)
-        ax.set_ylabel('X0', fontsize=22)
+        ax.set_ylabel(vt[1], fontsize=22)
         ax.set_title(det, fontsize=22)
         ax.xaxis.set_major_locator(MultipleLocator(0.5))
         ax.xaxis.set_minor_locator(MultipleLocator(0.1))
+        ax.yaxis.set_major_locator(MultipleLocator(vt[2]))
+        ax.yaxis.set_minor_locator(MultipleLocator(vt[3]))
         ax.grid(ls=':', which='both')
         ax.set_axisbelow(False)
         ax.set_xlim(eta_range[0] - 0.1, eta_range[1] + 0.1)
