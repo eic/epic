@@ -31,7 +31,7 @@ pd.set_option('display.max_rows', 1000)
 PROGRESS_STEP = 10
 OTHERS_NAME = 'Others'
 # maximum number of detectors/materials to plot
-COLORS = ['royalblue', 'forestgreen', 'darkviolet', 'indianred', 'goldenrod', 'darkturquoise']
+COLORS = ['royalblue', 'indianred', 'forestgreen', 'gold', 'darkviolet', 'orange', 'darkturquoise']
 # a specified color for Others, this should not be included in COLORS
 OTHERS_COLOR = 'silver'
 
@@ -140,7 +140,6 @@ def material_scan(desc, start, end, epsilon, int_dets=None, thickness_corrector=
         # 'local_x', 'local_y', 'local_z'
         ]
     dft = pd.DataFrame(data=res, columns=cols)
-    # print(dft[['detector', 'material', 'x', 'y', 'z', 'path_length', 'r_xy', 'local_x', 'local_y', 'local_z']].head(100))
     # print(dft.groupby('detector')['X0'].sum())
     return dft
 
@@ -158,7 +157,7 @@ if __name__ == '__main__':
             help='Top-level xml file of the detector description.'
             )
     parser.add_argument(
-            '--path-r', type=float, default=120.,
+            '--path-r', type=float, default=400., # 120.,
             help='R_xy (cm) where the scan stops.'
             )
     parser.add_argument(
@@ -166,8 +165,16 @@ if __name__ == '__main__':
             help='Start point of the scan, use the format \"x,y,z\", unit is cm.'
             )
     parser.add_argument(
-            '--eta-range', default='-2.0,1.7,3701',
-            help='Eta range of the scan, use the format \"eta_1,eta_2,eta_nbins\".'
+            '--eta-min', type=float, default=-2.0,
+            help='Minimum eta for the scan.'
+            )
+    parser.add_argument(
+            '--eta-max', type=float, default=2.0,
+            help='Minimum eta for the scan.'
+            )
+    parser.add_argument(
+            '--eta-nbins', type=int, default=401,
+            help='Number of bins for the eta scan.'
             )
     parser.add_argument(
             '--phi', type=float, default=20.,
@@ -184,12 +191,9 @@ if __name__ == '__main__':
     parser.add_argument(
             '--detectors',
             # default='all',
-            default='EcalBarrelScFi,EcalBarrelImaging,EcalEndcapN,HcalEndcapN',
+            # ordering the detectors
+            default='EcalBarrelScFi,EcalEndcapN,EcalEndcapP,SolenoidBarrel,HcalBarrel,HcalEndcapN,HcalEndcapP',
             help='Names of the interested detectors, separated by \",\".'
-            )
-    parser.add_argument(
-            '--hide-others', action='store_true',
-            help='Turn this flag on to hide the materials that are categorized into \"{}\".'.format(OTHERS_NAME)
             )
     args = parser.parse_args()
 
@@ -204,11 +208,7 @@ if __name__ == '__main__':
     # scan parameters
     path_r = args.path_r
     phi = args.phi
-    eta_range = [float(v.strip()) for v in args.eta_range.split(',')]
-    if len(eta_range) != 3:
-        print('Error: expecting three values from --eta-range, getting {:d} instead.'.format(len(eta_range)))
-        exit(-1)
-    etas = np.linspace(eta_range[0], eta_range[1], int(eta_range[2]))
+    etas = np.linspace(args.eta_min, args.eta_max, args.eta_nbins)
     start_point = np.array([float(v.strip()) for v in args.start_point.split(',')])
     if len(start_point) != 3:
         print('Error: expecting three values (x,y,z) from --start-point, getting {:d} instead.'.format(len(start_point)))
@@ -222,10 +222,13 @@ if __name__ == '__main__':
     all_dets = [n for n, _ in desc.world().children()]
     dets = []
     missing_dets = []
+    sort_dets = False
     for det in args.detectors.split(','):
         det = det.strip()
         if det.lower() == 'all':
             dets = all_dets
+            # sort detectors by material thickness
+            sort_dets = True
             break
         if det in all_dets:
             dets.append(det)
@@ -279,8 +282,10 @@ if __name__ == '__main__':
     # aggregated data for plots
     dfa = pd.DataFrame(data=vals[:, :, 0], columns=dets2, index=etas)
     # sort columns by the total thickness (over eta range)
-    sdets = [d for d in dfa.sum().sort_values(ascending=False).index if d != OTHERS_NAME]
-    dfa = dfa[sdets + [OTHERS_NAME]]
+    sdets = dets
+    if sort_dets:
+        sdets = [d for d in dfa.sum().sort_values(ascending=False).index if d != OTHERS_NAME]
+        dfa = dfa[sdets + [OTHERS_NAME]]
     dfa.to_csv('material_scan_agg.csv')
 
     # plots
@@ -292,8 +297,8 @@ if __name__ == '__main__':
     plot_dets = sdets
     if len(sdets) > len(COLORS):
         group_dets = sdets[len(COLORS):]
-        dfa.loc[:, OTHERS_NAME] += dfa.loc[:, group_dets].sum(axis=0)
-        print('Warning: not enough colors, detectors {} are grouped into {}'.format(group_dets, OTHERS_NAME))
+        dfa.loc[:, OTHERS_NAME] += dfa.loc[:, group_dets].sum(axis=1)
+        print('Detectors {} are grouped into {} due to limited number of colors.'.format(group_dets, OTHERS_NAME))
         plot_dets = sdets[:len(COLORS)]
 
     # plot
@@ -302,39 +307,44 @@ if __name__ == '__main__':
     for col, c in zip(plot_dets, COLORS):
         ax.fill_between(dfa.index, bottom, dfa[col].values + bottom, label=col, step='mid', color=c)
         bottom += dfa[col].values
+    # only plot Others if there are any
     if dfa[OTHERS_NAME].sum() > 0.:
         ax.fill_between(dfa.index, bottom, dfa[OTHERS_NAME].values + bottom, label=OTHERS_NAME, step='mid', color=OTHERS_COLOR)
 
     # formatting
     ax.tick_params(which='both', direction='in', labelsize=22)
     ax.set_xlabel('$\eta$', fontsize=22)
-    ax.set_ylabel(vt[1], fontsize=22)
+    ax.set_ylabel('{} ($R_{{xy}} \leq {:.1f}$ cm)'.format(vt[1], args.path_r), fontsize=22)
     ax.xaxis.set_major_locator(MultipleLocator(0.5))
     ax.xaxis.set_minor_locator(MultipleLocator(0.1))
     ax.yaxis.set_major_locator(MultipleLocator(vt[2]))
     ax.yaxis.set_minor_locator(MultipleLocator(vt[3]))
     ax.grid(ls=':', which='both')
     ax.set_axisbelow(False)
-    ax.set_xlim(eta_range[0] - 0.1, eta_range[1] + 0.1)
+    ax.set_xlim(args.eta_min, args.eta_max)
     ax.set_ylim(0., ax.get_ylim()[1]*1.1)
-    ax.legend(bbox_to_anchor=(0.0, 0.9, 1.0, 0.1), ncol=5, loc="upper center", fontsize=22,
+    ax.legend(bbox_to_anchor=(0.0, 0.9, 1.0, 0.1), ncol=4, loc="upper center", fontsize=22,
           borderpad=0.2, labelspacing=0.2, columnspacing=0.6, borderaxespad=0.05, handletextpad=0.4)
     # ax.set_yscale('log')
     fig.savefig('material_scan.png')
     pdf.savefig(fig)
+    plt.close(fig)
 
     # detailed plot for each detector
     for j, det in enumerate(dets):
         dmats = det_mats[det]
         dfa = pd.DataFrame(data=vals[:, j, 1:len(dmats)+1], columns=dmats, index=etas)
+        if not len(dmats):
+            print('No material found for detector {} in this scan, skipped it.'.format(det))
+            continue
         # sort columns by the total thickness (over eta range)
         mats = [d for d in dfa.sum().sort_values(ascending=False).index]
         dfa = dfa[mats]
         plot_mats = mats
         if len(mats) > len(COLORS):
             group_mats = mats[len(COLORS):]
-            dfa.loc[:, OTHERS_NAME] = dfa.loc[:, group_mats].sum(axis=0)
-            print('Warning: not enough colors, materials {} of detectors {} are grouped into {}'.format(group_mats, det, OTHERS_NAME))
+            dfa.loc[:, OTHERS_NAME] = dfa.loc[:, group_mats].sum(axis=1)
+            print('For detector {}, materials {} are grouped into {} due to limited number of colors.'.format(det, group_mats, OTHERS_NAME))
             plot_mats = mats[:len(COLORS)]
 
         fig, ax = plt.subplots(figsize=(16, 8), dpi=160,
@@ -351,7 +361,7 @@ if __name__ == '__main__':
                   borderpad=0.3, labelspacing=0.2, columnspacing=0.8, borderaxespad=0.1, handletextpad=0.4)
         ax.tick_params(which='both', direction='in', labelsize=22)
         ax.set_xlabel('$\eta$', fontsize=22)
-        ax.set_ylabel(vt[1], fontsize=22)
+        ax.set_ylabel('{} ($R_{{xy}} \leq {:.1f}$ cm)'.format(vt[1], args.path_r), fontsize=22)
         ax.set_title(det, fontsize=22)
         ax.xaxis.set_major_locator(MultipleLocator(0.5))
         ax.xaxis.set_minor_locator(MultipleLocator(0.1))
@@ -359,7 +369,9 @@ if __name__ == '__main__':
         ax.yaxis.set_minor_locator(MultipleLocator(vt[3]))
         ax.grid(ls=':', which='both')
         ax.set_axisbelow(False)
-        ax.set_xlim(eta_range[0] - 0.1, eta_range[1] + 0.1)
+        ax.set_xlim(args.eta_min, args.eta_max)
         ax.set_ylim(0., ax.get_ylim()[1]*1.1)
         pdf.savefig(fig)
+        plt.close(fig)
+    # close PDF
     pdf.close()
