@@ -193,7 +193,7 @@ if __name__ == '__main__':
             # default='all',
             # ordering the detectors
             default='EcalBarrelScFi,EcalEndcapN,EcalEndcapP,SolenoidBarrel,HcalBarrel,HcalEndcapN,HcalEndcapP',
-            help='Names of the interested detectors, separated by \",\".'
+            help='Names of the interested detectors, separated by \",\". Use \"all\" for all detectors.'
             )
     args = parser.parse_args()
 
