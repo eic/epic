@@ -217,7 +217,7 @@ void buildFibers(Detector& desc, SensitiveDetector& sens, Volume& s_vol, int lay
 
   // fiber and its cladding
   double f_radius_core = f_radius - f_cladding_thickness;
-  Tube   f_tube_clad(f_radius_core, f_radius, s_length);
+  Tube   f_tube_clad(0, f_radius, s_length);
   Volume f_vol_clad("fiber_vol", f_tube_clad, desc.material(x_fiber.materialStr()));
   Tube   f_tube_core(0, f_radius_core, s_length);
   Volume f_vol_core("fiber_core_vol", f_tube_core, desc.material(x_fiber.materialStr()));
@@ -225,6 +225,7 @@ void buildFibers(Detector& desc, SensitiveDetector& sens, Volume& s_vol, int lay
     f_vol_core.setSensitiveDetector(sens);
   }
   f_vol_core.setAttributes(desc, x_fiber.regionStr(), x_fiber.limitsStr(), x_fiber.visStr());
+  f_vol_clad.placeVolume(f_vol_core);
 
 
   // Calculate number of divisions
@@ -267,9 +268,8 @@ void buildFibers(Detector& desc, SensitiveDetector& sens, Volume& s_vol, int lay
 
       // place fiber in grid
       auto p = fi.pos - gr.mean_centroid;
-      auto core_phv = grid_vol.placeVolume(f_vol_core, Position(p.x(), p.y(), 0.));
-      core_phv.addPhysVolID(f_id_fiber, f_id);
-      grid_vol.placeVolume(f_vol_clad, Position(p.x(), p.y(), 0.));
+      auto clad_phv = grid_vol.placeVolume(f_vol_clad, Position(p.x(), p.y(), 0.));
+      clad_phv.addPhysVolID(f_id_fiber, f_id);
       fi.assigned = true;
       f_id ++;
     }
