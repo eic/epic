@@ -82,7 +82,7 @@ class ThicknessCorrector:
     end: 3D vector for end point
     epsilon: step size
 '''
-def material_scan(desc, start, end, epsilon=1e-5, int_dets=None, thickness_corrector=None):
+def material_scan(desc, start, end, epsilon=1e-4, int_dets=None, thickness_corrector=None):
     mat_mng = DDRec.MaterialManager(desc.worldVolume())
     # only use the top-level detectors
     if int_dets is None:
@@ -163,7 +163,7 @@ if __name__ == '__main__':
             help='Start point of the scan, use the format \"x,y,z\", unit is cm.'
             )
     parser.add_argument(
-            '--eta-range', default='-2.0,1.7,371',
+            '--eta-range', default='-2.0,1.7,3701',
             help='Eta range of the scan, use the format \"eta_1,eta_2,eta_nbins\".'
             )
     parser.add_argument(
