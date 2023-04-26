@@ -32,7 +32,7 @@ void buildTiles(Detector& desc, SensitiveDetector &sens, Volume &s_vol_outer, Vo
   double f_spacing_phi = getAttrOrDefault(x_tiles, _Unicode(phi_width), 0.05);
   //int f_nbins_eta = getAttrOrDefault(x_tiles, _Unicode(nbins_eta), 20);
   int f_nbins_phi = getAttrOrDefault(x_tiles, _Unicode(nbins_phi), 2);
-  std::string f_id_tiles = getAttrOrDefault(x_tiles, _Unicode(identifier_tiles), "tiles");
+  //////std::string f_id_tiles = getAttrOrDefault(x_tiles, _Unicode(identifier_tiles), "tiles");
 
   /*
   double f_trd_x1 = s_dim_x;
