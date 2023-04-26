@@ -51,13 +51,13 @@ class ThicknessCorrector:
         if desc is not None:
             self.scan_missing_thickness(desc)
 
-    def scan_missing_thickness(self, desc, pi=(0.,0.,0.), pf=(100.,40.,0.), dz=0.01):
+    def scan_missing_thickness(self, desc, pi=(0.,0.,0.), pf=(100.,40.,0.), dz=0.01, epsilon=1e-3):
         # assume negative eta is missed, maybe can do a more detailed check?
         pf1 = np.array(pf) + np.array([0., 0., dz])
-        dft1 = material_scan(desc, pi, pf1)
+        dft1 = material_scan(desc, pi, pf1, epsilon)
         th1 = dft1['path_length'].iloc[0]
         pf2 = np.array(pf) + np.array([0., 0., -dz])
-        dft2 = material_scan(desc, pi, pf2)
+        dft2 = material_scan(desc, pi, pf2, epsilon)
         th2 = dft2['path_length'].iloc[0]
         self.scanned = True
         # print(dft1.head(3))
@@ -82,7 +82,7 @@ class ThicknessCorrector:
     end: 3D vector for end point
     epsilon: step size
 '''
-def material_scan(desc, start, end, epsilon=1e-4, int_dets=None, thickness_corrector=None):
+def material_scan(desc, start, end, epsilon, int_dets=None, thickness_corrector=None):
     mat_mng = DDRec.MaterialManager(desc.worldVolume())
     # only use the top-level detectors
     if int_dets is None:
@@ -171,6 +171,10 @@ if __name__ == '__main__':
             help='Phi angle of the scan, unit is degree.'
             )
     parser.add_argument(
+            '--epsilon', type=float, default=1e-3,
+            help='Step size for each material scan.'
+            )
+    parser.add_argument(
             '--value-type', default='X0',
             help='Choose one in {}.'.format(ALLOWED_VALUE_TYPES)
             )
@@ -229,7 +233,8 @@ if __name__ == '__main__':
 
     # FIXME: work-around for dd4hep material scan issue, check ThicknessCorrector
     th_corr = ThicknessCorrector()
-    th_corr.scan_missing_thickness(desc, start_point, np.array(start_point) + np.array([100., 50., 0.]), dz=0.0001)
+    th_corr.scan_missing_thickness(desc, start_point, np.array(start_point) + np.array([100., 50., 0.]),
+                                   dz=0.0001, epsilon=args.epsilon)
 
     # array for detailed data
     # number of materials cannot be pre-determined, so just assign a large number to be safe
@@ -246,7 +251,7 @@ if __name__ == '__main__':
         end_y = path_r*np.sin(phi/180.*np.pi)
         end_z = path_r*np.sinh(eta)
         # print('({:.2f}, {:.2f}, {:.2f})'.format(end_x, end_y, end_z))
-        dfr = material_scan(desc, start_point, (end_x, end_y, end_z), int_dets=dets, thickness_corrector=th_corr)
+        dfr = material_scan(desc, start_point, (end_x, end_y, end_z), epsilon=args.epsilon, int_dets=dets, thickness_corrector=th_corr)
 
         # print(dfr.groupby('detector')['X0'].sum())
         # aggregated values for detectors
