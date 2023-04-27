@@ -6,7 +6,10 @@
 #include "DD4hep/Printout.h"
 #include "DDRec/DetectorData.h"
 #include "DDRec/Surface.h"
+#include "XML/Layering.h"
+#include "XML/Utilities.h"
 #include <XML/Helper.h>
+#include "DD4hepDetectorHelper.h"
 
 
 //////////////////////////////////////////////////
@@ -104,13 +107,16 @@ static Ref_t create_detector(Detector& desc, xml_h e, SensitiveDetector sens)
   int      nVacuum = 0;
   int      nAir    = 0;
 
+  dd4hep::xml::setDetectorTypeFlag(x_det, det);
+  //  auto &params = DD4hepDetectorHelper::ensureExtension<dd4hep::rec::VariantParameters>(det);
+
   //-----------------------------------------------------------------
   // Add Tagger box containers and vacuum box extension for modules
   //-----------------------------------------------------------------
   for (xml_coll_t mod(x_det, _Unicode(module)); mod; ++mod) {
 
     int    moduleID   = dd4hep::getAttrOrDefault<int>(mod, _Unicode(id), 0);
-    string moduleName = dd4hep::getAttrOrDefault<std::string>(mod, _Unicode(modname), "Tagger0");
+    string moduleName = dd4hep::getAttrOrDefault<std::string>(mod, _Unicode(name), "Tagger0");
 
     // Offset from the electron beam
     double tagoff  = dd4hep::getAttrOrDefault<double>(mod, _Unicode(offset_min), 50.0 * mm);
@@ -196,6 +202,8 @@ static Ref_t create_detector(Detector& desc, xml_h e, SensitiveDetector sens)
     DetElement moddet(det,moduleName, moduleID);
     pv_mod2.addPhysVolID("module", moduleID);
     moddet.setPlacement(pv_mod2);
+
+    dd4hep::xml::setDetectorTypeFlag(mod, moddet);  
 
     Make_Tagger(desc, mod, TaggerAssembly, moddet, sens);
 
@@ -358,7 +366,8 @@ static void Make_Tagger(Detector& desc, xml_coll_t& mod, Assembly& env, DetEleme
     pv_layer.addPhysVolID("layer", layerID);
 
     DetElement laydet(modElement,"layerName"+std::to_string(layerID), layerID);
-    laydet.setPlacement(pv_layer);  
+    laydet.setPlacement(pv_layer);
+ 
 
   }
 }

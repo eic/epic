@@ -26,7 +26,7 @@
 
       <comment> Tagger stations and extended vacuum volume </comment>
       <module id="1"
-        modname="Tagger1"
+        name="Tagger1"
         theta_min="Tagger1_Min_Theta"
         max_align="false"
         offset_min="Tagger1_Min_Offset"
@@ -40,7 +40,7 @@
         <windowLayer id="1" type="window"  z="0*mm"   thickness="1*mm" material="Copper"/>
       </module>
       <module id="2"
-        modname="Tagger2"
+        name="Tagger2"
         theta_min="Tagger2_Min_Theta"
         theta_max="Tagger1_Min_Theta"
         max_align="true"
@@ -48,6 +48,7 @@
         extend_vacuum="true"
         overlap="-20*mm"
         >
+        <type_flags type="component"/>
         <dimensions x="Tagger2_Width/2" y="Tagger2_Height/2" z="Tagger2_Length"/>
         <trackLayer  id="0" type="timepix" z="2*mm"   sensor_thickness="400*um"/>
         <trackLayer  id="1" type="timepix" z="302*mm" sensor_thickness="400*um"/>
@@ -100,6 +101,16 @@
 
     </comment>
   </detectors>
+
+
+  <plugins>
+    <plugin name="DD4hep_ParametersPlugin">
+      <argument value="BackwardsTaggerStation"/>
+      <argument value="layer_pattern: str=Tagger\d"/>
+    </plugin>
+  </plugins>
+
+
   <readouts>
 
     <readout name="TaggerTrackerHits">
