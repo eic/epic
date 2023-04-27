@@ -978,7 +978,7 @@
       <D value="0.2" unit="g / cm3"/>
       <fraction n="0.625" ref="SiliconOxide"/>
       <fraction n="0.374" ref="SiliconOxide"/>
-      <fraction n="0.1"   ref="C"/>
+      <fraction n="0.001" ref="C"/>
       <property name="RINDEX" ref="RINDEX__Aerogel"/>
       <property name="ABSLENGTH" ref="ABSLENGTH__Aerogel"/>
     </material>

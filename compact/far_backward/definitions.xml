@@ -1,18 +1,16 @@
 <!-- SPDX-License-Identifier: LGPL-3.0-or-later -->
 <!-- Copyright (C) 2022 Simon Gardner, Jaroslav Adam, Wouter Deconinck -->
 
-<lccdd>
-
   <define>
 
     <comment> Connection to central beam pipe </comment>
 
-    <constant name="Center_Beampipe_End"  value="-4560.17 * mm"/>
-    <constant name="Center_Beampipe_Rad"  value="47.60 * mm"/>
+    <constant name="Center_Beampipe_End"  value="-4560.17*mm"/>
+    <constant name="Center_Beampipe_Rad"  value="47.60*mm"/>
 
-    <constant name="Hadron_Beampipe_End"        value="-4490.35 * mm"/>
-    <constant name="Hadron_Beampipe_Rad"        value="50 * mm"/>
-    <constant name="Hadron_Beampipe_Thickness"  value="1.64 * mm"/>
+    <constant name="Hadron_Beampipe_End"        value="-4490.35*mm"/>
+    <constant name="Hadron_Beampipe_Rad"        value="50*mm"/>
+    <constant name="Hadron_Beampipe_Thickness"  value="1.64*mm"/>
 
     <comment> Electron magnet dimensions and positions </comment>
 
@@ -223,7 +221,7 @@
     <!--  -->
     <!-- Luminosity System -->
     <!--  -->
-    <constant name="LumiBeamDiv_pref"     value="5 * 211e-6*rad"/>
+    <constant name="LumiBeamDiv_pref"     value="5*211e-6*rad"/>
 
     <!-- Lumi Exit Window -->
     <constant name="LumiWin_Zstart"       value="-18.5*m"/>
@@ -248,14 +246,12 @@
     <constant name="LumiSweepMag_Y"       value="0*m"/>
     <constant name="LumiSweepMag_Z"       value="-36*m"/>
     <constant name="LumiSweepMag_DZ"      value="0.78*m"/>
-    <constant name="LumiSweepMag_B"       value="0.5*tesla"/>
 
     <!-- Lumi spectrometer dipole Magnet -->
     <constant name="LumiSpecMag_X"        value="0*m"/>
     <constant name="LumiSpecMag_Y"        value="0*m"/>
     <constant name="LumiSpecMag_Z"        value="-56*m"/>
     <constant name="LumiSpecMag_DZ"       value="LumiSweepMag_DZ"/>
-    <constant name="LumiSpecMag_B"        value="0.5*tesla"/>
 
     <!-- Lumi converter -->
     <constant name="LumiConverter_X"      value="0*m"/>
@@ -286,7 +282,6 @@
     <constant name="LumiSpecTracker_Cu_DZ"   value="0.014*cm"/>
 
     <!-- Lumi photon chamber -->
-    <constant name="LumiChamber_gas"      value="Vacuum" type="string"/>
     <constant name="LumiChamber1_Z1"      value="LumiSweepMag_Z + LumiSweepMag_DZ/2.0"/>
     <constant name="LumiChamber1_Z2"      value="LumiConverter_Z + LumiConverter_DZ/2."/>
     <constant name="LumiChamber2_Z1"      value="LumiConverter_Z - LumiConverter_DZ/2."/>
@@ -298,5 +293,3 @@
     <constant name="LumiDirect_DZ"        value="0.2*m"/>
 
   </define>
-
-</lccdd>

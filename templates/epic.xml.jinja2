@@ -44,11 +44,13 @@
       The ip6 (or other ip) defines should be included first.
       These files have only a define tags.
     </documentation>
-    <include ref="${DETECTOR_PATH}/compact/far_forward/fields_{{ pbeam | default("275", true) }}.xml" />
+    <include ref="${DETECTOR_PATH}/compact/fields/beamline_{{ ebeam | default("18", true) }}x{{ pbeam | default("275", true) }}.xml" />
     <include ref="${DETECTOR_PATH}/compact/far_forward/definitions.xml" />
+    <include ref="${DETECTOR_PATH}/compact/far_backward/definitions.xml" />
     <include ref="${DETECTOR_PATH}/compact/definitions.xml" />
     <include ref="${DD4hepINSTALL}/DDDetectors/compact/detector_types.xml"/>
   </define>
+
 
   <includes>
     <gdmlFile ref="${DD4hepINSTALL}/DDDetectors/compact/elements.xml"/>
