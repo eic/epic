@@ -257,6 +257,8 @@ The unused IDs below are saved for future use.
     <constant name="B0Preshower_Station_1_ID" value="154"/>
     <constant name="ForwardRomanPot_Station_1_ID"    value="155"/>
     <constant name="ForwardRomanPot_Station_2_ID"    value="156"/>
+    <constant name="B0TrackerCompanion_ID"           value="157"/>
+    <constant name="B0TrackerSubAssembly_ID"         value="158"/>
     <constant name="ForwardOffMTracker_station_1_ID" value="159"/>
     <constant name="ForwardOffMTracker_station_2_ID" value="160"/>
     <constant name="ForwardOffMTracker_station_3_ID" value="161"/>
