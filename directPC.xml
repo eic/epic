@@ -1,0 +1,42 @@
+<!-- Copyright (C) 2023 Yasir Ali -->
+<lccdd>
+  <comment>
+    //////////////////////////////////////////////////
+    // LumiDirectPhoton-Calorimeter
+    //////////////////////////////////////////////////
+  </comment>
+
+  <define>
+    <constant name="LumiDirectPCAL_FiberRadius" value="0.5*mm"/>
+    <constant name="LumiDirectPCAL_FiberOffset" value="3*mm"/>
+    <constant name="LumiDirectPCAL_FiberSpaceX" value="0.265*mm"/>
+    <constant name="LumiDirectPCAL_FiberSpaceY" value="0.425*mm"/>
+  </define>
+
+  <detectors>
+    <detector id="LumiDirectPCAL_ID"
+      name="LumiDirectPCAL"
+      type="LumiDirectPCAL"
+      vis="LumiEcal_Vis"
+      readout="LumiDirectPCALHits">
+      <position   x="0" y="0" z="LumiDirect_Z-LumiDirect_DZ/2" />
+      <rotation x="Lumi_rotateX_angle" y="Lumi_rotateY_angle" z="Lumi_rotateZ_angle"/>
+      <dimensions x="LumiDirectPCAL_width" z="LumiDirectPCAL_length"/>
+      <module sizex="200*mm" sizey="200*mm" sizez="400*mm" material="TungstenDens24" vis="EcalVis">
+        <fiber material="Polystyrene"
+          radius="LumiDirectPCAL_FiberRadius"
+          offset="LumiDirectPCAL_FiberOffset"
+          spacex="LumiDirectPCAL_FiberSpaceX"
+          spacey="LumiDirectPCAL_FiberSpaceY"/>
+      </module>
+    </detector>
+  </detectors>
+
+  <readouts>
+    <readout name="LumiDirectPCALHits">
+      <segmentation type="NoSegmentation"/>
+      <id>system:8,module:28,fiber_x:8,fiber_y:8,fiber_z:8</id>
+    </readout>
+  </readouts>
+
+</lccdd>

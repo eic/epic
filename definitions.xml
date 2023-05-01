@@ -1,0 +1,302 @@
+<!-- SPDX-License-Identifier: LGPL-3.0-or-later -->
+<!-- Copyright (C) 2022 Simon Gardner, Jaroslav Adam, Wouter Deconinck -->
+
+  <define>
+
+    <comment> Connection to central beam pipe </comment>
+
+    <constant name="Center_Beampipe_End"  value="-4560.17*mm"/>
+    <constant name="Center_Beampipe_Rad"  value="47.60*mm"/>
+
+    <constant name="Hadron_Beampipe_End"        value="-4490.35*mm"/>
+    <constant name="Hadron_Beampipe_Rad"        value="50*mm"/>
+    <constant name="Hadron_Beampipe_Thickness"  value="1.64*mm"/>
+
+    <comment> Electron magnet dimensions and positions </comment>
+
+    <constant name="Q1eR_InnerRadius"     value="67.5*mm"/>
+    <constant name="Q1eR_Length"          value="1.78*m"/>
+    <constant name="Q1eR_CenterPosition"  value="-6.2*m"/>
+
+    <constant name="Q2eR_InnerRadius"     value="78.0*mm"/>
+    <constant name="Q2eR_Length"          value="1.4*m"/>
+    <constant name="Q2eR_CenterPosition"  value="-8.3*m"/>
+
+    <constant name="B2AeR_InnerRadius"    value="90.0*mm"/>
+    <constant name="B2AeR_Length"         value="1.78*m"/>
+    <constant name="B2AeR_CenterPosition" value="-10.5*m"/>
+
+    <constant name="B2BeR_InnerRadius"    value="111.0*mm"/>
+    <constant name="B2BeR_Length"         value="3.18*m"/>
+    <constant name="B2BeR_CenterPosition" value="-13.275*m"/>
+
+    <constant name="Q3eR_InnerRadius"     value="0.05*m"/>
+    <constant name="Q3eR_Length"          value="0.6*m"/>
+    <constant name="Q3eR_StartZ"          value="-37.696067*m"/>
+    <constant name="Q3eR_StartX"          value="-0.460027*m"/>
+    <constant name="Q3eR_EndZ"            value="-38.295969*m"/>
+    <constant name="Q3eR_EndX"            value="-0.470873*m"/>
+    <constant name="Q3eR_XPosition"       value="-0.46545*m"/>
+    <constant name="Q3eR_Theta"           value="0.0180766389*rad"/>
+    <constant name="Q3eR_CenterPosition"  value="-37.996018*m"/>
+
+    <comment> Note: Placements for Q4eR, B3eR, B4eR, B5eR, B6eR, B7eR
+              are approximate (valid to within ~1 cm).
+              Should be updated with detailed input from the accelerator group
+    </comment>
+
+    <constant name="Q4eR_CenterZ"         value="-45.32*m"/>
+    <constant name="Q4eR_CenterX"         value="-0.58*m"/>
+    <constant name="Q4eR_Length"          value="0.6*m"/>
+    <constant name="Q4eR_InnerRadius"     value="0.05*m"/>
+    <constant name="Q4eR_OuterRadius"     value="0.2*m"/>
+    <constant name="Q4eR_Theta"           value="Q3eR_Theta"/>
+
+    <constant name="B3eR_CenterZ"         value="-50.01*m"/>
+    <constant name="B3eR_CenterX"         value="-0.67*m"/>
+    <constant name="B3eR_Length"          value="1.2*m"/>
+    <constant name="B3eR_InnerRadius"     value="0.05*m"/>
+    <constant name="B3eR_OuterRadius"     value="0.24*m"/>
+    <constant name="B3eR_Theta"           value="Q3eR_Theta*7/8"/>
+
+    <constant name="B4eR_CenterZ"         value="-55*m"/>
+    <constant name="B4eR_CenterX"         value="-0.79*m"/>
+    <constant name="B4eR_Length"          value="1.2*m"/>
+    <constant name="B4eR_InnerRadius"     value="0.05*m"/>
+    <constant name="B4eR_OuterRadius"     value="0.24*m"/>
+    <constant name="B4eR_Theta"           value="Q3eR_Theta*6/8"/>
+
+    <constant name="B5eR_CenterZ"         value="-59.98*m"/>
+    <constant name="B5eR_CenterX"         value="-0.93*m"/>
+    <constant name="B5eR_Length"          value="1.2*m"/>
+    <constant name="B5eR_InnerRadius"     value="0.05*m"/>
+    <constant name="B5eR_OuterRadius"     value="0.24*m"/>
+    <constant name="B5eR_Theta"           value="Q3eR_Theta*5/8"/>
+
+    <constant name="B6eR_CenterZ"         value="-64.97*m"/>
+    <constant name="B6eR_CenterX"         value="-1.05*m"/>
+    <constant name="B6eR_Length"          value="1.2*m"/>
+    <constant name="B6eR_InnerRadius"     value="0.05*m"/>
+    <constant name="B6eR_OuterRadius"     value="0.24*m"/>
+    <constant name="B6eR_Theta"           value="Q3eR_Theta*4/8"/>
+
+    <constant name="B7eR_CenterZ"         value="-69.96*m"/>
+    <constant name="B7eR_CenterX"         value="-1.19*m"/>
+    <constant name="B7eR_Length"          value="1.2*m"/>
+    <constant name="B7eR_InnerRadius"     value="0.05*m"/>
+    <constant name="B7eR_OuterRadius"     value="0.24*m"/>
+    <constant name="B7eR_Theta"           value="Q3eR_Theta*3/8"/>
+
+
+    <comment> Hadron magnet dimensions and positions </comment>
+
+    <constant name="Q1APR_InnerRadius"    value="Hadron_Beampipe_Rad"/>
+    <constant name="Q1APR_Length"         value="1.8*m"/>
+    <constant name="Q1APR_StartZ"         value="-5.29834383626*m"/>
+    <constant name="Q1APR_StartX"         value="0.13248619835*m"/>
+    <constant name="Q1APR_EndZ"           value="-7.09778136555*m"/>
+    <constant name="Q1APR_EndX"           value="0.17748151099*m"/>
+    <constant name="Q1APR_Theta"          value="CrossingAngle"/>
+
+    <constant name="Q1BPR_InnerRadius"    value="Hadron_Beampipe_Rad"/>
+    <constant name="Q1BPR_Length"         value="1.4*m"/>
+    <constant name="Q1BPR_StartZ"         value="-7.59762512369533560*m"/>
+    <constant name="Q1BPR_StartX"         value="0.189980208951863655*m"/>
+    <constant name="Q1BPR_EndZ"           value="-8.99718764648131852*m"/>
+    <constant name="Q1BPR_EndX"           value="0.224976563232413274*m"/>
+    <constant name="Q1BPR_Theta"          value="CrossingAngle"/>
+
+    <constant name="Q2PR_InnerRadius"     value="Hadron_Beampipe_Rad"/>
+    <constant name="Q2PR_Length"          value="4.5*m"/>
+    <constant name="Q2PR_StartZ"          value="-10.4967189208948746*m"/>
+    <constant name="Q2PR_StartX"          value="0.262472657104463214*m"/>
+    <constant name="Q2PR_EndZ"            value="-14.9953127441355356*m"/>
+    <constant name="Q2PR_EndX"            value="0.374960938720726777*m"/>
+    <constant name="Q2PR_Theta"           value="CrossingAngle"/>
+
+    <constant name="Q3PR_CenterX"         value="0.9686*m"/>
+    <constant name="Q3PR_CenterZ"         value="-38.7385*m"/>
+    <constant name="Q3PR_InnerRadius"     value="Hadron_Beampipe_Rad"/>
+    <constant name="Q3PR_OuterRadius"     value="0.29*m"/>
+    <constant name="Q3PR_Length"          value="1.5*m"/>
+    <constant name="Q3PR_StartZ"          value="-37.9887505859252528*m"/>
+    <constant name="Q3PR_StartX"          value="0.949916672201157830*m"/>
+    <constant name="Q3PR_EndZ"            value="-39.4882818603388088*m"/>
+    <constant name="Q3PR_EndX"            value="0.987412766073207715*m"/>
+    <constant name="Q3PR_Theta"           value="CrossingAngle"/>
+
+    <comment> Note: Placements for Crab1PR, Crab2PR, Crab3PR, Q4PR, B1PR
+              are approximate (valid to within ~1 cm).
+              Should be updated with detailed input from the accelerator group
+    </comment>
+
+    <constant name="Crab1PR_CenterZ"      value="-42.43*m"/>
+    <constant name="Crab1PR_CenterX"      value="1.07*m"/>
+    <constant name="Crab1PR_Length"       value="5*m"/>
+    <constant name="Crab1PR_InnerRadius"  value="0.05*m"/>
+    <constant name="Crab1PR_OuterRadius"  value="0.5*m"/>
+    <constant name="Crab1PR_Theta"        value="CrossingAngle"/>
+
+    <constant name="Crab2PR_CenterZ"      value="-47.315*m"/>
+    <constant name="Crab2PR_CenterX"      value="1.21*m"/>
+    <constant name="Crab2PR_Length"       value="4.75*m"/>
+    <constant name="Crab2PR_InnerRadius"  value="0.05*m"/>
+    <constant name="Crab2PR_OuterRadius"  value="0.68*m"/>
+    <constant name="Crab2PR_Theta"        value="CrossingAngle"/>
+
+    <constant name="Crab3PR_CenterZ"      value="-52.5*m"/>
+    <constant name="Crab3PR_CenterX"      value="1.33*m"/>
+    <constant name="Crab3PR_Length"       value="4.75*m"/>
+    <constant name="Crab3PR_InnerRadius"  value="0.05*m"/>
+    <constant name="Crab3PR_OuterRadius"  value="0.68*m"/>
+    <constant name="Crab3PR_Theta"        value="CrossingAngle"/>
+
+    <constant name="Q4PR_CenterZ"         value="-56.35*m"/>
+    <constant name="Q4PR_CenterX"         value="1.42*m"/>
+    <constant name="Q4PR_Length"          value="1.5*m"/>
+    <constant name="Q4PR_InnerRadius"     value="0.05*m"/>
+    <constant name="Q4PR_OuterRadius"     value="0.29*m"/>
+    <constant name="Q4PR_Theta"           value="CrossingAngle"/>
+
+    <constant name="B1PR_CenterZ"         value="-75.59*m"/>
+    <constant name="B1PR_CenterX"         value="1.86*m"/>
+    <constant name="B1PR_Length"          value="3.7*m"/>
+    <constant name="B1PR_InnerRadius"     value="0.05*m"/>
+    <constant name="B1PR_OuterRadius"     value="0.4*m"/>
+    <constant name="B1PR_Theta"           value="CrossingAngle"/>
+
+    <comment>
+      --------------------------
+      Parameters for backwards vacuum box
+      --------------------------
+    </comment>
+    <constant name="Vacuum_BB_MinX"       value="-2.5*m"/>
+    <constant name="Vacuum_BB_MaxX"       value="0.5*m"/>
+    <constant name="Vacuum_BB_MinY"       value="-1.5*m"/>
+    <constant name="Vacuum_BB_MaxY"       value="1.5*m"/>
+    <constant name="Vacuum_BB_MinZ"       value="B2BeR_CenterPosition-B2BeR_Length/2"/>
+    <constant name="Vacuum_BB_MaxZ"       value="Q3eR_EndZ"/>
+
+    <constant name="Beam_Theta"           value="Q3eR_Theta"/>
+
+    <comment> Dipole focal point in global coordinates </comment>
+    <constant name="Dipole_Focus_X"       value="0.0*mm"/>
+    <constant name="Dipole_Focus_Y"       value="0.0*mm"/>
+    <constant name="Dipole_Focus_Z"       value="Q3eR_StartZ-Q3eR_StartX/tan(Beam_Theta)"/>
+
+    <comment> Central pipe dimensions </comment>
+    <constant name="Beam_Length"          value="(Dipole_Focus_Z-Q3eR_StartZ)/cos(Beam_Theta)"/>
+    <constant name="Beam_WidthR"          value="Q3eR_InnerRadius"/>
+    <constant name="Beam_WidthL"          value="Q3eR_InnerRadius"/>
+    <constant name="Beam_Height"          value="Q3eR_InnerRadius"/>
+
+    <comment> Entry box joining magnets, lumi and tagger systems </comment>
+    <constant name="Exit_Height"          value="B2BeR_InnerRadius"/>
+    <constant name="Exit_Width"           value="B2BeR_InnerRadius"/>
+    <constant name="Exit_Theta"           value="0.07*rad"/>
+
+    <comment> Tagger box and dimensions and positions </comment>
+    <constant name="Tagger1_Width"        value="400*mm"/>
+    <constant name="Tagger1_Height"       value="200*mm"/>
+
+    <constant name="Tag_Tracker_1_Depth"  value="905*mm"/>
+    <constant name="Tag_Cal_1_Depth"      value="200*mm"/>
+    <constant name="Tagger1_Length"       value="Tag_Tracker_1_Depth+Tag_Cal_1_Depth"/>
+
+    <constant name="Tagger1_Min_Theta"    value="0.0242*rad"/>
+    <constant name="Tagger1_Max_Theta"    value="0.0410*rad"/>
+    <constant name="Tagger1_Min_Offset"   value="Q3eR_InnerRadius"/>
+
+    <constant name="Tagger2_Width"        value="250.0*mm"/>
+    <constant name="Tagger2_Height"       value="150.0*mm"/>
+
+    <constant name="Tag_Tracker_2_Depth"  value="Tag_Tracker_1_Depth"/>
+    <constant name="Tag_Cal_2_Depth"      value="Tag_Cal_1_Depth"/>
+    <constant name="Tagger2_Length"       value="Tag_Tracker_2_Depth+Tag_Cal_2_Depth"/>
+
+    <constant name="Tagger2_Min_Theta"    value="0.02*rad"/>
+    <constant name="Tagger2_Max_Theta"    value="Tagger1_Min_Theta+0.005*rad"/>
+    <constant name="Tagger2_Min_Offset"   value="Q3eR_InnerRadius-15*mm"/>
+
+    <!--  -->
+    <!-- Luminosity System -->
+    <!--  -->
+    <constant name="LumiBeamDiv_pref"     value="5*211e-6*rad"/>
+
+    <!-- Lumi Exit Window -->
+    <constant name="LumiWin_Zstart"       value="-18.5*m"/>
+    <constant name="LumiWin_thickness"    value="1*cm"/>
+    <constant name="LumiWin_R"            value="4*cm"/> <!-- opening radius of tagger box -->
+    <constant name="LumiWin_Z"            value="LumiWin_Zstart - LumiWin_thickness/2."/>
+
+    <!-- Lumi collimator -->
+    <constant name="LumiColl_DZ"          value="30*cm"/>
+    <constant name="LumiColl_X"           value="0*m"/>
+    <constant name="LumiColl_Y"           value="0*m"/>
+    <constant name="LumiColl_Z"           value="-22.6*m"/>
+
+    <!-- Lumi lead walls -->
+    <constant name="LumiWall_DX"          value="0.5*m"/>
+    <constant name="LumiWall_DY"          value="1*m"/>
+    <constant name="LumiWall_DZ"          value="20*cm"/>
+    <constant name="LumiWall_Z"           value="-55*m"/>
+
+    <!-- Lumi sweeper dipole Magnet -->
+    <constant name="LumiSweepMag_X"       value="0*m"/>
+    <constant name="LumiSweepMag_Y"       value="0*m"/>
+    <constant name="LumiSweepMag_Z"       value="-36*m"/>
+    <constant name="LumiSweepMag_DZ"      value="0.78*m"/>
+
+    <!-- Lumi spectrometer dipole Magnet -->
+    <constant name="LumiSpecMag_X"        value="0*m"/>
+    <constant name="LumiSpecMag_Y"        value="0*m"/>
+    <constant name="LumiSpecMag_Z"        value="-56*m"/>
+    <constant name="LumiSpecMag_DZ"       value="LumiSweepMag_DZ"/>
+
+    <!-- Lumi converter -->
+    <constant name="LumiConverter_X"      value="0*m"/>
+    <constant name="LumiConverter_Y"      value="0*m"/>
+    <constant name="LumiConverter_Z"      value="LumiSpecMag_Z + LumiSpecMag_DZ/2."/>
+    <constant name="LumiConverter_DZ"     value="1*mm"/>
+    <constant name="LumiConverter_DXY"    value="12*cm"/>
+
+    <!-- Lumi spectrometer CAL -->
+    <constant name="LumiSpecCAL_DXY"      value="0.2*m"/>
+    <constant name="LumiSpecCALTower_DXY" value="0.02*m"/>
+    <constant name="LumiSpecCALTower_DZ"  value="0.2*m"/>
+    <constant name="LumiSpecCAL_FiveSigma" value="0.069*m"/>
+    <constant name="LumiSpecCAL_Y"        value="LumiSpecCAL_FiveSigma + LumiSpecCAL_DXY/2.0"/>
+    <constant name="LumiSpecCAL_Z"        value="-65*m"/>
+
+    <!-- Lumi spectrometer trackers -->
+    <constant name="SpecMag_to_SpecCAL_DZ" value="(LumiSpecMag_Z - LumiSpecMag_DZ/2.0) - (LumiSpecCAL_Z + LumiSpecCALTower_DZ/2.0)"/>
+    <constant name="LumiSpecTracker_DXY"  value="0.2*m"/>
+    <constant name="LumiSpecTracker_Z1"   value="LumiSpecMag_Z - LumiSpecMag_DZ/2.0 - 5/6.*SpecMag_to_SpecCAL_DZ"/>
+    <constant name="LumiSpecTracker_Z2"   value="LumiSpecMag_Z - LumiSpecMag_DZ/2.0 - 11/12.*SpecMag_to_SpecCAL_DZ"/>
+    <constant name="LumiSpecTracker_Z3"   value="LumiSpecCAL_Z + LumiSpecCALTower_DZ/2. + 1*cm"/>
+    <constant name="LumiSpecTracker_Y1"   value="LumiSpecCAL_FiveSigma + LumiSpecTracker_DXY/2."/>
+    <constant name="LumiSpecTracker_Y2"   value="LumiSpecTracker_Y1"/>
+    <constant name="LumiSpecTracker_Y3"   value="LumiSpecTracker_Y1"/>
+
+    <constant name="LumiSpecTracker_Si_DZ"   value="0.03*cm"/>
+    <constant name="LumiSpecTracker_Cu_DZ"   value="0.014*cm"/>
+
+    <!-- Lumi photon chamber -->
+    <constant name="LumiChamber1_Z1"      value="LumiSweepMag_Z + LumiSweepMag_DZ/2.0"/>
+    <constant name="LumiChamber1_Z2"      value="LumiConverter_Z + LumiConverter_DZ/2."/>
+    <constant name="LumiChamber2_Z1"      value="LumiConverter_Z - LumiConverter_DZ/2."/>
+    <constant name="LumiChamber2_Z2"      value="LumiSpecCAL_Z - LumiSpecCALTower_DZ"/>
+
+    <!-- Lumi direct photon detector -->
+    <constant name="LumiDirect_Z"         value="-66*m"/>
+    <constant name="LumiDirect_XY"        value="0.2*m"/>
+    <constant name="LumiDirect_DZ"        value="0.4*m"/>
+    <constant name="LumiDirectPCAL_width"         value="30.0 * cm"/>
+    <constant name="LumiDirectPCAL_length"        value="50.0 * cm"/>
+    <constant name="Lumi_rotateX_angle"   value="0.0 * rad"/>
+    <constant name="Lumi_rotateY_angle"   value="0.0 * rad"/>
+    <constant name="Lumi_rotateZ_angle"   value="0.0 * rad"/>
+    
+    
+    
+  </define>
