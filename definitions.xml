@@ -296,7 +296,7 @@
     <constant name="Lumi_rotateX_angle"   value="0.0 * rad"/>
     <constant name="Lumi_rotateY_angle"   value="0.0 * rad"/>
     <constant name="Lumi_rotateZ_angle"   value="0.0 * rad"/>
-    
-    
-    
+
+
+
   </define>

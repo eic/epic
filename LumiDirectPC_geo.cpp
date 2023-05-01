@@ -30,7 +30,7 @@ static Ref_t create_detector(Detector& desc, xml_h handle, SensitiveDetector sen
   auto      width  = dim.x();
   //auto      height = dim.y();
   auto      length = dim.z();
-  
+
   xml_dim_t pos    = detElem.position();
   xml_dim_t rot    = detElem.rotation();
 
