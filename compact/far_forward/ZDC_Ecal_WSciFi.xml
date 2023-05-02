@@ -30,7 +30,8 @@
           radius="ZDCEcal_FiberRadius"
           offset="ZDCEcal_FiberOffset"
           spacex="ZDCEcal_FiberSpaceX"
-          spacey="ZDCEcal_FiberSpaceY"/>
+          spacey="ZDCEcal_FiberSpaceY">
+        </fiber>
       </module>
     </detector>
   </detectors>
