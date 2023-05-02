@@ -1,0 +1,18 @@
+<lccdd>
+
+  <info name="lfhcal_with_space_for_insert.xml"
+        title="EPIC LFHCAL with insert cutout"
+        author="@FriederikeBock"
+        url="https://github.com/FriederikeBock"
+        status="development"
+        version="1.0"
+  ><comment/></info>
+
+  <define>
+    <constant name="LFHCAL_with_space_for_insert" value="1"/>
+    <constant name="LFHCAL_without_space_for_insert" value="0"/>
+  </define>
+
+  <include ref="lfhcal.xml"/>
+
+</lccdd>
