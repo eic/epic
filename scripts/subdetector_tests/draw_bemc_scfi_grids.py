@@ -91,8 +91,7 @@ def get_grid_fibers(det_elem, vol_man, id_conv, id_dict):
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument(
-            '-c', '--compact',
-            dest='compact', required=True,
+            'compact',
             help='Top-level xml file of the detector description.'
             )
     parser.add_argument(
@@ -128,6 +127,10 @@ if __name__ == '__main__':
             dest='wsize', type=float, default=4.,
             help='Plot window size (mm).'
             )
+    parser.add_argument(
+            '--no-marker', action='store_true',
+            help='Switch to draw a marker for grid center or not'
+            )
     args = parser.parse_args()
 
     # initialize dd4hep detector
@@ -141,7 +144,7 @@ if __name__ == '__main__':
     except Exception:
         print('Failed to find detector {} from \"{}\"'.format(args.detector, args.compact))
         print('Available detectors are listed below:')
-        for n, d in desc.world().children:
+        for n, d in desc.world().children():
             print(' --- detector: {}'.format(n))
         exit(-1)
 
@@ -167,7 +170,9 @@ if __name__ == '__main__':
     # default color cycle
     colors = plt.rcParams['axes.prop_cycle'].by_key()['color']
     for i, ids in enumerate(id_dicts):
-        c = colors[i % len(colors)]
+        # color index number
+        ic = (ids.get('grid') + (ids.get('layer') % 2)*4 - 1) % len(colors)
+        c = colors[ic]
         fibers, gr_pos = get_grid_fibers(det, vman, converter, ids)
         if fibers is None:
             print('ignored {} because the volume might not exist.'.format(ids))
@@ -176,8 +181,9 @@ if __name__ == '__main__':
         patches = []
         for fi in fibers:
             patches.append(Circle((fi[0], fi[1]), fi[3]))
-        p = PatchCollection(patches, alpha=0.4, facecolors=(c,), edgecolors=('k',))
-        ax.plot(gr_pos[0], gr_pos[1], marker='P', mfc=c, mec='k', ms=9, label='grid {}'.format(ids['grid']))
+        p = PatchCollection(patches, alpha=0.6, facecolors=(c,), edgecolors=('k',))
+        if not args.no_marker:
+            ax.plot(gr_pos[0], gr_pos[1], marker='P', mfc=c, mec='k', ms=9, label='grid {}'.format(ids['grid']))
         ax.add_collection(p)
         # center at the first entry
         if i == 0:
@@ -186,7 +192,7 @@ if __name__ == '__main__':
 
     # ax.legend(fontsize=22)
     ax.tick_params(labelsize=20, direction='in')
-    ax.set_xlabel('Global X (mm)', fontsize=22)
-    ax.set_ylabel('Global Y (mm)', fontsize=22)
+    ax.set_xlabel('X (mm)', fontsize=22)
+    ax.set_ylabel('Y (mm)', fontsize=22)
     ax.set_title('Centered at {}'.format('/'.join(['{}{}'.format(k, v) for k, v in fields.items()])), fontsize=22)
     fig.savefig(os.path.join(args.outdir, 'grid_fibers.png'))
