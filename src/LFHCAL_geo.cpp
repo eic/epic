@@ -1010,6 +1010,10 @@ static Ref_t createDetector(Detector& desc, xml_h handle, SensitiveDetector sens
   xml_coll_t eightMPos(detElem, _Unicode(eightmodulepositions));
   for (xml_coll_t position_i(eightMPos, _U(position)); position_i; ++position_i){
     xml_comp_t position_comp = position_i;
+    if (! getAttrOrDefault(position_comp, _Unicode(if), true)) {
+      printout(WARNING, "LFHCAL_geo", "skipping x = %.1f cm, y = %.1f cm", position_comp.x(), position_comp.y());
+      continue;
+    }
     pos8M.push_back({position_comp.x(), position_comp.y(), position_comp.z()});
   }
 
@@ -1036,6 +1040,10 @@ static Ref_t createDetector(Detector& desc, xml_h handle, SensitiveDetector sens
   xml_coll_t fourMPos(detElem, _Unicode(fourmodulepositions));
   for (xml_coll_t position_i(fourMPos, _U(position)); position_i; ++position_i){
     xml_comp_t position_comp = position_i;
+    if (! getAttrOrDefault(position_comp, _Unicode(if), true)) {
+      printout(WARNING, "LFHCAL_geo", "skipping x = %.1f cm, y = %.1f cm", position_comp.x(), position_comp.y());
+      continue;
+    }
     pos4M.push_back({position_comp.x(), position_comp.y(), position_comp.z()});
   }
 

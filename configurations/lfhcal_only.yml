@@ -1,3 +1,3 @@
 features:
   hcal:
-    lfhcal:
+    lfhcal_without_space_for_insert:
