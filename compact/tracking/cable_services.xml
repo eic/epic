@@ -1,0 +1,17 @@
+<!-- SPDX-License-Identifier: LGPL-3.0-or-later -->
+<!-- Copyright (C) 2022 Wouter Deconinck, Whitney Armstrong -->
+
+<lccdd>
+  <includes>
+    <gdmlFile ref="meshes/FullCableSpaceEstimate.xml"/>
+  </includes>
+
+  <detectors>
+    <detector name="Services" type="DD4hep_TestShape_Creator">
+      <check>
+	<shape type="CAD_MultiVolume" ref="meshes/FullCableSpaceEstimate.obj" unit="m">
+        </shape>
+      </check>
+    </detector>
+  </detectors>
+</lccdd>

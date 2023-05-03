@@ -36,7 +36,7 @@ long load_file(Detector& /* desc */, int argc, char** argv)
 {
   // argument parsing
   std::string cache, file, url;
-  std::string cmd("curl --retry 5 -f {0} -o {1}");
+  std::string cmd("curl --location --retry 5 -f {0} -o {1}");
   for (int i = 0; i < argc && argv[i]; ++i) {
     if (0 == std::strncmp("cache:", argv[i], 6))
       cache = (argv[i] + 6);
