@@ -2,9 +2,24 @@
 <!-- Copyright (C) 2022 Wouter Deconinck, Whitney Armstrong -->
 
 <lccdd>
-  <includes>
-    <gdmlFile ref="meshes/FullCableSpaceEstimate.xml"/>
-  </includes>
+  <materials>
+    <material name="0.000000_0.000000_1.000000_0.000000_0.000000">
+      <D value="7.85" unit="g/cm3"/>
+      <fraction n="1" ref="Fe"/>
+    </material>
+    <material name="1.000000_0.000000_0.000000_0.000000_0.000000">
+      <D value="7.85" unit="g/cm3"/>
+      <fraction n="1" ref="Fe"/>
+    </material>
+    <material name="1.000000_0.501961_0.000000_0.000000_0.000000">
+      <D value="7.85" unit="g/cm3"/>
+      <fraction n="1" ref="Fe"/>
+    </material>
+    <material name="1.000000_0.501961_0.250980_0.000000_0.000000">
+      <D value="7.85" unit="g/cm3"/>
+      <fraction n="1" ref="Fe"/>
+    </material>
+  </materials>
 
   <detectors>
     <detector name="Services" type="DD4hep_TestShape_Creator">

@@ -9,11 +9,4 @@
       <arg value="url:https://github.com/eic/epic-data/raw/meshes/meshes/tracking/FullCableSpaceEstimate.obj"/>
     </plugin>
   </plugins>
-  <plugins>
-    <plugin name="epic_FileLoader">
-      <arg value="cache:$DETECTOR_PATH:/opt/detector"/>
-      <arg value="file:meshes/FullCableSpaceEstimate.xml"/>
-      <arg value="url:https://github.com/eic/epic-data/raw/meshes/meshes/tracking/FullCableSpaceEstimate.xml"/>
-    </plugin>
-  </plugins>
 </lccdd>
