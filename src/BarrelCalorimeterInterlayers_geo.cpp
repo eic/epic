@@ -298,7 +298,7 @@ void buildFibers(Detector& desc, SensitiveDetector& sens, Volume& s_vol, int lay
 }
 
 // simple aluminum sheet cover
-// dimensions: (inner r, position in z, length, phi) 
+// dimensions: (inner r, position in z, length, phi)
 void buildSupport(Detector& desc, Volume& mod_vol, xml_comp_t x_support,
                   const std::tuple<double, double, double, double>& dimensions)
 {
