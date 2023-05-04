@@ -149,7 +149,9 @@
        space_before="EcalBarrel_ImagingLayerThickness + EcalBarrel_SpaceBetween/2.">
         <slice material="SciFiPb_PbGlue" thickness="EcalBarrel_RadiatorThickness" vis="EcalBarrelFiberLayerVis">
           <fiber material="SciFiPb_Scintillator"
-            sensitive="yes"
+	    sensitive="yes"
+            grid_n_phi="5"
+	    grid_dr="2*cm"
             radius="EcalBarrel_FiberRadius"
             cladding_thickness="EcalBarrel_CladdingThickness"
             spacing_x="EcalBarrel_FiberXSpacing"
@@ -167,6 +169,8 @@
           vis="EcalBarrelFiberLayerVis">
           <fiber material="SciFiPb_Scintillator"
             sensitive="yes"
+            grid_n_phi="5"
+	    grid_dr="2*cm"
             radius="EcalBarrel_FiberRadius"
             cladding_thickness="EcalBarrel_CladdingThickness"
             spacing_x="EcalBarrel_FiberXSpacing"

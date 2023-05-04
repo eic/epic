@@ -50,8 +50,7 @@ struct FiberGrid {
 
 vector<Point> fiberPositions(double r, double sx, double sz, double trx, double trz, double phi,
                              bool shift_first = false, double stol = 1e-2);
-std::pair<int, int>   getNdivisions(double x, double z, double dx, double dz);
-vector<FiberGrid> gridPoints(int div_x, int div_z, double x, double z, double phi);
+vector<FiberGrid> gridPoints(int div_n_phi, double div_dr, double x, double z, double phi);
 
 // geometry helpers
 void buildFibers(Detector& desc, SensitiveDetector& sens, Volume& mother, int layer_nunber, xml_comp_t x_fiber,
@@ -205,6 +204,8 @@ void buildFibers(Detector& desc, SensitiveDetector& sens, Volume& s_vol, int lay
   double      f_cladding_thickness         = getAttrOrDefault(x_fiber, _Unicode(cladding_thickness), 0.0 * cm);
   double      f_spacing_x                  = getAttrOrDefault(x_fiber, _Unicode(spacing_x), 0.122 * cm);
   double      f_spacing_z                  = getAttrOrDefault(x_fiber, _Unicode(spacing_z), 0.134 * cm);
+  int         grid_n_phi                   = getAttrOrDefault(x_fiber, _Unicode(grid_n_phi), 5);
+  double      grid_dr                      = getAttrOrDefault(x_fiber, _Unicode(grid_dr), 2.0*cm);
   std::string f_id_grid                    = getAttrOrDefault<std::string>(x_fiber, _Unicode(identifier_grid), "grid");
   std::string f_id_fiber = getAttrOrDefault<std::string>(x_fiber, _Unicode(identifier_fiber), "fiber");
 
@@ -227,11 +228,10 @@ void buildFibers(Detector& desc, SensitiveDetector& sens, Volume& s_vol, int lay
   f_vol_core.setAttributes(desc, x_fiber.regionStr(), x_fiber.limitsStr(), x_fiber.visStr());
 
 
-  // Calculate number of divisions
-  auto        grid_div = getNdivisions(s_trd_x1, s_thick, 2.0 * cm, 2.0 * cm);
-  // Calculate polygonal grid coordinates (vertices)
-  auto        grids = gridPoints(grid_div.first, grid_div.second, s_trd_x1, s_thick, hphi);
-  vector<int> f_id_count(grid_div.first * grid_div.second, 0);
+  // calculate polygonal grid coordinates (vertices)
+  auto        grids = gridPoints(grid_n_phi, grid_dr, s_trd_x1, s_thick, hphi);
+  vector<int> f_id_count(grids.size(), 0);
+  // use layer_number % 2 to add correct shifts for the adjacent fibers at layer boundary
   auto        f_pos = fiberPositions(f_radius, f_spacing_x, f_spacing_z, s_trd_x1, s_thick, hphi, (layer_number % 2 == 0));
   // a helper struct to speed up searching
   struct Fiber {
@@ -279,7 +279,7 @@ void buildFibers(Detector& desc, SensitiveDetector& sens, Volume& s_vol, int lay
         // fiber is along y-axis of the layer volume, so grids are arranged on X-Z plane
         Transform3D gr_tr(RotationZYX(0., 0., M_PI*0.5), Position(gr.mean_centroid.x(), 0., gr.mean_centroid.y()));
         auto grid_phv = s_vol.placeVolume(grid_vol, gr_tr);
-        grid_phv.addPhysVolID(f_id_grid, gr.ix + gr.iy * grid_div.first + 1);
+        grid_phv.addPhysVolID(f_id_grid, gr.ix + gr.iy * grid_n_phi + 1);
         grid_vol.ptr()->Voxelize("");
     }
   }
@@ -422,13 +422,12 @@ vector<Point> fiberPositions(double r, double sx, double sz, double trx, double 
   return positions;
 }
 
-// Calculate number of divisions for the readout grid for the fiber layers
-std::pair<int, int> getNdivisions(double x, double z, double dx, double dz)
+// Determine the number of divisions for the readout grid for the fiber layers
+// Calculate dimensions of the polygonal grid 
+vector<FiberGrid> gridPoints(int div_n_phi, double div_dr, double trd_x1, double height, double phi)
 {
-  // x and z defined as in vector<Point> fiberPositions
-  // dx, dz - size of the grid in x and z we want to get close to with the polygons
-  // See also descripltion when the function is called
-
+  /*
+  // TODO: move this test to xml file
   double SiPMsize = 13.0 * mm;
   double grid_min = SiPMsize + 3.0 * mm;
 
@@ -439,56 +438,44 @@ std::pair<int, int> getNdivisions(double x, double z, double dx, double dz)
   if (dx < grid_min) {
     dx = grid_min;
   }
+  */
+  // number of divisions
+  int nph = div_n_phi;
+  int nr = floor(height / div_dr);
+  if (nr == 0) {
+    nr++;
+  }
 
-  int nfit_cells_z = floor(z / dz);
-  int n_cells_z    = nfit_cells_z;
-
-  if (nfit_cells_z == 0)
-    n_cells_z++;
-
-  int nfit_cells_x = floor((2 * x) / dx);
-  int n_cells_x    = nfit_cells_x;
-
-  if (nfit_cells_x == 0)
-    n_cells_x++;
-
-  return std::make_pair(n_cells_x, n_cells_z);
-}
-
-// Calculate dimensions of the polygonal grid in the cartesian coordinate system x-z
-vector<FiberGrid> gridPoints(int div_x, int div_z, double x, double z, double phi)
-{
-  // x, z and phi defined as in vector<Point> fiberPositions
-  // div_x, div_z - number of divisions in x and z
+  // grid vertices
   vector<FiberGrid> results;
-  double dz = z / div_z;
+  double dr = height / nr;
 
-  for (int iz = 0; iz < div_z + 1; iz++) {
-    for (int ix = 0; ix < div_x + 1; ix++) {
-      double A_z = -z / 2 + iz * dz;
-      double B_z = -z / 2 + (iz + 1) * dz;
+  for (int ir = 0; ir <= nr; ir++) {
+    for (int iph = 0; iph <= nph; iph++) {
+      double A_y = -height / 2. + ir * dr;
+      double B_y = -height / 2. + (ir + 1) * dr;
 
-      double len_x_for_z        = 2 * (x + iz * dz * tan(phi));
-      double len_x_for_z_plus_1 = 2 * (x + (iz + 1) * dz * tan(phi));
+      double botl_dr = 2 * (trd_x1 + ir * dr * tan(phi));
+      double topl_dr = 2 * (trd_x1 + (ir + 1) * dr * tan(phi));
 
-      double dx_for_z        = len_x_for_z / div_x;
-      double dx_for_z_plus_1 = len_x_for_z_plus_1 / div_x;
+      double botl_dph_dr = botl_dr / nph;
+      double topl_dph_dr = topl_dr / nph;
 
-      double A_x = -len_x_for_z / 2. + ix * dx_for_z;
-      double B_x = -len_x_for_z_plus_1 / 2. + ix * dx_for_z_plus_1;
+      double A_x = -botl_dr / 2. + iph * botl_dph_dr;
+      double B_x = -topl_dr / 2. + iph * topl_dph_dr;
 
-      double C_z = B_z;
-      double D_z = A_z;
-      double C_x = B_x + dx_for_z_plus_1;
-      double D_x = A_x + dx_for_z;
+      double C_y = B_y;
+      double D_y = A_y;
+      double C_x = B_x + topl_dph_dr;
+      double D_x = A_x + botl_dph_dr;
 
-      auto A = Point(A_x, A_z);
-      auto B = Point(B_x, B_z);
-      auto C = Point(C_x, C_z);
-      auto D = Point(D_x, D_z);
+      auto A = Point(A_x, A_y);
+      auto B = Point(B_x, B_y);
+      auto C = Point(C_x, C_y);
+      auto D = Point(D_x, D_y);
 
       // vertex points filled in the clock-wise direction
-      results.emplace_back(FiberGrid(ix, iz, {A, B, C, D}));
+      results.emplace_back(FiberGrid(iph, ir, {A, B, C, D}));
     }
   }
 
