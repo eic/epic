@@ -423,7 +423,7 @@ vector<Point> fiberPositions(double r, double sx, double sz, double trx, double 
 }
 
 // Determine the number of divisions for the readout grid for the fiber layers
-// Calculate dimensions of the polygonal grid 
+// Calculate dimensions of the polygonal grid
 vector<FiberGrid> gridPoints(int div_n_phi, double div_dr, double trd_x1, double height, double phi)
 {
   /*
