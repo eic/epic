@@ -60,7 +60,7 @@
     <vis name="EcalBarrelStaveVis"      ref="AnlGold"   showDaughters="true" visible="true" />
     <vis name="EcalBarrelFiberLayerVis" ref="AnlGold"   showDaughters="false" visible="true" />
     <vis name="EcalBarrelSliceVis"      ref="AnlGray"/>
-    <vis name="EcalBarrelSupportVis"    ref="AnlOrange"/>
+    <vis name="EcalBarrelSupportVis"    ref="AnlLightGray"/>
 
     <vis name="EcalVis"                 ref="AnlGold"   showDaughters="true"  visible="false"/>
     <vis name="EcalEndcapVis"           ref="AnlGold"   showDaughters="false" visible="true"/>
