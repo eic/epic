@@ -1,8 +1,12 @@
 // SPDX-License-Identifier: LGPL-3.0-or-later
 // Copyright (C) 2022 Aranya Giri
 
-// Start Date - 10/31/2022
-// Homogeneous PbWO4 (EM Calorimeter) Pair Spectrometer
+/* Date : 04/31/2023
+W Scifi (EM Calorimeter) Pair Spectrometer
+
+Scintillating fiber calorimeter with tower shape blocks
+reference: https://github.com/eic/epic/blob/main/src/ScFiCalorimeter_geo.cpp
+Author: Chao Peng (ANL)*/
 
 #include "DD4hep/DetFactoryHelper.h"
 #include <XML/Helper.h>
@@ -14,7 +18,7 @@ using namespace std;
 using namespace dd4hep;
 
 // Definition of function to build the modules
-static tuple<Volume, Position> build_specHomoCAL_module(const Detector& description, const xml::Component& mod_x, SensitiveDetector& sens);
+static tuple<Volume, Position> build_specScifiCAL_module(const Detector& description, const xml::Component& mod_x, SensitiveDetector& sens);
 
 // Driver Function
 static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector sens)
@@ -38,7 +42,7 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
 
   // Create Modules
 
-  auto [modVol, modSize] = build_specHomoCAL_module(description, x_mod, sens);
+  auto [modVol, modSize] = build_specScifiCAL_module(description, x_mod, sens);
   double detSizeXY = getAttrOrDefault( x_det, _Unicode(sizeXY), 20 );
   int nxy = int( detSizeXY / modSize.x() );
   double xypos0 = -nxy*modSize.x()/2.0 + modSize.x()/2.0;
@@ -84,7 +88,7 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
 
 //--------------------------------------------------------------------
 //Function for building the module
-static tuple<Volume, Position> build_specHomoCAL_module( const Detector& description, const xml::Component& mod_x, SensitiveDetector& sens){
+static tuple<Volume, Position> build_specScifiCAL_module( const Detector& description, const xml::Component& mod_x, SensitiveDetector& sens){
 
   //--------------------Module Setup---------------------------------------------------------------------
   double sx = mod_x.attr<double>(_Unicode(sizex));
@@ -102,15 +106,15 @@ static tuple<Volume, Position> build_specHomoCAL_module( const Detector& descrip
 
   //----------------------------Sci-Fi fibers -----------------------------------------------------------
   if (mod_x.hasChild(_Unicode(fiber))) {
-    auto   fiber_x  = mod_x.child(_Unicode(fiber));
-    auto   fr       = fiber_x.attr<double>(_Unicode(radius));
-    auto   fsx      = fiber_x.attr<double>(_Unicode(spacex));
-    auto   fsy      = fiber_x.attr<double>(_Unicode(spacey));
-    auto   foff     = dd4hep::getAttrOrDefault<double>(fiber_x, _Unicode(offset), 0.5 * mm);
-    auto   fiberMat = description.material(fiber_x.attr<std::string>(_Unicode(material)));
+    auto   fiber_tube  = mod_x.child(_Unicode(fiber));
+    auto   fr       = fiber_tube.attr<double>(_Unicode(radius));
+    auto   fsx      = fiber_tube.attr<double>(_Unicode(spacex));
+    auto   fsy      = fiber_tube.attr<double>(_Unicode(spacey));
+    auto   foff     = dd4hep::getAttrOrDefault<double>(fiber_tube, _Unicode(offset), 0.5 * mm);
+    auto   fiberMat = description.material(fiber_tube.attr<std::string>(_Unicode(material)));
     Tube   fiberShape(0., fr, sz / 2.);
     Volume fiberVol("fiber_vol", fiberShape, fiberMat);
-    fiberVol.setVisAttributes(description.visAttributes(fiber_x.attr<std::string>(_Unicode(vis))));
+    fiberVol.setVisAttributes(description.visAttributes(fiber_tube.attr<std::string>(_Unicode(vis))));
     fiberVol.setSensitiveDetector(sens);
 
     // Fibers are placed in a honeycomb with the radius = sqrt(3)/2. * hexagon side length
