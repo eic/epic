@@ -143,7 +143,6 @@
       <dimensions numsides="EcalBarrel_ModRepeat"
         rmin="EcalBarrel_rmin"
         z="EcalBarrel_Calorimeter_length"/>
-      <support thickness="EcalBarrel_Support_thickness" material="Aluminum" vis="EcalBarrelSupportVis"/>
       <staves vis="EcalBarrelStaveVis"/>
       <layer repeat="EcalBarrelImagingLayers_num-1" vis="EcalBarrelLayerVis"
        space_between="EcalBarrel_ImagingLayerThickness + EcalBarrel_SpaceBetween"
@@ -180,6 +179,7 @@
           </fiber>
         </slice>
       </layer>
+      <support thickness="EcalBarrel_Support_thickness" material="Aluminum" vis="EcalBarrelSupportVis"/>
     </detector>
   </detectors>
 
