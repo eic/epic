@@ -4,38 +4,39 @@
 <lccdd>
 
 	<define>
-    <constant name="EcalLumiSpec_FiberRadius" value="0.235*cm"/>
-    <constant name="EcalLumiSpec_FiberOffset" value="0.5*mm"/>
-    <constant name="EcalLumiSpec_FiberSpaceX" value="0.265*mm"/>
-    <constant name="EcalLumiSpec_FiberSpaceY" value="0.425*mm"/>
-  </define>
+		<constant name="EcalLumiSpec_FiberRadius" value="0.235*cm"/>
+		<constant name="EcalLumiSpec_FiberOffset" value="0.5*mm"/>
+		<constant name="EcalLumiSpec_FiberSpaceX" value="0.265*mm"/>
+		<constant name="EcalLumiSpec_FiberSpaceY" value="0.425*mm"/>
+	</define>
 
-  <detectors>
-    <detector id="LumiSpecCAL_ID" name="LumiSpecCAL" type="LumiSpecScifiCAL" vis="FFPreVis" readout="EcalLumiSpecHits" sizeXY="LumiSpecCAL_DXY">
-	<module sizex="25*mm" sizey="25*mm" sizez="LumiSpecCALTower_DZ" frameSize="0.0*mm" material="TungstenDens24" vis="FFPreModuleVis">
-	   <fiber material="Polystyrene"
-		radius="EcalLumiSpec_FiberRadius"
-		offset="EcalLumiSpec_FiberOffset"
-		spacex="EcalLumiSpec_FiberSpaceX"
-		spacey="EcalLumiSpec_FiberSpaceY"
-		vis="EcalEndcapBlockVis"/>
-	</module>
-	<sector id="0">
-        	<position x="0.0*cm" y="LumiSpecCAL_Y" z="LumiSpecCAL_Z"/>
-        	<rotation x="0.0*rad" y="0.0*rad" z="0.0*rad"/>
-	</sector>
-      	<sector id="1">
-        	<position x="0.0*cm" y="-1*LumiSpecCAL_Y" z="LumiSpecCAL_Z"/>
-        	<rotation x="0.0*rad" y="0.0*rad" z="0.0*rad"/>
-      	</sector>
-    </detector>
-  </detectors>
+	<detectors>
+		<detector id="LumiSpecCAL_ID" name="LumiSpecCAL" type="LumiSpecScifiCAL" vis="FFPreVis" readout="LumiSpecCALHits" sizeXY="LumiSpecCAL_DXY">
+			<module sizex="25*mm" sizey="25*mm" sizez="LumiSpecCALTower_DZ" frameSize="0.0*mm" material="TungstenDens24" vis="FFPreModuleVis">
+				<fiber material="Polystyrene"
+					radius="EcalLumiSpec_FiberRadius"
+					offset="EcalLumiSpec_FiberOffset"
+					spacex="EcalLumiSpec_FiberSpaceX"
+					spacey="EcalLumiSpec_FiberSpaceY"
+					vis="EcalEndcapBlockVis"/>
+			</module>
+			<sector id="0">
+				<position x="0.0*cm" y="LumiSpecCAL_Y" z="LumiSpecCAL_Z"/>
+				<rotation x="0.0*rad" y="0.0*rad" z="0.0*rad"/>
+			</sector>
+			<sector id="1">
+				<position x="0.0*cm" y="-1*LumiSpecCAL_Y" z="LumiSpecCAL_Z"/>
+				<rotation x="0.0*rad" y="0.0*rad" z="0.0*rad"/>
+			</sector>
+		</detector>
+	</detectors>
 
-  <readouts>
-    <readout name="EcalLumiSpecHits">
-      <segmentation type="NoSegmentation"/>
-      <id> system:8,sector:8,module:8,fiber_x:8,fiber_y:8</id>
-    </readout>
-  </readouts>
+	<readouts>
+		<readout name="LumiSpecCALHits">
+			
+			<segmentation type="NoSegmentation"/>
+			<id>system:8,sector:8,module:8,fiber_x:16,fiber_y:16</id>
+		</readout>
+	</readouts>
 
 </lccdd>
