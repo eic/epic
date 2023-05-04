@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: LGPL-3.0-or-later
-// Copyright (C) 2022 Aranya Giri
+// Copyright (C) 2023 Aranya Giri
 
 /* Date : 04/31/2023
 W Scifi (EM Calorimeter) Pair Spectrometer
