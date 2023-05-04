@@ -1,3 +1,5 @@
+ebeam: 5
+pbeam: 41
 features:
   beampipe:
   tracking:
@@ -5,14 +7,13 @@ features:
     vertex_barrel:
     silicon_barrel:
     mpgd_barrel:
-    mpgd_dirc:
     silicon_disks:
     support_service_assembly:
     tof_barrel:
     tof_endcap:
   pid:
     dirc:
-    mrich:
+    #pfrich_gdml:
     drich:
   ecal:
     forward_homogeneous:
@@ -26,6 +27,6 @@ features:
     barrel_gdml:
     backward:
   far_forward:
-    far_forward:
+    far_forward_brycecanyon:
   far_backward:
     far_backward:

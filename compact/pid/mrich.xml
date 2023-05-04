@@ -90,7 +90,8 @@
               pitch="MRICHFresnelLensGroove_pitch" focal_length="6.0*inch"
               effective_diameter="MRICHFresnelLensEffectiveDiameter"
               width="MRICHAerogel_width"
-              material="AcrylicOptical"/>
+              material="AcrylicOptical">
+        </lens>
         <mirror vis="MRICH_mirror_vis"
                 x1="MRICHMirror_width1" x2="MRICHMirror_width2" length="MRICHMirror_length"
                 surface="MRICH_MirrorOpticalSurface" thickness="MRICHMirror_thickness"
