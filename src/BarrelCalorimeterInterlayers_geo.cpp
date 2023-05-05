@@ -50,8 +50,7 @@ struct FiberGrid {
 
 vector<Point> fiberPositions(double r, double sx, double sz, double trx, double trz, double phi,
                              bool shift_first = false, double stol = 1e-2);
-std::pair<int, int>   getNdivisions(double x, double z, double dx, double dz);
-vector<FiberGrid> gridPoints(int div_x, int div_z, double x, double z, double phi);
+vector<FiberGrid> gridPoints(int div_n_phi, double div_dr, double x, double z, double phi);
 
 // geometry helpers
 void buildFibers(Detector& desc, SensitiveDetector& sens, Volume& mother, int layer_nunber, xml_comp_t x_fiber,
@@ -187,9 +186,9 @@ static Ref_t create_detector(Detector& desc, xml_h e, SensitiveDetector sens)
   if (x_det.hasChild(_U(staves))) {
     xml_comp_t x_staves = x_det.staves();
     mod_vol.setVisAttributes(desc.visAttributes(x_staves.visStr()));
-    if (x_staves.hasChild(_U(support))) {
-      buildSupport(desc, mod_vol, x_staves.child(_U(support)), {inner_r, l_pos_z, x_dim.z(), hphi});
-    }
+  }
+  if (x_det.hasChild(_U(support))) {
+    buildSupport(desc, mod_vol, x_det.child(_U(support)), {inner_r, l_pos_z, x_dim.z(), hphi});
   }
 
   // Set envelope volume attributes.
@@ -205,6 +204,8 @@ void buildFibers(Detector& desc, SensitiveDetector& sens, Volume& s_vol, int lay
   double      f_cladding_thickness         = getAttrOrDefault(x_fiber, _Unicode(cladding_thickness), 0.0 * cm);
   double      f_spacing_x                  = getAttrOrDefault(x_fiber, _Unicode(spacing_x), 0.122 * cm);
   double      f_spacing_z                  = getAttrOrDefault(x_fiber, _Unicode(spacing_z), 0.134 * cm);
+  int         grid_n_phi                   = getAttrOrDefault(x_fiber, _Unicode(grid_n_phi), 5);
+  double      grid_dr                      = getAttrOrDefault(x_fiber, _Unicode(grid_dr), 2.0*cm);
   std::string f_id_grid                    = getAttrOrDefault<std::string>(x_fiber, _Unicode(identifier_grid), "grid");
   std::string f_id_fiber = getAttrOrDefault<std::string>(x_fiber, _Unicode(identifier_fiber), "fiber");
 
@@ -228,11 +229,10 @@ void buildFibers(Detector& desc, SensitiveDetector& sens, Volume& s_vol, int lay
   f_vol_clad.placeVolume(f_vol_core);
 
 
-  // Calculate number of divisions
-  auto        grid_div = getNdivisions(s_trd_x1, s_thick, 2.0 * cm, 2.0 * cm);
-  // Calculate polygonal grid coordinates (vertices)
-  auto        grids = gridPoints(grid_div.first, grid_div.second, s_trd_x1, s_thick, hphi);
-  vector<int> f_id_count(grid_div.first * grid_div.second, 0);
+  // calculate polygonal grid coordinates (vertices)
+  auto        grids = gridPoints(grid_n_phi, grid_dr, s_trd_x1, s_thick, hphi);
+  vector<int> f_id_count(grids.size(), 0);
+  // use layer_number % 2 to add correct shifts for the adjacent fibers at layer boundary
   auto        f_pos = fiberPositions(f_radius, f_spacing_x, f_spacing_z, s_trd_x1, s_thick, hphi, (layer_number % 2 == 0));
   // a helper struct to speed up searching
   struct Fiber {
@@ -279,7 +279,7 @@ void buildFibers(Detector& desc, SensitiveDetector& sens, Volume& s_vol, int lay
         // fiber is along y-axis of the layer volume, so grids are arranged on X-Z plane
         Transform3D gr_tr(RotationZYX(0., 0., M_PI*0.5), Position(gr.mean_centroid.x(), 0., gr.mean_centroid.y()));
         auto grid_phv = s_vol.placeVolume(grid_vol, gr_tr);
-        grid_phv.addPhysVolID(f_id_grid, gr.ix + gr.iy * grid_div.first + 1);
+        grid_phv.addPhysVolID(f_id_grid, gr.ix + gr.iy * grid_n_phi + 1);
         grid_vol.ptr()->Voxelize("");
     }
   }
@@ -297,93 +297,22 @@ void buildFibers(Detector& desc, SensitiveDetector& sens, Volume& s_vol, int lay
   */
 }
 
-// DAWN view seems to have some issue with overlapping solids even if they were unions
-// The support is now built without overlapping
+// simple aluminum sheet cover
+// dimensions: (inner r, position in z, length, phi)
 void buildSupport(Detector& desc, Volume& mod_vol, xml_comp_t x_support,
                   const std::tuple<double, double, double, double>& dimensions)
 {
-  auto [inner_r, l_pos_z, stave_length, hphi] = dimensions;
+  auto     [inner_r, pos_z, stave_length, hphi] = dimensions;
+  double   support_thickness = getAttrOrDefault(x_support, _Unicode(thickness), 3.*cm);
+  auto     material          = desc.material(x_support.materialStr());
+  double   trd_y             = stave_length / 2.;
+  double   trd_x1_support    = std::tan(hphi) * pos_z;
+  double   trd_x2_support    = std::tan(hphi) * (pos_z + support_thickness);
 
-  double support_thickness = getAttrOrDefault(x_support, _Unicode(thickness), 5. * cm);
-  double beam_thickness    = getAttrOrDefault(x_support, _Unicode(beam_thickness), support_thickness / 4.);
-  // sanity check
-  if (beam_thickness > support_thickness / 3.) {
-    std::cerr << Form("beam_thickness (%.2f) cannot be greater than support_thickness/3 (%.2f), shrink it to fit",
-                      beam_thickness, support_thickness / 3.)
-              << std::endl;
-    beam_thickness = support_thickness / 3.;
-  }
-  Assembly env_vol("support_envelope");
-  double   trd_y          = stave_length / 2.;
-  double   trd_x1_support = std::tan(hphi) * l_pos_z;
-  // FIXME trd_x2_support is filled but unused
-  // double   trd_x2_support = std::tan(hphi) * (l_pos_z + support_thickness);
-
-  double grid_size        = getAttrOrDefault(x_support, _Unicode(grid_size), 25. * cm);
-  int    n_cross_supports = std::floor(trd_y - beam_thickness) / grid_size;
-  // number of "beams" running the length of the stave.
-  // @TODO make it configurable
-  int n_beams = getAttrOrDefault(x_support, _Unicode(n_beams), 3);
-  ;
-  double beam_width = 2. * trd_x1_support / (n_beams + 1); // quick hack to make some gap between T beams
-  double beam_gap   = getAttrOrDefault(x_support, _Unicode(beam_gap), 3. * cm);
-
-  // build T-shape beam
-  double                  beam_space_x    = beam_width + beam_gap;
-  [[maybe_unused]] double beam_space_z    = support_thickness - beam_thickness;
-  double                  cross_thickness = support_thickness - beam_thickness;
-  double                  beam_pos_z      = beam_thickness / 2.;
-  [[maybe_unused]] double beam_center_z   = support_thickness / 2. - beam_pos_z;
-
-  Box        beam_vert_s(beam_thickness / 2., trd_y, cross_thickness / 2.);
-  Box        beam_hori_s(beam_width / 2., trd_y, beam_thickness / 2.);
-  UnionSolid T_beam_s(beam_hori_s, beam_vert_s, Position(0., 0., support_thickness / 2.));
-  Volume     H_beam_vol("H_beam", T_beam_s, desc.material(x_support.materialStr()));
-  H_beam_vol.setVisAttributes(desc, x_support.visStr());
-  // place H beams first
-  double beam_start_x = -(n_beams - 1) * (beam_width + beam_gap) / 2.;
-  for (int i = 0; i < n_beams; ++i) {
-    Position beam_pos(beam_start_x + i * (beam_width + beam_gap), 0., -support_thickness / 2. + beam_pos_z);
-    env_vol.placeVolume(H_beam_vol, beam_pos);
-  }
-
-  // place central crossing beams that connects the H beams
-  double cross_x = beam_space_x - beam_thickness;
-  Box    cross_s(cross_x / 2., beam_thickness / 2., cross_thickness / 2.);
-  Volume cross_vol("cross_center_beam", cross_s, desc.material(x_support.materialStr()));
-  cross_vol.setVisAttributes(desc, x_support.visStr());
-  for (int i = 0; i < n_beams - 1; ++i) {
-    env_vol.placeVolume(cross_vol, Position(beam_start_x + beam_space_x * (i + 0.5), 0., beam_pos_z));
-    for (int j = 1; j < n_cross_supports; j++) {
-      env_vol.placeVolume(cross_vol, Position(beam_start_x + beam_space_x * (i + 0.5), -j * grid_size, beam_pos_z));
-      env_vol.placeVolume(cross_vol, Position(beam_start_x + beam_space_x * (i + 0.5), j * grid_size, beam_pos_z));
-    }
-  }
-
-  // place edge crossing beams that connects the neighbour support
-  // @TODO: connection part is still using boolean volumes, maybe problematic to DAWN
-  double           cross_edge_x = trd_x1_support + beam_start_x - beam_thickness / 2.;
-  double           cross_trd_x1 = cross_edge_x + std::tan(hphi) * beam_thickness;
-  double           cross_trd_x2 = cross_trd_x1 + 2. * std::tan(hphi) * cross_thickness;
-  double           edge_pos_x   = beam_start_x - cross_trd_x1 / 2. - beam_thickness / 2;
-  Trapezoid        cross_s2_trd(cross_trd_x1 / 2., cross_trd_x2 / 2., beam_thickness / 2., beam_thickness / 2.,
-                                cross_thickness / 2.);
-  Box              cross_s2_box((cross_trd_x2 - cross_trd_x1) / 4., beam_thickness / 2., cross_thickness / 2.);
-  SubtractionSolid cross_s2(cross_s2_trd, cross_s2_box, Position((cross_trd_x2 + cross_trd_x1) / 4., 0., 0.));
-  Volume           cross_vol2("cross_edge_beam", cross_s2, desc.material(x_support.materialStr()));
-  cross_vol2.setVisAttributes(desc, x_support.visStr());
-  env_vol.placeVolume(cross_vol2, Position(edge_pos_x, 0., beam_pos_z));
-  env_vol.placeVolume(cross_vol2, Transform3D(Translation3D(-edge_pos_x, 0., beam_pos_z) * RotationZ(M_PI)));
-  for (int j = 1; j < n_cross_supports; j++) {
-    env_vol.placeVolume(cross_vol2, Position(edge_pos_x, -j * grid_size, beam_pos_z));
-    env_vol.placeVolume(cross_vol2, Position(edge_pos_x, j * grid_size, beam_pos_z));
-    env_vol.placeVolume(cross_vol2,
-                        Transform3D(Translation3D(-edge_pos_x, -j * grid_size, beam_pos_z) * RotationZ(M_PI)));
-    env_vol.placeVolume(cross_vol2,
-                        Transform3D(Translation3D(-edge_pos_x, j * grid_size, beam_pos_z) * RotationZ(M_PI)));
-  }
-
-  mod_vol.placeVolume(env_vol, Position(0.0, 0.0, l_pos_z + support_thickness / 2.));
+  Trapezoid  s_shape(trd_x1_support, trd_x2_support, trd_y, trd_y, support_thickness / 2.);
+  Volume     s_vol("support_layer", s_shape, material);
+  s_vol.setVisAttributes(desc.visAttributes(x_support.visStr()));
+  mod_vol.placeVolume(s_vol, Position(0.0, 0.0, pos_z + support_thickness / 2.));
 }
 
 // Fill fiber lattice into trapezoid starting from position (0,0) in x-z coordinate system
@@ -422,13 +351,12 @@ vector<Point> fiberPositions(double r, double sx, double sz, double trx, double 
   return positions;
 }
 
-// Calculate number of divisions for the readout grid for the fiber layers
-std::pair<int, int> getNdivisions(double x, double z, double dx, double dz)
+// Determine the number of divisions for the readout grid for the fiber layers
+// Calculate dimensions of the polygonal grid
+vector<FiberGrid> gridPoints(int div_n_phi, double div_dr, double trd_x1, double height, double phi)
 {
-  // x and z defined as in vector<Point> fiberPositions
-  // dx, dz - size of the grid in x and z we want to get close to with the polygons
-  // See also descripltion when the function is called
-
+  /*
+  // TODO: move this test to xml file
   double SiPMsize = 13.0 * mm;
   double grid_min = SiPMsize + 3.0 * mm;
 
@@ -439,56 +367,44 @@ std::pair<int, int> getNdivisions(double x, double z, double dx, double dz)
   if (dx < grid_min) {
     dx = grid_min;
   }
+  */
+  // number of divisions
+  int nph = div_n_phi;
+  int nr = floor(height / div_dr);
+  if (nr == 0) {
+    nr++;
+  }
 
-  int nfit_cells_z = floor(z / dz);
-  int n_cells_z    = nfit_cells_z;
-
-  if (nfit_cells_z == 0)
-    n_cells_z++;
-
-  int nfit_cells_x = floor((2 * x) / dx);
-  int n_cells_x    = nfit_cells_x;
-
-  if (nfit_cells_x == 0)
-    n_cells_x++;
-
-  return std::make_pair(n_cells_x, n_cells_z);
-}
-
-// Calculate dimensions of the polygonal grid in the cartesian coordinate system x-z
-vector<FiberGrid> gridPoints(int div_x, int div_z, double x, double z, double phi)
-{
-  // x, z and phi defined as in vector<Point> fiberPositions
-  // div_x, div_z - number of divisions in x and z
+  // grid vertices
   vector<FiberGrid> results;
-  double dz = z / div_z;
+  double dr = height / nr;
 
-  for (int iz = 0; iz < div_z + 1; iz++) {
-    for (int ix = 0; ix < div_x + 1; ix++) {
-      double A_z = -z / 2 + iz * dz;
-      double B_z = -z / 2 + (iz + 1) * dz;
+  for (int ir = 0; ir <= nr; ir++) {
+    for (int iph = 0; iph <= nph; iph++) {
+      double A_y = -height / 2. + ir * dr;
+      double B_y = -height / 2. + (ir + 1) * dr;
 
-      double len_x_for_z        = 2 * (x + iz * dz * tan(phi));
-      double len_x_for_z_plus_1 = 2 * (x + (iz + 1) * dz * tan(phi));
+      double botl_dr = 2 * (trd_x1 + ir * dr * tan(phi));
+      double topl_dr = 2 * (trd_x1 + (ir + 1) * dr * tan(phi));
 
-      double dx_for_z        = len_x_for_z / div_x;
-      double dx_for_z_plus_1 = len_x_for_z_plus_1 / div_x;
+      double botl_dph_dr = botl_dr / nph;
+      double topl_dph_dr = topl_dr / nph;
 
-      double A_x = -len_x_for_z / 2. + ix * dx_for_z;
-      double B_x = -len_x_for_z_plus_1 / 2. + ix * dx_for_z_plus_1;
+      double A_x = -botl_dr / 2. + iph * botl_dph_dr;
+      double B_x = -topl_dr / 2. + iph * topl_dph_dr;
 
-      double C_z = B_z;
-      double D_z = A_z;
-      double C_x = B_x + dx_for_z_plus_1;
-      double D_x = A_x + dx_for_z;
+      double C_y = B_y;
+      double D_y = A_y;
+      double C_x = B_x + topl_dph_dr;
+      double D_x = A_x + botl_dph_dr;
 
-      auto A = Point(A_x, A_z);
-      auto B = Point(B_x, B_z);
-      auto C = Point(C_x, C_z);
-      auto D = Point(D_x, D_z);
+      auto A = Point(A_x, A_y);
+      auto B = Point(B_x, B_y);
+      auto C = Point(C_x, C_y);
+      auto D = Point(D_x, D_y);
 
       // vertex points filled in the clock-wise direction
-      results.emplace_back(FiberGrid(ix, iz, {A, B, C, D}));
+      results.emplace_back(FiberGrid(iph, ir, {A, B, C, D}));
     }
   }
 
