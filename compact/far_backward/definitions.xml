@@ -269,7 +269,6 @@
     <constant name="LumiSpecCAL_Z"        value="-65*m"/>
 
     <!-- Lumi spectrometer trackers -->
-    <constant name="SpecMag_to_SpecCAL_DZ" value="(LumiSpecMag_Z - LumiSpecMag_DZ/2.0) - (LumiSpecCAL_Z + LumiSpecCALTower_DZ/2.0)"/>
     <constant name="LumiSpecTracker_DXY"  value="0.2*m"/>
     <constant name="LumiSpecTracker_Z1"   value="LumiSpecCAL_Z + LumiSpecCALTower_DZ/2. + 21*cm "/>
     <constant name="LumiSpecTracker_Z2"   value="LumiSpecCAL_Z + LumiSpecCALTower_DZ/2. + 11*cm"/>
