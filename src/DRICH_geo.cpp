@@ -148,7 +148,7 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
   }
 
   // if debugging anything, draw only one sector and adjust visibility
-  if (debugOptics || debugMirror || debugSensors)
+  if (debugOpticsMode!=0 || debugMirror || debugSensors)
     debugSector = true;
   if (debugSector)
     gasvolVis = vesselVis = desc.invisible();
