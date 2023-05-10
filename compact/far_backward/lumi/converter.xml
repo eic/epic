@@ -1,0 +1,22 @@
+<!-- SPDX-License-Identifier: LGPL-3.0-or-later -->
+<!-- Copyright (C) 2022 Dhevan Gangadharan -->
+
+<lccdd>
+
+  <comment>
+  Bremstrahlung photon converter before the lumi spectrometer.
+  </comment>
+
+  <detectors>
+    <detector
+      name="LumiConverter"
+      type="LumiWindow"
+      material="Aluminum"
+      vis="AnlBlue">
+      <dimensions x="LumiConverter_DXY/2" y="LumiConverter_DXY/2" z="LumiConverter_DZ/2" />
+      <position   x="LumiConverter_X" y="LumiConverter_Y" z="LumiConverter_Z" />
+      <rotation   x="0*rad" y="0*rad" z="0*rad" />
+    </detector>
+  </detectors>
+
+</lccdd>

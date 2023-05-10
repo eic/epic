@@ -140,8 +140,6 @@ static Ref_t create_detector(Detector& lcdd, xml_h handle, SensitiveDetector sen
     wedge_box_tube_v.setVisAttributes(lcdd.visAttributes(wedge_box_handle.visStr()));
     envelope_v.placeVolume(wedge_box_tube_v);
 
-    // The sides of the box are also shared between each pair of the adjacent sectors
-
     const double side_rmin         = wedge_box_handle.inner_r() + wedge_box_handle.thickness();
     const double side_rmax_default = std::min(envelope_handle.rmax(),
                                               // subtract a unit of thickness to avoid an overlap
@@ -152,7 +150,6 @@ static Ref_t create_detector(Detector& lcdd, xml_h handle, SensitiveDetector sen
 
     Box wedge_box_side_box_shape{
         (side_rmax - side_rmin) / 2,
-        // It would make sense for a shared side to have double thickness, but we seemingly don't have space for that
         wedge_box_handle.thickness() / 2, (envelope_handle.zmax() - envelope_handle.zmin()) / 2};
     Volume wedge_box_side_v[2];
     for (int side = -1; side <= 1; side += 2) {

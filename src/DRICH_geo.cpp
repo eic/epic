@@ -108,6 +108,7 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
   double sensorSphPatchZmin = sensorSphPatchElem.attr<double>(_Unicode(zmin));
   // - settings and switches
   long debugOpticsMode = desc.constantAsLong("DRICH_debug_optics");
+  bool debugSector     = desc.constantAsLong("DRICH_debug_sector") == 1;
   bool debugMirror     = desc.constantAsLong("DRICH_debug_mirror") == 1;
   bool debugSensors    = desc.constantAsLong("DRICH_debug_sensors") == 1;
   std::string FPfile = desc.constantAsString("DRICH_FP_file");
@@ -133,8 +134,6 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
       printout(FATAL, "DRICH_geo", "UNKNOWN debugOpticsMode");
       return det;
     }
-    aerogelVis = sensorVis = mirrorVis;
-    gasvolVis = vesselVis = desc.invisible();
   }
 
   // sensor size rescaling for large sensor (catching all photons)
@@ -147,6 +146,12 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
     seg.setOffsetX(sensorRescale * seg.offsetX());
     seg.setOffsetY(sensorRescale * seg.offsetY());
   }
+
+  // if debugging anything, draw only one sector and adjust visibility
+  if (debugOptics || debugMirror || debugSensors)
+    debugSector = true;
+  if (debugSector)
+    gasvolVis = vesselVis = desc.invisible();
 
   // readout coder <-> unique sensor ID
   /* - `sensorIDfields` is a list of readout fields used to specify a unique sensor ID
@@ -342,7 +347,7 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
 
   for (int isec = 0; isec < nSectors; isec++) {
     // debugging filters, limiting the number of sectors
-    if ((debugMirror || debugSensors || debugOpticsMode!=0) && isec != 0)
+    if (debugSector && isec != 0)
       continue;
 
     // sector rotation about z axis
@@ -351,62 +356,29 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
 
     // BUILD MIRRORS ====================================================================
 
-    // derive spherical mirror parameters `(zM,xM,rM)`, for given image point
-    // coordinates `(zI,xI)` and `dO`, defined as the z-distance between the
-    // object and the mirror surface
-    // - all coordinates are specified w.r.t. the object point coordinates
-    // - this is point-to-point focusing, but it can be used to effectively steer
-    //   parallel-to-point focusing
-    double zM, xM, rM;
-    auto   FocusMirror = [&zM, &xM, &rM](double zI, double xI, double dO) {
-      zM = dO * zI / (2 * dO - zI);
-      xM = dO * xI / (2 * dO - zI);
-      rM = dO - zM;
-    };
-
-    // attributes, re-defined w.r.t. IP, needed for mirror positioning
-    double zS = sensorSphCenterZ + vesselZmin; // sensor sphere attributes
+    // mirror positioning attributes
+    // - sensor sphere center, w.r.t. IP
+    double zS = sensorSphCenterZ + vesselZmin;
     double xS = sensorSphCenterX;
-    // double rS = sensorSphRadius;
-    double B = vesselZmax - mirrorBackplane; // distance between IP and mirror back plane
-
-    // focus 1: set mirror to focus IP on center of sensor sphere `(zS,xS)`
-    /*double zF = zS;
-    double xF = xS;
-    FocusMirror(zF,xF,B);*/
-
-    // focus 2: move focal region along sensor sphere radius, according to `focusTuneLong`
-    // - specifically, along the radial line which passes through the approximate centroid
-    //   of the sensor region `(sensorCentroidZ,sensorCentroidX)`
-    // - `focusTuneLong` is the distance to move, given as a fraction of `sensorSphRadius`
-    // - `focusTuneLong==0` means `(zF,xF)==(zS,xS)`
-    // - `focusTuneLong==1` means `(zF,xF)` will be on the sensor sphere, near the centroid
-    /*
-    double zC = sensorCentroidZ + vesselZmin;
-    double xC = sensorCentroidX;
-    double slopeF = (xC-xS) / (zC-zS);
-    double thetaF = std::atan(std::fabs(slopeF));
-    double zF = zS + focusTuneLong * sensorSphRadius * std::cos(thetaF);
-    double xF = xS - focusTuneLong * sensorSphRadius * std::sin(thetaF);
-    //FocusMirror(zF,xF,B);
-
-    // focus 3: move along line perpendicular to focus 2's radial line,
-    // according to `focusTunePerp`, with the same numerical scale as `focusTuneLong`
-    zF += focusTunePerp * sensorSphRadius * std::cos(M_PI/2-thetaF);
-    xF += focusTunePerp * sensorSphRadius * std::sin(M_PI/2-thetaF);
-    FocusMirror(zF,xF,B);
-    */
-
-    // focus 4: use (z,x) coordinates for tune parameters
+    // - distance between IP and mirror back plane
+    double b = vesselZmax - mirrorBackplane;
+    // - desired focal region: sensor sphere center, offset by focus-tune (z,x) parameters
     double zF = zS + focusTuneZ;
     double xF = xS + focusTuneX;
-    FocusMirror(zF, xF, B);
 
-    // re-define mirror attributes to be w.r.t vessel front plane
-    // - `(zM,xM)` is the mirror center w.r.t. to the IP
-    double mirrorCenterZ = zM - vesselZmin;
-    double mirrorCenterX = xM;
-    double mirrorRadius  = rM;
+    // determine the mirror that focuses the IP to this desired region
+    /* - uses point-to-point focusing to derive spherical mirror center
+     *   `(mirrorCenterZ,mirrorCenterX)` and radius `mirrorRadius` for given
+     *   image point coordinates `(zF,xF)` and `b`, defined as the z-distance
+     *   between the object (IP) and the mirror surface
+     * - all coordinates are specified w.r.t. the object point (IP)
+     */
+    double mirrorCenterZ = b * zF / (2 * b - zF);
+    double mirrorCenterX = b * xF / (2 * b - zF);
+    double mirrorRadius  = b - mirrorCenterZ;
+
+    // translate mirror center to be w.r.t vessel front plane
+    mirrorCenterZ -= vesselZmin;
 
     // spherical mirror patch cuts and rotation
     double mirrorThetaRot = std::asin(mirrorCenterX / mirrorRadius);
@@ -664,6 +636,12 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
     // }
 
     // END SENSOR MODULE LOOP ------------------------
+
+    // add constant for access to the number of modules per sector
+    if (isec == 0)
+      desc.add(Constant("DRICH_num_sensors", std::to_string(imod)));
+    else if (imod != desc.constantAsLong("DRICH_num_sensors"))
+      printout(WARNING, "DRICH_geo", "number of sensors is not the same for each sector");
 
   } // END SECTOR LOOP //////////////////////////
 

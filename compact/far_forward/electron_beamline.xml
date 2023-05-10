@@ -1,0 +1,112 @@
+<!-- SPDX-License-Identifier: LGPL-3.0-or-later -->
+<!-- Copyright (C) 2022 Jaroslav Adam, Jakub Ceska -->
+
+<lccdd>
+
+  <define>
+
+    <!-- electron beam pipe wall thickness at positive z -->
+    <constant name="Beampipe_cen_pos_Thickness" value="1.0*mm"/>
+
+    <!-- end of central section -->
+    <constant name="Beampipe_cen_pos_EndZ" value="4484.25*mm"/>
+    <constant name="Beampipe_cen_pos_r1" value="BeampipeOD/2."/>
+
+    <!-- Q0eF quadrupole magnet -->
+    <constant name="Q0EF_StartZ" value="7000.*mm"/>
+    <constant name="Q0EF_EndZ" value="5800.*mm"/>
+    <!--<constant name="Q0EF_InnerRadius" value="25.*mm"/>-->
+
+    <!-- Q1eF quadrupole magnet -->
+    <constant name="Q1EF_StartZ" value="12370.*mm"/>
+    <constant name="Q1EF_EndZ" value="10760.*mm"/>
+    <!--<constant name="Q1EF_InnerRadius" value="63*mm"/>-->
+
+    <!-- beam section at forward region to +15 meters -->
+    <constant name="Beampipe_fwd_pos_EndZ" value="15000.*mm"/>
+
+  </define>
+
+  <detectors>
+
+    <!-- Beam Pipe from central section at positive z to +15 meters -->
+    <detector
+      name="Pipe_cen_to_pos"
+      type="BeamPipeChain"
+      wall_thickness="Beampipe_cen_pos_Thickness">
+
+      <pipe id="0" name="Pipe_to_Q0EF"
+        xcenter="0" zcenter="(Q0EF_EndZ+Beampipe_cen_pos_EndZ)/2."
+        length="Q0EF_EndZ-Beampipe_cen_pos_EndZ" theta="0"
+        rout1="Q0EF_InnerRadius" rout2="Beampipe_cen_pos_r1">
+      </pipe>
+
+      <pipe id="1" name="Pipe_Q0EF_to_Q1EF"
+        xcenter="0" zcenter="(Q1EF_EndZ+Q0EF_StartZ)/2."
+        length="Q1EF_EndZ-Q0EF_StartZ" theta="0"
+        rout1="Q1EF_InnerRadius" rout2="Q0EF_InnerRadius">
+      </pipe>
+
+      <pipe id="2" name="Pipe_Q1EF_to_pos"
+      xcenter="0" zcenter="(Beampipe_fwd_pos_EndZ+Q1EF_StartZ)/2."
+      length="Beampipe_fwd_pos_EndZ-Q1EF_StartZ" theta="0"
+      rout1="Q1EF_InnerRadius" rout2="Q1EF_InnerRadius">
+      </pipe>
+
+    </detector>
+
+    <!-- Q0eF magnet -->
+    <detector name="Q0EF" type="ip6_CylindricalDipoleMagnet" vis="RedVis">
+      <placement  x="0" y="0" z="(Q0EF_StartZ+Q0EF_EndZ)/2." theta="0"/>
+      <dimensions x="Q0EF_InnerRadius*4" y="Q0EF_InnerRadius*4" z="Q0EF_StartZ-Q0EF_EndZ" r="1.9*Q0EF_InnerRadius" />
+      <apperture  x="Q0EF_InnerRadius*2" y="Q0EF_InnerRadius*2" r="Q0EF_InnerRadius" />
+      <coil dx="2*cm" dy="1.5*cm" />!--unchecked--
+    </detector>
+
+    <!-- inner vacuum for Q0eF -->
+    <detector name="Q0EF_vac" type="DD4hep_TubeSegment" vis="VisFwElInvisible">
+      <material name="Vacuum"/>
+      <tubs rmin="0" rmax="Q0EF_InnerRadius" zhalf="(Q0EF_StartZ-Q0EF_EndZ)/2."/>
+      <position x="0" y="0" z="(Q0EF_StartZ+Q0EF_EndZ)/2."/>
+      <rotation x="0" y="0" z="0"/>
+    </detector>
+
+    <!-- Q1eF magnet -->
+    <detector name="Q1EF" type="ip6_CylindricalDipoleMagnet" vis="RedVis">
+      <placement  x="0" y="0" z="(Q1EF_StartZ+Q1EF_EndZ)/2." theta="0"/>
+      <dimensions x="Q1EF_InnerRadius*4" y="Q1EF_InnerRadius*4" z="Q1EF_StartZ-Q1EF_EndZ" r="1.9*Q1EF_InnerRadius" />
+      <apperture  x="Q1EF_InnerRadius*2" y="Q1EF_InnerRadius*2" r="Q1EF_InnerRadius" />
+      <coil dx="2*cm" dy="1.5*cm" />!--unchecked--
+    </detector>
+
+    <!-- inner vacuum for Q1eF -->
+    <detector name="Q1EF_vac" type="DD4hep_TubeSegment" vis="VisFwElInvisible">
+      <material name="Vacuum"/>
+      <tubs rmin="0" rmax="Q1EF_InnerRadius" zhalf="(Q1EF_StartZ-Q1EF_EndZ)/2."/>
+      <position x="0" y="0" z="(Q1EF_StartZ+Q1EF_EndZ)/2."/>
+      <rotation x="0" y="0" z="0"/>
+    </detector>
+
+  </detectors>
+
+  <fields>
+
+    <!-- Q0eF quadrupole field -->
+    <field name="Q0EF_field" type="MultipoleMagnet">
+      <shape type="Tube" rmax="Q0EF_InnerRadius" dz="(Q0EF_StartZ-Q0EF_EndZ)/2."/>
+      <position x="0" y="0" z="(Q0EF_StartZ+Q0EF_EndZ)/2."/>
+      <coefficient/>
+      <coefficient coefficient="-13.0961*tesla/meter"/>
+    </field>
+
+    <!-- Q1eF quadrupole field -->
+    <field name="Q1EF_field" type="MultipoleMagnet">
+      <shape type="Tube" rmax="Q1EF_InnerRadius" dz="(Q1EF_StartZ-Q1EF_EndZ)/2."/>
+      <position x="0" y="0" z="(Q1EF_StartZ+Q1EF_EndZ)/2."/>
+      <coefficient/>
+      <coefficient coefficient="6.0639*tesla/meter"/>
+    </field>
+
+  </fields>
+
+</lccdd>

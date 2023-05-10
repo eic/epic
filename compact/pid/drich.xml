@@ -1,5 +1,5 @@
 <!-- SPDX-License-Identifier: LGPL-3.0-or-later -->
-<!-- Copyright (C) 2022, 2023 Christopher Dilks, Connor Pecar -->
+<!-- Copyright (C) 2023 Christopher Dilks, Chandradoy Chatterjee, Connor Pecar -->
 
 <lccdd>
 
@@ -15,10 +15,9 @@
 <constant name="DRICH_window_thickness"   value="0.1*cm"/>  <!-- thickness of entrance and exit walls -->
 <constant name="DRICH_num_sectors"        value="6"/>  <!-- number of azimuthal sectors -->
 <!-- snout geometry: cone with front radius rmax0 and back radius of rmax1 -->
-<constant name="DRICH_rmax0"              value="110.0*cm"/>
+<constant name="DRICH_rmax0"              value="90.0*cm"/>
 <constant name="DRICH_snout_length"       value="20.0*cm"/>
-<constant name="DRICH_snout_slope"        value="DRICH_rmax0 / DRICH_zmin"/> <!-- TODO: increase slope to allow more space for aerogel cones ? -->
-<constant name="DRICH_rmax1"              value="DRICH_rmax0 + DRICH_snout_length * DRICH_snout_slope"/>
+<constant name="DRICH_rmax1"              value="DRICH_rmax0 + DRICH_snout_length * (tan(0.200+atan(DRICH_rmax0/DRICH_zmin))) "/>  <!--extra 0.200 takes into account the saturated cone of light from aerogel-->
 <!-- tank geometry: cylinder, holding the majority of detector components -->
 <constant name="DRICH_rmax2"              value="ForwardPIDRegion_rmax"/>  <!-- cylinder radius -->
 <!-- aerogel+filter geometry -->
@@ -41,10 +40,12 @@
 			   4 = all components become vacuum, except for mirrors and sensors, oversized sensor created to catch all photons
                            5 = all components created normally, calculated focal points from mode 4 drawn if environment variable set
                            0 = off
+- `DRICH_debug_sector`:    1 = only include one sector (will be set automatically when `DRICH_debug_optics>0`)
 - `DRICH_debug_mirror`:    1 = draw full mirror shape for single sector; 0 = off
 - `DRICH_debug_sensors`:   1 = draw full sensor sphere for a single sector; 0 = off
 </comment>
 <constant name="DRICH_debug_optics"    value="0"/>
+<constant name="DRICH_debug_sector"    value="0"/>
 <constant name="DRICH_debug_mirror"    value="0"/>
 <constant name="DRICH_debug_sensors"   value="0"/>
 <constant name="DRICH_FP_file"   value="0" type="string"/>
@@ -159,13 +160,13 @@
   material="Acrylic_DRICH"
   surface="MirrorSurface_DRICH"
   vis="DRICH_mirror_vis"
-  backplane="DRICH_window_thickness + 2.0*cm"
+  backplane="DRICH_window_thickness + 1.0*cm"
   rmin="DRICH_rmin1 + DRICH_wall_thickness - 1.0*cm"
   rmax="DRICH_rmax2 - DRICH_wall_thickness - 3.0*cm"
   phiw="59.5*degree"
   thickness="0.2*cm"
-  focus_tune_x="-5.0*cm"
-  focus_tune_z="0.0*cm"
+  focus_tune_x="-7.00*cm"
+  focus_tune_z="6.15*cm"
   />
 
 <!-- /detectors/detector/sensors -->
@@ -212,15 +213,15 @@
     - `zmin`: z-plane cut
 </documentation>
 <sphere
-  centerz="-50.0*cm"
-  centerx="180.0*cm"
-  radius="100.0*cm"
+  centerz="138.4*cm - DRICH_zmin"
+  centerx="183.4*cm"
+  radius="110.0*cm"
   />
 <sphericalpatch
-  phiw="18*degree"
-  rmin="DRICH_rmax1 + 2.0*cm"
-  rmax="DRICH_rmax2 - 5.0*cm"
-  zmin="DRICH_snout_length + 5.0*cm"
+  phiw="30*degree"
+  rmin="111.0*cm"
+  rmax="179.0*cm"
+  zmin="DRICH_snout_length + 3.0*cm"
   />
 
 
@@ -248,6 +249,4 @@
     <id>system:8,sector:3,module:12,x:32:-16,y:-16</id>
   </readout>
 </readouts>
-
-
 </lccdd>
