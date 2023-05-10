@@ -61,7 +61,7 @@ def get_grid_fibers(det_elem, vol_man, id_conv, id_dict):
     for i in np.arange(gnode.GetNdaughters()):
         fnode = gnode.GetDaughter(int(i))
         # NOTE, this is defined in geometry plugin, fiber_core is the only wanted sensitive detector
-        if 'fiber_core' not in fnode.GetName():
+        if 'fiber' not in fnode.GetName():
             continue
         fpos = np.array([0., 0., 0.])
         gpos = np.array([0., 0., 0.])
