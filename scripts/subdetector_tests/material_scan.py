@@ -1,7 +1,7 @@
 # SPDX-License-Identifier: LGPL-3.0-or-later
 # Copyright (C) 2023 Chao Peng
 '''
-    A script to scan the materials thickness (X0 or Lambda) over eta
+    A script to scan the materials thickness (X0 or Lambda) by detectors over eta
 
     It uses dd4hep::rec::MaterialManager::placementsBetween to check the material layers, and then uses the detector
     alignment to transform world coordinates to local coordiantes, and then assigns the materials to a detector based
@@ -34,6 +34,7 @@ OTHERS_NAME = 'Others'
 COLORS = ['royalblue', 'indianred', 'forestgreen', 'gold', 'darkviolet', 'orange', 'darkturquoise']
 # a specified color for Others, this should not be included in COLORS
 OTHERS_COLOR = 'silver'
+MAX_N_MATS = 50
 
 
 # FIXME: this is a work-around to an issue of dd4hep::rec::MaterialManager::placementsBetween
@@ -157,6 +158,10 @@ if __name__ == '__main__':
             help='Top-level xml file of the detector description.'
             )
     parser.add_argument(
+            '-o', default='.', dest='outdir',
+            help='Output directory.'
+            )
+    parser.add_argument(
             '--path-r', type=float, default=400., # 120.,
             help='R_xy (cm) where the scan stops.'
             )
@@ -189,6 +194,10 @@ if __name__ == '__main__':
             help='Choose one in {}.'.format(list(ALLOWED_VALUE_TYPES.keys()))
             )
     parser.add_argument(
+            '--groupby-materials', action='store_true',
+            help='Enable it to group the results by materials instead of by detectors.'
+            )
+    parser.add_argument(
             '--detectors',
             # default='all',
             # ordering the detectors
@@ -204,6 +213,8 @@ if __name__ == '__main__':
     if args.value_type not in ALLOWED_VALUE_TYPES.keys():
         print('Cannot find value {}, choose one in {}'.format(args.value_type, list(ALLOWED_VALUE_TYPES.keys())))
         exit(-1)
+
+    os.makedirs(args.outdir, exist_ok=True)
 
     # scan parameters
     path_r = args.path_r
@@ -246,12 +257,86 @@ if __name__ == '__main__':
     th_corr.scan_missing_thickness(desc, start_point, np.array(start_point) + np.array([100., 50., 0.]),
                                    dz=0.0001, epsilon=args.epsilon)
 
+    # value-type
+    vt = ALLOWED_VALUE_TYPES[args.value_type]
+
+    # material-based scan
+    if args.groupby_materials:
+        vals = np.zeros(shape=(len(etas), MAX_N_MATS))
+        mats = []
+        for i, eta in enumerate(etas):
+            if i % PROGRESS_STEP == 0:
+                print('Scanned {:d}/{:d} for {:.2f} <= eta <= {:.2f}'.format(i, len(etas), etas[0], etas[-1]),
+                      end='\r', flush=True)
+            # scan material layers
+            end_x = path_r*np.cos(phi/180.*np.pi)
+            end_y = path_r*np.sin(phi/180.*np.pi)
+            end_z = path_r*np.sinh(eta)
+            # print('({:.2f}, {:.2f}, {:.2f})'.format(end_x, end_y, end_z))
+            dfr = material_scan(desc, start_point, (end_x, end_y, end_z), epsilon=args.epsilon, int_dets=dets, thickness_corrector=th_corr)
+
+            # aggregated values for detectors
+            x0_vals = dfr.groupby('material')[vt[0]].sum().to_dict()
+            # update material list
+            for mat in x0_vals.keys():
+                if mat not in mats:
+                    mats.append(mat)
+            # save material scan results
+            for j, mat in enumerate(mats):
+                vals[i, j] = x0_vals.get(mat, 0.)
+        print('Scanned {:d}/{:d} lines for {:.2f} < eta < {:.2f}'.format(len(etas), len(etas), etas[0], etas[-1]))
+
+        # aggregated data for plots
+        dfa = pd.DataFrame(data=vals[:, :len(mats)], columns=mats, index=etas)
+        # sort by total thickness
+        smats = [d for d in dfa.sum().sort_values(ascending=False).index]
+        dfa.to_csv(os.path.join(args.outdir, 'material_scan_agg.csv'))
+
+        # plot material scan
+        fig, ax = plt.subplots(figsize=(16, 8), dpi=160,
+                               gridspec_kw={'top': 0.9, 'bottom': 0.2, 'left': 0.08, 'right': 0.98})
+
+        # group some materials into "Others" if there're no enough colors
+        plot_mats = smats
+        if len(smats) > len(COLORS):
+            group_mats = smats[len(COLORS):]
+            dfa.loc[:, OTHERS_NAME] += dfa.loc[:, group_mats].sum(axis=1)
+            print('Materials {} are grouped into {} due to limited number of colors.'.format(group_mats, OTHERS_NAME))
+            plot_mats = sdets[:len(COLORS)]
+
+        bottom = np.zeros(len(dfa))
+        width = np.mean(np.diff(dfa.index))
+        for col, c in zip(plot_mats, COLORS):
+            ax.fill_between(dfa.index, bottom, dfa[col].values + bottom, label=col, step='mid', color=c)
+            bottom += dfa[col].values
+        # only plot Others if there are any
+        if OTHERS_NAME in dfa.columns and dfa[OTHERS_NAME].sum() > 0.:
+            ax.fill_between(dfa.index, bottom, dfa[OTHERS_NAME].values + bottom, label=OTHERS_NAME, step='mid', color=OTHERS_COLOR)
+
+        # formatting
+        ax.tick_params(which='both', direction='in', labelsize=22)
+        ax.set_xlabel('$\eta$', fontsize=22)
+        ax.set_ylabel('{} ($R_{{xy}} \leq {:.1f}$ cm)'.format(vt[1], args.path_r), fontsize=22)
+        ax.xaxis.set_major_locator(MultipleLocator(0.5))
+        ax.xaxis.set_minor_locator(MultipleLocator(0.1))
+        ax.yaxis.set_major_locator(MultipleLocator(vt[2]))
+        ax.yaxis.set_minor_locator(MultipleLocator(vt[3]))
+        ax.grid(ls=':', which='both')
+        ax.set_axisbelow(False)
+        ax.set_xlim(args.eta_min, args.eta_max)
+        ax.set_ylim(0., ax.get_ylim()[1]*1.1)
+        ax.legend(bbox_to_anchor=(0.0, 0.9, 1.0, 0.1), ncol=2, loc="upper center", fontsize=22,
+              borderpad=0.2, labelspacing=0.2, columnspacing=0.6, borderaxespad=0.05, handletextpad=0.4)
+        # ax.set_yscale('log')
+        fig.savefig(os.path.join(args.outdir, 'material_scan.png'))
+        exit(0)
+
+    # detector-based scan
     # array for detailed data
     # number of materials cannot be pre-determined, so just assign a large number to be safe
-    vals = np.zeros(shape=(len(etas), len(dets) + 1, 50))
+    vals = np.zeros(shape=(len(etas), len(dets) + 1, MAX_N_MATS))
     dets2 = dets + [OTHERS_NAME]
     det_mats = {d: [] for d in dets2}
-    vt = ALLOWED_VALUE_TYPES[args.value_type]
 
     for i, eta in enumerate(etas):
         if i % PROGRESS_STEP == 0:
@@ -286,10 +371,10 @@ if __name__ == '__main__':
     if sort_dets:
         sdets = [d for d in dfa.sum().sort_values(ascending=False).index if d != OTHERS_NAME]
         dfa = dfa[sdets + [OTHERS_NAME]]
-    dfa.to_csv('material_scan_agg.csv')
+    dfa.to_csv(os.path.join(args.outdir, 'material_scan_agg.csv'))
 
     # plots
-    pdf = matplotlib.backends.backend_pdf.PdfPages('material_scan_details.pdf')
+    pdf = matplotlib.backends.backend_pdf.PdfPages(os.path.join(args.outdir, 'material_scan_details.pdf'))
     fig, ax = plt.subplots(figsize=(16, 8), dpi=160,
                            gridspec_kw={'top': 0.9, 'bottom': 0.2, 'left': 0.08, 'right': 0.98})
 
@@ -326,7 +411,7 @@ if __name__ == '__main__':
     ax.legend(bbox_to_anchor=(0.0, 0.9, 1.0, 0.1), ncol=4, loc="upper center", fontsize=22,
           borderpad=0.2, labelspacing=0.2, columnspacing=0.6, borderaxespad=0.05, handletextpad=0.4)
     # ax.set_yscale('log')
-    fig.savefig('material_scan.png')
+    fig.savefig(os.path.join(args.outdir, 'material_scan.png'))
     pdf.savefig(fig)
     plt.close(fig)
 
