@@ -8,84 +8,12 @@
       5.1*eV 1.0
       "/>
     <matrix name="RINDEX__AirOptical" coldim="2" values="
-      1.90745*eV  1.0
-      1.93725*eV  1.0
-      1.968*eV    1.0
-      1.99974*eV  1.0
-      2.03253*eV  1.0
-      2.0664*eV   1.0
-      2.10143*eV  1.0
-      2.13766*eV  1.0
-      2.17516*eV  1.0
-      2.214*eV    1.0
-      2.25426*eV  1.0
-      2.296*eV    1.0
-      2.33932*eV  1.0
-      2.38431*eV  1.0
-      2.43106*eV  1.0
-      2.47968*eV  1.0
-      2.53029*eV  1.0
-      2.583*eV    1.0
-      2.63796*eV  1.0
-      2.69531*eV  1.0
-      2.7552*eV   1.0
-      2.81782*eV  1.0
-      2.88335*eV  1.0
-      2.952*eV    1.0
-      3.024*eV    1.0
-      3.0996*eV   1.0
-      3.17908*eV  1.0
-      3.26274*eV  1.0
-      3.35092*eV  1.0
-      3.44401*eV  1.0
-      3.54241*eV  1.0
-      3.64659*eV  1.0
-      3.7571*eV   1.0
-      3.87451*eV  1.0
-      3.99949*eV  1.0
-      4.13281*eV  1.0
-      "/>
-    <matrix name="ABSLENGTH__AirOptical" coldim="2" values="
-      1.90745*eV  4.0*cm
-      1.93725*eV  4.0*cm
-      1.968*eV    4.0*cm
-      1.99974*eV  4.0*cm
-      2.03253*eV  4.0*cm
-      2.0664*eV   4.0*cm
-      2.10143*eV  4.0*cm
-      2.13766*eV  4.0*cm
-      2.17516*eV  4.0*cm
-      2.214*eV    4.0*cm
-      2.25426*eV  4.0*cm
-      2.296*eV    4.0*cm
-      2.33932*eV  4.0*cm
-      2.38431*eV  4.0*cm
-      2.43106*eV  4.0*cm
-      2.47968*eV  4.0*cm
-      2.53029*eV  4.0*cm
-      2.583*eV    4.0*cm
-      2.63796*eV  4.0*cm
-      2.69531*eV  4.0*cm
-      2.7552*eV   4.0*cm
-      2.81782*eV  4.0*cm
-      2.88335*eV  4.0*cm
-      2.952*eV    4.0*cm
-      3.024*eV    4.0*cm
-      3.0996*eV   4.0*cm
-      3.17908*eV  4.0*cm
-      3.26274*eV  4.0*cm
-      3.35092*eV  4.0*cm
-      3.44401*eV  4.0*cm
-      3.54241*eV  4.0*cm
-      3.64659*eV  4.0*cm
-      3.7571*eV   4.0*cm
-      3.87451*eV  4.0*cm
-      3.99949*eV  4.0*cm
-      4.13281*eV  4.0*cm
-      "/>
-    <matrix name="RINDEX__Air" coldim="2" values="
       1.0*eV 1.00029
       5.1*eV 1.00029
+      "/>
+    <matrix name="ABSLENGTH__AirOptical" coldim="2" values="
+      1.0*eV 4.0*cm
+      5.1*eV 4.0*cm
       "/>
     <matrix name="RINDEX__Quartz" coldim="2" values="
       1.0*eV 1.46
@@ -644,14 +572,6 @@
       "/>
     <matrix name="ABSLENGTH__C2F6_DRICH" coldim="2" values="
       1.7712*eV   10.0*m
-      1.92389*eV  10.0*m
-      2.10539*eV  10.0*m
-      2.3247*eV   10.0*m
-      2.59502*eV  10.0*m
-      2.93647*eV  10.0*m
-      3.38139*eV  10.0*m
-      3.98521*eV  10.0*m
-      4.85156*eV  10.0*m
       6.19921*eV  10.0*m
       "/>
     <!-- pfRICH gas -->
@@ -669,14 +589,6 @@
       "/>
     <matrix name="ABSLENGTH__C4F10_PFRICH" coldim="2" values="
       1.7712*eV   6.0*m
-      1.92389*eV  6.0*m
-      2.10539*eV  6.0*m
-      2.3247*eV   6.0*m
-      2.59502*eV  6.0*m
-      2.93647*eV  6.0*m
-      3.38139*eV  6.0*m
-      3.98521*eV  6.0*m
-      4.85156*eV  6.0*m
       6.19921*eV  6.0*m
       "/>
     <!-- dRICH aerogel, for density=0.11 g/cm3 -->
@@ -839,54 +751,6 @@
     <!-- dRICH acrylic filter -->
     <matrix name="RINDEX__Acrylic_DRICH" coldim="2" values="
       4.13281*eV  1.5017
-      4.22099*eV  1.5017
-      4.30916*eV  1.5017
-      4.39734*eV  1.5017
-      4.48552*eV  1.5017
-      4.57369*eV  1.5017
-      4.66187*eV  1.5017
-      4.75005*eV  1.5017
-      4.83822*eV  1.5017
-      4.9264*eV   1.5017
-      5.01458*eV  1.5017
-      5.10275*eV  1.5017
-      5.19093*eV  1.5017
-      5.27911*eV  1.5017
-      5.36728*eV  1.5017
-      5.45546*eV  1.5017
-      5.54364*eV  1.5017
-      5.63181*eV  1.5017
-      5.71999*eV  1.5017
-      5.80817*eV  1.5017
-      5.89634*eV  1.5017
-      5.98452*eV  1.5017
-      6.0727*eV   1.5017
-      6.16087*eV  1.5017
-      6.24905*eV  1.5017
-      6.33723*eV  1.5017
-      6.4254*eV   1.5017
-      6.51358*eV  1.5017
-      6.60176*eV  1.5017
-      6.68993*eV  1.5017
-      6.77811*eV  1.5017
-      6.86629*eV  1.5017
-      6.95446*eV  1.5017
-      7.04264*eV  1.5017
-      7.13082*eV  1.5017
-      7.21899*eV  1.5017
-      7.30717*eV  1.5017
-      7.39535*eV  1.5017
-      7.48353*eV  1.5017
-      7.5717*eV   1.5017
-      7.65988*eV  1.5017
-      7.74806*eV  1.5017
-      7.83623*eV  1.5017
-      7.92441*eV  1.5017
-      8.01259*eV  1.5017
-      8.10076*eV  1.5017
-      8.18894*eV  1.5017
-      8.27712*eV  1.5017
-      8.36529*eV  1.5017
       8.45347*eV  1.5017
       "/>
     <matrix name="ABSLENGTH__Acrylic_DRICH" coldim="2" values="
@@ -1141,14 +1005,12 @@
     <opticalsurface name="MirrorSurface_DRICH" model="unified" finish="polished" type="dielectric_metal">
       <property name="REFLECTIVITY" coldim="2" values="
         1*eV  0.9
-        4*eV  0.9
         7*eV  0.9
         "/>
     </opticalsurface>
     <opticalsurface name="SensorSurface_DRICH" model="glisur" finish="polished" type="dielectric_dielectric">
       <property name="EFFICIENCY" coldim="2" values="
         1*eV  1
-        4*eV  1
         7*eV  1
         "/>
     </opticalsurface>
