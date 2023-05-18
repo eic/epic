@@ -572,14 +572,6 @@
       "/>
     <matrix name="ABSLENGTH__C2F6_DRICH" coldim="2" values="
       1.7712*eV   10.0*m
-      1.92389*eV  10.0*m
-      2.10539*eV  10.0*m
-      2.3247*eV   10.0*m
-      2.59502*eV  10.0*m
-      2.93647*eV  10.0*m
-      3.38139*eV  10.0*m
-      3.98521*eV  10.0*m
-      4.85156*eV  10.0*m
       6.19921*eV  10.0*m
       "/>
     <!-- pfRICH gas -->
@@ -597,14 +589,6 @@
       "/>
     <matrix name="ABSLENGTH__C4F10_PFRICH" coldim="2" values="
       1.7712*eV   6.0*m
-      1.92389*eV  6.0*m
-      2.10539*eV  6.0*m
-      2.3247*eV   6.0*m
-      2.59502*eV  6.0*m
-      2.93647*eV  6.0*m
-      3.38139*eV  6.0*m
-      3.98521*eV  6.0*m
-      4.85156*eV  6.0*m
       6.19921*eV  6.0*m
       "/>
     <!-- dRICH aerogel, for density=0.11 g/cm3 -->
@@ -767,54 +751,6 @@
     <!-- dRICH acrylic filter -->
     <matrix name="RINDEX__Acrylic_DRICH" coldim="2" values="
       4.13281*eV  1.5017
-      4.22099*eV  1.5017
-      4.30916*eV  1.5017
-      4.39734*eV  1.5017
-      4.48552*eV  1.5017
-      4.57369*eV  1.5017
-      4.66187*eV  1.5017
-      4.75005*eV  1.5017
-      4.83822*eV  1.5017
-      4.9264*eV   1.5017
-      5.01458*eV  1.5017
-      5.10275*eV  1.5017
-      5.19093*eV  1.5017
-      5.27911*eV  1.5017
-      5.36728*eV  1.5017
-      5.45546*eV  1.5017
-      5.54364*eV  1.5017
-      5.63181*eV  1.5017
-      5.71999*eV  1.5017
-      5.80817*eV  1.5017
-      5.89634*eV  1.5017
-      5.98452*eV  1.5017
-      6.0727*eV   1.5017
-      6.16087*eV  1.5017
-      6.24905*eV  1.5017
-      6.33723*eV  1.5017
-      6.4254*eV   1.5017
-      6.51358*eV  1.5017
-      6.60176*eV  1.5017
-      6.68993*eV  1.5017
-      6.77811*eV  1.5017
-      6.86629*eV  1.5017
-      6.95446*eV  1.5017
-      7.04264*eV  1.5017
-      7.13082*eV  1.5017
-      7.21899*eV  1.5017
-      7.30717*eV  1.5017
-      7.39535*eV  1.5017
-      7.48353*eV  1.5017
-      7.5717*eV   1.5017
-      7.65988*eV  1.5017
-      7.74806*eV  1.5017
-      7.83623*eV  1.5017
-      7.92441*eV  1.5017
-      8.01259*eV  1.5017
-      8.10076*eV  1.5017
-      8.18894*eV  1.5017
-      8.27712*eV  1.5017
-      8.36529*eV  1.5017
       8.45347*eV  1.5017
       "/>
     <matrix name="ABSLENGTH__Acrylic_DRICH" coldim="2" values="
@@ -1069,14 +1005,12 @@
     <opticalsurface name="MirrorSurface_DRICH" model="unified" finish="polished" type="dielectric_metal">
       <property name="REFLECTIVITY" coldim="2" values="
         1*eV  0.9
-        4*eV  0.9
         7*eV  0.9
         "/>
     </opticalsurface>
     <opticalsurface name="SensorSurface_DRICH" model="glisur" finish="polished" type="dielectric_dielectric">
       <property name="EFFICIENCY" coldim="2" values="
         1*eV  1
-        4*eV  1
         7*eV  1
         "/>
     </opticalsurface>
