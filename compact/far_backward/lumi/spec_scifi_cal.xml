@@ -4,7 +4,7 @@
 <lccdd>
 	<!-- EcalLumiSpec - ELS -->
 	<define>
-		<constant name="ELS_FiberSize"		value="4.0*mm"/>
+		<constant name="ELS_FiberSize"		value="4.00*mm"/>
 		<constant name="ELS_ModuleSize"		value="5.0*mm"/>
 		<constant name="ELS_FrontPlateWidth"   	value="2.0*mm"/>
 	</define>
@@ -31,7 +31,7 @@
 	<readouts>
 		<readout name="LumiSpecCALHits">
 			<segmentation type="NoSegmentation"/>
-			<id>system:8,sector:8,module:32</id>
+			<id>system:8,sector:8,module:16,fiber:16</id>
 		</readout>
 	</readouts>
 
