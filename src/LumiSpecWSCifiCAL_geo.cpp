@@ -1,12 +1,13 @@
 // SPDX-License-Identifier: LGPL-3.0-or-later
 // Copyright (C) 2023 Aranya Giri
 
-/* Date : 04/31/2023
+/* Start Date : 04/31/2023
 W Scifi (EM Calorimeter) Pair Spectrometer
-
-Scintillating fiber calorimeter with tower shape blocks
-reference: https://github.com/eic/epic/blob/main/src/ScFiCalorimeter_geo.cpp
-Author: Chao Peng (ANL)*/
+Each module has rectangular scintillating fiber in the center, surrounded with W powder.
+Modules in even layer are rotated along y-axis.
+Modules in odd layers are rotated along x-axis.
+The fiber id is same as the module id.
+*/
 
 #include "DD4hep/DetFactoryHelper.h"
 #include <XML/Helper.h>
