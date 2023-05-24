@@ -24,7 +24,7 @@
 				<position x="0.0*cm" y="-1*LumiSpecCAL_Y" z="LumiSpecCAL_Z"/>
 				<rotation x="0.0*rad" y="0.0*rad" z="0.0*rad"/>
 			</sector>
-			
+
 		</detector>
 	</detectors>
 

@@ -40,7 +40,7 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
   // Detector assembly
   Assembly      assembly( det_name );
   assembly.setVisAttributes( description.invisible() );
- 
+
   // Build detector components
   // loop over sectors
   for( xml_coll_t si(x_det, _Unicode(sector)); si; si++) { // sectors (top,bottom)
@@ -58,10 +58,10 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
     double xyzpos0 = -nxyz*modSizeXY/2.0 + modSizeXY/2.0;
 
     for(int iz=0; iz< nxyz; iz++){
-	    
+
 	    // Create Modules
 	    auto [modVol, modSize] = build_specScifiCAL_module(description, x_mod, sens, mod_id);
-	    
+
 	    if((iz%2)==0){ //90* rotation along y-axis
 		    for(int iy=0; iy< nxyz; iy++){
 
@@ -75,7 +75,7 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
 			    modPV.addPhysVolID( "sector", sector_id ).addPhysVolID( "module", mod_id);
 			    mod_id++;
 		    }//iy-close
-	    }//if-close 
+	    }//if-close
 	    else{// 90* rotation along x-axis
 	    for(int ix=0; ix< nxyz; ix++){
 
@@ -90,7 +90,7 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
 			    mod_id++;
 		    }//ix-loop close
 	    }//else-close
-	    
+
     }//iz-close
 
   } // sectors
@@ -127,7 +127,7 @@ static tuple<Volume, Position> build_specScifiCAL_module( const Detector& descri
 	//make the module hollow to insert Scifi fibers
 	Volume modVol("module_vol", modShape, modMat);
 	modVol.setVisAttributes(description.visAttributes(mod_x.attr<std::string>(_Unicode(vis))));
-	
+
 	Volume fiberVol("fiber_vol", fiberShape, fiberMat);
 	PlacedVolume detfiberPV = modVol.placeVolume(fiberVol,Transform3D( RotationZYX(0.0, 0.0, 0.0), Position(0.0, 0.0,0.0) ) );
 	fiberVol.setVisAttributes(description.visAttributes(fiber_box.attr<std::string>(_Unicode(vis))));
