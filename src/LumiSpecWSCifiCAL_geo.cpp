@@ -18,7 +18,7 @@ using namespace std;
 using namespace dd4hep;
 
 // Definition of function to build the modules
-static tuple<Volume, Position> build_specScifiCAL_module(const Detector& description, const xml::Component& mod_x, SensitiveDetector& sens);
+static tuple<Volume, Position> build_specScifiCAL_module(const Detector& description, const xml::Component& mod_x, SensitiveDetector& sens, int mod_id);
 
 // Driver Function
 static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector sens)
@@ -39,13 +39,7 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
   // Detector assembly
   Assembly      assembly( det_name );
   assembly.setVisAttributes( description.invisible() );
-
-  // Create Modules
-  auto [modVol, modSize] = build_specScifiCAL_module(description, x_mod, sens);
-  double detSizeXY = getAttrOrDefault( x_det, _Unicode(sizeXY), 20 );
-  int nxyz = int( detSizeXY / modSize.x() );
-  double xyzpos0 = -nxyz*modSize.x()/2.0 + modSize.x()/2.0;
-
+ 
   // Build detector components
   // loop over sectors
   for( xml_coll_t si(x_det, _Unicode(sector)); si; si++) { // sectors (top,bottom)
@@ -57,7 +51,16 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
     xml_comp_t x_pos = x_sector.position();
     xml_comp_t x_rot = x_sector.rotation();
 
+    double detSizeXY = getAttrOrDefault( x_det, _Unicode(sizeXY), 20*cm);
+    double modSizeXY = getAttrOrDefault( x_mod, _Unicode(sizex), 5*mm);
+    int nxyz = int( detSizeXY / modSizeXY );
+    double xyzpos0 = -nxyz*modSizeXY/2.0 + modSizeXY/2.0;
+
     for(int iz=0; iz< nxyz; iz++){
+	    
+	    // Create Modules
+	    auto [modVol, modSize] = build_specScifiCAL_module(description, x_mod, sens, mod_id);
+	    
 	    if((iz%2)==0){ //90* rotation along y-axis
 		    for(int iy=0; iy< nxyz; iy++){
 
@@ -68,7 +71,7 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
 			    PlacedVolume modPV = assembly.placeVolume(
 					    modVol, Transform3D( RotationZYX( x_rot.x(), 90.0*degree, x_rot.z()), Position( mod_pos_x, mod_pos_y, mod_pos_z ) ) );
 
-			    modPV.addPhysVolID( "sector", sector_id ).addPhysVolID( "module", mod_id );
+			    modPV.addPhysVolID( "sector", sector_id ).addPhysVolID( "module", mod_id);
 			    mod_id++;
 		    }//iy-close
 	    }//if-close 
@@ -82,7 +85,7 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
 			    PlacedVolume modPV = assembly.placeVolume(
 					    modVol, Transform3D( RotationZYX(0.0, x_rot.y(), 90.0*degree), Position( mod_pos_x, mod_pos_y, mod_pos_z ) ) );
 
-			    modPV.addPhysVolID( "sector", sector_id ).addPhysVolID( "module", mod_id );
+			    modPV.addPhysVolID( "sector", sector_id ).addPhysVolID( "module", mod_id);
 			    mod_id++;
 		    }//ix-loop close
 	    }//else-close
@@ -103,7 +106,7 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
 
 //--------------------------------------------------------------------
 //Function for building the module
-static tuple<Volume, Position> build_specScifiCAL_module( const Detector& description, const xml::Component& mod_x, SensitiveDetector& sens){
+static tuple<Volume, Position> build_specScifiCAL_module( const Detector& description, const xml::Component& mod_x, SensitiveDetector& sens, int mod_id){
 
 	//Modules
 	double sx = mod_x.attr<double>(_Unicode(sizex));
@@ -121,14 +124,14 @@ static tuple<Volume, Position> build_specScifiCAL_module( const Detector& descri
 	Box    fiberShape(fsize/2.0, fsize/2.0, sz/2.0);
 
 	//make the module hollow to insert Scifi fibers
-	SubtractionSolid mod_substract(modShape, fiberShape, Position(0.0, 0.0,0.0));
-	Volume modVol("module_vol", mod_substract, modMat);
+	Volume modVol("module_vol", modShape, modMat);
 	modVol.setVisAttributes(description.visAttributes(mod_x.attr<std::string>(_Unicode(vis))));
 	
 	Volume fiberVol("fiber_vol", fiberShape, fiberMat);
-	modVol.placeVolume(fiberVol,Transform3D( RotationZYX(0.0, 0.0, 0.0), Position(0.0, 0.0,0.0) ) );
+	PlacedVolume detfiberPV = modVol.placeVolume(fiberVol,Transform3D( RotationZYX(0.0, 0.0, 0.0), Position(0.0, 0.0,0.0) ) );
 	fiberVol.setVisAttributes(description.visAttributes(fiber_box.attr<std::string>(_Unicode(vis))));
 	fiberVol.setSensitiveDetector(sens);
+	detfiberPV.addPhysVolID( "fiber", mod_id);
 
 	return make_tuple(modVol, Position{sx, sy, sz} );
 }
