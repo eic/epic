@@ -10,7 +10,7 @@
   </comment>
 
   <detectors>
-    <detector id="ZDCHcal_ID" name="ZDCHcal" type="ZDC_Sampling" readout="ZDCHcalHits" vis="ZDCHcal_Vis">
+    <detector id="ZDCHcal_ID" name="ZDCHcal" type="ZDC_Sampling" readout="ZDCHcalHits" vis="ZDC_Hcal_Vis">
       <position x="ZDCHcal_x_pos" y="ZDCHcal_y_pos" z="ZDCHcal_z_pos"/>
       <rotation x="ZDCHcal_rotateX_angle" y="ZDCHcal_rotateY_angle" z="ZDCHcal_rotateZ_angle"/>
       <dimensions x="ZDCHcal_width" z="ZDCHcal_length"/>
