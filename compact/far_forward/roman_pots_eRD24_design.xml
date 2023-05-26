@@ -56,7 +56,7 @@
     <constant name="ForwardRomanPotStation1_insertion_central" value="3.2*cm + 0.7*cm"/>
     <constant name="ForwardRomanPotStation2_insertion_central" value="3.2*cm + 0.7*cm"/>
 
-	--!>
+	-->
 
 	<!-- Each module is a sandwich of 1mm aluminum, 0.3mm air, 0.3mm silicon, 0.3mm inactive silicon, 0.3mm copper, and 1mm aluminum -->
 	<!-- Vacuum is between each module -->
