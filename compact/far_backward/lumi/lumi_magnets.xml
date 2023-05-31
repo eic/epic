@@ -1,0 +1,87 @@
+<!-- SPDX-License-Identifier: LGPL-3.0-or-later -->
+<!-- Copyright (C) 2022 Justin Chan -->
+
+<lccdd>
+
+<comment>
+Construct a dipole magnet for the luminosity monitor in the style of the ZEUS design.
+Constructed as mainbody (subtraction solid of outer and inner block) + coil panels (subtraction solid of outer and inner block) + legs (subtraction solid of outer and inner block).
+</comment>
+
+<define>
+  <constant name="MainBodyOut_DX" value="44*cm"/>
+  <constant name="MainBodyOut_DY" value="44*cm"/>
+  <constant name="MainBodyOut_DZ" value="60*cm"/>
+  <constant name="MainBodyIn_DX" value="24*cm"/>
+  <constant name="MainBodyIn_DY" value="29*cm"/>
+  <constant name="PanelOut_DY" value="39*cm"/>
+  <constant name="PanelOut_DZ" value="LumiSpecMag_DZ"/>
+  <constant name="PanelIn_DX" value="10*cm"/>
+  <constant name="LegsOut_DX" value="33*cm"/>
+  <constant name="LegsOut_DY" value="46*cm"/>
+  <constant name="LegsIn_DZ" value="50*cm"/>
+  <constant name="CenterY_Bfield" value="(MainBodyOut_DY - MainBodyIn_DY) - (MainBodyOut_DY - PanelOut_DY)/2.0"/>
+</define>
+
+
+
+<detectors>
+
+    <detector
+      name="SweeperMag"
+      type="LumiMagnets"
+      vis_name1="AnlGreen"
+      vis_name2="AnlRed"
+      vis_name3="AnlGray">
+      <dimensions_mainbody_outer x="MainBodyOut_DX" y="MainBodyOut_DY" z="MainBodyOut_DZ"/>
+      <dimensions_mainbody_inner x="MainBodyIn_DX" y="MainBodyIn_DY" z="MainBodyOut_DZ"/>
+      <dimensions_panel_outer x="MainBodyIn_DX" y="PanelOut_DY" z="PanelOut_DZ"/>
+      <dimensions_panel_inner x="PanelIn_DX" y="PanelOut_DY" z="PanelOut_DZ"/>
+      <dimensions_leg_outer x="LegsOut_DX" y="LegsOut_DY" z="MainBodyOut_DZ"/>
+      <dimensions_leg_inner x="LegsOut_DX" y="LegsOut_DY" z="LegsIn_DZ"/>
+      <position   x="LumiSweepMag_X" y="LumiSweepMag_Y - CenterY_Bfield" z="LumiSweepMag_Z"/>
+      <rotation   x="0*rad" y="0*rad" z="0*rad"/>
+    </detector>
+
+    <!-- 4 cm wider x opening than sweeper mag for allowance of 5 sigma photon beam -->
+    <detector
+      name="SpectrometerMag"
+      type="LumiMagnets"
+      vis_name1="AnlGreen"
+      vis_name2="AnlRed"
+      vis_name3="AnlGray">
+      <dimensions_mainbody_outer x="MainBodyOut_DX" y="MainBodyOut_DY" z="MainBodyOut_DZ"/>
+      <dimensions_mainbody_inner x="MainBodyIn_DX" y="MainBodyIn_DY" z="MainBodyOut_DZ"/>
+      <dimensions_panel_outer x="MainBodyIn_DX" y="PanelOut_DY" z="PanelOut_DZ"/>
+      <dimensions_panel_inner x="4*cm + PanelIn_DX" y="PanelOut_DY" z="PanelOut_DZ"/>
+      <dimensions_leg_outer x="LegsOut_DX" y="LegsOut_DY" z="MainBodyOut_DZ"/>
+      <dimensions_leg_inner x="LegsOut_DX" y="LegsOut_DY" z="LegsIn_DZ"/>
+      <position   x="LumiSpecMag_X" y="LumiSpecMag_Y - CenterY_Bfield" z="LumiSpecMag_Z"/>
+      <rotation   x="0*rad" y="0*rad" z="0*rad"/>
+    </detector>
+
+  </detectors>
+
+
+  <comment>
+  dz of fields is set to main body length, not panel length.
+  Approximates effect of Bx dL integral with non-uniform Bx.
+  </comment>
+
+  <fields>
+    <field name="LumiSweeperField" type="MultipoleMagnet">
+      <position x="LumiSweepMag_X" y="LumiSweepMag_Y" z="LumiSweepMag_Z"/>
+      <rotation x="0" y="0" z="0"/>
+      <shape type="Box" dx="PanelIn_DX/2.0" dy="PanelOut_DY/2.0" dz="PanelOut_DZ/2.0"/>
+      <coefficient coefficient="0" skew="LumiSweepMag_B"/>
+    </field>
+
+    <field name="LumiSpectrometerField" type="MultipoleMagnet">
+      <position x="LumiSpecMag_X" y="LumiSpecMag_Y" z="LumiSpecMag_Z"/>
+      <rotation x="0" y="0" z="0"/>
+      <shape type="Box" dx="2*cm + PanelIn_DX/2.0" dy="PanelOut_DY/2.0" dz="PanelOut_DZ/2.0"/>
+      <coefficient coefficient="0" skew="LumiSpecMag_B"/>
+    </field>
+  </fields>
+
+</lccdd>

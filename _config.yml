@@ -1,0 +1,48 @@
+title: EPIC
+description: DD4hep Geometry Description of the EPIC Experiment
+
+url: https://wdconinc.github.io
+baseurl: /epic
+
+theme: minima
+
+plugins:
+- jekyll-titles-from-headings
+
+readme_index:
+  enabled:          true
+  remove_originals: true
+  with_frontmatter: false
+
+titles_from_headings:
+  enabled:     true
+  strip_title: true
+  collections: true
+
+header_pages:
+  - README.md
+  - reports/artifacts.md
+  - reports/geoviewer.md
+  - reports/arches_views.md
+  - reports/brycecanyon_views.md
+
+exclude:
+  - bin/
+  - lib/
+  - share/
+  - install/
+  - artifacts/*.prim
+  - artifacts/build-gcc-full-eic-shell/
+  - artifacts/build-gcc-fast-eic-shell/
+  - artifacts/build-clang-full-eic-shell/
+  - artifacts/build-clang-fast-eic-shell/
+  - .sass-cache/
+  - .jekyll-cache/
+  - gemfiles/
+  - Gemfile
+  - Gemfile.lock
+  - node_modules/
+  - vendor/bundle/
+  - vendor/cache/
+  - vendor/gems/
+  - vendor/ruby/

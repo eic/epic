@@ -7,7 +7,7 @@ features:
     barrel_sciglass:
     backward_PbWO4:
   hcal:
-    forward:
+    lfhcal_with_space_for_insert:
     forward_insert:
     barrel_gdml:
     backward:

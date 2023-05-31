@@ -1,3 +1,7 @@
+#!/usr/bin/env python3
+# SPDX-License-Identifier: LGPL-3.0-or-later
+# Copyright (C) 2022 Wouter Deconinck
+
 from __future__ import absolute_import, unicode_literals
 import os
 import time
@@ -10,7 +14,7 @@ parser = argparse.ArgumentParser(
      epilog='''
      This program checks the compact detector file for overlaps using Geant4.
          ''')
-parser.add_argument("-c", "--compact", help="compact detector file",default="athena.xml")
+parser.add_argument("-c", "--compact", help="compact detector file",default=f'{os.getenv("DETECTOR_PATH")}/{os.getenv("DETECTOR")}.xml')
 parser.add_argument("-r", "--resolution", help="number of points on surface",default="10000")
 parser.add_argument("-t", "--tolerance", help="minimum distance (in mm) to report overlaps",default="0.1")
 parser.add_argument("-v", "--verbose", help="print output", action='store_true')

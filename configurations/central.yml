@@ -1,6 +1,7 @@
 features:
   beampipe:
   tracking:
+    definitions:
     vertex_barrel:
     silicon_barrel:
     mpgd_barrel:
@@ -20,7 +21,7 @@ features:
     backward_PbWO4:
   solenoid:
   hcal:
-    forward:
+    lfhcal_with_space_for_insert:
     forward_insert:
     barrel_gdml:
     backward:

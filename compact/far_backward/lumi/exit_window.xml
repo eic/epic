@@ -5,20 +5,15 @@
 
   <!-- Luminosity exit window -->
 
-  <define>
-    <!-- gap between vacuum box and LumiWindow -->
-    <constant name="LumiWin_gap" value="1*mm"/>
-  </define>
-
   <detectors>
     <detector
       id="LumiWindow_ID"
       name="LumiWindow"
       type="LumiWindow"
       material="Aluminum"
-      vis="Shape1_vis">
-      <dimensions x="LumiWin_DXY/2" y="LumiWin_DXY/2" z="LumiWin_thickness/2" />
-      <position   x="0" y="0" z="LumiWin_Z - LumiWin_thickness/2 - LumiWin_gap" />
+      vis="AnlLightGray">
+      <dimensions x="LumiWin_R" y="LumiWin_R" z="LumiWin_thickness/2" />
+      <position   x="0" y="0" z="LumiWin_Z" />
       <rotation   x="0*rad" y="0*rad" z="0*rad" />
     </detector>
   </detectors>

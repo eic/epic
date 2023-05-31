@@ -62,8 +62,8 @@
     </comment>
     <!--<constant name="Q0EF_InnerRadius" value="0.02*cm"/>-->
     <!--<constant name="Q1EF_InnerRadius"  value="0.485*cm"/>-->
-    <constant name="Q0EF_InnerRadius" value="2*cm"/>
-    <constant name="Q1EF_InnerRadius"  value="2*cm"/>
+    <constant name="Q0EF_InnerRadius" value="2.5*cm"/>
+    <constant name="Q1EF_InnerRadius"  value="2.5*cm"/>
 
     <constant name="B0PF_RotationAngle"  value="-0.0*0.001*rad"/>
     <constant name="B0APF_RotationAngle" value="-25.0*0.001*rad"/>

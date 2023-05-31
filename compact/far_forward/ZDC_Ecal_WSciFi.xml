@@ -20,17 +20,18 @@
     <detector id="ZDCEcal_ID"
       name="ZDCEcal"
       type="ZDCEcalScFiCalorimeter"
-      vis="ZDCEcal_Vis"
+      vis="ZDC_Ecal_Vis"
       readout="ZDCEcalHits">
       <position x="ZDCEcal_x_pos" y="ZDCEcal_y_pos" z="ZDCEcal_z_pos"/>
       <rotation x="ZDCEcal_rotateX_angle" y="ZDCEcal_rotateY_angle" z="ZDCEcal_rotateZ_angle"/>
       <dimensions x="ZDCEcal_width" z="ZDCEcal_length"/>
-      <module sizex="25*mm" sizey="25*mm" sizez="170*mm" material="WSciFi_UCLA_Abs" vis="ZDCEcal_module_Vis">
+      <module sizex="25*mm" sizey="25*mm" sizez="170*mm" material="WSciFi_UCLA_Abs" vis="ZDC_Ecal_module_Vis">
         <fiber material="Polystyrene"
           radius="ZDCEcal_FiberRadius"
           offset="ZDCEcal_FiberOffset"
           spacex="ZDCEcal_FiberSpaceX"
-          spacey="ZDCEcal_FiberSpaceY"/>
+          spacey="ZDCEcal_FiberSpaceY">
+        </fiber>
       </module>
     </detector>
   </detectors>

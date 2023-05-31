@@ -19,9 +19,11 @@
 #include "DD4hep/DetFactoryHelper.h"
 #include "DD4hep/Printout.h"
 #include "DD4hep/Shapes.h"
+#include "DD4hepDetectorHelper.h"
 #include "DDRec/DetectorData.h"
 #include "DDRec/Surface.h"
 #include "XML/Layering.h"
+#include "XML/Utilities.h"
 #include <array>
 
 using namespace std;
@@ -50,6 +52,16 @@ static Ref_t create_MPGDDIRC_geo(Detector& description, xml_h e, SensitiveDetect
   dd4hep::xml::Dimension                  dimensions(x_det.dimensions());
   xml_dim_t                               mpgd_dirc_pos = x_det.position();
   Assembly                                assembly(det_name);
+
+  // Set detector type flag
+  dd4hep::xml::setDetectorTypeFlag(x_det, sdet);
+  auto& params = DD4hepDetectorHelper::ensureExtension<dd4hep::rec::VariantParameters>(sdet);
+
+  // Add the volume boundary material if configured
+  for (xml_coll_t bmat(x_det, _Unicode(boundary_material)); bmat; ++bmat) {
+    xml_comp_t x_boundary_material = bmat;
+    DD4hepDetectorHelper::xmlToProtoSurfaceMaterial(x_boundary_material, params, "boundary_material");
+  }
 
   map<string, std::array<double, 2>> module_thicknesses;
   sens.setType("tracker");
@@ -212,12 +224,23 @@ static Ref_t create_MPGDDIRC_geo(Detector& description, xml_h e, SensitiveDetect
 
   // build the layers the modules will be arranged around
   for (xml_coll_t li(x_det, _U(layer)); li; ++li) {
-    xml_comp_t x_layer  = li;
-    xml_comp_t x_layout = x_layer.child(_U(rphi_layout));
-    xml_comp_t z_layout = x_layer.child(_U(z_layout));
-    int        lay_id   = x_layer.id();
-    string     m_nam    = x_layer.moduleStr();
-    string     lay_nam  = _toString(x_layer.id(), "layer%d");
+    xml_comp_t x_layer            = li;
+    xml_comp_t x_layout           = x_layer.child(_U(rphi_layout));
+    xml_comp_t z_layout           = x_layer.child(_U(z_layout));
+    int        lay_id             = x_layer.id();
+    string     m_nam              = x_layer.moduleStr();
+    string     lay_nam            = det_name + _toString(x_layer.id(), "_layer%d");
+    xml_comp_t envelope_tolerance = x_layer.child(_Unicode(envelope_tolerance), false);
+    double     envelope_r_min     = 0;
+    double     envelope_r_max     = 0;
+    double     envelope_z_min     = 0;
+    double     envelope_z_max     = 0;
+    if (envelope_tolerance) {
+      envelope_r_min = getAttrOrDefault(envelope_tolerance, _Unicode(r_min), 0);
+      envelope_r_max = getAttrOrDefault(envelope_tolerance, _Unicode(r_max), 0);
+      envelope_z_min = getAttrOrDefault(envelope_tolerance, _Unicode(z_min), 0);
+      envelope_z_max = getAttrOrDefault(envelope_tolerance, _Unicode(z_max), 0);
+    }
 
     double phi0     = x_layout.phi0();     // starting phi of first module
     double phi_tilt = x_layout.phi_tilt(); // Phi tilit of module
@@ -230,9 +253,15 @@ static Ref_t create_MPGDDIRC_geo(Detector& description, xml_h e, SensitiveDetect
     double z_dr     = z_layout.dr();       // Radial offest of modules in z
     double z0       = z_layout.z0();       // Sets how much overlap in z the nz modules have
 
+    Assembly    layer_assembly(lay_nam);
     Volume      module_env = volumes[m_nam];
     DetElement  lay_elt(sdet, lay_nam, lay_id);
-    Placements& sensVols = sensitives[m_nam];
+    Placements& sensVols    = sensitives[m_nam];
+    auto&       layerParams = DD4hepDetectorHelper::ensureExtension<dd4hep::rec::VariantParameters>(lay_elt);
+
+    pv = assembly.placeVolume(layer_assembly);
+    pv.addPhysVolID("layer", lay_id);
+    lay_elt.setPlacement(pv);
 
     int module = 1;
     // loop over the modules in phi
@@ -248,11 +277,11 @@ static Ref_t create_MPGDDIRC_geo(Detector& description, xml_h e, SensitiveDetect
         double     mod_z       = 0.5 * dimensions.length();
         double     z_placement = mod_z - j * nz * mod_z; // z location for module placement
         double     z_offset =
-            z_placement > 0 ? -z0 / 2.0 : z0 / 2.0;  // determine the amount of overlap in z the z nz modules have
+            z_placement > 0 ? -z0 / 2.0 : z0 / 2.0; // determine the amount of overlap in z the z nz modules have
 
         Transform3D tr(RotationZYX(0.0, ((M_PI / 2) - phic - phi_tilt), -M_PI / 2),
                        Position(xc, yc, mpgd_dirc_pos.z() + z_placement + z_offset)); // in x-y plane,
-        pv = assembly.placeVolume(module_env, tr);
+        pv = layer_assembly.placeVolume(module_env, tr);
         pv.addPhysVolID("module", module);
         mod_elt.setPlacement(pv);
         for (size_t ic = 0; ic < sensVols.size(); ++ic) {
@@ -269,6 +298,16 @@ static Ref_t create_MPGDDIRC_geo(Detector& description, xml_h e, SensitiveDetect
       // increment counters
       phic += phi_incr;
       rc += rphi_dr;
+    }
+    layer_assembly->GetShape()->ComputeBBox();
+    layerParams.set<double>("envelope_r_min", envelope_r_min);
+    layerParams.set<double>("envelope_r_max", envelope_r_max);
+    layerParams.set<double>("envelope_z_min", envelope_z_min);
+    layerParams.set<double>("envelope_z_max", envelope_z_max);
+
+    for (xml_coll_t lmat(x_layer, _Unicode(layer_material)); lmat; ++lmat) {
+      xml_comp_t x_layer_material = lmat;
+      DD4hepDetectorHelper::xmlToProtoSurfaceMaterial(x_layer_material, layerParams, "layer_material");
     }
   }
   sdet.setAttributes(description, assembly, x_det.regionStr(), x_det.limitsStr(), x_det.visStr());
