@@ -75,30 +75,30 @@
       <backplate thickness="HcalEndcapPInsertBackplateThickness"/>
       <comment> Tungsten/Scintillator layers </comment>
       <comment> Slices will be ordered according to the slice order listed here </comment>
-      <layer repeat="HcalEndcapPInsertLayer_NTungstenRepeat" thickness="HcalEndcapPInsertSingleLayerThickness">
-        <slice material="Tungsten" thickness="HcalEndcapPInsertAbsorberThickness"/>
+      <layer repeat="HcalEndcapPInsertLayer_NTungstenRepeat" thickness="HcalEndcapPInsertSingleLayerThickness" vis="InvisibleWithDaughters">
+        <slice material="Tungsten" thickness="HcalEndcapPInsertAbsorberThickness" vis="LFHCAL4MModVis" />
         <slice material="Air" thickness="HcalEndcapPInsertAirThickness"/>
-        <slice material="Aluminum" thickness="HcalEndcapPInsertScintillatorCoverThickness"/>
-        <slice material="Polystyrene" thickness="HcalEndcapPInsertESRFoilThickness"/>
-        <slice material="Polystyrene" thickness="HcalEndcapPInsertPolystyreneThickness" sensitive="true" limits="cal_limits"/>
-        <slice material="Polystyrene" thickness="HcalEndcapPInsertESRFoilThickness"/>
+        <slice material="Aluminum" thickness="HcalEndcapPInsertScintillatorCoverThickness" vis="AnlProcess_Blue"/>
+        <slice material="Polystyrene" thickness="HcalEndcapPInsertESRFoilThickness" vis="AnlGray"/>
+        <slice material="Polystyrene" thickness="HcalEndcapPInsertPolystyreneThickness" sensitive="true" limits="cal_limits" vis="AnlLightGray"/>
+        <slice material="Polystyrene" thickness="HcalEndcapPInsertESRFoilThickness" vis="AnlGray"/>
         <slice material="Fr4" thickness="HcalEndcapPInsertPCBThickness"/>
         <slice material="Air" thickness="HcalEndcapPInsertAirThickness"/>
       </layer>
       <comment> Steel/Sc layers </comment>
-      <layer repeat="HcalEndcapPInsertLayer_NSteelRepeat" thickness="HcalEndcapPInsertSingleLayerThickness">
-        <slice material="Steel235" thickness="HcalEndcapPInsertAbsorberThickness" />
+      <layer repeat="HcalEndcapPInsertLayer_NSteelRepeat" thickness="HcalEndcapPInsertSingleLayerThickness" vis="InvisibleWithDaughters">
+        <slice material="Steel235" thickness="HcalEndcapPInsertAbsorberThickness" vis="LFHCAL8MModVis"/>
         <slice material="Air" thickness="HcalEndcapPInsertAirThickness"/>
-        <slice material="Aluminum" thickness="HcalEndcapPInsertScintillatorCoverThickness"/>
-        <slice material="Polystyrene" thickness="HcalEndcapPInsertESRFoilThickness"/>
-        <slice material="Polystyrene" thickness="HcalEndcapPInsertPolystyreneThickness"  sensitive="true" limits="cal_limits"/>
-        <slice material="Polystyrene" thickness="HcalEndcapPInsertESRFoilThickness"/>
+        <slice material="Aluminum" thickness="HcalEndcapPInsertScintillatorCoverThickness" vis="AnlProcess_Blue"/>
+        <slice material="Polystyrene" thickness="HcalEndcapPInsertESRFoilThickness" vis="AnlGray"/>
+        <slice material="Polystyrene" thickness="HcalEndcapPInsertPolystyreneThickness"  sensitive="true" limits="cal_limits" vis="AnlLightGray"/>
+        <slice material="Polystyrene" thickness="HcalEndcapPInsertESRFoilThickness" vis="AnlGray"/>
         <slice material="Fr4" thickness="HcalEndcapPInsertPCBThickness"/>
         <slice material="Air" thickness="HcalEndcapPInsertAirThickness"/>
       </layer>
       <comment> Final layer of steel </comment>
       <layer repeat="1" thickness="HcalEndcapPInsertBackplateThickness">
-        <slice material="Steel235" thickness="HcalEndcapPInsertBackplateThickness" />
+        <slice material="Steel235" thickness="HcalEndcapPInsertBackplateThickness" vis="LFHCAL8MModVis"/>
       </layer>
       <documentation>
         initial_hole_radius: Hole radius in first layer
