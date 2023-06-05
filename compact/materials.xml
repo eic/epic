@@ -35,6 +35,17 @@
     <composite n="1" ref="Si"/>
     <composite n="2" ref="O"/>
   </material>
+  <material name="Epotek">
+    <D type="density" value="1.2" unit="g/cm3"/>
+    <composite n="5" ref="H"/>
+    <composite n="3" ref="C"/>
+    <composite n="2" ref="O"/>
+  </material>
+  <material name="Sapphire">
+    <D type="density" value="3.98" unit="g/cm3"/>
+    <composite n="2" ref="Al"/>
+    <composite n="3" ref="O"/>
+  </material>
   <material name="G10">
     <D type="density" value="1.7" unit="g/cm3"/>
     <fraction n="0.08" ref="Cl"/>
@@ -340,6 +351,21 @@
     <fraction n="0.528" ref="Quartz"/>
     <fraction n="0.472" ref="Fr4_Epoxy"/>
   </material>
+  <material name="Tyvek">
+    <D type="density" value="0.3529" unit="g/cm3"/>
+    <composite n="2" ref="C"/>
+    <composite n="4" ref="H"/>
+  </material>
+  <material name="TiO2">
+    <D type="density" value="4.2" unit="g/cm3"/>
+    <composite n="1" ref="Ti"/>
+    <composite n="2" ref="O"/>
+  </material>
+  <material name="Ti02Epoxy">
+    <D type="density" value="2.3" unit="g/cm3"/>
+    <fraction n="0.67" ref="Epoxy"/>
+    <fraction n="0.33" ref="TiO2"/>
+  </material>
   <material name="Cfrp_intt">
     <D type="density" value="1.69" unit="g/cm3"/>
     <composite n="10" ref="C"/>
@@ -367,6 +393,10 @@
     <fraction n="0.74" ref="Fe"/>
     <fraction n="0.18" ref="Cr"/>
     <fraction n="0.08" ref="Ni"/>
+  </material>
+  <material name="Copper">
+    <D type="density" value="8.96" unit="g / cm3"/>
+    <fraction n="1." ref="Cu"/>
   </material>
   <material name="ZDC_Tungsten">
     <D type="density" value="18.73" unit="g / cm3"/>

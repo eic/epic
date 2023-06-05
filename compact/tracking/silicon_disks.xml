@@ -426,7 +426,7 @@
 
   <readouts>
     <readout name="TrackerEndcapHits">
-      <segmentation type="CartesianGridXZ" grid_size_x="0.010*mm" grid_size_z="0.010*mm" />
+      <segmentation type="CartesianGridXZ" grid_size_x="0.020*mm" grid_size_z="0.020*mm" />
       <id>system:8,layer:4,module:12,sensor:2,x:32:-16,z:-16</id>
     </readout>
   </readouts>

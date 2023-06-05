@@ -1,4 +1,4 @@
-ebeam: 18
+ebeam: 10
 pbeam: 275
 features:
   beampipe:
@@ -18,14 +18,16 @@ features:
     drich:
   ecal:
     forward_homogeneous:
+    forward_insert_homogeneous:
     barrel_sciglass:
     backward_PbWO4:
   solenoid:
   hcal:
-    forward:
-    #barrel_gdml:
+    lfhcal_with_space_for_insert:
+    forward_insert:
+    barrel_gdml:
     backward:
   far_forward:
-    far_forward_arches:
+    far_forward:
   far_backward:
     far_backward:
