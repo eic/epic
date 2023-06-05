@@ -3,12 +3,12 @@
 
 <lccdd>
 
-  <include ref="far_backward/magnets.xml"/>
+  <!include ref="far_backward/magnets.xml"/>
 
   <!-- Scattered electron taggers -->
   <include ref="far_backward/taggers.xml"/>
 
   <!-- Luminosity detector -->
-  <include ref="far_backward/lumi.xml"/>
+  <!include ref="far_backward/lumi.xml"/>
 
 </lccdd>
