@@ -59,7 +59,9 @@
   <include ref="${DETECTOR_PATH}/compact/optical_materials.xml"/>
 
   <limits>
-    <limitset name="EICBeamlineLimits">
+    <limitset name="world_limits">
+    </limitset>
+    <limitset name="beamline_limits">
       <limit name="step_length_max" particles="*" value="1.0" unit="mm" />
       <limit name="track_length_max" particles="*" value="1.0" unit="mm" />
       <limit name="time_max" particles="*" value="0.1" unit="ns" />
@@ -70,6 +72,12 @@
       <limit name="step_length_max" particles="*" value="5.0" unit="mm"/>
     </limitset>
   </limits>
+
+  <regions>
+    <region name="world_region" eunit="MeV" lunit="mm" cut="0.001" threshold="0.001">
+      <limitsetref name="world_limits"/>
+    </region>
+  </regions>
 
   <display>
     <include ref="${DETECTOR_PATH}/compact/{{colors | default("colors.xml", true) }}"/>
@@ -83,6 +91,8 @@
   </documentation>
   <world material="Air">
     <shape type="Box" dx="world_dx" dy="world_dy" dz="world_dz"/>
+    <regionref   name="world_region"/>
+    <limitsetref name="world_limits"/>
   </world>
 
   <documentation level="0">

@@ -3,7 +3,7 @@ pbeam: 275
 features:
   beampipe:
   tracking:
-    definitions:
+    definitions_arches:
     vertex_barrel:
     silicon_barrel:
     mpgd_barrel:
