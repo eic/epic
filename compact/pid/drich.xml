@@ -10,8 +10,8 @@
 <constant name="DRICH_zmin"               value="ForwardRICHRegion_zmin + DRICH_zmin_extra"/>
 <constant name="DRICH_zmax_extra"         value="2*cm"/>
 <constant name="DRICH_zmax"               value="DRICH_zmin + DRICH_length + DRICH_zmax_extra"/>
-<constant name="DRICH_rmin0"              value="DRICH_zmin * ForwardRICHRegion_tan1"/>  <!-- bore radius at dRICH entrance -->
-<constant name="DRICH_rmin1"              value="DRICH_zmax * ForwardRICHRegion_tan2"/>  <!-- bore radius at dRICH exit -->
+<constant name="DRICH_rmin0"              value="10*cm"/>  <!-- DRICH_zmin * ForwardRICHRegion_tan1 changed to diameter 20; bore radius at dRICH entrance -->
+<constant name="DRICH_rmin1"              value="17.6*cm"/>  <!-- DRICH_zmax * ForwardRICHRegion_tan2 changed to diameter 35.2; bore radius at dRICH exit -->
 <constant name="DRICH_bore_slope"         value="(DRICH_rmin1 - DRICH_rmin0) / DRICH_length"/> <!-- slope of bore radius -->
 <constant name="DRICH_wall_thickness"     value="0.5*cm"/>  <!-- thickness of radial walls -->
 <constant name="DRICH_window_thickness"   value="0.1*cm"/>  <!-- thickness of entrance and exit walls -->
