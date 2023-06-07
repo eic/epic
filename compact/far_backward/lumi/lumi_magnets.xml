@@ -15,7 +15,7 @@ Constructed as mainbody (subtraction solid of outer and inner block) + coil pane
   <constant name="MainBodyIn_DX" value="24*cm"/>
   <constant name="MainBodyIn_DY" value="29*cm"/>
   <constant name="PanelOut_DY" value="39*cm"/>
-  <constant name="PanelOut_DZ" value="LumiSpecMag_DZ"/>
+  <constant name="PanelOut_DZ" value="LumiAnalyzerMag_DZ"/>
   <constant name="PanelIn_DX" value="10*cm"/>
   <constant name="LegsOut_DX" value="33*cm"/>
   <constant name="LegsOut_DY" value="46*cm"/>
@@ -56,7 +56,7 @@ Constructed as mainbody (subtraction solid of outer and inner block) + coil pane
       <dimensions_panel_inner x="4*cm + PanelIn_DX" y="PanelOut_DY" z="PanelOut_DZ"/>
       <dimensions_leg_outer x="LegsOut_DX" y="LegsOut_DY" z="MainBodyOut_DZ"/>
       <dimensions_leg_inner x="LegsOut_DX" y="LegsOut_DY" z="LegsIn_DZ"/>
-      <position   x="LumiSpecMag_X" y="LumiSpecMag_Y - CenterY_Bfield" z="LumiSpecMag_Z"/>
+      <position   x="LumiAnalyzerMag_X" y="LumiAnalyzerMag_Y - CenterY_Bfield" z="LumiAnalyzerMag_Z"/>
       <rotation   x="0*rad" y="0*rad" z="0*rad"/>
     </detector>
 
@@ -77,10 +77,10 @@ Constructed as mainbody (subtraction solid of outer and inner block) + coil pane
     </field>
 
     <field name="LumiSpectrometerField" type="MultipoleMagnet">
-      <position x="LumiSpecMag_X" y="LumiSpecMag_Y" z="LumiSpecMag_Z"/>
+      <position x="LumiAnalyzerMag_X" y="LumiAnalyzerMag_Y" z="LumiAnalyzerMag_Z"/>
       <rotation x="0" y="0" z="0"/>
       <shape type="Box" dx="2*cm + PanelIn_DX/2.0" dy="PanelOut_DY/2.0" dz="PanelOut_DZ/2.0"/>
-      <coefficient coefficient="0" skew="LumiSpecMag_B"/>
+      <coefficient coefficient="0" skew="LumiAnalyzerMag_B"/>
     </field>
   </fields>
 

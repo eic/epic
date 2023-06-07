@@ -14,12 +14,13 @@
 
   <detectors>
     <detector
-      name="LumiPhotonChamber1"
+      name="LumiPhotonChamber"
       type="LumiPhotonChamber"
-      material="Vacuum"
+      pipematerial="Al"
+      fillmaterial="Vacuum"
       vis="AnlLightGray">
-      <position z1="LumiChamber1_Z1" z2="LumiChamber1_Z2"/>
-      <dimensions dx1="LumiBeamDiv_pref * fabs(LumiChamber1_Z1)" dx2="LumiBeamDiv_pref * fabs(LumiChamber1_Z2)" dy1="LumiBeamDiv_pref * fabs(LumiChamber1_Z1)" dy2="LumiBeamDiv_pref * fabs(LumiChamber1_Z2)"/>
+      <position z1="LumiChamber_Z1" z2="LumiChamber_Z2"/>
+      <dimensions rmin="LumiBeamDiv_pref * fabs(LumiChamber_Z2)" pipe_dr="LumiChamber_DR" cap1_dz="LumiChamber_cap1_DZ" cap2_dz="LumiChamber_cap2_DZ"/>
     </detector>
   </detectors>
 

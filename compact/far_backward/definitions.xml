@@ -250,36 +250,36 @@
     <!-- Lumi sweeper dipole Magnet -->
     <constant name="LumiSweepMag_X"       value="0*m"/>
     <constant name="LumiSweepMag_Y"       value="0*m"/>
-    <constant name="LumiSweepMag_Z"       value="-36*m"/>
-    <constant name="LumiSweepMag_DZ"      value="0.78*m"/>
+    <constant name="LumiSweepMag_Z"       value="-40*m"/>
+    <constant name="LumiSweepMag_DZ"      value="1*m"/>
 
     <!-- Lumi spectrometer dipole Magnet -->
-    <constant name="LumiSpecMag_X"        value="0*m"/>
-    <constant name="LumiSpecMag_Y"        value="0*m"/>
-    <constant name="LumiSpecMag_Z"        value="-56*m"/>
-    <constant name="LumiSpecMag_DZ"       value="LumiSweepMag_DZ"/>
+    <constant name="LumiAnalyzerMag_X"        value="0*m"/>
+    <constant name="LumiAnalyzerMag_Y"        value="0*m"/>
+    <constant name="LumiAnalyzerMag_Z"        value="LumiSweepMag_Z - 4*m"/>
+    <constant name="LumiAnalyzerMag_DZ"       value="LumiSweepMag_DZ"/>
 
     <!-- Lumi converter -->
     <constant name="LumiConverter_X"      value="0*m"/>
     <constant name="LumiConverter_Y"      value="0*m"/>
     <constant name="LumiConverter_DZ"     value="1*mm"/>
-    <constant name="LumiConverter_Z"      value="LumiSpecMag_Z + LumiSpecMag_DZ/2. + LumiConverter_DZ"/>
+    <constant name="LumiConverter_Z"      value="(LumiAnalyzerMag_Z + LumiSweepMag_Z)/2.0"/>
     <constant name="LumiConverter_DXY"    value="12*cm"/>
 
     <!-- Lumi spectrometer CAL -->
     <constant name="LumiSpecCAL_DXY"      value="0.2*m"/>
     <constant name="LumiSpecCALTower_DXY" value="0.02*m"/>
     <constant name="LumiSpecCALTower_DZ"  value="0.2*m"/>
-    <constant name="LumiSpecCAL_FiveSigma" value="0.069*m"/>
+    <constant name="LumiSpecCAL_FiveSigma" value="0.050*m"/>
     <constant name="LumiSpecCAL_Y"        value="LumiSpecCAL_FiveSigma + LumiSpecCAL_DXY/2.0"/>
-    <constant name="LumiSpecCAL_Z"        value="-65*m"/>
+    <constant name="LumiSpecCAL_Z"        value="LumiSweepMag_Z - 8*m - LumiSpecCALTower_DZ/2.0"/>
 
     <!-- Lumi spectrometer trackers -->
     <constant name="LumiSpecTracker_DXY"  value="0.2*m"/>
     <constant name="LumiSpecTracker_Z1"   value="LumiSpecCAL_Z + LumiSpecCALTower_DZ/2. + 21*cm "/>
     <constant name="LumiSpecTracker_Z2"   value="LumiSpecCAL_Z + LumiSpecCALTower_DZ/2. + 11*cm"/>
     <constant name="LumiSpecTracker_Z3"   value="LumiSpecCAL_Z + LumiSpecCALTower_DZ/2. + 1*cm"/>
-    <constant name="LumiSpecTracker_Y1"   value="LumiSpecCAL_FiveSigma + LumiSpecTracker_DXY/2."/>
+    <constant name="LumiSpecTracker_Y1"   value="LumiSpecCAL_FiveSigma + LumiSpecTracker_DXY/2.0"/>
     <constant name="LumiSpecTracker_Y2"   value="LumiSpecTracker_Y1"/>
     <constant name="LumiSpecTracker_Y3"   value="LumiSpecTracker_Y1"/>
 
@@ -287,13 +287,14 @@
     <constant name="LumiSpecTracker_Cu_DZ"   value="0.014*cm"/>
 
     <!-- Lumi photon chamber -->
-    <constant name="LumiChamber1_Z1"      value="LumiSweepMag_Z + LumiSweepMag_DZ/2.0"/>
-    <constant name="LumiChamber1_Z2"      value="LumiConverter_Z + LumiConverter_DZ/2."/>
-    <constant name="LumiChamber2_Z1"      value="LumiConverter_Z - LumiConverter_DZ/2."/>
-    <constant name="LumiChamber2_Z2"      value="LumiSpecCAL_Z - LumiSpecCALTower_DZ"/>
+    <constant name="LumiChamber_Z1"      value="LumiSweepMag_Z + LumiSweepMag_DZ/2.0"/>
+    <constant name="LumiChamber_Z2"      value="LumiAnalyzerMag_Z - LumiAnalyzerMag_DZ/2.0"/>
+    <constant name="LumiChamber_DR"      value="2*mm"/>
+    <constant name="LumiChamber_cap1_DZ" value="1*cm"/>
+    <constant name="LumiChamber_cap2_DZ" value="1*cm"/>
 
     <!-- Lumi direct photon detector -->
-    <constant name="LumiDirect_Z"         value="-66*m"/>
+    <constant name="LumiDirect_Z"         value="LumiSpecCAL_Z - 1*m"/>
     <constant name="LumiDirect_XY"        value="0.2*m"/>
     <constant name="LumiDirect_DZ"        value="0.2*m"/>
 
