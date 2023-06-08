@@ -591,8 +591,8 @@
       15.4980*eV   1.00239
       "/>
     <matrix name="ABSLENGTH__C2F6_DRICH" coldim="2" values="
-      1.7712*eV   10.0*m
-      6.19921*eV  10.0*m
+      1.23984*eV   10.0*m
+      15.4980*eV   10.0*m
       "/>
     <!-- pfRICH gas -->
     <matrix name="RINDEX__C4F10_PFRICH" coldim="2" values="
