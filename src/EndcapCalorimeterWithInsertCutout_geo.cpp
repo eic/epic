@@ -23,7 +23,7 @@ static Ref_t createDetector(Detector& desc, xml_h handle, SensitiveDetector sens
   double    rmin   = dim.rmin(); // Dummy variable. Set to 0 since cutting out insert
   double    rmax   = dim.rmax(); // Max radius of endcap
   double    length = dim.z();    // Size along z-axis
-
+  std::cout << "rmin: " << rmin << " rmax: " << rmax << " length: " << length << std::endl;
   xml_dim_t pos = detElem.position();
 
   Material air = desc.material("Air");

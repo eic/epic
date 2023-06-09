@@ -146,8 +146,8 @@ def material_scan(desc, start, end, epsilon, int_dets=None, thickness_corrector=
 
 # the allowed value types {name: [col_name, label_name, major_step, minor_step]}
 ALLOWED_VALUE_TYPES = {
-    'X0': ['X0', '$X_0$', 10, 5],
-    'lambda': ['lambda', '$\lambda$', 5, 1],
+    'X0': ['X0', '$X_0$', 1, 0.01],
+    'lambda': ['lambda', '$\lambda$', 1, 0.2],
 }
 # execute the script
 if __name__ == '__main__':
