@@ -16,7 +16,7 @@ Constructed as mainbody (subtraction solid of outer and inner block) + coil pane
   <constant name="MainBodyIn_DY" value="29*cm"/>
   <constant name="PanelOut_DY" value="39*cm"/>
   <constant name="PanelOut_DZ" value="LumiAnalyzerMag_DZ"/>
-  <constant name="PanelIn_DX" value="10*cm"/>
+  <constant name="PanelIn_DX" value="15*cm"/>
   <constant name="LegsOut_DX" value="33*cm"/>
   <constant name="LegsOut_DY" value="46*cm"/>
   <constant name="LegsIn_DZ" value="50*cm"/>
@@ -53,7 +53,7 @@ Constructed as mainbody (subtraction solid of outer and inner block) + coil pane
       <dimensions_mainbody_outer x="MainBodyOut_DX" y="MainBodyOut_DY" z="MainBodyOut_DZ"/>
       <dimensions_mainbody_inner x="MainBodyIn_DX" y="MainBodyIn_DY" z="MainBodyOut_DZ"/>
       <dimensions_panel_outer x="MainBodyIn_DX" y="PanelOut_DY" z="PanelOut_DZ"/>
-      <dimensions_panel_inner x="4*cm + PanelIn_DX" y="PanelOut_DY" z="PanelOut_DZ"/>
+      <dimensions_panel_inner x="PanelIn_DX" y="PanelOut_DY" z="PanelOut_DZ"/>
       <dimensions_leg_outer x="LegsOut_DX" y="LegsOut_DY" z="MainBodyOut_DZ"/>
       <dimensions_leg_inner x="LegsOut_DX" y="LegsOut_DY" z="LegsIn_DZ"/>
       <position   x="LumiAnalyzerMag_X" y="LumiAnalyzerMag_Y - CenterY_Bfield" z="LumiAnalyzerMag_Z"/>
