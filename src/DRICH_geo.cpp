@@ -85,21 +85,20 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
   double mirrorPhiw      = mirrorElem.attr<double>(_Unicode(phiw));
   double focusTuneZ      = mirrorElem.attr<double>(_Unicode(focus_tune_z));
   double focusTuneX      = mirrorElem.attr<double>(_Unicode(focus_tune_x));
-  // - sensor module
-  auto   sensorElem      = detElem.child(_Unicode(sensors)).child(_Unicode(module));
-  auto   sensorMat       = desc.material(sensorElem.attr<std::string>(_Unicode(material)));
-  auto   sensorVis       = desc.visAttributes(sensorElem.attr<std::string>(_Unicode(vis)));
-  auto   sensorSurf      = surfMgr.opticalSurface(sensorElem.attr<std::string>(_Unicode(surface)));
-  double sensorSide      = sensorElem.attr<double>(_Unicode(side));
-  double sensorGap       = sensorElem.attr<double>(_Unicode(gap));
-  double sensorThickness = sensorElem.attr<double>(_Unicode(thickness));
-  auto   readoutName     = detElem.attr<std::string>(_Unicode(readout));
+  // - sensor photosensitive surface (pss)
+  auto   pssElem      = detElem.child(_Unicode(sensors)).child(_Unicode(pss));
+  auto   pssMat       = desc.material(pssElem.attr<std::string>(_Unicode(material)));
+  auto   pssVis       = desc.visAttributes(pssElem.attr<std::string>(_Unicode(vis)));
+  auto   pssSurf      = surfMgr.opticalSurface(pssElem.attr<std::string>(_Unicode(surface)));
+  double pssSide      = pssElem.attr<double>(_Unicode(side));
+  double pssThickness = pssElem.attr<double>(_Unicode(thickness));
+  double pssGap       = pssElem.attr<double>(_Unicode(gap));
   // - sensor resin
-  auto   resinElem       = detElem.child(_Unicode(sensors)).child(_Unicode(resin));
-  auto   resinMat        = desc.material(resinElem.attr<std::string>(_Unicode(material)));
-  auto   resinVis        = desc.visAttributes(resinElem.attr<std::string>(_Unicode(vis)));
-  double resinSide       = resinElem.attr<double>(_Unicode(side));
-  double resinThickness  = resinElem.attr<double>(_Unicode(thickness));
+  auto   resinElem      = detElem.child(_Unicode(sensors)).child(_Unicode(resin));
+  auto   resinMat       = desc.material(resinElem.attr<std::string>(_Unicode(material)));
+  auto   resinVis       = desc.visAttributes(resinElem.attr<std::string>(_Unicode(vis)));
+  double resinSide      = resinElem.attr<double>(_Unicode(side));
+  double resinThickness = resinElem.attr<double>(_Unicode(thickness));
   // - sensor sphere
   auto   sensorSphElem    = detElem.child(_Unicode(sensors)).child(_Unicode(sphere));
   double sensorSphRadius  = sensorSphElem.attr<double>(_Unicode(radius));
@@ -111,6 +110,8 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
   double sensorSphPatchRmin = sensorSphPatchElem.attr<double>(_Unicode(rmin));
   double sensorSphPatchRmax = sensorSphPatchElem.attr<double>(_Unicode(rmax));
   double sensorSphPatchZmin = sensorSphPatchElem.attr<double>(_Unicode(zmin));
+  // - sensor readout
+  auto readoutName = detElem.attr<std::string>(_Unicode(readout));
   // - settings and switches
   long debugOpticsMode = desc.constantAsLong("DRICH_debug_optics");
   bool debugSector     = desc.constantAsLong("DRICH_debug_sector") == 1;
@@ -123,10 +124,10 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
     printout(WARNING, "DRICH_geo", "DEBUGGING DRICH OPTICS");
     switch (debugOpticsMode) {
     case 1:
-      vesselMat = aerogelMat = filterMat = sensorMat = gasvolMat = desc.material("VacuumOptical");
+      vesselMat = aerogelMat = filterMat = pssMat = gasvolMat = desc.material("VacuumOptical");
       break;
     case 2:
-      vesselMat = aerogelMat = filterMat = sensorMat = desc.material("VacuumOptical");
+      vesselMat = aerogelMat = filterMat = pssMat = desc.material("VacuumOptical");
       break;
     case 3:
       vesselMat = aerogelMat = filterMat = gasvolMat = desc.material("VacuumOptical");
@@ -410,7 +411,7 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
 
     // if debugging sphere properties, restrict number of sensors drawn
     if (debugSensors) {
-      sensorSide = 2 * M_PI * sensorSphRadius / 64;
+      pssSide = 2 * M_PI * sensorSphRadius / 64;
     }
 
     // reconstruction constants
@@ -432,10 +433,10 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
      *     positions) of sensors we choose to build is near the equator, where
      *     point distribution is more uniform
      * - PROCEDURE: loop over `thetaGen`, with subloop over `phiGen`, each divided evenly
-     *   - the number of points to generate depends how many sensors (+`sensorGap`)
+     *   - the number of points to generate depends how many sensors (+`pssGap`)
      *     can fit within each ring of constant `thetaGen` or `phiGen`
      *   - we divide the relevant circumference by the sensor
-     *     size(+`sensorGap`), and this number is allowed to be a fraction,
+     *     size(+`pssGap`), and this number is allowed to be a fraction,
      *     because likely we don't care about generating a full sphere and
      *     don't mind a "seam" at the overlap point
      *   - if we pick a patch of the sphere near the equator, and not near
@@ -446,12 +447,12 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
     int imod = 0;
 
     // thetaGen loop: iterate less than "0.5 circumference / sensor size" times
-    double nTheta = M_PI * sensorSphRadius / (sensorSide + sensorGap);
+    double nTheta = M_PI * sensorSphRadius / (pssSide + pssGap);
     for (int t = 0; t < (int)(nTheta + 0.5); t++) {
       double thetaGen = t / ((double)nTheta) * M_PI;
 
       // phiGen loop: iterate less than "circumference at this latitude / sensor size" times
-      double nPhi = 2 * M_PI * sensorSphRadius * std::sin(thetaGen) / (sensorSide + sensorGap);
+      double nPhi = 2 * M_PI * sensorSphRadius * std::sin(thetaGen) / (pssSide + pssGap);
       for (int p = 0; p < (int)(nPhi + 0.5); p++) {
         double phiGen = p / ((double)nPhi) * 2 * M_PI - M_PI; // shift to [-pi,pi]
 
@@ -482,36 +483,36 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
           patchCut = std::fabs(phiCheck) < sensorSphPatchPhiw;
         if (patchCut) {
 
-          // SiPM assembly: collection of all objects for a single SiPM
-          Assembly sipmAssembly(detName + "_sensor_" + secName);
+          // sensor assembly: collection of all objects for a single SiPM + services
+          Assembly sensorAssembly(detName + "_sensor_" + secName);
 
-          // sensor and resin solid and volume
-          Box    sensorSolid(sensorSide / 2., sensorSide / 2., sensorThickness / 2.);
+          // photosensitive surface (pss) and resin solid and volume
+          Box    pssSolid(pssSide / 2., pssSide / 2., pssThickness / 2.);
           Box    resinSolid(resinSide / 2., resinSide / 2., resinThickness / 2.);
-          Volume sensorVol(detName + "_photosensor" + secName, sensorSolid, sensorMat);
+          Volume pssVol(detName + "_pss_" + secName, pssSolid, pssMat);
           Volume resinVol(detName + "_resin_" + secName, resinSolid, resinMat);
-          sensorVol.setVisAttributes(sensorVis);
+          pssVol.setVisAttributes(pssVis);
           resinVol.setVisAttributes(resinVis);
 
           // sensitivity
           if (!debugOptics || debugOpticsMode == 3)
-            sensorVol.setSensitiveDetector(sens);
+            pssVol.setSensitiveDetector(sens);
 
           // clang-format off
           /* placement (note: transformations are in reverse order)
            * - transformations operate on global coordinates; the corresponding
            *   generator coordinates are provided in the comments
            */
-          // place sensorVol
-          auto sensorPlacement = Transform3D(Translation3D(0., 0., -sensorThickness / 2.0));
-          auto sensorPV = sipmAssembly.placeVolume(sensorVol, sensorPlacement);
+          // place pssVol
+          auto pssPlacement = Transform3D(Translation3D(0., 0., -pssThickness / 2.0));
+          auto pssPV = sensorAssembly.placeVolume(pssVol, pssPlacement);
           // place resinVol
           auto resinPlacement =
               Translation3D(0., 0., -resinThickness / 2.0) * // move behind sensor
-              sensorPlacement;
-          sipmAssembly.placeVolume(resinVol, resinPlacement);
+              pssPlacement;
+          sensorAssembly.placeVolume(resinVol, resinPlacement);
           // place SiPM assembly
-          auto sipmPlacement = 
+          auto sensorAssemblyPlacement = 
               sectorRotation *                               // rotate about beam axis to sector
               Translation3D(sensorSphPos) *                  // move sphere to reference position
               RotationX(phiGen) *                            // rotate about `zGen`
@@ -520,30 +521,25 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
               Translation3D(sensorSphRadius, 0., 0.) *       // push radially to spherical surface
               RotationY(M_PI / 2) *                          // rotate sensor to be compatible with generator coords
               RotationZ(-M_PI / 2);                          // correction for readout segmentation mapping
-          gasvolVol.placeVolume(sipmAssembly, sipmPlacement);
+          auto sensorPV = gasvolVol.placeVolume(sensorAssembly, sensorAssemblyPlacement);
           // clang-format on
 
           // generate LUT for module number -> sensor position, for readout mapping tests
-          // if(isec==0) printf("%d %f %f\n",imod,sensorPV.position().x(),sensorPV.position().y());
+          // if(isec==0) printf("%d %f %f\n",imod,pssPV.position().x(),pssPV.position().y());
 
-          // properties
-          sensorPV.addPhysVolID("sector", isec).addPhysVolID("module", imod); // NOTE: follow `sensorIDfields`
-          auto        imodsec    = encodeSensorID(sensorPV.volIDs());
+          // sensor readout and DetElements
+          pssPV.addPhysVolID("sector", isec).addPhysVolID("module", imod); // NOTE: follow `sensorIDfields`
+          auto        imodsec    = encodeSensorID(pssPV.volIDs());
           std::string modsecName = secName + "_" + std::to_string(imod);
           DetElement sensorDE(det, "sensor_de_" + modsecName, imodsec);
           sensorDE.setPlacement(sensorPV);
 
+          // sensor surface properties
           if (!debugOptics || debugOpticsMode == 3) {
-            SkinSurface sensorSkin(desc, sensorDE, "sensor_optical_surface_" + modsecName, sensorSurf, sensorVol);
-            sensorSkin.isValid();
+            DetElement pssDE(det, "pss_de_" + modsecName, imodsec);
+            SkinSurface pssSkin(desc, pssDE, "sensor_optical_surface_" + modsecName, pssSurf, pssVol);
+            pssSkin.isValid();
           }
-
-          // TODO: do we need to define a resin surface (as sensorSurf)?
-          // if (!debugOptics || debugOpticsMode == 3) {
-          //   DetElement resinDE(det,  "resin_de_"  + modsecName, imodsec);
-          //   SkinSurface resinSkin(desc, resinDE, "resin_optical_surface_" + modsecName, resinSurf, resinVol);
-          //   resinSkin.isValid();
-          // };
 
           // increment sensor module number
           imod++;

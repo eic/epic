@@ -25,11 +25,11 @@
 <constant name="DRICH_airgap_thickness"   value="0.01*mm"/> <!-- air gap between aerogel and filter -->
 <constant name="DRICH_filter_thickness"   value="0.3*mm"/>  <!-- filter thickness -->
 <!-- sensor geometry; model = S13361-3050NE-08 SiPM -->
-<constant name="DRICH_sensor_base_size"       value="25.8*mm"/> <!-- full length of the sensor+resin side -->
 <constant name="DRICH_pixel_gap"              value="0.2*mm"/> <!-- size of gaps between adjacent pixels AND gaps between edge pixels and sensor side -->
-<constant name="DRICH_sensor_size"            value="DRICH_sensor_base_size - DRICH_pixel_gap"/> <!-- side length of photosensitive surface (to be segmented) -->
-<constant name="DRICH_sensor_thickness"       value="0.1*mm"/> <!-- sensor thickness -->
-<constant name="DRICH_sensor_resin_thickness" value="1.35*mm"/> <!-- sensor+resin thickness -->
+<constant name="DRICH_sensor_resin_size"      value="25.8*mm"/> <!-- full length of the sensor+resin side -->
+<constant name="DRICH_sensor_size"            value="DRICH_sensor_resin_size - DRICH_pixel_gap"/> <!-- side length of photosensitive surface (to be segmented) -->
+<constant name="DRICH_sensor_thickness"       value="0.1*mm"/> <!-- photosensitive surface thickness -->
+<constant name="DRICH_sensor_resin_thickness" value="1.35*mm - DRICH_sensor_thickness"/> <!-- resin thickness -->
 <constant name="DRICH_num_px"                 value="8"/> <!-- number of pixels along one side of the sensor -->
 <constant name="DRICH_pixel_size"             value="3.0*mm"/> <!-- a single SiPM pixel size -->
 <constant name="DRICH_pixel_pitch"            value="DRICH_pixel_size + DRICH_pixel_gap"/> <!-- center-to-center distance between SiPMs in a 8x8 panel -->
@@ -176,7 +176,7 @@
 
 <!-- /detectors/detector/sensors/module -->
 <documentation level="10">
-##### Sensor module: sensitive module + resin base
+##### Sensor module: photosensitive surface (pss) + resin base
 - dimensions:
   - `side`: side length of the square module
   - `thickness`: thickness of the sensor module
@@ -185,7 +185,7 @@
     sensor placement algorithm will try to place as many as it can in the specified
     spherical patch below
 </documentation>
-<module
+<pss
   material="AirOptical"
   surface="SensorSurface_DRICH"
   vis="DRICH_sensor_vis"
@@ -196,7 +196,7 @@
 <resin
   material="Epoxy"
   vis="DRICH_vessel_vis"
-  side="DRICH_sensor_base_size"
+  side="DRICH_sensor_resin_size"
   thickness="DRICH_sensor_resin_thickness"
   />
 
