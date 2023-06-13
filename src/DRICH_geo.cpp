@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: LGPL-3.0-or-later
-// Copyright (C) 2023 Christopher Dilks, Junhuai Xu
+// Copyright (C) 2022, 2023 Christopher Dilks, Junhuai Xu
 
 //==========================================================================
 //  dRICH: Dual Ring Imaging Cherenkov Detector
@@ -413,24 +413,6 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
       sensorSide = 2 * M_PI * sensorSphRadius / 64;
     }
 
-    // solid and volume: single sensor module
-    Box    sensorSolid(sensorSide / 2., sensorSide / 2., sensorThickness / 2.);
-    Volume sensorVol(detName + "_sensor_" + secName, sensorSolid, sensorMat);
-    sensorVol.setVisAttributes(sensorVis);
-
-    // solid and volume: single sensor resin
-    Box    resinSolid(resinSide / 2., resinSide / 2., resinThickness / 2.);
-    Volume resinVol(detName + "_resin_" + secName, resinSolid, resinMat);
-    resinVol.setVisAttributes(resinVis);
-
-    // place sensorVol in resinVol
-    auto sensorPV = resinVol.placeVolume(sensorVol,
-        Transform3D(Translation3D(0., 0., resinThickness / 2.0 - sensorThickness / 2.0)));
-
-    // sensitivity
-    if (!debugOptics || debugOpticsMode == 3)
-      sensorVol.setSensitiveDetector(sens);
-
     // reconstruction constants
     auto sensorSphPos         = Position(sensorSphCenterX, 0., sensorSphCenterZ) + originFront;
     auto sensorSphFinalCenter = sectorRotation * Position(xS, 0.0, zS);
@@ -500,10 +482,29 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
           patchCut = std::fabs(phiCheck) < sensorSphPatchPhiw;
         if (patchCut) {
 
-          // placement (note: transformations are in reverse order)
-          // - transformations operate on global coordinates; the corresponding
-          //   generator coordinates are provided in the comments
+          // sensor and resin solid and volume
+          Box    sensorSolid(sensorSide / 2., sensorSide / 2., sensorThickness / 2.);
+          Box    resinSolid(resinSide / 2., resinSide / 2., resinThickness / 2.);
+          Volume sensorVol(detName + "_sensor_" + secName, sensorSolid, sensorMat);
+          Volume resinVol(detName + "_resin_" + secName, resinSolid, resinMat);
+          sensorVol.setVisAttributes(sensorVis);
+          resinVol.setVisAttributes(resinVis);
+
+          // sensitivity
+          if (!debugOptics || debugOpticsMode == 3)
+            sensorVol.setSensitiveDetector(sens);
+
           // clang-format off
+          /* placement (note: transformations are in reverse order)
+           * - transformations operate on global coordinates; the corresponding
+           *   generator coordinates are provided in the comments
+           */
+          // place sensorVol in resinVol
+          auto sensorPV = resinVol.placeVolume(
+              sensorVol,
+              Transform3D(Translation3D(0., 0., resinThickness / 2.0 - sensorThickness / 2.0))
+              );
+          // place resinVol in gasVol
           auto sensorPlacement =
               sectorRotation *                               // rotate about beam axis to sector
               Translation3D(sensorSphPos) *                  // move sphere to reference position
