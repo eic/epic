@@ -482,10 +482,13 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
           patchCut = std::fabs(phiCheck) < sensorSphPatchPhiw;
         if (patchCut) {
 
+          // SiPM assembly: collection of all objects for a single SiPM
+          Assembly sipmAssembly(detName + "_sensor_" + secName);
+
           // sensor and resin solid and volume
           Box    sensorSolid(sensorSide / 2., sensorSide / 2., sensorThickness / 2.);
           Box    resinSolid(resinSide / 2., resinSide / 2., resinThickness / 2.);
-          Volume sensorVol(detName + "_sensor_" + secName, sensorSolid, sensorMat);
+          Volume sensorVol(detName + "_photosensor" + secName, sensorSolid, sensorMat);
           Volume resinVol(detName + "_resin_" + secName, resinSolid, resinMat);
           sensorVol.setVisAttributes(sensorVis);
           resinVol.setVisAttributes(resinVis);
@@ -499,13 +502,16 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
            * - transformations operate on global coordinates; the corresponding
            *   generator coordinates are provided in the comments
            */
-          // place sensorVol in resinVol
-          auto sensorPV = resinVol.placeVolume(
-              sensorVol,
-              Transform3D(Translation3D(0., 0., resinThickness / 2.0 - sensorThickness / 2.0))
-              );
-          // place resinVol in gasVol
-          auto sensorPlacement =
+          // place sensorVol
+          auto sensorPlacement = Transform3D(Translation3D(0., 0., -sensorThickness / 2.0));
+          auto sensorPV = sipmAssembly.placeVolume(sensorVol, sensorPlacement);
+          // place resinVol
+          auto resinPlacement =
+              Translation3D(0., 0., -resinThickness / 2.0) * // move behind sensor
+              sensorPlacement;
+          sipmAssembly.placeVolume(resinVol, resinPlacement);
+          // place SiPM assembly
+          auto sipmPlacement = 
               sectorRotation *                               // rotate about beam axis to sector
               Translation3D(sensorSphPos) *                  // move sphere to reference position
               RotationX(phiGen) *                            // rotate about `zGen`
@@ -514,7 +520,7 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
               Translation3D(sensorSphRadius, 0., 0.) *       // push radially to spherical surface
               RotationY(M_PI / 2) *                          // rotate sensor to be compatible with generator coords
               RotationZ(-M_PI / 2);                          // correction for readout segmentation mapping
-          auto resinPV  = gasvolVol.placeVolume(resinVol, sensorPlacement);
+          gasvolVol.placeVolume(sipmAssembly, sipmPlacement);
           // clang-format on
 
           // generate LUT for module number -> sensor position, for readout mapping tests
@@ -524,9 +530,7 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
           sensorPV.addPhysVolID("sector", isec).addPhysVolID("module", imod); // NOTE: follow `sensorIDfields`
           auto        imodsec    = encodeSensorID(sensorPV.volIDs());
           std::string modsecName = secName + "_" + std::to_string(imod);
-          DetElement resinDE(det,  "resin_de_"  + modsecName, imodsec);
           DetElement sensorDE(det, "sensor_de_" + modsecName, imodsec);
-          resinDE.setPlacement(resinPV);
           sensorDE.setPlacement(sensorPV);
 
           if (!debugOptics || debugOpticsMode == 3) {
@@ -536,6 +540,7 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
 
           // TODO: do we need to define a resin surface (as sensorSurf)?
           // if (!debugOptics || debugOpticsMode == 3) {
+          //   DetElement resinDE(det,  "resin_de_"  + modsecName, imodsec);
           //   SkinSurface resinSkin(desc, resinDE, "resin_optical_surface_" + modsecName, resinSurf, resinVol);
           //   resinSkin.isValid();
           // };
