@@ -512,7 +512,7 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
               pssPlacement;
           sensorAssembly.placeVolume(resinVol, resinPlacement);
           // place SiPM assembly
-          auto sensorAssemblyPlacement = 
+          auto sensorAssemblyPlacement =
               sectorRotation *                               // rotate about beam axis to sector
               Translation3D(sensorSphPos) *                  // move sphere to reference position
               RotationX(phiGen) *                            // rotate about `zGen`
