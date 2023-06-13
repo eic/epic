@@ -484,13 +484,44 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
         if (patchCut) {
 
           // sensor assembly: collection of all objects for a single SiPM + services
+          /* - coordinate system: the "origin" of the assembly will be the center of the
+           *   outermost surface of the photosensitive surface (pss)
+           *   - reconstruction can access the sensor surface position from the sensor
+           *     assembly origin, which will ultimately have coordinates w.r.t. to the IP after
+           *     placement in the dRICH vessel
+           *   - the pss is segmented into SiPM pixels; gaps between the pixels
+           *     are accounted for in reconstruction, and each pixel reads out as a unique `cellID`
+           *   - `cellID` to postion conversion will give pixel centroids within the pss volume,
+           *     (not exactly at the pss surface, but rather in the center of the pss volume,
+           *     so keep in mind the very small offset)
+           *
+           * sensor assembly diagram:, where '0' denotes the origin:
+           *
+           *                                 axes:  z
+           *    +-+--------0--------+-+             |
+           *    | |       pss       | |             0--x
+           *    | +-----------------+ |
+           *    |        resin        |
+           *    +---------------------+
+           *
+           *       ... services ... (TODO)
+           *           - electronics
+           *           - cooling
+           *
+           */
           Assembly sensorAssembly(detName + "_sensor_" + secName);
 
-          // photosensitive surface (pss) and resin solid and volume
-          Box    pssSolid(pssSide / 2., pssSide / 2., pssThickness / 2.);
-          Box    resinSolid(resinSide / 2., resinSide / 2., resinThickness / 2.);
+          // photosensitive surface (pss) and resin solids
+          Box pssSolid(pssSide / 2., pssSide / 2., pssThickness / 2.);
+          Box resinSolid(resinSide / 2., resinSide / 2., resinThickness / 2.);
+
+          // embed pss solid in resin solid, by subtracting `pssSolid` from `resinSolid`
+          SubtractionSolid resinSolidEmbedded(resinSolid, pssSolid, 
+              Transform3D(Translation3D(0., 0., (resinThickness - pssThickness) / 2. )));
+
+          // pss and resin volumes
           Volume pssVol(detName + "_pss_" + secName, pssSolid, pssMat);
-          Volume resinVol(detName + "_resin_" + secName, resinSolid, resinMat);
+          Volume resinVol(detName + "_resin_" + secName, resinSolidEmbedded, resinMat);
           pssVol.setVisAttributes(pssVis);
           resinVol.setVisAttributes(resinVis);
 
@@ -499,17 +530,18 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
             pssVol.setSensitiveDetector(sens);
 
           // clang-format off
-          /* placement (note: transformations are in reverse order)
+          /* placement (NOTE: placement transformations are applied in reverse order)
            * - transformations operate on global coordinates; the corresponding
            *   generator coordinates are provided in the comments
            */
           // place pssVol
-          auto pssPlacement = Transform3D(Translation3D(0., 0., -pssThickness / 2.0));
+          auto pssPlacement =
+            Transform3D(Translation3D(0., 0., -pssThickness / 2.0)); // set assembly origin to pss outermost surface centroid
           auto pssPV = sensorAssembly.placeVolume(pssVol, pssPlacement);
           // place resinVol
           auto resinPlacement =
-              Translation3D(0., 0., -resinThickness / 2.0) * // move behind sensor
-              pssPlacement;
+              pssPlacement *  // move back by another half-pss-thickness, so pss is embeded exactly in resin
+              pssPlacement;   // assembly origin
           sensorAssembly.placeVolume(resinVol, resinPlacement);
           // place SiPM assembly
           auto sensorAssemblyPlacement =
