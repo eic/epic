@@ -80,7 +80,7 @@ static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector /* sens *
   // Subtractes the volume of the inner box from the outer box for the main body
   BooleanSolid main_body =  SubtractionSolid(box_outer, box_inner, Transform3D(Translation3D(0, (height - height_2)/2. , 0)));
 
-  Volume v_main_body("v_main_body", main_body, m_Iron);
+  Volume v_main_body( det_name + "_vol_main_body", main_body, m_Iron);
 
   sdet.setAttributes(det, v_main_body, x_det.regionStr(), x_det.limitsStr(), vis1);
 
@@ -89,7 +89,7 @@ static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector /* sens *
   // Creates panels by subtracting the inner box of the panels from the outer box of the panels
   BooleanSolid panels =  SubtractionSolid(panel_outer, panel_inner);
 
-  Volume v_panels("v_panels", panels, m_Copper);
+  Volume v_panels( det_name + "_vol_panels", panels, m_Copper);
 
   sdet.setAttributes(det, v_panels, x_det.regionStr(), x_det.limitsStr(), vis2);
 
@@ -98,7 +98,7 @@ static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector /* sens *
   // Creates the legs by subtracting the inner box of the legs from the outer box of the legs
   BooleanSolid legs =  SubtractionSolid(leg_outer, leg_inner);
 
-  Volume v_legs("v_legs", legs, m_Iron);
+  Volume v_legs( det_name + "_vol_legs", legs, m_Iron);
 
   sdet.setAttributes(det, v_legs, x_det.regionStr(), x_det.limitsStr(), vis3);
 

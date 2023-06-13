@@ -43,10 +43,8 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector /
   Assembly      assembly( det_name );
   assembly.setVisAttributes( description.invisible() );
 
-  //////////
+  ////////////
   // G4 solids
-  // photon chamber that encapsulates tube + caps
-  //Trap chamber( posZ1 - posZ2 + cap1_DZ + cap2_DZ, 2*(rmin + pipe_DR), 2*(rmin + pipe_DR), 2*(rmin + pipe_DR) );
   // main tube
   Tube tube( rmin, rmin + pipe_DR, (posZ1 - posZ2)/2.0, 0, 2*TMath::Pi() );
   // vacuum regions inside tube
@@ -59,7 +57,6 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector /
   Tube cap2( 0, rmin + pipe_DR, cap2_DZ/2.0, 0, 2*TMath::Pi() );
   // conversion foil
   Tube convFoil( 0, rmin, conv_DZ/2.0, 0, 2*TMath::Pi() );
-
 
   //////////
   // volumes
@@ -93,7 +90,6 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector /
           vol_vac1, Transform3D( RotationZYX(0, 0, 0), Position(0, 0, (posZ1 + posZconv)/2.)) );
   assembly.placeVolume(
           vol_vac2, Transform3D( RotationZYX(0, 0, 0), Position(0, 0, (posZ2 + posZconv)/2.)) );
-
 
   // Place assembly into mother volume.  Assembly is centered at origin
   PlacedVolume phv = motherVol.placeVolume( assembly, Position(0.0, 0.0, 0.0) );
