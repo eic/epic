@@ -558,7 +558,7 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
            *
            *    Top view: 2x2 matrix of SiPMs (2 PDU units shown side-by-side)
            *    =============================
-           *    
+           *
            *              ->:  :<- PDU gap size
            *                :  :
            *    +-----------+  +-----------+
