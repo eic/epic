@@ -61,7 +61,7 @@ def get_grid_fibers(det_elem, vol_man, id_conv, id_dict):
     for i in np.arange(gnode.GetNdaughters()):
         fnode = gnode.GetDaughter(int(i))
         # NOTE, this is defined in geometry plugin, fiber_core is the only wanted sensitive detector
-        if 'fiber_core' not in fnode.GetName():
+        if 'fiber' not in fnode.GetName():
             continue
         fpos = np.array([0., 0., 0.])
         gpos = np.array([0., 0., 0.])
@@ -129,7 +129,11 @@ if __name__ == '__main__':
             )
     parser.add_argument(
             '--no-marker', action='store_true',
-            help='Switch to draw a marker for grid center or not'
+            help='Switch on to not draw a marker for each grid\'s center',
+            )
+    parser.add_argument(
+            '--no-fiber-edge', action='store_true',
+            help='Switch on to not draw fiber edge, might be helpful for a crowded plot.',
             )
     args = parser.parse_args()
 
@@ -181,7 +185,8 @@ if __name__ == '__main__':
         patches = []
         for fi in fibers:
             patches.append(Circle((fi[0], fi[1]), fi[3]))
-        p = PatchCollection(patches, alpha=0.6, facecolors=(c,), edgecolors=('k',))
+        ec = 'k' if not args.no_fiber_edge else c
+        p = PatchCollection(patches, alpha=0.6, facecolors=(c,), edgecolors=(ec,))
         if not args.no_marker:
             ax.plot(gr_pos[0], gr_pos[1], marker='P', mfc=c, mec='k', ms=9, label='grid {}'.format(ids['grid']))
         ax.add_collection(p)

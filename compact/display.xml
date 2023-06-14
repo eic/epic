@@ -66,10 +66,10 @@
     <vis name="EcalBarrelVis"           ref="AnlGold"   showDaughters="false" visible="true"/>
     <vis name="EcalBarrelStaveVis"      ref="AnlOrange" showDaughters="false" visible="true" />
     <vis name="EcalBarrelEnvelopeVis"   ref="AnlGold" showDaughters="false" visible="true" />
-    <vis name="EcalBarrelSupportVis"    ref="AnlOrange" showDaughters="false" visible="true"/>
     <vis name="EcalBarrelLayerVis"      ref="AnlGold"   showDaughters="true"  visible="true"/>
     <vis name="EcalBarrelSliceVis"      ref="AnlGray"   showDaughters="false" visible="true"/>
     <vis name="EcalBarrelFiberLayerVis" ref="AnlGold"   showDaughters="false" visible="true" />
+    <vis name="EcalBarrelSupportVis"    ref="AnlLightGray" showDaughters="false" visible="true"/>
 
     <vis name="EcalEndcapVis"           ref="AnlGold"   showDaughters="true" visible="false"/>
     <vis name="EcalEndcapLayerVis"      ref="AnlGold"   showDaughters="false" visible="true"/>
@@ -132,9 +132,9 @@
       ZDC visualization
     </comment>
 
-    <vis name="ffi_ZDC_ECAL_Vis"        ref="AnlGreen" showDaughters="true"  visible="true"/>
-    <vis name="ffi_ZDC_ECAL_module_Vis" ref="AnlRed"   showDaughters="false" visible="true"/>
-    <vis name="ffi_ZDC_HCAL_Vis"        ref="AnlBlue"  showDaughters="true"  visible="true"/>
+    <vis name="ZDC_Ecal_Vis"        ref="AnlGreen" showDaughters="true"  visible="true"/>
+    <vis name="ZDC_Ecal_module_Vis" ref="AnlRed"   showDaughters="false" visible="true"/>
+    <vis name="ZDC_Hcal_Vis"        ref="AnlBlue"  showDaughters="true"  visible="true"/>
 
     <comment>
       Backwards beamline vacuum
