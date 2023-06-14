@@ -1,0 +1,44 @@
+<!-- SPDX-License-Identifier: LGPL-3.0-or-later -->
+<!-- Copyright (C) 2023 Alex Jentsch -->
+
+<lccdd>
+  <comment>
+    //////////////////////////////////////////////////
+    // Dummy Barrel HCAL Sampling Calorimeter
+    //////////////////////////////////////////////////
+  </comment>
+
+  <define>
+    <constant name="numLayers" value="20"/>
+    <constant name="dummy_hcal_rmin"       value="2295.0*mm"/> <!-- use HcalBarrel_rmin when integrating into main geometry -->
+    <constant name="dummy_hcal_rmax"       value="3225.0*mm"/> <!-- use HcalBarrel_rmax does nothing right now - I hard-coded a number of layer that would fit -->
+    <constant name="dummy_hcal_length"     value="6396.0*mm"/> <!-- use HcalBarrel_length -->
+  </define>
+
+  <detectors>
+    <detector
+	id="HCalBarrel_ID"
+	name="dummy_barrel_HCAL"
+	type="dummyBarrelHCAL"
+	vis="dummyBarrelHCAL_Vis"
+	readout="dummyBarrelHCALHits">
+      <position   x="0.0*mm"         y="0.0*mm"          z="0.0*mm"/>
+      <rotation   x="0.0*rad"        y="0.0*rad"         z="0.0*rad"/>
+      <dimensions rmin="dummy_hcal_rmin" rmax="dummy_hcal_rmax"  z="dummy_hcal_length"/>
+      <module nbox="1"  gapspace="0.0*mm">
+	<layer nlayer="numLayers">
+	  <slice name="Steel"          material="Steel235"     thickness="10.0*mm"  vis="AnlLight_Gray"/>
+	  <slice name="Scintillator"   material="PlasticScint" thickness="2.5*mm"   vis="AnlGreen"  sensitive="true"/>
+	</layer>
+      </module>
+    </detector>
+  </detectors>
+
+  <readouts>
+    <readout name="dummyBarrelHCALHits">
+      <segmentation type="CartesianGridXY" grid_size_x="10.*cm" grid_size_y="10.*cm"/>
+      <id>system:8,Scintillator:6,x:24:-12,y:-12</id>
+    </readout>
+  </readouts>
+
+</lccdd>
