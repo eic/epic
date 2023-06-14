@@ -516,7 +516,7 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
           Box resinSolid(resinSide / 2., resinSide / 2., resinThickness / 2.);
 
           // embed pss solid in resin solid, by subtracting `pssSolid` from `resinSolid`
-          SubtractionSolid resinSolidEmbedded(resinSolid, pssSolid, 
+          SubtractionSolid resinSolidEmbedded(resinSolid, pssSolid,
               Transform3D(Translation3D(0., 0., (resinThickness - pssThickness) / 2. )));
 
           /* NOTE:
