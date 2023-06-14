@@ -33,6 +33,10 @@
 <constant name="DRICH_num_px"                 value="8"/> <!-- number of pixels along one side of the sensor -->
 <constant name="DRICH_pixel_size"             value="3.0*mm"/> <!-- a single SiPM pixel size -->
 <constant name="DRICH_pixel_pitch"            value="DRICH_pixel_size + DRICH_pixel_gap"/> <!-- center-to-center distance between SiPMs in a 8x8 panel -->
+<!-- photodetector unit (PDU) geometry -->
+<constant name="DRICH_pdu_num_sensors" value="2"/> <!-- number of sensors along one side of a PDU -->
+<constant name="DRICH_pdu_sensor_gap"  value="0.2*mm"/> <!-- gap between adjacent sensors -->
+<constant name="DRICH_pdu_gap"         value="1.0*mm"/> <!-- gap between adjacent PDUs -->
 <!-- settings and switches -->
 <comment>
 - `DRICH_debug_optics`:    1 = all components become vacuum, except for mirrors; test opticalphotons from IP
@@ -176,14 +180,25 @@
 
 <!-- /detectors/detector/sensors/module -->
 <documentation level="10">
-##### Sensor module: photosensitive surface (pss) + resin base
-- dimensions:
-  - `side`: side length of the square module
-  - `thickness`: thickness of the sensor module
-  - `gap`: provides room between the squares, to help prevent them from overlapping
-  - note: the value of `side` will determine how many sensors there are, since the
+##### Sensor modules: photosensitive surface (pss) + resin base
+- One SiPM:
+  - PSS: photosensitive surface
+  - resin: resin substrate (holds the PSS)
+  - dimensions:
+    - `side`: side length
+    - `thickness`: thickness
+- PDU: Photodetector Unit (dimensions defined as constants above)
+  - note: the PDU pitch will determine how many PDUs there are, since the
     sensor placement algorithm will try to place as many as it can in the specified
     spherical patch below
+  - Services: cooling, heat exchange, etc.
+    - so far just a box with `side` and `thickness` dimensions
+  - Board: a circuit board (front end board, readout board, etc.)
+    - dimensions:
+      - `width`: board side length, paralell to PSS
+      - `length`: board side length, perpendicular to PSS
+      - `thickness: board thickness
+      - `offset`: positioning, with respect to PDU central axis
 </documentation>
 <pss
   material="AirOptical"
@@ -191,7 +206,6 @@
   vis="DRICH_sensor_vis"
   side="DRICH_sensor_size"
   thickness="DRICH_sensor_thickness"
-  gap="0.3*mm"
   />
 <resin
   material="Epoxy"
@@ -199,6 +213,21 @@
   side="DRICH_sensor_resin_size"
   thickness="DRICH_sensor_resin_thickness"
   />
+<pdu>
+  <services
+    side="(DRICH_pdu_num_sensors + 1) * DRICH_pdu_sensor_gap"
+    thickness="3.8*cm"
+    material="Epoxy"
+    vis="DRICH_aerogel_vis"
+    />
+  <boards material="Epoxy" vis="DRICH_service_vis">
+    <board width="4.2*cm" length="6.0*cm" thickness="0.2*cm" offset="-2.0*cm" /> <!-- FEB -->
+    <board width="4.2*cm" length="6.0*cm" thickness="0.2*cm" offset="-1.0*cm" /> <!-- FEB -->
+    <board width="4.2*cm" length="9.0*cm" thickness="0.2*cm" offset="0.0*cm"  /> <!-- RDO -->
+    <board width="4.2*cm" length="6.0*cm" thickness="0.2*cm" offset="1.0*cm"  /> <!-- FEB -->
+    <board width="4.2*cm" length="6.0*cm" thickness="0.2*cm" offset="2.0*cm"  /> <!-- FEB -->
+  </boards>
+</pdu>
 
 
 <!-- /detectors/detector/sensors/{sphere,sphericalpatch} -->

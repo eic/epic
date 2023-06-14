@@ -92,13 +92,16 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
   auto   pssSurf      = surfMgr.opticalSurface(pssElem.attr<std::string>(_Unicode(surface)));
   double pssSide      = pssElem.attr<double>(_Unicode(side));
   double pssThickness = pssElem.attr<double>(_Unicode(thickness));
-  double pssGap       = pssElem.attr<double>(_Unicode(gap));
   // - sensor resin
-  auto   resinElem      = detElem.child(_Unicode(sensors)).child(_Unicode(resin));
-  auto   resinMat       = desc.material(resinElem.attr<std::string>(_Unicode(material)));
-  auto   resinVis       = desc.visAttributes(resinElem.attr<std::string>(_Unicode(vis)));
-  double resinSide      = resinElem.attr<double>(_Unicode(side));
-  double resinThickness = resinElem.attr<double>(_Unicode(thickness));
+  auto resinElem      = detElem.child(_Unicode(sensors)).child(_Unicode(resin));
+  auto resinMat       = desc.material(resinElem.attr<std::string>(_Unicode(material)));
+  auto resinVis       = desc.visAttributes(resinElem.attr<std::string>(_Unicode(vis)));
+  auto resinSide      = resinElem.attr<double>(_Unicode(side));
+  auto resinThickness = resinElem.attr<double>(_Unicode(thickness));
+  // - photodetector unit (PDU)
+  auto pduNumSensors = desc.constant<int>("DRICH_pdu_num_sensors");
+  auto pduSensorGap  = desc.constant<double>("DRICH_pdu_sensor_gap");
+  auto pduGap        = desc.constant<double>("DRICH_pdu_gap");
   // - sensor sphere
   auto   sensorSphElem    = detElem.child(_Unicode(sensors)).child(_Unicode(sphere));
   double sensorSphRadius  = sensorSphElem.attr<double>(_Unicode(radius));
@@ -113,10 +116,10 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
   // - sensor readout
   auto readoutName = detElem.attr<std::string>(_Unicode(readout));
   // - settings and switches
-  int debugOpticsMode = desc.constant<int>("DRICH_debug_optics");
-  bool debugSector    = desc.constant<int>("DRICH_debug_sector") == 1;
-  bool debugMirror    = desc.constant<int>("DRICH_debug_mirror") == 1;
-  bool debugSensors   = desc.constant<int>("DRICH_debug_sensors") == 1;
+  auto debugOpticsMode = desc.constant<int>("DRICH_debug_optics");
+  bool debugSector     = desc.constant<int>("DRICH_debug_sector") == 1;
+  bool debugMirror     = desc.constant<int>("DRICH_debug_mirror") == 1;
+  bool debugSensors    = desc.constant<int>("DRICH_debug_sensors") == 1;
 
   // if debugging optics, override some settings
   bool debugOptics = debugOpticsMode > 0;
@@ -433,12 +436,11 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
      *     positions) of sensors we choose to build is near the equator, where
      *     point distribution is more uniform
      * - PROCEDURE: loop over `thetaGen`, with subloop over `phiGen`, each divided evenly
-     *   - the number of points to generate depends how many sensors (+`pssGap`)
+     *   - the number of points to generate depends how many PDUs
      *     can fit within each ring of constant `thetaGen` or `phiGen`
-     *   - we divide the relevant circumference by the sensor
-     *     size(+`pssGap`), and this number is allowed to be a fraction,
-     *     because likely we don't care about generating a full sphere and
-     *     don't mind a "seam" at the overlap point
+     *   - we divide the relevant circumference by the PDU size, and this
+     *     number is allowed to be a fraction, because likely we don't care about
+     *     generating a full sphere and don't mind a "seam" at the overlap point
      *   - if we pick a patch of the sphere near the equator, and not near
      *     the poles or seam, the sensor distribution will appear uniform
      */
@@ -446,13 +448,16 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
     // initialize module number for this sector
     int imod = 0;
 
+    // calculate PDU pitch: the distance between two adjacent PDUs
+    double pduPitch = pduNumSensors * resinSide + (pduNumSensors + 1) * pduSensorGap + pduGap;
+
     // thetaGen loop: iterate less than "0.5 circumference / sensor size" times
-    double nTheta = M_PI * sensorSphRadius / (pssSide + pssGap);
+    double nTheta = M_PI * sensorSphRadius / pduPitch;
     for (int t = 0; t < (int)(nTheta + 0.5); t++) {
       double thetaGen = t / ((double)nTheta) * M_PI;
 
       // phiGen loop: iterate less than "circumference at this latitude / sensor size" times
-      double nPhi = 2 * M_PI * sensorSphRadius * std::sin(thetaGen) / (pssSide + pssGap);
+      double nPhi = 2 * M_PI * sensorSphRadius * std::sin(thetaGen) / pduPitch;
       for (int p = 0; p < (int)(nPhi + 0.5); p++) {
         double phiGen = p / ((double)nPhi) * 2 * M_PI - M_PI; // shift to [-pi,pi]
 
@@ -504,10 +509,6 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
            *    |        resin        |
            *    +---------------------+
            *
-           *       ... services ... (TODO)
-           *           - electronics
-           *           - cooling
-           *
            */
           Assembly sensorAssembly(detName + "_sensor_" + secName);
 
@@ -541,22 +542,80 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
           if (!debugOptics || debugOpticsMode == 3)
             pssVol.setSensitiveDetector(sens);
 
+          // placement of objects in `sensorAssembly`
           // clang-format off
-          /* placement (NOTE: placement transformations are applied in reverse order)
-           * - transformations operate on global coordinates; the corresponding
-           *   generator coordinates are provided in the comments
+          auto pssPV = sensorAssembly.placeVolume(
+              pssVol,
+              Transform3D(Translation3D(0., 0., -pssThickness / 2.0)) // set assembly origin to pss outermost surface centroid
+              );
+          sensorAssembly.placeVolume(
+              resinVol,
+              Transform3D(Translation3D(0., 0., -resinThickness / 2.0))
+              );
+          // clang-format on
+
+          /* photodetector unit (PDU) assembly
+           *
+           *    Top view: 2x2 matrix of SiPMs (2 PDU units shown side-by-side)
+           *    =============================
+           *    
+           *              ->:  :<- PDU gap size
+           *                :  :
+           *    +-----------+  +-----------+
+           *    | +--+ +--+ |  | +--+ +--+ |
+           *    | |  | |  | |  | |  | |  | |
+           *    | +--+ +--+ |  | +--+ +--+ |
+           *    | +--+ +--+ |  | +--+ +--+ |
+           *    | |  | |  | |  | |  | |  | |
+           *    | +--+ +--+ |  | +--+ +--+ |
+           *    +-----------+  +-----------+
+           *         : :  : :
+           *         : :->: :<- sensor gap size
+           *       ->: :<- sensor gap size (same)
+           *
+           *     Side view:
+           *     ==========
+           *
+           *     +--------------------+
+           *     |     SiPM Matrix    |
+           *     +--------------------+
+           *     |   Cooling, heat    |
+           *     |   exchange, etc.   |
+           *     +--------------------+
+           *       ||  ||  ||  ||  ||
+           *       ||  ||  ||  ||  || front-end and
+           *       ||  ||  ||  ||  || readout boards
+           *       ||  ||  ||  ||  ||
+           *       ||  ||  ||  ||  ||
+           *               :   :
+           *             ->:   :<- offset of a board
            */
-          // place pssVol
-          auto pssPlacement =
-            Transform3D(Translation3D(0., 0., -pssThickness / 2.0)); // set assembly origin to pss outermost surface centroid
-          auto pssPV = sensorAssembly.placeVolume(pssVol, pssPlacement);
-          // place resinVol
-          auto resinPlacement =
-              pssPlacement *  // move back by another half-pss-thickness, so pss is embeded exactly in resin
-              pssPlacement;   // assembly origin
-          sensorAssembly.placeVolume(resinVol, resinPlacement);
-          // place SiPM assembly
-          auto sensorAssemblyPlacement =
+
+          Assembly pduAssembly(detName + "_pdu_" + secName);
+
+          // generate matrix of sensors
+          double pduSensorPitch     = resinSide + pduSensorGap;
+          double pduSensorOffsetMax = pduSensorPitch * (pduNumSensors - 1) / 2.0;
+          for(int sensorIx = 0; sensorIx < pduNumSensors; sensorIx++) {
+            for(int sensorIy = 0; sensorIy < pduNumSensors; sensorIy++) {
+              pduAssembly.placeVolume(
+                  sensorAssembly,
+                  Transform3D(Translation3D(
+                      sensorIx * pduSensorPitch - pduSensorOffsetMax,
+                      sensorIy * pduSensorPitch - pduSensorOffsetMax,
+                      -resinThickness / 2.0
+                      ))
+                  );
+            }
+          }
+
+          // place PDU assembly
+          /* - transformations operate on global coordinates; the corresponding
+           *   generator coordinates are provided in the comments
+           * - transformations are applied in reverse order
+           */
+          // clang-format off
+          auto pduAssemblyPlacement =
               sectorRotation *                               // rotate about beam axis to sector
               Translation3D(sensorSphPos) *                  // move sphere to reference position
               RotationX(phiGen) *                            // rotate about `zGen`
@@ -565,7 +624,7 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
               Translation3D(sensorSphRadius, 0., 0.) *       // push radially to spherical surface
               RotationY(M_PI / 2) *                          // rotate sensor to be compatible with generator coords
               RotationZ(-M_PI / 2);                          // correction for readout segmentation mapping
-          auto sensorPV = gasvolVol.placeVolume(sensorAssembly, sensorAssemblyPlacement);
+          auto pduPV = gasvolVol.placeVolume(pduAssembly, pduAssemblyPlacement);
           // clang-format on
 
           // generate LUT for module number -> sensor position, for readout mapping tests
@@ -575,8 +634,8 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
           pssPV.addPhysVolID("sector", isec).addPhysVolID("module", imod); // NOTE: follow `sensorIDfields`
           auto        imodsec    = encodeSensorID(pssPV.volIDs());
           std::string modsecName = secName + "_" + std::to_string(imod);
-          DetElement sensorDE(det, "sensor_de_" + modsecName, imodsec);
-          sensorDE.setPlacement(sensorPV);
+          DetElement pduDE(det, "sensor_de_" + modsecName, imodsec);
+          pduDE.setPlacement(pduPV);
 
           // sensor surface properties
           if (!debugOptics || debugOpticsMode == 3) {

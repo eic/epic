@@ -147,12 +147,13 @@
       PID visualization
     </comment>
 
-    <vis name="DRICH_vessel_vis"  ref="AnlGray" showDaughters="true" visible="true" />
-    <vis name="DRICH_gas_vis"     ref="AnlGreen" alpha="0.5" showDaughters="true" visible="true" />
-    <vis name="DRICH_aerogel_vis" ref="AnlTeal" showDaughters="true" visible="true" />
-    <vis name="DRICH_filter_vis"  alpha="1.0" r="1.0" g="1.0" b="0.0" showDaughters="true" visible="true" />
-    <vis name="DRICH_mirror_vis"  ref="AnlGray" showDaughters="true" visible="true" />
-    <vis name="DRICH_sensor_vis"  ref="AnlBlue" showDaughters="true" visible="true" />
+    <vis name="DRICH_vessel_vis"  ref="AnlGray"      showDaughters="true" visible="true" />
+    <vis name="DRICH_gas_vis"     ref="AnlGreen"     showDaughters="true" visible="true" alpha="0.5" />
+    <vis name="DRICH_aerogel_vis" ref="AnlTeal"      showDaughters="true" visible="true" />
+    <vis name="DRICH_filter_vis"  ref="AnlGold"      showDaughters="true" visible="true" />
+    <vis name="DRICH_mirror_vis"  ref="AnlLightGray" showDaughters="true" visible="true" />
+    <vis name="DRICH_sensor_vis"  ref="AnlBlue"      showDaughters="true" visible="true" />
+    <vis name="DRICH_service_vis" ref="AnlGreen"     showDaughters="true" visible="true" />
 
     <vis name="MRICH_aerogel_vis" ref="AnlTeal" showDaughters="true" visible="true" />
     <vis name="MRICH_frame_vis" ref="AnlGold" showDaughters="true" visible="true" />
