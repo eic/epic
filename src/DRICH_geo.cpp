@@ -519,6 +519,18 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
           SubtractionSolid resinSolidEmbedded(resinSolid, pssSolid, 
               Transform3D(Translation3D(0., 0., (resinThickness - pssThickness) / 2. )));
 
+          /* NOTE:
+           * Here we could add gaps (size=`DRICH_pixel_gap`) between the pixels
+           * as additional resin volumes, but this would require several more
+           * iterative boolean operations, which may cause significant
+           * performance slow downs in the simulation. Alternatively, one can
+           * create a pixel gap mask with several disjoint, thin `Box` volumes
+           * just outside the pss surface (no booleans required), but this
+           * would amount to a very large number of additional volumes. Instead,
+           * we have decided to apply pixel gap masking to the digitization
+           * algorithm, downstream in reconstruction.
+           */
+
           // pss and resin volumes
           Volume pssVol(detName + "_pss_" + secName, pssSolid, pssMat);
           Volume resinVol(detName + "_resin_" + secName, resinSolidEmbedded, resinMat);
