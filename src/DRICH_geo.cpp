@@ -113,10 +113,10 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
   // - sensor readout
   auto readoutName = detElem.attr<std::string>(_Unicode(readout));
   // - settings and switches
-  long debugOpticsMode = desc.constantAsLong("DRICH_debug_optics");
-  bool debugSector     = desc.constantAsLong("DRICH_debug_sector") == 1;
-  bool debugMirror     = desc.constantAsLong("DRICH_debug_mirror") == 1;
-  bool debugSensors    = desc.constantAsLong("DRICH_debug_sensors") == 1;
+  int debugOpticsMode = desc.constant<int>("DRICH_debug_optics");
+  bool debugSector    = desc.constant<int>("DRICH_debug_sector") == 1;
+  bool debugMirror    = desc.constant<int>("DRICH_debug_mirror") == 1;
+  bool debugSensors   = desc.constant<int>("DRICH_debug_sensors") == 1;
 
   // if debugging optics, override some settings
   bool debugOptics = debugOpticsMode > 0;
@@ -585,7 +585,7 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
     // add constant for access to the number of modules per sector
     if (isec == 0)
       desc.add(Constant("DRICH_num_sensors", std::to_string(imod)));
-    else if (imod != desc.constantAsLong("DRICH_num_sensors"))
+    else if (imod != desc.constant<int>("DRICH_num_sensors"))
       printout(WARNING, "DRICH_geo", "number of sensors is not the same for each sector");
 
   } // END SECTOR LOOP //////////////////////////
