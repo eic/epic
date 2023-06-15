@@ -36,7 +36,7 @@
 <!-- photodetector unit (PDU) geometry -->
 <constant name="DRICH_pdu_num_sensors" value="2"/> <!-- number of sensors along one side of a PDU -->
 <constant name="DRICH_pdu_sensor_gap"  value="0.2*mm"/> <!-- gap between adjacent sensors -->
-<constant name="DRICH_pdu_gap"         value="1.0*mm"/> <!-- gap between adjacent PDUs -->
+<constant name="DRICH_pdu_gap"         value="3.0*mm"/> <!-- gap between adjacent PDUs -->
 <!-- settings and switches -->
 <comment>
 - `DRICH_debug_optics`:    1 = all components become vacuum, except for mirrors; test opticalphotons from IP
@@ -218,12 +218,12 @@
     <service
       name="cooling"
       side="DRICH_pdu_num_sensors * (DRICH_sensor_resin_size + DRICH_pdu_sensor_gap) + DRICH_pdu_sensor_gap"
-      thickness="3.8*cm"
-      material="Epoxy"
+      thickness="2.0*cm"
+      material="Aluminum"
       vis="DRICH_aerogel_vis"
       />
   </services>
-  <boards material="Epoxy" vis="DRICH_service_vis">
+  <boards material="Aluminum" vis="DRICH_service_vis">
     <board name="FEB0" width="4.2*cm" length="6.0*cm" thickness="0.2*cm" offset="-2.0*cm" />
     <board name="FEB1" width="4.2*cm" length="6.0*cm" thickness="0.2*cm" offset="-1.0*cm" />
     <board name="RDO"  width="4.2*cm" length="9.0*cm" thickness="0.2*cm" offset="0.0*cm"  />

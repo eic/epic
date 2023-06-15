@@ -619,6 +619,8 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
             auto serviceThickness = serviceElem.attr<double>(_Unicode(thickness));
             auto serviceMat       = desc.material(serviceElem.attr<std::string>(_Unicode(material)));
             auto serviceVis       = desc.visAttributes(serviceElem.attr<std::string>(_Unicode(vis)));
+            // if(isec == 0 && imod == 0)
+            //   printout(INFO, "DRICH_geo", "Service volume '%s': %f x %f x %f cm", serviceName.c_str(), serviceSide, serviceSide, serviceThickness);
             Box serviceSolid(serviceSide / 2.0, serviceSide / 2.0, serviceThickness / 2.0);
             Volume serviceVol(detName + "_" + serviceName + "_" + secName, serviceSolid, serviceMat);
             serviceVol.setVisAttributes(serviceVis);
@@ -638,6 +640,8 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
             auto boardLength    = boardElem.attr<double>(_Unicode(length));
             auto boardThickness = boardElem.attr<double>(_Unicode(thickness));
             auto boardOffset    = boardElem.attr<double>(_Unicode(offset));
+            // if(isec == 0 && imod == 0)
+            //   printout(INFO, "DRICH_geo", "Board '%s': %f x %f x %f cm", boardName.c_str(), boardWidth, boardLength, boardThickness);
             Box boardSolid(boardWidth / 2.0, boardThickness / 2.0, boardLength / 2.0);
             Volume boardVol(detName + "_" + boardName + "+" + secName, boardSolid, boardsMat);
             boardVol.setVisAttributes(boardsVis);
