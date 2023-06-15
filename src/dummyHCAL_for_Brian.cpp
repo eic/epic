@@ -31,11 +31,9 @@ static Ref_t createDetector(Detector& desc, xml_h handle, SensitiveDetector sens
     //double innerRadius = 1655.0 + 640.0; //millimeter
     //double outerRadius = innerRadius + 930.0; //millimeter
     //double barrelHCALLength = 1800.0 + 1350.0 + 46.0 + 3200; //millimeter - extracted from definitions.xml -- broken up on purpose to edit later
-  
-    //double absorberThickness = 10.0; //millimeter
+  	//double absorberThickness = 10.0; //millimeter
     //double scintillatorThickness = 2.5; //millimeter
-  
-    //int numLayers = 74;
+  	//int numLayers = 74;
 
 	xml::DetElement detElem = handle;
 	std::string     detName = detElem.nameStr();
@@ -67,11 +65,9 @@ static Ref_t createDetector(Detector& desc, xml_h handle, SensitiveDetector sens
 
 	int        nsl = 0;
 	double     running_thickness = 0.0;
+	int layerid = 0;
 	xml_coll_t ci(x_lyr, _Unicode(slice));
-	//xml_coll_t iLayer(x_lyr, _Unicode(layer));
-	//xml_coll_t iSlice(x_lyr, _Unicode(slice));
 	for(int iLayer = 0; iLayer < nlyr; iLayer++){
-		int layerid = 0;
 		for (ci.reset(); ci; ++ci) {
 			xml_comp_t x_sl    = ci;
 			Material   sl_mat  = desc.material(x_sl.materialStr());
@@ -83,9 +79,7 @@ static Ref_t createDetector(Detector& desc, xml_h handle, SensitiveDetector sens
 			sl_Vol.setVisAttributes(desc.visAttributes(x_sl.visStr()));
 			if (x_sl.isSensitive()){
 		 	   sl_Vol.setSensitiveDetector(sens);
-			   layerid++;
 			}
-
 
 			nsl++;
 			running_thickness    += sl_z;
@@ -96,25 +90,12 @@ static Ref_t createDetector(Detector& desc, xml_h handle, SensitiveDetector sens
 			Position     sl_pos(0, 0, 0);
 			PlacedVolume pv = env.placeVolume(slices[sl_name], sl_pos);
 			if (slices[sl_name].isSensitive()){
-  				pv.addPhysVolID(sl_name, layerid);
+				pv.addPhysVolID(sl_name, layerid);
+				layerid++;
 			}
 		}
 	}
-	//int    layerid = 0;
-	//for (int ibox = 0; ibox < nbox; ibox++) {
-		//for (int ilyr = 0; ilyr < nlyr; ilyr++) {
-			//layerid++;
-	  		//for (int isl = 0; isl < nsl; isl++) {
-	    			//string sl_name = v_sl_name[isl + 1];
-
-	    			//Position     sl_pos(0, 0, 0);
-	    			//PlacedVolume pv = env.placeVolume(slices[sl_name], sl_pos);
-	    			//if (slices[sl_name].isSensitive()){
-	      			//	pv.addPhysVolID(sl_name, layerid);
-					//}
-	  		//}
-		//}
-	//}
+	
 
 	// detector position and rotation
 	Volume       motherVol = desc.pickMotherVolume(det);

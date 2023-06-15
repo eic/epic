@@ -9,7 +9,7 @@
   </comment>
 
   <define>
-    <constant name="numLayers" value="20"/>
+    <constant name="numLayers" value="74"/>
     <constant name="dummy_hcal_rmin"       value="2295.0*mm"/> <!-- use HcalBarrel_rmin when integrating into main geometry -->
     <constant name="dummy_hcal_rmax"       value="3225.0*mm"/> <!-- use HcalBarrel_rmax does nothing right now - I hard-coded a number of layer that would fit -->
     <constant name="dummy_hcal_length"     value="6396.0*mm"/> <!-- use HcalBarrel_length -->
@@ -37,7 +37,7 @@
   <readouts>
     <readout name="dummyBarrelHCALHits">
       <segmentation type="CartesianGridXY" grid_size_x="10.*cm" grid_size_y="10.*cm"/>
-      <id>system:8,Scintillator:6,x:24:-12,y:-12</id>
+      <id>system:8,Scintillator:8,layer:4,slice:8,x:32:-16,y:-16</id>
     </readout>
   </readouts>
 
