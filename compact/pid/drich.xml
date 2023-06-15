@@ -178,7 +178,6 @@
 <sensors>
 
 
-<!-- /detectors/detector/sensors/module -->
 <documentation level="10">
 ##### Sensor modules: photosensitive surface (pss) + resin base
 - One SiPM:
@@ -193,6 +192,7 @@
     spherical patch below
   - Services: cooling, heat exchange, etc.
     - so far just a box with `side` and `thickness` dimensions
+    - includes a unique `name`, and `material` and `vis`
   - Board: a circuit board (front end board, readout board, etc.)
     - dimensions:
       - `width`: board side length, paralell to PSS
@@ -214,18 +214,21 @@
   thickness="DRICH_sensor_resin_thickness"
   />
 <pdu>
-  <services
-    side="(DRICH_pdu_num_sensors + 1) * DRICH_pdu_sensor_gap"
-    thickness="3.8*cm"
-    material="Epoxy"
-    vis="DRICH_aerogel_vis"
-    />
+  <services>
+    <service
+      name="cooling"
+      side="DRICH_pdu_num_sensors * (DRICH_sensor_resin_size + DRICH_pdu_sensor_gap) + DRICH_pdu_sensor_gap"
+      thickness="3.8*cm"
+      material="Epoxy"
+      vis="DRICH_aerogel_vis"
+      />
+  </services>
   <boards material="Epoxy" vis="DRICH_service_vis">
-    <board width="4.2*cm" length="6.0*cm" thickness="0.2*cm" offset="-2.0*cm" /> <!-- FEB -->
-    <board width="4.2*cm" length="6.0*cm" thickness="0.2*cm" offset="-1.0*cm" /> <!-- FEB -->
-    <board width="4.2*cm" length="9.0*cm" thickness="0.2*cm" offset="0.0*cm"  /> <!-- RDO -->
-    <board width="4.2*cm" length="6.0*cm" thickness="0.2*cm" offset="1.0*cm"  /> <!-- FEB -->
-    <board width="4.2*cm" length="6.0*cm" thickness="0.2*cm" offset="2.0*cm"  /> <!-- FEB -->
+    <board name="FEB0" width="4.2*cm" length="6.0*cm" thickness="0.2*cm" offset="-2.0*cm" />
+    <board name="FEB1" width="4.2*cm" length="6.0*cm" thickness="0.2*cm" offset="-1.0*cm" />
+    <board name="RDO"  width="4.2*cm" length="9.0*cm" thickness="0.2*cm" offset="0.0*cm"  />
+    <board name="FEB2" width="4.2*cm" length="6.0*cm" thickness="0.2*cm" offset="1.0*cm"  />
+    <board name="FEB3" width="4.2*cm" length="6.0*cm" thickness="0.2*cm" offset="2.0*cm"  />
   </boards>
 </pdu>
 
