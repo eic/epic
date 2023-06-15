@@ -220,9 +220,6 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
     break; // `!debugOptics`
   case 1:
   case 3:
-    vesselSolid = vesselBox;
-    gasvolSolid = gasvolBox;
-    break;
   case 4:
   case 5:
     vesselSolid = vesselBox;
