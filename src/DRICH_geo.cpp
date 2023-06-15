@@ -612,21 +612,38 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
 
           // service volumes, for cooling, heat exchange, etc.
           int iService = 0;
+          Transform3D serviceTransformation = Transform3D(Translation3D(0., 0., -resinThickness));
           for(xml::Collection_t serviceElem(pduElem.child(_Unicode(services)), _Unicode(service)); serviceElem; ++serviceElem, ++iService) {
+            auto serviceName      = serviceElem.attr<std::string>(_Unicode(name));
             auto serviceSide      = serviceElem.attr<double>(_Unicode(side));
             auto serviceThickness = serviceElem.attr<double>(_Unicode(thickness));
-            auto serviceName      = serviceElem.attr<std::string>(_Unicode(name));
             auto serviceMat       = desc.material(serviceElem.attr<std::string>(_Unicode(material)));
             auto serviceVis       = desc.visAttributes(serviceElem.attr<std::string>(_Unicode(vis)));
             Box serviceSolid(serviceSide / 2.0, serviceSide / 2.0, serviceThickness / 2.0);
             Volume serviceVol(detName + "_" + serviceName + "_" + secName, serviceSolid, serviceMat);
             serviceVol.setVisAttributes(serviceVis);
-            pduAssembly.placeVolume(
-                serviceVol,
-                Transform3D(Translation3D(0., 0., -resinThickness - serviceThickness / 2.0))
-                );
+            serviceTransformation = Transform3D(Translation3D(0., 0., -serviceThickness / 2.0)) * serviceTransformation;
+            pduAssembly.placeVolume(serviceVol, serviceTransformation);
+            serviceTransformation = Transform3D(Translation3D(0., 0., -serviceThickness / 2.0)) * serviceTransformation;
           }
 
+          // circuit board volumes
+          int iBoard = 0;
+          auto boardsElem = pduElem.child(_Unicode(boards));
+          auto boardsMat = desc.material(boardsElem.attr<std::string>(_Unicode(material)));
+          auto boardsVis = desc.visAttributes(boardsElem.attr<std::string>(_Unicode(vis)));
+          for(xml::Collection_t boardElem(boardsElem, _Unicode(board)); boardElem; ++boardElem, ++iBoard) {
+            auto boardName      = boardElem.attr<std::string>(_Unicode(name));
+            auto boardWidth     = boardElem.attr<double>(_Unicode(width));
+            auto boardLength    = boardElem.attr<double>(_Unicode(length));
+            auto boardThickness = boardElem.attr<double>(_Unicode(thickness));
+            auto boardOffset    = boardElem.attr<double>(_Unicode(offset));
+            Box boardSolid(boardWidth / 2.0, boardThickness / 2.0, boardLength / 2.0);
+            Volume boardVol(detName + "_" + boardName + "+" + secName, boardSolid, boardsMat);
+            boardVol.setVisAttributes(boardsVis);
+            auto boardTransformation = Translation3D(0., boardOffset, -boardLength / 2.0) * serviceTransformation;
+            pduAssembly.placeVolume(boardVol, boardTransformation);
+          }
 
           // place PDU assembly
           /* - transformations operate on global coordinates; the corresponding
