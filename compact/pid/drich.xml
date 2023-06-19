@@ -217,7 +217,7 @@
 <sphericalpatch
   phiw="30*degree"
   rmin="111.0*cm"
-  rmax="179.0*cm"
+  rmax="179.0*cm - ForwardPIDRegion_rmax_service"
   zmin="DRICH_snout_length + 3.0*cm"
   />
 
