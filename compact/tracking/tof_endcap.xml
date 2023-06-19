@@ -16,7 +16,7 @@
 
     <comment> LGAD parameters for the endcap TOFs </comment>
     <constant name="TOFEndcapSensor_thickness"      value="300*um" />
-    <constant name="TOFEndcapService_thickness"     value="5.00/100*9.37*cm-TOFEndcapSensor_thickness" />
+    <constant name="TOFEndcapService_thickness"     value="1.50/100*9.37*cm-TOFEndcapSensor_thickness" />
     <constant name="TOFEndcapMod_count"             value="36" />
     <constant name="TOFEndcapMod_dz"                value="0" />
     <constant name="TOFEndcapMod_overlap"           value="0" />

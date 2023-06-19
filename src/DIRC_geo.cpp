@@ -32,7 +32,9 @@ static Ref_t createDetector(Detector& desc, xml_h e, SensitiveDetector sens)
   double    det_rmin = dirc_dim.rmin();
   double    det_rmax = dirc_dim.rmax();
   double    det_ravg = (det_rmin + det_rmax) / 2;
-
+  std::cout << "det_rmin = " << det_rmin << std::endl;
+  std::cout << "det_rmax = " << det_rmax << std::endl;
+  std::cout << "det_ravg = " << det_ravg << std::endl;
   // Detector type
   sens.setType("tracker");
 

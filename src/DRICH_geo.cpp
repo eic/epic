@@ -269,6 +269,7 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
   // TODO [low-priority]: define skin properties for aerogel and filter
   // FIXME: radiatorPitch might not be working correctly (not yet used)
   auto radiatorPos      = Position(0., 0., radiatorFrontplane + 0.5 * aerogelThickness) + originFront;
+  std::cout << "radiatorPos: " << radiatorPos << std::endl;
   auto aerogelPlacement = Translation3D(radiatorPos.x(), radiatorPos.y(), radiatorPos.z()) * // re-center to originFront
                           RotationY(radiatorPitch); // change polar angle to specified pitch
   auto       aerogelPV = gasvolVol.placeVolume(aerogelVol, aerogelPlacement);
@@ -303,6 +304,7 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
 
     // radiator z-positions (w.r.t. IP); only needed downstream if !debugOptics
     double aerogelZpos = vesselPos.z() + aerogelPV.position().z();
+    std::cout << "aerogelZpos: " << aerogelZpos << std::endl;
     double airgapZpos  = vesselPos.z() + airgapPV.position().z();
     double filterZpos  = vesselPos.z() + filterPV.position().z();
     desc.add(Constant("DRICH_aerogel_zpos", std::to_string(aerogelZpos)));
