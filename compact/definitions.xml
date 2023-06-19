@@ -440,8 +440,9 @@ Examples:
 
     <comment> Global PID regions with suballocations for TOF and RICH detectors </comment>
     <constant name="ForwardPIDRegion_zmin"        value="CentralTrackingRegionP_zmax" />
-    <constant name="ForwardPIDRegion_length"      value="137.0*cm" /> <!--Changed from 135.0 cm  -->
-    <constant name="ForwardPIDRegion_rmax"        value="180.0*cm" /> <!--Changed from 185.0 cm -->
+    <constant name="ForwardPIDRegion_length"      value="135.0*cm" />
+    <constant name="ForwardPIDRegion_rmax"        value="185.0*cm" /> 
+    <constant name="ForwardPIDRegion_rmax_service" value="5*cm" /> 
 
     <comment> Forward TOF region currenlty empty for future upgrades </comment>
     <constant name="ForwardTOFRegion_zmin"        value="ForwardPIDRegion_zmin" />
@@ -454,7 +455,7 @@ Examples:
 
     <comment> Forward RICH region </comment>
     <constant name="ForwardRICHRegion_zmin"       value="ForwardTOFRegion_zmin + ForwardTOFRegion_length" />
-    <constant name="ForwardRICHRegion_length"     value="ForwardPIDRegion_length - ForwardTOFRegion_length" />
+    <constant name="ForwardRICHRegion_length"     value="ForwardPIDRegion_length - ForwardTOFRegion_length+2*cm" />
     <comment> tangent of the opening angle at the front and back of the RICH </comment>
     <constant name="ForwardRICHRegion_tan1"        value="CentralTrackingRegionP_tan * 0.88" />
     <constant name="ForwardRICHRegion_tan2"        value="Eta3_6_tan * 0.89" />

@@ -19,7 +19,7 @@
 <constant name="DRICH_snout_length"       value="20.0*cm"/>
 <constant name="DRICH_rmax1"              value="DRICH_rmax0 + DRICH_snout_length * (tan(0.200+atan(DRICH_rmax0/DRICH_zmin))) "/>  <!--extra 0.200 takes into account the saturated cone of light from aerogel-->
 <!-- tank geometry: cylinder, holding the majority of detector components -->
-<constant name="DRICH_rmax2"              value="ForwardPIDRegion_rmax"/>  <!-- cylinder radius -->
+<constant name="DRICH_rmax2"              value="ForwardPIDRegion_rmax - ForwardPIDRegion_rmax_service"/>  <!-- cylinder radius -->
 <!-- aerogel+filter geometry -->
 <constant name="DRICH_aerogel_thickness"  value="4.0*cm"/>  <!-- aerogel thickness -->
 <constant name="DRICH_airgap_thickness"   value="0.01*mm"/> <!-- air gap between aerogel and filter -->
