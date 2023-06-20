@@ -489,7 +489,7 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
           patchCut = std::fabs(phiCheck) < sensorSphPatchPhiw;
         if (patchCut) {
 
-          // sensor assembly: collection of all objects for a single SiPM + services
+          // sensor assembly: collection of all objects for a single SiPM
           /* - coordinate system: the "origin" of the assembly will be the center of the
            *   outermost surface of the photosensitive surface (pss)
            *   - reconstruction can access the sensor surface position from the sensor
@@ -511,52 +511,9 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
            *    +---------------------+
            *
            */
-          Assembly sensorAssembly(detName + "_sensor_" + secName);
 
-          // photosensitive surface (pss) and resin solids
-          Box pssSolid(pssSide / 2., pssSide / 2., pssThickness / 2.);
-          Box resinSolid(resinSide / 2., resinSide / 2., resinThickness / 2.);
-
-          // embed pss solid in resin solid, by subtracting `pssSolid` from `resinSolid`
-          SubtractionSolid resinSolidEmbedded(resinSolid, pssSolid,
-              Transform3D(Translation3D(0., 0., (resinThickness - pssThickness) / 2. )));
-
-          /* NOTE:
-           * Here we could add gaps (size=`DRICH_pixel_gap`) between the pixels
-           * as additional resin volumes, but this would require several more
-           * iterative boolean operations, which may cause significant
-           * performance slow downs in the simulation. Alternatively, one can
-           * create a pixel gap mask with several disjoint, thin `Box` volumes
-           * just outside the pss surface (no booleans required), but this
-           * would amount to a very large number of additional volumes. Instead,
-           * we have decided to apply pixel gap masking to the digitization
-           * algorithm, downstream in reconstruction.
-           */
-
-          // pss and resin volumes
-          Volume pssVol(detName + "_pss_" + secName, pssSolid, pssMat);
-          Volume resinVol(detName + "_resin_" + secName, resinSolidEmbedded, resinMat);
-          pssVol.setVisAttributes(pssVis);
-          resinVol.setVisAttributes(resinVis);
-
-          // sensitivity
-          if (!debugOptics || debugOpticsMode == 3)
-            pssVol.setSensitiveDetector(sens);
-
-          // placement of objects in `sensorAssembly`
-          // clang-format off
-          auto pssPV = sensorAssembly.placeVolume(
-              pssVol,
-              Transform3D(Translation3D(0., 0., -pssThickness / 2.0)) // set assembly origin to pss outermost surface centroid
-              );
-          sensorAssembly.placeVolume(
-              resinVol,
-              Transform3D(Translation3D(0., 0., -resinThickness / 2.0))
-              );
-          // clang-format on
-
-          /* photodetector unit (PDU) assembly
-           *
+          // photodetector unit (PDU) assembly: matrix of SiPMs with services
+          /*
            *    Top view: 2x2 matrix of SiPMs (2 PDU units shown side-by-side)
            *    =============================
            *
@@ -592,13 +549,73 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
            *             ->:   :<- offset of a board
            */
 
-          Assembly pduAssembly(detName + "_pdu_" + secName);
+          // photosensitive surface (pss) and resin solids
+          Box pssSolid(pssSide / 2., pssSide / 2., pssThickness / 2.);
+          Box resinSolid(resinSide / 2., resinSide / 2., resinThickness / 2.);
+
+          // embed pss solid in resin solid, by subtracting `pssSolid` from `resinSolid`
+          SubtractionSolid resinSolidEmbedded(resinSolid, pssSolid,
+              Transform3D(Translation3D(0., 0., (resinThickness - pssThickness) / 2. )));
+
+          /* NOTE:
+           * Here we could add gaps (size=`DRICH_pixel_gap`) between the pixels
+           * as additional resin volumes, but this would require several more
+           * iterative boolean operations, which may cause significant
+           * performance slow downs in the simulation. Alternatively, one can
+           * create a pixel gap mask with several disjoint, thin `Box` volumes
+           * just outside the pss surface (no booleans required), but this
+           * would amount to a very large number of additional volumes. Instead,
+           * we have decided to apply pixel gap masking to the digitization
+           * algorithm, downstream in reconstruction.
+           */
+
+          // pss and resin volumes
+          Volume pssVol(detName + "_pss_" + secName, pssSolid, pssMat);
+          Volume resinVol(detName + "_resin_" + secName, resinSolidEmbedded, resinMat);
+          pssVol.setVisAttributes(pssVis);
+          resinVol.setVisAttributes(resinVis);
+
+          // sensitivity
+          if (!debugOptics || debugOpticsMode == 3)
+            pssVol.setSensitiveDetector(sens);
+
+          // PDU placement definition: describe how to place a PDU on the sphere
+          /* - transformations operate on global coordinates; the corresponding
+           *   generator coordinates are provided in the comments
+           * - transformations are applied in reverse order
+           */
+          // clang-format off
+          auto pduAssemblyPlacement =
+              sectorRotation *                               // rotate about beam axis to sector
+              Translation3D(sensorSphPos) *                  // move sphere to reference position
+              RotationX(phiGen) *                            // rotate about `zGen`
+              RotationZ(thetaGen) *                          // rotate about `yGen`
+              Translation3D(-resinThickness / 2.0, 0., 0.) * // pull back so sensor active surface is at spherical surface
+              Translation3D(sensorSphRadius, 0., 0.) *       // push radially to spherical surface
+              RotationY(M_PI / 2) *                          // rotate sensor to be compatible with generator coords
+              RotationZ(-M_PI / 2);                          // correction for readout segmentation mapping
+          // clang-format on
 
           // generate matrix of sensors and place them in `pduAssembly`
+          Assembly pduAssembly(detName + "_pdu_" + secName);
           double pduSensorPitch     = resinSide + pduSensorGap;
           double pduSensorOffsetMax = pduSensorPitch * (pduNumSensors - 1) / 2.0;
           for(int sensorIx = 0; sensorIx < pduNumSensors; sensorIx++) {
             for(int sensorIy = 0; sensorIy < pduNumSensors; sensorIy++) {
+
+              Assembly sensorAssembly(detName + "_sensor_" + secName);
+
+              // placement of objects in `sensorAssembly`
+              // clang-format off
+              auto pssPV = sensorAssembly.placeVolume(
+                  pssVol,
+                  Transform3D(Translation3D(0., 0., -pssThickness / 2.0)) // set assembly origin to pss outermost surface centroid
+                  );
+              sensorAssembly.placeVolume(
+                  resinVol,
+                  Transform3D(Translation3D(0., 0., -resinThickness / 2.0))
+                  );
+              // placement of a `sensorAssembly` in `pduAssembly`
               pduAssembly.placeVolume(
                   sensorAssembly,
                   Transform3D(Translation3D(
@@ -607,6 +624,37 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
                       0.0
                       ))
                   );
+              // clang-format on
+
+              // generate LUT for module number -> sensor position, for readout mapping tests
+              // if(isec==0) printf("%d %f %f\n",imod,pssPV.position().x(),pssPV.position().y());
+
+              // sensor readout and DetElements
+              pssPV.addPhysVolID("sector", isec).addPhysVolID("module", imod); // NOTE: follow `sensorIDfields`
+              auto        imodsec    = encodeSensorID(pssPV.volIDs());
+              std::string modsecName = secName + "_" + std::to_string(imod);
+              DetElement pssDE(det, "sensor_de_" + modsecName, imodsec);
+              pssDE.setPlacement(pssPV);
+
+              // sensor surface properties
+              if (!debugOptics || debugOpticsMode == 3) {
+                SkinSurface pssSkin(desc, pssDE, "sensor_optical_surface_" + modsecName, pssSurf, pssVol);
+                pssSkin.isValid();
+              }
+
+              // sensor VariantParameters
+              auto pssVarMap = pssDE.extension<VariantParameters>(false);
+              if(pssVarMap == nullptr) {
+                pssVarMap = new VariantParameters();
+                pssDE.addExtension<VariantParameters>(pssVarMap);
+              }
+              pssVarMap->variantParameters["x"] = 2.0;
+              pssVarMap->variantParameters["y"] = 4.0;
+              pssVarMap->variantParameters["z"] = 6.0;
+
+              // increment sensor module number
+              imod++;
+
             }
           }
 
@@ -650,42 +698,7 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
           }
 
           // place PDU assembly
-          /* - transformations operate on global coordinates; the corresponding
-           *   generator coordinates are provided in the comments
-           * - transformations are applied in reverse order
-           */
-          // clang-format off
-          auto pduAssemblyPlacement =
-              sectorRotation *                               // rotate about beam axis to sector
-              Translation3D(sensorSphPos) *                  // move sphere to reference position
-              RotationX(phiGen) *                            // rotate about `zGen`
-              RotationZ(thetaGen) *                          // rotate about `yGen`
-              Translation3D(-resinThickness / 2.0, 0., 0.) * // pull back so sensor active surface is at spherical surface
-              Translation3D(sensorSphRadius, 0., 0.) *       // push radially to spherical surface
-              RotationY(M_PI / 2) *                          // rotate sensor to be compatible with generator coords
-              RotationZ(-M_PI / 2);                          // correction for readout segmentation mapping
-          auto pduPV = gasvolVol.placeVolume(pduAssembly, pduAssemblyPlacement);
-          // clang-format on
-
-          // generate LUT for module number -> sensor position, for readout mapping tests
-          // if(isec==0) printf("%d %f %f\n",imod,pssPV.position().x(),pssPV.position().y());
-
-          // sensor readout and DetElements
-          pssPV.addPhysVolID("sector", isec).addPhysVolID("module", imod); // NOTE: follow `sensorIDfields`
-          auto        imodsec    = encodeSensorID(pssPV.volIDs());
-          std::string modsecName = secName + "_" + std::to_string(imod);
-          DetElement pduDE(det, "sensor_de_" + modsecName, imodsec);
-          pduDE.setPlacement(pduPV);
-
-          // sensor surface properties
-          if (!debugOptics || debugOpticsMode == 3) {
-            DetElement pssDE(det, "pss_de_" + modsecName, imodsec);
-            SkinSurface pssSkin(desc, pssDE, "sensor_optical_surface_" + modsecName, pssSurf, pssVol);
-            pssSkin.isValid();
-          }
-
-          // increment sensor module number
-          imod++;
+          gasvolVol.placeVolume(pduAssembly, pduAssemblyPlacement);
 
         } // end patch cuts
       }   // end phiGen loop
