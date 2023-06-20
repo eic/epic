@@ -643,7 +643,7 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
               //   - so we don't have to figure out transformations downstream
               //   - use `XYZPoint`, since `typedef XYZVector Position` can't be translated
               ROOT::Math::XYZPoint pssPos(pssPV.position());
-              auto sensorPosition = 
+              auto sensorPosition =
                 pduAssemblyPlacement *    // position of PDU
                 sensorAssemblyPlacement * // position of SiPM in PDU
                 pssPos;                   // position of sensor surface in `sensorAssembly`
