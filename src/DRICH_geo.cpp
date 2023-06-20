@@ -586,14 +586,14 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
            */
           // clang-format off
           auto pduAssemblyPlacement =
-              sectorRotation *                               // rotate about beam axis to sector
-              Translation3D(sensorSphPos) *                  // move sphere to reference position
-              RotationX(phiGen) *                            // rotate about `zGen`
-              RotationZ(thetaGen) *                          // rotate about `yGen`
-              Translation3D(-resinThickness / 2.0, 0., 0.) * // pull back so sensor active surface is at spherical surface
-              Translation3D(sensorSphRadius, 0., 0.) *       // push radially to spherical surface
-              RotationY(M_PI / 2) *                          // rotate sensor to be compatible with generator coords
-              RotationZ(-M_PI / 2);                          // correction for readout segmentation mapping
+            sectorRotation *                               // rotate about beam axis to sector
+            Translation3D(sensorSphPos) *                  // move sphere to reference position
+            RotationX(phiGen) *                            // rotate about `zGen`
+            RotationZ(thetaGen) *                          // rotate about `yGen`
+            Translation3D(-resinThickness / 2.0, 0., 0.) * // pull back so sensor active surface is at spherical surface
+            Translation3D(sensorSphRadius, 0., 0.) *       // push radially to spherical surface
+            RotationY(M_PI / 2) *                          // rotate sensor to be compatible with generator coords
+            RotationZ(-M_PI / 2);                          // correction for readout segmentation mapping
           // clang-format on
 
           // generate matrix of sensors and place them in `pduAssembly`
@@ -605,32 +605,28 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
 
               Assembly sensorAssembly(detName + "_sensor_" + secName);
 
-              // placement of objects in `sensorAssembly`
+              // placement transformations
               // clang-format off
-              auto pssPV = sensorAssembly.placeVolume(
-                  pssVol,
-                  Transform3D(Translation3D(0., 0., -pssThickness / 2.0)) // set assembly origin to pss outermost surface centroid
-                  );
-              sensorAssembly.placeVolume(
-                  resinVol,
-                  Transform3D(Translation3D(0., 0., -resinThickness / 2.0))
-                  );
-              // placement of a `sensorAssembly` in `pduAssembly`
-              pduAssembly.placeVolume(
-                  sensorAssembly,
-                  Transform3D(Translation3D(
+              // - placement of objects in `sensorAssembly`
+              auto pssPlacement   = Transform3D(Translation3D(0., 0., -pssThickness / 2.0)); // set assembly origin to pss outermost surface centroid
+              auto resinPlacement = Transform3D(Translation3D(0., 0., -resinThickness / 2.0));
+              // - placement of a `sensorAssembly` in `pduAssembly`
+              auto sensorAssemblyPlacement = Transform3D(Translation3D(
                       sensorIx * pduSensorPitch - pduSensorOffsetMax,
                       sensorIy * pduSensorPitch - pduSensorOffsetMax,
                       0.0
-                      ))
-                  );
+                      ));
               // clang-format on
 
-              // generate LUT for module number -> sensor position, for readout mapping tests
-              // if(isec==0) printf("%d %f %f\n",imod,pssPV.position().x(),pssPV.position().y());
+              // placements
+              auto pssPV = sensorAssembly.placeVolume(pssVol, pssPlacement);
+              sensorAssembly.placeVolume(resinVol, resinPlacement);
+              pduAssembly.placeVolume(sensorAssembly, sensorAssemblyPlacement);
 
-              // sensor readout and DetElements
-              pssPV.addPhysVolID("sector", isec).addPhysVolID("module", imod); // NOTE: follow `sensorIDfields`
+              // sensor readout // NOTE: follow `sensorIDfields`
+              pssPV.addPhysVolID("sector", isec).addPhysVolID("module", imod);
+
+              // sensor DetElement
               auto        imodsec    = encodeSensorID(pssPV.volIDs());
               std::string modsecName = secName + "_" + std::to_string(imod);
               DetElement pssDE(det, "sensor_de_" + modsecName, imodsec);
@@ -642,15 +638,45 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
                 pssSkin.isValid();
               }
 
-              // sensor VariantParameters
+              // obtain some parameters useful for optics
+              // - sensor position
+              //   - so we don't have to figure out transformations downstream
+              //   - use `XYZPoint`, since `typedef XYZVector Position` can't be translated
+              ROOT::Math::XYZPoint pssPos(pssPV.position());
+              auto sensorPosition = 
+                pduAssemblyPlacement *    // position of PDU
+                sensorAssemblyPlacement * // position of SiPM in PDU
+                pssPos;                   // position of sensor surface in `sensorAssembly`
+              // - sensor surface basis: the orientation of the sensor surface
+              //   - all sensors of a single PDU have the same surface orientation, but to avoid
+              //     loss of generality downstream, define the basis for each sensor
+              std::vector<Direction> pssBasis = {
+                Direction{1., 0., 0.,},
+                Direction{0., 1., 0.,},
+                Direction{0., 0., 1.,}
+              };
+              std::vector<Direction> sensorBasis;
+              for(auto& e : pssBasis)
+                sensorBasis.push_back(pduAssemblyPlacement * e);
+
+              // add these optics parameters to this sensor's parameter map
               auto pssVarMap = pssDE.extension<VariantParameters>(false);
               if(pssVarMap == nullptr) {
                 pssVarMap = new VariantParameters();
                 pssDE.addExtension<VariantParameters>(pssVarMap);
               }
-              pssVarMap->variantParameters["x"] = 2.0;
-              pssVarMap->variantParameters["y"] = 4.0;
-              pssVarMap->variantParameters["z"] = 6.0;
+              auto addVecToMap = [pssVarMap] (std::string key, auto vec) {
+                pssVarMap->set<double>(key+"_x", vec.x());
+                pssVarMap->set<double>(key+"_y", vec.y());
+                pssVarMap->set<double>(key+"_z", vec.z());
+              };
+              addVecToMap("pos", sensorPosition);
+              addVecToMap("normX", sensorBasis[0]);
+              addVecToMap("normY", sensorBasis[1]);
+              addVecToMap("normZ", sensorBasis[2]);
+              printout(INFO, "DRICH_geo", "sector %d sensor %d:", isec, imod);
+              for(auto kv : pssVarMap->variantParameters)
+                printout(INFO, "DRICH_geo", "    %s: %f", kv.first.c_str(), pssVarMap->get<double>(kv.first));
 
               // increment sensor module number
               imod++;
