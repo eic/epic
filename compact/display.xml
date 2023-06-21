@@ -126,7 +126,7 @@
     <comment>
       Beam line with magnets
     </comment>
-    <vis name="BeamPipeVis"        alpha="1" ref="AnlLightGray"       showDaughters="true" visible="true"/>
+    <vis name="BeamPipeVis"         alpha="0.2" ref="AnlLightGray"       showDaughters="true" visible="true"/>
     <vis name="FFMagnetVis"         ref="AnlGreen"           showDaughters="true" visible="true"/>
     <vis name="FFMagnetCoilVis"     ref="AnlRed"             showDaughters="true" visible="true"/>
 

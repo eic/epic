@@ -77,7 +77,7 @@ static Ref_t create_detector(Detector& desc, xml_h e, SensitiveDetector sens)
   // Entry box geometry description joining magnet, taggers and lumi
   xml::Component EB     = x_det.child(_Unicode(exitdim));
   double         ED_X   = EB.x();
-  //  double         ED_Y   = EB.y();
+  double         ED_Y   = EB.y();
   double         ED_Z   = off - EB.attr<double>(_Unicode(lumiZ));
   double         Lumi_R = EB.attr<double>(_Unicode(lumiR));
 
@@ -223,14 +223,16 @@ static Ref_t create_detector(Detector& desc, xml_h e, SensitiveDetector sens)
 
   if (addLumi) {
 
-//     double angle = 0;
-    double angle = -pi/4;
+    //     double angle = 0;
+//    double angle = -pi/4;
 
-    //     Box Entry_Beam_Box(ED_X + wall, ED_Y + wall, ED_Z);
-    //     Box Entry_Vacuum_Box(ED_X, ED_Y, ED_Z - wall);
-    CutTube Entry_Beam_Box  (ED_X, ED_X + wall, ED_Z,        0,2*pi, sin(angle),0,cos(angle), 0,0,1);
-    CutTube Entry_Vacuum_Box(0,    ED_X,        ED_Z - wall, 0,2*pi, sin(angle),0,cos(angle), 0,0,1);
-    CutTube Lumi_Exit       (0,    Lumi_R,      ED_Z,        0,2*pi, sin(angle),0,cos(angle), 0,0,1);
+    Box Entry_Beam_Box(ED_X + wall, ED_Y + wall, ED_Z);
+    Box Entry_Vacuum_Box(ED_X, ED_Y, ED_Z - wall);    
+    Tube Lumi_Exit(0, Lumi_R, ED_Z);
+
+    // CutTube Entry_Beam_Box  (ED_X, ED_X + wall, ED_Z,        0,2*pi, sin(angle),0,cos(angle), 0,0,1);
+//     CutTube Entry_Vacuum_Box(0,    ED_X,        ED_Z - wall, 0,2*pi, sin(angle),0,cos(angle), 0,0,1);
+//     CutTube Lumi_Exit       (0,    Lumi_R,      ED_Z,        0,2*pi, sin(angle),0,cos(angle), 0,0,1);
 
     // Add entry boxes to main beamline volume
     Wall_Box   = UnionSolid(Wall_Box, Entry_Beam_Box, Transform3D(RotationY(-rot.theta())));
