@@ -142,8 +142,8 @@
       Backwards beamline vacuum
     </comment>
     <vis name="BackwardsBox"      alpha="0.3" r="102/256" g="102/256" b="102/256"     showDaughters="true" visible="true"/>
-    <vis name="BackwardsVac"      alpha="0.7" r="209/256" g="209/256" b="209/256"     showDaughters="true" visible="true"/>
-    <vis name="BackwardsAir"      alpha="0.1" r="0/256"   g="96/256"  b="156/256"     showDaughters="true" visible="true"/>
+    <vis name="BackwardsVac"      alpha="0.5" r="209/256" g="209/256" b="209/256"     showDaughters="true" visible="true"/>
+    <vis name="BackwardsAir"      alpha="0.5" r="0/256"   g="96/256"  b="156/256"     showDaughters="true" visible="true"/>
     <comment>
       Commented versions while bug in DD4Hep overwites alpha value of ref
      <vis name="BackwardsBox"      alpha="0.3" ref="AnlGray"       showDaughters="true" visible="true"/>
