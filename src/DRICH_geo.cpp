@@ -537,7 +537,7 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
            *     +--------------------+
            *     |     SiPM Matrix    |
            *     +--------------------+
-           *     |   Cooling, heat    |
+           *     |   Cooling, heat    |  frontservices
            *     |   exchange, etc.   |
            *     +--------------------+
            *       ||  ||  ||  ||  ||
@@ -545,8 +545,11 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
            *       ||  ||  ||  ||  || readout boards
            *       ||  ||  ||  ||  ||
            *       ||  ||  ||  ||  ||
-           *               :   :
-           *             ->:   :<- offset of a board
+           *               ||
+           *               ||
+           *       +----------------+
+           *       | Sockets, etc.  |  backservices
+           *       +----------------+
            */
 
           // photosensitive surface (pss) and resin solids
@@ -673,6 +676,15 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
               auto sensorNormZ    = sensorNormX.Cross(sensorNormY); // sensor surface normal
               auto testOrtho      = sensorNormX.Dot(sensorNormY); // zero, if x and y vectors are orthogonal
               auto testRadial     = radialDir.Cross(sensorNormZ).Mag2(); // zero, if surface normal is parallel to radial direction
+              //
+              // TODO
+              //
+              //
+              // auto testDirection  = radialDir.Dot(sensorNormZ)
+              //
+              //
+              //
+              //
               if(std::abs(testOrtho)>1e-6 || std::abs(testRadial)>1e-6) {
                 printout(ERROR, "DRICH_geo", "sector %d sensor %d failed orientation test", isec, imod);
                 printout(ERROR, "DRICH_geo", "  testOrtho  = %f", testOrtho);
@@ -703,43 +715,55 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
             }
           }
 
-          // service volumes, for cooling, heat exchange, etc.
-          int iService = 0;
-          Transform3D serviceTransformation = Transform3D(Translation3D(0., 0., -resinThickness));
-          for(xml::Collection_t serviceElem(pduElem.child(_Unicode(services)), _Unicode(service)); serviceElem; ++serviceElem, ++iService) {
+          // front service volumes
+          Transform3D frontServiceTransformation = Transform3D(Translation3D(0., 0., -resinThickness));
+          for(xml::Collection_t serviceElem(pduElem.child(_Unicode(frontservices)), _Unicode(service)); serviceElem; ++serviceElem) {
             auto serviceName      = serviceElem.attr<std::string>(_Unicode(name));
             auto serviceSide      = serviceElem.attr<double>(_Unicode(side));
             auto serviceThickness = serviceElem.attr<double>(_Unicode(thickness));
             auto serviceMat       = desc.material(serviceElem.attr<std::string>(_Unicode(material)));
             auto serviceVis       = desc.visAttributes(serviceElem.attr<std::string>(_Unicode(vis)));
-            // if(isec == 0 && imod == 0)
-            //   printout(INFO, "DRICH_geo", "Service volume '%s': %f x %f x %f cm", serviceName.c_str(), serviceSide, serviceSide, serviceThickness);
             Box serviceSolid(serviceSide / 2.0, serviceSide / 2.0, serviceThickness / 2.0);
             Volume serviceVol(detName + "_" + serviceName + "_" + secName, serviceSolid, serviceMat);
             serviceVol.setVisAttributes(serviceVis);
-            serviceTransformation = Transform3D(Translation3D(0., 0., -serviceThickness / 2.0)) * serviceTransformation;
-            pduAssembly.placeVolume(serviceVol, serviceTransformation);
-            serviceTransformation = Transform3D(Translation3D(0., 0., -serviceThickness / 2.0)) * serviceTransformation;
+            frontServiceTransformation = Transform3D(Translation3D(0., 0., -serviceThickness / 2.0)) * frontServiceTransformation;
+            pduAssembly.placeVolume(serviceVol, frontServiceTransformation);
+            frontServiceTransformation = Transform3D(Translation3D(0., 0., -serviceThickness / 2.0)) * frontServiceTransformation;
           }
 
           // circuit board volumes
-          int iBoard = 0;
           auto boardsElem = pduElem.child(_Unicode(boards));
           auto boardsMat = desc.material(boardsElem.attr<std::string>(_Unicode(material)));
           auto boardsVis = desc.visAttributes(boardsElem.attr<std::string>(_Unicode(vis)));
-          for(xml::Collection_t boardElem(boardsElem, _Unicode(board)); boardElem; ++boardElem, ++iBoard) {
+          Transform3D backServiceTransformation;
+          for(xml::Collection_t boardElem(boardsElem, _Unicode(board)); boardElem; ++boardElem) {
             auto boardName      = boardElem.attr<std::string>(_Unicode(name));
             auto boardWidth     = boardElem.attr<double>(_Unicode(width));
             auto boardLength    = boardElem.attr<double>(_Unicode(length));
             auto boardThickness = boardElem.attr<double>(_Unicode(thickness));
             auto boardOffset    = boardElem.attr<double>(_Unicode(offset));
-            // if(isec == 0 && imod == 0)
-            //   printout(INFO, "DRICH_geo", "Board '%s': %f x %f x %f cm", boardName.c_str(), boardWidth, boardLength, boardThickness);
             Box boardSolid(boardWidth / 2.0, boardThickness / 2.0, boardLength / 2.0);
             Volume boardVol(detName + "_" + boardName + "+" + secName, boardSolid, boardsMat);
             boardVol.setVisAttributes(boardsVis);
-            auto boardTransformation = Translation3D(0., boardOffset, -boardLength / 2.0) * serviceTransformation;
+            auto boardTransformation = Translation3D(0., boardOffset, -boardLength / 2.0) * frontServiceTransformation;
             pduAssembly.placeVolume(boardVol, boardTransformation);
+            if(boardName=="RDO")
+              backServiceTransformation = Translation3D(0., 0., -boardLength) * frontServiceTransformation;
+          }
+
+          // back service volumes
+          for(xml::Collection_t serviceElem(pduElem.child(_Unicode(backservices)), _Unicode(service)); serviceElem; ++serviceElem) {
+            auto serviceName      = serviceElem.attr<std::string>(_Unicode(name));
+            auto serviceSide      = serviceElem.attr<double>(_Unicode(side));
+            auto serviceThickness = serviceElem.attr<double>(_Unicode(thickness));
+            auto serviceMat       = desc.material(serviceElem.attr<std::string>(_Unicode(material)));
+            auto serviceVis       = desc.visAttributes(serviceElem.attr<std::string>(_Unicode(vis)));
+            Box serviceSolid(serviceSide / 2.0, serviceSide / 2.0, serviceThickness / 2.0);
+            Volume serviceVol(detName + "_" + serviceName + "_" + secName, serviceSolid, serviceMat);
+            serviceVol.setVisAttributes(serviceVis);
+            backServiceTransformation = Transform3D(Translation3D(0., 0., -serviceThickness / 2.0)) * backServiceTransformation;
+            pduAssembly.placeVolume(serviceVol, backServiceTransformation);
+            backServiceTransformation = Transform3D(Translation3D(0., 0., -serviceThickness / 2.0)) * backServiceTransformation;
           }
 
           // place PDU assembly

@@ -194,7 +194,7 @@
   - note: the PDU pitch will determine how many PDUs there are, since the
     sensor placement algorithm will try to place as many as it can in the specified
     spherical patch below
-  - Services: cooling, heat exchange, etc.
+  - Front Services: cooling, heat exchange, etc.
     - so far just a box with `side` and `thickness` dimensions
     - includes a unique `name`, and `material` and `vis`
   - Board: a circuit board (front end board, readout board, etc.)
@@ -203,6 +203,9 @@
       - `length`: board side length, perpendicular to PSS
       - `thickness: board thickness
       - `offset`: positioning, with respect to PDU central axis
+  - Back Services: sockets, cooling, etc.
+    - so far just a box with `side` and `thickness` dimensions
+    - includes a unique `name`, and `material` and `vis`
 </documentation>
 <pss
   material="AirOptical"
@@ -218,7 +221,7 @@
   thickness="DRICH_sensor_resin_thickness"
   />
 <pdu>
-  <services>
+  <frontservices>
     <service
       name="cooling"
       side="DRICH_pdu_num_sensors * (DRICH_sensor_resin_size + DRICH_pdu_sensor_gap) + DRICH_pdu_sensor_gap"
@@ -226,7 +229,7 @@
       material="Aluminum"
       vis="DRICH_aerogel_vis"
       />
-  </services>
+  </frontservices>
   <boards material="Aluminum" vis="DRICH_service_vis">
     <board name="FEB0" width="4.2*cm" length="6.0*cm" thickness="0.2*cm" offset="-2.0*cm" />
     <board name="FEB1" width="4.2*cm" length="6.0*cm" thickness="0.2*cm" offset="-1.0*cm" />
@@ -234,6 +237,15 @@
     <board name="FEB2" width="4.2*cm" length="6.0*cm" thickness="0.2*cm" offset="1.0*cm"  />
     <board name="FEB3" width="4.2*cm" length="6.0*cm" thickness="0.2*cm" offset="2.0*cm"  />
   </boards>
+  <backservices>
+    <service
+      name="socket"
+      side="4.0*cm"
+      thickness="2.0*cm"
+      material="Aluminum"
+      vis="DRICH_aerogel_vis"
+      />
+  </backservices>
 </pdu>
 
 
@@ -258,10 +270,10 @@
   radius="110.0*cm"
   />
 <sphericalpatch
-  phiw="18*degree"
+  phiw="22*degree"
   rmin="111.0*cm"
   rmax="179.0*cm"
-  zmin="DRICH_snout_length + 3.0*cm"
+  zmin="DRICH_snout_length + 7.0*cm"
   />
 
 
