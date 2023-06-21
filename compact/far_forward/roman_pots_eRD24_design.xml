@@ -15,40 +15,35 @@
 
     <constant name="ForwardRomanPotStation1_zpos" value="26.0*m"/>
     <constant name="ForwardRomanPotStation1_xpos" value="-0.8333878326*m"/>
-	  <constant name="ForwardRomanPotStation2_zpos" value="28.0*m"/>
+    <constant name="ForwardRomanPotStation2_zpos" value="28.0*m"/>
     <constant name="ForwardRomanPotStation2_xpos" value="-0.924342804*m"/>
 
-	<constant name="ForwardRomanPotStation1_rotation" value="-0.047*rad"/>
+    <constant name="ForwardRomanPotStation1_rotation" value="-0.047*rad"/>
     <constant name="ForwardRomanPotStation2_rotation" value="-0.047*rad"/>
 
     <constant name="ForwardRomanPotStation1_insertionPosition" value="0.0*cm"/>
-	<constant name="ForwardRomanPotStation2_insertionPosition" value="0.0*cm"/>
+    <constant name="ForwardRomanPotStation2_insertionPosition" value="0.0*cm"/>
 
-	<!-- Module/layer information -->
-	<!-- Each module is simply a 3.2cm wide by 3.2cm tall square -->
+    <!-- Module/layer information -->
+    <!-- Each module is simply a 3.2cm wide by 3.2cm tall square -->
 
-	<!-- Module insertion positions -->
+    <!-- Module insertion positions -->
 
-
-
-	<constant name="ForwardRomanPotStation1_insertion_outer" value="3.2*cm"/>
+    <constant name="ForwardRomanPotStation1_insertion_outer" value="3.2*cm"/>
     <constant name="ForwardRomanPotStation2_insertion_outer" value="3.2*cm"/>
 
-	<!-- HIGH ACCEPTANCE VALUES -->
+    <!-- HIGH ACCEPTANCE VALUES -->
+
+    <constant name="ForwardRomanPotStation1_insertion_central" value="3.2*cm + 0.7*cm"/>
+    <constant name="ForwardRomanPotStation2_insertion_central" value="3.2*cm + 0.7*cm"/>
+
+    <constant name="ForwardRomanPotStation1_insertion_intermediate" value="3.2*cm + 0.0*cm"/>
+    <constant name="ForwardRomanPotStation2_insertion_intermediate" value="3.2*cm + 0.0*cm"/>
 
 
+    <!-- HIGH DIVERGENCE VALUES -->
 
-        <constant name="ForwardRomanPotStation1_insertion_intermediate" value="3.2*cm + 0.0*cm"/>
-        <constant name="ForwardRomanPotStation2_insertion_intermediate" value="3.2*cm + 0.0*cm"/>
-
-        <constant name="ForwardRomanPotStation1_insertion_central" value="3.2*cm + 0.7*cm"/>
-        <constant name="ForwardRomanPotStation2_insertion_central" value="3.2*cm + 0.7*cm"/>
-
-
-
-	<!-- HIGH DIVERGENCE VALUES -->
-
-    	<!--
+    <!--
 
         <constant name="ForwardRomanPotStation1_insertion_intermediate" value="3.2*cm + 0.6*cm"/>
         <constant name="ForwardRomanPotStation2_insertion_intermediate" value="3.2*cm + 0.6*cm"/>
@@ -56,29 +51,29 @@
         <constant name="ForwardRomanPotStation1_insertion_central" value="3.2*cm + 0.7*cm"/>
         <constant name="ForwardRomanPotStation2_insertion_central" value="3.2*cm + 0.7*cm"/>
 
-	--!>
+    -->
 
-	<!-- Each module is a sandwich of 1mm aluminum, 0.3mm air, 0.3mm silicon, 0.3mm inactive silicon, 0.3mm copper, and 1mm aluminum -->
-	<!-- Vacuum is between each module -->
+    <!-- Each module is a sandwich of 1mm aluminum, 0.3mm air, 0.3mm silicon, 0.3mm inactive silicon, 0.3mm copper, and 1mm aluminum -->
+    <!-- Vacuum is between each module -->
 
-	<!-- module size -->
+    <!-- module size -->
 
-	<constant name="ForwardRomanPot_ModuleWidth"  value="32.0*mm"/>
+    <constant name="ForwardRomanPot_ModuleWidth"  value="32.0*mm"/>
     <constant name="ForwardRomanPot_ModuleHeight"   value="32.0*mm"/>
 
     <!-- materials -->
-	<!-- <constant name="ForwardRomanPot_RFShieldMat"     value="StainlessSteel"/> -->
-	<!-- <constant name="ForwardRomanPot_LGADMat"         value="SiliconOxide"/>   -->
-	<!-- <constant name="ForwardRomanPot_ASICMat"         value="SiliconOxide"/>   -->
-	<!-- <constant name="ForwardRomanPot_ThermalStripMat" value="Copper"/>         -->
+    <!-- <constant name="ForwardRomanPot_RFShieldMat"     value="StainlessSteel"/> -->
+    <!-- <constant name="ForwardRomanPot_LGADMat"         value="SiliconOxide"/>   -->
+    <!-- <constant name="ForwardRomanPot_ASICMat"         value="SiliconOxide"/>   -->
+    <!-- <constant name="ForwardRomanPot_ThermalStripMat" value="Copper"/>         -->
 
-	<!-- Thicknesses -->
-	<constant name="ForwardRomanPot_RFShieldThickness"          value="1.0*mm"/>
+    <!-- Thicknesses -->
+    <constant name="ForwardRomanPot_RFShieldThickness"          value="1.0*mm"/>
     <constant name="ForwardRomanPot_LGADThickness"              value="0.3*mm"/>
     <constant name="ForwardRomanPot_ASICThickness"              value="0.3*mm"/>
     <constant name="ForwardRomanPot_ThermalStripThickness"      value="0.3*mm"/>
-  	<constant name="ForwardRomanPot_ShieldingAirLayerThickness" value="0.3*mm"/>
-	<constant name="ForwardRomanPot_LayerSeparationThickness" value="1.0*cm"/>
+    <constant name="ForwardRomanPot_ShieldingAirLayerThickness" value="0.3*mm"/>
+    <constant name="ForwardRomanPot_LayerSeparationThickness" value="1.0*cm"/>
 
   </define>
 
@@ -175,8 +170,8 @@
       <module_component material="Vacuum"       vis="InvisibleNoDaughters"  thickness="ForwardRomanPot_ShieldingAirLayerThickness"/>
       <module_component material="Aluminum"     vis="FFTrackerShieldingVis" thickness="ForwardRomanPot_RFShieldThickness"/>
     </module>
-	<module_assembly name="Station2Top">
-		<array nx="2" ny="2" module="Module1" width="2*ForwardRomanPot_ModuleWidth" height="2*ForwardRomanPot_ModuleHeight">
+    <module_assembly name="Station2Top">
+      <array nx="2" ny="2" module="Module1" width="2*ForwardRomanPot_ModuleWidth" height="2*ForwardRomanPot_ModuleHeight">
         <position x="(4*ForwardRomanPot_ModuleWidth)/2.0 + (2*ForwardRomanPot_ModuleWidth)/2.0" y="ForwardRomanPotStation1_insertion_outer"/>
       </array>
       <array nx="2" ny="2" module="Module1" width="2*ForwardRomanPot_ModuleWidth" height="2*ForwardRomanPot_ModuleHeight">
@@ -227,7 +222,7 @@
       </component>
       <component assembly="Station2Bottom">
         <position x="0" y="0" z="20.0*mm"/>
-	  </component>
+      </component>
     </layer>
   </detector>
 

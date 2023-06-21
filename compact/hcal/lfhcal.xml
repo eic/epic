@@ -1,0 +1,1379 @@
+<lccdd>
+
+  <info name="lfhcal.xml"
+        title="EPIC LFHCAL"
+        author="@FriederikeBock"
+        url="https://github.com/FriederikeBock"
+        status="development"
+        version="1.0"
+  ><comment/></info>
+
+  <define>
+    <documentation>
+      #### Material Thickness
+    </documentation>
+    <constant name="LFHCALAbsorberThickness"       value="1.52* cm"/>
+    <constant name="LFHCALPolystyreneThickness"    value="0.4* cm"/>
+    <constant name="LFHCALTyvekThickness"          value="0.034* cm"/>
+    <constant name="LFHCALAirOffset"               value="0.046* cm"/>
+    <constant name="LFHCALElectronicsThickness"    value="10.0* cm"/>
+    <documentation>
+      - Hcal Endcap N Layers and computed Thickness
+    </documentation>
+
+    <comment> FIXME: Need actual values once they are decided upon </comment>
+    <constant name="LFHCALLayer_NSteelRepeatS" value="10"/> <!--      6 x 10 steel layers -->
+    <constant name="LFHCALLayer_NTungstenRepeat" value="4"/>
+    <constant name="Mod_SideWallThickness"   value="1.9812* mm"/>
+    <constant name="Mod_TopWallThickness"    value="0.5* mm"/>
+    <constant name="Mod_FrontWallThickness"  value="14* mm"/>
+    <constant name="Mod_BackWallThickness"   value="9.91* mm"/>
+    <constant name="Mod_NotchDepth"          value="1.25* mm"/>
+    <constant name="Mod_SepWidth"            value="0.5* mm"/>
+
+    <constant name="EightM_xArr"                value="4" />
+    <constant name="EightM_yArr"                value="2" />
+    <constant name="EightM_OuterWidth"          value="20.0* cm"/>
+    <constant name="EightM_OuterHeight"         value="10.0* cm"/>
+    <constant name="EightM_BackInnerWidth"      value="15.0* cm"/>
+    <constant name="EightM_BackInnerHeight"     value="7.5* cm"/>
+    <constant name="EightM_NotchWidthAbsA"      value="23* mm"/>
+    <constant name="EightM_NotchWidthAbsB"      value="10* mm"/>
+    <constant name="EightM_NotchWidthAbsC"      value="6.5* mm"/>
+    <constant name="EightM_NotchWidthScin"      value="29* mm"/>
+    <constant name="FourM_xArr"                value="4" />
+    <constant name="FourM_yArr"                value="2" />
+    <constant name="FourM_OuterWidth"          value="10.0* cm"/>
+    <constant name="FourM_OuterHeight"         value="10.0* cm"/>
+    <constant name="FourM_BackInnerWidth"      value="7.5* cm"/>
+    <constant name="FourM_BackInnerHeight"     value="7.5* cm"/>
+    <constant name="FourM_NotchWidthAbsA"      value="23* mm"/>
+    <constant name="FourM_NotchWidthAbsC"      value="6.5* mm"/>
+    <constant name="FourM_NotchWidthScin"      value="29* mm"/>
+
+    <vis name="LFHCAL8MModVis"        ref="AnlBlue" showDaughters="false" visible="true"/>
+    <vis name="LFHCAL4MModVis"        ref="AnlViolet" showDaughters="false" visible="true"/>
+    <vis name="LFHCAL8MModOuter"      ref="AnlBlue" showDaughters="false" visible="false"/>
+    <vis name="LFHCALLayerScintVis"   ref="AnlLight_Gray"   showDaughters="false" visible="false"/>
+    <vis name="LFHCALLayerSteelVis"   ref="AnlRed"   showDaughters="false" visible="false"/>
+    <vis name="LFHCALLayerTungstenVis" ref="AnlViolet"   showDaughters="true" visible="false"/>
+    <vis name="LFHCALLayerTyvekVis"   ref="AnlGold"   showDaughters="false" visible="false"/>
+    <vis name="LFHCALLayerTiOVis"     ref="AnlDarkGreen"   showDaughters="false" visible="false"/>
+
+  </define>
+
+  <!-- Define detector -->
+  <detectors>
+    <documentation>
+      ### Forward (Positive Z) Endcap Hadronic Calorimeter
+
+      This is the ECCE LFHCAL design without individual tower placements and electronics
+      The original design was 60 layers of Steel/Sc and 10 layers of W/Sc, both 1.6 cm/0.4 cm
+      This is too long, so 5 layers of tungsten were removed as a placeholder until the final design is chosen
+
+      The HCal forward insert shape is cut out from this detector
+
+      Currently don't have an implementation of electronics, so just leave that area (final 10 cm) empty
+      So then, actual detector area is "LFHCAL_length - LFHCALElectronicsThickness" long
+    </documentation>
+    <detector
+      id="LFHCAL_ID"
+      name="LFHCAL"
+      type="epic_LFHCAL"
+      readout="LFHCALHits"
+      vis="InvisibleWithDaughters"
+      calorimeterType="HAD_ENDCAP"
+      renderComponents="0"
+      allSensitive="0"
+      >
+
+      <position x="0" y="0" z="LFHCAL_zmin"/>
+      <dimensions
+        z="LFHCAL_length"
+        rmin="20*cm"
+        rmax="LFHCAL_rmax"/>
+      <eightmodule name="8MModule" vis= "LFHCAL8MModVis" repeat="0" >
+        <dimensions
+        width="EightM_OuterWidth"
+        height="EightM_OuterHeight"
+        widthBackInner="EightM_BackInnerWidth"
+        heightBackInner="EightM_BackInnerHeight"
+        widthSideWall="Mod_SideWallThickness"
+        widthTopWall="Mod_TopWallThickness"
+        thicknessFrontWall="Mod_FrontWallThickness"
+        thicknessBackWall="Mod_BackWallThickness"
+        arrayX="EightM_xArr"
+        arrayY="EightM_yArr"
+        notchWidthAbsA="EightM_NotchWidthAbsA"
+        notchWidthAbsB="EightM_NotchWidthAbsB"
+        notchWidthAbsC="EightM_NotchWidthAbsC"
+        notchWidthScin="EightM_NotchWidthScin"
+        notchDepth="Mod_NotchDepth"
+        sepDepth="Mod_SepWidth"
+        />
+        <position x="50*cm" y="50*cm" z="LFHCAL_length - LFHCALElectronicsThickness" />
+      </eightmodule>
+      <fourmodule name="4MModule" vis= "LFHCAL4MModVis" repeat="2">
+        <dimensions
+        width="FourM_OuterWidth"
+        height="FourM_OuterHeight"
+        widthBackInner="FourM_BackInnerWidth"
+        heightBackInner="FourM_BackInnerHeight"
+        widthSideWall="Mod_SideWallThickness"
+        widthTopWall="Mod_TopWallThickness"
+        thicknessFrontWall="Mod_FrontWallThickness"
+        thicknessBackWall="Mod_BackWallThickness"
+        arrayX="FourM_xArr"
+        arrayY="FourM_yArr"
+        notchWidthAbsA="FourM_NotchWidthAbsA"
+        notchWidthAbsC="FourM_NotchWidthAbsC"
+        notchWidthScin="FourM_NotchWidthScin"
+        notchDepth="Mod_NotchDepth"
+        sepDepth="Mod_SepWidth"
+        />
+        <position x="50*cm" y="60*cm" z="LFHCAL_length - LFHCALElectronicsThickness" />
+      </fourmodule>
+
+      <layer repeat="1" vis="InvisibleWithDaughters" readoutlayer="0">
+        <slice material="Tyvek" thickness="LFHCALTyvekThickness" vis="LFHCALLayerTyvekVis"
+               type="2" offset="LFHCALAirOffset"/>
+        <slice material="Polystyrene" thickness="LFHCALPolystyreneThickness" vis="LFHCALLayerScintVis" sensitive="yes" limits="cal_limits" type="3" />
+      </layer>
+      <layer repeat="LFHCALLayer_NTungstenRepeat" vis="InvisibleWithDaughters" readoutlayer="0" >
+<!--         <slice material="Steel235" thickness="LFHCALAbsorberThickness" vis="LFHCALLayerSteelVis" type="1"/> -->
+        <slice material="Tungsten" thickness="LFHCALAbsorberThickness" vis="LFHCALLayerSteelVis" type="1"/>
+        <slice material="Tyvek" thickness="LFHCALTyvekThickness" vis="LFHCALLayerTyvekVis" type="2" offset="LFHCALAirOffset"/>
+        <slice material="Polystyrene" thickness="LFHCALPolystyreneThickness" vis="LFHCALLayerScintVis" sensitive="yes" limits="cal_limits" type="3" />
+      </layer>
+      <layer repeat="LFHCALLayer_NSteelRepeatS" vis="InvisibleWithDaughters" readoutlayer="1">
+        <slice material="Steel235" thickness="LFHCALAbsorberThickness" vis="LFHCALLayerSteelVis" type="1"/>
+        <slice material="Tyvek" thickness="LFHCALTyvekThickness" vis="LFHCALLayerTyvekVis" type="2" offset="LFHCALAirOffset"/>
+        <slice material="Polystyrene" thickness="LFHCALPolystyreneThickness" vis="LFHCALLayerScintVis" sensitive="yes" limits="cal_limits" type="3" />
+      </layer>
+      <layer repeat="LFHCALLayer_NSteelRepeatS" vis="InvisibleWithDaughters" readoutlayer="2">
+        <slice material="Steel235" thickness="LFHCALAbsorberThickness" vis="LFHCALLayerSteelVis" type="1"/>
+        <slice material="Tyvek" thickness="LFHCALTyvekThickness" vis="LFHCALLayerTyvekVis" type="2" offset="LFHCALAirOffset"/>
+        <slice material="Polystyrene" thickness="LFHCALPolystyreneThickness" vis="LFHCALLayerScintVis" sensitive="yes" limits="cal_limits" type="3" />
+      </layer>
+      <layer repeat="LFHCALLayer_NSteelRepeatS" vis="InvisibleWithDaughters" readoutlayer="3">
+        <slice material="Steel235" thickness="LFHCALAbsorberThickness" vis="LFHCALLayerSteelVis" type="1"/>
+        <slice material="Tyvek" thickness="LFHCALTyvekThickness" vis="LFHCALLayerTyvekVis" type="2" offset="LFHCALAirOffset"/>
+        <slice material="Polystyrene" thickness="LFHCALPolystyreneThickness" vis="LFHCALLayerScintVis" sensitive="yes" limits="cal_limits" type="3" />
+      </layer>
+      <layer repeat="LFHCALLayer_NSteelRepeatS" vis="InvisibleWithDaughters" readoutlayer="4">
+        <slice material="Steel235" thickness="LFHCALAbsorberThickness" vis="LFHCALLayerSteelVis" type="1"/>
+        <slice material="Tyvek" thickness="LFHCALTyvekThickness" vis="LFHCALLayerTyvekVis" type="2" offset="LFHCALAirOffset"/>
+        <slice material="Polystyrene" thickness="LFHCALPolystyreneThickness" vis="LFHCALLayerScintVis" sensitive="yes" limits="cal_limits" type="3" />
+      </layer>
+      <layer repeat="LFHCALLayer_NSteelRepeatS" vis="InvisibleWithDaughters" readoutlayer="5">
+        <slice material="Steel235" thickness="LFHCALAbsorberThickness" vis="LFHCALLayerSteelVis" type="1"/>
+        <slice material="Tyvek" thickness="LFHCALTyvekThickness" vis="LFHCALLayerTyvekVis" type="2" offset="LFHCALAirOffset"/>
+        <slice material="Polystyrene" thickness="LFHCALPolystyreneThickness" vis="LFHCALLayerScintVis" sensitive="yes" limits="cal_limits" type="3" />
+      </layer>
+      <layer repeat="LFHCALLayer_NSteelRepeatS" vis="InvisibleWithDaughters" readoutlayer="6">
+        <slice material="Steel235" thickness="LFHCALAbsorberThickness" vis="LFHCALLayerSteelVis" type="1"/>
+        <slice material="Tyvek" thickness="LFHCALTyvekThickness" vis="LFHCALLayerTyvekVis" type="2" offset="LFHCALAirOffset"/>
+        <slice material="Polystyrene" thickness="LFHCALPolystyreneThickness" vis="LFHCALLayerScintVis" sensitive="yes" limits="cal_limits" type="3" />
+      </layer>
+      <layer repeat="1" vis="InvisibleWithDaughters" >
+        <slice material="Steel235" thickness="LFHCALAbsorberThickness" vis="LFHCALLayerSteelVis"  type="1"/>
+      </layer>
+
+      <documentation>
+        ### for testing of a single module
+      </documentation>
+<!--        <eightmodulepositions name="xpos" unit="cm" values="15 35"/>
+        <eightmodulepositions name="ypos" unit="cm" values="15 35"/>
+        <eightmodulepositions name="zpos" unit="cm" values="0 0"/>
+        <fourmodulepositions name="xpos" unit="cm" values="-25 -35"/>
+        <fourmodulepositions name="ypos" unit="cm" values="-25 -35"/>
+        <fourmodulepositions name="zpos" unit="cm" values="0 0"/>
+      -->
+
+      <documentation>
+      ### positions of modules for full area LFHCAL (sorted by ascending r, x, y)
+      </documentation>
+      <eightmodulepositions>
+        <position x="0*cm" y="25*cm" z="0*cm" if="LFHCAL_without_space_for_insert"/>
+        <position x="10*cm" y="-25*cm" z="0*cm" if="LFHCAL_without_space_for_insert"/>
+        <position x="-30*cm" y="-5*cm" z="0*cm" if="LFHCAL_without_space_for_insert"/>
+        <position x="30*cm" y="-5*cm" z="0*cm" if="LFHCAL_without_space_for_insert"/>
+        <position x="-20*cm" y="25*cm" z="0*cm" if="LFHCAL_without_space_for_insert"/>
+        <position x="20*cm" y="25*cm" z="0*cm" if="LFHCAL_without_space_for_insert"/>
+        <position x="-30*cm" y="15*cm" z="0*cm" if="LFHCAL_without_space_for_insert"/>
+        <position x="30*cm" y="15*cm" z="0*cm" if="LFHCAL_without_space_for_insert"/>
+        <position x="0*cm" y="-35*cm" z="0*cm"/>
+        <position x="10*cm" y="35*cm" z="0*cm"/>
+        <position x="-30*cm" y="-25*cm" z="0*cm" if="LFHCAL_without_space_for_insert"/>
+        <position x="30*cm" y="-25*cm" z="0*cm" if="LFHCAL_without_space_for_insert"/>
+        <position x="-20*cm" y="-35*cm" z="0*cm"/>
+        <position x="20*cm" y="-35*cm" z="0*cm"/>
+        <position x="-40*cm" y="5*cm" z="0*cm"/>
+        <position x="40*cm" y="5*cm" z="0*cm"/>
+        <position x="-40*cm" y="-15*cm" z="0*cm"/>
+        <position x="40*cm" y="-15*cm" z="0*cm"/>
+        <position x="0*cm" y="45*cm" z="0*cm"/>
+        <position x="10*cm" y="-45*cm" z="0*cm"/>
+        <position x="-30*cm" y="35*cm" z="0*cm"/>
+        <position x="30*cm" y="35*cm" z="0*cm"/>
+        <position x="-40*cm" y="25*cm" z="0*cm"/>
+        <position x="40*cm" y="25*cm" z="0*cm"/>
+        <position x="-20*cm" y="45*cm" z="0*cm"/>
+        <position x="20*cm" y="45*cm" z="0*cm"/>
+        <position x="-50*cm" y="-5*cm" z="0*cm"/>
+        <position x="50*cm" y="-5*cm" z="0*cm"/>
+        <position x="-50*cm" y="15*cm" z="0*cm"/>
+        <position x="50*cm" y="15*cm" z="0*cm"/>
+        <position x="-40*cm" y="-35*cm" z="0*cm"/>
+        <position x="40*cm" y="-35*cm" z="0*cm"/>
+        <position x="-30*cm" y="-45*cm" z="0*cm"/>
+        <position x="30*cm" y="-45*cm" z="0*cm"/>
+        <position x="0*cm" y="-55*cm" z="0*cm"/>
+        <position x="10*cm" y="55*cm" z="0*cm"/>
+        <position x="-50*cm" y="-25*cm" z="0*cm"/>
+        <position x="50*cm" y="-25*cm" z="0*cm"/>
+        <position x="-20*cm" y="-55*cm" z="0*cm"/>
+        <position x="20*cm" y="-55*cm" z="0*cm"/>
+        <position x="-40*cm" y="45*cm" z="0*cm"/>
+        <position x="40*cm" y="45*cm" z="0*cm"/>
+        <position x="-60*cm" y="5*cm" z="0*cm"/>
+        <position x="60*cm" y="5*cm" z="0*cm"/>
+        <position x="-50*cm" y="35*cm" z="0*cm"/>
+        <position x="50*cm" y="35*cm" z="0*cm"/>
+        <position x="-60*cm" y="-15*cm" z="0*cm"/>
+        <position x="60*cm" y="-15*cm" z="0*cm"/>
+        <position x="-30*cm" y="55*cm" z="0*cm"/>
+        <position x="30*cm" y="55*cm" z="0*cm"/>
+        <position x="0*cm" y="65*cm" z="0*cm"/>
+        <position x="-60*cm" y="25*cm" z="0*cm"/>
+        <position x="60*cm" y="25*cm" z="0*cm"/>
+        <position x="10*cm" y="-65*cm" z="0*cm"/>
+        <position x="-50*cm" y="-45*cm" z="0*cm"/>
+        <position x="50*cm" y="-45*cm" z="0*cm"/>
+        <position x="-20*cm" y="65*cm" z="0*cm"/>
+        <position x="20*cm" y="65*cm" z="0*cm"/>
+        <position x="-40*cm" y="-55*cm" z="0*cm"/>
+        <position x="40*cm" y="-55*cm" z="0*cm"/>
+        <position x="-60*cm" y="-35*cm" z="0*cm"/>
+        <position x="60*cm" y="-35*cm" z="0*cm"/>
+        <position x="-70*cm" y="-5*cm" z="0*cm"/>
+        <position x="70*cm" y="-5*cm" z="0*cm"/>
+        <position x="-30*cm" y="-65*cm" z="0*cm"/>
+        <position x="30*cm" y="-65*cm" z="0*cm"/>
+        <position x="-70*cm" y="15*cm" z="0*cm"/>
+        <position x="70*cm" y="15*cm" z="0*cm"/>
+        <position x="-50*cm" y="55*cm" z="0*cm"/>
+        <position x="50*cm" y="55*cm" z="0*cm"/>
+        <position x="-70*cm" y="-25*cm" z="0*cm"/>
+        <position x="70*cm" y="-25*cm" z="0*cm"/>
+        <position x="0*cm" y="-75*cm" z="0*cm"/>
+        <position x="-60*cm" y="45*cm" z="0*cm"/>
+        <position x="60*cm" y="45*cm" z="0*cm"/>
+        <position x="10*cm" y="75*cm" z="0*cm"/>
+        <position x="-40*cm" y="65*cm" z="0*cm"/>
+        <position x="40*cm" y="65*cm" z="0*cm"/>
+        <position x="-20*cm" y="-75*cm" z="0*cm"/>
+        <position x="20*cm" y="-75*cm" z="0*cm"/>
+        <position x="-70*cm" y="35*cm" z="0*cm"/>
+        <position x="70*cm" y="35*cm" z="0*cm"/>
+        <position x="-80*cm" y="5*cm" z="0*cm"/>
+        <position x="80*cm" y="5*cm" z="0*cm"/>
+        <position x="-30*cm" y="75*cm" z="0*cm"/>
+        <position x="30*cm" y="75*cm" z="0*cm"/>
+        <position x="-60*cm" y="-55*cm" z="0*cm"/>
+        <position x="60*cm" y="-55*cm" z="0*cm"/>
+        <position x="-80*cm" y="-15*cm" z="0*cm"/>
+        <position x="80*cm" y="-15*cm" z="0*cm"/>
+        <position x="-50*cm" y="-65*cm" z="0*cm"/>
+        <position x="50*cm" y="-65*cm" z="0*cm"/>
+        <position x="-70*cm" y="-45*cm" z="0*cm"/>
+        <position x="70*cm" y="-45*cm" z="0*cm"/>
+        <position x="-80*cm" y="25*cm" z="0*cm"/>
+        <position x="80*cm" y="25*cm" z="0*cm"/>
+        <position x="0*cm" y="85*cm" z="0*cm"/>
+        <position x="-40*cm" y="-75*cm" z="0*cm"/>
+        <position x="40*cm" y="-75*cm" z="0*cm"/>
+        <position x="10*cm" y="-85*cm" z="0*cm"/>
+        <position x="-20*cm" y="85*cm" z="0*cm"/>
+        <position x="20*cm" y="85*cm" z="0*cm"/>
+        <position x="-80*cm" y="-35*cm" z="0*cm"/>
+        <position x="80*cm" y="-35*cm" z="0*cm"/>
+        <position x="-60*cm" y="65*cm" z="0*cm"/>
+        <position x="60*cm" y="65*cm" z="0*cm"/>
+        <position x="-70*cm" y="55*cm" z="0*cm"/>
+        <position x="70*cm" y="55*cm" z="0*cm"/>
+        <position x="-30*cm" y="-85*cm" z="0*cm"/>
+        <position x="30*cm" y="-85*cm" z="0*cm"/>
+        <position x="-50*cm" y="75*cm" z="0*cm"/>
+        <position x="50*cm" y="75*cm" z="0*cm"/>
+        <position x="-90*cm" y="-5*cm" z="0*cm"/>
+        <position x="90*cm" y="-5*cm" z="0*cm"/>
+        <position x="-90*cm" y="15*cm" z="0*cm"/>
+        <position x="90*cm" y="15*cm" z="0*cm"/>
+        <position x="-80*cm" y="45*cm" z="0*cm"/>
+        <position x="80*cm" y="45*cm" z="0*cm"/>
+        <position x="-90*cm" y="-25*cm" z="0*cm"/>
+        <position x="90*cm" y="-25*cm" z="0*cm"/>
+        <position x="-40*cm" y="85*cm" z="0*cm"/>
+        <position x="40*cm" y="85*cm" z="0*cm"/>
+        <position x="0*cm" y="-95*cm" z="0*cm"/>
+        <position x="10*cm" y="95*cm" z="0*cm"/>
+        <position x="-70*cm" y="-65*cm" z="0*cm"/>
+        <position x="70*cm" y="-65*cm" z="0*cm"/>
+        <position x="-60*cm" y="-75*cm" z="0*cm"/>
+        <position x="60*cm" y="-75*cm" z="0*cm"/>
+        <position x="-90*cm" y="35*cm" z="0*cm"/>
+        <position x="90*cm" y="35*cm" z="0*cm"/>
+        <position x="-20*cm" y="-95*cm" z="0*cm"/>
+        <position x="20*cm" y="-95*cm" z="0*cm"/>
+        <position x="-80*cm" y="-55*cm" z="0*cm"/>
+        <position x="80*cm" y="-55*cm" z="0*cm"/>
+        <position x="-50*cm" y="-85*cm" z="0*cm"/>
+        <position x="50*cm" y="-85*cm" z="0*cm"/>
+        <position x="-30*cm" y="95*cm" z="0*cm"/>
+        <position x="30*cm" y="95*cm" z="0*cm"/>
+        <position x="-100*cm" y="5*cm" z="0*cm"/>
+        <position x="100*cm" y="5*cm" z="0*cm"/>
+        <position x="-90*cm" y="-45*cm" z="0*cm"/>
+        <position x="90*cm" y="-45*cm" z="0*cm"/>
+        <position x="-100*cm" y="-15*cm" z="0*cm"/>
+        <position x="100*cm" y="-15*cm" z="0*cm"/>
+        <position x="-70*cm" y="75*cm" z="0*cm"/>
+        <position x="70*cm" y="75*cm" z="0*cm"/>
+        <position x="-100*cm" y="25*cm" z="0*cm"/>
+        <position x="100*cm" y="25*cm" z="0*cm"/>
+        <position x="-40*cm" y="-95*cm" z="0*cm"/>
+        <position x="40*cm" y="-95*cm" z="0*cm"/>
+        <position x="-80*cm" y="65*cm" z="0*cm"/>
+        <position x="80*cm" y="65*cm" z="0*cm"/>
+        <position x="-60*cm" y="85*cm" z="0*cm"/>
+        <position x="60*cm" y="85*cm" z="0*cm"/>
+        <position x="0*cm" y="105*cm" z="0*cm"/>
+        <position x="10*cm" y="-105*cm" z="0*cm"/>
+        <position x="-90*cm" y="55*cm" z="0*cm"/>
+        <position x="90*cm" y="55*cm" z="0*cm"/>
+        <position x="-100*cm" y="-35*cm" z="0*cm"/>
+        <position x="100*cm" y="-35*cm" z="0*cm"/>
+        <position x="-20*cm" y="105*cm" z="0*cm"/>
+        <position x="20*cm" y="105*cm" z="0*cm"/>
+        <position x="-50*cm" y="95*cm" z="0*cm"/>
+        <position x="50*cm" y="95*cm" z="0*cm"/>
+        <position x="-30*cm" y="-105*cm" z="0*cm"/>
+        <position x="30*cm" y="-105*cm" z="0*cm"/>
+        <position x="-100*cm" y="45*cm" z="0*cm"/>
+        <position x="100*cm" y="45*cm" z="0*cm"/>
+        <position x="-80*cm" y="-75*cm" z="0*cm"/>
+        <position x="80*cm" y="-75*cm" z="0*cm"/>
+        <position x="-110*cm" y="-5*cm" z="0*cm"/>
+        <position x="110*cm" y="-5*cm" z="0*cm"/>
+        <position x="-70*cm" y="-85*cm" z="0*cm"/>
+        <position x="70*cm" y="-85*cm" z="0*cm"/>
+        <position x="-110*cm" y="15*cm" z="0*cm"/>
+        <position x="110*cm" y="15*cm" z="0*cm"/>
+        <position x="-90*cm" y="-65*cm" z="0*cm"/>
+        <position x="90*cm" y="-65*cm" z="0*cm"/>
+        <position x="-40*cm" y="105*cm" z="0*cm"/>
+        <position x="40*cm" y="105*cm" z="0*cm"/>
+        <position x="-60*cm" y="-95*cm" z="0*cm"/>
+        <position x="60*cm" y="-95*cm" z="0*cm"/>
+        <position x="-110*cm" y="-25*cm" z="0*cm"/>
+        <position x="110*cm" y="-25*cm" z="0*cm"/>
+        <position x="-100*cm" y="-55*cm" z="0*cm"/>
+        <position x="100*cm" y="-55*cm" z="0*cm"/>
+        <position x="0*cm" y="-115*cm" z="0*cm"/>
+        <position x="10*cm" y="115*cm" z="0*cm"/>
+        <position x="-110*cm" y="35*cm" z="0*cm"/>
+        <position x="110*cm" y="35*cm" z="0*cm"/>
+        <position x="-50*cm" y="-105*cm" z="0*cm"/>
+        <position x="50*cm" y="-105*cm" z="0*cm"/>
+        <position x="-20*cm" y="-115*cm" z="0*cm"/>
+        <position x="20*cm" y="-115*cm" z="0*cm"/>
+        <position x="-80*cm" y="85*cm" z="0*cm"/>
+        <position x="80*cm" y="85*cm" z="0*cm"/>
+        <position x="-90*cm" y="75*cm" z="0*cm"/>
+        <position x="90*cm" y="75*cm" z="0*cm"/>
+        <position x="-70*cm" y="95*cm" z="0*cm"/>
+        <position x="70*cm" y="95*cm" z="0*cm"/>
+        <position x="-110*cm" y="-45*cm" z="0*cm"/>
+        <position x="110*cm" y="-45*cm" z="0*cm"/>
+        <position x="-30*cm" y="115*cm" z="0*cm"/>
+        <position x="30*cm" y="115*cm" z="0*cm"/>
+        <position x="-100*cm" y="65*cm" z="0*cm"/>
+        <position x="100*cm" y="65*cm" z="0*cm"/>
+        <position x="-120*cm" y="5*cm" z="0*cm"/>
+        <position x="120*cm" y="5*cm" z="0*cm"/>
+        <position x="-120*cm" y="-15*cm" z="0*cm"/>
+        <position x="120*cm" y="-15*cm" z="0*cm"/>
+        <position x="-60*cm" y="105*cm" z="0*cm"/>
+        <position x="60*cm" y="105*cm" z="0*cm"/>
+        <position x="-40*cm" y="-115*cm" z="0*cm"/>
+        <position x="40*cm" y="-115*cm" z="0*cm"/>
+        <position x="-120*cm" y="25*cm" z="0*cm"/>
+        <position x="120*cm" y="25*cm" z="0*cm"/>
+        <position x="-110*cm" y="55*cm" z="0*cm"/>
+        <position x="110*cm" y="55*cm" z="0*cm"/>
+        <position x="-90*cm" y="-85*cm" z="0*cm"/>
+        <position x="90*cm" y="-85*cm" z="0*cm"/>
+        <position x="-80*cm" y="-95*cm" z="0*cm"/>
+        <position x="80*cm" y="-95*cm" z="0*cm"/>
+        <position x="0*cm" y="125*cm" z="0*cm"/>
+        <position x="-100*cm" y="-75*cm" z="0*cm"/>
+        <position x="100*cm" y="-75*cm" z="0*cm"/>
+        <position x="-120*cm" y="-35*cm" z="0*cm"/>
+        <position x="120*cm" y="-35*cm" z="0*cm"/>
+        <position x="10*cm" y="-125*cm" z="0*cm"/>
+        <position x="-50*cm" y="115*cm" z="0*cm"/>
+        <position x="50*cm" y="115*cm" z="0*cm"/>
+        <position x="-70*cm" y="-105*cm" z="0*cm"/>
+        <position x="70*cm" y="-105*cm" z="0*cm"/>
+        <position x="-20*cm" y="125*cm" z="0*cm"/>
+        <position x="20*cm" y="125*cm" z="0*cm"/>
+        <position x="-110*cm" y="-65*cm" z="0*cm"/>
+        <position x="110*cm" y="-65*cm" z="0*cm"/>
+        <position x="-120*cm" y="45*cm" z="0*cm"/>
+        <position x="120*cm" y="45*cm" z="0*cm"/>
+        <position x="-30*cm" y="-125*cm" z="0*cm"/>
+        <position x="30*cm" y="-125*cm" z="0*cm"/>
+        <position x="-60*cm" y="-115*cm" z="0*cm"/>
+        <position x="60*cm" y="-115*cm" z="0*cm"/>
+        <position x="-130*cm" y="-5*cm" z="0*cm"/>
+        <position x="130*cm" y="-5*cm" z="0*cm"/>
+        <position x="-130*cm" y="15*cm" z="0*cm"/>
+        <position x="130*cm" y="15*cm" z="0*cm"/>
+        <position x="-90*cm" y="95*cm" z="0*cm"/>
+        <position x="90*cm" y="95*cm" z="0*cm"/>
+        <position x="-100*cm" y="85*cm" z="0*cm"/>
+        <position x="100*cm" y="85*cm" z="0*cm"/>
+        <position x="-40*cm" y="125*cm" z="0*cm"/>
+        <position x="40*cm" y="125*cm" z="0*cm"/>
+        <position x="-120*cm" y="-55*cm" z="0*cm"/>
+        <position x="120*cm" y="-55*cm" z="0*cm"/>
+        <position x="-80*cm" y="105*cm" z="0*cm"/>
+        <position x="80*cm" y="105*cm" z="0*cm"/>
+        <position x="-130*cm" y="-25*cm" z="0*cm"/>
+        <position x="130*cm" y="-25*cm" z="0*cm"/>
+        <position x="-110*cm" y="75*cm" z="0*cm"/>
+        <position x="110*cm" y="75*cm" z="0*cm"/>
+        <position x="-130*cm" y="35*cm" z="0*cm"/>
+        <position x="130*cm" y="35*cm" z="0*cm"/>
+        <position x="-50*cm" y="-125*cm" z="0*cm"/>
+        <position x="50*cm" y="-125*cm" z="0*cm"/>
+        <position x="-70*cm" y="115*cm" z="0*cm"/>
+        <position x="70*cm" y="115*cm" z="0*cm"/>
+        <position x="0*cm" y="-135*cm" z="0*cm"/>
+        <position x="10*cm" y="135*cm" z="0*cm"/>
+        <position x="-120*cm" y="65*cm" z="0*cm"/>
+        <position x="120*cm" y="65*cm" z="0*cm"/>
+        <position x="-20*cm" y="-135*cm" z="0*cm"/>
+        <position x="20*cm" y="-135*cm" z="0*cm"/>
+        <position x="-130*cm" y="-45*cm" z="0*cm"/>
+        <position x="130*cm" y="-45*cm" z="0*cm"/>
+        <position x="-100*cm" y="-95*cm" z="0*cm"/>
+        <position x="100*cm" y="-95*cm" z="0*cm"/>
+        <position x="-30*cm" y="135*cm" z="0*cm"/>
+        <position x="30*cm" y="135*cm" z="0*cm"/>
+        <position x="-90*cm" y="-105*cm" z="0*cm"/>
+        <position x="90*cm" y="-105*cm" z="0*cm"/>
+        <position x="-60*cm" y="125*cm" z="0*cm"/>
+        <position x="60*cm" y="125*cm" z="0*cm"/>
+        <position x="-110*cm" y="-85*cm" z="0*cm"/>
+        <position x="110*cm" y="-85*cm" z="0*cm"/>
+        <position x="-140*cm" y="5*cm" z="0*cm"/>
+        <position x="140*cm" y="5*cm" z="0*cm"/>
+        <position x="-80*cm" y="-115*cm" z="0*cm"/>
+        <position x="80*cm" y="-115*cm" z="0*cm"/>
+        <position x="-140*cm" y="-15*cm" z="0*cm"/>
+        <position x="140*cm" y="-15*cm" z="0*cm"/>
+        <position x="-40*cm" y="-135*cm" z="0*cm"/>
+        <position x="40*cm" y="-135*cm" z="0*cm"/>
+        <position x="-130*cm" y="55*cm" z="0*cm"/>
+        <position x="130*cm" y="55*cm" z="0*cm"/>
+        <position x="-120*cm" y="-75*cm" z="0*cm"/>
+        <position x="120*cm" y="-75*cm" z="0*cm"/>
+        <position x="-140*cm" y="25*cm" z="0*cm"/>
+        <position x="140*cm" y="25*cm" z="0*cm"/>
+        <position x="-70*cm" y="-125*cm" z="0*cm"/>
+        <position x="70*cm" y="-125*cm" z="0*cm"/>
+        <position x="-50*cm" y="135*cm" z="0*cm"/>
+        <position x="50*cm" y="135*cm" z="0*cm"/>
+        <position x="-140*cm" y="-35*cm" z="0*cm"/>
+        <position x="140*cm" y="-35*cm" z="0*cm"/>
+        <position x="0*cm" y="145*cm" z="0*cm"/>
+        <position x="-100*cm" y="105*cm" z="0*cm"/>
+        <position x="100*cm" y="105*cm" z="0*cm"/>
+        <position x="10*cm" y="-145*cm" z="0*cm"/>
+        <position x="-110*cm" y="95*cm" z="0*cm"/>
+        <position x="110*cm" y="95*cm" z="0*cm"/>
+        <position x="-130*cm" y="-65*cm" z="0*cm"/>
+        <position x="130*cm" y="-65*cm" z="0*cm"/>
+        <position x="-90*cm" y="115*cm" z="0*cm"/>
+        <position x="90*cm" y="115*cm" z="0*cm"/>
+        <position x="-20*cm" y="145*cm" z="0*cm"/>
+        <position x="20*cm" y="145*cm" z="0*cm"/>
+        <position x="-120*cm" y="85*cm" z="0*cm"/>
+        <position x="120*cm" y="85*cm" z="0*cm"/>
+        <position x="-140*cm" y="45*cm" z="0*cm"/>
+        <position x="140*cm" y="45*cm" z="0*cm"/>
+        <position x="-60*cm" y="-135*cm" z="0*cm"/>
+        <position x="60*cm" y="-135*cm" z="0*cm"/>
+        <position x="-30*cm" y="-145*cm" z="0*cm"/>
+        <position x="30*cm" y="-145*cm" z="0*cm"/>
+        <position x="-80*cm" y="125*cm" z="0*cm"/>
+        <position x="80*cm" y="125*cm" z="0*cm"/>
+        <position x="-130*cm" y="75*cm" z="0*cm"/>
+        <position x="130*cm" y="75*cm" z="0*cm"/>
+        <position x="-150*cm" y="-5*cm" z="0*cm"/>
+        <position x="150*cm" y="-5*cm" z="0*cm"/>
+        <position x="-140*cm" y="-55*cm" z="0*cm"/>
+        <position x="140*cm" y="-55*cm" z="0*cm"/>
+        <position x="-40*cm" y="145*cm" z="0*cm"/>
+        <position x="40*cm" y="145*cm" z="0*cm"/>
+        <position x="-150*cm" y="15*cm" z="0*cm"/>
+        <position x="150*cm" y="15*cm" z="0*cm"/>
+        <position x="-110*cm" y="-105*cm" z="0*cm"/>
+        <position x="110*cm" y="-105*cm" z="0*cm"/>
+        <position x="-150*cm" y="-25*cm" z="0*cm"/>
+        <position x="150*cm" y="-25*cm" z="0*cm"/>
+        <position x="-70*cm" y="135*cm" z="0*cm"/>
+        <position x="70*cm" y="135*cm" z="0*cm"/>
+        <position x="-100*cm" y="-115*cm" z="0*cm"/>
+        <position x="100*cm" y="-115*cm" z="0*cm"/>
+        <position x="-120*cm" y="-95*cm" z="0*cm"/>
+        <position x="120*cm" y="-95*cm" z="0*cm"/>
+        <position x="-50*cm" y="-145*cm" z="0*cm"/>
+        <position x="50*cm" y="-145*cm" z="0*cm"/>
+        <position x="-150*cm" y="35*cm" z="0*cm"/>
+        <position x="150*cm" y="35*cm" z="0*cm"/>
+        <position x="-90*cm" y="-125*cm" z="0*cm"/>
+        <position x="90*cm" y="-125*cm" z="0*cm"/>
+        <position x="-140*cm" y="65*cm" z="0*cm"/>
+        <position x="140*cm" y="65*cm" z="0*cm"/>
+        <position x="0*cm" y="-155*cm" z="0*cm"/>
+        <position x="10*cm" y="155*cm" z="0*cm"/>
+        <position x="-130*cm" y="-85*cm" z="0*cm"/>
+        <position x="130*cm" y="-85*cm" z="0*cm"/>
+        <position x="-20*cm" y="-155*cm" z="0*cm"/>
+        <position x="20*cm" y="-155*cm" z="0*cm"/>
+        <position x="-150*cm" y="-45*cm" z="0*cm"/>
+        <position x="150*cm" y="-45*cm" z="0*cm"/>
+        <position x="-60*cm" y="145*cm" z="0*cm"/>
+        <position x="60*cm" y="145*cm" z="0*cm"/>
+        <position x="-80*cm" y="-135*cm" z="0*cm"/>
+        <position x="80*cm" y="-135*cm" z="0*cm"/>
+        <position x="-30*cm" y="155*cm" z="0*cm"/>
+        <position x="30*cm" y="155*cm" z="0*cm"/>
+        <position x="-140*cm" y="-75*cm" z="0*cm"/>
+        <position x="140*cm" y="-75*cm" z="0*cm"/>
+        <position x="-110*cm" y="115*cm" z="0*cm"/>
+        <position x="110*cm" y="115*cm" z="0*cm"/>
+        <position x="-120*cm" y="105*cm" z="0*cm"/>
+        <position x="120*cm" y="105*cm" z="0*cm"/>
+        <position x="-150*cm" y="55*cm" z="0*cm"/>
+        <position x="150*cm" y="55*cm" z="0*cm"/>
+        <position x="-100*cm" y="125*cm" z="0*cm"/>
+        <position x="100*cm" y="125*cm" z="0*cm"/>
+        <position x="-160*cm" y="5*cm" z="0*cm"/>
+        <position x="160*cm" y="5*cm" z="0*cm"/>
+        <position x="-40*cm" y="-155*cm" z="0*cm"/>
+        <position x="40*cm" y="-155*cm" z="0*cm"/>
+        <position x="-160*cm" y="-15*cm" z="0*cm"/>
+        <position x="160*cm" y="-15*cm" z="0*cm"/>
+        <position x="-130*cm" y="95*cm" z="0*cm"/>
+        <position x="130*cm" y="95*cm" z="0*cm"/>
+        <position x="-70*cm" y="-145*cm" z="0*cm"/>
+        <position x="70*cm" y="-145*cm" z="0*cm"/>
+        <position x="-160*cm" y="25*cm" z="0*cm"/>
+        <position x="160*cm" y="25*cm" z="0*cm"/>
+        <position x="-90*cm" y="135*cm" z="0*cm"/>
+        <position x="90*cm" y="135*cm" z="0*cm"/>
+        <position x="-50*cm" y="155*cm" z="0*cm"/>
+        <position x="50*cm" y="155*cm" z="0*cm"/>
+        <position x="-150*cm" y="-65*cm" z="0*cm"/>
+        <position x="150*cm" y="-65*cm" z="0*cm"/>
+        <position x="-140*cm" y="85*cm" z="0*cm"/>
+        <position x="140*cm" y="85*cm" z="0*cm"/>
+        <position x="-160*cm" y="-35*cm" z="0*cm"/>
+        <position x="160*cm" y="-35*cm" z="0*cm"/>
+        <position x="0*cm" y="165*cm" z="0*cm"/>
+        <position x="10*cm" y="-165*cm" z="0*cm"/>
+        <position x="-80*cm" y="145*cm" z="0*cm"/>
+        <position x="80*cm" y="145*cm" z="0*cm"/>
+        <position x="-120*cm" y="-115*cm" z="0*cm"/>
+        <position x="120*cm" y="-115*cm" z="0*cm"/>
+        <position x="-160*cm" y="45*cm" z="0*cm"/>
+        <position x="160*cm" y="45*cm" z="0*cm"/>
+        <position x="-20*cm" y="165*cm" z="0*cm"/>
+        <position x="20*cm" y="165*cm" z="0*cm"/>
+        <position x="-60*cm" y="-155*cm" z="0*cm"/>
+        <position x="60*cm" y="-155*cm" z="0*cm"/>
+        <position x="-110*cm" y="-125*cm" z="0*cm"/>
+        <position x="110*cm" y="-125*cm" z="0*cm"/>
+        <position x="-130*cm" y="-105*cm" z="0*cm"/>
+        <position x="130*cm" y="-105*cm" z="0*cm"/>
+        <position x="-150*cm" y="75*cm" z="0*cm"/>
+        <position x="150*cm" y="75*cm" z="0*cm"/>
+        <position x="-30*cm" y="-165*cm" z="0*cm"/>
+        <position x="30*cm" y="-165*cm" z="0*cm"/>
+        <position x="-100*cm" y="-135*cm" z="0*cm"/>
+        <position x="100*cm" y="-135*cm" z="0*cm"/>
+        <position x="-140*cm" y="-95*cm" z="0*cm"/>
+        <position x="140*cm" y="-95*cm" z="0*cm"/>
+        <position x="-160*cm" y="-55*cm" z="0*cm"/>
+        <position x="160*cm" y="-55*cm" z="0*cm"/>
+        <position x="-40*cm" y="165*cm" z="0*cm"/>
+        <position x="40*cm" y="165*cm" z="0*cm"/>
+        <position x="-170*cm" y="-5*cm" z="0*cm"/>
+        <position x="170*cm" y="-5*cm" z="0*cm"/>
+        <position x="-70*cm" y="155*cm" z="0*cm"/>
+        <position x="70*cm" y="155*cm" z="0*cm"/>
+        <position x="-170*cm" y="15*cm" z="0*cm"/>
+        <position x="170*cm" y="15*cm" z="0*cm"/>
+        <position x="-90*cm" y="-145*cm" z="0*cm"/>
+        <position x="90*cm" y="-145*cm" z="0*cm"/>
+        <position x="-170*cm" y="-25*cm" z="0*cm"/>
+        <position x="170*cm" y="-25*cm" z="0*cm"/>
+        <position x="-150*cm" y="-85*cm" z="0*cm"/>
+        <position x="150*cm" y="-85*cm" z="0*cm"/>
+        <position x="-50*cm" y="-165*cm" z="0*cm"/>
+        <position x="50*cm" y="-165*cm" z="0*cm"/>
+        <position x="-160*cm" y="65*cm" z="0*cm"/>
+        <position x="160*cm" y="65*cm" z="0*cm"/>
+        <position x="-120*cm" y="125*cm" z="0*cm"/>
+        <position x="120*cm" y="125*cm" z="0*cm"/>
+        <position x="-130*cm" y="115*cm" z="0*cm"/>
+        <position x="130*cm" y="115*cm" z="0*cm"/>
+        <position x="-170*cm" y="35*cm" z="0*cm"/>
+        <position x="170*cm" y="35*cm" z="0*cm"/>
+        <position x="-110*cm" y="135*cm" z="0*cm"/>
+        <position x="110*cm" y="135*cm" z="0*cm"/>
+        <position x="-80*cm" y="-155*cm" z="0*cm"/>
+        <position x="80*cm" y="-155*cm" z="0*cm"/>
+        <position x="0*cm" y="-175*cm" z="0*cm"/>
+        <position x="-140*cm" y="105*cm" z="0*cm"/>
+        <position x="140*cm" y="105*cm" z="0*cm"/>
+        <position x="10*cm" y="175*cm" z="0*cm"/>
+        <position x="-60*cm" y="165*cm" z="0*cm"/>
+        <position x="60*cm" y="165*cm" z="0*cm"/>
+        <position x="-170*cm" y="-45*cm" z="0*cm"/>
+        <position x="170*cm" y="-45*cm" z="0*cm"/>
+        <position x="-100*cm" y="145*cm" z="0*cm"/>
+        <position x="100*cm" y="145*cm" z="0*cm"/>
+        <position x="-20*cm" y="-175*cm" z="0*cm"/>
+        <position x="20*cm" y="-175*cm" z="0*cm"/>
+        <position x="-160*cm" y="-75*cm" z="0*cm"/>
+        <position x="160*cm" y="-75*cm" z="0*cm"/>
+        <position x="-150*cm" y="95*cm" z="0*cm"/>
+        <position x="150*cm" y="95*cm" z="0*cm"/>
+        <position x="-30*cm" y="175*cm" z="0*cm"/>
+        <position x="30*cm" y="175*cm" z="0*cm"/>
+        <position x="-170*cm" y="55*cm" z="0*cm"/>
+        <position x="170*cm" y="55*cm" z="0*cm"/>
+        <position x="-70*cm" y="-165*cm" z="0*cm"/>
+        <position x="70*cm" y="-165*cm" z="0*cm"/>
+        <position x="-90*cm" y="155*cm" z="0*cm"/>
+        <position x="90*cm" y="155*cm" z="0*cm"/>
+        <position x="-40*cm" y="-175*cm" z="0*cm"/>
+        <position x="40*cm" y="-175*cm" z="0*cm"/>
+        <position x="-180*cm" y="5*cm" z="0*cm"/>
+        <position x="180*cm" y="5*cm" z="0*cm"/>
+        <position x="-130*cm" y="-125*cm" z="0*cm"/>
+        <position x="130*cm" y="-125*cm" z="0*cm"/>
+        <position x="-120*cm" y="-135*cm" z="0*cm"/>
+        <position x="120*cm" y="-135*cm" z="0*cm"/>
+        <position x="-180*cm" y="-15*cm" z="0*cm"/>
+        <position x="180*cm" y="-15*cm" z="0*cm"/>
+        <position x="-140*cm" y="-115*cm" z="0*cm"/>
+        <position x="140*cm" y="-115*cm" z="0*cm"/>
+        <position x="-160*cm" y="85*cm" z="0*cm"/>
+        <position x="160*cm" y="85*cm" z="0*cm"/>
+        <position x="-180*cm" y="25*cm" z="0*cm"/>
+        <position x="180*cm" y="25*cm" z="0*cm"/>
+        <position x="-110*cm" y="-145*cm" z="0*cm"/>
+        <position x="110*cm" y="-145*cm" z="0*cm"/>
+        <position x="-170*cm" y="-65*cm" z="0*cm"/>
+        <position x="170*cm" y="-65*cm" z="0*cm"/>
+        <position x="-50*cm" y="175*cm" z="0*cm"/>
+        <position x="50*cm" y="175*cm" z="0*cm"/>
+        <position x="-150*cm" y="-105*cm" z="0*cm"/>
+        <position x="150*cm" y="-105*cm" z="0*cm"/>
+        <position x="-180*cm" y="-35*cm" z="0*cm"/>
+        <position x="180*cm" y="-35*cm" z="0*cm"/>
+        <position x="-80*cm" y="165*cm" z="0*cm"/>
+        <position x="80*cm" y="165*cm" z="0*cm"/>
+        <position x="-100*cm" y="-155*cm" z="0*cm"/>
+        <position x="100*cm" y="-155*cm" z="0*cm"/>
+        <position x="0*cm" y="185*cm" z="0*cm"/>
+        <position x="-60*cm" y="-175*cm" z="0*cm"/>
+        <position x="60*cm" y="-175*cm" z="0*cm"/>
+        <position x="10*cm" y="-185*cm" z="0*cm"/>
+        <position x="-180*cm" y="45*cm" z="0*cm"/>
+        <position x="180*cm" y="45*cm" z="0*cm"/>
+        <position x="-170*cm" y="75*cm" z="0*cm"/>
+        <position x="170*cm" y="75*cm" z="0*cm"/>
+        <position x="-160*cm" y="-95*cm" z="0*cm"/>
+        <position x="160*cm" y="-95*cm" z="0*cm"/>
+        <position x="-20*cm" y="185*cm" z="0*cm"/>
+        <position x="20*cm" y="185*cm" z="0*cm"/>
+        <position x="-130*cm" y="135*cm" z="0*cm"/>
+        <position x="130*cm" y="135*cm" z="0*cm"/>
+        <position x="-30*cm" y="-185*cm" z="0*cm"/>
+        <position x="30*cm" y="-185*cm" z="0*cm"/>
+        <position x="-140*cm" y="125*cm" z="0*cm"/>
+        <position x="140*cm" y="125*cm" z="0*cm"/>
+        <position x="-90*cm" y="-165*cm" z="0*cm"/>
+        <position x="90*cm" y="-165*cm" z="0*cm"/>
+        <position x="-120*cm" y="145*cm" z="0*cm"/>
+        <position x="120*cm" y="145*cm" z="0*cm"/>
+        <position x="-180*cm" y="-55*cm" z="0*cm"/>
+        <position x="180*cm" y="-55*cm" z="0*cm"/>
+        <position x="-70*cm" y="175*cm" z="0*cm"/>
+        <position x="70*cm" y="175*cm" z="0*cm"/>
+        <position x="-150*cm" y="115*cm" z="0*cm"/>
+        <position x="150*cm" y="115*cm" z="0*cm"/>
+        <position x="-40*cm" y="185*cm" z="0*cm"/>
+        <position x="40*cm" y="185*cm" z="0*cm"/>
+        <position x="-110*cm" y="155*cm" z="0*cm"/>
+        <position x="110*cm" y="155*cm" z="0*cm"/>
+        <position x="-170*cm" y="-85*cm" z="0*cm"/>
+        <position x="170*cm" y="-85*cm" z="0*cm"/>
+        <position x="-190*cm" y="-5*cm" z="0*cm"/>
+        <position x="190*cm" y="-5*cm" z="0*cm"/>
+        <position x="-190*cm" y="15*cm" z="0*cm"/>
+        <position x="190*cm" y="15*cm" z="0*cm"/>
+        <position x="-160*cm" y="105*cm" z="0*cm"/>
+        <position x="160*cm" y="105*cm" z="0*cm"/>
+        <position x="-180*cm" y="65*cm" z="0*cm"/>
+        <position x="180*cm" y="65*cm" z="0*cm"/>
+        <position x="-190*cm" y="-25*cm" z="0*cm"/>
+        <position x="190*cm" y="-25*cm" z="0*cm"/>
+        <position x="-50*cm" y="-185*cm" z="0*cm"/>
+        <position x="50*cm" y="-185*cm" z="0*cm"/>
+        <position x="-80*cm" y="-175*cm" z="0*cm"/>
+        <position x="80*cm" y="-175*cm" z="0*cm"/>
+        <position x="-100*cm" y="165*cm" z="0*cm"/>
+        <position x="100*cm" y="165*cm" z="0*cm"/>
+        <position x="-190*cm" y="35*cm" z="0*cm"/>
+        <position x="190*cm" y="35*cm" z="0*cm"/>
+        <position x="-140*cm" y="-135*cm" z="0*cm"/>
+        <position x="140*cm" y="-135*cm" z="0*cm"/>
+        <position x="-60*cm" y="185*cm" z="0*cm"/>
+        <position x="60*cm" y="185*cm" z="0*cm"/>
+        <position x="-130*cm" y="-145*cm" z="0*cm"/>
+        <position x="130*cm" y="-145*cm" z="0*cm"/>
+        <position x="-170*cm" y="95*cm" z="0*cm"/>
+        <position x="170*cm" y="95*cm" z="0*cm"/>
+        <position x="0*cm" y="-195*cm" z="0*cm"/>
+        <position x="-180*cm" y="-75*cm" z="0*cm"/>
+        <position x="180*cm" y="-75*cm" z="0*cm"/>
+        <position x="10*cm" y="195*cm" z="0*cm"/>
+        <position x="-150*cm" y="-125*cm" z="0*cm"/>
+        <position x="150*cm" y="-125*cm" z="0*cm"/>
+        <position x="-190*cm" y="-45*cm" z="0*cm"/>
+        <position x="190*cm" y="-45*cm" z="0*cm"/>
+        <position x="-120*cm" y="-155*cm" z="0*cm"/>
+        <position x="120*cm" y="-155*cm" z="0*cm"/>
+        <position x="-20*cm" y="-195*cm" z="0*cm"/>
+        <position x="20*cm" y="-195*cm" z="0*cm"/>
+        <position x="-90*cm" y="175*cm" z="0*cm"/>
+        <position x="90*cm" y="175*cm" z="0*cm"/>
+        <position x="-160*cm" y="-115*cm" z="0*cm"/>
+        <position x="160*cm" y="-115*cm" z="0*cm"/>
+        <position x="-30*cm" y="195*cm" z="0*cm"/>
+        <position x="30*cm" y="195*cm" z="0*cm"/>
+        <position x="-190*cm" y="55*cm" z="0*cm"/>
+        <position x="190*cm" y="55*cm" z="0*cm"/>
+        <position x="-70*cm" y="-185*cm" z="0*cm"/>
+        <position x="70*cm" y="-185*cm" z="0*cm"/>
+        <position x="-110*cm" y="-165*cm" z="0*cm"/>
+        <position x="110*cm" y="-165*cm" z="0*cm"/>
+        <position x="-180*cm" y="85*cm" z="0*cm"/>
+        <position x="180*cm" y="85*cm" z="0*cm"/>
+        <position x="-40*cm" y="-195*cm" z="0*cm"/>
+        <position x="40*cm" y="-195*cm" z="0*cm"/>
+        <position x="-170*cm" y="-105*cm" z="0*cm"/>
+        <position x="170*cm" y="-105*cm" z="0*cm"/>
+        <position x="-200*cm" y="5*cm" z="0*cm"/>
+        <position x="200*cm" y="5*cm" z="0*cm"/>
+        <position x="-200*cm" y="-15*cm" z="0*cm"/>
+        <position x="200*cm" y="-15*cm" z="0*cm"/>
+        <position x="-190*cm" y="-65*cm" z="0*cm"/>
+        <position x="190*cm" y="-65*cm" z="0*cm"/>
+        <position x="-50*cm" y="195*cm" z="0*cm"/>
+        <position x="50*cm" y="195*cm" z="0*cm"/>
+        <position x="-100*cm" y="-175*cm" z="0*cm"/>
+        <position x="100*cm" y="-175*cm" z="0*cm"/>
+        <position x="-140*cm" y="145*cm" z="0*cm"/>
+        <position x="140*cm" y="145*cm" z="0*cm"/>
+        <position x="-200*cm" y="25*cm" z="0*cm"/>
+        <position x="200*cm" y="25*cm" z="0*cm"/>
+        <position x="-80*cm" y="185*cm" z="0*cm"/>
+        <position x="80*cm" y="185*cm" z="0*cm"/>
+        <position x="-150*cm" y="135*cm" z="0*cm"/>
+        <position x="150*cm" y="135*cm" z="0*cm"/>
+        <position x="-130*cm" y="155*cm" z="0*cm"/>
+        <position x="130*cm" y="155*cm" z="0*cm"/>
+        <position x="-160*cm" y="125*cm" z="0*cm"/>
+        <position x="160*cm" y="125*cm" z="0*cm"/>
+        <position x="-200*cm" y="-35*cm" z="0*cm"/>
+        <position x="200*cm" y="-35*cm" z="0*cm"/>
+        <position x="-180*cm" y="-95*cm" z="0*cm"/>
+        <position x="180*cm" y="-95*cm" z="0*cm"/>
+        <position x="-120*cm" y="165*cm" z="0*cm"/>
+        <position x="120*cm" y="165*cm" z="0*cm"/>
+        <position x="-60*cm" y="-195*cm" z="0*cm"/>
+        <position x="60*cm" y="-195*cm" z="0*cm"/>
+        <position x="-190*cm" y="75*cm" z="0*cm"/>
+        <position x="190*cm" y="75*cm" z="0*cm"/>
+        <position x="0*cm" y="205*cm" z="0*cm"/>
+        <position x="-200*cm" y="45*cm" z="0*cm"/>
+        <position x="200*cm" y="45*cm" z="0*cm"/>
+        <position x="10*cm" y="-205*cm" z="0*cm"/>
+        <position x="-170*cm" y="115*cm" z="0*cm"/>
+        <position x="170*cm" y="115*cm" z="0*cm"/>
+        <position x="-90*cm" y="-185*cm" z="0*cm"/>
+        <position x="90*cm" y="-185*cm" z="0*cm"/>
+        <position x="-20*cm" y="205*cm" z="0*cm"/>
+        <position x="20*cm" y="205*cm" z="0*cm"/>
+        <position x="-110*cm" y="175*cm" z="0*cm"/>
+        <position x="110*cm" y="175*cm" z="0*cm"/>
+        <position x="-30*cm" y="-205*cm" z="0*cm"/>
+        <position x="30*cm" y="-205*cm" z="0*cm"/>
+        <position x="-70*cm" y="195*cm" z="0*cm"/>
+        <position x="70*cm" y="195*cm" z="0*cm"/>
+        <position x="-200*cm" y="-55*cm" z="0*cm"/>
+        <position x="200*cm" y="-55*cm" z="0*cm"/>
+        <position x="-190*cm" y="-85*cm" z="0*cm"/>
+        <position x="190*cm" y="-85*cm" z="0*cm"/>
+        <position x="-180*cm" y="105*cm" z="0*cm"/>
+        <position x="180*cm" y="105*cm" z="0*cm"/>
+        <position x="-150*cm" y="-145*cm" z="0*cm"/>
+        <position x="150*cm" y="-145*cm" z="0*cm"/>
+        <position x="-140*cm" y="-155*cm" z="0*cm"/>
+        <position x="140*cm" y="-155*cm" z="0*cm"/>
+        <position x="-40*cm" y="205*cm" z="0*cm"/>
+        <position x="40*cm" y="205*cm" z="0*cm"/>
+        <position x="-160*cm" y="-135*cm" z="0*cm"/>
+        <position x="160*cm" y="-135*cm" z="0*cm"/>
+        <position x="-130*cm" y="-165*cm" z="0*cm"/>
+        <position x="130*cm" y="-165*cm" z="0*cm"/>
+        <position x="-210*cm" y="-5*cm" z="0*cm"/>
+        <position x="210*cm" y="-5*cm" z="0*cm"/>
+        <position x="-100*cm" y="185*cm" z="0*cm"/>
+        <position x="100*cm" y="185*cm" z="0*cm"/>
+        <position x="-200*cm" y="65*cm" z="0*cm"/>
+        <position x="200*cm" y="65*cm" z="0*cm"/>
+        <position x="-210*cm" y="15*cm" z="0*cm"/>
+        <position x="210*cm" y="15*cm" z="0*cm"/>
+        <position x="-80*cm" y="-195*cm" z="0*cm"/>
+        <position x="80*cm" y="-195*cm" z="0*cm"/>
+        <position x="-170*cm" y="-125*cm" z="0*cm"/>
+        <position x="170*cm" y="-125*cm" z="0*cm"/>
+        <position x="-50*cm" y="-205*cm" z="0*cm"/>
+        <position x="50*cm" y="-205*cm" z="0*cm"/>
+        <position x="-210*cm" y="-25*cm" z="0*cm"/>
+        <position x="210*cm" y="-25*cm" z="0*cm"/>
+        <position x="-120*cm" y="-175*cm" z="0*cm"/>
+        <position x="120*cm" y="-175*cm" z="0*cm"/>
+        <position x="-190*cm" y="95*cm" z="0*cm"/>
+        <position x="190*cm" y="95*cm" z="0*cm"/>
+        <position x="-210*cm" y="35*cm" z="0*cm"/>
+        <position x="210*cm" y="35*cm" z="0*cm"/>
+        <position x="-180*cm" y="-115*cm" z="0*cm"/>
+        <position x="180*cm" y="-115*cm" z="0*cm"/>
+        <position x="-200*cm" y="-75*cm" z="0*cm"/>
+        <position x="200*cm" y="-75*cm" z="0*cm"/>
+        <position x="-60*cm" y="205*cm" z="0*cm"/>
+        <position x="60*cm" y="205*cm" z="0*cm"/>
+        <position x="-210*cm" y="-45*cm" z="0*cm"/>
+        <position x="210*cm" y="-45*cm" z="0*cm"/>
+        <position x="-90*cm" y="195*cm" z="0*cm"/>
+        <position x="90*cm" y="195*cm" z="0*cm"/>
+        <position x="0*cm" y="-215*cm" z="0*cm"/>
+        <position x="10*cm" y="215*cm" z="0*cm"/>
+        <position x="-110*cm" y="-185*cm" z="0*cm"/>
+        <position x="110*cm" y="-185*cm" z="0*cm"/>
+        <position x="-150*cm" y="155*cm" z="0*cm"/>
+        <position x="150*cm" y="155*cm" z="0*cm"/>
+        <position x="-160*cm" y="145*cm" z="0*cm"/>
+        <position x="160*cm" y="145*cm" z="0*cm"/>
+        <position x="-20*cm" y="-215*cm" z="0*cm"/>
+        <position x="20*cm" y="-215*cm" z="0*cm"/>
+        <position x="-140*cm" y="165*cm" z="0*cm"/>
+        <position x="140*cm" y="165*cm" z="0*cm"/>
+        <position x="-70*cm" y="-205*cm" z="0*cm"/>
+        <position x="70*cm" y="-205*cm" z="0*cm"/>
+        <position x="-170*cm" y="135*cm" z="0*cm"/>
+        <position x="170*cm" y="135*cm" z="0*cm"/>
+        <position x="-190*cm" y="-105*cm" z="0*cm"/>
+        <position x="190*cm" y="-105*cm" z="0*cm"/>
+        <position x="-210*cm" y="55*cm" z="0*cm"/>
+        <position x="210*cm" y="55*cm" z="0*cm"/>
+        <position x="-30*cm" y="215*cm" z="0*cm"/>
+        <position x="30*cm" y="215*cm" z="0*cm"/>
+        <position x="-200*cm" y="85*cm" z="0*cm"/>
+        <position x="200*cm" y="85*cm" z="0*cm"/>
+        <position x="-130*cm" y="175*cm" z="0*cm"/>
+        <position x="130*cm" y="175*cm" z="0*cm"/>
+        <position x="-40*cm" y="-215*cm" z="0*cm"/>
+        <position x="40*cm" y="-215*cm" z="0*cm"/>
+        <position x="-100*cm" y="-195*cm" z="0*cm"/>
+        <position x="100*cm" y="-195*cm" z="0*cm"/>
+        <position x="-180*cm" y="125*cm" z="0*cm"/>
+        <position x="180*cm" y="125*cm" z="0*cm"/>
+        <position x="-210*cm" y="-65*cm" z="0*cm"/>
+        <position x="210*cm" y="-65*cm" z="0*cm"/>
+        <position x="-220*cm" y="5*cm" z="0*cm"/>
+        <position x="220*cm" y="5*cm" z="0*cm"/>
+        <position x="-80*cm" y="205*cm" z="0*cm"/>
+        <position x="80*cm" y="205*cm" z="0*cm"/>
+        <position x="-120*cm" y="185*cm" z="0*cm"/>
+        <position x="120*cm" y="185*cm" z="0*cm"/>
+        <position x="-220*cm" y="-15*cm" z="0*cm"/>
+        <position x="220*cm" y="-15*cm" z="0*cm"/>
+        <position x="-50*cm" y="215*cm" z="0*cm"/>
+        <position x="50*cm" y="215*cm" z="0*cm"/>
+        <position x="-200*cm" y="-95*cm" z="0*cm"/>
+        <position x="200*cm" y="-95*cm" z="0*cm"/>
+        <position x="-220*cm" y="25*cm" z="0*cm"/>
+        <position x="220*cm" y="25*cm" z="0*cm"/>
+        <position x="-190*cm" y="115*cm" z="0*cm"/>
+        <position x="190*cm" y="115*cm" z="0*cm"/>
+        <position x="-160*cm" y="-155*cm" z="0*cm"/>
+        <position x="160*cm" y="-155*cm" z="0*cm"/>
+        <position x="-220*cm" y="-35*cm" z="0*cm"/>
+        <position x="220*cm" y="-35*cm" z="0*cm"/>
+        <position x="-150*cm" y="-165*cm" z="0*cm"/>
+        <position x="150*cm" y="-165*cm" z="0*cm"/>
+        <position x="-210*cm" y="75*cm" z="0*cm"/>
+        <position x="210*cm" y="75*cm" z="0*cm"/>
+        <position x="-60*cm" y="-215*cm" z="0*cm"/>
+        <position x="60*cm" y="-215*cm" z="0*cm"/>
+        <position x="-170*cm" y="-145*cm" z="0*cm"/>
+        <position x="170*cm" y="-145*cm" z="0*cm"/>
+        <position x="-110*cm" y="195*cm" z="0*cm"/>
+        <position x="110*cm" y="195*cm" z="0*cm"/>
+        <position x="-90*cm" y="-205*cm" z="0*cm"/>
+        <position x="90*cm" y="-205*cm" z="0*cm"/>
+        <position x="-140*cm" y="-175*cm" z="0*cm"/>
+        <position x="140*cm" y="-175*cm" z="0*cm"/>
+        <position x="-220*cm" y="45*cm" z="0*cm"/>
+        <position x="220*cm" y="45*cm" z="0*cm"/>
+        <position x="0*cm" y="225*cm" z="0*cm"/>
+        <position x="-180*cm" y="-135*cm" z="0*cm"/>
+        <position x="180*cm" y="-135*cm" z="0*cm"/>
+        <position x="10*cm" y="-225*cm" z="0*cm"/>
+        <position x="-200*cm" y="105*cm" z="0*cm"/>
+        <position x="200*cm" y="105*cm" z="0*cm"/>
+        <position x="-20*cm" y="225*cm" z="0*cm"/>
+        <position x="20*cm" y="225*cm" z="0*cm"/>
+        <position x="-130*cm" y="-185*cm" z="0*cm"/>
+        <position x="130*cm" y="-185*cm" z="0*cm"/>
+        <position x="-70*cm" y="215*cm" z="0*cm"/>
+        <position x="70*cm" y="215*cm" z="0*cm"/>
+        <position x="-210*cm" y="-85*cm" z="0*cm"/>
+        <position x="210*cm" y="-85*cm" z="0*cm"/>
+        <position x="-220*cm" y="-55*cm" z="0*cm"/>
+        <position x="220*cm" y="-55*cm" z="0*cm"/>
+        <position x="-30*cm" y="-225*cm" z="0*cm"/>
+        <position x="30*cm" y="-225*cm" z="0*cm"/>
+        <position x="-190*cm" y="-125*cm" z="0*cm"/>
+        <position x="190*cm" y="-125*cm" z="0*cm"/>
+        <position x="-100*cm" y="205*cm" z="0*cm"/>
+        <position x="100*cm" y="205*cm" z="0*cm"/>
+        <position x="-40*cm" y="225*cm" z="0*cm"/>
+        <position x="40*cm" y="225*cm" z="0*cm"/>
+        <position x="-120*cm" y="-195*cm" z="0*cm"/>
+        <position x="120*cm" y="-195*cm" z="0*cm"/>
+        <position x="-220*cm" y="65*cm" z="0*cm"/>
+        <position x="220*cm" y="65*cm" z="0*cm"/>
+        <position x="-80*cm" y="-215*cm" z="0*cm"/>
+        <position x="80*cm" y="-215*cm" z="0*cm"/>
+        <position x="-160*cm" y="165*cm" z="0*cm"/>
+        <position x="160*cm" y="165*cm" z="0*cm"/>
+        <position x="-170*cm" y="155*cm" z="0*cm"/>
+        <position x="170*cm" y="155*cm" z="0*cm"/>
+        <position x="-230*cm" y="-5*cm" z="0*cm"/>
+        <position x="230*cm" y="-5*cm" z="0*cm"/>
+        <position x="-150*cm" y="175*cm" z="0*cm"/>
+        <position x="150*cm" y="175*cm" z="0*cm"/>
+        <position x="-210*cm" y="95*cm" z="0*cm"/>
+        <position x="210*cm" y="95*cm" z="0*cm"/>
+        <position x="-230*cm" y="15*cm" z="0*cm"/>
+        <position x="230*cm" y="15*cm" z="0*cm"/>
+        <position x="-50*cm" y="-225*cm" z="0*cm"/>
+        <position x="50*cm" y="-225*cm" z="0*cm"/>
+        <position x="-200*cm" y="-115*cm" z="0*cm"/>
+        <position x="200*cm" y="-115*cm" z="0*cm"/>
+        <position x="-180*cm" y="145*cm" z="0*cm"/>
+        <position x="180*cm" y="145*cm" z="0*cm"/>
+        <position x="-230*cm" y="-25*cm" z="0*cm"/>
+        <position x="230*cm" y="-25*cm" z="0*cm"/>
+        <position x="-140*cm" y="185*cm" z="0*cm"/>
+        <position x="140*cm" y="185*cm" z="0*cm"/>
+        <position x="-220*cm" y="-75*cm" z="0*cm"/>
+        <position x="220*cm" y="-75*cm" z="0*cm"/>
+        <position x="-110*cm" y="-205*cm" z="0*cm"/>
+        <position x="110*cm" y="-205*cm" z="0*cm"/>
+        <position x="-230*cm" y="35*cm" z="0*cm"/>
+        <position x="230*cm" y="35*cm" z="0*cm"/>
+        <position x="-60*cm" y="225*cm" z="0*cm"/>
+        <position x="60*cm" y="225*cm" z="0*cm"/>
+        <position x="-190*cm" y="135*cm" z="0*cm"/>
+        <position x="190*cm" y="135*cm" z="0*cm"/>
+        <position x="-90*cm" y="215*cm" z="0*cm"/>
+        <position x="90*cm" y="215*cm" z="0*cm"/>
+        <position x="-130*cm" y="195*cm" z="0*cm"/>
+        <position x="130*cm" y="195*cm" z="0*cm"/>
+        <position x="-230*cm" y="-45*cm" z="0*cm"/>
+        <position x="230*cm" y="-45*cm" z="0*cm"/>
+        <position x="-210*cm" y="-105*cm" z="0*cm"/>
+        <position x="210*cm" y="-105*cm" z="0*cm"/>
+        <position x="0*cm" y="-235*cm" z="0*cm"/>
+        <position x="10*cm" y="235*cm" z="0*cm"/>
+        <position x="-70*cm" y="-225*cm" z="0*cm"/>
+        <position x="70*cm" y="-225*cm" z="0*cm"/>
+        <position x="-200*cm" y="125*cm" z="0*cm"/>
+        <position x="200*cm" y="125*cm" z="0*cm"/>
+        <position x="-20*cm" y="-235*cm" z="0*cm"/>
+        <position x="20*cm" y="-235*cm" z="0*cm"/>
+        <position x="-220*cm" y="85*cm" z="0*cm"/>
+        <position x="220*cm" y="85*cm" z="0*cm"/>
+        <position x="-230*cm" y="55*cm" z="0*cm"/>
+        <position x="230*cm" y="55*cm" z="0*cm"/>
+        <position x="-170*cm" y="-165*cm" z="0*cm"/>
+        <position x="170*cm" y="-165*cm" z="0*cm"/>
+        <position x="-30*cm" y="235*cm" z="0*cm"/>
+        <position x="30*cm" y="235*cm" z="0*cm"/>
+        <position x="-100*cm" y="-215*cm" z="0*cm"/>
+        <position x="100*cm" y="-215*cm" z="0*cm"/>
+        <position x="-160*cm" y="-175*cm" z="0*cm"/>
+        <position x="160*cm" y="-175*cm" z="0*cm"/>
+        <position x="-120*cm" y="205*cm" z="0*cm"/>
+        <position x="120*cm" y="205*cm" z="0*cm"/>
+        <position x="-180*cm" y="-155*cm" z="0*cm"/>
+        <position x="180*cm" y="-155*cm" z="0*cm"/>
+        <position x="-150*cm" y="-185*cm" z="0*cm"/>
+        <position x="150*cm" y="-185*cm" z="0*cm"/>
+        <position x="-40*cm" y="-235*cm" z="0*cm"/>
+        <position x="40*cm" y="-235*cm" z="0*cm"/>
+        <position x="-80*cm" y="225*cm" z="0*cm"/>
+        <position x="80*cm" y="225*cm" z="0*cm"/>
+        <position x="-190*cm" y="-145*cm" z="0*cm"/>
+        <position x="190*cm" y="-145*cm" z="0*cm"/>
+        <position x="-230*cm" y="-65*cm" z="0*cm"/>
+        <position x="230*cm" y="-65*cm" z="0*cm"/>
+        <position x="-210*cm" y="115*cm" z="0*cm"/>
+        <position x="210*cm" y="115*cm" z="0*cm"/>
+        <position x="-220*cm" y="-95*cm" z="0*cm"/>
+        <position x="220*cm" y="-95*cm" z="0*cm"/>
+        <position x="-140*cm" y="-195*cm" z="0*cm"/>
+        <position x="140*cm" y="-195*cm" z="0*cm"/>
+        <position x="-240*cm" y="5*cm" z="0*cm"/>
+        <position x="240*cm" y="5*cm" z="0*cm"/>
+        <position x="-50*cm" y="235*cm" z="0*cm"/>
+        <position x="50*cm" y="235*cm" z="0*cm"/>
+        <position x="-240*cm" y="-15*cm" z="0*cm"/>
+        <position x="240*cm" y="-15*cm" z="0*cm"/>
+        <position x="-200*cm" y="-135*cm" z="0*cm"/>
+        <position x="200*cm" y="-135*cm" z="0*cm"/>
+        <position x="-240*cm" y="25*cm" z="0*cm"/>
+        <position x="240*cm" y="25*cm" z="0*cm"/>
+        <position x="-110*cm" y="215*cm" z="0*cm"/>
+        <position x="110*cm" y="215*cm" z="0*cm"/>
+        <position x="-230*cm" y="75*cm" z="0*cm"/>
+        <position x="230*cm" y="75*cm" z="0*cm"/>
+        <position x="-90*cm" y="-225*cm" z="0*cm"/>
+        <position x="90*cm" y="-225*cm" z="0*cm"/>
+        <position x="-240*cm" y="-35*cm" z="0*cm"/>
+        <position x="240*cm" y="-35*cm" z="0*cm"/>
+        <position x="-60*cm" y="-235*cm" z="0*cm"/>
+        <position x="60*cm" y="-235*cm" z="0*cm"/>
+        <position x="-130*cm" y="-205*cm" z="0*cm"/>
+        <position x="130*cm" y="-205*cm" z="0*cm"/>
+        <position x="-220*cm" y="105*cm" z="0*cm"/>
+        <position x="220*cm" y="105*cm" z="0*cm"/>
+        <position x="-170*cm" y="175*cm" z="0*cm"/>
+        <position x="170*cm" y="175*cm" z="0*cm"/>
+        <position x="-180*cm" y="165*cm" z="0*cm"/>
+        <position x="180*cm" y="165*cm" z="0*cm"/>
+        <position x="-240*cm" y="45*cm" z="0*cm"/>
+        <position x="240*cm" y="45*cm" z="0*cm"/>
+        <position x="-210*cm" y="-125*cm" z="0*cm"/>
+        <position x="210*cm" y="-125*cm" z="0*cm"/>
+        <position x="-160*cm" y="185*cm" z="0*cm"/>
+        <position x="160*cm" y="185*cm" z="0*cm"/>
+        <position x="0*cm" y="245*cm" z="0*cm"/>
+        <position x="10*cm" y="-245*cm" z="0*cm"/>
+        <position x="-190*cm" y="155*cm" z="0*cm"/>
+        <position x="190*cm" y="155*cm" z="0*cm"/>
+        <position x="-230*cm" y="-85*cm" z="0*cm"/>
+        <position x="230*cm" y="-85*cm" z="0*cm"/>
+        <position x="-70*cm" y="235*cm" z="0*cm"/>
+        <position x="70*cm" y="235*cm" z="0*cm"/>
+        <position x="-20*cm" y="245*cm" z="0*cm"/>
+        <position x="20*cm" y="245*cm" z="0*cm"/>
+        <position x="-150*cm" y="195*cm" z="0*cm"/>
+        <position x="150*cm" y="195*cm" z="0*cm"/>
+        <position x="-100*cm" y="225*cm" z="0*cm"/>
+        <position x="100*cm" y="225*cm" z="0*cm"/>
+        <position x="-120*cm" y="-215*cm" z="0*cm"/>
+        <position x="120*cm" y="-215*cm" z="0*cm"/>
+        <position x="-240*cm" y="-55*cm" z="0*cm"/>
+        <position x="240*cm" y="-55*cm" z="0*cm"/>
+        <position x="-30*cm" y="-245*cm" z="0*cm"/>
+        <position x="30*cm" y="-245*cm" z="0*cm"/>
+        <position x="-200*cm" y="145*cm" z="0*cm"/>
+        <position x="200*cm" y="145*cm" z="0*cm"/>
+        <position x="-140*cm" y="205*cm" z="0*cm"/>
+        <position x="140*cm" y="205*cm" z="0*cm"/>
+        <position x="-220*cm" y="-115*cm" z="0*cm"/>
+        <position x="220*cm" y="-115*cm" z="0*cm"/>
+        <position x="-40*cm" y="245*cm" z="0*cm"/>
+        <position x="40*cm" y="245*cm" z="0*cm"/>
+        <position x="-80*cm" y="-235*cm" z="0*cm"/>
+        <position x="80*cm" y="-235*cm" z="0*cm"/>
+        <position x="-240*cm" y="65*cm" z="0*cm"/>
+        <position x="240*cm" y="65*cm" z="0*cm"/>
+        <position x="-230*cm" y="95*cm" z="0*cm"/>
+        <position x="230*cm" y="95*cm" z="0*cm"/>
+        <position x="-210*cm" y="135*cm" z="0*cm"/>
+        <position x="210*cm" y="135*cm" z="0*cm"/>
+        <position x="-250*cm" y="-5*cm" z="0*cm"/>
+        <position x="250*cm" y="-5*cm" z="0*cm"/>
+        <position x="-50*cm" y="-245*cm" z="0*cm"/>
+        <position x="50*cm" y="-245*cm" z="0*cm"/>
+        <position x="-110*cm" y="-225*cm" z="0*cm"/>
+        <position x="110*cm" y="-225*cm" z="0*cm"/>
+        <position x="-250*cm" y="15*cm" z="0*cm"/>
+        <position x="250*cm" y="15*cm" z="0*cm"/>
+        <position x="-180*cm" y="-175*cm" z="0*cm"/>
+        <position x="180*cm" y="-175*cm" z="0*cm"/>
+        <position x="-130*cm" y="215*cm" z="0*cm"/>
+        <position x="130*cm" y="215*cm" z="0*cm"/>
+        <position x="-170*cm" y="-185*cm" z="0*cm"/>
+        <position x="170*cm" y="-185*cm" z="0*cm"/>
+        <position x="-250*cm" y="-25*cm" z="0*cm"/>
+        <position x="250*cm" y="-25*cm" z="0*cm"/>
+        <position x="-240*cm" y="-75*cm" z="0*cm"/>
+        <position x="240*cm" y="-75*cm" z="0*cm"/>
+        <position x="-190*cm" y="-165*cm" z="0*cm"/>
+        <position x="190*cm" y="-165*cm" z="0*cm"/>
+        <position x="-90*cm" y="235*cm" z="0*cm"/>
+        <position x="90*cm" y="235*cm" z="0*cm"/>
+        <position x="-160*cm" y="-195*cm" z="0*cm"/>
+        <position x="160*cm" y="-195*cm" z="0*cm"/>
+        <position x="-60*cm" y="245*cm" z="0*cm"/>
+        <position x="60*cm" y="245*cm" z="0*cm"/>
+        <position x="-250*cm" y="35*cm" z="0*cm"/>
+        <position x="250*cm" y="35*cm" z="0*cm"/>
+        <position x="-230*cm" y="-105*cm" z="0*cm"/>
+        <position x="230*cm" y="-105*cm" z="0*cm"/>
+        <position x="-200*cm" y="-155*cm" z="0*cm"/>
+        <position x="200*cm" y="-155*cm" z="0*cm"/>
+        <position x="-220*cm" y="125*cm" z="0*cm"/>
+        <position x="220*cm" y="125*cm" z="0*cm"/>
+        <position x="-150*cm" y="-205*cm" z="0*cm"/>
+        <position x="150*cm" y="-205*cm" z="0*cm"/>
+        <position x="-250*cm" y="-45*cm" z="0*cm"/>
+        <position x="250*cm" y="-45*cm" z="0*cm"/>
+        <position x="-240*cm" y="85*cm" z="0*cm"/>
+        <position x="240*cm" y="85*cm" z="0*cm"/>
+        <position x="-70*cm" y="-245*cm" z="0*cm"/>
+        <position x="70*cm" y="-245*cm" z="0*cm"/>
+        <position x="0*cm" y="-255*cm" z="0*cm"/>
+        <position x="-120*cm" y="225*cm" z="0*cm"/>
+        <position x="120*cm" y="225*cm" z="0*cm"/>
+        <position x="10*cm" y="255*cm" z="0*cm"/>
+        <position x="-210*cm" y="-145*cm" z="0*cm"/>
+        <position x="210*cm" y="-145*cm" z="0*cm"/>
+        <position x="-100*cm" y="-235*cm" z="0*cm"/>
+        <position x="100*cm" y="-235*cm" z="0*cm"/>
+        <position x="-20*cm" y="-255*cm" z="0*cm"/>
+        <position x="20*cm" y="-255*cm" z="0*cm"/>
+        <position x="-250*cm" y="55*cm" z="0*cm"/>
+        <position x="250*cm" y="55*cm" z="0*cm"/>
+        <position x="-140*cm" y="-215*cm" z="0*cm"/>
+        <position x="140*cm" y="-215*cm" z="0*cm"/>
+        <position x="-30*cm" y="255*cm" z="0*cm"/>
+        <position x="30*cm" y="255*cm" z="0*cm"/>
+        <position x="-230*cm" y="115*cm" z="0*cm"/>
+        <position x="230*cm" y="115*cm" z="0*cm"/>
+        <position x="-80*cm" y="245*cm" z="0*cm"/>
+        <position x="80*cm" y="245*cm" z="0*cm"/>
+        <position x="-180*cm" y="185*cm" z="0*cm"/>
+        <position x="-220*cm" y="-135*cm" z="0*cm"/>
+        <position x="220*cm" y="-135*cm" z="0*cm"/>
+        <position x="-240*cm" y="-95*cm" z="0*cm"/>
+        <position x="240*cm" y="-95*cm" z="0*cm"/>
+        <position x="-40*cm" y="-255*cm" z="0*cm"/>
+        <position x="40*cm" y="-255*cm" z="0*cm"/>
+        <position x="-190*cm" y="175*cm" z="0*cm"/>
+        <position x="-250*cm" y="-65*cm" z="0*cm"/>
+        <position x="250*cm" y="-65*cm" z="0*cm"/>
+        <position x="-170*cm" y="195*cm" z="0*cm"/>
+        <position x="-200*cm" y="165*cm" z="0*cm"/>
+        <position x="-110*cm" y="235*cm" z="0*cm"/>
+        <position x="-130*cm" y="-225*cm" z="0*cm"/>
+        <position x="130*cm" y="-225*cm" z="0*cm"/>
+        <position x="-50*cm" y="255*cm" z="0*cm"/>
+        <position x="50*cm" y="255*cm" z="0*cm"/>
+        <position x="-160*cm" y="205*cm" z="0*cm"/>
+        <position x="-260*cm" y="5*cm" z="0*cm"/>
+        <position x="-260*cm" y="-15*cm" z="0*cm"/>
+        <position x="-210*cm" y="155*cm" z="0*cm"/>
+        <position x="-250*cm" y="75*cm" z="0*cm"/>
+        <position x="-90*cm" y="-245*cm" z="0*cm"/>
+        <position x="90*cm" y="-245*cm" z="0*cm"/>
+        <position x="-260*cm" y="25*cm" z="0*cm"/>
+        <position x="-230*cm" y="-125*cm" z="0*cm"/>
+        <position x="230*cm" y="-125*cm" z="0*cm"/>
+        <position x="-240*cm" y="105*cm" z="0*cm"/>
+        <position x="-60*cm" y="-255*cm" z="0*cm"/>
+        <position x="60*cm" y="-255*cm" z="0*cm"/>
+        <position x="-150*cm" y="215*cm" z="0*cm"/>
+        <position x="-260*cm" y="-35*cm" z="0*cm"/>
+        <position x="-220*cm" y="145*cm" z="0*cm"/>
+        <position x="-120*cm" y="-235*cm" z="0*cm"/>
+        <position x="120*cm" y="-235*cm" z="0*cm"/>
+        <position x="-260*cm" y="45*cm" z="0*cm"/>
+        <position x="-250*cm" y="-85*cm" z="0*cm"/>
+        <position x="-70*cm" y="255*cm" z="0*cm"/>
+        <position x="-100*cm" y="245*cm" z="0*cm"/>
+        <position x="-140*cm" y="225*cm" z="0*cm"/>
+        <position x="10*cm" y="-265*cm" z="0*cm"/>
+        <position x="-190*cm" y="-185*cm" z="0*cm"/>
+        <position x="-180*cm" y="-195*cm" z="0*cm"/>
+        <position x="-200*cm" y="-175*cm" z="0*cm"/>
+        <position x="-260*cm" y="-55*cm" z="0*cm"/>
+        <position x="-240*cm" y="-115*cm" z="0*cm"/>
+        <position x="-170*cm" y="-205*cm" z="0*cm"/>
+        <position x="-230*cm" y="135*cm" z="0*cm"/>
+        <position x="-30*cm" y="-265*cm" z="0*cm"/>
+        <position x="30*cm" y="-265*cm" z="0*cm"/>
+        <position x="-210*cm" y="-165*cm" z="0*cm"/>
+        <position x="-80*cm" y="-255*cm" z="0*cm"/>
+        <position x="80*cm" y="-255*cm" z="0*cm"/>
+        <position x="-250*cm" y="95*cm" z="0*cm"/>
+        <position x="-160*cm" y="-215*cm" z="0*cm"/>
+        <position x="-260*cm" y="65*cm" z="0*cm"/>
+        <position x="-110*cm" y="-245*cm" z="0*cm"/>
+        <position x="-220*cm" y="-155*cm" z="0*cm"/>
+        <position x="-50*cm" y="-265*cm" z="0*cm"/>
+        <position x="50*cm" y="-265*cm" z="0*cm"/>
+        <position x="-270*cm" y="-5*cm" z="0*cm"/>
+        <position x="-150*cm" y="-225*cm" z="0*cm"/>
+        <position x="-270*cm" y="15*cm" z="0*cm"/>
+        <position x="-240*cm" y="125*cm" z="0*cm"/>
+        <position x="-260*cm" y="-75*cm" z="0*cm"/>
+        <position x="-250*cm" y="-105*cm" z="0*cm"/>
+        <position x="-270*cm" y="-25*cm" z="0*cm"/>
+        <position x="-230*cm" y="-145*cm" z="0*cm"/>
+        <position x="-270*cm" y="35*cm" z="0*cm"/>
+        <position x="-140*cm" y="-235*cm" z="0*cm"/>
+        <position x="-260*cm" y="85*cm" z="0*cm"/>
+        <position x="-270*cm" y="-45*cm" z="0*cm"/>
+        <position x="-100*cm" y="-255*cm" z="0*cm"/>
+        <position x="-70*cm" y="-265*cm" z="0*cm"/>
+        <position x="-250*cm" y="115*cm" z="0*cm"/>
+        <position x="-240*cm" y="-135*cm" z="0*cm"/>
+        <position x="-270*cm" y="55*cm" z="0*cm"/>
+        <position x="-260*cm" y="-95*cm" z="0*cm"/>
+        <position x="-270*cm" y="-65*cm" z="0*cm"/>
+        <position x="-250*cm" y="-125*cm" z="0*cm"/>
+      </eightmodulepositions>
+      <fourmodulepositions>
+        <position x="-20*cm" y="5*cm" z="0*cm" if="LFHCAL_without_space_for_insert"/>
+        <position x="0*cm" y="-25*cm" z="0*cm" if="LFHCAL_without_space_for_insert"/>
+        <position x="-20*cm" y="-15*cm" z="0*cm" if="LFHCAL_without_space_for_insert"/>
+        <position x="-10*cm" y="-25*cm" z="0*cm" if="LFHCAL_without_space_for_insert"/>
+        <position x="-30*cm" y="-5*cm" z="0*cm" if="LFHCAL_with_space_for_insert"/>
+        <position x="30*cm" y="5*cm" z="0*cm" if="LFHCAL_without_space_for_insert"/>
+        <position x="-30*cm" y="15*cm" z="0*cm" if="LFHCAL_with_space_for_insert"/>
+        <position x="30*cm" y="-15*cm" z="0*cm" if="LFHCAL_without_space_for_insert"/>
+        <position x="0*cm" y="35*cm" z="0*cm"/>
+        <position x="-10*cm" y="35*cm" z="0*cm"/>
+        <position x="-30*cm" y="-25*cm" z="0*cm" if="LFHCAL_with_space_for_insert"/>
+        <position x="40*cm" y="-5*cm" z="0*cm" if="LFHCAL_with_space_for_insert"/>
+        <position x="40*cm" y="15*cm" z="0*cm" if="LFHCAL_with_space_for_insert"/>
+        <position x="0*cm" y="-45*cm" z="0*cm"/>
+        <position x="-10*cm" y="-45*cm" z="0*cm"/>
+        <position x="40*cm" y="-25*cm" z="0*cm" if="LFHCAL_with_space_for_insert"/>
+        <position x="0*cm" y="55*cm" z="0*cm"/>
+        <position x="-10*cm" y="55*cm" z="0*cm"/>
+        <position x="0*cm" y="-65*cm" z="0*cm"/>
+        <position x="-10*cm" y="-65*cm" z="0*cm"/>
+        <position x="0*cm" y="75*cm" z="0*cm"/>
+        <position x="-10*cm" y="75*cm" z="0*cm"/>
+        <position x="0*cm" y="-85*cm" z="0*cm"/>
+        <position x="-10*cm" y="-85*cm" z="0*cm"/>
+        <position x="0*cm" y="95*cm" z="0*cm"/>
+        <position x="-10*cm" y="95*cm" z="0*cm"/>
+        <position x="0*cm" y="-105*cm" z="0*cm"/>
+        <position x="-10*cm" y="-105*cm" z="0*cm"/>
+        <position x="0*cm" y="115*cm" z="0*cm"/>
+        <position x="-10*cm" y="115*cm" z="0*cm"/>
+        <position x="0*cm" y="-125*cm" z="0*cm"/>
+        <position x="-10*cm" y="-125*cm" z="0*cm"/>
+        <position x="0*cm" y="135*cm" z="0*cm"/>
+        <position x="-10*cm" y="135*cm" z="0*cm"/>
+        <position x="0*cm" y="-145*cm" z="0*cm"/>
+        <position x="-10*cm" y="-145*cm" z="0*cm"/>
+        <position x="0*cm" y="155*cm" z="0*cm"/>
+        <position x="-10*cm" y="155*cm" z="0*cm"/>
+        <position x="0*cm" y="-165*cm" z="0*cm"/>
+        <position x="-10*cm" y="-165*cm" z="0*cm"/>
+        <position x="0*cm" y="175*cm" z="0*cm"/>
+        <position x="-10*cm" y="175*cm" z="0*cm"/>
+        <position x="0*cm" y="-185*cm" z="0*cm"/>
+        <position x="-10*cm" y="-185*cm" z="0*cm"/>
+        <position x="0*cm" y="195*cm" z="0*cm"/>
+        <position x="-10*cm" y="195*cm" z="0*cm"/>
+        <position x="0*cm" y="-205*cm" z="0*cm"/>
+        <position x="-10*cm" y="-205*cm" z="0*cm"/>
+        <position x="0*cm" y="215*cm" z="0*cm"/>
+        <position x="-10*cm" y="215*cm" z="0*cm"/>
+        <position x="0*cm" y="-225*cm" z="0*cm"/>
+        <position x="-10*cm" y="-225*cm" z="0*cm"/>
+        <position x="0*cm" y="235*cm" z="0*cm"/>
+        <position x="-10*cm" y="235*cm" z="0*cm"/>
+        <position x="0*cm" y="-245*cm" z="0*cm"/>
+        <position x="-10*cm" y="-245*cm" z="0*cm"/>
+        <position x="0*cm" y="255*cm" z="0*cm"/>
+        <position x="-10*cm" y="255*cm" z="0*cm"/>
+        <position x="260*cm" y="5*cm" z="0*cm"/>
+        <position x="260*cm" y="-15*cm" z="0*cm"/>
+        <position x="250*cm" y="75*cm" z="0*cm"/>
+        <position x="260*cm" y="25*cm" z="0*cm"/>
+        <position x="240*cm" y="105*cm" z="0*cm"/>
+        <position x="260*cm" y="-35*cm" z="0*cm"/>
+        <position x="260*cm" y="45*cm" z="0*cm"/>
+        <position x="250*cm" y="-85*cm" z="0*cm"/>
+        <position x="0*cm" y="-265*cm" z="0*cm"/>
+        <position x="-10*cm" y="-265*cm" z="0*cm"/>
+        <position x="260*cm" y="-55*cm" z="0*cm"/>
+        <position x="240*cm" y="-115*cm" z="0*cm"/>
+        <position x="-270*cm" y="5*cm" z="0*cm"/>
+        <position x="-270*cm" y="-15*cm" z="0*cm"/>
+        <position x="-260*cm" y="75*cm" z="0*cm"/>
+        <position x="-250*cm" y="105*cm" z="0*cm"/>
+        <position x="-270*cm" y="25*cm" z="0*cm"/>
+        <position x="-270*cm" y="-35*cm" z="0*cm"/>
+        <position x="-260*cm" y="-85*cm" z="0*cm"/>
+        <position x="-270*cm" y="45*cm" z="0*cm"/>
+        <position x="-250*cm" y="-115*cm" z="0*cm"/>
+        <position x="-270*cm" y="-55*cm" z="0*cm"/>
+      </fourmodulepositions>
+
+    </detector>
+
+  </detectors>
+
+  <!--  Definition of the readout segmentation/definition  -->
+  <readouts>
+    <readout name="LFHCALHits">
+      <segmentation type="NoSegmentation"/>
+      <id>system:8,moduleIDx:6,moduleIDy:6,moduletype:1,passive:1,towerx:2,towery:1,rlayerz:4,layerz:4</id>
+    </readout>
+  </readouts>
+
+</lccdd>
