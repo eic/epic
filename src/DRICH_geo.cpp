@@ -638,7 +638,7 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
               // obtain some parameters useful for optics, so we don't have to figure them out downstream
               // - sensor position: the centroid of the active SURFACE of the `pss`
               auto pduOrigin = ROOT::Math::XYZPoint(0,0,0);
-              auto sensorPos = 
+              auto sensorPos =
                 Translation3D(vesselPos) *   // position of vessel in world
                 pduAssemblyPlacement *       // position of PDU in vessel
                 sensorAssemblyPlacement *    // position of SiPM in PDU
