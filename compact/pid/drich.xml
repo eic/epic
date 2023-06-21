@@ -11,8 +11,12 @@
 <constant name="DRICH_rmin0"              value="DRICH_zmin * ForwardRICHRegion_tan1"/>  <!-- bore radius at dRICH entrance -->
 <constant name="DRICH_rmin1"              value="DRICH_zmax * ForwardRICHRegion_tan2"/>  <!-- bore radius at dRICH exit -->
 <constant name="DRICH_bore_slope"         value="(DRICH_rmin1 - DRICH_rmin0) / DRICH_length"/> <!-- slope of bore radius -->
-<constant name="DRICH_wall_thickness"     value="0.5*cm"/>  <!-- thickness of radial walls -->
-<constant name="DRICH_window_thickness"   value="0.1*cm"/>  <!-- thickness of entrance and exit walls -->
+<!--
+  NOTE: these aluminum thicknesses were increased for material budget studies;
+  consider reverting them before PR review
+-->
+<constant name="DRICH_wall_thickness"     value="1.5*cm"/>  <!-- thickness of radial walls -->
+<constant name="DRICH_window_thickness"   value="0.3*cm"/>  <!-- thickness of entrance and exit walls -->
 <constant name="DRICH_num_sectors"        value="6"/>  <!-- number of azimuthal sectors -->
 <!-- snout geometry: cone with front radius rmax0 and back radius of rmax1 -->
 <constant name="DRICH_rmax0"              value="90.0*cm"/>
@@ -23,7 +27,7 @@
 <!-- aerogel+filter geometry -->
 <constant name="DRICH_aerogel_thickness"  value="4.0*cm"/>  <!-- aerogel thickness -->
 <constant name="DRICH_airgap_thickness"   value="0.01*mm"/> <!-- air gap between aerogel and filter -->
-<constant name="DRICH_filter_thickness"   value="0.3*mm"/>  <!-- filter thickness -->
+<constant name="DRICH_filter_thickness"   value="3.0*mm"/>  <!-- filter thickness -->
 <!-- sensor geometry; model = S13361-3050NE-08 SiPM -->
 <constant name="DRICH_pixel_gap"              value="0.2*mm"/> <!-- size of gaps between adjacent pixels AND gaps between edge pixels and sensor side -->
 <constant name="DRICH_sensor_resin_size"      value="25.8*mm"/> <!-- full length of the sensor+resin side -->
@@ -254,7 +258,7 @@
   radius="110.0*cm"
   />
 <sphericalpatch
-  phiw="30*degree"
+  phiw="18*degree"
   rmin="111.0*cm"
   rmax="179.0*cm"
   zmin="DRICH_snout_length + 3.0*cm"
