@@ -59,47 +59,6 @@
 
     </detector>
 
-    <comment> Calorimeters </comment>
-    <comment>
-    <detector id="TaggerCalorimeter_ID" name="BackwardsTaggerCalorimeter" type="BackwardsTaggerCalorimeter" wall="Backwards_Box_Wall" lumi="true" vis="BackwardsBox" readout="TaggerCalorimeterHits">
-      <focus      x="Dipole_Focus_X"    y="Dipole_Focus_Y"    z="Dipole_Focus_Z" />
-      <rotation   theta="Beam_Theta"/>
-  
-  
-      <comment> Tagger calorimeter stations </comment>
-      <module id="1"
-        modname="TagCal1"
-        theta_min="Tagger1_Min_Theta"
-        max_align="false"
-        offset_min="Tagger1_Min_Offset"
-        nrow="8"
-        ncol="8"
-        material="leadtungsten_optical"
-        cryvis="EcalVis"
-        >
-        <dimensions  x="Tagger1_Width/2" y="Tagger1_Height/2" z="Tag_Cal_1_Depth"/>
-        <offset      x="-50*mm" y="0" z="-Tagger1_Length-10*mm"/>
-      </module>
-
-      <module id="2"
-        modname="TagCal2"
-        theta_min="Tagger2_Min_Theta"
-        theta_max="Tagger1_Min_Theta"
-        max_align="true"
-        offset_min="Tagger2_Min_Offset"
-        nrow="8"
-        ncol="8"
-        material="leadtungsten_optical"
-        cryvis="EcalVis"
-        overlap="-20*mm"
-        >
-        <dimensions x="Tagger2_Width/2" y="Tagger2_Height/2" z="Tag_Cal_2_Depth"/>
-        <offset     x="-50*mm" y="0" z="-Tagger2_Length-10*mm"/>
-      </module>
-
-    </detector>
-
-    </comment>
   </detectors>
 
 
