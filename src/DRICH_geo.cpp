@@ -583,17 +583,18 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
           /* - transformations operate on global coordinates; the corresponding
            *   generator coordinates are provided in the comments
            * - transformations are applied in reverse order
+           * - the `pduAssembly` origin is at the active surface; in other words, this origin
+           *   should be placed on the sensor sphere surface by `pduAssemblyPlacement`
            */
           // clang-format off
           auto pduAssemblyPlacement =
-            sectorRotation *                               // rotate about beam axis to sector
-            Translation3D(sensorSphPos) *                  // move sphere to reference position
-            RotationX(phiGen) *                            // rotate about `zGen`
-            RotationZ(thetaGen) *                          // rotate about `yGen`
-            Translation3D(-resinThickness / 2.0, 0., 0.) * // pull back so sensor active surface is at spherical surface
-            Translation3D(sensorSphRadius, 0., 0.) *       // push radially to spherical surface
-            RotationY(M_PI / 2) *                          // rotate sensor to be compatible with generator coords
-            RotationZ(-M_PI / 2);                          // correction for readout segmentation mapping
+            sectorRotation *                         // rotate about beam axis to sector
+            Translation3D(sensorSphPos) *            // move sphere to reference position
+            RotationX(phiGen) *                      // rotate about `zGen`
+            RotationZ(thetaGen) *                    // rotate about `yGen`
+            Translation3D(sensorSphRadius, 0., 0.) * // push radially to spherical surface
+            RotationY(M_PI / 2) *                    // rotate sensor to be compatible with generator coords
+            RotationZ(-M_PI / 2);                    // correction for readout segmentation mapping
           // clang-format on
 
           // generate matrix of sensors and place them in `pduAssembly`
@@ -606,17 +607,13 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
               Assembly sensorAssembly(detName + "_sensor_" + secName);
 
               // placement transformations
-              // clang-format off
               // - placement of objects in `sensorAssembly`
               auto pssPlacement   = Transform3D(Translation3D(0., 0., -pssThickness / 2.0)); // set assembly origin to pss outermost surface centroid
               auto resinPlacement = Transform3D(Translation3D(0., 0., -resinThickness / 2.0));
               // - placement of a `sensorAssembly` in `pduAssembly`
-              auto sensorAssemblyPlacement = Transform3D(Translation3D(
-                      sensorIx * pduSensorPitch - pduSensorOffsetMax,
-                      sensorIy * pduSensorPitch - pduSensorOffsetMax,
-                      0.0
-                      ));
-              // clang-format on
+              auto pduSensorOffsetX        = sensorIx * pduSensorPitch - pduSensorOffsetMax;
+              auto pduSensorOffsetY        = sensorIy * pduSensorPitch - pduSensorOffsetMax;
+              auto sensorAssemblyPlacement = Transform3D(Translation3D(pduSensorOffsetX, pduSensorOffsetY, 0.0));
 
               // placements
               auto pssPV = sensorAssembly.placeVolume(pssVol, pssPlacement);
@@ -638,26 +635,49 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
                 pssSkin.isValid();
               }
 
-              // obtain some parameters useful for optics
-              // - sensor position
-              //   - so we don't have to figure out transformations downstream
-              //   - use `XYZPoint`, since `typedef XYZVector Position` can't be translated
-              ROOT::Math::XYZPoint pssPos(pssPV.position());
-              auto sensorPosition = 
-                pduAssemblyPlacement *    // position of PDU
-                sensorAssemblyPlacement * // position of SiPM in PDU
-                pssPos;                   // position of sensor surface in `sensorAssembly`
+              // obtain some parameters useful for optics, so we don't have to figure them out downstream
+              // - sensor position: the centroid of the active SURFACE of the `pss`
+              auto pduOrigin = ROOT::Math::XYZPoint(0,0,0);
+              auto sensorPos = 
+                Translation3D(vesselPos) *   // position of vessel in world
+                pduAssemblyPlacement *       // position of PDU in vessel
+                sensorAssemblyPlacement *    // position of SiPM in PDU
+                pduOrigin;
+              auto pduPos =
+                Translation3D(vesselPos) *   // position of vessel in world
+                pduAssemblyPlacement *       // position of PDU in vessel
+                pduOrigin;
               // - sensor surface basis: the orientation of the sensor surface
-              //   - all sensors of a single PDU have the same surface orientation, but to avoid
-              //     loss of generality downstream, define the basis for each sensor
-              std::vector<Direction> pssBasis = {
-                Direction{1., 0., 0.,},
-                Direction{0., 1., 0.,},
-                Direction{0., 0., 1.,}
+              //   NOTE: all sensors of a single PDU have the same surface orientation, but to avoid
+              //         loss of generality downstream, define the basis for each sensor
+              auto normVector = [pduAssemblyPlacement] (Direction n) {
+                return pduAssemblyPlacement * n;
               };
-              std::vector<Direction> sensorBasis;
-              for(auto& e : pssBasis)
-                sensorBasis.push_back(pduAssemblyPlacement * e);
+              auto sensorNormX = normVector(Direction{1., 0., 0.,});
+              auto sensorNormY = normVector(Direction{0., 1., 0.,});
+
+              // geometry tests
+              /* - to help ensure the optics geometry is correctly interpreted by the reconstruction,
+               *   we do a few checks here
+               * - if any changes break these tests, the determination of `sensorPos`,
+               *   `sensorNormX`, `sensorNormY` is wrong and/or the tests need to be updated
+               */
+              // - test: check if the sensor position is on the sensor sphere (corrected for PDU matrix offset)
+              auto distActual   = std::sqrt((sensorPos-sensorSphFinalCenter).Mag2());
+              auto distExpected = std::hypot(pduSensorOffsetX, pduSensorOffsetY, sensorSphRadius);
+              auto testOnSphere = distActual - distExpected;
+              if(std::abs(testOnSphere) > 1e-6)
+                printout(ERROR, "DRICH_geo", "sector %d sensor %d failed on-sphere test; testOnSphere=%f", isec, imod, testOnSphere);
+              // - test: check the orientation
+              Direction radialDir = Direction(pduPos) - sensorSphFinalCenter; // sensor sphere radius direction
+              auto sensorNormZ    = sensorNormX.Cross(sensorNormY); // sensor surface normal
+              auto testOrtho      = sensorNormX.Dot(sensorNormY); // zero, if x and y vectors are orthogonal
+              auto testRadial     = radialDir.Cross(sensorNormZ).Mag2(); // zero, if surface normal is parallel to radial direction
+              if(std::abs(testOrtho)>1e-6 || std::abs(testRadial)>1e-6) {
+                printout(ERROR, "DRICH_geo", "sector %d sensor %d failed orientation test", isec, imod);
+                printout(ERROR, "DRICH_geo", "  testOrtho  = %f", testOrtho);
+                printout(ERROR, "DRICH_geo", "  testRadial = %f", testRadial);
+              }
 
               // add these optics parameters to this sensor's parameter map
               auto pssVarMap = pssDE.extension<VariantParameters>(false);
@@ -670,13 +690,12 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
                 pssVarMap->set<double>(key+"_y", vec.y());
                 pssVarMap->set<double>(key+"_z", vec.z());
               };
-              addVecToMap("pos", sensorPosition);
-              addVecToMap("normX", sensorBasis[0]);
-              addVecToMap("normY", sensorBasis[1]);
-              addVecToMap("normZ", sensorBasis[2]);
-              printout(INFO, "DRICH_geo", "sector %d sensor %d:", isec, imod);
+              addVecToMap("pos", sensorPos);
+              addVecToMap("normX", sensorNormX);
+              addVecToMap("normY", sensorNormY);
+              printout(DEBUG, "DRICH_geo", "sector %d sensor %d:", isec, imod);
               for(auto kv : pssVarMap->variantParameters)
-                printout(INFO, "DRICH_geo", "    %s: %f", kv.first.c_str(), pssVarMap->get<double>(kv.first));
+                printout(DEBUG, "DRICH_geo", "    %s: %f", kv.first.c_str(), pssVarMap->get<double>(kv.first));
 
               // increment sensor module number
               imod++;
