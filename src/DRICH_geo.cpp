@@ -85,6 +85,10 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
   auto mirrorPhiw      = mirrorElem.attr<double>(_Unicode(phiw));
   auto focusTuneZ      = mirrorElem.attr<double>(_Unicode(focus_tune_z));
   auto focusTuneX      = mirrorElem.attr<double>(_Unicode(focus_tune_x));
+  // - sensorboxes
+  auto sensorboxLength = desc.constant<double>("DRICH_sensorbox_length");
+  auto sensorboxRmin   = desc.constant<double>("DRICH_sensorbox_rmin");
+  auto sensorboxRmax   = desc.constant<double>("DRICH_sensorbox_rmax");
   // - sensor photosensitive surface (pss)
   auto pssElem      = detElem.child(_Unicode(sensors)).child(_Unicode(pss));
   auto pssMat       = desc.material(pssElem.attr<std::string>(_Unicode(material)));
@@ -200,9 +204,18 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
   Cone gasvolTank(tankLength / 2.0 - windowThickness, gasvolSnout.rMin2(), vesselRmax2 - wallThickness,
                   vesselRmin1 + wallThickness, vesselRmax2 - wallThickness);
 
-  // snout + tank solids
-  UnionSolid vesselUnion(vesselTank, vesselSnout, Position(0., 0., -vesselLength / 2.));
-  UnionSolid gasvolUnion(gasvolTank, gasvolSnout, Position(0., 0., -vesselLength / 2. + windowThickness));
+  // sensorbox solids
+  // FIXME: this is currently just a simple tubular extrusion; this should be replaced by proper sensor boxes
+  Tube vesselSensorboxTube(sensorboxRmin, sensorboxRmax, sensorboxLength / 2.);
+  Tube gasvolSensorboxTube(sensorboxRmin + wallThickness, sensorboxRmax - wallThickness, sensorboxLength / 2.);
+
+  // union: snout + tank
+  UnionSolid vesselUnion0(vesselTank, vesselSnout, Position(0., 0., -vesselLength / 2.));
+  UnionSolid gasvolUnion0(gasvolTank, gasvolSnout, Position(0., 0., -vesselLength / 2. + windowThickness));
+
+  // union: add sensorbox
+  UnionSolid vesselUnion(vesselUnion0, vesselSensorboxTube, Position(0., 0., -(tankLength + sensorboxLength) / 2.));
+  UnionSolid gasvolUnion(gasvolUnion0, gasvolSensorboxTube, Position(0., 0., -(tankLength + sensorboxLength) / 2. + windowThickness));
 
   //  extra solids for `debugOptics` only
   Box vesselBox(1001, 1001, 1001);

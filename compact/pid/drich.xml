@@ -24,6 +24,10 @@
 <constant name="DRICH_rmax1"              value="DRICH_rmax0 + DRICH_snout_length * (tan(0.200+atan(DRICH_rmax0/DRICH_zmin))) "/>  <!--extra 0.200 takes into account the saturated cone of light from aerogel-->
 <!-- tank geometry: cylinder, holding the majority of detector components -->
 <constant name="DRICH_rmax2"              value="ForwardPIDRegion_rmax"/>  <!-- cylinder radius -->
+<!-- sensor boxes: extrusions of the tank, to hold the sensors and their services -->
+<constant name="DRICH_sensorbox_length"   value="10.0*cm"/>
+<constant name="DRICH_sensorbox_rmin"     value="DRICH_rmax1 + 2*cm"/>
+<constant name="DRICH_sensorbox_rmax"     value="DRICH_rmax2"/>
 <!-- aerogel+filter geometry -->
 <constant name="DRICH_aerogel_thickness"  value="4.0*cm"/>  <!-- aerogel thickness -->
 <constant name="DRICH_airgap_thickness"   value="0.01*mm"/> <!-- air gap between aerogel and filter -->
@@ -240,7 +244,7 @@
   <backservices>
     <service
       name="socket"
-      side="4.0*cm"
+      side="4.5*cm"
       thickness="2.0*cm"
       material="Aluminum"
       vis="DRICH_aerogel_vis"
@@ -270,10 +274,10 @@
   radius="110.0*cm"
   />
 <sphericalpatch
-  phiw="22*degree"
+  phiw="30*degree"
   rmin="111.0*cm"
   rmax="179.0*cm"
-  zmin="DRICH_snout_length + 7.0*cm"
+  zmin="DRICH_snout_length + 4.0*cm"
   />
 
 
