@@ -682,26 +682,22 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
               auto distActual   = std::sqrt((sensorPos-sensorSphFinalCenter).Mag2());
               auto distExpected = std::hypot(pduSensorOffsetX, pduSensorOffsetY, sensorSphRadius);
               auto testOnSphere = distActual - distExpected;
-              if(std::abs(testOnSphere) > 1e-6)
+              if(std::abs(testOnSphere) > 1e-6) {
                 printout(ERROR, "DRICH_geo", "sector %d sensor %d failed on-sphere test; testOnSphere=%f", isec, imod, testOnSphere);
+                throw std::runtime_error("dRICH sensor position test failed");
+              }
               // - test: check the orientation
               Direction radialDir = Direction(pduPos) - sensorSphFinalCenter; // sensor sphere radius direction
               auto sensorNormZ    = sensorNormX.Cross(sensorNormY); // sensor surface normal
               auto testOrtho      = sensorNormX.Dot(sensorNormY); // zero, if x and y vectors are orthogonal
               auto testRadial     = radialDir.Cross(sensorNormZ).Mag2(); // zero, if surface normal is parallel to radial direction
-              //
-              // TODO
-              //
-              //
-              // auto testDirection  = radialDir.Dot(sensorNormZ)
-              //
-              //
-              //
-              //
-              if(std::abs(testOrtho)>1e-6 || std::abs(testRadial)>1e-6) {
+              auto testDirection  = radialDir.Dot(sensorNormZ); // positive, if radial direction == sensor normal direction (outward)
+              if(std::abs(testOrtho)>1e-6 || std::abs(testRadial)>1e-6 || testDirection<=0) {
                 printout(ERROR, "DRICH_geo", "sector %d sensor %d failed orientation test", isec, imod);
-                printout(ERROR, "DRICH_geo", "  testOrtho  = %f", testOrtho);
-                printout(ERROR, "DRICH_geo", "  testRadial = %f", testRadial);
+                printout(ERROR, "DRICH_geo", "  testOrtho     = %f; should be zero", testOrtho);
+                printout(ERROR, "DRICH_geo", "  testRadial    = %f; should be zero", testRadial);
+                printout(ERROR, "DRICH_geo", "  testDirection = %f; should be positive", testDirection);
+                throw std::runtime_error("dRICH sensor orientation test failed");
               }
 
               // add these optics parameters to this sensor's parameter map
