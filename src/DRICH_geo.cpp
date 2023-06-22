@@ -156,7 +156,7 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
   /* - `sensorIDfields` is a list of readout fields used to specify a unique sensor ID
    * - `cellMask` is defined such that a hit's `cellID & cellMask` is the corresponding sensor's unique ID
    */
-  std::vector<std::string> sensorIDfields = {"module", "sector"};
+  std::vector<std::string> sensorIDfields = {"pdu", "sipm", "sector"};
   const auto&              readoutCoder   = *desc.readout(readoutName).idSpec().decoder();
   // determine `cellMask` based on `sensorIDfields`
   uint64_t cellMask = 0;
@@ -459,8 +459,8 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
      *     the poles or seam, the sensor distribution will appear uniform
      */
 
-    // initialize module number for this sector
-    int imod = 0;
+    // initialize PDU number for this sector
+    int ipdu = 0;
 
     // calculate PDU pitch: the distance between two adjacent PDUs
     double pduPitch = pduNumSensors * resinSide + (pduNumSensors + 1) * pduSensorGap + pduGap;
@@ -617,6 +617,7 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
           Assembly pduAssembly(detName + "_pdu_" + secName);
           double pduSensorPitch     = resinSide + pduSensorGap;
           double pduSensorOffsetMax = pduSensorPitch * (pduNumSensors - 1) / 2.0;
+          int isipm = 0;
           for(int sensorIx = 0; sensorIx < pduNumSensors; sensorIx++) {
             for(int sensorIy = 0; sensorIy < pduNumSensors; sensorIy++) {
 
@@ -637,17 +638,17 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
               pduAssembly.placeVolume(sensorAssembly, sensorAssemblyPlacement);
 
               // sensor readout // NOTE: follow `sensorIDfields`
-              pssPV.addPhysVolID("sector", isec).addPhysVolID("module", imod);
+              pssPV.addPhysVolID("sector", isec).addPhysVolID("pdu", ipdu).addPhysVolID("sipm", isipm);
 
               // sensor DetElement
-              auto        imodsec    = encodeSensorID(pssPV.volIDs());
-              std::string modsecName = secName + "_" + std::to_string(imod);
-              DetElement pssDE(det, "sensor_de_" + modsecName, imodsec);
+              auto        sensorID     = encodeSensorID(pssPV.volIDs());
+              std::string sensorIDname = secName + "_pdu" + std::to_string(ipdu) + "_sipm" + std::to_string(isipm);
+              DetElement pssDE(det, "sensor_de_" + sensorIDname, sensorID);
               pssDE.setPlacement(pssPV);
 
               // sensor surface properties
               if (!debugOptics || debugOpticsMode == 3) {
-                SkinSurface pssSkin(desc, pssDE, "sensor_optical_surface_" + modsecName, pssSurf, pssVol);
+                SkinSurface pssSkin(desc, pssDE, "sensor_optical_surface_" + sensorIDname, pssSurf, pssVol);
                 pssSkin.isValid();
               }
 
@@ -683,7 +684,7 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
               auto distExpected = std::hypot(pduSensorOffsetX, pduSensorOffsetY, sensorSphRadius);
               auto testOnSphere = distActual - distExpected;
               if(std::abs(testOnSphere) > 1e-6) {
-                printout(ERROR, "DRICH_geo", "sector %d sensor %d failed on-sphere test; testOnSphere=%f", isec, imod, testOnSphere);
+                printout(ERROR, "DRICH_geo", "sensor %s failed on-sphere test; testOnSphere=%f", sensorIDname.c_str(), testOnSphere);
                 throw std::runtime_error("dRICH sensor position test failed");
               }
               // - test: check the orientation
@@ -693,7 +694,7 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
               auto testRadial     = radialDir.Cross(sensorNormZ).Mag2(); // zero, if surface normal is parallel to radial direction
               auto testDirection  = radialDir.Dot(sensorNormZ); // positive, if radial direction == sensor normal direction (outward)
               if(std::abs(testOrtho)>1e-6 || std::abs(testRadial)>1e-6 || testDirection<=0) {
-                printout(ERROR, "DRICH_geo", "sector %d sensor %d failed orientation test", isec, imod);
+                printout(ERROR, "DRICH_geo", "sensor %s failed orientation test", sensorIDname.c_str());
                 printout(ERROR, "DRICH_geo", "  testOrtho     = %f; should be zero", testOrtho);
                 printout(ERROR, "DRICH_geo", "  testRadial    = %f; should be zero", testRadial);
                 printout(ERROR, "DRICH_geo", "  testDirection = %f; should be positive", testDirection);
@@ -714,15 +715,15 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
               addVecToMap("pos", sensorPos);
               addVecToMap("normX", sensorNormX);
               addVecToMap("normY", sensorNormY);
-              printout(DEBUG, "DRICH_geo", "sector %d sensor %d:", isec, imod);
+              printout(DEBUG, "DRICH_geo", "sensor %s:", sensorIDname.c_str());
               for(auto kv : pssVarMap->variantParameters)
                 printout(DEBUG, "DRICH_geo", "    %s: %f", kv.first.c_str(), pssVarMap->get<double>(kv.first));
 
-              // increment sensor module number
-              imod++;
+              // increment SIPM number
+              isipm++;
 
             }
-          }
+          } // end PDU SiPM matrix loop
 
           // front service volumes
           Transform3D frontServiceTransformation = Transform3D(Translation3D(0., 0., -resinThickness));
@@ -778,17 +779,20 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
           // place PDU assembly
           gasvolVol.placeVolume(pduAssembly, pduAssemblyPlacement);
 
+          // increment PDU number
+          ipdu++;
+
         } // end patch cuts
       }   // end phiGen loop
     }     // end thetaGen loop
 
     // END SENSOR MODULE LOOP ------------------------
 
-    // add constant for access to the number of modules per sector
+    // add constant for access to the number of PDUs per sector
     if (isec == 0)
-      desc.add(Constant("DRICH_num_sensors", std::to_string(imod)));
-    else if (imod != desc.constant<int>("DRICH_num_sensors"))
-      printout(WARNING, "DRICH_geo", "number of sensors is not the same for each sector");
+      desc.add(Constant("DRICH_num_pdus", std::to_string(ipdu)));
+    else if (ipdu != desc.constant<int>("DRICH_num_pdus"))
+      printout(WARNING, "DRICH_geo", "number of PDUs is not the same for each sector");
 
   } // END SECTOR LOOP //////////////////////////
 
