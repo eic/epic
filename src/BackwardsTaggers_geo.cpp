@@ -330,7 +330,7 @@ static void Make_Tagger(Detector& desc, xml_coll_t& mod, Assembly& env, DetEleme
     Tagger_Air = Volume("AirVolume", Box_Air, Air);
     Tagger_Air.setVisAttributes(desc.visAttributes("BackwardsAir"));
 
-    Box    Foil_Box(tag_w/cos(layerRot), tag_h, layerThickness / 2);
+    Box    Foil_Box(tag_w/cos(layerRot)-0.5*layerThickness*tan(layerRot), tag_h, layerThickness / 2);
     Volume layVol("FoilVolume", Foil_Box, FoilMaterial);
     layVol.setVisAttributes(desc.visAttributes(layerVis));
 
