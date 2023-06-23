@@ -440,13 +440,12 @@ Examples:
 
     <comment> Global PID regions with suballocations for TOF and RICH detectors </comment>
     <constant name="ForwardPIDRegion_zmin"        value="CentralTrackingRegionP_zmax" />
-    <constant name="ForwardPIDRegion_length"      value="135.0*cm" />
-    <constant name="ForwardPIDRegion_rmax"        value="185.0*cm" />
-    <constant name="ForwardPIDRegion_rmax_service" value="5*cm" />
+    <constant name="ForwardPIDRegion_length"      value="142.0*cm" />
+    <constant name="ForwardPIDRegion_rmax"        value="180.0*cm" />
 
     <comment> Forward TOF region currenlty empty for future upgrades </comment>
     <constant name="ForwardTOFRegion_zmin"        value="ForwardPIDRegion_zmin" />
-    <constant name="ForwardTOFRegion_length"      value="15.0*cm" />
+    <constant name="ForwardTOFRegion_length"      value="20.0*cm" />
     <constant name="ForwardTOFRegion_tan"         value="CentralTrackingRegionP_tan" />
     <constant name="ForwardTOFRegion_minR"            value="8*cm" />
     <constant name="ForwardTOFRegion_maxR"            value="67*cm" />
@@ -455,7 +454,7 @@ Examples:
 
     <comment> Forward RICH region </comment>
     <constant name="ForwardRICHRegion_zmin"       value="ForwardTOFRegion_zmin + ForwardTOFRegion_length" />
-    <constant name="ForwardRICHRegion_length"     value="ForwardPIDRegion_length - ForwardTOFRegion_length+2*cm" />
+    <constant name="ForwardRICHRegion_length"     value="ForwardPIDRegion_length - ForwardTOFRegion_length" />
     <comment> tangent of the opening angle at the front and back of the RICH </comment>
     <constant name="ForwardRICHRegion_tan1"        value="CentralTrackingRegionP_tan * 0.88" />
     <constant name="ForwardRICHRegion_tan2"        value="Eta3_6_tan * 0.89" />
@@ -499,13 +498,12 @@ Examples:
 Service gaps in FW direction (before endcapP ECAL) and BW direction (before endcapN HCAL)
     </documentation>
     <constant name="ForwardInnerEndcapRegionExtraSpace_length" value="4.6*cm"/>
-    <constant name="ForwardServiceGap_length"     value="10.0*cm"/>
+    <constant name="ForwardServiceGap_length"     value="3.0*cm"/>
     <constant name="ForwardServiceGap_zmin"       value="ForwardPIDRegion_zmin + ForwardInnerEndcapRegion_length + ForwardInnerEndcapRegionExtraSpace_length"/>
     <constant name="ForwardServiceGap_zmax"       value="ForwardServiceGap_zmin + ForwardServiceGap_length"/>
 
     <comment> Radial service gap between dRICH and HcalBarrel </comment>
-    <constant name="ForwardServiceGap_thickness"  value="10.0*cm"/>
-    <constant name="ForwardRICHServiceGap"        value="5.0*cm"/>
+    <constant name="ForwardServiceGap_thickness"  value="15.0*cm"/>
     <constant name="ForwardServiceGap_rmin"       value="ForwardPIDRegion_rmax"/>
     <constant name="ForwardServiceGap_rmax"       value="ForwardServiceGap_rmin + ForwardServiceGap_thickness"/>
 

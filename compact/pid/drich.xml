@@ -6,7 +6,7 @@
 <define>
 <!-- vessel (=snout+tank) geometry -->
 <constant name="DRICH_length"             value="ForwardRICHRegion_length"/>  <!-- overall vessel length -->
-<constant name="DRICH_zmin"               value="ForwardRICHRegion_zmin + ForwardRICHServiceGap"/>
+<constant name="DRICH_zmin"               value="ForwardRICHRegion_zmin"/>
 <constant name="DRICH_zmax"               value="DRICH_zmin + DRICH_length"/>
 <constant name="DRICH_rmin0"              value="10*cm"/>  <!-- DRICH_zmin * ForwardRICHRegion_tan1 changed to diameter 20; bore radius at dRICH entrance -->
 <constant name="DRICH_rmin1"              value="17.6*cm"/>  <!-- DRICH_zmax * ForwardRICHRegion_tan2 changed to diameter 35.2; bore radius at dRICH exit -->
@@ -19,7 +19,7 @@
 <constant name="DRICH_snout_length"       value="20.0*cm"/>
 <constant name="DRICH_rmax1"              value="DRICH_rmax0 + DRICH_snout_length * (tan(0.200+atan(DRICH_rmax0/DRICH_zmin))) "/>  <!--extra 0.200 takes into account the saturated cone of light from aerogel-->
 <!-- tank geometry: cylinder, holding the majority of detector components -->
-<constant name="DRICH_rmax2"              value="ForwardPIDRegion_rmax - ForwardPIDRegion_rmax_service"/>  <!-- cylinder radius -->
+<constant name="DRICH_rmax2"              value="ForwardPIDRegion_rmax"/>  <!-- cylinder radius -->
 <!-- aerogel+filter geometry -->
 <constant name="DRICH_aerogel_thickness"  value="4.0*cm"/>  <!-- aerogel thickness -->
 <constant name="DRICH_airgap_thickness"   value="0.01*mm"/> <!-- air gap between aerogel and filter -->
@@ -217,7 +217,7 @@
 <sphericalpatch
   phiw="30*degree"
   rmin="111.0*cm"
-  rmax="179.0*cm - ForwardPIDRegion_rmax_service"
+  rmax="174.0*cm"
   zmin="DRICH_snout_length + 3.0*cm"
   />
 
