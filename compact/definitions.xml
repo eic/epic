@@ -497,6 +497,8 @@ Examples:
 
 Service gaps in FW direction (before endcapP ECAL) and BW direction (before endcapN HCAL)
     </documentation>
+
+    <comment> Horizontal service gap between dRICH and EcalEndcapP </comment>
     <constant name="ForwardInnerEndcapRegionExtraSpace_length" value="4.6*cm"/>
     <constant name="ForwardServiceGap_length"     value="3.0*cm"/>
     <constant name="ForwardServiceGap_zmin"       value="ForwardPIDRegion_zmin + ForwardInnerEndcapRegion_length + ForwardInnerEndcapRegionExtraSpace_length"/>
@@ -553,7 +555,7 @@ Service gaps in FW direction (before endcapP ECAL) and BW direction (before endc
     <constant name="EcalBarrel_rmin"                value="CentralTrackingRegion_rmax + BarrelPIDRegion_thickness + BarrelExtraSpace_thickness"/>
     <constant name="EcalBarrel_inner_margin"        value="2*cm"/>
     <constant name="EcalBarrel_rmax"                value="EcalBarrel_rmin + EcalBarrelRegion_thickness"/>
-    <constant name="EcalBarrelForward_zmax"         value="ForwardRICHRegion_zmin"/> <!-- FIXME currently unable to accommodate actual position -->
+    <constant name="EcalBarrelForward_zmax"         value="195.0*cm"/> <!-- FIXME currently unable to accommodate actual position -->
     <constant name="EcalBarrelBackward_zmax"        value="BackwardServiceGap_zmax"/> <!-- FIXME should be -389 cm -->
     <constant name="EcalBarrel_length"              value="EcalBarrelForward_zmax + EcalBarrelBackward_zmax"/>
     <constant name="EcalBarrel_offset"              value="(EcalBarrelForward_zmax - EcalBarrelBackward_zmax)/2.0"/>
@@ -609,7 +611,7 @@ Service gaps in FW direction (before endcapP ECAL) and BW direction (before endc
     <constant name="HcalBarrel_thickness" value="93.0*cm"/> <!-- ref: as-built CAD, plus a little room for the longer half-plates -->
     <constant name="HcalBarrel_rmin"      value="Solenoid_rmax"/>
     <constant name="HcalBarrel_rmax"      value="HcalBarrel_rmin + HcalBarrel_thickness"/>
-    <constant name="HcalBarrelForward_zmax"  value="ForwardServiceGap_zmin"/>
+    <constant name="HcalBarrelForward_zmax"  value="ForwardServiceGap_zmax - 10.0*cm"/>
     <constant name="HcalBarrelBackward_zmax" value="BackwardServiceGap_zmin"/>
     <constant name="HcalBarrel_length"    value="HcalBarrelForward_zmax + HcalBarrelBackward_zmax"/>
     <constant name="HcalBarrel_offset"    value="(HcalBarrelForward_zmax - HcalBarrelBackward_zmax)/2"/>
