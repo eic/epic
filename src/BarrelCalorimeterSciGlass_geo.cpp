@@ -240,7 +240,7 @@ static Ref_t create_detector(Detector& lcdd, xml_h handle, SensitiveDetector sen
       const double alpha1 = 0.;
       const double alpha2 = 0.;
 
-      for (unsigned int tower = 0; tower < number-1; tower++, tower_id += dir_sign) {
+      for (unsigned int tower = 0; tower < number; tower++, tower_id += dir_sign) {
         // see https://github.com/eic/epic/blob/main/doc/sciglass_tower_stacking.svg
         beta += flare_angle_polar_prev + flare_angle_polar;
         const double gamma = M_PI_2 - flare_angle_polar_prev - beta_prev;
@@ -249,16 +249,16 @@ static Ref_t create_detector(Detector& lcdd, xml_h handle, SensitiveDetector sen
         dz += (tower_gap_longitudinal / cos(flare_angle_polar) + 2 * y1) * sin(M_PI - gamma - beta) / sin(gamma);
         const string t_name = _toString(row, "_row%d") + _toString(tower_id, "_tower%d");
         sector_v
-	  .placeVolume(
-		       Volume{t_name, Trap{z, theta, phi, y1, x1, x2, alpha1, y2, x3, x4, alpha2}, tower_mat},
-		       Transform3D{RotationZ{-M_PI_2 + row_phi}} * Transform3D{Position{0. * cm, row_rmin, dir_sign * dz}} *
-		       Transform3D{RotationX{-M_PI / 2 + dir_sign * beta}} * Transform3D{Position{0, dir_sign * y1, z}})
-	  .addPhysVolID("row", row)
-	  .addPhysVolID("tower", tower_id)
-	  .volume()
-	  .setSensitiveDetector(sens)
-	  .setVisAttributes(lcdd.visAttributes(family_dim_handle.visStr()));
-	
+            .placeVolume(
+                Volume{t_name, Trap{z, theta, phi, y1, x1, x2, alpha1, y2, x3, x4, alpha2}, tower_mat},
+                Transform3D{RotationZ{-M_PI_2 + row_phi}} * Transform3D{Position{0. * cm, row_rmin, dir_sign * dz}} *
+                    Transform3D{RotationX{-M_PI / 2 + dir_sign * beta}} * Transform3D{Position{0, dir_sign * y1, z}})
+            .addPhysVolID("row", row)
+            .addPhysVolID("tower", tower_id)
+            .volume()
+            .setSensitiveDetector(sens)
+            .setVisAttributes(lcdd.visAttributes(family_dim_handle.visStr()));
+
         if (sectors_handle.hasChild(_Unicode(carbon_fiber_support))) {
           xml_comp_t carbon_fiber_support_handle = sectors_handle.child(_Unicode(carbon_fiber_support));
           xml_comp_t cut_out_handle              = carbon_fiber_support_handle.child(_Unicode(cut_out));

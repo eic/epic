@@ -76,22 +76,22 @@
           </comment>
 
           <family dir_sign="+1" x1="1.925 * cm" y1="2 * cm" z_length="40.0 * cm" number="10" flare_angle_polar="1.16 * degree"  flare_angle_at_face="0.3059 * degree" vis="family1" />
-          <!family dir_sign="+1" x1="1.925 * cm" y1="2 * cm" z_length="40.0 * cm" number="6"  flare_angle_polar="1.045 * degree" flare_angle_at_face="0.7058 * degree" vis="family2" />
-          <!family dir_sign="+1" x1="1.925 * cm" y1="2 * cm" z_length="45.5 * cm" number="5"  flare_angle_polar="0.929 * degree" flare_angle_at_face="0.8892 * degree" vis="family3" />
-          <!family dir_sign="+1" x1="1.925 * cm" y1="2 * cm" z_length="45.5 * cm" number="5"  flare_angle_polar="0.82 * degree"  flare_angle_at_face="1.0258 * degree" vis="family4" />
-          <!family dir_sign="+1" x1="1.925 * cm" y1="2 * cm" z_length="45.5 * cm" number="3"  flare_angle_polar="0.70 * degree"  flare_angle_at_face="1.126 * degree"  vis="family5" />
-          <!family dir_sign="-1" x1="1.925 * cm" y1="2 * cm" z_length="40.0 * cm" number="10" flare_angle_polar="1.16 * degree"  flare_angle_at_face="0.3059 * degree" vis="family1" />
-          <!family dir_sign="-1" x1="1.925 * cm" y1="2 * cm" z_length="40.0 * cm" number="6"  flare_angle_polar="1.045 * degree" flare_angle_at_face="0.7058 * degree" vis="family2" />
-          <!family dir_sign="-1" x1="1.925 * cm" y1="2 * cm" z_length="45.5 * cm" number="5"  flare_angle_polar="0.929 * degree" flare_angle_at_face="0.8892 * degree" vis="family3" />
-          <!family dir_sign="-1" x1="1.925 * cm" y1="2 * cm" z_length="45.5 * cm" number="5"  flare_angle_polar="0.82 * degree"  flare_angle_at_face="1.0258 * degree" vis="family4" />
-          <!family dir_sign="-1" x1="1.925 * cm" y1="2 * cm" z_length="45.5 * cm" number="5"  flare_angle_polar="0.70 * degree"  flare_angle_at_face="1.126 * degree"  vis="family5" />
-          <!family dir_sign="-1" x1="1.925 * cm" y1="2 * cm" z_length="45.5 * cm" number="6"  flare_angle_polar="0.586 * degree" flare_angle_at_face="1.1914 * degree" vis="family6" />
+          <family dir_sign="+1" x1="1.925 * cm" y1="2 * cm" z_length="40.0 * cm" number="6"  flare_angle_polar="1.045 * degree" flare_angle_at_face="0.7058 * degree" vis="family2" />
+          <family dir_sign="+1" x1="1.925 * cm" y1="2 * cm" z_length="45.5 * cm" number="5"  flare_angle_polar="0.929 * degree" flare_angle_at_face="0.8892 * degree" vis="family3" />
+          <family dir_sign="+1" x1="1.925 * cm" y1="2 * cm" z_length="45.5 * cm" number="5"  flare_angle_polar="0.82 * degree"  flare_angle_at_face="1.0258 * degree" vis="family4" />
+          <family dir_sign="+1" x1="1.925 * cm" y1="2 * cm" z_length="45.5 * cm" number="3"  flare_angle_polar="0.70 * degree"  flare_angle_at_face="1.126 * degree"  vis="family5" />
+          <family dir_sign="-1" x1="1.925 * cm" y1="2 * cm" z_length="40.0 * cm" number="10" flare_angle_polar="1.16 * degree"  flare_angle_at_face="0.3059 * degree" vis="family1" />
+          <family dir_sign="-1" x1="1.925 * cm" y1="2 * cm" z_length="40.0 * cm" number="6"  flare_angle_polar="1.045 * degree" flare_angle_at_face="0.7058 * degree" vis="family2" />
+          <family dir_sign="-1" x1="1.925 * cm" y1="2 * cm" z_length="45.5 * cm" number="5"  flare_angle_polar="0.929 * degree" flare_angle_at_face="0.8892 * degree" vis="family3" />
+          <family dir_sign="-1" x1="1.925 * cm" y1="2 * cm" z_length="45.5 * cm" number="5"  flare_angle_polar="0.82 * degree"  flare_angle_at_face="1.0258 * degree" vis="family4" />
+          <family dir_sign="-1" x1="1.925 * cm" y1="2 * cm" z_length="45.5 * cm" number="5"  flare_angle_polar="0.70 * degree"  flare_angle_at_face="1.126 * degree"  vis="family5" />
+          <family dir_sign="-1" x1="1.925 * cm" y1="2 * cm" z_length="45.5 * cm" number="6"  flare_angle_polar="0.586 * degree" flare_angle_at_face="1.1914 * degree" vis="family6" />
           <comment>
             Family 7 is not based on any design in particular. The polar
             flaring angle was adjusted according to the trend to avoid overlaps
             and provide gaps needed to place the supports.
           </comment>
-          <!family dir_sign="-1" x1="1.925 * cm" y1="2 * cm" z_length="45.5 * cm" number="2"  flare_angle_polar="0.46 * degree" flare_angle_at_face="1.1914 * degree" vis="family7" />
+          <family dir_sign="-1" x1="1.925 * cm" y1="2 * cm" z_length="45.5 * cm" number="2"  flare_angle_polar="0.46 * degree" flare_angle_at_face="1.1914 * degree" vis="family7" />
         </rows>
 
         <documentation>
