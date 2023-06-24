@@ -442,6 +442,8 @@ Examples:
     <constant name="ForwardPIDRegion_zmin"        value="CentralTrackingRegionP_zmax" />
     <constant name="ForwardPIDRegion_length"      value="135.0*cm" />
     <constant name="ForwardPIDRegion_rmax"        value="185.0*cm" />
+    <constant name="BarrelTOF_zmin"               value="120.0*cm"/>
+    <constant name="BarrelTOF_zmax"               value="120.0*cm"/>
 
     <comment> Forward TOF region currenlty empty for future upgrades </comment>
     <constant name="ForwardTOFRegion_zmin"        value="ForwardPIDRegion_zmin" />
