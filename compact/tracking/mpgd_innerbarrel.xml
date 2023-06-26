@@ -68,8 +68,9 @@
     <constant name="MMDriftKapton_thickness"                value="250*um"/>
     <constant name="MMDriftCuGround_thickness"              value="0.41*um"/>
 
-    <comment> FIXME: No support material is here, so fudge factor used to bring material budget to ~0.5% for barrel </comment>
-    <constant name="MMFudgeInnerMPGDBarrel_thickness"                      value="570*um"/>
+    <comment> FIXME: No support material is here, so fudge factor used to bring material budget to ~1% for barrel </comment>
+	    <!--<constant name="MMFudgeInnerMPGDBarrel_thickness"                      value="570*um"/>-->
+    <constant name="MMFudgeInnerMPGDBarrel_thickness"                      value="1600*um"/>
 
 
     <comment>
