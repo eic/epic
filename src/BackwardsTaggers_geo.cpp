@@ -98,7 +98,7 @@ static Ref_t create_detector(Detector& desc, xml_h e, SensitiveDetector sens)
   // Central vacuum box
   //Tube Extended_Vacuum_Box(0,Width,Thickness);
   Box Extended_Vacuum_Box(Width, Height, Thickness);
-  
+
   Solid Wall_Box   = Extended_Beam_Box;
   Solid Vacuum_Box = Extended_Vacuum_Box;
 
@@ -152,13 +152,13 @@ static Ref_t create_detector(Detector& desc, xml_h e, SensitiveDetector sens)
     // Angle in relation to the main beam
     auto theta      = thetamin;
 
-    
+
     auto offsetx    = -(box_w - wall) * (cos(theta));
     auto offsetz    = (box_w - wall) * (sin(theta));
     auto vacoffsetx = -vac_w * (cos(theta));
     auto vacoffsetz = vac_w * (sin(theta));
     auto l          = (tagoff) / (sin(theta)) + tagboxL;
-    
+
     auto tagoffsetx = vacoffsetx - (l) * sin(theta);
     auto tagoffsetz = vacoffsetz - (l) * cos(theta);
     //     auto tagoffsetx = vacoffsetx-(l+tagboxL/2)*sin(theta);
@@ -194,7 +194,7 @@ static Ref_t create_detector(Detector& desc, xml_h e, SensitiveDetector sens)
     }
 
     Assembly TaggerAssembly("Tagger_module_assembly");
-    
+
     PlacedVolume pv_mod2 = mother.placeVolume(
         TaggerAssembly,
         Transform3D(rotate, Position(tagoffsetx, 0,
@@ -203,7 +203,7 @@ static Ref_t create_detector(Detector& desc, xml_h e, SensitiveDetector sens)
     pv_mod2.addPhysVolID("module", moduleID);
     moddet.setPlacement(pv_mod2);
 
-    dd4hep::xml::setDetectorTypeFlag(mod, moddet);  
+    dd4hep::xml::setDetectorTypeFlag(mod, moddet);
 
     Make_Tagger(desc, mod, TaggerAssembly, moddet, sens);
 
@@ -227,7 +227,7 @@ static Ref_t create_detector(Detector& desc, xml_h e, SensitiveDetector sens)
 //    double angle = -pi/4;
 
     Box Entry_Beam_Box(ED_X + wall, ED_Y + wall, ED_Z);
-    Box Entry_Vacuum_Box(ED_X, ED_Y, ED_Z - wall);    
+    Box Entry_Vacuum_Box(ED_X, ED_Y, ED_Z - wall);
     Tube Lumi_Exit(0, Lumi_R, ED_Z);
 
     // CutTube Entry_Beam_Box  (ED_X, ED_X + wall, ED_Z,        0,2*pi, sin(angle),0,cos(angle), 0,0,1);
@@ -399,14 +399,14 @@ static void Make_Tagger(Detector& desc, xml_coll_t& mod, Assembly& env, DetEleme
     Volume layVol("Tagger_tracker_layer", Layer_Box, Silicon);
     layVol.setSensitiveDetector(sens);
     layVol.setVisAttributes(desc.visAttributes(layerVis));
-  
+
 
     PlacedVolume pv_layer = mother.placeVolume(layVol, Transform3D(rotate, Position(0, 0, MotherThickness - layerZ + layerThickness / 2)));
     pv_layer.addPhysVolID("layer", layerID);
 
     DetElement laydet(modElement,"layerName"+std::to_string(layerID), layerID);
     laydet.setPlacement(pv_layer);
- 
+
 
   }
 }
