@@ -443,19 +443,7 @@ Examples:
     <constant name="ForwardPIDRegion_length"      value="135.0*cm" />
     <constant name="ForwardPIDRegion_rmax"        value="185.0*cm" />
     <constant name="ForwardTOFRegion_length"      value="15.0*cm" />
-<!--
-    <constant name="BarrelTOF_zmin"               value="120.0*cm"/>
-    <constant name="BarrelTOF_zmax"               value="120.0*cm"/>
-
-    <comment> Forward TOF region currenlty empty for future upgrades </comment>
-    <constant name="ForwardTOFRegion_zmin"        value="ForwardPIDRegion_zmin" />
-    <constant name="ForwardTOFRegion_length"      value="15.0*cm" />
-    <constant name="ForwardTOFRegion_tan"         value="CentralTrackingRegionP_tan" />
-    <constant name="ForwardTOFRegion_minR"            value="8*cm" />
-    <constant name="ForwardTOFRegion_maxR"            value="67*cm" />
-    <constant name="ForwardTOF_xOffset"         value="-2.75*cm" />
-    <constant name="ForwardTOF_det_height"      value="2.0*cm" />
--->
+    
     <comment> Forward RICH region </comment>
     <constant name="ForwardRICHRegion_zmin"       value="ForwardPIDRegion_zmin + ForwardTOFRegion_length" />
     <constant name="ForwardRICHRegion_length"     value="ForwardPIDRegion_length - ForwardTOFRegion_length" />

@@ -30,15 +30,11 @@
     <constant name="InnerMPGDBarrel_dz"              value="8.0*cm"/>
     <comment> barrel length: 2R/tan(angle) - dz </comment>
 
-    <comment> Position in center of space behind DIRC </comment>
-    <constant name="MPGDDIRC_rmin"            value="DIRC_rmin + DIRC_thickness"/>
-    <comment> barrel asymmetryc between forward and backward lengths </comment>
-
     <comment> Main parameters for Barrel TOF layers </comment>
     <comment> Barrel TOF region </comment>
     <constant name="BarrelTOF_zmin"       value="120.0*cm"/>
     <constant name="BarrelTOF_zmax"       value="120.0*cm"/>
-
+    
     <comment> Forward TOF region  </comment>
     <constant name="ForwardTOFRegion_zmin"        value="ForwardPIDRegion_zmin" />
     <constant name="ForwardTOFRegion_tan"         value="CentralTrackingRegionP_tan" />
@@ -94,12 +90,30 @@
     <constant name="TrackerEndcapNDisk2_zmin"        value="65*cm" />
     <constant name="TrackerEndcapNDisk2_rmin"        value="Beampipe_rmax + Beampipe_bakeout_buffer"   />
     <constant name="TrackerEndcapNDisk2_rmax"        value="TrackerEndcapPDisk2_rmax" />
-    <constant name="TrackerEndcapNDisk3_zmin"        value="90*cm" />
+    <constant name="TrackerEndcapNDisk3_zmin"        value="85*cm" />
     <constant name="TrackerEndcapNDisk3_rmin"        value="34.244*mm + Beampipe_bakeout_buffer + 0.817*mm" />
     <constant name="TrackerEndcapNDisk3_rmax"        value="TrackerEndcapPDisk3_rmax" />
-    <constant name="TrackerEndcapNDisk4_zmin"        value="115*cm" />
+    <constant name="TrackerEndcapNDisk4_zmin"        value="105*cm" />
     <constant name="TrackerEndcapNDisk4_rmin"        value="38.043*mm + Beampipe_bakeout_buffer + 3.310*mm" />
     <constant name="TrackerEndcapNDisk4_rmax"        value="TrackerEndcapPDisk4_rmax" />
+
+    <comment> Main paratmers for MPGD endcap disks, offset here is the distance between disks </comment>
+    <constant name="ForwardMPGD_zmin"             value="148*cm"/>
+    <constant name="ForwardMPGDMod_offset"        value="13.0*cm"/>
+    <constant name="ForwardMPGDMod1_rmin"         value="7.014*cm" />
+    <constant name="ForwardMPGDMod2_rmin"         value="7.014*cm"/>
+    <constant name="ForwardMPGDMod1_rmax"         value="50*cm" />
+    <constant name="ForwardMPGDMod2_rmax"         value="50*cm" />
+
+    <constant name="BackwardMPGD_zmin"             value="110*cm"/>
+    <constant name="BackwardMPGDMod_offset"        value="10.0*cm"/>
+    <constant name="BackwardMPGDMod1_rmin"         value="4.653*cm" />
+    <constant name="BackwardMPGDMod2_rmin"         value="4.635*cm" />
+    <constant name="BackwardMPGDMod1_rmax"         value="50.0*cm" />
+    <constant name="BackwardMPGDMod2_rmax"         value="50.0*cm" />
+
+
+
   </define>
   <detectors>
     <detector id="VertexSubAssembly_0_ID"
@@ -145,12 +159,14 @@
       <composite name="BarrelTOF"/>
     </detector>
     <detector id="TrackerSubAssembly_5_ID"
-        name="OuterMPGDSubAssembly"
-        type="DD4hep_SubdetectorAssembly"
-        vis="TrackerSubAssemblyVis">
-        <composite name="MPGDDIRC_0"/>
+      name="EndcapMPGDSubAssembly"
+      type="DD4hep_SubdetectorAssembly"
+      vis="TrackerSubAssemblyVis">
+      <composite name="ForwardMPGD"/>
+      <composite name="BackwardMPGD"/>
+    </detector>  
     <detector id="TrackerSubAssembly_6_ID"
-      name="EndcapTOFSubSubAssembly"
+      name="EndcapTOFSubAssembly"
       type="DD4hep_SubdetectorAssembly"
       vis="TrackerSubAssemblyVis">
       <composite name="ForwardTOF"/>

@@ -1,0 +1,157 @@
+<!-- SPDX-License-Identifier: LGPL-3.0-or-later -->
+<!-- Copyright (C) 2022 Nicolas Schmidt -->
+
+<lccdd>
+  <define>
+    <comment>
+      --------------------------
+      Backward MPGD Parameters
+      --------------------------
+    </comment>
+    <comment> Backward MPGD position </comment>
+    <constant name="BackwardMPGD_nlayers"             value="2"/>
+    <constant name="BackwardMPGD_AllowedSpace"        value="2.5*cm"/>
+
+    <comment> Parameters for the endcap MPGDs </comment>
+    <constant name="BackwardMPGDEndcapMod_count"             value="48" />
+    <constant name="BackwardMPGDEndcapMod_dz"                value="0" />
+    <constant name="BackwardMPGDEndcapMod_overlap"           value="0" />
+
+    <comment> Layer definitions around the sensor for the endcap MPGDs </comment>
+    <constant name="BackwardMPGDDriftGap_thickness"           value="3.0*mm" />
+    <constant name="BackwardMPGDWindow_thickness"             value="50*um"/>
+    <constant name="BackwardMPGDWindowGap_thickness"          value="2*mm"/>
+    <constant name="BackwardMPGDFoilCu_thickness"             value="5*um"/>
+    <constant name="BackwardMPGDReadOutElectrode_thickness"   value="10*um"/>
+    <constant name="BackwardMPGDFoilKapton_thickness"         value="50*um"/>
+    <constant name="BackwardMPGDReadOutNomex_thickness"       value="50*um"/>
+    <constant name="BackwardMPGDReadOutKapton_thickness"      value="50*um"/>
+    <constant name="BackwardMPGDPCB_thickness"                value="1.5*mm"/>
+  </define>
+
+  <comment>
+    Actual detector implementation.
+  </comment>
+  <define>
+    <constant name="BackwardMPGDEndcapMod_angle"         value="360.0*degree/BackwardMPGDEndcapMod_count*(1.0 + BackwardMPGDEndcapMod_overlap)" />
+    <comment> 1 um padding to not have layer and module touch (ACTS requirement) </comment>
+    <constant name="BackwardMPGDLayerPad"                    value="0*um"/>
+    <comment> Detector thickness </comment>
+    <constant name="BackwardMPGDCathode_thickness" value="BackwardMPGDFoilKapton_thickness + BackwardMPGDFoilCu_thickness"/>
+    <constant name="BackwardMPGDRWell_thickness"   value="BackwardMPGDFoilKapton_thickness + BackwardMPGDFoilCu_thickness"/>
+    <constant name="BackwardMPGDReadOut_thickness"  value="BackwardMPGDReadOutNomex_thickness + BackwardMPGDReadOutElectrode_thickness + BackwardMPGDReadOutKapton_thickness "/>
+    <comment>@TODO: have space for 3 frames (2mm + 2mm + 3mm) need to add frame material </comment>
+    <constant name="BackwardMPGDFrame_thickness"   value="2*BackwardMPGDWindowGap_thickness + BackwardMPGDDriftGap_thickness"/>
+    <constant name="BackwardMPGDEndcapMod_thickness"  value="BackwardMPGDCathode_thickness + BackwardMPGDRWell_thickness + BackwardMPGDReadOut_thickness + BackwardMPGDFrame_thickness"/>
+    <constant name="BackwardMPGDEndcapLayer_thickness"   value="BackwardMPGDEndcapMod_thickness + 2 * BackwardMPGDEndcapMod_dz + BackwardMPGDLayerPad" />
+   
+    <constant name="BackwardMPGDMod1_zmin"         value="BackwardMPGD_zmin" />
+    <constant name="BackwardMPGDMod2_zmin"         value="BackwardMPGD_zmin + BackwardMPGDMod_offset" />
+    <constant name="BackwardMPGDLayer1_rmin"       value="BackwardMPGDMod1_rmin - BackwardMPGDLayerPad" />
+    <constant name="BackwardMPGDLayer2_rmin"       value="BackwardMPGDMod2_rmin - BackwardMPGDLayerPad" />
+    <constant name="BackwardMPGDLayer1_rmax"       value="BackwardMPGDMod1_rmax + BackwardMPGDLayerPad" />
+    <constant name="BackwardMPGDLayer2_rmax"       value="BackwardMPGDMod2_rmax + BackwardMPGDLayerPad" />
+    <constant name="BackwardMPGDLayer1_zmin"       value="BackwardMPGDMod1_zmin - BackwardMPGDEndcapLayer_thickness / 2" />
+    <constant name="BackwardMPGDLayer2_zmin"       value="BackwardMPGDMod2_zmin - BackwardMPGDEndcapLayer_thickness / 2" />
+
+    <constant name="BackwardMPGDMod1_x1"           value="2 * BackwardMPGDMod1_rmin * tan(BackwardMPGDEndcapMod_angle/2)" />
+    <constant name="BackwardMPGDMod1_x2"           value="2 * BackwardMPGDMod1_rmax * sin(BackwardMPGDEndcapMod_angle/2)" />
+    <constant name="BackwardMPGDMod1_y"            value="BackwardMPGDMod1_rmax * cos(BackwardMPGDEndcapMod_angle/2) - BackwardMPGDMod1_rmin" />
+    <constant name="BackwardMPGDMod2_x1"           value="2 * BackwardMPGDMod2_rmin * tan(BackwardMPGDEndcapMod_angle/2)" />
+    <constant name="BackwardMPGDMod2_x2"           value="2 * BackwardMPGDMod2_rmax * sin(BackwardMPGDEndcapMod_angle/2)" />
+    <constant name="BackwardMPGDMod2_y"            value="BackwardMPGDMod2_rmax * cos(BackwardMPGDEndcapMod_angle/2) - BackwardMPGDMod2_rmin" />
+  </define>
+
+  <detectors>
+      <detector
+        id="TrackerEndcapN_4_ID"
+        name="BackwardMPGD"
+        type="epic_TrapEndcapTracker"
+        actsType="endcap"
+        readout="BackwardMPGDEndcapHits"
+        vis="MPGDVis"
+        reflect="true">
+        <type_flags type="DetType_TRACKER + DetType_ENDCAP"/>
+	<module name="BackwardModule1" vis="MPGDModuleVis">
+	  <trd x1="BackwardMPGDMod1_x1/2.0" x2="BackwardMPGDMod1_x2/2.0" z="BackwardMPGDMod1_y/2"/>
+	  <comment> Window and drift region </comment>
+          <module_component thickness="BackwardMPGDDriftGap_thickness" material="Ar" sensitive="true" vis="MPGDVis"/>
+          <module_component thickness="BackwardMPGDWindowGap_thickness" material="Ar" sensitive="false" vis="MPGDVis"/>
+	  <module_component thickness="BackwardMPGDWindow_thickness" material="Kapton" sensitive="false" vis="MPGDVis"/>
+	  <comment> HV Cathode </comment>
+          <module_component name="Cathode Kapton" thickness="BackwardMPGDFoilKapton_thickness" material="Kapton" sensitive="false" vis="MPGDVis"/>
+	  <module_component name="Cathode Cu" thickness="BackwardMPGDFoilCu_thickness" material="Copper" sensitive="false" vis="MPGDVis"/>
+	  <comment> Amplification foil (urwell) </comment>
+          <module_component name="RWell Cu" thickness="BackwardMPGDFoilCu_thickness" material="Copper" sensitive="false" vis="MPGDVis"/>
+          <module_component name="RWell Kapton" thickness="BackwardMPGDFoilKapton_thickness" material="Kapton" sensitive="false" vis="MPGDVis"/>
+	  <comment> Readout/Backboard </comment>
+          <module_component name="Readout Nomex" thickness="BackwardMPGDReadOutNomex_thickness" material="Nomex" sensitive="false" vis="MPGDVis"/>
+          <module_component name="Readout Electrodes" thickness="BackwardMPGDReadOutElectrode_thickness" material="Copper" sensitive="false" vis="MPGDVis"/>
+          <module_component name="Readout Kapton" thickness="BackwardMPGDReadOutKapton_thickness" material="Kapton" sensitive="false" vis="MPGDVis"/>
+          <module_component name="Readout PCB" thickness="BackwardMPGDPCB_thickness" material="Fr4" sensitive="false" vis="MPGDVis"/>
+        </module>
+
+        <module name="BackwardModule2" vis="MPGDModuleVis">
+          <trd x1="BackwardMPGDMod2_x1/2.0" x2="BackwardMPGDMod2_x2/2.0" z="BackwardMPGDMod2_y/2"/>
+	  <comment> Window and drift region </comment>
+          <module_component thickness="BackwardMPGDDriftGap_thickness" material="Ar" sensitive="true" vis="MPGDVis"/>
+          <module_component thickness="BackwardMPGDWindowGap_thickness" material="Ar" sensitive="false" vis="MPGDVis"/>
+	  <module_component thickness="BackwardMPGDWindow_thickness" material="Kapton" sensitive="false" vis="MPGDVis"/>
+	  <comment> HV Cathode </comment>
+          <module_component name="Cathode Kapton" thickness="BackwardMPGDFoilKapton_thickness" material="Kapton" sensitive="false" vis="MPGDVis"/>
+	  <module_component name="Cathode Cu" thickness="BackwardMPGDFoilCu_thickness" material="Copper" sensitive="false" vis="MPGDVis"/>
+	  <comment> Amplification foil (urwell) </comment>
+          <module_component name="RWell Cu" thickness="BackwardMPGDFoilCu_thickness" material="Copper" sensitive="false" vis="MPGDVis"/>
+          <module_component name="RWell Kapton" thickness="BackwardMPGDFoilKapton_thickness" material="Kapton" sensitive="false" vis="MPGDVis"/>
+	  <comment> Readout/Backboard </comment>
+          <module_component name="Readout Nomex" thickness="BackwardMPGDReadOutNomex_thickness" material="Nomex" sensitive="false" vis="MPGDVis"/>
+          <module_component name="Readout Electrodes" thickness="BackwardMPGDReadOutElectrode_thickness" material="Copper" sensitive="false" vis="MPGDVis"/>
+          <module_component name="Readout Kapton" thickness="BackwardMPGDReadOutKapton_thickness" material="Kapton" sensitive="false" vis="MPGDVis"/>
+          <module_component name="Readout PCB" thickness="BackwardMPGDPCB_thickness" material="Fr4" sensitive="false" vis="MPGDVis"/>
+        </module>
+
+        <layer id="1">
+          <envelope  vis="MPGDLayerVis"
+            rmin="BackwardMPGDLayer1_rmin"
+            rmax="BackwardMPGDLayer1_rmax"
+            length="BackwardMPGDEndcapLayer_thickness"
+            zstart="BackwardMPGDLayer1_zmin" />
+          <ring
+            r="BackwardMPGDMod1_rmin + BackwardMPGDMod1_y/2.0"
+            zstart="0"
+            nmodules="BackwardMPGDEndcapMod_count"
+            dz="BackwardMPGDEndcapMod_dz"
+            module="BackwardModule1" />
+        </layer>
+
+        <layer id="2">
+          <envelope  vis="MPGDLayerVis"
+            rmin="BackwardMPGDLayer2_rmin"
+            rmax="BackwardMPGDLayer2_rmax"
+            length="BackwardMPGDEndcapLayer_thickness"
+            zstart="BackwardMPGDLayer2_zmin" />
+          <ring
+            r="BackwardMPGDMod2_rmin + BackwardMPGDMod2_y/2.0"
+            zstart="0"
+            nmodules="BackwardMPGDEndcapMod_count"
+            dz="BackwardMPGDEndcapMod_dz"
+            module="BackwardModule2" />
+        </layer>
+      </detector>
+  </detectors>
+
+  <plugins>
+    <plugin name="DD4hep_ParametersPlugin">
+      <argument value="BackwardMPGD"/>
+      <argument value="layer_pattern: str=layer\d"/>
+    </plugin>
+  </plugins>
+
+  <readouts>
+    <readout name="BackwardMPGDEndcapHits">
+      <segmentation type="CartesianGridXY" grid_size_x="sqrt(12)*150*um" grid_size_y="sqrt(12)*150*um" />
+      <id>system:8,layer:2,module:6,sensor:16,x:32:-16,y:-16</id>
+    </readout>
+  </readouts>
+
+</lccdd>
