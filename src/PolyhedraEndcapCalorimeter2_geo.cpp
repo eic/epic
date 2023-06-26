@@ -144,7 +144,7 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
       absorber.setMaterial(s_mat);
 
       if (x_slice.visStr() == "HcalAbsorberVis") {
-       
+
         PlacedVolume s_phv1 = l_vol.placeVolume(absorber, Position(-disksGap / 2, 0, sliceZ));
         s_phv1.addPhysVolID("absorberDisk", 0);
         PlacedVolume s_phv2 =
