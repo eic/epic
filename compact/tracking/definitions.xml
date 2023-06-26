@@ -36,8 +36,9 @@
 
     <comment> Main parameters for Barrel TOF layers </comment>
     <comment> Barrel TOF region </comment>
-    <constant name="BarrelTOF_zmin"       value="120.0*cm"/>
-    <constant name="BarrelTOF_zmax"       value="120.0*cm"/>
+    <constant name="BarrelTOF_zmin"          value="120.0*cm"/>
+    <constant name="BarrelTOF_zmax"          value="120.0*cm"/>
+    <constant name="BarrelTOF_radius_design" value="64.6*cm"/>
     
     <comment> Forward TOF region  </comment>
     <constant name="ForwardTOFRegion_zmin"        value="ForwardPIDRegion_zmin" />

@@ -23,7 +23,6 @@
     <constant name="SiBarrel2_rmin"                  value="42.0*cm"/>
     <constant name="SiBarrel_angle"                  value="TrackerPrimaryAngle"/>
     <constant name="SiBarrel_dz"                     value="2*cm"/>
-    <comment> barrel length: 2R/tan(angle) - dz </comment>
 
     <comment> Main parameters for the MPGD Barrel layers </comment>
     <constant name="InnerMPGDBarrel_rmin"            value="51.25*cm"/>
@@ -35,14 +34,15 @@
 
     <comment> Main parameters for Barrel TOF layers </comment>
     <comment> Barrel TOF region </comment>
-    <constant name="BarrelTOF_zmin"       value="120.0*cm"/>
-    <constant name="BarrelTOF_zmax"       value="120.0*cm"/>
-    
+    <constant name="BarrelTOF_zmin"          value="110.0*cm"/>
+    <constant name="BarrelTOF_zmax"          value="174.0*cm"/>
+    <constant name="BarrelTOF_radius_design" value="64.6*cm"/>
+
     <comment> Forward TOF region  </comment>
-    <constant name="ForwardTOFRegion_zmin"        value="ForwardPIDRegion_zmin" />
+    <constant name="ForwardTOFRegion_zmin"        value="174.0*cm" />
     <constant name="ForwardTOFRegion_tan"         value="CentralTrackingRegionP_tan" />
-    <constant name="ForwardTOFRegion_minR"        value="8*cm" />
-    <constant name="ForwardTOFRegion_maxR"        value="67*cm" />
+    <constant name="ForwardTOFRegion_minR"        value="7.014*cm" />
+    <constant name="ForwardTOFRegion_maxR"        value="50*cm" />
     <constant name="ForwardTOF_xOffset"           value="-2.75*cm" />
     <constant name="ForwardTOF_det_height"        value="2.0*cm" />
 

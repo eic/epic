@@ -1,6 +1,7 @@
 features:
   fields:
     marco:
+  beampipe:
   tracking:
     definitions_craterlake:
     vertex_barrel:

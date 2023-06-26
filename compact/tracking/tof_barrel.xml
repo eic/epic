@@ -27,7 +27,7 @@
     <constant name="BarrelTOF_Module_thickness"       value="BarrelTOF_Sensor_thickness+2*BarrelTOF_Hybrid_thickness+2*BarrelTOF_CFSkin_thickness+BarrelTOF_CFoam_thickness+BarrelTOF_CoolingTube_thickness+BarrelTOF_Coolant_thickness"/>
 
     <constant name="BarrelTOF_zOffset"                 value="0*cm"/>
-    <constant name="BarrelTOF_radius_design"           value="64.6*cm"/>
+	    <!--<constant name="BarrelTOF_radius_design"           value="64.6*cm"/>-->
     <constant name="BarrelTOF_Module_width_design"     value="56.0*mm"/>
     <constant name="BarrelTOF_Sensor_width_design"     value="32.0*mm"/>
     <constant name="BarrelTOF_CFoam_width_design"      value="BarrelTOF_Sensor_width_design-5.0*mm"/>
