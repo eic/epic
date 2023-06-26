@@ -1,0 +1,195 @@
+<!-- SPDX-License-Identifier: LGPL-3.0-or-later -->
+<!-- Copyright (C) 2022 Matt Posik, Wouter Deconinck -->
+
+<lccdd>
+<info name="mrwell_outerbarrel.xml"
+      title="Micro-Pattern Gas Detector Planar Barrel Layer"
+      author="mposik1983"
+      url="https://github.com/mposik1983"
+      status="development"
+      version="1.0"
+><comment/>
+</info>
+
+<define>
+    <comment> frames </comment>
+    <constant name="MPGDOuterBarrelFrame_width"            value="20*mm"/>
+    <constant name="MPGDOuterBarrelFrame_thickness"        value="7*mm"/>
+   
+    <comment> module constants </comment>
+    <constant name="MPGDOuterBarrelModule_count"                   value="12" />
+    <constant name="MPGDOuterBarrelModule_allowed_space"           value="2.5*cm"/>
+    <constant name="MPGDOuterBarrelModule_rmax"                    value="MPGDOuterBarrelModule_rmin + MPGDOuterBarrelModule_allowed_space/2.0" />
+    <constant name="MPGDOuterBarrelModule_width"                   value="34.0*cm"/>
+    <constant name="MPGDOuterBarrelModule_length"                  value="0.5*(MPGDOuterBarrelModule_zmin1 + MPGDOuterBarrelModule_zmin2 + 2*MPGDOuterBarrelModule_allowed_space)"/>
+    <constant name="MPGDOuterBarrelModule_offset"                  value="(MPGDOuterBarrelModule_zmin2 - MPGDOuterBarrelModule_zmin1)/2.0"/>
+    <constant name="MPGDOuterBarrelModule_roverlap"                value="1.2*cm"/>
+    <constant name="MPGDOuterBarrelModule_zoverlap"                value="2*MPGDOuterBarrelFrame_width"/>
+   
+
+    <comment> layer parameters </comment>
+    <constant name="MPGDOuterBarrelWindow_thickness"             value="50*um"/>
+    <constant name="MPGDOuterBarrelWindowGap_thickness"          value="2*mm"/>
+    <constant name="MPGDOuterBarrelDriftGap_thickness"           value="3*mm"/>
+    <constant name="MPGDOuterBarrelFoilCu_thickness"             value="5*um"/>
+    <constant name="MPGDOuterBarrelReadOutElectrode_thickness"   value="10*um"/>
+    <constant name="MPGDOuterBarrelFoilKapton_thickness"         value="50*um"/>
+    <constant name="MPGDOuterBarrelReadOutNomex_thickness"       value="50*um"/>
+    <constant name="MPGDOuterBarrelReadOutKapton_thickness"      value="50*um"/>
+    <constant name="MPGDOuterBarrelPCB_thickness"                value="1.5*mm"/>
+
+    <comment> Thickness values </comment>
+    <constant name="MPGDOuterBarrelCathode_thickness"          value="MPGDOuterBarrelFoilKapton_thickness + MPGDOuterBarrelFoilCu_thickness"/>
+    <constant name="MPGDOuterBarrelFoil_thickness"             value="MPGDOuterBarrelFoilKapton_thickness + MPGDOuterBarrelFoilCu_thickness"/>
+    <constant name="MPGDOuterBarrelReadOut_thickness"          value="MPGDOuterBarrelReadOutNomex_thickness + MPGDOuterBarrelReadOutElectrode_thickness + MPGDOuterBarrelReadOutKapton_thickness"/>
+    <constant name="MPGDOuterBarrelModule_thickness"           value="MPGDOuterBarrelWindow_thickness + MPGDOuterBarrelCathode_thickness +
+                                                            MPGDOuterBarrelFoil_thickness + MPGDOuterBarrelReadOut_thickness +
+                                                            MPGDOuterBarrelPCB_thickness + MPGDOuterBarrelFrame_thickness" />
+  </define>
+
+
+  <materials>
+  </materials>
+
+  <limits>
+  </limits>
+
+  <regions>
+  </regions>
+
+  <display>
+  </display>
+
+   <detectors>
+   <detector id="TrackerBarrel_5_ID" name="MPGDOuterBarrel" type="epic_OuterMPGDBarrel" readout="MPGDOuterBarrelHits" vis="TrackerVis">
+     <type_flags type="DetType_TRACKER + DetType_BARREL"/>
+     <dimensions width="MPGDOuterBarrelModule_width" length="MPGDOuterBarrelModule_length" height="MPGDOuterBarrelModule_allowed_space" />
+     <position x="0" y="0" z="MPGDOuterBarrelModule_offset" />
+
+    <comment> MPGD DIRC module components</comment>
+    <module name="MPGDOuterBarrelModule" vis="TrackerVis">
+
+        <module_component name="DriftGap"
+               material="Ar"
+               sensitive="true"
+               width="MPGDOuterBarrelModule_width"
+               thickness="MPGDOuterBarrelDriftGap_thickness"
+               vis="TrackerMPGDGasVis"
+               length="MPGDOuterBarrelModule_length"/>
+
+        <module_component name="WindowGasGap"
+               material="Ar"
+               sensitive="false"
+               width="MPGDOuterBarrelModule_width"
+               thickness="MPGDOuterBarrelWindowGap_thickness"
+               vis="TrackerMPGDGasVis"
+               length="MPGDOuterBarrelModule_length" />
+        <module_component name="Window"
+               material="Kapton"
+               sensitive="false"
+               width="MPGDOuterBarrelModule_width"
+               thickness="MPGDOuterBarrelWindow_thickness"
+               vis="TrackerVis"
+               length="MPGDOuterBarrelModule_length" />
+        <module_component name="Cathode_Kapton"
+               material="Kapton"
+               sensitive="false"
+               width="MPGDOuterBarrelModule_width"
+               thickness="MPGDOuterBarrelFoilKapton_thickness"
+               vis="TrackerVis"
+               length="MPGDOuterBarrelModule_length" />
+        <module_component name="Cathode_Cu"
+               material="Copper"
+               sensitive="false"
+               width="MPGDOuterBarrelModule_width"
+               thickness="MPGDOuterBarrelFoilCu_thickness"
+               vis="TrackerVis"
+               length="MPGDOuterBarrelModule_length" />
+        <module_component name="RWELL_Cu"
+               material="Copper"
+               sensitive="false"
+               width="MPGDOuterBarrelModule_width"
+               thickness="MPGDOuterBarrelFoilCu_thickness"
+               vis="TrackerVis"
+               length="MPGDOuterBarrelModule_length" />
+        <module_component name="RWELL_Kapton"
+               material="Kapton"
+               sensitive="false"
+               width="MPGDOuterBarrelModule_width"
+               thickness="MPGDOuterBarrelFoilKapton_thickness"
+               vis="TrackerVis"
+               length="MPGDOuterBarrelModule_length" />
+        <module_component name="Nomex"
+               material="Nomex"
+               sensitive="false"
+               width="MPGDOuterBarrelModule_width"
+               thickness="MPGDOuterBarrelReadOutNomex_thickness"
+               vis="TrackerVis"
+               length="MPGDOuterBarrelModule_length" />
+        <module_component name="ReadOutElectrodes"
+               material="Copper"
+               sensitive="false"
+               width="MPGDOuterBarrelModule_width"
+               thickness="MPGDOuterBarrelReadOutElectrode_thickness"
+               vis="TrackerVis"
+               length="MPGDOuterBarrelModule_length" />
+        <module_component name="ReadOutKapton"
+               material="Kapton"
+               sensitive="false"
+               width="MPGDOuterBarrelModule_width"
+               thickness="MPGDOuterBarrelReadOutKapton_thickness"
+               vis="TrackerVis"
+               length="MPGDOuterBarrelModule_length" />
+        <module_component name="PCB"
+               material="Fr4"
+               sensitive="false"
+               width="MPGDOuterBarrelModule_width"
+               thickness="MPGDOuterBarrelPCB_thickness"
+               vis="TrackerVis"
+               length="MPGDOuterBarrelModule_length" />
+
+   <comment> Frame width gets subtracted from the gas module volumes
+      see src/BarrelPlanarMPGDTracker_geo.cpp
+        </comment>
+
+        <frame material="Fr4"
+               width="MPGDOuterBarrelFrame_width"
+               vis="TrackerSupportVis"
+               thickness="MPGDOuterBarrelFrame_thickness"/>
+
+</module>
+<comment> Layout for MPGD DIRC layers </comment>
+  <layer module="MPGDOuterBarrelModule" id="0" vis="TrackerSupportVis">
+    <envelope_tolerance r_min="-50*mm" r_max="0*mm" z_min="0*mm" z_max="0*mm"/>
+    <layer_material surface="inner" binning="binPhi,binZ" bins0="MPGDOuterBarrelModule_count" bins1="100" />
+    <rphi_layout
+          phi_tilt="0"
+          nphi="MPGDOuterBarrelModule_count"
+          phi0="0"
+	  rc="MPGDOuterBarrelModule_rmin"
+	  dr="0" />
+    <z_layout
+	  dr = "MPGDOuterBarrelModule_roverlap"
+	  z0 = "MPGDOuterBarrelModule_zoverlap"
+	  nz = "2"/>
+   </layer>
+</detector>
+</detectors>
+
+  <readouts>
+    <readout name="MPGDOuterBarrelHits">
+      <segmentation type="CartesianGridXY" grid_size_x="0.150*mm*sqrt(12)" grid_size_y="0.150*mm*sqrt(12)" />
+      <id>system:8,layer:4,module:12,sensor:2,x:32:-14,y:-18</id>
+    </readout>
+  </readouts>
+
+  <plugins>
+    <plugin name="DD4hep_ParametersPlugin">
+      <argument value="MPGDOuterBarrel"/>
+      <argument value="layer_pattern: str=MPGDOuterBarrel_layer\d"/>
+    </plugin>
+  </plugins>
+
+  <fields>
+  </fields>
+</lccdd>

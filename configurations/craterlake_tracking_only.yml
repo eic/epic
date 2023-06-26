@@ -6,7 +6,7 @@ features:
     definitions_craterlake:
     vertex_barrel:
     silicon_barrel:
-    mpgd_barrel:
+    mpgd_innerbarrel:
     mpgd_outerbarrel:
     mpgd_forward_endcap:
     mpgd_backward_endcap:
