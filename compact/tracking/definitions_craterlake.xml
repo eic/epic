@@ -25,10 +25,13 @@
     <constant name="SiBarrel_dz"                     value="2*cm"/>
     <comment> barrel length: 2R/tan(angle) - dz </comment>
 
-    <comment> Main parameters for the MPGD layer geometries </comment>
-    <constant name="InnerMPGDBarrel_rmin"            value="55.0*cm"/>
-    <constant name="InnerMPGDBarrel_dz"              value="8.0*cm"/>
-    <comment> barrel length: 2R/tan(angle) - dz </comment>
+    <comment> Main parameters for the MPGD Barrel layers </comment>
+    <constant name="InnerMPGDBarrel_rmin"            value="51.25*cm"/>
+    <constant name="InnerMPGDBarrel_dz"              value="5.0*cm"/>
+    <constant name="MPGDOuterBarrelModule_rmin"      value="68.25"/>
+    <constant name="MPGDOuterBarrelModule_zmin1"     value="167.5*cm"/>
+    <constant name="MPGDOuterBarrelModule_zmin2"     value="174.0*cm"/>
+
 
     <comment> Main parameters for Barrel TOF layers </comment>
     <comment> Barrel TOF region </comment>
@@ -112,8 +115,6 @@
     <constant name="BackwardMPGDMod1_rmax"         value="50.0*cm" />
     <constant name="BackwardMPGDMod2_rmax"         value="50.0*cm" />
 
-
-
   </define>
   <detectors>
     <detector id="VertexSubAssembly_0_ID"
@@ -159,13 +160,19 @@
       <composite name="BarrelTOF"/>
     </detector>
     <detector id="TrackerSubAssembly_5_ID"
+      name="OuterBarrelMPGDSubAssembly"
+      type="DD4hep_SubdetectorAssembly"
+      vis="TrackerSubAssemblyVis">
+      <composite name="MPGDOuterBarrel"/>
+    </detector>  
+    <detector id="TrackerSubAssembly_6_ID"
       name="EndcapMPGDSubAssembly"
       type="DD4hep_SubdetectorAssembly"
       vis="TrackerSubAssemblyVis">
       <composite name="ForwardMPGD"/>
       <composite name="BackwardMPGD"/>
     </detector>  
-    <detector id="TrackerSubAssembly_6_ID"
+    <detector id="TrackerSubAssembly_7_ID"
       name="EndcapTOFSubAssembly"
       type="DD4hep_SubdetectorAssembly"
       vis="TrackerSubAssemblyVis">
