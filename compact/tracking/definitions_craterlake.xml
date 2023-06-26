@@ -149,33 +149,43 @@
       <composite name="OuterTrackerEndcapP"/>
     </detector>
     <detector id="TrackerSubAssembly_3_ID"
-      name="InnerMPGDBarrelSubAssembly"
+      name="InnerMPGDBarrelNSubAssembly"
+      type="DD4hep_SubdetectorAssembly"
+      vis="TrackerSubAssemblyVis">
+      <composite name="InnerMPGDBarrelN"/>
+    </detector>
+    <detector id="TrackerSubAssembly_4_ID"
+      name="InnerMPGDBarrelCSubAssembly"
       type="DD4hep_SubdetectorAssembly"
       vis="TrackerSubAssemblyVis">
       <composite name="InnerMPGDBarrelC"/>
-      <composite name="InnerMPGDBarrelN"/>
+    </detector>
+    <detector id="TrackerSubAssembly_5_ID"
+      name="InnerMPGDBarrelPSubAssembly"
+      type="DD4hep_SubdetectorAssembly"
+      vis="TrackerSubAssemblyVis">
       <composite name="InnerMPGDBarrelP"/>
     </detector>
-    <detector id="TrackerSubAssembly_4_ID"
+    <detector id="TrackerSubAssembly_6_ID"
       name="BarrelTOFSubAssembly"
       type="DD4hep_SubdetectorAssembly"
       vis="TrackerSubAssemblyVis">
       <composite name="BarrelTOF"/>
     </detector>
-    <detector id="TrackerSubAssembly_5_ID"
+    <detector id="TrackerSubAssembly_7_ID"
       name="OuterBarrelMPGDSubAssembly"
       type="DD4hep_SubdetectorAssembly"
       vis="TrackerSubAssemblyVis">
       <composite name="MPGDOuterBarrel"/>
     </detector> 
-    <detector id="TrackerSubAssembly_6_ID"
+    <detector id="TrackerSubAssembly_8_ID"
       name="EndcapMPGDSubAssembly"
       type="DD4hep_SubdetectorAssembly"
       vis="TrackerSubAssemblyVis">
       <composite name="ForwardMPGD"/>
       <composite name="BackwardMPGD"/>
     </detector>  
-    <detector id="TrackerSubAssembly_7_ID"
+    <detector id="TrackerSubAssembly_9_ID"
       name="EndcapTOFSubAssembly"
       type="DD4hep_SubdetectorAssembly"
       vis="TrackerSubAssemblyVis">

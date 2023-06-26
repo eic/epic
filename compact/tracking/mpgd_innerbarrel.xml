@@ -27,8 +27,8 @@
     <constant name="InnerMPGDBarrelMod1_length"               value="2*InnerMPGDBarrel_rmin / tan(TrackerPrimaryAngle) - InnerMPGDBarrel_dz"/>
     <constant name="InnerMPGDBarrelMod1_zmin"                value="InnerMPGDBarrelMod1_length/2"/>
     <constant name="InnerMPGDBarrelMod1_zmax"                value="InnerMPGDBarrelMod1_length/2"/>
-    <constant name="InnerMPGDBarrelEnvelope1_length"          value="InnerMPGDBarrelMod1_length + 1*um" />
-    <constant name="InnerMPGDBarrelLayer1_length"            value="InnerMPGDBarrelMod1_length + 1*um" />
+    <constant name="InnerMPGDBarrelEnvelope1_length"         value="InnerMPGDBarrelMod1_length + 0*um" />
+    <constant name="InnerMPGDBarrelLayer1_length"            value="InnerMPGDBarrelMod1_length + 0*um" />
     <constant name="InnerMPGDBarrelLayer1_thickness"         value="2.5*cm" />
     <constant name="InnerMPGDBarrelLayer1_rmin"              value="InnerMPGDBarrelMod1_rmin - InnerMPGDBarrelLayer1_thickness / 2.0"/>
     <constant name="InnerMPGDBarrelLayer1_rmax"              value="InnerMPGDBarrelMod1_rmin + InnerMPGDBarrelLayer1_thickness /2.0"/>
@@ -38,8 +38,8 @@
     <constant name="InnerMPGDBarrelMod2_zpos"                value="0.5*(InnerMPGDBarrelMod2_zmin + InnerMPGDBarrelMod2_zmax)"/>
     <constant name="InnerMPGDBarrelMod2_length"              value="InnerMPGDBarrelMod2_zmax - InnerMPGDBarrelMod2_zmin" />
     <constant name="InnerMPGDBarrelMod2_rmin"                value="InnerMPGDBarrel_rmin"/>
-    <constant name="InnerMPGDBarrelEnvelope2_length"         value="InnerMPGDBarrelMod2_length + 1*um" />
-    <constant name="InnerMPGDBarrelLayer2_length"            value="InnerMPGDBarrelMod2_length + 1*um" />
+    <constant name="InnerMPGDBarrelEnvelope2_length"         value="InnerMPGDBarrelMod2_length + 0*um" />
+    <constant name="InnerMPGDBarrelLayer2_length"            value="InnerMPGDBarrelMod2_length + 0*um" />
     <constant name="InnerMPGDBarrelLayer2_thickness"         value="2.5*cm" />
     <constant name="InnerMPGDBarrelLayer2_rmin"              value="InnerMPGDBarrelMod2_rmin - InnerMPGDBarrelLayer2_thickness / 2.0"/>
     <constant name="InnerMPGDBarrelLayer2_rmax"              value="InnerMPGDBarrelMod2_rmin + InnerMPGDBarrelLayer2_thickness/ 2.0"/>
@@ -49,8 +49,8 @@
     <constant name="InnerMPGDBarrelMod3_zpos"                value="0.5*(InnerMPGDBarrelMod3_zmin + InnerMPGDBarrelMod3_zmax)"/>
     <constant name="InnerMPGDBarrelMod3_length"              value="InnerMPGDBarrelMod3_zmax - InnerMPGDBarrelMod3_zmin" />
     <constant name="InnerMPGDBarrelMod3_rmin"                value="InnerMPGDBarrel_rmin"/>
-    <constant name="InnerMPGDBarrelEnvelope3_length"         value="InnerMPGDBarrelMod3_length + 1*um" />
-    <constant name="InnerMPGDBarrelLayer3_length"            value="InnerMPGDBarrelMod3_length + 1*um" />
+    <constant name="InnerMPGDBarrelEnvelope3_length"         value="InnerMPGDBarrelMod3_length + 0*um" />
+    <constant name="InnerMPGDBarrelLayer3_length"            value="InnerMPGDBarrelMod3_length + 0*um" />
     <constant name="InnerMPGDBarrelLayer3_thickness"         value="2.5*cm" />
     <constant name="InnerMPGDBarrelLayer3_rmin"              value="InnerMPGDBarrelMod3_rmin - InnerMPGDBarrelLayer3_thickness / 2.0"/>
     <constant name="InnerMPGDBarrelLayer3_rmax"              value="InnerMPGDBarrelMod3_rmin + InnerMPGDBarrelLayer3_thickness/ 2.0"/>
@@ -69,7 +69,6 @@
     <constant name="MMDriftCuGround_thickness"              value="0.41*um"/>
 
     <comment> FIXME: No support material is here, so fudge factor used to bring material budget to ~1% for barrel </comment>
-	    <!--<constant name="MMFudgeInnerMPGDBarrel_thickness"                      value="570*um"/>-->
     <constant name="MMFudgeInnerMPGDBarrel_thickness"                      value="1600*um"/>
 
 

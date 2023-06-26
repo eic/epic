@@ -61,7 +61,7 @@
   </display>
 
    <detectors>
-   <detector id="TrackerBarrel_5_ID" name="MPGDOuterBarrel" type="epic_OuterMPGDBarrel" readout="MPGDOuterBarrelHits" vis="TrackerVis">
+   <detector id="TrackerBarrel_5_ID" name="MPGDOuterBarrel" type="epic_OuterMPGDBarrel" readout="OuterMPGDBarrelHits" vis="TrackerVis">
      <type_flags type="DetType_TRACKER + DetType_BARREL"/>
      <dimensions width="MPGDOuterBarrelModule_width" length="MPGDOuterBarrelModule_length" height="MPGDOuterBarrelModule_allowed_space" />
      <position x="0" y="0" z="MPGDOuterBarrelModule_offset" />
@@ -177,7 +177,7 @@
 </detectors>
 
   <readouts>
-    <readout name="MPGDOuterBarrelHits">
+    <readout name="OuterMPGDBarrelHits">
       <segmentation type="CartesianGridXY" grid_size_x="0.150*mm*sqrt(12)" grid_size_y="0.150*mm*sqrt(12)" />
       <id>system:8,layer:4,module:12,sensor:2,x:32:-14,y:-18</id>
     </readout>
