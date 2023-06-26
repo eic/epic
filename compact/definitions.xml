@@ -442,6 +442,8 @@ Examples:
     <constant name="ForwardPIDRegion_zmin"        value="CentralTrackingRegionP_zmax" />
     <constant name="ForwardPIDRegion_length"      value="135.0*cm" />
     <constant name="ForwardPIDRegion_rmax"        value="185.0*cm" />
+    <constant name="ForwardTOFRegion_length"      value="15.0*cm" />
+<!--
     <constant name="BarrelTOF_zmin"               value="120.0*cm"/>
     <constant name="BarrelTOF_zmax"               value="120.0*cm"/>
 
@@ -453,9 +455,9 @@ Examples:
     <constant name="ForwardTOFRegion_maxR"            value="67*cm" />
     <constant name="ForwardTOF_xOffset"         value="-2.75*cm" />
     <constant name="ForwardTOF_det_height"      value="2.0*cm" />
-
+-->
     <comment> Forward RICH region </comment>
-    <constant name="ForwardRICHRegion_zmin"       value="ForwardTOFRegion_zmin + ForwardTOFRegion_length" />
+    <constant name="ForwardRICHRegion_zmin"       value="ForwardPIDRegion_zmin + ForwardTOFRegion_length" />
     <constant name="ForwardRICHRegion_length"     value="ForwardPIDRegion_length - ForwardTOFRegion_length" />
     <comment> tangent of the opening angle at the front and back of the RICH </comment>
     <constant name="ForwardRICHRegion_tan1"        value="CentralTrackingRegionP_tan * 0.88" />
