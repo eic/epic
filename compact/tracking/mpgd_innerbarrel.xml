@@ -94,7 +94,7 @@
       <dimensions
         rmin="InnerMPGDBarrelLayer1_rmin"
         rmax="InnerMPGDBarrelLayer1_rmax"
-	length="InnerMPGDBarrelEnvelope1_length"/>
+	length="240*cm"/>
       <comment> Central Barrel modules </comment>	      
       <module name="ModuleC" vis="TrackerMPGDVis">
 	<module_component name="DriftCuGround" thickness="MMDriftCuGround_thickness" material="Copper" vis="TrackerMPGDVis" width="InnerMPGDBarrelStave1_width" length="InnerMPGDBarrelMod1_length">
@@ -123,18 +123,6 @@
         <rphi_layout phi_tilt="0" nphi="MPGDBarrelStave_count" phi0="0.0" rc="InnerMPGDBarrelMod1_rmin" dr="0.0 * mm"/>
         <z_layout dr="0.0 * mm" z0="0" nz="1"/>
     </layer>
-    </detector>
-    <detector
-      id="TrackerBarrel_3_ID"
-      name="InnerMPGDBarrelN"
-      type="epic_InnerMPGDBarrel"
-      readout="InnerMPGDBarrelHits"
-      insideTrackingVolume="true">
-      <type_flags type="DetType_TRACKER + DetType_BARREL"/>
-      <dimensions
-        rmin="InnerMPGDBarrelLayer2_rmin"
-        rmax="InnerMPGDBarrelLayer2_rmax"
-	length="InnerMPGDBarrelEnvelope2_length"/>
       <module name="ModuleN" vis="TrackerMPGDVis">
 	<module_component name="DriftCuGround" thickness="MMDriftCuGround_thickness" material="Copper" vis="TrackerMPGDVis" width="InnerMPGDBarrelStave2_width" length="InnerMPGDBarrelMod2_length"/>
         <module_component name="DriftKapton" thickness="MMDriftKapton_thickness" material="Kapton" width="InnerMPGDBarrelStave2_width" length="InnerMPGDBarrelMod2_length"/>
@@ -161,18 +149,6 @@
         <rphi_layout phi_tilt="0" nphi="MPGDBarrelStave_count" phi0="0.0" rc="InnerMPGDBarrelMod2_rmin" dr="0.0 * mm"/>
         <z_layout dr="0.0 * mm" z0="0" nz="1"/>
       </layer>
-    </detector>
-    <detector
-      id="TrackerBarrel_4_ID"
-      name="InnerMPGDBarrelP"
-      type="epic_InnerMPGDBarrel"
-      readout="InnerMPGDBarrelHits"
-      insideTrackingVolume="true">
-      <type_flags type="DetType_TRACKER + DetType_BARREL"/>
-      <dimensions
-        rmin="InnerMPGDBarrelLayer3_rmin"
-        rmax="InnerMPGDBarrelLayer3_rmax"
-	length="InnerMPGDBarrelEnvelope3_length"/>
       <module name="ModuleP" vis="TrackerMPGDVis">
 	<module_component name="DriftCuGround" thickness="MMDriftCuGround_thickness" material="Copper" vis="TrackerMPGDVis" width="InnerMPGDBarrelStave3_width" length="InnerMPGDBarrelMod3_length"/>
         <module_component name="DriftKapton" thickness="MMDriftKapton_thickness" material="Kapton" width="InnerMPGDBarrelStave3_width" length="InnerMPGDBarrelMod3_length"/>
@@ -199,21 +175,12 @@
         <rphi_layout phi_tilt="0" nphi="MPGDBarrelStave_count" phi0="0.0" rc="InnerMPGDBarrelMod3_rmin" dr="0.0 * mm"/>
 	<z_layout dr="0.0 * mm" z0="0" nz="1"/>
        </layer>
-   </detector>
+     </detector>
   </detectors>
-
   <plugins>
     <plugin name="DD4hep_ParametersPlugin">
       <argument value="InnerMPGDBarrelC"/>
       <argument value="layer_pattern: str=InnerMPGDBarrelC_layer\d"/>
-    </plugin>
-    <plugin name="DD4hep_ParametersPlugin">
-      <argument value="InnerMPGDBarrelN"/>
-      <argument value="layer_pattern: str=InnerMPGDBarrelN_layer\d"/>
-    </plugin>
-    <plugin name="DD4hep_ParametersPlugin">
-      <argument value="InnerMPGDBarrelP"/>
-      <argument value="layer_pattern: str=InnerMPGDBarrelP_layer\d"/>
     </plugin>
   </plugins>
   
