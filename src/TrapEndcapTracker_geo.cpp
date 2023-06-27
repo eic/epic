@@ -223,6 +223,8 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
     // Assembly    layer_assembly(layer_name);
     // assembly.placeVolume(layer_assembly);
     Tube   layer_tub(layer_rmin, layer_rmax, layer_length / 2);
+    std::cout << "SiTracker Endcap layer rmin = " << layer_rmin / dd4hep::mm << "mm ( " << layer_rmax / dd4hep::mm
+              << " mm thick )\n";
     Volume layer_vol(layer_name, layer_tub, air); // Create the layer envelope volume.
     layer_vol.setVisAttributes(description.visAttributes(layer_vis));
 
@@ -261,7 +263,9 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
       double      iphi     = 2 * M_PI / nmodules;
       double      phi      = phi0;
       Placements& sensVols = sensitives[m_nam];
-
+      std::cout << "\tSiTracker Endcap layer " << l_id << " ring " << r << " phi0 " << phi0 << " zstart " << zstart
+                << "\t dz " << dz << " nmodules " << nmodules << " module " << m_nam << " volume " << m_vol.name()
+                << std::endl;
       for (int k = 0; k < nmodules; ++k) {
         string m_base = _toString(l_id, "layer%d") + _toString(mod_num, "_module%d");
         double x      = -r * std::cos(phi);

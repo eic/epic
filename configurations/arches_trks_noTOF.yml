@@ -1,17 +1,11 @@
 ebeam: 18
 pbeam: 275
 features:
-  beampipe:
   tracking:
-    definitions:
+    definitions_brycecanyon:
     vertex_barrel:
     silicon_barrel:
     mpgd_barrel:
     mpgd_dirc:
     silicon_disks:
-    support_service_assembly:
-  pid:
-    dirc:
-    mrich:
-    drich:
-  solenoid:
+

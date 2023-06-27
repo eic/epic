@@ -329,7 +329,8 @@ static Ref_t create_BarrelTrackerWithFrame(Detector& description, xml_h e, Sensi
     lay_elt.setPlacement(pv);
   }
   sdet.setAttributes(description, assembly, x_det.regionStr(), x_det.limitsStr(), x_det.visStr());
-  assembly.setVisAttributes(description.invisible());
+  // assembly.setVisAttributes(description.invisible());
+  // assembly.setVisAttributes(description.invisible());
   pv = description.pickMotherVolume(sdet).placeVolume(assembly);
   pv.addPhysVolID("system", det_id); // Set the subdetector system ID.
   sdet.setPlacement(pv);
@@ -342,3 +343,4 @@ DECLARE_DETELEMENT(epic_BarrelTrackerWithFrame, create_BarrelTrackerWithFrame)
 DECLARE_DETELEMENT(epic_TrackerBarrel,   create_BarrelTrackerWithFrame)
 DECLARE_DETELEMENT(epic_VertexBarrel,    create_BarrelTrackerWithFrame)
 DECLARE_DETELEMENT(epic_TOFBarrel,       create_BarrelTrackerWithFrame)
+DECLARE_DETELEMENT(epic_MPGDBarrel,       create_BarrelTrackerWithFrame)
