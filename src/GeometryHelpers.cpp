@@ -151,42 +151,42 @@ namespace epic::geo {
     return res;
   }
 
-  
+
   bool isPointInsidePolygon(Point p, std::vector<Point> vertices)
   {
     int n = vertices.size();
     int i, j = 0;
     int check = 0;  // check == 0 (outside the polygon), check == 1 (inside the polygon)
     const double tolerance = 0.00001;
-    
+
     // When the point overlaped with vertex in the tolerance.
     //
-    for(i = 0, j = n-1 ; i < n ; j = i++)  
+    for(i = 0, j = n-1 ; i < n ; j = i++)
       if( std::abs(p.x() - vertices[i].x()) < tolerance && std::abs(p.y() - vertices[i].y()) < tolerance )
         check = !check;
 
-    
+
     // When the point is on the line connected two vertices in the tolerance.
     //
     if( check == 0 )
-      {        
-        for(i = 0, j = n-1 ; i < n ; j = i++)  
+      {
+        for(i = 0, j = n-1 ; i < n ; j = i++)
           if( std::abs(p.x() - vertices[i].x()) < tolerance && std::abs(p.x() - vertices[j].x()) < tolerance )
             if( (vertices[i].y() > p.y()) != (vertices[j].y() > p.y()) )
               check = !check;
       }
 
     if( check == 0 )
-      {        
-        for(i = 0, j = n-1 ; i < n ; j = i++)  
+      {
+        for(i = 0, j = n-1 ; i < n ; j = i++)
           if( std::abs(p.y() - vertices[i].y()) < tolerance && std::abs(p.y() - vertices[j].y()) < tolerance )
             if( (vertices[i].x() > p.x()) != (vertices[j].x() > p.x()) )
               check = !check;
       }
 
-    
+
     if( check == 0 )
-      {        
+      {
         for(i = 0, j = n-1 ; i < n ; j = i++)
           {
             double ver_i = vertices[i].y();
@@ -195,9 +195,9 @@ namespace epic::geo {
 
             if( ((ver_i > p.y()) != (ver_j > p.y())) && (p.x() < criteria || std::abs(p.x() - criteria) < tolerance) )
               check = !check;
-          }        
+          }
       }
-    
+
     return check;
   }
 
@@ -207,7 +207,7 @@ namespace epic::geo {
     for (int i = 0; i < 4; i++)
       {
         if (!isPointInsidePolygon(box[i], vertices))
-          return false;         
+          return false;
       }
     return true;
   }
@@ -225,6 +225,6 @@ namespace epic::geo {
       }
     return vertices;
   }
-  
-  
+
+
 } // namespace epic::geo

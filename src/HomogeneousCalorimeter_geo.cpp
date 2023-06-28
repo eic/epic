@@ -327,15 +327,15 @@ static std::tuple<int, std::pair<int, int>> add_12surface_disk(Detector& desc, A
     In_vertices.push_back(inpt);
   }
 
-  double minX = 0., maxX = 0., minY = 0., maxY = 0.;   
+  double minX = 0., maxX = 0., minY = 0., maxY = 0.;
   for (auto &square : test_points) {
     epic::geo::Point box[4] = {{square.x() + half_modx, square.y() + half_mody}, {square.x() - half_modx, square.y() + half_mody}, {square.x() - half_modx, square.y() - half_mody}, {square.x() + half_modx, square.y() - half_mody}};
-    if (epic::geo::isBoxInsidePolygon(box, Out_vertices)) {      
+    if (epic::geo::isBoxInsidePolygon(box, Out_vertices)) {
       if( square.x() < minX ) minX = square.x();
       if( square.y() < minY ) minY = square.x();
       if( square.x() > maxX ) maxX = square.x();
-      if( square.y() > maxY ) maxY = square.x();     
-    }          
+      if( square.y() > maxY ) maxY = square.x();
+    }
   }
 
   int total_count = 0;
@@ -346,8 +346,8 @@ static std::tuple<int, std::pair<int, int>> add_12surface_disk(Detector& desc, A
 
   for (auto &square : test_points) {
     epic::geo::Point box[4] = {{square.x() + half_modx, square.y() + half_mody}, {square.x() - half_modx, square.y() + half_mody}, {square.x() - half_modx, square.y() - half_mody}, {square.x() + half_modx, square.y() - half_mody}};
-    
-    if (epic::geo::isBoxInsidePolygon(box, Out_vertices)) {      
+
+    if (epic::geo::isBoxInsidePolygon(box, Out_vertices)) {
       if(!epic::geo::isBoxInsidePolygon(box, In_vertices)) {
         // std::cout << "Square inside the inner frame: " << square.x() << ", " << square.y() << std::endl;
         column = std::round((square.x() - minX) / modSize.x());
@@ -358,7 +358,7 @@ static std::tuple<int, std::pair<int, int>> add_12surface_disk(Detector& desc, A
         total_count++;
       }
     }
-    
+
   }
 
   std::cout << "New Min: " << minX << ", " << minY << " || Max: " << maxX << ", " << maxY << std::endl;

@@ -37,5 +37,5 @@ namespace epic::geo {
   bool isBoxInsidePolygon(Point box[4], std::vector<Point> vertices);
 
   std::vector<std::pair<double, double>> getPolygonVertices(std::pair<double, double> center, double radius, double angle_0, int numSides);
-  
+
 } // namespace epic::geo
