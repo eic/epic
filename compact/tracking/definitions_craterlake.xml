@@ -24,13 +24,23 @@
     <constant name="SiBarrel_angle"                  value="TrackerPrimaryAngle"/>
     <constant name="SiBarrel_dz"                     value="2*cm"/>
 
+    <!--
     <comment> Main parameters for the MPGD Barrel layers, dz = z gap between cylinsers </comment>
     <constant name="InnerMPGDBarrel_rmin"            value="51.25*cm"/>
     <constant name="InnerMPGDBarrel_dz"              value="5.0*cm"/>
+    -->
+    <comment> Main parameters for the outer MPGD barrel layer </comment>
     <constant name="MPGDOuterBarrelModule_rmin"      value="68.25"/>
     <constant name="MPGDOuterBarrelModule_zmin1"     value="167.5*cm"/>
     <constant name="MPGDOuterBarrelModule_zmin2"     value="174.0*cm"/>
-
+    
+    <comment> Inner MPGD unsegmented barrel </comment>
+    <constant name="InnerMPGDBarrel_rmin"            value="51.25*cm"/>
+    <constant name="InnerMPGDBarrel_dz"              value="0"/>
+    <constant name="InnerMPGDBarrel_zmin"            value="105*cm"/> <comment> negative z </comment>
+    <constant name="InnerMPGDBarrel_zmax"            value="135*cm"/>    <comment> positive z </comment>
+    <constant name="InnerMPGDBarrel_length"          value="InnerMPGDBarrel_zmax + InnerMPGDBarrel_zmin"/>
+    <constant name="InnerMPGDBarrel_zoffset"         value="0.5*(InnerMPGDBarrel_zmax - InnerMPGDBarrel_zmin)"/>
 
     <comment> Main parameters for Barrel TOF layers </comment>
     <comment> Barrel TOF region </comment>
@@ -156,8 +166,16 @@
       name="InnerMPGDBarrelSubAssembly"
       type="DD4hep_SubdetectorAssembly"
       vis="TrackerSubAssemblyVis">
-      <composite name="InnerMPGDBarrelC"/>
+      <composite name="InnerMPGDBarrel"/>
     </detector>
+    <!--
+    <detector id="TrackerSubAssembly_3_ID"
+      name="InnerMPGDBarrelSubAssembly"
+      type="DD4hep_SubdetectorAssembly"
+      vis="TrackerSubAssemblyVis">
+      <composite name="InnerMPGDBarrelC"/>
+     </detector>
+    -->
     <!--
     <detector id="TrackerSubAssembly_4_ID"
       name="InnerMPGDBarrelCSubAssembly"
