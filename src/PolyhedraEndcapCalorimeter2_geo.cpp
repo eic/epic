@@ -24,15 +24,11 @@ const double defaultZpos[nDefaultLayers] = {270.19,  271.695, 273.15,  274.555, 
                                             285.173, 286.578, 287.983, 289.388, 290.793, 292.198, 293.603, 295.008,
                                             296.413, 297.818, 299.223, 300.628, 302.033, 303.438, 304.843, 306.158};
 
-const double newZstart           = 403;
-const double newLayerWidth       = 4.55;
-const int    firstNewLayer       = 0;
-const int    nNewLayers          = 11;
-int          tileMap[nNewLayers] = {0, 2, 4, 5, 6, 8, 10, 13, 15, 17, 19};
-double       getEta(const double& z, const double& r) { return asinh(z / r); }
-double       getR(const double& z, const double& eta) { return z / (sinh(eta)); }
-double getNewEta(const double& zOld, const double& etaOld, double zNew) { return getEta(zNew, getR(zOld, etaOld)); }
-inline double getNewZ(const int& layer) { return newZstart + layer * newLayerWidth; }
+const int nNewLayers          = 11;
+const int       tileMap[nNewLayers] = {0, 2, 4, 5, 6, 8, 10, 13, 15, 17, 19};
+double    getEta(const double& z, const double& r) { return asinh(z / r); }
+double    getR(const double& z, const double& eta) { return z / (sinh(eta)); }
+double    getNewEta(const double& zOld, const double& etaOld, double zNew) { return getEta(zNew, getR(zOld, etaOld)); }
 
 inline double getEtaMean(unsigned eta) { return 0.5 * (defaultEtaBins[eta] + defaultEtaBins[eta + 1]); }
 inline double getEtaHalfWidth(unsigned eta) { return 0.5 * fabs(defaultEtaBins[eta] - defaultEtaBins[eta + 1]); }
@@ -60,21 +56,6 @@ inline double getPhiMean(unsigned sector, unsigned subSector)
 {
   const double dPhi = TMath::TwoPi() / nHcalSectors;
   return AdjustAngle((double(sector) + (subSector + 0.5L) / nHcalSubSectors) * dPhi + phiShift);
-}
-
-TVector3 getTowerCenter(const unsigned sector, const unsigned subSector, const unsigned etaBin, const unsigned layer)
-{
-  double phi = 0.0;
-  double eta = -1.0;
-  double z   = 0.0;
-  double rho = 0.0;
-
-  phi = getPhiMean(sector, subSector);
-  eta = getEtaMean(etaBin);
-  z   = (layer + 0.5) * newLayerWidth;
-  rho = getR(z, eta);
-  // create vector pointing toward the center of the tower
-  return TVector3(rho * cos(phi), rho * sin(phi), z);
 }
 
 TVector3 getTowerCenter(const unsigned sector, const unsigned subSector, const unsigned etaBin, const double z)
@@ -139,12 +120,12 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
       double     s_thick = x_slice.thickness();
       Material   s_mat   = description.material(x_slice.materialStr());
       sliceZ += s_thick / 2;
-      Tube halfdisk(rmin, rmax, s_thick / 2, M_PI / 2, M_PI * 3 / 2);
-      Volume absorber(halfdisk);
-      absorber.setMaterial(s_mat);
+      int         oldTileLayer = tileMap[l_num - 1]; // layer of the old tile corresponding to the current layer
+      double      zOldPos      = defaultZpos[oldTileLayer];         // center z position of the old tile
 
+       Volume absorber("aborber",Tube(rmin, rmax, s_thick / 2, M_PI / 2, M_PI * 3 / 2),s_mat);
       if (x_slice.visStr() == "HcalAbsorberVis") {
-       
+
         PlacedVolume s_phv1 = l_vol.placeVolume(absorber, Position(-disksGap / 2, 0, sliceZ));
         s_phv1.addPhysVolID("absorberDisk", 0);
         PlacedVolume s_phv2 =
@@ -158,9 +139,7 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
                             air);
         for (unsigned iEtaBin = 0; iEtaBin < nEtaBins; iEtaBin++) {
           // recreate old tile size for the given layer:
-          int    oldTileLayer = tileMap[l_num - 1];        // layer of the old tile corresponding to the current layer
-          double zOldPos      = defaultZpos[oldTileLayer]; // center z position of the old tile
-
+        
           double rBottom = getR(zOldPos, defaultEtaBins[iEtaBin]);  // closest current tile distance to the beam pipe
           double rTop = getR(zOldPos, defaultEtaBins[iEtaBin + 1]); // furthest current tile distance to the beam pipe
           // cosine theorem for the angle between the two radii:
@@ -172,8 +151,7 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
           double       dy  = s_thick / 2;
           Trapezoid    tile(dx1, dx2, dy, dy, dz);
           Volume       tile_vol(_toString(iEtaBin, "tile%i"), tile, s_mat);
-          PlacedVolume tile_phys = subSectorVol.placeVolume(
-              tile_vol, Transform3D(RotationZYX(0, 0, 0), Position(0, 0, (rTop + rBottom) / 2)));
+          PlacedVolume tile_phys = subSectorVol.placeVolume(tile_vol,  Position(0, 0, (rTop + rBottom) / 2));
 
           tile_phys.addPhysVolID("etabin", iEtaBin);
 
@@ -184,21 +162,22 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
           }
         }
 
-        int         oldTileLayer = tileMap[l_num - 1]; // layer of the old tile corresponding to the current layer
-        double      zOldPos      = defaultZpos[oldTileLayer];         // center z position of the old tile
+        
+        
         double      rTop         = getR(zOldPos, defaultEtaBins[12]); // furthest current tile distance to the beam pipe
         ConeSegment sectorShape(s_thick / 2, rmin, rTop, rmin, rTop, 0, 2 * M_PI / nHcalSectors);
         Volume      sectorVol{"sector", sectorShape, air};
 
         for (unsigned iSubSector = 0; iSubSector < nHcalSubSectors; iSubSector++) {
           PlacedVolume subSectorVol_phys = sectorVol.placeVolume(
-              subSectorVol, Transform3D(RotationZYX(0,iSubSector *2* M_PI/(nHcalSectors*nHcalSubSectors),0), Position(0, 0, 0)));
+              subSectorVol, RotationZYX(0, (iSubSector+0.5L) * 2 * M_PI / (nHcalSectors * nHcalSubSectors), M_PI/2));
           subSectorVol_phys.addPhysVolID("subsector", iSubSector);
         }
 
         for (unsigned iSector = 0; iSector < nHcalSectors; iSector++) {
-          PlacedVolume sectorVol_phys =
-              l_vol.placeVolume(sectorVol, Transform3D(RotationZYX(0, iSector *2* M_PI/(nHcalSectors), M_PI/2), Position(0, 0, sliceZ)));
+          PlacedVolume sectorVol_phys = l_vol.placeVolume(
+              sectorVol, Transform3D(RotationZYX(M_PI/2, iSector * 2 * M_PI / (nHcalSectors), M_PI / 2),
+                                     Position((iSector > nHcalSectors / 2 ? -disksGap : disksGap), 0, sliceZ)));
           sectorVol_phys.addPhysVolID("sector", iSector);
         }
       }
