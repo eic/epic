@@ -139,7 +139,7 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
                             air);
         for (unsigned iEtaBin = 0; iEtaBin < nEtaBins; iEtaBin++) {
           // recreate old tile size for the given layer:
-        
+
           double rBottom = getR(zOldPos, defaultEtaBins[iEtaBin]);  // closest current tile distance to the beam pipe
           double rTop = getR(zOldPos, defaultEtaBins[iEtaBin + 1]); // furthest current tile distance to the beam pipe
           // cosine theorem for the angle between the two radii:
@@ -162,8 +162,8 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
           }
         }
 
-        
-        
+
+
         double      rTop         = getR(zOldPos, defaultEtaBins[12]); // furthest current tile distance to the beam pipe
         ConeSegment sectorShape(s_thick / 2, rmin, rTop, rmin, rTop, 0, 2 * M_PI / nHcalSectors);
         Volume      sectorVol{"sector", sectorShape, air};
