@@ -15,7 +15,12 @@
     <constant name="EcalEndcapN_crystalmodule_carbonfiber_thickness" value="0.20*mm"/>
     <constant name="EcalEndcapN_crystalmodule_VM2000_thickness" value="0.05*mm"/>
     <constant name="EcalEndcapN_crystalmodule_carbonfiber_length" value="20.00*mm"/>
-
+    <constant name="EcalEndcapN_crystalmodule_PCB_thickness" value="2.0*mm"/>
+    <constant name="EcalEndcapN_crystalmodule_sensor_sizeX" value="4.35*mm"/>
+    <constant name="EcalEndcapN_crystalmodule_sensor_sizeY" value="3.85*mm"/>
+    <constant name="EcalEndcapN_crystalmodule_sensor_thickness" value="1.45*mm"/>
+    <constant name="EcalEndcapN_crystalmodule_Nsensor_in_X" value="4"/>
+    <constant name="EcalEndcapN_crystalmodule_Nsensor_in_Y" value="4"/>
 
     <comment>
       Basic hardcoded parameters about supporting structures, rotation and shift
@@ -100,7 +105,7 @@
           <module
             modulex="EcalEndcapN_crystalmodule_crystal_width + 2.*EcalEndcapN_crystalmodule_carbonfiber_thickness + 2.*EcalEndcapN_crystalmodule_VM2000_thickness"
             moduley="EcalEndcapN_crystalmodule_crystal_width + 2.*EcalEndcapN_crystalmodule_carbonfiber_thickness + 2.*EcalEndcapN_crystalmodule_VM2000_thickness"
-            modulez="EcalEndcapN_crystalmodule_crystal_length + EcalEndcapN_crystalmodule_VM2000_thickness"
+            modulez="EcalEndcapN_crystalmodule_crystal_length + EcalEndcapN_crystalmodule_VM2000_thickness + EcalEndcapN_crystalmodule_sensor_thickness + EcalEndcapN_crystalmodule_PCB_thickness"
             moduleshift="EcalEndcapN_crystalmodule_VM2000_thickness"
             gmaterial="Vacuum"
             vis="BlueVis"/>
@@ -120,6 +125,16 @@
             vis_carbon="PurpleVis"
             vis_wrap="RPVis"
             vis_gap="AnlGray"/>
+          <readout
+            Sensor_sizex="EcalEndcapN_crystalmodule_sensor_sizeX"
+            Sensor_sizey="EcalEndcapN_crystalmodule_sensor_sizeY"
+            Sensor_thickness="EcalEndcapN_crystalmodule_sensor_thickness"
+            Nsensor_X="EcalEndcapN_crystalmodule_Nsensor_in_X"
+            Nsensor_Y="EcalEndcapN_crystalmodule_Nsensor_in_Y"
+            PCB_sizex="EcalEndcapN_crystalmodule_crystal_width"
+            PCB_sizey="EcalEndcapN_crystalmodule_crystal_width"
+            PCB_thickness="EcalEndcapN_crystalmodule_PCB_thickness"
+            material="SiliconDioxide"/>
         </disk_12surface>
       </placements>
 
