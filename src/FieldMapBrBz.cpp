@@ -20,6 +20,13 @@ namespace fs = std::filesystem;
 
 using namespace dd4hep;
 
+// In DD4hep 1.26, the name for the `field_type` enum changed (from `type`).
+#if DD4HEP_VERSION_GE(1, 26)
+#define DD4HEP_FIELD_TYPE field_type
+#else
+#define DD4HEP_FIELD_TYPE type
+#endif
+
 // implementation of the field map
 class FieldMapBrBz : public dd4hep::CartesianField::Object {
 public:
@@ -51,11 +58,11 @@ FieldMapBrBz::FieldMapBrBz(const std::string& field_type_str)
 
   // set type
   if (ftype == "magnetic") {
-    type = CartesianField::MAGNETIC;
+    DD4HEP_FIELD_TYPE = CartesianField::MAGNETIC;
   } else if (ftype == "electric") {
-    type = CartesianField::ELECTRIC;
+    DD4HEP_FIELD_TYPE = CartesianField::ELECTRIC;
   } else {
-    type = CartesianField::UNKNOWN;
+    DD4HEP_FIELD_TYPE = CartesianField::UNKNOWN;
     std::cout << "FieldMapBrBz Warning: Unknown field type " << field_type_str << "!" << std::endl;
   }
 }
