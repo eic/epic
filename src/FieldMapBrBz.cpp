@@ -27,6 +27,18 @@ using namespace dd4hep;
 #define DD4HEP_FIELD_TYPE type
 #endif
 
+// This allows us to specify the name of the variable by hand, when patching
+// the previous versions, by setting `DD4HEP_FIELD_TYPE_OVERRIDE`.
+// TODO remove after DD4hep 1.26 release
+#define XSTR(x) STR(x)
+#define STR(x) #x
+#ifdef DD4HEP_FIELD_TYPE_OVERRIDE
+#undef DD4HEP_FIELD_TYPE
+#define DD4HEP_FIELD_TYPE DD4HEP_FIELD_TYPE_OVERRIDE
+#pragma message("DD4HEP_FIELD_TYPE overridden as " XSTR(DD4HEP_FIELD_TYPE))
+#endif
+#pragma message("DD4HEP_FIELD_TYPE is " XSTR(DD4HEP_FIELD_TYPE))
+
 // implementation of the field map
 class FieldMapBrBz : public dd4hep::CartesianField::Object {
 public:
