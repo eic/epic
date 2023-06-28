@@ -136,7 +136,7 @@ std::tuple<Volume, Position> build_module(Detector& desc, xml::Collection_t& plm
   Box    PCBshape(PCBx / 2., PCBy / 2., PCBz / 2.);
   auto   PCBMat = desc.material(roc.attr<std::string>(_Unicode(material)));
   Volume PCBVol("PCB_vol", PCBshape, PCBMat);
-  
+
   auto   sensorx = roc.attr<double>(_Unicode(Sensor_sizex));
   auto   sensory = roc.attr<double>(_Unicode(Sensor_sizey));
   auto   sensorz = roc.attr<double>(_Unicode(Sensor_thickness));
@@ -145,7 +145,7 @@ std::tuple<Volume, Position> build_module(Detector& desc, xml::Collection_t& plm
   Box    sensorshape(sensorx / 2., sensory / 2., sensorz / 2.);
   auto   sensorMat = desc.material(roc.attr<std::string>(_Unicode(material)));
   Volume sensorVol("sensor_vol", sensorshape, sensorMat);
-  
+
   modVol.placeVolume(crystalVol, Position(0., 0., (PCBz + sensorz - mdz) / 2.));
   crystalVol.setVisAttributes(desc.visAttributes(cry.attr<std::string>(_Unicode(cryvis))));
   crystalVol.setSensitiveDetector(sens);
@@ -159,9 +159,9 @@ std::tuple<Volume, Position> build_module(Detector& desc, xml::Collection_t& plm
   for(int i = 0 ; i < sensorNx ; i++)
     for(int j = 0 ; j < sensorNy ; j++)
       modVol.placeVolume(sensorVol, Position(x0 + (sensorx + intervalx) * i, y0 + (sensory + intervaly) * j, PCBz + (sensorz - mz) / 2.));
-    
 
-  
+
+
   if (!plm.hasChild(_Unicode(wrapper))){  // no wrapper
     printout(DEBUG, "HomogeneousCalorimeter", "without wrapper");
     return std::make_tuple(modVol, Position{mx, my, mz});
