@@ -23,7 +23,7 @@ using namespace dd4hep;
 // implementation of the field map
 class FieldMapBrBz : public dd4hep::CartesianField::Object {
 public:
-  FieldMapBrBz(const std::string& field_type = "magnetic");
+  FieldMapBrBz(const std::string& field_type_str = "magnetic");
   void Configure(double rmin, double rmax, double rstep, double zmin, double zmax, double zstep);
   void LoadMap(const std::string& map_file, double scale);
   void GetIndices(double r, double z, int& ir, int& iz, double& dr, double& dz);
@@ -42,9 +42,9 @@ private:
 };
 
 // constructor
-FieldMapBrBz::FieldMapBrBz(const std::string& field_type)
+FieldMapBrBz::FieldMapBrBz(const std::string& field_type_str)
 {
-  std::string ftype = field_type;
+  std::string ftype = field_type_str;
   for (auto& c : ftype) {
     c = tolower(c);
   }
@@ -56,7 +56,7 @@ FieldMapBrBz::FieldMapBrBz(const std::string& field_type)
     type = CartesianField::ELECTRIC;
   } else {
     type = CartesianField::UNKNOWN;
-    std::cout << "FieldMapBrBz Warning: Unknown field type " << field_type << "!" << std::endl;
+    std::cout << "FieldMapBrBz Warning: Unknown field type " << field_type_str << "!" << std::endl;
   }
 }
 
