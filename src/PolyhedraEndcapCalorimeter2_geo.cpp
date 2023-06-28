@@ -23,17 +23,17 @@ const double defaultEtaBins[13] = {
     2.0, 1.9008, 1.8065, 1.7168, 1.6317, 1.5507, 1.4738,
     1.4007, 1.3312, 1.2651, 1.2023, 1.1427, 1.086};
 
-const double newEtaBins[28] = { 3.9736842, 3.82929, 3.65542, 3.48947, 3.33106, 3.17987, 
+const double newEtaBins[28] = { 3.9736842, 3.82929, 3.65542, 3.48947, 3.33106, 3.17987,
             3.03556, 2.89782, 2.76635, 2.64086, 2.52109, 2.40676, 2.29764,
-            2.19349, 2.09299, 1.99721, 1.90582, 1.81882, 1.7357, 1.65646, 
+            2.19349, 2.09299, 1.99721, 1.90582, 1.81882, 1.7357, 1.65646,
             1.58079, 1.50851, 1.43941, 1.3734, 1.3104, 1.25011, 1.19095, 1.1158023};
 
 const double defaultZpos[nDefaultLayers] = {
-    270.19,  271.695,  273.15, 274.555,  275.96, 277.365, 
+    270.19,  271.695,  273.15, 274.555,  275.96, 277.365,
     282.363, 283.768, 285.173, 286.578, 287.983, 289.388,
-    290.793, 292.198, 293.603, 295.008, 296.413, 297.818, 
+    290.793, 292.198, 293.603, 295.008, 296.413, 297.818,
     299.223, 300.628, 302.033, 303.438, 304.843, 306.158};
-  
+
 const double newZstart = 329.6;
 const unsigned firstNewLayer = 0;
 const unsigned tileMap[10] = {0, 2, 5, 6, 8, 10, 13, 16, 18, 21};
@@ -41,7 +41,7 @@ const unsigned tileMap[10] = {0, 2, 5, 6, 8, 10, 13, 16, 18, 21};
 inline double getR(const double &z, const double &eta) { return z / (sinh(eta)); }
 inline double getNewEta(const double &zOld, const double &etaOld, double zNew){ return asinh(zNew /getR(zOld,etaOld));}
 
-double getNewEta(const int &layer, const int &etaBin, double zNew) { 
+double getNewEta(const int &layer, const int &etaBin, double zNew) {
 return getNewEta(defaultZpos[layer], defaultEtaBins[etaBin], zNew); }
 
 inline double getNewZ(const int &layer) { return newZstart + layer * newLayerWidth; }
@@ -61,7 +61,7 @@ inline double getPhiHalfWidth(){
    const double dPhi=TMath::TwoPi()/nHcalSectors;
    return (double)(0.5L/nHcalSubSectors*dPhi);
 }
-inline double getPhiMean(unsigned sector, unsigned subSector) 
+inline double getPhiMean(unsigned sector, unsigned subSector)
 {    const double dPhi = TMath::TwoPi() / nHcalSectors;
      return AdjustAngle( (double(sector) + (subSector + 0.5L) / nHcalSubSectors) * dPhi + phiShift);
 }
@@ -69,32 +69,32 @@ inline double getPhiMean(unsigned sector, unsigned subSector)
 
 
 
-TVector3 getTowerCenter(const unsigned sector, const unsigned subSector, const unsigned etaBin, const unsigned layer)  
+TVector3 getTowerCenter(const unsigned sector, const unsigned subSector, const unsigned etaBin, const unsigned layer)
 {
   double phi =  0.0;
   double eta = -1.0;
   double z   =  0.0;
   double rho =  0.0;
-   
+
   phi  = getPhiMean(sector,subSector);
   eta  = getEtaMean(etaBin);
   z    = (layer+0.5)*newLayerWidth ;
-  rho   = getR(z,eta);   
+  rho   = getR(z,eta);
   // create vector pointing toward the center of the tower
    return TVector3(rho*cos(phi),rho*sin(phi),z);
 }
 
 
-TVector3 getTowerCenter(const unsigned sector, const unsigned subSector, const unsigned etaBin, const double z)  
+TVector3 getTowerCenter(const unsigned sector, const unsigned subSector, const unsigned etaBin, const double z)
 {
   double phi =  0.0;
   double eta = -1.0;
   double rho =  0.0;
-   
+
   phi  = getPhiMean(sector,subSector);
   eta  = getEtaMean(etaBin);
-  
-  rho   = getR(z,eta);   
+
+  rho   = getR(z,eta);
   // create vector pointing toward the center of the tower
    return TVector3(rho*cos(phi),rho*sin(phi),z);
 }
@@ -162,8 +162,8 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
         s_phv2.addPhysVolID("sliceDisk2", s_num);
       }
 
-      else {     
-      
+      else {
+
       double dphi = 2*getPhiHalfWidth();
 adadadass
       for (unsigned iSector = 0; iSector < 1; iSector++)    {
@@ -212,10 +212,10 @@ adadadass
 
       sliceZ += s_thick / 2;
       s_num++;
-    
+
     }
 
-    
+
     l_vol.setVisAttributes(description.visAttributes(x_layer.visStr()));
     if (l_repeat <= 0)
       throw std::runtime_error(x_det.nameStr() + "> Invalid repeat value");
