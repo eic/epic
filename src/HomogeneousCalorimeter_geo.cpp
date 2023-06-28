@@ -186,7 +186,6 @@ static std::tuple<int, std::pair<int, int>> add_12surface_disk(Detector& desc, A
 {
   auto [modVol, modSize]             = build_module(desc, plm, sens);
   int         sector_id              = dd4hep::getAttrOrDefault<int>(plm, _Unicode(sector), sid);
-  double      rmin                   = plm.attr<double>(_Unicode(rmin));
   double      rmax                   = plm.attr<double>(_Unicode(rmax));
   double      r12min                 = plm.attr<double>(_Unicode(r12min));
   double      r12max                 = plm.attr<double>(_Unicode(r12max));
@@ -202,14 +201,7 @@ static std::tuple<int, std::pair<int, int>> add_12surface_disk(Detector& desc, A
 
   std::vector<double> pt_innerframe_x;  //The points information for inner supporting frame
   std::vector<double> pt_innerframe_y;
-
-
-
-  //=========================================================
-  // The modules' positions followd the fillRectangles function
-  //=========================================================
-  float half_modx = modSize.x() * 0.5, half_mody = modSize.y() * 0.5;
-  auto points = epic::geo::fillRectangles({half_modx, half_mody}, modSize.x(), modSize.y(), rmin, rmax, phimin, phimax);
+  double half_modx = modSize.x() * 0.5, half_mody = modSize.y() * 0.5;
 
 
   //=========================================================
@@ -220,13 +212,6 @@ static std::tuple<int, std::pair<int, int>> add_12surface_disk(Detector& desc, A
     xml_comp_t position_comp = position_i;
     pt_innerframe_x.push_back((position_comp.x()));
     pt_innerframe_y.push_back((position_comp.y()));
-  }
-
-  xml_coll_t positions_addmodules(plm, _Unicode(addmodulespos));
-  for (xml_coll_t position_i(positions_addmodules, _U(position)); position_i; ++position_i){
-    xml_comp_t position_comp = position_i;
-    auto add_point = epic::geo::Point((position_comp.x()), (position_comp.y()));
-    points.push_back(add_point);
   }
 
 
@@ -288,37 +273,66 @@ static std::tuple<int, std::pair<int, int>> add_12surface_disk(Detector& desc, A
 
 
 
-
   //=====================================================================
   // Placing The Modules
-  // Since the inner and outer porfile is not the circle shape,
-  // which means the modules placements can't be simply done by
-  // fillRectangles functions. I hardcode the additional positions
-  // at backward_PbWO4.xml to fill all the gap between circular
-  // placement and supporting structures.
   //=====================================================================
 
-  // retrieve the max and min position of modules
-  auto [minl_ptsx, maxl_ptsx] = std::minmax_element(points.begin(), points.end(), [](auto a, auto b){ return a.x() < b.x(); });
-  auto [minl_ptsy, maxl_ptsy] = std::minmax_element(points.begin(), points.end(), [](auto a, auto b){ return a.y() < b.y(); });
+  auto test_points = epic::geo::fillRectangles({half_modx, half_mody}, modSize.x(), modSize.y(), 0., (rmax/std::cos(Prot)), phimin, phimax);
 
-  // Place the modules, use row and column ID for each modules
-  // row and column ID start from the top left corner
-  //
+  std::pair<double, double> c1 (0., 0.);
+  auto polyVertex = epic::geo::getPolygonVertices(c1, (rmax/std::cos(Prot)), M_PI/12., 12);
+  std::vector<epic::geo::Point> Out_vertices, In_vertices;
+  int index = 0;
+  for( auto p : polyVertex ){
+    epic::geo::Point a = {p.first, p.second};
+    Out_vertices.push_back(a);
+    // std::cout << "{" << Out_vertices[index].x() << ", " << Out_vertices[index].y() << "}, " << std::endl;
+    index++;
+  }
+  // std::cout << std::endl << std::endl;
+
+  for (xml_coll_t position_i(pts_extrudedpolygon, _U(position)); position_i; ++position_i){
+    xml_comp_t position_comp = position_i;
+    epic::geo::Point inpt = {position_comp.x(), position_comp.y()};
+    In_vertices.push_back(inpt);
+  }
+
+  double minX = 0., maxX = 0., minY = 0., maxY = 0.;   
+  for (auto &square : test_points) {
+    epic::geo::Point box[4] = {{square.x() + half_modx, square.y() + half_mody}, {square.x() - half_modx, square.y() + half_mody}, {square.x() - half_modx, square.y() - half_mody}, {square.x() + half_modx, square.y() - half_mody}};
+    if (epic::geo::isBoxInsidePolygon(box, Out_vertices)) {      
+      if( square.x() < minX ) minX = square.x();
+      if( square.y() < minY ) minY = square.x();
+      if( square.x() > maxX ) maxX = square.x();
+      if( square.y() > maxY ) maxY = square.x();     
+    }          
+  }
+
+  int total_count = 0;
   int row = 0, column = 0;
-  int N_row =  std::round((maxl_ptsy[0].y() - minl_ptsy[0].y()) / modSize.y());
-  int N_column =  std::round((maxl_ptsx[0].x() - minl_ptsx[0].x()) / modSize.x());
-
+  int N_row = std::round((maxY - minY) / modSize.y());
+  int N_column = std::round((maxX - minX) / modSize.x());
   auto rowcolumn = std::make_pair(N_row, N_column);
 
-  for (auto& p : points) {
-    column = std::round((p.x() - minl_ptsx[0].x()) / modSize.x());
-    row = std::round((maxl_ptsy[0].y() - p.y()) / modSize.y());
-
-    Transform3D tr_local = RotationZYX(Nrot, 0.0, 0.0) * Translation3D(p.x(), p.y(), 0.0);
-    auto modPV = (has_envelope ? env_vol.placeVolume(modVol, tr_local) : env.placeVolume(modVol, tr_global * tr_local));
-    modPV.addPhysVolID("sector", sector_id).addPhysVolID("row", row).addPhysVolID("column", column);
+  for (auto &square : test_points) {
+    epic::geo::Point box[4] = {{square.x() + half_modx, square.y() + half_mody}, {square.x() - half_modx, square.y() + half_mody}, {square.x() - half_modx, square.y() - half_mody}, {square.x() + half_modx, square.y() - half_mody}};
+    
+    if (epic::geo::isBoxInsidePolygon(box, Out_vertices)) {      
+      if(!epic::geo::isBoxInsidePolygon(box, In_vertices)) {
+        // std::cout << "Square inside the inner frame: " << square.x() << ", " << square.y() << std::endl;
+        column = std::round((square.x() - minX) / modSize.x());
+        row = std::round((maxY - square.y()) / modSize.y());
+        Transform3D tr_local = RotationZYX(Nrot, 0.0, 0.0) * Translation3D(square.x(), square.y(), 0.0);
+        auto modPV = (has_envelope ? env_vol.placeVolume(modVol, tr_local) : env.placeVolume(modVol, tr_global * tr_local));
+        modPV.addPhysVolID("sector", sector_id).addPhysVolID("row", row).addPhysVolID("column", column);
+        total_count++;
+      }
+    }
+    
   }
+
+  std::cout << "New Min: " << minX << ", " << minY << " || Max: " << maxX << ", " << maxY << std::endl;
+  std::cout << "Total count new: " << total_count << std::endl;
 
   return {sector_id, rowcolumn};
 }
