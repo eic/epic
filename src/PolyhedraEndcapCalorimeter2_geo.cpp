@@ -1,29 +1,106 @@
-// SPDX-License-Identifier: LGPL-3.0-or-later
-// Copyright (C) 2022 Whitney Armstrong
 
-//==========================================================================
-//  AIDA Detector description implementation
-//--------------------------------------------------------------------------
-// Copyright (C) Organisation europeenne pour la Recherche nucleaire (CERN)
-// All rights reserved.
-//
-// For the licensing terms see $DD4hepINSTALL/LICENSE.
-// For the list of contributors see $DD4hepINSTALL/doc/CREDITS.
-//
-// Author     : M.Frank
-//
-//==========================================================================
-//
-// Modified for ATHENA detector
-//
-//==========================================================================
 #include "DD4hep/DetFactoryHelper.h"
 #include "XML/Layering.h"
-
+#include "TVector3.h"
 using namespace std;
 using namespace dd4hep;
 using namespace dd4hep::detail;
 
+// Class HcalGeo{
+
+
+
+// };
+
+const double phiShift   =  0*M_PI/180.0;  // first sector (1 o'clock) phi value [index 0]
+const unsigned nEtaBins = 12;
+const unsigned nHcalSectors = 12;
+const unsigned nHcalSubSectors = 5;
+const double newLayerWidth = 4.55;
+
+const unsigned nDefaultLayers = 24;
+const double defaultEtaBins[13] = {
+    2.0, 1.9008, 1.8065, 1.7168, 1.6317, 1.5507, 1.4738,
+    1.4007, 1.3312, 1.2651, 1.2023, 1.1427, 1.086};
+
+const double newEtaBins[28] = { 3.9736842, 3.82929, 3.65542, 3.48947, 3.33106, 3.17987,
+            3.03556, 2.89782, 2.76635, 2.64086, 2.52109, 2.40676, 2.29764,
+            2.19349, 2.09299, 1.99721, 1.90582, 1.81882, 1.7357, 1.65646,
+            1.58079, 1.50851, 1.43941, 1.3734, 1.3104, 1.25011, 1.19095, 1.1158023};
+
+const double defaultZpos[nDefaultLayers] = {
+    270.19,  271.695,  273.15, 274.555,  275.96, 277.365,
+    282.363, 283.768, 285.173, 286.578, 287.983, 289.388,
+    290.793, 292.198, 293.603, 295.008, 296.413, 297.818,
+    299.223, 300.628, 302.033, 303.438, 304.843, 306.158};
+
+const double newZstart = 329.6;
+const unsigned firstNewLayer = 0;
+const unsigned tileMap[10] = {0, 2, 5, 6, 8, 10, 13, 16, 18, 21};
+
+inline double getR(const double &z, const double &eta) { return z / (sinh(eta)); }
+inline double getNewEta(const double &zOld, const double &etaOld, double zNew){ return asinh(zNew /getR(zOld,etaOld));}
+
+double getNewEta(const int &layer, const int &etaBin, double zNew) {
+return getNewEta(defaultZpos[layer], defaultEtaBins[etaBin], zNew); }
+
+inline double getNewZ(const int &layer) { return newZstart + layer * newLayerWidth; }
+
+inline double getEtaMean(unsigned eta)  { return 0.5 * (defaultEtaBins[eta] + defaultEtaBins[eta + 1]); }
+inline double getEtaHalfWidth(unsigned eta) { return 0.5 * fabs(defaultEtaBins[eta] - defaultEtaBins[eta + 1]);    }
+// adjust angle so it falls into [-pi,pi] interval
+static inline double AdjustAngle(double alpha)
+{   while (alpha < -TMath::Pi())alpha += TMath::TwoPi();
+    while (alpha > TMath::Pi()) alpha -= TMath::TwoPi();
+    return alpha;
+}
+inline double getPhiMean(unsigned sector)  {const double dPhi = TMath::TwoPi() / nHcalSectors;
+return AdjustAngle( (sector + 0.5L) * dPhi + phiShift);}
+
+inline double getPhiHalfWidth(){
+   const double dPhi=TMath::TwoPi()/nHcalSectors;
+   return (double)(0.5L/nHcalSubSectors*dPhi);
+}
+inline double getPhiMean(unsigned sector, unsigned subSector)
+{    const double dPhi = TMath::TwoPi() / nHcalSectors;
+     return AdjustAngle( (double(sector) + (subSector + 0.5L) / nHcalSubSectors) * dPhi + phiShift);
+}
+
+
+
+
+TVector3 getTowerCenter(const unsigned sector, const unsigned subSector, const unsigned etaBin, const unsigned layer)
+{
+  double phi =  0.0;
+  double eta = -1.0;
+  double z   =  0.0;
+  double rho =  0.0;
+
+  phi  = getPhiMean(sector,subSector);
+  eta  = getEtaMean(etaBin);
+  z    = (layer+0.5)*newLayerWidth ;
+  rho   = getR(z,eta);
+  // create vector pointing toward the center of the tower
+   return TVector3(rho*cos(phi),rho*sin(phi),z);
+}
+
+
+TVector3 getTowerCenter(const unsigned sector, const unsigned subSector, const unsigned etaBin, const double z)
+{
+  double phi =  0.0;
+  double eta = -1.0;
+  double rho =  0.0;
+
+  phi  = getPhiMean(sector,subSector);
+  eta  = getEtaMean(etaBin);
+
+  rho   = getR(z,eta);
+  // create vector pointing toward the center of the tower
+   return TVector3(rho*cos(phi),rho*sin(phi),z);
+}
+
+
+sds
 static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector sens)
 {
   xml_det_t      x_det    = e;
@@ -37,16 +114,12 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
   double         rmin     = dim.rmin();
   double         rmax     = dim.rmax();
   double         zmin     = dim.zmin();
+
   Layering       layering(x_det);
   double         totalThickness = layering.totalThickness();
   Volume         endcapVol("endcap", PolyhedraRegular(numsides, rmin, rmax, totalThickness), air);
   DetElement     endcap("endcap", det_id);
 
-  // std::cout << "totalThickness = " << totalThickness << "\n";
-  // std::cout << "zmin = " << zmin << "\n";
-  // std::cout << "rmin = " << rmin << "\n";
-  // std::cout << "rmax = " << rmax << "\n";
-  // std::cout << "nlayers = " << std::size(layering.layers()) << "\n";
   int    l_num     = 1;
   int    layerType = 0;
   double layerZ    = -totalThickness / 2;
@@ -66,25 +139,83 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
 
     int    s_num  = 1;
     double sliceZ = -l_thick / 2;
+
+   double disksGap= getAttrOrDefault( x_layer, _Unicode(disksGap), 0 * cm );
+
+   //std::cout << "disksGap = " << disksGap << "\n";
     for (xml_coll_t xs(x_layer, _U(slice)); xs; ++xs) {
       xml_comp_t x_slice = xs;
       string     s_name  = _toString(s_num, "slice%d");
       double     s_thick = x_slice.thickness();
       Material   s_mat   = description.material(x_slice.materialStr());
-      Volume     s_vol(s_name, PolyhedraRegular(numsides, rmin, rmax, s_thick), s_mat);
-
-      s_vol.setVisAttributes(description.visAttributes(x_slice.visStr()));
       sliceZ += s_thick / 2;
-      PlacedVolume s_phv = l_vol.placeVolume(s_vol, Position(0, 0, sliceZ));
-      s_phv.addPhysVolID("slice", s_num);
-      if (x_slice.isSensitive()) {
-        sens.setType("calorimeter");
-        s_vol.setSensitiveDetector(sens);
-        sensitives.push_back(s_phv);
+
+      if(x_slice.visStr()=="HcalAbsorberVis") {
+        Volume     s_vol1(s_name+"_halfdisk1", Tube(rmin, rmax, s_thick/2, M_PI/2, M_PI*3/2), s_mat);
+        s_vol1.setVisAttributes(description.visAttributes(x_slice.visStr()));
+        PlacedVolume s_phv1 = l_vol.placeVolume(s_vol1, Position(-disksGap/2, 0, sliceZ));
+        s_phv1.addPhysVolID("sliceDisk1", s_num);
+
+        Volume     s_vol2(s_name+"_halfdisk1", Tube(rmin, rmax, s_thick/2, M_PI/2, M_PI*3/2), s_mat);
+        s_vol2.setVisAttributes(description.visAttributes(x_slice.visStr()));
+        PlacedVolume s_phv2 = l_vol.placeVolume(s_vol2, Transform3D(RotationZYX(M_PI,0,0), Position(+disksGap/2, 0, sliceZ)));
+        s_phv2.addPhysVolID("sliceDisk2", s_num);
       }
+
+      else {
+
+      double dphi = 2*getPhiHalfWidth();
+adadadass
+      for (unsigned iSector = 0; iSector < 1; iSector++)    {
+        string sector_name = Form("sector%d", iSector);
+        // double z_min = newZstart - s_thick / 2;
+        // double z_max = newZstart + s_thick / 2;
+        // ConeSegment cone(s_thick/2, rmin, getR(z_max, l_num - 1), rmin, getR(z_min, l_num-1) ,2*M_PI*iSector/nHcalSectors,  2*M_PI*(iSector+1)/nHcalSectors);
+        // Volume     sector_volume(sector_name, cone, air);
+        // PlacedVolume  s_phv = l_vol.placeVolume(sector_volume, Position(0, 0, sliceZ)); //iSector>2&&iSector<9?(-disksGap/2):disksGap/2
+        // s_phv.addPhysVolID(s_name+sector_name, s_num);
+
+          for (unsigned iSubSector = 0; iSubSector < 1; iSubSector++)    {
+            for   (unsigned iEtaBin =0; iEtaBin < nEtaBins; iEtaBin++)    {
+                              //recreate old tile size for the given layer:
+                int oldTileLayer=tileMap[l_num-1]; //layer of the old tile corresponding to the current layer
+                double zOldPos=defaultZpos[oldTileLayer]; //center z position of the old tile
+
+                TVector3 tileCenterPosition = getTowerCenter(iSector, iSubSector, iEtaBin, zOldPos); //vector pointing to the center of the tile
+                string subsector_name = Form("subsector%d", iSubSector);
+                string etabin_name = Form("etabin%d", iEtaBin);
+
+                double rBottom= getR(zOldPos, defaultEtaBins[iEtaBin]); //closest current tile distance to the beam pipe
+                double rTop= getR(zOldPos, defaultEtaBins[iEtaBin+1]); //furthest current tile distance to the beam pipe
+                //cosine theorem for the angle between the two radii:
+                //(2 dx1)^2 = r^2+r^2-2*r*r*cos(phi) = 2r^2(1-cos(phi));
+                //  dx1=r*sqrt(2(1-cos(phi)))/2;
+                double dx1=rBottom*sqrt(2*(1-cos(dphi)))/2;
+                double dx2=rTop*sqrt(2*(1-cos(dphi)))/2;
+                double dz = (rTop-rBottom)/2;
+                double dy = s_thick/2;
+                Trapezoid tile(dx1, dx2, dy, dy, dz);
+                Volume     tile_vol("tile"+sector_name+subsector_name+etabin_name, tile, s_mat);
+                PlacedVolume  tile_phys = l_vol.placeVolume(tile_vol, Transform3D(RotationZYX((iSector*nHcalSectors + iSubSector)*2*M_PI/60, M_PI/2, M_PI/2), Position( tileCenterPosition.X(), tileCenterPosition.Y(), sliceZ)));// Position(tileCenterPosition.Y(), tileCenterPosition.X(), sliceZ));
+                tile_phys.addPhysVolID(sector_name+subsector_name+etabin_name, s_num);
+                if (x_slice.isSensitive()) {
+                    sens.setType("calorimeter");
+                    tile_vol.setSensitiveDetector(sens);
+                    sensitives.push_back(tile_phys);
+                    }
+              }
+          }
+
+
+      }
+      }
+
       sliceZ += s_thick / 2;
       s_num++;
+
     }
+
+
     l_vol.setVisAttributes(description.visAttributes(x_layer.visStr()));
     if (l_repeat <= 0)
       throw std::runtime_error(x_det.nameStr() + "> Invalid repeat value");
@@ -129,6 +260,7 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
   endcapAssyDE.setPlacement(pv);
   return endcapAssyDE;
 }
+
 
 // clang-format off
 DECLARE_DETELEMENT(epic_PolyhedraEndcapCalorimeter2, create_detector)
