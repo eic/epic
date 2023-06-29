@@ -8,19 +8,24 @@
       The structure of a single module is arranged as followed:
 
             carbonfiber[ VM2000[ crystal ]VM2000 ]carbonfiber
-
+            0.2          0.05    200.00  
     </comment>
     <constant name="EcalEndcapN_crystalmodule_crystal_width" value="20.00*mm"/>
     <constant name="EcalEndcapN_crystalmodule_crystal_length" value="200.00*mm"/>
     <constant name="EcalEndcapN_crystalmodule_carbonfiber_thickness" value="0.20*mm"/>
     <constant name="EcalEndcapN_crystalmodule_VM2000_thickness" value="0.05*mm"/>
     <constant name="EcalEndcapN_crystalmodule_carbonfiber_length" value="20.00*mm"/>
-    <constant name="EcalEndcapN_crystalmodule_PCB_thickness" value="2.0*mm"/>
-    <constant name="EcalEndcapN_crystalmodule_sensor_sizeX" value="4.35*mm"/>
-    <constant name="EcalEndcapN_crystalmodule_sensor_sizeY" value="3.85*mm"/>
+    <constant name="EcalEndcapN_crystalmodule_PCB_thickness" value="1.45*mm"/>
+
+    <comment>
+      The S14160 SiPM from Hamamatsu is planned to use
+    </comment>
+    <constant name="EcalEndcapN_crystalmodule_sensor_sizeX" value="6.85*mm"/>
+    <constant name="EcalEndcapN_crystalmodule_sensor_sizeY" value="7.35*mm"/>
+    <constant name="EcalEndcapN_crystalmodule_sensor_spacing" value="1.00*mm"/>
     <constant name="EcalEndcapN_crystalmodule_sensor_thickness" value="1.45*mm"/>
-    <constant name="EcalEndcapN_crystalmodule_Nsensor_in_X" value="4"/>
-    <constant name="EcalEndcapN_crystalmodule_Nsensor_in_Y" value="4"/>
+    <constant name="EcalEndcapN_crystalmodule_Nsensor_in_X" value="2"/>
+    <constant name="EcalEndcapN_crystalmodule_Nsensor_in_Y" value="2"/>
 
     <comment>
       Basic hardcoded parameters about supporting structures, rotation and shift
@@ -63,7 +68,7 @@
         name="EcalEndcapN"
         type="epic_HomogeneousCalorimeter"
         readout="EcalEndcapNHits">
-      <position x="0" y="0" z="-(EcalEndcapN_zmin + (EcalEndcapN_crystalmodule_crystal_length + EcalEndcapN_crystalmodule_VM2000_thickness)/2.)"/>
+      <position x="0" y="0" z="-(EcalEndcapN_zmin + (EcalEndcapN_crystalmodule_crystal_length + EcalEndcapN_crystalmodule_VM2000_thickness + EcalEndcapN_crystalmodule_sensor_thickness + EcalEndcapN_crystalmodule_PCB_thickness)/2.)"/>
       <rotation x="0" y="0." z="0"/>
       <placements>
         <disk_12surface
@@ -72,7 +77,7 @@
             r12min="EcalEndcapN_structure_Oring_min"
             r12max="EcalEndcapN_structure_Oring_max"
             outerringlength="EcalEndcapN_structure_Oring_length"
-            modulelength="EcalEndcapN_crystalmodule_crystal_length + EcalEndcapN_crystalmodule_VM2000_thickness"
+            modulelength="EcalEndcapN_crystalmodule_crystal_length + EcalEndcapN_crystalmodule_VM2000_thickness + EcalEndcapN_crystalmodule_sensor_thickness + EcalEndcapN_crystalmodule_PCB_thickness"
             protate="EcalEndcapN_Protate"
             nrotate="EcalEndcapN_Nrotate"
             outerringshift="EcalEndcapN_Oring_relative_shift"
@@ -103,8 +108,8 @@
           </points_extrudedpolygon>
 
           <module
-            modulex="EcalEndcapN_crystalmodule_crystal_width + 2.*EcalEndcapN_crystalmodule_carbonfiber_thickness + 2.*EcalEndcapN_crystalmodule_VM2000_thickness"
-            moduley="EcalEndcapN_crystalmodule_crystal_width + 2.*EcalEndcapN_crystalmodule_carbonfiber_thickness + 2.*EcalEndcapN_crystalmodule_VM2000_thickness"
+            modulex="EcalEndcapN_crystalmodule_crystal_width + 2.0*EcalEndcapN_crystalmodule_carbonfiber_thickness + 2.0*EcalEndcapN_crystalmodule_VM2000_thickness"
+            moduley="EcalEndcapN_crystalmodule_crystal_width + 2.0*EcalEndcapN_crystalmodule_carbonfiber_thickness + 2.0*EcalEndcapN_crystalmodule_VM2000_thickness"
             modulez="EcalEndcapN_crystalmodule_crystal_length + EcalEndcapN_crystalmodule_VM2000_thickness + EcalEndcapN_crystalmodule_sensor_thickness + EcalEndcapN_crystalmodule_PCB_thickness"
             moduleshift="EcalEndcapN_crystalmodule_VM2000_thickness"
             gmaterial="Vacuum"
@@ -129,6 +134,7 @@
             Sensor_sizex="EcalEndcapN_crystalmodule_sensor_sizeX"
             Sensor_sizey="EcalEndcapN_crystalmodule_sensor_sizeY"
             Sensor_thickness="EcalEndcapN_crystalmodule_sensor_thickness"
+            Sensor_space="EcalEndcapN_crystalmodule_sensor_spacing"
             Nsensor_X="EcalEndcapN_crystalmodule_Nsensor_in_X"
             Nsensor_Y="EcalEndcapN_crystalmodule_Nsensor_in_Y"
             PCB_sizex="EcalEndcapN_crystalmodule_crystal_width"
