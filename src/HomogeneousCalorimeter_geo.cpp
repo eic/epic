@@ -125,40 +125,39 @@ std::tuple<Volume, Position> build_module(Detector& desc, xml::Collection_t& plm
   auto   cryx = cry.attr<double>(_Unicode(sizex));
   auto   cryy = cry.attr<double>(_Unicode(sizey));
   auto   cryz = cry.attr<double>(_Unicode(sizez));
-  Box    crystalshape(cryx / 2., cryy / 2., cryz / 2.);
-  auto   crystalMat = desc.material(cry.attr<std::string>(_Unicode(material)));
-  Volume crystalVol("crystal_vol", crystalshape, crystalMat);
-
   auto   roc  = plm.child(_Unicode(readout));
   auto   PCBx = roc.attr<double>(_Unicode(PCB_sizex));
   auto   PCBy = roc.attr<double>(_Unicode(PCB_sizex));
   auto   PCBz = roc.attr<double>(_Unicode(PCB_thickness));
-  Box    PCBshape(PCBx / 2., PCBy / 2., PCBz / 2.);
-  auto   PCBMat = desc.material(roc.attr<std::string>(_Unicode(material)));
-  Volume PCBVol("PCB_vol", PCBshape, PCBMat);
-
   auto   sensorx = roc.attr<double>(_Unicode(Sensor_sizex));
   auto   sensory = roc.attr<double>(_Unicode(Sensor_sizey));
   auto   sensorz = roc.attr<double>(_Unicode(Sensor_thickness));
+  auto   sensorspace = roc.attr<double>(_Unicode(Sensor_space));
   auto   sensorNx = roc.attr<int>(_Unicode(Nsensor_X));
   auto   sensorNy = roc.attr<int>(_Unicode(Nsensor_Y));
+  
+  Box    crystalshape(cryx / 2., cryy / 2., cryz / 2.);
+  auto   crystalMat = desc.material(cry.attr<std::string>(_Unicode(material)));
+  Volume crystalVol("crystal_vol", crystalshape, crystalMat);
+  modVol.placeVolume(crystalVol, Position(0., 0., PCBz + sensorz + (cryz - mz) / 2.));
+  crystalVol.setVisAttributes(desc.visAttributes(cry.attr<std::string>(_Unicode(cryvis))));
+  crystalVol.setSensitiveDetector(sens);
+  
+  Box    PCBshape(PCBx / 2., PCBy / 2., PCBz / 2.);
+  auto   PCBMat = desc.material(roc.attr<std::string>(_Unicode(material)));
+  Volume PCBVol("PCB_vol", PCBshape, PCBMat);
+  modVol.placeVolume(PCBVol, Position(0., 0., (PCBz - mz) / 2.));
+  
   Box    sensorshape(sensorx / 2., sensory / 2., sensorz / 2.);
   auto   sensorMat = desc.material(roc.attr<std::string>(_Unicode(material)));
   Volume sensorVol("sensor_vol", sensorshape, sensorMat);
-
-  modVol.placeVolume(crystalVol, Position(0., 0., (PCBz + sensorz - mdz) / 2.));
-  crystalVol.setVisAttributes(desc.visAttributes(cry.attr<std::string>(_Unicode(cryvis))));
-  crystalVol.setSensitiveDetector(sens);
-
-  modVol.placeVolume(PCBVol, Position(0., 0., (PCBz - mz) / 2.));
-
-  auto intervalx = (PCBx - sensorNx * sensorx) / (sensorNx - 1);
-  auto intervaly = (PCBy - sensorNy * sensory) / (sensorNy - 1);
-  auto x0 = (sensorx - PCBx) / 2.;
-  auto y0 = (sensory - PCBy) / 2.;
+  auto marginx = (PCBx - sensorNx * sensorx - (sensorNx - 1) * sensorspace) / 2.;
+  auto marginy = (PCBy - sensorNy * sensory - (sensorNy - 1) * sensorspace) / 2.;
+  auto x0 = marginx + sensorx / 2. - PCBx / 2.;
+  auto y0 = marginy + sensory / 2. - PCBy / 2.;
   for(int i = 0 ; i < sensorNx ; i++)
     for(int j = 0 ; j < sensorNy ; j++)
-      modVol.placeVolume(sensorVol, Position(x0 + (sensorx + intervalx) * i, y0 + (sensory + intervaly) * j, PCBz + (sensorz - mz) / 2.));
+      modVol.placeVolume(sensorVol, Position(x0 + (sensorx + sensorspace) * i, y0 + (sensory + sensorspace) * j, PCBz + (sensorz - mz) / 2.));
 
 
 
@@ -186,19 +185,18 @@ std::tuple<Volume, Position> build_module(Detector& desc, xml::Collection_t& plm
     Box gapShape_sub((mx - 2. * wrapcfthickness) / 2., (my - 2. * wrapcfthickness) / 2., (cryz - 2. * wrapcflength) / 2.);
     SubtractionSolid gap_subtract(gapShape, gapShape_sub, Position(0., 0., 0.));
 
-    Box wrpVM2000((mx - 2. * wrapcfthickness) / 2., (my - 2. * wrapcfthickness) / 2., mz / 2.);
+    Box wrpVM2000((mx - 2. * wrapcfthickness) / 2., (my - 2. * wrapcfthickness) / 2., (cryz + mdz) / 2.);
     Box wrpVM2000_sub((mx - 2. * wrapcfthickness - 2. * wrapVMthickness) / 2., (my - 2. * wrapcfthickness - 2. * wrapVMthickness) / 2., cryz / 2.);
     SubtractionSolid wrpVM2000_subtract(wrpVM2000, wrpVM2000_sub, Position(0., 0., -mdz / 2.));
 
     Volume carbonVol("carbon_vol", carbon_subtract, carbonMat);
     Volume gapVol("gap_vol", gap_subtract, gapMat);
     Volume wrpVol("wrapper_vol", wrpVM2000_subtract, wrpMat);
-
-    modVol.placeVolume(carbonVol, Position(0., 0., sensorz + PCBz + (cryz - wrapcflength - wrapVMthickness) / 2.)); // put the wrap in the both ends of crystal
-    modVol.placeVolume(carbonVol, Position(0., 0., sensorz + PCBz + (wrapcflength - cryz - wrapVMthickness) / 2.));
-    modVol.placeVolume(gapVol, Position(0., 0., sensorz + PCBz - (wrapVMthickness / 2.))); // put the gap between two carbon fiber
-    modVol.placeVolume(wrpVol, Position(0., 0., sensorz + PCBz));
-
+    
+    modVol.placeVolume(carbonVol, Position(0., 0., PCBz + sensorz + (wrapcflength - mz) / 2.)); // put the wrap in the both ends of crystal
+    modVol.placeVolume(carbonVol, Position(0., 0., PCBz + sensorz + cryz - (wrapcflength + mz) / 2.));
+    modVol.placeVolume(gapVol, Position(0., 0., PCBz + sensorz + (cryz - mz) / 2. )); // put the gap between two carbon fiber
+    modVol.placeVolume(wrpVol, Position(0., 0., PCBz + sensorz + (cryz + mdz - mz) / 2.));
 
     carbonVol.setVisAttributes(desc.visAttributes(wrp.attr<std::string>(_Unicode(vis_carbon))));
     gapVol.setVisAttributes(desc.visAttributes(wrp.attr<std::string>(_Unicode(vis_gap))));
@@ -307,30 +305,28 @@ static std::tuple<int, std::pair<int, int>> add_12surface_disk(Detector& desc, A
   // Placing The Modules
   //=====================================================================
 
-  auto test_points = epic::geo::fillRectangles({half_modx, half_mody}, modSize.x(), modSize.y(), 0., (rmax/std::cos(Prot)), phimin, phimax);
+  auto points = epic::geo::fillRectangles({half_modx, half_mody}, modSize.x(), modSize.y(), 0., (rmax/std::cos(Prot)), phimin, phimax);
 
   std::pair<double, double> c1 (0., 0.);
   auto polyVertex = epic::geo::getPolygonVertices(c1, (rmax/std::cos(Prot)), M_PI/12., 12);
-  std::vector<epic::geo::Point> Out_vertices, In_vertices;
+  std::vector<epic::geo::Point> out_vertices, in_vertices;
   int index = 0;
   for( auto p : polyVertex ){
     epic::geo::Point a = {p.first, p.second};
-    Out_vertices.push_back(a);
-    // std::cout << "{" << Out_vertices[index].x() << ", " << Out_vertices[index].y() << "}, " << std::endl;
+    out_vertices.push_back(a);
     index++;
   }
-  // std::cout << std::endl << std::endl;
 
   for (xml_coll_t position_i(pts_extrudedpolygon, _U(position)); position_i; ++position_i){
     xml_comp_t position_comp = position_i;
     epic::geo::Point inpt = {position_comp.x(), position_comp.y()};
-    In_vertices.push_back(inpt);
+    in_vertices.push_back(inpt);
   }
 
   double minX = 0., maxX = 0., minY = 0., maxY = 0.;
-  for (auto &square : test_points) {
+  for (auto &square : points) {
     epic::geo::Point box[4] = {{square.x() + half_modx, square.y() + half_mody}, {square.x() - half_modx, square.y() + half_mody}, {square.x() - half_modx, square.y() - half_mody}, {square.x() + half_modx, square.y() - half_mody}};
-    if (epic::geo::isBoxInsidePolygon(box, Out_vertices)) {
+    if (epic::geo::isBoxTotalInsidePolygon(box, out_vertices)) {
       if( square.x() < minX ) minX = square.x();
       if( square.y() < minY ) minY = square.x();
       if( square.x() > maxX ) maxX = square.x();
@@ -344,12 +340,10 @@ static std::tuple<int, std::pair<int, int>> add_12surface_disk(Detector& desc, A
   int N_column = std::round((maxX - minX) / modSize.x());
   auto rowcolumn = std::make_pair(N_row, N_column);
 
-  for (auto &square : test_points) {
+  for (auto &square : points) {
     epic::geo::Point box[4] = {{square.x() + half_modx, square.y() + half_mody}, {square.x() - half_modx, square.y() + half_mody}, {square.x() - half_modx, square.y() - half_mody}, {square.x() + half_modx, square.y() - half_mody}};
-
-    if (epic::geo::isBoxInsidePolygon(box, Out_vertices)) {
-      if(!epic::geo::isBoxInsidePolygon(box, In_vertices)) {
-        // std::cout << "Square inside the inner frame: " << square.x() << ", " << square.y() << std::endl;
+    if (epic::geo::isBoxTotalInsidePolygon(box, out_vertices)) {
+      if(!epic::geo::isBoxTotalInsidePolygon(box, in_vertices)) {
         column = std::round((square.x() - minX) / modSize.x());
         row = std::round((maxY - square.y()) / modSize.y());
         Transform3D tr_local = RotationZYX(Nrot, 0.0, 0.0) * Translation3D(square.x(), square.y(), 0.0);
@@ -358,11 +352,12 @@ static std::tuple<int, std::pair<int, int>> add_12surface_disk(Detector& desc, A
         total_count++;
       }
     }
-
   }
 
-  std::cout << "New Min: " << minX << ", " << minY << " || Max: " << maxX << ", " << maxY << std::endl;
-  std::cout << "Total count new: " << total_count << std::endl;
+  printout(DEBUG, "HomogeneousCalorimeter_geo", "Number of modules: %d", total_count);
+  printout(DEBUG, "HomogeneousCalorimeter_geo", "Min X, Y position of module: %.2f, %.2f", minX, minY);
+  printout(DEBUG, "HomogeneousCalorimeter_geo", "Max X, Y position of module: %.2f, %.2f", maxX, maxY);
+
 
   return {sector_id, rowcolumn};
 }
