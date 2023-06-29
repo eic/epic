@@ -156,8 +156,8 @@ namespace epic::geo {
   {
     int n = vertices.size();
     int i, j = 0;
-    int check = 0;  // check == 0 (outside the polygon), check == 1 (inside the polygon)
-    const double tolerance = 0.00001;
+    bool check = false;  // check == false (outside the polygon), check == true (inside the polygon)
+    const double tolerance = 0.000001;
 
     // When the point overlaped with vertex in the tolerance.
     //
@@ -168,15 +168,14 @@ namespace epic::geo {
 
     // When the point is on the line connected two vertices in the tolerance.
     //
-    if( check == 0 )
+    if( check == false )
       {
         for(i = 0, j = n-1 ; i < n ; j = i++)
           if( std::abs(p.x() - vertices[i].x()) < tolerance && std::abs(p.x() - vertices[j].x()) < tolerance )
             if( (vertices[i].y() > p.y()) != (vertices[j].y() > p.y()) )
               check = !check;
       }
-
-    if( check == 0 )
+    if( check == false )
       {
         for(i = 0, j = n-1 ; i < n ; j = i++)
           if( std::abs(p.y() - vertices[i].y()) < tolerance && std::abs(p.y() - vertices[j].y()) < tolerance )
@@ -185,7 +184,7 @@ namespace epic::geo {
       }
 
 
-    if( check == 0 )
+    if( check == false )
       {
         for(i = 0, j = n-1 ; i < n ; j = i++)
           {
@@ -202,14 +201,21 @@ namespace epic::geo {
   }
 
 
-  bool isBoxInsidePolygon(Point box[4], std::vector<Point> vertices)
+  bool isBoxTotalInsidePolygon(Point box[4], std::vector<Point> vertices)
   {
-    for (int i = 0; i < 4; i++)
-      {
-        if (!isPointInsidePolygon(box[i], vertices))
-          return false;
-      }
-    return true;
+    bool pt_check = true;
+    for (int i = 0 ; i < 4 ; i++ )
+      pt_check = pt_check && isPointInsidePolygon(box[i], vertices);
+    return pt_check;
+  }
+
+
+  bool isBoxPartialInsidePolygon(Point box[4], std::vector<Point> vertices)
+  {
+    bool pt_check = false;
+    for (int i = 0 ; i < 4 ; i++ )
+      pt_check = pt_check || isPointInsidePolygon(box[i], vertices);
+    return pt_check;
   }
 
 
@@ -217,7 +223,7 @@ namespace epic::geo {
   {
     std::vector<std::pair<double, double>> vertices;
     double angle = 2 * M_PI / numSides;  // calculate the angle between adjacent vertices
-    for (int i = 0; i < numSides; i++)
+    for (int i = 0 ; i < numSides ; i++)
       {
         double x = center.first + radius * cos(i * angle + angle_0);
         double y = center.second + radius * sin(i * angle + angle_0);
