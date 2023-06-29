@@ -135,19 +135,19 @@ std::tuple<Volume, Position> build_module(Detector& desc, xml::Collection_t& plm
   auto   sensorspace = roc.attr<double>(_Unicode(Sensor_space));
   auto   sensorNx = roc.attr<int>(_Unicode(Nsensor_X));
   auto   sensorNy = roc.attr<int>(_Unicode(Nsensor_Y));
-  
+
   Box    crystalshape(cryx / 2., cryy / 2., cryz / 2.);
   auto   crystalMat = desc.material(cry.attr<std::string>(_Unicode(material)));
   Volume crystalVol("crystal_vol", crystalshape, crystalMat);
   modVol.placeVolume(crystalVol, Position(0., 0., PCBz + sensorz + (cryz - mz) / 2.));
   crystalVol.setVisAttributes(desc.visAttributes(cry.attr<std::string>(_Unicode(cryvis))));
   crystalVol.setSensitiveDetector(sens);
-  
+
   Box    PCBshape(PCBx / 2., PCBy / 2., PCBz / 2.);
   auto   PCBMat = desc.material(roc.attr<std::string>(_Unicode(material)));
   Volume PCBVol("PCB_vol", PCBshape, PCBMat);
   modVol.placeVolume(PCBVol, Position(0., 0., (PCBz - mz) / 2.));
-  
+
   Box    sensorshape(sensorx / 2., sensory / 2., sensorz / 2.);
   auto   sensorMat = desc.material(roc.attr<std::string>(_Unicode(material)));
   Volume sensorVol("sensor_vol", sensorshape, sensorMat);
@@ -192,7 +192,7 @@ std::tuple<Volume, Position> build_module(Detector& desc, xml::Collection_t& plm
     Volume carbonVol("carbon_vol", carbon_subtract, carbonMat);
     Volume gapVol("gap_vol", gap_subtract, gapMat);
     Volume wrpVol("wrapper_vol", wrpVM2000_subtract, wrpMat);
-    
+
     modVol.placeVolume(carbonVol, Position(0., 0., PCBz + sensorz + (wrapcflength - mz) / 2.)); // put the wrap in the both ends of crystal
     modVol.placeVolume(carbonVol, Position(0., 0., PCBz + sensorz + cryz - (wrapcflength + mz) / 2.));
     modVol.placeVolume(gapVol, Position(0., 0., PCBz + sensorz + (cryz - mz) / 2. )); // put the gap between two carbon fiber

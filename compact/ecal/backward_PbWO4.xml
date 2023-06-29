@@ -8,7 +8,7 @@
       The structure of a single module is arranged as followed:
 
             carbonfiber[ VM2000[ crystal ]VM2000 ]carbonfiber
-            0.2          0.05    200.00  
+            0.2          0.05    200.00
     </comment>
     <constant name="EcalEndcapN_crystalmodule_crystal_width" value="20.00*mm"/>
     <constant name="EcalEndcapN_crystalmodule_crystal_length" value="200.00*mm"/>
