@@ -43,10 +43,6 @@ include(GNUInstallDirs)
 find_package(DD4hep 1.21 REQUIRED COMPONENTS DDCore DDRec)
 find_package(fmt REQUIRED)
 
-# ePIC compile definitions
-option(EPIC_COMPILE_DEFINITIONS "Additional compile definitions" "")
-add_compile_definitions(${EPIC_COMPILE_DEFINITIONS})
-
 #-----------------------------------------------------------------------------------
 set(a_lib_name ${PROJECT_NAME})
 
