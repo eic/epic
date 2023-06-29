@@ -250,7 +250,7 @@
     <!-- Lumi sweeper dipole Magnet -->
     <constant name="LumiSweepMag_X"       value="0*m"/>
     <constant name="LumiSweepMag_Y"       value="0*m"/>
-    <constant name="LumiSweepMag_Z"       value="-65*m"/>
+    <constant name="LumiSweepMag_Z"       value="-62.5*m"/>
     <constant name="LumiSweepMag_DZ"      value="1*m"/>
 
     <!-- Lumi spectrometer dipole Magnet -->
@@ -279,6 +279,7 @@
     <constant name="LumiSpecCAL_Y"        value="LumiSpecCAL_FiveSigma + LumiSpecCAL_DXY/2.0"/>
 
     <!-- Lumi spectrometer trackers -->
+    <constant name="LumiSpecTracker_pixelSize"  value="0.050*mm"/>
     <constant name="LumiSpecTracker_DXY"  value="0.2*m"/>
     <constant name="LumiSpecTracker_Z1"   value="LumiSpecCAL_Z + LumiSpecCALTower_DZ/2. + 21*cm "/>
     <constant name="LumiSpecTracker_Z2"   value="LumiSpecCAL_Z + LumiSpecCALTower_DZ/2. + 11*cm"/>
