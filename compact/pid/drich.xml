@@ -8,8 +8,8 @@
 <constant name="DRICH_length"             value="ForwardRICHRegion_length"/>  <!-- overall vessel length -->
 <constant name="DRICH_zmin"               value="ForwardRICHRegion_zmin"/>
 <constant name="DRICH_zmax"               value="DRICH_zmin + DRICH_length"/>
-<constant name="DRICH_rmin0"              value="DRICH_zmin * ForwardRICHRegion_tan1"/>  <!-- bore radius at dRICH entrance -->
-<constant name="DRICH_rmin1"              value="DRICH_zmax * ForwardRICHRegion_tan2"/>  <!-- bore radius at dRICH exit -->
+<constant name="DRICH_rmin0"              value="10*cm"/>  <!-- DRICH_zmin * ForwardRICHRegion_tan1 changed to diameter 20; bore radius at dRICH entrance -->
+<constant name="DRICH_rmin1"              value="17.6*cm"/>  <!-- DRICH_zmax * ForwardRICHRegion_tan2 changed to diameter 35.2; bore radius at dRICH exit -->
 <constant name="DRICH_bore_slope"         value="(DRICH_rmin1 - DRICH_rmin0) / DRICH_length"/> <!-- slope of bore radius -->
 <constant name="DRICH_wall_thickness"     value="0.5*cm"/>  <!-- thickness of radial walls -->
 <constant name="DRICH_window_thickness"   value="0.1*cm"/>  <!-- thickness of entrance and exit walls -->
@@ -162,10 +162,10 @@
   rmax="DRICH_rmax2 - DRICH_wall_thickness - 3.0*cm"
   phiw="59.5*degree"
   thickness="0.2*cm"
-  focus_tune_x="-7.00*cm"
+  focus_tune_x="-7.0*cm"
   focus_tune_z="6.15*cm"
   />
-
+<!--f_z f_x = 6.15, -7 -> -5.1 10  -->
 <!-- /detectors/detector/sensors -->
 <documentation level="10">
 #### Sensors
@@ -210,14 +210,14 @@
     - `zmin`: z-plane cut
 </documentation>
 <sphere
-  centerz="138.4*cm - DRICH_zmin"
+  centerz="143.4*cm - DRICH_zmin"
   centerx="183.4*cm"
   radius="110.0*cm"
   />
 <sphericalpatch
   phiw="30*degree"
   rmin="111.0*cm"
-  rmax="179.0*cm"
+  rmax="174.0*cm"
   zmin="DRICH_snout_length + 3.0*cm"
   />
 
