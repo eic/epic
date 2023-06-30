@@ -35,7 +35,7 @@
     <constant name="Mod_PCBThickness"         value="4* mm"/>
     <constant name="Mod_PCBLength"            value="135* cm"/>
 
-    
+
     <constant name="EightM_xArr"              value="4" />
     <constant name="EightM_yArr"              value="2" />
     <constant name="EightM_OuterWidth"        value="20.0* cm"/>
@@ -64,7 +64,7 @@
     <vis name="LFHCALLayerFoilVis"      ref="AnlGray"       showDaughters="false" visible="true"/>
     <vis name="LFHCALModPCB"            ref="AnlDarkGreen"  showDaughters="false" visible="true"/>
  </display>
-    
+
   <!-- Define detector -->
   <detectors>
     <documentation>

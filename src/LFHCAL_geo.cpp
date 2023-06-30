@@ -19,7 +19,7 @@ using namespace dd4hep;
 
 struct moduleParamsStrct{
   moduleParamsStrct(): mod_BIwidth(0.), mod_BIheight(0.), mod_SWThick(0.),   mod_TWThick(0.), mod_FWThick (0.),
-                      mod_BWThick(0.), mod_width(0.), mod_height(0.), 
+                      mod_BWThick(0.), mod_width(0.), mod_height(0.),
                       mod_notchDepth(0.), mod_notchHeight(0.), mod_foilThick(0.),  mod_pcbLength(0.), mod_pcbThick(0.), mod_pcbWidth(0.), mod_visStr(""), mod_regStr(""), mod_limStr("")
                       {}
   moduleParamsStrct(   double BIwidth, double BIheight, double SWThick, double TWThick, double FWThick, double BWThick, double width, double height,
@@ -171,7 +171,7 @@ Volume createFillerPlate( Detector& desc,
 ){
   double w_plate     = w_mod-2*t_mod_sp-w_notch;
   double h_plate     = h_mod-2*t_mod_tp;
-  
+
   Box         filler( w_plate / 2., h_plate / 2., t_slice / 2.);
   Volume      filler_vol(basename, filler, slice_mat);
   // Setting slice attributes
@@ -199,7 +199,7 @@ Volume createScintillatorTower( Detector& desc,
                                   SensitiveDetector sens,
                                   bool renderComp
 ){
-  
+
   Box         scintplate( w_tow / 2., h_tow / 2., t_slice / 2.);
   Volume      slice_vol(basename, scintplate, slice_mat);
     // Setting appropriate slices as sensitive
@@ -252,7 +252,7 @@ Assembly createScintillatorPlateEightM( Detector& desc,
   double h_plate  = h_mod-2*t_mod_tp-2*t_foil;
   double w_tow    = (w_plate-6*t_foil)/4;
   double h_tow    = (h_plate-2*t_foil)/2;
-  
+
   // placement volumes
   PlacedVolume pvm;
 
@@ -315,7 +315,7 @@ Assembly createScintillatorPlateEightM( Detector& desc,
   pvm = modScintAssembly.placeVolume(foil_b_vol, Position(0, -(1.5*t_foil+h_tow), 0 ));
   pvm = modScintAssembly.placeVolume(foil_l_vol, Position(-(3.5*t_foil+2*w_tow), 0, 0 ));
   pvm = modScintAssembly.placeVolume(foil_r_vol, Position((3.5*t_foil+2*w_tow), 0, 0 ));
-  
+
   // 8M module placement of scintillator for tower
   double rotZ[8] = {0,  0,  0,  0,  0,  0,  0,  0};
   double rotY[8] = {0,  0,  0,  0,  0,  0,  0,  0};
@@ -377,7 +377,7 @@ Assembly createScintillatorPlateFourM( Detector& desc,
   //|              ||              |
   //--------------------------------
   Assembly modScintAssembly(basename);
-  
+
   double w_plate  = w_mod-w_notch-2*t_mod_sp-2*t_foil;
   double h_plate  = h_mod-2*t_mod_tp-2*t_foil;
   double w_tow    = (w_plate-2*t_foil)/2;
@@ -434,8 +434,8 @@ Assembly createScintillatorPlateFourM( Detector& desc,
   pvm = modScintAssembly.placeVolume(foil_b_vol, Position(0, -(1.5*t_foil+h_tow), 0 ));
   pvm = modScintAssembly.placeVolume(foil_l_vol, Position(-(1.5*t_foil+w_tow), 0, 0 ));
   pvm = modScintAssembly.placeVolume(foil_r_vol, Position((1.5*t_foil+w_tow), 0, 0 ));
-  
-  
+
+
   // 4M module placement of scintillator for tower
   double rotZ[4] = {0,    0, 0,     0   };
   double rotY[4] = {0,    0, 0,     0   };
@@ -542,7 +542,7 @@ Volume createEightMModule ( Detector& desc,
   } else {
     vol_modPCB.setAttributes(desc, mod_params.mod_regStr, mod_params.mod_limStr, "InvisibleNoDaughters");
   }
-  
+
   int    layer_num = 0;
   double slice_z   = -length/2+mod_params.mod_FWThick; // Keeps track of layers' local z locations
   // Looping through the number of repeated layers & slices in each section
@@ -609,7 +609,7 @@ Volume createEightMModule ( Detector& desc,
 
   double lengthA      = length-mod_params.mod_FWThick-mod_params.mod_BWThick;
   double z_offSetPCB  = (mod_params.mod_FWThick-mod_params.mod_BWThick)/2-(lengthA-mod_params.mod_pcbLength)/2.;
-  
+
   pvm = vol_mod.placeVolume(vol_modPCB, Position(-(mod_params.mod_width-2*mod_params.mod_SWThick-mod_params.mod_notchDepth)/2., 0, z_offSetPCB));
 
   return vol_mod;
@@ -697,7 +697,7 @@ Volume createFourMModule ( Detector& desc,
   } else {
     vol_modPCB.setAttributes(desc, mod_params.mod_regStr, mod_params.mod_limStr, "InvisibleNoDaughters");
   }
-  
+
   int    layer_num = 0;
   double slice_z   = -length/2+mod_params.mod_FWThick; // Keeps track of layers' local z locations
 
@@ -761,8 +761,8 @@ Volume createFourMModule ( Detector& desc,
 
   double lengthA      = length-mod_params.mod_FWThick-mod_params.mod_BWThick;
   double z_offSetPCB  = (mod_params.mod_FWThick-mod_params.mod_BWThick)/2-(lengthA-mod_params.mod_pcbLength)/2.;
-  
-  pvm = vol_mod.placeVolume(vol_modPCB, Position(-(mod_params.mod_width-2*mod_params.mod_SWThick-mod_params.mod_notchDepth)/2., 0, z_offSetPCB));  
+
+  pvm = vol_mod.placeVolume(vol_modPCB, Position(-(mod_params.mod_width-2*mod_params.mod_SWThick-mod_params.mod_notchDepth)/2., 0, z_offSetPCB));
   return vol_mod;
 }
 
