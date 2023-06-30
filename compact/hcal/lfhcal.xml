@@ -12,56 +12,59 @@
     <documentation>
       #### Material Thickness
     </documentation>
-    <constant name="LFHCALAbsorberThickness"       value="1.52* cm"/>
-    <constant name="LFHCALPolystyreneThickness"    value="0.4* cm"/>
-    <constant name="LFHCALTyvekThickness"          value="0.034* cm"/>
-    <constant name="LFHCALAirOffset"               value="0.046* cm"/>
-    <constant name="LFHCALElectronicsThickness"    value="10.0* cm"/>
+    <constant name="LFHCALAbsorberThickness"      value="1.52* cm"/>
+    <constant name="LFHCALPolystyreneThickness"   value="0.4* cm"/>
+    <constant name="LFHCALKaptonThickness"        value="0.08* cm"/>
+    <constant name="LFHCALAirOffset"              value="0.05* cm"/>
+    <constant name="LFHCALElectronicsThickness"   value="10.0* cm"/>
     <documentation>
       - Hcal Endcap N Layers and computed Thickness
     </documentation>
 
     <comment> FIXME: Need actual values once they are decided upon </comment>
-    <constant name="LFHCALLayer_NSteelRepeatS" value="10"/> <!--      6 x 10 steel layers -->
-    <constant name="LFHCALLayer_NTungstenRepeat" value="4"/>
-    <constant name="Mod_SideWallThickness"   value="1.9812* mm"/>
-    <constant name="Mod_TopWallThickness"    value="0.5* mm"/>
-    <constant name="Mod_FrontWallThickness"  value="14* mm"/>
-    <constant name="Mod_BackWallThickness"   value="9.91* mm"/>
-    <constant name="Mod_NotchDepth"          value="1.25* mm"/>
-    <constant name="Mod_SepWidth"            value="0.5* mm"/>
+    <constant name="LFHCALLayer_NSteelRepeatS"    value="10"/> <!--      6 x 10 steel layers -->
+    <constant name="LFHCALLayer_NTungstenRepeat"  value="4"/>
+    <constant name="Mod_SideWallThickness"    value="1.9* mm"/>
+    <constant name="Mod_TopWallThickness"     value="1.9* mm"/>
+    <constant name="Mod_FrontWallThickness"   value="15* mm"/>
+    <constant name="Mod_BackWallThickness"    value="15* mm"/>
+    <constant name="Mod_NotchDepth"           value="5* mm"/>
+    <constant name="Mod_NotchHeight"          value="75* mm"/>
+    <constant name="Mod_FoilThick"            value="0.1* mm"/>
+    <constant name="Mod_PCBWidth"             value="70* mm"/>
+    <constant name="Mod_PCBThickness"         value="4* mm"/>
+    <constant name="Mod_PCBLength"            value="135* cm"/>
 
-    <constant name="EightM_xArr"                value="4" />
-    <constant name="EightM_yArr"                value="2" />
-    <constant name="EightM_OuterWidth"          value="20.0* cm"/>
-    <constant name="EightM_OuterHeight"         value="10.0* cm"/>
-    <constant name="EightM_BackInnerWidth"      value="15.0* cm"/>
-    <constant name="EightM_BackInnerHeight"     value="7.5* cm"/>
-    <constant name="EightM_NotchWidthAbsA"      value="23* mm"/>
-    <constant name="EightM_NotchWidthAbsB"      value="10* mm"/>
-    <constant name="EightM_NotchWidthAbsC"      value="6.5* mm"/>
-    <constant name="EightM_NotchWidthScin"      value="29* mm"/>
-    <constant name="FourM_xArr"                value="4" />
-    <constant name="FourM_yArr"                value="2" />
-    <constant name="FourM_OuterWidth"          value="10.0* cm"/>
-    <constant name="FourM_OuterHeight"         value="10.0* cm"/>
-    <constant name="FourM_BackInnerWidth"      value="7.5* cm"/>
-    <constant name="FourM_BackInnerHeight"     value="7.5* cm"/>
-    <constant name="FourM_NotchWidthAbsA"      value="23* mm"/>
-    <constant name="FourM_NotchWidthAbsC"      value="6.5* mm"/>
-    <constant name="FourM_NotchWidthScin"      value="29* mm"/>
+    
+    <constant name="EightM_xArr"              value="4" />
+    <constant name="EightM_yArr"              value="2" />
+    <constant name="EightM_OuterWidth"        value="20.0* cm"/>
+    <constant name="EightM_OuterHeight"       value="10.0* cm"/>
+    <constant name="EightM_BackInnerWidth"    value="15.0* cm"/>
+    <constant name="EightM_BackInnerHeight"   value="7.0* cm"/>
+    <constant name="FourM_xArr"               value="2" />
+    <constant name="FourM_yArr"               value="2" />
+    <constant name="FourM_OuterWidth"         value="10.0* cm"/>
+    <constant name="FourM_OuterHeight"        value="10.0* cm"/>
+    <constant name="FourM_BackInnerWidth"     value="7.0* cm"/>
+    <constant name="FourM_BackInnerHeight"    value="7.0* cm"/>
+    <constant name="FourM_NotchHeight"        value="75* mm"/>
 
-    <vis name="LFHCAL8MModVis"        ref="AnlBlue" showDaughters="false" visible="true"/>
-    <vis name="LFHCAL4MModVis"        ref="AnlViolet" showDaughters="false" visible="true"/>
-    <vis name="LFHCAL8MModOuter"      ref="AnlBlue" showDaughters="false" visible="false"/>
-    <vis name="LFHCALLayerScintVis"   ref="AnlLight_Gray"   showDaughters="false" visible="false"/>
-    <vis name="LFHCALLayerSteelVis"   ref="AnlRed"   showDaughters="false" visible="false"/>
-    <vis name="LFHCALLayerTungstenVis" ref="AnlViolet"   showDaughters="true" visible="false"/>
-    <vis name="LFHCALLayerTyvekVis"   ref="AnlGold"   showDaughters="false" visible="false"/>
-    <vis name="LFHCALLayerTiOVis"     ref="AnlDarkGreen"   showDaughters="false" visible="false"/>
 
   </define>
 
+  <display>
+    <vis name="LFHCAL8MModVis"          ref="AnlBlue"       showDaughters="true"  visible="true"/>
+    <vis name="LFHCAL4MModVis"          ref="AnlViolet"     showDaughters="true"  visible="true"/>
+    <vis name="LFHCAL8MModOuter"        ref="AnlBlue"       showDaughters="true"  visible="true"/>
+    <vis name="LFHCALLayerScintVis"     ref="AnlLight_Gray" showDaughters="false" visible="true"/>
+    <vis name="LFHCALLayerSteelVis"     ref="AnlRed"        showDaughters="false" visible="true"/>
+    <vis name="LFHCALLayerTungstenVis"  ref="AnlViolet"     showDaughters="false" visible="true"/>
+    <vis name="LFHCALLayerKaptonVis"    ref="AnlGold"       showDaughters="false" visible="true"/>
+    <vis name="LFHCALLayerFoilVis"      ref="AnlGray"       showDaughters="false" visible="true"/>
+    <vis name="LFHCALModPCB"            ref="AnlDarkGreen"  showDaughters="false" visible="true"/>
+ </display>
+    
   <!-- Define detector -->
   <detectors>
     <documentation>
@@ -104,12 +107,12 @@
         thicknessBackWall="Mod_BackWallThickness"
         arrayX="EightM_xArr"
         arrayY="EightM_yArr"
-        notchWidthAbsA="EightM_NotchWidthAbsA"
-        notchWidthAbsB="EightM_NotchWidthAbsB"
-        notchWidthAbsC="EightM_NotchWidthAbsC"
-        notchWidthScin="EightM_NotchWidthScin"
         notchDepth="Mod_NotchDepth"
-        sepDepth="Mod_SepWidth"
+        notchHeight="Mod_NotchHeight"
+        foilThick="Mod_FoilThick"
+        pcbLength="Mod_PCBLength"
+        pcbThick="Mod_PCBThickness"
+        pcbWidth="Mod_PCBWidth"
         />
         <position x="50*cm" y="50*cm" z="LFHCAL_length - LFHCALElectronicsThickness" />
       </eightmodule>
@@ -125,57 +128,57 @@
         thicknessBackWall="Mod_BackWallThickness"
         arrayX="FourM_xArr"
         arrayY="FourM_yArr"
-        notchWidthAbsA="FourM_NotchWidthAbsA"
-        notchWidthAbsC="FourM_NotchWidthAbsC"
-        notchWidthScin="FourM_NotchWidthScin"
         notchDepth="Mod_NotchDepth"
-        sepDepth="Mod_SepWidth"
+        notchHeight="Mod_NotchHeight"
+        foilThick="Mod_FoilThick"
+        pcbLength="Mod_PCBLength"
+        pcbThick="Mod_PCBThickness"
+        pcbWidth="Mod_PCBWidth"
         />
         <position x="50*cm" y="60*cm" z="LFHCAL_length - LFHCALElectronicsThickness" />
       </fourmodule>
 
       <layer repeat="1" vis="InvisibleWithDaughters" readoutlayer="0">
-        <slice material="Tyvek" thickness="LFHCALTyvekThickness" vis="LFHCALLayerTyvekVis"
-               type="2" offset="LFHCALAirOffset"/>
+        <slice material="Kapton" thickness="LFHCALKaptonThickness" vis="LFHCALLayerKaptonVis" type="2" offset="LFHCALAirOffset"/>
         <slice material="Polystyrene" thickness="LFHCALPolystyreneThickness" vis="LFHCALLayerScintVis" sensitive="yes" limits="cal_limits" type="3" />
       </layer>
       <layer repeat="LFHCALLayer_NTungstenRepeat" vis="InvisibleWithDaughters" readoutlayer="0" >
 <!--         <slice material="Steel235" thickness="LFHCALAbsorberThickness" vis="LFHCALLayerSteelVis" type="1"/> -->
-        <slice material="Tungsten" thickness="LFHCALAbsorberThickness" vis="LFHCALLayerSteelVis" type="1"/>
-        <slice material="Tyvek" thickness="LFHCALTyvekThickness" vis="LFHCALLayerTyvekVis" type="2" offset="LFHCALAirOffset"/>
+        <slice material="Tungsten" thickness="LFHCALAbsorberThickness" vis="LFHCALLayerTungstenVis" type="1"/>
+        <slice material="Kapton" thickness="LFHCALKaptonThickness" vis="LFHCALLayerKaptonVis" type="2" offset="LFHCALAirOffset"/>
         <slice material="Polystyrene" thickness="LFHCALPolystyreneThickness" vis="LFHCALLayerScintVis" sensitive="yes" limits="cal_limits" type="3" />
       </layer>
       <layer repeat="LFHCALLayer_NSteelRepeatS" vis="InvisibleWithDaughters" readoutlayer="1">
         <slice material="Steel235" thickness="LFHCALAbsorberThickness" vis="LFHCALLayerSteelVis" type="1"/>
-        <slice material="Tyvek" thickness="LFHCALTyvekThickness" vis="LFHCALLayerTyvekVis" type="2" offset="LFHCALAirOffset"/>
+        <slice material="Kapton" thickness="LFHCALKaptonThickness" vis="LFHCALLayerKaptonVis" type="2" offset="LFHCALAirOffset"/>
         <slice material="Polystyrene" thickness="LFHCALPolystyreneThickness" vis="LFHCALLayerScintVis" sensitive="yes" limits="cal_limits" type="3" />
       </layer>
       <layer repeat="LFHCALLayer_NSteelRepeatS" vis="InvisibleWithDaughters" readoutlayer="2">
         <slice material="Steel235" thickness="LFHCALAbsorberThickness" vis="LFHCALLayerSteelVis" type="1"/>
-        <slice material="Tyvek" thickness="LFHCALTyvekThickness" vis="LFHCALLayerTyvekVis" type="2" offset="LFHCALAirOffset"/>
+        <slice material="Kapton" thickness="LFHCALKaptonThickness" vis="LFHCALLayerKaptonVis" type="2" offset="LFHCALAirOffset"/>
         <slice material="Polystyrene" thickness="LFHCALPolystyreneThickness" vis="LFHCALLayerScintVis" sensitive="yes" limits="cal_limits" type="3" />
       </layer>
       <layer repeat="LFHCALLayer_NSteelRepeatS" vis="InvisibleWithDaughters" readoutlayer="3">
         <slice material="Steel235" thickness="LFHCALAbsorberThickness" vis="LFHCALLayerSteelVis" type="1"/>
-        <slice material="Tyvek" thickness="LFHCALTyvekThickness" vis="LFHCALLayerTyvekVis" type="2" offset="LFHCALAirOffset"/>
+        <slice material="Kapton" thickness="LFHCALKaptonThickness" vis="LFHCALLayerKaptonVis" type="2" offset="LFHCALAirOffset"/>
         <slice material="Polystyrene" thickness="LFHCALPolystyreneThickness" vis="LFHCALLayerScintVis" sensitive="yes" limits="cal_limits" type="3" />
       </layer>
       <layer repeat="LFHCALLayer_NSteelRepeatS" vis="InvisibleWithDaughters" readoutlayer="4">
         <slice material="Steel235" thickness="LFHCALAbsorberThickness" vis="LFHCALLayerSteelVis" type="1"/>
-        <slice material="Tyvek" thickness="LFHCALTyvekThickness" vis="LFHCALLayerTyvekVis" type="2" offset="LFHCALAirOffset"/>
+        <slice material="Kapton" thickness="LFHCALKaptonThickness" vis="LFHCALLayerKaptonVis" type="2" offset="LFHCALAirOffset"/>
         <slice material="Polystyrene" thickness="LFHCALPolystyreneThickness" vis="LFHCALLayerScintVis" sensitive="yes" limits="cal_limits" type="3" />
       </layer>
       <layer repeat="LFHCALLayer_NSteelRepeatS" vis="InvisibleWithDaughters" readoutlayer="5">
         <slice material="Steel235" thickness="LFHCALAbsorberThickness" vis="LFHCALLayerSteelVis" type="1"/>
-        <slice material="Tyvek" thickness="LFHCALTyvekThickness" vis="LFHCALLayerTyvekVis" type="2" offset="LFHCALAirOffset"/>
+        <slice material="Kapton" thickness="LFHCALKaptonThickness" vis="LFHCALLayerKaptonVis" type="2" offset="LFHCALAirOffset"/>
         <slice material="Polystyrene" thickness="LFHCALPolystyreneThickness" vis="LFHCALLayerScintVis" sensitive="yes" limits="cal_limits" type="3" />
       </layer>
       <layer repeat="LFHCALLayer_NSteelRepeatS" vis="InvisibleWithDaughters" readoutlayer="6">
         <slice material="Steel235" thickness="LFHCALAbsorberThickness" vis="LFHCALLayerSteelVis" type="1"/>
-        <slice material="Tyvek" thickness="LFHCALTyvekThickness" vis="LFHCALLayerTyvekVis" type="2" offset="LFHCALAirOffset"/>
+        <slice material="Kapton" thickness="LFHCALKaptonThickness" vis="LFHCALLayerKaptonVis" type="2" offset="LFHCALAirOffset"/>
         <slice material="Polystyrene" thickness="LFHCALPolystyreneThickness" vis="LFHCALLayerScintVis" sensitive="yes" limits="cal_limits" type="3" />
       </layer>
-      <layer repeat="1" vis="InvisibleWithDaughters" >
+      <layer repeat="1" vis="VisibleWithDaughters" >
         <slice material="Steel235" thickness="LFHCALAbsorberThickness" vis="LFHCALLayerSteelVis"  type="1"/>
       </layer>
 
