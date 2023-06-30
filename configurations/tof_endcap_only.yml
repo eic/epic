@@ -3,4 +3,5 @@ features:
     marco:
   tracking:
     definitions:
+    #silicon_disks:
     tof_endcap_detailed:
