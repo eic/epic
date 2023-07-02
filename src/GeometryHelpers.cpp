@@ -159,7 +159,7 @@ namespace epic::geo {
     bool check = false;  // check == false (outside the polygon), check == true (inside the polygon)
     const double tolerance = 0.000001;
 
-    // When the point overlaped with vertex in the tolerance.
+    // When the point overlaps with vertex in the tolerance.
     //
     for(i = 0, j = n-1 ; i < n ; j = i++)
       if( std::abs(p.x() - vertices[i].x()) < tolerance && std::abs(p.y() - vertices[i].y()) < tolerance )
