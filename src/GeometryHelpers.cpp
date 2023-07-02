@@ -160,7 +160,7 @@ namespace epic::geo {
 
     // When the point overlaps with vertex in the tolerance.
     //
-    for( int i = 0, j = n-1 ; i < n ; j = i++)
+    for( int i = 0 ; i < n ; i++)
       if( std::abs(p.x() - vertices[i].x()) < tolerance && std::abs(p.y() - vertices[i].y()) < tolerance )
         check = !check;
 
