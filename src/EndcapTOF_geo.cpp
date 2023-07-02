@@ -27,8 +27,6 @@ using namespace dd4hep::detail;
 
 static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector sens)
 {
-  // typedef vector<PlacedVolume> Placements;
-
   xml_det_t    x_det    = e;
   int          det_id   = x_det.id();
   std::string  det_name = x_det.nameStr();
@@ -108,7 +106,6 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
       //! Note the module ordering is different for front and back side
       xml_comp_t x_modCurr = iy % 2 == 0 ? x_modFront : x_modBack;
 
-      // double module_z = envelope.length() / 2.0 - total_thickness/2;
       double module_z = x_supp_envelope.length() / 2.0 + total_thickness / 2;
       if (iy % 2 == 0) {
         module_z *= -1;
@@ -117,22 +114,19 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
       float corner_x2 = xcoord - module_x / 2;
       float corner_y1 = ycoord + module_y / 2;
       float corner_y2 = ycoord - module_y / 2;
-      float maxRadius =
-          std::max(std::max(sqrt(pow(corner_x1, 2) + pow(corner_y1, 2)), sqrt(pow(corner_x2, 2) + pow(corner_y2, 2))),
-                   std::max(sqrt(pow(corner_x1, 2) + pow(corner_y2, 2)), sqrt(pow(corner_x2, 2) + pow(corner_y1, 2))));
-      float minRadius =
-          std::min(std::min(sqrt(pow(corner_x1, 2) + pow(corner_y1, 2)), sqrt(pow(corner_x2, 2) + pow(corner_y2, 2))),
-                   std::min(sqrt(pow(corner_x1, 2) + pow(corner_y2, 2)), sqrt(pow(corner_x2, 2) + pow(corner_y1, 2))));
+      float maxRadius = std::max(std::max(std::hypot(corner_x1, corner_y1), std::hypot(corner_x2, corner_y2)),
+                                 std::max(std::hypot(corner_x1, corner_y2), std::hypot(corner_x2, corner_y1)));
+      float minRadius = std::min(std::min(std::hypot(corner_x1, corner_y1), std::hypot(corner_x2, corner_y2)),
+                                 std::min(std::hypot(corner_x1, corner_y2), std::hypot(corner_x2, corner_y1)));
       if (maxRadius > envelope.rmax() || minRadius < envelope.rmin()) {
         continue;
       }
 
-      string     module_name = Form("module%d_%d_%d", module, ix, iy); //_toString(module, "module%d");
+      string     module_name = Form("module%d_%d_%d", module, ix, iy);
       DetElement mod_elt(lay_elt, module_name, module);
 
       // create individual sensor layers here
-      // !!!!!!!!!!!!!!!!!
-      string m_nam = Form("EndcapTOF_Module1_%d_%d", ix, iy); // x_mod.nameStr();
+      string m_nam = Form("EndcapTOF_Module1_%d_%d", ix, iy);
 
       int ncomponents   = 0;
       int sensor_number = 1;
@@ -147,12 +141,11 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
         xml_comp_t   x_comp = mci;
         xml_comp_t   x_pos  = x_comp.position(false);
         xml_comp_t   x_rot  = x_comp.rotation(false);
-        const string c_nam  = Form("component_%d_%d", ix, iy); //_toString(ncomponents, "component%d");
+        const string c_nam  = Form("component_%d_%d", ix, iy);
         Box          c_box(x_comp.width() / 2, x_comp.length() / 2, x_comp.thickness() / 2);
         Volume       c_vol(c_nam, c_box, description.material(x_comp.materialStr()));
         if (x_comp.materialStr() == "CarbonFiber") {
           thickness_carbonsupp = x_comp.thickness();
-          // cout << "thickness_carbonsupp: " << thickness_carbonsupp << endl;
         }
         // Utility variable for the relative z-offset based off the previous components
         const double zoff = thickness_sum + x_comp.thickness() / 2.0;
@@ -172,7 +165,6 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
         c_vol.setLimitSet(description, x_comp.limitsStr());
         c_vol.setVisAttributes(description, x_comp.visStr());
         if (x_comp.isSensitive()) {
-          // pv.addPhysVolID("sensor", sensor_number);
           pv.addPhysVolID("idx", ix);
           pv.addPhysVolID("idy", iy);
           c_vol.setSensitiveDetector(sens);
@@ -191,10 +183,7 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
 
           SurfaceType type(SurfaceType::Sensitive);
 
-          // if( isStripDetector )
-          //  type.setProperty( SurfaceType::Measurement1D , true ) ;
-
-          VolPlane surf(c_vol, type, inner_thickness, outer_thickness, u, v, n); //,o ) ;
+          VolPlane surf(c_vol, type, inner_thickness, outer_thickness, u, v, n);
           sensor_number++;
 
           DetElement comp_de(mod_elt, std::string("de_") + pv.volume().name(), module);
@@ -222,9 +211,7 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
       suppb_vol.setVisAttributes(description, "AnlRed");
 
       pv = lay_vol.placeVolume(suppb_vol, trsupp);
-      // !!!!!!!!!!!!!!!!!
       // module built!
-      // !!!!!!!!!!!!!!!!!
 
       Transform3D tr(RotationZYX(M_PI / 2, 0, 0), Position(xcoord, ycoord, module_z));
 
