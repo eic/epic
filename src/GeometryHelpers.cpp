@@ -155,13 +155,12 @@ namespace epic::geo {
   bool isPointInsidePolygon(Point p, std::vector<Point> vertices)
   {
     int n = vertices.size();
-    int i, j = 0;
     bool check = false;  // check == false (outside the polygon), check == true (inside the polygon)
     const double tolerance = 0.000001;
 
     // When the point overlaps with vertex in the tolerance.
     //
-    for(i = 0, j = n-1 ; i < n ; j = i++)
+    for( int i = 0, j = n-1 ; i < n ; j = i++)
       if( std::abs(p.x() - vertices[i].x()) < tolerance && std::abs(p.y() - vertices[i].y()) < tolerance )
         check = !check;
 
@@ -170,14 +169,14 @@ namespace epic::geo {
     //
     if( check == false )
       {
-        for(i = 0, j = n-1 ; i < n ; j = i++)
+        for( int i = 0, j = n-1 ; i < n ; j = i++)
           if( std::abs(p.x() - vertices[i].x()) < tolerance && std::abs(p.x() - vertices[j].x()) < tolerance )
             if( (vertices[i].y() > p.y()) != (vertices[j].y() > p.y()) )
               check = !check;
       }
     if( check == false )
       {
-        for(i = 0, j = n-1 ; i < n ; j = i++)
+        for( int i = 0, j = n-1 ; i < n ; j = i++)
           if( std::abs(p.y() - vertices[i].y()) < tolerance && std::abs(p.y() - vertices[j].y()) < tolerance )
             if( (vertices[i].x() > p.x()) != (vertices[j].x() > p.x()) )
               check = !check;
@@ -186,7 +185,7 @@ namespace epic::geo {
 
     if( check == false )
       {
-        for(i = 0, j = n-1 ; i < n ; j = i++)
+        for( int i = 0, j = n-1 ; i < n ; j = i++)
           {
             double ver_i = vertices[i].y();
             double ver_j = vertices[j].y();
