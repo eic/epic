@@ -84,9 +84,9 @@ static Ref_t create_detector(Detector& desc, xml_h e, SensitiveDetector sens)
   env_phv.addPhysVolID("system", det_id);
   sdet.setPlacement(env_phv);
 
-  // build a single stave
-  DetElement stave_det("stave0", det_id);
-  Assembly   mod_vol("stave");
+  // build a single sector
+  DetElement sector_det("sector0", det_id);
+  Assembly   mod_vol("sector");
 
   // keep tracking of the total thickness
   double l_pos_z = inner_r;
@@ -118,7 +118,7 @@ static Ref_t create_detector(Detector& desc, xml_h e, SensitiveDetector sens)
         double     l_trd_z  = l_thickness / 2;
         Trapezoid  l_shape(l_trd_x1, l_trd_x2, l_trd_y1, l_trd_y2, l_trd_z);
         Volume     l_vol(l_name, l_shape, air);
-        DetElement layer(stave_det, l_name, det_id);
+        DetElement layer(sector_det, l_name, det_id);
 
         // Loop over the sublayers or slices for this layer.
         int    s_num   = 1;
@@ -169,23 +169,23 @@ static Ref_t create_detector(Detector& desc, xml_h e, SensitiveDetector sens)
       }
     }
   }
-  // Phi start for a stave.
+  // Phi start for a sector.
   double phi = M_PI / nsides;
-  // Create nsides staves.
+  // Create nsides sectors.
   for (int i = 0; i < nsides; i++, phi -= dphi) { // i is module number
-    // Compute the stave position
+    // Compute the sector position
     Transform3D  tr(RotationZYX(0, phi, M_PI * 0.5), Translation3D(0, 0, 0));
     PlacedVolume pv = envelope.placeVolume(mod_vol, tr);
     pv.addPhysVolID("module", i + 1);
-    DetElement sd = (i == 0) ? stave_det : stave_det.clone(Form("stave%d", i));
+    DetElement sd = (i == 0) ? sector_det : sector_det.clone(Form("sector%d", i));
     sd.setPlacement(pv);
     sdet.add(sd);
   }
 
-  // optional stave support
-  if (x_det.hasChild(_U(staves))) {
-    xml_comp_t x_staves = x_det.staves();
-    mod_vol.setVisAttributes(desc.visAttributes(x_staves.visStr()));
+  // optional sector support
+  if (x_det.hasChild(_U(sectors))) {
+    xml_comp_t x_sectors = x_det.sectors();
+    mod_vol.setVisAttributes(desc.visAttributes(x_sectors.visStr()));
   }
   if (x_det.hasChild(_U(support))) {
     buildSupport(desc, mod_vol, x_det.child(_U(support)), {inner_r, l_pos_z, x_dim.z(), hphi});
@@ -302,10 +302,10 @@ void buildFibers(Detector& desc, SensitiveDetector& sens, Volume& s_vol, int lay
 void buildSupport(Detector& desc, Volume& mod_vol, xml_comp_t x_support,
                   const std::tuple<double, double, double, double>& dimensions)
 {
-  auto     [inner_r, pos_z, stave_length, hphi] = dimensions;
+  auto     [inner_r, pos_z, sector_length, hphi] = dimensions;
   double   support_thickness = getAttrOrDefault(x_support, _Unicode(thickness), 3.*cm);
   auto     material          = desc.material(x_support.materialStr());
-  double   trd_y             = stave_length / 2.;
+  double   trd_y             = sector_length / 2.;
   double   trd_x1_support    = std::tan(hphi) * pos_z;
   double   trd_x2_support    = std::tan(hphi) * (pos_z + support_thickness);
 
