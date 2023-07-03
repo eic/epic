@@ -176,7 +176,7 @@
     <detector
       id="ECalBarrel2_ID"
       name="EcalBarrelScFi"
-      type="epic_EcalBarrelSciFi"
+      type="epic_EcalBarrelScFi"
       readout="EcalBarrelScFiHits"
       calorimeterType="EM_BARREL"
       vis="EcalBarrelEnvelopeVis"
