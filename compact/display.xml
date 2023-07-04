@@ -155,6 +155,7 @@
       PID visualization
       Commented versions while bug in DD4Hep overwites alpha value of ref
     </comment>
+    <vis name="TOF_envelope"     ref="AnlBlue" drawingStyle="wireframe" showDaughters="true" visible="true" />
 
     <vis name="DRICH_vessel_vis"  ref="AnlGray" showDaughters="true" visible="true" />
     <!--vis name="DRICH_gas_vis"     ref="AnlGreen" alpha="0.5" showDaughters="true" visible="true" /-->
