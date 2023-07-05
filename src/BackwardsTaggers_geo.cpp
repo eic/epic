@@ -6,10 +6,6 @@
 #include "DD4hep/Printout.h"
 #include "DDRec/DetectorData.h"
 #include "DDRec/Surface.h"
-#include "XML/Layering.h"
-#include "XML/Utilities.h"
-#include <XML/Helper.h>
-#include "DD4hepDetectorHelper.h"
 
 
 //////////////////////////////////////////////////
@@ -107,9 +103,6 @@ static Ref_t create_detector(Detector& desc, xml_h e, SensitiveDetector sens)
   int      nVacuum = 0;
   int      nAir    = 0;
 
-  dd4hep::xml::setDetectorTypeFlag(x_det, det);
-  //  auto &params = DD4hepDetectorHelper::ensureExtension<dd4hep::rec::VariantParameters>(det);
-
   //-----------------------------------------------------------------
   // Add Tagger box containers and vacuum box extension for modules
   //-----------------------------------------------------------------
@@ -203,8 +196,6 @@ static Ref_t create_detector(Detector& desc, xml_h e, SensitiveDetector sens)
     pv_mod2.addPhysVolID("module", moduleID);
     moddet.setPlacement(pv_mod2);
 
-    dd4hep::xml::setDetectorTypeFlag(mod, moddet);
-
     Make_Tagger(desc, mod, TaggerAssembly, moddet, sens);
 
   }
@@ -230,9 +221,10 @@ static Ref_t create_detector(Detector& desc, xml_h e, SensitiveDetector sens)
     Box Entry_Vacuum_Box(ED_X, ED_Y, ED_Z - wall);
     Tube Lumi_Exit(0, Lumi_R, ED_Z);
 
+    // 
     // CutTube Entry_Beam_Box  (ED_X, ED_X + wall, ED_Z,        0,2*pi, sin(angle),0,cos(angle), 0,0,1);
-//     CutTube Entry_Vacuum_Box(0,    ED_X,        ED_Z - wall, 0,2*pi, sin(angle),0,cos(angle), 0,0,1);
-//     CutTube Lumi_Exit       (0,    Lumi_R,      ED_Z,        0,2*pi, sin(angle),0,cos(angle), 0,0,1);
+    // CutTube Entry_Vacuum_Box(0,    ED_X,        ED_Z - wall, 0,2*pi, sin(angle),0,cos(angle), 0,0,1);
+    // CutTube Lumi_Exit       (0,    Lumi_R,      ED_Z,        0,2*pi, sin(angle),0,cos(angle), 0,0,1);
 
     // Add entry boxes to main beamline volume
     Wall_Box   = UnionSolid(Wall_Box, Entry_Beam_Box, Transform3D(RotationY(-rot.theta())));
