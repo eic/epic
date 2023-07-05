@@ -20,10 +20,29 @@ namespace fs = std::filesystem;
 
 using namespace dd4hep;
 
+// In DD4hep 1.26, the name for the `field_type` enum changed (from `type`).
+#if DD4HEP_VERSION_GE(1, 26)
+#define DD4HEP_FIELD_TYPE field_type
+#else
+#define DD4HEP_FIELD_TYPE type
+#endif
+
+// This allows us to specify the name of the variable by hand, when patching
+// the previous versions, by setting `DD4HEP_FIELD_TYPE_OVERRIDE`.
+// TODO remove after DD4hep 1.26 release
+#define XSTR(x) STR(x)
+#define STR(x) #x
+#ifdef DD4HEP_FIELD_TYPE_OVERRIDE
+#undef DD4HEP_FIELD_TYPE
+#define DD4HEP_FIELD_TYPE DD4HEP_FIELD_TYPE_OVERRIDE
+#pragma message("DD4HEP_FIELD_TYPE overridden as " XSTR(DD4HEP_FIELD_TYPE))
+#endif
+#pragma message("DD4HEP_FIELD_TYPE is " XSTR(DD4HEP_FIELD_TYPE))
+
 // implementation of the field map
 class FieldMapBrBz : public dd4hep::CartesianField::Object {
 public:
-  FieldMapBrBz(const std::string& field_type = "magnetic");
+  FieldMapBrBz(const std::string& field_type_str = "magnetic");
   void Configure(double rmin, double rmax, double rstep, double zmin, double zmax, double zstep);
   void LoadMap(const std::string& map_file, double scale);
   void GetIndices(double r, double z, int& ir, int& iz, double& dr, double& dz);
@@ -42,21 +61,21 @@ private:
 };
 
 // constructor
-FieldMapBrBz::FieldMapBrBz(const std::string& field_type)
+FieldMapBrBz::FieldMapBrBz(const std::string& field_type_str)
 {
-  std::string ftype = field_type;
+  std::string ftype = field_type_str;
   for (auto& c : ftype) {
     c = tolower(c);
   }
 
   // set type
   if (ftype == "magnetic") {
-    type = CartesianField::MAGNETIC;
+    DD4HEP_FIELD_TYPE = CartesianField::MAGNETIC;
   } else if (ftype == "electric") {
-    type = CartesianField::ELECTRIC;
+    DD4HEP_FIELD_TYPE = CartesianField::ELECTRIC;
   } else {
-    type = CartesianField::UNKNOWN;
-    std::cout << "FieldMapBrBz Warning: Unknown field type " << field_type << "!" << std::endl;
+    DD4HEP_FIELD_TYPE = CartesianField::UNKNOWN;
+    std::cout << "FieldMapBrBz Warning: Unknown field type " << field_type_str << "!" << std::endl;
   }
 }
 

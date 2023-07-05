@@ -209,25 +209,55 @@ static Ref_t create_detector(Detector& lcdd, xml_h handle, SensitiveDetector sen
       const double       length              = family_dim_handle.z_length();
       const auto         flare_angle_polar   = family_dim_handle.attr<double>(_Unicode(flare_angle_polar));
       const unsigned int number              = family_dim_handle.number();
-      const auto         flare_angle_at_face = family_dim_handle.attr<double>(_Unicode(flare_angle_at_face));
+
+      // some per-family calculations rely on extreme values of "beta" to make
+      // conservative estimates
+      double beta_max = beta + flare_angle_polar_prev + (2 * number - 1) * flare_angle_polar;
 
       const double z  = length / 2;
       // Face parameters (see doc/sciglass_tower_front_view.svg for definitions)
       const double y1 = family_dim_handle.y1();
       const double y2 = y1 + length * tan(flare_angle_polar);
       double       x1 = family_dim_handle.x1();
+
+      const auto   flare_angle_at_face_s = family_dim_handle.attr<string>(_Unicode(flare_angle_at_face));
+      double flare_angle_at_face;
+      if (flare_angle_at_face_s == "auto") {
+        flare_angle_at_face = asin(sin(beta_max) * (x1 / row_rmin));
+      } else {
+        flare_angle_at_face = family_dim_handle.attr<double>(_Unicode(flare_angle_at_face));
+      }
+
       double       x2 = family_dim_handle.x1() + (2 * y1) * tan(flare_angle_at_face);
       double       x3, x4;
-      if (family_dim_handle.hasAttr(_Unicode(flare_angle_azimuthal))) {
-        // Azimuthal flaring independently defined
-        const auto flare_angle_azimuthal = family_dim_handle.attr<double>(_Unicode(flare_angle_azimuthal));
-        x3 = x1 + length * (tan(flare_angle_azimuthal) - tan(flare_angle_polar) * tan(flare_angle_at_face));
-        x4 = x2 + length * (tan(flare_angle_azimuthal) + tan(flare_angle_polar) * tan(flare_angle_at_face));
-      } else {
+
+      const auto flare_angle_azimuthal_s = family_dim_handle.attr<string>(_Unicode(flare_angle_azimuthal));
+      if (flare_angle_azimuthal_s == "pyramidal") {
         // Pyramidal shape
         // corresponds to: tan(flare_angle_azimuthal) = (x1 / y1 + tan(flare_angle_at_face)) * tan(flare_angle_polar)
         x3 = x1 * (y2 / y1);
         x4 = x2 * (y2 / y1);
+      } else {
+        double flare_angle_azimuthal;
+        // Azimuthal flaring independently defined
+        if (flare_angle_azimuthal_s == "auto") {
+	  // This is a solution to x4 - x1 = delta_r * tan(alpha), where the
+	  // "alpha" is the azimuthal flaring for projection to x-y plane and
+	  // "delta_r" is the length of the projection of the tower onto the
+	  // same x-y plane.
+	  // Here, we assumed tan(alpha) = x1 / row_rmin flaring preserves the
+	  // desired gap, which is strictly not true.
+          flare_angle_azimuthal = atan(
+            (cos(beta_max) + sin(beta_max) * 2 * y1 / length) * (x1 / row_rmin)
+            - (x2 - x1) / length
+            - tan(flare_angle_polar) * tan(flare_angle_at_face)
+          );
+        } else {
+          flare_angle_azimuthal = family_dim_handle.attr<double>(_Unicode(flare_angle_azimuthal));
+        }
+
+        x3 = x1 + length * (tan(flare_angle_azimuthal) - tan(flare_angle_polar) * tan(flare_angle_at_face));
+        x4 = x2 + length * (tan(flare_angle_azimuthal) + tan(flare_angle_polar) * tan(flare_angle_at_face));
       }
 
       if (dir_sign < 0) {
