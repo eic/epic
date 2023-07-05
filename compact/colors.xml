@@ -23,7 +23,7 @@
   <vis name="AnlDarkGreen"    alpha="1" r="0"       g="110/256" b="50/256"/>
   <vis name="AnlDarkBlue"     alpha="1" r="45/256"   g="45/256"  b="110/256"/>
   <vis name="AnlDelta_Red"    ref="AnlDarkRed"/>
-  <vis name="AnlDelta_Green"  ref="AnlDarkGreen"/>
-  <vis name="AnlDelta_Blue"   ref="AnlDarkBlue"/>
+  <vis name="AnlDelta_Green"    ref="AnlDarkGreen"/>
+  <vis name="AnlDelta_Blue"    ref="AnlDarkBlue"/>
 
 </display>

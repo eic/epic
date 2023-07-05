@@ -1,4 +1,3 @@
-
 <!-- SPDX-License-Identifier: LGPL-3.0-or-later -->
 <!-- Copyright (C) 2022 Sylvester Joosten, Whitney Armstrong, Zhenyu Ye, Christopher Dilks -->
 
@@ -15,7 +14,6 @@
       Tracking Visualizations
     </comment>
     <vis name="TrackerVis"        ref="AnlGold" />
-    <vis name="TrackerSubAssemblyVis" ref="InvisibleWithDaughters"/>
     <vis name="TrackerSupportVis" ref="AnlBlue"         visible="true"  showDaughters="true" />
     <vis name="TrackerServiceVis" ref="AnlViolet"         showDaughters="false" />
     <vis name="TrackerLayerVis"   ref="AnlGold"         visible="true"  showDaughters="true" />
@@ -51,15 +49,15 @@
     <vis name="TOFCHoneycombVis"  ref="TrackerServiceVis"   visible="true"  showDaughters="true"/>
 
 
-    <vis name="FFTrackerVis"        alpha="1"  ref="AnlRed" />
-    <vis name="FFTrackerSupportVis" alpha="1"  ref="AnlBlue"             visible="true"  showDaughters="false" />
-    <vis name="FFTrackerShieldingVis" alpha="1" ref="AnlGray"             visible="true"  showDaughters="false" />
-    <vis name="FFTrackerServiceVis" alpha="1"  ref="AnlGold"             visible="true"  showDaughters="false" />
-    <vis name="FFTrackerLayerVis"  alpha="1"   ref="TrackerVis"          visible="true"  showDaughters="true"  />
-    <vis name="FFTrackerModuleVis" alpha="1"   ref="FFTrackerLayerVis"   visible="true"  showDaughters="true"  />
-    <vis name="FFTrackerSurfaceVis" alpha="1"  ref="FFTrackerLayerVis"   visible="true"  showDaughters="true"  />
+    <vis name="FFTrackerVis"        ref="AnlRed" />
+    <vis name="FFTrackerSupportVis" ref="AnlBlue"             visible="true"  showDaughters="false" />
+    <vis name="FFTrackerShieldingVis" ref="AnlGray"           visible="true"  showDaughters="false" />
+    <vis name="FFTrackerServiceVis" ref="AnlGold"             visible="true"  showDaughters="false" />
+    <vis name="FFTrackerLayerVis"   ref="TrackerVis"          visible="true"  showDaughters="true" />
+    <vis name="FFTrackerModuleVis"  ref="FFTrackerLayerVis"   visible="true"  showDaughters="true" />
+    <vis name="FFTrackerSurfaceVis" ref="FFTrackerLayerVis"   visible="true"  showDaughters="true" />
     <comment> For shielded modules by default just display to module instead of 6 layers </comment>
-    <vis name="FFTrackerShieldedModuleVis" alpha="1" ref="FFTrackerModuleVis"   visible="true"  showDaughters="false" />
+    <vis name="FFTrackerShieldedModuleVis" ref="FFTrackerModuleVis"   visible="true"  showDaughters="false" />
 
     <comment>
       ECal Vis
@@ -80,10 +78,10 @@
     <vis name="EcalEndcapNModuleVis"    ref="AnlGold"   showDaughters="false" visible="true"/>
 
     <vis name="FFPreVis"            ref="AnlGold"             showDaughters="true" visible="true"/>
-    <vis name="FFPreLayerVis"     alpha="1"  ref="FFPreVis"            showDaughters="true" visible="true"/>
-    <vis name="FFPreModuleVis"    alpha="1" ref="FFPreLayerVis"       showDaughters="true" visible="true"/>
-    <vis name="FFPreRadiatorVis"  alpha="1"  ref="FFPreModuleVis"      showDaughters="true" visible="true"/>
-    <vis name="FFPreReadoutVis"   alpha="1" ref="FFTrackerSurfaceVis" showDaughters="true" visible="true"/>
+    <vis name="FFPreLayerVis"       ref="FFPreVis"            showDaughters="true" visible="true"/>
+    <vis name="FFPreModuleVis"      ref="FFPreLayerVis"       showDaughters="true" visible="true"/>
+    <vis name="FFPreRadiatorVis"    ref="FFPreModuleVis"      showDaughters="true" visible="true"/>
+    <vis name="FFPreReadoutVis"     ref="FFTrackerSurfaceVis" showDaughters="true" visible="true"/>
 
     <comment>
       HCal Vis
@@ -106,7 +104,7 @@
     <comment>
       Solenoid
     </comment>
-    <vis name="SolenoidCoilVis"     ref="AnlLightGray"  showDaughters="true"  visible="true" lineStyle="solid" drawingStyle="solid" />
+    <vis name="SolenoidCoilVis"     ref="AnlLightGray" showDaughters="true"  visible="true" lineStyle="solid" drawingStyle="solid" />
     <vis name="SolenoidCryostatVis" ref="AnlGray"       showDaughters="true"  visible="true" lineStyle="solid" drawingStyle="solid" />
     <vis name="SolenoidYokeVis"     ref="AnlLight_Gray" showDaughters="false" visible="true" lineStyle="solid" drawingStyle="solid" />
 
@@ -126,9 +124,9 @@
     <comment>
       Beam line with magnets
     </comment>
-    <vis name="BeamPipeVis"         alpha="0.2" ref="AnlLightGray"       showDaughters="true" visible="true"/>
-    <vis name="FFMagnetVis"         ref="AnlGreen"           showDaughters="true" visible="true"/>
-    <vis name="FFMagnetCoilVis"     ref="AnlRed"             showDaughters="true" visible="true"/>
+    <vis name="BeamPipeVis"         ref="AnlLightGray"       showDaughters="true" visible="true"/>
+    <vis name="FFMagnetVis"         ref="AnlGreen"            showDaughters="true" visible="true"/>
+    <vis name="FFMagnetCoilVis"     ref="AnlRed"              showDaughters="true" visible="true"/>
 
     <comment>
       ZDC visualization
@@ -141,33 +139,25 @@
     <comment>
       Backwards beamline vacuum
     </comment>
-    <vis name="BackwardsBox"      alpha="0.3" r="102/256" g="102/256" b="102/256"     showDaughters="true" visible="true"/>
-    <vis name="BackwardsVac"      alpha="0.5" r="209/256" g="209/256" b="209/256"     showDaughters="true" visible="true"/>
-    <vis name="BackwardsAir"      alpha="0.5" r="0/256"   g="96/256"  b="156/256"     showDaughters="true" visible="true"/>
-    <comment>
-      Commented versions while bug in DD4Hep overwites alpha value of ref
-     <vis name="BackwardsBox"      alpha="0.3" ref="AnlGray"       showDaughters="true" visible="true"/>
-     <vis name="BackwardsAir"      alpha="0.7" ref="AnlBlue"       showDaughters="true" visible="true"/>
-     <vis name="BackwardsVac"      alpha="0.1" ref="AnlLight_Gray" showDaughters="true" visible="true"/>
-    </comment>
+    <vis name="BackwardsBox"      alpha="0.3" ref="AnlGray"       showDaughters="true" visible="true"/>
+    <vis name="BackwardsAir"      alpha="0.7" ref="AnlBlue"       showDaughters="true" visible="true"/>
+    <vis name="BackwardsVac"      alpha="0.1" ref="AnlLight_Gray" showDaughters="true" visible="true"/>
 
     <comment>
       PID visualization
-      Commented versions while bug in DD4Hep overwites alpha value of ref
     </comment>
     <vis name="TOF_envelope"     ref="AnlBlue" drawingStyle="wireframe" showDaughters="true" visible="true" />
 
     <vis name="DRICH_vessel_vis"  ref="AnlGray" showDaughters="true" visible="true" />
-    <!--vis name="DRICH_gas_vis"     ref="AnlGreen" alpha="0.5" showDaughters="true" visible="true" /-->
-    <vis name="DRICH_gas_vis"     alpha="0.5" r="100/256" g="200/256" b="0/256" showDaughters="true" visible="true" />
+    <vis name="DRICH_gas_vis"     ref="AnlGreen" alpha="0.5" showDaughters="true" visible="true" />
     <vis name="DRICH_aerogel_vis" ref="AnlTeal" showDaughters="true" visible="true" />
     <vis name="DRICH_filter_vis"  alpha="1.0" r="1.0" g="1.0" b="0.0" showDaughters="true" visible="true" />
     <vis name="DRICH_mirror_vis"  ref="AnlGray" showDaughters="true" visible="true" />
     <vis name="DRICH_sensor_vis"  ref="AnlBlue" showDaughters="true" visible="true" />
 
     <vis name="MRICH_aerogel_vis" ref="AnlTeal" showDaughters="true" visible="true" />
-    <vis name="MRICH_frame_vis"   ref="AnlGold" showDaughters="true" visible="true" />
-    <vis name="MRICH_lens_vis"    ref="AnlGray" showDaughters="true" visible="true" />
+    <vis name="MRICH_frame_vis" ref="AnlGold" showDaughters="true" visible="true" />
+    <vis name="MRICH_lens_vis" ref="AnlGray" showDaughters="true" visible="true" />
     <vis name="MRICH_mirror_vis"  ref="AnlGray" showDaughters="true" visible="true" />
 
     <vis name="RICHServiceVis"  ref="AnlGray" showDaughters="true" visible="true" />

@@ -94,11 +94,8 @@
   </regions>
 
   <display>
-    <!-- Commented versions while bug in DD4Hep overwites alpha value of ref -->
-    <!--vis name="DIRCTube"   ref="AnlTeal" alpha="0.1" visible="true"  showDaughters="true"   lineStyle="solid" drawingStyle="solid" /-->
-    <!--vis name="DIRCBox"    ref="AnlLight_Gray" alpha="0.1" visible="true"  showDaughters="true"   lineStyle="solid" drawingStyle="solid" /-->
-    <vis name="DIRCTube"   r="0/256"   g="161/256" b="156/256" alpha="0.1" visible="true"  showDaughters="true"   lineStyle="solid" drawingStyle="solid" />
-    <vis name="DIRCBox"    r="209/256" g="209/256" b="209/256" alpha="0.1" visible="true"  showDaughters="true"   lineStyle="solid" drawingStyle="solid" />
+    <vis name="DIRCTube"   ref="AnlTeal" alpha="0.1" visible="true"  showDaughters="true"   lineStyle="solid" drawingStyle="solid" />
+    <vis name="DIRCBox"    ref="AnlLight_Gray" alpha="0.1" visible="true"  showDaughters="true"   lineStyle="solid" drawingStyle="solid" />
     <vis name="DIRCLens1"  ref="AnlTeal" visible="true"  showDaughters="false"  lineStyle="solid" drawingStyle="solid" />
     <vis name="DIRCLens2"  ref="AnlProcess_Blue" visible="true"  showDaughters="false"  lineStyle="solid" drawingStyle="solid" />
     <vis name="DIRCLens3"  ref="AnlTeal" visible="true"  showDaughters="false"  lineStyle="solid" drawingStyle="solid" />
