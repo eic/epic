@@ -146,7 +146,7 @@ static Ref_t create_detector(Detector& desc, xml_h e, SensitiveDetector sens)
           double     s_trd_z  = s_thick / 2.;
           Trapezoid  s_shape(s_trd_x1, s_trd_x2, s_trd_y1, s_trd_y2, s_trd_z);
           Volume     s_vol(s_name, s_shape, lfill_mat);
-	  s_vol.setVisAttributes(desc.invisible());
+          s_vol.setVisAttributes(desc.invisible());
           l_vol.placeVolume(s_vol, Position(0, 0, s_pos_z + s_thick / 2));
         }
 
