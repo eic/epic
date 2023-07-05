@@ -182,9 +182,9 @@ static Ref_t create_detector(Detector& desc, xml_h e, SensitiveDetector sens)
     sdet.add(sd);
   }
 
-  // optional sector support
-  if (x_det.hasChild(_U(sectors))) {
-    xml_comp_t x_sectors = x_det.sectors();
+  // optional sector attributes
+  if (x_det.hasChild(_Unicode(sectors))) {
+    xml_comp_t x_sectors = x_det.child(_Unicode(sectors));
     mod_vol.setVisAttributes(desc.visAttributes(x_sectors.visStr()));
   }
   if (x_det.hasChild(_U(support))) {

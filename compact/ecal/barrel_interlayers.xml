@@ -138,12 +138,12 @@
 
       <layer repeat="1" vis="EcalBarrelLayerVis"
 	space_before="EcalBarrel_ScFiLayerThickness + EcalBarrel_SpaceBetween">
-        <frame material="CarbonFiber" fill="Air" thickness="0.5*mm" height="2.*cm" vis="EcalBarrelSliceVis">
+        <frame material="CarbonFiber" fill="Air" thickness="0.5*mm" height="2.*cm" vis="EcalBarrelSliceVis"/>
       </layer>
 
       <layer repeat="1" vis="EcalBarrelLayerVis"
         space_before="EcalBarrel_ScFiLayerThickness + EcalBarrel_SpaceBetween">
-        <frame material="CarbonFiber" fill="Air" thickness="0.5*mm" height="2.*cm" vis="EcalBarrelSliceVis">
+        <frame material="CarbonFiber" fill="Air" thickness="0.5*mm" height="2.*cm" vis="EcalBarrelSliceVis"/>
         <slice material="Silicon" thickness="EcalBarrel_SiliconThickness" sensitive="yes" limits="cal_limits" vis="EcalBarrelSliceVis"/>
         <slice material="Silicon" thickness="EcalBarrel_ElectronicsThickness" vis="EcalBarrelSliceVis"/>
         <slice material="Copper" thickness="EcalBarrel_CopperThickness"       vis="EcalBarrelSliceVis"/>
@@ -153,13 +153,13 @@
 
       <layer repeat="1" vis="EcalBarrelLayerVis"
         space_before="EcalBarrel_ScFiLayerThickness + EcalBarrel_SpaceBetween">
-        <frame material="CarbonFiber" fill="Air" thickness="0.5*mm" height="2.*cm" vis="EcalBarrelSliceVis">
+        <frame material="CarbonFiber" fill="Air" thickness="0.5*mm" height="2.*cm" vis="EcalBarrelSliceVis"/>
       </layer>
 
       <layer repeat="EcalBarrelImagingLayers_num-4" vis="EcalBarrelLayerVis"
         space_between="EcalBarrel_ScFiLayerThickness + EcalBarrel_SpaceBetween"
         space_before="EcalBarrel_ScFiLayerThickness + EcalBarrel_SpaceBetween">
-        <frame material="CarbonFiber" fill="Air" thickness="0.5*mm" height="2.*cm" vis="EcalBarrelSliceVis">
+        <frame material="CarbonFiber" fill="Air" thickness="0.5*mm" height="2.*cm" vis="EcalBarrelSliceVis"/>
         <slice material="Silicon" thickness="EcalBarrel_SiliconThickness" sensitive="yes" limits="cal_limits" vis="EcalBarrelSliceVis"/>
         <slice material="Silicon" thickness="EcalBarrel_ElectronicsThickness" vis="EcalBarrelSliceVis"/>
         <slice material="Copper" thickness="EcalBarrel_CopperThickness"       vis="EcalBarrelSliceVis"/>
