@@ -78,7 +78,7 @@ static Ref_t create_detector(Detector& desc, xml_h e, SensitiveDetector sens)
         double l_dim_x        = tan_hphi * l_pos_z;
         double l_thickness    = l_sthickness;
         auto   lfill_mat      = desc.air();
-        auto   lenv_mat       = desc.air(); 
+        auto   lenv_mat       = desc.air();
         double wt             = 0.;
         // update values if there will be a frame
         if (framing) {
@@ -103,7 +103,7 @@ static Ref_t create_detector(Detector& desc, xml_h e, SensitiveDetector sens)
         double     l_trd_z  = l_thickness / 2;
         Trapezoid  l_shape(l_trd_x1, l_trd_x2, l_trd_y1, l_trd_y2, l_trd_z);
         Volume     l_vol(l_name, l_shape, lenv_mat);
-        DetElement layer(sector_det, l_name, det_id);        
+        DetElement layer(sector_det, l_name, det_id);
 
         // Loop over the sublayers or slices for this layer.
         int    s_num   = 1;
