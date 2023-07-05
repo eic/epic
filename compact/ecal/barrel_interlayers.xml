@@ -137,7 +137,7 @@
       </layer>
 
       <layer repeat="1" vis="EcalBarrelLayerVis"
-	space_before="EcalBarrel_ScFiLayerThickness + EcalBarrel_SpaceBetween">
+        space_before="EcalBarrel_ScFiLayerThickness + EcalBarrel_SpaceBetween">
         <frame material="CarbonFiber" fill="Air" thickness="0.5*mm" height="2.*cm" vis="EcalBarrelSliceVis"/>
       </layer>
 
