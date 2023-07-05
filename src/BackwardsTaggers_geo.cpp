@@ -135,7 +135,6 @@ static Ref_t create_detector(Detector& desc, xml_h e, SensitiveDetector sens)
 
     // Width and height of vacuum volume
     auto vac_w = w;
-    //    auto vac_w = w+wall/2; // Adds space for wall to be added in tagger geometry
     auto vac_h = h;
 
     // Width and height of box volume
@@ -154,8 +153,6 @@ static Ref_t create_detector(Detector& desc, xml_h e, SensitiveDetector sens)
 
     auto tagoffsetx = vacoffsetx - (l) * sin(theta);
     auto tagoffsetz = vacoffsetz - (l) * cos(theta);
-    //     auto tagoffsetx = vacoffsetx-(l+tagboxL/2)*sin(theta);
-    //     auto tagoffsetz = vacoffsetz-(l+tagboxL/2)*cos(theta);
 
     if (max_align) {
       theta      = thetamax;
@@ -166,8 +163,6 @@ static Ref_t create_detector(Detector& desc, xml_h e, SensitiveDetector sens)
       l          = (2 * offsetx + tagoff) / sin(theta);
       tagoffsetx = vacoffsetx - (l) * sin(theta);
       tagoffsetz = vacoffsetz - (l) * cos(theta);
-      //       tagoffsetx = -wall+vacoffsetx-(l+tagboxL/2)*sin(theta);
-      //       tagoffsetz = vacoffsetz-(l+tagboxL/2)*cos(theta);
     }
 
     Box TagWallBox(box_w, box_h, l + wall);
@@ -261,7 +256,6 @@ static Ref_t create_detector(Detector& desc, xml_h e, SensitiveDetector sens)
 
   Volume wallVol("TaggerStation_Container", Wall_Box_Out, Steel);
   wallVol.setVisAttributes(desc.visAttributes(vis_name));
-  //  wallVol.placeVolume(vacVol);
 
   Assembly backAssembly(detName + "_assembly");
   backAssembly.placeVolume(wallVol);
