@@ -378,7 +378,9 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
     // spherical mirror patch cuts and rotation
     double mirrorThetaRot = std::asin(mirrorCenterX / mirrorRadius);
     double mirrorTheta1   = mirrorThetaRot - std::asin((mirrorCenterX - mirrorRmin) / mirrorRadius);
-    double mirrorTheta2   = mirrorThetaRot + std::asin((mirrorRmax - mirrorCenterX) / mirrorRadius);
+    double mirrorTheta2   = 0.4*mirrorThetaRot + std::asin((mirrorRmax - mirrorCenterX) / mirrorRadius);
+    double mirrorTheta3   = 0.41*mirrorThetaRot + std::asin((mirrorRmax - mirrorCenterX) / mirrorRadius);
+    double mirrorTheta4   = 1.0*mirrorThetaRot + std::asin((mirrorRmax - mirrorCenterX) / mirrorRadius);
 
     // if debugging, draw full sphere
     if (debugMirror) {
@@ -391,6 +393,8 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
     Sphere mirrorSolid1(mirrorRadius, mirrorRadius + mirrorThickness, mirrorTheta1, mirrorTheta2, -40 * degree,
                         40 * degree);
 
+    Sphere mirrorSolid3(mirrorRadius, mirrorRadius + mirrorThickness, mirrorTheta3, mirrorTheta4, -40 * degree,
+                        40 * degree);
     // mirror placement transformation (note: transformations are in reverse order)
     auto mirrorPos = Position(mirrorCenterX, 0., mirrorCenterZ) + originFront;
     auto mirrorPlacement(Translation3D(mirrorPos) * // re-center to specified position
@@ -400,17 +404,31 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
     // cut overlaps with other sectors using "pie slice" wedges, to the extent specified
     // by `mirrorPhiw`
     Tube              pieSlice(0.01 * cm, vesselRmax2, tankLength / 2.0, -mirrorPhiw / 2.0, mirrorPhiw / 2.0);
+    Tube              pieSlice1(0.01 * cm, vesselRmax2, tankLength / 2.0, -mirrorPhiw / 2.0, (0.05*mirrorPhiw) / 2.0);
+    Tube              pieSlice2(0.01 * cm, vesselRmax2, tankLength / 2.0, (0.06*mirrorPhiw) / 2.0, mirrorPhiw / 2.0);
     IntersectionSolid mirrorSolid2(pieSlice, mirrorSolid1, mirrorPlacement);
+    IntersectionSolid mirrorSolid4(pieSlice1, mirrorSolid3, mirrorPlacement);
+    IntersectionSolid mirrorSolid5(pieSlice2, mirrorSolid3, mirrorPlacement);
 
     // mirror volume, attributes, and placement
-    Volume mirrorVol(detName + "_mirror_" + secName, mirrorSolid2, mirrorMat);
+    Volume mirrorVol(detName + "_mirror_0" + secName, mirrorSolid2, mirrorMat);
+    Volume mirrorVol2(detName + "_mirror_1" + secName, mirrorSolid4, mirrorMat);
+    Volume mirrorVol3(detName + "_mirror_2" + secName, mirrorSolid5, mirrorMat);
+
     mirrorVol.setVisAttributes(mirrorVis);
+    mirrorVol2.setVisAttributes(mirrorVis);
+    mirrorVol3.setVisAttributes(mirrorVis);
+
     auto mirrorSectorPlacement = Transform3D(sectorRotation); // rotate about beam axis to sector
     auto mirrorPV              = gasvolVol.placeVolume(mirrorVol, mirrorSectorPlacement);
+    auto mirrorPV2              = gasvolVol.placeVolume(mirrorVol2, mirrorSectorPlacement);
+    auto mirrorPV3              = gasvolVol.placeVolume(mirrorVol3, mirrorSectorPlacement);
 
     // properties
     DetElement mirrorDE(det, "mirror_de_" + secName, isec);
     mirrorDE.setPlacement(mirrorPV);
+    mirrorDE.setPlacement(mirrorPV2);
+    mirrorDE.setPlacement(mirrorPV3);
     SkinSurface mirrorSkin(desc, mirrorDE, "mirror_optical_surface_" + secName, mirrorSurf, mirrorVol);
     mirrorSkin.isValid();
 
