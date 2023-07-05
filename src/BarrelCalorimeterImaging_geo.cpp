@@ -18,9 +18,9 @@
 #include "Math/Point2D.h"
 #include "TGeoPolygon.h"
 #include "XML/Layering.h"
+#include "DD4hep/Printout.h"
 #include <functional>
 
-using namespace std;
 using namespace dd4hep;
 
 typedef ROOT::Math::XYPoint Point;
@@ -31,7 +31,7 @@ static Ref_t create_detector(Detector& desc, xml_h e, SensitiveDetector sens)
   Layering   layering(e);
   xml_det_t  x_det    = e;
   int        det_id   = x_det.id();
-  string     det_name = x_det.nameStr();
+  std::string     det_name = x_det.nameStr();
   double     offset   = x_det.attr<double>(_Unicode(offset));
   xml_comp_t x_dim    = x_det.dimensions();
   int        nsides   = x_dim.numsides();
@@ -66,14 +66,14 @@ static Ref_t create_detector(Detector& desc, xml_h e, SensitiveDetector sens)
     for (xml_coll_t li(x_det, _U(layer)); li; ++li) {
       xml_comp_t x_layer         = li;
       int        repeat          = x_layer.repeat();
-      double     l_space_between = dd4hep::getAttrOrDefault(x_layer, _Unicode(space_between), 0.);
-      double     l_space_before  = dd4hep::getAttrOrDefault(x_layer, _Unicode(space_before), 0.);
-      bool       framing         = x_layer.hasChild(_Unicode(frame));
+      double     l_space_between = getAttrOrDefault(x_layer, _Unicode(space_between), 0.);
+      double     l_space_before  = getAttrOrDefault(x_layer, _Unicode(space_before), 0.);
+      bool       has_frame       = x_layer.hasChild(_Unicode(frame));
       l_pos_z += l_space_before;
       // Loop over number of repeats for this layer.
       for (int j = 0; j < repeat; j++) {
         // make an envelope for this layer
-        string l_name         = Form("layer%d", l_num);
+        std::string l_name    = Form("layer%d", l_num);
         double l_sthickness   = layering.layer(l_num - 1)->thickness(); // total thickness of slices
         double l_dim_x        = tan_hphi * l_pos_z;
         double l_thickness    = l_sthickness;
@@ -81,7 +81,7 @@ static Ref_t create_detector(Detector& desc, xml_h e, SensitiveDetector sens)
         auto   lenv_mat       = desc.air();
         double wt             = 0.;
         // update values if there will be a frame
-        if (framing) {
+        if (has_frame) {
           auto x_frame = x_layer.child(_Unicode(frame));
           l_thickness  = x_frame.attr<double>(_Unicode(height));
           wt           = x_frame.attr<double>(_Unicode(thickness));
@@ -89,9 +89,9 @@ static Ref_t create_detector(Detector& desc, xml_h e, SensitiveDetector sens)
           lfill_mat    = desc.material(x_frame.attr<std::string>(_Unicode(fill)));
           // sanity check
           if (l_thickness < (l_sthickness + 2*wt)) {
-            std::cerr << "EcalBarrelImaging_geo Error: frame available space " << l_thickness - 2.*wt
-                      << "is less than total thickness of slices!" << l_sthickness
-                      << std::endl;
+            printout(ERROR, "EcalBarrelImaging",
+                     "available space in frame %.2f is less than the slice thickness %.2f",
+                     l_thickness - 2.*wt, l_sthickness);
           }
         }
 
@@ -110,7 +110,7 @@ static Ref_t create_detector(Detector& desc, xml_h e, SensitiveDetector sens)
         double s_pos_z = -(l_thickness / 2.) + wt;
         for (xml_coll_t si(x_layer, _U(slice)); si; ++si) {
           xml_comp_t x_slice  = si;
-          string     s_name   = Form("slice%d", s_num);
+          std::string s_name  = Form("slice%d", s_num);
           double     s_thick  = x_slice.thickness();
           double     s_trd_x1 = l_dim_x + (s_pos_z + l_thickness / 2) * tan_hphi;
           double     s_trd_x2 = l_dim_x + (s_pos_z + l_thickness / 2 + s_thick) * tan_hphi;
@@ -136,8 +136,8 @@ static Ref_t create_detector(Detector& desc, xml_h e, SensitiveDetector sens)
         }
 
         // filling gap
-        if (framing && (l_thickness > (l_sthickness + 2.*wt))) {
-          string     s_name   = Form("layer_filling%d", l_num);
+        if (has_frame && (l_thickness > (l_sthickness + 2.*wt))) {
+          std::string s_name  = Form("layer_filling%d", l_num);
           double     s_thick  = l_thickness - l_sthickness -2 *wt;
           double     s_trd_x1 = l_dim_x + (s_pos_z + l_thickness / 2) * tan_hphi;
           double     s_trd_x2 = l_dim_x + (s_pos_z + l_thickness / 2 + s_thick) * tan_hphi;

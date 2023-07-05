@@ -20,19 +20,18 @@
 #include "XML/Layering.h"
 #include <functional>
 
-using namespace std;
 using namespace dd4hep;
 
 typedef ROOT::Math::XYPoint Point;
 // fiber placement helpers, defined below
 struct FiberGrid {
   int ix = 0, iy = 0;
-  vector<Point> points;
+  std::vector<Point> points;
   Point mean_centroid = Point(0., 0.);
   Assembly *assembly_ptr = nullptr;
 
   // initialize with grid id and points
-  FiberGrid(int i, int j, const vector<Point> &pts) : ix(i), iy(j), points(pts) {
+  FiberGrid(int i, int j, const std::vector<Point> &pts) : ix(i), iy(j), points(pts) {
     if (pts.empty()) {
       return;
     }
@@ -48,9 +47,9 @@ struct FiberGrid {
   };
 };
 
-vector<Point> fiberPositions(double r, double sx, double sz, double trx, double trz, double phi,
+std::vector<Point> fiberPositions(double r, double sx, double sz, double trx, double trz, double phi,
                              bool shift_first = false, double stol = 1e-2);
-vector<FiberGrid> gridPoints(int div_n_phi, double div_dr, double x, double z, double phi);
+std::vector<FiberGrid> gridPoints(int div_n_phi, double div_dr, double x, double z, double phi);
 
 // geometry helpers
 void buildFibers(Detector& desc, SensitiveDetector& sens, Volume& mother, int layer_nunber, xml_comp_t x_fiber,
@@ -65,13 +64,13 @@ static Ref_t create_detector(Detector& desc, xml_h e, SensitiveDetector sens)
   xml_det_t  x_det    = e;
   Material   air      = desc.air();
   int        det_id   = x_det.id();
-  string     det_name = x_det.nameStr();
   double     offset   = x_det.attr<double>(_Unicode(offset));
   xml_comp_t x_dim    = x_det.dimensions();
   int        nsides   = x_dim.numsides();
   double     inner_r  = x_dim.rmin();
   double     dphi     = (2 * M_PI / nsides);
   double     hphi     = dphi / 2;
+  std::string det_name = x_det.nameStr();
 
   DetElement sdet(det_name, det_id);
   Volume     motherVol = desc.pickMotherVolume(sdet);
@@ -100,12 +99,12 @@ static Ref_t create_detector(Detector& desc, xml_h e, SensitiveDetector sens)
     for (xml_coll_t li(x_det, _U(layer)); li; ++li) {
       xml_comp_t x_layer         = li;
       int        repeat          = x_layer.repeat();
-      double     l_space_between = dd4hep::getAttrOrDefault(x_layer, _Unicode(space_between), 0.);
-      double     l_space_before  = dd4hep::getAttrOrDefault(x_layer, _Unicode(space_before), 0.);
+      double     l_space_between = getAttrOrDefault(x_layer, _Unicode(space_between), 0.);
+      double     l_space_before  = getAttrOrDefault(x_layer, _Unicode(space_before), 0.);
       l_pos_z += l_space_before;
       // Loop over number of repeats for this layer.
       for (int j = 0; j < repeat; j++) {
-        string l_name      = Form("layer%d", l_num);
+        std::string l_name = Form("layer%d", l_num);
         double l_thickness = layering.layer(l_num - 1)->thickness(); // Layer's thickness.
         double l_dim_x     = tan_hphi * l_pos_z;
         l_pos_z += l_thickness;
@@ -125,7 +124,7 @@ static Ref_t create_detector(Detector& desc, xml_h e, SensitiveDetector sens)
         double s_pos_z = -(l_thickness / 2.);
         for (xml_coll_t si(x_layer, _U(slice)); si; ++si) {
           xml_comp_t x_slice  = si;
-          string     s_name   = Form("slice%d", s_num);
+	  std::string s_name  = Form("slice%d", s_num);
           double     s_thick  = x_slice.thickness();
           double     s_trd_x1 = l_dim_x + (s_pos_z + l_thickness / 2) * tan_hphi;
           double     s_trd_x2 = l_dim_x + (s_pos_z + l_thickness / 2 + s_thick) * tan_hphi;
@@ -231,7 +230,7 @@ void buildFibers(Detector& desc, SensitiveDetector& sens, Volume& s_vol, int lay
 
   // calculate polygonal grid coordinates (vertices)
   auto        grids = gridPoints(grid_n_phi, grid_dr, s_trd_x1, s_thick, hphi);
-  vector<int> f_id_count(grids.size(), 0);
+  std::vector<int> f_id_count(grids.size(), 0);
   // use layer_number % 2 to add correct shifts for the adjacent fibers at layer boundary
   auto        f_pos = fiberPositions(f_radius, f_spacing_x, f_spacing_z, s_trd_x1, s_thick, hphi, (layer_number % 2 == 0));
   // a helper struct to speed up searching
@@ -255,9 +254,9 @@ void buildFibers(Detector& desc, SensitiveDetector& sens, Volume& s_vol, int lay
 
       // use TGeoPolygon to help check if fiber is inside a grid
       TGeoPolygon poly(gr.points.size());
-      vector<double> vx, vy;
-      transform(gr.points.begin(), gr.points.end(), back_inserter(vx), mem_fn(&Point::x));
-      transform(gr.points.begin(), gr.points.end(), back_inserter(vy), mem_fn(&Point::y));
+      std::vector<double> vx, vy;
+      std::transform(gr.points.begin(), gr.points.end(), back_inserter(vx), std::mem_fn(&Point::x));
+      std::transform(gr.points.begin(), gr.points.end(), back_inserter(vy), std::mem_fn(&Point::y));
       poly.SetXY(vx.data(), vy.data());
       poly.FinishPolygon();
 
@@ -316,7 +315,7 @@ void buildSupport(Detector& desc, Volume& mod_vol, xml_comp_t x_support,
 }
 
 // Fill fiber lattice into trapezoid starting from position (0,0) in x-z coordinate system
-vector<Point> fiberPositions(double r, double sx, double sz, double trx, double trz, double phi, bool shift, double stol)
+std::vector<Point> fiberPositions(double r, double sx, double sz, double trx, double trz, double phi, bool shift, double stol)
 {
   // r      - fiber radius
   // sx, sz - spacing between fibers in x, z
@@ -325,14 +324,14 @@ vector<Point> fiberPositions(double r, double sx, double sz, double trx, double 
   // phi    - angle between z and trapezoid arm
   // stol   - spacing tolerance
 
-  vector<Point> positions;
+  std::vector<Point> positions;
   int z_layers = floor((trz / 2 - r - stol) / sz); // number of layers that fits in half trapezoid-z
 
   double px = 0., pz = 0.;
   int start_line = shift ? 1 : 0;
 
   for (int l = -z_layers; l < z_layers + 1; l++) {
-    vector<Point> xline;
+    std::vector<Point> xline;
     pz           = l * sz;
     double x_max = trx + (trz / 2. + pz) * tan(phi) - stol; // calculate max x at particular z_pos
     (abs(l) % 2 == start_line) ? px = 0. : px = sx / 2;          // account for spacing/2 shift
@@ -353,7 +352,7 @@ vector<Point> fiberPositions(double r, double sx, double sz, double trx, double 
 
 // Determine the number of divisions for the readout grid for the fiber layers
 // Calculate dimensions of the polygonal grid
-vector<FiberGrid> gridPoints(int div_n_phi, double div_dr, double trd_x1, double height, double phi)
+std::vector<FiberGrid> gridPoints(int div_n_phi, double div_dr, double trd_x1, double height, double phi)
 {
   /*
   // TODO: move this test to xml file
@@ -376,7 +375,7 @@ vector<FiberGrid> gridPoints(int div_n_phi, double div_dr, double trd_x1, double
   }
 
   // grid vertices
-  vector<FiberGrid> results;
+  std::vector<FiberGrid> results;
   double dr = height / nr;
 
   for (int ir = 0; ir <= nr; ir++) {
