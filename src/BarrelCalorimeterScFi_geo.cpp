@@ -124,7 +124,7 @@ static Ref_t create_detector(Detector& desc, xml_h e, SensitiveDetector sens)
         double s_pos_z = -(l_thickness / 2.);
         for (xml_coll_t si(x_layer, _U(slice)); si; ++si) {
           xml_comp_t x_slice  = si;
-	  std::string s_name  = Form("slice%d", s_num);
+          std::string s_name  = Form("slice%d", s_num);
           double     s_thick  = x_slice.thickness();
           double     s_trd_x1 = l_dim_x + (s_pos_z + l_thickness / 2) * tan_hphi;
           double     s_trd_x2 = l_dim_x + (s_pos_z + l_thickness / 2 + s_thick) * tan_hphi;
