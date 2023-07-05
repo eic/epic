@@ -88,12 +88,12 @@ static Ref_t create_detector(Detector& desc, xml_h e, SensitiveDetector sens)
   Box Cut_Box(xbox, ybox, zbox);
 
   // Central pipe box
-  //Tube Extended_Beam_Box(Width,Width+wall,Thickness);
-  Box Extended_Beam_Box(Width + wall, Height + wall, Thickness);
+  //Tube Extended_Beam_Box(Width,Width+wall,Thickness); // More realistic tube pipe
+  Box Extended_Beam_Box(Width + wall, Height + wall, Thickness); // Simpler box pipe
 
   // Central vacuum box
-  //Tube Extended_Vacuum_Box(0,Width,Thickness);
-  Box Extended_Vacuum_Box(Width, Height, Thickness);
+  //Tube Extended_Vacuum_Box(0,Width,Thickness); // More realistic tube pipe
+  Box Extended_Vacuum_Box(Width, Height, Thickness); // Simpler box pipe
 
   Solid Wall_Box   = Extended_Beam_Box;
   Solid Vacuum_Box = Extended_Vacuum_Box;
@@ -214,14 +214,12 @@ static Ref_t create_detector(Detector& desc, xml_h e, SensitiveDetector sens)
 
   if (addLumi) {
 
-    //     double angle = 0;
-//    double angle = -pi/4;
-
     Box Entry_Beam_Box(ED_X + wall, ED_Y + wall, ED_Z);
     Box Entry_Vacuum_Box(ED_X, ED_Y, ED_Z - wall);
     Tube Lumi_Exit(0, Lumi_R, ED_Z);
 
-    // 
+    // Future angled exit window and more realistic tube shaped pipe.
+    // double angle = -pi/4;
     // CutTube Entry_Beam_Box  (ED_X, ED_X + wall, ED_Z,        0,2*pi, sin(angle),0,cos(angle), 0,0,1);
     // CutTube Entry_Vacuum_Box(0,    ED_X,        ED_Z - wall, 0,2*pi, sin(angle),0,cos(angle), 0,0,1);
     // CutTube Lumi_Exit       (0,    Lumi_R,      ED_Z,        0,2*pi, sin(angle),0,cos(angle), 0,0,1);
