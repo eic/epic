@@ -223,7 +223,6 @@ static Ref_t create_detector(Detector& desc, xml_h e, SensitiveDetector sens)
     Wall_Box   = UnionSolid(Wall_Box, Entry_Beam_Box, Transform3D(RotationY(-rot.theta())));
     Vacuum_Box = UnionSolid(Vacuum_Box, Entry_Vacuum_Box, Transform3D(RotationY(-rot.theta())));
     Vacuum_Box = UnionSolid(Vacuum_Box, Lumi_Exit, Transform3D(RotationY(-rot.theta())));
-
   }
 
   //-----------------------------------------------------------------
