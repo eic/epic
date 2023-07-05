@@ -44,7 +44,7 @@
     <constant name="ForwardMPGDFrame_thickness"   value="2*ForwardMPGDWindowGap_thickness + ForwardMPGDDriftGap_thickness"/>
     <constant name="ForwardMPGDEndcapMod_thickness"  value="ForwardMPGDCathode_thickness + ForwardMPGDRWell_thickness + ForwardMPGDReadOut_thickness + ForwardMPGDFrame_thickness"/>
     <constant name="ForwardMPGDEndcapLayer_thickness"   value="ForwardMPGDEndcapMod_thickness + 2 * ForwardMPGDEndcapMod_dz + ForwardMPGDLayerPad" />
-   
+
     <constant name="ForwardMPGDMod1_zmin"        value="ForwardMPGD_zmin" />
     <constant name="ForwardMPGDMod2_zmin"        value="ForwardMPGD_zmin + ForwardMPGDMod_offset" />
     <constant name="ForwardMPGDLayer1_rmin"       value="ForwardMPGDMod1_rmin - ForwardMPGDLayerPad" />

@@ -44,7 +44,7 @@
     <constant name="BackwardMPGDFrame_thickness"   value="2*BackwardMPGDWindowGap_thickness + BackwardMPGDDriftGap_thickness"/>
     <constant name="BackwardMPGDEndcapMod_thickness"  value="BackwardMPGDCathode_thickness + BackwardMPGDRWell_thickness + BackwardMPGDReadOut_thickness + BackwardMPGDFrame_thickness"/>
     <constant name="BackwardMPGDEndcapLayer_thickness"   value="BackwardMPGDEndcapMod_thickness + 2 * BackwardMPGDEndcapMod_dz + BackwardMPGDLayerPad" />
-   
+
     <constant name="BackwardMPGDMod1_zmin"         value="BackwardMPGD_zmin" />
     <constant name="BackwardMPGDMod2_zmin"         value="BackwardMPGD_zmin + BackwardMPGDMod_offset" />
     <constant name="BackwardMPGDLayer1_rmin"       value="BackwardMPGDMod1_rmin - BackwardMPGDLayerPad" />

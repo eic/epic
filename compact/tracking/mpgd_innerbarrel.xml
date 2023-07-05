@@ -43,7 +43,7 @@
     <constant name="InnerMPGDBarrelLayer2_thickness"         value="2.5*cm" />
     <constant name="InnerMPGDBarrelLayer2_rmin"              value="InnerMPGDBarrelMod2_rmin - InnerMPGDBarrelLayer2_thickness / 2.0"/>
     <constant name="InnerMPGDBarrelLayer2_rmax"              value="InnerMPGDBarrelMod2_rmin + InnerMPGDBarrelLayer2_thickness/ 2.0"/>
-    
+
     <constant name="InnerMPGDBarrelMod3_zmin"                value="InnerMPGDBarrelMod1_zmax + InnerMPGDBarrelMod3_dz" />
     <constant name="InnerMPGDBarrelMod3_zmax"                value="135.0*cm" />
     <constant name="InnerMPGDBarrelMod3_zpos"                value="0.5*(InnerMPGDBarrelMod3_zmin + InnerMPGDBarrelMod3_zmax)"/>
@@ -95,7 +95,7 @@
         rmin="InnerMPGDBarrelLayer1_rmin"
         rmax="InnerMPGDBarrelLayer1_rmax"
 	length="240*cm"/>
-      <comment> Central Barrel modules </comment>	      
+      <comment> Central Barrel modules </comment>
       <module name="ModuleC" vis="TrackerMPGDVis">
 	<module_component name="DriftCuGround" thickness="MMDriftCuGround_thickness" material="Copper" vis="TrackerMPGDVis" width="InnerMPGDBarrelStave1_width" length="InnerMPGDBarrelMod1_length">
 	</module_component>
@@ -183,7 +183,7 @@
       <argument value="layer_pattern: str=InnerMPGDBarrelC_layer\d"/>
     </plugin>
   </plugins>
-  
+
   <readouts>
     <readout name="InnerMPGDBarrelHits">
       <segmentation type="CartesianGridXY" grid_size_x="0.150*mm*sqrt(12)" grid_size_y="0.150*mm*sqrt(12)" />

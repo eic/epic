@@ -15,7 +15,7 @@
     <comment> frames </comment>
     <constant name="MPGDOuterBarrelFrame_width"            value="20*mm"/>
     <constant name="MPGDOuterBarrelFrame_thickness"        value="7*mm"/>
-   
+
     <comment> module constants </comment>
     <constant name="MPGDOuterBarrelModule_count"                   value="12" />
     <constant name="MPGDOuterBarrelModule_allowed_space"           value="2.5*cm"/>
@@ -25,7 +25,7 @@
     <constant name="MPGDOuterBarrelModule_offset"                  value="(MPGDOuterBarrelModule_zmin2 - MPGDOuterBarrelModule_zmin1)/2.0"/>
     <constant name="MPGDOuterBarrelModule_roverlap"                value="1.2*cm"/>
     <constant name="MPGDOuterBarrelModule_zoverlap"                value="2*MPGDOuterBarrelFrame_width"/>
-   
+
 
     <comment> layer parameters </comment>
     <constant name="MPGDOuterBarrelWindow_thickness"             value="50*um"/>
