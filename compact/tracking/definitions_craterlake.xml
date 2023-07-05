@@ -24,11 +24,6 @@
     <constant name="SiBarrel_angle"                  value="TrackerPrimaryAngle"/>
     <constant name="SiBarrel_dz"                     value="2*cm"/>
 
-    <!--
-    <comment> Main parameters for the MPGD Barrel layers, dz = z gap between cylinsers </comment>
-    <constant name="InnerMPGDBarrel_rmin"            value="51.25*cm"/>
-    <constant name="InnerMPGDBarrel_dz"              value="5.0*cm"/>
-    -->
     <comment> Main parameters for the outer MPGD barrel layer </comment>
     <constant name="MPGDOuterBarrelModule_rmin"      value="68.25"/>
     <constant name="MPGDOuterBarrelModule_zmin1"     value="167.5*cm"/>
@@ -115,10 +110,6 @@
     <comment> Main paratmers for MPGD endcap disks, offset here is the distance between disks </comment>
     <constant name="ForwardMPGD_zmin"             value="148*cm"/>
     <constant name="ForwardMPGDMod_offset"        value="13.0*cm"/> 
-    <!--
-    <constant name="ForwardMPGD_zmin"             value="51*cm"/>
-    <constant name="ForwardMPGDMod_offset"        value="100.0*cm"/>
-    -->
     <constant name="ForwardMPGDMod1_rmin"         value="7.014*cm" />
     <constant name="ForwardMPGDMod2_rmin"         value="7.014*cm"/>
     <constant name="ForwardMPGDMod1_rmax"         value="50*cm" />
@@ -168,48 +159,26 @@
       vis="TrackerSubAssemblyVis">
       <composite name="InnerMPGDBarrel"/>
     </detector>
-    <!--
-    <detector id="TrackerSubAssembly_3_ID"
-      name="InnerMPGDBarrelSubAssembly"
-      type="DD4hep_SubdetectorAssembly"
-      vis="TrackerSubAssemblyVis">
-      <composite name="InnerMPGDBarrelC"/>
-     </detector>
-    -->
-    <!--
     <detector id="TrackerSubAssembly_4_ID"
-      name="InnerMPGDBarrelCSubAssembly"
-      type="DD4hep_SubdetectorAssembly"
-      vis="TrackerSubAssemblyVis">
-      <composite name="InnerMPGDBarrelC"/>
-    </detector>
-    <detector id="TrackerSubAssembly_5_ID"
-      name="InnerMPGDBarrelPSubAssembly"
-      type="DD4hep_SubdetectorAssembly"
-      vis="TrackerSubAssemblyVis">
-      <composite name="InnerMPGDBarrelP"/>
-    </detector>
-    -->
-    <detector id="TrackerSubAssembly_6_ID"
       name="BarrelTOFSubAssembly"
       type="DD4hep_SubdetectorAssembly"
       vis="TrackerSubAssemblyVis">
       <composite name="BarrelTOF"/>
     </detector>
-    <detector id="TrackerSubAssembly_7_ID"
+    <detector id="TrackerSubAssembly_5_ID"
       name="OuterBarrelMPGDSubAssembly"
       type="DD4hep_SubdetectorAssembly"
       vis="TrackerSubAssemblyVis">
       <composite name="MPGDOuterBarrel"/>
     </detector> 
-    <detector id="TrackerSubAssembly_8_ID"
+    <detector id="TrackerSubAssembly_6_ID"
       name="EndcapMPGDSubAssembly"
       type="DD4hep_SubdetectorAssembly"
       vis="TrackerSubAssemblyVis">
       <composite name="ForwardMPGD"/>
       <composite name="BackwardMPGD"/>
     </detector>  
-    <detector id="TrackerSubAssembly_9_ID"
+    <detector id="TrackerSubAssembly_7_ID"
       name="EndcapTOFSubAssembly"
       type="DD4hep_SubdetectorAssembly"
       vis="TrackerSubAssemblyVis">
