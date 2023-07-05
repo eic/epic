@@ -28,6 +28,10 @@
     <comment> Main parameters for the MPGD layer geometries </comment>
     <constant name="InnerMPGDBarrel_rmin"            value="55.0*cm"/>
     <constant name="InnerMPGDBarrel_dz"              value="8.0*cm"/>
+    <constant name="InnerMPGDBarrel_length"          value="2*InnerMPGDBarrel_rmin / tan(TrackerBackwardAngle) - InnerMPGDBarrel_dz"/>
+    <constant name="InnerMPGDBarrel_zmin"            value="InnerMPGDBarrel_length/2"/> <comment> -z </comment>
+    <constant name="InnerMPGDBarrel_zmax"            value="InnerMPGDBarrel_length/2"/> <comment> +z </comment>
+    <constant name="InnerMPGDBarrel_zoffset"         value="InnerMPGDBarrel_zmax - InnerMPGDBarrel_zmin"/>
     <comment> barrel length: 2R/tan(angle) - dz </comment>
 
     <comment> Position in center of space behind DIRC </comment>
