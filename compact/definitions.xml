@@ -425,7 +425,7 @@ Examples:
 
     <constant name="CentralTrackingRegion_rmax"   value="700.0*mm" />
     <constant name="CentralTrackingRegionP_zmax"  value="1800.0*mm" />
-    <constant name="CentralTrackingRegionN_zmax"  value="1186.0*mm" />
+    <constant name="CentralTrackingRegionN_zmax"  value="1236.0*mm" />
     <constant name="CentralTrackingRegion_length" value="CentralTrackingRegionP_zmax + CentralTrackingRegionN_zmax" />
     <comment>
       tan(theta) to determine rmin in the outer tracking region (due to tapered beampipe)
@@ -459,9 +459,9 @@ Examples:
     <constant name="ForwardRICHRegion_tan1"        value="CentralTrackingRegionP_tan * 0.88" />
     <constant name="ForwardRICHRegion_tan2"        value="Eta3_6_tan * 0.89" />
 
-    <constant name="BackwardPIDRegion_length"     value="54.1*cm" />
+    <constant name="BackwardPIDRegion_length"     value="49.1*cm" />
     <constant name="BackwardPIDRegion_zmin"       value="CentralTrackingRegionN_zmax" />
-    <constant name="BackwardPIDRegion_zmax"       value="BackwardPIDRegion_zmin+BackwardPIDRegion_length" />
+    <constant name="BackwardPIDRegion_zmax"       value="BackwardPIDRegion_zmin + BackwardPIDRegion_length" />
     <constant name="BackwardPIDRegion_rmax"       value="63.0*cm" /> <!-- FIXME hardcoded, was CentralTrackingRegion_rmax -->
     <constant name="BackwardPIDRegion_tan"        value="CentralTrackingRegionN_tan * 0.92" />
 
