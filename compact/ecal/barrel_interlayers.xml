@@ -63,10 +63,7 @@
       + EcalBarrel_EpoxyThickness
       + EcalBarrel_CarbonThickness"/>
 
-    <constant name="EcalBarrel_ImagingLayerThickness"
-      value="EcalBarrel_CarbonThickness
-      + EcalBarrel_LayerSpacing
-      + EcalBarrel_ImagingFirstLayerThickness"/>
+    <constant name="EcalBarrel_ImagingLayerThickness" value="2.0*cm"/>
 
     <constant name="EcalBarrel_ImagingLayerThickness_WithoutFrame"
       value="EcalBarrel_ImagingLayerThickness
@@ -118,7 +115,7 @@
     <detector
       id="ECalBarrel_ID"
       name="EcalBarrelImaging"
-      type="epic_EcalBarrelInterlayers"
+      type="epic_EcalBarrelImaging"
       readout="EcalBarrelImagingHits"
       calorimeterType="EM_BARREL"
       vis="EcalBarrelEnvelopeVis"
@@ -138,41 +135,33 @@
 
       <layer repeat="1" vis="EcalBarrelLayerVis"
         space_before="EcalBarrel_ScFiLayerThickness + EcalBarrel_SpaceBetween">
-        <slice material="CarbonFiber" thickness="EcalBarrel_CarbonThickness" vis="EcalBarrelSliceVis"/>
-        <slice material="Air" thickness="EcalBarrel_ImagingLayerThickness_WithoutFrame " vis="EcalBarrelSliceVis"/>
-        <slice material="CarbonFiber" thickness="EcalBarrel_CarbonThickness" vis="EcalBarrelSliceVis"/>
+        <frame material="CarbonFiber" fill="Air" thickness="EcalBarrel_CarbonThickness" height="EcalBarrel_ImagingLayerThickness" vis="EcalBarrelSliceVis"/>
       </layer>
 
       <layer repeat="1" vis="EcalBarrelLayerVis"
         space_before="EcalBarrel_ScFiLayerThickness + EcalBarrel_SpaceBetween">
-        <slice material="CarbonFiber" thickness="EcalBarrel_CarbonThickness" vis="EcalBarrelSliceVis"/>
-        <slice material="Air" thickness="EcalBarrel_LayerSpacing " vis="EcalBarrelSliceVis"/>
+        <frame material="CarbonFiber" fill="Air" thickness="EcalBarrel_CarbonThickness" height="EcalBarrel_ImagingLayerThickness" vis="EcalBarrelSliceVis"/>
         <slice material="Silicon" thickness="EcalBarrel_SiliconThickness" sensitive="yes" limits="cal_limits" vis="EcalBarrelSliceVis"/>
         <slice material="Silicon" thickness="EcalBarrel_ElectronicsThickness" vis="EcalBarrelSliceVis"/>
         <slice material="Copper" thickness="EcalBarrel_CopperThickness"       vis="EcalBarrelSliceVis"/>
         <slice material="Kapton" thickness="EcalBarrel_KaptonThickness"       vis="EcalBarrelSliceVis"/>
         <slice material="Epoxy" thickness="EcalBarrel_EpoxyThickness"         vis="EcalBarrelSliceVis"/>
-        <slice material="CarbonFiber" thickness="EcalBarrel_CarbonThickness" vis="EcalBarrelSliceVis"/>
       </layer>
 
       <layer repeat="1" vis="EcalBarrelLayerVis"
         space_before="EcalBarrel_ScFiLayerThickness + EcalBarrel_SpaceBetween">
-        <slice material="CarbonFiber" thickness="EcalBarrel_CarbonThickness" vis="EcalBarrelSliceVis"/>
-        <slice material="Air" thickness="EcalBarrel_ImagingLayerThickness_WithoutFrame " vis="EcalBarrelSliceVis"/>
-        <slice material="CarbonFiber" thickness="EcalBarrel_CarbonThickness" vis="EcalBarrelSliceVis"/>
+        <frame material="CarbonFiber" fill="Air" thickness="EcalBarrel_CarbonThickness" height="EcalBarrel_ImagingLayerThickness" vis="EcalBarrelSliceVis"/>
       </layer>
 
       <layer repeat="EcalBarrelImagingLayers_num-4" vis="EcalBarrelLayerVis"
         space_between="EcalBarrel_ScFiLayerThickness + EcalBarrel_SpaceBetween"
         space_before="EcalBarrel_ScFiLayerThickness + EcalBarrel_SpaceBetween">
-        <slice material="CarbonFiber" thickness="EcalBarrel_CarbonThickness" vis="EcalBarrelSliceVis"/>
-        <slice material="Air" thickness="EcalBarrel_LayerSpacing " vis="EcalBarrelSliceVis"/>
+        <frame material="CarbonFiber" fill="Air" thickness="EcalBarrel_CarbonThickness" height="EcalBarrel_ImagingLayerThickness" vis="EcalBarrelSliceVis"/>
         <slice material="Silicon" thickness="EcalBarrel_SiliconThickness" sensitive="yes" limits="cal_limits" vis="EcalBarrelSliceVis"/>
         <slice material="Silicon" thickness="EcalBarrel_ElectronicsThickness" vis="EcalBarrelSliceVis"/>
         <slice material="Copper" thickness="EcalBarrel_CopperThickness"       vis="EcalBarrelSliceVis"/>
         <slice material="Kapton" thickness="EcalBarrel_KaptonThickness"       vis="EcalBarrelSliceVis"/>
         <slice material="Epoxy" thickness="EcalBarrel_EpoxyThickness"         vis="EcalBarrelSliceVis"/>
-        <slice material="CarbonFiber" thickness="EcalBarrel_CarbonThickness" vis="EcalBarrelSliceVis"/>
       </layer>
     </detector>
 
@@ -184,7 +173,7 @@
     <detector
       id="ECalBarrel2_ID"
       name="EcalBarrelScFi"
-      type="epic_EcalBarrelInterlayers"
+      type="epic_EcalBarrelScFi"
       readout="EcalBarrelScFiHits"
       calorimeterType="EM_BARREL"
       vis="EcalBarrelEnvelopeVis"
@@ -192,8 +181,7 @@
       <dimensions numsides="EcalBarrel_ModRepeat"
         rmin="EcalBarrel_rmin"
         z="EcalBarrel_Calorimeter_length"/>
-      <staves vis="EcalBarrelStaveVis"/>
-
+      <sectors vis="EcalBarrelStaveVis"/>
       <layer repeat="EcalBarrelImagingLayers_num-1" vis="EcalBarrelLayerVis"
        space_between="EcalBarrel_ImagingLayerThickness + EcalBarrel_SpaceBetween"
        space_before="EcalBarrel_ImagingFirstLayerThickness + EcalBarrel_SpaceBetween/2.">
