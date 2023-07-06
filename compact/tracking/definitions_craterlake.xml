@@ -70,7 +70,7 @@
     <constant name="BackwardEndcapSupportCyl_zmax"   value="BackwardPIDRegion_zmax" />
 
     <comment> Main parameters for the positive silicon disks </comment>
-    <comment> assume the disk are centered along z. The inner radii are larger than designed to account for the beampipe offset. Need to be fixed later </comment>
+    <comment> Assume the disk are centered along z. The inner radii are larger than designed to account for the beampipe offset. Need to be fixed later </comment>
     <constant name="Beampipe_bakeout_buffer"        value="5*mm" />
 
     <constant name="InnerTrackerEndcapP_zmin"        value="25.0*cm" />
