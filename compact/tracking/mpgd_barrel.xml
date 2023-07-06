@@ -23,7 +23,6 @@
     <constant name="InnerMPGDBarrelMod_rmin"                value="InnerMPGDBarrel_rmin"/>
     <constant name="InnerMPGDBarrelMod_dz"                  value="InnerMPGDBarrel_dz"/>
 
-	    <!--<constant name="InnerMPGDBarrelMod_length"              value="2 * InnerMPGDBarrelMod_rmin / tan(TrackerBackwardAngle) - InnerMPGDBarrel_dz" />-->
     <constant name="InnerMPGDBarrelMod_length"              value="InnerMPGDBarrel_length" />
 
     <constant name="InnerMPGDBarrelLayer_length"            value="InnerMPGDBarrelMod_length + 1*um" />
