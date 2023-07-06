@@ -16,7 +16,7 @@
     <constant name="MPGDOuterBarrelFrame_width"            value="20*mm"/>
     <constant name="MPGDOuterBarrelFrame_thickness"        value="7*mm"/>
 
-    <comment> module constants </comment>
+    <comment> Module constants </comment>
     <constant name="MPGDOuterBarrelModule_count"                   value="12" />
     <constant name="MPGDOuterBarrelModule_allowed_space"           value="2.5*cm"/>
     <constant name="MPGDOuterBarrelModule_rmax"                    value="MPGDOuterBarrelModule_rmin + MPGDOuterBarrelModule_allowed_space/2.0" />
