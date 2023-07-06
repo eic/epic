@@ -114,8 +114,13 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
 
     for (xml_coll_t xc(x_det, _U(layer)); xc; ++xc) {
       xml_comp_t           x_layer = xc;
+<<<<<<< HEAD
       double               l_thick = layering.layer(iLayer - 1)->thickness();
       string               l_name  = _toString(iLayer-1, "layer%d");
+=======
+      double               l_thick = layering.layer(l_num - 1)->thickness();
+      string               l_name  = _toString(layerType, "layer%d");
+>>>>>>> cd1974dca74022f5cd744909da0711ae3c9149fc
       Volume               l_vol(l_name, PolyhedraRegular(numsides, rmin, rmax, l_thick), air);
       vector<PlacedVolume> sensitives;
       int                  s_num    = 1;
@@ -146,6 +151,7 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
         else {
           ConeSegment sectorShape(s_thick / 2, rmin, rmax, rmin, rmax, 0, 2 * M_PI / (nHcalSectors));
           Volume      sectorVol{"sector", sectorShape, air};
+<<<<<<< HEAD
           // void buildSubsector(Detector& description, xml_h e, SensitiveDetector sens, vector<PlacedVolume>&
           // sensitives,
           //     const double& s_thick, const int& layerNumber, const xml_comp_t x_slice, Volume& sectorVol,
@@ -159,6 +165,24 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
           buildSubsector(description, e, sens, sensitives, s_thick, iLayer, x_slice, sectorVol, 3, 2,
                          &newHcalEtaBins[1]); // 2 eta bins of inner sector with 10 (30/3) degree tiles
           buildSubsector(description, e, sens, sensitives, s_thick, iLayer, x_slice, sectorVol, 2, 1,
+=======
+          // buildSubsector( ... const int& nSubSectors, const int& nEtaBins, const double* etaBins, const double&
+          // s_thick, const int& layerNumber, const double & disksGap, bool isStarEmc = false)\
+
+          // void buildSubsector(Detector& description, xml_h e, SensitiveDetector sens, vector<PlacedVolume>&
+          // sensitives,
+          //     const double& s_thick, const int& layerNumber, const xml_comp_t x_slice, Volume& sectorVol,
+          //     const int& nSubSectors, const int& nEtaBins, const double* etaBins, bool isStarEmc = false)
+
+          buildSubsector(description, e, sens, sensitives, s_thick, l_num, x_slice, sectorVol, 5, 12, starEmcEtaBins,
+                         true);               // star Emc implementation for new Z position with 12 eta bins
+          buildSubsector(description, e, sens, sensitives, s_thick, l_num, x_slice, sectorVol, 5, 3,
+                         &newHcalEtaBins[3]); // 3 eta bins of inner sector with the same substructure as Star Emc with 6
+                                              // (30/5)degree tiles
+          buildSubsector(description, e, sens, sensitives, s_thick, l_num, x_slice, sectorVol, 3, 2,
+                         &newHcalEtaBins[1]); // 2 eta bins of inner sector with 10 (30/3) degree tiles
+          buildSubsector(description, e, sens, sensitives, s_thick, l_num, x_slice, sectorVol, 2, 1,
+>>>>>>> cd1974dca74022f5cd744909da0711ae3c9149fc
                          &newHcalEtaBins[0]); // 1 eta bins of innermost sector with 15 (30/2) degree tiles
 
           for (unsigned iSector = 0; iSector < nHcalSectors; iSector++) {
@@ -176,7 +200,11 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
 
       l_vol.setVisAttributes(description.visAttributes(x_layer.visStr()));
 
+<<<<<<< HEAD
       string phys_lay = Form("layer%i", iLayer);
+=======
+      string phys_lay = Form("layer%i", l_num);
+>>>>>>> cd1974dca74022f5cd744909da0711ae3c9149fc
       layerZ += l_thick / 2;
       DetElement   layer_elt(endcap, phys_lay, iLayer);
       PlacedVolume pv = endcapVol.placeVolume(l_vol, Position(0, 0, layerZ));
