@@ -63,10 +63,7 @@
       + EcalBarrel_EpoxyThickness
       + EcalBarrel_CarbonThickness"/>
 
-    <constant name="EcalBarrel_ImagingLayerThickness"
-      value="EcalBarrel_CarbonThickness
-      + EcalBarrel_LayerSpacing
-      + EcalBarrel_ImagingFirstLayerThickness"/>
+    <constant name="EcalBarrel_ImagingLayerThickness" value="2.0*cm"/>
 
     <constant name="EcalBarrel_ImagingLayerThickness_WithoutFrame"
       value="EcalBarrel_ImagingLayerThickness
@@ -138,12 +135,12 @@
 
       <layer repeat="1" vis="EcalBarrelLayerVis"
         space_before="EcalBarrel_ScFiLayerThickness + EcalBarrel_SpaceBetween">
-        <frame material="CarbonFiber" fill="Air" thickness="0.5*mm" height="2.*cm" vis="EcalBarrelSliceVis"/>
+        <frame material="CarbonFiber" fill="Air" thickness="EcalBarrel_CarbonThickness" height="EcalBarrel_ImagingLayerThickness" vis="EcalBarrelSliceVis"/>
       </layer>
 
       <layer repeat="1" vis="EcalBarrelLayerVis"
         space_before="EcalBarrel_ScFiLayerThickness + EcalBarrel_SpaceBetween">
-        <frame material="CarbonFiber" fill="Air" thickness="0.5*mm" height="2.*cm" vis="EcalBarrelSliceVis"/>
+        <frame material="CarbonFiber" fill="Air" thickness="EcalBarrel_CarbonThickness" height="EcalBarrel_ImagingLayerThickness" vis="EcalBarrelSliceVis"/>
         <slice material="Silicon" thickness="EcalBarrel_SiliconThickness" sensitive="yes" limits="cal_limits" vis="EcalBarrelSliceVis"/>
         <slice material="Silicon" thickness="EcalBarrel_ElectronicsThickness" vis="EcalBarrelSliceVis"/>
         <slice material="Copper" thickness="EcalBarrel_CopperThickness"       vis="EcalBarrelSliceVis"/>
@@ -153,13 +150,13 @@
 
       <layer repeat="1" vis="EcalBarrelLayerVis"
         space_before="EcalBarrel_ScFiLayerThickness + EcalBarrel_SpaceBetween">
-        <frame material="CarbonFiber" fill="Air" thickness="0.5*mm" height="2.*cm" vis="EcalBarrelSliceVis"/>
+        <frame material="CarbonFiber" fill="Air" thickness="EcalBarrel_CarbonThickness" height="EcalBarrel_ImagingLayerThickness" vis="EcalBarrelSliceVis"/>
       </layer>
 
       <layer repeat="EcalBarrelImagingLayers_num-4" vis="EcalBarrelLayerVis"
         space_between="EcalBarrel_ScFiLayerThickness + EcalBarrel_SpaceBetween"
         space_before="EcalBarrel_ScFiLayerThickness + EcalBarrel_SpaceBetween">
-        <frame material="CarbonFiber" fill="Air" thickness="0.5*mm" height="2.*cm" vis="EcalBarrelSliceVis"/>
+        <frame material="CarbonFiber" fill="Air" thickness="EcalBarrel_CarbonThickness" height="EcalBarrel_ImagingLayerThickness" vis="EcalBarrelSliceVis"/>
         <slice material="Silicon" thickness="EcalBarrel_SiliconThickness" sensitive="yes" limits="cal_limits" vis="EcalBarrelSliceVis"/>
         <slice material="Silicon" thickness="EcalBarrel_ElectronicsThickness" vis="EcalBarrelSliceVis"/>
         <slice material="Copper" thickness="EcalBarrel_CopperThickness"       vis="EcalBarrelSliceVis"/>
