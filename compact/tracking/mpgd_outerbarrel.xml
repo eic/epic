@@ -27,7 +27,7 @@
     <constant name="MPGDOuterBarrelModule_zoverlap"                value="2*MPGDOuterBarrelFrame_width"/>
 
 
-    <comment> layer parameters </comment>
+    <comment> Layer parameters </comment>
     <constant name="MPGDOuterBarrelWindow_thickness"             value="50*um"/>
     <constant name="MPGDOuterBarrelWindowGap_thickness"          value="2*mm"/>
     <constant name="MPGDOuterBarrelDriftGap_thickness"           value="3*mm"/>
