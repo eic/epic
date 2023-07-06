@@ -3,4 +3,4 @@ features:
     marco:
   tracking:
     definitions:
-    tof_endcap_detailed:
+    tof_endcap:
