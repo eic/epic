@@ -18,7 +18,7 @@ features:
     pfrich:
     drich:
   ecal:
-   forward_homogeneous:
+    forward_homogeneous:
     forward_insert_homogeneous:
     barrel_interlayers:
     backward_PbWO4:
