@@ -27,6 +27,6 @@ features:
     barrel_gdml:
     backward:
   far_forward:
-    far_forward_brycecanyon:
+    far_forward:
   far_backward:
     far_backward:

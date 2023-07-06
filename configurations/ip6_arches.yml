@@ -3,6 +3,6 @@ pbeam: 275
 features:
   beampipe:
   far_forward:
-    far_forward_arches:
+    far_forward:
   far_backward:
     far_backward:
