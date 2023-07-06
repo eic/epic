@@ -8,7 +8,7 @@
     </documentation>
     <constant name="HcalEndcapNSteelThickness"       value="4.0 * cm"/>
     <constant name="HcalEndcapNPolystyreneThickness" value="0.4 * cm"/>
-
+    <constant name="HcalEndcapNDiskGap"              value="1 * cm"/>
     <constant name="HcalEndcapN_polyhedron_rmax"     value="275.444*cm"/>
     <constant name="HcalEndcapN_segments_rmin"     value="12.4*cm"/>
     <constant name="HcalEndcapN_segments_rmax"     value="HcalEndcapN_polyhedron_rmax/(cos(180*deg/HcalEndcapN_CaloSides))"/>
@@ -42,7 +42,7 @@
         zmin="HcalEndcapN_zmin"
         rmin="HcalEndcapN_segments_rmin"
         rmax="HcalEndcapN_polyhedron_rmax"/>
-      <layer repeat="HcalEndcapNLayer_NRepeat" vis="HcalEndcapLayerVis">
+      <layer repeat="HcalEndcapNLayer_NRepeat" vis="HcalEndcapLayerVis" disksGap = "HcalEndcapNDiskGap">
         <slice material="Steel235" thickness="HcalEndcapNSteelThickness" vis="HcalAbsorberVis"/>
         <slice material="Polystyrene" thickness="HcalEndcapNPolystyreneThickness" vis="HcalSensorVis" sensitive="yes" limits="cal_limits"/>
       </layer>
