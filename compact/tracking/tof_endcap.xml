@@ -9,8 +9,6 @@
       --------------------------
     </comment>
     <comment> Forward TOF position </comment>
-    <constant name="ForwardTOF_length"              value="min(ForwardTOFRegion_length, 2.*cm)"/>
-    <constant name="ForwardTOF_zmin"                value="ForwardTOFRegion_zmin + ForwardTOFRegion_length - ForwardTOF_length - 1*cm"/>
     <constant name="ForwardTOF_nlayers"             value="1"/>
     <constant name="ForwardTOFMod_offset"           value="1.2*cm"/>
 

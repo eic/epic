@@ -101,11 +101,11 @@ The unused IDs below are saved for future use.
     <constant name="TrackerSubAssembly_4_ID"      value="44"/>
     <constant name="TrackerSubAssembly_5_ID"      value="45"/>
     <constant name="TrackerSubAssembly_6_ID"      value="46"/>
+    <constant name="TrackerSubAssembly_7_ID"      value="47"/>
+    <constant name="TrackerSubAssembly_8_ID"      value="48"/>
+    <constant name="TrackerSubAssembly_9_ID"      value="49"/>
 
-    <constant name="TrackerCompositeBarrel_0_ID"  value="47"/>
-    <constant name="TrackerCompositeBarrel_1_ID"  value="48"/>
-    <constant name="TrackerCompositeBarrel_2_ID"  value="49"/>
-    <constant name="TrackerCompositeBarrel_3_ID"  value="50"/>
+    <constant name="TrackerCompositeBarrel_0_ID"  value="50"/>
     <constant name="TrackerCompositeEndcapN_0_ID" value="51"/>
     <constant name="TrackerCompositeEndcapN_1_ID" value="52"/>
     <constant name="TrackerCompositeEndcapN_2_ID" value="53"/>
@@ -442,20 +442,12 @@ Examples:
     <constant name="ForwardPIDRegion_zmin"        value="CentralTrackingRegionP_zmax" />
     <constant name="ForwardPIDRegion_length"      value="135.0*cm" />
     <constant name="ForwardPIDRegion_rmax"        value="185.0*cm" />
-
-    <comment> Forward TOF region currenlty empty for future upgrades </comment>
-    <constant name="ForwardTOFRegion_zmin"        value="ForwardPIDRegion_zmin" />
     <constant name="ForwardTOFRegion_length"      value="15.0*cm" />
-    <constant name="ForwardTOFRegion_tan"         value="CentralTrackingRegionP_tan" />
-    <constant name="ForwardTOFRegion_minR"            value="8*cm" />
-    <constant name="ForwardTOFRegion_maxR"            value="67*cm" />
-    <constant name="ForwardTOF_xOffset"         value="-2.75*cm" />
-    <constant name="ForwardTOF_det_height"      value="2.0*cm" />
 
     <comment> Forward RICH region </comment>
-    <constant name="ForwardRICHRegion_zmin"       value="ForwardTOFRegion_zmin + ForwardTOFRegion_length" />
+    <constant name="ForwardRICHRegion_zmin"       value="ForwardPIDRegion_zmin + ForwardTOFRegion_length" />
     <constant name="ForwardRICHRegion_length"     value="ForwardPIDRegion_length - ForwardTOFRegion_length" />
-    <comment> tangent of the opening angle at the front and back of the RICH </comment>
+     <comment> Tangent of the opening angle at the front and back of the RICH </comment>
     <constant name="ForwardRICHRegion_tan1"        value="CentralTrackingRegionP_tan * 0.88" />
     <constant name="ForwardRICHRegion_tan2"        value="Eta3_6_tan * 0.89" />
 
