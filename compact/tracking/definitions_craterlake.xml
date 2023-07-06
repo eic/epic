@@ -3,8 +3,6 @@
 
 <lccdd>
 
-  <display>
-  </display>
   <define>
     <comment> Primary directions for the tracker </comment>
     <comment> TODO: use actual design angles rather than calculated projective directions </comment>
