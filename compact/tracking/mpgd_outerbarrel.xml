@@ -47,19 +47,6 @@
                                                             MPGDOuterBarrelPCB_thickness + MPGDOuterBarrelFrame_thickness" />
   </define>
 
-
-  <materials>
-  </materials>
-
-  <limits>
-  </limits>
-
-  <regions>
-  </regions>
-
-  <display>
-  </display>
-
    <detectors>
    <detector id="TrackerBarrel_5_ID" name="MPGDOuterBarrel" type="epic_OuterMPGDBarrel" readout="OuterMPGDBarrelHits" vis="TrackerVis">
      <type_flags type="DetType_TRACKER + DetType_BARREL"/>
