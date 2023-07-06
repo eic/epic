@@ -107,7 +107,7 @@
     <constant name="TrackerEndcapNDisk4_rmin"        value="38.043*mm + Beampipe_bakeout_buffer + 3.310*mm" />
     <constant name="TrackerEndcapNDisk4_rmax"        value="TrackerEndcapPDisk4_rmax" />
 
-    <comment> Main paratmers for MPGD endcap disks, offset here is the distance between disks </comment>
+    <comment> Main parameters for MPGD endcap disks, offset here is the distance between disks </comment>
     <constant name="ForwardMPGD_zmin"             value="148*cm"/>
     <constant name="ForwardMPGDMod_offset"        value="13.0*cm"/>
     <constant name="ForwardMPGDMod1_rmin"         value="7.014*cm" />
