@@ -12,7 +12,7 @@
 </info>
 
 <define>
-    <comment> frames </comment>
+    <comment> Frames </comment>
     <constant name="MPGDOuterBarrelFrame_width"            value="20*mm"/>
     <constant name="MPGDOuterBarrelFrame_thickness"        value="7*mm"/>
 
