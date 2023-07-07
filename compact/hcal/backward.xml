@@ -6,19 +6,18 @@
     <documentation>
       #### Material Thickness
     </documentation>
-    <constant name="HcalEndcapNSteelThickness"       value="4.0 * cm"/>
+    <constant name="HcalEndcapNSteelThickness" value="4.0 * cm"/>
     <constant name="HcalEndcapNPolystyreneThickness" value="0.4 * cm"/>
-    <constant name="HcalEndcapNLayerGap"             value="0.15 * cm"/>
-    <constant name="HcalEndcapNDiskGap"              value="1 * cm"/>
-    <constant name="HcalEndcapN_polyhedron_rmax"     value="275.0*cm"/>
-    <constant name="HcalEndcapN_segments_rmin"       value="12.4*cm"/>
+    <constant name="HcalEndcapNLayerGap" value="0.15 * cm"/>
+    <constant name="HcalEndcapNDiskGap" value="1 * cm"/>
+    <constant name="HcalEndcapN_polyhedron_rmax" value="275.0*cm"/>
+    <constant name="HcalEndcapN_segments_rmin" value="12.4*cm"/>
 
     <documentation>
       - Hcal Endcap N Layers and computed Thickness
     </documentation>
 
-    <constant name="HcalEndcapNSingleLayerThickness"
-             value="HcalEndcapNSteelThickness + HcalEndcapNPolystyreneThickness + HcalEndcapNLayerGap"/>
+    <constant name="HcalEndcapNSingleLayerThickness" value="HcalEndcapNSteelThickness + HcalEndcapNPolystyreneThickness + HcalEndcapNLayerGap"/>
     <constant name="HcalEndcapNLayer_NRepeat" value="floor(HcalEndcapN_length / HcalEndcapNSingleLayerThickness)"/>
     <constant name="HcalEndcapN_thickness" value="HcalEndcapNLayer_NRepeat * HcalEndcapNSingleLayerThickness"/>
   </define>
@@ -29,22 +28,14 @@
     <documentation>
       ### Backwards (Negative Z) Endcap Hadronic Calorimeter
     </documentation>
-    <detector
-      id="HCalEndcapN_ID"
-      name="HcalEndcapN"
-      type="epic_PolyhedraEndcapCalorimeter2"
-      readout="HcalEndcapNHits"
-      vis="HcalEndcapVis"
-      calorimeterType="HAD_ENDCAP" reflect="true">
+    <detector id="HCalEndcapN_ID" name="HcalEndcapN" type="epic_PolyhedraEndcapCalorimeter2" readout="HcalEndcapNHits" vis="HcalEndcapVis" calorimeterType="HAD_ENDCAP" reflect="true">
       <position x="0" y="0" z="0"/>
-      <dimensions
-        numsides="HcalEndcapN_CaloSides"
-        zmin="HcalEndcapN_zmin"
-        rmin="HcalEndcapN_segments_rmin"
-        rmax="HcalEndcapN_polyhedron_rmax"/>
+      <dimensions numsides="HcalEndcapN_CaloSides" zmin="HcalEndcapN_zmin" rmin="HcalEndcapN_segments_rmin" rmax="HcalEndcapN_polyhedron_rmax"/>
       <layer repeat="HcalEndcapNLayer_NRepeat" vis="HcalEndcapLayerVis" disksGap = "HcalEndcapNDiskGap">
-        <slice material="Steel235" thickness="HcalEndcapNSteelThickness" vis="HcalAbsorberVis"/>
         <slice material="Polystyrene" thickness="HcalEndcapNPolystyreneThickness" vis="HcalSensorVis" sensitive="yes" limits="cal_limits"/>
+        <slice material="Air" thickness="HcalEndcapNLayerGap/2" vis="HcalAbsorberVis"/>
+        <slice material="Steel235" thickness="HcalEndcapNSteelThickness" vis="HcalAbsorberVis"/>
+        <slice material="Air" thickness="HcalEndcapNLayerGap/2" vis="HcalAbsorberVis"/>
       </layer>
     </detector>
   </detectors>
@@ -52,7 +43,7 @@
   <!--  Definition of the readout segmentation/definition  -->
   <readouts>
     <readout name="HcalEndcapNHits">
-       <segmentation type="NoSegmentation"/>
+      <segmentation type="NoSegmentation"/>
       <id>system:8,barrel:3,module:4,layer:8,slice:5,sector:8,subsector:8,tile:20</id>
     </readout>
   </readouts>

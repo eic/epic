@@ -5,10 +5,12 @@ using namespace std;
 using namespace dd4hep;
 using namespace dd4hep::detail;
 
+// .q
 const unsigned nHcalSectors          = 12;
 const double   starEmcEtaBins[13]    = {2.0,    1.9008, 1.8065, 1.7168, 1.6317, 1.5507, 1.4738,
                                         1.4007, 1.3312, 1.2651, 1.2023, 1.1427, 1.086};
-const double   newHcalEtaBins[7]     = {3.13294, 2.99414, 2.86202, 2.73624, 2.61643, 2.50226, 2.39341};
+const double   outerHcalEtaBins[3]   = {1.42823, 1.3672, 1.30824};
+const double   innerHcalEtaBins[7]   = {3.10639, 2.97419, 2.84764, 2.72653, 2.61067, 2.49986, 2.3939};
 const double   starEmcZPositions[24] = {270.19,  271.695, 273.15,  274.555, 275.96,  277.365, 282.363, 283.768,
                                         285.173, 286.578, 287.983, 289.388, 290.793, 292.198, 293.603, 295.008,
                                         296.413, 297.818, 299.223, 300.628, 302.033, 303.438, 304.843, 306.158};
@@ -17,35 +19,36 @@ const int      tileMap[nNewLayers]   = {0, 2, 4, 5, 6, 8, 10, 12, 15, 17, 19};
 double         getR(const double& z, const double& eta) { return z / (sinh(eta)); }
 
 void buildSubsector(Detector& description, xml_h e, SensitiveDetector sens, vector<PlacedVolume>& sensitives,
-                    const double& s_thick, const int& layerNumber, const xml_comp_t x_slice, Volume& sectorVol,
-                    const int& nSubSectors, const int& nEtaBins, const double* etaBins, bool isStarEmc = false)
+                    const int& layerNumber, const xml_comp_t x_slice, Volume& sectorVol, const int& nSubSectors,
+                    const int& nEtaBins, const double* etaBins, const double& oldEmcGap = 0, bool isStarEmc = false)
 {
-  xml_det_t x_det        = e;
-  xml_dim_t dim          = x_det.dimensions();
-  Material  air          = description.air();
-  double    zmin         = dim.zmin();
-  double    dphiSector   = 2. * M_PI / (nHcalSectors);      // 30  deg
-  double    dphi         = dphiSector / nSubSectors;        // 6 deg
-  int       oldTileLayer = tileMap[layerNumber - 1];        // layer of the old tile corresponding to the current layer
-  double    zOldPos      = starEmcZPositions[oldTileLayer]; // center z position of the old tile
-  double    zPos         = zmin + (layerNumber - 1) * s_thick + s_thick / 2;
-  double    oldEmcGap    = 2;                               // cm
+  xml_det_t x_det = e;
+  xml_dim_t dim   = x_det.dimensions();
+  Material  air   = description.air();
+  double    zmin  = dim.zmin();
+  Layering  layering(x_det);
+  double    layer_thickness = layering.layer(layerNumber - 1)->thickness();
+  double    s_thick         = x_slice.thickness();
+  
+  double dphiSector   = 2. * M_PI / (nHcalSectors);      // 30  deg
+  double dphi         = dphiSector / nSubSectors;        // 6 deg
+  int    oldTileLayer = tileMap[layerNumber - 1];        // layer of the old tile corresponding to the current layer
+  double zOldPos      = starEmcZPositions[oldTileLayer]; // center z position of the old tile
+  double zPos         = zmin + (layerNumber-1)*layer_thickness + s_thick / 2;
 
   double rmax = isStarEmc ? getR(zOldPos, starEmcEtaBins[nEtaBins])
                           : getR(zPos, etaBins[nEtaBins]) - oldEmcGap; // closest tile distance to the beam pipe
   double rmin = isStarEmc ? getR(zOldPos, starEmcEtaBins[0])
-                          : getR(zPos, etaBins[0]) - oldEmcGap;        // furthest tile distance to the beam pipe
+                          : getR(zPos, etaBins[0]) -oldEmcGap ;        // furthest tile distance to the beam pipe
 
   Volume subSectorVol("subsector", Tube(rmin, rmax, s_thick / 2, 0, dphi), air);
 
   for (int iEtaBin = 0; iEtaBin < nEtaBins; iEtaBin++) {
     // recreate tile size for the given layer:
-    double rBottom = isStarEmc
-                         ? getR(zOldPos, starEmcEtaBins[iEtaBin])
-                         : getR(zPos, etaBins[iEtaBin]) - oldEmcGap; // current tile closest distance to the beam pipe
-    double rTop    = isStarEmc
-                         ? getR(zOldPos, starEmcEtaBins[iEtaBin + 1])
-                         : getR(zPos, etaBins[iEtaBin + 1]) - oldEmcGap; // current tile closest distance to the beam pipe
+    double rBottom = isStarEmc ? getR(zOldPos, starEmcEtaBins[iEtaBin])
+                               : getR(zPos, etaBins[iEtaBin]) -oldEmcGap ;     // current tile closest distance to the beam pipe
+    double rTop    = isStarEmc ? getR(zOldPos, starEmcEtaBins[iEtaBin + 1])
+                               : getR(zPos, etaBins[iEtaBin + 1]) -oldEmcGap ; // current tile closest distance to the beam pipe
     // cosine theorem for the angle between the two radii:
     //(2 dx1)^2 = r^2+r^2-2*r*r*cos(phi) = 2r^2(1-cos(phi));
     //   dx1=r*sqrt(2(1-cos(phi)))/2;
@@ -59,14 +62,10 @@ void buildSubsector(Detector& description, xml_h e, SensitiveDetector sens, vect
         isStarEmc ? _toString(iEtaBin, "tileOld%i") : Form("tile%i_%i", (int)(dphi / M_PI * 180 + 0.5), iEtaBin);
     Volume tile_vol(tileName, tile, s_mat);
     tile_vol.setVisAttributes(description.visAttributes(x_slice.visStr()));
-    // PlacedVolume tile_phys = subSectorVol.placeVolume(tile_vol,
-    //   Transform3D(RotationZYX(M_PI / 2, iSector * 2 * M_PI / (nHcalSectors), M_PI / 2),
-    //                                     Position(((iSector + 1) > nHcalSectors / 2 ? -disksGap : disksGap), 0, 0)))
-
-    // Transform3D( RotationZYX(0, 0, (rTop + rBottom) / 2)));
-    double distance = (rTop + rBottom) / 2;
+    double       distance  = (rTop + rBottom) / 2;
     PlacedVolume tile_phys = subSectorVol.placeVolume(
-        tile_vol, Transform3D(RotationZYX(  0,  M_PI / 2 + dphi/2 , M_PI / 2), Position(distance * cos(dphi/2), distance * sin(dphi/2), 0)));
+        tile_vol, Transform3D(RotationZYX(0, M_PI / 2 + dphi / 2, M_PI / 2),
+                              Position(distance * cos(dphi / 2), distance * sin(dphi / 2), 0)));
     tile_phys.addPhysVolID("etabin", iEtaBin);
 
     if (x_slice.isSensitive()) {
@@ -78,7 +77,6 @@ void buildSubsector(Detector& description, xml_h e, SensitiveDetector sens, vect
 
   for (int iSubSector = 0; iSubSector < nSubSectors; iSubSector++) {
     PlacedVolume subSectorVol_phys = sectorVol.placeVolume(subSectorVol, RotationZYX((iSubSector)*dphi, 0, 0));
-    // sectorVol.placeVolume(subSectorVol, RotationZYX(0, (iSubSector + 0.5L) * dphi, M_PI / 2));
     subSectorVol_phys.addPhysVolID("subsector", iSubSector);
   }
 }
@@ -144,8 +142,11 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
 
           PlacedVolume s_phv = l_vol.placeVolume(slice, Position(0, 0, sliceZ));
           s_phv.addPhysVolID("slice", s_num);
-        }
-
+        } 
+     
+        
+        
+        
         else {
           ConeSegment sectorShape(s_thick / 2, rmin, rmax, rmin, rmax, 0, 2 * M_PI / (nHcalSectors));
           Volume      sectorVol{"sector", sectorShape, air};
@@ -154,27 +155,22 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
           //     const double& s_thick, const int& layerNumber, const xml_comp_t x_slice, Volume& sectorVol,
           //     const int& nSubSectors, const int& nEtaBins, const double* etaBins, bool isStarEmc = false)
 
-          // buildSubsector(description, e, sens, sensitives, s_thick, iLayer, x_slice, sectorVol, 10, 2,
-          // starEmcEtaBins);               // star Emc implementation for new Z position with 12 eta bins
+          buildSubsector(description, e, sens, sensitives, iLayer, x_slice, sectorVol, 10, 2, outerHcalEtaBins, -2.18);
 
-          buildSubsector(description, e, sens, sensitives, s_thick, iLayer, x_slice, sectorVol, 5, 12, starEmcEtaBins,
-                         true);               // star Emc implementation for new Z position with 12 eta bins
-          buildSubsector(description, e, sens, sensitives, s_thick, iLayer, x_slice, sectorVol, 5, 3,
-                         &newHcalEtaBins[3]); // 3 eta bins of inner sector with the same substructure as Star Emc with
-                                              // // 6 (30/5)degree tiles
-          buildSubsector(description, e, sens, sensitives, s_thick, iLayer, x_slice, sectorVol, 3, 2,
-                         &newHcalEtaBins[1]); // 2 eta bins of inner sector with 10 (30/3) degree tiles
-          buildSubsector(description, e, sens, sensitives, s_thick, iLayer, x_slice, sectorVol, 2, 1,
-                         &newHcalEtaBins[0]); // 1 eta bins of innermost sector with 15 (30/2) degree tiles
+          buildSubsector(description, e, sens, sensitives, iLayer, x_slice, sectorVol, 5, 12, starEmcEtaBins, 0.,
+                         true); // star Emc implementation for new Z position with 12 eta bins
+          buildSubsector(description, e, sens, sensitives, iLayer, x_slice, sectorVol, 5, 3, &innerHcalEtaBins[3],
+                         2.18); // 3 eta bins of inner sector with the same substructure as Star Emc with
+                                // // 6 (30/5)degree tiles
+          buildSubsector(description, e, sens, sensitives, iLayer, x_slice, sectorVol, 3, 2, &innerHcalEtaBins[1],
+                         2.18); // 2 eta bins of inner sector with 10 (30/3) degree tiles
+          buildSubsector(description, e, sens, sensitives, iLayer, x_slice, sectorVol, 2, 1, &innerHcalEtaBins[0],
+                         2.18); // 1 eta bins of innermost sector with 15 (30/2) degree tiles
 
           for (unsigned iSector = 0; iSector < nHcalSectors; iSector++) {
-            // PlacedVolume sectorVol_phys = slice.placeVolume(
-            //     sectorVol, Transform3D(RotationZYX(M_PI / 2, iSector * 2 * M_PI / (nHcalSectors), M_PI / 2),
-            //                            Position(((iSector + 1) > nHcalSectors / 2 ? -disksGap : disksGap), 0, 0)));
             PlacedVolume sectorVol_phys = slice.placeVolume(
                 sectorVol, Transform3D(RotationZYX(M_PI / 2 + iSector * 2 * M_PI / (nHcalSectors), 0, 0),
                                        Position(((iSector + 1) > nHcalSectors / 2 ? disksGap : -disksGap), 0, 0)));
-
             sectorVol_phys.addPhysVolID("sector", iSector);
           }
           PlacedVolume s_phv = l_vol.placeVolume(slice, Position(0, 0, sliceZ));
