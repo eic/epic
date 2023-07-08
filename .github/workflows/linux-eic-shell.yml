@@ -152,17 +152,6 @@ jobs:
           DETECTOR_VERSION=${{ github.event.pull_request.head.ref || github.ref_name }}
           GITHUB_REPOSITORY=${{ github.repository }}
           GITHUB_SHA=${{ github.event.pull_request.head.sha || github.sha }}
-    - run: |
-        gh api \
-           --method POST \
-          -H "Accept: application/vnd.github+json" \
-          /repos/${{ github.repository }}/statuses/${{ github.event.pull_request.head.sha || github.sha }} \
-          -f state="pending" \
-          -f target_url="${{ steps.trigger.outputs.web_url }}" \
-          -f description="Triggered... $(TZ=America/New_York date)" \
-          -f context="eicweb/geoviewer (${{ matrix.detector_config }})"
-      env:
-        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
   check-geometry-configs:
     runs-on: ubuntu-latest
