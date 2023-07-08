@@ -144,7 +144,7 @@ jobs:
         url: https://eicweb.phy.anl.gov
         project_id: 539
         token: ${{ secrets.EICWEB_GEOVIEWER_TRIGGER }}
-        ref_name: main
+        ref_name: post-pr-comment
         variables: |
           DETECTOR_REPOSITORYURL=${{ github.server_url }}/${{ github.repository }}
           DETECTOR_REPOSITORYREF=${{ github.ref }}
@@ -152,6 +152,7 @@ jobs:
           DETECTOR_VERSION=${{ github.event.pull_request.head.ref || github.ref_name }}
           GITHUB_REPOSITORY=${{ github.repository }}
           GITHUB_SHA=${{ github.event.pull_request.head.sha || github.sha }}
+          GITHUB_PR=${{ github.event.pull_request.number }}
 
   check-geometry-configs:
     runs-on: ubuntu-latest
