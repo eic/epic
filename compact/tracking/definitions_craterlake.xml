@@ -136,6 +136,8 @@
     <constant name="BackwardMPGDMod2_rmax"         value="50.0*cm" />
 
   </define>
+  <comment> See compact/definitions.xml for reserved detector id
+    ACTS detector volume needs to be built inside out in terms of R. </comment>
   <detectors>
     <detector id="VertexSubAssembly_0_ID"
       name="VertexBarrelSubAssembly"
@@ -167,36 +169,36 @@
       <composite name="OuterTrackerEndcapP"/>
     </detector>
     <detector id="TrackerSubAssembly_3_ID"
+      name="EndcapMPGDSubAssembly"
+      type="DD4hep_SubdetectorAssembly"
+      vis="TrackerSubAssemblyVis">
+      <composite name="BackwardMPGD"/>
+      <composite name="ForwardMPGD"/>
+    </detector>
+      <detector id="TrackerSubAssembly_4_ID"
       name="InnerMPGDBarrelSubAssembly"
       type="DD4hep_SubdetectorAssembly"
       vis="TrackerSubAssemblyVis">
       <composite name="InnerMPGDBarrel"/>
     </detector>
-    <detector id="TrackerSubAssembly_4_ID"
+    <detector id="TrackerSubAssembly_5_ID"
+      name="EndcapTOFSubAssembly"
+      type="DD4hep_SubdetectorAssembly"
+      vis="TrackerSubAssemblyVis">
+      <composite name="BackwardTOF"/>
+      <composite name="ForwardTOF"/>
+    </detector>
+    <detector id="TrackerSubAssembly_6_ID"
       name="BarrelTOFSubAssembly"
       type="DD4hep_SubdetectorAssembly"
       vis="TrackerSubAssemblyVis">
       <composite name="BarrelTOF"/>
     </detector>
-    <detector id="TrackerSubAssembly_5_ID"
+    <detector id="TrackerSubAssembly_7_ID"
       name="OuterBarrelMPGDSubAssembly"
       type="DD4hep_SubdetectorAssembly"
       vis="TrackerSubAssemblyVis">
       <composite name="MPGDOuterBarrel"/>
-    </detector>
-    <detector id="TrackerSubAssembly_6_ID"
-      name="EndcapMPGDSubAssembly"
-      type="DD4hep_SubdetectorAssembly"
-      vis="TrackerSubAssemblyVis">
-      <composite name="ForwardMPGD"/>
-      <composite name="BackwardMPGD"/>
-    </detector>
-    <detector id="TrackerSubAssembly_7_ID"
-      name="EndcapTOFSubAssembly"
-      type="DD4hep_SubdetectorAssembly"
-      vis="TrackerSubAssemblyVis">
-      <composite name="ForwardTOF"/>
-      <composite name="BackwardTOF"/>
     </detector>
     <detector id="B0TrackerSubAssembly_ID"
       name="B0TrackerSubAssembly"
