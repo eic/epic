@@ -172,7 +172,6 @@ jobs:
         setup: install/setup.sh
         run: |
           configs=${{ needs.list-detector-configs.outputs.configs_csv }}
-
           for config in ${configs//,/ } ; do
             checkGeometry -c ${DETECTOR_PATH}/${config}.xml
           done
