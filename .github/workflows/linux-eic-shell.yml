@@ -248,7 +248,7 @@ jobs:
           IFS=, read -a configs <<< "${{ needs.list-detector-configs.outputs.configs_csv }}"
           for config in ${configs[@]} ; do
             echo "::group::${config}" ;
-            geoConverter -compact2tgeo -input ${DETECTOR_PATH}/${config}.xml -output ${config}.root 
+            geoConverter -compact2tgeo -input ${DETECTOR_PATH}/${config}.xml -output ${config}.root
             echo "::endgroup::" ;
           done
     - uses: actions/upload-artifact@v3
