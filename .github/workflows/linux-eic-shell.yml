@@ -172,7 +172,7 @@ jobs:
         setup: install/setup.sh
         run: |
           configs=${{ needs.list-detector-configs.outputs.configs_csv }}
-          for config in ${configs//,/ } ; do
+          for config in $(echo ${configs//,/ }) ; do
             checkGeometry -c ${DETECTOR_PATH}/${config}.xml
           done
 
@@ -214,7 +214,7 @@ jobs:
         setup: install/setup.sh
         run: |
           configs=${{ needs.list-detector-configs.outputs.configs_csv }}
-          for config in ${configs//,/ } ; do
+          for config in $(echo ${configs//,/ }) ; do
             geoConverter -compact2gdml -input ${DETECTOR_PATH}/${config}.xml -output ${config}.gdml
           done
     - uses: actions/upload-artifact@v3
@@ -242,7 +242,7 @@ jobs:
         setup: install/setup.sh
         run: |
           configs=${{ needs.list-detector-configs.outputs.configs_csv }}
-          for config in ${configs//,/ } ; do
+          for config in $(echo ${configs//,/ }) ; do
             geoConverter -compact2tgeo -input ${DETECTOR_PATH}/${config}.xml -output ${config}.root
           done
     - uses: actions/upload-artifact@v3
