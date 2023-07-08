@@ -220,7 +220,7 @@ jobs:
     - uses: actions/upload-artifact@v3
       with:
         name: gdml
-        path: *.gdml
+        path: ${{ github.workspace }}/*.gdml
         if-no-files-found: error
 
   convert-to-tgeo:
@@ -248,7 +248,7 @@ jobs:
     - uses: actions/upload-artifact@v3
       with:
         name: tgeo
-        path: *.root
+        path: ${{ github.workspace }}/*.root
         if-no-files-found: error
 
   dump-constants:
