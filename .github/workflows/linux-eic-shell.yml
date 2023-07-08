@@ -171,9 +171,10 @@ jobs:
         network_types: "none"
         setup: install/setup.sh
         run: |
-          configs=${{ needs.list-detector-configs.outputs.configs_csv }}
-          IFS=, for config in ${configs} ; do
-            checkGeometry -c ${DETECTOR_PATH}/${config}.xml
+          IFS=, for config in ${{ needs.list-detector-configs.outputs.configs_csv}} ; do
+            echo "::group::${config}" ;
+            checkGeometry -c ${DETECTOR_PATH}/${config}.xml ;
+            echo "::endgroup::" ;
           done
 
   check-tracking-geometry:
