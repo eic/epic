@@ -215,9 +215,11 @@ jobs:
         network_types: "none"
         setup: install/setup.sh
         run: |
-          configs=${{ needs.list-detector-configs.outputs.configs_csv }}
-          for config in $(echo ${configs//,/ }) ; do
-            geoConverter -compact2gdml -input ${DETECTOR_PATH}/${config}.xml -output ${config}.gdml
+          IFS=, read -a configs <<< "${{ needs.list-detector-configs.outputs.configs_csv }}"
+          for config in ${configs[@]} ; do
+            echo "::group::${config}" ;
+            geoConverter -compact2gdml -input ${DETECTOR_PATH}/${config}.xml -output ${config}.gdml ;
+            echo "::endgroup::" ;
           done
     - uses: actions/upload-artifact@v3
       with:
@@ -243,9 +245,11 @@ jobs:
         network_types: "none"
         setup: install/setup.sh
         run: |
-          configs=${{ needs.list-detector-configs.outputs.configs_csv }}
-          for config in $(echo ${configs//,/ }) ; do
-            geoConverter -compact2tgeo -input ${DETECTOR_PATH}/${config}.xml -output ${config}.root
+          IFS=, read -a configs <<< "${{ needs.list-detector-configs.outputs.configs_csv }}"
+          for config in ${configs[@]} ; do
+            echo "::group::${config}" ;
+            geoConverter -compact2tgeo -input ${DETECTOR_PATH}/${config}.xml -output ${config}.root 
+            echo "::endgroup::" ;
           done
     - uses: actions/upload-artifact@v3
       with:
