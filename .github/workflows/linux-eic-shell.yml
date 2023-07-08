@@ -144,7 +144,7 @@ jobs:
         url: https://eicweb.phy.anl.gov
         project_id: 539
         token: ${{ secrets.EICWEB_GEOVIEWER_TRIGGER }}
-        ref_name: post-pr-comment
+        ref_name: main
         variables: |
           DETECTOR_REPOSITORYURL=${{ github.server_url }}/${{ github.repository }}
           DETECTOR_REPOSITORYREF=${{ github.ref }}
