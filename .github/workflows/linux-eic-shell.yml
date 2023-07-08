@@ -171,7 +171,8 @@ jobs:
         network_types: "none"
         setup: install/setup.sh
         run: |
-          IFS=, for config in ${{ needs.list-detector-configs.outputs.configs_csv}} ; do
+          IFS=, read -a configs <<< "${{ needs.list-detector-configs.outputs.configs_csv }}"
+          for config in ${configs[@]} ; do
             echo "::group::${config}" ;
             checkGeometry -c ${DETECTOR_PATH}/${config}.xml ;
             echo "::endgroup::" ;
