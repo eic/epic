@@ -93,7 +93,7 @@
     <constant name="TrackerSupportCylN_thickness1C"          value="TrackerSupportCylAlN_thickness1C + TrackerSupportCylCF_thickness1" />
 
 
-    <comment> 2. Outer barrel for Si barrel cables (guided out projectively) and MPGD (inner+disks). </comment>    
+    <comment> 2. Outer barrel for Si barrel cables (guided out projectively) and MPGD (inner+disks). </comment>
     <constant name="TrackerSupportCylCF_thickness2"        value="0.01*cm" /> <comment> place holder </comment>
 
     <comment> Positive </comment>
