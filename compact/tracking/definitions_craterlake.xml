@@ -35,7 +35,7 @@
     <constant name="MPGDOuterBarrelModule_rmin"      value="68.25"/>
     <constant name="MPGDOuterBarrelModule_zmin1"     value="167.5*cm"/>
     <constant name="MPGDOuterBarrelModule_zmin2"     value="174.0*cm"/>
-    
+
     <comment> Inner MPGD unsegmented barrel </comment>
     <constant name="InnerMPGDBarrel_rmin"            value="51.25*cm"/>
     <constant name="InnerMPGDBarrel_dz"              value="0"/>
@@ -118,7 +118,7 @@
 
     <comment> Main paratmers for MPGD endcap disks, offset here is the distance between disks </comment>
     <constant name="ForwardMPGD_zmin"             value="148*cm"/>
-    <constant name="ForwardMPGDMod_offset"        value="13.0*cm"/> 
+    <constant name="ForwardMPGDMod_offset"        value="13.0*cm"/>
     <!--
     <constant name="ForwardMPGD_zmin"             value="51*cm"/>
     <constant name="ForwardMPGDMod_offset"        value="100.0*cm"/>
