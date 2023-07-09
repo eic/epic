@@ -9,12 +9,6 @@
     MPGD: estimated by M. Posik
   </comment>
   <define>
-    <!-- <comment> Inner vertex Support</comment> -->
-
-<!--     <comment> Vertex Support Barrel to the 2nd vertex layer</comment>
-    <constant name="VertexSupportCyl2_zmax"               value="VertexBarrel_length/2.0" />
-    <constant name="VertexSupportCyl2_rmin"               value="VertexSupportCyl2_zmax*tan(TrackerPrimaryAngle)"/>
-    <constant name="VertexSupportCyl2_length"             value="VertexSupportCyl2_zmax*2.0" /> -->
 
     <comment> use a disk to connect vertex barrels to cone</comment>
     <constant name="VertexSupportRingCF_thickness"         value="2.0*mm" />
@@ -48,12 +42,8 @@
     </comment>
 
     <comment> 1: Inner barrel for Si disk, 3 slices each ends (Negative CBA, Positive ABC) </comment>
-    <!-- <constant name="TrackerSupportCylEndcapP_rmin1"       value="TrackerSupportCyl_rmin1" /> -->
-    <!-- <constant name="TrackerSupportCylEndcapN_rmin1"       value="TrackerSupportConeEndcapP_rmin1" /> -->
     <constant name="TrackerSupportCylCF_thickness1"        value="InnerSupportConeCF_thickness" />
 
-    <!-- <constant name="TrackerSupportCylEndcapP_zmin1"        value="TrackerEndcapPDisk1_zmin + 1*cm" /> -->
-    <!-- <constant name="TrackerSupportCylEndcapP_zmax1"        value="InnerMPGDBarrel_zmax+1*cm" /> -->
     <comment> Positive </comment>
     <constant name="TrackerSupportCylEndcapP_zmin1A"       value="TrackerEndcapPDisk1_zmin + 1*cm" />
     <constant name="TrackerSupportCylEndcapP_zmin1B"       value="TrackerEndcapPDisk2_zmin" />
@@ -103,9 +93,7 @@
     <constant name="TrackerSupportCylN_thickness1C"          value="TrackerSupportCylAlN_thickness1C + TrackerSupportCylCF_thickness1" />
 
 
-    <comment> 2. Outer barrel for Si barrel cables (guided out projectively) and MPGD (inner+disks). </comment>
-    <!-- <constant name="TrackerSupportCylEndcapP_rmin2"      value="TrackerSupportCyl_rmin2" /> -->
-    <!-- <constant name="TrackerSupportCylEndcapN_rmin2"      value="TrackerSupportCylEndcapP_rmin2" /> -->
+    <comment> 2. Outer barrel for Si barrel cables (guided out projectively) and MPGD (inner+disks). </comment>    
     <constant name="TrackerSupportCylCF_thickness2"        value="0.01*cm" /> <comment> place holder </comment>
 
     <comment> Positive </comment>
