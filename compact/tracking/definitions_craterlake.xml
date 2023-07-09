@@ -217,7 +217,7 @@
     <plugin name="epic_FileLoader">
       <arg value="cache:$DETECTOR_PATH:/opt/detector"/>
       <arg value="file:calibrations/materials-map.cbor"/>
-      <arg value="url:https://eicweb.phy.anl.gov/EIC/detectors/athena/uploads/77bd16bef5d811f31256279a3601c9d5/material-maps.cbor"/>
+      <arg value="url:https://eicweb.phy.anl.gov/EIC/detectors/athena/uploads/6253bfcb92dd6bc236dd9a06084614ba/material-maps.cbor"/>
     </plugin>
   </plugins>
 
