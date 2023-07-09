@@ -135,7 +135,7 @@
 
 	<glue
           thickness="DIRCGlue_thickness"
-          material="Epotek"
+          material="EpotekOptical"
           vis="DIRCGlue"
         />
 
@@ -148,7 +148,7 @@
           r1="DIRCLens_r1"
           r2="DIRCLens_r2"
           material1="QuartzOptical"
-          material2="Sapphire"
+          material2="SapphireOptical"
           material3="QuartzOptical"
           vis1="DIRCLens1"
           vis2="DIRCLens2"
