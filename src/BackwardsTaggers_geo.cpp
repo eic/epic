@@ -6,17 +6,20 @@
 #include "DD4hep/Printout.h"
 #include "DDRec/DetectorData.h"
 #include "DDRec/Surface.h"
-#include <XML/Helper.h>
+
 
 //////////////////////////////////////////////////
-// Low Q2 taggers and vacuum drift volume in far backwards region
+// Far backwards vacuum drift volume
+// Low Q2 tagger trackers placed either in or out of vacuum
 //////////////////////////////////////////////////
 
 using namespace std;
 using namespace dd4hep;
+using namespace dd4hep::rec;
 
-// Helper function to make the tagger detectors
-static void Make_Tagger(Detector& desc, xml_coll_t& mod, Assembly& env, SensitiveDetector& sens);
+// Helper function to make the tagger tracker detectors
+static void Make_Tagger(Detector& desc, xml_coll_t& mod, Assembly& env, DetElement modElement, SensitiveDetector& sens);
+
 
 static Ref_t create_detector(Detector& desc, xml_h e, SensitiveDetector sens)
 {
@@ -24,6 +27,8 @@ static Ref_t create_detector(Detector& desc, xml_h e, SensitiveDetector sens)
   xml_det_t x_det   = e;
   string    detName = x_det.nameStr();
   int       detID   = x_det.id();
+
+  DetElement det(detName, detID);
 
   string vis_name = dd4hep::getAttrOrDefault<std::string>(x_det, _Unicode(vis), "BackwardsBox");
 
@@ -37,8 +42,8 @@ static Ref_t create_detector(Detector& desc, xml_h e, SensitiveDetector sens)
   double Thickness = dim.z();
 
   // Materials
-  Material Vacuum = desc.material("Vacuum");
-  Material Steel  = desc.material("StainlessSteel");
+  Material Vacuum  = desc.material("Vacuum");
+  Material Steel   = desc.material("StainlessSteel");
 
   // Central focal point of the geometry
   xml::Component pos = x_det.child(_Unicode(focus));
@@ -83,12 +88,12 @@ static Ref_t create_detector(Detector& desc, xml_h e, SensitiveDetector sens)
   Box Cut_Box(xbox, ybox, zbox);
 
   // Central pipe box
-  // Tube Extended_Beam_Box(Width,Width+wall,Thickness);
-  Box Extended_Beam_Box(Width + wall, Height + wall, Thickness);
+  //Tube Extended_Beam_Box(Width,Width+wall,Thickness); // More realistic tube pipe
+  Box Extended_Beam_Box(Width + wall, Height + wall, Thickness); // Simpler box pipe
 
   // Central vacuum box
-  Box Extended_Vacuum_Box(Width, Height, Thickness);
-  // Tube Extended_Vacuum_Box(0,Width,Thickness);
+  //Tube Extended_Vacuum_Box(0,Width,Thickness); // More realistic tube pipe
+  Box Extended_Vacuum_Box(Width, Height, Thickness); // Simpler box pipe
 
   Solid Wall_Box   = Extended_Beam_Box;
   Solid Vacuum_Box = Extended_Vacuum_Box;
@@ -98,18 +103,19 @@ static Ref_t create_detector(Detector& desc, xml_h e, SensitiveDetector sens)
   int      nVacuum = 0;
   int      nAir    = 0;
 
-  DetElement det(detName, detID);
-
   //-----------------------------------------------------------------
   // Add Tagger box containers and vacuum box extension for modules
   //-----------------------------------------------------------------
   for (xml_coll_t mod(x_det, _Unicode(module)); mod; ++mod) {
 
     int    moduleID   = dd4hep::getAttrOrDefault<int>(mod, _Unicode(id), 0);
-    string moduleName = dd4hep::getAttrOrDefault<std::string>(mod, _Unicode(modname), "Tagger0");
+    string moduleName = dd4hep::getAttrOrDefault<std::string>(mod, _Unicode(name), "Tagger0");
 
     // Offset from the electron beam
-    double tagoff = dd4hep::getAttrOrDefault<double>(mod, _Unicode(offset_min), 50.0 * mm);
+    double tagoff  = dd4hep::getAttrOrDefault<double>(mod, _Unicode(offset_min), 50.0 * mm);
+
+    // Overlap left beyond theta setting
+    double overlap = dd4hep::getAttrOrDefault<double>(mod, _Unicode(overlap), 0.0 * mm);
 
     // Theta coverage expected
     double thetamin = dd4hep::getAttrOrDefault<double>(mod, _Unicode(theta_min), 0.030 * rad) - rot.theta();
@@ -129,41 +135,38 @@ static Ref_t create_detector(Detector& desc, xml_h e, SensitiveDetector sens)
 
     // Width and height of vacuum volume
     auto vac_w = w;
-    //    auto vac_w = w+wall/2; // Adds space for wall to be added in tagger geometry
     auto vac_h = h;
 
     // Width and height of box volume
     auto box_w = w + wall;
     auto box_h = h + wall;
 
+    // Angle in relation to the main beam
     auto theta      = thetamin;
+
+
     auto offsetx    = -(box_w - wall) * (cos(theta));
     auto offsetz    = (box_w - wall) * (sin(theta));
     auto vacoffsetx = -vac_w * (cos(theta));
     auto vacoffsetz = vac_w * (sin(theta));
-    auto l          = (tagoff) / (sin(theta));
-    //    auto l          = (tagoff)/(sin(theta));
+    auto l          = (tagoff) / (sin(theta)) + tagboxL;
 
-    auto tagoffsetx = vacoffsetx - (l + tagboxL) * sin(theta);
-    auto tagoffsetz = vacoffsetz - (l + tagboxL) * cos(theta);
-    //     auto tagoffsetx = vacoffsetx-(l+tagboxL/2)*sin(theta);
-    //     auto tagoffsetz = vacoffsetz-(l+tagboxL/2)*cos(theta);
+    auto tagoffsetx = vacoffsetx - (l) * sin(theta);
+    auto tagoffsetz = vacoffsetz - (l) * cos(theta);
 
     if (max_align) {
       theta      = thetamax;
-      offsetx    = (box_w - wall) * (cos(theta));
-      offsetz    = -(box_w - wall) * (sin(theta));
-      vacoffsetx = vac_w * (cos(theta));
-      vacoffsetz = -vac_w * (sin(theta));
+      offsetx    = (overlap+box_w - wall) * (cos(theta));
+      offsetz    = -(overlap+box_w - wall) * (sin(theta));
+      vacoffsetx = (overlap+vac_w) * (cos(theta));
+      vacoffsetz = -(overlap+vac_w) * (sin(theta));
       l          = (2 * offsetx + tagoff) / sin(theta);
-      tagoffsetx = vacoffsetx - (l + tagboxL) * sin(theta);
-      tagoffsetz = vacoffsetz - (l + tagboxL) * cos(theta);
-      //       tagoffsetx = -wall+vacoffsetx-(l+tagboxL/2)*sin(theta);
-      //       tagoffsetz = vacoffsetz-(l+tagboxL/2)*cos(theta);
+      tagoffsetx = vacoffsetx - (l) * sin(theta);
+      tagoffsetz = vacoffsetz - (l) * cos(theta);
     }
 
-    Box TagWallBox(box_w, box_h, l + tagboxL + wall);
-    Box TagVacBox(vac_w, vac_h, l + tagboxL);
+    Box TagWallBox(box_w, box_h, l + wall);
+    Box TagVacBox(vac_w, vac_h, l);
 
     RotationY rotate(theta);
 
@@ -180,16 +183,16 @@ static Ref_t create_detector(Detector& desc, xml_h e, SensitiveDetector sens)
 
     Assembly TaggerAssembly("Tagger_module_assembly");
 
-    Make_Tagger(desc, mod, TaggerAssembly, sens);
-
     PlacedVolume pv_mod2 = mother.placeVolume(
         TaggerAssembly,
         Transform3D(rotate, Position(tagoffsetx, 0,
                                      tagoffsetz))); // Very strange y is not centered and offset needs correcting for...
-    DetElement moddet(moduleName, moduleID);
+    DetElement moddet(det,moduleName, moduleID);
     pv_mod2.addPhysVolID("module", moduleID);
     moddet.setPlacement(pv_mod2);
-    det.add(moddet);
+
+    Make_Tagger(desc, mod, TaggerAssembly, moddet, sens);
+
   }
 
   //-----------------------------------------------------------------
@@ -208,9 +211,13 @@ static Ref_t create_detector(Detector& desc, xml_h e, SensitiveDetector sens)
 
     Box Entry_Beam_Box(ED_X + wall, ED_Y + wall, ED_Z);
     Box Entry_Vacuum_Box(ED_X, ED_Y, ED_Z - wall);
-    // Tube Entry_Beam_Box(ED_X, ED_X + wall, ED_Z);
-    // Tube Entry_Vacuum_Box(0, ED_X, ED_Z - wall);
     Tube Lumi_Exit(0, Lumi_R, ED_Z);
+
+    // Future angled exit window and more realistic tube shaped pipe.
+    // double angle = -pi/4;
+    // CutTube Entry_Beam_Box  (ED_X, ED_X + wall, ED_Z,        0,2*pi, sin(angle),0,cos(angle), 0,0,1);
+    // CutTube Entry_Vacuum_Box(0,    ED_X,        ED_Z - wall, 0,2*pi, sin(angle),0,cos(angle), 0,0,1);
+    // CutTube Lumi_Exit       (0,    Lumi_R,      ED_Z,        0,2*pi, sin(angle),0,cos(angle), 0,0,1);
 
     // Add entry boxes to main beamline volume
     Wall_Box   = UnionSolid(Wall_Box, Entry_Beam_Box, Transform3D(RotationY(-rot.theta())));
@@ -245,9 +252,9 @@ static Ref_t create_detector(Detector& desc, xml_h e, SensitiveDetector sens)
   vacVol.setVisAttributes(desc.visAttributes("BackwardsVac"));
   if (nVacuum > 0)
     vacVol.placeVolume(DetAssembly);
+
   Volume wallVol("TaggerStation_Container", Wall_Box_Out, Steel);
   wallVol.setVisAttributes(desc.visAttributes(vis_name));
-  //  wallVol.placeVolume(vacVol);
 
   Assembly backAssembly(detName + "_assembly");
   backAssembly.placeVolume(wallVol);
@@ -263,10 +270,11 @@ static Ref_t create_detector(Detector& desc, xml_h e, SensitiveDetector sens)
 
   det.setPlacement(detPV);
 
+
   return det;
 }
 
-static void Make_Tagger(Detector& desc, xml_coll_t& mod, Assembly& env, SensitiveDetector& sens)
+static void Make_Tagger(Detector& desc, xml_coll_t& mod, Assembly& env, DetElement modElement, SensitiveDetector& sens)
 {
 
   sens.setType("tracker");
@@ -285,15 +293,49 @@ static void Make_Tagger(Detector& desc, xml_coll_t& mod, Assembly& env, Sensitiv
   double vacuumThickness = tagboxL;
 
   // Add window layer and air-vacuum boxes
+  for (xml_coll_t lay(mod, _Unicode(foilLayer)); lay; ++lay) {
+
+    string layerType      = dd4hep::getAttrOrDefault<std::string>(lay, _Unicode(type), "foil");
+    string layerVis       = dd4hep::getAttrOrDefault<std::string>(lay, _Unicode(vis), "FFTrackerShieldingVis");
+    double layerZ         = dd4hep::getAttrOrDefault<double>(lay, _Unicode(z), 0 * mm);
+    double layerRot       = dd4hep::getAttrOrDefault<double>(lay, _Unicode(angle), 45*deg);
+    double layerThickness = dd4hep::getAttrOrDefault<double>(lay, _Unicode(sensor_thickness), 100 * um);
+    string layerMaterial  = dd4hep::getAttrOrDefault<std::string>(lay, _Unicode(material), "Copper");
+
+    Material FoilMaterial = desc.material(layerMaterial);
+
+    RotationY rotate(layerRot);
+
+    airThickness    = tagboxL - layerZ;
+    vacuumThickness = tagboxL - airThickness;
+
+    Box Box_Air(tag_w, tag_h, airThickness / 2);
+    Tagger_Air = Volume("AirVolume", Box_Air, Air);
+    Tagger_Air.setVisAttributes(desc.visAttributes("BackwardsAir"));
+
+    Box    Foil_Box(tag_w/cos(layerRot)-0.5*layerThickness*tan(layerRot), tag_h, layerThickness / 2);
+    Volume layVol("FoilVolume", Foil_Box, FoilMaterial);
+    layVol.setVisAttributes(desc.visAttributes(layerVis));
+
+    env.placeVolume(layVol, Transform3D(rotate,Position(0, 0, tagboxL+tag_w*tan(layerRot))));
+
+    // Currently only one "foil" layer implemented
+    break;
+  }
+
+  // Add window layer and air-vacuum boxes
   for (xml_coll_t lay(mod, _Unicode(windowLayer)); lay; ++lay) {
 
     string layerType      = dd4hep::getAttrOrDefault<std::string>(lay, _Unicode(type), "window");
     string layerVis       = dd4hep::getAttrOrDefault<std::string>(lay, _Unicode(vis), "FFTrackerShieldingVis");
     double layerZ         = dd4hep::getAttrOrDefault<double>(lay, _Unicode(z), 0 * mm);
+    double layerRot       = dd4hep::getAttrOrDefault<double>(lay, _Unicode(angle), 0);
     double layerThickness = dd4hep::getAttrOrDefault<double>(lay, _Unicode(sensor_thickness), 1 * mm);
     string layerMaterial  = dd4hep::getAttrOrDefault<std::string>(lay, _Unicode(material), "Copper");
 
     Material WindowMaterial = desc.material(layerMaterial);
+
+    RotationY rotate(layerRot);
 
     airThickness    = tagboxL - layerZ;
     vacuumThickness = tagboxL - airThickness;
@@ -309,6 +351,7 @@ static void Make_Tagger(Detector& desc, xml_coll_t& mod, Assembly& env, Sensitiv
     Tagger_Air.placeVolume(layVol, Position(0, 0, airThickness / 2 - layerThickness / 2));
 
     env.placeVolume(Tagger_Air, Position(0, 0, tagboxL - airThickness / 2));
+
     // Currently only one "window" layer implemented
     break;
   }
@@ -320,11 +363,14 @@ static void Make_Tagger(Detector& desc, xml_coll_t& mod, Assembly& env, Sensitiv
     int    layerID        = dd4hep::getAttrOrDefault<int>(lay, _Unicode(id), 0);
     string layerType      = dd4hep::getAttrOrDefault<std::string>(lay, _Unicode(type), "timepix");
     string layerVis       = dd4hep::getAttrOrDefault<std::string>(lay, _Unicode(vis), "FFTrackerLayerVis");
+    double layerRot       = dd4hep::getAttrOrDefault<double>(lay, _Unicode(angle), 0);
     double layerZ         = dd4hep::getAttrOrDefault<double>(lay, _Unicode(z), 0 * mm);
     double layerThickness = dd4hep::getAttrOrDefault<double>(lay, _Unicode(sensor_thickness), 200 * um);
 
     Volume mother          = env;
     double MotherThickness = tagboxL;
+
+    RotationY rotate(layerRot);
 
     if (layerZ > vacuumThickness) {
       mother = Tagger_Air;
@@ -337,10 +383,14 @@ static void Make_Tagger(Detector& desc, xml_coll_t& mod, Assembly& env, Sensitiv
     layVol.setSensitiveDetector(sens);
     layVol.setVisAttributes(desc.visAttributes(layerVis));
 
-    // string module_name = detName + _toString(N_layers,"_TrackLayer_%d");
 
-    PlacedVolume pv_layer = mother.placeVolume(layVol, Position(0, 0, MotherThickness - layerZ + layerThickness / 2));
+    PlacedVolume pv_layer = mother.placeVolume(layVol, Transform3D(rotate, Position(0, 0, MotherThickness - layerZ + layerThickness / 2)));
     pv_layer.addPhysVolID("layer", layerID);
+
+    DetElement laydet(modElement,"layerName"+std::to_string(layerID), layerID);
+    laydet.setPlacement(pv_layer);
+
+
   }
 }
 

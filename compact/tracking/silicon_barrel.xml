@@ -178,7 +178,7 @@
 
   <readouts>
     <readout name="SiBarrelHits">
-      <segmentation type="CartesianGridXY" grid_size_x="0.010*mm" grid_size_y="0.010*mm" />
+      <segmentation type="CartesianGridXY" grid_size_x="0.020*mm" grid_size_y="0.020*mm" />
       <id>system:8,layer:4,module:12,sensor:2,x:32:-12,y:-20</id>
     </readout>
   </readouts>
