@@ -116,6 +116,8 @@
             rmax="BackwardMPGDLayer1_rmax"
             length="BackwardMPGDEndcapLayer_thickness"
             zstart="BackwardMPGDLayer1_zmin" />
+          <layer_material surface="inner" binning="binPhi,binR" bins0="BackwardMPGDEndcapMod_count" bins1="50"/>
+          <layer_material surface="outer" binning="binPhi,binR" bins0="BackwardMPGDEndcapMod_count" bins1="50"/>
           <ring
             r="BackwardMPGDMod1_rmin + BackwardMPGDMod1_y/2.0"
             zstart="0"
@@ -130,6 +132,8 @@
             rmax="BackwardMPGDLayer2_rmax"
             length="BackwardMPGDEndcapLayer_thickness"
             zstart="BackwardMPGDLayer2_zmin" />
+        <layer_material surface="inner" binning="binPhi,binR" bins0="BackwardMPGDEndcapMod_count" bins1="50"/>
+        <layer_material surface="outer" binning="binPhi,binR" bins0="BackwardMPGDEndcapMod_count" bins1="50"/>
           <ring
             r="BackwardMPGDMod2_rmin + BackwardMPGDMod2_y/2.0"
             zstart="0"
