@@ -225,7 +225,7 @@ jobs:
     - uses: actions/upload-artifact@v3
       with:
         name: gdml
-        path: ${{ github.workspace }}/*.gdml
+        path: "*.gdml"
         if-no-files-found: error
 
   convert-to-tgeo:
