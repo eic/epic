@@ -255,7 +255,7 @@ jobs:
     - uses: actions/upload-artifact@v3
       with:
         name: tgeo
-        path: ${{ github.workspace }}/*.root
+        path: "*.root"
         if-no-files-found: error
 
   dump-constants:
