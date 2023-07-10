@@ -173,7 +173,7 @@
   <detectors>
     <detector type="epic_SupportServiceMaterial"
       name="InnerTrackerSupport"
-      id="84"
+      id="TrackerSupport_0_ID"
     >
       <comment> Forward </comment>
       <support type="Disk"
