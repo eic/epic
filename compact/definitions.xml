@@ -140,8 +140,8 @@ The unused IDs below are saved for future use.
     <constant name="TrackerEndcapP_4_ID"          value="81"/>
     <constant name="TrackerEndcapP_5_ID"          value="82"/>
     <constant name="TrackerEndcapP_6_ID"          value="83"/>
-    <constant name="TrackerEndcapP_7_ID"          value="84"/>
-    <constant name="TrackerEndcapP_8_ID"          value="85"/>
+    <constant name="TrackerSupport_0_ID"          value="84"/>
+    <constant name="TrackerSupport_1_ID"          value="85"/>
     <constant name="MPGDDIRC_0_ID"                value="86"/>
 
     <documentation>
