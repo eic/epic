@@ -55,8 +55,8 @@ static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector /* sens *
 
   // enter dimensions of vaccum cylinders here
 
-  //-----b0pf pipe----
-
+  //-----b0pf pipe----	
+  /*
   double radius_b0pf   = 2.9;     // cm
   double length_b0pf   = 120.0;   // 848.2683995; //290.0;    //cm
   double rotation_b0pf = -0.025;  // radians
@@ -105,6 +105,57 @@ static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector /* sens *
   double x_b1apf        = -61.2903791;
   double y_b1apf        = 0.0;
   double z_b1apf        = 2131.298439;
+	*/
+
+  double radius_b0pf = 2.9;   //cm
+  double length_b0pf = 700.213;   //cm
+  double rotation_b0pf = -0.025;  // radians
+  double x_b0pf = -9.25297;   // cm
+  double y_b0pf = 0.0;    // cm
+  double z_b0pf = 350.106;   // cm
+
+  double radius_b0apf = 4.3;   //cm
+  double length_b0apf = 149.952;   //cm
+  double rotation_b0apf = -0.025;  // radians
+  double x_b0apf = -19.9248;   // cm
+  double y_b0apf = 0.0;    // cm
+  double z_b0apf = 774.957;   // cm
+
+  double radius_q1apf = 5.6;   //cm
+  double length_q1apf = 185.999;   //cm
+  double rotation_q1apf = -0.0195;  // radians
+  double x_q1apf = -25.0455;   // cm
+  double y_q1apf = 0.0;    // cm
+  double z_q1apf = 942.885;   // cm
+
+  double radius_q1bpf = 7.8;   //cm
+  double length_q1bpf = 200.998;   //cm
+  double rotation_q1bpf = -0.015;  // radians
+  double x_q1bpf = -30.9852;   // cm
+  double y_q1bpf = 0.0;    // cm
+  double z_q1bpf = 1136.31;   // cm
+
+  double radius_q2pf = 13.15;   //cm
+  double length_q2pf = 419.995;   //cm
+  double rotation_q2pf = -0.0148;  // radians
+  double x_q2pf = -40.4423;   // cm
+  double y_q2pf = 0.0;    // cm
+  double z_q2pf = 1446.73;   // cm
+
+  double radius_b1pf = 13.5;   //cm
+  double length_b1pf = 350.018;   //cm
+  double rotation_b1pf = -0.034;  // radians
+  double x_b1pf = -49.4721;   // cm
+  double y_b1pf = 0.0;    // cm
+  double z_b1pf = 1831.59;   // cm
+
+  double radius_b1apf = 16.8;   //cm
+  double length_b1apf = 200.025;   //cm
+  double rotation_b1apf = -0.025;  // radians
+  double x_b1apf = -60.6686;   // cm
+  double y_b1apf = 0.0;    // cm
+  double z_b1apf = 2106.41;   // cm
+
 
   // define shapes here
 
