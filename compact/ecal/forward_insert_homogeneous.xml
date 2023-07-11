@@ -91,10 +91,13 @@
 
   <readouts>
     <readout name="EcalEndcapPInsertHits">
+      <documentation>
+        Readout size matches the size of the forward ECal readout in x and y.
+      </documentation>
       <segmentation
         type="CartesianGridXY"
-        grid_size_x="1.*cm"
-        grid_size_y="1.*cm"
+        grid_size_x="24.925*mm"
+        grid_size_y="24.65*mm"
       />
       <id>system:8,barrel:3,module:4,layer:8,slice:5,x:32:-16,y:-16</id>
     </readout>

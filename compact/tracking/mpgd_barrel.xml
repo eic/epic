@@ -23,7 +23,8 @@
     <constant name="InnerMPGDBarrelMod_rmin"                value="InnerMPGDBarrel_rmin"/>
     <constant name="InnerMPGDBarrelMod_dz"                  value="InnerMPGDBarrel_dz"/>
 
-    <constant name="InnerMPGDBarrelMod_length"              value="2 * InnerMPGDBarrelMod_rmin / tan(TrackerBackwardAngle) - InnerMPGDBarrel_dz" />
+    <constant name="InnerMPGDBarrelMod_length"              value="InnerMPGDBarrel_length" />
+
     <constant name="InnerMPGDBarrelLayer_length"            value="InnerMPGDBarrelMod_length + 1*um" />
     <constant name="InnerMPGDBarrelLayer_thickness"         value="2*cm" />
     <constant name="InnerMPGDBarrelLayer_rmin"              value="InnerMPGDBarrelMod_rmin - InnerMPGDBarrelLayer_thickness / 2.0"/>
@@ -87,7 +88,8 @@
         <barrel_envelope
           inner_r="InnerMPGDBarrelLayer_rmin"
           outer_r="InnerMPGDBarrelLayer_rmax"
-          z_length="InnerMPGDBarrelLayer_length"/>
+	  z_length="InnerMPGDBarrelLayer_length"
+	  z0="InnerMPGDBarrel_zoffset"/>
         <layer_material surface="inner" binning="binPhi,binZ" bins0="MPGDBarrelStave_count" bins1="100" />
         <rphi_layout phi_tilt="0" nphi="MPGDBarrelStave_count" phi0="0.0" rc="InnerMPGDBarrelMod_rmin" dr="0.0 * mm"/>
         <z_layout dr="0.0 * mm" z0="0.0 * mm" nz="1"/>

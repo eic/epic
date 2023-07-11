@@ -30,9 +30,9 @@ void buildTiles(Detector& desc, SensitiveDetector &sens, Volume &s_vol_outer, Vo
   //double f_radius = s_pos;
   //double f_spacing_eta = getAttrOrDefault(x_tiles, _Unicode(spacing_eta), 0.1);
   double f_spacing_phi = getAttrOrDefault(x_tiles, _Unicode(phi_width), 0.05);
-  //int f_nbins_eta = getAttrOrDefault(x_tiles, _Unicode(nbins_eta), 20);
+  const int f_nbins_eta = getAttrOrDefault(x_tiles, _Unicode(nbins_eta), 20);
   int f_nbins_phi = getAttrOrDefault(x_tiles, _Unicode(nbins_phi), 2);
-  //////std::string f_id_tiles = getAttrOrDefault(x_tiles, _Unicode(identifier_tiles), "tiles");
+  ////////std::string f_id_tiles = getAttrOrDefault(x_tiles, _Unicode(identifier_tiles), "tiles");
 
   /*
   double f_trd_x1 = s_dim_x;
@@ -53,6 +53,7 @@ void buildTiles(Detector& desc, SensitiveDetector &sens, Volume &s_vol_outer, Vo
             2.19349, 2.09299, 1.99721, 1.90582, 1.81882, 1.7357, 1.65646, 
             1.58079, 1.50851, 1.43941, 1.3734, 1.3104, 1.25011, 1.19095, 1.1158023};
             */
+           
  double eta_values[21] = { 3.9736842, 3.38219, 3.01399, 2.74652, 2.5368, 2.36466,
             2.21898, 2.09299, 1.99721, 1.90582, 1.81882, 1.7357, 1.65646, 
             1.58079, 1.50851, 1.43941, 1.3734, 1.3104, 1.25011, 1.19095, 1.1158023};        
@@ -85,7 +86,7 @@ void buildTiles(Detector& desc, SensitiveDetector &sens, Volume &s_vol_outer, Vo
 	double phi_hi = phi_lo + 4*f_spacing_phi;
 
 
-	for (int j = 0; j < 15; ++j) {
+	for (int j = 0; j < f_nbins_phi/4; ++j) {
 
 		
 
@@ -162,7 +163,7 @@ void buildTiles(Detector& desc, SensitiveDetector &sens, Volume &s_vol_outer, Vo
 	double phi_hi = phi_lo + 2*f_spacing_phi;
 
 
-	for (int j = 0; j < 30; ++j) {
+	for (int j = 0; j < f_nbins_phi/2; ++j) {
 
 		
 
@@ -206,7 +207,7 @@ void buildTiles(Detector& desc, SensitiveDetector &sens, Volume &s_vol_outer, Vo
 	}
    }
 
-  for (int i = 5; i < 20; ++i) {
+  for (int i = 5; i < f_nbins_eta; ++i) {
 
   eta_in = -1.0*eta_values[i];
   eta_out = -1.0*eta_values[i+1];
@@ -351,7 +352,7 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
   double layerZ    = -totalThickness / 2;
 
  ////////////////start
-  DetElement    stave_det("stave0",det_id);
+  ///////DetElement    stave_det("stave0",det_id);
   
 
   //double  dphi = (2*M_PI/numsides);
@@ -396,7 +397,7 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
        x_layer = xf;
         double     l_thick = layering.layer(l_num - 1)->thickness();
         // std::cout << "xc = " << xc << "\n";
-        string               l_name   = _toString(layerType, "layer%d");
+        string               l_name   = _toString(layerType, "layer_%d");
         l_repeat = x_layer.repeat();
     
         const std::vector< double > z_l = { l_thick/2.0,  -l_thick/2.0 };
@@ -432,7 +433,7 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
 
 
         ////////////start
-        DetElement layer(stave_det, l_name, det_id);
+        DetElement layer(endcap, l_name, det_id);
     
     
        ////////////end

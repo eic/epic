@@ -11,8 +11,7 @@
 
     <constant name="HcalEndcapN_polyhedron_rmax"     value="275*cm"/>
     <constant name="HcalEndcapN_polyhedron_rmin"     value="12.4*cm"/>
-    <!--constant name="HcalEndcapN_segments_rmax"     value="HcalEndcapN_polyhedron_rmax/(cos(180*deg/HcalEndcapN_CaloSides))"/-->
-
+    
     <documentation>
       - Hcal Endcap N Layers and computed Thickness
     </documentation>
@@ -22,7 +21,8 @@
     <constant name="HcalEndcapNLayer_NRepeat" value="floor(HcalEndcapN_length / HcalEndcapNSingleLayerThickness)"/>
     <constant name="HcalEndcapN_thickness" value="HcalEndcapNLayer_NRepeat * HcalEndcapNSingleLayerThickness"/>
   </define>
-
+  
+  <!-- constant name="HcalEndcapN_segments_rmax"     value="HcalEndcapN_polyhedron_rmax/(cos(180*deg/HcalEndcapN_CaloSides))"/ -->
 
   <!-- Define detector -->
   <detectors>
@@ -45,23 +45,20 @@
       <layer repeat="HcalEndcapNLayer_NRepeat" vis="HcalEndcapLayerVis">
         <slice material="Steel235" thickness="HcalEndcapNSteelThickness" vis="HcalAbsorberVis"/>
         <slice material="Air" thickness="HcalEndcapNPolystyreneThickness" vis="AnlLight_Gray" sensitive="no" limits="cal_limits">
-         <tiles material="Polystyrene"
-            sensitive="yes"
-            eta_values="3.97368, 3.82929, 3.65542, 3.48947, 3.33106, 3.17987, 
-            3.03556, 2.89782, 2.76635, 2.64086, 2.52109, 2.40676, 2.29764,
-            2.19349, 2.09299, 1.99721, 1.90582, 1.81882, 1.7357, 1.65646, 
-            1.58079, 1.50851, 1.43941, 1.3734, 1.3104, 1.25011, 1.19095, 1.1158"
-            phi_width="0.10472"
-            nbins_eta="27"
-            nbins_phi="60"
-            vis="HcalSensorVis"
-            limits="cal_limits">
-          </tiles>
+         <tiles 
+           material="Polystyrene"
+           sensitive="yes"
+           phi_width="0.10472"
+           nbins_eta="20"
+           nbins_phi="HcalEndcapN_CaloSides"
+           vis="HcalSensorVis"
+           limits="cal_limits"/>
         </slice>
-        <!-- slice material="Polystyrene" thickness="HcalEndcapNPolystyreneThickness" vis="HcalSensorVis" sensitive="yes" limits="cal_limits"/ -->
       </layer>
     </detector>
   </detectors>
+
+  <!-- slice material="Polystyrene" thickness="HcalEndcapNPolystyreneThickness" vis="HcalSensorVis" sensitive="yes" limits="cal_limits"/ -->
 
   <!--  Definition of the readout segmentation/definition  -->
   <readouts>
@@ -73,4 +70,3 @@
   </readouts>
 
 </lccdd>
-
