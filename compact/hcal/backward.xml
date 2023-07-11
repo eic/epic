@@ -18,8 +18,9 @@
     </documentation>
 
     <constant name="HcalEndcapNSingleLayerThickness" value="HcalEndcapNSteelThickness + HcalEndcapNPolystyreneThickness + HcalEndcapNLayerGap"/>
-    <constant name="HcalEndcapNLayer_NRepeat" value="floor(HcalEndcapN_length / HcalEndcapNSingleLayerThickness)"/>
-    <constant name="HcalEndcapN_thickness" value="HcalEndcapNLayer_NRepeat * HcalEndcapNSingleLayerThickness"/>
+    <constant name="HcalEndcapNLayer_NRepeat" value="5"/>
+    <constant name="HcalEndcapNSingleSensitiveLayerThickness" value="HcalEndcapNPolystyreneThickness + HcalEndcapNLayerGap/2"/>
+    <constant name="HcalEndcapN_thickness" value="HcalEndcapN_length"/>
   </define>
 
 
@@ -31,12 +32,27 @@
     <detector id="HCalEndcapN_ID" name="HcalEndcapN" type="epic_PolyhedraEndcapCalorimeter2" readout="HcalEndcapNHits" vis="HcalEndcapVis" calorimeterType="HAD_ENDCAP" reflect="true">
       <position x="0" y="0" z="0"/>
       <dimensions numsides="HcalEndcapN_CaloSides" zmin="HcalEndcapN_zmin" rmin="HcalEndcapN_segments_rmin" rmax="HcalEndcapN_polyhedron_rmax"/>
-      <layer repeat="HcalEndcapNLayer_NRepeat" vis="HcalEndcapLayerVis" disksGap = "HcalEndcapNDiskGap">
+
+      <layer repeat="HcalEndcapNLayer_NRepeat" thickness="HcalEndcapNSingleLayerThickness" vis="HcalEndcapLayerVis" disksGap = "HcalEndcapNDiskGap">
+        <slice material="Air" thickness="HcalEndcapNLayerGap/2" vis="InvisibleNoDaughters"/>
         <slice material="Polystyrene" thickness="HcalEndcapNPolystyreneThickness" vis="HcalSensorVis" sensitive="yes" limits="cal_limits"/>
-        <slice material="Air" thickness="HcalEndcapNLayerGap/2" vis="HcalAbsorberVis"/>
-        <slice material="Steel235" thickness="HcalEndcapNSteelThickness" vis="HcalAbsorberVis"/>
-        <slice material="Air" thickness="HcalEndcapNLayerGap/2" vis="HcalAbsorberVis"/>
+        <slice material="Air" thickness="HcalEndcapNLayerGap/2" vis="InvisibleNoDaughters"/>
+        <slice material="StainlessSteel" thickness="HcalEndcapNSteelThickness" vis="HcalAbsorberVis"/>
       </layer>
+
+      <layer repeat="HcalEndcapNLayer_NRepeat" thickness="HcalEndcapNSingleLayerThickness" vis="HcalEndcapLayerVis" disksGap = "HcalEndcapNDiskGap">
+        <slice material="Air" thickness="HcalEndcapNLayerGap/2" vis="InvisibleNoDaughters"/>
+        <slice material="Polystyrene" thickness="HcalEndcapNPolystyreneThickness" vis="HcalSensorVis" sensitive="yes" limits="cal_limits"/>
+        <slice material="Air" thickness="HcalEndcapNLayerGap/2" vis="InvisibleNoDaughters"/>
+        <slice material="Steel235" thickness="HcalEndcapNSteelThickness" vis="HcalAbsorberVis"/>
+      </layer>
+
+      <layer repeat="1" thickness="HcalEndcapNSingleSensitiveLayerThickness" vis="HcalEndcapLayerVis" disksGap = "HcalEndcapNDiskGap">
+        <slice material="Air" thickness="HcalEndcapNLayerGap/2" vis="InvisibleNoDaughters"/>
+        <slice material="Polystyrene" thickness="HcalEndcapNPolystyreneThickness" vis="HcalSensorVis" sensitive="yes" limits="cal_limits"/>
+        <slice material="Air" thickness="HcalEndcapNLayerGap/2" vis="InvisibleNoDaughters"/>
+      </layer>
+
     </detector>
   </detectors>
 

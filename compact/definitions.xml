@@ -601,8 +601,8 @@ Service gaps in FW direction (before endcapP ECAL) and BW direction (before endc
 
     <constant name="HcalEndcapN_CaloSides"	value="60"/>
     <!-- <constant name="HcalEndcapN_zmin"     value="BackwardServiceGap_zmax"/> -->
-    <constant name="HcalEndcapN_zmin"     value="404.5*cm"/>
-    <constant name="HcalEndcapN_length"   value="45.5000001*cm"/>
+    <constant name="HcalEndcapN_zmin"     value="403.95*cm"/>
+    <constant name="HcalEndcapN_length"   value="46.05*cm"/>
     <constant name="HcalEndcapN_zmax"     value="HcalEndcapN_zmin + HcalEndcapN_length"/>
     <comment> HcalEndcapN needs to clear the straight beampipe with 1 * crossing angle + its radius of 22.25 mm </comment>
     <constant name="HcalEndcapN_rmin"     value="max((HcalEndcapN_zmin + HcalEndcapN_length) * tan(abs(CrossingAngle)) + 22.25 * mm, 11 * cm)"/>
