@@ -208,7 +208,7 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
       Box          suppb_box((module_x + module_spacing) / 2, thickness_carbonsupp / 2, x_supp_envelope.length() / 2);
       Volume       suppb_vol(suppb_nam, suppb_box, carbon);
       Transform3D  trsupp(RotationZYX(0, 0, 0), Position(xcoord, ycoord + module_y / 2 - module_overlap / 2, 0));
-      suppb_vol.setVisAttributes(description, "AnlRed");
+      suppb_vol.setVisAttributes(description, "AnlGray");
 
       pv = lay_vol.placeVolume(suppb_vol, trsupp);
       // module built!
