@@ -61,9 +61,9 @@
     <constant name="TrackerSupportCylEndcapP_length1B"     value="TrackerSupportCylEndcapP_zmax1B - TrackerSupportCylEndcapP_zmin1B" />
     <constant name="TrackerSupportCylEndcapP_length1C"     value="TrackerSupportCylEndcapP_zmax1C - TrackerSupportCylEndcapP_zmin1C" />
 
-    <constant name="TrackerSupportCylAlP_thickness1A"        value="0.1*mm" />
-    <constant name="TrackerSupportCylAlP_thickness1B"        value="1.13*mm" />
-    <constant name="TrackerSupportCylAlP_thickness1C"        value="2.25*mm" />
+    <constant name="TrackerSupportCylAlP_thickness1A"        value="0.11*mm" />
+    <constant name="TrackerSupportCylAlP_thickness1B"        value="1.31*mm" />
+    <constant name="TrackerSupportCylAlP_thickness1C"        value="2.62*mm" />
     <constant name="TrackerSupportCylP_thickness1A"          value="TrackerSupportCylAlP_thickness1A + TrackerSupportCylCF_thickness1" />
     <constant name="TrackerSupportCylP_thickness1B"          value="TrackerSupportCylAlP_thickness1B + TrackerSupportCylCF_thickness1" />
     <constant name="TrackerSupportCylP_thickness1C"          value="TrackerSupportCylAlP_thickness1C + TrackerSupportCylCF_thickness1" />

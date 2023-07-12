@@ -56,7 +56,7 @@
     <constant name="ForwardTOF_zmin"              value="ForwardTOFRegion_zmin + ForwardTOFRegion_length - ForwardTOF_length - 1*cm"/>
 
     <comment> Service/Support setup </comment>
-    <constant name="TrackerSupportCyl_rmin1"          value="InnerMPGDBarrel_rmin - 2*cm"/>
+    <constant name="TrackerSupportCyl_rmin1"          value="TrackerEndcapDisk_rmax + 0.2*cm"/>
     <constant name="TrackerSupportCyl_rmin2"          value="InnerMPGDBarrel_rmin + 2*cm"/>
     <comment> These may belong in definitions.xml </comment>
     <constant name="InnerTrackerEndcapP_zmax"        value="CentralTrackingRegionP_zmax"/>
