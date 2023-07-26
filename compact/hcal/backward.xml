@@ -53,7 +53,7 @@
   <readouts>
     <readout name="HcalEndcapNHits">
       <segmentation type="NoSegmentation"/>
-      <id>system:8,barrel:3,module:4,layer:8,slice:5,sector:8,subsector:8,tile:20</id>
+      <id>system:8,barrel:3,module:4,layer:8,slice:5,halfdisk:10,sector:8,subsector:8,tile:10</id>
     </readout>
   </readouts>
 
