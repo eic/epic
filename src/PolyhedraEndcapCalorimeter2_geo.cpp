@@ -8,12 +8,12 @@ using namespace dd4hep::detail;
 const unsigned nHcalSectors          = 12;
 const double   starEmcEtaBins[13]    = {2.0,    1.9008, 1.8065, 1.7168, 1.6317, 1.5507, 1.4738,
                                         1.4007, 1.3312, 1.2651, 1.2023, 1.1427, 1.086};
-const double   outerHcalEtaBins[3]   = {1.42718, 1.36617, 1.30723};
-const double   innerHcalEtaBins[7]   = {3.10522, 2.97302, 2.84647, 2.72537, 2.60951, 2.4987, 2.39275};
+const double   outerHcalEtaBins[3]   = {1.38907, 1.32865, 1.27034};
+const double   innerHcalEtaBins[7]   = {3.06253, 2.93036, 2.80385, 2.68281, 2.56704, 2.45634, 2.35052};
 const double   starEmcZPositions[24] = {270.19,  271.695, 273.15,  274.555, 275.96,  277.365, 282.363, 283.768,
                                         285.173, 286.578, 287.983, 289.388, 290.793, 292.198, 293.603, 295.008,
                                         296.413, 297.818, 299.223, 300.628, 302.033, 303.438, 304.843, 306.158};
-const int      tileMap[11]           = {0, 2, 4, 5, 6, 8, 10, 12, 15, 17, 19};
+const int      tileMap[11]           = {0, 2, 4, 5, 6, 9, 11, 13, 15, 18, 20};
 double         getR(const double& z, const double& eta) { return z / (sinh(eta)); }
 
 void buildSubsector(Detector& description, xml_h e, SensitiveDetector sens, vector<PlacedVolume>& sensitives,
@@ -31,10 +31,10 @@ void buildSubsector(Detector& description, xml_h e, SensitiveDetector sens, vect
   int    oldTileLayer = tileMap[layerNumber - 1];        // layer of the old tile corresponding to the current layer
   double zOldPos      = starEmcZPositions[oldTileLayer]; // center z position of the old tile
   double zPos         = globalZ;
-  double rmax = isStarEmc ? getR(zOldPos, starEmcEtaBins[nEtaBins])
-                          : getR(zPos, etaBins[nEtaBins]) - oldEmcGap; // closest tile distance to the beam pipe
-  double rmin = isStarEmc ? getR(zOldPos, starEmcEtaBins[0])
-                          : getR(zPos, etaBins[0]) - oldEmcGap;        // furthest tile distance to the beam pipe
+  double rmax         = isStarEmc ? getR(zOldPos, starEmcEtaBins[nEtaBins])
+                                  : getR(zPos, etaBins[nEtaBins]) - oldEmcGap; // closest tile distance to the beam pipe
+  double rmin         = isStarEmc ? getR(zOldPos, starEmcEtaBins[0])
+                                  : getR(zPos, etaBins[0]) - oldEmcGap; // furthest tile distance to the beam pipe
 
   Volume subSectorVol("subsector", Tube(rmin, rmax, slice_thickness / 2, 0, dphi), air);
 
@@ -63,7 +63,7 @@ void buildSubsector(Detector& description, xml_h e, SensitiveDetector sens, vect
     PlacedVolume tile_phys = subSectorVol.placeVolume(
         tile_vol, Transform3D(RotationZYX(0, M_PI / 2 + dphi / 2, M_PI / 2),
                               Position(distance * cos(dphi / 2), distance * sin(dphi / 2), 0)));
-    tile_phys.addPhysVolID("etabin", iEtaBin);
+    tile_phys.addPhysVolID("tile ", iEtaBin);
     sens.setType("calorimeter");
     tile_vol.setSensitiveDetector(sens);
     sensitives.push_back(tile_phys);
@@ -129,10 +129,7 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
         if (x_slice.isSensitive()) {
           ConeSegment sectorShape(slice_thickness / 2, rmin, rmax, rmin, rmax, 0, 2 * M_PI / (nHcalSectors));
           Volume      sectorVol{"sector", sectorShape, air};
-          // void buildSubsector(Detector& description, xml_h e, SensitiveDetector sens, vector<PlacedVolume>&
-          // sensitives,
-          //     const double& slice_thickness, const int& layerNumber, const xml_comp_t x_slice, Volume& sectorVol,
-          //     const int& nSubSectors, const int& nEtaBins, const double* etaBins, bool isStarEmc = false)
+          // void buildSubsector(.. nSubSectors, nEtaBins, etaBins[0], isStarEmc, OldEmcGap)
           buildSubsector(description, e, sens, sensitives, iLayer, globalZ, x_slice, sectorVol, 10, 2, outerHcalEtaBins,
                          -2.18);                      // 2 eta bins of outer sector with 3 (30/10) degree tiles
           buildSubsector(description, e, sens, sensitives, iLayer, globalZ, x_slice, sectorVol, 5, 12, starEmcEtaBins,
