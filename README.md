@@ -25,7 +25,7 @@ Overview
 [<img title="brycecanyon" src="https://eic.github.io/epic/artifacts/epic_brycecanyon_views/view1_top.png" width="49%">](https://eic.github.io/epic/artifacts/epic_brycecanyon_views/view1_top.pdf) [<img title="craterlake" src="https://eic.github.io/epic/artifacts/epic_craterlake_views/view1_top.png" width="49%">](https://eic.github.io/epic/artifacts/epic_craterlake_views/view1_top.pdf)
 
 **Detector parameters:**
-- text: [Brycecanyon](https://eic.github.io/epic/artifacts/constants/epic_brycecanyon.out) [CraterLake](https://eic.github.io/epic/artifacts/constants/epic_craterlake.out) 
+- text: [Brycecanyon](https://eic.github.io/epic/artifacts/constants/epic_brycecanyon.out) [CraterLake](https://eic.github.io/epic/artifacts/constants/epic_craterlake.out)
 - toml: [Brycecanyon](https://eic.github.io/epic/artifacts/constants/epic_brycecanyon.toml) [CraterLake](https://eic.github.io/epic/artifacts/constants/epic_craterlake.toml)
 - csv: [Brycecanyon](https://eic.github.io/epic/artifacts/DetectorParameterTable/epic_brycecanyon.csv) [CraterLake](https://eic.github.io/epic/artifacts/DetectorParameterTable/epic_craterlake.csv)
 
