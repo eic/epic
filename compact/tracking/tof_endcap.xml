@@ -9,8 +9,6 @@
       --------------------------
     </comment>
     <comment> Forward TOF position </comment>
-    <constant name="ForwardTOF_length"              value="min(ForwardTOFRegion_length, 2.*cm)"/>
-    <constant name="ForwardTOF_zmin"                value="ForwardTOFRegion_zmin + ForwardTOFRegion_length - ForwardTOF_length - 1*cm"/>
     <constant name="ForwardTOF_nlayers"             value="1"/>
     <constant name="ForwardTOFMod_offset"           value="1.2*cm"/>
 
@@ -214,7 +212,7 @@
         <module_component name="hybridPCB" material="Fr4" sensitive="false" width="EndcapTOF_Module_width" length="EndcapTOF_Module_length" thickness="EndcapTOF_HybridPCB_thickness" vis="AnlGreen" >
           <position x="EndcapTOF_Service_position" y="0" z="0" />
         </module_component>
-        <module_component name="hybridtraces" material="Aluminum" sensitive="false" width="EndcapTOF_Module_width" length="EndcapTOF_Module_length" thickness="EndcapTOF_HybridTrace_thickness" vis="TOFCFoamVis" >
+        <module_component name="hybridtraces" material="Copper" sensitive="false" width="EndcapTOF_Module_width" length="EndcapTOF_Module_length" thickness="EndcapTOF_HybridTrace_thickness" vis="TOFCFoamVis" >
           <position x="EndcapTOF_Service_position" y="0" z="0" />
         </module_component>
         <module_component name="hybridkaptonbottom" material="Kapton" sensitive="false" width="EndcapTOF_Module_width" length="EndcapTOF_Module_length" thickness="EndcapTOF_Hybrid_thickness" vis="TOFHybridVis" >
@@ -237,7 +235,7 @@
         <module_component name="hybridkaptonbottom" material="Kapton" sensitive="false" width="EndcapTOF_Module_width" length="EndcapTOF_Module_length" thickness="EndcapTOF_Hybrid_thickness" vis="TOFHybridVis" >
           <position x="EndcapTOF_Service_position" y="0" z="0" />
         </module_component>
-        <module_component name="hybridtraces" material="Aluminum" sensitive="false" width="EndcapTOF_Module_width" length="EndcapTOF_Module_length" thickness="EndcapTOF_HybridTrace_thickness" vis="TOFCFoamVis" >
+        <module_component name="hybridtraces" material="Copper" sensitive="false" width="EndcapTOF_Module_width" length="EndcapTOF_Module_length" thickness="EndcapTOF_HybridTrace_thickness" vis="TOFCFoamVis" >
           <position x="EndcapTOF_Service_position" y="0" z="0" />
         </module_component>
         <module_component name="hybridPCB" material="Fr4" sensitive="false" width="EndcapTOF_Module_width" length="EndcapTOF_Module_length" thickness="EndcapTOF_HybridPCB_thickness" vis="AnlGreen" >
@@ -253,7 +251,8 @@
           rmax="ForwardTOFLayer_rmax"
           length="3*cm"
           zstart="ForwardTOF_zmin" />
-        <layer_material surface="inner" binning="binPhi,binR" bins0="256" bins1="256"/>
+        <layer_material surface="inner" binning="binPhi,binR" bins0="30" bins1="30"/>
+        <layer_material surface="inner" binning="binPhi,binR" bins0="30" bins1="30"/>
         <y_layout dr="0.0*mm" z0="EndcapTOF_zOffset" nz="EndcapTOF_Module_nz"/>
         <z_layout z0="ForwardTOF_zmin"/>
       </layer>

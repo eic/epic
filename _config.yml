@@ -23,8 +23,8 @@ header_pages:
   - README.md
   - reports/artifacts.md
   - reports/geoviewer.md
-  - reports/arches_views.md
   - reports/brycecanyon_views.md
+  - reports/craterlake_views.md
 
 exclude:
   - bin/
