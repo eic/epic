@@ -55,9 +55,6 @@ static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector /* sens *
   //int numPipePieces = 4; //number of individual pipe sections 
 
 
-  //double drift_beam_pipe_angle = -0.047666638;
-  // double zPosShift             = 50.0; //cm
-
   double b0_hadron_tube_inner_r = 2.9;   // cm
   double b0_hadron_tube_outer_r = 3.1;   // cm
   double b0_hadron_tube_length  = 120.0; // cm
@@ -65,12 +62,7 @@ static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector /* sens *
   
   double drift_hadron_section_1_inner_r = 19.5;
   double drift_hadron_section_1_outer_r = 20.5;
-  //double drift_hadron_section_1_length  = 342.225466; // 393.4334363;
-  /*
-  double drift_hadron_section_2_inner_r = 19.5;
-  double drift_hadron_section_2_outer_r = 20.5;
-  double drift_hadron_section_2_length  = 300.0;
-  */
+ 
   double drift_hadron_section_3_inner_r_ent = 19.5;
   double drift_hadron_section_3_outer_r_ent = 20.5;
   double drift_hadron_section_3_inner_r_ex  = 5.0;
@@ -93,8 +85,8 @@ static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector /* sens *
   //double orbit_start[2] = {22.0623828, -0.6543372}; //meters!
   //double orbit_end[2] = {38.5445361, -1.4039456}; //meters!
 
-  double orbit_start[2] = {22.07774534, -0.650777226};
-  double orbit_end[2] = {38.54362489, -1.436245325};
+  double orbit_start[2] = {22.07774534, -0.650777226}; //meters
+  double orbit_end[2] = {38.54362489, -1.436245325};  //meters
 
   //calculate straight line formula x = slope*z + intercept
   
@@ -174,90 +166,10 @@ static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector /* sens *
 	  DetElement pipe_de(sdet, Form("sector_pipe_%d_de", iSection), 1);
 	  pipe_de.setPlacement(pv_pipe);
   }
-  
-
-  
-  // The tube that goes from B1apf to the start of the RP
-
-  /*
-
-  Tube   drift_tube_section_1(drift_hadron_section_1_inner_r, drift_hadron_section_1_outer_r,
-                              drift_hadron_section_1_length / 2.0);
-  Volume v_drift_tube_section_1("v_drift_tube_section_1", drift_tube_section_1, m_SS);
-  sdet.setAttributes(det, v_drift_tube_section_1, x_det.regionStr(), x_det.limitsStr(), vis_name);
-
-  // The tube that serves as a scattering chamber
-
-  Tube   drift_tube_section_2(drift_hadron_section_2_inner_r, drift_hadron_section_2_outer_r,
-                              drift_hadron_section_2_length / 2.0);
-  Volume v_drift_tube_section_2("v_drift_tube_section_2", drift_tube_section_2, m_SS);
-  sdet.setAttributes(det, v_drift_tube_section_2, x_det.regionStr(), x_det.limitsStr(), vis_name);
-
-  Tube   drift_tube_vacuum_2(0.0, drift_hadron_section_2_inner_r, drift_hadron_section_2_length / 2.0);
-  Volume v_drift_tube_vacuum_2("v_drift_tube_vacuum_2", drift_tube_vacuum_2, m_vac);
-  sdet.setAttributes(det, v_drift_tube_vacuum_2, x_det.regionStr(), x_det.limitsStr(), vis_name);
-
-  // The taper from the RP to last straight section
-
-  Cone   drift_tube_section_3(drift_hadron_section_3_length / 2.0, drift_hadron_section_3_inner_r_ent,
-                              drift_hadron_section_3_outer_r_ent, drift_hadron_section_3_inner_r_ex,
-                              drift_hadron_section_3_outer_r_ex);
-  Volume v_drift_tube_section_3("v_drift_tube_section_3", drift_tube_section_3, m_SS);
-  sdet.setAttributes(det, v_drift_tube_section_3, x_det.regionStr(), x_det.limitsStr(), vis_name);
-
-  // Final tube from taper to B2pf magnet
-
-  Tube   drift_tube_section_4(drift_hadron_section_4_inner_r, drift_hadron_section_4_outer_r,
-                              drift_hadron_section_4_length / 2.0);
-  Volume v_drift_tube_section_4("v_drift_tube_section_4", drift_tube_section_4, m_SS);
-  sdet.setAttributes(det, v_drift_tube_section_4, x_det.regionStr(), x_det.limitsStr(), vis_name);
-
-  //----------------------------//
-
-  auto pv_b0_hadron_tube =
-      assembly.placeVolume(v_b0_hadron_tube, Transform3D(RotationY(-0.025), Position(pos.x(), pos.y(), pos.z())));
-  pv_b0_hadron_tube.addPhysVolID("sector", 1);
-  DetElement tube_de_1(sdet, "sector1_de", 1);
-  tube_de_1.setPlacement(pv_b0_hadron_tube);
-
-  // first tube section - right after b1apf - has same size as RP chamber, but keeping separate.
-  auto pv_drift_tube_section_1 = assembly.placeVolume(
-      v_drift_tube_section_1,
-      Transform3D(RotationY(drift_beam_pipe_angle), Position(-73.23100294, 0.0, 2378.69291))); // 2353.06094)));
-  pv_drift_tube_section_1.addPhysVolID("sector", 1);
-  DetElement tube_de_2(sdet, "sector2_de", 1);
-  tube_de_2.setPlacement(pv_drift_tube_section_1);
-  */
-   
-
-  /*
-  // Second section - RP scattering chamber -- keeping separate for now.
-  auto pv_drift_tube_section_2 = assembly.placeVolume(
-      v_drift_tube_section_2, Transform3D(RotationY(drift_beam_pipe_angle), Position(-88.5315717, 0.0, 2699.440911)));
-  pv_drift_tube_section_2.addPhysVolID("sector", 1);
-  DetElement tube_de_3(sdet, "sector3_de", 1);
-  tube_de_3.setPlacement(pv_drift_tube_section_2);
-
-  auto pv_drift_tube_vacuum_2 = assembly.placeVolume(
-      v_drift_tube_vacuum_2, Transform3D(RotationY(drift_beam_pipe_angle), Position(-88.5315717, 0.0, 2699.440911)));
-  pv_drift_tube_vacuum_2.addPhysVolID("sector", 1);
-  DetElement tube_de_4(sdet, "sector4_de", 1);
-  tube_de_4.setPlacement(pv_drift_tube_vacuum_2);
-
-  // Third section -- tapered section acting as poor man's universal exit window.
-  auto pv_drift_tube_section_3 = assembly.placeVolume(
-      v_drift_tube_section_3, Transform3D(RotationY(drift_beam_pipe_angle), Position(-99.25250431, 0.0, 2924.185347)));
-  pv_drift_tube_section_3.addPhysVolID("sector", 1);
-  DetElement tube_de_5(sdet, "sector5_de", 1);
-  tube_de_5.setPlacement(pv_drift_tube_section_3);
-
-  auto pv_drift_tube_section_4 = assembly.placeVolume(
-      v_drift_tube_section_4, Transform3D(RotationY(drift_beam_pipe_angle), Position(-123.076799, 0.0, 3423.617428)));
-  pv_drift_tube_section_4.addPhysVolID("sector", 1);
-  DetElement tube_de_6(sdet, "sector6_de", 1);
-  tube_de_6.setPlacement(pv_drift_tube_section_4);
-  */
-  //make vacuum volumes here
+ 
+  //------------------------------
+  //  make vacuum volumes here
+  //------------------------------
   
   //last two entries are dummy numbers for now
   double z_start_points[7]    = {orbit_start[0]+0.03, 22.590,  24.590,   26.040, 28.040 , 20.0, 20.0 };
