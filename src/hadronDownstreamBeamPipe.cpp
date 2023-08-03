@@ -84,7 +84,7 @@ static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector /* sens *
 					    //(z, x)
   //double orbit_start[2] = {22.0623828, -0.6543372}; //meters!
   //double orbit_end[2] = {38.5445361, -1.4039456}; //meters!
-
+						  //22.07774534	
   double orbit_start[2] = {22.07774534, -0.650777226}; //meters
   double orbit_end[2] = {38.54362489, -1.436245325};  //meters
 
@@ -105,7 +105,7 @@ static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector /* sens *
   //    build drift beam pipe here
   //----------------------------------
 
-  double z_start_pipe[3]    = {orbit_start[0]+0.03, 30.000,  31.500 };
+  double z_start_pipe[3]    = {orbit_start[0], 30.000,  31.500 };
   double z_end_pipe[3]      = {30.000,              31.500,  40.000 };
 
 
@@ -129,7 +129,7 @@ static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector /* sens *
 	  	  exit_radius_inner  = drift_hadron_section_1_inner_r;
 		  entrance_r_outer   = drift_hadron_section_1_outer_r;
 		  exit_radius_outer  = drift_hadron_section_1_outer_r;
-		  //length = drift_hadron_section_1_length + drift_hadron_section_2_length;
+		  length = length - 0.03;
 	  }
 	  if(iSection == 1){
 		  entrance_r_inner   = drift_hadron_section_3_inner_r_ent;
@@ -172,8 +172,8 @@ static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector /* sens *
   //------------------------------
 
   //last two entries are dummy numbers for now
-  double z_start_points[7]    = {orbit_start[0]+0.03, 22.590,  24.590,   26.040, 28.040 , 20.0, 20.0 };
-  double z_endpoints_array[7] = {22.499,              24.499,  25.990,   27.990, z_start_pipe[1] , 25.0, 25.0 };
+  double z_start_points[7]    = {orbit_start[0]+0.03, 22.590,  24.590,   26.055, 28.055 , 20.0, 20.0 };
+  double z_endpoints_array[7] = {22.499,              24.499,  25.980,   27.980, z_start_pipe[1] , 25.0, 25.0 };
 
 
   for(int iVac = 0; iVac < 7; iVac++){

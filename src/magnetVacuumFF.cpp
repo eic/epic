@@ -108,14 +108,14 @@ static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector /* sens *
 	*/
 
   double radius_b0pf = 2.9;   //cm
-  double length_b0pf = 700.213;   //cm
+  double length_b0pf = 250.028;   //cm -- shorten by 6mm
   double rotation_b0pf = -0.025;  // radians
-  double x_b0pf = -9.25297;   // cm
+  double x_b0pf = -14.8832;   // cm
   double y_b0pf = 0.0;    // cm
-  double z_b0pf = 350.106;   // cm
+  double z_b0pf = 575.314;   // cm
 
   double radius_b0apf = 4.3;   //cm
-  double length_b0apf = 149.952;   //cm
+  double length_b0apf = 149.452;   //cm -- shorten by 5mm
   double rotation_b0apf = -0.025;  // radians
   double x_b0apf = -19.9248;   // cm
   double y_b0apf = 0.0;    // cm
@@ -136,14 +136,14 @@ static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector /* sens *
   double z_q1bpf = 1136.31;   // cm
 
   double radius_q2pf = 13.15;   //cm
-  double length_q2pf = 419.995;   //cm
+  double length_q2pf = 419.495;   //cm -- shorten by 5mm
   double rotation_q2pf = -0.0148;  // radians
   double x_q2pf = -40.4423;   // cm
   double y_q2pf = 0.0;    // cm
   double z_q2pf = 1446.73;   // cm
 
   double radius_b1pf = 13.5;   //cm
-  double length_b1pf = 350.018;   //cm
+  double length_b1pf = 349.718;   //cm -- shorten by 3mm
   double rotation_b1pf = -0.034;  // radians
   double x_b1pf = -49.4721;   // cm
   double y_b1pf = 0.0;    // cm
