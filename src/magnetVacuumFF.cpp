@@ -156,6 +156,12 @@ static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector /* sens *
   double y_b1apf = 0.0;    // cm
   double z_b1apf = 2106.41;   // cm
 
+  //double radius_drift_pipe_1 = 19.0;   //cm
+  //double length_drift_pipe_1 = 200.025;   //cm
+  //double rotation_drift_pipe_1 = -0.047;  // radians
+  //double x_drift_pipe_1 = -60.6686;   // cm
+  //double y_drift_pipe_1 = 0.0;    // cm
+  //double z_drift_pipe_1 = 2106.41;   // cm
 
   // define shapes here
 
