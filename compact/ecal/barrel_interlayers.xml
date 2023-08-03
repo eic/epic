@@ -29,14 +29,6 @@
     <constant name="EcalBarrel_Calorimeter_offset"
       value="(EcalBarrel_Calorimeter_zmax - EcalBarrel_Calorimeter_zmin)/2.0"/>
 
-    <constant name="EcalBarrel_AstroPix_width"       value="2*cm"/>
-    <constant name="EcalBarrel_AstroPix_length"      value="2*cm"/>
-    <constant name="EcalBarrel_AstroPix_margin"      value="200*um"/>
-
-    <constant name="EcalBarrel_Stave_width"          value="EcalBarrel_AstroPix_width"/>
-    <constant name="EcalBarrel_Module_length"        value="EcalBarrel_Calorimeter_length"/>
-    <constant name="EcalBarrel_StaveTilt_angle"      value="10*degree"/>
-
     <constant name="EcalBarrel_Support_thickness"    value="3*cm"/>
     <constant name="EcalBarrel_SiliconThickness"     value="500*um"/>
     <constant name="EcalBarrel_ElectronicsThickness" value="150*um"/>
@@ -45,6 +37,26 @@
     <constant name="EcalBarrel_EpoxyThickness"       value="100*um"/>
     <constant name="EcalBarrel_CarbonThickness"      value="0.5*mm"/>
     <constant name="EcalBarrel_CarbonSpacerWidth"    value="4*mm"/>
+
+    <constant name="EcalBarrel_AstroPix_width"       value="2*cm"/>
+    <constant name="EcalBarrel_AstroPix_length"      value="2*cm"/>
+    <constant name="EcalBarrel_AstroPix_margin"      value="200*um"/>
+    <constant name="EcalBarrel_AstroPix_thickness"
+      value="EcalBarrel_SiliconThickness
+      + EcalBarrel_ElectronicsThickness
+      + EcalBarrel_CopperThickness
+      + EcalBarrel_KaptonThickness
+      + EcalBarrel_EpoxyThickness"/>
+
+    <constant name="EcalBarrel_Stave_width"          value="EcalBarrel_AstroPix_width + 2. * EcalBarrel_AstroPix_margin"/>
+    <constant name="EcalBarrel_Stave_length"         value="EcalBarrel_Calorimeter_length"/>
+    <constant name="EcalBarrel_StaveTilt_angle"      value="10*degree"/>
+    <constant name="EcalBarrel_Stave_ModuleRepeat"   value="floor(EcalBarrel_Calorimeter_length / (EcalBarrel_AstroPix_length + EcalBarrel_AstroPix_margin))"/>
+
+    <constant name="EcalBarrel_ImagingFirstLayerThickness"
+      value="EcalBarrel_AstroPix_thickness
+      + EcalBarrel_CarbonThickness"/>
+
     <constant name="EcalBarrel_LayerSpacing"         value="10.0*mm"/>
     <constant name="EcalBarrel_FiberRadius"          value="0.5*mm"/>
     <constant name="EcalBarrel_FiberXSpacing"        value="1.34*mm"/>
@@ -55,21 +67,10 @@
       For Pb/SiFi (GlueX):  X0 ~ 1.45 cm
       For W/SiFi (sPHENIX): X0 ~ 0.7 cm (but different fiber orientation)
     </comment>
-    <constant name="EcalBarrel_RadiatorThickness"    value="EcalBarrel_FiberZSpacing*17"/>
+    <constant name="EcalBarrel_RadiatorThickness"    value="EcalBarrel_FiberZSpacing * 17"/>
     <constant name="EcalBarrel_TotalFiberLayers_num" value="12"/>
-    <constant name="EcalBarrel_ModRepeat"            value="EcalBarrelSectorsN"/>
-    <constant name="EcalBarrel_ModLength"            value="0.5*m"/>
-    <constant name="EcalBarrel_ModWidth"             value="0.5*m"/>
-    <constant name="EcalBarrel_AvailThickness"       value="EcalBarrelRegion_thickness-EcalBarrel_Support_thickness"/>
-
-
-    <constant name="EcalBarrel_ImagingFirstLayerThickness"
-      value="EcalBarrel_SiliconThickness
-      + EcalBarrel_ElectronicsThickness
-      + EcalBarrel_CopperThickness
-      + EcalBarrel_KaptonThickness
-      + EcalBarrel_EpoxyThickness
-      + EcalBarrel_CarbonThickness"/>
+    <constant name="EcalBarrel_SectorRepeat"         value="EcalBarrelSectorsN"/>
+    <constant name="EcalBarrel_AvailThickness"       value="EcalBarrelRegion_thickness - EcalBarrel_Support_thickness"/>
 
     <constant name="EcalBarrel_ImagingLayerThickness" value="2.0*cm"/>
 
@@ -128,26 +129,34 @@
       calorimeterType="EM_BARREL"
       vis="EcalBarrelEnvelopeVis"
       offset="EcalBarrel_Calorimeter_offset">
-      <dimensions numsides="EcalBarrel_ModRepeat"
+      <dimensions numsides="EcalBarrel_SectorRepeat"
         rmin="EcalBarrel_rmin"
         z="EcalBarrel_Calorimeter_length"/>
       <sectors vis="EcalBarrelStaveVis"/>
+
       <module name="AstroPix_Module_FirstLayer"
               vis="EcalBarrelLayerVis">
         <module_component name="AstroPix_Chip"
                           material="Silicon"
                           width="EcalBarrel_AstroPix_width"
                           length="EcalBarrel_AstroPix_length"
-                          thickness="EcalBarrel_ImagingFirstLayerThickness"
+                          thickness="EcalBarrel_AstroPix_thickness"
                           vis="EcalBarrelLayerVis">
           <slice material="Silicon" thickness="EcalBarrel_SiliconThickness"     vis="EcalBarrelSliceVis" sensitive="yes" limits="cal_limits"/>
           <slice material="Silicon" thickness="EcalBarrel_ElectronicsThickness" vis="EcalBarrelSliceVis"/>
           <slice material="Copper" thickness="EcalBarrel_CopperThickness"       vis="EcalBarrelSliceVis"/>
           <slice material="Kapton" thickness="EcalBarrel_KaptonThickness"       vis="EcalBarrelSliceVis"/>
           <slice material="Epoxy" thickness="EcalBarrel_EpoxyThickness"         vis="EcalBarrelSliceVis"/>
-          <slice material="CarbonFiber" thickness="EcalBarrel_CarbonThickness"  vis="EcalBarrelSliceVis"/>
+        </module_component>
+        <module_component name="AstroPix_Support"
+                          material="CarbonFiber"
+                          width="EcalBarrel_AstroPix_width + EcalBarrel_AstroPix_margin"
+                          length="EcalBarrel_AstroPix_length + EcalBarrel_AstroPix_margin"
+                          thickness="EcalBarrel_CarbonThickness"
+                          vis="EcalBarrelSliceVis">
         </module_component>
       </module>
+
       <module name="AstroPix_Module"
               vis="EcalBarrelLayerVis">
         <module_component name="AstroPix_Chip"
@@ -163,6 +172,7 @@
           <slice material="Epoxy" thickness="EcalBarrel_EpoxyThickness"         vis="EcalBarrelSliceVis"/>
         </module_component>
       </module>
+
       <layer repeat="1" vis="EcalBarrelLayerVis"
              thickness="EcalBarrel_ImagingFirstLayerThickness"
              space_before="0.*cm">
@@ -172,17 +182,13 @@
           z_length="EcalBarrel_Calorimeter_length"/>
         <stave repeat="5"
                width="EcalBarrel_Stave_width"
-               length="EcalBarrel_Calorimeter_length"
+               length="EcalBarrel_Stave_length"
                thickness="EcalBarrel_ImagingFirstLayerThickness"
                module="AstroPix_Module_FirstLayer">
-          <x_layout nx="1" x0="0" dx="EcalBarrel_AstroPix_width + EcalBarrel_AstroPix_margin"/>
-          <z_layout nz="1" z0="0" dz="EcalBarrel_AstroPix_length + EcalBarrel_AstroPix_margin"/>
-          <slice material="Silicon" thickness="EcalBarrel_SiliconThickness"     vis="EcalBarrelSliceVis" sensitive="yes" limits="cal_limits"/>
-          <slice material="Silicon" thickness="EcalBarrel_ElectronicsThickness" vis="EcalBarrelSliceVis"/>
-          <slice material="Copper" thickness="EcalBarrel_CopperThickness"       vis="EcalBarrelSliceVis"/>
-          <slice material="Kapton" thickness="EcalBarrel_KaptonThickness"       vis="EcalBarrelSliceVis"/>
-          <slice material="Epoxy" thickness="EcalBarrel_EpoxyThickness"         vis="EcalBarrelSliceVis"/>
-          <slice material="CarbonFiber" thickness="EcalBarrel_CarbonThickness"  vis="EcalBarrelSliceVis"/>
+          <xy_layout
+            dx="EcalBarrel_AstroPix_width + EcalBarrel_AstroPix_margin"
+            dy="EcalBarrel_AstroPix_length + EcalBarrel_AstroPix_margin"
+          />
         </stave>
       </layer>
 
@@ -198,14 +204,14 @@
         <frame material="CarbonFiber" fill="Air" thickness="EcalBarrel_CarbonThickness" height="EcalBarrel_ImagingLayerThickness / 2.0" vis="EcalBarrelSliceVis"/>
         <stave repeat="6"
                width="EcalBarrel_Stave_width"
-               length="EcalBarrel_Calorimeter_length"
+               length="EcalBarrel_Stave_length"
                thickness="EcalBarrel_ImagingFirstLayerThickness"
-               angle="-EcalBarrel_StaveTilt_angle">
-          <slice material="Silicon" thickness="EcalBarrel_SiliconThickness"     vis="EcalBarrelSliceVis" sensitive="yes" limits="cal_limits"/>
-          <slice material="Silicon" thickness="EcalBarrel_ElectronicsThickness" vis="EcalBarrelSliceVis"/>
-          <slice material="Copper" thickness="EcalBarrel_CopperThickness"       vis="EcalBarrelSliceVis"/>
-          <slice material="Kapton" thickness="EcalBarrel_KaptonThickness"       vis="EcalBarrelSliceVis"/>
-          <slice material="Epoxy" thickness="EcalBarrel_EpoxyThickness"         vis="EcalBarrelSliceVis"/>
+               angle="-EcalBarrel_StaveTilt_angle"
+               module="AstroPix_Module">
+          <xy_layout
+            dx="EcalBarrel_AstroPix_width + EcalBarrel_AstroPix_margin"
+            dy="EcalBarrel_AstroPix_length + EcalBarrel_AstroPix_margin"
+          />
         </stave>
       </layer>
 
@@ -222,14 +228,14 @@
         <frame material="CarbonFiber" fill="Air" thickness="EcalBarrel_CarbonThickness" height="EcalBarrel_ImagingLayerThickness / 2.0" vis="EcalBarrelSliceVis"/>
         <stave repeat="7"
                width="EcalBarrel_Stave_width"
-               length="EcalBarrel_Calorimeter_length"
+               length="EcalBarrel_Stave_length"
                thickness="EcalBarrel_ImagingFirstLayerThickness"
-               angle="EcalBarrel_StaveTilt_angle">
-          <slice material="Silicon" thickness="EcalBarrel_SiliconThickness"     vis="EcalBarrelSliceVis" sensitive="yes" limits="cal_limits"/>
-          <slice material="Silicon" thickness="EcalBarrel_ElectronicsThickness" vis="EcalBarrelSliceVis"/>
-          <slice material="Copper" thickness="EcalBarrel_CopperThickness"       vis="EcalBarrelSliceVis"/>
-          <slice material="Kapton" thickness="EcalBarrel_KaptonThickness"       vis="EcalBarrelSliceVis"/>
-          <slice material="Epoxy" thickness="EcalBarrel_EpoxyThickness"         vis="EcalBarrelSliceVis"/>
+               angle="EcalBarrel_StaveTilt_angle"
+               module="AstroPix_Module">
+          <xy_layout
+            dx="EcalBarrel_AstroPix_width + EcalBarrel_AstroPix_margin"
+            dy="EcalBarrel_AstroPix_length + EcalBarrel_AstroPix_margin"
+          />
         </stave>
       </layer>
     </detector>
@@ -247,7 +253,7 @@
       calorimeterType="EM_BARREL"
       vis="EcalBarrelEnvelopeVis"
       offset="EcalBarrel_Calorimeter_offset">
-      <dimensions numsides="EcalBarrel_ModRepeat"
+      <dimensions numsides="EcalBarrel_SectorRepeat"
         rmin="EcalBarrel_rmin"
         z="EcalBarrel_Calorimeter_length"/>
       <sectors vis="EcalBarrelStaveVis"/>

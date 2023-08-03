@@ -22,6 +22,8 @@
 #include "XML/Layering.h"
 #include <functional>
 
+#include "DD4hepDetectorHelper.h"
+
 using namespace dd4hep;
 
 typedef ROOT::Math::XYPoint Point;
@@ -45,12 +47,12 @@ static Ref_t create_detector(Detector& desc, xml_h e, SensitiveDetector sens)
   Assembly detector_volume(detector_name);
   detector_volume.setAttributes(desc, x_detector.regionStr(), x_detector.limitsStr(), x_detector.visStr());
 
-  Transform3D  detector_tr = Translation3D(0, 0, offset) * RotationZ(half_dphi);
-  PlacedVolume detector_pv = mother_volume.placeVolume(detector_volume, detector_tr);
+  Transform3D  detector_tr      = Translation3D(0, 0, offset) * RotationZ(half_dphi);
+  PlacedVolume detector_physvol = mother_volume.placeVolume(detector_volume, detector_tr);
   sens.setType("calorimeter");
 
-  detector_pv.addPhysVolID("system", detector_id);
-  sdet.setPlacement(detector_pv);
+  detector_physvol.addPhysVolID("system", detector_id);
+  sdet.setPlacement(detector_physvol);
 
   // build a single sector
   DetElement sector_element("sector0", detector_id);
@@ -68,76 +70,109 @@ static Ref_t create_detector(Detector& desc, xml_h e, SensitiveDetector sens)
   double layer_dim_y   = x_dimensions.z() / 2.;
 
   // Loop over the modules
-  PlacedVolume pv;
   using dd4hep::rec::VolPlane;
   std::map<std::string, Volume>                    volumes;
   std::map<std::string, std::vector<PlacedVolume>> sensitives;
   std::map<std::string, std::vector<VolPlane>>     volplane_surfaces;
   std::map<std::string, std::array<double, 2>>     module_thicknesses;
   for (xml_coll_t i_module(x_detector, _U(module)); i_module; ++i_module) {
-    xml_comp_t  x_mod = i_module;
-    std::string m_nam = x_mod.nameStr();
+    xml_comp_t  x_module    = i_module;
+    std::string module_name = x_module.nameStr();
 
-    if (volumes.find(m_nam) != volumes.end()) {
-      printout(ERROR, "BarrelCalorimeterImaging", "Module with name %s already exists", m_nam.c_str());
+    if (volumes.find(module_name) != volumes.end()) {
+      printout(ERROR, "BarrelCalorimeterImaging", "Module with name %s already exists", module_name.c_str());
       throw std::runtime_error("Logics error in building modules.");
     }
 
     // Compute module total thickness from components
     double     total_thickness = 0;
-    xml_coll_t ci(x_mod, _U(module_component));
+    xml_coll_t ci(x_module, _U(module_component));
     for (ci.reset(), total_thickness = 0.0; ci; ++ci) {
       total_thickness += xml_comp_t(ci).thickness();
     }
 
     // Create the module assembly volume
-    Assembly m_vol(m_nam);
-    volumes[m_nam] = m_vol;
-    m_vol.setVisAttributes(desc.visAttributes(x_mod.visStr()));
+    Assembly module_volume(module_name);
+    volumes[module_name] = module_volume;
+    module_volume.setVisAttributes(desc.visAttributes(x_module.visStr()));
 
     // Add components
     int    sensor_number    = 1;
     int    ncomponents      = 0;
     double thickness_so_far = 0.0;
     double thickness_sum    = -total_thickness / 2.0;
-    for (xml_coll_t mci(x_mod, _U(module_component)); mci; ++mci, ++ncomponents) {
-      xml_comp_t        x_comp = mci;
-      xml_comp_t        x_pos  = x_comp.position(false);
-      xml_comp_t        x_rot  = x_comp.rotation(false);
-      const std::string c_nam  = _toString(ncomponents, "component%d");
-      Box               c_box(x_comp.width() / 2, x_comp.length() / 2, x_comp.thickness() / 2);
-      Volume            c_vol(c_nam, c_box, desc.material(x_comp.materialStr()));
+    for (xml_coll_t i_component(x_module, _U(module_component)); i_component; ++i_component, ++ncomponents) {
+      xml_comp_t        x_component     = i_component;
+      xml_comp_t        x_component_pos = x_component.position(false);
+      xml_comp_t        x_component_rot = x_component.rotation(false);
+      const std::string component_name  = _toString(ncomponents, "component%d");
+      Box               component_box(x_component.width() / 2, x_component.length() / 2, x_component.thickness() / 2);
+      Volume            component_volume(component_name, component_box, desc.material(x_component.materialStr()));
+      component_volume.setAttributes(desc, x_component.regionStr(), x_component.limitsStr(), x_component.visStr());
+
+      // Loop over the slices for this component
+      int    slice_num   = 1;
+      double slice_pos_z = -x_component.thickness() / 2;
+      for (xml_coll_t i_slice(x_component, _U(slice)); i_slice; ++i_slice) {
+        xml_comp_t  x_slice     = i_slice;
+        std::string slice_name  = Form("slice%d", slice_num);
+        double      slice_dim_x = x_component.width() / 2;
+        double      slice_dim_y = x_component.length() / 2;
+        double      slice_dim_z = x_slice.thickness() / 2;
+        Box         slice_shape(slice_dim_x, slice_dim_y, slice_dim_z);
+        Volume      slice_volume(slice_name, slice_shape, desc.material(x_slice.materialStr()));
+        slice_volume.setAttributes(desc, x_slice.regionStr(), x_slice.limitsStr(), x_slice.visStr());
+
+        // Place slice
+        PlacedVolume slice_physvol =
+            component_volume.placeVolume(slice_volume, Position(0, 0, slice_pos_z + x_slice.thickness() / 2));
+
+        // Set sensitive
+        if (x_slice.isSensitive()) {
+          slice_physvol.addPhysVolID("slice", slice_num);
+          slice_volume.setSensitiveDetector(sens);
+          sensitives[module_name].push_back(slice_physvol);
+        }
+
+        // Increment Z position of slice
+        slice_pos_z += x_slice.thickness();
+        ++slice_num;
+      }
 
       // Utility variable for the relative z-offset based off the previous components
-      const double zoff = thickness_sum + x_comp.thickness() / 2.0;
-      if (x_pos && x_rot) {
-        Position    c_pos(x_pos.x(0), x_pos.y(0), x_pos.z(0) + zoff);
-        RotationZYX c_rot(x_rot.z(0), x_rot.y(0), x_rot.x(0));
-        pv = m_vol.placeVolume(c_vol, Transform3D(c_rot, c_pos));
-      } else if (x_rot) {
-        Position c_pos(0, 0, zoff);
-        pv = m_vol.placeVolume(c_vol, Transform3D(RotationZYX(x_rot.z(0), x_rot.y(0), x_rot.x(0)), c_pos));
-      } else if (x_pos) {
-        pv = m_vol.placeVolume(c_vol, Position(x_pos.x(0), x_pos.y(0), x_pos.z(0) + zoff));
+      const double zoff = thickness_sum + x_component.thickness() / 2.0;
+      PlacedVolume component_physvol;
+      if (x_component_pos && x_component_rot) {
+        Position    component_pos(x_component_pos.x(0), x_component_pos.y(0), x_component_pos.z(0) + zoff);
+        RotationZYX component_rot(x_component_rot.z(0), x_component_rot.y(0), x_component_rot.x(0));
+        component_physvol = module_volume.placeVolume(component_volume, Transform3D(component_rot, component_pos));
+      } else if (x_component_rot) {
+        Position    component_pos(0, 0, zoff);
+        RotationZYX component_rot(x_component_rot.z(0), x_component_rot.y(0), x_component_rot.x(0));
+        component_physvol = module_volume.placeVolume(component_volume, Transform3D(component_rot, component_pos));
+      } else if (x_component_pos) {
+        Position component_pos(x_component_pos.x(0), x_component_pos.y(0), x_component_pos.z(0) + zoff);
+        component_physvol = module_volume.placeVolume(component_volume, component_pos);
       } else {
-        pv = m_vol.placeVolume(c_vol, Position(0, 0, zoff));
+        Position component_pos(0, 0, zoff);
+        component_physvol = module_volume.placeVolume(component_volume, component_pos);
       }
-      c_vol.setRegion(desc, x_comp.regionStr());
-      c_vol.setLimitSet(desc, x_comp.limitsStr());
-      c_vol.setVisAttributes(desc, x_comp.visStr());
-      if (x_comp.isSensitive()) {
-        pv.addPhysVolID("sensor", sensor_number++);
-        c_vol.setSensitiveDetector(sens);
-        sensitives[m_nam].push_back(pv);
-        module_thicknesses[m_nam] = {thickness_so_far + x_comp.thickness() / 2.0,
-                                     total_thickness - thickness_so_far - x_comp.thickness() / 2.0};
+
+      if (x_component.isSensitive()) {
+        component_physvol.addPhysVolID("sensor", sensor_number++);
+        component_volume.setSensitiveDetector(sens);
+        sensitives[module_name].push_back(component_physvol);
+        module_thicknesses[module_name] = {thickness_so_far + x_component.thickness() / 2.0,
+                                           total_thickness - thickness_so_far - x_component.thickness() / 2.0};
       }
-      thickness_sum += x_comp.thickness();
-      thickness_so_far += x_comp.thickness();
+
+      thickness_sum += x_component.thickness();
+      thickness_so_far += x_component.thickness();
+
       // apply relative offsets in z-position used to stack components side-by-side
-      if (x_pos) {
-        thickness_sum += x_pos.z(0);
-        thickness_so_far += x_pos.z(0);
+      if (x_component_pos) {
+        thickness_sum += x_component_pos.z(0);
+        thickness_so_far += x_component_pos.z(0);
       }
     }
   }
@@ -186,10 +221,6 @@ static Ref_t create_detector(Detector& desc, xml_h e, SensitiveDetector sens)
         double     stave_rot_y  = getAttrOrDefault(x_stave, _Unicode(angle), 0.);
         double     stave_off_z  = getAttrOrDefault(x_stave, _Unicode(offset), 0.);
 
-        // Optional x_layout and z_layout specification
-        [[maybe_unused]] bool has_x_layout = x_stave.hasChild(_U(z_layout));
-        [[maybe_unused]] bool has_z_layout = x_stave.hasChild(_U(z_layout));
-
         // Arrange staves symmetrically around center of layer
         double stave_pos_x = -layer_dim_x + stave_dim_x;
         double stave_pitch = -2.0 * stave_pos_x / (stave_repeat - 1);
@@ -205,30 +236,60 @@ static Ref_t create_detector(Detector& desc, xml_h e, SensitiveDetector sens)
         // Loop over the slices for this stave
         double slice_pos_z = -(stave_thick / 2.);
 
-        // If x_layout and z_layout
-        if (has_x_layout && has_z_layout) {
-          auto x_layout      = x_stave.child(_Unicode(x_layout));
-          auto z_layout      = x_stave.child(_Unicode(x_layout));
-          auto module_str    = x_stave.moduleStr();
-          auto module_volume = volumes[module_str];
-          int  i_module      = 0;
-          for (auto i_x = 0; i_x < x_layout.nx(); ++i_x) {
-            for (auto i_z = 0; i_z < z_layout.nz(); ++i_z) {
+        // Place in xy_layout
+        if (x_stave.hasChild(_Unicode(xy_layout))) {
+          auto  module_str        = x_stave.moduleStr();
+          auto& module_volume     = volumes[module_str];
+          auto& module_sensitives = sensitives[module_str];
+
+          // Get layout grid pitch
+          xml_comp_t x_xy_layout = x_stave.child(_Unicode(xy_layout));
+          auto       dx          = x_xy_layout.attr<double>(_Unicode(dx));
+          auto       dy          = x_xy_layout.attr<double>(_Unicode(dy));
+
+          // Default to filling
+          auto nx = getAttrOrDefault<int>(x_xy_layout, _Unicode(nx), floor(2. * stave_dim_x / dx));
+          auto ny = getAttrOrDefault<int>(x_xy_layout, _Unicode(ny), floor(2. * stave_dim_y / dy));
+          printout(DEBUG, "BarrelCalorimeterImaging", "Stave %s layout with %d by %d modules", stave_name.c_str(), nx,
+                   ny);
+
+          // Default to centered
+          auto x0 = getAttrOrDefault<double>(x_xy_layout, _Unicode(x0), -(nx - 1) * dx / 2.);
+          auto y0 = getAttrOrDefault<double>(x_xy_layout, _Unicode(x0), -(ny - 1) * dy / 2.);
+          printout(DEBUG, "BarrelCalorimeterImaging", "Stave %s modules starting at x=%f, y=%f", stave_name.c_str(), x0,
+                   y0);
+
+          // Place modules
+          int i_module = 0;
+          for (auto i_x = 0; i_x < nx; ++i_x) {
+            for (auto i_y = 0; i_y < ny; ++i_y) {
+
+              // Create module
               std::string module_name = _toString(i_module, "module%d");
               DetElement  module_element(stave_element, module_name, i_module);
 
               // Place module
-              double x = x_layout.x0() + i_x * x_layout.dx();
-              double z = z_layout.z0() + i_z * z_layout.dz();
+              auto         x = x0 + i_x * dx;
+              auto         y = y0 + i_y * dy;
+              Position     module_pos(x, y, 0);
+              PlacedVolume module_physvol = stave_volume.placeVolume(module_volume, module_pos);
+              module_physvol.addPhysVolID("module", i_module);
+              module_element.setPlacement(module_physvol);
 
-              PlacedVolume module_pv = stave_volume.placeVolume(module_volume, Position(x, 0, z));
-              module_pv.addPhysVolID("module", module);
-              module.setPlacement(module_pv);
+              // Add sensitive volumes
+              for (auto& sensitive_physvol : module_sensitives) {
+                DetElement sensitive_element(module_element, sensitive_physvol.volume().name(), i_module);
+                sensitive_element.setPlacement(sensitive_physvol);
+
+                auto& sensitive_element_params =
+                    DD4hepDetectorHelper::ensureExtension<dd4hep::rec::VariantParameters>(sensitive_element);
+                sensitive_element_params.set<std::string>("axis_definitions", "XYZ");
+              }
 
               i_module++;
             }
           }
-          slice_pos_z += module_thicknesses[module_name].first;
+          slice_pos_z += module_thicknesses[module_str][0] + module_thicknesses[module_str][1];
         }
 
         // Loop over the slices for this stave
@@ -251,9 +312,10 @@ static Ref_t create_detector(Detector& desc, xml_h e, SensitiveDetector sens)
           }
 
           // Place slice
-          PlacedVolume slice_pv = stave_volume.placeVolume(slice_volume, Position(0, 0, slice_pos_z + slice_thick / 2));
-          slice_pv.addPhysVolID("slice", slice_num);
-          slice.setPlacement(slice_pv);
+          PlacedVolume slice_physvol =
+              stave_volume.placeVolume(slice_volume, Position(0, 0, slice_pos_z + slice_thick / 2));
+          slice_physvol.addPhysVolID("slice", slice_num);
+          slice_element.setPlacement(slice_physvol);
 
           // Increment Z position of slice
           slice_pos_z += slice_thick;
@@ -267,9 +329,9 @@ static Ref_t create_detector(Detector& desc, xml_h e, SensitiveDetector sens)
           Position     stave_pos(stave_pos_x, 0, layer_j % 2 == 0 ? +stave_off_z : -stave_off_z);
           RotationY    stave_rot(layer_j % 2 == 0 ? +stave_rot_y : -stave_rot_y);
           Transform3D  stave_tr(stave_rot, stave_pos);
-          PlacedVolume stave_pv = layer_volume.placeVolume(stave_volume, stave_tr);
-          stave_pv.addPhysVolID("stave", stave_num);
-          stave.setPlacement(stave_pv);
+          PlacedVolume stave_physvol = layer_volume.placeVolume(stave_volume, stave_tr);
+          stave_physvol.addPhysVolID("stave", stave_num);
+          stave_element.setPlacement(stave_physvol);
 
           // Increment X position of stave
           stave_pos_x += stave_pitch;
@@ -279,10 +341,10 @@ static Ref_t create_detector(Detector& desc, xml_h e, SensitiveDetector sens)
 
       // Place frame
       if (layer_has_frame) {
-        auto   x_frame         = x_layer.child(_Unicode(frame));
-        double frame_height    = x_frame.attr<double>(_Unicode(height));
-        double frame_thickness = x_frame.attr<double>(_Unicode(thickness));
-        auto   frame_material  = desc.material(x_frame.attr<std::string>(_Unicode(material)));
+        xml_comp_t x_frame         = x_layer.child(_Unicode(frame));
+        double     frame_height    = x_frame.height();
+        double     frame_thickness = x_frame.thickness();
+        auto       frame_material  = desc.material(x_frame.materialStr());
 
         std::string frame1_name   = Form("frame_inner%d", layer_num);
         double      frame1_thick  = frame_thickness;
@@ -308,9 +370,9 @@ static Ref_t create_detector(Detector& desc, xml_h e, SensitiveDetector sens)
       }
 
       // Place layer into sector
-      PlacedVolume layer_pv = sector_volume.placeVolume(layer_volume, layer_pos);
-      layer_pv.addPhysVolID("layer", layer_num);
-      layer.setPlacement(layer_pv);
+      PlacedVolume layer_physvol = sector_volume.placeVolume(layer_volume, layer_pos);
+      layer_physvol.addPhysVolID("layer", layer_num);
+      layer_element.setPlacement(layer_physvol);
 
       // Increment to next layer Z position. Do not add space_between for the last layer
       layer_pos_z += layer_thickness;
@@ -327,10 +389,10 @@ static Ref_t create_detector(Detector& desc, xml_h e, SensitiveDetector sens)
   for (int i = 0; i < nsides; i++, phi -= dphi) { // i is sector number
     // Compute the sector position
     Transform3D  tr(RotationZYX(0, phi, M_PI * 0.5), Translation3D(0, 0, 0));
-    PlacedVolume detector_pv = detector_volume.placeVolume(sector_volume, tr);
-    detector_pv.addPhysVolID("sector", i + 1);
+    PlacedVolume sector_physvol = detector_volume.placeVolume(sector_volume, tr);
+    sector_physvol.addPhysVolID("sector", i + 1);
     DetElement sd = (i == 0) ? sector_element : sector_element.clone(Form("sector%d", i));
-    sd.setPlacement(detector_pv);
+    sd.setPlacement(sector_physvol);
     sdet.add(sd);
   }
 
