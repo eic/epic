@@ -5,10 +5,8 @@
 
     <constant name="ElectronBeamEnergy" value="18*GeV"  />
     <constant name="IonBeamEnergy"      value="275*GeV" />
-
-
-    <constant name="FieldScaleFactor" value="82.0/275.0"  />
-
+    
+    <constant name="FieldScaleFactor" value="275.0/275.0"  /> <!-- only use for light ion beams!!! ASK FF EXPERTS -->
 
     <comment>
        Backwards Fields
