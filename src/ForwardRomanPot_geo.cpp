@@ -43,7 +43,8 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
 
     Box    m_solid(mod_width / 2.0, mod_height / 2.0, mod_total_thickness / 2.0);
     Volume m_volume(m_nam, m_solid, vacuum);
-    m_volume.setVisAttributes(description.visAttributes(x_mod.visStr()));
+    //m_volume.setVisAttributes(description.visAttributes(x_mod.visStr()));
+	m_volume.setVisAttributes(description.visAttributes("AnlGold"));
 
     double comp_z_pos = -mod_total_thickness / 2.0;
     int    n_sensor   = 1;
@@ -55,7 +56,7 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
       double     comp_y  = getAttrOrDefault<double>(c, _Unicode(height), mod_height);
 
       Material c_mat  = description.material(c.materialStr());
-      string   c_name = _toString(c_id, "component%d");
+      string   c_name = _toString(c_id, "RP_component%d");
 
       Box    comp_s1(comp_x / 2.0, comp_y / 2.0, c_thick / 2.0);
       Solid  comp_shape = comp_s1;
