@@ -84,7 +84,7 @@ static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector /* sens *
 					    //(z, x)
   //double orbit_start[2] = {22.0623828, -0.6543372}; //meters!
   //double orbit_end[2] = {38.5445361, -1.4039456}; //meters!
-						  //22.07774534	
+						  //22.07774534
   double orbit_start[2] = {22.07774534, -0.650777226}; //meters
   double orbit_end[2] = {38.54362489, -1.436245325};  //meters
 

@@ -56,7 +56,7 @@ static Ref_t build_magnet(Detector& dtor, xml_h e, SensitiveDetector /* sens */)
   DetElement yoke_de(sdet, "yoke_de", 1);
   yoke_de.setPlacement(yoke_pv);
   yoke_de.setAttributes(dtor, yoke_vol, x_det.regionStr(), x_det.limitsStr(), yoke_vis);
- 
+
   /*
 
   // -- coils
