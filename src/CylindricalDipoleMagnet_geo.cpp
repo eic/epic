@@ -29,11 +29,11 @@ static Ref_t build_magnet(Detector& dtor, xml_h e, SensitiveDetector /* sens */)
   double    dim_z     = dims.z();
   xml_dim_t apperture = x_det.child(_Unicode(apperture));
   double    app_r     = apperture.r();
-  xml_dim_t coil      = x_det.child(_Unicode(coil));
-  double    coil_x    = coil.dx();
-  double    coil_y    = coil.dy();
+  //xml_dim_t coil      = x_det.child(_Unicode(coil));
+  //double    coil_x    = coil.dx();
+  //double    coil_y    = coil.dy();
   Material  iron      = dtor.material("Iron");
-  Material  niobium   = dtor.material("Niobium");
+  //Material  niobium   = dtor.material("Niobium");
 
   // std::cout << det_name << " positioned at z=" << pos.z() << ", x=" << pos.x() << "\n";
 
@@ -43,18 +43,21 @@ static Ref_t build_magnet(Detector& dtor, xml_h e, SensitiveDetector /* sens */)
   const string module_name = "Quad_magnet";
 
   const string yoke_vis = dd4hep::getAttrOrDefault<std::string>(x_det, _Unicode(vis), "FFMagnetVis");
-  const string coil_vis = dd4hep::getAttrOrDefault<std::string>(coil, _Unicode(vis), "FFMagnetCoilVis");
+  //const string coil_vis = dd4hep::getAttrOrDefault<std::string>(coil, _Unicode(vis), "FFMagnetCoilVis");
 
   sdet.setAttributes(dtor, assembly, x_det.regionStr(), x_det.limitsStr(), yoke_vis);
 
   // -- yoke
-  Tube   yoke_tube(app_r + coil_y, dim_r, 0.5 * dim_z);
+  //Tube   yoke_tube(app_r + coil_y, dim_r, 0.5 * dim_z);
+  Tube   yoke_tube(app_r, dim_r, 0.5 * dim_z);
   Volume yoke_vol("yoke_vol", yoke_tube, iron);
   auto   yoke_pv = assembly.placeVolume(yoke_vol);
   yoke_pv.addPhysVolID("element", 1);
   DetElement yoke_de(sdet, "yoke_de", 1);
   yoke_de.setPlacement(yoke_pv);
   yoke_de.setAttributes(dtor, yoke_vol, x_det.regionStr(), x_det.limitsStr(), yoke_vis);
+ 
+  /*
 
   // -- coils
   double offset       = 1.5 * coil_x;
@@ -93,6 +96,8 @@ static Ref_t build_magnet(Detector& dtor, xml_h e, SensitiveDetector /* sens */)
   DetElement coil_de(sdet, "coil_de", 2);
   coil_de.setAttributes(dtor, coil_vol, x_det.regionStr(), x_det.limitsStr(), coil_vis);
   coil_de.setPlacement(coil_pv);
+
+  */
 
   // -- finishing steps
   auto final_pos = Transform3D(Translation3D(pos_x, pos_y, pos_z) * RotationY(pos_theta));
