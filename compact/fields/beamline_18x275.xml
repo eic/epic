@@ -6,7 +6,7 @@
     <constant name="ElectronBeamEnergy" value="18*GeV"  />
     <constant name="IonBeamEnergy"      value="275*GeV" />
 
-    
+
     <constant name="FieldScaleFactor" value="82.0/275.0"  />
 
 

@@ -55,7 +55,7 @@ static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector /* sens *
 
   // enter dimensions of vaccum cylinders here
 
-  //-----b0pf pipe----	
+  //-----b0pf pipe----
   /*
   double radius_b0pf   = 2.9;     // cm
   double length_b0pf   = 120.0;   // 848.2683995; //290.0;    //cm
