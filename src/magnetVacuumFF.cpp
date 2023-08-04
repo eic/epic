@@ -56,22 +56,22 @@ static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector /* sens *
   double y_b0pf = 0.0*dd4hep::cm;
   double z_b0pf = 575.314*dd4hep::cm;
 
-  double radius_b0apf = 4.3*dd4hep::cm;
-  double length_b0apf = 149.452*dd4hep::cm;   //cm -- shorten by 5mm
+  double radius_b0apf = 4.3*dd4hep::cm;   
+  double length_b0apf = 149.352*dd4hep::cm;   //cm -- shorten by 6mm
   double rotation_b0apf = -0.025;  // radians
   double x_b0apf = -19.9248*dd4hep::cm;
   double y_b0apf = 0.0*dd4hep::cm;
   double z_b0apf = 774.957*dd4hep::cm;
 
-  double radius_q1apf = 5.6*dd4hep::cm;
-  double length_q1apf = 185.999*dd4hep::cm;
+  double radius_q1apf = 5.6*dd4hep::cm;   
+  double length_q1apf = 185.699*dd4hep::cm; //cm -- shorten by 3mm  
   double rotation_q1apf = -0.0195;  // radians
   double x_q1apf = -25.0455*dd4hep::cm;
   double y_q1apf = 0.0*dd4hep::cm;
   double z_q1apf = 942.885*dd4hep::cm;
 
-  double radius_q1bpf = 7.8*dd4hep::cm;
-  double length_q1bpf = 200.998*dd4hep::cm;
+  double radius_q1bpf = 7.8*dd4hep::cm;   
+  double length_q1bpf = 200.698*dd4hep::cm; //cm -- shorten by 3mm
   double rotation_q1bpf = -0.015;  // radians
   double x_q1bpf = -30.9852*dd4hep::cm;
   double y_q1bpf = 0.0*dd4hep::cm;
@@ -91,8 +91,8 @@ static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector /* sens *
   double y_b1pf = 0.0*dd4hep::cm;
   double z_b1pf = 1831.59*dd4hep::cm;
 
-  double radius_b1apf = 16.8*dd4hep::cm;
-  double length_b1apf = 200.025*dd4hep::cm;
+  double radius_b1apf = 16.8*dd4hep::cm;   
+  double length_b1apf = 199.725*dd4hep::cm; //cm -- shorten by 3mm  
   double rotation_b1apf = -0.025;  // radians
   double x_b1apf = -60.6686*dd4hep::cm;
   double y_b1apf = 0.0*dd4hep::cm;

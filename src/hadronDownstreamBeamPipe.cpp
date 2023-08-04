@@ -129,7 +129,7 @@ static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector /* sens *
 	  	  exit_radius_inner  = drift_hadron_section_1_inner_r;
 		  entrance_r_outer   = drift_hadron_section_1_outer_r;
 		  exit_radius_outer  = drift_hadron_section_1_outer_r;
-		  length = length - 0.03;
+		  length = length - 0.04;
 	  }
 	  if(iSection == 1){
 		  entrance_r_inner   = drift_hadron_section_3_inner_r_ent;
@@ -138,7 +138,9 @@ static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector /* sens *
 		  exit_radius_outer  = drift_hadron_section_3_outer_r_ex;
 		  drift_hadron_section_3_x = x_center;
 		  drift_hadron_section_3_z = z_center;
-		  drift_hadron_section_3_length = length;
+		  drift_hadron_section_3_length = length - 0.02;
+		  //old numbers commented out for reference - A. Jentsch
+		  //length = length - 0.02;
 		  //x_center = -99.25250431/100.0;
 		  //z_center = 2924.185347/100.0;
 		  //length = drift_hadron_section_3_length/100.0;
@@ -150,9 +152,11 @@ static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector /* sens *
 		  exit_radius_outer  = drift_hadron_section_4_outer_r;
 		  drift_hadron_section_4_x = x_center;
 		  drift_hadron_section_4_z = z_center;
-		  drift_hadron_section_4_length = length;
-		 // x_center =  -123.076799/100.0;
-		 // z_center = 3423.617428/100.0;
+		  drift_hadron_section_4_length = length - 0.02;
+		  length = length - 0.02;
+		  //old numbers commented out for reference - A. Jentsch
+		  // x_center =  -123.076799/100.0;
+		  // z_center = 3423.617428/100.0;
 		  //length = drift_hadron_section_4_length/100.0;
 	  }
 
@@ -198,7 +202,7 @@ static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector /* sens *
 		  exit_radius_inner  = drift_hadron_section_3_inner_r_ex;
 		  x_center = drift_hadron_section_3_x;//-99.25250431/100.0;
 		  z_center = drift_hadron_section_3_z;//2924.185347/100.0;
-		  length = drift_hadron_section_3_length; ///100.0;
+		  length = drift_hadron_section_3_length - 0.02; ///100.0;
 	  }
 	  if(iVac == 6){
 		  entrance_r_inner   = drift_hadron_section_4_inner_r;
