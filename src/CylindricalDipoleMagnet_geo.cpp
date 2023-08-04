@@ -49,7 +49,7 @@ static Ref_t build_magnet(Detector& dtor, xml_h e, SensitiveDetector /* sens */)
   DetElement yoke_de(sdet, "yoke_de", 1);
   yoke_de.setPlacement(yoke_pv);
   yoke_de.setAttributes(dtor, yoke_vol, x_det.regionStr(), x_det.limitsStr(), yoke_vis);
- 
+
 
   // -- finishing steps
   auto final_pos = Transform3D(Translation3D(pos_x, pos_y, pos_z) * RotationY(pos_theta));
