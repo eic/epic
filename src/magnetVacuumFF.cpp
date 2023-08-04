@@ -44,124 +44,61 @@ static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector /* sens *
   string     vis_name = x_det.visStr();
 
   PlacedVolume pv_assembly;
-
-  // xml::Component pos   = x_det.position();
-  // xml::Component rot   = x_det.rotation();
+	
 
   /// hard-code defintion here, then refine and make more general
 
-  // double drift_beam_pipe_angle = -0.047666638;
-  // double zPosShift             = 50.0; //cm
 
-  // enter dimensions of vaccum cylinders here
-
-  //-----b0pf pipe----
-  /*
-  double radius_b0pf   = 2.9;     // cm
-  double length_b0pf   = 120.0;   // 848.2683995; //290.0;    //cm
+  double radius_b0pf = 2.9*dd4hep::cm;  
+  double length_b0pf = 250.028*dd4hep::cm;   //cm -- shorten by 6mm
   double rotation_b0pf = -0.025;  // radians
-  double x_b0pf        = -16.5;   // cm
-  double y_b0pf        = 0.0;     // cm
-  double z_b0pf        = 640.0;   // cm
+  double x_b0pf = -14.8832*dd4hep::cm;   
+  double y_b0pf = 0.0*dd4hep::cm;    
+  double z_b0pf = 575.314*dd4hep::cm;   
 
-  double radius_b0apf   = 4.3;    // cm
-  double length_b0apf   = 60.0;   // cm
-  double rotation_b0apf = -0.025; // radians
-  double x_b0apf        = -21.0480535;
-  double y_b0apf        = 0.0;
-  double z_b0apf        = 819.8946015;
-
-  double radius_q1apf   = 5.6;     // cm
-  double length_q1apf   = 146.0;   // cm
-  double rotation_q1apf = -0.0195; // radians
-  double x_q1apf        = -25.4342857;
-  double y_q1apf        = 0.0;
-  double z_q1apf        = 962.8296939;
-
-  double radius_q1bpf   = 7.8;    // cm
-  double length_q1bpf   = 161.0;  // cm
-  double rotation_q1bpf = -0.015; // radians
-  double x_q1bpf        = -31.2840809;
-  double y_q1bpf        = 0.0;
-  double z_q1bpf        = 1156.243847;
-
-  double radius_q2pf   = 13.15;   // cm
-  double length_q2pf   = 380.0;   // cm
-  double rotation_q2pf = -0.0148; // radians
-  double x_q2pf        = -40.7362293;
-  double y_q2pf        = 0.0;
-  double z_q2pf        = 1466.604545;
-
-  double radius_b1pf   = 13.5;   // cm
-  double length_b1pf   = 300.0;  // cm
-  double rotation_b1pf = -0.034; // radians
-  double x_b1pf        = -50.3165042;
-  double y_b1pf        = 0.0;
-  double z_b1pf        = 1856.486896;
-
-  double radius_b1apf   = 16.8;   // cm
-  double length_b1apf   = 150.0;  // cm
-  double rotation_b1apf = -0.025; // radians
-  double x_b1apf        = -61.2903791;
-  double y_b1apf        = 0.0;
-  double z_b1apf        = 2131.298439;
-	*/
-
-  double radius_b0pf = 2.9;   //cm
-  double length_b0pf = 250.028;   //cm -- shorten by 6mm
-  double rotation_b0pf = -0.025;  // radians
-  double x_b0pf = -14.8832;   // cm
-  double y_b0pf = 0.0;    // cm
-  double z_b0pf = 575.314;   // cm
-
-  double radius_b0apf = 4.3;   //cm
-  double length_b0apf = 149.452;   //cm -- shorten by 5mm
+  double radius_b0apf = 4.3*dd4hep::cm;   
+  double length_b0apf = 149.452*dd4hep::cm;   //cm -- shorten by 5mm
   double rotation_b0apf = -0.025;  // radians
-  double x_b0apf = -19.9248;   // cm
-  double y_b0apf = 0.0;    // cm
-  double z_b0apf = 774.957;   // cm
+  double x_b0apf = -19.9248*dd4hep::cm;   
+  double y_b0apf = 0.0*dd4hep::cm;    
+  double z_b0apf = 774.957*dd4hep::cm;  
 
-  double radius_q1apf = 5.6;   //cm
-  double length_q1apf = 185.999;   //cm
+  double radius_q1apf = 5.6*dd4hep::cm;   
+  double length_q1apf = 185.999*dd4hep::cm;   
   double rotation_q1apf = -0.0195;  // radians
-  double x_q1apf = -25.0455;   // cm
-  double y_q1apf = 0.0;    // cm
-  double z_q1apf = 942.885;   // cm
+  double x_q1apf = -25.0455*dd4hep::cm;   
+  double y_q1apf = 0.0*dd4hep::cm;    
+  double z_q1apf = 942.885*dd4hep::cm;   
 
-  double radius_q1bpf = 7.8;   //cm
-  double length_q1bpf = 200.998;   //cm
+  double radius_q1bpf = 7.8*dd4hep::cm;   
+  double length_q1bpf = 200.998*dd4hep::cm; 
   double rotation_q1bpf = -0.015;  // radians
-  double x_q1bpf = -30.9852;   // cm
-  double y_q1bpf = 0.0;    // cm
-  double z_q1bpf = 1136.31;   // cm
+  double x_q1bpf = -30.9852*dd4hep::cm;   
+  double y_q1bpf = 0.0*dd4hep::cm;   
+  double z_q1bpf = 1136.31*dd4hep::cm; 
 
-  double radius_q2pf = 13.15;   //cm
-  double length_q2pf = 419.495;   //cm -- shorten by 5mm
+  double radius_q2pf = 13.15*dd4hep::cm;  
+  double length_q2pf = 419.495*dd4hep::cm;   //cm -- shorten by 5mm
   double rotation_q2pf = -0.0148;  // radians
-  double x_q2pf = -40.4423;   // cm
-  double y_q2pf = 0.0;    // cm
-  double z_q2pf = 1446.73;   // cm
+  double x_q2pf = -40.4423*dd4hep::cm;   
+  double y_q2pf = 0.0*dd4hep::cm;    
+  double z_q2pf = 1446.73*dd4hep::cm;   
 
-  double radius_b1pf = 13.5;   //cm
-  double length_b1pf = 349.718;   //cm -- shorten by 3mm
+  double radius_b1pf = 13.5*dd4hep::cm;   
+  double length_b1pf = 349.718*dd4hep::cm;   //cm -- shorten by 3mm
   double rotation_b1pf = -0.034;  // radians
-  double x_b1pf = -49.4721;   // cm
-  double y_b1pf = 0.0;    // cm
-  double z_b1pf = 1831.59;   // cm
+  double x_b1pf = -49.4721*dd4hep::cm;  
+  double y_b1pf = 0.0*dd4hep::cm;    
+  double z_b1pf = 1831.59*dd4hep::cm;   
 
-  double radius_b1apf = 16.8;   //cm
-  double length_b1apf = 200.025;   //cm
+  double radius_b1apf = 16.8*dd4hep::cm;   
+  double length_b1apf = 200.025*dd4hep::cm;   
   double rotation_b1apf = -0.025;  // radians
-  double x_b1apf = -60.6686;   // cm
-  double y_b1apf = 0.0;    // cm
-  double z_b1apf = 2106.41;   // cm
+  double x_b1apf = -60.6686*dd4hep::cm;   
+  double y_b1apf = 0.0*dd4hep::cm;   
+  double z_b1apf = 2106.41*dd4hep::cm;
 
-  //double radius_drift_pipe_1 = 19.0;   //cm
-  //double length_drift_pipe_1 = 200.025;   //cm
-  //double rotation_drift_pipe_1 = -0.047;  // radians
-  //double x_drift_pipe_1 = -60.6686;   // cm
-  //double y_drift_pipe_1 = 0.0;    // cm
-  //double z_drift_pipe_1 = 2106.41;   // cm
+ 
 
   // define shapes here
 
@@ -237,8 +174,6 @@ static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector /* sens *
   DetElement tube_de_7(sdet, "sector7_de", 1);
   tube_de_7.setPlacement(pv_b1apf_vacuum);
 
-  // Transform3D posAndRot(RotationZYX(rot.z(), rot.y(), rot.x()), Position(pos.x(), pos.y(), pos.z()));
-  // Transform3D posAndRot(RotationZYX(rot.z(), rot.y(), rot.x()), Position(x_position, y_position, z_position));
 
   pv_assembly = det.pickMotherVolume(sdet).placeVolume(assembly); //, posAndRot);
   pv_assembly.addPhysVolID("system", x_det.id()).addPhysVolID("barrel", 1);

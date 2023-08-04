@@ -43,8 +43,9 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
 
     Box    m_solid(mod_width / 2.0, mod_height / 2.0, mod_total_thickness / 2.0);
     Volume m_volume(m_nam, m_solid, vacuum);
+    //set to AnlGold temporarily for future RP troubleshooting
     //m_volume.setVisAttributes(description.visAttributes(x_mod.visStr()));
-	m_volume.setVisAttributes(description.visAttributes("AnlGold"));
+    m_volume.setVisAttributes(description.visAttributes("AnlGold"));
 
     double comp_z_pos = -mod_total_thickness / 2.0;
     int    n_sensor   = 1;
