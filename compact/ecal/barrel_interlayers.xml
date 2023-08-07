@@ -139,6 +139,7 @@
       </layer>
 
       <layer repeat="2" vis="EcalBarrelLayerVis"
+        space_between="EcalBarrel_ScFiLayerThickness + EcalBarrel_SpaceBetween"
         space_before="EcalBarrel_ScFiLayerThickness + EcalBarrel_SpaceBetween">
         <frame material="CarbonFiber" fill="Air" thickness="EcalBarrel_CarbonThickness" height="EcalBarrel_ImagingLayerThickness" vis="EcalBarrelSliceVis"/>
         <slice material="Silicon" thickness="EcalBarrel_SiliconThickness" sensitive="yes" limits="cal_limits" vis="EcalBarrelSliceVis"/>
