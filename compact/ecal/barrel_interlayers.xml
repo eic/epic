@@ -72,7 +72,7 @@
     <constant name="EcalBarrel_SectorRepeat"         value="EcalBarrelSectorsN"/>
     <constant name="EcalBarrel_AvailThickness"       value="EcalBarrelRegion_thickness - EcalBarrel_Support_thickness"/>
 
-    <constant name="EcalBarrel_ImagingLayerThickness" value="2.0*cm"/>
+    <constant name="EcalBarrel_ImagingLayerThickness" value="1.5*cm"/>
 
     <constant name="EcalBarrel_ImagingLayerThickness_WithoutFrame"
       value="EcalBarrel_ImagingLayerThickness
