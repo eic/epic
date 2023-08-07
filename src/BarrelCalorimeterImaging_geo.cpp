@@ -355,7 +355,7 @@ static Ref_t create_detector(Detector& desc, xml_h e, SensitiveDetector sens)
         double    frame1_trd_z  = frame1_thick / 2.;
         Trapezoid frame1_shape(frame1_trd_x1, frame1_trd_x2, frame1_trd_y1, frame1_trd_y2, frame1_trd_z);
         Volume    frame1_volume(frame1_name, frame1_shape, frame_material);
-        layer_volume.placeVolume(frame1_volume, Position(0, 0, -frame_height / 2.0 - frame_thickness / 2.0));
+        layer_volume.placeVolume(frame1_volume, Position(0, 0, -frame_height / 2.0 + frame_thickness / 2.0));
 
         std::string frame2_name   = Form("frame_outer%d", layer_num);
         double      frame2_thick  = frame_thickness;
@@ -366,7 +366,7 @@ static Ref_t create_detector(Detector& desc, xml_h e, SensitiveDetector sens)
         double    frame2_trd_z  = frame2_thick / 2.;
         Trapezoid frame2_shape(frame2_trd_x1, frame2_trd_x2, frame2_trd_y1, frame2_trd_y2, frame2_trd_z);
         Volume    frame2_volume(frame2_name, frame2_shape, frame_material);
-        layer_volume.placeVolume(frame2_volume, Position(0, 0, +frame_height / 2.0 + frame_thickness / 2.0));
+        layer_volume.placeVolume(frame2_volume, Position(0, 0, +frame_height / 2.0 - frame_thickness / 2.0));
       }
 
       // Place layer into sector
