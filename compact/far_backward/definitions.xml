@@ -247,24 +247,22 @@
     <constant name="LumiWall_DZ"          value="20*cm"/>
     <constant name="LumiWall_Z"           value="-55*m"/>
 
-    <!-- Lumi sweeper dipole Magnet -->
+    <!-- Lumi dipole magnets (sweeper and analyzer) -->
+    <constant name="LumiMag_DZ"           value="1.200*m"/>
     <constant name="LumiSweepMag_X"       value="0*m"/>
     <constant name="LumiSweepMag_Y"       value="0*m"/>
     <constant name="LumiSweepMag_Z"       value="-62.5*m"/>
-    <constant name="LumiSweepMag_DZ"      value="1*m"/>
 
-    <!-- Lumi spectrometer dipole Magnet -->
-    <constant name="LumiAnalyzerMag_X"        value="0*m"/>
-    <constant name="LumiAnalyzerMag_Y"        value="0*m"/>
-    <constant name="LumiAnalyzerMag_Z"        value="-4*m + LumiSweepMag_Z"/>
-    <constant name="LumiAnalyzerMag_DZ"       value="LumiSweepMag_DZ"/>
+    <constant name="LumiAnalyzerMag_X"    value="0*m"/>
+    <constant name="LumiAnalyzerMag_Y"    value="0*m"/>
+    <constant name="LumiAnalyzerMag_Z"    value="-4*m + LumiSweepMag_Z"/>
 
     <!-- Lumi photon chamber -->
-    <constant name="LumiChamber_Z1"      value="LumiSweepMag_Z + LumiSweepMag_DZ/2.0"/>
-    <constant name="LumiChamber_Z2"      value="LumiAnalyzerMag_Z - LumiAnalyzerMag_DZ/2.0"/>
-    <constant name="LumiChamber_DR"      value="2*mm"/>
-    <constant name="LumiChamber_cap1_DZ" value="1*cm"/>
-    <constant name="LumiChamber_cap2_DZ" value="1*cm"/>
+    <constant name="LumiChamber_Z1"       value="LumiSweepMag_Z + LumiMag_DZ/2.0"/>
+    <constant name="LumiChamber_Z2"       value="LumiAnalyzerMag_Z - LumiMag_DZ/2.0"/>
+    <constant name="LumiChamber_DR"       value="2*mm"/>
+    <constant name="LumiChamber_cap1_DZ"  value="1*cm"/>
+    <constant name="LumiChamber_cap2_DZ"  value="1*cm"/>
 
     <!-- Lumi converter -->
     <constant name="LumiConverter_Z"      value="(LumiAnalyzerMag_Z + LumiSweepMag_Z)/2.0"/>
@@ -279,7 +277,7 @@
     <constant name="LumiSpecCAL_Y"        value="LumiSpecCAL_FiveSigma + LumiSpecCAL_DXY/2.0"/>
 
     <!-- Lumi spectrometer trackers -->
-    <constant name="LumiSpecTracker_pixelSize"  value="0.050*mm"/>
+    <constant name="LumiSpecTracker_pixelSize"  value="0.05*mm"/>
     <constant name="LumiSpecTracker_DXY"  value="0.2*m"/>
     <constant name="LumiSpecTracker_Z1"   value="LumiSpecCAL_Z + LumiSpecCALTower_DZ/2. + 21*cm "/>
     <constant name="LumiSpecTracker_Z2"   value="LumiSpecCAL_Z + LumiSpecCALTower_DZ/2. + 11*cm"/>

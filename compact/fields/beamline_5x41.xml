@@ -24,9 +24,8 @@
     <constant name="B2BeR_B"        value="0.0132222*tesla/GeV*ElectronBeamEnergy"      />
 
     <!-- Luminosity System -->
-    <constant name="LumiSweepMag_B" value="1*tesla"/> <!-- Currently left static before tuning of acceptance -->
-    <constant name="LumiAnalyzerMag_B"  value="1*tesla"/>
-
+    <constant name="LumiSweepMag_B"     value="1/1.2*tesla"/>
+    <constant name="LumiAnalyzerMag_B"  value="1/1.2*tesla"/>
 
     <comment>
        Forward Fields
