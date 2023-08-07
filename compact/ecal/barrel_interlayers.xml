@@ -50,6 +50,7 @@
 
     <constant name="EcalBarrel_Stave_width"          value="EcalBarrel_AstroPix_width + 2. * EcalBarrel_AstroPix_margin"/>
     <constant name="EcalBarrel_Stave_length"         value="EcalBarrel_Calorimeter_length"/>
+    <constant name="EcalBarrel_Stave_thickness"      value="EcalBarrel_AstroPix_thickness + EcalBarrel_CarbonThickness"/>
     <constant name="EcalBarrel_StaveTilt_angle"      value="10*degree"/>
     <constant name="EcalBarrel_Stave_ModuleRepeat"   value="floor(EcalBarrel_Calorimeter_length / (EcalBarrel_AstroPix_length + EcalBarrel_AstroPix_margin))"/>
 
