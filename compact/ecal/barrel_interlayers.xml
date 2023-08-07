@@ -182,7 +182,7 @@
           outer_r="EcalBarrel_rmin + EcalBarrel_Stave_thickness"
           z_length="EcalBarrel_Calorimeter_length"/>
         <frame material="CarbonFiber" fill="Air" thickness="EcalBarrel_CarbonThickness" height="EcalBarrel_ImagingLayerThickness / 2.0" vis="EcalBarrelSliceVis"/>
-        <stave repeat="5"
+        <stave repeat="6"
                width="EcalBarrel_Stave_width"
                length="EcalBarrel_Stave_length"
                thickness="EcalBarrel_Stave_thickness"
