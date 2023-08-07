@@ -184,6 +184,7 @@
                width="EcalBarrel_Stave_width"
                length="EcalBarrel_Stave_length"
                thickness="EcalBarrel_ImagingFirstLayerThickness"
+               angle="EcalBarrel_StaveTilt_angle"
                module="AstroPix_Module_FirstLayer">
           <xy_layout
             dx="EcalBarrel_AstroPix_width + EcalBarrel_AstroPix_margin"
