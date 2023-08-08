@@ -133,7 +133,7 @@
       <dimensions numsides="EcalBarrel_SectorRepeat"
         rmin="EcalBarrel_rmin"
         z="EcalBarrel_Calorimeter_length"/>
-      <sectors vis="EcalBarrelStaveVis"/>
+      <sectors vis="EcalBarrelSectorVis"/>
 
       <module name="AstroPix_Module_FirstLayer"
               vis="EcalBarrelLayerVis">
@@ -260,7 +260,7 @@
       <dimensions numsides="EcalBarrel_SectorRepeat"
         rmin="EcalBarrel_rmin"
         z="EcalBarrel_Calorimeter_length"/>
-      <sectors vis="EcalBarrelStaveVis"/>
+      <sectors vis="EcalBarrelSectorVis"/>
       <layer repeat="EcalBarrelImagingLayers_num-1" vis="EcalBarrelLayerVis"
        space_between="EcalBarrel_ImagingLayerThickness + EcalBarrel_SpaceBetween"
        space_before="EcalBarrel_ImagingLayerThickness + EcalBarrel_SpaceBetween/2.">
