@@ -187,7 +187,8 @@
                length="EcalBarrel_Stave_length"
                thickness="EcalBarrel_Stave_thickness"
                angle="EcalBarrel_StaveTilt_angle"
-               module="AstroPix_Module">
+               module="AstroPix_Module"
+               vis="EcalBarrelStaveVis">
           <xy_layout
             dx="EcalBarrel_AstroPix_width + EcalBarrel_AstroPix_margin"
             dy="EcalBarrel_AstroPix_length + EcalBarrel_AstroPix_margin"
@@ -211,7 +212,8 @@
                length="EcalBarrel_Stave_length"
                thickness="EcalBarrel_AstroPix_thickness"
                angle="-EcalBarrel_StaveTilt_angle"
-               module="AstroPix_Module">
+               module="AstroPix_Module"
+               vis="EcalBarrelStaveVis">
           <xy_layout
             dx="EcalBarrel_AstroPix_width + EcalBarrel_AstroPix_margin"
             dy="EcalBarrel_AstroPix_length + EcalBarrel_AstroPix_margin"
@@ -235,7 +237,8 @@
                length="EcalBarrel_Stave_length"
                thickness="EcalBarrel_AstroPix_thickness"
                angle="EcalBarrel_StaveTilt_angle"
-               module="AstroPix_Module">
+               module="AstroPix_Module"
+               vis="EcalBarrelStaveVis">
           <xy_layout
             dx="EcalBarrel_AstroPix_width + EcalBarrel_AstroPix_margin"
             dy="EcalBarrel_AstroPix_length + EcalBarrel_AstroPix_margin"
