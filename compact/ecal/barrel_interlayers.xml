@@ -136,13 +136,13 @@
       <sectors vis="EcalBarrelSectorVis"/>
 
       <module name="AstroPix_Module_FirstLayer"
-              vis="EcalBarrelLayerVis">
+              vis="EcalBarrelModuleVis">
         <module_component name="AstroPix_Chip"
                           material="Silicon"
                           width="EcalBarrel_AstroPix_width"
                           length="EcalBarrel_AstroPix_length"
                           thickness="EcalBarrel_AstroPix_thickness"
-                          vis="EcalBarrelLayerVis">
+                          vis="EcalBarrelModuleVis">
           <slice material="Silicon" thickness="EcalBarrel_SiliconThickness"     vis="EcalBarrelSliceVis" sensitive="yes" limits="cal_limits"/>
           <slice material="Silicon" thickness="EcalBarrel_ElectronicsThickness" vis="EcalBarrelSliceVis"/>
           <slice material="Copper" thickness="EcalBarrel_CopperThickness"       vis="EcalBarrelSliceVis"/>
@@ -159,13 +159,13 @@
       </module>
 
       <module name="AstroPix_Module"
-              vis="EcalBarrelLayerVis">
+              vis="EcalBarrelModuleVis">
         <module_component name="AstroPix_Chip"
                           material="Silicon"
                           width="EcalBarrel_AstroPix_width"
                           length="EcalBarrel_AstroPix_length"
                           thickness="EcalBarrel_AstroPix_thickness"
-                          vis="EcalBarrelLayerVis">
+                          vis="EcalBarrelModuleVis">
           <slice material="Silicon" thickness="EcalBarrel_SiliconThickness"     vis="EcalBarrelSliceVis" sensitive="yes" limits="cal_limits"/>
           <slice material="Silicon" thickness="EcalBarrel_ElectronicsThickness" vis="EcalBarrelSliceVis"/>
           <slice material="Copper" thickness="EcalBarrel_CopperThickness"       vis="EcalBarrelSliceVis"/>
