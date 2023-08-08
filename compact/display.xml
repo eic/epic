@@ -64,10 +64,11 @@
     </comment>
     <vis name="EcalVis"                 ref="AnlGold"   showDaughters="true"  visible="true"/>
     <vis name="EcalBarrelVis"           ref="AnlGold"   showDaughters="false" visible="true"/>
+    <vis name="EcalBarrelSectorVis"     ref="AnlGold"   showDaughters="true"  visible="true"/>
     <vis name="EcalBarrelStaveVis"      ref="AnlOrange" showDaughters="false" visible="true" />
-    <vis name="EcalBarrelEnvelopeVis"   ref="AnlGold" showDaughters="false" visible="true" />
+    <vis name="EcalBarrelEnvelopeVis"   ref="AnlGold"   showDaughters="false" visible="true" />
     <vis name="EcalBarrelLayerVis"      ref="AnlGold"   showDaughters="true"  visible="true"/>
-    <vis name="EcalBarrelModuleVis"     ref="AnlRed"    showDaughters="true"  visible="true" />
+    <vis name="EcalBarrelModuleVis"     ref="AnlRed"    showDaughters="false" visible="true" />
     <vis name="EcalBarrelSliceVis"      ref="AnlGray"   showDaughters="false" visible="true"/>
     <vis name="EcalBarrelFiberLayerVis" ref="AnlGold"   showDaughters="false" visible="true" />
     <vis name="EcalBarrelSupportVis"    ref="AnlLightGray" showDaughters="false" visible="true"/>
