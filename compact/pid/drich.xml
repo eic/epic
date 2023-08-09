@@ -11,10 +11,6 @@
 <constant name="DRICH_rmin0"              value="DRICH_zmin * ForwardRICHRegion_tan1"/>  <!-- bore radius at dRICH entrance -->
 <constant name="DRICH_rmin1"              value="DRICH_zmax * ForwardRICHRegion_tan2"/>  <!-- bore radius at dRICH exit -->
 <constant name="DRICH_bore_slope"         value="(DRICH_rmin1 - DRICH_rmin0) / DRICH_length"/> <!-- slope of bore radius -->
-<!--
-  NOTE: these aluminum thicknesses were increased for material budget studies;
-  consider reverting them before PR review
--->
 <constant name="DRICH_wall_thickness"     value="1.0*cm"/>  <!-- thickness of radial walls -->
 <constant name="DRICH_window_thickness"   value="0.3*cm"/>  <!-- thickness of entrance and exit walls -->
 <constant name="DRICH_num_sectors"        value="6"/>  <!-- number of azimuthal sectors -->
