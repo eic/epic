@@ -101,11 +101,11 @@ The unused IDs below are saved for future use.
     <constant name="TrackerSubAssembly_4_ID"      value="44"/>
     <constant name="TrackerSubAssembly_5_ID"      value="45"/>
     <constant name="TrackerSubAssembly_6_ID"      value="46"/>
+    <constant name="TrackerSubAssembly_7_ID"      value="47"/>
+    <constant name="TrackerSubAssembly_8_ID"      value="48"/>
+    <constant name="TrackerSubAssembly_9_ID"      value="49"/>
 
-    <constant name="TrackerCompositeBarrel_0_ID"  value="47"/>
-    <constant name="TrackerCompositeBarrel_1_ID"  value="48"/>
-    <constant name="TrackerCompositeBarrel_2_ID"  value="49"/>
-    <constant name="TrackerCompositeBarrel_3_ID"  value="50"/>
+    <constant name="TrackerCompositeBarrel_0_ID"  value="50"/>
     <constant name="TrackerCompositeEndcapN_0_ID" value="51"/>
     <constant name="TrackerCompositeEndcapN_1_ID" value="52"/>
     <constant name="TrackerCompositeEndcapN_2_ID" value="53"/>
@@ -140,8 +140,8 @@ The unused IDs below are saved for future use.
     <constant name="TrackerEndcapP_4_ID"          value="81"/>
     <constant name="TrackerEndcapP_5_ID"          value="82"/>
     <constant name="TrackerEndcapP_6_ID"          value="83"/>
-    <constant name="TrackerEndcapP_7_ID"          value="84"/>
-    <constant name="TrackerEndcapP_8_ID"          value="85"/>
+    <constant name="TrackerSupport_0_ID"          value="84"/>
+    <constant name="TrackerSupport_1_ID"          value="85"/>
     <constant name="MPGDDIRC_0_ID"                value="86"/>
 
     <documentation>
@@ -425,7 +425,7 @@ Examples:
 
     <constant name="CentralTrackingRegion_rmax"   value="700.0*mm" />
     <constant name="CentralTrackingRegionP_zmax"  value="1800.0*mm" />
-    <constant name="CentralTrackingRegionN_zmax"  value="1186.0*mm" />
+    <constant name="CentralTrackingRegionN_zmax"  value="1236.0*mm" />
     <constant name="CentralTrackingRegion_length" value="CentralTrackingRegionP_zmax + CentralTrackingRegionN_zmax" />
     <comment>
       tan(theta) to determine rmin in the outer tracking region (due to tapered beampipe)
@@ -442,26 +442,18 @@ Examples:
     <constant name="ForwardPIDRegion_zmin"        value="CentralTrackingRegionP_zmax" />
     <constant name="ForwardPIDRegion_length"      value="135.0*cm" />
     <constant name="ForwardPIDRegion_rmax"        value="185.0*cm" />
-
-    <comment> Forward TOF region currenlty empty for future upgrades </comment>
-    <constant name="ForwardTOFRegion_zmin"        value="ForwardPIDRegion_zmin" />
     <constant name="ForwardTOFRegion_length"      value="15.0*cm" />
-    <constant name="ForwardTOFRegion_tan"         value="CentralTrackingRegionP_tan" />
-    <constant name="ForwardTOFRegion_minR"            value="8*cm" />
-    <constant name="ForwardTOFRegion_maxR"            value="67*cm" />
-    <constant name="ForwardTOF_xOffset"         value="-2.75*cm" />
-    <constant name="ForwardTOF_det_height"      value="2.0*cm" />
 
     <comment> Forward RICH region </comment>
-    <constant name="ForwardRICHRegion_zmin"       value="ForwardTOFRegion_zmin + ForwardTOFRegion_length" />
+    <constant name="ForwardRICHRegion_zmin"       value="ForwardPIDRegion_zmin + ForwardTOFRegion_length" />
     <constant name="ForwardRICHRegion_length"     value="ForwardPIDRegion_length - ForwardTOFRegion_length" />
-    <comment> tangent of the opening angle at the front and back of the RICH </comment>
+     <comment> Tangent of the opening angle at the front and back of the RICH </comment>
     <constant name="ForwardRICHRegion_tan1"        value="CentralTrackingRegionP_tan * 0.88" />
     <constant name="ForwardRICHRegion_tan2"        value="Eta3_6_tan * 0.89" />
 
-    <constant name="BackwardPIDRegion_length"     value="54.1*cm" />
+    <constant name="BackwardPIDRegion_length"     value="49.1*cm" />
     <constant name="BackwardPIDRegion_zmin"       value="CentralTrackingRegionN_zmax" />
-    <constant name="BackwardPIDRegion_zmax"       value="BackwardPIDRegion_zmin+BackwardPIDRegion_length" />
+    <constant name="BackwardPIDRegion_zmax"       value="BackwardPIDRegion_zmin + BackwardPIDRegion_length" />
     <constant name="BackwardPIDRegion_rmax"       value="63.0*cm" /> <!-- FIXME hardcoded, was CentralTrackingRegion_rmax -->
     <constant name="BackwardPIDRegion_tan"        value="CentralTrackingRegionN_tan * 0.92" />
 
@@ -515,7 +507,7 @@ Service gaps in FW direction (before endcapP ECAL) and BW direction (before endc
   <documentation level="3">
 ## Calorimeter Parameters
   </documentation>
-    <constant name="EcalBarrelStavesN"              value="48"/>
+    <constant name="EcalBarrelSectorsN"             value="48"/>
     <constant name="EcalEndcapP_zmin"               value="ForwardServiceGap_zmax" />
     <constant name="EcalEndcapP_length"             value="30*cm" />
     <constant name="EcalEndcapP_zmax"               value="EcalEndcapP_zmin + EcalEndcapP_length"/>

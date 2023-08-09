@@ -11,7 +11,8 @@
     <detector
     name="Pipe_Q1eR_to_B2BeR"
     type="BeamPipeChain"
-    wall_thickness="2*mm">
+    wall_thickness="2*mm"
+    vis="BeamPipeVis">
       <pipe id="0" name="Pipe_to_Q1eR"
         xcenter="0" zcenter="(Center_Beampipe_End + Q1eR_CenterPosition+Q1eR_Length/2)/2"
         length="Center_Beampipe_End - (Q1eR_CenterPosition+Q1eR_Length/2)" theta="0"

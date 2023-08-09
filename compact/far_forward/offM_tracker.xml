@@ -32,7 +32,7 @@
       reflect="false">
       <position x="-780.0*mm" y="0" z="22500*mm"/>
       <rotation x="0*rad" y="-0.047*rad" z="0*rad"/>
-      <module name="Module1" vis="FFTrackerShieldedModuleVis">
+      <module name="OMD1Mod1" vis="FFTrackerShieldedModuleVis">
         <shape x="10.0*cm" y="20.0*cm"/>
         <comment> back-to-front </comment>
         <module_component material="Aluminum"     vis="FFTrackerShieldingVis" thickness="ForwardOffMTracker_RFShieldThickness"/>
@@ -42,7 +42,7 @@
         <module_component material="Vacuum"       vis="InvisibleNoDaughters"  thickness="ForwardOffMTracker_ShieldingAirLayerThickness"/>
         <module_component material="Aluminum"     vis="FFTrackerShieldingVis" thickness="ForwardOffMTracker_RFShieldThickness"/>
       </module>
-      <layer id="1" module="Module1">
+      <layer id="1" module="OMD1Mod1">
         <envelope vis="FFTrackerLayerVis" x="10.0*cm" y="20.0*cm" length="1.0*cm"
           zstart="0.0/2.0" />
       </layer>
@@ -57,7 +57,7 @@
       reflect="false">
       <position x="-780.0*mm" y="0" z="22520*mm"/>
       <rotation x="0*rad" y="-0.047*rad" z="0*rad"/>
-      <module name="Module1" vis="FFTrackerShieldedModuleVis">
+      <module name="OMD2Mod1" vis="FFTrackerShieldedModuleVis">
         <shape x="10.0*cm" y="20.0*cm"/>
         <module_component material="Aluminum"     vis="FFTrackerShieldingVis" thickness="ForwardOffMTracker_RFShieldThickness"/>
         <module_component material="Copper"       vis="FFTrackerServiceVis"   thickness="ForwardOffMTracker_ThermalStripThickness" />
@@ -66,7 +66,7 @@
         <module_component material="Vacuum"       vis="InvisibleNoDaughters"  thickness="ForwardOffMTracker_ShieldingAirLayerThickness"/>
         <module_component material="Aluminum"     vis="FFTrackerShieldingVis" thickness="ForwardOffMTracker_RFShieldThickness"/>
       </module>
-      <layer id="1" module="Module1">
+      <layer id="1" module="OMD2Mod1">
          <envelope vis="FFTrackerLayerVis" x="10.0*cm" y="20.0*cm" length="3.2*mm"
            zstart="0.0/2.0" />
       </layer>
@@ -82,7 +82,7 @@
       reflect="false">
       <position x="-870.0*mm" y="0" z="24500*mm"/>
       <rotation x="0*rad" y="-0.047*rad" z="0*rad"/>
-      <module name="Module1" vis="FFTrackerShieldedModuleVis">
+      <module name="OMD3Mod1" vis="FFTrackerShieldedModuleVis">
         <shape x="10.0*cm" y="20.0*cm"/>
         <module_component material="Aluminum"     vis="FFTrackerShieldingVis" thickness="ForwardOffMTracker_RFShieldThickness"/>
         <module_component material="Copper"       vis="FFTrackerServiceVis"   thickness="ForwardOffMTracker_ThermalStripThickness" />
@@ -91,7 +91,7 @@
         <module_component material="Vacuum"       vis="InvisibleNoDaughters"  thickness="ForwardOffMTracker_ShieldingAirLayerThickness"/>
         <module_component material="Aluminum"     vis="FFTrackerShieldingVis" thickness="ForwardOffMTracker_RFShieldThickness"/>
       </module>
-      <layer id="1" module="Module1">
+      <layer id="1" module="OMD3Mod1">
          <envelope vis="FFTrackerLayerVis" x="10.0*cm" y="20.0*cm" length="3.2*mm"
           zstart="0.0/2.0" />
       </layer>
@@ -107,7 +107,7 @@
       reflect="false">
       <position x="-870.0*mm" y="0" z="24520*mm"/>
       <rotation x="0*rad" y="-0.047*rad" z="0*rad"/>
-      <module name="Module1" vis="FFTrackerShieldedModuleVis">
+      <module name="OMD4Mod1" vis="FFTrackerShieldedModuleVis">
         <shape x="10.0*cm" y="20.0*cm"/>
         <module_component material="Aluminum"     vis="FFTrackerShieldingVis" thickness="ForwardOffMTracker_RFShieldThickness"/>
         <module_component material="Copper"       vis="FFTrackerServiceVis"   thickness="ForwardOffMTracker_ThermalStripThickness" />
@@ -116,7 +116,7 @@
         <module_component material="Vacuum"       vis="InvisibleNoDaughters"  thickness="ForwardOffMTracker_ShieldingAirLayerThickness"/>
         <module_component material="Aluminum"     vis="FFTrackerShieldingVis" thickness="ForwardOffMTracker_RFShieldThickness"/>
       </module>
-      <layer id="1" module="Module1">
+      <layer id="1" module="OMD4Mod1">
          <envelope vis="FFTrackerLayerVis" x="10.0*cm" y="20.0*cm" length="3.2*mm"
           zstart="0.0/2.0" />
       </layer>
