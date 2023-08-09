@@ -21,9 +21,9 @@
 <!-- tank geometry: cylinder, holding the majority of detector components -->
 <constant name="DRICH_rmax2"              value="ForwardPIDRegion_rmax"/>  <!-- cylinder radius -->
 <!-- sensor boxes: extrusions of the tank, to hold the sensors and their services -->
-<constant name="DRICH_sensorbox_length"   value="10.0*cm"/>
-<constant name="DRICH_sensorbox_rmin"     value="DRICH_rmax1 + 2*cm"/>
-<constant name="DRICH_sensorbox_rmax"     value="DRICH_rmax2"/>
+<constant name="DRICH_sensorbox_length"   value="10.0*cm"/>  <!-- z-length of the extrusion -->
+<constant name="DRICH_sensorbox_rmin"     value="DRICH_rmax1 + 2*cm"/>  <!-- lower radial limit of the extrusion -->
+<constant name="DRICH_sensorbox_rmax"     value="DRICH_rmax2"/>  <!-- upper radial limit of the extrusion -->
 <!-- aerogel+filter geometry -->
 <constant name="DRICH_aerogel_thickness"  value="4.0*cm"/>  <!-- aerogel thickness -->
 <constant name="DRICH_airgap_thickness"   value="0.01*mm"/> <!-- air gap between aerogel and filter -->
@@ -197,6 +197,7 @@
   - Front Services: cooling, heat exchange, etc.
     - so far just a box with `side` and `thickness` dimensions
     - includes a unique `name`, and `material` and `vis`
+    - if more than one is defined, they will be layered, in order
   - Board: a circuit board (front end board, readout board, etc.)
     - dimensions:
       - `width`: board side length, paralell to PSS
@@ -206,6 +207,7 @@
   - Back Services: sockets, cooling, etc.
     - so far just a box with `side` and `thickness` dimensions
     - includes a unique `name`, and `material` and `vis`
+    - if more than one is defined, they will be layered, in order
 </documentation>
 <pss
   material="AirOptical"
