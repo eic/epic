@@ -6,6 +6,8 @@
     <constant name="ElectronBeamEnergy" value="5*GeV"  />
     <constant name="IonBeamEnergy"      value="41*GeV" />
 
+    <constant name="FieldScaleFactor" value="1.0"  /> <!-- only use for 275 GeV magnet config ::: ASK FF EXPERTS -->
+
     <comment>
        Backwards Fields
        Values taken from: https://indico.bnl.gov/event/10974/contributions/51260/
