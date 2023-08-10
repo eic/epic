@@ -46,10 +46,10 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector /
   ////////////
   // G4 solids
   // main tube
-  Tube tube( rmin, rmin + pipe_DR, (posZ1 - posZ2)/2.0, 0, 2*TMath::Pi() );
+  Tube tube( rmin, rmin + pipe_DR, fabs(posZ1 - posZ2)/2.0, 0, 2*TMath::Pi() );
   // vacuum regions inside tube
-  Tube vac1( 0, rmin, (posZ1 - posZconv - conv_DZ/2.0)/2.0, 0, 2*TMath::Pi() );
-  Tube vac2( 0, rmin, (posZconv - posZ2 - conv_DZ/2.0)/2.0, 0, 2*TMath::Pi() );
+  Tube vac1( 0, rmin, fabs(posZ1 - posZconv - conv_DZ/2.0)/2.0, 0, 2*TMath::Pi() );
+  Tube vac2( 0, rmin, fabs(posZconv - posZ2 - conv_DZ/2.0)/2.0, 0, 2*TMath::Pi() );
 
   // end cap closest to IP
   Tube cap1( 0, rmin + pipe_DR, cap1_DZ/2.0, 0, 2*TMath::Pi() );
@@ -87,9 +87,9 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector /
   assembly.placeVolume(
           vol_conv, Transform3D( RotationZYX(0, 0, 0), Position(0, 0, posZconv)) );
   assembly.placeVolume(
-          vol_vac1, Transform3D( RotationZYX(0, 0, 0), Position(0, 0, (posZ1 + posZconv)/2.)) );
+          vol_vac1, Transform3D( RotationZYX(0, 0, 0), Position(0, 0, (posZ1 + (posZconv+conv_DZ/2.0))/2.)) );
   assembly.placeVolume(
-          vol_vac2, Transform3D( RotationZYX(0, 0, 0), Position(0, 0, (posZ2 + posZconv)/2.)) );
+          vol_vac2, Transform3D( RotationZYX(0, 0, 0), Position(0, 0, (posZ2 + (posZconv-conv_DZ/2.0))/2.)) );
 
   // Place assembly into mother volume.  Assembly is centered at origin
   PlacedVolume phv = motherVol.placeVolume( assembly, Position(0.0, 0.0, 0.0) );
