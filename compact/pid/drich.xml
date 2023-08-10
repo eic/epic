@@ -184,7 +184,7 @@
 
 <documentation level="10">
 ##### Sensor modules: photosensitive surface (pss) + resin base
-- One SiPM:
+- SiPM: Silicon Photomultiplier
   - PSS: photosensitive surface
   - resin: resin substrate (holds the PSS)
   - dimensions:
@@ -208,6 +208,61 @@
     - so far just a box with `side` and `thickness` dimensions
     - includes a unique `name`, and `material` and `vis`
     - if more than one is defined, they will be layered, in order
+
+###### Diagrams
+```
+ sensor assembly diagram:, where '0' denotes the origin:
+
+                                axes:  z
+   +-+--------0--------+-+             |
+   | |       pss       | |             0--x
+   | +-----------------+ |
+   |        resin        |
+   +---------------------+
+
+```
+```
+photodetector unit (PDU) assembly diagram: matrix of SiPMs with services
+
+   Top view: 2x2 matrix of SiPMs (2 PDU units shown side-by-side)
+   =============================
+
+              -:  :- PDU gap size
+               :  :
+   +-----------+  +-----------+
+   | +--+ +--+ |  | +--+ +--+ |
+   | |  | |  | |  | |  | |  | |
+   | +--+ +--+ |  | +--+ +--+ |
+   | +--+ +--+ |  | +--+ +--+ |
+   | |  | |  | |  | |  | |  | |
+   | +--+ +--+ |  | +--+ +--+ |
+   +-----------+  +-----------+
+        : :  : :
+        : : -: :- sensor gap size
+        : :
+       -: :- sensor gap size (same)
+
+    Side view:
+    ==========
+
+    +--------------------+
+    |     SiPM Matrix    |
+    +--------------------+
+    |   Cooling, heat    |  frontservices
+    |   exchange, etc.   |
+    +--------------------+
+      ||  ||  ||  ||  ||
+      ||  ||  ||  ||  || front-end and
+      ||  ||  ||  ||  || readout boards
+      ||  ||  ||  ||  ||
+      ||  ||  ||  ||  ||
+              ||
+              ||
+      +----------------+
+      | Sockets, etc.  |  backservices
+      +----------------+
+
+```
 </documentation>
 <pss
   material="AirOptical"

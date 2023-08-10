@@ -502,67 +502,19 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
           patchCut = std::fabs(phiCheck) < sensorSphPatchPhiw;
         if (patchCut) {
 
-          // sensor assembly: collection of all objects for a single SiPM
-          /* - coordinate system: the "origin" of the assembly will be the center of the
-           *   outermost surface of the photosensitive surface (pss)
-           *   - reconstruction can access the sensor surface position from the sensor
-           *     assembly origin, which will ultimately have coordinates w.r.t. to the IP after
-           *     placement in the dRICH vessel
-           *   - the pss is segmented into SiPM pixels; gaps between the pixels
-           *     are accounted for in reconstruction, and each pixel reads out as a unique `cellID`
-           *   - `cellID` to postion conversion will give pixel centroids within the pss volume,
-           *     (not exactly at the pss surface, but rather in the center of the pss volume,
-           *     so keep in mind the very small offset)
-           *
-           * sensor assembly diagram:, where '0' denotes the origin:
-           *
-           *                                 axes:  z
-           *    +-+--------0--------+-+             |
-           *    | |       pss       | |             0--x
-           *    | +-----------------+ |
-           *    |        resin        |
-           *    +---------------------+
-           *
-           */
-
-          // photodetector unit (PDU) assembly: matrix of SiPMs with services
-          /*
-           *    Top view: 2x2 matrix of SiPMs (2 PDU units shown side-by-side)
-           *    =============================
-           *
-           *              ->:  :<- PDU gap size
-           *                :  :
-           *    +-----------+  +-----------+
-           *    | +--+ +--+ |  | +--+ +--+ |
-           *    | |  | |  | |  | |  | |  | |
-           *    | +--+ +--+ |  | +--+ +--+ |
-           *    | +--+ +--+ |  | +--+ +--+ |
-           *    | |  | |  | |  | |  | |  | |
-           *    | +--+ +--+ |  | +--+ +--+ |
-           *    +-----------+  +-----------+
-           *         : :  : :
-           *         : :->: :<- sensor gap size
-           *       ->: :<- sensor gap size (same)
-           *
-           *     Side view:
-           *     ==========
-           *
-           *     +--------------------+
-           *     |     SiPM Matrix    |
-           *     +--------------------+
-           *     |   Cooling, heat    |  frontservices
-           *     |   exchange, etc.   |
-           *     +--------------------+
-           *       ||  ||  ||  ||  ||
-           *       ||  ||  ||  ||  || front-end and
-           *       ||  ||  ||  ||  || readout boards
-           *       ||  ||  ||  ||  ||
-           *       ||  ||  ||  ||  ||
-           *               ||
-           *               ||
-           *       +----------------+
-           *       | Sockets, etc.  |  backservices
-           *       +----------------+
+          /* begin building sensors and PDUs, where:
+           * - sensor assembly: collection of all objects for a single SiPM
+           * - photodetector unit (PDU) assembly: matrix of SiPMs with services
+           *   - coordinate system: the "origin" of the assembly will be the center of the
+           *     outermost surface of the photosensitive surface (pss)
+           *     - reconstruction can access the sensor surface position from the sensor
+           *       assembly origin, which will ultimately have coordinates w.r.t. to the IP after
+           *       placement in the dRICH vessel
+           *     - the pss is segmented into SiPM pixels; gaps between the pixels
+           *       are accounted for in reconstruction, and each pixel reads out as a unique `cellID`
+           *     - `cellID` to postion conversion will give pixel centroids within the pss volume,
+           *       (not exactly at the pss surface, but rather in the center of the pss volume,
+           *       so keep in mind the very small offset)
            */
 
           // photosensitive surface (pss) and resin solids
