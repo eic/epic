@@ -61,7 +61,7 @@ static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector /* sens *
   double         width_5   = box_dim_5.attr<double>(_Unicode(x));
   double         depth_5   = box_dim_5.attr<double>(_Unicode(z));
 
-  Box coils_inner_2(width_5/2., height_5/2., depth_5/2.); 
+  Box coils_inner_2(width_5/2., height_5/2., depth_5/2.);
 
   // Creates the outer box for the shape of the yoke
   xml::Component box_dim_6 = x_det.child(_Unicode(dimensions_yoke_outer));
@@ -87,13 +87,13 @@ static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector /* sens *
 
   Box leg_outer(width_8/2., height_8/2., depth_8/2.);
 
-  // Creates the inner box for the shape of the legs                                      
+  // Creates the inner box for the shape of the legs
   xml::Component box_dim_9 = x_det.child(_Unicode(dimensions_leg_inner));
   double         height_9  = box_dim_9.attr<double>(_Unicode(y));
   double         width_9   = box_dim_9.attr<double>(_Unicode(x));
   double         depth_9   = box_dim_9.attr<double>(_Unicode(z));
 
-  Box leg_inner(width_9/2., height_9/2., depth_9/2.); 
+  Box leg_inner(width_9/2., height_9/2., depth_9/2.);
 
   // Sets box position
   xml::Component box_pos = x_det.child(_Unicode(position));

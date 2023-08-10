@@ -35,7 +35,7 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector /
 
   // Create main detector element to be returned at the end
   DetElement    det(det_name, x_det.id());
-  
+
   // Mother volume
   Volume        motherVol = description.pickMotherVolume( det );
 

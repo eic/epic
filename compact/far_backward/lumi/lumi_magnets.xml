@@ -31,7 +31,7 @@ Construct the sweeper and analyzer dipole magnets for the luminosity subsystem.
 
 
 <detectors>
-  <detector 
+  <detector
       name="SweeperMag"
       type="LumiMagnets"
       vis_name1="AnlGreen"
@@ -50,7 +50,7 @@ Construct the sweeper and analyzer dipole magnets for the luminosity subsystem.
       <rotation   x="0*rad" y="0*rad" z="0*rad" />
   </detector>
 
-  <detector 
+  <detector
       name="AnalyzerMag"
       type="LumiMagnets"
       vis_name1="AnlGreen"
