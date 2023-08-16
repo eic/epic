@@ -130,9 +130,9 @@
       </documentation>
       <beampipe_hole
         initial_hole_radius="EcalEndcapPInsert_hole_radius"
-        final_hole_radius="17.04*cm"
+        final_hole_radius="17.17*cm"
         initial_hole_x="EcalEndcapPInsert_hole_xposition"
-        final_hole_x="-10.27*cm"
+        final_hole_x="-10.44*cm"
         initial_hole_y="EcalEndcapPInsert_hole_yposition"
         final_hole_y="0.*cm"
       />
