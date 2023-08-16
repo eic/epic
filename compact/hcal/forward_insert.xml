@@ -31,8 +31,8 @@
     <constant name="HcalEndcapPInsertFrontLayerThickness"
       value="LFHCAL_FrontWallThickness +
              HcalEndcapPInsertAirThickness +
-             HcalEndcapPInsertESRFoilThickness +
              HcalEndcapPInsertScintillatorCoverThickness +
+             HcalEndcapPInsertESRFoilThickness +
              HcalEndcapPInsertPolystyreneThickness +
              HcalEndcapPInsertESRFoilThickness +
              HcalEndcapPInsertPCBThickness +
@@ -41,8 +41,8 @@
     <constant name="HcalEndcapPInsertSingleLayerThickness"
       value="HcalEndcapPInsertAbsorberThickness +
              HcalEndcapPInsertAirThickness +
-             HcalEndcapPInsertESRFoilThickness +
              HcalEndcapPInsertScintillatorCoverThickness +
+             HcalEndcapPInsertESRFoilThickness +
              HcalEndcapPInsertPolystyreneThickness +
              HcalEndcapPInsertESRFoilThickness +
              HcalEndcapPInsertPCBThickness +
