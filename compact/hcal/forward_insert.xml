@@ -86,7 +86,7 @@
       <comment> Front layer to match front walls of LFHCAL modules </comment> 
       <comment> Slices will be ordered according to the slice order listed here </comment>
       <layer repeat="1" thickness="HcalEndcapPInsertFrontLayerThickness" vis="InvisibleWithDaughters">
-        <slice material="Steel235" thickness="LFHCAL_FrontWallThickness" vis="LFHCAL4MModVis" />
+        <slice material="Steel235" thickness="LFHCAL_FrontWallThickness" vis="LFHCAL8MModVis" />
         <slice material="Air" thickness="HcalEndcapPInsertAirThickness"/>
         <slice material="Aluminum" thickness="HcalEndcapPInsertScintillatorCoverThickness" vis="AnlProcess_Blue"/>
         <slice material="Polystyrene" thickness="HcalEndcapPInsertESRFoilThickness" vis="AnlGray"/>
