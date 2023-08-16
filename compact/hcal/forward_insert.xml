@@ -63,8 +63,7 @@
       ESR foil (front and back of scintillator), a PCB, and an aluminum scitnillator cover
 
       Circular hole is cut out from each layer to account for the beampipe
-      Hole will change in size and position throughout layers
-      Due to angled (from crossing angle) and cone-shaped beampipe
+      Hole will change in size and position throughout layers due to angled (from crossing angle) and cone-shaped beampipe
       Hole radius is beampipe radius + 3.85 cm of clearance
 
     </documentation>
