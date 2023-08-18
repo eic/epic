@@ -12,9 +12,9 @@
       - I start from the downstream side of the B0 magnet and an arbitrary offset
         which puts the downstream of the detector 10cm from the end of the magnet.
     </comment>
-    <constant name="B0Tracker_length"      value="60.0*cm"/>
-    <constant name="B0Tracker_zoffset"     value="10.0*cm"/>
-    <constant name="B0TrackerCenter_zpos"  value="6.2*m"/>
+    <constant name="B0Tracker_length"      value="81.0*cm"/>
+    <constant name="B0Tracker_zoffset"     value="5.0*cm"/>
+    <constant name="B0TrackerCenter_zpos"  value="6.3*m"/>
     <constant name="B0TrackerCenter_xpos"  value="-0.16000052*m" />
     <constant name="B0Tracker_zmin"        value="B0TrackerCenter_zpos - B0Tracker_length/2.0 "/>
     <constant name="B0Tracker_rotation"    value="ionCrossingAngle"/>
@@ -50,7 +50,7 @@
     <constant name="B0TrackerMod1Small_x2"     value="2.0*B0TrackerMod1SmallOuter_r*sin(B0TrackerModOpeningAngle/2.0)"/>
     <constant name="B0TrackerMod1Small_y"      value="B0TrackerMod1SmallOuter_r*cos(B0TrackerModOpeningAngle/2.0) - B0TrackerMod1Inner_r"/>
 
-    <constant name="B0TrackerMod2SmallOuter_r" value="11.0*cm"/>
+    <constant name="B0TrackerMod2SmallOuter_r" value="10.0*cm"/>
     <constant name="B0TrackerMod2Small_x2"     value="2.0*B0TrackerMod2SmallOuter_r*sin(B0TrackerModOpeningAngle/2.0)"/>
     <constant name="B0TrackerMod2Small_y"      value="B0TrackerMod2SmallOuter_r*cos(B0TrackerModOpeningAngle/2.0) - B0TrackerMod1Inner_r"/>
 
