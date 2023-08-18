@@ -87,27 +87,27 @@
       <module name="Module1" vis="TrackerModuleVis"> <!-- AnlProcess_Blue-->
         <trd x1="B0TrackerMod1_x1/2.0" x2="B0TrackerMod1_x2/2.0" z="B0TrackerMod1_y/2"/>
         <comment> Back-to-front </comment>
-        <module_component thickness="0.12*mm" material="CarbonFiber" vis="FFTrackerSupportVis" />
+        <module_component thickness="0.715*mm" material="Copper" vis="FFTrackerSupportVis" />
         <module_component thickness="0.3*mm" material="SiliconOxide" vis="FFTrackerSurfaceVis" sensitive="true"/>
       </module>
       <module name="SmallModule1" vis="FFTrackerModuleVis">
         <trd x1="B0TrackerMod1_x1/2.0" x2="B0TrackerMod1Small_x2/2.0" z="B0TrackerMod1Small_y/2"/>
-        <module_component thickness="0.12*mm" material="CarbonFiber" vis="FFTrackerSupportVis" />
+        <module_component thickness="0.715*mm" material="Copper" vis="FFTrackerSupportVis" />
         <module_component thickness="0.3*mm" material="SiliconOxide" vis="FFTrackerSurfaceVis" sensitive="true"/>
       </module>
       <module name="SmallModule2" vis="FFTrackerModuleVis">
         <trd x1="B0TrackerMod1_x1/2.0" x2="B0TrackerMod2Small_x2/2.0" z="B0TrackerMod2Small_y/2"/>
-        <module_component thickness="0.12*mm" material="CarbonFiber" vis="FFTrackerSupportVis" />
+        <module_component thickness="0.715*mm" material="Copper" vis="FFTrackerSupportVis" />
         <module_component thickness="0.3*mm" material="SiliconOxide" vis="FFTrackerSurfaceVis" sensitive="true"/>
       </module>
       <module name="SmallModule3" vis="FFTrackerModuleVis">
         <trd x1="B0TrackerMod1_x1/2.0" x2="B0TrackerMod3Small_x2/2.0" z="B0TrackerMod3Small_y/2"/>
-        <module_component thickness="0.12*mm" material="CarbonFiber" vis="FFTrackerSupportVis" />
+        <module_component thickness="0.715*mm" material="Copper" vis="FFTrackerSupportVis" />
         <module_component thickness="0.3*mm" material="SiliconOxide" vis="FFTrackerSurfaceVis" sensitive="true"/>
       </module>
       <module name="SmallModule4" vis="FFTrackerModuleVis">
         <trd x1="B0TrackerMod1_x1/2.0" x2="B0TrackerMod4Small_x2/2.0" z="B0TrackerMod4Small_y/2"/>
-        <module_component thickness="0.12*mm" material="CarbonFiber" vis="FFTrackerSupportVis" />
+        <module_component thickness="0.715*mm" material="Copper" vis="FFTrackerSupportVis" />
         <module_component thickness="0.3*mm" material="SiliconOxide" vis="FFTrackerSurfaceVis" sensitive="true"/>
       </module>
       <layer id="1">
