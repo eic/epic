@@ -166,7 +166,7 @@
     <readout name="B0TrackerHits">
       <comment>
         20um resolution = 75um "pixels", but this is "effective", since we assume charge sharing in the real-life 500um AC-LGADs - this may need to addressed differently in simulations later via digitization
-      <comment>
+      </comment>
       <segmentation type="CartesianGridXZ" grid_size_x="0.070*mm" grid_size_z="0.070*mm" />
       <id>system:8,layer:4,module:12,sensor:2,x:32:-16,z:-16</id>
     </readout>
