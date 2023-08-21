@@ -1,6 +1,8 @@
 ebeam: 18
 pbeam: 275
 features:
+  fields:
+    marco:
   beampipe:
   far_forward:
     far_forward:
