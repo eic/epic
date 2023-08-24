@@ -13,12 +13,12 @@
     <constant name="SolenoidBarrelInnerSecondMLILayerThickness" value=" 20.0 * mm"/>
     <constant name="SolenoidBarrelInnerThermalShieldThickness"  value=" 5.0 * mm"/>
     <constant name="SolenoidBarrelInnerFirstMLILayerThickness"  value=" 32.0 * mm"/>
-    <constant name="SolenoidBarrelInnerHeliumThickness"         value=" 15.0 * mm"/> 
-    <constant name="SolenoidBarrelInnerG10Thickness"            value=" 3.0 * mm"/>  
+    <constant name="SolenoidBarrelInnerHeliumThickness"         value=" 15.0 * mm"/>
+    <constant name="SolenoidBarrelInnerG10Thickness"            value=" 3.0 * mm"/>
     <constant name="SolenoidBarrelCoilThickness"                value=" 33.6 * mm"/>
-    <constant name="SolenoidBarrelOuterG10Thickness"            value=" 3.0 * mm"/> 
+    <constant name="SolenoidBarrelOuterG10Thickness"            value=" 3.0 * mm"/>
     <constant name="SolenoidBarrelCoilFormerThickness"          value=" 30.0 * mm"/>
-    <constant name="SolenoidBarrelOuterHeliumThickness"         value=" 15.0 * mm"/> 
+    <constant name="SolenoidBarrelOuterHeliumThickness"         value=" 15.0 * mm"/>
     <constant name="SolenoidBarrelOuterThermalShieldThickness"  value=" 5.0 * mm"/>
     <constant name="SolenoidBarrelOuterSecondMLILayerThickness" value=" 62.5 * mm"/>
     <constant name="SolenoidBarrelOuterVacuumVesselThickness"   value=" 25.0 * mm"/>
