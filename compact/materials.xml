@@ -474,4 +474,26 @@
     <fraction n="0.9622" ref="Pb"/>
     <fraction n="0.0378" ref="SciFiPb_Glue"/>
   </material>
+  <material name="Brass">
+    <D type="density" value="8.41" unit="g / cm3"/>
+    <fraction n="0.70" ref="Cu"/>
+    <fraction n="0.30" ref="Zn"/>
+  </material> 
+  <material name="NbTi">
+    <D type="density" value="6.54" unit="g / cm3"/>
+    <fraction n="0.50" ref="Nb"/>
+    <fraction n="0.50" ref="Ti"/>
+  </material> 
+  <material name="Solder">
+    <D type="density" value="11.35" unit="g / cm3"/>
+    <fraction n="0.975" ref="Pb"/>
+    <fraction n="0.015" ref="Sn"/>
+    <fraction n="0.010" ref="Ag"/>
+  </material> 
+ <material name="SolenoidCoil">
+    <D type="density" value="8.73" unit="g / cm3"/>
+    <fraction n="0.9201" ref="Cu"/>
+    <fraction n="0.0638" ref="NbTi"/>
+    <fraction n="0.0161" ref="Solder"/>
+  </material>
 </materials>
