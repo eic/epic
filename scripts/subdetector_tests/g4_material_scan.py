@@ -33,7 +33,7 @@ def g4_material_scan(compact, start_point, direction, timeout=200):
     # find material scan lines
     lines = []
     add_line = False
-    
+
     for l in output.split('\n'):
         if add_line:
             lines.append(l.strip())
