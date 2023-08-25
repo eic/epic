@@ -5,14 +5,12 @@
 '''
 
 import os
-import math
-import json
-import fnmatch
 import argparse
 import subprocess
-from io import StringIO
 import pandas as pd
 import numpy as np
+from io import StringIO
+from collections import OrderedDict as odict
 
 pd.set_option('display.max_rows', 1000)
 PROGRESS_STEP = 10
@@ -27,8 +25,8 @@ PROGRESS_STEP = 10
 '''
 def g4_material_scan(compact, start_point, direction, timeout=200):
     EXEC_NAME = 'g4MaterialScan'
-    cmd = '{} --compact={} --position=\"{}\" --direction=\"{}\"'\
-          .format(EXEC_NAME, compact, start_point, direction)
+    cmd = '{} --compact={} --position=\"{},{},{}\" --direction=\"{},{},{}\"'\
+          .format(EXEC_NAME, compact, *np.hstack([start_point, direction]))
     output = os.popen(cmd).read()
     # output = subprocess.check_output(cmd.split(' '), timeout=timeout).decode('UTF-8')
 
@@ -74,19 +72,23 @@ if __name__ == '__main__':
             help='Top-level xml file of the detector description.'
             )
     parser.add_argument(
+            '-o', '--output', default='g4_materials.csv',
+            help='A csv file contains the scan info.'
+            )
+    parser.add_argument(
             '--start-point', default='0,0,0',
             help='Start point of the scan, use the format \"x,y,z\", unit is cm.'
             )
     parser.add_argument(
-            '--eta-min', type=float, default=-2.0,
+            '--eta-min', type=float, default=-4.0,
             help='Minimum eta for the scan.'
             )
     parser.add_argument(
-            '--eta-max', type=float, default=2.0,
+            '--eta-max', type=float, default=4.0,
             help='Minimum eta for the scan.'
             )
     parser.add_argument(
-            '--eta-nbins', type=int, default=401,
+            '--eta-nbins', type=int, default=801,
             help='Number of bins for the eta scan.'
             )
     parser.add_argument(
@@ -99,5 +101,22 @@ if __name__ == '__main__':
         print('Cannot find {}'.format(args.compact))
         exit(-1)
 
-    df = g4_material_scan(args.compact, args.start_point, '0.2,0.01,1.0')
-    print(df)
+    start_point = np.array([float(v.strip()) for v in args.start_point.split(',')])
+    etas = np.linspace(args.eta_min, args.eta_max, args.eta_nbins)
+    mats_indices = odict()
+    # a data buffer for the X0 values of (eta, material), 50 should be large enough
+    data = np.zeros(shape=(len(etas), 50))
+    for i, eta in enumerate(etas):
+        if i % PROGRESS_STEP == 0:
+            print('Scanned {:d}/{:d} lines for {:.2f} < eta < {:.2f}'.format(i, len(etas), etas[0], etas[-1]))
+        direction = (np.cos(args.phi/180.*np.pi), np.sin(args.phi/180.*np.pi), np.sinh(eta))
+        dfa = g4_material_scan(args.compact, start_point, direction)
+        dfa.loc[:, 'X0'] = dfa['int_X0'].diff(1).fillna(dfa['int_X0'])
+        for mat, xval in dfa.groupby('material')['X0'].sum().items():
+            if mat not in mats_indices:
+                mats_indices[mat] = len(mats_indices)
+            j = mats_indices.get(mat)
+            data[i, j] = xval
+
+    result = pd.DataFrame(columns=mats_indices.keys(), index=etas, data=data[:, :len(mats_indices)])
+    result.to_csv(args.output)
