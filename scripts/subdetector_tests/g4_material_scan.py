@@ -137,7 +137,8 @@ if __name__ == '__main__':
             eta_scan = eta_scan.merge(phi_scan, how='outer', left_index=True, right_index=True)
         # print(eta_scan)
         # print(eta_scan.sum(axis=1))
-        for mat, xval in eta_scan.sum(axis=1).items():
+        # replace nan value with 0 and then calculate average values
+        for mat, xval in eta_scan.fillna(0.).mean(axis=1).items():
             if mat not in mats_indices:
                 mats_indices[mat] = len(mats_indices)
             j = mats_indices.get(mat)
