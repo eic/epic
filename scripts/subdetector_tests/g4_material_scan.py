@@ -98,11 +98,11 @@ if __name__ == '__main__':
             )
     parser.add_argument(
             '--eta', default='-4.0:4.0:0.1',
-            help='Eta range, in the format of \"<min>[:<max>][:<step>]\".'
+            help='Eta range, in the format of \"<min>[:<max>[:<step>]]\".'
             )
     parser.add_argument(
             '--phi', default='0:30:1',
-            help='Phi angle range, in the format of \"<min>[:<max>][:<step>]\" (degree).'
+            help='Phi angle range, in the format of \"<min>[:<max>[:<step>]]\" (degree).'
             )
     args = parser.parse_args()
 
