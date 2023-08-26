@@ -20,7 +20,7 @@ PROGRESS_STEP = 10
     A parser function to convert output from g4MaterialScan to a pandas dataframe
     compact: is path to compact file
     start_point: a list or tuple for 3D coordinates (e.g., 0,0,0)
-    direction: a lit or tuple for direction (e.g., 0.1,0.2,1.0)
+    direction: a list or tuple for direction (e.g., 0.1,0.2,1.0)
     return: a dataframe for materialScan results
 '''
 def g4_material_scan(compact, start_point, direction, timeout=200):
@@ -66,7 +66,7 @@ def g4_material_scan(compact, start_point, direction, timeout=200):
 
 
 '''
-    A helper function to convert a string (<min>[:<max>][:<step>]) to an array
+    A helper function to convert a string (<min>[:<max>[:<step>]]) to an array
 '''
 def args_array(arg, step=1, include_end=True):
     vals = [float(x.strip()) for x in arg.split(':')]
