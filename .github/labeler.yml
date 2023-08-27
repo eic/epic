@@ -49,6 +49,11 @@
   - "templates/setup.sh.in"
   - "views/**/*"
 
+"topic: magnets"
+  - "compact/fields/**/*"
+  - "compact/fields.xml"
+  - "compact/solenoid.xml"
+
 "topic: materials":
   - "compact/materials.xml"
   - "compact/optical_materials.xml"
