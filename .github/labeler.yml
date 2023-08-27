@@ -49,7 +49,7 @@
   - "templates/setup.sh.in"
   - "views/**/*"
 
-"topic: magnets"
+"topic: magnets":
   - "compact/fields/**/*"
   - "compact/fields.xml"
   - "compact/solenoid.xml"
