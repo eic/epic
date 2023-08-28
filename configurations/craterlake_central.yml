@@ -1,5 +1,3 @@
-ebeam: 5
-pbeam: 41
 features:
   beampipe:
   tracking:
@@ -29,7 +27,3 @@ features:
     forward_insert:
     barrel_gdml:
     backward:
-  far_forward:
-    far_forward:
-  far_backward:
-    far_backward:
