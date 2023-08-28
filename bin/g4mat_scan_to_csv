@@ -85,7 +85,9 @@ def args_array(arg, step=1, include_end=True):
 
 
 if __name__ == '__main__':
-    parser = argparse.ArgumentParser()
+    parser = argparse.ArgumentParser(
+            'A python script to scan the materials of a given DD4Hep compact file within certain ranges of eta and phi.'
+            + ' The results will be averaged over phi and are saved in CSV format.')
     parser.add_argument(
             dest='compact',
             help='Top-level xml file of the detector description.'
