@@ -8,11 +8,11 @@
 
 import os
 import argparse
-import subprocess
 import pandas as pd
 import numpy as np
 from io import StringIO
 from collections import OrderedDict as odict
+
 
 # pd.set_option('display.max_rows', 1000)
 PROGRESS_STEP = 10
@@ -29,6 +29,7 @@ def g4_material_scan(compact, start_point, direction, timeout=200):
     EXEC_NAME = 'g4MaterialScan'
     cmd = '{} --compact={} --position=\"{},{},{}\" --direction=\"{},{},{}\"'\
           .format(EXEC_NAME, compact, *np.hstack([start_point, direction]))
+    print(cmd)
     output = os.popen(cmd).read()
     # output = subprocess.check_output(cmd.split(' '), timeout=timeout).decode('UTF-8')
 
@@ -87,7 +88,7 @@ def args_array(arg, step=1, include_end=True):
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(
             'A python script to run \"g4MaterialScan\" and save the results in CSV format.' + '\n       ' # 7 spaces for "usage: "
-            + 'The scan can be conducted with given ranges for both eta and phi, but the final output is averaged over phi.'
+            + 'The scan can be conducted with given ranges for both eta and phi, but the final output is averaged over phi.\n'
             )
     parser.add_argument(
             dest='compact',
@@ -109,6 +110,10 @@ if __name__ == '__main__':
             '--phi', default='0:30:1',
             help='Phi angle range, in the format of \"<min>[:<max>[:<step>]]\" (degree).'
             )
+    parser.add_argument(
+            '--mat-buffer-size', type=int, default=50,
+            help='Material buffer size.'
+            )
     args = parser.parse_args()
 
     if not os.path.exists(args.compact):
@@ -123,8 +128,8 @@ if __name__ == '__main__':
         print('No phi values from the input {}, aborted!'.format(args.phi))
         exit(-1)
     mats_indices = odict()
-    # a data buffer for the X0 values of (eta, material), 50 should be large enough
-    data = np.zeros(shape=(len(etas), 50))
+    # a data buffer for the X0 values of (eta, material)
+    data = np.zeros(shape=(len(etas), args.mat_buffer_size))
     # scan eta
     for i, eta in enumerate(etas):
         if i % PROGRESS_STEP == 0:
@@ -138,6 +143,7 @@ if __name__ == '__main__':
             dfa = g4_material_scan(args.compact, start_point, direction)
             dfa.loc[:, 'X0'] = dfa['int_X0'].diff(1).fillna(dfa['int_X0'])
             phi_scan = dfa.groupby('material')['X0'].sum().to_frame(name=phi)
+            # print(phi_scan)
             # using pd.DataFrame.merge to combine results, using outer so new materials at specific phi angle can be added in
             eta_scan = eta_scan.merge(phi_scan, how='outer', left_index=True, right_index=True)
         # print(eta_scan)
@@ -145,6 +151,10 @@ if __name__ == '__main__':
         # replace nan value with 0 and then calculate average values
         for mat, xval in eta_scan.fillna(0.).mean(axis=1).items():
             if mat not in mats_indices:
+                if len(mats_indices) >= args.mat_buffer_size:
+                    print('Number of materials exceeds MAT_BUFFER_SIZE ({:d}), dropped material {}.'.format(args.mat_buffer_size, mat))
+                    print('Hint: increase the buffer size with --mat-buffer-size.')
+                    continue
                 mats_indices[mat] = len(mats_indices)
             j = mats_indices.get(mat)
             data[i, j] = xval
