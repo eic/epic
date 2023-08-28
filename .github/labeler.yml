@@ -53,6 +53,8 @@
   - "compact/fields/**/*"
   - "compact/fields.xml"
   - "compact/solenoid.xml"
+  - "compact/far_backward/magnets.xml"
+  - "compact/far_forward/magnets.xml"
 
 "topic: materials":
   - "compact/materials.xml"
