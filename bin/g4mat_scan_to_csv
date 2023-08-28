@@ -173,6 +173,6 @@ if __name__ == '__main__':
             data[i, j] = xval
 
     result = pd.DataFrame(columns=mats_indices.keys(), index=etas, data=data[:, :len(mats_indices)])
-    out_path = args.output.format(vars(args))
+    out_path = args.output.format(**vars(args))
     result.to_csv(out_path, sep="\t")
     print('Scanned results saved to \"{}\"'.format(out_path))
