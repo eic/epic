@@ -150,4 +150,4 @@ if __name__ == '__main__':
             data[i, j] = xval
 
     result = pd.DataFrame(columns=mats_indices.keys(), index=etas, data=data[:, :len(mats_indices)])
-    result.to_csv(args.output, sep="\t", quoting=csv.QUOTE_NONE)
+    result.to_csv(args.output, sep="\t")
