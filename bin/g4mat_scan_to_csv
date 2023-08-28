@@ -16,6 +16,7 @@ from collections import OrderedDict as odict
 
 # pd.set_option('display.max_rows', 1000)
 PROGRESS_STEP = 10
+ALLOWED_VALUE_TYPES = ['X0', 'lambda']
 
 
 '''
@@ -61,7 +62,7 @@ def g4_material_scan(compact, start_point, direction, timeout=200):
     cols = [
         'material', 'Z', 'A', 'density',
         'rad_length', 'int_length', 'thickness', 'path_length',
-        'int_X0', 'int_lamda', 'end_x', 'end_y', 'end_z'
+        'int_X0', 'int_lambda', 'end_x', 'end_y', 'end_z'
         ]
 
     dft = pd.read_csv(StringIO('\n'.join(scans)), sep='\s+', header=None, index_col=0, names=cols)
@@ -111,13 +112,21 @@ if __name__ == '__main__':
             help='Phi angle range, in the format of \"<min>[:<max>[:<step>]]\" (degree).'
             )
     parser.add_argument(
+            '--value-type', default='X0',
+            help='Choose one in {}.'.format(ALLOWED_VALUE_TYPES)
+            )
+    parser.add_argument(
             '--mat-buffer-size', type=int, default=50,
             help='Material buffer size.'
             )
     args = parser.parse_args()
 
     if not os.path.exists(args.compact):
-        print('Cannot find {}'.format(args.compact))
+        print('Cannot find compact file {}'.format(args.compact))
+        exit(-1)
+
+    if args.value_type not in ALLOWED_VALUE_TYPES:
+        print('Cannot find value type {}, choose one in {}'.format(args.value_type, ALLOWED_VALUE_TYPES))
         exit(-1)
 
     start_point = np.array([float(v.strip()) for v in args.start_point.split(',')])
@@ -139,13 +148,17 @@ if __name__ == '__main__':
         # average over phi
         eta_scan = pd.DataFrame()
         for phi in phis:
+            # scan
             direction = (np.cos(phi/180.*np.pi), np.sin(phi/180.*np.pi), np.sinh(eta))
             dfa = g4_material_scan(args.compact, start_point, direction)
             dfa.loc[:, 'X0'] = dfa['int_X0'].diff(1).fillna(dfa['int_X0'])
-            phi_scan = dfa.groupby('material')['X0'].sum().to_frame(name=phi)
-            # print(phi_scan)
+            dfa.loc[:, 'lambda'] = dfa['int_lambda'].diff(1).fillna(dfa['int_lambda'])
+
+            # scan result
+            phi_scan = dfa.groupby('material')[args.value_type].sum().to_frame(name=phi)
             # using pd.DataFrame.merge to combine results, using outer so new materials at specific phi angle can be added in
             eta_scan = eta_scan.merge(phi_scan, how='outer', left_index=True, right_index=True)
+            # print(phi_scan)
         # print(eta_scan)
         # print(eta_scan.sum(axis=1))
         # replace nan value with 0 and then calculate average values
