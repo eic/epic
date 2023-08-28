@@ -14,7 +14,7 @@ import numpy as np
 from io import StringIO
 from collections import OrderedDict as odict
 
-pd.set_option('display.max_rows', 1000)
+# pd.set_option('display.max_rows', 1000)
 PROGRESS_STEP = 10
 
 

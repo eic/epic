@@ -115,8 +115,3 @@ configure_file(templates/setup.sh.in ${CMAKE_CURRENT_BINARY_DIR}/setup.sh @ONLY)
 install(FILES ${CMAKE_CURRENT_BINARY_DIR}/setup.sh
     DESTINATION ${CMAKE_INSTALL_PREFIX}
 )
-
-# copying test scripts
-install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/scripts/subdetector_tests
-  DESTINATION ${CMAKE_INSTALL_PREFIX}/scripts
- )
