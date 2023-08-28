@@ -96,8 +96,8 @@ if __name__ == '__main__':
             help='Top-level xml file of the detector description.'
             )
     parser.add_argument(
-            '-o', '--output', default='g4_materials.csv',
-            help='A csv file contains the scan info.'
+            '-o', '--output', default='g4mat_scan_{value_type}.csv',
+            help='Path of the output csv file. Support python formatting of args, e.g., g4mat_scan_{value_type}.csv.'
             )
     parser.add_argument(
             '--start-point', default='0,0,0',
@@ -173,4 +173,6 @@ if __name__ == '__main__':
             data[i, j] = xval
 
     result = pd.DataFrame(columns=mats_indices.keys(), index=etas, data=data[:, :len(mats_indices)])
-    result.to_csv(args.output, sep="\t")
+    out_path = args.output.format(vars(args))
+    result.to_csv(out_path, sep="\t")
+    print('Scanned results saved to \"{}\"'.format(out_path))
