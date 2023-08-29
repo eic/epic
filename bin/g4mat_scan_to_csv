@@ -138,16 +138,17 @@ if __name__ == '__main__':
         exit(-1)
     mats_indices = odict()
     # a data buffer for the X0 values of (eta, material)
-    data = np.zeros(shape=(len(etas), args.mat_buffer_size))
+    data = np.zeros(shape=(len(etas)*len(phis), args.mat_buffer_size))
+
+    # build a multi-indices for the data frame
+    indices = []
     # scan eta
     for i, eta in enumerate(etas):
         if i % PROGRESS_STEP == 0:
-            print('Scanned {:d}/{:d} lines for {:.2f} < eta < {:.2f}, each line contains {:d} phi angles from {:.2f} to {:.2f}'\
+            print('Scanned {:d}/{:d} lines for eta in [{:.2f}, {:.2f}], each with {:d} phi values in [{:.2f}, {:.2f}] (degree).'\
                   .format(i, len(etas), etas[0], etas[-1], len(phis), phis[0], phis[-1])
                   )
-        # average over phi
-        eta_scan = pd.DataFrame()
-        for phi in phis:
+        for j, phi in enumerate(phis):
             # scan
             direction = (np.cos(phi/180.*np.pi), np.sin(phi/180.*np.pi), np.sinh(eta))
             dfa = g4_material_scan(args.compact, start_point, direction)
@@ -155,24 +156,20 @@ if __name__ == '__main__':
             dfa.loc[:, 'lambda'] = dfa['int_lambda'].diff(1).fillna(dfa['int_lambda'])
 
             # scan result
-            phi_scan = dfa.groupby('material')[args.value_type].sum().to_frame(name=phi)
-            # using pd.DataFrame.merge to combine results, using outer so new materials at specific phi angle can be added in
-            eta_scan = eta_scan.merge(phi_scan, how='outer', left_index=True, right_index=True)
-            # print(phi_scan)
-        # print(eta_scan)
-        # print(eta_scan.sum(axis=1))
-        # replace nan value with 0 and then calculate average values
-        for mat, xval in eta_scan.fillna(0.).mean(axis=1).items():
-            if mat not in mats_indices:
-                if len(mats_indices) >= args.mat_buffer_size:
-                    print('Number of materials exceeds MAT_BUFFER_SIZE ({:d}), dropped material {}.'.format(args.mat_buffer_size, mat))
-                    print('Hint: increase the buffer size with --mat-buffer-size.')
-                    continue
-                mats_indices[mat] = len(mats_indices)
-            j = mats_indices.get(mat)
-            data[i, j] = xval
+            single_scan = dfa.groupby('material')[args.value_type].sum()
+            for mat, xval in single_scan.items():
+                if mat not in mats_indices:
+                    if len(mats_indices) >= args.mat_buffer_size:
+                        print('Number of materials exceeds MAT_BUFFER_SIZE ({:d}), dropped material {}.'.format(args.mat_buffer_size, mat))
+                        print('Hint: increase the buffer size with --mat-buffer-size.')
+                        continue
+                    mats_indices[mat] = len(mats_indices)
+                k = mats_indices.get(mat)
+                data[len(indices), k] = xval
+            indices.append((i, j))
 
-    result = pd.DataFrame(columns=mats_indices.keys(), index=etas, data=data[:, :len(mats_indices)])
+    indices = pd.MultiIndex.from_tuples(indices, names=['eta', 'phi'])
+    result = pd.DataFrame(columns=mats_indices.keys(), index=indices, data=data[:, :len(mats_indices)])
     out_path = args.output.format(**vars(args))
     result.to_csv(out_path, sep="\t")
     print('Scanned results saved to \"{}\"'.format(out_path))
