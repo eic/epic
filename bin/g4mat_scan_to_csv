@@ -3,7 +3,8 @@
 # SPDX-License-Identifier: LGPL-3.0-or-later
 # Copyright (C) 2023 Chao Peng
 '''
-    A script to use g4MaterialScan and collect the results
+    A script to run a 2D (eta, phi) scan using g4MaterialScan.
+    Scan results are collected in a CSV format file.
 '''
 
 import os
@@ -89,7 +90,7 @@ def args_array(arg, step=1, include_end=True):
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(
             'A python script to run \"g4MaterialScan\" and save the results in CSV format.' + '\n       ' # 7 spaces for "usage: "
-            + 'The scan can be conducted with given ranges for both eta and phi, but the final output is averaged over phi.\n'
+            + 'The scan is conducted with given ranges for both eta and phi.\n'
             )
     parser.add_argument(
             dest='compact',
