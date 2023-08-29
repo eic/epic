@@ -6,7 +6,8 @@
     <detector id="BackwardRICH_ID" name="PFRICH" type="DD4hep_GdmlDetector">
       <gdmlFile ref="pfrich.gdml"/>
       <parent name="/world_volume"/>
-      <position x="0.0 * cm"         y="0.0 * cm"         z="-145.625 * cm"/>
+      <!-- <position x="0.0 * cm"         y="0.0 * cm"         z="-145.625 * cm"/> -->
+      <position x="0.0 * cm"         y="0.0 * cm"         z="-148.625 * cm"/>
       <rotation x="0.0 * rad" y="180.0 * degree" z="0.0 * rad"/>
     </detector>
   </detectors>
