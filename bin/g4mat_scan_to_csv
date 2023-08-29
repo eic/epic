@@ -167,7 +167,7 @@ if __name__ == '__main__':
                     mats_indices[mat] = len(mats_indices)
                 k = mats_indices.get(mat)
                 data[len(indices), k] = xval
-            indices.append((i, j))
+            indices.append((eta, phi))
 
     indices = pd.MultiIndex.from_tuples(indices, names=['eta', 'phi'])
     result = pd.DataFrame(columns=mats_indices.keys(), index=indices, data=data[:, :len(mats_indices)])
