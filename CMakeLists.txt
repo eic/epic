@@ -117,6 +117,6 @@ install(FILES ${CMAKE_CURRENT_BINARY_DIR}/setup.sh
 )
 
 # install programs
-install(PROGRAMS bin/g4mat_scan_to_csv
+install(PROGRAMS bin/g4MaterialScan_to_csv
   DESTINATION ${CMAKE_INSTALL_BINDIR}
 )

@@ -93,7 +93,7 @@ if __name__ == '__main__':
             + 'The scan is conducted with given ranges for both eta and phi.\n'
             )
     parser.add_argument(
-            dest='compact',
+            '-c', '--compact', dest='compact', required=True,
             help='Top-level xml file of the detector description.'
             )
     parser.add_argument(
