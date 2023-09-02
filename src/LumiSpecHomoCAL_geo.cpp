@@ -21,10 +21,10 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
 {
   sens.setType("calorimeter");
 
-  xml_det_t 	x_det 		= 	e;
+  xml_det_t     x_det           =       e;
   xml_comp_t    x_mod           =       x_det.child( _Unicode(module) );
-  string        det_name	= 	x_det.nameStr();
-  int		det_ID		=	x_det.id();
+  string        det_name        =       x_det.nameStr();
+  int           det_ID          =       x_det.id();
 
   // Create main detector element to be returned at the end
   DetElement    det( det_name, det_ID );
@@ -57,9 +57,9 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
     for(int ix=0; ix< nxy; ix++){
       for(int iy=0; iy< nxy; iy++){
 
-        double 	mod_pos_x 	= x_pos.x() + xypos0 + ix*modSize.x();
-        double	mod_pos_y 	= x_pos.y() + xypos0 + iy*modSize.y();
-        double 	mod_pos_z 	= x_pos.z() + 0.0*cm;
+        double  mod_pos_x       = x_pos.x() + xypos0 + ix*modSize.x();
+        double  mod_pos_y       = x_pos.y() + xypos0 + iy*modSize.y();
+        double  mod_pos_z       = x_pos.z() + 0.0*cm;
 
         PlacedVolume modPV = assembly.placeVolume(
             modVol, Transform3D( RotationZYX( x_rot.x(), x_rot.y(), x_rot.z()), Position( mod_pos_x, mod_pos_y, mod_pos_z ) ) );

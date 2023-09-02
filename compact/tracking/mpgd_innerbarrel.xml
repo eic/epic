@@ -94,15 +94,15 @@
       <dimensions
         rmin="InnerMPGDBarrelLayer1_rmin"
         rmax="InnerMPGDBarrelLayer1_rmax"
-	length="240*cm"/>
+        length="240*cm"/>
       <comment> Central Barrel modules </comment>
       <module name="ModuleC" vis="TrackerMPGDVis">
-	<module_component name="DriftCuGround" thickness="MMDriftCuGround_thickness" material="Copper" vis="TrackerMPGDVis" width="InnerMPGDBarrelStave1_width" length="InnerMPGDBarrelMod1_length">
-	</module_component>
+        <module_component name="DriftCuGround" thickness="MMDriftCuGround_thickness" material="Copper" vis="TrackerMPGDVis" width="InnerMPGDBarrelStave1_width" length="InnerMPGDBarrelMod1_length">
+        </module_component>
         <module_component name="DriftKapton" thickness="MMDriftKapton_thickness" material="Kapton" width="InnerMPGDBarrelStave1_width" length="InnerMPGDBarrelMod1_length"/>
         <module_component name="DriftCuElectrode" thickness="MMDriftCuElectrode_thickness" material="Copper" width="InnerMPGDBarrelStave1_width" length="InnerMPGDBarrelMod1_length"/>
         <module_component name="GasGap" thickness="MMGasGap_thickness" material="Ar90IsoButane" sensitive="True" width="InnerMPGDBarrelStave1_width" length="InnerMPGDBarrelMod1_length"/>
-	<module_component name="Mesh" thickness="MMMesh_thickness" material="MMGAS_InoxForMesh" width="InnerMPGDBarrelStave1_width" length="InnerMPGDBarrelMod1_length"/>
+        <module_component name="Mesh" thickness="MMMesh_thickness" material="MMGAS_InoxForMesh" width="InnerMPGDBarrelStave1_width" length="InnerMPGDBarrelMod1_length"/>
         <module_component name="Fudge" thickness="MMFudgeInnerMPGDBarrel_thickness" material="Kapton" width="InnerMPGDBarrelStave1_width" length="InnerMPGDBarrelMod1_length"/>
         <module_component name="Gas" thickness="MMGas_thickness" material="Ar90IsoButane" width="InnerMPGDBarrelStave1_width" length="InnerMPGDBarrelMod1_length"/>
         <module_component name="ResistiveStrips" thickness="MMResistiveStrip_thickness" material="MMGAS_ResistivePaste" width="InnerMPGDBarrelStave1_width" length="InnerMPGDBarrelMod1_length"/>
@@ -110,25 +110,25 @@
         <module_component name="CuStrips" thickness="MMCuStrip_thickness" material="Copper" width="InnerMPGDBarrelStave1_width" length="InnerMPGDBarrelMod1_length"/>
         <module_component name="PCB" thickness="MMPCB_thickness" material="Fr4" width="InnerMPGDBarrelStave1_width" length="InnerMPGDBarrelMod1_length"/>
         <module_component name="CuGround" thickness="MMCuGround_thickness" material="Copper" width="InnerMPGDBarrelStave1_width" length="InnerMPGDBarrelMod1_length"/>
-	<module_component name="KaptonOverlay" thickness="MMKaptonOverlay_thickness" material="Kapton" vis="TrackerSupportVis" width="InnerMPGDBarrelStave1_width" length="InnerMPGDBarrelMod1_length"/>
+        <module_component name="KaptonOverlay" thickness="MMKaptonOverlay_thickness" material="Kapton" vis="TrackerSupportVis" width="InnerMPGDBarrelStave1_width" length="InnerMPGDBarrelMod1_length"/>
       </module>
       <comment>Layers composed of many arrayed modules </comment>
       <layer module="ModuleC" id="1" vis="TrackerMMGASLayerVis">
         <barrel_envelope
           inner_r="InnerMPGDBarrelLayer1_rmin"
           outer_r="InnerMPGDBarrelLayer1_rmax"
-	  z_length="InnerMPGDBarrelLayer1_length"
+          z_length="InnerMPGDBarrelLayer1_length"
           z0="0" />
         <layer_material surface="inner" binning="binPhi,binZ" bins0="MPGDBarrelStave_count" bins1="100" />
         <rphi_layout phi_tilt="0" nphi="MPGDBarrelStave_count" phi0="0.0" rc="InnerMPGDBarrelMod1_rmin" dr="0.0 * mm"/>
         <z_layout dr="0.0 * mm" z0="0" nz="1"/>
     </layer>
       <module name="ModuleN" vis="TrackerMPGDVis">
-	<module_component name="DriftCuGround" thickness="MMDriftCuGround_thickness" material="Copper" vis="TrackerMPGDVis" width="InnerMPGDBarrelStave2_width" length="InnerMPGDBarrelMod2_length"/>
+        <module_component name="DriftCuGround" thickness="MMDriftCuGround_thickness" material="Copper" vis="TrackerMPGDVis" width="InnerMPGDBarrelStave2_width" length="InnerMPGDBarrelMod2_length"/>
         <module_component name="DriftKapton" thickness="MMDriftKapton_thickness" material="Kapton" width="InnerMPGDBarrelStave2_width" length="InnerMPGDBarrelMod2_length"/>
         <module_component name="DriftCuElectrode" thickness="MMDriftCuElectrode_thickness" material="Copper" width="InnerMPGDBarrelStave2_width" length="InnerMPGDBarrelMod2_length"/>
         <module_component name="GasGap" thickness="MMGasGap_thickness" material="Ar90IsoButane" sensitive="True" width="InnerMPGDBarrelStave2_width" length="InnerMPGDBarrelMod2_length"/>
-	<module_component name="Mesh" thickness="MMMesh_thickness" material="MMGAS_InoxForMesh" width="InnerMPGDBarrelStave2_width" length="InnerMPGDBarrelMod2_length"/>
+        <module_component name="Mesh" thickness="MMMesh_thickness" material="MMGAS_InoxForMesh" width="InnerMPGDBarrelStave2_width" length="InnerMPGDBarrelMod2_length"/>
         <module_component name="Fudge" thickness="MMFudgeInnerMPGDBarrel_thickness" material="Kapton" width="InnerMPGDBarrelStave2_width" length="InnerMPGDBarrelMod2_length"/>
         <module_component name="Gas" thickness="MMGas_thickness" material="Ar90IsoButane" width="InnerMPGDBarrelStave2_width" length="InnerMPGDBarrelMod2_length"/>
         <module_component name="ResistiveStrips" thickness="MMResistiveStrip_thickness" material="MMGAS_ResistivePaste" width="InnerMPGDBarrelStave2_width" length="InnerMPGDBarrelMod2_length"/>
@@ -136,44 +136,44 @@
         <module_component name="CuStrips" thickness="MMCuStrip_thickness" material="Copper" width="InnerMPGDBarrelStave2_width" length="InnerMPGDBarrelMod2_length"/>
         <module_component name="PCB" thickness="MMPCB_thickness" material="Fr4" width="InnerMPGDBarrelStave2_width" length="InnerMPGDBarrelMod2_length"/>
         <module_component name="CuGround" thickness="MMCuGround_thickness" material="Copper" width="InnerMPGDBarrelStave2_width" length="InnerMPGDBarrelMod2_length"/>
-	<module_component name="KaptonOverlay" thickness="MMKaptonOverlay_thickness" material="Kapton" vis="TrackerSupportVis" width="InnerMPGDBarrelStave2_width" length="InnerMPGDBarrelMod2_length"/>
+        <module_component name="KaptonOverlay" thickness="MMKaptonOverlay_thickness" material="Kapton" vis="TrackerSupportVis" width="InnerMPGDBarrelStave2_width" length="InnerMPGDBarrelMod2_length"/>
       </module>
       <comment>Layers composed of many arrayed modules </comment>
       <layer module="ModuleN" id="2" vis="TrackerMMGASLayerVis">
         <barrel_envelope
           inner_r="InnerMPGDBarrelLayer2_rmin"
           outer_r="InnerMPGDBarrelLayer2_rmax"
-	  z_length="InnerMPGDBarrelLayer2_length"
-	  z0="-InnerMPGDBarrelMod2_zpos"/>
+          z_length="InnerMPGDBarrelLayer2_length"
+          z0="-InnerMPGDBarrelMod2_zpos"/>
         <layer_material surface="inner" binning="binPhi,binZ" bins0="MPGDBarrelStave_count" bins1="100" />
         <rphi_layout phi_tilt="0" nphi="MPGDBarrelStave_count" phi0="0.0" rc="InnerMPGDBarrelMod2_rmin" dr="0.0 * mm"/>
         <z_layout dr="0.0 * mm" z0="0" nz="1"/>
       </layer>
       <module name="ModuleP" vis="TrackerMPGDVis">
-	<module_component name="DriftCuGround" thickness="MMDriftCuGround_thickness" material="Copper" vis="TrackerMPGDVis" width="InnerMPGDBarrelStave3_width" length="InnerMPGDBarrelMod3_length"/>
+        <module_component name="DriftCuGround" thickness="MMDriftCuGround_thickness" material="Copper" vis="TrackerMPGDVis" width="InnerMPGDBarrelStave3_width" length="InnerMPGDBarrelMod3_length"/>
         <module_component name="DriftKapton" thickness="MMDriftKapton_thickness" material="Kapton" width="InnerMPGDBarrelStave3_width" length="InnerMPGDBarrelMod3_length"/>
-	<module_component name="DriftCuElectrode" thickness="MMDriftCuElectrode_thickness" material="Copper" width="InnerMPGDBarrelStave3_width" length="InnerMPGDBarrelMod3_length"/>
-	<module_component name="GasGap" thickness="MMGasGap_thickness" material="Ar90IsoButane" sensitive="True" width="InnerMPGDBarrelStave3_width" length="InnerMPGDBarrelMod3_length"/>
-	<module_component name="Mesh" thickness="MMMesh_thickness" material="MMGAS_InoxForMesh" width="InnerMPGDBarrelStave3_width" length="InnerMPGDBarrelMod3_length"/>
-	<module_component name="Fudge" thickness="MMFudgeInnerMPGDBarrel_thickness" material="Kapton" width="InnerMPGDBarrelStave3_width" length="InnerMPGDBarrelMod3_length"/>
-	<module_component name="Gas" thickness="MMGas_thickness" material="Ar90IsoButane" width="InnerMPGDBarrelStave3_width" length="InnerMPGDBarrelMod3_length"/>
-	<module_component name="ResistiveStrips" thickness="MMResistiveStrip_thickness" material="MMGAS_ResistivePaste" width="InnerMPGDBarrelStave3_width" length="InnerMPGDBarrelMod3_length"/>
-	<module_component name="KaptonStrips" thickness="MMKaptonStrip_thickness" material="Kapton" width="InnerMPGDBarrelStave3_width" length="InnerMPGDBarrelMod3_length"/>
-	<module_component name="CuStrips" thickness="MMCuStrip_thickness" material="Copper" width="InnerMPGDBarrelStave3_width" length="InnerMPGDBarrelMod3_length"/>
-	<module_component name="PCB" thickness="MMPCB_thickness" material="Fr4" width="InnerMPGDBarrelStave3_width" length="InnerMPGDBarrelMod3_length"/>
-	<module_component name="CuGround" thickness="MMCuGround_thickness" material="Copper" width="InnerMPGDBarrelStave3_width" length="InnerMPGDBarrelMod3_length"/>
-	<module_component name="KaptonOverlay" thickness="MMKaptonOverlay_thickness" material="Kapton" vis="TrackerSupportVis" width="InnerMPGDBarrelStave3_width" length="InnerMPGDBarrelMod3_length"/>
+        <module_component name="DriftCuElectrode" thickness="MMDriftCuElectrode_thickness" material="Copper" width="InnerMPGDBarrelStave3_width" length="InnerMPGDBarrelMod3_length"/>
+        <module_component name="GasGap" thickness="MMGasGap_thickness" material="Ar90IsoButane" sensitive="True" width="InnerMPGDBarrelStave3_width" length="InnerMPGDBarrelMod3_length"/>
+        <module_component name="Mesh" thickness="MMMesh_thickness" material="MMGAS_InoxForMesh" width="InnerMPGDBarrelStave3_width" length="InnerMPGDBarrelMod3_length"/>
+        <module_component name="Fudge" thickness="MMFudgeInnerMPGDBarrel_thickness" material="Kapton" width="InnerMPGDBarrelStave3_width" length="InnerMPGDBarrelMod3_length"/>
+        <module_component name="Gas" thickness="MMGas_thickness" material="Ar90IsoButane" width="InnerMPGDBarrelStave3_width" length="InnerMPGDBarrelMod3_length"/>
+        <module_component name="ResistiveStrips" thickness="MMResistiveStrip_thickness" material="MMGAS_ResistivePaste" width="InnerMPGDBarrelStave3_width" length="InnerMPGDBarrelMod3_length"/>
+        <module_component name="KaptonStrips" thickness="MMKaptonStrip_thickness" material="Kapton" width="InnerMPGDBarrelStave3_width" length="InnerMPGDBarrelMod3_length"/>
+        <module_component name="CuStrips" thickness="MMCuStrip_thickness" material="Copper" width="InnerMPGDBarrelStave3_width" length="InnerMPGDBarrelMod3_length"/>
+        <module_component name="PCB" thickness="MMPCB_thickness" material="Fr4" width="InnerMPGDBarrelStave3_width" length="InnerMPGDBarrelMod3_length"/>
+        <module_component name="CuGround" thickness="MMCuGround_thickness" material="Copper" width="InnerMPGDBarrelStave3_width" length="InnerMPGDBarrelMod3_length"/>
+        <module_component name="KaptonOverlay" thickness="MMKaptonOverlay_thickness" material="Kapton" vis="TrackerSupportVis" width="InnerMPGDBarrelStave3_width" length="InnerMPGDBarrelMod3_length"/>
       </module>
       <comment>Layers composed of many arrayed modules </comment>
       <layer module="ModuleP" id="3" vis="TrackerMMGASLayerVis">
         <barrel_envelope
           inner_r="InnerMPGDBarrelLayer3_rmin"
           outer_r="InnerMPGDBarrelLayer3_rmax"
-	  z_length="InnerMPGDBarrelLayer3_length"
-	  z0="InnerMPGDBarrelMod3_zpos"/>
+          z_length="InnerMPGDBarrelLayer3_length"
+          z0="InnerMPGDBarrelMod3_zpos"/>
         <layer_material surface="inner" binning="binPhi,binZ" bins0="MPGDBarrelStave_count" bins1="100" />
         <rphi_layout phi_tilt="0" nphi="MPGDBarrelStave_count" phi0="0.0" rc="InnerMPGDBarrelMod3_rmin" dr="0.0 * mm"/>
-	<z_layout dr="0.0 * mm" z0="0" nz="1"/>
+        <z_layout dr="0.0 * mm" z0="0" nz="1"/>
        </layer>
      </detector>
   </detectors>

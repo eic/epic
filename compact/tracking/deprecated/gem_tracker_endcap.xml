@@ -31,7 +31,7 @@
 
     <comment>
               Needs implimentation:
-	      Carbon fiber support ring and spokes
+              Carbon fiber support ring and spokes
               Initial preliminary details can be found here: https://www.dropbox.com/s/grt9p8feqlsh52f/GEM-RD-GEMWheel.pdf?dl=0
               This design is still very much preliminary
 
@@ -112,10 +112,10 @@
         </frame>
         </comment>
         <comment> Going from HV side to readout side</comment>
-	      <module_component thickness="25.0*um" material="Mylar" name="entrance_window" vis="TrackerLayerVis"/>
-	      <module_component thickness=" 2.0*mm" material="Ar10CO2" name="entrance_region" />
+              <module_component thickness="25.0*um" material="Mylar" name="entrance_window" vis="TrackerLayerVis"/>
+              <module_component thickness=" 2.0*mm" material="Ar10CO2" name="entrance_region" />
         <module_component thickness="50.0*um" material="Kapton" name="cathode_foil"/>
-	      <module_component thickness=" 5.0*um" material="Copper" name="cathode_cu"/>
+              <module_component thickness=" 5.0*um" material="Copper" name="cathode_cu"/>
         <module_component thickness=" 3.0*mm" material="Ar10CO2" sensitive="true" name="drift_region" vis="AnlProcess_Blue"/>
         <module_component thickness="GEMAreaFactor*50.0*um" material="Kapton"  name="gem_foil_1"/>
         <module_component thickness="GEMAreaFactor*10.0*um" material="Copper"  name="gem_foil_1_cu"/>
@@ -127,8 +127,8 @@
         <module_component thickness="GEMAreaFactor*10.0*um" material="Copper"  name="gem_foil_3_cu"/>
         <module_component thickness=" 2.0*mm" material="Ar10CO2" name="induction_region"/>
         <module_component thickness="50.0*um" material="Kapton"  name="readout_foil"/>
-	      <module_component thickness=" 5.0*um" material="Copper"  name="readout_cu"/>
-	      <module_component thickness=" 2.0*mm" material="Ar10CO2" name="exit_region"/>
+              <module_component thickness=" 5.0*um" material="Copper"  name="readout_cu"/>
+              <module_component thickness=" 2.0*mm" material="Ar10CO2" name="exit_region"/>
         <module_component thickness="25.0*um" material="Mylar" name="exit_window" vis="TrackerLayerVis"/>
       </module>
       <module name="GEMSupportSpokes" vis="TrackerSupportVis">
@@ -177,9 +177,9 @@
         </comment>
         <comment> Going from HV side to readout side</comment>
         <module_component thickness="25.0*um" material="Mylar" name="entrance_window" vis="TrackerLayerVis"/>
-	      <module_component thickness=" 2.0*mm" material="Ar10CO2" name="entrance_region" />
+              <module_component thickness=" 2.0*mm" material="Ar10CO2" name="entrance_region" />
         <module_component thickness="50.0*um" material="Kapton" name="cathode_foil"/>
-	      <module_component thickness=" 5.0*um" material="Copper" name="cathode_cu"/>
+              <module_component thickness=" 5.0*um" material="Copper" name="cathode_cu"/>
         <module_component thickness=" 3.0*mm" material="Ar10CO2" sensitive="true" name="drift_region" vis="AnlProcess_Blue"/>
         <module_component thickness="GEMAreaFactor*50.0*um" material="Kapton"  name="gem_foil_1"/>
         <module_component thickness="GEMAreaFactor*10.0*um" material="Copper"  name="gem_foil_1_cu"/>
@@ -191,8 +191,8 @@
         <module_component thickness="GEMAreaFactor*10.0*um" material="Copper"  name="gem_foil_3_cu"/>
         <module_component thickness=" 2.0*mm" material="Ar10CO2" name="induction_region"/>
         <module_component thickness="50.0*um" material="Kapton"  name="readout_foil"/>
-	      <module_component thickness=" 5.0*um" material="Copper"  name="readout_cu"/>
-	      <module_component thickness=" 2.0*mm" material="Ar10CO2" name="exit_region"/>
+              <module_component thickness=" 5.0*um" material="Copper"  name="readout_cu"/>
+              <module_component thickness=" 2.0*mm" material="Ar10CO2" name="exit_region"/>
         <module_component thickness="25.0*um" material="Mylar" name="exit_window" vis="TrackerLayerVis"/>
       </module>
       <module name="GEMSupportSpokes" vis="TrackerSupportVis">
