@@ -169,12 +169,12 @@
           phi_tilt="0"
           nphi="MPGDDIRCModule_count"
           phi0="0"
-	   rc="MPGDDIRCModule_rmin"
-	  dr="0" />
+           rc="MPGDDIRCModule_rmin"
+          dr="0" />
     <z_layout
-	  dr = "0.0 * cm"
-	  z0 = "0.0 * cm"
-	  nz = "2"/>
+          dr = "0.0 * cm"
+          z0 = "0.0 * cm"
+          nz = "2"/>
    </layer>
 </detector>
 </detectors>
