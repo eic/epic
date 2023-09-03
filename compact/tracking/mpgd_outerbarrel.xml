@@ -153,12 +153,12 @@
           phi_tilt="0"
           nphi="MPGDOuterBarrelModule_count"
           phi0="0"
-	  rc="MPGDOuterBarrelModule_rmin"
-	  dr="0" />
+          rc="MPGDOuterBarrelModule_rmin"
+          dr="0" />
     <z_layout
-	  dr = "MPGDOuterBarrelModule_roverlap"
-	  z0 = "MPGDOuterBarrelModule_zoverlap"
-	  nz = "2"/>
+          dr = "MPGDOuterBarrelModule_roverlap"
+          z0 = "MPGDOuterBarrelModule_zoverlap"
+          nz = "2"/>
    </layer>
 </detector>
 </detectors>
