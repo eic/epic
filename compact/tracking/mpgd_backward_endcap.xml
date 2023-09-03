@@ -72,19 +72,19 @@
         vis="MPGDVis"
         reflect="true">
         <type_flags type="DetType_TRACKER + DetType_ENDCAP"/>
-	<module name="BackwardModule1" vis="MPGDModuleVis">
-	  <trd x1="BackwardMPGDMod1_x1/2.0" x2="BackwardMPGDMod1_x2/2.0" z="BackwardMPGDMod1_y/2"/>
-	  <comment> Window and drift region </comment>
+        <module name="BackwardModule1" vis="MPGDModuleVis">
+          <trd x1="BackwardMPGDMod1_x1/2.0" x2="BackwardMPGDMod1_x2/2.0" z="BackwardMPGDMod1_y/2"/>
+          <comment> Window and drift region </comment>
           <module_component thickness="BackwardMPGDDriftGap_thickness" material="Ar" sensitive="true" vis="MPGDVis"/>
           <module_component thickness="BackwardMPGDWindowGap_thickness" material="Ar" sensitive="false" vis="MPGDVis"/>
-	  <module_component thickness="BackwardMPGDWindow_thickness" material="Kapton" sensitive="false" vis="MPGDVis"/>
-	  <comment> HV Cathode </comment>
+          <module_component thickness="BackwardMPGDWindow_thickness" material="Kapton" sensitive="false" vis="MPGDVis"/>
+          <comment> HV Cathode </comment>
           <module_component name="Cathode Kapton" thickness="BackwardMPGDFoilKapton_thickness" material="Kapton" sensitive="false" vis="MPGDVis"/>
-	  <module_component name="Cathode Cu" thickness="BackwardMPGDFoilCu_thickness" material="Copper" sensitive="false" vis="MPGDVis"/>
-	  <comment> Amplification foil (urwell) </comment>
+          <module_component name="Cathode Cu" thickness="BackwardMPGDFoilCu_thickness" material="Copper" sensitive="false" vis="MPGDVis"/>
+          <comment> Amplification foil (urwell) </comment>
           <module_component name="RWell Cu" thickness="BackwardMPGDFoilCu_thickness" material="Copper" sensitive="false" vis="MPGDVis"/>
           <module_component name="RWell Kapton" thickness="BackwardMPGDFoilKapton_thickness" material="Kapton" sensitive="false" vis="MPGDVis"/>
-	  <comment> Readout/Backboard </comment>
+          <comment> Readout/Backboard </comment>
           <module_component name="Readout Nomex" thickness="BackwardMPGDReadOutNomex_thickness" material="Nomex" sensitive="false" vis="MPGDVis"/>
           <module_component name="Readout Electrodes" thickness="BackwardMPGDReadOutElectrode_thickness" material="Copper" sensitive="false" vis="MPGDVis"/>
           <module_component name="Readout Kapton" thickness="BackwardMPGDReadOutKapton_thickness" material="Kapton" sensitive="false" vis="MPGDVis"/>
@@ -93,17 +93,17 @@
 
         <module name="BackwardModule2" vis="MPGDModuleVis">
           <trd x1="BackwardMPGDMod2_x1/2.0" x2="BackwardMPGDMod2_x2/2.0" z="BackwardMPGDMod2_y/2"/>
-	  <comment> Window and drift region </comment>
+          <comment> Window and drift region </comment>
           <module_component thickness="BackwardMPGDDriftGap_thickness" material="Ar" sensitive="true" vis="MPGDVis"/>
           <module_component thickness="BackwardMPGDWindowGap_thickness" material="Ar" sensitive="false" vis="MPGDVis"/>
-	  <module_component thickness="BackwardMPGDWindow_thickness" material="Kapton" sensitive="false" vis="MPGDVis"/>
-	  <comment> HV Cathode </comment>
+          <module_component thickness="BackwardMPGDWindow_thickness" material="Kapton" sensitive="false" vis="MPGDVis"/>
+          <comment> HV Cathode </comment>
           <module_component name="Cathode Kapton" thickness="BackwardMPGDFoilKapton_thickness" material="Kapton" sensitive="false" vis="MPGDVis"/>
-	  <module_component name="Cathode Cu" thickness="BackwardMPGDFoilCu_thickness" material="Copper" sensitive="false" vis="MPGDVis"/>
-	  <comment> Amplification foil (urwell) </comment>
+          <module_component name="Cathode Cu" thickness="BackwardMPGDFoilCu_thickness" material="Copper" sensitive="false" vis="MPGDVis"/>
+          <comment> Amplification foil (urwell) </comment>
           <module_component name="RWell Cu" thickness="BackwardMPGDFoilCu_thickness" material="Copper" sensitive="false" vis="MPGDVis"/>
           <module_component name="RWell Kapton" thickness="BackwardMPGDFoilKapton_thickness" material="Kapton" sensitive="false" vis="MPGDVis"/>
-	  <comment> Readout/Backboard </comment>
+          <comment> Readout/Backboard </comment>
           <module_component name="Readout Nomex" thickness="BackwardMPGDReadOutNomex_thickness" material="Nomex" sensitive="false" vis="MPGDVis"/>
           <module_component name="Readout Electrodes" thickness="BackwardMPGDReadOutElectrode_thickness" material="Copper" sensitive="false" vis="MPGDVis"/>
           <module_component name="Readout Kapton" thickness="BackwardMPGDReadOutKapton_thickness" material="Kapton" sensitive="false" vis="MPGDVis"/>
