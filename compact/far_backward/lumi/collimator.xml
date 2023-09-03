@@ -11,7 +11,7 @@
 
   <detectors>
     <detector
-      name="LumiCollimator1"
+      name="LumiCollimator"
       type="LumiCollimator"
       vis="Shape1_vis">
       <dimensions_outer x="12.6/2.*cm" y="13/2.*cm" z="LumiColl_DZ/2."/>
