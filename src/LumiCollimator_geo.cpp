@@ -50,7 +50,7 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector /
   BooleanSolid collimator =  SubtractionSolid(box_outer, box_inner);
 
   // Assembles the collimator and sets its material
-  Volume v_collimator("v_collimator", collimator , m_Steel);
+  Volume v_collimator( det_name + "_vol_collimator", collimator , m_Steel);
 
   sdet.setAttributes(description, v_collimator, x_det.regionStr(), x_det.limitsStr(), vis_name);
 
