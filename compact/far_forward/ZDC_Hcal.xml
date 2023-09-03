@@ -17,7 +17,7 @@
       <layer repeat="ZDC_PbScint_NRepeat">
         <slice name="Lead_slice"  material="Pb"           thickness="ZDC_Lead_Thickness"  vis="AnlGray"/>
         <slice name="Scint_slice" material="PlasticScint" thickness="ZDC_Scint_Thickness" vis="AnlOrange" sensitive="true"/>
-	<slice name="Air_4_slice" material="Air"          thickness="ZDC_Air_4_Thickness" vis="InvisibleNoDaughters"/>
+        <slice name="Air_4_slice" material="Air"          thickness="ZDC_Air_4_Thickness" vis="InvisibleNoDaughters"/>
       </layer>
     </detector>
   </detectors>
