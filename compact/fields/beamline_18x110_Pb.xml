@@ -25,7 +25,7 @@
 
     <!-- Luminosity System -->
     <constant name="LumiSweepMag_B" value="0.5*tesla"/> <!-- Currently left static before tuning of acceptance -->
-    <constant name="LumiAnalyzerMag_B"  value="0.5*tesla"/>
+    <constant name="LumiAnalyzerMag_B"  value="1/1.2*tesla"/>
 
 
     <comment>
