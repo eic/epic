@@ -3,10 +3,10 @@
 
   <define>
 
-    <constant name="ElectronBeamEnergy" value="10*GeV"  />
-    <constant name="IonBeamEnergy"      value="100*GeV" />
+    <constant name="ElectronBeamEnergy" value="5*GeV"  />
+    <constant name="IonBeamEnergy"      value="164*GeV" />
 
-    <constant name="FieldScaleFactor" value="1.0"  /> <!-- only use for 275 GeV magnet config ::: ASK FF EXPERTS -->
+    <constant name="FieldScaleFactor" value="82.0/275.0"  /> <!-- only use for light ion beams!!! ASK FF EXPERTS -->
 
     <comment>
        Backwards Fields
@@ -24,33 +24,34 @@
     <constant name="B2BeR_B"        value="0.0132222*tesla/GeV*ElectronBeamEnergy"/>
 
     <!-- Luminosity System -->
-    <constant name="LumiSweepMag_B"     value="1/1.2*tesla"/>
+    <constant name="LumiSweepMag_B" value="1/1.2*tesla"/> <!-- Currently left static before tuning of acceptance -->
     <constant name="LumiAnalyzerMag_B"  value="1/1.2*tesla"/>
+
 
     <comment>
        Forward Fields
-       These are the values from Scott's tables for the 50cm shifted hadron FF 100 GeV proton lattice. Notice they mostly do not scale with beam energy in the staightforward way from the previous lattice.
+       All magnet values are input by hand and represent the implementation in EICRoot used for the Yellow Report.
     </comment>
 
     <constant name="B0PF_GradientMax"  value="-8.12238283*tesla/m"/>
     <constant name="B0APF_GradientMax" value="0.0*tesla/m"/>
-    <constant name="Q1APF_GradientMax" value="-44.08979*tesla/m"/>
-    <constant name="Q1BPF_GradientMax" value="0.0*tesla/m"/> <!-- need to check with Scott on this one -->
-    <constant name="Q2PF_GradientMax"  value="12.7764668*tesla/m"/>
+    <constant name="Q1APF_GradientMax" value="-72.608*tesla/m"/>
+    <constant name="Q1BPF_GradientMax" value="-63.24525402*tesla/m"/>
+    <constant name="Q2PF_GradientMax"  value="36.88301623*tesla/m"/>
     <constant name="B1PF_GradientMax"  value="0.0*tesla/m"/>
     <constant name="B1APF_GradientMax" value="0.0*tesla/m"/>
     <constant name="B2PF_GradientMax"  value="0.0*tesla/m"/>
-    <constant name="Q0EF_GradientMax" value="-4.774134545*tesla/m"/>
-    <constant name="Q1EF_GradientMax"  value="2.127596364*tesla/m"/>
+    <constant name="Q0EF_GradientMax" value="-13.12887*tesla/m"/>
+    <constant name="Q1EF_GradientMax"  value="5.85089*tesla/m"/>
 
     <constant name="B0PF_Bmax"  value="1.1840539*tesla"/>
-    <constant name="B0APF_Bmax" value="1.1588921*tesla"/> <!-- need to check with Scott on this one -->
+    <constant name="B0APF_Bmax" value="3.4314469*tesla"/>
     <constant name="Q1APF_Bmax" value="0.0*tesla"/>
     <constant name="Q1BPF_Bmax" value="0.0*tesla"/>
     <constant name="Q2PF_Bmax"  value="0.0*tesla"/>
-    <constant name="B1PF_Bmax"  value="1.29077532*tesla"/>
-    <constant name="B1APF_Bmax" value="0.98178068*tesla"/>
-    <constant name="B2PF_Bmax" value="-1.74139319*tesla"/>
+    <constant name="B1PF_Bmax"  value="3.447989*tesla"/>
+    <constant name="B1APF_Bmax" value="2.7*tesla"/>
+    <constant name="B2PF_Bmax" value="-4.7890142*tesla"/>
     <constant name="Q0EF_BMax" value="0.0*tesla"/>
     <constant name="Q1EF_BMax"  value="0.0*tesla"/>
 

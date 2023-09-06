@@ -115,3 +115,8 @@ configure_file(templates/setup.sh.in ${CMAKE_CURRENT_BINARY_DIR}/setup.sh @ONLY)
 install(FILES ${CMAKE_CURRENT_BINARY_DIR}/setup.sh
     DESTINATION ${CMAKE_INSTALL_PREFIX}
 )
+
+# install programs
+install(PROGRAMS bin/g4MaterialScan_to_csv
+  DESTINATION ${CMAKE_INSTALL_BINDIR}
+)

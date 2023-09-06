@@ -34,7 +34,7 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector /
   double        rotZ            = x_rot.z();
 
   Box box( sizeX, sizeY, sizeZ );
-  Volume vol( det_name + "_vol", box, description.material( mat_name ) );
+  Volume vol( det_name + "_vol_ExitWindow", box, description.material( mat_name ) );
   vol.setVisAttributes( description.visAttributes(x_det.visStr()) );
 
   Transform3D  pos( RotationZYX(rotX, rotY, rotZ), Position(posX, posY, posZ) );
