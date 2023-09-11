@@ -1,0 +1,176 @@
+#!/usr/bin/env python3
+
+# SPDX-License-Identifier: LGPL-3.0-or-later
+# Copyright (C) 2023 Chao Peng
+'''
+    A script to run a 2D (eta, phi) scan using g4MaterialScan.
+    Scan results are collected in a CSV format file.
+'''
+
+import os
+import argparse
+import pandas as pd
+import numpy as np
+from io import StringIO
+from collections import OrderedDict as odict
+
+
+# pd.set_option('display.max_rows', 1000)
+PROGRESS_STEP = 10
+ALLOWED_VALUE_TYPES = ['X0', 'lambda']
+
+
+'''
+    A parser function to convert output from g4MaterialScan to a pandas dataframe
+    compact: is path to compact file
+    start_point: a list or tuple for 3D coordinates (e.g., 0,0,0)
+    direction: a list or tuple for direction (e.g., 0.1,0.2,1.0)
+    return: a dataframe for materialScan results
+'''
+def g4_material_scan(compact, start_point, direction, timeout=200):
+    EXEC_NAME = 'g4MaterialScan'
+    cmd = '{} --compact={} --position=\"{},{},{}\" --direction=\"{},{},{}\"'\
+          .format(EXEC_NAME, compact, *np.hstack([start_point, direction]))
+    print(cmd)
+    output = os.popen(cmd).read()
+    # output = subprocess.check_output(cmd.split(' '), timeout=timeout).decode('UTF-8')
+
+    # find material scan lines
+    lines = []
+    add_line = False
+
+    for l in output.split('\n'):
+        if add_line:
+            lines.append(l.strip())
+        if l.strip().startswith('MaterialScan'):
+            add_line = True
+
+
+    # NOTE: the code below is for materialScan output as of 03/05/2023
+    # it may need change if the output format is changed
+    scans = []
+    first_digit = False
+    for i, l in enumerate(lines):
+        line = l.strip('| ')
+        if not first_digit and not line[:1].isdigit():
+            continue
+        first_digit = True
+        if not line[:1].isdigit():
+            break
+        # break coordinates for endpoint, which has a format of (x, y, z)
+        scans.append(line.strip('| ').translate({ord(i): None for i in '()'}).replace(',', ' '))
+
+    cols = [
+        'material', 'Z', 'A', 'density',
+        'rad_length', 'int_length', 'thickness', 'path_length',
+        'int_X0', 'int_lambda', 'end_x', 'end_y', 'end_z'
+        ]
+
+    dft = pd.read_csv(StringIO('\n'.join(scans)), sep='\s+', header=None, index_col=0, names=cols)
+    return dft.astype({key: np.float64 for key in cols[1:]})
+
+
+'''
+    A helper function to convert a string (<min>[:<max>[:<step>]]) to an array
+'''
+def args_array(arg, step=1, include_end=True):
+    vals = [float(x.strip()) for x in arg.split(':')]
+    # empty or only one value
+    if len(vals) < 2:
+        return np.array(vals)
+    # has step input
+    if len(vals) > 2:
+        step = vals[2]
+    # inclusion of the endpoint (max)
+    if include_end:
+        vals[1] += step
+    return np.arange(vals[0], vals[1], step)
+
+
+if __name__ == '__main__':
+    parser = argparse.ArgumentParser(
+            'A python script to run \"g4MaterialScan\" and save the results in CSV format.' + '\n       ' # 7 spaces for "usage: "
+            + 'The scan is conducted with given ranges for both eta and phi.\n'
+            )
+    parser.add_argument(
+            '-c', '--compact', dest='compact', required=True,
+            help='Top-level xml file of the detector description.'
+            )
+    parser.add_argument(
+            '-o', '--output', default='g4mat_scan_{value_type}.csv',
+            help='Path of the output csv file. Support python formatting of args, e.g., g4mat_scan_{value_type}.csv.'
+            )
+    parser.add_argument(
+            '--start-point', default='0,0,0',
+            help='Start point of the scan, use the format \"x,y,z\", unit is cm.'
+            )
+    parser.add_argument(
+            '--eta', default='-4.0:4.0:0.1',
+            help='Eta range, in the format of \"<min>[:<max>[:<step>]]\".'
+            )
+    parser.add_argument(
+            '--phi', default='0:30:1',
+            help='Phi angle range, in the format of \"<min>[:<max>[:<step>]]\" (degree).'
+            )
+    parser.add_argument(
+            '--value-type', default='X0',
+            help='Choose one in {}.'.format(ALLOWED_VALUE_TYPES)
+            )
+    parser.add_argument(
+            '--mat-buffer-size', type=int, default=50,
+            help='Material buffer size.'
+            )
+    args = parser.parse_args()
+
+    if not os.path.exists(args.compact):
+        print('Cannot find compact file {}'.format(args.compact))
+        exit(-1)
+
+    if args.value_type not in ALLOWED_VALUE_TYPES:
+        print('Cannot find value type {}, choose one in {}'.format(args.value_type, ALLOWED_VALUE_TYPES))
+        exit(-1)
+
+    start_point = np.array([float(v.strip()) for v in args.start_point.split(',')])
+    etas = args_array(args.eta)
+    phis = args_array(args.phi)
+    # sanity check
+    if not len(phis):
+        print('No phi values from the input {}, aborted!'.format(args.phi))
+        exit(-1)
+    mats_indices = odict()
+    # a data buffer for the X0 values of (eta, material)
+    data = np.zeros(shape=(len(etas)*len(phis), args.mat_buffer_size))
+
+    # build a multi-indices for the data frame
+    indices = []
+    # scan eta
+    for i, eta in enumerate(etas):
+        if i % PROGRESS_STEP == 0:
+            print('Scanned {:d}/{:d} lines for eta in [{:.2f}, {:.2f}], each with {:d} phi values in [{:.2f}, {:.2f}] (degree).'\
+                  .format(i, len(etas), etas[0], etas[-1], len(phis), phis[0], phis[-1])
+                  )
+        for j, phi in enumerate(phis):
+            # scan
+            direction = (np.cos(phi/180.*np.pi), np.sin(phi/180.*np.pi), np.sinh(eta))
+            dfa = g4_material_scan(args.compact, start_point, direction)
+            dfa.loc[:, 'X0'] = dfa['int_X0'].diff(1).fillna(dfa['int_X0'])
+            dfa.loc[:, 'lambda'] = dfa['int_lambda'].diff(1).fillna(dfa['int_lambda'])
+
+            # scan result
+            single_scan = dfa.groupby('material')[args.value_type].sum()
+            for mat, xval in single_scan.items():
+                if mat not in mats_indices:
+                    if len(mats_indices) >= args.mat_buffer_size:
+                        print('Number of materials exceeds MAT_BUFFER_SIZE ({:d}), dropped material {}.'.format(args.mat_buffer_size, mat))
+                        print('Hint: increase the buffer size with --mat-buffer-size.')
+                        continue
+                    mats_indices[mat] = len(mats_indices)
+                k = mats_indices.get(mat)
+                data[len(indices), k] = xval
+            indices.append((eta, phi))
+
+    indices = pd.MultiIndex.from_tuples(indices, names=['eta', 'phi'])
+    result = pd.DataFrame(columns=mats_indices.keys(), index=indices, data=data[:, :len(mats_indices)])
+    out_path = args.output.format(**vars(args))
+    result.to_csv(out_path, sep="\t")
+    print('Scanned results saved to \"{}\"'.format(out_path))

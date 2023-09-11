@@ -12,9 +12,9 @@
       - I start from the downstream side of the B0 magnet and an arbitrary offset
         which puts the downstream of the detector 10cm from the end of the magnet.
     </comment>
-    <constant name="B0Tracker_length"      value="60.0*cm"/>
-    <constant name="B0Tracker_zoffset"     value="10.0*cm"/>
-    <constant name="B0TrackerCenter_zpos"  value="6.2*m"/>
+    <constant name="B0Tracker_length"      value="81.0*cm"/>
+    <constant name="B0Tracker_zoffset"     value="5.0*cm"/>
+    <constant name="B0TrackerCenter_zpos"  value="6.3*m"/>
     <constant name="B0TrackerCenter_xpos"  value="-0.16000052*m" />
     <constant name="B0Tracker_zmin"        value="B0TrackerCenter_zpos - B0Tracker_length/2.0 "/>
     <constant name="B0Tracker_rotation"    value="ionCrossingAngle"/>
@@ -50,7 +50,7 @@
     <constant name="B0TrackerMod1Small_x2"     value="2.0*B0TrackerMod1SmallOuter_r*sin(B0TrackerModOpeningAngle/2.0)"/>
     <constant name="B0TrackerMod1Small_y"      value="B0TrackerMod1SmallOuter_r*cos(B0TrackerModOpeningAngle/2.0) - B0TrackerMod1Inner_r"/>
 
-    <constant name="B0TrackerMod2SmallOuter_r" value="11.0*cm"/>
+    <constant name="B0TrackerMod2SmallOuter_r" value="10.0*cm"/>
     <constant name="B0TrackerMod2Small_x2"     value="2.0*B0TrackerMod2SmallOuter_r*sin(B0TrackerModOpeningAngle/2.0)"/>
     <constant name="B0TrackerMod2Small_y"      value="B0TrackerMod2SmallOuter_r*cos(B0TrackerModOpeningAngle/2.0) - B0TrackerMod1Inner_r"/>
 
@@ -87,27 +87,27 @@
       <module name="Module1" vis="TrackerModuleVis"> <!-- AnlProcess_Blue-->
         <trd x1="B0TrackerMod1_x1/2.0" x2="B0TrackerMod1_x2/2.0" z="B0TrackerMod1_y/2"/>
         <comment> Back-to-front </comment>
-        <module_component thickness="0.12*mm" material="CarbonFiber" vis="FFTrackerSupportVis" />
+        <module_component thickness="0.715*mm" material="Copper" vis="FFTrackerSupportVis" />
         <module_component thickness="0.3*mm" material="SiliconOxide" vis="FFTrackerSurfaceVis" sensitive="true"/>
       </module>
       <module name="SmallModule1" vis="FFTrackerModuleVis">
         <trd x1="B0TrackerMod1_x1/2.0" x2="B0TrackerMod1Small_x2/2.0" z="B0TrackerMod1Small_y/2"/>
-        <module_component thickness="0.12*mm" material="CarbonFiber" vis="FFTrackerSupportVis" />
+        <module_component thickness="0.715*mm" material="Copper" vis="FFTrackerSupportVis" />
         <module_component thickness="0.3*mm" material="SiliconOxide" vis="FFTrackerSurfaceVis" sensitive="true"/>
       </module>
       <module name="SmallModule2" vis="FFTrackerModuleVis">
         <trd x1="B0TrackerMod1_x1/2.0" x2="B0TrackerMod2Small_x2/2.0" z="B0TrackerMod2Small_y/2"/>
-        <module_component thickness="0.12*mm" material="CarbonFiber" vis="FFTrackerSupportVis" />
+        <module_component thickness="0.715*mm" material="Copper" vis="FFTrackerSupportVis" />
         <module_component thickness="0.3*mm" material="SiliconOxide" vis="FFTrackerSurfaceVis" sensitive="true"/>
       </module>
       <module name="SmallModule3" vis="FFTrackerModuleVis">
         <trd x1="B0TrackerMod1_x1/2.0" x2="B0TrackerMod3Small_x2/2.0" z="B0TrackerMod3Small_y/2"/>
-        <module_component thickness="0.12*mm" material="CarbonFiber" vis="FFTrackerSupportVis" />
+        <module_component thickness="0.715*mm" material="Copper" vis="FFTrackerSupportVis" />
         <module_component thickness="0.3*mm" material="SiliconOxide" vis="FFTrackerSurfaceVis" sensitive="true"/>
       </module>
       <module name="SmallModule4" vis="FFTrackerModuleVis">
         <trd x1="B0TrackerMod1_x1/2.0" x2="B0TrackerMod4Small_x2/2.0" z="B0TrackerMod4Small_y/2"/>
-        <module_component thickness="0.12*mm" material="CarbonFiber" vis="FFTrackerSupportVis" />
+        <module_component thickness="0.715*mm" material="Copper" vis="FFTrackerSupportVis" />
         <module_component thickness="0.3*mm" material="SiliconOxide" vis="FFTrackerSurfaceVis" sensitive="true"/>
       </module>
       <layer id="1">
@@ -164,7 +164,10 @@
 
   <readouts>
     <readout name="B0TrackerHits">
-      <segmentation type="CartesianGridXZ" grid_size_x="0.020*mm" grid_size_z="0.020*mm" />
+      <comment>
+        20um resolution = 75um "pixels", but this is "effective", since we assume charge sharing in the real-life 500um AC-LGADs - this may need to addressed differently in simulations later via digitization
+      </comment>
+      <segmentation type="CartesianGridXZ" grid_size_x="0.070*mm" grid_size_z="0.070*mm" />
       <id>system:8,layer:4,module:12,sensor:2,x:32:-16,z:-16</id>
     </readout>
   </readouts>

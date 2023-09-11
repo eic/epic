@@ -587,7 +587,7 @@ Service gaps in FW direction (before endcapP ECAL) and BW direction (before endc
     <constant name="HcalEndcapPInsert_xposition" value="EcalEndcapPInsert_xposition"/>
     <constant name="HcalEndcapPInsert_yposition" value="EcalEndcapPInsert_yposition"/>
 
-    <constant name="HcalEndcapN_CaloSides"	value="60"/>
+    <constant name="HcalEndcapN_CaloSides"      value="60"/>
     <constant name="HcalEndcapN_zmin"     value="BackwardServiceGap_zmax"/>
     <constant name="HcalEndcapN_length"   value="44.0*cm"/>
     <constant name="HcalEndcapN_zmax"     value="HcalEndcapN_zmin + HcalEndcapN_length"/>

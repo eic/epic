@@ -56,42 +56,42 @@ static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector /* sens *
   double y_b0pf = 0.0*dd4hep::cm;
   double z_b0pf = 575.314*dd4hep::cm;
 
-  double radius_b0apf = 4.3*dd4hep::cm;
+  double radius_b0apf = 4.2*dd4hep::cm;  //cm -- reduce by 1mm
   double length_b0apf = 149.352*dd4hep::cm;   //cm -- shorten by 6mm
   double rotation_b0apf = -0.025;  // radians
   double x_b0apf = -19.9248*dd4hep::cm;
   double y_b0apf = 0.0*dd4hep::cm;
   double z_b0apf = 774.957*dd4hep::cm;
 
-  double radius_q1apf = 5.6*dd4hep::cm;
+  double radius_q1apf = 5.5*dd4hep::cm; //cm -- reduce by 1mm
   double length_q1apf = 185.699*dd4hep::cm; //cm -- shorten by 3mm
   double rotation_q1apf = -0.0195;  // radians
   double x_q1apf = -25.0455*dd4hep::cm;
   double y_q1apf = 0.0*dd4hep::cm;
   double z_q1apf = 942.885*dd4hep::cm;
 
-  double radius_q1bpf = 7.8*dd4hep::cm;
+  double radius_q1bpf = 7.7*dd4hep::cm; //cm -- reduce by 1mm
   double length_q1bpf = 200.698*dd4hep::cm; //cm -- shorten by 3mm
   double rotation_q1bpf = -0.015;  // radians
   double x_q1bpf = -30.9852*dd4hep::cm;
   double y_q1bpf = 0.0*dd4hep::cm;
   double z_q1bpf = 1136.31*dd4hep::cm;
 
-  double radius_q2pf = 13.15*dd4hep::cm;
+  double radius_q2pf = 13.05*dd4hep::cm; //cm -- reduce by 1mm
   double length_q2pf = 419.495*dd4hep::cm;   //cm -- shorten by 5mm
   double rotation_q2pf = -0.0148;  // radians
   double x_q2pf = -40.4423*dd4hep::cm;
   double y_q2pf = 0.0*dd4hep::cm;
   double z_q2pf = 1446.73*dd4hep::cm;
 
-  double radius_b1pf = 13.5*dd4hep::cm;
-  double length_b1pf = 349.718*dd4hep::cm;   //cm -- shorten by 3mm
+  double radius_b1pf = 13.2*dd4hep::cm; //cm -- reduce by 3mm
+  double length_b1pf = 347.718*dd4hep::cm;   //cm -- shorten by 5mm
   double rotation_b1pf = -0.034;  // radians
   double x_b1pf = -49.4721*dd4hep::cm;
   double y_b1pf = 0.0*dd4hep::cm;
   double z_b1pf = 1831.59*dd4hep::cm;
 
-  double radius_b1apf = 16.8*dd4hep::cm;
+  double radius_b1apf = 16.7*dd4hep::cm; //cm -- reduce by 1mm
   double length_b1apf = 199.725*dd4hep::cm; //cm -- shorten by 3mm
   double rotation_b1apf = -0.025;  // radians
   double x_b1apf = -60.6686*dd4hep::cm;
