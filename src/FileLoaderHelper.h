@@ -21,9 +21,12 @@ namespace fs = std::filesystem;
 using dd4hep::printout;
 using dd4hep::ERROR, dd4hep::WARNING, dd4hep::INFO;
 
+namespace FileLoaderHelper {
+  static constexpr const char* const kCommand = "curl --retry 5 --location --fail {0} --output {1}";
+}
+
 // Function to download files
-inline void EnsureFileFromURLExists(std::string url, std::string file, std::string cache_str = "",
-                                    std::string cmd = "curl --retry 5 --location --fail {0} --output {1}")
+inline void EnsureFileFromURLExists(std::string url, std::string file, std::string cache_str = "")
 {
   // parse cache for environment variables
   auto pos = std::string::npos;
@@ -111,7 +114,7 @@ inline void EnsureFileFromURLExists(std::string url, std::string file, std::stri
 
   // if hash does not exist, we try to retrieve file from url
   if (!fs::exists(hash_path)) {
-    cmd = fmt::format(cmd, url, hash_path.c_str()); // TODO: Use c++20 std::fmt
+    std::string cmd = fmt::format(FileLoaderHelper::kCommand, url, hash_path.c_str()); // TODO: Use c++20 std::fmt
     printout(INFO, "FileLoader", "downloading " + file + " as hash " + hash + " with " + cmd);
     // run cmd
     auto ret = std::system(cmd.c_str());
