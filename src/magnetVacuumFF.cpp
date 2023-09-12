@@ -1,14 +1,7 @@
 // SPDX-License-Identifier: LGPL-3.0-or-later
 // Copyright (C) 2023 Alex Jentsch
 
-//==========================================================================
-//
-//      <detector name ="DetName" type="Beampipe" >
-//      <layer id="#(int)" inner_r="#(double)" outer_z="#(double)" >
-//      <slice material="string" thickness="#(double)" >
-//      </layer>
-//      </detector>
-//==========================================================================
+
 #include "DD4hep/DetFactoryHelper.h"
 #include "DD4hep/Printout.h"
 #include "TMath.h"
@@ -38,34 +31,29 @@ double getRotatedX(double z, double x, double angle);
 static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector /* sens */)
 {
 
-  using namespace ROOT::Math;
-  xml_det_t x_det    = e;
-  string    det_name = x_det.nameStr();
-  // Material   air       = det.air();
-  DetElement sdet(det_name, x_det.id());
-  Assembly   assembly(det_name + "_assembly");
-  Material   m_Vac    = det.material("Vacuum");
-  string     vis_name = x_det.visStr();
+	using namespace ROOT::Math;
+	xml_det_t x_det    = e;
+	string    det_name = x_det.nameStr();
+	// Material   air       = det.air();
+	DetElement sdet(det_name, x_det.id());
+	Assembly   assembly(det_name + "_assembly");
+	Material   m_Vac    = det.material("Vacuum");
+	string     vis_name = x_det.visStr();
 
-  PlacedVolume pv_assembly;
+	PlacedVolume pv_assembly;
 
-  //new code goes here!!!!!----------------------------
-  
-  //----------------------------------------------------------------------------
-  // Starting point is only the magnet centers and OMD/RP detector locations, 
-  // lengths, rotations, and radii -- everything else calculated internally to 
-  // make it easier to update later.
-  //----------------------------------------------------------------------------
+	//----------------------------------------------
+	// Starting point is only the magnet centers, 
+	// lengths, rotations, and radii --> 
+	// everything else calculated internally to 
+	// make it easier to update later.
+	//----------------------------------------------
 
-  const int numGaps = 6;
-  const int numMagnets = 7;
+	const int numGaps = 6;
+	const int numMagnets = 7;
 
-  TString elem_name[7] = {"b0pf", "b0apf", "q1apf", "q1bpf", "q2pf", "b1pf", "b1apf"}; //, "RP1", "RP2"};
+	TString elem_name[7] = {"b0pf", "b0apf", "q1apf", "q1bpf", "q2pf", "b1pf", "b1apf"}; //, "RP1", "RP2"};
 
-  //-----------------------------------------------------------------------------
-  // I can use the stupid unicode stuff to link this to the XML file with the 
-  // magnet geometric information --> reduce chance for an error with update.
-  //-----------------------------------------------------------------------------
 
 	double radii_magnet[numMagnets];
 	double lengths_magnet[numMagnets];
@@ -74,110 +62,45 @@ static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector /* sens *
 	double y_elem_magnet[numMagnets];
 	double z_elem_magnet[numMagnets];
 
+	//loop to fill arrays here
+	
+	int idx = 0;
+	for(xml_coll_t c(x_det,_U(element)); c; ++c){
+		
+		xml_dim_t pos       = c.child(_U(placement));
+	    double    pos_x     = pos.x();
+	    double    pos_y     = pos.y();
+	    double    pos_z     = pos.z();
+	    double    pos_theta = pos.attr<double>(_U(theta));
+	    xml_dim_t dims      = c.child(_U(dimensions)); //dimensions();
+	    double    dim_z     = dims.z();
+	    xml_dim_t apperture = c.child(_Unicode(apperture));
+	    double    app_r     = apperture.r();
+		
+		
+		radii_magnet[idx]     = app_r;     // cm
+		lengths_magnet[idx]   = dim_z;   //cm
+		rotation_magnet[idx]  = pos_theta;  // radians
+		x_elem_magnet[idx]    = pos_x*dd4hep::cm;   // cm
+		y_elem_magnet[idx]    = pos_y*dd4hep::cm;     // cm
+		z_elem_magnet[idx]    = pos_z*dd4hep::cm;   // cm
+		
+		idx++;
+	}
+
+	//-------------------------------------------
+	//override numbers for the first element --> 
+	//doesn't use the actual B0pf geometry!!!
+	//-------------------------------------------
+	
 	radii_magnet[0]     = 2.9;     // cm
-	lengths_magnet[0]   = 120.0;   // 848.2683995; //290.0;    //cm
+	lengths_magnet[0]   = 120.0;   // cm
 	rotation_magnet[0]  = -0.025;  // radians
 	x_elem_magnet[0]    = -16.5;   // cm
 	y_elem_magnet[0]    = 0.0;     // cm
 	z_elem_magnet[0]    = 640.0;   // cm
-
-	radii_magnet[1]     = 4.3;    // cm
-	lengths_magnet[1]   = 60.0;   // cm
-	rotation_magnet[1]  = -0.025; // radians
-	x_elem_magnet[1]    = -21.0480535;
-	y_elem_magnet[1]    = 0.0;
-	z_elem_magnet[1]    = 819.8946015;
-
-	radii_magnet[2]     = 5.6;     // cm
-	lengths_magnet[2]   = 146.0;   // cm
-	rotation_magnet[2]  = -0.0195; // radians
-	x_elem_magnet[2]    = -25.4342857;
-	y_elem_magnet[2]    = 0.0;
-	z_elem_magnet[2]    = 962.8296939;
-
-	radii_magnet[3]     = 7.8;    // cm
-	lengths_magnet[3]   = 161.0;  // cm
-	rotation_magnet[3]  = -0.015; // radians
-	x_elem_magnet[3]    = -31.2840809;
-	y_elem_magnet[3]    = 0.0;
-	z_elem_magnet[3]    = 1156.243847;
-
-	radii_magnet[4]     = 13.15;   // cm
-	lengths_magnet[4]   = 380.0;   // cm
-	rotation_magnet[4]  = -0.0148; // radians
-	x_elem_magnet[4]    = -40.7362293;
-	y_elem_magnet[4]    = 0.0;
-	z_elem_magnet[4]    = 1466.604545;
-
-	radii_magnet[5]     = 13.5;   // cm
-	lengths_magnet[5]   = 300.0;  // cm
-	rotation_magnet[5]  = -0.034; // radians
-	x_elem_magnet[5]    = -50.3165042;
-	y_elem_magnet[5]    = 0.0;
-	z_elem_magnet[5]    = 1856.486896;
-
-	radii_magnet[6]     = 16.8;   // cm
-	lengths_magnet[6]   = 150.0;  // cm
-	rotation_magnet[6]  = -0.025; // radians
-	x_elem_magnet[6]    = -61.2903791;
-	y_elem_magnet[6]    = 0.0;
-	z_elem_magnet[6]    = 2131.298439;	
-
-	//Off-Momentum Station 1
-	//radii_magnet[7]     = 15.0;   // cm
-	//lengths_magnet[7]   = 2.0;  // cm
-	//rotation_magnet[7]  = -0.0454486856; // radians
-	//x_elem_magnet[7]    = -100.0;
-	//y_elem_magnet[7]    = 0.0;
-	//z_elem_magnet[7]    = 2600.0;
-
-	//Off-Momentum Station 2
-	//radii_magnet[8]     = 15.0;   // cm
-	//lengths_magnet[8]   = 2.0;  // cm
-	//rotation_magnet[8]  = -0.02822; // radians
-	//x_elem_magnet[8]    = -149.1239596;
-	//y_elem_magnet[8]    = 0.0;
-	//z_elem_magnet[8]    = 4074.293743;
-
-	//Roman Pots Station 1
-	//radii_magnet[7]     = 15.0;   // cm
-	//lengths_magnet[7]   = 2.0;  // cm
-	//rotation_magnet[7]  = -0.0454486856; // radians
-	//x_elem_magnet[7]    = -92.3019;
-	//y_elem_magnet[7]    = 0.0;
-	//z_elem_magnet[7]    = 2797.0;
-
-	//Roman Pots Station 2
-	//radii_magnet[8]     = 15.0;   // cm
-	//lengths_magnet[8]   = 2.0;  // cm
-	//rotation_magnet[8]  = -0.0454486856; // radians
-	//x_elem_magnet[8]    = -101.352;
-	//y_elem_magnet[8]    = 0.0;
-	//z_elem_magnet[8]    = 2996.0;
-
-
-	//radii_magnet[7]     = 20.0;   // cm
-	//lengths_magnet[7]   = 440.0;  // cm
-	//rotation_magnet[7]  = -0.02822; // radians
-	//x_elem_magnet[7]    = -149.1239596;
-	//y_elem_magnet[7]    = 0.0;
-	//z_elem_magnet[7]    = 4074.293743;	
-
-	//double romanPotsStation1_z = 2797.0;
-	//double romanPotsStatios1_x = -92.3019;
-
-	//double romanPotsStation2_z = 2996.0;
-	//double romanPotsStatios2_x = -1013.52;
-
-	//double omdStation1_z = 2600.0;
-	//double omdPotsStatios1_x = -100.0;
-
-	//double omdPotsStation2_z = 2750.0;
-	//double omdPotsStatios2_x = -1065.0;
- 
-	//double rpAndOMD_RotationAngle = -0.0454486856;
-
-  
+	
+	
 	double x_beg[numMagnets];
 	double z_beg[numMagnets];
 	double x_end[numMagnets];
@@ -188,16 +111,12 @@ static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector /* sens *
 	double x_gap[numGaps];
 	double length_gap[numGaps];
 
-	//int numElements = 7;
-   
-	//CutTube *gapPiece[numGaps];
-	//Tube *magnetPiece[numMagnets];
-	//Volume  *vpiece[numMagnets + numGaps];
+	
 	DetElement *detectorElement[numMagnets + numGaps];
    
-	//-------------------------------------------------------------
-	//--- First step --> calculate entrance/exit points of magnets
-	//-------------------------------------------------------------
+	//-------------------------------------------
+	//calculate entrance/exit points of magnets
+	//-------------------------------------------
 
 	for(int i = 0; i < numMagnets; i++){
 	
@@ -210,6 +129,10 @@ static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector /* sens *
 		x_end[i] = getRotatedX( 0.5*lengths_magnet[i], 0.0, rotation_magnet[i]) + x_elem_magnet[i];
 			
 	}
+
+	//-----------------------------------------------
+	//calculate gap region center, length, and angle
+	//-----------------------------------------------
 
 	for(int i = 1; i < numMagnets; i++){
 	
@@ -246,8 +169,10 @@ static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector /* sens *
 
 	}
 
+	//-----------------------
+	// inside magnets
+	//-----------------------
 
-  
 	for(int pieceIdx = 0; pieceIdx < numMagnets; pieceIdx++){
 
 		std::string piece_name      = Form("MagnetVacuum%d", pieceIdx);
@@ -294,15 +219,15 @@ static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector /* sens *
     }
   
   
-  //----------------------------------------------------
+  	//----------------------------------------------------
 
 
 
-  pv_assembly = det.pickMotherVolume(sdet).placeVolume(assembly); //, posAndRot);
-  pv_assembly.addPhysVolID("system", x_det.id()).addPhysVolID("barrel", 1);
-  sdet.setPlacement(pv_assembly);
-  assembly->GetShape()->ComputeBBox();
-  return sdet;
+  	pv_assembly = det.pickMotherVolume(sdet).placeVolume(assembly); //, posAndRot);
+  	pv_assembly.addPhysVolID("system", x_det.id()).addPhysVolID("barrel", 1);
+  	sdet.setPlacement(pv_assembly);
+  	assembly->GetShape()->ComputeBBox();
+  	return sdet;
 }
 
 double getRotatedZ(double z, double x, double angle){

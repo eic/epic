@@ -10,12 +10,58 @@
 
   <detectors>
 
-    <detector id="VacuumMagnetElement_1_ID" name="VacuumMagnetElement" type="magnetElementInnerVacuum" vis="AnlGold">
-      <position x="0.0" y="0.0" z="0.0" />
-      <rotation x="0*rad" y="0*rad" z="0*rad" />
-    </detector>
-
+      <detector id="VacuumMagnetElement_1_ID" name="VacuumMagnetElement" type="magnetElementInnerVacuum" vis="AnlGold">
+        <element item="0">
+		<placement x="B0PF_XPosition" y="0*m" z="B0PF_CenterPosition" theta="B0PF_RotationAngle" />
+        	<dimensions x="B0PF_InnerRadius*4" y="B0PF_InnerRadius*4" z="B0PF_Length" r="B0PF_InnerRadius*2.0" />
+        	<apperture x="B0PF_InnerRadius" y="B0PF_InnerRadius" r="B0PF_InnerRadius" />
+	</element>
+      
+        <element item="1">
+		<placement x="B0APF_XPosition" y="0*m" z="B0APF_CenterPosition" theta="B0APF_RotationAngle" />
+        	<dimensions x="B0APF_InnerRadius*4" y="B0APF_InnerRadius*4" z="B0APF_Length" r="B0APF_InnerRadius*2.0" />
+        	<apperture x="B0APF_InnerRadius" y="B0APF_InnerRadius" r="B0APF_InnerRadius" />
+	</element>
+      
+        <element item="2">
+	        <placement x="Q1APF_XPosition" y="0*m" z="Q1APF_CenterPosition" theta="Q1APF_RotationAngle" />
+	        <dimensions x="Q1APF_InnerRadius*4" y="Q1APF_InnerRadius*4" z="Q1APF_Length" r="2.0*Q1APF_InnerRadius"/>
+	        <apperture x="Q1APF_InnerRadius*2" y="Q1APF_InnerRadius*2"  r="Q1APF_InnerRadius"/>
+        </element>
+	
+        <element item="3">
+	        <placement x="Q1BPF_XPosition" y="0*m" z="Q1BPF_CenterPosition" theta="Q1BPF_RotationAngle" />
+	        <dimensions x="Q1BPF_InnerRadius*4" y="Q1BPF_InnerRadius*4" z="Q1BPF_Length"  r="2.0*Q1BPF_InnerRadius"/>
+	        <apperture x="Q1BPF_InnerRadius*2" y="Q1BPF_InnerRadius*2"  r="Q1BPF_InnerRadius"/>
+        </element>
+      
+        <element item="4">
+	        <placement x="Q2PF_XPosition" y="0*m" z="Q2PF_CenterPosition" theta="Q2PF_RotationAngle" />
+	        <dimensions x="Q2PF_InnerRadius*4" y="Q2PF_InnerRadius*4" z="Q2PF_Length" r="2.0*Q2PF_InnerRadius" />
+	        <apperture x="Q2PF_InnerRadius*2" y="Q2PF_InnerRadius*2"  r="Q2PF_InnerRadius"/>
+      	</element>
+	
+        <element item="5">
+	        <placement x="B1PF_XPosition" y="0*m" z="B1PF_CenterPosition" theta="B1PF_RotationAngle" />
+	        <dimensions x="B1PF_InnerRadius*4" y="B1PF_InnerRadius*4" z="B1PF_Length" r="2.0*B1PF_InnerRadius"  />
+	        <apperture x="B1PF_InnerRadius*2" y="B1PF_InnerRadius*2"  r="B1PF_InnerRadius" />
+	</element>
+	
+	<element item="6">
+	        <placement x="B1APF_XPosition" y="0*m" z="B1APF_CenterPosition" theta="B1APF_RotationAngle" />
+	        <dimensions x="B1APF_InnerRadius*4" y="B1APF_InnerRadius*4" z="B1APF_Length" r="2.0*B1APF_InnerRadius" />
+	        <apperture x="B1APF_InnerRadius*2" y="B1APF_InnerRadius*2"  r="B1APF_InnerRadius"/>
+        </element>
+	
+	<!--
+        <element item="7">
+	        <placement x="B2PF_XPosition" y="0*m" z="B2PF_CenterPosition" theta="B2PF_RotationAngle" />
+	        <dimensions x="B2PF_InnerRadius*4" y="B2PF_InnerRadius*4" z="B2PF_Length" r="2.0*B2PF_InnerRadius" />
+	        <apperture x="B2PF_InnerRadius*2" y="B2PF_InnerRadius*2"  r="B2PF_InnerRadius"/>
+	</element>
+	-->
+		
+      </detector>
   </detectors>
-
 
 </lccdd>
