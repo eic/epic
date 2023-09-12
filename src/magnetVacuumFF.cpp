@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: LGPL-3.0-or-later
-// Copyright (C) 2022 Alex Jentsch, Whitney Armstrong, Wouter Deconinck
+// Copyright (C) 2023 Alex Jentsch
 
 //==========================================================================
 //
@@ -31,6 +31,10 @@ using namespace dd4hep;
  * \endcode
  *
  */
+
+double getRotatedZ(double z, double x, double angle);
+double getRotatedX(double z, double x, double angle);
+
 static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector /* sens */)
 {
 
@@ -45,134 +49,253 @@ static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector /* sens *
 
   PlacedVolume pv_assembly;
 
+  //new code goes here!!!!!----------------------------
+  
+  //----------------------------------------------------------------------------
+  // Starting point is only the magnet centers and OMD/RP detector locations, 
+  // lengths, rotations, and radii -- everything else calculated internally to 
+  // make it easier to update later.
+  //----------------------------------------------------------------------------
 
-  /// hard-code defintion here, then refine and make more general
+  const int numGaps = 6;
+  const int numMagnets = 7;
+
+  TString elem_name[7] = {"b0pf", "b0apf", "q1apf", "q1bpf", "q2pf", "b1pf", "b1apf"}; //, "RP1", "RP2"};
+
+  //-----------------------------------------------------------------------------
+  // I can use the stupid unicode stuff to link this to the XML file with the 
+  // magnet geometric information --> reduce chance for an error with update.
+  //-----------------------------------------------------------------------------
+
+	double radii_magnet[numMagnets];
+	double lengths_magnet[numMagnets];
+	double rotation_magnet[numMagnets];
+	double x_elem_magnet[numMagnets];
+	double y_elem_magnet[numMagnets];
+	double z_elem_magnet[numMagnets];
+
+	radii_magnet[0]     = 2.9;     // cm
+	lengths_magnet[0]   = 120.0;   // 848.2683995; //290.0;    //cm
+	rotation_magnet[0]  = -0.025;  // radians
+	x_elem_magnet[0]    = -16.5;   // cm
+	y_elem_magnet[0]    = 0.0;     // cm
+	z_elem_magnet[0]    = 640.0;   // cm
+
+	radii_magnet[1]     = 4.3;    // cm
+	lengths_magnet[1]   = 60.0;   // cm
+	rotation_magnet[1]  = -0.025; // radians
+	x_elem_magnet[1]    = -21.0480535;
+	y_elem_magnet[1]    = 0.0;
+	z_elem_magnet[1]    = 819.8946015;
+
+	radii_magnet[2]     = 5.6;     // cm
+	lengths_magnet[2]   = 146.0;   // cm
+	rotation_magnet[2]  = -0.0195; // radians
+	x_elem_magnet[2]    = -25.4342857;
+	y_elem_magnet[2]    = 0.0;
+	z_elem_magnet[2]    = 962.8296939;
+
+	radii_magnet[3]     = 7.8;    // cm
+	lengths_magnet[3]   = 161.0;  // cm
+	rotation_magnet[3]  = -0.015; // radians
+	x_elem_magnet[3]    = -31.2840809;
+	y_elem_magnet[3]    = 0.0;
+	z_elem_magnet[3]    = 1156.243847;
+
+	radii_magnet[4]     = 13.15;   // cm
+	lengths_magnet[4]   = 380.0;   // cm
+	rotation_magnet[4]  = -0.0148; // radians
+	x_elem_magnet[4]    = -40.7362293;
+	y_elem_magnet[4]    = 0.0;
+	z_elem_magnet[4]    = 1466.604545;
+
+	radii_magnet[5]     = 13.5;   // cm
+	lengths_magnet[5]   = 300.0;  // cm
+	rotation_magnet[5]  = -0.034; // radians
+	x_elem_magnet[5]    = -50.3165042;
+	y_elem_magnet[5]    = 0.0;
+	z_elem_magnet[5]    = 1856.486896;
+
+	radii_magnet[6]     = 16.8;   // cm
+	lengths_magnet[6]   = 150.0;  // cm
+	rotation_magnet[6]  = -0.025; // radians
+	x_elem_magnet[6]    = -61.2903791;
+	y_elem_magnet[6]    = 0.0;
+	z_elem_magnet[6]    = 2131.298439;	
+
+	//Off-Momentum Station 1
+	//radii_magnet[7]     = 15.0;   // cm
+	//lengths_magnet[7]   = 2.0;  // cm
+	//rotation_magnet[7]  = -0.0454486856; // radians
+	//x_elem_magnet[7]    = -100.0;
+	//y_elem_magnet[7]    = 0.0;
+	//z_elem_magnet[7]    = 2600.0;
+
+	//Off-Momentum Station 2
+	//radii_magnet[8]     = 15.0;   // cm
+	//lengths_magnet[8]   = 2.0;  // cm
+	//rotation_magnet[8]  = -0.02822; // radians
+	//x_elem_magnet[8]    = -149.1239596;
+	//y_elem_magnet[8]    = 0.0;
+	//z_elem_magnet[8]    = 4074.293743;
+
+	//Roman Pots Station 1
+	//radii_magnet[7]     = 15.0;   // cm
+	//lengths_magnet[7]   = 2.0;  // cm
+	//rotation_magnet[7]  = -0.0454486856; // radians
+	//x_elem_magnet[7]    = -92.3019;
+	//y_elem_magnet[7]    = 0.0;
+	//z_elem_magnet[7]    = 2797.0;
+
+	//Roman Pots Station 2
+	//radii_magnet[8]     = 15.0;   // cm
+	//lengths_magnet[8]   = 2.0;  // cm
+	//rotation_magnet[8]  = -0.0454486856; // radians
+	//x_elem_magnet[8]    = -101.352;
+	//y_elem_magnet[8]    = 0.0;
+	//z_elem_magnet[8]    = 2996.0;
 
 
-  double radius_b0pf = 2.9*dd4hep::cm;
-  double length_b0pf = 250.028*dd4hep::cm;   //cm -- shorten by 6mm
-  double rotation_b0pf = -0.025;  // radians
-  double x_b0pf = -14.8832*dd4hep::cm;
-  double y_b0pf = 0.0*dd4hep::cm;
-  double z_b0pf = 575.314*dd4hep::cm;
+	//radii_magnet[7]     = 20.0;   // cm
+	//lengths_magnet[7]   = 440.0;  // cm
+	//rotation_magnet[7]  = -0.02822; // radians
+	//x_elem_magnet[7]    = -149.1239596;
+	//y_elem_magnet[7]    = 0.0;
+	//z_elem_magnet[7]    = 4074.293743;	
 
-  double radius_b0apf = 4.2*dd4hep::cm;  //cm -- reduce by 1mm
-  double length_b0apf = 149.352*dd4hep::cm;   //cm -- shorten by 6mm
-  double rotation_b0apf = -0.025;  // radians
-  double x_b0apf = -19.9248*dd4hep::cm;
-  double y_b0apf = 0.0*dd4hep::cm;
-  double z_b0apf = 774.957*dd4hep::cm;
+	//double romanPotsStation1_z = 2797.0;
+	//double romanPotsStatios1_x = -92.3019;
 
-  double radius_q1apf = 5.5*dd4hep::cm; //cm -- reduce by 1mm
-  double length_q1apf = 185.699*dd4hep::cm; //cm -- shorten by 3mm
-  double rotation_q1apf = -0.0195;  // radians
-  double x_q1apf = -25.0455*dd4hep::cm;
-  double y_q1apf = 0.0*dd4hep::cm;
-  double z_q1apf = 942.885*dd4hep::cm;
+	//double romanPotsStation2_z = 2996.0;
+	//double romanPotsStatios2_x = -1013.52;
 
-  double radius_q1bpf = 7.7*dd4hep::cm; //cm -- reduce by 1mm
-  double length_q1bpf = 200.698*dd4hep::cm; //cm -- shorten by 3mm
-  double rotation_q1bpf = -0.015;  // radians
-  double x_q1bpf = -30.9852*dd4hep::cm;
-  double y_q1bpf = 0.0*dd4hep::cm;
-  double z_q1bpf = 1136.31*dd4hep::cm;
+	//double omdStation1_z = 2600.0;
+	//double omdPotsStatios1_x = -100.0;
 
-  double radius_q2pf = 13.05*dd4hep::cm; //cm -- reduce by 1mm
-  double length_q2pf = 419.495*dd4hep::cm;   //cm -- shorten by 5mm
-  double rotation_q2pf = -0.0148;  // radians
-  double x_q2pf = -40.4423*dd4hep::cm;
-  double y_q2pf = 0.0*dd4hep::cm;
-  double z_q2pf = 1446.73*dd4hep::cm;
+	//double omdPotsStation2_z = 2750.0;
+	//double omdPotsStatios2_x = -1065.0;
+ 
+	//double rpAndOMD_RotationAngle = -0.0454486856;
 
-  double radius_b1pf = 13.2*dd4hep::cm; //cm -- reduce by 3mm
-  double length_b1pf = 347.718*dd4hep::cm;   //cm -- shorten by 5mm
-  double rotation_b1pf = -0.034;  // radians
-  double x_b1pf = -49.4721*dd4hep::cm;
-  double y_b1pf = 0.0*dd4hep::cm;
-  double z_b1pf = 1831.59*dd4hep::cm;
+  
+	double x_beg[numMagnets];
+	double z_beg[numMagnets];
+	double x_end[numMagnets];
+	double z_end[numMagnets];
+  
+	double angle_elem_gap[numGaps];
+	double z_gap[numGaps];
+	double x_gap[numGaps];
+	double length_gap[numGaps];
 
-  double radius_b1apf = 16.7*dd4hep::cm; //cm -- reduce by 1mm
-  double length_b1apf = 199.725*dd4hep::cm; //cm -- shorten by 3mm
-  double rotation_b1apf = -0.025;  // radians
-  double x_b1apf = -60.6686*dd4hep::cm;
-  double y_b1apf = 0.0*dd4hep::cm;
-  double z_b1apf = 2106.41*dd4hep::cm;
+	//int numElements = 7;
+   
+	//CutTube *gapPiece[numGaps];
+	//Tube *magnetPiece[numMagnets];
+	//Volume  *vpiece[numMagnets + numGaps];
+	DetElement *detectorElement[numMagnets + numGaps];
+   
+	//-------------------------------------------------------------
+	//--- First step --> calculate entrance/exit points of magnets
+	//-------------------------------------------------------------
+
+	for(int i = 0; i < numMagnets; i++){
+	
+		// need to use the common coordinate system -->
+		// use x = z, and y = x to make things easier
+	
+		z_beg[i] = getRotatedZ(-0.5*lengths_magnet[i], 0.0, rotation_magnet[i]) + z_elem_magnet[i];
+		z_end[i] = getRotatedZ( 0.5*lengths_magnet[i], 0.0, rotation_magnet[i]) + z_elem_magnet[i];
+		x_beg[i] = getRotatedX(-0.5*lengths_magnet[i], 0.0, rotation_magnet[i]) + x_elem_magnet[i];
+		x_end[i] = getRotatedX( 0.5*lengths_magnet[i], 0.0, rotation_magnet[i]) + x_elem_magnet[i];
+			
+	}
+
+	for(int i = 1; i < numMagnets; i++){
+	
+		angle_elem_gap[i-1] = (x_beg[i] - x_end[i-1])/(z_beg[i] - z_end[i-1]);
+		length_gap[i-1] = TMath::Sqrt(TMath::Power(z_beg[i] - z_end[i-1], 2) + TMath::Power(x_beg[i] - x_end[i-1], 2));
+		z_gap[i-1] = z_end[i-1] + 0.5*length_gap[i-1]*TMath::Cos(angle_elem_gap[i-1]);
+		x_gap[i-1] = x_end[i-1] + 0.5*length_gap[i-1]*TMath::Sin(angle_elem_gap[i-1]);
+			
+	}   
+   
+	Double_t inRadius[numGaps];
+	Double_t outRadius[numGaps];
+	Double_t nxLow[numGaps];
+	Double_t nyLow[numGaps];
+	Double_t nzLow[numGaps];
+	Double_t nxHigh[numGaps];
+	Double_t nyHigh[numGaps];
+	Double_t nzHigh[numGaps];
+	Double_t phi_initial[numGaps];
+	Double_t phi_final[numGaps];   
+
+	for(int gapIdx = 0; gapIdx < numGaps; gapIdx++){
+
+		inRadius[gapIdx]    = 0.0;
+		outRadius[gapIdx]   = radii_magnet[gapIdx+1];
+		phi_initial[gapIdx] = 0.0;
+		phi_final[gapIdx]   = TMath::TwoPi();
+		nxLow[gapIdx]       = -(length_gap[gapIdx]/2.0)*TMath::Sin(rotation_magnet[gapIdx]-angle_elem_gap[gapIdx]);
+		nyLow[gapIdx]       = 0.0;
+		nzLow[gapIdx]       = -(length_gap[gapIdx]/2.0)*TMath::Cos(rotation_magnet[gapIdx]-angle_elem_gap[gapIdx]);
+		nxHigh[gapIdx]      = (length_gap[gapIdx]/2.0)*TMath::Sin(rotation_magnet[gapIdx+1]-angle_elem_gap[gapIdx]);
+		nyHigh[gapIdx]      = 0.0;
+		nzHigh[gapIdx]      = (length_gap[gapIdx]/2.0)*TMath::Cos(rotation_magnet[gapIdx+1]-angle_elem_gap[gapIdx]);
+
+	}
 
 
+  
+	for(int pieceIdx = 0; pieceIdx < numMagnets; pieceIdx++){
 
-  // define shapes here
+		std::string piece_name      = Form("MagnetVacuum%d", pieceIdx);
 
-  Cone   b0pf_vacuum(length_b0pf / 2.0, 0.0, radius_b0pf, 0.0, radius_b0pf);
-  Volume v_b0pf_vacuum("v_b0pf_vacuum", b0pf_vacuum, m_Vac);
-  sdet.setAttributes(det, v_b0pf_vacuum, x_det.regionStr(), x_det.limitsStr(), vis_name);
+		Tube magnetPiece(piece_name, 0.0, radii_magnet[pieceIdx], lengths_magnet[pieceIdx]/2);
+	    //vpiece[pieceIdx]      = new Volume(Form("MagnetVacuum%d", pieceIdx), magnetPiece[pieceIdx], m_Vac);
+		Volume vpiece(piece_name, magnetPiece, m_Vac);
+		sdet.setAttributes(det, vpiece, x_det.regionStr(), x_det.limitsStr(), vis_name);
+		
+	    auto pv = assembly.placeVolume(vpiece, 
+								       Transform3D(RotationY(rotation_magnet[pieceIdx]), 
+								       Position(x_elem_magnet[pieceIdx], y_elem_magnet[pieceIdx], z_elem_magnet[pieceIdx])));
+	    pv.addPhysVolID("sector", 1);
+	    detectorElement[pieceIdx] = new DetElement(sdet, Form("sector%d_de", pieceIdx), 1);
+	    detectorElement[pieceIdx]->setPlacement(pv);
+	
 
-  Cone   b0apf_vacuum(length_b0apf / 2.0, 0.0, radius_b0apf, 0.0, radius_b0apf);
-  Volume v_b0apf_vacuum("v_b0apf_vacuum", b0apf_vacuum, m_Vac);
-  sdet.setAttributes(det, v_b0apf_vacuum, x_det.regionStr(), x_det.limitsStr(), vis_name);
+	}
+  
+    //--------------------------
+    //between magnets
+    //--------------------------
+    
+	for(int pieceIdx = numMagnets; pieceIdx < numGaps + numMagnets; pieceIdx++){
+    	
+		int correctIdx = pieceIdx-numMagnets;
+	
+		std::string piece_name  = Form("GapVacuum%d", correctIdx);
+	
+    	CutTube gapPiece(piece_name, inRadius[correctIdx], outRadius[correctIdx], length_gap[correctIdx]/2, phi_initial[correctIdx], phi_final[correctIdx], 
+										nxLow[correctIdx], nyLow[correctIdx], nzLow[correctIdx], nxHigh[correctIdx], nyHigh[correctIdx], nzHigh[correctIdx]);
+				
+		Volume vpiece(piece_name, gapPiece, m_Vac);		
+		//vpiece[pieceIdx] = new Volume(Form("GapVacuum%d", correctIdx), gapPiece[correctIdx], m_Vac);
+    	sdet.setAttributes(det, vpiece, x_det.regionStr(), x_det.limitsStr(), vis_name);
+    	
+		auto pv = assembly.placeVolume(vpiece, 
+								       Transform3D(RotationY(angle_elem_gap[correctIdx]), 
+								       Position(x_gap[correctIdx], 0.0, z_gap[correctIdx])));
+	    pv.addPhysVolID("sector", 1);
+	    detectorElement[pieceIdx] = new DetElement(sdet, Form("sector%d_de", pieceIdx), 1);
+	    detectorElement[pieceIdx]->setPlacement(pv);
+  
+    }
+  
+  
+  //----------------------------------------------------
 
-  Cone   q1apf_vacuum(length_q1apf / 2.0, 0.0, radius_q1apf, 0.0, radius_q1apf);
-  Volume v_q1apf_vacuum("v_q1apf_vacuum", q1apf_vacuum, m_Vac);
-  sdet.setAttributes(det, v_q1apf_vacuum, x_det.regionStr(), x_det.limitsStr(), vis_name);
-
-  Cone   q1bpf_vacuum(length_q1bpf / 2.0, 0.0, radius_q1bpf, 0.0, radius_q1bpf);
-  Volume v_q1bpf_vacuum("v_q1bpf_vacuum", q1bpf_vacuum, m_Vac);
-  sdet.setAttributes(det, v_q1bpf_vacuum, x_det.regionStr(), x_det.limitsStr(), vis_name);
-
-  Cone   q2pf_vacuum(length_q2pf / 2.0, 0.0, radius_q2pf, 0.0, radius_q2pf);
-  Volume v_q2pf_vacuum("v_q2pf_vacuum", q2pf_vacuum, m_Vac);
-  sdet.setAttributes(det, v_q2pf_vacuum, x_det.regionStr(), x_det.limitsStr(), vis_name);
-
-  Cone   b1pf_vacuum(length_b1pf / 2.0, 0.0, radius_b1pf, 0.0, radius_b1pf);
-  Volume v_b1pf_vacuum("v_b1pf_vacuum", b1pf_vacuum, m_Vac);
-  sdet.setAttributes(det, v_b1pf_vacuum, x_det.regionStr(), x_det.limitsStr(), vis_name);
-
-  Cone   b1apf_vacuum(length_b1apf / 2.0, 0.0, radius_b1apf, 0.0, radius_b1apf);
-  Volume v_b1apf_vacuum("v_b1apf_vacuum", b1apf_vacuum, m_Vac);
-  sdet.setAttributes(det, v_b1apf_vacuum, x_det.regionStr(), x_det.limitsStr(), vis_name);
-
-  //----------------------------//
-
-  auto pv_b0pf_vacuum =
-      assembly.placeVolume(v_b0pf_vacuum, Transform3D(RotationY(rotation_b0pf), Position(x_b0pf, y_b0pf, z_b0pf)));
-  pv_b0pf_vacuum.addPhysVolID("sector", 1);
-  DetElement tube_de_1(sdet, "sector1_de", 1);
-  tube_de_1.setPlacement(pv_b0pf_vacuum);
-
-  auto pv_b0apf_vacuum =
-      assembly.placeVolume(v_b0apf_vacuum, Transform3D(RotationY(rotation_b0apf), Position(x_b0apf, y_b0apf, z_b0apf)));
-  pv_b0apf_vacuum.addPhysVolID("sector", 1);
-  DetElement tube_de_2(sdet, "sector2_de", 1);
-  tube_de_2.setPlacement(pv_b0apf_vacuum);
-
-  auto pv_q1apf_vacuum =
-      assembly.placeVolume(v_q1apf_vacuum, Transform3D(RotationY(rotation_q1apf), Position(x_q1apf, y_q1apf, z_q1apf)));
-  pv_q1apf_vacuum.addPhysVolID("sector", 1);
-  DetElement tube_de_3(sdet, "sector3_de", 1);
-  tube_de_3.setPlacement(pv_q1apf_vacuum);
-
-  auto pv_q1bpf_vacuum =
-      assembly.placeVolume(v_q1bpf_vacuum, Transform3D(RotationY(rotation_q1bpf), Position(x_q1bpf, y_q1bpf, z_q1bpf)));
-  pv_q1bpf_vacuum.addPhysVolID("sector", 1);
-  DetElement tube_de_4(sdet, "sector4_de", 1);
-  tube_de_4.setPlacement(pv_q1bpf_vacuum);
-
-  auto pv_q2pf_vacuum =
-      assembly.placeVolume(v_q2pf_vacuum, Transform3D(RotationY(rotation_q2pf), Position(x_q2pf, y_q2pf, z_q2pf)));
-  pv_q2pf_vacuum.addPhysVolID("sector", 1);
-  DetElement tube_de_5(sdet, "sector5_de", 1);
-  tube_de_5.setPlacement(pv_q2pf_vacuum);
-
-  auto pv_b1pf_vacuum =
-      assembly.placeVolume(v_b1pf_vacuum, Transform3D(RotationY(rotation_b1pf), Position(x_b1pf, y_b1pf, z_b1pf)));
-  pv_b1pf_vacuum.addPhysVolID("sector", 1);
-  DetElement tube_de_6(sdet, "sector6_de", 1);
-  tube_de_6.setPlacement(pv_q1apf_vacuum);
-
-  auto pv_b1apf_vacuum =
-      assembly.placeVolume(v_b1apf_vacuum, Transform3D(RotationY(rotation_b1apf), Position(x_b1apf, y_b1apf, z_b1apf)));
-  pv_b1apf_vacuum.addPhysVolID("sector", 1);
-  DetElement tube_de_7(sdet, "sector7_de", 1);
-  tube_de_7.setPlacement(pv_b1apf_vacuum);
 
 
   pv_assembly = det.pickMotherVolume(sdet).placeVolume(assembly); //, posAndRot);
@@ -180,6 +303,16 @@ static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector /* sens *
   sdet.setPlacement(pv_assembly);
   assembly->GetShape()->ComputeBBox();
   return sdet;
+}
+
+double getRotatedZ(double z, double x, double angle){
+	
+	return z*TMath::Cos(angle) - x*TMath::Sin(angle);
+}
+
+double getRotatedX(double z, double x, double angle){
+	
+	return z*TMath::Sin(angle) + x*TMath::Cos(angle);
 }
 
 DECLARE_DETELEMENT(magnetElementInnerVacuum, create_detector)
