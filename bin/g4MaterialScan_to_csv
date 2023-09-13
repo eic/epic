@@ -89,8 +89,10 @@ def args_array(arg, step=1, include_end=True):
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(
-            'A python script to run \"g4MaterialScan\" and save the results in CSV format.' + '\n       ' # 7 spaces for "usage: "
-            + 'The scan is conducted with given ranges for both eta and phi.\n'
+            prog='g4MaterialScan_to_csv',
+            description = 'A python script to run \"g4MaterialScan\" and save the results in CSV format.'
+                        + '\n       ' # 7 spaces for "usage: "
+                        + 'The scan is conducted with given ranges for both eta and phi.'
             )
     parser.add_argument(
             '-c', '--compact', dest='compact', required=True,
