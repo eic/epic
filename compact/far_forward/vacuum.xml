@@ -1,5 +1,5 @@
 <!-- SPDX-License-Identifier: LGPL-3.0-or-later -->
-<!-- Copyright (C) 2022 Whitney Armstrong, Alex Jentsch -->
+<!-- Copyright (C) 2023 Alex Jentsch -->
 
 <lccdd>
   <define>
@@ -10,7 +10,7 @@
 
   <detectors>
 
-      <detector id="VacuumMagnetElement_1_ID" name="VacuumMagnetElement" type="magnetElementInnerVacuum" vis="AnlGold">
+      <detector id="VacuumMagnetElement_1_ID" name="VacuumMagnetElement" type="magnetElementInnerVacuum" vis="AnlBlue">
         <element item="0">
 		<placement x="B0PF_XPosition" y="0*m" z="B0PF_CenterPosition" theta="B0PF_RotationAngle" />
         	<dimensions x="B0PF_InnerRadius*4" y="B0PF_InnerRadius*4" z="B0PF_Length" r="B0PF_InnerRadius*2.0" />
@@ -52,14 +52,6 @@
 	        <dimensions x="B1APF_InnerRadius*4" y="B1APF_InnerRadius*4" z="B1APF_Length" r="2.0*B1APF_InnerRadius" />
 	        <apperture x="B1APF_InnerRadius*2" y="B1APF_InnerRadius*2"  r="B1APF_InnerRadius"/>
         </element>
-	
-	<!--
-        <element item="7">
-	        <placement x="B2PF_XPosition" y="0*m" z="B2PF_CenterPosition" theta="B2PF_RotationAngle" />
-	        <dimensions x="B2PF_InnerRadius*4" y="B2PF_InnerRadius*4" z="B2PF_Length" r="2.0*B2PF_InnerRadius" />
-	        <apperture x="B2PF_InnerRadius*2" y="B2PF_InnerRadius*2"  r="B2PF_InnerRadius"/>
-	</element>
-	-->
 		
       </detector>
   </detectors>
