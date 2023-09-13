@@ -17,7 +17,6 @@ from collections import OrderedDict as odict
 
 # pd.set_option('display.max_rows', 1000)
 PROGRESS_STEP = 10
-ALLOWED_VALUE_TYPES = ['X0', 'lambda']
 
 
 '''
@@ -99,8 +98,8 @@ if __name__ == '__main__':
             help='Top-level xml file of the detector description.'
             )
     parser.add_argument(
-            '-o', '--output', default='g4mat_scan_{value_type}.csv',
-            help='Path of the output csv file. Support python formatting of args, e.g., g4mat_scan_{value_type}.csv.'
+            '-o', '--output', default='g4mat_scan.csv',
+            help='Path of the output csv file. Support python formatting of args, e.g., g4mat_scan_{eta}_{phi}.csv.'
             )
     parser.add_argument(
             '--start-point', default='0,0,0',
@@ -115,10 +114,6 @@ if __name__ == '__main__':
             help='Phi angle range, in the format of \"<min>[:<max>[:<step>]]\" (degree).'
             )
     parser.add_argument(
-            '--value-type', default='X0',
-            help='Choose one in {}.'.format(ALLOWED_VALUE_TYPES)
-            )
-    parser.add_argument(
             '--mat-buffer-size', type=int, default=50,
             help='Material buffer size.'
             )
@@ -126,10 +121,6 @@ if __name__ == '__main__':
 
     if not os.path.exists(args.compact):
         print('Cannot find compact file {}'.format(args.compact))
-        exit(-1)
-
-    if args.value_type not in ALLOWED_VALUE_TYPES:
-        print('Cannot find value type {}, choose one in {}'.format(args.value_type, ALLOWED_VALUE_TYPES))
         exit(-1)
 
     start_point = np.array([float(v.strip()) for v in args.start_point.split(',')])
@@ -140,12 +131,14 @@ if __name__ == '__main__':
         print('No phi values from the input {}, aborted!'.format(args.phi))
         exit(-1)
     mats_indices = odict()
-    # a data buffer for the X0 values of (eta, material)
-    data = np.zeros(shape=(len(etas)*len(phis), args.mat_buffer_size))
 
     # build a multi-indices for the data frame
-    indices = []
-    # scan eta
+    eta_phi = []
+    # should exist in the scan as int_{value_type}
+    value_types = ['X0', 'lambda']
+    # a data buffer for the X0 values of ((eta, phi), materials, (X0, Lambda))
+    data = np.zeros(shape=(len(etas)*len(phis), args.mat_buffer_size, len(value_types)))
+    # scan eta, phi
     for i, eta in enumerate(etas):
         if i % PROGRESS_STEP == 0:
             print('Scanned {:d}/{:d} lines for eta in [{:.2f}, {:.2f}], each with {:d} phi values in [{:.2f}, {:.2f}] (degree).'\
@@ -155,12 +148,13 @@ if __name__ == '__main__':
             # scan
             direction = (np.cos(phi/180.*np.pi), np.sin(phi/180.*np.pi), np.sinh(eta))
             dfa = g4_material_scan(args.compact, start_point, direction)
-            dfa.loc[:, 'X0'] = dfa['int_X0'].diff(1).fillna(dfa['int_X0'])
-            dfa.loc[:, 'lambda'] = dfa['int_lambda'].diff(1).fillna(dfa['int_lambda'])
+            for vt in value_types:
+                dfa.loc[:, vt] = dfa['int_{}'.format(vt)].diff(1).fillna(dfa['int_{}'.format(vt)])
 
             # scan result
-            single_scan = dfa.groupby('material')[args.value_type].sum()
-            for mat, xval in single_scan.items():
+            single_scan = dfa.groupby('material')[value_types].sum()
+            # print(single_scan)
+            for mat, xvals in single_scan.iterrows():
                 if mat not in mats_indices:
                     if len(mats_indices) >= args.mat_buffer_size:
                         print('Number of materials exceeds MAT_BUFFER_SIZE ({:d}), dropped material {}.'.format(args.mat_buffer_size, mat))
@@ -168,11 +162,14 @@ if __name__ == '__main__':
                         continue
                     mats_indices[mat] = len(mats_indices)
                 k = mats_indices.get(mat)
-                data[len(indices), k] = xval
-            indices.append((eta, phi))
+                data[len(eta_phi), k] = xvals.values
+            eta_phi.append((eta, phi))
 
-    indices = pd.MultiIndex.from_tuples(indices, names=['eta', 'phi'])
-    result = pd.DataFrame(columns=mats_indices.keys(), index=indices, data=data[:, :len(mats_indices)])
+    # save results
+    result = dict()
+    for i, vt in enumerate(value_types):
+        indices = pd.MultiIndex.from_tuples(eta_phi, names=['eta', 'phi'])
+        result[vt] = pd.DataFrame(columns=mats_indices.keys(), index=indices, data=data[:, :len(mats_indices), i])
     out_path = args.output.format(**vars(args))
-    result.to_csv(out_path, sep="\t")
+    pd.concat(result, names=['value_type']).to_csv(out_path, sep="\t")
     print('Scanned results saved to \"{}\"'.format(out_path))
