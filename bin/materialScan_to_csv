@@ -105,7 +105,7 @@ if __name__ == '__main__':
                         + 'The scan is conducted with given ranges for both eta and phi.\n'
             )
     parser.add_argument(
-            '-c', '--compact', dest='compact', required=True,
+            'compact',
             help='Top-level xml file of the detector description.'
             )
     parser.add_argument(
@@ -145,4 +145,12 @@ if __name__ == '__main__':
     # a data buffer for the X0 values of (eta, material)
     data = np.zeros(shape=(len(etas)*len(phis), args.mat_buffer_size))
 
-    doc = dd4hep.xml.DocumentHandler.parse(args.compact, 0)
+    desc = dd4hep.Detector.getInstance()
+    desc.fromXML(args.compact)
+
+    dets = {n: desc.detector(n).clone('temp_' + n) for n, _ in desc.world().children()}
+    for n, det in dets.items():
+        desc.clearData()
+        desc.add(det)
+        print(desc.world().children())
+
