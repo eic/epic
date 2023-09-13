@@ -34,7 +34,6 @@ static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector /* sens *
 	using namespace ROOT::Math;
 	xml_det_t x_det    = e;
 	string    det_name = x_det.nameStr();
-	// Material   air       = det.air();
 	DetElement sdet(det_name, x_det.id());
 	Assembly   assembly(det_name + "_assembly");
 	Material   m_Vac    = det.material("Vacuum");
@@ -49,8 +48,8 @@ static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector /* sens *
 	// make it easier to update later.
 	//----------------------------------------------
 
-	const int numGaps = 6;
-	const int numMagnets = 7;
+	const int numGaps = 6; //number of gaps between magnets (excluding the IP to B0pf transition -- special case)
+	const int numMagnets = 7; //number of actual FF magnets between IP and FF detectors
 	
 	bool makeIP_B0pfVacuum = true; //This is for the special gap location between IP and b0pf
 	const int numDetElements = numMagnets + numGaps + 1;
@@ -78,12 +77,12 @@ static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector /* sens *
 	    double    app_r     = apperture.r();
 		
 		
-		radii_magnet[idx]     = app_r;     // cm
-		lengths_magnet[idx]   = dim_z;   //cm
+		radii_magnet[idx]     = app_r; // cm
+		lengths_magnet[idx]   = dim_z; //cm
 		rotation_magnet[idx]  = pos_theta;  // radians
-		x_elem_magnet[idx]    = pos_x*dd4hep::cm;   // cm
-		y_elem_magnet[idx]    = pos_y*dd4hep::cm;     // cm
-		z_elem_magnet[idx]    = pos_z*dd4hep::cm;   // cm
+		x_elem_magnet[idx]    = pos_x*dd4hep::cm;  
+		y_elem_magnet[idx]    = pos_y*dd4hep::cm;    
+		z_elem_magnet[idx]    = pos_z*dd4hep::cm;
 		
 		idx++;
 	}
@@ -197,7 +196,6 @@ static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector /* sens *
 		std::string piece_name      = Form("MagnetVacuum%d", pieceIdx);
 
 		Tube magnetPiece(piece_name, 0.0, radii_magnet[pieceIdx], lengths_magnet[pieceIdx]/2);
-	    //vpiece[pieceIdx]      = new Volume(Form("MagnetVacuum%d", pieceIdx), magnetPiece[pieceIdx], m_Vac);
 		Volume vpiece(piece_name, magnetPiece, m_Vac);
 		sdet.setAttributes(det, vpiece, x_det.regionStr(), x_det.limitsStr(), vis_name);
 		
@@ -208,7 +206,6 @@ static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector /* sens *
 	    detectorElement[pieceIdx] = new DetElement(sdet, Form("sector%d_de", pieceIdx), 1);
 	    detectorElement[pieceIdx]->setPlacement(pv);
 	
-
 	}
   
     //--------------------------
@@ -225,7 +222,6 @@ static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector /* sens *
 										nxLow[correctIdx], nyLow[correctIdx], nzLow[correctIdx], nxHigh[correctIdx], nyHigh[correctIdx], nzHigh[correctIdx]);
 				
 		Volume vpiece(piece_name, gapPiece, m_Vac);		
-		//vpiece[pieceIdx] = new Volume(Form("GapVacuum%d", correctIdx), gapPiece[correctIdx], m_Vac);
     	sdet.setAttributes(det, vpiece, x_det.regionStr(), x_det.limitsStr(), vis_name);
     	
 		auto pv = assembly.placeVolume(vpiece, 
@@ -241,8 +237,6 @@ static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector /* sens *
     //make and place vacuum volume to connect IP beam pipe to B0pf
     //--------------------------------------------------------------
 	
-	
-  
   	if(makeIP_B0pfVacuum){
   
   	  	double specialGapLength = TMath::Sqrt(TMath::Power(z_beg[0] - endOfCentralBeamPipe_z, 2) + TMath::Power(x_beg[0] - endOfCentralBeamPipe_x, 2)) - 0.1;
@@ -252,7 +246,6 @@ static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector /* sens *
 		std::string piece_name  = Form("GapVacuum%d", numGaps + numMagnets);
 
 		Cone specialGap(piece_name, specialGapLength/2, 0.0, vacuumDiameterEntrance/2, 0.0, vacuumDiameterExit/2 );
-		//Tube specialGap(piece_name, vacuumDiameterEntrance/2, vacuumDiameterExit/2, specialGapLength/2);
 			
 		Volume specialGap_v(piece_name, specialGap, m_Vac);		
 		sdet.setAttributes(det, specialGap_v, x_det.regionStr(), x_det.limitsStr(), vis_name);
@@ -266,9 +259,7 @@ static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector /* sens *
   
   	//----------------------------------------------------
 
-
-
-  	pv_assembly = det.pickMotherVolume(sdet).placeVolume(assembly); //, posAndRot);
+  	pv_assembly = det.pickMotherVolume(sdet).placeVolume(assembly);
   	pv_assembly.addPhysVolID("system", x_det.id()).addPhysVolID("barrel", 1);
   	sdet.setPlacement(pv_assembly);
   	assembly->GetShape()->ComputeBBox();
