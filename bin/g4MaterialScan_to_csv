@@ -3,21 +3,78 @@
 # SPDX-License-Identifier: LGPL-3.0-or-later
 # Copyright (C) 2023 Chao Peng
 '''
-    A script to run a 2D (eta, phi) scan using g4MaterialScan.
+    A script to run a 2D (eta, phi) scan using Geant4 kernel.
     Scan results are collected in a CSV format file.
 '''
 
 import os
+import errno
 import argparse
 import pandas as pd
 import numpy as np
 from io import StringIO
 from collections import OrderedDict as odict
 
+import DDG4
+import dd4hep
+import g4units
 
 # pd.set_option('display.max_rows', 1000)
 PROGRESS_STEP = 10
 
+
+class g4MaterialScanner:
+    # singleton to prevent kernel from being accessed by multiple sources
+    _self = None
+
+    def __new__(cls):
+        if cls._self is None:
+            cls._self = super().__new__(cls)
+        return cls._self
+
+    def __init__(self, compact, phy_list='QGSP_BERT'):
+        kernel = DDG4.Kernel()
+        kernel.loadGeometry(compact)
+        DDG4.Core.setPrintFormat(str("%-32s %6s %s"))
+        geant4 = DDG4.Geant4(kernel)
+        geant4.setupCshUI(ui=None)
+        for i in geant4.description.detectors():
+            o = DDG4.DetElement(i.second.ptr())
+            sd = geant4.description.sensitiveDetector(o.name())
+            if sd.isValid():
+                typ = sd.type()
+            if typ in geant4.sensitive_types:
+                geant4.setupDetector(o.name(), geant4.sensitive_types[typ])
+            else:
+                logger.error('+++  %-32s type:%-12s  --> Unknown Sensitive type: %s', o.name(), typ, typ)
+                sys.exit(errno.EINVAL)
+
+        scan = DDG4.SteppingAction(kernel, 'Geant4MaterialScanner/MaterialScan')
+        kernel.steppingAction().adopt(scan)
+
+        # Now build the physics list:
+        geant4.setupPhysics(phy_list)
+        kernel.configure()
+        kernel.initialize()
+
+        self.kernel = kernel
+        self.geant4 = geant4
+
+    def __del__(self):
+        self.kernel.terminate()
+
+    def scan(position, direction):
+        self.geant4.setupGun('Scanner',
+                             Standalone=True,
+                             particle='geantino',
+                             energy=20 8 g4units.GeV,
+                             position='({},{},{})'.format(*position),
+                             direction='({},{},{})'.format(*direction),
+                             multiplicity=1,
+                             isotrop=False)
+
+        self.kernel.NumEvents = 1
+        self.kernel.run()
 
 '''
     A parser function to convert output from g4MaterialScan to a pandas dataframe
