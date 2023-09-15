@@ -148,7 +148,7 @@
   <plugins>
     <plugin name="DD4hep_ParametersPlugin">
       <argument value="ForwardMPGD"/>
-      <argument value="layer_pattern: str=layer\d"/>
+      <argument value="layer_pattern: str=ForwardMPGD_layer\d_P"/>
     </plugin>
   </plugins>
 
