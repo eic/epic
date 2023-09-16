@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+#!/usr/bin/env python
 
 # SPDX-License-Identifier: LGPL-3.0-or-later
 # Copyright (C) 2023 Chao Peng
@@ -8,73 +8,88 @@
 '''
 
 import os
+import sys
 import errno
 import argparse
 import pandas as pd
 import numpy as np
 from io import StringIO
 from collections import OrderedDict as odict
+from contextlib import contextmanager
 
 import DDG4
-import dd4hep
 import g4units
 
 # pd.set_option('display.max_rows', 1000)
 PROGRESS_STEP = 10
 
 
+'''
+    redirect stdout for non-python applications (C stdio)
+'''
+@contextmanager
+def stdout_redirected(to=os.devnull):
+    fd = sys.stdout.fileno()
+
+    def _redirect_stdout(to):
+        sys.stdout.close() # + implicit flush()
+        os.dup2(to.fileno(), fd) # fd writes to 'to' file
+        sys.stdout = os.fdopen(fd, 'w') # Python writes to fd
+
+    with os.fdopen(os.dup(fd), 'w') as old_stdout:
+        with open(to, 'w') as file:
+            _redirect_stdout(to=file)
+        try:
+            yield # allow code to be run with the redirected stdout
+        finally:
+            _redirect_stdout(to=old_stdout) # restore stdout.
+                                            # buffering and flags such as
+                                            # CLOEXEC may be different
+
+# a class to simplify the material scan, avoid the use of multipe instances of it
 class g4MaterialScanner:
-    # singleton to prevent kernel from being accessed by multiple sources
-    _self = None
-
-    def __new__(cls):
-        if cls._self is None:
-            cls._self = super().__new__(cls)
-        return cls._self
-
-    def __init__(self, compact, phy_list='QGSP_BERT'):
+    def __init__(self, compact):
         kernel = DDG4.Kernel()
         kernel.loadGeometry(compact)
         DDG4.Core.setPrintFormat(str("%-32s %6s %s"))
         geant4 = DDG4.Geant4(kernel)
+        self.kernel = kernel
+        self.geant4 = geant4
+
         geant4.setupCshUI(ui=None)
         for i in geant4.description.detectors():
             o = DDG4.DetElement(i.second.ptr())
             sd = geant4.description.sensitiveDetector(o.name())
             if sd.isValid():
                 typ = sd.type()
-            if typ in geant4.sensitive_types:
-                geant4.setupDetector(o.name(), geant4.sensitive_types[typ])
-            else:
-                logger.error('+++  %-32s type:%-12s  --> Unknown Sensitive type: %s', o.name(), typ, typ)
-                sys.exit(errno.EINVAL)
-
-        scan = DDG4.SteppingAction(kernel, 'Geant4MaterialScanner/MaterialScan')
-        kernel.steppingAction().adopt(scan)
-
-        # Now build the physics list:
-        geant4.setupPhysics(phy_list)
-        kernel.configure()
-        kernel.initialize()
-
-        self.kernel = kernel
-        self.geant4 = geant4
+                if typ in geant4.sensitive_types:
+                    geant4.setupDetector(o.name(), geant4.sensitive_types[typ])
+                else:
+                    logger.error('+++  %-32s type:%-12s  --> Unknown Sensitive type: %s', o.name(), typ, typ)
+                    sys.exit(errno.EINVAL)
 
     def __del__(self):
         self.kernel.terminate()
 
-    def scan(position, direction):
+    def scan(self, position, direction, phy_list='QGSP_BERT'):
         self.geant4.setupGun('Scanner',
                              Standalone=True,
                              particle='geantino',
-                             energy=20 8 g4units.GeV,
+                             energy=20*g4units.GeV,
                              position='({},{},{})'.format(*position),
                              direction='({},{},{})'.format(*direction),
                              multiplicity=1,
                              isotrop=False)
 
+        scan = DDG4.SteppingAction(self.kernel, 'Geant4MaterialScanner/MaterialScan')
+        self.kernel.steppingAction().adopt(scan)
+        # Now build the physics list:
+        self.geant4.setupPhysics(phy_list)
+        self.kernel.configure()
+        self.kernel.initialize()
         self.kernel.NumEvents = 1
         self.kernel.run()
+        # print(output)
 
 '''
     A parser function to convert output from g4MaterialScan to a pandas dataframe
@@ -200,6 +215,7 @@ if __name__ == '__main__':
     # a data buffer for the X0 values of ((eta, phi), materials, (X0, Lambda))
     data = np.zeros(shape=(len(etas)*len(phis), args.mat_buffer_size, len(value_types)))
     # scan eta, phi
+    scanner = g4MaterialScanner(args.compact)
     for i, eta in enumerate(etas):
         if i % PROGRESS_STEP == 0:
             print('Scanned {:d}/{:d} lines for eta in [{:.2f}, {:.2f}], each with {:d} phi values in [{:.2f}, {:.2f}] (degree).'\
@@ -208,7 +224,11 @@ if __name__ == '__main__':
         for j, phi in enumerate(phis):
             # scan
             direction = (np.cos(phi/180.*np.pi), np.sin(phi/180.*np.pi), np.sinh(eta))
-            dfa = g4_material_scan(args.compact, start_point, direction)
+            # alternative solution
+            # from wurlitzer import pipes
+            # with pipes() as (out, err):
+            with stdout_redirected():
+                scanner.scan(start_point, direction)
             for vt in value_types:
                 dfa.loc[:, vt] = dfa['int_{}'.format(vt)].diff(1).fillna(dfa['int_{}'.format(vt)])
 
