@@ -47,8 +47,7 @@ class g4MaterialScanner:
                     sys.exit(errno.EINVAL)
         geant4.setupPhysics(phy_list)
 
-        # for a micromanagement of the particle gun
-
+        # save the gun for micromanagement
         self.gun = geant4.setupGun('Scanner',
                                    Standalone=True,
                                    particle='geantino',
@@ -63,9 +62,7 @@ class g4MaterialScanner:
         # Now build the physics list:
         self.kernel.configure()
         self.kernel.initialize()
-
         self.kernel.NumEvents = 1
-
 
     def __del__(self):
         self.kernel.terminate()
@@ -77,9 +74,7 @@ class g4MaterialScanner:
             self.kernel.run()
         return self.parse_scan_output(out.getvalue())
 
-    '''
-        A parser function to convert output from Gean4MaterialScanner to a pandas dataframe
-    '''
+    # A parser function to convert output from Gean4MaterialScanner to a pandas dataframe
     @staticmethod
     def parse_scan_output(output):
         # find material scan lines
