@@ -49,7 +49,7 @@ class g4MaterialScanner:
         geant4.setupPhysics(phy_list)
 
         # for a micromanagement of the particle gun
-        
+
         self.gun = geant4.setupGun('Scanner',
                                    Standalone=True,
                                    particle='geantino',
