@@ -15,7 +15,6 @@ import pandas as pd
 import numpy as np
 from io import StringIO
 from collections import OrderedDict as odict
-from contextlib import contextmanager
 from wurlitzer import pipes
 
 import DDG4
