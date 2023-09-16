@@ -32,7 +32,7 @@ class g4MaterialScanner:
         DDG4.Core.setPrintFormat(str("%-32s %6s %s"))
         self.kernel = kernel
 
-        # DDG4 Geant4 wrapper to shorten setup
+        # use DDG4 Geant4 wrapper to simplify the setup
         geant4 = DDG4.Geant4(kernel)
         geant4.setupCshUI(ui=None)
         for i in geant4.description.detectors():
@@ -47,7 +47,7 @@ class g4MaterialScanner:
                     sys.exit(errno.EINVAL)
         geant4.setupPhysics(phy_list)
 
-        # save the gun for micromanagement
+        # save the gun for micromanagement later
         self.gun = geant4.setupGun('Scanner',
                                    Standalone=True,
                                    particle='geantino',
@@ -59,7 +59,6 @@ class g4MaterialScanner:
 
         scan = DDG4.SteppingAction(self.kernel, 'Geant4MaterialScanner/MaterialScan')
         self.kernel.steppingAction().adopt(scan)
-        # Now build the physics list:
         self.kernel.configure()
         self.kernel.initialize()
         self.kernel.NumEvents = 1
@@ -74,7 +73,7 @@ class g4MaterialScanner:
             self.kernel.run()
         return self.parse_scan_output(out.getvalue())
 
-    # A parser function to convert output from Gean4MaterialScanner to a pandas dataframe
+    # A parser function to convert the output from Gean4MaterialScanner to a pandas dataframe
     @staticmethod
     def parse_scan_output(output):
         # find material scan lines
@@ -88,8 +87,8 @@ class g4MaterialScanner:
                 add_line = True
 
 
-        # NOTE: the code below depends on DDG4::Geant4MaterialScanner
-        # it may need change if the output format is changed (as of the version on 09/15/2023)
+        # NOTE: the code below depends on the output from DDG4::Geant4MaterialScanner
+        # it is valid on 09/15/2023
         scans = []
         first_digit = False
         for i, l in enumerate(lines):
@@ -103,10 +102,10 @@ class g4MaterialScanner:
             scans.append(line.strip('| ').translate({ord(i): None for i in '()'}).replace(',', ' '))
 
         cols = [
-            'material', 'Z', 'A', 'density',
-            'rad_length', 'int_length', 'thickness', 'path_length',
-            'int_X0', 'int_lambda', 'end_x', 'end_y', 'end_z'
-            ]
+                'material', 'Z', 'A', 'density',
+                'rad_length', 'int_length', 'thickness', 'path_length',
+                'int_X0', 'int_lambda', 'end_x', 'end_y', 'end_z'
+                ]
 
         dft = pd.read_csv(StringIO('\n'.join(scans)), sep='\s+', header=None, index_col=0, names=cols)
         return dft.astype({key: np.float64 for key in cols[1:]})
@@ -177,30 +176,31 @@ if __name__ == '__main__':
     if not len(phis):
         print('No phi values from the input {}, aborted!'.format(args.phi))
         exit(-1)
-    mats_indices = odict()
 
-    # build a multi-indices for the data frame
     eta_phi = []
-    # should exist in the scan as int_{value_type}
+    mats_indices = odict()
+    # should exist in the scan output as int_{value_type}
     value_types = ['X0', 'lambda']
     # a data buffer for the X0 values of ((eta, phi), materials, (X0, Lambda))
     data = np.zeros(shape=(len(etas)*len(phis), args.mat_buffer_size, len(value_types)))
-    # scan eta, phi
-    print('Scanning {:d} eta values in [{:.2f}, {:.2f}] and {:d} phi values in [{:.2f}, {:.2f}] (degree).')
+
+    # scan over eta and phi
     scanner = g4MaterialScanner(args.compact)
+    print('Scanning {:d} eta values in [{:.2f}, {:.2f}] and {:d} phi values in [{:.2f}, {:.2f}] (degree).')
     for i, eta in enumerate(etas):
         for j, phi in enumerate(phis):
+
             nlines = i*len(phis) + j
             if nlines % PROGRESS_STEP == 0:
                 print('Scanned {:d}/{:d} lines.'.format(nlines, len(etas)*len(phis)), end='\r', flush=True)
+
             # scan
             direction = (np.cos(phi/180.*np.pi), np.sin(phi/180.*np.pi), np.sinh(eta))
-            # alternative solution
             dfa = scanner.scan(start_point, direction)
             for vt in value_types:
                 dfa.loc[:, vt] = dfa['int_{}'.format(vt)].diff(1).fillna(dfa['int_{}'.format(vt)])
 
-            # scan result
+            # group by materials
             single_scan = dfa.groupby('material')[value_types].sum()
             # print(single_scan)
             for mat, xvals in single_scan.iterrows():
@@ -213,8 +213,8 @@ if __name__ == '__main__':
                 k = mats_indices.get(mat)
                 data[len(eta_phi), k] = xvals.values
             eta_phi.append((eta, phi))
-
     print('Scanned {:d}/{:d} lines.'.format(len(etas)*len(phis), len(etas)*len(phis)))
+
     # save results
     result = dict()
     for i, vt in enumerate(value_types):
