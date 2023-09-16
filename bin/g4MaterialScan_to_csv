@@ -186,7 +186,8 @@ if __name__ == '__main__':
 
     # scan over eta and phi
     scanner = g4MaterialScanner(args.compact)
-    print('Scanning {:d} eta values in [{:.2f}, {:.2f}] and {:d} phi values in [{:.2f}, {:.2f}] (degree).')
+    print('Scanning {:d} eta values in [{:.2f}, {:.2f}] and {:d} phi values in [{:.2f}, {:.2f}] (degree).'\
+          .format(len(etas), etas[0], etas[-1], len(phis), phis[0], phis[-1]))
     for i, eta in enumerate(etas):
         for j, phi in enumerate(phis):
 
