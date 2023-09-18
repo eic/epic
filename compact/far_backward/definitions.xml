@@ -251,7 +251,7 @@
     <constant name="LumiMag_DZ"           value="1.200*m"/>
     <constant name="LumiSweepMag_X"       value="0*m"/>
     <constant name="LumiSweepMag_Y"       value="0*m"/>
-    <constant name="LumiSweepMag_Z"       value="-62.5*m"/>
+    <constant name="LumiSweepMag_Z"       value="-56.0*m"/>
 
     <constant name="LumiAnalyzerMag_X"    value="0*m"/>
     <constant name="LumiAnalyzerMag_Y"    value="0*m"/>
