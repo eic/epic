@@ -85,10 +85,7 @@ inline void EnsureFileFromURLExists(std::string url, std::string file, std::stri
       fs::path cache_path(cache);
       printout(INFO, "FileLoader", "cache " + cache_path.string());
       if (fs::exists(cache_path)) {
-        for (auto const& dir_entry : fs::recursive_directory_iterator(cache_path)) {
-          if (!dir_entry.is_directory())
-            continue;
-          fs::path cache_dir_path = dir_entry.path();
+        auto check_path = [&](const fs::path &cache_dir_path) {
           printout(INFO, "FileLoader", "checking " + cache_dir_path.string());
           fs::path cache_hash_path = cache_dir_path / hash;
           if (fs::exists(cache_hash_path)) {
@@ -109,7 +106,17 @@ inline void EnsureFileFromURLExists(std::string url, std::string file, std::stri
                        "unable to link from " + hash_path.string() + " to " + link_target.string());
               std::_Exit(EXIT_FAILURE);
             }
-            break;
+            return true;
+          }
+	  return false;
+        };
+	if (!check_path(cache_path)) {
+          for (auto const& dir_entry : fs::recursive_directory_iterator(cache_path)) {
+            if (!dir_entry.is_directory())
+              continue;
+            if (check_path(dir_entry.path())) {
+              break;
+            };
           }
         }
       }
