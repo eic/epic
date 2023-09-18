@@ -72,6 +72,11 @@ inline void EnsureFileFromURLExists(std::string url, std::string file, std::stri
     return;
   }
 
+  if (fs::exists(fs::symlink_status(hash_path)) && !fs::exists(fs::status(hash_path))) {
+    printout(INFO, "FileLoader", "removing broken \"" + hash_path.string() + "\" symlink");
+    remove(hash_path);
+  }
+
   // if hash does not exist, we try to retrieve file from cache
   if (!fs::exists(hash_path)) {
     // recursive loop into cache directories
@@ -102,8 +107,6 @@ inline void EnsureFileFromURLExists(std::string url, std::string file, std::stri
             } catch (const fs::filesystem_error&) {
               printout(ERROR, "FileLoader",
                        "unable to link from " + hash_path.string() + " to " + link_target.string());
-              printout(ERROR, "FileLoader", "hint: this may be resolved by removing directory " + parent_path.string());
-              printout(ERROR, "FileLoader", "hint: or in that directory removing the file or link " + cache_hash_path.string());
               std::_Exit(EXIT_FAILURE);
             }
             break;
