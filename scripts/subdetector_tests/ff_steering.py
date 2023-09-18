@@ -23,7 +23,7 @@ SIM = DD4hepSimulation()
 # of the ePIC repo!
 #
 #
-# FIXME: You MUST source the right setup file is you compile 
+# FIXME: You MUST source the right setup file is you compile
 #        ePIC locally!
 #
 #        source epic/install/setup.sh
@@ -157,7 +157,7 @@ SIM.field.stepper = "HelixSimpleRunge"
 #SIM.filter.calo = "edep100MeV"
 #SIM.filter.mapDetFilter['ForwardRomanPot_Station_1'] = "edep100MeV"
 #SIM.filter.mapDetFilter['ForwardRomanPot_Station_2'] = "edep100MeV"
-#SIM.part.minimalKineticEnergy = 100*MeV 
+#SIM.part.minimalKineticEnergy = 100*MeV
 
 ##  a map between patterns and filter objects, using patterns to attach filters to sensitive detector
 ##SIM.filter.mapDetFilter = {}
@@ -300,4 +300,4 @@ SIM.random.file = None
 SIM.random.luxury = 1
 SIM.random.replace_gRandom = True
 SIM.random.seed = None
-SIM.random.type = None 
+SIM.random.type = None
