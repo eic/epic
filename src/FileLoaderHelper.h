@@ -83,19 +83,25 @@ inline void EnsureFileFromURLExists(std::string url, std::string file, std::stri
         for (auto const& dir_entry : fs::recursive_directory_iterator(cache_path)) {
           if (!dir_entry.is_directory())
             continue;
-          fs::path cache_dir_path = cache_path / dir_entry;
+          fs::path cache_dir_path = dir_entry.path();
           printout(INFO, "FileLoader", "checking " + cache_dir_path.string());
           fs::path cache_hash_path = cache_dir_path / hash;
           if (fs::exists(cache_hash_path)) {
             // symlink hash to cache/.../hash
             printout(INFO, "FileLoader",
                      "file " + file + " with hash " + hash + " found in " + cache_hash_path.string());
+	    fs::path link_target;
+	    if (cache_hash_path.is_absolute()) {
+	      link_target = cache_hash_path;
+	    } else {
+	      link_target = fs::proximate(cache_hash_path, parent_path);
+	    }
             try {
-              fs::create_symlink(cache_hash_path, hash_path);
+              fs::create_symlink(link_target, hash_path);
               success = true;
             } catch (const fs::filesystem_error&) {
               printout(ERROR, "FileLoader",
-                       "unable to link from " + hash_path.string() + " to " + cache_hash_path.string());
+                       "unable to link from " + hash_path.string() + " to " + link_target.string());
               printout(ERROR, "FileLoader", "hint: this may be resolved by removing directory " + parent_path.string());
               printout(ERROR, "FileLoader", "hint: or in that directory removing the file or link " + cache_hash_path.string());
               std::_Exit(EXIT_FAILURE);
