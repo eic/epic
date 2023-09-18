@@ -99,7 +99,7 @@ void FieldMapB::Configure(std::vector<xml_comp_t> dimensions)
 {
   // Fill vectors with step size, min, max for each dimension
   for( auto el : dimensions ) {
-    steps.push_back( el.step() ); 
+    steps.push_back( el.step() );
     mins.push_back( getAttrOrDefault<double>(el, _Unicode(min), 0) );
     maxs.push_back( getAttrOrDefault<double>(el, _Unicode(max), 0) );
   }
@@ -107,7 +107,7 @@ void FieldMapB::Configure(std::vector<xml_comp_t> dimensions)
   if( coord_type.compare("BrBz") == 0 ) {
     int nr = int((maxs[0] - mins[0]) / steps[0]) + 2;
     int nz = int((maxs[1] - mins[1]) / steps[1]) + 2;
-    
+
     Bvals_RZ.resize(nr);
     for (auto& B2 : Bvals_RZ) {
       B2.resize(nz);
@@ -121,7 +121,7 @@ void FieldMapB::Configure(std::vector<xml_comp_t> dimensions)
     int nx = int((maxs[0] - mins[0]) / steps[0]) + 2;
     int ny = int((maxs[1] - mins[1]) / steps[1]) + 2;
     int nz = int((maxs[2] - mins[2]) / steps[2]) + 2;
-   
+
     Bvals_XYZ.resize(nx);
     for (auto& B3 : Bvals_XYZ) {
       B3.resize(ny);
@@ -135,7 +135,7 @@ void FieldMapB::Configure(std::vector<xml_comp_t> dimensions)
   }
 }
 
-// get cell indices corresponding to point of interest 
+// get cell indices corresponding to point of interest
 void FieldMapB::GetIndices(std::vector<double> coord, std::vector<int> *indices, std::vector<double> *deltas)
 {
   for( uint i = 0; i < coord.size(); i++ ) {
@@ -209,7 +209,7 @@ void FieldMapB::fieldComponents(const double* pos, double* field)
 {
   // coordinate conversion
   auto p = trans_inv * ROOT::Math::XYZPoint(pos[0], pos[1], pos[2]);
-  
+
   std::vector<int>  indices = {};
   std::vector<double> deltas = {};
   ROOT::Math::XYZPoint B = ROOT::Math::XYZPoint(0,0,0);
@@ -236,14 +236,14 @@ void FieldMapB::fieldComponents(const double* pos, double* field)
     auto& p3 = Bvals_RZ[indices[0] + 1][indices[1] + 1];
 
     // Bilinear interpolation
-    double Br = p0[0] * (1 - deltas[0]) * (1 - deltas[1]) 
-      + p1[0] * (1 - deltas[0]) * deltas[1] 
+    double Br = p0[0] * (1 - deltas[0]) * (1 - deltas[1])
+      + p1[0] * (1 - deltas[0]) * deltas[1]
       + p2[0] * deltas[0] * (1 - deltas[1])
       + p3[0] * deltas[0] * deltas[1];
 
-    double Bz = p0[1] * (1 - deltas[0]) * (1 - deltas[1]) 
-      + p1[1] * (1 - deltas[0]) * deltas[1] 
-      + p2[1] * deltas[0] * (1 - deltas[1]) 
+    double Bz = p0[1] * (1 - deltas[0]) * (1 - deltas[1])
+      + p1[1] * (1 - deltas[0]) * deltas[1]
+      + p2[1] * deltas[0] * (1 - deltas[1])
       + p3[1] * deltas[0] * deltas[1];
 
     // convert Br Bz to Bx By Bz
@@ -263,13 +263,13 @@ void FieldMapB::fieldComponents(const double* pos, double* field)
     for(int comp = 0; comp < 3; comp++) { // field component loop
       // Trilinear interpolation
       // First along X, along 4 lines
-      double b00 = Bvals_XYZ[indices[0]][indices[1]][indices[2]][comp]         * (1 - deltas[0])         
+      double b00 = Bvals_XYZ[indices[0]][indices[1]][indices[2]][comp]         * (1 - deltas[0])
         + Bvals_XYZ[indices[0] + 1][indices[1]][indices[2]][comp]              * deltas[0];
-      double b01 = Bvals_XYZ[indices[0]][indices[1]][indices[2] + 1][comp]     * (1 - deltas[0])     
+      double b01 = Bvals_XYZ[indices[0]][indices[1]][indices[2] + 1][comp]     * (1 - deltas[0])
         + Bvals_XYZ[indices[0] + 1][indices[1]][indices[2] + 1][comp]          * deltas[0];
-      double b10 = Bvals_XYZ[indices[0]][indices[1] + 1][indices[2]][comp]     * (1 - deltas[0])     
+      double b10 = Bvals_XYZ[indices[0]][indices[1] + 1][indices[2]][comp]     * (1 - deltas[0])
         + Bvals_XYZ[indices[0] + 1][indices[1] + 1][indices[2]][comp]          * deltas[0];
-      double b11 = Bvals_XYZ[indices[0]][indices[1] + 1][indices[2] + 1][comp] * (1 - deltas[0]) 
+      double b11 = Bvals_XYZ[indices[0]][indices[1] + 1][indices[2] + 1][comp] * (1 - deltas[0])
         + Bvals_XYZ[indices[0] + 1][indices[1] + 1][indices[2] + 1][comp]      * deltas[0];
       //// Next along Y, along 2 lines
       double b0 = b00 * (1 - deltas[1]) + b10 * deltas[1];
@@ -286,7 +286,7 @@ void FieldMapB::fieldComponents(const double* pos, double* field)
   field[1] += B.y() * tesla;
   field[2] += B.z() * tesla;
 
-  return;  
+  return;
 }
 
 // assign the field map to CartesianField
@@ -300,10 +300,10 @@ static Ref_t create_field_map_b(Detector& /*lcdd*/, xml::Handle_t handle)
 
   CartesianField field;
   std::string    field_type = x_par.attr<std::string>(_Unicode(field_type));
-  
+
   // coordinate type: "BrBz" or "BxByBz"
   std::string    coord_type = x_par.attr<std::string>(_Unicode(coord_type));
-  
+
   // dimensions
   xml_comp_t x_dim = x_par.dimensions();
 
@@ -323,7 +323,7 @@ static Ref_t create_field_map_b(Detector& /*lcdd*/, xml::Handle_t handle)
     printout(ERROR, "FieldMapB", "Coordinate type: " + coord_type + ", is not BrBz nor BxByBz");
     std::_Exit(EXIT_FAILURE);
   }
-  
+
   std::string field_map_file  = x_par.attr<std::string>(_Unicode(field_map));
   std::string field_map_url   = x_par.attr<std::string>(_Unicode(url));
   std::string field_map_cache = getAttrOrDefault<std::string>(x_par, _Unicode(cache), "");
