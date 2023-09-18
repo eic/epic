@@ -92,12 +92,12 @@ inline void EnsureFileFromURLExists(std::string url, std::string file, std::stri
             // symlink hash to cache/.../hash
             printout(INFO, "FileLoader",
                      "file " + file + " with hash " + hash + " found in " + cache_hash_path.string());
-	    fs::path link_target;
-	    if (cache_hash_path.is_absolute()) {
-	      link_target = cache_hash_path;
-	    } else {
-	      link_target = fs::proximate(cache_hash_path, parent_path);
-	    }
+            fs::path link_target;
+            if (cache_hash_path.is_absolute()) {
+              link_target = cache_hash_path;
+            } else {
+              link_target = fs::proximate(cache_hash_path, parent_path);
+            }
             try {
               fs::create_symlink(link_target, hash_path);
               success = true;
@@ -108,9 +108,9 @@ inline void EnsureFileFromURLExists(std::string url, std::string file, std::stri
             }
             return true;
           }
-	  return false;
+          return false;
         };
-	if (!check_path(cache_path)) {
+        if (!check_path(cache_path)) {
           for (auto const& dir_entry : fs::recursive_directory_iterator(cache_path)) {
             if (!dir_entry.is_directory())
               continue;
