@@ -76,9 +76,9 @@ void buildSubsector(Detector& description, xml_h e, SensitiveDetector sens, vect
           oldEmcGap > 0) // last row in 2 most inner groups - a temporary solution for avoiding overlaps
       {
         if (nRows == nInnerRowsGroup2) {
-          rTop = rTop * 0.999 * cos(dphi / 2) * cos(dphi / 3);
+          rTop = rTop * cos(dphi / 2) * cos(dphi / 3);
         } else if (nRows == nInnerRowsGroup1) {
-          rTop = rTop * 1.001 * cos(dphi / 2) * cos(dphi / 3);
+          rTop = rTop * 1.002 * cos(dphi / 2) * cos(dphi / 3);
         }
       }
 
