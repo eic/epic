@@ -47,22 +47,42 @@ static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector /* sens *
         // make it easier to update later.
         //----------------------------------------------
 
-        const int numGaps = 6; //number of gaps between magnets (excluding the IP to B0pf transition -- special case)
-        const int numMagnets = 7; //number of actual FF magnets between IP and FF detectors
-
         bool makeIP_B0pfVacuum = true; //This is for the special gap location between IP and b0pf
-        const int numDetElements = numMagnets + numGaps + 1;
+        
+		//information for actual FF magnets, with magnet centers as reference
+        vector <double> radii_magnet;
+        vector <double> lengths_magnet;
+        vector <double> rotation_magnet;
+        vector <double> x_elem_magnet;
+        vector <double> y_elem_magnet;
+        vector <double> z_elem_magnet;
+		
+		//calculated entrance/exit points of FF magnet
+        vector <double> x_beg;
+        vector <double> z_beg;
+        vector <double> x_end;
+        vector <double> z_end;
 
-        double radii_magnet[numMagnets];
-        double lengths_magnet[numMagnets];
-        double rotation_magnet[numMagnets];
-        double x_elem_magnet[numMagnets];
-        double y_elem_magnet[numMagnets];
-        double z_elem_magnet[numMagnets];
+		//calculated center of gap regions between magnets, rotation, and length
+        vector <double> angle_elem_gap;
+        vector <double> z_gap;
+        vector <double> x_gap;
+        vector <double> length_gap;
 
-        //loop to fill arrays here
+		//storage elements for CutTube geometry element used for gaps
+        vector <double> inRadius;
+        vector <double> outRadius;
+        vector <double> nxLow;
+        vector <double> nyLow;
+        vector <double> nzLow;
+        vector <double> nxHigh;
+        vector <double> nyHigh;
+        vector <double> nzHigh;
+        vector <double> phi_initial;
+        vector <double> phi_final;
 
-        int idx = 0;
+        vector <DetElement*> detectorElement;
+
         for(xml_coll_t c(x_det,_U(element)); c; ++c){
 
 			xml_dim_t pos       = c.child(_U(placement));
@@ -75,16 +95,17 @@ static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector /* sens *
             xml_dim_t apperture = c.child(_Unicode(apperture));
             double    app_r     = apperture.r();
 
+            radii_magnet.push_back(app_r); // cm
+            lengths_magnet.push_back(dim_z); //cm
+            rotation_magnet.push_back(pos_theta);  // radians
+            x_elem_magnet.push_back(pos_x*dd4hep::cm);
+            y_elem_magnet.push_back(pos_y*dd4hep::cm);
+            z_elem_magnet.push_back(pos_z*dd4hep::cm);
 
-            radii_magnet[idx]     = app_r; // cm
-            lengths_magnet[idx]   = dim_z; //cm
-            rotation_magnet[idx]  = pos_theta;  // radians
-            x_elem_magnet[idx]    = pos_x*dd4hep::cm;
-            y_elem_magnet[idx]    = pos_y*dd4hep::cm;
-            z_elem_magnet[idx]    = pos_z*dd4hep::cm;
-
-            idx++;
         }
+
+		int numMagnets = radii_magnet.size(); //number of actual FF magnets between IP and FF detectors
+		int numGaps = numMagnets - 1; //number of gaps between magnets (excluding the IP to B0pf transition -- special case)
 
         //-------------------------------------------
         // override numbers for the first element -->
@@ -100,22 +121,7 @@ static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector /* sens *
         x_elem_magnet[0]    = -16.5;   // cm
         y_elem_magnet[0]    = 0.0;     // cm
         z_elem_magnet[0]    = 640.0;   // cm
-
-
-
-        double x_beg[numMagnets];
-        double z_beg[numMagnets];
-        double x_end[numMagnets];
-        double z_end[numMagnets];
-
-        double angle_elem_gap[numGaps];
-        double z_gap[numGaps];
-        double x_gap[numGaps];
-        double length_gap[numGaps];
-
-
-        DetElement *detectorElement[numDetElements];
-
+		
         //-------------------------------------------
         //calculate entrance/exit points of magnets
         //-------------------------------------------
@@ -124,11 +130,11 @@ static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector /* sens *
 
                 // need to use the common coordinate system -->
                 // use x = z, and y = x to make things easier
-
-                z_beg[i] = getRotatedZ(-0.5*lengths_magnet[i], 0.0, rotation_magnet[i]) + z_elem_magnet[i];
-                z_end[i] = getRotatedZ( 0.5*lengths_magnet[i], 0.0, rotation_magnet[i]) + z_elem_magnet[i];
-                x_beg[i] = getRotatedX(-0.5*lengths_magnet[i], 0.0, rotation_magnet[i]) + x_elem_magnet[i];
-                x_end[i] = getRotatedX( 0.5*lengths_magnet[i], 0.0, rotation_magnet[i]) + x_elem_magnet[i];
+				
+                z_beg.push_back(getRotatedZ(-0.5*lengths_magnet[i], 0.0, rotation_magnet[i]) + z_elem_magnet[i]);
+                z_end.push_back(getRotatedZ( 0.5*lengths_magnet[i], 0.0, rotation_magnet[i]) + z_elem_magnet[i]);
+                x_beg.push_back(getRotatedX(-0.5*lengths_magnet[i], 0.0, rotation_magnet[i]) + x_elem_magnet[i]);
+                x_end.push_back(getRotatedX( 0.5*lengths_magnet[i], 0.0, rotation_magnet[i]) + x_elem_magnet[i]);
 
         }
 
@@ -155,37 +161,30 @@ static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector /* sens *
         //-----------------------------------------------
 
         for(int i = 1; i < numMagnets; i++){
-
-            angle_elem_gap[i-1] = (x_beg[i] - x_end[i-1])/(z_beg[i] - z_end[i-1]);
-            length_gap[i-1] = sqrt(pow(z_beg[i] - z_end[i-1], 2) + pow(x_beg[i] - x_end[i-1], 2));
-            z_gap[i-1] = z_end[i-1] + 0.5*length_gap[i-1]*cos(angle_elem_gap[i-1]);
-            x_gap[i-1] = x_end[i-1] + 0.5*length_gap[i-1]*sin(angle_elem_gap[i-1]);
+			
+            angle_elem_gap.push_back((x_beg[i] - x_end[i-1])/(z_beg[i] - z_end[i-1]));
+            length_gap.push_back(sqrt(pow(z_beg[i] - z_end[i-1], 2) + pow(x_beg[i] - x_end[i-1], 2)));
+            z_gap.push_back(z_end[i-1] + 0.5*length_gap[i-1]*cos(angle_elem_gap[i-1]));
+            x_gap.push_back(x_end[i-1] + 0.5*length_gap[i-1]*sin(angle_elem_gap[i-1]));
 
         }
 
-        Double_t inRadius[numGaps];
-        Double_t outRadius[numGaps];
-        Double_t nxLow[numGaps];
-        Double_t nyLow[numGaps];
-        Double_t nzLow[numGaps];
-        Double_t nxHigh[numGaps];
-        Double_t nyHigh[numGaps];
-        Double_t nzHigh[numGaps];
-        Double_t phi_initial[numGaps];
-        Double_t phi_final[numGaps];
+        //-----------------------------------------------
+        // fill CutTube storage elements
+        //-----------------------------------------------
 
         for(int gapIdx = 0; gapIdx < numGaps; gapIdx++){
 
-            inRadius[gapIdx]    = 0.0;
-            outRadius[gapIdx]   = radii_magnet[gapIdx+1];
-            phi_initial[gapIdx] = 0.0;
-            phi_final[gapIdx]   = 2*M_PI;
-            nxLow[gapIdx]       = -(length_gap[gapIdx]/2.0)*sin(rotation_magnet[gapIdx]-angle_elem_gap[gapIdx]);
-            nyLow[gapIdx]       = 0.0;
-            nzLow[gapIdx]       = -(length_gap[gapIdx]/2.0)*cos(rotation_magnet[gapIdx]-angle_elem_gap[gapIdx]);
-            nxHigh[gapIdx]      = (length_gap[gapIdx]/2.0)*sin(rotation_magnet[gapIdx+1]-angle_elem_gap[gapIdx]);
-            nyHigh[gapIdx]      = 0.0;
-            nzHigh[gapIdx]      = (length_gap[gapIdx]/2.0)*cos(rotation_magnet[gapIdx+1]-angle_elem_gap[gapIdx]);
+            inRadius.push_back(0.0);
+            outRadius.push_back(radii_magnet[gapIdx+1]);
+            phi_initial.push_back(0.0);
+            phi_final.push_back(2*M_PI);
+            nxLow.push_back(-(length_gap[gapIdx]/2.0)*sin(rotation_magnet[gapIdx]-angle_elem_gap[gapIdx]));
+            nyLow.push_back(0.0);
+            nzLow.push_back(-(length_gap[gapIdx]/2.0)*cos(rotation_magnet[gapIdx]-angle_elem_gap[gapIdx]));
+            nxHigh.push_back((length_gap[gapIdx]/2.0)*sin(rotation_magnet[gapIdx+1]-angle_elem_gap[gapIdx]));
+            nyHigh.push_back(0.0);
+            nzHigh.push_back((length_gap[gapIdx]/2.0)*cos(rotation_magnet[gapIdx+1]-angle_elem_gap[gapIdx]));
 
         }
 
@@ -204,7 +203,10 @@ static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector /* sens *
             auto pv = assembly.placeVolume(vpiece, Transform3D(RotationY(rotation_magnet[pieceIdx]),
                                                    Position(x_elem_magnet[pieceIdx], y_elem_magnet[pieceIdx], z_elem_magnet[pieceIdx])));
             pv.addPhysVolID("sector", 1);
-            detectorElement[pieceIdx] = new DetElement(sdet, Form("sector%d_de", pieceIdx), 1);
+            
+			DetElement * tmp = new DetElement(sdet, Form("sector%d_de", pieceIdx), 1);
+			
+			detectorElement.push_back(tmp);
             detectorElement[pieceIdx]->setPlacement(pv);
 
         }
@@ -228,7 +230,9 @@ static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector /* sens *
 			auto pv = assembly.placeVolume(vpiece, Transform3D(RotationY(angle_elem_gap[correctIdx]),
                                                    Position(x_gap[correctIdx], 0.0, z_gap[correctIdx])));
 			pv.addPhysVolID("sector", 1);
-            detectorElement[pieceIdx] = new DetElement(sdet, Form("sector%d_de", pieceIdx), 1);
+			
+			DetElement * tmp = new DetElement(sdet, Form("sector%d_de", pieceIdx), 1);
+			detectorElement.push_back(tmp);
             detectorElement[pieceIdx]->setPlacement(pv);
 
     }
@@ -252,7 +256,10 @@ static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector /* sens *
 
 			auto pv = assembly.placeVolume(specialGap_v, Transform3D(RotationY(crossingAngle), Position(specialGap_x, 0.0, specialGap_z)));
 			pv.addPhysVolID("sector", 1);
-			detectorElement[numGaps + numMagnets] = new DetElement(sdet, Form("sector%d_de", numGaps + numMagnets), 1);
+			
+			DetElement * tmp = new DetElement(sdet, Form("sector%d_de", numGaps + numMagnets), 1);
+			detectorElement.push_back(tmp);
+			
 			detectorElement[numGaps + numMagnets]->setPlacement(pv);
 
         }
