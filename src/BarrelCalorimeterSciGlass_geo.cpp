@@ -241,12 +241,12 @@ static Ref_t create_detector(Detector& lcdd, xml_h handle, SensitiveDetector sen
         double flare_angle_azimuthal;
         // Azimuthal flaring independently defined
         if (flare_angle_azimuthal_s == "auto") {
-	  // This is a solution to x4 - x1 = delta_r * tan(alpha), where the
-	  // "alpha" is the azimuthal flaring for projection to x-y plane and
-	  // "delta_r" is the length of the projection of the tower onto the
-	  // same x-y plane.
-	  // Here, we assumed tan(alpha) = x1 / row_rmin flaring preserves the
-	  // desired gap, which is strictly not true.
+          // This is a solution to x4 - x1 = delta_r * tan(alpha), where the
+          // "alpha" is the azimuthal flaring for projection to x-y plane and
+          // "delta_r" is the length of the projection of the tower onto the
+          // same x-y plane.
+          // Here, we assumed tan(alpha) = x1 / row_rmin flaring preserves the
+          // desired gap, which is strictly not true.
           flare_angle_azimuthal = atan(
             (cos(beta_max) + sin(beta_max) * 2 * y1 / length) * (x1 / row_rmin)
             - (x2 - x1) / length

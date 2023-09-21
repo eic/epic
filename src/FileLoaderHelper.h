@@ -72,6 +72,11 @@ inline void EnsureFileFromURLExists(std::string url, std::string file, std::stri
     return;
   }
 
+  if (fs::exists(fs::symlink_status(hash_path)) && !fs::exists(fs::status(hash_path))) {
+    printout(INFO, "FileLoader", "removing broken \"" + hash_path.string() + "\" symlink");
+    remove(hash_path);
+  }
+
   // if hash does not exist, we try to retrieve file from cache
   if (!fs::exists(hash_path)) {
     // recursive loop into cache directories
@@ -80,27 +85,38 @@ inline void EnsureFileFromURLExists(std::string url, std::string file, std::stri
       fs::path cache_path(cache);
       printout(INFO, "FileLoader", "cache " + cache_path.string());
       if (fs::exists(cache_path)) {
-        for (auto const& dir_entry : fs::recursive_directory_iterator(cache_path)) {
-          if (!dir_entry.is_directory())
-            continue;
-          fs::path cache_dir_path = cache_path / dir_entry;
+        auto check_path = [&](const fs::path &cache_dir_path) {
           printout(INFO, "FileLoader", "checking " + cache_dir_path.string());
           fs::path cache_hash_path = cache_dir_path / hash;
           if (fs::exists(cache_hash_path)) {
             // symlink hash to cache/.../hash
             printout(INFO, "FileLoader",
                      "file " + file + " with hash " + hash + " found in " + cache_hash_path.string());
+            fs::path link_target;
+            if (cache_hash_path.is_absolute()) {
+              link_target = cache_hash_path;
+            } else {
+              link_target = fs::proximate(cache_hash_path, parent_path);
+            }
             try {
-              fs::create_symlink(cache_hash_path, hash_path);
+              fs::create_symlink(link_target, hash_path);
               success = true;
             } catch (const fs::filesystem_error&) {
               printout(ERROR, "FileLoader",
-                       "unable to link from " + hash_path.string() + " to " + cache_hash_path.string());
-              printout(ERROR, "FileLoader", "hint: this may be resolved by removing directory " + parent_path.string());
-              printout(ERROR, "FileLoader", "hint: or in that directory removing the file or link " + cache_hash_path.string());
+                       "unable to link from " + hash_path.string() + " to " + link_target.string());
               std::_Exit(EXIT_FAILURE);
             }
-            break;
+            return true;
+          }
+          return false;
+        };
+        if (!check_path(cache_path)) {
+          for (auto const& dir_entry : fs::recursive_directory_iterator(cache_path)) {
+            if (!dir_entry.is_directory())
+              continue;
+            if (check_path(dir_entry.path())) {
+              break;
+            };
           }
         }
       }

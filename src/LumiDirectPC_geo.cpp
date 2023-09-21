@@ -23,7 +23,7 @@ static Ref_t create_detector(Detector& desc, xml_h e, SensitiveDetector sens)
   //
   string        det_name        = x_det.nameStr();
   string        mat_name        = dd4hep::getAttrOrDefault<string>( x_det, _U(material), "PbWO4" );
-  int		det_ID		=x_det.id();
+  int           det_ID          =x_det.id();
   DetElement det(det_name, det_ID);
   //
   double        sizeX           = x_dim.x();
