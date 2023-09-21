@@ -48,28 +48,28 @@ static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector /* sens *
         //----------------------------------------------
 
         bool makeIP_B0pfVacuum = true; //This is for the special gap location between IP and b0pf
-        
-		//information for actual FF magnets, with magnet centers as reference
+
+                //information for actual FF magnets, with magnet centers as reference
         vector <double> radii_magnet;
         vector <double> lengths_magnet;
         vector <double> rotation_magnet;
         vector <double> x_elem_magnet;
         vector <double> y_elem_magnet;
         vector <double> z_elem_magnet;
-		
-		//calculated entrance/exit points of FF magnet
+
+                //calculated entrance/exit points of FF magnet
         vector <double> x_beg;
         vector <double> z_beg;
         vector <double> x_end;
         vector <double> z_end;
 
-		//calculated center of gap regions between magnets, rotation, and length
+                //calculated center of gap regions between magnets, rotation, and length
         vector <double> angle_elem_gap;
         vector <double> z_gap;
         vector <double> x_gap;
         vector <double> length_gap;
 
-		//storage elements for CutTube geometry element used for gaps
+                //storage elements for CutTube geometry element used for gaps
         vector <double> inRadius;
         vector <double> outRadius;
         vector <double> nxLow;
@@ -85,7 +85,7 @@ static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector /* sens *
 
         for(xml_coll_t c(x_det,_U(element)); c; ++c){
 
-			xml_dim_t pos       = c.child(_U(placement));
+                        xml_dim_t pos       = c.child(_U(placement));
             double    pos_x     = pos.x();
             double    pos_y     = pos.y();
             double    pos_z     = pos.z();
@@ -104,15 +104,15 @@ static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector /* sens *
 
         }
 
-		int numMagnets = radii_magnet.size(); //number of actual FF magnets between IP and FF detectors
-		int numGaps = numMagnets - 1; //number of gaps between magnets (excluding the IP to B0pf transition -- special case)
+                int numMagnets = radii_magnet.size(); //number of actual FF magnets between IP and FF detectors
+                int numGaps = numMagnets - 1; //number of gaps between magnets (excluding the IP to B0pf transition -- special case)
 
         //-------------------------------------------
         // override numbers for the first element -->
         // doesn't use the actual B0pf geometry!!!
-		// -->it's based on the B0 beam pipe
-		// this needs to be fixed later to read-in 
-		// that beam pipe geometry
+                // -->it's based on the B0 beam pipe
+                // this needs to be fixed later to read-in
+                // that beam pipe geometry
         //-------------------------------------------
 
         radii_magnet[0]     = 2.9;     // cm
@@ -121,7 +121,7 @@ static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector /* sens *
         x_elem_magnet[0]    = -16.5;   // cm
         y_elem_magnet[0]    = 0.0;     // cm
         z_elem_magnet[0]    = 640.0;   // cm
-		
+
         //-------------------------------------------
         //calculate entrance/exit points of magnets
         //-------------------------------------------
@@ -130,7 +130,7 @@ static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector /* sens *
 
                 // need to use the common coordinate system -->
                 // use x = z, and y = x to make things easier
-				
+
                 z_beg.push_back(getRotatedZ(-0.5*lengths_magnet[i], 0.0, rotation_magnet[i]) + z_elem_magnet[i]);
                 z_end.push_back(getRotatedZ( 0.5*lengths_magnet[i], 0.0, rotation_magnet[i]) + z_elem_magnet[i]);
                 x_beg.push_back(getRotatedX(-0.5*lengths_magnet[i], 0.0, rotation_magnet[i]) + x_elem_magnet[i]);
@@ -161,7 +161,7 @@ static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector /* sens *
         //-----------------------------------------------
 
         for(int i = 1; i < numMagnets; i++){
-			
+
             angle_elem_gap.push_back((x_beg[i] - x_end[i-1])/(z_beg[i] - z_end[i-1]));
             length_gap.push_back(sqrt(pow(z_beg[i] - z_end[i-1], 2) + pow(x_beg[i] - x_end[i-1], 2)));
             z_gap.push_back(z_end[i-1] + 0.5*length_gap[i-1]*cos(angle_elem_gap[i-1]));
@@ -203,10 +203,10 @@ static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector /* sens *
             auto pv = assembly.placeVolume(vpiece, Transform3D(RotationY(rotation_magnet[pieceIdx]),
                                                    Position(x_elem_magnet[pieceIdx], y_elem_magnet[pieceIdx], z_elem_magnet[pieceIdx])));
             pv.addPhysVolID("sector", 1);
-            
-			DetElement * tmp = new DetElement(sdet, Form("sector%d_de", pieceIdx), 1);
-			
-			detectorElement.push_back(tmp);
+
+                        DetElement * tmp = new DetElement(sdet, Form("sector%d_de", pieceIdx), 1);
+
+                        detectorElement.push_back(tmp);
             detectorElement[pieceIdx]->setPlacement(pv);
 
         }
@@ -221,18 +221,18 @@ static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector /* sens *
 
             std::string piece_name  = Form("GapVacuum%d", correctIdx);
 
-       	 	CutTube gapPiece(piece_name, inRadius[correctIdx], outRadius[correctIdx], length_gap[correctIdx]/2, phi_initial[correctIdx], phi_final[correctIdx],
+                CutTube gapPiece(piece_name, inRadius[correctIdx], outRadius[correctIdx], length_gap[correctIdx]/2, phi_initial[correctIdx], phi_final[correctIdx],
                                                nxLow[correctIdx], nyLow[correctIdx], nzLow[correctIdx], nxHigh[correctIdx], nyHigh[correctIdx], nzHigh[correctIdx]);
 
             Volume vpiece(piece_name, gapPiece, m_Vac);
-        	sdet.setAttributes(det, vpiece, x_det.regionStr(), x_det.limitsStr(), vis_name);
+                sdet.setAttributes(det, vpiece, x_det.regionStr(), x_det.limitsStr(), vis_name);
 
-			auto pv = assembly.placeVolume(vpiece, Transform3D(RotationY(angle_elem_gap[correctIdx]),
+                        auto pv = assembly.placeVolume(vpiece, Transform3D(RotationY(angle_elem_gap[correctIdx]),
                                                    Position(x_gap[correctIdx], 0.0, z_gap[correctIdx])));
-			pv.addPhysVolID("sector", 1);
-			
-			DetElement * tmp = new DetElement(sdet, Form("sector%d_de", pieceIdx), 1);
-			detectorElement.push_back(tmp);
+                        pv.addPhysVolID("sector", 1);
+
+                        DetElement * tmp = new DetElement(sdet, Form("sector%d_de", pieceIdx), 1);
+                        detectorElement.push_back(tmp);
             detectorElement[pieceIdx]->setPlacement(pv);
 
     }
@@ -243,24 +243,24 @@ static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector /* sens *
 
         if(makeIP_B0pfVacuum){
 
-        	double specialGapLength = sqrt(pow(z_beg[0] - endOfCentralBeamPipe_z, 2) + pow(x_beg[0] - endOfCentralBeamPipe_x, 2)) - 0.1;
-			double specialGap_z = 0.5*specialGapLength*cos(crossingAngle) + endOfCentralBeamPipe_z;
-			double specialGap_x = 0.5*specialGapLength*sin(crossingAngle) + endOfCentralBeamPipe_x;
+                double specialGapLength = sqrt(pow(z_beg[0] - endOfCentralBeamPipe_z, 2) + pow(x_beg[0] - endOfCentralBeamPipe_x, 2)) - 0.1;
+                        double specialGap_z = 0.5*specialGapLength*cos(crossingAngle) + endOfCentralBeamPipe_z;
+                        double specialGap_x = 0.5*specialGapLength*sin(crossingAngle) + endOfCentralBeamPipe_x;
 
-			std::string piece_name  = Form("GapVacuum%d", numGaps + numMagnets);
+                        std::string piece_name  = Form("GapVacuum%d", numGaps + numMagnets);
 
-			Cone specialGap(piece_name, specialGapLength/2, 0.0, vacuumDiameterEntrance/2, 0.0, vacuumDiameterExit/2 );
+                        Cone specialGap(piece_name, specialGapLength/2, 0.0, vacuumDiameterEntrance/2, 0.0, vacuumDiameterExit/2 );
 
-			Volume specialGap_v(piece_name, specialGap, m_Vac);
-			sdet.setAttributes(det, specialGap_v, x_det.regionStr(), x_det.limitsStr(), vis_name);
+                        Volume specialGap_v(piece_name, specialGap, m_Vac);
+                        sdet.setAttributes(det, specialGap_v, x_det.regionStr(), x_det.limitsStr(), vis_name);
 
-			auto pv = assembly.placeVolume(specialGap_v, Transform3D(RotationY(crossingAngle), Position(specialGap_x, 0.0, specialGap_z)));
-			pv.addPhysVolID("sector", 1);
-			
-			DetElement * tmp = new DetElement(sdet, Form("sector%d_de", numGaps + numMagnets), 1);
-			detectorElement.push_back(tmp);
-			
-			detectorElement[numGaps + numMagnets]->setPlacement(pv);
+                        auto pv = assembly.placeVolume(specialGap_v, Transform3D(RotationY(crossingAngle), Position(specialGap_x, 0.0, specialGap_z)));
+                        pv.addPhysVolID("sector", 1);
+
+                        DetElement * tmp = new DetElement(sdet, Form("sector%d_de", numGaps + numMagnets), 1);
+                        detectorElement.push_back(tmp);
+
+                        detectorElement[numGaps + numMagnets]->setPlacement(pv);
 
         }
 
