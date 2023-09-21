@@ -47,8 +47,10 @@ void buildSubsector(Detector& description, xml_h e, SensitiveDetector sens, vect
                                   : getR(zPos, etaBins[nRows]) - oldEmcGap; // closest tile distance to the beam pipe
   double rmin         = isStarEmc ? getR(zOldPos, starEmcEtaBins[0])
                                   : getR(zPos, etaBins[0]) - oldEmcGap; // furthest tile distance to the beam pipe
-
-  /////Volume subSectorVol("subsector", Tube(rmin, rmax, slice_thickness / 2, 0, dphi), air);
+  if (oldEmcGap <= 0 || nRows == nInnerRowsGroup3) // tricky check if this is not the innermost group or second
+                                                   // innermost group
+    rmax *= (2 - cos(dphi / 2));
+  // to account for difference between trapezoid and tube segment
 
   for (int iSubSector = 0; iSubSector < nSubSectors; iSubSector++) {
     int subSector_volID = iSubSector;
@@ -121,21 +123,22 @@ void buildSubsector(Detector& description, xml_h e, SensitiveDetector sens, vect
 }
 static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector sens)
 {
-  xml_det_t      x_det    = e;
-  xml_dim_t      dim      = x_det.dimensions();
-  int            det_id   = x_det.id();
-  bool           reflect  = x_det.reflect(true);
-  string         det_name = x_det.nameStr();
-  Material       air      = description.air();
-  int            numsides = dim.numsides();
-  xml::Component pos      = x_det.position();
-  double         rmin     = dim.rmin();
-  double         rmax     = dim.rmax();
-  double         zmin     = dim.zmin();
+  xml_det_t x_det    = e;
+  xml_dim_t dim      = x_det.dimensions();
+  int       det_id   = x_det.id();
+  bool      reflect  = x_det.reflect(true);
+  string    det_name = x_det.nameStr();
+  Material  air      = description.air();
+  // int            numsides = dim.numsides();
+  xml::Component pos  = x_det.position();
+  double         rmin = dim.rmin();
+  double         rmax = dim.rmax();
+  double         zmin = dim.zmin();
 
-  Layering   layering(x_det);
-  double     totalThickness = layering.totalThickness();
-  Volume     endcapVol("endcap", PolyhedraRegular(numsides, rmin, rmax, totalThickness), air);
+  Layering layering(x_det);
+  double   totalThickness = layering.totalThickness();
+
+  Volume endcapVol("endcap", Tube(rmin, rmax + 2 * cm, totalThickness), air); // rmax + 2 * cm -to account for disk gap
   DetElement endcap("endcap", det_id);
 
   double layerZ = -totalThickness / 2;
@@ -152,12 +155,12 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
     // Looping through the number of repeated Rows in each section
     for (int i = 0; i < repeat; i++) {
       iLayer++;
-      string               l_name = _toString(iLayer - 1, "layer%d");
-      Volume               layer_volume("layer", PolyhedraRegular(numsides, rmin, rmax, layer_thickness), air);
+      string               l_name   = _toString(iLayer - 1, "layer%d");
+      double               disksGap = getAttrOrDefault(x_layer, _Unicode(disksGap), 1 * cm);
+      Volume               layer_volume("layer", Tube(rmin, rmax + disksGap, layer_thickness), air);
       vector<PlacedVolume> sensitives;
       int                  slice_number = 1;
       double               sliceZ       = -layer_thickness / 2;
-      double               disksGap     = getAttrOrDefault(x_layer, _Unicode(disksGap), 1 * cm);
 
       for (xml_coll_t xs(x_layer, _U(slice)); xs; ++xs) {
         xml_comp_t x_slice         = xs;
@@ -168,7 +171,7 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
         Material s_mat = description.material(x_slice.materialStr());
         sliceZ += slice_thickness / 2;
 
-        Volume slice_volume("slice", Tube(rmin, rmax, slice_thickness / 2), air);
+        Volume slice_volume("slice", Tube(rmin, rmax + disksGap, slice_thickness / 2), air);
 
         if (x_slice.isSensitive()) {
           ConeSegment sectorShape(slice_thickness / 2, rmin, rmax, rmin, rmax, 0, 2 * M_PI / (nHcalSectors));

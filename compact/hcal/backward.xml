@@ -11,7 +11,7 @@
     <constant name="HcalEndcapNLayerGap" value="0.15 * cm"/>
     <constant name="HcalEndcapNDiskGap" value="1 * cm"/>
     <constant name="HcalEndcapN_polyhedron_rmax" value="275.0*cm"/>
-    <constant name="HcalEndcapN_segments_rmin" value="12.4*cm"/>
+    <constant name="HcalEndcapN_segments_rmin" value="14*cm"/>
 
     <documentation>
       - Hcal Endcap N Layers and computed Thickness
@@ -31,7 +31,7 @@
     </documentation>
     <detector id="HCalEndcapN_ID" name="HcalEndcapN" type="epic_PolyhedraEndcapCalorimeter2" readout="HcalEndcapNHits" vis="HcalEndcapVis" calorimeterType="HAD_ENDCAP" reflect="true">
       <position x="0" y="0" z="0"/>
-      <dimensions numsides="HcalEndcapN_CaloSides" zmin="HcalEndcapN_zmin" rmin="HcalEndcapN_segments_rmin" rmax="HcalEndcapN_polyhedron_rmax"/>
+      <dimensions numsides="HcalEndcapN_CaloSides" zmin="HcalEndcapN_zmin" rmin="HcalEndcapN_segments_rmin" rmax="HcalEndcapN_polyhedron_rmax" />
 
       <layer repeat="HcalEndcapNLayerNRepeat" thickness="HcalEndcapNSingleLayerThickness" vis="HcalEndcapLayerVis" disksGap = "HcalEndcapNDiskGap">
         <slice material="Air" thickness="HcalEndcapNLayerGap/2" vis="InvisibleNoDaughters"/>
