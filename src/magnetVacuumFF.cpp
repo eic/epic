@@ -24,8 +24,8 @@ using namespace dd4hep;
  *
  */
 
-double getRotatedZ(double z, double x, double angle);
-double getRotatedX(double z, double x, double angle);
+static double getRotatedZ(double z, double x, double angle);
+static double getRotatedX(double z, double x, double angle);
 
 static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector /* sens */)
 {
