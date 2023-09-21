@@ -30,7 +30,6 @@ static double getRotatedX(double z, double x, double angle);
 static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector /* sens */)
 {
 
-        //using namespace ROOT::Math;
         xml_det_t x_det    = e;
         string    det_name = x_det.nameStr();
         DetElement sdet(det_name, x_det.id());
