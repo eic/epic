@@ -81,7 +81,8 @@ Construct the sweeper and analyzer dipole magnets for the luminosity subsystem.
   <fields>
 
     <comment> Ideal fields </comment>
-    <!--<field name="LumiSweeperField" type="MultipoleMagnet">
+    <comment>
+    <field name="LumiSweeperField" type="MultipoleMagnet">
       <position x="LumiSweepMag_X" y="LumiSweepMag_Y" z="LumiSweepMag_Z"/>
       <rotation x="0" y="0" z="0"/>
       <shape type="Box" dx="LumiMag_DX_InnerBox/2.0" dy="LumiMag_DY_InnerBox/2.0" dz="LumiMag_DZ/2.0"/>
@@ -94,7 +95,7 @@ Construct the sweeper and analyzer dipole magnets for the luminosity subsystem.
       <shape type="Box" dx="LumiMag_DX_InnerBox/2.0" dy="LumiMag_DY_InnerBox/2.0" dz="LumiMag_DZ/2.0"/>
       <coefficient coefficient="0" skew="LumiAnalyzerIdealMag_B"/>
     </field>
-    -->
+    </comment>
 
     <comment> Calculated fields </comment>
     <field type="epic_FieldMapB" name="LumiSweeperField" field_type="magnetic" coord_type="BxByBz"
