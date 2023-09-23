@@ -485,10 +485,9 @@
     <fraction n="0.50" ref="Ti"/>
   </material>
   <material name="Solder">
-    <D type="density" value="11.35" unit="g / cm3"/>
-    <fraction n="0.975" ref="Pb"/>
-    <fraction n="0.015" ref="Sn"/>
-    <fraction n="0.010" ref="Ag"/>
+    <D type="density" value="8.60" unit="g / cm3"/>
+    <fraction n="0.40" ref="Pb"/>
+    <fraction n="0.60" ref="Sn"/>
   </material>
  <material name="SolenoidCoil">
     <D type="density" value="8.73" unit="g / cm3"/>
