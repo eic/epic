@@ -86,9 +86,9 @@
         <slice name="Absorber_slice" material="Steel235" thickness="ZDC_SiPMonTile_AbsorberThickness" vis="AnlGray"/>
         <slice name="Air_slice" material="Air" thickness="ZDC_SiPMonTile_AirThickness"/>
         <slice name="ScintCover_slice" material="Aluminum" thickness="ZDC_SiPMonTile_ScintillatorCoverThickness"/> 
-        <slice name="ESRFoil_slice" material="Polystyrole" thickness="ZDC_SiPMonTile_ESRFoilThickness"/> 
-        <slice name="Scintillator_slice" material="PlasticScint126" thickness="ZDC_SiPMonTile_PolystyreneThickness" vis="AnlOrange" sensitive="true"/>
-        <slice name="ESRFoil_slice" material="Polystyrole" thickness="ZDC_SiPMonTile_ESRFoilThickness"/>
+        <slice name="ESRFoil_slice" material="Polystyrene" thickness="ZDC_SiPMonTile_ESRFoilThickness"/> 
+        <slice name="Scintillator_slice" material="Polystyrene" thickness="ZDC_SiPMonTile_PolystyreneThickness" vis="AnlOrange" sensitive="true"/>
+        <slice name="ESRFoil_slice" material="Polystyrene" thickness="ZDC_SiPMonTile_ESRFoilThickness"/>
         <slice name="PCB_slice" material="Fr4" thickness="ZDC_SiPMonTile_PCBThickness"/>
         <slice name="Air_slice" material="Air" thickness="ZDC_SiPMonTile_AirThickness"/>
       </layer>
@@ -100,7 +100,7 @@
   </detectors>
 
   <readouts>
-    <readout name="ZDC_SiPMonTile_HcalHits">
+    <readout name="ZDC_SiPMonTile_Hits">
       <segmentation
 	type="HexGrid"
 	side_length="ZDC_SiPMonTile_HexSideLength"
