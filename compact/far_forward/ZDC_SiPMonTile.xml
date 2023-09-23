@@ -6,7 +6,7 @@
         url="https://github.com/sebouh137"
         status="development"
         version="1.0"
-	  ><comment/></info>
+          ><comment/></info>
 
   <define>
     <documentation>
@@ -18,19 +18,19 @@
     <constant name="ZDC_SiPMonTile_PolystyreneThickness"          value="0.30*cm"/>
     <constant name="ZDC_SiPMonTile_PCBThickness"                  value="0.08*cm"/>
     <constant name="ZDC_SiPMonTile_ESRFoilThickness"              value="0.015*cm"/>
-    
+
     <documentation>
       - ZDC N Layers and computed Thickness
     </documentation>
-    
-    
-    <constant name="ZDC_SiPMonTile_SingleLayerThickness" 
-      value="ZDC_SiPMonTile_AbsorberThickness + 
+
+
+    <constant name="ZDC_SiPMonTile_SingleLayerThickness"
+      value="ZDC_SiPMonTile_AbsorberThickness +
              ZDC_SiPMonTile_PolystyreneThickness +
              ZDC_SiPMonTile_PCBThickness+ZDC_SiPMonTile_ESRFoilThickness*2+
-	     2*ZDC_SiPMonTile_AirThickness+ZDC_SiPMonTile_ScintillatorCoverThickness"
+             2*ZDC_SiPMonTile_AirThickness+ZDC_SiPMonTile_ScintillatorCoverThickness"
       />
-    
+
     <constant name="ZDC_SiPMonTile_BackplateThickness" value="ZDC_SiPMonTile_AbsorberThickness"/>
     <constant name="ZDC_SiPMonTile_Layer_NSteelRepeat" value="64"/>
 
@@ -42,7 +42,7 @@
     <constant name="ZDC_SiPMonTile_rotateX_angle" value="0*deg"/>
     <constant name="ZDC_SiPMonTile_rotateY_angle" value="0*deg"/>
     <constant name="ZDC_SiPMonTile_rotateZ_angle" value="ionCrossingAngle"/>
-    
+
     <constant name="ZDC_SiPMonTile_r_pos" value="35.8*m"/>
     <constant name="ZDC_SiPMonTile_x_pos" value="sin(ZDC_SiPMonTile_rotateZ_angle)*ZDC_SiPMonTile_r_pos"/>
     <constant name="ZDC_SiPMonTile_y_pos" value="0*m" />
@@ -61,20 +61,20 @@
   <detectors>
       <documentation>
       ### SiPM-on-tile Zero-Degree Calorimeter Hcal
-      
+
       Each of the layers includes air gaps (front and back of each layer),
       ESR foil (front and back of scintillator), a PCB, and an aluminum scitnillator cover
-      
+
     </documentation>
     <detector
-      id="ZDC_SiPMonTile_ID" 
-      name="ZDC SiPM-on-Tile Hcal" 
+      id="ZDC_SiPMonTile_ID"
+      name="ZDC SiPM-on-Tile Hcal"
       type="ZeroDegreeCalorimeterSiPMonTile"
       readout="ZDC_SiPMonTile_Hits"
     >
       <position x="ZDC_SiPMonTile_x_pos"         y="ZDC_SiPMonTile_y_pos"         z="ZDC_SiPMonTile_z_pos"/>
       <rotation x="ZDC_SiPMonTile_rotateX_angle" y="ZDC_SiPMonTile_rotateY_angle" z="ZDC_SiPMonTile_rotateZ_angle"/>
-      <dimensions 
+      <dimensions
         x="ZDC_SiPMonTile_width"
         y="ZDC_SiPMonTile_height"
         z="ZDC_SiPMonTile_SingleLayerThickness*ZDC_SiPMonTile_Layer_NSteelRepeat +
@@ -85,8 +85,8 @@
       <layer repeat="ZDC_SiPMonTile_Layer_NSteelRepeat" thickness = "ZDC_SiPMonTile_SingleLayerThickness">
         <slice name="Absorber_slice" material="Steel235" thickness="ZDC_SiPMonTile_AbsorberThickness" vis="AnlGray"/>
         <slice name="Air_slice" material="Air" thickness="ZDC_SiPMonTile_AirThickness"/>
-        <slice name="ScintCover_slice" material="Aluminum" thickness="ZDC_SiPMonTile_ScintillatorCoverThickness"/> 
-        <slice name="ESRFoil_slice" material="Polystyrene" thickness="ZDC_SiPMonTile_ESRFoilThickness"/> 
+        <slice name="ScintCover_slice" material="Aluminum" thickness="ZDC_SiPMonTile_ScintillatorCoverThickness"/>
+        <slice name="ESRFoil_slice" material="Polystyrene" thickness="ZDC_SiPMonTile_ESRFoilThickness"/>
         <slice name="Scintillator_slice" material="Polystyrene" thickness="ZDC_SiPMonTile_PolystyreneThickness" vis="AnlOrange" sensitive="true"/>
         <slice name="ESRFoil_slice" material="Polystyrene" thickness="ZDC_SiPMonTile_ESRFoilThickness"/>
         <slice name="PCB_slice" material="Fr4" thickness="ZDC_SiPMonTile_PCBThickness"/>
@@ -102,11 +102,11 @@
   <readouts>
     <readout name="ZDC_SiPMonTile_Hits">
       <segmentation
-	type="HexGrid"
-	side_length="ZDC_SiPMonTile_HexSideLength"
-	stagger="ZDC_SiPMonTile_stagger"
-	/>
-      <id>system:8,barrel:3,module:4,layer:8,slice:5,x:32:-16,y:-16</id>  
+        type="HexGrid"
+        side_length="ZDC_SiPMonTile_HexSideLength"
+        stagger="ZDC_SiPMonTile_stagger"
+        />
+      <id>system:8,barrel:3,module:4,layer:8,slice:5,x:32:-16,y:-16</id>
     </readout>
   </readouts>
 
