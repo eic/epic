@@ -71,7 +71,7 @@
       id="ZDC_SiPMonTile_ID"
       name="ZDC SiPM-on-Tile Hcal"
       type="ZeroDegreeCalorimeterSiPMonTile"
-      readout="ZDC_SiPMonTile_Hits"
+      readout="HcalFarForwardZDCHits"
     >
       <position x="ZDC_SiPMonTile_x_pos"         y="ZDC_SiPMonTile_y_pos"         z="ZDC_SiPMonTile_z_pos"/>
       <rotation x="ZDC_SiPMonTile_rotateX_angle" y="ZDC_SiPMonTile_rotateY_angle" z="ZDC_SiPMonTile_rotateZ_angle"/>
@@ -101,7 +101,7 @@
   </detectors>
 
   <readouts>
-    <readout name="ZDC_SiPMonTile_Hits">
+    <readout name="HcalFarForwardZDCHits">
       <segmentation
         type="HexGrid"
         side_length="ZDC_SiPMonTile_HexSideLength"
