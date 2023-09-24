@@ -18,18 +18,18 @@ static Ref_t createDetector(Detector& desc, xml_h handle, SensitiveDetector sens
 
   xml_dim_t  dim        = detElem.dimensions();
   double     width      = dim.x(); // Size along x-axis
-  double     height     = dim.y(); // Size along y-axis 
+  double     height     = dim.y(); // Size along y-axis
   double     length     = dim.z(); // Size along z-axis
 
   xml_dim_t  pos        = detElem.position(); // Position in global coordinates
 
   Material   air        = desc.material("Air");
-  
+
   // Defining envelope
   Box envelope(width / 2.0, height / 2.0, length / 2.0);
-    
+
   // Defining envelope volume
-  Volume envelopeVol(detName, envelope, air); 
+  Volume envelopeVol(detName, envelope, air);
   // Setting envelope attributes
   envelopeVol.setAttributes(
     desc,
@@ -43,14 +43,14 @@ static Ref_t createDetector(Detector& desc, xml_h handle, SensitiveDetector sens
   double z_distance_traversed = 0.;
 
   int layer_num = 1;
-  
+
   // Looping through all the different layer sections
   for(xml_coll_t c(detElem,_U(layer)); c; ++c)
   {
     xml_comp_t x_layer = c;
-    int repeat = x_layer.repeat();  
+    int repeat = x_layer.repeat();
     double layer_thickness = x_layer.thickness();
-    
+
     // Looping through the number of repeated layers in each section
     for(int i = 0; i < repeat; i++)
     {
@@ -64,25 +64,25 @@ static Ref_t createDetector(Detector& desc, xml_h handle, SensitiveDetector sens
       double slice_z = -layer_thickness / 2.; // Keeps track of slices' z locations in each layer
 
       // Looping over each layer's slices
-      for(xml_coll_t l(x_layer,_U(slice)); l; ++l) 
+      for(xml_coll_t l(x_layer,_U(slice)); l; ++l)
       {
         xml_comp_t x_slice = l;
         double slice_thickness = x_slice.thickness();
         std::string slice_name = layer_name + _toString(slice_num, "slice%d");
-        Material slice_mat = desc.material(x_slice.materialStr());		
+        Material slice_mat = desc.material(x_slice.materialStr());
         slice_z += slice_thickness/2.; // Going to slice halfway point
 
         Box slice(width/2., height/2., slice_thickness/2.);
-        
+
         Volume slice_vol (slice_name, slice, slice_mat);
-        
+
         // Setting appropriate slices as sensitive
         if(x_slice.isSensitive())
         {
           sens.setType("calorimeter");
           slice_vol.setSensitiveDetector(sens);
         }
-        
+
         // Setting slice attributes
         slice_vol.setAttributes(
           desc,
@@ -113,7 +113,7 @@ static Ref_t createDetector(Detector& desc, xml_h handle, SensitiveDetector sens
       layer_vol.setAttributes(
         desc,
         x_layer.regionStr(),
-        x_layer.limitsStr(), 
+        x_layer.limitsStr(),
         x_layer.visStr()
       );
       // Placing each layer inside the envelope volume
@@ -140,9 +140,9 @@ static Ref_t createDetector(Detector& desc, xml_h handle, SensitiveDetector sens
     }
   }
 
-  DetElement   det(detName, detID);  
+  DetElement   det(detName, detID);
   Volume motherVol = desc.pickMotherVolume(det);
-  
+
   // Placing ZDC in world volume
   auto tr = Transform3D(Position(pos.x(), pos.y(), pos.z() + length / 2.));
   PlacedVolume phv = motherVol.placeVolume(envelopeVol, tr);
