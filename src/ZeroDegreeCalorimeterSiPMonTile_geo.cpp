@@ -1,5 +1,8 @@
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (C) 2023 Sebouh J. Paul
+
 //==========================================================================
-//  Implementation of Zero-Degree Calorimeter SiPM-on-tile
+//  Implementation of SiPM-on-tile Zero-Degree Calorimeter 
 //--------------------------------------------------------------------------
 //  Author: Sebouh J. Paul (UCR)
 //==========================================================================
