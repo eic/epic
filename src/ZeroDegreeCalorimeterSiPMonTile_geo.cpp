@@ -2,7 +2,7 @@
 // Copyright (C) 2023 Sebouh J. Paul
 
 //==========================================================================
-//  Implementation of SiPM-on-tile Zero-Degree Calorimeter 
+//  Implementation of SiPM-on-tile Zero-Degree Calorimeter
 //--------------------------------------------------------------------------
 //  Author: Sebouh J. Paul (UCR)
 //==========================================================================
