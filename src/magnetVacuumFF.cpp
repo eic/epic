@@ -190,7 +190,7 @@ static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector /* sens *
     //-----------------------
 
     for(int pieceIdx = 0; pieceIdx < numMagnets; pieceIdx++){
-        
+
         std::string piece_name      = Form("MagnetVacuum%d", pieceIdx);
 
         Tube magnetPiece(piece_name, 0.0, radii_magnet[pieceIdx], lengths_magnet[pieceIdx]/2);
@@ -202,9 +202,9 @@ static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector /* sens *
         pv.addPhysVolID("sector", 1);
 
         DetElement tmp(sdet, Form("sector%d_de", pieceIdx), 1);
-	    detectorElement.push_back(tmp);
+            detectorElement.push_back(tmp);
 
-	    detectorElement[pieceIdx].setPlacement(pv);
+            detectorElement[pieceIdx].setPlacement(pv);
 
     }
 
@@ -214,9 +214,9 @@ static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector /* sens *
 
     for(int pieceIdx = numMagnets; pieceIdx < numGaps + numMagnets; pieceIdx++){
 
-		int correctIdx = pieceIdx-numMagnets;
+                int correctIdx = pieceIdx-numMagnets;
 
-		std::string piece_name  = Form("GapVacuum%d", correctIdx);
+                std::string piece_name  = Form("GapVacuum%d", correctIdx);
 
         CutTube gapPiece(piece_name, inRadius[correctIdx], outRadius[correctIdx], length_gap[correctIdx]/2, phi_initial[correctIdx], phi_final[correctIdx],
                                                nxLow[correctIdx], nyLow[correctIdx], nzLow[correctIdx], nxHigh[correctIdx], nyHigh[correctIdx], nzHigh[correctIdx]);
@@ -230,8 +230,8 @@ static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector /* sens *
 
         DetElement tmp(sdet, Form("sector%d_de", pieceIdx), 1);
         detectorElement.push_back(tmp);
-    	
-	    detectorElement[pieceIdx].setPlacement(pv);
+
+            detectorElement[pieceIdx].setPlacement(pv);
 
 
     }
@@ -240,9 +240,9 @@ static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector /* sens *
     //make and place vacuum volume to connect IP beam pipe to B0pf
     //--------------------------------------------------------------
 
-	if(makeIP_B0pfVacuum){
-        
-    	double specialGapLength = sqrt(pow(z_beg[0] - endOfCentralBeamPipe_z, 2) + pow(x_beg[0] - endOfCentralBeamPipe_x, 2)) - 0.1;
+        if(makeIP_B0pfVacuum){
+
+        double specialGapLength = sqrt(pow(z_beg[0] - endOfCentralBeamPipe_z, 2) + pow(x_beg[0] - endOfCentralBeamPipe_x, 2)) - 0.1;
         double specialGap_z = 0.5*specialGapLength*cos(crossingAngle) + endOfCentralBeamPipe_z;
         double specialGap_x = 0.5*specialGapLength*sin(crossingAngle) + endOfCentralBeamPipe_x;
 
@@ -250,27 +250,27 @@ static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector /* sens *
 
         Cone specialGap(piece_name, specialGapLength/2, 0.0, vacuumDiameterEntrance/2, 0.0, vacuumDiameterExit/2 );
 
-		Volume specialGap_v(piece_name, specialGap, m_Vac);
-		sdet.setAttributes(det, specialGap_v, x_det.regionStr(), x_det.limitsStr(), vis_name);
+                Volume specialGap_v(piece_name, specialGap, m_Vac);
+                sdet.setAttributes(det, specialGap_v, x_det.regionStr(), x_det.limitsStr(), vis_name);
 
-		auto pv = assembly.placeVolume(specialGap_v, Transform3D(RotationY(crossingAngle), Position(specialGap_x, 0.0, specialGap_z)));
-		pv.addPhysVolID("sector", 1);
+                auto pv = assembly.placeVolume(specialGap_v, Transform3D(RotationY(crossingAngle), Position(specialGap_x, 0.0, specialGap_z)));
+                pv.addPhysVolID("sector", 1);
 
-		DetElement tmp(sdet, Form("sector%d_de", numGaps + numMagnets), 1);
-		detectorElement.push_back(tmp);
+                DetElement tmp(sdet, Form("sector%d_de", numGaps + numMagnets), 1);
+                detectorElement.push_back(tmp);
 
-		detectorElement[numGaps + numMagnets].setPlacement(pv);
+                detectorElement[numGaps + numMagnets].setPlacement(pv);
 
-	}
-	 
-	//----------------------------------------------------
+        }
+
+        //----------------------------------------------------
 
     pv_assembly = det.pickMotherVolume(sdet).placeVolume(assembly);
     pv_assembly.addPhysVolID("system", x_det.id()).addPhysVolID("barrel", 1);
     sdet.setPlacement(pv_assembly);
     assembly->GetShape()->ComputeBBox();
 
-	detectorElement.clear();
+        detectorElement.clear();
 
     return sdet;
 }
