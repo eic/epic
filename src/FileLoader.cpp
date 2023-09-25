@@ -20,8 +20,7 @@ using namespace dd4hep;
 
 void usage(int argc, char** argv)
 {
-  std::cout << "Usage: -plugin <name> -arg [-arg]                                                  \n"
-               "     name:   factory name     FileLoader                                           \n"
+  std::cerr << "Usage: -plugin <name> -arg [-arg]                                                  \n"
                "     cache:<string>           cache location (may be read-only)                    \n"
                "     file:<string>            file location                                        \n"
                "     url:<string>             url location                                         \n"
@@ -43,8 +42,10 @@ long load_file(Detector& /* desc */, int argc, char** argv)
       file = (argv[i] + 5);
     else if (0 == std::strncmp("url:", argv[i], 4))
       url = (argv[i] + 4);
-    else
+    else {
+      std::cerr << "Unexpected argument \"" << argv[i] << "\"" << std::endl;
       usage(argc, argv);
+    }
   }
   printout(DEBUG, "FileLoader", "arg cache: " + cache);
   printout(DEBUG, "FileLoader", "arg file: " + file);
