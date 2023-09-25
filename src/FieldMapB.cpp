@@ -280,7 +280,7 @@ void FieldMapB::fieldComponents(const double* pos, double* field)
       // Finally along Z
       b[comp] = b0 * (1 - dz) + b1 * dz;
     }
-    
+
     B_interpolated = ROOT::Math::XYZPoint( b[0], b[1], b[2] );
   }
 
@@ -324,7 +324,7 @@ static Ref_t create_field_map_b(Detector& /*lcdd*/, xml::Handle_t handle)
     printout(ERROR, "FieldMapB", "Coordinate type: " + coord_type + ", is not BrBz nor BxByBz");
     std::_Exit(EXIT_FAILURE);
   }
-  
+
   std::string field_map_file  = x_par.attr<std::string>(_Unicode(field_map));
   std::string field_map_url   = x_par.attr<std::string>(_Unicode(url));
   std::string field_map_cache = getAttrOrDefault<std::string>(x_par, _Unicode(cache), "");
