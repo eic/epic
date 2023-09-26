@@ -83,7 +83,7 @@
       />
       <comment> Slices will be ordered according to the slice order listed here </comment>
       <comment> Steel/Sc layers </comment>
-      <layer repeat="ZDC_SiPMonTile_Layer_NSteelRepeat" thickness = "ZDC_SiPMonTile_SingleLayerThickness">
+      <layer repeat="ZDC_SiPMonTile_Layer_NSteelRepeat" thickness="ZDC_SiPMonTile_SingleLayerThickness" vis="InvisibleWithDaughters">
         <slice name="Absorber_slice" material="Steel235" thickness="ZDC_SiPMonTile_AbsorberThickness" vis="AnlGray"/>
         <slice name="Air_slice" material="Air" thickness="ZDC_SiPMonTile_AirThickness"/>
         <slice name="ScintCover_slice" material="Aluminum" thickness="ZDC_SiPMonTile_ScintillatorCoverThickness"/>
