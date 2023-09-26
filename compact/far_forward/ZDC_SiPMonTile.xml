@@ -94,7 +94,7 @@
         <slice name="Air_slice" material="Air" thickness="ZDC_SiPMonTile_AirThickness"/>
       </layer>
       <comment> Final layer of steel </comment>
-      <layer repeat="1" thickness = "ZDC_SiPMonTile_BackplateThickness">
+      <layer repeat="1" thickness="ZDC_SiPMonTile_BackplateThickness">
         <slice name="Absorber_slice" material="Steel235" thickness="ZDC_SiPMonTile_BackplateThickness" vis="AnlGray"/>
       </layer>
     </detector>
