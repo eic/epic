@@ -75,6 +75,7 @@
       name="ZDC SiPM-on-Tile Hcal"
       type="ZeroDegreeCalorimeterSiPMonTile"
       readout="HcalFarForwardZDCHits"
+      vis="InvisibleWithDaughters"
     >
       <position x="HcalFarForwardZDC_SiPMonTile_x_pos"         y="HcalFarForwardZDC_SiPMonTile_y_pos"         z="HcalFarForwardZDC_SiPMonTile_z_pos"/>
       <rotation x="HcalFarForwardZDC_SiPMonTile_rotateX_angle" y="HcalFarForwardZDC_SiPMonTile_rotateY_angle" z="HcalFarForwardZDC_SiPMonTile_rotateZ_angle"/>
