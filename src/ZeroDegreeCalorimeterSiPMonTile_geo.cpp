@@ -25,6 +25,7 @@ static Ref_t createDetector(Detector& desc, xml_h handle, SensitiveDetector sens
   double     length     = dim.z(); // Size along z-axis
 
   xml_dim_t  pos        = detElem.position(); // Position in global coordinates
+  xml_dim_t rot         = detElem.rotation();
 
   Material   air        = desc.material("Air");
 
@@ -147,7 +148,7 @@ static Ref_t createDetector(Detector& desc, xml_h handle, SensitiveDetector sens
   Volume motherVol = desc.pickMotherVolume(det);
 
   // Placing ZDC in world volume
-  auto tr = Transform3D(Position(pos.x(), pos.y(), pos.z() + length / 2.));
+  auto tr = Transform3D(RotationZYX(rot.z(), rot.y(), rot.x()),Position(pos.x(), pos.y(), pos.z()));
   PlacedVolume phv = motherVol.placeVolume(envelopeVol, tr);
   phv.addPhysVolID("system", detID);
   det.setPlacement(phv);
