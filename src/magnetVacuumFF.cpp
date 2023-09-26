@@ -80,8 +80,6 @@ static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector /* sens *
     vector <double> phi_initial;
     vector <double> phi_final;
 
-    vector <DetElement> detectorElement;
-
     for(xml_coll_t c(x_det,_U(element)); c; ++c){
 
                     xml_dim_t pos       = c.child(_U(placement));
@@ -201,10 +199,8 @@ static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector /* sens *
                                                    Position(x_elem_magnet[pieceIdx], y_elem_magnet[pieceIdx], z_elem_magnet[pieceIdx])));
         pv.addPhysVolID("sector", 1);
 
-        DetElement tmp(sdet, Form("sector%d_de", pieceIdx), 1);
-            detectorElement.push_back(tmp);
-
-            detectorElement[pieceIdx].setPlacement(pv);
+        DetElement de(sdet, Form("sector%d_de", pieceIdx), 1);
+        de.setPlacement(pv);
 
     }
 
@@ -228,10 +224,8 @@ static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector /* sens *
                                                    Position(x_gap[correctIdx], 0.0, z_gap[correctIdx])));
         pv.addPhysVolID("sector", 1);
 
-        DetElement tmp(sdet, Form("sector%d_de", pieceIdx), 1);
-        detectorElement.push_back(tmp);
-
-            detectorElement[pieceIdx].setPlacement(pv);
+        DetElement de(sdet, Form("sector%d_de", pieceIdx), 1);
+        de.setPlacement(pv);
 
 
     }
@@ -256,10 +250,8 @@ static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector /* sens *
                 auto pv = assembly.placeVolume(specialGap_v, Transform3D(RotationY(crossingAngle), Position(specialGap_x, 0.0, specialGap_z)));
                 pv.addPhysVolID("sector", 1);
 
-                DetElement tmp(sdet, Form("sector%d_de", numGaps + numMagnets), 1);
-                detectorElement.push_back(tmp);
-
-                detectorElement[numGaps + numMagnets].setPlacement(pv);
+                DetElement de(sdet, Form("sector%d_de", numGaps + numMagnets), 1);
+                de.setPlacement(pv);
 
         }
 
@@ -269,8 +261,6 @@ static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector /* sens *
     pv_assembly.addPhysVolID("system", x_det.id()).addPhysVolID("barrel", 1);
     sdet.setPlacement(pv_assembly);
     assembly->GetShape()->ComputeBBox();
-
-        detectorElement.clear();
 
     return sdet;
 }
