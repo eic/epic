@@ -107,7 +107,7 @@
         side_length="ZDC_SiPMonTile_HexSideLength"
         stagger="ZDC_SiPMonTile_stagger"
         />
-      <id>system:8,barrel:3,module:4,layer:8,slice:5,x:32:-16,y:-16</id>
+      <id>system:8,layer:8,slice:5,x:32:-16,y:-16</id>
     </readout>
   </readouts>
 
