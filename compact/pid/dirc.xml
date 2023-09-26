@@ -178,8 +178,10 @@
 
   <readouts>
     <readout name="DIRCBarHits">
-      <segmentation type="CartesianGridXY" grid_size_x="3.0*mm" grid_size_y="3.0*mm" />
-      <id>system:8,module:8,section:8,bar:8,x:32:-16,y:-16</id>
+      <!-- <segmentation type="CartesianGridXY" grid_size_x="3.0*mm" grid_size_y="3.0*mm" /> -->
+      <!-- <id>system:8,module:8,section:8,bar:8,x:32:-16,y:-16</id> -->
+      <segmentation type="CartesianGridXYZ" grid_size_x="1.0*mm" grid_size_y="1.0*mm" grid_size_z="1.0*mm" />
+      <id>system:8,module:8,section:5,bar:5,x:26:-13,y:-13,z:-12</id>
     </readout>
   </readouts>
 

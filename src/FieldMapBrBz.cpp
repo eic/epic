@@ -125,7 +125,12 @@ void FieldMapBrBz::LoadMap(const std::string& map_file, double scale)
   if (!input) {
     std::cout << "FieldMapBrBz Error: file \"" << map_file << "\" cannot be read." << std::endl;
   }
-
+  std::cout << "FieldMapBrBz file \"" << map_file << "\" is used." << std::endl;
+  if(input.rdbuf()->in_avail() == 0) {
+    std::cout << "FieldMapBrBz Error: file \"" << map_file << "\" is empty." << std::endl;
+  } else {
+    std::cout << "FieldMapBrBz file \"" << map_file << "\" is not empty." << std::endl;
+  }
   double r, z, br, bz;
   int    ir, iz;
   double dr, dz;
@@ -143,6 +148,7 @@ void FieldMapBrBz::LoadMap(const std::string& map_file, double scale)
       // std::cout << ir << ", " << iz << ", " << br << ", " << bz << std::endl;
     }
   }
+  std::cout << "FieldMapBrBz file \"" << map_file << "\" done being used." << std::endl;
 }
 
 // get field components
@@ -206,10 +212,10 @@ static Ref_t create_field_map_brbz(Detector& /*lcdd*/, xml::Handle_t handle)
   xml_comp_t z_dim = x_dim.child(_Unicode(longitudinal));
 
   std::string field_map_file  = x_par.attr<std::string>(_Unicode(field_map));
-  std::string field_map_url   = x_par.attr<std::string>(_Unicode(url));
+  // std::string field_map_url   = x_par.attr<std::string>(_Unicode(url));
   std::string field_map_cache = getAttrOrDefault<std::string>(x_par, _Unicode(cache), "");
 
-  EnsureFileFromURLExists(field_map_url, field_map_file, field_map_cache);
+  // EnsureFileFromURLExists(field_map_url, field_map_file, field_map_cache);
 
   double field_map_scale = x_par.attr<double>(_Unicode(scale));
 

@@ -196,6 +196,7 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
   Volume aerogelVol(detName + "_aerogel", aerogelSolid, aerogelMat);
   Volume filterVol(detName + "_filter", filterSolid, filterMat);
   aerogelVol.setVisAttributes(aerogelVis);
+  aerogelVol.setSensitiveDetector(sens);
   filterVol.setVisAttributes(filterVis);
 
   // aerogel placement and surface properties
@@ -205,6 +206,7 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
   auto aerogelPlacement = Translation3D(radiatorPos.x(), radiatorPos.y(), radiatorPos.z()) * // re-center to originFront
                           RotationY(radiatorPitch); // change polar angle to specified pitch
   auto       aerogelPV = gasvolVol.placeVolume(aerogelVol, aerogelPlacement);
+    aerogelPV.addPhysVolID("test", 1);
   DetElement aerogelDE(det, "aerogel_de", 0);
   aerogelDE.setPlacement(aerogelPV);
   // SkinSurface aerogelSkin(desc, aerogelDE, "mirror_optical_surface", aerogelSurf, aerogelVol);
@@ -244,8 +246,8 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
   sensorVol.setVisAttributes(sensorVis);
 
   // sensitivity
-  if (!debug_optics)
-    sensorVol.setSensitiveDetector(sens);
+  // if (!debug_optics)
+  //   sensorVol.setSensitiveDetector(sens);
 
   // sensor plane positioning: we want `proximityGap` to be the distance between the
   // aerogel backplane (i.e., aerogel/filter boundary) and the sensor active surface (e.g, photocathode)
@@ -286,7 +288,7 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
           // printf("%d %f %f\n",imod,sensorPV.position().x(),sensorPV.position().y());
 
           // properties
-          sensorPV.addPhysVolID("module", imod); // NOTE: must be consistent with `sensorIDfields`
+          // sensorPV.addPhysVolID("module", imod); // NOTE: must be consistent with `sensorIDfields`
           auto       imodEnc = encodeSensorID(sensorPV.volIDs());
           DetElement sensorDE(det, "sensor_de_" + std::to_string(imod), imodEnc);
           sensorDE.setPlacement(sensorPV);
