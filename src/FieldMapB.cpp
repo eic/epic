@@ -81,7 +81,6 @@ private:
   float                                                         dr, dx, dy, dz; // deltas for interpolation
   std::vector<std::vector<std::array<float, 2>>>                Bvals_RZ; // B map values:  {R}, {Z}, {Br,Bz}
   std::vector<std::vector<std::vector<std::array<float, 3>>>>   Bvals_XYZ; // B map values: {X}, {Y}, {Z}, {Bx,By,Bz}
-  ROOT::Math::XYZPoint                                          B_interpolated; // interpolated B
 };
 
 // constructor
@@ -202,7 +201,9 @@ void FieldMapB::LoadMap(const std::string& map_file, float scale)
         printout(WARNING, "FieldMapB", "coordinates out of range, skipped it.");
       }
       else {
-        Bvals_RZ[ ir ][ iz ] = { Bcomp[0] * scale, Bcomp[1] * scale };
+        Bvals_RZ[ ir ][ iz ] =
+        { Bcomp[0] * scale * float(tesla),
+          Bcomp[1] * scale * float(tesla) };
       }
     }
     else {
@@ -214,7 +215,10 @@ void FieldMapB::LoadMap(const std::string& map_file, float scale)
         printout(WARNING, "FieldMap","coordinates out of range, skipped it.");
       }
       else {
-        Bvals_XYZ[ ix ][ iy ][ iz ] = { Bcomp[0] * scale, Bcomp[1] * scale, Bcomp[2] * scale };
+        Bvals_XYZ[ ix ][ iy ][ iz ] =
+        { Bcomp[0] * scale * float(tesla),
+          Bcomp[1] * scale * float(tesla),
+          Bcomp[2] * scale * float(tesla) };
       }
     }
   }
@@ -240,10 +244,10 @@ void FieldMapB::fieldComponents(const double* pos, double* field)
     // p1    p3
     //    p
     // p0    p2
-    auto& p0 = Bvals_RZ[ ir     ][ iz    ];
-    auto& p1 = Bvals_RZ[ ir     ][ iz + 1];
-    auto& p2 = Bvals_RZ[ ir + 1 ][ iz    ];
-    auto& p3 = Bvals_RZ[ ir + 1 ][ iz + 1];
+    auto& p0 = Bvals_RZ[ ir     ][ iz     ];
+    auto& p1 = Bvals_RZ[ ir     ][ iz + 1 ];
+    auto& p2 = Bvals_RZ[ ir + 1 ][ iz     ];
+    auto& p3 = Bvals_RZ[ ir + 1 ][ iz + 1 ];
 
     // Bilinear interpolation
     float Br = p0[0] * (1 - dr) * (1 - dz) + p1[0] * (1 - dr) * dz
@@ -253,8 +257,9 @@ void FieldMapB::fieldComponents(const double* pos, double* field)
              + p2[1] *    dr    * (1 - dz) + p3[1] *    dr    * dz;
 
     // convert Br Bz to Bx By Bz
-    B_interpolated = ROOT::Math::XYZPoint(Br * sin(phi), Br * cos(phi), Bz);
-    B_interpolated = trans * B_interpolated;
+    field[0] += Br * sin(phi);
+    field[1] += Br * cos(phi);
+    field[2] += Bz;
   }
   else {
 
@@ -266,14 +271,14 @@ void FieldMapB::fieldComponents(const double* pos, double* field)
     for(int comp = 0; comp < 3; comp++) { // field component loop
       // Trilinear interpolation
       // First along X, along 4 lines
-      float b00 = Bvals_XYZ[ ix     ][ iy     ][ iz     ][comp] * (1 - dx)
-                + Bvals_XYZ[ ix  + 1][ iy     ][ iz     ][comp] * dx;
-      float b01 = Bvals_XYZ[ ix     ][ iy     ][ iz  + 1][comp] * (1 - dx)
-                + Bvals_XYZ[ ix  + 1][ iy     ][ iz  + 1][comp] * dx;
-      float b10 = Bvals_XYZ[ ix     ][ iy  + 1][ iz     ][comp] * (1 - dx)
-                + Bvals_XYZ[ ix  + 1][ iy  + 1][ iz     ][comp] * dx;
-      float b11 = Bvals_XYZ[ ix     ][ iy  + 1][ iz  + 1][comp] * (1 - dx)
-                + Bvals_XYZ[ ix  + 1][ iy  + 1][ iz  + 1][comp] * dx;
+      float b00 = Bvals_XYZ[ ix      ][ iy      ][ iz      ][comp] * (1 - dx)
+                + Bvals_XYZ[ ix  + 1 ][ iy      ][ iz      ][comp] * dx;
+      float b01 = Bvals_XYZ[ ix      ][ iy      ][ iz  + 1 ][comp] * (1 - dx)
+                + Bvals_XYZ[ ix  + 1 ][ iy      ][ iz  + 1 ][comp] * dx;
+      float b10 = Bvals_XYZ[ ix      ][ iy  + 1 ][ iz      ][comp] * (1 - dx)
+                + Bvals_XYZ[ ix  + 1 ][ iy  + 1 ][ iz      ][comp] * dx;
+      float b11 = Bvals_XYZ[ ix      ][ iy  + 1 ][ iz  + 1 ][comp] * (1 - dx)
+                + Bvals_XYZ[ ix  + 1 ][ iy  + 1 ][ iz  + 1 ][comp] * dx;
       // Next along Y, along 2 lines
       float b0 = b00 * (1 - dy) + b10 * dy;
       float b1 = b01 * (1 - dy) + b11 * dy;
@@ -281,12 +286,10 @@ void FieldMapB::fieldComponents(const double* pos, double* field)
       b[comp] = b0 * (1 - dz) + b1 * dz;
     }
 
-    B_interpolated = ROOT::Math::XYZPoint( b[0], b[1], b[2] );
+    field[0] += b[0];
+    field[1] += b[1];
+    field[2] += b[2];
   }
-
-  field[0] += B_interpolated.x() * tesla;
-  field[1] += B_interpolated.y() * tesla;
-  field[2] += B_interpolated.z() * tesla;
 
   return;
 }
