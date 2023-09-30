@@ -275,6 +275,28 @@ jobs:
         path: doc/${{matrix.detector_config}}_constants.out
         if-no-files-found: error
 
+  valgrind:
+    runs-on: ubuntu-latest
+    needs: build
+    strategy:
+      matrix:
+        detector_config: [epic_brycecanyon, epic_craterlake]
+    steps:
+    - uses: actions/checkout@v3
+    - uses: actions/download-artifact@v3
+      with:
+        name: build-gcc-full-eic-shell
+        path: install/
+    - uses: cvmfs-contrib/github-action-cvmfs@v3
+    - uses: eic/run-cvmfs-osg-eic-shell@main
+      with:
+        platform-release: "jug_xl:nightly"
+        network_types: "none"
+        setup: install/setup.sh
+        run: |
+          set -o pipefail
+          valgrind --suppressions=/usr/local/etc/root/valgrind-root.supp --suppressions=$PWD/.github/valgrind.supp --gen-suppressions=all --tool=memcheck --leak-check=yes --errors-for-leak-kinds=definite --error-exitcode=1 geoPluginRun -input install/share/epic/epic_brycecanyon.xml -destroy -plugin DD4hep_DummyPlugin 2>&1 | sed 's|^==|# ==|'
+
   dump-parameter-table:
     runs-on: ubuntu-latest
     needs: build
