@@ -136,6 +136,7 @@ jobs:
         token: ${{ secrets.EICWEB_GEOVIEWER_TRIGGER }}
         ref_name: main
         variables: |
+          DETECTOR=epic
           DETECTOR_REPOSITORYURL=${{ github.server_url }}/${{ github.repository }}
           DETECTOR_REPOSITORYREF=${{ github.ref }}
           DETECTOR_CONFIG=${{ needs.list-detector-configs.outputs.configs_csv }}
@@ -428,6 +429,7 @@ jobs:
         token: ${{ secrets.EICWEB_DETECTOR_BENCHMARK_TRIGGER }}
         ref_name: master
         variables: |
+          DETECTOR=epic
           DETECTOR_REPOSITORYURL=${{ github.server_url }}/${{ github.repository }}
           DETECTOR_VERSION=${{ github.event.pull_request.head.ref || github.ref_name }}
           DETECTOR_CONFIG=${{ matrix.detector_config }}
