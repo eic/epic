@@ -22,12 +22,12 @@ Overview
     - [ToF](https://eic.github.io/epic/geoviewer?nobrowser&file=artifacts/tgeo/epic_tof_only.root&item=default;1&opt=clipx;clipy;transp30;zoom55;ROTY49;ROTZ350;trz0;trr0;ctrl;all)
   - [Beamline](https://eic.github.io/epic/geoviewer?nobrowser&file=artifacts/tgeo/epic_ip6.root&item=default;1&opt=clipx;clipy;transp30;zoom40;ROTY290;ROTZ350;trz0;trr0;ctrl;all)
 
-[<img title="brycecanyon" src="https://eic.github.io/epic/artifacts/epic_brycecanyon_views/view1_top.png" width="49%">](https://eic.github.io/epic/artifacts/epic_brycecanyon_views/view1_top.pdf) [<img title="craterlake" src="https://eic.github.io/epic/artifacts/epic_craterlake_views/view1_top.png" width="49%">](https://eic.github.io/epic/artifacts/epic_craterlake_views/view1_top.pdf)
+[<img title="craterlake" src="https://eic.github.io/epic/artifacts/epic_craterlake_views/view1_top.png" width="75%">](https://eic.github.io/epic/artifacts/epic_craterlake_views/view1_top.pdf)
 
 **Detector parameters:**
-- text: [Brycecanyon](https://eic.github.io/epic/artifacts/constants/epic_brycecanyon_constants.out) [CraterLake](https://eic.github.io/epic/artifacts/constants/epic_craterlake_constants.out)
-- toml: [Brycecanyon](https://eic.github.io/epic/artifacts/constants/epic_brycecanyon_constants.toml) [CraterLake](https://eic.github.io/epic/artifacts/constants/epic_craterlake_constants.toml)
-- csv: [Brycecanyon](https://eic.github.io/epic/artifacts/DetectorParameterTable/epic_brycecanyon.csv) [CraterLake](https://eic.github.io/epic/artifacts/DetectorParameterTable/epic_craterlake.csv)
+- text: [CraterLake](https://eic.github.io/epic/artifacts/constants/epic_craterlake_constants.out)
+- toml: [CraterLake](https://eic.github.io/epic/artifacts/constants/epic_craterlake_constants.toml)
+- csv: [CraterLake](https://eic.github.io/epic/artifacts/DetectorParameterTable/epic_craterlake.csv)
 
 
 Getting Started
