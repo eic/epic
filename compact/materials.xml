@@ -495,7 +495,7 @@
     <fraction n="0.0638" ref="NbTi"/>
     <fraction n="0.0161" ref="Solder"/>
   </material>
-  <material name="Lyso"> <!-- given by the Taiwan Applied Crystals -->
+  <material name="LYSO"> <!-- given by the Taiwan Applied Crystals -->
     <D type="density" unit="g/cm3" value="7.125"/>
     <fraction n="0.71813" ref="Lu"/>
     <fraction n="0.03613" ref="Y"/>
