@@ -45,7 +45,7 @@
     <constant name="DIRCMirror_thickness"   value="1 * mm"/>
 
     <!-- Lens -->
-    <constant name="DIRCLens_thickness"     value="0 * mm"/>
+    <constant name="DIRCLens_thickness"     value="12 * mm"/>
     <constant name="DIRCLens_r1"            value="62 * mm"/>
     <constant name="DIRCLens_r2"            value="36 * mm"/>
     <constant name="DIRCLens_height"        value="50 * mm"/>
