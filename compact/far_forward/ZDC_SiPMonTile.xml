@@ -43,8 +43,8 @@
     <constant name="HcalFarForwardZDC_SiPMonTile_length" value= "HcalFarForwardZDC_SiPMonTile_SingleLayerThickness*HcalFarForwardZDC_SiPMonTile_Layer_NSteelRepeat +
            HcalFarForwardZDC_SiPMonTile_BackplateThickness"/>
     <constant name="HcalFarForwardZDC_SiPMonTile_rotateX_angle" value="0*deg"/>
-    <constant name="HcalFarForwardZDC_SiPMonTile_rotateY_angle" value="0*deg"/>
-    <constant name="HcalFarForwardZDC_SiPMonTile_rotateZ_angle" value="ionCrossingAngle"/>
+    <constant name="HcalFarForwardZDC_SiPMonTile_rotateY_angle" value="ionCrossingAngle"/>
+    <constant name="HcalFarForwardZDC_SiPMonTile_rotateZ_angle" value="0*deg"/>
 
     <constant name="HcalFarForwardZDC_SiPMonTile_r_pos_front_face" value="35.8*m"/>
     <constant name="HcalFarForwardZDC_SiPMonTile_r_pos" value="HcalFarForwardZDC_SiPMonTile_r_pos_front_face + HcalFarForwardZDC_SiPMonTile_length/2.0"/>
