@@ -7,18 +7,8 @@ on:
     tags:
       - '*'
   pull_request:
-  workflow_dispatch:
-    inputs:
-      github_repository:
-        description: 'Submitting GitHub repository'
-        required: false
-        default: ''
-        type: string
-      github_sha:
-        description: 'Submitting GitHub sha'
-        required: false
-        default: ''
-        type: string
+  merge_group:
+  workflow_dispatch: # allow manual triggering
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
@@ -37,17 +27,22 @@ jobs:
   list-detector-configs:
     runs-on: ubuntu-latest
     outputs:
-      configs: ${{ steps.list-detector-configs.outputs.configs }}
+      configs_csv: ${{ steps.list-detector-configs.outputs.configs_csv }}
+      configs_json: ${{ steps.list-detector-configs.outputs.configs_json }}
     steps:
     - uses: actions/checkout@v3
     - id: list-detector-configs
       run: |
-        CONFIGS=$((
+        CONFIGS_CSV=$(
+          ls -1 configurations | sed 's/^/epic_/g' | xargs | sed 's/\.yml//g;s/ /,/g'
+        )
+        CONFIGS_JSON=$((
           echo '{ "detector_config": ['
-          ls -1 configurations | xargs | sed 's/\.yml//g;s/ /, /g' | xargs -n 1 echo | sed -r 's/^([^,]*)(,?)$/"\1"\2/'
+          ls -1 configurations | sed 's/^/epic_/g' | xargs | sed 's/\.yml//g;s/ /, /g' | xargs -n 1 echo | sed -r 's/^([^,]*)(,?)$/"\1"\2/'
           echo ' ]}'
         ) | jq -c .)
-        echo "configs=$CONFIGS" | tee -a $GITHUB_OUTPUT
+        echo "configs_csv=${CONFIGS_CSV}" | tee -a $GITHUB_OUTPUT
+        echo "configs_json=${CONFIGS_JSON}" | tee -a $GITHUB_OUTPUT
 
   build:
     runs-on: ubuntu-latest
@@ -132,8 +127,6 @@ jobs:
     needs:
       - xmllint-after-build
       - list-detector-configs
-    strategy:
-      matrix: ${{ fromJson(needs.list-detector-configs.outputs.configs) }}
     steps:
     - uses: eic/trigger-gitlab-ci@v2
       id: trigger
@@ -143,32 +136,20 @@ jobs:
         token: ${{ secrets.EICWEB_GEOVIEWER_TRIGGER }}
         ref_name: main
         variables: |
+          DETECTOR=epic
           DETECTOR_REPOSITORYURL=${{ github.server_url }}/${{ github.repository }}
           DETECTOR_REPOSITORYREF=${{ github.ref }}
-          DETECTOR_CONFIG=epic_${{ matrix.detector_config }}
+          DETECTOR_CONFIG=${{ needs.list-detector-configs.outputs.configs_csv }}
           DETECTOR_VERSION=${{ github.event.pull_request.head.ref || github.ref_name }}
           GITHUB_REPOSITORY=${{ github.repository }}
           GITHUB_SHA=${{ github.event.pull_request.head.sha || github.sha }}
-    - run: |
-        gh api \
-           --method POST \
-          -H "Accept: application/vnd.github+json" \
-          /repos/${{ github.repository }}/statuses/${{ github.event.pull_request.head.sha || github.sha }} \
-          -f state="pending" \
-          -f target_url="${{ steps.trigger.outputs.web_url }}" \
-          -f description="Triggered... $(TZ=America/New_York date)" \
-          -f context="eicweb/geoviewer (epic_${{ matrix.detector_config }})"
-      env:
-        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_PR=${{ github.event.pull_request.number }}
 
   check-geometry-configs:
     runs-on: ubuntu-latest
     needs:
       - build
       - list-detector-configs
-    strategy:
-      matrix: ${{ fromJson(needs.list-detector-configs.outputs.configs) }}
-      fail-fast: false
     steps:
     - uses: actions/checkout@v3
     - uses: actions/download-artifact@v3
@@ -182,7 +163,12 @@ jobs:
         network_types: "none"
         setup: install/setup.sh
         run: |
-          checkGeometry -c ${DETECTOR_PATH}/${DETECTOR}_${{ matrix.detector_config }}.xml
+          IFS=, read -a configs <<< "${{ needs.list-detector-configs.outputs.configs_csv }}"
+          for config in ${configs[@]} ; do
+            echo "::group::${config}" ;
+            checkGeometry -c ${DETECTOR_PATH}/${config}.xml ;
+            echo "::endgroup::" ;
+          done
 
   check-tracking-geometry:
     runs-on: ubuntu-latest
@@ -208,8 +194,6 @@ jobs:
     needs:
       - build
       - list-detector-configs
-    strategy:
-      matrix: ${{ fromJson(needs.list-detector-configs.outputs.configs) }}
     steps:
     - uses: actions/checkout@v3
     - uses: actions/download-artifact@v3
@@ -223,11 +207,16 @@ jobs:
         network_types: "none"
         setup: install/setup.sh
         run: |
-          geoConverter -compact2gdml -input ${DETECTOR_PATH}/${DETECTOR}_${{ matrix.detector_config }}.xml -output ${{ matrix.detector_config }}.gdml
+          IFS=, read -a configs <<< "${{ needs.list-detector-configs.outputs.configs_csv }}"
+          for config in ${configs[@]} ; do
+            echo "::group::${config}" ;
+            geoConverter -compact2gdml -input ${DETECTOR_PATH}/${config}.xml -output ${config}.gdml ;
+            echo "::endgroup::" ;
+          done
     - uses: actions/upload-artifact@v3
       with:
         name: gdml
-        path: ${{ matrix.detector_config }}.gdml
+        path: "*.gdml"
         if-no-files-found: error
 
   convert-to-tgeo:
@@ -235,8 +224,6 @@ jobs:
     needs:
       - build
       - list-detector-configs
-    strategy:
-      matrix: ${{ fromJson(needs.list-detector-configs.outputs.configs) }}
     steps:
     - uses: actions/checkout@v3
     - uses: actions/download-artifact@v3
@@ -250,11 +237,16 @@ jobs:
         network_types: "none"
         setup: install/setup.sh
         run: |
-          geoConverter -compact2tgeo -input ${DETECTOR_PATH}/${DETECTOR}_${{ matrix.detector_config }}.xml -output ${{ matrix.detector_config }}.root
+          IFS=, read -a configs <<< "${{ needs.list-detector-configs.outputs.configs_csv }}"
+          for config in ${configs[@]} ; do
+            echo "::group::${config}" ;
+            geoConverter -compact2tgeo -input ${DETECTOR_PATH}/${config}.xml -output ${config}.root
+            echo "::endgroup::" ;
+          done
     - uses: actions/upload-artifact@v3
       with:
         name: tgeo
-        path: ${{ matrix.detector_config }}.root
+        path: "*.root"
         if-no-files-found: error
 
   dump-constants:
@@ -262,7 +254,7 @@ jobs:
     needs: build
     strategy:
       matrix:
-        detector_config: [epic_arches, epic_brycecanyon]
+        detector_config: [epic_craterlake]
     steps:
     - uses: actions/checkout@v3
     - uses: actions/download-artifact@v3
@@ -289,7 +281,7 @@ jobs:
     needs: build
     strategy:
       matrix:
-        detector_config: [epic_arches, epic_brycecanyon]
+        detector_config: [epic_craterlake]
     steps:
     - uses: actions/checkout@v3
     - uses: actions/download-artifact@v3
@@ -324,7 +316,7 @@ jobs:
     strategy:
       matrix:
         option: ['m'] #, 's'] # FIXME
-        detector_config: [epic_arches, epic_brycecanyon] # FIXME
+        detector_config: [epic_craterlake] # FIXME
       fail-fast: false
     steps:
     - uses: actions/checkout@v3
@@ -375,10 +367,9 @@ jobs:
     runs-on: ubuntu-latest
     needs:
       - build
-      - list-detector-configs
     strategy:
       matrix:
-        detector_config: [epic_arches, epic_brycecanyon]
+        detector_config: [epic_craterlake]
       fail-fast: false
     steps:
     - uses: actions/checkout@v3
@@ -403,7 +394,7 @@ jobs:
     needs: build
     strategy:
       matrix:
-        detector_config: [epic_inner_detector, epic_arches, epic_brycecanyon]
+        detector_config: [epic_inner_detector, epic_craterlake]
       fail-fast: false
     steps:
     - uses: actions/checkout@v3
@@ -428,7 +419,7 @@ jobs:
     needs: [check-overlap-tgeo, check-overlap-geant4-fast]
     strategy:
       matrix:
-        detector_config: [epic_arches, epic_brycecanyon]
+        detector_config: [epic_craterlake]
     steps:
     - uses: eic/trigger-gitlab-ci@v2
       id: trigger
@@ -438,11 +429,12 @@ jobs:
         token: ${{ secrets.EICWEB_DETECTOR_BENCHMARK_TRIGGER }}
         ref_name: master
         variables: |
+          DETECTOR=epic
           DETECTOR_REPOSITORYURL=${{ github.server_url }}/${{ github.repository }}
           DETECTOR_VERSION=${{ github.event.pull_request.head.ref || github.ref_name }}
           DETECTOR_CONFIG=${{ matrix.detector_config }}
-          GITHUB_REPOSITORY=${{ inputs.github_repository || github.repository }}
-          GITHUB_SHA=${{ inputs.github_sha || github.event.pull_request.head.sha || github.sha }}
+          GITHUB_REPOSITORY=${{ github.repository }}
+          GITHUB_SHA=${{ github.event.pull_request.head.sha || github.sha }}
     - run: |
         gh api \
            --method POST \
@@ -460,7 +452,7 @@ jobs:
     needs: build
     strategy:
       matrix:
-        detector_config: [epic_arches, epic_brycecanyon]
+        detector_config: [epic_craterlake]
       fail-fast: false
     steps:
     - uses: actions/checkout@v3
@@ -489,7 +481,7 @@ jobs:
     strategy:
       matrix:
         view: [view1, view2, view3, view6, view7, view11, view13, view50]
-        detector_config: [epic_arches, epic_brycecanyon]
+        detector_config: [epic_craterlake]
       fail-fast: false
     steps:
     - uses: actions/checkout@v3
@@ -519,7 +511,7 @@ jobs:
       matrix:
         view: [view12, view14, view15]
         slice: [100, 300, 500, 700, 900, 1100, 1300, 1500, 1700, 1900]
-        detector_config: [epic_arches, epic_brycecanyon]
+        detector_config: [epic_craterlake]
       fail-fast: false
     steps:
     - uses: actions/checkout@v3
