@@ -273,6 +273,7 @@ The unused IDs below are saved for future use.
     <constant name="ZDCEcal_ID"              value="163"/>
     <constant name="ZDCHcal_ID"              value="164"/>
     -->
+    <constant name="HcalFarForwardZDC_SiPMonTile_ID"                value="167"/>
 
     <constant name="VacuumMagnetElement_1_ID"        value="168"/>
     <constant name="B0ECal_ID" value="169"/>
@@ -573,25 +574,21 @@ Service gaps in FW direction (before endcapP ECAL) and BW direction (before endc
     </documentation>
 
     <constant name="HcalBarrelStavesN"          value="12"/>
-    <constant name="HcalEndcapP_zmin"     value="EcalEndcapP_zmin + EcalEndcapP_length"/>
-    <comment> HCalEndcapP is 140 cm total, but current implementation leaves the final 10 cm empty </comment>
-    <constant name="HcalEndcapP_length"   value="140.0*cm"/>
-    <constant name="HcalEndcapP_zmax"     value="HcalEndcapP_zmin + HcalEndcapP_length"/>
 
     <constant name="LFHCAL_zmin"          value="EcalEndcapP_zmin + EcalEndcapP_length"/>
     <comment> LFHCAL is 140 cm total, but current implementation leaves the final 10 cm empty </comment>
     <constant name="LFHCAL_length"        value="140.0*cm"/>
     <constant name="LFHCAL_zmax"          value="LFHCAL_zmin + LFHCAL_length"/>
 
-    <constant name="HcalEndcapPInsert_zmin"     value="HcalEndcapP_zmin"/>
-    <constant name="HcalEndcapPInsert_length"   value="127.97*cm"/>
+    <constant name="HcalEndcapPInsert_zmin"     value="EcalEndcapP_zmin + EcalEndcapP_length"/>
+    <constant name="HcalEndcapPInsert_length"   value="134.75*cm"/>
     <constant name="HcalEndcapPInsert_zmax"     value="HcalEndcapPInsert_zmin + HcalEndcapPInsert_length"/>
     <constant name="HcalEndcapPInsert_width"    value="59.6*cm"/>
     <constant name="HcalEndcapPInsert_height"    value="59.7485*cm"/>
     <constant name="HcalEndcapPInsert_xposition" value="EcalEndcapPInsert_xposition"/>
     <constant name="HcalEndcapPInsert_yposition" value="EcalEndcapPInsert_yposition"/>
 
-    <constant name="HcalEndcapN_CaloSides"	value="60"/>
+    <constant name="HcalEndcapN_CaloSides"      value="60"/>
     <constant name="HcalEndcapN_zmin"     value="BackwardServiceGap_zmax"/>
     <constant name="HcalEndcapN_length"   value="44.0*cm"/>
     <constant name="HcalEndcapN_zmax"     value="HcalEndcapN_zmin + HcalEndcapN_length"/>
@@ -606,7 +603,6 @@ Service gaps in FW direction (before endcapP ECAL) and BW direction (before endc
     <constant name="HcalBarrel_length"    value="HcalBarrelForward_zmax + HcalBarrelBackward_zmax"/>
     <constant name="HcalBarrel_offset"    value="(HcalBarrelForward_zmax - HcalBarrelBackward_zmax)/2"/>
     <constant name="HcalEndcapN_rmax"     value="HcalBarrel_rmax"/>
-    <constant name="HcalEndcapP_rmax"     value="HcalBarrel_rmax"/>
     <constant name="LFHCAL_rmax"          value="HcalBarrel_rmax"/>
     <comment>
       These are used by ddsim, the region where we store all secondaries

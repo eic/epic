@@ -425,12 +425,12 @@
     <composite n="1" ref="C"/>
   </material>
   <material name="MMGAS_InoxForMesh" state="solid">
-  	<D type="density" unit="g/cm3" value="2.8548"/>
+        <D type="density" unit="g/cm3" value="2.8548"/>
     <fraction n="0.19" ref="Cr"/>
-  	<fraction n="0.68" ref="Fe"/>
-   	<fraction n="0.02" ref="Mn"/>
-   	<fraction n="0.10" ref="Ni"/>
-   	<fraction n="0.01" ref="Si"/>
+        <fraction n="0.68" ref="Fe"/>
+        <fraction n="0.02" ref="Mn"/>
+        <fraction n="0.10" ref="Ni"/>
+        <fraction n="0.01" ref="Si"/>
   </material>
   <material name="Ar90IsoButane" state="gas">
     <D type="density" unit="g/cm3" value="0.00170335"/>
@@ -473,5 +473,26 @@
     <D type="density" value="8.558" unit="g / cm3"/>
     <fraction n="0.9622" ref="Pb"/>
     <fraction n="0.0378" ref="SciFiPb_Glue"/>
+  </material>
+  <material name="Brass">
+    <D type="density" value="8.41" unit="g / cm3"/>
+    <fraction n="0.70" ref="Cu"/>
+    <fraction n="0.30" ref="Zn"/>
+  </material>
+  <material name="NbTi">
+    <D type="density" value="6.54" unit="g / cm3"/>
+    <fraction n="0.50" ref="Nb"/>
+    <fraction n="0.50" ref="Ti"/>
+  </material>
+  <material name="Solder">
+    <D type="density" value="8.60" unit="g / cm3"/>
+    <fraction n="0.40" ref="Pb"/>
+    <fraction n="0.60" ref="Sn"/>
+  </material>
+ <material name="SolenoidCoil">
+    <D type="density" value="8.73" unit="g / cm3"/>
+    <fraction n="0.9201" ref="Cu"/>
+    <fraction n="0.0638" ref="NbTi"/>
+    <fraction n="0.0161" ref="Solder"/>
   </material>
 </materials>
