@@ -114,7 +114,8 @@ static Ref_t createDetector(Detector& desc, xml_h e, SensitiveDetector sens)
   xml_comp_t xml_lens    = xml_module.child(_Unicode(lens));
   double     lens_shift  = getAttrOrDefault(xml_lens, _Unicode(shift), 0 * mm);
   double lens_width = getAttrOrDefault(xml_lens, _Unicode(width), 35 * mm);
-  double lens_thickness = getAttrOrDefault(xml_lens, _Unicode(thickness), 12 * mm);
+  //double lens_thickness = getAttrOrDefault(xml_lens, _Unicode(thickness), 12 * mm);
+  double lens_thickness = getAttrOrDefault(xml_lens, _Unicode(thickness), 0 * mm);
   double lens_r1        = getAttrOrDefault(xml_lens, _Unicode(r1), 62 * mm);
   double lens_r2        = getAttrOrDefault(xml_lens, _Unicode(r2), 36 * mm);
 
@@ -212,8 +213,13 @@ static Ref_t createDetector(Detector& desc, xml_h e, SensitiveDetector sens)
   Position mcp_position(prism_position_x, mcp_position_z, 0);
   RotationX mcp_rotation(-M_PI / 2.);
 
+  // MCP optical surface                                                                                                                  
+  auto        surf_sensor    = surfMgr.opticalSurface("SensorSurface_DIRC");
+  SkinSurface skin_sensor(desc, det, Form("dirc_sensor_optical_surface"), surf_sensor, mcp_vol);
+  skin_sensor.isValid();
+  
   Envelope_trap_vol.placeVolume(mcp_vol, Transform3D(mcp_rotation, mcp_position));
-
+  
   // Place modules
   const int    module_repeat = xml_module.repeat();
   const double dphi          = 2. * M_PI / module_repeat;

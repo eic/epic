@@ -1027,8 +1027,23 @@
       <property name="RINDEX"                  coldim="2" values="1.034*eV  1.5   4.136*eV  1.5"/>
     </opticalsurface>
     -->
-    <opticalsurface finish="polished" model="glisur" name="DIRC_MirrorOpticalSurface" type="dielectric_metal" value="0">
+    <opticalsurface finish="polished" model="glisur" name="DIRC_MirrorOpticalSurface" type="dielectric_metal" value="1.0">
       <property name="REFLECTIVITY" ref="REFLECTIVITY_DIRC_mirror"/>
+      <property name="EFFICIENCY" coldim="2" values="
+        1*eV  0
+        7*eV  0
+	"/> 
+    </opticalsurface>
+
+    <opticalsurface name="SensorSurface_DIRC" model="glisur" finish="polished" type="dielectric_dielectric">
+      <property name="REFLECTIVITY" coldim="2" values="
+       1*eV 0
+       7*eV 0
+       "/>
+      <property name="EFFICIENCY" coldim="2" values="                                                                               
+        1*eV  1                                                                               
+        7*eV  1                                                                                                                            
+        "/>
     </opticalsurface>
 
     <opticalsurface finish="polished" model="unified" name="MRICH_MirrorOpticalSurface" type="dielectric_metal" value="0">
