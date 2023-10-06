@@ -1,0 +1,43 @@
+#!/usr/bin/env python3
+
+# SPDX-License-Identifier: LGPL-3.0-or-later
+# Copyright (C) 2023 Chao Peng
+'''
+    A script to compare two detector parameter tables.
+    Report inconsistent numbers, missing components/columns, or other errors.
+'''
+
+import os
+import argparse
+import pandas as pd
+
+
+if __name__ == '__main__':
+    parser = argparse.ArgumentParser(
+            prog='compare_detector_parameter_table',
+            description = 'A python script to compare two detector parameter tables.'
+                        + '\n       ' # 7 spaces for "usage: "
+                        + r'It adapts the format as of 2023/10 (see https://eic.jlab.org/Menagerie).'
+            )
+    parser.add_argument(
+            'base_table',
+            help='Path or url to the base parameter table.'
+            )
+    parser.add_argument(
+            'other_table',
+            help='Path or url to the other parameter table.'
+            )
+    parser.add_argument(
+            '--base-encoding', default='ISO-8859-1',
+            help='encoding for the base table'
+            )
+    parser.add_argument(
+            '--other-encoding', default='ISO-8859-1',
+            help='encoding for the other table'
+            )
+    args = parser.parse_args()
+
+    df1 = pd.read_csv(args.base_table, encoding=args.base_encoding)
+    print(df1)
+    df2 = pd.read_csv(args.other_table, encoding=args.other_encoding)
+    print(df2)
