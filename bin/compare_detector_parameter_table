@@ -11,6 +11,28 @@ import os
 import argparse
 import pandas as pd
 
+pd.set_option('display.max_rows', 500)
+
+
+# read parameter table and do a little bit formatting
+def read_par_table(path, **kwargs):
+    dft = pd.read_csv(path, **kwargs)
+    dft.columns = [i.replace(' \n', ' ').replace('\n', ' ').strip() for i in dft.columns.astype(str)]
+    unnamed_cols = [i for i in dft.columns if i.startswith('Unnamed')]
+    dft = dft.drop(columns=unnamed_cols)
+    for col in dft.columns:
+        if pd.api.types.is_string_dtype(dft[col].dtype):
+            dft.loc[:, col] = dft[col].str.replace(' \n', ' ').str.replace('\n', ' ').str.strip()
+    dft.loc[:, 'Region'] = dft['Region'].fillna(method='ffill')
+    dft.loc[:, 'Component'] = dft['Component'].fillna(method='ffill')
+    dft.loc[:, 'Sub-Component'] = dft['Sub-Component'].fillna('')
+    # build a key (multi-indexing also works)
+    comp = dft['Region'] + '_' + dft['Component']
+    sub_comp = dft['Sub-Component'].copy()
+    sub_comp.loc[sub_comp.str.len() > 0] = '_' + sub_comp.astype(str)
+    dft.loc[:, 'key'] = (comp + sub_comp).str.replace(' ', '_').str.lower()
+    return dft.set_index('key', drop=True)
+
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(
@@ -20,24 +42,26 @@ if __name__ == '__main__':
                         + r'It adapts the format as of 2023/10 (see https://eic.jlab.org/Menagerie).'
             )
     parser.add_argument(
-            'base_table',
-            help='Path or url to the base parameter table.'
+            'det_table',
+            help='Path or url to the DETECTOR parameter table.'
             )
     parser.add_argument(
-            'other_table',
-            help='Path or url to the other parameter table.'
+            'sim_table',
+            help='Path or url to the SIMULATION parameter table.'
             )
     parser.add_argument(
-            '--base-encoding', default='ISO-8859-1',
-            help='encoding for the base table'
+            '--det-encoding', default='ISO-8859-1',
+            help='encoding for the detector parameter table'
             )
     parser.add_argument(
-            '--other-encoding', default='ISO-8859-1',
-            help='encoding for the other table'
+            '--sim-encoding', default='ISO-8859-1',
+            help='encoding for the simulation parameter table'
             )
     args = parser.parse_args()
 
-    df1 = pd.read_csv(args.base_table, encoding=args.base_encoding)
-    print(df1)
-    df2 = pd.read_csv(args.other_table, encoding=args.other_encoding)
-    print(df2)
+    dfd = read_par_table(args.det_table, encoding=args.det_encoding)
+    # ignore alternatives
+    dfd = dfd[~dfd['Region'].str.contains('ALTERNATIVE')]
+    print(dfd)
+    dfs = read_par_table(args.sim_table, encoding=args.sim_encoding)
+    print(dfs)
