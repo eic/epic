@@ -141,9 +141,9 @@
   <readouts>
     <readout name="HcalEndcapPInsertHits">
       <segmentation
-        type="CartesianGridXY"
-        grid_size_x="3.*cm"
-        grid_size_y="3.*cm"
+        type="HexGrid"
+        side_length="1.889*cm"
+        stagger="2"
       />
       <id>system:8,layer:8,slice:8,x:32:-16,y:-16</id>
     </readout>
