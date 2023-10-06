@@ -139,6 +139,11 @@
   </detectors>
 
   <readouts>
+    <documentation>
+      Readout is segmented into hexagons with sides of 1.889 cm
+      The hexagons positions cycle through four sets of layer configurations ("H4 staggering")
+      i.e. hexagons in layers 1-4 (5-8, ...) are all offset transversely from each other
+    </documentation>
     <readout name="HcalEndcapPInsertHits">
       <segmentation
         type="HexGrid"
