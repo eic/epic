@@ -107,8 +107,8 @@ Construct the sweeper and analyzer dipole magnets for the luminosity subsystem.
         <X step="0.5*cm" min="-7.5*cm" max="7.5*cm" />
         <Y step="2.0*cm" min="-34*cm" max="34*cm" />
         <Z step="2.0*cm" min="-80*cm" max="80*cm" />
-        <translation x="LumiSweepMag_X" y="LumiSweepMag_Y" z="LumiSweepMag_Z" />
-        <rotation x="0" y="0" z="0" />
+        <translationCoord x="LumiSweepMag_X" y="LumiSweepMag_Y" z="LumiSweepMag_Z" />
+        <rotationField x="0" y="0" z="0" />
       </dimensions>
     </field>
 
@@ -121,8 +121,8 @@ Construct the sweeper and analyzer dipole magnets for the luminosity subsystem.
         <X step="0.5*cm" min="-7.5*cm" max="7.5*cm" />
         <Y step="2.0*cm" min="-34*cm" max="34*cm" />
         <Z step="2.0*cm" min="-80*cm" max="80*cm" />
-        <translation x="LumiAnalyzerMag_X" y="LumiAnalyzerMag_Y" z="LumiAnalyzerMag_Z" />
-        <rotation x="0" y="0" z="0" />
+        <translationCoord x="LumiAnalyzerMag_X" y="LumiAnalyzerMag_Y" z="LumiAnalyzerMag_Z" />
+        <rotationField x="0" y="0" z="0" />
       </dimensions>
     </field>
 

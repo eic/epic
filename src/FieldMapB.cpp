@@ -65,17 +65,23 @@ public:
   void LoadMap(const std::string& map_file, float scale);
   bool GetIndices(float R, float Z, int *idxR, int *idxZ, float *deltaR, float *deltaZ);
   bool GetIndices(float X, float Y, float Z, int *idxX, int *idxY, int *idxZ, float *deltaX, float *deltaY, float *deltaZ);
-  void SetTransform(const Transform3D& tr)
+  void SetCoordTranslation(const Transform3D& tr)
   {
-    trans     = tr;
-    trans_inv = tr.Inverse();
+    coordTranslate     = tr;
+    coordTranslate_inv = tr.Inverse();
+  }
+  void SetFieldRotation(const Transform3D& tr)
+  {
+    fieldRot     = tr;
+    fieldRot_inv = tr.Inverse();
   }
 
   virtual void fieldComponents(const double* pos, double* field);
 
 private:
   FieldCoord                                                    fieldCoord; // field coordinate type
-  Transform3D                                                   trans, trans_inv; // transformation matrices
+  Transform3D                                                   coordTranslate, coordTranslate_inv; // coord translation
+  Transform3D                                                   fieldRot, fieldRot_inv; // field rotation
   std::vector<float>                                            steps, mins, maxs; // B map cell info
   int                                                           ir, ix, iy, iz; // lookup indices
   float                                                         dr, dx, dy, dz; // deltas for interpolation
@@ -205,7 +211,7 @@ void FieldMapB::LoadMap(const std::string& map_file, float scale)
       if( ! GetIndices( coord[0], coord[1], &ir, &iz, &dr, &dz) ) {
         printout(WARNING, "FieldMapB", "coordinates out of range, skipped it.");
       }
-      else {
+      else { // scale field
         Bvals_RZ[ ir ][ iz ] =
         { Bcomp[0] * scale * float(tesla),
           Bcomp[1] * scale * float(tesla) };
@@ -219,11 +225,11 @@ void FieldMapB::LoadMap(const std::string& map_file, float scale)
       if( ! GetIndices(coord[0], coord[1], coord[2], &ix, &iy, &iz, &dx, &dy, &dz) ) {
         printout(WARNING, "FieldMap","coordinates out of range, skipped it.");
       }
-      else {
-        Bvals_XYZ[ ix ][ iy ][ iz ] =
-        { Bcomp[0] * scale * float(tesla),
-          Bcomp[1] * scale * float(tesla),
-          Bcomp[2] * scale * float(tesla) };
+      else { // scale and rotate B field vector
+        auto B = ROOT::Math::XYZPoint( Bcomp[0], Bcomp[1], Bcomp[2] );
+        B *= scale * float(tesla);
+        B = fieldRot * B;
+        Bvals_XYZ[ ix ][ iy ][ iz ] = { float(B.x()), float(B.y()), float(B.z()) };
       }
     }
   }
@@ -233,7 +239,7 @@ void FieldMapB::LoadMap(const std::string& map_file, float scale)
 void FieldMapB::fieldComponents(const double* pos, double* field)
 {
   // coordinate conversion
-  auto p = trans_inv * ROOT::Math::XYZPoint(pos[0], pos[1], pos[2]);
+  auto p = coordTranslate_inv * ROOT::Math::XYZPoint(pos[0], pos[1], pos[2]);
 
   if( fieldCoord == FieldCoord::BrBz ) {
     // coordinates conversion
@@ -261,12 +267,13 @@ void FieldMapB::fieldComponents(const double* pos, double* field)
     float Bz = p0[1] * (1 - dr) * (1 - dz) + p1[1] * (1 - dr) * dz
              + p2[1] *    dr    * (1 - dz) + p3[1] *    dr    * dz;
 
-    // convert Br Bz to Bx By Bz
-    field[0] += Br * sin(phi);
-    field[1] += Br * cos(phi);
-    field[2] += Bz;
+    // convert Br Bz to Bx By Bz and rotate field
+    auto B = fieldRot * ROOT::Math::XYZPoint(Br * sin(phi), Br * cos(phi), Bz);
+    field[0] += B.x();
+    field[1] += B.y();
+    field[2] += B.z();
   }
-  else {
+  else { // BxByBz
 
     if( ! GetIndices(p.x(), p.y(), p.z(), &ix, &iy, &iz, &dx, &dy, &dz) ) {
       return; // out of range
@@ -291,6 +298,7 @@ void FieldMapB::fieldComponents(const double* pos, double* field)
       b[comp] = b0 * (1 - dz) + b1 * dz;
     }
 
+    // field rotation done in LoadMap()
     field[0] += b[0];
     field[1] += b[1];
     field[2] += b[2];
@@ -353,17 +361,18 @@ static Ref_t create_field_map_b(Detector& /*lcdd*/, xml::Handle_t handle)
   // translation, rotation
   static float deg2r = ROOT::Math::Pi() / 180.;
   RotationZYX   rot(0., 0., 0.);
-  if (x_dim.hasChild(_Unicode(rotation))) {
-    xml_comp_t rot_dim = x_dim.child(_Unicode(rotation));
+  if (x_dim.hasChild(_Unicode(rotationField))) {
+    xml_comp_t rot_dim = x_dim.child(_Unicode(rotationField));
     rot                = RotationZYX(rot_dim.z() * deg2r, rot_dim.y() * deg2r, rot_dim.x() * deg2r);
   }
 
   Translation3D trans(0., 0., 0.);
-  if (x_dim.hasChild(_Unicode(translation))) {
-    xml_comp_t trans_dim = x_dim.child(_Unicode(translation));
+  if (x_dim.hasChild(_Unicode(translationCoord))) {
+    xml_comp_t trans_dim = x_dim.child(_Unicode(translationCoord));
     trans                = Translation3D(trans_dim.x(), trans_dim.y(), trans_dim.z());
   }
-  map->SetTransform(trans * rot);
+  map->SetCoordTranslation( Transform3D(trans) );
+  map->SetFieldRotation( Transform3D(rot) );
 
   map->LoadMap(field_map_file, field_map_scale);
   field.assign(map, x_par.nameStr(), "FieldMapB");
