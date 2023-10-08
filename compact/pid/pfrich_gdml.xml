@@ -3,9 +3,11 @@
 
 <lccdd>
   <detectors>
-    <detector id="BackwardRICH_ID" name="PFRICH" type="DD4hep_GdmlDetector">
+  <!--   <detector id="BackwardRICH_ID" name="PFRICH" type="DD4hep_GdmlDetector"> -->
   <!--      <gdmlFile ref="pfrich.gdml"/> -->
   <!--    <gdmlFile ref="pfrich_prototype_gdml.gdml"/> -->
+  <!--  <detector id="BackwardRICH_ID" name="PFRICH" type="DD4hep_GdmlDetector"> -->
+      <detector id="BackwardRICH_ID" name="PFRICH" type="epic_PFRICH_v1">
       <gdmlFile ref="pdrich_import_test.gdml"/>
       <parent name="/world_volume"/>
     </detector>

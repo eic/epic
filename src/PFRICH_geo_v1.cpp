@@ -27,10 +27,9 @@ using namespace dd4hep;
 using namespace dd4hep::rec;
 
 // create the detector
-static Ref_t createDetector(Detector& description, xml_h e, SensitiveDetector sens)
+//static Ref_t createDetector(Detector& description, xml_h e, SensitiveDetector sens)
+static Ref_t createDetector(Detector& description, xml_h e, Ref_t)
 {
-
-
 
 //  xml::DetElement       detElem = handle;
 //  std::string           detName = detElem.nameStr();
@@ -45,19 +44,18 @@ static Ref_t createDetector(Detector& description, xml_h e, SensitiveDetector se
   int       det_id   = x_det.id();
 
   string det_name = x_det.nameStr();
+//  Material  air      = description.air();
+
   DetElement sdet(det_name, det_id);
 
-  sens.setType("tracker");
+//  sens.setType("tracker");
   description.invisible(); 
 
+  cout << "aaaaaaaaaaaaaaaaaaaaaaaa " << endl;
+
+  exit(0);
+
 //  Material   air      = description.material("AirOptical");
-
-
-
-
-
-
-
 //  desccription;
 //  sens;  
 
@@ -369,4 +367,4 @@ static Ref_t createDetector(Detector& description, xml_h e, SensitiveDetector se
 }
 
 // clang-format off
-DECLARE_DETELEMENT(epic_PFRICH, createDetector)
+DECLARE_DETELEMENT(epic_PFRICH_v1, createDetector)
