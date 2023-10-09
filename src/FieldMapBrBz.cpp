@@ -179,7 +179,7 @@ void FieldMapBrBz::fieldComponents(const double* pos, double* field)
   double Bz = p0[1] * (1 - dr) * (1 - dz) + p1[1] * (1 - dr) * dz + p2[1] * dr * (1 - dz) + p3[1] * dr * dz;
 
   // convert Br Bz to Bx By Bz
-  auto B = trans * ROOT::Math::XYZPoint(Br * sin(phi), Br * cos(phi), Bz);
+  auto B = trans * ROOT::Math::XYZPoint(Br * cos(phi), Br * sin(phi), Bz);
   field[0] += B.x() * tesla;
   field[1] += B.y() * tesla;
   field[2] += B.z() * tesla;
