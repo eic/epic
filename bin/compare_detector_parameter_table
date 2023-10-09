@@ -86,6 +86,10 @@ if __name__ == '__main__':
             help='encoding for the simulation parameter table.'
             )
     parser.add_argument(
+            '-v', '--verbose', action='store_true',
+            help='enable to print out the report.'
+            )
+    parser.add_argument(
             '-o', '--output', default='par_table_report.json',
             help='output path for the report.'
             )
@@ -116,9 +120,9 @@ if __name__ == '__main__':
         dftm = temp.loc[:, key_cols + value_cols]
     except:
         dftm = pd.DataFrame()
-
     # check values
-    values = []
+    correct_values = []
+    wrong_values = []
     total_mismatched = 0
     for k, drow in dfdm.iterrows():
         srow = dfsm.loc[k].squeeze()
@@ -127,9 +131,12 @@ if __name__ == '__main__':
         except:
             tvars = dict()
         # check value
-        row_check = drow[key_cols].to_dict()
-        mismatched = 0
+        correct_row = drow[key_cols].to_dict()
+        wrong_row = correct_row.copy()
+        # print(tvars)
         for vcol in value_cols:
+            # print(k, vcol)
+            tvar = str(tvars.get(vcol, 'Not Found')).replace('nan', 'Empty')
             try:
                 dval = float(drow[vcol])
             except:
@@ -138,25 +145,31 @@ if __name__ == '__main__':
                 sval = float(srow[vcol])
             except:
                 sval = np.nan
-            if (not pd.isnull(sval) or not pd.isnull(dval)) and not np.isclose(sval, dval):
-                tvar = str(tvars.get(vcol, 'Not Found')).replace('nan', 'Empty')
-                row_check[vcol] = dict(det=dval, sim=sval, template_var=tvar)
-                mismatched += 1
-        if mismatched > 0:
-            total_mismatched += mismatched
-            values.append(row_check)
+            if not np.all(np.isnan([sval, dval])) and not np.isclose(sval, dval):
+                wrong_row[vcol] = dict(det=dval, sim=sval, template_var=tvar)
+            else:
+                correct_row[vcol] = dict(det=dval, sim=sval, template_var=tvar)
 
+        if len(wrong_row) > len(key_cols):
+            total_mismatched += len(wrong_row) - len(key_cols)
+            wrong_values.append(wrong_row)
+        if len(correct_row) > len(key_cols):
+            correct_values.append(correct_row)
 
-    # printout reports
-    if len(df_mis) > 0:
-        print('These det table components are missing in the sim table:')
-        print(df_mis)
-    if len(df_ext) > 0:
-        print('These sim table components are not found in the det table:')
-        print(df_ext)
-    if len(values) > 0:
-        print('These values are mismatched between the two tables:')
-        print(json.dumps(values, indent=4))
+    if args.verbose:
+        # printout reports
+        if len(df_mis) > 0:
+            print('These det table components are missing in the sim table:')
+            print(df_mis)
+        if len(df_ext) > 0:
+            print('These sim table components are not found in the det table:')
+            print(df_ext)
+        if len(correct_values) > 0:
+            print('These values are correct:')
+            print(json.dumps(correct_values, indent=4))
+        if len(wrong_values) > 0:
+            print('These values are mismatched between the two tables:')
+            print(json.dumps(wrong_values, indent=4))
 
     report['stats'] = dict(
             checked_columns=value_cols,
@@ -176,7 +189,8 @@ if __name__ == '__main__':
                 ),
             )
     report['results'] = dict(
-            value_checks=values,
+            wrong_values=wrong_values,
+            correct_values=correct_values,
             missing_components=df_mis.to_dict('records'),
             extra_components=df_ext.to_dict('records')
             )
