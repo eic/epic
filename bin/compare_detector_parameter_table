@@ -120,10 +120,9 @@ if __name__ == '__main__':
         dftm = temp.loc[:, key_cols + value_cols]
     except:
         dftm = pd.DataFrame()
-    # check values
-    correct_values = []
-    wrong_values = []
-    total_mismatched = 0
+
+    comps = []
+    # check component values
     for k, drow in dfdm.iterrows():
         srow = dfsm.loc[k].squeeze()
         try:
@@ -131,8 +130,8 @@ if __name__ == '__main__':
         except:
             tvars = dict()
         # check value
-        correct_row = drow[key_cols].to_dict()
-        wrong_row = correct_row.copy()
+        comp = drow[key_cols].to_dict()
+        missing_vals, wrong_vals, correct_vals = {}, {}, {}
         # print(tvars)
         for vcol in value_cols:
             # print(k, vcol)
@@ -145,16 +144,18 @@ if __name__ == '__main__':
                 sval = float(srow[vcol])
             except:
                 sval = np.nan
-            if not np.all(np.isnan([sval, dval])) and not np.isclose(sval, dval):
-                wrong_row[vcol] = dict(det=dval, sim=sval, template_var=tvar)
-            else:
-                correct_row[vcol] = dict(det=dval, sim=sval, template_var=tvar)
 
-        if len(wrong_row) > len(key_cols):
-            total_mismatched += len(wrong_row) - len(key_cols)
-            wrong_values.append(wrong_row)
-        if len(correct_row) > len(key_cols):
-            correct_values.append(correct_row)
+            if np.any(np.isnan([sval, dval])):
+                missing_vals[vcol] = dict(det=dval, sim=sval, template_var=tvar)
+            elif not np.isclose(sval, dval):
+                wrong_vals[vcol] = dict(det=dval, sim=sval, template_var=tvar)
+            else:
+                correct_vals[vcol] = dict(det=dval, sim=sval, template_var=tvar)
+
+        comp['MisMatched'] = wrong_vals
+        comp['Missing'] = missing_vals
+        comp['Correct'] = correct_vals
+        comps.append(comp)
 
     # printout reports
     if args.verbose:
@@ -164,11 +165,9 @@ if __name__ == '__main__':
         print('These sim table components are not found in the det table:')
         print(df_ext)
 
-        print('These values are correct:')
-        print(json.dumps(correct_values, indent=4))
+        print('These components are checked:')
+        print(json.dumps(comps, indent=4))
 
-        print('These values are mismatched between the two tables:')
-        print(json.dumps(wrong_values, indent=4))
 
     # save reports to a json file
     report['stats'] = dict(
@@ -183,14 +182,9 @@ if __name__ == '__main__':
                     matched=dfsm.shape[0],
                     missing=df_ext.shape[0],)
                 ),
-            component_values=dict(
-                total=len(value_cols)*len(dfdm),
-                mismatched=total_mismatched,
-                ),
             )
     report['results'] = dict(
-            wrong_values=wrong_values,
-            correct_values=correct_values,
+            checked_components=comps,
             missing_components=df_mis.to_dict('records'),
             extra_components=df_ext.to_dict('records')
             )
