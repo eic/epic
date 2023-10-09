@@ -152,7 +152,7 @@ if __name__ == '__main__':
             else:
                 correct_vals[vcol] = dict(det=dval, sim=sval, template_var=tvar)
 
-        comp['MisMatched'] = wrong_vals
+        comp['Mismatched'] = wrong_vals
         comp['Missing'] = missing_vals
         comp['Correct'] = correct_vals
         comps.append(comp)
