@@ -8,6 +8,7 @@
 '''
 
 import os
+import json
 import argparse
 import pandas as pd
 
@@ -51,17 +52,56 @@ if __name__ == '__main__':
             )
     parser.add_argument(
             '--det-encoding', default='ISO-8859-1',
-            help='encoding for the detector parameter table'
+            help='encoding for the detector parameter table.'
             )
     parser.add_argument(
-            '--sim-encoding', default='ISO-8859-1',
-            help='encoding for the simulation parameter table'
+            '--sim-encoding', default='utf-8',
+            help='encoding for the simulation parameter table.'
+            )
+    parser.add_argument(
+            '-o', '--output', default='par_table_report.json',
+            help='output path for the report.'
             )
     args = parser.parse_args()
 
     dfd = read_par_table(args.det_table, encoding=args.det_encoding)
     # ignore alternatives
     dfd = dfd[~dfd['Region'].str.contains('ALTERNATIVE')]
-    print(dfd)
     dfs = read_par_table(args.sim_table, encoding=args.sim_encoding)
-    print(dfs)
+
+    # check components
+    report = dict()
+    missing_keys = [k for k in dfd.index if k not in dfs.index]
+    extra_keys = [k for k in dfs.index if k not in dfd.index]
+    matched_keys = [k for k in dfd.index if k in dfs.index]
+    df_mis = dfd.loc[missing_keys, ['Region', 'Component', 'Sub-Component']].reset_index(drop=True)
+    df_ext = dfs.loc[extra_keys, ['Region', 'Component', 'Sub-Component']].reset_index(drop=True)
+    dfdm = dfd.loc[matched_keys]
+    dfsm = dfs.loc[matched_keys]
+
+    # check values
+
+
+    # printout reports
+    print("These det table components are missing in the sim table.")
+    print(df_mis)
+    print("These sim table components do not match with the det table.")
+    print(df_ext)
+
+    report['stats'] = dict(
+            table_components=dict(
+                detector=dict(
+                    total=dfd.shape[0],
+                    matched=dfdm.shape[0],
+                    missing=df_mis.shape[0],),
+                simulation=dict(
+                    total=dfs.shape[0],
+                    matched=dfsm.shape[0],
+                    missing=df_ext.shape[0],)
+                )
+            )
+    report['matched'] = dfdm[['Region', 'Component', 'Sub-Component']].to_dict('records')
+    report['missing'] = df_mis.to_dict('records')
+    report['mismatch'] = df_ext.to_dict('records')
+    with open(args.output, 'w') as f:
+        json.dump(report, f, indent=4)
