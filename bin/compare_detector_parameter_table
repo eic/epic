@@ -156,21 +156,21 @@ if __name__ == '__main__':
         if len(correct_row) > len(key_cols):
             correct_values.append(correct_row)
 
+    # printout reports
     if args.verbose:
-        # printout reports
-        if len(df_mis) > 0:
-            print('These det table components are missing in the sim table:')
-            print(df_mis)
-        if len(df_ext) > 0:
-            print('These sim table components are not found in the det table:')
-            print(df_ext)
-        if len(correct_values) > 0:
-            print('These values are correct:')
-            print(json.dumps(correct_values, indent=4))
-        if len(wrong_values) > 0:
-            print('These values are mismatched between the two tables:')
-            print(json.dumps(wrong_values, indent=4))
+        print('These det table components are missing in the sim table:')
+        print(df_mis)
 
+        print('These sim table components are not found in the det table:')
+        print(df_ext)
+
+        print('These values are correct:')
+        print(json.dumps(correct_values, indent=4))
+
+        print('These values are mismatched between the two tables:')
+        print(json.dumps(wrong_values, indent=4))
+
+    # save reports to a json file
     report['stats'] = dict(
             checked_columns=value_cols,
             table_components=dict(
