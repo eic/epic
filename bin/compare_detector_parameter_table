@@ -127,10 +127,10 @@ if __name__ == '__main__':
 
     # printout reports
     if len(df_mis) > 0:
-        print('These det table components are missing in the sim table.')
+        print('These det table components are missing in the sim table:')
         print(df_mis)
     if len(df_ext) > 0:
-        print('These sim table components do not match with the det table.')
+        print('These sim table components do not match with the det table:')
         print(df_ext)
     if len(values) > 0:
         print('These values are mismatched in the tables:')
