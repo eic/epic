@@ -269,7 +269,7 @@ void FieldMapB::fieldComponents(const double* pos, double* field)
              + p2[1] *    dr    * (1 - dz) + p3[1] *    dr    * dz;
 
     // convert Br Bz to Bx By Bz and rotate field
-    auto B = fieldRot * ROOT::Math::XYZPoint(Br * sin(phi), Br * cos(phi), Bz);
+    auto B = fieldRot * ROOT::Math::XYZPoint(Br * cos(phi), Br * sin(phi), Bz);
     field[0] += B.x();
     field[1] += B.y();
     field[2] += B.z();
