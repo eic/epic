@@ -73,6 +73,11 @@ if __name__ == '__main__':
             help='Path or url to the SIMULATION parameter table.'
             )
     parser.add_argument(
+            '--template',
+            default='https://raw.githubusercontent.com/eic/epic/main/templates/DetectorParameterTable.csv.jinja2',
+            help='Path or url to the template file of the detector paramter table'
+            )
+    parser.add_argument(
             '--det-encoding', default='ISO-8859-1',
             help='encoding for the detector parameter table.'
             )
@@ -91,6 +96,13 @@ if __name__ == '__main__':
     dfd = dfd[~dfd['Region'].str.contains('ALTERNATIVE')]
     dfs = read_par_table(args.sim_table, encoding=args.sim_encoding)
 
+    try:
+        temp = read_par_table(args.template)
+    except:
+        print('Failed to load parameter table template from \"{}\".'.format(args.template))
+        print('Report will not include information about the simulation variable names.')
+        temp = pd.DataFrame()
+
     # check components
     report = dict()
     matched_keys = np.intersect1d(dfd.index, dfs.index)
@@ -98,14 +110,23 @@ if __name__ == '__main__':
     extra_keys = [k for k in dfs.index if k not in matched_keys]
     df_mis = dfd.loc[missing_keys, ['Region', 'Component', 'Sub-Component']].reset_index(drop=True)
     df_ext = dfs.loc[extra_keys, ['Region', 'Component', 'Sub-Component']].reset_index(drop=True)
-    dfdm = dfd.loc[matched_keys, key_cols + value_cols].reset_index(drop=True)
-    dfsm = dfs.loc[matched_keys, key_cols + value_cols].reset_index(drop=True)
+    dfdm = dfd.loc[matched_keys, key_cols + value_cols]
+    dfsm = dfs.loc[:, key_cols + value_cols]
+    try:
+        dftm = temp.loc[:, key_cols + value_cols]
+    except:
+        dftm = pd.DataFrame()
 
     # check values
     values = []
     total_mismatched = 0
-    for i, drow in dfdm.iterrows():
-        srow = dfsm.iloc[i].squeeze()
+    for k, drow in dfdm.iterrows():
+        srow = dfsm.loc[k].squeeze()
+        try:
+            tvars = dftm.loc[k].squeeze().to_dict()
+        except:
+            tvars = dict()
+        # check value
         row_check = drow[key_cols].to_dict()
         mismatched = 0
         for vcol in value_cols:
@@ -118,7 +139,8 @@ if __name__ == '__main__':
             except:
                 sval = np.nan
             if (not pd.isnull(sval) or not pd.isnull(dval)) and not np.isclose(sval, dval):
-                row_check[vcol] = dict(det=dval, sim=sval)
+                tvar = str(tvars.get(vcol, 'Not Found')).replace('nan', 'Empty')
+                row_check[vcol] = dict(det=dval, sim=sval, template_var=tvar)
                 mismatched += 1
         if mismatched > 0:
             total_mismatched += mismatched
