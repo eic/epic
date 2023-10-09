@@ -122,6 +122,7 @@ if __name__ == '__main__':
         dftm = pd.DataFrame()
 
     comps = []
+    total_counts = np.zeros(3, dtype=int)
     # check component values
     for k, drow in dfdm.iterrows():
         srow = dfsm.loc[k].squeeze()
@@ -153,8 +154,11 @@ if __name__ == '__main__':
                 correct_vals[vcol] = dict(det=dval, sim=sval, template_var=tvar)
 
         comp['Mismatched'] = wrong_vals
+        total_counts[0] += len(wrong_vals)
         comp['Missing'] = missing_vals
+        total_counts[1] += len(missing_vals)
         comp['Correct'] = correct_vals
+        total_counts[2] += len(correct_vals)
         comps.append(comp)
 
     # printout reports
@@ -179,8 +183,15 @@ if __name__ == '__main__':
                     missing=df_mis.shape[0],),
                 simulation=dict(
                     total=dfs.shape[0],
-                    matched=dfsm.shape[0],
+                    matched=dfdm.shape[0],
                     missing=df_ext.shape[0],)
+                ),
+            component_values=dict(
+                checked_components=dfdm.shape[0],
+                checked_values=int(np.sum(total_counts)),
+                mismatched=int(total_counts[0]),
+                missing=int(total_counts[1]),
+                correct=int(total_counts[2]),
                 ),
             )
     report['results'] = dict(
