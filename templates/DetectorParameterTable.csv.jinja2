@@ -7,7 +7,7 @@ Weight: estimated as 79% iron and 21% plastic"
 Offset: measured from face nearest to interaction point
 Weight: estimated as 85% lead glass and 15% steel"
 ,Service Gap,,,{{ForwardServiceGap_length}},,,,{{ForwardServiceGap_zmax}},{{ForwardServiceGap_zmin}},,,,Offset: measured from location nearest to interaction point
-"CENTRAL DETECTOR",Barrel Hadron Calorimeter,,6.10.06,{{HcalBarrel_length}},{{HcalBarrel_rmin}},{{HcalBarrel_rmax}},,{{HcalBarrelForward_zmax}},-{{HcalBarrelBackward_zmax}},,,FeSc,"Offset: measured from center of detector
+"CENTRAL DETECTOR",Barrel Hadron Calorimeter,,6.10.06,{{HcalBarrel_length}},{{HcalBarrel_rmin}},{{HcalBarrel_rmax}},,-{{HcalBarrelBackward_zmax}},{{HcalBarrelForward_zmax}},,,FeSc,"Offset: measured from center of detector
 Volume: calculated as sum of the sub-sections
 Weight: estimated as 79% iron and 21% plastic"
 ,,HD Section,,,,,,,,,,,Offset: measured from face nearest to interaction point
@@ -18,18 +18,18 @@ Volume: calculated as sum of the sub-sections
 Weight: based on parametric estimate from CLAS LTCC"
 ,,Detector Section,,,{{DRICH_rmin0}},,,,,,,,Offset: measured from face nearest to interaction point
 ,,Aerogel Section,,,{{DRICH_rmin0}},,,,,,,Offset: measured from face nearest to interaction point
-,Solenoid Magnet,,6.10.07,{{Solenoid_length}},{{Solenoid_rmin}},{{Solenoid_rmax}},,{{SolenoidForward_zmax}},-{{SolenoidBackward_zmax}},,,Solenoid,Weight: based on parametric estimate from CLEO II
+,Solenoid Magnet,,6.10.07,{{Solenoid_length}},{{Solenoid_rmin}},{{Solenoid_rmax}},,-{{SolenoidBackward_zmax}},{{SolenoidForward_zmax}},,,Solenoid,Weight: based on parametric estimate from CLEO II
 ,EMCal Outer Support,,,,,,,,,,,"Steel, Instrumented",Weight: calculated as 20% of total volume as steel (balance is air)
-,EMCal Electronics,,,{{EcalBarrel_length}},,,,{{EcalBarrelForward_zmax}},-{{EcalBarrelBackward_zmax}},,,Near eta=0,Weight: calculated as 25% silicon (balance is air)
-,Barrel EMCal,,6.10.05,{{EcalBarrel_length}},{{EcalBarrel_rmin}},{{EcalBarrel_rmax}},,{{EcalBarrelForward_zmax}},-{{EcalBarrelBackward_zmax}},,,Sci Glass,Weight: based on parametric estimate from CMS EMCal
-,EMCal Inner Support,,,{{EcalBarrel_length}},,,,{{EcalBarrelForward_zmax}},-{{EcalBarrelBackward_zmax}},,,Steel,Weight: calculated as 100% steel
+,EMCal Electronics,,,{{EcalBarrel_length}},,,,-{{EcalBarrelBackward_zmax}},{{EcalBarrelForward_zmax}},,,Near eta=0,Weight: calculated as 25% silicon (balance is air)
+,Barrel EMCal,,6.10.05,{{EcalBarrel_length}},{{EcalBarrel_rmin}},{{EcalBarrel_rmax}},,-{{EcalBarrelBackward_zmax}},{{EcalBarrelForward_zmax}},,,Sci Glass,Weight: based on parametric estimate from CMS EMCal
+,EMCal Inner Support,,,{{EcalBarrel_length}},,,,-{{EcalBarrelBackward_zmax}},{{EcalBarrelForward_zmax}},,,Steel,Weight: calculated as 100% steel
 ,Barrel Gem Tracker,,6.10.03,,,,,,,,,muRWell (plane type),Weight: based on parametric estimate from SBS Gem
 ,DIRC Support ,,,,,,,,,,,Steel,"Offset: measured from point where DIRC bar connects to the readout
 Volume: calculated as sum of sub-sections
 Weight: estimated as 5% of total volume as steel (balance is air & detector)"
 ,,Bar Support,,,,,,,,,,,
 ,,Readout Support,,,,,,,,,,,"Readout support is triangular frame, therefore volume is halved."
-,DIRC Detector,,6.10.04,,{{DIRC_rmin}},{{DIRC_rmax}},,{{DIRCForward_zmax}},-{{DIRCBackward_zmax}},,,Fused silica bars,"Detector is totally enclosed by DIRC Support.
+,DIRC Detector,,6.10.04,,{{DIRC_rmin}},{{DIRC_rmax}},,-{{DIRCBackward_zmax}},{{DIRCForward_zmax}},,,Fused silica bars,"Detector is totally enclosed by DIRC Support.
 Weight: calculated as sum of sub-components"
 ,,DIRC Bar,,{{DIRCBar_length}},,,,,,,,,Weight: calculated as 30% quartz (balance is air & support system)
 ,,DIRC Readout,,{{DIRCReadout_length}},,,,,,,,,"Readout is triangular, therefore volume is halved.
