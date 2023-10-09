@@ -10,13 +10,29 @@
 import os
 import json
 import argparse
+import numpy as np
 import pandas as pd
 
 pd.set_option('display.max_rows', 500)
 
+# key_cols + value_cols are required columns
+key_cols = [
+        'Region',
+        'Component',
+        'Sub-Component',
+        ]
+value_cols = [
+        'Length (cm)',
+        'Inner Radius (cm)',
+        'Outer Radius (cm)',
+        'Offset from Center (cm)',
+        'Physical Start (cm)',
+        'Physical End (cm)',
+        ]
 
 # read parameter table and do a little bit formatting
 def read_par_table(path, **kwargs):
+    # read and format
     dft = pd.read_csv(path, **kwargs)
     dft.columns = [i.replace(' \n', ' ').replace('\n', ' ').strip() for i in dft.columns.astype(str)]
     unnamed_cols = [i for i in dft.columns if i.startswith('Unnamed')]
@@ -24,6 +40,12 @@ def read_par_table(path, **kwargs):
     for col in dft.columns:
         if pd.api.types.is_string_dtype(dft[col].dtype):
             dft.loc[:, col] = dft[col].str.replace(' \n', ' ').str.replace('\n', ' ').str.strip()
+
+    missing_required_cols = [c for c in key_cols + value_cols if c not in dft.columns]
+    if len(missing_required_cols) > 0:
+        print('Error: required columns do not exist in \"{}\": {}'.format(path, missing_required_cols))
+        exit(-1)
+
     dft.loc[:, 'Region'] = dft['Region'].fillna(method='ffill')
     dft.loc[:, 'Component'] = dft['Component'].fillna(method='ffill')
     dft.loc[:, 'Sub-Component'] = dft['Sub-Component'].fillna('')
@@ -39,7 +61,7 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser(
             prog='compare_detector_parameter_table',
             description = 'A python script to compare two detector parameter tables.'
-                        + '\n       ' # 7 spaces for "usage: "
+                        + '\n       ' # 7 spaces for 'usage: '
                         + r'It adapts the format as of 2023/10 (see https://eic.jlab.org/Menagerie).'
             )
     parser.add_argument(
@@ -71,24 +93,51 @@ if __name__ == '__main__':
 
     # check components
     report = dict()
-    missing_keys = [k for k in dfd.index if k not in dfs.index]
-    extra_keys = [k for k in dfs.index if k not in dfd.index]
-    matched_keys = [k for k in dfd.index if k in dfs.index]
+    matched_keys = np.intersect1d(dfd.index, dfs.index)
+    missing_keys = [k for k in dfd.index if k not in matched_keys]
+    extra_keys = [k for k in dfs.index if k not in matched_keys]
     df_mis = dfd.loc[missing_keys, ['Region', 'Component', 'Sub-Component']].reset_index(drop=True)
     df_ext = dfs.loc[extra_keys, ['Region', 'Component', 'Sub-Component']].reset_index(drop=True)
-    dfdm = dfd.loc[matched_keys]
-    dfsm = dfs.loc[matched_keys]
+    dfdm = dfd.loc[matched_keys, key_cols + value_cols].reset_index(drop=True)
+    dfsm = dfs.loc[matched_keys, key_cols + value_cols].reset_index(drop=True)
 
     # check values
+    values = []
+    total_mismatched = 0
+    for i, drow in dfdm.iterrows():
+        srow = dfsm.iloc[i].squeeze()
+        row_check = drow[key_cols].to_dict()
+        mismatched = 0
+        for vcol in value_cols:
+            try:
+                dval = float(drow[vcol])
+            except:
+                dval = np.nan
+            try:
+                sval = float(srow[vcol])
+            except:
+                sval = np.nan
+            if (not pd.isnull(sval) or not pd.isnull(dval)) and not np.isclose(sval, dval):
+                row_check[vcol] = dict(det=dval, sim=sval)
+                mismatched += 1
+        if mismatched > 0:
+            total_mismatched += mismatched
+            values.append(row_check)
 
 
     # printout reports
-    print("These det table components are missing in the sim table.")
-    print(df_mis)
-    print("These sim table components do not match with the det table.")
-    print(df_ext)
+    if len(df_mis) > 0:
+        print('These det table components are missing in the sim table.')
+        print(df_mis)
+    if len(df_ext) > 0:
+        print('These sim table components do not match with the det table.')
+        print(df_ext)
+    if len(values) > 0:
+        print('These values are mismatched in the tables:')
+        print(json.dumps(values, indent=4))
 
     report['stats'] = dict(
+            checked_columns=value_cols,
             table_components=dict(
                 detector=dict(
                     total=dfd.shape[0],
@@ -98,10 +147,16 @@ if __name__ == '__main__':
                     total=dfs.shape[0],
                     matched=dfsm.shape[0],
                     missing=df_ext.shape[0],)
-                )
+                ),
+            component_values=dict(
+                total=len(value_cols)*len(dfdm),
+                mismatched=total_mismatched,
+                ),
             )
-    report['matched'] = dfdm[['Region', 'Component', 'Sub-Component']].to_dict('records')
-    report['missing'] = df_mis.to_dict('records')
-    report['mismatch'] = df_ext.to_dict('records')
+    report['results'] = dict(
+            value_checks=values,
+            missing_components=df_mis.to_dict('records'),
+            extra_components=df_ext.to_dict('records')
+            )
     with open(args.output, 'w') as f:
         json.dump(report, f, indent=4)
