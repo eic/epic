@@ -139,11 +139,20 @@
   </detectors>
 
   <readouts>
+    <documentation>
+      Readout is segmented into hexagons with sides of 1.889 cm
+      The hexagons positions cycle through four sets of layer configurations ("H4 staggering")
+      i.e. hexagons in layers 1-4 (5-8, ...) are all offset transversely from each other
+      with the centers of the cells of one layer being at the midpoints of the edges of the cells in
+      the other layers
+      Staggering defined in https://github.com/AIDASoft/DD4hep/blob/1962f7d1ace4484efb8886d66a6759a83c5107a3/DDCore/include/DDSegmentation/HexGrid.h#L112-L114
+      and https://github.com/AIDASoft/DD4hep/blob/1962f7d1ace4484efb8886d66a6759a83c5107a3/DDCore/src/segmentations/HexGrid.cpp#L102-L120
+    </documentation>
     <readout name="HcalEndcapPInsertHits">
       <segmentation
-        type="CartesianGridXY"
-        grid_size_x="3.*cm"
-        grid_size_y="3.*cm"
+        type="HexGrid"
+        side_length="1.889*cm"
+        stagger="2"
       />
       <id>system:8,layer:8,slice:8,x:32:-16,y:-16</id>
     </readout>
