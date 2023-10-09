@@ -201,3 +201,4 @@ if __name__ == '__main__':
             )
     with open(args.output, 'w') as f:
         json.dump(report, f, indent=4)
+    print('Comparison reports saved to \"{}\".'.format(args.output))
