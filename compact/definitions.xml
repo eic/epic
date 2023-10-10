@@ -496,7 +496,7 @@ Service gaps in FW direction (before endcapP ECAL) and BW direction (before endc
     <constant name="ForwardServiceGap_zmax"       value="ForwardServiceGap_zmin + ForwardServiceGap_length"/>
 
     <comment> Radial service gap between dRICH and HcalBarrel </comment>
-    <constant name="ForwardServiceGap_thickness"  value="13.6*cm"/>
+    <constant name="ForwardServiceGap_thickness"  value="10.0*cm"/>
     <constant name="ForwardServiceGap_rmin"       value="ForwardPIDRegion_rmax"/>
     <constant name="ForwardServiceGap_rmax"       value="ForwardServiceGap_rmin + ForwardServiceGap_thickness"/>
 
