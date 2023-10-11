@@ -127,8 +127,9 @@ void FieldMapB::Configure(std::vector<xml_comp_t> dimensions)
   }
 
   if( fieldCoord == FieldCoord::BrBz ) {
-    int nr = std::roundf( (maxs[0] - mins[0]) / steps[0] ) + 1;
-    int nz = std::roundf( (maxs[1] - mins[1]) / steps[1] ) + 1;
+    // N bins increased by 1 beyond grid size to account for edge cases at upper limits
+    int nr = std::roundf( (maxs[0] - mins[0]) / steps[0] ) + 2;
+    int nz = std::roundf( (maxs[1] - mins[1]) / steps[1] ) + 2;
 
     Bvals_RZ.resize(nr);
     for (auto& B2 : Bvals_RZ) {
@@ -136,9 +137,10 @@ void FieldMapB::Configure(std::vector<xml_comp_t> dimensions)
     }
   }
   else {
-    int nx = std::roundf( (maxs[0] - mins[0]) / steps[0] ) + 1;
-    int ny = std::roundf( (maxs[1] - mins[1]) / steps[1] ) + 1;
-    int nz = std::roundf( (maxs[2] - mins[2]) / steps[2] ) + 1;
+    // N bins increased by 1 beyond grid size to account for edge cases at upper limits
+    int nx = std::roundf( (maxs[0] - mins[0]) / steps[0] ) + 2;
+    int ny = std::roundf( (maxs[1] - mins[1]) / steps[1] ) + 2;
+    int nz = std::roundf( (maxs[2] - mins[2]) / steps[2] ) + 2;
 
     Bvals_XYZ.resize(nx);
     for (auto& B3 : Bvals_XYZ) {
