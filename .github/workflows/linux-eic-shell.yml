@@ -300,7 +300,7 @@ jobs:
           cp doc/${{matrix.detector_config}}_constants.toml doc/constants.toml
           python bin/make_detector_parameter_table | tee doc/${{matrix.detector_config}}.csv
           sqlite3 -cmd \
-            ".import --csv ${{matrix.detector_config}}.csv detector_parameter_table" \
+            ".import --csv doc/${{matrix.detector_config}}.csv detector_parameter_table" \
             ".headers on" \
             ".mode html" \
             ".output doc/${{matrix.detector_config}}.html" \
