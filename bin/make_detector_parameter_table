@@ -16,5 +16,3 @@ constants = toml.load('doc/constants.toml')
 
 # render the template
 print(template.render(**constants))
-with open('temp_detector_parameter_table.csv', 'w') as f:
-    f.write(template.render(**constants))
