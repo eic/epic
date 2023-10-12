@@ -299,13 +299,12 @@ jobs:
           npdet_info dump ${DETECTOR_PATH}/${{matrix.detector_config}}.xml | grep -v '^\s' | grep '=' | cut -d= -f1-2 | tee doc/${{matrix.detector_config}}_constants.toml
           cp doc/${{matrix.detector_config}}_constants.toml doc/constants.toml
           python bin/make_detector_parameter_table | tee doc/${{matrix.detector_config}}.csv
-          cat <<-EOF | sqlite3
-            .import --csv ${{matrix.detector_config}}.csv detector_parameter_table
-            .headers on
-            .mode html
-            .output doc/${{matrix.detector_config}}.html
-            select * from detector_parameter_table;
-          EOF
+          sqlite3 -cmd \
+            ".import --csv ${{matrix.detector_config}}.csv detector_parameter_table" \
+            ".headers on" \
+            ".mode html" \
+            ".output doc/${{matrix.detector_config}}.html" \
+            "select * from detector_parameter_table;"
           sed -i '1s/^/<html><body><table border="1" style="border-collapse:collapse">\n/;$a</table></body></html>' doc/${{matrix.detector_config}}.html
     - uses: actions/upload-artifact@v3
       with:
@@ -315,7 +314,9 @@ jobs:
     - uses: actions/upload-artifact@v3
       with:
         name: DetectorParameterTable
-        path: doc/${{matrix.detector_config}}.csv
+        path: |
+          doc/${{matrix.detector_config}}.csv
+          doc/${{matrix.detector_config}}.html
         if-no-files-found: error
 
   check-overlap-tgeo:
