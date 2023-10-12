@@ -28,7 +28,7 @@ Overview
 - text: [CraterLake](https://eic.github.io/epic/artifacts/constants/epic_craterlake_constants.out)
 - toml: [CraterLake](https://eic.github.io/epic/artifacts/constants/epic_craterlake_constants.toml)
 - csv: [CraterLake](https://eic.github.io/epic/artifacts/DetectorParameterTable/epic_craterlake.csv)
-
+- html: [CraterLake](https://eic.github.io/epic/artifacts/DetectorParameterTable/epic_craterlake.html)
 
 Getting Started
 ---------------
