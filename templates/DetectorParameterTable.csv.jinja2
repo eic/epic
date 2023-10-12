@@ -32,8 +32,8 @@ CENTRAL DETECTOR,Integrated DIRC/MPGD Detector,DIRC Readout Support,{{DIRCReadou
 CENTRAL DETECTOR,Integrated DIRC/MPGD Detector,DIRC Bar Box,{{DIRCBar_length}},,,,,
 CENTRAL DETECTOR,Integrated DIRC/MPGD Detector,Inner MPGD,,,,,,
 CENTRAL DETECTOR,Barrel Time of Flight/Tracker,,{{BarrelTOF_length}},{{BarrelTOF_rmin}},{{BarrelTOF_rmax}},,,
-CENTRAL DETECTOR,HD MPGD 2,,,,,,,
-CENTRAL DETECTOR,HD MPGD 1,,,,,,,
+CENTRAL DETECTOR,HD MPGD 2,,,{{ForwardMPGDLayer2_rmin}},{{ForwardMPGDLayer2_rmax}},,{{ForwardMPGDLayer2_zmin}},{{ForwardMPGDLayer2_zmin+ForwardMPGDEndcapLayer_thickness}}
+CENTRAL DETECTOR,HD MPGD 1,,,{{ForwardMPGDLayer1_rmin}},{{ForwardMPGDLayer1_rmax}},,{{ForwardMPGDLayer1_zmin}},{{ForwardMPGDLayer1_zmin+ForwardMPGDEndcapLayer_thickness}}
 CENTRAL DETECTOR,Inner Tracker (Micromegas),,,,,,,
 CENTRAL DETECTOR,Inner Tracker (Micromegas),Micromega 1,,,,,,
 CENTRAL DETECTOR,Inner Tracker (Micromegas),Micromega 2,,,,,,
@@ -41,28 +41,28 @@ CENTRAL DETECTOR,Inner Tracker (Micromegas),Micromega 3,,,,,,
 CENTRAL DETECTOR,Inner Tracker (Micromegas),Micromega 4,,,,,,
 CENTRAL DETECTOR,Inner Tracker (Micromegas),Micromega 5,,,,,,
 CENTRAL DETECTOR,Inner Tracker (Si Barrel),,,,,,,
-CENTRAL DETECTOR,Inner Tracker (Si Barrel),Si Layer 1,,,,,,
-CENTRAL DETECTOR,Inner Tracker (Si Barrel),Si Layer 2,,,,,,
-CENTRAL DETECTOR,Inner Tracker (Si Barrel),Si Layer 3,,,,,,
-CENTRAL DETECTOR,Inner Tracker (Si Barrel),Si Layer 4,,,,,,
-CENTRAL DETECTOR,Inner Tracker (Si Barrel),Si Layer 5,,,,,,
+CENTRAL DETECTOR,Inner Tracker (Si Barrel),Si Layer 1,,{{VertexBarrelLayer1_rmin}},{{VertexBarrelLayer1_rmax}},,-{{VertexBarrelEnvelope_length/2}},{{VertexBarrelEnvelope_length/2}}
+CENTRAL DETECTOR,Inner Tracker (Si Barrel),Si Layer 2,,{{VertexBarrelLayer2_rmin}},{{VertexBarrelLayer2_rmax}},,-{{VertexBarrelEnvelope_length/2}},{{VertexBarrelEnvelope_length/2}}
+CENTRAL DETECTOR,Inner Tracker (Si Barrel),Si Layer 3,,{{VertexBarrelLayer3_rmin}},{{VertexBarrelLayer3_rmax}},,-{{VertexBarrelEnvelope_length/2}},{{VertexBarrelEnvelope_length/2}}
+CENTRAL DETECTOR,Inner Tracker (Si Barrel),Si Layer 4,,{{SiBarrelLayer1_rmin}},{{SiBarrelLayer1_rmax}},,-{{SiBarrelLayer1_length/2}},{{SiBarrelLayer1_length/2}}
+CENTRAL DETECTOR,Inner Tracker (Si Barrel),Si Layer 5,,{{SiBarrelLayer2_rmin}},{{SiBarrelLayer2_rmax}},,-{{SiBarrelLayer1_length/2}},{{SiBarrelLayer1_length/2}}
 CENTRAL DETECTOR,Inner Tracker (Si Disks),,,,,,,
-CENTRAL DETECTOR,Inner Tracker (Si Disks),HD Disk 1,,,,,,
-CENTRAL DETECTOR,Inner Tracker (Si Disks),HD Disk 2,,,,,,
-CENTRAL DETECTOR,Inner Tracker (Si Disks),HD Disk 3,,,,,,
-CENTRAL DETECTOR,Inner Tracker (Si Disks),HD Disk 4,,,,,,
-CENTRAL DETECTOR,Inner Tracker (Si Disks),HD Disk 5,,,,,,
-CENTRAL DETECTOR,Inner Tracker (Si Disks),LD Disk 1,,,,,,
-CENTRAL DETECTOR,Inner Tracker (Si Disks),LD Disk 2,,,,,,
-CENTRAL DETECTOR,Inner Tracker (Si Disks),LD Disk 3,,,,,,
-CENTRAL DETECTOR,Inner Tracker (Si Disks),LD Disk 4,,,,,,
-CENTRAL DETECTOR,Inner Tracker (Si Disks),LD Disk 5,,,,,,
-CENTRAL DETECTOR,LD MPGD 1,,,,,,,
-CENTRAL DETECTOR,LD MPGD 2,,,,,,,
+CENTRAL DETECTOR,Inner Tracker (Si Disks),HD Disk 1,,{{InnerTrackerEndcapPLayer1_rmin}},{{InnerTrackerEndcapPLayer1_rmax}},,{{InnerTrackerEndcapPLayer1_zmin}},{{InnerTrackerEndcapPLayer1_zmin+SiTrackerEndcapLayer_thickness}}
+CENTRAL DETECTOR,Inner Tracker (Si Disks),HD Disk 2,,{{TrackerEndcapPLayer1_rmin}},{{TrackerEndcapPLayer1_rmax}},,{{TrackerEndcapPLayer1_zmin}},{{TrackerEndcapPLayer1_zmin+SiTrackerEndcapLayer_thickness}}
+CENTRAL DETECTOR,Inner Tracker (Si Disks),HD Disk 3,,{{TrackerEndcapPLayer2_rmin}},{{TrackerEndcapPLayer2_rmax}},,{{TrackerEndcapPLayer2_zmin}},{{TrackerEndcapPLayer2_zmin+SiTrackerEndcapLayer_thickness}}
+CENTRAL DETECTOR,Inner Tracker (Si Disks),HD Disk 4,,{{TrackerEndcapPLayer3_rmin}},{{TrackerEndcapPLayer3_rmax}},,{{TrackerEndcapPLayer3_zmin}},{{TrackerEndcapPLayer3_zmin+SiTrackerEndcapLayer_thickness}}
+CENTRAL DETECTOR,Inner Tracker (Si Disks),HD Disk 5,,{{TrackerEndcapPLayer4_rmin}},{{TrackerEndcapPLayer4_rmax}},,{{TrackerEndcapPLayer4_zmin}},{{TrackerEndcapPLayer4_zmin+SiTrackerEndcapLayer_thickness}}
+CENTRAL DETECTOR,Inner Tracker (Si Disks),LD Disk 1,,{{InnerTrackerEndcapNLayer1_rmin}},{{InnerTrackerEndcapNLayer1_rmax}},,{{InnerTrackerEndcapNLayer1_zmin}},{{InnerTrackerEndcapNLayer1_zmin+SiTrackerEndcapLayer_thickness}}
+CENTRAL DETECTOR,Inner Tracker (Si Disks),LD Disk 2,,{{TrackerEndcapNLayer1_rmin}},{{TrackerEndcapNLayer1_rmax}},,-{{TrackerEndcapNLayer1_zmin+SiTrackerEndcapLayer_thickness}},-{{TrackerEndcapNLayer1_zmin}}
+CENTRAL DETECTOR,Inner Tracker (Si Disks),LD Disk 3,,{{TrackerEndcapNLayer2_rmin}},{{TrackerEndcapNLayer2_rmax}},,-{{TrackerEndcapNLayer2_zmin+SiTrackerEndcapLayer_thickness}},-{{TrackerEndcapNLayer2_zmin}}
+CENTRAL DETECTOR,Inner Tracker (Si Disks),LD Disk 4,,{{TrackerEndcapNLayer3_rmin}},{{TrackerEndcapNLayer3_rmax}},,-{{TrackerEndcapNLayer3_zmin+SiTrackerEndcapLayer_thickness}},-{{TrackerEndcapNLayer3_zmin}}
+CENTRAL DETECTOR,Inner Tracker (Si Disks),LD Disk 5,,{{TrackerEndcapNLayer4_rmin}},{{TrackerEndcapNLayer4_rmax}},,-{{TrackerEndcapNLayer4_zmin+SiTrackerEndcapLayer_thickness}},-{{TrackerEndcapNLayer4_zmin}}
+CENTRAL DETECTOR,LD MPGD 1,,,{{BackwardMPGDMod1_rmin}},{{BackwardMPGDMod1_rmax}},,-{{BackwardMPGD_zmin}},
+CENTRAL DETECTOR,LD MPGD 2,,,{{BackwardMPGDMod2_rmin}},{{BackwardMPGDMod2_rmax}},,-{{BackwardMPGD_zmin+BackwardMPGDMod_offset}},
 CENTRAL DETECTOR,Proximity Focusing RICH,,{{PFRICH_length}},{{PFRICH_rmin0}},{{PFRICH_rmax}},,{{PFRICH_zmin}},{{PFRICH_zmin-PFRICH_length}}
 CENTRAL DETECTOR,LD EMCal,,{{EcalEndcapN_length}},{{EcalEndcapN_rmin}},{{EcalEndcapN_rmax}},,-{{EcalEndcapN_zmax}},-{{EcalEndcapN_zmin}}
-CENTRAL DETECTOR,Service Gap,,,,,,,
+CENTRAL DETECTOR,Service Gap,,,,,,-{{BackwardServiceGap_zmax+BackwardServiceGap_length}},-{{BackwardServiceGap_zmax}}
 LEPTON DIRECTION ENDCAP,LD Flux Return (Oculus),,,,,,,
 LEPTON DIRECTION ENDCAP,LD Flux Return (Collar),,,,,,,
-LEPTON DIRECTION ENDCAP,Backward HCal,,,,,,,
+LEPTON DIRECTION ENDCAP,Backward HCal,,,{{HcalEndcapN_rmin}},{{HcalEndcapN_rmax}},,-{{HcalEndcapN_zmin+HcalEndcapN_length}},-{{HcalEndcapN_zmin}}
 LEPTON DIRECTION ENDCAP,LD Flux Return (Exterior),,,,,,,
