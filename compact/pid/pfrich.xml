@@ -187,14 +187,16 @@
 </documentation>
 <readouts>
   <readout name="PFRICHHits">
-    <segmentation
+    <!-- <segmentation
       type="CartesianGridXY"
       grid_size_x="PFRICH_pixel_pitch"
       grid_size_y="PFRICH_pixel_pitch"
       offset_x="-0.5*(PFRICH_num_px-1)*PFRICH_pixel_pitch"
       offset_y="-0.5*(PFRICH_num_px-1)*PFRICH_pixel_pitch"
       />
-    <id>system:8,module:12,x:32:-16,y:-16</id>
+    <id>system:8,module:12,x:32:-16,y:-16</id> -->
+      <segmentation type="CartesianGridXYZ" grid_size_x="1.0*mm" grid_size_y="1.0*mm" grid_size_z="1.0*mm" />
+      <id>system:8,module:12,test:2,x:22:-13,y:-13,z:-13</id>
   </readout>
 </readouts>
 

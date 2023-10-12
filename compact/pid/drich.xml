@@ -348,14 +348,16 @@ photodetector unit (PDU) assembly diagram: matrix of SiPMs with services
 </documentation>
 <readouts>
   <readout name="DRICHHits">
-    <segmentation
+    <!-- <segmentation
       type="CartesianGridXY"
       grid_size_x="DRICH_pixel_pitch"
       grid_size_y="DRICH_pixel_pitch"
       offset_x="-0.5*(DRICH_num_px-1)*DRICH_pixel_pitch"
       offset_y="-0.5*(DRICH_num_px-1)*DRICH_pixel_pitch"
       />
-    <id>system:8,sector:3,pdu:12,sipm:6,x:32:-16,y:-16</id>
+    <id>system:8,sector:3,pdu:12,sipm:6,x:32:-16,y:-16</id> -->
+    <segmentation type="CartesianGridXYZ" grid_size_x="1.0*mm" grid_size_y="1.0*mm" grid_size_z="1.0*mm" />
+    <id>system:8,sector:3,pdu:12,sipm:6,x:29:-12,y:-12,z:-11</id>
   </readout>
 </readouts>
 </lccdd>

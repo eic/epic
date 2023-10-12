@@ -56,14 +56,14 @@ static Ref_t createDetector(Detector& desc, xml_h e, SensitiveDetector sens)
   Box        bar_box("bar_box", bar_height / 2, bar_width / 2, bar_length / 2);
   Volume     bar_vol("bar_vol", bar_box, desc.material(xml_bar.materialStr()));
   bar_vol.setVisAttributes(desc.visAttributes(xml_bar.visStr()));
-
+  bar_vol.setSensitiveDetector(sens); //NOTE necessary change for angular resos
   // Glue
   xml_comp_t xml_glue       = xml_module.child(_Unicode(glue));
   double     glue_thickness = xml_glue.thickness();
   Box        glue_box("glue_box", bar_height / 2, bar_width / 2, glue_thickness / 2);
   Volume     glue_vol("glue_vol", glue_box, desc.material(xml_glue.materialStr()));
   glue_vol.setVisAttributes(desc.visAttributes(xml_glue.visStr()));
-
+  glue_vol.setSensitiveDetector(sens); //NOTE necessary change for angular resos
   auto bar_repeat_y    = xml_bar.attr<int>(_Unicode(repeat_y));
   auto bar_repeat_z    = xml_bar.attr<int>(_Unicode(repeat_z));
   auto bar_gap         = xml_bar.gap();
@@ -94,7 +94,7 @@ static Ref_t createDetector(Detector& desc, xml_h e, SensitiveDetector sens)
     double y = 0.5 * bar_assm_width - 0.5 * bar_width - (bar_width + bar_gap) * y_index;
     for (int z_index = 0; z_index < bar_repeat_z; z_index++) {
       double z = 0.5 * bar_assm_length - 0.5 * mirror_thickness - 0.5 * bar_length - (bar_length + glue_thickness) * z_index;
-      Envelope_box_vol.placeVolume(glue_vol, Position(0, y, z - 0.5 * (bar_length + glue_thickness)));
+      Envelope_box_vol.placeVolume(glue_vol, Position(0, y, z - 0.5 * (bar_length + glue_thickness))).addPhysVolID("section", z_index+bar_repeat_z).addPhysVolID("bar", y_index);
       Envelope_box_vol.placeVolume(bar_vol, Position(0, y, z)).addPhysVolID("section", z_index).addPhysVolID("bar", y_index);
     }
   }
@@ -206,7 +206,7 @@ static Ref_t createDetector(Detector& desc, xml_h e, SensitiveDetector sens)
   // MCP construction
   Box    mcp_box("mcp_box", mcp_height / 2, mcp_width / 2, mcp_thickness / 2);
   Volume mcp_vol("mcp_vol", mcp_box, desc.material(xml_mcp.materialStr()));
-  mcp_vol.setVisAttributes(desc.visAttributes(xml_mcp.visStr())).setSensitiveDetector(sens);
+  mcp_vol.setVisAttributes(desc.visAttributes(xml_mcp.visStr()));//.setSensitiveDetector(sens);
 
   double mcp_position_z = -0.5 * prism_length;
   Position mcp_position(prism_position_x, mcp_position_z, 0);
