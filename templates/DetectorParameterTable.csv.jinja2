@@ -19,9 +19,9 @@ CENTRAL DETECTOR,Barrel HD EMCal Support,Exterior Plate,,,,,,
 CENTRAL DETECTOR,Barrel HD EMCal Support,Support Ring,,,,,,
 CENTRAL DETECTOR,Barrel EMCal,,{{EcalBarrel_length}},{{EcalBarrel_rmin}},{{EcalBarrel_rmax}},,-{{EcalBarrelBackward_zmax}},{{EcalBarrelForward_zmax}}
 CENTRAL DETECTOR,Barrel EMCal,Exterior Cover,,,,,,
-CENTRAL DETECTOR,Barrel EMCal,Imaging Part,,,,,,
-CENTRAL DETECTOR,Barrel EMCal,Sampling Part,,,,,,
-CENTRAL DETECTOR,Barrel EMCal,LD Readout Electronics,,,,,,
+CENTRAL DETECTOR,Barrel EMCal,Imaging Part,{{EcalBarrel_Calorimeter_length}},{{EcalBarrel_rmin}},{{EcalBarrel_rmin+EcalBarrel_ImagingPartThickness}},-{{EcalBarrel_Calorimeter_zmax}},{{EcalBarrel_Calorimeter_zmax}}
+CENTRAL DETECTOR,Barrel EMCal,Sampling Part,{{EcalBarrel_Calorimeter_length}},{{EcalBarrel_rmin+EcalBarrel_ImagingPartThickness}},{{EcalBarrel_rmin+EcalBarrel_ImagingPartThickness+EcalBarrel_ScFiPartThickness}},-{{EcalBarrel_Calorimeter_zmax}},{{EcalBarrel_Calorimeter_zmax}}
+CENTRAL DETECTOR,Barrel EMCal,LD Readout Electronics,,,,,-{{EcalBarrel_Readout_zmax}},-{{EcalBarrel_Readout_zmin}}
 CENTRAL DETECTOR,Barrel EMCal,HD Readout Electronics,,,,,,
 CENTRAL DETECTOR,Barrel LD EMCal Support,,,,,,,
 CENTRAL DETECTOR,Barrel LD EMCal Support,Exterior Plate,,,,,,
