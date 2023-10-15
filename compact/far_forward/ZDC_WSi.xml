@@ -11,7 +11,7 @@
 
   <define>
     <constant name="ZDC_WSi_x"       value="ZDC_width"/>
-    <constant name="ZDC_WSi_y"       value="ZDC_width"/>
+    <constant name="ZDC_WSi_y"       value="ZDC_height"/>
     <constant name="ZDC_WSi_pix_nlayers" value="ZDC_WSi_nblocks + 1"/>
     <constant name="ZDC_WSi_pad_nlayers" value="ZDC_WSi_nblocks * ZDC_WSi_pad_nlayers_per_block"/>
     <constant name="ZDC_WSi_pad_layerthickness"
