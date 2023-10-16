@@ -4,7 +4,7 @@ features:
   ecal:
     forward_homogeneous:
     forward_insert_homogeneous:
-    barrel_sciglass:
+    barrel_interlayers:
     backward_PbWO4:
   hcal:
     lfhcal_with_space_for_insert:
