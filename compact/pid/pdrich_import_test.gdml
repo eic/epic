@@ -2,6 +2,12 @@
 <gdml xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://service-spi.web.cern.ch/service-spi/app/releases/GDML/schema/gdml.xsd">
 
   <define>
+
+    <!-- Defining Detector parameters -->
+	<constant name="PFRICH_rmax"               value="BackwardPIDRegion_rmax"/>           <!-- vessel radius -->
+
+
+    <!-- Loading the CAD Import of GDML -->
     <position name="Feature_v0" unit="mm" x="-83.356827" y="-32.297249" z="1198.699951"/>
     <position name="Feature_v1" unit="mm" x="-83.356827" y="-32.297249" z="1192.349976"/>
     <position name="Feature_v2" unit="mm" x="-92.547508" y="-25.642256" z="1198.699951"/>
