@@ -3,6 +3,15 @@
 
 <lccdd>
 
+  <info name="lumi.xml"
+        title="Luminosity Subsystem"
+        author="@dhevang"
+        url="https://github.com/dhevang"
+        status="development"
+        version="1.0"
+  ><comment/></info>
+
+
    <include ref="lumi/exit_window.xml"/>
    <include ref="lumi/collimator.xml"/>
    <include ref="lumi/lumi_magnets.xml"/>
