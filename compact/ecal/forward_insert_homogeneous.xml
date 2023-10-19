@@ -9,7 +9,7 @@
         url="https://github.com/rymilton"
         status="development"
         version="1.0"
-	  ><comment/></info>
+          ><comment/></info>
 
   <define>
      <documentation>
@@ -92,12 +92,12 @@
   <readouts>
     <readout name="EcalEndcapPInsertHits">
       <documentation>
-        Readout size is 1.25 cm by 1.25 cm -- half the size of the forward ECal readout in x and y.
+        Readout size matches the size of the forward ECal readout in x and y.
       </documentation>
       <segmentation
         type="CartesianGridXY"
-        grid_size_x="1.25*cm"
-        grid_size_y="1.25*cm"
+        grid_size_x="24.925*mm"
+        grid_size_y="24.65*mm"
       />
       <id>system:8,barrel:3,module:4,layer:8,slice:5,x:32:-16,y:-16</id>
     </readout>

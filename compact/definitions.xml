@@ -101,11 +101,11 @@ The unused IDs below are saved for future use.
     <constant name="TrackerSubAssembly_4_ID"      value="44"/>
     <constant name="TrackerSubAssembly_5_ID"      value="45"/>
     <constant name="TrackerSubAssembly_6_ID"      value="46"/>
+    <constant name="TrackerSubAssembly_7_ID"      value="47"/>
+    <constant name="TrackerSubAssembly_8_ID"      value="48"/>
+    <constant name="TrackerSubAssembly_9_ID"      value="49"/>
 
-    <constant name="TrackerCompositeBarrel_0_ID"  value="47"/>
-    <constant name="TrackerCompositeBarrel_1_ID"  value="48"/>
-    <constant name="TrackerCompositeBarrel_2_ID"  value="49"/>
-    <constant name="TrackerCompositeBarrel_3_ID"  value="50"/>
+    <constant name="TrackerCompositeBarrel_0_ID"  value="50"/>
     <constant name="TrackerCompositeEndcapN_0_ID" value="51"/>
     <constant name="TrackerCompositeEndcapN_1_ID" value="52"/>
     <constant name="TrackerCompositeEndcapN_2_ID" value="53"/>
@@ -140,8 +140,8 @@ The unused IDs below are saved for future use.
     <constant name="TrackerEndcapP_4_ID"          value="81"/>
     <constant name="TrackerEndcapP_5_ID"          value="82"/>
     <constant name="TrackerEndcapP_6_ID"          value="83"/>
-    <constant name="TrackerEndcapP_7_ID"          value="84"/>
-    <constant name="TrackerEndcapP_8_ID"          value="85"/>
+    <constant name="TrackerSupport_0_ID"          value="84"/>
+    <constant name="TrackerSupport_1_ID"          value="85"/>
     <constant name="MPGDDIRC_0_ID"                value="86"/>
 
     <documentation>
@@ -273,6 +273,7 @@ The unused IDs below are saved for future use.
     <constant name="ZDCEcal_ID"              value="163"/>
     <constant name="ZDCHcal_ID"              value="164"/>
     -->
+    <constant name="HcalFarForwardZDC_SiPMonTile_ID"                value="167"/>
 
     <constant name="VacuumMagnetElement_1_ID"        value="168"/>
     <constant name="B0ECal_ID" value="169"/>
@@ -425,7 +426,7 @@ Examples:
 
     <constant name="CentralTrackingRegion_rmax"   value="700.0*mm" />
     <constant name="CentralTrackingRegionP_zmax"  value="1800.0*mm" />
-    <constant name="CentralTrackingRegionN_zmax"  value="1186.0*mm" />
+    <constant name="CentralTrackingRegionN_zmax"  value="1236.0*mm" />
     <constant name="CentralTrackingRegion_length" value="CentralTrackingRegionP_zmax + CentralTrackingRegionN_zmax" />
     <comment>
       tan(theta) to determine rmin in the outer tracking region (due to tapered beampipe)
@@ -442,26 +443,18 @@ Examples:
     <constant name="ForwardPIDRegion_zmin"        value="CentralTrackingRegionP_zmax" />
     <constant name="ForwardPIDRegion_length"      value="135.0*cm" />
     <constant name="ForwardPIDRegion_rmax"        value="185.0*cm" />
-
-    <comment> Forward TOF region currenlty empty for future upgrades </comment>
-    <constant name="ForwardTOFRegion_zmin"        value="ForwardPIDRegion_zmin" />
     <constant name="ForwardTOFRegion_length"      value="15.0*cm" />
-    <constant name="ForwardTOFRegion_tan"         value="CentralTrackingRegionP_tan" />
-    <constant name="ForwardTOFRegion_minR"            value="8*cm" />
-    <constant name="ForwardTOFRegion_maxR"            value="67*cm" />
-    <constant name="ForwardTOF_xOffset"         value="-2.75*cm" />
-    <constant name="ForwardTOF_det_height"      value="2.0*cm" />
 
     <comment> Forward RICH region </comment>
-    <constant name="ForwardRICHRegion_zmin"       value="ForwardTOFRegion_zmin + ForwardTOFRegion_length" />
+    <constant name="ForwardRICHRegion_zmin"       value="ForwardPIDRegion_zmin + ForwardTOFRegion_length" />
     <constant name="ForwardRICHRegion_length"     value="ForwardPIDRegion_length - ForwardTOFRegion_length" />
-    <comment> tangent of the opening angle at the front and back of the RICH </comment>
+     <comment> Tangent of the opening angle at the front and back of the RICH </comment>
     <constant name="ForwardRICHRegion_tan1"        value="CentralTrackingRegionP_tan * 0.88" />
     <constant name="ForwardRICHRegion_tan2"        value="Eta3_6_tan * 0.89" />
 
-    <constant name="BackwardPIDRegion_length"     value="54.1*cm" />
+    <constant name="BackwardPIDRegion_length"     value="49.1*cm" />
     <constant name="BackwardPIDRegion_zmin"       value="CentralTrackingRegionN_zmax" />
-    <constant name="BackwardPIDRegion_zmax"       value="BackwardPIDRegion_zmin+BackwardPIDRegion_length" />
+    <constant name="BackwardPIDRegion_zmax"       value="BackwardPIDRegion_zmin + BackwardPIDRegion_length" />
     <constant name="BackwardPIDRegion_rmax"       value="63.0*cm" /> <!-- FIXME hardcoded, was CentralTrackingRegion_rmax -->
     <constant name="BackwardPIDRegion_tan"        value="CentralTrackingRegionN_tan * 0.92" />
 
@@ -498,7 +491,7 @@ Examples:
 Service gaps in FW direction (before endcapP ECAL) and BW direction (before endcapN HCAL)
     </documentation>
     <constant name="ForwardInnerEndcapRegionExtraSpace_length" value="4.6*cm"/>
-    <constant name="ForwardServiceGap_length"     value="10.0*cm"/>
+    <constant name="ForwardServiceGap_length"     value="13.6*cm"/>
     <constant name="ForwardServiceGap_zmin"       value="ForwardPIDRegion_zmin + ForwardInnerEndcapRegion_length + ForwardInnerEndcapRegionExtraSpace_length"/>
     <constant name="ForwardServiceGap_zmax"       value="ForwardServiceGap_zmin + ForwardServiceGap_length"/>
 
@@ -507,21 +500,21 @@ Service gaps in FW direction (before endcapP ECAL) and BW direction (before endc
     <constant name="ForwardServiceGap_rmin"       value="ForwardPIDRegion_rmax"/>
     <constant name="ForwardServiceGap_rmax"       value="ForwardServiceGap_rmin + ForwardServiceGap_thickness"/>
 
-    <constant name="BackwardServiceGap_length"    value="10.0 * cm"/>
-    <constant name="BackwardServiceGap_zmin"      value="320.0 * cm"/> <!-- FIXME hardcoded -->
+    <constant name="BackwardServiceGap_length"    value="124.0 * cm"/>
+    <constant name="BackwardServiceGap_zmin"      value="316.0 * cm"/> <!-- FIXME hardcoded -->
     <constant name="BackwardServiceGap_zmax"      value="BackwardServiceGap_zmin + BackwardServiceGap_length"/>
 
 
   <documentation level="3">
 ## Calorimeter Parameters
   </documentation>
-    <constant name="EcalBarrelStavesN"              value="48"/>
+    <constant name="EcalBarrelSectorsN"             value="48"/>
     <constant name="EcalEndcapP_zmin"               value="ForwardServiceGap_zmax" />
     <constant name="EcalEndcapP_length"             value="30*cm" />
     <constant name="EcalEndcapP_zmax"               value="EcalEndcapP_zmin + EcalEndcapP_length"/>
     <constant name="EcalEndcapP_rmin"               value="200.0*mm" />
     <comment> extra 50cm rmax that "protrudes" into the HCAL</comment>
-    <constant name="EcalEndcapP_rmax"               value="floor(Eta1_1_tan * EcalEndcapP_zmin)"/>
+    <constant name="EcalEndcapP_rmax"               value="floor(Eta1_4_tan * EcalEndcapP_zmin)"/>
     <constant name="EcalEndcapP_numLayers"          value="1"/>
 
     <constant name="EcalEndcapPInsert_zmin"           value="EcalEndcapP_zmin"/>
@@ -536,7 +529,7 @@ Service gaps in FW direction (before endcapP ECAL) and BW direction (before endc
     <constant name="EcalEndcapPInsert_hole_yposition" value="0.0*cm"/>
 
     <!-- <constant name="EcalEndcapN_zmin"               value="BackwardPIDRegion_zmin + BackwardInnerEndcapRegion_length"/> -->
-    <constant name="EcalEndcapN_zmin"               value="174*cm"/>   <!-- Currently fix value hardcoded -->
+    <constant name="EcalEndcapN_zmin"               value="175*cm"/>   <!-- Currently fix value hardcoded -->
     <constant name="EcalEndcapN_length"             value="60*cm" />   <!-- Currently fix value hardcoded -->
     <constant name="EcalEndcapN_zmax"               value="EcalEndcapN_zmin + EcalEndcapN_length"/>
 
@@ -549,8 +542,8 @@ Service gaps in FW direction (before endcapP ECAL) and BW direction (before endc
     <constant name="EcalEndcapN_rmin"               value="9.*cm"/>    <!-- Currently fix value hardcoded -->
     <constant name="EcalEndcapN_rmax"               value="63.*cm"/>   <!-- Currently fix value hardcoded -->
 
-    <constant name="EcalBarrelRegion_thickness"     value="61.5*cm"/>
-    <constant name="EcalBarrel_rmin"                value="CentralTrackingRegion_rmax + BarrelPIDRegion_thickness + BarrelExtraSpace_thickness"/>
+    <constant name="EcalBarrelRegion_thickness"     value="35.*cm"/>
+    <constant name="EcalBarrel_rmin"                value="max(81.*cm, CentralTrackingRegion_rmax + BarrelPIDRegion_thickness + BarrelExtraSpace_thickness)"/> <!-- FIXME hardcoded max -->
     <constant name="EcalBarrel_inner_margin"        value="2*cm"/>
     <constant name="EcalBarrel_rmax"                value="EcalBarrel_rmin + EcalBarrelRegion_thickness"/>
     <constant name="EcalBarrelForward_zmax"         value="ForwardRICHRegion_zmin"/> <!-- FIXME currently unable to accommodate actual position -->
@@ -581,30 +574,26 @@ Service gaps in FW direction (before endcapP ECAL) and BW direction (before endc
     </documentation>
 
     <constant name="HcalBarrelStavesN"          value="12"/>
-    <constant name="HcalEndcapP_zmin"     value="EcalEndcapP_zmin + EcalEndcapP_length"/>
-    <comment> HCalEndcapP is 140 cm total, but current implementation leaves the final 10 cm empty </comment>
-    <constant name="HcalEndcapP_length"   value="140.0*cm"/>
-    <constant name="HcalEndcapP_zmax"     value="HcalEndcapP_zmin + HcalEndcapP_length"/>
 
     <constant name="LFHCAL_zmin"          value="EcalEndcapP_zmin + EcalEndcapP_length"/>
     <comment> LFHCAL is 140 cm total, but current implementation leaves the final 10 cm empty </comment>
     <constant name="LFHCAL_length"        value="140.0*cm"/>
     <constant name="LFHCAL_zmax"          value="LFHCAL_zmin + LFHCAL_length"/>
 
-    <constant name="HcalEndcapPInsert_zmin"     value="HcalEndcapP_zmin"/>
-    <constant name="HcalEndcapPInsert_length"   value="127.97*cm"/>
+    <constant name="HcalEndcapPInsert_zmin"     value="EcalEndcapP_zmin + EcalEndcapP_length"/>
+    <constant name="HcalEndcapPInsert_length"   value="134.75*cm"/>
     <constant name="HcalEndcapPInsert_zmax"     value="HcalEndcapPInsert_zmin + HcalEndcapPInsert_length"/>
     <constant name="HcalEndcapPInsert_width"    value="59.6*cm"/>
     <constant name="HcalEndcapPInsert_height"    value="59.7485*cm"/>
     <constant name="HcalEndcapPInsert_xposition" value="EcalEndcapPInsert_xposition"/>
     <constant name="HcalEndcapPInsert_yposition" value="EcalEndcapPInsert_yposition"/>
 
-    <constant name="HcalEndcapN_CaloSides"	value="60"/>
+    <constant name="HcalEndcapN_CaloSides"      value="60"/>
     <constant name="HcalEndcapN_zmin"     value="BackwardServiceGap_zmax"/>
-    <constant name="HcalEndcapN_length"   value="44.0*cm"/>
+    <constant name="HcalEndcapN_length"   value="45.0*cm"/>
     <constant name="HcalEndcapN_zmax"     value="HcalEndcapN_zmin + HcalEndcapN_length"/>
     <comment> HcalEndcapN needs to clear the straight beampipe with 1 * crossing angle + its radius of 22.25 mm </comment>
-    <constant name="HcalEndcapN_rmin"     value="max((HcalEndcapN_zmin + HcalEndcapN_length) * tan(abs(CrossingAngle)) + 22.25 * mm, 11 * cm)"/>
+    <constant name="HcalEndcapN_rmin"     value="max((HcalEndcapN_zmin + HcalEndcapN_length) * tan(abs(CrossingAngle)) + 22.25 * mm, 12.4 * cm)"/>
 
     <constant name="HcalBarrel_thickness" value="93.0*cm"/> <!-- ref: as-built CAD, plus a little room for the longer half-plates -->
     <constant name="HcalBarrel_rmin"      value="Solenoid_rmax"/>
@@ -614,7 +603,6 @@ Service gaps in FW direction (before endcapP ECAL) and BW direction (before endc
     <constant name="HcalBarrel_length"    value="HcalBarrelForward_zmax + HcalBarrelBackward_zmax"/>
     <constant name="HcalBarrel_offset"    value="(HcalBarrelForward_zmax - HcalBarrelBackward_zmax)/2"/>
     <constant name="HcalEndcapN_rmax"     value="HcalBarrel_rmax"/>
-    <constant name="HcalEndcapP_rmax"     value="HcalBarrel_rmax"/>
     <constant name="LFHCAL_rmax"          value="HcalBarrel_rmax"/>
     <comment>
       These are used by ddsim, the region where we store all secondaries

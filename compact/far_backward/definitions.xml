@@ -179,6 +179,8 @@
 
     <constant name="Beam_Theta"           value="Q3eR_Theta"/>
 
+    <constant name="Backwards_Box_Wall"   value="2*mm"/>
+
     <comment> Dipole focal point in global coordinates </comment>
     <constant name="Dipole_Focus_X"       value="0.0*mm"/>
     <constant name="Dipole_Focus_Y"       value="0.0*mm"/>
@@ -195,33 +197,37 @@
     <constant name="Exit_Width"           value="B2BeR_InnerRadius"/>
     <constant name="Exit_Theta"           value="0.07*rad"/>
 
+    <comment> Timepix4 ASIC dimensions </comment>
+    <constant name="Timepix4height"       value="28.16*mm"/>
+    <constant name="Timepix4width"        value="24.64*mm"/>
+
     <comment> Tagger box and dimensions and positions </comment>
-    <constant name="Tagger1_Width"        value="400*mm"/>
+    <constant name="Tagger1_Width"        value="147.84*mm"/>
     <constant name="Tagger1_Height"       value="200*mm"/>
 
-    <constant name="Tag_Tracker_1_Depth"  value="905*mm"/>
-    <constant name="Tag_Cal_1_Depth"      value="200*mm"/>
-    <constant name="Tagger1_Length"       value="Tag_Tracker_1_Depth+Tag_Cal_1_Depth"/>
+    <constant name="Tag_Tracker_1_Depth"  value="305*mm"/>
+    <constant name="Tag_Cal_1_Depth"      value="300*mm"/>
+    <constant name="Tagger1_Length"       value="Tag_Tracker_1_Depth"/>
 
-    <constant name="Tagger1_Min_Theta"    value="0.0242*rad"/>
+    <constant name="Tagger1_Min_Theta"    value="0.0262*rad"/>
     <constant name="Tagger1_Max_Theta"    value="0.0410*rad"/>
     <constant name="Tagger1_Min_Offset"   value="Q3eR_InnerRadius"/>
 
-    <constant name="Tagger2_Width"        value="250.0*mm"/>
+    <constant name="Tagger2_Width"        value="147.84*mm"/>
     <constant name="Tagger2_Height"       value="150.0*mm"/>
 
     <constant name="Tag_Tracker_2_Depth"  value="Tag_Tracker_1_Depth"/>
     <constant name="Tag_Cal_2_Depth"      value="Tag_Cal_1_Depth"/>
-    <constant name="Tagger2_Length"       value="Tag_Tracker_2_Depth+Tag_Cal_2_Depth"/>
+    <constant name="Tagger2_Length"       value="Tag_Tracker_2_Depth"/>
 
     <constant name="Tagger2_Min_Theta"    value="0.02*rad"/>
-    <constant name="Tagger2_Max_Theta"    value="Tagger1_Min_Theta+0.005*rad"/>
-    <constant name="Tagger2_Min_Offset"   value="Q3eR_InnerRadius-15*mm"/>
+    <constant name="Tagger2_Max_Theta"    value="Tagger1_Min_Theta+0.000*rad"/>
+    <constant name="Tagger2_Min_Offset"   value="Q3eR_InnerRadius+Backwards_Box_Wall"/>
 
     <!--  -->
     <!-- Luminosity System -->
     <!--  -->
-    <constant name="LumiBeamDiv_pref"     value="5*211e-6*rad"/>
+    <constant name="LumiBeamDiv_pref"     value="5 * 211e-6*rad"/>
 
     <!-- Lumi Exit Window -->
     <constant name="LumiWin_Zstart"       value="-18.5*m"/>
@@ -241,53 +247,50 @@
     <constant name="LumiWall_DZ"          value="20*cm"/>
     <constant name="LumiWall_Z"           value="-55*m"/>
 
-    <!-- Lumi sweeper dipole Magnet -->
+    <!-- Lumi dipole magnets (sweeper and analyzer) -->
+    <constant name="LumiMag_DZ"           value="1.200*m"/>
     <constant name="LumiSweepMag_X"       value="0*m"/>
     <constant name="LumiSweepMag_Y"       value="0*m"/>
-    <constant name="LumiSweepMag_Z"       value="-36*m"/>
-    <constant name="LumiSweepMag_DZ"      value="0.78*m"/>
+    <constant name="LumiSweepMag_Z"       value="-62.5*m"/>
 
-    <!-- Lumi spectrometer dipole Magnet -->
-    <constant name="LumiSpecMag_X"        value="0*m"/>
-    <constant name="LumiSpecMag_Y"        value="0*m"/>
-    <constant name="LumiSpecMag_Z"        value="-56*m"/>
-    <constant name="LumiSpecMag_DZ"       value="LumiSweepMag_DZ"/>
+    <constant name="LumiAnalyzerMag_X"    value="0*m"/>
+    <constant name="LumiAnalyzerMag_Y"    value="0*m"/>
+    <constant name="LumiAnalyzerMag_Z"    value="-4*m + LumiSweepMag_Z"/>
+
+    <!-- Lumi photon chamber -->
+    <constant name="LumiChamber_Z1"       value="LumiSweepMag_Z + LumiMag_DZ/2.0"/>
+    <constant name="LumiChamber_Z2"       value="LumiAnalyzerMag_Z - LumiMag_DZ/2.0"/>
+    <constant name="LumiChamber_DR"       value="2*mm"/>
+    <constant name="LumiChamber_cap1_DZ"  value="1*cm"/>
+    <constant name="LumiChamber_cap2_DZ"  value="1*cm"/>
 
     <!-- Lumi converter -->
-    <constant name="LumiConverter_X"      value="0*m"/>
-    <constant name="LumiConverter_Y"      value="0*m"/>
+    <constant name="LumiConverter_Z"      value="(LumiAnalyzerMag_Z + LumiSweepMag_Z)/2.0"/>
     <constant name="LumiConverter_DZ"     value="1*mm"/>
-    <constant name="LumiConverter_Z"      value="LumiSpecMag_Z + LumiSpecMag_DZ/2. + LumiConverter_DZ"/>
-    <constant name="LumiConverter_DXY"    value="12*cm"/>
 
     <!-- Lumi spectrometer CAL -->
     <constant name="LumiSpecCAL_DXY"      value="0.2*m"/>
     <constant name="LumiSpecCALTower_DXY" value="0.02*m"/>
     <constant name="LumiSpecCALTower_DZ"  value="0.2*m"/>
-    <constant name="LumiSpecCAL_FiveSigma" value="0.069*m"/>
+    <constant name="LumiSpecCAL_Z"        value="-8*m + LumiSweepMag_Z - LumiSpecCALTower_DZ/2.0"/>
+    <constant name="LumiSpecCAL_FiveSigma" value="LumiBeamDiv_pref * fabs(LumiSpecCAL_Z)"/>
     <constant name="LumiSpecCAL_Y"        value="LumiSpecCAL_FiveSigma + LumiSpecCAL_DXY/2.0"/>
-    <constant name="LumiSpecCAL_Z"        value="-65*m"/>
 
     <!-- Lumi spectrometer trackers -->
+    <constant name="LumiSpecTracker_pixelSize"  value="0.05*mm"/>
     <constant name="LumiSpecTracker_DXY"  value="0.2*m"/>
     <constant name="LumiSpecTracker_Z1"   value="LumiSpecCAL_Z + LumiSpecCALTower_DZ/2. + 21*cm "/>
     <constant name="LumiSpecTracker_Z2"   value="LumiSpecCAL_Z + LumiSpecCALTower_DZ/2. + 11*cm"/>
     <constant name="LumiSpecTracker_Z3"   value="LumiSpecCAL_Z + LumiSpecCALTower_DZ/2. + 1*cm"/>
-    <constant name="LumiSpecTracker_Y1"   value="LumiSpecCAL_FiveSigma + LumiSpecTracker_DXY/2."/>
+    <constant name="LumiSpecTracker_Y1"   value="LumiSpecCAL_FiveSigma + LumiSpecTracker_DXY/2.0"/>
     <constant name="LumiSpecTracker_Y2"   value="LumiSpecTracker_Y1"/>
     <constant name="LumiSpecTracker_Y3"   value="LumiSpecTracker_Y1"/>
 
-    <constant name="LumiSpecTracker_Si_DZ"   value="0.03*cm"/>
-    <constant name="LumiSpecTracker_Cu_DZ"   value="0.014*cm"/>
-
-    <!-- Lumi photon chamber -->
-    <constant name="LumiChamber1_Z1"      value="LumiSweepMag_Z + LumiSweepMag_DZ/2.0"/>
-    <constant name="LumiChamber1_Z2"      value="LumiConverter_Z + LumiConverter_DZ/2."/>
-    <constant name="LumiChamber2_Z1"      value="LumiConverter_Z - LumiConverter_DZ/2."/>
-    <constant name="LumiChamber2_Z2"      value="LumiSpecCAL_Z - LumiSpecCALTower_DZ"/>
+    <constant name="LumiSpecTracker_Si_DZ"   value="0.016*cm"/>
+    <constant name="LumiSpecTracker_Cu_DZ"   value="0.01*cm"/>
 
     <!-- Lumi direct photon detector -->
-    <constant name="LumiDirect_Z"         value="-66*m"/>
+    <constant name="LumiDirect_Z"         value="LumiSpecCAL_Z - 1*m"/>
     <constant name="LumiDirect_XY"        value="0.2*m"/>
     <constant name="LumiDirect_DZ"        value="0.2*m"/>
 

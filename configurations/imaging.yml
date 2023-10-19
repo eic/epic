@@ -1,7 +1,7 @@
 features:
   beampipe:
   tracking:
-    definitions_brycecanyon:
+    definitions:
     vertex_barrel:
     silicon_barrel:
     mpgd_barrel:

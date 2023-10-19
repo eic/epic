@@ -3,7 +3,7 @@ pbeam: 41
 features:
   beampipe:
   tracking:
-    definitions_brycecanyon:
+    definitions:
     vertex_barrel:
     silicon_barrel:
     mpgd_barrel:
@@ -27,6 +27,6 @@ features:
     barrel_gdml:
     backward:
   far_forward:
-    far_forward_brycecanyon:
+    far_forward:
   far_backward:
     far_backward:

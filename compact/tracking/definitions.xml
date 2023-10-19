@@ -28,11 +28,31 @@
     <comment> Main parameters for the MPGD layer geometries </comment>
     <constant name="InnerMPGDBarrel_rmin"            value="55.0*cm"/>
     <constant name="InnerMPGDBarrel_dz"              value="8.0*cm"/>
+    <constant name="InnerMPGDBarrel_length"          value="2*InnerMPGDBarrel_rmin / tan(TrackerBackwardAngle) - InnerMPGDBarrel_dz"/>
+    <constant name="InnerMPGDBarrel_zmin"            value="InnerMPGDBarrel_length/2"/> <comment> -z </comment>
+    <constant name="InnerMPGDBarrel_zmax"            value="InnerMPGDBarrel_length/2"/> <comment> +z </comment>
+    <constant name="InnerMPGDBarrel_zoffset"         value="InnerMPGDBarrel_zmax - InnerMPGDBarrel_zmin"/>
     <comment> barrel length: 2R/tan(angle) - dz </comment>
 
     <comment> Position in center of space behind DIRC </comment>
     <constant name="MPGDDIRC_rmin"            value="DIRC_rmin + DIRC_thickness"/>
     <comment> barrel asymmetryc between forward and backward lengths </comment>
+
+    <comment> Main parameters for Barrel TOF layers </comment>
+    <comment> Barrel TOF region </comment>
+    <constant name="BarrelTOF_zmin"          value="120.0*cm"/>
+    <constant name="BarrelTOF_zmax"          value="120.0*cm"/>
+    <constant name="BarrelTOF_radius_design" value="64.6*cm"/>
+
+    <comment> Forward TOF region  </comment>
+    <constant name="ForwardTOFRegion_zmin"        value="ForwardPIDRegion_zmin" />
+    <constant name="ForwardTOFRegion_tan"         value="CentralTrackingRegionP_tan" />
+    <constant name="ForwardTOFRegion_minR"        value="8*cm" />
+    <constant name="ForwardTOFRegion_maxR"        value="67*cm" />
+    <constant name="ForwardTOF_xOffset"           value="-2.75*cm" />
+    <constant name="ForwardTOF_det_height"        value="2.0*cm" />
+    <constant name="ForwardTOF_length"            value="min(ForwardTOFRegion_length, 2.*cm)"/>
+    <constant name="ForwardTOF_zmin"              value="ForwardTOFRegion_zmin + ForwardTOFRegion_length - ForwardTOF_length - 1*cm"/>
 
     <comment> Service/Support setup </comment>
     <constant name="VertexSupportCyl2_thickness"     value="0.3*cm"/>
@@ -130,12 +150,6 @@
       type="DD4hep_SubdetectorAssembly"
       vis="TrackerSubAssemblyVis">
       <composite name="BarrelTOF"/>
-    </detector>
-    <detector id="TrackerSubAssembly_5_ID"
-        name="OuterMPGDSubAssembly"
-        type="DD4hep_SubdetectorAssembly"
-        vis="TrackerSubAssemblyVis">
-        <composite name="MPGDDIRC_0"/>
     </detector>
     <detector id="TrackerSubAssembly_6_ID"
       name="EndcapTOFSubSubAssembly"
