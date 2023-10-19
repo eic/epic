@@ -33,13 +33,16 @@ value_cols = [
 # read parameter table and do a little bit formatting
 def read_par_table(path, **kwargs):
     # read and format
-    dft = pd.read_csv(path, **kwargs)
+    if path.endswith('html') or path.endswith('htm'):
+        dft = pd.read_html(path, **kwargs)[0]
+    else:
+        dft = pd.read_csv(path, **kwargs)
     dft.columns = [i.replace(' \n', ' ').replace('\n', ' ').strip() for i in dft.columns.astype(str)]
     unnamed_cols = [i for i in dft.columns if i.startswith('Unnamed')]
     dft = dft.drop(columns=unnamed_cols)
     for col in dft.columns:
         if pd.api.types.is_string_dtype(dft[col].dtype):
-            dft.loc[:, col] = dft[col].str.replace(' \n', ' ').str.replace('\n', ' ').str.strip()
+            dft.loc[:, col] = dft[col].str.replace('\n', ' ').str.replace('  ', ' ').str.strip()
 
     missing_required_cols = [c for c in key_cols + value_cols if c not in dft.columns]
     if len(missing_required_cols) > 0:
@@ -66,11 +69,11 @@ if __name__ == '__main__':
             )
     parser.add_argument(
             'det_table',
-            help='Path or url to the DETECTOR parameter table.'
+            help='Path or url to the DETECTOR parameter table (csv or html).'
             )
     parser.add_argument(
             'sim_table',
-            help='Path or url to the SIMULATION parameter table.'
+            help='Path or url to the SIMULATION parameter table (csv or html).'
             )
     parser.add_argument(
             '--template',
@@ -170,8 +173,17 @@ if __name__ == '__main__':
         print(df_ext)
 
         print('These components are checked:')
-        print(json.dumps(comps, indent=4))
 
+        for comp in comps:
+            subdet = pd.DataFrame(columns=['det', 'sim', 'template_var', 'stat'], index=value_cols)
+            print('{}, {}, {}: '.format(comp['Region'], comp['Component'], comp['Sub-Component']))
+            for stat in ['Mismatched', 'Missing', 'Correct']:
+                for key, val in comp[stat].items():
+                    subdet.loc[key, 'stat'] = stat
+                    for k, v in val.items():
+                        subdet.loc[key, k] = v
+            print(subdet)
+            print(' ')
 
     # save reports to a json file
     report['stats'] = dict(
