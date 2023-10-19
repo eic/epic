@@ -10,6 +10,7 @@
 import os
 import json
 import argparse
+import requests
 import numpy as np
 import pandas as pd
 
@@ -33,13 +34,16 @@ value_cols = [
 # read parameter table and do a little bit formatting
 def read_par_table(path, **kwargs):
     # read and format
-    dft = pd.read_csv(path, **kwargs)
+    if path.endswith('html') or path.endswith('htm'):
+        dft = pd.read_html(path, **kwargs)[0]
+    else:
+        dft = pd.read_csv(path, **kwargs)
     dft.columns = [i.replace(' \n', ' ').replace('\n', ' ').strip() for i in dft.columns.astype(str)]
     unnamed_cols = [i for i in dft.columns if i.startswith('Unnamed')]
     dft = dft.drop(columns=unnamed_cols)
     for col in dft.columns:
         if pd.api.types.is_string_dtype(dft[col].dtype):
-            dft.loc[:, col] = dft[col].str.replace(' \n', ' ').str.replace('\n', ' ').str.strip()
+            dft.loc[:, col] = dft[col].str.replace('\n', ' ').str.replace('  ', ' ').str.strip()
 
     missing_required_cols = [c for c in key_cols + value_cols if c not in dft.columns]
     if len(missing_required_cols) > 0:
