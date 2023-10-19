@@ -10,7 +10,6 @@
 import os
 import json
 import argparse
-import requests
 import numpy as np
 import pandas as pd
 
@@ -174,8 +173,17 @@ if __name__ == '__main__':
         print(df_ext)
 
         print('These components are checked:')
-        print(json.dumps(comps, indent=4))
 
+        for comp in comps:
+            subdet = pd.DataFrame(columns=['det', 'sim', 'template_var', 'stat'], index=value_cols)
+            print('{}, {}, {}: '.format(comp['Region'], comp['Component'], comp['Sub-Component']))
+            for stat in ['Mismatched', 'Missing', 'Correct']:
+                for key, val in comp[stat].items():
+                    subdet.loc[key, 'stat'] = stat
+                    for k, v in val.items():
+                        subdet.loc[key, k] = v
+            print(subdet)
+            print(' ')
 
     # save reports to a json file
     report['stats'] = dict(
