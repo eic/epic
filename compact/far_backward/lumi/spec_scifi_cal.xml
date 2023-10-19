@@ -2,37 +2,37 @@
 <!-- Copyright (C) 2023 Aranya Giri -->
 
 <lccdd>
-	<!-- EcalLumiSpec - ELS -->
-	<define>
-		<constant name="ELS_FiberSize"		value="4.00*mm"/>
-		<constant name="ELS_ModuleSize"		value="5.0*mm"/>
-		<constant name="ELS_FrontPlateWidth"   	value="2.0*mm"/>
-	</define>
+        <!-- EcalLumiSpec - ELS -->
+        <define>
+                <constant name="ELS_FiberSize"          value="4.00*mm"/>
+                <constant name="ELS_ModuleSize"         value="5.0*mm"/>
+                <constant name="ELS_FrontPlateWidth"    value="2.0*mm"/>
+        </define>
 
-	<detectors>
-		<detector id="LumiSpecCAL_ID" name="LumiSpecCAL" type="LumiSpecScifiCAL" vis="FFPreVis" readout="LumiSpecCALHits" sizeXY="LumiSpecCAL_DXY">
-			<module sizex="ELS_ModuleSize" sizey="ELS_ModuleSize" sizez="LumiSpecCALTower_DZ" frontplateSize="ELS_FrontPlateWidth" material="TungstenDens24" vis="EcalEndcapBlockVis">
-				<fiber material="Polystyrene"
-					size="ELS_FiberSize"
-					vis="AnlGray"/>
-			</module>
-			<sector id="0">
-				<position x="0.0*cm" y="LumiSpecCAL_Y" z="LumiSpecCAL_Z"/>
-				<rotation x="0.0*rad" y="0.0*rad" z="0.0*rad"/>
-			</sector>
-			<sector id="1">
-				<position x="0.0*cm" y="-1*LumiSpecCAL_Y" z="LumiSpecCAL_Z"/>
-				<rotation x="0.0*rad" y="0.0*rad" z="0.0*rad"/>
-			</sector>
+        <detectors>
+                <detector id="LumiSpecCAL_ID" name="LumiSpecCAL" type="LumiSpecScifiCAL" vis="FFPreVis" readout="LumiSpecCALHits" sizeXY="LumiSpecCAL_DXY">
+                        <module sizex="ELS_ModuleSize" sizey="ELS_ModuleSize" sizez="LumiSpecCALTower_DZ" frontplateSize="ELS_FrontPlateWidth" material="TungstenDens24" vis="EcalEndcapBlockVis">
+                                <fiber material="Polystyrene"
+                                        size="ELS_FiberSize"
+                                        vis="AnlGray"/>
+                        </module>
+                        <sector id="0">
+                                <position x="0.0*cm" y="LumiSpecCAL_Y" z="LumiSpecCAL_Z"/>
+                                <rotation x="0.0*rad" y="0.0*rad" z="0.0*rad"/>
+                        </sector>
+                        <sector id="1">
+                                <position x="0.0*cm" y="-1*LumiSpecCAL_Y" z="LumiSpecCAL_Z"/>
+                                <rotation x="0.0*rad" y="0.0*rad" z="0.0*rad"/>
+                        </sector>
 
-		</detector>
-	</detectors>
+                </detector>
+        </detectors>
 
-	<readouts>
-		<readout name="LumiSpecCALHits">
-			<segmentation type="NoSegmentation"/>
-			<id>system:8,sector:8,module:16,fiber:16</id>
-		</readout>
-	</readouts>
+        <readouts>
+                <readout name="LumiSpecCALHits">
+                        <segmentation type="NoSegmentation"/>
+                        <id>system:8,sector:8,module:16,fiber:16</id>
+                </readout>
+        </readouts>
 
 </lccdd>
