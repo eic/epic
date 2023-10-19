@@ -70,11 +70,11 @@ if __name__ == '__main__':
             )
     parser.add_argument(
             'det_table',
-            help='Path or url to the DETECTOR parameter table.'
+            help='Path or url to the DETECTOR parameter table (csv or html).'
             )
     parser.add_argument(
             'sim_table',
-            help='Path or url to the SIMULATION parameter table.'
+            help='Path or url to the SIMULATION parameter table (csv or html).'
             )
     parser.add_argument(
             '--template',
