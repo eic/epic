@@ -26,10 +26,10 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
 {
   sens.setType("calorimeter");
 
-  xml_det_t 	x_det 		= 	e;
+  xml_det_t     x_det           =       e;
   xml_comp_t    x_mod           =       x_det.child( _Unicode(module) );
-  string        det_name	= 	x_det.nameStr();
-  int		det_ID		=	x_det.id();
+  string        det_name        =       x_det.nameStr();
+  int           det_ID          =       x_det.id();
 
   // Create main detector element to be returned at the end
   DetElement    det( det_name, det_ID );
@@ -59,37 +59,37 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
 
     for(int iz=0; iz< nxyz; iz++){
 
-	    // Create Modules
-	    auto [modVol, modSize] = build_specScifiCAL_module(description, x_mod, sens, mod_id);
+            // Create Modules
+            auto [modVol, modSize] = build_specScifiCAL_module(description, x_mod, sens, mod_id);
 
-	    if((iz%2)==0){ //90* rotation along y-axis
-		    for(int iy=0; iy< nxyz; iy++){
+            if((iz%2)==0){ //90* rotation along y-axis
+                    for(int iy=0; iy< nxyz; iy++){
 
-			    double 	mod_pos_z 	= x_pos.z() + xyzpos0 + iz*modSize.x();
-			    double	mod_pos_y 	= x_pos.y() + xyzpos0 + iy*modSize.y();
-			    double 	mod_pos_x 	= x_pos.x() + 0.0*cm;
+                            double      mod_pos_z       = x_pos.z() + xyzpos0 + iz*modSize.x();
+                            double      mod_pos_y       = x_pos.y() + xyzpos0 + iy*modSize.y();
+                            double      mod_pos_x       = x_pos.x() + 0.0*cm;
 
-			    PlacedVolume modPV = assembly.placeVolume(
-					    modVol, Transform3D( RotationZYX( x_rot.x(), 90.0*degree, x_rot.z()), Position( mod_pos_x, mod_pos_y, mod_pos_z ) ) );
+                            PlacedVolume modPV = assembly.placeVolume(
+                                            modVol, Transform3D( RotationZYX( x_rot.x(), 90.0*degree, x_rot.z()), Position( mod_pos_x, mod_pos_y, mod_pos_z ) ) );
 
-			    modPV.addPhysVolID( "sector", sector_id ).addPhysVolID( "module", mod_id);
-			    mod_id++;
-		    }//iy-close
-	    }//if-close
-	    else{// 90* rotation along x-axis
-	    for(int ix=0; ix< nxyz; ix++){
+                            modPV.addPhysVolID( "sector", sector_id ).addPhysVolID( "module", mod_id);
+                            mod_id++;
+                    }//iy-close
+            }//if-close
+            else{// 90* rotation along x-axis
+            for(int ix=0; ix< nxyz; ix++){
 
-			    double 	mod_pos_z 	= x_pos.z() + xyzpos0 + iz*modSize.x();
-			    double	mod_pos_x 	= x_pos.x() + xyzpos0 + ix*modSize.x();
-			    double 	mod_pos_y 	= x_pos.y() + 0.0*cm;
+                            double      mod_pos_z       = x_pos.z() + xyzpos0 + iz*modSize.x();
+                            double      mod_pos_x       = x_pos.x() + xyzpos0 + ix*modSize.x();
+                            double      mod_pos_y       = x_pos.y() + 0.0*cm;
 
-			    PlacedVolume modPV = assembly.placeVolume(
-					    modVol, Transform3D( RotationZYX(0.0, x_rot.y(), 90.0*degree), Position( mod_pos_x, mod_pos_y, mod_pos_z ) ) );
+                            PlacedVolume modPV = assembly.placeVolume(
+                                            modVol, Transform3D( RotationZYX(0.0, x_rot.y(), 90.0*degree), Position( mod_pos_x, mod_pos_y, mod_pos_z ) ) );
 
-			    modPV.addPhysVolID( "sector", sector_id ).addPhysVolID( "module", mod_id);
-			    mod_id++;
-		    }//ix-loop close
-	    }//else-close
+                            modPV.addPhysVolID( "sector", sector_id ).addPhysVolID( "module", mod_id);
+                            mod_id++;
+                    }//ix-loop close
+            }//else-close
 
     }//iz-close
 
@@ -109,32 +109,32 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
 //Function for building the module
 static tuple<Volume, Position> build_specScifiCAL_module( const Detector& description, const xml::Component& mod_x, SensitiveDetector& sens, int mod_id){
 
-	//Modules
-	double sx = mod_x.attr<double>(_Unicode(sizex));
-	double sy = mod_x.attr<double>(_Unicode(sizey));
-	double sz = mod_x.attr<double>(_Unicode(sizez));
-	//double frontplatesize = mod_x.attr<double>(_Unicode(frontplateSize));
+        //Modules
+        double sx = mod_x.attr<double>(_Unicode(sizex));
+        double sy = mod_x.attr<double>(_Unicode(sizey));
+        double sz = mod_x.attr<double>(_Unicode(sizez));
+        //double frontplatesize = mod_x.attr<double>(_Unicode(frontplateSize));
 
-	Box    modShape( sx/2.0 , sy/2.0 , sz/2.0 );
-	auto   modMat = description.material(mod_x.attr<std::string>(_Unicode(material)));
+        Box    modShape( sx/2.0 , sy/2.0 , sz/2.0 );
+        auto   modMat = description.material(mod_x.attr<std::string>(_Unicode(material)));
 
-	//Scifi fibers
-	auto   fiber_box  = mod_x.child(_Unicode(fiber));
-	auto   fsize      = fiber_box.attr<double>(_Unicode(size));
-	auto   fiberMat = description.material(fiber_box.attr<std::string>(_Unicode(material)));
-	Box    fiberShape(fsize/2.0, fsize/2.0, sz/2.0);
+        //Scifi fibers
+        auto   fiber_box  = mod_x.child(_Unicode(fiber));
+        auto   fsize      = fiber_box.attr<double>(_Unicode(size));
+        auto   fiberMat = description.material(fiber_box.attr<std::string>(_Unicode(material)));
+        Box    fiberShape(fsize/2.0, fsize/2.0, sz/2.0);
 
-	//make the module hollow to insert Scifi fibers
-	Volume modVol("module_vol", modShape, modMat);
-	modVol.setVisAttributes(description.visAttributes(mod_x.attr<std::string>(_Unicode(vis))));
+        //make the module hollow to insert Scifi fibers
+        Volume modVol("module_vol", modShape, modMat);
+        modVol.setVisAttributes(description.visAttributes(mod_x.attr<std::string>(_Unicode(vis))));
 
-	Volume fiberVol("fiber_vol", fiberShape, fiberMat);
-	PlacedVolume detfiberPV = modVol.placeVolume(fiberVol,Transform3D( RotationZYX(0.0, 0.0, 0.0), Position(0.0, 0.0,0.0) ) );
-	fiberVol.setVisAttributes(description.visAttributes(fiber_box.attr<std::string>(_Unicode(vis))));
-	fiberVol.setSensitiveDetector(sens);
-	detfiberPV.addPhysVolID( "fiber", mod_id);
+        Volume fiberVol("fiber_vol", fiberShape, fiberMat);
+        PlacedVolume detfiberPV = modVol.placeVolume(fiberVol,Transform3D( RotationZYX(0.0, 0.0, 0.0), Position(0.0, 0.0,0.0) ) );
+        fiberVol.setVisAttributes(description.visAttributes(fiber_box.attr<std::string>(_Unicode(vis))));
+        fiberVol.setSensitiveDetector(sens);
+        detfiberPV.addPhysVolID( "fiber", mod_id);
 
-	return make_tuple(modVol, Position{sx, sy, sz} );
+        return make_tuple(modVol, Position{sx, sy, sz} );
 }
 
 DECLARE_DETELEMENT(LumiSpecScifiCAL, create_detector) //(det_type, driver func)
