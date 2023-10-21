@@ -500,7 +500,7 @@ Service gaps in FW direction (before endcapP ECAL) and BW direction (before endc
     <constant name="ForwardServiceGap_rmin"       value="ForwardPIDRegion_rmax"/>
     <constant name="ForwardServiceGap_rmax"       value="ForwardServiceGap_rmin + ForwardServiceGap_thickness"/>
 
-    <constant name="BackwardServiceGap_length"    value="124.0 * cm"/>
+    <constant name="BackwardServiceGap_length"    value="15.0 * cm"/>
     <constant name="BackwardServiceGap_zmin"      value="316.0 * cm"/> <!-- FIXME hardcoded -->
     <constant name="BackwardServiceGap_zmax"      value="BackwardServiceGap_zmin + BackwardServiceGap_length"/>
 
