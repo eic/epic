@@ -595,15 +595,20 @@ Service gaps in FW direction (before endcapP ECAL) and BW direction (before endc
     <comment> HcalEndcapN needs to clear the straight beampipe with 1 * crossing angle + its radius of 22.25 mm </comment>
     <constant name="HcalEndcapN_rmin"     value="max((HcalEndcapN_zmin + HcalEndcapN_length) * tan(abs(CrossingAngle)) + 22.25 * mm, 12.4 * cm)"/>
 
-    <constant name="HcalBarrel_thickness" value="93.0*cm"/> <!-- ref: as-built CAD, plus a little room for the longer half-plates -->
-    <constant name="HcalBarrel_rmin"      value="Solenoid_rmax"/>
-    <constant name="HcalBarrel_rmax"      value="HcalBarrel_rmin + HcalBarrel_thickness"/>
-    <constant name="HcalBarrelForward_zmax"  value="ForwardServiceGap_zmin"/>
-    <constant name="HcalBarrelBackward_zmax" value="BackwardServiceGap_zmin"/>
-    <constant name="HcalBarrel_length"    value="HcalBarrelForward_zmax + HcalBarrelBackward_zmax"/>
-    <constant name="HcalBarrel_offset"    value="(HcalBarrelForward_zmax - HcalBarrelBackward_zmax)/2"/>
+    <constant name="HcalBarrel_thickness"     value="88.83*cm"/> 
+    <constant name="HcalBarrel_rmin1"         value="180.0*cm"/>
+    <constant name="HcalBarrel_rmin2"         value="HcalBarrel_rmin1 + 13.188*cm"/>
+    <constant name="HcalBarrel_rmax"          value="HcalBarrel_rmin1 + HcalBarrel_thickness"/>
+    <constant name="HcalBarrelForward_zmax"   value="315.81*cm"/>
+    <constant name="HcalBarrelBackward_zmax"  value="HcalBarrelForward_zmax"/>
+    <constant name="HcalBarrel_length2"       value="HcalBarrelForward_zmax + HcalBarrelBackward_zmax"/>
+    <constant name="HcalBarrel_length1"       value="318.709*cm"/>
+    <constant name="HcalBarrel_offset"        value="(HcalBarrelForward_zmax - HcalBarrelBackward_zmax)/2"/>
+
     <constant name="HcalEndcapN_rmax"     value="HcalBarrel_rmax"/>
+
     <constant name="LFHCAL_rmax"          value="HcalBarrel_rmax"/>
+
     <comment>
       These are used by ddsim, the region where we store all secondaries
 

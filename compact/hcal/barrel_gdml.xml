@@ -15,11 +15,11 @@
           readout="HcalBarrelHits"
           vis="HcalBarrelVis"
           env_vis="HcalBarrelEnvelopeVis"
-          rmin1="HcalBarrel_rmin"
-          rmin2="ForwardServiceGap_rmax - 5.0"
-          rmax="HcalBarrel_rmax"
-          z1="SolenoidBarrel_length"
-          z2="HcalBarrel_length"
+          rmin1="HcalBarrel_rmin1 - 2.0"
+          rmin2="HcalBarrel_rmin2 - 2.0"
+          rmax="HcalBarrel_rmax + 2.0"
+          z1="HcalBarrel_length1 + 0.01"
+          z2="HcalBarrel_length2 + 0.01"
           calorimeterType="HAD_BARREL">
 
   <define>
