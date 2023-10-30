@@ -248,7 +248,8 @@
     <constant name="LumiWall_Z"           value="-55*m"/>
 
     <!-- Lumi dipole magnets (sweeper and analyzer) -->
-    <constant name="LumiMag_DZ"           value="1.200*m"/>
+    <constant name="LumiMagMainBody_DZ"   value="1.200*m"/>
+    <constant name="LumiMagCoils_DZ"      value="1.533*m"/>
     <constant name="LumiSweepMag_X"       value="0*m"/>
     <constant name="LumiSweepMag_Y"       value="0*m"/>
     <constant name="LumiSweepMag_Z"       value="-56*m"/>
@@ -258,8 +259,8 @@
     <constant name="LumiAnalyzerMag_Z"    value="-4*m + LumiSweepMag_Z"/>
 
     <!-- Lumi photon chamber -->
-    <constant name="LumiChamber_Z1"       value="LumiSweepMag_Z + LumiMag_DZ/2.0"/>
-    <constant name="LumiChamber_Z2"       value="LumiAnalyzerMag_Z - LumiMag_DZ/2.0"/>
+    <constant name="LumiChamber_Z1"       value="LumiSweepMag_Z + LumiMagCoils_DZ/2.0"/>
+    <constant name="LumiChamber_Z2"       value="LumiAnalyzerMag_Z - LumiMagCoils_DZ/2.0"/>
     <constant name="LumiChamber_DR"       value="2*mm"/>
     <constant name="LumiChamber_entrCap_DZ"  value="1*cm"/>
     <constant name="LumiChamber_exitCap_DZ"  value="0.5*cm"/>
