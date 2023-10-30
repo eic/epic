@@ -491,7 +491,7 @@ Examples:
 Service gaps in FW direction (before endcapP ECAL) and BW direction (before endcapN HCAL)
     </documentation>
     <constant name="ForwardInnerEndcapRegionExtraSpace_length" value="4.6*cm"/>
-    <constant name="ForwardServiceGap_length"     value="10.0*cm"/>
+    <constant name="ForwardServiceGap_length"     value="13.6*cm"/>
     <constant name="ForwardServiceGap_zmin"       value="ForwardPIDRegion_zmin + ForwardInnerEndcapRegion_length + ForwardInnerEndcapRegionExtraSpace_length"/>
     <constant name="ForwardServiceGap_zmax"       value="ForwardServiceGap_zmin + ForwardServiceGap_length"/>
 
@@ -500,8 +500,8 @@ Service gaps in FW direction (before endcapP ECAL) and BW direction (before endc
     <constant name="ForwardServiceGap_rmin"       value="ForwardPIDRegion_rmax"/>
     <constant name="ForwardServiceGap_rmax"       value="ForwardServiceGap_rmin + ForwardServiceGap_thickness"/>
 
-    <constant name="BackwardServiceGap_length"    value="10.0 * cm"/>
-    <constant name="BackwardServiceGap_zmin"      value="320.0 * cm"/> <!-- FIXME hardcoded -->
+    <constant name="BackwardServiceGap_length"    value="15.0 * cm"/>
+    <constant name="BackwardServiceGap_zmin"      value="316.0 * cm"/> <!-- FIXME hardcoded -->
     <constant name="BackwardServiceGap_zmax"      value="BackwardServiceGap_zmin + BackwardServiceGap_length"/>
 
 
@@ -529,7 +529,7 @@ Service gaps in FW direction (before endcapP ECAL) and BW direction (before endc
     <constant name="EcalEndcapPInsert_hole_yposition" value="0.0*cm"/>
 
     <!-- <constant name="EcalEndcapN_zmin"               value="BackwardPIDRegion_zmin + BackwardInnerEndcapRegion_length"/> -->
-    <constant name="EcalEndcapN_zmin"               value="174*cm"/>   <!-- Currently fix value hardcoded -->
+    <constant name="EcalEndcapN_zmin"               value="175*cm"/>   <!-- Currently fix value hardcoded -->
     <constant name="EcalEndcapN_length"             value="60*cm" />   <!-- Currently fix value hardcoded -->
     <constant name="EcalEndcapN_zmax"               value="EcalEndcapN_zmin + EcalEndcapN_length"/>
 
@@ -542,8 +542,8 @@ Service gaps in FW direction (before endcapP ECAL) and BW direction (before endc
     <constant name="EcalEndcapN_rmin"               value="9.*cm"/>    <!-- Currently fix value hardcoded -->
     <constant name="EcalEndcapN_rmax"               value="63.*cm"/>   <!-- Currently fix value hardcoded -->
 
-    <constant name="EcalBarrelRegion_thickness"     value="61.5*cm"/>
-    <constant name="EcalBarrel_rmin"                value="CentralTrackingRegion_rmax + BarrelPIDRegion_thickness + BarrelExtraSpace_thickness"/>
+    <constant name="EcalBarrelRegion_thickness"     value="35.*cm"/>
+    <constant name="EcalBarrel_rmin"                value="max(81.*cm, CentralTrackingRegion_rmax + BarrelPIDRegion_thickness + BarrelExtraSpace_thickness)"/> <!-- FIXME hardcoded max -->
     <constant name="EcalBarrel_inner_margin"        value="2*cm"/>
     <constant name="EcalBarrel_rmax"                value="EcalBarrel_rmin + EcalBarrelRegion_thickness"/>
     <constant name="EcalBarrelForward_zmax"         value="ForwardRICHRegion_zmin"/> <!-- FIXME currently unable to accommodate actual position -->
@@ -590,10 +590,10 @@ Service gaps in FW direction (before endcapP ECAL) and BW direction (before endc
 
     <constant name="HcalEndcapN_CaloSides"      value="60"/>
     <constant name="HcalEndcapN_zmin"     value="BackwardServiceGap_zmax"/>
-    <constant name="HcalEndcapN_length"   value="44.0*cm"/>
+    <constant name="HcalEndcapN_length"   value="45.0*cm"/>
     <constant name="HcalEndcapN_zmax"     value="HcalEndcapN_zmin + HcalEndcapN_length"/>
     <comment> HcalEndcapN needs to clear the straight beampipe with 1 * crossing angle + its radius of 22.25 mm </comment>
-    <constant name="HcalEndcapN_rmin"     value="max((HcalEndcapN_zmin + HcalEndcapN_length) * tan(abs(CrossingAngle)) + 22.25 * mm, 11 * cm)"/>
+    <constant name="HcalEndcapN_rmin"     value="max((HcalEndcapN_zmin + HcalEndcapN_length) * tan(abs(CrossingAngle)) + 22.25 * mm, 12.4 * cm)"/>
 
     <constant name="HcalBarrel_thickness" value="93.0*cm"/> <!-- ref: as-built CAD, plus a little room for the longer half-plates -->
     <constant name="HcalBarrel_rmin"      value="Solenoid_rmax"/>
