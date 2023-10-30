@@ -16,12 +16,14 @@
     <detector
       name="LumiPhotonChamber"
       type="LumiPhotonChamber"
-      pipeAndCapMaterial="Beryllium"
+      pipeMaterial="Aluminum"
+      entrCapMaterial="Aluminum"
+      exitCapMaterial="Beryllium"
       convMaterial="Aluminum"
       fillMaterial="Vacuum"
       vis="AnlLightGray">
       <position z1="LumiChamber_Z1" z2="LumiChamber_Z2" z_conv="LumiConverter_Z"/>
-      <dimensions rmin="LumiBeamDiv_pref * fabs(LumiChamber_Z2)" pipe_dr="LumiChamber_DR" cap1_dz="LumiChamber_cap1_DZ" cap2_dz="LumiChamber_cap2_DZ" conv_dz="LumiConverter_DZ"/>
+      <dimensions rmin="LumiBeamDiv_pref * fabs(LumiChamber_Z2)" pipe_dr="LumiChamber_DR" entrCap_dz="LumiChamber_entrCap_DZ" exitCap_dz="LumiChamber_exitCap_DZ" conv_dz="LumiConverter_DZ"/>
     </detector>
   </detectors>
 

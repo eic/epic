@@ -20,7 +20,9 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector /
   xml_comp_t    x_pos           = x_det.child( _Unicode(position) );
   //
   string        det_name        = x_det.nameStr();
-  string        mat_pipeCap     = getAttrOrDefault<string>( x_det, _Unicode(pipeAndCapMaterial), "Aluminum" );
+  string        mat_pipe        = getAttrOrDefault<string>( x_det, _Unicode(pipeMaterial), "Aluminum" );
+  string        mat_entrCap     = getAttrOrDefault<string>( x_det, _Unicode(entrCapMaterial), "Aluminum" );
+  string        mat_exitCap     = getAttrOrDefault<string>( x_det, _Unicode(exitCapMaterial), "Aluminum" );
   string        mat_conv        = getAttrOrDefault<string>( x_det, _Unicode(convMaterial), "Aluminum" );
   string        mat_fill        = getAttrOrDefault<string>( x_det, _Unicode(fillMaterial), "Vacuum" );
   //
@@ -29,8 +31,8 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector /
   double        posZconv         = x_pos.attr<double>(_Unicode(z_conv));
   double        rmin             = x_dim.attr<double>(_Unicode(rmin));
   double        pipe_DR          = x_dim.attr<double>(_Unicode(pipe_dr));
-  double        cap1_DZ          = x_dim.attr<double>(_Unicode(cap1_dz));
-  double        cap2_DZ          = x_dim.attr<double>(_Unicode(cap2_dz));
+  double        entrCap_DZ       = x_dim.attr<double>(_Unicode(entrCap_dz));
+  double        exitCap_DZ       = x_dim.attr<double>(_Unicode(exitCap_dz));
   double        conv_DZ          = x_dim.attr<double>(_Unicode(conv_dz));
 
   // Create main detector element to be returned at the end
@@ -52,9 +54,9 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector /
   Tube vac2( 0, rmin, fabs(posZconv - posZ2 - conv_DZ/2.0)/2.0, 0, 2*TMath::Pi() );
 
   // end cap closest to IP
-  Tube cap1( 0, rmin + pipe_DR, cap1_DZ/2.0, 0, 2*TMath::Pi() );
+  Tube entrCap( 0, rmin + pipe_DR, entrCap_DZ/2.0, 0, 2*TMath::Pi() );
   // end cap farthest from IP
-  Tube cap2( 0, rmin + pipe_DR, cap2_DZ/2.0, 0, 2*TMath::Pi() );
+  Tube exitCap( 0, rmin + pipe_DR, exitCap_DZ/2.0, 0, 2*TMath::Pi() );
   // conversion foil
   Tube convFoil( 0, rmin, conv_DZ/2.0, 0, 2*TMath::Pi() );
 
@@ -65,14 +67,14 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector /
   Volume vol_vac2( det_name + "_vol_vac2", vac2, description.material( mat_fill ) );
   vol_vac2.setVisAttributes( description.invisible() );
 
-  Volume vol_tube( det_name + "_vol_tube", tube, description.material( mat_pipeCap ) );
+  Volume vol_tube( det_name + "_vol_tube", tube, description.material( mat_pipe ) );
   vol_tube.setVisAttributes( description.visAttributes(x_det.visStr()) );
 
-  Volume vol_cap1( det_name + "_vol_cap1", cap1, description.material( mat_pipeCap ) );
-  vol_cap1.setVisAttributes( description.visAttributes(x_det.visStr()) );
+  Volume vol_entrCap( det_name + "_vol_entrCap", entrCap, description.material( mat_entrCap ) );
+  vol_entrCap.setVisAttributes( description.visAttributes(x_det.visStr()) );
 
-  Volume vol_cap2( det_name + "_vol_cap2", cap2, description.material( mat_pipeCap ) );
-  vol_cap2.setVisAttributes( description.visAttributes(x_det.visStr()) );
+  Volume vol_exitCap( det_name + "_vol_exitCap", exitCap, description.material( mat_exitCap ) );
+  vol_exitCap.setVisAttributes( description.visAttributes(x_det.visStr()) );
 
   Volume vol_conv( det_name + "_vol_conversionFoil", convFoil, description.material( mat_conv ) );
   vol_conv.setVisAttributes( description.visAttributes(x_det.visStr()) );
@@ -81,9 +83,9 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector /
   assembly.placeVolume(
           vol_tube, Transform3D( RotationZYX(0, 0, 0), Position(0, 0, (posZ1 + posZ2)/2.)) );
   assembly.placeVolume(
-          vol_cap1, Transform3D( RotationZYX(0, 0, 0), Position(0, 0, posZ1 + cap1_DZ/2.)) );
+          vol_entrCap, Transform3D( RotationZYX(0, 0, 0), Position(0, 0, posZ1 + entrCap_DZ/2.)) );
   assembly.placeVolume(
-          vol_cap2, Transform3D( RotationZYX(0, 0, 0), Position(0, 0, posZ2 - cap2_DZ/2.)) );
+          vol_exitCap, Transform3D( RotationZYX(0, 0, 0), Position(0, 0, posZ2 - exitCap_DZ/2.)) );
   assembly.placeVolume(
           vol_conv, Transform3D( RotationZYX(0, 0, 0), Position(0, 0, posZconv)) );
   assembly.placeVolume(

@@ -261,8 +261,8 @@
     <constant name="LumiChamber_Z1"       value="LumiSweepMag_Z + LumiMag_DZ/2.0"/>
     <constant name="LumiChamber_Z2"       value="LumiAnalyzerMag_Z - LumiMag_DZ/2.0"/>
     <constant name="LumiChamber_DR"       value="2*mm"/>
-    <constant name="LumiChamber_cap1_DZ"  value="1*cm"/>
-    <constant name="LumiChamber_cap2_DZ"  value="0.5*cm"/>
+    <constant name="LumiChamber_entrCap_DZ"  value="1*cm"/>
+    <constant name="LumiChamber_exitCap_DZ"  value="0.5*cm"/>
 
     <!-- Lumi converter -->
     <constant name="LumiConverter_Z"      value="(LumiAnalyzerMag_Z + LumiSweepMag_Z)/2.0"/>
