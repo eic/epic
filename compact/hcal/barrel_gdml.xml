@@ -18,7 +18,7 @@
           env_vis="HcalBarrelEnvelopeVis"
           rmin1="HcalBarrel_rmin1 - 1.7"
           rmin2="HcalBarrel_rmin2 - 2.0"
-          rmax="HcalBarrel_rmax"  
+          rmax="HcalBarrel_rmax"
           z1="HcalBarrel_length1"
           z2="HcalBarrel_length2"
           calorimeterType="HAD_BARREL">
