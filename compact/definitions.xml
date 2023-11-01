@@ -599,10 +599,10 @@ Service gaps in FW direction (before endcapP ECAL) and BW direction (before endc
     <constant name="HcalBarrel_rmin1"         value="180.0*cm"/>
     <constant name="HcalBarrel_rmin2"         value="HcalBarrel_rmin1 + 13.188*cm"/>
     <constant name="HcalBarrel_rmax"          value="HcalBarrel_rmin1 + HcalBarrel_thickness"/>
-    <constant name="HcalBarrelForward_zmax"   value="315.81*cm"/>
+    <constant name="HcalBarrelForward_zmax"   value="319.625*cm"/>
     <constant name="HcalBarrelBackward_zmax"  value="HcalBarrelForward_zmax"/>
     <constant name="HcalBarrel_length2"       value="HcalBarrelForward_zmax + HcalBarrelBackward_zmax"/>
-    <constant name="HcalBarrel_length1"       value="318.709*cm"/>
+    <constant name="HcalBarrel_length1"       value="319.0*cm"/>
     <constant name="HcalBarrel_offset"        value="(HcalBarrelForward_zmax - HcalBarrelBackward_zmax)/2"/>
 
     <constant name="HcalEndcapN_rmax"     value="HcalBarrel_rmax"/>

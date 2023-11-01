@@ -7,6 +7,7 @@
     <detectors>
       <documentation>
       ### Barrel Hadronic Calorimeter
+      ### inner radius parameter to inner plate, -1.8cm to account for combs and outer plate
       </documentation>
       <detector
           id="HCalBarrel_ID"
@@ -15,11 +16,11 @@
           readout="HcalBarrelHits"
           vis="HcalBarrelVis"
           env_vis="HcalBarrelEnvelopeVis"
-          rmin1="HcalBarrel_rmin1 - 2.0"
+          rmin1="HcalBarrel_rmin1 - 1.7"
           rmin2="HcalBarrel_rmin2 - 2.0"
-          rmax="HcalBarrel_rmax + 2.0"
-          z1="HcalBarrel_length1 + 0.01"
-          z2="HcalBarrel_length2 + 0.01"
+          rmax="HcalBarrel_rmax"  
+          z1="HcalBarrel_length1"
+          z2="HcalBarrel_length2"
           calorimeterType="HAD_BARREL">
 
   <define>
