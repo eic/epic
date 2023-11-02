@@ -474,4 +474,33 @@
     <fraction n="0.9622" ref="Pb"/>
     <fraction n="0.0378" ref="SciFiPb_Glue"/>
   </material>
+  <material name="Brass">
+    <D type="density" value="8.41" unit="g / cm3"/>
+    <fraction n="0.70" ref="Cu"/>
+    <fraction n="0.30" ref="Zn"/>
+  </material>
+  <material name="NbTi">
+    <D type="density" value="6.54" unit="g / cm3"/>
+    <fraction n="0.50" ref="Nb"/>
+    <fraction n="0.50" ref="Ti"/>
+  </material>
+  <material name="Solder">
+    <D type="density" value="8.60" unit="g / cm3"/>
+    <fraction n="0.40" ref="Pb"/>
+    <fraction n="0.60" ref="Sn"/>
+  </material>
+ <material name="SolenoidCoil">
+    <D type="density" value="8.73" unit="g / cm3"/>
+    <fraction n="0.9201" ref="Cu"/>
+    <fraction n="0.0638" ref="NbTi"/>
+    <fraction n="0.0161" ref="Solder"/>
+  </material>
+ <material name="LYSO"> <!-- given by the Taiwan Applied Crystals -->
+    <D type="density" unit="g/cm3" value="7.125"/>
+    <fraction n="0.71813" ref="Lu"/>
+    <fraction n="0.03613" ref="Y"/>
+    <fraction n="0.06338" ref="Si"/>
+    <fraction n="0.18046" ref="O"/>
+    <fraction n="0.00190" ref="Ce"/>
+  </material>
 </materials>

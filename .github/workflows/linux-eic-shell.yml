@@ -8,18 +8,7 @@ on:
       - '*'
   pull_request:
   merge_group:
-  workflow_dispatch:
-    inputs:
-      github_repository:
-        description: 'Submitting GitHub repository'
-        required: false
-        default: ''
-        type: string
-      github_sha:
-        description: 'Submitting GitHub sha'
-        required: false
-        default: ''
-        type: string
+  workflow_dispatch: # allow manual triggering
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
@@ -147,6 +136,7 @@ jobs:
         token: ${{ secrets.EICWEB_GEOVIEWER_TRIGGER }}
         ref_name: main
         variables: |
+          DETECTOR=epic
           DETECTOR_REPOSITORYURL=${{ github.server_url }}/${{ github.repository }}
           DETECTOR_REPOSITORYREF=${{ github.ref }}
           DETECTOR_CONFIG=${{ needs.list-detector-configs.outputs.configs_csv }}
@@ -264,7 +254,7 @@ jobs:
     needs: build
     strategy:
       matrix:
-        detector_config: [epic_brycecanyon, epic_craterlake]
+        detector_config: [epic_craterlake]
     steps:
     - uses: actions/checkout@v3
     - uses: actions/download-artifact@v3
@@ -291,7 +281,7 @@ jobs:
     needs: build
     strategy:
       matrix:
-        detector_config: [epic_brycecanyon, epic_craterlake]
+        detector_config: [epic_craterlake]
     steps:
     - uses: actions/checkout@v3
     - uses: actions/download-artifact@v3
@@ -309,6 +299,13 @@ jobs:
           npdet_info dump ${DETECTOR_PATH}/${{matrix.detector_config}}.xml | grep -v '^\s' | grep '=' | cut -d= -f1-2 | tee doc/${{matrix.detector_config}}_constants.toml
           cp doc/${{matrix.detector_config}}_constants.toml doc/constants.toml
           python bin/make_detector_parameter_table | tee doc/${{matrix.detector_config}}.csv
+          sqlite3 -cmd \
+            ".import --csv doc/${{matrix.detector_config}}.csv detector_parameter_table" \
+            ".headers on" \
+            ".mode html" \
+            ".output doc/${{matrix.detector_config}}.html" \
+            "select * from detector_parameter_table;"
+          sed -i '1s/^/<html><body><table border="1" style="border-collapse:collapse">\n/;$a</table></body></html>' doc/${{matrix.detector_config}}.html
     - uses: actions/upload-artifact@v3
       with:
         name: constants
@@ -317,7 +314,9 @@ jobs:
     - uses: actions/upload-artifact@v3
       with:
         name: DetectorParameterTable
-        path: doc/${{matrix.detector_config}}.csv
+        path: |
+          doc/${{matrix.detector_config}}.csv
+          doc/${{matrix.detector_config}}.html
         if-no-files-found: error
 
   check-overlap-tgeo:
@@ -326,7 +325,7 @@ jobs:
     strategy:
       matrix:
         option: ['m'] #, 's'] # FIXME
-        detector_config: [epic_brycecanyon, epic_craterlake] # FIXME
+        detector_config: [epic_craterlake] # FIXME
       fail-fast: false
     steps:
     - uses: actions/checkout@v3
@@ -379,7 +378,7 @@ jobs:
       - build
     strategy:
       matrix:
-        detector_config: [epic_brycecanyon, epic_craterlake]
+        detector_config: [epic_craterlake]
       fail-fast: false
     steps:
     - uses: actions/checkout@v3
@@ -404,7 +403,7 @@ jobs:
     needs: build
     strategy:
       matrix:
-        detector_config: [epic_inner_detector, epic_brycecanyon, epic_craterlake]
+        detector_config: [epic_inner_detector, epic_craterlake]
       fail-fast: false
     steps:
     - uses: actions/checkout@v3
@@ -429,7 +428,7 @@ jobs:
     needs: [check-overlap-tgeo, check-overlap-geant4-fast]
     strategy:
       matrix:
-        detector_config: [epic_brycecanyon, epic_craterlake]
+        detector_config: [epic_craterlake]
     steps:
     - uses: eic/trigger-gitlab-ci@v2
       id: trigger
@@ -439,11 +438,12 @@ jobs:
         token: ${{ secrets.EICWEB_DETECTOR_BENCHMARK_TRIGGER }}
         ref_name: master
         variables: |
+          DETECTOR=epic
           DETECTOR_REPOSITORYURL=${{ github.server_url }}/${{ github.repository }}
           DETECTOR_VERSION=${{ github.event.pull_request.head.ref || github.ref_name }}
           DETECTOR_CONFIG=${{ matrix.detector_config }}
-          GITHUB_REPOSITORY=${{ inputs.github_repository || github.repository }}
-          GITHUB_SHA=${{ inputs.github_sha || github.event.pull_request.head.sha || github.sha }}
+          GITHUB_REPOSITORY=${{ github.repository }}
+          GITHUB_SHA=${{ github.event.pull_request.head.sha || github.sha }}
     - run: |
         gh api \
            --method POST \
@@ -461,7 +461,7 @@ jobs:
     needs: build
     strategy:
       matrix:
-        detector_config: [epic_brycecanyon, epic_craterlake]
+        detector_config: [epic_craterlake]
       fail-fast: false
     steps:
     - uses: actions/checkout@v3
@@ -490,7 +490,7 @@ jobs:
     strategy:
       matrix:
         view: [view1, view2, view3, view6, view7, view11, view13, view50]
-        detector_config: [epic_brycecanyon, epic_craterlake]
+        detector_config: [epic_craterlake]
       fail-fast: false
     steps:
     - uses: actions/checkout@v3
@@ -520,7 +520,7 @@ jobs:
       matrix:
         view: [view12, view14, view15]
         slice: [100, 300, 500, 700, 900, 1100, 1300, 1500, 1700, 1900]
-        detector_config: [epic_brycecanyon, epic_craterlake]
+        detector_config: [epic_craterlake]
       fail-fast: false
     steps:
     - uses: actions/checkout@v3
