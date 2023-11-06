@@ -51,8 +51,10 @@
     <constant name="ForwardMPGDLayer2_rmin"       value="ForwardMPGDMod2_rmin - ForwardMPGDLayerPad" />
     <constant name="ForwardMPGDLayer1_rmax"       value="ForwardMPGDMod1_rmax + ForwardMPGDLayerPad" />
     <constant name="ForwardMPGDLayer2_rmax"       value="ForwardMPGDMod2_rmax + ForwardMPGDLayerPad" />
-    <constant name="ForwardMPGDLayer1_zmin"       value="ForwardMPGDMod1_zmin - ForwardMPGDEndcapLayer_thickness / 2" />
-    <constant name="ForwardMPGDLayer2_zmin"       value="ForwardMPGDMod2_zmin - ForwardMPGDEndcapLayer_thickness / 2" />
+    <!--<constant name="ForwardMPGDLayer1_zmin"       value="ForwardMPGDMod1_zmin - ForwardMPGDEndcapLayer_thickness / 2" />
+    <constant name="ForwardMPGDLayer2_zmin"       value="ForwardMPGDMod2_zmin - ForwardMPGDEndcapLayer_thickness / 2" />-->
+    <constant name="ForwardMPGDLayer1_zmin"       value="ForwardMPGDMod1_zmin" />
+    <constant name="ForwardMPGDLayer2_zmin"       value="ForwardMPGDMod2_zmin" />
 
     <constant name="ForwardMPGDMod1_x1"           value="2 * ForwardMPGDMod1_rmin * tan(ForwardMPGDEndcapMod_angle/2)" />
     <constant name="ForwardMPGDMod1_x2"           value="2 * ForwardMPGDMod1_rmax * sin(ForwardMPGDEndcapMod_angle/2)" />
