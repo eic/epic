@@ -2,6 +2,14 @@
 <!-- Copyright (C) 2022 Sylvester Joosten, Wouter Deconinck, Shujie Li -->
 
 <lccdd>
+<info name="silicon_disks.xml"
+      title="Silicon Disk Tracker"
+      author="@ShujieL"
+      url="https://github.com/ShujieL"
+      status="development"
+      version="1.0"
+><comment/>
+</info>
   <comment>
     Main parameters. June 2022 setup with symmetric disk locations.
     Here to comply with the ACTS translation onion structure we have:
