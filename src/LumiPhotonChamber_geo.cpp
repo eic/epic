@@ -22,7 +22,7 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector /
   string        det_name        = x_det.nameStr();
   string        mat_pipe        = getAttrOrDefault<string>( x_det, _Unicode(pipeMaterial), "Aluminum" );
   string        mat_entrCap     = getAttrOrDefault<string>( x_det, _Unicode(entrCapMaterial), "Aluminum" );
-  string        mat_exitCap     = getAttrOrDefault<string>( x_det, _Unicode(exitCapMaterial), "Aluminum" );
+  string        mat_exitCap     = getAttrOrDefault<string>( x_det, _Unicode(exitCapMaterial), "Beryllium" );
   string        mat_conv        = getAttrOrDefault<string>( x_det, _Unicode(convMaterial), "Aluminum" );
   string        mat_fill        = getAttrOrDefault<string>( x_det, _Unicode(fillMaterial), "Vacuum" );
   //
