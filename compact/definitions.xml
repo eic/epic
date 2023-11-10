@@ -442,7 +442,7 @@ Examples:
     <comment> Global PID regions with suballocations for TOF and RICH detectors </comment>
     <constant name="ForwardPIDRegion_zmin"        value="CentralTrackingRegionP_zmax" />
     <constant name="ForwardPIDRegion_length"      value="135.0*cm" />
-    <constant name="ForwardPIDRegion_rmax"        value="185.0*cm" />
+    <constant name="ForwardPIDRegion_rmax"        value="180.0*cm" /> <!--Changed from 185.00 cm to 180.00 cm the dRICH vessel  -->
     <constant name="ForwardTOFRegion_length"      value="15.0*cm" />
 
     <comment> Forward RICH region </comment>
