@@ -25,7 +25,7 @@ endif()
 
 # Error on all warnings
 if(NOT CMAKE_BUILD_TYPE STREQUAL "Release")
-  add_compile_options(-Wall -Wextra -Werror -pedantic)
+  add_compile_options(-Wall -Wextra -Werror -pedantic  -Wno-error=unused-variable -Wno-error=unused-but-set-variable)
 endif()
 
 # Export compile commands as json for run-clang-tidy
