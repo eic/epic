@@ -214,8 +214,8 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
   UnionSolid gasvolUnion0(gasvolTank, gasvolSnout, Position(0., 0., -vesselLength / 2. + windowThickness));
 
   // union: add sensorbox
-  UnionSolid vesselUnion(vesselUnion0, vesselSensorboxTube, Position(0., 0., -(tankLength + sensorboxLength) / 2.));
-  UnionSolid gasvolUnion(gasvolUnion0, gasvolSensorboxTube, Position(0., 0., -(tankLength + sensorboxLength) / 2. + windowThickness));
+  UnionSolid vesselUnion(vesselUnion0, vesselSensorboxTube, Position(0., 0., -(snoutLength + sensorboxLength) / 2.));
+  UnionSolid gasvolUnion(gasvolUnion0, gasvolSensorboxTube, Position(0., 0., -(snoutLength + sensorboxLength) / 2. + windowThickness));
 
   //  extra solids for `debugOptics` only
   Box vesselBox(1001, 1001, 1001);
