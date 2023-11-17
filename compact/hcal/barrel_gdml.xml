@@ -1,3 +1,6 @@
+<!-- SPDX-License-Identifier: LGPL-3.0-or-later -->
+<!-- Copyright (C) 2022 John Lajoie -->
+
 <lccdd>
 
     <!-- Define detector -->
@@ -6,18 +9,18 @@
       ### Barrel Hadronic Calorimeter
       </documentation>
       <detector
-	  id="HCalBarrel_ID"
-	  name="HcalBarrel"
-	  type="epic_HcalBarrelGDML"
-	  readout="HcalBarrelHits"
-	  vis="HcalBarrelVis"
-	  env_vis="HcalBarrelEnvelopeVis"
-	  rmin1="HcalBarrel_rmin"
-	  rmin2="ForwardServiceGap_rmax - 5.0"
-	  rmax="HcalBarrel_rmax"
-	  z1="SolenoidBarrel_length"
-	  z2="HcalBarrel_length"
-	  calorimeterType="HAD_BARREL">
+          id="HCalBarrel_ID"
+          name="HcalBarrel"
+          type="epic_HcalBarrelGDML"
+          readout="HcalBarrelHits"
+          vis="HcalBarrelVis"
+          env_vis="HcalBarrelEnvelopeVis"
+          rmin1="HcalBarrel_rmin"
+          rmin2="ForwardServiceGap_rmax - 5.0"
+          rmax="HcalBarrel_rmax"
+          z1="SolenoidBarrel_length"
+          z2="HcalBarrel_length"
+          calorimeterType="HAD_BARREL">
 
   <define>
 
@@ -1111,7 +1114,7 @@
   <readouts>
     <readout name="HcalBarrelHits">
       <segmentation type="NoSegmentation"/>
-      <id>system:8,barrel:3,sector:6,tower:6,tile:9</id>
+      <id>system:8,sector:5,tower:6,tile:3</id>
     </readout>
   </readouts>
 

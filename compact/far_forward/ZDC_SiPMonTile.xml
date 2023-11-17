@@ -1,0 +1,123 @@
+<!-- SPDX-License-Identifier: LGPL-3.0-or-later -->
+<!-- Copyright (C) 2023 Sebouh J. Paul -->
+<lccdd>
+  <info name="ZDC_SiPMonTile.xml"
+        title="SiPM-on-Tile Zero-Degree Calorimeter Hcal, Fe/Sc"
+        author="@sebouh137"
+        url="https://github.com/sebouh137"
+        status="development"
+        version="1.0"
+          ><comment/></info>
+
+  <define>
+    <documentation>
+      #### Material Thicknesses
+    </documentation>
+    <constant name="HcalFarForwardZDC_SiPMonTile_AirThickness"                  value="0.02*cm"/>
+    <constant name="HcalFarForwardZDC_SiPMonTile_AbsorberThickness"             value="2*cm"/>
+    <constant name="HcalFarForwardZDC_SiPMonTile_ScintillatorCoverThickness"    value="0.04*cm"/>
+    <constant name="HcalFarForwardZDC_SiPMonTile_PolystyreneThickness"          value="0.30*cm"/>
+    <constant name="HcalFarForwardZDC_SiPMonTile_PCBThickness"                  value="0.08*cm"/>
+    <constant name="HcalFarForwardZDC_SiPMonTile_ESRFoilThickness"              value="0.015*cm"/>
+
+    <documentation>
+      - ZDC N Layers and computed Thickness
+    </documentation>
+
+
+    <constant name="HcalFarForwardZDC_SiPMonTile_SingleLayerThickness"
+      value="HcalFarForwardZDC_SiPMonTile_AbsorberThickness +
+             HcalFarForwardZDC_SiPMonTile_PolystyreneThickness +
+             HcalFarForwardZDC_SiPMonTile_PCBThickness+HcalFarForwardZDC_SiPMonTile_ESRFoilThickness*2+
+             2*HcalFarForwardZDC_SiPMonTile_AirThickness+HcalFarForwardZDC_SiPMonTile_ScintillatorCoverThickness"
+      />
+
+    <constant name="HcalFarForwardZDC_SiPMonTile_BackplateThickness" value="HcalFarForwardZDC_SiPMonTile_AbsorberThickness"/>
+    <constant name="HcalFarForwardZDC_SiPMonTile_Layer_NSteelRepeat" value="64"/>
+
+    <constant name="HcalFarForwardZDC_SiPMonTile_HexSideLength" value="31.3*mm"/>
+    <constant name="HcalFarForwardZDC_SiPMonTile_stagger" value="2"/>
+
+    <constant name="HcalFarForwardZDC_SiPMonTile_width" value= "60*cm"/>
+    <constant name="HcalFarForwardZDC_SiPMonTile_height" value= "60*cm"/>
+    <constant name="HcalFarForwardZDC_SiPMonTile_length" value= "HcalFarForwardZDC_SiPMonTile_SingleLayerThickness*HcalFarForwardZDC_SiPMonTile_Layer_NSteelRepeat +
+           HcalFarForwardZDC_SiPMonTile_BackplateThickness"/>
+    <constant name="HcalFarForwardZDC_SiPMonTile_rotateX_angle" value="0*deg"/>
+    <constant name="HcalFarForwardZDC_SiPMonTile_rotateY_angle" value="ionCrossingAngle"/>
+    <constant name="HcalFarForwardZDC_SiPMonTile_rotateZ_angle" value="0*deg"/>
+
+    <constant name="HcalFarForwardZDC_SiPMonTile_r_pos_front_face" value="35.8*m"/>
+    <constant name="HcalFarForwardZDC_SiPMonTile_r_pos" value="HcalFarForwardZDC_SiPMonTile_r_pos_front_face + HcalFarForwardZDC_SiPMonTile_length/2.0"/>
+    <constant name="HcalFarForwardZDC_SiPMonTile_x_pos" value="sin(HcalFarForwardZDC_SiPMonTile_rotateY_angle)*HcalFarForwardZDC_SiPMonTile_r_pos"/>
+    <constant name="HcalFarForwardZDC_SiPMonTile_y_pos" value="0*m" />
+    <constant name="HcalFarForwardZDC_SiPMonTile_z_pos" value="cos(HcalFarForwardZDC_SiPMonTile_rotateY_angle)*HcalFarForwardZDC_SiPMonTile_r_pos"/>
+  </define>
+
+  <limits>
+  </limits>
+
+  <regions>
+  </regions>
+
+  <display>
+  </display>
+
+  <detectors>
+      <documentation>
+      ### SiPM-on-tile Zero-Degree Calorimeter Hcal
+
+      Each of the layers includes air gaps (front and back of each layer),
+      ESR foil (front and back of scintillator), a PCB, and an aluminum scitnillator cover
+
+    </documentation>
+    <detector
+      id="HcalFarForwardZDC_SiPMonTile_ID"
+      name="ZDC SiPM-on-Tile Hcal"
+      type="ZeroDegreeCalorimeterSiPMonTile"
+      readout="HcalFarForwardZDCHits"
+      vis="InvisibleWithDaughters"
+    >
+      <position x="HcalFarForwardZDC_SiPMonTile_x_pos"         y="HcalFarForwardZDC_SiPMonTile_y_pos"         z="HcalFarForwardZDC_SiPMonTile_z_pos"/>
+      <rotation x="HcalFarForwardZDC_SiPMonTile_rotateX_angle" y="HcalFarForwardZDC_SiPMonTile_rotateY_angle" z="HcalFarForwardZDC_SiPMonTile_rotateZ_angle"/>
+      <dimensions
+        x="HcalFarForwardZDC_SiPMonTile_width"
+        y="HcalFarForwardZDC_SiPMonTile_height"
+        z="HcalFarForwardZDC_SiPMonTile_length"
+      />
+      <comment> Slices will be ordered according to the slice order listed here </comment>
+      <comment> Steel/Sc layers </comment>
+      <layer repeat="HcalFarForwardZDC_SiPMonTile_Layer_NSteelRepeat" thickness="HcalFarForwardZDC_SiPMonTile_SingleLayerThickness" vis="InvisibleWithDaughters">
+        <slice name="Absorber_slice" material="Steel235" thickness="HcalFarForwardZDC_SiPMonTile_AbsorberThickness" vis="AnlGray"/>
+        <slice name="Air_slice" material="Air" thickness="HcalFarForwardZDC_SiPMonTile_AirThickness"/>
+        <slice name="ScintCover_slice" material="Aluminum" thickness="HcalFarForwardZDC_SiPMonTile_ScintillatorCoverThickness"/>
+        <slice name="ESRFoil_slice" material="Polystyrene" thickness="HcalFarForwardZDC_SiPMonTile_ESRFoilThickness"/>
+        <slice name="Scintillator_slice" material="Polystyrene" thickness="HcalFarForwardZDC_SiPMonTile_PolystyreneThickness" vis="AnlOrange" sensitive="true"/>
+        <slice name="ESRFoil_slice" material="Polystyrene" thickness="HcalFarForwardZDC_SiPMonTile_ESRFoilThickness"/>
+        <slice name="PCB_slice" material="Fr4" thickness="HcalFarForwardZDC_SiPMonTile_PCBThickness"/>
+        <slice name="Air_slice" material="Air" thickness="HcalFarForwardZDC_SiPMonTile_AirThickness"/>
+      </layer>
+      <comment> Final layer of steel </comment>
+      <layer repeat="1" thickness="HcalFarForwardZDC_SiPMonTile_BackplateThickness">
+        <slice name="Absorber_slice" material="Steel235" thickness="HcalFarForwardZDC_SiPMonTile_BackplateThickness" vis="AnlGray"/>
+      </layer>
+    </detector>
+  </detectors>
+
+  <readouts>
+    <readout name="HcalFarForwardZDCHits">
+      <segmentation
+        type="HexGrid"
+        side_length="HcalFarForwardZDC_SiPMonTile_HexSideLength"
+        stagger="HcalFarForwardZDC_SiPMonTile_stagger"
+        />
+      <id>system:8,layer:8,slice:5,x:32:-16,y:-16</id>
+    </readout>
+  </readouts>
+
+  <plugins>
+  </plugins>
+
+  <fields>
+  </fields>
+
+</lccdd>

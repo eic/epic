@@ -1,3 +1,7 @@
+#!/usr/bin/env python3
+# SPDX-License-Identifier: LGPL-3.0-or-later
+# Copyright (C) 2022 Wouter Deconinck
+
 from __future__ import absolute_import, unicode_literals
 import os
 import time
@@ -10,8 +14,8 @@ parser = argparse.ArgumentParser(
      epilog='''
      This program converts the compact detector file to a single GDML file.
          ''')
-parser.add_argument("-c", "--compact", help="compact detector file",default="athena.xml")
-parser.add_argument("-o", "--output", help="gdml detector file",default="athena.gdml")
+parser.add_argument("-c", "--compact", help="compact detector file",default=f'{os.getenv("DETECTOR_PATH")}/{os.getenv("DETECTOR")}.xml')
+parser.add_argument("-o", "--output", help="gdml detector file",default=f'{os.getenv("DETECTOR")}.gdml')
 
 args = parser.parse_args()
 

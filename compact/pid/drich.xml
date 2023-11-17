@@ -1,44 +1,58 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<!-- SPDX-License-Identifier: LGPL-3.0-or-later -->
+<!-- Copyright (C) 2022, 2023 Christopher Dilks, Chandradoy Chatterjee, Junhuai Xu -->
+
 <lccdd>
 
 <define>
 <!-- vessel (=snout+tank) geometry -->
-<constant name="DRICH_Length"             value="ForwardRICHRegion_length"/>  <!-- overall vessel length -->
+<constant name="DRICH_length"             value="ForwardRICHRegion_length"/>  <!-- overall vessel length -->
 <constant name="DRICH_zmin"               value="ForwardRICHRegion_zmin"/>
-<constant name="DRICH_zmax"               value="DRICH_zmin + DRICH_Length"/>
+<constant name="DRICH_zmax"               value="DRICH_zmin + DRICH_length"/>
 <constant name="DRICH_rmin0"              value="DRICH_zmin * ForwardRICHRegion_tan1"/>  <!-- bore radius at dRICH entrance -->
 <constant name="DRICH_rmin1"              value="DRICH_zmax * ForwardRICHRegion_tan2"/>  <!-- bore radius at dRICH exit -->
-<constant name="DRICH_wall_thickness"     value="0.5*cm"/>  <!-- thickness of radial walls -->
-<constant name="DRICH_window_thickness"   value="0.1*cm"/>  <!-- thickness of entrance and exit walls -->
+<constant name="DRICH_bore_slope"         value="(DRICH_rmin1 - DRICH_rmin0) / DRICH_length"/> <!-- slope of bore radius -->
+<constant name="DRICH_wall_thickness"     value="1.0*cm"/>  <!-- thickness of radial walls -->
+<constant name="DRICH_window_thickness"   value="0.3*cm"/>  <!-- thickness of entrance and exit walls -->
+<constant name="DRICH_num_sectors"        value="6"/>  <!-- number of azimuthal sectors -->
 <!-- snout geometry: cone with front radius rmax0 and back radius of rmax1 -->
-<constant name="DRICH_rmax0"              value="110.0*cm"/>
-<constant name="DRICH_SnoutLength"        value="20.0*cm"/>
-<constant name="DRICH_SnoutSlope"         value="DRICH_rmax0 / DRICH_zmin"/> <!-- TODO: increase slope to allow more space for aerogel cones ? -->
-<constant name="DRICH_rmax1"              value="DRICH_rmax0 + DRICH_SnoutLength * DRICH_SnoutSlope"/>
+<constant name="DRICH_rmax0"              value="90.0*cm"/>
+<constant name="DRICH_snout_length"       value="20.0*cm"/>
+<constant name="DRICH_rmax1"              value="DRICH_rmax0 + DRICH_snout_length * (tan(0.200+atan(DRICH_rmax0/DRICH_zmin))) "/>  <!--extra 0.200 takes into account the saturated cone of light from aerogel-->
 <!-- tank geometry: cylinder, holding the majority of detector components -->
 <constant name="DRICH_rmax2"              value="ForwardPIDRegion_rmax"/>  <!-- cylinder radius -->
+<!-- sensor boxes: extrusions of the tank, to hold the sensors and their services -->
+<constant name="DRICH_sensorbox_length"   value="10.0*cm"/>  <!-- z-length of the extrusion -->
+<constant name="DRICH_sensorbox_rmin"     value="DRICH_rmax1 + 2*cm"/>  <!-- lower radial limit of the extrusion -->
+<constant name="DRICH_sensorbox_rmax"     value="DRICH_rmax2"/>  <!-- upper radial limit of the extrusion -->
 <!-- aerogel+filter geometry -->
 <constant name="DRICH_aerogel_thickness"  value="4.0*cm"/>  <!-- aerogel thickness -->
-<constant name="DRICH_filter_thickness"   value="0.3*mm"/>  <!-- filter thickness -->
-<constant name="DRICH_aerogel_filter_gap" value="0.01*mm"/> <!-- air gap between aerogel and filter FIXME: currently a gas gap -->
+<constant name="DRICH_airgap_thickness"   value="0.01*mm"/> <!-- air gap between aerogel and filter -->
+<constant name="DRICH_filter_thickness"   value="3.0*mm"/>  <!-- filter thickness -->
 <!-- sensor geometry; model = S13361-3050NE-08 SiPM -->
-<constant name="DRICH_sensor_size"           value="25.8*mm"/> <!-- full length of the sensor side FIXME: resin base should be this size -->
-<constant name="DRICH_pixel_gap"             value="0.2*mm"/> <!-- size of gaps between adjacent pixels AND gaps between edge pixels and sensor side -->
-<constant name="DRICH_sensor_sensitive_size" value="DRICH_sensor_size - DRICH_pixel_gap"/> <!-- side length of photosensitive surface (to be segmented) -->
-<constant name="DRICH_sensor_thickness"      value="0.5*mm"/>  <!-- sensor thickness FIXME: use the real thickness + resin -->
-<constant name="DRICH_num_px"                value="8"/>       <!-- number of pixels along one side of the sensor -->
-<constant name="DRICH_pixel_size"            value="3.0*mm"/>  <!-- a single SiPM pixel size -->
-<constant name="DRICH_pixel_pitch"           value="DRICH_pixel_size + DRICH_pixel_gap"/>  <!-- center-to-center distance between SiPMs in a 8x8 panel -->
+<constant name="DRICH_pixel_gap"              value="0.2*mm"/> <!-- size of gaps between adjacent pixels AND gaps between edge pixels and sensor side -->
+<constant name="DRICH_sensor_resin_size"      value="25.8*mm"/> <!-- full length of the sensor+resin side -->
+<constant name="DRICH_sensor_size"            value="DRICH_sensor_resin_size - DRICH_pixel_gap"/> <!-- side length of photosensitive surface (to be segmented) -->
+<constant name="DRICH_sensor_thickness"       value="0.1*mm"/> <!-- photosensitive surface thickness -->
+<constant name="DRICH_sensor_resin_thickness" value="1.35*mm"/> <!-- resin thickness -->
+<constant name="DRICH_num_px"                 value="8"/> <!-- number of pixels along one side of the sensor -->
+<constant name="DRICH_pixel_size"             value="3.0*mm"/> <!-- a single SiPM pixel size -->
+<constant name="DRICH_pixel_pitch"            value="DRICH_pixel_size + DRICH_pixel_gap"/> <!-- center-to-center distance between SiPMs in a 8x8 panel -->
+<!-- photodetector unit (PDU) geometry -->
+<constant name="DRICH_pdu_num_sensors" value="2"/> <!-- number of sensors along one side of a PDU -->
+<constant name="DRICH_pdu_sensor_gap"  value="0.2*mm"/> <!-- gap between adjacent sensors -->
+<constant name="DRICH_pdu_gap"         value="3.0*mm"/> <!-- gap between adjacent PDUs -->
 <!-- settings and switches -->
 <comment>
 - `DRICH_debug_optics`:    1 = all components become vacuum, except for mirrors; test opticalphotons from IP
                            2 = all components become vacuum, except for mirrors and `gasvol`, test charged particles from IP
                            3 = all components become vacuum, except for mirrors and sensors, test reflected trajectories' hits
                            0 = off
+- `DRICH_debug_sector`:    1 = only include one sector (will be set automatically when `DRICH_debug_optics>0`)
 - `DRICH_debug_mirror`:    1 = draw full mirror shape for single sector; 0 = off
 - `DRICH_debug_sensors`:   1 = draw full sensor sphere for a single sector; 0 = off
 </comment>
 <constant name="DRICH_debug_optics"    value="0"/>
+<constant name="DRICH_debug_sector"    value="0"/>
 <constant name="DRICH_debug_mirror"    value="0"/>
 <constant name="DRICH_debug_sensors"   value="0"/>
 </define>
@@ -82,14 +96,14 @@
 </documentation>
 <dimensions
   zmin="DRICH_zmin"
-  length="DRICH_Length"
-  snout_length="DRICH_SnoutLength"
+  length="DRICH_length"
+  snout_length="DRICH_snout_length"
   rmin0="DRICH_rmin0"
   rmin1="DRICH_rmin1"
   rmax0="DRICH_rmax0"
   rmax1="DRICH_rmax1"
   rmax2="DRICH_rmax2"
-  nsectors="6"
+  nsectors="DRICH_num_sectors"
   wall_thickness="DRICH_wall_thickness"
   window_thickness="DRICH_window_thickness"
   />
@@ -121,7 +135,7 @@
   <airgap
     material="AirOptical"
     vis="DRICH_gas_vis"
-    thickness="DRICH_aerogel_filter_gap"
+    thickness="DRICH_airgap_thickness"
     />
   <filter
     material="Acrylic_DRICH"
@@ -152,13 +166,13 @@
   material="Acrylic_DRICH"
   surface="MirrorSurface_DRICH"
   vis="DRICH_mirror_vis"
-  backplane="DRICH_window_thickness + 2.0*cm"
+  backplane="DRICH_window_thickness + 1.0*cm"
   rmin="DRICH_rmin1 + DRICH_wall_thickness - 1.0*cm"
   rmax="DRICH_rmax2 - DRICH_wall_thickness - 3.0*cm"
   phiw="59.5*degree"
   thickness="0.2*cm"
-  focus_tune_x="-5.0*cm"
-  focus_tune_z="0.0*cm"
+  focus_tune_x="-7.00*cm"
+  focus_tune_z="6.15*cm"
   />
 
 <!-- /detectors/detector/sensors -->
@@ -168,25 +182,128 @@
 <sensors>
 
 
-<!-- /detectors/detector/sensors/module -->
 <documentation level="10">
-##### Sensor module
-- dimensions:
-  - `side`: side length of the square module
-  - `thickness`: thickness of the sensor module
-  - `gap`: provides room between the squares, to help prevent them from overlapping
-  - note: the value of `side` will determine how many sensors there are, since the
+##### Sensor modules: photosensitive surface (pss) + resin base
+- SiPM: Silicon Photomultiplier
+  - PSS: photosensitive surface
+  - resin: resin substrate (holds the PSS)
+  - dimensions:
+    - `side`: side length
+    - `thickness`: thickness
+- PDU: Photodetector Unit (dimensions defined as constants above)
+  - note: the PDU pitch will determine how many PDUs there are, since the
     sensor placement algorithm will try to place as many as it can in the specified
     spherical patch below
+  - Front Services: cooling, heat exchange, etc.
+    - so far just a box with `side` and `thickness` dimensions
+    - includes a unique `name`, and `material` and `vis`
+    - if more than one is defined, they will be layered, in order
+  - Board: a circuit board (front end board, readout board, etc.)
+    - dimensions:
+      - `width`: board side length, paralell to PSS
+      - `length`: board side length, perpendicular to PSS
+      - `thickness: board thickness
+      - `offset`: positioning, with respect to PDU central axis
+  - Back Services: sockets, cooling, etc.
+    - so far just a box with `side` and `thickness` dimensions
+    - includes a unique `name`, and `material` and `vis`
+    - if more than one is defined, they will be layered, in order
+
+###### Diagrams
+```
+ sensor assembly diagram:, where '0' denotes the origin:
+
+                                axes:  z
+   +-+--------0--------+-+             |
+   | |       pss       | |             0--x
+   | +-----------------+ |
+   |        resin        |
+   +---------------------+
+
+```
+```
+photodetector unit (PDU) assembly diagram: matrix of SiPMs with services
+
+   Top view: 2x2 matrix of SiPMs (2 PDU units shown side-by-side)
+   =============================
+
+              -:  :- PDU gap size
+               :  :
+   +-----------+  +-----------+
+   | +--+ +--+ |  | +--+ +--+ |
+   | |  | |  | |  | |  | |  | |
+   | +--+ +--+ |  | +--+ +--+ |
+   | +--+ +--+ |  | +--+ +--+ |
+   | |  | |  | |  | |  | |  | |
+   | +--+ +--+ |  | +--+ +--+ |
+   +-----------+  +-----------+
+        : :  : :
+        : : -: :- sensor gap size
+        : :
+       -: :- sensor gap size (same)
+
+    Side view:
+    ==========
+
+    +--------------------+
+    |     SiPM Matrix    |
+    +--------------------+
+    |   Cooling, heat    |  frontservices
+    |   exchange, etc.   |
+    +--------------------+
+      ||  ||  ||  ||  ||
+      ||  ||  ||  ||  || front-end and
+      ||  ||  ||  ||  || readout boards
+      ||  ||  ||  ||  ||
+      ||  ||  ||  ||  ||
+              ||
+              ||
+      +----------------+
+      | Sockets, etc.  |  backservices
+      +----------------+
+
+```
 </documentation>
-<module
+<pss
   material="AirOptical"
   surface="SensorSurface_DRICH"
   vis="DRICH_sensor_vis"
-  side="DRICH_sensor_sensitive_size"
+  side="DRICH_sensor_size"
   thickness="DRICH_sensor_thickness"
-  gap="0.3*mm"
   />
+<resin
+  material="Epoxy"
+  vis="DRICH_vessel_vis"
+  side="DRICH_sensor_resin_size"
+  thickness="DRICH_sensor_resin_thickness"
+  />
+<pdu>
+  <frontservices>
+    <service
+      name="cooling"
+      side="DRICH_pdu_num_sensors * (DRICH_sensor_resin_size + DRICH_pdu_sensor_gap) + DRICH_pdu_sensor_gap"
+      thickness="2.0*cm"
+      material="Aluminum"
+      vis="DRICH_aerogel_vis"
+      />
+  </frontservices>
+  <boards material="Aluminum" vis="DRICH_service_vis">
+    <board name="FEB0" width="4.2*cm" length="6.0*cm" thickness="0.2*cm" offset="-2.0*cm" />
+    <board name="FEB1" width="4.2*cm" length="6.0*cm" thickness="0.2*cm" offset="-1.0*cm" />
+    <board name="RDO"  width="4.2*cm" length="9.0*cm" thickness="0.2*cm" offset="0.0*cm"  />
+    <board name="FEB2" width="4.2*cm" length="6.0*cm" thickness="0.2*cm" offset="1.0*cm"  />
+    <board name="FEB3" width="4.2*cm" length="6.0*cm" thickness="0.2*cm" offset="2.0*cm"  />
+  </boards>
+  <backservices>
+    <service
+      name="socket"
+      side="4.5*cm"
+      thickness="2.0*cm"
+      material="Aluminum"
+      vis="DRICH_aerogel_vis"
+      />
+  </backservices>
+</pdu>
 
 
 <!-- /detectors/detector/sensors/{sphere,sphericalpatch} -->
@@ -205,15 +322,15 @@
     - `zmin`: z-plane cut
 </documentation>
 <sphere
-  centerz="-50.0*cm"
-  centerx="180.0*cm"
-  radius="100.0*cm"
+  centerz="138.4*cm - DRICH_zmin"
+  centerx="183.4*cm"
+  radius="110.0*cm"
   />
 <sphericalpatch
-  phiw="18*degree"
-  rmin="DRICH_rmax1 + 2.0*cm"
-  rmax="DRICH_rmax2 - 5.0*cm"
-  zmin="DRICH_SnoutLength + 5.0*cm"
+  phiw="30*degree"
+  rmin="111.0*cm"
+  rmax="179.0*cm"
+  zmin="DRICH_snout_length + 4.0*cm"
   />
 
 
@@ -238,9 +355,7 @@
       offset_x="-0.5*(DRICH_num_px-1)*DRICH_pixel_pitch"
       offset_y="-0.5*(DRICH_num_px-1)*DRICH_pixel_pitch"
       />
-    <id>system:8,sector:3,module:12,x:32:-16,y:-16</id>
+    <id>system:8,sector:3,pdu:12,sipm:6,x:32:-16,y:-16</id>
   </readout>
 </readouts>
-
-
 </lccdd>

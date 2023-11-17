@@ -1,6 +1,7 @@
 features:
   beampipe:
   tracking:
+    definitions:
     vertex_barrel:
     silicon_barrel:
     mpgd_barrel:
@@ -11,16 +12,16 @@ features:
     tof_endcap:
   pid:
     dirc:
-    mrich:
+    pfrich:
     drich:
   ecal:
     forward_homogeneous:
     forward_insert_homogeneous:
-    barrel_sciglass:
+    barrel_interlayers:
     backward_PbWO4:
   solenoid:
   hcal:
-    forward:
+    lfhcal_with_space_for_insert:
     forward_insert:
     barrel_gdml:
     backward:

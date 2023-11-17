@@ -1,3 +1,6 @@
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (C) 2022 Ryan Milton
+
 //==========================================================================
 //  Implementation of forward insert calorimeter
 //--------------------------------------------------------------------------
@@ -19,9 +22,9 @@ static Ref_t createDetector(Detector& desc, xml_h handle, SensitiveDetector sens
   int         detID   = detElem.id();
 
   xml_dim_t dim    = detElem.dimensions();
-  double    width  = dim.x(); // Size along x-axis
-  double    height = dim.y(); // Size along y-axis
-  double    length = dim.z(); // Size along z-axis
+  double    width  = dim.x();         // Size along x-axis
+  double    height = dim.y();         // Size along y-axis
+  double    length = dim.z();         // Size along z-axis
 
   xml_dim_t pos = detElem.position(); // Position in global coordinates
 
@@ -32,14 +35,14 @@ static Ref_t createDetector(Detector& desc, xml_h handle, SensitiveDetector sens
   const double          hole_radius_initial =
       dd4hep::getAttrOrDefault<double>(beampipe_hole_xml, _Unicode(initial_hole_radius), 14.61 * cm);
   const double hole_radius_final =
-      dd4hep::getAttrOrDefault<double>(beampipe_hole_xml, _Unicode(final_hole_radius), 17.04 * cm);
+      dd4hep::getAttrOrDefault<double>(beampipe_hole_xml, _Unicode(final_hole_radius), 17.17 * cm);
   const std::pair<double, double> hole_radii_parameters(hole_radius_initial, hole_radius_final);
 
   // Subtract by pos.x() and pos.y() to convert from global to local coordinates
   const double hole_x_initial =
       dd4hep::getAttrOrDefault<double>(beampipe_hole_xml, _Unicode(initial_hole_x), -7.20 * cm) - pos.x();
   const double hole_x_final =
-      dd4hep::getAttrOrDefault<double>(beampipe_hole_xml, _Unicode(final_hole_x), -10.27 * cm) - pos.x();
+      dd4hep::getAttrOrDefault<double>(beampipe_hole_xml, _Unicode(final_hole_x), -10.44 * cm) - pos.x();
   const std::pair<double, double> hole_x_parameters(hole_x_initial, hole_x_final);
 
   const double hole_y_initial =
@@ -57,7 +60,8 @@ static Ref_t createDetector(Detector& desc, xml_h handle, SensitiveDetector sens
     For the ECal insert, the hole radius & position is constant
     Also has only one layer so don't have a backplate_thickness there (so set to 0)
   */
-  auto backplate_thickness = detElem.hasChild(_Unicode(backplate))? detElem.child(_Unicode(backplate)).attr<double>(_Unicode(thickness)) : 0.;
+  auto backplate_thickness =
+      detElem.hasChild(_Unicode(backplate)) ? detElem.child(_Unicode(backplate)).attr<double>(_Unicode(thickness)) : 0.;
 
   // Function that returns a linearly interpolated hole radius, x-position, and y-position at a given z
   auto get_hole_rxy = [hole_radii_parameters, hole_x_parameters, hole_y_parameters, length,
@@ -85,7 +89,8 @@ static Ref_t createDetector(Detector& desc, xml_h handle, SensitiveDetector sens
 
   // Assembly that will contain all the layers
   Assembly assembly(detName);
-
+  // FIXME Workaround for https://github.com/eic/epic/issues/411
+  assembly.setVisAttributes(desc.visAttributes("InvisibleWithDaughters"));
   PlacedVolume pv;
 
   // Keeps track of the z location as we move longiduinally through the insert

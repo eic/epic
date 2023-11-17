@@ -15,6 +15,7 @@ concurrency:
 jobs:
   build-lcg-ubuntu-2004:
     runs-on: ubuntu-20.04
+    if: ${{ false }}  # Note: disabled until LCG has at least DD4hep 1.21 (LCG_103 or beyond)
     strategy:
       fail-fast: false
       matrix:
@@ -29,17 +30,8 @@ jobs:
         release-platform: ${{ matrix.LCG }}
         run: |
           PREFIX=${PWD}/install
-          # install ip6 repo
-          git clone https://github.com/eic/ip6.git eic_ip6
-          pushd eic_ip6
           cmake -B build -S . -DCMAKE_INSTALL_PREFIX=${PREFIX}
           cmake --build build -- install
-          popd
-          # install this repo
-          cmake -B build -S . -DCMAKE_INSTALL_PREFIX=${PREFIX}
-          cmake --build build -- install
-          # link ip6 into install
-          ln -sf ../ip6/ip6 ${PREFIX}/share/epic/ip6
           # check geometry
           source ${PREFIX}/setup.sh
           checkGeometry -c ${DETECTOR_PATH}/${DETECTOR}.xml

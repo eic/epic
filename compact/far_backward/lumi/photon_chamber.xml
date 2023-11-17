@@ -1,0 +1,30 @@
+<!-- SPDX-License-Identifier: LGPL-3.0-or-later -->
+<!-- Copyright (C) 2023 Dhevan Gangadharan -->
+
+<lccdd>
+
+  <comment>
+    Chamber that encapsulates the lumi photons.
+    Contains the vacuum tube + end caps + conversion foil inside.
+    rmin (half width) claculated as 5*sigma of max electron beam divergence.
+  </comment>
+
+  <define>
+  </define>
+
+  <detectors>
+    <detector
+      name="LumiPhotonChamber"
+      type="LumiPhotonChamber"
+      pipeMaterial="Aluminum"
+      entrCapMaterial="Aluminum"
+      exitCapMaterial="Beryllium"
+      convMaterial="Aluminum"
+      fillMaterial="Vacuum"
+      vis="AnlLightGray">
+      <position z1="LumiChamber_Z1" z2="LumiChamber_Z2" z_conv="LumiConverter_Z"/>
+      <dimensions rmin="LumiBeamDiv_pref * fabs(LumiChamber_Z2)" pipe_dr="LumiChamber_DR" entrCap_dz="LumiChamber_entrCap_DZ" exitCap_dz="LumiChamber_exitCap_DZ" conv_dz="LumiConverter_DZ"/>
+    </detector>
+  </detectors>
+
+</lccdd>

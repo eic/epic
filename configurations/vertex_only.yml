@@ -1,2 +1,6 @@
 features:
-  vertex:
+  fields:
+    marco:
+  tracking:
+    definitions:
+    vertex_barrel:

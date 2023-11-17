@@ -1,3 +1,6 @@
+<!-- SPDX-License-Identifier: LGPL-3.0-or-later -->
+<!-- Copyright (C) 2022 Zhenyu Ye -->
+
 <lccdd>
 
   <comment>RWell tracker barrel based on Fun4All implementation https://www.dropbox.com/sh/j4n4g5h80g9tai6/AAAzmXSHRGQCShoSiewe6HCDa?dl=0 Where the detector is constructed in the G4_RWell.C and Build_G4_RWell_Sup01.C files

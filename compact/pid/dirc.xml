@@ -1,3 +1,6 @@
+<!-- SPDX-License-Identifier: LGPL-3.0-or-later -->
+<!-- Copyright (C) 2022 Dmitry Romanov, Whitney Armstrong, Sylvester Joosten, Wouter Deconinck -->
+
 <lccdd>
 
   <comment>
@@ -29,8 +32,12 @@
     <constant name="DIRCPrism_height"       value="DIRCPrism_long_edge"/>
 
     <!-- Box - main DIRC modules -->
-    <constant name="DIRCBox_count"          value="12"  comment="Number of DIRC boxes per... DIRC. 12 - default"/>
+    <constant name="DIRCBox_count"          value="12" comment="Number of DIRC boxes. 12 - default"/>
     <constant name="DIRCBox_width"          value="DIRCPrism_width"/>
+
+    <!-- Bar - number in each direction -->
+    <constant name="DIRCBar_count_y"        value="10" comment="Number of bars per box in y direction"/>
+    <constant name="DIRCBar_count_z"        value="4" comment="Number of bars per box in z direction"/>
 
     <!-- Mirror -->
     <constant name="DIRCMirror_height"      value="20 * mm"/>
@@ -42,8 +49,8 @@
     <constant name="DIRCLens_r1"            value="62 * mm"/>
     <constant name="DIRCLens_r2"            value="36 * mm"/>
     <constant name="DIRCLens_height"        value="50 * mm"/>
-    <constant name="DIRCLens_shift"         value="10 * mm" comment="Shift of optical axis compared to bar center"/>
-    <constant name="DIRCLens_width"         value="DIRCPrism_width"/>
+    <constant name="DIRCLens_shift"         value="0 * mm" comment="Shift of optical axis compared to bar center"/>
+    <constant name="DIRCLens_width"         value="DIRCPrism_width / DIRCBar_count_y"/>
 
     <!-- MCP -->
     <constant name="DIRCMCP_height"          value="DIRCPrism_height"/>
@@ -53,8 +60,6 @@
     <!-- Bar - Each DIRC box consists of N "bars" -->
     <!-- BarAssembly - Bars + Glue -->
     <constant name="DIRCBarAssm_length"     value="DIRC_length - DIRCPrism_length - DIRCMirror_thickness - DIRCLens_thickness - DIRCMCP_thickness" comment="Length of bars+glue assembly"/>
-    <constant name="DIRCBar_count_y"        value="10" comment="Number of bars per box in y direction"/>
-    <constant name="DIRCBar_count_z"        value="4" comment="Number of bars per box in z direction"/>
     <constant name="DIRCBar_gap"            value="0.15 * mm"/>
     <constant name="DIRCBar_height"         value="17 * mm"/>
     <constant name="DIRCBar_width"          value="(DIRCPrism_width - (DIRCBar_count_y - 1) * DIRCBar_gap) / DIRCBar_count_y"/>
@@ -91,7 +96,7 @@
   <display>
     <vis name="DIRCTube"   ref="AnlTeal" alpha="0.1" visible="true"  showDaughters="true"   lineStyle="solid" drawingStyle="solid" />
     <vis name="DIRCBox"    ref="AnlLight_Gray" alpha="0.1" visible="true"  showDaughters="true"   lineStyle="solid" drawingStyle="solid" />
-    <vis name="DIRCLens1"  ref="AnlProcess_Blue" visible="true"  showDaughters="false"  lineStyle="solid" drawingStyle="solid" />
+    <vis name="DIRCLens1"  ref="AnlTeal" visible="true"  showDaughters="false"  lineStyle="solid" drawingStyle="solid" />
     <vis name="DIRCLens2"  ref="AnlProcess_Blue" visible="true"  showDaughters="false"  lineStyle="solid" drawingStyle="solid" />
     <vis name="DIRCLens3"  ref="AnlTeal" visible="true"  showDaughters="false"  lineStyle="solid" drawingStyle="solid" />
     <vis name="DIRCBar"    ref="AnlTeal" visible="true"  showDaughters="false"  lineStyle="solid" drawingStyle="solid" />
@@ -128,7 +133,11 @@
           vis="DIRCBar"
         />
 
-        <glue thickness="DIRCGlue_thickness" material="Epotek" vis="DIRCGlue"/>
+        <glue
+          thickness="DIRCGlue_thickness"
+          material="Epotek"
+          vis="DIRCGlue"
+        />
 
         <!-- lens -->
         <lens
@@ -139,7 +148,7 @@
           r1="DIRCLens_r1"
           r2="DIRCLens_r2"
           material1="Quartz"
-          material2="Nlak33a"
+          material2="Sapphire"
           material3="Quartz"
           vis1="DIRCLens1"
           vis2="DIRCLens2"

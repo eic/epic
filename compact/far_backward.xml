@@ -1,0 +1,14 @@
+<!-- SPDX-License-Identifier: LGPL-3.0-or-later -->
+<!-- Copyright (C) 2022 Wouter Deconinck, Simon Gardner -->
+
+<lccdd>
+
+  <include ref="far_backward/magnets.xml"/>
+
+  <!-- Scattered electron taggers -->
+  <include ref="far_backward/taggers.xml"/>
+
+  <!-- Luminosity detector -->
+  <include ref="far_backward/lumi.xml"/>
+
+</lccdd>

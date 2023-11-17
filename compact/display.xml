@@ -1,3 +1,6 @@
+<!-- SPDX-License-Identifier: LGPL-3.0-or-later -->
+<!-- Copyright (C) 2022 Sylvester Joosten, Whitney Armstrong, Zhenyu Ye, Christopher Dilks -->
+
   <display>
 
     <comment>
@@ -61,12 +64,14 @@
     </comment>
     <vis name="EcalVis"                 ref="AnlGold"   showDaughters="true"  visible="true"/>
     <vis name="EcalBarrelVis"           ref="AnlGold"   showDaughters="false" visible="true"/>
+    <vis name="EcalBarrelSectorVis"     ref="AnlGold"   showDaughters="true"  visible="true"/>
     <vis name="EcalBarrelStaveVis"      ref="AnlOrange" showDaughters="false" visible="true" />
-    <vis name="EcalBarrelEnvelopeVis"   ref="AnlGold" showDaughters="false" visible="true" />
-    <vis name="EcalBarrelSupportVis"    ref="AnlOrange" showDaughters="false" visible="true"/>
+    <vis name="EcalBarrelEnvelopeVis"   ref="AnlGold"   showDaughters="false" visible="true" />
     <vis name="EcalBarrelLayerVis"      ref="AnlGold"   showDaughters="true"  visible="true"/>
+    <vis name="EcalBarrelModuleVis"     ref="AnlRed"    showDaughters="false" visible="true" />
     <vis name="EcalBarrelSliceVis"      ref="AnlGray"   showDaughters="false" visible="true"/>
     <vis name="EcalBarrelFiberLayerVis" ref="AnlGold"   showDaughters="false" visible="true" />
+    <vis name="EcalBarrelSupportVis"    ref="AnlLightGray" showDaughters="false" visible="true"/>
 
     <vis name="EcalEndcapVis"           ref="AnlGold"   showDaughters="true" visible="false"/>
     <vis name="EcalEndcapLayerVis"      ref="AnlGold"   showDaughters="false" visible="true"/>
@@ -92,7 +97,7 @@
     <vis name="HcalSensorVis"         ref="AnlBlue"   showDaughters="false" visible="false"/>
     <vis name="HcalAbsorberVis"       ref="AnlGray"   showDaughters="false" visible="false"/>
     <vis name="HcalEndcapInsertVis"   ref="AnlGray"   showDaughters="false" visible="true"/>
-
+    <vis name="LFHCALVis"             ref="AnlBlue"   showDaughters="true" visible="true"/>
     <comment>
       Passive steel for flux return
     </comment>
@@ -129,20 +134,29 @@
       ZDC visualization
     </comment>
 
-    <vis name="ffi_ZDC_ECAL_Vis"        ref="AnlGreen" showDaughters="true"  visible="true"/>
-    <vis name="ffi_ZDC_ECAL_module_Vis" ref="AnlRed"   showDaughters="false" visible="true"/>
-    <vis name="ffi_ZDC_HCAL_Vis"        ref="AnlBlue"  showDaughters="true"  visible="true"/>
+    <vis name="ZDC_Ecal_Vis"        ref="AnlGreen" showDaughters="true"  visible="true"/>
+    <vis name="ZDC_Ecal_module_Vis" ref="AnlRed"   showDaughters="false" visible="true"/>
+    <vis name="ZDC_Hcal_Vis"        ref="AnlBlue"  showDaughters="true"  visible="true"/>
+
+    <comment>
+      Backwards beamline vacuum
+    </comment>
+    <vis name="BackwardsBox"      alpha="0.3" ref="AnlGray"       showDaughters="true" visible="true"/>
+    <vis name="BackwardsAir"      alpha="0.7" ref="AnlBlue"       showDaughters="true" visible="true"/>
+    <vis name="BackwardsVac"      alpha="0.1" ref="AnlLight_Gray" showDaughters="true" visible="true"/>
 
     <comment>
       PID visualization
     </comment>
+    <vis name="TOF_envelope"     ref="AnlBlue" drawingStyle="wireframe" showDaughters="true" visible="true" />
 
-    <vis name="DRICH_vessel_vis"  ref="AnlGray" showDaughters="true" visible="true" />
-    <vis name="DRICH_gas_vis"     ref="AnlGreen" alpha="0.5" showDaughters="true" visible="true" />
-    <vis name="DRICH_aerogel_vis" ref="AnlTeal" showDaughters="true" visible="true" />
-    <vis name="DRICH_filter_vis"  alpha="1.0" r="1.0" g="1.0" b="0.0" showDaughters="true" visible="true" />
-    <vis name="DRICH_mirror_vis"  ref="AnlGray" showDaughters="true" visible="true" />
-    <vis name="DRICH_sensor_vis"  ref="AnlBlue" showDaughters="true" visible="true" />
+    <vis name="DRICH_vessel_vis"  ref="AnlGray"      showDaughters="true" visible="true" />
+    <vis name="DRICH_gas_vis"     ref="AnlGreen"     showDaughters="true" visible="true" alpha="0.5" />
+    <vis name="DRICH_aerogel_vis" ref="AnlTeal"      showDaughters="true" visible="true" />
+    <vis name="DRICH_filter_vis"  ref="AnlGold"      showDaughters="true" visible="true" />
+    <vis name="DRICH_mirror_vis"  ref="AnlLightGray" showDaughters="true" visible="true" />
+    <vis name="DRICH_sensor_vis"  ref="AnlBlue"      showDaughters="true" visible="true" />
+    <vis name="DRICH_service_vis" ref="AnlGreen"     showDaughters="true" visible="true" />
 
     <vis name="MRICH_aerogel_vis" ref="AnlTeal" showDaughters="true" visible="true" />
     <vis name="MRICH_frame_vis" ref="AnlGold" showDaughters="true" visible="true" />

@@ -1,5 +1,7 @@
 "topic: backward":
   - "compact/**/backward_*"
+  - "compact/**/mrich*"
+  - "compact/**/pfrich*"
 
 "topic: barrel":
   - "compact/**/barrel_*"
@@ -18,11 +20,20 @@
 "topic: documentation":
   - "**/*.md"
 
-"topic: far-forward": []
+"topic: far-backward":
+  - "compact/far_backward/**"
+  - "src/Backwards*"
+
+"topic: far-forward":
+  - "compact/far_forward/**"
+  - "src/Forward*"
+  - "src/B0*"
+  - "src/ZDC*"
+  - "src/ZeroDegreeCalorimeter*"
 
 "topic: forward":
   - "compact/**/forward_*"
-  - "compact/**/*rich*"
+  - "compact/**/drich*"
   - "src/*Tracker*"
 
 "topic: infrastructure":
@@ -37,6 +48,13 @@
   - "scripts/**/*"
   - "templates/setup.sh.in"
   - "views/**/*"
+
+"topic: magnets":
+  - "compact/far_backward/magnets.xml"
+  - "compact/far_forward/magnets.xml"
+  - "compact/fields/**/*"
+  - "compact/fields.xml"
+  - "compact/solenoid.xml"
 
 "topic: materials":
   - "compact/materials.xml"

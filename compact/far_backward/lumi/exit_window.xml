@@ -1,0 +1,21 @@
+<!-- SPDX-License-Identifier: LGPL-3.0-or-later -->
+<!-- Copyright (C) 2022 Dhevan Gangadharan -->
+
+<lccdd>
+
+  <!-- Luminosity exit window -->
+
+  <detectors>
+    <detector
+      id="LumiWindow_ID"
+      name="LumiWindow"
+      type="LumiWindow"
+      material="Aluminum"
+      vis="AnlLightGray">
+      <dimensions x="LumiWin_R" y="LumiWin_R" z="LumiWin_thickness/2" />
+      <position   x="0" y="0" z="LumiWin_Z" />
+      <rotation   x="0*rad" y="0*rad" z="0*rad" />
+    </detector>
+  </detectors>
+
+</lccdd>

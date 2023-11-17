@@ -1,3 +1,6 @@
+<!-- SPDX-License-Identifier: LGPL-3.0-or-later -->
+<!-- Copyright (C) 2022 Sylvester Joosten, Whitney Armstrong, Zhenyu Ye -->
+
   <display>
 
     <comment>
@@ -56,7 +59,7 @@
     <vis name="EcalBarrelStaveVis"      ref="AnlGold"   showDaughters="true" visible="true" />
     <vis name="EcalBarrelFiberLayerVis" ref="AnlGold"   showDaughters="false" visible="true" />
     <vis name="EcalBarrelSliceVis"      ref="AnlGray"/>
-    <vis name="EcalBarrelSupportVis"    ref="AnlOrange"/>
+    <vis name="EcalBarrelSupportVis"    ref="AnlLightGray"/>
 
     <vis name="EcalVis"                 ref="AnlGold"   showDaughters="true"  visible="false"/>
     <vis name="EcalEndcapVis"           ref="AnlGold"   showDaughters="false" visible="true"/>
@@ -79,6 +82,7 @@
     <vis name="HcalBarrelStaveVis"    ref="AnlBlue"   showDaughters="false" visible="true"/>
     <vis name="HcalBarrelLayerVis"    ref="AnlBlue"   showDaughters="true"  visible="true"/>
     <vis name="HcalEndcapVis"         ref="AnlBlue"   showDaughters="false" visible="true"/>
+    <vis name="LFHCALVis"             ref="AnlRed"   showDaughters="true" visible="true"/>
     <vis name="HcalEndcapLayerVis"    ref="AnlBlue"   showDaughters="true"  visible="true"/>
     <vis name="HcalSensorVis"         ref="AnlBlue"   showDaughters="true"  visible="true"/>
     <vis name="HcalAbsorberVis"       ref="AnlGray"   showDaughters="true"  visible="true"/>
@@ -158,6 +162,6 @@
     <vis name="RBG510"         alpha="0.5"  r= "1.0" g=".2"  b="0.0" showDaughters="true" visible="true"/>
     <vis name="RBG"            alpha="0.5"  r= "1.0" g="1.0" b="1.0" showDaughters="true" visible="true"/>
     <vis name="GrayVis"        alpha="1.0"  r= "0.75" g="0.75" b="0.75" showDaughters="true" visible="true"/>
-		<vis name="AnlRed_1"        alpha="0.5" r="205/256" g="32/256" b="44/256"/>
+                <vis name="AnlRed_1"        alpha="0.5" r="205/256" g="32/256" b="44/256"/>
 
   </display>

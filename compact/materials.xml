@@ -1,4 +1,6 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<!-- SPDX-License-Identifier: LGPL-3.0-or-later -->
+<!-- Copyright (C) 2022 Jihee Kim, Zhenyu Ye, Sylvester Joosten -->
+
 <materials>
   <!--
        Air by weight from
@@ -18,6 +20,10 @@
     <fraction n="0.234" ref="O"/>
     <fraction n="0.012" ref="Ar"/>
   </material>
+  <material name="HeGas">
+    <D type="density" unit="g/cm3" value="0.0000838"/>
+    <fraction n="1" ref="He"/>
+  </material>
   <material name="Epoxy">
     <D type="density" value="1.3" unit="g/cm3"/>
     <composite n="44" ref="H"/>
@@ -29,6 +35,17 @@
     <composite n="1" ref="Si"/>
     <composite n="2" ref="O"/>
   </material>
+  <material name="Epotek">
+    <D type="density" value="1.2" unit="g/cm3"/>
+    <composite n="5" ref="H"/>
+    <composite n="3" ref="C"/>
+    <composite n="2" ref="O"/>
+  </material>
+  <material name="Sapphire">
+    <D type="density" value="3.98" unit="g/cm3"/>
+    <composite n="2" ref="Al"/>
+    <composite n="3" ref="O"/>
+  </material>
   <material name="G10">
     <D type="density" value="1.7" unit="g/cm3"/>
     <fraction n="0.08" ref="Cl"/>
@@ -39,6 +56,7 @@
     <D value="1.032" unit="g/cm3"/>
     <composite n="19" ref="C"/>
     <composite n="21" ref="H"/>
+    <constant name="BirksConstant" value="0.126*mm/MeV"/>
   </material>
   <material name="Water">
     <D value="1.00" unit="g/cm3"/>
@@ -140,6 +158,7 @@
     <fraction n="0.2146" ref="Gd"/>
     <fraction n="0.1369" ref="Si"/>
     <fraction n="0.2610" ref="O"/>
+    <constant name="BirksConstant" value="0.0333*mm/MeV"/>
   </material>
   <documentation level="3">
     #### Material for TOF
@@ -287,12 +306,14 @@
     <D type="density" unit="g/cm3" value="1.032"/>
     <composite n="9" ref="C"/>
     <composite n="10" ref="H"/>
+    <constant name="BirksConstant" value="0.126*mm/MeV"/>
   </material>
   <material name="PbWO4">
     <D type="density" value="8.3" unit="g / cm3"/>
     <composite n="1" ref="Pb"/>
     <composite n="1" ref="W"/>
     <composite n="4" ref="O"/>
+    <constant name="BirksConstant" value="0.0333*mm/MeV"/>
   </material>
   <material name="Ar10CO2">
     <D type="density" value="1.802" unit="mg / cm3"/>
@@ -330,6 +351,21 @@
     <fraction n="0.528" ref="Quartz"/>
     <fraction n="0.472" ref="Fr4_Epoxy"/>
   </material>
+  <material name="Tyvek">
+    <D type="density" value="0.3529" unit="g/cm3"/>
+    <composite n="2" ref="C"/>
+    <composite n="4" ref="H"/>
+  </material>
+  <material name="TiO2">
+    <D type="density" value="4.2" unit="g/cm3"/>
+    <composite n="1" ref="Ti"/>
+    <composite n="2" ref="O"/>
+  </material>
+  <material name="Ti02Epoxy">
+    <D type="density" value="2.3" unit="g/cm3"/>
+    <fraction n="0.67" ref="Epoxy"/>
+    <fraction n="0.33" ref="TiO2"/>
+  </material>
   <material name="Cfrp_intt">
     <D type="density" value="1.69" unit="g/cm3"/>
     <composite n="10" ref="C"/>
@@ -358,6 +394,10 @@
     <fraction n="0.18" ref="Cr"/>
     <fraction n="0.08" ref="Ni"/>
   </material>
+  <material name="Copper">
+    <D type="density" value="8.96" unit="g / cm3"/>
+    <fraction n="1." ref="Cu"/>
+  </material>
   <material name="ZDC_Tungsten">
     <D type="density" value="18.73" unit="g / cm3"/>
     <fraction n="0.943" ref="W"/>
@@ -385,12 +425,12 @@
     <composite n="1" ref="C"/>
   </material>
   <material name="MMGAS_InoxForMesh" state="solid">
-  	<D type="density" unit="g/cm3" value="2.8548"/>
+        <D type="density" unit="g/cm3" value="2.8548"/>
     <fraction n="0.19" ref="Cr"/>
-  	<fraction n="0.68" ref="Fe"/>
-   	<fraction n="0.02" ref="Mn"/>
-   	<fraction n="0.10" ref="Ni"/>
-   	<fraction n="0.01" ref="Si"/>
+        <fraction n="0.68" ref="Fe"/>
+        <fraction n="0.02" ref="Mn"/>
+        <fraction n="0.10" ref="Ni"/>
+        <fraction n="0.01" ref="Si"/>
   </material>
   <material name="Ar90IsoButane" state="gas">
     <D type="density" unit="g/cm3" value="0.00170335"/>
@@ -403,6 +443,11 @@
     <composite n="0.950"  ref="W"/>
     <composite n="0.009" ref="H"/>
     <composite n="0.041"  ref="C"/>
+  </material>
+  <material name="ZDC_Polyethylene">
+    <D type="density" value="0.96" unit="g/cm3"/>
+    <composite n="2" ref="C"/>
+    <composite n="4" ref="H"/>
   </material>
   <material name="WSciFi_UCLA_Abs">
     <D type="density" value="12.4" unit="g / cm3"/>
@@ -428,5 +473,34 @@
     <D type="density" value="8.558" unit="g / cm3"/>
     <fraction n="0.9622" ref="Pb"/>
     <fraction n="0.0378" ref="SciFiPb_Glue"/>
+  </material>
+  <material name="Brass">
+    <D type="density" value="8.41" unit="g / cm3"/>
+    <fraction n="0.70" ref="Cu"/>
+    <fraction n="0.30" ref="Zn"/>
+  </material>
+  <material name="NbTi">
+    <D type="density" value="6.54" unit="g / cm3"/>
+    <fraction n="0.50" ref="Nb"/>
+    <fraction n="0.50" ref="Ti"/>
+  </material>
+  <material name="Solder">
+    <D type="density" value="8.60" unit="g / cm3"/>
+    <fraction n="0.40" ref="Pb"/>
+    <fraction n="0.60" ref="Sn"/>
+  </material>
+ <material name="SolenoidCoil">
+    <D type="density" value="8.73" unit="g / cm3"/>
+    <fraction n="0.9201" ref="Cu"/>
+    <fraction n="0.0638" ref="NbTi"/>
+    <fraction n="0.0161" ref="Solder"/>
+  </material>
+ <material name="LYSO"> <!-- given by the Taiwan Applied Crystals -->
+    <D type="density" unit="g/cm3" value="7.125"/>
+    <fraction n="0.71813" ref="Lu"/>
+    <fraction n="0.03613" ref="Y"/>
+    <fraction n="0.06338" ref="Si"/>
+    <fraction n="0.18046" ref="O"/>
+    <fraction n="0.00190" ref="Ce"/>
   </material>
 </materials>

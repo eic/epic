@@ -8,7 +8,6 @@
 */*/*.pdf
 *.root
 build/*
-.DAWN*
 */*.pyc
 **.pyc
 
@@ -21,7 +20,6 @@ accelerator
 eic_ip6
 eic
 ip6_build
-ip6
 
 *.swp
 
@@ -32,3 +30,17 @@ acts.txt
 acts2.txt
 
 materials-map.cbor
+
+# local install directories
+lib/
+share/
+setup.sh
+
+# jekyll
+Gemfile.lock
+vendor/
+.bundle
+.jekyll-cache/
+.jekyll-metadata
+.sass-cache/
+_site/

@@ -1,0 +1,61 @@
+<!-- SPDX-License-Identifier: LGPL-3.0-or-later -->
+<!-- Copyright (C) 2022 Dhevan Gangadharan, Aranya Giri -->
+
+<lccdd>
+
+  <define>
+
+    <constant name="Pos_Y1"     value="LumiSpecTracker_Y1"/>
+    <constant name="Pos_Z1"     value="LumiSpecTracker_Z1"/>
+    <constant name="Size_XY1"   value="LumiSpecTracker_DXY"/>
+
+    <constant name="Pos_Y2"     value="LumiSpecTracker_Y2"/>
+    <constant name="Pos_Z2"     value="LumiSpecTracker_Z2"/>
+    <constant name="Size_XY2"   value="LumiSpecTracker_DXY"/>
+
+  </define>
+
+
+  <detectors>
+    <detector
+    id="LumiSpecTracker_ID"
+    name="LumiSpecTracker"
+    type="LumiSpecTracker"
+    readout="LumiSpecTrackerHits"
+    vis="TrackerVis"
+    visCu="TrackerServiceVis"
+    materialSi="SiliconOxide"
+    materialCu="Copper"
+    thicknessSi="LumiSpecTracker_Si_DZ/2.0"
+    thicknessCu="LumiSpecTracker_Cu_DZ/2.0">
+    <module id="0">
+        <sector id="0" name="Top1">
+          <position   x="0" y="Pos_Y1" z="Pos_Z1"/>
+          <dimensions x="Size_XY1/2.0" y="Size_XY1/2.0"/>
+        </sector>
+        <sector id="1" name="Bottom1">
+          <position   x="0" y="-1*Pos_Y1" z="Pos_Z1"/>
+          <dimensions x="Size_XY1/2.0" y="Size_XY1/2.0"/>
+        </sector>
+    </module>
+    <module id="1">
+        <sector id="0" name="Top2">
+          <position   x="0" y="Pos_Y2" z="Pos_Z2"/>
+          <dimensions x="Size_XY2/2.0" y="Size_XY2/2.0"/>
+        </sector>
+        <sector id="1" name="Bottom2">
+          <position   x="0" y="-1*Pos_Y2" z="Pos_Z2"/>
+          <dimensions x="Size_XY2/2.0" y="Size_XY2/2.0"/>
+        </sector>
+    </module>
+    </detector>
+  </detectors>
+
+  <readouts>
+    <readout name="LumiSpecTrackerHits">
+      <segmentation type="CartesianGridXY" grid_size_x="LumiSpecTracker_pixelSize" grid_size_y="LumiSpecTracker_pixelSize"/>
+      <id>system:8,sector:8,module:8,x:32:-16,y:-16</id>
+    </readout>
+  </readouts>
+
+</lccdd>

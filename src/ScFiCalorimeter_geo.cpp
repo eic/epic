@@ -1,3 +1,6 @@
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (C) 2022 Chao Peng
+
 //==========================================================================
 //  Scintillating fiber calorimeter with tower shape blocks
 //  reference: https://github.com/adamjaro/lmon/blob/master/calo/src/WScFiZXv3.cxx

@@ -1,4 +1,6 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<!-- SPDX-License-Identifier: LGPL-3.0-or-later -->
+<!-- Copyright (C) 2022 Sylvester Joosten, Whitney Armstrong, Shujie Li -->
+
 <lccdd>
   <define>
     <comment>
@@ -60,6 +62,7 @@
       type="epic_VertexBarrel"
       readout="VertexBarrelHits"
       insideTrackingVolume="true">
+      <type_flags type="DetType_TRACKER + DetType_BARREL"/>
       <dimensions
         rmin="VertexBarrelLayer1_rmin"
         rmax="VertexBarrelLayer3_rmax"
@@ -133,9 +136,16 @@
     </detector>
   </detectors>
 
+  <plugins>
+    <plugin name="DD4hep_ParametersPlugin">
+      <argument value="VertexBarrel"/>
+      <argument value="layer_pattern: str=VertexBarrel_layer\d"/>
+    </plugin>
+  </plugins>
+
   <readouts>
     <readout name="VertexBarrelHits">
-      <segmentation type="CartesianGridXY" grid_size_x="0.010*mm" grid_size_y="0.010*mm" />
+      <segmentation type="CartesianGridXY" grid_size_x="0.020*mm" grid_size_y="0.020*mm" />
       <id>system:8,layer:4,module:12,sensor:2,x:32:-16,y:-16</id>
     </readout>
   </readouts>

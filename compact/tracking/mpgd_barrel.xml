@@ -1,4 +1,6 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<!-- SPDX-License-Identifier: LGPL-3.0-or-later -->
+<!-- Copyright (C) 2022 Sylvester Joosten, Wouter Deconinck, Matt Posik -->
+
 <lccdd>
 <info name="mpgd_barrel.xml"
       title="Micro Pattern Gas Detectors"
@@ -21,7 +23,8 @@
     <constant name="InnerMPGDBarrelMod_rmin"                value="InnerMPGDBarrel_rmin"/>
     <constant name="InnerMPGDBarrelMod_dz"                  value="InnerMPGDBarrel_dz"/>
 
-    <constant name="InnerMPGDBarrelMod_length"              value="2 * InnerMPGDBarrelMod_rmin / tan(TrackerBackwardAngle) - InnerMPGDBarrel_dz" />
+    <constant name="InnerMPGDBarrelMod_length"              value="InnerMPGDBarrel_length" />
+
     <constant name="InnerMPGDBarrelLayer_length"            value="InnerMPGDBarrelMod_length + 1*um" />
     <constant name="InnerMPGDBarrelLayer_thickness"         value="2*cm" />
     <constant name="InnerMPGDBarrelLayer_rmin"              value="InnerMPGDBarrelMod_rmin - InnerMPGDBarrelLayer_thickness / 2.0"/>
@@ -60,6 +63,7 @@
       type="epic_TrackerBarrel"
       readout="MPGDBarrelHits"
       insideTrackingVolume="true">
+      <type_flags type="DetType_TRACKER + DetType_BARREL"/>
       <dimensions
         rmin="InnerMPGDBarrelLayer_rmin"
         rmax="InnerMPGDBarrelLayer_rmax"
@@ -70,7 +74,7 @@
         <module_component name="DriftKapton" thickness="MMDriftKapton_thickness" material="Kapton" width="InnerMPGDBarrelStave_width" length="InnerMPGDBarrelMod_length"/>
         <module_component name="DriftCuElectrode" thickness="MMDriftCuElectrode_thickness" material="Copper" width="InnerMPGDBarrelStave_width" length="InnerMPGDBarrelMod_length"/>
         <module_component name="GasGap" thickness="MMGasGap_thickness" material="Ar90IsoButane" sensitive="True" width="InnerMPGDBarrelStave_width" length="InnerMPGDBarrelMod_length"/>
-	<module_component name="Mesh" thickness="MMMesh_thickness" material="MMGAS_InoxForMesh" width="InnerMPGDBarrelStave_width" length="InnerMPGDBarrelMod_length"/>
+        <module_component name="Mesh" thickness="MMMesh_thickness" material="MMGAS_InoxForMesh" width="InnerMPGDBarrelStave_width" length="InnerMPGDBarrelMod_length"/>
         <module_component name="Fudge" thickness="MMFudgeInnerMPGDBarrel_thickness" material="Kapton" width="InnerMPGDBarrelStave_width" length="InnerMPGDBarrelMod_length"/>
         <module_component name="Gas" thickness="MMGas_thickness" material="Ar90IsoButane" width="InnerMPGDBarrelStave_width" length="InnerMPGDBarrelMod_length"/>
         <module_component name="ResistiveStrips" thickness="MMResistiveStrip_thickness" material="MMGAS_ResistivePaste" width="InnerMPGDBarrelStave_width" length="InnerMPGDBarrelMod_length"/>
@@ -84,15 +88,21 @@
         <barrel_envelope
           inner_r="InnerMPGDBarrelLayer_rmin"
           outer_r="InnerMPGDBarrelLayer_rmax"
-          z_length="InnerMPGDBarrelLayer_length"/>
+          z_length="InnerMPGDBarrelLayer_length"
+          z0="InnerMPGDBarrel_zoffset"/>
         <layer_material surface="inner" binning="binPhi,binZ" bins0="MPGDBarrelStave_count" bins1="100" />
         <rphi_layout phi_tilt="0" nphi="MPGDBarrelStave_count" phi0="0.0" rc="InnerMPGDBarrelMod_rmin" dr="0.0 * mm"/>
         <z_layout dr="0.0 * mm" z0="0.0 * mm" nz="1"/>
       </layer>
     </detector>
-
   </detectors>
 
+  <plugins>
+    <plugin name="DD4hep_ParametersPlugin">
+      <argument value="InnerMPGDBarrel"/>
+      <argument value="layer_pattern: str=InnerMPGDBarrel_layer\d"/>
+    </plugin>
+  </plugins>
 
   <readouts>
     <readout name="MPGDBarrelHits">
