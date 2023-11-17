@@ -41,7 +41,7 @@
       <dimensions
         numsides="HcalEndcapN_CaloSides"
         zmin="HcalEndcapN_zmin"
-        rmin=HcalEndcapN_rmin
+        rmin="HcalEndcapN_rmin"
         rmax="HcalEndcapN_rmax"/>
       <layer repeat="HcalEndcapNLayer_NRepeat" vis="HcalEndcapLayerVis" >
         <slice material="StainlessSteel" thickness="HcalEndcapNSteelThickness" vis="HcalAbsorberVis"/>
