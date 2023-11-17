@@ -2,7 +2,7 @@ ci:
     skip: [clang-format]
 repos:
 -   repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v4.3.0
+    rev: v4.5.0
     hooks:
     -   id: check-yaml
     -   id: end-of-file-fixer
@@ -10,4 +10,12 @@ repos:
 -   repo: https://github.com/pocc/pre-commit-hooks
     rev: v1.3.5
     hooks:
-      - id: clang-format
+    -   id: clang-format
+-   repo: https://github.com/Lucas-C/pre-commit-hooks
+    rev: v1.5.4
+    hooks:
+    -   id: forbid-crlf
+    -   id: remove-crlf
+    -   id: forbid-tabs
+    -   id: remove-tabs
+        args: [--whitespaces-count, '8']

@@ -1,3 +1,6 @@
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (C) 2022 Chao Peng, Whitney Armstrong
+
 #pragma once
 #include "Math/Point2D.h"
 #include <vector>
@@ -28,5 +31,13 @@ namespace epic::geo {
 
   std::vector<Point> fillHexagons(Point ref, double lside, double rmin, double rmax, double phmin = -M_PI,
                                   double phmax = M_PI);
+
+  bool isPointInsidePolygon(Point p, std::vector<Point> vertices);
+
+  bool isBoxTotalInsidePolygon(Point box[4], std::vector<Point> vertices);
+
+  bool isBoxPartialInsidePolygon(Point box[4], std::vector<Point> vertices);
+
+  std::vector<std::pair<double, double>> getPolygonVertices(std::pair<double, double> center, double radius, double angle_0, int numSides);
 
 } // namespace epic::geo

@@ -31,48 +31,31 @@ endif()
 # Export compile commands as json for run-clang-tidy
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
+# Install to the top directory by default
+if(CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)
+    set(CMAKE_INSTALL_PREFIX ${CMAKE_SOURCE_DIR}/prefix CACHE PATH "Install in $src/prefix/ directory by default" FORCE)
+endif()
+
 # Install into GNU standard directories
 include(GNUInstallDirs)
 
-# Set required DD4hep components based on user input
-set(USE_DDG4 "TRUE" CACHE BOOL "Require DD4hep DDG4 component")
-set(DD4hep_required_components DDCore DDRec)
-if(${USE_DDG4})
-  list(APPEND DD4hep_required_components DDG4)
-endif()
-
-# The items passed to target_link_libraries below need DD4hep:: prepended
-set(DD4hep_required_libraries ${DD4hep_required_components})
-list(TRANSFORM DD4hep_required_libraries PREPEND DD4hep::)
-
 # Dependencies
-find_package(DD4hep REQUIRED COMPONENTS ${DD4hep_required_components})
-if(${DD4hep_VERSION} VERSION_LESS 1.21)
-  message(WARNING "DD4hep before 1.21 does not write collections correctly \n"
-                  "More info at https://github.com/AIDASoft/DD4hep/pull/922")
-endif()
-find_package(ActsDD4hep)
-if(ActsDD4hep_FOUND)
-  add_compile_definitions(USE_ACTSDD4HEP)
-  set(ActsDD4hep ActsDD4hep::ActsDD4hep)
-else()
-  find_package(Acts REQUIRED COMPONENTS Core PluginIdentification PluginTGeo PluginDD4hep)
-  set(ActsDD4hep ActsCore ActsPluginDD4hep)
-endif()
+find_package(DD4hep 1.21 REQUIRED COMPONENTS DDCore DDRec)
 find_package(fmt REQUIRED)
 
 #-----------------------------------------------------------------------------------
 set(a_lib_name ${PROJECT_NAME})
 
 dd4hep_configure_output()
+dd4hep_set_compiler_flags()
 
 file(GLOB sources CONFIGURE_DEPENDS src/*.cpp)
 dd4hep_add_plugin(${a_lib_name}
   SOURCES ${sources}
-  USES ${ActsDD4hep} ROOT::Core ROOT::Gdml
+  USES ROOT::Core ROOT::Gdml
   )
 target_link_libraries(${a_lib_name}
-  PUBLIC ${DD4hep_required_libraries} fmt::fmt
+  PUBLIC DD4hep::DDCore DD4hep::DDRec fmt::fmt
   )
 
 #-----------------------------------------------------------------------------------
@@ -110,7 +93,7 @@ install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/${PROJECT_NAME}_full.xml
 # Install the detector description files.
 install(DIRECTORY compact/
     DESTINATION ${CMAKE_INSTALL_DATADIR}/${PROJECT_NAME}/compact
-    FILES_MATCHING PATTERN "*.xml"
+    FILES_MATCHING PATTERN "*.xml" PATTERN "*.gdml"
     )
 
 #-----------------------------------------------------------------------------------
@@ -131,4 +114,9 @@ execute_process(
 configure_file(templates/setup.sh.in ${CMAKE_CURRENT_BINARY_DIR}/setup.sh @ONLY)
 install(FILES ${CMAKE_CURRENT_BINARY_DIR}/setup.sh
     DESTINATION ${CMAKE_INSTALL_PREFIX}
+)
+
+# install programs
+install(PROGRAMS bin/g4MaterialScan_to_csv
+  DESTINATION ${CMAKE_INSTALL_BINDIR}
 )

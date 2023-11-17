@@ -1,4 +1,6 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<!-- SPDX-License-Identifier: LGPL-3.0-or-later -->
+<!-- Copyright (C) 2022 Sylvester Joosten, Wouter Deconinck, Shujie Li -->
+
 <lccdd>
   <comment>
     Main parameters. June 2022 setup with symmetric disk locations.
@@ -62,6 +64,7 @@
       readout="TrackerEndcapHits"
       vis="TrackerVis"
       reflect="false">
+      <type_flags type="DetType_TRACKER + DetType_ENDCAP"/>
       <module name="Module1" vis="TrackerModuleVis">
         <trd x1="InnerTrackerEndcapPMod1_x1/2" x2="InnerTrackerEndcapPMod1_x2/2" z="InnerTrackerEndcapPMod1_y/2" />
         <module_component thickness="SiTrackerEndcapCF_thickness" material="CarbonFiber" vis="TrackerSupportVis" />
@@ -74,7 +77,8 @@
           rmax="InnerTrackerEndcapPLayer1_rmax"
           length="SiTrackerEndcapLayer_thickness"
           zstart="InnerTrackerEndcapPLayer1_zmin" />
-        <layer_material surface="inner" binning="binPhi,binR" bins0="20*SiTrackerEndcapMod_count" bins1="256"/>
+        <layer_material surface="inner" binning="binPhi,binR" bins0="5*SiTrackerEndcapMod_count" bins1="100"/>
+        <layer_material surface="outer" binning="binPhi,binR" bins0="5*SiTrackerEndcapMod_count" bins1="100"/>
         <ring
           r="InnerTrackerEndcapPMod1_rmin + InnerTrackerEndcapPMod1_y/2"
           zstart="0"
@@ -90,6 +94,7 @@
       readout="TrackerEndcapHits"
       vis="TrackerVis"
       reflect="true">
+      <type_flags type="DetType_TRACKER + DetType_ENDCAP"/>
       <module name="Module1" vis="TrackerModuleVis">
         <trd x1="InnerTrackerEndcapNMod1_x1/2" x2="InnerTrackerEndcapNMod1_x2/2" z="InnerTrackerEndcapNMod1_y/2" />
         <module_component thickness="SiTrackerEndcapCF_thickness" material="CarbonFiber" vis="TrackerSupportVis" />
@@ -102,7 +107,8 @@
           rmax="InnerTrackerEndcapNLayer1_rmax"
           length="SiTrackerEndcapLayer_thickness"
           zstart="InnerTrackerEndcapNLayer1_zmin" />
-        <layer_material surface="inner" binning="binPhi,binR" bins0="20*SiTrackerEndcapMod_count" bins1="256"/>
+        <layer_material surface="inner" binning="binPhi,binR" bins0="5*SiTrackerEndcapMod_count" bins1="100"/>
+        <layer_material surface="outer" binning="binPhi,binR" bins0="5*SiTrackerEndcapMod_count" bins1="100"/>
         <ring
           r="InnerTrackerEndcapNMod1_rmin + InnerTrackerEndcapNMod1_y/2"
           zstart="0"
@@ -202,6 +208,7 @@
       readout="TrackerEndcapHits"
       vis="TrackerVis"
       reflect="false">
+      <type_flags type="DetType_TRACKER + DetType_ENDCAP"/>
       <module name="Module1" vis="TrackerModuleVis">
         <trd x1="TrackerEndcapPMod1_x1/2" x2="TrackerEndcapPMod1_x2/2" z="TrackerEndcapPMod1_y/2" />
         <module_component thickness="SiTrackerEndcapCF_thickness" material="CarbonFiber" vis="TrackerSupportVis" />
@@ -214,7 +221,8 @@
           rmax="TrackerEndcapPLayer1_rmax"
           length="SiTrackerEndcapLayer_thickness"
           zstart="TrackerEndcapPLayer1_zmin" />
-        <layer_material surface="inner" binning="binPhi,binR" bins0="20*SiTrackerEndcapMod_count" bins1="256"/>
+        <layer_material surface="inner" binning="binPhi,binR" bins0="5*SiTrackerEndcapMod_count" bins1="100"/>
+        <layer_material surface="inner" binning="binPhi,binR" bins0="5*SiTrackerEndcapMod_count" bins1="100"/>
         <ring
           r="TrackerEndcapPMod1_rmin + TrackerEndcapPMod1_y/2"
           zstart="0"
@@ -230,6 +238,7 @@
       readout="TrackerEndcapHits"
       vis="TrackerVis"
       reflect="true">
+      <type_flags type="DetType_TRACKER + DetType_ENDCAP"/>
       <module name="Module1" vis="TrackerModuleVis">
         <trd x1="TrackerEndcapNMod1_x1/2" x2="TrackerEndcapNMod1_x2/2" z="TrackerEndcapNMod1_y/2" />
         <module_component thickness="SiTrackerEndcapCF_thickness" material="CarbonFiber" vis="TrackerSupportVis" />
@@ -242,7 +251,8 @@
           rmax="TrackerEndcapNLayer1_rmax"
           length="SiTrackerEndcapLayer_thickness"
           zstart="TrackerEndcapNLayer1_zmin" />
-        <layer_material surface="inner" binning="binPhi,binR" bins0="20*SiTrackerEndcapMod_count" bins1="256"/>
+        <layer_material surface="inner" binning="binPhi,binR" bins0="5*SiTrackerEndcapMod_count" bins1="100"/>
+        <layer_material surface="inner" binning="binPhi,binR" bins0="5*SiTrackerEndcapMod_count" bins1="100"/>
         <ring
           r="TrackerEndcapNMod1_rmin + TrackerEndcapNMod1_y/2"
           zstart="0"
@@ -258,6 +268,7 @@
       readout="TrackerEndcapHits"
       vis="TrackerVis"
       reflect="false">
+      <type_flags type="DetType_TRACKER + DetType_ENDCAP"/>
       <module name="Module2" vis="TrackerModuleVis">
         <trd x1="TrackerEndcapPMod2_x1/2" x2="TrackerEndcapPMod2_x2/2" z="TrackerEndcapPMod2_y/2" />
         <module_component thickness="SiTrackerEndcapCF_thickness" material="CarbonFiber" vis="TrackerSupportVis" />
@@ -283,6 +294,7 @@
           length="SiTrackerEndcapLayer_thickness"
           zstart="TrackerEndcapPLayer2_zmin" />
         <layer_material surface="inner" binning="binPhi,binR" bins0="12" bins1="20"/>
+        <layer_material surface="outer" binning="binPhi,binR" bins0="12" bins1="20"/>
         <ring
           r="TrackerEndcapPMod2_rmin + TrackerEndcapPMod2_y/2"
           zstart="0"
@@ -297,6 +309,7 @@
           length="SiTrackerEndcapLayer_thickness"
           zstart="TrackerEndcapPLayer3_zmin" />
         <layer_material surface="inner" binning="binPhi,binR" bins0="12" bins1="20"/>
+        <layer_material surface="outer" binning="binPhi,binR" bins0="12" bins1="20"/>
         <ring
           r="TrackerEndcapPMod3_rmin + TrackerEndcapPMod3_y/2"
           zstart="0"
@@ -311,6 +324,7 @@
           length="SiTrackerEndcapLayer_thickness"
           zstart="TrackerEndcapPLayer4_zmin" />
         <layer_material surface="inner" binning="binPhi,binR" bins0="12" bins1="10"/>
+        <layer_material surface="outer" binning="binPhi,binR" bins0="12" bins1="10"/>
         <ring
           r="TrackerEndcapPMod4_rmin + TrackerEndcapPMod4_y/2"
           zstart="0"
@@ -326,6 +340,7 @@
       readout="TrackerEndcapHits"
       vis="TrackerVis"
       reflect="true">
+      <type_flags type="DetType_TRACKER + DetType_ENDCAP"/>
       <module name="Module2" vis="TrackerModuleVis">
         <trd x1="TrackerEndcapNMod2_x1/2" x2="TrackerEndcapNMod2_x2/2" z="TrackerEndcapNMod2_y/2" />
         <module_component thickness="SiTrackerEndcapCF_thickness" material="CarbonFiber" vis="TrackerSupportVis" />
@@ -351,6 +366,7 @@
           length="SiTrackerEndcapLayer_thickness"
           zstart="TrackerEndcapNLayer2_zmin" />
         <layer_material surface="inner" binning="binPhi,binR" bins0="12" bins1="20"/>
+        <layer_material surface="outer" binning="binPhi,binR" bins0="12" bins1="20"/>
         <ring
           r="TrackerEndcapNMod2_rmin + TrackerEndcapNMod2_y/2"
           zstart="0"
@@ -365,6 +381,7 @@
           length="SiTrackerEndcapLayer_thickness"
           zstart="TrackerEndcapNLayer3_zmin" />
         <layer_material surface="inner" binning="binPhi,binR" bins0="12" bins1="20"/>
+        <layer_material surface="outer" binning="binPhi,binR" bins0="12" bins1="20"/>
         <ring
           r="TrackerEndcapNMod3_rmin + TrackerEndcapNMod3_y/2"
           zstart="0"
@@ -379,6 +396,7 @@
           length="SiTrackerEndcapLayer_thickness"
           zstart="TrackerEndcapNLayer4_zmin" />
         <layer_material surface="inner" binning="binPhi,binR" bins0="12" bins1="10"/>
+        <layer_material surface="outer" binning="binPhi,binR" bins0="12" bins1="10"/>
         <ring
           r="TrackerEndcapNMod4_rmin + TrackerEndcapNMod4_y/2"
           zstart="0"
@@ -389,9 +407,36 @@
     </detector>
   </detectors>
 
+  <plugins>
+    <plugin name="DD4hep_ParametersPlugin">
+      <argument value="MiddleTrackerEndcapP"/>
+      <argument value="layer_pattern: str=MiddleTrackerEndcapP_layer\d_P"/>
+    </plugin>
+    <plugin name="DD4hep_ParametersPlugin">
+      <argument value="MiddleTrackerEndcapN"/>
+      <argument value="layer_pattern: str=MiddleTrackerEndcapN_layer\d_N"/>
+    </plugin>
+    <plugin name="DD4hep_ParametersPlugin">
+      <argument value="InnerTrackerEndcapP"/>
+      <argument value="layer_pattern: str=InnerTrackerEndcapP_layer\d_P"/>
+    </plugin>
+    <plugin name="DD4hep_ParametersPlugin">
+      <argument value="InnerTrackerEndcapN"/>
+      <argument value="layer_pattern: str=InnerTrackerEndcapN_layer\d_N"/>
+    </plugin>
+    <plugin name="DD4hep_ParametersPlugin">
+      <argument value="OuterTrackerEndcapP"/>
+      <argument value="layer_pattern: str=OuterTrackerEndcapP_layer\d_P"/>
+    </plugin>
+    <plugin name="DD4hep_ParametersPlugin">
+      <argument value="OuterTrackerEndcapN"/>
+      <argument value="layer_pattern: str=OuterTrackerEndcapN_layer\d_N"/>
+    </plugin>
+  </plugins>
+
   <readouts>
     <readout name="TrackerEndcapHits">
-      <segmentation type="CartesianGridXZ" grid_size_x="0.010*mm" grid_size_z="0.010*mm" />
+      <segmentation type="CartesianGridXZ" grid_size_x="0.020*mm" grid_size_z="0.020*mm" />
       <id>system:8,layer:4,module:12,sensor:2,x:32:-16,z:-16</id>
     </readout>
   </readouts>

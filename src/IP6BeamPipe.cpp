@@ -1,3 +1,6 @@
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (C) 2022 Wouter Deconinck, Whitney Armstrong, Sylvester Joosten
+
 //==========================================================================
 //
 //      <detector name ="DetName" type="Beampipe" >
@@ -10,12 +13,8 @@
 #include "DD4hep/Printout.h"
 #include "TMath.h"
 #include <XML/Helper.h>
-
-#if defined(USE_ACTSDD4HEP)
-#include "ActsDD4hep/ActsExtension.hpp"
-#else
-#include "Acts/Plugins/DD4hep/ActsExtension.hpp"
-#endif
+#include "XML/Utilities.h"
+#include "DD4hepDetectorHelper.h"
 
 using namespace std;
 using namespace dd4hep;
@@ -40,6 +39,8 @@ static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector /* sens *
   using namespace ROOT::Math;
   xml_det_t  x_det    = e;
   string     det_name = x_det.nameStr();
+  xml_comp_t  x_dettype = x_det.child(dd4hep::xml::Strng_t("type_flags"));
+  unsigned int typeFlag = x_dettype.type();
   DetElement sdet(det_name, x_det.id());
   Assembly   assembly(det_name + "_assembly");
   Material   m_Al     = det.material("Aluminum");
@@ -68,16 +69,15 @@ static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector /* sens *
   const double central_offset = -.5 * (upstream_straight_length - downstream_straight_length);
   DetElement   central_det(sdet, "acts_beampipe_central", 1);
 
-  // Add extension for the beampipe
-  {
-    Acts::ActsExtension* beamPipeExtension = new Acts::ActsExtension();
-    // beamPipeExtension->addType("barrel", "detector");
-    // beamPipeExtension->addType("beampipe", "beampipe");
-    // beamPipeExtension->addType("passive cylinder", "layer");
-    beamPipeExtension->addType("beampipe", "layer");
-    central_det.addExtension<Acts::ActsExtension>(beamPipeExtension);
-    // TODO add material binning
-  }
+  // Set dd4hep variant parameters for conversion to ACTS tracking geometry
+  central_det.setTypeFlag(typeFlag);
+  auto &params = DD4hepDetectorHelper::ensureExtension<dd4hep::rec::VariantParameters>(central_det);
+  int nBinPhi = 144; // fix later. Should take this from a xml tag
+  int nBinZ = 10;  // fix later. Should take this from a xml tag
+  params.set<bool>("layer_material", true);
+  params.set<bool>("layer_material_representing", true);
+  params.set<int>("layer_material_representing_binPhi", nBinPhi);
+  params.set<int>("layer_material_representing_binZ", nBinZ);
 
   // -----------------------------
   // IP beampipe

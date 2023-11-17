@@ -7,18 +7,8 @@ on:
     tags:
       - '*'
   pull_request:
-  workflow_dispatch:
-    inputs:
-      github_repository:
-        description: 'Submitting GitHub repository'
-        required: false
-        default: ''
-        type: string
-      github_sha:
-        description: 'Submitting GitHub sha'
-        required: false
-        default: ''
-        type: string
+  merge_group:
+  workflow_dispatch: # allow manual triggering
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
@@ -37,21 +27,33 @@ jobs:
   list-detector-configs:
     runs-on: ubuntu-latest
     outputs:
-      configs: ${{ steps.list-detector-configs.outputs.configs }}
+      configs_csv: ${{ steps.list-detector-configs.outputs.configs_csv }}
+      configs_json: ${{ steps.list-detector-configs.outputs.configs_json }}
     steps:
     - uses: actions/checkout@v3
     - id: list-detector-configs
       run: |
-        CONFIGS=$((
+        CONFIGS_CSV=$(
+          ls -1 configurations | sed 's/^/epic_/g' | xargs | sed 's/\.yml//g;s/ /,/g'
+        )
+        CONFIGS_JSON=$((
           echo '{ "detector_config": ['
-          ls -1 configurations | xargs | sed 's/\.yml//g;s/ /, /g' | xargs -n 1 echo | sed -r 's/^([^,]*)(,?)$/"\1"\2/'
+          ls -1 configurations | sed 's/^/epic_/g' | xargs | sed 's/\.yml//g;s/ /, /g' | xargs -n 1 echo | sed -r 's/^([^,]*)(,?)$/"\1"\2/'
           echo ' ]}'
         ) | jq -c .)
-        echo "configs=$CONFIGS" | tee -a $GITHUB_OUTPUT
+        echo "configs_csv=${CONFIGS_CSV}" | tee -a $GITHUB_OUTPUT
+        echo "configs_json=${CONFIGS_JSON}" | tee -a $GITHUB_OUTPUT
 
-  build-gcc:
+  build:
     runs-on: ubuntu-latest
     needs: xmllint-before-build
+    strategy:
+      matrix:
+        include:
+          - CC: gcc
+            CXX: g++
+          - CC: clang
+            CXX: clang++
     env:
       PREFIX: ${{ github.workspace }}/install
     steps:
@@ -64,9 +66,10 @@ jobs:
       uses: actions/cache@v3
       with:
         path: .ccache
-        key: ccache-${{ github.ref_name }}-${{ steps.ccache_cache_timestamp.outputs.timestamp }}
+        key: ccache-${{ matrix.CC }}-${{ github.ref_name }}-${{ steps.ccache_cache_timestamp.outputs.timestamp }}
         restore-keys: |
-             ccache-${{ github.ref_name }}-
+             ccache-${{ matrix.CC }}-${{ github.ref_name }}-
+             ccache-${{ matrix.CC }}-
              ccache-
     - name: Configure ccache
       run: |
@@ -86,59 +89,29 @@ jobs:
       with:
         platform-release: "jug_xl:nightly"
         run: |
-          CC=gcc CXX=g++ cmake -B build -S . -DCMAKE_INSTALL_PREFIX=${PREFIX} -DCMAKE_C_COMPILER_LAUNCHER=ccache -DCMAKE_CXX_COMPILER_LAUNCHER=ccache
-          cmake --build build -- -j 2 install
+          CC=${{ matrix.CC }} CXX=${{ matrix.CXX }} cmake -B build -S . -DCMAKE_INSTALL_PREFIX=${PREFIX} -DCMAKE_C_COMPILER_LAUNCHER=ccache -DCMAKE_CXX_COMPILER_LAUNCHER=ccache
+          cmake --build build -- -k -j 2 install
     - uses: actions/upload-artifact@v3
       with:
-        name: build-gcc-full-eic-shell
+        name: build-${{ matrix.CC }}-full-eic-shell
         path: install/
         if-no-files-found: error
     - run: |
         source install/setup.sh
-        sed -i '/<fiber/,+6d' ${DETECTOR_PATH}/compact/ecal/barrel_interlayers.xml
-        sed -i '/<fiber/,+4d' ${DETECTOR_PATH}/compact/ecal/forward_scfi.xml
-        sed -i '/<fiber/,+4d' ${DETECTOR_PATH}/compact/far_forward/ZDC_Ecal_WSciFi.xml
-        sed -i '/<lens/,+4d' ${DETECTOR_PATH}/compact/pid/mrich.xml
+        sed -i 's%\(<fiber\|<lens\)%<comment>\1%g; s%\(/fiber>\|/lens>\)%\1</comment>%g' \
+          ${DETECTOR_PATH}/compact/ecal/barrel_interlayers.xml \
+          ${DETECTOR_PATH}/compact/ecal/forward_scfi.xml \
+          ${DETECTOR_PATH}/compact/far_forward/ZDC_Ecal_WSciFi.xml \
+          ${DETECTOR_PATH}/compact/pid/mrich.xml
     - uses: actions/upload-artifact@v3
       with:
-        name: build-gcc-fast-eic-shell
-        path: install/
-        if-no-files-found: error
-
-  build-clang:
-    runs-on: ubuntu-latest
-    needs: build-gcc
-    steps:
-    - uses: actions/checkout@v3
-    - uses: cvmfs-contrib/github-action-cvmfs@v3
-    - uses: eic/run-cvmfs-osg-eic-shell@main
-      with:
-        platform-release: "jug_xl:nightly"
-        network_types: "none"
-        run: |
-          PREFIX=${PWD}/install
-          CC=clang CXX=clang++ cmake -B build -S . -DCMAKE_INSTALL_PREFIX=${PREFIX}
-          cmake --build build -- -j 2 install
-    - uses: actions/upload-artifact@v3
-      with:
-        name: build-clang-full-eic-shell
-        path: install/
-        if-no-files-found: error
-    - run: |
-        source install/setup.sh
-        sed -i '/<fiber/,+6d' ${DETECTOR_PATH}/compact/ecal/barrel_interlayers.xml
-        sed -i '/<fiber/,+4d' ${DETECTOR_PATH}/compact/ecal/forward_scfi.xml
-        sed -i '/<fiber/,+4d' ${DETECTOR_PATH}/compact/far_forward/ZDC_Ecal_WSciFi.xml
-        sed -i '/<lens/,+4d' ${DETECTOR_PATH}/compact/pid/mrich.xml
-    - uses: actions/upload-artifact@v3
-      with:
-        name: build-clang-fast-eic-shell
+        name: build-${{ matrix.CC }}-fast-eic-shell
         path: install/
         if-no-files-found: error
 
   xmllint-after-build:
     runs-on: ubuntu-latest
-    needs: build-gcc
+    needs: build
     steps:
     - uses: actions/download-artifact@v3
       with:
@@ -151,10 +124,9 @@ jobs:
 
   trigger-geoviewer:
     runs-on: ubuntu-latest
-    needs: [xmllint-after-build]
-    strategy:
-      matrix:
-        detector_config: [epic_arches, epic_brycecanyon]
+    needs:
+      - xmllint-after-build
+      - list-detector-configs
     steps:
     - uses: eic/trigger-gitlab-ci@v2
       id: trigger
@@ -164,32 +136,20 @@ jobs:
         token: ${{ secrets.EICWEB_GEOVIEWER_TRIGGER }}
         ref_name: main
         variables: |
+          DETECTOR=epic
           DETECTOR_REPOSITORYURL=${{ github.server_url }}/${{ github.repository }}
           DETECTOR_REPOSITORYREF=${{ github.ref }}
-          DETECTOR_CONFIG=${{ matrix.detector_config }}
+          DETECTOR_CONFIG=${{ needs.list-detector-configs.outputs.configs_csv }}
           DETECTOR_VERSION=${{ github.event.pull_request.head.ref || github.ref_name }}
           GITHUB_REPOSITORY=${{ github.repository }}
           GITHUB_SHA=${{ github.event.pull_request.head.sha || github.sha }}
-    - run: |
-        gh api \
-           --method POST \
-          -H "Accept: application/vnd.github+json" \
-          /repos/${{ github.repository }}/statuses/${{ github.event.pull_request.head.sha || github.sha }} \
-          -f state="pending" \
-          -f target_url="${{ steps.trigger.outputs.web_url }}" \
-          -f description="Triggered... $(TZ=America/New_York date)" \
-          -f context="eicweb/geoviewer (${{ matrix.detector_config }})"
-      env:
-        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_PR=${{ github.event.pull_request.number }}
 
   check-geometry-configs:
     runs-on: ubuntu-latest
     needs:
-      - build-gcc
+      - build
       - list-detector-configs
-    strategy:
-      matrix: ${{ fromJson(needs.list-detector-configs.outputs.configs) }}
-      fail-fast: false
     steps:
     - uses: actions/checkout@v3
     - uses: actions/download-artifact@v3
@@ -203,11 +163,16 @@ jobs:
         network_types: "none"
         setup: install/setup.sh
         run: |
-          checkGeometry -c ${DETECTOR_PATH}/${DETECTOR}_${{ matrix.detector_config }}.xml
+          IFS=, read -a configs <<< "${{ needs.list-detector-configs.outputs.configs_csv }}"
+          for config in ${configs[@]} ; do
+            echo "::group::${config}" ;
+            checkGeometry -c ${DETECTOR_PATH}/${config}.xml ;
+            echo "::endgroup::" ;
+          done
 
   check-tracking-geometry:
     runs-on: ubuntu-latest
-    needs: build-gcc
+    needs: build
     steps:
     - uses: actions/checkout@v3
     - uses: actions/download-artifact@v3
@@ -226,7 +191,9 @@ jobs:
 
   convert-to-gdml:
     runs-on: ubuntu-latest
-    needs: build-gcc
+    needs:
+      - build
+      - list-detector-configs
     steps:
     - uses: actions/checkout@v3
     - uses: actions/download-artifact@v3
@@ -240,17 +207,23 @@ jobs:
         network_types: "none"
         setup: install/setup.sh
         run: |
-          mkdir -p geo
-          python scripts/convert_to_gdml.py --compact ${DETECTOR_PATH}/${DETECTOR}.xml --output geo/${DETECTOR}.gdml
+          IFS=, read -a configs <<< "${{ needs.list-detector-configs.outputs.configs_csv }}"
+          for config in ${configs[@]} ; do
+            echo "::group::${config}" ;
+            geoConverter -compact2gdml -input ${DETECTOR_PATH}/${config}.xml -output ${config}.gdml ;
+            echo "::endgroup::" ;
+          done
     - uses: actions/upload-artifact@v3
       with:
-        name: epic.gdml
-        path: geo/
+        name: gdml
+        path: "*.gdml"
         if-no-files-found: error
 
   convert-to-tgeo:
     runs-on: ubuntu-latest
-    needs: build-gcc
+    needs:
+      - build
+      - list-detector-configs
     steps:
     - uses: actions/checkout@v3
     - uses: actions/download-artifact@v3
@@ -264,17 +237,24 @@ jobs:
         network_types: "none"
         setup: install/setup.sh
         run: |
-          mkdir -p geo
-          dd_web_display --output geo/${DETECTOR}.root ${DETECTOR_PATH}/${DETECTOR}.xml
+          IFS=, read -a configs <<< "${{ needs.list-detector-configs.outputs.configs_csv }}"
+          for config in ${configs[@]} ; do
+            echo "::group::${config}" ;
+            geoConverter -compact2tgeo -input ${DETECTOR_PATH}/${config}.xml -output ${config}.root
+            echo "::endgroup::" ;
+          done
     - uses: actions/upload-artifact@v3
       with:
-        name: epic.root
-        path: geo/
+        name: tgeo
+        path: "*.root"
         if-no-files-found: error
 
   dump-constants:
     runs-on: ubuntu-latest
-    needs: build-gcc
+    needs: build
+    strategy:
+      matrix:
+        detector_config: [epic_craterlake]
     steps:
     - uses: actions/checkout@v3
     - uses: actions/download-artifact@v3
@@ -289,16 +269,19 @@ jobs:
         setup: install/setup.sh
         run: |
           mkdir -p doc
-          npdet_info dump ${DETECTOR_PATH}/epic.xml | tee doc/constants.out
+          npdet_info dump ${DETECTOR_PATH}/${{matrix.detector_config}}.xml | tee doc/${{matrix.detector_config}}_constants.out
     - uses: actions/upload-artifact@v3
       with:
-        name: constants.out
-        path: doc/constants.out
+        name: constants
+        path: doc/${{matrix.detector_config}}_constants.out
         if-no-files-found: error
 
   dump-parameter-table:
     runs-on: ubuntu-latest
-    needs: build-gcc
+    needs: build
+    strategy:
+      matrix:
+        detector_config: [epic_craterlake]
     steps:
     - uses: actions/checkout@v3
     - uses: actions/download-artifact@v3
@@ -313,52 +296,36 @@ jobs:
         setup: install/setup.sh
         run: |
           mkdir -p doc
-          npdet_info dump ${DETECTOR_PATH}/epic.xml | grep -v '^\s' | grep '=' | cut -d= -f1-2 | tee doc/constants.toml
-          python bin/make_detector_parameter_table | tee doc/DetectorParameterTable.csv
+          npdet_info dump ${DETECTOR_PATH}/${{matrix.detector_config}}.xml | grep -v '^\s' | grep '=' | cut -d= -f1-2 | tee doc/${{matrix.detector_config}}_constants.toml
+          cp doc/${{matrix.detector_config}}_constants.toml doc/constants.toml
+          python bin/make_detector_parameter_table | tee doc/${{matrix.detector_config}}.csv
+          sqlite3 -cmd \
+            ".import --csv doc/${{matrix.detector_config}}.csv detector_parameter_table" \
+            ".headers on" \
+            ".mode html" \
+            ".output doc/${{matrix.detector_config}}.html" \
+            "select * from detector_parameter_table;"
+          sed -i '1s/^/<html><body><table border="1" style="border-collapse:collapse">\n/;$a</table></body></html>' doc/${{matrix.detector_config}}.html
     - uses: actions/upload-artifact@v3
       with:
-        name: constants.toml
-        path: doc/constants.toml
+        name: constants
+        path: doc/${{matrix.detector_config}}_constants.toml
         if-no-files-found: error
     - uses: actions/upload-artifact@v3
       with:
-        name: DetectorParameterTable.csv
-        path: doc/DetectorParameterTable.csv
+        name: DetectorParameterTable
+        path: |
+          doc/${{matrix.detector_config}}.csv
+          doc/${{matrix.detector_config}}.html
         if-no-files-found: error
 
   check-overlap-tgeo:
     runs-on: ubuntu-latest
-    needs: build-gcc
+    needs: build
     strategy:
       matrix:
         option: ['m'] #, 's'] # FIXME
-        detector_config: [epic_arches_no_barrel_hcal, epic_brycecanyon_no_barrel_hcal] # FIXME
-      fail-fast: false
-    steps:
-    - uses: actions/checkout@v3
-    - uses: actions/download-artifact@v3
-      with:
-        name: build-gcc-full-eic-shell
-        path: install/
-    - uses: cvmfs-contrib/github-action-cvmfs@v3
-    - uses: eic/run-cvmfs-osg-eic-shell@main
-      with:
-        platform-release: "jug_xl:nightly"
-        network_types: "bridge" # this job must succeed even when new artifacts
-        setup: install/setup.sh
-        run: |
-          mkdir -p doc
-          checkOverlaps --option ${{ matrix.option }} -c ${DETECTOR_PATH}/${{ matrix.detector_config }}.xml | tee doc/overlap_check_tgeo.out
-          noverlaps="$(grep -c ovlp doc/overlap_check_tgeo.out || true)"
-          if [[ "${noverlaps}" -gt "0" ]] ; then echo "${noverlaps} overlaps found!" && false ; fi
-
-  check-overlap-tgeo-with-barrel-hcal:
-    runs-on: ubuntu-latest
-    needs: build-gcc
-    strategy:
-      matrix:
-        option: ['m'] #, 's'] # FIXME
-        detector_config: [epic_arches, epic_brycecanyon] # FIXME
+        detector_config: [epic_craterlake] # FIXME
       fail-fast: false
     steps:
     - uses: actions/checkout@v3
@@ -380,7 +347,7 @@ jobs:
 
   check-geometry-full:
     runs-on: ubuntu-latest
-    needs: build-gcc
+    needs: build
     if: github.ref == 'refs/heads/main'
     steps:
     - uses: actions/checkout@v3
@@ -407,10 +374,11 @@ jobs:
 
   check-overlap-geant4:
     runs-on: ubuntu-latest
-    needs: build-gcc
+    needs:
+      - build
     strategy:
       matrix:
-        detector_config: [epic_arches, epic_brycecanyon, epic_arches_no_barrel_hcal, epic_brycecanyon_no_barrel_hcal] # FIXME
+        detector_config: [epic_craterlake]
       fail-fast: false
     steps:
     - uses: actions/checkout@v3
@@ -432,35 +400,10 @@ jobs:
 
   check-overlap-geant4-fast:
     runs-on: ubuntu-latest
-    needs: build-gcc
+    needs: build
     strategy:
       matrix:
-        detector_config: [epic_inner_detector, epic_arches_no_barrel_hcal, epic_brycecanyon_no_barrel_hcal] # FIXME
-      fail-fast: false
-    steps:
-    - uses: actions/checkout@v3
-    - uses: actions/download-artifact@v3
-      with:
-        name: build-gcc-fast-eic-shell
-        path: install/
-    - uses: cvmfs-contrib/github-action-cvmfs@v3
-    - uses: eic/run-cvmfs-osg-eic-shell@main
-      with:
-        platform-release: "jug_xl:nightly"
-        network_types: "bridge" # this job must succeed even when new artifacts
-        setup: install/setup.sh
-        run: |
-          mkdir -p doc
-          python scripts/checkOverlaps.py -c ${DETECTOR_PATH}/${{ matrix.detector_config }}.xml | tee doc/overlap_check_geant4.out
-          noverlaps="$(grep -c GeomVol1002 doc/overlap_check_geant4.out || true)"
-          if [[ "${noverlaps}" -gt "0" ]] ; then echo "${noverlaps} overlaps found!" && false ; fi
-
-  check-overlap-geant4-fast-with-barrel-hcal:
-    runs-on: ubuntu-latest
-    needs: build-gcc
-    strategy:
-      matrix:
-        detector_config: [epic_arches, epic_brycecanyon] # FIXME
+        detector_config: [epic_inner_detector, epic_craterlake]
       fail-fast: false
     steps:
     - uses: actions/checkout@v3
@@ -485,7 +428,7 @@ jobs:
     needs: [check-overlap-tgeo, check-overlap-geant4-fast]
     strategy:
       matrix:
-        detector_config: [epic_arches, epic_brycecanyon]
+        detector_config: [epic_craterlake]
     steps:
     - uses: eic/trigger-gitlab-ci@v2
       id: trigger
@@ -495,11 +438,12 @@ jobs:
         token: ${{ secrets.EICWEB_DETECTOR_BENCHMARK_TRIGGER }}
         ref_name: master
         variables: |
+          DETECTOR=epic
           DETECTOR_REPOSITORYURL=${{ github.server_url }}/${{ github.repository }}
           DETECTOR_VERSION=${{ github.event.pull_request.head.ref || github.ref_name }}
           DETECTOR_CONFIG=${{ matrix.detector_config }}
-          GITHUB_REPOSITORY=${{ inputs.github_repository || github.repository }}
-          GITHUB_SHA=${{ inputs.github_sha || github.event.pull_request.head.sha || github.sha }}
+          GITHUB_REPOSITORY=${{ github.repository }}
+          GITHUB_SHA=${{ github.event.pull_request.head.sha || github.sha }}
     - run: |
         gh api \
            --method POST \
@@ -514,10 +458,10 @@ jobs:
 
   generate-prim-file:
     runs-on: ubuntu-latest
-    needs: build-gcc
+    needs: build
     strategy:
       matrix:
-        detector_config: [epic_arches, epic_brycecanyon]
+        detector_config: [epic_craterlake]
       fail-fast: false
     steps:
     - uses: actions/checkout@v3
@@ -546,7 +490,7 @@ jobs:
     strategy:
       matrix:
         view: [view1, view2, view3, view6, view7, view11, view13, view50]
-        detector_config: [epic_arches, epic_brycecanyon]
+        detector_config: [epic_craterlake]
       fail-fast: false
     steps:
     - uses: actions/checkout@v3
@@ -564,18 +508,19 @@ jobs:
           bin/make_dawn_views -i prim/${{ matrix.detector_config }}.prim -t ${{ matrix.view }} -d scripts/${{ matrix.view }} -D
     - uses: actions/upload-artifact@v3
       with:
-        name: ${{ matrix.detector_config }}_${{ matrix.view }}
+        name: ${{ matrix.detector_config }}_views
         path: images/
         if-no-files-found: error
 
   dawn-view-slices:
     runs-on: ubuntu-latest
     needs: generate-prim-file
+    if: github.ref == 'refs/heads/main'
     strategy:
       matrix:
         view: [view12, view14, view15]
         slice: [100, 300, 500, 700, 900, 1100, 1300, 1500, 1700, 1900]
-        detector_config: [epic_arches, epic_brycecanyon]
+        detector_config: [epic_craterlake]
       fail-fast: false
     steps:
     - uses: actions/checkout@v3
@@ -593,7 +538,7 @@ jobs:
           bin/make_dawn_views -i prim/${{ matrix.detector_config }}.prim -t ${{ matrix.view }} -d scripts/${{ matrix.view }} -D -- ${{ matrix.slice }}
     - uses: actions/upload-artifact@v3
       with:
-        name: ${{ matrix.detector_config }}_${{ matrix.view }}
+        name: ${{ matrix.detector_config }}_views
         path: images/
         if-no-files-found: error
 
@@ -603,40 +548,19 @@ jobs:
     runs-on: ubuntu-latest
     needs:
     - dawn-view
+    - dawn-view-slices
+    - convert-to-gdml
+    - convert-to-tgeo
+    - dump-constants
+    - dump-parameter-table
     steps:
+    - uses: actions/checkout@v3
     - uses: actions/download-artifact@v3
       with:
-        name: epic_arches_view1
-        path: html/
-    - uses: actions/download-artifact@v3
-      with:
-        name: epic_arches_view2
-        path: html/
-    - uses: actions/download-artifact@v3
-      with:
-        name: epic_arches_view1
-        path: html/arches/
-    - uses: actions/download-artifact@v3
-      with:
-        name: epic_arches_view2
-        path: html/arches/
-    - uses: actions/download-artifact@v3
-      with:
-        name: epic_brycecanyon_view1
-        path: html/brycecanyon/
-    - uses: actions/download-artifact@v3
-      with:
-        name: epic_brycecanyon_view2
-        path: html/brycecanyon/
-    - uses: actions/upload-artifact@v3
-      with:
-        name: artifacts-page
-        path: html/
-        if-no-files-found: error
+        path: artifacts/
+    - uses: actions/jekyll-build-pages@v1
     - uses: actions/upload-pages-artifact@v1
-      if: github.ref == 'refs/heads/main'
       with:
-        path: html/
         retention-days: 7
 
   deploy-artifacts-page:

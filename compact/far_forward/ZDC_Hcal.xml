@@ -1,3 +1,6 @@
+<!-- SPDX-License-Identifier: LGPL-3.0-or-later -->
+<!-- Copyright (C) 2022 Whitney Armstrong, Wouter Deconinck, Jihee Kim -->
+
 <lccdd>
   <comment>
     ///////////////////////////////////////////////////////////
@@ -7,14 +10,14 @@
   </comment>
 
   <detectors>
-    <detector id="ZDCHcal_ID" name="ZDCHcal" type="ZDC_Sampling" readout="ZDCHcalHits" vis="ZDCHcal_Vis">
+    <detector id="ZDCHcal_ID" name="ZDCHcal" type="ZDC_Sampling" readout="ZDCHcalHits" vis="ZDC_Hcal_Vis">
       <position x="ZDCHcal_x_pos" y="ZDCHcal_y_pos" z="ZDCHcal_z_pos"/>
       <rotation x="ZDCHcal_rotateX_angle" y="ZDCHcal_rotateY_angle" z="ZDCHcal_rotateZ_angle"/>
       <dimensions x="ZDCHcal_width" z="ZDCHcal_length"/>
       <layer repeat="ZDC_PbScint_NRepeat">
         <slice name="Lead_slice"  material="Pb"           thickness="ZDC_Lead_Thickness"  vis="AnlGray"/>
         <slice name="Scint_slice" material="PlasticScint" thickness="ZDC_Scint_Thickness" vis="AnlOrange" sensitive="true"/>
-	<slice name="Air_4_slice" material="Air"          thickness="ZDC_Air_4_Thickness" vis="InvisibleNoDaughters"/>
+        <slice name="Air_4_slice" material="Air"          thickness="ZDC_Air_4_Thickness" vis="InvisibleNoDaughters"/>
       </layer>
     </detector>
   </detectors>

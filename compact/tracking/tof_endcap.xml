@@ -1,4 +1,6 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<!-- SPDX-License-Identifier: LGPL-3.0-or-later -->
+<!-- Copyright (C) 2022 Nicolas Schmidt -->
+
 <lccdd>
   <define>
     <comment>
@@ -7,8 +9,6 @@
       --------------------------
     </comment>
     <comment> Forward TOF position </comment>
-    <constant name="ForwardTOF_length"              value="min(ForwardTOFRegion_length, 2.*cm)"/>
-    <constant name="ForwardTOF_zmin"                value="ForwardTOFRegion_zmin + ForwardTOFRegion_length - ForwardTOF_length - 1*cm"/>
     <constant name="ForwardTOF_nlayers"             value="1"/>
     <constant name="ForwardTOFMod_offset"           value="1.2*cm"/>
 
@@ -119,6 +119,70 @@
     <constant name="ForwardTOFMod_x1"           value="2 * ForwardTOFMod_rmin * tan(TOFEndcapMod_angle/2)" />
     <constant name="ForwardTOFMod_x2"           value="2 * ForwardTOFMod_rmax * sin(TOFEndcapMod_angle/2)" />
     <constant name="ForwardTOFMod_y"            value="ForwardTOFMod_rmax * cos(TOFEndcapMod_angle/2) - ForwardTOFMod_rmin" />
+
+   <constant name="EndcapTOF_Sensor_thickness"       value="0.3*mm"/>
+    <constant name="EndcapTOF_Hybrid_thickness"       value="0.008125*cm"/>
+    <constant name="EndcapTOF_HybridTrace_thickness"       value="0.002500*cm"/>
+    <constant name="EndcapTOF_HybridPCB_thickness"       value="0.1*cm"/>
+    <constant name="EndcapTOF_CFSkin_thickness"       value="2*0.0075*cm"/>
+    <constant name="EndcapTOF_CFSupp_thickness"        value="0.4*cm"/>
+    <constant name="EndcapTOF_CFoam_thickness"        value="2*0.29*cm"/>
+    <constant name="EndcapTOF_CHoneycomb_thickness"   value="2*0.29*cm"/>
+    <constant name="EndcapTOF_CoolingTube_thickness"  value="0.08*cm"/>
+    <constant name="EndcapTOF_Coolant_thickness"      value="0.08*cm"/>
+    <constant name="EndcapTOF_Module_thickness"       value="EndcapTOF_Sensor_thickness+2*EndcapTOF_Hybrid_thickness+2*EndcapTOF_CFSkin_thickness+EndcapTOF_CFoam_thickness+EndcapTOF_CoolingTube_thickness+EndcapTOF_Coolant_thickness"/>
+
+    <constant name="EndcapTOF_zOffset"                 value="0*cm"/>
+    <constant name="EndcapTOF_radius_design"           value="64.6*cm"/>
+    <constant name="EndcapTOF_Module_width_design"     value="53.5*mm"/>
+    <constant name="EndcapTOF_Module_length_design"    value="53.5*mm / 2"/>
+    <constant name="EndcapTOF_Module_overlap_design"   value="3*mm"/>
+    <constant name="EndcapTOF_Module_spacing_design"   value="0.5*mm"/>
+    <constant name="EndcapTOF_Sensor_width_design"     value="53 *mm"/>
+    <constant name="EndcapTOF_Sensor_length_design"    value="53 *mm / 2"/>
+    <constant name="EndcapTOF_CFoam_width_design"      value="EndcapTOF_Sensor_width_design-5.0*mm"/>
+    <constant name="EndcapTOF_CHoneycomb_width_design" value="EndcapTOF_Module_width_design-EndcapTOF_CFoam_width_design"/>
+    <constant name="EndcapTOF_CoolingTube_width_design" value="0.75*cm"/>
+    <constant name="EndcapTOF_Coolant_width_design"    value="0.75*cm"/>
+
+    <constant name="EndcapTOF_Sensor_position_design"  value="0.5*(EndcapTOF_Sensor_width_design-EndcapTOF_Module_width_design)"/>
+    <constant name="EndcapTOF_CFoam_position_design"   value="0.5*(EndcapTOF_CFoam_width_design-EndcapTOF_Module_width_design)"/>
+    <constant name="EndcapTOF_CHoneycomb_position_design"  value="0.5*(EndcapTOF_Module_width_design-EndcapTOF_CHoneycomb_width_design)"/>
+    <constant name="EndcapTOF_CoolingTube_position_design"  value="EndcapTOF_CHoneycomb_position_design"/>
+    <constant name="EndcapTOF_Coolant_position_design" value="EndcapTOF_CHoneycomb_position_design"/>
+    <constant name="EndcapTOF_Service_position_design" value="0.0*mm"/>
+
+    <constant name="EndcapTOF_scale"               value="1.0"/>
+    <constant name="EndcapTOF_radius"              value="EndcapTOF_scale * EndcapTOF_radius_design"/>
+    <constant name="EndcapTOF_Sensor_width"        value="EndcapTOF_scale * EndcapTOF_Sensor_width_design"/>
+    <constant name="EndcapTOF_Sensor_length"        value="EndcapTOF_scale * EndcapTOF_Sensor_length_design"/>
+    <constant name="EndcapTOF_CFoam_width"         value="EndcapTOF_scale * EndcapTOF_CFoam_width_design"/>
+    <constant name="EndcapTOF_CHoneycomb_width"    value="EndcapTOF_scale * EndcapTOF_CHoneycomb_width_design"/>
+    <constant name="EndcapTOF_CoolingTube_width"   value="EndcapTOF_scale * EndcapTOF_CoolingTube_width_design"/>
+    <constant name="EndcapTOF_Coolant_width"       value="EndcapTOF_scale * EndcapTOF_Coolant_width_design"/>
+    <constant name="EndcapTOF_Sensor_position"     value="EndcapTOF_scale * EndcapTOF_Sensor_position_design"/>
+    <constant name="EndcapTOF_CFoam_position"      value="EndcapTOF_scale * EndcapTOF_CFoam_position_design"/>
+    <constant name="EndcapTOF_CHoneycomb_position" value="EndcapTOF_scale * EndcapTOF_CHoneycomb_position_design"/>
+    <constant name="EndcapTOF_CoolingTube_position" value="EndcapTOF_scale * EndcapTOF_CoolingTube_position_design"/>
+    <constant name="EndcapTOF_Coolant_position"    value="EndcapTOF_scale * EndcapTOF_Coolant_position_design"/>
+    <constant name="EndcapTOF_Service_position"    value="EndcapTOF_scale * EndcapTOF_Service_position_design"/>
+    <constant name="EndcapTOF_Module_width"        value="EndcapTOF_scale*EndcapTOF_Module_width_design"/>
+    <constant name="EndcapTOF_Module_length"        value="EndcapTOF_scale*EndcapTOF_Module_length_design"/>
+    <constant name="EndcapTOF_Module_overlap"        value="EndcapTOF_scale*EndcapTOF_Module_overlap_design"/>
+    <constant name="EndcapTOF_Module_spacing"        value="EndcapTOF_scale*EndcapTOF_Module_spacing_design"/>
+    <constant name="EndcapTOF_Module_tiltangle"    value="20*degree"/>
+    <constant name="EndcapTOF_Module_nphi"         value="144"/>
+    <constant name="EndcapTOF_Module_nz"           value="1"/>
+
+    <constant name="EndcapTOF_rOffset1"            value="1.6*cm"/>
+    <constant name="EndcapTOF_rOffset2"            value="1.4*cm"/>
+    <constant name="EndcapTOF_rmin"                value="EndcapTOF_radius-EndcapTOF_rOffset1"/>
+    <constant name="EndcapTOF_rmax"                value="EndcapTOF_radius+EndcapTOF_rOffset2"/>
+    <constant name="EndcapTOF_length1"             value="80 * cm"/>
+    <constant name="EndcapTOF_length2"             value="EndcapTOF_length1"/>
+    <constant name="EndcapTOF_length"              value="EndcapTOF_length2"/>
+
+
   </define>
 
   <detectors>
@@ -128,6 +192,7 @@
       type="epic_CompositeTracker"
       actsType="endcap"
       vis="TrackerSubAssemblyVis">
+      <type_flags type="DetType_TRACKER + DetType_ENDCAP"/>
       <position x="0*cm" y="0*cm" z="-1*um" />
     </detector>
     <detector
@@ -138,54 +203,85 @@
       readout="TOFEndcapHits"
       vis="TOFVis"
       reflect="false">
+      <type_flags type="DetType_TRACKER + DetType_ENDCAP"/>
       <position x="0*cm" y="0*cm" z="ForwardTOF_zmin" />
-      <module name="ForwardModule" vis="TOFModuleVis">
-        <dimensions
-          rMin="ForwardTOFMod_rmin"
-          rMax="ForwardTOFMod_rmax"
-          xOffset="ForwardTOF_xOffset"
-          det_height="ForwardTOF_det_height"
-          zPos="ForwardTOF_zmin"
-          cooling_plate_height="TOFEndcap_cooling_plate_height"
-          wallthickness_coolingtube="TOFEndcap_wallthickness_coolingtube"
-          diameter_coolingtube="TOFEndcap_diameter_coolingtube"
-          material="Aluminum"/>
-        <sensorparameters
-          width="TOFEndcap_sensor_width"
-          length="TOFEndcap_sensor_length"
-          baseplate_length="TOFEndcap_baseplate_length"
-          baseplate_width="TOFEndcap_baseplate_width"/>
-      </module>
-      <layer id="1">
-        <envelope  vis="TOFLayerVis"
+      <moduleFront name="EndcapTOF_Module1" vis="TOFEndcapModuleVis">
+        <module_component name="hybridkaptontop" material="Kapton" sensitive="false" width="EndcapTOF_Module_width" length="EndcapTOF_Module_length" thickness="EndcapTOF_Hybrid_thickness" vis="TOFHybridVis" >
+          <position x="EndcapTOF_Service_position" y="0" z="0" />
+        </module_component>
+        <module_component name="hybridPCB" material="Fr4" sensitive="false" width="EndcapTOF_Module_width" length="EndcapTOF_Module_length" thickness="EndcapTOF_HybridPCB_thickness" vis="AnlGreen" >
+          <position x="EndcapTOF_Service_position" y="0" z="0" />
+        </module_component>
+        <module_component name="hybridtraces" material="Copper" sensitive="false" width="EndcapTOF_Module_width" length="EndcapTOF_Module_length" thickness="EndcapTOF_HybridTrace_thickness" vis="TOFCFoamVis" >
+          <position x="EndcapTOF_Service_position" y="0" z="0" />
+        </module_component>
+        <module_component name="hybridkaptonbottom" material="Kapton" sensitive="false" width="EndcapTOF_Module_width" length="EndcapTOF_Module_length" thickness="EndcapTOF_Hybrid_thickness" vis="TOFHybridVis" >
+          <position x="EndcapTOF_Service_position" y="0" z="0" />
+        </module_component>
+        <module_component name="sensor" material="Silicon" sensitive="true" width="EndcapTOF_Sensor_width" length="EndcapTOF_Sensor_length" thickness="EndcapTOF_Sensor_thickness" vis="TOFSensorVis" >
+          <position x="EndcapTOF_Sensor_position" y="0" z="0" />
+        </module_component>
+        <module_component name="carbonsupport" material="CarbonFiber" sensitive="false" width="EndcapTOF_Module_width" length="EndcapTOF_Module_length" thickness="EndcapTOF_CFSupp_thickness" vis="AnlGray" >
+          <position x="EndcapTOF_Sensor_position" y="0" z="0" />
+        </module_component>
+      </moduleFront>
+      <moduleBack name="EndcapTOF_Module1" vis="TOFEndcapModuleVis">
+        <module_component name="carbonsupport" material="CarbonFiber" sensitive="false" width="EndcapTOF_Module_width" length="EndcapTOF_Module_length" thickness="EndcapTOF_CFSupp_thickness" vis="AnlGray" >
+          <position x="EndcapTOF_Sensor_position" y="0" z="0" />
+        </module_component>
+        <module_component name="sensor" material="Silicon" sensitive="true" width="EndcapTOF_Sensor_width" length="EndcapTOF_Sensor_length" thickness="EndcapTOF_Sensor_thickness" vis="TOFSensorVis" >
+          <position x="EndcapTOF_Sensor_position" y="0" z="0" />
+        </module_component>
+        <module_component name="hybridkaptonbottom" material="Kapton" sensitive="false" width="EndcapTOF_Module_width" length="EndcapTOF_Module_length" thickness="EndcapTOF_Hybrid_thickness" vis="TOFHybridVis" >
+          <position x="EndcapTOF_Service_position" y="0" z="0" />
+        </module_component>
+        <module_component name="hybridtraces" material="Copper" sensitive="false" width="EndcapTOF_Module_width" length="EndcapTOF_Module_length" thickness="EndcapTOF_HybridTrace_thickness" vis="TOFCFoamVis" >
+          <position x="EndcapTOF_Service_position" y="0" z="0" />
+        </module_component>
+        <module_component name="hybridPCB" material="Fr4" sensitive="false" width="EndcapTOF_Module_width" length="EndcapTOF_Module_length" thickness="EndcapTOF_HybridPCB_thickness" vis="AnlGreen" >
+          <position x="EndcapTOF_Service_position" y="0" z="0" />
+        </module_component>
+        <module_component name="hybridkaptontop" material="Kapton" sensitive="false" width="EndcapTOF_Module_width" length="EndcapTOF_Module_length" thickness="EndcapTOF_Hybrid_thickness" vis="TOFHybridVis" >
+          <position x="EndcapTOF_Service_position" y="0" z="0" />
+        </module_component>
+      </moduleBack>
+      <layer module="EndcapTOF_Module1" id="1">
+        <envelope vis="TOF_envelope"
           rmin="ForwardTOFLayer_rmin"
           rmax="ForwardTOFLayer_rmax"
-          length="TOFEndcapLayer_thickness"
-          zstart="ForwardTOFLayer1_zmin" />
+          length="3*cm"
+          zstart="ForwardTOF_zmin" />
+        <layer_material surface="inner" binning="binPhi,binR" bins0="30" bins1="30"/>
+        <layer_material surface="inner" binning="binPhi,binR" bins0="30" bins1="30"/>
+        <y_layout dr="0.0*mm" z0="EndcapTOF_zOffset" nz="EndcapTOF_Module_nz"/>
+        <z_layout z0="ForwardTOF_zmin"/>
       </layer>
-      <layer id="2" name="SensorStack" thickness="SS_thickness" numslices="8"  binning="binPhi,binR" bins0="20" bins1="256">
-          <slice name="ThermalPad"  material="Graphite"         thickness="SS_TP_thickness" width="SS_TP_width" length="SS_TP_length" offset="SS_TP_offset" sensitive="no"/>
-          <slice name="ALNBtm"      material="AluminumNitrate"  thickness="SS_ALNBtm_thickness"     width="SS_ALNBtm_width"     length="SS_ALNBtm_length"     offset="SS_ALNBtm_offset"     sensitive="no"/>
-          <slice name="LairdFilm"   material="Graphite"         thickness="SS_LairdFilm_thickness"  width="SS_LairdFilm_width"  length="SS_LairdFilm_length"  offset="SS_LairdFilm_offset"  sensitive="no"/>
-          <slice name="ROC"         material="Plexiglass"       thickness="SS_ROC_thickness"        width="SS_ROC_width"        length="SS_ROC_length"        offset="SS_ROC_offset"        sensitive="no"/>
-          <slice name="Solder"      material="Tin"              thickness="SS_Solder_thickness"     width="SS_Solder_width"     length="SS_Solder_length"     offset="SS_Solder_offset"     sensitive="no"/>
-          <slice name="Sensor"      material="Silicon"          thickness="SS_Sensor_thickness"     width="SS_Sensor_width"     length="SS_Sensor_length"     offset="SS_Sensor_offset"     sensitive="yes"/>
-          <slice name="Epoxy"       material="Epoxy"            thickness="SS_Epoxy_thickness"      width="SS_Epoxy_width"      length="SS_Epoxy_length"      offset="SS_Epoxy_offset"      sensitive="no"/>
-          <slice name="ALNTop"      material="AluminumNitrate"  thickness="SS_ALNTop_thickness"     width="SS_ALNTop_width"     length="SS_ALNTop_length"     offset="SS_ALNTop_offset"     sensitive="no"/>
-        </layer>
-      <layer id="3" name="ServiceHybridStack" thickness="SH_thickness" numslices="4">
-          <slice name="ThermalPad"      material="Graphite"     thickness="SH_TP_thickness"     width="SH_TP_width"         length="SH_TP_length"         offset="SH_TP_offset"         sensitive="no"/>
-          <slice name="HighSpeedBoard"  material="Polystyrene"  thickness="SH_HSB_thickness"    width="SH_HSB_width"        length="SH_HSB_length"        offset="SH_HSB_offset"        sensitive="no"/>
-          <slice name="ConnectorSpace"  material="Air"          thickness="SH_ConnSp_thickness" width="SH_ConnSp_width"     length="SH_ConnSp_length"     offset="SH_ConnSp_offset"     sensitive="no"/>
-          <slice name="Powerboard"      material="Polystyrene"  thickness="SH_PB_thickness"     width="SH_PB_width"         length="SH_PB_length"         offset="SH_PB_offset"         sensitive="no"/>
-        </layer>
+      <support module="EndcapTOF_SupportDummy" id="1" vis="InvisibleWithDaughters">
+        <envelope vis="AnlGray"
+          rmin="ForwardTOFLayer_rmin"
+          rmax="ForwardTOFLayer_rmax"
+          length="12*mm"
+          zstart="ForwardTOF_zmin" />
+      </support>
+      <modsize
+          width="EndcapTOF_Module_width"
+          length="EndcapTOF_Module_length"
+          overlap="EndcapTOF_Module_overlap"
+          spacing="EndcapTOF_Module_spacing" />
     </detector>
   </detectors>
 
+  <plugins>
+    <plugin name="DD4hep_ParametersPlugin">
+      <argument value="ForwardTOF"/>
+      <argument value="layer_pattern: str=ForwardTOF_layer\d"/>
+    </plugin>
+  </plugins>
+
   <readouts>
     <readout name="TOFEndcapHits">
-      <segmentation type="CartesianGridXZ" grid_size_x="100*um" grid_size_z="100*um" />
-      <id>system:8,layer:2,module:6,sensor:16,x:32:-16,z:-16</id>
+      <segmentation type="CartesianGridXY" grid_size_x="0.1*mm" grid_size_y="0.1*cm" />
+      <id>system:8,layer:4,module:8,idx:7,idy:5,x:32:-16,y:-16</id>
     </readout>
   </readouts>
 

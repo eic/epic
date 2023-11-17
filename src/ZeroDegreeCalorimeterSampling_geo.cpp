@@ -1,3 +1,6 @@
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (C) 2022 Whitney Armstrong
+
 #include "DD4hep/DetFactoryHelper.h"
 #include "DD4hep/OpticalSurfaces.h"
 #include "DD4hep/Printout.h"
@@ -85,7 +88,7 @@ static Ref_t createDetector(Detector& desc, xml_h e, SensitiveDetector sens)
 
   DetElement   det(detName, detID);
   Volume       motherVol = desc.pickMotherVolume(det);
-  Transform3D  tr(RotationZYX(rot.z(), -rot.y(), rot.x()), Position(pos.x(), pos.y(), pos.z() + totWidth / 2.0));
+  Transform3D  tr(RotationZYX(rot.z(), rot.y(), rot.x()), Position(pos.x(), pos.y(), pos.z() + totWidth / 2.0));
   PlacedVolume phv = motherVol.placeVolume(envelopeVol, tr);
   phv.addPhysVolID("system", detID);
   det.setPlacement(phv);

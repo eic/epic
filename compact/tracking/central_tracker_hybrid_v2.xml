@@ -1,4 +1,6 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<!-- SPDX-License-Identifier: LGPL-3.0-or-later -->
+<!-- Copyright (C) 2022 Sylvester Joosten -->
+
 <lccdd>
   <comment>
     Master tracker parameters
@@ -288,7 +290,7 @@ total X0 0.24% per disk layer （4 sectors per disk):
   <detectors>
     <detector type="epic_SupportServiceMaterial"
       name="SupportCone"
-      id="84"
+      id="TrackerSupport_0_ID"
     >
       <support type="Cone"
         name="serv_cone_dmmy_neg"

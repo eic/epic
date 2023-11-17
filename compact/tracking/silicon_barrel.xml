@@ -1,4 +1,6 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<!-- SPDX-License-Identifier: LGPL-3.0-or-later -->
+<!-- Copyright (C) 2022 Sylvester Joosten, Wouter Deconinck, Shujie Li -->
+
 <lccdd>
   <define>
     <comment>
@@ -54,6 +56,7 @@
       type="epic_TrackerBarrel"
       readout="SiBarrelHits"
       insideTrackingVolume="true">
+      <type_flags type="DetType_TRACKER + DetType_BARREL"/>
       <dimensions
         rmin="SiBarrelLayer1_rmin"
         rmax="SiBarrelLayer1_rmax"
@@ -111,6 +114,7 @@
       type="epic_TrackerBarrel"
       readout="SiBarrelHits"
       insideTrackingVolume="true">
+      <type_flags type="DetType_TRACKER + DetType_BARREL"/>
       <dimensions
         rmin="SiBarrelLayer2_rmin"
         rmax="SiBarrelLayer2_rmax"
@@ -161,9 +165,20 @@
     </detector>
   </detectors>
 
+  <plugins>
+    <plugin name="DD4hep_ParametersPlugin">
+      <argument value="SagittaSiBarrel"/>
+      <argument value="layer_pattern: str=SagittaSiBarrel_layer\d"/>
+    </plugin>
+    <plugin name="DD4hep_ParametersPlugin">
+      <argument value="OuterSiBarrel"/>
+      <argument value="layer_pattern: str=OuterSiBarrel_layer\d"/>
+    </plugin>
+  </plugins>
+
   <readouts>
     <readout name="SiBarrelHits">
-      <segmentation type="CartesianGridXY" grid_size_x="0.010*mm" grid_size_y="0.010*mm" />
+      <segmentation type="CartesianGridXY" grid_size_x="0.020*mm" grid_size_y="0.020*mm" />
       <id>system:8,layer:4,module:12,sensor:2,x:32:-12,y:-20</id>
     </readout>
   </readouts>

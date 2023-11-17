@@ -1,0 +1,162 @@
+<!-- SPDX-License-Identifier: LGPL-3.0-or-later -->
+<!-- Copyright (C) 2022 Nicolas Schmidt -->
+
+<lccdd>
+  <define>
+    <comment>
+      --------------------------
+      Forward MPGD Parameters
+      --------------------------
+    </comment>
+    <comment> Forward MPGD position </comment>
+    <constant name="ForwardMPGD_nlayers"             value="2"/>
+    <constant name="ForwardMPGD_AllowedSpace"        value="2.5*cm"/>
+
+    <comment> Parameters for the endcap MPGDs </comment>
+    <constant name="ForwardMPGDEndcapMod_count"             value="48" />
+    <constant name="ForwardMPGDEndcapMod_dz"                value="0" />
+    <constant name="ForwardMPGDEndcapMod_overlap"           value="0" />
+
+    <comment> Layer definitions around the sensor for the endcap MPGDs </comment>
+    <constant name="ForwardMPGDDriftGap_thickness"           value="3.0*mm" />
+    <constant name="ForwardMPGDWindow_thickness"             value="50*um"/>
+    <constant name="ForwardMPGDWindowGap_thickness"          value="2*mm"/>
+    <constant name="ForwardMPGDFoilCu_thickness"             value="5*um"/>
+    <constant name="ForwardMPGDReadOutElectrode_thickness"   value="10*um"/>
+    <constant name="ForwardMPGDFoilKapton_thickness"         value="50*um"/>
+    <constant name="ForwardMPGDReadOutNomex_thickness"       value="50*um"/>
+    <constant name="ForwardMPGDReadOutKapton_thickness"      value="50*um"/>
+    <constant name="ForwardMPGDPCB_thickness"                value="1.5*mm"/>
+  </define>
+
+  <comment>
+    Actual detector implementation.
+  </comment>
+  <define>
+    <constant name="ForwardMPGDEndcapMod_angle"         value="360.0*degree/ForwardMPGDEndcapMod_count*(1.0 + ForwardMPGDEndcapMod_overlap)" />
+    <comment> 1 um padding to not have layer and module touch (ACTS requirement) </comment>
+    <constant name="ForwardMPGDLayerPad"                    value="0*um"/>
+    <comment> Detector thickness </comment>
+    <constant name="ForwardMPGDCathode_thickness" value="ForwardMPGDFoilKapton_thickness + ForwardMPGDFoilCu_thickness"/>
+    <constant name="ForwardMPGDRWell_thickness"   value="ForwardMPGDFoilKapton_thickness + ForwardMPGDFoilCu_thickness"/>
+    <constant name="ForwardMPGDReadOut_thickness"  value="ForwardMPGDReadOutNomex_thickness + ForwardMPGDReadOutElectrode_thickness + ForwardMPGDReadOutKapton_thickness "/>
+    <comment>@TODO: have space for 3 frames (2mm + 2mm + 3mm) need to add frame material </comment>
+    <constant name="ForwardMPGDFrame_thickness"   value="2*ForwardMPGDWindowGap_thickness + ForwardMPGDDriftGap_thickness"/>
+    <constant name="ForwardMPGDEndcapMod_thickness"  value="ForwardMPGDCathode_thickness + ForwardMPGDRWell_thickness + ForwardMPGDReadOut_thickness + ForwardMPGDFrame_thickness"/>
+    <constant name="ForwardMPGDEndcapLayer_thickness"   value="ForwardMPGDEndcapMod_thickness + 2 * ForwardMPGDEndcapMod_dz + ForwardMPGDLayerPad" />
+
+    <constant name="ForwardMPGDMod1_zmin"        value="ForwardMPGD_zmin" />
+    <constant name="ForwardMPGDMod2_zmin"        value="ForwardMPGD_zmin + ForwardMPGDMod_offset" />
+    <constant name="ForwardMPGDLayer1_rmin"       value="ForwardMPGDMod1_rmin - ForwardMPGDLayerPad" />
+    <constant name="ForwardMPGDLayer2_rmin"       value="ForwardMPGDMod2_rmin - ForwardMPGDLayerPad" />
+    <constant name="ForwardMPGDLayer1_rmax"       value="ForwardMPGDMod1_rmax + ForwardMPGDLayerPad" />
+    <constant name="ForwardMPGDLayer2_rmax"       value="ForwardMPGDMod2_rmax + ForwardMPGDLayerPad" />
+    <constant name="ForwardMPGDLayer1_zmin"       value="ForwardMPGDMod1_zmin - ForwardMPGDLayerPad" />
+    <constant name="ForwardMPGDLayer2_zmin"       value="ForwardMPGDMod2_zmin + ForwardMPGDLayerPad" />
+
+    <constant name="ForwardMPGDMod1_x1"           value="2 * ForwardMPGDMod1_rmin * tan(ForwardMPGDEndcapMod_angle/2)" />
+    <constant name="ForwardMPGDMod1_x2"           value="2 * ForwardMPGDMod1_rmax * sin(ForwardMPGDEndcapMod_angle/2)" />
+    <constant name="ForwardMPGDMod1_y"            value="ForwardMPGDMod1_rmax * cos(ForwardMPGDEndcapMod_angle/2) - ForwardMPGDMod1_rmin" />
+    <constant name="ForwardMPGDMod2_x1"           value="2 * ForwardMPGDMod2_rmin * tan(ForwardMPGDEndcapMod_angle/2)" />
+    <constant name="ForwardMPGDMod2_x2"           value="2 * ForwardMPGDMod2_rmax * sin(ForwardMPGDEndcapMod_angle/2)" />
+    <constant name="ForwardMPGDMod2_y"            value="ForwardMPGDMod2_rmax * cos(ForwardMPGDEndcapMod_angle/2) - ForwardMPGDMod2_rmin" />
+  </define>
+
+  <detectors>
+      <detector
+        id="TrackerEndcapP_5_ID"
+        name="ForwardMPGD"
+        type="epic_TrapEndcapTracker"
+        actsType="endcap"
+        readout="ForwardMPGDEndcapHits"
+        vis="MPGDVis"
+        reflect="false">
+        <type_flags type="DetType_TRACKER + DetType_ENDCAP"/>
+        <module name="ForwardModule1" vis="MPGDModuleVis">
+          <trd x1="ForwardMPGDMod1_x1/2.0" x2="ForwardMPGDMod1_x2/2.0" z="ForwardMPGDMod1_y/2"/>
+          <comment> Window and drift region </comment>
+          <module_component thickness="ForwardMPGDDriftGap_thickness" material="Ar" sensitive="true" vis="MPGDVis"/>
+          <module_component thickness="ForwardMPGDWindowGap_thickness" material="Ar" sensitive="false" vis="MPGDVis"/>
+          <module_component thickness="ForwardMPGDWindow_thickness" material="Kapton" sensitive="false" vis="MPGDVis"/>
+          <comment> HV Cathode </comment>
+          <module_component name="Cathode Kapton" thickness="ForwardMPGDFoilKapton_thickness" material="Kapton" sensitive="false" vis="MPGDVis"/>
+          <module_component name="Cathode Cu" thickness="ForwardMPGDFoilCu_thickness" material="Copper" sensitive="false" vis="MPGDVis"/>
+          <comment> Amplification foil (urwell) </comment>
+          <module_component name="RWell Cu" thickness="ForwardMPGDFoilCu_thickness" material="Copper" sensitive="false" vis="MPGDVis"/>
+          <module_component name="RWell Kapton" thickness="ForwardMPGDFoilKapton_thickness" material="Kapton" sensitive="false" vis="MPGDVis"/>
+          <comment> Readout/Backboard </comment>
+          <module_component name="Readout Nomex" thickness="ForwardMPGDReadOutNomex_thickness" material="Nomex" sensitive="false" vis="MPGDVis"/>
+          <module_component name="Readout Electrodes" thickness="ForwardMPGDReadOutElectrode_thickness" material="Copper" sensitive="false" vis="MPGDVis"/>
+          <module_component name="Readout Kapton" thickness="ForwardMPGDReadOutKapton_thickness" material="Kapton" sensitive="false" vis="MPGDVis"/>
+          <module_component name="Readout PCB" thickness="ForwardMPGDPCB_thickness" material="Fr4" sensitive="false" vis="MPGDVis"/>
+        </module>
+        <module name="ForwardModule2" vis="MPGDModuleVis">
+          <trd x1="ForwardMPGDMod2_x1/2.0" x2="ForwardMPGDMod2_x2/2.0" z="ForwardMPGDMod2_y/2"/>
+          <comment> Window and drift region </comment>
+          <module_component thickness="ForwardMPGDDriftGap_thickness" material="Ar" sensitive="true" vis="MPGDVis"/>
+          <module_component thickness="ForwardMPGDWindowGap_thickness" material="Ar" sensitive="false" vis="MPGDVis"/>
+          <module_component thickness="ForwardMPGDWindow_thickness" material="Kapton" sensitive="false" vis="MPGDVis"/>
+          <comment> HV Cathode </comment>
+          <module_component name="Cathode Kapton" thickness="ForwardMPGDFoilKapton_thickness" material="Kapton" sensitive="false" vis="MPGDVis"/>
+          <module_component name="Cathode Cu" thickness="ForwardMPGDFoilCu_thickness" material="Copper" sensitive="false" vis="MPGDVis"/>
+          <comment> Amplification foil (urwell) </comment>
+          <module_component name="RWell Cu" thickness="ForwardMPGDFoilCu_thickness" material="Copper" sensitive="false" vis="MPGDVis"/>
+          <module_component name="RWell Kapton" thickness="ForwardMPGDFoilKapton_thickness" material="Kapton" sensitive="false" vis="MPGDVis"/>
+          <comment> Readout/Backboard </comment>
+          <module_component name="Readout Nomex" thickness="ForwardMPGDReadOutNomex_thickness" material="Nomex" sensitive="false" vis="MPGDVis"/>
+          <module_component name="Readout Electrodes" thickness="ForwardMPGDReadOutElectrode_thickness" material="Copper" sensitive="false" vis="MPGDVis"/>
+          <module_component name="Readout Kapton" thickness="ForwardMPGDReadOutKapton_thickness" material="Kapton" sensitive="false" vis="MPGDVis"/>
+          <module_component name="Readout PCB" thickness="ForwardMPGDPCB_thickness" material="Fr4" sensitive="false" vis="MPGDVis"/>
+        </module>
+
+        <layer id="1">
+          <envelope  vis="MPGDLayerVis"
+            rmin="ForwardMPGDLayer1_rmin"
+            rmax="ForwardMPGDLayer1_rmax"
+            length="ForwardMPGDEndcapLayer_thickness"
+            zstart="ForwardMPGDLayer1_zmin" />
+          <layer_material surface="inner" binning="binPhi,binR" bins0="ForwardMPGDEndcapMod_count" bins1="30"/>
+          <layer_material surface="outer" binning="binPhi,binR" bins0="ForwardMPGDEndcapMod_count" bins1="30"/>
+
+          <ring
+            r="ForwardMPGDMod1_rmin + ForwardMPGDMod1_y/2.0"
+            zstart="0"
+            nmodules="ForwardMPGDEndcapMod_count"
+            dz="ForwardMPGDEndcapMod_dz"
+            module="ForwardModule1" />
+        </layer>
+
+        <layer id="2">
+          <envelope  vis="MPGDLayerVis"
+            rmin="ForwardMPGDLayer2_rmin"
+            rmax="ForwardMPGDLayer2_rmax"
+            length="ForwardMPGDEndcapLayer_thickness"
+            zstart="ForwardMPGDLayer2_zmin" />
+          <layer_material surface="inner" binning="binPhi,binR" bins0="ForwardMPGDEndcapMod_count" bins1="30"/>
+          <layer_material surface="outer" binning="binPhi,binR" bins0="ForwardMPGDEndcapMod_count" bins1="30"/>
+
+          <ring
+            r="ForwardMPGDMod2_rmin + ForwardMPGDMod2_y/2.0"
+            zstart="0"
+            nmodules="ForwardMPGDEndcapMod_count"
+            dz="ForwardMPGDEndcapMod_dz"
+            module="ForwardModule2" />
+        </layer>
+      </detector>
+  </detectors>
+
+  <plugins>
+    <plugin name="DD4hep_ParametersPlugin">
+      <argument value="ForwardMPGD"/>
+      <argument value="layer_pattern: str=ForwardMPGD_layer\d_P"/>
+    </plugin>
+  </plugins>
+
+  <readouts>
+    <readout name="ForwardMPGDEndcapHits">
+      <segmentation type="CartesianGridXZ" grid_size_x="sqrt(12)*150*um" grid_size_z="sqrt(12)*150*um" />
+      <id>system:8,layer:2,module:6,sensor:16,x:32:-16,z:-16</id>
+    </readout>
+  </readouts>
+
+</lccdd>

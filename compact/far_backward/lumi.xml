@@ -1,129 +1,14 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<!-- SPDX-License-Identifier: LGPL-3.0-or-later -->
+<!-- Copyright (C) 2022 Jaroslav Adam, Dhevan Gangadharan -->
+
 <lccdd>
 
-  <define>
-
-
-    <constant name="Collimator_Box_Depth"    value="300*mm"/>
-    <constant name="Collimator_Box_Width"    value="100*mm"/>
-    <constant name="Collimator_Box_Height"   value="100*mm"/>
-
-    <constant name="Collimator_Hole_Height"  value="70*mm"/>
-    <constant name="Collimator_Hole_Width"   value="96*mm"/>
-    <constant name="Collimator_Hole_XOff"    value="0"/>
-
-    <constant name="CollimatorZ"    value="-27*m"/>
-
-    <!-- Luminosity exit window -->
-    <constant name="LumiWin_XY" value="0.074*m"/>
-    <constant name="LumiWin_DZ" value="0.29*m"/>
-
-    <!-- Luminosity dipole magnet -->
-    <constant name="LumiMag_cen_Z" value="-28*m"/>
-    <constant name="LumiMag_R" value="0.1*m"/>
-    <constant name="LumiMag_DZ" value="0.6*m"/>
-
-    <!-- Luminosity spectrometers up and down -->
-    <constant name="LumiSpec_Z" value="-36.4*m"/>
-    <constant name="LumiSpec_XY" value="0.2*m"/>
-    <constant name="LumiSpec_DZ" value="0.35*m"/>
-    <constant name="LumiSpec_cen_Y" value="0.142*m"/>
-
-    <!-- Luminosity direct photon detector -->
-    <constant name="LumiD_Z" value="-37*m"/>
-    <constant name="LumiD_XY" value="0.2*m"/>
-    <constant name="LumiD_DZ" value="0.35*m"/>
-
-
-  </define>
-
-  <detectors>
-
-    <detector name="LumiMagvac" type="DD4hep_TubeSegment" vis="Shape1_vis">
-      <material name="Vacuum"/>
-      <tubs rmin="0" rmax="LumiMag_R" zhalf="LumiMag_DZ/2"/>
-      <position x="0" y="0" z="LumiMag_cen_Z"/>
-      <rotation x="0" y="0" z="0"/>
-    </detector>
-
-    <detector name="LumiSUbox" type="DD4hep_BoxSegment" vis="Shape2_vis">
-      <material name="Vacuum"/>
-      <box x="LumiSpec_XY/2" y="LumiSpec_XY/2" z="LumiSpec_DZ/2"/>
-      <position x="0" y="LumiSpec_cen_Y" z="LumiSpec_Z-LumiSpec_DZ/2"/>
-      <rotation x="0" y="0" z="0"/>
-    </detector>
-
-    <detector name="LumiSDbox" type="DD4hep_BoxSegment" vis="Shape2_vis">
-      <material name="Vacuum"/>
-      <box x="LumiSpec_XY/2" y="LumiSpec_XY/2" z="LumiSpec_DZ/2"/>
-      <position x="0" y="-LumiSpec_cen_Y" z="LumiSpec_Z-LumiSpec_DZ/2"/>
-      <rotation x="0" y="0" z="0"/>
-    </detector>
-
-    <detector name="LumiDbox" type="DD4hep_BoxSegment" vis="Shape2_vis">
-      <material name="Vacuum"/>
-      <box x="LumiD_XY/2" y="LumiD_XY/2" z="LumiD_DZ/2"/>
-      <position x="0" y="0" z="LumiD_Z-LumiD_DZ/2"/>
-      <rotation x="0" y="0" z="0"/>
-    </detector>
-
-    <detector name="vac_lumi_win_mag" type="BackwardsLumiVac" z0="LumiWin_Z-LumiWin_DZ" z1="LumiMag_cen_Z+LumiMag_DZ/2">
-      <points
-        dX0="LumiWin_XY/2"
-        dY0="LumiWin_XY/2"
-        dX1="LumiMag_R"
-        dY1="LumiMag_R"
-      />
-    </detector>
-
-    <detector name="vac_lumi_mag_spec" type="BackwardsLumiVac" z0="LumiMag_cen_Z-LumiMag_DZ/2" z1="LumiSpec_Z">
-      <points
-        dX0="LumiMag_R"
-        dY0="LumiMag_R"
-        dX1="LumiSpec_XY/2"
-        dY1="LumiSpec_cen_Y+LumiSpec_XY/2"
-      />
-    </detector>
-
-    <detector name="vac_lumi_spec_phot" type="BackwardsLumiVac" z0="LumiSpec_Z-LumiSpec_DZ" z1="LumiD_Z">
-      <points
-        dX0="LumiSpec_XY/2"
-        dY0="LumiSpec_cen_Y-LumiSpec_XY/2"
-        dX1="LumiD_XY/2"
-        dY1="LumiD_XY/2"
-      />
-    </detector>
-
-    <detector name="vac_lumi_spec_mid" type="DD4hep_BoxSegment" vis="Shape1_vis">
-      <material name="Vacuum"/>
-      <box x="LumiSpec_XY/2" y="LumiSpec_cen_Y-LumiSpec_XY/2" z="LumiSpec_DZ/2"/>
-      <position x="0" y="0" z="LumiSpec_Z-LumiSpec_DZ/2"/>
-      <rotation x="0" y="0" z="0"/>
-    </detector>
-
-    <detector name="LumiMag_shape" type="ip6_CylindricalDipoleMagnet" vis="Shape2_vis">
-      <placement  x="0" y="0" z="LumiMag_cen_Z" theta="0"/>
-      <dimensions x="LumiMag_R*4" y="LumiMag_R*4" z="LumiMag_DZ" r="2*LumiMag_R"/>
-      <apperture  x="LumiMag_R*2" y="LumiMag_R*2" r="LumiMag_R"/>
-      <coil dx="2*cm" dy="1.5*cm"/><!--unchecked-->
-    </detector>
-
-    <detector id="LumiCollimator_ID" name="LumiCollimator" type="BackwardsCollimator" vis="Shape1_vis">
-      <dimensions height="Collimator_Box_Height"  width="Collimator_Box_Width"  depth="Collimator_Box_Depth"/>
-      <collimator height="Collimator_Hole_Height" width="Collimator_Hole_Width" xOff="Collimator_Hole_XOff"/>
-      <placement  z="CollimatorZ-Collimator_Box_Depth"/>
-    </detector>
-
-  </detectors>
-
-  <comment>
-  <fields>
-    <field name="LumiDipole" type="MultipoleMagnet">
-      <shape type="Box" dx="LumiDipole_x" dy="LumiDipole_y" dz="LumiDipole_z/2"/>
-      <position x="0" y="0" z="LumiMag_cen_Z"/>
-      <coefficient coefficient="0.26*tesla"/>
-    </field>
-  </fields>
-  </comment>
+   <include ref="lumi/exit_window.xml"/>
+   <include ref="lumi/collimator.xml"/>
+   <include ref="lumi/lumi_magnets.xml"/>
+   <include ref="lumi/spec_tracker.xml"/>
+   <include ref="lumi/spec_homo_cal.xml"/>
+   <include ref="lumi/photon_chamber.xml"/>
+   <include ref="lumi/directPC.xml"/>
 
 </lccdd>

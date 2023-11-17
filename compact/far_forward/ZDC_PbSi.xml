@@ -1,3 +1,6 @@
+<!-- SPDX-License-Identifier: LGPL-3.0-or-later -->
+<!-- Copyright (C) 2022 Shima Shimizu -->
+
 <lccdd>
   <comment>
     //////////////////////////////////////////////////
@@ -8,7 +11,7 @@
 
   <define>
     <constant name="ZDC_PbSi_layer_thickness"
-	      value="ZDC_Lead_thickness + ZDC_glue_thickness * 2 + ZDC_pad_thickness + ZDC_PCB_thickness + ZDC_Si_Air_thickness"/>
+              value="ZDC_Lead_thickness + ZDC_glue_thickness * 2 + ZDC_pad_thickness + ZDC_PCB_thickness + ZDC_Si_Air_thickness"/>
     <constant name="ZDC_PbSi_x"       value="ZDC_width"/>
     <constant name="ZDC_PbSi_y"       value="ZDC_width"/>
     <constant name="ZDC_PbSi_z"       value="ZDC_PbSi_nlayers * ZDC_PbSi_layer_thickness"/>
@@ -16,20 +19,20 @@
 
   <detectors>
     <detector
-	id="ZDC_PbSi_ID"
-	name="ZDC_PbSi"
-	type="ZDC_ImagingCal"
-	vis="ZDC_PbSi_Vis"
-	readout="ZDC_PbSi_Hits">
+        id="ZDC_PbSi_ID"
+        name="ZDC_PbSi"
+        type="ZDC_ImagingCal"
+        vis="ZDC_PbSi_Vis"
+        readout="ZDC_PbSi_Hits">
       <position x="ZDC_PbSi_x_pos"         y="ZDC_PbSi_y_pos"         z="ZDC_PbSi_z_pos"/>
       <rotation x="ZDC_PbSi_rotateX_angle" y="ZDC_PbSi_rotateY_angle" z="ZDC_PbSi_rotateZ_angle"/>
       <dimensions x="ZDC_PbSi_x" y="ZDC_PbSi_y" z="ZDC_PbSi_z"/>
       <layer nlayer="ZDC_PbSi_nlayers" gapspace="ZDC_Si_Air_thickness">
-	<slice name="lead"      material="Lead"    thickness="ZDC_Lead_thickness"  vis="AnlLight_Gray"/>
-	<slice name="glue"      material="G10"     thickness="ZDC_glue_thickness"  vis="AnlLight_Gray"/>
-	<slice name="silicon"   material="Silicon" thickness="ZDC_pad_thickness"   vis="AnlTeal"  sensitive="true"/>
-	<slice name="glue"      material="G10"     thickness="ZDC_glue_thickness"  vis="AnlLight_Gray"/>
-	<slice name="pcb"       material="ZDC_PET" thickness="ZDC_PCB_thickness"   vis="AnlGreen"/>
+        <slice name="lead"      material="Lead"    thickness="ZDC_Lead_thickness"  vis="AnlLight_Gray"/>
+        <slice name="glue"      material="G10"     thickness="ZDC_glue_thickness"  vis="AnlLight_Gray"/>
+        <slice name="silicon"   material="Silicon" thickness="ZDC_pad_thickness"   vis="AnlTeal"  sensitive="true"/>
+        <slice name="glue"      material="G10"     thickness="ZDC_glue_thickness"  vis="AnlLight_Gray"/>
+        <slice name="pcb"       material="ZDC_PET" thickness="ZDC_PCB_thickness"   vis="AnlGreen"/>
       </layer>
     </detector>
   </detectors>

@@ -1,3 +1,6 @@
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (C) 2022 Chao Peng, Whitney Armstrong
+
 #include "GeometryHelpers.h"
 
 // some utility functions that can be shared
@@ -147,5 +150,86 @@ namespace epic::geo {
     add_poly(ref, res, 6, lside, rmin, rmax, phmin, phmax, std::pow(int(rmax / lside) + 1, 2) * 2);
     return res;
   }
+
+
+  bool isPointInsidePolygon(Point p, std::vector<Point> vertices)
+  {
+    int n = vertices.size();
+    bool check = false;  // check == false (outside the polygon), check == true (inside the polygon)
+    const double tolerance = 0.000001;
+
+    // When the point overlaps with vertex in the tolerance.
+    //
+    for( int i = 0 ; i < n ; i++)
+      if( std::abs(p.x() - vertices[i].x()) < tolerance && std::abs(p.y() - vertices[i].y()) < tolerance )
+        check = !check;
+
+
+    // When the point is on the line connected two vertices in the tolerance.
+    //
+    if( check == false )
+      {
+        for( int i = 0, j = n-1 ; i < n ; j = i++)
+          if( std::abs(p.x() - vertices[i].x()) < tolerance && std::abs(p.x() - vertices[j].x()) < tolerance )
+            if( (vertices[i].y() > p.y()) != (vertices[j].y() > p.y()) )
+              check = !check;
+      }
+    if( check == false )
+      {
+        for( int i = 0, j = n-1 ; i < n ; j = i++)
+          if( std::abs(p.y() - vertices[i].y()) < tolerance && std::abs(p.y() - vertices[j].y()) < tolerance )
+            if( (vertices[i].x() > p.x()) != (vertices[j].x() > p.x()) )
+              check = !check;
+      }
+
+
+    if( check == false )
+      {
+        for( int i = 0, j = n-1 ; i < n ; j = i++)
+          {
+            double ver_i = vertices[i].y();
+            double ver_j = vertices[j].y();
+            double criteria = (vertices[j].x() - vertices[i].x()) * (p.y() - vertices[i].y()) / (vertices[j].y() - vertices[i].y()) + vertices[i].x();
+
+            if( ((ver_i > p.y()) != (ver_j > p.y())) && (p.x() < criteria || std::abs(p.x() - criteria) < tolerance) )
+              check = !check;
+          }
+      }
+
+    return check;
+  }
+
+
+  bool isBoxTotalInsidePolygon(Point box[4], std::vector<Point> vertices)
+  {
+    bool pt_check = true;
+    for (int i = 0 ; i < 4 ; i++ )
+      pt_check = pt_check && isPointInsidePolygon(box[i], vertices);
+    return pt_check;
+  }
+
+
+  bool isBoxPartialInsidePolygon(Point box[4], std::vector<Point> vertices)
+  {
+    bool pt_check = false;
+    for (int i = 0 ; i < 4 ; i++ )
+      pt_check = pt_check || isPointInsidePolygon(box[i], vertices);
+    return pt_check;
+  }
+
+
+  std::vector<std::pair<double, double>> getPolygonVertices(std::pair<double, double> center, double radius, double angle_0, int numSides)
+  {
+    std::vector<std::pair<double, double>> vertices;
+    double angle = 2 * M_PI / numSides;  // calculate the angle between adjacent vertices
+    for (int i = 0 ; i < numSides ; i++)
+      {
+        double x = center.first + radius * cos(i * angle + angle_0);
+        double y = center.second + radius * sin(i * angle + angle_0);
+        vertices.emplace_back(x, y);  // add the vertex to the vector
+      }
+    return vertices;
+  }
+
 
 } // namespace epic::geo

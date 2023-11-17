@@ -1,18 +1,60 @@
+<!-- SPDX-License-Identifier: LGPL-3.0-or-later -->
+<!-- Copyright (C) 2022 Pu-Kai Wang, Wouter Deconinck -->
+
 <lccdd>
   <define>
-    <constant name="EcalEndcapN_CrystalModule_width" value="20.00*mm"/>
-    <constant name="EcalEndcapN_CrystalModule_length" value="200.00*mm"/>
-    <constant name="EcalEndcapN_CrystalModule_carbon_thickness" value="0.20*mm"/>
-    <constant name="EcalEndcapN_CrystalModule_wrap_thickness" value="0.05*mm"/>
-    <constant name="EcalEndcapN_CrystalModule_carbon_length" value="20.00*mm"/>
+    <comment>
+      The basic parameters of size [not half-length] of single module
+      The structure of a single module is arranged as followed:
 
-    <comment>The size of outer frame</comment>
-    <constant name="EcalEndcapN_structure_ring_length" value="EcalEndcapN_length"/>
-    <constant name="EcalEndcapN_structure_ring_max" value="65.00*cm"/>
-    <constant name="EcalEndcapN_structure_ring_min" value="EcalEndcapN_structure_ring_max - 0.9*cm"/>
+            carbonfiber[ VM2000[ crystal ]VM2000 ]carbonfiber
+            0.2          0.05    200.00
+    </comment>
+    <constant name="EcalEndcapN_crystalmodule_crystal_width" value="20.00*mm"/>
+    <constant name="EcalEndcapN_crystalmodule_crystal_length" value="200.00*mm"/>
+    <constant name="EcalEndcapN_crystalmodule_carbonfiber_thickness" value="0.20*mm"/>
+    <constant name="EcalEndcapN_crystalmodule_VM2000_thickness" value="0.05*mm"/>
+    <constant name="EcalEndcapN_crystalmodule_carbonfiber_length" value="20.00*mm"/>
+    <constant name="EcalEndcapN_crystalmodule_PCB_thickness" value="1.45*mm"/>
 
-    <comment>FIXME currently unused</comment>
+    <comment>
+      The S14160 SiPM from Hamamatsu is planned to use
+    </comment>
+    <constant name="EcalEndcapN_crystalmodule_sensor_sizeX" value="6.85*mm"/>
+    <constant name="EcalEndcapN_crystalmodule_sensor_sizeY" value="7.35*mm"/>
+    <constant name="EcalEndcapN_crystalmodule_sensor_spacing" value="1.00*mm"/>
+    <constant name="EcalEndcapN_crystalmodule_sensor_thickness" value="1.45*mm"/>
+    <constant name="EcalEndcapN_crystalmodule_Nsensor_in_X" value="2"/>
+    <constant name="EcalEndcapN_crystalmodule_Nsensor_in_Y" value="2"/>
+
+    <comment>
+      Basic hardcoded parameters about supporting structures, rotation and shift
+        ** +15 deg rotation (Protate) make top side of outer supporting structure (Oring) and
+        the mother volume parallel to the x-z plane.
+        ** -15 deg rotation (Nrotate) used for offset the 15*deg rotation on the modules, since modules are the
+        daughter volumes with respect to mother volumn.
+        ** Inner supporting structure (Iring) is an elliptics.
+        ** The length of inner supporting structure (Iring) is shorter than outer supporting structure, so it needs
+        additional shft to align the surface.
+        ** some existed parameters are passed from "difinition.xml"
+    </comment>
+    <constant name="EcalEndcapN_structure_Oring_length" value="EcalEndcapN_length"/>
+    <constant name="EcalEndcapN_structure_Oring_max" value="65.00*cm"/>
+    <constant name="EcalEndcapN_structure_Oring_min" value="EcalEndcapN_structure_Oring_max - 0.9*cm"/>
+    <constant name="EcalEndcapN_Protate" value="15.*degree"/>
+    <constant name="EcalEndcapN_Nrotate" value="-15.*degree"/>
+    <constant name="EcalEndcapN_Oring_relative_shift" value="-20.*cm"/>
+    <constant name="EcalEndcapN_Iring_axisA" value="7.5*cm"/>
+    <constant name="EcalEndcapN_Iring_axisB" value="5.5*cm"/>
+
+
+    <comment>
+      FIXME currently unused
+    </comment>
     <constant name="EcalEndcapN_IonCutout_dphi" value="30*degree"/>
+
+
+
 
   </define>
 
@@ -26,44 +68,79 @@
         name="EcalEndcapN"
         type="epic_HomogeneousCalorimeter"
         readout="EcalEndcapNHits">
-      <position x="0" y="0" z="-(EcalEndcapN_zmin + EcalEndcapN_CrystalModule_length/2.)"/>
+      <position x="0" y="0" z="-(EcalEndcapN_zmin + (EcalEndcapN_crystalmodule_crystal_length + EcalEndcapN_crystalmodule_VM2000_thickness + EcalEndcapN_crystalmodule_sensor_thickness + EcalEndcapN_crystalmodule_PCB_thickness)/2.)"/>
       <rotation x="0" y="0." z="0"/>
       <placements>
         <disk_12surface
             rmin="EcalEndcapN_rmin"
-            rmax="EcalEndcapN_structure_ring_min"
-            r12min="EcalEndcapN_structure_ring_min"
-            r12max="EcalEndcapN_structure_ring_max"
-            SFlength="EcalEndcapN_structure_ring_length"
-            CMlength="EcalEndcapN_CrystalModule_length + 2.*EcalEndcapN_CrystalModule_wrap_thickness"
+            rmax="EcalEndcapN_structure_Oring_min"
+            r12min="EcalEndcapN_structure_Oring_min"
+            r12max="EcalEndcapN_structure_Oring_max"
+            outerringlength="EcalEndcapN_structure_Oring_length"
+            modulelength="EcalEndcapN_crystalmodule_crystal_length + EcalEndcapN_crystalmodule_VM2000_thickness + EcalEndcapN_crystalmodule_sensor_thickness + EcalEndcapN_crystalmodule_PCB_thickness"
+            protate="EcalEndcapN_Protate"
+            nrotate="EcalEndcapN_Nrotate"
+            outerringshift="EcalEndcapN_Oring_relative_shift"
+            inneradiusa="EcalEndcapN_Iring_axisA"
+            inneradiusb="EcalEndcapN_Iring_axisB"
             envelope="true"
+            ringmaterial="StainlessSteel"
+            sector="1"
             vis_struc="RPVis"
-            vis_steel_gap="AnlGray"
-            ring_material="StainlessSteel"
-            sector="1">
+            vis_steel_gap="AnlGray">
+
+          <comment>
+            The points information for constructing inner supporting structure [extrudedpolygon shape, 12 points in total]
+          </comment>
+          <points_extrudedpolygon>
+            <position x="6.15*cm"  y="6.15*cm"/>
+            <position x="6.15*cm"  y="4.1*cm"/>
+            <position x="8.2*cm"   y="4.1*cm"/>
+            <position x="8.2*cm"   y="-4.1*cm"/>
+            <position x="6.15*cm"  y="-4.1*cm"/>
+            <position x="6.15*cm"  y="-6.15*cm"/>
+            <position x="-6.15*cm" y="-6.15*cm"/>
+            <position x="-6.15*cm" y="-4.1*cm"/>
+            <position x="-8.2*cm"  y="-4.1*cm"/>
+            <position x="-8.2*cm"  y="4.1*cm"/>
+            <position x="-6.15*cm" y="4.1*cm"/>
+            <position x="-6.15*cm" y="6.15*cm"/>
+          </points_extrudedpolygon>
+
           <module
-            gx="EcalEndcapN_CrystalModule_width + 2.*EcalEndcapN_CrystalModule_carbon_thickness + 2.*EcalEndcapN_CrystalModule_wrap_thickness"
-            gy="EcalEndcapN_CrystalModule_width + 2.*EcalEndcapN_CrystalModule_carbon_thickness + 2.*EcalEndcapN_CrystalModule_wrap_thickness"
-            gz="EcalEndcapN_CrystalModule_length"
-            gdz="EcalEndcapN_CrystalModule_wrap_thickness"
+            modulex="EcalEndcapN_crystalmodule_crystal_width + 2.0*EcalEndcapN_crystalmodule_carbonfiber_thickness + 2.0*EcalEndcapN_crystalmodule_VM2000_thickness"
+            moduley="EcalEndcapN_crystalmodule_crystal_width + 2.0*EcalEndcapN_crystalmodule_carbonfiber_thickness + 2.0*EcalEndcapN_crystalmodule_VM2000_thickness"
+            modulez="EcalEndcapN_crystalmodule_crystal_length + EcalEndcapN_crystalmodule_VM2000_thickness + EcalEndcapN_crystalmodule_sensor_thickness + EcalEndcapN_crystalmodule_PCB_thickness"
+            moduleshift="EcalEndcapN_crystalmodule_VM2000_thickness"
             gmaterial="Vacuum"
             vis="BlueVis"/>
           <crystal
-            sizex="EcalEndcapN_CrystalModule_width"
-            sizey="EcalEndcapN_CrystalModule_width"
-            sizez="EcalEndcapN_CrystalModule_length"
+            sizex="EcalEndcapN_crystalmodule_crystal_width"
+            sizey="EcalEndcapN_crystalmodule_crystal_width"
+            sizez="EcalEndcapN_crystalmodule_crystal_length"
             material="leadtungsten_optical"
             cryvis="GreenVis"/>
           <wrapper
-            carbon_thickness="EcalEndcapN_CrystalModule_carbon_thickness"
-            wrap_thickness="EcalEndcapN_CrystalModule_wrap_thickness"
-            length="EcalEndcapN_CrystalModule_carbon_length"
+            carbonfiber_thickness="EcalEndcapN_crystalmodule_carbonfiber_thickness"
+            carbonfiber_length="EcalEndcapN_crystalmodule_carbonfiber_length"
+            VM2000_thickness="EcalEndcapN_crystalmodule_VM2000_thickness"
             material_carbon="CarbonFiber"
             material_wrap="VM2000"
             material_gap="Air"
             vis_carbon="PurpleVis"
             vis_wrap="RPVis"
             vis_gap="AnlGray"/>
+          <readout
+            Sensor_sizex="EcalEndcapN_crystalmodule_sensor_sizeX"
+            Sensor_sizey="EcalEndcapN_crystalmodule_sensor_sizeY"
+            Sensor_thickness="EcalEndcapN_crystalmodule_sensor_thickness"
+            Sensor_space="EcalEndcapN_crystalmodule_sensor_spacing"
+            Nsensor_X="EcalEndcapN_crystalmodule_Nsensor_in_X"
+            Nsensor_Y="EcalEndcapN_crystalmodule_Nsensor_in_Y"
+            PCB_sizex="EcalEndcapN_crystalmodule_crystal_width"
+            PCB_sizey="EcalEndcapN_crystalmodule_crystal_width"
+            PCB_thickness="EcalEndcapN_crystalmodule_PCB_thickness"
+            material="SiliconDioxide"/>
         </disk_12surface>
       </placements>
 
@@ -77,7 +154,7 @@
     </comment>
     <readout name="EcalEndcapNHits">
       <segmentation type="NoSegmentation" key="sector"/>
-      <id>system:8,sector:4,module:20</id>
+      <id>system:8,sector:4,row:8,column:8</id>
     </readout>
   </readouts>
 </lccdd>

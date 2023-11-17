@@ -1,3 +1,6 @@
 features:
+  fields:
+    marco:
   tracking:
+    definitions:
     tof_endcap:
