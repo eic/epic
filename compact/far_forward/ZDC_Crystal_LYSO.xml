@@ -13,7 +13,7 @@
     <constant name="ZDC_width"         value="60.0 * cm"/>
     <constant name="ZDC_r_pos"         value="3550.0 * cm"/>
     <constant name="ZDC_y_pos"         value="0.0 * cm"/>
-    <constant name="ZDC_Crystal_r_pos"           value="ZDC_r_pos + 5.9 *cm "/>
+    <constant name="ZDC_Crystal_r_pos"           value="ZDC_r_pos + 5.9 *cm +19.2*cm"/>
     <constant name="ZDC_Crystal_z_pos"           value="ZDC_Crystal_r_pos * cos(ionCrossingAngle)"/>
     <constant name="ZDC_Crystal_x_pos"           value="ZDC_Crystal_r_pos * sin(ionCrossingAngle)"/>
     <constant name="ZDC_Crystal_y_pos"           value="ZDC_y_pos"/>
