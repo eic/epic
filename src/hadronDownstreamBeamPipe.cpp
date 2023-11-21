@@ -60,11 +60,11 @@ static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector /* sens *
   double b0_hadron_tube_length  = 120.0; // cm
 
 
-  double drift_hadron_section_1_inner_r = 19.5;
-  double drift_hadron_section_1_outer_r = 20.5;
+  double drift_hadron_section_1_inner_r = 20.0;
+  double drift_hadron_section_1_outer_r = 20.2;
 
-  double drift_hadron_section_3_inner_r_ent = 19.5;
-  double drift_hadron_section_3_outer_r_ent = 20.5;
+  double drift_hadron_section_3_inner_r_ent = 20.0;
+  double drift_hadron_section_3_outer_r_ent = 20.2;
   double drift_hadron_section_3_inner_r_ex  = 5.0;
   double drift_hadron_section_3_outer_r_ex  = 5.2;
   double drift_hadron_section_3_length      = 150.0;
