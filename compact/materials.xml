@@ -13,9 +13,9 @@
     <fraction n="0.234" ref="O"/>
     <fraction n="0.012" ref="Ar"/>
   </material>
-  <!-- We model vacuum just as very thin air -->
+  <!-- default RHIC vacuum is 1e-9 mbar == 1e-15 g/cm3 -->
   <material name="Vacuum">
-    <D type="density" unit="g/cm3" value="0.0000000001"/>
+    <D type="density" unit="g/cm3" value="0.000000000000001"/>
     <fraction n="0.754" ref="N"/>
     <fraction n="0.234" ref="O"/>
     <fraction n="0.012" ref="Ar"/>
