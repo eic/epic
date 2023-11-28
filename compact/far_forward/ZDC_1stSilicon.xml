@@ -11,7 +11,7 @@
 
   <define>
     <constant name="ZDC_1stSilicon_x"       value="ZDC_width"/>
-    <constant name="ZDC_1stSilicon_y"       value="ZDC_width"/>
+    <constant name="ZDC_1stSilicon_y"       value="ZDC_height"/>
     <constant name="ZDC_1stSilicon_z"       value="ZDC_pixel_thickness + ZDC_glue_thickness + ZDC_PCB_thickness + ZDC_Si_Air_thickness"/>
   </define>
 
@@ -36,7 +36,7 @@
 
   <readouts>
     <readout name="ZDC_SiliconPix_Hits">
-      <segmentation type="CartesianGridXY" grid_size_x="3.*mm" grid_size_y="3.*mm"/>
+      <segmentation type="CartesianGridXY" grid_size_x="4.*mm" grid_size_y="3.*mm"/>
       <id>system:8,silicon:6,x:24:-12,y:-12</id>
     </readout>
   </readouts>
