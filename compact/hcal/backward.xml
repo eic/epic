@@ -6,13 +6,13 @@
     <documentation>
       #### Material Thickness
     </documentation>
-    <constant name="HcalEndcapNSteelThickness"		value="4.0 * cm"/>
+    <constant name="HcalEndcapNSteelThickness"          value="4.0 * cm"/>
     <constant name="HcalEndcapNPolystyreneThickness" value="0.4 * cm"/>
-	<constant name="HcalEndcapNLayerGap"			value="0.1 * cm"/> <!-- 2*thicker than LFHCAL -->
-    
-	<constant name="HcalEndcapN_polyhedron_rmax"	value="251.444*cm"/>
-	<constant name="HcalEndcapN_segments_rmin"		value="19.9431*cm"/>
-	<constant name="HcalEndcapN_segments_rmax"		value="HcalEndcapN_rmax/(cos(180*deg/HcalEndcapN_CaloSides))"/>
+        <constant name="HcalEndcapNLayerGap"                    value="0.1 * cm"/> <!-- 2*thicker than LFHCAL -->
+
+        <constant name="HcalEndcapN_polyhedron_rmax"    value="251.444*cm"/>
+        <constant name="HcalEndcapN_segments_rmin"              value="19.9431*cm"/>
+        <constant name="HcalEndcapN_segments_rmax"              value="HcalEndcapN_rmax/(cos(180*deg/HcalEndcapN_CaloSides))"/>
 
 
     <documentation>
@@ -21,8 +21,8 @@
 
     <constant name="HcalEndcapNSingleLayerThickness"
              value="HcalEndcapNSteelThickness + HcalEndcapNPolystyreneThickness"/>
-    <constant name="HcalEndcapNLayer_NRepeat" 	value="floor(HcalEndcapN_length / HcalEndcapNSingleLayerThickness)"/>
-    <constant name="HcalEndcapN_thickness" 		value="HcalEndcapNLayer_NRepeat * HcalEndcapNSingleLayerThickness"/>
+    <constant name="HcalEndcapNLayer_NRepeat"   value="floor(HcalEndcapN_length / HcalEndcapNSingleLayerThickness)"/>
+    <constant name="HcalEndcapN_thickness"              value="HcalEndcapNLayer_NRepeat * HcalEndcapNSingleLayerThickness"/>
   </define>
 
 
@@ -48,7 +48,7 @@
         <slice material="StainlessSteel" thickness="HcalEndcapNSteelThickness" vis="HcalAbsorberVis"/>
         <slice material="Air" thickness="HcalEndcapNLayerGap/2" vis="InvisibleNoDaughters"/>
         <slice material="Polystyrene" thickness="HcalEndcapNPolystyreneThickness" vis="HcalSensorVis" sensitive="yes" limits="cal_limits"/>
-        <slice material="Air" thickness="HcalEndcapNLayerGap/2" vis="InvisibleNoDaughters"/>       
+        <slice material="Air" thickness="HcalEndcapNLayerGap/2" vis="InvisibleNoDaughters"/>
       </layer>
     </detector>
   </detectors>
@@ -56,8 +56,8 @@
   <!--  Definition of the readout segmentation/definition  -->
   <readouts>
     <readout name="HcalEndcapNHits">
-		<segmentation type="CartesianGridXY" grid_size_x="100 * mm" grid_size_y ="100 * mm"/>
-    	<id>system:8,barrel:3,module:4,layer:8,slice:5,x:32:-16,y:-16</id>     
+                <segmentation type="CartesianGridXY" grid_size_x="100 * mm" grid_size_y ="100 * mm"/>
+        <id>system:8,barrel:3,module:4,layer:8,slice:5,x:32:-16,y:-16</id>
     </readout>
   </readouts>
 
