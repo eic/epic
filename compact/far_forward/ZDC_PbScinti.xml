@@ -11,8 +11,8 @@
 
   <define>
     <constant name="ZDC_PbSci_layer_thickness" value="ZDC_Lead_thickness + ZDC_Sci_thickness"/>
-    <constant name="ZDC_PbSci_x"       value="ZDC_width"/>
-    <constant name="ZDC_PbSci_y"       value="ZDC_width"/>
+    <constant name="ZDC_PbSci_x"       value="ZDC_Pb_width"/>
+    <constant name="ZDC_PbSci_y"       value="ZDC_Pb_width"/>
     <constant name="ZDC_PbSci_z"
               value="ZDC_PbSci_nbox * (ZDC_PbSci_nlayers_per_box * ZDC_PbSci_layer_thickness + ZDC_PbSci_box_gap)"/>
   </define>
@@ -39,7 +39,7 @@
   <readouts>
     <readout name="ZDCHcalHits">
       <segmentation type="CartesianGridXY" grid_size_x="10.*cm" grid_size_y="10.*cm"/>
-      <id>system:8,scinti:6,x:24:-12,y:-12</id>
+      <id>system:8,scinti:8,x:24:-12,y:-12</id>
     </readout>
   </readouts>
 
