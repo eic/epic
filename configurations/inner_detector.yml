@@ -1,7 +1,7 @@
 features:
   beampipe:
   tracking:
-    definitions:
+    definitions_craterlake:
     vertex_barrel:
     silicon_barrel:
     mpgd_barrel:
