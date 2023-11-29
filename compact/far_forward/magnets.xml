@@ -3,6 +3,7 @@
 
 <lccdd>
   <fields>
+    <!--
     <field name="B0PF_Magnet" type="MultipoleMagnet">
       <position x="B0PF_XPosition" y="0" z="B0PF_CenterPosition"/>
       <rotation x="0" y="B0PF_RotationAngle" z="0"/>
@@ -10,6 +11,7 @@
       <coefficient coefficient="B0PF_Bmax*FieldScaleFactor" skew="0.0*tesla"/>
       <coefficient coefficient="B0PF_GradientMax*FieldScaleFactor" skew="0.0*tesla/m"/>
     </field>
+    -->
     <field name="B0APF_Magnet" type="MultipoleMagnet">
       <position x="B0APF_XPosition" y="0" z="B0APF_CenterPosition"/>
       <rotation x="0" y="B0APF_RotationAngle" z="0"/>

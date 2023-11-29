@@ -71,4 +71,22 @@
     </detector>
   </detectors>
 
+  <fields>
+    <field type="epic_FieldMapB" name="B0pf_field" field_type="magnetic" coord_type="BxByBz"
+           field_map="fieldmaps/formatted_B0_field_map_23dec2022_cm_T_REDUCED_v2.txt"
+	    url="https://github.com/eic/epic-data/raw/c843d348e44697c364f9c6500399defcbdc24b5e/formatted_B0_field_map_23dec2022_cm_T_REDUCED_v2.txt"
+           cache="$DETECTOR_PATH:/opt/detector"
+           scale="1.0">
+        <dimensions>
+          <X step="1.0*cm" min="-40*cm" max="5*cm" />
+          <Y step="1.0*cm" min="-35*cm" max="35*cm" />
+          <Z step="10.0*cm" min="-200*cm" max="200*cm" />
+          <translationCoord x="B0PF_XPosition" y="0.0*m" z="B0PF_CenterPosition" />
+	  <!--<translationCoord x = "0.0*m" y ="0.0*m" z = "0.0*m" />-->
+          <rotationField x="0" y="B0PF_RotationAngle" z="0" />
+        </dimensions>
+    </field>
+  </fields>
+
+
 </lccdd>
