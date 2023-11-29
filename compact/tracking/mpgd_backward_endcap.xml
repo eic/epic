@@ -51,8 +51,8 @@
     <constant name="BackwardMPGDLayer2_rmin"       value="BackwardMPGDMod2_rmin - BackwardMPGDLayerPad" />
     <constant name="BackwardMPGDLayer1_rmax"       value="BackwardMPGDMod1_rmax + BackwardMPGDLayerPad" />
     <constant name="BackwardMPGDLayer2_rmax"       value="BackwardMPGDMod2_rmax + BackwardMPGDLayerPad" />
-    <constant name="BackwardMPGDLayer1_zmin"       value="BackwardMPGDMod1_zmin - BackwardMPGDEndcapLayer_thickness / 2" />
-    <constant name="BackwardMPGDLayer2_zmin"       value="BackwardMPGDMod2_zmin - BackwardMPGDEndcapLayer_thickness / 2" />
+    <constant name="BackwardMPGDLayer1_zmin"       value="BackwardMPGDMod1_zmin - BackwardMPGDLayerPad" />
+    <constant name="BackwardMPGDLayer2_zmin"       value="BackwardMPGDMod2_zmin + BackwardMPGDLayerPad" />
 
     <constant name="BackwardMPGDMod1_x1"           value="2 * BackwardMPGDMod1_rmin * tan(BackwardMPGDEndcapMod_angle/2)" />
     <constant name="BackwardMPGDMod1_x2"           value="2 * BackwardMPGDMod1_rmax * sin(BackwardMPGDEndcapMod_angle/2)" />
