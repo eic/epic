@@ -128,7 +128,7 @@ static Ref_t create_OffMomentumTracker(Detector& description, xml_h e, Sensitive
       auto       comp_y  = getAttrOrDefault(c, _Unicode(y), y1);
 
       Material c_mat  = description.material(c.materialStr());
-      string   c_name = _toString(c_id, "component%d");
+      string   c_name = _toString(c_id, "OMD_component%d");
 
       Box   comp_s1(comp_x / 2.0, comp_y / 2.0, c_thick / 2e0);
       Solid comp_shape = comp_s1;

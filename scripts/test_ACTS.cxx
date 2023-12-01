@@ -32,9 +32,8 @@ void test_ACTS(const char* compact = "epic.xml")
   detector.fromCompact(compact);
   dd4hep::rec::CellIDPositionConverter cellid_converter(detector);
 
-  // std::unique_ptr<const Acts::TrackingGeometry>
-  auto acts_tracking_geometry = Acts::convertDD4hepDetector(detector.world(), Acts::Logging::Level::VERBOSE);
-  // acts_tracking_geometry  = Acts::convertDD4hepDetector (detector.world(),Acts::Logging::Level::INFO);
+  auto logger = Acts::getDefaultLogger("Acts", Acts::Logging::Level::VERBOSE);
+  auto acts_tracking_geometry = Acts::convertDD4hepDetector(detector.world(), *logger);
 
   if (acts_tracking_geometry) {
     std::cout << "success?\n";

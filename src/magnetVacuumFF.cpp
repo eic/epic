@@ -1,17 +1,9 @@
 // SPDX-License-Identifier: LGPL-3.0-or-later
-// Copyright (C) 2022 Alex Jentsch, Whitney Armstrong, Wouter Deconinck
+// Copyright (C) 2023 Alex Jentsch
 
-//==========================================================================
-//
-//      <detector name ="DetName" type="Beampipe" >
-//      <layer id="#(int)" inner_r="#(double)" outer_z="#(double)" >
-//      <slice material="string" thickness="#(double)" >
-//      </layer>
-//      </detector>
-//==========================================================================
+
 #include "DD4hep/DetFactoryHelper.h"
 #include "DD4hep/Printout.h"
-#include "TMath.h"
 #include <XML/Helper.h>
 
 using namespace std;
@@ -31,163 +23,256 @@ using namespace dd4hep;
  * \endcode
  *
  */
+
+static double getRotatedZ(double z, double x, double angle);
+static double getRotatedX(double z, double x, double angle);
+
 static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector /* sens */)
 {
 
-  using namespace ROOT::Math;
-  xml_det_t x_det    = e;
-  string    det_name = x_det.nameStr();
-  // Material   air       = det.air();
-  DetElement sdet(det_name, x_det.id());
-  Assembly   assembly(det_name + "_assembly");
-  Material   m_Vac    = det.material("Vacuum");
-  string     vis_name = x_det.visStr();
+    xml_det_t x_det    = e;
+    string    det_name = x_det.nameStr();
+    DetElement sdet(det_name, x_det.id());
+    Assembly   assembly(det_name + "_assembly");
+    Material   m_Vac    = det.material("Vacuum");
+    string     vis_name = x_det.visStr();
 
-  PlacedVolume pv_assembly;
+    PlacedVolume pv_assembly;
 
-  // xml::Component pos   = x_det.position();
-  // xml::Component rot   = x_det.rotation();
+    //----------------------------------------------
+    // Starting point is only the magnet centers,
+    // lengths, rotations, and radii -->
+    // everything else calculated internally to
+    // make it easier to update later.
+    //----------------------------------------------
 
-  /// hard-code defintion here, then refine and make more general
+    bool makeIP_B0pfVacuum = true; //This is for the special gap location between IP and b0pf
 
-  // double drift_beam_pipe_angle = -0.047666638;
-  // double zPosShift             = 50.0; //cm
+            //information for actual FF magnets, with magnet centers as reference
+    vector <double> radii_magnet;
+    vector <double> lengths_magnet;
+    vector <double> rotation_magnet;
+    vector <double> x_elem_magnet;
+    vector <double> y_elem_magnet;
+    vector <double> z_elem_magnet;
 
-  // enter dimensions of vaccum cylinders here
+            //calculated entrance/exit points of FF magnet
+    vector <double> x_beg;
+    vector <double> z_beg;
+    vector <double> x_end;
+    vector <double> z_end;
 
-  //-----b0pf pipe----
+            //calculated center of gap regions between magnets, rotation, and length
+    vector <double> angle_elem_gap;
+    vector <double> z_gap;
+    vector <double> x_gap;
+    vector <double> length_gap;
 
-  double radius_b0pf   = 2.9;     // cm
-  double length_b0pf   = 120.0;   // 848.2683995; //290.0;    //cm
-  double rotation_b0pf = -0.025;  // radians
-  double x_b0pf        = -16.5;   // cm
-  double y_b0pf        = 0.0;     // cm
-  double z_b0pf        = 640.0;   // cm
+            //storage elements for CutTube geometry element used for gaps
+    vector <double> inRadius;
+    vector <double> outRadius;
+    vector <double> nxLow;
+    vector <double> nyLow;
+    vector <double> nzLow;
+    vector <double> nxHigh;
+    vector <double> nyHigh;
+    vector <double> nzHigh;
+    vector <double> phi_initial;
+    vector <double> phi_final;
 
-  double radius_b0apf   = 4.3;    // cm
-  double length_b0apf   = 60.0;   // cm
-  double rotation_b0apf = -0.025; // radians
-  double x_b0apf        = -21.0480535;
-  double y_b0apf        = 0.0;
-  double z_b0apf        = 819.8946015;
+    for(xml_coll_t c(x_det,_U(element)); c; ++c){
 
-  double radius_q1apf   = 5.6;     // cm
-  double length_q1apf   = 146.0;   // cm
-  double rotation_q1apf = -0.0195; // radians
-  double x_q1apf        = -25.4342857;
-  double y_q1apf        = 0.0;
-  double z_q1apf        = 962.8296939;
+                    xml_dim_t pos       = c.child(_U(placement));
+        double    pos_x     = pos.x();
+        double    pos_y     = pos.y();
+        double    pos_z     = pos.z();
+        double    pos_theta = pos.attr<double>(_U(theta));
+        xml_dim_t dims      = c.child(_U(dimensions)); //dimensions();
+        double    dim_z     = dims.z();
+        xml_dim_t apperture = c.child(_Unicode(apperture));
+        double    app_r     = apperture.r();
 
-  double radius_q1bpf   = 7.8;    // cm
-  double length_q1bpf   = 161.0;  // cm
-  double rotation_q1bpf = -0.015; // radians
-  double x_q1bpf        = -31.2840809;
-  double y_q1bpf        = 0.0;
-  double z_q1bpf        = 1156.243847;
+        radii_magnet.push_back(app_r); // cm
+        lengths_magnet.push_back(dim_z); //cm
+        rotation_magnet.push_back(pos_theta);  // radians
+        x_elem_magnet.push_back(pos_x*dd4hep::cm);
+        y_elem_magnet.push_back(pos_y*dd4hep::cm);
+        z_elem_magnet.push_back(pos_z*dd4hep::cm);
 
-  double radius_q2pf   = 13.15;   // cm
-  double length_q2pf   = 380.0;   // cm
-  double rotation_q2pf = -0.0148; // radians
-  double x_q2pf        = -40.7362293;
-  double y_q2pf        = 0.0;
-  double z_q2pf        = 1466.604545;
+    }
 
-  double radius_b1pf   = 13.5;   // cm
-  double length_b1pf   = 300.0;  // cm
-  double rotation_b1pf = -0.034; // radians
-  double x_b1pf        = -50.3165042;
-  double y_b1pf        = 0.0;
-  double z_b1pf        = 1856.486896;
+    int numMagnets = radii_magnet.size(); //number of actual FF magnets between IP and FF detectors
+    int numGaps = numMagnets - 1; //number of gaps between magnets (excluding the IP to B0pf transition -- special case)
 
-  double radius_b1apf   = 16.8;   // cm
-  double length_b1apf   = 150.0;  // cm
-  double rotation_b1apf = -0.025; // radians
-  double x_b1apf        = -61.2903791;
-  double y_b1apf        = 0.0;
-  double z_b1apf        = 2131.298439;
+    //-------------------------------------------
+    // override numbers for the first element -->
+    // doesn't use the actual B0pf geometry!!!
+    // -->it's based on the B0 beam pipe
+    // this needs to be fixed later to read-in
+    // that beam pipe geometry
+    //-------------------------------------------
 
-  // define shapes here
+    radii_magnet[0]     = 2.9;     // cm
+    lengths_magnet[0]   = 120.0;   // cm
+    rotation_magnet[0]  = -0.025;  // radians
+    x_elem_magnet[0]    = -16.5;   // cm
+    y_elem_magnet[0]    = 0.0;     // cm
+    z_elem_magnet[0]    = 640.0;   // cm
 
-  Cone   b0pf_vacuum(length_b0pf / 2.0, 0.0, radius_b0pf, 0.0, radius_b0pf);
-  Volume v_b0pf_vacuum("v_b0pf_vacuum", b0pf_vacuum, m_Vac);
-  sdet.setAttributes(det, v_b0pf_vacuum, x_det.regionStr(), x_det.limitsStr(), vis_name);
+    //-------------------------------------------
+    //calculate entrance/exit points of magnets
+    //-------------------------------------------
 
-  Cone   b0apf_vacuum(length_b0apf / 2.0, 0.0, radius_b0apf, 0.0, radius_b0apf);
-  Volume v_b0apf_vacuum("v_b0apf_vacuum", b0apf_vacuum, m_Vac);
-  sdet.setAttributes(det, v_b0apf_vacuum, x_det.regionStr(), x_det.limitsStr(), vis_name);
+    for(int i = 0; i < numMagnets; i++){
 
-  Cone   q1apf_vacuum(length_q1apf / 2.0, 0.0, radius_q1apf, 0.0, radius_q1apf);
-  Volume v_q1apf_vacuum("v_q1apf_vacuum", q1apf_vacuum, m_Vac);
-  sdet.setAttributes(det, v_q1apf_vacuum, x_det.regionStr(), x_det.limitsStr(), vis_name);
+        // need to use the common coordinate system -->
+        // use x = z, and y = x to make things easier
 
-  Cone   q1bpf_vacuum(length_q1bpf / 2.0, 0.0, radius_q1bpf, 0.0, radius_q1bpf);
-  Volume v_q1bpf_vacuum("v_q1bpf_vacuum", q1bpf_vacuum, m_Vac);
-  sdet.setAttributes(det, v_q1bpf_vacuum, x_det.regionStr(), x_det.limitsStr(), vis_name);
+        z_beg.push_back(getRotatedZ(-0.5*lengths_magnet[i], 0.0, rotation_magnet[i]) + z_elem_magnet[i]);
+        z_end.push_back(getRotatedZ( 0.5*lengths_magnet[i], 0.0, rotation_magnet[i]) + z_elem_magnet[i]);
+        x_beg.push_back(getRotatedX(-0.5*lengths_magnet[i], 0.0, rotation_magnet[i]) + x_elem_magnet[i]);
+        x_end.push_back(getRotatedX( 0.5*lengths_magnet[i], 0.0, rotation_magnet[i]) + x_elem_magnet[i]);
 
-  Cone   q2pf_vacuum(length_q2pf / 2.0, 0.0, radius_q2pf, 0.0, radius_q2pf);
-  Volume v_q2pf_vacuum("v_q2pf_vacuum", q2pf_vacuum, m_Vac);
-  sdet.setAttributes(det, v_q2pf_vacuum, x_det.regionStr(), x_det.limitsStr(), vis_name);
+    }
 
-  Cone   b1pf_vacuum(length_b1pf / 2.0, 0.0, radius_b1pf, 0.0, radius_b1pf);
-  Volume v_b1pf_vacuum("v_b1pf_vacuum", b1pf_vacuum, m_Vac);
-  sdet.setAttributes(det, v_b1pf_vacuum, x_det.regionStr(), x_det.limitsStr(), vis_name);
+    //------------------------------------------
+    // this part is a bit ugly for now -
+    // it's to make the vacuum volume between the
+    // end of the IP beam pipe and the beginning of
+    // beginning of the B0pf magnet
+    //
+    // -->the volume will be calculated at the end
+    //-------------------------------------------
 
-  Cone   b1apf_vacuum(length_b1apf / 2.0, 0.0, radius_b1apf, 0.0, radius_b1apf);
-  Volume v_b1apf_vacuum("v_b1apf_vacuum", b1apf_vacuum, m_Vac);
-  sdet.setAttributes(det, v_b1apf_vacuum, x_det.regionStr(), x_det.limitsStr(), vis_name);
+    double endOfCentralBeamPipe_z = 445.580*dd4hep::cm; //extracted from central_beampipe.xml, line 64
+    double diameterReduce = 11.0*dd4hep::cm; //size reduction to avoid overlap with electron pipe
+    double vacuumDiameterEntrance = 25.792*dd4hep::cm - diameterReduce; //extracted from central_beampipe.xml, line 64
+    double vacuumDiameterExit = 17.4*dd4hep::cm; //15mrad @ entrance to magnet to not overlap electron magnet
+    double crossingAngle = -0.025; //radians
+    double endOfCentralBeamPipe_x = endOfCentralBeamPipe_z*crossingAngle;
 
-  //----------------------------//
+    //-----------------------------------------------
+    //calculate gap region center, length, and angle
+    //-----------------------------------------------
 
-  auto pv_b0pf_vacuum =
-      assembly.placeVolume(v_b0pf_vacuum, Transform3D(RotationY(rotation_b0pf), Position(x_b0pf, y_b0pf, z_b0pf)));
-  pv_b0pf_vacuum.addPhysVolID("sector", 1);
-  DetElement tube_de_1(sdet, "sector1_de", 1);
-  tube_de_1.setPlacement(pv_b0pf_vacuum);
+    for(int i = 1; i < numMagnets; i++){
 
-  auto pv_b0apf_vacuum =
-      assembly.placeVolume(v_b0apf_vacuum, Transform3D(RotationY(rotation_b0apf), Position(x_b0apf, y_b0apf, z_b0apf)));
-  pv_b0apf_vacuum.addPhysVolID("sector", 1);
-  DetElement tube_de_2(sdet, "sector2_de", 1);
-  tube_de_2.setPlacement(pv_b0apf_vacuum);
+        angle_elem_gap.push_back((x_beg[i] - x_end[i-1])/(z_beg[i] - z_end[i-1]));
+        length_gap.push_back(sqrt(pow(z_beg[i] - z_end[i-1], 2) + pow(x_beg[i] - x_end[i-1], 2)));
+        z_gap.push_back(z_end[i-1] + 0.5*length_gap[i-1]*cos(angle_elem_gap[i-1]));
+        x_gap.push_back(x_end[i-1] + 0.5*length_gap[i-1]*sin(angle_elem_gap[i-1]));
 
-  auto pv_q1apf_vacuum =
-      assembly.placeVolume(v_q1apf_vacuum, Transform3D(RotationY(rotation_q1apf), Position(x_q1apf, y_q1apf, z_q1apf)));
-  pv_q1apf_vacuum.addPhysVolID("sector", 1);
-  DetElement tube_de_3(sdet, "sector3_de", 1);
-  tube_de_3.setPlacement(pv_q1apf_vacuum);
+    }
 
-  auto pv_q1bpf_vacuum =
-      assembly.placeVolume(v_q1bpf_vacuum, Transform3D(RotationY(rotation_q1bpf), Position(x_q1bpf, y_q1bpf, z_q1bpf)));
-  pv_q1bpf_vacuum.addPhysVolID("sector", 1);
-  DetElement tube_de_4(sdet, "sector4_de", 1);
-  tube_de_4.setPlacement(pv_q1bpf_vacuum);
+    //-----------------------------------------------
+    // fill CutTube storage elements
+    //-----------------------------------------------
 
-  auto pv_q2pf_vacuum =
-      assembly.placeVolume(v_q2pf_vacuum, Transform3D(RotationY(rotation_q2pf), Position(x_q2pf, y_q2pf, z_q2pf)));
-  pv_q2pf_vacuum.addPhysVolID("sector", 1);
-  DetElement tube_de_5(sdet, "sector5_de", 1);
-  tube_de_5.setPlacement(pv_q2pf_vacuum);
+    for(int gapIdx = 0; gapIdx < numGaps; gapIdx++){
 
-  auto pv_b1pf_vacuum =
-      assembly.placeVolume(v_b1pf_vacuum, Transform3D(RotationY(rotation_b1pf), Position(x_b1pf, y_b1pf, z_b1pf)));
-  pv_b1pf_vacuum.addPhysVolID("sector", 1);
-  DetElement tube_de_6(sdet, "sector6_de", 1);
-  tube_de_6.setPlacement(pv_q1apf_vacuum);
+        inRadius.push_back(0.0);
+        outRadius.push_back(radii_magnet[gapIdx+1]);
+        phi_initial.push_back(0.0);
+        phi_final.push_back(2*M_PI);
+        nxLow.push_back(-(length_gap[gapIdx]/2.0)*sin(rotation_magnet[gapIdx]-angle_elem_gap[gapIdx]));
+        nyLow.push_back(0.0);
+        nzLow.push_back(-(length_gap[gapIdx]/2.0)*cos(rotation_magnet[gapIdx]-angle_elem_gap[gapIdx]));
+        nxHigh.push_back((length_gap[gapIdx]/2.0)*sin(rotation_magnet[gapIdx+1]-angle_elem_gap[gapIdx]));
+        nyHigh.push_back(0.0);
+        nzHigh.push_back((length_gap[gapIdx]/2.0)*cos(rotation_magnet[gapIdx+1]-angle_elem_gap[gapIdx]));
 
-  auto pv_b1apf_vacuum =
-      assembly.placeVolume(v_b1apf_vacuum, Transform3D(RotationY(rotation_b1apf), Position(x_b1apf, y_b1apf, z_b1apf)));
-  pv_b1apf_vacuum.addPhysVolID("sector", 1);
-  DetElement tube_de_7(sdet, "sector7_de", 1);
-  tube_de_7.setPlacement(pv_b1apf_vacuum);
+    }
 
-  // Transform3D posAndRot(RotationZYX(rot.z(), rot.y(), rot.x()), Position(pos.x(), pos.y(), pos.z()));
-  // Transform3D posAndRot(RotationZYX(rot.z(), rot.y(), rot.x()), Position(x_position, y_position, z_position));
+    //-----------------------
+    // inside magnets
+    //-----------------------
 
-  pv_assembly = det.pickMotherVolume(sdet).placeVolume(assembly); //, posAndRot);
-  pv_assembly.addPhysVolID("system", x_det.id()).addPhysVolID("barrel", 1);
-  sdet.setPlacement(pv_assembly);
-  assembly->GetShape()->ComputeBBox();
-  return sdet;
+    for(int pieceIdx = 0; pieceIdx < numMagnets; pieceIdx++){
+
+        std::string piece_name      = Form("MagnetVacuum%d", pieceIdx);
+
+        Tube magnetPiece(piece_name, 0.0, radii_magnet[pieceIdx], lengths_magnet[pieceIdx]/2);
+        Volume vpiece(piece_name, magnetPiece, m_Vac);
+        sdet.setAttributes(det, vpiece, x_det.regionStr(), x_det.limitsStr(), vis_name);
+
+        auto pv = assembly.placeVolume(vpiece, Transform3D(RotationY(rotation_magnet[pieceIdx]),
+                                                   Position(x_elem_magnet[pieceIdx], y_elem_magnet[pieceIdx], z_elem_magnet[pieceIdx])));
+        pv.addPhysVolID("sector", 1);
+
+        DetElement de(sdet, Form("sector%d_de", pieceIdx), 1);
+        de.setPlacement(pv);
+
+    }
+
+    //--------------------------
+    //between magnets
+    //--------------------------
+
+    for(int pieceIdx = numMagnets; pieceIdx < numGaps + numMagnets; pieceIdx++){
+
+                int correctIdx = pieceIdx-numMagnets;
+
+                std::string piece_name  = Form("GapVacuum%d", correctIdx);
+
+        CutTube gapPiece(piece_name, inRadius[correctIdx], outRadius[correctIdx], length_gap[correctIdx]/2, phi_initial[correctIdx], phi_final[correctIdx],
+                                               nxLow[correctIdx], nyLow[correctIdx], nzLow[correctIdx], nxHigh[correctIdx], nyHigh[correctIdx], nzHigh[correctIdx]);
+
+        Volume vpiece(piece_name, gapPiece, m_Vac);
+        sdet.setAttributes(det, vpiece, x_det.regionStr(), x_det.limitsStr(), vis_name);
+
+        auto pv = assembly.placeVolume(vpiece, Transform3D(RotationY(angle_elem_gap[correctIdx]),
+                                                   Position(x_gap[correctIdx], 0.0, z_gap[correctIdx])));
+        pv.addPhysVolID("sector", 1);
+
+        DetElement de(sdet, Form("sector%d_de", pieceIdx), 1);
+        de.setPlacement(pv);
+
+
+    }
+
+    //--------------------------------------------------------------
+    //make and place vacuum volume to connect IP beam pipe to B0pf
+    //--------------------------------------------------------------
+
+        if(makeIP_B0pfVacuum){
+
+        double specialGapLength = sqrt(pow(z_beg[0] - endOfCentralBeamPipe_z, 2) + pow(x_beg[0] - endOfCentralBeamPipe_x, 2)) - 0.1;
+        double specialGap_z = 0.5*specialGapLength*cos(crossingAngle) + endOfCentralBeamPipe_z;
+        double specialGap_x = 0.5*specialGapLength*sin(crossingAngle) + endOfCentralBeamPipe_x;
+
+        std::string piece_name  = Form("GapVacuum%d", numGaps + numMagnets);
+
+        Cone specialGap(piece_name, specialGapLength/2, 0.0, vacuumDiameterEntrance/2, 0.0, vacuumDiameterExit/2 );
+
+                Volume specialGap_v(piece_name, specialGap, m_Vac);
+                sdet.setAttributes(det, specialGap_v, x_det.regionStr(), x_det.limitsStr(), vis_name);
+
+                auto pv = assembly.placeVolume(specialGap_v, Transform3D(RotationY(crossingAngle), Position(specialGap_x, 0.0, specialGap_z)));
+                pv.addPhysVolID("sector", 1);
+
+                DetElement de(sdet, Form("sector%d_de", numGaps + numMagnets), 1);
+                de.setPlacement(pv);
+
+        }
+
+        //----------------------------------------------------
+
+    pv_assembly = det.pickMotherVolume(sdet).placeVolume(assembly);
+    pv_assembly.addPhysVolID("system", x_det.id()).addPhysVolID("barrel", 1);
+    sdet.setPlacement(pv_assembly);
+    assembly->GetShape()->ComputeBBox();
+
+    return sdet;
+}
+
+double getRotatedZ(double z, double x, double angle){
+
+        return z*cos(angle) - x*sin(angle);
+}
+
+double getRotatedX(double z, double x, double angle){
+
+        return z*sin(angle) + x*cos(angle);
 }
 
 DECLARE_DETELEMENT(magnetElementInnerVacuum, create_detector)

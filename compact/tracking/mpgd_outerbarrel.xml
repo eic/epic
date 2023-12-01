@@ -17,14 +17,15 @@
     <constant name="MPGDOuterBarrelFrame_thickness"        value="7*mm"/>
 
     <comment> Module constants </comment>
+    <constant name="MPGDOuterBarrelModule_roverlap"                value="1.2*cm"/>
+    <constant name="MPGDOuterBarrelModule_zoverlap"                value="3*MPGDOuterBarrelFrame_width"/>
     <constant name="MPGDOuterBarrelModule_count"                   value="12" />
     <constant name="MPGDOuterBarrelModule_allowed_space"           value="2.5*cm"/>
-    <constant name="MPGDOuterBarrelModule_rmax"                    value="MPGDOuterBarrelModule_rmin + MPGDOuterBarrelModule_allowed_space/2.0" />
+    <constant name="MPGDOuterBarrelModule_rmax"                    value="MPGDOuterBarrelModule_rmin + MPGDOuterBarrelModule_allowed_space" />
     <constant name="MPGDOuterBarrelModule_width"                   value="34.0*cm"/>
-    <constant name="MPGDOuterBarrelModule_length"                  value="0.5*(MPGDOuterBarrelModule_zmin1 + MPGDOuterBarrelModule_zmin2 + 2*MPGDOuterBarrelModule_allowed_space)"/>
+    <constant name="MPGDOuerBarrel_length"                         value="MPGDOuterBarrelModule_zmin1 + MPGDOuterBarrelModule_zmin2"/>
+    <constant name="MPGDOuterBarrelModule_length"                  value="0.5*(MPGDOuterBarrelModule_zmin1 + MPGDOuterBarrelModule_zmin2 + MPGDOuterBarrelModule_zoverlap)"/>
     <constant name="MPGDOuterBarrelModule_offset"                  value="(MPGDOuterBarrelModule_zmin2 - MPGDOuterBarrelModule_zmin1)/2.0"/>
-    <constant name="MPGDOuterBarrelModule_roverlap"                value="1.2*cm"/>
-    <constant name="MPGDOuterBarrelModule_zoverlap"                value="2*MPGDOuterBarrelFrame_width"/>
 
 
     <comment> Layer parameters </comment>
@@ -153,12 +154,12 @@
           phi_tilt="0"
           nphi="MPGDOuterBarrelModule_count"
           phi0="0"
-	  rc="MPGDOuterBarrelModule_rmin"
-	  dr="0" />
+          rc="MPGDOuterBarrelModule_rmin"
+          dr="0" />
     <z_layout
-	  dr = "MPGDOuterBarrelModule_roverlap"
-	  z0 = "MPGDOuterBarrelModule_zoverlap"
-	  nz = "2"/>
+          dr = "MPGDOuterBarrelModule_roverlap"
+          z0 = "MPGDOuterBarrelModule_zoverlap"
+          nz = "2"/>
    </layer>
 </detector>
 </detectors>

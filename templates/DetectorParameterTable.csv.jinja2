@@ -1,60 +1,68 @@
-Region,Component,Sub-Component,WBS,Length (cm),Inner Radius (cm),Outer Radius (cm),Offset from Center (cm),Physical Start (cm),Physical End (cm),Volume (m³),Weight (kg),Technology,Notes
-"HADRON DIRECTION END CAP",Hadron Calorimeter,,6.10.06,{{HcalEndcapP_length}},{{HcalEndcapP_rmin}},{{HcalEndcapP_rmax}},,{{HcalEndcapP_zmin}},{{HcalEndcapP_zmax}},,,"FeSc, WSc last segment","Tower size: 5cm x 5cm x 140cm, 20cm readout
-Offset: measured from face nearest to interaction point
-Volume: calculated as cylindrical volume minus the volume of the embedded ECAL
-Weight: estimated as 79% iron and 21% plastic"
-,Electromagnetic Calorimeter,,6.10.05,{{EcalEndcapP_length}},{{EcalEndcapP_rmin}},{{EcalEndcapP_rmax}},,{{EcalEndcapP_zmin}},{{EcalEndcapP_zmax}},,,Pb/Sc,"Tower size: 1cm (1.65cm) x 1cm(1.65cm) x 37.5cm, 5cm readout
-Offset: measured from face nearest to interaction point
-Weight: estimated as 85% lead glass and 15% steel"
-,Service Gap,,,{{ForwardServiceGap_length}},,,,{{ForwardServiceGap_zmax}},{{ForwardServiceGap_zmin}},,,,Offset: measured from location nearest to interaction point
-"CENTRAL DETECTOR",Barrel Hadron Calorimeter,,6.10.06,{{HcalBarrel_length}},{{HcalBarrel_rmin}},{{HcalBarrel_rmax}},,{{HcalBarrelForward_zmax}},-{{HcalBarrelBackward_zmax}},,,FeSc,"Offset: measured from center of detector
-Volume: calculated as sum of the sub-sections
-Weight: estimated as 79% iron and 21% plastic"
-,,HD Section,,,,,,,,,,,Offset: measured from face nearest to interaction point
-,,Central Section,,,,,,,,,,,Offset: measured from center of detector
-,,LD Section,,,,,,,,,,,Offset: measured from face nearest to interaction point
-,Dual RICH,,6.10.04,{{DRICH_length}},{{DRICH_rmin0}},{{DRICH_rmax2}},,{{DRICH_zmin}},{{DRICH_zmin+DRICH_length}},,,Aerogel/Gas,"Offset: measured from face nearest to interaction point
-Volume: calculated as sum of the sub-sections
-Weight: based on parametric estimate from CLAS LTCC"
-,,Detector Section,,,{{DRICH_rmin0}},,,,,,,,Offset: measured from face nearest to interaction point
-,,Aerogel Section,,,{{DRICH_rmin0}},,,,,,,Offset: measured from face nearest to interaction point
-,Solenoid Magnet,,6.10.07,{{Solenoid_length}},{{Solenoid_rmin}},{{Solenoid_rmax}},,{{SolenoidForward_zmax}},-{{SolenoidBackward_zmax}},,,Solenoid,Weight: based on parametric estimate from CLEO II
-,EMCal Outer Support,,,,,,,,,,,"Steel, Instrumented",Weight: calculated as 20% of total volume as steel (balance is air)
-,EMCal Electronics,,,{{EcalBarrel_length}},,,,{{EcalBarrelForward_zmax}},-{{EcalBarrelBackward_zmax}},,,Near eta=0,Weight: calculated as 25% silicon (balance is air)
-,Barrel EMCal,,6.10.05,{{EcalBarrel_length}},{{EcalBarrel_rmin}},{{EcalBarrel_rmax}},,{{EcalBarrelForward_zmax}},-{{EcalBarrelBackward_zmax}},,,Sci Glass,Weight: based on parametric estimate from CMS EMCal
-,EMCal Inner Support,,,{{EcalBarrel_length}},,,,{{EcalBarrelForward_zmax}},-{{EcalBarrelBackward_zmax}},,,Steel,Weight: calculated as 100% steel
-,Barrel Gem Tracker,,6.10.03,,,,,,,,,muRWell (plane type),Weight: based on parametric estimate from SBS Gem
-,DIRC Support ,,,,,,,,,,,Steel,"Offset: measured from point where DIRC bar connects to the readout
-Volume: calculated as sum of sub-sections
-Weight: estimated as 5% of total volume as steel (balance is air & detector)"
-,,Bar Support,,,,,,,,,,,
-,,Readout Support,,,,,,,,,,,"Readout support is triangular frame, therefore volume is halved."
-,DIRC Detector,,6.10.04,,{{DIRC_rmin}},{{DIRC_rmax}},,{{DIRCForward_zmax}},-{{DIRCBackward_zmax}},,,Fused silica bars,"Detector is totally enclosed by DIRC Support.
-Weight: calculated as sum of sub-components"
-,,DIRC Bar,,{{DIRCBar_length}},,,,,,,,,Weight: calculated as 30% quartz (balance is air & support system)
-,,DIRC Readout,,{{DIRCReadout_length}},,,,,,,,,"Readout is triangular, therefore volume is halved.
-Weight: Calculated as 30% silicon(balance is air & support system)"
-,Barrel Time of Flight/Tracker,,6.10.03,{{BarrelTOF_length}},{{BarrelTOF_rmin}},{{BarrelTOF_rmax}},,,,,,AC/LGAD,Weight: based on parametric estimate from SBS Gem
-,HD Time of Flight/Tracker,,6.10.03,,,,,,,,,AC/LGAD,"Offset: measured from face nearest to interaction point
-Weight: based on parametric estimate from SBS Gem"
-,Silicon Tracker,,6.10.03,,,,,,,,,MAPS,Weight: calculated as 3% aluminum and 3% silicon (balance is air)
-,Modular RICH,,6.10.04,{{MRICH_length}},{{MRICH_rmin}},{{MRICH_rmax}},,-{{MRICH_zmin}},,,,Aerogel,"Offset: measured from face nearest to interaction point
-Weight: based on parametric estimate from CLAS LTCC"
-{% if false %}
-{# FIXME: Disable pfRICH, since we need to figure out how to have both PFRICH and MRICH
-  simultaneously (idea: make some configurations/.yml file that includes EVERYTHING, so
-  ALL constants can be written to constants.toml using this config)
-#}
-,Proximity Focusing RICH,Alternative Technology to mRICH,6.10.04,{{PFRICH_length}},{{PFRICH_rmin0}},{{PFRICH_rmax}},,{{PFRICH_zmin}},{{PFRICH_zmin-PFRICH_length}},,,Aerogel/Gas,"Offset: measured from face nearest to interaction point
-Weight: based on parametric estimate from CLAS LTCC"
-{% endif %}
-,LD Time of Flight/Tracker,,6.10.03,,,,,,,,,AC/LGAD,"Offset: measured from face nearest to interaction point
-Weight: based on parametric estimate from SBS Gem"
-,LD EMCal,,6.10.05,{{EcalEndcapN_length}},{{EcalEndcapN_rmin}},{{EcalEndcapN_rmax}},,-{{EcalEndcapN_zmin}},-{{EcalEndcapN_zmax}},,,PbWO4,"Offset: measured from face nearest to interaction point
-Weight: estimated as 85% lead glass and 15% steel"
-,Service Gap,,,,,,,,,,,,Offset: measured from location nearest to interaction point
-"LEPTON DIRECTION ENDCAP",Backward Field Return,,6.10.06,,,,,,,,,Iron,"Offset: measured from face nearest to interaction point
-Weight: calculated as 100% iron."
-,,Return Cylinder,,,,,,,,,,,
-,,Support Panel,,,,,,,,,,,"Height: specified in outer radius
-Width: specified in inner radius"
+Region,Component,Sub-Component,Length (cm),Inner Radius (cm),Outer Radius (cm),Offset from Center (cm),Physical Start (cm),Physical End (cm)
+HADRON DIRECTION END CAP,HD Flux Return (Collar),,,,,,,
+HADRON DIRECTION END CAP,Hadron Calorimeter,,{{LFHCAL_length}},0,{{LFHCAL_rmax}},,{{LFHCAL_zmin}},{{LFHCAL_zmax}}
+HADRON DIRECTION END CAP,HD Flux Return (Oculus),,,,,,,
+HADRON DIRECTION END CAP,Electromagnetic Calorimeter,,{{EcalEndcapP_length}},{{EcalEndcapP_rmin}},{{EcalEndcapP_rmax}},,{{EcalEndcapP_zmin}},{{EcalEndcapP_zmax}}
+HADRON DIRECTION END CAP,Service Gap,,{{ForwardServiceGap_length}},,,,{{ForwardServiceGap_zmin}},{{ForwardServiceGap_zmax}}
+CENTRAL DETECTOR,Dual RICH,,{{DRICH_length}},{{DRICH_rmin0}},{{DRICH_rmax2}},,{{DRICH_zmin}},{{DRICH_zmin+DRICH_length}}
+CENTRAL DETECTOR,Dual RICH,Detector Section,,{{DRICH_rmin0}},,,,
+CENTRAL DETECTOR,Dual RICH,Aerogel Section,,{{DRICH_rmin0}},,,,
+CENTRAL DETECTOR,HD Time of Flight/Tracker,,,,,,,
+CENTRAL DETECTOR,Barrel Flux Return,,,,,,,
+CENTRAL DETECTOR,Barrel Hadron Calorimeter,,{{HcalBarrel_length}},{{HcalBarrel_rmin}},{{HcalBarrel_rmax}},,-{{HcalBarrelBackward_zmax}},{{HcalBarrelForward_zmax}}
+CENTRAL DETECTOR,Barrel Hadron Calorimeter,HD Section,,,,,,
+CENTRAL DETECTOR,Barrel Hadron Calorimeter,Central Section,,,,,,
+CENTRAL DETECTOR,Barrel Hadron Calorimeter,LD Section,,,,,,
+CENTRAL DETECTOR,Solenoid Magnet,,{{Solenoid_length}},{{Solenoid_rmin}},{{Solenoid_rmax}},,-{{SolenoidBackward_zmax}},{{SolenoidForward_zmax}}
+CENTRAL DETECTOR,Barrel HD EMCal Support,,,,,,,
+CENTRAL DETECTOR,Barrel HD EMCal Support,Exterior Plate,,,,,,
+CENTRAL DETECTOR,Barrel HD EMCal Support,Support Ring,,,,,,
+CENTRAL DETECTOR,Barrel EMCal,,{{EcalBarrel_length}},{{EcalBarrel_rmin}},{{EcalBarrel_rmax}},,-{{EcalBarrelBackward_zmax}},{{EcalBarrelForward_zmax}}
+CENTRAL DETECTOR,Barrel EMCal,Exterior Cover,,,,,,
+CENTRAL DETECTOR,Barrel EMCal,Imaging Part,{{EcalBarrel_Calorimeter_length}},{{EcalBarrel_rmin}},{{EcalBarrel_rmin+EcalBarrel_ImagingPartThickness}},-{{EcalBarrel_Calorimeter_zmax}},{{EcalBarrel_Calorimeter_zmax}}
+CENTRAL DETECTOR,Barrel EMCal,Sampling Part,{{EcalBarrel_Calorimeter_length}},{{EcalBarrel_rmin+EcalBarrel_ImagingPartThickness}},{{EcalBarrel_rmin+EcalBarrel_ImagingPartThickness+EcalBarrel_ScFiPartThickness}},-{{EcalBarrel_Calorimeter_zmax}},{{EcalBarrel_Calorimeter_zmax}}
+CENTRAL DETECTOR,Barrel EMCal,LD Readout Electronics,,,,,-{{EcalBarrel_Readout_zmax}},-{{EcalBarrel_Readout_zmin}}
+CENTRAL DETECTOR,Barrel EMCal,HD Readout Electronics,,,,,,
+CENTRAL DETECTOR,Barrel LD EMCal Support,,,,,,,
+CENTRAL DETECTOR,Barrel LD EMCal Support,Exterior Plate,,,,,,
+CENTRAL DETECTOR,Barrel LD EMCal Support,Support Ring,,,,,,
+CENTRAL DETECTOR,Integrated DIRC/MPGD Detector,,,{{DIRC_rmin}},{{DIRC_rmax}},,-{{DIRCBackward_zmax}},{{DIRCForward_zmax}}
+CENTRAL DETECTOR,Integrated DIRC/MPGD Detector,Dirc Bar/MPGD  Support,,,,,,
+CENTRAL DETECTOR,Integrated DIRC/MPGD Detector,DIRC Readout Support,{{DIRCReadout_length}},,,,,
+CENTRAL DETECTOR,Integrated DIRC/MPGD Detector,DIRC Bar Box,{{DIRCBar_length}},,,,,
+CENTRAL DETECTOR,Integrated DIRC/MPGD Detector,Inner MPGD,,,,,,
+CENTRAL DETECTOR,Barrel Time of Flight/Tracker,,{{BarrelTOF_length}},{{BarrelTOF_rmin}},{{BarrelTOF_rmax}},,,
+CENTRAL DETECTOR,HD MPGD 2,,{{ForwardMPGD_AllowedSpace}},{{ForwardMPGDLayer2_rmin}},{{ForwardMPGDLayer2_rmax}},{{ForwardMPGDLayer2_zmin}},{{ForwardMPGDLayer2_zmin}},{{ForwardMPGDLayer2_zmin+ForwardMPGD_AllowedSpace}}
+CENTRAL DETECTOR,HD MPGD 1,,{{ForwardMPGD_AllowedSpace}},{{ForwardMPGDLayer1_rmin}},{{ForwardMPGDLayer1_rmax}},{{ForwardMPGDLayer1_zmin}},{{ForwardMPGDLayer1_zmin}},{{ForwardMPGDLayer1_zmin+ForwardMPGD_AllowedSpace}}
+CENTRAL DETECTOR,Inner Tracker (Micromegas),,,,,,,
+CENTRAL DETECTOR,Inner Tracker (Micromegas),Micromega 1,,,,,,
+CENTRAL DETECTOR,Inner Tracker (Micromegas),Micromega 2,,,,,,
+CENTRAL DETECTOR,Inner Tracker (Micromegas),Micromega 3,,,,,,
+CENTRAL DETECTOR,Inner Tracker (Micromegas),Micromega 4,,,,,,
+CENTRAL DETECTOR,Inner Tracker (Micromegas),Micromega 5,,,,,,
+CENTRAL DETECTOR,Inner Tracker (Si Barrel),,,,,,,
+CENTRAL DETECTOR,Inner Tracker (Si Barrel),Si Layer 1,,{{VertexBarrelLayer1_rmin}},{{VertexBarrelLayer1_rmax}},,-{{VertexBarrelEnvelope_length/2}},{{VertexBarrelEnvelope_length/2}}
+CENTRAL DETECTOR,Inner Tracker (Si Barrel),Si Layer 2,,{{VertexBarrelLayer2_rmin}},{{VertexBarrelLayer2_rmax}},,-{{VertexBarrelEnvelope_length/2}},{{VertexBarrelEnvelope_length/2}}
+CENTRAL DETECTOR,Inner Tracker (Si Barrel),Si Layer 3,,{{VertexBarrelLayer3_rmin}},{{VertexBarrelLayer3_rmax}},,-{{VertexBarrelEnvelope_length/2}},{{VertexBarrelEnvelope_length/2}}
+CENTRAL DETECTOR,Inner Tracker (Si Barrel),Si Layer 4,,{{SiBarrelLayer1_rmin}},{{SiBarrelLayer1_rmax}},,-{{SiBarrelLayer1_length/2}},{{SiBarrelLayer1_length/2}}
+CENTRAL DETECTOR,Inner Tracker (Si Barrel),Si Layer 5,,{{SiBarrelLayer2_rmin}},{{SiBarrelLayer2_rmax}},,-{{SiBarrelLayer1_length/2}},{{SiBarrelLayer1_length/2}}
+CENTRAL DETECTOR,Inner Tracker (Si Disks),,,,,,,
+CENTRAL DETECTOR,Inner Tracker (Si Disks),HD Disk 1,,{{InnerTrackerEndcapPLayer1_rmin}},{{InnerTrackerEndcapPLayer1_rmax}},,{{InnerTrackerEndcapPLayer1_zmin}},{{InnerTrackerEndcapPLayer1_zmin+SiTrackerEndcapLayer_thickness}}
+CENTRAL DETECTOR,Inner Tracker (Si Disks),HD Disk 2,,{{TrackerEndcapPLayer1_rmin}},{{TrackerEndcapPLayer1_rmax}},,{{TrackerEndcapPLayer1_zmin}},{{TrackerEndcapPLayer1_zmin+SiTrackerEndcapLayer_thickness}}
+CENTRAL DETECTOR,Inner Tracker (Si Disks),HD Disk 3,,{{TrackerEndcapPLayer2_rmin}},{{TrackerEndcapPLayer2_rmax}},,{{TrackerEndcapPLayer2_zmin}},{{TrackerEndcapPLayer2_zmin+SiTrackerEndcapLayer_thickness}}
+CENTRAL DETECTOR,Inner Tracker (Si Disks),HD Disk 4,,{{TrackerEndcapPLayer3_rmin}},{{TrackerEndcapPLayer3_rmax}},,{{TrackerEndcapPLayer3_zmin}},{{TrackerEndcapPLayer3_zmin+SiTrackerEndcapLayer_thickness}}
+CENTRAL DETECTOR,Inner Tracker (Si Disks),HD Disk 5,,{{TrackerEndcapPLayer4_rmin}},{{TrackerEndcapPLayer4_rmax}},,{{TrackerEndcapPLayer4_zmin}},{{TrackerEndcapPLayer4_zmin+SiTrackerEndcapLayer_thickness}}
+CENTRAL DETECTOR,Inner Tracker (Si Disks),LD Disk 1,,{{InnerTrackerEndcapNLayer1_rmin}},{{InnerTrackerEndcapNLayer1_rmax}},,{{InnerTrackerEndcapNLayer1_zmin}},{{InnerTrackerEndcapNLayer1_zmin+SiTrackerEndcapLayer_thickness}}
+CENTRAL DETECTOR,Inner Tracker (Si Disks),LD Disk 2,,{{TrackerEndcapNLayer1_rmin}},{{TrackerEndcapNLayer1_rmax}},,-{{TrackerEndcapNLayer1_zmin+SiTrackerEndcapLayer_thickness}},-{{TrackerEndcapNLayer1_zmin}}
+CENTRAL DETECTOR,Inner Tracker (Si Disks),LD Disk 3,,{{TrackerEndcapNLayer2_rmin}},{{TrackerEndcapNLayer2_rmax}},,-{{TrackerEndcapNLayer2_zmin+SiTrackerEndcapLayer_thickness}},-{{TrackerEndcapNLayer2_zmin}}
+CENTRAL DETECTOR,Inner Tracker (Si Disks),LD Disk 4,,{{TrackerEndcapNLayer3_rmin}},{{TrackerEndcapNLayer3_rmax}},,-{{TrackerEndcapNLayer3_zmin+SiTrackerEndcapLayer_thickness}},-{{TrackerEndcapNLayer3_zmin}}
+CENTRAL DETECTOR,Inner Tracker (Si Disks),LD Disk 5,,{{TrackerEndcapNLayer4_rmin}},{{TrackerEndcapNLayer4_rmax}},,-{{TrackerEndcapNLayer4_zmin+SiTrackerEndcapLayer_thickness}},-{{TrackerEndcapNLayer4_zmin}}
+CENTRAL DETECTOR,LD MPGD 1,,{{BackwardMPGD_AllowedSpace}},{{BackwardMPGDLayer1_rmin}},{{BackwardMPGDLayer1_rmax}},-{{BackwardMPGDLayer1_zmin}},-{{BackwardMPGDLayer1_zmin+BackwardMPGD_AllowedSpace}},-{{BackwardMPGDLayer1_zmin}}
+CENTRAL DETECTOR,LD MPGD 2,,{{BackwardMPGD_AllowedSpace}},{{BackwardMPGDLayer2_rmin}},{{BackwardMPGDLayer2_rmax}},-{{BackwardMPGDLayer2_zmin}},-{{BackwardMPGDLayer2_zmin+BackwardMPGD_AllowedSpace}},-{{BackwardMPGDLayer2_zmin}}
+CENTRAL DETECTOR,Proximity Focusing RICH,,{{PFRICH_length}},{{PFRICH_rmin0}},{{PFRICH_rmax}},,{{PFRICH_zmin}},{{PFRICH_zmin-PFRICH_length}}
+CENTRAL DETECTOR,LD EMCal,,{{EcalEndcapN_length}},{{EcalEndcapN_rmin}},{{EcalEndcapN_rmax}},,-{{EcalEndcapN_zmax}},-{{EcalEndcapN_zmin}}
+CENTRAL DETECTOR,Service Gap,,,,,,-{{BackwardServiceGap_zmax+BackwardServiceGap_length}},-{{BackwardServiceGap_zmax}}
+LEPTON DIRECTION ENDCAP,LD Flux Return (Oculus),,,,,,,
+LEPTON DIRECTION ENDCAP,LD Flux Return (Collar),,,,,,,
+LEPTON DIRECTION ENDCAP,Backward HCal,,,{{HcalEndcapN_rmin}},{{HcalEndcapN_rmax}},,-{{HcalEndcapN_zmin+HcalEndcapN_length}},-{{HcalEndcapN_zmin}}
+LEPTON DIRECTION ENDCAP,LD Flux Return (Exterior),,,,,,,
