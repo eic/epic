@@ -873,10 +873,6 @@ static Ref_t createDetector(Detector& desc, xml_h handle, SensitiveDetector sens
   int moduleIDy = -1;
 
 
-  int    moduleID   = 0;
-
-
-
   struct position {
     double x,y,z;
   };
@@ -908,7 +904,6 @@ static Ref_t createDetector(Detector& desc, xml_h handle, SensitiveDetector sens
     auto tr8M = Transform3D(Position(pos.x()-pos8M[e].x-0.5*eightM_params.mod_width, pos.y() - pos8M[e].y, pos.z() + pos8M[e].z + length / 2.));
     phv = assembly.placeVolume(eightMassembly, tr8M);
     phv.addPhysVolID("moduleIDx", moduleIDx).addPhysVolID("moduleIDy", moduleIDy).addPhysVolID("moduletype", 0);
-    moduleID++;
   }
 
   std::vector<position> pos4M;
@@ -937,7 +932,6 @@ static Ref_t createDetector(Detector& desc, xml_h handle, SensitiveDetector sens
     auto tr4M = Transform3D(Position(pos.x()-pos4M[f].x-0.5*fourM_params.mod_width, pos.y()-pos4M[f].y, pos.z() + pos4M[f].z + length / 2.));
     phv = assembly.placeVolume(fourMassembly, tr4M);
     phv.addPhysVolID("moduleIDx", moduleIDx).addPhysVolID("moduleIDy", moduleIDy).addPhysVolID("moduletype", 1);
-    moduleID++;
   }
 
   Volume     motherVol = desc.pickMotherVolume(det);
