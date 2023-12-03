@@ -1,6 +1,7 @@
 <!-- SPDX-License-Identifier: LGPL-3.0-or-later -->
 <!-- Copyright (C) 2022 Whitney Armstrong, Chao Peng, Maria Zurek, Jihee Kim -->
-<!-- Active AstroPix layers: 1-3-5-6 -->
+<!-- Active AstroPix layers: 1-3-4-6 -->
+
 
 <lccdd>
 
@@ -19,11 +20,11 @@
     <!-- Number of imaging layer slots -->
     <constant name="EcalBarrelImagingLayers_nMax"   value="6"/>
     <constant name="EcalBarrel_Calorimeter_zmin"
-      value="min(257*cm, EcalBarrelBackward_zmax)"/>
+      value="min(258.75*cm, EcalBarrelBackward_zmax)"/>
     <constant name="EcalBarrel_Calorimeter_zmax"
-      value="min(177.5*cm, EcalBarrelForward_zmax)"/>
-    <constant name="EcalBarrel_Readout_zmin"        value="272*cm"/>
-    <constant name="EcalBarrel_Readout_zmax"        value="192.5*cm"/>
+      value="min(181.25*cm, EcalBarrelForward_zmax)"/>
+    <constant name="EcalBarrel_Readout_zmin"        value="273.75*cm"/>
+    <constant name="EcalBarrel_Readout_zmax"        value="196.25*cm"/>
     <constant name="EcalBarrel_Calorimeter_length"
       value="EcalBarrel_Calorimeter_zmax + EcalBarrel_Calorimeter_zmin"/>
     <constant name="EcalBarrel_Calorimeter_offset"
@@ -54,10 +55,6 @@
     <constant name="EcalBarrel_StaveTilt_angle"      value="10*degree"/>
     <constant name="EcalBarrel_Stave_ModuleRepeat"   value="floor(EcalBarrel_Calorimeter_length / (EcalBarrel_AstroPix_length + EcalBarrel_AstroPix_margin))"/>
 
-    <constant name="EcalBarrel_ImagingFirstLayerThickness"
-      value="EcalBarrel_AstroPix_thickness
-      + EcalBarrel_CarbonThickness"/>
-
     <constant name="EcalBarrel_LayerSpacing"         value="10.0*mm"/>
     <constant name="EcalBarrel_FiberRadius"          value="0.5*mm"/>
     <constant name="EcalBarrel_FiberXSpacing"        value="1.34*mm"/>
@@ -84,18 +81,15 @@
 
     <constant name="EcalBarrelImagingLayers_num"
         value="min(EcalBarrelImagingLayers_nMax,
-               floor((EcalBarrel_AvailThickness-EcalBarrel_ImagingFirstLayerThickness)/
-                     (EcalBarrel_ImagingLayerThickness + EcalBarrel_ScFiLayerThickness +
-                      EcalBarrel_SpaceBetween)))"/>
+               floor(EcalBarrel_AvailThickness/(EcalBarrel_ImagingLayerThickness + EcalBarrel_ScFiLayerThickness + EcalBarrel_SpaceBetween)))"/>
     <comment>
       Adjusting size of the ScFi back chunk to match number of imaging layers
       and ~17.1 radiation lengths in total
     </comment>
-    <constant name="EcalBarrel_FiberBulkLayers_num" value = "EcalBarrel_TotalFiberLayers_num-EcalBarrelImagingLayers_num+1"/>
+    <constant name="EcalBarrel_FiberBulkLayers_num" value = "EcalBarrel_TotalFiberLayers_num-EcalBarrelImagingLayers_num"/>
 
     <constant name="EcalBarrel_ImagingPartThickness"
-        value="(EcalBarrelImagingLayers_num-1)*(EcalBarrel_ImagingLayerThickness + EcalBarrel_ScFiLayerThickness + EcalBarrel_SpaceBetween)
-              + EcalBarrel_ImagingFirstLayerThickness + EcalBarrel_SpaceBetween"/>
+        value="(EcalBarrelImagingLayers_num)*(EcalBarrel_ImagingLayerThickness + EcalBarrel_ScFiLayerThickness + EcalBarrel_SpaceBetween)"/>
     <constant name="EcalBarrel_ScFiPartThickness_max"
         value="max(0, EcalBarrel_AvailThickness-EcalBarrel_ImagingPartThickness)"/>
     <constant name="EcalBarrel_ScFiPartThickness"
@@ -134,29 +128,6 @@
         rmin="EcalBarrel_rmin"
         z="EcalBarrel_Calorimeter_length"/>
       <sectors vis="EcalBarrelSectorVis"/>
-
-      <module name="AstroPix_Module_FirstLayer"
-              vis="EcalBarrelModuleVis">
-        <module_component name="AstroPix_Chip"
-                          material="Silicon"
-                          width="EcalBarrel_AstroPix_width"
-                          length="EcalBarrel_AstroPix_length"
-                          thickness="EcalBarrel_AstroPix_thickness"
-                          vis="EcalBarrelModuleVis">
-          <slice material="Silicon" thickness="EcalBarrel_SiliconThickness"     vis="EcalBarrelSliceVis" sensitive="yes" limits="cal_limits"/>
-          <slice material="Silicon" thickness="EcalBarrel_ElectronicsThickness" vis="EcalBarrelSliceVis"/>
-          <slice material="Copper" thickness="EcalBarrel_CopperThickness"       vis="EcalBarrelSliceVis"/>
-          <slice material="Kapton" thickness="EcalBarrel_KaptonThickness"       vis="EcalBarrelSliceVis"/>
-          <slice material="Epoxy" thickness="EcalBarrel_EpoxyThickness"         vis="EcalBarrelSliceVis"/>
-        </module_component>
-        <module_component name="AstroPix_Support"
-                          material="CarbonFiber"
-                          width="EcalBarrel_AstroPix_width + EcalBarrel_AstroPix_margin"
-                          length="EcalBarrel_AstroPix_length + EcalBarrel_AstroPix_margin"
-                          thickness="EcalBarrel_CarbonThickness"
-                          vis="EcalBarrelSliceVis">
-        </module_component>
-      </module>
 
       <module name="AstroPix_Module"
               vis="EcalBarrelModuleVis">
