@@ -310,11 +310,9 @@ static std::tuple<int, std::pair<int, int>> add_12surface_disk(Detector& desc, A
   std::pair<double, double> c1 (0., 0.);
   auto polyVertex = epic::geo::getPolygonVertices(c1, (rmax/std::cos(Prot)), M_PI/12., 12);
   std::vector<epic::geo::Point> out_vertices, in_vertices;
-  int index = 0;
   for( auto p : polyVertex ){
     epic::geo::Point a = {p.first, p.second};
     out_vertices.push_back(a);
-    index++;
   }
 
   for (xml_coll_t position_i(pts_extrudedpolygon, _U(position)); position_i; ++position_i){
