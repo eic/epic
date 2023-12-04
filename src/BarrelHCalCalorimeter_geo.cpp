@@ -70,7 +70,7 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
   sdet.setPlacement(env_phv);
 
   // Storage for sectors and tile assemblies
-  Assembly BarrelHCAL("BarrelHCAL"); 
+  Assembly BarrelHCAL("BarrelHCAL");
   Assembly ChimneyTower[4];
   Assembly Tower[24];
 
@@ -160,7 +160,7 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
     aptr->push_back(atof(mtrx_values.c_str()));
   }
 
-  double increment_angle = (360.0/320.0)*dd4hep::deg;  
+  double increment_angle = (360.0/320.0)*dd4hep::deg;
 
   // Loop over the solids, create them and add them to the detector volume
 
@@ -199,7 +199,7 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
         zp = -zp;
       }
 
-      // points are numbered starting at 0, so these will be indexed 
+      // points are numbered starting at 0, so these will be indexed
       // properly when we pick out the index from the vertex names
 
       Tessellated::Vertex_t thisPoint(xp, yp, zp);
@@ -220,9 +220,9 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
 
       // Extract the point indices
 
-      int vtx1 = stoi(pointName1.substr(pointName1.find_first_of("0123456789"))); 
-      int vtx2 = stoi(pointName2.substr(pointName2.find_first_of("0123456789"))); 
-      int vtx3 = stoi(pointName3.substr(pointName3.find_first_of("0123456789"))); 
+      int vtx1 = stoi(pointName1.substr(pointName1.find_first_of("0123456789")));
+      int vtx2 = stoi(pointName2.substr(pointName2.find_first_of("0123456789")));
+      int vtx3 = stoi(pointName3.substr(pointName3.find_first_of("0123456789")));
 
       // Add the facet to the solid
 
@@ -246,15 +246,15 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
 
       // Extract the point indices
 
-      int vtx1 = stoi(pointName1.substr(pointName1.find_first_of("0123456789"))); 
-      int vtx2 = stoi(pointName2.substr(pointName2.find_first_of("0123456789"))); 
-      int vtx3 = stoi(pointName3.substr(pointName3.find_first_of("0123456789"))); 
-      int vtx4 = stoi(pointName4.substr(pointName4.find_first_of("0123456789"))); 
+      int vtx1 = stoi(pointName1.substr(pointName1.find_first_of("0123456789")));
+      int vtx2 = stoi(pointName2.substr(pointName2.find_first_of("0123456789")));
+      int vtx3 = stoi(pointName3.substr(pointName3.find_first_of("0123456789")));
+      int vtx4 = stoi(pointName4.substr(pointName4.find_first_of("0123456789")));
 
       // Add the facet to the solid
 
-      if ((vtx1 >= 0) && (vtx2 >= 0) && (vtx3 >= 0) && (vtx4 >= 0) && 
-	  (vtx1 != vtx2) && (vtx1 != vtx3) && (vtx2 != vtx3) && (vtx1 != vtx4) && (vtx2 != vtx4) && (vtx3 != vtx4)) {
+      if ((vtx1 >= 0) && (vtx2 >= 0) && (vtx3 >= 0) && (vtx4 >= 0) &&
+          (vtx1 != vtx2) && (vtx1 != vtx3) && (vtx2 != vtx3) && (vtx1 != vtx4) && (vtx2 != vtx4) && (vtx3 != vtx4)) {
 
         solid->AddFacet(vtx1, vtx2, vtx3, vtx4);
 
@@ -398,7 +398,7 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
       } else
         printout(WARNING, "BarrelHCalCalorimeter", "solid_name.size() invalid! ");
     }
-      
+
   }
 
 
@@ -414,40 +414,40 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
     if( j < 3) {
 
       // special chimney sector towers
-      for (int i = 0; i < 4; i++) { 
+      for (int i = 0; i < 4; i++) {
 
-	PlacedVolume tower_phv0 = 
-	  BarrelHCAL.placeVolume(ChimneyTower[i], i + j*48, Transform3D(RotationZ((10 * (j-1) * (360.0 / 320.0) - 0.042) * dd4hep::deg), Translation3D(0.0, 0.0, 0.0)));
-	tower_phv0.addPhysVolID("tower", i + j*48); 
- 	DetElement tt0 = tower_det.clone(_toString(i + j*48, "tower%d"));
-	tt0.setPlacement(tower_phv0);
-	sdet.add(tt0);
-    
-	PlacedVolume tower_phv1 = 
-	  BarrelHCAL.placeVolume(ChimneyTower[i], i + 24 + j*48, Transform3D(RotationZ(((10 * (j-1) + 5) * (360.0 / 320.0) - 0.042) * dd4hep::deg), Translation3D(0.0, 0.0, 0.0)));
-	tower_phv1.addPhysVolID("tower", i + 24 + j*48); 
-	DetElement tt1 = tower_det.clone(_toString(i + 24 + j*48, "tower%d"));
-	tt1.setPlacement(tower_phv1);
-	sdet.add(tt1);
+        PlacedVolume tower_phv0 =
+          BarrelHCAL.placeVolume(ChimneyTower[i], i + j*48, Transform3D(RotationZ((10 * (j-1) * (360.0 / 320.0) - 0.042) * dd4hep::deg), Translation3D(0.0, 0.0, 0.0)));
+        tower_phv0.addPhysVolID("tower", i + j*48);
+        DetElement tt0 = tower_det.clone(_toString(i + j*48, "tower%d"));
+        tt0.setPlacement(tower_phv0);
+        sdet.add(tt0);
+
+        PlacedVolume tower_phv1 =
+          BarrelHCAL.placeVolume(ChimneyTower[i], i + 24 + j*48, Transform3D(RotationZ(((10 * (j-1) + 5) * (360.0 / 320.0) - 0.042) * dd4hep::deg), Translation3D(0.0, 0.0, 0.0)));
+        tower_phv1.addPhysVolID("tower", i + 24 + j*48);
+        DetElement tt1 = tower_det.clone(_toString(i + 24 + j*48, "tower%d"));
+        tt1.setPlacement(tower_phv1);
+        sdet.add(tt1);
 
       }
 
       // ordinary towers in chimney sectors
-      for (int i = 4; i < 24; i++) { 
+      for (int i = 4; i < 24; i++) {
 
-	PlacedVolume tower_phv0 = 
-	  BarrelHCAL.placeVolume(Tower[i], i + j*48, Transform3D(RotationZ((10 * (j-1) * (360.0 / 320.0) - 0.042) * dd4hep::deg), Translation3D(0.0, 0.0, 0.0)));
-	tower_phv0.addPhysVolID("tower", i + j*48); 
- 	DetElement tt0 = tower_det.clone(_toString(i + j*48, "tower%d"));
-	tt0.setPlacement(tower_phv0);
-	sdet.add(tt0);
-    
-	PlacedVolume tower_phv1 = 
-	  BarrelHCAL.placeVolume(Tower[i], i + 24 + j*48, Transform3D(RotationZ(((10 * (j-1) + 5) * (360.0 / 320.0) - 0.042) * dd4hep::deg), Translation3D(0.0, 0.0, 0.0)));
-	tower_phv1.addPhysVolID("tower", i + 24 + j*48); 
-	DetElement tt1 = tower_det.clone(_toString(i + 24 + j*48, "tower%d"));
-	tt1.setPlacement(tower_phv1);
-	sdet.add(tt1);
+        PlacedVolume tower_phv0 =
+          BarrelHCAL.placeVolume(Tower[i], i + j*48, Transform3D(RotationZ((10 * (j-1) * (360.0 / 320.0) - 0.042) * dd4hep::deg), Translation3D(0.0, 0.0, 0.0)));
+        tower_phv0.addPhysVolID("tower", i + j*48);
+        DetElement tt0 = tower_det.clone(_toString(i + j*48, "tower%d"));
+        tt0.setPlacement(tower_phv0);
+        sdet.add(tt0);
+
+        PlacedVolume tower_phv1 =
+          BarrelHCAL.placeVolume(Tower[i], i + 24 + j*48, Transform3D(RotationZ(((10 * (j-1) + 5) * (360.0 / 320.0) - 0.042) * dd4hep::deg), Translation3D(0.0, 0.0, 0.0)));
+        tower_phv1.addPhysVolID("tower", i + 24 + j*48);
+        DetElement tt1 = tower_det.clone(_toString(i + 24 + j*48, "tower%d"));
+        tt1.setPlacement(tower_phv1);
+        sdet.add(tt1);
 
       }
 
@@ -455,21 +455,21 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
     // ordinary sectors
     else {
 
-      for (int i = 0; i < 24; i++) { 
+      for (int i = 0; i < 24; i++) {
 
-	PlacedVolume tower_phv0 = 
-	  BarrelHCAL.placeVolume(Tower[i], i + j*48, Transform3D(RotationZ((10 * (j-1) * (360.0 / 320.0) - 0.0525) * dd4hep::deg), Translation3D(0.0, 0.0, 0.0)));
-	tower_phv0.addPhysVolID("tower", i + j*48); 
- 	DetElement tt0 = tower_det.clone(_toString(i + j*48, "tower%d"));
-	tt0.setPlacement(tower_phv0);
-	sdet.add(tt0);
-    
-	PlacedVolume tower_phv1 = 
-	  BarrelHCAL.placeVolume(Tower[i], i + 24 + j*48, Transform3D(RotationZ(((10 * (j-1) + 5) * (360.0 / 320.0) - 0.0525) * dd4hep::deg), Translation3D(0.0, 0.0, 0.0)));
-	tower_phv1.addPhysVolID("tower", i + 24 + j*48); 
-	DetElement tt1 = tower_det.clone(_toString(i + 24 + j*48, "tower%d"));
-	tt1.setPlacement(tower_phv1);
-	sdet.add(tt1);
+        PlacedVolume tower_phv0 =
+          BarrelHCAL.placeVolume(Tower[i], i + j*48, Transform3D(RotationZ((10 * (j-1) * (360.0 / 320.0) - 0.0525) * dd4hep::deg), Translation3D(0.0, 0.0, 0.0)));
+        tower_phv0.addPhysVolID("tower", i + j*48);
+        DetElement tt0 = tower_det.clone(_toString(i + j*48, "tower%d"));
+        tt0.setPlacement(tower_phv0);
+        sdet.add(tt0);
+
+        PlacedVolume tower_phv1 =
+          BarrelHCAL.placeVolume(Tower[i], i + 24 + j*48, Transform3D(RotationZ(((10 * (j-1) + 5) * (360.0 / 320.0) - 0.0525) * dd4hep::deg), Translation3D(0.0, 0.0, 0.0)));
+        tower_phv1.addPhysVolID("tower", i + 24 + j*48);
+        DetElement tt1 = tower_det.clone(_toString(i + 24 + j*48, "tower%d"));
+        tt1.setPlacement(tower_phv1);
+        sdet.add(tt1);
 
       }
 
