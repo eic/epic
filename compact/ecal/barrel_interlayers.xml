@@ -86,10 +86,10 @@
       Adjusting size of the ScFi back chunk to match number of imaging layers
       and ~17.1 radiation lengths in total
     </comment>
-    <constant name="EcalBarrel_FiberBulkLayers_num" value = "EcalBarrel_TotalFiberLayers_num-EcalBarrelImagingLayers_num"/>
+    <constant name="EcalBarrel_FiberBulkLayers_num" value = "EcalBarrel_TotalFiberLayers_num-EcalBarrelImagingLayers_num+1"/>
 
     <constant name="EcalBarrel_ImagingPartThickness"
-        value="(EcalBarrelImagingLayers_num)*(EcalBarrel_ImagingLayerThickness + EcalBarrel_ScFiLayerThickness + EcalBarrel_SpaceBetween)"/>
+        value="EcalBarrelImagingLayers_num*(EcalBarrel_ImagingLayerThickness + EcalBarrel_ScFiLayerThickness + EcalBarrel_SpaceBetween)-EcalBarrel_ScFiLayerThickness"/>
     <constant name="EcalBarrel_ScFiPartThickness_max"
         value="max(0, EcalBarrel_AvailThickness-EcalBarrel_ImagingPartThickness)"/>
     <constant name="EcalBarrel_ScFiPartThickness"
