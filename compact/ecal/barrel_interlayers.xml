@@ -164,6 +164,7 @@
             dx="EcalBarrel_AstroPix_width + EcalBarrel_AstroPix_margin"
             dy="EcalBarrel_AstroPix_length + EcalBarrel_AstroPix_margin"
           />
+          <slice material="CarbonFiber" thickness="EcalBarrel_CarbonThickness" vis="EcalBarrelSliceVis"/>
         </stave>
       </layer>
 
@@ -181,7 +182,7 @@
         <stave repeat="6"
                width="EcalBarrel_Stave_width"
                length="EcalBarrel_Stave_length"
-               thickness="EcalBarrel_AstroPix_thickness"
+               thickness="EcalBarrel_Stave_thickness"
                angle="-EcalBarrel_StaveTilt_angle"
                module="AstroPix_Module"
                vis="EcalBarrelStaveVis">
@@ -189,6 +190,7 @@
             dx="EcalBarrel_AstroPix_width + EcalBarrel_AstroPix_margin"
             dy="EcalBarrel_AstroPix_length + EcalBarrel_AstroPix_margin"
           />
+          <slice material="CarbonFiber" thickness="EcalBarrel_CarbonThickness" vis="EcalBarrelSliceVis"/>
         </stave>
       </layer>
 
@@ -206,7 +208,7 @@
         <stave repeat="7"
                width="EcalBarrel_Stave_width"
                length="EcalBarrel_Stave_length"
-               thickness="EcalBarrel_AstroPix_thickness"
+               thickness="EcalBarrel_Stave_thickness"
                angle="EcalBarrel_StaveTilt_angle"
                module="AstroPix_Module"
                vis="EcalBarrelStaveVis">
@@ -214,6 +216,7 @@
             dx="EcalBarrel_AstroPix_width + EcalBarrel_AstroPix_margin"
             dy="EcalBarrel_AstroPix_length + EcalBarrel_AstroPix_margin"
           />
+          <slice material="CarbonFiber" thickness="EcalBarrel_CarbonThickness" vis="EcalBarrelSliceVis"/>
         </stave>
       </layer>
     </detector>
