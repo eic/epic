@@ -51,8 +51,12 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
   double length1 = x_det.z1();
   double length2 = x_det.z2();
 
-  std::vector<double> rmins = {rmin2, rmin2, rmin1, rmin1, rmin2, rmin2};
-  std::vector<double> rmaxs = {rmax, rmax, rmax, rmax, rmax, rmax};
+  // 5mm buffer on inner radius to acount for comb angle/tilt
+  // (allows the combs to be added in later)
+  std::vector<double> rmins = {rmin2-0.5*cm, rmin2-0.5*cm, rmin1-1.5*cm, rmin1-1.5*cm, rmin2-0.5*cm, rmin2-0.5*cm};
+  // 1cm buffer on outer radius to acount for comb angle/tilt
+  // (allows the combs to be added in later)
+  std::vector<double> rmaxs = {rmax+1.0*cm, rmax+1.0*cm, rmax+1.0*cm, rmax+1.0*cm, rmax+1.0*cm, rmax+1.0*cm};
   std::vector<double> zs    = {-length2 / 2., -length1 / 2., -length1 / 2., length1 / 2., length1 / 2., length2 / 2.};
 
   // printout(WARNING, "BarrelHCalCalorimeter", "%f %f %f %f %f", rmin1, rmin2, rmax, length1/2., length2/2.);
@@ -66,8 +70,7 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
   sdet.setPlacement(env_phv);
 
   // Storage for sectors and tile assemblies
-  Assembly ChimneySector("ChimneySector");
-  Assembly Sector("Sector");
+  Assembly BarrelHCAL("BarrelHCAL"); 
   Assembly ChimneyTower[4];
   Assembly Tower[24];
 
@@ -77,16 +80,8 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
 
   double ctilePlaneRotate = 0.0;
   double tilePlaneRotate  = 0.0;
-  double csectorRotate    = 0.0;
-  double sectorRotate     = 0.0;
 
   double tile_tolerance = 0.2; // Tile tolerance in mm to avoid overlaps
-
-  // Tile rotation starting points to align with sector plates
-  double ctileRotateStart  = 5.4420 * (360.0 / 320.0) * dd4hep::deg;
-  double octileRotateStart = 5.4420 * (360.0 / 320.0) * dd4hep::deg;
-  // double tileRotateStart  = 20.38875*(360.0/320.0)*dd4hep::deg + ctileRotateStart;
-  double tileRotateStart = 20.38675 * (360.0 / 320.0) * dd4hep::deg + ctileRotateStart;
 
   for (xml_coll_t i(det_define, _Unicode(constant)); i; ++i) {
     xml_comp_t x_const = i;
@@ -98,10 +93,6 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
       ctilePlaneRotate = atof(const_value.c_str());
     else if (const_name == "tilePlaneRotate")
       tilePlaneRotate = atof(const_value.c_str());
-    else if (const_name == "csectorRotate")
-      csectorRotate = atof(const_value.c_str());
-    else if (const_name == "sectorRotate")
-      sectorRotate = atof(const_value.c_str());
     else
       printout(WARNING, "BarrelHCalCalorimeter", "unrecognized <constant> data!");
   }
@@ -122,14 +113,6 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
   std::vector<double> xposChimneyTileS;
   std::vector<double> yposChimneyTileS;
   std::vector<double> zposChimneyTileS;
-
-  std::vector<double> plates_x;
-  std::vector<double> plates_y;
-  std::vector<double> plates_z;
-
-  std::vector<double> tweak_tiles;
-  std::vector<double> tweak_chimney_tiles;
-  std::vector<double> tweak_sectors;
 
   for (xml_coll_t i(det_define, _Unicode(matrix)); i; ++i) {
     xml_comp_t x_mtrx = i;
@@ -161,18 +144,6 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
       aptr = &yposChimneyTileS;
     else if (mtrx_name == "zposChimneyTileS")
       aptr = &zposChimneyTileS;
-    else if (mtrx_name == "plates_x")
-      aptr = &plates_x;
-    else if (mtrx_name == "plates_y")
-      aptr = &plates_y;
-    else if (mtrx_name == "plates_z")
-      aptr = &plates_z;
-    else if (mtrx_name == "tweak_tiles")
-      aptr = &tweak_tiles;
-    else if (mtrx_name == "tweak_chimney_tiles")
-      aptr = &tweak_chimney_tiles;
-    else if (mtrx_name == "tweak_sectors")
-      aptr = &tweak_sectors;
     else {
       printout(WARNING, "BarrelHCalCalorimeter", "unknown <matrix> data!");
       continue;
@@ -188,6 +159,8 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
     }
     aptr->push_back(atof(mtrx_values.c_str()));
   }
+
+  double increment_angle = (360.0/320.0)*dd4hep::deg;  
 
   // Loop over the solids, create them and add them to the detector volume
 
@@ -221,11 +194,13 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
       // for the sector plates  we perform a rotation around y - the chimney cutout should be in the
       // electron arm
 
-      if ((solid_name == "HCAL_Chimney_Sector_Half_Plate") || (solid_name == "HCAL_Chimney_Sector_Plate") ||
-          (solid_name == "HCAL_Sector_Half_Plate") || (solid_name == "HCAL_Sector_Plate")) {
+      if (solid_name == "HCAL_Steel") {
         xp = -xp;
         zp = -zp;
       }
+
+      // points are numbered starting at 0, so these will be indexed 
+      // properly when we pick out the index from the vertex names
 
       Tessellated::Vertex_t thisPoint(xp, yp, zp);
 
@@ -234,35 +209,20 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
 
     TessellatedSolid solid(solid_name.c_str(), vertices);
 
+    // Triangular vertices
+
     for (xml_coll_t i(tessellated, _Unicode(triangular)); i; ++i) {
       xml_comp_t triang = i;
 
-      int vtx1 = -1;
-      int vtx2 = -1;
-      int vtx3 = -1;
+      std::string pointName1 = getAttrOrDefault<std::string>(triang, _Unicode(vertex1), " ");
+      std::string pointName2 = getAttrOrDefault<std::string>(triang, _Unicode(vertex2), " ");
+      std::string pointName3 = getAttrOrDefault<std::string>(triang, _Unicode(vertex3), " ");
 
-      std::string facetName1 = getAttrOrDefault<std::string>(triang, _Unicode(vertex1), " ");
-      std::string facetName2 = getAttrOrDefault<std::string>(triang, _Unicode(vertex2), " ");
-      std::string facetName3 = getAttrOrDefault<std::string>(triang, _Unicode(vertex3), " ");
+      // Extract the point indices
 
-      // Search the define collection to match things up
-      int idx = 0;
-      for (xml_coll_t j(define, _Unicode(position)); j; ++j) {
-        xml_comp_t  pos     = j;
-        std::string posName = getAttrOrDefault<std::string>(pos, _Unicode(name), " ");
-
-        if (posName == facetName1)
-          vtx1 = idx;
-        if (posName == facetName2)
-          vtx2 = idx;
-        if (posName == facetName3)
-          vtx3 = idx;
-
-        if ((vtx1 >= 0) && (vtx2 >= 0) && (vtx3 >= 0))
-          break;
-
-        idx++;
-      }
+      int vtx1 = stoi(pointName1.substr(pointName1.find_first_of("0123456789"))); 
+      int vtx2 = stoi(pointName2.substr(pointName2.find_first_of("0123456789"))); 
+      int vtx3 = stoi(pointName3.substr(pointName3.find_first_of("0123456789"))); 
 
       // Add the facet to the solid
 
@@ -271,7 +231,35 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
         solid->AddFacet(vtx1, vtx2, vtx3);
 
       } else
-        printout(WARNING, "BarrelHCalCalorimeter", "bad facet! %d %d %d", vtx1, vtx2, vtx3);
+        printout(WARNING, "BarrelHCalCalorimeter", "bad triangular facet! %d %d %d", vtx1, vtx2, vtx3);
+    }
+
+    // Quadrangular vertices
+
+    for (xml_coll_t i(tessellated, _Unicode(quadrangular)); i; ++i) {
+      xml_comp_t quadrang = i;
+
+      std::string pointName1 = getAttrOrDefault<std::string>(quadrang, _Unicode(vertex1), " ");
+      std::string pointName2 = getAttrOrDefault<std::string>(quadrang, _Unicode(vertex2), " ");
+      std::string pointName3 = getAttrOrDefault<std::string>(quadrang, _Unicode(vertex3), " ");
+      std::string pointName4 = getAttrOrDefault<std::string>(quadrang, _Unicode(vertex4), " ");
+
+      // Extract the point indices
+
+      int vtx1 = stoi(pointName1.substr(pointName1.find_first_of("0123456789"))); 
+      int vtx2 = stoi(pointName2.substr(pointName2.find_first_of("0123456789"))); 
+      int vtx3 = stoi(pointName3.substr(pointName3.find_first_of("0123456789"))); 
+      int vtx4 = stoi(pointName4.substr(pointName4.find_first_of("0123456789"))); 
+
+      // Add the facet to the solid
+
+      if ((vtx1 >= 0) && (vtx2 >= 0) && (vtx3 >= 0) && (vtx4 >= 0) && 
+	  (vtx1 != vtx2) && (vtx1 != vtx3) && (vtx2 != vtx3) && (vtx1 != vtx4) && (vtx2 != vtx4) && (vtx3 != vtx4)) {
+
+        solid->AddFacet(vtx1, vtx2, vtx3, vtx4);
+
+      } else
+        printout(WARNING, "BarrelHCalCalorimeter", "bad quadrangular facet! %d %d %d %d", vtx1, vtx2, vtx3, vtx4);
     }
 
     // Complete the shape
@@ -282,51 +270,10 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
 
     // printout(WARNING, "BarrelHCalCalorimeter", "tesselated solid name %s", solid_name.c_str());
 
-    if (solid_name == "HCAL_Chimney_Sector_Half_Plate") {
+    if (solid_name == "HCAL_Steel") {
 
-      ChimneySector.placeVolume(
-          solidVolume, 0,
-          RotationZ(csectorRotate * dd4hep::deg) *
-              Transform3D(RotationZ(0.0),
-                          Translation3D(plates_x[0] * dd4hep::mm, plates_y[0] * dd4hep::mm, plates_z[0] * dd4hep::mm)));
-
-      ChimneySector.placeVolume(
-          solidVolume, 1,
-          RotationZ((9.60 * 2 * M_PI / 320) + csectorRotate * dd4hep::deg) *
-              Transform3D(RotationZ(0.0),
-                          Translation3D(plates_x[0] * dd4hep::mm, plates_y[0] * dd4hep::mm, plates_z[0] * dd4hep::mm)));
-
-    } else if (solid_name == "HCAL_Chimney_Sector_Plate") {
-
-      for (int i = 0; i < 9; i++)
-        ChimneySector.placeVolume(
-            solidVolume, i,
-            RotationZ((i * 2 * M_PI / 320) + csectorRotate * dd4hep::deg) *
-                Transform3D(RotationZ(0.0), Translation3D(plates_x[1] * dd4hep::mm, plates_y[1] * dd4hep::mm,
-                                                          plates_z[1] * dd4hep::mm)));
-
-    } else if (solid_name == "HCAL_Sector_Half_Plate") {
-
-      Sector.placeVolume(
-          solidVolume, 0,
-          RotationZ(sectorRotate * dd4hep::deg) *
-              Transform3D(RotationZ(0.4 * dd4hep::deg),
-                          Translation3D(plates_x[2] * dd4hep::mm, plates_y[2] * dd4hep::mm, plates_z[2] * dd4hep::mm)));
-
-      Sector.placeVolume(
-          solidVolume, 1,
-          RotationZ((9.60 * 2 * M_PI / 320) + sectorRotate * dd4hep::deg) *
-              Transform3D(RotationZ(0.4 * dd4hep::deg),
-                          Translation3D(plates_x[2] * dd4hep::mm, plates_y[2] * dd4hep::mm, plates_z[2] * dd4hep::mm)));
-
-    } else if (solid_name == "HCAL_Sector_Plate") {
-
-      for (int i = 0; i < 9; i++)
-        Sector.placeVolume(solidVolume, i,
-                           RotationZ((i * 2 * M_PI / 320) + sectorRotate * dd4hep::deg) *
-                               Transform3D(RotationZ(0.4 * dd4hep::deg),
-                                           Translation3D(plates_x[3] * dd4hep::mm, plates_y[3] * dd4hep::mm,
-                                                         plates_z[3] * dd4hep::mm)));
+      // Place steel in envelope
+      BarrelHCAL.placeVolume(solidVolume, 0, Transform3D(RotationZ(0.0),Translation3D(0, 0, 0)));
 
     } else {
 
@@ -360,7 +307,7 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
 
                 PlacedVolume phv0 = Tower[11 - tnum].placeVolume(
                     solidVolume, i,
-                    RotationZ(octileRotateStart + i * (360.0 / 320.0) * dd4hep::deg) *
+                    RotationZ(i * increment_angle) *
                         Transform3D(RotationY(90.0 * dd4hep::deg),
                                     Translation3D(xposOuter[0] * dd4hep::mm, yposOuter[0] * dd4hep::mm, 0.0)) *
                         RotationX(-tilePlaneRotate * dd4hep::deg) *
@@ -375,7 +322,7 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
 
                 PlacedVolume phv1 = Tower[12 + tnum].placeVolume(
                     solidVolume, i + 5,
-                    RotationZ(octileRotateStart + i * (360.0 / 320.0) * dd4hep::deg) *
+                    RotationZ(i * increment_angle) *
                         Transform3D(RotationY(90.0 * dd4hep::deg),
                                     Translation3D(xposOuter[0] * dd4hep::mm, yposOuter[0] * dd4hep::mm, 0.0)) *
                         RotationX(-tilePlaneRotate * dd4hep::deg) *
@@ -391,7 +338,7 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
 
                 PlacedVolume phv0 = Tower[11 - tnum].placeVolume(
                     solidVolume, i,
-                    RotationZ(octileRotateStart + i * (360.0 / 320.0) * dd4hep::deg) *
+                    RotationZ(i * increment_angle) *
                         Transform3D(RotationY(90.0 * dd4hep::deg),
                                     Translation3D(xposOuter[0] * dd4hep::mm, yposOuter[0] * dd4hep::mm, 0.0)) *
                         RotationX(-tilePlaneRotate * dd4hep::deg) *
@@ -406,7 +353,7 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
 
                 PlacedVolume phv1 = Tower[12 + tnum].placeVolume(
                     solidVolume, i + 5,
-                    RotationZ(octileRotateStart + i * (360.0 / 320.0) * dd4hep::deg) *
+                    RotationZ(i * increment_angle) *
                         Transform3D(RotationY(90.0 * dd4hep::deg),
                                     Translation3D(xposOuter[0] * dd4hep::mm, yposOuter[0] * dd4hep::mm, 0.0)) *
                         RotationX(-tilePlaneRotate * dd4hep::deg) *
@@ -430,7 +377,7 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
 
               PlacedVolume phv = ChimneyTower[11 - tnum].placeVolume(
                   solidVolume, i,
-                  RotationZ(ctileRotateStart + i * (360.0 / 320.0) * dd4hep::deg) *
+                  RotationZ(i * increment_angle) *
                       Transform3D(RotationY(90.0 * dd4hep::deg),
                                   Translation3D(xposOuter[0] * dd4hep::mm, yposOuter[0] * dd4hep::mm, 0.0)) *
                       RotationX(-ctilePlaneRotate * dd4hep::deg) *
@@ -451,7 +398,9 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
       } else
         printout(WARNING, "BarrelHCalCalorimeter", "solid_name.size() invalid! ");
     }
+      
   }
+
 
   // Place the sector tile assemblies into the sectors
 
@@ -459,94 +408,78 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
 
   DetElement tower_det("tower0", det_id);
 
-  // special chimney sector towers
-  for (int i = 0; i < 4; i++) {
+  for (int j = 0; j < 32; j++) {  // sector
 
-    PlacedVolume tower_phv0 = ChimneySector.placeVolume(
-        ChimneyTower[i], i, Transform3D(RotationZ(tweak_chimney_tiles[i]), Translation3D(0.0, 0.0, 0.0)));
-    tower_phv0.addPhysVolID("tower", i); // lower phi
-    DetElement sd0 = tower_det.clone(_toString(i, "tower%d"));
-    sd0.setPlacement(tower_phv0);
-    sdet.add(sd0);
+    // chimney sectors
+    if( j < 3) {
 
-    PlacedVolume tower_phv1 =
-        ChimneySector.placeVolume(ChimneyTower[i], i + 24,
-                                  Transform3D(RotationZ(5 * (360.0 / 320.0) * dd4hep::deg + tweak_chimney_tiles[i]),
-                                              Translation3D(0.0, 0.0, 0.0)));
-    tower_phv1.addPhysVolID("tower", i+24); // upper phi
-    DetElement sd1 = tower_det.clone(_toString(i + 24, "tower%d"));
-    sd1.setPlacement(tower_phv1);
-    sdet.add(sd1);
+      // special chimney sector towers
+      for (int i = 0; i < 4; i++) { 
+
+	PlacedVolume tower_phv0 = 
+	  BarrelHCAL.placeVolume(ChimneyTower[i], i + j*48, Transform3D(RotationZ((10 * (j-1) * (360.0 / 320.0) - 0.042) * dd4hep::deg), Translation3D(0.0, 0.0, 0.0)));
+	tower_phv0.addPhysVolID("tower", i + j*48); 
+ 	DetElement tt0 = tower_det.clone(_toString(i + j*48, "tower%d"));
+	tt0.setPlacement(tower_phv0);
+	sdet.add(tt0);
+    
+	PlacedVolume tower_phv1 = 
+	  BarrelHCAL.placeVolume(ChimneyTower[i], i + 24 + j*48, Transform3D(RotationZ(((10 * (j-1) + 5) * (360.0 / 320.0) - 0.042) * dd4hep::deg), Translation3D(0.0, 0.0, 0.0)));
+	tower_phv1.addPhysVolID("tower", i + 24 + j*48); 
+	DetElement tt1 = tower_det.clone(_toString(i + 24 + j*48, "tower%d"));
+	tt1.setPlacement(tower_phv1);
+	sdet.add(tt1);
+
+      }
+
+      // ordinary towers in chimney sectors
+      for (int i = 4; i < 24; i++) { 
+
+	PlacedVolume tower_phv0 = 
+	  BarrelHCAL.placeVolume(Tower[i], i + j*48, Transform3D(RotationZ((10 * (j-1) * (360.0 / 320.0) - 0.042) * dd4hep::deg), Translation3D(0.0, 0.0, 0.0)));
+	tower_phv0.addPhysVolID("tower", i + j*48); 
+ 	DetElement tt0 = tower_det.clone(_toString(i + j*48, "tower%d"));
+	tt0.setPlacement(tower_phv0);
+	sdet.add(tt0);
+    
+	PlacedVolume tower_phv1 = 
+	  BarrelHCAL.placeVolume(Tower[i], i + 24 + j*48, Transform3D(RotationZ(((10 * (j-1) + 5) * (360.0 / 320.0) - 0.042) * dd4hep::deg), Translation3D(0.0, 0.0, 0.0)));
+	tower_phv1.addPhysVolID("tower", i + 24 + j*48); 
+	DetElement tt1 = tower_det.clone(_toString(i + 24 + j*48, "tower%d"));
+	tt1.setPlacement(tower_phv1);
+	sdet.add(tt1);
+
+      }
+
+    }
+    // ordinary sectors
+    else {
+
+      for (int i = 0; i < 24; i++) { 
+
+	PlacedVolume tower_phv0 = 
+	  BarrelHCAL.placeVolume(Tower[i], i + j*48, Transform3D(RotationZ((10 * (j-1) * (360.0 / 320.0) - 0.0525) * dd4hep::deg), Translation3D(0.0, 0.0, 0.0)));
+	tower_phv0.addPhysVolID("tower", i + j*48); 
+ 	DetElement tt0 = tower_det.clone(_toString(i + j*48, "tower%d"));
+	tt0.setPlacement(tower_phv0);
+	sdet.add(tt0);
+    
+	PlacedVolume tower_phv1 = 
+	  BarrelHCAL.placeVolume(Tower[i], i + 24 + j*48, Transform3D(RotationZ(((10 * (j-1) + 5) * (360.0 / 320.0) - 0.0525) * dd4hep::deg), Translation3D(0.0, 0.0, 0.0)));
+	tower_phv1.addPhysVolID("tower", i + 24 + j*48); 
+	DetElement tt1 = tower_det.clone(_toString(i + 24 + j*48, "tower%d"));
+	tt1.setPlacement(tower_phv1);
+	sdet.add(tt1);
+
+      }
+
+    }
+
   }
 
-  // ordinary towers in chimney sectors
-  for (int i = 4; i < 24; i++) {
+  // Place the detector into the envelope
 
-    PlacedVolume tower_phv0 = ChimneySector.placeVolume(
-        Tower[i], i, Transform3D(RotationZ(tweak_chimney_tiles[i]), Translation3D(0.0, 0.0, 0.0)));
-    tower_phv0.addPhysVolID("tower", i); // lower phi
-    DetElement sd0 = tower_det.clone(_toString(i, "tower%d"));
-    sd0.setPlacement(tower_phv0);
-    sdet.add(sd0);
-
-    PlacedVolume tower_phv1 =
-        ChimneySector.placeVolume(Tower[i], i + 24,
-                                  Transform3D(RotationZ(5 * (360.0 / 320.0) * dd4hep::deg + tweak_chimney_tiles[i]),
-                                              Translation3D(0.0, 0.0, 0.0)));
-    tower_phv1.addPhysVolID("tower", i+24); // upper phi
-    DetElement sd1 = tower_det.clone(_toString(i + 24, "tower%d"));
-    sd1.setPlacement(tower_phv1);
-    sdet.add(sd1);
-  }
-
-  // ordinary sectors
-  for (int i = 0; i < 24; i++) {
-
-    PlacedVolume tower_phv0 = Sector.placeVolume(
-        Tower[i], i + 24,
-        Transform3D(RotationZ(tileRotateStart - octileRotateStart + tweak_tiles[i]), Translation3D(0.0, 0.0, 0.0)));
-    tower_phv0.addPhysVolID("tower", i); // lower phi
-    DetElement sd0 = tower_det.clone(_toString(i + 48, "tower%d"));
-    sd0.setPlacement(tower_phv0);
-    sdet.add(sd0);
-
-    PlacedVolume tower_phv1 = Sector.placeVolume(
-        Tower[i], i + 48,
-        Transform3D(RotationZ(tileRotateStart - octileRotateStart + 5 * (360.0 / 320.0) * dd4hep::deg + tweak_tiles[i]),
-                    Translation3D(0.0, 0.0, 0.0)));
-    tower_phv1.addPhysVolID("tower", i+24); // upper phi
-    DetElement sd1 = tower_det.clone(_toString(i + 72, "tower%d"));
-    sd1.setPlacement(tower_phv1);
-    sdet.add(sd1);
-  }
-
-  // Place the sectors into the envelope
-
-  DetElement sector_det("sector0", det_id);
-
-  // Chimney sectors
-  for (int i = -1; i < 2; i++) {
-    PlacedVolume sect_phv = envelope.placeVolume(
-        ChimneySector, i + 1,
-        Transform3D(RotationZ(((i - 1) * 2 * M_PI / 32) + tweak_sectors[i + 1]), Translation3D(0, 0, 0)));
-    sect_phv.addPhysVolID("sector", i + 1);
-    DetElement sd = sector_det.clone(_toString(i + 1, "sector%d"));
-    sd.setPlacement(sect_phv);
-    sdet.add(sd);
-  }
-
-  // Normal sectors
-
-  for (int i = 3; i < 32; i++) {
-    PlacedVolume sect_phv =
-        envelope.placeVolume(Sector, i,
-                             Transform3D(RotationZ((-2.075 * M_PI / 32) + (i - 3) * (2 * M_PI / 32) + tweak_sectors[i]),
-                                         Translation3D(0, 0, 0)));
-    sect_phv.addPhysVolID("sector", i);
-    DetElement sd = sector_det.clone(_toString(i, "sector%d"));
-    sd.setPlacement(sect_phv);
-    sdet.add(sd);
-  }
+  envelope.placeVolume(BarrelHCAL, 0, Transform3D(RotationZ(0.0),Translation3D(0, 0, 0)));
 
   std::string env_vis = getAttrOrDefault<std::string>(x_det, _Unicode(env_vis), "HcalBarrelEnvelopeVis");
   envelope.setAttributes(description, x_det.regionStr(), x_det.limitsStr(), env_vis);
