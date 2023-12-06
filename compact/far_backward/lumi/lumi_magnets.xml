@@ -14,7 +14,6 @@ Construct the sweeper and analyzer dipole magnets for the luminosity subsystem.
   <constant name="LumiMag_DX_InnerBox"           value="0.42032*m"/>
   <constant name="LumiMag_DY_InnerBox"           value="0.61262*m"/>
 
-  <constant name="LumiMag_DZ_Coil"               value="1.53336*m"/>
   <constant name="LumiMag_DY1_Coil"              value="0.59262*m"/>
   <constant name="LumiMag_DY2_Coil"              value="0.30592*m"/>
   <constant name="LumiMag_DX1_Coil"              value="0.198*m"/>
@@ -37,15 +36,15 @@ Construct the sweeper and analyzer dipole magnets for the luminosity subsystem.
       vis_name1="AnlGreen"
       vis_name2="AnlRed"
       vis_name3="AnlGray">
-      <dimensions_mainbody_outer x="LumiMag_DX" y="LumiMag_DY" z="LumiMag_DZ" />
-      <dimensions_mainbody_inner x="LumiMag_DX_InnerBox" y="LumiMag_DY_InnerBox" z="LumiMag_DZ" />
-      <dimensions_coils_outer x="LumiMag_DX_InnerBox" y="LumiMag_DY1_Coil" z="LumiMag_DZ_Coil"  />
-      <dimensions_coils_inner_1 x="LumiMag_DX1_Coil" y="LumiMag_DY1_Coil" z="LumiMag_DZ_Coil" />
-      <dimensions_coils_inner_2 x="LumiMag_DX2_Coil" y="LumiMag_DY2_Coil" z="LumiMag_DZ" />
-      <dimensions_yoke_outer x="LumiMag_DX1_Coil" y="LumiMag_DY2_Coil" z="LumiMag_DZ" />
-      <dimensions_yoke_inner x="LumiMag_DX_Yoke" y="LumiMag_DY2_Coil" z="LumiMag_DZ" />
-      <dimensions_leg_outer x="LumiMag_DX1_Legs" y="LumiMag_DY1_Legs" z="LumiMag_DZ" />
-      <dimensions_leg_inner x="LumiMag_DX2_Legs" y="LumiMag_DY2_Legs" z="LumiMag_DZ" />
+      <dimensions_mainbody_outer x="LumiMag_DX" y="LumiMag_DY" z="LumiMagMainBody_DZ" />
+      <dimensions_mainbody_inner x="LumiMag_DX_InnerBox" y="LumiMag_DY_InnerBox" z="LumiMagMainBody_DZ" />
+      <dimensions_coils_outer x="LumiMag_DX_InnerBox" y="LumiMag_DY1_Coil" z="LumiMagCoils_DZ"  />
+      <dimensions_coils_inner_1 x="LumiMag_DX1_Coil" y="LumiMag_DY1_Coil" z="LumiMagCoils_DZ" />
+      <dimensions_coils_inner_2 x="LumiMag_DX2_Coil" y="LumiMag_DY2_Coil" z="LumiMagMainBody_DZ" />
+      <dimensions_yoke_outer x="LumiMag_DX1_Coil" y="LumiMag_DY2_Coil" z="LumiMagMainBody_DZ" />
+      <dimensions_yoke_inner x="LumiMag_DX_Yoke" y="LumiMag_DY2_Coil" z="LumiMagMainBody_DZ" />
+      <dimensions_leg_outer x="LumiMag_DX1_Legs" y="LumiMag_DY1_Legs" z="LumiMagMainBody_DZ" />
+      <dimensions_leg_inner x="LumiMag_DX2_Legs" y="LumiMag_DY2_Legs" z="LumiMagMainBody_DZ" />
       <position   x="LumiSweepMag_X" y="LumiSweepMag_Y - CenterY_Bfield" z="LumiSweepMag_Z" />
       <rotation   x="0*rad" y="0*rad" z="0*rad" />
   </detector>
@@ -56,15 +55,15 @@ Construct the sweeper and analyzer dipole magnets for the luminosity subsystem.
       vis_name1="AnlGreen"
       vis_name2="AnlRed"
       vis_name3="AnlGray">
-      <dimensions_mainbody_outer x="LumiMag_DX" y="LumiMag_DY" z="LumiMag_DZ" />
-      <dimensions_mainbody_inner x="LumiMag_DX_InnerBox" y="LumiMag_DY_InnerBox" z="LumiMag_DZ" />
-      <dimensions_coils_outer x="LumiMag_DX_InnerBox" y="LumiMag_DY1_Coil" z="LumiMag_DZ_Coil"  />
-      <dimensions_coils_inner_1 x="LumiMag_DX1_Coil" y="LumiMag_DY1_Coil" z="LumiMag_DZ_Coil" />
-      <dimensions_coils_inner_2 x="LumiMag_DX2_Coil" y="LumiMag_DY2_Coil" z="LumiMag_DZ" />
-      <dimensions_yoke_outer x="LumiMag_DX1_Coil" y="LumiMag_DY2_Coil" z="LumiMag_DZ" />
-      <dimensions_yoke_inner x="LumiMag_DX_Yoke" y="LumiMag_DY2_Coil" z="LumiMag_DZ" />
-      <dimensions_leg_outer x="LumiMag_DX1_Legs" y="LumiMag_DY1_Legs" z="LumiMag_DZ" />
-      <dimensions_leg_inner x="LumiMag_DX2_Legs" y="LumiMag_DY2_Legs" z="LumiMag_DZ" />
+      <dimensions_mainbody_outer x="LumiMag_DX" y="LumiMag_DY" z="LumiMagMainBody_DZ" />
+      <dimensions_mainbody_inner x="LumiMag_DX_InnerBox" y="LumiMag_DY_InnerBox" z="LumiMagMainBody_DZ" />
+      <dimensions_coils_outer x="LumiMag_DX_InnerBox" y="LumiMag_DY1_Coil" z="LumiMagCoils_DZ"  />
+      <dimensions_coils_inner_1 x="LumiMag_DX1_Coil" y="LumiMag_DY1_Coil" z="LumiMagCoils_DZ" />
+      <dimensions_coils_inner_2 x="LumiMag_DX2_Coil" y="LumiMag_DY2_Coil" z="LumiMagMainBody_DZ" />
+      <dimensions_yoke_outer x="LumiMag_DX1_Coil" y="LumiMag_DY2_Coil" z="LumiMagMainBody_DZ" />
+      <dimensions_yoke_inner x="LumiMag_DX_Yoke" y="LumiMag_DY2_Coil" z="LumiMagMainBody_DZ" />
+      <dimensions_leg_outer x="LumiMag_DX1_Legs" y="LumiMag_DY1_Legs" z="LumiMagMainBody_DZ" />
+      <dimensions_leg_inner x="LumiMag_DX2_Legs" y="LumiMag_DY2_Legs" z="LumiMagMainBody_DZ" />
       <position   x="LumiAnalyzerMag_X" y="LumiAnalyzerMag_Y - CenterY_Bfield" z="LumiAnalyzerMag_Z"/>
       <rotation   x="0*rad" y="0*rad" z="0*rad" />
   </detector>
@@ -73,8 +72,8 @@ Construct the sweeper and analyzer dipole magnets for the luminosity subsystem.
 
 
   <comment>
-  dz of fields is set to main body length, not coil length.
-  Detailed field map to be inserted later.
+  Calculated field option is the current default.
+  DZ of Ideal Fields option is set to main body length, not coil length.
   </comment>
 
 
@@ -85,14 +84,14 @@ Construct the sweeper and analyzer dipole magnets for the luminosity subsystem.
     <field name="LumiSweeperField" type="MultipoleMagnet">
       <position x="LumiSweepMag_X" y="LumiSweepMag_Y" z="LumiSweepMag_Z"/>
       <rotation x="0" y="0" z="0"/>
-      <shape type="Box" dx="LumiMag_DX_InnerBox/2.0" dy="LumiMag_DY_InnerBox/2.0" dz="LumiMag_DZ/2.0"/>
+      <shape type="Box" dx="LumiMag_DX_InnerBox/2.0" dy="LumiMag_DY_InnerBox/2.0" dz="LumiMagMainBody_DZ/2.0"/>
       <coefficient coefficient="0" skew="LumiSweepIdealMag_B"/>
     </field>
 
     <field name="LumiAnalyzerField" type="MultipoleMagnet">
       <position x="LumiAnalyzerMag_X" y="LumiAnalyzerMag_Y" z="LumiAnalyzerMag_Z"/>
       <rotation x="0" y="0" z="0"/>
-      <shape type="Box" dx="LumiMag_DX_InnerBox/2.0" dy="LumiMag_DY_InnerBox/2.0" dz="LumiMag_DZ/2.0"/>
+      <shape type="Box" dx="LumiMag_DX_InnerBox/2.0" dy="LumiMag_DY_InnerBox/2.0" dz="LumiMagMainBody_DZ/2.0"/>
       <coefficient coefficient="0" skew="LumiAnalyzerIdealMag_B"/>
     </field>
     </comment>

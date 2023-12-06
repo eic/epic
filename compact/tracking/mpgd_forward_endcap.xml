@@ -51,8 +51,8 @@
     <constant name="ForwardMPGDLayer2_rmin"       value="ForwardMPGDMod2_rmin - ForwardMPGDLayerPad" />
     <constant name="ForwardMPGDLayer1_rmax"       value="ForwardMPGDMod1_rmax + ForwardMPGDLayerPad" />
     <constant name="ForwardMPGDLayer2_rmax"       value="ForwardMPGDMod2_rmax + ForwardMPGDLayerPad" />
-    <constant name="ForwardMPGDLayer1_zmin"       value="ForwardMPGDMod1_zmin - ForwardMPGDEndcapLayer_thickness / 2" />
-    <constant name="ForwardMPGDLayer2_zmin"       value="ForwardMPGDMod2_zmin - ForwardMPGDEndcapLayer_thickness / 2" />
+    <constant name="ForwardMPGDLayer1_zmin"       value="ForwardMPGDMod1_zmin - ForwardMPGDLayerPad" />
+    <constant name="ForwardMPGDLayer2_zmin"       value="ForwardMPGDMod2_zmin + ForwardMPGDLayerPad" />
 
     <constant name="ForwardMPGDMod1_x1"           value="2 * ForwardMPGDMod1_rmin * tan(ForwardMPGDEndcapMod_angle/2)" />
     <constant name="ForwardMPGDMod1_x2"           value="2 * ForwardMPGDMod1_rmax * sin(ForwardMPGDEndcapMod_angle/2)" />
@@ -154,8 +154,8 @@
 
   <readouts>
     <readout name="ForwardMPGDEndcapHits">
-      <segmentation type="CartesianGridXY" grid_size_x="sqrt(12)*150*um" grid_size_y="sqrt(12)*150*um" />
-      <id>system:8,layer:2,module:6,sensor:16,x:32:-16,y:-16</id>
+      <segmentation type="CartesianGridXZ" grid_size_x="sqrt(12)*150*um" grid_size_z="sqrt(12)*150*um" />
+      <id>system:8,layer:2,module:6,sensor:16,x:32:-16,z:-16</id>
     </readout>
   </readouts>
 
