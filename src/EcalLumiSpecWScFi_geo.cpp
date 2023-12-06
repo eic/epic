@@ -62,15 +62,7 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
           xml_comp_t x_rot = x_sector.rotation();
 
           for(int ilay=0; ilay< nlayer; ilay++){
-                 /*
-                  Box PlateShape( 9*cm, 9*cm, 0.45*cm);
-                  auto   PlateMat = description.material(x_mod.attr<std::string>(_Unicode(material)));
-                  //auto PlateMat = "TungstenDens23";
-                  Volume PlateVol("plate_vol", PlateShape, PlateMat);
-                  modVol.setVisAttributes("EcalBarrelStaveVis");
-                  assembly.placeVolume(PlateVol, Transform3D( RotationZYX( x_rot.z(), x_rot.y(), x_rot.x()), Position( x_pos.x() , x_pos.y() , ( x_pos.z() + 9*cm - 0.45*cm) ) ) );
-*/
-                  //Modules rotation A/Odd-Even
+                 //Modules rotation A/Odd-Even
                   if((ilay%2)==0){ // 0 : || to x-axis
                           for(int imod=0; imod< nmod_perlayer; imod++){
 

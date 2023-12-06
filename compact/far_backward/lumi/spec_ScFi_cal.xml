@@ -2,9 +2,17 @@
 <!-- Copyright (C) 2022 Aranya Giri -->
 
 <lccdd>
-        <!--EcalLumiSpec - ELS
+        <!--
         Note : Values/Notations for making modules pointing along z-axis.
                Rotation of modules wrt XY axis after construction.          -->
+	<define>
+		<constant name="LumiSpecCAL_ModSizeX"            value="LumiSpecCAL_SiPMNumX*LumiSpecCAL_SiPMSizeXY"/>
+    		<constant name="LumiSpecCAL_ModSizeY"            value="LumiSpecCAL_SiPMNumY*LumiSpecCAL_SiPMSizeXY"/>
+    		<constant name="LumiSpecCAL_ModSizeZ"            value="LumiSpecCAL_SizeXY"/>
+    		<constant name="LumiSpecCAL_FiberRadius"            value="0.25*mm"/>
+    		<constant name="LumiSpecCAL_FiberSpaceX"            value="0.25*mm"/>
+    		<constant name="LumiSpecCAL_FiberSpaceY"            value="0.25*mm"/>
+	</define>
 
         <materials>
         <material name="BrassAlloy360">
@@ -22,27 +30,27 @@
         </materials>
 
         <display>
-                <vis    name="ELS_ModuleVis"            ref="AnlGold"   alpha="0.5"     visible="true" showDaughters="true"/>
-                <vis    name="ELS_FiberVis"             ref="AnlRed"    aplha="0.8"     visible="true"/>
-                <vis    name="ELS_FiberHolderVis"       ref="AnlBlue"   alpha="1.0"     visible="true"/>
+                <vis    name="LumiSpecCAL_ModuleVis"            ref="AnlGold"   alpha="0.5"     visible="true" showDaughters="true"/>
+                <vis    name="LumiSpecCAL_FiberVis"             ref="AnlRed"    aplha="0.8"     visible="true"/>
+                <vis    name="LumiSpecCAL_FiberHolderVis"       ref="AnlBlue"   alpha="1.0"     visible="true"/>
         </display>
 
         <detectors>
-                <detector id="LumiSpecCAL_ID" name="LumiSpecCAL" type="EcalLumiSpecWScFi" vis="FFPreVis" readout="EcalLumiSpecHits" sizeXY="ELS_CALSizeXY" sizeZ="ELS_CALSizeZ" >
-                        <module sizex="ELS_CALModSizeX" sizey="ELS_CALModSizeY" sizez="ELS_CALModSizeZ" nmod_perlayer="ELS_XYLayers" nlayer="ELS_ZLayers" material="WPowderplusEpoxy" vis="ELS_ModuleVis">
+                <detector id="LumiSpecCAL_ID" name="LumiSpecCAL" type="EcalLumiSpecWScFi" vis="FFPreVis" readout="EcalLumiSpecHits" sizeXY="LumiSpecCAL_SizeXY" sizeZ="LumiSpecCAL_SizeZ" >
+                        <module sizex="LumiSpecCAL_ModSizeX" sizey="LumiSpecCAL_ModSizeY" sizez="LumiSpecCAL_ModSizeZ" nmod_perlayer="LumiSpecCAL_XYLayers" nlayer="LumiSpecCAL_ZLayers" material="WPowderplusEpoxy" vis="LumiSpecCAL_ModuleVis">
                                 <fiber material="Polystyrene"
-                                        radius="ELS_FiberRadius"
-                                        spacex="ELS_FiberSpaceX"
-                                        spacey="ELS_FiberSpaceY"
-                                        vis="ELS_FiberVis"/>
-                                <fiberholder material="BrassAlloy360" vis="ELS_FiberHolderVis"/>
+                                        radius="LumiSpecCAL_FiberRadius"
+                                        spacex="LumiSpecCAL_FiberSpaceX"
+                                        spacey="LumiSpecCAL_FiberSpaceY"
+                                        vis="LumiSpecCAL_FiberVis"/>
+                                <fiberholder material="BrassAlloy360" vis="LumiSpecCAL_FiberHolderVis"/>
                         </module>
                         <sector id="0">
-                                <position x="0.0*cm" y="ELS_CALPosY" z="ELS_CALPosZ"/>
+                                <position x="0.0*cm" y="LumiSpecCAL_PosY" z="LumiSpecCAL_PosZ"/>
                                 <rotation x="0.0*rad" y="0.0*rad" z="0.0*rad"/>
                         </sector>
                         <sector id="1">
-                                <position x="0.0*cm" y="-1*ELS_CALPosY" z="ELS_CALPosZ"/>
+                                <position x="0.0*cm" y="-1*LumiSpecCAL_PosY" z="LumiSpecCAL_PosZ"/>
                                 <rotation x="0.0*rad" y="0.0*rad" z="0.0*rad"/>
                         </sector>
                 </detector>
