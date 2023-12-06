@@ -5,14 +5,14 @@
         <!--
         Note : Values/Notations for making modules pointing along z-axis.
                Rotation of modules wrt XY axis after construction.          -->
-	<define>
-		<constant name="LumiSpecCAL_ModSizeX"            value="LumiSpecCAL_SiPMNumX*LumiSpecCAL_SiPMSizeXY"/>
-    		<constant name="LumiSpecCAL_ModSizeY"            value="LumiSpecCAL_SiPMNumY*LumiSpecCAL_SiPMSizeXY"/>
-    		<constant name="LumiSpecCAL_ModSizeZ"            value="LumiSpecCAL_SizeXY"/>
-    		<constant name="LumiSpecCAL_FiberRadius"            value="0.25*mm"/>
-    		<constant name="LumiSpecCAL_FiberSpaceX"            value="0.25*mm"/>
-    		<constant name="LumiSpecCAL_FiberSpaceY"            value="0.25*mm"/>
-	</define>
+        <define>
+                <constant name="LumiSpecCAL_ModSizeX"            value="LumiSpecCAL_SiPMNumX*LumiSpecCAL_SiPMSizeXY"/>
+                <constant name="LumiSpecCAL_ModSizeY"            value="LumiSpecCAL_SiPMNumY*LumiSpecCAL_SiPMSizeXY"/>
+                <constant name="LumiSpecCAL_ModSizeZ"            value="LumiSpecCAL_SizeXY"/>
+                <constant name="LumiSpecCAL_FiberRadius"            value="0.25*mm"/>
+                <constant name="LumiSpecCAL_FiberSpaceX"            value="0.25*mm"/>
+                <constant name="LumiSpecCAL_FiberSpaceY"            value="0.25*mm"/>
+        </define>
 
         <materials>
         <material name="BrassAlloy360">
