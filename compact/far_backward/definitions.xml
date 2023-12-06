@@ -271,22 +271,22 @@
 
     <!-- Lumi spectrometer CAL -->
     <!--Shorthand Notation : EcalLumiSpec - ELS -->
-    <constant name="ELS_SiPMSizeXY"		value="3*mm"/>
-    <constant name="ELS_SiPMNumX"		value="20"/>
-    <constant name="ELS_SiPMNumY" 		value="3"/>
-    <constant name="ELS_ZLayers"     		value="20"/>
-    <constant name="ELS_XYLayers"     		value="3"/>	
-    <constant name="ELS_CALSizeZ" 		value="ELS_ZLayers*ELS_SiPMNumY*ELS_SiPMSizeXY"/>
-    <constant name="ELS_CALSizeXY"		value="ELS_XYLayers*ELS_SiPMNumX*ELS_SiPMSizeXY"/>
-    <constant name="ELS_CALModSizeX"		value="ELS_SiPMNumX*ELS_SiPMSizeXY"/>
-    <constant name="ELS_CALModSizeY"		value="ELS_SiPMNumY*ELS_SiPMSizeXY"/>
-    <constant name="ELS_CALModSizeZ"		value="ELS_CALSizeXY"/>
-    <constant name="ELS_FiberRadius" 		value="0.25*mm"/>
-    <constant name="ELS_FiberSpaceX" 		value="0.25*mm"/>
-    <constant name="ELS_FiberSpaceY" 		value="0.25*mm"/>
-    <constant name="ELS_CALPosZ"        	value="-8*m + LumiSweepMag_Z - ELS_CALSizeZ/2.0"/>
-    <constant name="ELS_FiveSigma" 		value="LumiBeamDiv_pref * fabs(ELS_CALPosZ)"/>
-    <constant name="ELS_CALPosY"        	value="ELS_FiveSigma + ELS_CALModSizeX/2.0"/>
+    <constant name="ELS_SiPMSizeXY"             value="3*mm"/>
+    <constant name="ELS_SiPMNumX"               value="20"/>
+    <constant name="ELS_SiPMNumY"               value="3"/>
+    <constant name="ELS_ZLayers"                value="20"/>
+    <constant name="ELS_XYLayers"               value="3"/>
+    <constant name="ELS_CALSizeZ"               value="ELS_ZLayers*ELS_SiPMNumY*ELS_SiPMSizeXY"/>
+    <constant name="ELS_CALSizeXY"              value="ELS_XYLayers*ELS_SiPMNumX*ELS_SiPMSizeXY"/>
+    <constant name="ELS_CALModSizeX"            value="ELS_SiPMNumX*ELS_SiPMSizeXY"/>
+    <constant name="ELS_CALModSizeY"            value="ELS_SiPMNumY*ELS_SiPMSizeXY"/>
+    <constant name="ELS_CALModSizeZ"            value="ELS_CALSizeXY"/>
+    <constant name="ELS_FiberRadius"            value="0.25*mm"/>
+    <constant name="ELS_FiberSpaceX"            value="0.25*mm"/>
+    <constant name="ELS_FiberSpaceY"            value="0.25*mm"/>
+    <constant name="ELS_CALPosZ"                value="-8*m + LumiSweepMag_Z - ELS_CALSizeZ/2.0"/>
+    <constant name="ELS_FiveSigma"              value="LumiBeamDiv_pref * fabs(ELS_CALPosZ)"/>
+    <constant name="ELS_CALPosY"                value="ELS_FiveSigma + ELS_CALModSizeX/2.0"/>
 
     <!-- Lumi spectrometer trackers -->
     <constant name="LumiSpecTracker_pixelSize"  value="0.1*mm"/>
