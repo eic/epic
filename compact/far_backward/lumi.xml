@@ -7,7 +7,7 @@
    <include ref="lumi/collimator.xml"/>
    <include ref="lumi/lumi_magnets.xml"/>
    <include ref="lumi/spec_tracker.xml"/>
-   <include ref="lumi/spec_scifi_cal.xml"/>
+   <include ref="lumi/spec_ScFi_cal.xml"/>
    <include ref="lumi/photon_chamber.xml"/>
    <include ref="lumi/directPC.xml"/>
 
