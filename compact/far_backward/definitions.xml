@@ -270,37 +270,30 @@
     <constant name="LumiConverter_DZ"     value="1*mm"/>
 
     <!-- Lumi spectrometer CAL -->
-    <!--Shorthand Notation : EcalLumiSpec - ELS -->
-    <constant name="ELS_SiPMSizeXY"             value="3*mm"/>
-    <constant name="ELS_SiPMNumX"               value="20"/>
-    <constant name="ELS_SiPMNumY"               value="3"/>
-    <constant name="ELS_ZLayers"                value="20"/>
-    <constant name="ELS_XYLayers"               value="3"/>
-    <constant name="ELS_CALSizeZ"               value="ELS_ZLayers*ELS_SiPMNumY*ELS_SiPMSizeXY"/>
-    <constant name="ELS_CALSizeXY"              value="ELS_XYLayers*ELS_SiPMNumX*ELS_SiPMSizeXY"/>
-    <constant name="ELS_CALModSizeX"            value="ELS_SiPMNumX*ELS_SiPMSizeXY"/>
-    <constant name="ELS_CALModSizeY"            value="ELS_SiPMNumY*ELS_SiPMSizeXY"/>
-    <constant name="ELS_CALModSizeZ"            value="ELS_CALSizeXY"/>
-    <constant name="ELS_FiberRadius"            value="0.25*mm"/>
-    <constant name="ELS_FiberSpaceX"            value="0.25*mm"/>
-    <constant name="ELS_FiberSpaceY"            value="0.25*mm"/>
-    <constant name="ELS_CALPosZ"                value="-8*m + LumiSweepMag_Z - ELS_CALSizeZ/2.0"/>
-    <constant name="ELS_FiveSigma"              value="LumiBeamDiv_pref * fabs(ELS_CALPosZ)"/>
-    <constant name="ELS_CALPosY"                value="ELS_FiveSigma + ELS_CALModSizeX/2.0"/>
+    <constant name="LumiSpecCAL_SiPMSizeXY"             value="3*mm"/>
+    <constant name="LumiSpecCAL_SiPMNumX"               value="20"/>
+    <constant name="LumiSpecCAL_SiPMNumY"               value="3"/>
+    <constant name="LumiSpecCAL_ZLayers"                value="20"/>
+    <constant name="LumiSpecCAL_XYLayers"               value="3"/>
+    <constant name="LumiSpecCAL_SizeZ"               value="LumiSpecCAL_ZLayers*LumiSpecCAL_SiPMNumY*LumiSpecCAL_SiPMSizeXY"/>
+    <constant name="LumiSpecCAL_SizeXY"              value="LumiSpecCAL_XYLayers*LumiSpecCAL_SiPMNumX*LumiSpecCAL_SiPMSizeXY"/>
+    <constant name="LumiSpecCAL_PosZ"                value="-8*m + LumiSweepMag_Z - LumiSpecCAL_SizeZ/2.0"/>
+    <constant name="LumiSpecCAL_FiveSigma"              value="LumiBeamDiv_pref * fabs(LumiSpecCAL_PosZ)"/>
+    <constant name="LumiSpecCAL_PosY"                value="LumiSpecCAL_FiveSigma + LumiSpecCAL_SizeXY/2.0"/>
 
     <!-- Lumi spectrometer trackers -->
     <constant name="LumiSpecTracker_pixelSize"  value="0.1*mm"/>
     <constant name="LumiSpecTracker_DXY"  value="0.2*m"/>
-    <constant name="LumiSpecTracker_Z1"   value="ELS_CALPosZ + ELS_CALSizeZ/2. + 1*cm"/>
-    <constant name="LumiSpecTracker_Z2"   value="ELS_CALPosZ + ELS_CALSizeZ/2. + 11*cm"/>
-    <constant name="LumiSpecTracker_Y1"   value="ELS_FiveSigma + LumiSpecTracker_DXY/2.0"/>
+    <constant name="LumiSpecTracker_Z1"   value="LumiSpecCAL_PosZ + LumiSpecCAL_SizeZ/2. + 1*cm"/>
+    <constant name="LumiSpecTracker_Z2"   value="LumiSpecCAL_PosZ + LumiSpecCAL_SizeZ/2. + 11*cm"/>
+    <constant name="LumiSpecTracker_Y1"   value="LumiSpecCAL_FiveSigma + LumiSpecTracker_DXY/2.0"/>
     <constant name="LumiSpecTracker_Y2"   value="LumiSpecTracker_Y1"/>
 
     <constant name="LumiSpecTracker_Si_DZ"   value="0.3*mm"/>
     <constant name="LumiSpecTracker_Cu_DZ"   value="0.14*mm"/>
 
     <!-- Lumi direct photon detector -->
-    <constant name="LumiDirect_Z"         value="ELS_CALPosZ - 1*m"/>
+    <constant name="LumiDirect_Z"         value="LumiSpecCAL_PosZ - 1*m"/>
     <constant name="LumiDirect_XY"        value="0.2*m"/>
     <constant name="LumiDirect_DZ"        value="0.2*m"/>
 
