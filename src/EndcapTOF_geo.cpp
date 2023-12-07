@@ -129,7 +129,6 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
       string m_nam = Form("EndcapTOF_Module1_%d_%d", ix, iy);
 
       int ncomponents   = 0;
-      int sensor_number = 1;
       // the module assembly volume
       Assembly m_vol(m_nam);
       m_vol.setVisAttributes(description.visAttributes(x_modCurr.visStr()));
@@ -184,7 +183,6 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
           SurfaceType type(SurfaceType::Sensitive);
 
           VolPlane surf(c_vol, type, inner_thickness, outer_thickness, u, v, n);
-          sensor_number++;
 
           DetElement comp_de(mod_elt, std::string("de_") + pv.volume().name(), module);
           comp_de.setPlacement(pv);
