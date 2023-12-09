@@ -424,7 +424,7 @@ Examples:
 
     </documentation>
 
-    <constant name="CentralTrackingRegion_rmax"   value="700.0*mm" />
+    <constant name="CentralTrackingRegion_rmax"   value="755.0*mm" />
     <constant name="CentralTrackingRegionP_zmax"  value="1800.0*mm" />
     <constant name="CentralTrackingRegionN_zmax"  value="1235.0*mm" />
     <constant name="CentralTrackingRegion_length" value="CentralTrackingRegionP_zmax + CentralTrackingRegionN_zmax" />
@@ -558,12 +558,16 @@ Service gaps in FW direction (before endcapP ECAL) and BW direction (before endc
       ## Special DIRC parameters (depend on the ECAL setup)
     </documentation>
     <constant name="DIRCReadout_length"         value="30*cm"/>
+    <comment> Leave 1.9 cm space from the end of mirror to the end of bar box in +z </comment>
+    <constant name="DIRCMirror_thickness"       value="1 * mm"/>
+    <constant name="DIRCBarbox_space_z"         value="1.9*cm"/>
+    <constant name="DIRCLens_thickness"         value="12 * mm"/>
     <constant name="DIRCForward_length"         value="0*cm"/>
     <constant name="DIRCForward_zmax"           value="CentralTrackingRegionP_zmax + 5*cm"/>
-    <constant name="DIRCBackward_zmax"          value="287*cm"/>
-    <constant name="DIRC_thickness"             value="3*cm"/>
+    <constant name="DIRCBackward_zmax"          value="303*cm"/>
+    <constant name="DIRC_thickness"             value="3.1*cm"/>
     <constant name="DIRC_length"                value="DIRCForward_zmax + DIRCBackward_zmax"/>
-    <constant name="DIRC_offset"                value="(DIRCForward_zmax - DIRCBackward_zmax)/2"/>
+    <constant name="DIRC_offset"                value="(DIRCForward_zmax - DIRCBackward_zmax - DIRCMirror_thickness - DIRCBarbox_space_z + DIRCLens_thickness + DIRCReadout_length)/2"/>
     <comment>
       The DIRC_rmin/rmax values are defined at the center of each stave, such that
       the DIRC_rmax can also be used as the OuterBarrelMPGD_rmin value.
