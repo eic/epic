@@ -1,5 +1,5 @@
 <!-- SPDX-License-Identifier: LGPL-3.0-or-later -->
-<!-- Copyright (C) 2022 Aranya Giri -->
+<!-- Copyright (C) 2023 Aranya Giri -->
 
 <lccdd>
         <!--
@@ -8,7 +8,7 @@
         <define>
                 <constant name="LumiSpecCAL_ModSizeX"            value="LumiSpecCAL_SiPMNumX*LumiSpecCAL_SiPMSizeXY"/>
                 <constant name="LumiSpecCAL_ModSizeY"            value="LumiSpecCAL_SiPMNumY*LumiSpecCAL_SiPMSizeXY"/>
-                <constant name="LumiSpecCAL_ModSizeZ"            value="LumiSpecCAL_SizeXY"/>
+                <constant name="LumiSpecCAL_ModSizeZ"            value="LumiSpecCAL_DXY"/>
                 <constant name="LumiSpecCAL_FiberRadius"            value="0.25*mm"/>
                 <constant name="LumiSpecCAL_FiberSpaceX"            value="0.25*mm"/>
                 <constant name="LumiSpecCAL_FiberSpaceY"            value="0.25*mm"/>
@@ -36,7 +36,7 @@
         </display>
 
         <detectors>
-                <detector id="LumiSpecCAL_ID" name="LumiSpecCAL" type="EcalLumiSpecWScFi" vis="FFPreVis" readout="EcalLumiSpecHits" sizeXY="LumiSpecCAL_SizeXY" sizeZ="LumiSpecCAL_SizeZ" >
+                <detector id="LumiSpecCAL_ID" name="LumiSpecCAL" type="EcalLumiSpecWScFi" vis="FFPreVis" readout="EcalLumiSpecHits" sizeXY="LumiSpecCAL_DXY" sizeZ="LumiSpecCAL_DZ" >
                         <module sizex="LumiSpecCAL_ModSizeX" sizey="LumiSpecCAL_ModSizeY" sizez="LumiSpecCAL_ModSizeZ" nmod_perlayer="LumiSpecCAL_XYLayers" nlayer="LumiSpecCAL_ZLayers" material="WPowderplusEpoxy" vis="LumiSpecCAL_ModuleVis">
                                 <fiber material="Polystyrene"
                                         radius="LumiSpecCAL_FiberRadius"
@@ -46,11 +46,11 @@
                                 <fiberholder material="BrassAlloy360" vis="LumiSpecCAL_FiberHolderVis"/>
                         </module>
                         <sector id="0">
-                                <position x="0.0*cm" y="LumiSpecCAL_PosY" z="LumiSpecCAL_PosZ"/>
+                                <position x="0.0*cm" y="LumiSpecCAL_Y" z="LumiSpecCAL_Z"/>
                                 <rotation x="0.0*rad" y="0.0*rad" z="0.0*rad"/>
                         </sector>
                         <sector id="1">
-                                <position x="0.0*cm" y="-1*LumiSpecCAL_PosY" z="LumiSpecCAL_PosZ"/>
+                                <position x="0.0*cm" y="-1*LumiSpecCAL_Y" z="LumiSpecCAL_Z"/>
                                 <rotation x="0.0*rad" y="0.0*rad" z="0.0*rad"/>
                         </sector>
                 </detector>
