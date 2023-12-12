@@ -28,6 +28,7 @@ using namespace dd4hep;
 
 typedef ROOT::Math::XYPoint Point;
 
+// geometry helpers
 static void buildSupport(Detector& desc, Volume& mother, xml_comp_t x_support,
                          const std::tuple<double, double, double, double>& dimensions);
 
