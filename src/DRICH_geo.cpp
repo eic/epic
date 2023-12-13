@@ -78,6 +78,10 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
   auto mirrorMat       = desc.material(mirrorElem.attr<std::string>(_Unicode(material)));
   auto mirrorVis       = desc.visAttributes(mirrorElem.attr<std::string>(_Unicode(vis)));
   auto mirrorSurf      = surfMgr.opticalSurface(mirrorElem.attr<std::string>(_Unicode(surface)));
+  auto mirrorThCut1    = mirrorElem.attr<double>(_Unicode(mirThCut1));
+  auto mirrorThCut2    = mirrorElem.attr<double>(_Unicode(mirThCut2));
+  auto mirrorPhiACut   = mirrorElem.attr<double>(_Unicode(mirPhiACut));
+  auto mirrorPhiBCut   = mirrorElem.attr<double>(_Unicode(mirPhiBCut));
   auto mirrorBackplane = mirrorElem.attr<double>(_Unicode(backplane));
   auto mirrorThickness = mirrorElem.attr<double>(_Unicode(thickness));
   auto mirrorRmin      = mirrorElem.attr<double>(_Unicode(rmin));
@@ -374,13 +378,13 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
 
     // translate mirror center to be w.r.t vessel front plane
     mirrorCenterZ -= vesselZmin;
-
+   
     // spherical mirror patch cuts and rotation
     double mirrorThetaRot = std::asin(mirrorCenterX / mirrorRadius);
     double mirrorTheta1   = mirrorThetaRot - std::asin((mirrorCenterX - mirrorRmin) / mirrorRadius);
-    double mirrorTheta2   = 0.4*mirrorThetaRot + std::asin((mirrorRmax - mirrorCenterX) / mirrorRadius);
-    double mirrorTheta3   = 0.41*mirrorThetaRot + std::asin((mirrorRmax - mirrorCenterX) / mirrorRadius);
-    double mirrorTheta4   = 1.0*mirrorThetaRot + std::asin((mirrorRmax - mirrorCenterX) / mirrorRadius);
+    double mirrorTheta2   = mirrorThCut1*mirrorThetaRot + std::asin((mirrorRmax - mirrorCenterX) / mirrorRadius);
+    double mirrorTheta3   = mirrorThCut2*mirrorThetaRot + std::asin((mirrorRmax - mirrorCenterX) / mirrorRadius);
+    double mirrorTheta4   = mirrorThetaRot + std::asin((mirrorRmax - mirrorCenterX) / mirrorRadius);
 
     // if debugging, draw full sphere
     if (debugMirror) {
@@ -393,8 +397,18 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
     Sphere mirrorSolid1(mirrorRadius, mirrorRadius + mirrorThickness, mirrorTheta1, mirrorTheta2, -40 * degree,
                         40 * degree);
 
-    Sphere mirrorSolid3(mirrorRadius, mirrorRadius + mirrorThickness, mirrorTheta3, mirrorTheta4, -40 * degree,
+    Sphere mirrorSolid2(mirrorRadius, mirrorRadius + mirrorThickness, mirrorTheta3, mirrorTheta4, -40 * degree,
                         40 * degree);
+
+    Sphere mirrorRibSolid0(mirrorRadius, mirrorRadius + mirrorThickness, mirrorTheta1, mirrorTheta4, -40 * degree,
+                        40 * degree);
+    
+    Sphere mirrorRibSolid1(mirrorRadius, mirrorRadius + mirrorThickness, mirrorTheta2, mirrorTheta3, -40 * degree,
+		     40 * degree);
+    
+    Sphere mirrorRibSolid2(mirrorRadius, mirrorRadius + mirrorThickness, mirrorTheta3, mirrorTheta4, -40 * degree,
+		     40 * degree);
+    
     // mirror placement transformation (note: transformations are in reverse order)
     auto mirrorPos = Position(mirrorCenterX, 0., mirrorCenterZ) + originFront;
     auto mirrorPlacement(Translation3D(mirrorPos) * // re-center to specified position
@@ -403,33 +417,56 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
 
     // cut overlaps with other sectors using "pie slice" wedges, to the extent specified
     // by `mirrorPhiw`
-    Tube              pieSlice(0.01 * cm, vesselRmax2, tankLength / 2.0, -mirrorPhiw / 2.0, mirrorPhiw / 2.0);
-    Tube              pieSlice1(0.01 * cm, vesselRmax2, tankLength / 2.0, -mirrorPhiw / 2.0, (0.05*mirrorPhiw) / 2.0);
-    Tube              pieSlice2(0.01 * cm, vesselRmax2, tankLength / 2.0, (0.06*mirrorPhiw) / 2.0, mirrorPhiw / 2.0);
-    IntersectionSolid mirrorSolid2(pieSlice, mirrorSolid1, mirrorPlacement);
-    IntersectionSolid mirrorSolid4(pieSlice1, mirrorSolid3, mirrorPlacement);
-    IntersectionSolid mirrorSolid5(pieSlice2, mirrorSolid3, mirrorPlacement);
+    Tube              pieSliceInner(0.01 * cm, vesselRmax2, tankLength / 2.0, -mirrorPhiw / 2.0, mirrorPhiw / 2.0);
+    Tube              pieSliceOuterA(0.01 * cm, vesselRmax2, tankLength / 2.0, -mirrorPhiw / 2.0, (mirrorPhiACut*mirrorPhiw) / 2.0);
+    Tube              pieSliceOuterB(0.01 * cm, vesselRmax2, tankLength / 2.0, (mirrorPhiBCut*mirrorPhiw) / 2.0, mirrorPhiw / 2.0);
+    //ribs
+    Tube              pieSliceInnerRib(0.01*cm,vesselRmax2,tankLength/2.0, -mirrorPhiw / 2.0, mirrorPhiw / 2.0);
+    Tube              pieSliceOuterRib(0.01*cm,vesselRmax2,tankLength/2.0, (mirrorPhiACut*mirrorPhiw) / 2.0 , (mirrorPhiBCut*mirrorPhiw) / 2.0);
+    Tube              pieSliceSectorRib(0.01*cm,vesselRmax2,tankLength/2.0, mirrorPhiw / 2.0 , (mirrorPhiw+0.017) / 2.0);
+    //mirror solids
+    IntersectionSolid mirrorInnerSolid(pieSliceInner, mirrorSolid1, mirrorPlacement);
+    IntersectionSolid mirrorOuterSolidA(pieSliceOuterA, mirrorSolid2, mirrorPlacement);
+    IntersectionSolid mirrorOuterSolidB(pieSliceOuterB, mirrorSolid2, mirrorPlacement);
+    //rib solids
+    IntersectionSolid mirrorRibInnerSolid(pieSliceInnerRib,mirrorRibSolid1,mirrorPlacement);
+    IntersectionSolid mirrorRibOuterSolid(pieSliceOuterRib,mirrorRibSolid2,mirrorPlacement);
+    IntersectionSolid mirrorRibSectorSolid(pieSliceSectorRib,mirrorRibSolid0,mirrorPlacement);
+    
+    // mirror and rib volume, attributes, and placement
+    Volume mirrorInnerVol(detName + "_mirror_tile0" + secName, mirrorInnerSolid, mirrorMat);
+    Volume mirrorOuterVolA(detName + "_mirror_tile1" + secName, mirrorOuterSolidA, mirrorMat);
+    Volume mirrorOuterVolB(detName + "_mirror_tile2" + secName, mirrorOuterSolidB, mirrorMat);
 
-    // mirror volume, attributes, and placement
-    Volume mirrorVol(detName + "_mirror_0" + secName, mirrorSolid2, mirrorMat);
-    Volume mirrorVol2(detName + "_mirror_1" + secName, mirrorSolid4, mirrorMat);
-    Volume mirrorVol3(detName + "_mirror_2" + secName, mirrorSolid5, mirrorMat);
+    Volume mirrorRibInnerVol(detName + "_mirror_rib0" + secName, mirrorRibInnerSolid, vesselMat);
+    Volume mirrorRibOuterVol(detName + "_mirror_rib1" + secName, mirrorRibOuterSolid, vesselMat);
+    Volume mirrorRibSectorVol(detName + "_mirror_rib3" + secName, mirrorRibSectorSolid, vesselMat);
+       
+    mirrorInnerVol.setVisAttributes(mirrorVis);
+    mirrorOuterVolA.setVisAttributes(mirrorVis);
+    mirrorOuterVolB.setVisAttributes(mirrorVis);
 
-    mirrorVol.setVisAttributes(mirrorVis);
-    mirrorVol2.setVisAttributes(mirrorVis);
-    mirrorVol3.setVisAttributes(mirrorVis);
+    mirrorRibInnerVol.setVisAttributes(resinVis);
+    mirrorRibOuterVol.setVisAttributes(resinVis);
+    mirrorRibSectorVol.setVisAttributes(resinVis);
 
-    auto mirrorSectorPlacement = Transform3D(sectorRotation); // rotate about beam axis to sector
-    auto mirrorPV              = gasvolVol.placeVolume(mirrorVol, mirrorSectorPlacement);
-    auto mirrorPV2              = gasvolVol.placeVolume(mirrorVol2, mirrorSectorPlacement);
-    auto mirrorPV3              = gasvolVol.placeVolume(mirrorVol3, mirrorSectorPlacement);
-
+    auto mirrorSectorPlacement       = Transform3D(sectorRotation); // rotate about beam axis to sector
+    auto mirrorInnerPV               = gasvolVol.placeVolume(mirrorInnerVol, mirrorSectorPlacement);
+    auto mirrorOuterPVA              = gasvolVol.placeVolume(mirrorOuterVolA, mirrorSectorPlacement);
+    auto mirrorOuterPVB              = gasvolVol.placeVolume(mirrorOuterVolB, mirrorSectorPlacement);
+    auto mirrorRibInnerPV             = gasvolVol.placeVolume(mirrorRibInnerVol,mirrorSectorPlacement);
+    auto mirrorRibOuterPV             = gasvolVol.placeVolume(mirrorRibOuterVol,mirrorSectorPlacement);
+    auto mirrorRibSectorPV             = gasvolVol.placeVolume(mirrorRibSectorVol,mirrorSectorPlacement);
+    
     // properties
     DetElement mirrorDE(det, "mirror_de_" + secName, isec);
-    mirrorDE.setPlacement(mirrorPV);
-    mirrorDE.setPlacement(mirrorPV2);
-    mirrorDE.setPlacement(mirrorPV3);
-    SkinSurface mirrorSkin(desc, mirrorDE, "mirror_optical_surface_" + secName, mirrorSurf, mirrorVol);
+    mirrorDE.setPlacement(mirrorInnerPV);
+    mirrorDE.setPlacement(mirrorOuterPVA);
+    mirrorDE.setPlacement(mirrorOuterPVB);
+    mirrorDE.setPlacement(mirrorRibInnerPV);
+    mirrorDE.setPlacement(mirrorRibOuterPV);
+    mirrorDE.setPlacement(mirrorRibSectorPV);
+    SkinSurface mirrorSkin(desc, mirrorDE, "mirror_optical_surface_" + secName, mirrorSurf, mirrorInnerVol);
     mirrorSkin.isValid();
 
     // reconstruction constants (w.r.t. IP)

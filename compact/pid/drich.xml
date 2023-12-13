@@ -173,6 +173,10 @@
   thickness="0.2*cm"
   focus_tune_x="-7.00*cm"
   focus_tune_z="6.15*cm"
+  mirThCut1="0.40"
+  mirThCut2="0.41"
+  mirPhiACut="0.05"
+  mirPhiBCut="0.06"
   />
 
 <!-- /detectors/detector/sensors -->
@@ -327,7 +331,7 @@ photodetector unit (PDU) assembly diagram: matrix of SiPMs with services
   radius="110.0*cm"
   />
 <sphericalpatch
-  phiw="30*degree"
+  phiw="18*degree"
   rmin="111.0*cm"
   rmax="179.0*cm"
   zmin="DRICH_snout_length + 4.0*cm"
