@@ -378,7 +378,7 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
 
     // translate mirror center to be w.r.t vessel front plane
     mirrorCenterZ -= vesselZmin;
-   
+
     // spherical mirror patch cuts and rotation
     double mirrorThetaRot = std::asin(mirrorCenterX / mirrorRadius);
     double mirrorTheta1   = mirrorThetaRot - std::asin((mirrorCenterX - mirrorRmin) / mirrorRadius);
@@ -402,13 +402,13 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
 
     Sphere mirrorRibSolid0(mirrorRadius, mirrorRadius + mirrorThickness, mirrorTheta1, mirrorTheta4, -40 * degree,
                         40 * degree);
-    
+
     Sphere mirrorRibSolid1(mirrorRadius, mirrorRadius + mirrorThickness, mirrorTheta2, mirrorTheta3, -40 * degree,
-		     40 * degree);
-    
+                     40 * degree);
+
     Sphere mirrorRibSolid2(mirrorRadius, mirrorRadius + mirrorThickness, mirrorTheta3, mirrorTheta4, -40 * degree,
-		     40 * degree);
-    
+                     40 * degree);
+
     // mirror placement transformation (note: transformations are in reverse order)
     auto mirrorPos = Position(mirrorCenterX, 0., mirrorCenterZ) + originFront;
     auto mirrorPlacement(Translation3D(mirrorPos) * // re-center to specified position
@@ -432,7 +432,7 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
     IntersectionSolid mirrorRibInnerSolid(pieSliceInnerRib,mirrorRibSolid1,mirrorPlacement);
     IntersectionSolid mirrorRibOuterSolid(pieSliceOuterRib,mirrorRibSolid2,mirrorPlacement);
     IntersectionSolid mirrorRibSectorSolid(pieSliceSectorRib,mirrorRibSolid0,mirrorPlacement);
-    
+
     // mirror and rib volume, attributes, and placement
     Volume mirrorInnerVol(detName + "_mirror_tile0" + secName, mirrorInnerSolid, mirrorMat);
     Volume mirrorOuterVolA(detName + "_mirror_tile1" + secName, mirrorOuterSolidA, mirrorMat);
@@ -441,7 +441,7 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
     Volume mirrorRibInnerVol(detName + "_mirror_rib0" + secName, mirrorRibInnerSolid, vesselMat);
     Volume mirrorRibOuterVol(detName + "_mirror_rib1" + secName, mirrorRibOuterSolid, vesselMat);
     Volume mirrorRibSectorVol(detName + "_mirror_rib3" + secName, mirrorRibSectorSolid, vesselMat);
-       
+
     mirrorInnerVol.setVisAttributes(mirrorVis);
     mirrorOuterVolA.setVisAttributes(mirrorVis);
     mirrorOuterVolB.setVisAttributes(mirrorVis);
@@ -457,7 +457,7 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
     auto mirrorRibInnerPV             = gasvolVol.placeVolume(mirrorRibInnerVol,mirrorSectorPlacement);
     auto mirrorRibOuterPV             = gasvolVol.placeVolume(mirrorRibOuterVol,mirrorSectorPlacement);
     auto mirrorRibSectorPV             = gasvolVol.placeVolume(mirrorRibSectorVol,mirrorSectorPlacement);
-    
+
     // properties
     DetElement mirrorDE(det, "mirror_de_" + secName, isec);
     mirrorDE.setPlacement(mirrorInnerPV);
