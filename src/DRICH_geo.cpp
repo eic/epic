@@ -84,6 +84,9 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
   auto mirrorPhiBCut   = mirrorElem.attr<double>(_Unicode(mirPhiBCut));
   auto mirrorBackplane = mirrorElem.attr<double>(_Unicode(backplane));
   auto mirrorThickness = mirrorElem.attr<double>(_Unicode(thickness));
+  auto mirrorRibElem   = mirrorElem.child(_Unicode(mirrorRib));
+  auto mirrorRibMat    = desc.material(mirrorRibElem.attr<std::string>(_Unicode(material)));
+  auto mirrorSecRib    = mirrorRibElem.attr<double>(_Unicode(sectorRibPhi));
   auto mirrorRmin      = mirrorElem.attr<double>(_Unicode(rmin));
   auto mirrorRmax      = mirrorElem.attr<double>(_Unicode(rmax));
   auto mirrorPhiw      = mirrorElem.attr<double>(_Unicode(phiw));
@@ -423,7 +426,7 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
     //ribs
     Tube              pieSliceInnerRib(0.01*cm,vesselRmax2,tankLength/2.0, -mirrorPhiw / 2.0, mirrorPhiw / 2.0);
     Tube              pieSliceOuterRib(0.01*cm,vesselRmax2,tankLength/2.0, (mirrorPhiACut*mirrorPhiw) / 2.0 , (mirrorPhiBCut*mirrorPhiw) / 2.0);
-    Tube              pieSliceSectorRib(0.01*cm,vesselRmax2,tankLength/2.0, mirrorPhiw / 2.0 , (mirrorPhiw+0.017) / 2.0);
+    Tube              pieSliceSectorRib(0.01*cm,vesselRmax2,tankLength/2.0, mirrorPhiw / 2.0 , (mirrorPhiw+mirrorSecRib) / 2.0);
     //mirror solids
     IntersectionSolid mirrorInnerSolid(pieSliceInner, mirrorSolid1, mirrorPlacement);
     IntersectionSolid mirrorOuterSolidA(pieSliceOuterA, mirrorSolid2, mirrorPlacement);
@@ -438,9 +441,9 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
     Volume mirrorOuterVolA(detName + "_mirror_tile1" + secName, mirrorOuterSolidA, mirrorMat);
     Volume mirrorOuterVolB(detName + "_mirror_tile2" + secName, mirrorOuterSolidB, mirrorMat);
 
-    Volume mirrorRibInnerVol(detName + "_mirror_rib0" + secName, mirrorRibInnerSolid, vesselMat);
-    Volume mirrorRibOuterVol(detName + "_mirror_rib1" + secName, mirrorRibOuterSolid, vesselMat);
-    Volume mirrorRibSectorVol(detName + "_mirror_rib3" + secName, mirrorRibSectorSolid, vesselMat);
+    Volume mirrorRibInnerVol(detName + "_mirror_rib0" + secName, mirrorRibInnerSolid, mirrorRibMat);
+    Volume mirrorRibOuterVol(detName + "_mirror_rib1" + secName, mirrorRibOuterSolid, mirrorRibMat);
+    Volume mirrorRibSectorVol(detName + "_mirror_rib3" + secName, mirrorRibSectorSolid, mirrorRibMat);
        
     mirrorInnerVol.setVisAttributes(mirrorVis);
     mirrorOuterVolA.setVisAttributes(mirrorVis);
