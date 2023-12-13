@@ -405,13 +405,13 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
 
     Sphere mirrorRibSolid0(mirrorRadius, mirrorRadius + mirrorThickness, mirrorTheta1, mirrorTheta4, -40 * degree,
                         40 * degree);
-    
+
     Sphere mirrorRibSolid1(mirrorRadius, mirrorRadius + mirrorThickness, mirrorTheta2, mirrorTheta3, -40 * degree,
-		     40 * degree);
-    
+                     40 * degree);
+
     Sphere mirrorRibSolid2(mirrorRadius, mirrorRadius + mirrorThickness, mirrorTheta3, mirrorTheta4, -40 * degree,
-		     40 * degree);
-    
+                     40 * degree);
+
     // mirror placement transformation (note: transformations are in reverse order)
     auto mirrorPos = Position(mirrorCenterX, 0., mirrorCenterZ) + originFront;
     auto mirrorPlacement(Translation3D(mirrorPos) * // re-center to specified position
@@ -448,7 +448,7 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
     mirrorInnerVol.setVisAttributes(mirrorVis);
     mirrorOuterVolA.setVisAttributes(mirrorVis);
     mirrorOuterVolB.setVisAttributes(mirrorVis);
-
+    
     mirrorRibInnerVol.setVisAttributes(resinVis);
     mirrorRibOuterVol.setVisAttributes(resinVis);
     mirrorRibSectorVol.setVisAttributes(resinVis);
