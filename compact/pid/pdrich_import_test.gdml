@@ -24071,11 +24071,12 @@
         <position name="vessel_pos" unit="mm" x="0" y="0" z="0"/>
       </physvol>
 -->
+<!--
       <physvol name="mirror_cone">
         <volumeref ref="frame_all0x55aebcd0f360"/>
-<!--        <position name="frame_rib_all_10x55aebcd0f4f0_pos" unit="mm" x="0" y="0" z="-1800"/> -->
         <position name="frame_rib_all_10x55aebcd0f4f0_pos" unit="mm" x="0" y="0" z="0"/>
       </physvol>
+-->
     </volume>
   </structure>
 

@@ -29,7 +29,7 @@
 <constant name="PFRICH_aerogel_filter_gap" value="0.01*mm"/>                          <!-- air gap between aerogel and filter FIXME: currently a gas gap -->
 
 <!-- FIXME: change to LAPPD(?) -->
-<constant name="PFRICH_sensor_size_default"   value="25.8*mm"/>                               <!-- sensor side length (full size, with enclosure) -->
+<constant name="PFRICH_sensor_size_default"   value="100*mm"/>                               <!-- sensor side length (full size, with enclosure) -->
 <constant name="PFRICH_sensor_size_lores"     value="PFRICH_sensor_size_default * 4"/>        <!-- lores sensor size, used for global vizualizations _only_ -->
 <constant name="PFRICH_sensor_size"           value="PFRICH_sensor_size_default"/>
 <constant name="PFRICH_pixel_gap"             value="0.2*mm"/>                                <!-- size of gaps between adjacent pixels AND gaps between edge pixels and sensor side -->
@@ -197,6 +197,21 @@
     />
 </radiator>
 
+<mirror
+  material="Acrylic_DRICH"
+  surface="MirrorSurface_DRICH"
+  vis="DRICH_mirror_vis"
+  backplane="DRICH_window_thickness + 1.0*cm"
+  rmin="DRICH_rmin1 + DRICH_wall_thickness - 1.0*cm"
+  rmax="DRICH_rmax2 - DRICH_wall_thickness - 3.0*cm"
+  phiw="59.5*degree"
+  thickness="0.2*cm"
+  focus_tune_x="-7.00*cm"
+  focus_tune_z="6.15*cm"
+  />
+
+
+
 </detector>
 </detectors>
 
@@ -213,6 +228,5 @@
     <id>system:8,module:12,x:32:-16,y:-16</id>
   </readout>
 </readouts>
-
 
 </lccdd>
