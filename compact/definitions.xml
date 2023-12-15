@@ -424,7 +424,7 @@ Examples:
 
     </documentation>
 
-    <constant name="CentralTrackingRegion_rmax"   value="700.0*mm" />
+    <constant name="CentralTrackingRegion_rmax"   value="755.0*mm" />
     <constant name="CentralTrackingRegionP_zmax"  value="1800.0*mm" />
     <constant name="CentralTrackingRegionN_zmax"  value="1235.0*mm" />
     <constant name="CentralTrackingRegion_length" value="CentralTrackingRegionP_zmax + CentralTrackingRegionN_zmax" />
@@ -442,7 +442,7 @@ Examples:
     <comment> Global PID regions with suballocations for TOF and RICH detectors </comment>
     <constant name="ForwardPIDRegion_zmin"        value="CentralTrackingRegionP_zmax" />
     <constant name="ForwardPIDRegion_length"      value="135.0*cm" />
-    <constant name="ForwardPIDRegion_rmax"        value="185.0*cm" />
+    <constant name="ForwardPIDRegion_rmax"        value="180.0*cm" />
     <constant name="ForwardTOFRegion_length"      value="15.0*cm" />
 
     <comment> Forward RICH region </comment>
@@ -544,7 +544,7 @@ Service gaps in FW direction (before endcapP ECAL) and BW direction (before endc
     <constant name="EcalEndcapN_rmin"               value="9.*cm"/>    <!-- Currently fix value hardcoded -->
     <constant name="EcalEndcapN_rmax"               value="63.*cm"/>   <!-- Currently fix value hardcoded -->
 
-    <constant name="EcalBarrelRegion_thickness"     value="35.*cm"/>
+    <constant name="EcalBarrelRegion_thickness"     value="38.*cm"/>
     <constant name="EcalBarrel_rmin"                value="max(81.*cm, CentralTrackingRegion_rmax + BarrelPIDRegion_thickness + BarrelExtraSpace_thickness)"/> <!-- FIXME hardcoded max -->
     <constant name="EcalBarrel_inner_margin"        value="2*cm"/>
     <constant name="EcalBarrel_rmax"                value="EcalBarrel_rmin + EcalBarrelRegion_thickness"/>
@@ -558,12 +558,16 @@ Service gaps in FW direction (before endcapP ECAL) and BW direction (before endc
       ## Special DIRC parameters (depend on the ECAL setup)
     </documentation>
     <constant name="DIRCReadout_length"         value="30*cm"/>
+    <comment> Leave 1.9 cm space from the end of mirror to the end of bar box in +z </comment>
+    <constant name="DIRCMirror_thickness"       value="1 * mm"/>
+    <constant name="DIRCBarbox_space_z"         value="1.9*cm"/>
+    <constant name="DIRCLens_thickness"         value="12 * mm"/>
     <constant name="DIRCForward_length"         value="0*cm"/>
     <constant name="DIRCForward_zmax"           value="CentralTrackingRegionP_zmax + 5*cm"/>
-    <constant name="DIRCBackward_zmax"          value="287*cm"/>
-    <constant name="DIRC_thickness"             value="3*cm"/>
+    <constant name="DIRCBackward_zmax"          value="303*cm"/>
+    <constant name="DIRC_thickness"             value="3.1*cm"/>
     <constant name="DIRC_length"                value="DIRCForward_zmax + DIRCBackward_zmax"/>
-    <constant name="DIRC_offset"                value="(DIRCForward_zmax - DIRCBackward_zmax)/2"/>
+    <constant name="DIRC_offset"                value="(DIRCForward_zmax - DIRCBackward_zmax - DIRCMirror_thickness - DIRCBarbox_space_z + DIRCLens_thickness + DIRCReadout_length)/2"/>
     <comment>
       The DIRC_rmin/rmax values are defined at the center of each stave, such that
       the DIRC_rmax can also be used as the OuterBarrelMPGD_rmin value.
