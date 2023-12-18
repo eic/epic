@@ -589,7 +589,7 @@ Service gaps in FW direction (before endcapP ECAL) and BW direction (before endc
     <constant name="HcalEndcapPInsert_yposition" value="EcalEndcapPInsert_yposition"/>
 
     <constant name="HcalEndcapN_CaloSides"      value="60"/>
-    <constant name="HcalEndcapN_zmin"     value="BackwardServiceGap_zmax"/>
+    <constant name="HcalEndcapN_zmin"     value="BackwardServiceGap_zmax - HcalEndcapN_length - 64 * cm"/> <!-- 64 cm gap between service gap, includes 28.5 cm oculus -->
     <constant name="HcalEndcapN_length"   value="45.0*cm"/>
     <constant name="HcalEndcapN_zmax"     value="HcalEndcapN_zmin + HcalEndcapN_length"/>
     <comment> HcalEndcapN needs to clear the straight beampipe with 1 * crossing angle + its radius of 22.25 mm </comment>
