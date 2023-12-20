@@ -35,6 +35,8 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
   // Mother volume
   Volume        motherVol = description.pickMotherVolume( det );
 
+
+
   // Detector assembly
   Assembly      assembly( det_name );
   assembly.setVisAttributes( description.invisible() );
@@ -44,11 +46,12 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
   int nmod_perlayer     = getAttrOrDefault( x_det, _Unicode(nmod_perlayer), 3);
   int nlayer            = getAttrOrDefault( x_det, _Unicode(nlayer), 20);
 
-  auto [modVol, modSize] = build_specScFiCAL_module(description, x_mod, sens);
+  // Global detector position and resolution
+  xml_comp_t pos = x_det.position();
+  xml_comp_t rot = x_det.rotation();
 
-  // No. of module/layer, # layer in CAL
-  //int nmod_perlayer   = int( detSizeXY / modSize.x() );
-  //int nlayer          = int( detSizeZ / modSize.y() );
+
+  auto [modVol, modSize] = build_specScFiCAL_module(description, x_mod, sens);
 
   // Position of first module, layer from center of CAL
   double mod_pos0       = -(detSizeXY/2.0) + (modSize.x()/2.0);
@@ -96,19 +99,15 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
 
     xml_comp_t x_sector( si );
     int sector_id = x_sector.id();
-    xml_comp_t x_pos = x_sector.position();
-    xml_comp_t x_rot = x_sector.rotation();
-      
-    double        sec_pos_z       = x_pos.z();
-    double        sec_pos_y       = x_pos.y();
-    double        sec_pos_x       = x_pos.x();
+    xml_comp_t sec_pos = x_sector.position();
+    xml_comp_t sec_rot = x_sector.rotation();
            
-    PlacedVolume secPV = assembly.placeVolume( sectorVol, Transform3D( RotationZYX(x_rot.z(), x_rot.y(), x_rot.x() ), Position( sec_pos_x, sec_pos_y, sec_pos_z ) ) );	  
+    PlacedVolume secPV = assembly.placeVolume( sectorVol, Transform3D( RotationZYX(sec_rot.z(), sec_rot.y(), sec_rot.x() ), Position( sec_pos.x(), sec_pos.y(), sec_pos.z() ) ) );	  
     secPV.addPhysVolID( "sector", sector_id );
   }// sectors
   
   // Place assembly into mother volume.  Assembly is centered at origin
-  PlacedVolume detPV = motherVol.placeVolume( assembly, Position(0.0, 0.0, 0.0) );
+  PlacedVolume detPV = motherVol.placeVolume( assembly, Transform3D( RotationZYX( rot.z(), rot.y(), rot.x() ), Position( pos.x(), pos.y(), pos.z() ) ) );
   detPV.addPhysVolID("system", det_ID);
   // Connect to system ID
   det.setPlacement(detPV);
