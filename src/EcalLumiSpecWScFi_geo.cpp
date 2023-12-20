@@ -37,10 +37,10 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
   Assembly      assembly( det_name );
   assembly.setVisAttributes( description.invisible() );
 
-  double detSizeXY      = getAttrOrDefault( x_det, _Unicode(sizeXY), 180*mm);
-  double detSizeZ       = getAttrOrDefault( x_det, _Unicode(sizeZ), 180*mm);
-  int nmod_perlayer     = getAttrOrDefault( x_det, _Unicode(nmod_perlayer), 3);
-  int nlayer            = getAttrOrDefault( x_det, _Unicode(nlayer), 20);
+  double detSizeXY      = getAttrOrDefault( x_mod, _Unicode(sizeXY), 180*mm);
+  double detSizeZ       = getAttrOrDefault( x_mod, _Unicode(sizeZ), 180*mm);
+  int nmod_perlayer     = getAttrOrDefault( x_mod, _Unicode(nmod_perlayer), 3);
+  int nlayer            = getAttrOrDefault( x_mod, _Unicode(nlayer), 20);
 
   auto [modVol, modSize]= build_specScFiCAL_module(description, x_mod, sens);
 
