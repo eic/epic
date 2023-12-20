@@ -74,18 +74,20 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
   //Fill sector with layers
   for(int layer_id=0; layer_id< nlayer; layer_id++){
     
-    double        lay_pos_z       = -layer_id*modSize.y() - layer_pos0;
-    double        lay_pos_y       = 0.0*cm;
-    double        lay_pos_x       = 0.0*cm;
+    double        lay_pos_z   = -layer_id*modSize.y() - layer_pos0;
+    double        lay_pos_y   = 0.0*cm;
+    double        lay_pos_x   = 0.0*cm;
+    int           orientation = layer_id%2==0;
     
     RotationZYX lay_rot = RotationZYX( 0, 0, -90.0*degree);
-    if(layer_id%2==0) lay_rot*=RotationY(-90.0*degree);
+    if(orientation) lay_rot*=RotationY(-90.0*degree);
       
     //                                   PlacedVolume modPV = assembly.placeVolume(
     //                                                   modVol, Transform3D( RotationZYX(x_rot.z(), x_rot.y(), -90.0*degree), Position( mod_pos_x, mod_pos_y, mod_pos_z ) ) );
        
     PlacedVolume layPV = sectorVol.placeVolume( layerVol, Transform3D( lay_rot, Position( lay_pos_x, lay_pos_y, lay_pos_z ) ) );
     layPV.addPhysVolID( "layer", layer_id );
+    layPV.addPhysVolID( "orientation", orientation );
     
   }//layer_id-loop close
 
