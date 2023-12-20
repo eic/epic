@@ -270,6 +270,11 @@
     <fraction n="0.052*19./40" ref="C"/>
     <fraction n="0.052*21./40" ref="H"/>
   </material>
+  <material name="WPowderplusEpoxy">
+    <D type="density" unit="g/cm3" value="10.95"/>
+    <fraction n="0.97" ref="Tungsten"/>
+    <fraction n="0.03" ref="Epoxy"/>
+  </material>
   <material name="CarbonFiber_25percent">
     <D type="density" value="0.375" unit="g / cm3"/>
     <fraction n="1.0" ref="CarbonFiber"/>
@@ -478,6 +483,13 @@
     <D type="density" value="8.41" unit="g / cm3"/>
     <fraction n="0.70" ref="Cu"/>
     <fraction n="0.30" ref="Zn"/>
+  </material>
+  <material name="BrassAlloy360">
+    <D type="density" unit="g/cm3" value="8.49"/>
+    <fraction n="0.6045" ref="Cu"/>
+    <fraction n="0.3550" ref="Zn"/>
+    <fraction n="0.0370" ref="Pb"/>
+    <fraction n="0.0035" ref="Fe"/>
   </material>
   <material name="NbTi">
     <D type="density" value="6.54" unit="g / cm3"/>

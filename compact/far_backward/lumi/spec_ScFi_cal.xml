@@ -14,27 +14,6 @@
                 <constant name="LumiSpecCAL_FiberSpaceY"            value="0.25*mm"/>
         </define>
 
-        <materials>
-        <material name="BrassAlloy360">
-                <D type="density" unit="g/cm3" value="8.49"/>
-                <fraction n="0.6045" ref="Cu"/>
-                <fraction n="0.3550" ref="Zn"/>
-                <fraction n="0.0370" ref="Pb"/>
-                <fraction n="0.0035" ref="Fe"/>
-        </material>
-        <material name="WPowderplusEpoxy">
-                <D type="density" unit="g/cm3" value="10.95"/>
-                <fraction n="0.97" ref="Tungsten"/>
-                <fraction n="0.03" ref="Epoxy"/>
-        </material>
-        </materials>
-
-        <display>
-                <vis    name="LumiSpecCAL_ModuleVis"            ref="AnlGold"   alpha="0.5"     visible="true" showDaughters="true"/>
-                <vis    name="LumiSpecCAL_FiberVis"             ref="AnlRed"    aplha="0.8"     visible="true"/>
-                <vis    name="LumiSpecCAL_FiberHolderVis"       ref="AnlBlue"   alpha="1.0"     visible="true"/>
-        </display>
-
         <detectors>
                 <detector id="LumiSpecCAL_ID" name="LumiSpecCAL" type="EcalLumiSpecWScFi" vis="FFPreVis" readout="EcalLumiSpecHits" sizeXY="LumiSpecCAL_DXY" sizeZ="LumiSpecCAL_DZ" >
                         <module sizex="LumiSpecCAL_ModSizeX" sizey="LumiSpecCAL_ModSizeY" sizez="LumiSpecCAL_ModSizeZ" nmod_perlayer="LumiSpecCAL_XYLayers" nlayer="LumiSpecCAL_ZLayers" material="WPowderplusEpoxy" vis="LumiSpecCAL_ModuleVis">
