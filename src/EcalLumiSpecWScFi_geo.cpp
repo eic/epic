@@ -39,7 +39,7 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
 
   // Detector assembly
   Assembly      assembly( det_name );
-  assembly.setVisAttributes( description.invisible() );
+  assembly.setVisAttributes( description.visAttributes(x_det.attr<std::string>(_Unicode(vis))) );
 
   double detSizeXY      = getAttrOrDefault( x_det, _Unicode(sizeXY), 180*mm);
   double detSizeZ       = getAttrOrDefault( x_det, _Unicode(sizeZ), 180*mm);
@@ -59,6 +59,7 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
 
   Box     layerBox ( detSizeXY/2, modSize.y()/2, detSizeXY/2 );
   Volume layerVol( "layer", layerBox, Air);
+  layerVol.setVisAttributes( description.visAttributes(x_mod.attr<std::string>(_Unicode(vis))) );
   //Fill layer with modules
   for(int mod_id=0; mod_id< nmod_perlayer; mod_id++){
     
@@ -74,6 +75,7 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
 
   Box     sectorBox( detSizeXY/2, detSizeXY/2, detSizeZ/2 );
   Volume sectorVol( det_name+"_sector", sectorBox, Air);
+  sectorVol.setVisAttributes( description.visAttributes(x_mod.attr<std::string>(_Unicode(vis))) );
   //Fill sector with layers
   for(int layer_id=0; layer_id< nlayer; layer_id++){
     

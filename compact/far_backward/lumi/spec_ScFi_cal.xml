@@ -4,7 +4,7 @@
 <lccdd>
 
         <detectors>
-                <detector id="LumiSpecCAL_ID" name="LumiSpecCAL" type="EcalLumiSpecWScFi" vis="FFPreVis" readout="EcalLumiSpecHits" sizeXY="LumiSpecCAL_DXY" sizeZ="LumiSpecCAL_DZ" nmod_perlayer="LumiSpecCAL_XYLayers" nlayer="LumiSpecCAL_ZLayers" >                                               
+                <detector id="LumiSpecCAL_ID" name="LumiSpecCAL" type="EcalLumiSpecWScFi" vis="FFPreVis" readout="EcalLumiSpecHits" sizeXY="LumiSpecCAL_DXY" sizeZ="LumiSpecCAL_DZ" nmod_perlayer="LumiSpecCAL_XYLayers" nlayer="LumiSpecCAL_ZLayers" vis="InvisibleWithDaughters">                                               
                         <position x="0.0*cm"  y="0.0*cm"  z="0.0*cm"/>
                         <rotation x="0.0*rad" y="0.0*rad" z="0.0*rad"/>
                         <module sizex="LumiSpecCAL_ModSizeX" sizey="LumiSpecCAL_ModSizeY" sizez="LumiSpecCAL_ModSizeZ"  material="WPowderplusEpoxy" vis="LumiSpecCAL_ModuleVis">

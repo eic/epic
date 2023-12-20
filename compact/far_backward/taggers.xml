@@ -60,6 +60,33 @@
 
     </detector>
 
+    <detector id="TaggerCalorimeter_ID" name="TaggerCalorimeter" type="EcalLumiSpecWScFi" vis="FFPreVis" readout="TaggerCalorimeterHits" sizeXY="LumiSpecCAL_DXY" sizeZ="LumiSpecCAL_DZ" nmod_perlayer="LumiSpecCAL_XYLayers" nlayer="LumiSpecCAL_ZLayers" >                                               
+        <position x="Dipole_Focus_X"  y="Dipole_Focus_Y"  z="Dipole_Focus_Z"/>
+        <rotation x="0.0*rad" y="Beam_Theta" z="0.0*rad"/>
+        <module sizex="LumiSpecCAL_ModSizeX" sizey="LumiSpecCAL_ModSizeY" sizez="LumiSpecCAL_ModSizeZ"  material="WPowderplusEpoxy" vis="LumiSpecCAL_ModuleVis">
+        <fiber
+          material="Polystyrene"
+          radius="LumiSpecCAL_FiberRadius"
+          spacex="LumiSpecCAL_FiberSpaceX"
+          spacey="LumiSpecCAL_FiberSpaceY"
+          vis="LumiSpecCAL_FiberVis"/>
+        <fiberholder material="BrassAlloy360" vis="LumiSpecCAL_FiberHolderVis"/>
+      </module>
+
+      <!--Tagger station 1 position-->
+      <sector id="1">
+        <position x="-Tagger1_Cal_X" y="0.0*cm" z="Tagger1_Cal_Z"/>
+        <rotation x="0.0*rad" y="Tagger1_Min_Theta" z="0.0*rad"/>
+      </sector>
+
+      <!--Tagger station 2 position-->
+      <sector id="2">
+        <position x="-Tagger2_Cal_X" y="0.0*cm" z="Tagger2_Cal_Z"/>
+        <rotation x="0.0*rad" y="-Tagger2_Min_Theta" z="0.0*rad"/>
+      </sector>
+
+    </detector>
+
   </detectors>
 
 
@@ -80,9 +107,9 @@
 
     <readout name="TaggerCalorimeterHits">
       <segmentation type="NoSegmentation"/>
-      <id>system:8,module:2,crystal:8,x:32:-16,y:-16</id>
+      <id>system:8,sector:4,orientation:2,layer:8,module:8,fiber_x:16,fiber_y:16</id>
     </readout>
-
+    
   </readouts>
 
 </lccdd>
