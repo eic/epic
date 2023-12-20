@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: LGPL-3.0-or-later
-// Copyright (C) 2023 Aranya Giri
+// Copyright (C) 2023 Aranya Giri, Simon Gardner
 
 /* Date : 12/12/2023
 W Scifi (EM Calorimeter) Pair Spectrometer */
@@ -42,7 +42,7 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
   int nmod_perlayer     = getAttrOrDefault( x_mod, _Unicode(nmod_perlayer), 3);
   int nlayer            = getAttrOrDefault( x_mod, _Unicode(nlayer), 20);
 
-  auto [modVol, modSize]= build_specScFiCAL_module(description, x_mod, sens);
+  auto [modVol, modSize] = build_specScFiCAL_module(description, x_mod, sens);
 
   // No. of module/layer, # layer in CAL
   //int nmod_perlayer   = int( detSizeXY / modSize.x() );

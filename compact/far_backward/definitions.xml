@@ -279,7 +279,17 @@
     <constant name="LumiSpecCAL_DXY"              value="LumiSpecCAL_XYLayers*LumiSpecCAL_SiPMNumX*LumiSpecCAL_SiPMSizeXY"/>
     <constant name="LumiSpecCAL_Z"                value="-8*m + LumiSweepMag_Z - LumiSpecCAL_DZ/2.0"/>
     <constant name="LumiSpecCAL_FiveSigma"        value="LumiBeamDiv_pref * fabs(LumiSpecCAL_Z)"/>
-    <constant name="LumiSpecCAL_Y"             value="LumiSpecCAL_FiveSigma + LumiSpecCAL_DXY/2.0"/>
+    <constant name="LumiSpecCAL_Y"                value="LumiSpecCAL_FiveSigma + LumiSpecCAL_DXY/2.0"/>
+    <comment>
+    Note : Values/Notations for making modules pointing along z-axis.
+    Rotation of modules wrt XY axis after construction.          
+    <comment/>
+    <constant name="LumiSpecCAL_ModSizeX"         value="LumiSpecCAL_SiPMNumX*LumiSpecCAL_SiPMSizeXY"/>
+    <constant name="LumiSpecCAL_ModSizeY"         value="LumiSpecCAL_SiPMNumY*LumiSpecCAL_SiPMSizeXY"/>
+    <constant name="LumiSpecCAL_ModSizeZ"         value="LumiSpecCAL_DXY"/>
+    <constant name="LumiSpecCAL_FiberRadius"      value="0.25*mm"/>
+    <constant name="LumiSpecCAL_FiberSpaceX"      value="0.25*mm"/>
+    <constant name="LumiSpecCAL_FiberSpaceY"      value="0.25*mm"/>
 
     <!-- Lumi spectrometer trackers -->
     <constant name="LumiSpecTracker_pixelSize"  value="0.1*mm"/>
