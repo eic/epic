@@ -27,6 +27,8 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
   string        det_name        =       x_det.nameStr();
   int           det_ID          =       x_det.id();
 
+  Material Air     = description.material("Air");
+
   // Create main detector element to be returned at the end
   DetElement    det( det_name, det_ID );
 
@@ -37,10 +39,10 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
   Assembly      assembly( det_name );
   assembly.setVisAttributes( description.invisible() );
 
-  double detSizeXY      = getAttrOrDefault( x_mod, _Unicode(sizeXY), 180*mm);
-  double detSizeZ       = getAttrOrDefault( x_mod, _Unicode(sizeZ), 180*mm);
-  int nmod_perlayer     = getAttrOrDefault( x_mod, _Unicode(nmod_perlayer), 3);
-  int nlayer            = getAttrOrDefault( x_mod, _Unicode(nlayer), 20);
+  double detSizeXY      = getAttrOrDefault( x_det, _Unicode(sizeXY), 180*mm);
+  double detSizeZ       = getAttrOrDefault( x_det, _Unicode(sizeZ), 180*mm);
+  int nmod_perlayer     = getAttrOrDefault( x_det, _Unicode(nmod_perlayer), 3);
+  int nlayer            = getAttrOrDefault( x_det, _Unicode(nlayer), 20);
 
   auto [modVol, modSize] = build_specScFiCAL_module(description, x_mod, sens);
 
@@ -52,50 +54,57 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
   double mod_pos0       = -(detSizeXY/2.0) + (modSize.x()/2.0);
   double layer_pos0     = -(detSizeZ/2.0) + (modSize.y()/2.0);
 
+  Box     layerBox ( detSizeXY/2, modSize.y()/2, detSizeXY/2 );
+  Volume layerVol( "layer", layerBox, Air);
+  //Fill layer with modules
+  for(int mod_id=0; mod_id< nmod_perlayer; mod_id++){
+    
+    //Build // to z-axis, then rotate
+    double        mod_pos_z       = 0.0*cm;
+    double        mod_pos_y       = 0.0*cm;
+    double        mod_pos_x       = mod_id*modSize.x() + mod_pos0;
+    
+    PlacedVolume modPV = layerVol.placeVolume( modVol, Position( mod_pos_x, mod_pos_y, mod_pos_z ) );	
+    modPV.addPhysVolID( "module", mod_id );
+  }//imod-loop close
+
+
+  Box     sectorBox( detSizeXY/2, detSizeXY/2, detSizeZ/2 );
+  Volume sectorVol( det_name+"_sector", sectorBox, Air);
+  //Fill sector with layers
+  for(int layer_id=0; layer_id< nlayer; layer_id++){
+    
+    double        lay_pos_z       = -layer_id*modSize.y() - layer_pos0;
+    double        lay_pos_y       = 0.0*cm;
+    double        lay_pos_x       = 0.0*cm;
+    
+    RotationZYX lay_rot = RotationZYX( 0, 0, -90.0*degree);
+    if(layer_id%2==0) lay_rot*=RotationY(-90.0*degree);
+      
+    //                                   PlacedVolume modPV = assembly.placeVolume(
+    //                                                   modVol, Transform3D( RotationZYX(x_rot.z(), x_rot.y(), -90.0*degree), Position( mod_pos_x, mod_pos_y, mod_pos_z ) ) );
+       
+    PlacedVolume layPV = sectorVol.placeVolume( layerVol, Transform3D( lay_rot, Position( lay_pos_x, lay_pos_y, lay_pos_z ) ) );
+    layPV.addPhysVolID( "layer", layer_id );
+    
+  }//layer_id-loop close
+
   // loop over sectors(top, bottom)
   for( xml_coll_t si(x_det, _Unicode(sector)); si; si++) {
 
-          xml_comp_t x_sector( si );
-          int sector_id = x_sector.id();
-          int mod_id = 0;
-          xml_comp_t x_pos = x_sector.position();
-          xml_comp_t x_rot = x_sector.rotation();
-
-          for(int ilay=0; ilay< nlayer; ilay++){
-                 //Modules rotation A/Odd-Even
-                  if((ilay%2)==0){ // 0 : || to x-axis
-                          for(int imod=0; imod< nmod_perlayer; imod++){
-
-                                  //Build // to z-axis, then rotate
-                                  double        mod_pos_z       = ( x_pos.z() - 0.0*cm ) - layer_pos0 - ilay*modSize.y();
-                                  double        mod_pos_y       = x_pos.y() + mod_pos0 + imod*modSize.x();
-                                  double        mod_pos_x       = x_pos.x() + 0.0*cm;
-
-                                  PlacedVolume modPV = assembly.placeVolume(
-                                                  modVol, Transform3D( RotationZYX( x_rot.z(), -90.0*degree, -90.0*degree), Position( mod_pos_x, mod_pos_y, mod_pos_z ) ) );
-
-                                  modPV.addPhysVolID( "sector", sector_id ).addPhysVolID( "module", mod_id);
-                                  mod_id++;
-                          }//imod-loop close
-                  }//if-close
-                  else{// 1 : || to y-axis
-                          for(int imod=0; imod< nmod_perlayer; imod++){
-
-                                  double        mod_pos_z       = ( x_pos.z() - 0.0*cm ) - layer_pos0 - ilay*modSize.y();
-                                  double        mod_pos_x       = x_pos.x() + mod_pos0 + imod*modSize.x();
-                                  double        mod_pos_y       = x_pos.y() + 0.0*mm;
-
-                                  PlacedVolume modPV = assembly.placeVolume(
-                                                  modVol, Transform3D( RotationZYX(x_rot.z(), x_rot.y(), -90.0*degree), Position( mod_pos_x, mod_pos_y, mod_pos_z ) ) );
-
-                                  modPV.addPhysVolID( "sector", sector_id ).addPhysVolID( "module", mod_id);
-                                  mod_id++;
-                          }//imod-loop close
-                  }//else-close
-
-          }//ilay-loop close
+    xml_comp_t x_sector( si );
+    int sector_id = x_sector.id();
+    xml_comp_t x_pos = x_sector.position();
+    xml_comp_t x_rot = x_sector.rotation();
+      
+    double        sec_pos_z       = x_pos.z();
+    double        sec_pos_y       = x_pos.y();
+    double        sec_pos_x       = x_pos.x();
+           
+    PlacedVolume secPV = assembly.placeVolume( sectorVol, Transform3D( RotationZYX(x_rot.z(), x_rot.y(), x_rot.x() ), Position( sec_pos_x, sec_pos_y, sec_pos_z ) ) );	  
+    secPV.addPhysVolID( "sector", sector_id );
   }// sectors
-
+  
   // Place assembly into mother volume.  Assembly is centered at origin
   PlacedVolume detPV = motherVol.placeVolume( assembly, Position(0.0, 0.0, 0.0) );
   detPV.addPhysVolID("system", det_ID);
