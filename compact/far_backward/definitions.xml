@@ -224,6 +224,7 @@
     <constant name="Tagger2_Max_Theta"    value="Tagger1_Min_Theta+0.000*rad"/>
     <constant name="Tagger2_Min_Offset"   value="Q3eR_InnerRadius+Backwards_Box_Wall"/>
 
+
     <!--  -->
     <!-- Luminosity System -->
     <!--  -->
@@ -275,11 +276,23 @@
     <constant name="LumiSpecCAL_SiPMNumY"         value="3"/>
     <constant name="LumiSpecCAL_ZLayers"          value="20"/>
     <constant name="LumiSpecCAL_XYLayers"         value="3"/>
-    <constant name="LumiSpecCAL_DZ"               value="LumiSpecCAL_ZLayers*LumiSpecCAL_SiPMNumY*LumiSpecCAL_SiPMSizeXY"/>
-    <constant name="LumiSpecCAL_DXY"              value="LumiSpecCAL_XYLayers*LumiSpecCAL_SiPMNumX*LumiSpecCAL_SiPMSizeXY"/>
+    <comment>
+      Note : Values/Notations for making modules pointing along z-axis.
+      Rotation of modules wrt XY axis after construction.          
+    </comment>
+    <constant name="LumiSpecCAL_ModSizeX"         value="LumiSpecCAL_SiPMNumX*LumiSpecCAL_SiPMSizeXY"/>
+    <constant name="LumiSpecCAL_ModSizeY"         value="LumiSpecCAL_SiPMNumY*LumiSpecCAL_SiPMSizeXY"/>
+    <constant name="LumiSpecCAL_DZ"               value="LumiSpecCAL_ZLayers*LumiSpecCAL_ModSizeY"/>
+    <constant name="LumiSpecCAL_DXY"              value="LumiSpecCAL_XYLayers*LumiSpecCAL_ModSizeX"/>
+    <constant name="LumiSpecCAL_ModSizeZ"         value="LumiSpecCAL_DXY"/> <!-- fibre length -->
+
     <constant name="LumiSpecCAL_Z"                value="-8*m + LumiSweepMag_Z - LumiSpecCAL_DZ/2.0"/>
     <constant name="LumiSpecCAL_FiveSigma"        value="LumiBeamDiv_pref * fabs(LumiSpecCAL_Z)"/>
-    <constant name="LumiSpecCAL_Y"             value="LumiSpecCAL_FiveSigma + LumiSpecCAL_DXY/2.0"/>
+    <constant name="LumiSpecCAL_Y"                value="LumiSpecCAL_FiveSigma + LumiSpecCAL_DXY/2.0"/>
+   
+    <constant name="LumiSpecCAL_FiberRadius"      value="0.25*mm"/>
+    <constant name="LumiSpecCAL_FiberSpaceX"      value="0.25*mm"/>
+    <constant name="LumiSpecCAL_FiberSpaceY"      value="0.25*mm"/>
 
     <!-- Lumi spectrometer trackers -->
     <constant name="LumiSpecTracker_pixelSize"  value="0.1*mm"/>
@@ -296,5 +309,16 @@
     <constant name="LumiDirect_Z"         value="LumiSpecCAL_Z - 1*m"/>
     <constant name="LumiDirect_XY"        value="0.2*m"/>
     <constant name="LumiDirect_DZ"        value="0.2*m"/>
+
+    <comment> Tagger calorimeter </comment>
+    <constant name="Tagger1_Cal_Gap"      value="30*cm"/>
+    <constant name="Tagger1_Cal_X"        value="Tagger1_Min_Offset+LumiSpecCAL_DXY/2"/>
+    <constant name="Tagger1_Cal_Z"        value="-Tagger1_Min_Offset/tan(Tagger1_Min_Theta-Beam_Theta)-Tagger1_Cal_Gap-Tagger1_Length"/>
+
+    <constant name="Tagger2_Cal_Gap"      value="30*cm"/>
+    <constant name="Tagger2_Cal_Z_Correction" value="235*cm"/>
+    <constant name="Tagger2_Cal_X_Correction" value="1*cm"/>
+    <constant name="Tagger2_Cal_X"        value="Tagger2_Min_Offset+LumiSpecCAL_DXY/2+Tagger2_Cal_X_Correction"/>
+    <constant name="Tagger2_Cal_Z"        value="-Tagger2_Min_Offset/tan(Tagger2_Min_Theta-Beam_Theta)-Tagger2_Cal_Gap-Tagger2_Length+Tagger2_Cal_Z_Correction"/>
 
   </define>
