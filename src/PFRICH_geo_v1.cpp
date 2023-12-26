@@ -372,14 +372,14 @@ static Ref_t createDetector(Detector& description, xml_h e, SensitiveDetector se
    // place mother volume (vessel)
  //  Volume       motherVol = description.pickMotherVolume(sdet);
  
-   // place mirror volume
-   PlacedVolume mirrorPV = volume.placeVolume(mirrorVol, Position(0, 0, 0));
-   DetElement   mirrorDE(sdet, "mirror_de", 0);
-   mirrorDE.setPlacement(mirrorPV);
-
-   SkinSurface mirrorSkin(description, mirrorDE, "mirror_optical_surface_cone", mirrorSurf, mirrorVol);
-   mirrorSkin.isValid();
-
+//   // place mirror volume
+//   PlacedVolume mirrorPV = volume.placeVolume(mirrorVol, Position(0, 0, 0));
+//   DetElement   mirrorDE(sdet, "mirror_de", 0);
+//   mirrorDE.setPlacement(mirrorPV);
+//
+//   SkinSurface mirrorSkin(description, mirrorDE, "mirror_optical_surface_cone", mirrorSurf, mirrorVol);
+//   mirrorSkin.isValid();
+//
    auto vesselPos = Position(0, 0, vesselZmin) - originFront;
  
  //  PlacedVolume vesselPV  = motherVol.placeVolume(vesselVol, vesselPos);
@@ -405,51 +405,7 @@ static Ref_t createDetector(Detector& description, xml_h e, SensitiveDetector se
  //  aerogelVol.setVisAttributes(aerogelVis);
  //  filterVol.setVisAttributes(filterVis);
  
- 
-   ///*--------------------------------------------------*/ 
-   ///*--------------------------------------------------*/ 
-   ///*--------------------------------------------------*/ 
-   /// Radiator
- 
-   // aerogel placement and surface properties
-   // TODO [low-priority]: define skin properties for aerogel and filter
-   // FIXME: radiatorPitch might not be working correctly (not yet used)
-   auto radiatorPos      = Position(0., 0., radiatorFrontplane - 0.5 * aerogelThickness) + originFront;
-   auto aerogelPlacement = Translation3D(radiatorPos.x(), radiatorPos.y(), radiatorPos.z()-43) * // re-center to originFront
-                           RotationY(radiatorPitch); // change polar angle to specified pitch
- //  auto       aerogelPV = gasvolVol.placeVolume(aerogelVol, aerogelPlacement);
- 
-   auto       aerogelPV = volume.placeVolume(aerogelVol, aerogelPlacement);
- 
-   DetElement aerogelDE(sdet, "aerogel_de", 0);
-   aerogelDE.setPlacement(aerogelPV);
-   // SkinSurface aerogelSkin(desc, aerogelDE, "mirror_optical_surface", aerogelSurf, aerogelVol);
-   // aerogelSkin.isValid();
- 
-   // filter placement and surface properties
-   PlacedVolume filterPV;
-   if (!debug_optics) {
-     auto filterPlacement =
-         Translation3D(0., 0., -airgapThickness) *                          // add an airgap
-         Translation3D(radiatorPos.x(), radiatorPos.y(), radiatorPos.z()-39) * // re-center to originFront
-         RotationY(radiatorPitch) *                                         // change polar angle
-         Translation3D(0., 0., -(aerogelThickness + filterThickness) / 2.); // move to aerogel backplane
- //    filterPV = gasvolVol.placeVolume(filterVol, filterPlacement);
-     filterPV = volume.placeVolume(filterVol, filterPlacement);
- 
- //    DetElement filterDE(sdet, "filter_de", 0);
- //    filterDE.setPlacement(filterPV);
- //
- //    // SkinSurface filterSkin(desc, filterDE, "mirror_optical_surface", filterSurf, filterVol);
- //    // filterSkin.isValid();
-   };
- 
-   // radiator z-positions (w.r.t. IP)
-   double aerogelZpos = vesselPos.z() + aerogelPV.position().z();
-   double filterZpos  = vesselPos.z() + filterPV.position().z();
-   description.add(Constant("PFRICH_aerogel_zpos", std::to_string(aerogelZpos)));
-   description.add(Constant("PFRICH_filter_zpos", std::to_string(filterZpos)));
- 
+
    // radiator material names
    description.add(Constant("PFRICH_aerogel_material", aerogelMat.ptr()->GetName(), "string"));
    description.add(Constant("PFRICH_filter_material", filterMat.ptr()->GetName(), "string"));
@@ -516,6 +472,27 @@ static Ref_t createDetector(Detector& description, xml_h e, SensitiveDetector se
    Volume sensorVol(detName + "_sensor", sensorSolid, sensorMat);
    sensorVol.setVisAttributes(sensorVis);
  
+   // -- Mirrors ---------------------------------------------------------------------------------
+   //
+   // Some "standard" value applied to all mirrors;
+   double _MIRROR_REFLECTIVITY_ = 0.90;
+   
+   // At the downstream (sensor plane) location; upstream radii are calculated automatically;
+   double _CONICAL_MIRROR_INNER_RADIUS_ = 12.0;
+   double _CONICAL_MIRROR_OUTER_RADIUS_ = 57.0;
+
+   double _INNER_MIRROR_THICKNESS_ = 0.1;  //0.29*_INCH
+   double _OUTER_MIRROR_THICKNESS_ = 0.2;  //0.54*_INCH
+
+//   #ifdef _PLANACON_GEOMETRY_
+//   #define _CONICAL_MIRROR_OUTER_RADIUS_     (520.0*mm)
+//   #else
+//   #define _CONICAL_MIRROR_OUTER_RADIUS_     (570.0*mm)
+//   #endif
+
+
+
+
 
   ///*--------------------------------------------------*/ 
   ///*--------------------------------------------------*/ 
@@ -527,6 +504,9 @@ static Ref_t createDetector(Detector& description, xml_h e, SensitiveDetector se
   double _HRPPD_WINDOW_THICKNESS_ = 0.38;         // cm
   double _HRPPD_CONTAINER_VOLUME_HEIGHT_ = 3.2;   // cm
   double _HRPPD_INSTALLATION_GAP_ = 2.5;          // cm
+
+  double _HRPPD_SUPPORT_GRID_BAR_HEIGHT_ = 0.2;
+  double _HRPPD_SUPPORT_GRID_BAR_WIDTH_  = _HRPPD_INSTALLATION_GAP_ + 2*0.3;
 
   double _HRPPD_TILE_SIZE_ = 12.0;                // cm
   double _HRPPD_OPEN_AREA_SIZE_ = 11.4;           // cm
@@ -559,6 +539,7 @@ static Ref_t createDetector(Detector& description, xml_h e, SensitiveDetector se
 
 
 
+  double _ACRYLIC_THICKNESS_ = 0.3;
 
   ///*--------------------------------------------------*/ 
   // HRPPD
@@ -906,9 +887,518 @@ static Ref_t createDetector(Detector& description, xml_h e, SensitiveDetector se
  
  ///*--------------------------------------------------*/ 
  ///*--------------------------------------------------*/ 
- 
+ /// Aerogel 
+
+  float _AEROGEL_INNER_WALL_THICKNESS_ = 0.01;
+
+  float _VESSEL_INNER_WALL_THICKNESS_ = 0.29 * 2.54;
+
+  float _VESSEL_OUTER_WALL_THICKNESS_ = 0.54 * 2.54;;
+
+  float _VESSEL_OUTER_RADIUS_ = 63.8;
+
+  double _VESSEL_FRONT_SIDE_THICKNESS_ = 0.29*2.54;
+
+  double m_gas_volume_length = _FIDUCIAL_VOLUME_LENGTH_ - _VESSEL_FRONT_SIDE_THICKNESS_ - _SENSOR_AREA_LENGTH_;
+  double m_gas_volume_offset = -(_SENSOR_AREA_LENGTH_ - _VESSEL_FRONT_SIDE_THICKNESS_)/2;
+  double m_gas_volume_radius = _VESSEL_OUTER_RADIUS_ - _VESSEL_OUTER_WALL_THICKNESS_;
+
+  float _FLANGE_CLEARANCE_ = 0.5;
+  float _BUILDING_BLOCK_CLEARANCE_ = 0.1;
+
+  const int _AEROGEL_BAND_COUNT_ = 3;
+
+  float _AEROGEL_SEPARATOR_WALL_THICKNESS_ = 0.05;
+
+  float _AEROGEL_OUTER_WALL_THICKNESS_ = 0.1;
+
+  float m_r0min = _FLANGE_EPIPE_DIAMETER_/2 + _FLANGE_CLEARANCE_ + _VESSEL_INNER_WALL_THICKNESS_ + _BUILDING_BLOCK_CLEARANCE_;
+  float m_r0max = m_gas_volume_radius - _BUILDING_BLOCK_CLEARANCE_;
+
+  const unsigned adim[_AEROGEL_BAND_COUNT_] = {9, 14, 20};
+  double rheight = (m_r0max - m_r0min - (_AEROGEL_BAND_COUNT_-1)*_AEROGEL_SEPARATOR_WALL_THICKNESS_ - 
+		    _AEROGEL_INNER_WALL_THICKNESS_ - _AEROGEL_OUTER_WALL_THICKNESS_) / _AEROGEL_BAND_COUNT_;
+
+  double agthick = 2.5;               // cm
+
+  double m_gzOffset = m_gas_volume_length/2 + _BUILDING_BLOCK_CLEARANCE_ + agthick/2;
+
+
    cout << "aaaaaaaaaaaaaaaaaaaaaaaa " << "    " << vesselRmax0 << endl;
  
+   string aerogel_name = "a1040";
+
+
+//  m_gas_tube = G4TubsDodecagonWrapper("GasVolume", 0.0, m_gas_volume_radius, m_gas_volume_length);
+
+
+//  auto *gas_shape = new G4SubtractionSolid("GasVolume", m_gas_tube, 
+//					   // Yes, account for vessel inner wall thickness;
+//					   FlangeCut(m_gas_volume_length + 1*mm, _FLANGE_CLEARANCE_),
+//					   0, G4ThreeVector(0.0, 0.0, 0.0));
+
+//  auto m_gas_volume_log = new G4LogicalVolume(gas_shape, _GAS_RADIATOR_,  "GasVolume", 0, 0, 0);
+
+//   Tube gasshape(0.0, m_gas_volume_radius, m_gas_volume_length/2, 0*degree, 360*degree);
+//   Volume GasVol(detName + "_gas_V", gasshape, mirrorMat);
+
+
+   // First aerogel sectors and azimuthal spacers;
+   // CherenkovRadiator *radiator = 0;
+      
+   for(unsigned ir=0; ir<_AEROGEL_BAND_COUNT_; ir++) {
+	int counter = ir ? -1 : 0;
+	double apitch = 360*degree / adim[ir];
+	double aerogel_r0 = m_r0min + _AEROGEL_INNER_WALL_THICKNESS_ + ir*(_AEROGEL_SEPARATOR_WALL_THICKNESS_ + rheight);
+	double aerogel_r1 = aerogel_r0 + rheight; 
+    double rm = (aerogel_r0+aerogel_r1)/2;
+	
+
+    cout << aerogel_r0 << "    " << aerogel_r1 << endl;
+
+
+
+	// Calculate angular space occupied by the spacers and by the tiles; no gas gaps for now;
+	// assume that a wegde shape is good enough (GEANT visualization does not like boolean objects), 
+	// rather than creating constant thicjkess azimuthal spacers; just assume that spacer thickness is 
+	// _AEROGEL_FRAME_WALL_THICKNESS_ at r=rm;
+	double l0 = 2*M_PI*rm/adim[ir]; 
+    double l1 = _AEROGEL_SEPARATOR_WALL_THICKNESS_;
+    double lsum = l0 + l1;
+	
+	// FIXME: names overlap in several places!;
+	double wd0 = (l0/lsum)*(360*degree / adim[ir]); 
+    double wd1 = (l1/lsum)*(360*degree / adim[ir]);
+	TString ag_name = "Tmp", sp_name = "Tmp"; 
+
+
+    cout << m_gzOffset << endl;
+
+	if (ir) ag_name.Form("%s-%d-00", aerogel_name.c_str(), ir);
+	if (ir) sp_name.Form("A-Spacer--%d-00",    ir);
+
+    // Box cplate_solid(_ASIC_SIZE_XY_/2, _ASIC_SIZE_XY_/2, _COLD_PLATE_THICKNESS_/2);
+
+    Tube agtube(aerogel_r0, aerogel_r1, agthick/2, 0*degree, wd0);
+	Tube sptube(aerogel_r0, aerogel_r1, agthick/2,      wd0, wd0 + wd1);
+
+
+//	if (ir) sp_name.Form("A-Spacer--%d-00",                      ir);
+
+
+//	G4Tubs *ag_tube  = new G4Tubs(ag_name.Data(), r0, r1, agthick/2, 0*degree, wd0);
+//	G4Tubs *sp_tube  = new G4Tubs(sp_name.Data(), r0, r1, agthick/2,      wd0, wd1);
+//	
+
+//  m_gas_volume_log = new G4LogicalVolume(gas_shape, _GAS_RADIATOR_,  "GasVolume", 0, 0, 0);
+//  m_gas_phys = new G4PVPlacement(0, G4ThreeVector(0.0, 0.0, m_gas_volume_offset), m_gas_volume_log, "GasVolume", m_fiducial_volume_log, false, 0);
+  // Gas container volume;
+
+
+ //   double m_gas_tube = G4TubsDodecagonWrapper("GasVolume", 0.0, m_gas_volume_radius, m_gas_volume_length);
+
+
+	for(unsigned ia=0; ia<adim[ir]; ia++) {
+
+      Rotation3D r_aerogel_Z(RotationZYX(ia*apitch, 0.0, 0.0));
+      Rotation3D r_aerogel_Zinv(RotationZYX(-1.*ia*apitch, 0.0, 0.0));
+//      Rotation3D r_aerogel_Zinv(RotationZYX(3.49, 0.0, 0.0));
+
+
+      cout << ia << "    " << -1.*ia*apitch << endl;
+
+
+//	  G4RotationMatrix *rZ    = new G4RotationMatrix(CLHEP::HepRotationZ(    ia*apitch));
+//	  G4RotationMatrix *rZinv = new G4RotationMatrix(CLHEP::HepRotationZ(-1.*ia*apitch));
+
+
+//      new G4PVPlacement(rZ, G4ThreeVector(0.0, 0.0, m_gzOffset), sp_log, sp_name.Data(),  m_gas_volume_log, false, counter);
+
+      // Transform3D(rY, Position(xOffset, yOffset, accu + _COLD_PLATE_THICKNESS_/2))
+
+//      auto aerogelTilePlacement = Transform3D(r_aerogel_Z, Position(0.0, 0.0, -m_gzOffset));
+//      auto aerogelTilePV = volume.placeVolume(agtubeVol, aerogelTilePlacement);
+
+//	  G4LogicalVolume *ag_log = 0, *sp_log = 0;
+	  if (ir) {
+//	    ag_log = new G4LogicalVolume(ag_tube,                   aerogel, ag_name.Data(), 0, 0, 0);
+//	    sp_log = new G4LogicalVolume(sp_tube, _AEROGEL_SPACER_MATERIAL_, sp_name.Data(), 0, 0, 0);
+
+
+        cout << "Angle check:   " << ir << "    " << wd0 << "    " << wd1 << endl;
+
+	    ag_name.Form("%s-%d-%02d", "aerogel", ir, ia);
+
+        Volume agtubeVol(ag_name.Data(), agtube, gasvolMat);
+        auto aerogelTilePlacement = Transform3D(r_aerogel_Z, Position(0.0, 0.0, -m_gzOffset));
+        auto aerogelTilePV = volume.placeVolume(agtubeVol, aerogelTilePlacement);
+
+        Volume sptubeVol(detName + "_sptube", sptube, mirrorMat);
+        auto sptubePlacement = Transform3D(r_aerogel_Z, Position(0.0, 0.0, -m_gzOffset));
+        auto sptubePV = volume.placeVolume(sptubeVol, sptubePlacement);
+
+	    counter++;
+
+//	    cout << "111111111111111" << endl;
+
+	  } else {
+
+ 	     ag_name.Form("%s-%d-%02d", "aerogel_inner", ir, ia);
+
+         Tube agtube_inner(aerogel_r0, aerogel_r1, agthick/2, 0*degree + ia*apitch, wd0 + ia*apitch);
+         SubtractionSolid agsub (agtube_inner, flange_final_shape);
+         Volume agsubtubeVol(ag_name.Data(), agsub, gasvolMat);
+         auto aerogelTilePlacement = Transform3D(RotationZYX(0.0, 0.0, 0.0), Position(0.0, 0.0, -m_gzOffset));
+         auto agsubTilePV = volume.placeVolume(agsubtubeVol, aerogelTilePlacement);
+
+
+ 	     sp_name.Form("%s-%d-%02d", "sp_inner", ir, ia);
+         Tube sptube_inner(aerogel_r0, aerogel_r1, agthick/2, wd0 + ia*apitch, wd0+wd1 + ia*apitch);
+
+         SubtractionSolid spsub (sptube_inner, flange_final_shape);
+         Volume spsubtubeVol(sp_name.Data(), spsub, mirrorMat);
+         auto spTilePlacement = Transform3D(RotationZYX(0.0, 0.0, 0.0), Position(0.0, 0.0, -m_gzOffset));
+         auto spsubTilePV = volume.placeVolume(spsubtubeVol, spTilePlacement);
+
+
+
+
+
+//	    auto ag_shape = new G4SubtractionSolid(ag_name.Data(), ag_tube, flange, 
+//						   rZinv, G4ThreeVector(0.0, 0.0, 0.0));
+//	    ag_log = new G4LogicalVolume(ag_shape, aerogel, ag_name.Data(),   0, 0, 0);
+	    
+
+//	    ag_name.Form("%s-%d-%02d", aerogel->GetName().c_str(), ir, ia);
+//	    auto ag_shape = new G4SubtractionSolid(ag_name.Data(), ag_tube, flange, 
+//						   rZinv, G4ThreeVector(0.0, 0.0, 0.0));
+//	    ag_log = new G4LogicalVolume(ag_shape, aerogel, ag_name.Data(),   0, 0, 0);
+
+
+//	    cout << "22222" << endl;
+
+
+	    
+	    sp_name.Form("A-Spacer--%d-%02d",                      ir, ia);
+//	    auto sp_shape = new G4SubtractionSolid(sp_name.Data(), sp_tube, flange, 
+//						   rZinv, G4ThreeVector(0.0, 0.0, 0.0));
+//	    sp_log = new G4LogicalVolume(sp_shape, _AEROGEL_SPACER_MATERIAL_, sp_name.Data(),   0, 0, 0);
+
+
+	  } //if
+
+
+//	  if (!ir && !ia) {
+//	    TVector3 nx(1*sign,0,0), ny(0,-1,0);
+//	    
+//	    auto surface = new FlatSurface(sign*(1/mm)*TVector3(0,0,_FIDUCIAL_VOLUME_OFFSET_ + 
+//								m_gas_volume_offset + m_gzOffset), nx, ny);
+//	    radiator = m_Geometry->AddFlatRadiator(cdet, aerogel->GetName(), CherenkovDetector::Upstream, 
+//						   0, ag_log, aerogel, surface, agthick/mm);
+//#ifdef _DISABLE_AEROGEL_PHOTONS_
+//	    radiator->DisableOpticalPhotonGeneration();
+//#endif
+//	  }
+//	  else
+//	    // This of course assumes that optical surfaces are the same (no relative tilts between bands, etc);
+//	    m_Geometry->AddRadiatorLogicalVolume(radiator, ag_log);
+//	  
+//#if 1//_MBUDGET_
+//	  new G4PVPlacement(rZ, G4ThreeVector(0.0, 0.0, m_gzOffset), ag_log, ag_name.Data(), 
+//			    m_gas_volume_log, false, counter);
+//#endif
+//#if 1//_MBUDGET_
+//	  new G4PVPlacement(rZ, G4ThreeVector(0.0, 0.0, m_gzOffset), sp_log, sp_name.Data(), 
+//			    m_gas_volume_log, false, counter);
+//#endif
+	} //for ia
+  } // for ir
+
+
+  ////*--------------------------------------------------*/ 
+  // Placing radial spacer
+
+	double sp_accu = m_r0min;
+
+	for(unsigned ir=0; ir<_AEROGEL_BAND_COUNT_+1; ir++) {
+	  double thickness = ir ? (ir == _AEROGEL_BAND_COUNT_ ? _AEROGEL_OUTER_WALL_THICKNESS_ : 
+				   _AEROGEL_SEPARATOR_WALL_THICKNESS_) : _AEROGEL_INNER_WALL_THICKNESS_;
+	  double sp_r0 = sp_accu;
+      double sp_r1 = sp_r0 + thickness;
+	  
+	  TString sp_name = "Tmp"; if (ir) sp_name.Form("R-Spacer--%d-00", ir);
+
+//      cout << ir << "   " << sp_r0 << "   " << sp_r1 << endl;
+	  
+//	  G4Tubs *sp_tube  = new G4Tubs(sp_name.Data(), r0, r1, agthick/2, 0*degree, 360*degree);
+
+
+      Tube sptube(sp_r0, sp_r1, agthick/2,  0*degree, 360*degree);
+      Volume sptubeVol(detName + "_radial_sptube", sptube, sensorMat);
+      auto sptubePlacement = Transform3D(RotationZYX(0.0, 0.0, 0.0), Position(0.0, 0.0, -m_gzOffset));
+  
+	  if (ir) {
+
+//	    sp_log = new G4LogicalVolume(sp_tube, _AEROGEL_SPACER_MATERIAL_, sp_name.Data(), 0, 0, 0);
+
+          auto sptubePV = volume.placeVolume(sptubeVol, sptubePlacement);
+
+     }
+
+	  else {
+//	    sp_name.Form("R-Spacer--%d-00", ir);
+
+          SubtractionSolid spsub (sptube, flange_final_shape);
+          Volume agsubtubeVol(detName + "_radial_sptube_inner", spsub, gasvolMat);
+
+          auto sptubePV = volume.placeVolume(agsubtubeVol, sptubePlacement);
+
+//	    auto sp_shape = new G4SubtractionSolid(sp_name.Data(), sp_tube, flange, 0, G4ThreeVector(0.0, 0.0, 0.0));
+//	    sp_log = new G4LogicalVolume(sp_shape, _AEROGEL_SPACER_MATERIAL_, sp_name.Data(),   0, 0, 0);
+	  } //if
+	  
+//	  new G4PVPlacement(0, G4ThreeVector(0.0, 0.0, m_gzOffset), sp_log, sp_name.Data(), m_gas_volume_log, false, 0);
+	  
+	  sp_accu += thickness + rheight;
+	} //for ir
+
+
+
+///*--------------------------------------------------*/ 
+/// subtraction SoLID Test
+//    Tube agtube(2, 60, agthick/2, 150*degree, 210*degree);
+//
+//    SubtractionSolid agsub (agtube, flange_final_shape, Transform3D(RotationZYX(0.0, 0.0, 0.0), Position(0.0, 0.0, 0.0)));
+//
+//    Volume agsubtubeVol("tube", agsub, mirrorMat);
+//
+//    auto aerogelTilePlacement = Transform3D(RotationZYX(0.0, 0.0, 0.0), Position(0.0, 0.0, -30));
+//    auto agsubTilePV = volume.placeVolume(agsubtubeVol, aerogelTilePlacement);
+//
+///*--------------------------------------------------*/ 
+
+
+
+
+
+//   ///*--------------------------------------------------*/ 
+//   ///*--------------------------------------------------*/ 
+//   ///*--------------------------------------------------*/ 
+//   /// Simple Radiator and filter
+// 
+//   // aerogel placement and surface properties
+//   // TODO [low-priority]: define skin properties for aerogel and filter
+//   // FIXME: radiatorPitch might not be working correctly (not yet used)
+//   auto radiatorPos      = Position(0., 0., radiatorFrontplane - 0.5 * aerogelThickness) + originFront;
+//   auto aerogelPlacement = Translation3D(radiatorPos.x(), radiatorPos.y(), radiatorPos.z()-43) * // re-center to originFront
+//                           RotationY(radiatorPitch); // change polar angle to specified pitch
+// //  auto       aerogelPV = gasvolVol.placeVolume(aerogelVol, aerogelPlacement);
+// 
+//
+//
+//
+//   auto       aerogelPV = volume.placeVolume(aerogelVol, aerogelPlacement);
+//   DetElement aerogelDE(sdet, "aerogel_de", 0);
+//   aerogelDE.setPlacement(aerogelPV);
+//   // SkinSurface aerogelSkin(desc, aerogelDE, "mirror_optical_surface", aerogelSurf, aerogelVol);
+//   // aerogelSkin.isValid();
+
+//   // filter placement and surface properties
+//   PlacedVolume filterPV;
+//   if (!debug_optics) {
+//     auto filterPlacement =
+//         Translation3D(0., 0., -airgapThickness) *                          // add an airgap
+//         Translation3D(radiatorPos.x(), radiatorPos.y(), radiatorPos.z()-39) * // re-center to originFront
+//         RotationY(radiatorPitch) *                                         // change polar angle
+//         Translation3D(0., 0., -(aerogelThickness + filterThickness) / 2.); // move to aerogel backplane
+// //    filterPV = gasvolVol.placeVolume(filterVol, filterPlacement);
+//     filterPV = volume.placeVolume(filterVol, filterPlacement);
+// 
+// //    DetElement filterDE(sdet, "filter_de", 0);
+// //    filterDE.setPlacement(filterPV);
+// //
+// //    // SkinSurface filterSkin(desc, filterDE, "mirror_optical_surface", filterSurf, filterVol);
+// //    // filterSkin.isValid();
+//   };
+
+//   // radiator z-positions (w.r.t. IP)
+//   double aerogelZpos = vesselPos.z() + aerogelPV.position().z();
+//   double filterZpos  = vesselPos.z() + filterPV.position().z();
+//   description.add(Constant("PFRICH_aerogel_zpos", std::to_string(aerogelZpos)));
+//   description.add(Constant("PFRICH_filter_zpos", std::to_string(filterZpos)));
+ 
+
+
+
+/// /*--------------------------------------------------*/ 
+/// Mirror construction
+
+  const char *names[2] = {"InnerMirror", "OuterMirror"};
+//  double mlen = m_gas_volume_length/2 - m_gzOffset - _BUILDING_BLOCK_CLEARANCE_;
+  double mlen = m_gas_volume_length - _BUILDING_BLOCK_CLEARANCE_;
+
+// #ifdef _USE_PYRAMIDS_
+//   mlen -= _BUILDING_BLOCK_CLEARANCE_ + _PYRAMID_MIRROR_HEIGHT_;
+// #else
+//   mlen -= _BUILDING_BLOCK_CLEARANCE_ + _HRPPD_SUPPORT_GRID_BAR_HEIGHT_;
+// #endif
+
+   mlen -= _BUILDING_BLOCK_CLEARANCE_ + _HRPPD_SUPPORT_GRID_BAR_HEIGHT_;
+
+  double mpos = m_gzOffset + mlen/2;
+  double mirror_r0[2] = {m_r0min, m_r0max}; 
+  double mirror_r1[2] = {_CONICAL_MIRROR_INNER_RADIUS_, _CONICAL_MIRROR_OUTER_RADIUS_};
+  
+  for(unsigned im=0; im<2; im++) {
+
+//    //auto material = im ? m_HalfInch_CF_HoneyComb : m_QuarterInch_CF_HoneyComb;
+//    auto material = m_CarbonFiber;//QuarterInch_CF_HoneyComb;
+    double mirror_thickness = im ? _OUTER_MIRROR_THICKNESS_ : _INNER_MIRROR_THICKNESS_;
+
+    cout << im << "    " <<  mirror_thickness << endl;
+//    cout << mirror_thickness << end;
+
+
+
+
+	if (im) {
+
+        Cone mirror_outer_cone_shape(mlen/2.0, mirror_r0[im], mirror_r0[im] + mirror_thickness, mirror_r1[im], mirror_r1[im] + mirror_thickness);
+
+       Volume outer_mirrorVol(detName +"_outer_outer", mirror_outer_cone_shape, mirrorMat);
+ 
+//       auto mshape = im ? new G4Cons(names[im], r0[im], r0[im] + thickness, r1[im], r1[im] + thickness, 
+//				    mlen/2, 0*degree, 360*degree) :
+
+       PlacedVolume mirror_outerPV = volume.placeVolume(outer_mirrorVol, Position(0, 0, 0));
+//
+//
+    } else {
+
+       cout << "mirror check: " <<  mirror_r0[im] << "    " << mirror_r0[im] + mirror_thickness << "    " << mirror_r1[im] << "    " << mirror_r1[im] + mirror_thickness << "    "<< mlen/2<< endl;
+
+       cout << "distance check: " << m_gas_volume_length/2 << "    " << m_gzOffset << "   "
+            << _BUILDING_BLOCK_CLEARANCE_ << "    " << _BUILDING_BLOCK_CLEARANCE_ << "    " 
+            << _HRPPD_SUPPORT_GRID_BAR_HEIGHT_ << endl;
+
+// #ifdef _USE_PYRAMIDS_
+//   mlen -= _BUILDING_BLOCK_CLEARANCE_ + _PYRAMID_MIRROR_HEIGHT_;
+// #else
+//   mlen -= _BUILDING_BLOCK_CLEARANCE_ + _HRPPD_SUPPORT_GRID_BAR_HEIGHT_;
+// #endif
+
+//   mlen -= _BUILDING_BLOCK_CLEARANCE_ + _HRPPD_SUPPORT_GRID_BAR_HEIGHT_;
+
+
+//        Cone mirror_inner_cone_shape(mlen/2, mirror_r0[im], mirror_r0[im] + mirror_thickness, mirror_r1[im], mirror_r1[im] + mirror_thickness);
+        Cone mirror_inner_cone_shape(mlen/2., mirror_r0[im], mirror_r0[im] + mirror_thickness, mirror_r1[im], mirror_r1[im] + mirror_thickness);
+
+       SubtractionSolid mirror_inner_sub (mirror_inner_cone_shape, flange_final_shape);
+
+
+       Volume inner_mirrorVol(detName +"_inner_outer", mirror_inner_sub, mirrorMat);
+
+       PlacedVolume mirror_innerPV = volume.placeVolume(inner_mirrorVol, Position(0, 0, 0));
+
+    }
+
+
+//   PlacedVolume mirrorPV = volume.placeVolume(mirrorVol, Position(0, 0, 0));
+//   DetElement   mirrorDE(sdet, "mirror_de", 0);
+//   mirrorDE.setPlacement(mirrorPV);
+//
+//   SkinSurface mirrorSkin(description, mirrorDE, "mirror_optical_surface_cone", mirrorSurf, mirrorVol);
+//   mirrorSkin.isValid();
+
+
+
+
+
+
+    //auto mgroup = new CherenkovMirrorGroup();
+    
+//    {
+//      auto mshape = im ? new G4Cons(names[im], r0[im], r0[im] + thickness, r1[im], r1[im] + thickness, 
+//				    mlen/2, 0*degree, 360*degree) :
+//  	  new G4Cons(names[im], r0[im] - thickness, r0[im], r1[im] - thickness, r1[im], mlen/2, 0*degree, 360*degree);
+//      
+//      // There should be a cutaway on the inner mirror because of the beam pipe flange;
+//      G4LogicalVolume *solid_log = 0;
+//      if (im) {
+//	auto solid = new G4IntersectionSolid(names[im], mshape, m_gas_tube, 0, G4ThreeVector(0.0, 0.0, 0.0));
+//	solid_log = new G4LogicalVolume(solid, material, names[im], 0, 0, 0);
+//      } else {
+//	auto solid = new G4SubtractionSolid(names[im], mshape, flange,  0, G4ThreeVector(0.0, 0.0, 0.0));
+//	solid_log = new G4LogicalVolume(solid, material, names[im], 0, 0, 0);
+//      } //if
+ 
+
+
+     
+//      SetColor(solid_log, G4Colour(0, 0, 1, 0.5));
+//      
+//      // NB: geometry will be saved in [mm] throughout the code;
+//      auto mirror = 
+//	new ConicalMirror(mshape, material, sign*(1/mm)*TVector3(0.0, 0.0, _FIDUCIAL_VOLUME_OFFSET_ + 
+//								 m_gas_volume_offset + mpos),
+//			  sign*TVector3(0,0,1), r0[im]/mm, r1[im]/mm, mlen/mm);
+//      
+//      mirror->SetColor(G4Colour(0, 0, 1, 0.5));
+//      mirror->SetReflectivity(_MIRROR_REFLECTIVITY_, this);
+//      
+//      // Mimic mirror->PlaceWedgeCopies() call; FIXME: can be vastly simplified for this simple case;
+//      mirror->DefineLogicalVolume();
+//      G4VPhysicalVolume *phys = new G4PVPlacement(/*rZ*/0, G4ThreeVector(0,0,mpos), solid_log,
+//						  mirror->GetSolid()->GetName(), 
+//						  m_gas_phys->GetLogicalVolume(), false, 0);//m_Copies.size());
+//      mirror->AddCopy(mirror->CreateCopy(phys));
+//      {
+//	auto msurface = mirror->GetMirrorSurface();
+//	
+//	if (msurface)
+//	  // Do I really need them separately?;
+//	  //char buffer[128]; snprintf(buffer, 128-1, "SphericalMirror");//Surface");//%2d%02d", io, iq);
+//	  new G4LogicalBorderSurface(mirror->GetSolid()->GetName(), m_gas_phys, phys, msurface);
+//      } 
+//      
+//      auto mcopy = dynamic_cast<SurfaceCopy*>(mirror->GetCopy(0));//m_Copies[iq]);
+//      mcopy->m_Surface = dynamic_cast<ParametricSurface*>(mirror)->_Clone(0.0, TVector3(0,0,1));
+//      if (!im) dynamic_cast<ConicalSurface*>(mcopy->m_Surface)->SetConvex();
+//      
+//      {
+//	//mgroup->AddMirror(mirror);
+//	m_Geometry->AddMirrorLookupEntry(mirror->GetLogicalVolume(), mirror);
+//	
+//	auto surface = dynamic_cast<SurfaceCopy*>(mirror->GetCopy(0))->m_Surface;
+//	m_mboundaries[im] = new OpticalBoundary(m_Geometry->FindRadiator(m_gas_volume_log), surface, false);
+//	
+//	// Complete the radiator volume description; this is the rear side of the container gas volume;
+//	//+? det->GetRadiator("GasVolume")->m_Borders[0].second = surface;
+//      }
+//
+//    }
+
+  } //for im
+
+
+
+  ///*--------------------------------------------------*/ 
+  ///*--------------------------------------------------*/ 
+  // Acrylic filter
+
+
+  double acthick = _ACRYLIC_THICKNESS_;
+  // m_gzOffset += acthick/2;
+  
+  Tube ac_tube(m_r0min, m_r0max, acthick/2, 0*degree, 360*degree);
+  SubtractionSolid ac_shape(ac_tube, flange_final_shape);
+
+  Volume acVol(detName +"_ac", ac_shape, gasvolMat);
+
+
+  PlacedVolume ac_PV = volume.placeVolume(acVol, Position(0, 0, -21.4));
+
+
    return sdet;
 
 }
