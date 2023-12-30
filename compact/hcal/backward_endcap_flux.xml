@@ -15,6 +15,7 @@
     <constant name="FluxEndcapN_rmax" value="267.0*cm"/>
     <constant name="FluxEndcapN_rmin" value="14*cm"/>
     <constant name="FluxEndcapN_thickness" value="10*cm"/>
+    <constant name="FluxEndcapN_zpos" value="FluxEndcapN_collar_thickness-FluxEndcapN_thickness"/>
     <constant name="FluxEndcapN_zmin" value="BackwardServiceGap_zmax"/>
 
   </define>
@@ -25,13 +26,13 @@
     <documentation>
       ### Backwards (Negative Z) Endcap Hadronic Calorimeter
     </documentation>
-    <detector id="FluxEndcapN_ID" name="FluxEndcapN" type="epic_EndcapFluxReturnN" vis="HcalEndcapVis">
+    <detector id="FluxEndcapN_ID" name="FluxEndcapN" type="epic_EndcapFluxReturnN" vis="FluxEndcapNVis">
       <position x="0" y="0" z="0"/>
-      <dimensions zmin="FluxEndcapN_zmin" rmin="FluxEndcapN_rmin" rmax="FluxEndcapN_collar_rmax" />
+      <dimensions zmin="FluxEndcapN_zmin" rmin="FluxEndcapN_collar_rmin" rmax="FluxEndcapN_collar_rmax" />
 
-      <layer material="Steel235" rmin="FluxEndcapN_collar_rmin" rmax="FluxEndcapN_collar_rmax" thickness="FluxEndcapN_collar_thickness" vis="HcalEndcapLayerVis">
-      <layer material="Steel235" rmin="FluxEndcapN_oculus_rmin" rmax="FluxEndcapN_oculus_rmax" thickness="FluxEndcapN_oculus_thickness" vis="HcalEndcapLayerVis">
-      <layer material="Steel235" rmin="FluxEndcapN_rmin" rmax="FluxEndcapN_rmax" thickness="FluxEndcapN_thickness" vis="HcalEndcapLayerVis">
+      <layer id="1" name="Collar" material="Steel235" rmin="FluxEndcapN_collar_rmin" rmax="FluxEndcapN_collar_rmax" zpos="0*cm" thickness="FluxEndcapN_collar_thickness" vis="FluxEndcapNLayerVis"/>
+      <layer id="2" name="Oculus" material="Steel235" rmin="FluxEndcapN_oculus_rmin" rmax="FluxEndcapN_oculus_rmax" zpos="0*cm"  thickness="FluxEndcapN_oculus_thickness" vis="FluxEndcapNLayerVis"/>
+      <layer id="3" name="FluxReturn" material="Steel235" rmin="FluxEndcapN_rmin" rmax="FluxEndcapN_rmax" zpos="FluxEndcapN_zpos"  thickness="FluxEndcapN_thickness" vis="FluxEndcapNLayerVis"/>
 
     </detector>
   </detectors>
