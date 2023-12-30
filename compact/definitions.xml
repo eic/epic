@@ -191,8 +191,9 @@ The unused IDs below are saved for future use.
       - Barrel   subassembly ID: 111
       - EndcapP  subassembly ID: 112
       - EndcapN  subassembly ID: 113
+      - FluxEndcapN  subassembly ID: 118
 
-      - Unused IDs: 117-119
+      - Unused IDs: 118-119
     </documentation>
     <constant name="HCalSubAssembly_ID" value="110"/>
     <constant name="HCalBarrel_ID"      value="111"/>
@@ -201,6 +202,7 @@ The unused IDs below are saved for future use.
     <constant name="PassiveSteelRingEndcapP_ID" value="114"/>
     <constant name="HCalEndcapPInsert_ID" value="115"/>
     <constant name="LFHCAL_ID"     value="116"/>
+    <constant name="FluxEndcapN_ID"     value="118"/>
     <documentation>
       #### (120-129) (near) Forward reserved
 
