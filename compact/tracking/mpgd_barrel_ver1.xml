@@ -1,0 +1,122 @@
+<!-- SPDX-License-Identifier: LGPL-3.0-or-later -->
+<!-- Copyright (C) 2022 Sylvester Joosten, Wouter Deconinck, Matt Posik -->
+<!-- Modified by Nivedith Ramasubramanian 2023 -->
+
+<lccdd>
+<info name="mpgd_barrel.xml"
+      title="Micro Pattern Gas Detectors"
+      author="mposik1983"
+      url="https://github.com/mposik1983"
+      status="development"
+      version="2.0"
+><comment/>
+</info>
+
+  <define>
+    <comment>
+      Inner MPGD tracking layer(s)
+      Note: the inner and outer layers are implemented as separate detectors, as they
+      belong to different ACTS tracking volumes. If this restriction goes away
+      in the future they could be put together in a single tag.
+    </comment>
+
+
+    <constant name="InnerMPGDBarrelMod_rmin"                value="InnerMPGDBarrel_rmin"/>
+    <constant name="InnerMPGDBarrelMod_thickness"           value="1*cm" />
+    <constant name="InnerMPGDBarrelMod_rmax"                value="InnerMPGDBarrel_rmin + InnerMPGDBarrelMod_thickness"/>
+    
+    <constant name="InnerMPGDBarrelMod_length"              value="60*cm" />
+  
+    <constant name="InnerMPGDBarrelLayer_length"            value="InnerMPGDBarrel_length + 5*cm" />
+    <constant name="InnerMPGDBarrelLayer_thickness"         value="4*cm" />
+    <constant name="InnerMPGDBarrelLayer_rmin"              value="50*cm"/>
+    <constant name="InnerMPGDBarrelLayer_rmax"              value="53.3*cm"/>
+
+
+    <constant name="MMKaptonOverlay_thickness"              value="50*um"/>
+    <constant name="MMCuGround_thickness"                   value="1.58*um"/>
+    <constant name="MMPCB_thickness"                        value="100*um"/>
+    <constant name="MMCuStrip_thickness"                    value="12*um"/>
+    <constant name="MMKaptonStrip_thickness"                value="75*um"/>
+    <constant name="MMResistiveStrip_thickness"             value="20*um"/>
+    <constant name="MMGas_thickness"                        value="128*um"/>
+    <constant name="MMMesh_thickness"                       value="18*um"/>
+    <constant name="MMGasGap_thickness"                     value="3000*um"/>
+    <constant name="MMDriftCuElectrode_thickness"           value="5*um"/>
+    <constant name="MMDriftKapton_thickness"                value="250*um"/>
+    <constant name="MMDriftCuGround_thickness"              value="0.41*um"/>
+
+    <constant name="FrameWidth" value="0.8*cm"/>
+    <comment> FIXME: No support material is here, so fudge factor used to bring material budget to ~0.5% for barrel </comment>
+    <constant name="MMFudgeInnerMPGDBarrel_thickness"                      value="570*um"/>
+    
+    <constant name="MPGDBarrelStave_count"            value="8"/>
+    <constant name="MPGDBarrelStave_width"            value="50*cm"/>
+  </define>
+
+  <detectors>
+    <detector
+      id="TrackerBarrel_2_ID"
+      name="InnerMPGDBarrel"
+      type="MPGDCylinderBarrelTracker"
+      readout="MPGDBarrelHits"
+      insideTrackingVolume="true"
+      vis="TrackerVis">
+      <type_flags type="DetType_TRACKER + DetType_BARREL"/>
+      <dimensions
+        rmin="InnerMPGDBarrelMod_rmin"
+        rmax="InnerMPGDBarrelMod_rmax"
+        length="InnerMPGDBarrelMod_length"
+	width = "MPGDBarrelStave_width"/>
+    
+      <module name="InnerMPGDBarrel_Mod1" vis="TrackerLayerVis" >
+        <comment> Going from the inside (sensitive) side to the readout side </comment>
+	  <frame material="CarbonFiber" width="FrameWidth" vis="TrackerSupportVis" />
+        <module_component name="DriftCuGround" thickness="MMDriftCuGround_thickness" material="Copper" vis="TrackerModuleVis"/>
+        <module_component name="DriftKapton" thickness="MMDriftKapton_thickness" material="Copper" vis="TrackerVis" />
+        <module_component name="DriftCuElectrode" thickness="MMDriftCuElectrode_thickness" material="Copper" vis="TrackerVis"/>
+	<module_component name="GasGap" thickness="MMGasGap_thickness" material="Ar90IsoButane" sensitive="True" vis="TrackerMPGDGasVis" />
+	<module_component name="Mesh" thickness="MMMesh_thickness" material="MMGAS_InoxForMesh" vis="TrackerVis"/>
+        <module_component name="Fudge" thickness="MMFudgeInnerMPGDBarrel_thickness" material="Kapton" vis="TrackerVis"/>
+        <module_component name="Gas" thickness="MMGas_thickness" material="Ar90IsoButane" vis="TrackerMPGDGasVis"/>
+        <module_component name="ResistiveStrips" thickness="MMResistiveStrip_thickness" material="MMGAS_ResistivePaste" vis="TrackerVis"/>
+        <module_component name="KaptonStrips" thickness="MMKaptonStrip_thickness" material="Kapton" vis="TrackerVis" />
+        <module_component name="CuStrips" thickness="MMCuStrip_thickness" material="Copper" vis="TrackerVis" />
+        <module_component name="PCB" thickness="MMPCB_thickness" material="Fr4" vis="TrackerVis"/>
+        <module_component name="CuGround" thickness="MMCuGround_thickness" material="Copper" vis="TrackerVis"/>
+        <module_component name="KaptonOverlay" thickness="MMKaptonOverlay_thickness" material="Copper" vis="TrackerSupportVis"/>
+   
+       </module>
+            
+      <layer module="InnerMPGDBarrel_Mod1" id="1" vis="InvisibleWithDaughters">
+        <barrel_envelope
+          inner_r="InnerMPGDBarrelLayer_rmin"
+          outer_r="InnerMPGDBarrelLayer_rmax"
+	  zmin="InnerMPGDBarrel_zmin"
+	  zmax="InnerMPGDBarrel_zmax"
+	  z_length="InnerMPGDBarrel_zmin +InnerMPGDBarrel_zmax"
+	  z0="InnerMPGDBarrel_zoffset"/>
+        <layer_material surface="inner" binning="binPhi,binZ" bins0="MPGDBarrelStave_count" bins1="100" />
+	 <rphi_layout phi_tilt="0" nphi="MPGDBarrelStave_count" phi0="0.0" rc="InnerMPGDBarrelMod_rmin" dr="0.0 * mm"/>
+         <z_layout dr="0.0 * mm" z0="50*cm" nz="4"/>
+      </layer>
+
+       
+    </detector>
+  </detectors>
+
+  <plugins>
+    <plugin name="DD4hep_ParametersPlugin">
+      <argument value="InnerMPGDBarrel"/>
+      <argument value="layer_pattern: str=InnerMPGDBarrel_layer\d"/>
+    </plugin>
+  </plugins>
+
+  <readouts>
+    <readout name="MPGDBarrelHits">
+      <segmentation type="CartesianGridXY" grid_size_x="0.150*mm*sqrt(12)" grid_size_y="0.150*mm*sqrt(12)" />
+      <id>system:8,layer:4,module:12,sensor:2,x:32:-14,y:-18</id>
+    </readout>
+  </readouts>
+
+</lccdd>
