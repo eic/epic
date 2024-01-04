@@ -86,10 +86,10 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
 
 <<<<<<< HEAD
   // Sector steel tessellated shape gdml file info
-  std::string gdml_file; 
-  std::string gdml_material; 
-  std::string gdml_url; 
-  std::string gdml_cache; 
+  std::string gdml_file;
+  std::string gdml_material;
+  std::string gdml_url;
+  std::string gdml_cache;
 =======
   // Sector steel tessellated shape
   std::string gdmlfile;
@@ -195,8 +195,8 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
     std::_Exit(EXIT_FAILURE);
   }
 
-  TGDMLParse parser; 
-  Volume barrel_steel_vol = parser.GDMLReadFile(gdml_file.c_str()); 
+  TGDMLParse parser;
+  Volume barrel_steel_vol = parser.GDMLReadFile(gdml_file.c_str());
 =======
   TGDMLParse parser;
   if (!gdmlfile.empty() && gdmlfile[0] == '/') {
@@ -211,12 +211,12 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
   Volume barrel_steel_vol = parser.GDMLReadFile(gdmlfile.c_str());
 >>>>>>> 5be16615651e46e5bc86ce9139191cf5c8e4c983
   if(!barrel_steel_vol.isValid()){
-    printout(WARNING, "BarrelHCalCalorimeter", "%s", gdml_file.c_str()); 
+    printout(WARNING, "BarrelHCalCalorimeter", "%s", gdml_file.c_str());
     printout(WARNING, "BarrelHCalCalorimeter", "barrel_steel_vol invalid, GDML parser failed!");
 <<<<<<< HEAD
     std::_Exit(EXIT_FAILURE);
-  }  
-  barrel_steel_vol.import(); 
+  }
+  barrel_steel_vol.import();
 =======
   }
   barrel_steel_vol.import();
@@ -226,7 +226,7 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
   barrel_steel_solid->CloseShape(true, true, true); // tesselated solid not closed by import!
 <<<<<<< HEAD
   Material sector_material = description.material(gdml_material.c_str());
-  barrel_steel_vol.setMaterial(sector_material); 
+  barrel_steel_vol.setMaterial(sector_material);
 =======
   Material gdml_material = description.material(gdmlmaterial.c_str());
   barrel_steel_vol.setMaterial(gdml_material);
