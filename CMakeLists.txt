@@ -40,7 +40,7 @@ endif()
 include(GNUInstallDirs)
 
 # Dependencies
-find_package(DD4hep 1.21 REQUIRED COMPONENTS DDCore DDRec)
+find_package(DD4hep 1.21 REQUIRED COMPONENTS DDCore DDG4 DDRec)
 find_package(fmt REQUIRED)
 
 #-----------------------------------------------------------------------------------
@@ -55,7 +55,7 @@ dd4hep_add_plugin(${a_lib_name}
   USES ROOT::Core ROOT::Gdml
   )
 target_link_libraries(${a_lib_name}
-  PUBLIC DD4hep::DDCore DD4hep::DDRec fmt::fmt
+  PUBLIC DD4hep::DDCore DD4hep::DDG4 DD4hep::DDRec fmt::fmt
   )
 
 #-----------------------------------------------------------------------------------
