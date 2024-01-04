@@ -19,12 +19,27 @@ static Ref_t create_detector(Detector& description, xml_h e, [[maybe_unused]] Se
   double         rmax = dim.rmax();
   double         zmin = dim.zmin();
 
+
+  double         rmin_oculus = getAttrOrDefault(dim, _Unicode(rmin_oculus), 0.);
+  double         rmax_oculus = getAttrOrDefault(dim, _Unicode(rmax_oculus), 0.);
+  double         thickness_oculus = getAttrOrDefault(dim, _Unicode(thickness_oculus), 0.);
+  double         rmin_flux = getAttrOrDefault(dim, _Unicode(rmin_flux), 0.);
+  double         rmax_flux = getAttrOrDefault(dim, _Unicode(rmax_flux), 0.);
+  double         thickness_flux = getAttrOrDefault(dim, _Unicode(thickness_flux), 0.);
+
+
   double disksGap = 0.0;
 
   Layering layering(x_det);
   double   totalThickness = layering.totalThickness();
 
-  Volume endcapVol("endcapFlux", Tube(rmin, rmax + 2 * cm, totalThickness), air); // rmax + 2 * cm -to account for disk gap
+  Tube tube_collar(rmin, rmax, totalThickness);
+  Tube tube_oculus(rmin_oculus, rmax_oculus, thickness_oculus);
+  Tube tube_flux(rmin_flux, rmax_flux, thickness_flux);
+
+  UnionSolid endcapSolid(UnionSolid(tube_collar, tube_oculus), tube_flux);
+
+  Volume endcapVol("endcapFlux", endcapSolid, air); // rmax + 2 * cm -to account for disk gap
   DetElement endcap("endcapFlux", det_id);
 
   endcapVol.setAttributes(description, x_det.regionStr(), x_det.limitsStr(), x_det.visStr());
