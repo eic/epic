@@ -46,7 +46,7 @@
     <constant name="gdmlfile" file="gdml/barrel_hcal_steel.gdml" url="https://github.com/eic/epic-data/raw/main/barrel_HCAL_gdml/barrel_hcal_steel.gdml" material="Steel1020"/>
 
   </define>
-
+  
   <solids>
 
   <solid name="OuterHCalTile01" material="PlasticScint" unit="mm" x="102.707" y="426.850" z="-5.4212">
