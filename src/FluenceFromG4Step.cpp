@@ -14,9 +14,6 @@
 #include "DDG4/Geant4SteppingAction.h"
 #include "DDG4/Geant4StepHandler.h"
 
-#include "Geant4/G4Step.hh"
-#include "Geant4/TrackStatus.hh"
-
 /// Namespace for the AIDA detector description toolkit
 namespace dd4hep {
 
