@@ -43,7 +43,7 @@
     <constant name="ctilePlaneRotate" unit="deg" value="-14.355"/>
     <constant name="tilePlaneRotate" unit="deg" value="-14.355"/>
 
-    <constant name="gdmlfile" file="gdml/barrel_hcal_steel.gdml" url="https://github.com/eic/epic-data/raw/main/barrel_HCAL_gdml/barrel_hcal_steel.gdml" material="Steel1020"/>
+    <constant name="gdmlfile" file="gdml/barrel_hcal_steel_no_endplates.gdml" url="https://github.com/eic/epic-data/raw/ohcalgeo_reconcile/barrel_HCAL_gdml/barrel_hcal_steel_no_endplates.gdml" material="Steel1020"/>
 
   </define>
 
