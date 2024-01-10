@@ -27,7 +27,7 @@
     <constant name="TrackerEndcapDisk_rmax"         value="43*cm"/>
 
     <comment> Main parameters for the outer MPGD barrel layer </comment>
-    <constant name="MPGDOuterBarrelModule_rmin"      value="72.5"/>
+    <constant name="MPGDOuterBarrelModule_rmin"      value="72.5*cm"/>
     <constant name="MPGDOuterBarrelModule_zmin1"     value="164.5*cm"/>
     <constant name="MPGDOuterBarrelModule_zmin2"     value="174.5*cm"/>
 
