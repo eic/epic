@@ -13,12 +13,12 @@
 
 <define>
     <comment> Frames </comment>
-    <constant name="MPGDOuterBarrelFrame_width"            value="20*mm"/>
+    <constant name="MPGDOuterBarrelFrame_width"            value="15*mm"/>
     <constant name="MPGDOuterBarrelFrame_thickness"        value="7*mm"/>
 
     <comment> Module constants </comment>
-    <constant name="MPGDOuterBarrelModule_roverlap"                value="1.2*cm"/>
-    <constant name="MPGDOuterBarrelModule_zoverlap"                value="3*MPGDOuterBarrelFrame_width"/>
+    <constant name="MPGDOuterBarrelModule_roverlap"                value="0*cm"/>
+    <constant name="MPGDOuterBarrelModule_zoverlap"                value="0*MPGDOuterBarrelFrame_width"/>
     <constant name="MPGDOuterBarrelModule_count"                   value="12" />
     <constant name="MPGDOuterBarrelModule_allowed_space"           value="2.5*cm"/>
     <constant name="MPGDOuterBarrelModule_rmax"                    value="MPGDOuterBarrelModule_rmin + MPGDOuterBarrelModule_allowed_space" />
