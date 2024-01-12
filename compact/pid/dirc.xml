@@ -1,5 +1,5 @@
 <!-- SPDX-License-Identifier: LGPL-3.0-or-later -->
-<!-- Copyright (C) 2022 Dmitry Romanov, Whitney Armstrong, Sylvester Joosten, Wouter Deconinck -->
+<!-- Copyright (C) 2022,2023 Dmitry Romanov, Whitney Armstrong, Sylvester Joosten, Wouter Deconinck, Nilanga Wickramaarachchi -->
 
 <lccdd>
 
@@ -15,6 +15,7 @@
       - DIRC_length
       - DIRC_offset
       - DIRC_rmin
+      - DIRC_rmax
       - DIRCBox_count  (12 full dirc, 1 - a single module)
 
     When DIRC_length is set, it affects bars length (all other lengths are fixed)
@@ -42,10 +43,8 @@
     <!-- Mirror -->
     <constant name="DIRCMirror_height"      value="20 * mm"/>
     <constant name="DIRCMirror_width"       value="DIRCPrism_width"/>
-    <constant name="DIRCMirror_thickness"   value="1 * mm"/>
 
     <!-- Lens -->
-    <constant name="DIRCLens_thickness"     value="12 * mm"/>
     <constant name="DIRCLens_r1"            value="62 * mm"/>
     <constant name="DIRCLens_r2"            value="36 * mm"/>
     <constant name="DIRCLens_height"        value="50 * mm"/>
@@ -59,12 +58,13 @@
 
     <!-- Bar - Each DIRC box consists of N "bars" -->
     <!-- BarAssembly - Bars + Glue -->
-    <constant name="DIRCBarAssm_length"     value="DIRC_length - DIRCPrism_length - DIRCMirror_thickness - DIRCLens_thickness - DIRCMCP_thickness" comment="Length of bars+glue assembly"/>
+    <constant name="DIRCBarAssm_length"     value="DIRC_length - DIRCPrism_length - DIRCBarbox_space_z - DIRCMirror_thickness - DIRCLens_thickness - DIRCMCP_thickness" comment="Length of bars+glue assembly"/>
     <constant name="DIRCBar_gap"            value="0.15 * mm"/>
     <constant name="DIRCBar_height"         value="17 * mm"/>
     <constant name="DIRCBar_width"          value="(DIRCPrism_width - (DIRCBar_count_y - 1) * DIRCBar_gap) / DIRCBar_count_y"/>
     <constant name="DIRCGlue_thickness"     value="0.05 * mm"/>
     <constant name="DIRCBar_length"         value="(DIRCBarAssm_length - 4 * DIRCGlue_thickness)/4"/>
+    <constant name="DIRCBar_center"         value="(DIRC_rmin + DIRC_rmax)/2" comment="Radial position of center of bar"/>
 
   </define>
 
@@ -108,7 +108,7 @@
 
   <detectors>
     <detector id="BarrelDIRC_ID" name="cb_DIRC" type="epic_DIRC" readout="DIRCBarHits" vis="DIRCTube">
-      <dimensions rmin="DIRC_rmin" rmax="DIRC_rmin + DIRCBar_height" length="DIRC_length"/>
+      <dimensions rmin="DIRCBar_center - DIRCBar_height/2" rmax="DIRCBar_center + DIRCBar_height/2" length="DIRC_length"/>
       <position x="0" y="0" z="DIRC_offset"/>
       <module name="DIRCBox" repeat="DIRCBox_count" width="DIRCPrism_width + 1*mm" height="DIRCPrism_height*2" length="DIRCBarAssm_length + 550*mm" vis="DIRCBox">
         <!-- Mirror (at the end of the module) -->
