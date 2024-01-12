@@ -23,7 +23,7 @@
     <constant name="ZDC_Crystal_width"           value="ZDC_width"/>
 
 
-    
+
     <constant name="ZDC_Crystal_cell_width"     value="3.*cm"/>
     <constant name="ZDC_Crystal_cell_length"    value="7.*cm"/>
     <constant name="ZDC_Crystal_frame_thickness"  value="0.3*mm"/>
