@@ -28,7 +28,6 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
   int           det_ID          =       x_det.id();
 
   Material Air     = description.material("Air");
-
   // Create main detector element to be returned at the end
   DetElement    det( det_name, det_ID );
 
@@ -38,26 +37,83 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
   // Detector assembly
   Assembly      assembly( det_name );
   assembly.setVisAttributes( description.visAttributes(x_det.attr<std::string>(_Unicode(vis))) );
+>>>>>>> origin/add_low-q2-calorimeter2
 
   double detSizeXY      = getAttrOrDefault( x_det, _Unicode(sizeXY), 180*mm);
   double detSizeZ       = getAttrOrDefault( x_det, _Unicode(sizeZ), 180*mm);
   int nmod_perlayer     = getAttrOrDefault( x_det, _Unicode(nmod_perlayer), 3);
   int nlayer            = getAttrOrDefault( x_det, _Unicode(nlayer), 20);
 
+<<<<<<< HEAD
+  auto [modVol, modSize]= build_specScFiCAL_module(description, x_mod, sens);
+
+  // No. of module/layer, # layer in CAL
+  //int nmod_perlayer   = int( detSizeXY / modSize.x() );
+  //int nlayer          = int( detSizeZ / modSize.y() );
+=======
   // Global detector position and resolution
   xml_comp_t pos = x_det.position();
   xml_comp_t rot = x_det.rotation();
 
+
   auto [modVol, modSize] = build_specScFiCAL_module(description, x_mod, sens);
+>>>>>>> origin/add_low-q2-calorimeter2
 
   // Position of first module, layer from center of CAL
   double mod_pos0       = -(detSizeXY/2.0) + (modSize.x()/2.0);
   double layer_pos0     = -(detSizeZ/2.0) + (modSize.y()/2.0);
 
+<<<<<<< HEAD
+  // loop over sectors(top, bottom)
+  for( xml_coll_t si(x_det, _Unicode(sector)); si; si++) {
+
+          xml_comp_t x_sector( si );
+          int sector_id = x_sector.id();
+          int mod_id = 0;
+          xml_comp_t x_pos = x_sector.position();
+          xml_comp_t x_rot = x_sector.rotation();
+
+          for(int ilay=0; ilay< nlayer; ilay++){
+                 //Modules rotation A/Odd-Even
+                  if((ilay%2)==0){ // 0 : || to x-axis
+                          for(int imod=0; imod< nmod_perlayer; imod++){
+
+                                  //Build // to z-axis, then rotate
+                                  double        mod_pos_z       = ( x_pos.z() - 0.0*cm ) - layer_pos0 - ilay*modSize.y();
+                                  double        mod_pos_y       = x_pos.y() + mod_pos0 + imod*modSize.x();
+                                  double        mod_pos_x       = x_pos.x() + 0.0*cm;
+
+                                  PlacedVolume modPV = assembly.placeVolume(
+                                                  modVol, Transform3D( RotationZYX( x_rot.z(), -90.0*degree, -90.0*degree), Position( mod_pos_x, mod_pos_y, mod_pos_z ) ) );
+
+                                  modPV.addPhysVolID( "sector", sector_id ).addPhysVolID( "module", mod_id);
+                                  mod_id++;
+                          }//imod-loop close
+                  }//if-close
+                  else{// 1 : || to y-axis
+                          for(int imod=0; imod< nmod_perlayer; imod++){
+
+                                  double        mod_pos_z       = ( x_pos.z() - 0.0*cm ) - layer_pos0 - ilay*modSize.y();
+                                  double        mod_pos_x       = x_pos.x() + mod_pos0 + imod*modSize.x();
+                                  double        mod_pos_y       = x_pos.y() + 0.0*mm;
+
+                                  PlacedVolume modPV = assembly.placeVolume(
+                                                  modVol, Transform3D( RotationZYX(x_rot.z(), x_rot.y(), -90.0*degree), Position( mod_pos_x, mod_pos_y, mod_pos_z ) ) );
+
+                                  modPV.addPhysVolID( "sector", sector_id ).addPhysVolID( "module", mod_id);
+                                  mod_id++;
+                          }//imod-loop close
+                  }//else-close
+
+          }//ilay-loop close
+  }// sectors
+
+  // Place assembly into mother volume.  Assembly is centered at origin
+  PlacedVolume detPV = motherVol.placeVolume( assembly, Position(0.0, 0.0, 0.0) );
+=======
   Box     layerBox ( detSizeXY/2, modSize.y()/2, detSizeXY/2 );
   Volume layerVol( "layer", layerBox, Air);
   layerVol.setVisAttributes( description.visAttributes(x_mod.attr<std::string>(_Unicode(vis))) );
-  
   //Fill layer with modules
   for(int mod_id=0; mod_id< nmod_perlayer; mod_id++){
     
@@ -70,10 +126,10 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
     modPV.addPhysVolID( "module", mod_id );
   }//imod-loop close
 
+
   Box     sectorBox( detSizeXY/2, detSizeXY/2, detSizeZ/2 );
   Volume sectorVol( det_name+"_sector", sectorBox, Air);
   sectorVol.setVisAttributes( description.visAttributes(x_mod.attr<std::string>(_Unicode(vis))) );
-  
   //Fill sector with layers
   for(int layer_id=0; layer_id< nlayer; layer_id++){
     
@@ -81,8 +137,7 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
     double        lay_pos_y   = 0.0*cm;
     double        lay_pos_x   = 0.0*cm;
     int           orientation = layer_id%2==0;
-    //int           orientation = layer_id%2;
-
+    
     RotationZYX lay_rot = RotationZYX( 0, 0, -90.0*degree);
     if(orientation) lay_rot*=RotationY(-90.0*degree);
       
@@ -90,8 +145,8 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
     //                                                   modVol, Transform3D( RotationZYX(x_rot.z(), x_rot.y(), -90.0*degree), Position( mod_pos_x, mod_pos_y, mod_pos_z ) ) );
        
     PlacedVolume layPV = sectorVol.placeVolume( layerVol, Transform3D( lay_rot, Position( lay_pos_x, lay_pos_y, lay_pos_z ) ) );
-    layPV.addPhysVolID( "layer", layer_id ).addPhysVolID( "orientation", orientation );
-    //layPV.addPhysVolID( "orientation", orientation );
+    layPV.addPhysVolID( "layer", layer_id );
+    layPV.addPhysVolID( "orientation", orientation );
     
   }//layer_id-loop close
 
@@ -109,6 +164,7 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
   
   // Place assembly into mother volume.  Assembly is centered at origin
   PlacedVolume detPV = motherVol.placeVolume( assembly, Transform3D( RotationZYX( rot.z(), rot.y(), rot.x() ), Position( pos.x(), pos.y(), pos.z() ) ) );
+>>>>>>> origin/add_low-q2-calorimeter2
   detPV.addPhysVolID("system", det_ID);
   // Connect to system ID
   det.setPlacement(detPV);
@@ -131,6 +187,16 @@ static tuple<Volume, Position> build_specScFiCAL_module( const Detector& descrip
 
         modVol.setVisAttributes(description.visAttributes(mod_x.attr<std::string>(_Unicode(vis))));
         //----------------------------Scintillating fibers -----------------------------------------------------------
+
+        //detectors will be placed in module within square shaped sub-modules inside the modules.
+        /*
+           | + + + + + | x (->) even
+           |  + + + +  | y (up) odd
+           | + + + + + | even
+           |  + + + +  | odd
+           fsx, fsy = space between center of two fibers or submods along x, y in fig.
+           foff = space between two modules
+           */
 
         //fibers
         auto   fiber_tube  = mod_x.child(_Unicode(fiber));

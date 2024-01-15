@@ -4,7 +4,7 @@
 <lccdd>
 
         <detectors>
-                <detector id="LumiSpecCAL_ID" name="LumiSpecCAL" type="EcalLumiSpecWScFi" vis="FFPreVis" readout="EcalLumiSpecHits" sizeXY="LumiSpecCAL_DXY" sizeZ="LumiSpecCAL_DZ" nmod_perlayer="LumiSpecCAL_XYLayers" nlayer="LumiSpecCAL_ZLayers" >                                               
+                <detector id="LumiSpecCAL_ID" name="LumiSpecCAL" type="EcalLumiSpecWScFi" vis="FFPreVis" readout="EcalLumiSpecHits" sizeXY="LumiSpecCAL_DXY" sizeZ="LumiSpecCAL_DZ" nmod_perlayer="LumiSpecCAL_XYLayers" nlayer="LumiSpecCAL_ZLayers" vis="InvisibleWithDaughters">                                               
                         <position x="0.0*cm"  y="0.0*cm"  z="0.0*cm"/>
                         <rotation x="0.0*rad" y="0.0*rad" z="0.0*rad"/>
                         <module sizex="LumiSpecCAL_ModSizeX" sizey="LumiSpecCAL_ModSizeY" sizez="LumiSpecCAL_ModSizeZ"  material="WPowderplusEpoxy" vis="LumiSpecCAL_ModuleVis">
@@ -14,6 +14,7 @@
                                  spacex="LumiSpecCAL_FiberSpaceX"
                                  spacey="LumiSpecCAL_FiberSpaceY"
                                  vis="LumiSpecCAL_FiberVis"/>
+
                                 <fiberholder material="BrassAlloy360" vis="LumiSpecCAL_FiberHolderVis"/>
                         </module>
                         <sector id="0">
@@ -30,7 +31,7 @@
         <readouts>
                 <readout name="EcalLumiSpecHits">
                         <segmentation type="NoSegmentation"/>
-                        <id>system:8,sector:4,orientation:4,layer:8,module:4,fiber_x:16,fiber_y:16</id>
+                        <id>system:8,sector:4,orientation:2,layer:8,module:8,fiber_x:16,fiber_y:16</id>
                 </readout>
         </readouts>
 
