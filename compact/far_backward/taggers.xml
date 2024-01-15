@@ -60,7 +60,7 @@
 
     </detector>
 
-    <detector id="TaggerCalorimeter_ID" name="TaggerCalorimeter" type="EcalLumiSpecWScFi" vis="FFPreVis" readout="TaggerCalorimeterHits" sizeXY="LumiSpecCAL_DXY" sizeZ="LumiSpecCAL_DZ" nmod_perlayer="LumiSpecCAL_XYLayers" nlayer="LumiSpecCAL_ZLayers" >                                               
+    <detector id="TaggerCalorimeter_ID" name="TaggerCalorimeter" type="EcalLumiSpecWScFi" vis="FFPreVis" readout="TaggerCalorimeterHits" sizeXY="LumiSpecCAL_DXY" sizeZ="LumiSpecCAL_DZ" nmod_perlayer="LumiSpecCAL_XYLayers" nlayer="LumiSpecCAL_ZLayers" >
         <position x="Dipole_Focus_X"  y="Dipole_Focus_Y"  z="Dipole_Focus_Z"/>
         <rotation x="0.0*rad" y="Beam_Theta" z="0.0*rad"/>
         <module sizex="LumiSpecCAL_ModSizeX" sizey="LumiSpecCAL_ModSizeY" sizez="LumiSpecCAL_ModSizeZ"  material="WPowderplusEpoxy" vis="LumiSpecCAL_ModuleVis">
@@ -109,7 +109,7 @@
       <segmentation type="NoSegmentation"/>
       <id>system:8,sector:4,orientation:2,layer:8,module:8,fiber_x:16,fiber_y:16</id>
     </readout>
-    
+
   </readouts>
 
 </lccdd>

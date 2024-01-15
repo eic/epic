@@ -59,12 +59,12 @@
     <comment> For shielded modules by default just display to module instead of 6 layers </comment>
     <vis name="FFTrackerShieldedModuleVis" ref="FFTrackerModuleVis"   visible="true"  showDaughters="false" />
 
-    <comment> 
+    <comment>
       Luminosity Visualisation
     </comment>
-    <vis    name="LumiSpecCAL_ModuleVis"       ref="AnlGold"   	alpha="0.5"     visible="true" showDaughters="true"/>
-    <vis    name="LumiSpecCAL_FiberVis"        ref="AnlRed"	alpha="0.8"	visible="true"/>
-    <vis    name="LumiSpecCAL_FiberHolderVis"  ref="AnlBlue"	alpha="1.0"	visible="true"/>
+    <vis    name="LumiSpecCAL_ModuleVis"       ref="AnlGold"    alpha="0.5"     visible="true" showDaughters="true"/>
+    <vis    name="LumiSpecCAL_FiberVis"        ref="AnlRed"     alpha="0.8"     visible="true"/>
+    <vis    name="LumiSpecCAL_FiberHolderVis"  ref="AnlBlue"    alpha="1.0"     visible="true"/>
 
 
     <comment>
