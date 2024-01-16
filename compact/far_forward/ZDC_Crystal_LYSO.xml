@@ -61,7 +61,7 @@
   </detectors>
 
   <readouts>
-    <readout name="ZDCEcalHits">
+    <readout name="EcalFarForwardZDCHits">
       <segmentation type="NoSegmentation"/>
       <id>system:8,module:2,crystal:12</id>
     </readout>
