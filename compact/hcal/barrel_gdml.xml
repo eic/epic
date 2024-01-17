@@ -25,8 +25,8 @@
 
   <define>
 
-    <matrix name="xposOuter" unit="mm" coldim="1" values="23.6005"/>
-    <matrix name="yposOuter" unit="mm" coldim="1" values="1857.892"/>
+    <matrix name="xposOuter" unit="mm" coldim="1" values="18.400271"/>
+    <matrix name="yposOuter" unit="mm" coldim="1" values="1833.4834"/>
 
     <matrix name="xposTileS" unit="mm" coldim="1" values="102.707 310.850 520.610 732.802 952.594 1180.725 1418.405 1668.665 1980.199 2267.609 2530.727 2785.926"/>
     <matrix name="yposTileS" unit="mm" coldim="1" values="426.850 426.422 427.080 426.818 426.866 426.919 426.976 426.824 482.037 481.908 470.159 432.797"/>
@@ -43,7 +43,7 @@
     <constant name="ctilePlaneRotate" unit="deg" value="-14.355"/>
     <constant name="tilePlaneRotate" unit="deg" value="-14.355"/>
 
-    <constant name="gdmlfile" file="gdml/barrel_hcal_steel_no_endplates.gdml" url="https://github.com/eic/epic-data/raw/ohcalgeo_reconcile/barrel_HCAL_gdml/barrel_hcal_steel_no_endplates.gdml" material="Steel1020"/>
+    <constant name="gdmlfile" file="gdml/barrel_hcal_steel_full_nocombs.gdml" url="https://github.com/eic/epic-data/raw/barrel_HCAL_gdml/barrel_hcal_steel_full_nocombs.gdml" material="Steel1020"/>
 
   </define>
 

@@ -59,7 +59,8 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
   // 1cm buffer on outer radius to acount for comb angle/tilt
   // (allows the combs to be added in later)
   std::vector<double> rmaxs = {rmax+1.0*cm, rmax+1.0*cm, rmax+1.0*cm, rmax+1.0*cm, rmax+1.0*cm, rmax+1.0*cm};
-  std::vector<double> zs    = {-length2 / 2., -length1 / 2., -length1 / 2., length1 / 2., length1 / 2., length2 / 2.};
+  // leave room for dogbones at the ends (not part of det table)
+  std::vector<double> zs    = {-length2 / 2. - 8.2*cm, -length1 / 2., -length1 / 2., length1 / 2., length1 / 2., length2 / 2. + 8.2*cm};
 
   // printout(WARNING, "BarrelHCalCalorimeter", "%f %f %f %f %f", rmin1, rmin2, rmax, length1/2., length2/2.);
 
