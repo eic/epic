@@ -9,7 +9,8 @@
   <include ref="far_forward/B0_tracker.xml"/>
   <include ref="far_forward/B0_ECal.xml"/>
   <include ref="far_forward/offM_tracker.xml"/>
-  <include ref="far_forward/ZDC.xml"/>
+  <include ref="far_forward/ZDC_SiPMonTile.xml"/>
+  <include ref="far_forward/ZDC_Crystal_LYSO.xml"/>
   <include ref="far_forward/roman_pots_eRD24_design.xml"/>
   <include ref="far_forward/vacuum.xml"/>
   <include ref="far_forward/magnets.xml"/>
