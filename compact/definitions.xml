@@ -603,12 +603,12 @@ Service gaps in FW direction (before endcapP ECAL) and BW direction (before endc
 
     <documentation>
       ## Barrel HCAL Parameters
-      
-      Hard-coded numbers are taken from the 3D model for the sPHENIX HCAL, see: 
+
+      Hard-coded numbers are taken from the 3D model for the sPHENIX HCAL, see:
 
       https://github.com/eic/epic-data/tree/main/barrel_HCAL_gdml
 
-      for 3D model files and FreeCAD projects. 
+      for 3D model files and FreeCAD projects.
     </documentation>
 
     <constant name="HcalBarrel_thickness"     value="86.18*cm"/>

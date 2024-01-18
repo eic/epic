@@ -86,7 +86,7 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
   double tile_tolerance = 0.2; // Tile tolerance in mm to avoid overlaps
 
   // Sector steel tessellated shape gdml file info
-  xml_comp_t x_det_gdmlfile = x_det.child("gdmlfile"); 
+  xml_comp_t x_det_gdmlfile = x_det.child("gdmlfile");
 
   std::string gdml_file = getAttrOrDefault<std::string>(x_det_gdmlfile, _Unicode(file), " ");;
   std::string gdml_material = getAttrOrDefault<std::string>(x_det_gdmlfile, _Unicode(material), " ");
