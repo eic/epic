@@ -22,8 +22,15 @@
           z1="HcalBarrel_length1"
           z2="HcalBarrel_length2"
           calorimeterType="HAD_BARREL">
+	  <gdmlfile file="gdml/barrel_hcal_steel_full_nocombs.gdml" url="https://github.com/eic/epic-data/raw/main/barrel_HCAL_gdml/barrel_hcal_steel_full_nocombs.gdml" material="Steel1020"/>
 
   <define>
+
+    <documentation>
+      Tile locations and reference locations determined by orientation of tiles models in 3D files.
+      These values adjust the 3D tile models to the correct position, orientation and angle 
+      so they can be placed programmatically within the GDML structure for the HCAL steel.
+    </documentation>
 
     <matrix name="xposOuter" unit="mm" coldim="1" values="18.400271"/>
     <matrix name="yposOuter" unit="mm" coldim="1" values="1833.4834"/>
@@ -42,8 +49,6 @@
 
     <constant name="ctilePlaneRotate" unit="deg" value="-14.355"/>
     <constant name="tilePlaneRotate" unit="deg" value="-14.355"/>
-
-    <constant name="gdmlfile" file="gdml/barrel_hcal_steel_full_nocombs.gdml" url="https://github.com/eic/epic-data/raw/main/barrel_HCAL_gdml/barrel_hcal_steel_full_nocombs.gdml" material="Steel1020"/>
 
   </define>
 

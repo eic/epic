@@ -86,10 +86,14 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
   double tile_tolerance = 0.2; // Tile tolerance in mm to avoid overlaps
 
   // Sector steel tessellated shape gdml file info
-  std::string gdml_file;
-  std::string gdml_material;
-  std::string gdml_url;
-  std::string gdml_cache;
+  xml_comp_t x_det_gdmlfile = x_det.child("gdmlfile"); 
+
+  std::string gdml_file = getAttrOrDefault<std::string>(x_det_gdmlfile, _Unicode(file), " ");;
+  std::string gdml_material = getAttrOrDefault<std::string>(x_det_gdmlfile, _Unicode(material), " ");
+  std::string gdml_url = getAttrOrDefault<std::string>(x_det_gdmlfile, _Unicode(url), " ");
+  std::string gdml_cache = getAttrOrDefault<std::string>(x_det_gdmlfile, _Unicode(cache), " ");
+
+  // Loop over the defines section and pick up the tile offsets, ref location and angles
 
   for (xml_coll_t i(det_define, _Unicode(constant)); i; ++i) {
     xml_comp_t x_const = i;
@@ -104,17 +108,10 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
       std::string const_value = getAttrOrDefault<std::string>(x_const, _Unicode(value), " ");
       tilePlaneRotate = atof(const_value.c_str());
     }
-    else if (const_name == "gdmlfile"){
-      gdml_file      = getAttrOrDefault<std::string>(x_const, _Unicode(file), " ");
-      gdml_material  = getAttrOrDefault<std::string>(x_const, _Unicode(material), " ");
-      gdml_url       = getAttrOrDefault<std::string>(x_const, _Unicode(url), " ");
-      gdml_cache     = getAttrOrDefault<std::string>(x_const, _Unicode(cache), " ");
-    }
     else
       printout(WARNING, "BarrelHCalCalorimeter", "unrecognized <constant> data!");
   }
 
-  // Loop over the defines section and pick up the tile offsets
 
   std::vector<double> xposOuter;
   std::vector<double> yposOuter;
