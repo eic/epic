@@ -19,21 +19,21 @@
     </documentation>
     <detector id="FluxEndcapN_ID" name="FluxEndcapN" type="epic_EndcapFluxReturnN" vis="FluxEndcapNVis">
       <position x="0" y="0" z="-FluxEndcapN_zmin"/>
-       
+
        <layer id="1" name="Collar" material="Steel235"
-       	rmin="FluxEndcapN_collar_rmin" rmax="FluxEndcapN_collar_rmax" zpos="0*cm"
-       	thickness="FluxEndcapN_collar_thickness" vis="FluxEndcapNLayerVis"
+        rmin="FluxEndcapN_collar_rmin" rmax="FluxEndcapN_collar_rmax" zpos="0*cm"
+        thickness="FluxEndcapN_collar_thickness" vis="FluxEndcapNLayerVis"
        />
        <layer id="2" name="Oculus" material="Steel235"
-       	rmin="FluxEndcapN_oculus_rmin" rmax="FluxEndcapN_oculus_rmax" zpos="0*cm"
-       	thickness="FluxEndcapN_oculus_thickness" vis="FluxEndcapNLayerVis"
+        rmin="FluxEndcapN_oculus_rmin" rmax="FluxEndcapN_oculus_rmax" zpos="0*cm"
+        thickness="FluxEndcapN_oculus_thickness" vis="FluxEndcapNLayerVis"
        />
        <layer id="3" name="FluxReturn" material="Steel235"
         rmin="FluxEndcapN_rmin" rmax="FluxEndcapN_rmax" zpos="FluxEndcapN_zpos"
         thickness="FluxEndcapN_thickness" vis="FluxEndcapNLayerVis"
        />
-                
-     
+
+
     </detector>
   </detectors>
 
