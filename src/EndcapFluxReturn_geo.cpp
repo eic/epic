@@ -18,7 +18,6 @@ using namespace dd4hep::detail;
 static Ref_t create_detector(Detector& description, xml_h e, [[maybe_unused]] SensitiveDetector sens)
 {
   xml_det_t x_det    = e;
-  //xml_dim_t dim      = x_det.dimensions();
   int       det_id   = x_det.id();
   string    det_name = x_det.nameStr();
   Material  air      = description.air();
