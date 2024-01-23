@@ -15,7 +15,7 @@
   <!-- Define detector -->
   <detectors>
     <documentation>
-      ### Backwards (Negative Z) Endcap Hadronic Calorimeter
+      ### Backwards (Negative Z) Endcap Flux Return
     </documentation>
     <detector name="FluxEndcapN" type="epic_EndcapFluxReturnN" vis="FluxEndcapNVis">
       <position x="0" y="0" z="-FluxEndcapN_zmin"/>
