@@ -1,3 +1,12 @@
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (C) 2024 Leszek Kosarzewski
+
+//==========================================================================
+//  Implementation of backward endcap flux return
+//--------------------------------------------------------------------------
+//  Author: Leszek Kosarzewski (OSU)
+//==========================================================================
+
 #include "DD4hep/DetFactoryHelper.h"
 #include "TVector3.h"
 #include "XML/Layering.h"
