@@ -31,7 +31,6 @@ static Ref_t create_detector(Detector& description, xml_h e, [[maybe_unused]] Se
   double disksGap = 0.0;
 
   Layering layering(x_det);
-  //double   totalThickness = layering.totalThickness();
 
   // Looping through all the different layer sections
   for (xml_coll_t xc(x_det, _U(layer)); xc; ++xc) {
