@@ -21,16 +21,16 @@
     </comment>
 
 
-    <constant name="InnerMPGDBarrelMod_rmin"                value="InnerMPGDBarrel_rmin"/>
+    <constant name="InnerMPGDBarrel_hack"                   value="0*cm"/>
+    <constant name="InnerMPGDBarrelMod_rmin"                value="InnerMPGDBarrel_rmin + InnerMPGDBarrel_hack"/>
     <constant name="InnerMPGDBarrelMod_thickness"           value="1*cm" />
     <constant name="InnerMPGDBarrelMod_rmax"                value="InnerMPGDBarrel_rmin + InnerMPGDBarrelMod_thickness"/>
     
     <constant name="InnerMPGDBarrelMod_length"              value="60*cm" />
   
     <constant name="InnerMPGDBarrelLayer_length"            value="InnerMPGDBarrel_length + 5*cm" />
-    <constant name="InnerMPGDBarrelLayer_thickness"         value="4*cm" />
-    <constant name="InnerMPGDBarrelLayer_rmin"              value="50*cm"/>
-    <constant name="InnerMPGDBarrelLayer_rmax"              value="53.3*cm"/>
+    <constant name="InnerMPGDBarrelLayer_rmin"              value="50*cm + InnerMPGDBarrel_hack"/>
+    <constant name="InnerMPGDBarrelLayer_rmax"              value="53.3*cm + 1*cm"/>
 
 
     <constant name="MMKaptonOverlay_thickness"              value="50*um"/>
@@ -51,7 +51,6 @@
     <constant name="MMFudgeInnerMPGDBarrel_thickness"                      value="570*um"/>
     
     <constant name="MPGDBarrelStave_count"            value="8"/>
-    <constant name="MPGDBarrelStave_width"            value="50*cm"/>
   </define>
 
   <detectors>
@@ -66,12 +65,11 @@
       <dimensions
         rmin="InnerMPGDBarrelMod_rmin"
         rmax="InnerMPGDBarrelMod_rmax"
-        length="InnerMPGDBarrelMod_length"
-	width = "MPGDBarrelStave_width"/>
+        length="InnerMPGDBarrelMod_length"/>
     
       <module name="InnerMPGDBarrel_Mod1" vis="TrackerLayerVis" >
         <comment> Going from the inside (sensitive) side to the readout side </comment>
-	  <frame material="CarbonFiber" width="FrameWidth" vis="TrackerSupportVis" />
+	<frame material="CarbonFiber" width="FrameWidth" vis="TrackerSupportVis" />
         <module_component name="DriftCuGround" thickness="MMDriftCuGround_thickness" material="Copper" vis="TrackerModuleVis"/>
         <module_component name="DriftKapton" thickness="MMDriftKapton_thickness" material="Copper" vis="TrackerVis" />
         <module_component name="DriftCuElectrode" thickness="MMDriftCuElectrode_thickness" material="Copper" vis="TrackerVis"/>
@@ -85,7 +83,6 @@
         <module_component name="PCB" thickness="MMPCB_thickness" material="Fr4" vis="TrackerVis"/>
         <module_component name="CuGround" thickness="MMCuGround_thickness" material="Copper" vis="TrackerVis"/>
         <module_component name="KaptonOverlay" thickness="MMKaptonOverlay_thickness" material="Copper" vis="TrackerSupportVis"/>
-   
        </module>
             
       <layer module="InnerMPGDBarrel_Mod1" id="1" vis="InvisibleWithDaughters">
@@ -95,12 +92,12 @@
 	  zmin="InnerMPGDBarrel_zmin"
 	  zmax="InnerMPGDBarrel_zmax"
 	  z_length="InnerMPGDBarrel_zmin +InnerMPGDBarrel_zmax"
-	  z0="InnerMPGDBarrel_zoffset"/>
+	  z0="0"/>
         <layer_material surface="inner" binning="binPhi,binZ" bins0="MPGDBarrelStave_count" bins1="100" />
-	 <rphi_layout phi_tilt="0" nphi="MPGDBarrelStave_count" phi0="0.0" rc="InnerMPGDBarrelMod_rmin" dr="0.0 * mm"/>
-         <z_layout dr="0.0 * mm" z0="50*cm" nz="4"/>
+	 <rphi_layout phi_tilt="0" nphi="8" phi0="0.0" rc="InnerMPGDBarrelMod_rmin" dr="0.0 * mm"/>
+         <z_layout dr="0.0 * mm" z0="50.0*cm" nz="4"/>
+         <!--<z_layout dr="0.0 * mm" z0="50*cm" nz="1"/>-->
       </layer>
-
        
     </detector>
   </detectors>

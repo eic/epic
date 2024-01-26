@@ -57,7 +57,7 @@
 
     <comment> Service/Support setup </comment>
     <constant name="TrackerSupportCyl_rmin1"          value="TrackerEndcapDisk_rmax + 0.2*cm"/>
-    <constant name="TrackerSupportCyl_rmin2"          value="InnerMPGDBarrel_rmin + 2.05*cm"/>
+    <constant name="TrackerSupportCyl_rmin2"          value="InnerMPGDBarrel_rmin + 2.05*cm + 1*cm"/>
     <comment> These may belong in definitions.xml </comment>
     <constant name="InnerTrackerEndcapP_zmax"        value="CentralTrackingRegionP_zmax"/>
     <constant name="InnerTrackerEndcapN_zmax"        value="CentralTrackingRegionN_zmax"/>
@@ -147,33 +147,33 @@
       <composite name="OuterSiBarrel"/>
       <composite name="OuterTrackerEndcapP"/>
     </detector>
-    <detector id="TrackerSubAssembly_3_ID"
+    <detector id="TrackerSubAssembly_4_ID"
+      name="InnerMPGDBarrelSubAssembly"
+      type="DD4hep_SubdetectorAssembly"
+      vis="TrackerSubAssemblyVis">
+      <composite name="InnerMPGDBarrel"/>
+    </detector> 
+    <detector id="TrackerSubAssembly_5_ID"
       name="EndcapMPGDSubAssembly"
       type="DD4hep_SubdetectorAssembly"
       vis="TrackerSubAssemblyVis">
       <composite name="BackwardMPGD"/>
       <composite name="ForwardMPGD"/>
     </detector>
-    <detector id="TrackerSubAssembly_4_ID"
-      name="InnerMPGDBarrelSubAssembly"
-      type="DD4hep_SubdetectorAssembly"
-      vis="TrackerSubAssemblyVis">
-      <composite name="InnerMPGDBarrel"/>
-    </detector>
-    <detector id="TrackerSubAssembly_5_ID"
+    <detector id="TrackerSubAssembly_6_ID"
       name="EndcapTOFSubAssembly"
       type="DD4hep_SubdetectorAssembly"
       vis="TrackerSubAssemblyVis">
       <composite name="BackwardTOF"/>
       <composite name="ForwardTOF"/>
     </detector>
-    <detector id="TrackerSubAssembly_6_ID"
+    <detector id="TrackerSubAssembly_7_ID"
       name="BarrelTOFSubAssembly"
       type="DD4hep_SubdetectorAssembly"
       vis="TrackerSubAssemblyVis">
       <composite name="BarrelTOF"/>
     </detector>
-    <detector id="TrackerSubAssembly_7_ID"
+    <detector id="TrackerSubAssembly_8_ID"
       name="OuterBarrelMPGDSubAssembly"
       type="DD4hep_SubdetectorAssembly"
       vis="TrackerSubAssemblyVis">
