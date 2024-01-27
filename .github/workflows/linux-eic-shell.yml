@@ -531,7 +531,7 @@ jobs:
           bin/make_dawn_views -i prim/${{ matrix.detector_config }}.prim -t ${{ matrix.view }} -d scripts/${{ matrix.view }} -D
     - uses: actions/upload-artifact@v4
       with:
-        name: ${{ matrix.detector_config }}_views
+        name: ${{ matrix.detector_config }}_views_${{ matrix.view }}
         path: images/
         if-no-files-found: error
 
@@ -561,21 +561,35 @@ jobs:
           bin/make_dawn_views -i prim/${{ matrix.detector_config }}.prim -t ${{ matrix.view }} -d scripts/${{ matrix.view }} -D -- ${{ matrix.slice }}
     - uses: actions/upload-artifact@v4
       with:
-        name: ${{ matrix.detector_config }}_views
+        name: ${{ matrix.detector_config }}_views_${{ matrix.view }}_${{ matrix.slice }}
         path: images/
         if-no-files-found: error
 
 #TODO view20
 
-  build-artifacts-page:
+  merge-dawn-view:
     runs-on: ubuntu-latest
     needs:
     - dawn-view
     - dawn-view-slices
+    strategy:
+      matrix:
+        detector_config: [epic_craterlake]
+    steps:
+    - uses: actions/upload-artifact/merge@v4
+      with:
+        name: ${{ matrix.detector_config }}_views
+        pattern: ${{ matrix.detector_config }}_views_*
+        delete-merged: true
+
+  build-artifacts-page:
+    runs-on: ubuntu-latest
+    needs:
     - convert-to-gdml
     - convert-to-tgeo
     - merge-constants
     - merge-parameter-table
+    - merge-dawn-view
     steps:
     - uses: actions/checkout@v4
     - uses: actions/download-artifact@v4
