@@ -272,7 +272,7 @@ jobs:
           npdet_info dump ${DETECTOR_PATH}/${{matrix.detector_config}}.xml | tee doc/${{matrix.detector_config}}_constants.out
     - uses: actions/upload-artifact@v4
       with:
-        name: constants
+        name: ${{matrix.detector_config}}_constants.out
         path: doc/${{matrix.detector_config}}_constants.out
         if-no-files-found: error
 
@@ -308,16 +308,39 @@ jobs:
           sed -i '1s/^/<html><body><table border="1" style="border-collapse:collapse">\n/;$a</table></body></html>' doc/${{matrix.detector_config}}.html
     - uses: actions/upload-artifact@v4
       with:
-        name: constants
+        name: ${{matrix.detector_config}}_constants.toml
         path: doc/${{matrix.detector_config}}_constants.toml
         if-no-files-found: error
     - uses: actions/upload-artifact@v4
       with:
-        name: DetectorParameterTable
+        name: ${{matrix.detector_config}}_DetectorParameterTable
         path: |
           doc/${{matrix.detector_config}}.csv
           doc/${{matrix.detector_config}}.html
         if-no-files-found: error
+
+  merge-constants:
+    runs-on: ubuntu-latest
+    needs:
+    - dump-constants
+    - dump-parameter-table
+    steps:
+    - uses: actions/upload-artifact/merge@v4
+      with:
+        name: constants
+        pattern: '*_constants.*'
+        delete-merged: true
+
+  merge-parameter-table:
+    runs-on: ubuntu-latest
+    needs:
+    - dump-parameter-table
+    steps:
+    - uses: actions/upload-artifact/merge@v4
+      with:
+        name: DetectorParameterTable
+        pattern: '*_DetectorParameterTable'
+        delete-merged: true
 
   check-overlap-tgeo:
     runs-on: ubuntu-latest
@@ -551,8 +574,8 @@ jobs:
     - dawn-view-slices
     - convert-to-gdml
     - convert-to-tgeo
-    - dump-constants
-    - dump-parameter-table
+    - merge-constants
+    - merge-parameter-table
     steps:
     - uses: actions/checkout@v4
     - uses: actions/download-artifact@v4
