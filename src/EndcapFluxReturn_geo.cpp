@@ -56,7 +56,7 @@ static dd4hep::Ref_t create_detector(dd4hep::Detector& description, xml_h e, [[m
 
 
     pv = assembly.placeVolume(disk, dd4hep::Position(0, 0, -layer_thickness/2-layer_zpos));
-    pv.addPhysVolID(x_layer.nameStr(), layer_id);
+    pv.addPhysVolID("layer", layer_id);
     disk_ele.setPlacement(pv);
   }
 
