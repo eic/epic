@@ -25,7 +25,7 @@ jobs:
     - uses: cvmfs-contrib/github-action-cvmfs@v4
       with:
         cvmfs_repositories: 'sft.cern.ch,geant4.cern.ch'
-    - uses: aidasoft/run-lcg-view@v1
+    - uses: aidasoft/run-lcg-view@v4
       with:
         release-platform: ${{ matrix.LCG }}
         run: |
