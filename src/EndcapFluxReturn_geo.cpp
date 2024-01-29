@@ -59,7 +59,6 @@ static dd4hep::Ref_t create_detector(dd4hep::Detector& description, xml_h e, [[m
   // Get position and place volume
   dd4hep::Position       pos(x_pos.x(), x_pos.y(), x_pos.z());
   pv = description.pickMotherVolume(sdet).placeVolume(assembly, pos);
-  pv.addPhysVolID("system", det_id).addPhysVolID("barrel", 0);
   sdet.setPlacement(pv);
   return sdet;
 }
