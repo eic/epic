@@ -10,10 +10,6 @@
 #include "DD4hep/DetFactoryHelper.h"
 #include "TVector3.h"
 #include "XML/Layering.h"
-/*using namespace std;
-using namespace dd4hep;
-using namespace dd4hep::detail;
-*/
 
 static dd4hep::Ref_t create_detector(dd4hep::Detector& description, xml_h e, [[maybe_unused]] dd4hep::SensitiveDetector sens)
 {
