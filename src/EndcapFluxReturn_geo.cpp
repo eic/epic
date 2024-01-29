@@ -68,5 +68,4 @@ static dd4hep::Ref_t create_detector(dd4hep::Detector& description, xml_h e, [[m
   return sdet;
 }
 
-// clang-format off
 DECLARE_DETELEMENT(epic_EndcapFluxReturnN, create_detector)
