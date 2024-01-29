@@ -35,7 +35,7 @@ jobs:
           # check geometry
           source ${PREFIX}/setup.sh
           checkGeometry -c ${DETECTOR_PATH}/${DETECTOR}.xml
-    - uses: actions/upload-artifact@v3
+    - uses: actions/upload-artifact@v4
       with:
         name: build-lcg-ubuntu2004
         path: install/
