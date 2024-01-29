@@ -41,7 +41,7 @@
         name="ZDC_Crystal"
         type="ZDC_Crystal"
         vis="ZDC_Crystal_Vis"
-        readout="ZDCEcalHits">
+        readout="EcalFarForwardZDCHits">
       <position x="ZDC_Crystal_x_pos"         y="ZDC_Crystal_y_pos"         z="ZDC_Crystal_z_pos"/>
       <rotation x="ZDC_Crystal_rotateX_angle" y="ZDC_Crystal_rotateY_angle" z="ZDC_Crystal_rotateZ_angle"/>
       <dimensions x="ZDC_Crystal_nx * (ZDC_Crystal_cell_width + ZDC_Crystal_frame_thickness) + ZDC_Crystal_frame_thickness"
