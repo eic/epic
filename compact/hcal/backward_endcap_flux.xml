@@ -4,7 +4,7 @@
 <lccdd>
   <define>
     <documentation>
-      #### Material constants
+      #### Dimension constants
     </documentation>
     <constant name="FluxEndcapN_zshift" value="FluxEndcapN_collar_thickness-FluxEndcapN_thickness"/>
     <constant name="FluxEndcapN_zmin" value="BackwardServiceGap_zmax"/>
