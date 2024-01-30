@@ -310,7 +310,7 @@
 
     <comment> Tagger calorimeter </comment>
     <constant name="Tagger1_Cal_Gap"      value="30*cm"/>
-    <constant name="Tagger1_Cal_X"        value="Tagger1_Min_Offset+LumiSpecCAL_DXY/2"/>
+    <constant name="Tagger1_Cal_X"        value="Tagger1_Min_Offset+1.1*LumiSpecCAL_DXY/2"/>
     <constant name="Tagger1_Cal_Z"        value="-Tagger1_Min_Offset/tan(Tagger1_Min_Theta-Beam_Theta)-Tagger1_Cal_Gap-Tagger1_Length"/>
 
     <constant name="Tagger2_Cal_Gap"      value="30*cm"/>
