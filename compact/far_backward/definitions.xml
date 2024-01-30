@@ -310,15 +310,4 @@
     <constant name="LumiDirect_XY"        value="0.2*m"/>
     <constant name="LumiDirect_DZ"        value="0.2*m"/>
 
-    <comment> Tagger calorimeter </comment>
-    <constant name="Tagger1_Cal_Gap"      value="30*cm"/>
-    <constant name="Tagger1_Cal_X"        value="Tagger1_Min_Offset+LumiSpecCAL_DXY/2"/>
-    <constant name="Tagger1_Cal_Z"        value="-Tagger1_Min_Offset/tan(Tagger1_Min_Theta-Beam_Theta)-Tagger1_Cal_Gap-Tagger1_Length"/>
-
-    <constant name="Tagger2_Cal_Gap"      value="30*cm"/>
-    <constant name="Tagger2_Cal_Z_Correction" value="235*cm"/>
-    <constant name="Tagger2_Cal_X_Correction" value="1*cm"/>
-    <constant name="Tagger2_Cal_X"        value="Tagger2_Min_Offset+LumiSpecCAL_DXY/2+Tagger2_Cal_X_Correction"/>
-    <constant name="Tagger2_Cal_Z"        value="-Tagger2_Min_Offset/tan(Tagger2_Min_Theta-Beam_Theta)-Tagger2_Cal_Gap-Tagger2_Length+Tagger2_Cal_Z_Correction"/>
-
-  </define>
+</define>
