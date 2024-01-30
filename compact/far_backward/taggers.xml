@@ -77,7 +77,7 @@
       <segmentation type="CartesianGridXY" grid_size_x="tracker_pixel_size" grid_size_y="tracker_pixel_size" />
       <id>system:8,module:2,layer:4,sensor:4,x:32:-16,y:-16</id>
     </readout>
-        
+
   </readouts>
 
 </lccdd>
