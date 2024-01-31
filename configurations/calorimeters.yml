@@ -11,3 +11,4 @@ features:
     forward_insert:
     barrel_gdml:
     backward:
+    backward_endcap_flux:

@@ -25,6 +25,7 @@ features:
     lfhcal_without_space_for_insert:
     barrel_gdml:
     backward:
+    backward_endcap_flux:
   far_forward:
     far_forward:
   far_backward:

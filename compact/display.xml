@@ -98,6 +98,8 @@
     <vis name="HcalAbsorberVis"       ref="AnlGray"   showDaughters="false" visible="false"/>
     <vis name="HcalEndcapInsertVis"   ref="AnlGray"   showDaughters="false" visible="true"/>
     <vis name="LFHCALVis"             ref="AnlBlue"   showDaughters="true" visible="true"/>
+    <vis name="FluxEndcapNVis"        ref="AnlGray"   showDaughters="true" visible="false"/>
+    <vis name="FluxEndcapNLayerVis"   ref="AnlViolet" showDaughters="false" visible="true"/>
     <comment>
       Passive steel for flux return
     </comment>
