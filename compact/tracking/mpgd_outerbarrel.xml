@@ -38,7 +38,7 @@
     <constant name="MPGDOuterBarrelFoilKapton_thickness"         value="50*um"/>
     <constant name="MPGDOuterBarrelReadOutNomex_thickness"       value="50*um"/>
     <constant name="MPGDOuterBarrelReadOutKapton_thickness"      value="50*um"/>
-    <constant name="MPGDOuterBarrelPCB_thickness"                value="1.5*mm"/>
+    <constant name="MPGDOuterBarrelPCB_thickness"                value="2.8*mm"/>
 
     <comment> Thickness values </comment>
     <constant name="MPGDOuterBarrelCathode_thickness"          value="MPGDOuterBarrelFoilKapton_thickness + MPGDOuterBarrelFoilCu_thickness"/>
