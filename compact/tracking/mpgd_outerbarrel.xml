@@ -13,7 +13,7 @@
 
 <define>
     <comment> Frames </comment>
-    <constant name="MPGDOuterBarrelFrame_width"            value="15*mm"/>
+    <constant name="MPGDOuterBarrelFrame_width"            value="10*mm"/>
     <constant name="MPGDOuterBarrelFrame_thickness"        value="7*mm"/>
 
     <comment> Module constants </comment>
@@ -23,7 +23,7 @@
     <constant name="MPGDOuterBarrelModule_allowed_space"           value="2.5*cm"/>
     <constant name="MPGDOuterBarrelModule_rmax"                    value="MPGDOuterBarrelModule_rmin + MPGDOuterBarrelModule_allowed_space" />
     <constant name="MPGDOuterBarrelModule_roffset"                 value="0.5*cm" />
-    <constant name="MPGDOuterBarrelModule_width"                   value="34.0*cm"/>
+    <constant name="MPGDOuterBarrelModule_width"                   value="36.0*cm"/>
     <constant name="MPGDOuerBarrel_length"                         value="MPGDOuterBarrelModule_zmin1 + MPGDOuterBarrelModule_zmin2"/>
     <constant name="MPGDOuterBarrelModule_length"                  value="0.5*(MPGDOuterBarrelModule_zmin1 + MPGDOuterBarrelModule_zmin2 + MPGDOuterBarrelModule_zoverlap)"/>
     <constant name="MPGDOuterBarrelModule_offset"                  value="(MPGDOuterBarrelModule_zmin2 - MPGDOuterBarrelModule_zmin1)/2.0"/>
@@ -38,7 +38,7 @@
     <constant name="MPGDOuterBarrelFoilKapton_thickness"         value="50*um"/>
     <constant name="MPGDOuterBarrelReadOutNomex_thickness"       value="50*um"/>
     <constant name="MPGDOuterBarrelReadOutKapton_thickness"      value="50*um"/>
-    <constant name="MPGDOuterBarrelPCB_thickness"                value="1.5*mm"/>
+    <constant name="MPGDOuterBarrelPCB_thickness"                value="2.8*mm"/>
 
     <comment> Thickness values </comment>
     <constant name="MPGDOuterBarrelCathode_thickness"          value="MPGDOuterBarrelFoilKapton_thickness + MPGDOuterBarrelFoilCu_thickness"/>
