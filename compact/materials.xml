@@ -484,7 +484,7 @@
     <fraction n="0.70" ref="Cu"/>
     <fraction n="0.30" ref="Zn"/>
   </material>
-  <material name="BrassAlloy360">
+  <material name="Brass360">
     <D type="density" unit="g/cm3" value="8.49"/>
     <fraction n="0.6045" ref="Cu"/>
     <fraction n="0.3550" ref="Zn"/>
