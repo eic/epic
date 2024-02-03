@@ -182,7 +182,7 @@ static Ref_t create_detector(Detector& desc, xml_h e, SensitiveDetector sens)
   }
   if (x_detector.hasChild(_Unicode(support))) {
        buildSupport(desc, sector_volume, x_detector.child(_Unicode(support)), {inner_r, layer_pos_z, x_dimensions.z(), half_dphi});
-
+  }
   //Loop over the sets of layer elements in the detector.
   int layer_num = 1;
   for (xml_coll_t i_layer(x_detector, _U(layer)); i_layer; ++i_layer) {
