@@ -78,11 +78,6 @@
       <id>system:8,module:2,layer:4,sensor:4,x:32:-16,y:-16</id>
     </readout>
 
-    <readout name="TaggerCalorimeterHits">
-      <segmentation type="NoSegmentation"/>
-      <id>system:8,module:2,crystal:8,x:32:-16,y:-16</id>
-    </readout>
-
   </readouts>
 
 </lccdd>

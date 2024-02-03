@@ -60,6 +60,14 @@
     <vis name="FFTrackerShieldedModuleVis" ref="FFTrackerModuleVis"   visible="true"  showDaughters="false" />
 
     <comment>
+      Luminosity Visualisation
+    </comment>
+    <vis    name="LumiSpecCAL_ModuleVis"       ref="AnlGold"    alpha="0.5"     visible="true" showDaughters="true"/>
+    <vis    name="LumiSpecCAL_FiberVis"        ref="AnlRed"     alpha="0.8"     visible="true"/>
+    <vis    name="LumiSpecCAL_FiberHolderVis"  ref="AnlBlue"    alpha="1.0"     visible="true"/>
+
+
+    <comment>
       ECal Vis
     </comment>
     <vis name="EcalVis"                 ref="AnlGold"   showDaughters="true"  visible="true"/>
