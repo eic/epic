@@ -2,6 +2,15 @@
 <!-- Copyright (C) 2022 Sylvester Joosten, Wouter Deconinck, Shujie Li -->
 
 <lccdd>
+<info name="silicon_barrel.xml"
+      title="Stave-like Silicon Outer Barrel"
+      author="@ShujieL"
+      url="https://github.com/ShujieL"
+      status="development"
+      version="1.0"
+><comment/>
+</info>
+
   <define>
     <comment>
       Main parameters - this is for the more realistic June 2022 design

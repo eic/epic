@@ -2,6 +2,14 @@
 <!-- Copyright (C) 2022 Sylvester Joosten, Shujie Li -->
 
 <lccdd>
+  <info name="support_service_craterlake.xml"
+      title="Tracker support structure and service materials"
+      author="@ShujieL"
+      url="https://github.com/ShujieL"
+      status="development"
+      version="1.0"
+><comment/>
+</info>
   <comment>
     Tracker support and service materials for ePIC-craterlake tracking geometry.
     See https://indico.bnl.gov/event/19854/#1-updated-epic-tracking-config
