@@ -166,7 +166,7 @@ The unused IDs below are saved for future use.
     <documentation>
       #### (100-109) Electromagnetic Calorimeter
 
-      ECal     subsystem  ID:  100
+      Ecal     subsystem  ID:  100
       Barrel   subassembly ID: 101
       EndcapP  subassembly ID: 102
       EndcapN  subassembly ID: 103
@@ -176,30 +176,37 @@ The unused IDs below are saved for future use.
       Unused IDs: 107-109
 
     </documentation>
-    <constant name="ECalSubAssembly_ID"   value="100"/>
-    <constant name="ECalBarrel_ID"        value="101"/>
-    <constant name="ECalEndcapP_ID"       value="102"/>
-    <constant name="ECalEndcapN_ID"       value="103"/>
-    <constant name="CrystalEndcap_ID"     value="104"/>
-    <constant name="ECalBarrel2_ID"       value="105"/>
-    <constant name="ECalEndcapPInsert_ID" value="106"/>
+    <constant name="ECalSubAssembly_ID"   value="100"/><!-- UNUSED -->
+    <constant name="ECalBarrel_ID"        value="101"/><!-- DEPRECATED -->
+    <constant name="EcalBarrel_ID"        value="101"/>
+    <constant name="ECalEndcapP_ID"       value="102"/><!-- DEPRECATED -->
+    <constant name="EcalEndcapP_ID"       value="102"/>
+    <constant name="ECalEndcapN_ID"       value="103"/><!-- DEPRECATED -->
+    <constant name="EcalEndcapN_ID"       value="103"/>
+    <constant name="CrystalEndcap_ID"     value="104"/><!-- UNUSED -->
+    <constant name="ECalBarrel2_ID"       value="105"/><!-- DEPRECATED -->
+    <constant name="EcalBarrel2_ID"       value="105"/>
+    <constant name="ECalEndcapPInsert_ID" value="106"/><!-- DEPRECATED -->
+    <constant name="EcalEndcapPInsert_ID" value="106"/>
 
     <documentation>
       #### (110-119) Hadronic Calorimeter
 
-      - HCal     subsystem  ID:  110
+      - Hcal     subsystem  ID:  110
       - Barrel   subassembly ID: 111
       - EndcapP  subassembly ID: 112
       - EndcapN  subassembly ID: 113
 
       - Unused IDs: 117-119
     </documentation>
-    <constant name="HCalSubAssembly_ID" value="110"/>
-    <constant name="HCalBarrel_ID"      value="111"/>
-    <constant name="HCalEndcapP_ID"     value="112"/>
-    <constant name="HCalEndcapN_ID"     value="113"/>
+    <constant name="HCalSubAssembly_ID" value="110"/><!-- UNUSED -->
+    <constant name="HCalBarrel_ID"      value="111"/><!-- DEPRECATED -->
+    <constant name="HcalBarrel_ID"      value="111"/>
+    <constant name="HCalEndcapN_ID"     value="113"/><!-- UNUSED -->
+    <constant name="HcalEndcapN_ID"     value="113"/><!-- DEPRECATED -->
     <constant name="PassiveSteelRingEndcapP_ID" value="114"/>
-    <constant name="HCalEndcapPInsert_ID" value="115"/>
+    <constant name="HCalEndcapPInsert_ID" value="115"/><!-- DEPRECATED -->
+    <constant name="HcalEndcapPInsert_ID" value="115"/>
     <constant name="LFHCAL_ID"     value="116"/>
     <documentation>
       #### (120-129) (near) Forward reserved

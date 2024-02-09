@@ -64,7 +64,7 @@
       #### Backwards Endcap EM Calorimeter
     </documentation>
     <detector
-        id="ECalEndcapN_ID"
+        id="EcalEndcapN_ID"
         name="EcalEndcapN"
         type="epic_HomogeneousCalorimeter"
         readout="EcalEndcapNHits">

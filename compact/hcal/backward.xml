@@ -32,7 +32,7 @@
       ### Backwards (Negative Z) Endcap Hadronic Calorimeter
     </documentation>
     <detector
-      id="HCalEndcapN_ID"
+      id="HcalEndcapN_ID"
       name="HcalEndcapN"
       type="epic_PolyhedraEndcapCalorimeter2"
       readout="HcalEndcapNHits"
