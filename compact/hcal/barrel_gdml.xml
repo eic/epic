@@ -23,22 +23,22 @@
           z2="HcalBarrel_length2"
           calorimeterType="HAD_BARREL">
         <gdmlfile file="gdml/barrel_hcal_steel_full_nocombs.gdml" url="https://github.com/eic/epic-data/raw/main/barrel_HCAL_gdml/barrel_hcal_steel_full_nocombs.gdml" cache="$DETECTOR_PATH:/opt/detector" material="Steel1020"/>
-	<tile1_gdmlfile file="gdml/Tile01_Reduced.gdml" url="https://github.com/eic/epic-data/raw/ohcalgeo_reconcile/barrel_HCAL_gdml/tiles/Tile01_Reduced.gdml" cache="$DETECTOR_PATH:/opt/detector" material="PlasticScint"/>
-	<tile2_gdmlfile file="gdml/Tile02_Reduced.gdml" url="https://github.com/eic/epic-data/raw/ohcalgeo_reconcile/barrel_HCAL_gdml/tiles/Tile02_Reduced.gdml" cache="$DETECTOR_PATH:/opt/detector" material="PlasticScint"/>
-	<tile3_gdmlfile file="gdml/Tile03_Reduced.gdml" url="https://github.com/eic/epic-data/raw/ohcalgeo_reconcile/barrel_HCAL_gdml/tiles/Tile03_Reduced.gdml" cache="$DETECTOR_PATH:/opt/detector" material="PlasticScint"/>
-	<tile4_gdmlfile file="gdml/Tile04_Reduced.gdml" url="https://github.com/eic/epic-data/raw/ohcalgeo_reconcile/barrel_HCAL_gdml/tiles/Tile04_Reduced.gdml" cache="$DETECTOR_PATH:/opt/detector" material="PlasticScint"/>
-	<tile5_gdmlfile file="gdml/Tile05_Reduced.gdml" url="https://github.com/eic/epic-data/raw/ohcalgeo_reconcile/barrel_HCAL_gdml/tiles/Tile05_Reduced.gdml" cache="$DETECTOR_PATH:/opt/detector" material="PlasticScint"/>
-	<tile6_gdmlfile file="gdml/Tile06_Reduced.gdml" url="https://github.com/eic/epic-data/raw/ohcalgeo_reconcile/barrel_HCAL_gdml/tiles/Tile06_Reduced.gdml" cache="$DETECTOR_PATH:/opt/detector" material="PlasticScint"/>
-	<tile7_gdmlfile file="gdml/Tile07_Reduced.gdml" url="https://github.com/eic/epic-data/raw/ohcalgeo_reconcile/barrel_HCAL_gdml/tiles/Tile07_Reduced.gdml" cache="$DETECTOR_PATH:/opt/detector" material="PlasticScint"/>
-	<tile8_gdmlfile file="gdml/Tile08_Reduced.gdml" url="https://github.com/eic/epic-data/raw/ohcalgeo_reconcile/barrel_HCAL_gdml/tiles/Tile08_Reduced.gdml" cache="$DETECTOR_PATH:/opt/detector" material="PlasticScint"/>
-	<tile9_gdmlfile file="gdml/Tile09_Reduced.gdml" url="https://github.com/eic/epic-data/raw/ohcalgeo_reconcile/barrel_HCAL_gdml/tiles/Tile09_Reduced.gdml" cache="$DETECTOR_PATH:/opt/detector" material="PlasticScint"/>
-	<tile10_gdmlfile file="gdml/Tile10_Reduced.gdml" url="https://github.com/eic/epic-data/raw/ohcalgeo_reconcile/barrel_HCAL_gdml/tiles/Tile10_Reduced.gdml" cache="$DETECTOR_PATH:/opt/detector" material="PlasticScint"/>
-	<tile11_gdmlfile file="gdml/Tile11_Reduced.gdml" url="https://github.com/eic/epic-data/raw/ohcalgeo_reconcile/barrel_HCAL_gdml/tiles/Tile11_Reduced.gdml" cache="$DETECTOR_PATH:/opt/detector" material="PlasticScint"/>
-	<tile12_gdmlfile file="gdml/Tile12_Reduced.gdml" url="https://github.com/eic/epic-data/raw/ohcalgeo_reconcile/barrel_HCAL_gdml/tiles/Tile12_Reduced.gdml" cache="$DETECTOR_PATH:/opt/detector" material="PlasticScint"/>
-	<ctile9_gdmlfile file="gdml/CTile09_Reduced.gdml" url="https://github.com/eic/epic-data/raw/ohcalgeo_reconcile/barrel_HCAL_gdml/tiles/CTile09_Reduced.gdml" cache="$DETECTOR_PATH:/opt/detector" material="PlasticScint"/>
-	<ctile10_gdmlfile file="gdml/CTile10_Reduced.gdml" url="https://github.com/eic/epic-data/raw/ohcalgeo_reconcile/barrel_HCAL_gdml/tiles/CTile10_Reduced.gdml" cache="$DETECTOR_PATH:/opt/detector" material="PlasticScint"/>
-	<ctile11_gdmlfile file="gdml/CTile11_Reduced.gdml" url="https://github.com/eic/epic-data/raw/ohcalgeo_reconcile/barrel_HCAL_gdml/tiles/CTile11_Reduced.gdml" cache="$DETECTOR_PATH:/opt/detector" material="PlasticScint"/>
-	<ctile12_gdmlfile file="gdml/CTile12_Reduced.gdml" url="https://github.com/eic/epic-data/raw/ohcalgeo_reconcile/barrel_HCAL_gdml/tiles/CTile12_Reduced.gdml" cache="$DETECTOR_PATH:/opt/detector" material="PlasticScint"/>
+	<tile1_gdmlfile file="gdml/Tile01_Reduced.gdml" url="https://github.com/eic/epic-data/raw/main/barrel_HCAL_gdml/tiles/Tile01_Reduced.gdml" cache="$DETECTOR_PATH:/opt/detector" material="PlasticScint"/>
+	<tile2_gdmlfile file="gdml/Tile02_Reduced.gdml" url="https://github.com/eic/epic-data/raw/main/barrel_HCAL_gdml/tiles/Tile02_Reduced.gdml" cache="$DETECTOR_PATH:/opt/detector" material="PlasticScint"/>
+	<tile3_gdmlfile file="gdml/Tile03_Reduced.gdml" url="https://github.com/eic/epic-data/raw/main/barrel_HCAL_gdml/tiles/Tile03_Reduced.gdml" cache="$DETECTOR_PATH:/opt/detector" material="PlasticScint"/>
+	<tile4_gdmlfile file="gdml/Tile04_Reduced.gdml" url="https://github.com/eic/epic-data/raw/main/barrel_HCAL_gdml/tiles/Tile04_Reduced.gdml" cache="$DETECTOR_PATH:/opt/detector" material="PlasticScint"/>
+	<tile5_gdmlfile file="gdml/Tile05_Reduced.gdml" url="https://github.com/eic/epic-data/raw/main/barrel_HCAL_gdml/tiles/Tile05_Reduced.gdml" cache="$DETECTOR_PATH:/opt/detector" material="PlasticScint"/>
+	<tile6_gdmlfile file="gdml/Tile06_Reduced.gdml" url="https://github.com/eic/epic-data/raw/main/barrel_HCAL_gdml/tiles/Tile06_Reduced.gdml" cache="$DETECTOR_PATH:/opt/detector" material="PlasticScint"/>
+	<tile7_gdmlfile file="gdml/Tile07_Reduced.gdml" url="https://github.com/eic/epic-data/raw/main/barrel_HCAL_gdml/tiles/Tile07_Reduced.gdml" cache="$DETECTOR_PATH:/opt/detector" material="PlasticScint"/>
+	<tile8_gdmlfile file="gdml/Tile08_Reduced.gdml" url="https://github.com/eic/epic-data/raw/main/barrel_HCAL_gdml/tiles/Tile08_Reduced.gdml" cache="$DETECTOR_PATH:/opt/detector" material="PlasticScint"/>
+	<tile9_gdmlfile file="gdml/Tile09_Reduced.gdml" url="https://github.com/eic/epic-data/raw/main/barrel_HCAL_gdml/tiles/Tile09_Reduced.gdml" cache="$DETECTOR_PATH:/opt/detector" material="PlasticScint"/>
+	<tile10_gdmlfile file="gdml/Tile10_Reduced.gdml" url="https://github.com/eic/epic-data/raw/main/barrel_HCAL_gdml/tiles/Tile10_Reduced.gdml" cache="$DETECTOR_PATH:/opt/detector" material="PlasticScint"/>
+	<tile11_gdmlfile file="gdml/Tile11_Reduced.gdml" url="https://github.com/eic/epic-data/raw/main/barrel_HCAL_gdml/tiles/Tile11_Reduced.gdml" cache="$DETECTOR_PATH:/opt/detector" material="PlasticScint"/>
+	<tile12_gdmlfile file="gdml/Tile12_Reduced.gdml" url="https://github.com/eic/epic-data/raw/main/barrel_HCAL_gdml/tiles/Tile12_Reduced.gdml" cache="$DETECTOR_PATH:/opt/detector" material="PlasticScint"/>
+	<ctile9_gdmlfile file="gdml/CTile09_Reduced.gdml" url="https://github.com/eic/epic-data/raw/main/barrel_HCAL_gdml/tiles/CTile09_Reduced.gdml" cache="$DETECTOR_PATH:/opt/detector" material="PlasticScint"/>
+	<ctile10_gdmlfile file="gdml/CTile10_Reduced.gdml" url="https://github.com/eic/epic-data/raw/main/barrel_HCAL_gdml/tiles/CTile10_Reduced.gdml" cache="$DETECTOR_PATH:/opt/detector" material="PlasticScint"/>
+	<ctile11_gdmlfile file="gdml/CTile11_Reduced.gdml" url="https://github.com/eic/epic-data/raw/main/barrel_HCAL_gdml/tiles/CTile11_Reduced.gdml" cache="$DETECTOR_PATH:/opt/detector" material="PlasticScint"/>
+	<ctile12_gdmlfile file="gdml/CTile12_Reduced.gdml" url="https://github.com/eic/epic-data/raw/main/barrel_HCAL_gdml/tiles/CTile12_Reduced.gdml" cache="$DETECTOR_PATH:/opt/detector" material="PlasticScint"/>
 
   <define>
 
