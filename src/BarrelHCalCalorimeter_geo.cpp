@@ -38,10 +38,7 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
   int       det_id   = x_det.id();
   string    det_name = x_det.nameStr();
   Material  air      = description.air();
-
-  // get the solids section for this detector
-  xml_comp_t x_solids = x_det.child("solids");
-
+  
   DetElement sdet(det_name, det_id);
   Volume     motherVol = description.pickMotherVolume(sdet);
 
@@ -111,7 +108,6 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
     else
       printout(WARNING, "BarrelHCalCalorimeter", "unrecognized <constant> data!");
   }
-
 
   std::vector<double> xposOuter;
   std::vector<double> yposOuter;
@@ -205,103 +201,55 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
 
   // Loop over the tile solids, create them and add them to the detector volume
 
-  for (xml_coll_t k(x_solids, _Unicode(solid)); k; ++k) {
+  for(int j=1; j<17; j++){
 
-    xml_comp_t x_solid = k;
+    std::string gdmlname;
+    std::string solid_name;
 
-    // get the sector solid definitions
-    xml_comp_t define      = x_solid.child("define");
-    xml_comp_t tessellated = x_solid.child("tessellated");
+    if(j<13){
 
-    std::string solid_name     = getAttrOrDefault<std::string>(x_solid, _Unicode(name), " ");
-    std::string solidMatString = getAttrOrDefault<std::string>(x_solid, _Unicode(material), " ");
-    Material    solid_material = description.material(solidMatString);
+      // standard tiles
 
-    double offset_x = atof(getAttrOrDefault<std::string>(x_solid, _Unicode(x), "0").c_str()) * dd4hep::mm;
-    double offset_y = atof(getAttrOrDefault<std::string>(x_solid, _Unicode(y), "0").c_str()) * dd4hep::mm;
-    double offset_z = atof(getAttrOrDefault<std::string>(x_solid, _Unicode(z), "0").c_str()) * dd4hep::mm;
+      gdmlname = _toString(j,"tile%d_gdmlfile");
+      solid_name = _toString(j,"OuterHCalTile%02d"); 
 
-    // Get the vertices
-    std::vector<Tessellated::Vertex_t> vertices;
-    for (xml_coll_t j(define, _Unicode(position)); j; ++j) {
-      xml_comp_t pos = j;
+    }
+    else{
 
-      // create the vertex point
+      // chimney tiles
 
-      double xp = atof(getAttrOrDefault<std::string>(pos, _Unicode(x), "0").c_str()) * dd4hep::mm - offset_x;
-      double yp = atof(getAttrOrDefault<std::string>(pos, _Unicode(y), "0").c_str()) * dd4hep::mm - offset_y;
-      double zp = atof(getAttrOrDefault<std::string>(pos, _Unicode(z), "0").c_str()) * dd4hep::mm - offset_z;
+      gdmlname = _toString(j-4,"ctile%d_gdmlfile");
+      solid_name = _toString(j-4,"OuterHCalChimneyTile%02d"); 
 
-      // points are numbered starting at 0, so these will be indexed
-      // properly when we pick out the index from the vertex names
-
-      Tessellated::Vertex_t thisPoint(xp, yp, zp);
-
-      vertices.push_back(thisPoint);
     }
 
-    TessellatedSolid solid(solid_name.c_str(), vertices);
+    // tile shape gdml file info
+    xml_comp_t x_det_tgdmlfile = x_det.child(gdmlname);
 
-    // Triangular facets
+    std::string tgdml_file = getAttrOrDefault<std::string>(x_det_tgdmlfile, _Unicode(file), " ");;
+    std::string tgdml_material = getAttrOrDefault<std::string>(x_det_tgdmlfile, _Unicode(material), " ");
+    std::string tgdml_url = getAttrOrDefault<std::string>(x_det_tgdmlfile, _Unicode(url), " ");
+    std::string tgdml_cache = getAttrOrDefault<std::string>(x_det_tgdmlfile, _Unicode(cache), " ");
 
-    for (xml_coll_t i(tessellated, _Unicode(triangular)); i; ++i) {
-      xml_comp_t triang = i;
-
-      std::string pointName1 = getAttrOrDefault<std::string>(triang, _Unicode(vertex1), " ");
-      std::string pointName2 = getAttrOrDefault<std::string>(triang, _Unicode(vertex2), " ");
-      std::string pointName3 = getAttrOrDefault<std::string>(triang, _Unicode(vertex3), " ");
-
-      // Extract the point indices
-
-      int vtx1 = stoi(pointName1.substr(pointName1.find_first_of("0123456789")));
-      int vtx2 = stoi(pointName2.substr(pointName2.find_first_of("0123456789")));
-      int vtx3 = stoi(pointName3.substr(pointName3.find_first_of("0123456789")));
-
-      // Add the facet to the solid
-
-      if ((vtx1 >= 0) && (vtx2 >= 0) && (vtx3 >= 0) && (vtx1 != vtx2) && (vtx1 != vtx3) && (vtx2 != vtx3)) {
-
-        solid->AddFacet(vtx1, vtx2, vtx3);
-
-      } else
-        printout(WARNING, "BarrelHCalCalorimeter", "bad triangular facet! %d %d %d", vtx1, vtx2, vtx3);
+    EnsureFileFromURLExists(tgdml_url, tgdml_file, tgdml_cache);
+    if (!fs::exists(fs::path(tgdml_file))) {
+      printout(ERROR, "BarrelHCalCalorimeter_geo", "file " + tgdml_file + " does not exist");
+      printout(ERROR, "BarrelHCalCalorimeter_geo", "use a FileLoader plugin before the field element");
+      std::_Exit(EXIT_FAILURE);
     }
 
-    // Quadrangular facets
-
-    for (xml_coll_t i(tessellated, _Unicode(quadrangular)); i; ++i) {
-      xml_comp_t quadrang = i;
-
-      std::string pointName1 = getAttrOrDefault<std::string>(quadrang, _Unicode(vertex1), " ");
-      std::string pointName2 = getAttrOrDefault<std::string>(quadrang, _Unicode(vertex2), " ");
-      std::string pointName3 = getAttrOrDefault<std::string>(quadrang, _Unicode(vertex3), " ");
-      std::string pointName4 = getAttrOrDefault<std::string>(quadrang, _Unicode(vertex4), " ");
-
-      // Extract the point indices
-
-      int vtx1 = stoi(pointName1.substr(pointName1.find_first_of("0123456789")));
-      int vtx2 = stoi(pointName2.substr(pointName2.find_first_of("0123456789")));
-      int vtx3 = stoi(pointName3.substr(pointName3.find_first_of("0123456789")));
-      int vtx4 = stoi(pointName4.substr(pointName4.find_first_of("0123456789")));
-
-      // Add the facet to the solid
-
-      if ((vtx1 >= 0) && (vtx2 >= 0) && (vtx3 >= 0) && (vtx4 >= 0) &&
-          (vtx1 != vtx2) && (vtx1 != vtx3) && (vtx2 != vtx3) && (vtx1 != vtx4) && (vtx2 != vtx4) && (vtx3 != vtx4)) {
-
-        solid->AddFacet(vtx1, vtx2, vtx3, vtx4);
-
-      } else
-        printout(WARNING, "BarrelHCalCalorimeter", "bad quadrangular facet! %d %d %d %d", vtx1, vtx2, vtx3, vtx4);
+    Volume solidVolume = parser.GDMLReadFile(tgdml_file.c_str());
+    if(!solidVolume.isValid()){
+      printout(WARNING, "BarrelHCalCalorimeter_geo", "%s", tgdml_file.c_str());
+      printout(WARNING, "BarrelHCalCalorimeter_geo", "solidVolume invalid, GDML parser failed!");
+      std::_Exit(EXIT_FAILURE);
     }
-
-    // Complete the shape
-    solid->CloseShape(true, true, true);
-
-    Volume solidVolume(solid_name, solid, solid_material);
+    solidVolume.import();
     solidVolume.setVisAttributes(description, x_det.visStr());
-
-    // printout(WARNING, "BarrelHCalCalorimeter", "tesselated solid name %s", solid_name.c_str());
+    TessellatedSolid volume_solid = solidVolume.solid();
+    volume_solid->CloseShape(true, true, true); // tesselated solid not closed by import!
+    Material tile_material = description.material(tgdml_material.c_str());
+    solidVolume.setMaterial(tile_material);
 
     // For tiles we build an assembly to get the full array of tiles
     // Offsets and rotation are to properly orient the tiles in the assembly.
@@ -331,7 +279,7 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
 
             if (tnum < 8) {
 
-              PlacedVolume phv0 = Tower[11 - tnum].placeVolume(
+	      PlacedVolume phv0 = Tower[11 - tnum].placeVolume(
                                                                solidVolume, i,
                                                                RotationZ(i * increment_angle) *
                                                                Transform3D(RotationY(90.0 * dd4hep::deg),
@@ -339,22 +287,25 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
                                                                RotationX(-tilePlaneRotate * dd4hep::deg) *
                                                                Transform3D(RotationY(0.0),
                                                                            Translation3D((xposTileS[tnum] + (tnum + 1) * tile_tolerance) * dd4hep::mm,
-                                                                                         yposTileS[tnum] * dd4hep::mm, zposTileS[tnum] * dd4hep::mm)));
-
+                                                                                         yposTileS[tnum] * dd4hep::mm, zposTileS[tnum] * dd4hep::mm)) *
+							       Translation3D(-xposTileS[tnum] * dd4hep::mm, -yposTileS[tnum] * dd4hep::mm, -zposTileS[tnum] * dd4hep::mm));							       
+ 
               phv0.addPhysVolID("tile", i);
               DetElement sd0 = tile_det.clone(_toString(i + (11 - tnum) * 10, "tile%d"));
               sd0.setPlacement(phv0);
               sdet.add(sd0);
 
               PlacedVolume phv1 = Tower[12 + tnum].placeVolume(
-                                                               solidVolume, i + 5,
+							       solidVolume, i + 5,
                                                                RotationZ(i * increment_angle) *
                                                                Transform3D(RotationY(90.0 * dd4hep::deg),
                                                                            Translation3D(xposOuter[0] * dd4hep::mm, yposOuter[0] * dd4hep::mm, 0.0)) *
                                                                RotationX(-tilePlaneRotate * dd4hep::deg) *
                                                                Transform3D(RotationY(180.0 * dd4hep::deg),
                                                                            Translation3D((xposTileN[tnum] - (tnum + 1) * tile_tolerance) * dd4hep::mm,
-                                                                                         yposTileN[tnum] * dd4hep::mm, zposTileN[tnum] * dd4hep::mm)));
+                                                                                         yposTileN[tnum] * dd4hep::mm, zposTileN[tnum] * dd4hep::mm)) *
+							       Translation3D(-xposTileS[tnum] * dd4hep::mm, -yposTileS[tnum] * dd4hep::mm, -zposTileS[tnum] * dd4hep::mm));
+	      
               phv1.addPhysVolID("tile", i);
               DetElement sd1 = tile_det.clone(_toString(i + 5 + (12 + tnum) * 10, "tile%d"));
               sd1.setPlacement(phv1);
@@ -363,14 +314,15 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
             } else {
 
               PlacedVolume phv0 = Tower[11 - tnum].placeVolume(
-                                                               solidVolume, i,
+							       solidVolume, i,
                                                                RotationZ(i * increment_angle) *
                                                                Transform3D(RotationY(90.0 * dd4hep::deg),
                                                                            Translation3D(xposOuter[0] * dd4hep::mm, yposOuter[0] * dd4hep::mm, 0.0)) *
                                                                RotationX(-tilePlaneRotate * dd4hep::deg) *
                                                                Transform3D(RotationY(180.0 * dd4hep::deg),
                                                                            Translation3D((xposTileS[tnum] + (tnum + 1) * tile_tolerance) * dd4hep::mm,
-                                                                                         yposTileS[tnum] * dd4hep::mm, zposTileS[tnum] * dd4hep::mm)));
+                                                                                         yposTileS[tnum] * dd4hep::mm, zposTileS[tnum] * dd4hep::mm)) *
+							       Translation3D(xposTileS[tnum] * dd4hep::mm, -yposTileS[tnum] * dd4hep::mm, -zposTileS[tnum] * dd4hep::mm));
 
               phv0.addPhysVolID("tile", i);
               DetElement sd0 = tile_det.clone(_toString(i + (11 - tnum) * 10, "tile%d"));
@@ -385,7 +337,8 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
                                                                RotationX(-tilePlaneRotate * dd4hep::deg) *
                                                                Transform3D(RotationY(0.0),
                                                                            Translation3D((xposTileN[tnum] - (tnum + 1) * tile_tolerance) * dd4hep::mm,
-                                                                                         yposTileN[tnum] * dd4hep::mm, zposTileN[tnum] * dd4hep::mm)));
+                                                                                         yposTileN[tnum] * dd4hep::mm, zposTileN[tnum] * dd4hep::mm)) *
+							       Translation3D(xposTileS[tnum] * dd4hep::mm, -yposTileS[tnum] * dd4hep::mm, -zposTileS[tnum] * dd4hep::mm));
               phv1.addPhysVolID("tile", i);
               DetElement sd1 = tile_det.clone(_toString(i + 5 + (12 + tnum) * 10, "tile%d"));
               sd1.setPlacement(phv1);
@@ -410,7 +363,9 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
                                                                    Transform3D(RotationY(0.0),
                                                                                Translation3D((xposChimneyTileS[tnum - 8] + (tnum + 1) * tile_tolerance) * dd4hep::mm,
                                                                                              yposChimneyTileS[tnum - 8] * dd4hep::mm,
-                                                                                             zposChimneyTileS[tnum - 8] * dd4hep::mm)));
+                                                                                             zposChimneyTileS[tnum - 8] * dd4hep::mm)) *
+								   Translation3D(-xposChimneyTileS[tnum-8] * dd4hep::mm, -yposChimneyTileS[tnum-8] * dd4hep::mm,
+										 -zposChimneyTileS[tnum-8] * dd4hep::mm));
             phv.addPhysVolID("tile", i);
             DetElement sd = tile_det.clone(_toString(i + (11 - tnum) * 10 + 480, "tile%d"));
             sd.setPlacement(phv);
