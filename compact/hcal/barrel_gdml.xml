@@ -10,7 +10,7 @@
       ### inner radius parameter to inner plate, -1.8cm to account for combs and outer plate
       </documentation>
       <detector
-          id="HCalBarrel_ID"
+          id="HcalBarrel_ID"
           name="HcalBarrel"
           type="epic_HcalBarrelGDML"
           readout="HcalBarrelHits"

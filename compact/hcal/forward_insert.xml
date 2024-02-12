@@ -68,7 +68,7 @@
 
     </documentation>
     <detector
-      id="HCalEndcapPInsert_ID"
+      id="HcalEndcapPInsert_ID"
       name="HcalEndcapPInsert"
       type="epic_InsertCalorimeter"
       vis="HcalEndcapInsertVis"

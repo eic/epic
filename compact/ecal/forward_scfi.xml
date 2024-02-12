@@ -29,7 +29,7 @@
       ------------------------------------------
       An EM calorimeter with ScFi modules
     </comment>
-    <detector id="ECalEndcapP_ID"
+    <detector id="EcalEndcapP_ID"
       name="EcalEndcapP"
       type="epic_ScFiCalorimeter"
       vis="EcalEndcapVis"
