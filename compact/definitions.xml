@@ -202,8 +202,8 @@ The unused IDs below are saved for future use.
     <constant name="HCalSubAssembly_ID" value="110"/><!-- UNUSED -->
     <constant name="HCalBarrel_ID"      value="111"/><!-- DEPRECATED -->
     <constant name="HcalBarrel_ID"      value="111"/>
-    <constant name="HCalEndcapN_ID"     value="113"/><!-- UNUSED -->
-    <constant name="HcalEndcapN_ID"     value="113"/><!-- DEPRECATED -->
+    <constant name="HCalEndcapN_ID"     value="113"/><!-- DEPRECATED -->
+    <constant name="HcalEndcapN_ID"     value="113"/>
     <constant name="PassiveSteelRingEndcapP_ID" value="114"/>
     <constant name="HCalEndcapPInsert_ID" value="115"/><!-- DEPRECATED -->
     <constant name="HcalEndcapPInsert_ID" value="115"/>
