@@ -38,7 +38,7 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
   int       det_id   = x_det.id();
   string    det_name = x_det.nameStr();
   Material  air      = description.air();
-  
+
   DetElement sdet(det_name, det_id);
   Volume     motherVol = description.pickMotherVolume(sdet);
 
@@ -211,7 +211,7 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
       // standard tiles
 
       gdmlname = _toString(j,"tile%d_gdmlfile");
-      solid_name = _toString(j,"OuterHCalTile%02d"); 
+      solid_name = _toString(j,"OuterHCalTile%02d");
 
     }
     else{
@@ -219,7 +219,7 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
       // chimney tiles
 
       gdmlname = _toString(j-4,"ctile%d_gdmlfile");
-      solid_name = _toString(j-4,"OuterHCalChimneyTile%02d"); 
+      solid_name = _toString(j-4,"OuterHCalChimneyTile%02d");
 
     }
 
@@ -279,7 +279,7 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
 
             if (tnum < 8) {
 
-	      PlacedVolume phv0 = Tower[11 - tnum].placeVolume(
+              PlacedVolume phv0 = Tower[11 - tnum].placeVolume(
                                                                solidVolume, i,
                                                                RotationZ(i * increment_angle) *
                                                                Transform3D(RotationY(90.0 * dd4hep::deg),
@@ -288,15 +288,15 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
                                                                Transform3D(RotationY(0.0),
                                                                            Translation3D((xposTileS[tnum] + (tnum + 1) * tile_tolerance) * dd4hep::mm,
                                                                                          yposTileS[tnum] * dd4hep::mm, zposTileS[tnum] * dd4hep::mm)) *
-							       Translation3D(-xposTileS[tnum] * dd4hep::mm, -yposTileS[tnum] * dd4hep::mm, -zposTileS[tnum] * dd4hep::mm));							       
- 
+                                                               Translation3D(-xposTileS[tnum] * dd4hep::mm, -yposTileS[tnum] * dd4hep::mm, -zposTileS[tnum] * dd4hep::mm));
+
               phv0.addPhysVolID("tile", i);
               DetElement sd0 = tile_det.clone(_toString(i + (11 - tnum) * 10, "tile%d"));
               sd0.setPlacement(phv0);
               sdet.add(sd0);
 
               PlacedVolume phv1 = Tower[12 + tnum].placeVolume(
-							       solidVolume, i + 5,
+                                                               solidVolume, i + 5,
                                                                RotationZ(i * increment_angle) *
                                                                Transform3D(RotationY(90.0 * dd4hep::deg),
                                                                            Translation3D(xposOuter[0] * dd4hep::mm, yposOuter[0] * dd4hep::mm, 0.0)) *
@@ -304,8 +304,8 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
                                                                Transform3D(RotationY(180.0 * dd4hep::deg),
                                                                            Translation3D((xposTileN[tnum] - (tnum + 1) * tile_tolerance) * dd4hep::mm,
                                                                                          yposTileN[tnum] * dd4hep::mm, zposTileN[tnum] * dd4hep::mm)) *
-							       Translation3D(-xposTileS[tnum] * dd4hep::mm, -yposTileS[tnum] * dd4hep::mm, -zposTileS[tnum] * dd4hep::mm));
-	      
+                                                               Translation3D(-xposTileS[tnum] * dd4hep::mm, -yposTileS[tnum] * dd4hep::mm, -zposTileS[tnum] * dd4hep::mm));
+
               phv1.addPhysVolID("tile", i);
               DetElement sd1 = tile_det.clone(_toString(i + 5 + (12 + tnum) * 10, "tile%d"));
               sd1.setPlacement(phv1);
@@ -314,7 +314,7 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
             } else {
 
               PlacedVolume phv0 = Tower[11 - tnum].placeVolume(
-							       solidVolume, i,
+                                                               solidVolume, i,
                                                                RotationZ(i * increment_angle) *
                                                                Transform3D(RotationY(90.0 * dd4hep::deg),
                                                                            Translation3D(xposOuter[0] * dd4hep::mm, yposOuter[0] * dd4hep::mm, 0.0)) *
@@ -322,7 +322,7 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
                                                                Transform3D(RotationY(180.0 * dd4hep::deg),
                                                                            Translation3D((xposTileS[tnum] + (tnum + 1) * tile_tolerance) * dd4hep::mm,
                                                                                          yposTileS[tnum] * dd4hep::mm, zposTileS[tnum] * dd4hep::mm)) *
-							       Translation3D(xposTileS[tnum] * dd4hep::mm, -yposTileS[tnum] * dd4hep::mm, -zposTileS[tnum] * dd4hep::mm));
+                                                               Translation3D(xposTileS[tnum] * dd4hep::mm, -yposTileS[tnum] * dd4hep::mm, -zposTileS[tnum] * dd4hep::mm));
 
               phv0.addPhysVolID("tile", i);
               DetElement sd0 = tile_det.clone(_toString(i + (11 - tnum) * 10, "tile%d"));
@@ -338,7 +338,7 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
                                                                Transform3D(RotationY(0.0),
                                                                            Translation3D((xposTileN[tnum] - (tnum + 1) * tile_tolerance) * dd4hep::mm,
                                                                                          yposTileN[tnum] * dd4hep::mm, zposTileN[tnum] * dd4hep::mm)) *
-							       Translation3D(xposTileS[tnum] * dd4hep::mm, -yposTileS[tnum] * dd4hep::mm, -zposTileS[tnum] * dd4hep::mm));
+                                                               Translation3D(xposTileS[tnum] * dd4hep::mm, -yposTileS[tnum] * dd4hep::mm, -zposTileS[tnum] * dd4hep::mm));
               phv1.addPhysVolID("tile", i);
               DetElement sd1 = tile_det.clone(_toString(i + 5 + (12 + tnum) * 10, "tile%d"));
               sd1.setPlacement(phv1);
@@ -364,8 +364,8 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
                                                                                Translation3D((xposChimneyTileS[tnum - 8] + (tnum + 1) * tile_tolerance) * dd4hep::mm,
                                                                                              yposChimneyTileS[tnum - 8] * dd4hep::mm,
                                                                                              zposChimneyTileS[tnum - 8] * dd4hep::mm)) *
-								   Translation3D(-xposChimneyTileS[tnum-8] * dd4hep::mm, -yposChimneyTileS[tnum-8] * dd4hep::mm,
-										 -zposChimneyTileS[tnum-8] * dd4hep::mm));
+                                                                   Translation3D(-xposChimneyTileS[tnum-8] * dd4hep::mm, -yposChimneyTileS[tnum-8] * dd4hep::mm,
+                                                                                 -zposChimneyTileS[tnum-8] * dd4hep::mm));
             phv.addPhysVolID("tile", i);
             DetElement sd = tile_det.clone(_toString(i + (11 - tnum) * 10 + 480, "tile%d"));
             sd.setPlacement(phv);
