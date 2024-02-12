@@ -118,7 +118,7 @@
       Silicon (Astropix) readout layers for imaging 3d showers
     </comment>
     <detector
-      id="ECalBarrel_ID"
+      id="EcalBarrel_ID"
       name="EcalBarrelImaging"
       type="epic_EcalBarrelImaging"
       readout="EcalBarrelImagingHits"
@@ -227,7 +227,7 @@
       ---------------------------------------
     </comment>
     <detector
-      id="ECalBarrel2_ID"
+      id="EcalBarrel2_ID"
       name="EcalBarrelScFi"
       type="epic_EcalBarrelScFi"
       readout="EcalBarrelScFiHits"
