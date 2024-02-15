@@ -401,7 +401,7 @@ jobs:
       - build
     strategy:
       matrix:
-        detector_config: [epic_craterlake]
+        detector_config: [epic_craterlake_no_bhcal, epic_bhcal]
       fail-fast: false
     steps:
     - uses: actions/checkout@v4
