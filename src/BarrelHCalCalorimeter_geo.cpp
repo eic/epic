@@ -253,7 +253,7 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
 
   // Place steel in envelope
 
-  double sec_rot_angle = 360.0/32.0; 
+  double sec_rot_angle = 360.0/32.0;
 
   for(int k=0; k<29; k++){
     BarrelHCAL.placeVolume(barrel_sector_vol, k, Transform3D(RotationZ(-k*sec_rot_angle*dd4hep::deg)*RotationY(180.0* dd4hep::deg),Translation3D(0, 0, 0)));
