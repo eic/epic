@@ -83,12 +83,23 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
   double tile_tolerance = 0.2; // Tile tolerance in mm to avoid overlaps
 
   // Sector steel tessellated shape gdml file info
-  xml_comp_t x_det_gdmlfile = x_det.child("gdmlfile");
+  xml_comp_t x_det_sec_gdmlfile = x_det.child("sec_gdmlfile");
+  std::string sec_gdml_file = getAttrOrDefault<std::string>(x_det_sec_gdmlfile, _Unicode(file), " ");;
+  std::string sec_gdml_material = getAttrOrDefault<std::string>(x_det_sec_gdmlfile, _Unicode(material), " ");
+  std::string sec_gdml_url = getAttrOrDefault<std::string>(x_det_sec_gdmlfile, _Unicode(url), " ");
+  std::string sec_gdml_cache = getAttrOrDefault<std::string>(x_det_sec_gdmlfile, _Unicode(cache), " ");
 
-  std::string gdml_file = getAttrOrDefault<std::string>(x_det_gdmlfile, _Unicode(file), " ");;
-  std::string gdml_material = getAttrOrDefault<std::string>(x_det_gdmlfile, _Unicode(material), " ");
-  std::string gdml_url = getAttrOrDefault<std::string>(x_det_gdmlfile, _Unicode(url), " ");
-  std::string gdml_cache = getAttrOrDefault<std::string>(x_det_gdmlfile, _Unicode(cache), " ");
+  xml_comp_t x_det_csec_gdmlfile = x_det.child("csec_gdmlfile");
+  std::string csec_gdml_file = getAttrOrDefault<std::string>(x_det_csec_gdmlfile, _Unicode(file), " ");;
+  std::string csec_gdml_material = getAttrOrDefault<std::string>(x_det_csec_gdmlfile, _Unicode(material), " ");
+  std::string csec_gdml_url = getAttrOrDefault<std::string>(x_det_csec_gdmlfile, _Unicode(url), " ");
+  std::string csec_gdml_cache = getAttrOrDefault<std::string>(x_det_csec_gdmlfile, _Unicode(cache), " ");
+
+  xml_comp_t x_det_er_gdmlfile = x_det.child("er_gdmlfile");
+  std::string er_gdml_file = getAttrOrDefault<std::string>(x_det_er_gdmlfile, _Unicode(file), " ");;
+  std::string er_gdml_material = getAttrOrDefault<std::string>(x_det_er_gdmlfile, _Unicode(material), " ");
+  std::string er_gdml_url = getAttrOrDefault<std::string>(x_det_er_gdmlfile, _Unicode(url), " ");
+  std::string er_gdml_cache = getAttrOrDefault<std::string>(x_det_er_gdmlfile, _Unicode(cache), " ");
 
   // Loop over the defines section and pick up the tile offsets, ref location and angles
 
@@ -173,31 +184,85 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
   double increment_angle = (360.0/320.0)*dd4hep::deg;
 
   // Read in the barrel structure GDML file
+  // three structures - normal sector, chimney sector, and end rings
   Assembly BarrelHCAL("BarrelHCAL");
+  TGDMLParse parser;
 
-  EnsureFileFromURLExists(gdml_url, gdml_file, gdml_cache);
-  if (!fs::exists(fs::path(gdml_file))) {
-    printout(ERROR, "BarrelHCalCalorimeter_geo", "file " + gdml_file + " does not exist");
+  // sector
+  EnsureFileFromURLExists(sec_gdml_url, sec_gdml_file, sec_gdml_cache);
+  if (!fs::exists(fs::path(sec_gdml_file))) {
+    printout(ERROR, "BarrelHCalCalorimeter_geo", "file " + sec_gdml_file + " does not exist");
     printout(ERROR, "BarrelHCalCalorimeter_geo", "use a FileLoader plugin before the field element");
     std::_Exit(EXIT_FAILURE);
   }
 
-  TGDMLParse parser;
-  Volume barrel_steel_vol = parser.GDMLReadFile(gdml_file.c_str());
-  if(!barrel_steel_vol.isValid()){
-    printout(WARNING, "BarrelHCalCalorimeter", "%s", gdml_file.c_str());
-    printout(WARNING, "BarrelHCalCalorimeter", "barrel_steel_vol invalid, GDML parser failed!");
+  Volume barrel_sector_vol = parser.GDMLReadFile(sec_gdml_file.c_str());
+  if(!barrel_sector_vol.isValid()){
+    printout(WARNING, "BarrelHCalCalorimeter", "%s", sec_gdml_file.c_str());
+    printout(WARNING, "BarrelHCalCalorimeter", "barrel_sector_vol invalid, GDML parser failed!");
     std::_Exit(EXIT_FAILURE);
   }
-  barrel_steel_vol.import();
-  barrel_steel_vol.setVisAttributes(description, x_det.visStr());
-  TessellatedSolid barrel_steel_solid = barrel_steel_vol.solid();
-  barrel_steel_solid->CloseShape(true, true, true); // tesselated solid not closed by import!
-  Material sector_material = description.material(gdml_material.c_str());
-  barrel_steel_vol.setMaterial(sector_material);
+  barrel_sector_vol.import();
+  barrel_sector_vol.setVisAttributes(description, x_det.visStr());
+  TessellatedSolid barrel_sector_solid = barrel_sector_vol.solid();
+  barrel_sector_solid->CloseShape(true, true, true); // tesselated solid not closed by import!
+  Material sector_material = description.material(sec_gdml_material.c_str());
+  barrel_sector_vol.setMaterial(sector_material);
+
+  // chimney sector
+  EnsureFileFromURLExists(csec_gdml_url, csec_gdml_file, csec_gdml_cache);
+  if (!fs::exists(fs::path(csec_gdml_file))) {
+    printout(ERROR, "BarrelHCalCalorimeter_geo", "file " + csec_gdml_file + " does not exist");
+    printout(ERROR, "BarrelHCalCalorimeter_geo", "use a FileLoader plugin before the field element");
+    std::_Exit(EXIT_FAILURE);
+  }
+
+  Volume barrel_csector_vol = parser.GDMLReadFile(csec_gdml_file.c_str());
+  if(!barrel_csector_vol.isValid()){
+    printout(WARNING, "BarrelHCalCalorimeter", "%s", csec_gdml_file.c_str());
+    printout(WARNING, "BarrelHCalCalorimeter", "barrel_csector_vol invalid, GDML parser failed!");
+    std::_Exit(EXIT_FAILURE);
+  }
+  barrel_csector_vol.import();
+  barrel_csector_vol.setVisAttributes(description, x_det.visStr());
+  TessellatedSolid barrel_csector_solid = barrel_csector_vol.solid();
+  barrel_csector_solid->CloseShape(true, true, true); // tesselated solid not closed by import!
+  Material csector_material = description.material(csec_gdml_material.c_str());
+  barrel_csector_vol.setMaterial(csector_material);
+
+  // end ring
+  EnsureFileFromURLExists(er_gdml_url, er_gdml_file, er_gdml_cache);
+  if (!fs::exists(fs::path(er_gdml_file))) {
+    printout(ERROR, "BarrelHCalCalorimeter_geo", "file " + er_gdml_file + " does not exist");
+    printout(ERROR, "BarrelHCalCalorimeter_geo", "use a FileLoader plugin before the field element");
+    std::_Exit(EXIT_FAILURE);
+  }
+
+  Volume barrel_er_vol = parser.GDMLReadFile(er_gdml_file.c_str());
+  if(!barrel_er_vol.isValid()){
+    printout(WARNING, "BarrelHCalCalorimeter", "%s", er_gdml_file.c_str());
+    printout(WARNING, "BarrelHCalCalorimeter", "barrel_er_vol invalid, GDML parser failed!");
+    std::_Exit(EXIT_FAILURE);
+  }
+  barrel_er_vol.import();
+  barrel_er_vol.setVisAttributes(description, x_det.visStr());
+  TessellatedSolid barrel_er_solid = barrel_er_vol.solid();
+  barrel_er_solid->CloseShape(true, true, true); // tesselated solid not closed by import!
+  Material er_material = description.material(er_gdml_material.c_str());
+  barrel_er_vol.setMaterial(er_material);
 
   // Place steel in envelope
-  BarrelHCAL.placeVolume(barrel_steel_vol, 0, Transform3D(RotationY(180.0* dd4hep::deg),Translation3D(0, 0, 0)));
+
+  double sec_rot_angle = 360.0/32.0; 
+
+  for(int k=0; k<29; k++){
+    BarrelHCAL.placeVolume(barrel_sector_vol, k, Transform3D(RotationZ(-k*sec_rot_angle*dd4hep::deg)*RotationY(180.0* dd4hep::deg),Translation3D(0, 0, 0)));
+  }
+  BarrelHCAL.placeVolume(barrel_csector_vol, 0, Transform3D(RotationZ(sec_rot_angle*dd4hep::deg)*RotationY(180.0* dd4hep::deg),Translation3D(0, 0, 0)));
+  BarrelHCAL.placeVolume(barrel_csector_vol, 1, Transform3D(RotationY(180.0* dd4hep::deg),Translation3D(0, 0, 0)));
+  BarrelHCAL.placeVolume(barrel_csector_vol, 2, Transform3D(RotationZ(-sec_rot_angle*dd4hep::deg)*RotationY(180.0* dd4hep::deg),Translation3D(0, 0, 0)));
+  BarrelHCAL.placeVolume(barrel_er_vol, 0, Transform3D(RotationY(180.0* dd4hep::deg),Translation3D(0, 0, 0)));
+  BarrelHCAL.placeVolume(barrel_er_vol, 1, Transform3D(RotationY(0.0* dd4hep::deg),Translation3D(0, 0, 0)));
 
   // Loop over the tile solids, create them and add them to the detector volume
 
