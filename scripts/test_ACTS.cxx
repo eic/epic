@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: LGPL-3.0-or-later
-// Copyright (C) 2022 Whitney Armstrong
+// Copyright (C) 2022 - 2024, Whitney Armstrong, Wouter Deconinck
 
 #include "DD4hep/Detector.h"
 
