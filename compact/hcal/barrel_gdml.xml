@@ -22,9 +22,9 @@
           z1="HcalBarrel_length1"
           z2="HcalBarrel_length2"
           calorimeterType="HAD_BARREL">
-        <sec_gdmlfile file="gdml/barrel_hcal_steel_sector_nocombs.gdml" url="https://github.com/eic/epic-data/raw/main/barrel_HCAL_gdml/barrel_hcal_steel_sector_nocombs.gdml" cache="$DETECTOR_PATH:/opt/detector" material="Steel1020"/>
-        <csec_gdmlfile file="gdml/barrel_hcal_steel_chimneysector_nocombs.gdml" url="https://github.com/eic/epic-data/raw/main/barrel_HCAL_gdml/barrel_hcal_steel_chimneysector_nocombs.gdml" cache="$DETECTOR_PATH:/opt/detector" material="Steel1020"/>
-        <er_gdmlfile file="gdml/barrel_hcal_steel_endring.gdml" url="https://github.com/eic/epic-data/raw/main/barrel_HCAL_gdml/barrel_hcal_steel_endring.gdml" cache="$DETECTOR_PATH:/opt/detector" material="Steel1020"/>
+        <sec_gdmlfile file="gdml/barrel_hcal_steel_sector_nocombs.gdml" url="https://github.com/eic/epic-data/raw/c1ef9dca1781047fe9485eec6c0f986ec7d27f41/barrel_HCAL_gdml/barrel_hcal_steel_sector_nocombs.gdml" cache="$DETECTOR_PATH:/opt/detector" material="Steel1020"/>
+        <csec_gdmlfile file="gdml/barrel_hcal_steel_chimneysector_nocombs.gdml" url="https://github.com/eic/epic-data/raw/c1ef9dca1781047fe9485eec6c0f986ec7d27f41/barrel_HCAL_gdml/barrel_hcal_steel_chimneysector_nocombs.gdml" cache="$DETECTOR_PATH:/opt/detector" material="Steel1020"/>
+        <er_gdmlfile file="gdml/barrel_hcal_steel_endring.gdml" url="https://github.com/eic/epic-data/raw/c1ef9dca1781047fe9485eec6c0f986ec7d27f41/barrel_HCAL_gdml/barrel_hcal_steel_endring.gdml" cache="$DETECTOR_PATH:/opt/detector" material="Steel1020"/>
         <tile1_gdmlfile file="gdml/Tile01_Reduced.gdml" url="https://github.com/eic/epic-data/raw/29b126ddf47333cd2295b2ca78a40c15c7520d00/barrel_HCAL_gdml/tiles/Tile01_Reduced.gdml" cache="$DETECTOR_PATH:/opt/detector" material="PlasticScint"/>
         <tile2_gdmlfile file="gdml/Tile02_Reduced.gdml" url="https://github.com/eic/epic-data/raw/29b126ddf47333cd2295b2ca78a40c15c7520d00/barrel_HCAL_gdml/tiles/Tile02_Reduced.gdml" cache="$DETECTOR_PATH:/opt/detector" material="PlasticScint"/>
         <tile3_gdmlfile file="gdml/Tile03_Reduced.gdml" url="https://github.com/eic/epic-data/raw/29b126ddf47333cd2295b2ca78a40c15c7520d00/barrel_HCAL_gdml/tiles/Tile03_Reduced.gdml" cache="$DETECTOR_PATH:/opt/detector" material="PlasticScint"/>
