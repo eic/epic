@@ -584,6 +584,7 @@ jobs:
 
   npsim-gun:
     runs-on: ubuntu-latest
+    needs: build
     strategy:
       matrix:
         particle: [pi, e]
@@ -652,6 +653,7 @@ jobs:
 
   npsim-dis:
     runs-on: ubuntu-latest
+    needs: build
     strategy:
       matrix:
         beam: [5x41, 10x100, 18x275]
