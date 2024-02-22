@@ -616,6 +616,7 @@ jobs:
         branch: ${{ github.event.pull_request.base.ref || github.ref_name }}
         path: ref/
         name: sim_${{ matrix.particle }}_1GeV_20GeV_${{ matrix.detector_config }}.edm4hep.root
+        workflow_conclusion: ""
         if_no_artifact_found: warn
     - name: Compare to previous artifacts
       uses: eic/run-cvmfs-osg-eic-shell@main
@@ -677,6 +678,7 @@ jobs:
         branch: ${{ github.event.pull_request.base.ref || github.ref_name }}
         path: ref/
         name: sim_dis_${{matrix.beam}}_minQ2=${{matrix.minq2}}_${{ matrix.detector_config }}.edm4hep.root
+        workflow_conclusion: ""
         if_no_artifact_found: warn
     - name: Compare to previous artifacts
       uses: eic/run-cvmfs-osg-eic-shell@main
