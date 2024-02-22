@@ -601,6 +601,7 @@ jobs:
       if: steps.retrieve_simulation_files.outputs.cache-hit != 'true'
       with:
         platform-release: "jug_xl:nightly"
+        setup: install/setup.sh
         run: |
           npsim --compactFile ${DETECTOR_PATH}/${DETECTOR}_${{ matrix.detector_config }}.xml -G --random.seed 1 --gun.particle "${{ matrix.particle }}-" --gun.momentumMin "1*GeV" --gun.momentumMax "20*GeV" --gun.distribution "uniform" -N 100 --outputFile sim_${{ matrix.particle }}_1GeV_20GeV_${{ matrix.detector_config }}.edm4hep.root -v WARNING
     - uses: actions/upload-artifact@v4
@@ -621,6 +622,7 @@ jobs:
       if: steps.download_previous_artifact.outputs.found_artifact == 'true'
       with:
         platform-release: "jug_xl:nightly"
+        setup: install/setup.sh
         run: |
           export PYTHONPATH=$HOME/.local/lib/python3.10/site-packages:$PYTHONPATH
           mkdir capybara-reports
@@ -646,6 +648,7 @@ jobs:
       if: steps.download_previous_artifact.outputs.found_artifact == 'true'
       with:
         platform-release: "jug_xl:nightly"
+        setup: install/setup.sh
         run: |
           echo "::group::diff ref -> new"
           python3 ${{ github.workspace }}/epic-capybara/bara.py ref/sim_${{ matrix.particle }}_1GeV_20GeV_${{ matrix.detector_config }}.edm4hep.root sim_${{ matrix.particle }}_1GeV_20GeV_${{ matrix.detector_config }}.edm4hep.root
@@ -674,6 +677,7 @@ jobs:
       if: steps.retrieve_simulation_files.outputs.cache-hit != 'true'
       with:
         platform-release: "jug_xl:nightly"
+        setup: install/setup.sh
         run: |
           url=root://dtn-eic.jlab.org//work/eic2/EPIC/EVGEN/DIS/NC/${{matrix.beam}}/minQ2=${{matrix.minq2}}/pythia8NCDIS_${{matrix.beam}}_minQ2=${{matrix.minq2}}_beamEffects_xAngle=-0.025_hiDiv_1.hepmc3.tree.root
           npsim --compactFile ${DETECTOR_PATH}/${DETECTOR}_${{ matrix.detector_config }}.xml -N 100 --inputFiles ${url} --random.seed 1 --outputFile sim_dis_${{matrix.beam}}_minQ2=${{matrix.minq2}}_${{ matrix.detector_config }}.edm4hep.root -v WARNING
@@ -695,6 +699,7 @@ jobs:
       if: steps.download_previous_artifact.outputs.found_artifact == 'true'
       with:
         platform-release: "jug_xl:nightly"
+        setup: install/setup.sh
         run: |
           pip install 'pygithub>=2' 'bokeh>=3'
           export PYTHONPATH=$HOME/.local/lib/python3.10/site-packages:$PYTHONPATH
@@ -728,6 +733,7 @@ jobs:
       if: steps.download_previous_artifact.outputs.found_artifact == 'true'
       with:
         platform-release: "jug_xl:nightly"
+        setup: install/setup.sh
         run: |
           echo "::group::pip install"
           python3 -m pip install -r ${{ github.workspace }}/.github/requirements.txt
