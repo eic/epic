@@ -38,7 +38,7 @@
       An EM calorimeter with SciGlass blocks
     </comment>
 
-    <detector id="ECalBarrel_ID" name="EcalBarrelSciGlass" type="epic_EcalBarrelSciGlass" readout="EcalBarrelSciGlassHits" vis="det_vis" calorimeterType="EM_BARREL">
+    <detector id="EcalBarrel_ID" name="EcalBarrelSciGlass" type="epic_EcalBarrelSciGlass" readout="EcalBarrelSciGlassHits" vis="det_vis" calorimeterType="EM_BARREL">
       <comment>
         Global detector dimensions from https://eic.jlab.org/Geometry/Detector/Detector-20220624102507.html
       </comment>

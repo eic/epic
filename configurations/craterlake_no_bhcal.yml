@@ -1,29 +1,32 @@
-ebeam: 18
-pbeam: 275
+ebeam: 5
+pbeam: 41
 features:
   beampipe:
   tracking:
-    definitions_arches:
+    definitions_craterlake:
     vertex_barrel:
     silicon_barrel:
     mpgd_barrel:
-    mpgd_dirc:
+    support_service_craterlake:
+    mpgd_outerbarrel:
+    mpgd_forward_endcap:
+    mpgd_backward_endcap:
     silicon_disks:
-    support_service_assembly:
     tof_barrel:
     tof_endcap:
   pid:
     dirc:
-    mrich:
+    pfrich:
     drich:
   ecal:
     forward_homogeneous:
-    barrel_sciglass:
+    forward_insert_homogeneous:
+    barrel_interlayers:
     backward_PbWO4:
   solenoid:
   hcal:
-    lfhcal_without_space_for_insert:
-    barrel_gdml:
+    lfhcal_with_space_for_insert:
+    forward_insert:
     backward:
     backward_endcap_flux:
   far_forward:

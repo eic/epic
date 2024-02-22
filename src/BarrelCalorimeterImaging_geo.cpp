@@ -28,6 +28,10 @@ using namespace dd4hep;
 
 typedef ROOT::Math::XYPoint Point;
 
+// geometry helpers
+static void buildSupport(Detector& desc, Volume& mother, xml_comp_t x_support,
+                         const std::tuple<double, double, double, double>& dimensions);
+
 // barrel ecal layers contained in an assembly
 static Ref_t create_detector(Detector& desc, xml_h e, SensitiveDetector sens)
 {
@@ -176,8 +180,10 @@ static Ref_t create_detector(Detector& desc, xml_h e, SensitiveDetector sens)
       }
     }
   }
-
-  // Loop over the sets of layer elements in the detector.
+  if (x_detector.hasChild(_Unicode(support))) {
+       buildSupport(desc, sector_volume, x_detector.child(_Unicode(support)), {inner_r, layer_pos_z, x_dimensions.z(), half_dphi});
+  }
+  //Loop over the sets of layer elements in the detector.
   int layer_num = 1;
   for (xml_coll_t i_layer(x_detector, _U(layer)); i_layer; ++i_layer) {
     xml_comp_t x_layer             = i_layer;
@@ -399,4 +405,21 @@ static Ref_t create_detector(Detector& desc, xml_h e, SensitiveDetector sens)
   return sdet;
 }
 
+// simple aluminum sheet cover
+// dimensions: (inner r, position in z, length, phi)
+static void buildSupport(Detector& desc, Volume& sector_volume, xml_comp_t x_support,
+                         const std::tuple<double, double, double, double>& dimensions)
+{
+  auto [inner_r, pos_z, sector_length, hphi] = dimensions;
+  double support_thickness                   = getAttrOrDefault(x_support, _Unicode(thickness), 0.5 * cm);
+  auto   material                            = desc.material(x_support.materialStr());
+  double trd_y                               = sector_length / 2.;
+  double trd_x1_support                      = std::tan(hphi) * pos_z;
+  double trd_x2_support                      = std::tan(hphi) * (pos_z + support_thickness);
+
+  Trapezoid s_shape(trd_x1_support, trd_x2_support, trd_y, trd_y, support_thickness / 2.);
+  Volume    s_vol("support_layer", s_shape, material);
+  s_vol.setVisAttributes(desc.visAttributes(x_support.visStr()));
+  sector_volume.placeVolume(s_vol, Position(0.0, 0.0, pos_z + support_thickness / 2.));
+}
 DECLARE_DETELEMENT(epic_EcalBarrelImaging, create_detector)
