@@ -20,11 +20,11 @@
     <!-- Number of imaging layer slots -->
     <constant name="EcalBarrelImagingLayers_nMax"   value="6"/>
     <constant name="EcalBarrel_Calorimeter_zmin"
-      value="min(258.75*cm, EcalBarrelBackward_zmax)"/>
+      value="min(260.25*cm, EcalBarrelBackward_zmax)"/>
     <constant name="EcalBarrel_Calorimeter_zmax"
-      value="min(181.25*cm, EcalBarrelForward_zmax)"/>
-    <constant name="EcalBarrel_Readout_zmin"        value="273.75*cm"/>
-    <constant name="EcalBarrel_Readout_zmax"        value="196.25*cm"/>
+      value="min(176.25*cm, EcalBarrelForward_zmax)"/>
+    <constant name="EcalBarrel_Readout_zmin"        value="275.25*cm"/>
+    <constant name="EcalBarrel_Readout_zmax"        value="191.25*cm"/>
     <constant name="EcalBarrel_Calorimeter_length"
       value="EcalBarrel_Calorimeter_zmax + EcalBarrel_Calorimeter_zmin"/>
     <constant name="EcalBarrel_Calorimeter_offset"
