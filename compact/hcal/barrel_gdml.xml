@@ -65,11 +65,9 @@
     <matrix name="yposChimneyTileS" unit="mm" coldim="1" values="645.634 645.645 642.964 607.790"/>
     <matrix name="zposChimneyTileS" unit="mm" coldim="1" values="0.0 0.0 0.0 0.0"/>
 
-    <constant name="ctilePlaneRotate" unit="deg" value="-14.355"/>
     <constant name="tilePlaneRotate" unit="deg" value="-14.355"/>
 
   </define>
-
 
   </detector>
   </detectors>
@@ -78,7 +76,7 @@
   <readouts>
     <readout name="HcalBarrelHits">
       <segmentation type="NoSegmentation"/>
-      <id>system:8,tower:11,tile:3</id>
+      <id>system:8,tile:13</id>
     </readout>
   </readouts>
 
