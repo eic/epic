@@ -620,18 +620,17 @@ jobs:
         if_no_artifact_found: warn
     - name: Compare to previous artifacts
       uses: eic/run-cvmfs-osg-eic-shell@main
-      if: steps.download_previous_artifact.outputs.found_artifact == 'true'
       with:
         platform-release: "jug_xl:nightly"
         setup: install/setup.sh
         run: |
           export PYTHONPATH=$HOME/.local/lib/python3.10/site-packages:$PYTHONPATH
           mkdir capybara-reports
-          capybara bara ref/sim_${{ matrix.particle }}_1GeV_20GeV_${{ matrix.detector_config }}.edm4hep.root sim_${{ matrix.particle }}_1GeV_20GeV_${{ matrix.detector_config }}.edm4hep.root
+          shopt -s nullglob
+          capybara bara ref/sim_${{ matrix.particle }}_1GeV_20GeV_${{ matrix.detector_config }}.edm4hep.root* sim_${{ matrix.particle }}_1GeV_20GeV_${{ matrix.detector_config }}.edm4hep.root
           mv capybara-reports sim_${{ matrix.particle }}_1GeV_20GeV_${{ matrix.detector_config }}
           touch .sim_${{ matrix.particle }}_1GeV_20GeV_${{ matrix.detector_config }}
     - uses: actions/upload-artifact@v4
-      if: steps.download_previous_artifact.outputs.found_artifact == 'true'
       with:
         name: sim_${{ matrix.particle }}_1GeV_20GeV_${{ matrix.detector_config }}.capy
         path: |
@@ -682,7 +681,6 @@ jobs:
         if_no_artifact_found: warn
     - name: Compare to previous artifacts
       uses: eic/run-cvmfs-osg-eic-shell@main
-      if: steps.download_previous_artifact.outputs.found_artifact == 'true'
       with:
         platform-release: "jug_xl:nightly"
         setup: install/setup.sh
@@ -690,11 +688,11 @@ jobs:
           pip install 'pygithub>=2' 'bokeh>=3'
           export PYTHONPATH=$HOME/.local/lib/python3.10/site-packages:$PYTHONPATH
           mkdir capybara-reports
-          capybara bara ref/sim_dis_${{matrix.beam}}_minQ2=${{matrix.minq2}}_${{ matrix.detector_config }}.edm4hep.root sim_dis_${{matrix.beam}}_minQ2=${{matrix.minq2}}_${{ matrix.detector_config }}.edm4hep.root
+          shopt -s nullglob
+          capybara bara ref/sim_dis_${{matrix.beam}}_minQ2=${{matrix.minq2}}_${{ matrix.detector_config }}.edm4hep.root* sim_dis_${{matrix.beam}}_minQ2=${{matrix.minq2}}_${{ matrix.detector_config }}.edm4hep.root
           mv capybara-reports sim_dis_${{matrix.beam}}_minQ2=${{matrix.minq2}}_${{ matrix.detector_config }}
           touch .sim_dis_${{matrix.beam}}_minQ2=${{matrix.minq2}}_${{ matrix.detector_config }}
     - uses: actions/upload-artifact@v4
-      if: steps.download_previous_artifact.outputs.found_artifact == 'true'
       with:
         name: sim_dis_${{matrix.beam}}_minQ2=${{matrix.minq2}}_${{ matrix.detector_config }}.capy
         path: |
