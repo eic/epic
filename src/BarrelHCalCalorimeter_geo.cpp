@@ -350,7 +350,7 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
 
   for (int i_eta = 0; i_eta < 12; i_eta++) {  // eta ring
 
-    int tnum = 11 - i_eta; 
+    int tnum = 11 - i_eta;
 
     for (int i_phi = 0; i_phi < 320; i_phi++) { // phi index
 
@@ -382,14 +382,14 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
                                                                Translation3D(xposOuter[0] * dd4hep::mm, yposOuter[0] * dd4hep::mm, 0.0 * dd4hep::mm)) *
                                                    RotationX(-tilePlaneRotate * dd4hep::deg) *
                                                    Translation3D(((tnum + 1) * tile_tolerance) * dd4hep::mm, 0.0 * dd4hep::mm, 0.0 * dd4hep::mm));
-      
+
         phv0.addPhysVolID("tile", i_phi + i_eta * 320);
         DetElement sd0 = tile_det.clone(_toString(i_phi + i_eta * 320, "tile%d"));
         sd0.setPlacement(phv0);
         sdet.add(sd0);
 
       } else {
-	
+
         // first three sectors are chimney sectors
 
         if(i_phi>29){
@@ -456,7 +456,7 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
           sdet.add(sd0);
 
         }
-	
+
       }
     }
   }
