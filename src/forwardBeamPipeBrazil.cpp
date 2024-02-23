@@ -73,9 +73,7 @@ static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector /* sens *
 	//TGeoConeSeg *piece[10];
 	//TGeoVolume  *vpiece[10];
 
-	double globRotationAngle = -0.0454486856;
- 
-	cout << "----- calculating line -----" << endl;
+	double globRotationAngle = -0.0454486856; //This is the angle of the proton orbit from the end of B1APF to the beginning of B2PF
 
 	double b1APFEndPoint_z = 22.0623828*1000; //in mm
 	double b1APFEndPoint_x = 0.6543372*1000; //in mm
@@ -249,7 +247,9 @@ static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector /* sens *
 	Box RP_subtract_outer(0.1*outerXRadius[1], 0.1*outerYRadius[1], 0.1*(length[2]+5.0)/2);
 	Box RP_subtract_inner(0.1*innerXRadius[1], 0.1*innerYRadius[1], 0.1*(length[2]+10.0)/2);
 
-	pieceIdx = 0;
+	//Begin building volumes here
+
+	pieceIdx = 0; //Larger, rectangular pipe transporting proton and neutral envelopes (neutral exit window and transfer to smaller proton line at the end)
 
 	Box pipeAfterB1APF_outer(0.1*outerXRadius[pieceIdx], 0.1*outerYRadius[pieceIdx], 0.1*length[pieceIdx]/2);
 	Box pipeAfterB1APF_inner(0.1*innerXRadius[pieceIdx], 0.1*innerYRadius[pieceIdx], 0.1*(length[pieceIdx]+5.0)/2);
@@ -263,7 +263,7 @@ static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector /* sens *
     DetElement pipe_de_0(sdet, Form("sector_pipe_%d_de", pieceIdx), 1);
     pipe_de_0.setPlacement(pv_pipe_0);
 	
-	pieceIdx = 1;
+	pieceIdx = 1; //smaller rectangular pipe for the protons
 
 	Box pipe_1_outer(0.1*outerXRadius[pieceIdx], 0.1*outerYRadius[pieceIdx], 0.1*length[pieceIdx]/2);
 	Box pipe_1_inner(0.1*innerXRadius[pieceIdx], 0.1*innerYRadius[pieceIdx], 0.1*(length[pieceIdx]+5.0)/2);
@@ -279,10 +279,10 @@ static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector /* sens *
 
 	//------------------------------------------------------------------------
 
-	pieceIdx = 2;
+	pieceIdx = 2; //first roman pots scattering chamber
 	
 	Box box_rp_station_1_outer(0.1*outerXRadius[pieceIdx], 0.1*outerYRadius[pieceIdx], 0.1*length[pieceIdx]/2);
-	Box box_rp_station_1_inner(0.1*innerXRadius[pieceIdx], 0.1*innerYRadius[pieceIdx], 0.1*(length[pieceIdx]+5.0)/2);
+	Box box_rp_station_1_inner(0.1*innerXRadius[pieceIdx], 0.1*innerYRadius[pieceIdx], 0.1*length[pieceIdx]/2);
 	SubtractionSolid tmp(box_rp_station_1_outer, box_rp_station_1_inner);
 	SubtractionSolid rpStation1(tmp, RP_subtract_outer);
 	
@@ -303,7 +303,7 @@ static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector /* sens *
 	SubtractionSolid pipe_3(pipe_1_outer, pipe_1_inner);
 	
     Volume v_pipe_3(Form("v_pipe_3_%d", pieceIdx), pipe_3, m_SS);
-    sdet.setAttributes(det, v_pipe_1, x_det.regionStr(), x_det.limitsStr(), vis_name);
+    sdet.setAttributes(det, v_pipe_3, x_det.regionStr(), x_det.limitsStr(), vis_name);
 
     auto pv_pipe_3 = assembly.placeVolume(v_pipe_3, Transform3D(RotationY(rotationAngle[pieceIdx]), Position(0.1 * xCenter[pieceIdx], 0.1 *  yCenter[pieceIdx], 0.1 * zCenter[pieceIdx]))); // 2353.06094)));
     pv_pipe_3.addPhysVolID("sector", 1);
@@ -312,10 +312,10 @@ static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector /* sens *
 
 	//---------------------------------------------------------------------
 
-	pieceIdx = 4;
+	pieceIdx = 4; //Second roman pots scattering chamber
 
 	Box box_rp_station_2_outer(0.1*outerXRadius[pieceIdx], 0.1*outerYRadius[pieceIdx], 0.1*length[pieceIdx]/2);
-	Box box_rp_station_2_inner(0.1*innerXRadius[pieceIdx], 0.1*innerYRadius[pieceIdx], 0.1*(length[pieceIdx]+5.0)/2);
+	Box box_rp_station_2_inner(0.1*innerXRadius[pieceIdx], 0.1*innerYRadius[pieceIdx], 0.1*length[pieceIdx]/2);
 	SubtractionSolid tmp_2(box_rp_station_2_outer, box_rp_station_2_inner);
 	SubtractionSolid rpStation2(tmp_2, RP_subtract_outer);
 	
