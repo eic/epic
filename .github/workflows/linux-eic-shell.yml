@@ -598,7 +598,6 @@ jobs:
     - uses: cvmfs-contrib/github-action-cvmfs@v4
     - name: Produce simulation files
       uses: eic/run-cvmfs-osg-eic-shell@main
-      if: steps.retrieve_simulation_files.outputs.cache-hit != 'true'
       with:
         platform-release: "jug_xl:nightly"
         setup: install/setup.sh
@@ -658,7 +657,6 @@ jobs:
     - uses: cvmfs-contrib/github-action-cvmfs@v4
     - name: Produce simulation files
       uses: eic/run-cvmfs-osg-eic-shell@main
-      if: steps.retrieve_simulation_files.outputs.cache-hit != 'true'
       with:
         platform-release: "jug_xl:nightly"
         setup: install/setup.sh
