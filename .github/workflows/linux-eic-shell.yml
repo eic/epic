@@ -706,7 +706,7 @@ jobs:
     steps:
     - uses: actions/upload-artifact/merge@v4
       with:
-        name: capybara
+        name: capybara-report
         pattern: |
           *.capy
         delete-merged: true
