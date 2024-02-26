@@ -369,7 +369,7 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
                                                    //                           yposTileN[tnum] * dd4hep::mm,
                                                    //                           zposTileN[tnum] * dd4hep::mm)) *
                                                    // Translation3D(-xposTileS[tnum] * dd4hep::mm,-yposTileS[tnum] * dd4hep::mm, -zposTileS[tnum] * dd4hep::mm));
-                                                   RotationY(180.0 * dd4hep::deg) * 
+                                                   RotationY(180.0 * dd4hep::deg) *
                                                    Translation3D((-xposTileN[tnum] + (tnum + 1) * tile_tolerance - xposTileS[tnum]) * dd4hep::mm,
                                                                  (yposTileN[tnum] - yposTileS[tnum]) * dd4hep::mm,
                                                                  (-zposTileN[tnum] - zposTileS[tnum]) * dd4hep::mm) );
@@ -413,7 +413,7 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
                                                      // Translation3D(-xposTileS[tnum] * dd4hep::mm,-yposTileS[tnum] * dd4hep::mm, -zposTileS[tnum] * dd4hep::mm));
                                                      RotationY(180.0 * dd4hep::deg) *
                                                      Translation3D((-xposTileN[tnum] - (tnum + 1) * tile_tolerance - xposTileS[tnum]) * dd4hep::mm,
-								   (yposTileN[tnum] - yposTileS[tnum]) * dd4hep::mm,
+                                                                   (yposTileN[tnum] - yposTileS[tnum]) * dd4hep::mm,
                                                                    (-zposTileN[tnum] - zposTileS[tnum])* dd4hep::mm) );
 
           phv1.addPhysVolID("tile", i_phi + i_eta * 320);
