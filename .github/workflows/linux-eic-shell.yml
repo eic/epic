@@ -582,6 +582,135 @@ jobs:
         pattern: ${{ matrix.detector_config }}_views_*
         delete-merged: true
 
+  npsim-gun:
+    runs-on: ubuntu-latest
+    needs: build
+    strategy:
+      matrix:
+        particle: [pi, e]
+        detector_config: [epic_craterlake]
+    steps:
+    - uses: actions/checkout@v4
+    - uses: actions/download-artifact@v4
+      with:
+        name: build-gcc-full-eic-shell
+        path: install/
+    - uses: cvmfs-contrib/github-action-cvmfs@v4
+    - name: Produce simulation files
+      uses: eic/run-cvmfs-osg-eic-shell@main
+      with:
+        platform-release: "jug_xl:nightly"
+        setup: install/setup.sh
+        run: |
+          npsim --compactFile ${DETECTOR_PATH}/${{ matrix.detector_config }}.xml -G --random.seed 1 --gun.particle "${{ matrix.particle }}-" --gun.momentumMin "1*GeV" --gun.momentumMax "20*GeV" --gun.distribution "uniform" -N 100 --outputFile sim_${{ matrix.particle }}_1GeV_20GeV_${{ matrix.detector_config }}.edm4hep.root -v WARNING
+    - uses: actions/upload-artifact@v4
+      with:
+        name: sim_${{ matrix.particle }}_1GeV_20GeV_${{ matrix.detector_config }}.edm4hep.root
+        path: sim_${{ matrix.particle }}_1GeV_20GeV_${{ matrix.detector_config }}.edm4hep.root
+        if-no-files-found: error
+    - name: Download previous artifact
+      id: download_previous_artifact
+      uses: dawidd6/action-download-artifact@v3
+      with:
+        branch: ${{ github.event.pull_request.base.ref || github.ref_name }}
+        path: ref/
+        name: sim_${{ matrix.particle }}_1GeV_20GeV_${{ matrix.detector_config }}.edm4hep.root
+        workflow_conclusion: ""
+        if_no_artifact_found: warn
+    - name: Compare to previous artifacts
+      uses: eic/run-cvmfs-osg-eic-shell@main
+      with:
+        platform-release: "jug_xl:nightly"
+        setup: install/setup.sh
+        run: |
+          export PYTHONPATH=$HOME/.local/lib/python3.10/site-packages:$PYTHONPATH
+          mkdir capybara-reports
+          shopt -s nullglob
+          capybara bara ref/sim_${{ matrix.particle }}_1GeV_20GeV_${{ matrix.detector_config }}.edm4hep.root* sim_${{ matrix.particle }}_1GeV_20GeV_${{ matrix.detector_config }}.edm4hep.root
+          mv capybara-reports sim_${{ matrix.particle }}_1GeV_20GeV_${{ matrix.detector_config }}
+          touch .sim_${{ matrix.particle }}_1GeV_20GeV_${{ matrix.detector_config }}
+    - uses: actions/upload-artifact@v4
+      with:
+        name: sim_${{ matrix.particle }}_1GeV_20GeV_${{ matrix.detector_config }}.capy
+        path: |
+          .sim_${{ matrix.particle }}_1GeV_20GeV_${{ matrix.detector_config }}
+          sim_${{ matrix.particle }}_1GeV_20GeV_${{ matrix.detector_config }}/
+        if-no-files-found: error
+
+  npsim-dis:
+    runs-on: ubuntu-latest
+    needs: build
+    strategy:
+      matrix:
+        beam: [5x41, 10x100, 18x275]
+        minq2: [1, 1000]
+        detector_config: [epic_craterlake]
+        exclude:
+        - beam: 5x41
+          minq2: 1000
+    steps:
+    - uses: actions/checkout@v4
+    - uses: actions/download-artifact@v4
+      with:
+        name: build-gcc-full-eic-shell
+        path: install/
+    - uses: cvmfs-contrib/github-action-cvmfs@v4
+    - name: Produce simulation files
+      uses: eic/run-cvmfs-osg-eic-shell@main
+      with:
+        platform-release: "jug_xl:nightly"
+        setup: install/setup.sh
+        run: |
+          url=root://dtn-eic.jlab.org//work/eic2/EPIC/EVGEN/DIS/NC/${{matrix.beam}}/minQ2=${{matrix.minq2}}/pythia8NCDIS_${{matrix.beam}}_minQ2=${{matrix.minq2}}_beamEffects_xAngle=-0.025_hiDiv_1.hepmc3.tree.root
+          npsim --compactFile ${DETECTOR_PATH}/${{ matrix.detector_config }}.xml -N 100 --inputFiles ${url} --random.seed 1 --outputFile sim_dis_${{matrix.beam}}_minQ2=${{matrix.minq2}}_${{ matrix.detector_config }}.edm4hep.root -v WARNING
+    - uses: actions/upload-artifact@v4
+      with:
+        name: sim_dis_${{matrix.beam}}_minQ2=${{matrix.minq2}}_${{ matrix.detector_config }}.edm4hep.root
+        path: sim_dis_${{matrix.beam}}_minQ2=${{matrix.minq2}}_${{ matrix.detector_config }}.edm4hep.root
+        if-no-files-found: error
+    - name: Download previous artifact
+      id: download_previous_artifact
+      uses: dawidd6/action-download-artifact@v3
+      with:
+        branch: ${{ github.event.pull_request.base.ref || github.ref_name }}
+        path: ref/
+        name: sim_dis_${{matrix.beam}}_minQ2=${{matrix.minq2}}_${{ matrix.detector_config }}.edm4hep.root
+        workflow_conclusion: ""
+        if_no_artifact_found: warn
+    - name: Compare to previous artifacts
+      uses: eic/run-cvmfs-osg-eic-shell@main
+      with:
+        platform-release: "jug_xl:nightly"
+        setup: install/setup.sh
+        run: |
+          pip install 'pygithub>=2' 'bokeh>=3'
+          export PYTHONPATH=$HOME/.local/lib/python3.10/site-packages:$PYTHONPATH
+          mkdir capybara-reports
+          shopt -s nullglob
+          capybara bara ref/sim_dis_${{matrix.beam}}_minQ2=${{matrix.minq2}}_${{ matrix.detector_config }}.edm4hep.root* sim_dis_${{matrix.beam}}_minQ2=${{matrix.minq2}}_${{ matrix.detector_config }}.edm4hep.root
+          mv capybara-reports sim_dis_${{matrix.beam}}_minQ2=${{matrix.minq2}}_${{ matrix.detector_config }}
+          touch .sim_dis_${{matrix.beam}}_minQ2=${{matrix.minq2}}_${{ matrix.detector_config }}
+    - uses: actions/upload-artifact@v4
+      with:
+        name: sim_dis_${{matrix.beam}}_minQ2=${{matrix.minq2}}_${{ matrix.detector_config }}.capy
+        path: |
+          .sim_dis_${{matrix.beam}}_minQ2=${{matrix.minq2}}_${{ matrix.detector_config }}
+          sim_dis_${{matrix.beam}}_minQ2=${{matrix.minq2}}_${{ matrix.detector_config }}/
+        if-no-files-found: error
+
+  merge-npsim-capybara:
+    runs-on: ubuntu-latest
+    needs:
+    - npsim-gun
+    - npsim-dis
+    steps:
+    - uses: actions/upload-artifact/merge@v4
+      with:
+        name: capybara-report
+        pattern: |
+          *.capy
+        delete-merged: true
+
   build-artifacts-page:
     runs-on: ubuntu-latest
     needs:
