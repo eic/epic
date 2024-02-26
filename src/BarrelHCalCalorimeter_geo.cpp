@@ -364,11 +364,15 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
                                                    Transform3D(RotationY(90.0 * dd4hep::deg),
                                                                Translation3D(xposOuter[0] * dd4hep::mm, yposOuter[0] * dd4hep::mm, 0.0 * dd4hep::mm)) *
                                                    RotationX(-tilePlaneRotate * dd4hep::deg) *
-                                                   Transform3D(RotationY(180.0 * dd4hep::deg),
-                                                               Translation3D((xposTileN[tnum] - (tnum + 1) * tile_tolerance) * dd4hep::mm,
-                                                                             yposTileN[tnum] * dd4hep::mm,
-                                                                             zposTileN[tnum] * dd4hep::mm)) *
-                                                   Translation3D(-xposTileS[tnum] * dd4hep::mm,-yposTileS[tnum] * dd4hep::mm, -zposTileS[tnum] * dd4hep::mm));
+                                                   // Transform3D(RotationY(180.0 * dd4hep::deg),
+                                                   //             Translation3D((xposTileN[tnum] - (tnum + 1) * tile_tolerance) * dd4hep::mm,
+                                                   //                           yposTileN[tnum] * dd4hep::mm,
+                                                   //                           zposTileN[tnum] * dd4hep::mm)) *
+                                                   // Translation3D(-xposTileS[tnum] * dd4hep::mm,-yposTileS[tnum] * dd4hep::mm, -zposTileS[tnum] * dd4hep::mm));
+                                                   RotationY(180.0 * dd4hep::deg) * 
+                                                   Translation3D((-xposTileN[tnum] + (tnum + 1) * tile_tolerance - xposTileS[tnum]) * dd4hep::mm,
+                                                                 (yposTileN[tnum] - yposTileS[tnum]) * dd4hep::mm,
+                                                                 (-zposTileN[tnum] - zposTileS[tnum]) * dd4hep::mm) );
 
         phv1.addPhysVolID("tile", i_phi + (12 + tnum) * 320);
         DetElement sd1 = tile_det.clone(_toString(i_phi + (12 + tnum) * 320, "tile%d"));
@@ -402,11 +406,15 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
                                                      Transform3D(RotationY(90.0 * dd4hep::deg),
                                                                  Translation3D(xposOuter[0] * dd4hep::mm, yposOuter[0] * dd4hep::mm, 0.0 * dd4hep::mm)) *
                                                      RotationX(-tilePlaneRotate * dd4hep::deg) *
-                                                     Transform3D(RotationY(180.0 * dd4hep::deg),
-                                                                 Translation3D((xposTileN[tnum] + (tnum + 1) * tile_tolerance) * dd4hep::mm,
-                                                                               yposTileN[tnum] * dd4hep::mm,
-                                                                               zposTileN[tnum] * dd4hep::mm)) *
-                                                     Translation3D(-xposTileS[tnum] * dd4hep::mm,-yposTileS[tnum] * dd4hep::mm, -zposTileS[tnum] * dd4hep::mm));
+                                                     // Transform3D(RotationY(180.0 * dd4hep::deg),
+                                                     //             Translation3D((xposTileN[tnum] + (tnum + 1) * tile_tolerance) * dd4hep::mm,
+                                                     //                           yposTileN[tnum] * dd4hep::mm,
+                                                     //                           zposTileN[tnum] * dd4hep::mm)) *
+                                                     // Translation3D(-xposTileS[tnum] * dd4hep::mm,-yposTileS[tnum] * dd4hep::mm, -zposTileS[tnum] * dd4hep::mm));
+                                                     RotationY(180.0 * dd4hep::deg) *
+                                                     Translation3D((-xposTileN[tnum] - (tnum + 1) * tile_tolerance - xposTileS[tnum]) * dd4hep::mm,
+								   (yposTileN[tnum] - yposTileS[tnum]) * dd4hep::mm,
+                                                                   (-zposTileN[tnum] - zposTileS[tnum])* dd4hep::mm) );
 
           phv1.addPhysVolID("tile", i_phi + i_eta * 320);
           DetElement sd1 = tile_det.clone(_toString(i_phi + i_eta * 320, "tile%d"));
