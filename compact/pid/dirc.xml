@@ -173,6 +173,11 @@
           vis="DIRCMCP"
         />
       </module>
+      <support>
+        <rail height="78.50*mm" width="46.17*mm" length="DIRCBar_count_z*DIRCBar_length" material="Aluminum">
+          <position x="20*mm" y="0" z="0"/>
+        </rail>
+      </support>
     </detector>
   </detectors>
 
