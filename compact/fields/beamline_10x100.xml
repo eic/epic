@@ -44,7 +44,7 @@
     <constant name="Q1EF_GradientMax"  value="2.127596364*tesla/m"/>
 
     <constant name="B0PF_Bmax"  value="1.1840539*tesla"/>
-    <constant name="B0APF_Bmax" value="1.1588921*tesla"/> <!-- need to check with Scott on this one -->
+    <constant name="B0APF_Bmax" value="-1.1588921*tesla"/> <!-- need to check with Scott on this one -->
     <constant name="Q1APF_Bmax" value="0.0*tesla"/>
     <constant name="Q1BPF_Bmax" value="0.0*tesla"/>
     <constant name="Q2PF_Bmax"  value="0.0*tesla"/>
