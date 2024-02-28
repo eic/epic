@@ -229,7 +229,7 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
   barrel_er_vol.setMaterial(er_material);
 
   // Place steel in envelope
-  
+
   double sec_rot_angle = 360.0/32.0;
 
   for(int k=0; k<29; k++){
@@ -295,7 +295,7 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
     volume_solid->CloseShape(true, true, true); // tesselated solid not closed by import!
     Material tile_material = description.material(tgdml_material.c_str());
     solidVolume.setMaterial(tile_material);
-        
+
     solidVolume.setSensitiveDetector(sens);
 
     // For tiles we build an assembly to get the full array of tiles
@@ -351,12 +351,12 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
         PlacedVolume phv1 = BarrelHCAL.placeVolume(
                                                    Tile[i_eta], i_phi + i_eta * 320,
                                                    RotationZ(i_phi * increment_angle + increment_offset) *
-						   Transform3D(RotationY(90.0 * dd4hep::deg),
-							       Translation3D(xposOuter[0] * dd4hep::mm, yposOuter[0] * dd4hep::mm, 0.0)) *
-						   RotationX(-tilePlaneRotate * dd4hep::deg) *
-						   Transform3D(RotationY(180.0 * dd4hep::deg),
-							       Translation3D(-(xposTile[tnum] + (tnum + 1) * tile_tolerance) * dd4hep::mm,
-									     yposTile[tnum] * dd4hep::mm, -zposTile[tnum] * dd4hep::mm)));
+                                                   Transform3D(RotationY(90.0 * dd4hep::deg),
+                                                               Translation3D(xposOuter[0] * dd4hep::mm, yposOuter[0] * dd4hep::mm, 0.0)) *
+                                                   RotationX(-tilePlaneRotate * dd4hep::deg) *
+                                                   Transform3D(RotationY(180.0 * dd4hep::deg),
+                                                               Translation3D(-(xposTile[tnum] + (tnum + 1) * tile_tolerance) * dd4hep::mm,
+                                                                             yposTile[tnum] * dd4hep::mm, -zposTile[tnum] * dd4hep::mm)));
 
         phv1.addPhysVolID("tile", i_phi + i_eta * 320);
         DetElement sd1 = tile_det.clone(_toString(i_phi + i_eta * 320, "tile%d"));
@@ -366,11 +366,11 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
         PlacedVolume phv0 = BarrelHCAL.placeVolume(
                                                    Tile[i_eta], i_phi + (12 + tnum) * 320,
                                                    RotationZ(i_phi * increment_angle + increment_offset) *
-						   Transform3D(RotationY(90.0 * dd4hep::deg),
-							       Translation3D(xposOuter[0] * dd4hep::mm, yposOuter[0] * dd4hep::mm, 0.0)) *
-						   RotationX(-tilePlaneRotate * dd4hep::deg) *
-						   Translation3D((xposTile[tnum] + (tnum + 1) * tile_tolerance) * dd4hep::mm,
-								 yposTile[tnum] * dd4hep::mm, zposTile[tnum] * dd4hep::mm));
+                                                   Transform3D(RotationY(90.0 * dd4hep::deg),
+                                                               Translation3D(xposOuter[0] * dd4hep::mm, yposOuter[0] * dd4hep::mm, 0.0)) *
+                                                   RotationX(-tilePlaneRotate * dd4hep::deg) *
+                                                   Translation3D((xposTile[tnum] + (tnum + 1) * tile_tolerance) * dd4hep::mm,
+                                                                 yposTile[tnum] * dd4hep::mm, zposTile[tnum] * dd4hep::mm));
 
         phv0.addPhysVolID("tile", i_phi + (12 + tnum) * 320);
         DetElement sd0 = tile_det.clone(_toString(i_phi + (12 + tnum) * 320, "tile%d"));
@@ -380,7 +380,7 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
       } else {
 
         // first three sectors are chimney sectors
-	
+
         if(i_phi>29){
 
           // ordinary sector tiles
@@ -388,11 +388,11 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
           PlacedVolume phv1 = BarrelHCAL.placeVolume(
                                                      Tile[i_eta], i_phi + i_eta * 320,
                                                      RotationZ(i_phi * increment_angle + increment_offset) *
-						     Transform3D(RotationY(90.0 * dd4hep::deg),
-								 Translation3D(xposOuter[0] * dd4hep::mm, yposOuter[0] * dd4hep::mm, 0.0)) *
-						     RotationX(-tilePlaneRotate * dd4hep::deg) *
-						     Translation3D((xposTile[tnum] + (tnum + 1) * tile_tolerance) * dd4hep::mm,
-								   yposTile[tnum] * dd4hep::mm, zposTile[tnum] * dd4hep::mm));
+                                                     Transform3D(RotationY(90.0 * dd4hep::deg),
+                                                                 Translation3D(xposOuter[0] * dd4hep::mm, yposOuter[0] * dd4hep::mm, 0.0)) *
+                                                     RotationX(-tilePlaneRotate * dd4hep::deg) *
+                                                     Translation3D((xposTile[tnum] + (tnum + 1) * tile_tolerance) * dd4hep::mm,
+                                                                   yposTile[tnum] * dd4hep::mm, zposTile[tnum] * dd4hep::mm));
 
           phv1.addPhysVolID("tile", i_phi + i_eta * 320);
           DetElement sd1 = tile_det.clone(_toString(i_phi + i_eta * 320, "tile%d"));
@@ -402,12 +402,12 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
           PlacedVolume phv0 = BarrelHCAL.placeVolume(
                                                      Tile[i_eta], i_phi + (12 + tnum) * 320,
                                                      RotationZ(i_phi * increment_angle + increment_offset) *
-						     Transform3D(RotationY(90.0 * dd4hep::deg),
-								 Translation3D(xposOuter[0] * dd4hep::mm, yposOuter[0] * dd4hep::mm, 0.0)) *
-						     RotationX(-tilePlaneRotate * dd4hep::deg) *
-						     Transform3D(RotationY(180.0 * dd4hep::deg),
-								 Translation3D(-(xposTile[tnum] + (tnum + 1) * tile_tolerance) * dd4hep::mm,
-									       yposTile[tnum] * dd4hep::mm, -zposTile[tnum] * dd4hep::mm)));
+                                                     Transform3D(RotationY(90.0 * dd4hep::deg),
+                                                                 Translation3D(xposOuter[0] * dd4hep::mm, yposOuter[0] * dd4hep::mm, 0.0)) *
+                                                     RotationX(-tilePlaneRotate * dd4hep::deg) *
+                                                     Transform3D(RotationY(180.0 * dd4hep::deg),
+                                                                 Translation3D(-(xposTile[tnum] + (tnum + 1) * tile_tolerance) * dd4hep::mm,
+                                                                               yposTile[tnum] * dd4hep::mm, -zposTile[tnum] * dd4hep::mm)));
 
           phv0.addPhysVolID("tile", i_phi + (12 + tnum) * 320);
           DetElement sd0 = tile_det.clone(_toString(i_phi + (12 + tnum) * 320, "tile%d"));
@@ -422,26 +422,26 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
           PlacedVolume phv1 = BarrelHCAL.placeVolume(
                                                      ChimneyTile[i_eta], i_phi + (12 + tnum) * 320,
                                                      RotationZ(i_phi * increment_angle + increment_offset) *
-						     Transform3D(RotationY(90.0 * dd4hep::deg),
-								 Translation3D(xposOuter[0] * dd4hep::mm, yposOuter[0] * dd4hep::mm, 0.0)) *
-						     RotationX(-tilePlaneRotate * dd4hep::deg) *
-						     Translation3D((xposChimneyTileS[tnum-8] + (tnum + 1) * tile_tolerance) * dd4hep::mm,
-								   yposChimneyTileS[tnum-8] * dd4hep::mm, zposChimneyTileS[tnum-8] * dd4hep::mm));
-								   
+                                                     Transform3D(RotationY(90.0 * dd4hep::deg),
+                                                                 Translation3D(xposOuter[0] * dd4hep::mm, yposOuter[0] * dd4hep::mm, 0.0)) *
+                                                     RotationX(-tilePlaneRotate * dd4hep::deg) *
+                                                     Translation3D((xposChimneyTileS[tnum-8] + (tnum + 1) * tile_tolerance) * dd4hep::mm,
+                                                                   yposChimneyTileS[tnum-8] * dd4hep::mm, zposChimneyTileS[tnum-8] * dd4hep::mm));
+
 
           phv1.addPhysVolID("tile", i_phi + (12 + tnum) * 320);
           DetElement sd1 = tile_det.clone(_toString(i_phi + (12 + tnum) * 320, "tile%d"));
           sd1.setPlacement(phv1);
           sdet.add(sd1);
-	  
+
           PlacedVolume phv0 = BarrelHCAL.placeVolume(
                                                      Tile[i_eta], i_phi + i_eta * 320,
                                                      RotationZ(i_phi * increment_angle + increment_offset) *
-						     Transform3D(RotationY(90.0 * dd4hep::deg),
-								 Translation3D(xposOuter[0] * dd4hep::mm, yposOuter[0] * dd4hep::mm, 0.0)) *
-						     RotationX(-tilePlaneRotate * dd4hep::deg) *
-						     Translation3D((xposTile[tnum] + (tnum + 1) * tile_tolerance) * dd4hep::mm,
-								   yposTile[tnum] * dd4hep::mm, zposTile[tnum] * dd4hep::mm));
+                                                     Transform3D(RotationY(90.0 * dd4hep::deg),
+                                                                 Translation3D(xposOuter[0] * dd4hep::mm, yposOuter[0] * dd4hep::mm, 0.0)) *
+                                                     RotationX(-tilePlaneRotate * dd4hep::deg) *
+                                                     Translation3D((xposTile[tnum] + (tnum + 1) * tile_tolerance) * dd4hep::mm,
+                                                                   yposTile[tnum] * dd4hep::mm, zposTile[tnum] * dd4hep::mm));
 
           phv0.addPhysVolID("tile", i_phi + i_eta * 320);
           DetElement sd0 = tile_det.clone(_toString(i_phi + i_eta * 320, "tile%d"));
