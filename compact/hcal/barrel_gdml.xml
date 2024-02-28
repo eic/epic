@@ -25,27 +25,27 @@
         <sec_gdmlfile file="gdml/barrel_hcal_steel_sector_nocombs.gdml" url="https://github.com/eic/epic-data/raw/c1ef9dca1781047fe9485eec6c0f986ec7d27f41/barrel_HCAL_gdml/barrel_hcal_steel_sector_nocombs.gdml" cache="$DETECTOR_PATH:/opt/detector" material="Steel1020"/>
         <csec_gdmlfile file="gdml/barrel_hcal_steel_chimneysector_nocombs.gdml" url="https://github.com/eic/epic-data/raw/c1ef9dca1781047fe9485eec6c0f986ec7d27f41/barrel_HCAL_gdml/barrel_hcal_steel_chimneysector_nocombs.gdml" cache="$DETECTOR_PATH:/opt/detector" material="Steel1020"/>
         <er_gdmlfile file="gdml/barrel_hcal_steel_endring.gdml" url="https://github.com/eic/epic-data/raw/c1ef9dca1781047fe9485eec6c0f986ec7d27f41/barrel_HCAL_gdml/barrel_hcal_steel_endring.gdml" cache="$DETECTOR_PATH:/opt/detector" material="Steel1020"/>
-        <tile1_gdmlfile file="gdml/Tile01_Reduced.gdml" url="https://github.com/eic/epic-data/raw/29b126ddf47333cd2295b2ca78a40c15c7520d00/barrel_HCAL_gdml/tiles/Tile01_Reduced.gdml" cache="$DETECTOR_PATH:/opt/detector" material="PlasticScint"/>
-        <tile2_gdmlfile file="gdml/Tile02_Reduced.gdml" url="https://github.com/eic/epic-data/raw/29b126ddf47333cd2295b2ca78a40c15c7520d00/barrel_HCAL_gdml/tiles/Tile02_Reduced.gdml" cache="$DETECTOR_PATH:/opt/detector" material="PlasticScint"/>
-        <tile3_gdmlfile file="gdml/Tile03_Reduced.gdml" url="https://github.com/eic/epic-data/raw/29b126ddf47333cd2295b2ca78a40c15c7520d00/barrel_HCAL_gdml/tiles/Tile03_Reduced.gdml" cache="$DETECTOR_PATH:/opt/detector" material="PlasticScint"/>
-        <tile4_gdmlfile file="gdml/Tile04_Reduced.gdml" url="https://github.com/eic/epic-data/raw/29b126ddf47333cd2295b2ca78a40c15c7520d00/barrel_HCAL_gdml/tiles/Tile04_Reduced.gdml" cache="$DETECTOR_PATH:/opt/detector" material="PlasticScint"/>
-        <tile5_gdmlfile file="gdml/Tile05_Reduced.gdml" url="https://github.com/eic/epic-data/raw/29b126ddf47333cd2295b2ca78a40c15c7520d00/barrel_HCAL_gdml/tiles/Tile05_Reduced.gdml" cache="$DETECTOR_PATH:/opt/detector" material="PlasticScint"/>
-        <tile6_gdmlfile file="gdml/Tile06_Reduced.gdml" url="https://github.com/eic/epic-data/raw/29b126ddf47333cd2295b2ca78a40c15c7520d00/barrel_HCAL_gdml/tiles/Tile06_Reduced.gdml" cache="$DETECTOR_PATH:/opt/detector" material="PlasticScint"/>
-        <tile7_gdmlfile file="gdml/Tile07_Reduced.gdml" url="https://github.com/eic/epic-data/raw/29b126ddf47333cd2295b2ca78a40c15c7520d00/barrel_HCAL_gdml/tiles/Tile07_Reduced.gdml" cache="$DETECTOR_PATH:/opt/detector" material="PlasticScint"/>
-        <tile8_gdmlfile file="gdml/Tile08_Reduced.gdml" url="https://github.com/eic/epic-data/raw/29b126ddf47333cd2295b2ca78a40c15c7520d00/barrel_HCAL_gdml/tiles/Tile08_Reduced.gdml" cache="$DETECTOR_PATH:/opt/detector" material="PlasticScint"/>
-        <tile9_gdmlfile file="gdml/Tile09_Reduced.gdml" url="https://github.com/eic/epic-data/raw/29b126ddf47333cd2295b2ca78a40c15c7520d00/barrel_HCAL_gdml/tiles/Tile09_Reduced.gdml" cache="$DETECTOR_PATH:/opt/detector" material="PlasticScint"/>
-        <tile10_gdmlfile file="gdml/Tile10_Reduced.gdml" url="https://github.com/eic/epic-data/raw/29b126ddf47333cd2295b2ca78a40c15c7520d00/barrel_HCAL_gdml/tiles/Tile10_Reduced.gdml" cache="$DETECTOR_PATH:/opt/detector" material="PlasticScint"/>
-        <tile11_gdmlfile file="gdml/Tile11_Reduced.gdml" url="https://github.com/eic/epic-data/raw/29b126ddf47333cd2295b2ca78a40c15c7520d00/barrel_HCAL_gdml/tiles/Tile11_Reduced.gdml" cache="$DETECTOR_PATH:/opt/detector" material="PlasticScint"/>
-        <tile12_gdmlfile file="gdml/Tile12_Reduced.gdml" url="https://github.com/eic/epic-data/raw/29b126ddf47333cd2295b2ca78a40c15c7520d00/barrel_HCAL_gdml/tiles/Tile12_Reduced.gdml" cache="$DETECTOR_PATH:/opt/detector" material="PlasticScint"/>
-        <ctile9_gdmlfile file="gdml/CTile09_Reduced.gdml" url="https://github.com/eic/epic-data/raw/29b126ddf47333cd2295b2ca78a40c15c7520d00/barrel_HCAL_gdml/tiles/CTile09_Reduced.gdml" cache="$DETECTOR_PATH:/opt/detector" material="PlasticScint"/>
-        <ctile10_gdmlfile file="gdml/CTile10_Reduced.gdml" url="https://github.com/eic/epic-data/raw/29b126ddf47333cd2295b2ca78a40c15c7520d00/barrel_HCAL_gdml/tiles/CTile10_Reduced.gdml" cache="$DETECTOR_PATH:/opt/detector" material="PlasticScint"/>
-        <ctile11_gdmlfile file="gdml/CTile11_Reduced.gdml" url="https://github.com/eic/epic-data/raw/29b126ddf47333cd2295b2ca78a40c15c7520d00/barrel_HCAL_gdml/tiles/CTile11_Reduced.gdml" cache="$DETECTOR_PATH:/opt/detector" material="PlasticScint"/>
-        <ctile12_gdmlfile file="gdml/CTile12_Reduced.gdml" url="https://github.com/eic/epic-data/raw/29b126ddf47333cd2295b2ca78a40c15c7520d00/barrel_HCAL_gdml/tiles/CTile12_Reduced.gdml" cache="$DETECTOR_PATH:/opt/detector" material="PlasticScint"/>
+        <tile1_gdmlfile file="gdml/Tile01_Reduced.gdml" url="https://github.com/eic/epic-data/raw/2edf54d71b069acb81d969a75717427a0bf77217/barrel_HCAL_gdml/tiles/Tile01_Reduced.gdml" cache="$DETECTOR_PATH:/opt/detector" material="PlasticScint"/>
+        <tile2_gdmlfile file="gdml/Tile02_Reduced.gdml" url="https://github.com/eic/epic-data/raw/2edf54d71b069acb81d969a75717427a0bf77217/barrel_HCAL_gdml/tiles/Tile02_Reduced.gdml" cache="$DETECTOR_PATH:/opt/detector" material="PlasticScint"/>
+        <tile3_gdmlfile file="gdml/Tile03_Reduced.gdml" url="https://github.com/eic/epic-data/raw/2edf54d71b069acb81d969a75717427a0bf77217/barrel_HCAL_gdml/tiles/Tile03_Reduced.gdml" cache="$DETECTOR_PATH:/opt/detector" material="PlasticScint"/>
+        <tile4_gdmlfile file="gdml/Tile04_Reduced.gdml" url="https://github.com/eic/epic-data/raw/2edf54d71b069acb81d969a75717427a0bf77217/barrel_HCAL_gdml/tiles/Tile04_Reduced.gdml" cache="$DETECTOR_PATH:/opt/detector" material="PlasticScint"/>
+        <tile5_gdmlfile file="gdml/Tile05_Reduced.gdml" url="https://github.com/eic/epic-data/raw/557595947d6423b8925a917c09461654e9df2d45/barrel_HCAL_gdml/tiles/Tile05_Reduced.gdml" cache="$DETECTOR_PATH:/opt/detector" material="PlasticScint"/>
+        <tile6_gdmlfile file="gdml/Tile06_Reduced.gdml" url="https://github.com/eic/epic-data/raw/2edf54d71b069acb81d969a75717427a0bf77217/barrel_HCAL_gdml/tiles/Tile06_Reduced.gdml" cache="$DETECTOR_PATH:/opt/detector" material="PlasticScint"/>
+        <tile7_gdmlfile file="gdml/Tile07_Reduced.gdml" url="https://github.com/eic/epic-data/raw/2edf54d71b069acb81d969a75717427a0bf77217/barrel_HCAL_gdml/tiles/Tile07_Reduced.gdml" cache="$DETECTOR_PATH:/opt/detector" material="PlasticScint"/>
+        <tile8_gdmlfile file="gdml/Tile08_Reduced.gdml" url="https://github.com/eic/epic-data/raw/582c777d1f17886da4619b1a2b047c507db43672/barrel_HCAL_gdml/tiles/Tile08_Reduced.gdml" cache="$DETECTOR_PATH:/opt/detector" material="PlasticScint"/>
+        <tile9_gdmlfile file="gdml/Tile09_Reduced.gdml" url="https://github.com/eic/epic-data/raw/2edf54d71b069acb81d969a75717427a0bf77217/barrel_HCAL_gdml/tiles/Tile09_Reduced.gdml" cache="$DETECTOR_PATH:/opt/detector" material="PlasticScint"/>
+        <tile10_gdmlfile file="gdml/Tile10_Reduced.gdml" url="https://github.com/eic/epic-data/raw/2edf54d71b069acb81d969a75717427a0bf77217/barrel_HCAL_gdml/tiles/Tile10_Reduced.gdml" cache="$DETECTOR_PATH:/opt/detector" material="PlasticScint"/>
+        <tile11_gdmlfile file="gdml/Tile11_Reduced.gdml" url="https://github.com/eic/epic-data/raw/2edf54d71b069acb81d969a75717427a0bf77217/barrel_HCAL_gdml/tiles/Tile11_Reduced.gdml" cache="$DETECTOR_PATH:/opt/detector" material="PlasticScint"/>
+        <tile12_gdmlfile file="gdml/Tile12_Reduced.gdml" url="https://github.com/eic/epic-data/raw/2edf54d71b069acb81d969a75717427a0bf77217/barrel_HCAL_gdml/tiles/Tile12_Reduced.gdml" cache="$DETECTOR_PATH:/opt/detector" material="PlasticScint"/>
+        <ctile9_gdmlfile file="gdml/CTile09_Reduced.gdml" url="https://github.com/eic/epic-data/raw/2edf54d71b069acb81d969a75717427a0bf77217/barrel_HCAL_gdml/tiles/CTile09_Reduced.gdml" cache="$DETECTOR_PATH:/opt/detector" material="PlasticScint"/>
+        <ctile10_gdmlfile file="gdml/CTile10_Reduced.gdml" url="https://github.com/eic/epic-data/raw/2edf54d71b069acb81d969a75717427a0bf77217/barrel_HCAL_gdml/tiles/CTile10_Reduced.gdml" cache="$DETECTOR_PATH:/opt/detector" material="PlasticScint"/>
+        <ctile11_gdmlfile file="gdml/CTile11_Reduced.gdml" url="https://github.com/eic/epic-data/raw/2edf54d71b069acb81d969a75717427a0bf77217/barrel_HCAL_gdml/tiles/CTile11_Reduced.gdml" cache="$DETECTOR_PATH:/opt/detector" material="PlasticScint"/>
+        <ctile12_gdmlfile file="gdml/CTile12_Reduced.gdml" url="https://github.com/eic/epic-data/raw/2edf54d71b069acb81d969a75717427a0bf77217/barrel_HCAL_gdml/tiles/CTile12_Reduced.gdml" cache="$DETECTOR_PATH:/opt/detector" material="PlasticScint"/>
 
   <define>
 
     <documentation>
-      Tile locations and reference locations determined by orientation of tiles models in 3D files.
+      Tile locations and reference locations in the barrel HCAL.
       These values adjust the 3D tile models to the correct position, orientation and angle
       so they can be placed programmatically within the GDML structure for the HCAL steel.
     </documentation>
@@ -53,13 +53,9 @@
     <matrix name="xposOuter" unit="mm" coldim="1" values="18.400271"/>
     <matrix name="yposOuter" unit="mm" coldim="1" values="1833.4834"/>
 
-    <matrix name="xposTileS" unit="mm" coldim="1" values="102.707 310.850 520.610 732.802 952.594 1180.725 1418.405 1668.665 1980.199 2267.609 2530.727 2785.926"/>
-    <matrix name="yposTileS" unit="mm" coldim="1" values="426.850 426.422 427.080 426.818 426.866 426.919 426.976 426.824 482.037 481.908 470.159 432.797"/>
-    <matrix name="zposTileS" unit="mm" coldim="1" values="-5.4212 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0"/>
-
-    <matrix name="xposTileN" unit="mm" coldim="1" values="-102.707 -310.850 -520.610 -732.802 -952.594 -1180.725 -1418.405 -1668.665 -1980.199 -2267.609 -2530.727 -2785.926"/>
-    <matrix name="yposTileN" unit="mm" coldim="1" values="426.850 426.422 427.080 426.818 426.866 426.919 426.976 426.824 482.037 481.908 470.159 432.797"/>
-    <matrix name="zposTileN" unit="mm" coldim="1" values="5.4212 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0"/>
+    <matrix name="xposTile" unit="mm" coldim="1" values="102.707 310.850 520.610 732.802 952.594 1180.725 1418.405 1668.665 1977.699 2265.109 2528.227 2783.426"/>
+    <matrix name="yposTile" unit="mm" coldim="1" values="426.850 426.422 427.080 426.818 426.866 426.919 426.976 426.824 482.037 481.908 470.159 432.797"/>
+    <matrix name="zposTile" unit="mm" coldim="1" values="-5.4212 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0"/>
 
     <matrix name="xposChimneyTileS" unit="mm" coldim="1" values="2118.192 2425.895 2711.635 2957.924"/>
     <matrix name="yposChimneyTileS" unit="mm" coldim="1" values="645.634 645.645 642.964 607.790"/>
