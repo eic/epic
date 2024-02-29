@@ -335,7 +335,7 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
   double increment_angle = (360.0/320.0)*dd4hep::deg;
   double increment_offset = -10.01*increment_angle;
 
-  DetElement tile_det("ieta0 iphi0", det_id);
+  DetElement tile_det("eta0 phi0", det_id);
   sens.setType("calorimeter");
 
   for (int i_eta = 0; i_eta < 12; i_eta++) {  // eta ring
@@ -358,8 +358,8 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
                                                                Translation3D(-(xposTile[tnum] + (tnum + 1) * tile_tolerance) * dd4hep::mm,
                                                                              yposTile[tnum] * dd4hep::mm, -zposTile[tnum] * dd4hep::mm)));
 
-        phv1.addPhysVolID("ieta",i_eta).addPhysVolID("iphi",i_phi);
-        DetElement sd1 = tile_det.clone(_toString(i_eta, "ieta%d ")+_toString(i_phi, "iphi%d"));
+        phv1.addPhysVolID("eta",i_eta).addPhysVolID("phi",i_phi);
+        DetElement sd1 = tile_det.clone(_toString(i_eta, "eta%d ")+_toString(i_phi, "phi%d"));
         sd1.setPlacement(phv1);
         sdet.add(sd1);
 
@@ -372,8 +372,8 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
                                                    Translation3D((xposTile[tnum] + (tnum + 1) * tile_tolerance) * dd4hep::mm,
                                                                  yposTile[tnum] * dd4hep::mm, zposTile[tnum] * dd4hep::mm));
 
-        phv0.addPhysVolID("ieta",(12+tnum)).addPhysVolID("iphi", i_phi);
-        DetElement sd0 = tile_det.clone(_toString((12+tnum), "ieta%d ")+_toString(i_phi, "iphi%d"));
+        phv0.addPhysVolID("eta",(12+tnum)).addPhysVolID("phi", i_phi);
+        DetElement sd0 = tile_det.clone(_toString((12+tnum), "eta%d ")+_toString(i_phi, "phi%d"));
         sd0.setPlacement(phv0);
         sdet.add(sd0);
 
@@ -395,8 +395,8 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
                                                      Translation3D((xposTile[tnum] + (tnum + 1) * tile_tolerance) * dd4hep::mm,
                                                                    yposTile[tnum] * dd4hep::mm, zposTile[tnum] * dd4hep::mm));
 
-          phv1.addPhysVolID("ieta", i_eta).addPhysVolID("iphi", i_phi);
-          DetElement sd1 = tile_det.clone(_toString(i_eta, "ieta%d ")+_toString(i_phi, "iphi%d"));
+          phv1.addPhysVolID("eta", i_eta).addPhysVolID("phi", i_phi);
+          DetElement sd1 = tile_det.clone(_toString(i_eta, "eta%d ")+_toString(i_phi, "phi%d"));
           sd1.setPlacement(phv1);
           sdet.add(sd1);
 
@@ -410,8 +410,8 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
                                                                  Translation3D(-(xposTile[tnum] + (tnum + 1) * tile_tolerance) * dd4hep::mm,
                                                                                yposTile[tnum] * dd4hep::mm, -zposTile[tnum] * dd4hep::mm)));
 
-          phv0.addPhysVolID("ieta", (12 + tnum)).addPhysVolID("iphi", i_phi);
-          DetElement sd0 = tile_det.clone(_toString((12+tnum), "ieta%d ")+_toString(i_phi, "iphi%d"));
+          phv0.addPhysVolID("eta", (12 + tnum)).addPhysVolID("phi", i_phi);
+          DetElement sd0 = tile_det.clone(_toString((12+tnum), "eta%d ")+_toString(i_phi, "phi%d"));
           sd0.setPlacement(phv0);
           sdet.add(sd0);
 
@@ -430,8 +430,8 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
                                                                    yposChimneyTileS[tnum-8] * dd4hep::mm, zposChimneyTileS[tnum-8] * dd4hep::mm));
 
 
-          phv1.addPhysVolID("ieta", (12 + tnum)).addPhysVolID("iphi", i_phi);
-          DetElement sd1 = tile_det.clone(_toString((12+tnum), "ieta%d ")+_toString(i_phi, "iphi%d"));
+          phv1.addPhysVolID("eta", (12 + tnum)).addPhysVolID("phi", i_phi);
+          DetElement sd1 = tile_det.clone(_toString((12+tnum), "eta%d ")+_toString(i_phi, "phi%d"));
           sd1.setPlacement(phv1);
           sdet.add(sd1);
 
@@ -444,8 +444,8 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
                                                      Translation3D((xposTile[tnum] + (tnum + 1) * tile_tolerance) * dd4hep::mm,
                                                                    yposTile[tnum] * dd4hep::mm, zposTile[tnum] * dd4hep::mm));
 
-          phv0.addPhysVolID("ieta", i_eta).addPhysVolID("iphi", i_phi);
-          DetElement sd0 = tile_det.clone(_toString(i_eta, "ieta%d ")+_toString(i_phi, "iphi%d"));
+          phv0.addPhysVolID("eta", i_eta).addPhysVolID("phi", i_phi);
+          DetElement sd0 = tile_det.clone(_toString(i_eta, "eta%d ")+_toString(i_phi, "phi%d"));
           sd0.setPlacement(phv0);
           sdet.add(sd0);
 
