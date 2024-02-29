@@ -357,7 +357,7 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
                                                    Transform3D(RotationY(180.0 * dd4hep::deg),
                                                                Translation3D(-(xposTile[tnum] + (tnum + 1) * tile_tolerance) * dd4hep::mm,
                                                                              yposTile[tnum] * dd4hep::mm, -zposTile[tnum] * dd4hep::mm)));
-	
+
         phv1.addPhysVolID("ieta",i_eta).addPhysVolID("iphi",i_phi);
         DetElement sd1 = tile_det.clone(_toString(i_eta, "ieta%d ")+_toString(i_phi, "iphi%d"));
         sd1.setPlacement(phv1);
@@ -377,7 +377,7 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
         sd0.setPlacement(phv0);
         sdet.add(sd0);
 
-	
+
       } else {
 
         // first three sectors are chimney sectors
