@@ -72,7 +72,7 @@
   <readouts>
     <readout name="HcalBarrelHits">
       <segmentation type="NoSegmentation"/>
-      <id>system:8,tile:13</id>
+      <id>system:8,ieta:5,iphi:9</id>
     </readout>
   </readouts>
 
