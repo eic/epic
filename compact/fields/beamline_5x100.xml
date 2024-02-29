@@ -35,7 +35,7 @@
     <constant name="B0PF_GradientMax"  value="-8.12238283*tesla/m"/>
     <constant name="B0APF_GradientMax" value="0.0*tesla/m"/>
     <constant name="Q1APF_GradientMax" value="-44.08979*tesla/m"/>
-    <constant name="Q1BPF_GradientMax" value="0.0*tesla/m"/> <!-- need to check with Scott on this one -->
+    <constant name="Q1BPF_GradientMax" value="0.0*tesla/m"/> 
     <constant name="Q2PF_GradientMax"  value="12.7764668*tesla/m"/>
     <constant name="B1PF_GradientMax"  value="0.0*tesla/m"/>
     <constant name="B1APF_GradientMax" value="0.0*tesla/m"/>
@@ -44,7 +44,7 @@
     <constant name="Q1EF_GradientMax"  value="2.127596364*tesla/m"/>
 
     <constant name="B0PF_Bmax"  value="1.1840539*tesla"/>
-    <constant name="B0APF_Bmax" value="-1.1588921*tesla"/> <!-- need to check with Scott on this one -->
+    <constant name="B0APF_Bmax" value="-1.1588921*tesla"/>
     <constant name="Q1APF_Bmax" value="0.0*tesla"/>
     <constant name="Q1BPF_Bmax" value="0.0*tesla"/>
     <constant name="Q2PF_Bmax"  value="0.0*tesla"/>
