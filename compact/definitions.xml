@@ -206,7 +206,7 @@ The unused IDs below are saved for future use.
     <constant name="PassiveSteelRingEndcapP_ID" value="114"/>
     <constant name="HCalEndcapPInsert_ID" value="115"/><!-- DEPRECATED -->
     <constant name="HcalEndcapPInsert_ID" value="115"/>
-    <constant name="LFHCAL_ID"     value="116"/>
+    <constant name="HcalEndcapP_ID"     value="116"/>
     <documentation>
       #### (120-129) (near) Forward reserved
 
@@ -587,10 +587,10 @@ Service gaps in FW direction (before endcapP ECAL) and BW direction (before endc
 
     <constant name="HcalBarrelStavesN"          value="12"/>
 
-    <constant name="LFHCAL_zmin"          value="EcalEndcapP_zmin + EcalEndcapP_length"/>
-    <comment> LFHCAL is 140 cm total, but current implementation leaves the final 10 cm empty </comment>
-    <constant name="LFHCAL_length"        value="140.0*cm"/>
-    <constant name="LFHCAL_zmax"          value="LFHCAL_zmin + LFHCAL_length"/>
+    <constant name="HcalEndcapP_zmin"          value="EcalEndcapP_zmin + EcalEndcapP_length"/>
+    <comment> HcalEndcapP is 140 cm total, but current implementation leaves the final 10 cm empty </comment>
+    <constant name="HcalEndcapP_length"        value="140.0*cm"/>
+    <constant name="HcalEndcapP_zmax"          value="HcalEndcapP_zmin + HcalEndcapP_length"/>
 
     <constant name="HcalEndcapPInsert_zmin"     value="EcalEndcapP_zmin + EcalEndcapP_length"/>
     <constant name="HcalEndcapPInsert_length"   value="134.75*cm"/>
@@ -629,8 +629,7 @@ Service gaps in FW direction (before endcapP ECAL) and BW direction (before endc
     <constant name="HcalBarrel_offset"        value="(HcalBarrelForward_zmax - HcalBarrelBackward_zmax)/2"/>
 
     <constant name="HcalEndcapN_rmax"     value="min(HcalBarrel_rmax, 267.0 * cm)"/>
-
-    <constant name="LFHCAL_rmax"          value="HcalBarrel_rmax"/>
+    <constant name="HcalEndcapP_rmax"          value="HcalBarrel_rmax"/>
 
     <constant name="FluxEndcapN_collar_rmax" value="326.2*cm"/>
     <constant name="FluxEndcapN_collar_rmin" value="269.0*cm"/>

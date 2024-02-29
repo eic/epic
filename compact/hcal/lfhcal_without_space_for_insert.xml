@@ -1,7 +1,7 @@
 <lccdd>
 
   <info name="lfhcal_without_space_for_insert.xml"
-        title="EPIC LFHCAL without insert cutout"
+        title="EPIC HcalEndcapP without insert cutout"
         author="@FriederikeBock"
         url="https://github.com/FriederikeBock"
         status="development"
@@ -9,8 +9,8 @@
   ><comment/></info>
 
   <define>
-    <constant name="LFHCAL_with_space_for_insert" value="0"/>
-    <constant name="LFHCAL_without_space_for_insert" value="1"/>
+    <constant name="HcalEndcapP_with_space_for_insert" value="0"/>
+    <constant name="HcalEndcapP_without_space_for_insert" value="1"/>
   </define>
 
   <include ref="lfhcal.xml"/>

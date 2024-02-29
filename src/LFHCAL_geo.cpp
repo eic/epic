@@ -298,11 +298,11 @@ Assembly createScintillatorPlateEightM( Detector& desc,
   Volume      foil_r_vol(basename+"_ESRFoilR_"+_toString(layerID, "_layer_%d"), foil_s, slice_mat);
   // Setting slice attributes
   if (renderComp){
-    foilgrid_vol.setAttributes(desc, region, limit, "LFHCALLayerSepVis");
-    foil_t_vol.setAttributes(desc, region, limit, "LFHCALLayerSepVis");
-    foil_b_vol.setAttributes(desc, region, limit, "LFHCALLayerSepVis");
-    foil_l_vol.setAttributes(desc, region, limit, "LFHCALLayerSepVis");
-    foil_r_vol.setAttributes(desc, region, limit, "LFHCALLayerSepVis");
+    foilgrid_vol.setAttributes(desc, region, limit, "HcalEndcapPLayerSepVis");
+    foil_t_vol.setAttributes(desc, region, limit, "HcalEndcapPLayerSepVis");
+    foil_b_vol.setAttributes(desc, region, limit, "HcalEndcapPLayerSepVis");
+    foil_l_vol.setAttributes(desc, region, limit, "HcalEndcapPLayerSepVis");
+    foil_r_vol.setAttributes(desc, region, limit, "HcalEndcapPLayerSepVis");
   } else {
     foilgrid_vol.setAttributes(desc, region, limit, "InvisibleNoDaughters");
     foil_t_vol.setAttributes(desc, region, limit, "InvisibleNoDaughters");
@@ -331,7 +331,7 @@ Assembly createScintillatorPlateEightM( Detector& desc,
 
   // loop over all towers within same module
   for (int i = 0; i < 8; i++){
-    // printout(DEBUG, "LFHCAL_geo", basename + _toString(i, "_tower_%d") + "\t" + _toString(modID) + "\t" + _toString(i) + "\t" + _toString(layerID));
+    // printout(DEBUG, "HcalEndcapP_geo", basename + _toString(i, "_tower_%d") + "\t" + _toString(modID) + "\t" + _toString(i) + "\t" + _toString(layerID));
     Volume modScintTowerAss = createScintillatorTower( desc,  basename+ _toString(i, "_tower_%d"),
                                                             w_tow, h_tow, t_slice,
                                                             slice_mat, region, limit, vis, sens, renderComp);
@@ -417,11 +417,11 @@ Assembly createScintillatorPlateFourM( Detector& desc,
   Volume      foil_r_vol(basename+"_ESRFoilR_"+_toString(layerID, "_layer_%d"), foil_s, slice_mat);
   // Setting slice attributes
   if (renderComp){
-    foilgrid_vol.setAttributes(desc, region, limit, "LFHCALLayerSepVis");
-    foil_t_vol.setAttributes(desc, region, limit, "LFHCALLayerSepVis");
-    foil_b_vol.setAttributes(desc, region, limit, "LFHCALLayerSepVis");
-    foil_l_vol.setAttributes(desc, region, limit, "LFHCALLayerSepVis");
-    foil_r_vol.setAttributes(desc, region, limit, "LFHCALLayerSepVis");
+    foilgrid_vol.setAttributes(desc, region, limit, "HcalEndcapPLayerSepVis");
+    foil_t_vol.setAttributes(desc, region, limit, "HcalEndcapPLayerSepVis");
+    foil_b_vol.setAttributes(desc, region, limit, "HcalEndcapPLayerSepVis");
+    foil_l_vol.setAttributes(desc, region, limit, "HcalEndcapPLayerSepVis");
+    foil_r_vol.setAttributes(desc, region, limit, "HcalEndcapPLayerSepVis");
   } else {
     foilgrid_vol.setAttributes(desc, region, limit, "InvisibleNoDaughters");
     foil_t_vol.setAttributes(desc, region, limit, "InvisibleNoDaughters");
@@ -451,7 +451,7 @@ Assembly createScintillatorPlateFourM( Detector& desc,
   // loop over all towers within same module
 
   for (int i = 0; i < 4; i++){
-    // printout(DEBUG, "LFHCAL_geo", basename + _toString(i, "_tower_%d") + "\t" + _toString(modID) + "\t" + _toString(i) + "\t" + _toString(layerID));
+    // printout(DEBUG, "HcalEndcapP_geo", basename + _toString(i, "_tower_%d") + "\t" + _toString(modID) + "\t" + _toString(i) + "\t" + _toString(layerID));
     Volume modScintTowerAss = createScintillatorTower( desc,  basename+ _toString(i, "_tower_%d"),
                                                              w_tow, h_tow, t_slice,
                                                             slice_mat, region, limit, vis, sens, renderComp);
@@ -476,7 +476,7 @@ Volume createEightMModule ( Detector& desc,
                               bool renderComp,
                               bool allSen
 ){
-  std::string baseName = "LFHCAL_8M";
+  std::string baseName = "HcalEndcapP_8M";
 
   // assembly definition
   Box         modBox( mod_params.mod_width / 2., mod_params.mod_height / 2., length / 2.);
@@ -538,7 +538,7 @@ Volume createEightMModule ( Detector& desc,
   Box         modPCB( mod_params.mod_pcbThick / 2., mod_params.mod_pcbWidth / 2., (mod_params.mod_pcbLength) / 2.);
   Volume  vol_modPCB(baseName+"_PCB",modPCB,desc.material("Fr4"));
   if (renderComp){
-    vol_modPCB.setAttributes(desc, mod_params.mod_regStr, mod_params.mod_limStr, "LFHCALModPCB");
+    vol_modPCB.setAttributes(desc, mod_params.mod_regStr, mod_params.mod_limStr, "HcalEndcapPModPCB");
   } else {
     vol_modPCB.setAttributes(desc, mod_params.mod_regStr, mod_params.mod_limStr, "InvisibleNoDaughters");
   }
@@ -629,12 +629,12 @@ Volume createFourMModule ( Detector& desc,
                               bool allSen
 ){
 
-  std::string baseName = "LFHCAL_4M";
+  std::string baseName = "HcalEndcapP_4M";
 
   // assembly definition
   Box         modBox( mod_params.mod_width / 2., mod_params.mod_height / 2., length / 2.);
   Volume  vol_mod(baseName,modBox,desc.material("Air"));
-  printout(DEBUG, "LFHCAL_geo", "visualization string module: " + mod_params.mod_visStr);
+  printout(DEBUG, "HcalEndcapP_geo", "visualization string module: " + mod_params.mod_visStr);
   vol_mod.setVisAttributes(desc.visAttributes(mod_params.mod_visStr.data()));
 
   // placement operator
@@ -693,7 +693,7 @@ Volume createFourMModule ( Detector& desc,
   Box         modPCB( mod_params.mod_pcbThick / 2., mod_params.mod_pcbWidth / 2., (mod_params.mod_pcbLength) / 2.);
   Volume  vol_modPCB(baseName+"_PCB",modPCB,desc.material("Fr4"));
   if (renderComp){
-    vol_modPCB.setAttributes(desc, mod_params.mod_regStr, mod_params.mod_limStr, "LFHCALModPCB");
+    vol_modPCB.setAttributes(desc, mod_params.mod_regStr, mod_params.mod_limStr, "HcalEndcapPModPCB");
   } else {
     vol_modPCB.setAttributes(desc, mod_params.mod_regStr, mod_params.mod_limStr, "InvisibleNoDaughters");
   }
@@ -784,14 +784,14 @@ static Ref_t createDetector(Detector& desc, xml_h handle, SensitiveDetector sens
   double    length = dim.z();    // Size along z-axis
   xml_dim_t pos = detElem.position();
 
-  printout(DEBUG, "LFHCAL_geo", "global LFHCal position " + _toString(pos.x()) + "\t" + _toString(pos.y()) + "\t" + _toString(pos.z()));
+  printout(DEBUG, "HcalEndcapP_geo", "global LFHCal position " + _toString(pos.x()) + "\t" + _toString(pos.y()) + "\t" + _toString(pos.z()));
 
   bool renderComponents = getAttrOrDefault(detElem, _Unicode(renderComponents), 0.);
   bool allSensitive     = getAttrOrDefault(detElem, _Unicode(allSensitive), 0.);
   if (renderComponents) {
-    printout(DEBUG, "LFHCAL_geo", "enabled visualization");
+    printout(DEBUG, "HcalEndcapP_geo", "enabled visualization");
   } else {
-    printout(DEBUG, "LFHCAL_geo", "switchted off visualization");
+    printout(DEBUG, "HcalEndcapP_geo", "switchted off visualization");
   }
 
   // 8M module specific loading
@@ -883,7 +883,7 @@ static Ref_t createDetector(Detector& desc, xml_h handle, SensitiveDetector sens
   for (xml_coll_t position_i(eightMPos, _U(position)); position_i; ++position_i){
     xml_comp_t position_comp = position_i;
     if (! getAttrOrDefault(position_comp, _Unicode(if), true)) {
-      printout(DEBUG, "LFHCAL_geo", "skipping x = %.1f cm, y = %.1f cm", position_comp.x(), position_comp.y());
+      printout(DEBUG, "HcalEndcapP_geo", "skipping x = %.1f cm, y = %.1f cm", position_comp.x(), position_comp.y());
       continue;
     }
     pos8M.push_back({position_comp.x(), position_comp.y(), position_comp.z()});
@@ -892,9 +892,9 @@ static Ref_t createDetector(Detector& desc, xml_h handle, SensitiveDetector sens
   // create 8M modules
   Volume  eightMassembly = createEightMModule ( desc, eightM_params, slice_Params, length, sens, renderComponents, allSensitive);
   for (int e = 0; e < (int)pos8M.size(); e++){
-    if(e%20 == 0 ) printout(DEBUG, "LFHCAL_geo", "LFHCAL placing 8M module: " + _toString(e) + "/" +  _toString((int)pos8M.size()) + "\t" + _toString(pos8M[e].x) + "\t" + _toString(pos8M[e].y) + "\t" + _toString(pos8M[e].z));
+    if(e%20 == 0 ) printout(DEBUG, "HcalEndcapP_geo", "HcalEndcapP placing 8M module: " + _toString(e) + "/" +  _toString((int)pos8M.size()) + "\t" + _toString(pos8M[e].x) + "\t" + _toString(pos8M[e].y) + "\t" + _toString(pos8M[e].z));
       if(moduleIDx<0 || moduleIDy<0){
-      printout(DEBUG, "LFHCAL_geo", "LFHCAL WRONG ID FOR 8M module: " + _toString(e) + "/" + _toString((int)pos8M.size()) + "\t" + _toString(moduleIDx) + "\t"
+      printout(DEBUG, "HcalEndcapP_geo", "HcalEndcapP WRONG ID FOR 8M module: " + _toString(e) + "/" + _toString((int)pos8M.size()) + "\t" + _toString(moduleIDx) + "\t"
                 + _toString(moduleIDy));
     }
     moduleIDx             = ((pos8M[e].x + 270) / 10);
@@ -912,7 +912,7 @@ static Ref_t createDetector(Detector& desc, xml_h handle, SensitiveDetector sens
   for (xml_coll_t position_i(fourMPos, _U(position)); position_i; ++position_i){
     xml_comp_t position_comp = position_i;
     if (! getAttrOrDefault(position_comp, _Unicode(if), true)) {
-      printout(DEBUG, "LFHCAL_geo", "skipping x = %.1f cm, y = %.1f cm", position_comp.x(), position_comp.y());
+      printout(DEBUG, "HcalEndcapP_geo", "skipping x = %.1f cm, y = %.1f cm", position_comp.x(), position_comp.y());
       continue;
     }
     pos4M.push_back({position_comp.x(), position_comp.y(), position_comp.z()});
@@ -921,12 +921,12 @@ static Ref_t createDetector(Detector& desc, xml_h handle, SensitiveDetector sens
   // create 4M modules
   Volume  fourMassembly = createFourMModule ( desc, fourM_params, slice_Params,  length, sens, renderComponents, allSensitive);
   for (int f = 0; f < (int)pos4M.size(); f++){
-    if(f%20 == 0 ) printout(DEBUG, "LFHCAL_geo", "LFHCAL placing 4M module: " + _toString(f) + "/" + _toString((int)pos4M.size()) + "\t" + _toString(pos4M[f].x) + "\t" + _toString(pos4M[f].y) + "\t" + _toString(pos4M[f].z));
+    if(f%20 == 0 ) printout(DEBUG, "HcalEndcapP_geo", "HcalEndcapP placing 4M module: " + _toString(f) + "/" + _toString((int)pos4M.size()) + "\t" + _toString(pos4M[f].x) + "\t" + _toString(pos4M[f].y) + "\t" + _toString(pos4M[f].z));
 
     moduleIDx             = ((pos4M[f].x + 265) / 10);
     moduleIDy             = ((pos4M[f].y + 265) / 10);
     if(moduleIDx<0 || moduleIDy<0){
-      printout(DEBUG, "LFHCAL_geo", "LFHCAL WRONG ID FOR 4M module: " + _toString(f) + "/" + _toString((int)pos4M.size()) + "\t" + _toString(moduleIDx) + "\t"
+      printout(DEBUG, "HcalEndcapP_geo", "HcalEndcapP WRONG ID FOR 4M module: " + _toString(f) + "/" + _toString((int)pos4M.size()) + "\t" + _toString(moduleIDx) + "\t"
                 + _toString(moduleIDy));
     }
     auto tr4M = Transform3D(Position(pos.x()-pos4M[f].x-0.5*fourM_params.mod_width, pos.y()-pos4M[f].y, pos.z() + pos4M[f].z + length / 2.));
@@ -942,4 +942,4 @@ static Ref_t createDetector(Detector& desc, xml_h handle, SensitiveDetector sens
 
   return det;
 }
-DECLARE_DETELEMENT(epic_LFHCAL, createDetector)
+DECLARE_DETELEMENT(epic_HcalEndcapP, createDetector)
