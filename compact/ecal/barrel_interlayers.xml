@@ -34,7 +34,7 @@
     <constant name="EcalBarrel_Calorimeter_length"
       value="EcalBarrel_Calorimeter_zmax + EcalBarrel_Calorimeter_zmin"/>
     <constant name="EcalBarrel_Calorimeter_offset"
-      value="(EcalBarrel_Calorimeter_zmax - EcalBarrel_Calorimeter_zmin + 6.5)/2.0"/>
+      value="(EcalBarrel_Calorimeter_zmax - EcalBarrel_Calorimeter_zmin)/2.0"/>
 
     <constant name="EcalBarrel_FrontSupportThickness" value="0.5*cm"/>
     <constant name="EcalBarrel_BackSupportThickness" value="3*cm"/>
