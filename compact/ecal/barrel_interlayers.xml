@@ -20,11 +20,11 @@
     <!-- Number of imaging layer slots -->
     <constant name="EcalBarrelImagingLayers_nMax"   value="6"/>
     <comment>
-      Active part of the calorimeter is 
+      Active part of the calorimeter is
       215 cm long in e-going
       221.5 cm long in p-going
       -38.75 cm offset
-    </comment> 
+    </comment>
     <constant name="EcalBarrel_Calorimeter_zmin"
       value="min(260.25*cm, EcalBarrelBackward_zmax)"/>
     <constant name="EcalBarrel_Calorimeter_zmax"
