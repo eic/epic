@@ -68,6 +68,12 @@
     <fraction n="0.998" ref="Fe"/>
     <fraction n=".002" ref="C"/>
   </material>
+  <material name="Steel1020">
+    <D value="7.86" unit="g/cm3"/>
+    <fraction n="0.993" ref="Fe"/>
+    <fraction n=".002" ref="C"/>
+    <fraction n=".005" ref="Mn"/>
+  </material>
   <material name="Aluminum5083">
     <D value="2.650" unit="g/cm3"/>
     <fraction n="0.94" ref="Al"/>
