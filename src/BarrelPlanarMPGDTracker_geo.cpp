@@ -321,4 +321,3 @@ static Ref_t create_BarrelPlanarMPGDTracker_geo(Detector& description, xml_h e, 
 //@}
 // clang-format off
 DECLARE_DETELEMENT(epic_OuterMPGDBarrel, create_BarrelPlanarMPGDTracker_geo)
-DECLARE_DETELEMENT(epic_MPGDDIRC, create_BarrelPlanarMPGDTracker_geo)
