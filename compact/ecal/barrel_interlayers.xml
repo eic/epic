@@ -18,7 +18,7 @@
       change EcalBarrelImagingLayers_nMax variable
     </comment>
     <!-- Number of imaging layer slots -->
-    <constant name="EcalBarrelImagingLayers_nMax"     value="6"/>
+    <constant name="EcalBarrelImagingLayers"     value="6"/>
     <comment>
       Active part of the calorimeter is
       215 cm long in e-going
@@ -62,7 +62,6 @@
     <constant name="EcalBarrel_StaveTilt_angle"       value="10*degree"/>
     <constant name="EcalBarrel_Stave_ModuleRepeat"    value="floor(EcalBarrel_Calorimeter_length / (EcalBarrel_AstroPix_length + EcalBarrel_AstroPix_margin))"/>
 
-    <constant name="EcalBarrel_LayerSpacing"          value="10.0*mm"/>
     <constant name="EcalBarrel_FiberRadius"           value="0.5*mm"/>
     <constant name="EcalBarrel_FiberXSpacing"         value="1.34*mm"/>
     <constant name="EcalBarrel_FiberZSpacing"         value="1.22*mm"/>
@@ -87,12 +86,7 @@
 
     <constant name="EcalBarrel_ScFiLayerThickness_Imaging"
       value="EcalBarrel_RadiatorThickness + 2*EcalBarrel_RadiatorEdgeThickness + 2*EcalBarrel_AluminumPlateThickness"/>
-    <constant name="EcalBarrel_ScFiLayerThickness_Bulk"
-      value="EcalBarrel_RadiatorThickness"/>
 
-    <constant name="EcalBarrelImagingLayers_num"
-        value="min(EcalBarrelImagingLayers_nMax,
-               floor(EcalBarrel_AvailThickness/(EcalBarrel_ImagingLayerThickness + EcalBarrel_ScFiLayerThickness + EcalBarrel_SpaceBetween)))"/>
     <comment>
       Adjusting size of the ScFi back chunk to match number of imaging layers
       and ~17.1 radiation lengths in total
@@ -100,14 +94,14 @@
     <constant name="EcalBarrel_FiberBulkLayers_num" value = "EcalBarrel_TotalFiberLayers_num-EcalBarrelImagingLayers_num+1"/>
 
     <constant name="EcalBarrel_ImagingPartThickness"
-        value="EcalBarrelImagingLayers_num*(EcalBarrel_ImagingLayerThickness + EcalBarrel_ScFiLayerThickness + EcalBarrel_SpaceBetween)-EcalBarrel_ScFiLayerThickness"/>
-    <constant name="EcalBarrel_ScFiPartThickness_max"
-        value="max(0, EcalBarrel_AvailThickness-EcalBarrel_ImagingPartThickness)"/>
+        value="EcalBarrelImagingLayers_num * (EcalBarrel_ImagingLayerThickness + EcalBarrel_ScFiLayerThickness_Imaging + EcalBarrel_SpaceBetween)
+         - EcalBarrel_ScFiLayerThickness_Imaging"/>
     <constant name="EcalBarrel_ScFiPartThickness"
-        value="min(EcalBarrel_ScFiPartThickness_max,
-         EcalBarrel_RadiatorThickness*EcalBarrel_FiberBulkLayers_num)"/>
-    <constant name="EcalBarrel_SensitiveLayers_rmax"
-        value="EcalBarrel_rmin + EcalBarrel_ImagingPartThickness + EcalBarrel_ScFiPartThickness"/>
+        value="EcalBarrel_RadiatorThickness*EcalBarrel_FiberBulkLayers_num"/>
+    <constant name="EcalBarrelDetector_rmax"
+        value="EcalBarrel_rmin + EcalBarrel_FrontSupportThickness
+         + EcalBarrel_ImagingPartThickness + EcalBarrel_ScFiPartThickness + EcalBarrel_BackSupportThickness"/>
+    
   </define>
 
   <limits>
