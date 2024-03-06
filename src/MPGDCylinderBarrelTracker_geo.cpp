@@ -1,10 +1,10 @@
 // SPDX-License-Identifier: LGPL-3.0-or-later
 // Copyright (C) 2022 Whitney Armstrong
-// Modified by Nivedith Ramasubramanian 2023
-//
+
 /** \addtogroup Trackers Trackers
  * \brief Type: **BarrelTrackerWithFrame**.
- * \author W. Armstrong *
+ * \author Nivedith Ramasubramanian
+ *
  * \ingroup trackers
  *
  * @{
@@ -19,13 +19,27 @@
 #include <array>
 #include "DD4hepDetectorHelper.h"
 
-
 using namespace std;
 using namespace dd4hep;
 using namespace dd4hep::rec;
 using namespace dd4hep::detail;
 
-
+/** Micromegas Barrel Tracker with space frame
+ *
+ * - Designed to process "mpgd_barrel.xml" ("mpgd_barrel_ver1" as of 2024/02).
+ *
+ * - Derived from "BarrelTrackerWithFrame_geo.cpp".
+ *
+ * - "support" tag not addressed.
+ *
+ * - "frame" tag within the module element.
+ *
+ * \code
+ * \endcode
+ *
+ *
+ * @author Whitney Armstrong
+ */
 static Ref_t create_MPGDCylinderBarrelTracker(Detector& description, xml_h e, SensitiveDetector sens)
 {
   typedef vector<PlacedVolume> Placements;
@@ -42,6 +56,13 @@ static Ref_t create_MPGDCylinderBarrelTracker(Detector& description, xml_h e, Se
 
   PlacedVolume pv;
 
+  //#define DEBUG_MPGDCylinderBarrelTracker
+#ifdef DEBUG_MPGDCylinderBarrelTracker
+  // TEMPORARILY INCREASE VERBOSITY level for debugging pruposes
+  PrintLevel priorPrintLevel = printLevel();
+  setPrintLevel(DEBUG);
+#endif
+
   // Set detector type flag
   dd4hep::xml::setDetectorTypeFlag(x_det, sdet);
   auto &params = DD4hepDetectorHelper::ensureExtension<dd4hep::rec::VariantParameters>(
@@ -56,6 +77,7 @@ static Ref_t create_MPGDCylinderBarrelTracker(Detector& description, xml_h e, Se
 
   dd4hep::xml::Dimension dimensions(x_det.dimensions());
   Assembly assembly(det_name);
+
   sens.setType("tracker");
  
   // loop over the modules
@@ -63,13 +85,14 @@ static Ref_t create_MPGDCylinderBarrelTracker(Detector& description, xml_h e, Se
   int Nmod = 0;
   for (xml_coll_t mi(x_det, _U(module)); mi; ++mi) {
     Nmod++;
-    cout << "Module Number: " << Nmod << endl;
     xml_comp_t x_mod = mi;
     string     m_nam = x_mod.nameStr();
+    printout(DEBUG, "MPGDCylinderBarrelTracker","New module #%d \"%s\"",
+	     Nmod,m_nam.c_str());
 
     if (volumes.find(m_nam) != volumes.end()) {
-      printout(ERROR, "MPGDCylinderBarrelTracker",
-               string((string("Module with named ") + m_nam + string(" already exists."))).c_str());
+      printout(ERROR,"MPGDCylinderBarrelTracker","Module \"%s\" already exists.",
+	       m_nam.c_str());
       throw runtime_error("Logics error in building modules.");
     }
 
@@ -77,27 +100,32 @@ static Ref_t create_MPGDCylinderBarrelTracker(Detector& description, xml_h e, Se
     int    sensor_number=1;
     double thickness_so_far=0;
     double total_thickness=0;
-    
+
     // Compute module total thickness from components
     xml_coll_t ci(x_mod, _U(module_component));
     for (ci.reset(), total_thickness = 0.0; ci; ++ci) {
-      cout << "ci: " << ci << " total_thickness: " << total_thickness << endl;
-      total_thickness += xml_comp_t(ci).thickness();
+      xml_comp_t x_comp = ci;
+      printout(DEBUG,"MPGDCylinderBarrelTracker",
+	       "0x%x: \"%s\" \t total_thickness %.4f cm",
+	       ci,x_comp.nameStr().c_str(),total_thickness/cm);
+      total_thickness += x_comp.thickness();
     }
-    cout << "total_thickness: " << total_thickness << endl;
-  
+    printout(DEBUG,"MPGDCylinderBarrelTracker",
+	     " => total_thickness %.4f cm",
+	     total_thickness/cm);
     // the module assembly volume
     Assembly m_vol(m_nam);
     volumes[m_nam] = m_vol;
     m_vol.setVisAttributes(description.visAttributes(x_mod.visStr()));
 
-    double det_rmin = dimensions.rmin();
-    auto det_length    = dimensions.length();
+    double det_rmin   = dimensions.rmin();
+    double det_length = dimensions.length();
     int nmod = 8; // the value of 2piR/width is 6.9, want to round up to 8. So +2
-    auto phi_start = - M_PI/nmod - (1*3.14/180); //causing 1 degrees of overlap on each side
-    auto phi_end = M_PI/nmod +(1*3.14/180) ;
+    double phi_start = - M_PI/nmod - (1*3.14/180); //causing 1 degrees of overlap on each side
+    double phi_end =     M_PI/nmod + (1*3.14/180) ;
     double zthickness_frame;
 
+    // Module frame.
     if (x_mod.hasChild(_U(frame))) {
       xml_comp_t m_frame = x_mod.child(_U(frame));
       const string frame_nam  = _toString("frame");
@@ -107,19 +135,19 @@ static Ref_t create_MPGDCylinderBarrelTracker(Detector& description, xml_h e, Se
       Tube frame_tube_1(det_rmin, det_rmin + total_thickness,zthickness_frame/2 , phi_start, phi_end);
       Volume frame_vol_1(frame_nam, frame_tube_1, description.material(m_frame.materialStr()));
       pv=m_vol.placeVolume(frame_vol_1, Position(0, 0, -(det_length+zthickness_frame)/2));
-      pv=m_vol.placeVolume(frame_vol_1, Position(0, 0, (det_length+zthickness_frame)/2));
+      pv=m_vol.placeVolume(frame_vol_1, Position(0, 0,  (det_length+zthickness_frame)/2));
 
       m_vol.setVisAttributes(description, m_frame.visStr());
       double frame_phi_end=zthickness_frame/(det_rmin); //converting the thickness of the frame to angular radians.
-        
+
       Tube frame_tube_2(det_rmin, det_rmin + total_thickness,(det_length+2*zthickness_frame)/2 , phi_start-frame_phi_end, phi_start);
       Volume frame_vol_2(frame_nam, frame_tube_2, description.material(m_frame.materialStr()));
       pv=m_vol.placeVolume(frame_vol_2);
-      
+
       Tube frame_tube_3(det_rmin, det_rmin + total_thickness,(det_length+2*zthickness_frame)/2 , phi_end, phi_end+frame_phi_end);
       Volume frame_vol_3(frame_nam, frame_tube_3, description.material(m_frame.materialStr()));
       pv=m_vol.placeVolume(frame_vol_3);
-      
+
       frame_vol_1.setVisAttributes(description, m_frame.visStr());
       frame_vol_2.setVisAttributes(description, m_frame.visStr());
       frame_vol_3.setVisAttributes(description, m_frame.visStr());
@@ -131,7 +159,7 @@ static Ref_t create_MPGDCylinderBarrelTracker(Detector& description, xml_h e, Se
     double comp_rmin=det_rmin;
     for (xml_coll_t mci(x_mod, _U(module_component)); mci; ++mci, ++ncomponents) {
       xml_comp_t   x_comp = mci;
-      const string c_nam  = _toString(ncomponents, "component%d");
+      const string c_nam  = x_comp.nameStr();
       
       double comp_thickness = x_comp.thickness();
       Tube         c_tube(comp_rmin, comp_rmin + comp_thickness, det_length/2, phi_start, phi_end);
@@ -148,18 +176,17 @@ static Ref_t create_MPGDCylinderBarrelTracker(Detector& description, xml_h e, Se
         pv.addPhysVolID("sensor", sensor_number++);
         c_vol.setSensitiveDetector(sens);
         sensitives[m_nam].push_back(pv);
-//        module_thicknesses[m_nam] = {thickness_so_far+ x_comp.thickness() / 2.0,
-//				     total_thickness - (thickness_so_far + x_comp.thickness()) - 0.05};
         module_thicknesses[m_nam] = {thickness_so_far + x_comp.thickness() / 2.0,
                                      total_thickness - thickness_so_far - x_comp.thickness() / 2.0};
 
 	double a = thickness_so_far + x_comp.thickness() / 2.0;
         double b1 = total_thickness - thickness_so_far - x_comp.thickness() / 2.0;
-        double b2 = total_thickness - (thickness_so_far + x_comp.thickness()) - 0.05; 	
-        cout << "m_nam" << m_nam << ", module_thickness[m_nam]: " << endl;
-	cout << "\t a: " << a << endl;
-	cout << "\t b1, b2: " << b1 << ", " << b2 << endl;
-        // -------- create a measurement plane for the tracking surface attched to the sensitive volume -----
+        double b2 = total_thickness - (thickness_so_far + x_comp.thickness()) - 0.05;
+	printout(DEBUG,"MPGDCylinderBarrelTracker",
+		 "Module \"%s\" thickness a,b1,b2 %.4f,%.4f,%.4f cm",
+		 m_nam.c_str(),a/cm,b1/cm,b2/cm);
+
+        // -------- create a measurement plane for the tracking surface attached to the sensitive volume -----
         Vector3D u(-1., 0., 0.);
         Vector3D v(0., -1., 0.);
         Vector3D n(0., 0., 1.);
@@ -167,8 +194,10 @@ static Ref_t create_MPGDCylinderBarrelTracker(Detector& description, xml_h e, Se
         // compute the inner and outer thicknesses that need to be assigned to the tracking surface
         // depending on wether the support is above or below the sensor
         double inner_thickness = module_thicknesses[m_nam][0];
-	double outer_thickness = module_thicknesses[m_nam][1];
+        double outer_thickness = module_thicknesses[m_nam][1];
+
 	SurfaceType type(SurfaceType::Sensitive);
+
         VolPlane surf(c_vol, type, inner_thickness, outer_thickness, u, v, n); //,o ) ;
         volplane_surfaces[m_nam].push_back(surf);
       }
@@ -206,7 +235,7 @@ static Ref_t create_MPGDCylinderBarrelTracker(Detector& description, xml_h e, Se
     double phi_incr = (M_PI * 2) / nphi;   // Phi increment for one module.
     double phic     = phi0;                // Phi of the module center.
     double nz       = z_layout.nz();       // Number of modules to place in z.
-    
+
     Volume      module_env = volumes[m_nam];
     DetElement  lay_elt(sdet, lay_nam, lay_id);
     Placements& sensVols = sensitives[m_nam];
@@ -258,15 +287,15 @@ static Ref_t create_MPGDCylinderBarrelTracker(Detector& description, xml_h e, Se
 	string     module_name = _toString(module, "module%d");
         DetElement mod_elt(lay_elt, module_name, module);
 
-	std::cout << "module_name: " << module_name << std::endl;
-	std::cout << "\t x1, y1: " << x1 << ", " << y1 << std::endl; 
-	std::cout << "\t r1: " << TMath::Sqrt(x1*x1 + y1*y1) << std::endl;
-	
+	printout(DEBUG,"MPGDCylinderBarrelTracker",
+		 "Layer \"%s\" sector %d,%d,\"%s\": \t x1,y1,r1: %7.4f,%7.4f,%7.4f cm",
+		 lay_nam.c_str(),ii,j,module_name.c_str(),x1/cm,y1/cm,sqrt(x1*x1+y1*y1)/cm);
+
 	Transform3D tr(RotationZYX((M_PI/2-phic),0,0),Position(x1,y1,modz_pos[j]));
 	pv = lay_vol.placeVolume(module_env,tr);
 	pv.addPhysVolID("module", module);
 	mod_elt.setPlacement(pv);
-	
+
         for (size_t ic = 0; ic < sensVols.size(); ++ic) {
           PlacedVolume sens_pv = sensVols[ic];
           DetElement   comp_de(mod_elt, std::string("de_") + sens_pv.volume().name(), module);
@@ -293,6 +322,12 @@ static Ref_t create_MPGDCylinderBarrelTracker(Detector& description, xml_h e, Se
   pv = description.pickMotherVolume(sdet).placeVolume(assembly);
   pv.addPhysVolID("system", det_id); // Set the subdetector system ID.
   sdet.setPlacement(pv);
+
+#ifdef DEBUG_MPGDCylinderBarrelTracker
+  // Reset initial print level before exiting
+  setPrintLevel(priorPrintLevel);
+#endif
+
   return sdet;
 }
 

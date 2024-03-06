@@ -1,6 +1,5 @@
 <!-- SPDX-License-Identifier: LGPL-3.0-or-later -->
 <!-- Copyright (C) 2022 Sylvester Joosten, Wouter Deconinck, Matt Posik -->
-<!-- Modified by Nivedith Ramasubramanian 2023 -->
 
 <lccdd>
 <info name="mpgd_barrel.xml"
@@ -15,11 +14,11 @@
   <define>
     <comment>
       Inner MPGD tracking layer(s)
+
       Note: the inner and outer layers are implemented as separate detectors, as they
       belong to different ACTS tracking volumes. If this restriction goes away
       in the future they could be put together in a single tag.
     </comment>
-
 
     <constant name="InnerMPGDBarrel_hack"                   value="0*cm"/>
     <constant name="InnerMPGDBarrelMod_rmin"                value="InnerMPGDBarrel_rmin + InnerMPGDBarrel_hack"/>
@@ -31,7 +30,6 @@
     <constant name="InnerMPGDBarrelLayer_length"            value="InnerMPGDBarrel_length + 5*cm" />
     <constant name="InnerMPGDBarrelLayer_rmin"              value="50*cm + InnerMPGDBarrel_hack"/>
     <constant name="InnerMPGDBarrelLayer_rmax"              value="53.3*cm + 1*cm"/>
-
 
     <constant name="MMKaptonOverlay_thickness"              value="50*um"/>
     <constant name="MMCuGround_thickness"                   value="1.58*um"/>
@@ -46,11 +44,11 @@
     <constant name="MMDriftKapton_thickness"                value="250*um"/>
     <constant name="MMDriftCuGround_thickness"              value="0.41*um"/>
 
-    <constant name="FrameWidth" value="0.8*cm"/>
+    <constant name="FrameWidth"                             value="0.8*cm"/>
     <comment> FIXME: No support material is here, so fudge factor used to bring material budget to ~0.5% for barrel </comment>
-    <constant name="MMFudgeInnerMPGDBarrel_thickness"                      value="570*um"/>
+    <constant name="MMFudgeInnerMPGDBarrel_thickness"       value="570*um"/>
     
-    <constant name="MPGDBarrelStave_count"            value="8"/>
+    <constant name="MPGDBarrelStave_count"                  value="8"/>
   </define>
 
   <detectors>
@@ -71,7 +69,7 @@
         <comment> Going from the inside (sensitive) side to the readout side </comment>
 	<frame material="CarbonFiber" width="FrameWidth" vis="TrackerSupportVis" />
         <module_component name="DriftCuGround" thickness="MMDriftCuGround_thickness" material="Copper" vis="TrackerModuleVis"/>
-        <module_component name="DriftKapton" thickness="MMDriftKapton_thickness" material="Copper" vis="TrackerVis" />
+        <module_component name="DriftKapton" thickness="MMDriftKapton_thickness" material="Kapton" vis="TrackerVis" />
         <module_component name="DriftCuElectrode" thickness="MMDriftCuElectrode_thickness" material="Copper" vis="TrackerVis"/>
 	<module_component name="GasGap" thickness="MMGasGap_thickness" material="Ar90IsoButane" sensitive="True" vis="TrackerMPGDGasVis" />
 	<module_component name="Mesh" thickness="MMMesh_thickness" material="MMGAS_InoxForMesh" vis="TrackerVis"/>
@@ -82,7 +80,7 @@
         <module_component name="CuStrips" thickness="MMCuStrip_thickness" material="Copper" vis="TrackerVis" />
         <module_component name="PCB" thickness="MMPCB_thickness" material="Fr4" vis="TrackerVis"/>
         <module_component name="CuGround" thickness="MMCuGround_thickness" material="Copper" vis="TrackerVis"/>
-        <module_component name="KaptonOverlay" thickness="MMKaptonOverlay_thickness" material="Copper" vis="TrackerSupportVis"/>
+        <module_component name="KaptonOverlay" thickness="MMKaptonOverlay_thickness" material="Kapton" vis="TrackerSupportVis"/>
        </module>
             
       <layer module="InnerMPGDBarrel_Mod1" id="1" vis="InvisibleWithDaughters">
@@ -98,7 +96,6 @@
          <z_layout dr="0.0 * mm" z0="50.0*cm" nz="4"/>
          <!--<z_layout dr="0.0 * mm" z0="50*cm" nz="1"/>-->
       </layer>
-       
     </detector>
   </detectors>
 
