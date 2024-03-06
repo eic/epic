@@ -69,22 +69,6 @@
   </define>
 
   <materials>
-    <comment>
-      Only non optical material variants are here.
-      See optical_materials.xml for optical ones
-      -
-    </comment>
-    <material name="EpotekOptical">
-      <D type="density" value="1.2" unit="g/cm3"/>
-      <composite n="5" ref="H"/>
-      <composite n="3" ref="C"/>
-      <composite n="2" ref="O"/>
-    </material>
-    <material name="Nlak33a">
-      <D type="density" value="4.220" unit="g/cm3"/>
-      <composite n="1" ref="Si"/>
-      <composite n="2" ref="O"/>
-    </material>
   </materials>
 
   <limits>
