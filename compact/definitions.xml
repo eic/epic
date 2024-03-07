@@ -552,8 +552,8 @@ Service gaps in FW direction (before endcapP ECAL) and BW direction (before endc
     <constant name="EcalEndcapN_rmax"               value="63.*cm"/>   <!-- Currently fix value hardcoded -->
 
     <constant name="EcalBarrel_rmin"                value="max(81.*cm, CentralTrackingRegion_rmax + BarrelPIDRegion_thickness + BarrelExtraSpace_thickness)"/> <!-- FIXME hardcoded max -->
-    <!-- <constant name="EcalBarrelRegion_thickness"     value="Solenoid_rmin-EcalBarrel_rmin"/> -->
-    <constant name="EcalBarrelRegion_thickness"     value="40"/>
+    <constant name="EcalBarrelRegion_thickness"     value="Solenoid_rmin-EcalBarrel_rmin"/>
+    <!-- <constant name="EcalBarrelRegion_thickness"     value="40"/> -->
     <constant name="EcalBarrel_inner_margin"        value="2*cm"/>
     <constant name="EcalBarrel_rmax"                value="EcalBarrel_rmin + EcalBarrelRegion_thickness"/>
     <constant name="EcalBarrelForward_zmax"         value="ForwardRICHRegion_zmin"/> <!-- FIXME currently unable to accommodate actual position -->
