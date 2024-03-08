@@ -101,7 +101,7 @@
     <constant name="EcalBarrelDetector_rmax"
         value="EcalBarrel_rmin + EcalBarrel_FrontSupportThickness
          + EcalBarrel_ImagingPartThickness + EcalBarrel_ScFiPartThickness + EcalBarrel_BackSupportThickness"/>
-    
+
   </define>
 
   <limits>
@@ -242,7 +242,7 @@
         rmin="EcalBarrel_rmin"
         z="EcalBarrel_Calorimeter_length"/>
       <sectors vis="EcalBarrelSectorVis"/>
-      
+
       <layer repeat="EcalBarrelImagingLayers_num-1" vis="EcalBarrelLayerVis"
              space_between="EcalBarrel_ImagingLayerThickness + EcalBarrel_SpaceBetween"
              space_before="EcalBarrel_FrontSupportThickness + EcalBarrel_ImagingLayerThickness + EcalBarrel_SpaceBetween/2.">
@@ -313,7 +313,7 @@
           </fiber>
         </slice>
         <slice material="SciFiPb_PbGlue_Edge" thickness="EcalBarrel_RadiatorEdgeThickness" vis="EcalBarrelSliceVis"/>
-      </layer>      
+      </layer>
 
       <support thickness="EcalBarrel_BackSupportThickness" material="Aluminum" vis="EcalBarrelSupportVis"/>
     </detector>
