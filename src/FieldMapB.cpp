@@ -9,6 +9,7 @@
 #include <cstdlib>
 #include <filesystem>
 #include <fstream>
+#include <optional>
 #include <iostream>
 #include <sstream>
 #include <stdexcept>
@@ -80,8 +81,8 @@ public:
 
 private:
   FieldCoord                                                    fieldCoord; // field coordinate type
-  Transform3D                                                   coordTranslate, coordTranslate_inv; // coord translation
-  Transform3D                                                   fieldRot, fieldRot_inv; // field rotation
+  std::optional<Transform3D>                                    coordTranslate, coordTranslate_inv; // coord translation
+  std::optional<Transform3D>                                    fieldRot, fieldRot_inv; // field rotation
   std::vector<float>                                            steps, mins, maxs; // B map cell info
   int                                                           ir, ix, iy, iz; // lookup indices
   float                                                         idx_1_f, idx_2_f, idx_3_f; // transient float indicies
@@ -231,7 +232,7 @@ void FieldMapB::LoadMap(const std::string& map_file, float scale)
       else { // scale and rotate B field vector
         auto B = ROOT::Math::XYZPoint( Bcomp[0], Bcomp[1], Bcomp[2] );
         B *= scale * float(tesla);
-        B = fieldRot * B;
+        if (fieldRot.has_value()) B = fieldRot.value() * B;
         Bvals_XYZ[ ix ][ iy ][ iz ] = { float(B.x()), float(B.y()), float(B.z()) };
       }
     }
@@ -242,7 +243,9 @@ void FieldMapB::LoadMap(const std::string& map_file, float scale)
 void FieldMapB::fieldComponents(const double* pos, double* field)
 {
   // coordinate conversion
-  auto p = coordTranslate_inv * ROOT::Math::XYZPoint(pos[0], pos[1], pos[2]);
+  auto p = coordTranslate_inv.has_value() ? 
+    coordTranslate_inv.value() * ROOT::Math::XYZPoint(pos[0], pos[1], pos[2]) :
+    ROOT::Math::XYZPoint(pos[0], pos[1], pos[2]);
 
   if( fieldCoord == FieldCoord::BrBz ) {
     // coordinates conversion
@@ -271,7 +274,10 @@ void FieldMapB::fieldComponents(const double* pos, double* field)
              + p2[1] *    dr    * (1 - dz) + p3[1] *    dr    * dz;
 
     // convert Br Bz to Bx By Bz and rotate field
-    auto B = fieldRot * ROOT::Math::XYZPoint(Br * cos(phi), Br * sin(phi), Bz);
+    auto B = fieldRot.has_value() ?
+      fieldRot.value() * ROOT::Math::XYZPoint(Br * cos(phi), Br * sin(phi), Bz) :
+      ROOT::Math::XYZPoint(Br * cos(phi), Br * sin(phi), Bz);
+
     field[0] += B.x();
     field[1] += B.y();
     field[2] += B.z();
@@ -367,15 +373,15 @@ static Ref_t create_field_map_b(Detector& /*lcdd*/, xml::Handle_t handle)
   if (x_dim.hasChild(_Unicode(rotationField))) {
     xml_comp_t rot_dim = x_dim.child(_Unicode(rotationField));
     rot                = RotationZYX(rot_dim.z() * deg2r, rot_dim.y() * deg2r, rot_dim.x() * deg2r);
+    map->SetFieldRotation( Transform3D(rot) );
   }
 
   Translation3D trans(0., 0., 0.);
   if (x_dim.hasChild(_Unicode(translationCoord))) {
     xml_comp_t trans_dim = x_dim.child(_Unicode(translationCoord));
     trans                = Translation3D(trans_dim.x(), trans_dim.y(), trans_dim.z());
+    map->SetCoordTranslation( Transform3D(trans) );
   }
-  map->SetCoordTranslation( Transform3D(trans) );
-  map->SetFieldRotation( Transform3D(rot) );
 
   map->LoadMap(field_map_file, field_map_scale);
   field.assign(map, x_par.nameStr(), "FieldMapB");
