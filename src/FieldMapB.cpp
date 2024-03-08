@@ -243,7 +243,7 @@ void FieldMapB::LoadMap(const std::string& map_file, float scale)
 void FieldMapB::fieldComponents(const double* pos, double* field)
 {
   // coordinate conversion
-  auto p = coordTranslate_inv.has_value() ? 
+  auto p = coordTranslate_inv.has_value() ?
     coordTranslate_inv.value() * ROOT::Math::XYZPoint(pos[0], pos[1], pos[2]) :
     ROOT::Math::XYZPoint(pos[0], pos[1], pos[2]);
 
