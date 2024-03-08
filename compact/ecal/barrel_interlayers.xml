@@ -74,7 +74,7 @@
     <constant name="EcalBarrel_RadiatorThickness"      value="EcalBarrel_FiberZSpacing * 17"/>
     <constant name="EcalBarrel_TotalFiberLayers_num"   value="12"/>
     <constant name="EcalBarrel_RadiatorEdgeThickness"  value="0.61*mm"/>
-    <constant name="EcalBarrel_AluminumPlateThickness" value="1.5*mm"/>
+    <constant name="EcalBarrel_AluminumPlateThickness" value="1*mm"/>
     <constant name="EcalBarrel_SectorRepeat"           value="EcalBarrelSectorsN"/>
     <constant name="EcalBarrel_AvailThickness"         value="EcalBarrelRegion_thickness - EcalBarrel_BackSupportThickness - EcalBarrel_FrontSupportThickness"/>
 
