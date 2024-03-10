@@ -142,12 +142,11 @@ The unused IDs below are saved for future use.
     <constant name="TrackerEndcapP_6_ID"          value="83"/>
     <constant name="TrackerSupport_0_ID"          value="84"/>
     <constant name="TrackerSupport_1_ID"          value="85"/>
-    <constant name="MPGDDIRC_0_ID"                value="86"/>
 
     <documentation>
-    #### (87-99) Reserved IDs
+    #### (86-99) Reserved IDs
 
-    - Unused IDs: 87-89
+    - Unused IDs: 86-89
     TBD
     </documentation>
     <documentation>

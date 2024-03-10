@@ -34,10 +34,6 @@
     <constant name="InnerMPGDBarrel_zoffset"         value="InnerMPGDBarrel_zmax - InnerMPGDBarrel_zmin"/>
     <comment> barrel length: 2R/tan(angle) - dz </comment>
 
-    <comment> Position in center of space behind DIRC </comment>
-    <constant name="MPGDDIRC_rmin"            value="DIRC_rmin + DIRC_thickness"/>
-    <comment> barrel asymmetryc between forward and backward lengths </comment>
-
     <comment> Main parameters for Barrel TOF layers </comment>
     <comment> Barrel TOF region </comment>
     <constant name="BarrelTOF_zmin"          value="120.0*cm"/>
