@@ -49,7 +49,7 @@
             sizey="B0ECal_CrystalModule_width"
             sizez="B0ECal_CrystalModule_length"
             vis="GreenVis"
-            material="PbWO4"/>
+            material="LYSO"/>
           <wrapper
             thickness="B0ECal_CrystalModule_wrap"
             material="Epoxy"
