@@ -168,13 +168,13 @@
     <constant name="TrackerSupportCylN_thickness2B"        value="TrackerSupportCylAlN_thickness2B + TrackerSupportCylCF_thickness2 + TrackerSupportCylAlN_thickness2SiCone+TrackerSupportCylAlN_thickness2SiDisk" />
     <constant name="TrackerSupportCylN_thickness2C"        value="TrackerSupportCylAlN_thickness2C + TrackerSupportCylCF_thickness2 + TrackerSupportCylAlN_thickness2SiCone+TrackerSupportCylAlN_thickness2SiDisk" />
 
-      <comment> Outer MPGD barrel support cylinder </comment>
-    <constant name="MPGDOuterBarrelSupportCylCF_thickness"    value="1.0*cm" />
-    <constant name="MPGDOuterBarrelSupportCylCF_zmin1"        value="MPGDOuterBarrelModule_zmin1" />
-    <constant name="MPGDOuterBarrelSupportCylCF_zmin2"        value="MPGDOuterBarrelModule_zmin2" />
-    <constant name="MPGDOuterBarrelSupportCylCF_length"       value="MPGDOuterBarrelSupportCylCF_zmin1 + MPGDOuterBarrelSupportCylCF_zmin2" />
-    <constant name="MPGDOuterBarrelSupportCylCF_offset"       value="(MPGDOuterBarrelSupportCylCF_zmin2 - MPGDOuterBarrelSupportCylCF_zmin1)/2.0"/>
-    <constant name="MPGDOuterBarrelSupportCylCF_rmin"         value="MPGDOuterBarrelModule_rmin - MPGDOuterBarrelSupportCylCF_thickness" />
+      <comment> Inner detector support cylinder </comment>
+    <constant name="InnerDetectorBarrelSupportCylCF_thickness"    value="1.0*cm" />
+    <constant name="InnerDetectorBarrelSupportCylCF_zmin1"        value="MPGDOuterBarrelModule_zmin1" />
+    <constant name="InnerDetectorBarrelSupportCylCF_zmin2"        value="MPGDOuterBarrelModule_zmin2" />
+    <constant name="InnerDetectorBarrelSupportCylCF_length"       value="InnerDetectorBarrelSupportCylCF_zmin1 + InnerDetectorBarrelSupportCylCF_zmin2" />
+    <constant name="InnerDetectorBarrelSupportCylCF_offset"       value="(InnerDetectorBarrelSupportCylCF_zmin2 - InnerDetectorBarrelSupportCylCF_zmin1)/2.0"/>
+    <constant name="InnerDetectorBarrelSupportCylCF_rmin"         value="MPGDOuterBarrelModule_rmin - InnerDetectorBarrelSupportCylCF_thickness" />
 
   </define>
 
@@ -373,15 +373,15 @@
           <component material="CarbonFiber" thickness="TrackerSupportCylCF_thickness2" name="Support" vis="TrackerSupportVis"/>
       </support>
 
-      <comment> MPGD outer barrel </comment>
+      <comment> Inner detector support barrel </comment>
       <support type="Cylinder"
-        name="MPGDOuterBarrelSupportCyl"
+        name="InnerDetectorBarrelSupportCyl"
         vis="TrackerSupportVis"
-        rmin="MPGDOuterBarrelSupportCylCF_rmin"
-        length="MPGDOuterBarrelSupportCylCF_length"
-        thickness="MPGDOuterBarrelSupportCylCF_thickness">
-          <position x="0*cm" y="0*cm" z="MPGDOuterBarrelSupportCylCF_offset" />
-          <component material="CarbonFiber" thickness="MPGDOuterBarrelSupportCylCF_thickness" name="Support" vis="TrackerSupportVis"/>
+        rmin="InnerDetectorBarrelSupportCylCF_rmin"
+        length="InnerDetectorBarrelSupportCylCF_length"
+        thickness="InnerDetectorBarrelSupportCylCF_thickness">
+          <position x="0*cm" y="0*cm" z="InnerDetectorBarrelSupportCylCF_offset" />
+          <component material="CarbonFiber" thickness="InnerDetectorBarrelSupportCylCF_thickness" name="Support" vis="TrackerSupportVis"/>
       </support>
     </detector>
   </detectors>
