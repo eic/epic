@@ -56,8 +56,8 @@
     <constant name="ForwardTOF_zmin"              value="ForwardTOFRegion_zmin + ForwardTOFRegion_length - ForwardTOF_length - 1*cm"/>
 
     <comment> Service/Support setup </comment>
-    <constant name="TrackerSupportCyl_rmin1"          value="TrackerEndcapDisk_rmax + 0.2*cm"/>
-    <constant name="TrackerSupportCyl_rmin2"          value="InnerMPGDBarrel_rmin - 1.2*cm"/>
+    <constant name="TrackerSupportCylEndcapN_rmin2"   value="BackwardPIDRegion_rmax + 2*cm"/> <comment> Ref: Services Material Budget 24.03.04..stp -- 650.00 mm </comment>
+    <constant name="TrackerSupportCylEndcapP_rmin2"   value="ForwardTOFRegion_maxR + 2*cm"/> <comment> Ref: Services Material Budget 24.03.04..stp -- 520.00 mm </comment>
     <comment> These may belong in definitions.xml </comment>
     <constant name="InnerTrackerEndcapP_zmax"        value="CentralTrackingRegionP_zmax"/>
     <constant name="InnerTrackerEndcapN_zmax"        value="CentralTrackingRegionN_zmax"/>

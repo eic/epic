@@ -7,6 +7,21 @@
     See https://indico.bnl.gov/event/19854/#1-updated-epic-tracking-config
     Silicon tracker: the same effective thickness parameters from previous versions, routing changed
     MPGD: estimated by M. Posik
+
+                                                                                         │
+                                                                                         │
+    ─2C─2B─2A─\ Outer Support Cone                                      /─2A─2B─2C─2D─2E─┘
+pfRICH         \                                                       /
+                \                                                     /
+                 \─1C──1B──1A─\ Inner Support   /─1A────1B─────1C────/ Outer Support Cone
+                               \    Cones      /
+                                \             /
+                                 \           /
+                                  │         │
+                                  │         │
+    N                             └         ┘                                            P
+    ──·──·──·──·──·────·──·──·──·──·── x ──·──·──·──·──·──·──·──·──·────·──·──·──·──·──·──
+
   </comment>
   <define>
 
@@ -24,28 +39,27 @@
     <comment> Inner tracker service/support cones, symmetric </comment>
     <constant name="InnerSupportConeCF_thickness"         value="2.0*mm" />
     <comment> Effective Aluminum for services for now </comment>
-    <constant name="InnerSupportConeAlP_thickness"         value="2.0*mm" />
-    <constant name="InnerSupportConeAlN_thickness"         value="1.5*mm" />
-    <constant name="InnerSupportConeP_thickness"           value="InnerSupportConeAlP_thickness + InnerSupportConeCF_thickness" />
-    <constant name="InnerSupportConeN_thickness"           value="InnerSupportConeAlN_thickness + InnerSupportConeCF_thickness" />
-    <constant name="InnerSupportCone_zmin"                value="VertexSupportRing_zmax+2*um" />
+    <constant name="InnerSupportConePAl_thickness"         value="13.0*mm" /> <comment> Ref: Services Material Budget 24.03.04..stp -- 13.0 mm </comment>
+    <constant name="InnerSupportConeNAl_thickness"         value="13.9*mm" /> <comment> Ref: Services Material Budget 24.03.04..stp -- 13.9 mm </comment>
+    <constant name="InnerSupportConeP_thickness"           value="InnerSupportConePAl_thickness + InnerSupportConeCF_thickness" />
+    <constant name="InnerSupportConeN_thickness"           value="InnerSupportConeNAl_thickness + InnerSupportConeCF_thickness" />
+    <constant name="InnerSupportCone_zmin"                value="VertexSupportRing_zmax" />
     <constant name="InnerSupportCone_rmin1"               value="InnerSupportCone_zmin/tan(TrackerPrimaryAngle)" />
 
-    <constant name="InnerSupportCone_rmin2"               value="InnerMPGDBarrel_rmin-2*cm" />
+    <constant name="InnerSupportCone_rmin2"               value="TrackerSupportCyl_rmin1" />
     <constant name="InnerSupportCone_zmax"                value="InnerSupportCone_rmin2/tan(TrackerPrimaryAngle)" />
 
     <constant name="InnerSupportCone_z"                   value="0.5*(InnerSupportCone_zmax + InnerSupportCone_zmin)" />
     <constant name="InnerSupportCone_length"              value="InnerSupportCone_zmax - InnerSupportCone_zmin" />
 
-    <comment> Tracker disk support barrels. 1: inner, 2: outer. All z parameters are unsigned
-      TBD: second cones to connect two barrels
-    </comment>
+
+    <comment> Tracker disk support barrels. 1: inner, 2: outer. All z parameters are unsigned </comment>
 
     <comment> 1: Inner barrel for Si disk, 3 slices each ends (Negative CBA, Positive ABC) </comment>
     <constant name="TrackerSupportCylCF_thickness1"        value="InnerSupportConeCF_thickness" />
 
     <comment> Positive </comment>
-    <constant name="TrackerSupportCylEndcapP_zmin1A"       value="TrackerEndcapPDisk1_zmin + 1*cm" />
+    <constant name="TrackerSupportCylEndcapP_zmin1A"       value="InnerSupportCone_zmax" />
     <constant name="TrackerSupportCylEndcapP_zmin1B"       value="TrackerEndcapPDisk2_zmin" />
     <constant name="TrackerSupportCylEndcapP_zmin1C"       value="TrackerEndcapPDisk3_zmin" />
 
@@ -61,21 +75,21 @@
     <constant name="TrackerSupportCylEndcapP_length1B"     value="TrackerSupportCylEndcapP_zmax1B - TrackerSupportCylEndcapP_zmin1B" />
     <constant name="TrackerSupportCylEndcapP_length1C"     value="TrackerSupportCylEndcapP_zmax1C - TrackerSupportCylEndcapP_zmin1C" />
 
-    <constant name="TrackerSupportCylAlP_thickness1A"        value="0.11*mm" />
-    <constant name="TrackerSupportCylAlP_thickness1B"        value="1.31*mm" />
-    <constant name="TrackerSupportCylAlP_thickness1C"        value="2.62*mm" />
+    <constant name="TrackerSupportCylAlP_thickness1A"        value="20.8*mm" /> <comment> Ref: Services Material Budget 24.03.04..stp -- 20.8 mm </comment>
+    <constant name="TrackerSupportCylAlP_thickness1B"        value="20.8*mm" /> <comment> Ref: Services Material Budget 24.03.04..stp -- 20.8 mm </comment>
+    <constant name="TrackerSupportCylAlP_thickness1C"        value="20.8*mm" /> <comment> Ref: Services Material Budget 24.03.04..stp -- 20.8 mm </comment>
     <constant name="TrackerSupportCylP_thickness1A"          value="TrackerSupportCylAlP_thickness1A + TrackerSupportCylCF_thickness1" />
     <constant name="TrackerSupportCylP_thickness1B"          value="TrackerSupportCylAlP_thickness1B + TrackerSupportCylCF_thickness1" />
     <constant name="TrackerSupportCylP_thickness1C"          value="TrackerSupportCylAlP_thickness1C + TrackerSupportCylCF_thickness1" />
 
     <comment> Negative </comment>
-    <constant name="TrackerSupportCylEndcapN_zmin1A"       value="TrackerEndcapNDisk1_zmin + 1*cm" />
+    <constant name="TrackerSupportCylEndcapN_zmin1A"       value="InnerSupportCone_zmax" />
     <constant name="TrackerSupportCylEndcapN_zmin1B"       value="TrackerEndcapNDisk2_zmin" />
     <constant name="TrackerSupportCylEndcapN_zmin1C"       value="TrackerEndcapNDisk3_zmin" />
 
     <constant name="TrackerSupportCylEndcapN_zmax1A"       value="TrackerEndcapNDisk2_zmin" />
     <constant name="TrackerSupportCylEndcapN_zmax1B"       value="TrackerEndcapNDisk3_zmin" />
-    <constant name="TrackerSupportCylEndcapN_zmax1C"       value="InnerMPGDBarrel_zmin+1*cm" /> <comment> 106cm </comment>
+    <constant name="TrackerSupportCylEndcapN_zmax1C"       value="101.0*cm" /> <comment> Ref: Services Material Budget 24.03.04..stp -- 101.00 mm </comment>
 
     <constant name="TrackerSupportCylEndcapN_z1A"          value="0.5*(TrackerSupportCylEndcapN_zmin1A + TrackerSupportCylEndcapN_zmax1A)" />
     <constant name="TrackerSupportCylEndcapN_z1B"          value="0.5*(TrackerSupportCylEndcapN_zmin1B + TrackerSupportCylEndcapN_zmax1B)" />
@@ -85,12 +99,41 @@
     <constant name="TrackerSupportCylEndcapN_length1B"     value="TrackerSupportCylEndcapN_zmax1B - TrackerSupportCylEndcapN_zmin1B" />
     <constant name="TrackerSupportCylEndcapN_length1C"     value="TrackerSupportCylEndcapN_zmax1C - TrackerSupportCylEndcapN_zmin1C" />
 
-    <constant name="TrackerSupportCylAlN_thickness1A"        value="0.01*mm" /> <comment> place holder to avoid zero thickness error </comment>
-    <constant name="TrackerSupportCylAlN_thickness1B"        value="1.13*mm" />
-    <constant name="TrackerSupportCylAlN_thickness1C"        value="2.25*mm" />
+    <constant name="TrackerSupportCylAlN_thickness1A"        value="20.8*mm" /> <comment> Ref: Services Material Budget 24.03.04..stp -- 20.8 mm </comment>
+    <constant name="TrackerSupportCylAlN_thickness1B"        value="20.8*mm" /> <comment> Ref: Services Material Budget 24.03.04..stp -- 20.8 mm </comment>
+    <constant name="TrackerSupportCylAlN_thickness1C"        value="20.8*mm" /> <comment> Ref: Services Material Budget 24.03.04..stp -- 20.8 mm </comment>
     <constant name="TrackerSupportCylN_thickness1A"          value="TrackerSupportCylAlN_thickness1A + TrackerSupportCylCF_thickness1" />
     <constant name="TrackerSupportCylN_thickness1B"          value="TrackerSupportCylAlN_thickness1B + TrackerSupportCylCF_thickness1" />
     <constant name="TrackerSupportCylN_thickness1C"          value="TrackerSupportCylAlN_thickness1C + TrackerSupportCylCF_thickness1" />
+
+
+    <comment> Outer tracker service/support cones, asymmetric </comment>
+    <constant name="OuterSupportConeCF_thickness"          value="2.0*mm" />
+    <comment> Effective Aluminum for services for now </comment>
+    <constant name="OuterSupportConePAl_thickness"         value="20.8*mm" /> <comment> Ref: Services Material Budget 24.03.04..stp -- 20.8 mm </comment>
+    <constant name="OuterSupportConeNAl_thickness"         value="26.1*mm" /> <comment> Ref: Services Material Budget 24.03.04..stp -- 26.1 mm </comment>
+    <constant name="OuterSupportConeP_thickness"           value="OuterSupportConePAl_thickness + OuterSupportConeCF_thickness" />
+    <constant name="OuterSupportConeN_thickness"           value="OuterSupportConeNAl_thickness + OuterSupportConeCF_thickness" />
+
+    <comment> Negative outer tracker service/support cone </comment>
+    <constant name="OuterSupportConeN_zmin"                value="TrackerSupportCylEndcapN_zmax1C" />
+    <constant name="OuterSupportConeN_rmin1"               value="TrackerSupportCyl_rmin1" />
+
+    <constant name="OuterSupportConeN_rmin2"               value="65.0*cm" />
+    <constant name="OuterSupportConeN_zmax"                value="121.0*cm" />
+
+    <constant name="OuterSupportConeN_z"                   value="0.5*(OuterSupportConeN_zmax + OuterSupportConeN_zmin)" />
+    <constant name="OuterSupportConeN_length"              value="OuterSupportConeN_zmax - OuterSupportConeN_zmin" />
+
+    <comment> Positive outer tracker service/support cone </comment>
+    <constant name="OuterSupportConeP_zmin"                value="TrackerSupportCylEndcapP_zmax1C" />
+    <constant name="OuterSupportConeP_rmin1"               value="TrackerSupportCyl_rmin1" />
+
+    <constant name="OuterSupportConeP_rmin2"               value="52*cm" />
+    <constant name="OuterSupportConeP_zmax"                value="153.1*cm" />
+
+    <constant name="OuterSupportConeP_z"                   value="0.5*(OuterSupportConeP_zmax + OuterSupportConeP_zmin)" />
+    <constant name="OuterSupportConeP_length"              value="OuterSupportConeP_zmax - OuterSupportConeP_zmin" />
 
 
     <comment> 2. Outer barrel for Si barrel cables (guided out projectively) and MPGD (inner+disks). </comment>
@@ -98,11 +141,11 @@
 
     <comment> Positive </comment>
 
-    <constant name="TrackerSupportCylEndcapP_zmin2A"       value="InnerSupportCone_zmax" /> <comment> ~48.75cm </comment>
-    <constant name="TrackerSupportCylEndcapP_zmin2B"       value="53.75*cm" />
-    <constant name="TrackerSupportCylEndcapP_zmin2C"       value="135*cm" />
-    <constant name="TrackerSupportCylEndcapP_zmin2D"       value="148*cm" />
-    <constant name="TrackerSupportCylEndcapP_zmin2E"       value="161*cm" />
+    <constant name="TrackerSupportCylEndcapP_zmin2A"       value="OuterSupportConeP_zmax" />
+    <constant name="TrackerSupportCylEndcapP_zmin2B"       value="max(53.75*cm, TrackerSupportCylEndcapP_zmin2A + 1*mm)" />
+    <constant name="TrackerSupportCylEndcapP_zmin2C"       value="max(135*cm, TrackerSupportCylEndcapP_zmin2B + 1*mm)" />
+    <constant name="TrackerSupportCylEndcapP_zmin2D"       value="max(148*cm, TrackerSupportCylEndcapP_zmin2C + 1*mm)" />
+    <constant name="TrackerSupportCylEndcapP_zmin2E"       value="max(161*cm, TrackerSupportCylEndcapP_zmin2D + 1*mm)" />
 
     <constant name="TrackerSupportCylEndcapP_zmax2A"       value="TrackerSupportCylEndcapP_zmin2B" />
     <constant name="TrackerSupportCylEndcapP_zmax2B"       value="TrackerSupportCylEndcapP_zmin2C" />
@@ -122,32 +165,48 @@
     <constant name="TrackerSupportCylEndcapP_length2D"     value="TrackerSupportCylEndcapP_zmax2D - TrackerSupportCylEndcapP_zmin2D" />
     <constant name="TrackerSupportCylEndcapP_length2E"     value="TrackerSupportCylEndcapP_zmax2E - TrackerSupportCylEndcapP_zmin2E" />
 
-    <comment> cables from Si tracker to outer barrels </comment>
-    <constant name="TrackerSupportCylAlP_thickness2SiCone" value="3.10*mm" /> <comment> cables from the Si cone </comment>
-    <constant name="TrackerSupportCylAlP_thickness2SiDisk" value="3.04*mm" /> <comment> cables from the Si disks </comment>
+    <comment>
+      <comment> grounds-up thickness determination </comment>
+      <comment> cables from Si tracker to outer barrels </comment>
+      <constant name="TrackerSupportCylAlP_thickness2SiCone" value="3.10*mm" /> <comment> cables from the Si cone </comment>
+      <constant name="TrackerSupportCylAlP_thickness2SiDisk" value="3.04*mm" /> <comment> cables from the Si disks </comment>
 
-    <comment> cables from MPGD</comment>
-    <constant name="TrackerSupportCylAlP_thickness2A"      value="1.66*mm" />
-    <constant name="TrackerSupportCylAlP_thickness2B"      value="3.12*mm" />
-    <constant name="TrackerSupportCylAlP_thickness2C"      value="4.68*mm" />
-    <constant name="TrackerSupportCylAlP_thickness2D"      value="5.99*mm" />
-    <constant name="TrackerSupportCylAlP_thickness2E"      value="7.30*mm" />
+      <comment> cables from MPGD</comment>
+      <constant name="TrackerSupportCylAlP_thickness2A"      value="1.66*mm" />
+      <constant name="TrackerSupportCylAlP_thickness2B"      value="3.12*mm" />
+      <constant name="TrackerSupportCylAlP_thickness2C"      value="4.68*mm" />
+      <constant name="TrackerSupportCylAlP_thickness2D"      value="5.99*mm" />
+      <constant name="TrackerSupportCylAlP_thickness2E"      value="7.30*mm" />
 
-    <comment> total</comment>
-    <constant name="TrackerSupportCylP_thickness2A"        value="TrackerSupportCylAlP_thickness2A + TrackerSupportCylCF_thickness2+ TrackerSupportCylAlP_thickness2SiCone" />
-    <constant name="TrackerSupportCylP_thickness2B"        value="TrackerSupportCylAlP_thickness2B + TrackerSupportCylCF_thickness2+ TrackerSupportCylAlP_thickness2SiCone+TrackerSupportCylAlP_thickness2SiDisk" />
-    <constant name="TrackerSupportCylP_thickness2C"        value="TrackerSupportCylAlP_thickness2C + TrackerSupportCylCF_thickness2+ TrackerSupportCylAlP_thickness2SiCone+TrackerSupportCylAlP_thickness2SiDisk" />
-    <constant name="TrackerSupportCylP_thickness2D"        value="TrackerSupportCylAlP_thickness2D + TrackerSupportCylCF_thickness2+ TrackerSupportCylAlP_thickness2SiCone+TrackerSupportCylAlP_thickness2SiDisk" />
-    <constant name="TrackerSupportCylP_thickness2E"        value="TrackerSupportCylAlP_thickness2E + TrackerSupportCylCF_thickness2+ TrackerSupportCylAlP_thickness2SiCone+TrackerSupportCylAlP_thickness2SiDisk" />
+      <comment> total</comment>
+      <constant name="TrackerSupportCylP_thickness2A"        value="TrackerSupportCylAlP_thickness2A + TrackerSupportCylCF_thickness2+ TrackerSupportCylAlP_thickness2SiCone" />
+      <constant name="TrackerSupportCylP_thickness2B"        value="TrackerSupportCylAlP_thickness2B + TrackerSupportCylCF_thickness2+ TrackerSupportCylAlP_thickness2SiCone+TrackerSupportCylAlP_thickness2SiDisk" />
+      <constant name="TrackerSupportCylP_thickness2C"        value="TrackerSupportCylAlP_thickness2C + TrackerSupportCylCF_thickness2+ TrackerSupportCylAlP_thickness2SiCone+TrackerSupportCylAlP_thickness2SiDisk" />
+      <constant name="TrackerSupportCylP_thickness2D"        value="TrackerSupportCylAlP_thickness2D + TrackerSupportCylCF_thickness2+ TrackerSupportCylAlP_thickness2SiCone+TrackerSupportCylAlP_thickness2SiDisk" />
+      <constant name="TrackerSupportCylP_thickness2E"        value="TrackerSupportCylAlP_thickness2E + TrackerSupportCylCF_thickness2+ TrackerSupportCylAlP_thickness2SiCone+TrackerSupportCylAlP_thickness2SiDisk" />
+    </comment>
+
+    <comment> effective thickness </comment>
+    <comment> Ref: Services Material Budget 24.03.04..stp -- 26.0 mm </comment>
+    <constant name="TrackerSupportCylAlP_thickness2A"      value="26.0*mm" />
+    <constant name="TrackerSupportCylAlP_thickness2B"      value="26.0*mm" />
+    <constant name="TrackerSupportCylAlP_thickness2C"      value="26.0*mm" />
+    <constant name="TrackerSupportCylAlP_thickness2D"      value="26.0*mm" />
+    <constant name="TrackerSupportCylAlP_thickness2E"      value="26.0*mm" />
+    <constant name="TrackerSupportCylP_thickness2A"        value="TrackerSupportCylAlP_thickness2A + TrackerSupportCylCF_thickness2" />
+    <constant name="TrackerSupportCylP_thickness2B"        value="TrackerSupportCylAlP_thickness2B + TrackerSupportCylCF_thickness2" />
+    <constant name="TrackerSupportCylP_thickness2C"        value="TrackerSupportCylAlP_thickness2C + TrackerSupportCylCF_thickness2" />
+    <constant name="TrackerSupportCylP_thickness2D"        value="TrackerSupportCylAlP_thickness2D + TrackerSupportCylCF_thickness2" />
+    <constant name="TrackerSupportCylP_thickness2E"        value="TrackerSupportCylAlP_thickness2E + TrackerSupportCylCF_thickness2" />
 
     <comment> Negative </comment>
-    <constant name="TrackerSupportCylEndcapN_zmin2A"       value="InnerSupportCone_zmax" /> <comment> ~ 48.75cm </comment>
-    <constant name="TrackerSupportCylEndcapN_zmin2B"       value="105*cm" />
-    <constant name="TrackerSupportCylEndcapN_zmin2C"       value="110*cm" />
+    <constant name="TrackerSupportCylEndcapN_zmin2A"       value="OuterSupportConeN_zmax" />
+    <constant name="TrackerSupportCylEndcapN_zmin2B"       value="max(105*cm, TrackerSupportCylEndcapN_zmin2A + 1*mm)" />
+    <constant name="TrackerSupportCylEndcapN_zmin2C"       value="max(110*cm, TrackerSupportCylEndcapN_zmin2B + 1*mm)" />
 
     <constant name="TrackerSupportCylEndcapN_zmax2A"       value="TrackerSupportCylEndcapN_zmin2B" />
     <constant name="TrackerSupportCylEndcapN_zmax2B"       value="TrackerSupportCylEndcapN_zmin2C" />
-    <constant name="TrackerSupportCylEndcapN_zmax2C"       value="InnerTrackerEndcapN_zmax" /> <comment> 123.6cm. Should be 120cm </comment>
+    <constant name="TrackerSupportCylEndcapN_zmax2C"       value="185.9*cm" /> <comment> Ref: Services Material Budget 24.03.04..stp -- 1858.82 mm </comment>
 
     <constant name="TrackerSupportCylEndcapN_z2A"          value="0.5*(TrackerSupportCylEndcapN_zmin2A + TrackerSupportCylEndcapN_zmax2A)" />
     <constant name="TrackerSupportCylEndcapN_z2B"          value="0.5*(TrackerSupportCylEndcapN_zmin2B + TrackerSupportCylEndcapN_zmax2B)" />
@@ -157,16 +216,39 @@
     <constant name="TrackerSupportCylEndcapN_length2B"     value="TrackerSupportCylEndcapN_zmax2B - TrackerSupportCylEndcapN_zmin2B" />
     <constant name="TrackerSupportCylEndcapN_length2C"     value="TrackerSupportCylEndcapN_zmax2C - TrackerSupportCylEndcapN_zmin2C" />
 
-    <comment> cables from Si tracker to outer barrels </comment>
-    <constant name="TrackerSupportCylAlN_thickness2SiCone" value="3.71*mm" />
-    <constant name="TrackerSupportCylAlN_thickness2SiDisk" value="3.04*mm" />
-    <comment> cables from MPGD </comment>
-    <constant name="TrackerSupportCylAlN_thickness2A"      value="1.56*mm" />
-    <constant name="TrackerSupportCylAlN_thickness2B"      value="3.12*mm" />
-    <constant name="TrackerSupportCylAlN_thickness2C"      value="4.43*mm" />
-    <constant name="TrackerSupportCylN_thickness2A"        value="TrackerSupportCylAlN_thickness2A + TrackerSupportCylCF_thickness2+ TrackerSupportCylAlN_thickness2SiCone" />
-    <constant name="TrackerSupportCylN_thickness2B"        value="TrackerSupportCylAlN_thickness2B + TrackerSupportCylCF_thickness2 + TrackerSupportCylAlN_thickness2SiCone+TrackerSupportCylAlN_thickness2SiDisk" />
-    <constant name="TrackerSupportCylN_thickness2C"        value="TrackerSupportCylAlN_thickness2C + TrackerSupportCylCF_thickness2 + TrackerSupportCylAlN_thickness2SiCone+TrackerSupportCylAlN_thickness2SiDisk" />
+    <comment>
+      <comment> grounds-up thickness determination </comment>
+      <comment> cables from Si tracker to outer barrels </comment>
+      <constant name="TrackerSupportCylAlN_thickness2SiCone" value="3.71*mm" />
+      <constant name="TrackerSupportCylAlN_thickness2SiDisk" value="3.04*mm" />
+      <comment> cables from MPGD </comment>
+      <constant name="TrackerSupportCylAlN_thickness2A"      value="1.56*mm" />
+      <constant name="TrackerSupportCylAlN_thickness2B"      value="3.12*mm" />
+      <constant name="TrackerSupportCylAlN_thickness2C"      value="4.43*mm" />
+      <constant name="TrackerSupportCylN_thickness2A"        value="TrackerSupportCylAlN_thickness2A + TrackerSupportCylCF_thickness2+ TrackerSupportCylAlN_thickness2SiCone" />
+      <constant name="TrackerSupportCylN_thickness2B"        value="TrackerSupportCylAlN_thickness2B + TrackerSupportCylCF_thickness2 + TrackerSupportCylAlN_thickness2SiCone+TrackerSupportCylAlN_thickness2SiDisk" />
+      <constant name="TrackerSupportCylN_thickness2C"        value="TrackerSupportCylAlN_thickness2C + TrackerSupportCylCF_thickness2 + TrackerSupportCylAlN_thickness2SiCone+TrackerSupportCylAlN_thickness2SiDisk" />
+    </comment>
+
+    <comment> effective thickness </comment>
+    <comment> Ref: Services Material Budget 24.03.04..stp -- 26.0 mm </comment>
+    <constant name="TrackerSupportCylAlN_thickness2A"      value="26.0*mm" />
+    <constant name="TrackerSupportCylAlN_thickness2B"      value="26.0*mm" />
+    <constant name="TrackerSupportCylAlN_thickness2C"      value="26.0*mm" />
+    <constant name="TrackerSupportCylN_thickness2A"        value="TrackerSupportCylAlN_thickness2A + TrackerSupportCylCF_thickness2" />
+    <constant name="TrackerSupportCylN_thickness2B"        value="TrackerSupportCylAlN_thickness2A + TrackerSupportCylCF_thickness2" />
+    <constant name="TrackerSupportCylN_thickness2C"        value="TrackerSupportCylAlN_thickness2A + TrackerSupportCylCF_thickness2" />
+
+
+    <comment> 3. Endcap disk routing for services. </comment>
+    <constant name="TrackerSupportDiskEndcapCF_thickness"         value="2.0*mm" />
+    <constant name="TrackerSupportDiskEndcapPAl_thickness"         value="26.0*mm" />
+    <constant name="TrackerSupportDiskEndcapP_thickness"           value="TrackerSupportDiskEndcapCF_thickness+TrackerSupportDiskEndcapPAl_thickness" />
+    <constant name="TrackerSupportDiskEndcapP_zmin"        value="TrackerSupportCylEndcapP_zmax2E" />
+    <constant name="TrackerSupportDiskEndcapP_zmax"        value="TrackerSupportDiskEndcapP_zmin + TrackerSupportDiskEndcapP_thickness" />
+    <constant name="TrackerSupportDiskEndcapP_rmin"        value="TrackerSupportCylEndcapP_rmin2" />
+    <constant name="TrackerSupportDiskEndcapP_rmax"        value="778.3*mm" /> <comment> Ref: Services Material Budget 24.03.04..stp -- 778.33 mm </comment>
+    <constant name="TrackerSupportDiskEndcapP_z"           value="0.5*(TrackerSupportDiskEndcapP_zmin + TrackerSupportDiskEndcapP_zmax)" />
 
       <comment> Inner detector support cylinder </comment>
     <constant name="InnerDetectorBarrelSupportCylCF_thickness"    value="1.0*cm" />
@@ -214,7 +296,7 @@
         length="InnerSupportCone_length"
         thickness="InnerSupportConeN_thickness">
           <position x="0*cm" y="0*cm" z="-InnerSupportCone_z" />
-          <component material="Aluminum" thickness="InnerSupportConeAlN_thickness" name="Services" vis="TrackerServiceVis" />
+          <component material="Aluminum" thickness="InnerSupportConeNAl_thickness" name="Services" vis="TrackerServiceVis" />
           <component material="CarbonFiber" thickness="InnerSupportConeCF_thickness" name="Support" vis="TrackerSupportVis"/>
       </support>
       <support type="Cone"
@@ -225,7 +307,7 @@
         length="InnerSupportCone_length"
         thickness="InnerSupportConeP_thickness">
           <position x="0*cm" y="0*cm" z="InnerSupportCone_z" />
-          <component material="Aluminum" thickness="InnerSupportConeAlP_thickness" name="Services" vis="TrackerServiceVis" />
+          <component material="Aluminum" thickness="InnerSupportConePAl_thickness" name="Services" vis="TrackerServiceVis" />
           <component material="CarbonFiber" thickness="InnerSupportConeCF_thickness" name="Support" vis="TrackerSupportVis"/>
       </support>
 
@@ -290,11 +372,34 @@
           <component material="CarbonFiber" thickness="TrackerSupportCylCF_thickness1" name="Support" vis="TrackerSupportVis"/>
       </support>
 
+      <support type="Cone"
+        name="OuterSupportConeEndcapN"
+        vis="TrackerSupportVis"
+        rmin1="OuterSupportConeN_rmin2"
+        rmin2="OuterSupportConeN_rmin1"
+        length="OuterSupportConeN_length"
+        thickness="OuterSupportConeN_thickness">
+          <position x="0*cm" y="0*cm" z="-OuterSupportConeN_z" />
+          <component material="Aluminum" thickness="OuterSupportConeNAl_thickness" name="Services" vis="TrackerServiceVis" />
+          <component material="CarbonFiber" thickness="OuterSupportConeCF_thickness" name="Support" vis="TrackerSupportVis"/>
+      </support>
+      <support type="Cone"
+        name="OuterSupportConeEndcapP"
+        vis="TrackerSupportVis"
+        rmin1="OuterSupportConeP_rmin1"
+        rmin2="OuterSupportConeP_rmin2"
+        length="OuterSupportConeP_length"
+        thickness="OuterSupportConeP_thickness">
+          <position x="0*cm" y="0*cm" z="OuterSupportConeP_z" />
+          <component material="Aluminum" thickness="OuterSupportConePAl_thickness" name="Services" vis="TrackerServiceVis" />
+          <component material="CarbonFiber" thickness="OuterSupportConeCF_thickness" name="Support" vis="TrackerSupportVis"/>
+      </support>
+
       <comment> outer barrel </comment>
       <support type="Cylinder"
         name="TrackerSupportCylEndcapN2A"
         vis="TrackerSupportVis"
-        rmin="TrackerSupportCyl_rmin2"
+        rmin="TrackerSupportCylEndcapN_rmin2"
         length="TrackerSupportCylEndcapN_length2A"
         thickness="TrackerSupportCylN_thickness2A">
           <position x="0*cm" y="0*cm" z="-TrackerSupportCylEndcapN_z2A" />
@@ -304,7 +409,7 @@
       <support type="Cylinder"
         name="TrackerSupportCylEndcapN2B"
         vis="TrackerSupportVis"
-        rmin="TrackerSupportCyl_rmin2"
+        rmin="TrackerSupportCylEndcapN_rmin2"
         length="TrackerSupportCylEndcapN_length2B"
         thickness="TrackerSupportCylN_thickness2B">
           <position x="0*cm" y="0*cm" z="-TrackerSupportCylEndcapN_z2B" />
@@ -314,7 +419,7 @@
       <support type="Cylinder"
         name="TrackerSupportCylEndcapN2C"
         vis="TrackerSupportVis"
-        rmin="TrackerSupportCyl_rmin2"
+        rmin="TrackerSupportCylEndcapN_rmin2"
         length="TrackerSupportCylEndcapN_length2C"
         thickness="TrackerSupportCylN_thickness2C">
           <position x="0*cm" y="0*cm" z="-TrackerSupportCylEndcapN_z2C" />
@@ -325,7 +430,7 @@
       <support type="Cylinder"
         name="TrackerSupportCylEndcapP2A"
         vis="TrackerSupportVis"
-        rmin="TrackerSupportCyl_rmin2"
+        rmin="TrackerSupportCylEndcapP_rmin2"
         length="TrackerSupportCylEndcapP_length2A"
         thickness="TrackerSupportCylP_thickness2A">
           <position x="0*cm" y="0*cm" z="TrackerSupportCylEndcapP_z2A" />
@@ -335,7 +440,7 @@
       <support type="Cylinder"
         name="TrackerSupportCylEndcapP2B"
         vis="TrackerSupportVis"
-        rmin="TrackerSupportCyl_rmin2"
+        rmin="TrackerSupportCylEndcapP_rmin2"
         length="TrackerSupportCylEndcapP_length2B"
         thickness="TrackerSupportCylP_thickness2B">
           <position x="0*cm" y="0*cm" z="TrackerSupportCylEndcapP_z2B" />
@@ -345,7 +450,7 @@
       <support type="Cylinder"
         name="TrackerSupportCylEndcapP2C"
         vis="TrackerSupportVis"
-        rmin="TrackerSupportCyl_rmin2"
+        rmin="TrackerSupportCylEndcapP_rmin2"
         length="TrackerSupportCylEndcapP_length2C"
         thickness="TrackerSupportCylP_thickness2C">
           <position x="0*cm" y="0*cm" z="TrackerSupportCylEndcapP_z2C" />
@@ -355,7 +460,7 @@
       <support type="Cylinder"
         name="TrackerSupportCylEndcapP2D"
         vis="TrackerSupportVis"
-        rmin="TrackerSupportCyl_rmin2"
+        rmin="TrackerSupportCylEndcapP_rmin2"
         length="TrackerSupportCylEndcapP_length2D"
         thickness="TrackerSupportCylP_thickness2D">
           <position x="0*cm" y="0*cm" z="TrackerSupportCylEndcapP_z2D" />
@@ -365,12 +470,23 @@
       <support type="Cylinder"
         name="TrackerSupportCylEndcapP2E"
         vis="TrackerSupportVis"
-        rmin="TrackerSupportCyl_rmin2"
+        rmin="TrackerSupportCylEndcapP_rmin2"
         length="TrackerSupportCylEndcapP_length2E"
         thickness="TrackerSupportCylP_thickness2E">
           <position x="0*cm" y="0*cm" z="TrackerSupportCylEndcapP_z2E" />
           <component material="Aluminum" thickness="TrackerSupportCylAlP_thickness2E" name="Services" vis="TrackerServiceVis" />
           <component material="CarbonFiber" thickness="TrackerSupportCylCF_thickness2" name="Support" vis="TrackerSupportVis"/>
+      </support>
+
+      <support type="Disk"
+        name="TrackerSupportDiskEndcapP"
+        vis="TrackerSupportVis"
+        rmin="TrackerSupportDiskEndcapP_rmin"
+        rmax="TrackerSupportDiskEndcapP_rmax"
+        thickness="TrackerSupportDiskEndcapP_thickness">
+          <position x="0*cm" y="0*cm" z="TrackerSupportDiskEndcapP_z" />
+          <component material="Aluminum" thickness="TrackerSupportDiskEndcapPAl_thickness" name="Services" vis="TrackerServiceVis" />
+          <component material="CarbonFiber" thickness="TrackerSupportDiskEndcapCF_thickness" name="Support" vis="TrackerSupportVis"/>
       </support>
 
       <comment> Inner detector support barrel </comment>
@@ -383,6 +499,7 @@
           <position x="0*cm" y="0*cm" z="InnerDetectorBarrelSupportCylCF_offset" />
           <component material="CarbonFiber" thickness="InnerDetectorBarrelSupportCylCF_thickness" name="Support" vis="TrackerSupportVis"/>
       </support>
+
     </detector>
   </detectors>
 </lccdd>
