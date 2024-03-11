@@ -222,7 +222,7 @@
           length="SiTrackerEndcapLayer_thickness"
           zstart="TrackerEndcapPLayer1_zmin" />
         <layer_material surface="inner" binning="binPhi,binR" bins0="5*SiTrackerEndcapMod_count" bins1="100"/>
-        <layer_material surface="inner" binning="binPhi,binR" bins0="5*SiTrackerEndcapMod_count" bins1="100"/>
+        <layer_material surface="outer" binning="binPhi,binR" bins0="5*SiTrackerEndcapMod_count" bins1="100"/>
         <ring
           r="TrackerEndcapPMod1_rmin + TrackerEndcapPMod1_y/2"
           zstart="0"
@@ -252,7 +252,7 @@
           length="SiTrackerEndcapLayer_thickness"
           zstart="TrackerEndcapNLayer1_zmin" />
         <layer_material surface="inner" binning="binPhi,binR" bins0="5*SiTrackerEndcapMod_count" bins1="100"/>
-        <layer_material surface="inner" binning="binPhi,binR" bins0="5*SiTrackerEndcapMod_count" bins1="100"/>
+        <layer_material surface="outer" binning="binPhi,binR" bins0="5*SiTrackerEndcapMod_count" bins1="100"/>
         <ring
           r="TrackerEndcapNMod1_rmin + TrackerEndcapNMod1_y/2"
           zstart="0"
