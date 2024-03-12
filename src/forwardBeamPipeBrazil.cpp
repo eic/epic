@@ -12,6 +12,7 @@
 #include "DD4hep/DetFactoryHelper.h"
 #include "DD4hep/Printout.h"
 #include "TMath.h"
+#include "TVector3.h"
 #include <XML/Helper.h>
 
 using namespace std;
@@ -109,9 +110,15 @@ static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector /* sens *
 	
 	cout << "large section ends at (z,x) = " << tmp_endpoint_z << ", " << tmp_endpoint_x << endl;
 
-	double neutralExitWindowZ = tmp_endpoint_z - 5.0;
+	double neutralExitWindowZ = tmp_endpoint_z;
 	double neutralExitWindowX = -0.025*neutralExitWindowZ;
-	double windowRadius = neutralExitWindowZ*TMath::Tan(0.004);
+	double windowRadius = neutralExitWindowZ*TMath::Tan(0.0035); //3.8 mrad radius exit window - needs to be revisited
+
+	cout << "neutral exit window (z, x) = " << neutralExitWindowZ << " , " << neutralExitWindowX << " mm." << endl;
+	cout << "Window radius = " << windowRadius << " mm." << endl;
+
+	//double protonTransferFlangeZ = tmp_endpoint_z;
+	//double protonTransferFlangeX = tmp_endpoint_x;
 
   	//------------------------------------------------------------------------------------
   	//first small pipe section, between primary vessel and RP station 1
@@ -194,21 +201,44 @@ static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector /* sens *
  
 	cout << "fifth component: " << " z = " << zCenter[4] << " x = " << xCenter[4] << endl;
 
+	tmp_endpoint_z = zCenter[4]+((0.5*length[4])*TMath::Cos(-globRotationAngle));
+    tmp_endpoint_x = -1*xCenter[4]+((0.5*length[4])*TMath::Sin(-globRotationAngle));
+
+	//------------------------------------------------------------------------------------
+    // Pipe from second RP chamber to B2PF magnet
+    //------------------------------------------------------------------------------------
+
+	length[5]            = 3000.0; // from VPC drawings
+    innerXRadius[5]      = 150.0; //
+    innerYRadius[5]      = 30.0; //
+    outerXRadius[5]      = innerXRadius[5] + pipeThickness; //
+    outerYRadius[5]      = innerYRadius[5] + pipeThickness; //
+
+    xCenter[5]           = -1*(tmp_endpoint_x+((0.5*length[5])*TMath::Sin(-globRotationAngle)));//-972.36849;
+    yCenter[5]           = 0.0;
+    zCenter[5]           = tmp_endpoint_z+((0.5*length[5])*TMath::Cos(-globRotationAngle));//29055.1545;
+    rotationAngle[5]     = globRotationAngle;
+
+    //cout << "fourth component: " << " z = " << zCenter[5] << " x = " << xCenter[3] << endl;
+    
+    tmp_endpoint_z = zCenter[5]+((0.5*length[5])*TMath::Cos(-globRotationAngle));
+    tmp_endpoint_x = -1*xCenter[5]+((0.5*length[5])*TMath::Sin(-globRotationAngle));
+
 
   	//------------------------------------------------------------------------------------
   	// Inner pipe to subtract from everything for proper entrance/exits
 	//------------------------------------------------------------------------------------
   
-  	length[5]            = 20000.0; // from VPC drawings
-	innerXRadius[5]      = 150.0; //
-	innerYRadius[5]      = 30.0; //
-	outerXRadius[5]      = innerXRadius[5] + pipeThickness; //
-	outerYRadius[5]      = innerYRadius[5] + pipeThickness; //
+  	//length[5]            = 20000.0; // from VPC drawings
+	//innerXRadius[5]      = 150.0; //
+	//innerYRadius[5]      = 30.0; //
+	//outerXRadius[5]      = innerXRadius[5] + pipeThickness; //
+	//outerYRadius[5]      = innerYRadius[5] + pipeThickness; //
 
-  	xCenter[5]           = -1*(b1APFEndPoint_x+((0.5*length[0])*TMath::Sin(-globRotationAngle))); //-745.20328;
-  	yCenter[5]           = 0.0;
-  	zCenter[5]           = (b1APFEndPoint_z+((0.5*length[0])*TMath::Cos(-globRotationAngle)));//24060.3176;
-  	rotationAngle[5]     = globRotationAngle;
+  	//xCenter[5]           = -1*(b1APFEndPoint_x+((0.5*length[0])*TMath::Sin(-globRotationAngle))); //-745.20328;
+  	//yCenter[5]           = 0.0;
+  	//zCenter[5]           = (b1APFEndPoint_z+((0.5*length[0])*TMath::Cos(-globRotationAngle)));//24060.3176;
+  	//rotationAngle[5]     = globRotationAngle;
  
 
 	//tmp_endpoint_z = zCenter[2]+((0.5*length[2])*TMath::Cos(-globRotationAngle));
@@ -252,9 +282,50 @@ static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector /* sens *
 	pieceIdx = 0; //Larger, rectangular pipe transporting proton and neutral envelopes (neutral exit window and transfer to smaller proton line at the end)
 
 	Box pipeAfterB1APF_outer(0.1*outerXRadius[pieceIdx], 0.1*outerYRadius[pieceIdx], 0.1*length[pieceIdx]/2);
-	Box pipeAfterB1APF_inner(0.1*innerXRadius[pieceIdx], 0.1*innerYRadius[pieceIdx], 0.1*(length[pieceIdx]+5.0)/2);
-	SubtractionSolid pipeAfterB1APF(pipeAfterB1APF_outer, pipeAfterB1APF_inner);
+	Box pipeAfterB1APF_inner(0.1*innerXRadius[pieceIdx], 0.1*innerYRadius[pieceIdx], 0.1*(length[pieceIdx])/2);
+	Box pipeAfterB1APF_firstEndCap(0.1*outerXRadius[pieceIdx], 0.1*outerYRadius[pieceIdx], 0.1*5.0/2.0);
+	Tube neutral_exit_window_cutout(0.0, 0.1*windowRadius, 1.0); // 1.0cm thick
+	Box protonTransferWindow(0.1*outerXRadius[0], 0.1*outerYRadius[1], 0.1*(5.0/2));
+
+	//double neutralExitWindowZ = tmp_endpoint_z - 5.0;
+    //double neutralExitWindowX = -0.025*neutralExitWindowZ;
+    //double windowRadius = neutralExitWindowZ*TMath::Tan(0.0038); //3.8 mrad radius exit window - needs to be revisited
+
+	SubtractionSolid tmpAfterB1APF(pipeAfterB1APF_outer, pipeAfterB1APF_inner); //This gets rid of the inner portion of the pipe, but leaves the endcaps
+	SubtractionSolid tmpAfterFrontEndCap(tmpAfterB1APF, pipeAfterB1APF_firstEndCap, Position(0.0, 0.0, 0.1 * (-length[pieceIdx])/2));
+	SubtractionSolid pipeAfterProtonTransferWindow(tmpAfterFrontEndCap, protonTransferWindow, Position(0.0, 0.0, 0.1 * (length[pieceIdx])/2 ));
 	
+	double tmp_x = neutralExitWindowX - (xCenter[pieceIdx] + 5.0);
+	double tmp_z = neutralExitWindowZ - zCenter[pieceIdx];
+
+	cout << " tmp_x = " << tmp_x << " mm." << endl;
+	cout << " tmp_z = " << tmp_z << " mm." << endl;
+
+	double hypotenuse = TMath::Sqrt(tmp_x*tmp_x + tmp_z*tmp_z);
+	double internalAngle = TMath::ACos(tmp_z/hypotenuse);
+	
+	//neutralExitCutout_x = 353.5086593124745;
+	//neutralExitCutout_z = (length[pieceIdx])/2;
+
+	double neutralExitCutout_z = tmp_z*TMath::Cos(0.025) - tmp_x*TMath::Sin(0.025);
+	double neutralExitCutout_x = tmp_z*TMath::Sin(0.025) + tmp_x*TMath::Cos(0.025); 
+
+	neutralExitCutout_z = tmp_z;
+	neutralExitCutout_x = neutralExitCutout_z*TMath::Tan(internalAngle);
+
+	cout << "hypotenuse = " << hypotenuse << endl;
+	cout << "internal angle = " << internalAngle << endl;
+	cout << " finding the cutout position --> x = " << neutralExitCutout_x << " mm." << endl;
+	cout << " finding the cutout position --> z = " << neutralExitCutout_z << " mm." << endl;
+	cout << " half length = " << length[pieceIdx]/2 << " mm." << endl;
+
+	SubtractionSolid pipeAfterB1APF(pipeAfterProtonTransferWindow, neutral_exit_window_cutout, Position(0.1 * neutralExitCutout_x , 0.0, 0.1 * neutralExitCutout_z));
+
+	//SubtractionSolid tmpAfterExitWindow(tmpAfterB1APF, neutral_exit_window_cutout, Position(0.1 * neutralExitWindowX - xCenter[pieceIdx] + 5.0 , 0.0, 0.1 * neutralExitWindowZ - zCenter[pieceIdx]));
+	//SubtractionSolid tmpAfterFrontEndCap(tmpAfterExitWindow, pipeAfterB1APF_firstEndCap, Position(0.0, 0.0, 0.1 * (-length[pieceIdx])/2));
+	//SubtractionSolid pipeAfterB1APF(tmpAfterFrontEndCap, protonTransferWindow, Position(0.0, 0.0, 0.1 * (length[pieceIdx])/2 ));
+
+
     Volume v_pipeAfterB1APF(Form("v_pipeAfterB1APF_%d", pieceIdx), pipeAfterB1APF, m_SS);
     sdet.setAttributes(det, v_pipeAfterB1APF, x_det.regionStr(), x_det.limitsStr(), vis_name);
 
@@ -279,11 +350,28 @@ static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector /* sens *
 
 	//------------------------------------------------------------------------
 
+	pieceIdx = 3; //pipe between Roman pots station
+
+    Box pipe_3_outer(0.1*outerXRadius[pieceIdx], 0.1*outerYRadius[pieceIdx], 0.1*length[pieceIdx]/2);
+    Box pipe_3_inner(0.1*innerXRadius[pieceIdx], 0.1*innerYRadius[pieceIdx], 0.1*(length[pieceIdx]+5.0)/2);
+    SubtractionSolid pipe_3(pipe_3_outer, pipe_3_inner);
+
+    Volume v_pipe_3(Form("v_pipe_3_%d", pieceIdx), pipe_3, m_SS);
+    sdet.setAttributes(det, v_pipe_3, x_det.regionStr(), x_det.limitsStr(), vis_name);
+
+    auto pv_pipe_3 = assembly.placeVolume(v_pipe_3, Transform3D(RotationY(rotationAngle[pieceIdx]), Position(0.1 * xCenter[pieceIdx], 0.1 *  yCenter[pieceIdx], 0.1 * zCenter[pieceIdx]))); // 2353.06094)));
+    pv_pipe_3.addPhysVolID("sector", 1);
+    DetElement pipe_de_3(sdet, Form("sector_pipe_%d_de", pieceIdx), 1);
+    pipe_de_3.setPlacement(pv_pipe_3);
+
+	//----------------------------------------------------------------
+
 	pieceIdx = 2; //first roman pots scattering chamber
 	
 	Box box_rp_station_1_outer(0.1*outerXRadius[pieceIdx], 0.1*outerYRadius[pieceIdx], 0.1*length[pieceIdx]/2);
 	Box box_rp_station_1_inner(0.1*innerXRadius[pieceIdx], 0.1*innerYRadius[pieceIdx], 0.1*length[pieceIdx]/2);
 	SubtractionSolid tmp(box_rp_station_1_outer, box_rp_station_1_inner);
+	//SubtractionSolid rpStation1(box_rp_station_1_outer, box_rp_station_1_inner);
 	SubtractionSolid rpStation1(tmp, RP_subtract_outer);
 	
     Volume v_rpStation1(Form("v_rpStation1_%d", pieceIdx), rpStation1, m_SS);
@@ -295,8 +383,8 @@ static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector /* sens *
     pipe_de_2.setPlacement(pv_pipe_2);
 
 	//---------------------------------------------------------------------
-	
-	pieceIdx = 3;
+	/*
+	pieceIdx = 3; //pipe between Roman pots station
 
 	Box pipe_3_outer(0.1*outerXRadius[pieceIdx], 0.1*outerYRadius[pieceIdx], 0.1*length[pieceIdx]/2);
 	Box pipe_3_inner(0.1*innerXRadius[pieceIdx], 0.1*innerYRadius[pieceIdx], 0.1*(length[pieceIdx]+5.0)/2);
@@ -309,7 +397,7 @@ static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector /* sens *
     pv_pipe_3.addPhysVolID("sector", 1);
     DetElement pipe_de_3(sdet, Form("sector_pipe_%d_de", pieceIdx), 1);
     pipe_de_3.setPlacement(pv_pipe_3);
-
+	*/
 	//---------------------------------------------------------------------
 
 	pieceIdx = 4; //Second roman pots scattering chamber
@@ -317,6 +405,8 @@ static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector /* sens *
 	Box box_rp_station_2_outer(0.1*outerXRadius[pieceIdx], 0.1*outerYRadius[pieceIdx], 0.1*length[pieceIdx]/2);
 	Box box_rp_station_2_inner(0.1*innerXRadius[pieceIdx], 0.1*innerYRadius[pieceIdx], 0.1*length[pieceIdx]/2);
 	SubtractionSolid tmp_2(box_rp_station_2_outer, box_rp_station_2_inner);
+	//SubtractionSolid rpStation2(box_rp_station_2_outer, box_rp_station_2_inner);
+	//SubtractionSolid tmp_22(tmp_2, pipe_3_outer);
 	SubtractionSolid rpStation2(tmp_2, RP_subtract_outer);
 	
     Volume v_rpStation2(Form("v_rpStation2_%d", pieceIdx), rpStation2, m_SS);
@@ -327,33 +417,49 @@ static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector /* sens *
     DetElement pipe_de_4(sdet, Form("sector_pipe_%d_de", pieceIdx), 1);
     pipe_de_4.setPlacement(pv_pipe_4);
 	
+	//---------------------------------------------------------------
+
+	pieceIdx = 5; //pipe between second RP station and the B2pf magnet
+
+    Box pipe_5_outer(0.1*outerXRadius[pieceIdx], 0.1*outerYRadius[pieceIdx], 0.1*length[pieceIdx]/2);
+    Box pipe_5_inner(0.1*innerXRadius[pieceIdx], 0.1*innerYRadius[pieceIdx], 0.1*(length[pieceIdx]+5.0)/2);
+    SubtractionSolid pipe_5(pipe_5_outer, pipe_5_inner);
+
+    Volume v_pipe_5(Form("v_pipe_5_%d", pieceIdx), pipe_5, m_SS);
+    sdet.setAttributes(det, v_pipe_5, x_det.regionStr(), x_det.limitsStr(), vis_name); 
+    
+    auto pv_pipe_5 = assembly.placeVolume(v_pipe_5, Transform3D(RotationY(rotationAngle[pieceIdx]), Position(0.1 * xCenter[pieceIdx], 0.1 *  yCenter[pieceIdx], 0.1 * zCenter[pieceIdx]))); // 2353.06094)));
+    pv_pipe_5.addPhysVolID("sector", 1);
+    DetElement pipe_de_5(sdet, Form("sector_pipe_%d_de", pieceIdx), 1);
+    pipe_de_5.setPlacement(pv_pipe_5);
+
+	//----------------------------------------------------------------
 
   	// This is the beam tube in the B0 magnet for the hadron beam
   	// doesn't use the slope information calculated before - it stands alone
 
-	pieceIdx = 5;
+	pieceIdx = 6;
 
   	Tube   b0_hadron_tube(b0_hadron_tube_inner_r, b0_hadron_tube_outer_r, b0_hadron_tube_length / 2.0);
   	Volume v_b0_hadron_tube("v_b0_hadron_tube", b0_hadron_tube, m_Be);
   	sdet.setAttributes(det, v_b0_hadron_tube, x_det.regionStr(), x_det.limitsStr(), vis_name);
 
-   
-    auto pv_pipe_5 = assembly.placeVolume(v_b0_hadron_tube, Transform3D(RotationY(-0.025), Position(-16.5, 0.0, 640.0))); // 2353.06094)));
-    pv_pipe_5.addPhysVolID("sector", 1);
-    DetElement pipe_de_5(sdet, Form("sector_pipe_%d_de", pieceIdx), 1);
-    pipe_de_5.setPlacement(pv_pipe_5);
-	
-	pieceIdx = 6; //neutral exit window
-
-  	Tube   neutral_exit_window(0.0, 0.1*windowRadius, 1.0); // 1.0cm thick
-  	Volume v_neutral_exit_window("v_neutral_exit_window", neutral_exit_window, m_Al);
-  	sdet.setAttributes(det, v_neutral_exit_window, x_det.regionStr(), x_det.limitsStr(), vis_name);
-
-	
-    auto pv_pipe_6 = assembly.placeVolume(v_neutral_exit_window, Transform3D(RotationY(-0.025), Position(0.1*neutralExitWindowX, 0.0, 0.1*neutralExitWindowZ))); // 2353.06094)));
+    auto pv_pipe_6 = assembly.placeVolume(v_b0_hadron_tube, Transform3D(RotationY(-0.025), Position(-16.5, 0.0, 640.0))); // 2353.06094)));
     pv_pipe_6.addPhysVolID("sector", 1);
     DetElement pipe_de_6(sdet, Form("sector_pipe_%d_de", pieceIdx), 1);
     pipe_de_6.setPlacement(pv_pipe_6);
+	
+	pieceIdx = 7; //neutral exit window
+
+  	Tube   neutral_exit_window(0.0, 0.1*windowRadius, 1.0); // 1.0cm thick
+  	Volume v_neutral_exit_window("v_neutral_exit_window", neutral_exit_window, m_Al);
+  	//sdet.setAttributes(det, v_neutral_exit_window, x_det.regionStr(), x_det.limitsStr(), "AnlRed");
+
+	
+    //auto pv_pipe_7 = assembly.placeVolume(v_neutral_exit_window, Transform3D(RotationY(-0.025), Position(0.1*neutralExitWindowX, 0.0, 0.1*neutralExitWindowZ))); // 2353.06094)));
+    //pv_pipe_7.addPhysVolID("sector", 1);
+    //DetElement pipe_de_7(sdet, Form("sector_pipe_%d_de", pieceIdx), 1);
+    //pipe_de_7.setPlacement(pv_pipe_7);
 
   	//----------------------------------
   	//    build drift beam pipe here

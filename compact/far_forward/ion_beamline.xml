@@ -63,12 +63,14 @@
       <apperture x="B1APF_InnerRadius*2" y="B1APF_InnerRadius*2"  r="B1APF_InnerRadius"/>
       <coil vis="FFMagnetCoilVis" dx="1*cm" dy="0.5*cm" />
     </detector>
-    <detector id="B2PF_ID" name="B2PF_BeamlineMagnet" vis="FFMagnetVis" type="ip6_CylindricalDipoleMagnet">
+    <comment>
+	<detector id="B2PF_ID" name="B2PF_BeamlineMagnet" vis="FFMagnetVis" type="ip6_CylindricalDipoleMagnet">
       <placement x="B2PF_XPosition" y="0*m" z="B2PF_CenterPosition" theta="B2PF_RotationAngle" />
       <dimensions x="B2PF_InnerRadius*4" y="B2PF_InnerRadius*4" z="B2PF_Length" r="2.0*B2PF_InnerRadius" />
       <apperture x="B2PF_InnerRadius*2" y="B2PF_InnerRadius*2"  r="B2PF_InnerRadius"/>
       <coil vis="FFMagnetCoilVis" dx="1*cm" dy="0.5*cm" />
     </detector>
+	</comment>
   </detectors>
 
 </lccdd>

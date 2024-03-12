@@ -52,12 +52,14 @@
       <coefficient coefficient="B1APF_Bmax*FieldScaleFactor" skew="0.0*tesla"/>
           <coefficient coefficient="B1APF_GradientMax*FieldScaleFactor" skew="0.0*tesla/m"/>
     </field>
-    <field name="B2PF_Magnet" type="MultipoleMagnet">
+    <comment>
+	  <field name="B2PF_Magnet" type="MultipoleMagnet">
       <position x="B2PF_XPosition" y="0" z="B2PF_CenterPosition"/>
       <rotation x="0" y="B2PF_RotationAngle" z="0"/>
       <shape type="Tube" rmin="0.0" rmax="B2PF_InnerRadius" dz="B2PF_Length*0.5"/>
       <coefficient coefficient="B2PF_Bmax*FieldScaleFactor" skew="0.0*tesla"/>
       <coefficient coefficient="B2PF_GradientMax*FieldScaleFactor" skew="0.0*tesla/cm"/>
-    </field>
+      </field>
+	</comment>
   </fields>
 </lccdd>
