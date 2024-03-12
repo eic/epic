@@ -32,10 +32,10 @@
     <constant name="MPGDOuterBarrelModule_zmin2"     value="174.5*cm"/>
 
     <comment> Inner MPGD unsegmented barrel </comment>
-    <constant name="InnerMPGDBarrel_rmin"            value="51.25*cm"/>
+    <constant name="InnerMPGDBarrel_rmin"            value="55*cm"/>
     <constant name="InnerMPGDBarrel_dz"              value="0"/>
     <constant name="InnerMPGDBarrel_zmin"            value="105*cm"/> <comment> negative z </comment>
-    <constant name="InnerMPGDBarrel_zmax"            value="135*cm"/>    <comment> positive z </comment>
+    <constant name="InnerMPGDBarrel_zmax"            value="143*cm"/> <comment> positive z </comment>
     <constant name="InnerMPGDBarrel_length"          value="InnerMPGDBarrel_zmax + InnerMPGDBarrel_zmin"/>
     <constant name="InnerMPGDBarrel_zoffset"         value="0.5*(InnerMPGDBarrel_zmax - InnerMPGDBarrel_zmin)"/>
 
