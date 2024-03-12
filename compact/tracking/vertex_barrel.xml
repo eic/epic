@@ -105,7 +105,7 @@
           z_length="VertexBarrelLayer_length" />
         <layer_material surface="inner" binning="binPhi,binZ" bins0="VertexBarrelStave_count1" bins1="100" />
         <layer_material surface="outer" binning="binPhi,binZ" bins0="VertexBarrelStave_count1" bins1="100" />
-	<comment>
+        <comment>
           phi0     : Starting phi of first module.
           phi_tilt : Phi tilt of a module.
           rc       : Radius of the module center.
@@ -125,7 +125,7 @@
           z_length="VertexBarrelLayer_length" />
         <layer_material surface="inner" binning="binPhi,binZ" bins0="VertexBarrelStave_count2" bins1="100" />
         <layer_material surface="outer" binning="binPhi,binZ" bins0="VertexBarrelStave_count2" bins1="100" />
-	<rphi_layout phi_tilt="0.0*degree" nphi="VertexBarrelStave_count2" phi0="0.0*degree" rc="VertexBarrelMod2_rmin" dr="0.0 * mm"/>
+        <rphi_layout phi_tilt="0.0*degree" nphi="VertexBarrelStave_count2" phi0="0.0*degree" rc="VertexBarrelMod2_rmin" dr="0.0 * mm"/>
         <z_layout dr="0.0 * mm" z0="0.0 * mm" nz="1"/>
       </layer>
       <layer module="Module3" id="4" vis="VertexLayerVis">
@@ -135,7 +135,7 @@
           z_length="VertexBarrelLayer_length" />
         <layer_material surface="inner" binning="binPhi,binZ" bins0="VertexBarrelStave_count3" bins1="100" />
         <layer_material surface="outer" binning="binPhi,binZ" bins0="VertexBarrelStave_count3" bins1="100" />
-	<rphi_layout phi_tilt="0.0*degree" nphi="VertexBarrelStave_count3" phi0="0.0" rc="VertexBarrelMod3_rmin" dr="0.0 * mm"/>
+        <rphi_layout phi_tilt="0.0*degree" nphi="VertexBarrelStave_count3" phi0="0.0" rc="VertexBarrelMod3_rmin" dr="0.0 * mm"/>
         <z_layout dr="0.0 * mm" z0="0.0 * mm" nz="1"/>
       </layer>
     </detector>
