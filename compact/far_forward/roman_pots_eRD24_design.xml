@@ -13,14 +13,14 @@
 
     <!-- Global "station" location, rotation, position information -->
 
-	<comment>
+        <comment>
     <constant name="ForwardRomanPotStation1_zpos" value="26.0*m"/>
     <constant name="ForwardRomanPotStation1_xpos" value="-0.8333878326*m"/>
     <constant name="ForwardRomanPotStation2_zpos" value="28.0*m"/>
     <constant name="ForwardRomanPotStation2_xpos" value="-0.924342804*m"/>
-	</comment>
+        </comment>
 
-	<constant name="ForwardRomanPotStation1_zpos" value="32547.3*mm"/>
+        <constant name="ForwardRomanPotStation1_zpos" value="32547.3*mm"/>
     <constant name="ForwardRomanPotStation1_xpos" value="-1131.19*mm"/>
     <constant name="ForwardRomanPotStation2_zpos" value="34245.5*mm"/>
     <constant name="ForwardRomanPotStation2_xpos" value="-1208.43*mm"/>
