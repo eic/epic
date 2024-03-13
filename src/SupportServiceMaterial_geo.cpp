@@ -44,15 +44,19 @@ namespace {
       const double thickness = getAttrOrDefault(x_child, _U(thickness), x_support.thickness());
       const double length    = getAttrOrDefault(x_child, _U(length), x_support.length());
       const double rmin      = getAttrOrDefault(x_child, _U(rmin), x_support.rmin()) + offset;
-      solid                  = Tube(rmin, rmin + thickness, length / 2);
+      const double phimin    = getAttrOrDefault(x_child, _Unicode(phimin), 0.0 * deg);
+      const double phimax    = getAttrOrDefault(x_child, _Unicode(phimax), 360.0 * deg);
+      solid                  = Tube(rmin, rmin + thickness, length / 2, phimin, phimax);
     }
     // A disk is a cylinder, constructed differently
     else if (type == "Disk") {
       const double thickness = getAttrOrDefault(x_child, _U(thickness), x_support.thickness());
       const double rmin      = getAttrOrDefault(x_child, _U(rmin), x_support.rmin());
       const double rmax      = getAttrOrDefault(x_child, _U(rmax), x_support.rmax());
+      const double phimin    = getAttrOrDefault(x_child, _Unicode(phimin), 0.0 * deg);
+      const double phimax    = getAttrOrDefault(x_child, _Unicode(phimax), 360.0 * deg);
       pos3D                  = pos3D + Position(0, 0, -x_support.thickness() / 2 + thickness / 2 + offset);
-      solid                  = Tube(rmin, rmax, thickness / 2);
+      solid                  = Tube(rmin, rmax, thickness / 2, phimin, phimax);
     } else if (type == "Cone") {
       const double base_rmin1 = getAttrOrDefault(x_child, _U(rmin1), x_support.rmin1());
       const double base_rmin2 = getAttrOrDefault(x_child, _U(rmin2), x_support.rmin2());
@@ -67,7 +71,13 @@ namespace {
       const double rmin2             = base_rmin2 + transverse_offset;
       const double rmax1             = rmin1 + transverse_thickness;
       const double rmax2             = rmin2 + transverse_thickness;
-      solid                          = Cone(length / 2, rmin1, rmax1, rmin2, rmax2);
+      if (x_child.hasAttr(_Unicode(phimin)) || x_child.hasAttr(_Unicode(phimax))) {
+        const double phimin = getAttrOrDefault<double>(x_child, _Unicode(phimin), 0.0 * deg);
+        const double phimax = getAttrOrDefault<double>(x_child, _Unicode(phimax), 360.0 * deg);
+        solid               = ConeSegment(length / 2, rmin1, rmax1, rmin2, rmax2, phimin, phimax);
+      } else {
+        solid = Cone(length / 2, rmin1, rmax1, rmin2, rmax2);
+      }
     } else {
       printout(ERROR, x_det.nameStr(), "Unknown support type: %s", type.c_str());
       std::exit(1);
