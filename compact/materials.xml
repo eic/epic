@@ -485,6 +485,11 @@
     <fraction n="0.9622" ref="Pb"/>
     <fraction n="0.0378" ref="SciFiPb_Glue"/>
   </material>
+  <material name="SciFiPb_PbGlue_Edge">
+    <D type="density" value="4.231" unit="g / cm3"/>
+    <fraction n="0.805" ref="Pb"/>
+    <fraction n="0.195" ref="SciFiPb_Glue"/>
+  </material>
   <material name="Brass">
     <D type="density" value="8.41" unit="g / cm3"/>
     <fraction n="0.70" ref="Cu"/>
