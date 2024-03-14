@@ -254,8 +254,8 @@ pfRICH         \                                                       /
 
     <comment> Inner detector support cylinder </comment>
     <constant name="InnerDetectorBarrelSupportCylCF_thickness"    value="1.0*cm" />
-    <constant name="InnerDetectorBarrelSupportCylCF_zmin1"        value="MPGDOuterBarrelModule_zmin1" />
-    <constant name="InnerDetectorBarrelSupportCylCF_zmin2"        value="MPGDOuterBarrelModule_zmin2" />
+    <constant name="InnerDetectorBarrelSupportCylCF_zmin1"        value="DIRCBackward_zmax" />
+    <constant name="InnerDetectorBarrelSupportCylCF_zmin2"        value="DIRCForward_zmax" />
     <constant name="InnerDetectorBarrelSupportCylCF_length"       value="InnerDetectorBarrelSupportCylCF_zmin1 + InnerDetectorBarrelSupportCylCF_zmin2" />
     <constant name="InnerDetectorBarrelSupportCylCF_offset"       value="(InnerDetectorBarrelSupportCylCF_zmin2 - InnerDetectorBarrelSupportCylCF_zmin1)/2.0"/>
     <constant name="InnerDetectorBarrelSupportCylCF_rmin"         value="MPGDOuterBarrelModule_rmin - InnerDetectorBarrelSupportCylCF_thickness - 2*mm" />
