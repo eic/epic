@@ -65,7 +65,7 @@ pfRICH         \                                                       /
 
     <constant name="TrackerSupportCylEndcapP_zmax1A"       value="TrackerEndcapPDisk2_zmin" />
     <constant name="TrackerSupportCylEndcapP_zmax1B"       value="TrackerEndcapPDisk3_zmin" />
-    <constant name="TrackerSupportCylEndcapP_zmax1C"       value="InnerMPGDBarrel_zmax+1*cm" /> <comment> 136cm </comment>
+    <constant name="TrackerSupportCylEndcapP_zmax1C"       value="129.7*cm" /> <comment> Ref: Services Material Budget 24.03.13.stp </comment>
 
     <constant name="TrackerSupportCylEndcapP_z1A"          value="0.5*(TrackerSupportCylEndcapP_zmin1A + TrackerSupportCylEndcapP_zmax1A)" />
     <constant name="TrackerSupportCylEndcapP_z1B"          value="0.5*(TrackerSupportCylEndcapP_zmin1B + TrackerSupportCylEndcapP_zmax1B)" />
@@ -118,8 +118,9 @@ pfRICH         \                                                       /
     <comment> Negative outer tracker service/support cone </comment>
     <constant name="OuterSupportConeN_zmin"                value="TrackerSupportCylEndcapN_zmax1C" />
     <constant name="OuterSupportConeN_rmin1"               value="TrackerSupportCyl_rmin1" />
+    <constant name="OuterSupportConeN_tan"                 value="OuterSupportConeN_rmin1/OuterSupportConeN_zmin" />
 
-    <constant name="OuterSupportConeN_rmin2"               value="67.0*cm" /> <comment> Ref: Services Material Budget 24.03.13.stp </comment>
+    <constant name="OuterSupportConeN_rmin2"               value="TrackerSupportCylEndcapN_rmin2" />
     <constant name="OuterSupportConeN_zmax"                value="125.0*cm" /> <comment> Ref: Services Material Budget 24.03.13.stp </comment>
 
     <constant name="OuterSupportConeN_z"                   value="0.5*(OuterSupportConeN_zmax + OuterSupportConeN_zmin)" />
@@ -128,9 +129,10 @@ pfRICH         \                                                       /
     <comment> Positive outer tracker service/support cone </comment>
     <constant name="OuterSupportConeP_zmin"                value="TrackerSupportCylEndcapP_zmax1C" />
     <constant name="OuterSupportConeP_rmin1"               value="TrackerSupportCyl_rmin1" />
+    <constant name="OuterSupportConeP_tan"                 value="OuterSupportConeP_rmin1/OuterSupportConeP_zmin" />
 
-    <constant name="OuterSupportConeP_rmin2"               value="52*cm" />
-    <constant name="OuterSupportConeP_zmax"                value="153.1*cm" />
+    <constant name="OuterSupportConeP_rmin2"               value="TrackerSupportCylEndcapP_rmin2" />
+    <constant name="OuterSupportConeP_zmax"                value="OuterSupportConeP_rmin2/OuterSupportConeP_tan" />
 
     <constant name="OuterSupportConeP_z"                   value="0.5*(OuterSupportConeP_zmax + OuterSupportConeP_zmin)" />
     <constant name="OuterSupportConeP_length"              value="OuterSupportConeP_zmax - OuterSupportConeP_zmin" />
@@ -151,7 +153,7 @@ pfRICH         \                                                       /
     <constant name="TrackerSupportCylEndcapP_zmax2B"       value="TrackerSupportCylEndcapP_zmin2C" />
     <constant name="TrackerSupportCylEndcapP_zmax2C"       value="TrackerSupportCylEndcapP_zmin2D" />
     <constant name="TrackerSupportCylEndcapP_zmax2D"       value="TrackerSupportCylEndcapP_zmin2E" />
-    <constant name="TrackerSupportCylEndcapP_zmax2E"       value="InnerTrackerEndcapP_zmax" /> <comment> 180cm. Should be ~174cm </comment>
+    <constant name="TrackerSupportCylEndcapP_zmax2E"       value="EcalBarrelForward_zmax" />
 
     <constant name="TrackerSupportCylEndcapP_z2A"          value="0.5*(TrackerSupportCylEndcapP_zmin2A + TrackerSupportCylEndcapP_zmax2A)" />
     <constant name="TrackerSupportCylEndcapP_z2B"          value="0.5*(TrackerSupportCylEndcapP_zmin2B + TrackerSupportCylEndcapP_zmax2B)" />
@@ -240,14 +242,14 @@ pfRICH         \                                                       /
     <constant name="TrackerSupportCylN_thickness2C"        value="TrackerSupportCylAlN_thickness2A + TrackerSupportCylCF_thickness2" />
 
 
-    <comment> 3. Endcap disk routing for services. </comment>
-    <constant name="TrackerSupportDiskEndcapCF_thickness"         value="2.0*mm" />
-    <constant name="TrackerSupportDiskEndcapPAl_thickness"         value="26.0*mm" />
-    <constant name="TrackerSupportDiskEndcapP_thickness"           value="TrackerSupportDiskEndcapCF_thickness+TrackerSupportDiskEndcapPAl_thickness" />
+    <comment> 3. Positive endcap disk routing for services. </comment>
+    <constant name="TrackerSupportDiskEndcapCF_thickness"  value="2.0*mm" />
+    <constant name="TrackerSupportDiskEndcapPAl_thickness" value="0.5 * (10.3*mm + 34.0*mm)" /> <comment> Average of inner and outer thickness </comment>
+    <constant name="TrackerSupportDiskEndcapP_thickness"   value="TrackerSupportDiskEndcapCF_thickness+TrackerSupportDiskEndcapPAl_thickness" />
     <constant name="TrackerSupportDiskEndcapP_zmin"        value="TrackerSupportCylEndcapP_zmax2E" />
     <constant name="TrackerSupportDiskEndcapP_zmax"        value="TrackerSupportDiskEndcapP_zmin + TrackerSupportDiskEndcapP_thickness" />
     <constant name="TrackerSupportDiskEndcapP_rmin"        value="TrackerSupportCylEndcapP_rmin2" />
-    <constant name="TrackerSupportDiskEndcapP_rmax"        value="778.3*mm" /> <comment> Ref: Services Material Budget 24.03.04..stp -- 778.33 mm </comment>
+    <constant name="TrackerSupportDiskEndcapP_rmax"        value="913.6*mm" /> <comment> Ref: Services Material Budget 24.03.13.stp </comment>
     <constant name="TrackerSupportDiskEndcapP_z"           value="0.5*(TrackerSupportDiskEndcapP_zmin + TrackerSupportDiskEndcapP_zmax)" />
 
     <comment> Inner detector support cylinder </comment>
