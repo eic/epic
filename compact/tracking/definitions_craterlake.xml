@@ -57,7 +57,7 @@
 
     <comment> Service/Support setup </comment>
     <constant name="TrackerSupportCyl_rmin1"          value="TrackerEndcapDisk_rmax + 2*cm"/> <comment> Ref: Services Material Budget 24.03.04..stp -- 450.00 mm </comment>
-    <constant name="TrackerSupportCylEndcapN_rmin2"   value="BackwardPIDRegion_rmax + 4*cm"/> <comment> Ref: Services Material Budget 24.03.13.stp -- 670.00 mm </comment>
+    <constant name="TrackerSupportCylEndcapN_rmin2"   value="BackwardPIDRegion_rmax + 4.5*cm"/> <comment> Ref: Services Material Budget 24.03.13.stp -- 670.00 mm, nudged 5 mm </comment>
     <constant name="TrackerSupportCylEndcapP_rmin2"   value="ForwardTOFRegion_maxR + 2*cm"/> <comment> Ref: Services Material Budget 24.03.04..stp -- 520.00 mm </comment>
     <comment> These may belong in definitions.xml </comment>
     <constant name="InnerTrackerEndcapP_zmax"        value="CentralTrackingRegionP_zmax"/>
