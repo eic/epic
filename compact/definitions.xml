@@ -142,12 +142,11 @@ The unused IDs below are saved for future use.
     <constant name="TrackerEndcapP_6_ID"          value="83"/>
     <constant name="TrackerSupport_0_ID"          value="84"/>
     <constant name="TrackerSupport_1_ID"          value="85"/>
-    <constant name="MPGDDIRC_0_ID"                value="86"/>
 
     <documentation>
-    #### (87-99) Reserved IDs
+    #### (86-99) Reserved IDs
 
-    - Unused IDs: 87-89
+    - Unused IDs: 86-89
     TBD
     </documentation>
     <documentation>
@@ -620,6 +619,7 @@ Service gaps in FW direction (before endcapP ECAL) and BW direction (before endc
 
     <constant name="HcalBarrel_thickness"     value="86.18*cm"/>
     <constant name="HcalBarrel_rmin1"         value="183.85*cm"/>
+    <constant name="HcalBarrel_rmin"          value="HcalBarrel_rmin1"/><!--DEPRECATED-->
     <constant name="HcalBarrel_rmin2"         value="HcalBarrel_rmin1 + 10.4*cm"/>
     <constant name="HcalBarrel_rmax"          value="HcalBarrel_rmin1 + HcalBarrel_thickness"/>
     <constant name="HcalBarrelForward_zmax"   value="319.625*cm"/>

@@ -69,22 +69,6 @@
   </define>
 
   <materials>
-    <comment>
-      Only non optical material variants are here.
-      See optical_materials.xml for optical ones
-      -
-    </comment>
-    <material name="Epotek">
-      <D type="density" value="1.2" unit="g/cm3"/>
-      <composite n="5" ref="H"/>
-      <composite n="3" ref="C"/>
-      <composite n="2" ref="O"/>
-    </material>
-    <material name="Nlak33a">
-      <D type="density" value="4.220" unit="g/cm3"/>
-      <composite n="1" ref="Si"/>
-      <composite n="2" ref="O"/>
-    </material>
   </materials>
 
   <limits>
@@ -129,13 +113,13 @@
           repeat_y="DIRCBar_count_y"
           repeat_z="DIRCBar_count_z"
           gap="DIRCBar_gap"
-          material="Quartz"
+          material="QuartzOptical"
           vis="DIRCBar"
         />
 
         <glue
           thickness="DIRCGlue_thickness"
-          material="Epotek"
+          material="EpotekOptical"
           vis="DIRCGlue"
         />
 
@@ -147,9 +131,9 @@
           thickness="DIRCLens_thickness"
           r1="DIRCLens_r1"
           r2="DIRCLens_r2"
-          material1="Quartz"
-          material2="Sapphire"
-          material3="Quartz"
+          material1="QuartzOptical"
+          material2="SapphireOptical"
+          material3="QuartzOptical"
           vis1="DIRCLens1"
           vis2="DIRCLens2"
           vis3="DIRCLens3"
@@ -161,7 +145,7 @@
           angle="DIRCPrism_angle"
           long_edge="DIRCPrism_long_edge"
           short_edge="DIRCPrism_short_edge"
-          material="Quartz"
+          material="QuartzOptical"
           vis="DIRCPrism"
         />
 
@@ -169,7 +153,7 @@
           height="DIRCMCP_height"
           width="DIRCMCP_width"
           thickness="DIRCMCP_thickness"
-          material="Quartz"
+          material="QuartzOptical"
           vis="DIRCMCP"
         />
       </module>
