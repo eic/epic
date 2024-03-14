@@ -1,0 +1,108 @@
+name: linux-ghcr
+
+on:
+  push:
+    branches:
+      - main
+    tags:
+      - '*'
+  pull_request:
+  workflow_dispatch:
+    inputs:
+      github_repository:
+        description: 'Submitting GitHub repository'
+        required: false
+        default: ''
+        type: string
+      github_sha:
+        description: 'Submitting GitHub sha'
+        required: false
+        default: ''
+        type: string
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  xmllint-before-build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    - run: |
+        sudo apt-get update
+        sudo apt-get install -y libxml2-utils
+        find compact/ -name "*.xml" -exec xmllint {} \; > /dev/null
+  list-detector-configs:
+    runs-on: ubuntu-latest
+    outputs:
+      configs: ${{ steps.list-detector-configs.outputs.configs }}
+    steps:
+    - uses: actions/checkout@v3
+    - id: list-detector-configs
+      run: |
+        CONFIGS=$((
+          echo '{ "detector_config": ['
+          ls -1 configurations | xargs | sed 's/\.yml//g;s/ /, /g' | xargs -n 1 echo | sed -r 's/^([^,]*)(,?)$/"\1"\2/'
+          echo ' ]}'
+        ) | jq -c .)
+        echo "configs=$CONFIGS" | tee -a $GITHUB_OUTPUT
+  build:
+    runs-on: ubuntu-latest
+    container:
+      image: ghcr.io/eic/jug_xl:nightly
+    needs: xmllint-before-build
+    strategy:
+      matrix:
+        include:
+          - CC: gcc
+            CXX: g++
+          - CC: clang
+            CXX: clang++
+    env:
+      PREFIX: ${{ github.workspace }}/install
+    steps:
+    - uses: actions/checkout@v3
+    - name: Prepare ccache timestamp
+      id: ccache_cache_timestamp
+      run: |
+        echo "timestamp=$(date --iso-8601=minutes)" >> $GITHUB_OUTPUT
+    - name: Retrieve ccache cache files
+      uses: actions/cache@v3
+      with:
+        path: .ccache
+        key: ccache-${{ matrix.CC }}-${{ github.ref_name }}-${{ steps.ccache_cache_timestamp.outputs.timestamp }}
+        restore-keys: |
+             ccache-${{ matrix.CC }}-${{ github.ref_name }}-
+             ccache-${{ matrix.CC }}-
+             ccache-
+    - name: Configure ccache
+      run: |
+        mkdir -p ~/.ccache/
+        echo "cache_dir=${{ github.workspace }}/.ccache" >> ~/.ccache/ccache.conf
+        echo "max_size=500MB" >> ~/.ccache/ccache.conf
+        echo "compression=true" >> ~/.ccache/ccache.conf
+    - name: Report container version info
+      run: |
+        eic-info
+    - name: Build detector geometry
+      run: |
+        CC=${{ matrix.CC }} CXX=${{ matrix.CXX }} cmake -B build -S . -DCMAKE_INSTALL_PREFIX=${PREFIX} -DCMAKE_C_COMPILER_LAUNCHER=ccache -DCMAKE_CXX_COMPILER_LAUNCHER=ccache
+        cmake --build build -- -k -j 2 install
+    - uses: actions/upload-artifact@v3
+      with:
+        name: build-${{ matrix.CC }}-full-ghcr
+        path: install/
+        if-no-files-found: error
+    - run: |
+        source install/setup.sh
+        sed -i 's%\(<fiber\|<lens\)%<comment>\1%g; s%\(/fiber>\|/lens>\)%\1</comment>%g' \
+          ${DETECTOR_PATH}/compact/ecal/barrel_interlayers.xml \
+          ${DETECTOR_PATH}/compact/ecal/forward_scfi.xml \
+          ${DETECTOR_PATH}/compact/far_forward/ZDC_Ecal_WSciFi.xml \
+          ${DETECTOR_PATH}/compact/pid/mrich.xml
+    - uses: actions/upload-artifact@v3
+      with:
+        name: build-${{ matrix.CC }}-fast-ghcr
+        path: install/
+        if-no-files-found: error
