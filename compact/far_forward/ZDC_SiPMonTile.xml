@@ -72,7 +72,7 @@
     </documentation>
     <detector
       id="HcalFarForwardZDC_SiPMonTile_ID"
-      name="ZDC SiPM-on-Tile Hcal"
+      name="HcalFarForwardZDC_SiPMonTile"
       type="ZeroDegreeCalorimeterSiPMonTile"
       readout="HcalFarForwardZDCHits"
       vis="InvisibleWithDaughters"
