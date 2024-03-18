@@ -283,12 +283,7 @@ jobs:
               unset detectors[$d]
             fi
           done
-          # Export to STEP file per detector
-          for d in ${!detectors[@]} ; do
-            echo "Converting $d"
-            npdet_to_step part $(echo ${detectors[$d]} $d) -o ${{matrix.detector_config}}_$d $DETECTOR_PATH/${{matrix.detector_config}}.xml 2>&1 | sed '/TGeoMatrix::dtor/d'
-          done
-          # Finally export to one STEP file
+          # Export to one STEP file
           npdet_to_step part $(for d in ${!detectors[@]} ; do echo ${detectors[$d]} $d ; done) -o ${{matrix.detector_config}} $DETECTOR_PATH/${{matrix.detector_config}}.xml 2>&1 | sed '/TGeoMatrix::dtor/d'
     - uses: actions/upload-artifact@v4
       with:
