@@ -452,7 +452,7 @@ Examples:
     <constant name="ForwardTOFRegion_length"      value="15.0*cm" />
 
     <comment> Forward RICH region </comment>
-    <constant name="ForwardRICHRegion_zmin"       value="ForwardPIDRegion_zmin + ForwardTOFRegion_length + 3.*cm" /> <!-- 3cm spacing since https://indico.bnl.gov/event/22417/ -->
+    <constant name="ForwardRICHRegion_zmin"       value="ForwardPIDRegion_zmin + ForwardTOFRegion_length" />
     <constant name="ForwardRICHRegion_length"     value="ForwardPIDRegion_length - ForwardTOFRegion_length" />
     <comment> Tangent of the opening angle at the front and back of the RICH </comment>
     <constant name="ForwardRICHRegion_tan1"        value="CentralTrackingRegionP_tan * 0.88" />
