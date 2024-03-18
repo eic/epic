@@ -271,6 +271,7 @@ jobs:
         run: |
           # First get all detectors (except world)
           declare -A detectors
+          export detectors
           while read d ; do detectors[$d]='-l 1' ; done <<< $(npdet_to_step list $DETECTOR_PATH/${{matrix.detector_config}}.xml  | sed '/world/d;s/.*(vol: \(.*\)).*/\1/g')
           # Then tweak the levels (default is 1)
           detectors[HcalEndcapN]='-l 1'
