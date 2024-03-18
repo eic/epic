@@ -285,7 +285,7 @@ jobs:
           for d in ${!detectors[@]} ; do
             echo "Converting $d"
             npdet_to_step part $(echo ${detectors[$d]} $d) -o ${{matrix.detector_config}}_$d.step $DETECTOR_PATH/${{matrix.detector_config}}.xml
-          donee
+          done
           # Finally export to one STEP file
           npdet_to_step part $(for d in ${!detectors[@]} ; do echo ${detectors[$d]} $d ; done) -o ${{matrix.detector_config}}.step $DETECTOR_PATH/${{matrix.detector_config}}.xml
     - uses: actions/upload-artifact@v4
