@@ -269,6 +269,7 @@ jobs:
         network_types: "none"
         setup: install/setup.sh
         run: |
+          cat ${GITHUB_WORKSPACE}/action_payload.sh
           # First get all detectors (except world)
           declare -A detectors
           export detectors
