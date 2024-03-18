@@ -255,7 +255,7 @@ jobs:
       - build
     strategy:
       matrix:
-        detector_config: [epic_craterlake]
+        detector_config: [epic_craterlake_no_bhcal]
     steps:
     - uses: actions/checkout@v4
     - uses: actions/download-artifact@v4
