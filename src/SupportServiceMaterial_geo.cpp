@@ -44,8 +44,8 @@ namespace {
       const double thickness = getAttrOrDefault(x_child, _U(thickness), x_support.thickness());
       const double length    = getAttrOrDefault(x_child, _U(length), x_support.length());
       const double rmin      = getAttrOrDefault(x_child, _U(rmin), x_support.rmin()) + offset;
-      const double phimin    = getAttrOrDefault(x_child, _Unicode(phimin), 0.0 * deg);
-      const double phimax    = getAttrOrDefault(x_child, _Unicode(phimax), 360.0 * deg);
+      const double phimin    = getAttrOrDefault(x_child, _Unicode(phimin), getAttrOrDefault(x_support, _Unicode(phimin),   0.0 * deg));
+      const double phimax    = getAttrOrDefault(x_child, _Unicode(phimax), getAttrOrDefault(x_support, _Unicode(phimax), 360.0 * deg));
       solid                  = Tube(rmin, rmin + thickness, length / 2, phimin, phimax);
     }
     // A disk is a cylinder, constructed differently
@@ -53,8 +53,8 @@ namespace {
       const double thickness = getAttrOrDefault(x_child, _U(thickness), x_support.thickness());
       const double rmin      = getAttrOrDefault(x_child, _U(rmin), x_support.rmin());
       const double rmax      = getAttrOrDefault(x_child, _U(rmax), x_support.rmax());
-      const double phimin    = getAttrOrDefault(x_child, _Unicode(phimin), 0.0 * deg);
-      const double phimax    = getAttrOrDefault(x_child, _Unicode(phimax), 360.0 * deg);
+      const double phimin    = getAttrOrDefault(x_child, _Unicode(phimin), getAttrOrDefault(x_support, _Unicode(phimin),   0.0 * deg));
+      const double phimax    = getAttrOrDefault(x_child, _Unicode(phimax), getAttrOrDefault(x_support, _Unicode(phimax), 360.0 * deg));
       pos3D                  = pos3D + Position(0, 0, -x_support.thickness() / 2 + thickness / 2 + offset);
       solid                  = Tube(rmin, rmax, thickness / 2, phimin, phimax);
     } else if (type == "Cone") {
