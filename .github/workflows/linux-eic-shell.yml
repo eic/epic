@@ -286,19 +286,19 @@ jobs:
           # Export to STEP file per detector
           for d in ${!detectors[@]} ; do
             echo "Converting $d"
-            npdet_to_step part $(echo ${detectors[$d]} $d) -o ${{matrix.detector_config}}_$d.step $DETECTOR_PATH/${{matrix.detector_config}}.xml 2>&1 | sed '/TGeoMatrix::dtor/d'
+            npdet_to_step part $(echo ${detectors[$d]} $d) -o ${{matrix.detector_config}}_$d $DETECTOR_PATH/${{matrix.detector_config}}.xml 2>&1 | sed '/TGeoMatrix::dtor/d'
           done
           # Finally export to one STEP file
-          npdet_to_step part $(for d in ${!detectors[@]} ; do echo ${detectors[$d]} $d ; done) -o ${{matrix.detector_config}}.step $DETECTOR_PATH/${{matrix.detector_config}}.xml 2>&1 | sed '/TGeoMatrix::dtor/d'
+          npdet_to_step part $(for d in ${!detectors[@]} ; do echo ${detectors[$d]} $d ; done) -o ${{matrix.detector_config}} $DETECTOR_PATH/${{matrix.detector_config}}.xml 2>&1 | sed '/TGeoMatrix::dtor/d'
     - uses: actions/upload-artifact@v4
       with:
-        name: ${{matrix.detector_config}}.step
-        path: ${{matrix.detector_config}}.step
+        name: ${{matrix.detector_config}}.stp
+        path: ${{matrix.detector_config}}.stp
         if-no-files-found: error
     - uses: actions/upload-artifact@v4
       with:
-        name: ${{matrix.detector_config}}_detectors.step
-        path: ${{matrix.detector_config}}_*.step
+        name: ${{matrix.detector_config}}_detectors.stp
+        path: ${{matrix.detector_config}}_*.stp
         if-no-files-found: error
 
   dump-constants:
