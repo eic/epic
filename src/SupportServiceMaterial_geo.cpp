@@ -71,12 +71,48 @@ namespace {
       const double rmin2             = base_rmin2 + transverse_offset;
       const double rmax1             = rmin1 + transverse_thickness;
       const double rmax2             = rmin2 + transverse_thickness;
-      if (x_child.hasAttr(_Unicode(phimin)) || x_child.hasAttr(_Unicode(phimax))) {
-        const double phimin = getAttrOrDefault<double>(x_child, _Unicode(phimin), 0.0 * deg);
-        const double phimax = getAttrOrDefault<double>(x_child, _Unicode(phimax), 360.0 * deg);
-        solid               = ConeSegment(length / 2, rmin1, rmax1, rmin2, rmax2, phimin, phimax);
+      // Allow for optional hard rmin/rmax cutoffs
+      const double rmin = getAttrOrDefault(x_child, _U(rmin), getAttrOrDefault(x_support, _Unicode(rmin), min(rmin1,rmin2)));
+      const double rmax = getAttrOrDefault(x_child, _U(rmax), getAttrOrDefault(x_support, _Unicode(rmax), max(rmax1,rmax2)));
+      if (rmin > min(rmax1,rmax2)) {
+        printout(ERROR, x_det.nameStr(), "%s: rmin (%f mm) must be smaller than the smallest rmax (%f %f mm)", x_support.nameStr().c_str(), rmin/mm, rmax1/mm, rmax2/mm);
+        std::exit(1);
+      }
+      if (rmax < max(base_rmin1,base_rmin2)) {
+        printout(ERROR, x_det.nameStr(), "%s: rmax (%f mm) must be larger than the largest rmin (%f %f mm)", x_support.nameStr().c_str(), rmax/mm, base_rmin1/mm, base_rmin2/mm);
+        std::exit(1);
+      }
+      const double zmin = - length / 2 + length * (rmin - rmin1) / (rmin2 - rmin1);
+      const double zmax = + length / 2 - length * (rmax2 - rmax) / (rmax2 - rmax1);
+      const auto rmin_at = [&](const double z) { return rmin1 + (z + length/2) * (rmin2 - rmin1) / length; };
+      const auto rmax_at = [&](const double z) { return rmax1 + (z + length/2) * (rmax2 - rmax1) / length; };
+      // Allow for optional phimin/phimax
+      const double phimin = getAttrOrDefault<double>(x_child, _Unicode(phimin), getAttrOrDefault(x_support, _Unicode(phimin),   0.0 * deg));
+      const double phimax = getAttrOrDefault<double>(x_child, _Unicode(phimax), getAttrOrDefault(x_support, _Unicode(phimax), 360.0 * deg));
+      const double deltaphi = phimax - phimin;
+      if (fabs(zmin) >= length / 2 - std::numeric_limits<double>::epsilon() &&
+          fabs(zmax) >= length / 2 - std::numeric_limits<double>::epsilon()) {
+        if (fabs(phimax - phimin - 360*deg) < std::numeric_limits<double>::epsilon()) {
+          solid = Cone(length / 2, rmin1, rmax1, rmin2, rmax2);
+        } else {
+          solid = ConeSegment(length / 2, rmin1, rmax1, rmin2, rmax2, phimin, phimax);
+        }
       } else {
-        solid = Cone(length / 2, rmin1, rmax1, rmin2, rmax2);
+        std::vector<double>
+          v_rmin{max(rmin1, rmin), max(rmin2, rmin)},
+          v_rmax{min(rmax1, rmax), min(rmax2, rmax)},
+          v_z{-length / 2, +length / 2};
+        if (- length / 2 < zmax && zmax < +length / 2) {
+          v_rmin.insert(std::next(v_rmin.begin()), rmin_at(zmax));
+          v_rmax.insert(std::next(v_rmax.begin()), rmax_at(zmax));
+          v_z.insert(std::next(v_z.begin()), zmax);
+        }
+        if (- length / 2 < zmin && zmin < +length / 2) {
+          v_rmin.insert(std::next(v_rmin.begin()), rmin_at(zmin));
+          v_rmax.insert(std::next(v_rmax.begin()), rmax_at(zmin));
+          v_z.insert(std::next(v_z.begin()), zmin);
+        }
+        solid = Polycone(phimin, deltaphi, v_rmin, v_rmax, v_z);
       }
     } else {
       printout(ERROR, x_det.nameStr(), "Unknown support type: %s", type.c_str());

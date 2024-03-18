@@ -330,6 +330,7 @@
         vis="TrackerSupportVis"
         rmin1="InnerSupportCone_rmin2"
         rmin2="InnerSupportCone_rmin1"
+        rmax="TrackerSupportCyl_rmin1+TrackerSupportCylN_thickness1A"
         length="InnerSupportCone_length"
         thickness="InnerSupportConeN_thickness">
           <position x="0*cm" y="0*cm" z="-InnerSupportCone_z" />
@@ -341,6 +342,7 @@
         vis="TrackerSupportVis"
         rmin1="InnerSupportCone_rmin1"
         rmin2="InnerSupportCone_rmin2"
+        rmax="TrackerSupportCyl_rmin1+TrackerSupportCylP_thickness1A"
         length="InnerSupportCone_length"
         thickness="InnerSupportConeP_thickness">
           <position x="0*cm" y="0*cm" z="InnerSupportCone_z" />
