@@ -284,6 +284,7 @@ jobs:
           # Export to STEP file per detector
           for d in ${!detectors[@]} ; do
             echo "Converting $d"
+            echo npdet_to_step part $(echo ${detectors[$d]} $d) -o ${{matrix.detector_config}}_$d.step $DETECTOR_PATH/${{matrix.detector_config}}.xml
             npdet_to_step part $(echo ${detectors[$d]} $d) -o ${{matrix.detector_config}}_$d.step $DETECTOR_PATH/${{matrix.detector_config}}.xml
           done
           # Finally export to one STEP file
