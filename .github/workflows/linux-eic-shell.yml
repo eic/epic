@@ -284,10 +284,10 @@ jobs:
           # Export to STEP file per detector
           for d in ${!detectors[@]} ; do
             echo "Converting $d"
-            npdet_to_step part $(echo ${detectors[$d]} $d) -o ${{matrix.detector_config}}_$d.step $DETECTOR_PATH/${{matrix.detector_config}}.xml 2>&1 | grep -v ^Warning
-          done
+            npdet_to_step part $(echo ${detectors[$d]} $d) -o ${{matrix.detector_config}}_$d.step $DETECTOR_PATH/${{matrix.detector_config}}.xml
+          donee
           # Finally export to one STEP file
-          npdet_to_step part $(for d in ${!detectors[@]} ; do echo ${detectors[$d]} $d ; done) -o ${{matrix.detector_config}}.step $DETECTOR_PATH/${{matrix.detector_config}}.xml 2>&1 | grep -v ^Warning
+          npdet_to_step part $(for d in ${!detectors[@]} ; do echo ${detectors[$d]} $d ; done) -o ${{matrix.detector_config}}.step $DETECTOR_PATH/${{matrix.detector_config}}.xml
     - uses: actions/upload-artifact@v4
       with:
         name: ${{matrix.detector_config}}.step
