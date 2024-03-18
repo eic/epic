@@ -31,25 +31,6 @@ using namespace dd4hep;
 //          <Y step="" min="" max=""/>
 //          <Z step="" min="" max=""/>
 
-// In DD4hep 1.26, the name for the `field_type` enum changed (from `type`).
-#if DD4HEP_VERSION_GE(1, 26)
-#define DD4HEP_FIELD_TYPE field_type
-#else
-#define DD4HEP_FIELD_TYPE type
-#endif
-
-// This allows us to specify the name of the variable by hand, when patching
-// the previous versions, by setting `DD4HEP_FIELD_TYPE_OVERRIDE`.
-// TODO remove after DD4hep 1.26 release
-#define XSTR(x) STR(x)
-#define STR(x) #x
-#ifdef DD4HEP_FIELD_TYPE_OVERRIDE
-#undef DD4HEP_FIELD_TYPE
-#define DD4HEP_FIELD_TYPE DD4HEP_FIELD_TYPE_OVERRIDE
-#pragma message("DD4HEP_FIELD_TYPE overridden as " XSTR(DD4HEP_FIELD_TYPE))
-#endif
-#pragma message("DD4HEP_FIELD_TYPE is " XSTR(DD4HEP_FIELD_TYPE))
-
 // implementation of the field map
 class FieldMapB : public dd4hep::CartesianField::Object {
 
@@ -100,11 +81,11 @@ FieldMapB::FieldMapB(const std::string& field_type_str, const std::string& coord
 
   // set type
   if (ftype == "magnetic") {
-    DD4HEP_FIELD_TYPE = CartesianField::MAGNETIC;
+    field_type = CartesianField::MAGNETIC;
   } else if (ftype == "electric") {
-    DD4HEP_FIELD_TYPE = CartesianField::ELECTRIC;
+    field_type = CartesianField::ELECTRIC;
   } else {
-    DD4HEP_FIELD_TYPE = CartesianField::UNKNOWN;
+    field_type = CartesianField::UNKNOWN;
     printout(ERROR, "FieldMap","Unknown field type " + ftype);
   }
 
