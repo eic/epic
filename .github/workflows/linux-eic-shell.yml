@@ -284,8 +284,7 @@ jobs:
             fi
           done
           # Export to one STEP file
-          echo npdet_to_step part $(for d in ${!detectors[@]} ; do echo ${detectors[$d]} $d ; done) -o ${{matrix.detector_config}} $DETECTOR_PATH/${{matrix.detector_config}}.xml
-          npdet_to_step part $(for d in ${!detectors[@]} ; do echo ${detectors[$d]} $d ; done) -o ${{matrix.detector_config}} $DETECTOR_PATH/${{matrix.detector_config}}.xml 2>&1 | sed '/TGeoMatrix::dtor/d'
+          npdet_to_step $(for d in ${!detectors[@]} ; do echo part ${detectors[$d]} $d ; done) -o ${{matrix.detector_config}} $DETECTOR_PATH/${{matrix.detector_config}}.xml 2>&1 | sed '/TGeoMatrix::dtor/d'
     - uses: actions/upload-artifact@v4
       with:
         name: ${{matrix.detector_config}}.stp
