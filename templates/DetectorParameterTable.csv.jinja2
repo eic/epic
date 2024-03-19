@@ -7,7 +7,7 @@ HADRON DIRECTION END CAP,Service Gap,,{{ForwardServiceGap_length}},,,,{{ForwardS
 CENTRAL DETECTOR,Dual RICH,,{{DRICH_length}},{{DRICH_rmin0}},{{DRICH_rmax2}},,{{DRICH_zmin}},{{DRICH_zmin+DRICH_length}}
 CENTRAL DETECTOR,Dual RICH,Detector Section,,{{DRICH_rmin0}},,,,
 CENTRAL DETECTOR,Dual RICH,Aerogel Section,,{{DRICH_rmin0}},,,,
-CENTRAL DETECTOR,HD Time of Flight/Tracker,,,,,,,
+CENTRAL DETECTOR,HD Time of Flight/Tracker,,{{ForwardTOFRegion_length}},{{ForwardTOFRegion_minR}},{{ForwardTOFRegion_maxR}},{{ForwardTOFRegion_zmin}},{{ForwardTOFRegion_zmin}},{{ForwardTOFRegion_zmax}}
 CENTRAL DETECTOR,Barrel Flux Return,,,,,,,
 CENTRAL DETECTOR,Barrel Hadron Calorimeter,,{{HcalBarrel_length2}},{{HcalBarrel_rmin1}},{{HcalBarrel_rmax}},{{HcalBarrel_offset}},-{{HcalBarrelBackward_zmax-HcalBarrel_offset}},{{HcalBarrelForward_zmax+HcalBarrel_offset}}
 CENTRAL DETECTOR,Barrel Hadron Calorimeter,HD Section,,{{HcalBarrel_length2-HcalBarrel_length1}},{{HcalBarrel_rmin2}},{{HcalBarrel_rmax}},{{HcalBarrel_length1/4+HcalBarrel_offset}},{{HcalBarrel_length1/2+HcalBarrel_offset}},{{HcalBarrelForward_zmax+HcalBarrel_offset}}
@@ -31,7 +31,7 @@ CENTRAL DETECTOR,Integrated DIRC/MPGD Detector,Dirc Bar/MPGD  Support,,,,,,
 CENTRAL DETECTOR,Integrated DIRC/MPGD Detector,DIRC Readout Support,{{DIRCReadout_length}},,,,,
 CENTRAL DETECTOR,Integrated DIRC/MPGD Detector,DIRC Bar Box,{{DIRCBar_length}},,,,,
 CENTRAL DETECTOR,Integrated DIRC/MPGD Detector,Inner MPGD,,,,,,
-CENTRAL DETECTOR,Barrel Time of Flight/Tracker,,{{BarrelTOF_length}},{{BarrelTOF_rmin}},{{BarrelTOF_rmax}},,,
+CENTRAL DETECTOR,Barrel Time of Flight/Tracker,,{{BarrelTOF_length}},{{BarrelTOF_rmin}},{{BarrelTOF_rmax}},{{BarrelTOF_zoffset}},-{{BarrelTOF_zmin}},{{BarrelTOF_zmax}}
 CENTRAL DETECTOR,HD MPGD 2,,{{ForwardMPGD_AllowedSpace}},{{ForwardMPGDLayer2_rmin}},{{ForwardMPGDLayer2_rmax}},{{ForwardMPGDLayer2_zmin}},{{ForwardMPGDLayer2_zmin}},{{ForwardMPGDLayer2_zmin+ForwardMPGD_AllowedSpace}}
 CENTRAL DETECTOR,HD MPGD 1,,{{ForwardMPGD_AllowedSpace}},{{ForwardMPGDLayer1_rmin}},{{ForwardMPGDLayer1_rmax}},{{ForwardMPGDLayer1_zmin}},{{ForwardMPGDLayer1_zmin}},{{ForwardMPGDLayer1_zmin+ForwardMPGD_AllowedSpace}}
 CENTRAL DETECTOR,Inner Tracker (Micromegas),,,,,,,
