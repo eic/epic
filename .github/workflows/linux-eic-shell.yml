@@ -276,13 +276,6 @@ jobs:
           while read d ; do detectors[$d]='-l 3' ; done <<< $(npdet_to_step list $DETECTOR_PATH/${{matrix.detector_config}}.xml  | sed '/world/d;s/.*(vol: \(.*\)).*/\1/g')
           # Then tweak the levels (default is 1)
           detectors[LFHCAL]='-l 2'
-          # Remove ACTS subassemblies
-          for d in ${!detectors[@]} ; do
-            if [[ $d =~ .*SubAssembly$ ]] ; then
-              echo "Removing $d"
-              unset detectors[$d]
-            fi
-          done
           # Export to one STEP file
           npdet_to_step $(for d in ${!detectors[@]} ; do echo part ${detectors[$d]} $d ; done) -o ${{matrix.detector_config}} $DETECTOR_PATH/${{matrix.detector_config}}.xml 2>&1 | sed '/TGeoMatrix::dtor/d'
     - uses: actions/upload-artifact@v4
