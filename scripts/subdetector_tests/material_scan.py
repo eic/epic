@@ -10,11 +10,8 @@
 '''
 
 import os
-import math
 import json
-import fnmatch
 import argparse
-import subprocess
 import pandas as pd
 import numpy as np
 from io import StringIO
@@ -195,6 +192,14 @@ if __name__ == '__main__':
             default='EcalBarrelScFi,EcalEndcapN,EcalEndcapP,SolenoidBarrel,HcalBarrel,HcalEndcapN,HcalEndcapP',
             help='Names of the interested detectors, separated by \",\". Use \"all\" for all detectors.'
             )
+    # detector name map
+    # convert detector names in compact file {xml_name_1: det_name_1, ...}
+    # it can also group several xml components into one name {xml_name_1: det_name_1, xml_name_2: det_name_1, ...}
+    parser.add_argument(
+            '--dname-map',
+            default=None,
+            help='A json file that contains the detector name map.'
+            )
     args = parser.parse_args()
 
     if not os.path.exists(args.compact):
@@ -246,13 +251,27 @@ if __name__ == '__main__':
     th_corr.scan_missing_thickness(desc, start_point, np.array(start_point) + np.array([100., 50., 0.]),
                                    dz=0.0001, epsilon=args.epsilon)
 
+
+    # detector name map
+    DNAME_MAP = dict()
+    if args.dname_map is not None:
+        with open(args.dname_map) as f:
+            dnames = json.load(f)
+            DNAME_MAP.update(dnames)
+
     # array for detailed data
     # number of materials cannot be pre-determined, so just assign a large number to be safe
-    vals = np.zeros(shape=(len(etas), len(dets) + 1, 50))
-    dets2 = dets + [OTHERS_NAME]
+    dn_map = {dn: dn for dn in np.unique(dets)}
+    dn_map.update(DNAME_MAP)
+    print('Detector Name Map:')
+    print(json.dumps(dn_map, sort_keys=True, indent=4))
+    dets2 = pd.Series(dets).map(dn_map).unique()
+    if OTHERS_NAME not in dets2:
+        dets2 = np.append(dets2, [OTHERS_NAME])
     det_mats = {d: [] for d in dets2}
     vt = ALLOWED_VALUE_TYPES[args.value_type]
 
+    vals = np.zeros(shape=(len(etas), len(dets2), 50))
     for i, eta in enumerate(etas):
         if i % PROGRESS_STEP == 0:
             print('Scanned {:d}/{:d} for {:.2f} <= eta <= {:.2f}'.format(i, len(etas), etas[0], etas[-1]),
@@ -263,13 +282,16 @@ if __name__ == '__main__':
         end_z = path_r*np.sinh(eta)
         # print('({:.2f}, {:.2f}, {:.2f})'.format(end_x, end_y, end_z))
         dfr = material_scan(desc, start_point, (end_x, end_y, end_z), epsilon=args.epsilon, int_dets=dets, thickness_corrector=th_corr)
+        dn_map = {dn: dn for dn in dfr['detector'].unique()}
+        dn_map.update(DNAME_MAP)
+        dfr['det_name'] = dfr['detector'].map(dn_map)
 
         # aggregated values for detectors
-        x0_vals = dfr.groupby('detector')[vt[0]].sum().to_dict()
+        x0_vals = dfr.groupby('det_name')[vt[0]].sum().to_dict()
         for j, det in enumerate(dets2):
             vals[i, j, 0] = x0_vals.get(det, 0.)
             # update material dict
-            dfd = dfr[dfr['detector'] == det]
+            dfd = dfr[dfr['det_name'] == det]
             x0_mats = dfd.groupby('material')[vt[0]].sum()
             for mat in x0_mats.index:
                 if mat not in det_mats[det]:
@@ -331,7 +353,7 @@ if __name__ == '__main__':
     plt.close(fig)
 
     # detailed plot for each detector
-    for j, det in enumerate(dets):
+    for j, det in enumerate(dets2):
         dmats = det_mats[det]
         dfa = pd.DataFrame(data=vals[:, j, 1:len(dmats)+1], columns=dmats, index=etas)
         if not len(dmats):
