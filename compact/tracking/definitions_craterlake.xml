@@ -14,6 +14,7 @@
     <comment> Main parameters for the vertex tracker </comment>
     <constant name="VertexBarrel_length"             value="270.0*mm"/>
     <constant name="VertexBarrel_rmin"               value="3.6*cm"/>
+       <!-- <constant name="VertexBarrel_rmin"               value="3.8*cm"/>  Changing for better fitting of sensors-->
     <constant name="VertexBarrel_rmax"               value="12.6*cm"/>
 
     <comment> Main parameters for the SiBarrel layer geometry </comment>
