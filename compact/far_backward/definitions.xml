@@ -5,8 +5,8 @@
 
     <comment> Connection to central beam pipe </comment>
 
-    <constant name="Center_Beampipe_End"  value="-4560.17*mm"/>
-    <constant name="Center_Beampipe_Rad"  value="47.60*mm"/>
+    <constant name="Center_Beampipe_End"  value="-5000.0 * mm"/>
+    <constant name="Center_Beampipe_Rad"  value="97.715/2 * mm"/>
 
     <constant name="Hadron_Beampipe_End"        value="-4490.35*mm"/>
     <constant name="Hadron_Beampipe_Rad"        value="50*mm"/>
@@ -14,21 +14,18 @@
 
     <comment> Electron magnet dimensions and positions </comment>
 
-    <constant name="Q1eR_InnerRadius"     value="67.5*mm"/>
-    <constant name="Q1eR_Length"          value="1.78*m"/>
-    <constant name="Q1eR_CenterPosition"  value="-6.2*m"/>
+    <constant name="Q1eR_InnerRadius"     value="57.70 * mm"/>
+    <constant name="Q1eR_Length"          value="1.80 * m"/>
+    <constant name="Q1eR_CenterPosition"  value="(-7.1+1.8/2) * m"/>
 
-    <constant name="Q2eR_InnerRadius"     value="78.0*mm"/>
-    <constant name="Q2eR_Length"          value="1.4*m"/>
-    <constant name="Q2eR_CenterPosition"  value="-8.3*m"/>
+    <constant name="Q2eR_InnerRadius"     value="66.30 * mm"/>
+    <constant name="Q2eR_Length"          value="1.4 * m"/>
+    <constant name="Q2eR_CenterPosition"  value="(-9.0 + 1.4/2) * m"/>
 
-    <constant name="B2AeR_InnerRadius"    value="90.0*mm"/>
-    <constant name="B2AeR_Length"         value="1.78*m"/>
-    <constant name="B2AeR_CenterPosition" value="-10.5*m"/>
-
-    <constant name="B2BeR_InnerRadius"    value="111.0*mm"/>
-    <constant name="B2BeR_Length"         value="3.18*m"/>
-    <constant name="B2BeR_CenterPosition" value="-13.275*m"/>
+    <constant name="B2BeR_InnerRadius"    value="100.0 * mm"/>
+    <constant name="B2BeR_Length"         value="5.500075391030 * m"/>
+    <constant name="B2BeR_CenterPosition" value="-15.000075390000 * m + B2BeR_Length/2"/>
+    <constant name="B2BeR_Edge"           value="5.0 * mm"/>
 
     <constant name="Q3eR_InnerRadius"     value="0.05*m"/>
     <constant name="Q3eR_Length"          value="0.6*m"/>
@@ -174,7 +171,7 @@
     <constant name="Vacuum_BB_MaxX"       value="0.5*m"/>
     <constant name="Vacuum_BB_MinY"       value="-1.5*m"/>
     <constant name="Vacuum_BB_MaxY"       value="1.5*m"/>
-    <constant name="Vacuum_BB_MinZ"       value="B2BeR_CenterPosition-B2BeR_Length/2"/>
+    <constant name="Vacuum_BB_MinZ"       value="B2BeR_CenterPosition-B2BeR_Length/2 - B2BeR_Edge"/>
     <constant name="Vacuum_BB_MaxZ"       value="Q3eR_EndZ"/>
 
     <constant name="Beam_Theta"           value="Q3eR_Theta"/>
@@ -310,4 +307,4 @@
     <constant name="LumiDirect_XY"        value="0.2*m"/>
     <constant name="LumiDirect_DZ"        value="0.2*m"/>
 
-</define>
+  </define>

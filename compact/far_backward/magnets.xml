@@ -13,33 +13,40 @@
     type="BeamPipeChain"
     wall_thickness="2*mm"
     vis="BeamPipeVis">
-      <pipe id="0" name="Pipe_to_Q1eR"
-        xcenter="0" zcenter="(Center_Beampipe_End + Q1eR_CenterPosition+Q1eR_Length/2)/2"
-        length="Center_Beampipe_End - (Q1eR_CenterPosition+Q1eR_Length/2)" theta="0"
-        rout1="Center_Beampipe_Rad" rout2="Q1eR_InnerRadius">
+      <pipe id="0" name="Pipe_0"
+        xcenter="0" zcenter="-7342.0 * mm + (Center_Beampipe_End + 7342.0 * mm)/2"
+        length="Center_Beampipe_End + 7342.0 * mm" theta="0"
+        rout1="Center_Beampipe_Rad" rout2="(111.40/2 + 2) * mm">
       </pipe>
-      <pipe id="1" name="Pipe_in_Q1eR"
-        xcenter="0" zcenter="Q1eR_CenterPosition"
-        length="Q1eR_Length" theta="0"
-        rout1="Q1eR_InnerRadius" rout2="Q1eR_InnerRadius">
+      <pipe id="1" name="Pipe_1"
+        xcenter="0" zcenter="-7405.0 * mm + (7405.00 - 7342.0)/2 * mm"
+        length="(7405.00 - 7342.0) * mm" theta="0"
+        rout1="(111.40/2 + 2) * mm" rout2="(128.60/2 + 2) * mm">
       </pipe>
-      <pipe id="2" name="Pipe_Q1eR_to_Q2eR"/>
-      <pipe id="3" name="Pipe_in_Q2eR"
-        xcenter="0" zcenter="Q2eR_CenterPosition"
-        length="Q2eR_Length" theta="0"
-        rout1="Q2eR_InnerRadius" rout2="Q2eR_InnerRadius">
+      <pipe id="2" name="Pipe_2"
+        xcenter="0" zcenter="-9288.0 * mm + (9288.0 - 7405.00)/2 * mm"
+        length="(9288.0 - 7405.00) * mm" theta="0"
+        rout1="(128.60/2 + 2) * mm" rout2="(128.60/2 + 2) * mm">
       </pipe>
-      <pipe id="4" name="Pipe_Q2eR_to_B2AeR"/>
-      <pipe id="5" name="Pipe_in_B2AeR"
-        xcenter="0" zcenter="B2AeR_CenterPosition"
-        length="B2AeR_Length" theta="0"
-        rout1="B2AeR_InnerRadius" rout2="B2AeR_InnerRadius">
+      <pipe id="3" name="Pipe_3"
+        xcenter="0" zcenter="-9364.0 * mm + (9364.0 - 9288.0)/2 * mm"
+        length="(9364.0 - 9288.0) * mm" theta="0"
+        rout1="(128.60/2 + 2)* mm" rout2="(154.00/2 + 2) * mm">
       </pipe>
-      <pipe id="6" name="Pipe_B2AeR_to_B2BeR"/>
-      <pipe id="7" name="Pipe_in_B2BeR"
-        xcenter="0" zcenter="B2BeR_CenterPosition"
-        length="B2BeR_Length" theta="0"
-        rout1="B2BeR_InnerRadius" rout2="B2BeR_InnerRadius">
+      <pipe id="4" name="Pipe_4"
+        xcenter="0" zcenter="-11364.0 * mm + (11364.0 - 9364.0)/2 * mm"
+        length="(11364.0 - 9364.0) * mm" theta="0"
+        rout1="(154.00/2 + 2) * mm" rout2="(154.00/2 + 2) * mm">
+      </pipe>
+      <pipe id="5" name="Pipe_5"
+        xcenter="0" zcenter="-11414.0 * mm + (11414.0 - 11364.0)/2 * mm"
+        length="(11414.0 - 11364.0) * mm" theta="0"
+        rout1="(154.00/2 + 2) * mm" rout2="(196.00/2 + 2) * mm">
+      </pipe>
+      <pipe id="6" name="Pipe_6"
+        xcenter="0" zcenter="(B2BeR_CenterPosition - B2BeR_Length/2 - B2BeR_Edge) + (abs(B2BeR_CenterPosition - B2BeR_Length/2 - B2BeR_Edge) - 11414.0 * mm)/2"
+        length="abs(B2BeR_CenterPosition - B2BeR_Length/2 - B2BeR_Edge) - 11414.0 * mm" theta="0"
+        rout1="(196.00/2 + 2) * mm" rout2="(196.00/2 + 2) * mm">
       </pipe>
     </detector>
 
@@ -56,13 +63,6 @@
       <placement  x="0" y="0" z="Q2eR_CenterPosition" theta="0*rad"/>
       <dimensions x="Q2eR_InnerRadius*4" y="Q2eR_InnerRadius*4" z="Q2eR_Length" r="1.5*Q2eR_InnerRadius"/>
       <apperture  x="Q2eR_InnerRadius*2" y="Q2eR_InnerRadius*2" r="Q2eR_InnerRadius"/>
-      <coil dx="2*cm" dy="1.5*cm" /><!--unchecked-->
-    </detector>
-
-    <detector name="Magnet_B2AeR" type="ip6_CylindricalDipoleMagnet" vis="FFMagnetVis">
-      <placement  x="0" y="0" z="B2AeR_CenterPosition" theta="0*rad"/>
-      <dimensions x="B2AeR_InnerRadius*4" y="B2AeR_InnerRadius*4" z="B2AeR_Length" r="1.5*B2AeR_InnerRadius"/>
-      <apperture  x="B2AeR_InnerRadius*2" y="B2AeR_InnerRadius*2" r="B2AeR_InnerRadius"/>
       <coil dx="2*cm" dy="1.5*cm" /><!--unchecked-->
     </detector>
 
@@ -108,12 +108,6 @@
       <position x="0" y="0" z="Q3eR_CenterPosition"/>
       <coefficient/>
       <coefficient coefficient="Q3eR_Gradient"/>
-    </field>
-
-    <field name="Magnet_B2AeR_Field" type="MultipoleMagnet">
-      <shape type="Tube" rmax="B2AeR_InnerRadius" dz="B2AeR_Length/2"/>
-      <position x="0" y="0" z="B2AeR_CenterPosition"/>
-      <coefficient coefficient="B2AeR_B"/>
     </field>
 
     <field name="Magnet_B2BeR_Field" type="MultipoleMagnet">

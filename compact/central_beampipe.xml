@@ -31,45 +31,60 @@
                 subtract_matter="false">
         <outgoing_lepton thickness="2.0*mm">
           <zplane z="BeampipeUpstreamStraightLength" OD="BeampipeOD"/>
-          <zplane z="2690.95 * mm" OD="85.616 * mm"/>
-          <zplane z="4560.17 * mm" OD="99.20 * mm"/>
+          <zplane z="5000.00 * mm" OD="97.715 * mm"/>
         </outgoing_lepton>
         <incoming_hadron thickness="1.65*mm"
                          crossing_angle="CrossingAngle">
           <!-- avoid overlap with IP beampipe by starting slightly displaced -->
           <zplane z="BeampipeUpstreamStraightLength + 0.5 * max(BeampipeOD, 24.714 * mm) * tan(abs(CrossingAngle))" OD="24.714 * mm"/>
-          <zplane z="2690.95 * mm" OD="24.714 * mm"/>
-          <zplane z="2710.75 * mm" OD="31.75 * mm"/>
+          <zplane z="2690.95 * mm" OD="31.75 * mm"/>
           <zplane z="2890.35 * mm" OD="31.75 * mm"/>
           <zplane z="2940.35 * mm" OD="44.45 * mm"/>
-          <zplane z="4490.35 * mm" OD="44.45 * mm"/>
+          <zplane z="5000.00 * mm" OD="44.45 * mm"/>
         </incoming_hadron>
       </upstream>
 
       <comment> For downstream beampipe (where on is inside the vacuum of the other), we subtract the matter from the vacuum, and subtract an additional pipe to create the angled cutout</comment>
       <downstream reflect="false"
-                  place_vacuum="true"
-                  subtract_vacuum="false"
-                  subtract_matter="true">
+                  place_vacuum="false">
         <incoming_lepton thickness="1.0*mm">
-          <zplane z="BeampipeDownstreamStraightLength" OD="BeampipeOD"/>
-          <zplane z="4484.25 * mm" OD="BeampipeOD"/>
+          <zplane_vac z="670.00 * mm" OD="60.00 * mm"/>
+          <zplane_vac z="755.00 * mm" OD="60.00 * mm"/>
+          <zplane_vac z="755.00 * mm" OD="62.00 * mm"/>
+          <zplane_vac z="4300.00 * mm" OD="62.00 * mm"/>
+          <zplane_vac z="4450.00 * mm" OD="44.00 * mm"/>
+          <zplane_vac z="4460.00 * mm" OD="44.00 * mm"/>
+          <zplane_vac z="4660.00 * mm" OD="54.00 * mm"/>
+          <zplane_vac z="5100.00 * mm" OD="54.00 * mm"/>
+
+          <zplane_mat z="670.00 * mm" OD="(62.00 + 1.0 * 2) * mm"/>
+          <zplane_mat z="(670.00 + 1.0) * mm" OD="(62.00 + 1.0 * 2) * mm"/>
+          <zplane_mat z="(670.00 + 1.0) * mm" OD="(60.00 + 1.0 * 2) * mm"/>
+          <zplane_mat z="(755.00 - 1.0) * mm" OD="(60.00 + 1.0 * 2) * mm"/>
+          <zplane_mat z="(755.00 - 1.0) * mm" OD="(62.00 + 1.0 * 2) * mm"/>
+          <zplane_mat z="4300.00 * mm" OD="(62.00 + 1.0 * 2) * mm"/>
+          <zplane_mat z="4450.00 * mm" OD="(44.00 + 1.0 * 2) * mm"/>
+          <zplane_mat z="4460.00 * mm" OD="(44.00 + 1.0 * 2) * mm"/>
+          <zplane_mat z="4660.00 * mm" OD="(54.00 + 1.0 * 2) * mm"/>
+          <zplane_mat z="5100.00 * mm" OD="(54.00 + 1.0 * 2) * mm"/>
         </incoming_lepton>
         <outgoing_hadron thickness="4.0*mm"
                          axis_intersection="670.0 * mm"
                          crossing_angle="CrossingAngle">
-          <!-- avoid overlap with IP beampipe by starting slightly displaced -->
-          <zplane z="BeampipeDownstreamStraightLength + 0.5 * BeampipeOD * tan(abs(CrossingAngle))" OD="BeampipeOD"/>
-          <zplane z="1750.00 * mm" OD=" 92.06 * mm"/>
-          <zplane z="4455.80 * mm" OD="257.92 * mm"/>
-          <!-- removed due to vacuum overlap with far forward electron beampipe -->
-          <!--zplane z="5000.00 * mm" OD="340.60 * mm"/-->
+          <zplane_vac z="670.00 * mm" OD="62.00 * mm"/>
+          <zplane_vac z="5100.00 * mm" OD="(62.00 + 2 * (5100.00 - 670.00) * tan(abs(CrossingAngle))) * mm"/>
+
+          <zplane_mat z="670.00 * mm" OD="(62.00 + 4.0 * 2) * mm"/>
+          <zplane_mat z="5100.00 * mm" OD="(62.00 + 2 * (5100.00 - 670.00) * tan(abs(CrossingAngle)) + 4.0 * 2) * mm"/>
         </outgoing_hadron>
         <additional_subtraction thickness="4.0*mm"
-                                crossing_angle="CrossingAngle">
+				crossing_angle="CrossingAngle">
           <!-- these are somewhat arbitrary to get the right hole shape -->
-          <zplane z="BeampipeDownstreamStraightLength" OD="32. * mm"/>
-          <zplane z="4484.25 * mm" OD="120. * mm"/>
+          <zplane_vac z="870.00 * mm" OD="(36.61 - 4.0 * 2) * mm"/>
+          <zplane_vac z="4484.25 * mm" OD="(120.00 - 4.0 * 2) * mm"/>
+
+          <zplane_mat z="670.00 * mm" OD="(32.00) * mm"/>
+          <zplane_mat z="4484.25 * mm" OD="(120.00) * mm"/>
         </additional_subtraction>
       </downstream>
     </detector>
