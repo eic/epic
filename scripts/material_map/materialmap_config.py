@@ -1,3 +1,7 @@
+#!/usr/bin/env python3
+# SPDX-License-Identifier: LGPL-3.0-or-later
+# Copyright (C) 2024 Shujie Li
+
 ## Generate ePIC material map for ACTS
 ## read config-map.json and turn on mapping for approach 1 and 2 of each sensitive surface.
 import pandas as pd
