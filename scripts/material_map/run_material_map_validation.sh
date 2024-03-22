@@ -68,12 +68,13 @@ matFile=material-map.json
 trackFile=material-map_tracks.root
 propFile=propagation_material
 
-# ----GEANTINO SCAN------
+echo "::group::----GEANTINO SCAN------"
 # output geant4_material_tracks.root
 # The result of the geantino scan will be a root file containing material tracks. Those contain the direction and production vertex of the geantino, the total material accumulated and all the interaction points in the detector.
 python material_recording_epic.py -i ${DETECTOR_PATH}/${DETECTOR_CONFIG}.xml -n ${nevents} -t ${nparticles} -o ${recordingFile}
+echo "::endgroup::"
 
-#-----MAPPING Configuration-----
+echo "::group::-----MAPPING Configuration-----"
 # map geometry to geometry-map.json
 python geometry_epic.py -i ${DETECTOR_PATH}/${DETECTOR_CONFIG}.xml
 
@@ -86,19 +87,22 @@ python materialmap_config.py -i config-map.json -o config-map_new.json
 
 # turn config-map.json into modified geometry-map.json
 python Examples/Scripts/MaterialMapping/configureMap.py ${geoFile} config-map_new.json
+echo "::endgroup::"
 
-#----MAPPING------------
+echo "::group::----MAPPING------------"
 # input: geant4_material_tracks.root, geometry-map.json
 # output: material-maps.json or cbor. This is the material map that you want to provide to EICrecon, i.e.  -Pacts:MaterialMap=XXX  .Please --matFile to specify the name and type
 #         material-maps_tracks.root(recorded steps from geantino, for validation purpose)
 python material_mapping_epic.py --xmlFile ${DETECTOR_PATH}/${DETECTOR_CONFIG}.xml --geoFile ${geoFile} --matFile ${matFile}
+echo "::endgroup::"
 
-#----Prepare validation rootfile--------
+echo "::group::----Prepare validation rootfile--------"
 # output propagation-material.root
 python material_validation_epic.py --xmlFile ${DETECTOR_PATH}/${DETECTOR_CONFIG}.xml --outputName ${propFile}_new --matFile ${matFile} -n ${nevents}
 python material_validation_epic.py --xmlFile ${DETECTOR_PATH}/${DETECTOR_CONFIG}.xml --outputName ${propFile}_old --matFile "calibrations/materials-map.cbor" -n ${nevents}
+echo "::endgroup::"
 
-## -------Comparison plots---------
+echo "::group::-------Comparison plots---------"
 rm -rf Validation/new
 mkdir -p Validation/new
 root -l -b -q Examples/Scripts/MaterialMapping/Mat_map.C'("'${propFile}_new'.root","'${trackFile}'","Validation/new")'
@@ -120,3 +124,4 @@ root -l -b -q Examples/Scripts/MaterialMapping/Mat_map_surface_plot_ratio.C'("'$
 root -l -b -q Examples/Scripts/MaterialMapping/Mat_map_surface_plot_ratio.C'("'${propFile}_old'.root","'${trackFile}'",-1,"Surfaces/old/ratio_plot","Surfaces/old/prop_plot","Surfaces/old/map_plot")'
 root -l -b -q Examples/Scripts/MaterialMapping/Mat_map_surface_plot_dist.C'("'${trackFile}'",-1,"Surfaces/dist_plot")'
 root -l -b -q Examples/Scripts/MaterialMapping/Mat_map_surface_plot_1D.C'("'${trackFile}'",-1,"Surfaces/1D_plot")'
+echo "::endgroup::"
