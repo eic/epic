@@ -1,3 +1,7 @@
+#!/usr/bin/env python3
+# SPDX-License-Identifier: LGPL-3.0-or-later
+# Copyright (C) 2024 Shujie Li
+
 ## Stand alone function to build ePIC geometry with ACTS python bindings
 ## for material mapping
 ## Shujie Li, 03, 2024
