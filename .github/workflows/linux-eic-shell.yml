@@ -207,6 +207,7 @@ jobs:
         setup: install/setup.sh
         run: |
           pushd scripts/material_map
+          export DETECTOR_CONFIG=epic_craterlake_material_map
           ./run_material_map_validation.sh
           popd
     - uses: actions/upload-artifact@v4
