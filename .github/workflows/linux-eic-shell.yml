@@ -189,7 +189,7 @@ jobs:
           root -b -q "scripts/test_ACTS.cxx+(\"${DETECTOR_PATH}/${DETECTOR_CONFIG}.xml\")" | tee check_tracking_geometry.out
           bin/acts_geo_check check_tracking_geometry.out
 
-  validate-material-ap:
+  validate-material-map:
     runs-on: ubuntu-latest
     needs:
       - build
@@ -213,10 +213,10 @@ jobs:
       with:
         name: material_map
         path: |
-          "*.json"
-          "*.root"
-          Surfaces/
-          Validation/
+          "scripts/material_map/*.json"
+          "scripts/material_map/*.root"
+          scripts/material_map/Surfaces/
+          scripts/material_map/Validation/
         if-no-files-found: error
 
   convert-to-gdml:
