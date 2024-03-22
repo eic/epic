@@ -225,10 +225,10 @@ static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector /* sens *
   };
 
   // Create downstream volumes
-  auto create_volumes_2 = [&](const std::string& name, 
-			      xml::Component& x_pipexml::Component& x_pipe2, 
-                              xml::Component& x_additional_subtraction) xml::Component& x_pipe2, 
-                                                                        xml::Component& x_additional_subtraction) {
+  auto create_volumes_2 = [&](const std::string& name,
+			      xml::Component& x_pipe1, 
+                              xml::Component& x_pipe2, 
+                              xml::Component& x_additional_subtraction) {
     auto pipe1_polycones = zplane_to_polycones_2(x_pipe1);
     auto pipe2_polycones = zplane_to_polycones_2(x_pipe2);
 
@@ -349,7 +349,9 @@ static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector /* sens *
   xml::Component outgoing_hadron_c = downstream_c.child(_Unicode(outgoing_hadron));
   xml::Component additional_subtractions_downstream_c = downstream_c.child(_Unicode(additional_subtraction));
 
-  auto volumes_downstream = create_volumes_2("downstream", incoming_lepton_c, outgoing_hadron_c, 
+  auto volumes_downstream = create_volumes_2("downstream", 
+                                             incoming_lepton_c, 
+                                             outgoing_hadron_c, 
                                              additional_subtractions_downstream_c);
 
   // transform 
