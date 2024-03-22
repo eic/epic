@@ -252,7 +252,7 @@
           length="3*cm"
           zstart="ForwardTOF_zmin" />
         <layer_material surface="inner" binning="binPhi,binR" bins0="30" bins1="30"/>
-        <layer_material surface="inner" binning="binPhi,binR" bins0="30" bins1="30"/>
+        <layer_material surface="outer" binning="binPhi,binR" bins0="30" bins1="30"/>
         <y_layout dr="0.0*mm" z0="EndcapTOF_zOffset" nz="EndcapTOF_Module_nz"/>
         <z_layout z0="ForwardTOF_zmin"/>
       </layer>

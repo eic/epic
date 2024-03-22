@@ -35,6 +35,7 @@ materials-map.cbor
 lib/
 share/
 setup.sh
+install/
 
 # jekyll
 Gemfile.lock

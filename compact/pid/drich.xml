@@ -6,7 +6,7 @@
 <define>
 <!-- vessel (=snout+tank) geometry -->
 <constant name="DRICH_length"             value="ForwardRICHRegion_length"/>  <!-- overall vessel length -->
-<constant name="DRICH_zmin"               value="ForwardRICHRegion_zmin"/>
+<constant name="DRICH_zmin"               value="ForwardRICHRegion_zmin + 3.*cm"/> <!-- 3cm spacing since https://indico.bnl.gov/event/22417/ -->
 <constant name="DRICH_zmax"               value="DRICH_zmin + DRICH_length"/>
 <constant name="DRICH_rmin0"              value="DRICH_zmin * ForwardRICHRegion_tan1"/>  <!-- bore radius at dRICH entrance -->
 <constant name="DRICH_rmin1"              value="DRICH_zmax * ForwardRICHRegion_tan2"/>  <!-- bore radius at dRICH exit -->

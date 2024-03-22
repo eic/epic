@@ -307,4 +307,4 @@
     <constant name="LumiDirect_XY"        value="0.2*m"/>
     <constant name="LumiDirect_DZ"        value="0.2*m"/>
 
-  </define>
+</define>

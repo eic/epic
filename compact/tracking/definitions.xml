@@ -43,7 +43,7 @@
     <comment> Forward TOF region  </comment>
     <constant name="ForwardTOFRegion_zmin"        value="ForwardPIDRegion_zmin" />
     <constant name="ForwardTOFRegion_tan"         value="CentralTrackingRegionP_tan" />
-    <constant name="ForwardTOFRegion_minR"        value="8*cm" />
+    <constant name="ForwardTOFRegion_minR"        value="13*cm" />
     <constant name="ForwardTOFRegion_maxR"        value="67*cm" />
     <constant name="ForwardTOF_xOffset"           value="-2.75*cm" />
     <constant name="ForwardTOF_det_height"        value="2.0*cm" />
