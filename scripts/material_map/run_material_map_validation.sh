@@ -30,7 +30,7 @@ ACTS_FILES=(
 )
 for file in ${ACTS_FILES[@]} ; do
   if [ ! -f ${file} ] ; then
-    curl --location --create-dirs --output ${file} ${ACTS_URL}/${ACTS_VERSION}/${file}
+    curl --silent --location --create-dirs --output ${file} ${ACTS_URL}/${ACTS_VERSION}/${file}
   fi
 done
 export PYTHONPATH=$PWD/Examples/Scripts/Python:$PYTHONPATH
