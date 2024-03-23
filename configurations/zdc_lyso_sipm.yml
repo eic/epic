@@ -1,4 +1,4 @@
 features:
   far_forward:
-    far_forward/ZDC_Crystal_LYSO:
-    far_forward/ZDC_SiPMonTile:
+    ZDC_Crystal_LYSO:
+    ZDC_SiPMonTile:

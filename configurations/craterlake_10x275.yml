@@ -31,6 +31,4 @@ features:
     backward:
     backward_endcap_flux:
   far_forward:
-    far_forward:
   far_backward:
-    far_backward:

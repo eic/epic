@@ -3,4 +3,8 @@ features:
   far_forward:
     far_forward:
   far_backward:
-    far_backward_extended:
+    magnets:
+    beamline_extension_hadron:
+    beamline_extension_electron:
+    taggers:
+    lumi:

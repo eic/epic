@@ -181,18 +181,26 @@
   <documentation level="11">
     ## Far foward detectors
   </documentation>
-  {% for ff in features['far_forward'] -%}
-  <include ref="${DETECTOR_PATH}/compact/{{ ff }}.xml"/>
-  {% endfor -%}
+  {% if features['far_forward'] | length > 1 -%}
+  {%   for ff in features['far_forward'] -%}
+  <include ref="${DETECTOR_PATH}/compact/far_forward/{{ ff }}.xml"/>
+  {%   endfor -%}
+  {% else -%}
+  <include ref="${DETECTOR_PATH}/compact/far_forward.xml"/>
+  {% endif -%}
 {% endif -%}
 
 {% if 'far_backward' in features %}
   <documentation level="11">
     ## Far backward detectors
   </documentation>
-  {% for fb in features['far_backward'] -%}
-  <include ref="${DETECTOR_PATH}/compact/{{ fb }}.xml"/>
-  {% endfor -%}
+  {% if features['far_backward'] | length > 1 -%}
+  {%   for fb in features['far_backward'] -%}
+  <include ref="${DETECTOR_PATH}/compact/far_backward/{{ fb }}.xml"/>
+  {%   endfor -%}
+  {% else -%}
+  <include ref="${DETECTOR_PATH}/compact/far_backward.xml"/>
+  {% endif -%}
 {% endif -%}
 
 </lccdd>
