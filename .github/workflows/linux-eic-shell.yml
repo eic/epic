@@ -255,7 +255,7 @@ jobs:
       - build
     strategy:
       matrix:
-        detector_config: [epic_craterlake_no_bhcal]
+        detector_config: [epic_craterlake_no_bhcal, epic_craterlake_tracking_only, epic_dirc_only, epic_drich_only, epic_imaging_only, epic_ip6, epic_lfhcal_with_insert]
     steps:
     - uses: actions/checkout@v4
     - uses: actions/download-artifact@v4
