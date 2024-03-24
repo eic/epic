@@ -9,10 +9,10 @@ CENTRAL DETECTOR,Dual RICH,Detector Section,,{{DRICH_rmin0}},,,,
 CENTRAL DETECTOR,Dual RICH,Aerogel Section,,{{DRICH_rmin0}},,,,
 CENTRAL DETECTOR,HD Time of Flight/Tracker,,,,,,,
 CENTRAL DETECTOR,Barrel Flux Return,,,,,,,
-CENTRAL DETECTOR,Barrel Hadron Calorimeter,,{{HcalBarrel_length}},{{HcalBarrel_rmin}},{{HcalBarrel_rmax}},,-{{HcalBarrelBackward_zmax}},{{HcalBarrelForward_zmax}}
-CENTRAL DETECTOR,Barrel Hadron Calorimeter,HD Section,,,,,,
-CENTRAL DETECTOR,Barrel Hadron Calorimeter,Central Section,,,,,,
-CENTRAL DETECTOR,Barrel Hadron Calorimeter,LD Section,,,,,,
+CENTRAL DETECTOR,Barrel Hadron Calorimeter,,{{HcalBarrel_length2}},{{HcalBarrel_rmin1}},{{HcalBarrel_rmax}},{{HcalBarrel_offset}},-{{HcalBarrelBackward_zmax-HcalBarrel_offset}},{{HcalBarrelForward_zmax+HcalBarrel_offset}}
+CENTRAL DETECTOR,Barrel Hadron Calorimeter,HD Section,,{{HcalBarrel_length2-HcalBarrel_length1}},{{HcalBarrel_rmin2}},{{HcalBarrel_rmax}},{{HcalBarrel_length1/4+HcalBarrel_offset}},{{HcalBarrel_length1/2+HcalBarrel_offset}},{{HcalBarrelForward_zmax+HcalBarrel_offset}}
+CENTRAL DETECTOR,Barrel Hadron Calorimeter,Central Section,,{{HcalBarrel_length1}},{{HcalBarrel_rmin1}},{{HcalBarrel_rmax}},{{HcalBarrel_offset}},-{{HcalBarrel_length1/2-HcalBarrel_offset}},{{HcalBarrel_length1/2+HcalBarrel_offset}}
+CENTRAL DETECTOR,Barrel Hadron Calorimeter,LD Section,,{{HcalBarrel_length2-HcalBarrel_length1}},{{HcalBarrel_rmin2}},{{HcalBarrel_rmax}},-{{HcalBarrel_length1/4-HcalBarrel_offset}},-{{HcalBarrel_length1/2-HcalBarrel_offset}},-{{HcalBarrelBackward_zmax-HcalBarrel_offset}}
 CENTRAL DETECTOR,Solenoid Magnet,,{{Solenoid_length}},{{Solenoid_rmin}},{{Solenoid_rmax}},,-{{SolenoidBackward_zmax}},{{SolenoidForward_zmax}}
 CENTRAL DETECTOR,Barrel HD EMCal Support,,,,,,,
 CENTRAL DETECTOR,Barrel HD EMCal Support,Exterior Plate,,,,,,

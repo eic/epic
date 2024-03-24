@@ -226,6 +226,42 @@ static Ref_t createDetector(Detector& desc, xml_h e, SensitiveDetector sens)
     det_volume.placeVolume(dirc_module, tr).addPhysVolID("module", i);
   }
 
+  // Construct support
+  xml_comp_t xml_support = xml_det.child(_U(support));
+  Assembly dirc_support("DIRCSupport");
+  dirc_support.setVisAttributes(desc.visAttributes(xml_support.visStr()));
+
+  // Rail
+  xml_comp_t xml_rail    = xml_support.child(_Unicode(rail));
+  xml_dim_t  rail_pos = xml_rail.position();
+  double     rail_height = xml_rail.height();
+  double     rail_width2 = xml_rail.width();
+  double     rail_distance_to_chord2 = rail_width2/2 / tan(dphi/2);
+  double     rail_distance_to_chord1 = rail_distance_to_chord2 - rail_height;
+  double     rail_width1 = 2*rail_distance_to_chord1 * tan(dphi/2);
+  double     rail_length = xml_rail.length();
+  Trap       rail_trap("rail_trap", rail_length / 2, 0, 0,
+                       rail_height / 2, rail_width1 / 2, rail_width2 / 2, 0,
+                       rail_height / 2, rail_width1 / 2, rail_width2 / 2, 0);
+  Volume     rail_vol("rail_vol", rail_trap, desc.material(xml_rail.materialStr()));
+  rail_vol.setVisAttributes(desc.visAttributes(xml_rail.visStr()));
+
+  // Place rail
+  Position rail_position(rail_pos.x(), rail_pos.y(), rail_pos.z());
+  RotationZ rail_rotation(-M_PI / 2.);
+  dirc_support.placeVolume(rail_vol, Transform3D(rail_rotation, rail_position));
+
+  // Place support
+  for (int i = 0; i < module_repeat; i++) {
+    double phi = dphi * i + dphi / 2;
+    double x   = det_ravg * cos(phi);
+    double y   = det_ravg * sin(phi);
+
+    Transform3D tr(RotationZ(phi), Position(x, y, 0));
+    det_volume.placeVolume(dirc_support, tr);
+  }
+
+
   return det;
 }
 

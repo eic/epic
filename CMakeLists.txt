@@ -40,13 +40,13 @@ endif()
 include(GNUInstallDirs)
 
 # Dependencies
-find_package(DD4hep 1.21 REQUIRED COMPONENTS DDCore DDRec)
+find_package(DD4hep 1.27 REQUIRED COMPONENTS DDCore DDRec)
 find_package(fmt REQUIRED)
 
 #-----------------------------------------------------------------------------------
 set(a_lib_name ${PROJECT_NAME})
 
-dd4hep_configure_output()
+dd4hep_configure_output(INSTALL ${CMAKE_INSTALL_PREFIX})
 dd4hep_set_compiler_flags()
 
 file(GLOB sources CONFIGURE_DEPENDS src/*.cpp)
@@ -60,9 +60,6 @@ target_link_libraries(${a_lib_name}
 
 #-----------------------------------------------------------------------------------
 # Parse jinja templates: once by default, and once for all yml files
-#
-# FIXME: should not write rendered templates to ${CMAKE_CURRENT_SOURCE_DIR}
-
 set(TEMPLATE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/templates)
 set(TEMPLATE_XML ${PROJECT_NAME}.xml.jinja2)
 
@@ -76,15 +73,15 @@ foreach(config_yml ${CONFIG_YMLS})
                 --dir ${TEMPLATE_DIR}
                 --template ${TEMPLATE_XML}
                 --config ${config_yml}
-                --output ${CMAKE_CURRENT_SOURCE_DIR}/${PROJECT_NAME}_${config}.xml
+                --output ${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}_${config}.xml
         COMMENT "Creating configuration ${config} for ${PROJECT_NAME}"
         )
-    install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/${PROJECT_NAME}_${config}.xml
+    install(FILES ${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}_${config}.xml
         DESTINATION ${CMAKE_INSTALL_DATADIR}/${PROJECT_NAME}/
         )
 endforeach()
 
-install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/${PROJECT_NAME}_full.xml
+install(FILES ${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}_full.xml
     DESTINATION ${CMAKE_INSTALL_DATADIR}/${PROJECT_NAME}/
     RENAME ${PROJECT_NAME}.xml
     )

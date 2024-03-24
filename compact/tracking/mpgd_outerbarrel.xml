@@ -24,7 +24,7 @@
     <constant name="MPGDOuterBarrelModule_rmax"                    value="MPGDOuterBarrelModule_rmin + MPGDOuterBarrelModule_allowed_space" />
     <constant name="MPGDOuterBarrelModule_roffset"                 value="0.5*cm" />
     <constant name="MPGDOuterBarrelModule_width"                   value="36.0*cm"/>
-    <constant name="MPGDOuerBarrel_length"                         value="MPGDOuterBarrelModule_zmin1 + MPGDOuterBarrelModule_zmin2"/>
+    <constant name="MPGDOuterBarrel_length"                        value="MPGDOuterBarrelModule_zmin1 + MPGDOuterBarrelModule_zmin2"/>
     <constant name="MPGDOuterBarrelModule_length"                  value="0.5*(MPGDOuterBarrelModule_zmin1 + MPGDOuterBarrelModule_zmin2 + MPGDOuterBarrelModule_zoverlap)"/>
     <constant name="MPGDOuterBarrelModule_offset"                  value="(MPGDOuterBarrelModule_zmin2 - MPGDOuterBarrelModule_zmin1)/2.0"/>
 
@@ -150,7 +150,8 @@
 <comment> Layout for MPGD DIRC layers </comment>
   <layer module="MPGDOuterBarrelModule" id="0" vis="TrackerSupportVis">
           <envelope_tolerance r_min="-50*mm" r_max="0*mm" z_min="0*mm" z_max="0*mm"/>
-    <layer_material surface="outer" binning="binPhi,binZ" bins0="MPGDOuterBarrelModule_count" bins1="100" />
+    <layer_material surface="inner" binning="binPhi,binZ" bins0="MPGDOuterBarrelModule_count*10" bins1="100" />
+    <layer_material surface="outer" binning="binPhi,binZ" bins0="MPGDOuterBarrelModule_count*10" bins1="100" />
     <rphi_layout
           phi_tilt="0"
           nphi="MPGDOuterBarrelModule_count"
