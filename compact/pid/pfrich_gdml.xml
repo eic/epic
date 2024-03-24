@@ -55,7 +55,7 @@
 <detector
   id="BackwardRICH_ID"
   name="PFRICH"
-  type="epic_PFRICH_v1"
+  type="epic_PFRICH_sl"
   readout="PFRICHHits"
   gas="C4F10_PFRICH"
   material="Aluminum"
