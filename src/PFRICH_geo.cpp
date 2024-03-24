@@ -5,7 +5,7 @@
 // pfRICH: Proximity Focusing RICH
 // Author: Wenliang (Bill) Li
 //
-// - Design Adapted from standalone Geant4 description by 
+// - Design Adapted from standalone Geant4 description by
 //   Alexander Kiselev and Chandradoy Chatterjee
 //----------------------------------
 
