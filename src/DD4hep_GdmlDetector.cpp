@@ -86,9 +86,6 @@ static Ref_t create_detector(Detector& description, xml_h e, Ref_t /* sens_det *
     volume = node.volume();
   }
 
-//  cout << "Here?" << endl;
-//  exit(0);
-
   if (x_pos && x_rot) {
     Rotation3D  rot(RotationZYX(x_rot.z(), x_rot.y(), x_rot.x()));
     Transform3D transform(rot, Position(x_pos.x(), x_pos.y(), x_pos.z()));
