@@ -1,9 +1,12 @@
 // SPDX-License-Identifier: LGPL-3.0-or-later
-// Copyright (C) 2023 Christopher Dilks, Sylvester Joosten, Wenliang (Bill) Li, Alexander Kiselev
+// Copyright (C) 2023  Wenliang (Bill) Li, Alexander Kiselev, Karthik Suresh
 
 //----------------------------------
-//  pfRICH: Proximity Focusing RICH
-//  Author: C. Dilks, Wenlinag (Bill) Li, Alexander Kiselev, Karthik Suresh
+// pfRICH: Proximity Focusing RICH
+// Author: Wenliang (Bill) Li
+//
+// - Design Adapted from standalone Geant4 description by 
+//   Alexander Kiselev and Chandradoy Chatterjee
 //----------------------------------
 
 #include "DD4hep/DetFactoryHelper.h"
