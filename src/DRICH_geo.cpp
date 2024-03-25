@@ -200,13 +200,15 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
       vesselRmin0 + boreDelta * (snoutLength - windowThickness) / vesselLength + wallThickness,
       vesselRmax1 - wallThickness + windowThickness * (vesselRmax1 - vesselRmax0) / snoutLength);
 
-  // tank solids
+  // tank solids:
+  // - inner: cone along beamline
+  // - outer; cone to back of sensor box, then fixed radius cylinder
   Polycone vesselTank(0, 2 * M_PI,
-           /* rmin */ {vesselSnout.rMin2(), vesselSnout.rMin2(), vesselRmin1},
+           /* rmin */ {vesselSnout.rMin2(), std::lerp(vesselSnout.rMin2(), vesselRmin1, (sensorboxLength - snoutLength) / tankLength), vesselRmin1},
            /* rmax */ {vesselSnout.rMax2(), vesselRmax2, vesselRmax2},
            /* z    */ {-tankLength / 2.0, -tankLength / 2.0 + sensorboxLength - snoutLength, tankLength / 2.0});
   Polycone gasvolTank(0, 2 * M_PI,
-           /* rmin */ {gasvolSnout.rMin2(), gasvolSnout.rMin2(), vesselRmin1 + wallThickness},
+           /* rmin */ {gasvolSnout.rMin2(), std::lerp(gasvolSnout.rMin2(), vesselRmin1 + wallThickness, (sensorboxLength - snoutLength) / tankLength), vesselRmin1 + wallThickness},
            /* rmax */ {gasvolSnout.rMax2(), vesselRmax2 - wallThickness, vesselRmax2 - wallThickness},
            /* z    */ {-tankLength / 2.0 + windowThickness, -tankLength / 2.0 + windowThickness + sensorboxLength - snoutLength, tankLength / 2.0 - windowThickness});
 
