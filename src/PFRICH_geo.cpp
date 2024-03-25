@@ -662,11 +662,11 @@ static Ref_t createDetector(Detector& description, xml_h e, SensitiveDetector se
 
          Cone mirror_outer_cone_shape(mlen/2.0, mirror_r0[im], mirror_r0[im] + mirror_thickness, mirror_r1[im], mirror_r1[im] + mirror_thickness);
 
-        Volume outer_mirrorVol(detName +"_outer_outer", mirror_outer_cone_shape, mirrorMat);
+        Volume outer_mirrorVol(detName +"_outer_mirror", mirror_outer_cone_shape, mirrorMat);
 
         PlacedVolume mirror_outerPV = pfRICH_volume.placeVolume(outer_mirrorVol, Position(0, 0, 0));
 
-        DetElement mirror_outerDE(sdet, "mirror_outer_de" , 0);
+        DetElement mirror_outerDE(sdet, "_outer_mirror_de" , 0);
         mirror_outerDE.setPlacement(mirror_outerPV);
 
      } else {
@@ -676,11 +676,11 @@ static Ref_t createDetector(Detector& description, xml_h e, SensitiveDetector se
         SubtractionSolid mirror_inner_sub (mirror_inner_cone_shape, flange_final_shape);
 
 
-        Volume inner_mirrorVol(detName +"_inner_outer", mirror_inner_sub, mirrorMat);
+        Volume inner_mirrorVol(detName +"_inner_mirror", mirror_inner_sub, mirrorMat);
 
         PlacedVolume mirror_innerPV = pfRICH_volume.placeVolume(inner_mirrorVol, Position(0, 0, 0));
 
-        DetElement mirror_innerDE(sdet, "mirror_inner_de" , 0);
+        DetElement mirror_innerDE(sdet, "_inner_mirror_de" , 0);
         mirror_innerDE.setPlacement(mirror_innerPV);
 
      }
@@ -692,7 +692,7 @@ static Ref_t createDetector(Detector& description, xml_h e, SensitiveDetector se
    double acthick = _ACRYLIC_THICKNESS_;
    // m_gzOffset += acthick/2;
 
-   Tube ac_tube(m_r0min-1, m_r0max-1, acthick/2, 0*degree, 360*degree);
+   Tube ac_tube(m_r0min+3, m_r0max-1, acthick/2, 0*degree, 360*degree);
    SubtractionSolid ac_shape(ac_tube, flange_final_shape);
 
    Volume acVol(detName +"_ac", ac_shape, gasvolMat);
