@@ -202,7 +202,7 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
 
   // tank solids:
   // - inner: cone along beamline
-  // - outer; cone to back of sensor box, then fixed radius cylinder
+  // - outer: cone to back of sensor box, then fixed radius cylinder
   Polycone vesselTank(0, 2 * M_PI,
            /* rmin */ {vesselSnout.rMin2(), std::lerp(vesselSnout.rMin2(), vesselRmin1, (sensorboxLength - snoutLength) / tankLength), vesselRmin1},
            /* rmax */ {vesselSnout.rMax2(), vesselRmax2, vesselRmax2},
