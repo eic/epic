@@ -12,8 +12,9 @@
 using namespace std;
 using namespace dd4hep;
 
-static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector /*sens*/)
+static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector sens)
 {
+  sens.setType("calorimeter");
 
   xml_det_t     x_det           = e;
   xml_comp_t    x_dim           = x_det.dimensions();
@@ -36,6 +37,7 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector /
   Box box( sizeX, sizeY, sizeZ );
   Volume vol( det_name + "_vol_ExitWindow", box, description.material( mat_name ) );
   vol.setVisAttributes( description.visAttributes(x_det.visStr()) );
+  vol.setSensitiveDetector(sens);
 
   Transform3D  pos( RotationZYX(rotX, rotY, rotZ), Position(posX, posY, posZ) );
 
