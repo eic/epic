@@ -44,6 +44,7 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
   DetElement det(det_name, x_det.id());
   Volume motherVol = description.pickMotherVolume( det );
   PlacedVolume phv = motherVol.placeVolume( vol, pos );
+  phv.addPhysVolID("system", x_det.id());
 
   det.setPlacement(phv);
 

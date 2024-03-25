@@ -11,11 +11,19 @@
       name="LumiWindow"
       type="LumiWindow"
       material="Aluminum"
-      vis="AnlLightGray">
+      vis="AnlLightGray"
+      readout="LumiWindowCALHits">
       <dimensions x="LumiWin_R" y="LumiWin_R" z="LumiWin_thickness/2" />
       <position   x="0" y="0" z="LumiWin_Z" />
       <rotation   x="0*rad" y="0*rad" z="0*rad" />
     </detector>
   </detectors>
+
+  <readouts>
+    <readout name="LumiWindowCALHits">
+      <segmentation type="NoSegmentation"/>
+      <id>system:8</id>
+    </readout>
+  </readouts>
 
 </lccdd>
