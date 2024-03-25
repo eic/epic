@@ -200,7 +200,7 @@
 </detectors>
 
 <readouts>
-  <readout name="PFRICHHits">
+  <readout name="RICHEndcapNHits">
     <segmentation
       type="CartesianGridXY"
       grid_size_x="PFRICH_pixel_pitch"
