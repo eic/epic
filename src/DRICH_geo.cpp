@@ -89,6 +89,7 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
   auto sensorboxLength = desc.constant<double>("DRICH_sensorbox_length");
   auto sensorboxRmin   = desc.constant<double>("DRICH_sensorbox_rmin");
   auto sensorboxRmax   = desc.constant<double>("DRICH_sensorbox_rmax");
+  auto sensorboxDphi   = desc.constant<double>("DRICH_sensorbox_dphi");
   // - sensor photosensitive surface (pss)
   auto pssElem      = detElem.child(_Unicode(sensors)).child(_Unicode(pss));
   auto pssMat       = desc.material(pssElem.attr<std::string>(_Unicode(material)));
@@ -199,23 +200,43 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
       vesselRmin0 + boreDelta * (snoutLength - windowThickness) / vesselLength + wallThickness,
       vesselRmax1 - wallThickness + windowThickness * (vesselRmax1 - vesselRmax0) / snoutLength);
 
-  // tank solids
-  Cone vesselTank(tankLength / 2.0, vesselSnout.rMin2(), vesselRmax2, vesselRmin1, vesselRmax2);
-  Cone gasvolTank(tankLength / 2.0 - windowThickness, gasvolSnout.rMin2(), vesselRmax2 - wallThickness,
-                  vesselRmin1 + wallThickness, vesselRmax2 - wallThickness);
+  // tank solids:
+  // - inner: cone along beamline
+  // - outer: cone to back of sensor box, then fixed radius cylinder
+  Polycone vesselTank(0, 2 * M_PI,
+           /* rmin */ {vesselSnout.rMin2(), std::lerp(vesselSnout.rMin2(), vesselRmin1, (sensorboxLength - snoutLength) / tankLength), vesselRmin1},
+           /* rmax */ {vesselSnout.rMax2(), vesselRmax2, vesselRmax2},
+           /* z    */ {-tankLength / 2.0, -tankLength / 2.0 + sensorboxLength - snoutLength, tankLength / 2.0});
+  Polycone gasvolTank(0, 2 * M_PI,
+           /* rmin */ {gasvolSnout.rMin2(), std::lerp(gasvolSnout.rMin2(), vesselRmin1 + wallThickness, (sensorboxLength - snoutLength) / tankLength), vesselRmin1 + wallThickness},
+           /* rmax */ {gasvolSnout.rMax2(), vesselRmax2 - wallThickness, vesselRmax2 - wallThickness},
+           /* z    */ {-tankLength / 2.0 + windowThickness, -tankLength / 2.0 + windowThickness + sensorboxLength - snoutLength, tankLength / 2.0 - windowThickness});
 
   // sensorbox solids
-  // FIXME: this is currently just a simple tubular extrusion; this should be replaced by proper sensor boxes
-  Tube vesselSensorboxTube(sensorboxRmin, sensorboxRmax, sensorboxLength / 2.);
-  Tube gasvolSensorboxTube(sensorboxRmin + wallThickness, sensorboxRmax - wallThickness, sensorboxLength / 2.);
+  double dphi = atan2(wallThickness, sensorboxRmax); // thickness only correct at Rmax
+  Tube vesselSensorboxTube(sensorboxRmin, sensorboxRmax, sensorboxLength / 2.,
+                           -sensorboxDphi / 2., sensorboxDphi / 2.);
+  Tube gasvolSensorboxTube(sensorboxRmin + wallThickness, sensorboxRmax - wallThickness, sensorboxLength / 2.,
+                           -sensorboxDphi / 2. + dphi, sensorboxDphi / 2. - dphi);
 
   // union: snout + tank
-  UnionSolid vesselUnion0(vesselTank, vesselSnout, Position(0., 0., -vesselLength / 2.));
-  UnionSolid gasvolUnion0(gasvolTank, gasvolSnout, Position(0., 0., -vesselLength / 2. + windowThickness));
+  UnionSolid vesselUnion(vesselTank, vesselSnout, Position(0., 0., -vesselLength / 2.));
+  UnionSolid gasvolUnion(gasvolTank, gasvolSnout, Position(0., 0., -vesselLength / 2. + windowThickness));
 
-  // union: add sensorbox
-  UnionSolid vesselUnion(vesselUnion0, vesselSensorboxTube, Position(0., 0., -(snoutLength + sensorboxLength - 0.6) / 2.));
-  UnionSolid gasvolUnion(gasvolUnion0, gasvolSensorboxTube, Position(0., 0., -(snoutLength + sensorboxLength) / 2. + windowThickness));
+  // union: add sensorboxes for all sectors
+  for (int isec = 0; isec < nSectors; isec++) {
+    RotationZ sectorRotation((isec + 0.5) * 2 * M_PI / nSectors);
+    vesselUnion = UnionSolid(vesselUnion, vesselSensorboxTube,
+                             Transform3D(sectorRotation,
+                                         Position(0., 0., -(snoutLength + sensorboxLength - 0.6) / 2.)
+                                         )
+                             );
+    gasvolUnion = UnionSolid(gasvolUnion, gasvolSensorboxTube,
+                             Transform3D(sectorRotation,
+                                         Position(0., 0., -(snoutLength + sensorboxLength) / 2. + windowThickness)
+                                         )
+                             );
+  }
 
   //  extra solids for `debugOptics` only
   Box vesselBox(1001, 1001, 1001);
