@@ -346,7 +346,7 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
       continue;
 
     // sector rotation about z axis
-    RotationZ   sectorRotation(isec * 2 * M_PI / nSectors);
+    RotationZ   sectorRotation((isec + 0.5) * 2 * M_PI / nSectors);
     std::string secName = "sec" + std::to_string(isec);
 
     // BUILD MIRRORS ====================================================================
