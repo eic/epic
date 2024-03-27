@@ -46,7 +46,7 @@
   id="BackwardRICH_ID"
   name="RICHEndcapN"
   type="epic_PFRICH"
-  readout="PFRICHHits"
+  readout="RICHEndcapNHits"
   gas="C4F10_PFRICH"
   material="Aluminum"
   vis_vessel="DRICH_vessel_vis"
