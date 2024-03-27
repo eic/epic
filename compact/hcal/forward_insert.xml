@@ -22,14 +22,14 @@
     <constant name="HcalEndcapPInsertPCBThickness"               value="0.08*cm"/>
     <constant name="HcalEndcapPInsertESRFoilThickness"           value="0.015*cm"/>
 
-    <constant name="HcalEndcapP_FrontWallThickness"                   value="1.50*cm"/>
+    <constant name="LFHCAL_FrontWallThickness"                   value="1.50*cm"/>
 
     <documentation>
       - Insert N Layers and computed Thickness
     </documentation>
 
     <constant name="HcalEndcapPInsertFrontLayerThickness"
-      value="HcalEndcapP_FrontWallThickness +
+      value="LFHCAL_FrontWallThickness +
              HcalEndcapPInsertAirThickness +
              HcalEndcapPInsertScintillatorCoverThickness +
              HcalEndcapPInsertESRFoilThickness +
@@ -82,10 +82,10 @@
         z="HcalEndcapPInsert_length"
       />
       <backplate thickness="HcalEndcapPInsertBackplateThickness"/>
-      <comment> Front layer to match front walls of HcalEndcapP modules </comment>
+      <comment> Front layer to match front walls of LFHCAL modules </comment>
       <comment> Slices will be ordered according to the slice order listed here </comment>
       <layer repeat="1" thickness="HcalEndcapPInsertFrontLayerThickness" vis="InvisibleWithDaughters">
-        <slice material="Steel235" thickness="HcalEndcapP_FrontWallThickness" vis="HcalEndcapP8MModVis" />
+        <slice material="Steel235" thickness="LFHCAL_FrontWallThickness" vis="LFHCAL8MModVis" />
         <slice material="Air" thickness="HcalEndcapPInsertAirThickness"/>
         <slice material="Aluminum" thickness="HcalEndcapPInsertScintillatorCoverThickness" vis="AnlProcess_Blue"/>
         <slice material="Polystyrene" thickness="HcalEndcapPInsertESRFoilThickness" vis="AnlGray"/>

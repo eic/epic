@@ -7,12 +7,12 @@
       #### Material Thickness
     </documentation>
     <constant name="HcalEndcapNSteelThickness"          value="4.0 * cm"/>
-    <constant name="HcalEndcapNPolystyreneThickness" value="0.4 * cm"/>
-        <constant name="HcalEndcapNLayerGap"                    value="0.1 * cm"/> <!-- 2*thicker than HcalEndcapP -->
+    <constant name="HcalEndcapNPolystyreneThickness"    value="0.4 * cm"/>
+    <constant name="HcalEndcapNLayerGap"                value="0.1 * cm"/> <!-- 2*thicker than HcalEndcapP -->
 
-        <constant name="HcalEndcapN_polyhedron_rmax"    value="251.444*cm"/>
-        <constant name="HcalEndcapN_segments_rmin"              value="19.9431*cm"/>
-        <constant name="HcalEndcapN_segments_rmax"              value="HcalEndcapN_rmax/(cos(180*deg/HcalEndcapN_CaloSides))"/>
+    <constant name="HcalEndcapN_polyhedron_rmax"        value="251.444*cm"/>
+    <constant name="HcalEndcapN_segments_rmin"          value="19.9431*cm"/>
+    <constant name="HcalEndcapN_segments_rmax"          value="HcalEndcapN_rmax/(cos(180*deg/HcalEndcapN_CaloSides))"/>
 
 
     <documentation>
