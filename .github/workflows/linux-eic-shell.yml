@@ -520,7 +520,7 @@ jobs:
     needs: build
     strategy:
       matrix:
-        detector_config: [epic_craterlake]
+        detector_config: [epic_craterlake, epic_craterlake_no_bhcal]
       fail-fast: false
     steps:
     - uses: actions/checkout@v4
@@ -549,7 +549,7 @@ jobs:
     strategy:
       matrix:
         view: [view1, view2, view3, view6, view7, view11, view13, view50]
-        detector_config: [epic_craterlake]
+        detector_config: [epic_craterlake, epic_craterlake_no_bhcal]
       fail-fast: false
     steps:
     - uses: actions/checkout@v4
@@ -610,7 +610,7 @@ jobs:
     - dawn-view-slices
     strategy:
       matrix:
-        detector_config: [epic_craterlake]
+        detector_config: [epic_craterlake, epic_craterlake_no_bhcal]
     steps:
     - uses: actions/upload-artifact/merge@v4
       with:
