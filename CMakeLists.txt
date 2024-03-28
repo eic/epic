@@ -46,6 +46,7 @@ find_package(fmt REQUIRED)
 #-----------------------------------------------------------------------------------
 set(a_lib_name ${PROJECT_NAME})
 
+set(DD4HEP_SET_RPATH TRUE)
 dd4hep_configure_output(INSTALL ${CMAKE_INSTALL_PREFIX})
 dd4hep_set_compiler_flags()
 
