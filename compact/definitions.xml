@@ -628,8 +628,8 @@ Service gaps in FW direction (before endcapP ECAL) and BW direction (before endc
     <constant name="HcalBarrel_length1"       value="319.0*cm"/>
     <constant name="HcalBarrel_offset"        value="(HcalBarrelForward_zmax - HcalBarrelBackward_zmax)/2"/>
 
-    <constant name="HcalEndcapN_rmax"     value="min(HcalBarrel_rmax, 267.0 * cm)"/>
-    <constant name="HcalEndcapP_rmax"          value="HcalBarrel_rmax"/>
+    <constant name="HcalEndcapN_rmax"         value="min(HcalBarrel_rmax, 267.0 * cm)"/>
+    <constant name="HcalEndcapP_rmax"         value="HcalBarrel_rmax"/>
 
     <constant name="FluxEndcapN_collar_rmax" value="326.2*cm"/>
     <constant name="FluxEndcapN_collar_rmin" value="269.0*cm"/>
