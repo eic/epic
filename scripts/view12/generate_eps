@@ -72,8 +72,8 @@ make_slice(){
   local zpos="$1"
   local tagnum=$(printf "%04d" ${zpos})
   local FILE_TAG="${original_file_tag}a${tagnum}"
-  dawncut 0 0 1 ${zpos}1 ${INPUT_FILE} ${FILE_TAG}_temp0.prim
-  dawncut 0 0 -1 -${zpos}0  ${FILE_TAG}_temp0.prim  ${FILE_TAG}.prim
+  dawncut 0 0 1 $(( 10 * ${zpos} + 1 )) ${INPUT_FILE} ${FILE_TAG}_temp0.prim
+  dawncut 0 0 -1 $(( -10 * ${zpos} )) ${FILE_TAG}_temp0.prim  ${FILE_TAG}.prim
   dawn -d ${FILE_TAG}.prim
   ps2pdf ${FILE_TAG}.eps ${FILE_TAG}_full.pdf
   gs -o ${FILE_TAG}.pdf -sDEVICE=pdfwrite \
