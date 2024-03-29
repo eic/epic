@@ -1,6 +1,6 @@
 features:
   beampipe:
   far_forward:
-    far_forward:
+    default:
   far_backward:
-    far_backward_extended:
+    extended:

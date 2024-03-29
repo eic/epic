@@ -39,8 +39,8 @@ OTHERS_COLOR = 'silver'
 # FIXME: this is a work-around to an issue of dd4hep::rec::MaterialManager::placementsBetween
 # As of 04/21/2023, at negative eta (eta < 0.), the scan will miss the first material layer (vacuum, 2.8 cm)
 # To reporduce this issue, check the difference between:
-#   materialScan epic_brycecanyon.xml 0 0 0 100  40  -0.01 | grep Vacuum
-#   materialScan epic_brycecanyon.xml 0 0 0 100  40  0.01 | grep Vacuum
+#   materialScan epic_craterlake.xml 0 0 0 100  40  -0.01 | grep Vacuum
+#   materialScan epic_craterlake.xml 0 0 0 100  40  0.01 | grep Vacuum
 # It is GEOMETRY DEPENDENT (the thickness of the first vacuum material layer)
 # This helper class can be removed once the issue is fixed
 # Plan to file a bug report for this (as of 04/21/2023)

@@ -1,14 +1,17 @@
-ebeam: 10
-pbeam: 100
+ebeam: 5
+pbeam: 41
 features:
   beampipe:
   tracking:
-    definitions:
+    definitions_craterlake:
     vertex_barrel:
     silicon_barrel:
     mpgd_barrel:
+    support_service_craterlake:
+    mpgd_outerbarrel:
+    mpgd_forward_endcap:
+    mpgd_backward_endcap:
     silicon_disks:
-    support_service_assembly:
     tof_barrel:
     tof_endcap:
   pid:
@@ -24,9 +27,9 @@ features:
   hcal:
     lfhcal_with_space_for_insert:
     forward_insert:
-    barrel_gdml:
     backward:
+    backward_endcap_flux:
   far_forward:
-    far_forward:
+    default:
   far_backward:
-    far_backward:
+    default:

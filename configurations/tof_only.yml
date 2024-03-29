@@ -2,6 +2,6 @@ features:
   fields:
     marco:
   tracking:
-    definitions:
+    definitions_craterlake:
     tof_endcap:
     tof_barrel:

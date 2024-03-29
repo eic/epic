@@ -6,7 +6,6 @@ Overview
 **Detector geometry viewer:**
 - [Viewer only](https://eic.github.io/epic/geoviewer)
 - Main configurations:
-  - [Brycecanyon](https://eic.github.io/epic/geoviewer?nobrowser&file=artifacts/tgeo/epic_brycecanyon.root&item=default;1&opt=clipx;clipy;transp30;zoom120;ROTY320;ROTZ340;trz0;trr0;ctrl;all)
   - [CraterLake](https://eic.github.io/epic/geoviewer?nobrowser&file=artifacts/tgeo/epic_craterlake.root&item=default;1&opt=clipx;clipy;transp30;zoom120;ROTY320;ROTZ340;trz0;trr0;ctrl;all)
 - Additional viewers:
   - [Inner detector (without calorimetry)](https://eic.github.io/epic/geoviewer?nobrowser&file=artifacts/tgeo/epic_inner_detector.root&item=default;1&opt=clipx;clipy;transp30;zoom120;ROTY320;ROTZ340;trz0;trr0;ctrl;all)

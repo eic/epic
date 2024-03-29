@@ -1,3 +1,4 @@
+# This contains all geometry to be used in the material map
 features:
   beampipe:
   tracking:
@@ -5,15 +6,12 @@ features:
     vertex_barrel:
     silicon_barrel:
     mpgd_barrel:
-    silicon_disks:
     support_service_craterlake:
+    mpgd_outerbarrel:
+    mpgd_forward_endcap:
+    mpgd_backward_endcap:
+    silicon_disks:
     tof_barrel:
     tof_endcap:
-  pid:
-    dirc:
-    drich:
-  ecal:
-    forward_homogeneous:
-    forward_insert_homogeneous:
-  hcal:
-    lfhcal_without_space_for_insert:
+  far_forward:
+    default:
