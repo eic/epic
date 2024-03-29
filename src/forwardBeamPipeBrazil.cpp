@@ -259,7 +259,6 @@ static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector /* sens *
     //------------------------------------------------------------------------------------
 
     //numbers here are not really correct for the full taper, just for the opening
-
    
 	beampipe_dimensions.push_back({
 
@@ -410,15 +409,16 @@ static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector /* sens *
 
     }
 
-	EightPointSolid taper_outer((0.5*beampipe_dimensions[pieceIdx].length), trpVertices);
-	EightPointSolid taper_inner((0.5*beampipe_dimensions[pieceIdx].length), trpVerticesInner);
 	
-	Box taper_entrance(beampipe_dimensions[pieceIdx].innerXRadius, beampipe_dimensions[pieceIdx].innerYRadius, (0.5*(pipeThickness + 5.0)));
-	Box taper_exit(beampipe_dimensions[pieceIdx].innerYRadius, beampipe_dimensions[pieceIdx].innerYRadius, (0.5*(pipeThickness + 5.0)));
-	SubtractionSolid hollowTaper(taper_outer, taper_inner);
-	SubtractionSolid taper_minus_entrance_cap(hollowTaper, taper_entrance, Position(0.0, 0.0, (-0.5*beampipe_dimensions[pieceIdx].length)));
-	SubtractionSolid finalTaper(taper_minus_entrance_cap, taper_exit, Position(0.0, 0.0, (0.5*beampipe_dimensions[pieceIdx].length)));
-	//SubtractionSolid finalTaper(taper_outer, taper_inner);
+    EightPointSolid taper_outer(dd4hep::mm * (0.5*length[pieceIdx]), trpVertices);
+    EightPointSolid taper_inner(dd4hep::mm * (0.5*length[pieceIdx]), trpVerticesInner);
+
+    Box taper_entrance(dd4hep::mm * innerXRadius[pieceIdx], dd4hep::mm * innerYRadius[pieceIdx], dd4hep::mm * (0.5*(pipeThickness + 5.0)));
+    Box taper_exit(dd4hep::mm * innerYRadius[pieceIdx], dd4hep::mm * innerYRadius[pieceIdx], dd4hep::mm * (0.5*(pipeThickness + 5.0)));
+    SubtractionSolid hollowTaper(taper_outer, taper_inner);
+    SubtractionSolid taper_minus_entrance_cap(hollowTaper, taper_entrance, Position(0.0, 0.0, dd4hep::mm * (-0.5*length[pieceIdx])));
+    SubtractionSolid finalTaper(taper_minus_entrance_cap, taper_exit, Position(0.0, 0.0, dd4hep::mm * (0.5*length[pieceIdx])));
+    //SubtractionSolid finalTaper(taper_outer, taper_inner);
 
     Volume v_taper(Form("v_taper_%d", pieceIdx), finalTaper, m_SS);
     sdet.setAttributes(det, v_taper, x_det.regionStr(), x_det.limitsStr(), vis_name);
@@ -444,7 +444,6 @@ static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector /* sens *
 
 
 	//--------------------------------------------------------------
-
 	// This is the beam tube in the B0 magnet for the hadron beam
   	// doesn't use the slope information calculated before - it stands alone
 
@@ -493,7 +492,7 @@ static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector /* sens *
     sdet.setAttributes(det, v_vacuum_main_pipe, x_det.regionStr(), x_det.limitsStr(), "AnlBlue");
 
     auto pv_vacuum_0 = assembly.placeVolume(v_vacuum_main_pipe, Transform3D(RotationY(crossingAngle), Position( beampipe_dimensions[pieceIdx].xCenter + 4.0, 0.0, beampipe_dimensions[pieceIdx].zCenter)));
-    pv_vacuum_0.addPhysVolID("sector", 1);
+	pv_vacuum_0.addPhysVolID("sector", 1);
     DetElement vacuum_de_0(sdet, Form("sector_FF_vacuum_%d_de", pieceIdx), 1);
     vacuum_de_0.setPlacement(pv_vacuum_0);
 
@@ -525,7 +524,7 @@ static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector /* sens *
     sdet.setAttributes(det, v_vacuum_taper, x_det.regionStr(), x_det.limitsStr(), "AnlBlue");
 
     auto pv_vacuum_6 = assembly.placeVolume(v_vacuum_taper, Transform3D(RotationY(beampipe_dimensions[pieceIdx].rotationAngle), Position( beampipe_dimensions[pieceIdx].xCenter, 0.0,  beampipe_dimensions[pieceIdx].zCenter)));
-    pv_vacuum_6.addPhysVolID("sector", 1);
+	pv_vacuum_6.addPhysVolID("sector", 1);
     DetElement vacuum_de_6(sdet, Form("sector_FF_vacuum_%d_de", pieceIdx), 1);
     vacuum_de_6.setPlacement(pv_vacuum_6);
 
@@ -533,23 +532,23 @@ static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector /* sens *
 
 	pieceIdx = 7; //vacuum between taper and B2PF
 
-    Tube vacuum_pipe_after_taper(0.0, beampipe_dimensions[pieceIdx].innerXRadius, beampipe_dimensions[pieceIdx].length/2);
+	Tube vacuum_pipe_after_taper(0.0, beampipe_dimensions[pieceIdx].innerXRadius, beampipe_dimensions[pieceIdx].length/2);
+	
+	Volume v_vacuum_pipe_after_taper("v_vacuum_pipe_after_taper", vacuum_pipe_after_taper, m_vac);
+	sdet.setAttributes(det, v_vacuum_pipe_after_taper, x_det.regionStr(), x_det.limitsStr(), "AnlBlue");
 
-    Volume v_vacuum_pipe_after_taper("v_vacuum_pipe_after_taper", vacuum_pipe_after_taper, m_vac);
-    sdet.setAttributes(det, v_vacuum_pipe_after_taper, x_det.regionStr(), x_det.limitsStr(), "AnlBlue");
-
-    auto pv_vacuum_7 = assembly.placeVolume(v_vacuum_pipe_after_taper, Transform3D(RotationY(beampipe_dimensions[pieceIdx].rotationAngle), Position(beampipe_dimensions[pieceIdx].xCenter, beampipe_dimensions[pieceIdx].yCenter, beampipe_dimensions[pieceIdx].zCenter))); // 2353.06094)));
-    pv_vacuum_7.addPhysVolID("sector", 1);
-    DetElement vacuum_de_7(sdet, Form("sector_FF_vacuum_%d_de", pieceIdx), 1);
-    vacuum_de_7.setPlacement(pv_vacuum_7);
+	auto pv_vacuum_7 = assembly.placeVolume(v_vacuum_pipe_after_taper, Transform3D(RotationY(beampipe_dimensions[pieceIdx].rotationAngle), Position(beampipe_dimensions[pieceIdx].xCenter, beampipe_dimensions[pieceIdx].yCenter, beampipe_dimensions[pieceIdx].zCenter))); // 2353.06094)));
+	pv_vacuum_7.addPhysVolID("sector", 1);
+	DetElement vacuum_de_7(sdet, Form("sector_FF_vacuum_%d_de", pieceIdx), 1);
+	vacuum_de_7.setPlacement(pv_vacuum_7);
 
 	//-------------------------------------------------------------------
 
-  	pv_assembly = det.pickMotherVolume(sdet).placeVolume(assembly); //, posAndRot);
-  	pv_assembly.addPhysVolID("system", x_det.id()).addPhysVolID("barrel", 1);
-  	sdet.setPlacement(pv_assembly);
-  	assembly->GetShape()->ComputeBBox();
-  	return sdet;
+	pv_assembly = det.pickMotherVolume(sdet).placeVolume(assembly); //, posAndRot);
+	pv_assembly.addPhysVolID("system", x_det.id()).addPhysVolID("barrel", 1);
+	sdet.setPlacement(pv_assembly);
+	assembly->GetShape()->ComputeBBox();
+	return sdet;
 }
 
 DECLARE_DETELEMENT(forwardBeamPipeBrazil, create_detector)
