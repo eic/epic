@@ -80,10 +80,10 @@ static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector /* sens *
         });
 
         beampipe_dimensions[0].outerXRadius      = beampipe_dimensions[0].innerXRadius + pipeThickness, //
-    beampipe_dimensions[0].outerYRadius      = beampipe_dimensions[0].innerYRadius + pipeThickness, //
+    	beampipe_dimensions[0].outerYRadius      = beampipe_dimensions[0].innerYRadius + pipeThickness, //
         beampipe_dimensions[0].xCenter           = -1*(b1APFEndPoint_x+((0.5*beampipe_dimensions[0].length)*TMath::Sin(-globRotationAngle))), //-745.20328;
-    beampipe_dimensions[0].yCenter           = 0.0,
-    beampipe_dimensions[0].zCenter           = (b1APFEndPoint_z+((0.5*beampipe_dimensions[0].length)*TMath::Cos(-globRotationAngle))),//24060.3176;
+    	beampipe_dimensions[0].yCenter           = 0.0,
+    	beampipe_dimensions[0].zCenter           = (b1APFEndPoint_z+((0.5*beampipe_dimensions[0].length)*TMath::Cos(-globRotationAngle))),//24060.3176;
 
         tmp_endpoint_z = beampipe_dimensions[0].zCenter+((0.5*beampipe_dimensions[0].length)*TMath::Cos(-globRotationAngle));
         tmp_endpoint_x = -1*beampipe_dimensions[0].xCenter+((0.5*beampipe_dimensions[0].length)*TMath::Sin(-globRotationAngle));
@@ -410,14 +410,15 @@ static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector /* sens *
     }
 
 
-    EightPointSolid taper_outer(dd4hep::mm * (0.5*length[pieceIdx]), trpVertices);
-    EightPointSolid taper_inner(dd4hep::mm * (0.5*length[pieceIdx]), trpVerticesInner);
+	
+    EightPointSolid taper_outer((0.5*beampipe_dimensions[pieceIdx].length), trpVertices);
+    EightPointSolid taper_inner((0.5*beampipe_dimensions[pieceIdx].length), trpVerticesInner);
 
-    Box taper_entrance(dd4hep::mm * innerXRadius[pieceIdx], dd4hep::mm * innerYRadius[pieceIdx], dd4hep::mm * (0.5*(pipeThickness + 5.0)));
-    Box taper_exit(dd4hep::mm * innerYRadius[pieceIdx], dd4hep::mm * innerYRadius[pieceIdx], dd4hep::mm * (0.5*(pipeThickness + 5.0)));
+    Box taper_entrance(beampipe_dimensions[pieceIdx].innerXRadius, beampipe_dimensions[pieceIdx].innerYRadius, (0.5*(pipeThickness + 5.0)));
+    Box taper_exit(beampipe_dimensions[pieceIdx].innerYRadius[pieceIdx], beampipe_dimensions[pieceIdx].innerYRadius[pieceIdx], (0.5*(pipeThickness + 5.0)));
     SubtractionSolid hollowTaper(taper_outer, taper_inner);
-    SubtractionSolid taper_minus_entrance_cap(hollowTaper, taper_entrance, Position(0.0, 0.0, dd4hep::mm * (-0.5*length[pieceIdx])));
-    SubtractionSolid finalTaper(taper_minus_entrance_cap, taper_exit, Position(0.0, 0.0, dd4hep::mm * (0.5*length[pieceIdx])));
+    SubtractionSolid taper_minus_entrance_cap(hollowTaper, taper_entrance, Position(0.0, 0.0, (-0.5*beampipe_dimensions[pieceIdx].length)));
+    SubtractionSolid finalTaper(taper_minus_entrance_cap, taper_exit, Position(0.0, 0.0, (0.5*beampipe_dimensions[pieceIdx].length)));
     //SubtractionSolid finalTaper(taper_outer, taper_inner);
 
     Volume v_taper(Form("v_taper_%d", pieceIdx), finalTaper, m_SS);
