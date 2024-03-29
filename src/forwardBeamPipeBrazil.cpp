@@ -292,7 +292,7 @@ static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector /* sens *
 	//-------------------------------------------------------------------
 
   	int pieceIdx = 0; //Larger, rectangular pipe transporting proton and neutral envelopes (neutral exit window and transfer to smaller proton line at the end)
-
+	
 	Box pipeAfterB1APF_outer(beampipe_dimensions[pieceIdx].outerXRadius, beampipe_dimensions[pieceIdx].outerYRadius, beampipe_dimensions[pieceIdx].length/2);
 	Box pipeAfterB1APF_inner(beampipe_dimensions[pieceIdx].innerXRadius, beampipe_dimensions[pieceIdx].innerYRadius, (beampipe_dimensions[pieceIdx].length)/2);
 	Box pipeAfterB1APF_firstEndCap(beampipe_dimensions[pieceIdx].outerXRadius, beampipe_dimensions[pieceIdx].outerYRadius, 5.0/2.0);
