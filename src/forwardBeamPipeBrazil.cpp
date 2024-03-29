@@ -80,10 +80,10 @@ static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector /* sens *
         });
 
         beampipe_dimensions[0].outerXRadius      = beampipe_dimensions[0].innerXRadius + pipeThickness, //
-    	beampipe_dimensions[0].outerYRadius      = beampipe_dimensions[0].innerYRadius + pipeThickness, //
+        beampipe_dimensions[0].outerYRadius      = beampipe_dimensions[0].innerYRadius + pipeThickness, //
         beampipe_dimensions[0].xCenter           = -1*(b1APFEndPoint_x+((0.5*beampipe_dimensions[0].length)*TMath::Sin(-globRotationAngle))), //-745.20328;
-    	beampipe_dimensions[0].yCenter           = 0.0,
-    	beampipe_dimensions[0].zCenter           = (b1APFEndPoint_z+((0.5*beampipe_dimensions[0].length)*TMath::Cos(-globRotationAngle))),//24060.3176;
+        beampipe_dimensions[0].yCenter           = 0.0,
+        beampipe_dimensions[0].zCenter           = (b1APFEndPoint_z+((0.5*beampipe_dimensions[0].length)*TMath::Cos(-globRotationAngle))),//24060.3176;
 
         tmp_endpoint_z = beampipe_dimensions[0].zCenter+((0.5*beampipe_dimensions[0].length)*TMath::Cos(-globRotationAngle));
         tmp_endpoint_x = -1*beampipe_dimensions[0].xCenter+((0.5*beampipe_dimensions[0].length)*TMath::Sin(-globRotationAngle));
@@ -410,7 +410,7 @@ static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector /* sens *
     }
 
 
-	
+
     EightPointSolid taper_outer((0.5*beampipe_dimensions[pieceIdx].length), trpVertices);
     EightPointSolid taper_inner((0.5*beampipe_dimensions[pieceIdx].length), trpVerticesInner);
 
