@@ -31,18 +31,8 @@ static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector /* sens *
 	double b0_hadron_tube_outer_r = 3.1 * dd4hep::cm;   
 	double b0_hadron_tube_length  = 120.0 * dd4hep::cm; 
 
-	double pipeThickness     = 5.0;
+	double pipeThickness     = 5.0 * dd4hep::mm;
   
-	//Double_t length[10];
-	//Double_t innerXRadius[10];  
-	//Double_t innerYRadius[10]; 
-	//Double_t outerXRadius[10];
-	//Double_t outerYRadius[10];
-	//Double_t rotationAngle[10];
-	//Double_t xCenter[10];
-	//Double_t yCenter[10];
-	//Double_t zCenter[10];
-
 	struct beampipe_dimensions_t {
     	Double_t length;
     	Double_t innerXRadius;
@@ -60,9 +50,10 @@ static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector /* sens *
 	std::cout << "Empty vector of structs created..." << std::endl;
   
 	double globRotationAngle = -0.0454486856; //This is the angle of the proton orbit from the end of B1APF to the beginning of B2PF
+	double crossingAngle     = -0.025; //relevant for the neutral cone
 
-	double b1APFEndPoint_z = 22062.3828; //location of proton orbit at b1APF exit -- in mm
-	double b1APFEndPoint_x = 654.3372; //location of proton orbit at b1APF exit -- in mm
+	double b1APFEndPoint_z = 22062.3828 * dd4hep::mm; //location of proton orbit at b1APF exit -- in mm
+	double b1APFEndPoint_x = 654.3372 * dd4hep::mm; //location of proton orbit at b1APF exit -- in mm
 
 	double tmp_endpoint_z = 0.0;
 	double tmp_endpoint_x = 0.0;
@@ -74,29 +65,17 @@ static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector /* sens *
 	//primary pipe after B1APF, before neutral exit window + transition to smaller pipe
 	//rectangular cross-section!!!!!
 	//------------------------------------------------------------------------------------
-  
-  	//length[0]            = 7615.486; //from VPC drawings, in mm
-	//innerXRadius[0]      = 275.0;    //
-	//innerYRadius[0]      = 175.0;    //
-	//outerXRadius[0]      = innerXRadius[0] + pipeThickness; //
-	//outerYRadius[0]      = innerYRadius[0] + pipeThickness; //
-
-  	//xCenter[0]           = -1*(b1APFEndPoint_x+((0.5*length[0])*TMath::Sin(-globRotationAngle))); //-745.20328;
-	//xCenter[0]           = xCenter[0]; //shift of center location to account for offset
-  	//yCenter[0]           = 0.0;
-  	//zCenter[0]           = (b1APFEndPoint_z+((0.5*length[0])*TMath::Cos(-globRotationAngle)));//24060.3176;
-  	//rotationAngle[0]     = globRotationAngle;
 
 	beampipe_dimensions.push_back({
 
-		.length            = 7615.486, //from VPC drawings, in mm
-    	.innerXRadius      = 275.0,    //
-    	.innerYRadius      = 175.0,    //
-    	.outerXRadius      = 0.0, //
-    	.outerYRadius      = 0.0, //
-		.xCenter           = 0.0, //-745.20328;
+		.length            = 7615.486 * dd4hep::mm, //from VPC drawings, in mm
+    	.innerXRadius      = 275.0 * dd4hep::mm,    
+    	.innerYRadius      = 175.0 * dd4hep::mm,    
+    	.outerXRadius      = 0.0, 
+    	.outerYRadius      = 0.0, 
+		.xCenter           = 0.0, 
     	.yCenter           = 0.0,
-    	.zCenter           = 0.0,//24060.3176;
+    	.zCenter           = 0.0,
     	.rotationAngle     = globRotationAngle
 	});
 	
@@ -109,7 +88,7 @@ static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector /* sens *
 	tmp_endpoint_z = beampipe_dimensions[0].zCenter+((0.5*beampipe_dimensions[0].length)*TMath::Cos(-globRotationAngle));
 	tmp_endpoint_x = -1*beampipe_dimensions[0].xCenter+((0.5*beampipe_dimensions[0].length)*TMath::Sin(-globRotationAngle));
 
-	double windowRadius = 110.0;
+	double windowRadius = 110.0 * dd4hep::mm;
 
 
   	//------------------------------------------------------------------------------------
@@ -117,27 +96,16 @@ static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector /* sens *
 	//rectangular cross-section!!!!!
 	//------------------------------------------------------------------------------------
   
-  	//length[1]            = 2780.273; // from VPC drawings
-	//innerXRadius[1]      = 150.0; //
-	//innerYRadius[1]      = 30.0; //
-	//outerXRadius[1]      = innerXRadius[1] + pipeThickness; //
-	//outerYRadius[1]      = innerYRadius[1] + pipeThickness; //
-
-	//xCenter[1]           = -1*(tmp_endpoint_x+((0.5*length[1])*TMath::Sin(-globRotationAngle)));//-972.36849;
-	//yCenter[1]           = 0.0;
-	//zCenter[1]           = tmp_endpoint_z+((0.5*length[1])*TMath::Cos(-globRotationAngle));//29055.1545;
-	//rotationAngle[1]     = globRotationAngle;
-
 	beampipe_dimensions.push_back({ 
 
-		.length            = 2780.273, // from VPC drawings
-    	.innerXRadius      = 150.0, //
-    	.innerYRadius      = 30.0, //
-    	.outerXRadius      = 0.0, //
-    	.outerYRadius      = 0.0, //
-		.xCenter           = 0.0,//-972.36849;
+		.length            = 2780.273 * dd4hep::mm, // from VPC drawings
+    	.innerXRadius      = 150.0 * dd4hep::mm, //
+    	.innerYRadius      = 30.0 * dd4hep::mm, //
+    	.outerXRadius      = 0.0, 
+    	.outerYRadius      = 0.0, 
+		.xCenter           = 0.0,
     	.yCenter           = 0.0,
-    	.zCenter           = 0.0,//29055.1545;
+    	.zCenter           = 0.0,
     	.rotationAngle     = globRotationAngle
 	});
 
@@ -154,22 +122,11 @@ static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector /* sens *
   	//First roman pots scattering chamber
 	//------------------------------------------------------------------------------------
   
-  	//length[2]            = 200; // from VPC drawings
-	//innerXRadius[2]      = 200.0; //
-	//innerYRadius[2]      = 125.0; //
-	//outerXRadius[2]      = innerXRadius[2] + pipeThickness; //
-	//outerYRadius[2]      = innerYRadius[2] + pipeThickness; //
-
-  	//xCenter[2]           = -1*(tmp_endpoint_x+((0.5*length[2])*TMath::Sin(-globRotationAngle)));//-972.36849;
-  	//yCenter[2]           = 0.0;
-  	//zCenter[2]           = tmp_endpoint_z+((0.5*length[2])*TMath::Cos(-globRotationAngle));//29055.1545;
-  	//rotationAngle[2]     = globRotationAngle;
-
 	beampipe_dimensions.push_back({
 
-		.length            = 200, // from VPC drawings
-    	.innerXRadius      = 200.0, //
-    	.innerYRadius      = 125.0, //
+		.length            = 200 * dd4hep::mm, // from VPC drawings
+    	.innerXRadius      = 200.0 * dd4hep::mm, //
+    	.innerYRadius      = 125.0 * dd4hep::mm, //
     	.outerXRadius      = 0.0, //
     	.outerYRadius      = 0.0, //
 		.xCenter           = 0.0,//-972.36849;
@@ -192,27 +149,17 @@ static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector /* sens *
 	//rectangular cross-section!!!!!
 	//------------------------------------------------------------------------------------
   
-  	//length[3]            = 1500.0; // from VPC drawings
-	//innerXRadius[3]      = 150.0; //
-	//innerYRadius[3]      = 30.0; //
-	//outerXRadius[3]      = innerXRadius[3] + pipeThickness; //
-	//outerYRadius[3]      = innerYRadius[3] + pipeThickness; //
-
-  	//xCenter[3]           = -1*(tmp_endpoint_x+((0.5*length[3])*TMath::Sin(-globRotationAngle)));//-972.36849;
-  	//yCenter[3]           = 0.0;
-  	//zCenter[3]           = tmp_endpoint_z+((0.5*length[3])*TMath::Cos(-globRotationAngle));//29055.1545;
-  	//rotationAngle[3]     = globRotationAngle;
-
+  	
 	beampipe_dimensions.push_back({
 
-		.length            = 1500.0, // from VPC drawings
-    	.innerXRadius      = 150.0, //
-    	.innerYRadius      = 30.0, //
-    	.outerXRadius      = 0.0, //
-    	.outerYRadius      = 0.0, //
-		.xCenter           = 0.0,//-972.36849;
+		.length            = 1500.0 * dd4hep::mm, // from VPC drawings
+    	.innerXRadius      = 150.0 * dd4hep::mm, //
+    	.innerYRadius      = 30.0 * dd4hep::mm, //
+    	.outerXRadius      = 0.0, 
+    	.outerYRadius      = 0.0, 
+		.xCenter           = 0.0,
     	.yCenter           = 0.0,
-    	.zCenter           = 0.0,//29055.1545;
+    	.zCenter           = 0.0,
     	.rotationAngle     = globRotationAngle
 	});
 	
@@ -229,27 +176,17 @@ static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector /* sens *
   	//second roman pots scattering chamber
 	//------------------------------------------------------------------------------------
   
-  	//length[4]            = 200; // from VPC drawings
-	//innerXRadius[4]      = 200.0; //
-	//innerYRadius[4]      = 125.0; //
-	//outerXRadius[4]      = innerXRadius[4] + pipeThickness; //
-	//outerYRadius[4]      = innerYRadius[4] + pipeThickness; //
-
-  	//xCenter[4]           = -1*(tmp_endpoint_x+((0.5*length[4])*TMath::Sin(-globRotationAngle)));//-972.36849;
-  	//yCenter[4]           = 0.0;
-  	//zCenter[4]           = tmp_endpoint_z+((0.5*length[4])*TMath::Cos(-globRotationAngle));//29055.1545;
-  	//rotationAngle[4]     = globRotationAngle;
- 
+  	
 	beampipe_dimensions.push_back({
 
-		.length            = 200, // from VPC drawings
-    	.innerXRadius      = 200.0, //
-    	.innerYRadius      = 125.0, //
-    	.outerXRadius      = 0.0, //
-    	.outerYRadius      = 0.0, //
-		.xCenter           = 0.0,//-972.36849;
+		.length            = 200 * dd4hep::mm, // from VPC drawings
+    	.innerXRadius      = 200.0 * dd4hep::mm, //
+    	.innerYRadius      = 125.0 * dd4hep::mm, //
+    	.outerXRadius      = 0.0, 
+    	.outerYRadius      = 0.0, 
+		.xCenter           = 0.0,
     	.yCenter           = 0.0,
-    	.zCenter           = 0.0,//29055.1545;
+    	.zCenter           = 0.0,
     	.rotationAngle     = globRotationAngle
 	});
 	
@@ -266,27 +203,17 @@ static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector /* sens *
     // Pipe from second RP chamber to taper 
     //------------------------------------------------------------------------------------
 
-	//length[5]            = 100.0; // from VPC drawings
-    //innerXRadius[5]      = 150.0; //
-    //innerYRadius[5]      = 30.0; //
-    //outerXRadius[5]      = innerXRadius[5] + pipeThickness; //
-    //outerYRadius[5]      = innerYRadius[5] + pipeThickness; //
-
-    //xCenter[5]           = -1*(tmp_endpoint_x+((0.5*length[5])*TMath::Sin(-globRotationAngle)));//-972.36849;
-    //yCenter[5]           = 0.0;
-    //zCenter[5]           = tmp_endpoint_z+((0.5*length[5])*TMath::Cos(-globRotationAngle));//29055.1545;
-    //rotationAngle[5]     = globRotationAngle;
 
 	beampipe_dimensions.push_back({
 
-		.length            = 100.0, // from VPC drawings
-    	.innerXRadius      = 150.0, //
-    	.innerYRadius      = 30.0, //
-    	.outerXRadius      = 0.0, //
-    	.outerYRadius      = 0.0, //
-		.xCenter           = 0.0,//-972.36849;
+		.length            = 100.0 * dd4hep::mm, // from VPC drawings
+    	.innerXRadius      = 150.0 * dd4hep::mm, //
+    	.innerYRadius      = 30.0 * dd4hep::mm, //
+    	.outerXRadius      = 0.0, 
+    	.outerYRadius      = 0.0, 
+		.xCenter           = 0.0,
     	.yCenter           = 0.0,
-    	.zCenter           = 0.0,//29055.1545;
+    	.zCenter           = 0.0,
     	.rotationAngle     = globRotationAngle
 	});
 	
@@ -303,29 +230,17 @@ static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector /* sens *
     // taper near ZDC
     //------------------------------------------------------------------------------------
 
-	//numbers here are not really correct for the full taper, just for the opening
-
-    //length[6]            = 599.692; // from VPC drawings
-    //innerXRadius[6]      = 150.0; //
-    //innerYRadius[6]      = 30.0; //
-    //outerXRadius[6]      = innerXRadius[6] + pipeThickness; //
-    //outerYRadius[6]      = innerYRadius[6] + pipeThickness; //
-
-    //xCenter[6]           = -1*(tmp_endpoint_x+((0.5*length[6])*TMath::Sin(-globRotationAngle)));//-972.36849;
-    //yCenter[6]           = 0.0;
-    //zCenter[6]           = tmp_endpoint_z+((0.5*length[6])*TMath::Cos(-globRotationAngle));//29055.1545;
-    //rotationAngle[6]     = globRotationAngle;
-
+	
 	beampipe_dimensions.push_back({
 
-		.length            = 599.692, // from VPC drawings
-    	.innerXRadius      = 150.0, //
-    	.innerYRadius      = 30.0, //
-    	.outerXRadius      = 0.0, //
-    	.outerYRadius      = 0.0, //
-		.xCenter           = 0.0,//-972.36849;
+		.length            = 599.692 * dd4hep::mm, // from VPC drawings
+    	.innerXRadius      = 150.0 * dd4hep::mm, //
+    	.innerYRadius      = 30.0 * dd4hep::mm, //
+    	.outerXRadius      = 0.0, 
+    	.outerYRadius      = 0.0, 
+		.xCenter           = 0.0,
     	.yCenter           = 0.0,
-    	.zCenter           = 0.0,//29055.1545;
+    	.zCenter           = 0.0,
     	.rotationAngle     = globRotationAngle
 
 	});
@@ -345,27 +260,17 @@ static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector /* sens *
 
     //numbers here are not really correct for the full taper, just for the opening
 
-    //length[7]            = 3000.0; // from VPC drawings
-    //innerXRadius[7]      = 35.0; //
-    //innerYRadius[7]      = 0.0; //NOT USED
-    //outerXRadius[7]      = innerXRadius[7] + pipeThickness; //
-    //outerYRadius[7]      = innerYRadius[7] + pipeThickness; //NOT USED
-
-    //xCenter[7]           = -1*(tmp_endpoint_x+((0.5*length[7])*TMath::Sin(-globRotationAngle)));//-972.36849;
-    //yCenter[7]           = 0.0;
-    //zCenter[7]           = tmp_endpoint_z+((0.5*length[7])*TMath::Cos(-globRotationAngle));//29055.1545;
-    //rotationAngle[7]     = globRotationAngle;
-
+   
 	beampipe_dimensions.push_back({
 
-		.length            = 3000.0, // from VPC drawings
-    	.innerXRadius      = 35.0, //
-    	.innerYRadius      = 0.0, //NOT USED
-    	.outerXRadius      = 0.0, //
-    	.outerYRadius      = 0.0, //NOT USED
-		.xCenter           = 0.0,//-972.36849;
+		.length            = 3000.0 * dd4hep::mm, // from VPC drawings
+    	.innerXRadius      = 35.0 * dd4hep::mm, //
+    	.innerYRadius      = 0.0, 
+    	.outerXRadius      = 0.0, 
+    	.outerYRadius      = 0.0, 
+		.xCenter           = 0.0,
     	.yCenter           = 0.0,
-    	.zCenter           = 0.0,//29055.1545;
+    	.zCenter           = 0.0,
     	.rotationAngle     = globRotationAngle
 	});
 	
@@ -381,119 +286,89 @@ static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector /* sens *
 	//begin building main volumes here
 	//------------------------------------------
 
+	//This solid is to properly remove the entrance/exit portions of the RP scattering chambers (see idx 2 and 4)
+	Box RP_subtract_outer(beampipe_dimensions[1].outerXRadius, beampipe_dimensions[1].outerYRadius, (beampipe_dimensions[2].length+5.0)/2);
+	
+	//-------------------------------------------------------------------
+
   	int pieceIdx = 0; //Larger, rectangular pipe transporting proton and neutral envelopes (neutral exit window and transfer to smaller proton line at the end)
 
-	Box inner_subtract_outer(dd4hep::mm*beampipe_dimensions[5].outerXRadius, dd4hep::mm*beampipe_dimensions[5].outerYRadius, dd4hep::mm*beampipe_dimensions[5].length/2);
-	Box inner_subtract_inner(dd4hep::mm*beampipe_dimensions[5].innerXRadius, dd4hep::mm*beampipe_dimensions[5].innerYRadius, dd4hep::mm*(beampipe_dimensions[5].length+5.0)/2);
-	
-	Box RP_subtract_outer(dd4hep::mm*beampipe_dimensions[1].outerXRadius, dd4hep::mm*beampipe_dimensions[1].outerYRadius, dd4hep::mm*(beampipe_dimensions[2].length+5.0)/2);
-	Box RP_subtract_inner(dd4hep::mm*beampipe_dimensions[1].innerXRadius, dd4hep::mm*beampipe_dimensions[1].innerYRadius, dd4hep::mm*(beampipe_dimensions[2].length+10.0)/2);
-
-	Box pipeAfterB1APF_outer(dd4hep::mm*beampipe_dimensions[pieceIdx].outerXRadius, dd4hep::mm*beampipe_dimensions[pieceIdx].outerYRadius, dd4hep::mm*beampipe_dimensions[pieceIdx].length/2);
-	Box pipeAfterB1APF_inner(dd4hep::mm*beampipe_dimensions[pieceIdx].innerXRadius, dd4hep::mm*beampipe_dimensions[pieceIdx].innerYRadius, dd4hep::mm*(beampipe_dimensions[pieceIdx].length)/2);
-	Box pipeAfterB1APF_firstEndCap(dd4hep::mm * beampipe_dimensions[pieceIdx].outerXRadius, dd4hep::mm * beampipe_dimensions[pieceIdx].outerYRadius, dd4hep::mm*5.0/2.0);
-	Tube neutral_exit_window_cutout(0.0, dd4hep::mm*windowRadius, 1.0); // 1.0cm thick
-	Box protonTransferWindow(dd4hep::mm * 155.0, dd4hep::mm*beampipe_dimensions[1].outerYRadius, dd4hep::mm*(5.0/2));
+	Box pipeAfterB1APF_outer(beampipe_dimensions[pieceIdx].outerXRadius, beampipe_dimensions[pieceIdx].outerYRadius, beampipe_dimensions[pieceIdx].length/2);
+	Box pipeAfterB1APF_inner(beampipe_dimensions[pieceIdx].innerXRadius, beampipe_dimensions[pieceIdx].innerYRadius, (beampipe_dimensions[pieceIdx].length)/2);
+	Box pipeAfterB1APF_firstEndCap(beampipe_dimensions[pieceIdx].outerXRadius, beampipe_dimensions[pieceIdx].outerYRadius, 5.0/2.0);
+	Tube neutral_exit_window_cutout(0.0, windowRadius, 1.0); // 1.0cm thick
+	//FIXME: proton transfer window is done by hand right now - not a nicer way to do it until we get the CAD drawing
+	Box protonTransferWindow(155.0 * dd4hep::mm, beampipe_dimensions[1].outerYRadius, (5.0/2));
 
 	SubtractionSolid tmpAfterB1APF(pipeAfterB1APF_outer, pipeAfterB1APF_inner); //This gets rid of the inner portion of the pipe, but leaves the endcaps
-	SubtractionSolid tmpAfterFrontEndCap(tmpAfterB1APF, pipeAfterB1APF_firstEndCap, Position(0.0, 0.0, dd4hep::mm * (-beampipe_dimensions[pieceIdx].length)/2));
-	SubtractionSolid pipeAfterProtonTransferWindow(tmpAfterFrontEndCap, protonTransferWindow, Position(dd4hep::mm * (-120.0), 0.0, dd4hep::mm * (beampipe_dimensions[pieceIdx].length)/2 ));
+	SubtractionSolid tmpAfterFrontEndCap(tmpAfterB1APF, pipeAfterB1APF_firstEndCap, Position(0.0, 0.0, (-beampipe_dimensions[pieceIdx].length)/2));
+	//FIXME: proton transfer window is done by hand right now - not a nicer way to do it until we get the CAD drawing
+	SubtractionSolid pipeAfterProtonTransferWindow(tmpAfterFrontEndCap, protonTransferWindow, Position((-120.0  * dd4hep::mm), 0.0, (beampipe_dimensions[pieceIdx].length)/2 ));
 
-	SubtractionSolid pipeAfterB1APF(pipeAfterProtonTransferWindow, neutral_exit_window_cutout, Position(dd4hep::mm * 160.0 , 0.0, dd4hep::mm * 0.5*beampipe_dimensions[pieceIdx].length));
+	SubtractionSolid pipeAfterB1APF(pipeAfterProtonTransferWindow, neutral_exit_window_cutout, Position(160.0  * dd4hep::mm, 0.0, 0.5*beampipe_dimensions[pieceIdx].length));
 
     Volume v_pipeAfterB1APF(Form("v_pipeAfterB1APF_%d", pieceIdx), pipeAfterB1APF, m_SS);
     sdet.setAttributes(det, v_pipeAfterB1APF, x_det.regionStr(), x_det.limitsStr(), vis_name);
 
-    auto pv_pipe_0 = assembly.placeVolume(v_pipeAfterB1APF, Transform3D(RotationY(-0.025), Position(dd4hep::mm * beampipe_dimensions[pieceIdx].xCenter + 4.0, dd4hep::mm *  beampipe_dimensions[pieceIdx].yCenter, dd4hep::mm * beampipe_dimensions[pieceIdx].zCenter))); // 2353.06094)));
+    auto pv_pipe_0 = assembly.placeVolume(v_pipeAfterB1APF, Transform3D(RotationY(crossingAngle), Position(beampipe_dimensions[pieceIdx].xCenter + 4.0,  beampipe_dimensions[pieceIdx].yCenter, beampipe_dimensions[pieceIdx].zCenter))); // 2353.06094)));
     pv_pipe_0.addPhysVolID("sector", 1);
     DetElement pipe_de_0(sdet, Form("sector_pipe_%d_de", pieceIdx), 1);
     pipe_de_0.setPlacement(pv_pipe_0);
 
 	//--------------------------------------------------------------------
 	
-	pieceIdx = 1; //smaller rectangular pipe for the protons
-
-	Box pipe_1_outer(dd4hep::mm*beampipe_dimensions[pieceIdx].outerXRadius, dd4hep::mm*beampipe_dimensions[pieceIdx].outerYRadius, dd4hep::mm*beampipe_dimensions[pieceIdx].length/2);
-	Box pipe_1_inner(dd4hep::mm*beampipe_dimensions[pieceIdx].innerXRadius, dd4hep::mm*beampipe_dimensions[pieceIdx].innerYRadius, dd4hep::mm*(beampipe_dimensions[pieceIdx].length+5.0)/2);
-	SubtractionSolid pipe_1(pipe_1_outer, pipe_1_inner);
+	double lengthDelta = 0.0; //over-length value to remove end-pieces for hollow rectangular pipes
 	
-    Volume v_pipe_1(Form("v_pipe_1_%d", pieceIdx), pipe_1, m_SS);
-    sdet.setAttributes(det, v_pipe_1, x_det.regionStr(), x_det.limitsStr(), vis_name);
-
-    auto pv_pipe_1 = assembly.placeVolume(v_pipe_1, Transform3D(RotationY(beampipe_dimensions[pieceIdx].rotationAngle), Position(dd4hep::mm * beampipe_dimensions[pieceIdx].xCenter, dd4hep::mm *  beampipe_dimensions[pieceIdx].yCenter, dd4hep::mm * beampipe_dimensions[pieceIdx].zCenter))); // 2353.06094)));
-    pv_pipe_1.addPhysVolID("sector", 1);
-    DetElement pipe_de_1(sdet, Form("sector_pipe_%d_de", pieceIdx), 1);
-    pipe_de_1.setPlacement(pv_pipe_1);
-
-	//------------------------------------------------------------------------
-
-	pieceIdx = 3; //pipe between Roman pots station
-
-    Box pipe_3_outer(dd4hep::mm*beampipe_dimensions[pieceIdx].outerXRadius, dd4hep::mm*beampipe_dimensions[pieceIdx].outerYRadius, dd4hep::mm*beampipe_dimensions[pieceIdx].length/2);
-    Box pipe_3_inner(dd4hep::mm*beampipe_dimensions[pieceIdx].innerXRadius, dd4hep::mm*beampipe_dimensions[pieceIdx].innerYRadius, dd4hep::mm*(beampipe_dimensions[pieceIdx].length+5.0)/2);
-    SubtractionSolid pipe_3(pipe_3_outer, pipe_3_inner);
-
-    Volume v_pipe_3(Form("v_pipe_3_%d", pieceIdx), pipe_3, m_SS);
-    sdet.setAttributes(det, v_pipe_3, x_det.regionStr(), x_det.limitsStr(), vis_name);
-
-    auto pv_pipe_3 = assembly.placeVolume(v_pipe_3, Transform3D(RotationY(beampipe_dimensions[pieceIdx].rotationAngle), Position(dd4hep::mm * beampipe_dimensions[pieceIdx].xCenter, dd4hep::mm * beampipe_dimensions[pieceIdx].yCenter, dd4hep::mm * beampipe_dimensions[pieceIdx].zCenter))); // 2353.06094)));
-    pv_pipe_3.addPhysVolID("sector", 1);
-    DetElement pipe_de_3(sdet, Form("sector_pipe_%d_de", pieceIdx), 1);
-    pipe_de_3.setPlacement(pv_pipe_3);
-
-	//----------------------------------------------------------------
-
-	pieceIdx = 2; //first roman pots scattering chamber
+	// 1 -- small pipe connecting big pipe to RP station 1
+	// 2 -- roman pots scattering chamber 1
+	// 3 -- small pipe connecting RP1 and RP2
+	// 4 -- roman pots scattering chamber 2
+	// 5 -- small pipe connecting RP2 to ZDC taper
 	
-	Box box_rp_station_1_outer(dd4hep::mm*beampipe_dimensions[pieceIdx].outerXRadius, dd4hep::mm*beampipe_dimensions[pieceIdx].outerYRadius, dd4hep::mm*beampipe_dimensions[pieceIdx].length/2);
-	Box box_rp_station_1_inner(dd4hep::mm*beampipe_dimensions[pieceIdx].innerXRadius, dd4hep::mm*beampipe_dimensions[pieceIdx].innerYRadius, dd4hep::mm*beampipe_dimensions[pieceIdx].length/2);
-	SubtractionSolid tmp(box_rp_station_1_outer, box_rp_station_1_inner);
-	//SubtractionSolid rpStation1(box_rp_station_1_outer, box_rp_station_1_inner);
-	SubtractionSolid rpStation1(tmp, RP_subtract_outer);
+	lengthDelta = 5.0; //for small beam pipes to remove endcaps
 	
-    Volume v_rpStation1(Form("v_rpStation1_%d", pieceIdx), rpStation1, m_SS);
-    sdet.setAttributes(det, v_rpStation1, x_det.regionStr(), x_det.limitsStr(), vis_name);
+	for(int idx = 1; idx < 6; idx++){ //loop for the easier pieces to simplify
+		
+		if(idx == 2 || idx == 4){ continue;}
+		
+		Box outer(beampipe_dimensions[idx].outerXRadius, beampipe_dimensions[idx].outerYRadius, beampipe_dimensions[idx].length/2);
+		Box inner(beampipe_dimensions[idx].innerXRadius, beampipe_dimensions[idx].innerYRadius, (beampipe_dimensions[idx].length+lengthDelta)/2);
+		
+		SubtractionSolid hollow_pipe(outer, inner);
+		
+		Volume v_hollow_pipe(Form("v_pipe_%d", idx), hollow_pipe, m_SS);
+	    sdet.setAttributes(det, v_hollow_pipe, x_det.regionStr(), x_det.limitsStr(), vis_name);
 
-    auto pv_pipe_2 = assembly.placeVolume(v_rpStation1, Transform3D(RotationY(beampipe_dimensions[pieceIdx].rotationAngle), Position(dd4hep::mm * beampipe_dimensions[pieceIdx].xCenter, dd4hep::mm * beampipe_dimensions[pieceIdx].yCenter, dd4hep::mm * beampipe_dimensions[pieceIdx].zCenter))); // 2353.06094)));
-    pv_pipe_2.addPhysVolID("sector", 1);
-    DetElement pipe_de_2(sdet, Form("sector_pipe_%d_de", pieceIdx), 1);
-    pipe_de_2.setPlacement(pv_pipe_2);
-
-	//---------------------------------------------------------------------
-
-	pieceIdx = 4; //Second roman pots scattering chamber
-
-	Box box_rp_station_2_outer(dd4hep::mm*beampipe_dimensions[pieceIdx].outerXRadius, dd4hep::mm*beampipe_dimensions[pieceIdx].outerYRadius, dd4hep::mm*beampipe_dimensions[pieceIdx].length/2);
-	Box box_rp_station_2_inner(dd4hep::mm*beampipe_dimensions[pieceIdx].innerXRadius, dd4hep::mm*beampipe_dimensions[pieceIdx].innerYRadius, dd4hep::mm*beampipe_dimensions[pieceIdx].length/2);
-	SubtractionSolid tmp_2(box_rp_station_2_outer, box_rp_station_2_inner);
-	//SubtractionSolid rpStation2(box_rp_station_2_outer, box_rp_station_2_inner);
-	//SubtractionSolid tmp_22(tmp_2, pipe_3_outer);
-	SubtractionSolid rpStation2(tmp_2, RP_subtract_outer);
+	    auto pv_final = assembly.placeVolume(v_hollow_pipe, Transform3D(RotationY(beampipe_dimensions[idx].rotationAngle), Position(beampipe_dimensions[idx].xCenter,  beampipe_dimensions[idx].yCenter, beampipe_dimensions[idx].zCenter))); 
+	    pv_final.addPhysVolID("sector", 1);
+	    DetElement final_de(sdet, Form("sector_pipe_%d_de", idx), 1);
+	    final_de.setPlacement(pv_final);
+		
+	}
 	
-    Volume v_rpStation2(Form("v_rpStation2_%d", pieceIdx), rpStation2, m_SS);
-    sdet.setAttributes(det, v_rpStation2, x_det.regionStr(), x_det.limitsStr(), vis_name);
-
-    auto pv_pipe_4 = assembly.placeVolume(v_rpStation2, Transform3D(RotationY(beampipe_dimensions[pieceIdx].rotationAngle), Position(dd4hep::mm * beampipe_dimensions[pieceIdx].xCenter, dd4hep::mm * beampipe_dimensions[pieceIdx].yCenter, dd4hep::mm * beampipe_dimensions[pieceIdx].zCenter))); // 2353.06094)));
-    pv_pipe_4.addPhysVolID("sector", 1);
-    DetElement pipe_de_4(sdet, Form("sector_pipe_%d_de", pieceIdx), 1);
-    pipe_de_4.setPlacement(pv_pipe_4);
+	lengthDelta = 0.0; //not needed for scattering chambers
 	
-	//---------------------------------------------------------------
+	for(int idx = 1; idx < 6; idx++){ //loop for the easier pieces to simplify
+		
+		if(idx == 1 || idx == 3 || idx == 5){ continue;}
+		
+		Box outer(beampipe_dimensions[idx].outerXRadius, beampipe_dimensions[idx].outerYRadius, beampipe_dimensions[idx].length/2);
+		Box inner(beampipe_dimensions[idx].innerXRadius, beampipe_dimensions[idx].innerYRadius, (beampipe_dimensions[idx].length+lengthDelta)/2);
+		
+		SubtractionSolid tmp(outer, inner);
+		SubtractionSolid hollow_pipe(tmp, RP_subtract_outer);
+		
+		Volume v_hollow_pipe(Form("v_pipe_%d", idx), hollow_pipe, m_SS);
+	    sdet.setAttributes(det, v_hollow_pipe, x_det.regionStr(), x_det.limitsStr(), vis_name);
 
-	pieceIdx = 5; //pipe between second RP station and the B2pf magnet
-
-    Box pipe_5_outer(dd4hep::mm*beampipe_dimensions[pieceIdx].outerXRadius, dd4hep::mm*beampipe_dimensions[pieceIdx].outerYRadius, dd4hep::mm*beampipe_dimensions[pieceIdx].length/2);
-    Box pipe_5_inner(dd4hep::mm*beampipe_dimensions[pieceIdx].innerXRadius, dd4hep::mm*beampipe_dimensions[pieceIdx].innerYRadius, dd4hep::mm*(beampipe_dimensions[pieceIdx].length+5.0)/2);
-    SubtractionSolid pipe_5(pipe_5_outer, pipe_5_inner);
-
-    Volume v_pipe_5(Form("v_pipe_5_%d", pieceIdx), pipe_5, m_SS);
-    sdet.setAttributes(det, v_pipe_5, x_det.regionStr(), x_det.limitsStr(), vis_name); 
-    
-    auto pv_pipe_5 = assembly.placeVolume(v_pipe_5, Transform3D(RotationY(beampipe_dimensions[pieceIdx].rotationAngle), Position(dd4hep::mm * beampipe_dimensions[pieceIdx].xCenter, dd4hep::mm * beampipe_dimensions[pieceIdx].yCenter, dd4hep::mm * beampipe_dimensions[pieceIdx].zCenter))); // 2353.06094)));
-    pv_pipe_5.addPhysVolID("sector", 1);
-    DetElement pipe_de_5(sdet, Form("sector_pipe_%d_de", pieceIdx), 1);
-    pipe_de_5.setPlacement(pv_pipe_5);
-
+	    auto pv_final = assembly.placeVolume(v_hollow_pipe, Transform3D(RotationY(beampipe_dimensions[idx].rotationAngle), Position(beampipe_dimensions[idx].xCenter,  beampipe_dimensions[idx].yCenter, beampipe_dimensions[idx].zCenter))); 
+	    pv_final.addPhysVolID("sector", 1);
+	    DetElement final_de(sdet, Form("sector_pipe_%d_de", idx), 1);
+	    final_de.setPlacement(pv_final);
+		
+	}
+	
+	
 	//----------------------------------------------------------------
 
 	pieceIdx = 6;
@@ -502,53 +377,53 @@ static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector /* sens *
     Double_t trpVerticesInner[16];
     //(x0, y0, x1, y1, ... , x7, y7)
 	//opening side - larger size
-    trpVertices[0] =  -beampipe_dimensions[6].outerXRadius * dd4hep::mm;
-    trpVertices[1] =  -beampipe_dimensions[6].outerYRadius * dd4hep::mm;
+    trpVertices[0] =  -beampipe_dimensions[6].outerXRadius;
+    trpVertices[1] =  -beampipe_dimensions[6].outerYRadius;
 
-    trpVertices[2] = -beampipe_dimensions[6].outerXRadius * dd4hep::mm;
-    trpVertices[3] = beampipe_dimensions[6].outerYRadius * dd4hep::mm;
+    trpVertices[2] = -beampipe_dimensions[6].outerXRadius;
+    trpVertices[3] = beampipe_dimensions[6].outerYRadius;
 
-    trpVertices[4] =  beampipe_dimensions[6].outerXRadius * dd4hep::mm;
-    trpVertices[5] =  beampipe_dimensions[6].outerYRadius * dd4hep::mm;
+    trpVertices[4] =  beampipe_dimensions[6].outerXRadius;
+    trpVertices[5] =  beampipe_dimensions[6].outerYRadius;
 
-    trpVertices[6] = beampipe_dimensions[6].outerXRadius * dd4hep::mm;
-    trpVertices[7] = -beampipe_dimensions[6].outerYRadius * dd4hep::mm;
+    trpVertices[6] = beampipe_dimensions[6].outerXRadius;
+    trpVertices[7] = -beampipe_dimensions[6].outerYRadius;
 	
 	//exiting side - smaller size
     
-	trpVertices[8] = -beampipe_dimensions[6].outerYRadius * dd4hep::mm;
-    trpVertices[9] = -beampipe_dimensions[6].outerYRadius * dd4hep::mm;
+	trpVertices[8] = -beampipe_dimensions[6].outerYRadius;
+    trpVertices[9] = -beampipe_dimensions[6].outerYRadius;
 
-    trpVertices[10] = -beampipe_dimensions[6].outerYRadius * dd4hep::mm;
-    trpVertices[11] = beampipe_dimensions[6].outerYRadius * dd4hep::mm;
+    trpVertices[10] = -beampipe_dimensions[6].outerYRadius;
+    trpVertices[11] = beampipe_dimensions[6].outerYRadius;
 
-    trpVertices[12] = beampipe_dimensions[6].outerYRadius * dd4hep::mm;
-    trpVertices[13] = beampipe_dimensions[6].outerYRadius * dd4hep::mm;
+    trpVertices[12] = beampipe_dimensions[6].outerYRadius;
+    trpVertices[13] = beampipe_dimensions[6].outerYRadius;
 
-    trpVertices[14] = beampipe_dimensions[6].outerYRadius * dd4hep::mm;
-    trpVertices[15] = -beampipe_dimensions[6].outerYRadius * dd4hep::mm;
+    trpVertices[14] = beampipe_dimensions[6].outerYRadius;
+    trpVertices[15] = -beampipe_dimensions[6].outerYRadius;
 
     for(int i = 0; i < 16; i++){
 
-        if(trpVertices[i] > 0.0){trpVerticesInner[i] = trpVertices[i]-(pipeThickness * dd4hep::mm);}
-        if(trpVertices[i] < 0.0){trpVerticesInner[i] = trpVertices[i]+(pipeThickness * dd4hep::mm);}
+        if(trpVertices[i] > 0.0){trpVerticesInner[i] = trpVertices[i]-(pipeThickness);}
+        if(trpVertices[i] < 0.0){trpVerticesInner[i] = trpVertices[i]+(pipeThickness);}
 
     }
 
-	EightPointSolid taper_outer(dd4hep::mm * (0.5*beampipe_dimensions[pieceIdx].length), trpVertices);
-	EightPointSolid taper_inner(dd4hep::mm * (0.5*beampipe_dimensions[pieceIdx].length), trpVerticesInner);
+	EightPointSolid taper_outer((0.5*beampipe_dimensions[pieceIdx].length), trpVertices);
+	EightPointSolid taper_inner((0.5*beampipe_dimensions[pieceIdx].length), trpVerticesInner);
 	
-	Box taper_entrance(dd4hep::mm * beampipe_dimensions[pieceIdx].innerXRadius, dd4hep::mm * beampipe_dimensions[pieceIdx].innerYRadius, dd4hep::mm * (0.5*(pipeThickness + 5.0)));
-	Box taper_exit(dd4hep::mm * beampipe_dimensions[pieceIdx].innerYRadius, dd4hep::mm * beampipe_dimensions[pieceIdx].innerYRadius, dd4hep::mm * (0.5*(pipeThickness + 5.0)));
+	Box taper_entrance(beampipe_dimensions[pieceIdx].innerXRadius, beampipe_dimensions[pieceIdx].innerYRadius, (0.5*(pipeThickness + 5.0)));
+	Box taper_exit(beampipe_dimensions[pieceIdx].innerYRadius, beampipe_dimensions[pieceIdx].innerYRadius, (0.5*(pipeThickness + 5.0)));
 	SubtractionSolid hollowTaper(taper_outer, taper_inner);
-	SubtractionSolid taper_minus_entrance_cap(hollowTaper, taper_entrance, Position(0.0, 0.0, dd4hep::mm * (-0.5*beampipe_dimensions[pieceIdx].length)));
-	SubtractionSolid finalTaper(taper_minus_entrance_cap, taper_exit, Position(0.0, 0.0, dd4hep::mm * (0.5*beampipe_dimensions[pieceIdx].length)));
+	SubtractionSolid taper_minus_entrance_cap(hollowTaper, taper_entrance, Position(0.0, 0.0, (-0.5*beampipe_dimensions[pieceIdx].length)));
+	SubtractionSolid finalTaper(taper_minus_entrance_cap, taper_exit, Position(0.0, 0.0, (0.5*beampipe_dimensions[pieceIdx].length)));
 	//SubtractionSolid finalTaper(taper_outer, taper_inner);
 
     Volume v_taper(Form("v_taper_%d", pieceIdx), finalTaper, m_SS);
     sdet.setAttributes(det, v_taper, x_det.regionStr(), x_det.limitsStr(), vis_name);
 
-    auto pv_pipe_6 = assembly.placeVolume(v_taper, Transform3D(RotationY(beampipe_dimensions[pieceIdx].rotationAngle), Position(dd4hep::mm * beampipe_dimensions[pieceIdx].xCenter, dd4hep::mm * beampipe_dimensions[pieceIdx].yCenter, dd4hep::mm * beampipe_dimensions[pieceIdx].zCenter))); // 2353.06094)));
+    auto pv_pipe_6 = assembly.placeVolume(v_taper, Transform3D(RotationY(beampipe_dimensions[pieceIdx].rotationAngle), Position(beampipe_dimensions[pieceIdx].xCenter, beampipe_dimensions[pieceIdx].yCenter, beampipe_dimensions[pieceIdx].zCenter))); // 2353.06094)));
     pv_pipe_6.addPhysVolID("sector", 1);
     DetElement pipe_de_6(sdet, Form("sector_pipe_%d_de", pieceIdx), 1);
     pipe_de_6.setPlacement(pv_pipe_6);
@@ -557,12 +432,12 @@ static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector /* sens *
 
 	pieceIdx = 7; //pipe between taper and B2PF
 
-    Tube pipe_after_taper(dd4hep::mm*beampipe_dimensions[pieceIdx].innerXRadius, dd4hep::mm*beampipe_dimensions[pieceIdx].outerXRadius, dd4hep::mm*beampipe_dimensions[pieceIdx].length/2);
+    Tube pipe_after_taper(beampipe_dimensions[pieceIdx].innerXRadius, beampipe_dimensions[pieceIdx].outerXRadius, beampipe_dimensions[pieceIdx].length/2);
 
     Volume v_pipe_7(Form("v_pipe_7_%d", pieceIdx), pipe_after_taper, m_SS);
     sdet.setAttributes(det, v_pipe_7, x_det.regionStr(), x_det.limitsStr(), vis_name);
 
-    auto pv_pipe_7 = assembly.placeVolume(v_pipe_7, Transform3D(RotationY(beampipe_dimensions[pieceIdx].rotationAngle), Position(dd4hep::mm * beampipe_dimensions[pieceIdx].xCenter, dd4hep::mm * beampipe_dimensions[pieceIdx].yCenter, dd4hep::mm * beampipe_dimensions[pieceIdx].zCenter))); // 2353.06094)));
+    auto pv_pipe_7 = assembly.placeVolume(v_pipe_7, Transform3D(RotationY(beampipe_dimensions[pieceIdx].rotationAngle), Position(beampipe_dimensions[pieceIdx].xCenter, beampipe_dimensions[pieceIdx].yCenter, beampipe_dimensions[pieceIdx].zCenter))); // 2353.06094)));
     pv_pipe_7.addPhysVolID("sector", 1);
     DetElement pipe_de_7(sdet, Form("sector_pipe_%d_de", pieceIdx), 1);
     pipe_de_7.setPlacement(pv_pipe_7);
@@ -579,7 +454,7 @@ static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector /* sens *
   	Volume v_b0_hadron_tube("v_b0_hadron_tube", b0_hadron_tube, m_Be);
   	sdet.setAttributes(det, v_b0_hadron_tube, x_det.regionStr(), x_det.limitsStr(), vis_name);
 
-    auto pv_pipe_8 = assembly.placeVolume(v_b0_hadron_tube, Transform3D(RotationY(-0.025), Position(-16.5, 0.0, 640.0))); // 2353.06094)));
+    auto pv_pipe_8 = assembly.placeVolume(v_b0_hadron_tube, Transform3D(RotationY(crossingAngle), Position(-16.5, 0.0, 640.0))); // 2353.06094)));
     pv_pipe_8.addPhysVolID("sector", 1);
     DetElement pipe_de_8(sdet, Form("sector_pipe_%d_de", pieceIdx), 1);
     pipe_de_8.setPlacement(pv_pipe_6);
@@ -588,15 +463,15 @@ static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector /* sens *
 
 	pieceIdx = 9; //neutral exit window
 
-	Box pipeAfterB1APF_LARGE(dd4hep::mm*(beampipe_dimensions[0].outerXRadius+5.0), dd4hep::mm*(beampipe_dimensions[0].outerYRadius+5.0), dd4hep::mm*(beampipe_dimensions[0].length+5.0)/2);
-	Tube   neutral_exit_window(0.0, dd4hep::mm*windowRadius, 1.0); // 1.0cm thick
+	Box pipeAfterB1APF_LARGE((beampipe_dimensions[0].outerXRadius+5.0), (beampipe_dimensions[0].outerYRadius+5.0), (beampipe_dimensions[0].length+5.0)/2);
+	Tube   neutral_exit_window(0.0, windowRadius, 1.0); // 1.0cm thick
   	
-	IntersectionSolid finalWindow(pipeAfterB1APF_outer, neutral_exit_window, Position(dd4hep::mm * 160.0 , 0.0, dd4hep::mm * 0.5*beampipe_dimensions[0].length));
+	IntersectionSolid finalWindow(pipeAfterB1APF_outer, neutral_exit_window, Position(160.0 * dd4hep::mm, 0.0, 0.5*beampipe_dimensions[0].length));
 
 	Volume v_neutral_exit_window("v_neutral_exit_window", finalWindow, m_Al);
   	sdet.setAttributes(det, v_neutral_exit_window, x_det.regionStr(), x_det.limitsStr(), "AnlRed");
 
-    auto pv_pipe_9 = assembly.placeVolume(v_neutral_exit_window, Transform3D(RotationY(-0.025), Position( dd4hep::mm * beampipe_dimensions[0].xCenter + 4.0, 0.0, dd4hep::mm * beampipe_dimensions[0].zCenter)));
+    auto pv_pipe_9 = assembly.placeVolume(v_neutral_exit_window, Transform3D(RotationY(crossingAngle), Position( beampipe_dimensions[0].xCenter + 4.0, 0.0, beampipe_dimensions[0].zCenter)));
 	pv_pipe_9.addPhysVolID("sector", 1);
     DetElement pipe_de_9(sdet, Form("sector_pipe_%d_de", pieceIdx), 1);
     pipe_de_9.setPlacement(pv_pipe_9);
@@ -608,87 +483,48 @@ static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector /* sens *
 
 	pieceIdx = 0;
 
-	Box vacuum_main_pipe(dd4hep::mm * beampipe_dimensions[pieceIdx].innerXRadius, dd4hep::mm*beampipe_dimensions[pieceIdx].innerYRadius, dd4hep::mm*(beampipe_dimensions[pieceIdx].length-20.0)/2);
-	Box cutout_for_OMD_station(dd4hep::mm * beampipe_dimensions[pieceIdx].innerXRadius, dd4hep::mm * beampipe_dimensions[pieceIdx].innerYRadius, dd4hep::mm * 20.0);
+	Box vacuum_main_pipe(beampipe_dimensions[pieceIdx].innerXRadius, beampipe_dimensions[pieceIdx].innerYRadius, (beampipe_dimensions[pieceIdx].length-2.0)/2);
+	Box cutout_for_OMD_station(beampipe_dimensions[pieceIdx].innerXRadius, beampipe_dimensions[pieceIdx].innerYRadius, 2.0);
 	
-	SubtractionSolid after_first_OMD_cutout(vacuum_main_pipe, cutout_for_OMD_station, Position(0.0, 0.0, dd4hep::mm * (22510.0 - beampipe_dimensions[pieceIdx].zCenter)));
-	SubtractionSolid final_vacuum_main_pipe(after_first_OMD_cutout, cutout_for_OMD_station, Position(0.0, 0.0, dd4hep::mm * (24510.0 - beampipe_dimensions[pieceIdx].zCenter)));
+	SubtractionSolid after_first_OMD_cutout(vacuum_main_pipe, cutout_for_OMD_station, Position(0.0, 0.0, (2251.0 - beampipe_dimensions[pieceIdx].zCenter)));
+	SubtractionSolid final_vacuum_main_pipe(after_first_OMD_cutout, cutout_for_OMD_station, Position(0.0, 0.0, (2451.0 - beampipe_dimensions[pieceIdx].zCenter)));
 
 	Volume v_vacuum_main_pipe("v_vacuum_main_pipe", final_vacuum_main_pipe, m_vac);
     sdet.setAttributes(det, v_vacuum_main_pipe, x_det.regionStr(), x_det.limitsStr(), "AnlBlue");
 
-    auto pv_vacuum_0 = assembly.placeVolume(v_vacuum_main_pipe, Transform3D(RotationY(-0.025), Position( dd4hep::mm * beampipe_dimensions[pieceIdx].xCenter + 4.0, 0.0, dd4hep::mm * beampipe_dimensions[pieceIdx].zCenter)));
+    auto pv_vacuum_0 = assembly.placeVolume(v_vacuum_main_pipe, Transform3D(RotationY(crossingAngle), Position( beampipe_dimensions[pieceIdx].xCenter + 4.0, 0.0, beampipe_dimensions[pieceIdx].zCenter)));
     pv_vacuum_0.addPhysVolID("sector", 1);
     DetElement vacuum_de_0(sdet, Form("sector_FF_vacuum_%d_de", pieceIdx), 1);
     vacuum_de_0.setPlacement(pv_vacuum_0);
 
 	//------------------------------------------------------------------
 
-	pieceIdx = 1;
+	for(int idx = 1; idx < 6; idx++){ //loop for the easier pieces to simplify
+		
+		if(idx == 2 || idx == 4){ continue;} //FIXME: don't fill RP chambers with vacuum yet - still an issue with RP geometry
+		
+		Box inner_vacuum(beampipe_dimensions[idx].innerXRadius, beampipe_dimensions[idx].innerYRadius, (beampipe_dimensions[idx].length)/2);
+				
+		Volume v_inner_vacuum(Form("v_vacuum_%d", idx), inner_vacuum, m_vac);
+	    sdet.setAttributes(det, v_inner_vacuum, x_det.regionStr(), x_det.limitsStr(), "AnlBlue");
 
-    Box vacuum_pipe_before_RP_1(dd4hep::mm * beampipe_dimensions[pieceIdx].innerXRadius, dd4hep::mm*beampipe_dimensions[pieceIdx].innerYRadius, dd4hep::mm*(beampipe_dimensions[pieceIdx].length)/2);
-
-    Volume v_pipe_before_RP_1("v_vacuum_pipe_before_RP_1", vacuum_pipe_before_RP_1, m_vac);
-    sdet.setAttributes(det, v_pipe_before_RP_1, x_det.regionStr(), x_det.limitsStr(), "AnlBlue");
-
-    auto pv_vacuum_1 = assembly.placeVolume(v_pipe_before_RP_1, Transform3D(RotationY(beampipe_dimensions[pieceIdx].rotationAngle), Position( dd4hep::mm * beampipe_dimensions[pieceIdx].xCenter, 0.0,  dd4hep::mm * beampipe_dimensions[pieceIdx].zCenter)));
-    pv_vacuum_1.addPhysVolID("sector", 1);
-    DetElement vacuum_de_1(sdet, Form("sector_FF_vacuum_%d_de", pieceIdx), 1);
-    vacuum_de_1.setPlacement(pv_vacuum_1);
-
-	//------------------------------------------------------------------
-
-	pieceIdx = 2;
-
-	//for roman pot station 1
-	//to be added after Roman pot issue is solved so I can see the parts together
-
-	//------------------------------------------------------------------
-
-	pieceIdx = 3;
-
-    Box vacuum_pipe_between_RP(dd4hep::mm * beampipe_dimensions[pieceIdx].innerXRadius, dd4hep::mm*beampipe_dimensions[pieceIdx].innerYRadius, dd4hep::mm*(beampipe_dimensions[pieceIdx].length)/2);
-
-    Volume v_vacuum_pipe_between_RP("v_vacuum_pipe_between_RP", vacuum_pipe_between_RP, m_vac);
-    sdet.setAttributes(det, v_vacuum_pipe_between_RP, x_det.regionStr(), x_det.limitsStr(), "AnlBlue");
-
-    auto pv_vacuum_3 = assembly.placeVolume(v_vacuum_pipe_between_RP, Transform3D(RotationY(beampipe_dimensions[pieceIdx].rotationAngle), Position( dd4hep::mm * beampipe_dimensions[pieceIdx].xCenter, 0.0,  dd4hep::mm * beampipe_dimensions[pieceIdx].zCenter)));
-    pv_vacuum_3.addPhysVolID("sector", 1);
-    DetElement vacuum_de_3(sdet, Form("sector_FF_vacuum_%d_de", pieceIdx), 1);
-    vacuum_de_3.setPlacement(pv_vacuum_3);
-
-	//------------------------------------------------------------------
-
-    pieceIdx = 4;
-
-    //for roman pot station 2
-	//to be added after Roman pot issue is solved so I can see the parts together
-
-	//------------------------------------------------------------------
-
-    pieceIdx = 5;
-
-    Box vacuum_pipe_after_RP(dd4hep::mm * beampipe_dimensions[pieceIdx].innerXRadius, dd4hep::mm*beampipe_dimensions[pieceIdx].innerYRadius, dd4hep::mm*(beampipe_dimensions[pieceIdx].length)/2);
-
-    Volume v_vacuum_pipe_after_RP("v_vacuum_pipe_after_RP", vacuum_pipe_after_RP, m_vac);
-    sdet.setAttributes(det, v_vacuum_pipe_after_RP, x_det.regionStr(), x_det.limitsStr(), "AnlBlue");
-
-    auto pv_vacuum_5 = assembly.placeVolume(v_vacuum_pipe_after_RP, Transform3D(RotationY(beampipe_dimensions[pieceIdx].rotationAngle), Position( dd4hep::mm * beampipe_dimensions[pieceIdx].xCenter, 0.0,  dd4hep::mm * beampipe_dimensions[pieceIdx].zCenter)));
-    pv_vacuum_5.addPhysVolID("sector", 1);
-    DetElement vacuum_de_5(sdet, Form("sector_FF_vacuum_%d_de", pieceIdx), 1);
-    vacuum_de_5.setPlacement(pv_vacuum_5);
-
+	    auto pv_final = assembly.placeVolume(v_inner_vacuum, Transform3D(RotationY(beampipe_dimensions[idx].rotationAngle), Position(beampipe_dimensions[idx].xCenter,  beampipe_dimensions[idx].yCenter, beampipe_dimensions[idx].zCenter))); 
+	    pv_final.addPhysVolID("sector", 1);
+	    DetElement final_de(sdet, Form("sector_FF_vacuum_%d_de", idx), 1);
+	    final_de.setPlacement(pv_final);
+		
+	}
 
 	//------------------------------------------------------------------
 
     pieceIdx = 6;
 
-	EightPointSolid vacuum_taper(dd4hep::mm * (0.5*beampipe_dimensions[pieceIdx].length), trpVerticesInner);
+	EightPointSolid vacuum_taper((0.5*beampipe_dimensions[pieceIdx].length), trpVerticesInner);
 
     Volume v_vacuum_taper("v_vacuum_taper", vacuum_taper, m_vac);
     sdet.setAttributes(det, v_vacuum_taper, x_det.regionStr(), x_det.limitsStr(), "AnlBlue");
 
-    auto pv_vacuum_6 = assembly.placeVolume(v_vacuum_taper, Transform3D(RotationY(beampipe_dimensions[pieceIdx].rotationAngle), Position( dd4hep::mm * beampipe_dimensions[pieceIdx].xCenter, 0.0,  dd4hep::mm * beampipe_dimensions[pieceIdx].zCenter)));
+    auto pv_vacuum_6 = assembly.placeVolume(v_vacuum_taper, Transform3D(RotationY(beampipe_dimensions[pieceIdx].rotationAngle), Position( beampipe_dimensions[pieceIdx].xCenter, 0.0,  beampipe_dimensions[pieceIdx].zCenter)));
     pv_vacuum_6.addPhysVolID("sector", 1);
     DetElement vacuum_de_6(sdet, Form("sector_FF_vacuum_%d_de", pieceIdx), 1);
     vacuum_de_6.setPlacement(pv_vacuum_6);
@@ -697,12 +533,12 @@ static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector /* sens *
 
 	pieceIdx = 7; //vacuum between taper and B2PF
 
-    Tube vacuum_pipe_after_taper(0.0, dd4hep::mm*beampipe_dimensions[pieceIdx].innerXRadius, dd4hep::mm*beampipe_dimensions[pieceIdx].length/2);
+    Tube vacuum_pipe_after_taper(0.0, beampipe_dimensions[pieceIdx].innerXRadius, beampipe_dimensions[pieceIdx].length/2);
 
     Volume v_vacuum_pipe_after_taper("v_vacuum_pipe_after_taper", vacuum_pipe_after_taper, m_vac);
     sdet.setAttributes(det, v_vacuum_pipe_after_taper, x_det.regionStr(), x_det.limitsStr(), "AnlBlue");
 
-    auto pv_vacuum_7 = assembly.placeVolume(v_vacuum_pipe_after_taper, Transform3D(RotationY(beampipe_dimensions[pieceIdx].rotationAngle), Position(dd4hep::mm * beampipe_dimensions[pieceIdx].xCenter, dd4hep::mm * beampipe_dimensions[pieceIdx].yCenter, dd4hep::mm * beampipe_dimensions[pieceIdx].zCenter))); // 2353.06094)));
+    auto pv_vacuum_7 = assembly.placeVolume(v_vacuum_pipe_after_taper, Transform3D(RotationY(beampipe_dimensions[pieceIdx].rotationAngle), Position(beampipe_dimensions[pieceIdx].xCenter, beampipe_dimensions[pieceIdx].yCenter, beampipe_dimensions[pieceIdx].zCenter))); // 2353.06094)));
     pv_vacuum_7.addPhysVolID("sector", 1);
     DetElement vacuum_de_7(sdet, Form("sector_FF_vacuum_%d_de", pieceIdx), 1);
     vacuum_de_7.setPlacement(pv_vacuum_7);
