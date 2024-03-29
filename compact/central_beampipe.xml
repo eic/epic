@@ -86,7 +86,7 @@
           <zplane_mat z="5100.00 * mm" OD="(62.00 + 2 * (5100.00 - 670.00) * tan(abs(CrossingAngle)) + 4.0 * 2) * mm"/>
         </outgoing_hadron>
         <additional_subtraction thickness="4.0*mm"
-				crossing_angle="CrossingAngle">
+                                crossing_angle="CrossingAngle">
           <!-- these are somewhat arbitrary to get the right hole shape -->
           <zplane_vac z="870.00 * mm" OD="(36.61 - 4.0 * 2) * mm"/>
           <zplane_vac z="4484.25 * mm" OD="(120.00 - 4.0 * 2) * mm"/>
