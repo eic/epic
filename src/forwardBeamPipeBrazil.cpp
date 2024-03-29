@@ -415,7 +415,7 @@ static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector /* sens *
     EightPointSolid taper_inner((0.5*beampipe_dimensions[pieceIdx].length), trpVerticesInner);
 
     Box taper_entrance(beampipe_dimensions[pieceIdx].innerXRadius, beampipe_dimensions[pieceIdx].innerYRadius, (0.5*(pipeThickness + 5.0)));
-    Box taper_exit(beampipe_dimensions[pieceIdx].innerYRadius[pieceIdx], beampipe_dimensions[pieceIdx].innerYRadius[pieceIdx], (0.5*(pipeThickness + 5.0)));
+    Box taper_exit(beampipe_dimensions[pieceIdx].innerYRadius, beampipe_dimensions[pieceIdx].innerYRadius, (0.5*(pipeThickness + 5.0)));
     SubtractionSolid hollowTaper(taper_outer, taper_inner);
     SubtractionSolid taper_minus_entrance_cap(hollowTaper, taper_entrance, Position(0.0, 0.0, (-0.5*beampipe_dimensions[pieceIdx].length)));
     SubtractionSolid finalTaper(taper_minus_entrance_cap, taper_exit, Position(0.0, 0.0, (0.5*beampipe_dimensions[pieceIdx].length)));
