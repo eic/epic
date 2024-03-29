@@ -45,3 +45,5 @@ vendor/
 .jekyll-metadata
 .sass-cache/
 _site/
+
+compile.bash
