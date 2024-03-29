@@ -46,7 +46,9 @@
 
       <comment> For downstream beampipe (where on is inside the vacuum of the other), we subtract the matter from the vacuum, and subtract an additional pipe to create the angled cutout</comment>
       <downstream reflect="false"
-                  place_vacuum="false">
+                  place_vacuum="true"
+                  subtract_vacuum="true"
+                  subtract_matter="true">
         <incoming_lepton thickness="1.0*mm">
           <zplane_vac z="670.00 * mm" OD="60.00 * mm"/>
           <zplane_vac z="755.00 * mm" OD="60.00 * mm"/>
@@ -70,6 +72,12 @@
         </incoming_lepton>
         <outgoing_hadron thickness="4.0*mm"
                          axis_intersection="670.0 * mm"
+                         horizontal_offset="15.0 * mm"
+                         cone_z_end="5000.0 * mm"
+                         cone_z_start="870.0 * mm"
+                         extension_r="27.5 * mm"
+                         extension_z="600.0 * mm"
+                         extension_thickness="1.65 * mm"
                          crossing_angle="CrossingAngle">
           <zplane_vac z="670.00 * mm" OD="62.00 * mm"/>
           <zplane_vac z="5100.00 * mm" OD="(62.00 + 2 * (5100.00 - 670.00) * tan(abs(CrossingAngle))) * mm"/>
