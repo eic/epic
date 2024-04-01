@@ -141,21 +141,6 @@ static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector /* sens *
   central_det.setPlacement(central_pv);
 
   //---------------------------------------------------------------------------------
-  // Helper function to create polycone pairs (shell and vacuum)
-  auto zplane_to_polycones = [](xml::Component& x_pipe) {
-    std::vector<double> zero, rmax, rmin, z;
-    for (xml_coll_t x_zplane_i(x_pipe, _Unicode(zplane)); x_zplane_i; ++x_zplane_i) {
-      xml_comp_t x_zplane  = x_zplane_i;
-      auto       thickness = getAttrOrDefault(x_zplane, _Unicode(thickness), x_pipe.thickness());
-      thickness += getAttrOrDefault(x_zplane, _Unicode(extra_thickness), 0.0);
-      zero.push_back(0);
-      rmax.push_back(x_zplane.attr<double>(_Unicode(OD)) / 2.0);
-      rmin.push_back(x_zplane.attr<double>(_Unicode(OD)) / 2.0 - thickness);
-      z.push_back(x_zplane.attr<double>(_Unicode(z)));
-    }
-    return std::make_pair<Polycone, Polycone>({0, 2.0 * M_PI, rmin, rmax, z}, {0, 2.0 * M_PI, zero, rmin, z});
-  };
-  //---------------------------------------------------------------------------------
   // Helper function to create polycone pairs (matter and vacuum have separate sizes)
   //
   //  ......../    /..
@@ -165,10 +150,11 @@ static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector /* sens *
   //  _________/......
   //  ................
 
-  auto zplane_to_polycones_2 = [](xml::Component& x_pipe) {
+  auto zplane_to_polycones = [](xml::Component& x_pipe) {
     // vacuum
     std::vector<double> rmax_vac, rmin_vac, z_vac;
-    for (xml_coll_t x_zplane_i(x_pipe, _Unicode(zplane_vac)); x_zplane_i; ++x_zplane_i) {
+    xml::Component vacuum = x_pipe.child(_Unicode(vacuum));
+    for (xml_coll_t x_zplane_i(vacuum, _Unicode(zplane)); x_zplane_i; ++x_zplane_i) {
       xml_comp_t x_zplane  = x_zplane_i;
       rmin_vac.push_back(0);
       rmax_vac.push_back(x_zplane.attr<double>(_Unicode(OD)) / 2.0);
@@ -176,7 +162,8 @@ static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector /* sens *
     }
     // matter
     std::vector<double> rmax_mat, rmin_mat, z_mat;
-    for (xml_coll_t x_zplane_i(x_pipe, _Unicode(zplane_mat)); x_zplane_i; ++x_zplane_i) {
+    xml::Component matter = x_pipe.child(_Unicode(matter));
+    for (xml_coll_t x_zplane_i(matter, _Unicode(zplane)); x_zplane_i; ++x_zplane_i) {
       xml_comp_t x_zplane  = x_zplane_i;
       rmin_mat.push_back(0);
       rmax_mat.push_back(x_zplane.attr<double>(_Unicode(OD)) / 2.0);
@@ -238,8 +225,8 @@ static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector /* sens *
   auto create_volumes_2 = [&](const std::string& name, xml::Component& x_pipe1, xml::Component& x_pipe2,
                               xml::Component& x_additional_subtraction, bool subtract_vacuum_from_matter = true,
                               bool subtract_matter_from_vacuum = false) {
-    auto pipe1_polycones = zplane_to_polycones_2(x_pipe1);
-    auto pipe2_polycones = zplane_to_polycones_2(x_pipe2);
+    auto pipe1_polycones = zplane_to_polycones(x_pipe1);
+    auto pipe2_polycones = zplane_to_polycones(x_pipe2);
 
     auto crossing_angle      = getAttrOrDefault(x_pipe2, _Unicode(crossing_angle), 0.0);
     auto axis_intersection   = getAttrOrDefault(x_pipe2, _Unicode(axis_intersection), 0.0);
@@ -336,7 +323,7 @@ static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector /* sens *
     }
 
     // subtract additional vacuum from matter and add it to the vacuum
-    auto additional_polycones = zplane_to_polycones_2(x_additional_subtraction);
+    auto additional_polycones = zplane_to_polycones(x_additional_subtraction);
     auto additional_crossing_angle = getAttrOrDefault(x_additional_subtraction, _Unicode(crossing_angle), 0.0);
     auto additional_tf = Transform3D(RotationY(additional_crossing_angle));
 
