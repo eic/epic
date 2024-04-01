@@ -154,7 +154,7 @@ static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector /* sens *
       z.push_back(x_zplane.attr<double>(_Unicode(z)));
     }
     return std::make_pair<Polycone, Polycone>({0, 2.0 * M_PI, rmin, rmax, z}, {0, 2.0 * M_PI, zero, rmin, z});
-  }; 
+  };
   //---------------------------------------------------------------------------------
   // Helper function to create polycone pairs (matter and vacuum have separate sizes)
   //
@@ -235,7 +235,7 @@ static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector /* sens *
   };
   //---------------------------------------------------------------------------------
   // Create downstream volumes
-  auto create_volumes_2 = [&](const std::string& name, xml::Component& x_pipe1, xml::Component& x_pipe2, 
+  auto create_volumes_2 = [&](const std::string& name, xml::Component& x_pipe1, xml::Component& x_pipe2,
                               xml::Component& x_additional_subtraction, bool subtract_vacuum_from_matter = true,
                               bool subtract_matter_from_vacuum = false) {
     auto pipe1_polycones = zplane_to_polycones_2(x_pipe1);
@@ -258,7 +258,7 @@ static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector /* sens *
               Transform3D(Position(0, 0, -axis_intersection));
 
     Solid pipe2_polycones_mat_cut, pipe2_polycones_vac_cut;
-    // virtual box to subtract from solids 
+    // virtual box to subtract from solids
     const double box_cut_sizex = 10000.0 * mm;
     const double box_cut_sizey = 10000.0 * mm;
     const double box_cut_sizez = 10000.0 * mm;
@@ -270,7 +270,7 @@ static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector /* sens *
 
     pipe2_polycones_mat_cut = SubtractionSolid(pipe2_polycones.first, box_cut,
                                 tf * Transform3D(Position(p_mat_1[0] + box_cut_sizex,
-                                                          p_mat_1[1], 
+                                                          p_mat_1[1],
                                                           p_mat_1[2])));
     pipe2_polycones_vac_cut = SubtractionSolid(pipe2_polycones.second, box_cut,
                                 tf * Transform3D(Position(p_vac_1[0] + box_cut_sizex,
@@ -306,7 +306,7 @@ static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector /* sens *
     Tube tb_mat(0 * mm, extension_r + extension_thickness, extension_z);
 
     pipe2_polycones_vac_cut = UnionSolid(pipe2_polycones_vac_cut, tb_vac,
-                                tf * Transform3D(RotationY(crossing_angle)) * 
+                                tf * Transform3D(RotationY(crossing_angle)) *
                                      Transform3D(Position(0, 0, cone_z_end)));
 
     pipe2_polycones_mat_cut = UnionSolid(pipe2_polycones_mat_cut, tb_mat,
@@ -386,14 +386,14 @@ static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector /* sens *
   bool           subtract_vacuum_downstream = getAttrOrDefault<bool>(downstream_c, _Unicode(subtract_vacuum), true);
   bool           subtract_matter_downstream = getAttrOrDefault<bool>(downstream_c, _Unicode(subtract_matter), true);
 
-  auto volumes_downstream = create_volumes_2("downstream", incoming_lepton_c, outgoing_hadron_c, 
+  auto volumes_downstream = create_volumes_2("downstream", incoming_lepton_c, outgoing_hadron_c,
     additional_subtractions_downstream_c, subtract_vacuum_downstream, subtract_matter_downstream);
 
-  // transform 
-  auto tf_downstream = Transform3D(Position(0, 0, +getAttrOrDefault(outgoing_hadron_c, _Unicode(axis_intersection), 0.0))) * 
+  // transform
+  auto tf_downstream = Transform3D(Position(0, 0, +getAttrOrDefault(outgoing_hadron_c, _Unicode(axis_intersection), 0.0))) *
                        Transform3D(RotationY(getAttrOrDefault(outgoing_hadron_c, _Unicode(crossing_angle), 0.0))) *
                        Transform3D(Position(0, 0, -getAttrOrDefault(outgoing_hadron_c, _Unicode(axis_intersection), 0.0)));
-  
+
   // reflect
   if(getAttrOrDefault<bool>(downstream_c, _Unicode(reflect), true))
     tf_downstream = Transform3D(RotationZYX(0, M_PI, 0));
@@ -411,7 +411,7 @@ static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector /* sens *
   pv_assembly.addPhysVolID("system", sdet.id());
   sdet.setPlacement(pv_assembly);
   assembly->GetShape()->ComputeBBox();
-  
+
   return sdet;
 }
 

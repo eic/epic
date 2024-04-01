@@ -36,7 +36,6 @@ prefix/
 lib/
 share/
 setup.sh
-install/
 
 # jekyll
 Gemfile.lock
@@ -46,5 +45,3 @@ vendor/
 .jekyll-metadata
 .sass-cache/
 _site/
-
-compile.bash
