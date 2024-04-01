@@ -36,6 +36,7 @@ static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector /* sens *
     Assembly   assembly(det_name + "_assembly");
     Material   m_Vac    = det.material("Vacuum");
     string     vis_name = x_det.visStr();
+    double     endOfCentralBeamPipe_z = dd4hep::getAttrOrDefault<double>(x_det, _Unicode(endOfCentralBeamPipe_z), 0);
 
     PlacedVolume pv_assembly;
 
@@ -144,7 +145,6 @@ static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector /* sens *
     // -->the volume will be calculated at the end
     //-------------------------------------------
 
-    double endOfCentralBeamPipe_z = 560.00*dd4hep::cm; // <-- extracted from central_beampipe.xml
     double diameterReduce = 11.0*dd4hep::cm; //size reduction to avoid overlap with electron pipe
     double vacuumDiameterEntrance = 25.792*dd4hep::cm - diameterReduce; //extracted from central_beampipe.xml, line 64
     double vacuumDiameterExit = 17.4*dd4hep::cm; //15mrad @ entrance to magnet to not overlap electron magnet

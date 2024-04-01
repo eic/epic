@@ -10,7 +10,12 @@
 
   <detectors>
 
-      <detector id="VacuumMagnetElement_1_ID" name="VacuumMagnetElement" type="magnetElementInnerVacuum" vis="AnlBlue">
+      <detector 
+                id="VacuumMagnetElement_1_ID" 
+                name="VacuumMagnetElement" 
+                type="magnetElementInnerVacuum" 
+                vis="AnlBlue" 
+                endOfCentralBeamPipe_z="BeampipeDownstreamHadronEnd">
         <element>
                 <placement x="B0PF_XPosition" y="0*m" z="B0PF_CenterPosition" theta="B0PF_RotationAngle" />
                 <dimensions z="B0PF_Length" />

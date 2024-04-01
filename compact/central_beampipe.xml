@@ -5,6 +5,7 @@
   <define>
     <constant name="BeampipeUpstreamStraightLength" value="800.0 * mm"/>
     <constant name="BeampipeDownstreamStraightLength" value="670.0 * mm"/>
+    <constant name="BeampipeDownstreamHadronEnd" value="5600.0 * mm"/>
   </define>
 
   <display>
@@ -76,7 +77,7 @@
                          cone_z_end="5000.0 * mm"
                          cone_z_start="870.0 * mm"
                          extension_r="27.5 * mm"
-                         extension_z="600.0 * mm"
+                         extension_z="BeampipeDownstreamHadronEnd - 5000.0 * mm"
                          extension_thickness="1.65 * mm"
                          crossing_angle="CrossingAngle">
           <zplane_vac z="670.00 * mm" OD="62.00 * mm"/>
