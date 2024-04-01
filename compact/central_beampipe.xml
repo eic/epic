@@ -48,7 +48,7 @@
                          crossing_angle="CrossingAngle">
           <!-- avoid overlap with IP beampipe by starting slightly displaced -->
           <vacuum>
-            <zplane z="BeampipeUpstreamStraightLength + 0.5 * max(BeampipeOD, 24.714 * mm) * tan(abs(CrossingAngle))" 
+            <zplane z="BeampipeUpstreamStraightLength + 0.5 * max(BeampipeOD, 24.714 * mm) * tan(abs(CrossingAngle))"
                     OD="24.714 * mm - 2* HadronIncomingBeampipeThickness"/>
             <zplane z="2690.95 * mm" OD="31.75 * mm - 2* HadronIncomingBeampipeThickness"/>
             <zplane z="2890.35 * mm" OD="31.75 * mm - 2* HadronIncomingBeampipeThickness"/>
@@ -56,7 +56,7 @@
             <zplane z="5000.00 * mm" OD="44.45 * mm - 2* HadronIncomingBeampipeThickness"/>
           </vacuum>
           <matter>
-            <zplane z="BeampipeUpstreamStraightLength + 0.5 * max(BeampipeOD, 24.714 * mm) * tan(abs(CrossingAngle))" 
+            <zplane z="BeampipeUpstreamStraightLength + 0.5 * max(BeampipeOD, 24.714 * mm) * tan(abs(CrossingAngle))"
                     OD="24.714 * mm"/>
             <zplane z="2690.95 * mm" OD="31.75 * mm"/>
             <zplane z="2890.35 * mm" OD="31.75 * mm"/>
