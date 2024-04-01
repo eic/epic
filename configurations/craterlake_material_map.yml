@@ -14,4 +14,4 @@ features:
     tof_barrel:
     tof_endcap:
   far_forward:
-    far_forward:
+    default:
