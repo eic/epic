@@ -79,7 +79,7 @@
 
 
     <detectors>
-        <detector 
+        <detector
                 id="ForwardRomanPot_Station_1_ID"
                 name="ForwardRomanPot_Station_1"
                 readout="ForwardRomanPotHits"
@@ -226,7 +226,7 @@
                 </component>
             </layer>
         </detector>
-    
+
     </detectors>
 
     <readouts>
