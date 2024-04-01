@@ -21,37 +21,37 @@
       <pipe id="1" name="Pipe_1"
         xcenter="0" zcenter="Electron_Beampipe_Pipe_1_End + abs(Electron_Beampipe_Pipe_0_End - Electron_Beampipe_Pipe_1_End)/2"
         length="abs(Electron_Beampipe_Pipe_0_End - Electron_Beampipe_Pipe_1_End)" theta="0"
-        rout1="Electron_Beampipe_Pipe_0_DI/2 + Electron_Beampipe_Pipe_Wall_Thickness" 
+        rout1="Electron_Beampipe_Pipe_0_DI/2 + Electron_Beampipe_Pipe_Wall_Thickness"
         rout2="Electron_Beampipe_Pipe_1_DI/2 + Electron_Beampipe_Pipe_Wall_Thickness">
       </pipe>
       <pipe id="2" name="Pipe_2"
         xcenter="0" zcenter="Electron_Beampipe_Pipe_2_End + abs(Electron_Beampipe_Pipe_1_End - Electron_Beampipe_Pipe_2_End)/2"
         length="abs(Electron_Beampipe_Pipe_1_End - Electron_Beampipe_Pipe_2_End)" theta="0"
-        rout1="Electron_Beampipe_Pipe_1_DI/2 + Electron_Beampipe_Pipe_Wall_Thickness" 
+        rout1="Electron_Beampipe_Pipe_1_DI/2 + Electron_Beampipe_Pipe_Wall_Thickness"
         rout2="Electron_Beampipe_Pipe_2_DI/2 + Electron_Beampipe_Pipe_Wall_Thickness">
       </pipe>
       <pipe id="3" name="Pipe_3"
         xcenter="0" zcenter="Electron_Beampipe_Pipe_3_End + abs(Electron_Beampipe_Pipe_2_End - Electron_Beampipe_Pipe_3_End)/2"
         length="abs(Electron_Beampipe_Pipe_2_End - Electron_Beampipe_Pipe_3_End)" theta="0"
-        rout1="Electron_Beampipe_Pipe_2_DI/2 + Electron_Beampipe_Pipe_Wall_Thickness" 
+        rout1="Electron_Beampipe_Pipe_2_DI/2 + Electron_Beampipe_Pipe_Wall_Thickness"
         rout2="Electron_Beampipe_Pipe_3_DI/2 + Electron_Beampipe_Pipe_Wall_Thickness">
       </pipe>
       <pipe id="4" name="Pipe_4"
         xcenter="0" zcenter="Electron_Beampipe_Pipe_4_End + abs(Electron_Beampipe_Pipe_3_End - Electron_Beampipe_Pipe_4_End)/2"
         length="abs(Electron_Beampipe_Pipe_3_End - Electron_Beampipe_Pipe_4_End)" theta="0"
-        rout1="Electron_Beampipe_Pipe_3_DI/2 + Electron_Beampipe_Pipe_Wall_Thickness" 
+        rout1="Electron_Beampipe_Pipe_3_DI/2 + Electron_Beampipe_Pipe_Wall_Thickness"
         rout2="Electron_Beampipe_Pipe_4_DI/2 + Electron_Beampipe_Pipe_Wall_Thickness">
       </pipe>
       <pipe id="5" name="Pipe_5"
         xcenter="0" zcenter="Electron_Beampipe_Pipe_5_End + abs(Electron_Beampipe_Pipe_4_End - Electron_Beampipe_Pipe_5_End)/2"
         length="abs(Electron_Beampipe_Pipe_4_End - Electron_Beampipe_Pipe_5_End)" theta="0"
-        rout1="Electron_Beampipe_Pipe_4_DI/2 + Electron_Beampipe_Pipe_Wall_Thickness" 
+        rout1="Electron_Beampipe_Pipe_4_DI/2 + Electron_Beampipe_Pipe_Wall_Thickness"
         rout2="Electron_Beampipe_Pipe_5_DI/2 + Electron_Beampipe_Pipe_Wall_Thickness">
       </pipe>
       <pipe id="6" name="Pipe_6"
         xcenter="0" zcenter="Electron_Beampipe_Pipe_6_End + abs(Electron_Beampipe_Pipe_5_End - Electron_Beampipe_Pipe_6_End)/2"
         length="abs(Electron_Beampipe_Pipe_5_End - Electron_Beampipe_Pipe_6_End)" theta="0"
-        rout1="Electron_Beampipe_Pipe_5_DI/2 + Electron_Beampipe_Pipe_Wall_Thickness" 
+        rout1="Electron_Beampipe_Pipe_5_DI/2 + Electron_Beampipe_Pipe_Wall_Thickness"
         rout2="Electron_Beampipe_Pipe_6_DI/2 + Electron_Beampipe_Pipe_Wall_Thickness">
       </pipe>
     </detector>
