@@ -11,42 +11,48 @@
     <detector
     name="Pipe_Q1eR_to_B2BeR"
     type="BeamPipeChain"
-    wall_thickness="2*mm"
+    wall_thickness="Electron_Beampipe_Pipe_Wall_Thickness"
     vis="BeamPipeVis">
       <pipe id="0" name="Pipe_0"
-        xcenter="0" zcenter="-7342.0 * mm + (Center_Beampipe_End + 7342.0 * mm)/2"
-        length="Center_Beampipe_End + 7342.0 * mm" theta="0"
-        rout1="Center_Beampipe_Rad" rout2="(111.40/2 + 2) * mm">
+        xcenter="0" zcenter="Electron_Beampipe_Pipe_0_End + abs(Center_Beampipe_End - Electron_Beampipe_Pipe_0_End)/2"
+        length="abs(Center_Beampipe_End - Electron_Beampipe_Pipe_0_End)" theta="0"
+        rout1="Center_Beampipe_Rad" rout2="Electron_Beampipe_Pipe_0_DI/2 + Electron_Beampipe_Pipe_Wall_Thickness">
       </pipe>
       <pipe id="1" name="Pipe_1"
-        xcenter="0" zcenter="-7405.0 * mm + (7405.00 - 7342.0)/2 * mm"
-        length="(7405.00 - 7342.0) * mm" theta="0"
-        rout1="(111.40/2 + 2) * mm" rout2="(128.60/2 + 2) * mm">
+        xcenter="0" zcenter="Electron_Beampipe_Pipe_1_End + abs(Electron_Beampipe_Pipe_0_End - Electron_Beampipe_Pipe_1_End)/2"
+        length="abs(Electron_Beampipe_Pipe_0_End - Electron_Beampipe_Pipe_1_End)" theta="0"
+        rout1="Electron_Beampipe_Pipe_0_DI/2 + Electron_Beampipe_Pipe_Wall_Thickness" 
+        rout2="Electron_Beampipe_Pipe_1_DI/2 + Electron_Beampipe_Pipe_Wall_Thickness">
       </pipe>
       <pipe id="2" name="Pipe_2"
-        xcenter="0" zcenter="-9288.0 * mm + (9288.0 - 7405.00)/2 * mm"
-        length="(9288.0 - 7405.00) * mm" theta="0"
-        rout1="(128.60/2 + 2) * mm" rout2="(128.60/2 + 2) * mm">
+        xcenter="0" zcenter="Electron_Beampipe_Pipe_2_End + abs(Electron_Beampipe_Pipe_1_End - Electron_Beampipe_Pipe_2_End)/2"
+        length="abs(Electron_Beampipe_Pipe_1_End - Electron_Beampipe_Pipe_2_End)" theta="0"
+        rout1="Electron_Beampipe_Pipe_1_DI/2 + Electron_Beampipe_Pipe_Wall_Thickness" 
+        rout2="Electron_Beampipe_Pipe_2_DI/2 + Electron_Beampipe_Pipe_Wall_Thickness">
       </pipe>
       <pipe id="3" name="Pipe_3"
-        xcenter="0" zcenter="-9364.0 * mm + (9364.0 - 9288.0)/2 * mm"
-        length="(9364.0 - 9288.0) * mm" theta="0"
-        rout1="(128.60/2 + 2)* mm" rout2="(154.00/2 + 2) * mm">
+        xcenter="0" zcenter="Electron_Beampipe_Pipe_3_End + abs(Electron_Beampipe_Pipe_2_End - Electron_Beampipe_Pipe_3_End)/2"
+        length="abs(Electron_Beampipe_Pipe_2_End - Electron_Beampipe_Pipe_3_End)" theta="0"
+        rout1="Electron_Beampipe_Pipe_2_DI/2 + Electron_Beampipe_Pipe_Wall_Thickness" 
+        rout2="Electron_Beampipe_Pipe_3_DI/2 + Electron_Beampipe_Pipe_Wall_Thickness">
       </pipe>
       <pipe id="4" name="Pipe_4"
-        xcenter="0" zcenter="-11364.0 * mm + (11364.0 - 9364.0)/2 * mm"
-        length="(11364.0 - 9364.0) * mm" theta="0"
-        rout1="(154.00/2 + 2) * mm" rout2="(154.00/2 + 2) * mm">
+        xcenter="0" zcenter="Electron_Beampipe_Pipe_4_End + abs(Electron_Beampipe_Pipe_3_End - Electron_Beampipe_Pipe_4_End)/2"
+        length="abs(Electron_Beampipe_Pipe_3_End - Electron_Beampipe_Pipe_4_End)" theta="0"
+        rout1="Electron_Beampipe_Pipe_3_DI/2 + Electron_Beampipe_Pipe_Wall_Thickness" 
+        rout2="Electron_Beampipe_Pipe_4_DI/2 + Electron_Beampipe_Pipe_Wall_Thickness">
       </pipe>
       <pipe id="5" name="Pipe_5"
-        xcenter="0" zcenter="-11414.0 * mm + (11414.0 - 11364.0)/2 * mm"
-        length="(11414.0 - 11364.0) * mm" theta="0"
-        rout1="(154.00/2 + 2) * mm" rout2="(196.00/2 + 2) * mm">
+        xcenter="0" zcenter="Electron_Beampipe_Pipe_5_End + abs(Electron_Beampipe_Pipe_4_End - Electron_Beampipe_Pipe_5_End)/2"
+        length="abs(Electron_Beampipe_Pipe_4_End - Electron_Beampipe_Pipe_5_End)" theta="0"
+        rout1="Electron_Beampipe_Pipe_4_DI/2 + Electron_Beampipe_Pipe_Wall_Thickness" 
+        rout2="Electron_Beampipe_Pipe_5_DI/2 + Electron_Beampipe_Pipe_Wall_Thickness">
       </pipe>
       <pipe id="6" name="Pipe_6"
-        xcenter="0" zcenter="(B2BeR_CenterPosition - B2BeR_Length/2 - B2BeR_Edge) + (abs(B2BeR_CenterPosition - B2BeR_Length/2 - B2BeR_Edge) - 11414.0 * mm)/2"
-        length="abs(B2BeR_CenterPosition - B2BeR_Length/2 - B2BeR_Edge) - 11414.0 * mm" theta="0"
-        rout1="(196.00/2 + 2) * mm" rout2="(196.00/2 + 2) * mm">
+        xcenter="0" zcenter="Electron_Beampipe_Pipe_6_End + abs(Electron_Beampipe_Pipe_5_End - Electron_Beampipe_Pipe_6_End)/2"
+        length="abs(Electron_Beampipe_Pipe_5_End - Electron_Beampipe_Pipe_6_End)" theta="0"
+        rout1="Electron_Beampipe_Pipe_5_DI/2 + Electron_Beampipe_Pipe_Wall_Thickness" 
+        rout2="Electron_Beampipe_Pipe_6_DI/2 + Electron_Beampipe_Pipe_Wall_Thickness">
       </pipe>
     </detector>
 

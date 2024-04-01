@@ -37,6 +37,25 @@
     <constant name="Q3eR_Theta"           value="0.0180766389*rad"/>
     <constant name="Q3eR_CenterPosition"  value="-37.996018*m"/>
 
+    <comment> Electron side beam pipe volumes: going from Q1eR to B2BeR </comment>
+    <constant name="Electron_Beampipe_Pipe_0_End" value="-7342.0 * mm"/>
+    <constant name="Electron_Beampipe_Pipe_1_End" value="-7405.0 * mm"/>
+    <constant name="Electron_Beampipe_Pipe_2_End" value="-9288.0 * mm"/>
+    <constant name="Electron_Beampipe_Pipe_3_End" value="-9364.0 * mm"/>
+    <constant name="Electron_Beampipe_Pipe_4_End" value="-11364.0 * mm"/>
+    <constant name="Electron_Beampipe_Pipe_5_End" value="-11414.0 * mm"/>
+    <constant name="Electron_Beampipe_Pipe_6_End" value="B2BeR_CenterPosition - B2BeR_Length/2 - B2BeR_Edge"/>
+
+    <constant name="Electron_Beampipe_Pipe_Wall_Thickness" value="2 * mm"/>
+
+    <constant name="Electron_Beampipe_Pipe_0_DI" value="111.40 * mm"/>
+    <constant name="Electron_Beampipe_Pipe_1_DI" value="128.60 * mm"/>
+    <constant name="Electron_Beampipe_Pipe_2_DI" value="128.60 * mm"/>
+    <constant name="Electron_Beampipe_Pipe_3_DI" value="154.00 * mm"/>
+    <constant name="Electron_Beampipe_Pipe_4_DI" value="154.00 * mm"/>
+    <constant name="Electron_Beampipe_Pipe_5_DI" value="196.00 * mm"/>
+    <constant name="Electron_Beampipe_Pipe_6_DI" value="196.00 * mm"/>
+
     <comment> Note: Placements for Q4eR, B3eR, B4eR, B5eR, B6eR, B7eR
               are approximate (valid to within ~1 cm).
               Should be updated with detailed input from the accelerator group
