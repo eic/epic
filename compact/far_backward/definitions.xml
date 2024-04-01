@@ -48,13 +48,13 @@
 
     <constant name="Electron_Beampipe_Pipe_Wall_Thickness" value="2 * mm"/>
 
-    <constant name="Electron_Beampipe_Pipe_0_DI" value="111.40 * mm"/>
-    <constant name="Electron_Beampipe_Pipe_1_DI" value="128.60 * mm"/>
-    <constant name="Electron_Beampipe_Pipe_2_DI" value="128.60 * mm"/>
-    <constant name="Electron_Beampipe_Pipe_3_DI" value="154.00 * mm"/>
-    <constant name="Electron_Beampipe_Pipe_4_DI" value="154.00 * mm"/>
-    <constant name="Electron_Beampipe_Pipe_5_DI" value="196.00 * mm"/>
-    <constant name="Electron_Beampipe_Pipe_6_DI" value="196.00 * mm"/>
+    <constant name="Electron_Beampipe_Pipe_0_ID" value="111.40 * mm"/>
+    <constant name="Electron_Beampipe_Pipe_1_ID" value="128.60 * mm"/>
+    <constant name="Electron_Beampipe_Pipe_2_ID" value="128.60 * mm"/>
+    <constant name="Electron_Beampipe_Pipe_3_ID" value="154.00 * mm"/>
+    <constant name="Electron_Beampipe_Pipe_4_ID" value="154.00 * mm"/>
+    <constant name="Electron_Beampipe_Pipe_5_ID" value="196.00 * mm"/>
+    <constant name="Electron_Beampipe_Pipe_6_ID" value="196.00 * mm"/>
 
     <comment> Note: Placements for Q4eR, B3eR, B4eR, B5eR, B6eR, B7eR
               are approximate (valid to within ~1 cm).

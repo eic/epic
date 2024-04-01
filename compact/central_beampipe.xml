@@ -6,10 +6,59 @@
     <constant name="BeampipeUpstreamStraightLength" value="800.0 * mm"/>
     <constant name="BeampipeDownstreamStraightLength" value="670.0 * mm"/>
     <constant name="BeampipeDownstreamHadronEnd" value="5600.0 * mm"/>
-    <constant name="LeptonOutgoingBeampipeThickness" value="2.00 * mm"/>
+
+    <!-- lepton incoming beam pipe -->
     <constant name="LeptonIncomingBeampipeThickness" value="1.00 * mm"/>
+    <constant name="LeptonIncomingBeampipe_z1" value="BeampipeDownstreamStraightLength"/>
+    <constant name="LeptonIncomingBeampipe_z2" value="755.00 * mm"/>
+    <constant name="LeptonIncomingBeampipe_z3" value="4300.00 * mm"/>
+    <constant name="LeptonIncomingBeampipe_z4" value="4450.00 * mm"/>
+    <constant name="LeptonIncomingBeampipe_z5" value="4460.00 * mm"/>
+    <constant name="LeptonIncomingBeampipe_z6" value="4660.00 * mm"/>
+    <constant name="LeptonIncomingBeampipe_z7" value="5100.00 * mm"/>
+
+    <constant name="LeptonIncomingBeampipe_OD1" value="60.00 * mm"/>
+    <constant name="LeptonIncomingBeampipe_OD2" value="62.00 * mm"/>
+    <constant name="LeptonIncomingBeampipe_OD3" value="44.00 * mm"/>
+    <constant name="LeptonIncomingBeampipe_OD4" value="54.00 * mm"/>
+
+    <!-- lepton lepton outgoing beam pipe -->
+    <constant name="LeptonOutgoingBeampipeThickness" value="2.00 * mm"/>
+    <constant name="LeptonOutgoingBeampipe_z1" value="BeampipeUpstreamStraightLength"/>
+    <constant name="LeptonOutgoingBeampipe_z2" value="5000.00 * mm"/>
+
+    <constant name="LeptonOutgoingBeampipe_OD1" value="BeampipeOD"/>
+    <constant name="LeptonOutgoingBeampipe_OD2" value="97.715 * mm"/>
+
+    <!-- incoming hadron beam pipe -->
     <constant name="HadronIncomingBeampipeThickness" value="1.65 * mm"/>
+    <!-- avoid overlap with IP beampipe by starting slightly displaced -->
+    <constant name="HadronIncomingBeampipe_OD1" value="24.714 * mm"/>
+    <constant name="HadronIncomingBeampipe_OD2" value="31.75 * mm"/>
+    <constant name="HadronIncomingBeampipe_OD3" value="44.45 * mm"/>
+
+    <constant name="HadronIncomingBeampipe_z1" value="BeampipeUpstreamStraightLength + 0.5 * max(BeampipeOD,HadronIncomingBeampipe_OD1) * tan(abs(CrossingAngle))"/>
+    <constant name="HadronIncomingBeampipe_z2" value="2690.95 * mm"/>
+    <constant name="HadronIncomingBeampipe_z3" value="2890.35 * mm"/>
+    <constant name="HadronIncomingBeampipe_z4" value="2940.35 * mm"/>
+    <constant name="HadronIncomingBeampipe_z5" value="5000.00 * mm"/>
+
+    <!-- outgoing hadron beam pipe -->
+    <constant name="HadronOutgoingBeampipeConeStart_z" value="870.00 * mm"/>
+    <constant name="HadronOutgoingBeampipeConeEnd_z" value="5000.00 * mm"/>
+    <constant name="HadronOutgoingBeampipeAxisIntersection_z" value="BeampipeDownstreamStraightLength"/>
     <constant name="HadronOutgoingBeampipeThickness" value="4.00 * mm"/>
+    <constant name="HadronOutgoingBeampipe_OD" value="62.00 * mm"/>
+    <constant name="HadronOutgoingBeampipe_z1" value="BeampipeDownstreamStraightLength"/>
+    <constant name="HadronOutgoingBeampipe_z2" value="5100.00 * mm"/>
+
+    <!-- addition subtraction; these are somewhat arbitrary to get the right hole shape -->
+    <constant name="AdditionSubtraction_z1" value="HadronOutgoingBeampipeConeStart_z"/>
+    <constant name="AdditionSubtraction_z2" value="4484.25 * mm"/>
+
+    <constant name="AdditionSubtraction_OD1" value="36.61 * mm"/>
+    <constant name="AdditionSubtraction_OD2" value="120.00 * mm"/>
+    <constant name="AdditionSubtraction_OD3" value="32.00 * mm"/>
   </define>
 
   <display>
@@ -36,32 +85,29 @@
                 subtract_matter="false">
         <outgoing_lepton thickness="LeptonOutgoingBeampipeThickness">
           <vacuum>
-            <zplane z="BeampipeUpstreamStraightLength" OD="BeampipeOD - 2* LeptonOutgoingBeampipeThickness"/>
-            <zplane z="5000.00 * mm" OD="97.715 * mm - 2* LeptonOutgoingBeampipeThickness"/>
+            <zplane z="LeptonOutgoingBeampipe_z1" OD="LeptonOutgoingBeampipe_OD1 - 2* LeptonOutgoingBeampipeThickness"/>
+            <zplane z="LeptonOutgoingBeampipe_z2" OD="LeptonOutgoingBeampipe_OD2 - 2* LeptonOutgoingBeampipeThickness"/>
           </vacuum>
           <matter>
-            <zplane z="BeampipeUpstreamStraightLength" OD="BeampipeOD"/>
-            <zplane z="5000.00 * mm" OD="97.715 * mm"/>
+            <zplane z="LeptonOutgoingBeampipe_z1" OD="LeptonOutgoingBeampipe_OD1"/>
+            <zplane z="LeptonOutgoingBeampipe_z2" OD="LeptonOutgoingBeampipe_OD2"/>
           </matter>
         </outgoing_lepton>
         <incoming_hadron thickness="HadronIncomingBeampipeThickness"
                          crossing_angle="CrossingAngle">
-          <!-- avoid overlap with IP beampipe by starting slightly displaced -->
           <vacuum>
-            <zplane z="BeampipeUpstreamStraightLength + 0.5 * max(BeampipeOD, 24.714 * mm) * tan(abs(CrossingAngle))" 
-                    OD="24.714 * mm - 2* HadronIncomingBeampipeThickness"/>
-            <zplane z="2690.95 * mm" OD="31.75 * mm - 2* HadronIncomingBeampipeThickness"/>
-            <zplane z="2890.35 * mm" OD="31.75 * mm - 2* HadronIncomingBeampipeThickness"/>
-            <zplane z="2940.35 * mm" OD="44.45 * mm - 2* HadronIncomingBeampipeThickness"/>
-            <zplane z="5000.00 * mm" OD="44.45 * mm - 2* HadronIncomingBeampipeThickness"/>
+            <zplane z="HadronIncomingBeampipe_z1" OD="HadronIncomingBeampipe_OD1 - 2* HadronIncomingBeampipeThickness"/>
+            <zplane z="HadronIncomingBeampipe_z2" OD="HadronIncomingBeampipe_OD2 - 2* HadronIncomingBeampipeThickness"/>
+            <zplane z="HadronIncomingBeampipe_z3" OD="HadronIncomingBeampipe_OD2 - 2* HadronIncomingBeampipeThickness"/>
+            <zplane z="HadronIncomingBeampipe_z4" OD="HadronIncomingBeampipe_OD3 - 2* HadronIncomingBeampipeThickness"/>
+            <zplane z="HadronIncomingBeampipe_z5" OD="HadronIncomingBeampipe_OD3 - 2* HadronIncomingBeampipeThickness"/>
           </vacuum>
           <matter>
-            <zplane z="BeampipeUpstreamStraightLength + 0.5 * max(BeampipeOD, 24.714 * mm) * tan(abs(CrossingAngle))" 
-                    OD="24.714 * mm"/>
-            <zplane z="2690.95 * mm" OD="31.75 * mm"/>
-            <zplane z="2890.35 * mm" OD="31.75 * mm"/>
-            <zplane z="2940.35 * mm" OD="44.45 * mm"/>
-            <zplane z="5000.00 * mm" OD="44.45 * mm"/>
+            <zplane z="HadronIncomingBeampipe_z1" OD="HadronIncomingBeampipe_OD1"/>
+            <zplane z="HadronIncomingBeampipe_z2" OD="HadronIncomingBeampipe_OD2"/>
+            <zplane z="HadronIncomingBeampipe_z3" OD="HadronIncomingBeampipe_OD2"/>
+            <zplane z="HadronIncomingBeampipe_z4" OD="HadronIncomingBeampipe_OD3"/>
+            <zplane z="HadronIncomingBeampipe_z5" OD="HadronIncomingBeampipe_OD3"/>
           </matter>
         </incoming_hadron>
       </upstream>
@@ -73,56 +119,55 @@
                   subtract_matter="true">
         <incoming_lepton thickness="LeptonIncomingBeampipeThickness">
             <vacuum>
-              <zplane z="670.00 * mm" OD="60.00 * mm"/>
-              <zplane z="755.00 * mm" OD="60.00 * mm"/>
-              <zplane z="755.00 * mm" OD="62.00 * mm"/>
-              <zplane z="4300.00 * mm" OD="62.00 * mm"/>
-              <zplane z="4450.00 * mm" OD="44.00 * mm"/>
-              <zplane z="4460.00 * mm" OD="44.00 * mm"/>
-              <zplane z="4660.00 * mm" OD="54.00 * mm"/>
-              <zplane z="5100.00 * mm" OD="54.00 * mm"/>
+              <zplane z="LeptonIncomingBeampipe_z1" OD="LeptonIncomingBeampipe_OD1"/>
+              <zplane z="LeptonIncomingBeampipe_z2" OD="LeptonIncomingBeampipe_OD1"/>
+              <zplane z="LeptonIncomingBeampipe_z2" OD="LeptonIncomingBeampipe_OD2"/>
+              <zplane z="LeptonIncomingBeampipe_z3" OD="LeptonIncomingBeampipe_OD2"/>
+              <zplane z="LeptonIncomingBeampipe_z4" OD="LeptonIncomingBeampipe_OD3"/>
+              <zplane z="LeptonIncomingBeampipe_z5" OD="LeptonIncomingBeampipe_OD3"/>
+              <zplane z="LeptonIncomingBeampipe_z6" OD="LeptonIncomingBeampipe_OD4"/>
+              <zplane z="LeptonIncomingBeampipe_z7" OD="LeptonIncomingBeampipe_OD4"/>
             </vacuum>
             <matter>
-              <zplane z="670.00 * mm" OD="62.00 * mm + 2* LeptonIncomingBeampipeThickness"/>
-              <zplane z="670.00 * mm + LeptonIncomingBeampipeThickness" OD="62.00 * mm + 2* LeptonIncomingBeampipeThickness"/>
-              <zplane z="670.00 * mm + LeptonIncomingBeampipeThickness" OD="60.00 * mm + 2* LeptonIncomingBeampipeThickness"/>
-              <zplane z="755.00 * mm + LeptonIncomingBeampipeThickness" OD="60.00 * mm + 2* LeptonIncomingBeampipeThickness"/>
-              <zplane z="755.00 * mm + LeptonIncomingBeampipeThickness" OD="62.00 * mm + 2* LeptonIncomingBeampipeThickness"/>
-              <zplane z="4300.00 * mm" OD="62.00 * mm + 2* LeptonIncomingBeampipeThickness"/>
-              <zplane z="4450.00 * mm" OD="44.00 * mm + 2* LeptonIncomingBeampipeThickness"/>
-              <zplane z="4460.00 * mm" OD="44.00 * mm + 2* LeptonIncomingBeampipeThickness"/>
-              <zplane z="4660.00 * mm" OD="54.00 * mm + 2* LeptonIncomingBeampipeThickness"/>
-              <zplane z="5100.00 * mm" OD="54.00 * mm + 2* LeptonIncomingBeampipeThickness"/>
+              <zplane z="LeptonIncomingBeampipe_z1" OD="LeptonIncomingBeampipe_OD2 + 2* LeptonIncomingBeampipeThickness"/>
+              <zplane z="LeptonIncomingBeampipe_z1 + LeptonIncomingBeampipeThickness" OD="LeptonIncomingBeampipe_OD2 + 2* LeptonIncomingBeampipeThickness"/>
+              <zplane z="LeptonIncomingBeampipe_z1 + LeptonIncomingBeampipeThickness" OD="LeptonIncomingBeampipe_OD1 + 2* LeptonIncomingBeampipeThickness"/>
+              <zplane z="LeptonIncomingBeampipe_z2 + LeptonIncomingBeampipeThickness" OD="LeptonIncomingBeampipe_OD1 + 2* LeptonIncomingBeampipeThickness"/>
+              <zplane z="LeptonIncomingBeampipe_z2 + LeptonIncomingBeampipeThickness" OD="LeptonIncomingBeampipe_OD2 + 2* LeptonIncomingBeampipeThickness"/>
+              <zplane z="LeptonIncomingBeampipe_z3" OD="LeptonIncomingBeampipe_OD2 + 2* LeptonIncomingBeampipeThickness"/>
+              <zplane z="LeptonIncomingBeampipe_z4" OD="LeptonIncomingBeampipe_OD3 + 2* LeptonIncomingBeampipeThickness"/>
+              <zplane z="LeptonIncomingBeampipe_z5" OD="LeptonIncomingBeampipe_OD3 + 2* LeptonIncomingBeampipeThickness"/>
+              <zplane z="LeptonIncomingBeampipe_z6" OD="LeptonIncomingBeampipe_OD4 + 2* LeptonIncomingBeampipeThickness"/>
+              <zplane z="LeptonIncomingBeampipe_z7" OD="LeptonIncomingBeampipe_OD4 + 2* LeptonIncomingBeampipeThickness"/>
             </matter>
         </incoming_lepton>
         <outgoing_hadron thickness="HadronOutgoingBeampipeThickness"
-                         axis_intersection="670.0 * mm"
+                         axis_intersection="HadronOutgoingBeampipeAxisIntersection_z"
                          horizontal_offset="15.0 * mm"
-                         cone_z_end="5000.0 * mm"
-                         cone_z_start="870.0 * mm"
+                         cone_z_end="HadronOutgoingBeampipeConeEnd_z"
+                         cone_z_start="HadronOutgoingBeampipeConeStart_z"
                          extension_r="27.5 * mm"
-                         extension_z="BeampipeDownstreamHadronEnd - 5000.0 * mm"
+                         extension_z="BeampipeDownstreamHadronEnd - HadronOutgoingBeampipeConeEnd_z"
                          extension_thickness="HadronIncomingBeampipeThickness"
                          crossing_angle="CrossingAngle">
             <vacuum>
-              <zplane z="670.00 * mm" OD="62.00 * mm"/>
-              <zplane z="5100.00 * mm" OD="(62.00 + 2 * (5100.00 - 670.00) * tan(abs(CrossingAngle))) * mm"/>
+              <zplane z="HadronOutgoingBeampipe_z1" OD="HadronOutgoingBeampipe_OD"/>
+              <zplane z="HadronOutgoingBeampipe_z2" OD="HadronOutgoingBeampipe_OD + 2* (HadronOutgoingBeampipe_z2 - HadronOutgoingBeampipe_z1) * tan(abs(CrossingAngle))"/>
             </vacuum>
             <matter>
-              <zplane z="670.00 * mm" OD="62.00 * mm + 2* HadronOutgoingBeampipeThickness"/>
-              <zplane z="5100.00 * mm" OD="(62.00 + 2 * (5100.00 - 670.00) * tan(abs(CrossingAngle))) * mm + 2* HadronOutgoingBeampipeThickness"/>
+              <zplane z="HadronOutgoingBeampipe_z1" OD="HadronOutgoingBeampipe_OD + 2* HadronOutgoingBeampipeThickness"/>
+              <zplane z="HadronOutgoingBeampipe_z2" OD="HadronOutgoingBeampipe_OD + 2* (HadronOutgoingBeampipe_z2 - HadronOutgoingBeampipe_z1) * tan(abs(CrossingAngle)) + 2* HadronOutgoingBeampipeThickness"/>
             </matter>
         </outgoing_hadron>
-        <additional_subtraction thickness="4.0*mm"
+        <additional_subtraction thickness="HadronOutgoingBeampipeThickness"
                                 crossing_angle="CrossingAngle">
-          <!-- these are somewhat arbitrary to get the right hole shape -->
             <vacuum>
-              <zplane z="870.00 * mm" OD="36.61 * mm - 2* HadronOutgoingBeampipeThickness"/>
-              <zplane z="4484.25 * mm" OD="120.00 * mm - 2* HadronOutgoingBeampipeThickness"/>
+              <zplane z="AdditionSubtraction_z1" OD="AdditionSubtraction_OD1 - 2* HadronOutgoingBeampipeThickness"/>
+              <zplane z="AdditionSubtraction_z2" OD="AdditionSubtraction_OD2 - 2* HadronOutgoingBeampipeThickness"/>
             </vacuum>
             <matter>
-              <zplane z="670.00 * mm" OD="32.00 * mm"/>
-              <zplane z="4484.25 * mm" OD="120.00 * mm"/>
+              <zplane z="BeampipeDownstreamStraightLength" OD="AdditionSubtraction_OD3 * mm"/>
+              <zplane z="AdditionSubtraction_z2" OD="AdditionSubtraction_OD2 * mm"/>
             </matter>
         </additional_subtraction>
       </downstream>
