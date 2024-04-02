@@ -174,7 +174,7 @@ static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector /* sens *
       {0, 2.0 * M_PI, rmin_vac, rmax_vac, z_vac});
   };
   //---------------------------------------------------------------------------------
-  // Create downstream volumes
+  // Create volumes
   auto create_volumes = [&](const std::string& name, xml::Component& x_pipe1, xml::Component& x_pipe2,
                               xml_coll_t& x_additional_subtraction_i) {
 
