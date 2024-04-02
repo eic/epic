@@ -23,7 +23,9 @@ ip6_build
 
 *.swp
 
-fieldmaps
+fieldmaps/
+gdml/
+calibrations/
 
 manifest.txt
 acts.txt
