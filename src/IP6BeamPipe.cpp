@@ -146,7 +146,7 @@ static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector /* sens *
   //  ......__________     --| -> matter
   //  ......|              *** -> vacuum
   //  ......|   ______
-  //  ______|   |***** 
+  //  ______|   |*****
   //            |*****
   //  __________|*****
   //  ****************
@@ -211,18 +211,18 @@ static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector /* sens *
       auto extension_r         = getAttrOrDefault(x_pipe2, _Unicode(extension_r), 0.0);
       auto extension_z         = getAttrOrDefault(x_pipe2, _Unicode(extension_z), 0.0);
       auto extension_thickness = getAttrOrDefault(x_pipe2, _Unicode(extension_thickness), 0.0);
-  
+
       Solid pipe2_polycones_mat_cut, pipe2_polycones_vac_cut;
       // virtual box to subtract from solids
       const double box_cut_sizex = 10000.0 * mm;
       const double box_cut_sizey = 10000.0 * mm;
       const double box_cut_sizez = 10000.0 * mm;
       Box box_cut(box_cut_sizex,box_cut_sizey,box_cut_sizez); // virtual box to subtract from solids
-  
+
       // horizontal offset of the outgoing h-beam pipe w.r.t. the incoming e-beam pipe
       const double p_mat_1[] = {horizontal_offset, 0, 0}; // matter
       const double p_vac_1[] = {horizontal_offset - thickness_pipe2, 0, 0}; // vacuum
-  
+
       pipe2_polycones_mat_cut = SubtractionSolid(pipe2_polycones.first, box_cut,
                                   tf * Transform3D(Position(p_mat_1[0] + box_cut_sizex,
                                                             p_mat_1[1],
@@ -234,7 +234,7 @@ static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector /* sens *
       // cut on the opposite side from the IP
       const double p_mat_2[] = {0, 0, cone_z_end + thickness_pipe2}; // matter
       const double p_vac_2[] = {0, 0, cone_z_end}; // vacuum
-  
+
       pipe2_polycones_mat_cut = SubtractionSolid(pipe2_polycones_mat_cut, box_cut,
                                   tf * Transform3D(Position(p_mat_2[0],
                                                             p_mat_2[1],
@@ -243,11 +243,11 @@ static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector /* sens *
                                   tf * Transform3D(Position(p_vac_2[0],
                                                             p_vac_2[1],
                                                             p_vac_2[2] + box_cut_sizez)));
-  
+
       // cut on the IP side
       const double p_mat_3[] = {0, 0, cone_z_start - thickness_pipe2}; // matter
       const double p_vac_3[] = {0, 0, cone_z_start}; // vacuum
-  
+
       pipe2_polycones_mat_cut = SubtractionSolid(pipe2_polycones_mat_cut, box_cut,
                                   tf * Transform3D(Position(p_mat_3[0],
                                                             p_mat_3[1],
@@ -259,11 +259,11 @@ static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector /* sens *
       // add an extension to the h-beam pipe
       Tube tb_vac(0 * mm, extension_r, extension_z);
       Tube tb_mat(0 * mm, extension_r + extension_thickness, extension_z);
-  
+
       pipe2_polycones_vac_cut = UnionSolid(pipe2_polycones_vac_cut, tb_vac,
                                   tf * Transform3D(RotationY(crossing_angle)) *
                                        Transform3D(Position(0, 0, cone_z_end)));
-  
+
       pipe2_polycones_mat_cut = UnionSolid(pipe2_polycones_mat_cut, tb_mat,
                                   tf * Transform3D(RotationY(crossing_angle)) *
                                        Transform3D(Position(0, 0, cone_z_end)));
@@ -332,7 +332,7 @@ static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector /* sens *
   xml::Component downstream_c      = x_det.child(_Unicode(downstream));
   xml::Component incoming_lepton_c = downstream_c.child(_Unicode(incoming_lepton));
   xml::Component outgoing_hadron_c = downstream_c.child(_Unicode(outgoing_hadron));
-  xml_coll_t     additional_subtractions_downstream(downstream_c, _Unicode(additional_subtraction));   
+  xml_coll_t     additional_subtractions_downstream(downstream_c, _Unicode(additional_subtraction));
 
   auto volumes_downstream = create_volumes("downstream", incoming_lepton_c, outgoing_hadron_c,
     additional_subtractions_downstream);
