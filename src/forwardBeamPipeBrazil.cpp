@@ -32,15 +32,15 @@ static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector /* sens *
     double pipeThickness     = 5.0 * dd4hep::mm;
 
     struct beampipe_dimensions_t {
-        Double_t length;
-        Double_t innerXRadius;
-        Double_t innerYRadius;
-        Double_t outerXRadius;
-        Double_t outerYRadius;
-        Double_t xCenter;
-        Double_t yCenter;
-        Double_t zCenter;
-        Double_t rotationAngle;
+        Double_t length = 0.0;
+        Double_t innerXRadius = 0.0;
+        Double_t innerYRadius = 0.0;
+        Double_t outerXRadius = 0.0;
+        Double_t outerYRadius = 0.0;
+        Double_t xCenter = 0.0;
+        Double_t yCenter = 0.0;
+        Double_t zCenter = 0.0;
+        Double_t rotationAngle = 0.0;
     };
 
     std::vector<beampipe_dimensions_t> beampipe_dimensions;
@@ -73,11 +73,6 @@ static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector /* sens *
         .length            = 7615.486 * dd4hep::mm, //from VPC drawings, in mm
         .innerXRadius      = 275.0 * dd4hep::mm,
         .innerYRadius      = 175.0 * dd4hep::mm,
-        .outerXRadius      = 0.0,
-        .outerYRadius      = 0.0,
-        .xCenter           = 0.0,
-        .yCenter           = 0.0,
-        .zCenter           = 0.0,
         .rotationAngle     = globRotationAngle
     });
 
@@ -103,11 +98,6 @@ static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector /* sens *
         .length            = 2780.273 * dd4hep::mm, // from VPC drawings
         .innerXRadius      = 150.0 * dd4hep::mm,
         .innerYRadius      = 30.0 * dd4hep::mm,
-        .outerXRadius      = 0.0,
-        .outerYRadius      = 0.0,
-        .xCenter           = 0.0,
-        .yCenter           = 0.0,
-        .zCenter           = 0.0,
         .rotationAngle     = globRotationAngle
     });
 
@@ -129,11 +119,6 @@ static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector /* sens *
         .length            = 200 * dd4hep::mm, // from VPC drawings
         .innerXRadius      = 200.0 * dd4hep::mm,
         .innerYRadius      = 125.0 * dd4hep::mm,
-        .outerXRadius      = 0.0,
-        .outerYRadius      = 0.0,
-        .xCenter           = 0.0,
-        .yCenter           = 0.0,
-        .zCenter           = 0.0,
         .rotationAngle     = globRotationAngle
     });
 
@@ -157,11 +142,6 @@ static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector /* sens *
         .length            = 1500.0 * dd4hep::mm, // from VPC drawings
         .innerXRadius      = 150.0 * dd4hep::mm,
         .innerYRadius      = 30.0 * dd4hep::mm,
-        .outerXRadius      = 0.0,
-        .outerYRadius      = 0.0,
-        .xCenter           = 0.0,
-        .yCenter           = 0.0,
-        .zCenter           = 0.0,
         .rotationAngle     = globRotationAngle
     });
 
@@ -184,11 +164,6 @@ static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector /* sens *
         .length            = 200 * dd4hep::mm, // from VPC drawings
         .innerXRadius      = 200.0 * dd4hep::mm,
         .innerYRadius      = 125.0 * dd4hep::mm,
-        .outerXRadius      = 0.0,
-        .outerYRadius      = 0.0,
-        .xCenter           = 0.0,
-        .yCenter           = 0.0,
-        .zCenter           = 0.0,
         .rotationAngle     = globRotationAngle
     });
 
@@ -211,11 +186,6 @@ static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector /* sens *
         .length            = 100.0 * dd4hep::mm, // from VPC drawings
         .innerXRadius      = 150.0 * dd4hep::mm,
         .innerYRadius      = 30.0 * dd4hep::mm,
-        .outerXRadius      = 0.0,
-        .outerYRadius      = 0.0,
-        .xCenter           = 0.0,
-        .yCenter           = 0.0,
-        .zCenter           = 0.0,
         .rotationAngle     = globRotationAngle
     });
 
@@ -238,11 +208,6 @@ static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector /* sens *
         .length            = 599.692 * dd4hep::mm, // from VPC drawings
         .innerXRadius      = 150.0 * dd4hep::mm,
         .innerYRadius      = 30.0 * dd4hep::mm,
-        .outerXRadius      = 0.0,
-        .outerYRadius      = 0.0,
-        .xCenter           = 0.0,
-        .yCenter           = 0.0,
-        .zCenter           = 0.0,
         .rotationAngle     = globRotationAngle
 
     });
@@ -267,11 +232,6 @@ static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector /* sens *
         .length            = 3000.0 * dd4hep::mm, // from VPC drawings
         .innerXRadius      = 35.0 * dd4hep::mm,
         .innerYRadius      = 0.0,
-        .outerXRadius      = 0.0,
-        .outerYRadius      = 0.0,
-        .xCenter           = 0.0,
-        .yCenter           = 0.0,
-        .zCenter           = 0.0,
         .rotationAngle     = globRotationAngle
     });
 
