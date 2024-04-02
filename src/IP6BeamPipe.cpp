@@ -142,13 +142,14 @@ static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector /* sens *
 
   //---------------------------------------------------------------------------------
   // Helper function to create polycone pairs (matter and vacuum have separate sizes)
-  //
-  //  ......../    /..
-  //  ......./    /...
-  //  ______/    /....
-  //            /.....
-  //  _________/......
-  //  ................
+  //  ................     ... -> air
+  //  ......__________     --| -> matter
+  //  ......|              *** -> vacuum
+  //  ......|   ______
+  //  ______|   |***** 
+  //            |*****
+  //  __________|*****
+  //  ****************
 
   auto zplane_to_polycones = [](xml::Component& x_pipe) {
     // vacuum
@@ -173,163 +174,127 @@ static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector /* sens *
       {0, 2.0 * M_PI, rmin_vac, rmax_vac, z_vac});
   };
   //---------------------------------------------------------------------------------
-  // Create volumes
-  auto create_volumes = [&](const std::string& name, xml::Component& x_pipe1, xml::Component& x_pipe2,
-                            xml_coll_t& x_additional_subtraction_i, bool subtract_vacuum_from_matter = true,
-                            bool subtract_matter_from_vacuum = false) {
-    auto pipe1_polycones = zplane_to_polycones(x_pipe1);
-    auto pipe2_polycones = zplane_to_polycones(x_pipe2);
-
-    auto crossing_angle    = getAttrOrDefault(x_pipe2, _Unicode(crossing_angle), 0.0);
-    auto axis_intersection = getAttrOrDefault(x_pipe2, _Unicode(axis_intersection), 0.0);
-
-    auto tf = Transform3D(Position(0, 0, axis_intersection)) * Transform3D(RotationY(crossing_angle)) *
-              Transform3D(Position(0, 0, -axis_intersection));
-
-    // union of all matter and vacuum
-    UnionSolid matter_union(pipe1_polycones.first, pipe2_polycones.first, tf);
-    UnionSolid vacuum_union(pipe1_polycones.second, pipe2_polycones.second, tf);
-
-    // subtract vacuum from matter
-    BooleanSolid matter;
-    if (subtract_vacuum_from_matter) {
-      matter = SubtractionSolid(matter_union, vacuum_union);
-    } else {
-      matter = matter_union;
-    }
-    // subtract matter from vacuum
-    BooleanSolid vacuum;
-    if (subtract_matter_from_vacuum) {
-      vacuum = SubtractionSolid(vacuum_union, matter_union);
-    } else {
-      vacuum = vacuum_union;
-    }
-
-    // subtract additional vacuum from matter
-    for (; x_additional_subtraction_i; ++x_additional_subtraction_i) {
-      xml_comp_t x_additional_subtraction  = x_additional_subtraction_i;
-      auto       additional_polycones      = zplane_to_polycones(x_additional_subtraction);
-      auto       additional_crossing_angle = getAttrOrDefault(x_additional_subtraction, _Unicode(crossing_angle), 0.0);
-      auto additional_axis_intersection = getAttrOrDefault(x_additional_subtraction, _Unicode(axis_intersection), 0.0);
-      auto additional_tf                = Transform3D(Position(0, 0, additional_axis_intersection)) *
-                           Transform3D(RotationY(additional_crossing_angle)) *
-                           Transform3D(Position(0, 0, -additional_axis_intersection));
-      matter = SubtractionSolid(matter, additional_polycones.second, additional_tf);
-    }
-
-    return std::make_pair<Volume, Volume>({"v_" + name + "_matter", matter, m_Al},
-                                          {"v_" + name + "_vacuum", vacuum, m_Vacuum});
-  };
-  //---------------------------------------------------------------------------------
   // Create downstream volumes
-  auto create_volumes_2 = [&](const std::string& name, xml::Component& x_pipe1, xml::Component& x_pipe2,
-                              xml::Component& x_additional_subtraction, bool subtract_vacuum_from_matter = true,
-                              bool subtract_matter_from_vacuum = false) {
-    auto pipe1_polycones = zplane_to_polycones(x_pipe1);
-    auto pipe2_polycones = zplane_to_polycones(x_pipe2);
+  auto create_volumes = [&](const std::string& name, xml::Component& x_pipe1, xml::Component& x_pipe2,
+                              xml_coll_t& x_additional_subtraction_i) {
+
+    auto pipe1_polycones = zplane_to_polycones(x_pipe1); // lepton
+    auto pipe2_polycones = zplane_to_polycones(x_pipe2); // hadron
 
     auto crossing_angle      = getAttrOrDefault(x_pipe2, _Unicode(crossing_angle), 0.0);
     auto axis_intersection   = getAttrOrDefault(x_pipe2, _Unicode(axis_intersection), 0.0);
-//    auto thickness_pipe1   = getAttrOrDefault(x_pipe1, _Unicode(thickness), 0.0);
-    auto thickness_pipe2     = getAttrOrDefault(x_pipe2, _Unicode(thickness), 0.0);
-    auto horizontal_offset   = getAttrOrDefault(x_pipe2, _Unicode(horizontal_offset), 0.0);
-    auto cone_z_end          = getAttrOrDefault(x_pipe2, _Unicode(cone_z_end), 0.0);
-    auto cone_z_start        = getAttrOrDefault(x_pipe2, _Unicode(cone_z_start), 0.0);
-    auto extension_r         = getAttrOrDefault(x_pipe2, _Unicode(extension_r), 0.0);
-    auto extension_z         = getAttrOrDefault(x_pipe2, _Unicode(extension_z), 0.0);
-    auto extension_thickness = getAttrOrDefault(x_pipe2, _Unicode(extension_thickness), 0.0);
 
     // transformation matrix: shift -> rotate -> shift
     auto tf = Transform3D(Position(0, 0, axis_intersection)) *
               Transform3D(RotationY( std::abs(crossing_angle))) *
               Transform3D(Position(0, 0, -axis_intersection));
 
-    Solid pipe2_polycones_mat_cut, pipe2_polycones_vac_cut;
-    // virtual box to subtract from solids
-    const double box_cut_sizex = 10000.0 * mm;
-    const double box_cut_sizey = 10000.0 * mm;
-    const double box_cut_sizez = 10000.0 * mm;
-    Box box_cut(box_cut_sizex,box_cut_sizey,box_cut_sizez); // virtual box to subtract from solids
+    // Global solids
+    BooleanSolid matter;
+    BooleanSolid vacuum;
 
-    // horizontal offset of the outgoing h-beam pipe w.r.t. the incoming e-beam pipe
-    const double p_mat_1[] = {horizontal_offset, 0, 0}; // matter
-    const double p_vac_1[] = {horizontal_offset - thickness_pipe2, 0, 0}; // vacuum
+    if (name == "upstream") {
+      // union of all matter and vacuum
+      UnionSolid matter_union(pipe1_polycones.first, pipe2_polycones.first, tf);
+      UnionSolid vacuum_union(pipe1_polycones.second, pipe2_polycones.second, tf);
 
-    pipe2_polycones_mat_cut = SubtractionSolid(pipe2_polycones.first, box_cut,
-                                tf * Transform3D(Position(p_mat_1[0] + box_cut_sizex,
-                                                          p_mat_1[1],
-                                                          p_mat_1[2])));
-    pipe2_polycones_vac_cut = SubtractionSolid(pipe2_polycones.second, box_cut,
-                                tf * Transform3D(Position(p_vac_1[0] + box_cut_sizex,
-                                                          p_vac_1[1],
-                                                          p_vac_1[2])));
-    // cut on the opposite side from the IP
-    const double p_mat_2[] = {0, 0, cone_z_end + thickness_pipe2}; // matter
-    const double p_vac_2[] = {0, 0, cone_z_end}; // vacuum
-
-    pipe2_polycones_mat_cut = SubtractionSolid(pipe2_polycones_mat_cut, box_cut,
-                                tf * Transform3D(Position(p_mat_2[0],
-                                                          p_mat_2[1],
-                                                          p_mat_2[2] + box_cut_sizez)));
-    pipe2_polycones_vac_cut = SubtractionSolid(pipe2_polycones_vac_cut, box_cut,
-                                tf * Transform3D(Position(p_vac_2[0],
-                                                          p_vac_2[1],
-                                                          p_vac_2[2] + box_cut_sizez)));
-
-    // cut on the IP side
-    const double p_mat_3[] = {0, 0, cone_z_start - thickness_pipe2}; // matter
-    const double p_vac_3[] = {0, 0, cone_z_start}; // vacuum
-
-    pipe2_polycones_mat_cut = SubtractionSolid(pipe2_polycones_mat_cut, box_cut,
-                                tf * Transform3D(Position(p_mat_3[0],
-                                                          p_mat_3[1],
-                                                          p_mat_3[2] - box_cut_sizez)));
-    pipe2_polycones_vac_cut = SubtractionSolid(pipe2_polycones_vac_cut, box_cut,
-                                tf * Transform3D(Position(p_vac_3[0],
-                                                          p_vac_3[1],
-                                                          p_vac_3[2] - box_cut_sizez)));
-    // add an extension to the h-beam pipe
-    Tube tb_vac(0 * mm, extension_r, extension_z);
-    Tube tb_mat(0 * mm, extension_r + extension_thickness, extension_z);
-
-    pipe2_polycones_vac_cut = UnionSolid(pipe2_polycones_vac_cut, tb_vac,
-                                tf * Transform3D(RotationY(crossing_angle)) *
-                                     Transform3D(Position(0, 0, cone_z_end)));
-
-    pipe2_polycones_mat_cut = UnionSolid(pipe2_polycones_mat_cut, tb_mat,
-                                tf * Transform3D(RotationY(crossing_angle)) *
-                                     Transform3D(Position(0, 0, cone_z_end)));
-
-     // subtract vacuum from matter
-    if (subtract_vacuum_from_matter) {
-      pipe2_polycones_mat_cut = SubtractionSolid(pipe2_polycones_mat_cut,pipe2_polycones_vac_cut);
+      // subtract vacuum from matter
+      matter = SubtractionSolid(matter_union, vacuum_union);
+      // subtract matter from vacuum
+      vacuum = SubtractionSolid(vacuum_union, matter_union);
     }
-    // unite matter h-beam and e-beam pipes
-    pipe2_polycones_mat_cut = UnionSolid(pipe2_polycones_mat_cut,pipe1_polycones.first,tf);
-    // subtract e-vacuum from matter
-    Solid matter;
-    if (subtract_vacuum_from_matter) {
+    else if (name == "downstream") {
+      auto thickness_pipe2     = getAttrOrDefault(x_pipe2, _Unicode(thickness), 0.0);
+      auto horizontal_offset   = getAttrOrDefault(x_pipe2, _Unicode(horizontal_offset), 0.0);
+      auto cone_z_end          = getAttrOrDefault(x_pipe2, _Unicode(cone_z_end), 0.0);
+      auto cone_z_start        = getAttrOrDefault(x_pipe2, _Unicode(cone_z_start), 0.0);
+      auto extension_r         = getAttrOrDefault(x_pipe2, _Unicode(extension_r), 0.0);
+      auto extension_z         = getAttrOrDefault(x_pipe2, _Unicode(extension_z), 0.0);
+      auto extension_thickness = getAttrOrDefault(x_pipe2, _Unicode(extension_thickness), 0.0);
+  
+      Solid pipe2_polycones_mat_cut, pipe2_polycones_vac_cut;
+      // virtual box to subtract from solids
+      const double box_cut_sizex = 10000.0 * mm;
+      const double box_cut_sizey = 10000.0 * mm;
+      const double box_cut_sizez = 10000.0 * mm;
+      Box box_cut(box_cut_sizex,box_cut_sizey,box_cut_sizez); // virtual box to subtract from solids
+  
+      // horizontal offset of the outgoing h-beam pipe w.r.t. the incoming e-beam pipe
+      const double p_mat_1[] = {horizontal_offset, 0, 0}; // matter
+      const double p_vac_1[] = {horizontal_offset - thickness_pipe2, 0, 0}; // vacuum
+  
+      pipe2_polycones_mat_cut = SubtractionSolid(pipe2_polycones.first, box_cut,
+                                  tf * Transform3D(Position(p_mat_1[0] + box_cut_sizex,
+                                                            p_mat_1[1],
+                                                            p_mat_1[2])));
+      pipe2_polycones_vac_cut = SubtractionSolid(pipe2_polycones.second, box_cut,
+                                  tf * Transform3D(Position(p_vac_1[0] + box_cut_sizex,
+                                                            p_vac_1[1],
+                                                            p_vac_1[2])));
+      // cut on the opposite side from the IP
+      const double p_mat_2[] = {0, 0, cone_z_end + thickness_pipe2}; // matter
+      const double p_vac_2[] = {0, 0, cone_z_end}; // vacuum
+  
+      pipe2_polycones_mat_cut = SubtractionSolid(pipe2_polycones_mat_cut, box_cut,
+                                  tf * Transform3D(Position(p_mat_2[0],
+                                                            p_mat_2[1],
+                                                            p_mat_2[2] + box_cut_sizez)));
+      pipe2_polycones_vac_cut = SubtractionSolid(pipe2_polycones_vac_cut, box_cut,
+                                  tf * Transform3D(Position(p_vac_2[0],
+                                                            p_vac_2[1],
+                                                            p_vac_2[2] + box_cut_sizez)));
+  
+      // cut on the IP side
+      const double p_mat_3[] = {0, 0, cone_z_start - thickness_pipe2}; // matter
+      const double p_vac_3[] = {0, 0, cone_z_start}; // vacuum
+  
+      pipe2_polycones_mat_cut = SubtractionSolid(pipe2_polycones_mat_cut, box_cut,
+                                  tf * Transform3D(Position(p_mat_3[0],
+                                                            p_mat_3[1],
+                                                            p_mat_3[2] - box_cut_sizez)));
+      pipe2_polycones_vac_cut = SubtractionSolid(pipe2_polycones_vac_cut, box_cut,
+                                  tf * Transform3D(Position(p_vac_3[0],
+                                                            p_vac_3[1],
+                                                            p_vac_3[2] - box_cut_sizez)));
+      // add an extension to the h-beam pipe
+      Tube tb_vac(0 * mm, extension_r, extension_z);
+      Tube tb_mat(0 * mm, extension_r + extension_thickness, extension_z);
+  
+      pipe2_polycones_vac_cut = UnionSolid(pipe2_polycones_vac_cut, tb_vac,
+                                  tf * Transform3D(RotationY(crossing_angle)) *
+                                       Transform3D(Position(0, 0, cone_z_end)));
+  
+      pipe2_polycones_mat_cut = UnionSolid(pipe2_polycones_mat_cut, tb_mat,
+                                  tf * Transform3D(RotationY(crossing_angle)) *
+                                       Transform3D(Position(0, 0, cone_z_end)));
+
+      // subtract h-vacuum from h-matter
+      pipe2_polycones_mat_cut = SubtractionSolid(pipe2_polycones_mat_cut,pipe2_polycones_vac_cut);
+      // unite h-matter and e-matter
+      pipe2_polycones_mat_cut = UnionSolid(pipe2_polycones_mat_cut,pipe1_polycones.first,tf);
+      // subtract e-vacuum from matter
       matter = SubtractionSolid(pipe2_polycones_mat_cut,pipe1_polycones.second,tf);
+      // unite h- and e-vacuum
+      vacuum = UnionSolid(pipe2_polycones_vac_cut,pipe1_polycones.second,tf);
+      // subtract matter from vacuum
+      vacuum = SubtractionSolid(vacuum,matter);
     }
     else {
-      matter = pipe2_polycones_mat_cut;
-    }
-    // unite h- and e-vacuum
-    Solid vacuum = UnionSolid(pipe2_polycones_vac_cut,pipe1_polycones.second,tf);
-
-    // subtract matter from vacuum
-    if (subtract_matter_from_vacuum) {
-      vacuum = SubtractionSolid(vacuum,matter);
+      throw std::runtime_error("Wrong side name (should be: upstream or downstream): " + name);
     }
 
     // subtract additional vacuum from matter and add it to the vacuum
-    auto additional_polycones = zplane_to_polycones(x_additional_subtraction);
-    auto additional_crossing_angle = getAttrOrDefault(x_additional_subtraction, _Unicode(crossing_angle), 0.0);
-    auto additional_tf = Transform3D(RotationY(additional_crossing_angle));
+    for (; x_additional_subtraction_i; ++x_additional_subtraction_i) {
+      xml_comp_t x_additional_subtraction  = x_additional_subtraction_i;
 
-    // final matter and vacuum
-    matter = SubtractionSolid(matter,additional_polycones.second,tf * additional_tf);
-    vacuum = UnionSolid(vacuum,additional_polycones.second,tf * additional_tf);
+      auto additional_polycones = zplane_to_polycones(x_additional_subtraction);
+      auto additional_crossing_angle = getAttrOrDefault(x_additional_subtraction, _Unicode(crossing_angle), 0.0);
+      auto additional_tf = Transform3D(RotationY(additional_crossing_angle));
+
+      // final matter and vacuum
+      matter = SubtractionSolid(matter,additional_polycones.second,tf * additional_tf);
+      vacuum = UnionSolid(vacuum,additional_polycones.second,tf * additional_tf);
+    }
 
     return std::make_pair<Volume, Volume>({"v_" + name + "_matter", matter, m_Al},
                                           {"v_" + name + "_vacuum", vacuum, m_Vacuum});
@@ -345,11 +310,9 @@ static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector /* sens *
   xml::Component incoming_hadron_c = upstream_c.child(_Unicode(incoming_hadron));
   xml::Component outgoing_lepton_c = upstream_c.child(_Unicode(outgoing_lepton));
   xml_coll_t     additional_subtractions_upstream(upstream_c, _Unicode(additional_subtraction));
-  bool           subtract_vacuum_upstream = getAttrOrDefault<bool>(upstream_c, _Unicode(subtract_vacuum), true);
-  bool           subtract_matter_upstream = getAttrOrDefault<bool>(upstream_c, _Unicode(subtract_matter), true);
-  auto           volumes_upstream =
-      create_volumes("upstream", outgoing_lepton_c, incoming_hadron_c, additional_subtractions_upstream,
-                     subtract_vacuum_upstream, subtract_matter_upstream);
+
+  auto volumes_upstream = create_volumes("upstream", outgoing_lepton_c, incoming_hadron_c,
+    additional_subtractions_upstream);
 
   auto tf_upstream = Transform3D(RotationZYX(0, 0, 0));
   if (getAttrOrDefault<bool>(upstream_c, _Unicode(reflect), true)) {
@@ -361,7 +324,7 @@ static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector /* sens *
   }
 
   // -----------------------------
-  // downstream:
+  // Downstream:
   // - incoming electron tube: tube with tube cut out
   // - outgoing hadron tube: cone centered at scattering angle
   // (incoming electron tube internal touching to outgoing hadron tube)
@@ -369,12 +332,10 @@ static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector /* sens *
   xml::Component downstream_c      = x_det.child(_Unicode(downstream));
   xml::Component incoming_lepton_c = downstream_c.child(_Unicode(incoming_lepton));
   xml::Component outgoing_hadron_c = downstream_c.child(_Unicode(outgoing_hadron));
-  xml::Component additional_subtractions_downstream_c = downstream_c.child(_Unicode(additional_subtraction));
-  bool           subtract_vacuum_downstream = getAttrOrDefault<bool>(downstream_c, _Unicode(subtract_vacuum), true);
-  bool           subtract_matter_downstream = getAttrOrDefault<bool>(downstream_c, _Unicode(subtract_matter), true);
+  xml_coll_t     additional_subtractions_downstream(downstream_c, _Unicode(additional_subtraction));   
 
-  auto volumes_downstream = create_volumes_2("downstream", incoming_lepton_c, outgoing_hadron_c,
-    additional_subtractions_downstream_c, subtract_vacuum_downstream, subtract_matter_downstream);
+  auto volumes_downstream = create_volumes("downstream", incoming_lepton_c, outgoing_hadron_c,
+    additional_subtractions_downstream);
 
   // transform
   auto tf_downstream = Transform3D(Position(0, 0, +getAttrOrDefault(outgoing_hadron_c, _Unicode(axis_intersection), 0.0))) *

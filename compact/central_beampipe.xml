@@ -80,9 +80,7 @@
 
       <comment> For upstream beampipe, we subtract the vacuum from the matter </comment>
       <upstream reflect="true"
-                place_vacuum="true"
-                subtract_vacuum="true"
-                subtract_matter="false">
+                place_vacuum="true">
         <outgoing_lepton thickness="LeptonOutgoingBeampipeThickness">
           <vacuum>
             <zplane z="LeptonOutgoingBeampipe_z1" OD="LeptonOutgoingBeampipe_OD1 - 2* LeptonOutgoingBeampipeThickness"/>
@@ -114,9 +112,7 @@
 
       <comment> For downstream beampipe (where on is inside the vacuum of the other), we subtract the matter from the vacuum, and subtract an additional pipe to create the angled cutout</comment>
       <downstream reflect="false"
-                  place_vacuum="true"
-                  subtract_vacuum="true"
-                  subtract_matter="true">
+                  place_vacuum="true">
         <incoming_lepton thickness="LeptonIncomingBeampipeThickness">
             <vacuum>
               <zplane z="LeptonIncomingBeampipe_z1" OD="LeptonIncomingBeampipe_OD1"/>
