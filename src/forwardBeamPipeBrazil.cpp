@@ -57,19 +57,18 @@ static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector /* sens *
     //forumula -> Z = b1APFEndPoint_z+((0.5*elementLengt)*Cos(globRotationAngle))
     //forumula -> X = b1APFEndPoint_z+((0.5*elementLengt)*Sin(globRotationAngle))
 
-        //------------------------------------------------------------------------------------
-        //Geometry extracted from version 0 VPC drawings shown at the FF preliminary
-        //design review in February 2024 -- CAD model not available as of April 1st, 2024
-        //------------------------------------------------------------------------------------
+    //------------------------------------------------------------------------------------
+    //Geometry extracted from version 0 VPC drawings shown at the FF preliminary
+    //design review in February 2024 -- CAD model not available as of April 1st, 2024
+    //------------------------------------------------------------------------------------
 
-        //------------------------------------------------------------------------------------
+    //------------------------------------------------------------------------------------
     //primary pipe after B1APF, before neutral exit window + transition to smaller pipe
     //rectangular cross-section!!!!!
     //------------------------------------------------------------------------------------
 
 
     beampipe_dimensions.push_back({
-
         .length            = 7615.486 * dd4hep::mm, //from VPC drawings, in mm
         .innerXRadius      = 275.0 * dd4hep::mm,
         .innerYRadius      = 175.0 * dd4hep::mm,
@@ -94,7 +93,6 @@ static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector /* sens *
     //------------------------------------------------------------------------------------
 
     beampipe_dimensions.push_back({
-
         .length            = 2780.273 * dd4hep::mm, // from VPC drawings
         .innerXRadius      = 150.0 * dd4hep::mm,
         .innerYRadius      = 30.0 * dd4hep::mm,
@@ -115,7 +113,6 @@ static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector /* sens *
     //------------------------------------------------------------------------------------
 
     beampipe_dimensions.push_back({
-
         .length            = 200 * dd4hep::mm, // from VPC drawings
         .innerXRadius      = 200.0 * dd4hep::mm,
         .innerYRadius      = 125.0 * dd4hep::mm,
@@ -138,7 +135,6 @@ static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector /* sens *
 
 
     beampipe_dimensions.push_back({
-
         .length            = 1500.0 * dd4hep::mm, // from VPC drawings
         .innerXRadius      = 150.0 * dd4hep::mm,
         .innerYRadius      = 30.0 * dd4hep::mm,
@@ -160,7 +156,6 @@ static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector /* sens *
 
 
     beampipe_dimensions.push_back({
-
         .length            = 200 * dd4hep::mm, // from VPC drawings
         .innerXRadius      = 200.0 * dd4hep::mm,
         .innerYRadius      = 125.0 * dd4hep::mm,
@@ -182,7 +177,6 @@ static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector /* sens *
 
 
     beampipe_dimensions.push_back({
-
         .length            = 100.0 * dd4hep::mm, // from VPC drawings
         .innerXRadius      = 150.0 * dd4hep::mm,
         .innerYRadius      = 30.0 * dd4hep::mm,
@@ -204,7 +198,6 @@ static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector /* sens *
 
 
     beampipe_dimensions.push_back({
-
         .length            = 599.692 * dd4hep::mm, // from VPC drawings
         .innerXRadius      = 150.0 * dd4hep::mm,
         .innerYRadius      = 30.0 * dd4hep::mm,
@@ -228,7 +221,6 @@ static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector /* sens *
     //numbers here are not really correct for the full taper, just for the opening
 
     beampipe_dimensions.push_back({
-
         .length            = 3000.0 * dd4hep::mm, // from VPC drawings
         .innerXRadius      = 35.0 * dd4hep::mm,
         .innerYRadius      = 0.0,
