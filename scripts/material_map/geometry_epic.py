@@ -19,7 +19,8 @@ if "__main__" == __name__:
         "--xmlFile",
         default=(
             os.environ.get("DETECTOR_PATH", "")
-            "/" + os.environ.get("DETECTOR_CONFIG", "")
+            + "/"
+            + os.environ.get("DETECTOR_CONFIG", "")
             + ".xml"
         ),
         help="Input xml file containing ePIC geometry",
