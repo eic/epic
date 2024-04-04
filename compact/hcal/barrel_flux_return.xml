@@ -1,0 +1,106 @@
+<!-- SPDX-License-Identifier: LGPL-3.0-or-later -->
+<!-- Copyright (C) 2023 Wouter Deconinck, Leszek Kosarzewski -->
+
+<lccdd>
+  <define>
+    <documentation>
+      #### Dimension constants
+    </documentation>
+    <constant name="FluxBarrel_repeat" value="30"/>
+    <constant name="FluxBarrel_dphi" value="360*deg / FluxBarrel_repeat"/>
+
+    <comment> Trapezoid for STAR backlegs </comment>
+    <constant name="FluxBarrel_Backleg_x" value="609.6*mm"/>
+    <constant name="FluxBarrel_Backleg_y1" value="444.5*mm"/>
+    <constant name="FluxBarrel_Backleg_y2" value="572.64*mm"/>
+    <constant name="FluxBarrel_Backleg_Regular_z" value="6316.2*mm"/>
+    <constant name="FluxBarrel_Backleg_Chimney_z" value="3616.2*mm"/>
+    <constant name="FluxBarrel_Backleg_Chimney_repeat" value="3"/>
+    <constant name="FluxBarrel_Backleg_Regular_repeat" value="FluxBarrel_repeat - FluxBarrel_Backleg_Chimney_repeat"/>
+
+    <comment> Box for spacers </comment>
+    <constant name="FluxBarrel_Spacer_x" value="612.96*mm"/>
+    <constant name="FluxBarrel_Spacer_y" value="128.76*mm"/>
+    <constant name="FluxBarrel_Spacer_Regular_z" value="FluxBarrel_Backleg_Regular_z"/>
+    <constant name="FluxBarrel_Spacer_Chimney_z" value="FluxBarrel_Backleg_Chimney_z"/>
+    <constant name="FluxBarrel_Spacer_Chimney_repeat" value="2"/>
+    <constant name="FluxBarrel_Spacer_Regular_repeat" value="FluxBarrel_repeat - FluxBarrel_Spacer_Chimney_repeat"/>
+  </define>
+
+  <!-- Define detector -->
+  <detectors>
+    <documentation>
+      ### Barrel Flux Return
+    </documentation>
+    <detector name="FluxBarrel" type="epic_BarrelFluxReturn" vis="FluxBarrelVis">
+      <dimensions
+        rmin="FluxBarrel_rmin"
+        rmax="FluxBarrel_rmax"
+        z="FluxBarrel_length"/>
+
+      <comment> Trd1 is defined such that x1/x2 are equivalent with y at phi = 0 </comment>
+      <shape name="FluxBarrel_Backleg_Regular"
+             type="Trd1"
+             z="FluxBarrel_Backleg_x/2"
+             x1="FluxBarrel_Backleg_y1/2"
+             x2="FluxBarrel_Backleg_y2/2"
+             y="FluxBarrel_Backleg_Regular_z/2"
+             material="Steel1008"/>
+      <replicate count="FluxBarrel_Backleg_Regular_repeat"
+                 shape="FluxBarrel_Backleg_Regular"
+                 dphi="FluxBarrel_dphi"
+                 phi0="90*deg + (FluxBarrel_Backleg_Chimney_repeat + 1) / 2 * FluxBarrel_dphi">
+        <rotation y="90*deg" z="90*deg"/>
+        <position x="FluxBarrel_rmin + FluxBarrel_Backleg_x/2"/>
+      </replicate>
+      <shape name="FluxBarrel_Backleg_Chimney"
+             type="Trd1"
+             z="FluxBarrel_Backleg_x/2"
+             x1="FluxBarrel_Backleg_y1/2"
+             x2="FluxBarrel_Backleg_y2/2"
+             y="FluxBarrel_Backleg_Chimney_z/2"
+             material="Steel1008"/>
+      <replicate count="FluxBarrel_Backleg_Chimney_repeat"
+                 shape="FluxBarrel_Backleg_Chimney"
+                 dphi="FluxBarrel_dphi"
+                 phi0="90*deg - (FluxBarrel_Backleg_Chimney_repeat - 1) / 2 * FluxBarrel_dphi">
+        <rotation y="90*deg" z="90*deg"/>
+        <position
+          x="FluxBarrel_rmin + FluxBarrel_Backleg_x/2"
+          z="(FluxBarrel_Backleg_Regular_z - FluxBarrel_Backleg_Chimney_z)/2"/>
+      </replicate>
+
+      <shape name="FluxBarrel_Spacer_Regular"
+             type="Box"
+             dx="FluxBarrel_Spacer_x/2"
+             dy="FluxBarrel_Spacer_y/2"
+             dz="FluxBarrel_Spacer_Regular_z/2"
+             material="Steel1008"/>
+      <replicate count="FluxBarrel_Spacer_Regular_repeat"
+                 shape="FluxBarrel_Spacer_Regular"
+                 dphi="FluxBarrel_dphi"
+                 phi0="90*deg + (FluxBarrel_Spacer_Chimney_repeat + 1) / 2 * FluxBarrel_dphi">
+        <position
+          x="FluxBarrel_rmin + FluxBarrel_Spacer_x/2"/>
+      </replicate>
+      <shape name="FluxBarrel_Spacer_Chimney"
+             type="Box"
+             dx="FluxBarrel_Spacer_x / 2"
+             dy="FluxBarrel_Spacer_y / 2"
+             dz="FluxBarrel_Spacer_Chimney_z / 2"
+             material="Steel1008"/>
+      <replicate
+          count="FluxBarrel_Spacer_Chimney_repeat"
+          shape="FluxBarrel_Spacer_Chimney"
+          dphi="FluxBarrel_dphi"
+          phi0="90*deg - (FluxBarrel_Spacer_Chimney_repeat - 1) / 2 * FluxBarrel_dphi">
+        <position
+          x="FluxBarrel_rmin + FluxBarrel_Spacer_x/2"
+          z="(FluxBarrel_Spacer_Regular_z - FluxBarrel_Spacer_Chimney_z)/2"/>
+      </replicate>
+
+    </detector>
+  </detectors>
+
+
+</lccdd>

@@ -649,6 +649,14 @@ Service gaps in FW direction (before endcapP ECAL) and BW direction (before endc
     <constant name="FluxEndcapP_oculus_rmin" value="195.0*cm"/>
     <constant name="FluxEndcapP_oculus_thickness" value="22.2*cm"/>
 
+    <constant name="FluxBarrelForward_zmax"  value="320*cm"/>
+    <constant name="FluxBarrelBackward_zmax" value="FluxBarrelForward_zmax"/>
+    <constant name="FluxBarrel_thickness"    value="62.5*cm"/> <!-- for envelope only -->
+    <constant name="FluxBarrel_rmin"         value="273.05*cm"/>
+    <constant name="FluxBarrel_rmax"         value="FluxBarrel_rmin + FluxBarrel_thickness"/>
+    <constant name="FluxBarrel_length"       value="FluxBarrelForward_zmax + FluxBarrelBackward_zmax"/>
+    <constant name="FluxBarrel_offset"       value="(FluxBarrelForward_zmax - FluxBarrelBackward_zmax)/2.0"/>
+
     <comment>
       These are used by ddsim, the region where we store all secondaries
 

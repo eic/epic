@@ -27,6 +27,8 @@ features:
   hcal:
     lfhcal_with_space_for_insert:
     forward_insert:
+    barrel_flux_return:
+    forward_endcap_flux:
     backward:
     backward_endcap_flux:
   far_forward:
