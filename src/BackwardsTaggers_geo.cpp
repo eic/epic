@@ -2,10 +2,11 @@
 // Copyright (C) 2022 Simon Gardner
 
 #include "DD4hep/DetFactoryHelper.h"
-#include "DD4hep/OpticalSurfaces.h"
 #include "DD4hep/Printout.h"
 #include "DDRec/DetectorData.h"
 #include "DDRec/Surface.h"
+#include "XML/Utilities.h"
+#include "DD4hepDetectorHelper.h"
 
 
 //////////////////////////////////////////////////
@@ -29,6 +30,7 @@ static Ref_t create_detector(Detector& desc, xml_h e, SensitiveDetector sens)
   int       detID   = x_det.id();
 
   DetElement det(detName, detID);
+  dd4hep::xml::setDetectorTypeFlag(x_det, det);
 
   string vis_name = dd4hep::getAttrOrDefault<std::string>(x_det, _Unicode(vis), "BackwardsBox");
 
@@ -379,7 +381,9 @@ static void Make_Tagger(Detector& desc, xml_coll_t& mod, Assembly& env, DetEleme
     }
 
     Box    Layer_Box(tag_w, tag_h, layerThickness / 2);
-    Volume layVol("Tagger_tracker_layer", Layer_Box, Silicon);
+
+    std::string layerName = "Tagger_tracker_layer" + std::to_string(layerID) +"_N";
+    Volume layVol(layerName, Layer_Box, Silicon);
     layVol.setSensitiveDetector(sens);
     layVol.setVisAttributes(desc.visAttributes(layerVis));
 
@@ -387,9 +391,25 @@ static void Make_Tagger(Detector& desc, xml_coll_t& mod, Assembly& env, DetEleme
     PlacedVolume pv_layer = mother.placeVolume(layVol, Transform3D(rotate, Position(0, 0, MotherThickness - layerZ + layerThickness / 2)));
     pv_layer.addPhysVolID("layer", layerID);
 
-    DetElement laydet(modElement,"layerName"+std::to_string(layerID), layerID);
-    laydet.setPlacement(pv_layer);
+    
+    std::cout << pv_layer.volume().name() << " " << layerID << std::endl;
+    DetElement laydet(modElement,pv_layer.volume().name(), layerID);
 
+    // -------- create a measurement plane for the tracking surface attched to the sensitive volume -----
+    Vector3D u(-1., 0., 0.);
+    Vector3D v(0., -1., 0.);
+    Vector3D n(0., 0., 1.);
+
+    // Add surface to layer for acts reconstruction 
+    SurfaceType type(SurfaceType::Sensitive);
+
+    auto &layerParams = DD4hepDetectorHelper::ensureExtension<dd4hep::rec::VariantParameters>(laydet);
+    layerParams.set<string>("axis_definitions", "XZY");
+
+    VolPlane surf(layVol, type, 1.0, 1.0, u, v, n); //,o ) ;
+    volSurfaceList(laydet)->push_back(surf);
+
+    laydet.setPlacement(pv_layer);
 
   }
 }

@@ -10,9 +10,20 @@
   </define>
 
   <detectors>
+    <detector
+      id="TaggerTrackerCompanion_ID"
+      name="TaggerTrackerCompanion"
+      type="epic_CompositeTracker"
+      actsType="endcap"
+      vis="TrackerSubAssemblyVis">
+      <type_flags type="DetType_TRACKER + DetType_ENDCAP"/>
+      <position x="0*cm" y="0*cm" z="+4*um" />
+    </detector>
 
     <comment> Main beamline vacuum volume spanning between B2BeR and Q3eR magnets</comment>
     <detector id="TaggerTracker_ID" name="BackwardsTaggerStation" type="BackwardsTagger" wall="Backwards_Box_Wall" lumi="true" vis="BeamPipeVis" readout="TaggerTrackerHits">
+    
+      <type_flags type="DetType_TRACKER + DetType_ENDCAP"/>
       <focus      x="Dipole_Focus_X"    y="Dipole_Focus_Y"    z="Dipole_Focus_Z" />
       <bounding   xmin="Vacuum_BB_MinX" xmax="Vacuum_BB_MaxX"
                   ymin="Vacuum_BB_MinY" ymax="Vacuum_BB_MaxY"
@@ -66,7 +77,7 @@
   <plugins>
     <plugin name="DD4hep_ParametersPlugin">
       <argument value="BackwardsTaggerStation"/>
-      <argument value="layer_pattern: str=Tagger\d"/>
+      <argument value="layer_pattern: str=Tagger_tracker_layer\d"/>
     </plugin>
   </plugins>
 
