@@ -15,9 +15,9 @@
   <!-- Define detector -->
   <detectors>
     <documentation>
-      ### Backwards (Negative Z) Endcap Flux Return
+      ### Backward (Negative Z) Endcap Flux Return
     </documentation>
-    <detector name="FluxEndcapN" type="epic_EndcapFluxReturnN" vis="FluxEndcapNVis">
+    <detector name="FluxEndcapN" type="epic_EndcapFluxReturn" vis="FluxEndcapNVis" reflect="true">
       <position x="0" y="0" z="-FluxEndcapN_zmin"/>
 
        <layer id="1" name="Collar" material="Steel235"
