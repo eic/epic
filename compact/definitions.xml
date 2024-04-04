@@ -642,11 +642,12 @@ Service gaps in FW direction (before endcapP ECAL) and BW direction (before endc
     <constant name="FluxEndcapN_rmin" value="14*cm"/>
     <constant name="FluxEndcapN_thickness" value="10*cm"/>
 
+    <comment> Hadron End Cap Assembly_North Half.stp, rwimmer, 2024-04-03 </comment>
     <constant name="FluxEndcapP_collar_rmax" value="326.2*cm"/>
-    <constant name="FluxEndcapP_collar_rmin" value="269.0*cm"/>
-    <constant name="FluxEndcapP_collar_thickness" value="170.0*cm"/>
-    <constant name="FluxEndcapP_oculus_rmax" value="267.0*cm"/>
-    <constant name="FluxEndcapP_oculus_rmin" value="195.0*cm"/>
+    <constant name="FluxEndcapP_collar_rmin" value="289.56*cm"/>
+    <constant name="FluxEndcapP_collar_thickness" value="167.14*cm"/>
+    <constant name="FluxEndcapP_oculus_rmax" value="FluxEndcapP_collar_rmin"/>
+    <constant name="FluxEndcapP_oculus_rmin" value="210.0*cm"/>
     <constant name="FluxEndcapP_oculus_thickness" value="22.2*cm"/>
 
     <constant name="FluxBarrelForward_zmax"  value="320*cm"/>
