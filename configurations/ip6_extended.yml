@@ -1,5 +1,7 @@
 features:
   beampipe:
+  tracking:
+    definitions_craterlake:
   far_forward:
     default:
   far_backward:
