@@ -630,8 +630,6 @@ Service gaps in FW direction (before endcapP ECAL) and BW direction (before endc
 
     <constant name="HcalEndcapN_rmax"     value="min(HcalBarrel_rmax, 267.0 * cm)"/>
 
-    <constant name="LFHCAL_rmax"          value="HcalBarrel_rmax"/>
-
     <comment> Lepton_Assy_21.stp, rwimmer, 2024-04-03 </comment>
     <constant name="FluxEndcapN_collar_rmax" value="326.2*cm"/>
     <constant name="FluxEndcapN_collar_rmin" value="275.0*cm"/>
@@ -650,6 +648,9 @@ Service gaps in FW direction (before endcapP ECAL) and BW direction (before endc
     <constant name="FluxEndcapP_oculus_rmax" value="FluxEndcapP_collar_rmin"/>
     <constant name="FluxEndcapP_oculus_rmin" value="210.0*cm"/>
     <constant name="FluxEndcapP_oculus_thickness" value="22.2*cm"/>
+
+    <comment> LFHCAL includes support, which is part of the flux return </comment>
+    <constant name="LFHCAL_rmax" value="FluxEndcapP_collar_rmin"/>
 
     <constant name="FluxBarrelForward_zmax"  value="320*cm"/>
     <constant name="FluxBarrelBackward_zmax" value="FluxBarrelForward_zmax"/>

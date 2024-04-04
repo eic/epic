@@ -94,7 +94,12 @@
       <dimensions
         z="LFHCAL_length"
         rmin="20*cm"
-        rmax="LFHCAL_rmax"/>
+        rmax="LFHCAL_rmax"
+        x="3*EightM_OuterWidth"
+        y="6*EightM_OuterHeight"
+        x0="-FourM_OuterWidth"/>
+      <envelope material="Steel235"/>
+
       <eightmodule name="8MModule" vis= "LFHCAL8MModVis" repeat="0" >
         <dimensions
         width="EightM_OuterWidth"
@@ -231,7 +236,7 @@
         <position x="40*cm" y="-35*cm" z="0*cm"/>
         <position x="-30*cm" y="-45*cm" z="0*cm"/>
         <position x="30*cm" y="-45*cm" z="0*cm"/>
-        <position x="0*cm" y="-55*cm" z="0*cm"/>
+        <position x="0* cm" y="-55*cm" z="0*cm"/>
         <position x="10*cm" y="55*cm" z="0*cm"/>
         <position x="-50*cm" y="-25*cm" z="0*cm"/>
         <position x="50*cm" y="-25*cm" z="0*cm"/>
