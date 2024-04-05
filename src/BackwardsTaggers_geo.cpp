@@ -199,18 +199,6 @@ static Ref_t create_detector(Detector& desc, xml_h e, SensitiveDetector sens)
 
     Make_Tagger(desc, mod, TaggerAssembly, moddet, sens);
 
-    // //Loop through moddet checking the names of its children
-    // std::cout << "Children of " << moddet.name() << std::endl;
-    // for (auto child : moddet.children()) {
-    //   std::cout << child.first << std::endl;
-    // }
-
-  }
-
-  //Loop through det checking the names of its children
-  std::cout << "Children of " << det.name() << std::endl;
-  for (auto child : det.children()) {
-    std::cout << child.first << std::endl;
   }
 
   //-----------------------------------------------------------------
