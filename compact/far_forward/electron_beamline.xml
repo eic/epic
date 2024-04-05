@@ -33,12 +33,13 @@
     <detector
       name="Pipe_cen_to_pos"
       type="BeamPipeChain"
-      wall_thickness="Beampipe_cen_pos_Thickness">
+      wall_thickness="Beampipe_cen_pos_Thickness"
+      coating_thickness="Electron_Beampipe_Pipe_Coating_Thickness">
 
       <pipe id="0" name="Pipe_to_Q0EF"
         xcenter="0" zcenter="(Q0EF_EndZ+Beampipe_cen_pos_EndZ)/2."
         length="Q0EF_EndZ-Beampipe_cen_pos_EndZ" theta="0"
-        rout1="Q0EF_InnerRadius" rout2="Beampipe_cen_pos_r1">
+        rout1="Q0EF_InnerRadius" rout2="Beampipe_cen_pos_r1"> 
       </pipe>
 
       <pipe id="1" name="Pipe_Q0EF_to_Q1EF"
@@ -48,9 +49,9 @@
       </pipe>
 
       <pipe id="2" name="Pipe_Q1EF_to_pos"
-      xcenter="0" zcenter="(Beampipe_fwd_pos_EndZ+Q1EF_StartZ)/2."
-      length="Beampipe_fwd_pos_EndZ-Q1EF_StartZ" theta="0"
-      rout1="Q1EF_InnerRadius" rout2="Q1EF_InnerRadius">
+        xcenter="0" zcenter="(Beampipe_fwd_pos_EndZ+Q1EF_StartZ)/2."
+        length="Beampipe_fwd_pos_EndZ-Q1EF_StartZ" theta="0"
+        rout1="Q1EF_InnerRadius" rout2="Q1EF_InnerRadius"> 
       </pipe>
 
     </detector>

@@ -12,17 +12,40 @@
     <constant name="Hadron_Beampipe_Rad"        value="50*mm"/>
     <constant name="Hadron_Beampipe_Thickness"  value="1.64*mm"/>
 
-    <comment> Electron magnet dimensions and positions </comment>
+    <comment> Electron side beam pipe volumes: going from Q1eR to B2BeR </comment>
+    <constant name="Electron_Beampipe_Pipe_0_End" value="-7342.0 * mm"/>
+    <constant name="Electron_Beampipe_Pipe_1_End" value="-7405.0 * mm"/>
+    <constant name="Electron_Beampipe_Pipe_2_End" value="-9288.0 * mm"/>
+    <constant name="Electron_Beampipe_Pipe_3_End" value="-9364.0 * mm"/>
+    <constant name="Electron_Beampipe_Pipe_4_End" value="-11364.0 * mm"/>
+    <constant name="Electron_Beampipe_Pipe_5_End" value="-11414.0 * mm"/>
+    <constant name="Electron_Beampipe_Pipe_6_End" value="-15000.5 * mm"/>
 
-    <constant name="Q1eR_InnerRadius"     value="57.70 * mm"/>
+    <constant name="Electron_Beampipe_Pipe_Wall_Thickness" value="2 * mm"/>
+    <constant name="Electron_Beampipe_Pipe_Coating_Thickness" value="0.03 * mm"/>
+
+    <constant name="Electron_Beampipe_Pipe_0_ID" value="111.40 * mm"/>
+    <constant name="Electron_Beampipe_Pipe_1_ID" value="128.60 * mm"/>
+    <constant name="Electron_Beampipe_Pipe_2_ID" value="128.60 * mm"/>
+    <constant name="Electron_Beampipe_Pipe_3_ID" value="154.00 * mm"/>
+    <constant name="Electron_Beampipe_Pipe_4_ID" value="154.00 * mm"/>
+    <constant name="Electron_Beampipe_Pipe_5_ID" value="196.00 * mm"/>
+    <constant name="Electron_Beampipe_Pipe_6_ID" value="196.00 * mm"/>
+
+    <comment> Electron magnet dimensions and positions </comment>
+    <constant name="Air_Gap_Between_Magnet_And_Beampipe" value="1 * mm"/>
+    <constant name="Q1eR_InnerRadius"     
+              value="Electron_Beampipe_Pipe_0_ID/2 + Electron_Beampipe_Pipe_Coating_Thickness + Electron_Beampipe_Pipe_Wall_Thickness + Air_Gap_Between_Magnet_And_Beampipe"/>
     <constant name="Q1eR_Length"          value="1.80 * m"/>
     <constant name="Q1eR_CenterPosition"  value="(-7.1+1.8/2) * m"/>
 
-    <constant name="Q2eR_InnerRadius"     value="66.30 * mm"/>
+    <constant name="Q2eR_InnerRadius"     
+              value="Electron_Beampipe_Pipe_2_ID/2 + Electron_Beampipe_Pipe_Coating_Thickness + Electron_Beampipe_Pipe_Wall_Thickness + Air_Gap_Between_Magnet_And_Beampipe"/>
     <constant name="Q2eR_Length"          value="1.4 * m"/>
     <constant name="Q2eR_CenterPosition"  value="(-9.0 + 1.4/2) * m"/>
 
-    <constant name="B2BeR_InnerRadius"    value="100.0 * mm"/>
+    <constant name="B2BeR_InnerRadius"    
+              value="Electron_Beampipe_Pipe_6_ID/2 + Electron_Beampipe_Pipe_Coating_Thickness + Electron_Beampipe_Pipe_Wall_Thickness + Air_Gap_Between_Magnet_And_Beampipe"/>
     <constant name="B2BeR_Length"         value="5.500075391030 * m"/>
     <constant name="B2BeR_CenterPosition" value="-15.000075390000 * m + B2BeR_Length/2"/>
     <constant name="B2BeR_Edge"           value="5.0 * mm"/>
@@ -36,25 +59,6 @@
     <constant name="Q3eR_XPosition"       value="-0.46545*m"/>
     <constant name="Q3eR_Theta"           value="0.0180766389*rad"/>
     <constant name="Q3eR_CenterPosition"  value="-37.996018*m"/>
-
-    <comment> Electron side beam pipe volumes: going from Q1eR to B2BeR </comment>
-    <constant name="Electron_Beampipe_Pipe_0_End" value="-7342.0 * mm"/>
-    <constant name="Electron_Beampipe_Pipe_1_End" value="-7405.0 * mm"/>
-    <constant name="Electron_Beampipe_Pipe_2_End" value="-9288.0 * mm"/>
-    <constant name="Electron_Beampipe_Pipe_3_End" value="-9364.0 * mm"/>
-    <constant name="Electron_Beampipe_Pipe_4_End" value="-11364.0 * mm"/>
-    <constant name="Electron_Beampipe_Pipe_5_End" value="-11414.0 * mm"/>
-    <constant name="Electron_Beampipe_Pipe_6_End" value="B2BeR_CenterPosition - B2BeR_Length/2 - B2BeR_Edge"/>
-
-    <constant name="Electron_Beampipe_Pipe_Wall_Thickness" value="2 * mm"/>
-
-    <constant name="Electron_Beampipe_Pipe_0_ID" value="111.40 * mm"/>
-    <constant name="Electron_Beampipe_Pipe_1_ID" value="128.60 * mm"/>
-    <constant name="Electron_Beampipe_Pipe_2_ID" value="128.60 * mm"/>
-    <constant name="Electron_Beampipe_Pipe_3_ID" value="154.00 * mm"/>
-    <constant name="Electron_Beampipe_Pipe_4_ID" value="154.00 * mm"/>
-    <constant name="Electron_Beampipe_Pipe_5_ID" value="196.00 * mm"/>
-    <constant name="Electron_Beampipe_Pipe_6_ID" value="196.00 * mm"/>
 
     <comment> Note: Placements for Q4eR, B3eR, B4eR, B5eR, B6eR, B7eR
               are approximate (valid to within ~1 cm).
@@ -190,7 +194,7 @@
     <constant name="Vacuum_BB_MaxX"       value="0.5*m"/>
     <constant name="Vacuum_BB_MinY"       value="-1.5*m"/>
     <constant name="Vacuum_BB_MaxY"       value="1.5*m"/>
-    <constant name="Vacuum_BB_MinZ"       value="B2BeR_CenterPosition-B2BeR_Length/2 - B2BeR_Edge"/>
+    <constant name="Vacuum_BB_MinZ"       value="Electron_Beampipe_Pipe_6_End"/>
     <constant name="Vacuum_BB_MaxZ"       value="Q3eR_EndZ"/>
 
     <constant name="Beam_Theta"           value="Q3eR_Theta"/>

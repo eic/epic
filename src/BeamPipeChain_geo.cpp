@@ -26,11 +26,14 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector /
   string     det_name = x_det.nameStr();
   DetElement sdet(det_name, x_det.id());
   Assembly   assembly(det_name + "_assembly");
-  Material   m_Al     = description.material("Aluminum");
+  Material   m_SS     = description.material("StainlessSteel");
+  Material   m_Cu     = description.material("Copper");
   Material   m_Vacuum = description.material("Vacuum");
   string     vis_name = dd4hep::getAttrOrDefault<std::string>(x_det, _Unicode(vis), "BeamPipeVis");
   double thickness = getAttrOrDefault<double>(x_det, _Unicode(wall_thickness), 0);
+  double coating = getAttrOrDefault<double>(x_det, _Unicode(coating_thickness), 0);
 
+  // beam pipe
   vector<string> names;
   vector<double> xCenters;
   vector<double> zCenters;
@@ -45,7 +48,6 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector /
     xml_comp_t pipe( pipe_coll );
 
     names.push_back( getAttrOrDefault<string>(pipe, _Unicode(name), "") );
-
     // Vectors momentarily filled with zeros for pipes in between magnets
     xCenters.push_back( getAttrOrDefault<double>(pipe, _Unicode(xcenter), 0) );
     zCenters.push_back( getAttrOrDefault<double>(pipe, _Unicode(zcenter), 0) );
@@ -84,18 +86,41 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector /
 
   // Add all pipes to the assembly
   for( uint pipeN = 0; pipeN < xCenters.size(); pipeN++ ) {
+    // beam pipe matter
+    ConeSegment s_tube(  
+                         lengths[pipeN] / 2.0,         // length 
+                         rOuters2[pipeN] - thickness,  // r2 in
+                         rOuters2[pipeN],              // r2 out
+                         rOuters1[pipeN] - thickness,  // r1 in
+                         rOuters1[pipeN]               // r1 out 
+                      );
+    // beam pipe coating
+    ConeSegment s_coat(  
+                         lengths[pipeN] / 2.0,                   // length 
+                         rOuters2[pipeN] - thickness - coating,  // r2 in
+                         rOuters2[pipeN] - thickness,            // r2 out
+                         rOuters1[pipeN] - thickness - coating,  // r1 in
+                         rOuters1[pipeN] - thickness             // r1 out 
+                      );
+    // beam pipe vacuum
+    ConeSegment s_vacm(  
+                         lengths[pipeN] / 2.0,                  // length 
+                         0,                                     // r2 in
+                         rOuters2[pipeN] - thickness - coating, // r2 out
+                         0,                                     // r1 in
+                         rOuters1[pipeN] - thickness - coating  // r1 out
+                      );
 
-    ConeSegment s_tube( lengths[pipeN] / 2.0, rOuters2[pipeN] - thickness, rOuters2[pipeN], rOuters1[pipeN] - thickness, rOuters1[pipeN] );
-    ConeSegment s_vacuum( lengths[pipeN] / 2.0, 0, rOuters2[pipeN] - thickness, 0, rOuters1[pipeN] - thickness );
-
-    Volume v_tube("v_tube_" + names[pipeN], s_tube, m_Al);
-    Volume v_vacuum("v_vacuum_" + names[pipeN], s_vacuum, m_Vacuum);
+    Volume v_tube("v_tube_"    + names[pipeN], s_tube, m_SS);
+    Volume v_coat("v_coating_" + names[pipeN], s_coat, m_Cu);
+    Volume v_vacm("v_vacuum_"  + names[pipeN], s_vacm, m_Vacuum);
 
     v_tube.setVisAttributes(description.visAttributes( vis_name ) );
+    v_coat.setVisAttributes(description.visAttributes( vis_name + "Coating") );
 
     assembly.placeVolume(v_tube, Transform3D( RotationY(thetas[pipeN]), Position(xCenters[pipeN], 0, zCenters[pipeN])));
-    assembly.placeVolume(v_vacuum, Transform3D( RotationY(thetas[pipeN]), Position(xCenters[pipeN], 0, zCenters[pipeN])));
-
+    assembly.placeVolume(v_coat, Transform3D( RotationY(thetas[pipeN]), Position(xCenters[pipeN], 0, zCenters[pipeN])));
+    assembly.placeVolume(v_vacm, Transform3D( RotationY(thetas[pipeN]), Position(xCenters[pipeN], 0, zCenters[pipeN])));
   }
 
   // Final placement
