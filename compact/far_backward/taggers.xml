@@ -22,7 +22,7 @@
 
     <comment> Main beamline vacuum volume spanning between B2BeR and Q3eR magnets</comment>
     <detector id="TaggerTracker_ID" name="BackwardsTaggerStation" type="BackwardsTagger" wall="Backwards_Box_Wall" lumi="true" vis="BeamPipeVis" readout="TaggerTrackerHits">
-    
+
       <type_flags type="DetType_TRACKER + DetType_ENDCAP"/>
       <focus      x="Dipole_Focus_X"    y="Dipole_Focus_Y"    z="Dipole_Focus_Z" />
       <bounding   xmin="Vacuum_BB_MinX" xmax="Vacuum_BB_MaxX"
