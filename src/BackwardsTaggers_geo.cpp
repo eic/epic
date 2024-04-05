@@ -43,7 +43,7 @@ static Ref_t create_detector(Detector& desc, xml_h e, SensitiveDetector sens)
 
   // Materials
   Material Vacuum  = desc.material("Vacuum");
-  Material Steel   = desc.material("StainlessSteel");
+  Material Copper   = desc.material("Copper");
 
   // Central focal point of the geometry
   xml::Component pos = x_det.child(_Unicode(focus));
@@ -253,7 +253,7 @@ static Ref_t create_detector(Detector& desc, xml_h e, SensitiveDetector sens)
   if (nVacuum > 0)
     vacVol.placeVolume(DetAssembly);
 
-  Volume wallVol("TaggerStation_Container", Wall_Box_Out, Steel);
+  Volume wallVol("TaggerStation_Container", Wall_Box_Out, Copper);
   wallVol.setVisAttributes(desc.visAttributes(vis_name));
 
   Assembly backAssembly(detName + "_assembly");

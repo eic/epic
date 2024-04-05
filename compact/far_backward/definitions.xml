@@ -195,7 +195,7 @@
 
     <constant name="Beam_Theta"           value="Q3eR_Theta"/>
 
-    <constant name="Backwards_Box_Wall"   value="2*mm"/>
+    <constant name="Backwards_Box_Wall"   value="3*mm"/>
 
     <comment> Dipole focal point in global coordinates </comment>
     <constant name="Dipole_Focus_X"       value="0.0*mm"/>
@@ -238,7 +238,7 @@
 
     <constant name="Tagger2_Min_Theta"    value="0.02*rad"/>
     <constant name="Tagger2_Max_Theta"    value="Tagger1_Min_Theta+0.000*rad"/>
-    <constant name="Tagger2_Min_Offset"   value="Q3eR_InnerRadius+Backwards_Box_Wall"/>
+    <constant name="Tagger2_Min_Offset"   value="Q3eR_InnerRadius+Backwards_Box_Wall/2"/>
 
 
     <!--  -->
