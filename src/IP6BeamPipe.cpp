@@ -43,7 +43,7 @@ static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector /* sens *
   unsigned int typeFlag = x_dettype.type();
   DetElement sdet(det_name, x_det.id());
   Assembly   assembly(det_name + "_assembly");
-  Material   m_Al     = det.material("Aluminum");
+  Material   m_SS     = det.material("StainlessSteel");
   Material   m_Be     = det.material("Beryllium");
   Material   m_Au     = det.material("Gold");
   Material   m_Vacuum = det.material("Vacuum");
@@ -145,10 +145,11 @@ static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector /* sens *
   //  ................     ... -> air
   //  ......__________     --| -> matter
   //  ......|              *** -> vacuum
-  //  ......|   ______
-  //  ______|   |*****
-  //            |*****
-  //  __________|*****
+  //  ......|   ______     ### -> coating
+  //  ______|   |#####
+  //            |#****
+  //  __________|#****
+  //  ############****
   //  ****************
 
   auto zplane_to_polycones = [](xml::Component& x_pipe) {
@@ -205,6 +206,7 @@ static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector /* sens *
     }
     else if (name == "downstream") {
       auto thickness_pipe2     = getAttrOrDefault(x_pipe2, _Unicode(thickness), 0.0);
+      auto coating             = getAttrOrDefault(x_pipe2, _Unicode(coating), 0.0);
       auto horizontal_offset   = getAttrOrDefault(x_pipe2, _Unicode(horizontal_offset), 0.0);
       auto cone_z_end          = getAttrOrDefault(x_pipe2, _Unicode(cone_z_end), 0.0);
       auto cone_z_start        = getAttrOrDefault(x_pipe2, _Unicode(cone_z_start), 0.0);
@@ -221,7 +223,7 @@ static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector /* sens *
 
       // horizontal offset of the outgoing h-beam pipe w.r.t. the incoming e-beam pipe
       const double p_mat_1[] = {horizontal_offset, 0, 0}; // matter
-      const double p_vac_1[] = {horizontal_offset - thickness_pipe2, 0, 0}; // vacuum
+      const double p_vac_1[] = {horizontal_offset - coating - thickness_pipe2, 0, 0}; // vacuum
 
       pipe2_polycones_mat_cut = SubtractionSolid(pipe2_polycones.first, box_cut,
                                   tf * Transform3D(Position(p_mat_1[0] + box_cut_sizex,
@@ -232,7 +234,7 @@ static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector /* sens *
                                                             p_vac_1[1],
                                                             p_vac_1[2])));
       // cut on the opposite side from the IP
-      const double p_mat_2[] = {0, 0, cone_z_end + thickness_pipe2}; // matter
+      const double p_mat_2[] = {0, 0, cone_z_end + coating + thickness_pipe2}; // matter
       const double p_vac_2[] = {0, 0, cone_z_end}; // vacuum
 
       pipe2_polycones_mat_cut = SubtractionSolid(pipe2_polycones_mat_cut, box_cut,
@@ -245,7 +247,7 @@ static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector /* sens *
                                                             p_vac_2[2] + box_cut_sizez)));
 
       // cut on the IP side
-      const double p_mat_3[] = {0, 0, cone_z_start - thickness_pipe2}; // matter
+      const double p_mat_3[] = {0, 0, cone_z_start - coating - thickness_pipe2}; // matter
       const double p_vac_3[] = {0, 0, cone_z_start}; // vacuum
 
       pipe2_polycones_mat_cut = SubtractionSolid(pipe2_polycones_mat_cut, box_cut,
@@ -258,7 +260,7 @@ static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector /* sens *
                                                             p_vac_3[2] - box_cut_sizez)));
       // add an extension to the h-beam pipe
       Tube tb_vac(0 * mm, extension_r, extension_z);
-      Tube tb_mat(0 * mm, extension_r + extension_thickness, extension_z);
+      Tube tb_mat(0 * mm, extension_r + extension_thickness + coating, extension_z);
 
       pipe2_polycones_vac_cut = UnionSolid(pipe2_polycones_vac_cut, tb_vac,
                                   tf * Transform3D(RotationY(crossing_angle)) *
@@ -296,7 +298,7 @@ static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector /* sens *
       vacuum = UnionSolid(vacuum,additional_polycones.second,tf * additional_tf);
     }
 
-    return std::make_pair<Volume, Volume>({"v_" + name + "_matter", matter, m_Al},
+    return std::make_pair<Volume, Volume>({"v_" + name + "_matter", matter, m_SS},
                                           {"v_" + name + "_vacuum", vacuum, m_Vacuum});
   };
   //---------------------------------------------------------------------------------
