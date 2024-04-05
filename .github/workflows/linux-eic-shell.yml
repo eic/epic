@@ -189,6 +189,37 @@ jobs:
           root -b -q "scripts/test_ACTS.cxx+(\"${DETECTOR_PATH}/${DETECTOR_CONFIG}.xml\")" | tee check_tracking_geometry.out
           bin/acts_geo_check check_tracking_geometry.out
 
+  validate-material-map:
+    runs-on: ubuntu-latest
+    needs:
+      - build
+      - check-tracking-geometry
+    steps:
+    - uses: actions/checkout@v4
+    - uses: actions/download-artifact@v4
+      with:
+        name: build-gcc-full-eic-shell
+        path: install/
+    - uses: cvmfs-contrib/github-action-cvmfs@v4
+    - uses: eic/run-cvmfs-osg-eic-shell@main
+      with:
+        platform-release: "jug_xl:nightly"
+        setup: install/setup.sh
+        run: |
+          pushd scripts/material_map
+          export DETECTOR_CONFIG=epic_craterlake_material_map
+          ./run_material_map_validation.sh
+          popd
+    - uses: actions/upload-artifact@v4
+      with:
+        name: material_map
+        path: |
+          "scripts/material_map/*.json"
+          "scripts/material_map/*.root"
+          scripts/material_map/Surfaces/
+          scripts/material_map/Validation/
+        if-no-files-found: error
+
   convert-to-gdml:
     runs-on: ubuntu-latest
     needs:
