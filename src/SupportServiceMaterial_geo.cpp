@@ -90,9 +90,10 @@ namespace {
       const double phimin = getAttrOrDefault<double>(x_child, _Unicode(phimin), getAttrOrDefault(x_support, _Unicode(phimin),   0.0 * deg));
       const double phimax = getAttrOrDefault<double>(x_child, _Unicode(phimax), getAttrOrDefault(x_support, _Unicode(phimax), 360.0 * deg));
       const double deltaphi = phimax - phimin;
-      if (fabs(zmin) >= length / 2 - std::numeric_limits<double>::epsilon() &&
-          fabs(zmax) >= length / 2 - std::numeric_limits<double>::epsilon()) {
-        if (fabs(phimax - phimin - 360*deg) < std::numeric_limits<double>::epsilon()) {
+      const double epsilon{TGeoShape::Tolerance()};
+      if (fabs(zmin) >= length / 2 - epsilon &&
+          fabs(zmax) >= length / 2 - epsilon) {
+        if (fabs(phimax - phimin - 360*deg) < epsilon) {
           solid = Cone(length / 2, rmin1, rmax1, rmin2, rmax2);
         } else {
           solid = ConeSegment(length / 2, rmin1, rmax1, rmin2, rmax2, phimin, phimax);
@@ -102,12 +103,12 @@ namespace {
           v_rmin{max(rmin1, rmin), max(rmin2, rmin)},
           v_rmax{min(rmax1, rmax), min(rmax2, rmax)},
           v_z{-length / 2, +length / 2};
-        if (- length / 2 < zmax && zmax < +length / 2) {
+        if (- length / 2 + epsilon < zmax && zmax < - epsilon + length / 2) {
           v_rmin.insert(std::next(v_rmin.begin()), rmin_at(zmax));
           v_rmax.insert(std::next(v_rmax.begin()), rmax_at(zmax));
           v_z.insert(std::next(v_z.begin()), zmax);
         }
-        if (- length / 2 < zmin && zmin < +length / 2) {
+        if (- length / 2 + epsilon < zmin && zmin < - epsilon + length / 2) {
           v_rmin.insert(std::next(v_rmin.begin()), rmin_at(zmin));
           v_rmax.insert(std::next(v_rmax.begin()), rmax_at(zmin));
           v_z.insert(std::next(v_z.begin()), zmin);
