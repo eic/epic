@@ -652,6 +652,7 @@ Service gaps in FW direction (before endcapP ECAL) and BW direction (before endc
     <comment> LFHCAL includes support, which is part of the flux return </comment>
     <constant name="LFHCAL_rmax" value="FluxEndcapP_collar_rmin"/>
 
+    <comment> STAR Asm for EPIC w cradle.stp, rwimmer, 2024-04-03 </comment>
     <constant name="FluxBarrelForward_zmax"  value="320*cm"/>
     <constant name="FluxBarrelBackward_zmax" value="FluxBarrelForward_zmax"/>
     <constant name="FluxBarrel_thickness"    value="62.5*cm"/> <!-- for envelope only -->
