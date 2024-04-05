@@ -193,7 +193,7 @@ static Ref_t create_detector(Detector& desc, xml_h e, SensitiveDetector sens)
     DetElement moddet(det,moduleName, moduleID);
     pv_mod2.addPhysVolID("module", moduleID);
     moddet.setPlacement(pv_mod2);
-    
+
     auto &moduleParams = DD4hepDetectorHelper::ensureExtension<dd4hep::rec::VariantParameters>(moddet);
     moduleParams.set<string>("layer_pattern", "Tagger_tracker_layer\\d");
 
@@ -408,7 +408,7 @@ static void Make_Tagger(Detector& desc, xml_coll_t& mod, Assembly& env, DetEleme
     layVol.setSensitiveDetector(sens);
     layVol.setVisAttributes(desc.visAttributes(layerVis));
 
-    
+
     PlacedVolume pv_layer = mother.placeVolume(layVol, Transform3D(rotate, Position(0, 0, MotherThickness - layerZ + layerThickness / 2)));
     pv_layer.addPhysVolID("layer", layerID);
 
@@ -419,7 +419,7 @@ static void Make_Tagger(Detector& desc, xml_coll_t& mod, Assembly& env, DetEleme
     Vector3D v( 0.,-1., 0.);
     Vector3D n( 0., 0., 1.);
 
-    // Add surface to layer for acts reconstruction 
+    // Add surface to layer for acts reconstruction
     SurfaceType type(SurfaceType::Sensitive);
 
     layVol->GetShape()->ComputeBBox();
