@@ -50,6 +50,8 @@
         <trackLayer  id="2" type="timepix" z="203*mm" sensor_thickness="400*um"/>
         <trackLayer  id="3" type="timepix" z="303*mm" sensor_thickness="400*um"/>
         <windowLayer id="1" type="window"  z="0*mm"   thickness="2*mm" material="CarbonFiber"/>
+        <layer_material surface="inner" binning="binPhi,binR" bins0="12" bins1="12"/>
+        <layer_material surface="outer" binning="binPhi,binR" bins0="12" bins1="12"/>
       </module>
       <module id="2"
         name="Tagger2"
@@ -62,11 +64,13 @@
         >
         <dimensions x="Tagger2_Width/2" y="Tagger2_Height/2" z="Tagger2_Length"/>
         <foilLayer   id="0" type="foil"    z="0*mm"   thickness="100*um" angle="70*deg"/>
-        <trackLayer  id="0" type="timepix" z="3*mm"   sensor_thickness="400*um"/>
-        <trackLayer  id="1" type="timepix" z="103*mm" sensor_thickness="400*um"/>
-        <trackLayer  id="2" type="timepix" z="203*mm" sensor_thickness="400*um"/>
-        <trackLayer  id="3" type="timepix" z="303*mm" sensor_thickness="400*um"/>
+        <trackLayer  id="4" type="timepix" z="3*mm"   sensor_thickness="400*um"/>
+        <trackLayer  id="5" type="timepix" z="103*mm" sensor_thickness="400*um"/>
+        <trackLayer  id="6" type="timepix" z="203*mm" sensor_thickness="400*um"/>
+        <trackLayer  id="7" type="timepix" z="303*mm" sensor_thickness="400*um"/>
         <windowLayer id="1" type="window"  z="0*mm"   thickness="2*mm" material="CarbonFiber"/>
+        <layer_material surface="inner" binning="binPhi,binR" bins0="12" bins1="12"/>
+        <layer_material surface="outer" binning="binPhi,binR" bins0="12" bins1="12"/>
       </module>
 
     </detector>
@@ -74,12 +78,6 @@
   </detectors>
 
 
-  <plugins>
-    <plugin name="DD4hep_ParametersPlugin">
-      <argument value="BackwardsTaggerStation"/>
-      <argument value="layer_pattern: str=Tagger_tracker_layer\d"/>
-    </plugin>
-  </plugins>
 
 
   <readouts>

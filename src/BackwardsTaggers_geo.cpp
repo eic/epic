@@ -183,7 +183,8 @@ static Ref_t create_detector(Detector& desc, xml_h e, SensitiveDetector sens)
       nAir++;
     }
 
-    Assembly TaggerAssembly("Tagger_module_assembly");
+    //Assembly TaggerAssembly("Tagger_module_assembly");
+    Assembly TaggerAssembly(moduleName);
 
     PlacedVolume pv_mod2 = mother.placeVolume(
         TaggerAssembly,
@@ -192,9 +193,24 @@ static Ref_t create_detector(Detector& desc, xml_h e, SensitiveDetector sens)
     DetElement moddet(det,moduleName, moduleID);
     pv_mod2.addPhysVolID("module", moduleID);
     moddet.setPlacement(pv_mod2);
+    
+    auto &moduleParams = DD4hepDetectorHelper::ensureExtension<dd4hep::rec::VariantParameters>(moddet);
+    moduleParams.set<string>("layer_pattern", "Tagger_tracker_layer\\d");
 
     Make_Tagger(desc, mod, TaggerAssembly, moddet, sens);
 
+    // //Loop through moddet checking the names of its children
+    // std::cout << "Children of " << moddet.name() << std::endl;
+    // for (auto child : moddet.children()) {
+    //   std::cout << child.first << std::endl;
+    // }
+
+  }
+
+  //Loop through det checking the names of its children
+  std::cout << "Children of " << det.name() << std::endl;
+  for (auto child : det.children()) {
+    std::cout << child.first << std::endl;
   }
 
   //-----------------------------------------------------------------
@@ -369,6 +385,11 @@ static void Make_Tagger(Detector& desc, xml_coll_t& mod, Assembly& env, DetEleme
     double layerZ         = dd4hep::getAttrOrDefault<double>(lay, _Unicode(z), 0 * mm);
     double layerThickness = dd4hep::getAttrOrDefault<double>(lay, _Unicode(sensor_thickness), 200 * um);
 
+    double envelope_r_min = dd4hep::getAttrOrDefault<double>(lay, _Unicode(envelope_r_min),  -1.0*mm);
+    double envelope_r_max = dd4hep::getAttrOrDefault<double>(lay, _Unicode(envelope_r_max),  1.0*mm);
+    double envelope_z_min = dd4hep::getAttrOrDefault<double>(lay, _Unicode(envelope_z_min),  -1.0*mm);
+    double envelope_z_max = dd4hep::getAttrOrDefault<double>(lay, _Unicode(envelope_z_max),  1.0*mm);
+
     Volume mother          = env;
     double MotherThickness = tagboxL;
 
@@ -382,31 +403,40 @@ static void Make_Tagger(Detector& desc, xml_coll_t& mod, Assembly& env, DetEleme
 
     Box    Layer_Box(tag_w, tag_h, layerThickness / 2);
 
-    std::string layerName = "Tagger_tracker_layer" + std::to_string(layerID) +"_N";
+    std::string layerName = "Tagger_tracker_layer" + std::to_string(layerID);
     Volume layVol(layerName, Layer_Box, Silicon);
     layVol.setSensitiveDetector(sens);
     layVol.setVisAttributes(desc.visAttributes(layerVis));
 
-
+    
     PlacedVolume pv_layer = mother.placeVolume(layVol, Transform3D(rotate, Position(0, 0, MotherThickness - layerZ + layerThickness / 2)));
     pv_layer.addPhysVolID("layer", layerID);
 
-    
-    std::cout << pv_layer.volume().name() << " " << layerID << std::endl;
     DetElement laydet(modElement,pv_layer.volume().name(), layerID);
 
     // -------- create a measurement plane for the tracking surface attched to the sensitive volume -----
     Vector3D u(-1., 0., 0.);
-    Vector3D v(0., -1., 0.);
-    Vector3D n(0., 0., 1.);
+    Vector3D v( 0.,-1., 0.);
+    Vector3D n( 0., 0., 1.);
 
     // Add surface to layer for acts reconstruction 
     SurfaceType type(SurfaceType::Sensitive);
 
+    layVol->GetShape()->ComputeBBox();
     auto &layerParams = DD4hepDetectorHelper::ensureExtension<dd4hep::rec::VariantParameters>(laydet);
     layerParams.set<string>("axis_definitions", "XZY");
+    layerParams.set<double>("envelope_r_min", envelope_r_min);
+    layerParams.set<double>("envelope_r_max", envelope_r_max);
+    layerParams.set<double>("envelope_z_min", envelope_z_min);
+    layerParams.set<double>("envelope_z_max", envelope_z_max);
 
-    VolPlane surf(layVol, type, 1.0, 1.0, u, v, n); //,o ) ;
+    for (xml_coll_t lmat(mod, _Unicode(layer_material)); lmat; ++lmat) {
+      xml_comp_t x_layer_material = lmat;
+      DD4hepDetectorHelper::xmlToProtoSurfaceMaterial(x_layer_material, layerParams, "layer_material");
+    }
+
+
+    VolPlane surf(layVol, type, 1.0, 2.0, u, v, n); //,o ) ;
     volSurfaceList(laydet)->push_back(surf);
 
     laydet.setPlacement(pv_layer);
