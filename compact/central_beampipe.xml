@@ -59,9 +59,8 @@
     <constant name="AdditionSubtraction_z1" value="HadronOutgoingBeampipeConeStart_z"/>
     <constant name="AdditionSubtraction_z2" value="4484.25 * mm"/>
 
-    <constant name="AdditionSubtraction_OD1" value="36.61 * mm"/>
-    <constant name="AdditionSubtraction_OD2" value="120.00 * mm"/>
-    <constant name="AdditionSubtraction_OD3" value="32.00 * mm"/>
+    <constant name="AdditionSubtraction_ID1" value="24.00 * mm"/>
+    <constant name="AdditionSubtraction_ID2" value="112.00 * mm"/>
   </define>
 
   <display>
@@ -216,12 +215,20 @@
         <additional_subtraction thickness="HadronOutgoingBeampipeThickness"
                                 crossing_angle="CrossingAngle">
             <vacuum>
-              <zplane z="AdditionSubtraction_z1" OD="AdditionSubtraction_OD1 - 2* HadronOutgoingBeampipeThickness"/>
-              <zplane z="AdditionSubtraction_z2" OD="AdditionSubtraction_OD2 - 2* HadronOutgoingBeampipeThickness"/>
+              <zplane z="AdditionSubtraction_z1" OD="AdditionSubtraction_ID1"/>
+              <zplane z="AdditionSubtraction_z2" OD="AdditionSubtraction_ID2"/>
             </vacuum>
+            <coating>
+              <zplane z="BeampipeDownstreamStraightLength" 
+                      OD="AdditionSubtraction_ID1 + 2* BeampipeCoatingThickness"/>
+              <zplane z="AdditionSubtraction_z2" 
+                      OD="AdditionSubtraction_ID2 + 2* BeampipeCoatingThickness"/>
+            </coating>
             <matter>
-              <zplane z="BeampipeDownstreamStraightLength" OD="AdditionSubtraction_OD3 * mm"/>
-              <zplane z="AdditionSubtraction_z2" OD="AdditionSubtraction_OD2 * mm"/>
+              <zplane z="BeampipeDownstreamStraightLength" 
+                      OD="AdditionSubtraction_ID1 + 2* BeampipeCoatingThickness + 2* HadronOutgoingBeampipeThickness"/>
+              <zplane z="AdditionSubtraction_z2" 
+                      OD="AdditionSubtraction_ID2 + 2* BeampipeCoatingThickness + 2* HadronOutgoingBeampipeThickness"/>
             </matter>
         </additional_subtraction>
       </downstream>
