@@ -314,6 +314,8 @@ static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector /* sens *
 
       // subtract h-vacuum from h-matter
       pipe2_polycones_mat_cut = SubtractionSolid(pipe2_polycones_mat_cut,pipe2_polycones_vac_cut);
+      // subtract h-coating from h-matter
+      pipe2_polycones_mat_cut = SubtractionSolid(pipe2_polycones_mat_cut,pipe2_polycones_coa_cut);
       // subtract h-vacuum from h-coating
       pipe2_polycones_coa_cut = SubtractionSolid(pipe2_polycones_coa_cut,pipe2_polycones_vac_cut);
 
@@ -324,6 +326,8 @@ static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector /* sens *
 
       // subtract e-vacuum from matter
       matter = SubtractionSolid(pipe2_polycones_mat_cut,std::get<2>(pipe1_polycones),tf);
+      // subtract e-coating from matter
+      matter = SubtractionSolid(pipe2_polycones_mat_cut,std::get<1>(pipe1_polycones),tf);
       // subtract e-vacuum from coating
       coating = SubtractionSolid(pipe2_polycones_coa_cut,std::get<2>(pipe1_polycones),tf);
 
