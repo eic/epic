@@ -189,8 +189,8 @@ static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector /* sens *
   };
   //---------------------------------------------------------------------------------
   // Create volumes
-  auto create_volumes = [&](const std::string& name, 
-                            xml::Component& x_pipe1, 
+  auto create_volumes = [&](const std::string& name,
+                            xml::Component& x_pipe1,
                             xml::Component& x_pipe2,
                             xml_coll_t& x_additional_subtraction_i) {
 
@@ -202,7 +202,7 @@ static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector /* sens *
 
     // transformation matrix: shift -> rotate -> shift
     auto tf = Transform3D(Position(0, 0, axis_intersection));
-    if(name == "upstream") 
+    if(name == "upstream")
       tf *= Transform3D(RotationY( crossing_angle));
     else
       tf *= Transform3D(RotationY( std::abs(crossing_angle)));
@@ -378,7 +378,7 @@ static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector /* sens *
   auto volumes_upstream = create_volumes(
     "upstream", outgoing_lepton_c, incoming_hadron_c,additional_subtractions_upstream);
 
-  // reflect 
+  // reflect
   auto tf_upstream = Transform3D(RotationZYX(0, 0, 0));
   if (getAttrOrDefault<bool>(upstream_c, _Unicode(reflect), true))
     tf_upstream = Transform3D(RotationZYX(0, M_PI, 0));
@@ -388,7 +388,7 @@ static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector /* sens *
   // add coating
   assembly.placeVolume(std::get<1>(volumes_upstream), tf_upstream);
   // add vacuum
-  if (getAttrOrDefault<bool>(upstream_c, _Unicode(place_vacuum), true)) 
+  if (getAttrOrDefault<bool>(upstream_c, _Unicode(place_vacuum), true))
     assembly.placeVolume(std::get<2>(volumes_upstream), tf_upstream);
 
   // -----------------------------
@@ -406,7 +406,7 @@ static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector /* sens *
     "downstream", incoming_lepton_c, outgoing_hadron_c,additional_subtractions_downstream);
 
   // transform
-  auto tf_downstream = 
+  auto tf_downstream =
     Transform3D(Position(0, 0, +getAttrOrDefault(outgoing_hadron_c, _Unicode(axis_intersection), 0.0))) *
     Transform3D(RotationY(getAttrOrDefault(outgoing_hadron_c, _Unicode(crossing_angle), 0.0))) *
     Transform3D(Position(0, 0, -getAttrOrDefault(outgoing_hadron_c, _Unicode(axis_intersection), 0.0)));

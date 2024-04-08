@@ -34,17 +34,17 @@
 
     <comment> Electron magnet dimensions and positions </comment>
     <constant name="Air_Gap_Between_Magnet_And_Beampipe" value="1 * mm"/>
-    <constant name="Q1eR_InnerRadius"     
+    <constant name="Q1eR_InnerRadius"
               value="Electron_Beampipe_Pipe_0_ID/2 + Electron_Beampipe_Pipe_Coating_Thickness + Electron_Beampipe_Pipe_Wall_Thickness + Air_Gap_Between_Magnet_And_Beampipe"/>
     <constant name="Q1eR_Length"          value="1.80 * m"/>
     <constant name="Q1eR_CenterPosition"  value="(-7.1+1.8/2) * m"/>
 
-    <constant name="Q2eR_InnerRadius"     
+    <constant name="Q2eR_InnerRadius"
               value="Electron_Beampipe_Pipe_2_ID/2 + Electron_Beampipe_Pipe_Coating_Thickness + Electron_Beampipe_Pipe_Wall_Thickness + Air_Gap_Between_Magnet_And_Beampipe"/>
     <constant name="Q2eR_Length"          value="1.4 * m"/>
     <constant name="Q2eR_CenterPosition"  value="(-9.0 + 1.4/2) * m"/>
 
-    <constant name="B2BeR_InnerRadius"    
+    <constant name="B2BeR_InnerRadius"
               value="Electron_Beampipe_Pipe_6_ID/2 + Electron_Beampipe_Pipe_Coating_Thickness + Electron_Beampipe_Pipe_Wall_Thickness + Air_Gap_Between_Magnet_And_Beampipe"/>
     <constant name="B2BeR_Length"         value="5.500075391030 * m"/>
     <constant name="B2BeR_CenterPosition" value="-15.000075390000 * m + B2BeR_Length/2"/>
