@@ -44,8 +44,8 @@
     <comment> Inner tracker service/support cones, symmetric </comment>
     <constant name="InnerSupportConeCF_thickness"         value="2.0*mm" />
     <comment> Effective Aluminum for services for now </comment>
-    <constant name="InnerSupportConePAl_thickness"        value="4.9*mm" /> <comment> Ref: Services Material Budget 24.03.13.stp </comment>
-    <constant name="InnerSupportConeNAl_thickness"        value="4.9*mm" /> <comment> Ref: Services Material Budget 24.03.13.stp </comment>
+    <constant name="InnerSupportConePAl_thickness"        value="4.9*mm - 0.5*mm" /> <comment> Ref: Services Material Budget 24.03.13.stp - 0.5*mm to avoid overlap with OuterSiBarrel </comment>
+    <constant name="InnerSupportConeNAl_thickness"        value="4.4*mm - 0.5*mm" /> <comment> Ref: Services Material Budget 24.03.13.stp - 0.5*mm to avoid overlap with OuterSiBarrel </comment>
     <constant name="InnerSupportConeP_thickness"          value="InnerSupportConePAl_thickness + InnerSupportConeCF_thickness" />
     <constant name="InnerSupportConeN_thickness"          value="InnerSupportConeNAl_thickness + InnerSupportConeCF_thickness" />
     <constant name="InnerSupportCone_zmin"                value="VertexSupportRing_zmax" />
