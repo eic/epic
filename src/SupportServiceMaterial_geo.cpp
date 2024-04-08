@@ -83,7 +83,7 @@ namespace {
         std::exit(1);
       }
       const double zmin = - length / 2 + length * (rmin - rmin1) / (rmin2 - rmin1);
-      const double zmax = + length / 2 - length * (rmax2 - rmax) / (rmax2 - rmax1);
+      const double zmax = - length / 2 + length * (rmax - rmax1) / (rmax2 - rmax1);
       const auto rmin_at = [&](const double z) { return rmin1 + (z + length/2) * (rmin2 - rmin1) / length; };
       const auto rmax_at = [&](const double z) { return rmax1 + (z + length/2) * (rmax2 - rmax1) / length; };
       // Allow for optional phimin/phimax
