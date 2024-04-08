@@ -94,7 +94,6 @@
         <layer_material surface="inner" binning="binPhi,binZ" bins0="MPGDBarrelStave_count" bins1="100" />
 	 <rphi_layout phi_tilt="0" nphi="8" phi0="0.0" rc="InnerMPGDBarrelMod_rmin" dr="0.0 * mm"/>
          <z_layout dr="0.0 * mm" z0="50.0*cm" nz="4"/>
-         <!--<z_layout dr="0.0 * mm" z0="50*cm" nz="1"/>-->
       </layer>
     </detector>
   </detectors>
@@ -108,8 +107,8 @@
 
   <readouts>
     <readout name="MPGDBarrelHits">
-      <segmentation type="CartesianGridXY" grid_size_x="0.150*mm*sqrt(12)" grid_size_y="0.150*mm*sqrt(12)" />
-      <id>system:8,layer:4,module:12,sensor:2,x:32:-14,y:-18</id>
+      <segmentation type="CartesianGridXYZ" grid_size_x="0.150*mm*sqrt(12)" grid_size_y="0.150*mm*sqrt(12)" grid_size_z="0.150*mm*sqrt(12)" />
+      <id>system:8,layer:4,module:12,sensor:2,x:32:-11,y:-10,z:-11</id>
     </readout>
   </readouts>
 

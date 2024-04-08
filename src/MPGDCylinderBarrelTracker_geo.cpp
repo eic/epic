@@ -243,8 +243,7 @@ static Ref_t create_MPGDCylinderBarrelTracker(Detector& description, xml_h e, Se
     // the local coordinate systems of modules in dd4hep and acts differ
     // see http://acts.web.cern.ch/ACTS/latest/doc/group__DD4hepPlugins.html
     auto &layerParams =
-        DD4hepDetectorHelper::ensureExtension<dd4hep::rec::VariantParameters>(
-            lay_elt);
+        DD4hepDetectorHelper::ensureExtension<dd4hep::rec::VariantParameters>(lay_elt);
 
     for (xml_coll_t lmat(x_layer, _Unicode(layer_material)); lmat; ++lmat) {
       xml_comp_t x_layer_material = lmat;
@@ -311,6 +310,12 @@ static Ref_t create_MPGDCylinderBarrelTracker(Detector& description, xml_h e, Se
       rc += rphi_dr;    // Increment the center radius according to dr parameter.
       rphi_dr *= -1;    // Flip sign of dr parameter.
     }
+
+    for (xml_coll_t lmat(x_layer, _Unicode(layer_material)); lmat; ++lmat) {
+      xml_comp_t x_layer_material = lmat;
+      DD4hepDetectorHelper::xmlToProtoSurfaceMaterial(x_layer_material, layerParams, "layer_material");
+    }
+   
     // Create the PhysicalVolume for the layer.
     pv = assembly.placeVolume(lay_vol, lay_pos); // Place layer in mother
     pv.addPhysVolID("layer", lay_id);            // Set the layer ID.
