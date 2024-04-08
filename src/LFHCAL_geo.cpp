@@ -782,9 +782,17 @@ static Ref_t createDetector(Detector& desc, xml_h handle, SensitiveDetector sens
   // general detector dimensions
   xml_dim_t dim    = detElem.dimensions();
   double    length = dim.z();    // Size along z-axis
-  xml_dim_t pos = detElem.position();
 
+  // general detector position
+  xml_dim_t pos = detElem.position();
   printout(DEBUG, "LFHCAL_geo", "global LFHCal position " + _toString(pos.x()) + "\t" + _toString(pos.y()) + "\t" + _toString(pos.z()));
+
+  // envelope volume
+  xml_comp_t x_env = detElem.child(_Unicode(envelope));
+  Tube rmaxtube(0, dim.rmax(), dim.z() / 2);
+  Box beampipe(dim.x() / 2, dim.y() / 2, dim.z() / 2);
+  Solid env = SubtractionSolid(rmaxtube, beampipe, Position(dim.x0(),0,0));
+  Volume env_vol(detName + "_env", env, desc.material(x_env.materialStr()));
 
   bool renderComponents = getAttrOrDefault(detElem, _Unicode(renderComponents), 0.);
   bool allSensitive     = getAttrOrDefault(detElem, _Unicode(allSensitive), 0.);
@@ -901,7 +909,7 @@ static Ref_t createDetector(Detector& desc, xml_h handle, SensitiveDetector sens
     moduleIDy             = ((pos8M[e].y + 265) / 10);
 
     // Placing modules in world volume
-    auto tr8M = Transform3D(Position(pos.x()-pos8M[e].x-0.5*eightM_params.mod_width, pos.y() - pos8M[e].y, pos.z() + pos8M[e].z + length / 2.));
+    auto tr8M = Transform3D(Position(-pos8M[e].x-0.5*eightM_params.mod_width, -pos8M[e].y, pos8M[e].z));
     phv = assembly.placeVolume(eightMassembly, tr8M);
     phv.addPhysVolID("moduleIDx", moduleIDx).addPhysVolID("moduleIDy", moduleIDy).addPhysVolID("moduletype", 0);
   }
@@ -929,16 +937,16 @@ static Ref_t createDetector(Detector& desc, xml_h handle, SensitiveDetector sens
       printout(DEBUG, "LFHCAL_geo", "LFHCAL WRONG ID FOR 4M module: " + _toString(f) + "/" + _toString((int)pos4M.size()) + "\t" + _toString(moduleIDx) + "\t"
                 + _toString(moduleIDy));
     }
-    auto tr4M = Transform3D(Position(pos.x()-pos4M[f].x-0.5*fourM_params.mod_width, pos.y()-pos4M[f].y, pos.z() + pos4M[f].z + length / 2.));
+    auto tr4M = Transform3D(Position(-pos4M[f].x-0.5*fourM_params.mod_width, -pos4M[f].y, pos4M[f].z));
     phv = assembly.placeVolume(fourMassembly, tr4M);
     phv.addPhysVolID("moduleIDx", moduleIDx).addPhysVolID("moduleIDy", moduleIDy).addPhysVolID("moduletype", 1);
   }
 
-  Volume     motherVol = desc.pickMotherVolume(det);
-  Transform3D  tr        = Translation3D(0., 0., 0.) * RotationZYX(0.,0.,0.);
-  PlacedVolume envPV     = motherVol.placeVolume(assembly, tr);
-  envPV.addPhysVolID("system", detID);
-  det.setPlacement(envPV);
+  Volume motherVol = desc.pickMotherVolume(det);
+  phv = env_vol.placeVolume(assembly);
+  phv = motherVol.placeVolume(env_vol, Transform3D(Position(pos.x(), pos.y(), pos.z() + length / 2.)));
+  phv.addPhysVolID("system", detID);
+  det.setPlacement(phv);
 
   return det;
 }
