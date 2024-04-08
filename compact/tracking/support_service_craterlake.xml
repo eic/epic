@@ -256,44 +256,70 @@
     <constant name="TrackerSupportDiskEndcapP_rmax"        value="920.6*mm" /> <comment> Ref: Services Material Budget 24.03.13.stp </comment>
     <constant name="TrackerSupportDiskEndcapP_z"           value="0.5*(TrackerSupportDiskEndcapP_zmin + TrackerSupportDiskEndcapP_zmax)" />
 
-    <constant name="TrackerSupportConeEndcapPCF_thickness" value="2.0*mm" />
-    <constant name="TrackerSupportConeEndcapPAl_thickness" value="0.5 * (30.6*mm + 86.7*mm)" /> <comment> Average of inner and outer thickness </comment>
-    <constant name="TrackerSupportConeEndcapP_thickness"   value="TrackerSupportConeEndcapPCF_thickness+TrackerSupportConeEndcapPAl_thickness" />
-    <constant name="TrackerSupportConeEndcapP_zmin"        value="TrackerSupportDiskEndcapP_zmax" />
-    <constant name="TrackerSupportConeEndcapP_zmax"        value="216.8*cm" />
-    <constant name="TrackerSupportConeEndcapP_rmin1"       value="TrackerSupportDiskEndcapP_rmax" />
-    <constant name="TrackerSupportConeEndcapP_rmin2"       value="112.8*cm" /> <comment> Ref: Services Material Budget 24.03.13.stp </comment>
-    <constant name="TrackerSupportConeEndcapP_z"           value="0.5*(TrackerSupportConeEndcapP_zmax + TrackerSupportConeEndcapP_zmin)" />
-    <constant name="TrackerSupportConeEndcapP_length"      value="TrackerSupportConeEndcapP_zmax - TrackerSupportConeEndcapP_zmin" />
+    <comment> 4. Segments between DRICH readout boxes. </comment>
 
-    <constant name="TrackerSupportDRICHConeSegACF_thickness" value="2.0*mm" />
-    <constant name="TrackerSupportDRICHConeSegAAl_thickness" value="104.7*mm" /> <comment> Ref: Services Material Budget 24.03.13.stp </comment>
-    <constant name="TrackerSupportDRICHConeSegA_thickness"   value="TrackerSupportDRICHConeSegACF_thickness+TrackerSupportDRICHConeSegAAl_thickness" />
-    <constant name="TrackerSupportDRICHConeSegA_deltaphi"    value="18*deg" />
-    <constant name="TrackerSupportDRICHConeSegA_zmin"        value="2070.3*mm" />
-    <constant name="TrackerSupportDRICHConeSegA_zmax"        value="2310.2*mm" />
-    <constant name="TrackerSupportDRICHConeSegA_rmin"        value="TrackerSupportConeEndcapP_rmin2" />
-    <constant name="TrackerSupportDRICHConeSegA_rmin1"       value="623.8*mm" />
-    <constant name="TrackerSupportDRICHConeSegA_rmin2"       value="1800.0*mm" /> <comment> Ref: Services Material Budget 24.03.13.stp </comment>
-    <constant name="TrackerSupportDRICHConeSegA_z"           value="0.5*(TrackerSupportDRICHConeSegA_zmax + TrackerSupportDRICHConeSegA_zmin)" />
-    <constant name="TrackerSupportDRICHConeSegA_length"      value="TrackerSupportDRICHConeSegA_zmax - TrackerSupportDRICHConeSegA_zmin" />
+    <comment> FIXME (wdconinc)
+      For now we fudge the segment phi extent because the DRICH is too wide.
+    </comment>
+    <constant name="TrackerSupportDRICHSegment_fudge"        value="(12*deg) / (18*deg)" />
 
-    <constant name="TrackerSupportDRICHCylSegAl_thickness"  value="68.6*mm" /> <comment> Ref: Services Material Budget 24.03.13.stp </comment>
-    <constant name="TrackerSupportDRICHCylSeg_thickness"    value="TrackerSupportDRICHCylSegAl_thickness" />
-    <constant name="TrackerSupportDRICHCylSeg_deltaphi"     value="18*deg" />
-    <constant name="TrackerSupportDRICHCylSeg_zmin"         value="2310.2*mm" />
-    <constant name="TrackerSupportDRICHCylSeg_zmax"         value="2972.6*mm" />
-    <constant name="TrackerSupportDRICHCylSeg_rmin"         value="1800.0*mm" />
-    <constant name="TrackerSupportDRICHCylSeg_z"            value="0.5*(TrackerSupportDRICHCylSeg_zmax + TrackerSupportDRICHCylSeg_zmin)" />
-    <constant name="TrackerSupportDRICHCylSeg_length"       value="TrackerSupportDRICHCylSeg_zmax - TrackerSupportDRICHCylSeg_zmin" />
+    <comment> Blind cone segments that do not continue into DRICH readout boxes </comment>
+    <constant name="TrackerSupportDRICHBlindConeSegmentCF_thickness" value="2.0*mm" />
+    <constant name="TrackerSupportDRICHBlindConeSegmentAl_thickness" value="0.5 * (30.6*mm + 86.7*mm)" /> <comment> Average of inner and outer thickness </comment>
+    <constant name="TrackerSupportDRICHBlindConeSegment_thickness"   value="TrackerSupportDRICHBlindConeSegmentCF_thickness + TrackerSupportDRICHBlindConeSegmentAl_thickness" />
+    <constant name="TrackerSupportDRICHBlindConeSegment_deltaphi"    value="60*deg - 18*deg * TrackerSupportDRICHSegment_fudge" />
+    <constant name="TrackerSupportDRICHBlindConeSegment_zmin"        value="TrackerSupportDiskEndcapP_zmax" />
+    <constant name="TrackerSupportDRICHBlindConeSegment_zmax"        value="214.0*cm" />
+    <constant name="TrackerSupportDRICHBlindConeSegment_rmin"        value="TrackerSupportDiskEndcapP_rmax" />
+    <constant name="TrackerSupportDRICHBlindConeSegment_rmin1"       value="TrackerSupportDiskEndcapP_rmax" />
+    <constant name="TrackerSupportDRICHBlindConeSegment_rmin2"       value="108.0*cm" /> <comment> Modified from 110*cm to DRICH_sensorbox_rmin = 108*cm </comment>
+    <constant name="TrackerSupportDRICHBlindConeSegment_rmax"        value="TrackerSupportDRICHBlindConeSegment_rmin2" />
+    <constant name="TrackerSupportDRICHBlindConeSegment_z"           value="0.5*(TrackerSupportDRICHBlindConeSegment_zmax + TrackerSupportDRICHBlindConeSegment_zmin)" />
+    <constant name="TrackerSupportDRICHBlindConeSegment_length"      value="TrackerSupportDRICHBlindConeSegment_zmax - TrackerSupportDRICHBlindConeSegment_zmin" />
+
+    <comment> Cone segments "A" that continue between the DRICH readout boxes </comment>
+    <constant name="TrackerSupportDRICHConeSegmentACF_thickness" value="TrackerSupportDRICHBlindConeSegmentCF_thickness" />
+    <constant name="TrackerSupportDRICHConeSegmentAAl_thickness" value="TrackerSupportDRICHBlindConeSegmentAl_thickness" />
+    <constant name="TrackerSupportDRICHConeSegmentA_thickness"   value="TrackerSupportDRICHConeSegmentACF_thickness+TrackerSupportDRICHConeSegmentAAl_thickness" />
+    <constant name="TrackerSupportDRICHConeSegmentA_deltaphi"    value="18*deg * TrackerSupportDRICHSegment_fudge" />
+    <constant name="TrackerSupportDRICHConeSegmentA_zmin"        value="TrackerSupportDiskEndcapP_zmax" />
+    <constant name="TrackerSupportDRICHConeSegmentA_zmax"        value="216.8*cm" />
+    <constant name="TrackerSupportDRICHConeSegmentA_rmin1"       value="TrackerSupportDiskEndcapP_rmax" />
+    <constant name="TrackerSupportDRICHConeSegmentA_rmin2"       value="113.2*cm" />
+    <constant name="TrackerSupportDRICHConeSegmentA_rmax"        value="TrackerSupportDRICHConeSegmentA_rmin2" />
+    <constant name="TrackerSupportDRICHConeSegmentA_z"           value="0.5*(TrackerSupportDRICHConeSegmentA_zmax + TrackerSupportDRICHConeSegmentA_zmin)" />
+    <constant name="TrackerSupportDRICHConeSegmentA_length"      value="TrackerSupportDRICHConeSegmentA_zmax - TrackerSupportDRICHConeSegmentA_zmin" />
+
+    <comment> Cone segments "B" that go between the DRICH readout boxes </comment>
+    <constant name="TrackerSupportDRICHConeSegmentBCF_thickness" value="2.0*mm" />
+    <constant name="TrackerSupportDRICHConeSegmentBAl_thickness" value="104.7*mm" /> <comment> Ref: Services Material Budget 24.03.13.stp </comment>
+    <constant name="TrackerSupportDRICHConeSegmentB_thickness"   value="TrackerSupportDRICHConeSegmentBCF_thickness + TrackerSupportDRICHConeSegmentBAl_thickness" />
+    <constant name="TrackerSupportDRICHConeSegmentB_deltaphi"    value="18*deg * TrackerSupportDRICHSegment_fudge" />
+    <constant name="TrackerSupportDRICHConeSegmentB_zmin"        value="2070.3*mm" />
+    <constant name="TrackerSupportDRICHConeSegmentB_zmax"        value="2310.2*mm" />
+    <constant name="TrackerSupportDRICHConeSegmentB_rmin"        value="TrackerSupportDRICHConeSegmentA_rmax" />
+    <constant name="TrackerSupportDRICHConeSegmentB_rmin1"       value="634.1*mm" />
+    <constant name="TrackerSupportDRICHConeSegmentB_rmin2"       value="1800.0*mm" /> <comment> Ref: Services Material Budget 24.03.13.stp </comment>
+    <constant name="TrackerSupportDRICHConeSegmentB_rmax"        value="1868.6*mm" />
+    <constant name="TrackerSupportDRICHConeSegmentB_z"           value="0.5*(TrackerSupportDRICHConeSegmentB_zmax + TrackerSupportDRICHConeSegmentB_zmin)" />
+    <constant name="TrackerSupportDRICHConeSegmentB_length"      value="TrackerSupportDRICHConeSegmentB_zmax   - TrackerSupportDRICHConeSegmentB_zmin" />
+
+    <constant name="TrackerSupportDRICHCylSegmentAl_thickness"   value="68.6*mm" /> <comment> Ref: Services Material Budget 24.03.13.stp </comment>
+    <constant name="TrackerSupportDRICHCylSegment_thickness"     value="TrackerSupportDRICHCylSegmentAl_thickness" />
+    <constant name="TrackerSupportDRICHCylSegment_deltaphi"      value="18*deg * TrackerSupportDRICHSegment_fudge" />
+    <constant name="TrackerSupportDRICHCylSegment_zmin"          value="2310.2*mm" />
+    <constant name="TrackerSupportDRICHCylSegment_zmax"          value="2972.6*mm" />
+    <constant name="TrackerSupportDRICHCylSegment_rmin"          value="1800.0*mm" />
+    <constant name="TrackerSupportDRICHCylSegment_z"             value="0.5*(TrackerSupportDRICHCylSegment_zmax + TrackerSupportDRICHCylSegment_zmin)" />
+    <constant name="TrackerSupportDRICHCylSegment_length"        value="TrackerSupportDRICHCylSegment_zmax - TrackerSupportDRICHCylSegment_zmin" />
 
     <comment> Inner detector support cylinder </comment>
-    <constant name="InnerDetectorBarrelSupportCylCF_thickness"    value="1.0*cm" />
-    <constant name="InnerDetectorBarrelSupportCylCF_zmin1"        value="DIRCBackward_zmax" />
-    <constant name="InnerDetectorBarrelSupportCylCF_zmin2"        value="DIRCForward_zmax" />
-    <constant name="InnerDetectorBarrelSupportCylCF_length"       value="InnerDetectorBarrelSupportCylCF_zmin1 + InnerDetectorBarrelSupportCylCF_zmin2" />
-    <constant name="InnerDetectorBarrelSupportCylCF_offset"       value="(InnerDetectorBarrelSupportCylCF_zmin2 - InnerDetectorBarrelSupportCylCF_zmin1)/2.0"/>
-    <constant name="InnerDetectorBarrelSupportCylCF_rmin"         value="MPGDOuterBarrelModule_rmin - InnerDetectorBarrelSupportCylCF_thickness - 2*mm" />
+    <constant name="InnerDetectorBarrelSupportCylCF_thickness"   value="1.0*cm" />
+    <constant name="InnerDetectorBarrelSupportCylCF_zmin1"       value="DIRCBackward_zmax" />
+    <constant name="InnerDetectorBarrelSupportCylCF_zmin2"       value="DIRCForward_zmax" />
+    <constant name="InnerDetectorBarrelSupportCylCF_length"      value="InnerDetectorBarrelSupportCylCF_zmin1 + InnerDetectorBarrelSupportCylCF_zmin2" />
+    <constant name="InnerDetectorBarrelSupportCylCF_offset"      value="(InnerDetectorBarrelSupportCylCF_zmin2 - InnerDetectorBarrelSupportCylCF_zmin1)/2.0"/>
+    <constant name="InnerDetectorBarrelSupportCylCF_rmin"        value="MPGDOuterBarrelModule_rmin - InnerDetectorBarrelSupportCylCF_thickness - 2*mm" />
 
   </define>
 
@@ -527,171 +553,321 @@
           <component material="Aluminum" thickness="TrackerSupportDiskEndcapPAl_thickness" name="Services" vis="TrackerServiceVis" />
           <component material="CarbonFiber" thickness="TrackerSupportDiskEndcapCF_thickness" name="Support" vis="TrackerSupportVis"/>
       </support>
-      <support type="Cone"
-        name="TrackerSupportConeEndcapP"
-        vis="TrackerSupportVis"
-        rmin="TrackerSupportDiskEndcapP_rmax"
-        rmax="TrackerSupportDRICHConeSegA_rmin"
-        rmin1="TrackerSupportConeEndcapP_rmin1"
-        rmin2="TrackerSupportConeEndcapP_rmin2"
-        length="TrackerSupportConeEndcapP_length"
-        thickness="TrackerSupportConeEndcapP_thickness">
-          <position x="0*cm" y="0*cm" z="TrackerSupportConeEndcapP_z" />
-          <component material="Aluminum" thickness="TrackerSupportConeEndcapPAl_thickness" name="Services" vis="TrackerServiceVis" />
-      </support>
 
       <comment> Service routings in front of DRICH </comment>
       <support type="Cone"
-        name="TrackerSupportDRICHConeSegA_1"
+        name="TrackerSupportDRICHConeSegmentA_1"
         vis="TrackerSupportVis"
-        rmin="TrackerSupportDRICHConeSegA_rmin"
-        rmax="TrackerSupportDRICHCylSeg_rmin+TrackerSupportDRICHCylSeg_thickness"
-        rmin1="TrackerSupportDRICHConeSegA_rmin1"
-        rmin2="TrackerSupportDRICHConeSegA_rmin2"
-        length="TrackerSupportDRICHConeSegA_length"
-        thickness="TrackerSupportDRICHConeSegA_thickness"
-        phimin="0*deg-0.5*TrackerSupportDRICHConeSegA_deltaphi"
-        phimax="0*deg+0.5*TrackerSupportDRICHConeSegA_deltaphi">
-          <position x="0*cm" y="0*cm" z="TrackerSupportDRICHConeSegA_z" />
-          <component material="Aluminum" thickness="TrackerSupportDRICHConeSegAAl_thickness" name="Services" vis="TrackerServiceVis" />
+        rmax="TrackerSupportDRICHConeSegmentA_rmax"
+        rmin1="TrackerSupportDRICHConeSegmentA_rmin1"
+        rmin2="TrackerSupportDRICHConeSegmentA_rmin2"
+        length="TrackerSupportDRICHConeSegmentA_length"
+        thickness="TrackerSupportDRICHConeSegmentA_thickness"
+        phimin="0*deg-0.5*TrackerSupportDRICHConeSegmentA_deltaphi"
+        phimax="0*deg+0.5*TrackerSupportDRICHConeSegmentA_deltaphi">
+          <position x="0*cm" y="0*cm" z="TrackerSupportDRICHConeSegmentA_z" />
+          <component material="Aluminum" thickness="TrackerSupportDRICHConeSegmentAAl_thickness" name="Services" vis="TrackerServiceVis" />
       </support>
       <support type="Cone"
-        name="TrackerSupportDRICHConeSegA_2"
+        name="TrackerSupportDRICHConeSegmentB_1"
         vis="TrackerSupportVis"
-        rmin="TrackerSupportDRICHConeSegA_rmin"
-        rmax="TrackerSupportDRICHCylSeg_rmin+TrackerSupportDRICHCylSeg_thickness"
-        rmin1="TrackerSupportDRICHConeSegA_rmin1"
-        rmin2="TrackerSupportDRICHConeSegA_rmin2"
-        length="TrackerSupportDRICHConeSegA_length"
-        thickness="TrackerSupportDRICHConeSegA_thickness"
-        phimin="60*deg-0.5*TrackerSupportDRICHConeSegA_deltaphi"
-        phimax="60*deg+0.5*TrackerSupportDRICHConeSegA_deltaphi">
-          <position x="0*cm" y="0*cm" z="TrackerSupportDRICHConeSegA_z" />
-          <component material="Aluminum" thickness="TrackerSupportDRICHConeSegAAl_thickness" name="Services" vis="TrackerServiceVis" />
+        rmin="TrackerSupportDRICHConeSegmentB_rmin"
+        rmax="TrackerSupportDRICHConeSegmentB_rmax"
+        rmin1="TrackerSupportDRICHConeSegmentB_rmin1"
+        rmin2="TrackerSupportDRICHConeSegmentB_rmin2"
+        length="TrackerSupportDRICHConeSegmentB_length"
+        thickness="TrackerSupportDRICHConeSegmentB_thickness"
+        phimin="0*deg-0.5*TrackerSupportDRICHConeSegmentB_deltaphi"
+        phimax="0*deg+0.5*TrackerSupportDRICHConeSegmentB_deltaphi">
+          <position x="0*cm" y="0*cm" z="TrackerSupportDRICHConeSegmentB_z" />
+          <component material="Aluminum" thickness="TrackerSupportDRICHConeSegmentBAl_thickness" name="Services" vis="TrackerServiceVis" />
       </support>
       <support type="Cone"
-        name="TrackerSupportDRICHConeSegA_3"
+        name="TrackerSupportDRICHBlindConeSegment_1"
         vis="TrackerSupportVis"
-        rmin="TrackerSupportDRICHConeSegA_rmin"
-        rmax="TrackerSupportDRICHCylSeg_rmin+TrackerSupportDRICHCylSeg_thickness"
-        rmin1="TrackerSupportDRICHConeSegA_rmin1"
-        rmin2="TrackerSupportDRICHConeSegA_rmin2"
-        length="TrackerSupportDRICHConeSegA_length"
-        thickness="TrackerSupportDRICHConeSegA_thickness"
-        phimin="120*deg-0.5*TrackerSupportDRICHConeSegA_deltaphi"
-        phimax="120*deg+0.5*TrackerSupportDRICHConeSegA_deltaphi">
-          <position x="0*cm" y="0*cm" z="TrackerSupportDRICHConeSegA_z" />
-          <component material="Aluminum" thickness="TrackerSupportDRICHConeSegAAl_thickness" name="Services" vis="TrackerServiceVis" />
+        rmin="TrackerSupportDRICHBlindConeSegment_rmin"
+        rmax="TrackerSupportDRICHBlindConeSegment_rmax"
+        rmin1="TrackerSupportDRICHBlindConeSegment_rmin1"
+        rmin2="TrackerSupportDRICHBlindConeSegment_rmin2"
+        length="TrackerSupportDRICHBlindConeSegment_length"
+        thickness="TrackerSupportDRICHBlindConeSegment_thickness"
+        phimin="30*deg-0.5*TrackerSupportDRICHBlindConeSegment_deltaphi"
+        phimax="30*deg+0.5*TrackerSupportDRICHBlindConeSegment_deltaphi">
+          <position x="0*cm" y="0*cm" z="TrackerSupportDRICHBlindConeSegment_z" />
+          <component material="Aluminum" thickness="TrackerSupportDRICHBlindConeSegmentAl_thickness" name="Services" vis="TrackerServiceVis" />
       </support>
       <support type="Cone"
-        name="TrackerSupportDRICHConeSegA_4"
+        name="TrackerSupportDRICHConeSegmentA_1"
         vis="TrackerSupportVis"
-        rmin="TrackerSupportDRICHConeSegA_rmin"
-        rmax="TrackerSupportDRICHCylSeg_rmin+TrackerSupportDRICHCylSeg_thickness"
-        rmin1="TrackerSupportDRICHConeSegA_rmin1"
-        rmin2="TrackerSupportDRICHConeSegA_rmin2"
-        length="TrackerSupportDRICHConeSegA_length"
-        thickness="TrackerSupportDRICHConeSegA_thickness"
-        phimin="180*deg-0.5*TrackerSupportDRICHConeSegA_deltaphi"
-        phimax="180*deg+0.5*TrackerSupportDRICHConeSegA_deltaphi">
-          <position x="0*cm" y="0*cm" z="TrackerSupportDRICHConeSegA_z" />
-          <component material="Aluminum" thickness="TrackerSupportDRICHConeSegAAl_thickness" name="Services" vis="TrackerServiceVis" />
+        rmax="TrackerSupportDRICHConeSegmentA_rmax"
+        rmin1="TrackerSupportDRICHConeSegmentA_rmin1"
+        rmin2="TrackerSupportDRICHConeSegmentA_rmin2"
+        length="TrackerSupportDRICHConeSegmentA_length"
+        thickness="TrackerSupportDRICHConeSegmentA_thickness"
+        phimin="60*deg-0.5*TrackerSupportDRICHConeSegmentA_deltaphi"
+        phimax="60*deg+0.5*TrackerSupportDRICHConeSegmentA_deltaphi">
+          <position x="0*cm" y="0*cm" z="TrackerSupportDRICHConeSegmentA_z" />
+          <component material="Aluminum" thickness="TrackerSupportDRICHConeSegmentAAl_thickness" name="Services" vis="TrackerServiceVis" />
       </support>
       <support type="Cone"
-        name="TrackerSupportDRICHConeSegA_5"
+        name="TrackerSupportDRICHConeSegmentB_1"
         vis="TrackerSupportVis"
-        rmin="TrackerSupportDRICHConeSegA_rmin"
-        rmax="TrackerSupportDRICHCylSeg_rmin+TrackerSupportDRICHCylSeg_thickness"
-        rmin1="TrackerSupportDRICHConeSegA_rmin1"
-        rmin2="TrackerSupportDRICHConeSegA_rmin2"
-        length="TrackerSupportDRICHConeSegA_length"
-        thickness="TrackerSupportDRICHConeSegA_thickness"
-        phimin="240*deg-0.5*TrackerSupportDRICHConeSegA_deltaphi"
-        phimax="240*deg+0.5*TrackerSupportDRICHConeSegA_deltaphi">
-          <position x="0*cm" y="0*cm" z="TrackerSupportDRICHConeSegA_z" />
-          <component material="Aluminum" thickness="TrackerSupportDRICHConeSegAAl_thickness" name="Services" vis="TrackerServiceVis" />
+        rmin="TrackerSupportDRICHConeSegmentB_rmin"
+        rmax="TrackerSupportDRICHConeSegmentB_rmax"
+        rmin1="TrackerSupportDRICHConeSegmentB_rmin1"
+        rmin2="TrackerSupportDRICHConeSegmentB_rmin2"
+        length="TrackerSupportDRICHConeSegmentB_length"
+        thickness="TrackerSupportDRICHConeSegmentB_thickness"
+        phimin="60*deg-0.5*TrackerSupportDRICHConeSegmentB_deltaphi"
+        phimax="60*deg+0.5*TrackerSupportDRICHConeSegmentB_deltaphi">
+          <position x="0*cm" y="0*cm" z="TrackerSupportDRICHConeSegmentB_z" />
+          <component material="Aluminum" thickness="TrackerSupportDRICHConeSegmentBAl_thickness" name="Services" vis="TrackerServiceVis" />
       </support>
       <support type="Cone"
-        name="TrackerSupportDRICHConeSegA_6"
+        name="TrackerSupportDRICHBlindConeSegment_1"
         vis="TrackerSupportVis"
-        rmin="TrackerSupportDRICHConeSegA_rmin"
-        rmax="TrackerSupportDRICHCylSeg_rmin+TrackerSupportDRICHCylSeg_thickness"
-        rmin1="TrackerSupportDRICHConeSegA_rmin1"
-        rmin2="TrackerSupportDRICHConeSegA_rmin2"
-        length="TrackerSupportDRICHConeSegA_length"
-        thickness="TrackerSupportDRICHConeSegA_thickness"
-        phimin="300*deg-0.5*TrackerSupportDRICHConeSegA_deltaphi"
-        phimax="300*deg+0.5*TrackerSupportDRICHConeSegA_deltaphi">
-          <position x="0*cm" y="0*cm" z="TrackerSupportDRICHConeSegA_z" />
-          <component material="Aluminum" thickness="TrackerSupportDRICHConeSegAAl_thickness" name="Services" vis="TrackerServiceVis" />
+        rmin="TrackerSupportDRICHBlindConeSegment_rmin"
+        rmax="TrackerSupportDRICHBlindConeSegment_rmax"
+        rmin1="TrackerSupportDRICHBlindConeSegment_rmin1"
+        rmin2="TrackerSupportDRICHBlindConeSegment_rmin2"
+        length="TrackerSupportDRICHBlindConeSegment_length"
+        thickness="TrackerSupportDRICHBlindConeSegment_thickness"
+        phimin="90*deg-0.5*TrackerSupportDRICHBlindConeSegment_deltaphi"
+        phimax="90*deg+0.5*TrackerSupportDRICHBlindConeSegment_deltaphi">
+          <position x="0*cm" y="0*cm" z="TrackerSupportDRICHBlindConeSegment_z" />
+          <component material="Aluminum" thickness="TrackerSupportDRICHBlindConeSegmentAl_thickness" name="Services" vis="TrackerServiceVis" />
+      </support>
+      <support type="Cone"
+        name="TrackerSupportDRICHConeSegmentA_1"
+        vis="TrackerSupportVis"
+        rmax="TrackerSupportDRICHConeSegmentA_rmax"
+        rmin1="TrackerSupportDRICHConeSegmentA_rmin1"
+        rmin2="TrackerSupportDRICHConeSegmentA_rmin2"
+        length="TrackerSupportDRICHConeSegmentA_length"
+        thickness="TrackerSupportDRICHConeSegmentA_thickness"
+        phimin="120*deg-0.5*TrackerSupportDRICHConeSegmentA_deltaphi"
+        phimax="120*deg+0.5*TrackerSupportDRICHConeSegmentA_deltaphi">
+          <position x="0*cm" y="0*cm" z="TrackerSupportDRICHConeSegmentA_z" />
+          <component material="Aluminum" thickness="TrackerSupportDRICHConeSegmentAAl_thickness" name="Services" vis="TrackerServiceVis" />
+      </support>
+      <support type="Cone"
+        name="TrackerSupportDRICHConeSegmentB_1"
+        vis="TrackerSupportVis"
+        rmin="TrackerSupportDRICHConeSegmentB_rmin"
+        rmax="TrackerSupportDRICHConeSegmentB_rmax"
+        rmin1="TrackerSupportDRICHConeSegmentB_rmin1"
+        rmin2="TrackerSupportDRICHConeSegmentB_rmin2"
+        length="TrackerSupportDRICHConeSegmentB_length"
+        thickness="TrackerSupportDRICHConeSegmentB_thickness"
+        phimin="120*deg-0.5*TrackerSupportDRICHConeSegmentB_deltaphi"
+        phimax="120*deg+0.5*TrackerSupportDRICHConeSegmentB_deltaphi">
+          <position x="0*cm" y="0*cm" z="TrackerSupportDRICHConeSegmentB_z" />
+          <component material="Aluminum" thickness="TrackerSupportDRICHConeSegmentBAl_thickness" name="Services" vis="TrackerServiceVis" />
+      </support>
+      <support type="Cone"
+        name="TrackerSupportDRICHBlindConeSegment_1"
+        vis="TrackerSupportVis"
+        rmin="TrackerSupportDRICHBlindConeSegment_rmin"
+        rmax="TrackerSupportDRICHBlindConeSegment_rmax"
+        rmin1="TrackerSupportDRICHBlindConeSegment_rmin1"
+        rmin2="TrackerSupportDRICHBlindConeSegment_rmin2"
+        length="TrackerSupportDRICHBlindConeSegment_length"
+        thickness="TrackerSupportDRICHBlindConeSegment_thickness"
+        phimin="150*deg-0.5*TrackerSupportDRICHBlindConeSegment_deltaphi"
+        phimax="150*deg+0.5*TrackerSupportDRICHBlindConeSegment_deltaphi">
+          <position x="0*cm" y="0*cm" z="TrackerSupportDRICHBlindConeSegment_z" />
+          <component material="Aluminum" thickness="TrackerSupportDRICHBlindConeSegmentAl_thickness" name="Services" vis="TrackerServiceVis" />
+      </support>
+      <support type="Cone"
+        name="TrackerSupportDRICHConeSegmentA_1"
+        vis="TrackerSupportVis"
+        rmax="TrackerSupportDRICHConeSegmentA_rmax"
+        rmin1="TrackerSupportDRICHConeSegmentA_rmin1"
+        rmin2="TrackerSupportDRICHConeSegmentA_rmin2"
+        length="TrackerSupportDRICHConeSegmentA_length"
+        thickness="TrackerSupportDRICHConeSegmentA_thickness"
+        phimin="180*deg-0.5*TrackerSupportDRICHConeSegmentA_deltaphi"
+        phimax="180*deg+0.5*TrackerSupportDRICHConeSegmentA_deltaphi">
+          <position x="0*cm" y="0*cm" z="TrackerSupportDRICHConeSegmentA_z" />
+          <component material="Aluminum" thickness="TrackerSupportDRICHConeSegmentAAl_thickness" name="Services" vis="TrackerServiceVis" />
+      </support>
+      <support type="Cone"
+        name="TrackerSupportDRICHConeSegmentB_1"
+        vis="TrackerSupportVis"
+        rmin="TrackerSupportDRICHConeSegmentB_rmin"
+        rmax="TrackerSupportDRICHConeSegmentB_rmax"
+        rmin1="TrackerSupportDRICHConeSegmentB_rmin1"
+        rmin2="TrackerSupportDRICHConeSegmentB_rmin2"
+        length="TrackerSupportDRICHConeSegmentB_length"
+        thickness="TrackerSupportDRICHConeSegmentB_thickness"
+        phimin="180*deg-0.5*TrackerSupportDRICHConeSegmentB_deltaphi"
+        phimax="180*deg+0.5*TrackerSupportDRICHConeSegmentB_deltaphi">
+          <position x="0*cm" y="0*cm" z="TrackerSupportDRICHConeSegmentB_z" />
+          <component material="Aluminum" thickness="TrackerSupportDRICHConeSegmentBAl_thickness" name="Services" vis="TrackerServiceVis" />
+      </support>
+      <support type="Cone"
+        name="TrackerSupportDRICHBlindConeSegment_1"
+        vis="TrackerSupportVis"
+        rmin="TrackerSupportDRICHBlindConeSegment_rmin"
+        rmax="TrackerSupportDRICHBlindConeSegment_rmax"
+        rmin1="TrackerSupportDRICHBlindConeSegment_rmin1"
+        rmin2="TrackerSupportDRICHBlindConeSegment_rmin2"
+        length="TrackerSupportDRICHBlindConeSegment_length"
+        thickness="TrackerSupportDRICHBlindConeSegment_thickness"
+        phimin="210*deg-0.5*TrackerSupportDRICHBlindConeSegment_deltaphi"
+        phimax="210*deg+0.5*TrackerSupportDRICHBlindConeSegment_deltaphi">
+          <position x="0*cm" y="0*cm" z="TrackerSupportDRICHBlindConeSegment_z" />
+          <component material="Aluminum" thickness="TrackerSupportDRICHBlindConeSegmentAl_thickness" name="Services" vis="TrackerServiceVis" />
+      </support>
+      <support type="Cone"
+        name="TrackerSupportDRICHConeSegmentA_1"
+        vis="TrackerSupportVis"
+        rmax="TrackerSupportDRICHConeSegmentA_rmax"
+        rmin1="TrackerSupportDRICHConeSegmentA_rmin1"
+        rmin2="TrackerSupportDRICHConeSegmentA_rmin2"
+        length="TrackerSupportDRICHConeSegmentA_length"
+        thickness="TrackerSupportDRICHConeSegmentA_thickness"
+        phimin="240*deg-0.5*TrackerSupportDRICHConeSegmentA_deltaphi"
+        phimax="240*deg+0.5*TrackerSupportDRICHConeSegmentA_deltaphi">
+          <position x="0*cm" y="0*cm" z="TrackerSupportDRICHConeSegmentA_z" />
+          <component material="Aluminum" thickness="TrackerSupportDRICHConeSegmentAAl_thickness" name="Services" vis="TrackerServiceVis" />
+      </support>
+      <support type="Cone"
+        name="TrackerSupportDRICHConeSegmentB_1"
+        vis="TrackerSupportVis"
+        rmin="TrackerSupportDRICHConeSegmentB_rmin"
+        rmax="TrackerSupportDRICHConeSegmentB_rmax"
+        rmin1="TrackerSupportDRICHConeSegmentB_rmin1"
+        rmin2="TrackerSupportDRICHConeSegmentB_rmin2"
+        length="TrackerSupportDRICHConeSegmentB_length"
+        thickness="TrackerSupportDRICHConeSegmentB_thickness"
+        phimin="240*deg-0.5*TrackerSupportDRICHConeSegmentB_deltaphi"
+        phimax="240*deg+0.5*TrackerSupportDRICHConeSegmentB_deltaphi">
+          <position x="0*cm" y="0*cm" z="TrackerSupportDRICHConeSegmentB_z" />
+          <component material="Aluminum" thickness="TrackerSupportDRICHConeSegmentBAl_thickness" name="Services" vis="TrackerServiceVis" />
+      </support>
+      <support type="Cone"
+        name="TrackerSupportDRICHBlindConeSegment_1"
+        vis="TrackerSupportVis"
+        rmin="TrackerSupportDRICHBlindConeSegment_rmin"
+        rmax="TrackerSupportDRICHBlindConeSegment_rmax"
+        rmin1="TrackerSupportDRICHBlindConeSegment_rmin1"
+        rmin2="TrackerSupportDRICHBlindConeSegment_rmin2"
+        length="TrackerSupportDRICHBlindConeSegment_length"
+        thickness="TrackerSupportDRICHBlindConeSegment_thickness"
+        phimin="270*deg-0.5*TrackerSupportDRICHBlindConeSegment_deltaphi"
+        phimax="270*deg+0.5*TrackerSupportDRICHBlindConeSegment_deltaphi">
+          <position x="0*cm" y="0*cm" z="TrackerSupportDRICHBlindConeSegment_z" />
+          <component material="Aluminum" thickness="TrackerSupportDRICHBlindConeSegmentAl_thickness" name="Services" vis="TrackerServiceVis" />
+      </support>
+      <support type="Cone"
+        name="TrackerSupportDRICHConeSegmentA_1"
+        vis="TrackerSupportVis"
+        rmax="TrackerSupportDRICHConeSegmentA_rmax"
+        rmin1="TrackerSupportDRICHConeSegmentA_rmin1"
+        rmin2="TrackerSupportDRICHConeSegmentA_rmin2"
+        length="TrackerSupportDRICHConeSegmentA_length"
+        thickness="TrackerSupportDRICHConeSegmentA_thickness"
+        phimin="300*deg-0.5*TrackerSupportDRICHConeSegmentA_deltaphi"
+        phimax="300*deg+0.5*TrackerSupportDRICHConeSegmentA_deltaphi">
+          <position x="0*cm" y="0*cm" z="TrackerSupportDRICHConeSegmentA_z" />
+          <component material="Aluminum" thickness="TrackerSupportDRICHConeSegmentAAl_thickness" name="Services" vis="TrackerServiceVis" />
+      </support>
+      <support type="Cone"
+        name="TrackerSupportDRICHConeSegmentB_1"
+        vis="TrackerSupportVis"
+        rmin="TrackerSupportDRICHConeSegmentB_rmin"
+        rmax="TrackerSupportDRICHConeSegmentB_rmax"
+        rmin1="TrackerSupportDRICHConeSegmentB_rmin1"
+        rmin2="TrackerSupportDRICHConeSegmentB_rmin2"
+        length="TrackerSupportDRICHConeSegmentB_length"
+        thickness="TrackerSupportDRICHConeSegmentB_thickness"
+        phimin="300*deg-0.5*TrackerSupportDRICHConeSegmentB_deltaphi"
+        phimax="300*deg+0.5*TrackerSupportDRICHConeSegmentB_deltaphi">
+          <position x="0*cm" y="0*cm" z="TrackerSupportDRICHConeSegmentB_z" />
+          <component material="Aluminum" thickness="TrackerSupportDRICHConeSegmentBAl_thickness" name="Services" vis="TrackerServiceVis" />
+      </support>
+      <support type="Cone"
+        name="TrackerSupportDRICHBlindConeSegment_1"
+        vis="TrackerSupportVis"
+        rmin="TrackerSupportDRICHBlindConeSegment_rmin"
+        rmax="TrackerSupportDRICHBlindConeSegment_rmax"
+        rmin1="TrackerSupportDRICHBlindConeSegment_rmin1"
+        rmin2="TrackerSupportDRICHBlindConeSegment_rmin2"
+        length="TrackerSupportDRICHBlindConeSegment_length"
+        thickness="TrackerSupportDRICHBlindConeSegment_thickness"
+        phimin="330*deg-0.5*TrackerSupportDRICHBlindConeSegment_deltaphi"
+        phimax="330*deg+0.5*TrackerSupportDRICHBlindConeSegment_deltaphi">
+          <position x="0*cm" y="0*cm" z="TrackerSupportDRICHBlindConeSegment_z" />
+          <component material="Aluminum" thickness="TrackerSupportDRICHBlindConeSegmentAl_thickness" name="Services" vis="TrackerServiceVis" />
       </support>
 
       <comment> Service routings outside DRICH </comment>
       <support type="Cylinder"
-        name="TrackerSupportDRICHCylSeg_1"
+        name="TrackerSupportDRICHCylSegment_1"
         vis="TrackerSupportVis"
-        rmin="TrackerSupportDRICHCylSeg_rmin"
-        length="TrackerSupportDRICHCylSeg_length"
-        thickness="TrackerSupportDRICHCylSeg_thickness"
-        phimin="0*deg-0.5*TrackerSupportDRICHCylSeg_deltaphi"
-        phimax="0*deg+0.5*TrackerSupportDRICHCylSeg_deltaphi">
-          <position x="0*cm" y="0*cm" z="TrackerSupportDRICHCylSeg_z" />
-          <component material="Aluminum" thickness="TrackerSupportDRICHCylSegAl_thickness" name="Services" vis="TrackerSupportVis"/>
+        rmin="TrackerSupportDRICHCylSegment_rmin"
+        length="TrackerSupportDRICHCylSegment_length"
+        thickness="TrackerSupportDRICHCylSegment_thickness"
+        phimin="0*deg-0.5*TrackerSupportDRICHCylSegment_deltaphi"
+        phimax="0*deg+0.5*TrackerSupportDRICHCylSegment_deltaphi">
+          <position x="0*cm" y="0*cm" z="TrackerSupportDRICHCylSegment_z" />
+          <component material="Aluminum" thickness="TrackerSupportDRICHCylSegmentAl_thickness" name="Services" vis="TrackerSupportVis"/>
       </support>
       <support type="Cylinder"
-        name="TrackerSupportDRICHCylSeg_2"
+        name="TrackerSupportDRICHCylSegment_2"
         vis="TrackerSupportVis"
-        rmin="TrackerSupportDRICHCylSeg_rmin"
-        length="TrackerSupportDRICHCylSeg_length"
-        thickness="TrackerSupportDRICHCylSeg_thickness"
-        phimin="60*deg-0.5*TrackerSupportDRICHCylSeg_deltaphi"
-        phimax="60*deg+0.5*TrackerSupportDRICHCylSeg_deltaphi">
-          <position x="0*cm" y="0*cm" z="TrackerSupportDRICHCylSeg_z" />
-          <component material="Aluminum" thickness="TrackerSupportDRICHCylSegAl_thickness" name="Services" vis="TrackerSupportVis"/>
+        rmin="TrackerSupportDRICHCylSegment_rmin"
+        length="TrackerSupportDRICHCylSegment_length"
+        thickness="TrackerSupportDRICHCylSegment_thickness"
+        phimin="60*deg-0.5*TrackerSupportDRICHCylSegment_deltaphi"
+        phimax="60*deg+0.5*TrackerSupportDRICHCylSegment_deltaphi">
+          <position x="0*cm" y="0*cm" z="TrackerSupportDRICHCylSegment_z" />
+          <component material="Aluminum" thickness="TrackerSupportDRICHCylSegmentAl_thickness" name="Services" vis="TrackerSupportVis"/>
       </support>
       <support type="Cylinder"
-        name="TrackerSupportDRICHCylSeg_3"
+        name="TrackerSupportDRICHCylSegment_3"
         vis="TrackerSupportVis"
-        rmin="TrackerSupportDRICHCylSeg_rmin"
-        length="TrackerSupportDRICHCylSeg_length"
-        thickness="TrackerSupportDRICHCylSeg_thickness"
-        phimin="120*deg-0.5*TrackerSupportDRICHCylSeg_deltaphi"
-        phimax="120*deg+0.5*TrackerSupportDRICHCylSeg_deltaphi">
-          <position x="0*cm" y="0*cm" z="TrackerSupportDRICHCylSeg_z" />
-          <component material="Aluminum" thickness="TrackerSupportDRICHCylSegAl_thickness" name="Services" vis="TrackerSupportVis"/>
+        rmin="TrackerSupportDRICHCylSegment_rmin"
+        length="TrackerSupportDRICHCylSegment_length"
+        thickness="TrackerSupportDRICHCylSegment_thickness"
+        phimin="120*deg-0.5*TrackerSupportDRICHCylSegment_deltaphi"
+        phimax="120*deg+0.5*TrackerSupportDRICHCylSegment_deltaphi">
+          <position x="0*cm" y="0*cm" z="TrackerSupportDRICHCylSegment_z" />
+          <component material="Aluminum" thickness="TrackerSupportDRICHCylSegmentAl_thickness" name="Services" vis="TrackerSupportVis"/>
       </support>
       <support type="Cylinder"
-        name="TrackerSupportDRICHCylSeg_4"
+        name="TrackerSupportDRICHCylSegment_4"
         vis="TrackerSupportVis"
-        rmin="TrackerSupportDRICHCylSeg_rmin"
-        length="TrackerSupportDRICHCylSeg_length"
-        thickness="TrackerSupportDRICHCylSeg_thickness"
-        phimin="180*deg-0.5*TrackerSupportDRICHCylSeg_deltaphi"
-        phimax="180*deg+0.5*TrackerSupportDRICHCylSeg_deltaphi">
-          <position x="0*cm" y="0*cm" z="TrackerSupportDRICHCylSeg_z" />
-          <component material="Aluminum" thickness="TrackerSupportDRICHCylSegAl_thickness" name="Services" vis="TrackerSupportVis"/>
+        rmin="TrackerSupportDRICHCylSegment_rmin"
+        length="TrackerSupportDRICHCylSegment_length"
+        thickness="TrackerSupportDRICHCylSegment_thickness"
+        phimin="180*deg-0.5*TrackerSupportDRICHCylSegment_deltaphi"
+        phimax="180*deg+0.5*TrackerSupportDRICHCylSegment_deltaphi">
+          <position x="0*cm" y="0*cm" z="TrackerSupportDRICHCylSegment_z" />
+          <component material="Aluminum" thickness="TrackerSupportDRICHCylSegmentAl_thickness" name="Services" vis="TrackerSupportVis"/>
       </support>
       <support type="Cylinder"
-        name="TrackerSupportDRICHCylSeg_5"
+        name="TrackerSupportDRICHCylSegment_5"
         vis="TrackerSupportVis"
-        rmin="TrackerSupportDRICHCylSeg_rmin"
-        length="TrackerSupportDRICHCylSeg_length"
-        thickness="TrackerSupportDRICHCylSeg_thickness"
-        phimin="240*deg-0.5*TrackerSupportDRICHCylSeg_deltaphi"
-        phimax="240*deg+0.5*TrackerSupportDRICHCylSeg_deltaphi">
-          <position x="0*cm" y="0*cm" z="TrackerSupportDRICHCylSeg_z" />
-          <component material="Aluminum" thickness="TrackerSupportDRICHCylSegAl_thickness" name="Services" vis="TrackerSupportVis"/>
+        rmin="TrackerSupportDRICHCylSegment_rmin"
+        length="TrackerSupportDRICHCylSegment_length"
+        thickness="TrackerSupportDRICHCylSegment_thickness"
+        phimin="240*deg-0.5*TrackerSupportDRICHCylSegment_deltaphi"
+        phimax="240*deg+0.5*TrackerSupportDRICHCylSegment_deltaphi">
+          <position x="0*cm" y="0*cm" z="TrackerSupportDRICHCylSegment_z" />
+          <component material="Aluminum" thickness="TrackerSupportDRICHCylSegmentAl_thickness" name="Services" vis="TrackerSupportVis"/>
       </support>
       <support type="Cylinder"
-        name="TrackerSupportDRICHCylSeg_6"
+        name="TrackerSupportDRICHCylSegment_6"
         vis="TrackerSupportVis"
-        rmin="TrackerSupportDRICHCylSeg_rmin"
-        length="TrackerSupportDRICHCylSeg_length"
-        thickness="TrackerSupportDRICHCylSeg_thickness"
-        phimin="300*deg-0.5*TrackerSupportDRICHCylSeg_deltaphi"
-        phimax="300*deg+0.5*TrackerSupportDRICHCylSeg_deltaphi">
-          <position x="0*cm" y="0*cm" z="TrackerSupportDRICHCylSeg_z" />
-          <component material="Aluminum" thickness="TrackerSupportDRICHCylSegAl_thickness" name="Services" vis="TrackerSupportVis"/>
+        rmin="TrackerSupportDRICHCylSegment_rmin"
+        length="TrackerSupportDRICHCylSegment_length"
+        thickness="TrackerSupportDRICHCylSegment_thickness"
+        phimin="300*deg-0.5*TrackerSupportDRICHCylSegment_deltaphi"
+        phimax="300*deg+0.5*TrackerSupportDRICHCylSegment_deltaphi">
+          <position x="0*cm" y="0*cm" z="TrackerSupportDRICHCylSegment_z" />
+          <component material="Aluminum" thickness="TrackerSupportDRICHCylSegmentAl_thickness" name="Services" vis="TrackerSupportVis"/>
       </support>
 
       <comment> Inner detector support barrel </comment>
