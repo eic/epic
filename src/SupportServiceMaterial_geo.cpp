@@ -103,15 +103,12 @@ namespace {
           v_rmin{max(rmin1, rmin), max(rmin2, rmin)},
           v_rmax{min(rmax1, rmax), min(rmax2, rmax)},
           v_z{-length / 2, +length / 2};
-        if (- length / 2 + epsilon < zmax && zmax < - epsilon + length / 2) {
-          v_rmin.insert(std::next(v_rmin.begin()), rmin_at(zmax));
-          v_rmax.insert(std::next(v_rmax.begin()), rmax_at(zmax));
-          v_z.insert(std::next(v_z.begin()), zmax);
-        }
-        if (- length / 2 + epsilon < zmin && zmin < - epsilon + length / 2) {
-          v_rmin.insert(std::next(v_rmin.begin()), rmin_at(zmin));
-          v_rmax.insert(std::next(v_rmax.begin()), rmax_at(zmin));
-          v_z.insert(std::next(v_z.begin()), zmin);
+        for (const auto& z : (zmin < zmax ? std::vector<double>{zmin, zmax} : std::vector<double>{zmax, zmin})) {
+          if (- length / 2 + epsilon < z && z < - epsilon + length / 2) {
+            v_rmin.insert(std::prev(v_rmin.end()), std::max(rmin, rmin_at(z)));
+            v_rmax.insert(std::prev(v_rmax.end()), std::min(rmax, rmax_at(z)));
+            v_z.insert(std::prev(v_z.end()), z);
+          }
         }
         solid = Polycone(phimin, deltaphi, v_rmin, v_rmax, v_z);
       }
