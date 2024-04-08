@@ -45,7 +45,8 @@
              x1="FluxBarrel_Backleg_y1/2"
              x2="FluxBarrel_Backleg_y2/2"
              y="FluxBarrel_Backleg_Regular_z/2"
-             material="Steel1008"/>
+             material="Steel1008"
+             vis="FluxBarrelElementVis"/>
       <replicate count="FluxBarrel_Backleg_Regular_repeat"
                  shape="FluxBarrel_Backleg_Regular"
                  dphi="FluxBarrel_dphi"
@@ -59,7 +60,8 @@
              x1="FluxBarrel_Backleg_y1/2"
              x2="FluxBarrel_Backleg_y2/2"
              y="FluxBarrel_Backleg_Chimney_z/2"
-             material="Steel1008"/>
+             material="Steel1008"
+             vis="FluxBarrelElementVis"/>
       <replicate count="FluxBarrel_Backleg_Chimney_repeat"
                  shape="FluxBarrel_Backleg_Chimney"
                  dphi="FluxBarrel_dphi"
@@ -75,7 +77,8 @@
              dx="FluxBarrel_Spacer_x/2"
              dy="FluxBarrel_Spacer_y/2"
              dz="FluxBarrel_Spacer_Regular_z/2"
-             material="Steel1008"/>
+             material="Steel1008"
+             vis="FluxBarrelElementVis"/>
       <replicate count="FluxBarrel_Spacer_Regular_repeat"
                  shape="FluxBarrel_Spacer_Regular"
                  dphi="FluxBarrel_dphi"
@@ -88,7 +91,8 @@
              dx="FluxBarrel_Spacer_x / 2"
              dy="FluxBarrel_Spacer_y / 2"
              dz="FluxBarrel_Spacer_Chimney_z / 2"
-             material="Steel1008"/>
+             material="Steel1008"
+             vis="FluxBarrelElementVis"/>
       <replicate
           count="FluxBarrel_Spacer_Chimney_repeat"
           shape="FluxBarrel_Spacer_Chimney"

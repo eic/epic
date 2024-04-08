@@ -19,6 +19,7 @@ static dd4hep::Ref_t create_detector(dd4hep::Detector& description, xml_h e, [[m
   dd4hep::Material air = description.air();
   Tube env_solid(x_dim.rmin(), x_dim.rmax(), x_dim.z() / 2.0);
   Volume env_vol(x_det.nameStr() + "_env", env_solid, air);
+  env_vol.setVisAttributes(description.visAttributes(x_det.visStr()));
 
   // Create volume map
   std::map<std::string, dd4hep::Volume> volumes_by_name;
@@ -26,7 +27,9 @@ static dd4hep::Ref_t create_detector(dd4hep::Detector& description, xml_h e, [[m
     xml_comp_t x_shape = shape;
     Solid solid = xml::createShape(description, x_shape.typeStr(), shape);
     Material mat = description.material(x_shape.materialStr());
-    volumes_by_name[x_shape.nameStr()] = Volume(x_shape.nameStr(), solid, mat);
+    volumes_by_name[x_shape.nameStr()] =
+      Volume(x_shape.nameStr(), solid, mat)
+      .setVisAttributes(description.visAttributes(x_shape.visStr()));
   }
 
   // Replicate volumes
