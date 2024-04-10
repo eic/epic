@@ -396,7 +396,7 @@ static void Make_Tagger(Detector& desc, xml_coll_t& mod, Assembly& env, DetEleme
     layVol.setSensitiveDetector(sens);
     layVol.setVisAttributes(desc.visAttributes(layerVis));
 
-    
+
     Assembly layer_vol(layerName);
     PlacedVolume pv_layer    = mother.placeVolume(layer_vol, Transform3D(rotate, Position(0, 0, MotherThickness - layerZ + layerThickness / 2)));
     PlacedVolume pv_layerdet = layer_vol.placeVolume(layVol);
