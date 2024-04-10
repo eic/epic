@@ -188,8 +188,7 @@ static Ref_t create_BarrelTrackerWithSensor(Detector& description, xml_h e, Sens
       } else if (x_pos) {
         pv = m_vol.placeVolume(c_vol, Position(x_pos.x(0), x_pos.y(0), x_pos.z(0) + zoff));
       } else {
-        std::cout << comp_name << std::endl;
-        // const double weirdFactor = 1.695;
+        // std::cout << comp_name << std::endl;
         const double TileWidth = 9.197;
         const double TileHeight = 10.773;
         const double BackboneWidth = 0.06;

@@ -18,7 +18,8 @@
     <constant name="VertexBarrelMod2_rmin"              value="VertexBarrelMod_rmin + 1.2*cm"/>
     <constant name="VertexBarrelMod3_rmin"              value="12.0*cm"/>
 
-    <comment> I am adding additional definitions here to create submodules. Those ensure I can properly built the RSUs from pixel matrices, inactive area and stuff </comment>
+    <comment> I am adding additional definitions here to create submodules. 
+    Those ensure I can properly built the RSUs from pixel matrices, inactive area and stuff </comment>
 
     <!-- Submodule 1 = 3Tile unit -->
     <constant name="Submodule1_width" value="9.197* mm"/>
@@ -95,18 +96,6 @@
         rmax="VertexBarrelLayer3_rmax"
         length="VertexBarrelEnvelope_length" />
       <comment>Vertex Barrel Modules</comment>
-
-<!--      for (int moduleIndex = 1; moduleIndex =5; ++moduleIndex) {-->
-      <module name="Module0" vis="VertexLayerVis">
-        <module_component name="ITS3"
-                          material="Silicon"
-                          sensitive="true"
-                          width="19.564 * mm"
-                          length="21.666 * mm"
-                          thickness="SiVertexSensor_thickness"
-                          position="0*mm 0*mm 0*mm"
-                          vis="VertexLayerVis" />
-      </module>
         <!-- Modified Module 1 with submodules -->
       <module name="Module1" vis="VertexLayerVis">
         <!-- <module_component name="ReferenceRSU"
@@ -115,7 +104,6 @@
                           width="19.564 * mm"
                           length="21.666 * mm"
                           thickness="SiVertexSensor_thickness"
-                          position="0*mm 0*mm 0*mm"
                           vis="TrackerServiceVis" /> -->
                           
         <module_component name="UpperLeftTile"
@@ -245,23 +233,22 @@
                           length="Submodule4_length"
                           thickness="Submodule4_thickness"
                           vis="VertexSupportLayerVis" />
-
+      </module>
+            <module name="Module2" vis="VertexLayerVis">
+        <module_component name="ITS3"
+                          material="Silicon"
+                          sensitive="true"
+                          width="VertexBarrelStave2_width"
+                          length="VertexBarrelMod_length"
+                          thickness="SiVertexSensor_thickness"
+                          position="0*mm 0*mm 0*mm"
+                          vis="VertexLayerVis" />
       </module>
       <module name="Module3" vis="VertexLayerVis">
         <module_component name="ITS3"
                           material="Silicon"
                           sensitive="true"
                           width="VertexBarrelStave3_width"
-                          length="VertexBarrelMod_length"
-                          thickness="SiVertexSensor_thickness"
-                          position="0*mm 0*mm 0*mm"
-                          vis="VertexLayerVis" />
-      </module>
-      <module name="Module2" vis="VertexLayerVis">
-        <module_component name="ITS3"
-                          material="Silicon"
-                          sensitive="true"
-                          width="VertexBarrelStave2_width"
                           length="VertexBarrelMod_length"
                           thickness="SiVertexSensor_thickness"
                           position="0*mm 0*mm 0*mm"
@@ -286,9 +273,6 @@
         </comment>
         <rphi_layout phi_tilt="0.0*degree" nphi="12" phi0="0.0" rc="VertexBarrelMod1_rmin" dr="0.0 * mm"/>
         <z_layout dr="0.0 * mm" z0="21.666*5.5* mm" nz="12"/>
-<!--        <z_layout dr="0.0 * mm" z0="260/(21.666)* 10* mm" nz="12"/> almost working-->
-<!--        <z_layout dr="0.0 * mm" z0="21.666 * 12 * 0.46 *mm" nz="12"/> for current module size and 12 RSUs -->
-<!--        <z_layout dr="0.0 * mm" z0="VertexBarrelMod_length*0.415" nz="6"/> for original module size-->
       </layer>
      <layer module="Module1" id="2" vis="VertexLayerVis">
        <barrel_envelope
@@ -296,8 +280,6 @@
          outer_r="VertexBarrelLayer2_rmax"
          z_length="VertexBarrelLayer_length" />
        <layer_material surface="inner" binning="binPhi,binZ" bins0="VertexBarrelStave_count" bins1="100" />
-       <!-- <rphi_layout phi_tilt="0.0*degree" nphi="VertexBarrelStave_count" phi0="0.0" rc="VertexBarrelMod2_rmin" dr="0.0 * mm"/>
-       <z_layout dr="0.0 * mm" z0="0.0 * mm" nz="1"/> -->
         <rphi_layout phi_tilt="0.0*degree" nphi="16" phi0="0.0" rc="VertexBarrelMod2_rmin" dr="0.0 * mm"/>
         <z_layout dr="0.0 * mm" z0="21.666*5.5* mm" nz="12"/>
      </layer>
@@ -307,8 +289,6 @@
          outer_r="VertexBarrelLayer3_rmax"
          z_length="VertexBarrelLayer_length" />
        <layer_material surface="inner" binning="binPhi,binZ" bins0="VertexBarrelStave_count" bins1="100" />
-       <!-- <rphi_layout phi_tilt="0.0*degree" nphi="VertexBarrelStave_count" phi0="0.0" rc="VertexBarrelMod3_rmin" dr="0.0 * mm"/>
-       <z_layout dr="0.0 * mm" z0="0.0 * mm" nz="1"/> -->
         <rphi_layout phi_tilt="0.0*degree" nphi="40" phi0="0.0" rc="VertexBarrelMod3_rmin" dr="0.0 * mm"/>
         <z_layout dr="0.0 * mm" z0="21.666*5.5* mm" nz="12"/>
      </layer>
