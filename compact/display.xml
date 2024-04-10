@@ -105,9 +105,13 @@
     <vis name="HcalSensorVis"         ref="AnlBlue"   showDaughters="false" visible="false"/>
     <vis name="HcalAbsorberVis"       ref="AnlGray"   showDaughters="false" visible="false"/>
     <vis name="HcalEndcapInsertVis"   ref="AnlGray"   showDaughters="false" visible="true"/>
-    <vis name="LFHCALVis"             ref="AnlBlue"   showDaughters="true" visible="true"/>
-    <vis name="FluxEndcapNVis"        ref="AnlGray"   showDaughters="true" visible="false"/>
+    <vis name="LFHCALVis"             ref="AnlBlue"   showDaughters="true"  visible="true"/>
+    <vis name="FluxBarrelVis"         ref="AnlGray"   showDaughters="true"  visible="false"/>
+    <vis name="FluxBarrelElementVis"  ref="AnlViolet" showDaughters="false" visible="true"/>
+    <vis name="FluxEndcapNVis"        ref="AnlGray"   showDaughters="true"  visible="false"/>
     <vis name="FluxEndcapNLayerVis"   ref="AnlViolet" showDaughters="false" visible="true"/>
+    <vis name="FluxEndcapPVis"        ref="AnlGray"   showDaughters="true"  visible="false"/>
+    <vis name="FluxEndcapPLayerVis"   ref="AnlViolet" showDaughters="false" visible="true"/>
     <comment>
       Passive steel for flux return
     </comment>

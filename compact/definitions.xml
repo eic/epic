@@ -632,17 +632,36 @@ Service gaps in FW direction (before endcapP ECAL) and BW direction (before endc
 
     <constant name="HcalEndcapN_rmax"     value="min(HcalBarrel_rmax, 267.0 * cm)"/>
 
-    <constant name="LFHCAL_rmax"          value="HcalBarrel_rmax"/>
-
+    <comment> Lepton_Assy_21.stp, rwimmer, 2024-04-03 </comment>
     <constant name="FluxEndcapN_collar_rmax" value="326.2*cm"/>
-    <constant name="FluxEndcapN_collar_rmin" value="269.0*cm"/>
-    <constant name="FluxEndcapN_collar_thickness" value="120.4*cm"/>
-    <constant name="FluxEndcapN_oculus_rmax" value="267.0*cm"/>
-    <constant name="FluxEndcapN_oculus_rmin" value="213.6*cm"/>
+    <constant name="FluxEndcapN_collar_rmin" value="275.0*cm"/>
+    <constant name="FluxEndcapN_collar_thickness" value="120.38*cm"/>
+    <constant name="FluxEndcapN_oculus_rmax" value="FluxEndcapN_collar_rmin"/>
+    <constant name="FluxEndcapN_oculus_rmin" value="221.6*cm"/>
     <constant name="FluxEndcapN_oculus_thickness" value="28.5*cm"/>
-    <constant name="FluxEndcapN_rmax" value="267.0*cm"/>
-    <constant name="FluxEndcapN_rmin" value="14*cm"/>
-    <constant name="FluxEndcapN_thickness" value="10*cm"/>
+    <constant name="FluxEndcapN_exterior_rmax" value="FluxEndcapN_collar_rmin*cm"/>
+    <constant name="FluxEndcapN_exterior_rmin" value="16*cm"/>
+    <constant name="FluxEndcapN_exterior_thickness" value="10*cm"/>
+
+    <comment> Hadron End Cap Assembly_North Half.stp, rwimmer, 2024-04-03 </comment>
+    <constant name="FluxEndcapP_collar_rmax" value="326.2*cm"/>
+    <constant name="FluxEndcapP_collar_rmin" value="289.56*cm"/>
+    <constant name="FluxEndcapP_collar_thickness" value="167.14*cm"/>
+    <constant name="FluxEndcapP_oculus_rmax" value="FluxEndcapP_collar_rmin"/>
+    <constant name="FluxEndcapP_oculus_rmin" value="210.0*cm"/>
+    <constant name="FluxEndcapP_oculus_thickness" value="22.2*cm"/>
+
+    <comment> LFHCAL includes support, which is part of the flux return </comment>
+    <constant name="LFHCAL_rmax" value="FluxEndcapP_collar_rmin"/>
+
+    <comment> STAR Asm for EPIC w cradle.stp, rwimmer, 2024-04-03 </comment>
+    <constant name="FluxBarrelForward_zmax"  value="320*cm"/>
+    <constant name="FluxBarrelBackward_zmax" value="FluxBarrelForward_zmax"/>
+    <constant name="FluxBarrel_thickness"    value="62.5*cm"/> <!-- for envelope only -->
+    <constant name="FluxBarrel_rmin"         value="273.05*cm"/>
+    <constant name="FluxBarrel_rmax"         value="FluxBarrel_rmin + FluxBarrel_thickness"/>
+    <constant name="FluxBarrel_length"       value="FluxBarrelForward_zmax + FluxBarrelBackward_zmax"/>
+    <constant name="FluxBarrel_offset"       value="(FluxBarrelForward_zmax - FluxBarrelBackward_zmax)/2.0"/>
 
     <comment>
       These are used by ddsim, the region where we store all secondaries

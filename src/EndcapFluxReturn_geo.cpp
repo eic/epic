@@ -16,10 +16,9 @@ static dd4hep::Ref_t create_detector(dd4hep::Detector& description, xml_h e, [[m
   xml_det_t x_det    = e;
   int       det_id   = x_det.id();
   std::string    det_name = x_det.nameStr();
+  bool           reflect  = x_det.reflect(false);
   dd4hep::Material  air      = description.air();
   xml_comp_t x_pos  = x_det.position();
-
-
   dd4hep::Assembly     assembly(det_name);
   dd4hep::DetElement   sdet(det_name, det_id);
   dd4hep::PlacedVolume pv;
@@ -51,7 +50,7 @@ static dd4hep::Ref_t create_detector(dd4hep::Detector& description, xml_h e, [[m
     s_phv2.addPhysVolID("halfdisk", 1);
 
 
-    pv = assembly.placeVolume(disk, dd4hep::Position(0, 0, -layer_thickness/2-layer_zpos));
+    pv = assembly.placeVolume(disk, dd4hep::Position(0, 0, (reflect ? -1.0 : 1.0) * (layer_thickness/2 + layer_zpos)));
     pv.addPhysVolID("layer", layer_id);
     disk_ele.setPlacement(pv);
   }
@@ -63,4 +62,4 @@ static dd4hep::Ref_t create_detector(dd4hep::Detector& description, xml_h e, [[m
   return sdet;
 }
 
-DECLARE_DETELEMENT(epic_EndcapFluxReturnN, create_detector)
+DECLARE_DETELEMENT(epic_EndcapFluxReturn, create_detector)
