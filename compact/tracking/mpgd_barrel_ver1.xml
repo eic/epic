@@ -20,17 +20,11 @@
       in the future they could be put together in a single tag.
     </comment>
 
+    <constant name="InnerMPGDBarrelLayer_length"            value="InnerMPGDBarrel_length" />
     <constant name="InnerMPGDBarrel_hack"                   value="0*cm"/>
-    <constant name="InnerMPGDBarrelMod_rmin"                value="InnerMPGDBarrel_rmin + InnerMPGDBarrel_hack"/>
-    <constant name="InnerMPGDBarrelMod_thickness"           value="1*cm" />
-    <constant name="InnerMPGDBarrelMod_rmax"                value="InnerMPGDBarrel_rmin + InnerMPGDBarrelMod_thickness"/>
-    
-    <constant name="InnerMPGDBarrelMod_length"              value="60*cm" />
-  
-    <constant name="InnerMPGDBarrelLayer_length"            value="InnerMPGDBarrel_length + 5*cm" />
-    <constant name="InnerMPGDBarrelLayer_rmin"              value="50*cm + InnerMPGDBarrel_hack"/>
-    <constant name="InnerMPGDBarrelLayer_rmax"              value="53.3*cm + 1*cm"/>
 
+    <comment> Intrinsic parameters... </comment>
+    <comment> ...Thicknesses </comment>
     <constant name="MMKaptonOverlay_thickness"              value="50*um"/>
     <constant name="MMCuGround_thickness"                   value="1.58*um"/>
     <constant name="MMPCB_thickness"                        value="100*um"/>
@@ -43,12 +37,25 @@
     <constant name="MMDriftCuElectrode_thickness"           value="5*um"/>
     <constant name="MMDriftKapton_thickness"                value="250*um"/>
     <constant name="MMDriftCuGround_thickness"              value="0.41*um"/>
-
-    <constant name="FrameWidth"                             value="0.8*cm"/>
     <comment> FIXME: No support material is here, so fudge factor used to bring material budget to ~0.5% for barrel </comment>
     <constant name="MMFudgeInnerMPGDBarrel_thickness"       value="570*um"/>
-    
+    <comment> FIXME: No definite plan for connections/services to the inner sectors yet, so guess value </comment>
+    <constant name="MMInnerService_thickness"               value="0.1*cm"/>
+    <comment> ...Dimensions </comment>
+    <constant name="MMModuleWidth"                          value="46.0*cm"/>
+    <constant name="MMModuleLength"                         value="61.0*cm"/>
+    <constant name="MMFrameWidth"                           value="1.0*cm"/>
+    <constant name="MMOutwardFrameWidth"                    value="5.0*cm"/>
+    <constant name="MMOuterSector_R"                        value="57.7*cm"/>
+    <constant name="MMInnerSector_R"                        value="55.5*cm"/>
+    <comment> ...Positioning </comment>
+    <constant name="MMRadial_offset"                        value="1.0*cm"/>
+    <constant name="MMCentral_gap"                          value="0.2*cm"/>
+
+    <comment> In principle, stave count should not be independenty specified: it is fixed by above intrinsic parameters </comment>
     <constant name="MPGDBarrelStave_count"                  value="8"/>
+    <constant name="InnerMPGDBarrelLayer_rmin"              value="InnerMPGDBarrel_rmin + InnerMPGDBarrel_hack"/>
+    <constant name="InnerMPGDBarrelLayer_rmax"              value="MMOuterSector_R + InnerMPGDBarrel_hack + MMRadial_offset / 2 + 1*cm"/>
   </define>
 
   <detectors>
@@ -61,13 +68,16 @@
       vis="TrackerVis">
       <type_flags type="DetType_TRACKER + DetType_BARREL"/>
       <dimensions
-        rmin="InnerMPGDBarrelMod_rmin"
-        rmax="InnerMPGDBarrelMod_rmax"
-        length="InnerMPGDBarrelMod_length"/>
-    
+	width="MMModuleWidth"
+        length="MMModuleLength"/>
+
       <module name="InnerMPGDBarrel_Mod1" vis="TrackerLayerVis" >
+	<model name="MMInnerSector" rmin1="MMInnerSector_R" rmin2="MMInnerSector_R" offset="MMRadial_offset"/>
+	<model name="MMOuterSector" rmin1="MMOuterSector_R" rmin2="MMOuterSector_R" offset="MMRadial_offset"/>
+	<frame name="MMFrame"        material="CarbonFiber" width="MMFrameWidth"        vis="TrackerSupportVis" />
+	<frame name="MMOutwardFrame" material="CarbonFiber" width="MMOutwardFrameWidth" vis="TrackerServiceVis" />
+	<service name="MMInnerService" material="Kapton" thickness="MMInnerService_thickness" vis="TrackerServiceVis" /> <comment> This includes cables => Kapton as a material is overoptimistic. </comment>
         <comment> Going from the inside (sensitive) side to the readout side </comment>
-	<frame material="CarbonFiber" width="FrameWidth" vis="TrackerSupportVis" />
         <module_component name="DriftCuGround" thickness="MMDriftCuGround_thickness" material="Copper" vis="TrackerModuleVis"/>
         <module_component name="DriftKapton" thickness="MMDriftKapton_thickness" material="Kapton" vis="TrackerVis" />
         <module_component name="DriftCuElectrode" thickness="MMDriftCuElectrode_thickness" material="Copper" vis="TrackerVis"/>
@@ -80,20 +90,18 @@
         <module_component name="CuStrips" thickness="MMCuStrip_thickness" material="Copper" vis="TrackerVis" />
         <module_component name="PCB" thickness="MMPCB_thickness" material="Fr4" vis="TrackerVis"/>
         <module_component name="CuGround" thickness="MMCuGround_thickness" material="Copper" vis="TrackerVis"/>
-        <module_component name="KaptonOverlay" thickness="MMKaptonOverlay_thickness" material="Kapton" vis="TrackerSupportVis"/>
-       </module>
-            
+        <module_component name="KaptonOverlay" thickness="MMKaptonOverlay_thickness" material="Kapton" vis="TrackerMPGDVis"/> <!-- Instead of "TrackerSupportVis" in order to highligh frames -->
+      </module>
+
       <layer module="InnerMPGDBarrel_Mod1" id="1" vis="InvisibleWithDaughters">
         <barrel_envelope
           inner_r="InnerMPGDBarrelLayer_rmin"
           outer_r="InnerMPGDBarrelLayer_rmax"
-	  zmin="InnerMPGDBarrel_zmin"
-	  zmax="InnerMPGDBarrel_zmax"
-	  z_length="InnerMPGDBarrel_zmin +InnerMPGDBarrel_zmax"
-	  z0="0"/>
+          z_length="InnerMPGDBarrelLayer_length"
+	  z0="InnerMPGDBarrel_zoffset"/>
         <layer_material surface="inner" binning="binPhi,binZ" bins0="MPGDBarrelStave_count" bins1="100" />
-	 <rphi_layout phi_tilt="0" nphi="8" phi0="0.0" rc="InnerMPGDBarrelMod_rmin" dr="0.0 * mm"/>
-         <z_layout dr="0.0 * mm" z0="50.0*cm" nz="4"/>
+	<rphi_layout phi0="0.0"/>
+        <z_layout gap="MMCentral_gap"/>
       </layer>
     </detector>
   </detectors>
@@ -107,7 +115,7 @@
 
   <readouts>
     <readout name="MPGDBarrelHits">
-      <segmentation type="CartesianGridXYZ" grid_size_x="0.150*mm*sqrt(12)" grid_size_y="0.150*mm*sqrt(12)" grid_size_z="0.150*mm*sqrt(12)" />
+      <segmentation type="CartesianGridXYZ" grid_size_x="0.175*mm*sqrt(12)" grid_size_y="0.175*mm*sqrt(12)" grid_size_z="0.175*mm*sqrt(12)" />
       <id>system:8,layer:4,module:12,sensor:2,x:32:-11,y:-10,z:-11</id>
     </readout>
   </readouts>
