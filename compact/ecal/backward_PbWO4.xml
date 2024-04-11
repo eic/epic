@@ -89,6 +89,17 @@
             vis_struc="RPVis"
             vis_steel_gap="AnlGray">
 
+          <inner_support_collar
+              electron_rmin="65 * mm"
+              electron_rmax="73 * mm"
+              proton_rmin="35 * mm"
+              proton_rmax="43 * mm"
+              straight_section_tilt="62.05 * deg"
+              z_length="250 * mm"
+              material="Copper"
+              vis="AnlOrange"
+              />
+
           <comment>
             The points information for constructing inner supporting structure [extrudedpolygon shape, 12 points in total]
           </comment>

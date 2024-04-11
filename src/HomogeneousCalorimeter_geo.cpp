@@ -59,6 +59,59 @@ Position get_xml_xyz(XmlComp& comp, dd4hep::xml::Strng_t name)
   return pos;
 }
 
+static Volume inner_support_collar(Detector& desc, xml_comp_t handle)
+{
+  // This consists of two circular tubes joined by straight sections
+
+  Material inner_ring_material = desc.material(handle.materialStr());
+
+  double electron_rmin = handle.attr<double>(_Unicode(electron_rmin));
+  double electron_rmax = handle.attr<double>(_Unicode(electron_rmax));
+  double proton_rmin = handle.attr<double>(_Unicode(proton_rmin));
+  double proton_rmax = handle.attr<double>(_Unicode(proton_rmax));
+  double straight_section_tilt = handle.attr<double>(_Unicode(straight_section_tilt));
+  double z_length = handle.attr<double>(_Unicode(z_length));
+
+  double proton_x_offset = ((electron_rmax + electron_rmin) - (proton_rmax + proton_rmin)) / 2 / cos(straight_section_tilt);
+  double mean_radius = (electron_rmax + electron_rmin + proton_rmax + proton_rmin) / 4;
+  Position straight_section_offset{
+    proton_x_offset / 2 + cos(straight_section_tilt) * mean_radius,
+    sin(straight_section_tilt) * mean_radius,
+    0,
+  };
+  Position straight_section_offset_mirror_y{
+    straight_section_offset.x(),
+    -straight_section_offset.y(),
+    straight_section_offset.z(),
+  };
+
+  Tube electron_side{electron_rmin, electron_rmax, z_length, straight_section_tilt, -straight_section_tilt};
+  Tube proton_side{proton_rmin, proton_rmax, z_length, -straight_section_tilt, straight_section_tilt};
+  Trd1 electron_proton_straight_section{
+    (electron_rmax - electron_rmin) / 2,
+    (proton_rmax - proton_rmin) / 2,
+    z_length,
+    proton_x_offset * sin(straight_section_tilt) / 2,
+  };
+  UnionSolid inner_support{
+    UnionSolid{
+      UnionSolid{
+        electron_side,
+        proton_side,
+        Position{proton_x_offset, 0., 0.},
+      },
+      electron_proton_straight_section,
+      Transform3D{straight_section_offset} * RotationZ(straight_section_tilt) * RotationX(90 * deg),
+    },
+    electron_proton_straight_section,
+    Transform3D{straight_section_offset_mirror_y} * RotationZ(-straight_section_tilt) * RotationX(-90 * deg),
+  };
+
+  Volume           inner_support_vol{"inner_support_vol", inner_support, inner_ring_material};
+  inner_support_vol.setVisAttributes(desc.visAttributes(handle.visStr()));
+  return inner_support_vol;
+}
+
 // main
 static Ref_t create_detector(Detector& desc, xml::Handle_t handle, SensitiveDetector sens)
 {
@@ -250,7 +303,6 @@ static std::tuple<int, std::pair<int, int>> add_12surface_disk(Detector& desc, A
   // Material for the structure and mother space
   //
   Material outer_ring_material = desc.material(getAttrOrDefault<std::string>(plm, _U(material), "StainlessSteel"));
-  Material inner_ring_material = desc.material(getAttrOrDefault<std::string>(plm, _U(material), "Copper"));
 
   //==============================
   // Outer supporting frame
@@ -260,24 +312,6 @@ static std::tuple<int, std::pair<int, int>> add_12surface_disk(Detector& desc, A
   Volume           ring12_vol("ring12", solid_ring12, outer_ring_material);
   Transform3D      tr_global_Oring = RotationZYX(Prot, 0., 0.) * Translation3D(0., 0., Oring_shift);
   ring12_vol.setVisAttributes(desc.visAttributes(plm.attr<std::string>(_Unicode(vis_struc))));
-
-  //=============================
-  // Inner supporting frame
-  //=============================
-
-  // Version3: solid with elliptical inside
-  //
-  std::vector<double> sec_z  = {-calo_module_length / 2., calo_module_length / 2.};
-  std::vector<double> sec_x  = {0., 0.};
-  std::vector<double> sec_y  = {0., 0.};
-  std::vector<double> zscale = {1., 1.};
-
-  ExtrudedPolygon  inner_support_main(pt_innerframe_x, pt_innerframe_y, sec_z, sec_x, sec_y, zscale);
-  EllipticalTube   subtract_a(Innera, Innerb, calo_module_length / 2.);
-  SubtractionSolid inner_support_substracta(inner_support_main, subtract_a, Position(0., 0., 0.));
-  Volume           inner_support_vol("inner_support_vol", inner_support_substracta, inner_ring_material);
-  inner_support_vol.setVisAttributes(desc.visAttributes(plm.attr<std::string>(_Unicode(vis_struc))));
-  Transform3D tr_global_Iring_elli = RotationZYX(Nrot, 0., 0.) * Translation3D(0., 0., 0.);
 
   //=============================
   // The mother volume of modules
@@ -296,7 +330,9 @@ static std::tuple<int, std::pair<int, int>> add_12surface_disk(Detector& desc, A
   if (has_envelope) {
     env.placeVolume(env_vol, tr_global);                          // Place the mother volume for all modules
     env.placeVolume(ring12_vol, tr_global_Oring);                 // Place the outer supporting frame
-    env_vol.placeVolume(inner_support_vol, tr_global_Iring_elli); // Place the version3 inner supporting frame
+
+    Volume inner_support_vol = inner_support_collar(desc, plm.child(_Unicode(inner_support_collar)));
+    env_vol.placeVolume(inner_support_vol, Transform3D{RotationZ{Nrot}});
   }
 
 
