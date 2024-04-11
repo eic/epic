@@ -245,11 +245,6 @@ static Ref_t create_MPGDCylinderBarrelTracker(Detector& description, xml_h e, Se
     auto &layerParams =
         DD4hepDetectorHelper::ensureExtension<dd4hep::rec::VariantParameters>(lay_elt);
 
-    for (xml_coll_t lmat(x_layer, _Unicode(layer_material)); lmat; ++lmat) {
-      xml_comp_t x_layer_material = lmat;
-      DD4hepDetectorHelper::xmlToProtoSurfaceMaterial(x_layer_material, layerParams, "layer_material");
-    }
-
     double a = (det_zmax+det_zmin)/2;
     double z_off = 0.1*cm; //half the offset between the inner middle two modules.
     double modz_pos[4]={det_zmin+(total_zlength)/2 - a,-(total_zlength+z_off)/2,(total_zlength+z_off)/2,det_zmax-(total_zlength)/2-a}; //these are the 4 central values in z where the four modules will be placed
