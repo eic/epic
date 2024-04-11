@@ -1,22 +1,5 @@
 // SPDX-License-Identifier: LGPL-3.0-or-later
-// Copyright (C) 2022 Chao Peng, Dmitry Romanov, Pu-Kai Wang
-//==========================================================================
-//  A general implementation for homogeneous calorimeter
-//--------------------------------------------------------------------------
-//  Author: Chao Peng (ANL)
-//  Date: 06/09/2021
-//==========================================================================
-//==========================================================================
-//  Date: 03/10/2022
-//  Add the new geometry and the supporting structue
-//  Adapted the single module with additional wrraper and supporting structure
-//--------------------------------------------------------------------------
-//  Date: 20/03/2023
-//  Reorganize and optimize the scripts
-//  Adapted the inner supporting structure for improving low Q2 measurements
-//--------------------------------------------------------------------------
-//  Author: WANG Pu-Kai, ZHU Yuwei (IJClab)
-//==========================================================================
+// Copyright (C) 2022 - 2024, Chao Peng, Dmitry Romanov, Pu-Kai Wang, Yuwei Zhu, Dmitry Kalinkin
 
 #include "DD4hep/DetFactoryHelper.h"
 #include "DD4hep/Printout.h"
@@ -35,7 +18,6 @@ using namespace dd4hep;
 
 /** \addtogroup Homogeneous Calorimeter
  * \brief Type: **HomogeneousCalorimeter**.
- * \author C. Peng
  * \ingroup calorimeters
  *
  * @{
