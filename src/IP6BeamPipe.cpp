@@ -33,21 +33,20 @@ using namespace dd4hep;
  * \endcode
  *
  */
-static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector /* sens */)
-{
+static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector /* sens */) {
 
   using namespace ROOT::Math;
-  xml_det_t  x_det    = e;
-  string     det_name = x_det.nameStr();
-  xml_comp_t  x_dettype = x_det.child(dd4hep::xml::Strng_t("type_flags"));
+  xml_det_t x_det       = e;
+  string det_name       = x_det.nameStr();
+  xml_comp_t x_dettype  = x_det.child(dd4hep::xml::Strng_t("type_flags"));
   unsigned int typeFlag = x_dettype.type();
   DetElement sdet(det_name, x_det.id());
-  Assembly   assembly(det_name + "_assembly");
-  Material   m_Al     = det.material("Aluminum");
-  Material   m_Be     = det.material("Beryllium");
-  Material   m_Au     = det.material("Gold");
-  Material   m_Vacuum = det.material("Vacuum");
-  string     vis_name = x_det.visStr();
+  Assembly assembly(det_name + "_assembly");
+  Material m_Al     = det.material("Aluminum");
+  Material m_Be     = det.material("Beryllium");
+  Material m_Au     = det.material("Gold");
+  Material m_Vacuum = det.material("Vacuum");
+  string vis_name   = x_det.visStr();
 
   xml::Component IP_pipe_c = x_det.child(_Unicode(IP_pipe));
 
@@ -55,7 +54,8 @@ static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector /* sens *
   double IP_beampipe_OD             = IP_pipe_c.attr<double>(_Unicode(OD));
   double IP_beampipe_wall_thickness = IP_pipe_c.attr<double>(_Unicode(wall_thickness));
   double IP_beampipe_gold_thickness = IP_pipe_c.attr<double>(_Unicode(gold_thickness));
-  double IP_beampipe_ID      = IP_beampipe_OD - 2.0 * IP_beampipe_gold_thickness - 2.0 * IP_beampipe_wall_thickness;
+  double IP_beampipe_ID =
+      IP_beampipe_OD - 2.0 * IP_beampipe_gold_thickness - 2.0 * IP_beampipe_wall_thickness;
   double IP_acts_beampipe_OD = IP_beampipe_ID - 5.0 * mm;
   double IP_acts_beampipe_ID = IP_acts_beampipe_OD - 1.0 * mm;
 
@@ -63,17 +63,17 @@ static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector /* sens *
   double downstream_straight_length = IP_pipe_c.attr<double>(_Unicode(downstream_straight_length));
 
   // central beampipe volume
-  Tube         central_tube(0.5 * IP_acts_beampipe_ID, 0.5 * IP_acts_beampipe_OD,
-                            0.5 * (upstream_straight_length + downstream_straight_length));
-  Volume       central_volume("acts_central_beampipe_vol", central_tube, m_Vacuum);
+  Tube central_tube(0.5 * IP_acts_beampipe_ID, 0.5 * IP_acts_beampipe_OD,
+                    0.5 * (upstream_straight_length + downstream_straight_length));
+  Volume central_volume("acts_central_beampipe_vol", central_tube, m_Vacuum);
   const double central_offset = -.5 * (upstream_straight_length - downstream_straight_length);
-  DetElement   central_det(sdet, "acts_beampipe_central", 1);
+  DetElement central_det(sdet, "acts_beampipe_central", 1);
 
   // Set dd4hep variant parameters for conversion to ACTS tracking geometry
   central_det.setTypeFlag(typeFlag);
-  auto &params = DD4hepDetectorHelper::ensureExtension<dd4hep::rec::VariantParameters>(central_det);
-  int nBinPhi = 144; // fix later. Should take this from a xml tag
-  int nBinZ = 10;  // fix later. Should take this from a xml tag
+  auto& params = DD4hepDetectorHelper::ensureExtension<dd4hep::rec::VariantParameters>(central_det);
+  int nBinPhi  = 144; // fix later. Should take this from a xml tag
+  int nBinZ    = 10;  // fix later. Should take this from a xml tag
   params.set<bool>("layer_material", true);
   params.set<bool>("layer_material_representing", true);
   params.set<int>("layer_material_representing_binPhi", nBinPhi);
@@ -93,28 +93,36 @@ static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector /* sens *
   Tube downstream_IP_vacuum_fill(0.0, IP_acts_beampipe_ID / 2.0, downstream_straight_length / 2.0);
   Tube downstream_IP_acts_beampipe(IP_acts_beampipe_ID / 2.0, IP_acts_beampipe_OD / 2.0,
                                    downstream_straight_length / 2.0);
-  Tube downstream_IP_vacuum_padding(IP_acts_beampipe_OD / 2.0, IP_beampipe_ID / 2.0, downstream_straight_length / 2.0);
+  Tube downstream_IP_vacuum_padding(IP_acts_beampipe_OD / 2.0, IP_beampipe_ID / 2.0,
+                                    downstream_straight_length / 2.0);
   Tube downstream_IP_gold(IP_beampipe_ID / 2.0, IP_beampipe_ID / 2.0 + IP_beampipe_gold_thickness,
                           downstream_straight_length / 2.0);
   Tube downstream_IP_tube(IP_beampipe_ID / 2.0 + IP_beampipe_gold_thickness, IP_beampipe_OD / 2.0,
                           downstream_straight_length / 2.0);
 
   Tube upstream_IP_vacuum_fill(0.0, IP_acts_beampipe_ID / 2.0, upstream_straight_length / 2.0);
-  Tube upstream_IP_acts_beampipe(IP_acts_beampipe_ID / 2.0, IP_acts_beampipe_OD / 2.0, upstream_straight_length / 2.0);
-  Tube upstream_IP_vacuum_padding(IP_acts_beampipe_OD / 2.0, IP_beampipe_ID / 2.0, upstream_straight_length / 2.0);
+  Tube upstream_IP_acts_beampipe(IP_acts_beampipe_ID / 2.0, IP_acts_beampipe_OD / 2.0,
+                                 upstream_straight_length / 2.0);
+  Tube upstream_IP_vacuum_padding(IP_acts_beampipe_OD / 2.0, IP_beampipe_ID / 2.0,
+                                  upstream_straight_length / 2.0);
   Tube upstream_IP_gold(IP_beampipe_ID / 2.0, IP_beampipe_ID / 2.0 + IP_beampipe_gold_thickness,
                         upstream_straight_length / 2.0);
   Tube upstream_IP_tube(IP_beampipe_ID / 2.0 + IP_beampipe_gold_thickness, IP_beampipe_OD / 2.0,
                         upstream_straight_length / 2.0);
 
-  Volume v_downstream_IP_vacuum_fill("v_downstream_IP_vacuum_fill", downstream_IP_vacuum_fill, m_Vacuum);
-  Volume v_downstream_IP_acts_beampipe("v_downstream_IP_acts_beampipe", downstream_IP_acts_beampipe, m_Vacuum);
-  Volume v_downstream_IP_vacuum_padding("v_downstream_IP_vacuum_padding", downstream_IP_vacuum_padding, m_Vacuum);
+  Volume v_downstream_IP_vacuum_fill("v_downstream_IP_vacuum_fill", downstream_IP_vacuum_fill,
+                                     m_Vacuum);
+  Volume v_downstream_IP_acts_beampipe("v_downstream_IP_acts_beampipe", downstream_IP_acts_beampipe,
+                                       m_Vacuum);
+  Volume v_downstream_IP_vacuum_padding("v_downstream_IP_vacuum_padding",
+                                        downstream_IP_vacuum_padding, m_Vacuum);
   Volume v_downstream_IP_gold("v_downstream_IP_gold", downstream_IP_gold, m_Au);
   Volume v_downstream_IP_tube("v_downstream_IP_tube", downstream_IP_tube, m_Be);
   Volume v_upstream_IP_vacuum_fill("v_upstream_IP_vacuum_fill", upstream_IP_vacuum_fill, m_Vacuum);
-  Volume v_upstream_IP_acts_beampipe("v_upstream_IP_acts_beampipe", upstream_IP_acts_beampipe, m_Vacuum);
-  Volume v_upstream_IP_vacuum_padding("v_upstream_IP_vacuum_padding", upstream_IP_vacuum_padding, m_Vacuum);
+  Volume v_upstream_IP_acts_beampipe("v_upstream_IP_acts_beampipe", upstream_IP_acts_beampipe,
+                                     m_Vacuum);
+  Volume v_upstream_IP_vacuum_padding("v_upstream_IP_vacuum_padding", upstream_IP_vacuum_padding,
+                                      m_Vacuum);
   Volume v_upstream_IP_gold("v_upstream_IP_gold", upstream_IP_gold, m_Au);
   Volume v_upstream_IP_tube("v_upstream_IP_tube", upstream_IP_tube, m_Be);
 
@@ -126,14 +134,17 @@ static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector /* sens *
   assembly.placeVolume(v_upstream_IP_vacuum_fill, Position(0, 0, -upstream_straight_length / 2.0));
   central_volume.placeVolume(v_upstream_IP_acts_beampipe,
                              Position(0, 0, -upstream_straight_length / 2.0 - central_offset));
-  assembly.placeVolume(v_upstream_IP_vacuum_padding, Position(0, 0, -upstream_straight_length / 2.0));
+  assembly.placeVolume(v_upstream_IP_vacuum_padding,
+                       Position(0, 0, -upstream_straight_length / 2.0));
   assembly.placeVolume(v_upstream_IP_gold, Position(0, 0, -upstream_straight_length / 2.0));
   assembly.placeVolume(v_upstream_IP_tube, Position(0, 0, -upstream_straight_length / 2.0));
 
-  assembly.placeVolume(v_downstream_IP_vacuum_fill, Position(0, 0, downstream_straight_length / 2.0));
+  assembly.placeVolume(v_downstream_IP_vacuum_fill,
+                       Position(0, 0, downstream_straight_length / 2.0));
   central_volume.placeVolume(v_downstream_IP_acts_beampipe,
                              Position(0, 0, downstream_straight_length / 2.0 - central_offset));
-  assembly.placeVolume(v_downstream_IP_vacuum_padding, Position(0, 0, downstream_straight_length / 2.0));
+  assembly.placeVolume(v_downstream_IP_vacuum_padding,
+                       Position(0, 0, downstream_straight_length / 2.0));
   assembly.placeVolume(v_downstream_IP_gold, Position(0, 0, downstream_straight_length / 2.0));
   assembly.placeVolume(v_downstream_IP_tube, Position(0, 0, downstream_straight_length / 2.0));
 
@@ -144,19 +155,21 @@ static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector /* sens *
   auto zplane_to_polycones = [](xml::Component& x_pipe) {
     std::vector<double> zero, rmax, rmin, z;
     for (xml_coll_t x_zplane_i(x_pipe, _Unicode(zplane)); x_zplane_i; ++x_zplane_i) {
-      xml_comp_t x_zplane  = x_zplane_i;
-      auto       thickness = getAttrOrDefault(x_zplane, _Unicode(thickness), x_pipe.thickness());
+      xml_comp_t x_zplane = x_zplane_i;
+      auto thickness      = getAttrOrDefault(x_zplane, _Unicode(thickness), x_pipe.thickness());
       thickness += getAttrOrDefault(x_zplane, _Unicode(extra_thickness), 0.0);
       zero.push_back(0);
       rmax.push_back(x_zplane.attr<double>(_Unicode(OD)) / 2.0);
       rmin.push_back(x_zplane.attr<double>(_Unicode(OD)) / 2.0 - thickness);
       z.push_back(x_zplane.attr<double>(_Unicode(z)));
     }
-    return std::make_pair<Polycone, Polycone>({0, 2.0 * M_PI, rmin, rmax, z}, {0, 2.0 * M_PI, zero, rmin, z});
+    return std::make_pair<Polycone, Polycone>({0, 2.0 * M_PI, rmin, rmax, z},
+                                              {0, 2.0 * M_PI, zero, rmin, z});
   };
 
-  auto create_volumes = [&](const std::string& name, xml::Component& x_pipe1, xml::Component& x_pipe2,
-                            xml_coll_t& x_additional_subtraction_i, bool subtract_vacuum_from_matter = true,
+  auto create_volumes = [&](const std::string& name, xml::Component& x_pipe1,
+                            xml::Component& x_pipe2, xml_coll_t& x_additional_subtraction_i,
+                            bool subtract_vacuum_from_matter = true,
                             bool subtract_matter_from_vacuum = false) {
     auto pipe1_polycones = zplane_to_polycones(x_pipe1);
     auto pipe2_polycones = zplane_to_polycones(x_pipe2);
@@ -164,7 +177,8 @@ static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector /* sens *
     auto crossing_angle    = getAttrOrDefault(x_pipe2, _Unicode(crossing_angle), 0.0);
     auto axis_intersection = getAttrOrDefault(x_pipe2, _Unicode(axis_intersection), 0.0);
 
-    auto tf = Transform3D(Position(0, 0, axis_intersection)) * Transform3D(RotationY(crossing_angle)) *
+    auto tf = Transform3D(Position(0, 0, axis_intersection)) *
+              Transform3D(RotationY(crossing_angle)) *
               Transform3D(Position(0, 0, -axis_intersection));
 
     // union of all matter and vacuum
@@ -188,11 +202,13 @@ static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector /* sens *
 
     // subtract additional vacuum from matter
     for (; x_additional_subtraction_i; ++x_additional_subtraction_i) {
-      xml_comp_t x_additional_subtraction  = x_additional_subtraction_i;
-      auto       additional_polycones      = zplane_to_polycones(x_additional_subtraction);
-      auto       additional_crossing_angle = getAttrOrDefault(x_additional_subtraction, _Unicode(crossing_angle), 0.0);
-      auto additional_axis_intersection = getAttrOrDefault(x_additional_subtraction, _Unicode(axis_intersection), 0.0);
-      auto additional_tf                = Transform3D(Position(0, 0, additional_axis_intersection)) *
+      xml_comp_t x_additional_subtraction = x_additional_subtraction_i;
+      auto additional_polycones           = zplane_to_polycones(x_additional_subtraction);
+      auto additional_crossing_angle =
+          getAttrOrDefault(x_additional_subtraction, _Unicode(crossing_angle), 0.0);
+      auto additional_axis_intersection =
+          getAttrOrDefault(x_additional_subtraction, _Unicode(axis_intersection), 0.0);
+      auto additional_tf = Transform3D(Position(0, 0, additional_axis_intersection)) *
                            Transform3D(RotationY(additional_crossing_angle)) *
                            Transform3D(Position(0, 0, -additional_axis_intersection));
       matter = SubtractionSolid(matter, additional_polycones.second, additional_tf);
@@ -210,12 +226,14 @@ static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector /* sens *
   xml::Component upstream_c        = x_det.child(_Unicode(upstream));
   xml::Component incoming_hadron_c = upstream_c.child(_Unicode(incoming_hadron));
   xml::Component outgoing_lepton_c = upstream_c.child(_Unicode(outgoing_lepton));
-  xml_coll_t     additional_subtractions_upstream(upstream_c, _Unicode(additional_subtraction));
-  bool           subtract_vacuum_upstream = getAttrOrDefault<bool>(upstream_c, _Unicode(subtract_vacuum), true);
-  bool           subtract_matter_upstream = getAttrOrDefault<bool>(upstream_c, _Unicode(subtract_matter), true);
-  auto           volumes_upstream =
-      create_volumes("upstream", outgoing_lepton_c, incoming_hadron_c, additional_subtractions_upstream,
-                     subtract_vacuum_upstream, subtract_matter_upstream);
+  xml_coll_t additional_subtractions_upstream(upstream_c, _Unicode(additional_subtraction));
+  bool subtract_vacuum_upstream =
+      getAttrOrDefault<bool>(upstream_c, _Unicode(subtract_vacuum), true);
+  bool subtract_matter_upstream =
+      getAttrOrDefault<bool>(upstream_c, _Unicode(subtract_matter), true);
+  auto volumes_upstream = create_volumes("upstream", outgoing_lepton_c, incoming_hadron_c,
+                                         additional_subtractions_upstream, subtract_vacuum_upstream,
+                                         subtract_matter_upstream);
 
   auto tf_upstream = Transform3D(RotationZYX(0, 0, 0));
   if (getAttrOrDefault<bool>(upstream_c, _Unicode(reflect), true)) {
@@ -235,12 +253,14 @@ static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector /* sens *
   xml::Component downstream_c      = x_det.child(_Unicode(downstream));
   xml::Component incoming_lepton_c = downstream_c.child(_Unicode(incoming_lepton));
   xml::Component outgoing_hadron_c = downstream_c.child(_Unicode(outgoing_hadron));
-  xml_coll_t     additional_subtractions_downstream(downstream_c, _Unicode(additional_subtraction));
-  bool           subtract_vacuum_downstream = getAttrOrDefault<bool>(downstream_c, _Unicode(subtract_vacuum), true);
-  bool           subtract_matter_downstream = getAttrOrDefault<bool>(downstream_c, _Unicode(subtract_matter), true);
-  auto           volumes_downstream =
-      create_volumes("downstream", incoming_lepton_c, outgoing_hadron_c, additional_subtractions_downstream,
-                     subtract_vacuum_downstream, subtract_matter_downstream);
+  xml_coll_t additional_subtractions_downstream(downstream_c, _Unicode(additional_subtraction));
+  bool subtract_vacuum_downstream =
+      getAttrOrDefault<bool>(downstream_c, _Unicode(subtract_vacuum), true);
+  bool subtract_matter_downstream =
+      getAttrOrDefault<bool>(downstream_c, _Unicode(subtract_matter), true);
+  auto volumes_downstream = create_volumes("downstream", incoming_lepton_c, outgoing_hadron_c,
+                                           additional_subtractions_downstream,
+                                           subtract_vacuum_downstream, subtract_matter_downstream);
 
   auto tf_downstream = Transform3D(RotationZYX(0, 0, 0));
   if (getAttrOrDefault<bool>(downstream_c, _Unicode(reflect), true)) {

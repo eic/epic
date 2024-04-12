@@ -23,13 +23,12 @@ using namespace dd4hep::rec;
 
 using Placements = vector<PlacedVolume>;
 
-static Ref_t createDetector(Detector& description, xml::Handle_t e, SensitiveDetector sens)
-{
-  xml_det_t  x_det    = e;
-  Material   air      = description.material("AirOptical");
-  string     det_name = x_det.nameStr();
+static Ref_t createDetector(Detector& description, xml::Handle_t e, SensitiveDetector sens) {
+  xml_det_t x_det = e;
+  Material air    = description.material("AirOptical");
+  string det_name = x_det.nameStr();
   DetElement sdet(det_name, x_det.id());
-  Assembly   assembly(det_name);
+  Assembly assembly(det_name);
   sens.setType("tracker");
   OpticalSurfaceManager surfMgr = description.surfaceManager();
 
@@ -38,59 +37,59 @@ static Ref_t createDetector(Detector& description, xml::Handle_t e, SensitiveDet
 
   PlacedVolume pv;
 
-  map<string, Volume>               modules;
-  map<string, Placements>           sensitives;
-  map<string, Volume>               module_assemblies;
+  map<string, Volume> modules;
+  map<string, Placements> sensitives;
+  map<string, Volume> module_assemblies;
   std::map<std::string, DetElement> module_assembly_delements;
 
   int n_sensor = 1;
 
   // dimensions
-  xml::Component dims   = x_det.dimensions();
-  auto           rmin   = dims.rmin();
-  auto           rmax   = dims.rmax();
-  auto           length = dims.length();
-  auto           zmin   = dims.zmin();
-  auto           zpos   = zmin + length / 2;
+  xml::Component dims = x_det.dimensions();
+  auto rmin           = dims.rmin();
+  auto rmax           = dims.rmax();
+  auto length         = dims.length();
+  auto zmin           = dims.zmin();
+  auto zpos           = zmin + length / 2;
 
   // envelope
-  Tube   envShape(rmin, rmax, length / 2., 0., 2 * M_PI);
+  Tube envShape(rmin, rmax, length / 2., 0., 2 * M_PI);
   Volume envVol("MRICH_Envelope", envShape, air);
   envVol.setVisAttributes(description.visAttributes(x_det.visStr()));
   if (x_det.hasChild(_Unicode(envelope))) {
-    xml_comp_t       x_envelope = x_det.child(_Unicode(envelope));
-    double           thickness  = x_envelope.thickness();
-    Material         material   = description.material(x_envelope.materialStr());
-    Tube             envInsideShape(rmin + thickness, rmax - thickness, length / 2. - thickness);
+    xml_comp_t x_envelope = x_det.child(_Unicode(envelope));
+    double thickness      = x_envelope.thickness();
+    Material material     = description.material(x_envelope.materialStr());
+    Tube envInsideShape(rmin + thickness, rmax - thickness, length / 2. - thickness);
     SubtractionSolid envShellShape(envShape, envInsideShape);
-    Volume           envShell("MRICH_Envelope_Inside", envShellShape, material);
+    Volume envShell("MRICH_Envelope_Inside", envShellShape, material);
     envVol.placeVolume(envShell);
   }
 
   // expect only one module (for now)
-  xml_comp_t x_mod      = x_det.child(_U(module));
-  string     mod_name   = x_mod.nameStr();
-  double     mod_width  = getAttrOrDefault(x_mod, _U(width), 130.0 * mm);
-  double     mod_height = getAttrOrDefault(x_mod, _U(height), 130.0 * mm);
-  double     mod_length = getAttrOrDefault(x_mod, _U(length), 130.0 * mm);
+  xml_comp_t x_mod  = x_det.child(_U(module));
+  string mod_name   = x_mod.nameStr();
+  double mod_width  = getAttrOrDefault(x_mod, _U(width), 130.0 * mm);
+  double mod_height = getAttrOrDefault(x_mod, _U(height), 130.0 * mm);
+  double mod_length = getAttrOrDefault(x_mod, _U(length), 130.0 * mm);
 
   // module
-  Box    m_solid(mod_width / 2.0, mod_height / 2.0, mod_length / 2.0);
+  Box m_solid(mod_width / 2.0, mod_height / 2.0, mod_length / 2.0);
   Volume m_volume(mod_name, m_solid, air);
   m_volume.setVisAttributes(description.visAttributes(x_mod.visStr()));
   DetElement mod_de(mod_name + std::string("_mod_") + std::to_string(1), 1);
-  double     z_placement = -mod_length / 2.0;
+  double z_placement = -mod_length / 2.0;
 
   // todo module frame
   if (x_mod.hasChild(_Unicode(frame))) {
-    xml_comp_t       x_frame         = x_mod.child(_Unicode(frame));
-    double           frame_thickness = getAttrOrDefault(x_frame, _U(thickness), 2.0 * mm);
-    Box              frame_inside(mod_width / 2.0 - frame_thickness, mod_height / 2.0 - frame_thickness,
-                                  mod_length / 2.0 - frame_thickness);
+    xml_comp_t x_frame     = x_mod.child(_Unicode(frame));
+    double frame_thickness = getAttrOrDefault(x_frame, _U(thickness), 2.0 * mm);
+    Box frame_inside(mod_width / 2.0 - frame_thickness, mod_height / 2.0 - frame_thickness,
+                     mod_length / 2.0 - frame_thickness);
     SubtractionSolid frame_solid(m_solid, frame_inside);
-    Material         frame_mat = description.material(x_frame.materialStr());
-    Volume           frame_vol(mod_name + "_frame", frame_solid, frame_mat);
-    auto             frame_vis = getAttrOrDefault<std::string>(x_frame, _U(vis), std::string("GrayVis"));
+    Material frame_mat = description.material(x_frame.materialStr());
+    Volume frame_vol(mod_name + "_frame", frame_solid, frame_mat);
+    auto frame_vis = getAttrOrDefault<std::string>(x_frame, _U(vis), std::string("GrayVis"));
     frame_vol.setVisAttributes(description.visAttributes(frame_vis));
     // update position
     z_placement += frame_thickness / 2.0;
@@ -102,27 +101,29 @@ static Ref_t createDetector(Detector& description, xml::Handle_t e, SensitiveDet
 
   // aerogel box
   if (x_mod.hasChild(_Unicode(aerogel))) {
-    xml_comp_t x_aerogel      = x_mod.child(_Unicode(aerogel));
-    double     aerogel_width  = getAttrOrDefault(x_aerogel, _U(width), 130.0 * mm);
-    double     aerogel_length = getAttrOrDefault(x_aerogel, _U(length), 130.0 * mm);
-    Material   aerogel_mat    = description.material(x_aerogel.materialStr());
-    auto       aerogel_vis = getAttrOrDefault<std::string>(x_aerogel, _U(vis), std::string("InvisibleWithDaughters"));
+    xml_comp_t x_aerogel  = x_mod.child(_Unicode(aerogel));
+    double aerogel_width  = getAttrOrDefault(x_aerogel, _U(width), 130.0 * mm);
+    double aerogel_length = getAttrOrDefault(x_aerogel, _U(length), 130.0 * mm);
+    Material aerogel_mat  = description.material(x_aerogel.materialStr());
+    auto aerogel_vis =
+        getAttrOrDefault<std::string>(x_aerogel, _U(vis), std::string("InvisibleWithDaughters"));
 
     xml_comp_t x_aerogel_frame = x_aerogel.child(_Unicode(frame));
-    double     foam_thickness  = getAttrOrDefault(x_aerogel_frame, _U(thickness), 2.0 * mm);
-    Material   foam_mat        = description.material(x_aerogel_frame.materialStr());
-    auto       foam_vis        = getAttrOrDefault<std::string>(x_aerogel_frame, _U(vis), std::string("RedVis"));
+    double foam_thickness      = getAttrOrDefault(x_aerogel_frame, _U(thickness), 2.0 * mm);
+    Material foam_mat          = description.material(x_aerogel_frame.materialStr());
+    auto foam_vis = getAttrOrDefault<std::string>(x_aerogel_frame, _U(vis), std::string("RedVis"));
 
     // foam frame
-    Box              foam_box(aerogel_width / 2.0 + foam_thickness, aerogel_width / 2.0 + foam_thickness,
-                              (aerogel_length + foam_thickness) / 2.0);
-    Box              foam_sub_box(aerogel_width / 2.0, aerogel_width / 2.0, (aerogel_length + foam_thickness) / 2.0);
+    Box foam_box(aerogel_width / 2.0 + foam_thickness, aerogel_width / 2.0 + foam_thickness,
+                 (aerogel_length + foam_thickness) / 2.0);
+    Box foam_sub_box(aerogel_width / 2.0, aerogel_width / 2.0,
+                     (aerogel_length + foam_thickness) / 2.0);
     SubtractionSolid foam_frame_solid(foam_box, foam_sub_box, Position(0, 0, foam_thickness));
-    Volume           foam_vol(mod_name + "_aerogel_frame", foam_frame_solid, foam_mat);
+    Volume foam_vol(mod_name + "_aerogel_frame", foam_frame_solid, foam_mat);
     foam_vol.setVisAttributes(description.visAttributes(foam_vis));
 
     // aerogel
-    Box    aerogel_box(aerogel_width / 2.0, aerogel_width / 2.0, (aerogel_length) / 2.0);
+    Box aerogel_box(aerogel_width / 2.0, aerogel_width / 2.0, (aerogel_length) / 2.0);
     Volume aerogel_vol(mod_name + "_aerogel", aerogel_box, aerogel_mat);
     aerogel_vol.setVisAttributes(description.visAttributes(aerogel_vis));
 
@@ -139,9 +140,10 @@ static Ref_t createDetector(Detector& description, xml::Handle_t e, SensitiveDet
     z_placement += aerogel_length / 2.0;
 
     // optical surfaces
-    auto aerogel_surf = surfMgr.opticalSurface(
-        dd4hep::getAttrOrDefault<std::string>(x_aerogel, _Unicode(surface), "MRICH_AerogelOpticalSurface"));
-    SkinSurface skin_surf(description, aerogel_de, Form("MRICH_aerogel_skin_surface_%d", 1), aerogel_surf, aerogel_vol);
+    auto aerogel_surf = surfMgr.opticalSurface(dd4hep::getAttrOrDefault<std::string>(
+        x_aerogel, _Unicode(surface), "MRICH_AerogelOpticalSurface"));
+    SkinSurface skin_surf(description, aerogel_de, Form("MRICH_aerogel_skin_surface_%d", 1),
+                          aerogel_surf, aerogel_vol);
     skin_surf.isValid();
   }
 
@@ -152,12 +154,13 @@ static Ref_t createDetector(Detector& description, xml::Handle_t e, SensitiveDet
     //  - The lens has a constant groove pitch (delta r) as opposed to fixing the groove height.
     //  - The lens area outside of the effective diamtere is flat.
     //  - The grooves are not curved, rather they are polycone shaped, ie a flat approximating the curvature.
-    auto   lens_vis         = getAttrOrDefault<std::string>(x_lens, _U(vis), std::string("AnlBlue"));
-    double groove_pitch     = getAttrOrDefault(x_lens, _Unicode(pitch), 0.2 * mm); // 0.5 * mm);
-    double lens_f           = getAttrOrDefault(x_lens, _Unicode(focal_length), 6.0 * 2.54 * cm);
-    double eff_diameter     = getAttrOrDefault(x_lens, _Unicode(effective_diameter), 152.4 * mm);
-    double lens_width       = getAttrOrDefault(x_lens, _Unicode(width), 6.7 * 2.54 * cm);
-    double center_thickness = getAttrOrDefault(x_lens, _U(thickness), 0.068 * 2.54 * cm); // 2.0 * mm);
+    auto lens_vis       = getAttrOrDefault<std::string>(x_lens, _U(vis), std::string("AnlBlue"));
+    double groove_pitch = getAttrOrDefault(x_lens, _Unicode(pitch), 0.2 * mm); // 0.5 * mm);
+    double lens_f       = getAttrOrDefault(x_lens, _Unicode(focal_length), 6.0 * 2.54 * cm);
+    double eff_diameter = getAttrOrDefault(x_lens, _Unicode(effective_diameter), 152.4 * mm);
+    double lens_width   = getAttrOrDefault(x_lens, _Unicode(width), 6.7 * 2.54 * cm);
+    double center_thickness =
+        getAttrOrDefault(x_lens, _U(thickness), 0.068 * 2.54 * cm); // 2.0 * mm);
 
     double n_acrylic      = 1.49;
     double lens_curvature = 1.0 / (lens_f * (n_acrylic - 1.0)); // confirmed
@@ -167,27 +170,29 @@ static Ref_t createDetector(Detector& description, xml::Handle_t e, SensitiveDet
     double groove_last_rmin = (N_grooves - 1) * groove_pitch;
     double groove_last_rmax = N_grooves * groove_pitch;
 
-    auto   groove_sagitta = [&](double r) { return lens_curvature * std::pow(r, 2) / (1.0 + 1.0); };
-    double lens_thickness = groove_sagitta(groove_last_rmax) - groove_sagitta(groove_last_rmin) + center_thickness;
+    auto groove_sagitta = [&](double r) { return lens_curvature * std::pow(r, 2) / (1.0 + 1.0); };
+    double lens_thickness =
+        groove_sagitta(groove_last_rmax) - groove_sagitta(groove_last_rmin) + center_thickness;
 
-    Material         lens_mat = description.material(x_lens.materialStr());
-    Box              lens_box(lens_width / 2.0, lens_width / 2.0, (center_thickness) / 2.0);
+    Material lens_mat = description.material(x_lens.materialStr());
+    Box lens_box(lens_width / 2.0, lens_width / 2.0, (center_thickness) / 2.0);
     SubtractionSolid flat_lens(lens_box, Tube(0.0, full_ring_rmax, 2 * center_thickness));
 
     Assembly lens_vol(mod_name + "_lens");
-    Volume   flatpart_lens_vol("flatpart_lens", flat_lens, lens_mat);
+    Volume flatpart_lens_vol("flatpart_lens", flat_lens, lens_mat);
     lens_vol.placeVolume(flatpart_lens_vol);
 
-    int    i_groove    = 0;
+    int i_groove       = 0;
     double groove_rmax = groove_pitch;
     double groove_rmin = 0;
 
     while (groove_rmax <= full_ring_rmax) {
-      double   dZ = groove_sagitta(groove_rmax) - groove_sagitta(groove_rmin);
-      Polycone groove_solid(0, 2.0 * M_PI, {groove_rmin, groove_rmin, groove_rmin},
-                            {groove_rmax, groove_rmax, groove_rmin},
-                            {-lens_thickness / 2.0, lens_thickness / 2.0 - dZ, lens_thickness / 2.0});
-      Volume   lens_groove_vol("lens_groove_" + std::to_string(i_groove), groove_solid, lens_mat);
+      double dZ = groove_sagitta(groove_rmax) - groove_sagitta(groove_rmin);
+      Polycone groove_solid(
+          0, 2.0 * M_PI, {groove_rmin, groove_rmin, groove_rmin},
+          {groove_rmax, groove_rmax, groove_rmin},
+          {-lens_thickness / 2.0, lens_thickness / 2.0 - dZ, lens_thickness / 2.0});
+      Volume lens_groove_vol("lens_groove_" + std::to_string(i_groove), groove_solid, lens_mat);
       lens_vol.placeVolume(lens_groove_vol);
 
       i_groove++;
@@ -207,9 +212,10 @@ static Ref_t createDetector(Detector& description, xml::Handle_t e, SensitiveDet
     z_placement += lens_thickness / 2.0;
 
     // optical surfaces
-    auto lens_surf = surfMgr.opticalSurface(
-        dd4hep::getAttrOrDefault<std::string>(x_lens, _Unicode(surface), "MRICH_LensOpticalSurface"));
-    SkinSurface skin_surf(description, lens_de, Form("MRichFresnelLens_skin_surface_%d", 1), lens_surf, lens_vol);
+    auto lens_surf = surfMgr.opticalSurface(dd4hep::getAttrOrDefault<std::string>(
+        x_lens, _Unicode(surface), "MRICH_LensOpticalSurface"));
+    SkinSurface skin_surf(description, lens_de, Form("MRichFresnelLens_skin_surface_%d", 1),
+                          lens_surf, lens_vol);
     skin_surf.isValid();
   }
 
@@ -221,20 +227,20 @@ static Ref_t createDetector(Detector& description, xml::Handle_t e, SensitiveDet
 
   // mirror
   if (x_mod.hasChild(_Unicode(mirror))) {
-    xml_comp_t       x_mirror         = x_mod.child(_Unicode(mirror));
-    auto             mirror_vis       = getAttrOrDefault<std::string>(x_mirror, _U(vis), std::string("AnlGray"));
-    double           mirror_x1        = getAttrOrDefault(x_mirror, _U(x1), 100.0 * mm);
-    double           mirror_x2        = getAttrOrDefault(x_mirror, _U(x2), 80.0 * mm);
-    double           mirror_length    = getAttrOrDefault(x_mirror, _U(length), 130.0 * mm);
-    double           mirror_thickness = getAttrOrDefault(x_mirror, _U(thickness), 2.0 * mm);
-    double           outer_x1         = (mirror_x1 + mirror_thickness) / 2.0;
-    double           outer_x2         = (mirror_x2 + mirror_thickness) / 2.0;
-    Trd2             outer_mirror_trd(outer_x1, outer_x2, outer_x1, outer_x2, mirror_length / 2.0);
-    Trd2             inner_mirror_trd(mirror_x1 / 2.0, mirror_x2 / 2.0, mirror_x1 / 2.0, mirror_x2 / 2.0,
-                                      mirror_length / 2.0 + 0.1 * mm);
+    xml_comp_t x_mirror  = x_mod.child(_Unicode(mirror));
+    auto mirror_vis      = getAttrOrDefault<std::string>(x_mirror, _U(vis), std::string("AnlGray"));
+    double mirror_x1     = getAttrOrDefault(x_mirror, _U(x1), 100.0 * mm);
+    double mirror_x2     = getAttrOrDefault(x_mirror, _U(x2), 80.0 * mm);
+    double mirror_length = getAttrOrDefault(x_mirror, _U(length), 130.0 * mm);
+    double mirror_thickness = getAttrOrDefault(x_mirror, _U(thickness), 2.0 * mm);
+    double outer_x1         = (mirror_x1 + mirror_thickness) / 2.0;
+    double outer_x2         = (mirror_x2 + mirror_thickness) / 2.0;
+    Trd2 outer_mirror_trd(outer_x1, outer_x2, outer_x1, outer_x2, mirror_length / 2.0);
+    Trd2 inner_mirror_trd(mirror_x1 / 2.0, mirror_x2 / 2.0, mirror_x1 / 2.0, mirror_x2 / 2.0,
+                          mirror_length / 2.0 + 0.1 * mm);
     SubtractionSolid mirror_solid(outer_mirror_trd, inner_mirror_trd);
-    Material         mirror_mat = description.material(x_mirror.materialStr());
-    Volume           mirror_vol(mod_name + "_mirror", mirror_solid, mirror_mat);
+    Material mirror_mat = description.material(x_mirror.materialStr());
+    Volume mirror_vol(mod_name + "_mirror", mirror_solid, mirror_mat);
 
     // update position
     z_placement += mirror_length / 2.0;
@@ -246,21 +252,22 @@ static Ref_t createDetector(Detector& description, xml::Handle_t e, SensitiveDet
     z_placement += mirror_length / 2.0;
 
     // optical surfaces
-    auto mirror_surf = surfMgr.opticalSurface(
-        dd4hep::getAttrOrDefault<std::string>(x_mirror, _Unicode(surface), "MRICH_MirrorOpticalSurface"));
-    SkinSurface skin_surf(description, mirror_de, Form("MRICH_mirror_skin_surface_%d", 1), mirror_surf, mirror_vol);
+    auto mirror_surf = surfMgr.opticalSurface(dd4hep::getAttrOrDefault<std::string>(
+        x_mirror, _Unicode(surface), "MRICH_MirrorOpticalSurface"));
+    SkinSurface skin_surf(description, mirror_de, Form("MRICH_mirror_skin_surface_%d", 1),
+                          mirror_surf, mirror_vol);
     skin_surf.isValid();
   }
 
   // photon detector
   if (x_mod.hasChild(_Unicode(photodet))) {
-    xml_comp_t x_photodet         = x_mod.child(_Unicode(photodet));
-    auto       photodet_vis       = getAttrOrDefault<std::string>(x_photodet, _U(vis), std::string("AnlRed"));
-    double     photodet_width     = getAttrOrDefault(x_photodet, _U(width), 130.0 * mm);
-    double     photodet_thickness = getAttrOrDefault(x_photodet, _U(thickness), 2.0 * mm);
-    Material   photodet_mat       = description.material(x_photodet.materialStr());
-    Box        window_box(photodet_width / 2.0, photodet_width / 2.0, photodet_thickness / 2.0);
-    Volume     window_vol(mod_name + "_window", window_box, photodet_mat);
+    xml_comp_t x_photodet = x_mod.child(_Unicode(photodet));
+    auto photodet_vis = getAttrOrDefault<std::string>(x_photodet, _U(vis), std::string("AnlRed"));
+    double photodet_width     = getAttrOrDefault(x_photodet, _U(width), 130.0 * mm);
+    double photodet_thickness = getAttrOrDefault(x_photodet, _U(thickness), 2.0 * mm);
+    Material photodet_mat     = description.material(x_photodet.materialStr());
+    Box window_box(photodet_width / 2.0, photodet_width / 2.0, photodet_thickness / 2.0);
+    Volume window_vol(mod_name + "_window", window_box, photodet_mat);
 
     // update position
     z_placement += photodet_thickness / 2.0;
@@ -288,17 +295,18 @@ static Ref_t createDetector(Detector& description, xml::Handle_t e, SensitiveDet
     // layers
     int i_layer = 1;
     for (xml_coll_t li(x_photodet, _Unicode(layer)); li; ++li) {
-      xml_comp_t x_layer         = li;
-      Material   layer_mat       = description.material(x_layer.materialStr());
-      double     layer_thickness = x_layer.thickness();
-      Box        layer_box(photodet_width / 2.0, photodet_width / 2.0, layer_thickness / 2.0);
-      Volume     layer_vol(mod_name + "_layer_" + std::to_string(i_layer), layer_box, layer_mat);
+      xml_comp_t x_layer     = li;
+      Material layer_mat     = description.material(x_layer.materialStr());
+      double layer_thickness = x_layer.thickness();
+      Box layer_box(photodet_width / 2.0, photodet_width / 2.0, layer_thickness / 2.0);
+      Volume layer_vol(mod_name + "_layer_" + std::to_string(i_layer), layer_box, layer_mat);
 
       // update position
       z_placement += layer_thickness / 2.0;
       // place volume
       pv = m_volume.placeVolume(layer_vol, Position(0, 0, z_placement));
-      DetElement layer_de(mod_de, mod_name + std::string("_layer_de_") + std::to_string(i_layer), 1);
+      DetElement layer_de(mod_de, mod_name + std::string("_layer_de_") + std::to_string(i_layer),
+                          1);
       layer_de.setPlacement(pv);
       // update position
       z_placement += layer_thickness / 2.0;
@@ -338,7 +346,8 @@ static Ref_t createDetector(Detector& description, xml::Handle_t e, SensitiveDet
     for (xml_coll_t x_position_i(x_positions, _U(position)); x_position_i; ++x_position_i) {
       xml_comp_t x_position = x_position_i;
       positions.push_back(std::make_tuple(x_positions.scale() * x_position.x() * mm,
-                                          x_positions.scale() * x_position.y() * mm, -x_positions.z0()));
+                                          x_positions.scale() * x_position.y() * mm,
+                                          -x_positions.z0()));
     }
   }
   // if no positions, then autoplacement
@@ -387,7 +396,8 @@ static Ref_t createDetector(Detector& description, xml::Handle_t e, SensitiveDet
       pv = envVol.placeVolume(mod_v, tr);
       pv.addPhysVolID("module", i_mod);
 
-      auto mod_det_element = module_assembly_delements[mod_name].clone(mod_name + "__" + std::to_string(i_mod));
+      auto mod_det_element =
+          module_assembly_delements[mod_name].clone(mod_name + "__" + std::to_string(i_mod));
       mod_det_element.setPlacement(pv);
       sdet.add(mod_det_element);
 
@@ -397,11 +407,11 @@ static Ref_t createDetector(Detector& description, xml::Handle_t e, SensitiveDet
 
   // additional layers
   if (x_det.hasChild(_Unicode(layer))) {
-    xml_comp_t x_layer         = x_det.child(_Unicode(layer));
-    double     layer_thickness = x_layer.thickness();
-    Material   layer_mat       = description.material(x_layer.materialStr());
-    Tube       frameShape(rmin, rmax, layer_thickness / 2., 0., 2 * M_PI);
-    Volume     frameVol("MRICH_Frame", frameShape, layer_mat);
+    xml_comp_t x_layer     = x_det.child(_Unicode(layer));
+    double layer_thickness = x_layer.thickness();
+    Material layer_mat     = description.material(x_layer.materialStr());
+    Tube frameShape(rmin, rmax, layer_thickness / 2., 0., 2 * M_PI);
+    Volume frameVol("MRICH_Frame", frameShape, layer_mat);
     pv = envVol.placeVolume(frameVol, Position(0, 0, (length - layer_thickness) / 2.0));
   }
 
