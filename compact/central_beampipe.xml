@@ -156,9 +156,9 @@
               <zplane z="LeptonIncomingBeampipe_z3"
                       OD="LeptonIncomingBeampipe_ID2 + 2* BeampipeCoatingThickness"/>
 <<<<<<< HEAD
-              <!-- zplane z="LeptonIncomingBeampipe_z4" 
+              <!-- zplane z="LeptonIncomingBeampipe_z4"
                       OD="LeptonIncomingBeampipe_ID3 + 2* BeampipeCoatingThickness"/ -->
-              <zplane z="LeptonIncomingBeampipe_z5" 
+              <zplane z="LeptonIncomingBeampipe_z5"
 =======
               <zplane z="LeptonIncomingBeampipe_z4"
                       OD="LeptonIncomingBeampipe_ID3 + 2* BeampipeCoatingThickness"/>
@@ -184,9 +184,9 @@
               <zplane z="LeptonIncomingBeampipe_z3"
                       OD="LeptonIncomingBeampipe_ID2 + 2* BeampipeCoatingThickness + 2* LeptonIncomingBeampipeThickness"/>
 <<<<<<< HEAD
-              <!-- zplane z="LeptonIncomingBeampipe_z4" 
+              <!-- zplane z="LeptonIncomingBeampipe_z4"
                       OD="LeptonIncomingBeampipe_ID3 + 2* BeampipeCoatingThickness + 2* LeptonIncomingBeampipeThickness"/ -->
-              <zplane z="LeptonIncomingBeampipe_z5" 
+              <zplane z="LeptonIncomingBeampipe_z5"
 =======
               <zplane z="LeptonIncomingBeampipe_z4"
                       OD="LeptonIncomingBeampipe_ID3 + 2* BeampipeCoatingThickness + 2* LeptonIncomingBeampipeThickness"/>
