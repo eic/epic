@@ -87,24 +87,24 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector /
   // Add all pipes to the assembly
   for( uint pipeN = 0; pipeN < xCenters.size(); pipeN++ ) {
     // beam pipe matter
-    ConeSegment s_tube(  
-                         lengths[pipeN] / 2.0,         // length 
+    ConeSegment s_tube(
+                         lengths[pipeN] / 2.0,         // length
                          rOuters2[pipeN] - thickness,  // r2 in
                          rOuters2[pipeN],              // r2 out
                          rOuters1[pipeN] - thickness,  // r1 in
-                         rOuters1[pipeN]               // r1 out 
+                         rOuters1[pipeN]               // r1 out
                       );
     // beam pipe coating
-    ConeSegment s_coat(  
-                         lengths[pipeN] / 2.0,                   // length 
+    ConeSegment s_coat(
+                         lengths[pipeN] / 2.0,                   // length
                          rOuters2[pipeN] - thickness - coating,  // r2 in
                          rOuters2[pipeN] - thickness,            // r2 out
                          rOuters1[pipeN] - thickness - coating,  // r1 in
-                         rOuters1[pipeN] - thickness             // r1 out 
+                         rOuters1[pipeN] - thickness             // r1 out
                       );
     // beam pipe vacuum
-    ConeSegment s_vacm(  
-                         lengths[pipeN] / 2.0,                  // length 
+    ConeSegment s_vacm(
+                         lengths[pipeN] / 2.0,                  // length
                          0,                                     // r2 in
                          rOuters2[pipeN] - thickness - coating, // r2 out
                          0,                                     // r1 in
