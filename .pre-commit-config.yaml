@@ -1,5 +1,3 @@
-ci:
-    skip: [clang-format]
 repos:
 -   repo: https://github.com/pre-commit/pre-commit-hooks
     rev: v4.6.0
@@ -7,8 +5,8 @@ repos:
     -   id: check-yaml
     -   id: end-of-file-fixer
     -   id: trailing-whitespace
--   repo: https://github.com/pocc/pre-commit-hooks
-    rev: v1.3.5
+-   repo: https://github.com/pre-commit/mirrors-clang-format
+    rev: v18.1.3
     hooks:
     -   id: clang-format
 -   repo: https://github.com/Lucas-C/pre-commit-hooks
