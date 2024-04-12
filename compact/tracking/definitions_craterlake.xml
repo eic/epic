@@ -186,6 +186,13 @@
       <composite name="B0Tracker"/>
       <composite name="B0TrackerCompanion"/>
     </detector>
+    <detector id="TaggerSubAssembly_ID"
+      name="TaggerSubAssembly"
+      type="DD4hep_SubdetectorAssembly"
+      vis="TrackerSubAssemblyVis">
+      <composite name="TaggerTrackerCompanion"/>
+      <composite name="BackwardsTaggerStation"/>
+    </detector>
   </detectors>
 
   <documentation>
