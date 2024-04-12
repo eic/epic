@@ -14,14 +14,16 @@
     <constant name="LeptonIncomingBeampipe_z1" value="BeampipeDownstreamStraightLength"/>
     <constant name="LeptonIncomingBeampipe_z2" value="755.00 * mm"/>
     <constant name="LeptonIncomingBeampipe_z3" value="4300.00 * mm"/>
-    <constant name="LeptonIncomingBeampipe_z4" value="4450.00 * mm"/>
-    <constant name="LeptonIncomingBeampipe_z5" value="4460.00 * mm"/>
+    <!-- constant name="LeptonIncomingBeampipe_z4" value="4450.00 * mm"/ -->
+    <!-- constant name="LeptonIncomingBeampipe_z5" value="4460.00 * mm"/ -->
+    <constant name="LeptonIncomingBeampipe_z5" value="4453.00 * mm"/>
     <constant name="LeptonIncomingBeampipe_z6" value="4660.00 * mm"/>
     <constant name="LeptonIncomingBeampipe_z7" value="5100.00 * mm"/>
 
     <constant name="LeptonIncomingBeampipe_ID1" value="60.00 * mm"/>
     <constant name="LeptonIncomingBeampipe_ID2" value="62.00 * mm"/>
-    <constant name="LeptonIncomingBeampipe_ID3" value="44.00 * mm"/>
+    <!-- constant name="LeptonIncomingBeampipe_ID3" value="44.00 * mm"/ -->
+    <constant name="LeptonIncomingBeampipe_ID3" value="43.00 * mm"/>
     <constant name="LeptonIncomingBeampipe_ID4" value="54.00 * mm"/>
 
     <!-- lepton lepton outgoing beam pipe -->
@@ -139,7 +141,7 @@
               <zplane z="LeptonIncomingBeampipe_z2" OD="LeptonIncomingBeampipe_ID1"/>
               <zplane z="LeptonIncomingBeampipe_z2" OD="LeptonIncomingBeampipe_ID2"/>
               <zplane z="LeptonIncomingBeampipe_z3" OD="LeptonIncomingBeampipe_ID2"/>
-              <zplane z="LeptonIncomingBeampipe_z4" OD="LeptonIncomingBeampipe_ID3"/>
+              <!-- zplane z="LeptonIncomingBeampipe_z4" OD="LeptonIncomingBeampipe_ID3"/ -->
               <zplane z="LeptonIncomingBeampipe_z5" OD="LeptonIncomingBeampipe_ID3"/>
               <zplane z="LeptonIncomingBeampipe_z6" OD="LeptonIncomingBeampipe_ID4"/>
               <zplane z="LeptonIncomingBeampipe_z7" OD="LeptonIncomingBeampipe_ID4"/>
@@ -153,8 +155,8 @@
                       OD="LeptonIncomingBeampipe_ID2 + 2* BeampipeCoatingThickness"/>
               <zplane z="LeptonIncomingBeampipe_z3" 
                       OD="LeptonIncomingBeampipe_ID2 + 2* BeampipeCoatingThickness"/>
-              <zplane z="LeptonIncomingBeampipe_z4" 
-                      OD="LeptonIncomingBeampipe_ID3 + 2* BeampipeCoatingThickness"/>
+              <!-- zplane z="LeptonIncomingBeampipe_z4" 
+                      OD="LeptonIncomingBeampipe_ID3 + 2* BeampipeCoatingThickness"/ -->
               <zplane z="LeptonIncomingBeampipe_z5" 
                       OD="LeptonIncomingBeampipe_ID3 + 2* BeampipeCoatingThickness"/>
               <zplane z="LeptonIncomingBeampipe_z6" 
@@ -175,8 +177,8 @@
                       OD="LeptonIncomingBeampipe_ID2 + 2* BeampipeCoatingThickness + 2* LeptonIncomingBeampipeThickness"/>
               <zplane z="LeptonIncomingBeampipe_z3" 
                       OD="LeptonIncomingBeampipe_ID2 + 2* BeampipeCoatingThickness + 2* LeptonIncomingBeampipeThickness"/>
-              <zplane z="LeptonIncomingBeampipe_z4" 
-                      OD="LeptonIncomingBeampipe_ID3 + 2* BeampipeCoatingThickness + 2* LeptonIncomingBeampipeThickness"/>
+              <!-- zplane z="LeptonIncomingBeampipe_z4" 
+                      OD="LeptonIncomingBeampipe_ID3 + 2* BeampipeCoatingThickness + 2* LeptonIncomingBeampipeThickness"/ -->
               <zplane z="LeptonIncomingBeampipe_z5" 
                       OD="LeptonIncomingBeampipe_ID3 + 2* BeampipeCoatingThickness + 2* LeptonIncomingBeampipeThickness"/>
               <zplane z="LeptonIncomingBeampipe_z6" 
