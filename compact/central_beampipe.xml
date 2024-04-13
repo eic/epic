@@ -155,15 +155,9 @@
                       OD="LeptonIncomingBeampipe_ID2 + 2* BeampipeCoatingThickness"/>
               <zplane z="LeptonIncomingBeampipe_z3"
                       OD="LeptonIncomingBeampipe_ID2 + 2* BeampipeCoatingThickness"/>
-<<<<<<< HEAD
               <!-- zplane z="LeptonIncomingBeampipe_z4"
                       OD="LeptonIncomingBeampipe_ID3 + 2* BeampipeCoatingThickness"/ -->
               <zplane z="LeptonIncomingBeampipe_z5"
-=======
-              <zplane z="LeptonIncomingBeampipe_z4"
-                      OD="LeptonIncomingBeampipe_ID3 + 2* BeampipeCoatingThickness"/>
-              <zplane z="LeptonIncomingBeampipe_z5"
->>>>>>> f5c5f26b1c6674b6abdcf85186651f47207e5c65
                       OD="LeptonIncomingBeampipe_ID3 + 2* BeampipeCoatingThickness"/>
               <zplane z="LeptonIncomingBeampipe_z6"
                       OD="LeptonIncomingBeampipe_ID4 + 2* BeampipeCoatingThickness"/>
@@ -183,15 +177,9 @@
                       OD="LeptonIncomingBeampipe_ID2 + 2* BeampipeCoatingThickness + 2* LeptonIncomingBeampipeThickness"/>
               <zplane z="LeptonIncomingBeampipe_z3"
                       OD="LeptonIncomingBeampipe_ID2 + 2* BeampipeCoatingThickness + 2* LeptonIncomingBeampipeThickness"/>
-<<<<<<< HEAD
               <!-- zplane z="LeptonIncomingBeampipe_z4"
                       OD="LeptonIncomingBeampipe_ID3 + 2* BeampipeCoatingThickness + 2* LeptonIncomingBeampipeThickness"/ -->
               <zplane z="LeptonIncomingBeampipe_z5"
-=======
-              <zplane z="LeptonIncomingBeampipe_z4"
-                      OD="LeptonIncomingBeampipe_ID3 + 2* BeampipeCoatingThickness + 2* LeptonIncomingBeampipeThickness"/>
-              <zplane z="LeptonIncomingBeampipe_z5"
->>>>>>> f5c5f26b1c6674b6abdcf85186651f47207e5c65
                       OD="LeptonIncomingBeampipe_ID3 + 2* BeampipeCoatingThickness + 2* LeptonIncomingBeampipeThickness"/>
               <zplane z="LeptonIncomingBeampipe_z6"
                       OD="LeptonIncomingBeampipe_ID4 + 2* BeampipeCoatingThickness + 2* LeptonIncomingBeampipeThickness"/>
