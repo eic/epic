@@ -1,0 +1,15 @@
+<!-- SPDX-License-Identifier: LGPL-3.0-or-later -->
+<!-- Copyright (C) 2024 Wouter Deconinck -->
+
+<lccdd>
+
+  <plugins>
+    <plugin name="epic_FileLoader">
+      <arg value="cache:$DETECTOR_PATH:/opt/detector"/>
+      <arg value="file:calibrations/onnx/identity_gemm_w1x1_b1.onnx"/>
+      <arg value="url:https://github.com/eic/epic-data/raw/27ef75b2b6108b5e72d3ab891f32aeeb3770c7bd/onnx/identity_gemm_w1x1_b1.onnx"/>
+    </plugin>
+  </plugins>
+
+</lccdd>
+
