@@ -287,9 +287,9 @@ jobs:
     runs-on: ubuntu-latest
     needs:
       - build
+      - list-detector-configs
     strategy:
-      matrix:
-        detector_config: [epic_craterlake_no_bhcal, epic_craterlake_tracking_only, epic_dirc_only, epic_drich_only, epic_imaging_only, epic_ip6, epic_lfhcal_with_insert]
+      matrix: ${{fromJson(needs.list-detector-configs.outputs.configs_json)}}
     steps:
     - uses: actions/checkout@v4
     - uses: actions/download-artifact@v4
@@ -309,6 +309,7 @@ jobs:
           declare -A detectors
           while read d ; do detectors[$d]='-l 3' ; done <<< $(npdet_to_step list $DETECTOR_PATH/${{matrix.detector_config}}.xml  | sed '/world/d;s/.*(vol: \(.*\)).*/\1/g')
           # Then tweak the levels (default is 1)
+          detectors[HcalBarrel]='-l 1'
           detectors[LFHCAL]='-l 2'
           detectors[OuterBarrelMPGDSubAssembly]='-l 4'
           # Export to one STEP file
