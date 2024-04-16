@@ -172,6 +172,8 @@
             dy="EcalBarrel_AstroPix_length + EcalBarrel_AstroPix_margin"
           />
         </stave>
+        <layer_material surface="inner" binning="binPhi,binR" bins0="6*EcalBarrel_SectorRepeat" bins1="100"/>
+        <layer_material surface="outer" binning="binPhi,binR" bins0="6*EcalBarrel_SectorRepeat" bins1="100"/>
       </layer>
 
       <layer repeat="1" vis="EcalBarrelLayerVis"
@@ -318,6 +320,13 @@
       <support thickness="EcalBarrel_BackSupportThickness" material="Aluminum" vis="EcalBarrelSupportVis"/>
     </detector>
   </detectors>
+
+  <plugins>
+    <plugin name="DD4hep_ParametersPlugin">
+      <argument value="EcalBarrelImagingTracker"/>
+      <argument value="layer_pattern: str=EcalBarrelImaging_layer\d_P"/>
+    </plugin>
+  </plugins>
 
   <readouts>
     <readout name="EcalBarrelImagingHits">
