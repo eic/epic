@@ -102,8 +102,8 @@
     <comment> Main parameters for MPGD endcap disks, offset here is the distance between disks </comment>
     <constant name="ForwardMPGD_zmin"             value="148*cm"/>
     <constant name="ForwardMPGDMod_offset"        value="13.0*cm"/>
-    <constant name="ForwardMPGDMod1_rmin"         value="8.014*cm" />
-    <constant name="ForwardMPGDMod2_rmin"         value="9.014*cm"/>
+    <constant name="ForwardMPGDMod1_rmin"         value="9.0*cm" />
+    <constant name="ForwardMPGDMod2_rmin"         value="9.0*cm"/>
     <constant name="ForwardMPGDMod1_rmax"         value="50*cm" />
     <constant name="ForwardMPGDMod2_rmax"         value="50*cm" />
 
