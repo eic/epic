@@ -23,35 +23,35 @@ using namespace std;
 using namespace dd4hep;
 using namespace dd4hep::detail;
 
-static Ref_t SimpleDiskDetector_create_detector(Detector& description, xml_h e, SensitiveDetector sens)
-{
-  xml_det_t      x_det    = e;
-  Material       air      = description.air();
-  string         det_name = x_det.nameStr();
-  bool           reflect  = x_det.reflect();
-  DetElement     sdet(det_name, x_det.id());
-  Assembly       assembly(det_name);
-  PlacedVolume   pv;
-  int            l_num = 0;
-  xml::Component pos   = x_det.position();
+static Ref_t SimpleDiskDetector_create_detector(Detector& description, xml_h e,
+                                                SensitiveDetector sens) {
+  xml_det_t x_det = e;
+  Material air    = description.air();
+  string det_name = x_det.nameStr();
+  bool reflect    = x_det.reflect();
+  DetElement sdet(det_name, x_det.id());
+  Assembly assembly(det_name);
+  PlacedVolume pv;
+  int l_num          = 0;
+  xml::Component pos = x_det.position();
 
   for (xml_coll_t i(x_det, _U(layer)); i; ++i, ++l_num) {
-    xml_comp_t x_layer    = i;
-    string     l_nam      = det_name + _toString(l_num, "_layer%d");
-    double     zmin       = x_layer.inner_z();
-    double     rmin       = x_layer.inner_r();
-    double     rmax       = x_layer.outer_r();
-    double     layerWidth = 0.;
-    int        s_num      = 0;
+    xml_comp_t x_layer = i;
+    string l_nam       = det_name + _toString(l_num, "_layer%d");
+    double zmin        = x_layer.inner_z();
+    double rmin        = x_layer.inner_r();
+    double rmax        = x_layer.outer_r();
+    double layerWidth  = 0.;
+    int s_num          = 0;
 
     for (xml_coll_t j(x_layer, _U(slice)); j; ++j) {
       double thickness = xml_comp_t(j).thickness();
       layerWidth += thickness;
     }
-    Tube   l_tub(rmin, rmax, layerWidth / 2.0, 2 * M_PI);
+    Tube l_tub(rmin, rmax, layerWidth / 2.0, 2 * M_PI);
     Volume l_vol(l_nam, l_tub, air);
     l_vol.setVisAttributes(description, x_layer.visStr());
-    DetElement   layer;
+    DetElement layer;
     PlacedVolume layer_pv;
     if (!reflect) {
       layer    = DetElement(sdet, l_nam + "_pos", l_num);
@@ -60,7 +60,8 @@ static Ref_t SimpleDiskDetector_create_detector(Detector& description, xml_h e, 
       layer.setPlacement(layer_pv);
     } else {
       layer    = DetElement(sdet, l_nam + "_neg", l_num);
-      layer_pv = assembly.placeVolume(l_vol, Transform3D(RotationY(M_PI), Position(0, 0, -zmin - layerWidth / 2)));
+      layer_pv = assembly.placeVolume(
+          l_vol, Transform3D(RotationY(M_PI), Position(0, 0, -zmin - layerWidth / 2)));
       layer_pv.addPhysVolID("barrel", 2).addPhysVolID("layer", l_num);
       layer.setPlacement(layer_pv);
       // DetElement layerR = layer.clone(l_nam+"_neg");
@@ -70,10 +71,10 @@ static Ref_t SimpleDiskDetector_create_detector(Detector& description, xml_h e, 
     double tot_thickness = -layerWidth / 2.0;
     for (xml_coll_t j(x_layer, _U(slice)); j; ++j, ++s_num) {
       xml_comp_t x_slice = j;
-      double     thick   = x_slice.thickness();
-      Material   mat     = description.material(x_slice.materialStr());
-      string     s_nam   = l_nam + _toString(s_num, "_slice%d");
-      Volume     s_vol(s_nam, Tube(rmin, rmax, thick / 2.0), mat);
+      double thick       = x_slice.thickness();
+      Material mat       = description.material(x_slice.materialStr());
+      string s_nam       = l_nam + _toString(s_num, "_slice%d");
+      Volume s_vol(s_nam, Tube(rmin, rmax, thick / 2.0), mat);
       if (!reflect) {
         s_nam += "_pos";
       } else {
@@ -94,7 +95,8 @@ static Ref_t SimpleDiskDetector_create_detector(Detector& description, xml_h e, 
   if (x_det.hasAttr(_U(combineHits))) {
     sdet.setCombineHits(x_det.attr<bool>(_U(combineHits)), sens);
   }
-  pv = description.pickMotherVolume(sdet).placeVolume(assembly, Position(pos.x(), pos.y(), pos.z()));
+  pv =
+      description.pickMotherVolume(sdet).placeVolume(assembly, Position(pos.x(), pos.y(), pos.z()));
   pv.addPhysVolID("system", x_det.id()); // Set the subdetector system ID.
   sdet.setPlacement(pv);
   return sdet;

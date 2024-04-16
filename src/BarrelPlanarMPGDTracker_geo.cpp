@@ -37,21 +37,21 @@ using namespace dd4hep::rec;
  * - Detector is setup as a "tracker" so we can use the hits
  *
  */
-static Ref_t create_BarrelPlanarMPGDTracker_geo(Detector& description, xml_h e, SensitiveDetector sens)
-{
+static Ref_t create_BarrelPlanarMPGDTracker_geo(Detector& description, xml_h e,
+                                                SensitiveDetector sens) {
   typedef vector<PlacedVolume> Placements;
-  xml_det_t                    x_det = e;
+  xml_det_t x_det = e;
   // Material                                air      = description.air();
-  int                                     det_id   = x_det.id();
-  string                                  det_name = x_det.nameStr();
-  DetElement                              sdet(det_name, det_id);
-  map<string, Volume>                     volumes;
-  map<string, Placements>                 sensitives;
+  int det_id      = x_det.id();
+  string det_name = x_det.nameStr();
+  DetElement sdet(det_name, det_id);
+  map<string, Volume> volumes;
+  map<string, Placements> sensitives;
   map<string, std::vector<rec::VolPlane>> volplane_surfaces;
-  PlacedVolume                            pv;
-  dd4hep::xml::Dimension                  dimensions(x_det.dimensions());
-  xml_dim_t                               mpgd_pos = x_det.position();
-  Assembly                                assembly(det_name);
+  PlacedVolume pv;
+  dd4hep::xml::Dimension dimensions(x_det.dimensions());
+  xml_dim_t mpgd_pos = x_det.position();
+  Assembly assembly(det_name);
 
   // Set detector type flag
   dd4hep::xml::setDetectorTypeFlag(x_det, sdet);
@@ -60,7 +60,8 @@ static Ref_t create_BarrelPlanarMPGDTracker_geo(Detector& description, xml_h e, 
   // Add the volume boundary material if configured
   for (xml_coll_t bmat(x_det, _Unicode(boundary_material)); bmat; ++bmat) {
     xml_comp_t x_boundary_material = bmat;
-    DD4hepDetectorHelper::xmlToProtoSurfaceMaterial(x_boundary_material, params, "boundary_material");
+    DD4hepDetectorHelper::xmlToProtoSurfaceMaterial(x_boundary_material, params,
+                                                    "boundary_material");
   }
 
   map<string, std::array<double, 2>> module_thicknesses;
@@ -69,7 +70,7 @@ static Ref_t create_BarrelPlanarMPGDTracker_geo(Detector& description, xml_h e, 
   // loop over the modules
   for (xml_coll_t mi(x_det, _U(module)); mi; ++mi) {
     xml_comp_t x_mod = mi;
-    string     m_nam = x_mod.nameStr();
+    string m_nam     = x_mod.nameStr();
 
     if (volumes.find(m_nam) != volumes.end()) {
       printout(ERROR, "BarrelPlanarMPGDTracker_geo",
@@ -77,8 +78,8 @@ static Ref_t create_BarrelPlanarMPGDTracker_geo(Detector& description, xml_h e, 
       throw runtime_error("Logics error in building modules.");
     }
 
-    int    ncomponents     = 0;
-    int    sensor_number   = 1;
+    int ncomponents        = 0;
+    int sensor_number      = 1;
     double total_thickness = 0;
 
     // Compute module total thickness from components
@@ -113,13 +114,13 @@ static Ref_t create_BarrelPlanarMPGDTracker_geo(Detector& description, xml_h e, 
     double max_component_length = 0;
     double gas_thickness        = 0.0;
     for (xml_coll_t mci(x_mod, _U(module_component)); mci; ++mci, ++ncomponents) {
-      xml_comp_t x_comp    = mci;
-      string     c_nam     = _toString(ncomponents, "component%d");
-      string     comp_name = x_comp.nameStr();
+      xml_comp_t x_comp = mci;
+      string c_nam      = _toString(ncomponents, "component%d");
+      string comp_name  = x_comp.nameStr();
 
       double box_width  = x_comp.width();
       double box_length = x_comp.length();
-      Box    c_box;
+      Box c_box;
       // Since MPGD frames are layed over the MPGD foils, the foil material is pressent under the frame as well.
       // The gas volumes are not present under the frames, so our frames must eat only the gas module areas
       //
@@ -149,7 +150,8 @@ static Ref_t create_BarrelPlanarMPGDTracker_geo(Detector& description, xml_h e, 
         printout(DEBUG, "BarrelPlanarMPGDTracker_geo", "Not gas: %s", comp_name.c_str());
         printout(DEBUG, "BarrelPlanarMPGDTracker_geo", "box_comp_width: %f", x_comp.width());
         printout(DEBUG, "BarrelPlanarMPGDTracker_geo", "box_comp_length: %f", x_comp.length());
-        printout(DEBUG, "BarrelPlanarMPGDTracker_geo", "box_comp_thickness: %f", x_comp.thickness());
+        printout(DEBUG, "BarrelPlanarMPGDTracker_geo", "box_comp_thickness: %f",
+                 x_comp.thickness());
       }
       Volume c_vol{c_nam, c_box, description.material(x_comp.materialStr())};
 
@@ -185,8 +187,8 @@ static Ref_t create_BarrelPlanarMPGDTracker_geo(Detector& description, xml_h e, 
     }
     // Now add-on the frame
     if (x_mod.hasChild(_U(frame))) {
-      xml_comp_t m_frame         = x_mod.child(_U(frame));
-      double     frame_thickness = getAttrOrDefault<double>(m_frame, _U(thickness), total_thickness);
+      xml_comp_t m_frame     = x_mod.child(_U(frame));
+      double frame_thickness = getAttrOrDefault<double>(m_frame, _U(thickness), total_thickness);
 
       Box lframe_box{m_frame.width() / 2.0, (max_component_length + 2.0 * m_frame.width()) / 2.0,
                      frame_thickness / 2.0};
@@ -209,16 +211,21 @@ static Ref_t create_BarrelPlanarMPGDTracker_geo(Detector& description, xml_h e, 
 
       printout(DEBUG, "BarrelPlanarMPGDTracker_geo", "frame_thickness: %f", frame_thickness);
       printout(DEBUG, "BarrelPlanarMPGDTracker_geo", "total_thickness: %f", total_thickness);
-      printout(DEBUG, "BarrelPlanarMPGDTracker_geo", "frame_thickness + total_thickness: %f", frame_thickness + total_thickness);
+      printout(DEBUG, "BarrelPlanarMPGDTracker_geo", "frame_thickness + total_thickness: %f",
+               frame_thickness + total_thickness);
 
       m_vol.placeVolume(lframe_vol, Position(frame_width / 2.0 + max_component_width / 2, 0.0,
-                                             frame_thickness / 2.0 - total_thickness / 2.0 - gas_thickness / 2.0));
+                                             frame_thickness / 2.0 - total_thickness / 2.0 -
+                                                 gas_thickness / 2.0));
       m_vol.placeVolume(rframe_vol, Position(-frame_width / 2.0 - max_component_width / 2.0, 0.0,
-                                             frame_thickness / 2.0 - total_thickness / 2.0 - gas_thickness / 2.0));
+                                             frame_thickness / 2.0 - total_thickness / 2.0 -
+                                                 gas_thickness / 2.0));
       m_vol.placeVolume(tframe_vol, Position(0.0, frame_width / 2.0 + max_component_length / 2,
-                                             frame_thickness / 2.0 - total_thickness / 2.0 - gas_thickness / 2.0));
+                                             frame_thickness / 2.0 - total_thickness / 2.0 -
+                                                 gas_thickness / 2.0));
       m_vol.placeVolume(bframe_vol, Position(0.0, -frame_width / 2.0 - max_component_length / 2.0,
-                                             frame_thickness / 2.0 - total_thickness / 2.0 - gas_thickness / 2.0));
+                                             frame_thickness / 2.0 - total_thickness / 2.0 -
+                                                 gas_thickness / 2.0));
     }
   }
 
@@ -227,14 +234,14 @@ static Ref_t create_BarrelPlanarMPGDTracker_geo(Detector& description, xml_h e, 
     xml_comp_t x_layer            = li;
     xml_comp_t x_layout           = x_layer.child(_U(rphi_layout));
     xml_comp_t z_layout           = x_layer.child(_U(z_layout));
-    int        lay_id             = x_layer.id();
-    string     m_nam              = x_layer.moduleStr();
-    string     lay_nam            = det_name + _toString(x_layer.id(), "_layer%d");
+    int lay_id                    = x_layer.id();
+    string m_nam                  = x_layer.moduleStr();
+    string lay_nam                = det_name + _toString(x_layer.id(), "_layer%d");
     xml_comp_t envelope_tolerance = x_layer.child(_Unicode(envelope_tolerance), false);
-    double     envelope_r_min     = 0;
-    double     envelope_r_max     = 0;
-    double     envelope_z_min     = 0;
-    double     envelope_z_max     = 0;
+    double envelope_r_min         = 0;
+    double envelope_r_max         = 0;
+    double envelope_z_min         = 0;
+    double envelope_z_max         = 0;
     if (envelope_tolerance) {
       envelope_r_min = getAttrOrDefault(envelope_tolerance, _Unicode(r_min), 0);
       envelope_r_max = getAttrOrDefault(envelope_tolerance, _Unicode(r_max), 0);
@@ -245,7 +252,7 @@ static Ref_t create_BarrelPlanarMPGDTracker_geo(Detector& description, xml_h e, 
     double phi0     = x_layout.phi0();     // starting phi of first module
     double phi_tilt = x_layout.phi_tilt(); // Phi tilit of module
     double rc       = x_layout.rc();       // Radius of the module
-    int    nphi     = x_layout.nphi();     // Number of modules in phi
+    int nphi        = x_layout.nphi();     // Number of modules in phi
     double rphi_dr  = x_layout.dr();       // The delta radius of every other module
     double phi_incr = (2 * M_PI) / nphi;   // Phi increment for one module
     double phic     = phi0;                // Phi of the module
@@ -253,11 +260,12 @@ static Ref_t create_BarrelPlanarMPGDTracker_geo(Detector& description, xml_h e, 
     double z_dr     = z_layout.dr();       // Radial offest of modules in z
     double z0       = z_layout.z0();       // Sets how much overlap in z the nz modules have
 
-    Assembly    layer_assembly(lay_nam);
-    Volume      module_env = volumes[m_nam];
-    DetElement  lay_elt(sdet, lay_nam, lay_id);
-    Placements& sensVols    = sensitives[m_nam];
-    auto&       layerParams = DD4hepDetectorHelper::ensureExtension<dd4hep::rec::VariantParameters>(lay_elt);
+    Assembly layer_assembly(lay_nam);
+    Volume module_env = volumes[m_nam];
+    DetElement lay_elt(sdet, lay_nam, lay_id);
+    Placements& sensVols = sensitives[m_nam];
+    auto& layerParams =
+        DD4hepDetectorHelper::ensureExtension<dd4hep::rec::VariantParameters>(lay_elt);
 
     pv = assembly.placeVolume(layer_assembly);
     pv.addPhysVolID("layer", lay_id);
@@ -272,12 +280,14 @@ static Ref_t create_BarrelPlanarMPGDTracker_geo(Detector& description, xml_h e, 
       double dy = z_dr * std::sin(phic + phi_tilt); // Deta y of module position
       // loop over the modules in z
       for (int j = 0; j < nz; j++) {
-        string     module_name = _toString(module, "module%d");
+        string module_name = _toString(module, "module%d");
         DetElement mod_elt(lay_elt, module_name, module);
-        double     mod_z       = 0.5 * dimensions.length();
-        double     z_placement = mod_z - j * nz * mod_z; // z location for module placement
-        double     z_offset =
-            z_placement > 0 ? -z0 / 2.0 : z0 / 2.0; // determine the amount of overlap in z the z nz modules have
+        double mod_z       = 0.5 * dimensions.length();
+        double z_placement = mod_z - j * nz * mod_z; // z location for module placement
+        double z_offset =
+            z_placement > 0
+                ? -z0 / 2.0
+                : z0 / 2.0; // determine the amount of overlap in z the z nz modules have
 
         Transform3D tr(RotationZYX(0.0, ((M_PI / 2) - phic - phi_tilt), -M_PI / 2),
                        Position(xc, yc, mpgd_pos.z() + z_placement + z_offset)); // in x-y plane,
@@ -286,7 +296,7 @@ static Ref_t create_BarrelPlanarMPGDTracker_geo(Detector& description, xml_h e, 
         mod_elt.setPlacement(pv);
         for (size_t ic = 0; ic < sensVols.size(); ++ic) {
           PlacedVolume sens_pv = sensVols[ic];
-          DetElement   comp_de(mod_elt, std::string("de_") + sens_pv.volume().name(), module);
+          DetElement comp_de(mod_elt, std::string("de_") + sens_pv.volume().name(), module);
           comp_de.setPlacement(sens_pv);
         }
         // increas module counter
@@ -307,7 +317,8 @@ static Ref_t create_BarrelPlanarMPGDTracker_geo(Detector& description, xml_h e, 
 
     for (xml_coll_t lmat(x_layer, _Unicode(layer_material)); lmat; ++lmat) {
       xml_comp_t x_layer_material = lmat;
-      DD4hepDetectorHelper::xmlToProtoSurfaceMaterial(x_layer_material, layerParams, "layer_material");
+      DD4hepDetectorHelper::xmlToProtoSurfaceMaterial(x_layer_material, layerParams,
+                                                      "layer_material");
     }
   }
   sdet.setAttributes(description, assembly, x_det.regionStr(), x_det.limitsStr(), x_det.visStr());

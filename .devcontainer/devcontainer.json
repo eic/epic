@@ -1,4 +1,4 @@
 {
-        "name": "eic-shell",
-        "image": "ghcr.io/eic/jug_xl:nightly"
+  "name": "eic-shell",
+  "image": "ghcr.io/eic/jug_xl:nightly"
 }

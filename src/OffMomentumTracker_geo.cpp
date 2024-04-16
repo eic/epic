@@ -17,60 +17,62 @@ using namespace dd4hep::detail;
  *
  * @author Whitney Armstrong
  */
-static Ref_t create_OffMomentumTracker(Detector& description, xml_h e, SensitiveDetector sens)
-{
+static Ref_t create_OffMomentumTracker(Detector& description, xml_h e, SensitiveDetector sens) {
   typedef vector<PlacedVolume> Placements;
-  xml_det_t                    x_det    = e;
-  Material                     vacuum   = description.vacuum();
-  int                          det_id   = x_det.id();
-  string                       det_name = x_det.nameStr();
-  DetElement                   sdet(det_name, det_id);
-  Assembly                     assembly(det_name);
-  xml::Component               pos = x_det.position();
-  xml::Component               rot = x_det.rotation();
+  xml_det_t x_det = e;
+  Material vacuum = description.vacuum();
+  int det_id      = x_det.id();
+  string det_name = x_det.nameStr();
+  DetElement sdet(det_name, det_id);
+  Assembly assembly(det_name);
+  xml::Component pos = x_det.position();
+  xml::Component rot = x_det.rotation();
 
   // Material  air  = description.material("Air");
   //  Volume      assembly    (det_name,Box(10000,10000,10000),vacuum);
-  Volume                  motherVol = description.pickMotherVolume(sdet);
-  int                     m_id = 0, c_id = 0, n_sensor = 0;
-  map<string, Volume>     modules;
+  Volume motherVol = description.pickMotherVolume(sdet);
+  int m_id = 0, c_id = 0, n_sensor = 0;
+  map<string, Volume> modules;
   map<string, Placements> sensitives;
-  PlacedVolume            pv;
+  PlacedVolume pv;
 
   assembly.setVisAttributes(description.invisible());
   sens.setType("tracker");
 
   for (xml_coll_t su(x_det, _U(support)); su; ++su) {
-    xml_comp_t  x_support         = su;
-    double      support_thickness = getAttrOrDefault<double>(x_support, _U(thickness), 2.0 * mm);
-    double      support_length    = getAttrOrDefault<double>(x_support, _U(length), 2.0 * mm);
-    double      support_rmin      = getAttrOrDefault<double>(x_support, _U(rmin), 2.0 * mm);
-    double      support_zstart    = getAttrOrDefault<double>(x_support, _U(zstart), 2.0 * mm);
-    std::string support_name      = getAttrOrDefault<std::string>(x_support, _Unicode(name), "support_tube");
-    std::string support_vis       = getAttrOrDefault<std::string>(x_support, _Unicode(vis), "AnlRed");
-    xml_dim_t   support_pos(x_support.child(_U(position), false));
-    xml_dim_t   support_rot(x_support.child(_U(rotation), false));
-    Solid       support_solid;
+    xml_comp_t x_support     = su;
+    double support_thickness = getAttrOrDefault<double>(x_support, _U(thickness), 2.0 * mm);
+    double support_length    = getAttrOrDefault<double>(x_support, _U(length), 2.0 * mm);
+    double support_rmin      = getAttrOrDefault<double>(x_support, _U(rmin), 2.0 * mm);
+    double support_zstart    = getAttrOrDefault<double>(x_support, _U(zstart), 2.0 * mm);
+    std::string support_name =
+        getAttrOrDefault<std::string>(x_support, _Unicode(name), "support_tube");
+    std::string support_vis = getAttrOrDefault<std::string>(x_support, _Unicode(vis), "AnlRed");
+    xml_dim_t support_pos(x_support.child(_U(position), false));
+    xml_dim_t support_rot(x_support.child(_U(rotation), false));
+    Solid support_solid;
     if (x_support.hasChild(_U(shape))) {
       xml_comp_t shape(x_support.child(_U(shape)));
-      string     shape_type = shape.typeStr();
-      support_solid         = xml::createShape(description, shape_type, shape);
+      string shape_type = shape.typeStr();
+      support_solid     = xml::createShape(description, shape_type, shape);
     } else {
       support_solid = Tube(support_rmin, support_rmin + support_thickness, support_length / 2);
     }
-    Transform3D tr = Transform3D(Rotation3D(), Position(0, 0, (support_zstart + support_length / 2)));
+    Transform3D tr =
+        Transform3D(Rotation3D(), Position(0, 0, (support_zstart + support_length / 2)));
     if (support_pos.ptr() && support_rot.ptr()) {
       Rotation3D rot3D(RotationZYX(support_rot.z(0), support_rot.y(0), support_rot.x(0)));
-      Position   pos3D(support_pos.x(0), support_pos.y(0), support_pos.z(0));
+      Position pos3D(support_pos.x(0), support_pos.y(0), support_pos.z(0));
       tr = Transform3D(rot3D, pos3D);
     } else if (support_pos.ptr()) {
-      tr = Transform3D(Rotation3D(), Position(support_pos.x(0), support_pos.y(0), support_pos.z(0)));
+      tr =
+          Transform3D(Rotation3D(), Position(support_pos.x(0), support_pos.y(0), support_pos.z(0)));
     } else if (support_rot.ptr()) {
       Rotation3D rot3D(RotationZYX(support_rot.z(0), support_rot.y(0), support_rot.x(0)));
       tr = Transform3D(rot3D, Position());
     }
     Material support_mat = description.material(x_support.materialStr());
-    Volume   support_vol(support_name, support_solid, support_mat);
+    Volume support_vol(support_name, support_solid, support_mat);
     support_vol.setVisAttributes(description.visAttributes(support_vis));
     pv = assembly.placeVolume(support_vol, tr);
     // pv = assembly.placeVolume(support_vol, Position(0, 0, support_zstart + support_length / 2));
@@ -78,7 +80,7 @@ static Ref_t create_OffMomentumTracker(Detector& description, xml_h e, Sensitive
 
   for (xml_coll_t mi(x_det, _U(module)); mi; ++mi, ++m_id) {
     xml_comp_t x_mod = mi;
-    string     m_nam = x_mod.nameStr();
+    string m_nam     = x_mod.nameStr();
     xml_comp_t x_box = x_mod.shape();
 
     double x1 = x_box.x();
@@ -91,7 +93,7 @@ static Ref_t create_OffMomentumTracker(Detector& description, xml_h e, Sensitive
       total_thickness += xml_comp_t(ci).thickness();
     }
 
-    Box    m_solid(x1 / 2.0, y1 / 2.0, total_thickness / 2.0);
+    Box m_solid(x1 / 2.0, y1 / 2.0, total_thickness / 2.0);
     Volume m_volume(m_nam, m_solid, vacuum);
     m_volume.setVisAttributes(description.visAttributes(x_mod.visStr()));
 
@@ -122,15 +124,15 @@ static Ref_t create_OffMomentumTracker(Detector& description, xml_h e, Sensitive
 
     double posZ = -total_thickness / 2.0;
     for (ci.reset(), n_sensor = 1, c_id = 0, posZ = -total_thickness / 2.0; ci; ++ci, ++c_id) {
-      xml_comp_t c       = ci;
-      double     c_thick = c.thickness();
-      auto       comp_x  = getAttrOrDefault(c, _Unicode(x), x1);
-      auto       comp_y  = getAttrOrDefault(c, _Unicode(y), y1);
+      xml_comp_t c   = ci;
+      double c_thick = c.thickness();
+      auto comp_x    = getAttrOrDefault(c, _Unicode(x), x1);
+      auto comp_y    = getAttrOrDefault(c, _Unicode(y), y1);
 
-      Material c_mat  = description.material(c.materialStr());
-      string   c_name = _toString(c_id, "OMD_component%d");
+      Material c_mat = description.material(c.materialStr());
+      string c_name  = _toString(c_id, "OMD_component%d");
 
-      Box   comp_s1(comp_x / 2.0, comp_y / 2.0, c_thick / 2e0);
+      Box comp_s1(comp_x / 2.0, comp_y / 2.0, c_thick / 2e0);
       Solid comp_shape = comp_s1;
       // if(frame_s.isValid()) {
       //   comp_shape = SubtractionSolid( comp_s1, frame_s);
@@ -141,7 +143,8 @@ static Ref_t create_OffMomentumTracker(Detector& description, xml_h e, Sensitive
       pv = m_volume.placeVolume(c_vol, Position(0, 0, posZ + c_thick / 2.0));
       if (c.isSensitive()) {
         // std::cout << " adding sensitive volume" << c_name << "\n";
-        sdet.check(n_sensor > 2, "SiTrackerEndcap2::fromCompact: " + c_name + " Max of 2 modules allowed!");
+        sdet.check(n_sensor > 2,
+                   "SiTrackerEndcap2::fromCompact: " + c_name + " Max of 2 modules allowed!");
         pv.addPhysVolID("slice", n_sensor);
         sens.setType("tracker");
         c_vol.setSensitiveDetector(sens);
@@ -155,11 +158,11 @@ static Ref_t create_OffMomentumTracker(Detector& description, xml_h e, Sensitive
 
   for (xml_coll_t li(x_det, _U(layer)); li; ++li) {
     xml_comp_t x_layer(li);
-    int        l_id    = x_layer.id();
-    int        mod_num = 1;
+    int l_id    = x_layer.id();
+    int mod_num = 1;
 
-    xml_comp_t l_env      = x_layer.child(_U(envelope));
-    string     layer_name = det_name + std::string("_layer") + std::to_string(l_id);
+    xml_comp_t l_env  = x_layer.child(_U(envelope));
+    string layer_name = det_name + std::string("_layer") + std::to_string(l_id);
 
     std::string layer_vis = l_env.attr<std::string>(_Unicode(vis));
     // double      layer_x  = l_env.attr<double>(_Unicode(x));
@@ -191,8 +194,8 @@ static Ref_t create_OffMomentumTracker(Detector& description, xml_h e, Sensitive
     DetElement layer_element(sdet, layer_name, l_id);
     layer_element.setPlacement(layer_pv);
 
-    string      m_nam    = x_layer.moduleStr();
-    Volume      m_vol    = modules[m_nam];
+    string m_nam         = x_layer.moduleStr();
+    Volume m_vol         = modules[m_nam];
     Placements& sensVols = sensitives[m_nam];
 
     DetElement module(layer_element, "module_", l_id);
@@ -201,9 +204,8 @@ static Ref_t create_OffMomentumTracker(Detector& description, xml_h e, Sensitive
     module.setPlacement(pv);
     for (size_t ic = 0; ic < sensVols.size(); ++ic) {
       PlacedVolume sens_pv = sensVols[ic];
-      DetElement   comp_elt(module, sens_pv.volume().name(), mod_num);
+      DetElement comp_elt(module, sens_pv.volume().name(), mod_num);
       comp_elt.setPlacement(sens_pv);
-
     }
 
     // for (xml_coll_t ri(x_layer, _U(ring)); ri; ++ri) {
@@ -261,7 +263,8 @@ static Ref_t create_OffMomentumTracker(Detector& description, xml_h e, Sensitive
     //}
     ++mod_num;
   }
-  Transform3D posAndRot(RotationZYX(rot.z(), rot.y(), rot.x()), Position(pos.x(), pos.y(), pos.z()));
+  Transform3D posAndRot(RotationZYX(rot.z(), rot.y(), rot.x()),
+                        Position(pos.x(), pos.y(), pos.z()));
   pv = motherVol.placeVolume(assembly, posAndRot);
   pv.addPhysVolID("system", det_id);
   sdet.setPlacement(pv);
