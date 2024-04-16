@@ -32,24 +32,24 @@ using namespace dd4hep;
  *   for e.g. the DIRC
  *
  */
-static Ref_t create_BarrelBarDetectorWithSideFrame(Detector& description, xml_h e, SensitiveDetector sens)
-{
-  typedef vector<PlacedVolume>            Placements;
-  xml_det_t                               x_det    = e;
-  Material                                air      = description.air();
-  int                                     det_id   = x_det.id();
-  string                                  det_name = x_det.nameStr();
-  DetElement                              sdet(det_name, det_id);
-  map<string, Volume>                     volumes;
-  map<string, Placements>                 sensitives;
+static Ref_t create_BarrelBarDetectorWithSideFrame(Detector& description, xml_h e,
+                                                   SensitiveDetector sens) {
+  typedef vector<PlacedVolume> Placements;
+  xml_det_t x_det = e;
+  Material air    = description.air();
+  int det_id      = x_det.id();
+  string det_name = x_det.nameStr();
+  DetElement sdet(det_name, det_id);
+  map<string, Volume> volumes;
+  map<string, Placements> sensitives;
   map<string, std::vector<rec::VolPlane>> volplane_surfaces;
-  PlacedVolume                            pv;
-  dd4hep::xml::Dimension                  dimensions(x_det.dimensions());
-  xml_dim_t                               dirc_pos = x_det.position();
+  PlacedVolume pv;
+  dd4hep::xml::Dimension dimensions(x_det.dimensions());
+  xml_dim_t dirc_pos = x_det.position();
 
   map<string, std::array<double, 2>> module_thicknesses;
 
-  Tube   topVolumeShape(dimensions.rmin(), dimensions.rmax(), dimensions.length() * 0.5);
+  Tube topVolumeShape(dimensions.rmin(), dimensions.rmax(), dimensions.length() * 0.5);
   Volume assembly(det_name, topVolumeShape, air);
 
   sens.setType("tracker");
@@ -57,7 +57,7 @@ static Ref_t create_BarrelBarDetectorWithSideFrame(Detector& description, xml_h 
   // loop over the modules
   for (xml_coll_t mi(x_det, _U(module)); mi; ++mi) {
     xml_comp_t x_mod = mi;
-    string     m_nam = x_mod.nameStr();
+    string m_nam     = x_mod.nameStr();
 
     if (volumes.find(m_nam) != volumes.end()) {
       printout(ERROR, "BarrelBarDetectorWithSideFrame",
@@ -65,7 +65,7 @@ static Ref_t create_BarrelBarDetectorWithSideFrame(Detector& description, xml_h 
       throw runtime_error("Logics error in building modules.");
     }
 
-    int    ncomponents     = 0;
+    int ncomponents        = 0;
     double total_thickness = 0;
 
     // Compute module total thickness from components
@@ -98,12 +98,12 @@ static Ref_t create_BarrelBarDetectorWithSideFrame(Detector& description, xml_h 
     double max_component_width = 0;
     for (xml_coll_t mci(x_mod, _U(module_component)); mci; ++mci, ++ncomponents) {
       xml_comp_t x_comp = mci;
-      string     c_nam  = _toString(ncomponents, "component%d");
+      string c_nam      = _toString(ncomponents, "component%d");
 
       double box_width    = x_comp.width() - 2 * frame_width;
       max_component_width = fmax(max_component_width, box_width);
 
-      Box    c_box{box_width / 2, x_comp.length() / 2, x_comp.thickness() / 2};
+      Box c_box{box_width / 2, x_comp.length() / 2, x_comp.thickness() / 2};
       Volume c_vol{c_nam, c_box, description.material(x_comp.materialStr())};
 
       pv = m_vol.placeVolume(c_vol, Position(0, 0, thickness_sum + x_comp.thickness() / 2.0));
@@ -136,8 +136,8 @@ static Ref_t create_BarrelBarDetectorWithSideFrame(Detector& description, xml_h 
     }
     // Now add-on the frame
     if (x_mod.hasChild(_U(frame))) {
-      xml_comp_t m_frame         = x_mod.child(_U(frame));
-      double     frame_thickness = getAttrOrDefault<double>(m_frame, _U(thickness), total_thickness);
+      xml_comp_t m_frame     = x_mod.child(_U(frame));
+      double frame_thickness = getAttrOrDefault<double>(m_frame, _U(thickness), total_thickness);
 
       Box lframe_box{m_frame.width() / 2., m_frame.length() / 2., frame_thickness / 2.};
       Box rframe_box{m_frame.width() / 2., m_frame.length() / 2., frame_thickness / 2.};
@@ -162,17 +162,17 @@ static Ref_t create_BarrelBarDetectorWithSideFrame(Detector& description, xml_h 
     xml_comp_t x_barrel = x_layer.child(_U(barrel_envelope));
     xml_comp_t x_layout = x_layer.child(_U(rphi_layout));
     xml_comp_t z_layout = x_layer.child(_U(z_layout)); // Get the <z_layout> element.
-    int        lay_id   = x_layer.id();
-    string     m_nam    = x_layer.moduleStr();
-    string     lay_nam  = _toString(x_layer.id(), "layer%d");
-    Tube       lay_tub(x_barrel.inner_r(), x_barrel.outer_r(), x_barrel.z_length() / 2.0);
-    Volume     lay_vol(lay_nam, lay_tub, air); // Create the layer envelope volume.
+    int lay_id          = x_layer.id();
+    string m_nam        = x_layer.moduleStr();
+    string lay_nam      = _toString(x_layer.id(), "layer%d");
+    Tube lay_tub(x_barrel.inner_r(), x_barrel.outer_r(), x_barrel.z_length() / 2.0);
+    Volume lay_vol(lay_nam, lay_tub, air); // Create the layer envelope volume.
     lay_vol.setVisAttributes(description, x_layer.visStr());
 
     double phi0     = x_layout.phi0();     // Starting phi of first module.
     double phi_tilt = x_layout.phi_tilt(); // Phi tilt of a module.
     double rc       = x_layout.rc();       // Radius of the module center.
-    int    nphi     = x_layout.nphi();     // Number of modules in phi.
+    int nphi        = x_layout.nphi();     // Number of modules in phi.
     double rphi_dr  = x_layout.dr();       // The delta radius of every other module.
     double phi_incr = (M_PI * 2) / nphi;   // Phi increment for one module.
     double phic     = phi0;                // Phi of the module center.
@@ -180,8 +180,8 @@ static Ref_t create_BarrelBarDetectorWithSideFrame(Detector& description, xml_h 
     double nz       = z_layout.nz();       // Number of modules to place in z.
     double z_dr     = z_layout.dr();       // Radial displacement parameter, of every other module.
 
-    Volume      module_env = volumes[m_nam];
-    DetElement  lay_elt(sdet, _toString(x_layer.id(), "layer%d"), lay_id);
+    Volume module_env = volumes[m_nam];
+    DetElement lay_elt(sdet, _toString(x_layer.id(), "layer%d"), lay_id);
     Placements& sensVols = sensitives[m_nam];
 
     // Z increment for module placement along Z axis.
@@ -190,7 +190,7 @@ static Ref_t create_BarrelBarDetectorWithSideFrame(Detector& description, xml_h 
     double z_incr = nz > 1 ? (2.0 * z0) / (nz - 1) : 0.0;
     // Starting z for module placement along Z axis.
     double module_z = -z0;
-    int    module   = 1;
+    int module      = 1;
 
     // Loop over the number of modules in phi.
     for (int ii = 0; ii < nphi; ii++) {
@@ -201,10 +201,11 @@ static Ref_t create_BarrelBarDetectorWithSideFrame(Detector& description, xml_h 
 
       // Loop over the number of modules in z.
       for (int j = 0; j < nz; j++) {
-        string     module_name = _toString(module, "module%d");
+        string module_name = _toString(module, "module%d");
         DetElement mod_elt(lay_elt, module_name, module);
 
-        Transform3D tr(RotationZYX(0, ((M_PI / 2) - phic - phi_tilt), -M_PI / 2), Position(x, y, module_z));
+        Transform3D tr(RotationZYX(0, ((M_PI / 2) - phic - phi_tilt), -M_PI / 2),
+                       Position(x, y, module_z));
 
         pv = lay_vol.placeVolume(module_env, tr);
         pv.addPhysVolID("module", module);
@@ -212,7 +213,7 @@ static Ref_t create_BarrelBarDetectorWithSideFrame(Detector& description, xml_h 
         mod_elt.setPlacement(pv);
         for (size_t ic = 0; ic < sensVols.size(); ++ic) {
           PlacedVolume sens_pv = sensVols[ic];
-          DetElement   comp_de(mod_elt, std::string("de_") + sens_pv.volume().name(), module);
+          DetElement comp_de(mod_elt, std::string("de_") + sens_pv.volume().name(), module);
           comp_de.setPlacement(sens_pv);
           rec::volSurfaceList(comp_de)->push_back(volplane_surfaces[m_nam][ic]);
         }
@@ -236,7 +237,8 @@ static Ref_t create_BarrelBarDetectorWithSideFrame(Detector& description, xml_h 
     // Create the PhysicalVolume for the layer.
     pv = assembly.placeVolume(lay_vol); // Place layer in mother
     pv.addPhysVolID("layer", lay_id);   // Set the layer ID.
-    lay_elt.setAttributes(description, lay_vol, x_layer.regionStr(), x_layer.limitsStr(), x_layer.visStr());
+    lay_elt.setAttributes(description, lay_vol, x_layer.regionStr(), x_layer.limitsStr(),
+                          x_layer.visStr());
     lay_elt.setPlacement(pv);
   }
   sdet.setAttributes(description, assembly, x_det.regionStr(), x_det.limitsStr(), x_det.visStr());

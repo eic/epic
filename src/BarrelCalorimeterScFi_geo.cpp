@@ -25,14 +25,13 @@ using namespace dd4hep;
 typedef ROOT::Math::XYPoint Point;
 // fiber placement helpers, defined below
 struct FiberGrid {
-  int                ix = 0, iy = 0;
+  int ix = 0, iy = 0;
   std::vector<Point> points;
-  Point              mean_centroid = Point(0., 0.);
-  Assembly*          assembly_ptr  = nullptr;
+  Point mean_centroid    = Point(0., 0.);
+  Assembly* assembly_ptr = nullptr;
 
   // initialize with grid id and points
-  FiberGrid(int i, int j, const std::vector<Point>& pts) : ix(i), iy(j), points(pts)
-  {
+  FiberGrid(int i, int j, const std::vector<Point>& pts) : ix(i), iy(j), points(pts) {
     if (pts.empty()) {
       return;
     }
@@ -48,37 +47,36 @@ struct FiberGrid {
   };
 };
 
-std::vector<Point>     fiberPositions(double r, double sx, double sz, double trx, double trz, double phi,
-                                      bool shift_first = false, double stol = 1e-2);
+std::vector<Point> fiberPositions(double r, double sx, double sz, double trx, double trz,
+                                  double phi, bool shift_first = false, double stol = 1e-2);
 std::vector<FiberGrid> gridPoints(int div_n_phi, double div_dr, double x, double z, double phi);
 
 // geometry helpers
-void buildFibers(Detector& desc, SensitiveDetector& sens, Volume& mother, int layer_nunber, xml_comp_t x_fiber,
-                 const std::tuple<double, double, double, double>& dimensions);
+void buildFibers(Detector& desc, SensitiveDetector& sens, Volume& mother, int layer_nunber,
+                 xml_comp_t x_fiber, const std::tuple<double, double, double, double>& dimensions);
 void buildSupport(Detector& desc, Volume& mother, xml_comp_t x_support,
                   const std::tuple<double, double, double, double>& dimensions);
 
 // barrel ecal layers contained in an assembly
-static Ref_t create_detector(Detector& desc, xml_h e, SensitiveDetector sens)
-{
-  Layering    layering(e);
-  xml_det_t   x_det    = e;
-  Material    air      = desc.air();
-  int         det_id   = x_det.id();
-  double      offset   = x_det.attr<double>(_Unicode(offset));
-  xml_comp_t  x_dim    = x_det.dimensions();
-  int         nsides   = x_dim.numsides();
-  double      inner_r  = x_dim.rmin();
-  double      dphi     = (2 * M_PI / nsides);
-  double      hphi     = dphi / 2;
+static Ref_t create_detector(Detector& desc, xml_h e, SensitiveDetector sens) {
+  Layering layering(e);
+  xml_det_t x_det      = e;
+  Material air         = desc.air();
+  int det_id           = x_det.id();
+  double offset        = x_det.attr<double>(_Unicode(offset));
+  xml_comp_t x_dim     = x_det.dimensions();
+  int nsides           = x_dim.numsides();
+  double inner_r       = x_dim.rmin();
+  double dphi          = (2 * M_PI / nsides);
+  double hphi          = dphi / 2;
   std::string det_name = x_det.nameStr();
 
   DetElement sdet(det_name, det_id);
-  Volume     motherVol = desc.pickMotherVolume(sdet);
+  Volume motherVol = desc.pickMotherVolume(sdet);
 
-  Assembly     envelope(det_name);
-  Transform3D  tr_global = Translation3D(0, 0, offset) * RotationZ(hphi);
-  PlacedVolume env_phv   = motherVol.placeVolume(envelope, tr_global);
+  Assembly envelope(det_name);
+  Transform3D tr_global = Translation3D(0, 0, offset) * RotationZ(hphi);
+  PlacedVolume env_phv  = motherVol.placeVolume(envelope, tr_global);
   sens.setType("calorimeter");
 
   env_phv.addPhysVolID("system", det_id);
@@ -86,7 +84,7 @@ static Ref_t create_detector(Detector& desc, xml_h e, SensitiveDetector sens)
 
   // build a single sector
   DetElement sector_det("sector0", det_id);
-  Assembly   mod_vol("sector");
+  Assembly mod_vol("sector");
 
   // keep tracking of the total thickness
   double l_pos_z = inner_r;
@@ -98,47 +96,48 @@ static Ref_t create_detector(Detector& desc, xml_h e, SensitiveDetector sens)
     // Loop over the sets of layer elements in the detector.
     int l_num = 1;
     for (xml_coll_t li(x_det, _U(layer)); li; ++li) {
-      xml_comp_t x_layer         = li;
-      int        repeat          = x_layer.repeat();
-      double     l_space_between = getAttrOrDefault(x_layer, _Unicode(space_between), 0.);
-      double     l_space_before  = getAttrOrDefault(x_layer, _Unicode(space_before), 0.);
+      xml_comp_t x_layer     = li;
+      int repeat             = x_layer.repeat();
+      double l_space_between = getAttrOrDefault(x_layer, _Unicode(space_between), 0.);
+      double l_space_before  = getAttrOrDefault(x_layer, _Unicode(space_before), 0.);
       l_pos_z += l_space_before;
       // Loop over number of repeats for this layer.
       for (int j = 0; j < repeat; j++) {
-        std::string l_name      = Form("layer%d", l_num);
-        double      l_thickness = layering.layer(l_num - 1)->thickness(); // Layer's thickness.
-        double      l_dim_x     = tan_hphi * l_pos_z;
+        std::string l_name = Form("layer%d", l_num);
+        double l_thickness = layering.layer(l_num - 1)->thickness(); // Layer's thickness.
+        double l_dim_x     = tan_hphi * l_pos_z;
         l_pos_z += l_thickness;
 
-        Position   l_pos(0, 0, l_pos_z - l_thickness / 2.); // Position of the layer.
-        double     l_trd_x1 = l_dim_x;
-        double     l_trd_x2 = l_dim_x + l_thickness * tan_hphi;
-        double     l_trd_y1 = l_dim_y;
-        double     l_trd_y2 = l_trd_y1;
-        double     l_trd_z  = l_thickness / 2;
-        Trapezoid  l_shape(l_trd_x1, l_trd_x2, l_trd_y1, l_trd_y2, l_trd_z);
-        Volume     l_vol(l_name, l_shape, air);
+        Position l_pos(0, 0, l_pos_z - l_thickness / 2.); // Position of the layer.
+        double l_trd_x1 = l_dim_x;
+        double l_trd_x2 = l_dim_x + l_thickness * tan_hphi;
+        double l_trd_y1 = l_dim_y;
+        double l_trd_y2 = l_trd_y1;
+        double l_trd_z  = l_thickness / 2;
+        Trapezoid l_shape(l_trd_x1, l_trd_x2, l_trd_y1, l_trd_y2, l_trd_z);
+        Volume l_vol(l_name, l_shape, air);
         DetElement layer(sector_det, l_name, det_id);
 
         // Loop over the sublayers or slices for this layer.
-        int    s_num   = 1;
+        int s_num      = 1;
         double s_pos_z = -(l_thickness / 2.);
         for (xml_coll_t si(x_layer, _U(slice)); si; ++si) {
-          xml_comp_t  x_slice  = si;
-          std::string s_name   = Form("slice%d", s_num);
-          double      s_thick  = x_slice.thickness();
-          double      s_trd_x1 = l_dim_x + (s_pos_z + l_thickness / 2) * tan_hphi;
-          double      s_trd_x2 = l_dim_x + (s_pos_z + l_thickness / 2 + s_thick) * tan_hphi;
-          double      s_trd_y1 = l_trd_y1;
-          double      s_trd_y2 = s_trd_y1;
-          double      s_trd_z  = s_thick / 2.;
-          Trapezoid   s_shape(s_trd_x1, s_trd_x2, s_trd_y1, s_trd_y2, s_trd_z);
-          Volume      s_vol(s_name, s_shape, desc.material(x_slice.materialStr()));
-          DetElement  slice(layer, s_name, det_id);
+          xml_comp_t x_slice = si;
+          std::string s_name = Form("slice%d", s_num);
+          double s_thick     = x_slice.thickness();
+          double s_trd_x1    = l_dim_x + (s_pos_z + l_thickness / 2) * tan_hphi;
+          double s_trd_x2    = l_dim_x + (s_pos_z + l_thickness / 2 + s_thick) * tan_hphi;
+          double s_trd_y1    = l_trd_y1;
+          double s_trd_y2    = s_trd_y1;
+          double s_trd_z     = s_thick / 2.;
+          Trapezoid s_shape(s_trd_x1, s_trd_x2, s_trd_y1, s_trd_y2, s_trd_z);
+          Volume s_vol(s_name, s_shape, desc.material(x_slice.materialStr()));
+          DetElement slice(layer, s_name, det_id);
 
           // build fibers
           if (x_slice.hasChild(_Unicode(fiber))) {
-            buildFibers(desc, sens, s_vol, l_num, x_slice.child(_Unicode(fiber)), {s_trd_x1, s_thick, l_dim_y, hphi});
+            buildFibers(desc, sens, s_vol, l_num, x_slice.child(_Unicode(fiber)),
+                        {s_trd_x1, s_thick, l_dim_y, hphi});
           }
 
           if (x_slice.isSensitive()) {
@@ -174,7 +173,7 @@ static Ref_t create_detector(Detector& desc, xml_h e, SensitiveDetector sens)
   // Create nsides sectors.
   for (int i = 0; i < nsides; i++, phi -= dphi) { // i is module number
     // Compute the sector position
-    Transform3D  tr(RotationZYX(0, phi, M_PI * 0.5), Translation3D(0, 0, 0));
+    Transform3D tr(RotationZYX(0, phi, M_PI * 0.5), Translation3D(0, 0, 0));
     PlacedVolume pv = envelope.placeVolume(mod_vol, tr);
     pv.addPhysVolID("sector", i + 1);
     DetElement sd = (i == 0) ? sector_det : sector_det.clone(Form("sector%d", i));
@@ -196,18 +195,18 @@ static Ref_t create_detector(Detector& desc, xml_h e, SensitiveDetector sens)
   return sdet;
 }
 
-void buildFibers(Detector& desc, SensitiveDetector& sens, Volume& s_vol, int layer_number, xml_comp_t x_fiber,
-                 const std::tuple<double, double, double, double>& dimensions)
-{
+void buildFibers(Detector& desc, SensitiveDetector& sens, Volume& s_vol, int layer_number,
+                 xml_comp_t x_fiber, const std::tuple<double, double, double, double>& dimensions) {
   auto [s_trd_x1, s_thick, s_length, hphi] = dimensions;
-  double      f_radius                     = getAttrOrDefault(x_fiber, _U(radius), 0.1 * cm);
-  double      f_cladding_thickness         = getAttrOrDefault(x_fiber, _Unicode(cladding_thickness), 0.0 * cm);
-  double      f_spacing_x                  = getAttrOrDefault(x_fiber, _Unicode(spacing_x), 0.122 * cm);
-  double      f_spacing_z                  = getAttrOrDefault(x_fiber, _Unicode(spacing_z), 0.134 * cm);
-  int         grid_n_phi                   = getAttrOrDefault(x_fiber, _Unicode(grid_n_phi), 5);
-  double      grid_dr                      = getAttrOrDefault(x_fiber, _Unicode(grid_dr), 2.0 * cm);
-  std::string f_id_grid                    = getAttrOrDefault<std::string>(x_fiber, _Unicode(identifier_grid), "grid");
-  std::string f_id_fiber = getAttrOrDefault<std::string>(x_fiber, _Unicode(identifier_fiber), "fiber");
+  double f_radius                          = getAttrOrDefault(x_fiber, _U(radius), 0.1 * cm);
+  double f_cladding_thickness = getAttrOrDefault(x_fiber, _Unicode(cladding_thickness), 0.0 * cm);
+  double f_spacing_x          = getAttrOrDefault(x_fiber, _Unicode(spacing_x), 0.122 * cm);
+  double f_spacing_z          = getAttrOrDefault(x_fiber, _Unicode(spacing_z), 0.134 * cm);
+  int grid_n_phi              = getAttrOrDefault(x_fiber, _Unicode(grid_n_phi), 5);
+  double grid_dr              = getAttrOrDefault(x_fiber, _Unicode(grid_dr), 2.0 * cm);
+  std::string f_id_grid = getAttrOrDefault<std::string>(x_fiber, _Unicode(identifier_grid), "grid");
+  std::string f_id_fiber =
+      getAttrOrDefault<std::string>(x_fiber, _Unicode(identifier_fiber), "fiber");
 
   // Set up the readout grid for the fiber layers
   // Trapezoid is divided into segments with equal dz and equal number of divisions in x
@@ -218,9 +217,9 @@ void buildFibers(Detector& desc, SensitiveDetector& sens, Volume& s_vol, int lay
 
   // fiber and its cladding
   double f_radius_core = f_radius - f_cladding_thickness;
-  Tube   f_tube_clad(0, f_radius, s_length);
+  Tube f_tube_clad(0, f_radius, s_length);
   Volume f_vol_clad("fiber_vol", f_tube_clad, desc.material(x_fiber.materialStr()));
-  Tube   f_tube_core(0, f_radius_core, s_length);
+  Tube f_tube_core(0, f_radius_core, s_length);
   Volume f_vol_core("fiber_core_vol", f_tube_core, desc.material(x_fiber.materialStr()));
   if (x_fiber.isSensitive()) {
     f_vol_core.setSensitiveDetector(sens);
@@ -229,14 +228,15 @@ void buildFibers(Detector& desc, SensitiveDetector& sens, Volume& s_vol, int lay
   f_vol_clad.placeVolume(f_vol_core);
 
   // calculate polygonal grid coordinates (vertices)
-  auto             grids = gridPoints(grid_n_phi, grid_dr, s_trd_x1, s_thick, hphi);
+  auto grids = gridPoints(grid_n_phi, grid_dr, s_trd_x1, s_thick, hphi);
   std::vector<int> f_id_count(grids.size(), 0);
   // use layer_number % 2 to add correct shifts for the adjacent fibers at layer boundary
-  auto f_pos = fiberPositions(f_radius, f_spacing_x, f_spacing_z, s_trd_x1, s_thick, hphi, (layer_number % 2 == 0));
+  auto f_pos = fiberPositions(f_radius, f_spacing_x, f_spacing_z, s_trd_x1, s_thick, hphi,
+                              (layer_number % 2 == 0));
   // a helper struct to speed up searching
   struct Fiber {
     Point pos;
-    bool  assigned = false;
+    bool assigned = false;
     Fiber(const Point& p) : pos(p){};
   };
   std::vector<Fiber> fibers(f_pos.begin(), f_pos.end());
@@ -253,7 +253,7 @@ void buildFibers(Detector& desc, SensitiveDetector& sens, Volume& s_vol, int lay
       }
 
       // use TGeoPolygon to help check if fiber is inside a grid
-      TGeoPolygon         poly(gr.points.size());
+      TGeoPolygon poly(gr.points.size());
       std::vector<double> vx, vy;
       std::transform(gr.points.begin(), gr.points.end(), back_inserter(vx), std::mem_fn(&Point::x));
       std::transform(gr.points.begin(), gr.points.end(), back_inserter(vy), std::mem_fn(&Point::y));
@@ -276,8 +276,9 @@ void buildFibers(Detector& desc, SensitiveDetector& sens, Volume& s_vol, int lay
     // only add this if this grid has fibers
     if (f_id > 1) {
       // fiber is along y-axis of the layer volume, so grids are arranged on X-Z plane
-      Transform3D gr_tr(RotationZYX(0., 0., M_PI * 0.5), Position(gr.mean_centroid.x(), 0., gr.mean_centroid.y()));
-      auto        grid_phv = s_vol.placeVolume(grid_vol, gr_tr);
+      Transform3D gr_tr(RotationZYX(0., 0., M_PI * 0.5),
+                        Position(gr.mean_centroid.x(), 0., gr.mean_centroid.y()));
+      auto grid_phv = s_vol.placeVolume(grid_vol, gr_tr);
       grid_phv.addPhysVolID(f_id_grid, gr.ix + gr.iy * grid_n_phi + 1);
       grid_vol.ptr()->Voxelize("");
     }
@@ -299,25 +300,23 @@ void buildFibers(Detector& desc, SensitiveDetector& sens, Volume& s_vol, int lay
 // simple aluminum sheet cover
 // dimensions: (inner r, position in z, length, phi)
 void buildSupport(Detector& desc, Volume& mod_vol, xml_comp_t x_support,
-                  const std::tuple<double, double, double, double>& dimensions)
-{
+                  const std::tuple<double, double, double, double>& dimensions) {
   auto [inner_r, pos_z, sector_length, hphi] = dimensions;
-  double support_thickness                   = getAttrOrDefault(x_support, _Unicode(thickness), 3. * cm);
-  auto   material                            = desc.material(x_support.materialStr());
-  double trd_y                               = sector_length / 2.;
-  double trd_x1_support                      = std::tan(hphi) * pos_z;
-  double trd_x2_support                      = std::tan(hphi) * (pos_z + support_thickness);
+  double support_thickness = getAttrOrDefault(x_support, _Unicode(thickness), 3. * cm);
+  auto material            = desc.material(x_support.materialStr());
+  double trd_y             = sector_length / 2.;
+  double trd_x1_support    = std::tan(hphi) * pos_z;
+  double trd_x2_support    = std::tan(hphi) * (pos_z + support_thickness);
 
   Trapezoid s_shape(trd_x1_support, trd_x2_support, trd_y, trd_y, support_thickness / 2.);
-  Volume    s_vol("support_layer", s_shape, material);
+  Volume s_vol("support_layer", s_shape, material);
   s_vol.setVisAttributes(desc.visAttributes(x_support.visStr()));
   mod_vol.placeVolume(s_vol, Position(0.0, 0.0, pos_z + support_thickness / 2.));
 }
 
 // Fill fiber lattice into trapezoid starting from position (0,0) in x-z coordinate system
-std::vector<Point> fiberPositions(double r, double sx, double sz, double trx, double trz, double phi, bool shift,
-                                  double stol)
-{
+std::vector<Point> fiberPositions(double r, double sx, double sz, double trx, double trz,
+                                  double phi, bool shift, double stol) {
   // r      - fiber radius
   // sx, sz - spacing between fibers in x, z
   // trx    - half-length of the shorter (bottom) base of the trapezoid
@@ -326,10 +325,10 @@ std::vector<Point> fiberPositions(double r, double sx, double sz, double trx, do
   // stol   - spacing tolerance
 
   std::vector<Point> positions;
-  int                z_layers = floor((trz / 2 - r - stol) / sz); // number of layers that fits in half trapezoid-z
+  int z_layers = floor((trz / 2 - r - stol) / sz); // number of layers that fits in half trapezoid-z
 
   double px = 0., pz = 0.;
-  int    start_line = shift ? 1 : 0;
+  int start_line = shift ? 1 : 0;
 
   for (int l = -z_layers; l < z_layers + 1; l++) {
     std::vector<Point> xline;
@@ -345,7 +344,8 @@ std::vector<Point> fiberPositions(double r, double sx, double sz, double trx, do
     }
 
     // Sort fiber IDs for a better organization
-    sort(xline.begin(), xline.end(), [](const Point& p1, const Point& p2) { return p1.x() < p2.x(); });
+    sort(xline.begin(), xline.end(),
+         [](const Point& p1, const Point& p2) { return p1.x() < p2.x(); });
     positions.insert(positions.end(), xline.begin(), xline.end());
   }
   return positions;
@@ -353,8 +353,8 @@ std::vector<Point> fiberPositions(double r, double sx, double sz, double trx, do
 
 // Determine the number of divisions for the readout grid for the fiber layers
 // Calculate dimensions of the polygonal grid
-std::vector<FiberGrid> gridPoints(int div_n_phi, double div_dr, double trd_x1, double height, double phi)
-{
+std::vector<FiberGrid> gridPoints(int div_n_phi, double div_dr, double trd_x1, double height,
+                                  double phi) {
   /*
   // TODO: move this test to xml file
   double SiPMsize = 13.0 * mm;
@@ -377,7 +377,7 @@ std::vector<FiberGrid> gridPoints(int div_n_phi, double div_dr, double trd_x1, d
 
   // grid vertices
   std::vector<FiberGrid> results;
-  double                 dr = height / nr;
+  double dr = height / nr;
 
   for (int ir = 0; ir <= nr; ir++) {
     for (int iph = 0; iph <= nph; iph++) {
