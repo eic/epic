@@ -20,45 +20,44 @@ using namespace std;
 using namespace dd4hep;
 
 // main
-static Ref_t create_detector(Detector& desc, xml_h handle, SensitiveDetector sens)
-{
+static Ref_t create_detector(Detector& desc, xml_h handle, SensitiveDetector sens) {
   xml::DetElement detElem = handle;
-  std::string     detName = detElem.nameStr();
-  int             detID   = detElem.id();
-  DetElement      det(detName, detID);
+  std::string detName     = detElem.nameStr();
+  int detID               = detElem.id();
+  DetElement det(detName, detID);
   sens.setType("calorimeter");
-  auto      dim    = detElem.dimensions();
-  auto      xwidth = dim.x();
-  auto      ywidth = dim.y();
-  auto      length = dim.z();
-  xml_dim_t pos    = detElem.position();
-  xml_dim_t rot    = detElem.rotation();
+  auto dim      = detElem.dimensions();
+  auto xwidth   = dim.x();
+  auto ywidth   = dim.y();
+  auto length   = dim.z();
+  xml_dim_t pos = detElem.position();
+  xml_dim_t rot = detElem.rotation();
 
   // envelope
-  Box    envShape(xwidth * 0.5, ywidth * 0.5, length * 0.5);
+  Box envShape(xwidth * 0.5, ywidth * 0.5, length * 0.5);
   Volume env(detName + "_envelope", envShape, desc.material("Air"));
   env.setVisAttributes(desc.visAttributes(detElem.visStr()));
 
-  xml_comp_t mod_x  = detElem.child(_Unicode(module));
-  auto       nbox   = mod_x.attr<int>(_Unicode(nbox));
-  auto       boxgap = mod_x.attr<int>(_Unicode(gapspace));
+  xml_comp_t mod_x = detElem.child(_Unicode(module));
+  auto nbox        = mod_x.attr<int>(_Unicode(nbox));
+  auto boxgap      = mod_x.attr<int>(_Unicode(gapspace));
 
   xml_comp_t x_lyr = mod_x.child(_Unicode(layer));
-  auto       nlyr  = x_lyr.attr<int>(_Unicode(nlayer));
+  auto nlyr        = x_lyr.attr<int>(_Unicode(nlayer));
 
-  map<int, string>    v_sl_name;
+  map<int, string> v_sl_name;
   map<string, Volume> slices;
   map<string, double> sl_thickness;
 
-  int        nsl = 0;
+  int nsl = 0;
   xml_coll_t ci(x_lyr, _Unicode(slice));
   for (ci.reset(); ci; ++ci) {
-    xml_comp_t x_sl    = ci;
-    Material   sl_mat  = desc.material(x_sl.materialStr());
-    string     sl_name = x_sl.nameStr();
-    double     sl_z    = x_sl.thickness();
+    xml_comp_t x_sl = ci;
+    Material sl_mat = desc.material(x_sl.materialStr());
+    string sl_name  = x_sl.nameStr();
+    double sl_z     = x_sl.thickness();
 
-    Box    sl_Shape(xwidth / 2., ywidth / 2., sl_z / 2.);
+    Box sl_Shape(xwidth / 2., ywidth / 2., sl_z / 2.);
     Volume sl_Vol("slice_vol", sl_Shape, sl_mat);
     sl_Vol.setVisAttributes(desc.visAttributes(x_sl.visStr()));
     if (x_sl.isSensitive())
@@ -70,16 +69,16 @@ static Ref_t create_detector(Detector& desc, xml_h handle, SensitiveDetector sen
     sl_thickness[sl_name] = sl_z;
   }
 
-  double zpos_0  = -length / 2.;
-  int    layerid = 0;
+  double zpos_0 = -length / 2.;
+  int layerid   = 0;
   for (int ibox = 0; ibox < nbox; ibox++) {
     for (int ilyr = 0; ilyr < nlyr; ilyr++) {
       layerid++;
       for (int isl = 0; isl < nsl; isl++) {
         string sl_name = v_sl_name[isl + 1];
 
-        double       zpos = zpos_0 + sl_thickness[sl_name] / 2.;
-        Position     sl_pos(0, 0, zpos);
+        double zpos = zpos_0 + sl_thickness[sl_name] / 2.;
+        Position sl_pos(0, 0, zpos);
         PlacedVolume pv = env.placeVolume(slices[sl_name], sl_pos);
         if (slices[sl_name].isSensitive())
           pv.addPhysVolID(sl_name, layerid);
@@ -91,8 +90,8 @@ static Ref_t create_detector(Detector& desc, xml_h handle, SensitiveDetector sen
   }
 
   // detector position and rotation
-  Volume       motherVol = desc.pickMotherVolume(det);
-  Transform3D  tr(RotationZYX(rot.z(), rot.y(), rot.x()), Position(pos.x(), pos.y(), pos.z()));
+  Volume motherVol = desc.pickMotherVolume(det);
+  Transform3D tr(RotationZYX(rot.z(), rot.y(), rot.x()), Position(pos.x(), pos.y(), pos.z()));
   PlacedVolume envPV = motherVol.placeVolume(env, tr);
   envPV.addPhysVolID("system", detID);
   det.setPlacement(envPV);

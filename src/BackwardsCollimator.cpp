@@ -31,30 +31,29 @@ using namespace dd4hep;
  * \endcode
  *
  */
-static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector /* sens */)
-{
+static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector /* sens */) {
 
   using namespace ROOT::Math;
-  xml_det_t  x_det    = e;
-  string     det_name = x_det.nameStr();
+  xml_det_t x_det = e;
+  string det_name = x_det.nameStr();
   DetElement sdet(det_name, x_det.id());
-  Assembly   assembly(det_name + "_assembly");
-  Material   m_Steel  = det.material("StainlessSteel");
-  Material   m_Vacuum = det.material("Vacuum");
-  string     vis_name = x_det.visStr();
+  Assembly assembly(det_name + "_assembly");
+  Material m_Steel  = det.material("StainlessSteel");
+  Material m_Vacuum = det.material("Vacuum");
+  string vis_name   = x_det.visStr();
 
   xml::Component box_dim = x_det.child(_Unicode(dimensions));
-  double         height  = box_dim.attr<double>(_Unicode(height));
-  double         width   = box_dim.attr<double>(_Unicode(width));
-  double         depth   = box_dim.attr<double>(_Unicode(depth));
+  double height          = box_dim.attr<double>(_Unicode(height));
+  double width           = box_dim.attr<double>(_Unicode(width));
+  double depth           = box_dim.attr<double>(_Unicode(depth));
 
-  xml::Component col_XS    = x_det.child(_Unicode(collimator));
-  double         colHeight = col_XS.attr<double>(_Unicode(height));
-  double         colWidth  = col_XS.attr<double>(_Unicode(width));
-  double         colXOff   = col_XS.attr<double>(_Unicode(xOff));
+  xml::Component col_XS = x_det.child(_Unicode(collimator));
+  double colHeight      = col_XS.attr<double>(_Unicode(height));
+  double colWidth       = col_XS.attr<double>(_Unicode(width));
+  double colXOff        = col_XS.attr<double>(_Unicode(xOff));
 
   xml::Component box_place = x_det.child(_Unicode(placement));
-  double         zOff      = box_place.attr<double>(_Unicode(z));
+  double zOff              = box_place.attr<double>(_Unicode(z));
 
   Box box_steel(width, height, depth);
   Box box_vacuum(colWidth, colHeight, depth);

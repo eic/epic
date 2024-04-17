@@ -11,8 +11,7 @@
  *
  *
  */
-void test_ACTS(const char* compact = "epic.xml")
-{
+void test_ACTS(const char* compact = "epic.xml") {
   // -------------------------
   // Get the DD4hep instance
   // Load the compact XML file
@@ -20,9 +19,9 @@ void test_ACTS(const char* compact = "epic.xml")
   auto detector = dd4hep::Detector::make_unique("");
   detector->fromCompact(compact);
 
-  auto logger = Acts::getDefaultLogger("Acts", Acts::Logging::Level::VERBOSE);
+  auto logger                 = Acts::getDefaultLogger("Acts", Acts::Logging::Level::VERBOSE);
   auto acts_tracking_geometry = Acts::convertDD4hepDetector(detector->world(), *logger);
 
   // Visit all surfaces
-  acts_tracking_geometry->visitSurfaces([](const Acts::Surface *surface) { });
+  acts_tracking_geometry->visitSurfaces([](const Acts::Surface* surface) {});
 }
