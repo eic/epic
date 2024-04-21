@@ -26,9 +26,12 @@
     <constant name="LeptonIncomingBeampipe_ID3" value="43.00 * mm"/>
     <constant name="LeptonIncomingBeampipe_ID4" value="54.00 * mm"/>
 
-    <!-- lepton lepton outgoing beam pipe -->
+    <!-- upstream lepton-hadron beam pipe joint -->
+    <constant name="UpstreamLeptonHadronBeampipeJointLength" value="20.1 * mm"/>
+
+    <!-- lepton outgoing beam pipe -->
     <constant name="LeptonOutgoingBeampipeThickness" value="2.00 * mm"/>
-    <constant name="LeptonOutgoingBeampipe_z1" value="BeampipeUpstreamStraightLength"/>
+    <constant name="LeptonOutgoingBeampipe_z1" value="BeampipeUpstreamStraightLength + UpstreamLeptonHadronBeampipeJointLength"/>
     <constant name="LeptonOutgoingBeampipe_z2" value="5000.00 * mm"/>
 
     <constant name="LeptonOutgoingBeampipe_ID1" value="62.00 * mm"/>
@@ -42,7 +45,7 @@
     <constant name="HadronIncomingBeampipe_ID3" value="41.15 * mm"/>
 
     <constant name="HadronIncomingBeampipe_z1"
-              value="BeampipeUpstreamStraightLength + 0.5 * max(BeampipeOD,HadronIncomingBeampipe_ID1 + 2* HadronIncomingBeampipeThickness + 2* BeampipeCoatingThickness) * tan(abs(CrossingAngle))"/>
+              value="BeampipeUpstreamStraightLength + UpstreamLeptonHadronBeampipeJointLength + 0.5 * max(BeampipeOD,HadronIncomingBeampipe_ID1 + 2* HadronIncomingBeampipeThickness + 2* BeampipeCoatingThickness) * tan(abs(CrossingAngle))"/>
     <constant name="HadronIncomingBeampipe_z2" value="2690.95 * mm"/>
     <constant name="HadronIncomingBeampipe_z3" value="2890.35 * mm"/>
     <constant name="HadronIncomingBeampipe_z4" value="2940.35 * mm"/>
@@ -85,6 +88,26 @@
       <comment> For upstream beampipe, we subtract the vacuum from the matter </comment>
       <upstream reflect="true"
                 place_vacuum="true">
+        <upstream_lepton_hadron_joint thickness="LeptonOutgoingBeampipeThickness">
+          <vacuum>
+            <zplane z="LeptonOutgoingBeampipe_z1 - UpstreamLeptonHadronBeampipeJointLength" 
+                    OD="LeptonOutgoingBeampipe_ID1"/>
+            <zplane z="LeptonOutgoingBeampipe_z1" 
+                    OD="LeptonOutgoingBeampipe_ID1"/>
+          </vacuum>
+          <coating>
+            <zplane z="LeptonOutgoingBeampipe_z1 - UpstreamLeptonHadronBeampipeJointLength" 
+                    OD="LeptonOutgoingBeampipe_ID1 + 2*BeampipeCoatingThickness"/>
+            <zplane z="LeptonOutgoingBeampipe_z1" 
+                    OD="LeptonOutgoingBeampipe_ID1 + 2*BeampipeCoatingThickness"/>
+          </coating>
+          <matter>
+            <zplane z="LeptonOutgoingBeampipe_z1 - UpstreamLeptonHadronBeampipeJointLength"
+                    OD="LeptonOutgoingBeampipe_ID1 + 2* LeptonOutgoingBeampipeThickness + 2*BeampipeCoatingThickness"/>
+            <zplane z="LeptonOutgoingBeampipe_z1"
+                    OD="LeptonOutgoingBeampipe_ID1 + 6* LeptonOutgoingBeampipeThickness + 2*BeampipeCoatingThickness"/>
+          </matter>
+        </upstream_lepton_hadron_joint>
         <outgoing_lepton thickness="LeptonOutgoingBeampipeThickness">
           <vacuum>
             <zplane z="LeptonOutgoingBeampipe_z1" OD="LeptonOutgoingBeampipe_ID1"/>

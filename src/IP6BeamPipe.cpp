@@ -204,7 +204,7 @@ static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector /* sens *
     auto tf = Transform3D(Position(0, 0, axis_intersection));
     if(name == "upstream")
       tf *= Transform3D(RotationY( crossing_angle));
-    else
+    else if(name == "downstream")
       tf *= Transform3D(RotationY( std::abs(crossing_angle)));
     tf *= Transform3D(Position(0, 0, -axis_intersection));
 
@@ -213,7 +213,7 @@ static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector /* sens *
     BooleanSolid coating;
     BooleanSolid vacuum;
 
-    if (name == "upstream") {
+    if (name == "upstream" || name == "joint") {
       // union of all matter, coating, and vacuum
       UnionSolid matter_union(  std::get<0>(pipe1_polycones), std::get<0>(pipe2_polycones), tf);
       UnionSolid coating_union( std::get<1>(pipe1_polycones), std::get<1>(pipe2_polycones), tf);
@@ -373,10 +373,14 @@ static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector /* sens *
   xml::Component upstream_c        = x_det.child(_Unicode(upstream));
   xml::Component incoming_hadron_c = upstream_c.child(_Unicode(incoming_hadron));
   xml::Component outgoing_lepton_c = upstream_c.child(_Unicode(outgoing_lepton));
+  xml::Component upstream_lepton_hadron_c = upstream_c.child(_Unicode(upstream_lepton_hadron_joint));
   xml_coll_t     additional_subtractions_upstream(upstream_c, _Unicode(additional_subtraction));
 
   auto volumes_upstream = create_volumes(
     "upstream", outgoing_lepton_c, incoming_hadron_c,additional_subtractions_upstream);
+
+  auto joint_upstream = create_volumes(
+    "joint", upstream_lepton_hadron_c, upstream_lepton_hadron_c,additional_subtractions_upstream);
 
   // reflect
   auto tf_upstream = Transform3D(RotationZYX(0, 0, 0));
@@ -385,11 +389,15 @@ static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector /* sens *
 
   // add matter
   assembly.placeVolume(std::get<0>(volumes_upstream), tf_upstream);
+  assembly.placeVolume(std::get<0>(joint_upstream), tf_upstream);
   // add coating
   assembly.placeVolume(std::get<1>(volumes_upstream), tf_upstream);
+  assembly.placeVolume(std::get<1>(joint_upstream), tf_upstream);
   // add vacuum
-  if (getAttrOrDefault<bool>(upstream_c, _Unicode(place_vacuum), true))
+  if (getAttrOrDefault<bool>(upstream_c, _Unicode(place_vacuum), true)) {
     assembly.placeVolume(std::get<2>(volumes_upstream), tf_upstream);
+    assembly.placeVolume(std::get<2>(joint_upstream), tf_upstream);
+  }
 
   // -----------------------------
   // Downstream:
