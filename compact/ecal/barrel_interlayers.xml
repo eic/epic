@@ -26,7 +26,7 @@
       -42 cm offset
     </comment>
     <constant name="EcalBarrel_Calorimeter_zmin"
-      value="min(260.25*cm, EcalBarrelBackward_zmax)"/>
+      value="min(260.25*cm, EcalBarrelBackward_zmax) + 5 * cm"/>
     <constant name="EcalBarrel_Calorimeter_zmax"
       value="min(176.25*cm, EcalBarrelForward_zmax)"/>
     <constant name="EcalBarrel_Readout_zmin"          value="275.25*cm"/>
