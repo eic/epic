@@ -24,6 +24,9 @@ using namespace dd4hep;
 using namespace dd4hep::rec;
 using namespace dd4hep::detail;
 
+#include "Math/Vector2D.h"
+using namespace ROOT::Math;
+
 /** Micromegas Barrel Tracker with space frame
  *
  * - Designed to process "mpgd_barrel.xml" ("mpgd_barrel_ver1" as of 2024/02).
@@ -57,9 +60,9 @@ static Ref_t create_MPGDCylinderBarrelTracker(Detector& description, xml_h e, Se
 
   PlacedVolume pv;
 
-  //#define DEBUG_MPGDCylinderBarrelTracker
+#define DEBUG_MPGDCylinderBarrelTracker
 #ifdef DEBUG_MPGDCylinderBarrelTracker
-  // TEMPORARILY INCREASE VERBOSITY level for debugging pruposes
+  // TEMPORARILY INCREASE VERBOSITY level for debugging purposes
   PrintLevel priorPrintLevel = printLevel();
   setPrintLevel(DEBUG);
 #endif
@@ -80,6 +83,7 @@ static Ref_t create_MPGDCylinderBarrelTracker(Detector& description, xml_h e, Se
 
   sens.setType("tracker");
  
+  // ********** MODULE
   // ***** ONE AND ONLY ONE MODULE
   xml_coll_t modules(x_det, _U(module));
   if (modules.size()!=1) {
@@ -94,6 +98,47 @@ static Ref_t create_MPGDCylinderBarrelTracker(Detector& description, xml_h e, Se
   printout(DEBUG, "MPGDCylinderBarrelTracker",
 	   "Module \"%s\" width = %.2f cm length = %.2f cm",
 	   m_nam.c_str(),stave_width,det_length);
+
+  // ********** LAYER
+  // ***** ONE AND ONLY ONE LAYER
+  xml_coll_t li(x_det, _U(layer));
+  if (li.size()!=1) {
+    printout(ERROR,"MPGDCylinderBarrelTracker",
+	     "Number of layers = %d. Must be = 1",(int)li.size());
+    throw runtime_error("Logics error in building modules.");
+  }
+  // ***** RETRIEVE PARAMETERS
+  xml_comp_t x_layer  = li;
+  int        lay_id   = x_layer.id();
+  if (x_layer.moduleStr()!=m_nam) {
+    printout(ERROR,"MPGDCylinderBarrelTracker",
+	     "Layer \"%s\" does not match module \"%s\"",
+	     x_layer.moduleStr().c_str(),m_nam.c_str());
+    throw runtime_error("Logics error in building layer.");
+  }
+  xml_comp_t x_barrel = x_layer.child(_U(barrel_envelope));
+  double barrel_length = x_barrel.z_length();
+  double barrel_z0 = getAttrOrDefault(x_barrel,_U(z0),0.);
+  // ***** LAYOUTS
+  xml_comp_t x_layout = x_layer.child(_U(rphi_layout));
+  double phi0     = x_layout.phi0();     // Starting phi of first module.
+  xml_comp_t z_layout = x_layer.child(_U(z_layout)); // Get the <z_layout> element.
+  double     z_gap = z_layout.gap();
+  // ***** UNVALID LAYOUT PROPERTIES
+  // # of staves (along phi) and sectors (along z) are now derived from stave
+  // width and sector length. Used to be specified directly. In order to remind
+  // the user this is no longer the case, let's forbid the use of the
+  // corresponding (and a few more) tags.
+  const int nUnvalids = 4;
+  const xml::Tag_t unvalidTags[nUnvalids] = {_U(phi_tilt),_U(nphi),_U(rc),_U(dr)};
+  for (int uv = 0; uv<nUnvalids; uv++) {
+    if (x_barrel.hasChild(unvalidTags[uv])) {
+      printout(ERROR,"MPGDCylinderBarrelTracker",
+	       "Layer \"%s\": Unvalid property \"%s\" in \"rphi_layout\"",
+	       m_nam.c_str(),_U(nphi));
+      throw runtime_error("Logics error in building modules.");
+    }
+  }
 
   // ***** MODELS
   // Model = set of two radii of curvature used alternatingly for staves
@@ -190,9 +235,10 @@ static Ref_t create_MPGDCylinderBarrelTracker(Detector& description, xml_h e, Se
     throw runtime_error("Logics error in building modules.");
   }
   xml_comp_t x_service = si;
+  double service_thickness = x_service.thickness();
   printout(DEBUG,"MPGDCylinderBarrelTracker",
-	   "1 Service \"%s\": thickness = \"%s\" material = \"%s\"",
-	   x_service.nameStr().c_str(),x_service.thickness(),x_service.materialStr().c_str());
+	   "1 Service \"%s\": thickness = %.4f cm, material = \"%s\"",
+  	   x_service.nameStr().c_str(),service_thickness,x_service.materialStr().c_str());
   
   // ***** TOTAL THICKNESS from components (used to build frames)
   double total_thickness = 0;
@@ -208,6 +254,36 @@ static Ref_t create_MPGDCylinderBarrelTracker(Detector& description, xml_h e, Se
 	   " => total_thickness %.4f cm",
 	   total_thickness/cm);
 
+  // Now that we know total thickness, let's "printout" the characteristics
+  // of the models (extrema, phi superposition).
+  printout(DEBUG,"MPGDCylinderBarrelTracker","2 Sector Models:");
+  double outerPhiSuperpos = 0; // Later used to define phi range of service to inner
+  for (int io = 0; io<2; io++) {
+    StaveModel &sM0 = staveModels[sector2Models[io][0]];
+    StaveModel &sM1 = staveModels[sector2Models[io][1]];
+    XYVector vOffset(sM0.offset/2,0);
+    double phiEdge0 = stave_width/2/sM0.rmin;
+    XYVector vEdge0(sM0.rmin*cos(phiEdge0),sM0.rmin*sin(phiEdge0)); vEdge0 -= vOffset;
+    // Module0: Stave model has smaller curvature than circle centred on
+    // beam axis. => Minimum is in the middle.
+    double RMn = sM0.rmin-sM0.offset/2, Mag0 = sqrt(vEdge0.Mag2());
+    double phiEdge1 = stave_width/2/sM1.rmin;
+    XYVector vEdge1(sM1.rmin*cos(phiEdge1),sM1.rmin*sin(phiEdge1)); vEdge1 += vOffset;
+    // Module1: Stave model has larger curvature than circle centred on
+    // beam axis. => Maximum is in the middle.
+    double RMx = sM1.rmin+sM1.offset/2, Mag1 = sqrt(vEdge1.Mag2());
+    double dPhi = acos(vEdge0.Dot(vEdge1)/Mag0/Mag1);
+    RMx += total_thickness;
+    if (io==1) {
+      RMn -= service_thickness; // Outer sector: acount for services to inner sector
+      outerPhiSuperpos = dPhi;
+    }
+    printout(DEBUG,"MPGDCylinderBarrelTracker",
+	     "Sector Model #%d,\"%s\" = \"%s\"+\"%s\": phi overlap = %.1f deg, Extrema R = %.2f,%.2f",
+	     io,io?"Outer":"Inner",sM0.name.c_str(),sM1.name.c_str(),
+	     dPhi/M_PI*180,RMn,RMx);
+  }
+
   // ********** LOOP OVER STAVE MODELS
   double total_length = 0; // Total length including frames
   for (int iSM = 0; iSM<nStaveModels; iSM++) {
@@ -216,7 +292,7 @@ static Ref_t create_MPGDCylinderBarrelTracker(Detector& description, xml_h e, Se
     double stave_rmin = staveModel.rmin;
     double dphi = stave_width/stave_rmin/2;
     double phi_start = -dphi, phi_end = dphi;
-    
+
     // ***** ASSEMBLY VOLUME: ONE PER STAVE MODEL
     Assembly m_vol(staveModel.name);
     volumes.push_back(m_vol);
@@ -253,8 +329,36 @@ static Ref_t create_MPGDCylinderBarrelTracker(Detector& description, xml_h e, Se
     frame_vol_I.setVisAttributes(description,frame.vis);
     frame_vol_3.setVisAttributes(description,frame.vis);
     frame_vol_4.setVisAttributes(description,frame.vis);
- 
-    // ***** LOOP OVER COMPONENTS
+
+    // ***** OUTER SECTORS: SERVICES TO INNER
+    // Don't know what the purpose of the "(inner|outer)_thickness" arg.s
+    // to the surface volume (see infra) and whether "inner_thickness" has to
+    // include the extra thickness corresponding to the services.
+    // Note: The phi range of the service volume is set so that it's smaller
+    // than that of the rest of components. This, in order to avoid the
+    // addition of a thickness of service to the already thick superposition
+    // of 2 module thicknesses (or module+frame) on the edge.
+    if (staveModel.io==1) {
+      // Superposition along Z
+      double outerPos = barrel_length/2-total_length/2;
+      double innerPos = (total_length+z_gap)/2;
+      double zSuperpos = total_length-outerPos+innerPos;
+      // Parameters
+      double serv_thickness = service_thickness;
+      double serv_rmin = stave_rmin-service_thickness;
+      double serv_length = total_length-zSuperpos;
+      // phi range: stay away from phi overlap and frame, add 1mm margin
+      double dPhi = outerPhiSuperpos/2+(frame.width+.1)/stave_rmin;
+      double serv_start = phi_start+dPhi, serv_stop = phi_end-dPhi;
+      Tube   c_tube(serv_rmin,serv_rmin+serv_thickness,serv_length/2,serv_start,serv_stop);
+      Volume c_vol(x_service.nameStr(),c_tube,description.material(x_service.materialStr()));
+      pv = m_vol.placeVolume(c_vol,Position(0,0,-zSuperpos/2));
+      c_vol.setRegion(description, x_service.regionStr());
+      c_vol.setLimitSet(description, x_service.limitsStr());
+      c_vol.setVisAttributes(description, x_service.visStr());
+    }
+
+    // ********** LOOP OVER COMPONENTS
     double comp_rmin = stave_rmin;
     int    sensor_number=1;
     double thickness_so_far=0;
@@ -265,10 +369,6 @@ static Ref_t create_MPGDCylinderBarrelTracker(Detector& description, xml_h e, Se
       double comp_thickness = x_comp.thickness();
       Tube   c_tube(comp_rmin,comp_rmin+comp_thickness,det_length/2,phi_start,phi_end);
       Volume c_vol(c_nam,c_tube,description.material(x_comp.materialStr()));
-
-      //Use this if you need to bring the module to the center and the do the rotation and translation.
-      //pv=m_vol.placeVolume(c_vol, Position(-(2*(comp_rmin + comp_thickness/2) - det_rmin - total_thickness/2), 0, 0));
-   
       pv = m_vol.placeVolume(c_vol,Position(0,0,(out_frame.width-frame.width)/2));
       c_vol.setRegion(description, x_comp.regionStr());
       c_vol.setLimitSet(description, x_comp.limitsStr());
@@ -308,56 +408,15 @@ static Ref_t create_MPGDCylinderBarrelTracker(Detector& description, xml_h e, Se
   }//end of stave model loop
 
   // ********** LAYER
-  // ***** ONE AND ONLY ONE MODULE
-  xml_coll_t li(x_det, _U(layer));
-  if (li.size()!=1) {
-    printout(ERROR,"MPGDCylinderBarrelTracker",
-	     "Number of layers = %d. Must be = 1",(int)li.size());
-    throw runtime_error("Logics error in building modules.");
-  }
-  // ***** RETRIEVE PARAMETERS
-  xml_comp_t x_layer  = li;
-  int        lay_id   = x_layer.id();
-  if (x_layer.moduleStr()!=m_nam) {
-    printout(ERROR,"MPGDCylinderBarrelTracker",
-	     "Layer \"%s\" does not match module \"%s\"",
-	     x_layer.moduleStr().c_str(),m_nam.c_str());
-    throw runtime_error("Logics error in building layer.");
-  }
-  xml_comp_t x_barrel = x_layer.child(_U(barrel_envelope));
-  double z_length = x_barrel.z_length();
-  double z0 = getAttrOrDefault(x_barrel,_U(z0),0.);
-  //double det_zmin = z0-z_length/2, det_zmax = z0+z_length/2;
-  xml_comp_t x_layout = x_layer.child(_U(rphi_layout));
-  double phi0     = x_layout.phi0();     // Starting phi of first module.
-  xml_comp_t z_layout = x_layer.child(_U(z_layout)); // Get the <z_layout> element.
-  double     z_gap = z_layout.gap();
-  // ***** UNVALID PROPERTIES
-  // # of staves (along phi) and sectors (along z) are now derived from stave
-  // width and sector length. Used to be specified directly. In order to remind
-  // the user this is no longer the case, let's forbid the use of the
-  // corresponding (and a few more) tags.
-  // ALSO rphi_dr
-  const int nUnvalids = 4;
-  const xml::Tag_t unvalidTags[nUnvalids] = {_U(phi_tilt),_U(nphi),_U(rc),_U(dr)};
-  for (int uv = 0; uv<nUnvalids; uv++) {
-    if (x_barrel.hasChild(unvalidTags[uv])) {
-      printout(ERROR,"MPGDCylinderBarrelTracker",
-	       "Layer \"%s\": Unvalid property \"%s\" in \"rphi_layout\"",
-	       m_nam.c_str(),_U(nphi));
-      throw runtime_error("Logics error in building modules.");
-    }
-  }
-  //double nz   = z_layout.nz();       // Number of modules to place in z.
   // ***** ENVELOPE
   string   lay_nam  = det_name+_toString(x_layer.id(),"_layer%d");
-  Tube     lay_tub(x_barrel.inner_r(),x_barrel.outer_r(),z_length/2);
+  Tube     lay_tub(x_barrel.inner_r(),x_barrel.outer_r(),barrel_length/2);
   Volume   lay_vol(lay_nam,lay_tub,air); // Create the layer envelope volume.
-  Position lay_pos(0,0,z0);
+  Position lay_pos(0,0,barrel_z0);
   lay_vol.setVisAttributes(description.visAttributes(x_layer.visStr()));
   printout(DEBUG,"MPGDCylinderBarrelTracker",
 	   "Layer \"%s\": rmin,max = %.2f,%.2f cm 1/2length = %.2f cm",
-	   lay_nam.c_str(),x_barrel.inner_r(),x_barrel.outer_r(),z_length/2);
+	   lay_nam.c_str(),x_barrel.inner_r(),x_barrel.outer_r(),barrel_length/2);
   
   DetElement  lay_elt(sdet, lay_nam, lay_id);
 
@@ -366,13 +425,15 @@ static Ref_t create_MPGDCylinderBarrelTracker(Detector& description, xml_h e, Se
   auto &layerParams =
     DD4hepDetectorHelper::ensureExtension<dd4hep::rec::VariantParameters>(lay_elt);
 
+  // ********** LOOP OVER THE SECTORS IN z
+  // ***** SECTOR POSITIONS ALONG Z
+  // These are the 4 central values in Z where the four sets of modules, called
+  // sectors, will be placed.
   double modz_pos[4] =
-    {-z_length/2+(total_length)/2,
+    {-barrel_length/2+(total_length)/2,
      -(total_length+z_gap)/2,
      +(total_length+z_gap)/2,
-     +z_length/2-(total_length)/2}; //these are the 4 central values in z where the four modules will be placed
-
-  // ***** LOOP OVER THE SECTORS IN z
+     +barrel_length/2-(total_length)/2};
   int nModules = 0;
   for (int iz = 0; iz<4; iz++) {
     int io = (iz==1||iz==2)?0:1;
@@ -392,8 +453,9 @@ static Ref_t create_MPGDCylinderBarrelTracker(Detector& description, xml_h e, Se
       string     module_name = _toString(10*iz+iphi,"module%02d");
       DetElement mod_elt(lay_elt,module_name,nModules);
       printout(DEBUG,"MPGDCylinderBarrelTracker",
-	       "Layer \"%s\" module \"%s\": \t x1,y1,r1: %7.4f,%7.4f,%7.4f cm",
-	       lay_nam.c_str(),module_name.c_str(),x1/cm,y1/cm,sqrt(x1*x1+y1*y1)/cm);
+	       "System %d Layer \"%s\",id=%d Module \"%s\",id=%d: x,y,r: %7.4f,%7.4f,%7.4f cm",
+	       det_id,lay_nam.c_str(),lay_id,module_name.c_str(),nModules,
+	       x1/cm,y1/cm,sqrt(x1*x1+y1*y1)/cm);
       RotationZYX rot;
       rot = RotationZYX(phic,0,0);
       if (iz>=2) // Rotate so that outward-frame faces outwards.

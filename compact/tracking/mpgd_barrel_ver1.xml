@@ -40,7 +40,7 @@
     <comment> FIXME: No support material is here, so fudge factor used to bring material budget to ~0.5% for barrel </comment>
     <constant name="MMFudgeInnerMPGDBarrel_thickness"       value="570*um"/>
     <comment> FIXME: No definite plan for connections/services to the inner sectors yet, so guess value </comment>
-    <constant name="MMInnerService_thickness"               value="0.1*cm"/>
+    <constant name="MMInnerService_thickness"               value="0.05*cm"/>
     <comment> ...Dimensions </comment>
     <constant name="MMModuleWidth"                          value="46.0*cm"/>
     <constant name="MMModuleLength"                         value="61.0*cm"/>
