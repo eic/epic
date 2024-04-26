@@ -303,7 +303,7 @@ static std::tuple<int, std::pair<int, int>> add_12surface_disk(Detector& desc, A
   //==============================
 
   PolyhedraRegular solid_ring12(12, r12min, r12max, structure_frame_length);
-  Volume ring12_vol("ring12", solid_ring12, outer_ring_material);
+  Volume ring12_vol("ring12", solid_ring12, desc.material("Vacuum"));
   Transform3D tr_global_Oring = RotationZYX(Prot, 0., 0.) * Translation3D(0., 0., Oring_shift);
   ring12_vol.setVisAttributes(desc.visAttributes(plm.attr<std::string>(_Unicode(vis_struc))));
 
@@ -313,7 +313,7 @@ static std::tuple<int, std::pair<int, int>> add_12surface_disk(Detector& desc, A
   bool has_envelope = dd4hep::getAttrOrDefault<bool>(plm, _Unicode(envelope), false);
   PolyhedraRegular solid_world(12, 0., r12min, calo_module_length);
   EllipticalTube solid_sub(Innera, Innerb, calo_module_length / 2.);
-  Transform3D subtract_pos = RotationZYX(Nrot, 0., 0.) * Translation3D(0., 0., 0.);
+  Transform3D subtract_pos = RotationZYX(Nrot, 0., 0.) * Translation3D(1*cm, 0., 0.);
   SubtractionSolid calo_subtract(solid_world, solid_sub, subtract_pos);
   Volume env_vol(std::string(env.name()) + "_envelope", calo_subtract, outer_ring_material);
   Transform3D tr_global = RotationZYX(Prot, 0., 0.) * Translation3D(0., 0., 0.);
@@ -353,10 +353,10 @@ static std::tuple<int, std::pair<int, int>> add_12surface_disk(Detector& desc, A
 
   double minX = 0., maxX = 0., minY = 0., maxY = 0.;
   for (auto& square : points) {
-    epic::geo::Point box[4] = {{square.x() + half_modx, square.y() + half_mody},
-                               {square.x() - half_modx, square.y() + half_mody},
-                               {square.x() - half_modx, square.y() - half_mody},
-                               {square.x() + half_modx, square.y() - half_mody}};
+    epic::geo::Point box[4] = {{square.x() + half_modx, square.y() + 2 * half_mody},
+                               {square.x() - half_modx, square.y() + 2 * half_mody},
+                               {square.x() - half_modx, square.y()},
+                               {square.x() + half_modx, square.y()}};
     if (epic::geo::isBoxTotalInsidePolygon(box, out_vertices)) {
       if (square.x() < minX)
         minX = square.x();
@@ -376,16 +376,16 @@ static std::tuple<int, std::pair<int, int>> add_12surface_disk(Detector& desc, A
   auto rowcolumn = std::make_pair(N_row, N_column);
 
   for (auto& square : points) {
-    epic::geo::Point box[4] = {{square.x() + half_modx, square.y() + half_mody},
-                               {square.x() - half_modx, square.y() + half_mody},
-                               {square.x() - half_modx, square.y() - half_mody},
-                               {square.x() + half_modx, square.y() - half_mody}};
+    epic::geo::Point box[4] = {{square.x() + half_modx, square.y() + 2 * half_mody},
+                               {square.x() - half_modx, square.y() + 2 * half_mody},
+                               {square.x() - half_modx, square.y()},
+                               {square.x() + half_modx, square.y()}};
     if (epic::geo::isBoxTotalInsidePolygon(box, out_vertices)) {
       if (!epic::geo::isBoxTotalInsidePolygon(box, in_vertices)) {
         column = std::round((square.x() - minX) / modSize.x());
         row    = std::round((maxY - square.y()) / modSize.y());
         Transform3D tr_local =
-            RotationZYX(Nrot, 0.0, 0.0) * Translation3D(square.x(), square.y(), 0.0);
+            RotationZYX(Nrot, 0.0, 0.0) * Translation3D(square.x(), square.y() + half_mody, 0.0);
         auto modPV = (has_envelope ? env_vol.placeVolume(modVol, tr_local)
                                    : env.placeVolume(modVol, tr_global * tr_local));
         modPV.addPhysVolID("sector", sector_id)
