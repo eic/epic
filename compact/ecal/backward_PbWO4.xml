@@ -10,10 +10,10 @@
             carbonfiber[ VM2000[ crystal ]VM2000 ]carbonfiber
             0.2          0.05    200.00
     </comment>
-    <constant name="EcalEndcapN_crystalmodule_crystal_width" value="20.00*mm"/>
+    <constant name="EcalEndcapN_crystalmodule_crystal_width" value="20.50*mm"/>
     <constant name="EcalEndcapN_crystalmodule_crystal_length" value="200.00*mm"/>
-    <constant name="EcalEndcapN_crystalmodule_carbonfiber_thickness" value="0.20*mm"/>
-    <constant name="EcalEndcapN_crystalmodule_VM2000_thickness" value="0.05*mm"/>
+    <constant name="EcalEndcapN_crystalmodule_carbonfiber_thickness" value="0.25*mm"/>
+    <constant name="EcalEndcapN_crystalmodule_VM2000_thickness" value="0.13*mm"/>
     <constant name="EcalEndcapN_crystalmodule_carbonfiber_length" value="20.00*mm"/>
     <constant name="EcalEndcapN_crystalmodule_PCB_thickness" value="1.45*mm"/>
 
