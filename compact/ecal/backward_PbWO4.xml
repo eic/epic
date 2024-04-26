@@ -45,7 +45,7 @@
     <constant name="EcalEndcapN_Protate" value="15.*degree"/>
     <constant name="EcalEndcapN_Nrotate" value="-15.*degree"/>
     <constant name="EcalEndcapN_Oring_relative_shift" value="-20.*cm"/>
-    <constant name="EcalEndcapN_Iring_axisA" value="7.5*cm"/>
+    <constant name="EcalEndcapN_Iring_axisA" value="7.0*cm"/>
     <constant name="EcalEndcapN_Iring_axisB" value="5.5*cm"/>
 
 
