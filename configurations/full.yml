@@ -15,7 +15,6 @@ features:
     tof_barrel:
     tof_endcap:
   pid:
-    dirc:
     pfrich:
     drich:
   ecal:
