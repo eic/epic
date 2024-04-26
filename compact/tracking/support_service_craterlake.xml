@@ -258,16 +258,11 @@
 
     <comment> 4. Segments between DRICH readout boxes. </comment>
 
-    <comment> FIXME (wdconinc)
-      For now we fudge the segment phi extent because the DRICH is too wide.
-    </comment>
-    <constant name="TrackerSupportDRICHSegment_fudge"        value="(12*deg) / (18*deg)" />
-
     <comment> Blind cone segments that do not continue into DRICH readout boxes </comment>
     <constant name="TrackerSupportDRICHBlindConeSegmentCF_thickness" value="2.0*mm" />
     <constant name="TrackerSupportDRICHBlindConeSegmentAl_thickness" value="0.5 * (30.6*mm + 86.7*mm)" /> <comment> Average of inner and outer thickness </comment>
     <constant name="TrackerSupportDRICHBlindConeSegment_thickness"   value="TrackerSupportDRICHBlindConeSegmentCF_thickness + TrackerSupportDRICHBlindConeSegmentAl_thickness" />
-    <constant name="TrackerSupportDRICHBlindConeSegment_deltaphi"    value="60*deg - 18*deg * TrackerSupportDRICHSegment_fudge" />
+    <constant name="TrackerSupportDRICHBlindConeSegment_deltaphi"    value="60*deg - 18*deg" />
     <constant name="TrackerSupportDRICHBlindConeSegment_zmin"        value="TrackerSupportDiskEndcapP_zmax" />
     <constant name="TrackerSupportDRICHBlindConeSegment_zmax"        value="214.0*cm" />
     <constant name="TrackerSupportDRICHBlindConeSegment_rmin"        value="TrackerSupportDiskEndcapP_rmax" />
@@ -281,7 +276,7 @@
     <constant name="TrackerSupportDRICHConeSegmentACF_thickness" value="TrackerSupportDRICHBlindConeSegmentCF_thickness" />
     <constant name="TrackerSupportDRICHConeSegmentAAl_thickness" value="TrackerSupportDRICHBlindConeSegmentAl_thickness" />
     <constant name="TrackerSupportDRICHConeSegmentA_thickness"   value="TrackerSupportDRICHConeSegmentACF_thickness+TrackerSupportDRICHConeSegmentAAl_thickness" />
-    <constant name="TrackerSupportDRICHConeSegmentA_deltaphi"    value="18*deg * TrackerSupportDRICHSegment_fudge" />
+    <constant name="TrackerSupportDRICHConeSegmentA_deltaphi"    value="18*deg" />
     <constant name="TrackerSupportDRICHConeSegmentA_zmin"        value="TrackerSupportDiskEndcapP_zmax" />
     <constant name="TrackerSupportDRICHConeSegmentA_zmax"        value="216.8*cm" />
     <constant name="TrackerSupportDRICHConeSegmentA_rmin1"       value="TrackerSupportDiskEndcapP_rmax" />
@@ -294,7 +289,7 @@
     <constant name="TrackerSupportDRICHConeSegmentBCF_thickness" value="2.0*mm" />
     <constant name="TrackerSupportDRICHConeSegmentBAl_thickness" value="104.7*mm" /> <comment> Ref: Services Material Budget 24.03.13.stp </comment>
     <constant name="TrackerSupportDRICHConeSegmentB_thickness"   value="TrackerSupportDRICHConeSegmentBCF_thickness + TrackerSupportDRICHConeSegmentBAl_thickness" />
-    <constant name="TrackerSupportDRICHConeSegmentB_deltaphi"    value="18*deg * TrackerSupportDRICHSegment_fudge" />
+    <constant name="TrackerSupportDRICHConeSegmentB_deltaphi"    value="18*deg" />
     <constant name="TrackerSupportDRICHConeSegmentB_zmin"        value="2070.3*mm" />
     <constant name="TrackerSupportDRICHConeSegmentB_zmax"        value="2310.2*mm" />
     <constant name="TrackerSupportDRICHConeSegmentB_rmin"        value="TrackerSupportDRICHConeSegmentA_rmax" />
@@ -306,7 +301,7 @@
 
     <constant name="TrackerSupportDRICHCylSegmentAl_thickness"   value="68.6*mm" /> <comment> Ref: Services Material Budget 24.03.13.stp </comment>
     <constant name="TrackerSupportDRICHCylSegment_thickness"     value="TrackerSupportDRICHCylSegmentAl_thickness" />
-    <constant name="TrackerSupportDRICHCylSegment_deltaphi"      value="18*deg * TrackerSupportDRICHSegment_fudge" />
+    <constant name="TrackerSupportDRICHCylSegment_deltaphi"      value="18*deg" />
     <constant name="TrackerSupportDRICHCylSegment_zmin"          value="2310.2*mm" />
     <constant name="TrackerSupportDRICHCylSegment_zmax"          value="2972.6*mm" />
     <constant name="TrackerSupportDRICHCylSegment_rmin"          value="1800.0*mm" />
