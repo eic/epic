@@ -237,7 +237,7 @@ void buildFibers(Detector& desc, SensitiveDetector& sens, Volume& s_vol, int lay
   struct Fiber {
     Point pos;
     bool assigned = false;
-    Fiber(const Point& p) : pos(p){};
+    Fiber(const Point& p) : pos(p) {};
   };
   std::vector<Fiber> fibers(f_pos.begin(), f_pos.end());
 
