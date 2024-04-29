@@ -24,7 +24,7 @@
 <constant name="DRICH_sensorbox_length"   value="50.0*cm"/>  <!-- z-length of the extrusion -->
 <constant name="DRICH_sensorbox_rmin"     value="DRICH_rmax1 + 2*cm"/>  <!-- lower radial limit of the extrusion -->
 <constant name="DRICH_sensorbox_rmax"     value="DRICH_rmax2 + 5*cm"/>  <!-- upper radial limit of the extrusion -->
-<constant name="DRICH_sensorbox_dphi"     value="48*degree"/>  <!-- azimuthal width of the extrusion -->
+<constant name="DRICH_sensorbox_dphi"     value="42*degree"/>  <!-- azimuthal width of the extrusion -->
 <!-- aerogel+filter geometry -->
 <constant name="DRICH_aerogel_thickness"  value="4.0*cm"/>  <!-- aerogel thickness -->
 <constant name="DRICH_airgap_thickness"   value="0.01*mm"/> <!-- air gap between aerogel and filter -->
@@ -328,7 +328,7 @@ photodetector unit (PDU) assembly diagram: matrix of SiPMs with services
   radius="110.0*cm"
   />
 <sphericalpatch
-  phiw="30*degree"
+  phiw="18*degree"
   rmin="111.0*cm"
   rmax="179.0*cm"
   zmin="DRICH_snout_length + 4.0*cm"
