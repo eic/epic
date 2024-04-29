@@ -22,7 +22,7 @@
 <constant name="DRICH_rmax2"              value="ForwardPIDRegion_rmax"/>  <!-- cylinder radius -->
 <!-- sensor boxes: extrusions of the tank, to hold the sensors and their services -->
 <constant name="DRICH_sensorbox_length"   value="50.0*cm"/>  <!-- z-length of the extrusion -->
-<constant name="DRICH_sensorbox_rmin"     value="DRICH_rmax1 + 2*cm"/>  <!-- lower radial limit of the extrusion -->
+<constant name="DRICH_sensorbox_rmin"     value="108*cm"/>  <!-- lower radial limit of the extrusion -->
 <constant name="DRICH_sensorbox_rmax"     value="DRICH_rmax2 + 5*cm"/>  <!-- upper radial limit of the extrusion -->
 <constant name="DRICH_sensorbox_dphi"     value="42*degree"/>  <!-- azimuthal width of the extrusion -->
 <!-- aerogel+filter geometry -->
