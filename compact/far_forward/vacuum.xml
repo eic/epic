@@ -55,7 +55,7 @@
 
         <element>
                 <placement x="B2PF_XPosition" y="0*m" z="B2PF_CenterPosition" theta="B2PF_RotationAngle" />
-                <dimensions z="B1PF_Length"  />
+                <dimensions z="B2PF_Length"  />
                 <apperture x="B2PF_InnerRadius*2" y="B2PF_InnerRadius*2"  r="B2PF_InnerRadius" />
         </element>
 
