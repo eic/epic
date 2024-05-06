@@ -305,6 +305,7 @@ static Ref_t createDetector(Detector& description, xml_h e, SensitiveDetector se
   Volume hrppdVol_air(detName + "_air_hrppd", hrppd_Solid, air);
   Volume hrppdVol(detName + "_hrppd", hrppd_Solid, sensorMat);
 
+  hrppdVol_air.setSensitiveDetector(sens);
   hrppdVol_air.setVisAttributes(gasvolVis);
   DetElement hrppdDE(sdet, "hrppd_de", 0);
 
