@@ -22,7 +22,7 @@
     <plugin name="epic_FileLoader">
       <arg value="cache:$DETECTOR_PATH:/opt/detector"/>
       <arg value="file:calibrations/pfrich.lut"/>
-      <arg value="url:https://github.com/eic/epic-data/raw/b863589baf6998acdc22f5e445a5e462bbf72b0a/pfrich.lut"/>
+      <arg value="url:https://raw.githubusercontent.com/eic/epic-data/126e57e058adddd1d044c63656eb76bc25a1aae5/pfrich.lut"/>
     </plugin>
     <plugin name="epic_FileLoader">
       <arg value="cache:$DETECTOR_PATH:/opt/detector"/>
