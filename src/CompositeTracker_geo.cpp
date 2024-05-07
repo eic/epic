@@ -18,26 +18,24 @@
 using namespace dd4hep;
 using namespace dd4hep::detail;
 
-static Ref_t create_element(Detector& description, xml_h e, Ref_t)
-{
-  xml_det_t         x_det(e);
+static Ref_t create_element(Detector& description, xml_h e, Ref_t) {
+  xml_det_t x_det(e);
   const std::string det_name = x_det.nameStr();
-  DetElement        sdet(det_name, x_det.id());
-  Volume            vol;
-  Position          pos;
+  DetElement sdet(det_name, x_det.id());
+  Volume vol;
+  Position pos;
 
   const bool usePos = x_det.hasChild(_U(position));
 
   // Set detector type flag
   dd4hep::xml::setDetectorTypeFlag(x_det, sdet);
-  auto &params = DD4hepDetectorHelper::ensureExtension<dd4hep::rec::VariantParameters>(
-      sdet);
+  auto& params = DD4hepDetectorHelper::ensureExtension<dd4hep::rec::VariantParameters>(sdet);
 
   // Add the volume boundary material if configured
   for (xml_coll_t bmat(x_det, _Unicode(boundary_material)); bmat; ++bmat) {
     xml_comp_t x_boundary_material = bmat;
     DD4hepDetectorHelper::xmlToProtoSurfaceMaterial(x_boundary_material, params,
-                                         "boundary_material");
+                                                    "boundary_material");
   }
 
   if (usePos) {
@@ -46,7 +44,7 @@ static Ref_t create_element(Detector& description, xml_h e, Ref_t)
   vol = Assembly(det_name);
   vol.setAttributes(description, x_det.regionStr(), x_det.limitsStr(), x_det.visStr());
 
-  Volume       mother = description.pickMotherVolume(sdet);
+  Volume mother = description.pickMotherVolume(sdet);
   PlacedVolume pv;
   if (usePos) {
     pv = mother.placeVolume(vol, pos);
@@ -55,8 +53,8 @@ static Ref_t create_element(Detector& description, xml_h e, Ref_t)
   }
   sdet.setPlacement(pv);
   for (xml_coll_t c(x_det, _U(composite)); c; ++c) {
-    xml_dim_t         component = c;
-    const std::string nam       = component.nameStr();
+    xml_dim_t component   = c;
+    const std::string nam = component.nameStr();
     description.declareParent(nam, sdet);
   }
   return sdet;

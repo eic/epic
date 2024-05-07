@@ -6,7 +6,7 @@
     <documentation>
       #### Dimension constants
     </documentation>
-    <constant name="FluxEndcapN_zshift" value="FluxEndcapN_collar_thickness-FluxEndcapN_thickness"/>
+    <constant name="FluxEndcapN_zshift" value="FluxEndcapN_collar_thickness-FluxEndcapN_exterior_thickness"/>
     <constant name="FluxEndcapN_zmin" value="BackwardServiceGap_zmax"/>
 
   </define>
@@ -15,9 +15,9 @@
   <!-- Define detector -->
   <detectors>
     <documentation>
-      ### Backwards (Negative Z) Endcap Flux Return
+      ### Backward (Negative Z) Endcap Flux Return
     </documentation>
-    <detector name="FluxEndcapN" type="epic_EndcapFluxReturnN" vis="FluxEndcapNVis">
+    <detector name="FluxEndcapN" type="epic_EndcapFluxReturn" vis="FluxEndcapNVis" reflect="true">
       <position x="0" y="0" z="-FluxEndcapN_zmin"/>
 
        <layer id="1" name="Collar" material="Steel235"
@@ -29,8 +29,8 @@
         thickness="FluxEndcapN_oculus_thickness" vis="FluxEndcapNLayerVis"
        />
        <layer id="3" name="FluxReturn" material="Steel235"
-        rmin="FluxEndcapN_rmin" rmax="FluxEndcapN_rmax" zpos="FluxEndcapN_zshift"
-        thickness="FluxEndcapN_thickness" vis="FluxEndcapNLayerVis"
+        rmin="FluxEndcapN_exterior_rmin" rmax="FluxEndcapN_exterior_rmax" zpos="FluxEndcapN_zshift"
+        thickness="FluxEndcapN_exterior_thickness" vis="FluxEndcapNLayerVis"
        />
 
 

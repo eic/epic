@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 #trignometry
 sin ()
@@ -75,10 +75,10 @@ make_slice(){
   local zpos="$1"
   local tagnum=$(printf "%04d" ${zpos})
   local FILE_TAG="${original_file_tag}a${tagnum}"
-  local z1=$(add ${zpos} 100)
-  local z2=$(add ${zpos} -100)
-  #dawncut 0 0 1 ${z1}1 ${INPUT_FILE} ${FILE_TAG}_temp0.prim
-  #dawncut 0 0 -1 -${z2}0  ${FILE_TAG}_temp0.prim  ${FILE_TAG}.prim
+  local z1=$(( ${zpos} + 100 ))
+  local z2=$(( ${zpos} - 100 ))
+  #dawncut 0 0 1 $(( 10 * ${z1} + 1 )) ${INPUT_FILE} ${FILE_TAG}_temp0.prim
+  #dawncut 0 0 -1 $(( -10 * ${z2} ))  ${FILE_TAG}_temp0.prim  ${FILE_TAG}.prim
   ../../bin/dawn_tweak -z ${zpos}0
   cp ${INPUT_FILE} ${FILE_TAG}.prim
   dawn -d ${FILE_TAG}.prim
