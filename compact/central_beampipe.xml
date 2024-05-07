@@ -90,15 +90,15 @@
                 place_vacuum="true">
         <upstream_lepton_hadron_joint thickness="LeptonOutgoingBeampipeThickness">
           <vacuum>
-            <zplane z="LeptonOutgoingBeampipe_z1 - UpstreamLeptonHadronBeampipeJointLength" 
+            <zplane z="LeptonOutgoingBeampipe_z1 - UpstreamLeptonHadronBeampipeJointLength"
                     OD="LeptonOutgoingBeampipe_ID1"/>
-            <zplane z="LeptonOutgoingBeampipe_z1" 
+            <zplane z="LeptonOutgoingBeampipe_z1"
                     OD="LeptonOutgoingBeampipe_ID1"/>
           </vacuum>
           <coating>
-            <zplane z="LeptonOutgoingBeampipe_z1 - UpstreamLeptonHadronBeampipeJointLength" 
+            <zplane z="LeptonOutgoingBeampipe_z1 - UpstreamLeptonHadronBeampipeJointLength"
                     OD="LeptonOutgoingBeampipe_ID1 + 2*BeampipeCoatingThickness"/>
-            <zplane z="LeptonOutgoingBeampipe_z1" 
+            <zplane z="LeptonOutgoingBeampipe_z1"
                     OD="LeptonOutgoingBeampipe_ID1 + 2*BeampipeCoatingThickness"/>
           </coating>
           <matter>
