@@ -22,7 +22,7 @@
     <plugin name="epic_FileLoader">
       <arg value="cache:$DETECTOR_PATH:/opt/detector"/>
       <arg value="file:calibrations/hpdirc.lut.gz"/>
-      <arg value="url:https://raw.githubusercontent.com/eic/epic-data/raw/4cfc44404d538cebe513cb491e5fcd62f99ad4f6/hpdirc.lut.gz"/>
+      <arg value="url:https://raw.githubusercontent.com/eic/epic-data/4cfc44404d538cebe513cb491e5fcd62f99ad4f6/hpdirc.lut.gz"/>
     </plugin>
     <plugin name="epic_FileLoader">
       <arg value="cache:$DETECTOR_PATH:/opt/detector"/>
