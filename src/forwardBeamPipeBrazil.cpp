@@ -468,7 +468,7 @@ static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector /* sens *
 
   auto pv_pipe_8 = assembly.placeVolume(
       v_b0_hadron_tube,
-      Transform3D(RotationY(crossingAngle), Position(640.0*sin(crossingAngle), 0.0, 640.0))); // 2353.06094)));
+      Transform3D(RotationY(crossingAngle), Position(640.0*sin(crossingAngle), 0.0, 640.0*cos(crossingAngle)))); // 2353.06094)));
   pv_pipe_8.addPhysVolID("sector", 1);
   DetElement pipe_de_8(sdet, Form("sector_pipe_%d_de", pieceIdx), 1);
   pipe_de_8.setPlacement(pv_pipe_6);
