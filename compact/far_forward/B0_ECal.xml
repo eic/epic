@@ -7,7 +7,7 @@
     <constant name="B0ECal_IP_distance" value="640*cm"/>
     <constant name="B0ECal_xcenter" value="B0ECal_IP_distance*sin(ionCrossingAngle)"/>
     <constant name="B0ECal_zcenter" value="B0ECal_IP_distance*cos(ionCrossingAngle)"/>
-    <constant name="B0ECal_length" value="120*cm"/>
+    <constant name="B0ECal_length" value="20*cm"/>
     <constant name="B0ECal_CrystalModule_width" value="2*cm"/>
     <constant name="B0ECal_CrystalModule_length_a" value="B0ECal_length"/>
     <constant name="B0ECal_CrystalModule_length_b" value="15*cm"/>
@@ -42,7 +42,7 @@
     <constant name="y14" value="y13+B0ECal_CrystalModule_width+2*B0ECal_CrystalModule_wrap"/>
     <constant name="y15" value="y14+B0ECal_CrystalModule_width+2*B0ECal_CrystalModule_wrap"/>
 
-    <constant name="z1" value="0"/>
+    <constant name="z1" value="-15*cm-48*cm"/>
     <constant name="z2" value="z1+2.5*cm"/>
   </define>
 
