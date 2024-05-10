@@ -125,9 +125,9 @@
 
 		  <placement id="48" x="x3" y="y10" z="z1" rotx="0." roty="0." rotz="0."/>
 		  <placement id="49" x="x4" y="y10" z="z1" rotx="0." roty="0." rotz="0."/>
-		  <placement id="50" x="x5" y="y10" z="z1" rotx="0." roty="0." rotz="0."/>
-		  <placement id="51" x="x6" y="y10" z="z1" rotx="0." roty="0." rotz="0."/>
-		  <placement id="52" x="x7" y="y10" z="z1" rotx="0." roty="0." rotz="0."/>
+		  <!--<placement id="50" x="x5" y="y10" z="z1" rotx="0." roty="0." rotz="0."/>-->
+		  <!--<placement id="51" x="x6" y="y10" z="z1" rotx="0." roty="0." rotz="0."/>-->
+		  <!--<placement id="52" x="x7" y="y10" z="z1" rotx="0." roty="0." rotz="0."/>-->
 		  <placement id="53" x="x8" y="y10" z="z1" rotx="0." roty="0." rotz="0."/>
 		  <placement id="54" x="x9" y="y10" z="z1" rotx="0." roty="0." rotz="0."/>
 		  <placement id="55" x="x10" y="y10" z="z1" rotx="0." roty="0." rotz="0."/>
@@ -135,24 +135,24 @@
 
 
 		  <placement id="58" x="x3" y="y9" z="z1" rotx="0." roty="0." rotz="0."/>
-		  <placement id="59" x="x4" y="y9" z="z1" rotx="0." roty="0." rotz="0."/>
-		  <placement id="60" x="x8" y="y9" z="z1" rotx="0." roty="0." rotz="0."/>
+		  <!--<placement id="59" x="x4" y="y9" z="z1" rotx="0." roty="0." rotz="0."/>-->
+		  <!--<placement id="60" x="x8" y="y9" z="z1" rotx="0." roty="0." rotz="0."/>-->
 		  <placement id="61" x="x9" y="y9" z="z1" rotx="0." roty="0." rotz="0."/>
 		  <placement id="62" x="x10" y="y9" z="z1" rotx="0." roty="0." rotz="0."/>
 		  <placement id="63" x="x11" y="y9" z="z1" rotx="0." roty="0." rotz="0."/>
 
 
 		  <placement id="65" x="x3" y="y8" z="z1" rotx="0." roty="0." rotz="0."/>
-		  <placement id="66" x="x4" y="y8" z="z1" rotx="0." roty="0." rotz="0."/>
-		  <placement id="67" x="x8" y="y8" z="z1" rotx="0." roty="0." rotz="0."/>
+		  <!--<placement id="66" x="x4" y="y8" z="z1" rotx="0." roty="0." rotz="0."/>-->
+		  <!--<placement id="67" x="x8" y="y8" z="z1" rotx="0." roty="0." rotz="0."/>-->
 		  <placement id="68" x="x9" y="y8" z="z1" rotx="0." roty="0." rotz="0."/>
 		  <placement id="69" x="x10" y="y8" z="z1" rotx="0." roty="0." rotz="0."/>
 		  <placement id="70" x="x11" y="y8" z="z1" rotx="0." roty="0." rotz="0."/>
 
 
 		  <placement id="72" x="x3" y="y7" z="z1" rotx="0." roty="0." rotz="0."/>
-		  <placement id="73" x="x4" y="y7" z="z1" rotx="0." roty="0." rotz="0."/>
-		  <placement id="74" x="x8" y="y7" z="z1" rotx="0." roty="0." rotz="0."/>
+		  <!--<placement id="73" x="x4" y="y7" z="z1" rotx="0." roty="0." rotz="0."/>-->
+		  <!--<placement id="74" x="x8" y="y7" z="z1" rotx="0." roty="0." rotz="0."/>-->
 		  <placement id="75" x="x9" y="y7" z="z1" rotx="0." roty="0." rotz="0."/>
 		  <placement id="76" x="x10" y="y7" z="z1" rotx="0." roty="0." rotz="0."/>
 		  <placement id="77" x="x11" y="y7" z="z1" rotx="0." roty="0." rotz="0."/>
@@ -160,9 +160,9 @@
 
 		  <placement id="79" x="x3" y="y6" z="z1" rotx="0." roty="0." rotz="0."/>
 		  <placement id="80" x="x4" y="y6" z="z1" rotx="0." roty="0." rotz="0."/>
-		  <placement id="81" x="x5" y="y6" z="z1" rotx="0." roty="0." rotz="0."/>
-		  <placement id="82" x="x6" y="y6" z="z1" rotx="0." roty="0." rotz="0."/>
-		  <placement id="83" x="x7" y="y6" z="z1" rotx="0." roty="0." rotz="0."/>
+		  <!--<placement id="81" x="x5" y="y6" z="z1" rotx="0." roty="0." rotz="0."/>-->
+		  <!--<placement id="82" x="x6" y="y6" z="z1" rotx="0." roty="0." rotz="0."/>-->
+		  <!--<placement id="83" x="x7" y="y6" z="z1" rotx="0." roty="0." rotz="0."/>-->
 		  <placement id="84" x="x8" y="y6" z="z1" rotx="0." roty="0." rotz="0."/>
 		  <placement id="85" x="x9" y="y6" z="z1" rotx="0." roty="0." rotz="0."/>
 		  <placement id="86" x="x10" y="y6" z="z1" rotx="0." roty="0." rotz="0."/>
