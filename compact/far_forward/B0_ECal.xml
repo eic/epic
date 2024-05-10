@@ -41,7 +41,7 @@
     <constant name="y14" value="y13+B0ECal_CrystalModule_width+2*B0ECal_CrystalModule_wrap"/>
     <constant name="y15" value="y14+B0ECal_CrystalModule_width+2*B0ECal_CrystalModule_wrap"/>
 
-    <constant name="z1" value="-48.0*cm"/>
+    <constant name="z1" value="-15*cm-48.0*cm"/>
     <constant name="z2" value="z1+2.5*cm"/>
   </define>
 
