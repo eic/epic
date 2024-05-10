@@ -31,7 +31,7 @@
         type="B0_ECAL"
         readout="B0ECalHits">
       <position x="B0ECal_xcenter" y="0" z="B0ECal_zcenter"/>
-      <rotation x="B0ECal_rotation" y="180*deg" z="0"/>
+      <rotation x="0" y="180*deg+B0ECal_rotation" z="0"/>
       <placements>
         <disk
             rmin="B0ECal_packman_rmin"
