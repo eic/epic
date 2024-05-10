@@ -48,6 +48,8 @@ static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector /* sens *
       -0.0454486856; //This is the angle of the proton orbit from the end of B1APF to the beginning of B2PF
   double crossingAngle = -0.025; //relevant for the neutral cone
 
+  double b0PFCenter_z = 640.0 * dd4hep::cm;       // location of the center of B0 magnet, used to define the hadron beampipe inside the magnet
+
   double b1APFEndPoint_z =
       22062.3828 * dd4hep::mm;                    //location of proton orbit at b1APF exit -- in mm
   double b1APFEndPoint_x = 654.3372 * dd4hep::mm; //location of proton orbit at b1APF exit -- in mm
@@ -468,7 +470,7 @@ static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector /* sens *
 
   auto pv_pipe_8 = assembly.placeVolume(
       v_b0_hadron_tube,
-      Transform3D(RotationY(crossingAngle), Position(-16.5, 0.0, 640.0))); // 2353.06094)));
+      Transform3D(RotationY(crossingAngle), Position(b0PFCenter_z*sin(crossingAngle), 0.0, b0PFCenter_z*cos(crossingAngle)))); // 2353.06094)));
   pv_pipe_8.addPhysVolID("sector", 1);
   DetElement pipe_de_8(sdet, Form("sector_pipe_%d_de", pieceIdx), 1);
   pipe_de_8.setPlacement(pv_pipe_6);

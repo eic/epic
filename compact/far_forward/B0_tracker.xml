@@ -14,8 +14,8 @@
     </comment>
     <constant name="B0Tracker_length"      value="81.0*cm"/>
     <constant name="B0Tracker_zoffset"     value="5.0*cm"/>
-    <constant name="B0TrackerCenter_zpos"  value="6.3*m"/>
-    <constant name="B0TrackerCenter_xpos"  value="-0.16000052*m" />
+    <constant name="B0TrackerCenter_zpos"  value="6.3*m*cos(ionCrossingAngle)"/>
+    <constant name="B0TrackerCenter_xpos"  value="6.3*m*sin(ionCrossingAngle)" />
     <constant name="B0Tracker_zmin"        value="B0TrackerCenter_zpos - B0Tracker_length/2.0 "/>
     <constant name="B0Tracker_rotation"    value="ionCrossingAngle"/>
     <comment>

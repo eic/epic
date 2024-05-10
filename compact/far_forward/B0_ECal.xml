@@ -4,8 +4,9 @@
 <lccdd>
   <define>
     <constant name="B0ECal_rotation" value="ionCrossingAngle"/>
-    <constant name="B0ECal_xcenter" value="-16.5*cm"/>
-    <constant name="B0ECal_zcenter" value="640.0*cm"/>
+    <constant name="B0ECal_IP_distance" value="640*cm"/>
+    <constant name="B0ECal_xcenter" value="B0ECal_IP_distance*sin(ionCrossingAngle)"/>
+    <constant name="B0ECal_zcenter" value="B0ECal_IP_distance*cos(ionCrossingAngle)"/>
     <constant name="B0ECal_length" value="20*cm"/>
     <constant name="B0ECal_CrystalModule_width" value="2*cm"/>
     <constant name="B0ECal_CrystalModule_length_a" value="B0ECal_length"/>
