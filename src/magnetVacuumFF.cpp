@@ -207,10 +207,6 @@ static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector /* sens *
         vpiece, Transform3D(RotationY(rotation_magnet[pieceIdx]),
                             Position(x_elem_magnet[pieceIdx], y_elem_magnet[pieceIdx],
                                      z_elem_magnet[pieceIdx])));
-    pv.addPhysVolID("sector", 1);
-
-    DetElement de(sdet, Form("sector%d_de", pieceIdx), 1);
-    de.setPlacement(pv);
   }
 
   //--------------------------
@@ -234,10 +230,6 @@ static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector /* sens *
     auto pv = assembly.placeVolume(
         vpiece, Transform3D(RotationY(angle_elem_gap[correctIdx]),
                             Position(x_gap[correctIdx], 0.0, z_gap[correctIdx])));
-    pv.addPhysVolID("sector", 1);
-
-    DetElement de(sdet, Form("sector%d_de", pieceIdx), 1);
-    de.setPlacement(pv);
   }
 
   //--------------------------------------------------------------
@@ -263,10 +255,6 @@ static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector /* sens *
     auto pv =
         assembly.placeVolume(specialGap_v, Transform3D(RotationY(crossingAngle),
                                                        Position(specialGap_x, 0.0, specialGap_z)));
-    pv.addPhysVolID("sector", 1);
-
-    DetElement de(sdet, Form("sector%d_de", numGaps + numMagnets), 1);
-    de.setPlacement(pv);
   }
 
   //----------------------------------------------------
@@ -290,11 +278,6 @@ static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector /* sens *
 
     auto pv = assembly.placeVolume(vpiece, Transform3D(RotationY(rotation_magnet[pieceIdx]),
                                                        Position(endGap_x, 0.0, endGap_z)));
-
-    pv.addPhysVolID("sector", 1);
-
-    DetElement de(sdet, Form("sector%d_de", numGaps + numMagnets + 1), 1);
-    de.setPlacement(pv);
   }
   //----------------------------------------------------
 
