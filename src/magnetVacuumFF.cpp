@@ -203,10 +203,10 @@ static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector /* sens *
     Volume vpiece(piece_name, magnetPiece, m_Vac);
     sdet.setAttributes(det, vpiece, x_det.regionStr(), x_det.limitsStr(), vis_name);
 
-    assembly.placeVolume(
-        vpiece, Transform3D(RotationY(rotation_magnet[pieceIdx]),
-                            Position(x_elem_magnet[pieceIdx], y_elem_magnet[pieceIdx],
-                                     z_elem_magnet[pieceIdx])));
+    assembly.placeVolume(vpiece,
+                         Transform3D(RotationY(rotation_magnet[pieceIdx]),
+                                     Position(x_elem_magnet[pieceIdx], y_elem_magnet[pieceIdx],
+                                              z_elem_magnet[pieceIdx])));
   }
 
   //--------------------------
@@ -227,9 +227,8 @@ static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector /* sens *
     Volume vpiece(piece_name, gapPiece, m_Vac);
     sdet.setAttributes(det, vpiece, x_det.regionStr(), x_det.limitsStr(), vis_name);
 
-    assembly.placeVolume(
-        vpiece, Transform3D(RotationY(angle_elem_gap[correctIdx]),
-                            Position(x_gap[correctIdx], 0.0, z_gap[correctIdx])));
+    assembly.placeVolume(vpiece, Transform3D(RotationY(angle_elem_gap[correctIdx]),
+                                             Position(x_gap[correctIdx], 0.0, z_gap[correctIdx])));
   }
 
   //--------------------------------------------------------------
@@ -253,7 +252,7 @@ static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector /* sens *
     sdet.setAttributes(det, specialGap_v, x_det.regionStr(), x_det.limitsStr(), vis_name);
 
     assembly.placeVolume(specialGap_v, Transform3D(RotationY(crossingAngle),
-                                                       Position(specialGap_x, 0.0, specialGap_z)));
+                                                   Position(specialGap_x, 0.0, specialGap_z)));
   }
 
   //----------------------------------------------------
@@ -276,7 +275,7 @@ static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector /* sens *
                        "InvisibleNoDaughters"); // make invisible instead of AnlBlue
 
     assembly.placeVolume(vpiece, Transform3D(RotationY(rotation_magnet[pieceIdx]),
-                                                       Position(endGap_x, 0.0, endGap_z)));
+                                             Position(endGap_x, 0.0, endGap_z)));
   }
   //----------------------------------------------------
 
