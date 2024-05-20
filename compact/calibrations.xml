@@ -9,6 +9,26 @@
       <arg value="file:calibrations/onnx/identity_gemm_w1x1_b1.onnx"/>
       <arg value="url:https://github.com/eic/epic-data/raw/27ef75b2b6108b5e72d3ab891f32aeeb3770c7bd/onnx/identity_gemm_w1x1_b1.onnx"/>
     </plugin>
+    <plugin name="epic_FileLoader">
+      <arg value="cache:$DETECTOR_PATH:/opt/detector"/>
+      <arg value="file:calibrations/drich.lut"/>
+      <arg value="url:https://github.com/eic/epic-data/raw/b863589baf6998acdc22f5e445a5e462bbf72b0a/drich.lut"/>
+    </plugin>
+    <plugin name="epic_FileLoader">
+      <arg value="cache:$DETECTOR_PATH:/opt/detector"/>
+      <arg value="file:calibrations/hpdirc_positive.lut"/>
+      <arg value="url:https://raw.githubusercontent.com/nathanwbrei/fastpid/66acf386f368d8fe95cbf157407492e92344ee7f/hpdirc_positive.lut"/>
+    </plugin>
+    <plugin name="epic_FileLoader">
+      <arg value="cache:$DETECTOR_PATH:/opt/detector"/>
+      <arg value="file:calibrations/pfrich.lut"/>
+      <arg value="url:https://raw.githubusercontent.com/eic/epic-data/f83bf74a79ba4cc71b459a65ba48d3a68deb0ae3/pfrich.lut"/>
+    </plugin>
+    <plugin name="epic_FileLoader">
+      <arg value="cache:$DETECTOR_PATH:/opt/detector"/>
+      <arg value="file:calibrations/tof.lut"/>
+      <arg value="url:https://github.com/eic/epic-data/raw/c0f0ec03ca98de39cb74bf03407948ea64169eb1/tof.lut"/>
+    </plugin>
   </plugins>
 
 </lccdd>
