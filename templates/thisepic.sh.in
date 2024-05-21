@@ -4,6 +4,12 @@ export DETECTOR=@PROJECT_NAME@
 export DETECTOR_PATH=@CMAKE_INSTALL_FULL_DATADIR@/@PROJECT_NAME@
 export DETECTOR_CONFIG=${1:-@PROJECT_NAME@}
 
+## Warn is not the right name (this script is sourced, hence $1)
+if [[ "$(basename ${BASH_SOURCE[0]})" != "$(basename $(realpath ${BASH_SOURCE[0]}))" ]]; then
+        echo "Warning: This script will cease to exist at '$(realpath --no-symlinks ${BASH_SOURCE[0]})'."
+        echo "         Please use the version at '$(realpath ${BASH_SOURCE[0]})'."
+fi
+
 ## Export detector libraries
 if [[ "$(uname -s)" = "Darwin" ]] || [[ "$OSTYPE" == "darwin"* ]]; then
         export DYLD_LIBRARY_PATH="@CMAKE_INSTALL_FULL_LIBDIR@${DYLD_LIBRARY_PATH:+:$DYLD_LIBRARY_PATH}"

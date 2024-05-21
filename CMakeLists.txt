@@ -113,6 +113,10 @@ configure_file(templates/thisepic.sh.in ${CMAKE_CURRENT_BINARY_DIR}/thisepic.sh 
 install(FILES ${CMAKE_CURRENT_BINARY_DIR}/thisepic.sh
     DESTINATION ${CMAKE_INSTALL_PREFIX}
 )
+install(FILES ${CMAKE_CURRENT_BINARY_DIR}/thisepic.sh
+    DESTINATION ${CMAKE_INSTALL_BINDIR}
+    RENAME setup.sh
+)
 
 # install programs
 install(PROGRAMS bin/g4MaterialScan_to_csv
