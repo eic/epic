@@ -109,13 +109,9 @@ execute_process(
   OUTPUT_VARIABLE GIT_BRANCH
   OUTPUT_STRIP_TRAILING_WHITESPACE
 )
-configure_file(templates/setup.sh.in ${CMAKE_CURRENT_BINARY_DIR}/setup.sh @ONLY)
-install(FILES ${CMAKE_CURRENT_BINARY_DIR}/setup.sh
+configure_file(templates/thisepic.sh.in ${CMAKE_CURRENT_BINARY_DIR}/thisepic.sh @ONLY)
+install(FILES ${CMAKE_CURRENT_BINARY_DIR}/thisepic.sh
     DESTINATION ${CMAKE_INSTALL_PREFIX}
-)
-install(FILES ${CMAKE_CURRENT_BINARY_DIR}/setup.sh
-    DESTINATION ${CMAKE_INSTALL_BINDIR}
-    RENAME this${PROJECT_NAME}.sh
 )
 
 # install programs
