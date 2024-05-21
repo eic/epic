@@ -7,7 +7,7 @@ export DETECTOR_CONFIG=${1:-@PROJECT_NAME@}
 ## Warn is not the right name (this script is sourced, hence $1)
 if [[ "$(basename ${BASH_SOURCE[0]})" != "$(basename $(realpath ${BASH_SOURCE[0]}))" ]]; then
         echo "Warning: This script will cease to exist at '$(realpath --no-symlinks ${BASH_SOURCE[0]})'."
-        echo "         Please use the version at '$(realpath ${BASH_SOURCE[0]})'."
+        echo "         Please use the version at '$(realpath --no-symlinks $(dirname ${BASH_SOURCE[0]})/$(readlink ${BASH_SOURCE[0]}))'."
 fi
 
 ## Export detector libraries
