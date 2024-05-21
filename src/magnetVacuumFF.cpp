@@ -265,6 +265,7 @@ static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector /* sens *
     int pieceIdx           = numMagnets - 1; // last B2PF magnet
     std::string piece_name = Form("GapVacuum%d", numGaps + numMagnets + 1);
     double endGapLength    = (10000.0 - z_end[pieceIdx]) / cos(rotation_magnet[pieceIdx]);
+    endGapLength = endGapLength - 4 * radii_magnet[pieceIdx] * tan(rotation_magnet[pieceIdx]);
     double endGap_z        = 0.5 * endGapLength * cos(rotation_magnet[pieceIdx]) + z_end[pieceIdx];
     double endGap_x        = 0.5 * endGapLength * sin(rotation_magnet[pieceIdx]) + x_end[pieceIdx];
 
