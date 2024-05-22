@@ -42,8 +42,8 @@
     <constant name="EcalBarrel_CopperThickness"       value="100*um"/>
     <constant name="EcalBarrel_KaptonThickness"       value="200*um"/>
     <constant name="EcalBarrel_EpoxyThickness"        value="100*um"/>
-    <constant name="EcalBarrel_CarbonThickness"       value="0.5*mm"/>
-    <constant name="EcalBarrel_CarbonSpacerWidth"     value="4*mm"/>
+    <constant name="EcalBarrel_CarbonFrameThickness"  value="2*mm"/>
+    <constant name="EcalBarrel_CarbonStaveThickness"  value="0.5*mm"/>
 
     <constant name="EcalBarrel_AstroPix_width"        value="2*cm"/>
     <constant name="EcalBarrel_AstroPix_length"       value="2*cm"/>
@@ -57,7 +57,7 @@
 
     <constant name="EcalBarrel_Stave_width"           value="EcalBarrel_AstroPix_width + 2. * EcalBarrel_AstroPix_margin"/>
     <constant name="EcalBarrel_Stave_length"          value="EcalBarrel_Calorimeter_length"/>
-    <constant name="EcalBarrel_Stave_thickness"       value="EcalBarrel_AstroPix_thickness + EcalBarrel_CarbonThickness"/>
+    <constant name="EcalBarrel_Stave_thickness"       value="EcalBarrel_AstroPix_thickness + EcalBarrel_CarbonStaveThickness"/>
     <constant name="EcalBarrel_StaveTilt_angle"       value="10*degree"/>
     <constant name="EcalBarrel_Stave_ModuleRepeat"    value="floor(EcalBarrel_Calorimeter_length / (EcalBarrel_AstroPix_length + EcalBarrel_AstroPix_margin))"/>
 
@@ -73,18 +73,17 @@
     <constant name="EcalBarrel_RadiatorThickness"      value="EcalBarrel_FiberZSpacing * 17"/>
     <constant name="EcalBarrel_TotalFiberLayers_num"   value="12"/>
     <constant name="EcalBarrel_RadiatorEdgeThickness"  value="0.61*mm"/>
-    <constant name="EcalBarrel_AluminumPlateThickness" value="1*mm"/>
     <constant name="EcalBarrel_SectorRepeat"           value="EcalBarrelSectorsN"/>
     <constant name="EcalBarrel_AvailThickness"         value="EcalBarrelRegion_thickness - EcalBarrel_BackSupportThickness - EcalBarrel_FrontSupportThickness"/>
 
-    <constant name="EcalBarrel_ImagingLayerThickness"  value="1.5*cm"/>
+    <constant name="EcalBarrel_ImagingLayerThickness"  value="1.7*cm"/>
 
     <constant name="EcalBarrel_ImagingLayerThickness_WithoutFrame"
       value="EcalBarrel_ImagingLayerThickness
-      - 2*EcalBarrel_CarbonThickness"/>
+      - 2*EcalBarrel_CarbonFrameThickness"/>
 
     <constant name="EcalBarrel_ScFiLayerThickness_Imaging"
-      value="EcalBarrel_RadiatorThickness + 2*EcalBarrel_RadiatorEdgeThickness + 2*EcalBarrel_AluminumPlateThickness"/>
+      value="EcalBarrel_RadiatorThickness + 2*EcalBarrel_RadiatorEdgeThickness"/>
 
     <comment>
       Adjusting size of the ScFi back chunk to match number of imaging layers
@@ -154,11 +153,7 @@
       <layer repeat="1" vis="EcalBarrelLayerVis"
              thickness="EcalBarrel_ImagingLayerThickness"
              space_before="EcalBarrel_FrontSupportThickness">
-        <barrel_envelope
-          inner_r="EcalBarrel_rmin - EcalBarrel_Stave_thickness"
-          outer_r="EcalBarrel_rmin + EcalBarrel_Stave_thickness"
-          z_length="EcalBarrel_Calorimeter_length"/>
-        <frame material="CarbonFiber" fill="Air" thickness="EcalBarrel_CarbonThickness" height="EcalBarrel_ImagingLayerThickness" vis="EcalBarrelSliceVis"/>
+        <frame material="CarbonFiber" fill="Air" thickness="EcalBarrel_CarbonFrameThickness" height="EcalBarrel_ImagingLayerThickness" vis="EcalBarrelSliceVis"/>
         <stave repeat="6"
                width="EcalBarrel_Stave_width"
                length="EcalBarrel_Stave_length"
@@ -176,14 +171,14 @@
       <layer repeat="1" vis="EcalBarrelLayerVis"
              thickness="EcalBarrel_ImagingLayerThickness"
              space_before="EcalBarrel_ScFiLayerThickness_Imaging + EcalBarrel_SpaceBetween">
-        <frame material="CarbonFiber" fill="Air" thickness="EcalBarrel_CarbonThickness" height="EcalBarrel_ImagingLayerThickness" vis="EcalBarrelSliceVis"/>
+        <frame material="CarbonFiber" fill="Air" thickness="EcalBarrel_CarbonFrameThickness" height="EcalBarrel_ImagingLayerThickness" vis="EcalBarrelSliceVis"/>
       </layer>
 
       <layer repeat="2" vis="EcalBarrelLayerVis"
              thickness="EcalBarrel_ImagingLayerThickness"
              space_between="EcalBarrel_ScFiLayerThickness_Imaging + EcalBarrel_SpaceBetween"
              space_before="EcalBarrel_ScFiLayerThickness_Imaging + EcalBarrel_SpaceBetween">
-        <frame material="CarbonFiber" fill="Air" thickness="EcalBarrel_CarbonThickness" height="EcalBarrel_ImagingLayerThickness" vis="EcalBarrelSliceVis"/>
+        <frame material="CarbonFiber" fill="Air" thickness="EcalBarrel_CarbonFrameThickness" height="EcalBarrel_ImagingLayerThickness" vis="EcalBarrelSliceVis"/>
         <stave repeat="6"
                width="EcalBarrel_Stave_width"
                length="EcalBarrel_Stave_length"
@@ -201,14 +196,14 @@
       <layer repeat="1" vis="EcalBarrelLayerVis"
              thickness="EcalBarrel_ImagingLayerThickness"
              space_before="EcalBarrel_ScFiLayerThickness_Imaging + EcalBarrel_SpaceBetween">
-        <frame material="CarbonFiber" fill="Air" thickness="EcalBarrel_CarbonThickness" height="EcalBarrel_ImagingLayerThickness" vis="EcalBarrelSliceVis"/>
+        <frame material="CarbonFiber" fill="Air" thickness="EcalBarrel_CarbonFrameThickness" height="EcalBarrel_ImagingLayerThickness" vis="EcalBarrelSliceVis"/>
       </layer>
 
       <layer repeat="EcalBarrelImagingLayers_num-5" vis="EcalBarrelLayerVis"
              thickness="EcalBarrel_ImagingLayerThickness"
              space_between="EcalBarrel_ScFiLayerThickness_Imaging + EcalBarrel_SpaceBetween"
              space_before="EcalBarrel_ScFiLayerThickness_Imaging + EcalBarrel_SpaceBetween">
-        <frame material="CarbonFiber" fill="Air" thickness="EcalBarrel_CarbonThickness" height="EcalBarrel_ImagingLayerThickness" vis="EcalBarrelSliceVis"/>
+        <frame material="CarbonFiber" fill="Air" thickness="EcalBarrel_CarbonFrameThickness" height="EcalBarrel_ImagingLayerThickness" vis="EcalBarrelSliceVis"/>
         <stave repeat="7"
                width="EcalBarrel_Stave_width"
                length="EcalBarrel_Stave_length"
@@ -245,7 +240,6 @@
       <layer repeat="EcalBarrelImagingLayers_num-1" vis="EcalBarrelLayerVis"
              space_between="EcalBarrel_ImagingLayerThickness + EcalBarrel_SpaceBetween"
              space_before="EcalBarrel_FrontSupportThickness + EcalBarrel_ImagingLayerThickness + EcalBarrel_SpaceBetween/2.">
-        <slice material="Aluminum" thickness="EcalBarrel_AluminumPlateThickness" vis="EcalBarrelSliceVis"/>
         <slice material="SciFiPb_PbGlue_Edge" thickness="EcalBarrel_RadiatorEdgeThickness" vis="EcalBarrelSliceVis"/>
         <slice material="SciFiPb_PbGlue" thickness="EcalBarrel_RadiatorThickness" vis="EcalBarrelFiberLayerVis">
           <fiber material="SciFiPb_Scintillator"
@@ -260,12 +254,10 @@
           </fiber>
         </slice>
         <slice material="SciFiPb_PbGlue_Edge" thickness="EcalBarrel_RadiatorEdgeThickness" vis="EcalBarrelSliceVis"/>
-        <slice material="Aluminum" thickness="EcalBarrel_AluminumPlateThickness" vis="EcalBarrelSliceVis"/>
       </layer>
 
       <layer repeat="1" vis="EcalBarrelLayerVis"
              space_before="EcalBarrel_ImagingLayerThickness + EcalBarrel_SpaceBetween">
-        <slice material="Aluminum" thickness="EcalBarrel_AluminumPlateThickness" vis="EcalBarrelSliceVis"/>
         <slice material="SciFiPb_PbGlue_Edge" thickness="EcalBarrel_RadiatorEdgeThickness" vis="EcalBarrelSliceVis"/>
         <slice material="SciFiPb_PbGlue" thickness="EcalBarrel_RadiatorThickness" vis="EcalBarrelFiberLayerVis">
           <fiber material="SciFiPb_Scintillator"
