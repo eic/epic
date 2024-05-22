@@ -66,14 +66,14 @@ static Volume inner_support_collar(Detector& desc, xml_comp_t handle) {
       straight_section_offset.z(),
   };
 
-  Tube electron_side{electron_rmin, electron_rmax, z_length, straight_section_tilt,
+  Tube electron_side{electron_rmin, electron_rmax, z_length / 2, straight_section_tilt,
                      -straight_section_tilt};
-  Tube proton_side{proton_rmin, proton_rmax, z_length, -straight_section_tilt,
+  Tube proton_side{proton_rmin, proton_rmax, z_length / 2, -straight_section_tilt,
                    straight_section_tilt};
   Trd1 electron_proton_straight_section{
       (electron_rmax - electron_rmin) / 2,
       (proton_rmax - proton_rmin) / 2,
-      z_length,
+      z_length / 2,
       proton_x_offset * sin(straight_section_tilt) / 2,
   };
   UnionSolid inner_support{
