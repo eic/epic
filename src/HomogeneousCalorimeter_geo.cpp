@@ -325,10 +325,12 @@ static std::tuple<int, std::pair<int, int>> add_12surface_disk(Detector& desc, A
     env.placeVolume(env_vol, tr_global);          // Place the mother volume for all modules
     env.placeVolume(ring12_vol, tr_global_Oring); // Place the outer supporting frame
 
-    xml_comp_t collar_comp = plm.child(_Unicode(inner_support_collar));
-    Volume inner_support_vol =
-        inner_support_collar(desc, collar_comp);
-    env_vol.placeVolume(inner_support_vol,Transform3D{RotationZ{Nrot}} * Translation3D(collar_comp.x_offset(0.), collar_comp.y_offset(0.), collar_comp.z_offset(0.)));
+    xml_comp_t collar_comp   = plm.child(_Unicode(inner_support_collar));
+    Volume inner_support_vol = inner_support_collar(desc, collar_comp);
+    env_vol.placeVolume(inner_support_vol,
+                        Transform3D{RotationZ{Nrot}} * Translation3D(collar_comp.x_offset(0.),
+                                                                     collar_comp.y_offset(0.),
+                                                                     collar_comp.z_offset(0.)));
   }
 
   //=====================================================================
