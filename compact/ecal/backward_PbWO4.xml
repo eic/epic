@@ -97,6 +97,7 @@
               proton_rmax="43 * mm"
               straight_section_tilt="62.05 * deg"
               z_length="250 * mm"
+              z_offset="-25 * mm"
               material="Copper"
               vis="AnlOrange"
               />
