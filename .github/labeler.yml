@@ -62,7 +62,7 @@
     - "reports/**/*"
     - "requirements.txt"
     - "scripts/**/*"
-    - "templates/setup.sh.in"
+    - "templates/thisepic.sh.in"
     - "views/**/*"
 
 "topic: magnets":
