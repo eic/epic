@@ -40,8 +40,9 @@
         ** some existed parameters are passed from "difinition.xml"
     </comment>
     <constant name="EcalEndcapN_structure_Oring_length" value="EcalEndcapN_length"/>
+    <constant name="EcalEndcapN_structure_Oring_thickness" value="2.0*cm"/>
     <constant name="EcalEndcapN_structure_Oring_max" value="65.00*cm"/>
-    <constant name="EcalEndcapN_structure_Oring_min" value="EcalEndcapN_structure_Oring_max - 0.9*cm"/>
+    <constant name="EcalEndcapN_structure_Oring_min" value="EcalEndcapN_structure_Oring_max - EcalEndcapN_structure_Oring_thickness"/>
     <constant name="EcalEndcapN_Protate" value="15.*degree"/>
     <constant name="EcalEndcapN_Nrotate" value="-15.*degree"/>
     <constant name="EcalEndcapN_Oring_relative_shift" value="-20.*cm"/>
