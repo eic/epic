@@ -305,7 +305,7 @@ static std::tuple<int, std::pair<int, int>> add_12surface_disk(Detector& desc, A
   EllipticalTube solid_sub(Innera, Innerb, calo_module_length / 2.);
   Transform3D subtract_pos = RotationZYX(Nrot, 0., 0.) * Translation3D(1 * cm, 0., 0.);
   SubtractionSolid calo_subtract(solid_world, solid_sub, subtract_pos);
-  Volume env_vol(std::string(env.name()) + "_envelope", calo_subtract, outer_ring_material);
+  Volume env_vol(std::string(env.name()) + "_envelope", calo_subtract, desc.material("Air"));
   Transform3D tr_global = RotationZYX(Prot, 0., 0.) * Translation3D(0., 0., 0.);
   env_vol.setVisAttributes(desc.visAttributes(plm.attr<std::string>(_Unicode(vis_steel_gap))));
 

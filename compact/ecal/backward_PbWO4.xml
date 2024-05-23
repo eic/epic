@@ -89,7 +89,7 @@
             ringmaterial="StainlessSteel"
             sector="1"
             vis_struc="RPVis"
-            vis_steel_gap="AnlGray">
+            vis_steel_gap="InvisibleWithDaughters">
 
           <inner_support_collar
               electron_rmin="65 * mm"
