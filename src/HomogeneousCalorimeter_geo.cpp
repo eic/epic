@@ -312,14 +312,8 @@ static std::tuple<int, std::pair<int, int>> add_12surface_disk(Detector& desc, A
   //=============================
   bool has_envelope = dd4hep::getAttrOrDefault<bool>(plm, _Unicode(envelope), false);
   PolyhedraRegular solid_world(12, 0., r12min, calo_module_length);
-
-  std::vector<double> sec_z  = {-calo_module_length / 2. - 1., calo_module_length / 2. + 1.};
-  std::vector<double> sec_x  = {0., 0.};
-  std::vector<double> sec_y  = {0., 0.};
-  std::vector<double> zscale = {1., 1.};
-
-  ExtrudedPolygon solid_sub(pt_innerframe_x, pt_innerframe_y, sec_z, sec_x, sec_y, zscale);
-  Transform3D subtract_pos = RotationZYX(Nrot, 0., 0.) * Translation3D(0., 0., 0.);
+  EllipticalTube solid_sub(Innera, Innerb, calo_module_length / 2.);
+  Transform3D subtract_pos = RotationZYX(Nrot, 0., 0.) * Translation3D(1 * cm, 0., 0.);
   SubtractionSolid calo_subtract(solid_world, solid_sub, subtract_pos);
   Volume env_vol(std::string(env.name()) + "_envelope", calo_subtract, outer_ring_material);
   Transform3D tr_global = RotationZYX(Prot, 0., 0.) * Translation3D(0., 0., 0.);
@@ -333,10 +327,10 @@ static std::tuple<int, std::pair<int, int>> add_12surface_disk(Detector& desc, A
 
     xml_comp_t collar_comp   = plm.child(_Unicode(inner_support_collar));
     Volume inner_support_vol = inner_support_collar(desc, collar_comp);
-    env.placeVolume(inner_support_vol,
-                    Transform3D{Translation3D{collar_comp.x_offset(0.),
-                                collar_comp.y_offset(0.),
-                                collar_comp.z_offset(0.)}});
+    env_vol.placeVolume(inner_support_vol,
+                        Transform3D{RotationZ{Nrot}} * Translation3D(collar_comp.x_offset(0.),
+                                                                     collar_comp.y_offset(0.),
+                                                                     collar_comp.z_offset(0.)));
   }
 
   //=====================================================================
