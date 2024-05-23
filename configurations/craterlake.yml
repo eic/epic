@@ -7,7 +7,6 @@ features:
     vertex_barrel:
     silicon_barrel:
     mpgd_barrel:
-    support_service_craterlake:
     mpgd_outerbarrel:
     mpgd_forward_endcap:
     mpgd_backward_endcap:
@@ -15,7 +14,6 @@ features:
     tof_barrel:
     tof_endcap:
   pid:
-    dirc:
     pfrich:
     drich:
   ecal:
