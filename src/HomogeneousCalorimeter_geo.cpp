@@ -280,16 +280,6 @@ static std::tuple<int, std::pair<int, int>> add_12surface_disk(Detector& desc, A
   double half_modx = modSize.x() * 0.5, half_mody = modSize.y() * 0.5;
 
   //=========================================================
-  // Read the positions information from xml file
-  //=========================================================
-  xml_coll_t pts_extrudedpolygon(plm, _Unicode(points_extrudedpolygon));
-  for (xml_coll_t position_i(pts_extrudedpolygon, _U(position)); position_i; ++position_i) {
-    xml_comp_t position_comp = position_i;
-    pt_innerframe_x.push_back((position_comp.x()));
-    pt_innerframe_y.push_back((position_comp.y()));
-  }
-
-  //=========================================================
   // optional envelope volume and the supporting frame
   //=========================================================
 
@@ -348,6 +338,7 @@ static std::tuple<int, std::pair<int, int>> add_12surface_disk(Detector& desc, A
     out_vertices.push_back(a);
   }
 
+  xml_coll_t pts_extrudedpolygon(plm, _Unicode(points_extrudedpolygon));
   for (xml_coll_t position_i(pts_extrudedpolygon, _U(position)); position_i; ++position_i) {
     xml_comp_t position_comp = position_i;
     epic::geo::Point inpt    = {position_comp.x(), position_comp.y()};
