@@ -128,7 +128,7 @@ jobs:
       - xmllint-after-build
       - list-detector-configs
     steps:
-    - uses: eic/trigger-gitlab-ci@v2
+    - uses: eic/trigger-gitlab-ci@v3
       id: trigger
       with:
         url: https://eicweb.phy.anl.gov
@@ -524,7 +524,7 @@ jobs:
       matrix:
         detector_config: [epic_craterlake]
     steps:
-    - uses: eic/trigger-gitlab-ci@v2
+    - uses: eic/trigger-gitlab-ci@v3
       id: trigger
       with:
         url: https://eicweb.phy.anl.gov
