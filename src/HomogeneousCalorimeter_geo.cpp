@@ -257,7 +257,7 @@ static std::tuple<int, std::pair<int, int>> add_12surface_disk(Detector& desc, A
   // Material for the structure and mother space
   //
   Material outer_ring_material =
-      desc.material(getAttrOrDefault<std::string>(plm, _U(material), "Air"));
+      desc.material(getAttrOrDefault<std::string>(plm, _U(material), "StainlessSteel"));
   Material inner_ring_material =
       desc.material(getAttrOrDefault<std::string>(plm, _U(material), "Copper"));
 
@@ -305,6 +305,7 @@ static std::tuple<int, std::pair<int, int>> add_12surface_disk(Detector& desc, A
   //
   if (has_envelope) {
     env.placeVolume(env_vol, tr_global);          // Place the mother volume for all modules
+    env.placeVolume(ring12_vol, tr_global_Oring); // Place the outer supporting frame
     env_vol.placeVolume(inner_support_vol,
                         tr_global_Iring_elli); // Place the version3 inner supporting frame
   }
