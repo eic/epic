@@ -293,7 +293,7 @@ static std::tuple<int, std::pair<int, int>> add_12surface_disk(Detector& desc, A
   //==============================
 
   PolyhedraRegular solid_ring12(12, r12min, r12max, structure_frame_length);
-  Volume ring12_vol("ring12", solid_ring12, desc.material("Vacuum"));
+  Volume ring12_vol("ring12", solid_ring12, outer_ring_material);
   Transform3D tr_global_Oring = RotationZYX(Prot, 0., 0.) * Translation3D(0., 0., Oring_shift);
   ring12_vol.setVisAttributes(desc.visAttributes(plm.attr<std::string>(_Unicode(vis_struc))));
 
