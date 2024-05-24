@@ -523,21 +523,24 @@ jobs:
     strategy:
       matrix:
         detector_config: [epic_craterlake]
-        benchmark_repo: [detector_benchmarks, physics_benchmarks]
+        benchmark_repo: [detector_benchmarks, physics_benchmarks, reconstruction_benchmarks]
         include:
         - benchmark_repo: detector_benchmarks
           project_id: 399
-          secret_name: EICWEB_DETECTOR_BENCHMARK_TRIGGER
+          secret_var: EICWEB_DETECTOR_BENCHMARK_TRIGGER
         - benchmark_repo: physics_benchmarks
           project_id: 400
-          secret_name: EICWEB_PHYSICS_BENCHMARK_TRIGGER
+          secret_var: EICWEB_PHYSICS_BENCHMARK_TRIGGER
+        - benchmark_repo: reconstruction_benchmarks
+          project_id: 408
+          secret_var: EICWEB_RECONSTRUCTION_BENCHMARK_TRIGGER
     steps:
     - uses: eic/trigger-gitlab-ci@v3
       id: trigger
       with:
         url: https://eicweb.phy.anl.gov
         project_id: ${{ matrix.project_id }}
-        token: ${{ secrets[matrix.secret_name] }}
+        token: ${{ secrets[matrix.secret_var] }}
         ref_name: master
         variables: |
           DETECTOR=epic
