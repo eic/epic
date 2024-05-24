@@ -7,7 +7,7 @@
     <plugin name="epic_FileLoader">
       <arg value="cache:$DETECTOR_PATH:/opt/detector"/>
       <arg value="file:calibrations/tmva/LowQ2_DNN_CPU.weights.xml"/>
-      <arg value="url:https://raw.githubusercontent.com/eic/epic-data/main/tmva/LowQ2_DNN_CPU.weights.xml"/>
+      <arg value="url:https://raw.githubusercontent.com/eic/epic-data/e441e5d88d0a44a1e407d3083914ac1a7de26f41/tmva/LowQ2_DNN_CPU.weights.xml"/>
     </plugin>
     <plugin name="epic_FileLoader">
       <arg value="cache:$DETECTOR_PATH:/opt/detector"/>
