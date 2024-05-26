@@ -378,36 +378,8 @@ static std::tuple<int, std::pair<int, int>> add_12surface_disk(Detector& desc, A
       if (!epic::geo::isBoxTotalInsidePolygon(box, in_vertices)) {
         column = std::round((square.x() - minX) / modSize.x());
         row    = std::round((maxY - square.y()) / modSize.y());
-
-	double x_offset = 0.;
-    if ((abs(row - 29) == 3) && (column < 29)) {
-      x_offset = 14.256 * mm;
-    }
-    if ((abs(row - 29) == 2) && (column < 29)) {
-      x_offset = 19.74 * mm;
-    }
-    if ((abs(row - 29) == 1) && (column < 29)) {
-      x_offset = 13.302 * mm;
-    }
-    if ((abs(row - 29) == 0) && (column < 29)) {
-      x_offset = 12.290 * mm;
-    }
-
-    if ((abs(row - 29) == 3) && (column >= 29)) {
-      x_offset = -8.925 * mm;
-    }
-    if ((abs(row - 29) == 2) && (column >= 29)) {
-      x_offset = -13.983 * mm;
-    }
-    if ((abs(row - 29) == 1) && (column >= 29)) {
-      x_offset = -0.949 * mm;
-    }
-    if ((abs(row - 29) == 0) && (column >= 29)) {
-      x_offset = -0.449 * mm;
-    }
-
         Transform3D tr_local =
-            RotationZYX(Nrot, 0.0, 0.0) * Translation3D(square.x() + x_offset, square.y() + half_mody, 0.0);
+            RotationZYX(Nrot, 0.0, 0.0) * Translation3D(square.x(), square.y() + half_mody, 0.0);
         auto modPV = (has_envelope ? env_vol.placeVolume(modVol, tr_local)
                                    : env.placeVolume(modVol, tr_global * tr_local));
         modPV.addPhysVolID("sector", sector_id)
