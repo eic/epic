@@ -328,7 +328,7 @@ static std::tuple<int, std::pair<int, int>> add_12surface_disk(Detector& desc, A
   // Placing The Modules
   //=====================================================================
 
-  auto points = epic::geo::fillRectangles({half_modx, half_mody}, modSize.x(), modSize.y(), 0.,
+  auto points = epic::geo::fillRectangles({half_modx, 0.}, modSize.x(), modSize.y(), 0.,
                                           (rmax / std::cos(Prot)), phimin, phimax);
 
   std::pair<double, double> c1(0., 0.);
@@ -348,10 +348,10 @@ static std::tuple<int, std::pair<int, int>> add_12surface_disk(Detector& desc, A
 
   double minX = 0., maxX = 0., minY = 0., maxY = 0.;
   for (auto& square : points) {
-    epic::geo::Point box[4] = {{square.x() + half_modx, square.y() + 2 * half_mody},
-                               {square.x() - half_modx, square.y() + 2 * half_mody},
-                               {square.x() - half_modx, square.y()},
-                               {square.x() + half_modx, square.y()}};
+    epic::geo::Point box[4] = {{square.x() + half_modx, square.y() + half_mody},
+                               {square.x() - half_modx, square.y() + half_mody},
+                               {square.x() - half_modx, square.y() - half_mody},
+                               {square.x() + half_modx, square.y() - half_mody}};
     if (epic::geo::isBoxTotalInsidePolygon(box, out_vertices)) {
       if (square.x() < minX)
         minX = square.x();
@@ -371,17 +371,18 @@ static std::tuple<int, std::pair<int, int>> add_12surface_disk(Detector& desc, A
   auto rowcolumn = std::make_pair(N_row, N_column);
 
   for (auto& square : points) {
-    epic::geo::Point box[4] = {{square.x() + half_modx, square.y() + 2 * half_mody},
-                               {square.x() - half_modx, square.y() + 2 * half_mody},
-                               {square.x() - half_modx, square.y()},
-                               {square.x() + half_modx, square.y()}};
+    epic::geo::Point box[4] = {{square.x() + half_modx, square.y() + half_mody},
+                               {square.x() - half_modx, square.y() + half_mody},
+                               {square.x() - half_modx, square.y() - half_mody},
+                               {square.x() + half_modx, square.y() - half_mody}};
+
     if (epic::geo::isBoxTotalInsidePolygon(box, out_vertices)) {
       if (!epic::geo::isBoxTotalInsidePolygon(box, in_vertices)) {
         column = std::round((square.x() - minX) / modSize.x());
         row    = std::round((maxY - square.y()) / modSize.y());
         Transform3D tr_local =
             RotationZYX(Nrot, 0.0, 0.0) *
-            Translation3D(square.x(), square.y() + half_mody,
+            Translation3D(square.x(), square.y(),
                           std::max((envelope_length - calo_module_length) / 2, 0.));
         auto modPV = (has_envelope ? env_vol.placeVolume(modVol, tr_local)
                                    : env.placeVolume(modVol, tr_global * tr_local));
