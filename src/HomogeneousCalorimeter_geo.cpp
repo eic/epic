@@ -50,7 +50,7 @@ static Volume inner_support_collar(Detector& desc, xml_comp_t handle) {
   double proton_rmin           = handle.attr<double>(_Unicode(proton_rmin));
   double proton_rmax           = handle.attr<double>(_Unicode(proton_rmax));
   double straight_section_tilt = handle.attr<double>(_Unicode(straight_section_tilt));
-  double z_length              = handle.attr<double>(_Unicode(z_length));
+  double z_length              = handle.z_length();
 
   double proton_x_offset = ((electron_rmax + electron_rmin) - (proton_rmax + proton_rmin)) / 2 /
                            cos(straight_section_tilt);
