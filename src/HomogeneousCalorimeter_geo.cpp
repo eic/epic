@@ -380,7 +380,9 @@ static std::tuple<int, std::pair<int, int>> add_12surface_disk(Detector& desc, A
         column = std::round((square.x() - minX) / modSize.x());
         row    = std::round((maxY - square.y()) / modSize.y());
         Transform3D tr_local =
-            RotationZYX(Nrot, 0.0, 0.0) * Translation3D(square.x(), square.y() + half_mody, std::max((envelope_length - calo_module_length) / 2, 0.));
+            RotationZYX(Nrot, 0.0, 0.0) *
+            Translation3D(square.x(), square.y() + half_mody,
+                          std::max((envelope_length - calo_module_length) / 2, 0.));
         auto modPV = (has_envelope ? env_vol.placeVolume(modVol, tr_local)
                                    : env.placeVolume(modVol, tr_global * tr_local));
         modPV.addPhysVolID("sector", sector_id)
