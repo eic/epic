@@ -1,5 +1,5 @@
 <!-- SPDX-License-Identifier: LGPL-3.0-or-later -->
-<!-- Copyright (C) 2022 Pu-Kai Wang, Wouter Deconinck -->
+<!-- Copyright (C) 2024 Pu-Kai Wang, Wouter Deconinck, Dmitry Kalinkin -->
 
 <lccdd>
   <define>
@@ -28,6 +28,8 @@
     <constant name="EcalEndcapN_crystalmodule_Nsensor_in_X" value="2"/>
     <constant name="EcalEndcapN_crystalmodule_Nsensor_in_Y" value="2"/>
 
+    <constant name="EcalEndcapN_crystalmodule_total_length" value="EcalEndcapN_crystalmodule_crystal_length + EcalEndcapN_crystalmodule_VM2000_thickness + EcalEndcapN_crystalmodule_sensor_thickness + EcalEndcapN_crystalmodule_PCB_thickness" />
+
     <comment>
       Basic hardcoded parameters about supporting structures, rotation and shift
         ** +15 deg rotation (Protate) make top side of outer supporting structure (Oring) and
@@ -40,15 +42,16 @@
         ** some existed parameters are passed from "difinition.xml"
     </comment>
     <constant name="EcalEndcapN_structure_Oring_length" value="EcalEndcapN_length"/>
+    <constant name="EcalEndcapN_inner_support_length" value="25.*cm"/>
+    <constant name="EcalEndcapN_envelope_length" value="max(EcalEndcapN_inner_support_length, EcalEndcapN_crystalmodule_total_length)" />
     <constant name="EcalEndcapN_structure_Oring_thickness" value="2.0*cm"/>
     <constant name="EcalEndcapN_structure_Oring_max" value="65.00*cm"/>
     <constant name="EcalEndcapN_structure_Oring_min" value="EcalEndcapN_structure_Oring_max - EcalEndcapN_structure_Oring_thickness"/>
     <constant name="EcalEndcapN_Protate" value="15.*degree"/>
     <constant name="EcalEndcapN_Nrotate" value="-15.*degree"/>
-    <constant name="EcalEndcapN_Oring_relative_shift" value="-20.*cm"/>
+    <constant name="EcalEndcapN_Oring_relative_shift" value="(EcalEndcapN_envelope_length - EcalEndcapN_structure_Oring_length) / 2"/>
     <constant name="EcalEndcapN_Iring_axisA" value="7.0*cm"/>
     <constant name="EcalEndcapN_Iring_axisB" value="5.5*cm"/>
-
 
     <comment>
       FIXME currently unused
@@ -70,7 +73,7 @@
         name="EcalEndcapN"
         type="epic_HomogeneousCalorimeter"
         readout="EcalEndcapNHits">
-      <position x="0" y="0" z="-(EcalEndcapN_zmin + (EcalEndcapN_crystalmodule_crystal_length + EcalEndcapN_crystalmodule_VM2000_thickness + EcalEndcapN_crystalmodule_sensor_thickness + EcalEndcapN_crystalmodule_PCB_thickness)/2.)"/>
+      <position x="0" y="0" z="-(EcalEndcapN_zmin + EcalEndcapN_envelope_length / 2.)"/>
       <rotation x="0" y="0." z="0"/>
       <placements>
         <disk_12surface
@@ -79,7 +82,8 @@
             r12min="EcalEndcapN_structure_Oring_min"
             r12max="EcalEndcapN_structure_Oring_max"
             outerringlength="EcalEndcapN_structure_Oring_length"
-            modulelength="EcalEndcapN_crystalmodule_crystal_length + EcalEndcapN_crystalmodule_VM2000_thickness + EcalEndcapN_crystalmodule_sensor_thickness + EcalEndcapN_crystalmodule_PCB_thickness"
+            modulelength="EcalEndcapN_crystalmodule_total_length"
+            envelope_length="EcalEndcapN_envelope_length"
             protate="EcalEndcapN_Protate"
             nrotate="EcalEndcapN_Nrotate"
             outerringshift="EcalEndcapN_Oring_relative_shift"
@@ -97,8 +101,7 @@
               proton_rmin="35 * mm"
               proton_rmax="43 * mm"
               straight_section_tilt="62.05 * deg"
-              z_length="250 * mm"
-              z_offset="-25 * mm"
+              z_length="EcalEndcapN_inner_support_length"
               material="Copper"
               vis="AnlOrange"
               />

@@ -267,6 +267,7 @@ static std::tuple<int, std::pair<int, int>> add_12surface_disk(Detector& desc, A
   double r12max                 = plm.attr<double>(_Unicode(r12max));
   double structure_frame_length = plm.attr<double>(_Unicode(outerringlength));
   double calo_module_length     = plm.attr<double>(_Unicode(modulelength));
+  double envelope_length        = plm.attr<double>(_Unicode(envelope_length));
   double Prot                   = plm.attr<double>(_Unicode(protate));
   double Nrot                   = plm.attr<double>(_Unicode(nrotate));
   double Oring_shift            = plm.attr<double>(_Unicode(outerringshift));
@@ -301,8 +302,8 @@ static std::tuple<int, std::pair<int, int>> add_12surface_disk(Detector& desc, A
   // The mother volume of modules
   //=============================
   bool has_envelope = dd4hep::getAttrOrDefault<bool>(plm, _Unicode(envelope), false);
-  PolyhedraRegular solid_world(12, 0., r12min, calo_module_length);
-  EllipticalTube solid_sub(Innera, Innerb, calo_module_length / 2.);
+  PolyhedraRegular solid_world(12, 0., r12min, envelope_length);
+  EllipticalTube solid_sub(Innera, Innerb, envelope_length / 2.);
   Transform3D subtract_pos = RotationZYX(Nrot, 0., 0.) * Translation3D(1 * cm, 0., 0.);
   SubtractionSolid calo_subtract(solid_world, solid_sub, subtract_pos);
   Volume env_vol(std::string(env.name()) + "_envelope", calo_subtract, desc.material("Air"));
@@ -379,7 +380,7 @@ static std::tuple<int, std::pair<int, int>> add_12surface_disk(Detector& desc, A
         column = std::round((square.x() - minX) / modSize.x());
         row    = std::round((maxY - square.y()) / modSize.y());
         Transform3D tr_local =
-            RotationZYX(Nrot, 0.0, 0.0) * Translation3D(square.x(), square.y() + half_mody, 0.0);
+            RotationZYX(Nrot, 0.0, 0.0) * Translation3D(square.x(), square.y() + half_mody, std::max((envelope_length - calo_module_length) / 2, 0.));
         auto modPV = (has_envelope ? env_vol.placeVolume(modVol, tr_local)
                                    : env.placeVolume(modVol, tr_global * tr_local));
         modPV.addPhysVolID("sector", sector_id)
