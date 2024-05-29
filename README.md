@@ -42,7 +42,7 @@ cmake --install build
 ```
 To load the geometry, you can use the scripts in the `install` directory:
 ```bash
-source install/setup.sh
+source install/bin/thisepic.sh
 ```
 
 ### Adding/changing detector geometry

@@ -97,7 +97,7 @@ jobs:
         path: install/
         if-no-files-found: error
     - run: |
-        source install/setup.sh
+        source install/bin/thisepic.sh
         sed -i 's%\(<fiber\|<lens\)%<comment>\1%g; s%\(/fiber>\|/lens>\)%\1</comment>%g' \
           ${DETECTOR_PATH}/compact/ecal/barrel_interlayers.xml \
           ${DETECTOR_PATH}/compact/ecal/forward_scfi.xml \
@@ -128,7 +128,7 @@ jobs:
       - xmllint-after-build
       - list-detector-configs
     steps:
-    - uses: eic/trigger-gitlab-ci@v2
+    - uses: eic/trigger-gitlab-ci@v3
       id: trigger
       with:
         url: https://eicweb.phy.anl.gov
@@ -161,7 +161,7 @@ jobs:
       with:
         platform-release: "jug_xl:nightly"
         network_types: "none"
-        setup: install/setup.sh
+        setup: install/bin/thisepic.sh
         run: |
           IFS=, read -a configs <<< "${{ needs.list-detector-configs.outputs.configs_csv }}"
           for config in ${configs[@]} ; do
@@ -187,7 +187,7 @@ jobs:
       with:
         platform-release: "jug_xl:nightly"
         network_types: "none"
-        setup: install/setup.sh
+        setup: install/bin/thisepic.sh
         run: |
           root -b -q "scripts/test_ACTS.cxx+(\"${DETECTOR_PATH}/${{matrix.detector_config}}.xml\")" | tee check_tracking_geometry.out
           bin/acts_geo_check check_tracking_geometry.out
@@ -207,7 +207,7 @@ jobs:
     - uses: eic/run-cvmfs-osg-eic-shell@main
       with:
         platform-release: "jug_xl:nightly"
-        setup: install/setup.sh
+        setup: install/bin/thisepic.sh
         run: |
           pushd scripts/material_map
           export DETECTOR_CONFIG=epic_craterlake_material_map
@@ -239,7 +239,7 @@ jobs:
       with:
         platform-release: "jug_xl:nightly"
         network_types: "none"
-        setup: install/setup.sh
+        setup: install/bin/thisepic.sh
         run: |
           IFS=, read -a configs <<< "${{ needs.list-detector-configs.outputs.configs_csv }}"
           for config in ${configs[@]} ; do
@@ -269,7 +269,7 @@ jobs:
       with:
         platform-release: "jug_xl:nightly"
         network_types: "none"
-        setup: install/setup.sh
+        setup: install/bin/thisepic.sh
         run: |
           IFS=, read -a configs <<< "${{ needs.list-detector-configs.outputs.configs_csv }}"
           for config in ${configs[@]} ; do
@@ -301,7 +301,7 @@ jobs:
       with:
         platform-release: "jug_xl:nightly"
         network_types: "none"
-        setup: install/setup.sh
+        setup: install/bin/thisepic.sh
         run: |
           # For some reason npdet_to_step really wants a space in IFS
           IFS=$' \n\t'
@@ -337,7 +337,7 @@ jobs:
       with:
         platform-release: "jug_xl:nightly"
         network_types: "none"
-        setup: install/setup.sh
+        setup: install/bin/thisepic.sh
         run: |
           mkdir -p doc
           npdet_info dump ${DETECTOR_PATH}/${{matrix.detector_config}}.xml | tee doc/${{matrix.detector_config}}_constants.out
@@ -364,7 +364,7 @@ jobs:
       with:
         platform-release: "jug_xl:nightly"
         network_types: "none"
-        setup: install/setup.sh
+        setup: install/bin/thisepic.sh
         run: |
           mkdir -p doc
           npdet_info dump ${DETECTOR_PATH}/${{matrix.detector_config}}.xml | grep -v '^\s' | grep '=' | cut -d= -f1-2 | tee doc/${{matrix.detector_config}}_constants.toml
@@ -432,7 +432,7 @@ jobs:
       with:
         platform-release: "jug_xl:nightly"
         network_types: "bridge" # this job must succeed even when new artifacts
-        setup: install/setup.sh
+        setup: install/bin/thisepic.sh
         run: |
           mkdir -p doc
           checkOverlaps --option ${{ matrix.option }} -c ${DETECTOR_PATH}/${{ matrix.detector_config }}.xml | tee doc/overlap_check_tgeo.out
@@ -453,7 +453,7 @@ jobs:
     - uses: eic/run-cvmfs-osg-eic-shell@main
       with:
         platform-release: "jug_xl:nightly"
-        setup: install/setup.sh
+        setup: install/bin/thisepic.sh
         run: |
           mkdir -p doc
           checkGeometry -f true -c ${DETECTOR_PATH}/${DETECTOR_CONFIG}.xml | tee geometry_check_full.out
@@ -485,7 +485,7 @@ jobs:
       with:
         platform-release: "jug_xl:nightly"
         network_types: "bridge" # this job must succeed even when new artifacts
-        setup: install/setup.sh
+        setup: install/bin/thisepic.sh
         run: |
           mkdir -p doc
           python scripts/checkOverlaps.py -c ${DETECTOR_PATH}/${{ matrix.detector_config }}.xml | tee doc/overlap_check_geant4.out
@@ -510,26 +510,37 @@ jobs:
       with:
         platform-release: "jug_xl:nightly"
         network_types: "bridge" # this job must succeed even when new artifacts
-        setup: install/setup.sh
+        setup: install/bin/thisepic.sh
         run: |
           mkdir -p doc
           python scripts/checkOverlaps.py -c ${DETECTOR_PATH}/${{ matrix.detector_config }}.xml | tee doc/overlap_check_geant4.out
           noverlaps="$(grep -c GeomVol1002 doc/overlap_check_geant4.out || true)"
           if [[ "${noverlaps}" -gt "0" ]] ; then echo "${noverlaps} overlaps found!" && false ; fi
 
-  trigger-detector-benchmarks:
+  trigger-benchmarks:
     runs-on: ubuntu-latest
     needs: [check-overlap-tgeo, check-overlap-geant4-fast]
     strategy:
       matrix:
         detector_config: [epic_craterlake]
+        benchmark_repo: [detector_benchmarks, physics_benchmarks, reconstruction_benchmarks]
+        include:
+        - benchmark_repo: detector_benchmarks
+          project_id: 399
+          secret_var: EICWEB_DETECTOR_BENCHMARK_TRIGGER
+        - benchmark_repo: physics_benchmarks
+          project_id: 400
+          secret_var: EICWEB_PHYSICS_BENCHMARK_TRIGGER
+        - benchmark_repo: reconstruction_benchmarks
+          project_id: 408
+          secret_var: EICWEB_RECONSTRUCTION_BENCHMARK_TRIGGER
     steps:
-    - uses: eic/trigger-gitlab-ci@v2
+    - uses: eic/trigger-gitlab-ci@v3
       id: trigger
       with:
         url: https://eicweb.phy.anl.gov
-        project_id: 399
-        token: ${{ secrets.EICWEB_DETECTOR_BENCHMARK_TRIGGER }}
+        project_id: ${{ matrix.project_id }}
+        token: ${{ secrets[matrix.secret_var] }}
         ref_name: master
         variables: |
           DETECTOR=epic
@@ -547,7 +558,7 @@ jobs:
           -f state="pending" \
           -f target_url="${{ steps.trigger.outputs.web_url }}" \
           -f description="Triggered... $(TZ=America/New_York date)" \
-          -f context="eicweb/detector_benchmarks (${{ matrix.detector_config }})"
+          -f context="eicweb/${{ matrix.benchmark_repo }} (${{ matrix.detector_config }})"
       env:
         GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
@@ -569,7 +580,7 @@ jobs:
       with:
         platform-release: "jug_xl:nightly"
         network_types: "none"
-        setup: install/setup.sh
+        setup: install/bin/thisepic.sh
         run: |
           bin/generate_prim_file -c $DETECTOR_PATH/${{ matrix.detector_config }}.xml -o prim -D -t ${{ matrix.detector_config }}
     - uses: actions/upload-artifact@v4
@@ -672,7 +683,7 @@ jobs:
       uses: eic/run-cvmfs-osg-eic-shell@main
       with:
         platform-release: "jug_xl:nightly"
-        setup: install/setup.sh
+        setup: install/bin/thisepic.sh
         run: |
           npsim --compactFile ${DETECTOR_PATH}/${{ matrix.detector_config }}.xml -G --random.seed 1 --gun.particle "${{ matrix.particle }}-" --gun.momentumMin "1*GeV" --gun.momentumMax "20*GeV" --gun.distribution "uniform" -N 100 --outputFile sim_${{ matrix.particle }}_1GeV_20GeV_${{ matrix.detector_config }}.edm4hep.root -v WARNING
     - uses: actions/upload-artifact@v4
@@ -693,7 +704,7 @@ jobs:
       uses: eic/run-cvmfs-osg-eic-shell@main
       with:
         platform-release: "jug_xl:nightly"
-        setup: install/setup.sh
+        setup: install/bin/thisepic.sh
         run: |
           export PYTHONPATH=$HOME/.local/lib/python3.10/site-packages:$PYTHONPATH
           mkdir capybara-reports
@@ -731,7 +742,7 @@ jobs:
       uses: eic/run-cvmfs-osg-eic-shell@main
       with:
         platform-release: "jug_xl:nightly"
-        setup: install/setup.sh
+        setup: install/bin/thisepic.sh
         run: |
           url=root://dtn-eic.jlab.org//work/eic2/EPIC/EVGEN/DIS/NC/${{matrix.beam}}/minQ2=${{matrix.minq2}}/pythia8NCDIS_${{matrix.beam}}_minQ2=${{matrix.minq2}}_beamEffects_xAngle=-0.025_hiDiv_1.hepmc3.tree.root
           npsim --compactFile ${DETECTOR_PATH}/${{ matrix.detector_config }}.xml -N 100 --inputFiles ${url} --random.seed 1 --outputFile sim_dis_${{matrix.beam}}_minQ2=${{matrix.minq2}}_${{ matrix.detector_config }}.edm4hep.root -v WARNING
@@ -753,7 +764,7 @@ jobs:
       uses: eic/run-cvmfs-osg-eic-shell@main
       with:
         platform-release: "jug_xl:nightly"
-        setup: install/setup.sh
+        setup: install/bin/thisepic.sh
         run: |
           pip install 'pygithub>=2' 'bokeh>=3'
           export PYTHONPATH=$HOME/.local/lib/python3.10/site-packages:$PYTHONPATH
