@@ -356,11 +356,11 @@ static std::tuple<int, std::pair<int, int>> add_12surface_disk(Detector& desc, A
       if (square.x() < minX)
         minX = square.x();
       if (square.y() < minY)
-        minY = square.x();
+        minY = square.y();
       if (square.x() > maxX)
         maxX = square.x();
       if (square.y() > maxY)
-        maxY = square.x();
+        maxY = square.y();
     }
   }
 
