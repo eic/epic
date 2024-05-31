@@ -196,9 +196,12 @@
   <plugins>
     <plugin name="epic_FileLoader">
       <arg value="cache:$DETECTOR_PATH:/opt/detector"/>
-      <arg value="file:calibrations/materials-map.cbor"/>
+      <arg value="file:calibrations/materials-map-craterlake.cbor"/>
       <arg value="url:https://eicweb.phy.anl.gov/EIC/detectors/athena/uploads/6253bfcb92dd6bc236dd9a06084614ba/material-maps.cbor"/>
     </plugin>
   </plugins>
+  <define>
+    <constant name="materials-map" value="calibrations/materials-map-craterlake.cbor" type="string"/>
+  </define>
 
 </lccdd>
