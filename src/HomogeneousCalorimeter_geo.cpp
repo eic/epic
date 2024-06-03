@@ -1,22 +1,5 @@
 // SPDX-License-Identifier: LGPL-3.0-or-later
-// Copyright (C) 2022 Chao Peng, Dmitry Romanov, Pu-Kai Wang
-//==========================================================================
-//  A general implementation for homogeneous calorimeter
-//--------------------------------------------------------------------------
-//  Author: Chao Peng (ANL)
-//  Date: 06/09/2021
-//==========================================================================
-//==========================================================================
-//  Date: 03/10/2022
-//  Add the new geometry and the supporting structue
-//  Adapted the single module with additional wrraper and supporting structure
-//--------------------------------------------------------------------------
-//  Date: 20/03/2023
-//  Reorganize and optimize the scripts
-//  Adapted the inner supporting structure for improving low Q2 measurements
-//--------------------------------------------------------------------------
-//  Author: WANG Pu-Kai, ZHU Yuwei (IJClab)
-//==========================================================================
+// Copyright (C) 2022 - 2024, Chao Peng, Dmitry Romanov, Pu-Kai Wang, Yuwei Zhu, Dmitry Kalinkin
 
 #include "DD4hep/DetFactoryHelper.h"
 #include "DD4hep/Printout.h"
@@ -35,7 +18,6 @@ using namespace dd4hep;
 
 /** \addtogroup Homogeneous Calorimeter
  * \brief Type: **HomogeneousCalorimeter**.
- * \author C. Peng
  * \ingroup calorimeters
  *
  * @{
@@ -56,6 +38,63 @@ template <class XmlComp> Position get_xml_xyz(XmlComp& comp, dd4hep::xml::Strng_
     pos.SetZ(dd4hep::getAttrOrDefault<double>(child, _Unicode(z), 0.));
   }
   return pos;
+}
+
+static Volume inner_support_collar(Detector& desc, xml_comp_t handle) {
+  // This consists of two circular tubes joined by straight sections
+
+  Material inner_ring_material = desc.material(handle.materialStr());
+
+  double electron_rmin         = handle.attr<double>(_Unicode(electron_rmin));
+  double electron_rmax         = handle.attr<double>(_Unicode(electron_rmax));
+  double proton_rmin           = handle.attr<double>(_Unicode(proton_rmin));
+  double proton_rmax           = handle.attr<double>(_Unicode(proton_rmax));
+  double straight_section_tilt = handle.attr<double>(_Unicode(straight_section_tilt));
+  double z_length              = handle.z_length();
+
+  double proton_x_offset = ((electron_rmax + electron_rmin) - (proton_rmax + proton_rmin)) / 2 /
+                           cos(straight_section_tilt);
+  double mean_radius = (electron_rmax + electron_rmin + proton_rmax + proton_rmin) / 4;
+  Position straight_section_offset{
+      proton_x_offset / 2 + cos(straight_section_tilt) * mean_radius,
+      sin(straight_section_tilt) * mean_radius,
+      0,
+  };
+  Position straight_section_offset_mirror_y{
+      straight_section_offset.x(),
+      -straight_section_offset.y(),
+      straight_section_offset.z(),
+  };
+
+  Tube electron_side{electron_rmin, electron_rmax, z_length / 2, straight_section_tilt,
+                     -straight_section_tilt};
+  Tube proton_side{proton_rmin, proton_rmax, z_length / 2, -straight_section_tilt,
+                   straight_section_tilt};
+  Trd1 electron_proton_straight_section{
+      (electron_rmax - electron_rmin) / 2,
+      (proton_rmax - proton_rmin) / 2,
+      z_length / 2,
+      proton_x_offset * sin(straight_section_tilt) / 2,
+  };
+  UnionSolid inner_support{
+      UnionSolid{
+          UnionSolid{
+              electron_side,
+              proton_side,
+              Position{proton_x_offset, 0., 0.},
+          },
+          electron_proton_straight_section,
+          Transform3D{straight_section_offset} * RotationZ(straight_section_tilt) *
+              RotationX(90 * deg),
+      },
+      electron_proton_straight_section,
+      Transform3D{straight_section_offset_mirror_y} * RotationZ(-straight_section_tilt) *
+          RotationX(-90 * deg),
+  };
+
+  Volume inner_support_vol{"inner_support_vol", inner_support, inner_ring_material};
+  inner_support_vol.setVisAttributes(desc.visAttributes(handle.visStr()));
+  return inner_support_vol;
 }
 
 // main
@@ -228,6 +267,7 @@ static std::tuple<int, std::pair<int, int>> add_12surface_disk(Detector& desc, A
   double r12max                 = plm.attr<double>(_Unicode(r12max));
   double structure_frame_length = plm.attr<double>(_Unicode(outerringlength));
   double calo_module_length     = plm.attr<double>(_Unicode(modulelength));
+  double envelope_length        = plm.attr<double>(_Unicode(envelope_length));
   double Prot                   = plm.attr<double>(_Unicode(protate));
   double Nrot                   = plm.attr<double>(_Unicode(nrotate));
   double Oring_shift            = plm.attr<double>(_Unicode(outerringshift));
@@ -241,16 +281,6 @@ static std::tuple<int, std::pair<int, int>> add_12surface_disk(Detector& desc, A
   double half_modx = modSize.x() * 0.5, half_mody = modSize.y() * 0.5;
 
   //=========================================================
-  // Read the positions information from xml file
-  //=========================================================
-  xml_coll_t pts_extrudedpolygon(plm, _Unicode(points_extrudedpolygon));
-  for (xml_coll_t position_i(pts_extrudedpolygon, _U(position)); position_i; ++position_i) {
-    xml_comp_t position_comp = position_i;
-    pt_innerframe_x.push_back((position_comp.x()));
-    pt_innerframe_y.push_back((position_comp.y()));
-  }
-
-  //=========================================================
   // optional envelope volume and the supporting frame
   //=========================================================
 
@@ -258,8 +288,6 @@ static std::tuple<int, std::pair<int, int>> add_12surface_disk(Detector& desc, A
   //
   Material outer_ring_material =
       desc.material(getAttrOrDefault<std::string>(plm, _U(material), "StainlessSteel"));
-  Material inner_ring_material =
-      desc.material(getAttrOrDefault<std::string>(plm, _U(material), "Copper"));
 
   //==============================
   // Outer supporting frame
@@ -271,33 +299,14 @@ static std::tuple<int, std::pair<int, int>> add_12surface_disk(Detector& desc, A
   ring12_vol.setVisAttributes(desc.visAttributes(plm.attr<std::string>(_Unicode(vis_struc))));
 
   //=============================
-  // Inner supporting frame
-  //=============================
-
-  // Version3: solid with elliptical inside
-  //
-  std::vector<double> sec_z  = {-calo_module_length / 2., calo_module_length / 2.};
-  std::vector<double> sec_x  = {0., 0.};
-  std::vector<double> sec_y  = {0., 0.};
-  std::vector<double> zscale = {1., 1.};
-
-  ExtrudedPolygon inner_support_main(pt_innerframe_x, pt_innerframe_y, sec_z, sec_x, sec_y, zscale);
-  EllipticalTube subtract_a(Innera, Innerb, calo_module_length / 2.);
-  SubtractionSolid inner_support_substracta(inner_support_main, subtract_a, Position(0., 0., 0.));
-  Volume inner_support_vol("inner_support_vol", inner_support_substracta, inner_ring_material);
-  inner_support_vol.setVisAttributes(
-      desc.visAttributes(plm.attr<std::string>(_Unicode(vis_struc))));
-  Transform3D tr_global_Iring_elli = RotationZYX(Nrot, 0., 0.) * Translation3D(0., 0., 0.);
-
-  //=============================
   // The mother volume of modules
   //=============================
   bool has_envelope = dd4hep::getAttrOrDefault<bool>(plm, _Unicode(envelope), false);
-  PolyhedraRegular solid_world(12, 0., r12min, calo_module_length);
-  EllipticalTube solid_sub(Innera, Innerb, calo_module_length / 2.);
-  Transform3D subtract_pos = RotationZYX(Nrot, 0., 0.) * Translation3D(0., 0., 0.);
+  PolyhedraRegular solid_world(12, 0., r12min, envelope_length);
+  EllipticalTube solid_sub(Innera, Innerb, envelope_length / 2.);
+  Transform3D subtract_pos = RotationZYX(Nrot, 0., 0.) * Translation3D(1 * cm, 0., 0.);
   SubtractionSolid calo_subtract(solid_world, solid_sub, subtract_pos);
-  Volume env_vol(std::string(env.name()) + "_envelope", calo_subtract, outer_ring_material);
+  Volume env_vol(std::string(env.name()) + "_envelope", calo_subtract, desc.material("Air"));
   Transform3D tr_global = RotationZYX(Prot, 0., 0.) * Translation3D(0., 0., 0.);
   env_vol.setVisAttributes(desc.visAttributes(plm.attr<std::string>(_Unicode(vis_steel_gap))));
 
@@ -306,15 +315,20 @@ static std::tuple<int, std::pair<int, int>> add_12surface_disk(Detector& desc, A
   if (has_envelope) {
     env.placeVolume(env_vol, tr_global);          // Place the mother volume for all modules
     env.placeVolume(ring12_vol, tr_global_Oring); // Place the outer supporting frame
+
+    xml_comp_t collar_comp   = plm.child(_Unicode(inner_support_collar));
+    Volume inner_support_vol = inner_support_collar(desc, collar_comp);
     env_vol.placeVolume(inner_support_vol,
-                        tr_global_Iring_elli); // Place the version3 inner supporting frame
+                        Transform3D{RotationZ{Nrot}} * Translation3D(collar_comp.x_offset(0.),
+                                                                     collar_comp.y_offset(0.),
+                                                                     collar_comp.z_offset(0.)));
   }
 
   //=====================================================================
   // Placing The Modules
   //=====================================================================
 
-  auto points = epic::geo::fillRectangles({half_modx, half_mody}, modSize.x(), modSize.y(), 0.,
+  auto points = epic::geo::fillRectangles({half_modx, 0.}, modSize.x(), modSize.y(), 0.,
                                           (rmax / std::cos(Prot)), phimin, phimax);
 
   std::pair<double, double> c1(0., 0.);
@@ -325,6 +339,7 @@ static std::tuple<int, std::pair<int, int>> add_12surface_disk(Detector& desc, A
     out_vertices.push_back(a);
   }
 
+  xml_coll_t pts_extrudedpolygon(plm, _Unicode(points_extrudedpolygon));
   for (xml_coll_t position_i(pts_extrudedpolygon, _U(position)); position_i; ++position_i) {
     xml_comp_t position_comp = position_i;
     epic::geo::Point inpt    = {position_comp.x(), position_comp.y()};
@@ -341,11 +356,11 @@ static std::tuple<int, std::pair<int, int>> add_12surface_disk(Detector& desc, A
       if (square.x() < minX)
         minX = square.x();
       if (square.y() < minY)
-        minY = square.x();
+        minY = square.y();
       if (square.x() > maxX)
         maxX = square.x();
       if (square.y() > maxY)
-        maxY = square.x();
+        maxY = square.y();
     }
   }
 
@@ -360,12 +375,15 @@ static std::tuple<int, std::pair<int, int>> add_12surface_disk(Detector& desc, A
                                {square.x() - half_modx, square.y() + half_mody},
                                {square.x() - half_modx, square.y() - half_mody},
                                {square.x() + half_modx, square.y() - half_mody}};
+
     if (epic::geo::isBoxTotalInsidePolygon(box, out_vertices)) {
       if (!epic::geo::isBoxTotalInsidePolygon(box, in_vertices)) {
         column = std::round((square.x() - minX) / modSize.x());
         row    = std::round((maxY - square.y()) / modSize.y());
         Transform3D tr_local =
-            RotationZYX(Nrot, 0.0, 0.0) * Translation3D(square.x(), square.y(), 0.0);
+            RotationZYX(Nrot, 0.0, 0.0) *
+            Translation3D(square.x(), square.y(),
+                          std::max((envelope_length - calo_module_length) / 2, 0.));
         auto modPV = (has_envelope ? env_vol.placeVolume(modVol, tr_local)
                                    : env.placeVolume(modVol, tr_global * tr_local));
         modPV.addPhysVolID("sector", sector_id)
