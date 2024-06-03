@@ -60,7 +60,7 @@ static Ref_t create_MPGDCylinderBarrelTracker(Detector& description, xml_h e, Se
 
   PlacedVolume pv;
 
-#define DEBUG_MPGDCylinderBarrelTracker
+  //#define DEBUG_MPGDCylinderBarrelTracker
 #ifdef DEBUG_MPGDCylinderBarrelTracker
   // TEMPORARILY INCREASE VERBOSITY level for debugging purposes
   PrintLevel priorPrintLevel = printLevel();
@@ -133,9 +133,10 @@ static Ref_t create_MPGDCylinderBarrelTracker(Detector& description, xml_h e, Se
   const xml::Tag_t unvalidTags[nUnvalids] = {_U(phi_tilt),_U(nphi),_U(rc),_U(dr)};
   for (int uv = 0; uv<nUnvalids; uv++) {
     if (x_barrel.hasChild(unvalidTags[uv])) {
+      const string tag = _U(nphi);
       printout(ERROR,"MPGDCylinderBarrelTracker",
 	       "Layer \"%s\": Unvalid property \"%s\" in \"rphi_layout\"",
-	       m_nam.c_str(),_U(nphi));
+	       m_nam.c_str(),tag.c_str());
       throw runtime_error("Logics error in building modules.");
     }
   }
@@ -166,7 +167,7 @@ static Ref_t create_MPGDCylinderBarrelTracker(Detector& description, xml_h e, Se
     if (nphi2!=nphi) {
       printout(ERROR,"MPGDCylinderBarrelTracker",
 	       "Model \"%s\": rmin1,2 = %.2f,%.2f cm are incompatible",
-	       x_model.nameStr(),rmin1,rmin2);
+	       x_model.nameStr().c_str(),rmin1,rmin2);
       throw runtime_error("Logics error in building modules.");
     }
     double offset = x_model.offset();
@@ -244,10 +245,10 @@ static Ref_t create_MPGDCylinderBarrelTracker(Detector& description, xml_h e, Se
   double total_thickness = 0;
   xml_coll_t ci(x_mod, _U(module_component));
   for (ci.reset(), total_thickness = 0.0; ci; ++ci) {
-    xml_comp_t x_comp = ci;
+    const xml_comp_t x_comp = ci;
     printout(DEBUG,"MPGDCylinderBarrelTracker",
-	     "0x%x: \"%s\" \t total_thickness %.4f cm",
-	     ci,x_comp.nameStr().c_str(),total_thickness/cm);
+	     "\"%s\": \t total_thickness %.4f cm",
+	     x_comp.nameStr().c_str(),total_thickness/cm);
     total_thickness += x_comp.thickness();
   }
   printout(DEBUG,"MPGDCylinderBarrelTracker",
