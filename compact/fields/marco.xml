@@ -4,8 +4,8 @@
 <lccdd>
   <fields>
     <field type="epic_FieldMapB" name="GlobalSolenoid" field_type="magnetic" coord_type="BrBz"
-           field_map="fieldmaps/MARCO_v.6.4.1.1.3_1.7T_Magnetic_Field_Map_2022_11_14_rad_coords_cm_T.txt"
-           url="https://github.com/eic/epic-data/raw/64b7ca6306b138b7f000e696c82bd8f72db1da56/MARCO_v.6.4.1.1.3_1.7T_Magnetic_Field_Map_2022_11_14_rad_coords_cm_T.txt"
+           field_map="fieldmaps/MARCO_v.7.6.2.2.11_1.7T_Magnetic_Field_Map_2024_05_02_rad_coords_cm_T.BMap.txt"
+           url="https://github.com/eic/epic-data/raw/81182bfe32e62db3e3e2014e27decbb1f47f7a6a/MARCO_v.7.6.2.2.11_1.7T_Magnetic_Field_Map_2024_05_02_rad_coords_cm_T.BMap.txt"
            cache="$DETECTOR_PATH:/opt/detector"
            scale="1.0">
       <dimensions>
