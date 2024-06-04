@@ -152,12 +152,104 @@ static Ref_t createDetector(Detector& description, xml_h e, SensitiveDetector se
   Cone mirror_cone(vesselLength / 2.0, vesselRmax1 - 7, vesselRmax1 - 7 + 0.3, vesselRmax1 - 13,
                    vesselRmax1 - 13 + 0.3);
 
-  // flange
+  // Flange
 
-  float _FLANGE_EPIPE_DIAMETER_ = 10.53; // in cm
-  float _FLANGE_HPIPE_DIAMETER_ = 4.47;  // in cm
-  float _FLANGE_HPIPE_OFFSET_   = 6.76;  // in cm
-  float clearance               = 0.5;   // in cm
+  double flange_epipe_diameter = description.constant<double>("FLANGE_EPIPE_DIAMETER");
+  double flange_hpipe_diameter = description.constant<double>("FLANGE_HPIPE_DIAMETER");
+  double flange_hpipe_offset = description.constant<double>("FLANGE_HPIPE_OFFSET");
+  double clearance = description.constant<double>("CLEARANCE");
+
+  // Mirrors
+  double conical_mirror_inner_radius = description.constant<double>("CONICAL_MIRROR_INNER_RADIUS");
+  double conical_mirror_outer_radius = description.constant<double>("CONICAL_MIRROR_OUTER_RADIUS");
+  double inner_mirror_thickness = description.constant<double>("INNER_MIRROR_THICKNESS");
+  double outer_mirror_thickness = description.constant<double>("OUTER_MIRROR_THICKNESS");
+
+  double fiducial_volume_length = description.constant<double>("FIDUCIAL_VOLUME_LENGTH");
+  double sensor_area_length = description.constant<double>("SENSOR_AREA_LENGTH");
+  double hrppd_central_row_offset = description.constant<double>("HRPPD_CENTRAL_ROW_OFFSET");
+  double hrppd_window_thickness = description.constant<double>("HRPPD_WINDOW_THICKNESS");
+  double hrppd_container_volume_height = description.constant<double>("HRPPD_CONTAINER_VOLUME_HEIGHT");
+  double hrppd_installation_gap = description.constant<double>("HRPPD_INSTALLATION_GAP");
+
+  double hrppd_support_grid_bar_height = description.constant<double>("HRPPD_SUPPORT_GRID_BAR_HEIGHT");
+
+  double hrppd_tile_size = description.constant<double>("HRPPD_TILE_SIZE");
+  double hrppd_open_area_size = description.constant<double>("HRPPD_OPEN_AREA_SIZE");
+  double hrppd_active_area_size = description.constant<double>("HRPPD_ACTIVE_AREA_SIZE");
+  double hrppd_ceramic_body_thickness = description.constant<double>("HRPPD_CERAMIC_BODY_THICKNESS");
+  double hrppd_baseplate_thickness = description.constant<double>("HRPPD_BASEPLATE_THICKNESS");
+  double hrppd_plating_layer_thickness = description.constant<double>("HRPPD_PLATING_LAYER_THICKNESS");
+  double effective_mcp_thickness = description.constant<double>("EFFECTIVE_MCP_THICKNESS");
+
+  double readout_pcb_thickness = description.constant<double>("READOUT_PCB_THICKNESS");
+  double readout_pcb_size = description.constant<double>("READOUT_PCB_SIZE");
+
+  double asic_size_xy = description.constant<double>("ASIC_SIZE_XY");
+  double asic_thickness = description.constant<double>("ASIC_THICKNESS");
+
+  // Aerogel
+  double aerogel_inner_wall_thickness = description.constant<double>("AEROGEL_INNER_WALL_THICKNESS");
+  double vessel_inner_wall_thickness = description.constant<double>("VESSEL_INNER_WALL_THICKNESS");
+  double vessel_outer_wall_thickness = description.constant<double>("VESSEL_OUTER_WALL_THICKNESS");
+  double vessel_outer_radius = description.constant<double>("VESSEL_OUTER_RADIUS");
+  double vessel_front_side_thickness = description.constant<double>("VESSEL_FRONT_SIDE_THICKNESS");
+  double flange_clearance = description.constant<double>("FLANGE_CLEARANCE");
+  double building_block_clearance = description.constant<double>("BUILDING_BLOCK_CLEARANCE");
+  //double aerogel_band_count = description.constant<int>("AEROGEL_BAND_COUNT");
+  double aerogel_separator_wall_thickness = description.constant<double>("AEROGEL_SEPARATOR_WALL_THICKNESS");
+  double aerogel_outer_wall_thickness = description.constant<double>("AEROGEL_OUTER_WALL_THICKNESS");
+
+  float _FLANGE_EPIPE_DIAMETER_ = flange_epipe_diameter;
+  float _FLANGE_HPIPE_DIAMETER_ = flange_hpipe_diameter;
+  float _FLANGE_HPIPE_OFFSET_ = flange_hpipe_offset;
+  //float _CLEARANCE_ = clearance; 
+
+  float _CONICAL_MIRROR_INNER_RADIUS_ = conical_mirror_inner_radius;
+  float _CONICAL_MIRROR_OUTER_RADIUS_ = conical_mirror_outer_radius;
+  float _INNER_MIRROR_THICKNESS_ = inner_mirror_thickness;
+  float _OUTER_MIRROR_THICKNESS_ = outer_mirror_thickness;
+
+  float _FIDUCIAL_VOLUME_LENGTH_ = fiducial_volume_length;
+  float _SENSOR_AREA_LENGTH_ = sensor_area_length;
+  float _HRPPD_CENTRAL_ROW_OFFSET_ = hrppd_central_row_offset;
+  float _HRPPD_WINDOW_THICKNESS_ = hrppd_window_thickness;
+  float _HRPPD_CONTAINER_VOLUME_HEIGHT_ = hrppd_container_volume_height;
+  float _HRPPD_INSTALLATION_GAP_ = hrppd_installation_gap;
+
+  float _HRPPD_SUPPORT_GRID_BAR_HEIGHT_ = hrppd_support_grid_bar_height;
+
+  float _HRPPD_TILE_SIZE_ = hrppd_tile_size;
+  float _HRPPD_OPEN_AREA_SIZE_ = hrppd_open_area_size;
+  float _HRPPD_ACTIVE_AREA_SIZE_ = hrppd_active_area_size;
+  float _HRPPD_CERAMIC_BODY_THICKNESS_ = hrppd_ceramic_body_thickness;
+  float _HRPPD_BASEPLATE_THICKNESS_ = hrppd_baseplate_thickness;
+  float _HRPPD_PLATING_LAYER_THICKNESS_ = hrppd_plating_layer_thickness;
+  float _EFFECTIVE_MCP_THICKNESS_ = effective_mcp_thickness;
+
+  float _READOUT_PCB_THICKNESS_ = readout_pcb_thickness;
+  float _READOUT_PCB_SIZE_ = readout_pcb_size;
+
+  float _ASIC_SIZE_XY_ = asic_size_xy;
+  float _ASIC_THICKNESS_ = asic_thickness;
+
+  float _AEROGEL_INNER_WALL_THICKNESS_ = aerogel_inner_wall_thickness;
+  float _VESSEL_INNER_WALL_THICKNESS_ = vessel_inner_wall_thickness;
+  float _VESSEL_OUTER_WALL_THICKNESS_ = vessel_outer_wall_thickness;
+  float _VESSEL_OUTER_RADIUS_ = vessel_outer_radius;
+  double _VESSEL_FRONT_SIDE_THICKNESS_ = vessel_front_side_thickness;
+  double m_gas_volume_length = _FIDUCIAL_VOLUME_LENGTH_ - _VESSEL_FRONT_SIDE_THICKNESS_ - _SENSOR_AREA_LENGTH_;
+  double m_gas_volume_radius = _VESSEL_OUTER_RADIUS_ - _VESSEL_OUTER_WALL_THICKNESS_;
+  float _FLANGE_CLEARANCE_ = flange_clearance;
+  float _BUILDING_BLOCK_CLEARANCE_ = building_block_clearance;
+  
+  //float _AEROGEL_BAND_COUNT_ = aerogel_band_count;
+  
+  float _AEROGEL_SEPARATOR_WALL_THICKNESS_ = aerogel_separator_wall_thickness;
+  float _AEROGEL_OUTER_WALL_THICKNESS_ = aerogel_outer_wall_thickness;
+
+  //cout << "FLANGE_EPIPE_DIAMETER : " << _FLANGE_EPIPE_DIAMETER_ << endl;
+  //cout << "CONICAL_MIRROR_INNER_RADIUS : " << _CONICAL_MIRROR_INNER_RADIUS_ << endl;
 
   /// Inner mirror cone
   // A wedge bridging two cylinders;
@@ -261,36 +353,6 @@ static Ref_t createDetector(Detector& description, xml_h e, SensitiveDetector se
   // -- Mirrors ---------------------------------------------------------------------------------
   // Some "standard" value applied to all mirrors;
   // At the downstream (sensor plane) location; upstream radii are calculated automatically;
-  double _CONICAL_MIRROR_INNER_RADIUS_ = 12.0;
-  double _CONICAL_MIRROR_OUTER_RADIUS_ = 57.0;
-
-  double _INNER_MIRROR_THICKNESS_ = 0.1; //0.29*_INCH
-  double _OUTER_MIRROR_THICKNESS_ = 0.2; //0.54*_INCH
-
-  /// Detailed sensor description
-
-  double _FIDUCIAL_VOLUME_LENGTH_        = 49.1; // cm
-  double _SENSOR_AREA_LENGTH_            = 5;    // cm
-  double _HRPPD_CENTRAL_ROW_OFFSET_      = 4.0;  // cm
-  double _HRPPD_WINDOW_THICKNESS_        = 0.38; // cm
-  double _HRPPD_CONTAINER_VOLUME_HEIGHT_ = 3.2;  // cm
-  double _HRPPD_INSTALLATION_GAP_        = 0.25; // cm
-
-  double _HRPPD_SUPPORT_GRID_BAR_HEIGHT_ = 0.2;
-
-  double _HRPPD_TILE_SIZE_               = 12.0;           // cm
-  double _HRPPD_OPEN_AREA_SIZE_          = 11.4;           // cm
-  double _HRPPD_ACTIVE_AREA_SIZE_        = 10.8;           // cm
-  double _HRPPD_CERAMIC_BODY_THICKNESS_  = 0.9;            // cm
-  double _HRPPD_BASEPLATE_THICKNESS_     = 0.3;            // cm
-  double _HRPPD_PLATING_LAYER_THICKNESS_ = 0.006;          // cm
-  double _EFFECTIVE_MCP_THICKNESS_       = 2 * 0.06 * 0.3; // cm
-
-  double _READOUT_PCB_THICKNESS_ = 0.2;
-  double _READOUT_PCB_SIZE_      = _HRPPD_OPEN_AREA_SIZE_ - 0.2;
-
-  double _ASIC_SIZE_XY_   = 1.6;
-  double _ASIC_THICKNESS_ = 0.1;
 
   double xysize = _HRPPD_TILE_SIZE_, wndthick = _HRPPD_WINDOW_THICKNESS_;
 
@@ -494,30 +556,7 @@ static Ref_t createDetector(Detector& description, xml_h e, SensitiveDetector se
 
   /// Aerogel
 
-  float _AEROGEL_INNER_WALL_THICKNESS_ = 0.01;
-
-  float _VESSEL_INNER_WALL_THICKNESS_ = 0.29 * 2.54;
-
-  float _VESSEL_OUTER_WALL_THICKNESS_ = 0.54 * 2.54;
-  ;
-
-  float _VESSEL_OUTER_RADIUS_ = 63.8;
-
-  double _VESSEL_FRONT_SIDE_THICKNESS_ = 0.29 * 2.54;
-
-  double m_gas_volume_length =
-      _FIDUCIAL_VOLUME_LENGTH_ - _VESSEL_FRONT_SIDE_THICKNESS_ - _SENSOR_AREA_LENGTH_;
-  double m_gas_volume_radius = _VESSEL_OUTER_RADIUS_ - _VESSEL_OUTER_WALL_THICKNESS_;
-
-  float _FLANGE_CLEARANCE_         = 0.5;
-  float _BUILDING_BLOCK_CLEARANCE_ = 0.1;
-
   const int _AEROGEL_BAND_COUNT_ = 3;
-
-  float _AEROGEL_SEPARATOR_WALL_THICKNESS_ = 0.05;
-
-  float _AEROGEL_OUTER_WALL_THICKNESS_ = 0.1;
-
   float m_r0min = _FLANGE_EPIPE_DIAMETER_ / 2 + _FLANGE_CLEARANCE_ + _VESSEL_INNER_WALL_THICKNESS_ +
                   _BUILDING_BLOCK_CLEARANCE_;
   float m_r0max = m_gas_volume_radius - _BUILDING_BLOCK_CLEARANCE_;

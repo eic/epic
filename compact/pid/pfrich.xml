@@ -38,6 +38,57 @@
 <constant name="PFRICH_pixel_pitch"           value="PFRICH_pixel_size + PFRICH_pixel_gap"/>  <!-- center-to-center distance between SiPMs in a 8x8 panel -->
 
 <constant name="PFRICH_debug_optics"  value="0"/>
+
+<!-- Flange -->
+<constant name="FLANGE_EPIPE_DIAMETER" value="10.53*cm"/>
+<constant name="FLANGE_HPIPE_DIAMETER" value="4.47*cm"/>
+<constant name="FLANGE_HPIPE_OFFSET" value="6.76*cm"/>
+<constant name="CLEARANCE" value="0.5*cm"/>
+
+<!-- Mirrors -->
+
+<constant name="CONICAL_MIRROR_INNER_RADIUS" value="12.0*cm"/>
+<constant name="CONICAL_MIRROR_OUTER_RADIUS" value="57.0*cm"/>
+<constant name="INNER_MIRROR_THICKNESS" value="0.1*cm"/>
+<constant name="OUTER_MIRROR_THICKNESS" value="0.2*cm"/>
+
+<constant name="FIDUCIAL_VOLUME_LENGTH" value="49.1*cm"/>
+<constant name="SENSOR_AREA_LENGTH" value="5*cm"/>
+<constant name="HRPPD_CENTRAL_ROW_OFFSET" value="4.0*cm"/>
+<constant name="HRPPD_WINDOW_THICKNESS" value="0.38*cm"/>
+<constant name="HRPPD_CONTAINER_VOLUME_HEIGHT" value="3.2*cm"/>
+<constant name="HRPPD_INSTALLATION_GAP" value="0.25*cm"/>
+
+<constant name="HRPPD_SUPPORT_GRID_BAR_HEIGHT" value="0.2*cm"/>
+
+<constant name="HRPPD_TILE_SIZE" value="12.0*cm"/>
+<constant name="HRPPD_OPEN_AREA_SIZE" value="11.4*cm"/>
+<constant name="HRPPD_ACTIVE_AREA_SIZE" value="10.8*cm"/>
+<constant name="HRPPD_CERAMIC_BODY_THICKNESS" value="0.9*cm"/>
+<constant name="HRPPD_BASEPLATE_THICKNESS" value="0.3*cm"/>
+<constant name="HRPPD_PLATING_LAYER_THICKNESS" value="0.006*cm"/>
+<constant name="EFFECTIVE_MCP_THICKNESS" value="2 * 0.06 * 0.3*cm"/>
+
+<constant name="READOUT_PCB_THICKNESS" value="0.2*cm"/>
+<constant name="READOUT_PCB_SIZE" value="HRPPD_OPEN_AREA_SIZE - 0.2*cm"/>
+
+<constant name="ASIC_SIZE_XY" value="1.6*cm"/>
+<constant name="ASIC_THICKNESS" value="0.1*cm"/>
+
+<!-- Aerogel -->
+
+<constant name="AEROGEL_INNER_WALL_THICKNESS" value="0.01"/>
+<constant name="VESSEL_INNER_WALL_THICKNESS" value="0.29 * 2.54"/>
+<constant name="VESSEL_OUTER_WALL_THICKNESS" value="0.54 * 2.54"/>
+<constant name="VESSEL_OUTER_RADIUS" value="63.8"/>
+<constant name="VESSEL_FRONT_SIDE_THICKNESS" value="0.29 * 2.54"/>
+<constant name="FLANGE_CLEARANCE" value="0.5"/>
+<constant name="BUILDING_BLOCK_CLEARANCE" value="0.1"/>
+<constant name="AEROGEL_BAND_COUNT" value="3"/>
+<constant name="AEROGEL_SEPARATOR_WALL_THICKNESS" value="0.05"/>
+<constant name="AEROGEL_OUTER_WALL_THICKNESS" value="0.1"/>
+
+<!-- hardcoded constants -->
 </define>
 
   <detectors>
