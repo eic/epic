@@ -3,7 +3,7 @@
 '''
     A script to visualize the fibers of some grids from BEMC ScFi part
     use case:
-    python scripts/subdetector_tests/draw_bemc_scfi_grids.py -c epic_brycecanyon.xml
+    python scripts/subdetector_tests/draw_bemc_scfi_grids.py -c epic_craterlake.xml
 '''
 import os
 import ROOT

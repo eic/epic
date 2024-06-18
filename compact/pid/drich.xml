@@ -6,7 +6,7 @@
 <define>
 <!-- vessel (=snout+tank) geometry -->
 <constant name="DRICH_length"             value="ForwardRICHRegion_length"/>  <!-- overall vessel length -->
-<constant name="DRICH_zmin"               value="ForwardRICHRegion_zmin"/>
+<constant name="DRICH_zmin"               value="ForwardRICHRegion_zmin + 3.*cm"/> <!-- 3cm spacing since https://indico.bnl.gov/event/22417/ -->
 <constant name="DRICH_zmax"               value="DRICH_zmin + DRICH_length"/>
 <constant name="DRICH_rmin0"              value="DRICH_zmin * ForwardRICHRegion_tan1"/>  <!-- bore radius at dRICH entrance -->
 <constant name="DRICH_rmin1"              value="DRICH_zmax * ForwardRICHRegion_tan2"/>  <!-- bore radius at dRICH exit -->
@@ -22,8 +22,9 @@
 <constant name="DRICH_rmax2"              value="ForwardPIDRegion_rmax"/>  <!-- cylinder radius -->
 <!-- sensor boxes: extrusions of the tank, to hold the sensors and their services -->
 <constant name="DRICH_sensorbox_length"   value="50.0*cm"/>  <!-- z-length of the extrusion -->
-<constant name="DRICH_sensorbox_rmin"     value="DRICH_rmax1 + 2*cm"/>  <!-- lower radial limit of the extrusion -->
+<constant name="DRICH_sensorbox_rmin"     value="108*cm"/>  <!-- lower radial limit of the extrusion -->
 <constant name="DRICH_sensorbox_rmax"     value="DRICH_rmax2 + 5*cm"/>  <!-- upper radial limit of the extrusion -->
+<constant name="DRICH_sensorbox_dphi"     value="42*degree"/>  <!-- azimuthal width of the extrusion -->
 <!-- aerogel+filter geometry -->
 <constant name="DRICH_aerogel_thickness"  value="4.0*cm"/>  <!-- aerogel thickness -->
 <constant name="DRICH_airgap_thickness"   value="0.01*mm"/> <!-- air gap between aerogel and filter -->
@@ -327,7 +328,7 @@ photodetector unit (PDU) assembly diagram: matrix of SiPMs with services
   radius="110.0*cm"
   />
 <sphericalpatch
-  phiw="30*degree"
+  phiw="18*degree"
   rmin="111.0*cm"
   rmax="179.0*cm"
   zmin="DRICH_snout_length + 4.0*cm"

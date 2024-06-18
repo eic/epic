@@ -1,0 +1,35 @@
+<!-- SPDX-License-Identifier: LGPL-3.0-or-later -->
+<!-- Copyright (C) 2023 Wouter Deconinck, Leszek Kosarzewski -->
+
+<lccdd>
+  <define>
+    <documentation>
+      #### Dimension constants
+    </documentation>
+    <constant name="FluxEndcapP_zmin" value="ForwardServiceGap_zmax"/>
+
+  </define>
+
+
+  <!-- Define detector -->
+  <detectors>
+    <documentation>
+      ### Forward (Positive Z) Endcap Flux Return
+    </documentation>
+    <detector name="FluxEndcapP" type="epic_EndcapFluxReturn" vis="FluxEndcapPVis">
+      <position x="0" y="0" z="FluxEndcapP_zmin"/>
+
+       <layer id="1" name="Collar" material="Steel235"
+        rmin="FluxEndcapP_collar_rmin" rmax="FluxEndcapP_collar_rmax" zpos="0*cm"
+        thickness="FluxEndcapP_collar_thickness" vis="FluxEndcapPLayerVis"
+       />
+       <layer id="2" name="Oculus" material="Steel235"
+        rmin="FluxEndcapP_oculus_rmin" rmax="FluxEndcapP_oculus_rmax" zpos="0*cm"
+        thickness="FluxEndcapP_oculus_thickness" vis="FluxEndcapPLayerVis"
+       />
+
+    </detector>
+  </detectors>
+
+
+</lccdd>

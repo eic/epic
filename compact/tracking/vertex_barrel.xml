@@ -46,10 +46,12 @@
       due to ACTS limitations.
       FIXME: this shouldn't be needed anymore, need to update the cylindrical plugin.
     </comment>
-    <constant name="VertexBarrelStave_count"       value="128"/>
-    <constant name="VertexBarrelStave1_width"      value="2*VertexBarrelMod1_rmin * tan(180*degree/VertexBarrelStave_count)"/>
-    <constant name="VertexBarrelStave2_width"      value="2*VertexBarrelMod2_rmin * tan(180*degree/VertexBarrelStave_count)"/>
-    <constant name="VertexBarrelStave3_width"      value="2*VertexBarrelMod3_rmin * tan(180*degree/VertexBarrelStave_count)"/>
+    <constant name="VertexBarrelStave_count1"       value="128"/>
+    <constant name="VertexBarrelStave_count2"       value="128"/>
+    <constant name="VertexBarrelStave_count3"       value="128"/>
+    <constant name="VertexBarrelStave1_width"      value="2*VertexBarrelMod1_rmin * tan(180*degree/VertexBarrelStave_count1)"/>
+    <constant name="VertexBarrelStave2_width"      value="2*VertexBarrelMod2_rmin * tan(180*degree/VertexBarrelStave_count2)"/>
+    <constant name="VertexBarrelStave3_width"      value="2*VertexBarrelMod3_rmin * tan(180*degree/VertexBarrelStave_count3)"/>
   </define>
 
   <detectors>
@@ -101,7 +103,8 @@
           inner_r="VertexBarrelLayer1_rmin"
           outer_r="VertexBarrelLayer1_rmax"
           z_length="VertexBarrelLayer_length" />
-        <layer_material surface="inner" binning="binPhi,binZ" bins0="VertexBarrelStave_count" bins1="100" />
+        <layer_material surface="inner" binning="binPhi,binZ" bins0="VertexBarrelStave_count1" bins1="100" />
+        <layer_material surface="outer" binning="binPhi,binZ" bins0="VertexBarrelStave_count1" bins1="100" />
         <comment>
           phi0     : Starting phi of first module.
           phi_tilt : Phi tilt of a module.
@@ -112,7 +115,7 @@
           nz       : Number of modules to place in z.
           dr       : Radial displacement parameter, of every other module.
         </comment>
-        <rphi_layout phi_tilt="0.0*degree" nphi="VertexBarrelStave_count" phi0="0.0" rc="VertexBarrelMod1_rmin" dr="0.0 * mm"/>
+        <rphi_layout phi_tilt="0.0*degree" nphi="VertexBarrelStave_count1" phi0="0.0" rc="VertexBarrelMod1_rmin" dr="0.0 * mm"/>
         <z_layout dr="0.0 * mm" z0="0.0 * mm" nz="1"/>
       </layer>
       <layer module="Module2" id="2" vis="VertexLayerVis">
@@ -120,8 +123,9 @@
           inner_r="VertexBarrelLayer2_rmin"
           outer_r="VertexBarrelLayer2_rmax"
           z_length="VertexBarrelLayer_length" />
-        <layer_material surface="inner" binning="binPhi,binZ" bins0="VertexBarrelStave_count" bins1="100" />
-        <rphi_layout phi_tilt="0.0*degree" nphi="VertexBarrelStave_count" phi0="0.0" rc="VertexBarrelMod2_rmin" dr="0.0 * mm"/>
+        <layer_material surface="inner" binning="binPhi,binZ" bins0="VertexBarrelStave_count2" bins1="100" />
+        <layer_material surface="outer" binning="binPhi,binZ" bins0="VertexBarrelStave_count2" bins1="100" />
+        <rphi_layout phi_tilt="0.0*degree" nphi="VertexBarrelStave_count2" phi0="0.0*degree" rc="VertexBarrelMod2_rmin" dr="0.0 * mm"/>
         <z_layout dr="0.0 * mm" z0="0.0 * mm" nz="1"/>
       </layer>
       <layer module="Module3" id="4" vis="VertexLayerVis">
@@ -129,8 +133,9 @@
           inner_r="VertexBarrelLayer3_rmin"
           outer_r="VertexBarrelLayer3_rmax"
           z_length="VertexBarrelLayer_length" />
-        <layer_material surface="inner" binning="binPhi,binZ" bins0="VertexBarrelStave_count" bins1="100" />
-        <rphi_layout phi_tilt="0.0*degree" nphi="VertexBarrelStave_count" phi0="0.0" rc="VertexBarrelMod3_rmin" dr="0.0 * mm"/>
+        <layer_material surface="inner" binning="binPhi,binZ" bins0="VertexBarrelStave_count3" bins1="100" />
+        <layer_material surface="outer" binning="binPhi,binZ" bins0="VertexBarrelStave_count3" bins1="100" />
+        <rphi_layout phi_tilt="0.0*degree" nphi="VertexBarrelStave_count3" phi0="0.0" rc="VertexBarrelMod3_rmin" dr="0.0 * mm"/>
         <z_layout dr="0.0 * mm" z0="0.0 * mm" nz="1"/>
       </layer>
     </detector>

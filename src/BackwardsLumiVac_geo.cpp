@@ -9,8 +9,7 @@
 using namespace std;
 using namespace dd4hep;
 
-static Ref_t createDetector(Detector& lccdd, xml_h e, SensitiveDetector /*sens*/)
-{
+static Ref_t createDetector(Detector& lccdd, xml_h e, SensitiveDetector /*sens*/) {
 
   xml_det_t x_det = e;
 
@@ -74,7 +73,7 @@ static Ref_t createDetector(Detector& lccdd, xml_h e, SensitiveDetector /*sens*/
 
   DetElement det(x_det.nameStr(), x_det.id());
 
-  Transform3D  pos(RotationZYX(0, 0, 0), Position(0, 0, zcen));
+  Transform3D pos(RotationZYX(0, 0, 0), Position(0, 0, zcen));
   PlacedVolume pv = lccdd.pickMotherVolume(det).placeVolume(vol, pos);
   det.setPlacement(pv);
 
