@@ -188,7 +188,7 @@ static Ref_t createDetector(Detector& description, xml_h e, SensitiveDetector se
   float _EFFECTIVE_MCP_THICKNESS_ = description.constant<double>("EFFECTIVE_MCP_THICKNESS");
 
   float _READOUT_PCB_THICKNESS_ = description.constant<double>("READOUT_PCB_THICKNESS");
-  float _READOUT_PCB_SIZE_      = description.constant<double>("ASIC_THICKNESS");
+  float _READOUT_PCB_SIZE_      = description.constant<double>("READOUT_PCB_SIZE");
 
   float _ASIC_SIZE_XY_   = description.constant<double>("ASIC_SIZE_XY");
   float _ASIC_THICKNESS_ = description.constant<double>("ASIC_THICKNESS");
