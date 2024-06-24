@@ -70,11 +70,12 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
       string s_name      = _toString(s_num, "slice%d");
       double s_thick     = x_slice.thickness();
       Material s_mat     = description.material(x_slice.materialStr());
-      Volume s_vol(s_name, PolyhedraRegular(numsides, rmin, rmax, s_thick), s_mat);
+      Volume s_vol(s_name, PolyhedraRegular(numsides, M_PI / numsides, rmin, rmax, s_thick), s_mat);
 
       s_vol.setVisAttributes(description.visAttributes(x_slice.visStr()));
       sliceZ += s_thick / 2;
-      PlacedVolume s_phv = l_vol.placeVolume(s_vol, Position(0, 0, sliceZ));
+      PlacedVolume s_phv = l_vol.placeVolume(
+          s_vol, Transform3D(RotationZYX(-M_PI / numsides, 0, 0), Position(0, 0, sliceZ)));
       s_phv.addPhysVolID("slice", s_num);
       if (x_slice.isSensitive()) {
         sens.setType("calorimeter");
