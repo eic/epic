@@ -20,26 +20,27 @@
 using namespace std;
 using namespace dd4hep;
 
-static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector /* sens */)
-{
+static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector /* sens */) {
 
   using namespace ROOT::Math;
-  xml_det_t  x_det    = e;
-  string     det_name = x_det.nameStr();
+  xml_det_t x_det = e;
+  string det_name = x_det.nameStr();
   DetElement sdet(det_name, x_det.id());
-  Assembly   assembly(det_name + "_assembly");
-  Material   m_Al     = det.material("Aluminum");
-  Material   m_Vacuum = det.material("Vacuum");
-  string     vis_name = dd4hep::getAttrOrDefault<std::string>(x_det, _Unicode(vis), "BeamPipeVis");
+  Assembly assembly(det_name + "_assembly");
+  Material m_Al     = det.material("Aluminum");
+  Material m_Vacuum = det.material("Vacuum");
+  string vis_name   = dd4hep::getAttrOrDefault<std::string>(x_det, _Unicode(vis), "BeamPipeVis");
 
   xml::Component Pipe_c = x_det.child(_Unicode(Pipe));
 
   // Get pipe dimensions from xml
   double thickness = Pipe_c.attr<double>(_Unicode(wall_thickness));
-  double innerD1   = Pipe_c.hasAttr(_Unicode(innerD1)) ? Pipe_c.attr<double>(_Unicode(innerD1))
-                                                       : Pipe_c.attr<double>(_Unicode(outerD1)) - 2 * thickness;
-  double innerD2   = Pipe_c.hasAttr(_Unicode(innerD2)) ? Pipe_c.attr<double>(_Unicode(innerD2))
-                                                       : Pipe_c.attr<double>(_Unicode(outerD2)) - 2 * thickness;
+  double innerD1   = Pipe_c.hasAttr(_Unicode(innerD1))
+                         ? Pipe_c.attr<double>(_Unicode(innerD1))
+                         : Pipe_c.attr<double>(_Unicode(outerD1)) - 2 * thickness;
+  double innerD2   = Pipe_c.hasAttr(_Unicode(innerD2))
+                         ? Pipe_c.attr<double>(_Unicode(innerD2))
+                         : Pipe_c.attr<double>(_Unicode(outerD2)) - 2 * thickness;
 
   double end1z = Pipe_c.attr<double>(_Unicode(end1z));
   double end2z = Pipe_c.attr<double>(_Unicode(end2z));
@@ -65,8 +66,8 @@ static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector /* sens *
 
   // -----------------------------
   // final placement
-  auto pv_assembly =
-      det.pickMotherVolume(sdet).placeVolume(assembly, Transform3D(RotationY(yrot), Position(end1x, 0.0, end1z)));
+  auto pv_assembly = det.pickMotherVolume(sdet).placeVolume(
+      assembly, Transform3D(RotationY(yrot), Position(end1x, 0.0, end1z)));
   pv_assembly.addPhysVolID("system", sdet.id()).addPhysVolID("barrel", 1);
   sdet.setPlacement(pv_assembly);
   assembly->GetShape()->ComputeBBox();

@@ -91,6 +91,7 @@
           outer_r="SiBarrelLayer1_rmax"
           z_length="SiBarrelLayer1_length" />
         <layer_material surface="inner" binning="binPhi,binZ" bins0="SiBarrelStave1_count" bins1="100" />
+        <layer_material surface="outer" binning="binPhi,binZ" bins0="SiBarrelStave1_count" bins1="100" />
         <comment>
           phi0     : Starting phi of first module.
           phi_tilt : Phi tilt of a module.
@@ -149,6 +150,7 @@
           outer_r="SiBarrelLayer2_rmax"
           z_length="SiBarrelLayer2_length" />
         <layer_material surface="inner" binning="binPhi,binZ" bins0="128" bins1="100" />
+        <layer_material surface="outer" binning="binPhi,binZ" bins0="128" bins1="100" />
         <comment>
           phi0     : Starting phi of first module.
           phi_tilt : Phi tilt of a module.

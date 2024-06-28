@@ -53,7 +53,7 @@
 
       Insert shape is cut out from middle of detector
     </documentation>
-    <detector id="ECalEndcapP_ID"
+    <detector id="EcalEndcapP_ID"
       name="EcalEndcapP"
       type="epic_EndcapCalorimeterWithInsertCutout"
       readout="EcalEndcapPHits">

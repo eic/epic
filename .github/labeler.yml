@@ -1,73 +1,100 @@
 "topic: backward":
-  - "compact/**/backward_*"
-  - "compact/**/mrich*"
-  - "compact/**/pfrich*"
+- changed-files:
+  - any-glob-to-any-file:
+    - "compact/**/backward_*"
+    - "compact/**/mrich*"
+    - "compact/**/pfrich*"
 
 "topic: barrel":
-  - "compact/**/barrel_*"
-  - "compact/**/*_barrel.xml"
-  - "compact/**/dirc*"
-  - "compact/hcal_gdml.xml"
-  - "src/Barrel*"
-  - "src/SciGlassCalorimeter_geo.cpp"
+- changed-files:
+  - any-glob-to-any-file:
+    - "compact/**/barrel_*"
+    - "compact/**/*_barrel.xml"
+    - "compact/**/dirc*"
+    - "compact/hcal_gdml.xml"
+    - "src/Barrel*"
+    - "src/SciGlassCalorimeter_geo.cpp"
 
 "topic: calorimetry":
-  - "compact/ecal/**/*"
-  - "compact/hcal/**/*"
-  - "compact/hcal_gdml.xml"
-  - "src/*Calorimeter*"
+- changed-files:
+  - any-glob-to-any-file:
+    - "compact/ecal/**/*"
+    - "compact/hcal/**/*"
+    - "compact/hcal_gdml.xml"
+    - "src/*Calorimeter*"
 
 "topic: documentation":
-  - "**/*.md"
+- changed-files:
+  - any-glob-to-any-file:
+    - "**/*.md"
 
 "topic: far-backward":
-  - "compact/far_backward/**"
-  - "src/Backwards*"
+- changed-files:
+  - any-glob-to-any-file:
+    - "compact/far_backward/**"
+    - "src/Backwards*"
 
 "topic: far-forward":
-  - "compact/far_forward/**"
-  - "src/Forward*"
-  - "src/B0*"
-  - "src/ZDC*"
-  - "src/ZeroDegreeCalorimeter*"
+- changed-files:
+  - any-glob-to-any-file:
+    - "compact/far_forward/**"
+    - "src/Forward*"
+    - "src/B0*"
+    - "src/ZDC*"
+    - "src/ZeroDegreeCalorimeter*"
 
 "topic: forward":
-  - "compact/**/forward_*"
-  - "compact/**/drich*"
-  - "src/*Tracker*"
+- changed-files:
+  - any-glob-to-any-file:
+    - "compact/**/forward_*"
+    - "compact/**/drich*"
+    - "src/*Tracker*"
 
 "topic: infrastructure":
-  - ".*"
-  - ".github/**/*"
-  - "CMakeLists.txt"
-  - "bin/**/*"
-  - "doc/**/*"
-  - "macro/**/*"
-  - "reports/**/*"
-  - "requirements.txt"
-  - "scripts/**/*"
-  - "templates/setup.sh.in"
-  - "views/**/*"
+- changed-files:
+  - any-glob-to-any-file:
+    - ".*"
+    - ".github/**/*"
+    - "CMakeLists.txt"
+    - "bin/**/*"
+    - "doc/**/*"
+    - "macro/**/*"
+    - "reports/**/*"
+    - "requirements.txt"
+    - "scripts/**/*"
+    - "templates/thisepic.sh.in"
+    - "views/**/*"
 
 "topic: magnets":
-  - "compact/far_backward/magnets.xml"
-  - "compact/far_forward/magnets.xml"
-  - "compact/fields/**/*"
-  - "compact/fields.xml"
-  - "compact/solenoid.xml"
+- changed-files:
+  - any-glob-to-any-file:
+    - "compact/far_backward/magnets.xml"
+    - "compact/far_forward/magnets.xml"
+    - "compact/fields/**/*"
+    - "compact/fields.xml"
+    - "compact/solenoid.xml"
 
 "topic: materials":
-  - "compact/materials.xml"
-  - "compact/optical_materials.xml"
+- changed-files:
+  - any-glob-to-any-file:
+    - "compact/materials.xml"
+    - "compact/optical_materials.xml"
 
 "topic: PID":
-  - "compact/pid/**/*"
-  - "compact/tracking/**/tof_*"
-  - "src/*RICH*"
-  - "src/*DIRC*"
-  - "src/*TOF*"
-  - "src/MRich*"
+- changed-files:
+  - any-glob-to-any-file:
+    - "compact/pid/**/*"
+    - "compact/tracking/**/tof_*"
+    - "src/*RICH*"
+    - "src/*DIRC*"
+    - "src/*TOF*"
+    - "src/MRich*"
 
 "topic: tracking":
-  - any: ["compact/tracking/**/*", "!compact/tracking/**/tof_*"]
-  - "src/*Tracker*"
+- all:
+  - changed-files:
+    - any-glob-to-any-file:
+      - "compact/tracking/**/*"
+      - "src/*Tracker*"
+    - all-globs-to-all-files:
+      - "!compact/tracking/**/tof_*"

@@ -20,7 +20,7 @@
     </documentation>
 
     <constant name="HcalEndcapNSingleLayerThickness"
-             value="HcalEndcapNSteelThickness + HcalEndcapNPolystyreneThickness"/>
+             value="HcalEndcapNSteelThickness + HcalEndcapNPolystyreneThickness + HcalEndcapNLayerGap"/>
     <constant name="HcalEndcapNLayer_NRepeat"   value="floor(HcalEndcapN_length / HcalEndcapNSingleLayerThickness)"/>
     <constant name="HcalEndcapN_thickness"              value="HcalEndcapNLayer_NRepeat * HcalEndcapNSingleLayerThickness"/>
   </define>
@@ -32,7 +32,7 @@
       ### Backwards (Negative Z) Endcap Hadronic Calorimeter
     </documentation>
     <detector
-      id="HCalEndcapN_ID"
+      id="HcalEndcapN_ID"
       name="HcalEndcapN"
       type="epic_PolyhedraEndcapCalorimeter2"
       readout="HcalEndcapNHits"

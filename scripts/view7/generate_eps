@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 echo "view7 produces a series of XY slices  a different z locations."
 

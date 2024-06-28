@@ -123,7 +123,8 @@
           outer_r="BarrelTOF_rmax"
           z_length="BarrelTOF_length+2*BarrelTOF_zOffset"
           z0="BarrelTOF_zoffset"/>
-
+         <layer_material surface="inner" binning="binPhi,binZ" bins0="BarrelTOF_Module_nphi" bins1="100" />
+         <layer_material surface="outer" binning="binPhi,binZ" bins0="BarrelTOF_Module_nphi" bins1="100" />
         <rphi_layout phi_tilt="BarrelTOF_Module_tiltangle" nphi="BarrelTOF_Module_nphi" phi0="0.0" rc="BarrelTOF_radius" dr="0.0*mm"/>
         <z_layout dr="0.0*mm" z0="BarrelTOF_zOffset" nz="BarrelTOF_Module_nz"/>
       </layer>

@@ -49,8 +49,7 @@
              HcalEndcapPInsertAirThickness "
     />
     <constant name="HcalEndcapPInsertBackplateThickness"    value="HcalEndcapPInsertAbsorberThickness"/>
-    <constant name="HcalEndcapPInsertLayer_NTungstenRepeat" value="10"/>
-    <constant name="HcalEndcapPInsertLayer_NSteelRepeat"    value="54"/>
+    <constant name="HcalEndcapPInsertLayer_NSteelRepeat"    value="64"/>
   </define>
 
   <detectors>
@@ -58,7 +57,7 @@
       ### Forward (Positive Z) Endcap Insert for Hadronic Calorimeter
       Insert goes in the middle of the forward endcap HCal -- around the beampipe
 
-      Insert is 1 front layer of Steel/Sc, 10 layers of W/Sc, 54 layers of Steel/Sc + 1 backplate of steel
+      Insert is 1 front layer of Steel/Sc + 64 layers of Steel/Sc + 1 backplate of steel
       Each of the layers (sans backplate) includes air gaps (front and back of each layer),
       ESR foil (front and back of scintillator), a PCB, and an aluminum scitnillator cover
 
@@ -68,7 +67,7 @@
 
     </documentation>
     <detector
-      id="HCalEndcapPInsert_ID"
+      id="HcalEndcapPInsert_ID"
       name="HcalEndcapPInsert"
       type="epic_InsertCalorimeter"
       vis="HcalEndcapInsertVis"
@@ -84,19 +83,8 @@
       <backplate thickness="HcalEndcapPInsertBackplateThickness"/>
       <comment> Front layer to match front walls of LFHCAL modules </comment>
       <comment> Slices will be ordered according to the slice order listed here </comment>
-      <layer repeat="1" thickness="HcalEndcapPInsertFrontLayerThickness" vis="InvisibleWithDaughters">
+       <layer repeat="1" thickness="HcalEndcapPInsertFrontLayerThickness" vis="InvisibleWithDaughters">
         <slice material="Steel235" thickness="LFHCAL_FrontWallThickness" vis="LFHCAL8MModVis" />
-        <slice material="Air" thickness="HcalEndcapPInsertAirThickness"/>
-        <slice material="Aluminum" thickness="HcalEndcapPInsertScintillatorCoverThickness" vis="AnlProcess_Blue"/>
-        <slice material="Polystyrene" thickness="HcalEndcapPInsertESRFoilThickness" vis="AnlGray"/>
-        <slice material="Polystyrene" thickness="HcalEndcapPInsertPolystyreneThickness" sensitive="true" limits="cal_limits" vis="AnlLightGray"/>
-        <slice material="Polystyrene" thickness="HcalEndcapPInsertESRFoilThickness" vis="AnlGray"/>
-        <slice material="Fr4" thickness="HcalEndcapPInsertPCBThickness"/>
-        <slice material="Air" thickness="HcalEndcapPInsertAirThickness"/>
-      </layer>
-      <comment> Tungsten/Scintillator layers </comment>
-      <layer repeat="HcalEndcapPInsertLayer_NTungstenRepeat" thickness="HcalEndcapPInsertSingleLayerThickness" vis="InvisibleWithDaughters">
-        <slice material="Tungsten" thickness="HcalEndcapPInsertAbsorberThickness" vis="LFHCAL4MModVis" />
         <slice material="Air" thickness="HcalEndcapPInsertAirThickness"/>
         <slice material="Aluminum" thickness="HcalEndcapPInsertScintillatorCoverThickness" vis="AnlProcess_Blue"/>
         <slice material="Polystyrene" thickness="HcalEndcapPInsertESRFoilThickness" vis="AnlGray"/>

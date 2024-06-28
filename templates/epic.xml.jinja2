@@ -58,6 +58,8 @@
   </includes>
   <include ref="${DETECTOR_PATH}/compact/optical_materials.xml"/>
 
+  <include ref="${DETECTOR_PATH}/compact/calibrations.xml"/>
+
   <limits>
     <limitset name="world_limits">
     </limitset>
@@ -182,7 +184,7 @@
     ## Far foward detectors
   </documentation>
   {% for ff in features['far_forward'] -%}
-  <include ref="${DETECTOR_PATH}/compact/{{ ff }}.xml"/>
+  <include ref="${DETECTOR_PATH}/compact/far_forward/{{ ff }}.xml"/>
   {% endfor -%}
 {% endif -%}
 
@@ -191,7 +193,7 @@
     ## Far backward detectors
   </documentation>
   {% for fb in features['far_backward'] -%}
-  <include ref="${DETECTOR_PATH}/compact/{{ fb }}.xml"/>
+  <include ref="${DETECTOR_PATH}/compact/far_backward/{{ fb }}.xml"/>
   {% endfor -%}
 {% endif -%}
 
