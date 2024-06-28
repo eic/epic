@@ -32,10 +32,10 @@
     <constant name="MPGDOuterBarrelModule_zmin2"     value="174.5*cm"/>
 
     <comment> Inner MPGD unsegmented barrel </comment>
-    <constant name="InnerMPGDBarrel_rmin"            value="51.25*cm"/>
+    <constant name="InnerMPGDBarrel_rmin"            value="55*cm"/>
     <constant name="InnerMPGDBarrel_dz"              value="0"/>
     <constant name="InnerMPGDBarrel_zmin"            value="105*cm"/> <comment> negative z </comment>
-    <constant name="InnerMPGDBarrel_zmax"            value="135*cm"/>    <comment> positive z </comment>
+    <constant name="InnerMPGDBarrel_zmax"            value="143*cm"/> <comment> positive z </comment>
     <constant name="InnerMPGDBarrel_length"          value="InnerMPGDBarrel_zmax + InnerMPGDBarrel_zmin"/>
     <constant name="InnerMPGDBarrel_zoffset"         value="0.5*(InnerMPGDBarrel_zmax - InnerMPGDBarrel_zmin)"/>
 
@@ -56,8 +56,9 @@
     <constant name="ForwardTOF_zmin"              value="ForwardTOFRegion_zmin + ForwardTOFRegion_length - ForwardTOF_length - 1*cm"/>
 
     <comment> Service/Support setup </comment>
-    <constant name="TrackerSupportCyl_rmin1"          value="TrackerEndcapDisk_rmax + 0.2*cm"/>
-    <constant name="TrackerSupportCyl_rmin2"          value="InnerMPGDBarrel_rmin + 2.05*cm + 1*cm"/>
+    <constant name="TrackerSupportCyl_rmin1"          value="TrackerEndcapDisk_rmax + 2*cm"/> <comment> Ref: Services Material Budget 24.03.04..stp -- 450.00 mm </comment>
+    <constant name="TrackerSupportCylEndcapN_rmin2"   value="BackwardPIDRegion_rmax + 4.5*cm"/> <comment> Ref: Services Material Budget 24.03.13.stp -- 670.00 mm, nudged 5 mm </comment>
+    <constant name="TrackerSupportCylEndcapP_rmin2"   value="ForwardTOFRegion_maxR + 2*cm"/> <comment> Ref: Services Material Budget 24.03.04..stp -- 520.00 mm </comment>
     <comment> These may belong in definitions.xml </comment>
     <constant name="InnerTrackerEndcapP_zmax"        value="CentralTrackingRegionP_zmax"/>
     <constant name="InnerTrackerEndcapN_zmax"        value="CentralTrackingRegionN_zmax"/>
@@ -102,8 +103,8 @@
     <comment> Main parameters for MPGD endcap disks, offset here is the distance between disks </comment>
     <constant name="ForwardMPGD_zmin"             value="148*cm"/>
     <constant name="ForwardMPGDMod_offset"        value="13.0*cm"/>
-    <constant name="ForwardMPGDMod1_rmin"         value="7.014*cm" />
-    <constant name="ForwardMPGDMod2_rmin"         value="7.014*cm"/>
+    <constant name="ForwardMPGDMod1_rmin"         value="9.0*cm" />
+    <constant name="ForwardMPGDMod2_rmin"         value="9.0*cm"/>
     <constant name="ForwardMPGDMod1_rmax"         value="50*cm" />
     <constant name="ForwardMPGDMod2_rmax"         value="50*cm" />
 
@@ -147,33 +148,33 @@
       <composite name="OuterSiBarrel"/>
       <composite name="OuterTrackerEndcapP"/>
     </detector>
-    <detector id="TrackerSubAssembly_4_ID"
-      name="InnerMPGDBarrelSubAssembly"
-      type="DD4hep_SubdetectorAssembly"
-      vis="TrackerSubAssemblyVis">
-      <composite name="InnerMPGDBarrel"/>
-    </detector> 
-    <detector id="TrackerSubAssembly_5_ID"
+    <detector id="TrackerSubAssembly_3_ID"
       name="EndcapMPGDSubAssembly"
       type="DD4hep_SubdetectorAssembly"
       vis="TrackerSubAssemblyVis">
       <composite name="BackwardMPGD"/>
       <composite name="ForwardMPGD"/>
     </detector>
-    <detector id="TrackerSubAssembly_6_ID"
+    <detector id="TrackerSubAssembly_4_ID"
+      name="InnerMPGDBarrelSubAssembly"
+      type="DD4hep_SubdetectorAssembly"
+      vis="TrackerSubAssemblyVis">
+      <composite name="InnerMPGDBarrel"/>
+    </detector>
+    <detector id="TrackerSubAssembly_5_ID"
       name="EndcapTOFSubAssembly"
       type="DD4hep_SubdetectorAssembly"
       vis="TrackerSubAssemblyVis">
       <composite name="BackwardTOF"/>
       <composite name="ForwardTOF"/>
     </detector>
-    <detector id="TrackerSubAssembly_7_ID"
+    <detector id="TrackerSubAssembly_6_ID"
       name="BarrelTOFSubAssembly"
       type="DD4hep_SubdetectorAssembly"
       vis="TrackerSubAssemblyVis">
       <composite name="BarrelTOF"/>
     </detector>
-    <detector id="TrackerSubAssembly_8_ID"
+    <detector id="TrackerSubAssembly_7_ID"
       name="OuterBarrelMPGDSubAssembly"
       type="DD4hep_SubdetectorAssembly"
       vis="TrackerSubAssemblyVis">
