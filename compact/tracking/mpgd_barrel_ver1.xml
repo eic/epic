@@ -68,21 +68,21 @@
       vis="TrackerVis">
       <type_flags type="DetType_TRACKER + DetType_BARREL"/>
       <dimensions
-	width="MMModuleWidth"
+        width="MMModuleWidth"
         length="MMModuleLength"/>
 
       <module name="InnerMPGDBarrel_Mod1" vis="TrackerLayerVis" >
-	<model name="MMInnerSector" rmin1="MMInnerSector_R" rmin2="MMInnerSector_R" offset="MMRadial_offset"/>
-	<model name="MMOuterSector" rmin1="MMOuterSector_R" rmin2="MMOuterSector_R" offset="MMRadial_offset"/>
-	<frame name="MMFrame"        material="CarbonFiber" width="MMFrameWidth"        vis="TrackerSupportVis" />
-	<frame name="MMOutwardFrame" material="CarbonFiber" width="MMOutwardFrameWidth" vis="TrackerServiceVis" />
-	<service name="MMInnerService" material="Kapton" thickness="MMInnerService_thickness" vis="TrackerServiceVis" /> <comment> This includes cables => Kapton as a material is overoptimistic. </comment>
+        <model name="MMInnerSector" rmin1="MMInnerSector_R" rmin2="MMInnerSector_R" offset="MMRadial_offset"/>
+        <model name="MMOuterSector" rmin1="MMOuterSector_R" rmin2="MMOuterSector_R" offset="MMRadial_offset"/>
+        <frame name="MMFrame"        material="CarbonFiber" width="MMFrameWidth"        vis="TrackerSupportVis" />
+        <frame name="MMOutwardFrame" material="CarbonFiber" width="MMOutwardFrameWidth" vis="TrackerServiceVis" />
+        <service name="MMInnerService" material="Kapton" thickness="MMInnerService_thickness" vis="TrackerServiceVis" /> <comment> This includes cables => Kapton as a material is overoptimistic. </comment>
         <comment> Going from the inside (sensitive) side to the readout side </comment>
         <module_component name="DriftCuGround" thickness="MMDriftCuGround_thickness" material="Copper" vis="TrackerModuleVis"/>
         <module_component name="DriftKapton" thickness="MMDriftKapton_thickness" material="Kapton" vis="TrackerVis" />
         <module_component name="DriftCuElectrode" thickness="MMDriftCuElectrode_thickness" material="Copper" vis="TrackerVis"/>
-	<module_component name="GasGap" thickness="MMGasGap_thickness" material="Ar90IsoButane" sensitive="True" vis="TrackerMPGDGasVis" />
-	<module_component name="Mesh" thickness="MMMesh_thickness" material="MMGAS_InoxForMesh" vis="TrackerVis"/>
+        <module_component name="GasGap" thickness="MMGasGap_thickness" material="Ar90IsoButane" sensitive="True" vis="TrackerMPGDGasVis" />
+        <module_component name="Mesh" thickness="MMMesh_thickness" material="MMGAS_InoxForMesh" vis="TrackerVis"/>
         <module_component name="Fudge" thickness="MMFudgeInnerMPGDBarrel_thickness" material="Kapton" vis="TrackerVis"/>
         <module_component name="Gas" thickness="MMGas_thickness" material="Ar90IsoButane" vis="TrackerMPGDGasVis"/>
         <module_component name="ResistiveStrips" thickness="MMResistiveStrip_thickness" material="MMGAS_ResistivePaste" vis="TrackerVis"/>
@@ -98,9 +98,9 @@
           inner_r="InnerMPGDBarrelLayer_rmin"
           outer_r="InnerMPGDBarrelLayer_rmax"
           z_length="InnerMPGDBarrelLayer_length"
-	  z0="InnerMPGDBarrel_zoffset"/>
+          z0="InnerMPGDBarrel_zoffset"/>
         <layer_material surface="inner" binning="binPhi,binZ" bins0="MPGDBarrelStave_count" bins1="100" />
-	<rphi_layout phi0="0.0"/>
+        <rphi_layout phi0="0.0"/>
         <z_layout gap="MMCentral_gap"/>
       </layer>
     </detector>
