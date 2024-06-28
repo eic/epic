@@ -469,19 +469,17 @@ static Ref_t create_MPGDCylinderBarrelTracker(Detector& description, xml_h e,
     double phic;
     for (iphi = 0, phic = phi0; iphi < nphi; iphi++, phic += phi_incr, nModules++) {
       // Every other module...
-      int jphi = iphi % 2, iV = iSMs[jphi];    // ...swap stave volume/sensitive
-      double rc = (2 * jphi - 1) * offset / 2; // ...flip sign of offset
-      if (iz >= 2)
-        rc *= -1;    // Swap >0 and <0 offsets.
-      double x1, y1; // Coordinates of the centre of curvaure of
-      x1                 = rc * std::cos(phic);
-      y1                 = rc * std::sin(phic);
-      string module_name = _toString(10 * iz + iphi, "module%02d");
-      DetElement mod_elt(lay_elt, module_name, nModules);
-      printout(DEBUG, "MPGDCylinderBarrelTracker",
-               "System %d Layer \"%s\",id=%d Module \"%s\",id=%d: x,y,r: %7.4f,%7.4f,%7.4f cm",
-               det_id, lay_nam.c_str(), lay_id, module_name.c_str(), nModules, x1 / cm, y1 / cm,
-               sqrt(x1 * x1 + y1 * y1) / cm);
+      int jphi = iphi%2, iV = iSMs[jphi]; // ...swap stave volume/sensitive
+      double rc = (2*jphi-1)*offset/2;    // ...flip sign of offset
+      if (iz>=2) rc *= -1; // Swap >0 and <0 offsets.
+      double x1, y1; // Coordinates of the centre of curvature of 
+      x1 = rc * std::cos(phic); y1 = rc * std::sin(phic);
+      string     module_name = _toString(10*iz+iphi,"module%02d");
+      DetElement mod_elt(lay_elt,module_name,nModules);
+      printout(DEBUG,"MPGDCylinderBarrelTracker",
+	       "System %d Layer \"%s\",id=%d Module \"%s\",id=%d: x,y,r: %7.4f,%7.4f,%7.4f cm",
+	       det_id,lay_nam.c_str(),lay_id,module_name.c_str(),nModules,
+	       x1/cm,y1/cm,sqrt(x1*x1+y1*y1)/cm);
       RotationZYX rot;
       rot = RotationZYX(phic, 0, 0);
       if (iz >= 2) // Rotate so that outward-frame faces outwards.
