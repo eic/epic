@@ -45,15 +45,15 @@ static Volume inner_support_collar(Detector& desc, xml_comp_t handle) {
 
   Material inner_ring_material = desc.material(handle.materialStr());
 
-  double electron_rmin         = handle.attr<double>(_Unicode(electron_rmin));
-  double electron_rmax         = handle.attr<double>(_Unicode(electron_rmax));
-  double proton_rmin           = handle.attr<double>(_Unicode(proton_rmin));
-  double proton_rmax           = handle.attr<double>(_Unicode(proton_rmax));
-  double straight_section_tilt = handle.attr<double>(_Unicode(straight_section_tilt));
-  double z_length              = handle.z_length();
+  double electron_rmin   = handle.attr<double>(_Unicode(electron_rmin));
+  double electron_rmax   = handle.attr<double>(_Unicode(electron_rmax));
+  double proton_rmin     = handle.attr<double>(_Unicode(proton_rmin));
+  double proton_rmax     = handle.attr<double>(_Unicode(proton_rmax));
+  double proton_x_offset = handle.attr<double>(_Unicode(proton_x_offset));
+  double z_length        = handle.z_length();
 
-  double proton_x_offset = ((electron_rmax + electron_rmin) - (proton_rmax + proton_rmin)) / 2 /
-                           cos(straight_section_tilt);
+  double straight_section_tilt =
+      acos(((electron_rmax + electron_rmin) - (proton_rmax + proton_rmin)) / 2 / proton_x_offset);
   double mean_radius = (electron_rmax + electron_rmin + proton_rmax + proton_rmin) / 4;
   Position straight_section_offset{
       proton_x_offset / 2 + cos(straight_section_tilt) * mean_radius,

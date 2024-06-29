@@ -103,9 +103,9 @@
               electron_rmax="73 * mm"
               proton_rmin="35 * mm"
               proton_rmax="43 * mm"
-              straight_section_tilt="62.05 * deg"
               z_length="EcalEndcapN_inner_support_length"
               x_offset="-1 * mm"
+              proton_x_offset="64 * mm"
               material="Copper"
               vis="AnlOrange"
               />
