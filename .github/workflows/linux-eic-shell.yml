@@ -142,7 +142,7 @@ jobs:
           DETECTOR_CONFIG=${{ needs.list-detector-configs.outputs.configs_csv }}
           DETECTOR_VERSION=${{ github.event.pull_request.head.ref || github.ref_name }}
           GITHUB_REPOSITORY=${{ github.repository }}
-          GITHUB_SHA=${{ github.event.pull_request.head.sha || github.sha }}
+          GITHUB_SHA=${{ github.sha }}
           GITHUB_PR=${{ github.event.pull_request.number }}
 
   check-geometry-configs:
@@ -548,7 +548,7 @@ jobs:
           DETECTOR_VERSION=${{ github.event.pull_request.head.ref || github.ref_name }}
           DETECTOR_CONFIG=${{ matrix.detector_config }}
           GITHUB_REPOSITORY=${{ github.repository }}
-          GITHUB_SHA=${{ github.event.pull_request.head.sha || github.sha }}
+          GITHUB_SHA=${{ github.sha }}
           PIPELINE_NAME=${{ github.event.pull_request.title || github.sha }}
     - run: |
         gh api \
