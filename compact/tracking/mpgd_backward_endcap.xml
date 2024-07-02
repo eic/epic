@@ -62,7 +62,7 @@
     <constant name="BackwardMPGDMod2_y"            value="BackwardMPGDMod2_rmax * cos(BackwardMPGDEndcapMod_angle/2) - BackwardMPGDMod2_rmin" />
   </define>
 
-  <detectors>
+    <detectors>
       <detector
         id="TrackerEndcapN_4_ID"
         name="BackwardMPGD"
