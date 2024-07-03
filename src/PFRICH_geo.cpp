@@ -63,7 +63,6 @@ static Ref_t createDetector(Detector& description, xml_h e, SensitiveDetector se
   xml_dim_t x_pos(x_det.child(_U(position), false));
   xml_dim_t x_rot(x_det.child(_U(rotation), false));
 
-  auto vesselMat = description.material("VacuumOptical");
 
   Tube pfRICH_air_volume(0.0, 65.0, 25.0); // dimension of the pfRICH world in cm
 
@@ -91,9 +90,9 @@ static Ref_t createDetector(Detector& description, xml_h e, SensitiveDetector se
 
   int imod = 0; // module number
 
-  auto gasvolMat = description.material("C4F10_PFRICH");
+  auto gasvolMat = description.material(detElem.attr<std::string>(_Unicode(gas)));
   auto gasvolVis = description.visAttributes("DRICH_gas_vis");
-  auto vesselVis = description.visAttributes("DRICH_gas_vis");
+  auto vesselVis = description.visAttributes(detElem.attr<std::string>(_Unicode(vis_vessel)));
 
   double windowThickness = dims.attr<double>(_Unicode(window_thickness));
   double wallThickness   = dims.attr<double>(_Unicode(wall_thickness));
@@ -113,11 +112,19 @@ static Ref_t createDetector(Detector& description, xml_h e, SensitiveDetector se
   double radiatorRmin = radiatorElem.attr<double>(_Unicode(rmin));
   double radiatorRmax = radiatorElem.attr<double>(_Unicode(rmax));
 
+  auto filterElem        = radiatorElem.child(_Unicode(filter)); 
+
   double airgapThickness = 0.1;
   double filterThickness = 1;
 
-  auto aerogelMat = description.material("C4F10_PFRICH");
-  auto filterMat  = description.material("C4F10_PFRICH");
+  auto aerogelMat = description.material(aerogelElem.attr<std::string>(_Unicode(material)));
+  auto filterMat  = description.material(filterElem.attr<std::string>(_Unicode(material)));
+
+//  auto aerogelMat = description.material("C4F10_PFRICH");
+//  auto filterMat  = description.material("C4F10_PFRICH");
+
+
+
 
   double vesselLength = dims.attr<double>(_Unicode(length));
   auto originFront    = Position(0., 0., vesselLength / 2.0);
@@ -151,6 +158,11 @@ static Ref_t createDetector(Detector& description, xml_h e, SensitiveDetector se
 
   Cone mirror_cone(vesselLength / 2.0, vesselRmax1 - 7, vesselRmax1 - 7 + 0.3, vesselRmax1 - 13,
                    vesselRmax1 - 13 + 0.3);
+
+   /*--------------------------------------------------*/
+  // Vessel  
+  auto vesselMat = description.material(detElem.attr<std::string>(_Unicode(material)));
+  auto vesselGas = description.material(detElem.attr<std::string>(_Unicode(gas)));
 
   /*--------------------------------------------------*/
   // Flange
@@ -246,8 +258,8 @@ static Ref_t createDetector(Detector& description, xml_h e, SensitiveDetector se
 
   SubtractionSolid pfRICH_volume_shape(pfRICH_air_volume, flange_final_shape);
 
-  Volume pfRICH_volume(detName + "_Vol", pfRICH_volume_shape,
-                       vesselMat); // dimension of the pfRICH world in cm
+  Volume pfRICH_volume(detName + "_aaaaaaa__Vol", pfRICH_volume_shape,
+                       vesselGas); // dimension of the pfRICH world in cm
 
   pv = mother.placeVolume(pfRICH_volume, transform);
 
@@ -264,6 +276,9 @@ static Ref_t createDetector(Detector& description, xml_h e, SensitiveDetector se
                   vesselRmax1 - wallThickness, vesselRmin0 + wallThickness,
                   vesselRmax0 - wallThickness);
 
+  Cone vesselWall(vesselLength / 2.0, vesselRmax1 - 0.1, vesselRmax1, vesselRmax0 -0.1, vesselRmax0);
+
+
   Box gasvolBox(1000, 1000, 1000);
 
   Solid gasvolSolid;
@@ -275,18 +290,38 @@ static Ref_t createDetector(Detector& description, xml_h e, SensitiveDetector se
   Solid mirrorSolid;
   mirrorSolid = mirror_cone;
 
-  Volume vesselVol(detName, vesselSolid, vesselMat);
-  Volume gasvolVol(detName + "_gas", gasvolSolid, gasvolMat);
+  Solid wallSolid;
+  wallSolid = vesselWall;
+
+/*--------------------------------------------------*/ 
+///        ag_name.Form("%s-%d-%02d", "aerogel", ir, ia);
+///
+///        Volume agtubeVol(ag_name.Data(), agtube, gasvolMat);
+///        auto aerogelTilePlacement = Transform3D(r_aerogel_Z, Position(0.0, 0.0, -m_gzOffset));
+///        auto aerogelTilePV        = pfRICH_volume.placeVolume(agtubeVol, aerogelTilePlacement);
+///        DetElement aerogelDE(sdet, "aerogel_de_" + std::to_string(kkcounter), 0);
+///        aerogelDE.setPlacement(aerogelTilePV);
+
+//  Volume vesselVol(detName + "_bbbbbbbbbbbbbbbbbbbbbbbbbbb_vol", vesselSolid, vesselMat);
+  Volume vesselVol(detName + "_bbbbbbbbbbbbbbbbbbbbbbbbbbb_vol", wallSolid, vesselMat);
   vesselVol.setVisAttributes(vesselVis);
-  gasvolVol.setVisAttributes(gasvolVis);
 
-  Volume mirrorVol(detName, mirrorSolid, mirrorMat);
-  mirrorVol.setVisAttributes(mirrorVis);
+  PlacedVolume vesselPV = pfRICH_volume.placeVolume(vesselVol, Position(0, 0, 0));
+  DetElement vesselDE(sdet, "vessel_de", 0);
+  vesselDE.setPlacement(vesselPV);
 
-  // place gas volume
-  PlacedVolume gasvolPV = vesselVol.placeVolume(gasvolVol, Position(0, 0, 0));
-  DetElement gasvolDE(sdet, "gasvol_de", 0);
-  gasvolDE.setPlacement(gasvolPV);
+
+
+
+
+//  Volume gasvolVol(detName + "_aaaaaaaaaaaaaaaaaaaaaaaaaaa_gas", gasvolSolid, gasvolMat);
+//  gasvolVol.setVisAttributes(gasvolVis);
+//
+//  // place gas volume
+//  // PlacedVolume gasvolPV = vesselVol.placeVolume(gasvolVol, Position(0, 0, 0));
+//  PlacedVolume gasvolPV = pfRICH_volume.placeVolume(gasvolVol, Position(0, 0, 0));
+//  DetElement gasvolDE(sdet, "gasvol_de", 0);
+//  gasvolDE.setPlacement(gasvolPV);
 
   // BUILD RADIATOR //////////////////////////////////////
 
@@ -318,6 +353,9 @@ static Ref_t createDetector(Detector& description, xml_h e, SensitiveDetector se
   // -- Mirrors ---------------------------------------------------------------------------------
   // Some "standard" value applied to all mirrors;
   // At the downstream (sensor plane) location; upstream radii are calculated automatically;
+
+  Volume mirrorVol(detName, mirrorSolid, mirrorMat);
+  mirrorVol.setVisAttributes(mirrorVis);
 
   double xysize = _HRPPD_TILE_SIZE_, wndthick = _HRPPD_WINDOW_THICKNESS_;
 
