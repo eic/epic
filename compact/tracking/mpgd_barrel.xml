@@ -117,7 +117,11 @@
     <readout name="MPGDBarrelHits">
       <comment> 768 strips in phi yield a segmentation of 2pi/8/768 ~= 1mrad. Which in turn, yields ~160 um in resolution.
       </comment>
-      <segmentation type="CylindricalGridPhiZ" grid_size_phi="1*mrad" grid_size_z="0.150*mm*sqrt(12)" />
+      <segmentation type="MultiSegmentation" key="module">
+        <segmentation name="Backward" type="CylindricalGridPhiZ" key_min="0"  key_max="7"  grid_size_phi="1*mrad" grid_size_z="0.150*mm*sqrt(12)" radius="57.875" />
+	<segmentation name="Inner"    type="CylindricalGridPhiZ" key_min="8"  key_max="23" grid_size_phi="1*mrad" grid_size_z="0.150*mm*sqrt(12)" radius="55.675" />
+	<segmentation name="Forward"  type="CylindricalGridPhiZ" key_min="24" key_max="31" grid_size_phi="1*mrad" grid_size_z="0.150*mm*sqrt(12)" radius="57.875" />
+      </segmentation>
       <id>system:8,layer:4,module:12,sensor:2,phi:32:-16,z:-16</id>
     </readout>
   </readouts>
