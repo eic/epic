@@ -18,7 +18,7 @@
 
 namespace fs = std::filesystem;
 
-using dd4hep::ERROR, dd4hep::WARNING, dd4hep::INFO;
+using dd4hep::ERROR, dd4hep::WARNING, dd4hep::VERBOSE, dd4hep::INFO;
 using dd4hep::printout;
 
 namespace FileLoaderHelper {
@@ -89,11 +89,11 @@ inline void EnsureFileFromURLExists(std::string url, std::string file, std::stri
       printout(INFO, "FileLoader", "cache " + cache_path.string());
       if (fs::exists(cache_path)) {
         auto check_path = [&](const fs::path& cache_dir_path) {
-          printout(INFO, "FileLoader", "checking " + cache_dir_path.string());
+          printout(VERBOSE, "FileLoader", "checking " + cache_dir_path.string());
           fs::path cache_hash_path = cache_dir_path / hash;
           if (fs::exists(cache_hash_path)) {
             // symlink hash to cache/.../hash
-            printout(INFO, "FileLoader",
+            printout(VERBOSE, "FileLoader",
                      "file " + file + " with hash " + hash + " found in " +
                          cache_hash_path.string());
             fs::path link_target;
