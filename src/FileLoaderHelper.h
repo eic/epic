@@ -18,7 +18,7 @@
 
 namespace fs = std::filesystem;
 
-using dd4hep::ERROR, dd4hep::WARNING, dd4hep::INFO;
+using dd4hep::ERROR, dd4hep::WARNING, dd4hep::VERBOSE, dd4hep::INFO;
 using dd4hep::printout;
 
 namespace FileLoaderHelper {
