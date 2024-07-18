@@ -120,12 +120,6 @@ static Ref_t createDetector(Detector& description, xml_h e, SensitiveDetector se
   auto aerogelMat = description.material(aerogelElem.attr<std::string>(_Unicode(material)));
   auto filterMat  = description.material(filterElem.attr<std::string>(_Unicode(material)));
 
-//  auto aerogelMat = description.material("C4F10_PFRICH");
-//  auto filterMat  = description.material("C4F10_PFRICH");
-
-
-
-
   double vesselLength = dims.attr<double>(_Unicode(length));
   auto originFront    = Position(0., 0., vesselLength / 2.0);
   double sensorZpos = radiatorFrontplane - aerogelThickness - proximityGap - 0.5 * sensorThickness;
@@ -225,9 +219,6 @@ static Ref_t createDetector(Detector& description, xml_h e, SensitiveDetector se
       _FIDUCIAL_VOLUME_LENGTH_ - _VESSEL_FRONT_SIDE_THICKNESS_ - _SENSOR_AREA_LENGTH_;
   double m_gas_volume_radius = _VESSEL_OUTER_RADIUS_ - _VESSEL_OUTER_WALL_THICKNESS_;
 
-  //cout << "FLANGE_EPIPE_DIAMETER : " << _FLANGE_EPIPE_DIAMETER_ << endl;
-  //cout << "CONICAL_MIRROR_INNER_RADIUS : " << _CONICAL_MIRROR_INNER_RADIUS_ << endl;
-
   /// Inner mirror cone
   // A wedge bridging two cylinders;
 
@@ -293,35 +284,12 @@ static Ref_t createDetector(Detector& description, xml_h e, SensitiveDetector se
   Solid wallSolid;
   wallSolid = vesselWall;
 
-/*--------------------------------------------------*/ 
-///        ag_name.Form("%s-%d-%02d", "aerogel", ir, ia);
-///
-///        Volume agtubeVol(ag_name.Data(), agtube, gasvolMat);
-///        auto aerogelTilePlacement = Transform3D(r_aerogel_Z, Position(0.0, 0.0, -m_gzOffset));
-///        auto aerogelTilePV        = pfRICH_volume.placeVolume(agtubeVol, aerogelTilePlacement);
-///        DetElement aerogelDE(sdet, "aerogel_de_" + std::to_string(kkcounter), 0);
-///        aerogelDE.setPlacement(aerogelTilePV);
-
-//  Volume vesselVol(detName + "_bbbbbbbbbbbbbbbbbbbbbbbbbbb_vol", vesselSolid, vesselMat);
-  Volume vesselVol(detName + "_bbbbbbbbbbbbbbbbbbbbbbbbbbb_vol", wallSolid, vesselMat);
+  Volume vesselVol(detName + "_vesel_vol", wallSolid, vesselMat);
   vesselVol.setVisAttributes(vesselVis);
 
   PlacedVolume vesselPV = pfRICH_volume.placeVolume(vesselVol, Position(0, 0, 0));
   DetElement vesselDE(sdet, "vessel_de", 0);
   vesselDE.setPlacement(vesselPV);
-
-
-
-
-
-//  Volume gasvolVol(detName + "_aaaaaaaaaaaaaaaaaaaaaaaaaaa_gas", gasvolSolid, gasvolMat);
-//  gasvolVol.setVisAttributes(gasvolVis);
-//
-//  // place gas volume
-//  // PlacedVolume gasvolPV = vesselVol.placeVolume(gasvolVol, Position(0, 0, 0));
-//  PlacedVolume gasvolPV = pfRICH_volume.placeVolume(gasvolVol, Position(0, 0, 0));
-//  DetElement gasvolDE(sdet, "gasvol_de", 0);
-//  gasvolDE.setPlacement(gasvolPV);
 
   // BUILD RADIATOR //////////////////////////////////////
 
