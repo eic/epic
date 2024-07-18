@@ -249,7 +249,7 @@ static Ref_t createDetector(Detector& description, xml_h e, SensitiveDetector se
 
   SubtractionSolid pfRICH_volume_shape(pfRICH_air_volume, flange_final_shape);
 
-  Volume pfRICH_volume(detName + "_aaaaaaa__Vol", pfRICH_volume_shape,
+  Volume pfRICH_volume(detName + "_Vol", pfRICH_volume_shape,
                        vesselGas); // dimension of the pfRICH world in cm
 
   pv = mother.placeVolume(pfRICH_volume, transform);
@@ -332,11 +332,21 @@ static Ref_t createDetector(Detector& description, xml_h e, SensitiveDetector se
 
   double _ACRYLIC_THICKNESS_ = 0.3;
 
-  // HRPPD
+
+
+  /*--------------------------------------------------*/
+  // HRPPD material definition:
+
+  auto HRPPD_WindowMat = description.material("Quartz");
+  auto HRPPD_PCBMat = description.material("G10");
+  auto HRPPD_MPDMat = description.material("SiliconDioxide");
+  auto HRPPD_ASICMat = description.material("SiliconCarbide");
+
+
   Box hrppd_Solid(xysize / 2, xysize / 2, hrppd_container_volume_thickness / 2);
 
   Volume hrppdVol_air(detName + "_air_hrppd", hrppd_Solid, air);
-  Volume hrppdVol(detName + "_hrppd", hrppd_Solid, sensorMat);
+//  Volume hrppdVol(detName + "_hrppd", hrppd_Solid, sensorMat);
 
   hrppdVol_air.setSensitiveDetector(sens);
   hrppdVol_air.setVisAttributes(gasvolVis);
@@ -345,7 +355,7 @@ static Ref_t createDetector(Detector& description, xml_h e, SensitiveDetector se
   // Quartz Window
   Box wnd_Solid(xysize / 2, xysize / 2, wndthick / 2);
 
-  Volume wndVol(detName + "_wnd", wnd_Solid, gasvolMat);
+  Volume wndVol(detName + "_wnd", wnd_Solid, HRPPD_WindowMat);
   wndVol.setVisAttributes(gasvolVis);
 
   double accu = -hrppd_container_volume_thickness / 2;
@@ -368,7 +378,7 @@ static Ref_t createDetector(Detector& description, xml_h e, SensitiveDetector se
 
   SubtractionSolid ceramic(cerbox, cut_box, Position(0, 0, -_HRPPD_BASEPLATE_THICKNESS_));
 
-  Volume ceramicVol(detName + "_ceramic", ceramic, air);
+  Volume ceramicVol(detName + "_ceramic", ceramic, HRPPD_MPDMat);
   ceramicVol.setVisAttributes(gasvolVis);
 
   PlacedVolume ceramicPV =
@@ -379,7 +389,7 @@ static Ref_t createDetector(Detector& description, xml_h e, SensitiveDetector se
   // Plating body
 
   Box plating_solid(xyopen / 2, xyopen / 2, _HRPPD_PLATING_LAYER_THICKNESS_ / 2);
-  Volume platingVol(detName + "_plating", plating_solid, air);
+  Volume platingVol(detName + "_plating", plating_solid, HRPPD_MPDMat);
 
   platingVol.setVisAttributes(gasvolVis);
   PlacedVolume platingPV =
@@ -390,7 +400,7 @@ static Ref_t createDetector(Detector& description, xml_h e, SensitiveDetector se
   // MCP body
 
   Box mcp_solid(xyopen / 2, xyopen / 2, _EFFECTIVE_MCP_THICKNESS_ / 2);
-  Volume mcpVol(detName + "_mcp", mcp_solid, air);
+  Volume mcpVol(detName + "_mcp", mcp_solid, HRPPD_MPDMat);
 
   mcpVol.setVisAttributes(gasvolVis);
   PlacedVolume mcpPV = hrppdVol_air.placeVolume(
@@ -403,7 +413,7 @@ static Ref_t createDetector(Detector& description, xml_h e, SensitiveDetector se
   double pdthick = 0.001;
 
   Box pdbox_solid(xyactive / 2, xyactive / 2, pdthick / 2);
-  Volume pdboxVol(detName + "_pd", pdbox_solid, air);
+  Volume pdboxVol(detName + "_pd", pdbox_solid, HRPPD_MPDMat);
 
   pdboxVol.setVisAttributes(gasvolVis);
   PlacedVolume pdboxPV =
@@ -413,7 +423,7 @@ static Ref_t createDetector(Detector& description, xml_h e, SensitiveDetector se
   pdboxDE.setPlacement(pdboxPV);
 
   Box qdbox_solid(xyactive / 2, xyactive / 2, pdthick / 2);
-  Volume qdboxVol(detName + "_qd", qdbox_solid, air);
+  Volume qdboxVol(detName + "_qd", qdbox_solid, HRPPD_MPDMat);
 
   qdboxVol.setVisAttributes(gasvolVis);
   PlacedVolume qdboxPV = hrppdVol_air.placeVolume(qdboxVol, Position(0.0, 0.0, accu + pdthick / 2));
@@ -426,7 +436,7 @@ static Ref_t createDetector(Detector& description, xml_h e, SensitiveDetector se
   /// PCB Board
 
   Box pcb_solid(_READOUT_PCB_SIZE_ / 2, _READOUT_PCB_SIZE_ / 2, _READOUT_PCB_THICKNESS_ / 2);
-  Volume pcbVol(detName + "_pcb", pcb_solid, air);
+  Volume pcbVol(detName + "_pcb", pcb_solid, HRPPD_PCBMat);
 
   pcbVol.setVisAttributes(gasvolVis);
   PlacedVolume pcbPV =
@@ -440,7 +450,7 @@ static Ref_t createDetector(Detector& description, xml_h e, SensitiveDetector se
   // ASIC Board
 
   Box asic_solid(_ASIC_SIZE_XY_ / 2, _ASIC_SIZE_XY_ / 2, _ASIC_THICKNESS_ / 2);
-  Volume asicVol(detName + "_asic", asic_solid, mirrorMat);
+  Volume asicVol(detName + "_asic", asic_solid, HRPPD_ASICMat);
   asicVol.setVisAttributes(mirrorVis);
 
   double asic_pitch = _READOUT_PCB_SIZE_ / 2;
