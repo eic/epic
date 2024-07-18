@@ -197,7 +197,7 @@ static Ref_t create_MPGDCylinderBarrelTracker(Detector& description, xml_h e,
     if (fabs(rmin2 - rmin1) > 1.e6) {
       StaveModel& staveMode2 = staveModels[nStaveModels++];
       staveMode2.rmin        = rmin2;
-      staveModel.rsensor     = rsensor+rmin2-rmin1;
+      staveModel.rsensor     = rsensor + rmin2 - rmin1;
       staveModel.nphi        = nphi;
       staveMode2.offset      = offset;
       staveMode2.io          = io;
@@ -319,7 +319,7 @@ static Ref_t create_MPGDCylinderBarrelTracker(Detector& description, xml_h e,
     // We intend to use it to set up two discrimination schemes:
     // i) Stave model w/ its distinctive radius.
     // ii) Readout coordinate: phi or Z.
-    int sensor_number = 2*iSM;
+    int sensor_number      = 2 * iSM;
     StaveModel& staveModel = staveModels[iSM];
     // phi range, when excluding frames
     double stave_rmin = staveModel.rmin;
@@ -431,19 +431,20 @@ static Ref_t create_MPGDCylinderBarrelTracker(Detector& description, xml_h e,
         // depending on wether the support is above or below the sensor (!?)
         double inner_thickness = thickness_so_far + comp_thickness / 2;
         double outer_thickness = total_thickness - inner_thickness;
-	// Consistency(+/-1um) check: segmentation = stack of module components
-	double rXCheck = comp_rmin + comp_thickness/2;
-	if (fabs(staveModel.rsensor-rXCheck)>.0001/cm) {
+        // Consistency(+/-1um) check: segmentation = stack of module components
+        double rXCheck = comp_rmin + comp_thickness / 2;
+        if (fabs(staveModel.rsensor - rXCheck) > .0001 / cm) {
           printout(ERROR, "MPGDCylinderBarrelTracker",
-                   "Sensitive Component \"%s\" of StaveModel #%d,\"%s\": rsensor(%.4f cm) != radius @ sensitive surface(%.4f cm)",
-                   iSM,c_nam.c_str(),staveModel.name.c_str(),
-		   staveModel.rsensor/cm,rXCheck/cm);
+                   "Sensitive Component \"%s\" of StaveModel #%d,\"%s\": rsensor(%.4f cm) != "
+                   "radius @ sensitive surface(%.4f cm)",
+                   iSM, c_nam.c_str(), staveModel.name.c_str(), staveModel.rsensor / cm,
+                   rXCheck / cm);
           throw runtime_error("Logics error in building modules.");
         }
-	printout(DEBUG, "MPGDCylinderBarrelTracker",
-		 "Stave Model #%d,\"%s\": Sensitive surface @ R = %.4f (%.4f,%.4f) cm",
-		 iSM,staveModel.name.c_str(),staveModel.rsensor/cm,
-		 inner_thickness/cm,outer_thickness/cm);
+        printout(DEBUG, "MPGDCylinderBarrelTracker",
+                 "Stave Model #%d,\"%s\": Sensitive surface @ R = %.4f (%.4f,%.4f) cm", iSM,
+                 staveModel.name.c_str(), staveModel.rsensor / cm, inner_thickness / cm,
+                 outer_thickness / cm);
 
         SurfaceType type(SurfaceType::Sensitive);
         VolPlane surf(c_vol, type, inner_thickness, outer_thickness, u, v, n); //,o ) ;
