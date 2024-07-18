@@ -151,6 +151,10 @@ static Ref_t create_MPGDCylinderBarrelTracker(Detector& description, xml_h e,
   typedef struct {
     string name;
     double rmin;
+    // "rsensor" is supposed to have been set equal to the radius specified in
+    // the segmentation and is used here to double-check the consistency
+    // between the stack of module components and that segmentation radius.
+    double rsensor;
     int nphi;
     double offset;
     int io;
@@ -165,9 +169,9 @@ static Ref_t create_MPGDCylinderBarrelTracker(Detector& description, xml_h e,
   }
   int nStaveModels;
   for (nStaveModels = 0; mi; ++mi) {
-    //double rmin1 = mi.attr<double>(_U(rmin1)), rmin2 = mi.attr<double>(_U(rmin2));
     xml_comp_t x_model = mi;
     double rmin1 = x_model.rmin1(), rmin2 = x_model.rmin2();
+    double rsensor = x_model.attr<double>(_Unicode(rsensor));
     // Determine "nphi" from stave width and radius
     int nphi  = int(2 * M_PI * rmin1 / stave_width + .5),
         nphi2 = int(2 * M_PI * rmin2 / stave_width + .5);
@@ -180,6 +184,7 @@ static Ref_t create_MPGDCylinderBarrelTracker(Detector& description, xml_h e,
     double offset          = x_model.offset();
     StaveModel& staveModel = staveModels[nStaveModels++];
     staveModel.rmin        = rmin1;
+    staveModel.rsensor     = rsensor;
     staveModel.nphi        = nphi;
     staveModel.offset      = offset;
     int io;
@@ -192,6 +197,7 @@ static Ref_t create_MPGDCylinderBarrelTracker(Detector& description, xml_h e,
     if (fabs(rmin2 - rmin1) > 1.e6) {
       StaveModel& staveMode2 = staveModels[nStaveModels++];
       staveMode2.rmin        = rmin2;
+      staveModel.rsensor     = rsensor+rmin2-rmin1;
       staveModel.nphi        = nphi;
       staveMode2.offset      = offset;
       staveMode2.io          = io;
@@ -309,6 +315,11 @@ static Ref_t create_MPGDCylinderBarrelTracker(Detector& description, xml_h e,
   // ********** LOOP OVER STAVE MODELS
   double total_length = 0; // Total length including frames
   for (int iSM = 0; iSM < nStaveModels; iSM++) {
+    // "sensor_number" = Bit field in cellID identifying the sensitive surface.
+    // We intend to use it to set up two discrimination schemes:
+    // i) Stave model w/ its distinctive radius.
+    // ii) Readout coordinate: phi or Z.
+    int sensor_number = 2*iSM;
     StaveModel& staveModel = staveModels[iSM];
     // phi range, when excluding frames
     double stave_rmin = staveModel.rmin;
@@ -383,7 +394,6 @@ static Ref_t create_MPGDCylinderBarrelTracker(Detector& description, xml_h e,
 
     // ********** LOOP OVER COMPONENTS
     double comp_rmin          = stave_rmin;
-    int sensor_number         = 1;
     double thickness_so_far   = 0;
     xml_comp_t* sensitiveComp = 0;
     for (xml_coll_t mci(x_mod, _U(module_component)); mci; ++mci) {
@@ -405,7 +415,7 @@ static Ref_t create_MPGDCylinderBarrelTracker(Detector& description, xml_h e,
                    c_nam.c_str(), m_nam.c_str(), sensitiveComp->nameStr().c_str());
           throw runtime_error("Logics error in building modules.");
         }
-        sensitiveComp = &x_comp; // TOTO: Add second sensitives
+        sensitiveComp = &x_comp; // TODO: Add second sensitive
         pv.addPhysVolID("sensor", sensor_number++);
         c_vol.setSensitiveDetector(sens);
         sensitives.push_back(pv);
@@ -415,12 +425,25 @@ static Ref_t create_MPGDCylinderBarrelTracker(Detector& description, xml_h e,
         Vector3D v(0., -1., 0.);
         Vector3D n(0., 0., 1.);
 
-        // compute the inner (i.e. thickness until mid-sensitive-volume) and
+        // Compute the inner (i.e. thickness until mid-sensitive-volume) and
         //             outer (from mid-sensitive-volume to top)
         // thicknesses that need to be assigned to the tracking surface
         // depending on wether the support is above or below the sensor (!?)
         double inner_thickness = thickness_so_far + comp_thickness / 2;
         double outer_thickness = total_thickness - inner_thickness;
+	// Consistency(+/-1um) check: segmentation = stack of module components
+	double rXCheck = comp_rmin + comp_thickness/2;
+	if (fabs(staveModel.rsensor-rXCheck)>.0001/cm) {
+          printout(ERROR, "MPGDCylinderBarrelTracker",
+                   "Sensitive Component \"%s\" of StaveModel #%d,\"%s\": rsensor(%.4f cm) != radius @ sensitive surface(%.4f cm)",
+                   iSM,c_nam.c_str(),staveModel.name.c_str(),
+		   staveModel.rsensor/cm,rXCheck/cm);
+          throw runtime_error("Logics error in building modules.");
+        }
+	printout(DEBUG, "MPGDCylinderBarrelTracker",
+		 "Stave Model #%d,\"%s\": Sensitive surface @ R = %.4f (%.4f,%.4f) cm",
+		 iSM,staveModel.name.c_str(),staveModel.rsensor/cm,
+		 inner_thickness/cm,outer_thickness/cm);
 
         SurfaceType type(SurfaceType::Sensitive);
         VolPlane surf(c_vol, type, inner_thickness, outer_thickness, u, v, n); //,o ) ;
