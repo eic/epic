@@ -70,7 +70,7 @@ inline void EnsureFileFromURLExists(std::string url, std::string file, std::stri
 
   // if file exists and is symlink to correct hash
   fs::path hash_path(parent_path / hash);
-  if (fs::exists(file_path) && fs::equivalent(file_path, hash_path)) {
+  if (fs::exists(file_path) && fs::exists(hash_path) && fs::equivalent(file_path, hash_path)) {
     printout(INFO, "FileLoader", "link " + file + " -> hash " + hash + " already exists");
     return;
   }
@@ -151,7 +151,8 @@ inline void EnsureFileFromURLExists(std::string url, std::string file, std::stri
     // file already exists
     if (fs::is_symlink(file_path)) {
       // file is symlink
-      if (fs::equivalent(hash_path, fs::read_symlink(file_path))) {
+      fs::path symlink_target = fs::read_symlink(file_path);
+      if (fs::exists(symlink_target) && fs::equivalent(hash_path, symlink_target)) {
         // link points to correct path
         return;
       } else {
