@@ -100,4 +100,3 @@ if __name__ == '__main__':
     save_path = '.'.join(args.data_path.split('.')[:-1]) + '.png'
     fig.savefig(save_path)
     print('Plot saved as \"{}\"'.format(save_path))
-
