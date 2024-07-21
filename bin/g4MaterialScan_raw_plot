@@ -88,6 +88,7 @@ if __name__ == '__main__':
         ax2.set_ylabel('$\Lambda$ (Cumulative)', fontsize=fs, color=colors[1])
         ax.xaxis.set_minor_locator(AutoMinorLocator(5))
         ax.yaxis.set_minor_locator(AutoMinorLocator(5))
+        ax2.yaxis.set_minor_locator(AutoMinorLocator(5))
         ax.set_xlim(min_pl, max_pl)
         ax.set_ylim(0, dfr['X0_cum'].max()*1.1)
         ax2.set_ylim(0, dfr['lambda_cum'].max()*1.1)
