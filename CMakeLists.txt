@@ -8,6 +8,10 @@ PROJECT(epic
   DESCRIPTION "DD4hep Geometry Description of the EPIC Experiment"
   )
 
+# Set version based on git
+include(cmake/git_version.cmake)
+set_git_version(CMAKE_PROJECT_VERSION)
+
 # C++ standard
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD 17 CACHE STRING "Set the C++ standard to be used")
