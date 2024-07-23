@@ -106,6 +106,7 @@ install(DIRECTORY calibrations/
 
 #-----------------------------------------------------------------------------------
 # Configure and install compact/version.xml
+#
 configure_file(templates/version.xml.in ${CMAKE_CURRENT_BINARY_DIR}/version.xml @ONLY)
 install(FILES ${CMAKE_CURRENT_BINARY_DIR}/version.xml
     DESTINATION ${CMAKE_INSTALL_DATADIR}/${PROJECT_NAME}/compact
