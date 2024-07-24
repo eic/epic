@@ -1,0 +1,41 @@
+<!-- SPDX-License-Identifier: LGPL-3.0-or-later -->
+<!-- Copyright (C) 2023 Wouter Deconinck, Leszek Kosarzewski -->
+
+<lccdd>
+  <define>
+    <documentation>
+      #### Dimension constants
+    </documentation>
+    <constant name="FluxEndcapN_zshift" value="FluxEndcapN_collar_thickness-FluxEndcapN_exterior_thickness"/>
+    <constant name="FluxEndcapN_zmin" value="BackwardServiceGap_zmax"/>
+
+  </define>
+
+
+  <!-- Define detector -->
+  <detectors>
+    <documentation>
+      ### Backward (Negative Z) Endcap Flux Return
+    </documentation>
+    <detector name="FluxEndcapN" type="epic_EndcapFluxReturn" vis="FluxEndcapNVis" reflect="true">
+      <position x="0" y="0" z="-FluxEndcapN_zmin"/>
+
+       <layer id="1" name="Collar" material="Steel235"
+        rmin="FluxEndcapN_collar_rmin" rmax="FluxEndcapN_collar_rmax" zpos="0*cm"
+        thickness="FluxEndcapN_collar_thickness" vis="FluxEndcapNLayerVis"
+       />
+       <layer id="2" name="Oculus" material="Steel235"
+        rmin="FluxEndcapN_oculus_rmin" rmax="FluxEndcapN_oculus_rmax" zpos="0*cm"
+        thickness="FluxEndcapN_oculus_thickness" vis="FluxEndcapNLayerVis"
+       />
+       <layer id="3" name="FluxReturn" material="Steel235"
+        rmin="FluxEndcapN_exterior_rmin" rmax="FluxEndcapN_exterior_rmax" zpos="FluxEndcapN_zshift"
+        thickness="FluxEndcapN_exterior_thickness" vis="FluxEndcapNLayerVis"
+       />
+
+
+    </detector>
+  </detectors>
+
+
+</lccdd>

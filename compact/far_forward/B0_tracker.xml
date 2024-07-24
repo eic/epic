@@ -120,7 +120,8 @@
         <ring phi0="-B0TrackerLayerSmallMod_phi0" dphi="B0TrackerModOpeningAngle"
           r="B0TrackerMod1Inner_r+B0TrackerMod1Small_y/2.0" zstart="0.0*mm"
           nmodules="B0TrackerLayerSmallMod_nModules" dz="0 * mm" module="SmallModule1" />
-        <layer_material surface="inner" binning="binPhi,binR" bins0="20*(B0TrackerLayerSmallMod_nModules)" bins1="256"/>
+        <layer_material surface="inner" binning="binPhi,binR" bins0="2*(B0TrackerLayerSmallMod_nModules)" bins1="12"/>
+        <layer_material surface="outer" binning="binPhi,binR" bins0="2*(B0TrackerLayerSmallMod_nModules)" bins1="12"/>
       </layer>
       <layer id="2" >
         <envelope vis="FFTrackerLayerVis" rmin_tolerance="0*mm" rmax_tolerance="0*mm"
@@ -132,7 +133,8 @@
         <ring phi0="-B0TrackerLayerSmallMod_phi0" dphi="B0TrackerModOpeningAngle"
           r="B0TrackerMod1Inner_r+B0TrackerMod2Small_y/2.0" zstart="0.0*mm"
           nmodules="B0TrackerLayerSmallMod_nModules" dz="0 * mm" module="SmallModule2" />
-        <layer_material surface="inner" binning="binPhi,binR" bins0="20*(B0TrackerLayerSmallMod_nModules)" bins1="256"/>
+        <layer_material surface="inner" binning="binPhi,binR" bins0="2*(B0TrackerLayerSmallMod_nModules)" bins1="12"/>
+        <layer_material surface="outer" binning="binPhi,binR" bins0="2*(B0TrackerLayerSmallMod_nModules)" bins1="12"/>
       </layer>
       <layer id="3" >
         <envelope vis="FFTrackerLayerVis" rmin_tolerance="0*mm" rmax_tolerance="0*mm"
@@ -144,7 +146,8 @@
         <ring phi0="-B0TrackerLayerSmallMod_phi0" dphi="B0TrackerModOpeningAngle"
           r="B0TrackerMod1Inner_r+B0TrackerMod3Small_y/2.0" zstart="0.0*mm"
           nmodules="B0TrackerLayerSmallMod_nModules" dz="0 * mm" module="SmallModule3" />
-        <layer_material surface="inner" binning="binPhi,binR" bins0="20*(B0TrackerLayerSmallMod_nModules)" bins1="256"/>
+        <layer_material surface="inner" binning="binPhi,binR" bins0="2*(B0TrackerLayerSmallMod_nModules)" bins1="12"/>
+        <layer_material surface="outer" binning="binPhi,binR" bins0="2*(B0TrackerLayerSmallMod_nModules)" bins1="12"/>
       </layer>
       <layer id="4" >
         <envelope vis="FFTrackerLayerVis" rmin_tolerance="0*mm" rmax_tolerance="0*mm"
@@ -156,7 +159,8 @@
         <ring phi0="-B0TrackerLayerSmallMod_phi0" dphi="B0TrackerModOpeningAngle"
           r="B0TrackerMod1Inner_r+B0TrackerMod4Small_y/2.0" zstart="0.0*mm"
           nmodules="B0TrackerLayerSmallMod_nModules" dz="0 * mm" module="SmallModule4" />
-        <layer_material surface="inner" binning="binPhi,binR" bins0="20*(B0TrackerLayerSmallMod_nModules)" bins1="256"/>
+        <layer_material surface="inner" binning="binPhi,binR" bins0="2*(B0TrackerLayerSmallMod_nModules)" bins1="12"/>
+        <layer_material surface="outer" binning="binPhi,binR" bins0="2*(B0TrackerLayerSmallMod_nModules)" bins1="12"/>
       </layer>
     </detector>
 

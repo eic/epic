@@ -18,21 +18,20 @@
 
 using namespace dd4hep;
 
-void usage(int argc, char** argv)
-{
-  std::cerr << "Usage: -plugin <name> -arg [-arg]                                                  \n"
-               "     cache:<string>           cache location (may be read-only)                    \n"
-               "     file:<string>            file location                                        \n"
-               "     url:<string>             url location                                         \n"
-               "     cmd:<string>             download command with {0} for url, {1} for output    \n"
-               "\tArguments given: "
-            << arguments(argc, argv) << std::endl;
+void usage(int argc, char** argv) {
+  std::cerr
+      << "Usage: -plugin <name> -arg [-arg]                                                  \n"
+         "     cache:<string>           cache location (may be read-only)                    \n"
+         "     file:<string>            file location                                        \n"
+         "     url:<string>             url location                                         \n"
+         "     cmd:<string>             download command with {0} for url, {1} for output    \n"
+         "\tArguments given: "
+      << arguments(argc, argv) << std::endl;
   std::exit(EINVAL);
 }
 
 // Plugin to download files
-long load_file(Detector& /* desc */, int argc, char** argv)
-{
+long load_file(Detector& /* desc */, int argc, char** argv) {
   // argument parsing
   std::string cache, file, url;
   for (int i = 0; i < argc && argv[i]; ++i) {

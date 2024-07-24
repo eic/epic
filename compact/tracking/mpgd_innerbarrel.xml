@@ -120,6 +120,7 @@
           z_length="InnerMPGDBarrelLayer1_length"
           z0="0" />
         <layer_material surface="inner" binning="binPhi,binZ" bins0="MPGDBarrelStave_count" bins1="100" />
+        <layer_material surface="outer" binning="binPhi,binZ" bins0="MPGDBarrelStave_count" bins1="100" />
         <rphi_layout phi_tilt="0" nphi="MPGDBarrelStave_count" phi0="0.0" rc="InnerMPGDBarrelMod1_rmin" dr="0.0 * mm"/>
         <z_layout dr="0.0 * mm" z0="0" nz="1"/>
     </layer>
@@ -146,6 +147,7 @@
           z_length="InnerMPGDBarrelLayer2_length"
           z0="-InnerMPGDBarrelMod2_zpos"/>
         <layer_material surface="inner" binning="binPhi,binZ" bins0="MPGDBarrelStave_count" bins1="100" />
+        <layer_material surface="outer" binning="binPhi,binZ" bins0="MPGDBarrelStave_count" bins1="100" />
         <rphi_layout phi_tilt="0" nphi="MPGDBarrelStave_count" phi0="0.0" rc="InnerMPGDBarrelMod2_rmin" dr="0.0 * mm"/>
         <z_layout dr="0.0 * mm" z0="0" nz="1"/>
       </layer>
@@ -172,6 +174,7 @@
           z_length="InnerMPGDBarrelLayer3_length"
           z0="InnerMPGDBarrelMod3_zpos"/>
         <layer_material surface="inner" binning="binPhi,binZ" bins0="MPGDBarrelStave_count" bins1="100" />
+        <layer_material surface="outer" binning="binPhi,binZ" bins0="MPGDBarrelStave_count" bins1="100" />
         <rphi_layout phi_tilt="0" nphi="MPGDBarrelStave_count" phi0="0.0" rc="InnerMPGDBarrelMod3_rmin" dr="0.0 * mm"/>
         <z_layout dr="0.0 * mm" z0="0" nz="1"/>
        </layer>

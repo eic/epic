@@ -24,15 +24,14 @@ using namespace dd4hep;
 using namespace dd4hep::rec;
 
 // create the detector
-static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetector sens)
-{
+static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetector sens) {
 
-  xml::DetElement       detElem = handle;
-  std::string           detName = detElem.nameStr();
-  int                   detID   = detElem.id();
-  xml::Component        dims    = detElem.dimensions();
+  xml::DetElement detElem       = handle;
+  std::string detName           = detElem.nameStr();
+  int detID                     = detElem.id();
+  xml::Component dims           = detElem.dimensions();
   OpticalSurfaceManager surfMgr = desc.surfaceManager();
-  DetElement            det(detName, detID);
+  DetElement det(detName, detID);
   sens.setType("tracker");
 
   // attributes, from compact file =============================================
@@ -89,6 +88,7 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
   auto sensorboxLength = desc.constant<double>("DRICH_sensorbox_length");
   auto sensorboxRmin   = desc.constant<double>("DRICH_sensorbox_rmin");
   auto sensorboxRmax   = desc.constant<double>("DRICH_sensorbox_rmax");
+  auto sensorboxDphi   = desc.constant<double>("DRICH_sensorbox_dphi");
   // - sensor photosensitive surface (pss)
   auto pssElem      = detElem.child(_Unicode(sensors)).child(_Unicode(pss));
   auto pssMat       = desc.material(pssElem.attr<std::string>(_Unicode(material)));
@@ -157,7 +157,7 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
    * - `cellMask` is defined such that a hit's `cellID & cellMask` is the corresponding sensor's unique ID
    */
   std::vector<std::string> sensorIDfields = {"pdu", "sipm", "sector"};
-  const auto&              readoutCoder   = *desc.readout(readoutName).idSpec().decoder();
+  const auto& readoutCoder                = *desc.readout(readoutName).idSpec().decoder();
   // determine `cellMask` based on `sensorIDfields`
   uint64_t cellMask = 0;
   for (const auto& idField : sensorIDfields)
@@ -187,9 +187,9 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
   // snout solids
   double boreDelta  = vesselRmin1 - vesselRmin0;
   double snoutDelta = vesselRmax1 - vesselRmax0;
-  Cone   vesselSnout(snoutLength / 2.0, vesselRmin0, vesselRmax0, vesselRmin0 + boreDelta * snoutLength / vesselLength,
-                   vesselRmax1);
-  Cone   gasvolSnout(
+  Cone vesselSnout(snoutLength / 2.0, vesselRmin0, vesselRmax0,
+                   vesselRmin0 + boreDelta * snoutLength / vesselLength, vesselRmax1);
+  Cone gasvolSnout(
       /* note: `gasvolSnout` extends a bit into the tank, so it touches `gasvolTank`
        * - the extension distance is equal to the tank `windowThickness`, so the
        *   length of `gasvolSnout` == length of `vesselSnout`
@@ -199,23 +199,55 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
       vesselRmin0 + boreDelta * (snoutLength - windowThickness) / vesselLength + wallThickness,
       vesselRmax1 - wallThickness + windowThickness * (vesselRmax1 - vesselRmax0) / snoutLength);
 
-  // tank solids
-  Cone vesselTank(tankLength / 2.0, vesselSnout.rMin2(), vesselRmax2, vesselRmin1, vesselRmax2);
-  Cone gasvolTank(tankLength / 2.0 - windowThickness, gasvolSnout.rMin2(), vesselRmax2 - wallThickness,
-                  vesselRmin1 + wallThickness, vesselRmax2 - wallThickness);
+  // tank solids:
+  // - inner: cone along beamline
+  // - outer: cone to back of sensor box, then fixed radius cylinder
+  Polycone vesselTank(
+      0, 2 * M_PI,
+      /* rmin */
+      {vesselSnout.rMin2(),
+       std::lerp(vesselSnout.rMin2(), vesselRmin1, (sensorboxLength - snoutLength) / tankLength),
+       vesselRmin1},
+      /* rmax */ {vesselSnout.rMax2(), vesselRmax2, vesselRmax2},
+      /* z    */
+      {-tankLength / 2.0, -tankLength / 2.0 + sensorboxLength - snoutLength, tankLength / 2.0});
+  Polycone gasvolTank(
+      0, 2 * M_PI,
+      /* rmin */
+      {gasvolSnout.rMin2(),
+       std::lerp(gasvolSnout.rMin2(), vesselRmin1 + wallThickness,
+                 (sensorboxLength - snoutLength) / tankLength),
+       vesselRmin1 + wallThickness},
+      /* rmax */ {gasvolSnout.rMax2(), vesselRmax2 - wallThickness, vesselRmax2 - wallThickness},
+      /* z    */
+      {-tankLength / 2.0 + windowThickness,
+       -tankLength / 2.0 + windowThickness + sensorboxLength - snoutLength,
+       tankLength / 2.0 - windowThickness});
 
   // sensorbox solids
-  // FIXME: this is currently just a simple tubular extrusion; this should be replaced by proper sensor boxes
-  Tube vesselSensorboxTube(sensorboxRmin, sensorboxRmax, sensorboxLength / 2.);
-  Tube gasvolSensorboxTube(sensorboxRmin + wallThickness, sensorboxRmax - wallThickness, sensorboxLength / 2.);
+  double dphi = atan2(wallThickness, sensorboxRmax); // thickness only correct at Rmax
+  Tube vesselSensorboxTube(sensorboxRmin, sensorboxRmax, sensorboxLength / 2., -sensorboxDphi / 2.,
+                           sensorboxDphi / 2.);
+  Tube gasvolSensorboxTube(sensorboxRmin + wallThickness, sensorboxRmax - wallThickness,
+                           sensorboxLength / 2., -sensorboxDphi / 2. + dphi,
+                           sensorboxDphi / 2. - dphi);
 
   // union: snout + tank
-  UnionSolid vesselUnion0(vesselTank, vesselSnout, Position(0., 0., -vesselLength / 2.));
-  UnionSolid gasvolUnion0(gasvolTank, gasvolSnout, Position(0., 0., -vesselLength / 2. + windowThickness));
+  UnionSolid vesselUnion(vesselTank, vesselSnout, Position(0., 0., -vesselLength / 2.));
+  UnionSolid gasvolUnion(gasvolTank, gasvolSnout,
+                         Position(0., 0., -vesselLength / 2. + windowThickness));
 
-  // union: add sensorbox
-  UnionSolid vesselUnion(vesselUnion0, vesselSensorboxTube, Position(0., 0., -(snoutLength + sensorboxLength - 0.6) / 2.));
-  UnionSolid gasvolUnion(gasvolUnion0, gasvolSensorboxTube, Position(0., 0., -(snoutLength + sensorboxLength) / 2. + windowThickness));
+  // union: add sensorboxes for all sectors
+  for (int isec = 0; isec < nSectors; isec++) {
+    RotationZ sectorRotation((isec + 0.5) * 2 * M_PI / nSectors);
+    vesselUnion = UnionSolid(
+        vesselUnion, vesselSensorboxTube,
+        Transform3D(sectorRotation, Position(0., 0., -(snoutLength + sensorboxLength - 0.6) / 2.)));
+    gasvolUnion = UnionSolid(
+        gasvolUnion, gasvolSensorboxTube,
+        Transform3D(sectorRotation,
+                    Position(0., 0., -(snoutLength + sensorboxLength) / 2. + windowThickness)));
+  }
 
   //  extra solids for `debugOptics` only
   Box vesselBox(1001, 1001, 1001);
@@ -258,12 +290,12 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
 
   // place gas volume
   PlacedVolume gasvolPV = vesselVol.placeVolume(gasvolVol, Position(0, 0, 0));
-  DetElement   gasvolDE(det, "gasvol_de", 0);
+  DetElement gasvolDE(det, "gasvol_de", 0);
   gasvolDE.setPlacement(gasvolPV);
 
   // place mother volume (vessel)
-  Volume       motherVol = desc.pickMotherVolume(det);
-  PlacedVolume vesselPV  = motherVol.placeVolume(vesselVol, vesselPos);
+  Volume motherVol      = desc.pickMotherVolume(det);
+  PlacedVolume vesselPV = motherVol.placeVolume(vesselVol, vesselPos);
   vesselPV.addPhysVolID("system", detID);
   det.setPlacement(vesselPV);
 
@@ -277,10 +309,14 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
                    radiatorRmax + snoutDelta * aerogelThickness / snoutLength,
                    radiatorRmin + boreDelta * (aerogelThickness + airgapThickness) / vesselLength,
                    radiatorRmax + snoutDelta * (aerogelThickness + airgapThickness) / snoutLength);
-  Cone filterSolid(filterThickness / 2, radiatorRmin + boreDelta * (aerogelThickness + airgapThickness) / vesselLength,
-                   radiatorRmax + snoutDelta * (aerogelThickness + airgapThickness) / snoutLength,
-                   radiatorRmin + boreDelta * (aerogelThickness + airgapThickness + filterThickness) / vesselLength,
-                   radiatorRmax + snoutDelta * (aerogelThickness + airgapThickness + filterThickness) / snoutLength);
+  Cone filterSolid(
+      filterThickness / 2,
+      radiatorRmin + boreDelta * (aerogelThickness + airgapThickness) / vesselLength,
+      radiatorRmax + snoutDelta * (aerogelThickness + airgapThickness) / snoutLength,
+      radiatorRmin +
+          boreDelta * (aerogelThickness + airgapThickness + filterThickness) / vesselLength,
+      radiatorRmax +
+          snoutDelta * (aerogelThickness + airgapThickness + filterThickness) / snoutLength);
 
   Volume aerogelVol(detName + "_aerogel", aerogelSolid, aerogelMat);
   Volume airgapVol(detName + "_airgap", airgapSolid, airgapMat);
@@ -292,10 +328,10 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
   // aerogel placement and surface properties
   // TODO [low-priority]: define skin properties for aerogel and filter
   // FIXME: radiatorPitch might not be working correctly (not yet used)
-  auto radiatorPos      = Position(0., 0., radiatorFrontplane + 0.5 * aerogelThickness) + originFront;
+  auto radiatorPos = Position(0., 0., radiatorFrontplane + 0.5 * aerogelThickness) + originFront;
   auto aerogelPlacement = Translation3D(radiatorPos) * // re-center to originFront
-                          RotationY(radiatorPitch); // change polar angle to specified pitch
-  auto       aerogelPV = gasvolVol.placeVolume(aerogelVol, aerogelPlacement);
+                          RotationY(radiatorPitch);    // change polar angle to specified pitch
+  auto aerogelPV = gasvolVol.placeVolume(aerogelVol, aerogelPlacement);
   DetElement aerogelDE(det, "aerogel_de", 0);
   aerogelDE.setPlacement(aerogelPV);
   // SkinSurface aerogelSkin(desc, aerogelDE, "mirror_optical_surface", aerogelSurf, aerogelVol);
@@ -305,18 +341,20 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
   if (!debugOptics) {
 
     auto airgapPlacement =
-        Translation3D(radiatorPos) *                                      // re-center to originFront
-        RotationY(radiatorPitch) *                                        // change polar angle
-        Translation3D(0., 0., (aerogelThickness + airgapThickness) / 2.); // move to aerogel backplane
+        Translation3D(radiatorPos) * // re-center to originFront
+        RotationY(radiatorPitch) *   // change polar angle
+        Translation3D(0., 0.,
+                      (aerogelThickness + airgapThickness) / 2.); // move to aerogel backplane
     auto airgapPV = gasvolVol.placeVolume(airgapVol, airgapPlacement);
     DetElement airgapDE(det, "airgap_de", 0);
     airgapDE.setPlacement(airgapPV);
 
     auto filterPlacement =
-        Translation3D(0., 0., airgapThickness) *                           // add an air gap
-        Translation3D(radiatorPos) *                                       // re-center to originFront
-        RotationY(radiatorPitch) *                                         // change polar angle
-        Translation3D(0., 0., (aerogelThickness + filterThickness) / 2.);  // move to aerogel backplane
+        Translation3D(0., 0., airgapThickness) * // add an air gap
+        Translation3D(radiatorPos) *             // re-center to originFront
+        RotationY(radiatorPitch) *               // change polar angle
+        Translation3D(0., 0.,
+                      (aerogelThickness + filterThickness) / 2.); // move to aerogel backplane
     auto filterPV = gasvolVol.placeVolume(filterVol, filterPlacement);
     DetElement filterDE(det, "filter_de", 0);
     filterDE.setPlacement(filterPV);
@@ -346,7 +384,7 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
       continue;
 
     // sector rotation about z axis
-    RotationZ   sectorRotation(isec * 2 * M_PI / nSectors);
+    RotationZ sectorRotation((isec + 0.5) * 2 * M_PI / nSectors);
     std::string secName = "sec" + std::to_string(isec);
 
     // BUILD MIRRORS ====================================================================
@@ -388,18 +426,19 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
 
     // solid : create sphere at origin, with specified angular limits;
     // phi limits are increased to fill gaps (overlaps are cut away later)
-    Sphere mirrorSolid1(mirrorRadius, mirrorRadius + mirrorThickness, mirrorTheta1, mirrorTheta2, -40 * degree,
-                        40 * degree);
+    Sphere mirrorSolid1(mirrorRadius, mirrorRadius + mirrorThickness, mirrorTheta1, mirrorTheta2,
+                        -40 * degree, 40 * degree);
 
     // mirror placement transformation (note: transformations are in reverse order)
     auto mirrorPos = Position(mirrorCenterX, 0., mirrorCenterZ) + originFront;
-    auto mirrorPlacement(Translation3D(mirrorPos) * // re-center to specified position
-                         RotationY(-mirrorThetaRot) // rotate about vertical axis, to be within vessel radial walls
+    auto mirrorPlacement(
+        Translation3D(mirrorPos) * // re-center to specified position
+        RotationY(-mirrorThetaRot) // rotate about vertical axis, to be within vessel radial walls
     );
 
     // cut overlaps with other sectors using "pie slice" wedges, to the extent specified
     // by `mirrorPhiw`
-    Tube              pieSlice(0.01 * cm, vesselRmax2, tankLength / 2.0, -mirrorPhiw / 2.0, mirrorPhiw / 2.0);
+    Tube pieSlice(0.01 * cm, vesselRmax2, tankLength / 2.0, -mirrorPhiw / 2.0, mirrorPhiw / 2.0);
     IntersectionSolid mirrorSolid2(pieSlice, mirrorSolid1, mirrorPlacement);
 
     // mirror volume, attributes, and placement
@@ -411,7 +450,8 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
     // properties
     DetElement mirrorDE(det, "mirror_de_" + secName, isec);
     mirrorDE.setPlacement(mirrorPV);
-    SkinSurface mirrorSkin(desc, mirrorDE, "mirror_optical_surface_" + secName, mirrorSurf, mirrorVol);
+    SkinSurface mirrorSkin(desc, mirrorDE, "mirror_optical_surface_" + secName, mirrorSurf,
+                           mirrorVol);
     mirrorSkin.isValid();
 
     // reconstruction constants (w.r.t. IP)
@@ -434,9 +474,12 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
     // reconstruction constants
     auto sensorSphPos         = Position(sensorSphCenterX, 0., sensorSphCenterZ) + originFront;
     auto sensorSphFinalCenter = sectorRotation * Position(xS, 0.0, zS);
-    desc.add(Constant("DRICH_sensor_sph_center_x_" + secName, std::to_string(sensorSphFinalCenter.x())));
-    desc.add(Constant("DRICH_sensor_sph_center_y_" + secName, std::to_string(sensorSphFinalCenter.y())));
-    desc.add(Constant("DRICH_sensor_sph_center_z_" + secName, std::to_string(sensorSphFinalCenter.z())));
+    desc.add(
+        Constant("DRICH_sensor_sph_center_x_" + secName, std::to_string(sensorSphFinalCenter.x())));
+    desc.add(
+        Constant("DRICH_sensor_sph_center_y_" + secName, std::to_string(sensorSphFinalCenter.y())));
+    desc.add(
+        Constant("DRICH_sensor_sph_center_z_" + secName, std::to_string(sensorSphFinalCenter.z())));
     if (isec == 0)
       desc.add(Constant("DRICH_sensor_sph_radius", std::to_string(sensorSphRadius)));
 
@@ -522,8 +565,9 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
           Box resinSolid(resinSide / 2., resinSide / 2., resinThickness / 2.);
 
           // embed pss solid in resin solid, by subtracting `pssSolid` from `resinSolid`
-          SubtractionSolid resinSolidEmbedded(resinSolid, pssSolid,
-              Transform3D(Translation3D(0., 0., (resinThickness - pssThickness) / 2. )));
+          SubtractionSolid resinSolidEmbedded(
+              resinSolid, pssSolid,
+              Transform3D(Translation3D(0., 0., (resinThickness - pssThickness) / 2.)));
 
           /* NOTE:
            * Here we could add gaps (size=`DRICH_pixel_gap`) between the pixels
@@ -569,20 +613,23 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
           Assembly pduAssembly(detName + "_pdu_" + secName);
           double pduSensorPitch     = resinSide + pduSensorGap;
           double pduSensorOffsetMax = pduSensorPitch * (pduNumSensors - 1) / 2.0;
-          int isipm = 0;
-          for(int sensorIx = 0; sensorIx < pduNumSensors; sensorIx++) {
-            for(int sensorIy = 0; sensorIy < pduNumSensors; sensorIy++) {
+          int isipm                 = 0;
+          for (int sensorIx = 0; sensorIx < pduNumSensors; sensorIx++) {
+            for (int sensorIy = 0; sensorIy < pduNumSensors; sensorIy++) {
 
               Assembly sensorAssembly(detName + "_sensor_" + secName);
 
               // placement transformations
               // - placement of objects in `sensorAssembly`
-              auto pssPlacement   = Transform3D(Translation3D(0., 0., -pssThickness / 2.0)); // set assembly origin to pss outermost surface centroid
+              auto pssPlacement   = Transform3D(Translation3D(
+                  0., 0.,
+                  -pssThickness / 2.0)); // set assembly origin to pss outermost surface centroid
               auto resinPlacement = Transform3D(Translation3D(0., 0., -resinThickness / 2.0));
               // - placement of a `sensorAssembly` in `pduAssembly`
-              auto pduSensorOffsetX        = sensorIx * pduSensorPitch - pduSensorOffsetMax;
-              auto pduSensorOffsetY        = sensorIy * pduSensorPitch - pduSensorOffsetMax;
-              auto sensorAssemblyPlacement = Transform3D(Translation3D(pduSensorOffsetX, pduSensorOffsetY, 0.0));
+              auto pduSensorOffsetX = sensorIx * pduSensorPitch - pduSensorOffsetMax;
+              auto pduSensorOffsetY = sensorIy * pduSensorPitch - pduSensorOffsetMax;
+              auto sensorAssemblyPlacement =
+                  Transform3D(Translation3D(pduSensorOffsetX, pduSensorOffsetY, 0.0));
 
               // placements
               auto pssPV = sensorAssembly.placeVolume(pssVol, pssPlacement);
@@ -590,40 +637,50 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
               pduAssembly.placeVolume(sensorAssembly, sensorAssemblyPlacement);
 
               // sensor readout // NOTE: follow `sensorIDfields`
-              pssPV.addPhysVolID("sector", isec).addPhysVolID("pdu", ipdu).addPhysVolID("sipm", isipm);
+              pssPV.addPhysVolID("sector", isec)
+                  .addPhysVolID("pdu", ipdu)
+                  .addPhysVolID("sipm", isipm);
 
               // sensor DetElement
-              auto        sensorID     = encodeSensorID(pssPV.volIDs());
-              std::string sensorIDname = secName + "_pdu" + std::to_string(ipdu) + "_sipm" + std::to_string(isipm);
+              auto sensorID = encodeSensorID(pssPV.volIDs());
+              std::string sensorIDname =
+                  secName + "_pdu" + std::to_string(ipdu) + "_sipm" + std::to_string(isipm);
               DetElement pssDE(det, "sensor_de_" + sensorIDname, sensorID);
               pssDE.setPlacement(pssPV);
 
               // sensor surface properties
               if (!debugOptics || debugOpticsMode == 3) {
-                SkinSurface pssSkin(desc, pssDE, "sensor_optical_surface_" + sensorIDname, pssSurf, pssVol);
+                SkinSurface pssSkin(desc, pssDE, "sensor_optical_surface_" + sensorIDname, pssSurf,
+                                    pssVol);
                 pssSkin.isValid();
               }
 
               // obtain some parameters useful for optics, so we don't have to figure them out downstream
               // - sensor position: the centroid of the active SURFACE of the `pss`
-              auto pduOrigin = ROOT::Math::XYZPoint(0,0,0);
-              auto sensorPos =
-                Translation3D(vesselPos) *   // position of vessel in world
-                pduAssemblyPlacement *       // position of PDU in vessel
-                sensorAssemblyPlacement *    // position of SiPM in PDU
-                pduOrigin;
-              auto pduPos =
-                Translation3D(vesselPos) *   // position of vessel in world
-                pduAssemblyPlacement *       // position of PDU in vessel
-                pduOrigin;
+              auto pduOrigin = ROOT::Math::XYZPoint(0, 0, 0);
+              auto sensorPos = Translation3D(vesselPos) * // position of vessel in world
+                               pduAssemblyPlacement *     // position of PDU in vessel
+                               sensorAssemblyPlacement *  // position of SiPM in PDU
+                               pduOrigin;
+              auto pduPos = Translation3D(vesselPos) * // position of vessel in world
+                            pduAssemblyPlacement *     // position of PDU in vessel
+                            pduOrigin;
               // - sensor surface basis: the orientation of the sensor surface
               //   NOTE: all sensors of a single PDU have the same surface orientation, but to avoid
               //         loss of generality downstream, define the basis for each sensor
-              auto normVector = [pduAssemblyPlacement] (Direction n) {
+              auto normVector = [pduAssemblyPlacement](Direction n) {
                 return pduAssemblyPlacement * n;
               };
-              auto sensorNormX = normVector(Direction{1., 0., 0.,});
-              auto sensorNormY = normVector(Direction{0., 1., 0.,});
+              auto sensorNormX = normVector(Direction{
+                  1.,
+                  0.,
+                  0.,
+              });
+              auto sensorNormY = normVector(Direction{
+                  0.,
+                  1.,
+                  0.,
+              });
 
               // geometry tests
               /* - to help ensure the optics geometry is correctly interpreted by the reconstruction,
@@ -632,73 +689,89 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
                *   `sensorNormX`, `sensorNormY` is wrong and/or the tests need to be updated
                */
               // - test: check if the sensor position is on the sensor sphere (corrected for PDU matrix offset)
-              auto distActual   = std::sqrt((sensorPos-sensorSphFinalCenter).Mag2());
+              auto distActual   = std::sqrt((sensorPos - sensorSphFinalCenter).Mag2());
               auto distExpected = std::hypot(pduSensorOffsetX, pduSensorOffsetY, sensorSphRadius);
               auto testOnSphere = distActual - distExpected;
-              if(std::abs(testOnSphere) > 1e-6) {
-                printout(ERROR, "DRICH_geo", "sensor %s failed on-sphere test; testOnSphere=%f", sensorIDname.c_str(), testOnSphere);
+              if (std::abs(testOnSphere) > 1e-6) {
+                printout(ERROR, "DRICH_geo", "sensor %s failed on-sphere test; testOnSphere=%f",
+                         sensorIDname.c_str(), testOnSphere);
                 throw std::runtime_error("dRICH sensor position test failed");
               }
               // - test: check the orientation
-              Direction radialDir = Direction(pduPos) - sensorSphFinalCenter; // sensor sphere radius direction
-              auto sensorNormZ    = sensorNormX.Cross(sensorNormY); // sensor surface normal
-              auto testOrtho      = sensorNormX.Dot(sensorNormY); // zero, if x and y vectors are orthogonal
-              auto testRadial     = radialDir.Cross(sensorNormZ).Mag2(); // zero, if surface normal is parallel to radial direction
-              auto testDirection  = radialDir.Dot(sensorNormZ); // positive, if radial direction == sensor normal direction (outward)
-              if(std::abs(testOrtho)>1e-6 || std::abs(testRadial)>1e-6 || testDirection<=0) {
-                printout(ERROR, "DRICH_geo", "sensor %s failed orientation test", sensorIDname.c_str());
+              Direction radialDir =
+                  Direction(pduPos) - sensorSphFinalCenter;      // sensor sphere radius direction
+              auto sensorNormZ = sensorNormX.Cross(sensorNormY); // sensor surface normal
+              auto testOrtho =
+                  sensorNormX.Dot(sensorNormY); // zero, if x and y vectors are orthogonal
+              auto testRadial =
+                  radialDir.Cross(sensorNormZ)
+                      .Mag2(); // zero, if surface normal is parallel to radial direction
+              auto testDirection = radialDir.Dot(
+                  sensorNormZ); // positive, if radial direction == sensor normal direction (outward)
+              if (std::abs(testOrtho) > 1e-6 || std::abs(testRadial) > 1e-6 || testDirection <= 0) {
+                printout(ERROR, "DRICH_geo", "sensor %s failed orientation test",
+                         sensorIDname.c_str());
                 printout(ERROR, "DRICH_geo", "  testOrtho     = %f; should be zero", testOrtho);
                 printout(ERROR, "DRICH_geo", "  testRadial    = %f; should be zero", testRadial);
-                printout(ERROR, "DRICH_geo", "  testDirection = %f; should be positive", testDirection);
+                printout(ERROR, "DRICH_geo", "  testDirection = %f; should be positive",
+                         testDirection);
                 throw std::runtime_error("dRICH sensor orientation test failed");
               }
 
               // add these optics parameters to this sensor's parameter map
               auto pssVarMap = pssDE.extension<VariantParameters>(false);
-              if(pssVarMap == nullptr) {
+              if (pssVarMap == nullptr) {
                 pssVarMap = new VariantParameters();
                 pssDE.addExtension<VariantParameters>(pssVarMap);
               }
-              auto addVecToMap = [pssVarMap] (std::string key, auto vec) {
-                pssVarMap->set<double>(key+"_x", vec.x());
-                pssVarMap->set<double>(key+"_y", vec.y());
-                pssVarMap->set<double>(key+"_z", vec.z());
+              auto addVecToMap = [pssVarMap](std::string key, auto vec) {
+                pssVarMap->set<double>(key + "_x", vec.x());
+                pssVarMap->set<double>(key + "_y", vec.y());
+                pssVarMap->set<double>(key + "_z", vec.z());
               };
               addVecToMap("pos", sensorPos);
               addVecToMap("normX", sensorNormX);
               addVecToMap("normY", sensorNormY);
               printout(DEBUG, "DRICH_geo", "sensor %s:", sensorIDname.c_str());
-              for(auto kv : pssVarMap->variantParameters)
-                printout(DEBUG, "DRICH_geo", "    %s: %f", kv.first.c_str(), pssVarMap->get<double>(kv.first));
+              for (auto kv : pssVarMap->variantParameters)
+                printout(DEBUG, "DRICH_geo", "    %s: %f", kv.first.c_str(),
+                         pssVarMap->get<double>(kv.first));
 
               // increment SIPM number
               isipm++;
-
             }
           } // end PDU SiPM matrix loop
 
           // front service volumes
-          Transform3D frontServiceTransformation = Transform3D(Translation3D(0., 0., -resinThickness));
-          for(xml::Collection_t serviceElem(pduElem.child(_Unicode(frontservices)), _Unicode(service)); serviceElem; ++serviceElem) {
+          Transform3D frontServiceTransformation =
+              Transform3D(Translation3D(0., 0., -resinThickness));
+          for (xml::Collection_t serviceElem(pduElem.child(_Unicode(frontservices)),
+                                             _Unicode(service));
+               serviceElem; ++serviceElem) {
             auto serviceName      = serviceElem.attr<std::string>(_Unicode(name));
             auto serviceSide      = serviceElem.attr<double>(_Unicode(side));
             auto serviceThickness = serviceElem.attr<double>(_Unicode(thickness));
-            auto serviceMat       = desc.material(serviceElem.attr<std::string>(_Unicode(material)));
-            auto serviceVis       = desc.visAttributes(serviceElem.attr<std::string>(_Unicode(vis)));
+            auto serviceMat = desc.material(serviceElem.attr<std::string>(_Unicode(material)));
+            auto serviceVis = desc.visAttributes(serviceElem.attr<std::string>(_Unicode(vis)));
             Box serviceSolid(serviceSide / 2.0, serviceSide / 2.0, serviceThickness / 2.0);
-            Volume serviceVol(detName + "_" + serviceName + "_" + secName, serviceSolid, serviceMat);
+            Volume serviceVol(detName + "_" + serviceName + "_" + secName, serviceSolid,
+                              serviceMat);
             serviceVol.setVisAttributes(serviceVis);
-            frontServiceTransformation = Transform3D(Translation3D(0., 0., -serviceThickness / 2.0)) * frontServiceTransformation;
+            frontServiceTransformation =
+                Transform3D(Translation3D(0., 0., -serviceThickness / 2.0)) *
+                frontServiceTransformation;
             pduAssembly.placeVolume(serviceVol, frontServiceTransformation);
-            frontServiceTransformation = Transform3D(Translation3D(0., 0., -serviceThickness / 2.0)) * frontServiceTransformation;
+            frontServiceTransformation =
+                Transform3D(Translation3D(0., 0., -serviceThickness / 2.0)) *
+                frontServiceTransformation;
           }
 
           // circuit board volumes
           auto boardsElem = pduElem.child(_Unicode(boards));
-          auto boardsMat = desc.material(boardsElem.attr<std::string>(_Unicode(material)));
-          auto boardsVis = desc.visAttributes(boardsElem.attr<std::string>(_Unicode(vis)));
+          auto boardsMat  = desc.material(boardsElem.attr<std::string>(_Unicode(material)));
+          auto boardsVis  = desc.visAttributes(boardsElem.attr<std::string>(_Unicode(vis)));
           Transform3D backServiceTransformation;
-          for(xml::Collection_t boardElem(boardsElem, _Unicode(board)); boardElem; ++boardElem) {
+          for (xml::Collection_t boardElem(boardsElem, _Unicode(board)); boardElem; ++boardElem) {
             auto boardName      = boardElem.attr<std::string>(_Unicode(name));
             auto boardWidth     = boardElem.attr<double>(_Unicode(width));
             auto boardLength    = boardElem.attr<double>(_Unicode(length));
@@ -707,25 +780,34 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
             Box boardSolid(boardWidth / 2.0, boardThickness / 2.0, boardLength / 2.0);
             Volume boardVol(detName + "_" + boardName + "+" + secName, boardSolid, boardsMat);
             boardVol.setVisAttributes(boardsVis);
-            auto boardTransformation = Translation3D(0., boardOffset, -boardLength / 2.0) * frontServiceTransformation;
+            auto boardTransformation =
+                Translation3D(0., boardOffset, -boardLength / 2.0) * frontServiceTransformation;
             pduAssembly.placeVolume(boardVol, boardTransformation);
-            if(boardName=="RDO")
-              backServiceTransformation = Translation3D(0., 0., -boardLength) * frontServiceTransformation;
+            if (boardName == "RDO")
+              backServiceTransformation =
+                  Translation3D(0., 0., -boardLength) * frontServiceTransformation;
           }
 
           // back service volumes
-          for(xml::Collection_t serviceElem(pduElem.child(_Unicode(backservices)), _Unicode(service)); serviceElem; ++serviceElem) {
+          for (xml::Collection_t serviceElem(pduElem.child(_Unicode(backservices)),
+                                             _Unicode(service));
+               serviceElem; ++serviceElem) {
             auto serviceName      = serviceElem.attr<std::string>(_Unicode(name));
             auto serviceSide      = serviceElem.attr<double>(_Unicode(side));
             auto serviceThickness = serviceElem.attr<double>(_Unicode(thickness));
-            auto serviceMat       = desc.material(serviceElem.attr<std::string>(_Unicode(material)));
-            auto serviceVis       = desc.visAttributes(serviceElem.attr<std::string>(_Unicode(vis)));
+            auto serviceMat = desc.material(serviceElem.attr<std::string>(_Unicode(material)));
+            auto serviceVis = desc.visAttributes(serviceElem.attr<std::string>(_Unicode(vis)));
             Box serviceSolid(serviceSide / 2.0, serviceSide / 2.0, serviceThickness / 2.0);
-            Volume serviceVol(detName + "_" + serviceName + "_" + secName, serviceSolid, serviceMat);
+            Volume serviceVol(detName + "_" + serviceName + "_" + secName, serviceSolid,
+                              serviceMat);
             serviceVol.setVisAttributes(serviceVis);
-            backServiceTransformation = Transform3D(Translation3D(0., 0., -serviceThickness / 2.0)) * backServiceTransformation;
+            backServiceTransformation =
+                Transform3D(Translation3D(0., 0., -serviceThickness / 2.0)) *
+                backServiceTransformation;
             pduAssembly.placeVolume(serviceVol, backServiceTransformation);
-            backServiceTransformation = Transform3D(Translation3D(0., 0., -serviceThickness / 2.0)) * backServiceTransformation;
+            backServiceTransformation =
+                Transform3D(Translation3D(0., 0., -serviceThickness / 2.0)) *
+                backServiceTransformation;
           }
 
           // place PDU assembly
@@ -735,8 +817,8 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
           ipdu++;
 
         } // end patch cuts
-      }   // end phiGen loop
-    }     // end thetaGen loop
+      } // end phiGen loop
+    } // end thetaGen loop
 
     // END SENSOR MODULE LOOP ------------------------
 

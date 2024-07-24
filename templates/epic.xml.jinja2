@@ -48,6 +48,7 @@
     <include ref="${DETECTOR_PATH}/compact/far_forward/definitions.xml" />
     <include ref="${DETECTOR_PATH}/compact/far_backward/definitions.xml" />
     <include ref="${DETECTOR_PATH}/compact/definitions.xml" />
+    <include ref="${DETECTOR_PATH}/compact/version.xml"/>
     <include ref="${DD4hepINSTALL}/DDDetectors/compact/detector_types.xml"/>
   </define>
 
@@ -57,6 +58,8 @@
     <gdmlFile ref="${DETECTOR_PATH}/compact/materials.xml"/>
   </includes>
   <include ref="${DETECTOR_PATH}/compact/optical_materials.xml"/>
+
+  <include ref="${DETECTOR_PATH}/compact/calibrations.xml"/>
 
   <limits>
     <limitset name="world_limits">
@@ -182,7 +185,7 @@
     ## Far foward detectors
   </documentation>
   {% for ff in features['far_forward'] -%}
-  <include ref="${DETECTOR_PATH}/compact/{{ ff }}.xml"/>
+  <include ref="${DETECTOR_PATH}/compact/far_forward/{{ ff }}.xml"/>
   {% endfor -%}
 {% endif -%}
 
@@ -191,7 +194,7 @@
     ## Far backward detectors
   </documentation>
   {% for fb in features['far_backward'] -%}
-  <include ref="${DETECTOR_PATH}/compact/{{ fb }}.xml"/>
+  <include ref="${DETECTOR_PATH}/compact/far_backward/{{ fb }}.xml"/>
   {% endfor -%}
 {% endif -%}
 

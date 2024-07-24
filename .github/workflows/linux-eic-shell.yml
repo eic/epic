@@ -18,7 +18,7 @@ jobs:
   xmllint-before-build:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
     - run: |
         sudo apt-get update
         sudo apt-get install -y libxml2-utils
@@ -30,7 +30,7 @@ jobs:
       configs_csv: ${{ steps.list-detector-configs.outputs.configs_csv }}
       configs_json: ${{ steps.list-detector-configs.outputs.configs_json }}
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
     - id: list-detector-configs
       run: |
         CONFIGS_CSV=$(
@@ -57,13 +57,13 @@ jobs:
     env:
       PREFIX: ${{ github.workspace }}/install
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
     - name: Prepare ccache timestamp
       id: ccache_cache_timestamp
       run: |
         echo "timestamp=$(date --iso-8601=minutes)" >> $GITHUB_OUTPUT
     - name: Retrieve ccache cache files
-      uses: actions/cache@v3
+      uses: actions/cache@v4
       with:
         path: .ccache
         key: ccache-${{ matrix.CC }}-${{ github.ref_name }}-${{ steps.ccache_cache_timestamp.outputs.timestamp }}
@@ -77,7 +77,7 @@ jobs:
         echo "cache_dir=${{ github.workspace }}/.ccache" >> ~/.ccache/ccache.conf
         echo "max_size=500MB" >> ~/.ccache/ccache.conf
         echo "compression=true" >> ~/.ccache/ccache.conf
-    - uses: cvmfs-contrib/github-action-cvmfs@v3
+    - uses: cvmfs-contrib/github-action-cvmfs@v4
     - name: Setup CVMFS OSG eic-shell environment
       uses: eic/run-cvmfs-osg-eic-shell@main
       with:
@@ -90,20 +90,20 @@ jobs:
         platform-release: "jug_xl:nightly"
         run: |
           CC=${{ matrix.CC }} CXX=${{ matrix.CXX }} cmake -B build -S . -DCMAKE_INSTALL_PREFIX=${PREFIX} -DCMAKE_C_COMPILER_LAUNCHER=ccache -DCMAKE_CXX_COMPILER_LAUNCHER=ccache
-          cmake --build build -- -k -j 2 install
-    - uses: actions/upload-artifact@v3
+          cmake --build build -- -k -j $(getconf _NPROCESSORS_ONLN) install
+    - uses: actions/upload-artifact@v4
       with:
         name: build-${{ matrix.CC }}-full-eic-shell
         path: install/
         if-no-files-found: error
     - run: |
-        source install/setup.sh
+        source install/bin/thisepic.sh
         sed -i 's%\(<fiber\|<lens\)%<comment>\1%g; s%\(/fiber>\|/lens>\)%\1</comment>%g' \
           ${DETECTOR_PATH}/compact/ecal/barrel_interlayers.xml \
           ${DETECTOR_PATH}/compact/ecal/forward_scfi.xml \
           ${DETECTOR_PATH}/compact/far_forward/ZDC_Ecal_WSciFi.xml \
           ${DETECTOR_PATH}/compact/pid/mrich.xml
-    - uses: actions/upload-artifact@v3
+    - uses: actions/upload-artifact@v4
       with:
         name: build-${{ matrix.CC }}-fast-eic-shell
         path: install/
@@ -113,7 +113,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: build
     steps:
-    - uses: actions/download-artifact@v3
+    - uses: actions/download-artifact@v4
       with:
         name: build-gcc-full-eic-shell
         path: install/
@@ -128,7 +128,7 @@ jobs:
       - xmllint-after-build
       - list-detector-configs
     steps:
-    - uses: eic/trigger-gitlab-ci@v2
+    - uses: eic/trigger-gitlab-ci@v3
       id: trigger
       with:
         url: https://eicweb.phy.anl.gov
@@ -140,7 +140,7 @@ jobs:
           DETECTOR_REPOSITORYURL=${{ github.server_url }}/${{ github.repository }}
           DETECTOR_REPOSITORYREF=${{ github.ref }}
           DETECTOR_CONFIG=${{ needs.list-detector-configs.outputs.configs_csv }}
-          DETECTOR_VERSION=${{ github.event.pull_request.head.ref || github.ref_name }}
+          DETECTOR_VERSION=${{ github.sha }}
           GITHUB_REPOSITORY=${{ github.repository }}
           GITHUB_SHA=${{ github.event.pull_request.head.sha || github.sha }}
           GITHUB_PR=${{ github.event.pull_request.number }}
@@ -151,17 +151,17 @@ jobs:
       - build
       - list-detector-configs
     steps:
-    - uses: actions/checkout@v3
-    - uses: actions/download-artifact@v3
+    - uses: actions/checkout@v4
+    - uses: actions/download-artifact@v4
       with:
         name: build-gcc-fast-eic-shell
         path: install/
-    - uses: cvmfs-contrib/github-action-cvmfs@v3
+    - uses: cvmfs-contrib/github-action-cvmfs@v4
     - uses: eic/run-cvmfs-osg-eic-shell@main
       with:
         platform-release: "jug_xl:nightly"
         network_types: "none"
-        setup: install/setup.sh
+        setup: install/bin/thisepic.sh
         run: |
           IFS=, read -a configs <<< "${{ needs.list-detector-configs.outputs.configs_csv }}"
           for config in ${configs[@]} ; do
@@ -173,21 +173,55 @@ jobs:
   check-tracking-geometry:
     runs-on: ubuntu-latest
     needs: build
+    strategy:
+      matrix:
+        detector_config: [epic_craterlake, epic_ip6]
     steps:
-    - uses: actions/checkout@v3
-    - uses: actions/download-artifact@v3
+    - uses: actions/checkout@v4
+    - uses: actions/download-artifact@v4
       with:
         name: build-gcc-fast-eic-shell
         path: install/
-    - uses: cvmfs-contrib/github-action-cvmfs@v3
+    - uses: cvmfs-contrib/github-action-cvmfs@v4
     - uses: eic/run-cvmfs-osg-eic-shell@main
       with:
         platform-release: "jug_xl:nightly"
         network_types: "none"
-        setup: install/setup.sh
+        setup: install/bin/thisepic.sh
         run: |
-          root -b -q "scripts/test_ACTS.cxx+(\"${DETECTOR_PATH}/${DETECTOR_CONFIG}.xml\")" | tee check_tracking_geometry.out
+          root -b -q "scripts/test_ACTS.cxx+(\"${DETECTOR_PATH}/${{matrix.detector_config}}.xml\")" | tee check_tracking_geometry.out
           bin/acts_geo_check check_tracking_geometry.out
+
+  validate-material-map:
+    runs-on: ubuntu-latest
+    needs:
+      - build
+      - check-tracking-geometry
+    steps:
+    - uses: actions/checkout@v4
+    - uses: actions/download-artifact@v4
+      with:
+        name: build-gcc-full-eic-shell
+        path: install/
+    - uses: cvmfs-contrib/github-action-cvmfs@v4
+    - uses: eic/run-cvmfs-osg-eic-shell@main
+      with:
+        platform-release: "jug_xl:nightly"
+        setup: install/bin/thisepic.sh
+        run: |
+          pushd scripts/material_map
+          export DETECTOR_CONFIG=epic_craterlake_material_map
+          ./run_material_map_validation.sh
+          popd
+    - uses: actions/upload-artifact@v4
+      with:
+        name: material_map
+        path: |
+          "scripts/material_map/*.json"
+          "scripts/material_map/*.root"
+          scripts/material_map/Surfaces/
+          scripts/material_map/Validation/
+        if-no-files-found: error
 
   convert-to-gdml:
     runs-on: ubuntu-latest
@@ -195,17 +229,17 @@ jobs:
       - build
       - list-detector-configs
     steps:
-    - uses: actions/checkout@v3
-    - uses: actions/download-artifact@v3
+    - uses: actions/checkout@v4
+    - uses: actions/download-artifact@v4
       with:
         name: build-gcc-full-eic-shell
         path: install/
-    - uses: cvmfs-contrib/github-action-cvmfs@v3
+    - uses: cvmfs-contrib/github-action-cvmfs@v4
     - uses: eic/run-cvmfs-osg-eic-shell@main
       with:
         platform-release: "jug_xl:nightly"
         network_types: "none"
-        setup: install/setup.sh
+        setup: install/bin/thisepic.sh
         run: |
           IFS=, read -a configs <<< "${{ needs.list-detector-configs.outputs.configs_csv }}"
           for config in ${configs[@]} ; do
@@ -213,7 +247,7 @@ jobs:
             geoConverter -compact2gdml -input ${DETECTOR_PATH}/${config}.xml -output ${config}.gdml ;
             echo "::endgroup::" ;
           done
-    - uses: actions/upload-artifact@v3
+    - uses: actions/upload-artifact@v4
       with:
         name: gdml
         path: "*.gdml"
@@ -225,17 +259,17 @@ jobs:
       - build
       - list-detector-configs
     steps:
-    - uses: actions/checkout@v3
-    - uses: actions/download-artifact@v3
+    - uses: actions/checkout@v4
+    - uses: actions/download-artifact@v4
       with:
         name: build-gcc-full-eic-shell
         path: install/
-    - uses: cvmfs-contrib/github-action-cvmfs@v3
+    - uses: cvmfs-contrib/github-action-cvmfs@v4
     - uses: eic/run-cvmfs-osg-eic-shell@main
       with:
         platform-release: "jug_xl:nightly"
         network_types: "none"
-        setup: install/setup.sh
+        setup: install/bin/thisepic.sh
         run: |
           IFS=, read -a configs <<< "${{ needs.list-detector-configs.outputs.configs_csv }}"
           for config in ${configs[@]} ; do
@@ -243,10 +277,47 @@ jobs:
             geoConverter -compact2tgeo -input ${DETECTOR_PATH}/${config}.xml -output ${config}.root
             echo "::endgroup::" ;
           done
-    - uses: actions/upload-artifact@v3
+    - uses: actions/upload-artifact@v4
       with:
         name: tgeo
         path: "*.root"
+        if-no-files-found: error
+
+  convert-to-step:
+    runs-on: ubuntu-latest
+    needs:
+      - build
+      - list-detector-configs
+    strategy:
+      matrix: ${{fromJson(needs.list-detector-configs.outputs.configs_json)}}
+    steps:
+    - uses: actions/checkout@v4
+    - uses: actions/download-artifact@v4
+      with:
+        name: build-gcc-fast-eic-shell
+        path: install/
+    - uses: cvmfs-contrib/github-action-cvmfs@v4
+    - uses: eic/run-cvmfs-osg-eic-shell@main
+      with:
+        platform-release: "jug_xl:nightly"
+        network_types: "none"
+        setup: install/bin/thisepic.sh
+        run: |
+          # For some reason npdet_to_step really wants a space in IFS
+          IFS=$' \n\t'
+          # First get all detectors (except world)
+          declare -A detectors
+          while read d ; do detectors[$d]='-l 3' ; done <<< $(npdet_to_step list $DETECTOR_PATH/${{matrix.detector_config}}.xml  | sed '/world/d;s/.*(vol: \(.*\)).*/\1/g')
+          # Then tweak the levels (default is 1)
+          detectors[HcalBarrel]='-l 1'
+          detectors[LFHCAL]='-l 2'
+          detectors[OuterBarrelMPGDSubAssembly]='-l 4'
+          # Export to one STEP file
+          npdet_to_step $(for d in ${!detectors[@]} ; do echo part ${detectors[$d]} $d ; done) -o ${{matrix.detector_config}} $DETECTOR_PATH/${{matrix.detector_config}}.xml 2>&1 | sed '/TGeoMatrix::dtor/d'
+    - uses: actions/upload-artifact@v4
+      with:
+        name: ${{matrix.detector_config}}.stp
+        path: ${{matrix.detector_config}}.stp
         if-no-files-found: error
 
   dump-constants:
@@ -256,23 +327,23 @@ jobs:
       matrix:
         detector_config: [epic_craterlake]
     steps:
-    - uses: actions/checkout@v3
-    - uses: actions/download-artifact@v3
+    - uses: actions/checkout@v4
+    - uses: actions/download-artifact@v4
       with:
         name: build-gcc-full-eic-shell
         path: install/
-    - uses: cvmfs-contrib/github-action-cvmfs@v3
+    - uses: cvmfs-contrib/github-action-cvmfs@v4
     - uses: eic/run-cvmfs-osg-eic-shell@main
       with:
         platform-release: "jug_xl:nightly"
         network_types: "none"
-        setup: install/setup.sh
+        setup: install/bin/thisepic.sh
         run: |
           mkdir -p doc
           npdet_info dump ${DETECTOR_PATH}/${{matrix.detector_config}}.xml | tee doc/${{matrix.detector_config}}_constants.out
-    - uses: actions/upload-artifact@v3
+    - uses: actions/upload-artifact@v4
       with:
-        name: constants
+        name: ${{matrix.detector_config}}_constants.out
         path: doc/${{matrix.detector_config}}_constants.out
         if-no-files-found: error
 
@@ -283,17 +354,17 @@ jobs:
       matrix:
         detector_config: [epic_craterlake]
     steps:
-    - uses: actions/checkout@v3
-    - uses: actions/download-artifact@v3
+    - uses: actions/checkout@v4
+    - uses: actions/download-artifact@v4
       with:
         name: build-gcc-full-eic-shell
         path: install/
-    - uses: cvmfs-contrib/github-action-cvmfs@v3
+    - uses: cvmfs-contrib/github-action-cvmfs@v4
     - uses: eic/run-cvmfs-osg-eic-shell@main
       with:
         platform-release: "jug_xl:nightly"
         network_types: "none"
-        setup: install/setup.sh
+        setup: install/bin/thisepic.sh
         run: |
           mkdir -p doc
           npdet_info dump ${DETECTOR_PATH}/${{matrix.detector_config}}.xml | grep -v '^\s' | grep '=' | cut -d= -f1-2 | tee doc/${{matrix.detector_config}}_constants.toml
@@ -306,18 +377,41 @@ jobs:
             ".output doc/${{matrix.detector_config}}.html" \
             "select * from detector_parameter_table;"
           sed -i '1s/^/<html><body><table border="1" style="border-collapse:collapse">\n/;$a</table></body></html>' doc/${{matrix.detector_config}}.html
-    - uses: actions/upload-artifact@v3
+    - uses: actions/upload-artifact@v4
       with:
-        name: constants
+        name: ${{matrix.detector_config}}_constants.toml
         path: doc/${{matrix.detector_config}}_constants.toml
         if-no-files-found: error
-    - uses: actions/upload-artifact@v3
+    - uses: actions/upload-artifact@v4
       with:
-        name: DetectorParameterTable
+        name: ${{matrix.detector_config}}_DetectorParameterTable
         path: |
           doc/${{matrix.detector_config}}.csv
           doc/${{matrix.detector_config}}.html
         if-no-files-found: error
+
+  merge-constants:
+    runs-on: ubuntu-latest
+    needs:
+    - dump-constants
+    - dump-parameter-table
+    steps:
+    - uses: actions/upload-artifact/merge@v4
+      with:
+        name: constants
+        pattern: '*_constants.*'
+        delete-merged: true
+
+  merge-parameter-table:
+    runs-on: ubuntu-latest
+    needs:
+    - dump-parameter-table
+    steps:
+    - uses: actions/upload-artifact/merge@v4
+      with:
+        name: DetectorParameterTable
+        pattern: '*_DetectorParameterTable'
+        delete-merged: true
 
   check-overlap-tgeo:
     runs-on: ubuntu-latest
@@ -328,17 +422,17 @@ jobs:
         detector_config: [epic_craterlake] # FIXME
       fail-fast: false
     steps:
-    - uses: actions/checkout@v3
-    - uses: actions/download-artifact@v3
+    - uses: actions/checkout@v4
+    - uses: actions/download-artifact@v4
       with:
         name: build-gcc-full-eic-shell
         path: install/
-    - uses: cvmfs-contrib/github-action-cvmfs@v3
+    - uses: cvmfs-contrib/github-action-cvmfs@v4
     - uses: eic/run-cvmfs-osg-eic-shell@main
       with:
         platform-release: "jug_xl:nightly"
         network_types: "bridge" # this job must succeed even when new artifacts
-        setup: install/setup.sh
+        setup: install/bin/thisepic.sh
         run: |
           mkdir -p doc
           checkOverlaps --option ${{ matrix.option }} -c ${DETECTOR_PATH}/${{ matrix.detector_config }}.xml | tee doc/overlap_check_tgeo.out
@@ -350,21 +444,21 @@ jobs:
     needs: build
     if: github.ref == 'refs/heads/main'
     steps:
-    - uses: actions/checkout@v3
-    - uses: actions/download-artifact@v3
+    - uses: actions/checkout@v4
+    - uses: actions/download-artifact@v4
       with:
         name: build-gcc-full-eic-shell
         path: install/
-    - uses: cvmfs-contrib/github-action-cvmfs@v3
+    - uses: cvmfs-contrib/github-action-cvmfs@v4
     - uses: eic/run-cvmfs-osg-eic-shell@main
       with:
         platform-release: "jug_xl:nightly"
-        setup: install/setup.sh
+        setup: install/bin/thisepic.sh
         run: |
           mkdir -p doc
           checkGeometry -f true -c ${DETECTOR_PATH}/${DETECTOR_CONFIG}.xml | tee geometry_check_full.out
           mv statistics.root geometry_check_full.root
-    - uses: actions/upload-artifact@v3
+    - uses: actions/upload-artifact@v4
       with:
         name: check-geometry-full
         path: |
@@ -381,17 +475,17 @@ jobs:
         detector_config: [epic_craterlake]
       fail-fast: false
     steps:
-    - uses: actions/checkout@v3
-    - uses: actions/download-artifact@v3
+    - uses: actions/checkout@v4
+    - uses: actions/download-artifact@v4
       with:
         name: build-gcc-full-eic-shell
         path: install/
-    - uses: cvmfs-contrib/github-action-cvmfs@v3
+    - uses: cvmfs-contrib/github-action-cvmfs@v4
     - uses: eic/run-cvmfs-osg-eic-shell@main
       with:
         platform-release: "jug_xl:nightly"
         network_types: "bridge" # this job must succeed even when new artifacts
-        setup: install/setup.sh
+        setup: install/bin/thisepic.sh
         run: |
           mkdir -p doc
           python scripts/checkOverlaps.py -c ${DETECTOR_PATH}/${{ matrix.detector_config }}.xml | tee doc/overlap_check_geant4.out
@@ -406,44 +500,56 @@ jobs:
         detector_config: [epic_inner_detector, epic_craterlake]
       fail-fast: false
     steps:
-    - uses: actions/checkout@v3
-    - uses: actions/download-artifact@v3
+    - uses: actions/checkout@v4
+    - uses: actions/download-artifact@v4
       with:
         name: build-gcc-fast-eic-shell
         path: install/
-    - uses: cvmfs-contrib/github-action-cvmfs@v3
+    - uses: cvmfs-contrib/github-action-cvmfs@v4
     - uses: eic/run-cvmfs-osg-eic-shell@main
       with:
         platform-release: "jug_xl:nightly"
         network_types: "bridge" # this job must succeed even when new artifacts
-        setup: install/setup.sh
+        setup: install/bin/thisepic.sh
         run: |
           mkdir -p doc
           python scripts/checkOverlaps.py -c ${DETECTOR_PATH}/${{ matrix.detector_config }}.xml | tee doc/overlap_check_geant4.out
           noverlaps="$(grep -c GeomVol1002 doc/overlap_check_geant4.out || true)"
           if [[ "${noverlaps}" -gt "0" ]] ; then echo "${noverlaps} overlaps found!" && false ; fi
 
-  trigger-detector-benchmarks:
+  trigger-benchmarks:
     runs-on: ubuntu-latest
     needs: [check-overlap-tgeo, check-overlap-geant4-fast]
     strategy:
       matrix:
         detector_config: [epic_craterlake]
+        benchmark_repo: [detector_benchmarks, physics_benchmarks, reconstruction_benchmarks]
+        include:
+        - benchmark_repo: detector_benchmarks
+          project_id: 399
+          secret_var: EICWEB_DETECTOR_BENCHMARK_TRIGGER
+        - benchmark_repo: physics_benchmarks
+          project_id: 400
+          secret_var: EICWEB_PHYSICS_BENCHMARK_TRIGGER
+        - benchmark_repo: reconstruction_benchmarks
+          project_id: 408
+          secret_var: EICWEB_RECONSTRUCTION_BENCHMARK_TRIGGER
     steps:
-    - uses: eic/trigger-gitlab-ci@v2
+    - uses: eic/trigger-gitlab-ci@v3
       id: trigger
       with:
         url: https://eicweb.phy.anl.gov
-        project_id: 399
-        token: ${{ secrets.EICWEB_DETECTOR_BENCHMARK_TRIGGER }}
+        project_id: ${{ matrix.project_id }}
+        token: ${{ secrets[matrix.secret_var] }}
         ref_name: master
         variables: |
           DETECTOR=epic
           DETECTOR_REPOSITORYURL=${{ github.server_url }}/${{ github.repository }}
-          DETECTOR_VERSION=${{ github.event.pull_request.head.ref || github.ref_name }}
+          DETECTOR_VERSION=${{ github.sha }}
           DETECTOR_CONFIG=${{ matrix.detector_config }}
           GITHUB_REPOSITORY=${{ github.repository }}
           GITHUB_SHA=${{ github.event.pull_request.head.sha || github.sha }}
+          PIPELINE_NAME=${{ github.event.pull_request.title || github.ref_name }}
     - run: |
         gh api \
            --method POST \
@@ -452,7 +558,7 @@ jobs:
           -f state="pending" \
           -f target_url="${{ steps.trigger.outputs.web_url }}" \
           -f description="Triggered... $(TZ=America/New_York date)" \
-          -f context="eicweb/detector_benchmarks (${{ matrix.detector_config }})"
+          -f context="eicweb/${{ matrix.benchmark_repo }} (${{ matrix.detector_config }})"
       env:
         GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
@@ -464,20 +570,20 @@ jobs:
         detector_config: [epic_craterlake]
       fail-fast: false
     steps:
-    - uses: actions/checkout@v3
-    - uses: actions/download-artifact@v3
+    - uses: actions/checkout@v4
+    - uses: actions/download-artifact@v4
       with:
         name: build-gcc-fast-eic-shell
         path: install/
-    - uses: cvmfs-contrib/github-action-cvmfs@v3
+    - uses: cvmfs-contrib/github-action-cvmfs@v4
     - uses: eic/run-cvmfs-osg-eic-shell@main
       with:
         platform-release: "jug_xl:nightly"
         network_types: "none"
-        setup: install/setup.sh
+        setup: install/bin/thisepic.sh
         run: |
           bin/generate_prim_file -c $DETECTOR_PATH/${{ matrix.detector_config }}.xml -o prim -D -t ${{ matrix.detector_config }}
-    - uses: actions/upload-artifact@v3
+    - uses: actions/upload-artifact@v4
       with:
         name: ${{ matrix.detector_config }}.prim
         path: prim/${{ matrix.detector_config }}.prim
@@ -493,12 +599,12 @@ jobs:
         detector_config: [epic_craterlake]
       fail-fast: false
     steps:
-    - uses: actions/checkout@v3
-    - uses: actions/download-artifact@v3
+    - uses: actions/checkout@v4
+    - uses: actions/download-artifact@v4
       with:
         name: ${{ matrix.detector_config }}.prim
         path: prim/
-    - uses: cvmfs-contrib/github-action-cvmfs@v3
+    - uses: cvmfs-contrib/github-action-cvmfs@v4
     - uses: eic/run-cvmfs-osg-eic-shell@main
       with:
         platform-release: "jug_xl:nightly"
@@ -506,9 +612,9 @@ jobs:
         run: |
           mkdir -p images
           bin/make_dawn_views -i prim/${{ matrix.detector_config }}.prim -t ${{ matrix.view }} -d scripts/${{ matrix.view }} -D
-    - uses: actions/upload-artifact@v3
+    - uses: actions/upload-artifact@v4
       with:
-        name: ${{ matrix.detector_config }}_views
+        name: ${{ matrix.detector_config }}_views_${{ matrix.view }}
         path: images/
         if-no-files-found: error
 
@@ -523,12 +629,12 @@ jobs:
         detector_config: [epic_craterlake]
       fail-fast: false
     steps:
-    - uses: actions/checkout@v3
-    - uses: actions/download-artifact@v3
+    - uses: actions/checkout@v4
+    - uses: actions/download-artifact@v4
       with:
         name: ${{ matrix.detector_config }}.prim
         path: prim/
-    - uses: cvmfs-contrib/github-action-cvmfs@v3
+    - uses: cvmfs-contrib/github-action-cvmfs@v4
     - uses: eic/run-cvmfs-osg-eic-shell@main
       with:
         platform-release: "jug_xl:nightly"
@@ -536,30 +642,173 @@ jobs:
         run: |
           mkdir -p images
           bin/make_dawn_views -i prim/${{ matrix.detector_config }}.prim -t ${{ matrix.view }} -d scripts/${{ matrix.view }} -D -- ${{ matrix.slice }}
-    - uses: actions/upload-artifact@v3
+    - uses: actions/upload-artifact@v4
       with:
-        name: ${{ matrix.detector_config }}_views
+        name: ${{ matrix.detector_config }}_views_${{ matrix.view }}_${{ matrix.slice }}
         path: images/
         if-no-files-found: error
 
 #TODO view20
 
-  build-artifacts-page:
+  merge-dawn-view:
     runs-on: ubuntu-latest
     needs:
     - dawn-view
     - dawn-view-slices
+    strategy:
+      matrix:
+        detector_config: [epic_craterlake]
+    steps:
+    - uses: actions/upload-artifact/merge@v4
+      with:
+        name: ${{ matrix.detector_config }}_views
+        pattern: ${{ matrix.detector_config }}_views_*
+        delete-merged: true
+
+  npsim-gun:
+    runs-on: ubuntu-latest
+    needs: build
+    strategy:
+      matrix:
+        particle: [pi, e]
+        detector_config: [epic_craterlake]
+    steps:
+    - uses: actions/checkout@v4
+    - uses: actions/download-artifact@v4
+      with:
+        name: build-gcc-full-eic-shell
+        path: install/
+    - uses: cvmfs-contrib/github-action-cvmfs@v4
+    - name: Produce simulation files
+      uses: eic/run-cvmfs-osg-eic-shell@main
+      with:
+        platform-release: "jug_xl:nightly"
+        setup: install/bin/thisepic.sh
+        run: |
+          npsim --compactFile ${DETECTOR_PATH}/${{ matrix.detector_config }}.xml -G --random.seed 1 --gun.particle "${{ matrix.particle }}-" --gun.momentumMin "1*GeV" --gun.momentumMax "20*GeV" --gun.distribution "uniform" -N 100 --outputFile sim_${{ matrix.particle }}_1GeV_20GeV_${{ matrix.detector_config }}.edm4hep.root -v WARNING
+    - uses: actions/upload-artifact@v4
+      with:
+        name: sim_${{ matrix.particle }}_1GeV_20GeV_${{ matrix.detector_config }}.edm4hep.root
+        path: sim_${{ matrix.particle }}_1GeV_20GeV_${{ matrix.detector_config }}.edm4hep.root
+        if-no-files-found: error
+    - name: Download previous artifact
+      id: download_previous_artifact
+      uses: dawidd6/action-download-artifact@v6
+      with:
+        branch: ${{ github.event.pull_request.base.ref || github.ref_name }}
+        path: ref/
+        name: sim_${{ matrix.particle }}_1GeV_20GeV_${{ matrix.detector_config }}.edm4hep.root
+        workflow_conclusion: ""
+        if_no_artifact_found: warn
+    - name: Compare to previous artifacts
+      uses: eic/run-cvmfs-osg-eic-shell@main
+      with:
+        platform-release: "jug_xl:nightly"
+        setup: install/bin/thisepic.sh
+        run: |
+          export PYTHONPATH=$HOME/.local/lib/python3.10/site-packages:$PYTHONPATH
+          mkdir capybara-reports
+          shopt -s nullglob
+          capybara bara ref/sim_${{ matrix.particle }}_1GeV_20GeV_${{ matrix.detector_config }}.edm4hep.root* sim_${{ matrix.particle }}_1GeV_20GeV_${{ matrix.detector_config }}.edm4hep.root
+          mv capybara-reports sim_${{ matrix.particle }}_1GeV_20GeV_${{ matrix.detector_config }}
+          touch .sim_${{ matrix.particle }}_1GeV_20GeV_${{ matrix.detector_config }}
+    - uses: actions/upload-artifact@v4
+      with:
+        name: sim_${{ matrix.particle }}_1GeV_20GeV_${{ matrix.detector_config }}.capy
+        path: |
+          .sim_${{ matrix.particle }}_1GeV_20GeV_${{ matrix.detector_config }}
+          sim_${{ matrix.particle }}_1GeV_20GeV_${{ matrix.detector_config }}/
+        if-no-files-found: error
+
+  npsim-dis:
+    runs-on: ubuntu-latest
+    needs: build
+    strategy:
+      matrix:
+        beam: [5x41, 10x100, 18x275]
+        minq2: [1, 1000]
+        detector_config: [epic_craterlake]
+        exclude:
+        - beam: 5x41
+          minq2: 1000
+    steps:
+    - uses: actions/checkout@v4
+    - uses: actions/download-artifact@v4
+      with:
+        name: build-gcc-full-eic-shell
+        path: install/
+    - uses: cvmfs-contrib/github-action-cvmfs@v4
+    - name: Produce simulation files
+      uses: eic/run-cvmfs-osg-eic-shell@main
+      with:
+        platform-release: "jug_xl:nightly"
+        setup: install/bin/thisepic.sh
+        run: |
+          url=root://dtn-eic.jlab.org//work/eic2/EPIC/EVGEN/DIS/NC/${{matrix.beam}}/minQ2=${{matrix.minq2}}/pythia8NCDIS_${{matrix.beam}}_minQ2=${{matrix.minq2}}_beamEffects_xAngle=-0.025_hiDiv_1.hepmc3.tree.root
+          npsim --compactFile ${DETECTOR_PATH}/${{ matrix.detector_config }}.xml -N 100 --inputFiles ${url} --random.seed 1 --outputFile sim_dis_${{matrix.beam}}_minQ2=${{matrix.minq2}}_${{ matrix.detector_config }}.edm4hep.root -v WARNING
+    - uses: actions/upload-artifact@v4
+      with:
+        name: sim_dis_${{matrix.beam}}_minQ2=${{matrix.minq2}}_${{ matrix.detector_config }}.edm4hep.root
+        path: sim_dis_${{matrix.beam}}_minQ2=${{matrix.minq2}}_${{ matrix.detector_config }}.edm4hep.root
+        if-no-files-found: error
+    - name: Download previous artifact
+      id: download_previous_artifact
+      uses: dawidd6/action-download-artifact@v6
+      with:
+        branch: ${{ github.event.pull_request.base.ref || github.ref_name }}
+        path: ref/
+        name: sim_dis_${{matrix.beam}}_minQ2=${{matrix.minq2}}_${{ matrix.detector_config }}.edm4hep.root
+        workflow_conclusion: ""
+        if_no_artifact_found: warn
+    - name: Compare to previous artifacts
+      uses: eic/run-cvmfs-osg-eic-shell@main
+      with:
+        platform-release: "jug_xl:nightly"
+        setup: install/bin/thisepic.sh
+        run: |
+          pip install 'pygithub>=2' 'bokeh>=3'
+          export PYTHONPATH=$HOME/.local/lib/python3.10/site-packages:$PYTHONPATH
+          mkdir capybara-reports
+          shopt -s nullglob
+          capybara bara ref/sim_dis_${{matrix.beam}}_minQ2=${{matrix.minq2}}_${{ matrix.detector_config }}.edm4hep.root* sim_dis_${{matrix.beam}}_minQ2=${{matrix.minq2}}_${{ matrix.detector_config }}.edm4hep.root
+          mv capybara-reports sim_dis_${{matrix.beam}}_minQ2=${{matrix.minq2}}_${{ matrix.detector_config }}
+          touch .sim_dis_${{matrix.beam}}_minQ2=${{matrix.minq2}}_${{ matrix.detector_config }}
+    - uses: actions/upload-artifact@v4
+      with:
+        name: sim_dis_${{matrix.beam}}_minQ2=${{matrix.minq2}}_${{ matrix.detector_config }}.capy
+        path: |
+          .sim_dis_${{matrix.beam}}_minQ2=${{matrix.minq2}}_${{ matrix.detector_config }}
+          sim_dis_${{matrix.beam}}_minQ2=${{matrix.minq2}}_${{ matrix.detector_config }}/
+        if-no-files-found: error
+
+  merge-npsim-capybara:
+    runs-on: ubuntu-latest
+    needs:
+    - npsim-gun
+    - npsim-dis
+    steps:
+    - uses: actions/upload-artifact/merge@v4
+      with:
+        name: capybara-report
+        pattern: |
+          *.capy
+        delete-merged: true
+
+  build-artifacts-page:
+    runs-on: ubuntu-latest
+    needs:
     - convert-to-gdml
     - convert-to-tgeo
-    - dump-constants
-    - dump-parameter-table
+    - merge-constants
+    - merge-parameter-table
+    - merge-dawn-view
     steps:
-    - uses: actions/checkout@v3
-    - uses: actions/download-artifact@v3
+    - uses: actions/checkout@v4
+    - uses: actions/download-artifact@v4
       with:
         path: artifacts/
     - uses: actions/jekyll-build-pages@v1
-    - uses: actions/upload-pages-artifact@v1
+    - uses: actions/upload-pages-artifact@v3
       with:
         retention-days: 7
 
@@ -577,4 +826,4 @@ jobs:
     steps:
     - name: Deploy to GitHub Pages
       id: deployment
-      uses: actions/deploy-pages@v1
+      uses: actions/deploy-pages@v4

@@ -5,14 +5,9 @@
 # C. Peng (ANL), translate to python and add flexible run time for simulation
 
 import os
-import signal
 import subprocess
 import argparse
-import atexit
-import time
-from datetime import datetime
 import fcntl
-import psutil
 
 
 def readline_nonblocking(output):

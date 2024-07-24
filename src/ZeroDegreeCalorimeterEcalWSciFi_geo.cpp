@@ -20,44 +20,43 @@ using namespace std;
 using namespace dd4hep;
 
 // main
-static Ref_t create_detector(Detector& desc, xml_h handle, SensitiveDetector sens)
-{
+static Ref_t create_detector(Detector& desc, xml_h handle, SensitiveDetector sens) {
   xml::DetElement detElem = handle;
-  std::string     detName = detElem.nameStr();
-  int             detID   = detElem.id();
-  DetElement      det(detName, detID);
+  std::string detName     = detElem.nameStr();
+  int detID               = detElem.id();
+  DetElement det(detName, detID);
   sens.setType("calorimeter");
-  auto      dim    = detElem.dimensions();
-  auto      width  = dim.x();
-  auto      length = dim.z();
-  xml_dim_t pos    = detElem.position();
-  xml_dim_t rot    = detElem.rotation();
+  auto dim      = detElem.dimensions();
+  auto width    = dim.x();
+  auto length   = dim.z();
+  xml_dim_t pos = detElem.position();
+  xml_dim_t rot = detElem.rotation();
 
   // envelope
-  Box    envShape(width * 0.5, width * 0.5, length * 0.5);
+  Box envShape(width * 0.5, width * 0.5, length * 0.5);
   Volume env(detName + "_envelope", envShape, desc.material("Air"));
   env.setVisAttributes(desc.visAttributes(detElem.visStr()));
 
   // build module
   xml_comp_t mod_x = detElem.child(_Unicode(module));
-  auto       sx    = mod_x.attr<double>(_Unicode(sizex));
-  auto       sy    = mod_x.attr<double>(_Unicode(sizey));
-  auto       sz    = mod_x.attr<double>(_Unicode(sizez));
+  auto sx          = mod_x.attr<double>(_Unicode(sizex));
+  auto sy          = mod_x.attr<double>(_Unicode(sizey));
+  auto sz          = mod_x.attr<double>(_Unicode(sizez));
 
-  Box    modShape(sx / 2., sy / 2., sz / 2.);
-  auto   modMat = desc.material(mod_x.attr<std::string>(_Unicode(material)));
+  Box modShape(sx / 2., sy / 2., sz / 2.);
+  auto modMat = desc.material(mod_x.attr<std::string>(_Unicode(material)));
   Volume modVol("module_vol", modShape, modMat);
   modVol.setVisAttributes(desc.visAttributes(mod_x.visStr()));
   // modVol.setSensitiveDetector(sens);
 
   if (mod_x.hasChild(_Unicode(fiber))) {
-    auto   fiber_x  = mod_x.child(_Unicode(fiber));
-    auto   fr       = fiber_x.attr<double>(_Unicode(radius));
-    auto   fsx      = fiber_x.attr<double>(_Unicode(spacex));
-    auto   fsy      = fiber_x.attr<double>(_Unicode(spacey));
-    auto   foff     = dd4hep::getAttrOrDefault<double>(fiber_x, _Unicode(offset), 0.5 * mm);
-    auto   fiberMat = desc.material(fiber_x.attr<std::string>(_Unicode(material)));
-    Tube   fiberShape(0., fr, sz / 2. - 1. * mm);
+    auto fiber_x  = mod_x.child(_Unicode(fiber));
+    auto fr       = fiber_x.attr<double>(_Unicode(radius));
+    auto fsx      = fiber_x.attr<double>(_Unicode(spacex));
+    auto fsy      = fiber_x.attr<double>(_Unicode(spacey));
+    auto foff     = dd4hep::getAttrOrDefault<double>(fiber_x, _Unicode(offset), 0.5 * mm);
+    auto fiberMat = desc.material(fiber_x.attr<std::string>(_Unicode(material)));
+    Tube fiberShape(0., fr, sz / 2. - 1. * mm);
     Volume fiberVol("fiber_vol", fiberShape, fiberMat);
     fiberVol.setSensitiveDetector(sens);
 
@@ -73,8 +72,8 @@ static Ref_t create_detector(Detector& desc, xml_h handle, SensitiveDetector sen
     int ny = int(sy / (2. * fr)) + 1;
 
     // place the fibers
-    double y0      = (foff + fside);
-    int    nfibers = 0;
+    double y0   = (foff + fside);
+    int nfibers = 0;
     for (int iy = 0; iy < ny; ++iy) {
       double y = y0 + fdisty * iy;
       // about to touch the boundary
@@ -88,7 +87,8 @@ static Ref_t create_detector(Detector& desc, xml_h handle, SensitiveDetector sen
         if ((sx - x) < x0) {
           break;
         }
-        auto fiberPV = modVol.placeVolume(fiberVol, nfibers++, Position{x - sx / 2., y - sy / 2., 0});
+        auto fiberPV =
+            modVol.placeVolume(fiberVol, nfibers++, Position{x - sx / 2., y - sy / 2., 0});
         fiberPV.addPhysVolID("fiber_x", ix + 1).addPhysVolID("fiber_y", iy + 1);
       }
     }
@@ -102,7 +102,7 @@ static Ref_t create_detector(Detector& desc, xml_h handle, SensitiveDetector sen
   double mod_y_pos = 0.0;
   double mod_z_pos = 0.0 * mm;
   double mgap      = 0.000001 * mm;
-  int    mNTowers  = floor(width / (sx + mgap));
+  int mNTowers     = floor(width / (sx + mgap));
   // std::cout << "mNTowers: " << mNTowers << std::endl;
 
   int k = 0;
@@ -127,8 +127,8 @@ static Ref_t create_detector(Detector& desc, xml_h handle, SensitiveDetector sen
   }
 
   // detector position and rotation
-  Volume       motherVol = desc.pickMotherVolume(det);
-  Transform3D  tr(RotationZYX(rot.z(), rot.y(), rot.x()), Position(pos.x(), pos.y(), pos.z()));
+  Volume motherVol = desc.pickMotherVolume(det);
+  Transform3D tr(RotationZYX(rot.z(), rot.y(), rot.x()), Position(pos.x(), pos.y(), pos.z()));
   PlacedVolume envPV = motherVol.placeVolume(env, tr);
   envPV.addPhysVolID("system", detID);
   det.setPlacement(envPV);

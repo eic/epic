@@ -20,4 +20,11 @@ if [[ "$nlines" > "0" ]] ; then
   res="1"
 fi
 
+nlines=$(grep -in inconsistent ${logfile} | grep -in acts | wc -l)
+if [[ "$nlines" > "0" ]] ; then
+  echo " ACTS geometry error: "
+  grep -in inconsistent ${logfile} | grep -in acts
+  res="1"
+fi
+
 exit ${res}

@@ -12,7 +12,6 @@ import atexit
 import time
 from datetime import datetime
 import fcntl
-import psutil
 
 
 def readline_nonblocking(output):
@@ -102,7 +101,8 @@ finished = False
 # run simulation
 print(' '.join(sim_cmd))
 p = subprocess.Popen(args=sim_cmd, env=dawn_env,
-                     stdout=subprocess.PIPE, stderr=subprocess.PIPE, stdin=subprocess.PIPE)
+                     stdout=subprocess.PIPE, stderr=subprocess.PIPE, stdin=subprocess.PIPE,
+                     preexec_fn=os.setsid)
 __child_pid = p.pid
 while elapse.seconds < args.timeout:
     line = readline_nonblocking(p.stdout)
@@ -134,14 +134,10 @@ while elapse.seconds < args.timeout:
 
     time.sleep(1)
 
-p.kill()
-# use to kill the subprocess generated from the python wrapper
-# this is unsafe so maybe more checks required
-for proc in psutil.process_iter():
-    pinfo = proc.as_dict(attrs=['pid', 'name', 'create_time'])
-    if pinfo['pid'] == p.pid + 1 and pinfo['name'] == 'python':
-        print('kill {}, generated from {}'.format(pinfo, p.pid))
-        os.kill(pinfo['pid'], signal.SIGTERM)
+try:
+    os.killpg(os.getpgid(p.pid), signal.SIGTERM)
+except ProcessLookupError:
+    pass # assume process is dead
 
 # revert the change
 #os.system('sed -i \'s/radius=\"EcalEndcapP_FiberRadius*10\"/radius=\"EcalEndcapP_FiberRadius\"/\' {}'.format(ci_ecal))
