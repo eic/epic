@@ -18,7 +18,7 @@
     <constant name="VertexBarrelMod2_rmin"              value="VertexBarrelMod_rmin + 1.2*cm"/>
     <constant name="VertexBarrelMod3_rmin"              value="12.0*cm"/>
 
-    <comment> I am adding additional definitions here to create submodules. 
+    <comment> I am adding additional definitions here to create submodules.
     Those ensure I can properly built the RSUs from pixel matrices, inactive area and stuff </comment>
 
     <!-- Submodule 1 = 3Tile unit -->
@@ -38,7 +38,7 @@
     <constant name="Submodule3_length" value="0.06 * mm"/>
     <constant name="Submodule3_thickness" value="40 * um"/>
     <!-- <constant name="Submodule2_vis" value="VertexSupportLayerVis"/> -->
-    
+
     <!-- Submodule 4 = Biasing -->
     <constant name="Submodule4_width" value="0.06 * mm"/>
     <constant name="Submodule4_length" value="10.773 * mm"/>
@@ -105,7 +105,7 @@
                           length="21.666 * mm"
                           thickness="SiVertexSensor_thickness"
                           vis="TrackerServiceVis" /> -->
-                          
+
         <module_component name="UpperLeftTile"
                           material="Silicon"
                           sensitive="true"

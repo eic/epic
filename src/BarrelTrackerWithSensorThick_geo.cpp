@@ -44,17 +44,17 @@ using namespace dd4hep::detail;
  *
  * @author Whitney Armstrong
  */
-static Ref_t create_BarrelTrackerWithSensor_thick(Detector& description, xml_h e, SensitiveDetector sens)
-{
+static Ref_t create_BarrelTrackerWithSensor_thick(Detector& description, xml_h e,
+                                                  SensitiveDetector sens) {
   typedef vector<PlacedVolume> Placements;
-  xml_det_t                    x_det    = e;
-  Material                     air      = description.air();
-  int                          det_id   = x_det.id();
-  string                       det_name = x_det.nameStr();
-  DetElement                   sdet(det_name, det_id);
+  xml_det_t x_det = e;
+  Material air    = description.air();
+  int det_id      = x_det.id();
+  string det_name = x_det.nameStr();
+  DetElement sdet(det_name, det_id);
 
-  map<string, Volume>                volumes;
-  map<string, Placements>            sensitives;
+  map<string, Volume> volumes;
+  map<string, Placements> sensitives;
   map<string, std::vector<VolPlane>> volplane_surfaces;
   map<string, std::array<double, 2>> module_thicknesses;
 
@@ -62,14 +62,13 @@ static Ref_t create_BarrelTrackerWithSensor_thick(Detector& description, xml_h e
 
   // Set detector type flag
   dd4hep::xml::setDetectorTypeFlag(x_det, sdet);
-  auto &params = DD4hepDetectorHelper::ensureExtension<dd4hep::rec::VariantParameters>(
-      sdet);
+  auto& params = DD4hepDetectorHelper::ensureExtension<dd4hep::rec::VariantParameters>(sdet);
 
   // Add the volume boundary material if configured
   for (xml_coll_t bmat(x_det, _Unicode(boundary_material)); bmat; ++bmat) {
     xml_comp_t x_boundary_material = bmat;
     DD4hepDetectorHelper::xmlToProtoSurfaceMaterial(x_boundary_material, params,
-                                         "boundary_material");
+                                                    "boundary_material");
   }
 
   // dd4hep::xml::Dimension dimensions(x_det.dimensions());
@@ -81,27 +80,29 @@ static Ref_t create_BarrelTrackerWithSensor_thick(Detector& description, xml_h e
 
   // Loop over the supports
   for (xml_coll_t su(x_det, _U(support)); su; ++su) {
-    xml_comp_t  x_support         = su;
-    double      support_thickness = getAttrOrDefault(x_support, _U(thickness), 2.0 * mm);
-    double      support_length    = getAttrOrDefault(x_support, _U(length), 2.0 * mm);
-    double      support_rmin      = getAttrOrDefault(x_support, _U(rmin), 2.0 * mm);
-    double      support_zstart    = getAttrOrDefault(x_support, _U(zstart), 2.0 * mm);
-    std::string support_name      = getAttrOrDefault<std::string>(x_support, _Unicode(name), "support_tube");
-    std::string support_vis       = getAttrOrDefault<std::string>(x_support, _Unicode(vis), "AnlRed");
-    xml_dim_t   pos(x_support.child(_U(position), false));
-    xml_dim_t   rot(x_support.child(_U(rotation), false));
-    Solid       support_solid;
+    xml_comp_t x_support     = su;
+    double support_thickness = getAttrOrDefault(x_support, _U(thickness), 2.0 * mm);
+    double support_length    = getAttrOrDefault(x_support, _U(length), 2.0 * mm);
+    double support_rmin      = getAttrOrDefault(x_support, _U(rmin), 2.0 * mm);
+    double support_zstart    = getAttrOrDefault(x_support, _U(zstart), 2.0 * mm);
+    std::string support_name =
+        getAttrOrDefault<std::string>(x_support, _Unicode(name), "support_tube");
+    std::string support_vis = getAttrOrDefault<std::string>(x_support, _Unicode(vis), "AnlRed");
+    xml_dim_t pos(x_support.child(_U(position), false));
+    xml_dim_t rot(x_support.child(_U(rotation), false));
+    Solid support_solid;
     if (x_support.hasChild(_U(shape))) {
       xml_comp_t shape(x_support.child(_U(shape)));
-      string     shape_type = shape.typeStr();
-      support_solid         = xml::createShape(description, shape_type, shape);
+      string shape_type = shape.typeStr();
+      support_solid     = xml::createShape(description, shape_type, shape);
     } else {
       support_solid = Tube(support_rmin, support_rmin + support_thickness, support_length / 2);
     }
-    Transform3D tr = Transform3D(Rotation3D(), Position(0, 0, (support_zstart + support_length / 2)));
+    Transform3D tr =
+        Transform3D(Rotation3D(), Position(0, 0, (support_zstart + support_length / 2)));
     if (pos.ptr() && rot.ptr()) {
       Rotation3D rot3D(RotationZYX(rot.z(0), rot.y(0), rot.x(0)));
-      Position   pos3D(pos.x(0), pos.y(0), pos.z(0));
+      Position pos3D(pos.x(0), pos.y(0), pos.z(0));
       tr = Transform3D(rot3D, pos3D);
     } else if (pos.ptr()) {
       tr = Transform3D(Rotation3D(), Position(pos.x(0), pos.y(0), pos.z(0)));
@@ -110,7 +111,7 @@ static Ref_t create_BarrelTrackerWithSensor_thick(Detector& description, xml_h e
       tr = Transform3D(rot3D, Position());
     }
     Material support_mat = description.material(x_support.materialStr());
-    Volume   support_vol(support_name, support_solid, support_mat);
+    Volume support_vol(support_name, support_solid, support_mat);
     support_vol.setVisAttributes(description.visAttributes(support_vis));
     pv = assembly.placeVolume(support_vol, tr);
     // pv = assembly.placeVolume(support_vol, Position(0, 0, support_zstart + support_length / 2));
@@ -119,7 +120,7 @@ static Ref_t create_BarrelTrackerWithSensor_thick(Detector& description, xml_h e
   // loop over the modules
   for (xml_coll_t mi(x_det, _U(module)); mi; ++mi) {
     xml_comp_t x_mod = mi;
-    string     m_nam = x_mod.nameStr();
+    string m_nam     = x_mod.nameStr();
 
     if (volumes.find(m_nam) != volumes.end()) {
       printout(ERROR, "BarrelTrackerWithFrame",
@@ -127,8 +128,8 @@ static Ref_t create_BarrelTrackerWithSensor_thick(Detector& description, xml_h e
       throw runtime_error("Logics error in building modules.");
     }
 
-    int    ncomponents     = 0;
-    int    sensor_number   = 1;
+    int ncomponents        = 0;
+    int sensor_number      = 1;
     double total_thickness = 0;
 
     // Compute module total thickness from components
@@ -154,33 +155,38 @@ static Ref_t create_BarrelTrackerWithSensor_thick(Detector& description, xml_h e
       double frame_width2    = 2.0 * frame_height2 / tanth;
 
       Trd1 moduleframe_part1(frame_width / 2, 0.001 * mm, m_frame.length() / 2, frame_height / 2);
-      Trd1 moduleframe_part2(frame_width2 / 2, 0.001 * mm, m_frame.length() / 2 + 0.01 * mm, frame_height2 / 2);
+      Trd1 moduleframe_part2(frame_width2 / 2, 0.001 * mm, m_frame.length() / 2 + 0.01 * mm,
+                             frame_height2 / 2);
 
-      SubtractionSolid moduleframe(moduleframe_part1, moduleframe_part2, Position(0.0, frame_thickness, 0.0));
-      Volume           v_moduleframe(m_nam + "_vol", moduleframe, description.material(m_frame.materialStr()));
+      SubtractionSolid moduleframe(moduleframe_part1, moduleframe_part2,
+                                   Position(0.0, frame_thickness, 0.0));
+      Volume v_moduleframe(m_nam + "_vol", moduleframe,
+                           description.material(m_frame.materialStr()));
       v_moduleframe.setVisAttributes(description, m_frame.visStr());
-      m_vol.placeVolume(v_moduleframe, Position(0.0, 0.0, frame_height / 2 + total_thickness / 2.0));
+      m_vol.placeVolume(v_moduleframe,
+                        Position(0.0, 0.0, frame_height / 2 + total_thickness / 2.0));
     }
 
     double thickness_so_far = 0.0;
     double thickness_sum    = -total_thickness / 2.0;
     for (xml_coll_t mci(x_mod, _U(module_component)); mci; ++mci, ++ncomponents) {
-      xml_comp_t   x_comp = mci;
-      xml_comp_t   x_pos  = x_comp.position(false);
-      xml_comp_t   x_rot  = x_comp.rotation(false);
-      const string c_nam  = _toString(ncomponents, "component%d");
-      Box          c_box(x_comp.width() / 2, x_comp.length() / 2, x_comp.thickness() / 2);
-      Volume       c_vol(c_nam, c_box, description.material(x_comp.materialStr()));
+      xml_comp_t x_comp  = mci;
+      xml_comp_t x_pos   = x_comp.position(false);
+      xml_comp_t x_rot   = x_comp.rotation(false);
+      const string c_nam = _toString(ncomponents, "component%d");
+      Box c_box(x_comp.width() / 2, x_comp.length() / 2, x_comp.thickness() / 2);
+      Volume c_vol(c_nam, c_box, description.material(x_comp.materialStr()));
 
       // Utility variable for the relative z-offset based off the previous components
       const double zoff = thickness_sum + x_comp.thickness() / 2.0;
       if (x_pos && x_rot) {
-        Position    c_pos(x_pos.x(0), x_pos.y(0), x_pos.z(0) + zoff);
+        Position c_pos(x_pos.x(0), x_pos.y(0), x_pos.z(0) + zoff);
         RotationZYX c_rot(x_rot.z(0), x_rot.y(0), x_rot.x(0));
         pv = m_vol.placeVolume(c_vol, Transform3D(c_rot, c_pos));
       } else if (x_rot) {
         Position c_pos(0, 0, zoff);
-        pv = m_vol.placeVolume(c_vol, Transform3D(RotationZYX(x_rot.z(0), x_rot.y(0), x_rot.x(0)), c_pos));
+        pv = m_vol.placeVolume(c_vol,
+                               Transform3D(RotationZYX(x_rot.z(0), x_rot.y(0), x_rot.x(0)), c_pos));
       } else if (x_pos) {
         pv = m_vol.placeVolume(c_vol, Position(x_pos.x(0), x_pos.y(0), x_pos.z(0) + zoff));
       } else {
@@ -233,18 +239,18 @@ static Ref_t create_BarrelTrackerWithSensor_thick(Detector& description, xml_h e
     xml_comp_t x_barrel = x_layer.child(_U(barrel_envelope));
     xml_comp_t x_layout = x_layer.child(_U(rphi_layout));
     xml_comp_t z_layout = x_layer.child(_U(z_layout)); // Get the <z_layout> element.
-    int        lay_id   = x_layer.id();
-    string     m_nam    = x_layer.moduleStr();
-    string     lay_nam  = det_name + _toString(x_layer.id(), "_layer%d");
-    Tube       lay_tub(x_barrel.inner_r(), x_barrel.outer_r(), x_barrel.z_length() / 2.0);
-    Volume     lay_vol(lay_nam, lay_tub, air); // Create the layer envelope volume.
-    Position   lay_pos(0, 0, getAttrOrDefault(x_barrel, _U(z0), 0.));
+    int lay_id          = x_layer.id();
+    string m_nam        = x_layer.moduleStr();
+    string lay_nam      = det_name + _toString(x_layer.id(), "_layer%d");
+    Tube lay_tub(x_barrel.inner_r(), x_barrel.outer_r(), x_barrel.z_length() / 2.0);
+    Volume lay_vol(lay_nam, lay_tub, air); // Create the layer envelope volume.
+    Position lay_pos(0, 0, getAttrOrDefault(x_barrel, _U(z0), 0.));
     lay_vol.setVisAttributes(description.visAttributes(x_layer.visStr()));
 
     double phi0     = x_layout.phi0();     // Starting phi of first module.
     double phi_tilt = x_layout.phi_tilt(); // Phi tilt of a module.
     double rc       = x_layout.rc();       // Radius of the module center.
-    int    nphi     = x_layout.nphi();     // Number of modules in phi.
+    int nphi        = x_layout.nphi();     // Number of modules in phi.
     double rphi_dr  = x_layout.dr();       // The delta radius of every other module.
     double phi_incr = (M_PI * 2) / nphi;   // Phi increment for one module.
     double phic     = phi0;                // Phi of the module center.
@@ -252,19 +258,19 @@ static Ref_t create_BarrelTrackerWithSensor_thick(Detector& description, xml_h e
     double nz       = z_layout.nz();       // Number of modules to place in z.
     double z_dr     = z_layout.dr();       // Radial displacement parameter, of every other module.
 
-    Volume      module_env = volumes[m_nam];
-    DetElement  lay_elt(sdet, lay_nam, lay_id);
+    Volume module_env = volumes[m_nam];
+    DetElement lay_elt(sdet, lay_nam, lay_id);
     Placements& sensVols = sensitives[m_nam];
 
     // the local coordinate systems of modules in dd4hep and acts differ
     // see http://acts.web.cern.ch/ACTS/latest/doc/group__DD4hepPlugins.html
-    auto &layerParams =
-        DD4hepDetectorHelper::ensureExtension<dd4hep::rec::VariantParameters>(
-            lay_elt);
+    auto& layerParams =
+        DD4hepDetectorHelper::ensureExtension<dd4hep::rec::VariantParameters>(lay_elt);
 
     for (xml_coll_t lmat(x_layer, _Unicode(layer_material)); lmat; ++lmat) {
       xml_comp_t x_layer_material = lmat;
-      DD4hepDetectorHelper::xmlToProtoSurfaceMaterial(x_layer_material, layerParams, "layer_material");
+      DD4hepDetectorHelper::xmlToProtoSurfaceMaterial(x_layer_material, layerParams,
+                                                      "layer_material");
     }
 
     // Z increment for module placement along Z axis.
@@ -273,7 +279,7 @@ static Ref_t create_BarrelTrackerWithSensor_thick(Detector& description, xml_h e
     double z_incr = nz > 1 ? (2.0 * z0) / (nz - 1) : 0.0;
     // Starting z for module placement along Z axis.
     double module_z = -z0;
-    int    module   = 1;
+    int module      = 1;
 
     // Loop over the number of modules in phi.
     for (int ii = 0; ii < nphi; ii++) {
@@ -284,20 +290,22 @@ static Ref_t create_BarrelTrackerWithSensor_thick(Detector& description, xml_h e
 
       // Loop over the number of modules in z.
       for (int j = 0; j < nz; j++) {
-        string     module_name = _toString(module, "module%d");
+        string module_name = _toString(module, "module%d");
         DetElement mod_elt(lay_elt, module_name, module);
 
-        Transform3D tr(RotationZYX(0, ((M_PI / 2) - phic - phi_tilt), -M_PI / 2), Position(x, y, module_z));
+        Transform3D tr(RotationZYX(0, ((M_PI / 2) - phic - phi_tilt), -M_PI / 2),
+                       Position(x, y, module_z));
 
         pv = lay_vol.placeVolume(module_env, tr);
         pv.addPhysVolID("module", module);
         mod_elt.setPlacement(pv);
         for (size_t ic = 0; ic < sensVols.size(); ++ic) {
           PlacedVolume sens_pv = sensVols[ic];
-          DetElement   comp_de(mod_elt, std::string("de_") + sens_pv.volume().name(), module);
+          DetElement comp_de(mod_elt, std::string("de_") + sens_pv.volume().name(), module);
           comp_de.setPlacement(sens_pv);
 
-          auto &comp_de_params = DD4hepDetectorHelper::ensureExtension<dd4hep::rec::VariantParameters>(comp_de);
+          auto& comp_de_params =
+              DD4hepDetectorHelper::ensureExtension<dd4hep::rec::VariantParameters>(comp_de);
           comp_de_params.set<string>("axis_definitions", "XYZ");
           // comp_de.setAttributes(description, sens_pv.volume(), x_layer.regionStr(), x_layer.limitsStr(),
           //                       xml_det_t(xmleles[m_nam]).visStr());
@@ -325,7 +333,8 @@ static Ref_t create_BarrelTrackerWithSensor_thick(Detector& description, xml_h e
     // Create the PhysicalVolume for the layer.
     pv = assembly.placeVolume(lay_vol, lay_pos); // Place layer in mother
     pv.addPhysVolID("layer", lay_id);            // Set the layer ID.
-    lay_elt.setAttributes(description, lay_vol, x_layer.regionStr(), x_layer.limitsStr(), x_layer.visStr());
+    lay_elt.setAttributes(description, lay_vol, x_layer.regionStr(), x_layer.limitsStr(),
+                          x_layer.visStr());
     lay_elt.setPlacement(pv);
   }
   sdet.setAttributes(description, assembly, x_det.regionStr(), x_det.limitsStr(), x_det.visStr());
