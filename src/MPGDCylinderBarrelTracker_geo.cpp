@@ -25,7 +25,7 @@ using namespace dd4hep::rec;
 using namespace dd4hep::detail;
 
 #include "Math/Vector2D.h"
-using namespace ROOT::Math;
+using ROOT::Math::XYVector;
 
 /** Micromegas Barrel Tracker with space frame
  *
