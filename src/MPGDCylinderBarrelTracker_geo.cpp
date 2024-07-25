@@ -88,8 +88,8 @@ static Ref_t create_MPGDCylinderBarrelTracker(Detector& description, xml_h e,
   xml_coll_t modules(x_det, _U(module));
   if (modules.size() != 1) {
     // Present detector constructor can only handle ONE <module> tag
-    printout(ERROR, "MPGDCylinderBarrelTracker", "Number of modules = %d. Must be = 1",
-             (int)modules.size());
+    printout(ERROR, "MPGDCylinderBarrelTracker", "Number of modules = %u. Must be = 1",
+             modules.size());
     throw runtime_error("Logics error in building modules.");
   }
   xml_comp_t x_mod   = modules;
