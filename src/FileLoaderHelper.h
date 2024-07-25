@@ -75,8 +75,8 @@ inline void EnsureFileFromURLExists(std::string url, std::string file, std::stri
     return;
   }
 
-  if (fs::exists(fs::symlink_status(hash_path)) && !fs::exists(fs::status(hash_path))) {
-    printout(INFO, "FileLoader", "removing broken \"" + hash_path.string() + "\" symlink");
+  if (fs::exists(fs::symlink_status(hash_path))) {
+    printout(INFO, "FileLoader", "removing symlink \"" + hash_path.string() + "\"");
     remove(hash_path);
   }
 
