@@ -8,6 +8,10 @@ PROJECT(epic
   DESCRIPTION "DD4hep Geometry Description of the EPIC Experiment"
   )
 
+# Set version based on git
+include(cmake/git_version.cmake)
+set_git_version(CMAKE_PROJECT_VERSION)
+
 # C++ standard
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD 17 CACHE STRING "Set the C++ standard to be used")
@@ -101,14 +105,16 @@ install(DIRECTORY calibrations/
     )
 
 #-----------------------------------------------------------------------------------
+# Configure and install compact/version.xml
+#
+configure_file(templates/version.xml.in ${CMAKE_CURRENT_BINARY_DIR}/version.xml @ONLY)
+install(FILES ${CMAKE_CURRENT_BINARY_DIR}/version.xml
+    DESTINATION ${CMAKE_INSTALL_DATADIR}/${PROJECT_NAME}/compact
+)
+
+#-----------------------------------------------------------------------------------
 # Configure and install detector setup script
 #
-execute_process(
-  COMMAND git rev-parse --abbrev-ref HEAD
-  WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
-  OUTPUT_VARIABLE GIT_BRANCH
-  OUTPUT_STRIP_TRAILING_WHITESPACE
-)
 configure_file(templates/thisepic.sh.in ${CMAKE_CURRENT_BINARY_DIR}/thisepic.sh @ONLY)
 install(FILES ${CMAKE_CURRENT_BINARY_DIR}/thisepic.sh
     DESTINATION ${CMAKE_INSTALL_BINDIR}

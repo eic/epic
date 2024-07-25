@@ -1,0 +1,4 @@
+<!-- SPDX-License-Identifier: LGPL-3.0-or-later -->
+<!-- Copyright (C) 2024 Dmitry Kalinkin -->
+
+    <constant name="epic_version" value="@CMAKE_PROJECT_VERSION@" />
