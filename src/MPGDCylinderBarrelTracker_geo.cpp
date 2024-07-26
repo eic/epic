@@ -1,9 +1,10 @@
 // SPDX-License-Identifier: LGPL-3.0-or-later
-// Copyright (C) 2022 Whitney Armstrong
+// Copyright (C) 2022-2024 Whitney Armstrong, Nivedith Ramasubramanian, Yann Bedfer
 
 /** \addtogroup Trackers Trackers
- * \brief Type: **BarrelTrackerWithFrame**.
+ * \brief Type: **Barrel Cylinder MPGD with frames**.
  * \author Nivedith Ramasubramanian
+ * Modified by M. Posik, Y. Bedfer
  *
  * \ingroup trackers
  *
@@ -25,7 +26,7 @@ using namespace dd4hep::rec;
 using namespace dd4hep::detail;
 
 #include "Math/Vector2D.h"
-using namespace ROOT::Math;
+using ROOT::Math::XYVector;
 
 /** Micromegas Barrel Tracker with space frame
  *
@@ -560,4 +561,4 @@ static Ref_t create_MPGDCylinderBarrelTracker(Detector& description, xml_h e,
 
 //@}
 // clang-format off
-DECLARE_DETELEMENT(MPGDCylinderBarrelTracker, create_MPGDCylinderBarrelTracker)
+DECLARE_DETELEMENT(epic_CylinderMPGDBarrel, create_MPGDCylinderBarrelTracker)

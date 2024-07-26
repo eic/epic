@@ -21,7 +21,6 @@
     </comment>
 
     <constant name="InnerMPGDBarrelLayer_length"            value="InnerMPGDBarrel_length" />
-    <constant name="InnerMPGDBarrel_hack"                   value="0*cm"/>
 
     <comment> Intrinsic parameters... </comment>
     <comment> ...Thicknesses </comment>
@@ -54,8 +53,8 @@
 
     <comment> In principle, stave count should not be independenty specified: it is fixed by above intrinsic parameters </comment>
     <constant name="MPGDBarrelStave_count"                  value="8"/>
-    <constant name="InnerMPGDBarrelLayer_rmin"              value="InnerMPGDBarrel_rmin + InnerMPGDBarrel_hack"/>
-    <constant name="InnerMPGDBarrelLayer_rmax"              value="MMOuterSector_R + InnerMPGDBarrel_hack + MMRadial_offset / 2 + 1*cm"/>
+    <constant name="InnerMPGDBarrelLayer_rmin"              value="InnerMPGDBarrel_rmin"/>
+    <constant name="InnerMPGDBarrelLayer_rmax"              value="MMOuterSector_R + MMRadial_offset / 2 + 1*cm"/>
     <constant name="rmin2Sensor" value="MMDriftCuGround_thickness + MMDriftKapton_thickness + MMDriftCuElectrode_thickness + MMGasGap_thickness / 2" />
     <constant name="MMInnerSensor_R" value="MMInnerSector_R + rmin2Sensor" />
     <constant name="MMOuterSensor_R" value="MMOuterSector_R + rmin2Sensor" />
@@ -65,7 +64,7 @@
     <detector
       id="TrackerBarrel_2_ID"
       name="InnerMPGDBarrel"
-      type="MPGDCylinderBarrelTracker"
+      type="epic_CylinderMPGDBarrel"
       readout="MPGDBarrelHits"
       insideTrackingVolume="true"
       vis="TrackerVis">
@@ -104,6 +103,7 @@
           z_length="InnerMPGDBarrelLayer_length"
           z0="InnerMPGDBarrel_zoffset"/>
         <layer_material surface="inner" binning="binPhi,binZ" bins0="MPGDBarrelStave_count" bins1="100" />
+        <layer_material surface="outer" binning="binPhi,binZ" bins0="MPGDBarrelStave_count" bins1="100" />
         <rphi_layout phi0="0.0"/>
         <z_layout gap="MMCentral_gap"/>
       </layer>
