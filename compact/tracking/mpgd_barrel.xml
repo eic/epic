@@ -102,8 +102,8 @@
           outer_r="InnerMPGDBarrelLayer_rmax"
           z_length="InnerMPGDBarrelLayer_length"
           z0="InnerMPGDBarrel_zoffset"/>
-        <layer_material surface="inner" binning="binPhi,binZ" bins0="MPGDBarrelStave_count" bins1="100" />
-        <layer_material surface="outer" binning="binPhi,binZ" bins0="MPGDBarrelStave_count" bins1="100" />
+        <layer_material surface="inner" binning="binPhi,binZ" bins0="MPGDBarrelStave_count*24" bins1="100" />
+        <layer_material surface="outer" binning="binPhi,binZ" bins0="MPGDBarrelStave_count*24" bins1="100" />
         <rphi_layout phi0="0.0"/>
         <z_layout gap="MMCentral_gap"/>
       </layer>
