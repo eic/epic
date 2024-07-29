@@ -89,8 +89,7 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
 
     PlacedVolume layPV = sectorVol.placeVolume(
         layerVol, Transform3D(lay_rot, Position(lay_pos_x, lay_pos_y, lay_pos_z)));
-    layPV.addPhysVolID("layer", layer_id).addPhysVolID("orientation", orientation);
-
+    layPV.addPhysVolID("layer", layer_id);
   } //layer_id-loop close
 
   // loop over sectors(top, bottom)
@@ -134,68 +133,101 @@ static tuple<Volume, Position> build_specScFiCAL_module(const Detector& descript
   Volume modVol("module_vol", modShape, modMat);
 
   modVol.setVisAttributes(description.visAttributes(mod_x.attr<std::string>(_Unicode(vis))));
-  //----------------------------Scintillating fibers -----------------------------------------------------------
+  
+  //--------------------------Block of fibers in a module------------------------------------------------------
+  
+  //block fibers
+  auto fiber_block = mod_x.child(_Unicode(block));
 
-  //fibers
+  auto fb_sx = fiber_block.attr<double>(_Unicode(sizeX));
+  auto fb_sy = fiber_block.attr<double>(_Unicode(sizeY));
+  auto fb_sz = fiber_block.attr<double>(_Unicode(sizeZ));
+  auto fb_SpaceXY = fiber_block.attr<double>(_Unicode(SpaceXY));
+
+  Position fbSize(fb_sx, fb_sy, fb_sz);
+
+  //fibers 
   auto fiber_tube = mod_x.child(_Unicode(fiber));
+  
   auto fr         = fiber_tube.attr<double>(_Unicode(radius));
   auto fsx        = fiber_tube.attr<double>(_Unicode(spacex));
   auto fsy        = fiber_tube.attr<double>(_Unicode(spacey));
+
+  //fiber block description and placement in module
+  Box fbShape(fb_sx/2.0, fb_sy/2.0, fb_sz/2.0);
+  Volume fbVol("fiberblock_volume", fbShape, modMat);
+  fbVol.setVisAttributes(description.visAttributes(mod_x.attr<std::string>(_Unicode(vis)))); //same as module
+  
+  int num_fbX = int(modSize.x() / (fbSize.x() + 2.0*fb_SpaceXY) );
+  int num_fbY = int(modSize.y() / (fbSize.y() + 2.0*fb_SpaceXY) );
+
+  double fb_xpos0 = -(modSize.x()/2.0) + (fbSize.x()/2.0) + fb_SpaceXY;
+  double fb_ypos0 = -(modSize.y()/2.0) + (fbSize.y()/2.0) + fb_SpaceXY;
+  int nblock         = 0;
+
+  for(int iy =0; iy<num_fbY; iy++){
+	  for(int ix =0; ix<num_fbX; ix++){
+		double fb_pos_x = fb_xpos0 + ix*(fbSize.x() + 2.0*fb_SpaceXY); //mm
+		double fb_pos_y = fb_ypos0 + iy*(fbSize.y() + 2.0*fb_SpaceXY); //mm
+      		double fb_pos_z = 0 *mm;
+
+		auto fbPV = modVol.placeVolume(fbVol, nblock, Position{fb_pos_x, fb_pos_y, fb_pos_z});
+		fbPV.addPhysVolID("block", nblock++);
+	  }}
+
+  //fiber placement and description in blocks
   auto fiberMat   = description.material(fiber_tube.attr<std::string>(_Unicode(material)));
-  Tube fiberShape(0., fr, modSize.z() / 2.0);
+  Tube fiberShape(0., fr, fbSize.z() / 2.0);
   Volume fiberVol("fiber_vol", fiberShape, fiberMat);
   fiberVol.setVisAttributes(description.visAttributes(fiber_tube.attr<std::string>(_Unicode(vis))));
   fiberVol.setSensitiveDetector(sens);
 
-  //double submod_sizexy = 2.0*fr; // size of square = diameter of tubes.
-  int num_submodX = int(modSize.x() / (2 * fr + 2.0 * fsx));
-  int num_submodY = int(modSize.y() / (2 * fr + 2.0 * fsy));
+  int num_fX = int(fbSize.x() /(2 *fr + 2.0 *fsx));
+  int num_fY = int(fbSize.y() /(2 *fr + 2.0 *fsy));
 
-  double submod_xpos0 = -modSize.x() / 2.0 + fr + fsx;
-  double submod_ypos0 = -modSize.y() / 2.0 + fr + fsy;
+  double fiber_xpos0 = -fbSize.x() /(2.0 + fr + fsx);
+  double fiber_ypos0 = -fbSize.y() /(2.0 + fr + fsy);
   int nfibers         = 0;
 
   //Fiber Holder
   auto fiberholder_x = mod_x.child(_Unicode(fiberholder));
-  double fh_dz       = 0.6 * mm; //thickness of fiber holder
+  double fh_dz       = 0.6 *mm; //thickness of fiber holder
 
-  double fh_outerbox_y = 2.0 * fr + 2.0 * fsy;
-  double fh_outerbox_x = 2.0 * fr + 2.0 * fsx;
-  Box fh_outerbox(fh_outerbox_x / 2.0, fh_outerbox_y / 2.0, fh_dz / 2.0);
+  double fh_outerbox_y = 2.0 *fr + 2.0 *fsy;
+  double fh_outerbox_x = 2.0 *fr + 2.0 *fsx;
+  Box fh_outerbox(fh_outerbox_x/2.0, fh_outerbox_y/2.0, fh_dz/2.0);
 
-  double fh_innerbox_y = 2.0 * fr;
-  double fh_innerbox_x = 2.0 * fr;
-  Box fh_innerbox(fh_innerbox_x / 2.0, fh_innerbox_y / 2.0, fh_dz / 2.0);
+  double fh_innerbox_y = 2.0 *fr;
+  double fh_innerbox_x = 2.0 *fr;
+  Box fh_innerbox(fh_innerbox_x/2.0, fh_innerbox_y/2.0, fh_dz/2.0);
 
   SubtractionSolid fiberholder_solid(fh_outerbox, fh_innerbox, Position(0.0, 0.0, 0.0));
   auto fiberholderMat = description.material(fiberholder_x.attr<std::string>(_Unicode(material)));
   Volume fiberholderVol("fiberholder_vol", fiberholder_solid, fiberholderMat);
-  fiberholderVol.setVisAttributes(
-      description.visAttributes(fiberholder_x.attr<std::string>(_Unicode(vis))));
+  fiberholderVol.setVisAttributes( description.visAttributes(fiberholder_x.attr<std::string>(_Unicode(vis))) );
 
   int nfh = 0;
 
   //placement of fibers and fiberholder
-  for (int iy = 0; iy < num_submodY; iy++) {
+  for (int iy = 0; iy < num_fY; iy++) {
+    for (int ix = 0; ix < num_fX; ix++) {
 
-    for (int ix = 0; ix < num_submodX; ix++) {
-
-      double submod_pos_x = submod_xpos0 + ix * (2.0 * fr + 2.0 * fsx); //mm
-      double submod_pos_y = submod_ypos0 + iy * (2.0 * fr + 2.0 * fsy); //mm
-      double submod_pos_z = 0 * mm;                                     //mm
+      double fiber_pos_x = fiber_xpos0 + ix * (2.0 * fr + 2.0 * fsx); //mm
+      double fiber_pos_y = fiber_ypos0 + iy * (2.0 * fr + 2.0 * fsy); //mm
+      double fiber_pos_z = 0 * mm;                                     //mm
 
       //placement of fiber
-      auto fiberPV = modVol.placeVolume(fiberVol, nfibers++,
-                                        Position{submod_pos_x, submod_pos_y, submod_pos_z});
+      auto fiberPV = fbVol.placeVolume(fiberVol, nfibers++,
+                                        Position{fiber_pos_x, fiber_pos_y, fiber_pos_z});
       fiberPV.addPhysVolID("fiber_x", ix + 1).addPhysVolID("fiber_y", iy + 1);
 
       //placement of fiber holder 6.6*cm apart c-to-c
       int num_holders  = 4; // which means 4 regions
-      double fh_pos_z0 = -1 * (modSize.z() / 2.0) + (fh_dz / 2.0);
+      double fh_pos_z0 = -1 * (fbSize.z() / 2.0) + (fh_dz / 2.0);
 
       for (int iz = 0; iz < num_holders; iz++) {
-        double fh_pos_z = fh_pos_z0 + iz * ((modSize.z() - fh_dz) / (num_holders - 1));
-        modVol.placeVolume(fiberholderVol, nfh++, Position{submod_pos_x, submod_pos_y, fh_pos_z});
+        double fh_pos_z = fh_pos_z0 + iz * ((fbSize.z() - fh_dz) / (num_holders - 1));
+        fbVol.placeVolume(fiberholderVol, nfh++, Position{fiber_pos_x, fiber_pos_y, fh_pos_z});
       } //iz close
 
     } //ix close

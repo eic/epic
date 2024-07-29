@@ -271,17 +271,20 @@
     <constant name="LumiConverter_DZ"     value="1*mm"/>
 
     <!-- Lumi spectrometer CAL -->
-    <constant name="LumiSpecCAL_SiPMSizeXY"       value="3*mm"/>
-    <constant name="LumiSpecCAL_SiPMNumX"         value="20"/>
-    <constant name="LumiSpecCAL_SiPMNumY"         value="3"/>
+    <constant name="LumiSpecCAL_SiPMSizeXY"       value="4*mm"/>
+    <constant name="LumiSpecCAL_SiPMNumX"         value="14"/>
+    <constant name="LumiSpecCAL_SiPMNumY"         value="2"/>
     <constant name="LumiSpecCAL_ZLayers"          value="20"/>
     <constant name="LumiSpecCAL_XYLayers"         value="3"/>
     <comment>
       Note : Values/Notations for making modules pointing along z-axis.
       Rotation of modules wrt XY axis after construction.
     </comment>
-    <constant name="LumiSpecCAL_ModSizeX"         value="LumiSpecCAL_SiPMNumX*LumiSpecCAL_SiPMSizeXY"/>
-    <constant name="LumiSpecCAL_ModSizeY"         value="LumiSpecCAL_SiPMNumY*LumiSpecCAL_SiPMSizeXY"/>
+
+    <constant name="LumiSpecCAL_SiPMSpaceXY"	  value="0.15*mm"/> <!-- mechanical needed space for adjacent SiPMs-->
+    
+    <constant name="LumiSpecCAL_ModSizeX"         value="LumiSpecCAL_SiPMNumX*(LumiSpecCAL_SiPMSizeXY + 2*LumiSpecCAL_SiPMSpaceXY)"/>
+    <constant name="LumiSpecCAL_ModSizeY"         value="LumiSpecCAL_SiPMNumY*(LumiSpecCAL_SiPMSizeXY + 2*LumiSpecCAL_SiPMSpaceXY)"/>
     <constant name="LumiSpecCAL_DZ"               value="LumiSpecCAL_ZLayers*LumiSpecCAL_ModSizeY"/>
     <constant name="LumiSpecCAL_DXY"              value="LumiSpecCAL_XYLayers*LumiSpecCAL_ModSizeX"/>
     <constant name="LumiSpecCAL_ModSizeZ"         value="LumiSpecCAL_DXY"/> <!-- fibre length -->
