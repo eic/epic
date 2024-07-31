@@ -83,7 +83,7 @@ if __name__ == '__main__':
                 fontsize=fs, color=colors[2],
                 horizontalalignment='left', verticalalignment='top', transform=ax.transAxes)
         # axis format
-        ax.set_xlabel('Path Length [mm]', fontsize=fs)
+        ax.set_xlabel('Path Length [cm]', fontsize=fs)
         ax.set_ylabel('$X/X_0$ (Cumulative)', fontsize=fs, color=colors[0])
         ax2.set_ylabel('$\Lambda$ (Cumulative)', fontsize=fs, color=colors[1])
         ax.xaxis.set_minor_locator(AutoMinorLocator(5))
