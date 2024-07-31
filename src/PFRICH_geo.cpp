@@ -342,7 +342,6 @@ static Ref_t createDetector(Detector& description, xml_h e, SensitiveDetector se
   Box hrppd_Solid(xysize / 2, xysize / 2, hrppd_container_volume_thickness / 2);
 
   Volume hrppdVol_air(detName + "_air_hrppd", hrppd_Solid, air);
-  //  Volume hrppdVol(detName + "_hrppd", hrppd_Solid, sensorMat);
 
   hrppdVol_air.setSensitiveDetector(sens);
   hrppdVol_air.setVisAttributes(gasvolVis);
