@@ -63,8 +63,6 @@ static Ref_t createDetector(Detector& description, xml_h e, SensitiveDetector se
   xml_dim_t x_pos(x_det.child(_U(position), false));
   xml_dim_t x_rot(x_det.child(_U(rotation), false));
 
-  auto vesselMat = description.material("VacuumOptical");
-
   Tube pfRICH_air_volume(0.0, 65.0, 25.0); // dimension of the pfRICH world in cm
 
   Rotation3D rot(RotationZYX(0, M_PI, 0));
@@ -91,9 +89,9 @@ static Ref_t createDetector(Detector& description, xml_h e, SensitiveDetector se
 
   int imod = 0; // module number
 
-  auto gasvolMat = description.material("C4F10_PFRICH");
+  auto gasvolMat = description.material(detElem.attr<std::string>(_Unicode(gas)));
   auto gasvolVis = description.visAttributes("DRICH_gas_vis");
-  auto vesselVis = description.visAttributes("DRICH_gas_vis");
+  auto vesselVis = description.visAttributes(detElem.attr<std::string>(_Unicode(vis_vessel)));
 
   double windowThickness = dims.attr<double>(_Unicode(window_thickness));
   double wallThickness   = dims.attr<double>(_Unicode(wall_thickness));
@@ -113,11 +111,13 @@ static Ref_t createDetector(Detector& description, xml_h e, SensitiveDetector se
   double radiatorRmin = radiatorElem.attr<double>(_Unicode(rmin));
   double radiatorRmax = radiatorElem.attr<double>(_Unicode(rmax));
 
+  auto filterElem = radiatorElem.child(_Unicode(filter));
+
   double airgapThickness = 0.1;
   double filterThickness = 1;
 
-  auto aerogelMat = description.material("C4F10_PFRICH");
-  auto filterMat  = description.material("C4F10_PFRICH");
+  auto aerogelMat = description.material(aerogelElem.attr<std::string>(_Unicode(material)));
+  auto filterMat  = description.material(filterElem.attr<std::string>(_Unicode(material)));
 
   double vesselLength = dims.attr<double>(_Unicode(length));
   auto originFront    = Position(0., 0., vesselLength / 2.0);
@@ -151,6 +151,11 @@ static Ref_t createDetector(Detector& description, xml_h e, SensitiveDetector se
 
   Cone mirror_cone(vesselLength / 2.0, vesselRmax1 - 7, vesselRmax1 - 7 + 0.3, vesselRmax1 - 13,
                    vesselRmax1 - 13 + 0.3);
+
+  /*--------------------------------------------------*/
+  // Vessel
+  auto vesselMat = description.material(detElem.attr<std::string>(_Unicode(material)));
+  auto vesselGas = description.material(detElem.attr<std::string>(_Unicode(gas)));
 
   /*--------------------------------------------------*/
   // Flange
@@ -213,9 +218,6 @@ static Ref_t createDetector(Detector& description, xml_h e, SensitiveDetector se
       _FIDUCIAL_VOLUME_LENGTH_ - _VESSEL_FRONT_SIDE_THICKNESS_ - _SENSOR_AREA_LENGTH_;
   double m_gas_volume_radius = _VESSEL_OUTER_RADIUS_ - _VESSEL_OUTER_WALL_THICKNESS_;
 
-  //cout << "FLANGE_EPIPE_DIAMETER : " << _FLANGE_EPIPE_DIAMETER_ << endl;
-  //cout << "CONICAL_MIRROR_INNER_RADIUS : " << _CONICAL_MIRROR_INNER_RADIUS_ << endl;
-
   /// Inner mirror cone
   // A wedge bridging two cylinders;
 
@@ -247,7 +249,7 @@ static Ref_t createDetector(Detector& description, xml_h e, SensitiveDetector se
   SubtractionSolid pfRICH_volume_shape(pfRICH_air_volume, flange_final_shape);
 
   Volume pfRICH_volume(detName + "_Vol", pfRICH_volume_shape,
-                       vesselMat); // dimension of the pfRICH world in cm
+                       vesselGas); // dimension of the pfRICH world in cm
 
   pv = mother.placeVolume(pfRICH_volume, transform);
 
@@ -264,6 +266,9 @@ static Ref_t createDetector(Detector& description, xml_h e, SensitiveDetector se
                   vesselRmax1 - wallThickness, vesselRmin0 + wallThickness,
                   vesselRmax0 - wallThickness);
 
+  Cone vesselWall(vesselLength / 2.0, vesselRmax1 - 0.1, vesselRmax1, vesselRmax0 - 0.1,
+                  vesselRmax0);
+
   Box gasvolBox(1000, 1000, 1000);
 
   Solid gasvolSolid;
@@ -275,18 +280,15 @@ static Ref_t createDetector(Detector& description, xml_h e, SensitiveDetector se
   Solid mirrorSolid;
   mirrorSolid = mirror_cone;
 
-  Volume vesselVol(detName, vesselSolid, vesselMat);
-  Volume gasvolVol(detName + "_gas", gasvolSolid, gasvolMat);
+  Solid wallSolid;
+  wallSolid = vesselWall;
+
+  Volume vesselVol(detName + "_vesel_vol", wallSolid, vesselMat);
   vesselVol.setVisAttributes(vesselVis);
-  gasvolVol.setVisAttributes(gasvolVis);
 
-  Volume mirrorVol(detName, mirrorSolid, mirrorMat);
-  mirrorVol.setVisAttributes(mirrorVis);
-
-  // place gas volume
-  PlacedVolume gasvolPV = vesselVol.placeVolume(gasvolVol, Position(0, 0, 0));
-  DetElement gasvolDE(sdet, "gasvol_de", 0);
-  gasvolDE.setPlacement(gasvolPV);
+  PlacedVolume vesselPV = pfRICH_volume.placeVolume(vesselVol, Position(0, 0, 0));
+  DetElement vesselDE(sdet, "vessel_de", 0);
+  vesselDE.setPlacement(vesselPV);
 
   // BUILD RADIATOR //////////////////////////////////////
 
@@ -319,6 +321,9 @@ static Ref_t createDetector(Detector& description, xml_h e, SensitiveDetector se
   // Some "standard" value applied to all mirrors;
   // At the downstream (sensor plane) location; upstream radii are calculated automatically;
 
+  Volume mirrorVol(detName, mirrorSolid, mirrorMat);
+  mirrorVol.setVisAttributes(mirrorVis);
+
   double xysize = _HRPPD_TILE_SIZE_, wndthick = _HRPPD_WINDOW_THICKNESS_;
 
   // HRPPD assembly container volume;
@@ -326,11 +331,17 @@ static Ref_t createDetector(Detector& description, xml_h e, SensitiveDetector se
 
   double _ACRYLIC_THICKNESS_ = 0.3;
 
-  // HRPPD
+  /*--------------------------------------------------*/
+  // HRPPD material definition:
+
+  auto HRPPD_WindowMat = description.material("Quartz");
+  auto HRPPD_PCBMat    = description.material("G10");
+  auto HRPPD_MPDMat    = description.material("SiliconDioxide");
+  auto HRPPD_ASICMat   = description.material("SiliconCarbide");
+
   Box hrppd_Solid(xysize / 2, xysize / 2, hrppd_container_volume_thickness / 2);
 
   Volume hrppdVol_air(detName + "_air_hrppd", hrppd_Solid, air);
-  Volume hrppdVol(detName + "_hrppd", hrppd_Solid, sensorMat);
 
   hrppdVol_air.setSensitiveDetector(sens);
   hrppdVol_air.setVisAttributes(gasvolVis);
@@ -339,7 +350,7 @@ static Ref_t createDetector(Detector& description, xml_h e, SensitiveDetector se
   // Quartz Window
   Box wnd_Solid(xysize / 2, xysize / 2, wndthick / 2);
 
-  Volume wndVol(detName + "_wnd", wnd_Solid, gasvolMat);
+  Volume wndVol(detName + "_wnd", wnd_Solid, HRPPD_WindowMat);
   wndVol.setVisAttributes(gasvolVis);
 
   double accu = -hrppd_container_volume_thickness / 2;
@@ -362,7 +373,7 @@ static Ref_t createDetector(Detector& description, xml_h e, SensitiveDetector se
 
   SubtractionSolid ceramic(cerbox, cut_box, Position(0, 0, -_HRPPD_BASEPLATE_THICKNESS_));
 
-  Volume ceramicVol(detName + "_ceramic", ceramic, air);
+  Volume ceramicVol(detName + "_ceramic", ceramic, HRPPD_MPDMat);
   ceramicVol.setVisAttributes(gasvolVis);
 
   PlacedVolume ceramicPV =
@@ -373,7 +384,7 @@ static Ref_t createDetector(Detector& description, xml_h e, SensitiveDetector se
   // Plating body
 
   Box plating_solid(xyopen / 2, xyopen / 2, _HRPPD_PLATING_LAYER_THICKNESS_ / 2);
-  Volume platingVol(detName + "_plating", plating_solid, air);
+  Volume platingVol(detName + "_plating", plating_solid, HRPPD_MPDMat);
 
   platingVol.setVisAttributes(gasvolVis);
   PlacedVolume platingPV =
@@ -384,7 +395,7 @@ static Ref_t createDetector(Detector& description, xml_h e, SensitiveDetector se
   // MCP body
 
   Box mcp_solid(xyopen / 2, xyopen / 2, _EFFECTIVE_MCP_THICKNESS_ / 2);
-  Volume mcpVol(detName + "_mcp", mcp_solid, air);
+  Volume mcpVol(detName + "_mcp", mcp_solid, HRPPD_MPDMat);
 
   mcpVol.setVisAttributes(gasvolVis);
   PlacedVolume mcpPV = hrppdVol_air.placeVolume(
@@ -397,7 +408,7 @@ static Ref_t createDetector(Detector& description, xml_h e, SensitiveDetector se
   double pdthick = 0.001;
 
   Box pdbox_solid(xyactive / 2, xyactive / 2, pdthick / 2);
-  Volume pdboxVol(detName + "_pd", pdbox_solid, air);
+  Volume pdboxVol(detName + "_pd", pdbox_solid, HRPPD_MPDMat);
 
   pdboxVol.setVisAttributes(gasvolVis);
   PlacedVolume pdboxPV =
@@ -407,7 +418,7 @@ static Ref_t createDetector(Detector& description, xml_h e, SensitiveDetector se
   pdboxDE.setPlacement(pdboxPV);
 
   Box qdbox_solid(xyactive / 2, xyactive / 2, pdthick / 2);
-  Volume qdboxVol(detName + "_qd", qdbox_solid, air);
+  Volume qdboxVol(detName + "_qd", qdbox_solid, HRPPD_MPDMat);
 
   qdboxVol.setVisAttributes(gasvolVis);
   PlacedVolume qdboxPV = hrppdVol_air.placeVolume(qdboxVol, Position(0.0, 0.0, accu + pdthick / 2));
@@ -420,7 +431,7 @@ static Ref_t createDetector(Detector& description, xml_h e, SensitiveDetector se
   /// PCB Board
 
   Box pcb_solid(_READOUT_PCB_SIZE_ / 2, _READOUT_PCB_SIZE_ / 2, _READOUT_PCB_THICKNESS_ / 2);
-  Volume pcbVol(detName + "_pcb", pcb_solid, air);
+  Volume pcbVol(detName + "_pcb", pcb_solid, HRPPD_PCBMat);
 
   pcbVol.setVisAttributes(gasvolVis);
   PlacedVolume pcbPV =
@@ -434,7 +445,7 @@ static Ref_t createDetector(Detector& description, xml_h e, SensitiveDetector se
   // ASIC Board
 
   Box asic_solid(_ASIC_SIZE_XY_ / 2, _ASIC_SIZE_XY_ / 2, _ASIC_THICKNESS_ / 2);
-  Volume asicVol(detName + "_asic", asic_solid, mirrorMat);
+  Volume asicVol(detName + "_asic", asic_solid, HRPPD_ASICMat);
   asicVol.setVisAttributes(mirrorVis);
 
   double asic_pitch = _READOUT_PCB_SIZE_ / 2;

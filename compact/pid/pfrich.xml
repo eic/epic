@@ -98,9 +98,9 @@
   name="RICHEndcapN"
   type="epic_PFRICH"
   readout="RICHEndcapNHits"
-  gas="C4F10_PFRICH"
-  material="Aluminum"
-  vis_vessel="DRICH_vessel_vis"
+  gas="N2cherenkov"
+  material="CarbonFiber"
+  vis_vessel="PFRICH_vessel_vis"
   vis_gas="DRICH_gas_vis"
   >
 
@@ -235,7 +235,7 @@
 </radiator>
 
 <mirror
-  material="Acrylic_DRICH"
+  material="CarbonFiber"
   surface="MirrorSurface_DRICH"
   vis="DRICH_mirror_vis"
   backplane="DRICH_window_thickness + 1.0*cm"
