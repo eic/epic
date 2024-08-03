@@ -68,6 +68,11 @@
     <constant name="BarrelTOF_length2"             value="BarrelTOF_length1"/>
     <constant name="BarrelTOF_length"              value="BarrelTOF_length2"/>
 
+    <constant name="BarrelTOF_Sensor_length"       value="4*cm"/>
+    <constant name="BarrelTOF_Sensor_offsetY"      value="10*cm"/>
+    <constant name="BarrelTOF_Sensor_deadspaceY"   value="1*cm"/>
+    <constant name="BarrelTOF_Sensor_amount"       value="40"/>
+
   </define>
 
   <display>
@@ -89,8 +94,8 @@
         Tracker Barrel Modules
       </comment>
       <module name="BarrelTOF_Module1" vis="TOFBarrelModuleVis">
-        <module_component name="sensor" material="Silicon" sensitive="true" width="BarrelTOF_Sensor_width" length="BarrelTOF_length1" thickness="BarrelTOF_Sensor_thickness" vis="TOFSensorVis" >
-          <position x="BarrelTOF_Sensor_position" y="0" z="0" />
+        <module_component name="sensor" material="Silicon" sensitive="true" width="BarrelTOF_Sensor_width" length="BarrelTOF_Sensor_length" thickness="BarrelTOF_Sensor_thickness" vis="TOFSensorVis" >
+            <GridSensors start_x="BarrelTOF_Sensor_position" start_y="-0.5*BarrelTOF_length1 + BarrelTOF_Sensor_offsetY" start_z="0" xdist="0" ydist="BarrelTOF_Sensor_length+BarrelTOF_Sensor_deadspaceY" nx="1" ny="BarrelTOF_Sensor_amount"/>
         </module_component>
         <module_component name="hybridtop" material="Kapton" sensitive="false" width="BarrelTOF_Module_width" length="BarrelTOF_length1" thickness="BarrelTOF_Hybrid_thickness" vis="TOFHybridVis" >
           <position x="BarrelTOF_Service_position" y="0" z="0" />
@@ -140,8 +145,8 @@
 
   <readouts>
     <readout name="TOFBarrelHits">
-      <segmentation type="CartesianGridXY" grid_size_x="0.1*mm" grid_size_y="1*cm" />
-      <id>system:8,layer:4,module:12,sensor:2,x:32:-16,y:-16</id>
+      <segmentation type="CartesianGridXY" grid_size_x="0.5*mm" grid_size_y="1*cm" offset_x="0.25*mm" offset_y="0.5*cm"/>
+      <id>system:8,layer:4,module:12,sensor:10,x:40:-8,y:-16</id>
     </readout>
   </readouts>
 
