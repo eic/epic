@@ -11,35 +11,50 @@
     <detector
     name="Pipe_Q1eR_to_B2BeR"
     type="BeamPipeChain"
-    wall_thickness="2*mm"
+    wall_thickness="Electron_Beampipe_Pipe_Wall_Thickness"
+    coating_thickness="Electron_Beampipe_Pipe_Coating_Thickness"
     vis="BeamPipeVis">
-      <pipe id="0" name="Pipe_to_Q1eR"
-        xcenter="0" zcenter="(Center_Beampipe_End + Q1eR_CenterPosition+Q1eR_Length/2)/2"
-        length="Center_Beampipe_End - (Q1eR_CenterPosition+Q1eR_Length/2)" theta="0"
-        rout1="Center_Beampipe_Rad" rout2="Q1eR_InnerRadius">
+      <pipe id="0" name="Pipe_0"
+        xcenter="0" zcenter="Electron_Beampipe_Pipe_0_End + abs(Center_Beampipe_End - Electron_Beampipe_Pipe_0_End)/2"
+        length="abs(Center_Beampipe_End - Electron_Beampipe_Pipe_0_End)" theta="0"
+        rout1="Center_Beampipe_Rad + Electron_Beampipe_Pipe_Coating_Thickness"
+        rout2="Electron_Beampipe_Pipe_0_ID/2 + Electron_Beampipe_Pipe_Coating_Thickness + Electron_Beampipe_Pipe_Wall_Thickness">
       </pipe>
-      <pipe id="1" name="Pipe_in_Q1eR"
-        xcenter="0" zcenter="Q1eR_CenterPosition"
-        length="Q1eR_Length" theta="0"
-        rout1="Q1eR_InnerRadius" rout2="Q1eR_InnerRadius">
+      <pipe id="1" name="Pipe_1"
+        xcenter="0" zcenter="Electron_Beampipe_Pipe_1_End + abs(Electron_Beampipe_Pipe_0_End - Electron_Beampipe_Pipe_1_End)/2"
+        length="abs(Electron_Beampipe_Pipe_0_End - Electron_Beampipe_Pipe_1_End)" theta="0"
+        rout1="Electron_Beampipe_Pipe_0_ID/2 + Electron_Beampipe_Pipe_Coating_Thickness + Electron_Beampipe_Pipe_Wall_Thickness"
+        rout2="Electron_Beampipe_Pipe_1_ID/2 + Electron_Beampipe_Pipe_Coating_Thickness + Electron_Beampipe_Pipe_Wall_Thickness">
       </pipe>
-      <pipe id="2" name="Pipe_Q1eR_to_Q2eR"/>
-      <pipe id="3" name="Pipe_in_Q2eR"
-        xcenter="0" zcenter="Q2eR_CenterPosition"
-        length="Q2eR_Length" theta="0"
-        rout1="Q2eR_InnerRadius" rout2="Q2eR_InnerRadius">
+      <pipe id="2" name="Pipe_2"
+        xcenter="0" zcenter="Electron_Beampipe_Pipe_2_End + abs(Electron_Beampipe_Pipe_1_End - Electron_Beampipe_Pipe_2_End)/2"
+        length="abs(Electron_Beampipe_Pipe_1_End - Electron_Beampipe_Pipe_2_End)" theta="0"
+        rout1="Electron_Beampipe_Pipe_1_ID/2 + Electron_Beampipe_Pipe_Coating_Thickness + Electron_Beampipe_Pipe_Wall_Thickness"
+        rout2="Electron_Beampipe_Pipe_2_ID/2 + Electron_Beampipe_Pipe_Coating_Thickness + Electron_Beampipe_Pipe_Wall_Thickness">
       </pipe>
-      <pipe id="4" name="Pipe_Q2eR_to_B2AeR"/>
-      <pipe id="5" name="Pipe_in_B2AeR"
-        xcenter="0" zcenter="B2AeR_CenterPosition"
-        length="B2AeR_Length" theta="0"
-        rout1="B2AeR_InnerRadius" rout2="B2AeR_InnerRadius">
+      <pipe id="3" name="Pipe_3"
+        xcenter="0" zcenter="Electron_Beampipe_Pipe_3_End + abs(Electron_Beampipe_Pipe_2_End - Electron_Beampipe_Pipe_3_End)/2"
+        length="abs(Electron_Beampipe_Pipe_2_End - Electron_Beampipe_Pipe_3_End)" theta="0"
+        rout1="Electron_Beampipe_Pipe_2_ID/2 + Electron_Beampipe_Pipe_Coating_Thickness + Electron_Beampipe_Pipe_Wall_Thickness"
+        rout2="Electron_Beampipe_Pipe_3_ID/2 + Electron_Beampipe_Pipe_Coating_Thickness + Electron_Beampipe_Pipe_Wall_Thickness">
       </pipe>
-      <pipe id="6" name="Pipe_B2AeR_to_B2BeR"/>
-      <pipe id="7" name="Pipe_in_B2BeR"
-        xcenter="0" zcenter="B2BeR_CenterPosition"
-        length="B2BeR_Length" theta="0"
-        rout1="B2BeR_InnerRadius" rout2="B2BeR_InnerRadius">
+      <pipe id="4" name="Pipe_4"
+        xcenter="0" zcenter="Electron_Beampipe_Pipe_4_End + abs(Electron_Beampipe_Pipe_3_End - Electron_Beampipe_Pipe_4_End)/2"
+        length="abs(Electron_Beampipe_Pipe_3_End - Electron_Beampipe_Pipe_4_End)" theta="0"
+        rout1="Electron_Beampipe_Pipe_3_ID/2 + Electron_Beampipe_Pipe_Coating_Thickness + Electron_Beampipe_Pipe_Wall_Thickness"
+        rout2="Electron_Beampipe_Pipe_4_ID/2 + Electron_Beampipe_Pipe_Coating_Thickness + Electron_Beampipe_Pipe_Wall_Thickness">
+      </pipe>
+      <pipe id="5" name="Pipe_5"
+        xcenter="0" zcenter="Electron_Beampipe_Pipe_5_End + abs(Electron_Beampipe_Pipe_4_End - Electron_Beampipe_Pipe_5_End)/2"
+        length="abs(Electron_Beampipe_Pipe_4_End - Electron_Beampipe_Pipe_5_End)" theta="0"
+        rout1="Electron_Beampipe_Pipe_4_ID/2 + Electron_Beampipe_Pipe_Coating_Thickness + Electron_Beampipe_Pipe_Wall_Thickness"
+        rout2="Electron_Beampipe_Pipe_5_ID/2 + Electron_Beampipe_Pipe_Coating_Thickness + Electron_Beampipe_Pipe_Wall_Thickness">
+      </pipe>
+      <pipe id="6" name="Pipe_6"
+        xcenter="0" zcenter="Electron_Beampipe_Pipe_6_End + abs(Electron_Beampipe_Pipe_5_End - Electron_Beampipe_Pipe_6_End)/2"
+        length="abs(Electron_Beampipe_Pipe_5_End - Electron_Beampipe_Pipe_6_End)" theta="0"
+        rout1="Electron_Beampipe_Pipe_5_ID/2 + Electron_Beampipe_Pipe_Coating_Thickness + Electron_Beampipe_Pipe_Wall_Thickness"
+        rout2="Electron_Beampipe_Pipe_6_ID/2 + Electron_Beampipe_Pipe_Coating_Thickness + Electron_Beampipe_Pipe_Wall_Thickness">
       </pipe>
     </detector>
 
@@ -56,13 +71,6 @@
       <placement  x="0" y="0" z="Q2eR_CenterPosition" theta="0*rad"/>
       <dimensions x="Q2eR_InnerRadius*4" y="Q2eR_InnerRadius*4" z="Q2eR_Length" r="1.5*Q2eR_InnerRadius"/>
       <apperture  x="Q2eR_InnerRadius*2" y="Q2eR_InnerRadius*2" r="Q2eR_InnerRadius"/>
-      <coil dx="2*cm" dy="1.5*cm" /><!--unchecked-->
-    </detector>
-
-    <detector name="Magnet_B2AeR" type="ip6_CylindricalDipoleMagnet" vis="FFMagnetVis">
-      <placement  x="0" y="0" z="B2AeR_CenterPosition" theta="0*rad"/>
-      <dimensions x="B2AeR_InnerRadius*4" y="B2AeR_InnerRadius*4" z="B2AeR_Length" r="1.5*B2AeR_InnerRadius"/>
-      <apperture  x="B2AeR_InnerRadius*2" y="B2AeR_InnerRadius*2" r="B2AeR_InnerRadius"/>
       <coil dx="2*cm" dy="1.5*cm" /><!--unchecked-->
     </detector>
 
@@ -108,12 +116,6 @@
       <position x="0" y="0" z="Q3eR_CenterPosition"/>
       <coefficient/>
       <coefficient coefficient="Q3eR_Gradient"/>
-    </field>
-
-    <field name="Magnet_B2AeR_Field" type="MultipoleMagnet">
-      <shape type="Tube" rmax="B2AeR_InnerRadius" dz="B2AeR_Length/2"/>
-      <position x="0" y="0" z="B2AeR_CenterPosition"/>
-      <coefficient coefficient="B2AeR_B"/>
     </field>
 
     <field name="Magnet_B2BeR_Field" type="MultipoleMagnet">

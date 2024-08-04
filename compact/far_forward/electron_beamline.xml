@@ -9,8 +9,8 @@
     <constant name="Beampipe_cen_pos_Thickness" value="1.0*mm"/>
 
     <!-- end of central section -->
-    <constant name="Beampipe_cen_pos_EndZ" value="4484.25*mm"/>
-    <constant name="Beampipe_cen_pos_r1" value="BeampipeOD/2."/>
+    <constant name="Beampipe_cen_pos_EndZ" value="5100.00 * mm"/>
+    <constant name="Beampipe_cen_pos_r1" value="(54.00/2.0 + 1.0) * mm"/>
 
     <!-- Q0eF quadrupole magnet -->
     <constant name="Q0EF_StartZ" value="7000.*mm"/>
@@ -33,7 +33,8 @@
     <detector
       name="Pipe_cen_to_pos"
       type="BeamPipeChain"
-      wall_thickness="Beampipe_cen_pos_Thickness">
+      wall_thickness="Beampipe_cen_pos_Thickness"
+      coating_thickness="Electron_Beampipe_Pipe_Coating_Thickness">
 
       <pipe id="0" name="Pipe_to_Q0EF"
         xcenter="0" zcenter="(Q0EF_EndZ+Beampipe_cen_pos_EndZ)/2."
@@ -48,9 +49,9 @@
       </pipe>
 
       <pipe id="2" name="Pipe_Q1EF_to_pos"
-      xcenter="0" zcenter="(Beampipe_fwd_pos_EndZ+Q1EF_StartZ)/2."
-      length="Beampipe_fwd_pos_EndZ-Q1EF_StartZ" theta="0"
-      rout1="Q1EF_InnerRadius" rout2="Q1EF_InnerRadius">
+        xcenter="0" zcenter="(Beampipe_fwd_pos_EndZ+Q1EF_StartZ)/2."
+        length="Beampipe_fwd_pos_EndZ-Q1EF_StartZ" theta="0"
+        rout1="Q1EF_InnerRadius" rout2="Q1EF_InnerRadius">
       </pipe>
 
     </detector>
