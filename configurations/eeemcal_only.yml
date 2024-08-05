@@ -1,7 +1,5 @@
 features:
-  #  beampipe:
-  tracking:
-    definitions_craterlake:
-    support_service_craterlake:
+  fields:
+    marco:
   ecal:
     backward_PbWO4:

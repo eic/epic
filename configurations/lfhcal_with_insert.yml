@@ -1,4 +1,6 @@
 features:
+  fields:
+    marco:
   hcal:
     lfhcal_with_space_for_insert:
     forward_insert:
