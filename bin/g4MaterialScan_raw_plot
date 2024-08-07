@@ -1,0 +1,102 @@
+#!/usr/bin/env python3
+
+# SPDX-License-Identifier: LGPL-3.0-or-later
+# Copyright (C) 2024 Chao Peng
+'''
+    A script to plot raw data output from the script g4MaterialScan_to_csv
+'''
+
+import os
+import re
+import argparse
+import pandas as pd
+import numpy as np
+from matplotlib import pyplot as plt
+from matplotlib.ticker import AutoMinorLocator
+
+
+if __name__ == '__main__':
+    parser = argparse.ArgumentParser(
+            prog='g4MaterialScan_raw_plot',
+            description = 'A python script to draw material thicknesses from raw output of g4MaterialScan_to_csv.'
+            )
+    parser.add_argument(
+            'data_path',
+            help='path to the raw data from scan (a csv file).'
+            )
+    parser.add_argument(
+            '--path-lengths', default="0, 180, 600",
+            help='path length points, separated by \",\".'
+            )
+    parser.add_argument(
+            '--sep', default='\t',
+            help='Seperator for the CSV file.'
+            )
+    parser.add_argument(
+            '--font-size', type=float, default=18.,
+            help='Font size of the plots.'
+            )
+    args = parser.parse_args()
+
+    # get the path length points
+    pls = np.array([float(x.strip()) for x in args.path_lengths.split(',')])
+    if len(pls) < 2:
+        print('Need at least two points in --path-lengths')
+        exit(-1)
+
+    # determine the eta and phi from path
+    eta, phi = 0., 0.
+    try:
+        match = re.search(r'eta=([\d\-\.]*\d).*phi=([\d\-\.]*\d)', args.data_path)
+        eta = float(match[1])
+        phi = float(match[2])
+    except:
+        print('WARNING: Fail to determine eta, phi from data path, information may be incorrect.')
+
+    # read and process data
+    df = pd.read_csv(args.data_path, sep=args.sep, index_col=0)
+    df.loc[:, 'X0_cum'] = df['X0'].cumsum()
+    df.loc[:, 'lambda_cum'] = df['lambda'].cumsum()
+    # print(df)
+
+    # font size and colors
+    fs = args.font_size
+    prop_cycle = plt.rcParams['axes.prop_cycle']
+    colors = prop_cycle.by_key()['color']
+
+    # plot X0 and lambda in the path length intervals [pl(i), pl(i+1)]
+    fig, axs = plt.subplots(1, len(pls) - 1, figsize=(8 * (len(pls) - 1), 6), dpi=160,
+                            gridspec_kw=dict(left=0.1, right=0.92, top=0.95, wspace=0.4))
+    for i, ax in enumerate(axs.flat):
+        min_pl, max_pl = pls[i], pls[i + 1]
+
+        dfr = df[(df['path_length'] <= max_pl) & (df['path_length'] >= min_pl)]
+        # X0
+        ax.step(df['path_length'], df['X0_cum'], color=colors[0])
+
+        # lambda
+        ax2 = ax.twinx()
+        ax2.step(df['path_length'], df['lambda_cum'], color=colors[1], ls='--')
+
+
+        ax.text(0.05, 0.95, r'$\eta={:g}, \phi={:g}^{{\circ}}$'.format(eta, phi),
+                fontsize=fs, color=colors[2],
+                horizontalalignment='left', verticalalignment='top', transform=ax.transAxes)
+        # axis format
+        ax.set_xlabel('Path Length [cm]', fontsize=fs)
+        ax.set_ylabel('$X/X_0$ (Cumulative)', fontsize=fs, color=colors[0])
+        ax2.set_ylabel('$\Lambda$ (Cumulative)', fontsize=fs, color=colors[1])
+        ax.xaxis.set_minor_locator(AutoMinorLocator(5))
+        ax.yaxis.set_minor_locator(AutoMinorLocator(5))
+        ax2.yaxis.set_minor_locator(AutoMinorLocator(5))
+        ax.set_xlim(min_pl, max_pl)
+        ax.set_ylim(0, dfr['X0_cum'].max()*1.1)
+        ax2.set_ylim(0, dfr['lambda_cum'].max()*1.1)
+        ax.tick_params(direction='in', which='both', labelsize=fs)
+        ax2.tick_params(direction='in', which='both', labelsize=fs)
+        ax.grid(which='major', ls=':')
+        ax.set_axisbelow(True)
+    # save the plot with the same name
+    save_path = '.'.join(args.data_path.split('.')[:-1]) + '.png'
+    fig.savefig(save_path)
+    print('Plot saved as \"{}\"'.format(save_path))
