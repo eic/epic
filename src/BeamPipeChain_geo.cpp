@@ -25,24 +25,24 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
   string det_name = x_det.nameStr();
   DetElement sdet(det_name, x_det.id());
   Assembly assembly(det_name + "_assembly");
-  Material m_Al        = description.material("Aluminum");
-  Material m_Vacuum    = description.material("Vacuum");
-  string   vis_name    = dd4hep::getAttrOrDefault<std::string>(x_det, _Unicode(vis), "BeamPipeVis");
-  double   thickness   = getAttrOrDefault<double>(x_det, _Unicode(wall_thickness), 0);
-  bool     isSensitive = getAttrOrDefault<bool>(x_det, _Unicode(sensitive), false);
+  Material m_Al     = description.material("Aluminum");
+  Material m_Vacuum = description.material("Vacuum");
+  string vis_name   = dd4hep::getAttrOrDefault<std::string>(x_det, _Unicode(vis), "BeamPipeVis");
+  double thickness  = getAttrOrDefault<double>(x_det, _Unicode(wall_thickness), 0);
+  bool isSensitive  = getAttrOrDefault<bool>(x_det, _Unicode(sensitive), false);
 
   sens.setType("tracker");
 
   vector<string> names;
-  vector<int>    ids;
+  vector<int> ids;
   vector<double> xCenters;
   vector<double> zCenters;
   vector<double> lengths;
   vector<double> thetas;
   vector<double> rOuters1;
   vector<double> rOuters2;
-  vector<bool>   detStart;
-  vector<bool>   detEnd;
+  vector<bool> detStart;
+  vector<bool> detEnd;
 
   // Grab info for beamline magnets
   for (xml_coll_t pipe_coll(x_det, _Unicode(pipe)); pipe_coll; pipe_coll++) { // pipes
@@ -52,16 +52,15 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
     names.push_back(getAttrOrDefault<string>(pipe, _Unicode(name), ""));
     ids.push_back(getAttrOrDefault<int>(pipe, _Unicode(id), 0));
 
-    // Vectors momentarily filled with zeros for pipes in between magnets    
-    xCenters.push_back(getAttrOrDefault<double>(pipe, _Unicode(xcenter),  0));
-    zCenters.push_back(getAttrOrDefault<double>(pipe, _Unicode(zcenter),  0));
-    lengths.push_back (getAttrOrDefault<double>(pipe, _Unicode(length),   0));
-    thetas.push_back  (getAttrOrDefault<double>(pipe, _Unicode(theta),    0));
-    rOuters1.push_back(getAttrOrDefault<double>(pipe, _Unicode(rout1),    0));
-    rOuters2.push_back(getAttrOrDefault<double>(pipe, _Unicode(rout2),    0));
-    detStart.push_back(getAttrOrDefault<bool>  (pipe, _Unicode(detStart), true));
-    detEnd.push_back  (getAttrOrDefault<bool>  (pipe, _Unicode(detEnd),   true));
-
+    // Vectors momentarily filled with zeros for pipes in between magnets
+    xCenters.push_back(getAttrOrDefault<double>(pipe, _Unicode(xcenter), 0));
+    zCenters.push_back(getAttrOrDefault<double>(pipe, _Unicode(zcenter), 0));
+    lengths.push_back(getAttrOrDefault<double>(pipe, _Unicode(length), 0));
+    thetas.push_back(getAttrOrDefault<double>(pipe, _Unicode(theta), 0));
+    rOuters1.push_back(getAttrOrDefault<double>(pipe, _Unicode(rout1), 0));
+    rOuters2.push_back(getAttrOrDefault<double>(pipe, _Unicode(rout2), 0));
+    detStart.push_back(getAttrOrDefault<bool>(pipe, _Unicode(detStart), true));
+    detEnd.push_back(getAttrOrDefault<bool>(pipe, _Unicode(detEnd), true));
   }
 
   // Calculate parameters for connecting pipes in between magnets
@@ -115,23 +114,29 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
     Volume v_vacuum("v_vacuum_" + names[pipeN], s_vacuum, m_Vacuum);
 
     // Add sensitive slices at the start and end of the beam pipe
-    if(isSensitive) {
-      double sensitive_thickness = 0.1*mm;
+    if (isSensitive) {
+      double sensitive_thickness = 0.1 * mm;
       if (detStart[pipeN]) {
         //Calculate R or cone after sensitive layer
-        double rEnd = rOuters2[pipeN] - thickness -(rOuters2[pipeN]-rOuters1[pipeN])*sensitive_thickness/lengths[pipeN];
-        ConeSegment s_start_disk(sensitive_thickness/2, 0.0, rOuters2[pipeN] - thickness, 0.0, rEnd);
+        double rEnd = rOuters2[pipeN] - thickness -
+                      (rOuters2[pipeN] - rOuters1[pipeN]) * sensitive_thickness / lengths[pipeN];
+        ConeSegment s_start_disk(sensitive_thickness / 2, 0.0, rOuters2[pipeN] - thickness, 0.0,
+                                 rEnd);
         Volume v_start_disk("v_start_disk_" + names[pipeN], s_start_disk, m_Vacuum);
         v_start_disk.setSensitiveDetector(sens);
-        auto disk_placement = v_vacuum.placeVolume(v_start_disk, Position(0.0, 0.0, -lengths[pipeN]/2.0 + sensitive_thickness/2.0));        
+        auto disk_placement = v_vacuum.placeVolume(
+            v_start_disk, Position(0.0, 0.0, -lengths[pipeN] / 2.0 + sensitive_thickness / 2.0));
         disk_placement.addPhysVolID("end", 0);
       }
       if (detEnd[pipeN]) {
-        double rStart = rOuters1[pipeN] - thickness +(rOuters2[pipeN]-rOuters1[pipeN])*sensitive_thickness/lengths[pipeN];
-        ConeSegment s_end_disk(sensitive_thickness/2, 0.0, rStart, 0.0, rOuters1[pipeN] - thickness);
+        double rStart = rOuters1[pipeN] - thickness +
+                        (rOuters2[pipeN] - rOuters1[pipeN]) * sensitive_thickness / lengths[pipeN];
+        ConeSegment s_end_disk(sensitive_thickness / 2, 0.0, rStart, 0.0,
+                               rOuters1[pipeN] - thickness);
         Volume v_end_disk("v_end_disk_" + names[pipeN], s_end_disk, m_Vacuum);
         v_end_disk.setSensitiveDetector(sens);
-        auto disk_placement = v_vacuum.placeVolume(v_end_disk, Position(0.0, 0.0, lengths[pipeN]/2.0 - sensitive_thickness/2.0));
+        auto disk_placement = v_vacuum.placeVolume(
+            v_end_disk, Position(0.0, 0.0, lengths[pipeN] / 2.0 - sensitive_thickness / 2.0));
         disk_placement.addPhysVolID("end", 1);
       }
     }
@@ -140,8 +145,9 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
 
     assembly.placeVolume(v_tube, Transform3D(RotationY(thetas[pipeN]),
                                              Position(xCenters[pipeN], 0, zCenters[pipeN])));
-    auto vac_placement = assembly.placeVolume(v_vacuum, Transform3D(RotationY(thetas[pipeN]),
-                                                    Position(xCenters[pipeN], 0, zCenters[pipeN])));
+    auto vac_placement =
+        assembly.placeVolume(v_vacuum, Transform3D(RotationY(thetas[pipeN]),
+                                                   Position(xCenters[pipeN], 0, zCenters[pipeN])));
     vac_placement.addPhysVolID("pipe", ids[pipeN]);
   }
 
