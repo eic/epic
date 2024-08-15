@@ -131,7 +131,7 @@
 
     <readout name="BackwardsBeamlineHits">
       <segmentation type="NoSegmentation"/>
-      <id>system:8,pipe:8,position:2</id>
+      <id>system:8,pipe:8,end:2</id>
     </readout>
 
   </readouts>

@@ -30,7 +30,8 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
   string   vis_name    = dd4hep::getAttrOrDefault<std::string>(x_det, _Unicode(vis), "BeamPipeVis");
   double   thickness   = getAttrOrDefault<double>(x_det, _Unicode(wall_thickness), 0);
   bool     isSensitive = getAttrOrDefault<bool>(x_det, _Unicode(sensitive), false);
-  sens.setType("calorimeter");
+
+  sens.setType("tracker");
 
   vector<string> names;
   vector<int>    ids;
@@ -123,7 +124,7 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
         Volume v_start_disk("v_start_disk_" + names[pipeN], s_start_disk, m_Vacuum);
         v_start_disk.setSensitiveDetector(sens);
         auto disk_placement = v_vacuum.placeVolume(v_start_disk, Position(0.0, 0.0, -lengths[pipeN]/2.0 + sensitive_thickness/2.0));        
-        disk_placement.addPhysVolID("pipe", 0);
+        disk_placement.addPhysVolID("end", 0);
       }
       if (detEnd[pipeN]) {
         double rStart = rOuters1[pipeN] - thickness +(rOuters2[pipeN]-rOuters1[pipeN])*sensitive_thickness/lengths[pipeN];
@@ -131,7 +132,7 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
         Volume v_end_disk("v_end_disk_" + names[pipeN], s_end_disk, m_Vacuum);
         v_end_disk.setSensitiveDetector(sens);
         auto disk_placement = v_vacuum.placeVolume(v_end_disk, Position(0.0, 0.0, lengths[pipeN]/2.0 - sensitive_thickness/2.0));
-        disk_placement.addPhysVolID("pipe", 1);
+        disk_placement.addPhysVolID("end", 1);
       }
     }
 
