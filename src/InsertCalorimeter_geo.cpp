@@ -118,7 +118,7 @@ static Ref_t createDetector(Detector& desc, xml_h handle, SensitiveDetector sens
 
       // Looping through the number of repeated layers in each section
       for (int i = 0; i < repeat; i++) {
-        std::string layer_name = detName + _toString(layer_num, side_name, "_layer%d_%s");
+        std::string layer_name = detName + _toString(layer_num, side_name, "_layer%d")+"_"+side_name;
         Box layer(width / 2., height / 2., layer_thickness / 2.);
 
         // Hole radius and position for each layer is determined from z position at the front of the layer
@@ -143,7 +143,7 @@ static Ref_t createDetector(Detector& desc, xml_h handle, SensitiveDetector sens
         for (xml_coll_t l(x_layer, _U(slice)); l; l++) {
           xml_comp_t x_slice     = l;
           double slice_thickness = x_slice.thickness();
-          std::string slice_name = layer_name + _toString(slice_num, side_name, "slice%d_%s");
+          std::string slice_name = layer_name + _toString(slice_num, "slice%d")+"_"+side_name;
           Material slice_mat     = desc.material(x_slice.materialStr());
           slice_z += slice_thickness / 2.; // Going to slice halfway point
 
