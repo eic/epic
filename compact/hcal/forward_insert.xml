@@ -137,7 +137,7 @@
       and https://github.com/AIDASoft/DD4hep/blob/1962f7d1ace4484efb8886d66a6759a83c5107a3/DDCore/src/segmentations/HexGrid.cpp#L102-L120
     </documentation>
     <readout name="HcalEndcapPInsertHits">
-      <segmentation type="MultiSegmentation" key="layer"
+      <segmentation type="MultiSegmentation" key="layer">
         <segmentation
           name="insert_hg"
           type="HexGrid"
