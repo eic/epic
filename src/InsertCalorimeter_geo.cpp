@@ -107,38 +107,38 @@ static Ref_t createDetector(Detector& desc, xml_h handle, SensitiveDetector sens
     // Keeps track of the z location as we move longiduinally through the insert
     // Will use this tracking variable as input to get_hole_rxy
     double z_distance_traversed = 0.;
-  
+
     int layer_num = 1;
-  
+
     // Looping through all the different layer sections (W/Sc, Steel/Sc, backplate)
     for (xml_coll_t c(detElem, _U(layer)); c; c++) {
       xml_comp_t x_layer     = c;
       int repeat             = x_layer.repeat();
       double layer_thickness = x_layer.thickness();
-  
+
       // Looping through the number of repeated layers in each section
       for (int i = 0; i < repeat; i++) {
         std::string layer_name = detName + _toString(layer_num, side_name, "_layer%d_%s");
         Box layer(width / 2., height / 2., layer_thickness / 2.);
-  
+
         // Hole radius and position for each layer is determined from z position at the front of the layer
         const auto hole_rxy = get_hole_rxy(z_distance_traversed);
         double hole_r       = std::get<0>(hole_rxy);
         double hole_x       = std::get<1>(hole_rxy);
         double hole_y       = std::get<2>(hole_rxy);
-  
+
         // Removing beampipe shape from each layer
         Tube layer_hole(0., hole_r, layer_thickness / 2.);
         SubtractionSolid layer_with_hole(layer, layer_hole, Position(hole_x, hole_y, 0.));
         // Only select the left or right side of the layer
         Box side_cut(width, height, layer_thickness);
-        Position side_cut_position((width/2-left_right_gap/2)*(1-2*side_num),0,0);
+        Position side_cut_position((width / 2 - left_right_gap / 2) * (1 - 2 * side_num), 0, 0);
         SubtractionSolid layer_side_with_hole(layer_with_hole, side_cut, side_cut_position);
         Volume layer_vol(layer_name, layer_side_with_hole, air);
-  
+
         int slice_num  = 1;
         double slice_z = -layer_thickness / 2.; // Keeps track of slices' z locations in each layer
-  
+
         // Looping over each layer's slices
         for (xml_coll_t l(x_layer, _U(slice)); l; l++) {
           xml_comp_t x_slice     = l;
@@ -146,23 +146,23 @@ static Ref_t createDetector(Detector& desc, xml_h handle, SensitiveDetector sens
           std::string slice_name = layer_name + _toString(slice_num, side_name, "slice%d_%s");
           Material slice_mat     = desc.material(x_slice.materialStr());
           slice_z += slice_thickness / 2.; // Going to slice halfway point
-  
+
           // Each slice within a layer has the same hole radius and x-y position
           Box slice(width / 2., height / 2., slice_thickness / 2.);
           Tube slice_hole(0., hole_r, slice_thickness / 2.);
           SubtractionSolid slice_with_hole(slice, slice_hole, Position(hole_x, hole_y, 0.));
           SubtractionSolid slice_side_with_hole(slice_with_hole, side_cut, side_cut_position);
           Volume slice_vol(slice_name, slice_side_with_hole, slice_mat);
-  
+
           // Setting appropriate slices as sensitive
           if (x_slice.isSensitive()) {
             sens.setType("calorimeter");
             slice_vol.setSensitiveDetector(sens);
           }
-  
+
           // Setting slice attributes
           slice_vol.setAttributes(desc, x_slice.regionStr(), x_slice.limitsStr(), x_slice.visStr());
-  
+
           // Placing slice within layer
           pv = layer_vol.placeVolume(slice_vol,
                                      Transform3D(RotationZYX(0, 0, 0), Position(0., 0., slice_z)));
@@ -172,7 +172,7 @@ static Ref_t createDetector(Detector& desc, xml_h handle, SensitiveDetector sens
           z_distance_traversed += slice_thickness;
           slice_num++;
         }
-  
+
         // Setting layer attributes
         layer_vol.setAttributes(desc, x_layer.regionStr(), x_layer.limitsStr(), x_layer.visStr());
         /*
@@ -186,11 +186,12 @@ static Ref_t createDetector(Detector& desc, xml_h handle, SensitiveDetector sens
                    Each loop over repeat will increases z_distance_traversed by layer_thickness
         */
         pv = assembly.placeVolume(
-            layer_vol, Transform3D(RotationZYX(0, 0, 0),
-                                   Position(0., 0.,
-                                            -length / 2. + (z_distance_traversed - layer_thickness) +
-                                                layer_thickness / 2.)));
-  
+            layer_vol,
+            Transform3D(RotationZYX(0, 0, 0),
+                        Position(0., 0.,
+                                 -length / 2. + (z_distance_traversed - layer_thickness) +
+                                     layer_thickness / 2.)));
+
         pv.addPhysVolID("layer", layer_num);
         pv.addPhysVolID("side", side_num);
         layer_num++;
