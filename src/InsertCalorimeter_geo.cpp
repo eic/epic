@@ -118,8 +118,7 @@ static Ref_t createDetector(Detector& desc, xml_h handle, SensitiveDetector sens
 
       // Looping through the number of repeated layers in each section
       for (int i = 0; i < repeat; i++) {
-        std::string layer_name =
-            detName + _toString(layer_num, "_layer%d") + "_" + side_name;
+        std::string layer_name = detName + _toString(layer_num, "_layer%d") + "_" + side_name;
         Box layer(width / 2., height / 2., layer_thickness / 2.);
 
         // Hole radius and position for each layer is determined from z position at the front of the layer
