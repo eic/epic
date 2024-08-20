@@ -49,7 +49,7 @@
              HcalEndcapPInsertAirThickness "
     />
     <constant name="HcalEndcapPInsertBackplateThickness"    value="HcalEndcapPInsertAbsorberThickness"/>
-    <constant name="HcalEndcapPInsertLayer_NSteelRepeat"    value="64"/>
+    <constant name="HcalEndcapPInsertLayer_NSteelRepeat"    value="60"/>
   </define>
 
   <detectors>
@@ -57,7 +57,7 @@
       ### Forward (Positive Z) Endcap Insert for Hadronic Calorimeter
       Insert goes in the middle of the forward endcap HCal -- around the beampipe
 
-      Insert is 1 front layer of Steel/Sc + 64 layers of Steel/Sc + 1 backplate of steel
+      Insert is 1 front layer of Steel/Sc + 60 layers of Steel/Sc + 1 backplate of steel
       Each of the layers (sans backplate) includes air gaps (front and back of each layer),
       ESR foil (front and back of scintillator), a PCB, and an aluminum scitnillator cover
 
@@ -128,11 +128,13 @@
 
   <readouts>
     <documentation>
-      Readout is segmented into hexagons with sides of 1.889 cm
-      The hexagons positions cycle through four sets of layer configurations ("H4 staggering")
+      Readout is segmented into hexagons with sides of 2.16 cm, 2.84 cm, and 3.10 cm in the high-granularity upstream section (layers 1-20, for both left and right sides), 
+      the left downstream section (layers 21-60), and the right downstream section (layers 21-60), respectively.
+      The hexagons positions in the first 20 layers cycle through four sets of layer configurations ("H4 staggering")
       i.e. hexagons in layers 1-4 (5-8, ...) are all offset transversely from each other
       with the centers of the cells of one layer being at the midpoints of the edges of the cells in
-      the other layers
+      the other layers.  
+      
       Staggering defined in https://github.com/AIDASoft/DD4hep/blob/1962f7d1ace4484efb8886d66a6759a83c5107a3/DDCore/include/DDSegmentation/HexGrid.h#L112-L114
       and https://github.com/AIDASoft/DD4hep/blob/1962f7d1ace4484efb8886d66a6759a83c5107a3/DDCore/src/segmentations/HexGrid.cpp#L102-L120
     </documentation>
