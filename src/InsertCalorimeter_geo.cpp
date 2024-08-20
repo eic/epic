@@ -102,7 +102,7 @@ static Ref_t createDetector(Detector& desc, xml_h handle, SensitiveDetector sens
   // FIXME Workaround for https://github.com/eic/epic/issues/411
   assembly.setVisAttributes(desc.visAttributes("InvisibleWithDaughters"));
   PlacedVolume pv;
-  for (int side_num = 0; i < 2; i++) { // 0 = right, 1 = left
+  for (int side_num = 0; side_num < 2; side_num++) { // 0 = right, 1 = left
     std::string side_name = side_num == 1 ? "L" : "R";
     // Keeps track of the z location as we move longiduinally through the insert
     // Will use this tracking variable as input to get_hole_rxy
