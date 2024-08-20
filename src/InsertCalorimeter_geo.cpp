@@ -132,7 +132,7 @@ static Ref_t createDetector(Detector& desc, xml_h handle, SensitiveDetector sens
         SubtractionSolid layer_with_hole(layer, layer_hole, Position(hole_x, hole_y, 0.));
         // Only select the left or right side of the layer
         Box side_cut(width, height, layer_thickness);
-        Position side_cut_position((width / 2 - left_right_gap / 2) * (1 - 2 * side_num), 0, 0);
+        Position side_cut_position((width / 2 - left_right_gap / 2) * (1 - 2 * side_num)-pos.x(), 0, 0);
         SubtractionSolid layer_side_with_hole(layer_with_hole, side_cut, side_cut_position);
         Volume layer_vol(layer_name, layer_side_with_hole, air);
 
@@ -151,7 +151,9 @@ static Ref_t createDetector(Detector& desc, xml_h handle, SensitiveDetector sens
           Box slice(width / 2., height / 2., slice_thickness / 2.);
           Tube slice_hole(0., hole_r, slice_thickness / 2.);
           SubtractionSolid slice_with_hole(slice, slice_hole, Position(hole_x, hole_y, 0.));
-          SubtractionSolid slice_side_with_hole(slice_with_hole, side_cut, side_cut_position);
+          Box side_cut_slice(width, height, layer_thickness);
+          Position side_cut_position_slice((width / 2 - left_right_gap / 2) * (1 - 2 * side_num)-pos.x(), 0, 0);
+          SubtractionSolid slice_side_with_hole(slice_with_hole, side_cut_slice, side_cut_position_slice);
           Volume slice_vol(slice_name, slice_side_with_hole, slice_mat);
 
           // Setting appropriate slices as sensitive
