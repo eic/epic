@@ -1,5 +1,5 @@
-ebeam: 5
-pbeam: 41
+ebeam: 10
+pbeam: 100
 features:
   beampipe:
   tracking:
