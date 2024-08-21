@@ -29,6 +29,17 @@
     <constant name="HcalEndcapPInsertCellSizeHG" value="2.16*cm"/>
     <constant name="HcalEndcapPInsertCellSizeLGLeft" value="2.84*cm"/>
     <constant name="HcalEndcapPInsertCellSizeLGRight" value="3.1*cm"/>
+    <documentation>
+      #### Transverse offsets of cells
+    </documentation>
+    <constant name="HcalEndcapPInsertOffsetXHGRight" value="-HcalEndcapPInsert_width/2.-HcalEndcapPInsertCellSizeHG*0.25"/>
+    <constant name="HcalEndcapPInsertOffsetYHGRight" value="HcalEndcapPInsertCellSizeHG*sqrt(3)/2*0"/>
+    <constant name="HcalEndcapPInsertOffsetXHGLeft" value="HcalEndcapPInsert_width/2.-HcalEndcapPInsertCellSizeHG*0"/>
+    <constant name="HcalEndcapPInsertOffsetYHGLeft" value="HcalEndcapPInsertCellSizeHG*sqrt(3)/2*0"/>
+    <constant name="HcalEndcapPInsertOffsetXLGRight" value="-HcalEndcapPInsert_width/2.-HcalEndcapPInsertCellSizeLGRight*0.5"/>
+    <constant name="HcalEndcapPInsertOffsetYLGRight" value="HcalEndcapPInsertCellSizeLGRight*0*sqrt(3)/2"/>
+    <constant name="HcalEndcapPInsertOffsetXLGLeft" value="HcalEndcapPInsert_width/2.+HcalEndcapPInsertCellSizeLGLeft*0.5"/>
+    <constant name="HcalEndcapPInsertOffsetYLGLeft" value="HcalEndcapPInsertCellSizeLGLeft*0*sqrt(3)/2"/>
 
     <documentation>
       - Insert N Layers and computed Thickness
@@ -153,8 +164,8 @@
             side_length="HcalEndcapPInsertCellSizeHG"
             stagger="2"
             key_value="1"
-            offset_x="0"
-            offset_y="0"
+            offset_x="HcalEndcapPInsertOffsetXHGLeft"
+            offset_y="HcalEndcapPInsertOffsetYHGLeft"
           />
            <segmentation
             name="insert_hg_right"
@@ -162,8 +173,8 @@
             side_length="HcalEndcapPInsertCellSizeHG"
             stagger="2"
             key_value="0"
-            offset_x="0"
-            offset_y="0"
+            offset_x="HcalEndcapPInsertOffsetXHGRight"
+            offset_y="HcalEndcapPInsertOffsetYHGRight"
           />
         </segmentation>
         <segmentation name="insert_lg" type="MultiSegmentation" key="side" key_min="21" key_max="60">
@@ -173,8 +184,8 @@
             side_length="HcalEndcapPInsertCellSizeLGLeft"
             stagger="0"
             key_value="1"
-            offset_x="0"
-            offset_y="0"
+            offset_x="HcalEndcapPInsertOffsetXLGLeft"
+            offset_y="HcalEndcapPInsertOffsetYLGLeft"
           />
           <segmentation
             name="insert_lg_right"
@@ -182,8 +193,8 @@
             side_length="HcalEndcapPInsertCellSizeLGRight"
             stagger="0"
             key_value="0"
-            offset_x="0"
-            offset_y="0"
+            offset_x="HcalEndcapPInsertOffsetXLGRight"
+            offset_y="HcalEndcapPInsertOffsetYLGRight"
           />
         </segmentation>
       </segmentation>
