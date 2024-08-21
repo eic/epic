@@ -198,14 +198,14 @@ static Ref_t create_detector(Detector& desc, xml_h e, SensitiveDetector sens) {
   //Loop over the sets of layer elements in the detector.
   int layer_num = 1;
   for (xml_coll_t i_layer(x_detector, _U(layer)); i_layer; ++i_layer) {
-    xml_comp_t x_layer         = i_layer;
-    int layer_repeat           = x_layer.repeat();
-    double layer_thickness     = x_layer.thickness();
+    xml_comp_t x_layer     = i_layer;
+    int layer_repeat       = x_layer.repeat();
+    double layer_thickness = x_layer.thickness();
     // Check if we enabled this silicon tray (actual silicon detector in the slots) at the top level
     // allowing us to easily disable layers in the XML file without needing multiple
     // copies of the XML file
-    const bool tray_enabled   = getAttrOrDefault(x_layer, _Unicode(enable_tray), 1) != 0;
-    bool layer_has_frame = x_layer.hasChild(_Unicode(frame));
+    const bool tray_enabled    = getAttrOrDefault(x_layer, _Unicode(enable_tray), 1) != 0;
+    bool layer_has_frame       = x_layer.hasChild(_Unicode(frame));
     double layer_space_between = getAttrOrDefault(x_layer, _Unicode(space_between), 0.);
     double layer_space_before  = getAttrOrDefault(x_layer, _Unicode(space_before), 0.);
     layer_pos_z += layer_space_before;
@@ -272,8 +272,10 @@ static Ref_t create_detector(Detector& desc, xml_h e, SensitiveDetector sens) {
             auto dy                = x_xy_layout.attr<double>(_Unicode(dy));
 
             // Default to filling
-            auto nx = getAttrOrDefault<int>(x_xy_layout, _Unicode(nx), floor(2. * stave_dim_x / dx));
-            auto ny = getAttrOrDefault<int>(x_xy_layout, _Unicode(ny), floor(2. * stave_dim_y / dy));
+            auto nx =
+                getAttrOrDefault<int>(x_xy_layout, _Unicode(nx), floor(2. * stave_dim_x / dx));
+            auto ny =
+                getAttrOrDefault<int>(x_xy_layout, _Unicode(ny), floor(2. * stave_dim_y / dy));
             printout(DEBUG, "BarrelCalorimeterImaging", "Stave %s layout with %d by %d modules",
                      stave_name.c_str(), nx, ny);
 
@@ -339,8 +341,8 @@ static Ref_t create_detector(Detector& desc, xml_h e, SensitiveDetector sens) {
             }
 
             // Place slice
-            PlacedVolume slice_physvol =
-                stave_volume.placeVolume(slice_volume, Position(0, 0, slice_pos_z + slice_thick / 2));
+            PlacedVolume slice_physvol = stave_volume.placeVolume(
+                slice_volume, Position(0, 0, slice_pos_z + slice_thick / 2));
             slice_physvol.addPhysVolID("slice", slice_num);
             slice_element.setPlacement(slice_physvol);
 
@@ -367,7 +369,7 @@ static Ref_t create_detector(Detector& desc, xml_h e, SensitiveDetector sens) {
         }
       }
 
-      // Place frame if defined. 
+      // Place frame if defined.
       if (layer_has_frame) {
         xml_comp_t x_frame     = x_layer.child(_Unicode(frame));
         double frame_height    = x_frame.height();

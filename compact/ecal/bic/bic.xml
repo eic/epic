@@ -15,7 +15,7 @@
     </comment>
     <comment>
       To change the number of imaging layer slots from, e.g., 9 to 6,
-      change EcalBarrelImagingLayers_nMax variable. Note that this does NOT change the 
+      change EcalBarrelImagingLayers_nMax variable. Note that this does NOT change the
       number of silicon frames, as each silicon frame and layer is placed manually.
 
       This file assumes the EcalBarrel_enable_tray_N variables have been defined to allow
