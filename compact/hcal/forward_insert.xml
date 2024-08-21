@@ -23,6 +23,12 @@
     <constant name="HcalEndcapPInsertESRFoilThickness"           value="0.015*cm"/>
 
     <constant name="LFHCAL_FrontWallThickness"                   value="1.50*cm"/>
+    <documentation>
+      #### Cell Sizes
+    </documentation>
+    <constant name="HcalEndcapPInsertCellSizeHG" value="2.16*cm"/>
+    <constant name="HcalEndcapPInsertCellSizeLGLeft" value="2.84*cm"/>
+    <constant name="HcalEndcapPInsertCellSizeLGRight" value="3.1*cm"/>
 
     <documentation>
       - Insert N Layers and computed Thickness
@@ -140,28 +146,44 @@
     </documentation>
     <readout name="HcalEndcapPInsertHits">
       <segmentation type="MultiSegmentation" key="layer">
-        <segmentation
-          name="insert_hg"
-          type="HexGrid"
-          side_length="2.16*cm"
-          stagger="2"
-          key_min="1"
-          key_max="20"
-        />
+        <segmentation name="insert_hg" type="MultiSegmentation" key="side" key_min="1" key_max="20">
+          <segmentation
+            name="insert_hg_left"
+            type="HexGrid"
+            side_length="HcalEndcapPInsertCellSizeHG"
+            stagger="2"
+            key_value="1"
+            offset_x="0"
+            offset_y="0"
+          />
+           <segmentation
+            name="insert_hg_right"
+            type="HexGrid"
+            side_length="HcalEndcapPInsertCellSizeHG"
+            stagger="2"
+            key_value="0"
+            offset_x="0"
+            offset_y="0"
+          />
+        </segmentation>
         <segmentation name="insert_lg" type="MultiSegmentation" key="side" key_min="21" key_max="60">
           <segmentation
             name="insert_lg_left"
             type="HexGrid"
-            side_length="2.84*cm"
-            stagger="2"
+            side_length="HcalEndcapPInsertCellSizeLGLeft"
+            stagger="0"
             key_value="1"
+            offset_x="0"
+            offset_y="0"
           />
           <segmentation
             name="insert_lg_right"
             type="HexGrid"
-            side_length="3.1*cm"
-            stagger="2"
+            side_length="HcalEndcapPInsertCellSizeLGRight"
+            stagger="0"
             key_value="0"
+            offset_x="0"
+            offset_y="0"
           />
         </segmentation>
       </segmentation>
