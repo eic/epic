@@ -11,12 +11,12 @@
   ><comment/></info>
 
   <define>
-    <constant name="EcallBarrel_enable_tray_1" value="1"/>
-    <constant name="EcallBarrel_enable_tray_2" value="1"/>
-    <constant name="EcallBarrel_enable_tray_3" value="1"/>
-    <constant name="EcallBarrel_enable_tray_4" value="1"/>
-    <constant name="EcallBarrel_enable_tray_5" value="1"/>
-    <constant name="EcallBarrel_enable_tray_6" value="1"/>
+    <constant name="EcalBarrel_enable_tray_1" value="1"/>
+    <constant name="EcalBarrel_enable_tray_2" value="1"/>
+    <constant name="EcalBarrel_enable_tray_3" value="1"/>
+    <constant name="EcalBarrel_enable_tray_4" value="1"/>
+    <constant name="EcalBarrel_enable_tray_5" value="1"/>
+    <constant name="EcalBarrel_enable_tray_6" value="1"/>
   </define>
   <include ref="bic/bic.xml"/>
 </lccdd>
