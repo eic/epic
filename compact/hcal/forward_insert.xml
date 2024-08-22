@@ -166,7 +166,7 @@
             offset_y="HcalEndcapPInsertOffsetYHGRight"
           />
         </segmentation>
-        <segmentation name="insert_lg" type="MultiSegmentation" key="side" key_min="21" key_max="60">
+        <segmentation name="insert_lg" type="MultiSegmentation" key="side" key_min="17" key_max="60">
           <segmentation
             name="insert_lg_left"
             type="HexGrid"
