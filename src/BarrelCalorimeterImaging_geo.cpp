@@ -198,13 +198,9 @@ static Ref_t create_detector(Detector& desc, xml_h e, SensitiveDetector sens) {
   //Loop over the sets of layer elements in the detector.
   int layer_num = 1;
   for (xml_coll_t i_layer(x_detector, _U(layer)); i_layer; ++i_layer) {
-    xml_comp_t x_layer     = i_layer;
-    int layer_repeat       = x_layer.repeat();
-    double layer_thickness = x_layer.thickness();
-    // Check if we enabled this silicon tray (actual silicon detector in the slots) at the top level
-    // allowing us to easily disable layers in the XML file without needing multiple
-    // copies of the XML file
-    const bool tray_enabled    = getAttrOrDefault(x_layer, _Unicode(enable_tray), 1) != 0;
+    xml_comp_t x_layer         = i_layer;
+    int layer_repeat           = x_layer.repeat();
+    double layer_thickness     = x_layer.thickness();
     bool layer_has_frame       = x_layer.hasChild(_Unicode(frame));
     double layer_space_between = getAttrOrDefault(x_layer, _Unicode(space_between), 0.);
     double layer_space_before  = getAttrOrDefault(x_layer, _Unicode(space_before), 0.);
@@ -233,139 +229,143 @@ static Ref_t create_detector(Detector& desc, xml_h e, SensitiveDetector sens) {
 
       // Loop over the staves for this layer, if the tray is enabled
       int stave_num = 1;
-      if (tray_enabled) {
-        for (xml_coll_t i_stave(x_layer, _U(stave)); i_stave; ++i_stave) {
-          xml_comp_t x_stave = i_stave;
-          int stave_repeat   = x_stave.repeat();
-          double stave_thick = x_stave.thickness();
-          double stave_dim_x = x_stave.width() / 2.0;
-          double stave_dim_y = x_stave.length() / 2.0;
-          double stave_dim_z = stave_thick / 2.0;
-          double stave_rot_y = getAttrOrDefault(x_stave, _Unicode(angle), 0.);
-          double stave_off_z = getAttrOrDefault(x_stave, _Unicode(offset), 0.);
+      for (xml_coll_t i_stave(x_layer, _U(stave)); i_stave; ++i_stave) {
+        xml_comp_t x_stave = i_stave;
+        // Check if we enabled this silicon tray (actual silicon detector in the slots) at the top level
+        // allowing us to easily disable layers in the XML file without needing multiple
+        // copies of the XML file
+        if (getAttrOrDefault(x_stave, _Unicode(enable), 1) == 0) {
+          // disabled
+          continue;
+        }
 
-          // Arrange staves symmetrically around center of layer
-          double stave_pos_x = -layer_dim_x + stave_dim_x;
-          double stave_pitch = -2.0 * stave_pos_x / (stave_repeat - 1);
+        int stave_repeat   = x_stave.repeat();
+        double stave_thick = x_stave.thickness();
+        double stave_dim_x = x_stave.width() / 2.0;
+        double stave_dim_y = x_stave.length() / 2.0;
+        double stave_dim_z = stave_thick / 2.0;
+        double stave_rot_y = getAttrOrDefault(x_stave, _Unicode(angle), 0.);
+        double stave_off_z = getAttrOrDefault(x_stave, _Unicode(offset), 0.);
 
-          // Make one stave
-          std::string stave_name = Form("stave%d", stave_num);
-          auto stave_material    = desc.air();
-          Box stave_shape(stave_dim_x, stave_dim_y, stave_dim_z);
-          Volume stave_volume(stave_name, stave_shape, stave_material);
-          stave_volume.setAttributes(desc, x_stave.regionStr(), x_stave.limitsStr(),
-                                     x_stave.visStr());
-          DetElement stave_element(layer_element, stave_name, detector_id);
+        // Arrange staves symmetrically around center of layer
+        double stave_pos_x = -layer_dim_x + stave_dim_x;
+        double stave_pitch = -2.0 * stave_pos_x / (stave_repeat - 1);
 
-          // Loop over the slices for this stave
-          double slice_pos_z = -(stave_thick / 2.);
+        // Make one stave
+        std::string stave_name = Form("stave%d", stave_num);
+        auto stave_material    = desc.air();
+        Box stave_shape(stave_dim_x, stave_dim_y, stave_dim_z);
+        Volume stave_volume(stave_name, stave_shape, stave_material);
+        stave_volume.setAttributes(desc, x_stave.regionStr(), x_stave.limitsStr(),
+                                   x_stave.visStr());
+        DetElement stave_element(layer_element, stave_name, detector_id);
 
-          // Place in xy_layout
-          if (x_stave.hasChild(_Unicode(xy_layout))) {
-            auto module_str         = x_stave.moduleStr();
-            auto& module_volume     = volumes[module_str];
-            auto& module_sensitives = sensitives[module_str];
+        // Loop over the slices for this stave
+        double slice_pos_z = -(stave_thick / 2.);
 
-            // Get layout grid pitch
-            xml_comp_t x_xy_layout = x_stave.child(_Unicode(xy_layout));
-            auto dx                = x_xy_layout.attr<double>(_Unicode(dx));
-            auto dy                = x_xy_layout.attr<double>(_Unicode(dy));
+        // Place in xy_layout
+        if (x_stave.hasChild(_Unicode(xy_layout))) {
+          auto module_str         = x_stave.moduleStr();
+          auto& module_volume     = volumes[module_str];
+          auto& module_sensitives = sensitives[module_str];
 
-            // Default to filling
-            auto nx =
-                getAttrOrDefault<int>(x_xy_layout, _Unicode(nx), floor(2. * stave_dim_x / dx));
-            auto ny =
-                getAttrOrDefault<int>(x_xy_layout, _Unicode(ny), floor(2. * stave_dim_y / dy));
-            printout(DEBUG, "BarrelCalorimeterImaging", "Stave %s layout with %d by %d modules",
-                     stave_name.c_str(), nx, ny);
+          // Get layout grid pitch
+          xml_comp_t x_xy_layout = x_stave.child(_Unicode(xy_layout));
+          auto dx                = x_xy_layout.attr<double>(_Unicode(dx));
+          auto dy                = x_xy_layout.attr<double>(_Unicode(dy));
 
-            // Default to centered
-            auto x0 = getAttrOrDefault<double>(x_xy_layout, _Unicode(x0), -(nx - 1) * dx / 2.);
-            auto y0 = getAttrOrDefault<double>(x_xy_layout, _Unicode(x0), -(ny - 1) * dy / 2.);
-            printout(DEBUG, "BarrelCalorimeterImaging", "Stave %s modules starting at x=%f, y=%f",
-                     stave_name.c_str(), x0, y0);
+          // Default to filling
+          auto nx = getAttrOrDefault<int>(x_xy_layout, _Unicode(nx), floor(2. * stave_dim_x / dx));
+          auto ny = getAttrOrDefault<int>(x_xy_layout, _Unicode(ny), floor(2. * stave_dim_y / dy));
+          printout(DEBUG, "BarrelCalorimeterImaging", "Stave %s layout with %d by %d modules",
+                   stave_name.c_str(), nx, ny);
 
-            // Place modules
-            int i_module = 0;
-            for (auto i_x = 0; i_x < nx; ++i_x) {
-              for (auto i_y = 0; i_y < ny; ++i_y) {
+          // Default to centered
+          auto x0 = getAttrOrDefault<double>(x_xy_layout, _Unicode(x0), -(nx - 1) * dx / 2.);
+          auto y0 = getAttrOrDefault<double>(x_xy_layout, _Unicode(x0), -(ny - 1) * dy / 2.);
+          printout(DEBUG, "BarrelCalorimeterImaging", "Stave %s modules starting at x=%f, y=%f",
+                   stave_name.c_str(), x0, y0);
 
-                // Create module
-                std::string module_name = _toString(i_module, "module%d");
-                DetElement module_element(stave_element, module_name, i_module);
+          // Place modules
+          int i_module = 0;
+          for (auto i_x = 0; i_x < nx; ++i_x) {
+            for (auto i_y = 0; i_y < ny; ++i_y) {
 
-                // Place module
-                auto x = x0 + i_x * dx;
-                auto y = y0 + i_y * dy;
-                Position module_pos(x, y, 0);
-                PlacedVolume module_physvol = stave_volume.placeVolume(module_volume, module_pos);
-                module_physvol.addPhysVolID("module", i_module);
-                module_element.setPlacement(module_physvol);
+              // Create module
+              std::string module_name = _toString(i_module, "module%d");
+              DetElement module_element(stave_element, module_name, i_module);
 
-                // Add sensitive volumes
-                for (auto& sensitive_physvol : module_sensitives) {
-                  DetElement sensitive_element(module_element, sensitive_physvol.volume().name(),
-                                               i_module);
-                  sensitive_element.setPlacement(sensitive_physvol);
+              // Place module
+              auto x = x0 + i_x * dx;
+              auto y = y0 + i_y * dy;
+              Position module_pos(x, y, 0);
+              PlacedVolume module_physvol = stave_volume.placeVolume(module_volume, module_pos);
+              module_physvol.addPhysVolID("module", i_module);
+              module_element.setPlacement(module_physvol);
 
-                  auto& sensitive_element_params =
-                      DD4hepDetectorHelper::ensureExtension<dd4hep::rec::VariantParameters>(
-                          sensitive_element);
-                  sensitive_element_params.set<std::string>("axis_definitions", "XYZ");
-                }
+              // Add sensitive volumes
+              for (auto& sensitive_physvol : module_sensitives) {
+                DetElement sensitive_element(module_element, sensitive_physvol.volume().name(),
+                                             i_module);
+                sensitive_element.setPlacement(sensitive_physvol);
 
-                i_module++;
+                auto& sensitive_element_params =
+                    DD4hepDetectorHelper::ensureExtension<dd4hep::rec::VariantParameters>(
+                        sensitive_element);
+                sensitive_element_params.set<std::string>("axis_definitions", "XYZ");
               }
+
+              i_module++;
             }
-            slice_pos_z += module_thicknesses[module_str][0] + module_thicknesses[module_str][1];
+          }
+          slice_pos_z += module_thicknesses[module_str][0] + module_thicknesses[module_str][1];
+        }
+
+        // Loop over the slices for this stave
+        int slice_num = 1;
+        for (xml_coll_t i_slice(x_stave, _U(slice)); i_slice; ++i_slice) {
+          xml_comp_t x_slice     = i_slice;
+          std::string slice_name = Form("slice%d", slice_num);
+          double slice_thick     = x_slice.thickness();
+          double slice_dim_x     = stave_dim_x;
+          double slice_dim_y     = stave_dim_y;
+          double slice_dim_z     = slice_thick / 2.;
+          Box slice_shape(slice_dim_x, slice_dim_y, slice_dim_z);
+          Volume slice_volume(slice_name, slice_shape, desc.material(x_slice.materialStr()));
+          slice_volume.setAttributes(desc, x_slice.regionStr(), x_slice.limitsStr(),
+                                     x_slice.visStr());
+          DetElement slice_element(stave_element, slice_name, detector_id);
+
+          // Set sensitive
+          if (x_slice.isSensitive()) {
+            slice_volume.setSensitiveDetector(sens);
           }
 
-          // Loop over the slices for this stave
-          int slice_num = 1;
-          for (xml_coll_t i_slice(x_stave, _U(slice)); i_slice; ++i_slice) {
-            xml_comp_t x_slice     = i_slice;
-            std::string slice_name = Form("slice%d", slice_num);
-            double slice_thick     = x_slice.thickness();
-            double slice_dim_x     = stave_dim_x;
-            double slice_dim_y     = stave_dim_y;
-            double slice_dim_z     = slice_thick / 2.;
-            Box slice_shape(slice_dim_x, slice_dim_y, slice_dim_z);
-            Volume slice_volume(slice_name, slice_shape, desc.material(x_slice.materialStr()));
-            slice_volume.setAttributes(desc, x_slice.regionStr(), x_slice.limitsStr(),
-                                       x_slice.visStr());
-            DetElement slice_element(stave_element, slice_name, detector_id);
+          // Place slice
+          PlacedVolume slice_physvol =
+              stave_volume.placeVolume(slice_volume, Position(0, 0, slice_pos_z + slice_thick / 2));
+          slice_physvol.addPhysVolID("slice", slice_num);
+          slice_element.setPlacement(slice_physvol);
 
-            // Set sensitive
-            if (x_slice.isSensitive()) {
-              slice_volume.setSensitiveDetector(sens);
-            }
+          // Increment Z position of slice
+          slice_pos_z += slice_thick;
+          ++slice_num;
+        }
 
-            // Place slice
-            PlacedVolume slice_physvol = stave_volume.placeVolume(
-                slice_volume, Position(0, 0, slice_pos_z + slice_thick / 2));
-            slice_physvol.addPhysVolID("slice", slice_num);
-            slice_element.setPlacement(slice_physvol);
+        // Loop over number of repeats for this stave
+        for (int stave_j = 0; stave_j < stave_repeat; stave_j++) {
 
-            // Increment Z position of slice
-            slice_pos_z += slice_thick;
-            ++slice_num;
-          }
+          // Stave placement
+          Position stave_pos(stave_pos_x, 0, layer_j % 2 == 0 ? +stave_off_z : -stave_off_z);
+          RotationY stave_rot(layer_j % 2 == 0 ? +stave_rot_y : -stave_rot_y);
+          Transform3D stave_tr(stave_rot, stave_pos);
+          PlacedVolume stave_physvol = layer_volume.placeVolume(stave_volume, stave_tr);
+          stave_physvol.addPhysVolID("stave", stave_num);
+          stave_element.setPlacement(stave_physvol);
 
-          // Loop over number of repeats for this stave
-          for (int stave_j = 0; stave_j < stave_repeat; stave_j++) {
-
-            // Stave placement
-            Position stave_pos(stave_pos_x, 0, layer_j % 2 == 0 ? +stave_off_z : -stave_off_z);
-            RotationY stave_rot(layer_j % 2 == 0 ? +stave_rot_y : -stave_rot_y);
-            Transform3D stave_tr(stave_rot, stave_pos);
-            PlacedVolume stave_physvol = layer_volume.placeVolume(stave_volume, stave_tr);
-            stave_physvol.addPhysVolID("stave", stave_num);
-            stave_element.setPlacement(stave_physvol);
-
-            // Increment X position of stave
-            stave_pos_x += stave_pitch;
-            ++stave_num;
-          }
+          // Increment X position of stave
+          stave_pos_x += stave_pitch;
+          ++stave_num;
         }
       }
 
