@@ -32,13 +32,14 @@
     <documentation>
       #### Transverse offsets of cells
     </documentation>
-    <constant name="HcalEndcapPInsertOffsetXHGRight" value="-HcalEndcapPInsert_width/2.-HcalEndcapPInsertCellSizeHG*0.25"/>
+    <constant name="HcalEndcapPInsertCellToPCBEdge" value="0.04*cm"/>
+    <constant name="HcalEndcapPInsertOffsetXHGRight" value="-HcalEndcapPInsert_width/2.+HcalEndcapPInsertCellToPCBEdge-HcalEndcapPInsertCellSizeHG*0.25"/>
     <constant name="HcalEndcapPInsertOffsetYHGRight" value="HcalEndcapPInsertCellSizeHG*sqrt(3)/2*0"/>
-    <constant name="HcalEndcapPInsertOffsetXHGLeft" value="HcalEndcapPInsert_width/2.-HcalEndcapPInsertCellSizeHG*0"/>
+    <constant name="HcalEndcapPInsertOffsetXHGLeft" value="HcalEndcapPInsert_width/2.-HcalEndcapPInsertCellToPCBEdge-HcalEndcapPInsertCellSizeHG*0"/>
     <constant name="HcalEndcapPInsertOffsetYHGLeft" value="HcalEndcapPInsertCellSizeHG*sqrt(3)/2*0"/>
-    <constant name="HcalEndcapPInsertOffsetXLGRight" value="-HcalEndcapPInsert_width/2.-HcalEndcapPInsertCellSizeLGRight*0.5"/>
+    <constant name="HcalEndcapPInsertOffsetXLGRight" value="-HcalEndcapPInsert_width/2.+HcalEndcapPInsertCellToPCBEdge-HcalEndcapPInsertCellSizeLGRight*0.5"/>
     <constant name="HcalEndcapPInsertOffsetYLGRight" value="HcalEndcapPInsertCellSizeLGRight*0*sqrt(3)/2"/>
-    <constant name="HcalEndcapPInsertOffsetXLGLeft" value="HcalEndcapPInsert_width/2.+HcalEndcapPInsertCellSizeLGLeft*0.5"/>
+    <constant name="HcalEndcapPInsertOffsetXLGLeft" value="HcalEndcapPInsert_width/2.-HcalEndcapPInsertCellToPCBEdge+HcalEndcapPInsertCellSizeLGLeft*0.5"/>
     <constant name="HcalEndcapPInsertOffsetYLGLeft" value="HcalEndcapPInsertCellSizeLGLeft*0*sqrt(3)/2"/>
 
     <documentation>
