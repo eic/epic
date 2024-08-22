@@ -194,7 +194,7 @@
 
       <layer repeat="1" vis="EcalBarrelLayerVis"
              thickness="EcalBarrel_ImagingLayerThickness"
-             space_before="EcalBarrel_ScFiLayerThickness_Imaging + EcalBarrel_SpaceBetween"> 
+             space_before="EcalBarrel_ScFiLayerThickness_Imaging + EcalBarrel_SpaceBetween">
         <frame material="CarbonFiber" fill="Air" thickness="EcalBarrel_CarbonFrameThickness" height="EcalBarrel_ImagingLayerThickness" vis="EcalBarrelSliceVis"/>
         <stave repeat="6"
                width="EcalBarrel_Stave_width"
