@@ -2,4 +2,4 @@ features:
   fields:
     marco:
   ecal:
-    barrel_interlayers:
+    bic_default:
