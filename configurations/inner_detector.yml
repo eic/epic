@@ -13,7 +13,7 @@ features:
     tof_barrel:
     tof_endcap:
   ecal:
-    barrel_interlayers:
+    bic_default:
     backward_PbWO4:
   pid:
     dirc:
