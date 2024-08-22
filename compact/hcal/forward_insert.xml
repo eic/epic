@@ -146,7 +146,7 @@
     </documentation>
     <readout name="HcalEndcapPInsertHits">
       <segmentation type="MultiSegmentation" key="layer">
-        <segmentation name="insert_hg" type="MultiSegmentation" key="side" key_min="1" key_max="20">
+        <segmentation name="insert_hg" type="MultiSegmentation" key="side" key_min="1" key_max="16">
           <segmentation
             name="insert_hg_left"
             type="HexGrid"
