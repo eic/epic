@@ -16,3 +16,5 @@ features:
     tof_endcap:
   far_forward:
     default:
+  far_backward:
+    default:
