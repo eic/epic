@@ -69,7 +69,7 @@
 			  sizex="B0ECal_CrystalModule_width"
 			  sizey="B0ECal_CrystalModule_width"
 			  sizez="B0ECal_CrystalModule_length_a"
-        material="LYSO"
+        material="PbWO4"
 			  vis="GreenVis"/>
 		<wrapper
 			  thickness="B0ECal_CrystalModule_wrap"
