@@ -91,6 +91,7 @@
       vis="HcalEndcapInsertVis"
       readout="HcalEndcapPInsertHits"
       calorimeterType="HAD_ENDCAP"
+      left_right_gap="0.38*cm"
     >
       <position x="HcalEndcapPInsert_xposition" y="HcalEndcapPInsert_yposition" z="HcalEndcapPInsert_zmin"/>
       <dimensions
