@@ -55,7 +55,7 @@ static Ref_t createDetector(Detector& desc, xml_h handle, SensitiveDetector sens
   const std::pair<double, double> hole_y_parameters(hole_y_initial, hole_y_final);
 
   const double left_right_gap =
-      dd4hep::getAttrOrDefault<double>(detElem, _Unicode(left_right_gap), 0.36 * cm);
+      dd4hep::getAttrOrDefault<double>(detElem, _Unicode(left_right_gap), 0.38 * cm);
   // Getting thickness of backplate
   /*
     The hole radius & position is determined by liner interpolation
