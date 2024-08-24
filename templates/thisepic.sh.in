@@ -3,7 +3,13 @@
 export DETECTOR=@PROJECT_NAME@
 export DETECTOR_PATH=@CMAKE_INSTALL_FULL_DATADIR@/@PROJECT_NAME@
 export DETECTOR_CONFIG=${1:-@PROJECT_NAME@}
-export DETECTOR_VERSION=@GIT_BRANCH@
+export DETECTOR_VERSION=@CMAKE_PROJECT_VERSION@
+
+## Warn is not the right name (this script is sourced, hence $1)
+if [[ "$(basename ${BASH_SOURCE[0]})" != "thisepic.sh" ]]; then
+        echo "Warning: This script will cease to exist at '$(realpath --no-symlinks ${BASH_SOURCE[0]})'."
+        echo "         Please use the version at '$(realpath --no-symlinks $(dirname ${BASH_SOURCE[0]})/bin/thisepic.sh)'."
+fi
 
 ## Export detector libraries
 if [[ "$(uname -s)" = "Darwin" ]] || [[ "$OSTYPE" == "darwin"* ]]; then

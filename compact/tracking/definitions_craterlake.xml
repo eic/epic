@@ -103,8 +103,8 @@
     <comment> Main parameters for MPGD endcap disks, offset here is the distance between disks </comment>
     <constant name="ForwardMPGD_zmin"             value="148*cm"/>
     <constant name="ForwardMPGDMod_offset"        value="13.0*cm"/>
-    <constant name="ForwardMPGDMod1_rmin"         value="7.014*cm" />
-    <constant name="ForwardMPGDMod2_rmin"         value="7.014*cm"/>
+    <constant name="ForwardMPGDMod1_rmin"         value="9.0*cm" />
+    <constant name="ForwardMPGDMod2_rmin"         value="9.0*cm"/>
     <constant name="ForwardMPGDMod1_rmax"         value="50*cm" />
     <constant name="ForwardMPGDMod2_rmax"         value="50*cm" />
 
@@ -197,7 +197,7 @@
     <plugin name="epic_FileLoader">
       <arg value="cache:$DETECTOR_PATH:/opt/detector"/>
       <arg value="file:calibrations/materials-map.cbor"/>
-      <arg value="url:https://eicweb.phy.anl.gov/EIC/detectors/athena/uploads/6253bfcb92dd6bc236dd9a06084614ba/material-maps.cbor"/>
+      <arg value="url:https://eicweb.phy.anl.gov/EIC/detectors/athena/uploads/807fdbd7c54e58f22f45d6344f68eea4/material-map-24.08.cbor"/>
     </plugin>
   </plugins>
 

@@ -164,6 +164,8 @@
     </comment>
     <vis name="TOF_envelope"     ref="AnlBlue" drawingStyle="wireframe" showDaughters="true" visible="true" />
 
+    <vis name="PFRICH_vessel_vis"  ref="AnlTeal"     showDaughters="false" visible="true"  alpha="0.5" />
+
     <vis name="DRICH_vessel_vis"  ref="AnlGray"      showDaughters="true" visible="true" />
     <vis name="DRICH_gas_vis"     ref="AnlGreen"     showDaughters="true" visible="true" alpha="0.5" />
     <vis name="DRICH_aerogel_vis" ref="AnlTeal"      showDaughters="true" visible="true" />
