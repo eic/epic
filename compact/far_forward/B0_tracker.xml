@@ -12,10 +12,11 @@
       - I start from the downstream side of the B0 magnet and an arbitrary offset
         which puts the downstream of the detector 10cm from the end of the magnet.
     </comment>
-    <constant name="B0Tracker_length"      value="81.0*cm"/>
+    <constant name="B0Tracker_length"      value="102.0*cm"/>
+    <constant name="B0Tracker_IP_distance" value="639*cm"/>
     <constant name="B0Tracker_zoffset"     value="5.0*cm"/>
-    <constant name="B0TrackerCenter_zpos"  value="6.3*m*cos(ionCrossingAngle)"/>
-    <constant name="B0TrackerCenter_xpos"  value="6.3*m*sin(ionCrossingAngle)" />
+    <constant name="B0TrackerCenter_zpos"  value="B0Tracker_IP_distance*cos(ionCrossingAngle)"/>
+    <constant name="B0TrackerCenter_xpos"  value="B0Tracker_IP_distance*sin(ionCrossingAngle)" />
     <constant name="B0Tracker_zmin"        value="B0TrackerCenter_zpos - B0Tracker_length/2.0 "/>
     <constant name="B0Tracker_rotation"    value="ionCrossingAngle"/>
     <comment>
