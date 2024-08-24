@@ -75,7 +75,7 @@
       ### Forward (Positive Z) Endcap Insert for Hadronic Calorimeter
       Insert goes in the middle of the forward endcap HCal -- around the beampipe
 
-      Insert is 1 front layer of Steel/Sc + 60 layers of Steel/Sc + 1 backplate of steel
+      Insert is 60 layers of Steel/Sc + 1 backplate of steel
       Each of the layers (sans backplate) includes air gaps (front and back of each layer),
       ESR foil (front and back of scintillator), a PCB, and an aluminum scitnillator cover
 
