@@ -134,7 +134,7 @@
 
   <readouts>
     <documentation>
-      Readout is segmented into hexagons with sides of 2.16 cm, 2.84 cm, and 3.10 cm in the high-granularity upstream section (layers 1-20, for both left and right sides),
+      Readout is segmented into hexagons with sides of 2.16 cm, 2.84 cm, and 3.10 cm in the high-granularity upstream section (layers 1-16, for both left and right sides),
       the left downstream section (layers 21-60), and the right downstream section (layers 21-60), respectively.
       The hexagons positions in the first 20 layers cycle through four sets of layer configurations ("H4 staggering")
       i.e. hexagons in layers 1-4 (5-8, ...) are all offset transversely from each other
