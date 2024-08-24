@@ -85,6 +85,7 @@
         final_hole_x="EcalEndcapPInsert_hole_xposition"
         initial_hole_y="EcalEndcapPInsert_hole_yposition"
         final_hole_y="EcalEndcapPInsert_hole_yposition"
+        left_right_gap="0.38*cm"
       />
     </detector>
   </detectors>
