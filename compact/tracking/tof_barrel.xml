@@ -70,8 +70,8 @@
 
     <constant name="BarrelTOF_Sensor_length"       value="4*cm"/>
     <constant name="BarrelTOF_Sensor_offsetY"      value="10*cm"/>
-    <constant name="BarrelTOF_Sensor_deadspaceY"   value="1*cm"/>
-    <constant name="BarrelTOF_Sensor_amount"       value="40"/>
+    <constant name="BarrelTOF_Sensor_deadspaceY"   value="0.1*cm"/>
+    <constant name="BarrelTOF_Sensor_amount"       value="60"/>
 
   </define>
 
@@ -95,7 +95,7 @@
       </comment>
       <module name="BarrelTOF_Module1" vis="TOFBarrelModuleVis">
         <module_component name="sensor" material="Silicon" sensitive="true" width="BarrelTOF_Sensor_width" length="BarrelTOF_Sensor_length" thickness="BarrelTOF_Sensor_thickness" vis="TOFSensorVis" >
-            <GridSensors start_x="BarrelTOF_Sensor_position" start_y="-0.5*BarrelTOF_length1 + BarrelTOF_Sensor_offsetY" start_z="0" xdist="0" ydist="BarrelTOF_Sensor_length+BarrelTOF_Sensor_deadspaceY" nx="1" ny="BarrelTOF_Sensor_amount"/>
+		<GridSensors start_x="BarrelTOF_Sensor_position" start_y="-0.5*BarrelTOF_length1 + BarrelTOF_Sensor_offsetY" start_z="0" xdist="0" ydist="BarrelTOF_Sensor_length+BarrelTOF_Sensor_deadspaceY" nx="1" ny="BarrelTOF_Sensor_amount" ny_before_ring="10" ring_extra_width="10*cm"/>
         </module_component>
         <module_component name="hybridtop" material="Kapton" sensitive="false" width="BarrelTOF_Module_width" length="BarrelTOF_length1" thickness="BarrelTOF_Hybrid_thickness" vis="TOFHybridVis" >
           <position x="BarrelTOF_Service_position" y="0" z="0" />

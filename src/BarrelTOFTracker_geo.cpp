@@ -255,12 +255,26 @@ static Ref_t create_TOFBarrel(Detector& description, xml_h e, SensitiveDetector 
         double start_y          = getAttrOrDefault<double>(x_comp_t, _Unicode(start_y), 0);
         // z-locatino of the center of all sensors (All sensors appears at the same z-layer
         double start_z          = getAttrOrDefault<double>(x_comp_t, _Unicode(start_z), 0);
+	// central ring is located to the right of the ny_before_ring th sensor
+	int ny_before_ring      = getAttrOrDefault<int>(x_comp_t, _Unicode(ny_before_ring), 0);
+	// Extra width caused by the ring
+	// |<--sensors_ydist-->|<--sensors_ydist-->|<-----ring_extra_width------->|<--sensors_ydist-->|
+	//   |<xcomp.width()>|   |<xcomp.width()>|                                   |<xcomp.width()>|
+	//   ring_extra_width is the extra width between boundaries of the sensor boundaries (including dead space)
+	double ring_extra_width = getAttrOrDefault<double>(x_comp_t, _Unicode(ring_extra_width), 0);
 
-        for(int nx = 0; nx < nsensors_x; ++nx)
-          for(int ny = 0; ny < nsensors_y; ++ny) 
-            make_box(start_x + nx*sensors_xdist, start_y + ny*sensors_ydist, start_z, 
+	double current_x = start_x;
+        for(int nx = 0; nx < nsensors_x; ++nx) {
+          double current_y = start_y;
+          for(int ny = 0; ny < nsensors_y; ++ny) { 
+            make_box(current_x, current_y, start_z, 
               rot_x, rot_y, rot_z, ((nx==nsensors_x-1) && (ny==nsensors_y-1))); // all sensors are located at the same z-layer
                              // increment z-layers only at the end, after the last sensor is added
+	    current_y += sensors_ydist;
+	    if(ny + 1 == ny_before_ring) current_y += ring_extra_width;
+	  }
+	  current_x += sensors_xdist;
+	}
       } else make_box(pos_x, pos_y, pos_z, rot_x, rot_y, rot_z);
     }
   }
