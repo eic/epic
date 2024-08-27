@@ -23,6 +23,24 @@
     <constant name="HcalEndcapPInsertESRFoilThickness"           value="0.015*cm"/>
 
     <constant name="LFHCAL_FrontWallThickness"                   value="1.50*cm"/>
+    <documentation>
+      #### Cell Sizes
+    </documentation>
+    <constant name="HcalEndcapPInsertCellSizeHG" value="2.16*cm"/>
+    <constant name="HcalEndcapPInsertCellSizeLGLeft" value="2.84*cm"/>
+    <constant name="HcalEndcapPInsertCellSizeLGRight" value="3.1*cm"/>
+    <documentation>
+      #### Transverse offsets of cells
+    </documentation>
+    <constant name="HcalEndcapPInsertCellToPCBEdge" value="0.04*cm"/>
+    <constant name="HcalEndcapPInsertOffsetXHGRight" value="-HcalEndcapPInsert_width/2.+HcalEndcapPInsertCellToPCBEdge-HcalEndcapPInsertCellSizeHG*0.25"/>
+    <constant name="HcalEndcapPInsertOffsetYHGRight" value="HcalEndcapPInsertCellSizeHG*sqrt(3)/2*0"/>
+    <constant name="HcalEndcapPInsertOffsetXHGLeft" value="HcalEndcapPInsert_width/2.-HcalEndcapPInsertCellToPCBEdge-HcalEndcapPInsertCellSizeHG*0"/>
+    <constant name="HcalEndcapPInsertOffsetYHGLeft" value="HcalEndcapPInsertCellSizeHG*sqrt(3)/2*0"/>
+    <constant name="HcalEndcapPInsertOffsetXLGRight" value="-HcalEndcapPInsert_width/2.+HcalEndcapPInsertCellToPCBEdge-HcalEndcapPInsertCellSizeLGRight*0.5"/>
+    <constant name="HcalEndcapPInsertOffsetYLGRight" value="HcalEndcapPInsertCellSizeLGRight*0*sqrt(3)/2"/>
+    <constant name="HcalEndcapPInsertOffsetXLGLeft" value="HcalEndcapPInsert_width/2.-HcalEndcapPInsertCellToPCBEdge+HcalEndcapPInsertCellSizeLGLeft*0.5"/>
+    <constant name="HcalEndcapPInsertOffsetYLGLeft" value="HcalEndcapPInsertCellSizeLGLeft*0*sqrt(3)/2"/>
 
     <documentation>
       - Insert N Layers and computed Thickness
@@ -49,7 +67,7 @@
              HcalEndcapPInsertAirThickness "
     />
     <constant name="HcalEndcapPInsertBackplateThickness"    value="HcalEndcapPInsertAbsorberThickness"/>
-    <constant name="HcalEndcapPInsertLayer_NSteelRepeat"    value="64"/>
+    <constant name="HcalEndcapPInsertLayer_NSteelRepeat"    value="60"/>
   </define>
 
   <detectors>
@@ -57,7 +75,7 @@
       ### Forward (Positive Z) Endcap Insert for Hadronic Calorimeter
       Insert goes in the middle of the forward endcap HCal -- around the beampipe
 
-      Insert is 1 front layer of Steel/Sc + 64 layers of Steel/Sc + 1 backplate of steel
+      Insert is 60 layers of Steel/Sc + 1 backplate of steel
       Each of the layers (sans backplate) includes air gaps (front and back of each layer),
       ESR foil (front and back of scintillator), a PCB, and an aluminum scitnillator cover
 
@@ -73,6 +91,7 @@
       vis="HcalEndcapInsertVis"
       readout="HcalEndcapPInsertHits"
       calorimeterType="HAD_ENDCAP"
+      left_right_gap="0.38*cm"
     >
       <position x="HcalEndcapPInsert_xposition" y="HcalEndcapPInsert_yposition" z="HcalEndcapPInsert_zmin"/>
       <dimensions
@@ -81,18 +100,6 @@
         z="HcalEndcapPInsert_length"
       />
       <backplate thickness="HcalEndcapPInsertBackplateThickness"/>
-      <comment> Front layer to match front walls of LFHCAL modules </comment>
-      <comment> Slices will be ordered according to the slice order listed here </comment>
-       <layer repeat="1" thickness="HcalEndcapPInsertFrontLayerThickness" vis="InvisibleWithDaughters">
-        <slice material="Steel235" thickness="LFHCAL_FrontWallThickness" vis="LFHCAL8MModVis" />
-        <slice material="Air" thickness="HcalEndcapPInsertAirThickness"/>
-        <slice material="Aluminum" thickness="HcalEndcapPInsertScintillatorCoverThickness" vis="AnlProcess_Blue"/>
-        <slice material="Polystyrene" thickness="HcalEndcapPInsertESRFoilThickness" vis="AnlGray"/>
-        <slice material="Polystyrene" thickness="HcalEndcapPInsertPolystyreneThickness" sensitive="true" limits="cal_limits" vis="AnlLightGray"/>
-        <slice material="Polystyrene" thickness="HcalEndcapPInsertESRFoilThickness" vis="AnlGray"/>
-        <slice material="Fr4" thickness="HcalEndcapPInsertPCBThickness"/>
-        <slice material="Air" thickness="HcalEndcapPInsertAirThickness"/>
-      </layer>
       <comment> Steel/Sc layers </comment>
       <layer repeat="HcalEndcapPInsertLayer_NSteelRepeat" thickness="HcalEndcapPInsertSingleLayerThickness" vis="InvisibleWithDaughters">
         <slice material="Steel235" thickness="HcalEndcapPInsertAbsorberThickness" vis="LFHCAL8MModVis"/>
@@ -128,21 +135,61 @@
 
   <readouts>
     <documentation>
-      Readout is segmented into hexagons with sides of 1.889 cm
-      The hexagons positions cycle through four sets of layer configurations ("H4 staggering")
+      Readout is segmented into hexagons with sides of 2.16 cm, 2.84 cm, and 3.10 cm in the high-granularity upstream section (layers 1-16, for both left and right sides),
+      the left downstream section (layers 17-60), and the right downstream section (layers 17-60), respectively.
+      The hexagons positions in the first 16 layers cycle through four sets of layer configurations ("H4 staggering")
       i.e. hexagons in layers 1-4 (5-8, ...) are all offset transversely from each other
       with the centers of the cells of one layer being at the midpoints of the edges of the cells in
-      the other layers
+      the other layers.
+
       Staggering defined in https://github.com/AIDASoft/DD4hep/blob/1962f7d1ace4484efb8886d66a6759a83c5107a3/DDCore/include/DDSegmentation/HexGrid.h#L112-L114
       and https://github.com/AIDASoft/DD4hep/blob/1962f7d1ace4484efb8886d66a6759a83c5107a3/DDCore/src/segmentations/HexGrid.cpp#L102-L120
     </documentation>
     <readout name="HcalEndcapPInsertHits">
-      <segmentation
-        type="HexGrid"
-        side_length="1.889*cm"
-        stagger="2"
-      />
-      <id>system:8,layer:8,slice:8,x:32:-16,y:-16</id>
+      <segmentation type="MultiSegmentation" key="layer">
+        <segmentation name="insert_hg" type="MultiSegmentation" key="side" key_min="1" key_max="16">
+          <segmentation
+            name="insert_hg_left"
+            type="HexGrid"
+            side_length="HcalEndcapPInsertCellSizeHG"
+            stagger="2"
+            key_value="1"
+            offset_x="HcalEndcapPInsertOffsetXHGLeft"
+            offset_y="HcalEndcapPInsertOffsetYHGLeft"
+          />
+           <segmentation
+            name="insert_hg_right"
+            type="HexGrid"
+            side_length="HcalEndcapPInsertCellSizeHG"
+            stagger="2"
+            key_value="0"
+            offset_x="HcalEndcapPInsertOffsetXHGRight"
+            offset_y="HcalEndcapPInsertOffsetYHGRight"
+          />
+        </segmentation>
+        <segmentation name="insert_lg" type="MultiSegmentation" key="side" key_min="17" key_max="60">
+          <segmentation
+            name="insert_lg_left"
+            type="HexGrid"
+            side_length="HcalEndcapPInsertCellSizeLGLeft"
+            stagger="0"
+            key_value="1"
+            offset_x="HcalEndcapPInsertOffsetXLGLeft"
+            offset_y="HcalEndcapPInsertOffsetYLGLeft"
+          />
+          <segmentation
+            name="insert_lg_right"
+            type="HexGrid"
+            side_length="HcalEndcapPInsertCellSizeLGRight"
+            stagger="0"
+            key_value="0"
+            offset_x="HcalEndcapPInsertOffsetXLGRight"
+            offset_y="HcalEndcapPInsertOffsetYLGRight"
+          />
+        </segmentation>
+      </segmentation>
+
+      <id>system:8,side:1,layer:8,slice:7,x:32:-16,y:-16</id>
     </readout>
 
   </readouts>
