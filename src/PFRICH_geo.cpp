@@ -334,10 +334,10 @@ static Ref_t createDetector(Detector& description, xml_h e, SensitiveDetector se
   /*--------------------------------------------------*/
   // HRPPD material definition:
 
-  auto HRPPD_WindowMat = description.material("Quartz");
-  auto HRPPD_PCBMat    = description.material("G10");
-  auto HRPPD_MPDMat    = description.material("SiliconDioxide");
-  auto HRPPD_ASICMat   = description.material("SiliconCarbide");
+  auto HRPPD_WindowMat = description.material(description.constant<std::string>("PFRICH_HRPPD_WindowMat"));
+  auto HRPPD_PCBMat    = description.material(description.constant<std::string>("PFRICH_HRPPD_PCBMat"));
+  auto HRPPD_MPDMat    = description.material(description.constant<std::string>("PFRICH_HRPPD_MPDMat"));
+  auto HRPPD_ASICMat   = description.material(description.constant<std::string>("PFRICH_HRPPD_ASICMat"));
 
   Box hrppd_Solid(xysize / 2, xysize / 2, hrppd_container_volume_thickness / 2);
 
