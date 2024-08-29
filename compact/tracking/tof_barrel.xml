@@ -69,9 +69,13 @@
     <constant name="BarrelTOF_length"              value="BarrelTOF_length2"/>
 
     <constant name="BarrelTOF_Sensor_length"       value="4*cm"/>
-    <constant name="BarrelTOF_Sensor_offsetY"      value="10*cm"/>
     <constant name="BarrelTOF_Sensor_deadspaceY"   value="0.1*cm"/>
-    <constant name="BarrelTOF_Sensor_amount"       value="60"/>
+    <constant name="BarrelTOF_Sensor_amount"       value="64"/>
+
+    <constant name="BarrelTOF_ring_center"         value="144*cm"/>
+    <constant name="BarrelTOF_ring_width"          value="0.7*cm"/>
+    <constant name="BarrelTOF_Sensor_Center_before_ring" value="-0.5*BarrelTOF_length1+BarrelTOF_ring_center-BarrelTOF_ring_width-0.5*BarrelTOF_Sensor_length"/>
+    <constant name="BarrelTOF_First_Sensor_Center"   value="-(0.5*BarrelTOF_Sensor_amount-1)*(BarrelTOF_Sensor_length+BarrelTOF_Sensor_deadspaceY) + BarrelTOF_Sensor_Center_before_ring"/>
 
   </define>
 
@@ -95,7 +99,7 @@
       </comment>
       <module name="BarrelTOF_Module1" vis="TOFBarrelModuleVis">
         <module_component name="sensor" material="Silicon" sensitive="true" width="BarrelTOF_Sensor_width" length="BarrelTOF_Sensor_length" thickness="BarrelTOF_Sensor_thickness" vis="TOFSensorVis" >
-		<GridSensors start_x="BarrelTOF_Sensor_position" start_y="-0.5*BarrelTOF_length1 + BarrelTOF_Sensor_offsetY" start_z="0" xdist="0" ydist="BarrelTOF_Sensor_length+BarrelTOF_Sensor_deadspaceY" nx="1" ny="BarrelTOF_Sensor_amount" ny_before_ring="10" ring_extra_width="10*cm"/>
+		<GridSensors start_x="BarrelTOF_Sensor_position" start_y="BarrelTOF_First_Sensor_Center" start_z="0" xdist="0" ydist="BarrelTOF_Sensor_length+BarrelTOF_Sensor_deadspaceY" nx="1" ny="BarrelTOF_Sensor_amount" ny_before_ring="0.5*BarrelTOF_Sensor_amount" ring_extra_width="BarrelTOF_ring_width-2*BarrelTOF_Sensor_deadspaceY"/>
         </module_component>
         <module_component name="hybridtop" material="Kapton" sensitive="false" width="BarrelTOF_Module_width" length="BarrelTOF_length1" thickness="BarrelTOF_Hybrid_thickness" vis="TOFHybridVis" >
           <position x="BarrelTOF_Service_position" y="0" z="0" />
