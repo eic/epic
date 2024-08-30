@@ -99,7 +99,7 @@
       </comment>
       <module name="BarrelTOF_Module1" vis="TOFBarrelModuleVis">
         <module_component name="sensor" material="Silicon" sensitive="true" width="BarrelTOF_Sensor_width" length="BarrelTOF_Sensor_length" thickness="BarrelTOF_Sensor_thickness" vis="TOFSensorVis" >
-		<GridSensors start_x="BarrelTOF_Sensor_position" start_y="BarrelTOF_First_Sensor_Center" start_z="0" xdist="0" ydist="BarrelTOF_Sensor_length+BarrelTOF_Sensor_deadspaceY" nx="1" ny="BarrelTOF_Sensor_amount" ny_before_ring="0.5*BarrelTOF_Sensor_amount" ring_extra_width="BarrelTOF_ring_width-2*BarrelTOF_Sensor_deadspaceY"/>
+                <GridSensors start_x="BarrelTOF_Sensor_position" start_y="BarrelTOF_First_Sensor_Center" start_z="0" xdist="0" ydist="BarrelTOF_Sensor_length+BarrelTOF_Sensor_deadspaceY" nx="1" ny="BarrelTOF_Sensor_amount" ny_before_ring="0.5*BarrelTOF_Sensor_amount" ring_extra_width="BarrelTOF_ring_width-2*BarrelTOF_Sensor_deadspaceY"/>
         </module_component>
         <module_component name="hybridtop" material="Kapton" sensitive="false" width="BarrelTOF_Module_width" length="BarrelTOF_length1" thickness="BarrelTOF_Hybrid_thickness" vis="TOFHybridVis" >
           <position x="BarrelTOF_Service_position" y="0" z="0" />
