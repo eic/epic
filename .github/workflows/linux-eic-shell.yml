@@ -322,9 +322,9 @@ jobs:
     - name: Upload to new public OnShape document
       run: |
         API=https://cad.onshape.com/api/v6
-        CREDENTIALS=$(printf ${{secrets.ONSHAPE_ACCESS_KEY}}:${{secrets.ONSHAPE_SECRET_KEY}} | base64)
+        CREDENTIALS=$(printf ${{secrets.ONSHAPE_ACCESS_KEY}}:${{secrets.ONSHAPE_SECRET_KEY}} | base64 --wrap=0)
         # Create new public document
-        curl -v -X POST $API/documents \
+        curl -X POST $API/documents \
           -H "accept: application/json;charset=UTF-8; qs=0.09" \
           -H "Authorization: Basic $CREDENTIALS" \
           -H "Content-Type: application/json;charset=UTF-8; qs=0.09" \
@@ -336,13 +336,14 @@ jobs:
         # User access link
         echo "https://cad.onshape.com/documents/$did/w/$wid"
         # Upload and translate STEP file
-        curl -v -X POST $API/translations/d/$did/w/$wid \
+        curl -X POST $API/translations/d/$did/w/$wid \
           -H "accept: application/json;charset=UTF-8; qs=0.09" \
           -H "Authorization: Basic $CREDENTIALS" \
           -H "Content-Type: multipart/form-data" \
-          -F "formatName=" \
+          -F "formatName=STEP" \
           -F "flattenAssemblies=true" \
           -F "translate=true" \
+          -F "yAxisIsUp=true" \
           -F "file=@${{matrix.detector_config}}.stp" \
           -o upload.json
         # Check on upload
