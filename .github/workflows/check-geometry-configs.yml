@@ -1,0 +1,31 @@
+name: Check geometry configs
+
+on:
+  workflow_call:
+    inputs:
+      detector_configs:
+        required: true
+        type: string
+
+jobs:
+  check-geometry-configs:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    - uses: actions/download-artifact@v4
+      with:
+        name: build-gcc-fast-eic-shell
+        path: install/
+    - uses: cvmfs-contrib/github-action-cvmfs@v4
+    - uses: eic/run-cvmfs-osg-eic-shell@main
+      with:
+        platform-release: "jug_xl:nightly"
+        network_types: "none"
+        setup: install/bin/thisepic.sh
+        run: |
+          IFS=, read -a configs <<< "${{inputs.detector_configs}}"
+          for config in ${configs[@]} ; do
+            echo "::group::${config}" ;
+            checkGeometry -c ${DETECTOR_PATH}/${config}.xml ;
+            echo "::endgroup::" ;
+          done

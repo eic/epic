@@ -1,0 +1,36 @@
+name: Convert to TGeo
+
+on:
+  workflow_call:
+    inputs:
+      detector_configs:
+        required: true
+        type: string
+
+jobs:
+  convert-to-tgeo:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    - uses: actions/download-artifact@v4
+      with:
+        name: build-gcc-full-eic-shell
+        path: install/
+    - uses: cvmfs-contrib/github-action-cvmfs@v4
+    - uses: eic/run-cvmfs-osg-eic-shell@main
+      with:
+        platform-release: "jug_xl:nightly"
+        network_types: "none"
+        setup: install/bin/thisepic.sh
+        run: |
+          IFS=, read -a configs <<< "${{inputs.detector_configs}}"
+          for config in ${configs[@]} ; do
+            echo "::group::${config}" ;
+            geoConverter -compact2tgeo -input ${DETECTOR_PATH}/${config}.xml -output ${config}.root
+            echo "::endgroup::" ;
+          done
+    - uses: actions/upload-artifact@v4
+      with:
+        name: tgeo
+        path: "*.root"
+        if-no-files-found: error
