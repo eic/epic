@@ -173,24 +173,10 @@ jobs:
   check-tracking-geometry:
     runs-on: ubuntu-latest
     needs: build
-    strategy:
-      matrix:
-        detector_config: [epic_craterlake, epic_ip6]
     steps:
-    - uses: actions/checkout@v4
-    - uses: actions/download-artifact@v4
+    - uses: ./.github/workflows/check-tracking-geometry.yml
       with:
-        name: build-gcc-fast-eic-shell
-        path: install/
-    - uses: cvmfs-contrib/github-action-cvmfs@v4
-    - uses: eic/run-cvmfs-osg-eic-shell@main
-      with:
-        platform-release: "jug_xl:nightly"
-        network_types: "none"
-        setup: install/bin/thisepic.sh
-        run: |
-          root -b -q "scripts/test_ACTS.cxx+(\"${DETECTOR_PATH}/${{matrix.detector_config}}.xml\")" | tee check_tracking_geometry.out
-          bin/acts_geo_check check_tracking_geometry.out
+        detector_configs: "['epic_craterlake', 'epic_ip6']"
 
   validate-material-map:
     runs-on: ubuntu-latest
