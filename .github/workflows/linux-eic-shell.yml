@@ -432,7 +432,7 @@ jobs:
           GITHUB_SHA=${{ github.event.pull_request.head.sha || github.sha }}
           GITHUB_PR=${{ github.event.pull_request.number }}
           PIPELINE_NAME=${{ github.event.pull_request.title || github.ref_name }}
-          EPICEIC_VERSION="${{ github.event.pull_request.head.ref || github.ref_name }}"
+          EPIC_VERSION="${{ github.event.pull_request.head.ref || github.ref_name }}"
     - run: |
         gh api \
            --method POST \
