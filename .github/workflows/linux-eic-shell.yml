@@ -416,7 +416,7 @@ jobs:
     if: ${{ github.event_name != 'merge_group' && github.actor != 'dependabot[bot]' }}
     needs: [check-overlap-tgeo, check-overlap-geant4-fast]
     steps:
-    - uses: eic/trigger-gitlab-ci@v2
+    - uses: eic/trigger-gitlab-ci@v3
       id: trigger
       with:
         url: https://eicweb.phy.anl.gov
@@ -424,9 +424,14 @@ jobs:
         token: ${{ secrets.EICWEB_CONTAINER_TRIGGER }}
         ref_name: master
         variables: |
+          DETECTOR=epic
+          DETECTOR_REPOSITORYURL=${{ github.server_url }}/${{ github.repository }}
+          DETECTOR_VERSION=${{ github.sha }}
+          DETECTOR_CONFIG=epic_craterlake
           GITHUB_REPOSITORY=${{ github.repository }}
           GITHUB_SHA=${{ github.event.pull_request.head.sha || github.sha }}
           GITHUB_PR=${{ github.event.pull_request.number }}
+          PIPELINE_NAME=${{ github.event.pull_request.title || github.ref_name }}
           EPICEIC_VERSION="${{ github.event.pull_request.head.ref || github.ref_name }}"
     - run: |
         gh api \
