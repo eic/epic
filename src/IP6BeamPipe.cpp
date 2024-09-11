@@ -81,7 +81,7 @@ static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector /* sens *
   params.set<int>("layer_material_representing_binZ", nBinZ);
 
   // -----------------------------
-  // IP beampipe
+  // IP6 beampipe
   //
   // setup for the central IP beampipe:
   //
@@ -91,66 +91,92 @@ static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector /* sens *
   //    /-\    Fake vacuum beampipe (1mm)
   //     -     Vacuum filled inner beampipe
   //
+
+  //---- ACTS
+  //-- Downstream
   Tube downstream_IP_vacuum_fill(0.0, IP_acts_beampipe_ID / 2.0, downstream_straight_length / 2.0);
   Tube downstream_IP_acts_beampipe(IP_acts_beampipe_ID / 2.0, IP_acts_beampipe_OD / 2.0,
                                    downstream_straight_length / 2.0);
   Tube downstream_IP_vacuum_padding(IP_acts_beampipe_OD / 2.0, IP_beampipe_ID / 2.0,
                                     downstream_straight_length / 2.0);
-  Tube downstream_IP_gold(IP_beampipe_ID / 2.0, IP_beampipe_ID / 2.0 + IP_beampipe_gold_thickness,
-                          downstream_straight_length / 2.0);
-  Tube downstream_IP_tube(IP_beampipe_ID / 2.0 + IP_beampipe_gold_thickness, IP_beampipe_OD / 2.0,
-                          downstream_straight_length / 2.0);
 
-  Tube upstream_IP_vacuum_fill(0.0, IP_acts_beampipe_ID / 2.0, upstream_straight_length / 2.0);
-  Tube upstream_IP_acts_beampipe(IP_acts_beampipe_ID / 2.0, IP_acts_beampipe_OD / 2.0,
-                                 upstream_straight_length / 2.0);
-  Tube upstream_IP_vacuum_padding(IP_acts_beampipe_OD / 2.0, IP_beampipe_ID / 2.0,
-                                  upstream_straight_length / 2.0);
-  Tube upstream_IP_gold(IP_beampipe_ID / 2.0, IP_beampipe_ID / 2.0 + IP_beampipe_gold_thickness,
-                        upstream_straight_length / 2.0);
-  Tube upstream_IP_tube(IP_beampipe_ID / 2.0 + IP_beampipe_gold_thickness, IP_beampipe_OD / 2.0,
-                        upstream_straight_length / 2.0);
-
+  // Create volumes
   Volume v_downstream_IP_vacuum_fill("v_downstream_IP_vacuum_fill", downstream_IP_vacuum_fill,
                                      m_Vacuum);
   Volume v_downstream_IP_acts_beampipe("v_downstream_IP_acts_beampipe", downstream_IP_acts_beampipe,
                                        m_Vacuum);
   Volume v_downstream_IP_vacuum_padding("v_downstream_IP_vacuum_padding",
                                         downstream_IP_vacuum_padding, m_Vacuum);
-  Volume v_downstream_IP_gold("v_downstream_IP_gold", downstream_IP_gold, m_Au);
-  Volume v_downstream_IP_tube("v_downstream_IP_tube", downstream_IP_tube, m_Be);
-  Volume v_upstream_IP_vacuum_fill("v_upstream_IP_vacuum_fill", upstream_IP_vacuum_fill, m_Vacuum);
-  Volume v_upstream_IP_acts_beampipe("v_upstream_IP_acts_beampipe", upstream_IP_acts_beampipe,
-                                     m_Vacuum);
-  Volume v_upstream_IP_vacuum_padding("v_upstream_IP_vacuum_padding", upstream_IP_vacuum_padding,
-                                      m_Vacuum);
-  Volume v_upstream_IP_gold("v_upstream_IP_gold", upstream_IP_gold, m_Au);
-  Volume v_upstream_IP_tube("v_upstream_IP_tube", upstream_IP_tube, m_Be);
 
-  sdet.setAttributes(det, v_upstream_IP_gold, x_det.regionStr(), x_det.limitsStr(), vis_name);
-  sdet.setAttributes(det, v_upstream_IP_tube, x_det.regionStr(), x_det.limitsStr(), vis_name);
-  sdet.setAttributes(det, v_downstream_IP_gold, x_det.regionStr(), x_det.limitsStr(), vis_name);
-  sdet.setAttributes(det, v_downstream_IP_tube, x_det.regionStr(), x_det.limitsStr(), vis_name);
-
-  assembly.placeVolume(v_upstream_IP_vacuum_fill, Position(0, 0, -upstream_straight_length / 2.0));
-  central_volume.placeVolume(v_upstream_IP_acts_beampipe,
-                             Position(0, 0, -upstream_straight_length / 2.0 - central_offset));
-  assembly.placeVolume(v_upstream_IP_vacuum_padding,
-                       Position(0, 0, -upstream_straight_length / 2.0));
-  assembly.placeVolume(v_upstream_IP_gold, Position(0, 0, -upstream_straight_length / 2.0));
-  assembly.placeVolume(v_upstream_IP_tube, Position(0, 0, -upstream_straight_length / 2.0));
-
+  // Placement
   assembly.placeVolume(v_downstream_IP_vacuum_fill,
                        Position(0, 0, downstream_straight_length / 2.0));
   central_volume.placeVolume(v_downstream_IP_acts_beampipe,
                              Position(0, 0, downstream_straight_length / 2.0 - central_offset));
   assembly.placeVolume(v_downstream_IP_vacuum_padding,
                        Position(0, 0, downstream_straight_length / 2.0));
-  assembly.placeVolume(v_downstream_IP_gold, Position(0, 0, downstream_straight_length / 2.0));
-  assembly.placeVolume(v_downstream_IP_tube, Position(0, 0, downstream_straight_length / 2.0));
 
+  //-- Upstream
+  Tube upstream_IP_vacuum_fill(0.0, IP_acts_beampipe_ID / 2.0, upstream_straight_length / 2.0);
+  Tube upstream_IP_acts_beampipe(IP_acts_beampipe_ID / 2.0, IP_acts_beampipe_OD / 2.0,
+                                 upstream_straight_length / 2.0);
+  Tube upstream_IP_vacuum_padding(IP_acts_beampipe_OD / 2.0, IP_beampipe_ID / 2.0,
+                                  upstream_straight_length / 2.0);
+
+  // Create volumes
+  Volume v_upstream_IP_vacuum_fill("v_upstream_IP_vacuum_fill", upstream_IP_vacuum_fill, m_Vacuum);
+  Volume v_upstream_IP_acts_beampipe("v_upstream_IP_acts_beampipe", upstream_IP_acts_beampipe,
+                                     m_Vacuum);
+  Volume v_upstream_IP_vacuum_padding("v_upstream_IP_vacuum_padding", upstream_IP_vacuum_padding,
+                                      m_Vacuum);
+
+  // Placement
+  assembly.placeVolume(v_upstream_IP_vacuum_fill, Position(0, 0, -upstream_straight_length / 2.0));
+  central_volume.placeVolume(v_upstream_IP_acts_beampipe,
+                             Position(0, 0, -upstream_straight_length / 2.0 - central_offset));
+  assembly.placeVolume(v_upstream_IP_vacuum_padding,
+                       Position(0, 0, -upstream_straight_length / 2.0));
+
+  // Place the ACTS assembly
   auto central_pv = assembly.placeVolume(central_volume, Position(0, 0, +central_offset));
   central_det.setPlacement(central_pv);
+
+  //---- IP beampipe
+  //-- Downstream
+  Tube downstream_IP_gold(IP_beampipe_ID / 2.0, IP_beampipe_ID / 2.0 + IP_beampipe_gold_thickness,
+                          downstream_straight_length / 2.0);
+  Tube downstream_IP_tube(IP_beampipe_ID / 2.0 + IP_beampipe_gold_thickness, IP_beampipe_OD / 2.0,
+                          downstream_straight_length / 2.0);
+
+  // Create volumes
+  Volume v_downstream_IP_gold("v_downstream_IP_gold", downstream_IP_gold, m_Au);
+  Volume v_downstream_IP_tube("v_downstream_IP_tube", downstream_IP_tube, m_Be);
+
+  // Set attributes
+  sdet.setAttributes(det, v_upstream_IP_gold, x_det.regionStr(), x_det.limitsStr(), vis_name);
+  sdet.setAttributes(det, v_upstream_IP_tube, x_det.regionStr(), x_det.limitsStr(), vis_name);
+
+  // Placement
+  assembly.placeVolume(v_upstream_IP_gold, Position(0, 0, -upstream_straight_length / 2.0));
+  assembly.placeVolume(v_upstream_IP_tube, Position(0, 0, -upstream_straight_length / 2.0));
+
+  //-- Upstream
+  Tube upstream_IP_gold(IP_beampipe_ID / 2.0, IP_beampipe_ID / 2.0 + IP_beampipe_gold_thickness,
+                        upstream_straight_length / 2.0);
+  Tube upstream_IP_tube(IP_beampipe_ID / 2.0 + IP_beampipe_gold_thickness, IP_beampipe_OD / 2.0,
+                        upstream_straight_length / 2.0);
+
+  // Create volumes
+  Volume v_upstream_IP_gold("v_upstream_IP_gold", upstream_IP_gold, m_Au);
+  Volume v_upstream_IP_tube("v_upstream_IP_tube", upstream_IP_tube, m_Be);
+
+  // Set attributes
+  sdet.setAttributes(det, v_downstream_IP_gold, x_det.regionStr(), x_det.limitsStr(), vis_name);
+  sdet.setAttributes(det, v_downstream_IP_tube, x_det.regionStr(), x_det.limitsStr(), vis_name);
+
+  // Placement
+  assembly.placeVolume(v_downstream_IP_gold, Position(0, 0, downstream_straight_length / 2.0));
+  assembly.placeVolume(v_downstream_IP_tube, Position(0, 0, downstream_straight_length / 2.0));
 
   //---------------------------------------------------------------------------------
   // Helper function to create polycone pairs (matter and vacuum have separate sizes)
