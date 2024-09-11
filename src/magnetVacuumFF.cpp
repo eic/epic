@@ -46,7 +46,8 @@ static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector /* sens *
   // make it easier to update later.
   //----------------------------------------------
 
-  bool makeIP_B0pfVacuum = true; //This is for the special gap location between IP and b0pf
+  bool makeIP_B0pfVacuum   = true; //This is for the special gap location between IP and b0pf
+  bool make_B2pf_EW_Vacuum = true; //This is for the gap after b2pf
 
   //information for actual FF magnets, with magnet centers as reference
   vector<double> radii_magnet;
@@ -103,7 +104,7 @@ static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector /* sens *
   int numMagnets = radii_magnet.size(); //number of actual FF magnets between IP and FF detectors
   int numGaps =
       numMagnets -
-      1; //number of gaps between magnets (excluding the IP to B0pf transition -- special case)
+      2; //number of gaps between magnets (excluding the IP to B0pf transition -- special case, and the gao after B1apf)
 
   //-------------------------------------------
   // override numbers for the first element -->
@@ -202,14 +203,10 @@ static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector /* sens *
     Volume vpiece(piece_name, magnetPiece, m_Vac);
     sdet.setAttributes(det, vpiece, x_det.regionStr(), x_det.limitsStr(), vis_name);
 
-    auto pv = assembly.placeVolume(
-        vpiece, Transform3D(RotationY(rotation_magnet[pieceIdx]),
-                            Position(x_elem_magnet[pieceIdx], y_elem_magnet[pieceIdx],
-                                     z_elem_magnet[pieceIdx])));
-    pv.addPhysVolID("sector", 1);
-
-    DetElement de(sdet, Form("sector%d_de", pieceIdx), 1);
-    de.setPlacement(pv);
+    assembly.placeVolume(vpiece,
+                         Transform3D(RotationY(rotation_magnet[pieceIdx]),
+                                     Position(x_elem_magnet[pieceIdx], y_elem_magnet[pieceIdx],
+                                              z_elem_magnet[pieceIdx])));
   }
 
   //--------------------------
@@ -230,13 +227,8 @@ static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector /* sens *
     Volume vpiece(piece_name, gapPiece, m_Vac);
     sdet.setAttributes(det, vpiece, x_det.regionStr(), x_det.limitsStr(), vis_name);
 
-    auto pv = assembly.placeVolume(
-        vpiece, Transform3D(RotationY(angle_elem_gap[correctIdx]),
-                            Position(x_gap[correctIdx], 0.0, z_gap[correctIdx])));
-    pv.addPhysVolID("sector", 1);
-
-    DetElement de(sdet, Form("sector%d_de", pieceIdx), 1);
-    de.setPlacement(pv);
+    assembly.placeVolume(vpiece, Transform3D(RotationY(angle_elem_gap[correctIdx]),
+                                             Position(x_gap[correctIdx], 0.0, z_gap[correctIdx])));
   }
 
   //--------------------------------------------------------------
@@ -259,15 +251,36 @@ static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector /* sens *
     Volume specialGap_v(piece_name, specialGap, m_Vac);
     sdet.setAttributes(det, specialGap_v, x_det.regionStr(), x_det.limitsStr(), vis_name);
 
-    auto pv =
-        assembly.placeVolume(specialGap_v, Transform3D(RotationY(crossingAngle),
-                                                       Position(specialGap_x, 0.0, specialGap_z)));
-    pv.addPhysVolID("sector", 1);
-
-    DetElement de(sdet, Form("sector%d_de", numGaps + numMagnets), 1);
-    de.setPlacement(pv);
+    assembly.placeVolume(specialGap_v, Transform3D(RotationY(crossingAngle),
+                                                   Position(specialGap_x, 0.0, specialGap_z)));
   }
 
+  //----------------------------------------------------
+
+  //--------------------------------------------------------------
+  //make and place vacuum volume after the FF detector array up to end of the world
+  //--------------------------------------------------------------
+  if (make_B2pf_EW_Vacuum) {
+
+    int pieceIdx           = numMagnets - 1; // last B2PF magnet
+    std::string piece_name = Form("GapVacuum%d", numGaps + numMagnets + 1);
+    double endGapLength    = (10000.0 - z_end[pieceIdx]) / cos(rotation_magnet[pieceIdx]);
+    endGapLength =
+        endGapLength -
+        4 * radii_magnet[pieceIdx] *
+            tan(-rotation_magnet[pieceIdx]); // shift to keep the tube inside the physical volume
+    double endGap_z = 0.5 * endGapLength * cos(rotation_magnet[pieceIdx]) + z_end[pieceIdx];
+    double endGap_x = 0.5 * endGapLength * sin(rotation_magnet[pieceIdx]) + x_end[pieceIdx];
+
+    Tube vacuum_endWorld(piece_name, 0.0, 4 * radii_magnet[pieceIdx],
+                         endGapLength / 2); // make larger tube than inner magnet radius
+    Volume vpiece(piece_name, vacuum_endWorld, m_Vac);
+    sdet.setAttributes(det, vpiece, x_det.regionStr(), x_det.limitsStr(),
+                       "InvisibleNoDaughters"); // make invisible instead of AnlBlue
+
+    assembly.placeVolume(vpiece, Transform3D(RotationY(rotation_magnet[pieceIdx]),
+                                             Position(endGap_x, 0.0, endGap_z)));
+  }
   //----------------------------------------------------
 
   pv_assembly = det.pickMotherVolume(sdet).placeVolume(assembly);

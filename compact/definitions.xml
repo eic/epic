@@ -550,7 +550,7 @@ Service gaps in FW direction (before endcapP ECAL) and BW direction (before endc
     <constant name="EcalEndcapN_rmin"               value="9.*cm"/>    <!-- Currently fix value hardcoded -->
     <constant name="EcalEndcapN_rmax"               value="63.*cm"/>   <!-- Currently fix value hardcoded -->
 
-    <constant name="EcalBarrel_rmin"                value="max(81.*cm, CentralTrackingRegion_rmax + BarrelPIDRegion_thickness + BarrelExtraSpace_thickness)"/> <!-- FIXME hardcoded max -->
+    <constant name="EcalBarrel_rmin"                value="max(82.*cm, CentralTrackingRegion_rmax + BarrelPIDRegion_thickness + BarrelExtraSpace_thickness)"/>
     <constant name="EcalBarrelRegion_thickness"     value="Solenoid_rmin-EcalBarrel_rmin"/>
     <constant name="EcalBarrel_inner_margin"        value="2*cm"/>
     <constant name="EcalBarrel_rmax"                value="EcalBarrel_rmin + EcalBarrelRegion_thickness"/>
@@ -595,8 +595,8 @@ Service gaps in FW direction (before endcapP ECAL) and BW direction (before endc
     <constant name="HcalEndcapPInsert_zmin"     value="EcalEndcapP_zmin + EcalEndcapP_length"/>
     <constant name="HcalEndcapPInsert_length"   value="134.75*cm"/>
     <constant name="HcalEndcapPInsert_zmax"     value="HcalEndcapPInsert_zmin + HcalEndcapPInsert_length"/>
-    <constant name="HcalEndcapPInsert_width"    value="59.6*cm"/>
-    <constant name="HcalEndcapPInsert_height"    value="59.7485*cm"/>
+    <constant name="HcalEndcapPInsert_width"    value="59.26*cm"/>
+    <constant name="HcalEndcapPInsert_height"    value="59.29*cm"/>
     <constant name="HcalEndcapPInsert_xposition" value="EcalEndcapPInsert_xposition"/>
     <constant name="HcalEndcapPInsert_yposition" value="EcalEndcapPInsert_yposition"/>
 

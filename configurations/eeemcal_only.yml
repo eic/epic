@@ -1,5 +1,5 @@
 features:
   fields:
     marco:
-  pid:
-    mrich:
+  ecal:
+    backward_PbWO4:

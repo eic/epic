@@ -1,0 +1,22 @@
+<!-- SPDX-License-Identifier: LGPL-3.0-or-later -->
+<!-- Copyright (C) 2024 Sylvester Joosten -->
+<lccdd>
+
+  <info name="bic_default"
+        title="Default ePIC BIC configuration with 4 AstroPix layers"
+        author="@sly2j"
+        url="https://github.com/sly2j"
+        status="development"
+        version="1.0"
+  ><comment/></info>
+
+  <define>
+    <constant name="EcalBarrel_enable_staves_1" value="1"/>
+    <constant name="EcalBarrel_enable_staves_2" value="0"/>
+    <constant name="EcalBarrel_enable_staves_3" value="1"/>
+    <constant name="EcalBarrel_enable_staves_4" value="1"/>
+    <constant name="EcalBarrel_enable_staves_5" value="0"/>
+    <constant name="EcalBarrel_enable_staves_6" value="1"/>
+  </define>
+  <include ref="bic/bic.xml"/>
+</lccdd>
