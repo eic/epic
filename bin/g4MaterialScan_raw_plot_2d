@@ -116,8 +116,8 @@ if __name__ == '__main__':
         ('mat_scan_2D_log.png', dict(cmap=mpl.colormaps['viridis'], norm=mpl.colors.LogNorm())),
     ]
     subplots_meta = [
-        (x0_array, 'X0 (Cumulative.)'),
-        (lmd_array, '$\Lambda$ (Cumulative)'),
+        (x0_array, 'Cumulative X0'),
+        (lmd_array, 'Cumulative $\Lambda$'),
     ]
     for outpath, p_kwargs in plots_meta:
         fig, axs = plt.subplots(len(plots_meta), 1, figsize=(10, 4*len(plots_meta)), dpi=180)
