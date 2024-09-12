@@ -1,0 +1,137 @@
+#!/usr/bin/env python3
+
+# SPDX-License-Identifier: LGPL-3.0-or-later
+# Copyright (C) 2024 Chao Peng
+'''
+    A script to plot raw data output from the script g4MaterialScan_to_csv
+'''
+
+import os
+import re
+import argparse
+import pandas as pd
+import numpy as np
+
+import matplotlib as mpl
+from matplotlib import pyplot as plt
+from matplotlib.collections import LineCollection, PatchCollection
+from matplotlib.patches import Wedge
+from mpl_toolkits.axes_grid1 import make_axes_locatable
+
+
+'''
+    A helper function to convert a string (<min>[:<max>[:<step>]]) to an array
+'''
+def args_array(arg, step=1, include_end=True):
+    vals = [float(x.strip()) for x in arg.split(':')]
+    # empty or only one value
+    if len(vals) < 2:
+        return np.array(vals)
+    # has step input
+    if len(vals) > 2:
+        step = vals[2]
+    # inclusion of the endpoint (max)
+    if include_end:
+        vals[1] += step
+    return np.arange(vals[0], vals[1], step)
+
+
+def eta2theta(v_eta):
+    return 2.*np.arctan(np.exp(-v_eta))
+
+
+if __name__ == '__main__':
+    parser = argparse.ArgumentParser(
+            prog='g4MaterialScan_raw_plot',
+            description = 'A python script to draw 2d plot of material thickness from raw outputs of g4MaterialScan_to_csv.' 
+            )
+    parser.add_argument(
+            '--path-format', default=r'scan_raw_eta={eta:.3f}_phi={phi:.3f}.csv',
+            help='modify the path format, default is \"scan_raw_eta={eta:.3f}_phi={phi:.3f}.csv\".'
+            )
+    parser.add_argument(
+            '--eta', default='-4.0:4.0:0.1',
+            help='Eta range, in the format of \"<min>[:<max>[:<step>]]\".'
+            )
+    parser.add_argument(
+            '--eta-values', default=None,
+            help='a list of eta values, separated by \",\", this option overwrites --eta.'
+            )
+    parser.add_argument(
+            '--phi', default='0', type=float,
+            help='A single phi value to lookup for the data files.'
+            )
+    parser.add_argument(
+            '--path-lengths', default="0, 180, 600",
+            help='path length points, separated by \",\".'
+            )
+    parser.add_argument(
+            '--sep', default='\t',
+            help='Seperator for the CSV file.'
+            )
+    parser.add_argument(
+            '--line-eps', type=float, default=0.05,
+            help='a small number to avoid line gaps from precision issue.'
+            )
+    args = parser.parse_args()
+
+    # get the path length points
+    pls = np.array([float(x.strip()) for x in args.path_lengths.split(',')])
+    if len(pls) < 2:
+        print('Need at least two points in --path-lengths')
+        exit(-1)
+
+    if args.eta_values is not None:
+        etas = np.array([float(xval.strip()) for xval in args.eta_values.split(',')])
+    else:
+        etas = args_array(args.eta)
+    phi = args.phi
+
+    # read raw output data, collect information
+    patches, x0_array, lmd_array = [], [], []
+    thetas = eta2theta(etas)
+    theta_diffs = -np.diff(thetas)/2.
+    theta_diffs = np.hstack([theta_diffs[0], theta_diffs, theta_diffs[-1]])
+    for i, (eta, theta) in enumerate(zip(etas, thetas)):
+        dpath = args.path_format.format(eta=eta, phi=phi)
+        if not os.path.exists(dpath):
+            print('Error: cannot find data file \"{}\", please check the path.'.format(dpath))
+            exit(-1)
+        df = pd.read_csv(args.path_format.format(eta=eta, phi=phi), sep=args.sep, index_col=0)
+        path_lengths = df['path_length'].values
+        x0s = df['X0'].cumsum().values
+        lmds = df['lambda'].cumsum().values
+        for k in np.arange(len(path_lengths) - 1):
+            x0_array.append(x0s[k])
+            lmd_array.append(lmds[k])
+            angle_min = (theta - theta_diffs[i])/np.pi*180. - args.line_eps
+            angle_max = (theta + theta_diffs[i])/np.pi*180. + args.line_eps
+            width = path_lengths[k + 1] - path_lengths[k] + args.line_eps
+            patches.append(Wedge((0., 0.), path_lengths[k+1], angle_min, angle_max, width=width))
+
+    # generate plots
+    xmax, ymax = 600, 400
+    plots_meta = [
+        ('mat_scan_2D.png', dict(cmap=mpl.colormaps['viridis'])),
+        ('mat_scan_2D_log.png', dict(cmap=mpl.colormaps['viridis'], norm=mpl.colors.LogNorm())),
+    ]
+    subplots_meta = [
+        (x0_array, 'X0 (cum.)'),
+        (lmd_array, '$\Lambda$ (cum.)'),
+    ]
+    for outpath, p_kwargs in plots_meta:
+        fig, axs = plt.subplots(len(plots_meta), 1, figsize=(10, 4*len(plots_meta)), dpi=180)
+        for ax, (data, zlabel) in zip(axs.flat, subplots_meta):
+            ax.set_xlim(-xmax, xmax)
+            ax.set_ylim(0, ymax)
+            p = PatchCollection(patches, **p_kwargs)
+            p.set_array(data)
+            ax.add_collection(p)
+            ax.set_xlabel('X [cm]')
+            ax.set_ylabel('Y [cm]')
+            divider = make_axes_locatable(ax)
+            cax = divider.append_axes('right', size='5%', pad=0.05)
+            cbar = fig.colorbar(p, cax=cax, orientation='vertical')
+            cbar.ax.set_ylabel(zlabel, rotation=90)
+        fig.savefig(outpath)
+
