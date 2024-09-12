@@ -70,8 +70,24 @@ if __name__ == '__main__':
             help='Seperator for the CSV file.'
             )
     parser.add_argument(
-            '--line-eps', type=float, default=0.05,
-            help='a small number to avoid line gaps from precision issue.'
+            '--z-max', type=float, default=600,
+            help='maximum z (x-axis) of the plot.'
+            )
+    parser.add_argument(
+            '--z-min', type=float, default=-600,
+            help='minimum z (x-axis) of the plot.'
+            )
+    parser.add_argument(
+            '--r-max', type=float, default=600,
+            help='maximum r (y-axis) of the plot.'
+            )
+    parser.add_argument(
+            '--r-min', type=float, default=-600,
+            help='minimum r (y-axis) of the plot.'
+            )
+    parser.add_argument(
+            '--output-format', type=str, default='png',
+            help='format of the plots, default is png, eps is also recommended (vectorized graphics)'
             )
     args = parser.parse_args()
 
@@ -86,51 +102,65 @@ if __name__ == '__main__':
     else:
         etas = args_array(args.eta)
     phi = args.phi
+    zmin, zmax = args.z_min, args.z_max
+    rmin, rmax = args.r_min, args.r_max
 
     # read raw output data, collect information
     patches, x0_array, lmd_array = [], [], []
     thetas = eta2theta(etas)
-    theta_diffs = -np.diff(thetas)/2.
-    theta_diffs = np.hstack([theta_diffs[0], theta_diffs, theta_diffs[-1]])
-    for i, (eta, theta) in enumerate(zip(etas, thetas)):
+    th_diffs = -np.diff(thetas)/2.
+    th_diffs = np.hstack([th_diffs[0], th_diffs, th_diffs[-1]])
+    th_mins = thetas - th_diffs[:-1]
+    th_maxes = thetas + th_diffs[1:]
+
+    # iterate every eta (theta) scan data
+    for i, (eta, theta, th_min, th_max) in enumerate(zip(etas, thetas, th_mins, th_maxes)):
+        # read data file
         dpath = args.path_format.format(eta=eta, phi=phi)
         if not os.path.exists(dpath):
             print('Error: cannot find data file \"{}\", please check the path.'.format(dpath))
             exit(-1)
         df = pd.read_csv(args.path_format.format(eta=eta, phi=phi), sep=args.sep, index_col=0)
-        path_lengths = df['path_length'].values
+        pls = df['path_length'].values
         x0s = df['X0'].cumsum().values
         lmds = df['lambda'].cumsum().values
-        for k in np.arange(len(path_lengths) - 1):
-            x0_array.append(x0s[k])
-            lmd_array.append(lmds[k])
-            angle_min = (theta - theta_diffs[i])/np.pi*180. - args.line_eps
-            angle_max = (theta + theta_diffs[i])/np.pi*180. + args.line_eps
-            width = path_lengths[k + 1] - path_lengths[k] + args.line_eps
-            patches.append(Wedge((0., 0.), path_lengths[k+1], angle_min, angle_max, width=width))
-
+        # a virtual bin size for the scan (fill all the 2D phase space)
+        angle_min = th_min/np.pi*180.
+        angle_max = th_max/np.pi*180.
+        # determine if the lines are in range
+        # segments of each scan (assuming start from 0)
+        for seg_start, seg_end, x0, lmd in zip(np.hstack([0., pls[:-1]]), pls, x0s, lmds):
+            # start point is already out of the plot range
+            z0, r0 = np.cos(theta)*seg_start, np.sin(theta)*seg_start
+            in_range = (z0 < zmax) & (z0 > zmin) & (r0 < rmax) & (r0 > rmin)
+            if not in_range:
+                continue
+            x0_array.append(x0)
+            lmd_array.append(lmd)
+            width = seg_end - seg_start
+            patches.append(Wedge((0., 0.), seg_end, angle_min, angle_max, width=width))
     # generate plots
     xmax, ymax = 600, 400
     plots_meta = [
-        ('mat_scan_2D.png', dict(cmap=mpl.colormaps['viridis'])),
-        ('mat_scan_2D_log.png', dict(cmap=mpl.colormaps['viridis'], norm=mpl.colors.LogNorm())),
+        ('mat_scan_2D.{}', dict(cmap=mpl.colormaps['viridis'])),
+        ('mat_scan_2D_log.{}', dict(cmap=mpl.colormaps['viridis'], norm=mpl.colors.LogNorm())),
     ]
     subplots_meta = [
         (x0_array, 'Cumulative X0'),
         (lmd_array, 'Cumulative $\Lambda$'),
     ]
     for outpath, p_kwargs in plots_meta:
-        fig, axs = plt.subplots(len(plots_meta), 1, figsize=(10, 4*len(plots_meta)), dpi=180)
+        fig, axs = plt.subplots(len(plots_meta), 1, figsize=(10, 4*len(plots_meta)), dpi=600)
         for ax, (data, zlabel) in zip(axs.flat, subplots_meta):
             ax.set_xlim(-xmax, xmax)
             ax.set_ylim(0, ymax)
             p = PatchCollection(patches, **p_kwargs)
             p.set_array(data)
             ax.add_collection(p)
-            ax.set_xlabel('X [cm]')
-            ax.set_ylabel('Y [cm]')
+            ax.set_xlabel('Z [cm]')
+            ax.set_ylabel('R [cm] ($\phi = {}^{{\circ}}$)'.format(phi))
             divider = make_axes_locatable(ax)
             cax = divider.append_axes('right', size='5%', pad=0.05)
             cbar = fig.colorbar(p, cax=cax, orientation='vertical')
             cbar.ax.set_ylabel(zlabel, rotation=90)
-        fig.savefig(outpath)
+        fig.savefig(outpath.format(args.output_format), format=args.output_format)
