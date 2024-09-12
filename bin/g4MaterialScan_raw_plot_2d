@@ -43,7 +43,7 @@ def eta2theta(v_eta):
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(
             prog='g4MaterialScan_raw_plot',
-            description = 'A python script to draw 2d plot of material thickness from raw outputs of g4MaterialScan_to_csv.' 
+            description = 'A python script to draw 2d plot of material thickness from raw outputs of g4MaterialScan_to_csv.'
             )
     parser.add_argument(
             '--path-format', default=r'scan_raw_eta={eta:.3f}_phi={phi:.3f}.csv',
@@ -134,4 +134,3 @@ if __name__ == '__main__':
             cbar = fig.colorbar(p, cax=cax, orientation='vertical')
             cbar.ax.set_ylabel(zlabel, rotation=90)
         fig.savefig(outpath)
-
