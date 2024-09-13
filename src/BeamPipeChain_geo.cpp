@@ -31,15 +31,15 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector /
   double thickness  = getAttrOrDefault<double>(x_det, _Unicode(wall_thickness), 0);
 
   vector<string> names;
-  vector<int>    ids;
+  vector<int> ids;
   vector<double> xCenters;
   vector<double> zCenters;
   vector<double> lengths;
   vector<double> thetas;
   vector<double> rOuters1;
   vector<double> rOuters2;
-  vector<bool>   detStart;
-  vector<bool>   detEnd;
+  vector<bool> detStart;
+  vector<bool> detEnd;
 
   // Grab info for beamline magnets
   for (xml_coll_t pipe_coll(x_det, _Unicode(pipe)); pipe_coll; pipe_coll++) { // pipes
@@ -50,12 +50,12 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector /
     ids.push_back  (getAttrOrDefault<int>(pipe, _Unicode(id), 0));
 
     // Vectors momentarily filled with zeros for pipes in between magnets
-    xCenters.push_back (getAttrOrDefault<double>(pipe, _Unicode(xcenter),  0   ));
-    zCenters.push_back (getAttrOrDefault<double>(pipe, _Unicode(zcenter),  0   ));
-    lengths.push_back  (getAttrOrDefault<double>(pipe, _Unicode(length),   0   ));
-    thetas.push_back   (getAttrOrDefault<double>(pipe, _Unicode(theta),    0   ));
-    rOuters1.push_back (getAttrOrDefault<double>(pipe, _Unicode(rout1),    0   ));
-    rOuters2.push_back (getAttrOrDefault<double>(pipe, _Unicode(rout2),    0   ));
+    xCenters.push_back(getAttrOrDefault<double>(pipe, _Unicode(xcenter), 0));
+    zCenters.push_back(getAttrOrDefault<double>(pipe, _Unicode(zcenter), 0));
+    lengths.push_back(getAttrOrDefault<double>(pipe, _Unicode(length), 0));
+    thetas.push_back(getAttrOrDefault<double>(pipe, _Unicode(theta), 0));
+    rOuters1.push_back(getAttrOrDefault<double>(pipe, _Unicode(rout1), 0));
+    rOuters2.push_back(getAttrOrDefault<double>(pipe, _Unicode(rout2), 0));
   }
 
   // Calculate parameters for connecting pipes in between magnets
@@ -112,7 +112,8 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector /
 
     assembly.placeVolume(v_tube, Transform3D(RotationY(thetas[pipeN]),
                                              Position(xCenters[pipeN], 0, zCenters[pipeN])));
-    auto placed_vacuum = assembly.placeVolume(v_vacuum, Transform3D(RotationY(thetas[pipeN]),
+    auto placed_vacuum =
+        assembly.placeVolume(v_vacuum, Transform3D(RotationY(thetas[pipeN]),
                                                    Position(xCenters[pipeN], 0, zCenters[pipeN])));
 
     DetElement vacuum_element(sdet, names[pipeN]+"_vacuum", ids[pipeN]);
