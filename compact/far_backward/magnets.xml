@@ -9,13 +9,10 @@
 
     <!-- Beam pipe going from Q1eR to B2BeR -->
     <detector
-    id="BackwardsBeamline_ID"
     name="Pipe_Q1eR_to_B2BeR"
     type="BeamPipeChain"
     wall_thickness="2*mm"
-    vis="BeamPipeVis"
-    readout="BackwardsBeamlineHits"
-    sensitive="false">
+    vis="BeamPipeVis">
       <pipe id="0" name="Pipe_to_Q1eR"
         xcenter="0" zcenter="(Center_Beampipe_End + Q1eR_CenterPosition+Q1eR_Length/2)/2"
         length="Center_Beampipe_End - (Q1eR_CenterPosition+Q1eR_Length/2)" theta="0"
@@ -127,13 +124,5 @@
 
   </fields>
 
-  <readouts>
-
-    <readout name="BackwardsBeamlineHits">
-      <segmentation type="NoSegmentation"/>
-      <id>system:8,pipe:8,end:2</id>
-    </readout>
-
-  </readouts>
 
 </lccdd>
