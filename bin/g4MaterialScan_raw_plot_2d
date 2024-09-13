@@ -82,12 +82,36 @@ if __name__ == '__main__':
             help='maximum r (y-axis) of the plot.'
             )
     parser.add_argument(
-            '--r-min', type=float, default=-600,
+            '--r-min', type=float, default=0,
             help='minimum r (y-axis) of the plot.'
             )
     parser.add_argument(
+            '--x0-max', type=float, default=None,
+             help='maximum x0 of the plot.'
+             )
+    parser.add_argument(
+            '--x0-min', type=float, default=None,
+             help='minimum x0 of the plot.'
+             )
+    parser.add_argument(
+            '--lambda-max', type=float, default=None,
+             help='maximum lambda of the plot.'
+             )
+    parser.add_argument(
+            '--lambda-min', type=float, default=None,
+             help='minimum lambda of the plot.'
+             )
+    parser.add_argument(
+            '--plot-scale', type=str, default='log',
+            help='only support \"log\" or \"linear\" scale.'
+            )
+    parser.add_argument(
+            '--output-path', type=str, default='mat_scan_2D.{output_format}',
+            help='path of the output plot, it supports the string format with inputs of the arguments.'
+            )
+    parser.add_argument(
             '--output-format', type=str, default='png',
-            help='format of the plots, default is png, eps is also recommended (vectorized graphics)'
+            help='format of the plots, default is png, eps is also recommended (vectorized graphics).'
             )
     args = parser.parse_args()
 
@@ -95,12 +119,22 @@ if __name__ == '__main__':
     pls = np.array([float(x.strip()) for x in args.path_lengths.split(',')])
     if len(pls) < 2:
         print('Need at least two points in --path-lengths')
-        exit(-1)
+        exit(1)
 
     if args.eta_values is not None:
         etas = np.array([float(xval.strip()) for xval in args.eta_values.split(',')])
     else:
         etas = args_array(args.eta)
+
+    norm = None
+    if args.plot_scale.lower() == 'linear':
+        norm = mpl.colors.Normalize
+    elif args.plot_scale.lower() == 'log':
+        norm = mpl.colors.LogNorm
+    else:
+        print('Error: unsupported plot scale {}, please choose it from [log, linear].'.format(args.plot_scale))
+        exit(1)
+
     phi = args.phi
     zmin, zmax = args.z_min, args.z_max
     rmin, rmax = args.r_min, args.r_max
@@ -108,8 +142,7 @@ if __name__ == '__main__':
     # read raw output data, collect information
     patches, x0_array, lmd_array = [], [], []
     thetas = eta2theta(etas)
-    th_diffs = -np.diff(thetas)/2.
-    th_diffs = np.hstack([th_diffs[0], th_diffs, th_diffs[-1]])
+    th_diffs = np.hstack([0., -np.diff(thetas)/2., 0.])
     th_mins = thetas - th_diffs[:-1]
     th_maxes = thetas + th_diffs[1:]
 
@@ -119,7 +152,7 @@ if __name__ == '__main__':
         dpath = args.path_format.format(eta=eta, phi=phi)
         if not os.path.exists(dpath):
             print('Error: cannot find data file \"{}\", please check the path.'.format(dpath))
-            exit(-1)
+            exit(1)
         df = pd.read_csv(args.path_format.format(eta=eta, phi=phi), sep=args.sep, index_col=0)
         pls = df['path_length'].values
         x0s = df['X0'].cumsum().values
@@ -132,35 +165,33 @@ if __name__ == '__main__':
         for seg_start, seg_end, x0, lmd in zip(np.hstack([0., pls[:-1]]), pls, x0s, lmds):
             # start point is already out of the plot range
             z0, r0 = np.cos(theta)*seg_start, np.sin(theta)*seg_start
-            in_range = (z0 < zmax) & (z0 > zmin) & (r0 < rmax) & (r0 > rmin)
+            in_range = (z0 <= zmax) & (z0 >= zmin) & (r0 <= rmax) & (r0 >= rmin)
             if not in_range:
                 continue
             x0_array.append(x0)
             lmd_array.append(lmd)
             width = seg_end - seg_start
             patches.append(Wedge((0., 0.), seg_end, angle_min, angle_max, width=width))
+
     # generate plots
-    xmax, ymax = 600, 400
-    plots_meta = [
-        ('mat_scan_2D.{}', dict(cmap=mpl.colormaps['viridis'])),
-        ('mat_scan_2D_log.{}', dict(cmap=mpl.colormaps['viridis'], norm=mpl.colors.LogNorm())),
+    cmap = mpl.colormaps['viridis']
+    plot_meta = [
+        ('Cumulative X0', x0_array, dict(cmap=cmap, norm=norm(vmin=args.x0_min, vmax=args.x0_max))),
+        ('Cumulative $\Lambda$', lmd_array, dict(cmap=cmap, norm=norm(vmin=args.lambda_min, vmax=args.lambda_max))),
     ]
-    subplots_meta = [
-        (x0_array, 'Cumulative X0'),
-        (lmd_array, 'Cumulative $\Lambda$'),
-    ]
-    for outpath, p_kwargs in plots_meta:
-        fig, axs = plt.subplots(len(plots_meta), 1, figsize=(10, 4*len(plots_meta)), dpi=600)
-        for ax, (data, zlabel) in zip(axs.flat, subplots_meta):
-            ax.set_xlim(-xmax, xmax)
-            ax.set_ylim(0, ymax)
-            p = PatchCollection(patches, **p_kwargs)
-            p.set_array(data)
-            ax.add_collection(p)
-            ax.set_xlabel('Z [cm]')
-            ax.set_ylabel('R [cm] ($\phi = {}^{{\circ}}$)'.format(phi))
-            divider = make_axes_locatable(ax)
-            cax = divider.append_axes('right', size='5%', pad=0.05)
-            cbar = fig.colorbar(p, cax=cax, orientation='vertical')
-            cbar.ax.set_ylabel(zlabel, rotation=90)
-        fig.savefig(outpath.format(args.output_format), format=args.output_format)
+
+    fig, axs = plt.subplots(len(plot_meta), 1, figsize=(10, 4*len(plot_meta)), dpi=600)
+    for ax, (zlabel, data, p_kwargs) in zip(axs.flat, plot_meta):
+        ax.set_xlim(zmin, zmax)
+        ax.set_ylim(rmin, rmax)
+        p = PatchCollection(patches, **p_kwargs)
+        p.set_array(data)
+        ax.add_collection(p)
+        ax.set_xlabel('Z [cm]')
+        ax.set_ylabel('R [cm] ($\phi = {}^{{\circ}}$)'.format(phi))
+        # color bar
+        divider = make_axes_locatable(ax)
+        cax = divider.append_axes('right', size='3%', pad=0.05)
+        cbar = fig.colorbar(p, cax=cax, orientation='vertical')
+        cbar.ax.set_ylabel(zlabel, rotation=90)
+    fig.savefig(args.output_path.format(**vars(args)), format=args.output_format)
