@@ -2,7 +2,7 @@
 <!-- Copyright (C) 2023 Wouter Deconinck, Simon Gardner -->
 
 <lccdd>
-  
+
   <include ref="magnets.xml"/>
   <include ref="beamline_extension_hadron.xml"/>
   <include ref="beamline_extension_electron.xml"/>
