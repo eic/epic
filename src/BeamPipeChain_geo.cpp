@@ -18,7 +18,7 @@
 using namespace std;
 using namespace dd4hep;
 
-static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector /*sens*/) {
+static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector /* sens */) {
 
   using namespace ROOT::Math;
   xml_det_t x_det = e;
@@ -38,8 +38,6 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector /
   vector<double> thetas;
   vector<double> rOuters1;
   vector<double> rOuters2;
-  vector<bool> detStart;
-  vector<bool> detEnd;
 
   // Grab info for beamline magnets
   for (xml_coll_t pipe_coll(x_det, _Unicode(pipe)); pipe_coll; pipe_coll++) { // pipes
