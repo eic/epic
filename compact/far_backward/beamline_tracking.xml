@@ -11,7 +11,7 @@
     name="Pipe_tracker"
     readout="BackwardsBeamlineHits">
 
-        <slice 
+        <slice
         pipe_id="0"
         grandmother="Pipe_Q1eR_to_B2BeR"
         mother="Pipe_to_Q1eR_vacuum"
@@ -22,7 +22,7 @@
         grandmother="Pipe_Q1eR_to_B2BeR"
         mother="Pipe_in_Q1eR_vacuum"
         name="Pipe_in_Q1eR_tracker"/>
-    
+
         <slice
         pipe_id="2"
         grandmother="Pipe_Q1eR_to_B2BeR"
@@ -41,7 +41,7 @@
         mother="Pipe_in_Q3eR_vacuum"
         name="Pipe_in_Q3eR_tracker"/>
 
-    </detector> 
+    </detector>
   </detectors>
 
   <readouts>
