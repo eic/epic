@@ -47,7 +47,7 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector /
     xml_comp_t pipe(pipe_coll);
 
     names.push_back(getAttrOrDefault<string>(pipe, _Unicode(name), ""));
-    ids.push_back(getAttrOrDefault<int>(pipe, _Unicode(id), 0));
+    ids.push_back  (getAttrOrDefault<int>(pipe, _Unicode(id), 0));
 
     // Vectors momentarily filled with zeros for pipes in between magnets
     xCenters.push_back (getAttrOrDefault<double>(pipe, _Unicode(xcenter),  0   ));
@@ -108,7 +108,6 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector /
     Volume v_tube("v_tube_" + names[pipeN], s_tube, m_Al);
     Volume v_vacuum("v_vacuum_" + names[pipeN], s_vacuum, m_Vacuum);
 
-
     v_tube.setVisAttributes(description.visAttributes(vis_name));
 
     assembly.placeVolume(v_tube, Transform3D(RotationY(thetas[pipeN]),
@@ -116,8 +115,6 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector /
     auto placed_vacuum = assembly.placeVolume(v_vacuum, Transform3D(RotationY(thetas[pipeN]),
                                                    Position(xCenters[pipeN], 0, zCenters[pipeN])));
 
-    std::cout << "Placing " << names[pipeN] << " at (" << xCenters[pipeN] << ", 0, " << zCenters[pipeN] << ")" << std::endl;
-    std::cout << names[pipeN]+"_vacuum" << std::endl;
     DetElement vacuum_element(sdet, names[pipeN]+"_vacuum", ids[pipeN]);
     vacuum_element.setPlacement(placed_vacuum);
   }
