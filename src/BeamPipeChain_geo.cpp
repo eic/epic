@@ -47,7 +47,7 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector /
     xml_comp_t pipe(pipe_coll);
 
     names.push_back(getAttrOrDefault<string>(pipe, _Unicode(name), ""));
-    ids.push_back  (getAttrOrDefault<int>(pipe, _Unicode(id), 0));
+    ids.push_back(getAttrOrDefault<int>(pipe, _Unicode(id), 0));
 
     // Vectors momentarily filled with zeros for pipes in between magnets
     xCenters.push_back(getAttrOrDefault<double>(pipe, _Unicode(xcenter), 0));
@@ -116,7 +116,7 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector /
         assembly.placeVolume(v_vacuum, Transform3D(RotationY(thetas[pipeN]),
                                                    Position(xCenters[pipeN], 0, zCenters[pipeN])));
 
-    DetElement vacuum_element(sdet, names[pipeN]+"_vacuum", ids[pipeN]);
+    DetElement vacuum_element(sdet, names[pipeN] + "_vacuum", ids[pipeN]);
     vacuum_element.setPlacement(placed_vacuum);
   }
 
