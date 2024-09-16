@@ -42,10 +42,17 @@
         pipe_id="5"
         grandmother="Pipe_Q3eR_to_B7eR"
         mother="Pipe_in_Q3eR_vacuum"
-        name="Pipe_in_Q3eR_tracker"/>
+        name="Pipe_in_Q3eR_tracker_start"
+        end="false"/>
 
         <slice
         pipe_id="6"
+        grandmother="Pipe_Q3eR_to_B7eR"
+        mother="Pipe_in_Q3eR_vacuum"
+        name="Pipe_in_Q3eR_tracker_end"/>
+
+        <slice
+        pipe_id="7"
         grandmother="Pipe_Q3eR_to_B7eR"
         mother="Pipe_in_Q4eR_vacuum"
         name="Pipe_in_Q4eR_tracker"/>
