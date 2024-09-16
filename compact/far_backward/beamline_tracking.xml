@@ -1,10 +1,7 @@
 
 <lccdd>
 
-
-
   <detectors>
-
     <detector
     id="BackwardsBeamline_ID"
     type="BeamPipeTracking"
@@ -32,14 +29,26 @@
         <slice
         pipe_id="3"
         grandmother="Pipe_Q1eR_to_B2BeR"
+        mother="Pipe_in_B2AeR_vacuum"
+        name="Pipe_in_B2AeR_tracker"/>
+
+        <slice
+        pipe_id="4"
+        grandmother="Pipe_Q1eR_to_B2BeR"
         mother="Pipe_in_B2BeR_vacuum"
         name="Pipe_in_B2BeR_tracker"/>
 
         <slice
-        pipe_id="4"
+        pipe_id="5"
         grandmother="Pipe_Q3eR_to_B7eR"
         mother="Pipe_in_Q3eR_vacuum"
         name="Pipe_in_Q3eR_tracker"/>
+
+        <slice
+        pipe_id="6"
+        grandmother="Pipe_Q3eR_to_B7eR"
+        mother="Pipe_in_Q4eR_vacuum"
+        name="Pipe_in_Q4eR_tracker"/>
 
     </detector>
   </detectors>
