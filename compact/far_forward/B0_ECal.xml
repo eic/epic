@@ -250,7 +250,7 @@
 		 <placement id="29" x="x11" y="y13" z="z2" rotx="0." roty="0." rotz="0."/>
 		 <placement id="57" x="x12" y="y10" z="z2" rotx="0." roty="0." rotz="0."/>
 		 <placement id="64" x="x12" y="y9" z="z2" rotx="0." roty="0." rotz="0."/>
-		 <placement id="71" x="x12" y="y8" z="z2" rotx="0." roty="0." rotz="0."/>
+		 <placement id="71" x="x12+x_sh" y="y8" z="z2" rotx="0." roty="0." rotz="0."/>
 		 <placement id="78" x="x12" y="y7" z="z2" rotx="0." roty="0." rotz="0."/>
 		 <placement id="88" x="x12" y="y6" z="z2" rotx="0." roty="0." rotz="0."/>
 		 <placement id="117" x="x11" y="y3" z="z2" rotx="0." roty="0." rotz="0."/>
