@@ -1,0 +1,30 @@
+name: Check tracking geometry
+
+on:
+  workflow_call:
+    inputs:
+      detector_configs:
+        required: true
+        type: string
+
+jobs:
+  check-tracking-geometry:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        detector_config: ${{fromJson(inputs.detector_configs)}}
+    steps:
+    - uses: actions/checkout@v4
+    - uses: actions/download-artifact@v4
+      with:
+        name: build-gcc-fast-eic-shell
+        path: install/
+    - uses: cvmfs-contrib/github-action-cvmfs@v4
+    - uses: eic/run-cvmfs-osg-eic-shell@main
+      with:
+        platform-release: "jug_xl:nightly"
+        network_types: "none"
+        setup: install/bin/thisepic.sh
+        run: |
+          root -b -q "scripts/test_ACTS.cxx+(\"${DETECTOR_PATH}/${{matrix.detector_config}}.xml\")" | tee check_tracking_geometry.out
+          bin/acts_geo_check check_tracking_geometry.out
