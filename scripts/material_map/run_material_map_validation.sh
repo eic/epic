@@ -35,6 +35,20 @@ for file in ${ACTS_FILES[@]} ; do
 done
 export PYTHONPATH=$PWD/Examples/Scripts/Python:$PYTHONPATH
 
+# FIXME
+# Disable ACTS FpeMonitor due to unexplained FPEINV in RootMaterialTrackReader
+# FPE summary for Reader: RootMaterialTrackReader
+# FLTINV: (2 times)
+#  0# Acts::MaterialSlab::MaterialSlab(Acts::Material const&, float) in /opt/local/python/acts/../../lib/libActsCore.so
+#  1# ActsExamples::RootMaterialTrackReader::read(ActsExamples::AlgorithmContext const&) in /opt/local/python/acts/../../lib/libActsExamplesIoRoot.so
+#  2# ActsExamples::Sequencer::run()::$_0::operator()() const::{lambda(tbb::blocked_range<unsigned long> const&)#1}::operator()(tbb::blocked_range<unsigned long> const&) const in /opt/local/python/acts/../../lib/libActsExamplesFramework.so
+#  3# ActsExamples::Sequencer::run()::$_0::operator()() const in /opt/local/python/acts/../../lib/libActsExamplesFramework.so
+#  4# ActsExamples::Sequencer::run() in /opt/local/python/acts/../../lib/libActsExamplesFramework.so
+#  5# 0x000070B51DE55640 in /opt/local/python/acts/ActsPythonBindings.cpython-310-x86_64-linux-gnu.so
+#  6# 0x000070B51DE49ACD in /opt/local/python/acts/ActsPythonBindings.cpython-310-x86_64-linux-gnu.so
+#  7# cfunction_call at Objects/methodobject.c:543
+export ACTS_SEQUENCER_DISABLE_FPEMON=1
+
 # Default arguments
 nevents=1000
 nparticles=1000
