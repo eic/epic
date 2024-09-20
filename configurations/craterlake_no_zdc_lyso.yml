@@ -40,7 +40,7 @@ features:
     B0_Ecal:
     offM_tracker:
     ZDC_SiPMonTile:
-    roman_pots_pots_eRD24_design:
+    roman_pots_eRD24_design:
     vacuum:
     magnets:
   far_backward:
