@@ -270,7 +270,7 @@ static Ref_t create_TOFBarrel(Detector& description, xml_h e, SensitiveDetector 
             make_box(current_x, current_y, start_z, rot_x, rot_y, rot_z,
                      ((nx == nsensors_x - 1) &&
                       (ny == nsensors_y - 1))); // all sensors are located at the same z-layer
-                // increment z-layers only at the end, after the last sensor is added
+            // increment z-layers only at the end, after the last sensor is added
             current_y += sensors_ydist;
             if (ny + 1 == ny_before_ring)
               current_y += ring_extra_width;
