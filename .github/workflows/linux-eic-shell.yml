@@ -413,7 +413,7 @@ jobs:
 
   trigger-container:
     runs-on: ubuntu-latest
-    if: ${{ github.event_name != 'merge_group' && github.actor != 'dependabot[bot]' }}
+    if: ${{ github.actor != 'dependabot[bot]' }}
     needs: [check-overlap-tgeo, check-overlap-geant4-fast]
     steps:
     - uses: eic/trigger-gitlab-ci@v3
