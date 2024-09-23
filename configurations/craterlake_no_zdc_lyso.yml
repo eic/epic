@@ -1,5 +1,5 @@
-ebeam: 10
-pbeam: 275
+ebeam: 5
+pbeam: 41
 features:
   beampipe:
   tracking:
@@ -33,6 +33,15 @@ features:
     backward:
     backward_endcap_flux:
   far_forward:
-    default:
+    ion_beamline:
+    beampipe_hadron_B0:
+    electron_beamline:
+    B0_tracker:
+    B0_ECal:
+    offM_tracker:
+    ZDC_SiPMonTile:
+    roman_pots_eRD24_design:
+    vacuum:
+    magnets:
   far_backward:
     default:

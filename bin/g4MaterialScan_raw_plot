@@ -18,7 +18,7 @@ from matplotlib.ticker import AutoMinorLocator
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(
             prog='g4MaterialScan_raw_plot',
-            description = 'A python script to draw material thicknesses from raw output of g4MaterialScan_to_csv.'
+            description = 'A python script to draw material thickness from raw output of g4MaterialScan_to_csv.'
             )
     parser.add_argument(
             'data_path',
@@ -79,7 +79,7 @@ if __name__ == '__main__':
         ax2.step(df['path_length'], df['lambda_cum'], color=colors[1], ls='--')
 
 
-        ax.text(0.05, 0.95, r'$\eta={:g}, \phi={:g}^{{\circ}}$'.format(eta, phi),
+        ax.text(0.05, 0.95, r'$\eta={:.3f}, \phi={:.3f}^{{\circ}}$'.format(eta, phi),
                 fontsize=fs, color=colors[2],
                 horizontalalignment='left', verticalalignment='top', transform=ax.transAxes)
         # axis format
