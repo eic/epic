@@ -83,9 +83,9 @@ static Ref_t createDetector(Detector& description, xml_h e, SensitiveDetector se
   auto readoutName       = detElem.attr<std::string>(_Unicode(readout));
 
   auto HRPPD_WindowMat = description.material(sensorElem.attr<std::string>(_Unicode(windowmat)));
-  auto HRPPD_PCBMat = description.material(sensorElem.attr<std::string>(_Unicode(pcbmat)));
-  auto HRPPD_MPDMat = description.material(sensorElem.attr<std::string>(_Unicode(mpdmat)));
-  auto HRPPD_ASICMat = description.material(sensorElem.attr<std::string>(_Unicode(asicmat)));
+  auto HRPPD_PCBMat    = description.material(sensorElem.attr<std::string>(_Unicode(pcbmat)));
+  auto HRPPD_MPDMat    = description.material(sensorElem.attr<std::string>(_Unicode(mpdmat)));
+  auto HRPPD_ASICMat   = description.material(sensorElem.attr<std::string>(_Unicode(asicmat)));
 
   double vesselRmin0 = dims.attr<double>(_Unicode(rmin0));
   double vesselRmin1 = dims.attr<double>(_Unicode(rmin1));
