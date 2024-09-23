@@ -82,6 +82,11 @@ static Ref_t createDetector(Detector& description, xml_h e, SensitiveDetector se
   double sensorThickness = sensorElem.attr<double>(_Unicode(thickness));
   auto readoutName       = detElem.attr<std::string>(_Unicode(readout));
 
+  auto HRPPD_WindowMat = description.material(sensorElem.attr<std::string>(_Unicode(windowmat)));
+  auto HRPPD_PCBMat = description.material(sensorElem.attr<std::string>(_Unicode(pcbmat)));
+  auto HRPPD_MPDMat = description.material(sensorElem.attr<std::string>(_Unicode(mpdmat)));
+  auto HRPPD_ASICMat = description.material(sensorElem.attr<std::string>(_Unicode(asicmat)));
+
   double vesselRmin0 = dims.attr<double>(_Unicode(rmin0));
   double vesselRmin1 = dims.attr<double>(_Unicode(rmin1));
   double vesselRmax0 = dims.attr<double>(_Unicode(rmax0));
@@ -333,15 +338,6 @@ static Ref_t createDetector(Detector& description, xml_h e, SensitiveDetector se
 
   /*--------------------------------------------------*/
   // HRPPD material definition:
-
-  auto HRPPD_WindowMat =
-      description.material(description.constant<std::string>("PFRICH_HRPPD_WindowMat"));
-  auto HRPPD_PCBMat =
-      description.material(description.constant<std::string>("PFRICH_HRPPD_PCBMat"));
-  auto HRPPD_MPDMat =
-      description.material(description.constant<std::string>("PFRICH_HRPPD_MPDMat"));
-  auto HRPPD_ASICMat =
-      description.material(description.constant<std::string>("PFRICH_HRPPD_ASICMat"));
 
   Box hrppd_Solid(xysize / 2, xysize / 2, hrppd_container_volume_thickness / 2);
 

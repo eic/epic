@@ -88,13 +88,6 @@
 <constant name="AEROGEL_SEPARATOR_WALL_THICKNESS" value="0.05"/>
 <constant name="AEROGEL_OUTER_WALL_THICKNESS" value="0.1"/>
 
-<!-- HRPPD material definitions -->
-
-<constant name="PFRICH_HRPPD_WindowMat" value="Quartz"/>
-<constant name="PFRICH_HRPPD_PCBMat" value="G10"/>
-<constant name="PFRICH_HRPPD_MPDMat" value="SiliconDioxide"/>
-<constant name="PFRICH_HRPPD_ASICMat" value="SiliconCarbide"/>
-
 <!-- hardcoded constants -->
 </define>
 
@@ -136,6 +129,10 @@
   side="PFRICH_sensor_sensitive_size"
   thickness="PFRICH_sensor_thickness"
   gap="0.2*mm"
+  windowmat="Quartz"
+  pcbmat="G10"
+  mpdmat="SiliconDioxide"
+  asicmat="SiliconCarbide"
   />
 
 <plane
