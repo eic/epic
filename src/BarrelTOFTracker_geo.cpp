@@ -1,9 +1,10 @@
 // SPDX-License-Identifier: LGPL-3.0-or-later
-// Copyright (C) 2022 Whitney Armstrong
+// Copyright (C) 2022 - 2024, Whitney Armstrong, Chun Yuen Tsang
 
 /** \addtogroup Trackers Trackers
- * \brief Type: **BarrelTrackerWithFrame**.
+ * \brief Type: **TOFBarrel**.
  * \author W. Armstrong
+ * \modified by C.Y Tsang 3rd Aug, 2024
  *
  * \ingroup trackers
  *
@@ -17,6 +18,7 @@
 #include "XML/Layering.h"
 #include "XML/Utilities.h"
 #include <array>
+#include <iostream>
 #include "DD4hepDetectorHelper.h"
 
 using namespace std;
@@ -44,7 +46,7 @@ using namespace dd4hep::detail;
  *
  * @author Whitney Armstrong
  */
-static Ref_t create_BarrelTrackerWithFrame(Detector& description, xml_h e, SensitiveDetector sens) {
+static Ref_t create_TOFBarrel(Detector& description, xml_h e, SensitiveDetector sens) {
   typedef vector<PlacedVolume> Placements;
   xml_det_t x_det = e;
   Material air    = description.air();
@@ -122,7 +124,7 @@ static Ref_t create_BarrelTrackerWithFrame(Detector& description, xml_h e, Sensi
     string m_nam     = x_mod.nameStr();
 
     if (volumes.find(m_nam) != volumes.end()) {
-      printout(ERROR, "BarrelTrackerWithFrame",
+      printout(ERROR, "TOFBarrel",
                string((string("Module with named ") + m_nam + string(" already exists."))).c_str());
       throw runtime_error("Logics error in building modules.");
     }
@@ -168,67 +170,115 @@ static Ref_t create_BarrelTrackerWithFrame(Detector& description, xml_h e, Sensi
 
     double thickness_so_far = 0.0;
     double thickness_sum    = -total_thickness / 2.0;
-    for (xml_coll_t mci(x_mod, _U(module_component)); mci; ++mci, ++ncomponents) {
-      xml_comp_t x_comp  = mci;
-      xml_comp_t x_pos   = x_comp.position(false);
-      xml_comp_t x_rot   = x_comp.rotation(false);
-      const string c_nam = _toString(ncomponents, "component%d");
-      Box c_box(x_comp.width() / 2, x_comp.length() / 2, x_comp.thickness() / 2);
-      Volume c_vol(c_nam, c_box, description.material(x_comp.materialStr()));
+    for (xml_coll_t mci(x_mod, _U(module_component)); mci; ++mci) {
+      xml_comp_t x_comp = mci;
+      xml_comp_t x_pos  = x_comp.position(false);
+      xml_comp_t x_rot  = x_comp.rotation(false);
+      auto make_box = [&](double pos_x = 0, double pos_y = 0, double pos_z = 0, double rot_x = 0,
+                          double rot_y = 0, double rot_z = 0, bool z_stacking = true) {
+        const string c_nam = _toString(ncomponents, "component%d");
+        ++ncomponents;
+        Box c_box(x_comp.width() / 2, x_comp.length() / 2, x_comp.thickness() / 2);
+        Volume c_vol(c_nam, c_box, description.material(x_comp.materialStr()));
 
-      // Utility variable for the relative z-offset based off the previous components
-      const double zoff = thickness_sum + x_comp.thickness() / 2.0;
-      if (x_pos && x_rot) {
-        Position c_pos(x_pos.x(0), x_pos.y(0), x_pos.z(0) + zoff);
-        RotationZYX c_rot(x_rot.z(0), x_rot.y(0), x_rot.x(0));
+        // Utility variable for the relative z-offset based off the previous components
+        const double zoff = thickness_sum + x_comp.thickness() / 2.0;
+        Position c_pos(pos_x, pos_y, pos_z + zoff);
+        RotationZYX c_rot(rot_z, rot_y, rot_x);
         pv = m_vol.placeVolume(c_vol, Transform3D(c_rot, c_pos));
-      } else if (x_rot) {
-        Position c_pos(0, 0, zoff);
-        pv = m_vol.placeVolume(c_vol,
-                               Transform3D(RotationZYX(x_rot.z(0), x_rot.y(0), x_rot.x(0)), c_pos));
-      } else if (x_pos) {
-        pv = m_vol.placeVolume(c_vol, Position(x_pos.x(0), x_pos.y(0), x_pos.z(0) + zoff));
-      } else {
-        pv = m_vol.placeVolume(c_vol, Position(0, 0, zoff));
+        c_vol.setRegion(description, x_comp.regionStr());
+        c_vol.setLimitSet(description, x_comp.limitsStr());
+        c_vol.setVisAttributes(description, x_comp.visStr());
+        if (x_comp.isSensitive()) {
+          pv.addPhysVolID("sensor", sensor_number++);
+          c_vol.setSensitiveDetector(sens);
+          sensitives[m_nam].push_back(pv);
+          module_thicknesses[m_nam] = {thickness_so_far + x_comp.thickness() / 2.0,
+                                       total_thickness - thickness_so_far -
+                                           x_comp.thickness() / 2.0};
+
+          // -------- create a measurement plane for the tracking surface attched to the sensitive volume -----
+          Vector3D u(-1., 0., 0.);
+          Vector3D v(0., -1., 0.);
+          Vector3D n(0., 0., 1.);
+          //    Vector3D o( 0. , 0. , 0. ) ;
+
+          // compute the inner and outer thicknesses that need to be assigned to the tracking surface
+          // depending on wether the support is above or below the sensor
+          double inner_thickness = module_thicknesses[m_nam][0];
+          double outer_thickness = module_thicknesses[m_nam][1];
+
+          SurfaceType type(SurfaceType::Sensitive);
+
+          // if( isStripDetector )
+          //  type.setProperty( SurfaceType::Measurement1D , true ) ;
+
+          VolPlane surf(c_vol, type, inner_thickness, outer_thickness, u, v, n); //,o ) ;
+          volplane_surfaces[m_nam].push_back(surf);
+
+          //--------------------------------------------
+        }
+        if (z_stacking) {
+          thickness_sum += x_comp.thickness();
+          thickness_so_far += x_comp.thickness();
+          // apply relative offsets in z-position used to stack components side-by-side
+          thickness_sum += pos_z;
+          thickness_so_far += pos_z;
+        }
+      };
+
+      double pos_x = 0, pos_y = 0, pos_z = 0;
+      double rot_x = 0, rot_y = 0, rot_z = 0;
+      if (x_rot) {
+        rot_x = x_rot.x(0);
+        rot_y = x_rot.y(0);
+        rot_z = x_rot.z(0);
       }
-      c_vol.setRegion(description, x_comp.regionStr());
-      c_vol.setLimitSet(description, x_comp.limitsStr());
-      c_vol.setVisAttributes(description, x_comp.visStr());
-      if (x_comp.isSensitive()) {
-        pv.addPhysVolID("sensor", sensor_number++);
-        c_vol.setSensitiveDetector(sens);
-        sensitives[m_nam].push_back(pv);
-        module_thicknesses[m_nam] = {thickness_so_far + x_comp.thickness() / 2.0,
-                                     total_thickness - thickness_so_far - x_comp.thickness() / 2.0};
-
-        // -------- create a measurement plane for the tracking surface attched to the sensitive volume -----
-        Vector3D u(-1., 0., 0.);
-        Vector3D v(0., -1., 0.);
-        Vector3D n(0., 0., 1.);
-        //    Vector3D o( 0. , 0. , 0. ) ;
-
-        // compute the inner and outer thicknesses that need to be assigned to the tracking surface
-        // depending on wether the support is above or below the sensor
-        double inner_thickness = module_thicknesses[m_nam][0];
-        double outer_thickness = module_thicknesses[m_nam][1];
-
-        SurfaceType type(SurfaceType::Sensitive);
-
-        // if( isStripDetector )
-        //  type.setProperty( SurfaceType::Measurement1D , true ) ;
-
-        VolPlane surf(c_vol, type, inner_thickness, outer_thickness, u, v, n); //,o ) ;
-        volplane_surfaces[m_nam].push_back(surf);
-
-        //--------------------------------------------
-      }
-      thickness_sum += x_comp.thickness();
-      thickness_so_far += x_comp.thickness();
-      // apply relative offsets in z-position used to stack components side-by-side
       if (x_pos) {
-        thickness_sum += x_pos.z(0);
-        thickness_so_far += x_pos.z(0);
+        pos_x = x_pos.x(0);
+        pos_y = x_pos.y(0);
+        pos_z = x_pos.z(0);
       }
+      if (x_comp.hasChild(_Unicode(GridSensors))) {
+        auto x_comp_t = x_comp.child(_Unicode(GridSensors));
+        // x-distance between centers of neighboring sensors
+        double sensors_xdist = getAttrOrDefault<double>(x_comp_t, _Unicode(xdist), x_comp.width());
+        // y-distance between centers of neighboring sensors
+        double sensors_ydist = getAttrOrDefault<double>(x_comp_t, _Unicode(ydist), x_comp.length());
+        // number of rows of sensors in a stave
+        int nsensors_x = getAttrOrDefault<int>(x_comp_t, _Unicode(nx), 1);
+        // number of column of sensors in a stave
+        int nsensors_y = getAttrOrDefault<int>(x_comp_t, _Unicode(ny), 1);
+        // x-location of the center of the leftmost sensor
+        double start_x = getAttrOrDefault<double>(x_comp_t, _Unicode(start_x), 0);
+        // y-location of the center of the uppermost sensor
+        double start_y = getAttrOrDefault<double>(x_comp_t, _Unicode(start_y), 0);
+        // z-locatino of the center of all sensors (All sensors appears at the same z-layer
+        double start_z = getAttrOrDefault<double>(x_comp_t, _Unicode(start_z), 0);
+        // central ring is located to the right of the ny_before_ring th sensor
+        int ny_before_ring = getAttrOrDefault<int>(x_comp_t, _Unicode(ny_before_ring), 0);
+        // Extra width caused by the ring
+        // |<--sensors_ydist-->|<--sensors_ydist-->|<-----ring_extra_width------->|<--sensors_ydist-->|
+        //   |<xcomp.width()>|   |<xcomp.width()>|                                   |<xcomp.width()>|
+        //   ring_extra_width is the extra width between boundaries of the sensor boundaries (including dead space)
+        double ring_extra_width = getAttrOrDefault<double>(x_comp_t, _Unicode(ring_extra_width), 0);
+
+        double current_x = start_x;
+        for (int nx = 0; nx < nsensors_x; ++nx) {
+          double current_y = start_y;
+          for (int ny = 0; ny < nsensors_y; ++ny) {
+            make_box(current_x, current_y, start_z, rot_x, rot_y, rot_z,
+                     ((nx == nsensors_x - 1) &&
+                      (ny == nsensors_y - 1))); // all sensors are located at the same z-layer
+            // increment z-layers only at the end, after the last sensor is added
+            current_y += sensors_ydist;
+            if (ny + 1 == ny_before_ring)
+              current_y += ring_extra_width;
+          }
+          current_x += sensors_xdist;
+        }
+      } else
+        make_box(pos_x, pos_y, pos_z, rot_x, rot_y, rot_z);
     }
   }
 
@@ -346,7 +396,4 @@ static Ref_t create_BarrelTrackerWithFrame(Detector& description, xml_h e, Sensi
 
 //@}
 // clang-format off
-DECLARE_DETELEMENT(epic_BarrelTrackerWithFrame, create_BarrelTrackerWithFrame)
-DECLARE_DETELEMENT(epic_TrackerBarrel,   create_BarrelTrackerWithFrame)
-DECLARE_DETELEMENT(epic_VertexBarrel,    create_BarrelTrackerWithFrame)
-DECLARE_DETELEMENT(epic_InnerMPGDBarrel,       create_BarrelTrackerWithFrame)
+DECLARE_DETELEMENT(epic_TOFBarrel,       create_TOFBarrel)

@@ -411,39 +411,28 @@ jobs:
           noverlaps="$(grep -c GeomVol1002 doc/overlap_check_geant4.out || true)"
           if [[ "${noverlaps}" -gt "0" ]] ; then echo "${noverlaps} overlaps found!" && false ; fi
 
-  trigger-benchmarks:
+  trigger-container:
     runs-on: ubuntu-latest
+    if: ${{ github.actor != 'dependabot[bot]' }}
     needs: [check-overlap-tgeo, check-overlap-geant4-fast]
-    strategy:
-      matrix:
-        detector_config: [epic_craterlake]
-        benchmark_repo: [detector_benchmarks, physics_benchmarks, reconstruction_benchmarks]
-        include:
-        - benchmark_repo: detector_benchmarks
-          project_id: 399
-          secret_var: EICWEB_DETECTOR_BENCHMARK_TRIGGER
-        - benchmark_repo: physics_benchmarks
-          project_id: 400
-          secret_var: EICWEB_PHYSICS_BENCHMARK_TRIGGER
-        - benchmark_repo: reconstruction_benchmarks
-          project_id: 408
-          secret_var: EICWEB_RECONSTRUCTION_BENCHMARK_TRIGGER
     steps:
     - uses: eic/trigger-gitlab-ci@v3
       id: trigger
       with:
         url: https://eicweb.phy.anl.gov
-        project_id: ${{ matrix.project_id }}
-        token: ${{ secrets[matrix.secret_var] }}
+        project_id: 290
+        token: ${{ secrets.EICWEB_CONTAINER_TRIGGER }}
         ref_name: master
         variables: |
           DETECTOR=epic
           DETECTOR_REPOSITORYURL=${{ github.server_url }}/${{ github.repository }}
           DETECTOR_VERSION=${{ github.sha }}
-          DETECTOR_CONFIG=${{ matrix.detector_config }}
+          DETECTOR_CONFIG=epic_craterlake
           GITHUB_REPOSITORY=${{ github.repository }}
           GITHUB_SHA=${{ github.event.pull_request.head.sha || github.sha }}
-          PIPELINE_NAME=${{ github.event.pull_request.title || github.ref_name }}
+          GITHUB_PR=${{ github.event.pull_request.number }}
+          EPIC_VERSION="${{ github.event.pull_request.head.ref || github.ref_name }}"
+          PIPELINE_NAME=${{ github.repository }}: ${{ github.event.pull_request.title || github.ref_name }}
     - run: |
         gh api \
            --method POST \
@@ -452,7 +441,7 @@ jobs:
           -f state="pending" \
           -f target_url="${{ steps.trigger.outputs.web_url }}" \
           -f description="Triggered... $(TZ=America/New_York date)" \
-          -f context="eicweb/${{ matrix.benchmark_repo }} (${{ matrix.detector_config }})"
+          -f context="eicweb/eic_container"
       env:
         GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
