@@ -1,0 +1,830 @@
+# ==1946183== Memcheck, a memory error detector
+# ==1946183== Copyright (C) 2002-2022, and GNU GPL'd, by Julian Seward et al.
+# ==1946183== Using Valgrind-3.19.0 and LibVEX; rerun with -h for copyright info
+# ==1946183== Command: geoPluginRun -input install/share/epic/epic_brycecanyon.xml -destroy -plugin DD4hep_DummyPlugin
+# ==1946183== Parent PID: 621361
+# ==1946183==
+# ==1946183==
+# ==1946183== HEAP SUMMARY:
+# ==1946183==     in use at exit: 35,132,554 bytes in 46,095 blocks
+# ==1946183==   total heap usage: 11,685,232 allocs, 11,639,137 frees, 890,926,132 bytes allocated
+# ==1946183==
+# ==1946183== 224 bytes in 2 blocks are definitely lost in loss record 8,833 of 10,220
+# ==1946183==    at 0x484C7B4: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+# ==1946183==    by 0xA2F4D8F: clang::Parser::AnnotateTemplateIdToken(clang::OpaquePtr<clang::TemplateName>, clang::TemplateNameKind, clang::CXXScopeSpec&, clang::SourceLocation, clang::UnqualifiedId&, bool, bool) (in /opt/software/linux-debian12-x86_64_v2/gcc-12.2.0/root-6.28.04-vluy26n4hk7btjvfbxamqtosp6cdwtsu/lib/root/libCling.so.6.28.04)
+# ==1946183==    by 0xA2893C5: clang::Parser::ParseOptionalCXXScopeSpecifier(clang::CXXScopeSpec&, clang::OpaquePtr<clang::QualType>, bool, bool, bool*, bool, clang::IdentifierInfo**, bool, bool) (in /opt/software/linux-debian12-x86_64_v2/gcc-12.2.0/root-6.28.04-vluy26n4hk7btjvfbxamqtosp6cdwtsu/lib/root/libCling.so.6.28.04)
+# ==1946183==    by 0xA3040E2: clang::Parser::TryAnnotateCXXScopeToken(bool) (in /opt/software/linux-debian12-x86_64_v2/gcc-12.2.0/root-6.28.04-vluy26n4hk7btjvfbxamqtosp6cdwtsu/lib/root/libCling.so.6.28.04)
+# ==1946183==    by 0x99FDD81: cling::LookupHelper::findScope(llvm::StringRef, cling::LookupHelper::DiagSetting, clang::Type const**, bool) const (in /opt/software/linux-debian12-x86_64_v2/gcc-12.2.0/root-6.28.04-vluy26n4hk7btjvfbxamqtosp6cdwtsu/lib/root/libCling.so.6.28.04)
+# ==1946183==    by 0x991F580: TCling::CheckClassInfo(char const*, bool, bool) (in /opt/software/linux-debian12-x86_64_v2/gcc-12.2.0/root-6.28.04-vluy26n4hk7btjvfbxamqtosp6cdwtsu/lib/root/libCling.so.6.28.04)
+# ==1946183==    by 0x5191135: TClass::GetClass(char const*, bool, bool, unsigned long, unsigned long) (in /opt/software/linux-debian12-x86_64_v2/gcc-12.2.0/root-6.28.04-vluy26n4hk7btjvfbxamqtosp6cdwtsu/lib/root/libCore.so.6.28.04)
+# ==1946183==    by 0x51975D5: TBuildRealData::Inspect(TClass*, char const*, char const*, void const*, bool) (in /opt/software/linux-debian12-x86_64_v2/gcc-12.2.0/root-6.28.04-vluy26n4hk7btjvfbxamqtosp6cdwtsu/lib/root/libCore.so.6.28.04)
+# ==1946183==    by 0x991AF1C: TCling::InspectMembers(TMemberInspector&, void const*, TClass const*, bool) (in /opt/software/linux-debian12-x86_64_v2/gcc-12.2.0/root-6.28.04-vluy26n4hk7btjvfbxamqtosp6cdwtsu/lib/root/libCling.so.6.28.04)
+# ==1946183==    by 0x991A13D: TCling::InspectMembers(TMemberInspector&, void const*, TClass const*, bool) (in /opt/software/linux-debian12-x86_64_v2/gcc-12.2.0/root-6.28.04-vluy26n4hk7btjvfbxamqtosp6cdwtsu/lib/root/libCling.so.6.28.04)
+# ==1946183==    by 0x991A13D: TCling::InspectMembers(TMemberInspector&, void const*, TClass const*, bool) (in /opt/software/linux-debian12-x86_64_v2/gcc-12.2.0/root-6.28.04-vluy26n4hk7btjvfbxamqtosp6cdwtsu/lib/root/libCling.so.6.28.04)
+# ==1946183==    by 0x51892FA: TClass::CallShowMembers(void const*, TMemberInspector&, bool) const (in /opt/software/linux-debian12-x86_64_v2/gcc-12.2.0/root-6.28.04-vluy26n4hk7btjvfbxamqtosp6cdwtsu/lib/root/libCore.so.6.28.04)
+# ==1946183==
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   match-leak-kinds: definite
+   fun:malloc
+   fun:_ZN5clang6Parser23AnnotateTemplateIdTokenENS_9OpaquePtrINS_12TemplateNameEEENS_16TemplateNameKindERNS_12CXXScopeSpecENS_14SourceLocationERNS_13UnqualifiedIdEbb
+   fun:_ZN5clang6Parser30ParseOptionalCXXScopeSpecifierERNS_12CXXScopeSpecENS_9OpaquePtrINS_8QualTypeEEEbbPbbPPNS_14IdentifierInfoEbb
+   fun:_ZN5clang6Parser24TryAnnotateCXXScopeTokenEb
+   fun:_ZNK5cling12LookupHelper9findScopeEN4llvm9StringRefENS0_11DiagSettingEPPKN5clang4TypeEb
+   fun:_ZN6TCling14CheckClassInfoEPKcbb
+   fun:_ZN6TClass8GetClassEPKcbbmm
+   fun:_ZN14TBuildRealData7InspectEP6TClassPKcS3_PKvb
+   fun:_ZN6TCling14InspectMembersER16TMemberInspectorPKvPK6TClassb
+   fun:_ZN6TCling14InspectMembersER16TMemberInspectorPKvPK6TClassb
+   fun:_ZN6TCling14InspectMembersER16TMemberInspectorPKvPK6TClassb
+   fun:_ZNK6TClass15CallShowMembersEPKvR16TMemberInspectorb
+}
+# ==1946183== 224 bytes in 2 blocks are definitely lost in loss record 8,834 of 10,220
+# ==1946183==    at 0x484C7B4: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+# ==1946183==    by 0xA2F4D8F: clang::Parser::AnnotateTemplateIdToken(clang::OpaquePtr<clang::TemplateName>, clang::TemplateNameKind, clang::CXXScopeSpec&, clang::SourceLocation, clang::UnqualifiedId&, bool, bool) (in /opt/software/linux-debian12-x86_64_v2/gcc-12.2.0/root-6.28.04-vluy26n4hk7btjvfbxamqtosp6cdwtsu/lib/root/libCling.so.6.28.04)
+# ==1946183==    by 0xA2893C5: clang::Parser::ParseOptionalCXXScopeSpecifier(clang::CXXScopeSpec&, clang::OpaquePtr<clang::QualType>, bool, bool, bool*, bool, clang::IdentifierInfo**, bool, bool) (in /opt/software/linux-debian12-x86_64_v2/gcc-12.2.0/root-6.28.04-vluy26n4hk7btjvfbxamqtosp6cdwtsu/lib/root/libCling.so.6.28.04)
+# ==1946183==    by 0xA3040E2: clang::Parser::TryAnnotateCXXScopeToken(bool) (in /opt/software/linux-debian12-x86_64_v2/gcc-12.2.0/root-6.28.04-vluy26n4hk7btjvfbxamqtosp6cdwtsu/lib/root/libCling.so.6.28.04)
+# ==1946183==    by 0x99FDD81: cling::LookupHelper::findScope(llvm::StringRef, cling::LookupHelper::DiagSetting, clang::Type const**, bool) const (in /opt/software/linux-debian12-x86_64_v2/gcc-12.2.0/root-6.28.04-vluy26n4hk7btjvfbxamqtosp6cdwtsu/lib/root/libCling.so.6.28.04)
+# ==1946183==    by 0x9978BCB: TClingClassInfo::TClingClassInfo(cling::Interpreter*, char const*, bool) (in /opt/software/linux-debian12-x86_64_v2/gcc-12.2.0/root-6.28.04-vluy26n4hk7btjvfbxamqtosp6cdwtsu/lib/root/libCling.so.6.28.04)
+# ==1946183==    by 0x9905BBB: TCling::GetInterpreterTypeName(char const*, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >&, bool) (in /opt/software/linux-debian12-x86_64_v2/gcc-12.2.0/root-6.28.04-vluy26n4hk7btjvfbxamqtosp6cdwtsu/lib/root/libCling.so.6.28.04)
+# ==1946183==    by 0x519118B: TClass::GetClass(char const*, bool, bool, unsigned long, unsigned long) (in /opt/software/linux-debian12-x86_64_v2/gcc-12.2.0/root-6.28.04-vluy26n4hk7btjvfbxamqtosp6cdwtsu/lib/root/libCore.so.6.28.04)
+# ==1946183==    by 0x51975D5: TBuildRealData::Inspect(TClass*, char const*, char const*, void const*, bool) (in /opt/software/linux-debian12-x86_64_v2/gcc-12.2.0/root-6.28.04-vluy26n4hk7btjvfbxamqtosp6cdwtsu/lib/root/libCore.so.6.28.04)
+# ==1946183==    by 0x991AF1C: TCling::InspectMembers(TMemberInspector&, void const*, TClass const*, bool) (in /opt/software/linux-debian12-x86_64_v2/gcc-12.2.0/root-6.28.04-vluy26n4hk7btjvfbxamqtosp6cdwtsu/lib/root/libCling.so.6.28.04)
+# ==1946183==    by 0x991A13D: TCling::InspectMembers(TMemberInspector&, void const*, TClass const*, bool) (in /opt/software/linux-debian12-x86_64_v2/gcc-12.2.0/root-6.28.04-vluy26n4hk7btjvfbxamqtosp6cdwtsu/lib/root/libCling.so.6.28.04)
+# ==1946183==    by 0x991A13D: TCling::InspectMembers(TMemberInspector&, void const*, TClass const*, bool) (in /opt/software/linux-debian12-x86_64_v2/gcc-12.2.0/root-6.28.04-vluy26n4hk7btjvfbxamqtosp6cdwtsu/lib/root/libCling.so.6.28.04)
+# ==1946183==
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   match-leak-kinds: definite
+   fun:malloc
+   fun:_ZN5clang6Parser23AnnotateTemplateIdTokenENS_9OpaquePtrINS_12TemplateNameEEENS_16TemplateNameKindERNS_12CXXScopeSpecENS_14SourceLocationERNS_13UnqualifiedIdEbb
+   fun:_ZN5clang6Parser30ParseOptionalCXXScopeSpecifierERNS_12CXXScopeSpecENS_9OpaquePtrINS_8QualTypeEEEbbPbbPPNS_14IdentifierInfoEbb
+   fun:_ZN5clang6Parser24TryAnnotateCXXScopeTokenEb
+   fun:_ZNK5cling12LookupHelper9findScopeEN4llvm9StringRefENS0_11DiagSettingEPPKN5clang4TypeEb
+   fun:_ZN15TClingClassInfoC1EPN5cling11InterpreterEPKcb
+   fun:_ZN6TCling22GetInterpreterTypeNameEPKcRNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEEb
+   fun:_ZN6TClass8GetClassEPKcbbmm
+   fun:_ZN14TBuildRealData7InspectEP6TClassPKcS3_PKvb
+   fun:_ZN6TCling14InspectMembersER16TMemberInspectorPKvPK6TClassb
+   fun:_ZN6TCling14InspectMembersER16TMemberInspectorPKvPK6TClassb
+   fun:_ZN6TCling14InspectMembersER16TMemberInspectorPKvPK6TClassb
+}
+# ==1946183== 224 bytes in 2 blocks are definitely lost in loss record 8,835 of 10,220
+# ==1946183==    at 0x484C7B4: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+# ==1946183==    by 0xA2F4D8F: clang::Parser::AnnotateTemplateIdToken(clang::OpaquePtr<clang::TemplateName>, clang::TemplateNameKind, clang::CXXScopeSpec&, clang::SourceLocation, clang::UnqualifiedId&, bool, bool) (in /opt/software/linux-debian12-x86_64_v2/gcc-12.2.0/root-6.28.04-vluy26n4hk7btjvfbxamqtosp6cdwtsu/lib/root/libCling.so.6.28.04)
+# ==1946183==    by 0xA2893C5: clang::Parser::ParseOptionalCXXScopeSpecifier(clang::CXXScopeSpec&, clang::OpaquePtr<clang::QualType>, bool, bool, bool*, bool, clang::IdentifierInfo**, bool, bool) (in /opt/software/linux-debian12-x86_64_v2/gcc-12.2.0/root-6.28.04-vluy26n4hk7btjvfbxamqtosp6cdwtsu/lib/root/libCling.so.6.28.04)
+# ==1946183==    by 0xA3040E2: clang::Parser::TryAnnotateCXXScopeToken(bool) (in /opt/software/linux-debian12-x86_64_v2/gcc-12.2.0/root-6.28.04-vluy26n4hk7btjvfbxamqtosp6cdwtsu/lib/root/libCling.so.6.28.04)
+# ==1946183==    by 0x99FDD81: cling::LookupHelper::findScope(llvm::StringRef, cling::LookupHelper::DiagSetting, clang::Type const**, bool) const (in /opt/software/linux-debian12-x86_64_v2/gcc-12.2.0/root-6.28.04-vluy26n4hk7btjvfbxamqtosp6cdwtsu/lib/root/libCling.so.6.28.04)
+# ==1946183==    by 0x991F580: TCling::CheckClassInfo(char const*, bool, bool) (in /opt/software/linux-debian12-x86_64_v2/gcc-12.2.0/root-6.28.04-vluy26n4hk7btjvfbxamqtosp6cdwtsu/lib/root/libCling.so.6.28.04)
+# ==1946183==    by 0x5191135: TClass::GetClass(char const*, bool, bool, unsigned long, unsigned long) (in /opt/software/linux-debian12-x86_64_v2/gcc-12.2.0/root-6.28.04-vluy26n4hk7btjvfbxamqtosp6cdwtsu/lib/root/libCore.so.6.28.04)
+# ==1946183==    by 0x51975D5: TBuildRealData::Inspect(TClass*, char const*, char const*, void const*, bool) (in /opt/software/linux-debian12-x86_64_v2/gcc-12.2.0/root-6.28.04-vluy26n4hk7btjvfbxamqtosp6cdwtsu/lib/root/libCore.so.6.28.04)
+# ==1946183==    by 0x991AF1C: TCling::InspectMembers(TMemberInspector&, void const*, TClass const*, bool) (in /opt/software/linux-debian12-x86_64_v2/gcc-12.2.0/root-6.28.04-vluy26n4hk7btjvfbxamqtosp6cdwtsu/lib/root/libCling.so.6.28.04)
+# ==1946183==    by 0x51892FA: TClass::CallShowMembers(void const*, TMemberInspector&, bool) const (in /opt/software/linux-debian12-x86_64_v2/gcc-12.2.0/root-6.28.04-vluy26n4hk7btjvfbxamqtosp6cdwtsu/lib/root/libCore.so.6.28.04)
+# ==1946183==    by 0x991A985: TCling::InspectMembers(TMemberInspector&, void const*, TClass const*, bool) (in /opt/software/linux-debian12-x86_64_v2/gcc-12.2.0/root-6.28.04-vluy26n4hk7btjvfbxamqtosp6cdwtsu/lib/root/libCling.so.6.28.04)
+# ==1946183==    by 0x51892FA: TClass::CallShowMembers(void const*, TMemberInspector&, bool) const (in /opt/software/linux-debian12-x86_64_v2/gcc-12.2.0/root-6.28.04-vluy26n4hk7btjvfbxamqtosp6cdwtsu/lib/root/libCore.so.6.28.04)
+# ==1946183==
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   match-leak-kinds: definite
+   fun:malloc
+   fun:_ZN5clang6Parser23AnnotateTemplateIdTokenENS_9OpaquePtrINS_12TemplateNameEEENS_16TemplateNameKindERNS_12CXXScopeSpecENS_14SourceLocationERNS_13UnqualifiedIdEbb
+   fun:_ZN5clang6Parser30ParseOptionalCXXScopeSpecifierERNS_12CXXScopeSpecENS_9OpaquePtrINS_8QualTypeEEEbbPbbPPNS_14IdentifierInfoEbb
+   fun:_ZN5clang6Parser24TryAnnotateCXXScopeTokenEb
+   fun:_ZNK5cling12LookupHelper9findScopeEN4llvm9StringRefENS0_11DiagSettingEPPKN5clang4TypeEb
+   fun:_ZN6TCling14CheckClassInfoEPKcbb
+   fun:_ZN6TClass8GetClassEPKcbbmm
+   fun:_ZN14TBuildRealData7InspectEP6TClassPKcS3_PKvb
+   fun:_ZN6TCling14InspectMembersER16TMemberInspectorPKvPK6TClassb
+   fun:_ZNK6TClass15CallShowMembersEPKvR16TMemberInspectorb
+   fun:_ZN6TCling14InspectMembersER16TMemberInspectorPKvPK6TClassb
+   fun:_ZNK6TClass15CallShowMembersEPKvR16TMemberInspectorb
+}
+# ==1946183== 224 bytes in 2 blocks are definitely lost in loss record 8,836 of 10,220
+# ==1946183==    at 0x484C7B4: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+# ==1946183==    by 0xA2F4D8F: clang::Parser::AnnotateTemplateIdToken(clang::OpaquePtr<clang::TemplateName>, clang::TemplateNameKind, clang::CXXScopeSpec&, clang::SourceLocation, clang::UnqualifiedId&, bool, bool) (in /opt/software/linux-debian12-x86_64_v2/gcc-12.2.0/root-6.28.04-vluy26n4hk7btjvfbxamqtosp6cdwtsu/lib/root/libCling.so.6.28.04)
+# ==1946183==    by 0xA2893C5: clang::Parser::ParseOptionalCXXScopeSpecifier(clang::CXXScopeSpec&, clang::OpaquePtr<clang::QualType>, bool, bool, bool*, bool, clang::IdentifierInfo**, bool, bool) (in /opt/software/linux-debian12-x86_64_v2/gcc-12.2.0/root-6.28.04-vluy26n4hk7btjvfbxamqtosp6cdwtsu/lib/root/libCling.so.6.28.04)
+# ==1946183==    by 0xA3040E2: clang::Parser::TryAnnotateCXXScopeToken(bool) (in /opt/software/linux-debian12-x86_64_v2/gcc-12.2.0/root-6.28.04-vluy26n4hk7btjvfbxamqtosp6cdwtsu/lib/root/libCling.so.6.28.04)
+# ==1946183==    by 0x99FDD81: cling::LookupHelper::findScope(llvm::StringRef, cling::LookupHelper::DiagSetting, clang::Type const**, bool) const (in /opt/software/linux-debian12-x86_64_v2/gcc-12.2.0/root-6.28.04-vluy26n4hk7btjvfbxamqtosp6cdwtsu/lib/root/libCling.so.6.28.04)
+# ==1946183==    by 0x9978BCB: TClingClassInfo::TClingClassInfo(cling::Interpreter*, char const*, bool) (in /opt/software/linux-debian12-x86_64_v2/gcc-12.2.0/root-6.28.04-vluy26n4hk7btjvfbxamqtosp6cdwtsu/lib/root/libCling.so.6.28.04)
+# ==1946183==    by 0x9905BBB: TCling::GetInterpreterTypeName(char const*, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >&, bool) (in /opt/software/linux-debian12-x86_64_v2/gcc-12.2.0/root-6.28.04-vluy26n4hk7btjvfbxamqtosp6cdwtsu/lib/root/libCling.so.6.28.04)
+# ==1946183==    by 0x519118B: TClass::GetClass(char const*, bool, bool, unsigned long, unsigned long) (in /opt/software/linux-debian12-x86_64_v2/gcc-12.2.0/root-6.28.04-vluy26n4hk7btjvfbxamqtosp6cdwtsu/lib/root/libCore.so.6.28.04)
+# ==1946183==    by 0x51975D5: TBuildRealData::Inspect(TClass*, char const*, char const*, void const*, bool) (in /opt/software/linux-debian12-x86_64_v2/gcc-12.2.0/root-6.28.04-vluy26n4hk7btjvfbxamqtosp6cdwtsu/lib/root/libCore.so.6.28.04)
+# ==1946183==    by 0x991AF1C: TCling::InspectMembers(TMemberInspector&, void const*, TClass const*, bool) (in /opt/software/linux-debian12-x86_64_v2/gcc-12.2.0/root-6.28.04-vluy26n4hk7btjvfbxamqtosp6cdwtsu/lib/root/libCling.so.6.28.04)
+# ==1946183==    by 0x51892FA: TClass::CallShowMembers(void const*, TMemberInspector&, bool) const (in /opt/software/linux-debian12-x86_64_v2/gcc-12.2.0/root-6.28.04-vluy26n4hk7btjvfbxamqtosp6cdwtsu/lib/root/libCore.so.6.28.04)
+# ==1946183==    by 0x991A985: TCling::InspectMembers(TMemberInspector&, void const*, TClass const*, bool) (in /opt/software/linux-debian12-x86_64_v2/gcc-12.2.0/root-6.28.04-vluy26n4hk7btjvfbxamqtosp6cdwtsu/lib/root/libCling.so.6.28.04)
+# ==1946183==
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   match-leak-kinds: definite
+   fun:malloc
+   fun:_ZN5clang6Parser23AnnotateTemplateIdTokenENS_9OpaquePtrINS_12TemplateNameEEENS_16TemplateNameKindERNS_12CXXScopeSpecENS_14SourceLocationERNS_13UnqualifiedIdEbb
+   fun:_ZN5clang6Parser30ParseOptionalCXXScopeSpecifierERNS_12CXXScopeSpecENS_9OpaquePtrINS_8QualTypeEEEbbPbbPPNS_14IdentifierInfoEbb
+   fun:_ZN5clang6Parser24TryAnnotateCXXScopeTokenEb
+   fun:_ZNK5cling12LookupHelper9findScopeEN4llvm9StringRefENS0_11DiagSettingEPPKN5clang4TypeEb
+   fun:_ZN15TClingClassInfoC1EPN5cling11InterpreterEPKcb
+   fun:_ZN6TCling22GetInterpreterTypeNameEPKcRNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEEb
+   fun:_ZN6TClass8GetClassEPKcbbmm
+   fun:_ZN14TBuildRealData7InspectEP6TClassPKcS3_PKvb
+   fun:_ZN6TCling14InspectMembersER16TMemberInspectorPKvPK6TClassb
+   fun:_ZNK6TClass15CallShowMembersEPKvR16TMemberInspectorb
+   fun:_ZN6TCling14InspectMembersER16TMemberInspectorPKvPK6TClassb
+}
+# ==1946183== 266 (232 direct, 34 indirect) bytes in 1 blocks are definitely lost in loss record 8,971 of 10,220
+# ==1946183==    at 0x484CF2F: operator new(unsigned long) (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+# ==1946183==    by 0x4B9C663: dd4hep::Header::Header(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&) (in /opt/software/linux-debian12-x86_64_v2/gcc-12.2.0/dd4hep-1.26-6ild5zfjiixxmqe25gdjrgm7u22lztxd/lib/libDDCore.so.1.26)
+# ==1946183==    by 0x1D8C545D: dd4hep::Converter<dd4hep::Header, dd4hep::xml::Handle_t>::operator()(dd4hep::xml::Handle_t) const (in /opt/software/linux-debian12-x86_64_v2/gcc-12.2.0/dd4hep-1.26-6ild5zfjiixxmqe25gdjrgm7u22lztxd/lib/libDDCorePlugins.so.1.26)
+# ==1946183==    by 0x1D8D5420: dd4hep::Converter<dd4hep::Compact, dd4hep::xml::Handle_t>::operator()(dd4hep::xml::Handle_t) const (in /opt/software/linux-debian12-x86_64_v2/gcc-12.2.0/dd4hep-1.26-6ild5zfjiixxmqe25gdjrgm7u22lztxd/lib/libDDCorePlugins.so.1.26)
+# ==1946183==    by 0x1D8D5B41: dd4hep::Converter<dd4hep::DetElementInclude, dd4hep::xml::Handle_t>::operator()(dd4hep::xml::Handle_t) const (in /opt/software/linux-debian12-x86_64_v2/gcc-12.2.0/dd4hep-1.26-6ild5zfjiixxmqe25gdjrgm7u22lztxd/lib/libDDCorePlugins.so.1.26)
+# ==1946183==    by 0x1D8D4947: dd4hep::Converter<dd4hep::Compact, dd4hep::xml::Handle_t>::operator()(dd4hep::xml::Handle_t) const (in /opt/software/linux-debian12-x86_64_v2/gcc-12.2.0/dd4hep-1.26-6ild5zfjiixxmqe25gdjrgm7u22lztxd/lib/libDDCorePlugins.so.1.26)
+# ==1946183==    by 0x1D8D5B41: dd4hep::Converter<dd4hep::DetElementInclude, dd4hep::xml::Handle_t>::operator()(dd4hep::xml::Handle_t) const (in /opt/software/linux-debian12-x86_64_v2/gcc-12.2.0/dd4hep-1.26-6ild5zfjiixxmqe25gdjrgm7u22lztxd/lib/libDDCorePlugins.so.1.26)
+# ==1946183==    by 0x1D8D4947: dd4hep::Converter<dd4hep::Compact, dd4hep::xml::Handle_t>::operator()(dd4hep::xml::Handle_t) const (in /opt/software/linux-debian12-x86_64_v2/gcc-12.2.0/dd4hep-1.26-6ild5zfjiixxmqe25gdjrgm7u22lztxd/lib/libDDCorePlugins.so.1.26)
+# ==1946183==    by 0x1D8D61E4: (anonymous namespace)::Factory<dd4hep::(anonymous namespace)::xml_document_lccdd, long (dd4hep::Detector*, dd4hep::xml::Handle_t*)>::call(dd4hep::Detector*, dd4hep::xml::Handle_t*) (in /opt/software/linux-debian12-x86_64_v2/gcc-12.2.0/dd4hep-1.26-6ild5zfjiixxmqe25gdjrgm7u22lztxd/lib/libDDCorePlugins.so.1.26)
+# ==1946183==    by 0x4B036E2: dd4hep::DetectorLoad::processXMLElement(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, dd4hep::xml::Handle_t const&) (in /opt/software/linux-debian12-x86_64_v2/gcc-12.2.0/dd4hep-1.26-6ild5zfjiixxmqe25gdjrgm7u22lztxd/lib/libDDCore.so.1.26)
+# ==1946183==    by 0x4B04230: dd4hep::DetectorLoad::processXML(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, dd4hep::xml::UriReader*) (in /opt/software/linux-debian12-x86_64_v2/gcc-12.2.0/dd4hep-1.26-6ild5zfjiixxmqe25gdjrgm7u22lztxd/lib/libDDCore.so.1.26)
+# ==1946183==    by 0x4AFADBF: non-virtual thunk to dd4hep::DetectorImp::fromCompact(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, dd4hep::DetectorBuildType) (in /opt/software/linux-debian12-x86_64_v2/gcc-12.2.0/dd4hep-1.26-6ild5zfjiixxmqe25gdjrgm7u22lztxd/lib/libDDCore.so.1.26)
+# ==1946183==
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   match-leak-kinds: definite
+   fun:_Znwm
+   fun:_ZN6dd4hep6HeaderC1ERKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEES8_
+   fun:_ZNK6dd4hep9ConverterINS_6HeaderENS_3xml8Handle_tEEclES3_
+   fun:_ZNK6dd4hep9ConverterINS_7CompactENS_3xml8Handle_tEEclES3_
+   fun:_ZNK6dd4hep9ConverterINS_17DetElementIncludeENS_3xml8Handle_tEEclES3_
+   fun:_ZNK6dd4hep9ConverterINS_7CompactENS_3xml8Handle_tEEclES3_
+   fun:_ZNK6dd4hep9ConverterINS_17DetElementIncludeENS_3xml8Handle_tEEclES3_
+   fun:_ZNK6dd4hep9ConverterINS_7CompactENS_3xml8Handle_tEEclES3_
+   fun:_ZN12_GLOBAL__N_17FactoryIN6dd4hep12_GLOBAL__N_118xml_document_lccddEFlPNS1_8DetectorEPNS1_3xml8Handle_tEEE4callES5_S8_
+   fun:_ZN6dd4hep12DetectorLoad17processXMLElementERKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEERKNS_3xml8Handle_tE
+   fun:_ZN6dd4hep12DetectorLoad10processXMLERKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEEPNS_3xml9UriReaderE
+   fun:_ZThn64_N6dd4hep11DetectorImp11fromCompactERKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEENS_17DetectorBuildTypeE
+}
+# ==1946183== 280 bytes in 2 blocks are definitely lost in loss record 8,999 of 10,220
+# ==1946183==    at 0x484C7B4: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+# ==1946183==    by 0xA2F4D8F: clang::Parser::AnnotateTemplateIdToken(clang::OpaquePtr<clang::TemplateName>, clang::TemplateNameKind, clang::CXXScopeSpec&, clang::SourceLocation, clang::UnqualifiedId&, bool, bool) (in /opt/software/linux-debian12-x86_64_v2/gcc-12.2.0/root-6.28.04-vluy26n4hk7btjvfbxamqtosp6cdwtsu/lib/root/libCling.so.6.28.04)
+# ==1946183==    by 0xA2893C5: clang::Parser::ParseOptionalCXXScopeSpecifier(clang::CXXScopeSpec&, clang::OpaquePtr<clang::QualType>, bool, bool, bool*, bool, clang::IdentifierInfo**, bool, bool) (in /opt/software/linux-debian12-x86_64_v2/gcc-12.2.0/root-6.28.04-vluy26n4hk7btjvfbxamqtosp6cdwtsu/lib/root/libCling.so.6.28.04)
+# ==1946183==    by 0xA3040E2: clang::Parser::TryAnnotateCXXScopeToken(bool) (in /opt/software/linux-debian12-x86_64_v2/gcc-12.2.0/root-6.28.04-vluy26n4hk7btjvfbxamqtosp6cdwtsu/lib/root/libCling.so.6.28.04)
+# ==1946183==    by 0x99FDD81: cling::LookupHelper::findScope(llvm::StringRef, cling::LookupHelper::DiagSetting, clang::Type const**, bool) const (in /opt/software/linux-debian12-x86_64_v2/gcc-12.2.0/root-6.28.04-vluy26n4hk7btjvfbxamqtosp6cdwtsu/lib/root/libCling.so.6.28.04)
+# ==1946183==    by 0x991F580: TCling::CheckClassInfo(char const*, bool, bool) (in /opt/software/linux-debian12-x86_64_v2/gcc-12.2.0/root-6.28.04-vluy26n4hk7btjvfbxamqtosp6cdwtsu/lib/root/libCling.so.6.28.04)
+# ==1946183==    by 0x5191135: TClass::GetClass(char const*, bool, bool, unsigned long, unsigned long) (in /opt/software/linux-debian12-x86_64_v2/gcc-12.2.0/root-6.28.04-vluy26n4hk7btjvfbxamqtosp6cdwtsu/lib/root/libCore.so.6.28.04)
+# ==1946183==    by 0x991A87B: TCling::InspectMembers(TMemberInspector&, void const*, TClass const*, bool) (in /opt/software/linux-debian12-x86_64_v2/gcc-12.2.0/root-6.28.04-vluy26n4hk7btjvfbxamqtosp6cdwtsu/lib/root/libCling.so.6.28.04)
+# ==1946183==    by 0x51892FA: TClass::CallShowMembers(void const*, TMemberInspector&, bool) const (in /opt/software/linux-debian12-x86_64_v2/gcc-12.2.0/root-6.28.04-vluy26n4hk7btjvfbxamqtosp6cdwtsu/lib/root/libCore.so.6.28.04)
+# ==1946183==    by 0x5195B93: TClass::BuildRealData(void*, bool) (in /opt/software/linux-debian12-x86_64_v2/gcc-12.2.0/root-6.28.04-vluy26n4hk7btjvfbxamqtosp6cdwtsu/lib/root/libCore.so.6.28.04)
+# ==1946183==    by 0x5197726: TBuildRealData::Inspect(TClass*, char const*, char const*, void const*, bool) (in /opt/software/linux-debian12-x86_64_v2/gcc-12.2.0/root-6.28.04-vluy26n4hk7btjvfbxamqtosp6cdwtsu/lib/root/libCore.so.6.28.04)
+# ==1946183==    by 0x991AF1C: TCling::InspectMembers(TMemberInspector&, void const*, TClass const*, bool) (in /opt/software/linux-debian12-x86_64_v2/gcc-12.2.0/root-6.28.04-vluy26n4hk7btjvfbxamqtosp6cdwtsu/lib/root/libCling.so.6.28.04)
+# ==1946183==
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   match-leak-kinds: definite
+   fun:malloc
+   fun:_ZN5clang6Parser23AnnotateTemplateIdTokenENS_9OpaquePtrINS_12TemplateNameEEENS_16TemplateNameKindERNS_12CXXScopeSpecENS_14SourceLocationERNS_13UnqualifiedIdEbb
+   fun:_ZN5clang6Parser30ParseOptionalCXXScopeSpecifierERNS_12CXXScopeSpecENS_9OpaquePtrINS_8QualTypeEEEbbPbbPPNS_14IdentifierInfoEbb
+   fun:_ZN5clang6Parser24TryAnnotateCXXScopeTokenEb
+   fun:_ZNK5cling12LookupHelper9findScopeEN4llvm9StringRefENS0_11DiagSettingEPPKN5clang4TypeEb
+   fun:_ZN6TCling14CheckClassInfoEPKcbb
+   fun:_ZN6TClass8GetClassEPKcbbmm
+   fun:_ZN6TCling14InspectMembersER16TMemberInspectorPKvPK6TClassb
+   fun:_ZNK6TClass15CallShowMembersEPKvR16TMemberInspectorb
+   fun:_ZN6TClass13BuildRealDataEPvb
+   fun:_ZN14TBuildRealData7InspectEP6TClassPKcS3_PKvb
+   fun:_ZN6TCling14InspectMembersER16TMemberInspectorPKvPK6TClassb
+}
+# ==1946183== 280 bytes in 2 blocks are definitely lost in loss record 9,000 of 10,220
+# ==1946183==    at 0x484C7B4: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+# ==1946183==    by 0xA2F4D8F: clang::Parser::AnnotateTemplateIdToken(clang::OpaquePtr<clang::TemplateName>, clang::TemplateNameKind, clang::CXXScopeSpec&, clang::SourceLocation, clang::UnqualifiedId&, bool, bool) (in /opt/software/linux-debian12-x86_64_v2/gcc-12.2.0/root-6.28.04-vluy26n4hk7btjvfbxamqtosp6cdwtsu/lib/root/libCling.so.6.28.04)
+# ==1946183==    by 0xA2893C5: clang::Parser::ParseOptionalCXXScopeSpecifier(clang::CXXScopeSpec&, clang::OpaquePtr<clang::QualType>, bool, bool, bool*, bool, clang::IdentifierInfo**, bool, bool) (in /opt/software/linux-debian12-x86_64_v2/gcc-12.2.0/root-6.28.04-vluy26n4hk7btjvfbxamqtosp6cdwtsu/lib/root/libCling.so.6.28.04)
+# ==1946183==    by 0xA3040E2: clang::Parser::TryAnnotateCXXScopeToken(bool) (in /opt/software/linux-debian12-x86_64_v2/gcc-12.2.0/root-6.28.04-vluy26n4hk7btjvfbxamqtosp6cdwtsu/lib/root/libCling.so.6.28.04)
+# ==1946183==    by 0x99FDD81: cling::LookupHelper::findScope(llvm::StringRef, cling::LookupHelper::DiagSetting, clang::Type const**, bool) const (in /opt/software/linux-debian12-x86_64_v2/gcc-12.2.0/root-6.28.04-vluy26n4hk7btjvfbxamqtosp6cdwtsu/lib/root/libCling.so.6.28.04)
+# ==1946183==    by 0x9978BCB: TClingClassInfo::TClingClassInfo(cling::Interpreter*, char const*, bool) (in /opt/software/linux-debian12-x86_64_v2/gcc-12.2.0/root-6.28.04-vluy26n4hk7btjvfbxamqtosp6cdwtsu/lib/root/libCling.so.6.28.04)
+# ==1946183==    by 0x9905BBB: TCling::GetInterpreterTypeName(char const*, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >&, bool) (in /opt/software/linux-debian12-x86_64_v2/gcc-12.2.0/root-6.28.04-vluy26n4hk7btjvfbxamqtosp6cdwtsu/lib/root/libCling.so.6.28.04)
+# ==1946183==    by 0x519118B: TClass::GetClass(char const*, bool, bool, unsigned long, unsigned long) (in /opt/software/linux-debian12-x86_64_v2/gcc-12.2.0/root-6.28.04-vluy26n4hk7btjvfbxamqtosp6cdwtsu/lib/root/libCore.so.6.28.04)
+# ==1946183==    by 0x991A87B: TCling::InspectMembers(TMemberInspector&, void const*, TClass const*, bool) (in /opt/software/linux-debian12-x86_64_v2/gcc-12.2.0/root-6.28.04-vluy26n4hk7btjvfbxamqtosp6cdwtsu/lib/root/libCling.so.6.28.04)
+# ==1946183==    by 0x51892FA: TClass::CallShowMembers(void const*, TMemberInspector&, bool) const (in /opt/software/linux-debian12-x86_64_v2/gcc-12.2.0/root-6.28.04-vluy26n4hk7btjvfbxamqtosp6cdwtsu/lib/root/libCore.so.6.28.04)
+# ==1946183==    by 0x5195B93: TClass::BuildRealData(void*, bool) (in /opt/software/linux-debian12-x86_64_v2/gcc-12.2.0/root-6.28.04-vluy26n4hk7btjvfbxamqtosp6cdwtsu/lib/root/libCore.so.6.28.04)
+# ==1946183==    by 0x5197726: TBuildRealData::Inspect(TClass*, char const*, char const*, void const*, bool) (in /opt/software/linux-debian12-x86_64_v2/gcc-12.2.0/root-6.28.04-vluy26n4hk7btjvfbxamqtosp6cdwtsu/lib/root/libCore.so.6.28.04)
+# ==1946183==
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   match-leak-kinds: definite
+   fun:malloc
+   fun:_ZN5clang6Parser23AnnotateTemplateIdTokenENS_9OpaquePtrINS_12TemplateNameEEENS_16TemplateNameKindERNS_12CXXScopeSpecENS_14SourceLocationERNS_13UnqualifiedIdEbb
+   fun:_ZN5clang6Parser30ParseOptionalCXXScopeSpecifierERNS_12CXXScopeSpecENS_9OpaquePtrINS_8QualTypeEEEbbPbbPPNS_14IdentifierInfoEbb
+   fun:_ZN5clang6Parser24TryAnnotateCXXScopeTokenEb
+   fun:_ZNK5cling12LookupHelper9findScopeEN4llvm9StringRefENS0_11DiagSettingEPPKN5clang4TypeEb
+   fun:_ZN15TClingClassInfoC1EPN5cling11InterpreterEPKcb
+   fun:_ZN6TCling22GetInterpreterTypeNameEPKcRNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEEb
+   fun:_ZN6TClass8GetClassEPKcbbmm
+   fun:_ZN6TCling14InspectMembersER16TMemberInspectorPKvPK6TClassb
+   fun:_ZNK6TClass15CallShowMembersEPKvR16TMemberInspectorb
+   fun:_ZN6TClass13BuildRealDataEPvb
+   fun:_ZN14TBuildRealData7InspectEP6TClassPKcS3_PKvb
+}
+# ==1946183== 280 bytes in 2 blocks are definitely lost in loss record 9,001 of 10,220
+# ==1946183==    at 0x484C7B4: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+# ==1946183==    by 0xA2F4D8F: clang::Parser::AnnotateTemplateIdToken(clang::OpaquePtr<clang::TemplateName>, clang::TemplateNameKind, clang::CXXScopeSpec&, clang::SourceLocation, clang::UnqualifiedId&, bool, bool) (in /opt/software/linux-debian12-x86_64_v2/gcc-12.2.0/root-6.28.04-vluy26n4hk7btjvfbxamqtosp6cdwtsu/lib/root/libCling.so.6.28.04)
+# ==1946183==    by 0xA2893C5: clang::Parser::ParseOptionalCXXScopeSpecifier(clang::CXXScopeSpec&, clang::OpaquePtr<clang::QualType>, bool, bool, bool*, bool, clang::IdentifierInfo**, bool, bool) (in /opt/software/linux-debian12-x86_64_v2/gcc-12.2.0/root-6.28.04-vluy26n4hk7btjvfbxamqtosp6cdwtsu/lib/root/libCling.so.6.28.04)
+# ==1946183==    by 0xA3040E2: clang::Parser::TryAnnotateCXXScopeToken(bool) (in /opt/software/linux-debian12-x86_64_v2/gcc-12.2.0/root-6.28.04-vluy26n4hk7btjvfbxamqtosp6cdwtsu/lib/root/libCling.so.6.28.04)
+# ==1946183==    by 0x99FDD81: cling::LookupHelper::findScope(llvm::StringRef, cling::LookupHelper::DiagSetting, clang::Type const**, bool) const (in /opt/software/linux-debian12-x86_64_v2/gcc-12.2.0/root-6.28.04-vluy26n4hk7btjvfbxamqtosp6cdwtsu/lib/root/libCling.so.6.28.04)
+# ==1946183==    by 0x991F580: TCling::CheckClassInfo(char const*, bool, bool) (in /opt/software/linux-debian12-x86_64_v2/gcc-12.2.0/root-6.28.04-vluy26n4hk7btjvfbxamqtosp6cdwtsu/lib/root/libCling.so.6.28.04)
+# ==1946183==    by 0x519A891: TClass::Init(char const*, short, std::type_info const*, TVirtualIsAProxy*, char const*, char const*, int, int, ClassInfo_t*, bool) (in /opt/software/linux-debian12-x86_64_v2/gcc-12.2.0/root-6.28.04-vluy26n4hk7btjvfbxamqtosp6cdwtsu/lib/root/libCore.so.6.28.04)
+# ==1946183==    by 0x519BA37: TClass::TClass(char const*, short, bool) (in /opt/software/linux-debian12-x86_64_v2/gcc-12.2.0/root-6.28.04-vluy26n4hk7btjvfbxamqtosp6cdwtsu/lib/root/libCore.so.6.28.04)
+# ==1946183==    by 0x991DA60: TCling::GenerateTClass(char const*, bool, bool) (in /opt/software/linux-debian12-x86_64_v2/gcc-12.2.0/root-6.28.04-vluy26n4hk7btjvfbxamqtosp6cdwtsu/lib/root/libCling.so.6.28.04)
+# ==1946183==    by 0x51911FE: TClass::GetClass(char const*, bool, bool, unsigned long, unsigned long) (in /opt/software/linux-debian12-x86_64_v2/gcc-12.2.0/root-6.28.04-vluy26n4hk7btjvfbxamqtosp6cdwtsu/lib/root/libCore.so.6.28.04)
+# ==1946183==    by 0x991A87B: TCling::InspectMembers(TMemberInspector&, void const*, TClass const*, bool) (in /opt/software/linux-debian12-x86_64_v2/gcc-12.2.0/root-6.28.04-vluy26n4hk7btjvfbxamqtosp6cdwtsu/lib/root/libCling.so.6.28.04)
+# ==1946183==    by 0x51892FA: TClass::CallShowMembers(void const*, TMemberInspector&, bool) const (in /opt/software/linux-debian12-x86_64_v2/gcc-12.2.0/root-6.28.04-vluy26n4hk7btjvfbxamqtosp6cdwtsu/lib/root/libCore.so.6.28.04)
+# ==1946183==
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   match-leak-kinds: definite
+   fun:malloc
+   fun:_ZN5clang6Parser23AnnotateTemplateIdTokenENS_9OpaquePtrINS_12TemplateNameEEENS_16TemplateNameKindERNS_12CXXScopeSpecENS_14SourceLocationERNS_13UnqualifiedIdEbb
+   fun:_ZN5clang6Parser30ParseOptionalCXXScopeSpecifierERNS_12CXXScopeSpecENS_9OpaquePtrINS_8QualTypeEEEbbPbbPPNS_14IdentifierInfoEbb
+   fun:_ZN5clang6Parser24TryAnnotateCXXScopeTokenEb
+   fun:_ZNK5cling12LookupHelper9findScopeEN4llvm9StringRefENS0_11DiagSettingEPPKN5clang4TypeEb
+   fun:_ZN6TCling14CheckClassInfoEPKcbb
+   fun:_ZN6TClass4InitEPKcsPKSt9type_infoP16TVirtualIsAProxyS1_S1_iiP11ClassInfo_tb
+   fun:_ZN6TClassC1EPKcsb
+   fun:_ZN6TCling14GenerateTClassEPKcbb
+   fun:_ZN6TClass8GetClassEPKcbbmm
+   fun:_ZN6TCling14InspectMembersER16TMemberInspectorPKvPK6TClassb
+   fun:_ZNK6TClass15CallShowMembersEPKvR16TMemberInspectorb
+}
+# ==1946183== 280 bytes in 2 blocks are definitely lost in loss record 9,002 of 10,220
+# ==1946183==    at 0x484C7B4: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+# ==1946183==    by 0xA2F4D8F: clang::Parser::AnnotateTemplateIdToken(clang::OpaquePtr<clang::TemplateName>, clang::TemplateNameKind, clang::CXXScopeSpec&, clang::SourceLocation, clang::UnqualifiedId&, bool, bool) (in /opt/software/linux-debian12-x86_64_v2/gcc-12.2.0/root-6.28.04-vluy26n4hk7btjvfbxamqtosp6cdwtsu/lib/root/libCling.so.6.28.04)
+# ==1946183==    by 0xA2893C5: clang::Parser::ParseOptionalCXXScopeSpecifier(clang::CXXScopeSpec&, clang::OpaquePtr<clang::QualType>, bool, bool, bool*, bool, clang::IdentifierInfo**, bool, bool) (in /opt/software/linux-debian12-x86_64_v2/gcc-12.2.0/root-6.28.04-vluy26n4hk7btjvfbxamqtosp6cdwtsu/lib/root/libCling.so.6.28.04)
+# ==1946183==    by 0xA3040E2: clang::Parser::TryAnnotateCXXScopeToken(bool) (in /opt/software/linux-debian12-x86_64_v2/gcc-12.2.0/root-6.28.04-vluy26n4hk7btjvfbxamqtosp6cdwtsu/lib/root/libCling.so.6.28.04)
+# ==1946183==    by 0x99FDD81: cling::LookupHelper::findScope(llvm::StringRef, cling::LookupHelper::DiagSetting, clang::Type const**, bool) const (in /opt/software/linux-debian12-x86_64_v2/gcc-12.2.0/root-6.28.04-vluy26n4hk7btjvfbxamqtosp6cdwtsu/lib/root/libCling.so.6.28.04)
+# ==1946183==    by 0x9978BCB: TClingClassInfo::TClingClassInfo(cling::Interpreter*, char const*, bool) (in /opt/software/linux-debian12-x86_64_v2/gcc-12.2.0/root-6.28.04-vluy26n4hk7btjvfbxamqtosp6cdwtsu/lib/root/libCling.so.6.28.04)
+# ==1946183==    by 0x990774C: TCling::SetClassInfo(TClass*, bool) (in /opt/software/linux-debian12-x86_64_v2/gcc-12.2.0/root-6.28.04-vluy26n4hk7btjvfbxamqtosp6cdwtsu/lib/root/libCling.so.6.28.04)
+# ==1946183==    by 0x519A8AF: TClass::Init(char const*, short, std::type_info const*, TVirtualIsAProxy*, char const*, char const*, int, int, ClassInfo_t*, bool) (in /opt/software/linux-debian12-x86_64_v2/gcc-12.2.0/root-6.28.04-vluy26n4hk7btjvfbxamqtosp6cdwtsu/lib/root/libCore.so.6.28.04)
+# ==1946183==    by 0x519BA37: TClass::TClass(char const*, short, bool) (in /opt/software/linux-debian12-x86_64_v2/gcc-12.2.0/root-6.28.04-vluy26n4hk7btjvfbxamqtosp6cdwtsu/lib/root/libCore.so.6.28.04)
+# ==1946183==    by 0x991DA60: TCling::GenerateTClass(char const*, bool, bool) (in /opt/software/linux-debian12-x86_64_v2/gcc-12.2.0/root-6.28.04-vluy26n4hk7btjvfbxamqtosp6cdwtsu/lib/root/libCling.so.6.28.04)
+# ==1946183==    by 0x51911FE: TClass::GetClass(char const*, bool, bool, unsigned long, unsigned long) (in /opt/software/linux-debian12-x86_64_v2/gcc-12.2.0/root-6.28.04-vluy26n4hk7btjvfbxamqtosp6cdwtsu/lib/root/libCore.so.6.28.04)
+# ==1946183==    by 0x991A87B: TCling::InspectMembers(TMemberInspector&, void const*, TClass const*, bool) (in /opt/software/linux-debian12-x86_64_v2/gcc-12.2.0/root-6.28.04-vluy26n4hk7btjvfbxamqtosp6cdwtsu/lib/root/libCling.so.6.28.04)
+# ==1946183==
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   match-leak-kinds: definite
+   fun:malloc
+   fun:_ZN5clang6Parser23AnnotateTemplateIdTokenENS_9OpaquePtrINS_12TemplateNameEEENS_16TemplateNameKindERNS_12CXXScopeSpecENS_14SourceLocationERNS_13UnqualifiedIdEbb
+   fun:_ZN5clang6Parser30ParseOptionalCXXScopeSpecifierERNS_12CXXScopeSpecENS_9OpaquePtrINS_8QualTypeEEEbbPbbPPNS_14IdentifierInfoEbb
+   fun:_ZN5clang6Parser24TryAnnotateCXXScopeTokenEb
+   fun:_ZNK5cling12LookupHelper9findScopeEN4llvm9StringRefENS0_11DiagSettingEPPKN5clang4TypeEb
+   fun:_ZN15TClingClassInfoC1EPN5cling11InterpreterEPKcb
+   fun:_ZN6TCling12SetClassInfoEP6TClassb
+   fun:_ZN6TClass4InitEPKcsPKSt9type_infoP16TVirtualIsAProxyS1_S1_iiP11ClassInfo_tb
+   fun:_ZN6TClassC1EPKcsb
+   fun:_ZN6TCling14GenerateTClassEPKcbb
+   fun:_ZN6TClass8GetClassEPKcbbmm
+   fun:_ZN6TCling14InspectMembersER16TMemberInspectorPKvPK6TClassb
+}
+# ==1946183== 294 (232 direct, 62 indirect) bytes in 1 blocks are definitely lost in loss record 9,014 of 10,220
+# ==1946183==    at 0x484CF2F: operator new(unsigned long) (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+# ==1946183==    by 0x4B9C663: dd4hep::Header::Header(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&) (in /opt/software/linux-debian12-x86_64_v2/gcc-12.2.0/dd4hep-1.26-6ild5zfjiixxmqe25gdjrgm7u22lztxd/lib/libDDCore.so.1.26)
+# ==1946183==    by 0x1D8C545D: dd4hep::Converter<dd4hep::Header, dd4hep::xml::Handle_t>::operator()(dd4hep::xml::Handle_t) const (in /opt/software/linux-debian12-x86_64_v2/gcc-12.2.0/dd4hep-1.26-6ild5zfjiixxmqe25gdjrgm7u22lztxd/lib/libDDCorePlugins.so.1.26)
+# ==1946183==    by 0x1D8D5420: dd4hep::Converter<dd4hep::Compact, dd4hep::xml::Handle_t>::operator()(dd4hep::xml::Handle_t) const (in /opt/software/linux-debian12-x86_64_v2/gcc-12.2.0/dd4hep-1.26-6ild5zfjiixxmqe25gdjrgm7u22lztxd/lib/libDDCorePlugins.so.1.26)
+# ==1946183==    by 0x1D8D61E4: (anonymous namespace)::Factory<dd4hep::(anonymous namespace)::xml_document_lccdd, long (dd4hep::Detector*, dd4hep::xml::Handle_t*)>::call(dd4hep::Detector*, dd4hep::xml::Handle_t*) (in /opt/software/linux-debian12-x86_64_v2/gcc-12.2.0/dd4hep-1.26-6ild5zfjiixxmqe25gdjrgm7u22lztxd/lib/libDDCorePlugins.so.1.26)
+# ==1946183==    by 0x4B036E2: dd4hep::DetectorLoad::processXMLElement(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, dd4hep::xml::Handle_t const&) (in /opt/software/linux-debian12-x86_64_v2/gcc-12.2.0/dd4hep-1.26-6ild5zfjiixxmqe25gdjrgm7u22lztxd/lib/libDDCore.so.1.26)
+# ==1946183==    by 0x4B04230: dd4hep::DetectorLoad::processXML(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, dd4hep::xml::UriReader*) (in /opt/software/linux-debian12-x86_64_v2/gcc-12.2.0/dd4hep-1.26-6ild5zfjiixxmqe25gdjrgm7u22lztxd/lib/libDDCore.so.1.26)
+# ==1946183==    by 0x4AFADBF: non-virtual thunk to dd4hep::DetectorImp::fromCompact(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, dd4hep::DetectorBuildType) (in /opt/software/linux-debian12-x86_64_v2/gcc-12.2.0/dd4hep-1.26-6ild5zfjiixxmqe25gdjrgm7u22lztxd/lib/libDDCore.so.1.26)
+# ==1946183==    by 0x1D92AB10: (anonymous namespace)::Factory<dd4hep::(anonymous namespace)::DD4hep_CompactLoader, long (dd4hep::Detector*, int, char**)>::call(dd4hep::Detector*, int, char**) (in /opt/software/linux-debian12-x86_64_v2/gcc-12.2.0/dd4hep-1.26-6ild5zfjiixxmqe25gdjrgm7u22lztxd/lib/libDDCorePlugins.so.1.26)
+# ==1946183==    by 0x4AF43A4: dd4hep::DetectorImp::apply(char const*, int, char**) const (in /opt/software/linux-debian12-x86_64_v2/gcc-12.2.0/dd4hep-1.26-6ild5zfjiixxmqe25gdjrgm7u22lztxd/lib/libDDCore.so.1.26)
+# ==1946183==    by 0x10D89C: (anonymous namespace)::run_plugin(dd4hep::Detector&, char const*, int, char**) (in /opt/software/linux-debian12-x86_64_v2/gcc-12.2.0/dd4hep-1.26-6ild5zfjiixxmqe25gdjrgm7u22lztxd/bin/geoPluginRun)
+# ==1946183==    by 0x10EE69: dd4hep::execute::invoke_plugin_runner(char const*, int, char**) (in /opt/software/linux-debian12-x86_64_v2/gcc-12.2.0/dd4hep-1.26-6ild5zfjiixxmqe25gdjrgm7u22lztxd/bin/geoPluginRun)
+# ==1946183==
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   match-leak-kinds: definite
+   fun:_Znwm
+   fun:_ZN6dd4hep6HeaderC1ERKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEES8_
+   fun:_ZNK6dd4hep9ConverterINS_6HeaderENS_3xml8Handle_tEEclES3_
+   fun:_ZNK6dd4hep9ConverterINS_7CompactENS_3xml8Handle_tEEclES3_
+   fun:_ZN12_GLOBAL__N_17FactoryIN6dd4hep12_GLOBAL__N_118xml_document_lccddEFlPNS1_8DetectorEPNS1_3xml8Handle_tEEE4callES5_S8_
+   fun:_ZN6dd4hep12DetectorLoad17processXMLElementERKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEERKNS_3xml8Handle_tE
+   fun:_ZN6dd4hep12DetectorLoad10processXMLERKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEEPNS_3xml9UriReaderE
+   fun:_ZThn64_N6dd4hep11DetectorImp11fromCompactERKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEENS_17DetectorBuildTypeE
+   fun:_ZN12_GLOBAL__N_17FactoryIN6dd4hep12_GLOBAL__N_120DD4hep_CompactLoaderEFlPNS1_8DetectorEiPPcEE4callES5_iS7_
+   fun:_ZNK6dd4hep11DetectorImp5applyEPKciPPc
+   fun:_ZN12_GLOBAL__N_110run_pluginERN6dd4hep8DetectorEPKciPPc
+   fun:_ZN6dd4hep7execute20invoke_plugin_runnerEPKciPPc
+}
+# ==1946183== 336 bytes in 3 blocks are definitely lost in loss record 9,096 of 10,220
+# ==1946183==    at 0x484C7B4: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+# ==1946183==    by 0xA2F4D8F: clang::Parser::AnnotateTemplateIdToken(clang::OpaquePtr<clang::TemplateName>, clang::TemplateNameKind, clang::CXXScopeSpec&, clang::SourceLocation, clang::UnqualifiedId&, bool, bool) (in /opt/software/linux-debian12-x86_64_v2/gcc-12.2.0/root-6.28.04-vluy26n4hk7btjvfbxamqtosp6cdwtsu/lib/root/libCling.so.6.28.04)
+# ==1946183==    by 0xA2893C5: clang::Parser::ParseOptionalCXXScopeSpecifier(clang::CXXScopeSpec&, clang::OpaquePtr<clang::QualType>, bool, bool, bool*, bool, clang::IdentifierInfo**, bool, bool) (in /opt/software/linux-debian12-x86_64_v2/gcc-12.2.0/root-6.28.04-vluy26n4hk7btjvfbxamqtosp6cdwtsu/lib/root/libCling.so.6.28.04)
+# ==1946183==    by 0xA3040E2: clang::Parser::TryAnnotateCXXScopeToken(bool) (in /opt/software/linux-debian12-x86_64_v2/gcc-12.2.0/root-6.28.04-vluy26n4hk7btjvfbxamqtosp6cdwtsu/lib/root/libCling.so.6.28.04)
+# ==1946183==    by 0x99FDD81: cling::LookupHelper::findScope(llvm::StringRef, cling::LookupHelper::DiagSetting, clang::Type const**, bool) const (in /opt/software/linux-debian12-x86_64_v2/gcc-12.2.0/root-6.28.04-vluy26n4hk7btjvfbxamqtosp6cdwtsu/lib/root/libCling.so.6.28.04)
+# ==1946183==    by 0x991F580: TCling::CheckClassInfo(char const*, bool, bool) (in /opt/software/linux-debian12-x86_64_v2/gcc-12.2.0/root-6.28.04-vluy26n4hk7btjvfbxamqtosp6cdwtsu/lib/root/libCling.so.6.28.04)
+# ==1946183==    by 0x519A891: TClass::Init(char const*, short, std::type_info const*, TVirtualIsAProxy*, char const*, char const*, int, int, ClassInfo_t*, bool) (in /opt/software/linux-debian12-x86_64_v2/gcc-12.2.0/root-6.28.04-vluy26n4hk7btjvfbxamqtosp6cdwtsu/lib/root/libCore.so.6.28.04)
+# ==1946183==    by 0x519B652: TClass::TClass(char const*, short, std::type_info const&, TVirtualIsAProxy*, char const*, char const*, int, int, bool) (in /opt/software/linux-debian12-x86_64_v2/gcc-12.2.0/root-6.28.04-vluy26n4hk7btjvfbxamqtosp6cdwtsu/lib/root/libCore.so.6.28.04)
+# ==1946183==    by 0x519B75A: ROOT::CreateClass(char const*, short, std::type_info const&, TVirtualIsAProxy*, char const*, char const*, int, int) (in /opt/software/linux-debian12-x86_64_v2/gcc-12.2.0/root-6.28.04-vluy26n4hk7btjvfbxamqtosp6cdwtsu/lib/root/libCore.so.6.28.04)
+# ==1946183==    by 0x51ACC61: ROOT::TGenericClassInfo::GetClass() (in /opt/software/linux-debian12-x86_64_v2/gcc-12.2.0/root-6.28.04-vluy26n4hk7btjvfbxamqtosp6cdwtsu/lib/root/libCore.so.6.28.04)
+# ==1946183==    by 0x5190B11: TClass::GetClass(char const*, bool, bool, unsigned long, unsigned long) (in /opt/software/linux-debian12-x86_64_v2/gcc-12.2.0/root-6.28.04-vluy26n4hk7btjvfbxamqtosp6cdwtsu/lib/root/libCore.so.6.28.04)
+# ==1946183==    by 0x51975D5: TBuildRealData::Inspect(TClass*, char const*, char const*, void const*, bool) (in /opt/software/linux-debian12-x86_64_v2/gcc-12.2.0/root-6.28.04-vluy26n4hk7btjvfbxamqtosp6cdwtsu/lib/root/libCore.so.6.28.04)
+# ==1946183==
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   match-leak-kinds: definite
+   fun:malloc
+   fun:_ZN5clang6Parser23AnnotateTemplateIdTokenENS_9OpaquePtrINS_12TemplateNameEEENS_16TemplateNameKindERNS_12CXXScopeSpecENS_14SourceLocationERNS_13UnqualifiedIdEbb
+   fun:_ZN5clang6Parser30ParseOptionalCXXScopeSpecifierERNS_12CXXScopeSpecENS_9OpaquePtrINS_8QualTypeEEEbbPbbPPNS_14IdentifierInfoEbb
+   fun:_ZN5clang6Parser24TryAnnotateCXXScopeTokenEb
+   fun:_ZNK5cling12LookupHelper9findScopeEN4llvm9StringRefENS0_11DiagSettingEPPKN5clang4TypeEb
+   fun:_ZN6TCling14CheckClassInfoEPKcbb
+   fun:_ZN6TClass4InitEPKcsPKSt9type_infoP16TVirtualIsAProxyS1_S1_iiP11ClassInfo_tb
+   fun:_ZN6TClassC1EPKcsRKSt9type_infoP16TVirtualIsAProxyS1_S1_iib
+   fun:_ZN4ROOT11CreateClassEPKcsRKSt9type_infoP16TVirtualIsAProxyS1_S1_ii
+   fun:_ZN4ROOT17TGenericClassInfo8GetClassEv
+   fun:_ZN6TClass8GetClassEPKcbbmm
+   fun:_ZN14TBuildRealData7InspectEP6TClassPKcS3_PKvb
+}
+# ==1946183== 336 bytes in 3 blocks are definitely lost in loss record 9,097 of 10,220
+# ==1946183==    at 0x484C7B4: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+# ==1946183==    by 0xA2F4D8F: clang::Parser::AnnotateTemplateIdToken(clang::OpaquePtr<clang::TemplateName>, clang::TemplateNameKind, clang::CXXScopeSpec&, clang::SourceLocation, clang::UnqualifiedId&, bool, bool) (in /opt/software/linux-debian12-x86_64_v2/gcc-12.2.0/root-6.28.04-vluy26n4hk7btjvfbxamqtosp6cdwtsu/lib/root/libCling.so.6.28.04)
+# ==1946183==    by 0xA2893C5: clang::Parser::ParseOptionalCXXScopeSpecifier(clang::CXXScopeSpec&, clang::OpaquePtr<clang::QualType>, bool, bool, bool*, bool, clang::IdentifierInfo**, bool, bool) (in /opt/software/linux-debian12-x86_64_v2/gcc-12.2.0/root-6.28.04-vluy26n4hk7btjvfbxamqtosp6cdwtsu/lib/root/libCling.so.6.28.04)
+# ==1946183==    by 0xA3040E2: clang::Parser::TryAnnotateCXXScopeToken(bool) (in /opt/software/linux-debian12-x86_64_v2/gcc-12.2.0/root-6.28.04-vluy26n4hk7btjvfbxamqtosp6cdwtsu/lib/root/libCling.so.6.28.04)
+# ==1946183==    by 0x99FDD81: cling::LookupHelper::findScope(llvm::StringRef, cling::LookupHelper::DiagSetting, clang::Type const**, bool) const (in /opt/software/linux-debian12-x86_64_v2/gcc-12.2.0/root-6.28.04-vluy26n4hk7btjvfbxamqtosp6cdwtsu/lib/root/libCling.so.6.28.04)
+# ==1946183==    by 0x9978BCB: TClingClassInfo::TClingClassInfo(cling::Interpreter*, char const*, bool) (in /opt/software/linux-debian12-x86_64_v2/gcc-12.2.0/root-6.28.04-vluy26n4hk7btjvfbxamqtosp6cdwtsu/lib/root/libCling.so.6.28.04)
+# ==1946183==    by 0x990774C: TCling::SetClassInfo(TClass*, bool) (in /opt/software/linux-debian12-x86_64_v2/gcc-12.2.0/root-6.28.04-vluy26n4hk7btjvfbxamqtosp6cdwtsu/lib/root/libCling.so.6.28.04)
+# ==1946183==    by 0x519A8AF: TClass::Init(char const*, short, std::type_info const*, TVirtualIsAProxy*, char const*, char const*, int, int, ClassInfo_t*, bool) (in /opt/software/linux-debian12-x86_64_v2/gcc-12.2.0/root-6.28.04-vluy26n4hk7btjvfbxamqtosp6cdwtsu/lib/root/libCore.so.6.28.04)
+# ==1946183==    by 0x519B652: TClass::TClass(char const*, short, std::type_info const&, TVirtualIsAProxy*, char const*, char const*, int, int, bool) (in /opt/software/linux-debian12-x86_64_v2/gcc-12.2.0/root-6.28.04-vluy26n4hk7btjvfbxamqtosp6cdwtsu/lib/root/libCore.so.6.28.04)
+# ==1946183==    by 0x519B75A: ROOT::CreateClass(char const*, short, std::type_info const&, TVirtualIsAProxy*, char const*, char const*, int, int) (in /opt/software/linux-debian12-x86_64_v2/gcc-12.2.0/root-6.28.04-vluy26n4hk7btjvfbxamqtosp6cdwtsu/lib/root/libCore.so.6.28.04)
+# ==1946183==    by 0x51ACC61: ROOT::TGenericClassInfo::GetClass() (in /opt/software/linux-debian12-x86_64_v2/gcc-12.2.0/root-6.28.04-vluy26n4hk7btjvfbxamqtosp6cdwtsu/lib/root/libCore.so.6.28.04)
+# ==1946183==    by 0x5190B11: TClass::GetClass(char const*, bool, bool, unsigned long, unsigned long) (in /opt/software/linux-debian12-x86_64_v2/gcc-12.2.0/root-6.28.04-vluy26n4hk7btjvfbxamqtosp6cdwtsu/lib/root/libCore.so.6.28.04)
+# ==1946183==
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   match-leak-kinds: definite
+   fun:malloc
+   fun:_ZN5clang6Parser23AnnotateTemplateIdTokenENS_9OpaquePtrINS_12TemplateNameEEENS_16TemplateNameKindERNS_12CXXScopeSpecENS_14SourceLocationERNS_13UnqualifiedIdEbb
+   fun:_ZN5clang6Parser30ParseOptionalCXXScopeSpecifierERNS_12CXXScopeSpecENS_9OpaquePtrINS_8QualTypeEEEbbPbbPPNS_14IdentifierInfoEbb
+   fun:_ZN5clang6Parser24TryAnnotateCXXScopeTokenEb
+   fun:_ZNK5cling12LookupHelper9findScopeEN4llvm9StringRefENS0_11DiagSettingEPPKN5clang4TypeEb
+   fun:_ZN15TClingClassInfoC1EPN5cling11InterpreterEPKcb
+   fun:_ZN6TCling12SetClassInfoEP6TClassb
+   fun:_ZN6TClass4InitEPKcsPKSt9type_infoP16TVirtualIsAProxyS1_S1_iiP11ClassInfo_tb
+   fun:_ZN6TClassC1EPKcsRKSt9type_infoP16TVirtualIsAProxyS1_S1_iib
+   fun:_ZN4ROOT11CreateClassEPKcsRKSt9type_infoP16TVirtualIsAProxyS1_S1_ii
+   fun:_ZN4ROOT17TGenericClassInfo8GetClassEv
+   fun:_ZN6TClass8GetClassEPKcbbmm
+}
+# ==1946183== 336 bytes in 3 blocks are definitely lost in loss record 9,098 of 10,220
+# ==1946183==    at 0x484C7B4: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+# ==1946183==    by 0xA2F4D8F: clang::Parser::AnnotateTemplateIdToken(clang::OpaquePtr<clang::TemplateName>, clang::TemplateNameKind, clang::CXXScopeSpec&, clang::SourceLocation, clang::UnqualifiedId&, bool, bool) (in /opt/software/linux-debian12-x86_64_v2/gcc-12.2.0/root-6.28.04-vluy26n4hk7btjvfbxamqtosp6cdwtsu/lib/root/libCling.so.6.28.04)
+# ==1946183==    by 0xA2893C5: clang::Parser::ParseOptionalCXXScopeSpecifier(clang::CXXScopeSpec&, clang::OpaquePtr<clang::QualType>, bool, bool, bool*, bool, clang::IdentifierInfo**, bool, bool) (in /opt/software/linux-debian12-x86_64_v2/gcc-12.2.0/root-6.28.04-vluy26n4hk7btjvfbxamqtosp6cdwtsu/lib/root/libCling.so.6.28.04)
+# ==1946183==    by 0xA3040E2: clang::Parser::TryAnnotateCXXScopeToken(bool) (in /opt/software/linux-debian12-x86_64_v2/gcc-12.2.0/root-6.28.04-vluy26n4hk7btjvfbxamqtosp6cdwtsu/lib/root/libCling.so.6.28.04)
+# ==1946183==    by 0x99FDD81: cling::LookupHelper::findScope(llvm::StringRef, cling::LookupHelper::DiagSetting, clang::Type const**, bool) const (in /opt/software/linux-debian12-x86_64_v2/gcc-12.2.0/root-6.28.04-vluy26n4hk7btjvfbxamqtosp6cdwtsu/lib/root/libCling.so.6.28.04)
+# ==1946183==    by 0x9978BCB: TClingClassInfo::TClingClassInfo(cling::Interpreter*, char const*, bool) (in /opt/software/linux-debian12-x86_64_v2/gcc-12.2.0/root-6.28.04-vluy26n4hk7btjvfbxamqtosp6cdwtsu/lib/root/libCling.so.6.28.04)
+# ==1946183==    by 0x98FC363: TCling::ClassInfo_Factory(char const*) const (in /opt/software/linux-debian12-x86_64_v2/gcc-12.2.0/root-6.28.04-vluy26n4hk7btjvfbxamqtosp6cdwtsu/lib/root/libCling.so.6.28.04)
+# ==1946183==    by 0x50CB623: TMemberInspector::GenericShowMembers(char const*, void const*, bool) (in /opt/software/linux-debian12-x86_64_v2/gcc-12.2.0/root-6.28.04-vluy26n4hk7btjvfbxamqtosp6cdwtsu/lib/root/libCore.so.6.28.04)
+# ==1946183==    by 0x50CB845: TMemberInspector::InspectMember(char const*, void const*, char const*, bool) (in /opt/software/linux-debian12-x86_64_v2/gcc-12.2.0/root-6.28.04-vluy26n4hk7btjvfbxamqtosp6cdwtsu/lib/root/libCore.so.6.28.04)
+# ==1946183==    by 0x991AE07: TCling::InspectMembers(TMemberInspector&, void const*, TClass const*, bool) (in /opt/software/linux-debian12-x86_64_v2/gcc-12.2.0/root-6.28.04-vluy26n4hk7btjvfbxamqtosp6cdwtsu/lib/root/libCling.so.6.28.04)
+# ==1946183==    by 0x991A13D: TCling::InspectMembers(TMemberInspector&, void const*, TClass const*, bool) (in /opt/software/linux-debian12-x86_64_v2/gcc-12.2.0/root-6.28.04-vluy26n4hk7btjvfbxamqtosp6cdwtsu/lib/root/libCling.so.6.28.04)
+# ==1946183==    by 0x991A13D: TCling::InspectMembers(TMemberInspector&, void const*, TClass const*, bool) (in /opt/software/linux-debian12-x86_64_v2/gcc-12.2.0/root-6.28.04-vluy26n4hk7btjvfbxamqtosp6cdwtsu/lib/root/libCling.so.6.28.04)
+# ==1946183==
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   match-leak-kinds: definite
+   fun:malloc
+   fun:_ZN5clang6Parser23AnnotateTemplateIdTokenENS_9OpaquePtrINS_12TemplateNameEEENS_16TemplateNameKindERNS_12CXXScopeSpecENS_14SourceLocationERNS_13UnqualifiedIdEbb
+   fun:_ZN5clang6Parser30ParseOptionalCXXScopeSpecifierERNS_12CXXScopeSpecENS_9OpaquePtrINS_8QualTypeEEEbbPbbPPNS_14IdentifierInfoEbb
+   fun:_ZN5clang6Parser24TryAnnotateCXXScopeTokenEb
+   fun:_ZNK5cling12LookupHelper9findScopeEN4llvm9StringRefENS0_11DiagSettingEPPKN5clang4TypeEb
+   fun:_ZN15TClingClassInfoC1EPN5cling11InterpreterEPKcb
+   fun:_ZNK6TCling17ClassInfo_FactoryEPKc
+   fun:_ZN16TMemberInspector18GenericShowMembersEPKcPKvb
+   fun:_ZN16TMemberInspector13InspectMemberEPKcPKvS1_b
+   fun:_ZN6TCling14InspectMembersER16TMemberInspectorPKvPK6TClassb
+   fun:_ZN6TCling14InspectMembersER16TMemberInspectorPKvPK6TClassb
+   fun:_ZN6TCling14InspectMembersER16TMemberInspectorPKvPK6TClassb
+}
+# ==1946183== 360 bytes in 1 blocks are definitely lost in loss record 9,118 of 10,220
+# ==1946183==    at 0x484CF2F: operator new(unsigned long) (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+# ==1946183==    by 0x4AEBD2C: dd4hep::DetElement::DetElement(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, int) (in /opt/software/linux-debian12-x86_64_v2/gcc-12.2.0/dd4hep-1.26-6ild5zfjiixxmqe25gdjrgm7u22lztxd/lib/libDDCore.so.1.26)
+# ==1946183==    by 0x1DED6ABB: create_detector(dd4hep::Detector&, dd4hep::xml::Handle_t, dd4hep::SensitiveDetector) (BarrelHCalCalorimeter_geo.cpp:460)
+# ==1946183==    by 0x1DED8A4B: dd4hep::XmlDetElementFactory<dd4hep::(anonymous namespace)::det_element_epic_HcalBarrelGDML>::create(dd4hep::Detector&, dd4hep::xml::Handle_t, dd4hep::Handle<dd4hep::NamedObject>) (BarrelHCalCalorimeter_geo.cpp:556)
+# ==1946183==    by 0x1DED8B12: (anonymous namespace)::Factory<dd4hep::(anonymous namespace)::det_element_epic_HcalBarrelGDML, dd4hep::NamedObject* (dd4hep::Detector*, dd4hep::xml::Handle_t*, dd4hep::Handle<dd4hep::NamedObject>*)>::call(dd4hep::Detector*, dd4hep::xml::Handle_t*, dd4hep::Handle<dd4hep::NamedObject>*) (Factories.h:249)
+# ==1946183==    by 0x1D8C9453: dd4hep::Converter<dd4hep::DetElement, dd4hep::xml::Handle_t>::operator()(dd4hep::xml::Handle_t) const (in /opt/software/linux-debian12-x86_64_v2/gcc-12.2.0/dd4hep-1.26-6ild5zfjiixxmqe25gdjrgm7u22lztxd/lib/libDDCorePlugins.so.1.26)
+# ==1946183==    by 0x1D8D48B3: dd4hep::Converter<dd4hep::Compact, dd4hep::xml::Handle_t>::operator()(dd4hep::xml::Handle_t) const (in /opt/software/linux-debian12-x86_64_v2/gcc-12.2.0/dd4hep-1.26-6ild5zfjiixxmqe25gdjrgm7u22lztxd/lib/libDDCorePlugins.so.1.26)
+# ==1946183==    by 0x1D8D5B41: dd4hep::Converter<dd4hep::DetElementInclude, dd4hep::xml::Handle_t>::operator()(dd4hep::xml::Handle_t) const (in /opt/software/linux-debian12-x86_64_v2/gcc-12.2.0/dd4hep-1.26-6ild5zfjiixxmqe25gdjrgm7u22lztxd/lib/libDDCorePlugins.so.1.26)
+# ==1946183==    by 0x1D8D4947: dd4hep::Converter<dd4hep::Compact, dd4hep::xml::Handle_t>::operator()(dd4hep::xml::Handle_t) const (in /opt/software/linux-debian12-x86_64_v2/gcc-12.2.0/dd4hep-1.26-6ild5zfjiixxmqe25gdjrgm7u22lztxd/lib/libDDCorePlugins.so.1.26)
+# ==1946183==    by 0x1D8D61E4: (anonymous namespace)::Factory<dd4hep::(anonymous namespace)::xml_document_lccdd, long (dd4hep::Detector*, dd4hep::xml::Handle_t*)>::call(dd4hep::Detector*, dd4hep::xml::Handle_t*) (in /opt/software/linux-debian12-x86_64_v2/gcc-12.2.0/dd4hep-1.26-6ild5zfjiixxmqe25gdjrgm7u22lztxd/lib/libDDCorePlugins.so.1.26)
+# ==1946183==    by 0x4B036E2: dd4hep::DetectorLoad::processXMLElement(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, dd4hep::xml::Handle_t const&) (in /opt/software/linux-debian12-x86_64_v2/gcc-12.2.0/dd4hep-1.26-6ild5zfjiixxmqe25gdjrgm7u22lztxd/lib/libDDCore.so.1.26)
+# ==1946183==    by 0x4B04230: dd4hep::DetectorLoad::processXML(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, dd4hep::xml::UriReader*) (in /opt/software/linux-debian12-x86_64_v2/gcc-12.2.0/dd4hep-1.26-6ild5zfjiixxmqe25gdjrgm7u22lztxd/lib/libDDCore.so.1.26)
+# ==1946183==
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   match-leak-kinds: definite
+   fun:_Znwm
+   fun:_ZN6dd4hep10DetElementC1ERKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEEi
+   fun:_ZL15create_detectorRN6dd4hep8DetectorENS_3xml8Handle_tENS_17SensitiveDetectorE
+   fun:_ZN6dd4hep20XmlDetElementFactoryINS_12_GLOBAL__N_131det_element_epic_HcalBarrelGDMLEE6createERNS_8DetectorENS_3xml8Handle_tENS_6HandleINS_11NamedObjectEEE
+   fun:_ZN12_GLOBAL__N_17FactoryIN6dd4hep12_GLOBAL__N_131det_element_epic_HcalBarrelGDMLEFPNS1_11NamedObjectEPNS1_8DetectorEPNS1_3xml8Handle_tEPNS1_6HandleIS4_EEEE4callES7_SA_SD_
+   fun:_ZNK6dd4hep9ConverterINS_10DetElementENS_3xml8Handle_tEEclES3_
+   fun:_ZNK6dd4hep9ConverterINS_7CompactENS_3xml8Handle_tEEclES3_
+   fun:_ZNK6dd4hep9ConverterINS_17DetElementIncludeENS_3xml8Handle_tEEclES3_
+   fun:_ZNK6dd4hep9ConverterINS_7CompactENS_3xml8Handle_tEEclES3_
+   fun:_ZN12_GLOBAL__N_17FactoryIN6dd4hep12_GLOBAL__N_118xml_document_lccddEFlPNS1_8DetectorEPNS1_3xml8Handle_tEEE4callES5_S8_
+   fun:_ZN6dd4hep12DetectorLoad17processXMLElementERKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEERKNS_3xml8Handle_tE
+   fun:_ZN6dd4hep12DetectorLoad10processXMLERKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEEPNS_3xml9UriReaderE
+}
+# ==1946183== 360 bytes in 1 blocks are definitely lost in loss record 9,119 of 10,220
+# ==1946183==    at 0x484CF2F: operator new(unsigned long) (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+# ==1946183==    by 0x4AEBD2C: dd4hep::DetElement::DetElement(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, int) (in /opt/software/linux-debian12-x86_64_v2/gcc-12.2.0/dd4hep-1.26-6ild5zfjiixxmqe25gdjrgm7u22lztxd/lib/libDDCore.so.1.26)
+# ==1946183==    by 0x1DED75F1: create_detector(dd4hep::Detector&, dd4hep::xml::Handle_t, dd4hep::SensitiveDetector) (BarrelHCalCalorimeter_geo.cpp:525)
+# ==1946183==    by 0x1DED8A4B: dd4hep::XmlDetElementFactory<dd4hep::(anonymous namespace)::det_element_epic_HcalBarrelGDML>::create(dd4hep::Detector&, dd4hep::xml::Handle_t, dd4hep::Handle<dd4hep::NamedObject>) (BarrelHCalCalorimeter_geo.cpp:556)
+# ==1946183==    by 0x1DED8B12: (anonymous namespace)::Factory<dd4hep::(anonymous namespace)::det_element_epic_HcalBarrelGDML, dd4hep::NamedObject* (dd4hep::Detector*, dd4hep::xml::Handle_t*, dd4hep::Handle<dd4hep::NamedObject>*)>::call(dd4hep::Detector*, dd4hep::xml::Handle_t*, dd4hep::Handle<dd4hep::NamedObject>*) (Factories.h:249)
+# ==1946183==    by 0x1D8C9453: dd4hep::Converter<dd4hep::DetElement, dd4hep::xml::Handle_t>::operator()(dd4hep::xml::Handle_t) const (in /opt/software/linux-debian12-x86_64_v2/gcc-12.2.0/dd4hep-1.26-6ild5zfjiixxmqe25gdjrgm7u22lztxd/lib/libDDCorePlugins.so.1.26)
+# ==1946183==    by 0x1D8D48B3: dd4hep::Converter<dd4hep::Compact, dd4hep::xml::Handle_t>::operator()(dd4hep::xml::Handle_t) const (in /opt/software/linux-debian12-x86_64_v2/gcc-12.2.0/dd4hep-1.26-6ild5zfjiixxmqe25gdjrgm7u22lztxd/lib/libDDCorePlugins.so.1.26)
+# ==1946183==    by 0x1D8D5B41: dd4hep::Converter<dd4hep::DetElementInclude, dd4hep::xml::Handle_t>::operator()(dd4hep::xml::Handle_t) const (in /opt/software/linux-debian12-x86_64_v2/gcc-12.2.0/dd4hep-1.26-6ild5zfjiixxmqe25gdjrgm7u22lztxd/lib/libDDCorePlugins.so.1.26)
+# ==1946183==    by 0x1D8D4947: dd4hep::Converter<dd4hep::Compact, dd4hep::xml::Handle_t>::operator()(dd4hep::xml::Handle_t) const (in /opt/software/linux-debian12-x86_64_v2/gcc-12.2.0/dd4hep-1.26-6ild5zfjiixxmqe25gdjrgm7u22lztxd/lib/libDDCorePlugins.so.1.26)
+# ==1946183==    by 0x1D8D61E4: (anonymous namespace)::Factory<dd4hep::(anonymous namespace)::xml_document_lccdd, long (dd4hep::Detector*, dd4hep::xml::Handle_t*)>::call(dd4hep::Detector*, dd4hep::xml::Handle_t*) (in /opt/software/linux-debian12-x86_64_v2/gcc-12.2.0/dd4hep-1.26-6ild5zfjiixxmqe25gdjrgm7u22lztxd/lib/libDDCorePlugins.so.1.26)
+# ==1946183==    by 0x4B036E2: dd4hep::DetectorLoad::processXMLElement(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, dd4hep::xml::Handle_t const&) (in /opt/software/linux-debian12-x86_64_v2/gcc-12.2.0/dd4hep-1.26-6ild5zfjiixxmqe25gdjrgm7u22lztxd/lib/libDDCore.so.1.26)
+# ==1946183==    by 0x4B04230: dd4hep::DetectorLoad::processXML(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, dd4hep::xml::UriReader*) (in /opt/software/linux-debian12-x86_64_v2/gcc-12.2.0/dd4hep-1.26-6ild5zfjiixxmqe25gdjrgm7u22lztxd/lib/libDDCore.so.1.26)
+# ==1946183==
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   match-leak-kinds: definite
+   fun:_Znwm
+   fun:_ZN6dd4hep10DetElementC1ERKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEEi
+   fun:_ZL15create_detectorRN6dd4hep8DetectorENS_3xml8Handle_tENS_17SensitiveDetectorE
+   fun:_ZN6dd4hep20XmlDetElementFactoryINS_12_GLOBAL__N_131det_element_epic_HcalBarrelGDMLEE6createERNS_8DetectorENS_3xml8Handle_tENS_6HandleINS_11NamedObjectEEE
+   fun:_ZN12_GLOBAL__N_17FactoryIN6dd4hep12_GLOBAL__N_131det_element_epic_HcalBarrelGDMLEFPNS1_11NamedObjectEPNS1_8DetectorEPNS1_3xml8Handle_tEPNS1_6HandleIS4_EEEE4callES7_SA_SD_
+   fun:_ZNK6dd4hep9ConverterINS_10DetElementENS_3xml8Handle_tEEclES3_
+   fun:_ZNK6dd4hep9ConverterINS_7CompactENS_3xml8Handle_tEEclES3_
+   fun:_ZNK6dd4hep9ConverterINS_17DetElementIncludeENS_3xml8Handle_tEEclES3_
+   fun:_ZNK6dd4hep9ConverterINS_7CompactENS_3xml8Handle_tEEclES3_
+   fun:_ZN12_GLOBAL__N_17FactoryIN6dd4hep12_GLOBAL__N_118xml_document_lccddEFlPNS1_8DetectorEPNS1_3xml8Handle_tEEE4callES5_S8_
+   fun:_ZN6dd4hep12DetectorLoad17processXMLElementERKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEERKNS_3xml8Handle_tE
+   fun:_ZN6dd4hep12DetectorLoad10processXMLERKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEEPNS_3xml9UriReaderE
+}
+# ==1946183== 448 bytes in 4 blocks are definitely lost in loss record 9,185 of 10,220
+# ==1946183==    at 0x484C7B4: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+# ==1946183==    by 0xA2F4D8F: clang::Parser::AnnotateTemplateIdToken(clang::OpaquePtr<clang::TemplateName>, clang::TemplateNameKind, clang::CXXScopeSpec&, clang::SourceLocation, clang::UnqualifiedId&, bool, bool) (in /opt/software/linux-debian12-x86_64_v2/gcc-12.2.0/root-6.28.04-vluy26n4hk7btjvfbxamqtosp6cdwtsu/lib/root/libCling.so.6.28.04)
+# ==1946183==    by 0xA2893C5: clang::Parser::ParseOptionalCXXScopeSpecifier(clang::CXXScopeSpec&, clang::OpaquePtr<clang::QualType>, bool, bool, bool*, bool, clang::IdentifierInfo**, bool, bool) (in /opt/software/linux-debian12-x86_64_v2/gcc-12.2.0/root-6.28.04-vluy26n4hk7btjvfbxamqtosp6cdwtsu/lib/root/libCling.so.6.28.04)
+# ==1946183==    by 0xA3040E2: clang::Parser::TryAnnotateCXXScopeToken(bool) (in /opt/software/linux-debian12-x86_64_v2/gcc-12.2.0/root-6.28.04-vluy26n4hk7btjvfbxamqtosp6cdwtsu/lib/root/libCling.so.6.28.04)
+# ==1946183==    by 0x99FDD81: cling::LookupHelper::findScope(llvm::StringRef, cling::LookupHelper::DiagSetting, clang::Type const**, bool) const (in /opt/software/linux-debian12-x86_64_v2/gcc-12.2.0/root-6.28.04-vluy26n4hk7btjvfbxamqtosp6cdwtsu/lib/root/libCling.so.6.28.04)
+# ==1946183==    by 0x991F580: TCling::CheckClassInfo(char const*, bool, bool) (in /opt/software/linux-debian12-x86_64_v2/gcc-12.2.0/root-6.28.04-vluy26n4hk7btjvfbxamqtosp6cdwtsu/lib/root/libCling.so.6.28.04)
+# ==1946183==    by 0x519A891: TClass::Init(char const*, short, std::type_info const*, TVirtualIsAProxy*, char const*, char const*, int, int, ClassInfo_t*, bool) (in /opt/software/linux-debian12-x86_64_v2/gcc-12.2.0/root-6.28.04-vluy26n4hk7btjvfbxamqtosp6cdwtsu/lib/root/libCore.so.6.28.04)
+# ==1946183==    by 0x519BA37: TClass::TClass(char const*, short, bool) (in /opt/software/linux-debian12-x86_64_v2/gcc-12.2.0/root-6.28.04-vluy26n4hk7btjvfbxamqtosp6cdwtsu/lib/root/libCore.so.6.28.04)
+# ==1946183==    by 0x991DA60: TCling::GenerateTClass(char const*, bool, bool) (in /opt/software/linux-debian12-x86_64_v2/gcc-12.2.0/root-6.28.04-vluy26n4hk7btjvfbxamqtosp6cdwtsu/lib/root/libCling.so.6.28.04)
+# ==1946183==    by 0x51911FE: TClass::GetClass(char const*, bool, bool, unsigned long, unsigned long) (in /opt/software/linux-debian12-x86_64_v2/gcc-12.2.0/root-6.28.04-vluy26n4hk7btjvfbxamqtosp6cdwtsu/lib/root/libCore.so.6.28.04)
+# ==1946183==    by 0x51975D5: TBuildRealData::Inspect(TClass*, char const*, char const*, void const*, bool) (in /opt/software/linux-debian12-x86_64_v2/gcc-12.2.0/root-6.28.04-vluy26n4hk7btjvfbxamqtosp6cdwtsu/lib/root/libCore.so.6.28.04)
+# ==1946183==    by 0x991AF1C: TCling::InspectMembers(TMemberInspector&, void const*, TClass const*, bool) (in /opt/software/linux-debian12-x86_64_v2/gcc-12.2.0/root-6.28.04-vluy26n4hk7btjvfbxamqtosp6cdwtsu/lib/root/libCling.so.6.28.04)
+# ==1946183==
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   match-leak-kinds: definite
+   fun:malloc
+   fun:_ZN5clang6Parser23AnnotateTemplateIdTokenENS_9OpaquePtrINS_12TemplateNameEEENS_16TemplateNameKindERNS_12CXXScopeSpecENS_14SourceLocationERNS_13UnqualifiedIdEbb
+   fun:_ZN5clang6Parser30ParseOptionalCXXScopeSpecifierERNS_12CXXScopeSpecENS_9OpaquePtrINS_8QualTypeEEEbbPbbPPNS_14IdentifierInfoEbb
+   fun:_ZN5clang6Parser24TryAnnotateCXXScopeTokenEb
+   fun:_ZNK5cling12LookupHelper9findScopeEN4llvm9StringRefENS0_11DiagSettingEPPKN5clang4TypeEb
+   fun:_ZN6TCling14CheckClassInfoEPKcbb
+   fun:_ZN6TClass4InitEPKcsPKSt9type_infoP16TVirtualIsAProxyS1_S1_iiP11ClassInfo_tb
+   fun:_ZN6TClassC1EPKcsb
+   fun:_ZN6TCling14GenerateTClassEPKcbb
+   fun:_ZN6TClass8GetClassEPKcbbmm
+   fun:_ZN14TBuildRealData7InspectEP6TClassPKcS3_PKvb
+   fun:_ZN6TCling14InspectMembersER16TMemberInspectorPKvPK6TClassb
+}
+# ==1946183== 448 bytes in 4 blocks are definitely lost in loss record 9,186 of 10,220
+# ==1946183==    at 0x484C7B4: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+# ==1946183==    by 0xA2F4D8F: clang::Parser::AnnotateTemplateIdToken(clang::OpaquePtr<clang::TemplateName>, clang::TemplateNameKind, clang::CXXScopeSpec&, clang::SourceLocation, clang::UnqualifiedId&, bool, bool) (in /opt/software/linux-debian12-x86_64_v2/gcc-12.2.0/root-6.28.04-vluy26n4hk7btjvfbxamqtosp6cdwtsu/lib/root/libCling.so.6.28.04)
+# ==1946183==    by 0xA2893C5: clang::Parser::ParseOptionalCXXScopeSpecifier(clang::CXXScopeSpec&, clang::OpaquePtr<clang::QualType>, bool, bool, bool*, bool, clang::IdentifierInfo**, bool, bool) (in /opt/software/linux-debian12-x86_64_v2/gcc-12.2.0/root-6.28.04-vluy26n4hk7btjvfbxamqtosp6cdwtsu/lib/root/libCling.so.6.28.04)
+# ==1946183==    by 0xA3040E2: clang::Parser::TryAnnotateCXXScopeToken(bool) (in /opt/software/linux-debian12-x86_64_v2/gcc-12.2.0/root-6.28.04-vluy26n4hk7btjvfbxamqtosp6cdwtsu/lib/root/libCling.so.6.28.04)
+# ==1946183==    by 0x99FDD81: cling::LookupHelper::findScope(llvm::StringRef, cling::LookupHelper::DiagSetting, clang::Type const**, bool) const (in /opt/software/linux-debian12-x86_64_v2/gcc-12.2.0/root-6.28.04-vluy26n4hk7btjvfbxamqtosp6cdwtsu/lib/root/libCling.so.6.28.04)
+# ==1946183==    by 0x9978BCB: TClingClassInfo::TClingClassInfo(cling::Interpreter*, char const*, bool) (in /opt/software/linux-debian12-x86_64_v2/gcc-12.2.0/root-6.28.04-vluy26n4hk7btjvfbxamqtosp6cdwtsu/lib/root/libCling.so.6.28.04)
+# ==1946183==    by 0x990774C: TCling::SetClassInfo(TClass*, bool) (in /opt/software/linux-debian12-x86_64_v2/gcc-12.2.0/root-6.28.04-vluy26n4hk7btjvfbxamqtosp6cdwtsu/lib/root/libCling.so.6.28.04)
+# ==1946183==    by 0x519A8AF: TClass::Init(char const*, short, std::type_info const*, TVirtualIsAProxy*, char const*, char const*, int, int, ClassInfo_t*, bool) (in /opt/software/linux-debian12-x86_64_v2/gcc-12.2.0/root-6.28.04-vluy26n4hk7btjvfbxamqtosp6cdwtsu/lib/root/libCore.so.6.28.04)
+# ==1946183==    by 0x519BA37: TClass::TClass(char const*, short, bool) (in /opt/software/linux-debian12-x86_64_v2/gcc-12.2.0/root-6.28.04-vluy26n4hk7btjvfbxamqtosp6cdwtsu/lib/root/libCore.so.6.28.04)
+# ==1946183==    by 0x991DA60: TCling::GenerateTClass(char const*, bool, bool) (in /opt/software/linux-debian12-x86_64_v2/gcc-12.2.0/root-6.28.04-vluy26n4hk7btjvfbxamqtosp6cdwtsu/lib/root/libCling.so.6.28.04)
+# ==1946183==    by 0x51911FE: TClass::GetClass(char const*, bool, bool, unsigned long, unsigned long) (in /opt/software/linux-debian12-x86_64_v2/gcc-12.2.0/root-6.28.04-vluy26n4hk7btjvfbxamqtosp6cdwtsu/lib/root/libCore.so.6.28.04)
+# ==1946183==    by 0x51975D5: TBuildRealData::Inspect(TClass*, char const*, char const*, void const*, bool) (in /opt/software/linux-debian12-x86_64_v2/gcc-12.2.0/root-6.28.04-vluy26n4hk7btjvfbxamqtosp6cdwtsu/lib/root/libCore.so.6.28.04)
+# ==1946183==
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   match-leak-kinds: definite
+   fun:malloc
+   fun:_ZN5clang6Parser23AnnotateTemplateIdTokenENS_9OpaquePtrINS_12TemplateNameEEENS_16TemplateNameKindERNS_12CXXScopeSpecENS_14SourceLocationERNS_13UnqualifiedIdEbb
+   fun:_ZN5clang6Parser30ParseOptionalCXXScopeSpecifierERNS_12CXXScopeSpecENS_9OpaquePtrINS_8QualTypeEEEbbPbbPPNS_14IdentifierInfoEbb
+   fun:_ZN5clang6Parser24TryAnnotateCXXScopeTokenEb
+   fun:_ZNK5cling12LookupHelper9findScopeEN4llvm9StringRefENS0_11DiagSettingEPPKN5clang4TypeEb
+   fun:_ZN15TClingClassInfoC1EPN5cling11InterpreterEPKcb
+   fun:_ZN6TCling12SetClassInfoEP6TClassb
+   fun:_ZN6TClass4InitEPKcsPKSt9type_infoP16TVirtualIsAProxyS1_S1_iiP11ClassInfo_tb
+   fun:_ZN6TClassC1EPKcsb
+   fun:_ZN6TCling14GenerateTClassEPKcbb
+   fun:_ZN6TClass8GetClassEPKcbbmm
+   fun:_ZN14TBuildRealData7InspectEP6TClassPKcS3_PKvb
+}
+# ==1946183== 560 bytes in 5 blocks are definitely lost in loss record 9,422 of 10,220
+# ==1946183==    at 0x484C7B4: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+# ==1946183==    by 0xA2F4D8F: clang::Parser::AnnotateTemplateIdToken(clang::OpaquePtr<clang::TemplateName>, clang::TemplateNameKind, clang::CXXScopeSpec&, clang::SourceLocation, clang::UnqualifiedId&, bool, bool) (in /opt/software/linux-debian12-x86_64_v2/gcc-12.2.0/root-6.28.04-vluy26n4hk7btjvfbxamqtosp6cdwtsu/lib/root/libCling.so.6.28.04)
+# ==1946183==    by 0xA2893C5: clang::Parser::ParseOptionalCXXScopeSpecifier(clang::CXXScopeSpec&, clang::OpaquePtr<clang::QualType>, bool, bool, bool*, bool, clang::IdentifierInfo**, bool, bool) (in /opt/software/linux-debian12-x86_64_v2/gcc-12.2.0/root-6.28.04-vluy26n4hk7btjvfbxamqtosp6cdwtsu/lib/root/libCling.so.6.28.04)
+# ==1946183==    by 0xA3040E2: clang::Parser::TryAnnotateCXXScopeToken(bool) (in /opt/software/linux-debian12-x86_64_v2/gcc-12.2.0/root-6.28.04-vluy26n4hk7btjvfbxamqtosp6cdwtsu/lib/root/libCling.so.6.28.04)
+# ==1946183==    by 0x99FDD81: cling::LookupHelper::findScope(llvm::StringRef, cling::LookupHelper::DiagSetting, clang::Type const**, bool) const (in /opt/software/linux-debian12-x86_64_v2/gcc-12.2.0/root-6.28.04-vluy26n4hk7btjvfbxamqtosp6cdwtsu/lib/root/libCling.so.6.28.04)
+# ==1946183==    by 0x9978BCB: TClingClassInfo::TClingClassInfo(cling::Interpreter*, char const*, bool) (in /opt/software/linux-debian12-x86_64_v2/gcc-12.2.0/root-6.28.04-vluy26n4hk7btjvfbxamqtosp6cdwtsu/lib/root/libCling.so.6.28.04)
+# ==1946183==    by 0x98FC363: TCling::ClassInfo_Factory(char const*) const (in /opt/software/linux-debian12-x86_64_v2/gcc-12.2.0/root-6.28.04-vluy26n4hk7btjvfbxamqtosp6cdwtsu/lib/root/libCling.so.6.28.04)
+# ==1946183==    by 0x50CB623: TMemberInspector::GenericShowMembers(char const*, void const*, bool) (in /opt/software/linux-debian12-x86_64_v2/gcc-12.2.0/root-6.28.04-vluy26n4hk7btjvfbxamqtosp6cdwtsu/lib/root/libCore.so.6.28.04)
+# ==1946183==    by 0x50CB845: TMemberInspector::InspectMember(char const*, void const*, char const*, bool) (in /opt/software/linux-debian12-x86_64_v2/gcc-12.2.0/root-6.28.04-vluy26n4hk7btjvfbxamqtosp6cdwtsu/lib/root/libCore.so.6.28.04)
+# ==1946183==    by 0x991AE07: TCling::InspectMembers(TMemberInspector&, void const*, TClass const*, bool) (in /opt/software/linux-debian12-x86_64_v2/gcc-12.2.0/root-6.28.04-vluy26n4hk7btjvfbxamqtosp6cdwtsu/lib/root/libCling.so.6.28.04)
+# ==1946183==    by 0x51892FA: TClass::CallShowMembers(void const*, TMemberInspector&, bool) const (in /opt/software/linux-debian12-x86_64_v2/gcc-12.2.0/root-6.28.04-vluy26n4hk7btjvfbxamqtosp6cdwtsu/lib/root/libCore.so.6.28.04)
+# ==1946183==    by 0x5195B93: TClass::BuildRealData(void*, bool) (in /opt/software/linux-debian12-x86_64_v2/gcc-12.2.0/root-6.28.04-vluy26n4hk7btjvfbxamqtosp6cdwtsu/lib/root/libCore.so.6.28.04)
+# ==1946183==
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   match-leak-kinds: definite
+   fun:malloc
+   fun:_ZN5clang6Parser23AnnotateTemplateIdTokenENS_9OpaquePtrINS_12TemplateNameEEENS_16TemplateNameKindERNS_12CXXScopeSpecENS_14SourceLocationERNS_13UnqualifiedIdEbb
+   fun:_ZN5clang6Parser30ParseOptionalCXXScopeSpecifierERNS_12CXXScopeSpecENS_9OpaquePtrINS_8QualTypeEEEbbPbbPPNS_14IdentifierInfoEbb
+   fun:_ZN5clang6Parser24TryAnnotateCXXScopeTokenEb
+   fun:_ZNK5cling12LookupHelper9findScopeEN4llvm9StringRefENS0_11DiagSettingEPPKN5clang4TypeEb
+   fun:_ZN15TClingClassInfoC1EPN5cling11InterpreterEPKcb
+   fun:_ZNK6TCling17ClassInfo_FactoryEPKc
+   fun:_ZN16TMemberInspector18GenericShowMembersEPKcPKvb
+   fun:_ZN16TMemberInspector13InspectMemberEPKcPKvS1_b
+   fun:_ZN6TCling14InspectMembersER16TMemberInspectorPKvPK6TClassb
+   fun:_ZNK6TClass15CallShowMembersEPKvR16TMemberInspectorb
+   fun:_ZN6TClass13BuildRealDataEPvb
+}
+# ==1946183== 672 bytes in 6 blocks are definitely lost in loss record 9,458 of 10,220
+# ==1946183==    at 0x484C7B4: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+# ==1946183==    by 0xA2F4D8F: clang::Parser::AnnotateTemplateIdToken(clang::OpaquePtr<clang::TemplateName>, clang::TemplateNameKind, clang::CXXScopeSpec&, clang::SourceLocation, clang::UnqualifiedId&, bool, bool) (in /opt/software/linux-debian12-x86_64_v2/gcc-12.2.0/root-6.28.04-vluy26n4hk7btjvfbxamqtosp6cdwtsu/lib/root/libCling.so.6.28.04)
+# ==1946183==    by 0xA2893C5: clang::Parser::ParseOptionalCXXScopeSpecifier(clang::CXXScopeSpec&, clang::OpaquePtr<clang::QualType>, bool, bool, bool*, bool, clang::IdentifierInfo**, bool, bool) (in /opt/software/linux-debian12-x86_64_v2/gcc-12.2.0/root-6.28.04-vluy26n4hk7btjvfbxamqtosp6cdwtsu/lib/root/libCling.so.6.28.04)
+# ==1946183==    by 0xA3040E2: clang::Parser::TryAnnotateCXXScopeToken(bool) (in /opt/software/linux-debian12-x86_64_v2/gcc-12.2.0/root-6.28.04-vluy26n4hk7btjvfbxamqtosp6cdwtsu/lib/root/libCling.so.6.28.04)
+# ==1946183==    by 0x99FDD81: cling::LookupHelper::findScope(llvm::StringRef, cling::LookupHelper::DiagSetting, clang::Type const**, bool) const (in /opt/software/linux-debian12-x86_64_v2/gcc-12.2.0/root-6.28.04-vluy26n4hk7btjvfbxamqtosp6cdwtsu/lib/root/libCling.so.6.28.04)
+# ==1946183==    by 0x9978BCB: TClingClassInfo::TClingClassInfo(cling::Interpreter*, char const*, bool) (in /opt/software/linux-debian12-x86_64_v2/gcc-12.2.0/root-6.28.04-vluy26n4hk7btjvfbxamqtosp6cdwtsu/lib/root/libCling.so.6.28.04)
+# ==1946183==    by 0x98FC363: TCling::ClassInfo_Factory(char const*) const (in /opt/software/linux-debian12-x86_64_v2/gcc-12.2.0/root-6.28.04-vluy26n4hk7btjvfbxamqtosp6cdwtsu/lib/root/libCling.so.6.28.04)
+# ==1946183==    by 0x50CB623: TMemberInspector::GenericShowMembers(char const*, void const*, bool) (in /opt/software/linux-debian12-x86_64_v2/gcc-12.2.0/root-6.28.04-vluy26n4hk7btjvfbxamqtosp6cdwtsu/lib/root/libCore.so.6.28.04)
+# ==1946183==    by 0x50CB845: TMemberInspector::InspectMember(char const*, void const*, char const*, bool) (in /opt/software/linux-debian12-x86_64_v2/gcc-12.2.0/root-6.28.04-vluy26n4hk7btjvfbxamqtosp6cdwtsu/lib/root/libCore.so.6.28.04)
+# ==1946183==    by 0x991AE07: TCling::InspectMembers(TMemberInspector&, void const*, TClass const*, bool) (in /opt/software/linux-debian12-x86_64_v2/gcc-12.2.0/root-6.28.04-vluy26n4hk7btjvfbxamqtosp6cdwtsu/lib/root/libCling.so.6.28.04)
+# ==1946183==    by 0x991A13D: TCling::InspectMembers(TMemberInspector&, void const*, TClass const*, bool) (in /opt/software/linux-debian12-x86_64_v2/gcc-12.2.0/root-6.28.04-vluy26n4hk7btjvfbxamqtosp6cdwtsu/lib/root/libCling.so.6.28.04)
+# ==1946183==    by 0x51892FA: TClass::CallShowMembers(void const*, TMemberInspector&, bool) const (in /opt/software/linux-debian12-x86_64_v2/gcc-12.2.0/root-6.28.04-vluy26n4hk7btjvfbxamqtosp6cdwtsu/lib/root/libCore.so.6.28.04)
+# ==1946183==
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   match-leak-kinds: definite
+   fun:malloc
+   fun:_ZN5clang6Parser23AnnotateTemplateIdTokenENS_9OpaquePtrINS_12TemplateNameEEENS_16TemplateNameKindERNS_12CXXScopeSpecENS_14SourceLocationERNS_13UnqualifiedIdEbb
+   fun:_ZN5clang6Parser30ParseOptionalCXXScopeSpecifierERNS_12CXXScopeSpecENS_9OpaquePtrINS_8QualTypeEEEbbPbbPPNS_14IdentifierInfoEbb
+   fun:_ZN5clang6Parser24TryAnnotateCXXScopeTokenEb
+   fun:_ZNK5cling12LookupHelper9findScopeEN4llvm9StringRefENS0_11DiagSettingEPPKN5clang4TypeEb
+   fun:_ZN15TClingClassInfoC1EPN5cling11InterpreterEPKcb
+   fun:_ZNK6TCling17ClassInfo_FactoryEPKc
+   fun:_ZN16TMemberInspector18GenericShowMembersEPKcPKvb
+   fun:_ZN16TMemberInspector13InspectMemberEPKcPKvS1_b
+   fun:_ZN6TCling14InspectMembersER16TMemberInspectorPKvPK6TClassb
+   fun:_ZN6TCling14InspectMembersER16TMemberInspectorPKvPK6TClassb
+   fun:_ZNK6TClass15CallShowMembersEPKvR16TMemberInspectorb
+}
+# ==1946183== 1,568 bytes in 14 blocks are definitely lost in loss record 9,709 of 10,220
+# ==1946183==    at 0x484C7B4: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+# ==1946183==    by 0xA2F4D8F: clang::Parser::AnnotateTemplateIdToken(clang::OpaquePtr<clang::TemplateName>, clang::TemplateNameKind, clang::CXXScopeSpec&, clang::SourceLocation, clang::UnqualifiedId&, bool, bool) (in /opt/software/linux-debian12-x86_64_v2/gcc-12.2.0/root-6.28.04-vluy26n4hk7btjvfbxamqtosp6cdwtsu/lib/root/libCling.so.6.28.04)
+# ==1946183==    by 0xA2893C5: clang::Parser::ParseOptionalCXXScopeSpecifier(clang::CXXScopeSpec&, clang::OpaquePtr<clang::QualType>, bool, bool, bool*, bool, clang::IdentifierInfo**, bool, bool) (in /opt/software/linux-debian12-x86_64_v2/gcc-12.2.0/root-6.28.04-vluy26n4hk7btjvfbxamqtosp6cdwtsu/lib/root/libCling.so.6.28.04)
+# ==1946183==    by 0xA3040E2: clang::Parser::TryAnnotateCXXScopeToken(bool) (in /opt/software/linux-debian12-x86_64_v2/gcc-12.2.0/root-6.28.04-vluy26n4hk7btjvfbxamqtosp6cdwtsu/lib/root/libCling.so.6.28.04)
+# ==1946183==    by 0x99FDD81: cling::LookupHelper::findScope(llvm::StringRef, cling::LookupHelper::DiagSetting, clang::Type const**, bool) const (in /opt/software/linux-debian12-x86_64_v2/gcc-12.2.0/root-6.28.04-vluy26n4hk7btjvfbxamqtosp6cdwtsu/lib/root/libCling.so.6.28.04)
+# ==1946183==    by 0x9978BCB: TClingClassInfo::TClingClassInfo(cling::Interpreter*, char const*, bool) (in /opt/software/linux-debian12-x86_64_v2/gcc-12.2.0/root-6.28.04-vluy26n4hk7btjvfbxamqtosp6cdwtsu/lib/root/libCling.so.6.28.04)
+# ==1946183==    by 0x98FC363: TCling::ClassInfo_Factory(char const*) const (in /opt/software/linux-debian12-x86_64_v2/gcc-12.2.0/root-6.28.04-vluy26n4hk7btjvfbxamqtosp6cdwtsu/lib/root/libCling.so.6.28.04)
+# ==1946183==    by 0x50CB623: TMemberInspector::GenericShowMembers(char const*, void const*, bool) (in /opt/software/linux-debian12-x86_64_v2/gcc-12.2.0/root-6.28.04-vluy26n4hk7btjvfbxamqtosp6cdwtsu/lib/root/libCore.so.6.28.04)
+# ==1946183==    by 0x50CB845: TMemberInspector::InspectMember(char const*, void const*, char const*, bool) (in /opt/software/linux-debian12-x86_64_v2/gcc-12.2.0/root-6.28.04-vluy26n4hk7btjvfbxamqtosp6cdwtsu/lib/root/libCore.so.6.28.04)
+# ==1946183==    by 0x991AE07: TCling::InspectMembers(TMemberInspector&, void const*, TClass const*, bool) (in /opt/software/linux-debian12-x86_64_v2/gcc-12.2.0/root-6.28.04-vluy26n4hk7btjvfbxamqtosp6cdwtsu/lib/root/libCling.so.6.28.04)
+# ==1946183==    by 0x51892FA: TClass::CallShowMembers(void const*, TMemberInspector&, bool) const (in /opt/software/linux-debian12-x86_64_v2/gcc-12.2.0/root-6.28.04-vluy26n4hk7btjvfbxamqtosp6cdwtsu/lib/root/libCore.so.6.28.04)
+# ==1946183==    by 0x991A985: TCling::InspectMembers(TMemberInspector&, void const*, TClass const*, bool) (in /opt/software/linux-debian12-x86_64_v2/gcc-12.2.0/root-6.28.04-vluy26n4hk7btjvfbxamqtosp6cdwtsu/lib/root/libCling.so.6.28.04)
+# ==1946183==
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   match-leak-kinds: definite
+   fun:malloc
+   fun:_ZN5clang6Parser23AnnotateTemplateIdTokenENS_9OpaquePtrINS_12TemplateNameEEENS_16TemplateNameKindERNS_12CXXScopeSpecENS_14SourceLocationERNS_13UnqualifiedIdEbb
+   fun:_ZN5clang6Parser30ParseOptionalCXXScopeSpecifierERNS_12CXXScopeSpecENS_9OpaquePtrINS_8QualTypeEEEbbPbbPPNS_14IdentifierInfoEbb
+   fun:_ZN5clang6Parser24TryAnnotateCXXScopeTokenEb
+   fun:_ZNK5cling12LookupHelper9findScopeEN4llvm9StringRefENS0_11DiagSettingEPPKN5clang4TypeEb
+   fun:_ZN15TClingClassInfoC1EPN5cling11InterpreterEPKcb
+   fun:_ZNK6TCling17ClassInfo_FactoryEPKc
+   fun:_ZN16TMemberInspector18GenericShowMembersEPKcPKvb
+   fun:_ZN16TMemberInspector13InspectMemberEPKcPKvS1_b
+   fun:_ZN6TCling14InspectMembersER16TMemberInspectorPKvPK6TClassb
+   fun:_ZNK6TClass15CallShowMembersEPKvR16TMemberInspectorb
+   fun:_ZN6TCling14InspectMembersER16TMemberInspectorPKvPK6TClassb
+}
+# ==1946183== 1,570 (1,160 direct, 410 indirect) bytes in 5 blocks are definitely lost in loss record 9,710 of 10,220
+# ==1946183==    at 0x484CF2F: operator new(unsigned long) (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+# ==1946183==    by 0x4B9C663: dd4hep::Header::Header(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&) (in /opt/software/linux-debian12-x86_64_v2/gcc-12.2.0/dd4hep-1.26-6ild5zfjiixxmqe25gdjrgm7u22lztxd/lib/libDDCore.so.1.26)
+# ==1946183==    by 0x1D8C545D: dd4hep::Converter<dd4hep::Header, dd4hep::xml::Handle_t>::operator()(dd4hep::xml::Handle_t) const (in /opt/software/linux-debian12-x86_64_v2/gcc-12.2.0/dd4hep-1.26-6ild5zfjiixxmqe25gdjrgm7u22lztxd/lib/libDDCorePlugins.so.1.26)
+# ==1946183==    by 0x1D8D5420: dd4hep::Converter<dd4hep::Compact, dd4hep::xml::Handle_t>::operator()(dd4hep::xml::Handle_t) const (in /opt/software/linux-debian12-x86_64_v2/gcc-12.2.0/dd4hep-1.26-6ild5zfjiixxmqe25gdjrgm7u22lztxd/lib/libDDCorePlugins.so.1.26)
+# ==1946183==    by 0x1D8D5B41: dd4hep::Converter<dd4hep::DetElementInclude, dd4hep::xml::Handle_t>::operator()(dd4hep::xml::Handle_t) const (in /opt/software/linux-debian12-x86_64_v2/gcc-12.2.0/dd4hep-1.26-6ild5zfjiixxmqe25gdjrgm7u22lztxd/lib/libDDCorePlugins.so.1.26)
+# ==1946183==    by 0x1D8D4947: dd4hep::Converter<dd4hep::Compact, dd4hep::xml::Handle_t>::operator()(dd4hep::xml::Handle_t) const (in /opt/software/linux-debian12-x86_64_v2/gcc-12.2.0/dd4hep-1.26-6ild5zfjiixxmqe25gdjrgm7u22lztxd/lib/libDDCorePlugins.so.1.26)
+# ==1946183==    by 0x1D8D61E4: (anonymous namespace)::Factory<dd4hep::(anonymous namespace)::xml_document_lccdd, long (dd4hep::Detector*, dd4hep::xml::Handle_t*)>::call(dd4hep::Detector*, dd4hep::xml::Handle_t*) (in /opt/software/linux-debian12-x86_64_v2/gcc-12.2.0/dd4hep-1.26-6ild5zfjiixxmqe25gdjrgm7u22lztxd/lib/libDDCorePlugins.so.1.26)
+# ==1946183==    by 0x4B036E2: dd4hep::DetectorLoad::processXMLElement(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, dd4hep::xml::Handle_t const&) (in /opt/software/linux-debian12-x86_64_v2/gcc-12.2.0/dd4hep-1.26-6ild5zfjiixxmqe25gdjrgm7u22lztxd/lib/libDDCore.so.1.26)
+# ==1946183==    by 0x4B04230: dd4hep::DetectorLoad::processXML(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, dd4hep::xml::UriReader*) (in /opt/software/linux-debian12-x86_64_v2/gcc-12.2.0/dd4hep-1.26-6ild5zfjiixxmqe25gdjrgm7u22lztxd/lib/libDDCore.so.1.26)
+# ==1946183==    by 0x4AFADBF: non-virtual thunk to dd4hep::DetectorImp::fromCompact(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, dd4hep::DetectorBuildType) (in /opt/software/linux-debian12-x86_64_v2/gcc-12.2.0/dd4hep-1.26-6ild5zfjiixxmqe25gdjrgm7u22lztxd/lib/libDDCore.so.1.26)
+# ==1946183==    by 0x1D92AB10: (anonymous namespace)::Factory<dd4hep::(anonymous namespace)::DD4hep_CompactLoader, long (dd4hep::Detector*, int, char**)>::call(dd4hep::Detector*, int, char**) (in /opt/software/linux-debian12-x86_64_v2/gcc-12.2.0/dd4hep-1.26-6ild5zfjiixxmqe25gdjrgm7u22lztxd/lib/libDDCorePlugins.so.1.26)
+# ==1946183==    by 0x4AF43A4: dd4hep::DetectorImp::apply(char const*, int, char**) const (in /opt/software/linux-debian12-x86_64_v2/gcc-12.2.0/dd4hep-1.26-6ild5zfjiixxmqe25gdjrgm7u22lztxd/lib/libDDCore.so.1.26)
+# ==1946183==
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   match-leak-kinds: definite
+   fun:_Znwm
+   fun:_ZN6dd4hep6HeaderC1ERKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEES8_
+   fun:_ZNK6dd4hep9ConverterINS_6HeaderENS_3xml8Handle_tEEclES3_
+   fun:_ZNK6dd4hep9ConverterINS_7CompactENS_3xml8Handle_tEEclES3_
+   fun:_ZNK6dd4hep9ConverterINS_17DetElementIncludeENS_3xml8Handle_tEEclES3_
+   fun:_ZNK6dd4hep9ConverterINS_7CompactENS_3xml8Handle_tEEclES3_
+   fun:_ZN12_GLOBAL__N_17FactoryIN6dd4hep12_GLOBAL__N_118xml_document_lccddEFlPNS1_8DetectorEPNS1_3xml8Handle_tEEE4callES5_S8_
+   fun:_ZN6dd4hep12DetectorLoad17processXMLElementERKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEERKNS_3xml8Handle_tE
+   fun:_ZN6dd4hep12DetectorLoad10processXMLERKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEEPNS_3xml9UriReaderE
+   fun:_ZThn64_N6dd4hep11DetectorImp11fromCompactERKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEENS_17DetectorBuildTypeE
+   fun:_ZN12_GLOBAL__N_17FactoryIN6dd4hep12_GLOBAL__N_120DD4hep_CompactLoaderEFlPNS1_8DetectorEiPPcEE4callES5_iS7_
+   fun:_ZNK6dd4hep11DetectorImp5applyEPKciPPc
+}
+# ==1946183== 2,727 (248 direct, 2,479 indirect) bytes in 1 blocks are definitely lost in loss record 9,819 of 10,220
+# ==1946183==    at 0x484CF2F: operator new(unsigned long) (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+# ==1946183==    by 0x50E86F8: TStorage::ObjectAlloc(unsigned long) (in /opt/software/linux-debian12-x86_64_v2/gcc-12.2.0/root-6.28.04-vluy26n4hk7btjvfbxamqtosp6cdwtsu/lib/root/libCore.so.6.28.04)
+# ==1946183==    by 0x524E371: ROOT::new_TEnum(void*) (in /opt/software/linux-debian12-x86_64_v2/gcc-12.2.0/root-6.28.04-vluy26n4hk7btjvfbxamqtosp6cdwtsu/lib/root/libCore.so.6.28.04)
+# ==1946183==    by 0x518B6F5: TClass::NewObject(TClass::ENewType, bool) const (in /opt/software/linux-debian12-x86_64_v2/gcc-12.2.0/root-6.28.04-vluy26n4hk7btjvfbxamqtosp6cdwtsu/lib/root/libCore.so.6.28.04)
+# ==1946183==    by 0x518BAAF: TClass::New(TClass::ENewType, bool) const (in /opt/software/linux-debian12-x86_64_v2/gcc-12.2.0/root-6.28.04-vluy26n4hk7btjvfbxamqtosp6cdwtsu/lib/root/libCore.so.6.28.04)
+# ==1946183==    by 0x62B7A53: TBufferFile::ReadObjectAny(TClass const*) (in /opt/software/linux-debian12-x86_64_v2/gcc-12.2.0/root-6.28.04-vluy26n4hk7btjvfbxamqtosp6cdwtsu/lib/root/libRIO.so.6.28.04)
+# ==1946183==    by 0x5152357: TObjArray::Streamer(TBuffer&) (in /opt/software/linux-debian12-x86_64_v2/gcc-12.2.0/root-6.28.04-vluy26n4hk7btjvfbxamqtosp6cdwtsu/lib/root/libCore.so.6.28.04)
+# ==1946183==    by 0x6359FE3: TKey::ReadObjectAny(TClass const*) (in /opt/software/linux-debian12-x86_64_v2/gcc-12.2.0/root-6.28.04-vluy26n4hk7btjvfbxamqtosp6cdwtsu/lib/root/libRIO.so.6.28.04)
+# ==1946183==    by 0x630B380: TDirectoryFile::GetObjectChecked(char const*, TClass const*) (in /opt/software/linux-debian12-x86_64_v2/gcc-12.2.0/root-6.28.04-vluy26n4hk7btjvfbxamqtosp6cdwtsu/lib/root/libRIO.so.6.28.04)
+# ==1946183==    by 0x991E085: TCling::LoadPCMImpl(TFile&) (in /opt/software/linux-debian12-x86_64_v2/gcc-12.2.0/root-6.28.04-vluy26n4hk7btjvfbxamqtosp6cdwtsu/lib/root/libCling.so.6.28.04)
+# ==1946183==    by 0x994ED95: TCling::LoadPCM(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >) (in /opt/software/linux-debian12-x86_64_v2/gcc-12.2.0/root-6.28.04-vluy26n4hk7btjvfbxamqtosp6cdwtsu/lib/root/libCling.so.6.28.04)
+# ==1946183==    by 0x99511C5: TCling::RegisterModule(char const*, char const**, char const**, char const*, char const*, void (*)(), std::vector<std::pair<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, int>, std::allocator<std::pair<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, int> > > const&, char const**, bool, bool) (in /opt/software/linux-debian12-x86_64_v2/gcc-12.2.0/root-6.28.04-vluy26n4hk7btjvfbxamqtosp6cdwtsu/lib/root/libCling.so.6.28.04)
+# ==1946183==
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   match-leak-kinds: definite
+   fun:_Znwm
+   fun:_ZN8TStorage11ObjectAllocEm
+   fun:_ZN4ROOTL9new_TEnumEPv
+   fun:_ZNK6TClass9NewObjectENS_8ENewTypeEb
+   fun:_ZNK6TClass3NewENS_8ENewTypeEb
+   fun:_ZN11TBufferFile13ReadObjectAnyEPK6TClass
+   fun:_ZN9TObjArray8StreamerER7TBuffer
+   fun:_ZN4TKey13ReadObjectAnyEPK6TClass
+   fun:_ZN14TDirectoryFile16GetObjectCheckedEPKcPK6TClass
+   fun:_ZN6TCling11LoadPCMImplER5TFile
+   fun:_ZN6TCling7LoadPCMENSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEE
+   fun:_ZN6TCling14RegisterModuleEPKcPS1_S2_S1_S1_PFvvERKSt6vectorISt4pairINSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEEiESaISD_EES2_bb
+}
+# ==1946183== 5,760 bytes in 16 blocks are definitely lost in loss record 9,933 of 10,220
+# ==1946183==    at 0x484CF2F: operator new(unsigned long) (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+# ==1946183==    by 0x4AEBD2C: dd4hep::DetElement::DetElement(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, int) (in /opt/software/linux-debian12-x86_64_v2/gcc-12.2.0/dd4hep-1.26-6ild5zfjiixxmqe25gdjrgm7u22lztxd/lib/libDDCore.so.1.26)
+# ==1946183==    by 0x1DED53DD: create_detector(dd4hep::Detector&, dd4hep::xml::Handle_t, dd4hep::SensitiveDetector) (BarrelHCalCalorimeter_geo.cpp:350)
+# ==1946183==    by 0x1DED8A4B: dd4hep::XmlDetElementFactory<dd4hep::(anonymous namespace)::det_element_epic_HcalBarrelGDML>::create(dd4hep::Detector&, dd4hep::xml::Handle_t, dd4hep::Handle<dd4hep::NamedObject>) (BarrelHCalCalorimeter_geo.cpp:556)
+# ==1946183==    by 0x1DED8B12: (anonymous namespace)::Factory<dd4hep::(anonymous namespace)::det_element_epic_HcalBarrelGDML, dd4hep::NamedObject* (dd4hep::Detector*, dd4hep::xml::Handle_t*, dd4hep::Handle<dd4hep::NamedObject>*)>::call(dd4hep::Detector*, dd4hep::xml::Handle_t*, dd4hep::Handle<dd4hep::NamedObject>*) (Factories.h:249)
+# ==1946183==    by 0x1D8C9453: dd4hep::Converter<dd4hep::DetElement, dd4hep::xml::Handle_t>::operator()(dd4hep::xml::Handle_t) const (in /opt/software/linux-debian12-x86_64_v2/gcc-12.2.0/dd4hep-1.26-6ild5zfjiixxmqe25gdjrgm7u22lztxd/lib/libDDCorePlugins.so.1.26)
+# ==1946183==    by 0x1D8D48B3: dd4hep::Converter<dd4hep::Compact, dd4hep::xml::Handle_t>::operator()(dd4hep::xml::Handle_t) const (in /opt/software/linux-debian12-x86_64_v2/gcc-12.2.0/dd4hep-1.26-6ild5zfjiixxmqe25gdjrgm7u22lztxd/lib/libDDCorePlugins.so.1.26)
+# ==1946183==    by 0x1D8D5B41: dd4hep::Converter<dd4hep::DetElementInclude, dd4hep::xml::Handle_t>::operator()(dd4hep::xml::Handle_t) const (in /opt/software/linux-debian12-x86_64_v2/gcc-12.2.0/dd4hep-1.26-6ild5zfjiixxmqe25gdjrgm7u22lztxd/lib/libDDCorePlugins.so.1.26)
+# ==1946183==    by 0x1D8D4947: dd4hep::Converter<dd4hep::Compact, dd4hep::xml::Handle_t>::operator()(dd4hep::xml::Handle_t) const (in /opt/software/linux-debian12-x86_64_v2/gcc-12.2.0/dd4hep-1.26-6ild5zfjiixxmqe25gdjrgm7u22lztxd/lib/libDDCorePlugins.so.1.26)
+# ==1946183==    by 0x1D8D61E4: (anonymous namespace)::Factory<dd4hep::(anonymous namespace)::xml_document_lccdd, long (dd4hep::Detector*, dd4hep::xml::Handle_t*)>::call(dd4hep::Detector*, dd4hep::xml::Handle_t*) (in /opt/software/linux-debian12-x86_64_v2/gcc-12.2.0/dd4hep-1.26-6ild5zfjiixxmqe25gdjrgm7u22lztxd/lib/libDDCorePlugins.so.1.26)
+# ==1946183==    by 0x4B036E2: dd4hep::DetectorLoad::processXMLElement(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, dd4hep::xml::Handle_t const&) (in /opt/software/linux-debian12-x86_64_v2/gcc-12.2.0/dd4hep-1.26-6ild5zfjiixxmqe25gdjrgm7u22lztxd/lib/libDDCore.so.1.26)
+# ==1946183==    by 0x4B04230: dd4hep::DetectorLoad::processXML(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, dd4hep::xml::UriReader*) (in /opt/software/linux-debian12-x86_64_v2/gcc-12.2.0/dd4hep-1.26-6ild5zfjiixxmqe25gdjrgm7u22lztxd/lib/libDDCore.so.1.26)
+# ==1946183==
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   match-leak-kinds: definite
+   fun:_Znwm
+   fun:_ZN6dd4hep10DetElementC1ERKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEEi
+   fun:_ZL15create_detectorRN6dd4hep8DetectorENS_3xml8Handle_tENS_17SensitiveDetectorE
+   fun:_ZN6dd4hep20XmlDetElementFactoryINS_12_GLOBAL__N_131det_element_epic_HcalBarrelGDMLEE6createERNS_8DetectorENS_3xml8Handle_tENS_6HandleINS_11NamedObjectEEE
+   fun:_ZN12_GLOBAL__N_17FactoryIN6dd4hep12_GLOBAL__N_131det_element_epic_HcalBarrelGDMLEFPNS1_11NamedObjectEPNS1_8DetectorEPNS1_3xml8Handle_tEPNS1_6HandleIS4_EEEE4callES7_SA_SD_
+   fun:_ZNK6dd4hep9ConverterINS_10DetElementENS_3xml8Handle_tEEclES3_
+   fun:_ZNK6dd4hep9ConverterINS_7CompactENS_3xml8Handle_tEEclES3_
+   fun:_ZNK6dd4hep9ConverterINS_17DetElementIncludeENS_3xml8Handle_tEEclES3_
+   fun:_ZNK6dd4hep9ConverterINS_7CompactENS_3xml8Handle_tEEclES3_
+   fun:_ZN12_GLOBAL__N_17FactoryIN6dd4hep12_GLOBAL__N_118xml_document_lccddEFlPNS1_8DetectorEPNS1_3xml8Handle_tEEE4callES5_S8_
+   fun:_ZN6dd4hep12DetectorLoad17processXMLElementERKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEERKNS_3xml8Handle_tE
+   fun:_ZN6dd4hep12DetectorLoad10processXMLERKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEEPNS_3xml9UriReaderE
+}
+# ==1946183== 15,727 (72 direct, 15,655 indirect) bytes in 1 blocks are definitely lost in loss record 10,029 of 10,220
+# ==1946183==    at 0x484CF2F: operator new(unsigned long) (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+# ==1946183==    by 0x4AED722: std::pair<std::_Rb_tree_iterator<std::pair<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const, dd4hep::DetElement> >, bool> std::_Rb_tree<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::pair<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const, dd4hep::DetElement>, std::_Select1st<std::pair<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const, dd4hep::DetElement> >, std::less<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > >, std::allocator<std::pair<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const, dd4hep::DetElement> > >::_M_emplace_unique<char const*, dd4hep::DetElement&>(char const*&&, dd4hep::DetElement&) (in /opt/software/linux-debian12-x86_64_v2/gcc-12.2.0/dd4hep-1.26-6ild5zfjiixxmqe25gdjrgm7u22lztxd/lib/libDDCore.so.1.26)
+# ==1946183==    by 0x4AED28F: dd4hep::DetElement::add(dd4hep::DetElement) (in /opt/software/linux-debian12-x86_64_v2/gcc-12.2.0/dd4hep-1.26-6ild5zfjiixxmqe25gdjrgm7u22lztxd/lib/libDDCore.so.1.26)
+# ==1946183==    by 0x4AED355: dd4hep::DetElement::DetElement(dd4hep::DetElement, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, int) (in /opt/software/linux-debian12-x86_64_v2/gcc-12.2.0/dd4hep-1.26-6ild5zfjiixxmqe25gdjrgm7u22lztxd/lib/libDDCore.so.1.26)
+# ==1946183==    by 0x1DF34381: create_detector(dd4hep::Detector&, dd4hep::xml::Handle_t, dd4hep::SensitiveDetector) (ForwardRomanPot_geo.cpp:130)
+# ==1946183==    by 0x1DF35279: dd4hep::XmlDetElementFactory<dd4hep::(anonymous namespace)::det_element_ip6_ForwardRomanPot>::create(dd4hep::Detector&, dd4hep::xml::Handle_t, dd4hep::Handle<dd4hep::NamedObject>) (ForwardRomanPot_geo.cpp:202)
+# ==1946183==    by 0x1DF35340: (anonymous namespace)::Factory<dd4hep::(anonymous namespace)::det_element_ip6_ForwardRomanPot, dd4hep::NamedObject* (dd4hep::Detector*, dd4hep::xml::Handle_t*, dd4hep::Handle<dd4hep::NamedObject>*)>::call(dd4hep::Detector*, dd4hep::xml::Handle_t*, dd4hep::Handle<dd4hep::NamedObject>*) (Factories.h:249)
+# ==1946183==    by 0x1D8C9453: dd4hep::Converter<dd4hep::DetElement, dd4hep::xml::Handle_t>::operator()(dd4hep::xml::Handle_t) const (in /opt/software/linux-debian12-x86_64_v2/gcc-12.2.0/dd4hep-1.26-6ild5zfjiixxmqe25gdjrgm7u22lztxd/lib/libDDCorePlugins.so.1.26)
+# ==1946183==    by 0x1D8D48B3: dd4hep::Converter<dd4hep::Compact, dd4hep::xml::Handle_t>::operator()(dd4hep::xml::Handle_t) const (in /opt/software/linux-debian12-x86_64_v2/gcc-12.2.0/dd4hep-1.26-6ild5zfjiixxmqe25gdjrgm7u22lztxd/lib/libDDCorePlugins.so.1.26)
+# ==1946183==    by 0x1D8D5B41: dd4hep::Converter<dd4hep::DetElementInclude, dd4hep::xml::Handle_t>::operator()(dd4hep::xml::Handle_t) const (in /opt/software/linux-debian12-x86_64_v2/gcc-12.2.0/dd4hep-1.26-6ild5zfjiixxmqe25gdjrgm7u22lztxd/lib/libDDCorePlugins.so.1.26)
+# ==1946183==    by 0x1D8D4947: dd4hep::Converter<dd4hep::Compact, dd4hep::xml::Handle_t>::operator()(dd4hep::xml::Handle_t) const (in /opt/software/linux-debian12-x86_64_v2/gcc-12.2.0/dd4hep-1.26-6ild5zfjiixxmqe25gdjrgm7u22lztxd/lib/libDDCorePlugins.so.1.26)
+# ==1946183==    by 0x1D8D5B41: dd4hep::Converter<dd4hep::DetElementInclude, dd4hep::xml::Handle_t>::operator()(dd4hep::xml::Handle_t) const (in /opt/software/linux-debian12-x86_64_v2/gcc-12.2.0/dd4hep-1.26-6ild5zfjiixxmqe25gdjrgm7u22lztxd/lib/libDDCorePlugins.so.1.26)
+# ==1946183==
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   match-leak-kinds: definite
+   fun:_Znwm
+   fun:_ZNSt8_Rb_treeINSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEESt4pairIKS5_N6dd4hep10DetElementEESt10_Select1stISA_ESt4lessIS5_ESaISA_EE17_M_emplace_uniqueIJPKcRS9_EEES6_ISt17_Rb_tree_iteratorISA_EbEDpOT_
+   fun:_ZN6dd4hep10DetElement3addES0_
+   fun:_ZN6dd4hep10DetElementC1ES0_RKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEEi
+   fun:_ZL15create_detectorRN6dd4hep8DetectorENS_3xml8Handle_tENS_17SensitiveDetectorE
+   fun:_ZN6dd4hep20XmlDetElementFactoryINS_12_GLOBAL__N_131det_element_ip6_ForwardRomanPotEE6createERNS_8DetectorENS_3xml8Handle_tENS_6HandleINS_11NamedObjectEEE
+   fun:_ZN12_GLOBAL__N_17FactoryIN6dd4hep12_GLOBAL__N_131det_element_ip6_ForwardRomanPotEFPNS1_11NamedObjectEPNS1_8DetectorEPNS1_3xml8Handle_tEPNS1_6HandleIS4_EEEE4callES7_SA_SD_
+   fun:_ZNK6dd4hep9ConverterINS_10DetElementENS_3xml8Handle_tEEclES3_
+   fun:_ZNK6dd4hep9ConverterINS_7CompactENS_3xml8Handle_tEEclES3_
+   fun:_ZNK6dd4hep9ConverterINS_17DetElementIncludeENS_3xml8Handle_tEEclES3_
+   fun:_ZNK6dd4hep9ConverterINS_7CompactENS_3xml8Handle_tEEclES3_
+   fun:_ZNK6dd4hep9ConverterINS_17DetElementIncludeENS_3xml8Handle_tEEclES3_
+}
+# ==1946183== 15,775 (360 direct, 15,415 indirect) bytes in 1 blocks are definitely lost in loss record 10,030 of 10,220
+# ==1946183==    at 0x484CF2F: operator new(unsigned long) (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+# ==1946183==    by 0x4AED301: dd4hep::DetElement::DetElement(dd4hep::DetElement, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, int) (in /opt/software/linux-debian12-x86_64_v2/gcc-12.2.0/dd4hep-1.26-6ild5zfjiixxmqe25gdjrgm7u22lztxd/lib/libDDCore.so.1.26)
+# ==1946183==    by 0x1DF34381: create_detector(dd4hep::Detector&, dd4hep::xml::Handle_t, dd4hep::SensitiveDetector) (ForwardRomanPot_geo.cpp:130)
+# ==1946183==    by 0x1DF35279: dd4hep::XmlDetElementFactory<dd4hep::(anonymous namespace)::det_element_ip6_ForwardRomanPot>::create(dd4hep::Detector&, dd4hep::xml::Handle_t, dd4hep::Handle<dd4hep::NamedObject>) (ForwardRomanPot_geo.cpp:202)
+# ==1946183==    by 0x1DF35340: (anonymous namespace)::Factory<dd4hep::(anonymous namespace)::det_element_ip6_ForwardRomanPot, dd4hep::NamedObject* (dd4hep::Detector*, dd4hep::xml::Handle_t*, dd4hep::Handle<dd4hep::NamedObject>*)>::call(dd4hep::Detector*, dd4hep::xml::Handle_t*, dd4hep::Handle<dd4hep::NamedObject>*) (Factories.h:249)
+# ==1946183==    by 0x1D8C9453: dd4hep::Converter<dd4hep::DetElement, dd4hep::xml::Handle_t>::operator()(dd4hep::xml::Handle_t) const (in /opt/software/linux-debian12-x86_64_v2/gcc-12.2.0/dd4hep-1.26-6ild5zfjiixxmqe25gdjrgm7u22lztxd/lib/libDDCorePlugins.so.1.26)
+# ==1946183==    by 0x1D8D48B3: dd4hep::Converter<dd4hep::Compact, dd4hep::xml::Handle_t>::operator()(dd4hep::xml::Handle_t) const (in /opt/software/linux-debian12-x86_64_v2/gcc-12.2.0/dd4hep-1.26-6ild5zfjiixxmqe25gdjrgm7u22lztxd/lib/libDDCorePlugins.so.1.26)
+# ==1946183==    by 0x1D8D5B41: dd4hep::Converter<dd4hep::DetElementInclude, dd4hep::xml::Handle_t>::operator()(dd4hep::xml::Handle_t) const (in /opt/software/linux-debian12-x86_64_v2/gcc-12.2.0/dd4hep-1.26-6ild5zfjiixxmqe25gdjrgm7u22lztxd/lib/libDDCorePlugins.so.1.26)
+# ==1946183==    by 0x1D8D4947: dd4hep::Converter<dd4hep::Compact, dd4hep::xml::Handle_t>::operator()(dd4hep::xml::Handle_t) const (in /opt/software/linux-debian12-x86_64_v2/gcc-12.2.0/dd4hep-1.26-6ild5zfjiixxmqe25gdjrgm7u22lztxd/lib/libDDCorePlugins.so.1.26)
+# ==1946183==    by 0x1D8D5B41: dd4hep::Converter<dd4hep::DetElementInclude, dd4hep::xml::Handle_t>::operator()(dd4hep::xml::Handle_t) const (in /opt/software/linux-debian12-x86_64_v2/gcc-12.2.0/dd4hep-1.26-6ild5zfjiixxmqe25gdjrgm7u22lztxd/lib/libDDCorePlugins.so.1.26)
+# ==1946183==    by 0x1D8D4947: dd4hep::Converter<dd4hep::Compact, dd4hep::xml::Handle_t>::operator()(dd4hep::xml::Handle_t) const (in /opt/software/linux-debian12-x86_64_v2/gcc-12.2.0/dd4hep-1.26-6ild5zfjiixxmqe25gdjrgm7u22lztxd/lib/libDDCorePlugins.so.1.26)
+# ==1946183==    by 0x1D8D61E4: (anonymous namespace)::Factory<dd4hep::(anonymous namespace)::xml_document_lccdd, long (dd4hep::Detector*, dd4hep::xml::Handle_t*)>::call(dd4hep::Detector*, dd4hep::xml::Handle_t*) (in /opt/software/linux-debian12-x86_64_v2/gcc-12.2.0/dd4hep-1.26-6ild5zfjiixxmqe25gdjrgm7u22lztxd/lib/libDDCorePlugins.so.1.26)
+# ==1946183==
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   match-leak-kinds: definite
+   fun:_Znwm
+   fun:_ZN6dd4hep10DetElementC1ES0_RKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEEi
+   fun:_ZL15create_detectorRN6dd4hep8DetectorENS_3xml8Handle_tENS_17SensitiveDetectorE
+   fun:_ZN6dd4hep20XmlDetElementFactoryINS_12_GLOBAL__N_131det_element_ip6_ForwardRomanPotEE6createERNS_8DetectorENS_3xml8Handle_tENS_6HandleINS_11NamedObjectEEE
+   fun:_ZN12_GLOBAL__N_17FactoryIN6dd4hep12_GLOBAL__N_131det_element_ip6_ForwardRomanPotEFPNS1_11NamedObjectEPNS1_8DetectorEPNS1_3xml8Handle_tEPNS1_6HandleIS4_EEEE4callES7_SA_SD_
+   fun:_ZNK6dd4hep9ConverterINS_10DetElementENS_3xml8Handle_tEEclES3_
+   fun:_ZNK6dd4hep9ConverterINS_7CompactENS_3xml8Handle_tEEclES3_
+   fun:_ZNK6dd4hep9ConverterINS_17DetElementIncludeENS_3xml8Handle_tEEclES3_
+   fun:_ZNK6dd4hep9ConverterINS_7CompactENS_3xml8Handle_tEEclES3_
+   fun:_ZNK6dd4hep9ConverterINS_17DetElementIncludeENS_3xml8Handle_tEEclES3_
+   fun:_ZNK6dd4hep9ConverterINS_7CompactENS_3xml8Handle_tEEclES3_
+   fun:_ZN12_GLOBAL__N_17FactoryIN6dd4hep12_GLOBAL__N_118xml_document_lccddEFlPNS1_8DetectorEPNS1_3xml8Handle_tEEE4callES5_S8_
+}
+# ==1946183== 31,502 (144 direct, 31,358 indirect) bytes in 2 blocks are definitely lost in loss record 10,122 of 10,220
+# ==1946183==    at 0x484CF2F: operator new(unsigned long) (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+# ==1946183==    by 0x4AED722: std::pair<std::_Rb_tree_iterator<std::pair<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const, dd4hep::DetElement> >, bool> std::_Rb_tree<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::pair<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const, dd4hep::DetElement>, std::_Select1st<std::pair<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const, dd4hep::DetElement> >, std::less<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > >, std::allocator<std::pair<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const, dd4hep::DetElement> > >::_M_emplace_unique<char const*, dd4hep::DetElement&>(char const*&&, dd4hep::DetElement&) (in /opt/software/linux-debian12-x86_64_v2/gcc-12.2.0/dd4hep-1.26-6ild5zfjiixxmqe25gdjrgm7u22lztxd/lib/libDDCore.so.1.26)
+# ==1946183==    by 0x4AED28F: dd4hep::DetElement::add(dd4hep::DetElement) (in /opt/software/linux-debian12-x86_64_v2/gcc-12.2.0/dd4hep-1.26-6ild5zfjiixxmqe25gdjrgm7u22lztxd/lib/libDDCore.so.1.26)
+# ==1946183==    by 0x4AED355: dd4hep::DetElement::DetElement(dd4hep::DetElement, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, int) (in /opt/software/linux-debian12-x86_64_v2/gcc-12.2.0/dd4hep-1.26-6ild5zfjiixxmqe25gdjrgm7u22lztxd/lib/libDDCore.so.1.26)
+# ==1946183==    by 0x1DF341C6: create_detector(dd4hep::Detector&, dd4hep::xml::Handle_t, dd4hep::SensitiveDetector) (ForwardRomanPot_geo.cpp:124)
+# ==1946183==    by 0x1DF35279: dd4hep::XmlDetElementFactory<dd4hep::(anonymous namespace)::det_element_ip6_ForwardRomanPot>::create(dd4hep::Detector&, dd4hep::xml::Handle_t, dd4hep::Handle<dd4hep::NamedObject>) (ForwardRomanPot_geo.cpp:202)
+# ==1946183==    by 0x1DF35340: (anonymous namespace)::Factory<dd4hep::(anonymous namespace)::det_element_ip6_ForwardRomanPot, dd4hep::NamedObject* (dd4hep::Detector*, dd4hep::xml::Handle_t*, dd4hep::Handle<dd4hep::NamedObject>*)>::call(dd4hep::Detector*, dd4hep::xml::Handle_t*, dd4hep::Handle<dd4hep::NamedObject>*) (Factories.h:249)
+# ==1946183==    by 0x1D8C9453: dd4hep::Converter<dd4hep::DetElement, dd4hep::xml::Handle_t>::operator()(dd4hep::xml::Handle_t) const (in /opt/software/linux-debian12-x86_64_v2/gcc-12.2.0/dd4hep-1.26-6ild5zfjiixxmqe25gdjrgm7u22lztxd/lib/libDDCorePlugins.so.1.26)
+# ==1946183==    by 0x1D8D48B3: dd4hep::Converter<dd4hep::Compact, dd4hep::xml::Handle_t>::operator()(dd4hep::xml::Handle_t) const (in /opt/software/linux-debian12-x86_64_v2/gcc-12.2.0/dd4hep-1.26-6ild5zfjiixxmqe25gdjrgm7u22lztxd/lib/libDDCorePlugins.so.1.26)
+# ==1946183==    by 0x1D8D5B41: dd4hep::Converter<dd4hep::DetElementInclude, dd4hep::xml::Handle_t>::operator()(dd4hep::xml::Handle_t) const (in /opt/software/linux-debian12-x86_64_v2/gcc-12.2.0/dd4hep-1.26-6ild5zfjiixxmqe25gdjrgm7u22lztxd/lib/libDDCorePlugins.so.1.26)
+# ==1946183==    by 0x1D8D4947: dd4hep::Converter<dd4hep::Compact, dd4hep::xml::Handle_t>::operator()(dd4hep::xml::Handle_t) const (in /opt/software/linux-debian12-x86_64_v2/gcc-12.2.0/dd4hep-1.26-6ild5zfjiixxmqe25gdjrgm7u22lztxd/lib/libDDCorePlugins.so.1.26)
+# ==1946183==    by 0x1D8D5B41: dd4hep::Converter<dd4hep::DetElementInclude, dd4hep::xml::Handle_t>::operator()(dd4hep::xml::Handle_t) const (in /opt/software/linux-debian12-x86_64_v2/gcc-12.2.0/dd4hep-1.26-6ild5zfjiixxmqe25gdjrgm7u22lztxd/lib/libDDCorePlugins.so.1.26)
+# ==1946183==
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   match-leak-kinds: definite
+   fun:_Znwm
+   fun:_ZNSt8_Rb_treeINSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEESt4pairIKS5_N6dd4hep10DetElementEESt10_Select1stISA_ESt4lessIS5_ESaISA_EE17_M_emplace_uniqueIJPKcRS9_EEES6_ISt17_Rb_tree_iteratorISA_EbEDpOT_
+   fun:_ZN6dd4hep10DetElement3addES0_
+   fun:_ZN6dd4hep10DetElementC1ES0_RKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEEi
+   fun:_ZL15create_detectorRN6dd4hep8DetectorENS_3xml8Handle_tENS_17SensitiveDetectorE
+   fun:_ZN6dd4hep20XmlDetElementFactoryINS_12_GLOBAL__N_131det_element_ip6_ForwardRomanPotEE6createERNS_8DetectorENS_3xml8Handle_tENS_6HandleINS_11NamedObjectEEE
+   fun:_ZN12_GLOBAL__N_17FactoryIN6dd4hep12_GLOBAL__N_131det_element_ip6_ForwardRomanPotEFPNS1_11NamedObjectEPNS1_8DetectorEPNS1_3xml8Handle_tEPNS1_6HandleIS4_EEEE4callES7_SA_SD_
+   fun:_ZNK6dd4hep9ConverterINS_10DetElementENS_3xml8Handle_tEEclES3_
+   fun:_ZNK6dd4hep9ConverterINS_7CompactENS_3xml8Handle_tEEclES3_
+   fun:_ZNK6dd4hep9ConverterINS_17DetElementIncludeENS_3xml8Handle_tEEclES3_
+   fun:_ZNK6dd4hep9ConverterINS_7CompactENS_3xml8Handle_tEEclES3_
+   fun:_ZNK6dd4hep9ConverterINS_17DetElementIncludeENS_3xml8Handle_tEEclES3_
+}
+# ==1946183== LEAK SUMMARY:
+# ==1946183==    definitely lost: 15,648 bytes in 88 blocks
+# ==1946183==    indirectly lost: 65,413 bytes in 556 blocks
+# ==1946183==      possibly lost: 0 bytes in 0 blocks
+# ==1946183==    still reachable: 34,709,409 bytes in 41,678 blocks
+# ==1946183==                       of which reachable via heuristic:
+# ==1946183==                         newarray           : 8,536 bytes in 17 blocks
+# ==1946183==         suppressed: 342,084 bytes in 3,773 blocks
+# ==1946183== Reachable blocks (those to which a pointer was found) are not shown.
+# ==1946183== To see them, rerun with: --leak-check=full --show-leak-kinds=all
+# ==1946183==
+# ==1946183== For lists of detected and suppressed errors, rerun with: -s
+# ==1946183== ERROR SUMMARY: 26 errors from 26 contexts (suppressed: 91549 from 96)
