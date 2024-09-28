@@ -129,6 +129,10 @@
   side="PFRICH_sensor_sensitive_size"
   thickness="PFRICH_sensor_thickness"
   gap="0.2*mm"
+  windowmat="Quartz"
+  pcbmat="G10"
+  mpdmat="SiliconDioxide"
+  asicmat="SiliconCarbide"
   />
 
 <plane
