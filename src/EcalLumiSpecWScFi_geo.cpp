@@ -94,11 +94,11 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
     double lay_pos_z = -layer_id*(modSize.y() + 2.0*layerCoatSizeY) - layer_pos0;
     double lay_pos_y = 0.0 * cm;
     double lay_pos_x = 0.0 * cm;
-    //int orientation  = layer_id % 2 == 0;
+    int orientation  = layer_id % 2 == 0;
     
     //rotation
     RotationZYX lay_rot = RotationZYX(0, 0, -90.0 * degree);
-    //if (orientation)
+    if (orientation)
     lay_rot *= RotationY(-90.0 * degree);
 
     PlacedVolume layPV = sectorVol.placeVolume(
