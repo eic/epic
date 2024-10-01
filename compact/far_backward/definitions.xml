@@ -161,6 +161,8 @@
     <constant name="B1PR_CenterZ"         value="-75.59*m"/>
     <constant name="B1PR_CenterX"         value="1.86*m"/>
     <constant name="B1PR_Length"          value="3.7*m"/>
+ //materila definitions needed
+
     <constant name="B1PR_InnerRadius"     value="0.05*m"/>
     <constant name="B1PR_OuterRadius"     value="0.4*m"/>
     <constant name="B1PR_Theta"           value="CrossingAngle"/>
@@ -281,14 +283,18 @@
       Rotation of modules wrt XY axis after construction.
     </comment>
 
-    <constant name="LumiSpecCAL_SiPMSpaceXY"	  value="0.15*mm"/> <!-- mechanical needed space for adjacent SiPMs-->
-    
+    <constant name="LumiSpecCAL_SiPMSpaceXY"	  value="0.15*mm"/> <!-- mechanical space for adjacent SiPMs-->
+    <constant name="LumiSpecCAL_LayerCoatX"	  value="0.25*cm"/> <!-- mechanical covering of layers, def without rotation-->
+    <constant name="LumiSpecCAL_LayerCoatY" 	  value="0.5*cm"/> <!-- mechanical covering of layers, def without rotation -->
+
     <constant name="LumiSpecCAL_ModSizeX"         value="LumiSpecCAL_SiPMNumX*(LumiSpecCAL_SiPMSizeXY + 2*LumiSpecCAL_SiPMSpaceXY)"/>
     <constant name="LumiSpecCAL_ModSizeY"         value="LumiSpecCAL_SiPMNumY*(LumiSpecCAL_SiPMSizeXY + 2*LumiSpecCAL_SiPMSpaceXY)"/>
-    <constant name="LumiSpecCAL_DZ"               value="LumiSpecCAL_ZLayers*LumiSpecCAL_ModSizeY"/>
-    <constant name="LumiSpecCAL_DXY"              value="LumiSpecCAL_XYLayers*LumiSpecCAL_ModSizeX"/>
-    <constant name="LumiSpecCAL_ModSizeZ"         value="LumiSpecCAL_DXY"/> <!-- fibre length -->
 
+    <!-- Add the size of layer coating to the overall size of CAL -->
+    <constant name="LumiSpecCAL_DZ"               value="LumiSpecCAL_ZLayers*(LumiSpecCAL_ModSizeY + 2.0*LumiSpecCAL_LayerCoatY)"/>
+    <constant name="LumiSpecCAL_DXY"              value="LumiSpecCAL_XYLayers*LumiSpecCAL_ModSizeX + 2.0*LumiSpecCAL_LayerCoatX"/>
+    
+    <constant name="LumiSpecCAL_ModSizeZ"         value="LumiSpecCAL_XYLayers*LumiSpecCAL_ModSizeX"/> <!-- fibre length -->
     <constant name="LumiSpecCAL_Z"                value="-8*m + LumiSweepMag_Z - LumiSpecCAL_DZ/2.0"/>
     <constant name="LumiSpecCAL_FiveSigma"        value="LumiBeamDiv_pref * fabs(LumiSpecCAL_Z)"/>
     <constant name="LumiSpecCAL_Y"                value="LumiSpecCAL_FiveSigma + LumiSpecCAL_DXY/2.0"/>

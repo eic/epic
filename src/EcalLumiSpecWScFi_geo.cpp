@@ -44,22 +44,34 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
   double detSizeZ   = getAttrOrDefault(x_det, _Unicode(sizeZ), 180 * mm);
   int nmod_perlayer = getAttrOrDefault(x_det, _Unicode(nmod_perlayer), 3);
   int nlayer        = getAttrOrDefault(x_det, _Unicode(nlayer), 20);
-
+  
   // Global detector position and resolution
   xml_comp_t pos = x_det.position();
   xml_comp_t rot = x_det.rotation();
 
+  //function for module definition
   auto [modVol, modSize] = build_specScFiCAL_module(description, x_mod, sens);
 
+  //layer definition before rotation
+  xml_comp_t x_layer = x_det.child(_Unicode(layer));
+  
+  double laySizeX 	= getAttrOrDefault(x_layer, _Unicode(sizeX), 1.0*cm);
+  double laySizeY 	= getAttrOrDefault(x_layer, _Unicode(sizeY), 1.0*cm);
+  double laySizeZ 	= getAttrOrDefault(x_layer, _Unicode(sizeZ), 1.0*cm);
+  double layerCoatSizeX	= getAttrOrDefault(x_layer, _Unicode(coatSizeX), 1.0*cm);
+  double layerCoatSizeY	= getAttrOrDefault(x_layer, _Unicode(coatSizeY), 1.0*cm);
+
+  Material layMat	= description.material(x_layer.attr<std::string>(_Unicode(material))); 
+  
+  Box layerBox(laySizeX/2.0, laySizeY/2.0, laySizeZ/2.0);
+  Volume layerVol("layer", layerBox, layMat);
+  layerVol.setVisAttributes(description.visAttributes(x_det.attr<std::string>(_Unicode(vis))));
+
   // Position of first module, layer from center of CAL
-  double mod_pos0   = -(detSizeXY / 2.0) + (modSize.x() / 2.0);
-  double layer_pos0 = -(detSizeZ / 2.0) + (modSize.y() / 2.0);
+  double mod_pos0   = -(detSizeXY / 2.0) + (modSize.x() / 2.0) + layerCoatSizeX;
+  double layer_pos0 = -(detSizeZ / 2.0) + (modSize.y() / 2.0) + layerCoatSizeY;
 
-  Box layerBox(detSizeXY / 2, modSize.y() / 2, detSizeXY / 2);
-  Volume layerVol("layer", layerBox, Air);
-  layerVol.setVisAttributes(description.visAttributes(x_mod.attr<std::string>(_Unicode(vis))));
-
-  //Fill layer with modules
+  //Fill uncoated layer with modules
   for (int mod_id = 0; mod_id < nmod_perlayer; mod_id++) {
 
     //Build // to z-axis, then rotate
@@ -71,25 +83,27 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
     modPV.addPhysVolID("module", mod_id);
   } //imod-loop close
 
+  //sector definition
   Box sectorBox(detSizeXY / 2, detSizeXY / 2, detSizeZ / 2);
   Volume sectorVol(det_name + "_sector", sectorBox, Air);
   sectorVol.setVisAttributes(description.visAttributes(x_mod.attr<std::string>(_Unicode(vis))));
 
-  //Fill sector with layers
+  //Fill sector with layers (coated)
   for (int layer_id = 0; layer_id < nlayer; layer_id++) {
 
-    double lay_pos_z = -layer_id * modSize.y() - layer_pos0;
+    double lay_pos_z = -layer_id*(modSize.y() + 2.0*layerCoatSizeY) - layer_pos0;
     double lay_pos_y = 0.0 * cm;
     double lay_pos_x = 0.0 * cm;
-    int orientation  = layer_id % 2 == 0;
-
+    //int orientation  = layer_id % 2 == 0;
+    
+    //rotation
     RotationZYX lay_rot = RotationZYX(0, 0, -90.0 * degree);
-    if (orientation)
-      lay_rot *= RotationY(-90.0 * degree);
+    //if (orientation)
+    lay_rot *= RotationY(-90.0 * degree);
 
     PlacedVolume layPV = sectorVol.placeVolume(
         layerVol, Transform3D(lay_rot, Position(lay_pos_x, lay_pos_y, lay_pos_z)));
-    layPV.addPhysVolID("layer", layer_id);
+   layPV.addPhysVolID("layer", layer_id); 
   } //layer_id-loop close
 
   // loop over sectors(top, bottom)
@@ -154,7 +168,7 @@ static tuple<Volume, Position> build_specScFiCAL_module(const Detector& descript
   auto fsy        = fiber_tube.attr<double>(_Unicode(spacey));
 
   //fiber block description and placement in module
-  Box fbShape(fb_sx/2.0, fb_sy/2.0, fb_sz/2.0);
+  Box fbShape(fbSize.x()/2.0, fbSize.y()/2.0, fbSize.z()/2.0);
   Volume fbVol("fiberblock_volume", fbShape, modMat);
   fbVol.setVisAttributes(description.visAttributes(mod_x.attr<std::string>(_Unicode(vis)))); //same as module
   
@@ -185,20 +199,20 @@ static tuple<Volume, Position> build_specScFiCAL_module(const Detector& descript
   int num_fX = int(fbSize.x() /(2 *fr + 2.0 *fsx));
   int num_fY = int(fbSize.y() /(2 *fr + 2.0 *fsy));
 
-  double fiber_xpos0 = -fbSize.x() /(2.0 + fr + fsx);
-  double fiber_ypos0 = -fbSize.y() /(2.0 + fr + fsy);
+  double fiber_xpos0 = -(fbSize.x()/2.0) + fr + fsx;
+  double fiber_ypos0 = -(fbSize.y()/2.0) + fr + fsy;
   int nfibers         = 0;
 
   //Fiber Holder
   auto fiberholder_x = mod_x.child(_Unicode(fiberholder));
   double fh_dz       = 0.6 *mm; //thickness of fiber holder
 
-  double fh_outerbox_y = 2.0 *fr + 2.0 *fsy;
-  double fh_outerbox_x = 2.0 *fr + 2.0 *fsx;
+  double fh_outerbox_y = 2.0*fr + 2.0*fsy;
+  double fh_outerbox_x = 2.0*fr + 2.0*fsx;
   Box fh_outerbox(fh_outerbox_x/2.0, fh_outerbox_y/2.0, fh_dz/2.0);
 
-  double fh_innerbox_y = 2.0 *fr;
-  double fh_innerbox_x = 2.0 *fr;
+  double fh_innerbox_y = 2.0*fr;
+  double fh_innerbox_x = 2.0*fr;
   Box fh_innerbox(fh_innerbox_x/2.0, fh_innerbox_y/2.0, fh_dz/2.0);
 
   SubtractionSolid fiberholder_solid(fh_outerbox, fh_innerbox, Position(0.0, 0.0, 0.0));
@@ -212,9 +226,9 @@ static tuple<Volume, Position> build_specScFiCAL_module(const Detector& descript
   for (int iy = 0; iy < num_fY; iy++) {
     for (int ix = 0; ix < num_fX; ix++) {
 
-      double fiber_pos_x = fiber_xpos0 + ix * (2.0 * fr + 2.0 * fsx); //mm
-      double fiber_pos_y = fiber_ypos0 + iy * (2.0 * fr + 2.0 * fsy); //mm
-      double fiber_pos_z = 0 * mm;                                     //mm
+      double fiber_pos_x = fiber_xpos0 + ix*(2.0*fr + 2.0*fsx); //mm
+      double fiber_pos_y = fiber_ypos0 + iy*(2.0*fr + 2.0*fsy); //mm
+      double fiber_pos_z = 0*mm;                              //mm
 
       //placement of fiber
       auto fiberPV = fbVol.placeVolume(fiberVol, nfibers++,

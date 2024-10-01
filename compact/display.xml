@@ -62,9 +62,10 @@
     <comment>
       Luminosity Visualisation
     </comment>
-    <vis    name="LumiSpecCAL_ModuleVis"       ref="AnlGold"    alpha="0.5"     visible="true" showDaughters="true"/>
-    <vis    name="LumiSpecCAL_FiberVis"        ref="AnlRed"     alpha="0.8"     visible="true"/>
-    <vis    name="LumiSpecCAL_FiberHolderVis"  ref="AnlBlue"    alpha="1.0"     visible="true"/>
+    <vis    name="LumiSpecCAL_LayerVis"		ref="AnlOrange" alpha="0.2"	visible="true" showDaughters = "false"/>
+    <vis    name="LumiSpecCAL_ModuleVis"       	ref="AnlGold"   alpha="0.5"     visible="true" showDaughters="false"/>
+    <vis    name="LumiSpecCAL_FiberVis"        	ref="AnlRed"    alpha="0.8"     visible="true"/>
+    <vis    name="LumiSpecCAL_FiberHolderVis"  	ref="AnlBlue"   alpha="1.0"     visible="true"/>
 
 
     <comment>
