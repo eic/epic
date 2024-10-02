@@ -589,7 +589,7 @@ Service gaps in FW direction (before endcapP ECAL) and BW direction (before endc
 
     <constant name="LFHCAL_zmin"          value="EcalEndcapP_zmin + EcalEndcapP_length"/>
     <comment> LFHCAL is 140 cm total, but current implementation leaves the final 10 cm empty </comment>
-    <constant name="LFHCAL_length"        value="140.0*cm"/>
+    <constant name="LFHCAL_length"        value="134.54*cm"/>
     <constant name="LFHCAL_zmax"          value="LFHCAL_zmin + LFHCAL_length"/>
 
     <constant name="HcalEndcapPInsert_zmin"     value="EcalEndcapP_zmin + EcalEndcapP_length"/>
@@ -650,7 +650,7 @@ Service gaps in FW direction (before endcapP ECAL) and BW direction (before endc
     <constant name="FluxEndcapP_oculus_thickness" value="22.2*cm"/>
 
     <comment> LFHCAL includes support, which is part of the flux return </comment>
-    <constant name="LFHCAL_rmax" value="FluxEndcapP_collar_rmin"/>
+    <constant name="LFHCAL_rmax" value="FluxEndcapP_collar_rmin+10*cm"/>
 
     <comment> STAR Asm for EPIC w cradle.stp, rwimmer, 2024-04-03 </comment>
     <constant name="FluxBarrelForward_zmax"  value="320*cm"/>
