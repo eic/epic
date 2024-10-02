@@ -41,19 +41,20 @@
 
     <comment> Main parameters for Barrel TOF layers </comment>
     <comment> Barrel TOF region </comment>
-    <constant name="BarrelTOF_zmin"          value="112.5*cm"/>
-    <constant name="BarrelTOF_zmax"          value="174.0*cm"/>
-    <constant name="BarrelTOF_radius_design" value="64.6*cm"/>
+    <constant name="BarrelTOF_zmin"          value="117.5*cm"/>
+    <constant name="BarrelTOF_zmax"          value="162.5*cm"/>
+    <constant name="BarrelTOF_radius_design" value="61.6*cm"/>
 
     <comment> Forward TOF region  </comment>
-    <constant name="ForwardTOFRegion_zmin"        value="174.0*cm" />
+    <constant name="ForwardTOFRegion_zmin"        value="ForwardPIDRegion_zmin" />
+    <constant name="ForwardTOFRegion_zmax"        value="ForwardTOFRegion_zmin + ForwardTOFRegion_length" />
     <constant name="ForwardTOFRegion_tan"         value="CentralTrackingRegionP_tan" />
     <constant name="ForwardTOFRegion_minR"        value="8*cm" />
-    <constant name="ForwardTOFRegion_maxR"        value="50*cm" />
+    <constant name="ForwardTOFRegion_maxR"        value="57.5*cm" />
     <constant name="ForwardTOF_xOffset"           value="-2.75*cm" />
     <constant name="ForwardTOF_det_height"        value="2.0*cm" />
     <constant name="ForwardTOF_length"            value="min(ForwardTOFRegion_length, 2.*cm)"/>
-    <constant name="ForwardTOF_zmin"              value="ForwardTOFRegion_zmin + ForwardTOFRegion_length - ForwardTOF_length - 1*cm"/>
+    <constant name="ForwardTOF_zmin"              value="ForwardTOFRegion_zmax - ForwardTOF_length - 1*cm"/>
 
     <comment> Service/Support setup </comment>
     <constant name="TrackerSupportCyl_rmin1"          value="TrackerEndcapDisk_rmax + 2*cm"/> <comment> Ref: Services Material Budget 24.03.04..stp -- 450.00 mm </comment>

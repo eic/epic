@@ -1,5 +1,5 @@
 <!-- SPDX-License-Identifier: LGPL-3.0-or-later -->
-<!-- Copyright (C) 2022 Zhenyu Ye -->
+<!-- Copyright (C) 2022-2023 Zhenyu Ye -->
 
 <lccdd>
 <info name="tof_barrel.xml"
@@ -59,9 +59,11 @@
     <constant name="BarrelTOF_Module_nphi"         value="144"/>
     <constant name="BarrelTOF_Module_nz"           value="1"/>
 
+    <constant name="BarrelTOF_rOffset0"            value="5.6*cm"/>
     <constant name="BarrelTOF_rOffset1"            value="1.6*cm"/>
     <constant name="BarrelTOF_rOffset2"            value="1.4*cm"/>
-    <constant name="BarrelTOF_rmin"                value="BarrelTOF_radius-BarrelTOF_rOffset1"/>
+    <constant name="BarrelTOF_rmin"                value="BarrelTOF_radius-BarrelTOF_rOffset0"/>
+    <constant name="BarrelTOF_rmin1"               value="BarrelTOF_radius-BarrelTOF_rOffset1"/>
     <constant name="BarrelTOF_rmax"                value="BarrelTOF_radius+BarrelTOF_rOffset2"/>
     <constant name="BarrelTOF_zoffset"             value="0.5*(BarrelTOF_zmax - BarrelTOF_zmin)"/>
     <constant name="BarrelTOF_length1"             value="BarrelTOF_zmin + BarrelTOF_zmax"/>
@@ -91,7 +93,7 @@
       insideTrackingVolume="true">
       <type_flags type="DetType_TRACKER + DetType_BARREL"/>
       <dimensions
-        rmin="BarrelTOF_rmin"
+        rmin="BarrelTOF_rmin1"
         rmax="BarrelTOF_rmax"
         length="BarrelTOF_length"/>
       <comment>
@@ -128,7 +130,7 @@
       </module>
       <layer module="BarrelTOF_Module1" id="1" vis="TOFLayerVis">
         <barrel_envelope
-          inner_r="BarrelTOF_rmin"
+          inner_r="BarrelTOF_rmin1"
           outer_r="BarrelTOF_rmax"
           z_length="BarrelTOF_length+2*BarrelTOF_zOffset"
           z0="BarrelTOF_zoffset"/>
