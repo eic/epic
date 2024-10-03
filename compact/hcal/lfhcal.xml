@@ -59,6 +59,10 @@
     <vis name="LFHCAL8MModVis"          ref="AnlBlue"       showDaughters="true"  visible="true"/>
     <vis name="LFHCAL4MModVis"          ref="AnlViolet"     showDaughters="true"  visible="true"/>
     <vis name="LFHCAL8MModOuter"        ref="AnlBlue"       showDaughters="true"  visible="true"/>
+
+    <!-- <vis name="LFHCAL8MModVis"          ref="AnlBlue"       showDaughters="true"  visible="false"/>
+    <vis name="LFHCAL4MModVis"          ref="AnlViolet"     showDaughters="true"  visible="false"/>
+    <vis name="LFHCAL8MModOuter"        ref="AnlBlue"       showDaughters="false"  visible="false"/> -->
     <vis name="LFHCALLayerScintVis"     ref="AnlLight_Gray" showDaughters="false" visible="true"/>
     <vis name="LFHCALLayerSteelVis"     ref="AnlRed"        showDaughters="false" visible="true"/>
     <vis name="LFHCALLayerTungstenVis"  ref="AnlViolet"     showDaughters="false" visible="true"/>
@@ -185,13 +189,13 @@
       <documentation>
         ### for testing of a single module
       </documentation>
-<!--        <eightmodulepositions name="xpos" unit="cm" values="15 35"/>
-        <eightmodulepositions name="ypos" unit="cm" values="15 35"/>
-        <eightmodulepositions name="zpos" unit="cm" values="0 0"/>
-        <fourmodulepositions name="xpos" unit="cm" values="-25 -35"/>
+       <!-- <eightmodulepositions name="xpos" unit="cm" values="15 35"/>
+        <eightmodulepositions name="ypos" unit="cm" values="15 35"/> -->
+        <!-- <eightmodulepositions name="zpos" unit="cm" values="0 0"/> -->
+        <!-- <fourmodulepositions name="xpos" unit="cm" values="-25 -35"/>
         <fourmodulepositions name="ypos" unit="cm" values="-25 -35"/>
-        <fourmodulepositions name="zpos" unit="cm" values="0 0"/>
-      -->
+        <fourmodulepositions name="zpos" unit="cm" values="0 0"/> -->
+     
 
       <documentation>
       ### positions of modules for full area LFHCAL (sorted by ascending r, x, y)
@@ -841,7 +845,7 @@
         <position x="2019.833*mm" y="353.500*mm" z="0*mm"/>
         <position x="2221.722*mm" y="353.500*mm" z="0*mm"/>
         <position x="2423.611*mm" y="353.500*mm" z="0*mm"/>
-        <position x="404.722*mm" y="151.500*mm" z="0*mm"/>
+        <!-- <position x="404.722*mm" y="151.500*mm" z="0*mm"/> -->
         <position x="606.611*mm" y="151.500*mm" z="0*mm"/>
         <position x="808.500*mm" y="151.500*mm" z="0*mm"/>
         <position x="1010.389*mm" y="151.500*mm" z="0*mm"/>
@@ -989,7 +993,7 @@
         <position x="2120.778*mm" y="50.500*mm" z="0*mm"/>
         <position x="2322.667*mm" y="50.500*mm" z="0*mm"/>
         <position x="2524.556*mm" y="50.500*mm" z="0*mm"/>
-        <position x="404.722*mm" y="-151.500*mm" z="0*mm"/>
+        <!-- <position x="404.722*mm" y="-151.500*mm" z="0*mm"/> -->
         <position x="606.611*mm" y="-151.500*mm" z="0*mm"/>
         <position x="808.500*mm" y="-151.500*mm" z="0*mm"/>
         <position x="1010.389*mm" y="-151.500*mm" z="0*mm"/>
@@ -1253,17 +1257,17 @@
         <position x="707.556*mm" y="-2474.500*mm" z="0*mm"/>
         <position x="909.444*mm" y="-2474.500*mm" z="0*mm"/>
         <position x="1111.333*mm" y="-2474.500*mm" z="0*mm"/>
+        <position x="-303.778*mm" y="252.500*mm" z="0*mm"/>
+        <position x="-303.778*mm" y="50.500*mm" z="0*mm"/>
+        <position x="-303.778*mm" y="-252.500*mm" z="0*mm"/>
+        <position x="-303.778*mm" y="-50.500*mm" z="0*mm"/>
         
       </eightmodulepositions>
       <fourmodulepositions>
-        <position x="354.008*mm" y="252.500*mm" z="0*mm"/>
-        <position x="354.008*mm" y="50.500*mm" z="0*mm"/>
-        <position x="354.008*mm" y="-252.500*mm" z="0*mm"/>
-        <position x="354.008*mm" y="-50.500*mm" z="0*mm"/>
-        <position x="-354.008*mm" y="252.500*mm" z="0*mm"/>
-        <position x="-354.008*mm" y="50.500*mm" z="0*mm"/>
-        <position x="-354.008*mm" y="-252.500*mm" z="0*mm"/>
-        <position x="-354.008*mm" y="-50.500*mm" z="0*mm"/>
+        <position x="-252.350*mm" y="151.500*mm" z="0*mm"/>
+        <position x="-252.350*mm" y="-151.500*mm" z="0*mm"/>
+        <position x="455.000*mm" y="151.500*mm" z="0*mm"/>
+        <position x="455.000*mm" y="-151.500*mm" z="0*mm"/>
         <position x="50.944*mm" y="2575.500*mm" z="0*mm"/>
         <position x="50.944*mm" y="2373.500*mm" z="0*mm"/>
         <position x="50.944*mm" y="2171.500*mm" z="0*mm"/>

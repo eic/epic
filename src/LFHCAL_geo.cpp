@@ -1105,7 +1105,8 @@ static Ref_t createDetector(Detector& desc, xml_h handle, SensitiveDetector sens
 
     // Placing modules in world volume
     auto tr8M =
-        Transform3D(Position(-pos8M[e].x - 0.5 * eightM_params.mod_width, -pos8M[e].y, pos8M[e].z));
+        Transform3D(Position(-pos8M[e].x, -pos8M[e].y, pos8M[e].z));
+        // Transform3D(Position(-pos8M[e].x - 0.5 * eightM_params.mod_width, -pos8M[e].y, pos8M[e].z));
     phv = assembly.placeVolume(eightMassembly, tr8M);
     phv.addPhysVolID("moduleIDx", moduleIDx)
         .addPhysVolID("moduleIDy", moduleIDy)
@@ -1144,7 +1145,7 @@ static Ref_t createDetector(Detector& desc, xml_h handle, SensitiveDetector sens
                    _toString(moduleIDy));
     }
     auto tr4M =
-        Transform3D(Position(-pos4M[f].x - fourM_params.mod_width, -pos4M[f].y, pos4M[f].z));
+        Transform3D(Position(-pos4M[f].x, -pos4M[f].y, pos4M[f].z));
         // Transform3D(Position(-pos4M[f].x - 0.5 * fourM_params.mod_width, -pos4M[f].y, pos4M[f].z));
     phv = assembly.placeVolume(fourMassembly, tr4M);
     phv.addPhysVolID("moduleIDx", moduleIDx)
