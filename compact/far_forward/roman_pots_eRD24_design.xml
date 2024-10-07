@@ -174,7 +174,7 @@
                 vis="FFTrackerVis">
             <position x="ForwardRomanPotStation2_xpos" y="0" z="ForwardRomanPotStation2_zpos" />
             <rotation x="0" y="ForwardRomanPotStation1_rotation" z="0" />
-            <module name="ModuleRP2" vis="FFTrackerShieldedModuleVis" nx="2" ny="2" width="ForwardRomanPot_ModuleWidth" height="ForwardRomanPot_ModuleHeight">
+            <module name="ModuleRP2" vis="FFTrackerShieldedModuleVis" nx="1" ny="1" width="ForwardRomanPot_ModuleWidth" height="ForwardRomanPot_ModuleHeight">
                 <module_component material="Aluminum"     vis="FFTrackerShieldingVis" thickness="ForwardRomanPot_RFShieldThickness"/>
                 <module_component material="Copper"       vis="FFTrackerServiceVis"   thickness="ForwardRomanPot_ThermalStripThickness" />
                 <module_component material="SiliconOxide" vis="FFTrackerServiceVis"   thickness="ForwardRomanPot_ASICThickness"  />
@@ -255,7 +255,7 @@
     <readouts>
         <readout name="ForwardRomanPotHits">
             <segmentation type="CartesianGridXY" grid_size_x="0.5*mm" grid_size_y="0.5*mm" />
-            <id>system:8,assembly:3,layer:4,module:4,sensor:4,x:32:-16,y:-16</id>
+            <id>system:8,assembly:3,layer:4,module:8,sensor:8,x:32:-16,y:-16</id>
         </readout>
     </readouts>
 
