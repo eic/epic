@@ -53,5 +53,15 @@
     <constant name="B2PF_Bmax" value="-1.74139319*tesla"/>
     <constant name="Q0EF_BMax" value="0.0*tesla"/>
     <constant name="Q1EF_BMax"  value="0.0*tesla"/>
+    
+    <comment>
+    These are the ten-sigma cuts for the Roman pots, translated to the physical layout we currently have.
+    They are not perfectly ten-sigma for reasons of physical geometry. 
+    </comment>
+
+    <constant name="offset_central_RP_section" value ="0.71*cm"/>
+    <constant name="offset_intermediate_1_RP_section" value ="0.55*cm"/>
+    <constant name="offset_intermediate_2_RP_section" value ="0.0*cm"/>
+    <constant name="offset_outer_RP_section" value ="0.0*cm"/>
 
   </define>

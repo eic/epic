@@ -54,5 +54,17 @@
     <constant name="B2PF_Bmax" value="-4.7890142*tesla"/>
     <constant name="Q0EF_BMax" value="0.0*tesla"/>
     <constant name="Q1EF_BMax"  value="0.0*tesla"/>
+    
+    <comment>
+    These are the ten-sigma cuts for the Roman pots, translated to the physical layout we currently have.
+    They are not perfectly ten-sigma for reasons of physical geometry. 
+    
+    Nuclei currently based on nearest per-nucleon proton energy (needs eventual update from machine).
+    </comment>
+
+    <constant name="offset_central_RP_section" value ="2.96*cm"/>
+    <constant name="offset_intermediate_1_RP_section" value ="2.75*cm"/> <!-- rough extrapolation -->
+    <constant name="offset_intermediate_2_RP_section" value ="1.80*cm"/> <!-- rough extrapolation -->
+    <constant name="offset_outer_RP_section" value ="0.0*cm"/>
 
   </define>

@@ -28,12 +28,12 @@
 	<!-- -->
 	<!-- these will be moved to the beam energy configuration files in a separate PR and this comment removed -->
 	<!-- -->
-	
+	<!--
 	<constant name="offset_central_RP_section" value ="0.27*cm"/>
 	<constant name="offset_intermediate_1_RP_section" value ="0.0*cm"/>
 	<constant name="offset_intermediate_2_RP_section" value ="0.0*cm"/>
 	<constant name="offset_outer_RP_section" value ="0.0*cm"/>
-
+	-->
 
         <!-- Module/layer information -->
         <!-- Each module is simply a 1.6cm wide by 1.6cm tall square -->
