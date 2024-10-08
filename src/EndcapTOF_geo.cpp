@@ -133,7 +133,6 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
         sensors_id_board_edge.insert(2*nsensors - curr_ix - 1); // reflected to sensor id on the left
       }
 
-      std::cout << "xoffset " << x_offset << std::endl;
       for (int ix = 0; ix < 2 * nsensors; ix++) {
         // there is a hole in the middle, with radius = x_offset
         float xcoord = (ix - nsensors + 0.5) * (module_x + module_spacing) + ((ix - nsensors < 0)? - x_offset : x_offset);
