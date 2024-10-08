@@ -19,6 +19,7 @@
 #include "XML/Utilities.h"
 #include <array>
 #include <map>
+#include <unordered_set>
 
 using namespace std;
 using namespace dd4hep;
@@ -83,6 +84,7 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
   double module_y       = x_modsz.width();
   double module_overlap = getAttrOrDefault(x_modsz, _Unicode(overlap), 0.); // x_modsz.overlap();
   double module_spacing = getAttrOrDefault(x_modsz, _Unicode(spacing), 0.); // x_modsz.overlap();
+  double board_gap  = getAttrOrDefault(x_modsz, _Unicode(board_gap), 0.);
 
   //! Add support structure
   xml_comp_t x_supp          = x_det.child(_Unicode(support));
@@ -111,17 +113,33 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
     xml_comp_t x_sensor_layout = front? x_sensor_layout_front : x_sensor_layout_back;
     for(xml_coll_t lrow(x_sensor_layout, _Unicode(row)); lrow; ++lrow) {
       xml_comp_t x_row = lrow;
-      double deadspace = getAttrOrDefault(x_row, _Unicode(deadspace), 0);
+      double deadspace = getAttrOrDefault<double>(x_row, _Unicode(deadspace), 0);
       if (deadspace > 0) {
          ycoord -= deadspace;
          continue;
       }
-      double x_offset = getAttrOrDefault(x_row, _Unicode(x_offset), 0);
+      double x_offset = getAttrOrDefault<double>(x_row, _Unicode(x_offset), 0);
       int nsensors = getAttrOrDefault<int>(x_row, _Unicode(nsensors), 0);
 
+      // find the sensor id that corrsponds to the rightmost sensor in a board
+      // we need to know where to apply additional spaces between neighboring board
+      std::unordered_set<int> sensors_id_board_edge;
+      int curr_ix = nsensors; // the first sensor to the right of center has ix of nsensors 
+      for(xml_coll_t lboard(x_row, _Unicode(board)); lboard; ++lboard) {
+        xml_comp_t x_board = lboard;
+        int nboard_sensors = getAttrOrDefault<int>(x_board, _Unicode(nsensors), 1);
+	curr_ix += nboard_sensors;
+	sensors_id_board_edge.insert(curr_ix);
+        sensors_id_board_edge.insert(2*nsensors - curr_ix - 1); // reflected to sensor id on the left
+      }
+
+      std::cout << "xoffset " << x_offset << std::endl;
       for (int ix = 0; ix < 2 * nsensors; ix++) {
         // there is a hole in the middle, with radius = x_offset
         float xcoord = (ix - nsensors + 0.5) * (module_x + module_spacing) + ((ix - nsensors < 0)? - x_offset : x_offset);
+	// add board spacing
+	if(sensors_id_board_edge.find(ix) != sensors_id_board_edge.end())
+          xcoord = (ix - nsensors < 0)? xcoord - board_gap : xcoord + board_gap;
         //! Note the module ordering is different for front and back side
         xml_comp_t x_modCurr = front? x_modFront : x_modBack;
 
