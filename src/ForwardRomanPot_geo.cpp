@@ -32,8 +32,8 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
   for (xml_coll_t mi(x_det, _U(module)); mi; ++mi, ++m_id) {
     xml_comp_t x_mod           = mi;
     string m_nam               = x_mod.nameStr();
-    double mod_width           = getAttrOrDefault<double>(x_mod, _U(width), 3.2 * cm);
-    double mod_height          = getAttrOrDefault<double>(x_mod, _U(height), 3.2 * cm);
+    double mod_width           = getAttrOrDefault<double>(x_mod, _U(width), 1.6 * cm);
+    double mod_height          = getAttrOrDefault<double>(x_mod, _U(height), 1.6 * cm);
     double mod_total_thickness = 0.;
 
     xml_coll_t ci(x_mod, _U(module_component));
@@ -42,9 +42,7 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
 
     Box m_solid(mod_width / 2.0, mod_height / 2.0, mod_total_thickness / 2.0);
     Volume m_volume(m_nam, m_solid, vacuum);
-    //set to AnlGold temporarily for future RP troubleshooting
-    //m_volume.setVisAttributes(description.visAttributes(x_mod.visStr()));
-    m_volume.setVisAttributes(description.visAttributes("AnlGold"));
+    m_volume.setVisAttributes(description.visAttributes(x_mod.visStr()));
 
     double comp_z_pos = -mod_total_thickness / 2.0;
     int n_sensor      = 1;
@@ -99,8 +97,8 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
       double nx              = getAttrOrDefault<double>(x_array, _Unicode(nx), 1);
       double ny              = getAttrOrDefault<double>(x_array, _Unicode(ny), 1);
       double dz              = getAttrOrDefault<double>(x_array, _Unicode(dz), 0 * mm);
-      double arr_width       = getAttrOrDefault<double>(x_array, _Unicode(width), 3.2 * cm);
-      double arr_height      = getAttrOrDefault<double>(x_array, _Unicode(height), 3.2 * cm);
+      double arr_width       = getAttrOrDefault<double>(x_array, _Unicode(width), 1.6 * cm);
+      double arr_height      = getAttrOrDefault<double>(x_array, _Unicode(height), 1.6 * cm);
       std::string arr_module = getAttrOrDefault<std::string>(x_array, _Unicode(module), "");
       // TODO: add check here
       auto arr_vol         = modules[arr_module];
@@ -120,6 +118,7 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
           if (x_pos) {
             arr_pos += Position(x_pos.x(0), x_pos.y(0), x_pos.z(0));
           }
+
           DetElement mod_de(ma_de, ma_name + std::string("_mod") + std::to_string(i_mod), i_mod);
           pv = ma_vol.placeVolume(arr_vol, arr_pos);
           pv.addPhysVolID("module", i_mod);
@@ -128,12 +127,6 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
             PlacedVolume sens_pv = sensVols[ic];
             DetElement comp_de(mod_de, std::string("de_") + sens_pv.volume().name(), ic + 1);
             comp_de.setPlacement(sens_pv);
-            // Acts::ActsExtension* sensorExtension = new Acts::ActsExtension();
-            //// sensorExtension->addType("sensor", "detector");
-            // comp_de.addExtension<Acts::ActsExtension>(sensorExtension);
-            //// comp_de.setAttributes(description, sens_pv.volume(),
-            /// x_layer.regionStr(), / x_layer.limitsStr(), /
-            /// xml_det_t(xmleles[m_nam]).visStr());
           }
         }
       }
@@ -159,11 +152,9 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
       xml_comp_t x_comp = ci;
       xml_comp_t c_pos  = x_comp.position(false);
 
-      // string     ma_name = x_comp.nameStr();
       string comp_assembly = getAttrOrDefault<std::string>(x_comp, _Unicode(assembly), "");
 
       auto comp_vol = module_assemblies[comp_assembly];
-      // auto de       = ;
       auto comp_de =
           module_assembly_delements[comp_assembly].clone(comp_assembly + std::to_string(l_num));
       if (c_pos) {
@@ -175,25 +166,13 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
       comp_de.setPlacement(pv);
       layer.add(comp_de);
       i_assembly++;
-      // DetElement det = module > 1 ? stave.clone(_toString(module,"stave%d"))
-      // : stave; Transform3D trafo(RotationZYX(0, rotY, rotX),
-      // Translation3D(-posX, -posY, 0)); PlacedVolume pv =
-      // envelopeVolume.placeVolume(sectVolume,trafo);
-      //// Not a valid volID: pv.addPhysVolID("stave", 0);
-      // pv.addPhysVolID("module", module);
-      // det.setPlacement(pv);
-      // parent.add(det);
     }
     pv = assembly.placeVolume(l_vol, l_pos);
     pv.addPhysVolID("layer", l_num);
   }
 
-  // pv = description.pickMotherVolume(sdet).placeVolume(assembly,
-  // Position(pos.x(), pos.y(), pos.z()));
   Transform3D posAndRot(RotationZYX(rot.z(), rot.y(), rot.x()),
                         Position(pos.x(), pos.y(), pos.z()));
-  // pv = description.pickMotherVolume(sdet).placeVolume(assembly,
-  // Position(pos.x(), pos.y(), pos.z()));
   pv = description.pickMotherVolume(sdet).placeVolume(assembly, posAndRot);
   pv.addPhysVolID("system", x_det.id()); // Set the subdetector system ID.
   sdet.setPlacement(pv);
