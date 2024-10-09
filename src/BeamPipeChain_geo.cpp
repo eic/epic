@@ -56,7 +56,6 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector /
     rOuters1.push_back(getAttrOrDefault<double>(pipe, _Unicode(rout1), 0));
     rOuters2.push_back(getAttrOrDefault<double>(pipe, _Unicode(rout2), 0));
     limits.push_back(getAttrOrDefault<std::string>(pipe, _Unicode(limits), "world_limits"));
-  
   }
 
   // Calculate parameters for connecting pipes in between magnets
@@ -110,7 +109,7 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector /
     Volume v_vacuum("v_vacuum_" + names[pipeN], s_vacuum, m_Vacuum);
 
     v_tube.setVisAttributes(description.visAttributes(vis_name));
-    v_vacuum.setLimitSet(description,limits[pipeN]);
+    v_vacuum.setLimitSet(description, limits[pipeN]);
 
     assembly.placeVolume(v_tube, Transform3D(RotationY(thetas[pipeN]),
                                              Position(xCenters[pipeN], 0, zCenters[pipeN])));
