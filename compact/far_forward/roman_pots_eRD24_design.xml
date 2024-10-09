@@ -8,7 +8,7 @@
             Roman Pots Implementation updated strawman layout (only layer materials)
             Author: Alex Jentsch
             Date of first commit: June 15th, 2021
-	    Last update: Oct 4th, 2024
+	        Last update: Oct 8th, 2024
             ---------------------------------
         </comment>
 
@@ -22,23 +22,10 @@
         <constant name="ForwardRomanPotStation1_rotation" value="-0.04545*rad"/>
         <constant name="ForwardRomanPotStation2_rotation" value="-0.04545*rad"/>
 
-        <constant name="ForwardRomanPotStation1_insertionPosition" value="0.0*cm"/>
-        <constant name="ForwardRomanPotStation2_insertionPosition" value="0.0*cm"/>
-
-	<!-- -->
-	<!-- these will be moved to the beam energy configuration files in a separate PR and this comment removed -->
-	<!-- -->
-	<!--
-	<constant name="offset_central_RP_section" value ="0.27*cm"/>
-	<constant name="offset_intermediate_1_RP_section" value ="0.0*cm"/>
-	<constant name="offset_intermediate_2_RP_section" value ="0.0*cm"/>
-	<constant name="offset_outer_RP_section" value ="0.0*cm"/>
-	-->
-
         <!-- Module/layer information -->
         <!-- Each module is simply a 1.6cm wide by 1.6cm tall square -->
 
-        <!-- Module insertion positions -->
+        <!-- Module insertion positions set by beam energy config in epic/compact/fields/beamline_XXXXX.xml -->
 
         <constant name="ForwardRomanPotStation1_insertion_central" value="2.4*cm + offset_central_RP_section"/>
         <constant name="ForwardRomanPotStation2_insertion_central" value="2.4*cm + offset_central_RP_section"/>
@@ -53,7 +40,7 @@
         <constant name="ForwardRomanPotStation2_insertion_outer" value="2.4*cm + offset_outer_RP_section"/>
 
         
-        <!-- Each module is a sandwich of 1mm aluminum, 0.3mm air, 0.3mm silicon, 0.3mm inactive silicon, 0.3mm copper, and 1mm aluminum -->
+        <!-- Each module is a sandwich of 1mm aluminum, 0.3mm air, 0.3mm silicon AC-LGAD, 0.3mm inactive silicon ASIC, 0.3mm copper cooling, and 1mm aluminum -->
         <!-- Vacuum is between each module -->
 
         <!-- module size -->
@@ -97,11 +84,11 @@
                 <module_component material="Aluminum"     vis="FFTrackerShieldingVis" thickness="ForwardRomanPot_RFShieldThickness"/>
             </module>
             <module_assembly name="Station1Top">
-                <array nx="5" ny="3" module="ModuleRP1" width="5*ForwardRomanPot_ModuleWidth" height="3*ForwardRomanPot_ModuleHeight">
-                    <position x="5.5*ForwardRomanPot_ModuleWidth" y="ForwardRomanPotStation1_insertion_outer"/>
+                <array nx="6" ny="3" module="ModuleRP1" width="6*ForwardRomanPot_ModuleWidth" height="3*ForwardRomanPot_ModuleHeight">
+                    <position x="6.0*ForwardRomanPot_ModuleWidth" y="ForwardRomanPotStation1_insertion_outer"/>
                 </array>
-                <array nx="5" ny="3" module="ModuleRP1" width="5*ForwardRomanPot_ModuleWidth" height="3*ForwardRomanPot_ModuleHeight">
-                    <position x="-5.5*ForwardRomanPot_ModuleWidth" y="ForwardRomanPotStation1_insertion_outer"/>
+                <array nx="6" ny="3" module="ModuleRP1" width="6*ForwardRomanPot_ModuleWidth" height="3*ForwardRomanPot_ModuleHeight">
+                    <position x="-6.0*ForwardRomanPot_ModuleWidth" y="ForwardRomanPotStation1_insertion_outer"/>
                 </array>
                 <array nx="2" ny="3" module="ModuleRP1" width="2*ForwardRomanPot_ModuleWidth" height="3*ForwardRomanPot_ModuleHeight">
                     <position x="0" y="ForwardRomanPotStation1_insertion_central"/>
@@ -120,11 +107,11 @@
                 </array>
             </module_assembly>
             <module_assembly name="Station1Bottom">
-		    <array nx="5" ny="3" module="ModuleRP1" width="5*ForwardRomanPot_ModuleWidth" height="3*ForwardRomanPot_ModuleHeight">
-                        <position x="5.5*ForwardRomanPot_ModuleWidth" y="-ForwardRomanPotStation1_insertion_outer"/>
-                    </array>
-                    <array nx="5" ny="3" module="ModuleRP1" width="5*ForwardRomanPot_ModuleWidth" height="3*ForwardRomanPot_ModuleHeight">
-                        <position x="-5.5*ForwardRomanPot_ModuleWidth" y="-ForwardRomanPotStation1_insertion_outer"/>
+		        <array nx="6" ny="3" module="ModuleRP1" width="6*ForwardRomanPot_ModuleWidth" height="3*ForwardRomanPot_ModuleHeight">
+                        <position x="6.0*ForwardRomanPot_ModuleWidth" y="-ForwardRomanPotStation1_insertion_outer"/>
+                </array>
+                    <array nx="6" ny="3" module="ModuleRP1" width="6*ForwardRomanPot_ModuleWidth" height="3*ForwardRomanPot_ModuleHeight">
+                        <position x="-6.0*ForwardRomanPot_ModuleWidth" y="-ForwardRomanPotStation1_insertion_outer"/>
                     </array>
                     <array nx="2" ny="3" module="ModuleRP1" width="2*ForwardRomanPot_ModuleWidth" height="3*ForwardRomanPot_ModuleHeight">
                         <position x="0" y="-ForwardRomanPotStation1_insertion_central"/>
@@ -183,11 +170,11 @@
                 <module_component material="Aluminum"     vis="FFTrackerShieldingVis" thickness="ForwardRomanPot_RFShieldThickness"/>
             </module>
             <module_assembly name="Station2Top">
-                    <array nx="5" ny="3" module="ModuleRP2" width="5*ForwardRomanPot_ModuleWidth" height="3*ForwardRomanPot_ModuleHeight">
-                        <position x="5.5*ForwardRomanPot_ModuleWidth" y="ForwardRomanPotStation1_insertion_outer"/>
+                    <array nx="6" ny="3" module="ModuleRP2" width="6*ForwardRomanPot_ModuleWidth" height="3*ForwardRomanPot_ModuleHeight">
+                        <position x="6.0*ForwardRomanPot_ModuleWidth" y="ForwardRomanPotStation1_insertion_outer"/>
                     </array>
-                    <array nx="5" ny="3" module="ModuleRP2" width="5*ForwardRomanPot_ModuleWidth" height="3*ForwardRomanPot_ModuleHeight">
-                        <position x="-5.5*ForwardRomanPot_ModuleWidth" y="ForwardRomanPotStation1_insertion_outer"/>
+                    <array nx="6" ny="3" module="ModuleRP2" width="6*ForwardRomanPot_ModuleWidth" height="3*ForwardRomanPot_ModuleHeight">
+                        <position x="-6.0*ForwardRomanPot_ModuleWidth" y="ForwardRomanPotStation1_insertion_outer"/>
                     </array>
                     <array nx="2" ny="3" module="ModuleRP2" width="2*ForwardRomanPot_ModuleWidth" height="3*ForwardRomanPot_ModuleHeight">
                         <position x="0" y="ForwardRomanPotStation1_insertion_central"/>
@@ -206,11 +193,11 @@
                     </array>
             </module_assembly>
             <module_assembly name="Station2Bottom">
-                    <array nx="5" ny="3" module="ModuleRP2" width="5*ForwardRomanPot_ModuleWidth" height="3*ForwardRomanPot_ModuleHeight">
-                        <position x="5.5*ForwardRomanPot_ModuleWidth" y="-ForwardRomanPotStation1_insertion_outer"/>
+                    <array nx="6" ny="3" module="ModuleRP2" width="6*ForwardRomanPot_ModuleWidth" height="3*ForwardRomanPot_ModuleHeight">
+                        <position x="6.0*ForwardRomanPot_ModuleWidth" y="-ForwardRomanPotStation1_insertion_outer"/>
                     </array>
-                    <array nx="5" ny="3" module="ModuleRP2" width="5*ForwardRomanPot_ModuleWidth" height="3*ForwardRomanPot_ModuleHeight">
-                        <position x="-5.5*ForwardRomanPot_ModuleWidth" y="-ForwardRomanPotStation1_insertion_outer"/>
+                    <array nx="6" ny="3" module="ModuleRP2" width="6*ForwardRomanPot_ModuleWidth" height="3*ForwardRomanPot_ModuleHeight">
+                        <position x="-6.0*ForwardRomanPot_ModuleWidth" y="-ForwardRomanPotStation1_insertion_outer"/>
                     </array>
                     <array nx="2" ny="3" module="ModuleRP2" width="2*ForwardRomanPot_ModuleWidth" height="3*ForwardRomanPot_ModuleHeight">
                         <position x="0" y="-ForwardRomanPotStation1_insertion_central"/>
