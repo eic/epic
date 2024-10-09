@@ -1,9 +1,10 @@
 // SPDX-License-Identifier: LGPL-3.0-or-later
-// Copyright (C) 2022 Nicolas Schmidt
+// Copyright (C) 2022 - 2024, Nicolas Schmidt, Chun Yuen Tsang
 
 /** \addtogroup Trackers Trackers
  * \brief Type: **Endcap Tracker with TOF**.
  * \author N. Schmidt
+ * \modified by C.Y. Tsang 8th Oct, 2024
  *
  * \ingroup trackers
  *
