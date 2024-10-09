@@ -118,7 +118,7 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
           if (x_pos) {
             arr_pos += Position(x_pos.x(0), x_pos.y(0), x_pos.z(0));
           }
-		  		  
+
           DetElement mod_de(ma_de, ma_name + std::string("_mod") + std::to_string(i_mod), i_mod);
           pv = ma_vol.placeVolume(arr_vol, arr_pos);
           pv.addPhysVolID("module", i_mod);
