@@ -107,7 +107,7 @@
     <comment> 1 um padding to not have layer and module touch (ACTS requirement) </comment>
     <constant name="TOFEndcapLayer_thickness"   value="TOFEndcapMod_thickness + 2 * TOFEndcapMod_dz + 1 * um" />
 
-    <constant name="ForwardTOFMod_rmin"         value="ForwardTOFRegion_minR+5.0*mm" />
+    <constant name="ForwardTOFMod_rmin"         value="ForwardTOFRegion_minR-1*cm" />
     <constant name="ForwardTOFMod_rmax"         value="ForwardTOFRegion_maxR" />
     <constant name="ForwardTOFMod1_zmin"        value="ForwardTOF_zmin" />
     <constant name="ForwardTOFMod2_zmin"        value="ForwardTOF_zmin + ForwardTOFMod_offset" />
@@ -133,10 +133,11 @@
     <constant name="EndcapTOF_Module_thickness"       value="EndcapTOF_Sensor_thickness+2*EndcapTOF_Hybrid_thickness+2*EndcapTOF_CFSkin_thickness+EndcapTOF_CFoam_thickness+EndcapTOF_CoolingTube_thickness+EndcapTOF_Coolant_thickness"/>
 
     <constant name="EndcapTOF_zOffset"                 value="0*cm"/>
+    <constant name="EndcapTOF_yOffset"                 value="0.5*cm"/>
     <constant name="EndcapTOF_radius_design"           value="64.4*cm"/>
     <constant name="EndcapTOF_Module_width_design"     value="67*mm"/>
     <constant name="EndcapTOF_Module_length_design"    value="34.333*mm"/>
-    <constant name="EndcapTOF_Module_overlap_design"   value="-2*mm"/>
+    <constant name="EndcapTOF_Module_overlap_design"   value="-1.5*mm"/>
     <constant name="EndcapTOF_Module_spacing_design"   value="0*mm"/>
     <constant name="EndcapTOF_Board_spacing_design"    value="2*mm"/>
     <constant name="EndcapTOF_Sensor_width_design"     value="16.4*mm"/>
@@ -148,8 +149,8 @@
     <constant name="EndcapTOF_CoolingTube_width_design" value="0.75*cm"/>
     <constant name="EndcapTOF_Coolant_width_design"    value="0.75*cm"/>
 
-    <constant name="EndcapTOF_Back_Sensor_position_design"   value="0.5*(EndcapTOF_Sensor_width_design-EndcapTOF_Module_width_design) + EndcapTOF_Sensor_y_offset"/>
-    <constant name="EndcapTOF_Front_Sensor_position_design"  value="-0.5*(EndcapTOF_Sensor_width_design-EndcapTOF_Module_width_design) - EndcapTOF_Sensor_y_offset"/>
+    <constant name="EndcapTOF_Up_Sensor_position_design"   value="0.5*(EndcapTOF_Sensor_width_design-EndcapTOF_Module_width_design) + EndcapTOF_Sensor_y_offset"/>
+    <constant name="EndcapTOF_Down_Sensor_position_design"  value="-0.5*(EndcapTOF_Sensor_width_design-EndcapTOF_Module_width_design) - EndcapTOF_Sensor_y_offset"/>
     <constant name="EndcapTOF_Support_position" value="0"/>
     <constant name="EndcapTOF_CFoam_position_design"   value="0.5*(EndcapTOF_CFoam_width_design-EndcapTOF_Module_width_design)"/>
     <constant name="EndcapTOF_CHoneycomb_position_design"  value="0.5*(EndcapTOF_Module_width_design-EndcapTOF_CHoneycomb_width_design)"/>
@@ -166,8 +167,8 @@
     <constant name="EndcapTOF_CHoneycomb_width"    value="EndcapTOF_scale * EndcapTOF_CHoneycomb_width_design"/>
     <constant name="EndcapTOF_CoolingTube_width"   value="EndcapTOF_scale * EndcapTOF_CoolingTube_width_design"/>
     <constant name="EndcapTOF_Coolant_width"       value="EndcapTOF_scale * EndcapTOF_Coolant_width_design"/>
-    <constant name="EndcapTOF_Front_Sensor_position"     value="EndcapTOF_scale * EndcapTOF_Front_Sensor_position_design"/>
-    <constant name="EndcapTOF_Back_Sensor_position"     value="EndcapTOF_scale * EndcapTOF_Back_Sensor_position_design"/>
+    <constant name="EndcapTOF_Down_Sensor_position"     value="EndcapTOF_scale * EndcapTOF_Down_Sensor_position_design"/>
+    <constant name="EndcapTOF_Up_Sensor_position"     value="EndcapTOF_scale * EndcapTOF_Up_Sensor_position_design"/>
     <constant name="EndcapTOF_CFoam_position"      value="EndcapTOF_scale * EndcapTOF_CFoam_position_design"/>
     <constant name="EndcapTOF_CHoneycomb_position" value="EndcapTOF_scale * EndcapTOF_CHoneycomb_position_design"/>
     <constant name="EndcapTOF_CoolingTube_position" value="EndcapTOF_scale * EndcapTOF_CoolingTube_position_design"/>
@@ -212,7 +213,7 @@
       reflect="false">
       <type_flags type="DetType_TRACKER + DetType_ENDCAP"/>
       <position x="0*cm" y="0*cm" z="ForwardTOF_zmin" />
-      <moduleFront name="EndcapTOF_Module1" vis="TOFEndcapModuleVis">
+      <moduleFrontRight name="EndcapTOF_Module1" vis="TOFEndcapModuleVis">
         <module_component name="hybridkaptontop" material="Kapton" sensitive="false" width="EndcapTOF_Module_width" length="EndcapTOF_Module_length" thickness="EndcapTOF_Hybrid_thickness" vis="TOFHybridVis" >
           <position x="EndcapTOF_Service_position" y="0" z="0" />
         </module_component>
@@ -226,36 +227,69 @@
           <position x="EndcapTOF_Service_position" y="0" z="0" />
         </module_component>
         <module_component name="sensor1" material="Silicon" sensitive="true" width="EndcapTOF_Sensor_width" length="EndcapTOF_Sensor_length" thickness="EndcapTOF_Sensor_thickness" vis="TOFSensorVis"  keep_layer="true">
-          <position x="EndcapTOF_Front_Sensor_position" y="0.5*(EndcapTOF_Sensor_length + EndcapTOF_Sensor_gap)" z="0"/>
+          <position x="EndcapTOF_Up_Sensor_position" y="0.5*(EndcapTOF_Sensor_length + EndcapTOF_Sensor_gap)" z="0"/>
         </module_component>
         <module_component name="sensor2" material="Silicon" sensitive="true" width="EndcapTOF_Sensor_width" length="EndcapTOF_Sensor_length" thickness="EndcapTOF_Sensor_thickness" vis="TOFSensorVis"  keep_layer="true">
-          <position x="EndcapTOF_Front_Sensor_position" y="-0.5*(EndcapTOF_Sensor_length + EndcapTOF_Sensor_gap)" z="0"/>
+          <position x="EndcapTOF_Up_Sensor_position" y="-0.5*(EndcapTOF_Sensor_length + EndcapTOF_Sensor_gap)" z="0"/>
         </module_component>
         <module_component name="sensor3" material="Silicon" sensitive="true" width="EndcapTOF_Sensor_width" length="EndcapTOF_Sensor_length" thickness="EndcapTOF_Sensor_thickness" vis="TOFSensorVis"  keep_layer="true">
-          <position x="EndcapTOF_Front_Sensor_position - EndcapTOF_Sensor_width - EndcapTOF_Sensor_gap " y="0.5*(EndcapTOF_Sensor_length + EndcapTOF_Sensor_gap)" z="0"/>
+          <position x="EndcapTOF_Up_Sensor_position + EndcapTOF_Sensor_width + EndcapTOF_Sensor_gap " y="0.5*(EndcapTOF_Sensor_length + EndcapTOF_Sensor_gap)" z="0"/>
         </module_component>
         <module_component name="sensor4" material="Silicon" sensitive="true" width="EndcapTOF_Sensor_width" length="EndcapTOF_Sensor_length" thickness="EndcapTOF_Sensor_thickness" vis="TOFSensorVis" >
-          <position x="EndcapTOF_Front_Sensor_position - EndcapTOF_Sensor_width - EndcapTOF_Sensor_gap " y="-0.5*(EndcapTOF_Sensor_length + EndcapTOF_Sensor_gap)" z="0" />
+          <position x="EndcapTOF_Up_Sensor_position + EndcapTOF_Sensor_width + EndcapTOF_Sensor_gap " y="-0.5*(EndcapTOF_Sensor_length + EndcapTOF_Sensor_gap)" z="0" />
         </module_component>
+
 	<module_component name="carbonsupport" material="CarbonFiber" sensitive="false" width="EndcapTOF_Module_width" length="EndcapTOF_Module_length" thickness="EndcapTOF_CFSupp_thickness" vis="AnlGray" >
           <position x="EndcapTOF_Support_position" y="0" z="0" />
         </module_component>
-      </moduleFront>
-      <moduleBack name="EndcapTOF_Module1" vis="TOFEndcapModuleVis">
+      </moduleFrontRight>
+
+      <moduleFrontLeft name="EndcapTOF_Module1" vis="TOFEndcapModuleVis">
+        <module_component name="hybridkaptontop" material="Kapton" sensitive="false" width="EndcapTOF_Module_width" length="EndcapTOF_Module_length" thickness="EndcapTOF_Hybrid_thickness" vis="TOFHybridVis" >
+          <position x="EndcapTOF_Service_position" y="0" z="0" />
+        </module_component>
+        <module_component name="hybridPCB" material="Fr4" sensitive="false" width="EndcapTOF_Module_width" length="EndcapTOF_Module_length" thickness="EndcapTOF_HybridPCB_thickness" vis="AnlGreen" >
+          <position x="EndcapTOF_Service_position" y="0" z="0" />
+        </module_component>
+        <module_component name="hybridtraces" material="Copper" sensitive="false" width="EndcapTOF_Module_width" length="EndcapTOF_Module_length" thickness="EndcapTOF_HybridTrace_thickness" vis="TOFCFoamVis" >
+          <position x="EndcapTOF_Service_position" y="0" z="0" />
+        </module_component>
+        <module_component name="hybridkaptonbottom" material="Kapton" sensitive="false" width="EndcapTOF_Module_width" length="EndcapTOF_Module_length" thickness="EndcapTOF_Hybrid_thickness" vis="TOFHybridVis" >
+          <position x="EndcapTOF_Service_position" y="0" z="0" />
+        </module_component>
+        <module_component name="sensor1" material="Silicon" sensitive="true" width="EndcapTOF_Sensor_width" length="EndcapTOF_Sensor_length" thickness="EndcapTOF_Sensor_thickness" vis="TOFSensorVis"  keep_layer="true">
+          <position x="EndcapTOF_Down_Sensor_position" y="0.5*(EndcapTOF_Sensor_length + EndcapTOF_Sensor_gap)" z="0"/>
+        </module_component>
+        <module_component name="sensor2" material="Silicon" sensitive="true" width="EndcapTOF_Sensor_width" length="EndcapTOF_Sensor_length" thickness="EndcapTOF_Sensor_thickness" vis="TOFSensorVis"  keep_layer="true">
+          <position x="EndcapTOF_Down_Sensor_position" y="-0.5*(EndcapTOF_Sensor_length + EndcapTOF_Sensor_gap)" z="0"/>
+        </module_component>
+        <module_component name="sensor3" material="Silicon" sensitive="true" width="EndcapTOF_Sensor_width" length="EndcapTOF_Sensor_length" thickness="EndcapTOF_Sensor_thickness" vis="TOFSensorVis"  keep_layer="true">
+          <position x="EndcapTOF_Down_Sensor_position - EndcapTOF_Sensor_width - EndcapTOF_Sensor_gap " y="0.5*(EndcapTOF_Sensor_length + EndcapTOF_Sensor_gap)" z="0"/>
+        </module_component>
+        <module_component name="sensor4" material="Silicon" sensitive="true" width="EndcapTOF_Sensor_width" length="EndcapTOF_Sensor_length" thickness="EndcapTOF_Sensor_thickness" vis="TOFSensorVis" >
+          <position x="EndcapTOF_Down_Sensor_position - EndcapTOF_Sensor_width - EndcapTOF_Sensor_gap " y="-0.5*(EndcapTOF_Sensor_length + EndcapTOF_Sensor_gap)" z="0" />
+        </module_component>
+
+	<module_component name="carbonsupport" material="CarbonFiber" sensitive="false" width="EndcapTOF_Module_width" length="EndcapTOF_Module_length" thickness="EndcapTOF_CFSupp_thickness" vis="AnlGray" >
+          <position x="EndcapTOF_Support_position" y="0" z="0" />
+        </module_component>
+      </moduleFrontLeft>
+
+      <moduleBackRight name="EndcapTOF_Module1" vis="TOFEndcapModuleVis">
 	<module_component name="carbonsupport" material="CarbonFiber" sensitive="false" width="EndcapTOF_Module_width" length="EndcapTOF_Module_length" thickness="EndcapTOF_CFSupp_thickness" vis="AnlGray" >
           <position x="EndcapTOF_Support_position" y="0" z="0" />
         </module_component>
         <module_component name="sensor1" material="Silicon" sensitive="true" width="EndcapTOF_Sensor_width" length="EndcapTOF_Sensor_length" thickness="EndcapTOF_Sensor_thickness" vis="TOFSensorVis"  keep_layer="true">
-          <position x="EndcapTOF_Back_Sensor_position" y="0.5*(EndcapTOF_Sensor_length + EndcapTOF_Sensor_gap)" z="0"/>
+          <position x="EndcapTOF_Down_Sensor_position" y="0.5*(EndcapTOF_Sensor_length + EndcapTOF_Sensor_gap)" z="0"/>
         </module_component>
         <module_component name="sensor2" material="Silicon" sensitive="true" width="EndcapTOF_Sensor_width" length="EndcapTOF_Sensor_length" thickness="EndcapTOF_Sensor_thickness" vis="TOFSensorVis"  keep_layer="true">
-          <position x="EndcapTOF_Back_Sensor_position" y="-0.5*(EndcapTOF_Sensor_length + EndcapTOF_Sensor_gap)" z="0"/>
+          <position x="EndcapTOF_Down_Sensor_position" y="-0.5*(EndcapTOF_Sensor_length + EndcapTOF_Sensor_gap)" z="0"/>
         </module_component>
         <module_component name="sensor3" material="Silicon" sensitive="true" width="EndcapTOF_Sensor_width" length="EndcapTOF_Sensor_length" thickness="EndcapTOF_Sensor_thickness" vis="TOFSensorVis"  keep_layer="true">
-          <position x="EndcapTOF_Back_Sensor_position + EndcapTOF_Sensor_width + EndcapTOF_Sensor_gap " y="0.5*(EndcapTOF_Sensor_length + EndcapTOF_Sensor_gap)" z="0"/>
+          <position x="EndcapTOF_Down_Sensor_position - EndcapTOF_Sensor_width - EndcapTOF_Sensor_gap " y="0.5*(EndcapTOF_Sensor_length + EndcapTOF_Sensor_gap)" z="0"/>
         </module_component>
         <module_component name="sensor4" material="Silicon" sensitive="true" width="EndcapTOF_Sensor_width" length="EndcapTOF_Sensor_length" thickness="EndcapTOF_Sensor_thickness" vis="TOFSensorVis" >
-          <position x="EndcapTOF_Back_Sensor_position + EndcapTOF_Sensor_width + EndcapTOF_Sensor_gap " y="-0.5*(EndcapTOF_Sensor_length + EndcapTOF_Sensor_gap)" z="0" />
+          <position x="EndcapTOF_Down_Sensor_position - EndcapTOF_Sensor_width - EndcapTOF_Sensor_gap " y="-0.5*(EndcapTOF_Sensor_length + EndcapTOF_Sensor_gap)" z="0" />
         </module_component>
         <module_component name="hybridkaptonbottom" material="Kapton" sensitive="false" width="EndcapTOF_Module_width" length="EndcapTOF_Module_length" thickness="EndcapTOF_Hybrid_thickness" vis="TOFHybridVis" >
           <position x="EndcapTOF_Service_position" y="0" z="0" />
@@ -269,7 +303,38 @@
         <module_component name="hybridkaptontop" material="Kapton" sensitive="false" width="EndcapTOF_Module_width" length="EndcapTOF_Module_length" thickness="EndcapTOF_Hybrid_thickness" vis="TOFHybridVis" >
           <position x="EndcapTOF_Service_position" y="0" z="0" />
         </module_component>
-      </moduleBack>
+      </moduleBackRight>
+
+      <moduleBackLeft name="EndcapTOF_Module1" vis="TOFEndcapModuleVis">
+	<module_component name="carbonsupport" material="CarbonFiber" sensitive="false" width="EndcapTOF_Module_width" length="EndcapTOF_Module_length" thickness="EndcapTOF_CFSupp_thickness" vis="AnlGray" >
+          <position x="EndcapTOF_Support_position" y="0" z="0" />
+        </module_component>
+        <module_component name="sensor1" material="Silicon" sensitive="true" width="EndcapTOF_Sensor_width" length="EndcapTOF_Sensor_length" thickness="EndcapTOF_Sensor_thickness" vis="TOFSensorVis"  keep_layer="true">
+          <position x="EndcapTOF_Up_Sensor_position" y="0.5*(EndcapTOF_Sensor_length + EndcapTOF_Sensor_gap)" z="0"/>
+        </module_component>
+        <module_component name="sensor2" material="Silicon" sensitive="true" width="EndcapTOF_Sensor_width" length="EndcapTOF_Sensor_length" thickness="EndcapTOF_Sensor_thickness" vis="TOFSensorVis"  keep_layer="true">
+          <position x="EndcapTOF_Up_Sensor_position" y="-0.5*(EndcapTOF_Sensor_length + EndcapTOF_Sensor_gap)" z="0"/>
+        </module_component>
+        <module_component name="sensor3" material="Silicon" sensitive="true" width="EndcapTOF_Sensor_width" length="EndcapTOF_Sensor_length" thickness="EndcapTOF_Sensor_thickness" vis="TOFSensorVis"  keep_layer="true">
+          <position x="EndcapTOF_Up_Sensor_position + EndcapTOF_Sensor_width + EndcapTOF_Sensor_gap " y="0.5*(EndcapTOF_Sensor_length + EndcapTOF_Sensor_gap)" z="0"/>
+        </module_component>
+        <module_component name="sensor4" material="Silicon" sensitive="true" width="EndcapTOF_Sensor_width" length="EndcapTOF_Sensor_length" thickness="EndcapTOF_Sensor_thickness" vis="TOFSensorVis" >
+          <position x="EndcapTOF_Up_Sensor_position + EndcapTOF_Sensor_width + EndcapTOF_Sensor_gap " y="-0.5*(EndcapTOF_Sensor_length + EndcapTOF_Sensor_gap)" z="0" />
+        </module_component>
+        <module_component name="hybridkaptonbottom" material="Kapton" sensitive="false" width="EndcapTOF_Module_width" length="EndcapTOF_Module_length" thickness="EndcapTOF_Hybrid_thickness" vis="TOFHybridVis" >
+          <position x="EndcapTOF_Service_position" y="0" z="0" />
+        </module_component>
+        <module_component name="hybridtraces" material="Copper" sensitive="false" width="EndcapTOF_Module_width" length="EndcapTOF_Module_length" thickness="EndcapTOF_HybridTrace_thickness" vis="TOFCFoamVis" >
+          <position x="EndcapTOF_Service_position" y="0" z="0" />
+        </module_component>
+        <module_component name="hybridPCB" material="Fr4" sensitive="false" width="EndcapTOF_Module_width" length="EndcapTOF_Module_length" thickness="EndcapTOF_HybridPCB_thickness" vis="AnlGreen" >
+          <position x="EndcapTOF_Service_position" y="0" z="0" />
+        </module_component>
+        <module_component name="hybridkaptontop" material="Kapton" sensitive="false" width="EndcapTOF_Module_width" length="EndcapTOF_Module_length" thickness="EndcapTOF_Hybrid_thickness" vis="TOFHybridVis" >
+          <position x="EndcapTOF_Service_position" y="0" z="0" />
+        </module_component>
+      </moduleBackLeft>
+
       <layer module="EndcapTOF_Module1" id="1">
         <envelope vis="TOF_envelope"
           rmin="ForwardTOFLayer_rmin"
@@ -292,8 +357,8 @@
 	  xoffset="EndcapTOF_Module_length_design/2" />
 
       </support>
-      <sensor_layout_front>
-		<row deadspace="15*mm"/>
+      <sensor_layout_front_left>
+		<row deadspace="15*mm + EndcapTOF_yOffset"/>
 		<row x_offset="EndcapTOF_Board_spacing/2" nsensors="3">
 		  <board nsensors="3"/>
 		</row>
@@ -362,10 +427,10 @@
 		<row x_offset="EndcapTOF_Board_spacing/2" nsensors="3">
 		  <board nsensors="3"/>
 		</row>
-      </sensor_layout_front>
+      </sensor_layout_front_left>
 
-      <sensor_layout_back>
-		<row deadspace="25.5*mm"/>
+      <sensor_layout_front_right>
+		<row deadspace="25.5*mm + EndcapTOF_yOffset"/>
 		<row x_offset="EndcapTOF_Board_spacing/2" nsensors="3">
 		  <board nsensors="3"/>
 		</row>
@@ -432,7 +497,150 @@
 		<row x_offset="EndcapTOF_Board_spacing/2" nsensors="3">
 		  <board nsensors="3"/>
 		</row>
-	</sensor_layout_back>
+	</sensor_layout_front_right>
+
+      <sensor_layout_back_left>
+		<row deadspace="25.5*mm + EndcapTOF_yOffset"/>
+		<row x_offset="EndcapTOF_Board_spacing/2" nsensors="3">
+		  <board nsensors="3"/>
+		</row>
+		<row x_offset="EndcapTOF_Board_spacing/2" nsensors="9">
+		  <board nsensors="6"/>
+		  <board nsensors="3"/>
+		</row>
+		<row x_offset="EndcapTOF_Board_spacing/2" nsensors="10">
+		  <board nsensors="7"/>
+		  <board nsensors="3"/>
+		</row>
+		<row x_offset="EndcapTOF_Board_spacing/2" nsensors="13">
+		  <board nsensors="7"/>
+		  <board nsensors="6"/>
+		</row>
+		<row x_offset="EndcapTOF_Board_spacing/2" nsensors="14">
+		  <board nsensors="7"/>
+		  <board nsensors="7"/>
+		</row>
+		<row x_offset="EndcapTOF_Board_spacing/2" nsensors="14">
+		  <board nsensors="7"/>
+		  <board nsensors="7"/>
+		</row>
+		<row x_offset="8.25*cm" nsensors="14">
+		  <board nsensors="7"/>
+		  <board nsensors="7"/>
+		</row>
+		<row x_offset="10.5*cm + 17*mm" nsensors="13">
+		  <board nsensors="7"/>
+		  <board nsensors="6"/>
+		</row>
+		<row x_offset="10.5*cm + 17*mm" nsensors="13">
+		  <board nsensors="7"/>
+		  <board nsensors="6"/>
+		</row>
+		<row x_offset="10.5*cm + 17*mm" nsensors="13">
+		  <board nsensors="7"/>
+		  <board nsensors="6"/>
+		</row>
+		<row x_offset="EndcapTOF_Board_spacing/2" nsensors="16">
+		  <board nsensors="7"/>
+		  <board nsensors="6"/>
+		  <board nsensors="3"/>
+	        </row>
+		<row x_offset="EndcapTOF_Board_spacing/2" nsensors="14">
+		  <board nsensors="7"/>
+		  <board nsensors="7"/>
+		</row>
+		<row x_offset="EndcapTOF_Board_spacing/2" nsensors="14">
+		  <board nsensors="7"/>
+		  <board nsensors="7"/>
+		</row>
+		<row x_offset="EndcapTOF_Board_spacing/2" nsensors="13">
+		  <board nsensors="7"/>
+		  <board nsensors="6"/>
+		</row>
+		<row x_offset="EndcapTOF_Board_spacing/2" nsensors="10">
+		  <board nsensors="7"/>
+		  <board nsensors="3"/>
+		</row>
+		<row x_offset="EndcapTOF_Board_spacing/2" nsensors="7">
+		  <board nsensors="7"/>
+		</row>
+		<row x_offset="EndcapTOF_Board_spacing/2" nsensors="3">
+		  <board nsensors="3"/>
+		</row>
+	</sensor_layout_back_left>
+
+      <sensor_layout_back_right>
+		<row deadspace="15*mm + EndcapTOF_yOffset"/>
+		<row x_offset="EndcapTOF_Board_spacing/2" nsensors="3">
+		  <board nsensors="3"/>
+		</row>
+		<row x_offset="EndcapTOF_Board_spacing/2" nsensors="9">
+		  <board nsensors="6"/>
+		  <board nsensors="3"/>
+		</row>
+		<row x_offset="EndcapTOF_Board_spacing/2" nsensors="10">
+		  <board nsensors="7"/>
+		  <board nsensors="3"/>
+		</row>
+		<row x_offset="EndcapTOF_Board_spacing/2" nsensors="13">
+		  <board nsensors="7"/>
+		  <board nsensors="6"/>
+		</row>
+		<row x_offset="EndcapTOF_Board_spacing/2" nsensors="14">
+		  <board nsensors="7"/>
+		  <board nsensors="7"/>
+		</row>
+		<row x_offset="EndcapTOF_Board_spacing/2" nsensors="14">
+		  <board nsensors="7"/>
+		  <board nsensors="7"/>
+		</row>
+		<row x_offset="EndcapTOF_Board_spacing/2" nsensors="16">
+		  <board nsensors="7"/>
+		  <board nsensors="6"/>
+		  <board nsensors="3"/>
+		</row>
+		<row x_offset="10.5*cm + 17*mm" nsensors="13">
+		  <board nsensors="7"/>
+		  <board nsensors="6"/>
+		</row>
+		<row x_offset="10.5*cm + 17*mm" nsensors="13">
+		  <board nsensors="7"/>
+		  <board nsensors="6"/>
+		</row>
+		<row x_offset="10.5*cm + 17*mm" nsensors="13">
+		  <board nsensors="7"/>
+		  <board nsensors="6"/>
+		</row>
+		<row x_offset="EndcapTOF_Board_spacing/2" nsensors="16">
+		  <board nsensors="7"/>
+		  <board nsensors="6"/>
+		  <board nsensors="3"/>
+	        </row>
+		<row x_offset="EndcapTOF_Board_spacing/2" nsensors="14">
+		  <board nsensors="7"/>
+		  <board nsensors="7"/>
+		</row>
+		<row x_offset="EndcapTOF_Board_spacing/2" nsensors="14">
+		  <board nsensors="7"/>
+		  <board nsensors="7"/>
+		</row>
+		<row x_offset="EndcapTOF_Board_spacing/2" nsensors="13">
+		  <board nsensors="7"/>
+		  <board nsensors="6"/>
+		</row>
+		<row x_offset="EndcapTOF_Board_spacing/2" nsensors="10">
+		  <board nsensors="7"/>
+		  <board nsensors="3"/>
+		</row>
+		<row x_offset="EndcapTOF_Board_spacing/2" nsensors="9">
+		  <board nsensors="6"/>
+		  <board nsensors="3"/>
+		</row>
+		<row x_offset="EndcapTOF_Board_spacing/2" nsensors="3">
+		  <board nsensors="3"/>
+		</row>
+      </sensor_layout_back_right>
+
 
 
       <modsize
