@@ -238,7 +238,6 @@
         <module_component name="sensor4" material="Silicon" sensitive="true" width="EndcapTOF_Sensor_width" length="EndcapTOF_Sensor_length" thickness="EndcapTOF_Sensor_thickness" vis="TOFSensorVis" >
           <position x="EndcapTOF_Up_Sensor_position + EndcapTOF_Sensor_width + EndcapTOF_Sensor_gap " y="-0.5*(EndcapTOF_Sensor_length + EndcapTOF_Sensor_gap)" z="0" />
         </module_component>
-
 	<module_component name="carbonsupport" material="CarbonFiber" sensitive="false" width="EndcapTOF_Module_width" length="EndcapTOF_Module_length" thickness="EndcapTOF_CFSupp_thickness" vis="AnlGray" >
           <position x="EndcapTOF_Support_position" y="0" z="0" />
         </module_component>
@@ -341,8 +340,8 @@
           rmax="ForwardTOFLayer_rmax"
           length="3*cm"
           zstart="ForwardTOF_zmin"
-	  xoffset="EndcapTOF_Module_length_design/2"
-	/>
+          xoffset="EndcapTOF_Module_length_design/2"
+        />
         <layer_material surface="inner" binning="binPhi,binR" bins0="30" bins1="30"/>
         <layer_material surface="outer" binning="binPhi,binR" bins0="30" bins1="30"/>
         <y_layout dr="0.0*mm" z0="EndcapTOF_zOffset" nz="EndcapTOF_Module_nz"/>
@@ -354,7 +353,7 @@
           rmax="ForwardTOFLayer_rmax"
           length="12*mm"
           zstart="ForwardTOF_zmin"
-	  xoffset="EndcapTOF_Module_length_design/2" />
+          xoffset="EndcapTOF_Module_length_design/2" />
 
       </support>
       <sensor_layout_front_left>
@@ -640,8 +639,6 @@
 		  <board nsensors="3"/>
 		</row>
       </sensor_layout_back_right>
-
-
 
       <modsize
           width="EndcapTOF_Module_width"

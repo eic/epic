@@ -59,7 +59,7 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
   int lay_id          = x_layer.id();
   string l_nam        = x_layer.moduleStr();
   string lay_nam      = det_name + _toString(x_layer.id(), "_layer%d");
-  Tube lay_tub(envelope.rmin(), envelope.rmax(), envelope.length()/ 2.0);
+  Tube lay_tub(envelope.rmin(), envelope.rmax(), envelope.length() / 2.0);
   Volume lay_vol(lay_nam, lay_tub, air); // Create the layer envelope volume.
   zPos = envelope.zstart();
   Position lay_pos(0, 0, 0);
@@ -85,7 +85,7 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
   double module_y       = x_modsz.width();
   double module_overlap = getAttrOrDefault(x_modsz, _Unicode(overlap), 0.); // x_modsz.overlap();
   double module_spacing = getAttrOrDefault(x_modsz, _Unicode(spacing), 0.); // x_modsz.overlap();
-  double board_gap  = getAttrOrDefault(x_modsz, _Unicode(board_gap), 0.);
+  double board_gap      = getAttrOrDefault(x_modsz, _Unicode(board_gap), 0.);
 
   //! Add support structure
   xml_comp_t x_supp          = x_det.child(_Unicode(support));
