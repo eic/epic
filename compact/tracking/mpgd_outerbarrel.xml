@@ -59,7 +59,7 @@
     <module name="MPGDOuterBarrelModule" vis="TrackerVis">
 
         <module_component name="DriftGap"
-               material="Ar"
+               material="Ar90IsoButane"
                sensitive="true"
                width="MPGDOuterBarrelModule_width"
                thickness="MPGDOuterBarrelDriftGap_thickness"
@@ -67,7 +67,7 @@
                length="MPGDOuterBarrelModule_length"/>
 
         <module_component name="WindowGasGap"
-               material="Ar"
+               material="Ar90IsoButane"
                sensitive="false"
                width="MPGDOuterBarrelModule_width"
                thickness="MPGDOuterBarrelWindowGap_thickness"

@@ -75,8 +75,8 @@
         <module name="BackwardModule1" vis="MPGDModuleVis">
           <trd x1="BackwardMPGDMod1_x1/2.0" x2="BackwardMPGDMod1_x2/2.0" z="BackwardMPGDMod1_y/2"/>
           <comment> Window and drift region </comment>
-          <module_component thickness="BackwardMPGDDriftGap_thickness" material="Ar" sensitive="true" vis="MPGDVis"/>
-          <module_component thickness="BackwardMPGDWindowGap_thickness" material="Ar" sensitive="false" vis="MPGDVis"/>
+          <module_component thickness="BackwardMPGDDriftGap_thickness" material="Ar90IsoButane" sensitive="true" vis="MPGDVis"/>
+          <module_component thickness="BackwardMPGDWindowGap_thickness" material="Ar90IsoButane" sensitive="false" vis="MPGDVis"/>
           <module_component thickness="BackwardMPGDWindow_thickness" material="Kapton" sensitive="false" vis="MPGDVis"/>
           <comment> HV Cathode </comment>
           <module_component name="Cathode Kapton" thickness="BackwardMPGDFoilKapton_thickness" material="Kapton" sensitive="false" vis="MPGDVis"/>
@@ -94,8 +94,8 @@
         <module name="BackwardModule2" vis="MPGDModuleVis">
           <trd x1="BackwardMPGDMod2_x1/2.0" x2="BackwardMPGDMod2_x2/2.0" z="BackwardMPGDMod2_y/2"/>
           <comment> Window and drift region </comment>
-          <module_component thickness="BackwardMPGDDriftGap_thickness" material="Ar" sensitive="true" vis="MPGDVis"/>
-          <module_component thickness="BackwardMPGDWindowGap_thickness" material="Ar" sensitive="false" vis="MPGDVis"/>
+          <module_component thickness="BackwardMPGDDriftGap_thickness" material="Ar90IsoButane" sensitive="true" vis="MPGDVis"/>
+          <module_component thickness="BackwardMPGDWindowGap_thickness" material="Ar90IsoButane" sensitive="false" vis="MPGDVis"/>
           <module_component thickness="BackwardMPGDWindow_thickness" material="Kapton" sensitive="false" vis="MPGDVis"/>
           <comment> HV Cathode </comment>
           <module_component name="Cathode Kapton" thickness="BackwardMPGDFoilKapton_thickness" material="Kapton" sensitive="false" vis="MPGDVis"/>
