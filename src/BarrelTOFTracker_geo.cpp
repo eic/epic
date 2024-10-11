@@ -136,7 +136,8 @@ static Ref_t create_TOFBarrel(Detector& description, xml_h e, SensitiveDetector 
     // Compute module total thickness from components
     xml_coll_t ci(x_mod, _U(module_component));
     for (ci.reset(), total_thickness = 0.0; ci; ++ci) {
-      total_thickness += xml_comp_t(ci).thickness();
+      if(!getAttrOrDefault<bool>(xml_comp_t(ci), _Unicode(keep_layer), false))
+        total_thickness += xml_comp_t(ci).thickness();
     }
     // the module assembly volume
     Assembly m_vol(m_nam);
@@ -272,6 +273,8 @@ static Ref_t create_TOFBarrel(Detector& description, xml_h e, SensitiveDetector 
       double width = x_comp.width();
       double length = x_comp.length();
       double thickness = x_comp.thickness();
+      bool keep_layer = getAttrOrDefault<bool>(x_comp, _Unicode(keep_layer), false);
+
 
       if (x_comp.hasChild(_Unicode(GridSensors))) {
         auto x_comp_t = x_comp.child(_Unicode(GridSensors));
@@ -320,7 +323,7 @@ static Ref_t create_TOFBarrel(Detector& description, xml_h e, SensitiveDetector 
             make_box(width, sensor_length, thickness, 
 		     current_x, current_y, start_z, 
 		     rot_x, rot_y, rot_z,
-                     ((nx == nsensors_x - 1) && (ny == nsensors_y - 1))); // all sensors are located at the same z-layer
+                     (((nx == nsensors_x - 1) && (ny == nsensors_y - 1))) && !keep_layer); // all sensors are located at the same z-layer
             // increment z-layers only at the end, after the last sensor is added
             current_y += tmp_sensors_ydist;
             if (ny + 1 == ny_before_ring)
@@ -329,7 +332,7 @@ static Ref_t create_TOFBarrel(Detector& description, xml_h e, SensitiveDetector 
           current_x += sensors_xdist;
         }
       } else
-        make_box(width, length, thickness, pos_x, pos_y, pos_z, rot_x, rot_y, rot_z);
+        make_box(width, length, thickness, pos_x, pos_y, pos_z, rot_x, rot_y, rot_z, !keep_layer);
     }
   }
 
