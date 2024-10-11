@@ -77,6 +77,7 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
   }
 
   auto pv_assembly = description.worldVolume().placeVolume(assembly, Position(0.0, 0.0, 0.0));
+  pv_assembly.addPhysVolID("system", det_id);
   sdet.setPlacement(pv_assembly);
 
   return sdet;

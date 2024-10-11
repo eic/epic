@@ -58,6 +58,14 @@
         name="Pipe_in_Q4eR_tracker"/>
 
     </detector>
+
+    <detector
+        type="BeamPipeStop"
+        name="Backwards_Pipe_Stop"
+        grandmother="Pipe_Q3eR_to_B7eR"
+        mother="Pipe_Q4eR_to_B3eR_vacuum"
+    />
+
   </detectors>
 
   <readouts>
