@@ -307,13 +307,13 @@ static Ref_t create_TOFBarrel(Detector& description, xml_h e, SensitiveDetector 
 	    double tmp_sensors_ydist = sensors_ydist;
 	    // when we draw half a sensor, the center has to be shifted by 0.25 times the length of a sensor
 	    // distance between centers to the next sensor also has to be reduced by 0.25 times the length of a sensor
-	    if(half_length_str == "left" && ny == 0) {
+	    if((half_length_str == "left" || half_length_str == "both") && ny == 0) {
               sensor_length = 0.5*length;
 	      current_y += 0.25*length;
 	      tmp_sensors_ydist -= 0.25*length;
 	    }
 	    // same idea, but when you are drawing to the right, the right sensor center has to move in -y direction
-	    if(half_length_str == "right" && ny == nsensors_y-1) {
+	    if((half_length_str == "right" || half_length_str == "both") && ny == nsensors_y-1) {
               sensor_length = 0.5*length;
 	      current_y -= 0.25*length;
 	    }

@@ -73,8 +73,11 @@
     <constant name="BarrelTOF_Sensor_length"       value="2*cm"/>
     <constant name="BarrelTOF_Sensor_overlap"      value="1*mm"/>
     <constant name="BarrelTOF_Sensor_deadspaceY"   value="2*cm - BarrelTOF_Sensor_overlap"/>
-    <constant name="BarrelTOF1_Sensor_amount"      value="32"/>
-    <constant name="BarrelTOF2_Sensor_amount"      value="32"/>
+    <constant name="BarrelTOF1_Sensor_amount"      value="33"/>
+    <constant name="BarrelTOF1_Sensor_amount_back" value="33"/>
+    <constant name="BarrelTOF2_Sensor_amount"      value="41"/>
+    <constant name="BarrelTOF2_Sensor_amount_back" value="40"/>
+
 
   </define>
 
@@ -124,7 +127,7 @@
           <position x="BarrelTOF_Service_position" y="0" z="0" />
         </module_component>
         <module_component name="sensorBack" material="Silicon" sensitive="true" width="BarrelTOF_Sensor_width" length="BarrelTOF_Sensor_length" thickness="0.5*BarrelTOF_Sensor_thickness" vis="TOFSensorVis" >
-		<GridSensors start_x="BarrelTOF_Sensor_position" start_y="-0.5*BarrelTOF1_length+BarrelTOF_Sensor_length" start_z="0" xdist="0" ydist="BarrelTOF_Sensor_length+BarrelTOF_Sensor_deadspaceY" nx="1" ny="BarrelTOF1_Sensor_amount"/>
+		<GridSensors start_x="BarrelTOF_Sensor_position" start_y="-0.5*BarrelTOF1_length+BarrelTOF_Sensor_length" start_z="0" xdist="0" ydist="BarrelTOF_Sensor_length+BarrelTOF_Sensor_deadspaceY" nx="1" ny="BarrelTOF1_Sensor_amount_back" half_length="right"/>
         </module_component>
 
       </module>
@@ -139,7 +142,7 @@
         <rphi_layout phi_tilt="BarrelTOF_Module_tiltangle" nphi="BarrelTOF_Module_nphi" phi0="0.0" rc="BarrelTOF_radius" dr="0.0*mm"/>
         <z_layout dr="0.0*mm" z0="0" nz="BarrelTOF_Module_nz"/>
       </layer>
-      <comment>
+<comment>
       <support name="support_ring"
 	material="CarbonFiber"
 	rmin="BarrelTOF_rmin" 
@@ -147,11 +150,10 @@
 	thickness="BarrelTOF_rmax - BarrelTOF_rmin"
 	length="-BarrelTOF1_zmax-BarrelTOF2_zmin"
       />
-      </comment>
-
+</comment>
       <module name="BarrelTOF_Module2" vis="TOFBarrelModuleVis">
         <module_component name="sensorFront" material="Silicon" sensitive="true" width="BarrelTOF_Sensor_width" length="BarrelTOF_Sensor_length" thickness="0.5*BarrelTOF_Sensor_thickness" vis="TOFSensorVis" >
-		<GridSensors start_x="BarrelTOF_Sensor_position" start_y="0.5*BarrelTOF2_length-(BarrelTOF2_Sensor_amount-1)*(BarrelTOF_Sensor_length+BarrelTOF_Sensor_deadspaceY)" start_z="0" xdist="0" ydist="BarrelTOF_Sensor_length+BarrelTOF_Sensor_deadspaceY" nx="1" ny="BarrelTOF2_Sensor_amount" half_length="right"/>
+		<GridSensors start_x="BarrelTOF_Sensor_position" start_y="0.5*BarrelTOF2_length-(BarrelTOF2_Sensor_amount-1)*(BarrelTOF_Sensor_length+BarrelTOF_Sensor_deadspaceY)" start_z="0" xdist="0" ydist="BarrelTOF_Sensor_length+BarrelTOF_Sensor_deadspaceY" nx="1" ny="BarrelTOF2_Sensor_amount" half_length="both"/>
         </module_component>
         <module_component name="hybridtop" material="Kapton" sensitive="false" width="BarrelTOF_Module_width" length="BarrelTOF2_length" thickness="BarrelTOF_Hybrid_thickness" vis="TOFHybridVis" >
           <position x="BarrelTOF_Service_position" y="0" z="0" />
@@ -172,11 +174,11 @@
         <module_component name="cfskinbottom" material="CFRPMix2" sensitive="false" width="BarrelTOF_Module_width" length="BarrelTOF2_length" thickness="BarrelTOF_CFSkin_thickness" vis="TOFCSkinVis" >
           <position x="BarrelTOF_Service_position" y="0" z="0" />
         </module_component>
-        <module_component name="hybridbottom" material="Kapton" sensitive="false" width="BarrelTOF_Module_width" length="BarrelTOF2_length" thickness="BarrelTOF_Hybrid_thickness" vis="TOFHybridVis" >
+        <module_component name="hybridbottom" material="Kapton" sensitive="false" width="BarrelTOF_Module_width" length="0.5*BarrelTOF2_length" thickness="BarrelTOF_Hybrid_thickness" vis="TOFHybridVis" >
           <position x="BarrelTOF_Service_position" y="0" z="0" />
         </module_component>
         <module_component name="sensorBack" material="Silicon" sensitive="true" width="BarrelTOF_Sensor_width" length="BarrelTOF_Sensor_length" thickness="0.5*BarrelTOF_Sensor_thickness" vis="TOFSensorVis" >
-		<GridSensors start_x="BarrelTOF_Sensor_position" start_y="0.5*BarrelTOF2_length-(BarrelTOF2_Sensor_amount-1)*(BarrelTOF_Sensor_length+BarrelTOF_Sensor_deadspaceY)-BarrelTOF_Sensor_length" start_z="0" xdist="0" ydist="BarrelTOF_Sensor_length+BarrelTOF_Sensor_deadspaceY" nx="1" ny="BarrelTOF2_Sensor_amount"/>
+		<GridSensors start_x="BarrelTOF_Sensor_position" start_y="0.5*BarrelTOF2_length-(BarrelTOF2_Sensor_amount_back-1)*(BarrelTOF_Sensor_length+BarrelTOF_Sensor_deadspaceY)-BarrelTOF_Sensor_length" start_z="0" xdist="0" ydist="BarrelTOF_Sensor_length+BarrelTOF_Sensor_deadspaceY" nx="1" ny="BarrelTOF2_Sensor_amount_back"/>
         </module_component>
 
       </module>
@@ -191,7 +193,6 @@
         <rphi_layout phi_tilt="BarrelTOF_Module_tiltangle" nphi="BarrelTOF_Module_nphi" phi0="0.0" rc="BarrelTOF_radius" dr="0.0*mm"/>
         <z_layout dr="0.0*mm" z0="0" nz="BarrelTOF_Module_nz"/>
       </layer>
-
 
     </detector>
   </detectors>
