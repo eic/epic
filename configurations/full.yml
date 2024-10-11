@@ -12,7 +12,7 @@ features:
     mpgd_forward_endcap:
     mpgd_backward_endcap:
     silicon_disks:
-    tof_barrel_double_sided:
+    tof_barrel:
     tof_endcap:
   pid:
     dirc:
