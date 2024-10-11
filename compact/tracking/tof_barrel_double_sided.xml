@@ -107,17 +107,15 @@
         <module_component name="cfskintop" material="CFRPMix2" sensitive="false" width="BarrelTOF_Module_width" length="BarrelTOF1_length" thickness="BarrelTOF_CFSkin_thickness" vis="TOFCSkinVis" >
           <position x="BarrelTOF_Service_position" y="0" z="0" />
         </module_component>
-        <module_component name="coolingtube" material="Aluminum" sensitive="false" width="BarrelTOF_CoolingTube_width" length="BarrelTOF1_length" thickness="BarrelTOF_CoolingTube_thickness" vis="TOFCoolingTubeVis" >
-          <position x="BarrelTOF_CoolingTube_position" y="0" z="0" />
-        </module_component>
-        <module_component name="coolant" material="NOVEC7200" sensitive="false" width="BarrelTOF_Coolant_width" length="BarrelTOF1_length" thickness="BarrelTOF_Coolant_thickness" vis="TOFCoolantVis" >
-          <position x="BarrelTOF_Coolant_position" y="0" z="0" />
-        </module_component>
-        <module_component name="cfoam" material="CarbonFoam" sensitive="false" width="BarrelTOF_CFoam_width" length="BarrelTOF1_length" thickness="BarrelTOF_CFoam_thickness" vis="TOFCFoamVis" >
+        <module_component name="cfoam" material="CarbonFoam" sensitive="false" width="BarrelTOF_CFoam_width" length="BarrelTOF1_length" thickness="BarrelTOF_CFoam_thickness" vis="TOFCFoamVis" coolingTube="true">
           <position x="BarrelTOF_CFoam_position" y="0" z="0" />
+	  <inner_tube name="cooling_tube" material="Aluminum" rmin="0.2*BarrelTOF_CFoam_thickness" rmax="0.24*BarrelTOF_CFoam_thickness"/>
+	  <inner_tube name="coolant" material="NOVEC7200" rmin="0" rmax="0.2*BarrelTOF_CFoam_thickness" vis="TOFWater"/>
         </module_component>
         <module_component name="choneycomb" material="CFRPMix" sensitive="false" width="BarrelTOF_CHoneycomb_width" length="BarrelTOF1_length" thickness="BarrelTOF_CHoneycomb_thickness" vis="TOFCHoneycombVis" >
           <position x="BarrelTOF_CHoneycomb_position" y="0" z="-1*BarrelTOF_CFoam_thickness" />
+	  <inner_tube name="cooling_tube" material="Aluminum" rmin="0.2*BarrelTOF_CHoneycomb_thickness" rmax="0.24*BarrelTOF_CHoneycomb_thickness"/>
+	  <inner_tube name="coolant" material="NOVEC7200" rmin="0" rmax="0.2*BarrelTOF_CHoneycomb_thickness" vis="TOFWater"/>
         </module_component>
         <module_component name="cfskinbottom" material="CFRPMix2" sensitive="false" width="BarrelTOF_Module_width" length="BarrelTOF1_length" thickness="BarrelTOF_CFSkin_thickness" vis="TOFCSkinVis" >
           <position x="BarrelTOF_Service_position" y="0" z="0" />
@@ -161,17 +159,15 @@
         <module_component name="cfskintop" material="CFRPMix2" sensitive="false" width="BarrelTOF_Module_width" length="BarrelTOF2_length" thickness="BarrelTOF_CFSkin_thickness" vis="TOFCSkinVis" >
           <position x="BarrelTOF_Service_position" y="0" z="0" />
         </module_component>
-        <module_component name="coolingtube" material="Aluminum" sensitive="false" width="BarrelTOF_CoolingTube_width" length="BarrelTOF2_length" thickness="BarrelTOF_CoolingTube_thickness" vis="TOFCoolingTubeVis" >
-          <position x="BarrelTOF_CoolingTube_position" y="0" z="0" />
-        </module_component>
-        <module_component name="coolant" material="NOVEC7200" sensitive="false" width="BarrelTOF_Coolant_width" length="BarrelTOF2_length" thickness="BarrelTOF_Coolant_thickness" vis="TOFCoolantVis" >
-          <position x="BarrelTOF_Coolant_position" y="0" z="0" />
-        </module_component>
         <module_component name="cfoam" material="CarbonFoam" sensitive="false" width="BarrelTOF_CFoam_width" length="BarrelTOF2_length" thickness="BarrelTOF_CFoam_thickness" vis="TOFCFoamVis" >
           <position x="BarrelTOF_CFoam_position" y="0" z="0" />
+	  <inner_tube name="cooling_tube" material="Aluminum" rmin="0.2*BarrelTOF_CFoam_thickness" rmax="0.24*BarrelTOF_CFoam_thickness"/>
+	  <inner_tube name="coolant" material="NOVEC7200" rmin="0" rmax="0.2*BarrelTOF_CFoam_thickness" vis="TOFWater"/>
         </module_component>
         <module_component name="choneycomb" material="CFRPMix" sensitive="false" width="BarrelTOF_CHoneycomb_width" length="BarrelTOF2_length" thickness="BarrelTOF_CHoneycomb_thickness" vis="TOFCHoneycombVis" >
           <position x="BarrelTOF_CHoneycomb_position" y="0" z="-1*BarrelTOF_CFoam_thickness" />
+	  <inner_tube name="cooling_tube" material="Aluminum" rmin="0.2*BarrelTOF_CHoneycomb_thickness" rmax="0.24*BarrelTOF_CHoneycomb_thickness"/>
+	  <inner_tube name="coolant" material="NOVEC7200" rmin="0" rmax="0.2*BarrelTOF_CHoneycomb_thickness" vis="TOFWater"/>
         </module_component>
         <module_component name="cfskinbottom" material="CFRPMix2" sensitive="false" width="BarrelTOF_Module_width" length="BarrelTOF2_length" thickness="BarrelTOF_CFSkin_thickness" vis="TOFCSkinVis" >
           <position x="BarrelTOF_Service_position" y="0" z="0" />

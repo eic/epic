@@ -177,17 +177,45 @@ static Ref_t create_TOFBarrel(Detector& description, xml_h e, SensitiveDetector 
       auto make_box = [&](double width, double length, double thickness, 
 		          double pos_x = 0, double pos_y = 0, double pos_z = 0, 
 			  double rot_x = 0, double rot_y = 0, double rot_z = 0, bool z_stacking = true) {
+        // Utility variable for the relative z-offset based off the previous components
+        const double zoff = thickness_sum + thickness / 2.0;
+
         const string c_nam = _toString(ncomponents, "component%d");
         ++ncomponents;
         Box c_box(width / 2, length / 2, thickness / 2);
-        Volume c_vol(c_nam, c_box, description.material(x_comp.materialStr()));
+        Volume c_vol;
+	
+        xml_coll_t ci(x_comp, _Unicode(inner_tube));
+	if(ci) {
+	  double max_r = 0;
+          for (; ci; ++ci) {
+            // fill the hole with tube
+	    xml_comp_t ct = ci;
+	    max_r = std::max(max_r, ct.rmax());
+       	    Tube c_tube(ct.rmin(), ct.rmax(), length / 2);
+            Volume c_tubevol(c_nam + ct.nameStr(), c_tube, description.material(ct.materialStr()));
+	    if(ct.visStr() != "") c_tubevol.setVisAttributes(description, ct.visStr());
+            m_vol.placeVolume(c_tubevol, Transform3D(RotationZYX(0, 0, -M_PI / 2),
+                                                        Position(pos_x, pos_y, pos_z + zoff)));
+	  }
 
-        // Utility variable for the relative z-offset based off the previous components
-        const double zoff = thickness_sum + thickness / 2.0;
+          Tube c_fbox(0, max_r, length / 2 + 1);
+	  SubtractionSolid c_sbox(c_box, c_fbox, Transform3D(RotationZYX(0, 0, -M_PI / 2),
+                                                  Position(0, 0, 0)));//pos_x, pos_y, pos_z + zoff)));
+
+          c_vol = Volume(c_nam, c_sbox, description.material(x_comp.materialStr()));
+	} else c_vol = Volume(c_nam, c_box, description.material(x_comp.materialStr()));
+
+	Volume test;
+	test = c_vol;
+
+
 	// center if off by half the box length if box length is cut in half
         Position c_pos(pos_x, pos_y, pos_z + zoff);
         RotationZYX c_rot(rot_z, rot_y, rot_x);
         pv = m_vol.placeVolume(c_vol, Transform3D(c_rot, c_pos));
+
+
         c_vol.setRegion(description, x_comp.regionStr());
         c_vol.setLimitSet(description, x_comp.limitsStr());
         c_vol.setVisAttributes(description, x_comp.visStr());
