@@ -64,8 +64,8 @@
     <constant name="BarrelTOF_rmin"                value="BarrelTOF_radius-BarrelTOF_rOffset1"/>
     <constant name="BarrelTOF_rmax"                value="BarrelTOF_radius+BarrelTOF_rOffset2"/>
     <constant name="BarrelTOF_zoffset"             value="0.5*(BarrelTOF2_zmax - BarrelTOF1_zmin)"/>
-    <constant name="BarrelTOF2_zoffset"            value="0.5*(BarrelTOF1_zmax - BarrelTOF1_zmin - BarrelTOF_zoffset)"/>
-    <constant name="BarrelTOF1_zoffset"            value="0.5*(BarrelTOF2_zmax - BarrelTOF2_zmin - BarrelTOF_zoffset)"/>
+    <constant name="BarrelTOF1_zoffset"            value="BarrelTOF_zoffset - 0.5*(BarrelTOF1_zmax - BarrelTOF1_zmin)"/>
+    <constant name="BarrelTOF2_zoffset"            value="BarrelTOF_zoffset - 0.5*(BarrelTOF2_zmax - BarrelTOF2_zmin)"/>
     <constant name="BarrelTOF1_length"             value="BarrelTOF1_zmin + BarrelTOF1_zmax"/>
     <constant name="BarrelTOF2_length"             value="BarrelTOF2_zmin + BarrelTOF2_zmax"/>
     <constant name="BarrelTOF_length"              value="BarrelTOF1_zmin + BarrelTOF2_zmax"/>
