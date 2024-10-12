@@ -136,7 +136,7 @@ static Ref_t create_TOFBarrel(Detector& description, xml_h e, SensitiveDetector 
     // Compute module total thickness from components
     xml_coll_t ci(x_mod, _U(module_component));
     for (ci.reset(), total_thickness = 0.0; ci; ++ci) {
-      if(!getAttrOrDefault<bool>(xml_comp_t(ci), _Unicode(keep_layer), false))
+      if (!getAttrOrDefault<bool>(xml_comp_t(ci), _Unicode(keep_layer), false))
         total_thickness += xml_comp_t(ci).thickness();
     }
     // the module assembly volume
@@ -175,9 +175,9 @@ static Ref_t create_TOFBarrel(Detector& description, xml_h e, SensitiveDetector 
       xml_comp_t x_comp = mci;
       xml_comp_t x_pos  = x_comp.position(false);
       xml_comp_t x_rot  = x_comp.rotation(false);
-      auto make_box = [&](double width, double length, double thickness, 
-		          double pos_x = 0, double pos_y = 0, double pos_z = 0, 
-			  double rot_x = 0, double rot_y = 0, double rot_z = 0, bool z_stacking = true) {
+      auto make_box     = [&](double width, double length, double thickness, double pos_x = 0,
+                          double pos_y = 0, double pos_z = 0, double rot_x = 0, double rot_y = 0,
+                          double rot_z = 0, bool z_stacking = true) {
         // Utility variable for the relative z-offset based off the previous components
         const double zoff = thickness_sum + thickness / 2.0;
 
@@ -185,37 +185,38 @@ static Ref_t create_TOFBarrel(Detector& description, xml_h e, SensitiveDetector 
         ++ncomponents;
         Box c_box(width / 2, length / 2, thickness / 2);
         Volume c_vol;
-	
+
         xml_coll_t ci(x_comp, _Unicode(inner_tube));
-	if(ci) {
-	  double max_r = 0;
+        if (ci) {
+          double max_r = 0;
           for (; ci; ++ci) {
             // fill the hole with tube
-	    xml_comp_t ct = ci;
-	    max_r = std::max(max_r, ct.rmax());
-       	    Tube c_tube(ct.rmin(), ct.rmax(), length / 2);
+            xml_comp_t ct = ci;
+            max_r         = std::max(max_r, ct.rmax());
+            Tube c_tube(ct.rmin(), ct.rmax(), length / 2);
             Volume c_tubevol(c_nam + ct.nameStr(), c_tube, description.material(ct.materialStr()));
-	    if(ct.visStr() != "") c_tubevol.setVisAttributes(description, ct.visStr());
+            if (ct.visStr() != "")
+              c_tubevol.setVisAttributes(description, ct.visStr());
             m_vol.placeVolume(c_tubevol, Transform3D(RotationZYX(0, 0, -M_PI / 2),
-                                                        Position(pos_x, pos_y, pos_z + zoff)));
-	  }
+                                                         Position(pos_x, pos_y, pos_z + zoff)));
+          }
 
           Tube c_fbox(0, max_r, length / 2 + 1);
-	  SubtractionSolid c_sbox(c_box, c_fbox, Transform3D(RotationZYX(0, 0, -M_PI / 2),
-                                                  Position(0, 0, 0)));//pos_x, pos_y, pos_z + zoff)));
+          SubtractionSolid c_sbox(c_box, c_fbox,
+                                      Transform3D(RotationZYX(0, 0, -M_PI / 2),
+                                                  Position(0, 0, 0))); //pos_x, pos_y, pos_z + zoff)));
 
           c_vol = Volume(c_nam, c_sbox, description.material(x_comp.materialStr()));
-	} else c_vol = Volume(c_nam, c_box, description.material(x_comp.materialStr()));
+        } else
+          c_vol = Volume(c_nam, c_box, description.material(x_comp.materialStr()));
 
-	Volume test;
-	test = c_vol;
+        Volume test;
+        test = c_vol;
 
-
-	// center if off by half the box length if box length is cut in half
+        // center if off by half the box length if box length is cut in half
         Position c_pos(pos_x, pos_y, pos_z + zoff);
         RotationZYX c_rot(rot_z, rot_y, rot_x);
         pv = m_vol.placeVolume(c_vol, Transform3D(c_rot, c_pos));
-
 
         c_vol.setRegion(description, x_comp.regionStr());
         c_vol.setLimitSet(description, x_comp.limitsStr());
@@ -225,8 +226,7 @@ static Ref_t create_TOFBarrel(Detector& description, xml_h e, SensitiveDetector 
           c_vol.setSensitiveDetector(sens);
           sensitives[m_nam].push_back(pv);
           module_thicknesses[m_nam] = {thickness_so_far + thickness / 2.0,
-                                       total_thickness - thickness_so_far -
-                                           thickness / 2.0};
+                                       total_thickness - thickness_so_far - thickness / 2.0};
 
           // -------- create a measurement plane for the tracking surface attched to the sensitive volume -----
           Vector3D u(-1., 0., 0.);
@@ -270,11 +270,10 @@ static Ref_t create_TOFBarrel(Detector& description, xml_h e, SensitiveDetector 
         pos_y = x_pos.y(0);
         pos_z = x_pos.z(0);
       }
-      double width = x_comp.width();
-      double length = x_comp.length();
+      double width     = x_comp.width();
+      double length    = x_comp.length();
       double thickness = x_comp.thickness();
-      bool keep_layer = getAttrOrDefault<bool>(x_comp, _Unicode(keep_layer), false);
-
+      bool keep_layer  = getAttrOrDefault<bool>(x_comp, _Unicode(keep_layer), false);
 
       if (x_comp.hasChild(_Unicode(GridSensors))) {
         auto x_comp_t = x_comp.child(_Unicode(GridSensors));
@@ -299,31 +298,31 @@ static Ref_t create_TOFBarrel(Detector& description, xml_h e, SensitiveDetector 
         //   |<xcomp.width()>|   |<xcomp.width()>|                                   |<xcomp.width()>|
         //   ring_extra_width is the extra width between boundaries of the sensor boundaries (including dead space)
         double ring_extra_width = getAttrOrDefault<double>(x_comp_t, _Unicode(ring_extra_width), 0);
-	auto half_length_str = getAttrOrDefault<std::string>(x_comp_t, _Unicode(half_length), "none");
-
+        auto half_length_str =
+            getAttrOrDefault<std::string>(x_comp_t, _Unicode(half_length), "none");
 
         double current_x = start_x;
         for (int nx = 0; nx < nsensors_x; ++nx) {
           double current_y = start_y;
           for (int ny = 0; ny < nsensors_y; ++ny) {
-            double sensor_length = length;
-	    double tmp_sensors_ydist = sensors_ydist;
-	    // when we draw half a sensor, the center has to be shifted by 0.25 times the length of a sensor
-	    // distance between centers to the next sensor also has to be reduced by 0.25 times the length of a sensor
-	    if((half_length_str == "left" || half_length_str == "both") && ny == 0) {
-              sensor_length = 0.5*length;
-	      current_y += 0.25*length;
-	      tmp_sensors_ydist -= 0.25*length;
-	    }
-	    // same idea, but when you are drawing to the right, the right sensor center has to move in -y direction
-	    if((half_length_str == "right" || half_length_str == "both") && ny == nsensors_y-1) {
-              sensor_length = 0.5*length;
-	      current_y -= 0.25*length;
-	    }
-            make_box(width, sensor_length, thickness, 
-		     current_x, current_y, start_z, 
-		     rot_x, rot_y, rot_z,
-                     (((nx == nsensors_x - 1) && (ny == nsensors_y - 1))) && !keep_layer); // all sensors are located at the same z-layer
+            double sensor_length     = length;
+            double tmp_sensors_ydist = sensors_ydist;
+            // when we draw half a sensor, the center has to be shifted by 0.25 times the length of a sensor
+            // distance between centers to the next sensor also has to be reduced by 0.25 times the length of a sensor
+            if ((half_length_str == "left" || half_length_str == "both") && ny == 0) {
+              sensor_length = 0.5 * length;
+              current_y += 0.25 * length;
+              tmp_sensors_ydist -= 0.25 * length;
+            }
+            // same idea, but when you are drawing to the right, the right sensor center has to move in -y direction
+            if ((half_length_str == "right" || half_length_str == "both") && ny == nsensors_y - 1) {
+              sensor_length = 0.5 * length;
+              current_y -= 0.25 * length;
+            }
+            make_box(width, sensor_length, thickness, current_x, current_y, start_z, rot_x, rot_y,
+                     rot_z,
+                     (((nx == nsensors_x - 1) && (ny == nsensors_y - 1))) &&
+                         !keep_layer); // all sensors are located at the same z-layer
             // increment z-layers only at the end, after the last sensor is added
             current_y += tmp_sensors_ydist;
             if (ny + 1 == ny_before_ring)

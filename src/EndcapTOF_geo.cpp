@@ -92,85 +92,88 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
   xml_comp_t x_supp_envelope = x_supp.child(_Unicode(envelope), false);
 
   xml_comp_t x_modFrontLeft  = x_det.child(_Unicode(moduleFrontLeft));
-  xml_comp_t x_modFrontRight  = x_det.child(_Unicode(moduleFrontRight));
+  xml_comp_t x_modFrontRight = x_det.child(_Unicode(moduleFrontRight));
   xml_comp_t x_modBackLeft   = x_det.child(_Unicode(moduleBackLeft));
-  xml_comp_t x_modBackRight   = x_det.child(_Unicode(moduleBackRight));
+  xml_comp_t x_modBackRight  = x_det.child(_Unicode(moduleBackRight));
 
-  xml_comp_t x_sensor_layout_front_left = x_det.child(_Unicode(sensor_layout_front_left));
-  xml_comp_t x_sensor_layout_back_left = x_det.child(_Unicode(sensor_layout_back_left));
+  xml_comp_t x_sensor_layout_front_left  = x_det.child(_Unicode(sensor_layout_front_left));
+  xml_comp_t x_sensor_layout_back_left   = x_det.child(_Unicode(sensor_layout_back_left));
   xml_comp_t x_sensor_layout_front_right = x_det.child(_Unicode(sensor_layout_front_right));
-  xml_comp_t x_sensor_layout_back_right = x_det.child(_Unicode(sensor_layout_back_right));
+  xml_comp_t x_sensor_layout_back_right  = x_det.child(_Unicode(sensor_layout_back_right));
 
-  for(bool left : std::vector<bool>{true, false}) {
-    for(bool front : std::vector<bool>{true, false}) {
-      int module = (front<<1) + left;
-      float ycoord = envelope.rmax() - module_y/2.; // y-center-coord of the top sensor. Start from the top row
-      int iy = 0;
+  for (bool left : std::vector<bool>{true, false}) {
+    for (bool front : std::vector<bool>{true, false}) {
+      int module   = (front << 1) + left;
+      float ycoord = envelope.rmax() -
+                     module_y / 2.; // y-center-coord of the top sensor. Start from the top row
+      int iy                     = 0;
       xml_comp_t x_sensor_layout = x_sensor_layout_front_left;
-      xml_comp_t x_modCurr = x_modFrontLeft;
+      xml_comp_t x_modCurr       = x_modFrontLeft;
 
-      if(front) {
-        if(left) {
-            x_sensor_layout = x_sensor_layout_front_left;
-	    x_modCurr = x_modFrontLeft;
-	} else {
-            x_sensor_layout = x_sensor_layout_front_right;
-	    x_modCurr = x_modFrontRight;
-	}
+      if (front) {
+        if (left) {
+          x_sensor_layout = x_sensor_layout_front_left;
+          x_modCurr       = x_modFrontLeft;
+        } else {
+          x_sensor_layout = x_sensor_layout_front_right;
+          x_modCurr       = x_modFrontRight;
+        }
       } else {
-        if(left) {
-            x_sensor_layout = x_sensor_layout_back_left;
-	    x_modCurr = x_modBackLeft;
-	} else {
-            x_sensor_layout = x_sensor_layout_back_right;
-	    x_modCurr = x_modBackRight;
-	}
-      } 
+        if (left) {
+          x_sensor_layout = x_sensor_layout_back_left;
+          x_modCurr       = x_modBackLeft;
+        } else {
+          x_sensor_layout = x_sensor_layout_back_right;
+          x_modCurr       = x_modBackRight;
+        }
+      }
 
       double total_thickness = 0;
       // Compute module total thickness from components
       xml_coll_t ci(x_modCurr, _U(module_component));
 
       for (ci.reset(), total_thickness = 0.0; ci; ++ci) {
-        xml_comp_t x_comp = ci;
+        xml_comp_t x_comp    = ci;
         bool keep_same_layer = getAttrOrDefault<bool>(x_comp, _Unicode(keep_layer), false);
-        if(!keep_same_layer) 
+        if (!keep_same_layer)
           total_thickness += x_comp.thickness();
       }
 
-
-      for(xml_coll_t lrow(x_sensor_layout, _Unicode(row)); lrow; ++lrow) {
+      for (xml_coll_t lrow(x_sensor_layout, _Unicode(row)); lrow; ++lrow) {
         xml_comp_t x_row = lrow;
         double deadspace = getAttrOrDefault<double>(x_row, _Unicode(deadspace), 0);
         if (deadspace > 0) {
-           ycoord -= deadspace;
-           continue;
+          ycoord -= deadspace;
+          continue;
         }
         double x_offset = getAttrOrDefault<double>(x_row, _Unicode(x_offset), 0);
-        int nsensors = getAttrOrDefault<int>(x_row, _Unicode(nsensors), 0);
+        int nsensors    = getAttrOrDefault<int>(x_row, _Unicode(nsensors), 0);
 
         // find the sensor id that corrsponds to the rightmost sensor in a board
         // we need to know where to apply additional spaces between neighboring board
         std::unordered_set<int> sensors_id_board_edge;
-        int curr_ix = nsensors; // the first sensor to the right of center has ix of nsensors  
-        for(xml_coll_t lboard(x_row, _Unicode(board)); lboard; ++lboard) {
+        int curr_ix = nsensors; // the first sensor to the right of center has ix of nsensors
+        for (xml_coll_t lboard(x_row, _Unicode(board)); lboard; ++lboard) {
           xml_comp_t x_board = lboard;
           int nboard_sensors = getAttrOrDefault<int>(x_board, _Unicode(nsensors), 1);
           curr_ix += nboard_sensors;
           sensors_id_board_edge.insert(curr_ix);
-          sensors_id_board_edge.insert(2*nsensors - curr_ix - 1); // reflected to sensor id on the left
+          sensors_id_board_edge.insert(2 * nsensors - curr_ix -
+                                       1); // reflected to sensor id on the left
         }
 
-        for (int ix = (left? 0 : nsensors) ; ix < (left? nsensors : 2 * nsensors); ix++) {
+        for (int ix = (left ? 0 : nsensors); ix < (left ? nsensors : 2 * nsensors); ix++) {
           // there is a hole in the middle, with radius = x_offset
-          float xcoord = (ix - nsensors + 0.5) * (module_x + module_spacing) + ((ix - nsensors < 0)? - x_offset : x_offset);
+          float xcoord = (ix - nsensors + 0.5) * (module_x + module_spacing) +
+                         ((ix - nsensors < 0) ? -x_offset : x_offset);
           // add board spacing
-          if(sensors_id_board_edge.find(ix) != sensors_id_board_edge.end())
-            xcoord = (ix - nsensors < 0)? xcoord - board_gap : xcoord + board_gap;
+          if (sensors_id_board_edge.find(ix) != sensors_id_board_edge.end())
+            xcoord = (ix - nsensors < 0) ? xcoord - board_gap : xcoord + board_gap;
           //! Note the module ordering is different for front and back side
 
           double module_z = x_supp_envelope.length() / 2.0 + total_thickness / 2;
-          if(front) module_z *= -1;
+          if (front)
+            module_z *= -1;
 
           string module_name = Form("module%d_%d_%d", module, ix, iy);
           DetElement mod_elt(lay_elt, module_name, module);
@@ -186,7 +189,7 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
           double thickness_so_far     = 0.0;
           double thickness_sum        = -total_thickness / 2.0;
           double thickness_carbonsupp = 0.0;
-          int sensitive_id = 0;
+          int sensitive_id            = 0;
           for (xml_coll_t mci(x_modCurr, _U(module_component)); mci; ++mci, ++ncomponents) {
             xml_comp_t x_comp  = mci;
             xml_comp_t x_pos   = x_comp.position(false);
@@ -241,7 +244,10 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
 
               VolPlane surf(c_vol, type, inner_thickness, outer_thickness, u, v, n);
 
-              DetElement comp_de(mod_elt, std::string("de_") + pv.volume().name() + "_" + std::to_string(sensitive_id), module);
+              DetElement comp_de(mod_elt,
+                                 std::string("de_") + pv.volume().name() + "_" +
+                                     std::to_string(sensitive_id),
+                                 module);
               comp_de.setPlacement(pv);
 
               auto& comp_de_params =
@@ -252,7 +258,7 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
               //--------------------------------------------
             }
             bool keep_same_layer = getAttrOrDefault<bool>(x_comp, _Unicode(keep_layer), false);
-            if(!keep_same_layer) {
+            if (!keep_same_layer) {
               thickness_sum += x_comp.thickness();
               thickness_so_far += x_comp.thickness();
               // apply relative offsets in z-position used to stack components side-by-side
@@ -263,19 +269,19 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
             }
           }
 
-          if(front) {
-              // only draw support bar on one side
-              // if you draw on both sides, they may overlap
-              const string suppb_nam =
-                  Form("suppbar_%d_%d", ix, iy); //_toString(ncomponents, "component%d");
-              Box suppb_box((module_x + module_spacing) / 2, thickness_carbonsupp / 2,
-                            x_supp_envelope.length() / 2);
-              Volume suppb_vol(suppb_nam, suppb_box, carbon);
-              Transform3D trsupp(RotationZYX(0, 0, 0),
-                                 Position(xcoord, ycoord + module_y / 2 - module_overlap / 2, 0));
-              suppb_vol.setVisAttributes(description, "AnlGray");
+          if (front) {
+            // only draw support bar on one side
+            // if you draw on both sides, they may overlap
+            const string suppb_nam =
+                Form("suppbar_%d_%d", ix, iy); //_toString(ncomponents, "component%d");
+            Box suppb_box((module_x + module_spacing) / 2, thickness_carbonsupp / 2,
+                          x_supp_envelope.length() / 2);
+            Volume suppb_vol(suppb_nam, suppb_box, carbon);
+            Transform3D trsupp(RotationZYX(0, 0, 0),
+                               Position(xcoord, ycoord + module_y / 2 - module_overlap / 2, 0));
+            suppb_vol.setVisAttributes(description, "AnlGray");
 
-              pv = lay_vol.placeVolume(suppb_vol, trsupp);
+            pv = lay_vol.placeVolume(suppb_vol, trsupp);
           }
           // module built!
 
