@@ -139,7 +139,7 @@
     <constant name="EndcapTOF_Module_length_design"    value="34.333*mm"/>
     <constant name="EndcapTOF_Module_overlap_design"   value="-1.5*mm"/>
     <constant name="EndcapTOF_Module_spacing_design"   value="0*mm"/>
-    <constant name="EndcapTOF_Board_spacing_design"    value="2*mm"/>
+    <constant name="EndcapTOF_Board_spacing_design"    value="0.2*mm"/>
     <constant name="EndcapTOF_Sensor_width_design"     value="16.4*mm"/>
     <constant name="EndcapTOF_Sensor_y_offset"         value="6*mm"/>
     <constant name="EndcapTOF_Sensor_length_design"    value="16.4*mm"/>
