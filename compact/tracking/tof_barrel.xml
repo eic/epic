@@ -101,17 +101,17 @@
         Tracker Barrel Modules
       </comment>
       <module name="BarrelTOF_Module1" vis="TOFBarrelModuleVis">
-	      <comment>
-		      keep_layer means the next module is located at the same thickness level
-		      so you can place component side by side
-		      Just make sure all components you placed side by side share the same thickness
-	      </comment>
+              <comment>
+                      keep_layer means the next module is located at the same thickness level
+                      so you can place component side by side
+                      Just make sure all components you placed side by side share the same thickness
+              </comment>
         <module_component name="sensorFront" material="Silicon" sensitive="true" width="BarrelTOF_Sensor_width" length="BarrelTOF_Sensor_length" thickness="0.5*BarrelTOF_Sensor_thickness" vis="TOFSensorVis" keep_layer="true">
-		<GridSensors start_x="BarrelTOF_Sensor_position" start_y="-0.5*BarrelTOF1_length + BarrelTOF1_zoffset" start_z="0" xdist="0" ydist="BarrelTOF_Sensor_length+BarrelTOF_Sensor_deadspaceY" nx="1" ny="BarrelTOF1_Sensor_amount" half_length="left"/>
+                <GridSensors start_x="BarrelTOF_Sensor_position" start_y="-0.5*BarrelTOF1_length + BarrelTOF1_zoffset" start_z="0" xdist="0" ydist="BarrelTOF_Sensor_length+BarrelTOF_Sensor_deadspaceY" nx="1" ny="BarrelTOF1_Sensor_amount" half_length="left"/>
         </module_component>
 
         <module_component name="sensorFront" material="Silicon" sensitive="true" width="BarrelTOF_Sensor_width" length="BarrelTOF_Sensor_length" thickness="0.5*BarrelTOF_Sensor_thickness" vis="TOFSensorVis" >
-		<GridSensors start_x="BarrelTOF_Sensor_position" start_y="0.5*BarrelTOF2_length-(BarrelTOF2_Sensor_amount-1)*(BarrelTOF_Sensor_length+BarrelTOF_Sensor_deadspaceY)+BarrelTOF2_zoffset" start_z="0" xdist="0" ydist="BarrelTOF_Sensor_length+BarrelTOF_Sensor_deadspaceY" nx="1" ny="BarrelTOF2_Sensor_amount" half_length="both"/>
+                <GridSensors start_x="BarrelTOF_Sensor_position" start_y="0.5*BarrelTOF2_length-(BarrelTOF2_Sensor_amount-1)*(BarrelTOF_Sensor_length+BarrelTOF_Sensor_deadspaceY)+BarrelTOF2_zoffset" start_z="0" xdist="0" ydist="BarrelTOF_Sensor_length+BarrelTOF_Sensor_deadspaceY" nx="1" ny="BarrelTOF2_Sensor_amount" half_length="both"/>
         </module_component>
 
         <module_component name="hybridtop" material="Kapton" sensitive="false" width="BarrelTOF_Module_width" length="BarrelTOF1_length" thickness="BarrelTOF_Hybrid_thickness" vis="TOFHybridVis" keep_layer="true">
@@ -138,23 +138,23 @@
 
         <module_component name="cfoam" material="CarbonFoam" sensitive="false" width="BarrelTOF_CFoam_width" length="BarrelTOF1_length" thickness="BarrelTOF_CFoam_thickness" vis="TOFCFoamVis" coolingTube="true" keep_layer="true">
           <position x="BarrelTOF_CFoam_position" y="BarrelTOF1_zoffset" z="0" />
-	  <inner_tube name="cooling_tube" material="Aluminum" rmin="0.2*BarrelTOF_CFoam_thickness" rmax="0.24*BarrelTOF_CFoam_thickness"/>
-	  <inner_tube name="coolant" material="NOVEC7200" rmin="0" rmax="0.2*BarrelTOF_CFoam_thickness" vis="TOFWater"/>
+          <inner_tube name="cooling_tube" material="Aluminum" rmin="0.2*BarrelTOF_CFoam_thickness" rmax="0.24*BarrelTOF_CFoam_thickness"/>
+          <inner_tube name="coolant" material="NOVEC7200" rmin="0" rmax="0.2*BarrelTOF_CFoam_thickness" vis="TOFWater"/>
         </module_component>
-	<module_component name="cfoam" material="CarbonFoam" sensitive="false" width="BarrelTOF_CFoam_width" length="BarrelTOF2_length" thickness="BarrelTOF_CFoam_thickness" vis="TOFCFoamVis" coolingTube="true" keep_layer="true">
+        <module_component name="cfoam" material="CarbonFoam" sensitive="false" width="BarrelTOF_CFoam_width" length="BarrelTOF2_length" thickness="BarrelTOF_CFoam_thickness" vis="TOFCFoamVis" coolingTube="true" keep_layer="true">
           <position x="BarrelTOF_CFoam_position" y="BarrelTOF2_zoffset" z="0" />
-	  <inner_tube name="cooling_tube" material="Aluminum" rmin="0.2*BarrelTOF_CFoam_thickness" rmax="0.24*BarrelTOF_CFoam_thickness"/>
-	  <inner_tube name="coolant" material="NOVEC7200" rmin="0" rmax="0.2*BarrelTOF_CFoam_thickness" vis="TOFWater"/>
+          <inner_tube name="cooling_tube" material="Aluminum" rmin="0.2*BarrelTOF_CFoam_thickness" rmax="0.24*BarrelTOF_CFoam_thickness"/>
+          <inner_tube name="coolant" material="NOVEC7200" rmin="0" rmax="0.2*BarrelTOF_CFoam_thickness" vis="TOFWater"/>
         </module_component>
         <module_component name="choneycomb" material="CFRPMix" sensitive="false" width="BarrelTOF_CHoneycomb_width" length="BarrelTOF1_length" thickness="BarrelTOF_CHoneycomb_thickness" vis="TOFCHoneycombVis" keep_layer="true">
           <position x="BarrelTOF_CHoneycomb_position" y="BarrelTOF1_zoffset" z="0" />
-	  <inner_tube name="cooling_tube" material="Aluminum" rmin="0.2*BarrelTOF_CHoneycomb_thickness" rmax="0.24*BarrelTOF_CHoneycomb_thickness"/>
-	  <inner_tube name="coolant" material="NOVEC7200" rmin="0" rmax="0.2*BarrelTOF_CHoneycomb_thickness" vis="TOFWater"/>
+          <inner_tube name="cooling_tube" material="Aluminum" rmin="0.2*BarrelTOF_CHoneycomb_thickness" rmax="0.24*BarrelTOF_CHoneycomb_thickness"/>
+          <inner_tube name="coolant" material="NOVEC7200" rmin="0" rmax="0.2*BarrelTOF_CHoneycomb_thickness" vis="TOFWater"/>
         </module_component>
         <module_component name="choneycomb" material="CFRPMix" sensitive="false" width="BarrelTOF_CHoneycomb_width" length="BarrelTOF2_length" thickness="BarrelTOF_CHoneycomb_thickness" vis="TOFCHoneycombVis">
           <position x="BarrelTOF_CHoneycomb_position" y="BarrelTOF2_zoffset" z="0" />
-	  <inner_tube name="cooling_tube" material="Aluminum" rmin="0.2*BarrelTOF_CHoneycomb_thickness" rmax="0.24*BarrelTOF_CHoneycomb_thickness"/>
-	  <inner_tube name="coolant" material="NOVEC7200" rmin="0" rmax="0.2*BarrelTOF_CHoneycomb_thickness" vis="TOFWater"/>
+          <inner_tube name="cooling_tube" material="Aluminum" rmin="0.2*BarrelTOF_CHoneycomb_thickness" rmax="0.24*BarrelTOF_CHoneycomb_thickness"/>
+          <inner_tube name="coolant" material="NOVEC7200" rmin="0" rmax="0.2*BarrelTOF_CHoneycomb_thickness" vis="TOFWater"/>
         </module_component>
 
         <module_component name="cfskinbottom" material="CFRPMix2" sensitive="false" width="BarrelTOF_Module_width" length="BarrelTOF1_length" thickness="BarrelTOF_CFSkin_thickness" vis="TOFCSkinVis" keep_layer="true">
@@ -172,10 +172,10 @@
         </module_component>
 
         <module_component name="sensorBack" material="Silicon" sensitive="true" width="BarrelTOF_Sensor_width" length="BarrelTOF_Sensor_length" thickness="0.5*BarrelTOF_Sensor_thickness" vis="TOFSensorVis" keep_layer="true">
-		<GridSensors start_x="BarrelTOF_Sensor_position" start_y="-0.5*BarrelTOF1_length+BarrelTOF_Sensor_length + BarrelTOF1_zoffset-0.5*BarrelTOF_Sensor_overlap" start_z="0" xdist="0" ydist="BarrelTOF_Sensor_length+BarrelTOF_Sensor_deadspaceY" nx="1" ny="BarrelTOF1_Sensor_amount_back" half_length="right"/>
+                <GridSensors start_x="BarrelTOF_Sensor_position" start_y="-0.5*BarrelTOF1_length+BarrelTOF_Sensor_length + BarrelTOF1_zoffset-0.5*BarrelTOF_Sensor_overlap" start_z="0" xdist="0" ydist="BarrelTOF_Sensor_length+BarrelTOF_Sensor_deadspaceY" nx="1" ny="BarrelTOF1_Sensor_amount_back" half_length="right"/>
         </module_component>
         <module_component name="sensorBack" material="Silicon" sensitive="true" width="BarrelTOF_Sensor_width" length="BarrelTOF_Sensor_length" thickness="0.5*BarrelTOF_Sensor_thickness" vis="TOFSensorVis" >
-		<GridSensors start_x="BarrelTOF_Sensor_position" start_y="0.5*BarrelTOF2_length-(BarrelTOF2_Sensor_amount_back-1)*(BarrelTOF_Sensor_length+BarrelTOF_Sensor_deadspaceY)-BarrelTOF_Sensor_length+BarrelTOF2_zoffset+0.5*BarrelTOF_Sensor_overlap" start_z="0" xdist="0" ydist="BarrelTOF_Sensor_length+BarrelTOF_Sensor_deadspaceY" nx="1" ny="BarrelTOF2_Sensor_amount_back"/>
+                <GridSensors start_x="BarrelTOF_Sensor_position" start_y="0.5*BarrelTOF2_length-(BarrelTOF2_Sensor_amount_back-1)*(BarrelTOF_Sensor_length+BarrelTOF_Sensor_deadspaceY)-BarrelTOF_Sensor_length+BarrelTOF2_zoffset+0.5*BarrelTOF_Sensor_overlap" start_z="0" xdist="0" ydist="BarrelTOF_Sensor_length+BarrelTOF_Sensor_deadspaceY" nx="1" ny="BarrelTOF2_Sensor_amount_back"/>
         </module_component>
 
       </module>
