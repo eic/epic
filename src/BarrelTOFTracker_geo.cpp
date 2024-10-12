@@ -186,12 +186,12 @@ static Ref_t create_TOFBarrel(Detector& description, xml_h e, SensitiveDetector 
         Box c_box(width / 2, length / 2, thickness / 2);
         Volume c_vol;
 	
-        xml_coll_t ci(x_comp, _Unicode(inner_tube));
-	if(ci) {
+        xml_coll_t ci_tube(x_comp, _Unicode(inner_tube));
+	if(ci_tube) {
 	  double max_r = 0;
-          for (; ci; ++ci) {
+          for (; ci_tube; ++ci_tube) {
             // fill the hole with tube
-	    xml_comp_t ct = ci;
+	    xml_comp_t ct = ci_tube;
 	    max_r = std::max(max_r, ct.rmax());
        	    Tube c_tube(ct.rmin(), ct.rmax(), length / 2);
             Volume c_tubevol(c_nam + ct.nameStr(), c_tube, description.material(ct.materialStr()));
