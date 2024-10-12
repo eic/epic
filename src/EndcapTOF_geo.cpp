@@ -162,13 +162,15 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
                                        1); // reflected to sensor id on the left
         }
 
-        for (int ix = (left ? 0 : nsensors); ix < (left ? nsensors : 2 * nsensors); ix++) {
-          // there is a hole in the middle, with radius = x_offset
-          float xcoord = (ix - nsensors + 0.5) * (module_x + module_spacing) +
-                         ((ix - nsensors < 0) ? -x_offset : x_offset);
+	double accum_xoffset = x_offset;
+        for (int ix = (left ? nsensors-1 : nsensors); (ix >= 0) && (ix < 2 * nsensors); ix=ix+(left?-1:1)) {
           // add board spacing
           if (sensors_id_board_edge.find(ix) != sensors_id_board_edge.end())
-            xcoord = (ix - nsensors < 0) ? xcoord - board_gap : xcoord + board_gap;
+            accum_xoffset = accum_xoffset + board_gap;
+
+          // there is a hole in the middle, with radius = x_offset
+          float xcoord = (ix - nsensors + 0.5) * (module_x + module_spacing) +
+                         + (left? -accum_xoffset : accum_xoffset);
           //! Note the module ordering is different for front and back side
 
           double module_z = x_supp_envelope.length() / 2.0 + total_thickness / 2;
