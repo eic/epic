@@ -285,7 +285,7 @@
 
     <constant name="LumiSpecCAL_SiPMSpaceXY"	  value="0.15*mm"/> <!-- mechanical space for adjacent SiPMs-->
     <constant name="LumiSpecCAL_LayerCoatX"	  value="0.25*cm"/> <!-- mechanical covering of layers, def without rotation-->
-    <constant name="LumiSpecCAL_LayerCoatY" 	  value="0.5*cm"/> <!-- mechanical covering of layers, def without rotation -->
+    <constant name="LumiSpecCAL_LayerCoatY" 	  value="0.25*cm"/> <!-- mechanical covering of layers, def without rotation -->
 
     <constant name="LumiSpecCAL_ModSizeX"         value="LumiSpecCAL_SiPMNumX*(LumiSpecCAL_SiPMSizeXY + 2*LumiSpecCAL_SiPMSpaceXY)"/>
     <constant name="LumiSpecCAL_ModSizeY"         value="LumiSpecCAL_SiPMNumY*(LumiSpecCAL_SiPMSizeXY + 2*LumiSpecCAL_SiPMSpaceXY)"/>
