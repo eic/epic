@@ -195,14 +195,14 @@
         <!-- <fourmodulepositions name="xpos" unit="cm" values="-25 -35"/>
         <fourmodulepositions name="ypos" unit="cm" values="-25 -35"/>
         <fourmodulepositions name="zpos" unit="cm" values="0 0"/> -->
-     
+
 
       <documentation>
       ### positions of modules for full area LFHCAL (sorted by ascending r, x, y)
       </documentation>
       <eightmodulepositions>
         <position x="-202.833*mm" y="-2575.500*mm" z="0*mm"/>
-	      <position x="-404.722*mm" y="-2575.500*mm" z="0*mm"/>
+              <position x="-404.722*mm" y="-2575.500*mm" z="0*mm"/>
         <position x="-606.611*mm" y="-2575.500*mm" z="0*mm"/>
         <position x="-808.500*mm" y="-2575.500*mm" z="0*mm"/>
         <position x="-1010.389*mm" y="-2575.500*mm" z="0*mm"/>
@@ -1261,7 +1261,7 @@
         <position x="-303.778*mm" y="50.500*mm" z="0*mm"/>
         <position x="-303.778*mm" y="-252.500*mm" z="0*mm"/>
         <position x="-303.778*mm" y="-50.500*mm" z="0*mm"/>
-        
+
       </eightmodulepositions>
       <fourmodulepositions>
         <position x="-252.350*mm" y="151.500*mm" z="0*mm"/>

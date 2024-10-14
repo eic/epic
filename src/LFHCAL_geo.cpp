@@ -37,8 +37,8 @@ struct moduleParamsStrct {
       , mod_visStr("")
       , mod_regStr("")
       , mod_limStr("") {}
-  moduleParamsStrct(double BIwidth, double BIheight, double SWThick, double TWThick, double MPThick, double FWThick,
-                    double BWThick, double width, double height, double notchDepth,
+  moduleParamsStrct(double BIwidth, double BIheight, double SWThick, double TWThick, double MPThick,
+                    double FWThick, double BWThick, double width, double height, double notchDepth,
                     double notchHeight, double foilThick, double pcbLegth, double pcbThick,
                     double pcbWidth, std::string visStr, std::string regStr, std::string limStr) {
     mod_BIwidth     = BIwidth;
@@ -485,16 +485,18 @@ Volume createEightMModule(Detector& desc, moduleParamsStrct mod_params,
                     mod_params.mod_MPThick / 2.);
   Box modFrontPlate(mod_params.mod_width / 2., mod_params.mod_height / 2.,
                     mod_params.mod_FWThick / 2.);
-  Box modSidePlateL(mod_params.mod_SWThick / 2., mod_params.mod_height / 2.,
-                    (length - mod_params.mod_MPThick - mod_params.mod_FWThick - mod_params.mod_BWThick) / 2.);
-  Box modSidePlateR(mod_params.mod_SWThick / 2., mod_params.mod_height / 2.,
-                    (length - mod_params.mod_MPThick-  mod_params.mod_FWThick - mod_params.mod_BWThick) / 2.);
-  Box modTopPlate((mod_params.mod_width - 2 * mod_params.mod_SWThick) / 2.,
-                  mod_params.mod_TWThick / 2.,
-                  (length - mod_params.mod_MPThick - mod_params.mod_FWThick - mod_params.mod_BWThick) / 2.);
-  Box modBottomPlate((mod_params.mod_width - 2 * mod_params.mod_SWThick) / 2.,
-                     mod_params.mod_TWThick / 2.,
-                     (length - mod_params.mod_MPThick - mod_params.mod_FWThick - mod_params.mod_BWThick) / 2.);
+  Box modSidePlateL(
+      mod_params.mod_SWThick / 2., mod_params.mod_height / 2.,
+      (length - mod_params.mod_MPThick - mod_params.mod_FWThick - mod_params.mod_BWThick) / 2.);
+  Box modSidePlateR(
+      mod_params.mod_SWThick / 2., mod_params.mod_height / 2.,
+      (length - mod_params.mod_MPThick - mod_params.mod_FWThick - mod_params.mod_BWThick) / 2.);
+  Box modTopPlate(
+      (mod_params.mod_width - 2 * mod_params.mod_SWThick) / 2., mod_params.mod_TWThick / 2.,
+      (length - mod_params.mod_MPThick - mod_params.mod_FWThick - mod_params.mod_BWThick) / 2.);
+  Box modBottomPlate(
+      (mod_params.mod_width - 2 * mod_params.mod_SWThick) / 2., mod_params.mod_TWThick / 2.,
+      (length - mod_params.mod_MPThick - mod_params.mod_FWThick - mod_params.mod_BWThick) / 2.);
   Box modBackCutOut(mod_params.mod_BIwidth / 2., mod_params.mod_BIheight / 2.,
                     mod_params.mod_BWThick / 2.);
   Box modBackPlateFull(mod_params.mod_width / 2., mod_params.mod_height / 2.,
@@ -524,12 +526,12 @@ Volume createEightMModule(Detector& desc, moduleParamsStrct mod_params,
   if (renderComp) {
     vol_mountingPlate.setAttributes(desc, mod_params.mod_regStr, mod_params.mod_limStr,
                                     // mod_params.mod_visStr);
-                                   "LFHCALLayerTungstenVis");
+                                    "LFHCALLayerTungstenVis");
     vol_modFrontPlate.setAttributes(desc, mod_params.mod_regStr, mod_params.mod_limStr,
                                     // mod_params.mod_visStr);
-                                   "LFHCALLayerSteelVis");
+                                    "LFHCALLayerSteelVis");
     vol_modBackPlate.setAttributes(desc, mod_params.mod_regStr, mod_params.mod_limStr,
-                                  //  mod_params.mod_visStr);
+                                   //  mod_params.mod_visStr);
                                    "LFHCALLayerSteelVis");
     vol_modSidePlateL.setAttributes(desc, mod_params.mod_regStr, mod_params.mod_limStr,
                                     mod_params.mod_visStr);
@@ -537,10 +539,10 @@ Volume createEightMModule(Detector& desc, moduleParamsStrct mod_params,
                                     mod_params.mod_visStr);
     vol_modTopPlate.setAttributes(desc, mod_params.mod_regStr, mod_params.mod_limStr,
                                   // mod_params.mod_visStr);
-                                   "LFHCALLayerSteelVis");
+                                  "LFHCALLayerSteelVis");
     vol_modBottomPlate.setAttributes(desc, mod_params.mod_regStr, mod_params.mod_limStr,
-                                    //  mod_params.mod_visStr);
-                                   "LFHCALLayerSteelVis");
+                                     //  mod_params.mod_visStr);
+                                     "LFHCALLayerSteelVis");
   } else {
     vol_mountingPlate.setAttributes(desc, mod_params.mod_regStr, mod_params.mod_limStr,
                                     "InvisibleNoDaughters");
@@ -572,7 +574,8 @@ Volume createEightMModule(Detector& desc, moduleParamsStrct mod_params,
   }
 
   int layer_num  = 0;
-  double slice_z = -length / 2 + mod_params.mod_MPThick + mod_params.mod_FWThick; // Keeps track of layers' local z locations
+  double slice_z = -length / 2 + mod_params.mod_MPThick +
+                   mod_params.mod_FWThick; // Keeps track of layers' local z locations
   // Looping through the number of repeated layers & slices in each section
   for (int i = 0; i < (int)sl_params.size(); i++) {
     slice_z += sl_params[i].slice_offset +
@@ -646,8 +649,9 @@ Volume createEightMModule(Detector& desc, moduleParamsStrct mod_params,
   // placement 8M module casing
   pvm = vol_mod.placeVolume(vol_mountingPlate,
                             Position(0, 0, -(length - mod_params.mod_MPThick) / 2.));
-  pvm = vol_mod.placeVolume(vol_modFrontPlate,
-                            Position(0, 0, -(length - mod_params.mod_FWThick) / 2. + mod_params.mod_MPThick));
+  pvm = vol_mod.placeVolume(
+      vol_modFrontPlate,
+      Position(0, 0, -(length - mod_params.mod_FWThick) / 2. + mod_params.mod_MPThick));
   if (allSen)
     pvm.addPhysVolID("towerx", 2)
         .addPhysVolID("towery", 0)
@@ -660,42 +664,48 @@ Volume createEightMModule(Detector& desc, moduleParamsStrct mod_params,
         .addPhysVolID("towery", 0)
         .addPhysVolID("layerz", layer_num)
         .addPhysVolID("passive", 1);
-  pvm = vol_mod.placeVolume(vol_modSidePlateL,
-                            Position(-(mod_params.mod_width - mod_params.mod_SWThick) / 2., 0,
-                                     (mod_params.mod_FWThick + mod_params.mod_MPThick - mod_params.mod_BWThick) / 2));
+  pvm = vol_mod.placeVolume(
+      vol_modSidePlateL,
+      Position(-(mod_params.mod_width - mod_params.mod_SWThick) / 2., 0,
+               (mod_params.mod_FWThick + mod_params.mod_MPThick - mod_params.mod_BWThick) / 2));
   if (allSen)
     pvm.addPhysVolID("towerx", 3)
         .addPhysVolID("towery", 0)
         .addPhysVolID("layerz", 0)
         .addPhysVolID("passive", 1);
-  pvm = vol_mod.placeVolume(vol_modSidePlateR,
-                            Position((mod_params.mod_width - mod_params.mod_SWThick) / 2., 0,
-                                     (mod_params.mod_FWThick + mod_params.mod_MPThick  - mod_params.mod_BWThick) / 2));
+  pvm = vol_mod.placeVolume(
+      vol_modSidePlateR,
+      Position((mod_params.mod_width - mod_params.mod_SWThick) / 2., 0,
+               (mod_params.mod_FWThick + mod_params.mod_MPThick - mod_params.mod_BWThick) / 2));
   if (allSen)
     pvm.addPhysVolID("towerx", 0)
         .addPhysVolID("towery", 1)
         .addPhysVolID("layerz", 0)
         .addPhysVolID("passive", 1);
-  pvm = vol_mod.placeVolume(vol_modTopPlate,
-                            Position(0, (mod_params.mod_height - mod_params.mod_TWThick) / 2.,
-                                     (mod_params.mod_FWThick + mod_params.mod_MPThick  - mod_params.mod_BWThick) / 2));
+  pvm = vol_mod.placeVolume(
+      vol_modTopPlate,
+      Position(0, (mod_params.mod_height - mod_params.mod_TWThick) / 2.,
+               (mod_params.mod_FWThick + mod_params.mod_MPThick - mod_params.mod_BWThick) / 2));
   if (allSen)
     pvm.addPhysVolID("towerx", 1)
         .addPhysVolID("towery", 1)
         .addPhysVolID("layerz", 0)
         .addPhysVolID("passive", 1);
-  pvm = vol_mod.placeVolume(vol_modBottomPlate,
-                            Position(0, -(mod_params.mod_height - mod_params.mod_TWThick) / 2.,
-                                     (mod_params.mod_FWThick + mod_params.mod_MPThick  - mod_params.mod_BWThick) / 2));
+  pvm = vol_mod.placeVolume(
+      vol_modBottomPlate,
+      Position(0, -(mod_params.mod_height - mod_params.mod_TWThick) / 2.,
+               (mod_params.mod_FWThick + mod_params.mod_MPThick - mod_params.mod_BWThick) / 2));
   if (allSen)
     pvm.addPhysVolID("towerx", 2)
         .addPhysVolID("towery", 1)
         .addPhysVolID("layerz", 0)
         .addPhysVolID("passive", 1);
 
-  double lengthA     = length - mod_params.mod_FWThick - mod_params.mod_MPThick  + mod_params.mod_BWThick/2;
-  double z_offSetPCB = (mod_params.mod_FWThick  + mod_params.mod_MPThick  + mod_params.mod_BWThick) / 2 -
-                       (lengthA - mod_params.mod_pcbLength) / 2.;
+  double lengthA =
+      length - mod_params.mod_FWThick - mod_params.mod_MPThick + mod_params.mod_BWThick / 2;
+  double z_offSetPCB =
+      (mod_params.mod_FWThick + mod_params.mod_MPThick + mod_params.mod_BWThick) / 2 -
+      (lengthA - mod_params.mod_pcbLength) / 2.;
 
   pvm = vol_mod.placeVolume(
       vol_modPCB,
@@ -732,16 +742,18 @@ Volume createFourMModule(Detector& desc, moduleParamsStrct mod_params,
                     mod_params.mod_MPThick / 2.);
   Box modFrontPlate(mod_params.mod_width / 2., mod_params.mod_height / 2.,
                     mod_params.mod_FWThick / 2.);
-  Box modSidePlateL(mod_params.mod_SWThick / 2., mod_params.mod_height / 2.,
-                    (length - mod_params.mod_MPThick - mod_params.mod_FWThick - mod_params.mod_BWThick) / 2.);
-  Box modSidePlateR(mod_params.mod_SWThick / 2., mod_params.mod_height / 2.,
-                    (length - mod_params.mod_MPThick - mod_params.mod_FWThick - mod_params.mod_BWThick) / 2.);
-  Box modTopPlate((mod_params.mod_width - 2 * mod_params.mod_SWThick) / 2.,
-                  mod_params.mod_TWThick / 2.,
-                  (length - mod_params.mod_MPThick - mod_params.mod_FWThick - mod_params.mod_BWThick) / 2.);
-  Box modBottomPlate((mod_params.mod_width - 2 * mod_params.mod_SWThick) / 2.,
-                     mod_params.mod_TWThick / 2.,
-                     (length - mod_params.mod_MPThick - mod_params.mod_FWThick - mod_params.mod_BWThick) / 2.);
+  Box modSidePlateL(
+      mod_params.mod_SWThick / 2., mod_params.mod_height / 2.,
+      (length - mod_params.mod_MPThick - mod_params.mod_FWThick - mod_params.mod_BWThick) / 2.);
+  Box modSidePlateR(
+      mod_params.mod_SWThick / 2., mod_params.mod_height / 2.,
+      (length - mod_params.mod_MPThick - mod_params.mod_FWThick - mod_params.mod_BWThick) / 2.);
+  Box modTopPlate(
+      (mod_params.mod_width - 2 * mod_params.mod_SWThick) / 2., mod_params.mod_TWThick / 2.,
+      (length - mod_params.mod_MPThick - mod_params.mod_FWThick - mod_params.mod_BWThick) / 2.);
+  Box modBottomPlate(
+      (mod_params.mod_width - 2 * mod_params.mod_SWThick) / 2., mod_params.mod_TWThick / 2.,
+      (length - mod_params.mod_MPThick - mod_params.mod_FWThick - mod_params.mod_BWThick) / 2.);
   Box modBackCutOut(mod_params.mod_BIwidth / 2., mod_params.mod_BIheight / 2.,
                     mod_params.mod_BWThick / 2.);
   Box modBackPlateFull(mod_params.mod_width / 2., mod_params.mod_height / 2.,
@@ -771,23 +783,23 @@ Volume createFourMModule(Detector& desc, moduleParamsStrct mod_params,
   if (renderComp) {
     vol_mountingPlate.setAttributes(desc, mod_params.mod_regStr, mod_params.mod_limStr,
                                     // mod_params.mod_visStr);
-                                   "LFHCALLayerTungstenVis");
+                                    "LFHCALLayerTungstenVis");
     vol_modFrontPlate.setAttributes(desc, mod_params.mod_regStr, mod_params.mod_limStr,
                                     // mod_params.mod_visStr);
-                                   "LFHCALLayerSteelVis");
+                                    "LFHCALLayerSteelVis");
     vol_modBackPlate.setAttributes(desc, mod_params.mod_regStr, mod_params.mod_limStr,
-                                    // mod_params.mod_visStr);
+                                   // mod_params.mod_visStr);
                                    "LFHCALLayerSteelVis");
     vol_modSidePlateL.setAttributes(desc, mod_params.mod_regStr, mod_params.mod_limStr,
                                     mod_params.mod_visStr);
     vol_modSidePlateR.setAttributes(desc, mod_params.mod_regStr, mod_params.mod_limStr,
                                     mod_params.mod_visStr);
     vol_modTopPlate.setAttributes(desc, mod_params.mod_regStr, mod_params.mod_limStr,
-                                    // mod_params.mod_visStr);
-                                   "LFHCALLayerSteelVis");
+                                  // mod_params.mod_visStr);
+                                  "LFHCALLayerSteelVis");
     vol_modBottomPlate.setAttributes(desc, mod_params.mod_regStr, mod_params.mod_limStr,
-                                    // mod_params.mod_visStr);
-                                   "LFHCALLayerSteelVis");
+                                     // mod_params.mod_visStr);
+                                     "LFHCALLayerSteelVis");
   } else {
     vol_mountingPlate.setAttributes(desc, mod_params.mod_regStr, mod_params.mod_limStr,
                                     "InvisibleNoDaughters");
@@ -819,7 +831,8 @@ Volume createFourMModule(Detector& desc, moduleParamsStrct mod_params,
   }
 
   int layer_num  = 0;
-  double slice_z = -length / 2 + mod_params.mod_MPThick + mod_params.mod_FWThick; // Keeps track of layers' local z locations
+  double slice_z = -length / 2 + mod_params.mod_MPThick +
+                   mod_params.mod_FWThick; // Keeps track of layers' local z locations
 
   // Looping through the number of repeated layers & slices in each section
   for (int i = 0; i < (int)sl_params.size(); i++) {
@@ -894,8 +907,9 @@ Volume createFourMModule(Detector& desc, moduleParamsStrct mod_params,
   // placement 4M module casing
   pvm = vol_mod.placeVolume(vol_mountingPlate,
                             Position(0, 0, -(length - mod_params.mod_MPThick) / 2.));
-  pvm = vol_mod.placeVolume(vol_modFrontPlate,
-                            Position(0, 0, -(length - mod_params.mod_FWThick) / 2. + mod_params.mod_MPThick));
+  pvm = vol_mod.placeVolume(
+      vol_modFrontPlate,
+      Position(0, 0, -(length - mod_params.mod_FWThick) / 2. + mod_params.mod_MPThick));
   if (allSen)
     pvm.addPhysVolID("towerx", 2)
         .addPhysVolID("towery", 0)
@@ -908,42 +922,48 @@ Volume createFourMModule(Detector& desc, moduleParamsStrct mod_params,
         .addPhysVolID("towery", 0)
         .addPhysVolID("layerz", layer_num)
         .addPhysVolID("passive", 1);
-  pvm = vol_mod.placeVolume(vol_modSidePlateL,
-                            Position(-(mod_params.mod_width - mod_params.mod_SWThick) / 2., 0,
-                                     (mod_params.mod_FWThick + mod_params.mod_MPThick - mod_params.mod_BWThick) / 2));
+  pvm = vol_mod.placeVolume(
+      vol_modSidePlateL,
+      Position(-(mod_params.mod_width - mod_params.mod_SWThick) / 2., 0,
+               (mod_params.mod_FWThick + mod_params.mod_MPThick - mod_params.mod_BWThick) / 2));
   if (allSen)
     pvm.addPhysVolID("towerx", 3)
         .addPhysVolID("towery", 0)
         .addPhysVolID("layerz", 0)
         .addPhysVolID("passive", 1);
-  pvm = vol_mod.placeVolume(vol_modSidePlateR,
-                            Position((mod_params.mod_width - mod_params.mod_SWThick) / 2., 0,
-                                     (mod_params.mod_FWThick + mod_params.mod_MPThick  - mod_params.mod_BWThick) / 2));
+  pvm = vol_mod.placeVolume(
+      vol_modSidePlateR,
+      Position((mod_params.mod_width - mod_params.mod_SWThick) / 2., 0,
+               (mod_params.mod_FWThick + mod_params.mod_MPThick - mod_params.mod_BWThick) / 2));
   if (allSen)
     pvm.addPhysVolID("towerx", 0)
         .addPhysVolID("towery", 1)
         .addPhysVolID("layerz", 0)
         .addPhysVolID("passive", 1);
-  pvm = vol_mod.placeVolume(vol_modTopPlate,
-                            Position(0, (mod_params.mod_height - mod_params.mod_TWThick) / 2.,
-                                     (mod_params.mod_FWThick + mod_params.mod_MPThick  - mod_params.mod_BWThick) / 2));
+  pvm = vol_mod.placeVolume(
+      vol_modTopPlate,
+      Position(0, (mod_params.mod_height - mod_params.mod_TWThick) / 2.,
+               (mod_params.mod_FWThick + mod_params.mod_MPThick - mod_params.mod_BWThick) / 2));
   if (allSen)
     pvm.addPhysVolID("towerx", 1)
         .addPhysVolID("towery", 1)
         .addPhysVolID("layerz", 0)
         .addPhysVolID("passive", 1);
-  pvm = vol_mod.placeVolume(vol_modBottomPlate,
-                            Position(0, -(mod_params.mod_height - mod_params.mod_TWThick) / 2.,
-                                     (mod_params.mod_FWThick + mod_params.mod_MPThick  - mod_params.mod_BWThick) / 2));
+  pvm = vol_mod.placeVolume(
+      vol_modBottomPlate,
+      Position(0, -(mod_params.mod_height - mod_params.mod_TWThick) / 2.,
+               (mod_params.mod_FWThick + mod_params.mod_MPThick - mod_params.mod_BWThick) / 2));
   if (allSen)
     pvm.addPhysVolID("towerx", 2)
         .addPhysVolID("towery", 1)
         .addPhysVolID("layerz", 0)
         .addPhysVolID("passive", 1);
 
-  double lengthA     = length - mod_params.mod_FWThick - mod_params.mod_MPThick  + mod_params.mod_BWThick/2;
-  double z_offSetPCB = (mod_params.mod_FWThick  + mod_params.mod_MPThick  + mod_params.mod_BWThick) / 2 -
-                       (lengthA - mod_params.mod_pcbLength) / 2.;
+  double lengthA =
+      length - mod_params.mod_FWThick - mod_params.mod_MPThick + mod_params.mod_BWThick / 2;
+  double z_offSetPCB =
+      (mod_params.mod_FWThick + mod_params.mod_MPThick + mod_params.mod_BWThick) / 2 -
+      (lengthA - mod_params.mod_pcbLength) / 2.;
 
   pvm = vol_mod.placeVolume(
       vol_modPCB,
@@ -993,43 +1013,44 @@ static Ref_t createDetector(Detector& desc, xml_h handle, SensitiveDetector sens
   // 8M module specific loading
   xml_comp_t eightM_xml   = detElem.child(_Unicode(eightmodule));
   xml_dim_t eightMmod_dim = eightM_xml.dimensions();
-  moduleParamsStrct eightM_params(getAttrOrDefault(eightMmod_dim, _Unicode(widthBackInner), 0.),
-                                  getAttrOrDefault(eightMmod_dim, _Unicode(heightBackInner), 0.),
-                                  getAttrOrDefault(eightMmod_dim, _Unicode(widthSideWall), 0.),
-                                  getAttrOrDefault(eightMmod_dim, _Unicode(widthTopWall), 0.),
-                                  getAttrOrDefault(eightMmod_dim, _Unicode(thicknessMountingPlate), 0.),
-                                  getAttrOrDefault(eightMmod_dim, _Unicode(thicknessFrontWall), 0.),
-                                  getAttrOrDefault(eightMmod_dim, _Unicode(thicknessBackWall), 0.),
-                                  getAttrOrDefault(eightMmod_dim, _Unicode(width), 0.),
-                                  getAttrOrDefault(eightMmod_dim, _Unicode(height), 0.),
-                                  getAttrOrDefault(eightMmod_dim, _Unicode(notchDepth), 0.),
-                                  getAttrOrDefault(eightMmod_dim, _Unicode(notchHeight), 0.),
-                                  getAttrOrDefault(eightMmod_dim, _Unicode(foilThick), 0.),
-                                  getAttrOrDefault(eightMmod_dim, _Unicode(pcbLength), 0.),
-                                  getAttrOrDefault(eightMmod_dim, _Unicode(pcbThick), 0.),
-                                  getAttrOrDefault(eightMmod_dim, _Unicode(pcbWidth), 0.),
-                                  eightM_xml.visStr(), eightM_xml.regionStr(),
-                                  eightM_xml.limitsStr());
+  moduleParamsStrct eightM_params(
+      getAttrOrDefault(eightMmod_dim, _Unicode(widthBackInner), 0.),
+      getAttrOrDefault(eightMmod_dim, _Unicode(heightBackInner), 0.),
+      getAttrOrDefault(eightMmod_dim, _Unicode(widthSideWall), 0.),
+      getAttrOrDefault(eightMmod_dim, _Unicode(widthTopWall), 0.),
+      getAttrOrDefault(eightMmod_dim, _Unicode(thicknessMountingPlate), 0.),
+      getAttrOrDefault(eightMmod_dim, _Unicode(thicknessFrontWall), 0.),
+      getAttrOrDefault(eightMmod_dim, _Unicode(thicknessBackWall), 0.),
+      getAttrOrDefault(eightMmod_dim, _Unicode(width), 0.),
+      getAttrOrDefault(eightMmod_dim, _Unicode(height), 0.),
+      getAttrOrDefault(eightMmod_dim, _Unicode(notchDepth), 0.),
+      getAttrOrDefault(eightMmod_dim, _Unicode(notchHeight), 0.),
+      getAttrOrDefault(eightMmod_dim, _Unicode(foilThick), 0.),
+      getAttrOrDefault(eightMmod_dim, _Unicode(pcbLength), 0.),
+      getAttrOrDefault(eightMmod_dim, _Unicode(pcbThick), 0.),
+      getAttrOrDefault(eightMmod_dim, _Unicode(pcbWidth), 0.), eightM_xml.visStr(),
+      eightM_xml.regionStr(), eightM_xml.limitsStr());
 
   // 4M module specific loading
   xml_comp_t fourM_xml   = detElem.child(_Unicode(fourmodule));
   xml_dim_t fourMmod_dim = fourM_xml.dimensions();
-  moduleParamsStrct fourM_params(getAttrOrDefault(fourMmod_dim, _Unicode(widthBackInner), 0.),
-                                 getAttrOrDefault(fourMmod_dim, _Unicode(heightBackInner), 0.),
-                                 getAttrOrDefault(fourMmod_dim, _Unicode(widthSideWall), 0.),
-                                 getAttrOrDefault(fourMmod_dim, _Unicode(widthTopWall), 0.),
-                                 getAttrOrDefault(fourMmod_dim, _Unicode(thicknessMountingPlate), 0.),
-                                 getAttrOrDefault(fourMmod_dim, _Unicode(thicknessFrontWall), 0.),
-                                 getAttrOrDefault(fourMmod_dim, _Unicode(thicknessBackWall), 0.),
-                                 getAttrOrDefault(fourMmod_dim, _Unicode(width), 0.),
-                                 getAttrOrDefault(fourMmod_dim, _Unicode(height), 0.),
-                                 getAttrOrDefault(fourMmod_dim, _Unicode(notchDepth), 0.),
-                                 getAttrOrDefault(fourMmod_dim, _Unicode(notchHeight), 0.),
-                                 getAttrOrDefault(fourMmod_dim, _Unicode(foilThick), 0.),
-                                 getAttrOrDefault(fourMmod_dim, _Unicode(pcbLength), 0.),
-                                 getAttrOrDefault(fourMmod_dim, _Unicode(pcbThick), 0.),
-                                 getAttrOrDefault(fourMmod_dim, _Unicode(pcbWidth), 0.),
-                                 fourM_xml.visStr(), fourM_xml.regionStr(), fourM_xml.limitsStr());
+  moduleParamsStrct fourM_params(
+      getAttrOrDefault(fourMmod_dim, _Unicode(widthBackInner), 0.),
+      getAttrOrDefault(fourMmod_dim, _Unicode(heightBackInner), 0.),
+      getAttrOrDefault(fourMmod_dim, _Unicode(widthSideWall), 0.),
+      getAttrOrDefault(fourMmod_dim, _Unicode(widthTopWall), 0.),
+      getAttrOrDefault(fourMmod_dim, _Unicode(thicknessMountingPlate), 0.),
+      getAttrOrDefault(fourMmod_dim, _Unicode(thicknessFrontWall), 0.),
+      getAttrOrDefault(fourMmod_dim, _Unicode(thicknessBackWall), 0.),
+      getAttrOrDefault(fourMmod_dim, _Unicode(width), 0.),
+      getAttrOrDefault(fourMmod_dim, _Unicode(height), 0.),
+      getAttrOrDefault(fourMmod_dim, _Unicode(notchDepth), 0.),
+      getAttrOrDefault(fourMmod_dim, _Unicode(notchHeight), 0.),
+      getAttrOrDefault(fourMmod_dim, _Unicode(foilThick), 0.),
+      getAttrOrDefault(fourMmod_dim, _Unicode(pcbLength), 0.),
+      getAttrOrDefault(fourMmod_dim, _Unicode(pcbThick), 0.),
+      getAttrOrDefault(fourMmod_dim, _Unicode(pcbWidth), 0.), fourM_xml.visStr(),
+      fourM_xml.regionStr(), fourM_xml.limitsStr());
 
   std::vector<sliceParamsStrct> slice_Params;
   int layer_num  = 0;
@@ -1104,9 +1125,8 @@ static Ref_t createDetector(Detector& desc, xml_h handle, SensitiveDetector sens
     moduleIDy = ((pos8M[e].y + 265) / 10);
 
     // Placing modules in world volume
-    auto tr8M =
-        Transform3D(Position(-pos8M[e].x, -pos8M[e].y, pos8M[e].z));
-        // Transform3D(Position(-pos8M[e].x - 0.5 * eightM_params.mod_width, -pos8M[e].y, pos8M[e].z));
+    auto tr8M = Transform3D(Position(-pos8M[e].x, -pos8M[e].y, pos8M[e].z));
+    // Transform3D(Position(-pos8M[e].x - 0.5 * eightM_params.mod_width, -pos8M[e].y, pos8M[e].z));
     phv = assembly.placeVolume(eightMassembly, tr8M);
     phv.addPhysVolID("moduleIDx", moduleIDx)
         .addPhysVolID("moduleIDy", moduleIDy)
@@ -1144,9 +1164,8 @@ static Ref_t createDetector(Detector& desc, xml_h handle, SensitiveDetector sens
                    _toString((int)pos4M.size()) + "\t" + _toString(moduleIDx) + "\t" +
                    _toString(moduleIDy));
     }
-    auto tr4M =
-        Transform3D(Position(-pos4M[f].x, -pos4M[f].y, pos4M[f].z));
-        // Transform3D(Position(-pos4M[f].x - 0.5 * fourM_params.mod_width, -pos4M[f].y, pos4M[f].z));
+    auto tr4M = Transform3D(Position(-pos4M[f].x, -pos4M[f].y, pos4M[f].z));
+    // Transform3D(Position(-pos4M[f].x - 0.5 * fourM_params.mod_width, -pos4M[f].y, pos4M[f].z));
     phv = assembly.placeVolume(fourMassembly, tr4M);
     phv.addPhysVolID("moduleIDx", moduleIDx)
         .addPhysVolID("moduleIDy", moduleIDy)
