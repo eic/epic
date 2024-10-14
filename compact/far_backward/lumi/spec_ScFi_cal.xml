@@ -8,7 +8,7 @@
                         <position x="0.0*cm"  y="0.0*cm"  z="0.0*cm"/>
 			<rotation x="0.0*rad" y="0.0*rad" z="0.0*rad"/>
 
-			<layer 	sizeX="LumiSpecCAL_XYLayers*LumiSpecCAL_ModSizeX + 2.0*LumiSpecCAL_LayerCoatX" sizeY="LumiSpecCAL_ModSizeY + 2.0*LumiSpecCAL_LayerCoatY" sizeZ="LumiSpecCAL_ModSizeZ" coatSizeX="LumiSpecCAL_LayerCoatX" coatSizeY="LumiSpecCAL_LayerCoatY" material="Aluminum5083" vis="LumiSpecCAL_LayerVis"/>
+			<layer 	sizeX="LumiSpecCAL_XYLayers*LumiSpecCAL_ModSizeX + 2.0*LumiSpecCAL_LayerCoatX" sizeY="LumiSpecCAL_ModSizeY + 2.0*LumiSpecCAL_LayerCoatY" sizeZ="LumiSpecCAL_ModSizeZ" coatSizeX="LumiSpecCAL_LayerCoatX" coatSizeY="LumiSpecCAL_LayerCoatY" material="Polystyrene" vis="LumiSpecCAL_LayerVis"/>
 
                         <module sizex="LumiSpecCAL_ModSizeX" sizey="LumiSpecCAL_ModSizeY" sizez="LumiSpecCAL_ModSizeZ"  material="WPowderplusEpoxy" vis="LumiSpecCAL_ModuleVis">
 				
@@ -20,7 +20,7 @@
                                  spacex="LumiSpecCAL_FiberSpaceX"
                                  spacey="LumiSpecCAL_FiberSpaceY"
                                  vis="LumiSpecCAL_FiberVis"/>
-                                <fiberholder material="Brass360" vis="LumiSpecCAL_FiberHolderVis"/>
+                                <fiberholder material="Steel1020" vis="LumiSpecCAL_FiberHolderVis"/>
                         </module>
                         <sector id="0">
                                 <position x="0.0*cm" y="LumiSpecCAL_Y" z="LumiSpecCAL_Z"/>
