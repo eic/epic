@@ -11,10 +11,15 @@
   <detectors>
 
     <detector id="BeamPipeB0_ID" name="BeamPipeB0" type="forwardBeamPipeBrazil" vis="BeamPipeVis">
-      <position x="-0.165*m" y="0*m" z="6.4*m" />
+      <position x="-0.165*m" y="0*m" z="B0PF_CenterPosition" />
       <rotation x="0*rad" y="0*rad" z="0*rad" />
     </detector>
-
+    
+    <detector id="B0Window_ID" name="B0Window" type="B0Window" material="StainlessSteel" vis="AnlLightGray">
+      <dimensions r="B0PF_InnerRadius" z="B0Win_thickness" x="1.9*Q0EF_InnerRadius" y="Beampipe_rmax" />
+      <position   x="B0PF_XPosition" y="0" z="B0PF_CenterPosition-B0PF_Length/2.0+B0Win_thickness" />
+      <rotation   x="0*rad" y="0*rad" z="0*rad" />
+    </detector>
   </detectors>
 
 
