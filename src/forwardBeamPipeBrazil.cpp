@@ -16,11 +16,11 @@ static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector /* sens *
   string det_name = x_det.nameStr();
   DetElement sdet(det_name, x_det.id());
   Assembly assembly(det_name + "_assembly");
-  Material m_Al   = det.material("Aluminum");
-  Material m_Be   = det.material("Beryllium");
-  Material m_SS   = det.material("StainlessSteel");
-  Material m_vac  = det.material("Vacuum");
-  string vis_name = x_det.visStr();
+  Material m_Al    = det.material("Aluminum");
+  Material m_Be    = det.material("Beryllium");
+  Material m_SS    = det.material("StainlessSteel");
+  Material m_vac   = det.material("Vacuum");
+  string vis_name  = x_det.visStr();
   xml_comp_t x_pos = x_det.position();
 
   PlacedVolume pv_assembly;
@@ -49,7 +49,9 @@ static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector /* sens *
       -0.0454486856; //This is the angle of the proton orbit from the end of B1APF to the beginning of B2PF
   double crossingAngle = -0.025; //relevant for the neutral cone
 
-  double b0PFCenter_z = x_pos.z(); // location of the center of B0 magnet, used to define the hadron beampipe inside the magnet
+  double b0PFCenter_z =
+      x_pos
+          .z(); // location of the center of B0 magnet, used to define the hadron beampipe inside the magnet
 
   double b1APFEndPoint_z =
       22062.3828 * dd4hep::mm;                    //location of proton orbit at b1APF exit -- in mm

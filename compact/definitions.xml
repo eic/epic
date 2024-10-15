@@ -298,7 +298,7 @@ The unused IDs below are saved for future use.
     <constant name="Q0EF_ID"  value="180"/>
     <constant name="Q1EF_ID"  value="181"/>
     <constant name="B0Window_ID"  value="182"/>
-    
+
     <documentation>
       #### (190-199) Far Backward Beamline Detectors
 

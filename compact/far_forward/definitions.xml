@@ -56,9 +56,9 @@
     <constant name="B1PF_InnerRadius"  value="13.5*cm"/>
     <constant name="B1APF_InnerRadius" value="16.8*cm"/>
     <constant name="B2PF_InnerRadius"  value="20.0*cm"/>
-	
-	<constant name="B0Win_thickness"  value="4.0*mm"/>
-	
+
+        <constant name="B0Win_thickness"  value="4.0*mm"/>
+
     <comment>
       The inner radii are temporarily enlarged so the inner coils (UnionSolid) are not built with overlapping volumes
       Overlapping boolean volumes may cause issues in DAWN view, even if they were good in simulation

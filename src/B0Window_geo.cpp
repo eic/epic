@@ -22,22 +22,22 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector /
   string det_name = x_det.nameStr();
   string mat_name = dd4hep::getAttrOrDefault<string>(x_det, _U(material), "StainlessSteel");
   //
-  double sizeR = x_dim.r();
-  double sizeZ = x_dim.z();
-  double sizeR_el = x_dim.x();
+  double sizeR     = x_dim.r();
+  double sizeZ     = x_dim.z();
+  double sizeR_el  = x_dim.x();
   double sizeR_had = x_dim.y();
-  double posX  = x_pos.x();
-  double posY  = x_pos.y();
-  double posZ  = x_pos.z();
-  double rotX  = x_rot.x();
-  double rotY  = x_rot.y();
-  double rotZ  = x_rot.z();
+  double posX      = x_pos.x();
+  double posY      = x_pos.y();
+  double posZ      = x_pos.z();
+  double rotX      = x_rot.x();
+  double rotY      = x_rot.y();
+  double rotZ      = x_rot.z();
 
   Tube tube(0.0, sizeR, sizeZ);
   Tube tube_el(0.0, sizeR_el, sizeZ);
   Tube tube_had(0.0, sizeR_had, sizeZ);
-  SubtractionSolid exit_window(tube,tube_had,Position(0.0, 0.0, 0.0));
-  exit_window = SubtractionSolid(exit_window,tube_el,Position(-posX, 0.0, 0.0));
+  SubtractionSolid exit_window(tube, tube_had, Position(0.0, 0.0, 0.0));
+  exit_window = SubtractionSolid(exit_window, tube_el, Position(-posX, 0.0, 0.0));
 
   Volume vol(det_name + "_vol_ExitWindow", exit_window, description.material(mat_name));
   vol.setVisAttributes(description.visAttributes(x_det.visStr()));
