@@ -46,8 +46,8 @@ The unused IDs below are saved for future use.
 
       #### (10-24) Interaction region beamline
 
-      - Beampipe ID : 10
-      - Unused   IDs: 11-24
+      - Beampipe ID : 10-11
+      - Unused   IDs: 12-24
 
     </documentation>
     <constant name="BeamPipe_ID" value="10"/>
@@ -297,6 +297,7 @@ The unused IDs below are saved for future use.
     <constant name="B2PF_ID"  value="177"/>
     <constant name="Q0EF_ID"  value="180"/>
     <constant name="Q1EF_ID"  value="181"/>
+    <constant name="B0Window_ID"  value="182"/>
 
     <documentation>
       #### (190-199) Far Backward Beamline Detectors
