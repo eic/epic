@@ -107,7 +107,7 @@
     <comment> 1 um padding to not have layer and module touch (ACTS requirement) </comment>
     <constant name="TOFEndcapLayer_thickness"   value="TOFEndcapMod_thickness + 2 * TOFEndcapMod_dz + 1 * um" />
 
-    <constant name="ForwardTOFMod_rmin"         value="ForwardTOFRegion_minR-1*cm" />
+    <constant name="ForwardTOFMod_rmin"         value="ForwardTOFRegion_minR" />
     <constant name="ForwardTOFMod_rmax"         value="ForwardTOFRegion_maxR" />
     <constant name="ForwardTOFMod1_zmin"        value="ForwardTOF_zmin" />
     <constant name="ForwardTOFMod2_zmin"        value="ForwardTOF_zmin + ForwardTOFMod_offset" />
