@@ -3,8 +3,6 @@
 
 /** \addtogroup Trackers Trackers
  * \brief Type: **Endcap Tracker with TOF**.
- * \author N. Schmidt
- * \modified by C.Y. Tsang 8th Oct, 2024
  *
  * \ingroup trackers
  *
