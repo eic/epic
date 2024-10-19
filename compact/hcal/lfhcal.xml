@@ -59,10 +59,6 @@
     <vis name="LFHCAL8MModVis"          ref="AnlBlue"       showDaughters="true"  visible="true"/>
     <vis name="LFHCAL4MModVis"          ref="AnlViolet"     showDaughters="true"  visible="true"/>
     <vis name="LFHCAL8MModOuter"        ref="AnlBlue"       showDaughters="true"  visible="true"/>
-
-    <!-- <vis name="LFHCAL8MModVis"          ref="AnlBlue"       showDaughters="true"  visible="false"/>
-    <vis name="LFHCAL4MModVis"          ref="AnlViolet"     showDaughters="true"  visible="false"/>
-    <vis name="LFHCAL8MModOuter"        ref="AnlBlue"       showDaughters="false"  visible="false"/> -->
     <vis name="LFHCALLayerScintVis"     ref="AnlLight_Gray" showDaughters="false" visible="true"/>
     <vis name="LFHCALLayerSteelVis"     ref="AnlRed"        showDaughters="false" visible="true"/>
     <vis name="LFHCALLayerTungstenVis"  ref="AnlViolet"     showDaughters="false" visible="true"/>
