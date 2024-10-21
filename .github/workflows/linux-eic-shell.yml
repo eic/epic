@@ -122,29 +122,6 @@ jobs:
         sudo apt-get install -y libxml2-utils
         find install/share -name "*.xml" -exec xmllint {} \; > /dev/null
 
-  trigger-geoviewer:
-    runs-on: ubuntu-latest
-    needs:
-      - xmllint-after-build
-      - list-detector-configs
-    steps:
-    - uses: eic/trigger-gitlab-ci@v3
-      id: trigger
-      with:
-        url: https://eicweb.phy.anl.gov
-        project_id: 539
-        token: ${{ secrets.EICWEB_GEOVIEWER_TRIGGER }}
-        ref_name: main
-        variables: |
-          DETECTOR=epic
-          DETECTOR_REPOSITORYURL=${{ github.server_url }}/${{ github.repository }}
-          DETECTOR_REPOSITORYREF=${{ github.ref }}
-          DETECTOR_CONFIG=${{ needs.list-detector-configs.outputs.configs_csv }}
-          DETECTOR_VERSION=${{ github.sha }}
-          GITHUB_REPOSITORY=${{ github.repository }}
-          GITHUB_SHA=${{ github.event.pull_request.head.sha || github.sha }}
-          GITHUB_PR=${{ github.event.pull_request.number }}
-
   check-geometry-configs:
     needs:
       - build
