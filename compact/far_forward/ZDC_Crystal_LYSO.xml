@@ -63,7 +63,7 @@
   <readouts>
     <readout name="EcalFarForwardZDCHits">
       <segmentation type="NoSegmentation"/>
-      <id>system:8,module:2,crystal:12</id>
+      <id>system:8,module:2,x:8,y:8</id>
     </readout>
   </readouts>
 

@@ -85,18 +85,16 @@ static Ref_t create_detector(Detector& desc, xml_h handle, SensitiveDetector sen
   double y_pos_0          = -(ny * tsy + (ny - 1) * fthickness) / 2.;
   double twr_z_pos_in_fr  = -fz / 2. + tsz / 2.;
   double sct_z_pos_in_env = -length / 2. + tsz + ssz / 2.;
-  int mod_i               = 0;
   for (int ix = 0; ix < nx; ix++) {
     double x_pos = x_pos_0 + ix * (tsx + fthickness) + tsx / 2.;
 
     for (int iy = 0; iy < ny; iy++) {
       double y_pos = y_pos_0 + iy * (tsy + fthickness) + tsy / 2.;
 
-      mod_i++;
-
       Position twr_pos(x_pos, y_pos, twr_z_pos_in_fr);
       pv = frVol.placeVolume(t_Vol, twr_pos);
-      pv.addPhysVolID(t_name, mod_i);
+      pv.addPhysVolID("x", ix + 1)
+	.addPhysVolID("y", iy + 1);
 
       Position sct_pos(x_pos, y_pos, sct_z_pos_in_env);
       pv = env.placeVolume(s_Vol, sct_pos);
