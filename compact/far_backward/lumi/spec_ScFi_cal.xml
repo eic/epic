@@ -20,7 +20,7 @@
                                  spacex="LumiSpecCAL_FiberSpaceX"
                                  spacey="LumiSpecCAL_FiberSpaceY"
                                  vis="LumiSpecCAL_FiberVis"/>
-                                <fiberholder material="Steel1020" vis="LumiSpecCAL_FiberHolderVis"/>
+                                <fiberholder material="Brass360" vis="LumiSpecCAL_FiberHolderVis"/>
                         </module>
                         <sector id="0">
                                 <position x="0.0*cm" y="LumiSpecCAL_Y" z="LumiSpecCAL_Z"/>
