@@ -207,7 +207,7 @@ static tuple<Volume, Position> build_specScFiCAL_module(const Detector& descript
 
   //Fiber Holder
   auto fiberholder_x = mod_x.child(_Unicode(fiberholder));
-  double fh_dz       = 0.4 * mm; //thickness of fiber holder
+  double fh_dz       = 0.25 * mm; //thickness of fiber holder
 
   double fh_outerbox_y = 2.0 * fr + 2.0 * fsy;
   double fh_outerbox_x = 2.0 * fr + 2.0 * fsx;
