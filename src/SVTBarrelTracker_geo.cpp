@@ -154,32 +154,15 @@ static Ref_t create_SVTBarrelTracker(Detector& description, xml_h e, SensitiveDe
     volumes[sM.name] = m_vol;
     m_vol.setVisAttributes(description.visAttributes(x_mod.visStr()));
 
-    // **** hard-coded RSU design with 4 tiles, plus backbones, readout pads, biasing
-    // "|" = backbone:
-    //
-    // | ------readout-------- | -------readout--------
-    // | tile                  | tile
-    // | ------biasing-------- | -------biasing--------
-    // | ------biasing-------- | -------biasing--------
-    // | tile                  | tile
-    // | ------readout-------- | -------readout--------
-    // please keep, RSU dimensions are calculated from the number below in mm:
-    // const double tile_width          = 9.197;
-    // const double tile_length         = 10.773; // along the stave (z)
-    const double BackboneWidth       = 0.06;
-    // const double BackboneLength      = 9.782;
-    // const double Readout_Pads_Width  = 10.773;
-    // const double Readout_Pads_Length = 0.525;
-    const double BiasingWidth        = 0.06;   // x2 for two sets
-    // const double BiasingLength       = 10.773; // along the stave (z)
 
-    // creat the total frame volume of RSU
-    Solid rsu_frame;
+    // creat the total RSU volume, then subtract the tiles to get frame.
+    // this method doesn't work well, has strange residuals
+    // Solid rsu_frame;
     // IntersectionSolid rsu_frame;
-    if (sM.has_rsu) {
-      double dphi = sM.width / sM.rmin / 2;
-      rsu_frame=Tube(sM.rmin, sM.rmin + sM.uthickness, sM.length / 2, -dphi, dphi);
-    }
+    // if (sM.has_rsu) {
+      // double dphi = sM.width / sM.rmin / 2;
+      // rsu_frame=Tube(sM.rmin, sM.rmin + sM.uthickness, sM.length / 2, -dphi, dphi);
+    // }
  
 
     // ********** LOOP OVER COMPONENTS 
@@ -191,7 +174,7 @@ static Ref_t create_SVTBarrelTracker(Detector& description, xml_h e, SensitiveDe
       comp_rmin+=sM.uthickness; 
     }
     // xml_comp_t* sensitiveComp = 0;
-    int sensor_number         = 1;
+    int sensor_number       = 1;
     for (xml_coll_t mci(x_mod, _U(module_component)); mci; ++mci) {
       xml_comp_t x_comp     = mci;
       const string c_nam    = x_comp.nameStr();
@@ -199,54 +182,107 @@ static Ref_t create_SVTBarrelTracker(Detector& description, xml_h e, SensitiveDe
       double comp_length = sM.length; // default value for a regular component (not a frame)
       double comp_width  = sM.width; // default value for a regular component (not a frame)
 
-      double pz=0; // default: create the module at center
-      double rphi=0; // default: no rotation
-      bool is_tile = 0;
-      if (sM.has_rsu) { // if has a frame, use RSU size, and determine the tile offset by comp name
-        double rphi_temp = (0.5 * x_comp.width()  + BiasingWidth*mm)/sM.rmin;   //tile_width along rphi
-        double pz_temp   = 0.5 * x_comp.length();  //tile_length along z
-        is_tile = 1;
-        if ((c_nam == "UpperRightTile")) {
-          rphi     = rphi_temp;
-          pz       = -pz_temp-BackboneWidth*mm;
-        } else if (c_nam == "UpperLeftTile") {
-          rphi     = rphi_temp;
-          pz       = pz_temp;
-        } else if (c_nam == "LowerRightTile") {
-          rphi       = -rphi_temp;
-          pz       = -pz_temp-BackboneWidth*mm;
-        } else if (c_nam == "LowerLeftTile") {
-          rphi       = -rphi_temp;
-          pz       = pz_temp;
-        } else {
-          is_tile=0;
-          }
-      }
-      RotationZYX rot(rphi, 0, 0);
-      Position pos(0,0,pz);// x: along R pointing out. y: along rphi, 
-      Transform3D tr(rot, pos);
-      Solid c_tube;
-      if (is_tile) { // has frame with tiles, use RSU dimension
-        double dphi      = x_comp.width() / sM.rmin / 2;
-        double phi_start = -dphi, phi_end = dphi;
-        c_tube    = Tube(sM.rmin, sM.rmin + sM.uthickness, x_comp.length() / 2, phi_start, phi_end);
-        // subtract tile volume from the inactive frame
-        rsu_frame = SubtractionSolid(rsu_frame, c_tube, tr);
-      } else{
-        double dphi      = comp_width / sM.rmin / 2;
-        double phi_start = -dphi, phi_end = dphi;
-        c_tube=Tube(comp_rmin, comp_rmin + comp_thickness, comp_length / 2, phi_start, phi_end);
-      }
+      Volume c_vol;
+      PlacedVolume pv_sens;
 
-      Volume c_vol(c_nam, c_tube, description.material(x_comp.materialStr()));
-      pv = m_vol.placeVolume(c_vol, tr); 
+      bool is_tile=0;
+      // place four tiles. Other components are set at center
+      if ((c_nam == "UpperRightTile")||(c_nam == "UpperLeftTile")||(c_nam == "LowerRightTile")||(c_nam == "LowerLeftTile")){
+        if (sM.has_rsu) { // ignore tiles if no frame provided
+          is_tile=1;
+          double rphi_lo=0, rphi_hi=0, z_left=0, z_right=0, rphi_hihi=0;
+          double drphi = x_comp.width();   //tile_width along rphi
+          double dz    = x_comp.length();  //tile_length along z  
+          // **** hard-coded RSU design with 4 tiles, plus backbones, readout pads, biasing
+          // "|" = backbone:
+          //
+          // | ------readout-------- | -------readout--------
+          // | tile                  | tile
+          // | ------biasing-------- | -------biasing--------
+          // | ------biasing-------- | -------biasing--------
+          // | tile                  | tile
+          // | ------readout-------- | -------readout--------
+          // please keep, RSU dimensions are calculated from the number below in mm:
+          const double tile_width          = drphi;//9.197;
+          const double tile_length         = dz;//10.773; // along the stave (z)
+          const double BiasingWidth        = 0.06*mm;   // need to x2 for two sets
+          // const double BiasingLength       = tile_length; // along the stave (z)
+          // const double ReadoutPadsLength   = tile_length;
+          const double ReadoutPadsWidth    = sM.width/2-BiasingWidth-tile_width;
+          const double BackboneLength      = sM.length/2-tile_length;//0.06;
+          const double BackboneWidth       = sM.width/2;
+
+          if ((c_nam == "UpperRightTile")) {
+            rphi_lo = BiasingWidth;
+            rphi_hi = rphi_lo + drphi;
+            rphi_hihi = sM.width/2;
+            z_left  = BackboneLength;
+            z_right = z_left + dz;
+          } else if (c_nam == "UpperLeftTile") {
+            rphi_lo = BiasingWidth;
+            rphi_hihi = sM.width/2;
+            rphi_hi = rphi_lo + drphi;
+            z_right  = 0;
+            z_left   = z_right - dz;
+          } else if (c_nam == "LowerRightTile") {
+            rphi_lo = -BiasingWidth;
+            rphi_hi = rphi_lo - drphi; //hi: farther away from phi=0, with sign
+            rphi_hihi = -sM.width/2;
+            z_left  = BackboneLength;
+            z_right = z_left + dz;
+          } else if (c_nam == "LowerLeftTile") {
+            rphi_lo = -BiasingWidth;
+            rphi_hi = rphi_lo - drphi;
+            rphi_hihi = -sM.width/2;
+            z_right  = 0;
+            z_left   = z_right - dz;
+          } 
+          double dphi  = drphi/sM.rmin;
+          double pz    = (z_right+z_left)/2;
+          double phi   = (rphi_hi+rphi_lo)/2/sM.rmin;
+          Position pos(0,0,pz);// x: along R pointing out. y: along rphi, 
+          RotationZYX rot(phi,0,0);
+          Transform3D tr(rot, pos);
+          Tube c_tube(sM.rmin, sM.rmin + sM.uthickness, dz/2, -dphi/2, dphi/2);
+          c_vol = Volume(c_nam, c_tube, description.material(x_comp.materialStr()));
+          pv_sens = m_vol.placeVolume(c_vol, tr);
+          // subtract tile volume from the inactive frame // doesn't work, has unknown residuals
+          // rsu_frame = SubtractionSolid(rsu_frame, c_tube, tr);
+          // biasing
+          dphi = BiasingWidth/sM.rmin;
+          Tube f_tube1(sM.rmin, sM.rmin + sM.uthickness, dz/2, -dphi/2, dphi/2);
+          Volume f_vol1(c_nam+"_biasing", f_tube1, description.material(sM.umaterial));
+          pv = m_vol.placeVolume(f_vol1, Transform3D(RotationZYX(rphi_lo/sM.rmin/2,0,0),pos));
+          f_vol1.setVisAttributes(description, sM.uvis);
+
+          // read out
+          dphi = ReadoutPadsWidth/sM.rmin;
+          Tube f_tube2(sM.rmin, sM.rmin + sM.uthickness, dz/2, -dphi/2, dphi/2);
+          Volume f_vol2(c_nam+"_readout", f_tube2, description.material(sM.umaterial));
+          pv = m_vol.placeVolume(f_vol2, Transform3D(RotationZYX((rphi_hihi+rphi_hi)/sM.rmin/2,0,0),pos));
+          f_vol2.setVisAttributes(description, sM.uvis);
+
+          // backbone 
+          dphi = BackboneWidth/sM.rmin;
+          Tube f_tube3(sM.rmin, sM.rmin + sM.uthickness, BackboneLength/2, -dphi/2, dphi/2);
+          Volume f_vol3(c_nam+"_backbone", f_tube3, description.material(sM.umaterial));
+          pv = m_vol.placeVolume(f_vol3, Transform3D(RotationZYX(rphi_hihi/sM.rmin/2,0,0),Position(0,0,z_left-BackboneLength/2)));
+          f_vol3.setVisAttributes(description, sM.uvis);
+        } 
+      }
+      else{ // other component, place at given thickness, and module center
+        double dphi      = comp_width / comp_rmin;
+        Tube c_tube(comp_rmin, comp_rmin + comp_thickness, comp_length / 2, -dphi/2, dphi/2);
+        c_vol = Volume(c_nam, c_tube, description.material(x_comp.materialStr()));
+        pv_sens = m_vol.placeVolume(c_vol, Transform3D(RotationZYX(0,0,0),Position(0,0,0)));
+      }
       c_vol.setVisAttributes(description, x_comp.visStr());
-
+      
       if (x_comp.isSensitive()) {
         // // ***** SENSITIVE VOLUME
-        pv.addPhysVolID("sensor", sensor_number++);
+        pv_sens.addPhysVolID("sensor", sensor_number++);
         c_vol.setSensitiveDetector(sens);
-        sensitives[sM.name].push_back(pv);
+        sensitives[sM.name].push_back(pv_sens);
 
         // -------- create a measurement plane for the tracking surface attached to the sensitive volume -----
         Vector3D u(-1., 0., 0.);
@@ -256,8 +292,6 @@ static Ref_t create_SVTBarrelTracker(Detector& description, xml_h e, SensitiveDe
         // Compute the inner (i.e. thickness until mid-sensitive-volume) and
         //             outer (from mid-sensitive-volume to top)
         // thicknesses that need to be assigned to the tracking surface
-        // depending on wether the support is above or below the sensor (!?)
-      
         double inner_thickness, outer_thickness;
         if (is_tile){
           inner_thickness = sM.uthickness / 2;
@@ -275,11 +309,11 @@ static Ref_t create_SVTBarrelTracker(Detector& description, xml_h e, SensitiveDe
       thickness_so_far += comp_thickness;
     } //end of module component loop
       //place the frame
-    if (sM.has_rsu){
-      Volume rsu_vol(sM.uname, rsu_frame, description.material(sM.umaterial));
-      pv       = m_vol.placeVolume(rsu_vol, Position(0, 0, 0));
-      rsu_vol.setVisAttributes(description, sM.uvis);
-    }
+    // if (sM.has_rsu){
+      // Volume rsu_vol(sM.uname, rsu_frame, description.material(sM.umaterial));
+      // pv       = m_vol.placeVolume(rsu_vol, Position(0, 0, 0));
+      // rsu_vol.setVisAttributes(description, sM.uvis);
+    // }
   } //end of module loop
    
   // ********** LAYER

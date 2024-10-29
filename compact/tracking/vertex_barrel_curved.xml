@@ -80,18 +80,14 @@
       </comment>
       <dimensions
        length="VertexBarrelEnvelope_length" z0="0" />
-      <comment>Vertex Barrel Modules</comment>
-      <comment>
+       <comment>Vertex Barrel Modules</comment>
+       <comment>
         Tile components will be ignored if no frame (RSU) is provided.
-        An inactive si layer will be created from frame if no tiles are provided.
+        width and length in component will be ignored for non-tiles. 
       </comment>
       <module name="L0" vis="VertexLayerVis" rmin="VertexBarrelLayer1_rmin" width="RSU_width" length="RSU_length">
         <frame name="RSUFrame" vis="VertexSupportLayerVis" material="Silicon"
               thickness="SiVertexSensor_thickness" />
-        <!-- <module_component name="ITS3"
-                          material="Silicon"
-                          sensitive="true"
-                          vis="VertexLayerVis" /> -->
         <module_component name="UpperLeftTile"
           sensitive="true" vis="VertexLayerVis" material="Silicon"
           width="Tile_width" length="Tile_length" thickness="Tile_thickness_dummy"
@@ -109,20 +105,47 @@
         width="Tile_width" length="Tile_length" thickness="Tile_thickness_dummy"
       />
       </module>
-
-
-      <!-- <module name="L1" vis="VertexLayerVis" rmin="VertexBarrelLayer2_rmin">
-        <module_component name="ITS3"
-          material="Silicon"
-          sensitive="true"
-          vis="VertexLayerVis" />
+      <module name="L1" vis="VertexLayerVis" rmin="VertexBarrelLayer2_rmin" width="RSU_width" length="RSU_length">
+        <frame name="RSUFrame" vis="VertexSupportLayerVis" material="Silicon"
+              thickness="SiVertexSensor_thickness" />
+        <module_component name="UpperLeftTile"
+          sensitive="true" vis="VertexLayerVis" material="Silicon"
+          width="Tile_width" length="Tile_length" thickness="Tile_thickness_dummy"
+        />
+        <module_component name="UpperRightTile"
+        sensitive="true" vis="VertexLayerVis" material="Silicon"
+        width="Tile_width" length="Tile_length" thickness="Tile_thickness_dummy"
+      />
+        <module_component name="LowerLeftTile"
+        sensitive="true" vis="VertexLayerVis" material="Silicon"
+        width="Tile_width" length="Tile_length" thickness="Tile_thickness_dummy"
+      />
+        <module_component name="LowerRightTile"
+        sensitive="true" vis="VertexLayerVis" material="Silicon"
+        width="Tile_width" length="Tile_length" thickness="Tile_thickness_dummy"
+      />
       </module>
-      <module name="L2" vis="VertexLayerVis" rmin="VertexBarrelLayer3_rmin">
-        <module_component name="ITS3"
-          material="Silicon"
-          sensitive="true"
-          vis="VertexLayerVis" />
-      </module> -->
+      <module name="L2" vis="VertexLayerVis" rmin="VertexBarrelLayer3_rmin" width="RSU_width" length="RSU_length">
+        <frame name="RSUFrame" vis="VertexSupportLayerVis" material="Silicon"
+              thickness="SiVertexSensor_thickness" />
+        <module_component name="UpperLeftTile"
+          sensitive="true" vis="VertexLayerVis" material="Silicon"
+          width="Tile_width" length="Tile_length" thickness="Tile_thickness_dummy"
+        />
+        <module_component name="UpperRightTile"
+        sensitive="true" vis="VertexLayerVis" material="Silicon"
+        width="Tile_width" length="Tile_length" thickness="Tile_thickness_dummy"
+      />
+        <module_component name="LowerLeftTile"
+        sensitive="true" vis="VertexLayerVis" material="Silicon"
+        width="Tile_width" length="Tile_length" thickness="Tile_thickness_dummy"
+      />
+        <module_component name="LowerRightTile"
+        sensitive="true" vis="VertexLayerVis" material="Silicon"
+        width="Tile_width" length="Tile_length" thickness="Tile_thickness_dummy"
+      />
+      </module>
+     
 
       <comment> Layers composed of many arrayed modules </comment>
       <layer module="L0" id="1" vis="VertexLayerVis">
@@ -140,7 +163,7 @@
         <z_layout />
       </layer>
 
-      <!-- <layer module="L1" id="2" vis="VertexLayerVis">
+      <layer module="L1" id="2" vis="VertexLayerVis">
         <barrel_envelope
           inner_r="VertexBarrelLayer2_rmin"
           outer_r="VertexBarrelLayer2_rmax"
@@ -168,7 +191,7 @@
         </comment>
         <rphi_layout phi0="0.0" />
         <z_layout />
-      </layer> -->
+      </layer>
     </detector>
   </detectors>
 
@@ -180,7 +203,7 @@
   </plugins>
 
   <readouts>
-    <readout name="VertexBarrelHits">
+    <readout name="VertexBarrelHits"> TODO: set segmentation for tube
       <segmentation type="CartesianGridXY" grid_size_x="0.020*mm" grid_size_y="0.020*mm" />
       <id>system:8,layer:4,module:12,sensor:2,x:32:-16,y:-16</id>
     </readout>
