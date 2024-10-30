@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<gdml xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://service-spi.web.cern.ch/service-spi/app/releases/GDML/schema/gdml.xsd">
+
+    <define>
+        <position name="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII_v0" unit="mm" x="-18.9008312225" y="2.42784667015" z="-131.934997559"/>
+        <position name="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII_v1" unit="mm" x="-19.452287674" y="2.30955195427" z="-131.934997559"/>
+        <position name="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII_v2" unit="mm" x="-19.431312561" y="2.21177625656" z="-131.934997559"/>
+        <position name="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII_v3" unit="mm" x="-18.879858017" y="2.33007097244" z="-131.934997559"/>
+        <position name="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII_v4" unit="mm" x="-14.7417221069" y="3.21838116646" z="-131.934997559"/>
+        <position name="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII_v5" unit="mm" x="-14.7253608704" y="3.11972856522" z="-131.934997559"/>
+        <position name="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII_v6" unit="mm" x="-10.5500888824" y="3.81281208992" z="-131.934997559"/>
+        <position name="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII_v7" unit="mm" x="-10.5383768082" y="3.71350026131" z="-131.934997559"/>
+        <position name="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII_v8" unit="mm" x="-6.33517313004" y="4.20982885361" z="-131.934997559"/>
+        <position name="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII_v9" unit="mm" x="-6.32813549042" y="4.1100769043" z="-131.934997559"/>
+        <position name="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII_v10" unit="mm" x="-2.10626721382" y="4.40855646133" z="-131.934997559"/>
+        <position name="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII_v11" unit="mm" x="-2.10391950607" y="4.30858373642" z="-131.934997559"/>
+        <position name="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII_v12" unit="mm" x="2.12730550766" y="4.40855646133" z="-131.934997559"/>
+        <position name="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII_v13" unit="mm" x="2.12495779991" y="4.30858373642" z="-131.934997559"/>
+        <position name="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII_v14" unit="mm" x="6.35621166229" y="4.20982885361" z="-131.934997559"/>
+        <position name="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII_v15" unit="mm" x="6.34917354584" y="4.1100769043" z="-131.934997559"/>
+        <position name="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII_v16" unit="mm" x="10.5711269379" y="3.81281208992" z="-131.934997559"/>
+        <position name="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII_v17" unit="mm" x="10.5594148636" y="3.71350026131" z="-131.934997559"/>
+        <position name="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII_v18" unit="mm" x="14.762761116" y="3.21838116646" z="-131.934997559"/>
+        <position name="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII_v19" unit="mm" x="14.7463989258" y="3.11972856522" z="-131.934997559"/>
+        <position name="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII_v20" unit="mm" x="18.9218711853" y="2.42784667015" z="-131.934997559"/>
+        <position name="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII_v21" unit="mm" x="18.9008960724" y="2.33007097244" z="-131.934997559"/>
+        <position name="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII_v22" unit="mm" x="19.4733257294" y="2.30955195427" z="-131.934997559"/>
+        <position name="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII_v23" unit="mm" x="19.4523506165" y="2.21177625656" z="-131.934997559"/>
+        <position name="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII_v24" unit="mm" x="-19.452287674" y="2.30955195427" z="-268.065002441"/>
+        <position name="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII_v25" unit="mm" x="-18.9008312225" y="2.42784667015" z="-268.065002441"/>
+        <position name="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII_v26" unit="mm" x="-19.431312561" y="2.21177625656" z="-268.065002441"/>
+        <position name="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII_v27" unit="mm" x="-18.879858017" y="2.33007097244" z="-268.065002441"/>
+        <position name="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII_v28" unit="mm" x="-14.7417221069" y="3.21838116646" z="-268.065002441"/>
+        <position name="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII_v29" unit="mm" x="-14.7253608704" y="3.11972856522" z="-268.065002441"/>
+        <position name="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII_v30" unit="mm" x="-10.5500888824" y="3.81281208992" z="-268.065002441"/>
+        <position name="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII_v31" unit="mm" x="-10.5383768082" y="3.71350026131" z="-268.065002441"/>
+        <position name="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII_v32" unit="mm" x="-6.33517313004" y="4.20982885361" z="-268.065002441"/>
+        <position name="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII_v33" unit="mm" x="-6.32813549042" y="4.1100769043" z="-268.065002441"/>
+        <position name="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII_v34" unit="mm" x="-2.10391950607" y="4.30858373642" z="-268.065002441"/>
+        <position name="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII_v35" unit="mm" x="-2.10626721382" y="4.40855646133" z="-268.065002441"/>
+        <position name="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII_v36" unit="mm" x="2.12495779991" y="4.30858373642" z="-268.065002441"/>
+        <position name="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII_v37" unit="mm" x="2.12730550766" y="4.40855646133" z="-268.065002441"/>
+        <position name="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII_v38" unit="mm" x="6.34917354584" y="4.1100769043" z="-268.065002441"/>
+        <position name="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII_v39" unit="mm" x="6.35621166229" y="4.20982885361" z="-268.065002441"/>
+        <position name="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII_v40" unit="mm" x="10.5594148636" y="3.71350026131" z="-268.065002441"/>
+        <position name="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII_v41" unit="mm" x="10.5711269379" y="3.81281208992" z="-268.065002441"/>
+        <position name="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII_v42" unit="mm" x="14.7463989258" y="3.11972856522" z="-268.065002441"/>
+        <position name="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII_v43" unit="mm" x="14.762761116" y="3.21838116646" z="-268.065002441"/>
+        <position name="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII_v44" unit="mm" x="18.9008960724" y="2.33007097244" z="-268.065002441"/>
+        <position name="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII_v45" unit="mm" x="18.9218711853" y="2.42784667015" z="-268.065002441"/>
+        <position name="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII_v46" unit="mm" x="19.4733257294" y="2.30955195427" z="-268.065002441"/>
+        <position name="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII_v47" unit="mm" x="19.4523506165" y="2.21177625656" z="-268.065002441"/>
+        <position name="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII_v48" unit="mm" x="19.4733257294" y="2.30955195427" z="-254.065002441"/>
+        <position name="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII_v49" unit="mm" x="18.9218711853" y="2.42784667015" z="-145.73500061"/>
+        <position name="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII_v50" unit="mm" x="19.4733257294" y="2.30955195427" z="-145.73500061"/>
+        <position name="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII_v51" unit="mm" x="18.9218711853" y="2.42784667015" z="-254.065002441"/>
+        <position name="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII_v52" unit="mm" x="-18.9008312225" y="2.42784667015" z="-254.065002441"/>
+        <position name="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII_v53" unit="mm" x="-18.9008312225" y="2.42784667015" z="-145.73500061"/>
+        <position name="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII_v54" unit="mm" x="-19.452287674" y="2.30955195427" z="-145.73500061"/>
+        <position name="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII_v55" unit="mm" x="-19.452287674" y="2.30955195427" z="-254.065002441"/>
+    </define>
+
+    <solids>
+        <tessellated aunit="deg" lunit="mm" name="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII-SOL">
+             <triangular vertex1="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII_v0" vertex2="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII_v1" vertex3="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII_v2"/>
+             <triangular vertex1="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII_v0" vertex2="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII_v2" vertex3="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII_v3"/>
+             <triangular vertex1="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII_v4" vertex2="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII_v3" vertex3="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII_v5"/>
+             <triangular vertex1="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII_v4" vertex2="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII_v0" vertex3="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII_v3"/>
+             <triangular vertex1="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII_v6" vertex2="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII_v5" vertex3="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII_v7"/>
+             <triangular vertex1="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII_v6" vertex2="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII_v4" vertex3="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII_v5"/>
+             <triangular vertex1="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII_v8" vertex2="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII_v7" vertex3="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII_v9"/>
+             <triangular vertex1="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII_v8" vertex2="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII_v6" vertex3="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII_v7"/>
+             <triangular vertex1="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII_v10" vertex2="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII_v9" vertex3="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII_v11"/>
+             <triangular vertex1="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII_v10" vertex2="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII_v8" vertex3="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII_v9"/>
+             <triangular vertex1="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII_v12" vertex2="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII_v11" vertex3="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII_v13"/>
+             <triangular vertex1="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII_v12" vertex2="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII_v10" vertex3="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII_v11"/>
+             <triangular vertex1="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII_v14" vertex2="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII_v13" vertex3="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII_v15"/>
+             <triangular vertex1="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII_v14" vertex2="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII_v12" vertex3="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII_v13"/>
+             <triangular vertex1="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII_v16" vertex2="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII_v15" vertex3="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII_v17"/>
+             <triangular vertex1="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII_v16" vertex2="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII_v14" vertex3="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII_v15"/>
+             <triangular vertex1="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII_v18" vertex2="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII_v17" vertex3="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII_v19"/>
+             <triangular vertex1="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII_v18" vertex2="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII_v16" vertex3="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII_v17"/>
+             <triangular vertex1="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII_v20" vertex2="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII_v19" vertex3="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII_v21"/>
+             <triangular vertex1="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII_v20" vertex2="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII_v18" vertex3="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII_v19"/>
+             <triangular vertex1="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII_v22" vertex2="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII_v21" vertex3="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII_v23"/>
+             <triangular vertex1="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII_v22" vertex2="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII_v20" vertex3="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII_v21"/>
+             <triangular vertex1="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII_v24" vertex2="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII_v25" vertex3="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII_v26"/>
+             <triangular vertex1="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII_v26" vertex2="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII_v25" vertex3="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII_v27"/>
+             <triangular vertex1="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII_v27" vertex2="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII_v28" vertex3="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII_v29"/>
+             <triangular vertex1="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII_v25" vertex2="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII_v28" vertex3="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII_v27"/>
+             <triangular vertex1="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII_v29" vertex2="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII_v30" vertex3="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII_v31"/>
+             <triangular vertex1="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII_v28" vertex2="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII_v30" vertex3="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII_v29"/>
+             <triangular vertex1="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII_v31" vertex2="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII_v32" vertex3="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII_v33"/>
+             <triangular vertex1="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII_v30" vertex2="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII_v32" vertex3="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII_v31"/>
+             <triangular vertex1="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII_v32" vertex2="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII_v34" vertex3="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII_v33"/>
+             <triangular vertex1="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII_v32" vertex2="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII_v35" vertex3="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII_v34"/>
+             <triangular vertex1="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII_v35" vertex2="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII_v36" vertex3="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII_v34"/>
+             <triangular vertex1="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII_v35" vertex2="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII_v37" vertex3="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII_v36"/>
+             <triangular vertex1="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII_v37" vertex2="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII_v38" vertex3="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII_v36"/>
+             <triangular vertex1="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII_v37" vertex2="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII_v39" vertex3="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII_v38"/>
+             <triangular vertex1="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII_v39" vertex2="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII_v40" vertex3="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII_v38"/>
+             <triangular vertex1="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII_v39" vertex2="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII_v41" vertex3="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII_v40"/>
+             <triangular vertex1="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII_v41" vertex2="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII_v42" vertex3="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII_v40"/>
+             <triangular vertex1="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII_v41" vertex2="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII_v43" vertex3="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII_v42"/>
+             <triangular vertex1="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII_v43" vertex2="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII_v44" vertex3="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII_v42"/>
+             <triangular vertex1="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII_v43" vertex2="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII_v45" vertex3="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII_v44"/>
+             <triangular vertex1="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII_v44" vertex2="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII_v46" vertex3="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII_v47"/>
+             <triangular vertex1="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII_v45" vertex2="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII_v46" vertex3="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII_v44"/>
+             <triangular vertex1="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII_v48" vertex2="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII_v49" vertex3="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII_v50"/>
+             <triangular vertex1="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII_v48" vertex2="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII_v51" vertex3="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII_v49"/>
+             <triangular vertex1="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII_v46" vertex2="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII_v45" vertex3="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII_v51"/>
+             <triangular vertex1="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII_v46" vertex2="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII_v51" vertex3="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII_v48"/>
+             <triangular vertex1="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII_v50" vertex2="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII_v22" vertex3="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII_v23"/>
+             <triangular vertex1="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII_v47" vertex2="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII_v46" vertex3="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII_v48"/>
+             <triangular vertex1="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII_v23" vertex2="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII_v47" vertex3="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII_v48"/>
+             <triangular vertex1="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII_v23" vertex2="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII_v48" vertex3="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII_v50"/>
+             <triangular vertex1="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII_v21" vertex2="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII_v44" vertex3="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII_v23"/>
+             <triangular vertex1="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII_v44" vertex2="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII_v47" vertex3="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII_v23"/>
+             <triangular vertex1="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII_v50" vertex2="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII_v49" vertex3="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII_v20"/>
+             <triangular vertex1="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII_v50" vertex2="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII_v20" vertex3="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII_v22"/>
+             <triangular vertex1="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII_v43" vertex2="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII_v51" vertex3="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII_v45"/>
+             <triangular vertex1="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII_v18" vertex2="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII_v20" vertex3="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII_v49"/>
+             <triangular vertex1="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII_v18" vertex2="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII_v49" vertex3="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII_v51"/>
+             <triangular vertex1="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII_v18" vertex2="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII_v43" vertex3="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII_v41"/>
+             <triangular vertex1="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII_v18" vertex2="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII_v51" vertex3="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII_v43"/>
+             <triangular vertex1="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII_v16" vertex2="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII_v41" vertex3="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII_v39"/>
+             <triangular vertex1="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII_v16" vertex2="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII_v18" vertex3="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII_v41"/>
+             <triangular vertex1="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII_v14" vertex2="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII_v39" vertex3="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII_v37"/>
+             <triangular vertex1="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII_v14" vertex2="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII_v16" vertex3="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII_v39"/>
+             <triangular vertex1="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII_v12" vertex2="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII_v37" vertex3="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII_v35"/>
+             <triangular vertex1="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII_v12" vertex2="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII_v14" vertex3="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII_v37"/>
+             <triangular vertex1="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII_v10" vertex2="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII_v35" vertex3="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII_v32"/>
+             <triangular vertex1="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII_v10" vertex2="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII_v12" vertex3="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII_v35"/>
+             <triangular vertex1="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII_v8" vertex2="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII_v32" vertex3="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII_v30"/>
+             <triangular vertex1="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII_v8" vertex2="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII_v10" vertex3="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII_v32"/>
+             <triangular vertex1="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII_v6" vertex2="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII_v30" vertex3="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII_v28"/>
+             <triangular vertex1="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII_v6" vertex2="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII_v8" vertex3="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII_v30"/>
+             <triangular vertex1="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII_v52" vertex2="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII_v28" vertex3="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII_v25"/>
+             <triangular vertex1="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII_v4" vertex2="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII_v6" vertex3="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII_v28"/>
+             <triangular vertex1="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII_v4" vertex2="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII_v28" vertex3="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII_v52"/>
+             <triangular vertex1="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII_v53" vertex2="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII_v4" vertex3="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII_v52"/>
+             <triangular vertex1="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII_v0" vertex2="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII_v4" vertex3="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII_v53"/>
+             <triangular vertex1="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII_v52" vertex2="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII_v54" vertex3="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII_v53"/>
+             <triangular vertex1="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII_v52" vertex2="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII_v55" vertex3="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII_v54"/>
+             <triangular vertex1="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII_v54" vertex2="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII_v2" vertex3="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII_v1"/>
+             <triangular vertex1="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII_v24" vertex2="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII_v26" vertex3="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII_v55"/>
+             <triangular vertex1="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII_v26" vertex2="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII_v2" vertex3="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII_v54"/>
+             <triangular vertex1="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII_v26" vertex2="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII_v54" vertex3="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII_v55"/>
+             <triangular vertex1="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII_v2" vertex2="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII_v26" vertex3="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII_v3"/>
+             <triangular vertex1="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII_v26" vertex2="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII_v27" vertex3="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII_v3"/>
+             <triangular vertex1="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII_v21" vertex2="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII_v19" vertex3="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII_v44"/>
+             <triangular vertex1="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII_v44" vertex2="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII_v19" vertex3="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII_v42"/>
+             <triangular vertex1="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII_v42" vertex2="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII_v17" vertex3="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII_v40"/>
+             <triangular vertex1="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII_v19" vertex2="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII_v17" vertex3="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII_v42"/>
+             <triangular vertex1="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII_v40" vertex2="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII_v15" vertex3="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII_v38"/>
+             <triangular vertex1="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII_v17" vertex2="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII_v15" vertex3="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII_v40"/>
+             <triangular vertex1="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII_v36" vertex2="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII_v13" vertex3="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII_v34"/>
+             <triangular vertex1="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII_v38" vertex2="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII_v13" vertex3="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII_v36"/>
+             <triangular vertex1="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII_v15" vertex2="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII_v13" vertex3="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII_v38"/>
+             <triangular vertex1="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII_v34" vertex2="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII_v11" vertex3="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII_v33"/>
+             <triangular vertex1="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII_v13" vertex2="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII_v11" vertex3="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII_v34"/>
+             <triangular vertex1="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII_v33" vertex2="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII_v9" vertex3="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII_v31"/>
+             <triangular vertex1="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII_v11" vertex2="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII_v9" vertex3="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII_v33"/>
+             <triangular vertex1="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII_v31" vertex2="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII_v7" vertex3="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII_v29"/>
+             <triangular vertex1="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII_v9" vertex2="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII_v7" vertex3="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII_v31"/>
+             <triangular vertex1="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII_v29" vertex2="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII_v5" vertex3="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII_v27"/>
+             <triangular vertex1="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII_v7" vertex2="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII_v5" vertex3="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII_v29"/>
+             <triangular vertex1="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII_v5" vertex2="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII_v3" vertex3="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII_v27"/>
+             <triangular vertex1="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII_v25" vertex2="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII_v24" vertex3="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII_v55"/>
+             <triangular vertex1="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII_v25" vertex2="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII_v55" vertex3="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII_v52"/>
+             <triangular vertex1="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII_v53" vertex2="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII_v54" vertex3="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII_v1"/>
+             <triangular vertex1="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII_v53" vertex2="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII_v1" vertex3="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII_v0"/>
+        </tessellated>
+    </solids>
+
+    <structure>
+        <volume name="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII">
+            <materialref ref="Vacuum"/>
+            <solidref ref="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII-SOL"/>
+        </volume>
+    </structure>
+
+    <setup name="Default" version="1.0">
+        <world ref="ALICE_SENSOR_ASSEMBLY(Mirror)_(2)_ASCII"/>
+    </setup>
+</gdml>

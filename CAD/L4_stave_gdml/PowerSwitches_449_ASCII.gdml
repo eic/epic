@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<gdml xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://service-spi.web.cern.ch/service-spi/app/releases/GDML/schema/gdml.xsd">
+
+    <define>
+        <position name="PowerSwitches_449_ASCII_v0" unit="mm" x="0.577888548374" y="4.35058689117" z="61.9883041382"/>
+        <position name="PowerSwitches_449_ASCII_v1" unit="mm" x="0.577888548374" y="4.35058689117" z="62.0083045959"/>
+        <position name="PowerSwitches_449_ASCII_v2" unit="mm" x="3.66284060478" y="4.29160690308" z="62.0083045959"/>
+        <position name="PowerSwitches_449_ASCII_v3" unit="mm" x="3.66284060478" y="4.29160690308" z="61.9883041382"/>
+        <position name="PowerSwitches_449_ASCII_v4" unit="mm" x="6.74396514893" y="4.12704896927" z="62.0083045959"/>
+        <position name="PowerSwitches_449_ASCII_v5" unit="mm" x="6.74396514893" y="4.12704896927" z="61.9883041382"/>
+        <position name="PowerSwitches_449_ASCII_v6" unit="mm" x="9.81765079498" y="3.85710573196" z="61.9883041382"/>
+        <position name="PowerSwitches_449_ASCII_v7" unit="mm" x="9.81765079498" y="3.85710573196" z="62.0083045959"/>
+        <position name="PowerSwitches_449_ASCII_v8" unit="mm" x="9.81242370605" y="3.80737948418" z="61.9883041382"/>
+        <position name="PowerSwitches_449_ASCII_v9" unit="mm" x="9.81242370605" y="3.80737948418" z="62.0083045959"/>
+        <position name="PowerSwitches_449_ASCII_v10" unit="mm" x="0.577788770199" y="4.30058717728" z="62.0083045959"/>
+        <position name="PowerSwitches_449_ASCII_v11" unit="mm" x="0.577788770199" y="4.30058717728" z="61.9883041382"/>
+        <position name="PowerSwitches_449_ASCII_v12" unit="mm" x="3.66102933884" y="4.24163961411" z="62.0083045959"/>
+        <position name="PowerSwitches_449_ASCII_v13" unit="mm" x="3.66102933884" y="4.24163961411" z="61.9883041382"/>
+        <position name="PowerSwitches_449_ASCII_v14" unit="mm" x="6.74044418335" y="4.0771727562" z="61.9883041382"/>
+        <position name="PowerSwitches_449_ASCII_v15" unit="mm" x="6.74044418335" y="4.0771727562" z="62.0083045959"/>
+    </define>
+
+    <solids>
+        <tessellated aunit="deg" lunit="mm" name="PowerSwitches_449_ASCII-SOL">
+             <triangular vertex1="PowerSwitches_449_ASCII_v0" vertex2="PowerSwitches_449_ASCII_v1" vertex3="PowerSwitches_449_ASCII_v2"/>
+             <triangular vertex1="PowerSwitches_449_ASCII_v3" vertex2="PowerSwitches_449_ASCII_v2" vertex3="PowerSwitches_449_ASCII_v4"/>
+             <triangular vertex1="PowerSwitches_449_ASCII_v3" vertex2="PowerSwitches_449_ASCII_v0" vertex3="PowerSwitches_449_ASCII_v2"/>
+             <triangular vertex1="PowerSwitches_449_ASCII_v5" vertex2="PowerSwitches_449_ASCII_v3" vertex3="PowerSwitches_449_ASCII_v4"/>
+             <triangular vertex1="PowerSwitches_449_ASCII_v6" vertex2="PowerSwitches_449_ASCII_v4" vertex3="PowerSwitches_449_ASCII_v7"/>
+             <triangular vertex1="PowerSwitches_449_ASCII_v6" vertex2="PowerSwitches_449_ASCII_v5" vertex3="PowerSwitches_449_ASCII_v4"/>
+             <triangular vertex1="PowerSwitches_449_ASCII_v8" vertex2="PowerSwitches_449_ASCII_v6" vertex3="PowerSwitches_449_ASCII_v7"/>
+             <triangular vertex1="PowerSwitches_449_ASCII_v8" vertex2="PowerSwitches_449_ASCII_v7" vertex3="PowerSwitches_449_ASCII_v9"/>
+             <triangular vertex1="PowerSwitches_449_ASCII_v10" vertex2="PowerSwitches_449_ASCII_v11" vertex3="PowerSwitches_449_ASCII_v12"/>
+             <triangular vertex1="PowerSwitches_449_ASCII_v11" vertex2="PowerSwitches_449_ASCII_v13" vertex3="PowerSwitches_449_ASCII_v12"/>
+             <triangular vertex1="PowerSwitches_449_ASCII_v12" vertex2="PowerSwitches_449_ASCII_v14" vertex3="PowerSwitches_449_ASCII_v15"/>
+             <triangular vertex1="PowerSwitches_449_ASCII_v13" vertex2="PowerSwitches_449_ASCII_v14" vertex3="PowerSwitches_449_ASCII_v12"/>
+             <triangular vertex1="PowerSwitches_449_ASCII_v15" vertex2="PowerSwitches_449_ASCII_v8" vertex3="PowerSwitches_449_ASCII_v9"/>
+             <triangular vertex1="PowerSwitches_449_ASCII_v14" vertex2="PowerSwitches_449_ASCII_v8" vertex3="PowerSwitches_449_ASCII_v15"/>
+             <triangular vertex1="PowerSwitches_449_ASCII_v1" vertex2="PowerSwitches_449_ASCII_v11" vertex3="PowerSwitches_449_ASCII_v10"/>
+             <triangular vertex1="PowerSwitches_449_ASCII_v0" vertex2="PowerSwitches_449_ASCII_v11" vertex3="PowerSwitches_449_ASCII_v1"/>
+             <triangular vertex1="PowerSwitches_449_ASCII_v8" vertex2="PowerSwitches_449_ASCII_v14" vertex3="PowerSwitches_449_ASCII_v6"/>
+             <triangular vertex1="PowerSwitches_449_ASCII_v14" vertex2="PowerSwitches_449_ASCII_v5" vertex3="PowerSwitches_449_ASCII_v6"/>
+             <triangular vertex1="PowerSwitches_449_ASCII_v14" vertex2="PowerSwitches_449_ASCII_v13" vertex3="PowerSwitches_449_ASCII_v5"/>
+             <triangular vertex1="PowerSwitches_449_ASCII_v13" vertex2="PowerSwitches_449_ASCII_v3" vertex3="PowerSwitches_449_ASCII_v5"/>
+             <triangular vertex1="PowerSwitches_449_ASCII_v11" vertex2="PowerSwitches_449_ASCII_v0" vertex3="PowerSwitches_449_ASCII_v13"/>
+             <triangular vertex1="PowerSwitches_449_ASCII_v13" vertex2="PowerSwitches_449_ASCII_v0" vertex3="PowerSwitches_449_ASCII_v3"/>
+             <triangular vertex1="PowerSwitches_449_ASCII_v15" vertex2="PowerSwitches_449_ASCII_v9" vertex3="PowerSwitches_449_ASCII_v7"/>
+             <triangular vertex1="PowerSwitches_449_ASCII_v4" vertex2="PowerSwitches_449_ASCII_v15" vertex3="PowerSwitches_449_ASCII_v7"/>
+             <triangular vertex1="PowerSwitches_449_ASCII_v12" vertex2="PowerSwitches_449_ASCII_v15" vertex3="PowerSwitches_449_ASCII_v4"/>
+             <triangular vertex1="PowerSwitches_449_ASCII_v2" vertex2="PowerSwitches_449_ASCII_v12" vertex3="PowerSwitches_449_ASCII_v4"/>
+             <triangular vertex1="PowerSwitches_449_ASCII_v10" vertex2="PowerSwitches_449_ASCII_v12" vertex3="PowerSwitches_449_ASCII_v2"/>
+             <triangular vertex1="PowerSwitches_449_ASCII_v1" vertex2="PowerSwitches_449_ASCII_v10" vertex3="PowerSwitches_449_ASCII_v2"/>
+        </tessellated>
+    </solids>
+
+    <structure>
+        <volume name="PowerSwitches_449_ASCII">
+            <materialref ref="Vacuum"/>
+            <solidref ref="PowerSwitches_449_ASCII-SOL"/>
+        </volume>
+    </structure>
+
+    <setup name="Default" version="1.0">
+        <world ref="PowerSwitches_449_ASCII"/>
+    </setup>
+</gdml>

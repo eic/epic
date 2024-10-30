@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<gdml xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://service-spi.web.cern.ch/service-spi/app/releases/GDML/schema/gdml.xsd">
+
+    <define>
+        <position name="Pads_049(Mirror)_(1)(Mirror)_(1)001_ASCII_v0" unit="mm" x="0.189766228199" y="4.30059528351" z="80.2239990234"/>
+        <position name="Pads_049(Mirror)_(1)(Mirror)_(1)001_ASCII_v1" unit="mm" x="0.0814342424273" y="4.30005598068" z="80.2239990234"/>
+        <position name="Pads_049(Mirror)_(1)(Mirror)_(1)001_ASCII_v2" unit="mm" x="0.081434212625" y="4.30005598068" z="83.8150024414"/>
+        <position name="Pads_049(Mirror)_(1)(Mirror)_(1)001_ASCII_v3" unit="mm" x="0.189766198397" y="4.30059480667" z="83.8150024414"/>
+        <position name="Pads_049(Mirror)_(1)(Mirror)_(1)001_ASCII_v4" unit="mm" x="0.298098772764" y="4.30100393295" z="80.2239990234"/>
+        <position name="Pads_049(Mirror)_(1)(Mirror)_(1)001_ASCII_v5" unit="mm" x="0.298098742962" y="4.30100345612" z="83.8150024414"/>
+        <position name="Pads_049(Mirror)_(1)(Mirror)_(1)001_ASCII_v6" unit="mm" x="0.406431764364" y="4.30128192902" z="80.2239990234"/>
+        <position name="Pads_049(Mirror)_(1)(Mirror)_(1)001_ASCII_v7" unit="mm" x="0.406431734562" y="4.30128192902" z="83.8150024414"/>
+        <position name="Pads_049(Mirror)_(1)(Mirror)_(1)001_ASCII_v8" unit="mm" x="0.406530201435" y="4.25128221512" z="80.2239990234"/>
+        <position name="Pads_049(Mirror)_(1)(Mirror)_(1)001_ASCII_v9" unit="mm" x="0.406530171633" y="4.25128221512" z="83.8150024414"/>
+        <position name="Pads_049(Mirror)_(1)(Mirror)_(1)001_ASCII_v10" unit="mm" x="0.0817129760981" y="4.25005674362" z="83.8150024414"/>
+        <position name="Pads_049(Mirror)_(1)(Mirror)_(1)001_ASCII_v11" unit="mm" x="0.189984887838" y="4.25059556961" z="80.2239990234"/>
+        <position name="Pads_049(Mirror)_(1)(Mirror)_(1)001_ASCII_v12" unit="mm" x="0.189984858036" y="4.25059556961" z="83.8150024414"/>
+        <position name="Pads_049(Mirror)_(1)(Mirror)_(1)001_ASCII_v13" unit="mm" x="0.081713013351" y="4.25005674362" z="80.2239990234"/>
+        <position name="Pads_049(Mirror)_(1)(Mirror)_(1)001_ASCII_v14" unit="mm" x="0.298257350922" y="4.25100374222" z="80.2239990234"/>
+        <position name="Pads_049(Mirror)_(1)(Mirror)_(1)001_ASCII_v15" unit="mm" x="0.298257291317" y="4.25100374222" z="83.8150024414"/>
+    </define>
+
+    <solids>
+        <tessellated aunit="deg" lunit="mm" name="Pads_049(Mirror)_(1)(Mirror)_(1)001_ASCII-SOL">
+             <triangular vertex1="Pads_049(Mirror)_(1)(Mirror)_(1)001_ASCII_v0" vertex2="Pads_049(Mirror)_(1)(Mirror)_(1)001_ASCII_v1" vertex3="Pads_049(Mirror)_(1)(Mirror)_(1)001_ASCII_v2"/>
+             <triangular vertex1="Pads_049(Mirror)_(1)(Mirror)_(1)001_ASCII_v0" vertex2="Pads_049(Mirror)_(1)(Mirror)_(1)001_ASCII_v2" vertex3="Pads_049(Mirror)_(1)(Mirror)_(1)001_ASCII_v3"/>
+             <triangular vertex1="Pads_049(Mirror)_(1)(Mirror)_(1)001_ASCII_v4" vertex2="Pads_049(Mirror)_(1)(Mirror)_(1)001_ASCII_v3" vertex3="Pads_049(Mirror)_(1)(Mirror)_(1)001_ASCII_v5"/>
+             <triangular vertex1="Pads_049(Mirror)_(1)(Mirror)_(1)001_ASCII_v4" vertex2="Pads_049(Mirror)_(1)(Mirror)_(1)001_ASCII_v0" vertex3="Pads_049(Mirror)_(1)(Mirror)_(1)001_ASCII_v3"/>
+             <triangular vertex1="Pads_049(Mirror)_(1)(Mirror)_(1)001_ASCII_v6" vertex2="Pads_049(Mirror)_(1)(Mirror)_(1)001_ASCII_v5" vertex3="Pads_049(Mirror)_(1)(Mirror)_(1)001_ASCII_v7"/>
+             <triangular vertex1="Pads_049(Mirror)_(1)(Mirror)_(1)001_ASCII_v6" vertex2="Pads_049(Mirror)_(1)(Mirror)_(1)001_ASCII_v4" vertex3="Pads_049(Mirror)_(1)(Mirror)_(1)001_ASCII_v5"/>
+             <triangular vertex1="Pads_049(Mirror)_(1)(Mirror)_(1)001_ASCII_v8" vertex2="Pads_049(Mirror)_(1)(Mirror)_(1)001_ASCII_v6" vertex3="Pads_049(Mirror)_(1)(Mirror)_(1)001_ASCII_v7"/>
+             <triangular vertex1="Pads_049(Mirror)_(1)(Mirror)_(1)001_ASCII_v8" vertex2="Pads_049(Mirror)_(1)(Mirror)_(1)001_ASCII_v7" vertex3="Pads_049(Mirror)_(1)(Mirror)_(1)001_ASCII_v9"/>
+             <triangular vertex1="Pads_049(Mirror)_(1)(Mirror)_(1)001_ASCII_v10" vertex2="Pads_049(Mirror)_(1)(Mirror)_(1)001_ASCII_v11" vertex3="Pads_049(Mirror)_(1)(Mirror)_(1)001_ASCII_v12"/>
+             <triangular vertex1="Pads_049(Mirror)_(1)(Mirror)_(1)001_ASCII_v13" vertex2="Pads_049(Mirror)_(1)(Mirror)_(1)001_ASCII_v11" vertex3="Pads_049(Mirror)_(1)(Mirror)_(1)001_ASCII_v10"/>
+             <triangular vertex1="Pads_049(Mirror)_(1)(Mirror)_(1)001_ASCII_v12" vertex2="Pads_049(Mirror)_(1)(Mirror)_(1)001_ASCII_v14" vertex3="Pads_049(Mirror)_(1)(Mirror)_(1)001_ASCII_v15"/>
+             <triangular vertex1="Pads_049(Mirror)_(1)(Mirror)_(1)001_ASCII_v11" vertex2="Pads_049(Mirror)_(1)(Mirror)_(1)001_ASCII_v14" vertex3="Pads_049(Mirror)_(1)(Mirror)_(1)001_ASCII_v12"/>
+             <triangular vertex1="Pads_049(Mirror)_(1)(Mirror)_(1)001_ASCII_v15" vertex2="Pads_049(Mirror)_(1)(Mirror)_(1)001_ASCII_v8" vertex3="Pads_049(Mirror)_(1)(Mirror)_(1)001_ASCII_v9"/>
+             <triangular vertex1="Pads_049(Mirror)_(1)(Mirror)_(1)001_ASCII_v14" vertex2="Pads_049(Mirror)_(1)(Mirror)_(1)001_ASCII_v8" vertex3="Pads_049(Mirror)_(1)(Mirror)_(1)001_ASCII_v15"/>
+             <triangular vertex1="Pads_049(Mirror)_(1)(Mirror)_(1)001_ASCII_v1" vertex2="Pads_049(Mirror)_(1)(Mirror)_(1)001_ASCII_v13" vertex3="Pads_049(Mirror)_(1)(Mirror)_(1)001_ASCII_v10"/>
+             <triangular vertex1="Pads_049(Mirror)_(1)(Mirror)_(1)001_ASCII_v1" vertex2="Pads_049(Mirror)_(1)(Mirror)_(1)001_ASCII_v10" vertex3="Pads_049(Mirror)_(1)(Mirror)_(1)001_ASCII_v2"/>
+             <triangular vertex1="Pads_049(Mirror)_(1)(Mirror)_(1)001_ASCII_v8" vertex2="Pads_049(Mirror)_(1)(Mirror)_(1)001_ASCII_v14" vertex3="Pads_049(Mirror)_(1)(Mirror)_(1)001_ASCII_v6"/>
+             <triangular vertex1="Pads_049(Mirror)_(1)(Mirror)_(1)001_ASCII_v14" vertex2="Pads_049(Mirror)_(1)(Mirror)_(1)001_ASCII_v4" vertex3="Pads_049(Mirror)_(1)(Mirror)_(1)001_ASCII_v6"/>
+             <triangular vertex1="Pads_049(Mirror)_(1)(Mirror)_(1)001_ASCII_v14" vertex2="Pads_049(Mirror)_(1)(Mirror)_(1)001_ASCII_v11" vertex3="Pads_049(Mirror)_(1)(Mirror)_(1)001_ASCII_v4"/>
+             <triangular vertex1="Pads_049(Mirror)_(1)(Mirror)_(1)001_ASCII_v11" vertex2="Pads_049(Mirror)_(1)(Mirror)_(1)001_ASCII_v0" vertex3="Pads_049(Mirror)_(1)(Mirror)_(1)001_ASCII_v4"/>
+             <triangular vertex1="Pads_049(Mirror)_(1)(Mirror)_(1)001_ASCII_v11" vertex2="Pads_049(Mirror)_(1)(Mirror)_(1)001_ASCII_v13" vertex3="Pads_049(Mirror)_(1)(Mirror)_(1)001_ASCII_v0"/>
+             <triangular vertex1="Pads_049(Mirror)_(1)(Mirror)_(1)001_ASCII_v13" vertex2="Pads_049(Mirror)_(1)(Mirror)_(1)001_ASCII_v1" vertex3="Pads_049(Mirror)_(1)(Mirror)_(1)001_ASCII_v0"/>
+             <triangular vertex1="Pads_049(Mirror)_(1)(Mirror)_(1)001_ASCII_v15" vertex2="Pads_049(Mirror)_(1)(Mirror)_(1)001_ASCII_v9" vertex3="Pads_049(Mirror)_(1)(Mirror)_(1)001_ASCII_v7"/>
+             <triangular vertex1="Pads_049(Mirror)_(1)(Mirror)_(1)001_ASCII_v5" vertex2="Pads_049(Mirror)_(1)(Mirror)_(1)001_ASCII_v15" vertex3="Pads_049(Mirror)_(1)(Mirror)_(1)001_ASCII_v7"/>
+             <triangular vertex1="Pads_049(Mirror)_(1)(Mirror)_(1)001_ASCII_v12" vertex2="Pads_049(Mirror)_(1)(Mirror)_(1)001_ASCII_v15" vertex3="Pads_049(Mirror)_(1)(Mirror)_(1)001_ASCII_v5"/>
+             <triangular vertex1="Pads_049(Mirror)_(1)(Mirror)_(1)001_ASCII_v3" vertex2="Pads_049(Mirror)_(1)(Mirror)_(1)001_ASCII_v12" vertex3="Pads_049(Mirror)_(1)(Mirror)_(1)001_ASCII_v5"/>
+             <triangular vertex1="Pads_049(Mirror)_(1)(Mirror)_(1)001_ASCII_v10" vertex2="Pads_049(Mirror)_(1)(Mirror)_(1)001_ASCII_v12" vertex3="Pads_049(Mirror)_(1)(Mirror)_(1)001_ASCII_v3"/>
+             <triangular vertex1="Pads_049(Mirror)_(1)(Mirror)_(1)001_ASCII_v2" vertex2="Pads_049(Mirror)_(1)(Mirror)_(1)001_ASCII_v10" vertex3="Pads_049(Mirror)_(1)(Mirror)_(1)001_ASCII_v3"/>
+        </tessellated>
+    </solids>
+
+    <structure>
+        <volume name="Pads_049(Mirror)_(1)(Mirror)_(1)001_ASCII">
+            <materialref ref="Vacuum"/>
+            <solidref ref="Pads_049(Mirror)_(1)(Mirror)_(1)001_ASCII-SOL"/>
+        </volume>
+    </structure>
+
+    <setup name="Default" version="1.0">
+        <world ref="Pads_049(Mirror)_(1)(Mirror)_(1)001_ASCII"/>
+    </setup>
+</gdml>

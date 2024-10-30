@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<gdml xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://service-spi.web.cern.ch/service-spi/app/releases/GDML/schema/gdml.xsd">
+
+    <define>
+        <position name="Readout_037(Mirror)_(1)_(1)001_ASCII_v0" unit="mm" x="-0.473092764616" y="4.3013882637" z="68.1490020752"/>
+        <position name="Readout_037(Mirror)_(1)_(1)001_ASCII_v1" unit="mm" x="-0.40642619133" y="4.30128192902" z="68.1490020752"/>
+        <position name="Readout_037(Mirror)_(1)_(1)001_ASCII_v2" unit="mm" x="-0.40642619133" y="4.30128192902" z="64.5579986572"/>
+        <position name="Readout_037(Mirror)_(1)_(1)001_ASCII_v3" unit="mm" x="-0.473092794418" y="4.3013882637" z="64.5579986572"/>
+        <position name="Readout_037(Mirror)_(1)_(1)001_ASCII_v4" unit="mm" x="-0.539759397507" y="4.30144548416" z="68.1490020752"/>
+        <position name="Readout_037(Mirror)_(1)_(1)001_ASCII_v5" unit="mm" x="-0.539759397507" y="4.301445961" z="64.5579986572"/>
+        <position name="Readout_037(Mirror)_(1)_(1)001_ASCII_v6" unit="mm" x="-0.6064260602" y="4.30145359039" z="68.1490020752"/>
+        <position name="Readout_037(Mirror)_(1)_(1)001_ASCII_v7" unit="mm" x="-0.6064260602" y="4.30145359039" z="64.5579986572"/>
+        <position name="Readout_037(Mirror)_(1)_(1)001_ASCII_v8" unit="mm" x="-0.606413543224" y="4.2514538765" z="64.5579986572"/>
+        <position name="Readout_037(Mirror)_(1)_(1)001_ASCII_v9" unit="mm" x="-0.606413543224" y="4.25145339966" z="68.1490020752"/>
+        <position name="Readout_037(Mirror)_(1)_(1)001_ASCII_v10" unit="mm" x="-0.406524658203" y="4.25128173828" z="64.5579986572"/>
+        <position name="Readout_037(Mirror)_(1)_(1)001_ASCII_v11" unit="mm" x="-0.406524628401" y="4.25128173828" z="68.1490020752"/>
+        <position name="Readout_037(Mirror)_(1)_(1)001_ASCII_v12" unit="mm" x="-0.473154246807" y="4.2513885498" z="64.5579986572"/>
+        <position name="Readout_037(Mirror)_(1)_(1)001_ASCII_v13" unit="mm" x="-0.473154217005" y="4.2513885498" z="68.1490020752"/>
+        <position name="Readout_037(Mirror)_(1)_(1)001_ASCII_v14" unit="mm" x="-0.539783895016" y="4.25144577026" z="68.1490020752"/>
+        <position name="Readout_037(Mirror)_(1)_(1)001_ASCII_v15" unit="mm" x="-0.539783895016" y="4.25144577026" z="64.5579986572"/>
+    </define>
+
+    <solids>
+        <tessellated aunit="deg" lunit="mm" name="Readout_037(Mirror)_(1)_(1)001_ASCII-SOL">
+             <triangular vertex1="Readout_037(Mirror)_(1)_(1)001_ASCII_v0" vertex2="Readout_037(Mirror)_(1)_(1)001_ASCII_v1" vertex3="Readout_037(Mirror)_(1)_(1)001_ASCII_v2"/>
+             <triangular vertex1="Readout_037(Mirror)_(1)_(1)001_ASCII_v0" vertex2="Readout_037(Mirror)_(1)_(1)001_ASCII_v2" vertex3="Readout_037(Mirror)_(1)_(1)001_ASCII_v3"/>
+             <triangular vertex1="Readout_037(Mirror)_(1)_(1)001_ASCII_v4" vertex2="Readout_037(Mirror)_(1)_(1)001_ASCII_v3" vertex3="Readout_037(Mirror)_(1)_(1)001_ASCII_v5"/>
+             <triangular vertex1="Readout_037(Mirror)_(1)_(1)001_ASCII_v4" vertex2="Readout_037(Mirror)_(1)_(1)001_ASCII_v0" vertex3="Readout_037(Mirror)_(1)_(1)001_ASCII_v3"/>
+             <triangular vertex1="Readout_037(Mirror)_(1)_(1)001_ASCII_v6" vertex2="Readout_037(Mirror)_(1)_(1)001_ASCII_v5" vertex3="Readout_037(Mirror)_(1)_(1)001_ASCII_v7"/>
+             <triangular vertex1="Readout_037(Mirror)_(1)_(1)001_ASCII_v6" vertex2="Readout_037(Mirror)_(1)_(1)001_ASCII_v4" vertex3="Readout_037(Mirror)_(1)_(1)001_ASCII_v5"/>
+             <triangular vertex1="Readout_037(Mirror)_(1)_(1)001_ASCII_v6" vertex2="Readout_037(Mirror)_(1)_(1)001_ASCII_v8" vertex3="Readout_037(Mirror)_(1)_(1)001_ASCII_v9"/>
+             <triangular vertex1="Readout_037(Mirror)_(1)_(1)001_ASCII_v7" vertex2="Readout_037(Mirror)_(1)_(1)001_ASCII_v8" vertex3="Readout_037(Mirror)_(1)_(1)001_ASCII_v6"/>
+             <triangular vertex1="Readout_037(Mirror)_(1)_(1)001_ASCII_v10" vertex2="Readout_037(Mirror)_(1)_(1)001_ASCII_v11" vertex3="Readout_037(Mirror)_(1)_(1)001_ASCII_v12"/>
+             <triangular vertex1="Readout_037(Mirror)_(1)_(1)001_ASCII_v11" vertex2="Readout_037(Mirror)_(1)_(1)001_ASCII_v13" vertex3="Readout_037(Mirror)_(1)_(1)001_ASCII_v12"/>
+             <triangular vertex1="Readout_037(Mirror)_(1)_(1)001_ASCII_v12" vertex2="Readout_037(Mirror)_(1)_(1)001_ASCII_v14" vertex3="Readout_037(Mirror)_(1)_(1)001_ASCII_v15"/>
+             <triangular vertex1="Readout_037(Mirror)_(1)_(1)001_ASCII_v13" vertex2="Readout_037(Mirror)_(1)_(1)001_ASCII_v14" vertex3="Readout_037(Mirror)_(1)_(1)001_ASCII_v12"/>
+             <triangular vertex1="Readout_037(Mirror)_(1)_(1)001_ASCII_v15" vertex2="Readout_037(Mirror)_(1)_(1)001_ASCII_v9" vertex3="Readout_037(Mirror)_(1)_(1)001_ASCII_v8"/>
+             <triangular vertex1="Readout_037(Mirror)_(1)_(1)001_ASCII_v14" vertex2="Readout_037(Mirror)_(1)_(1)001_ASCII_v9" vertex3="Readout_037(Mirror)_(1)_(1)001_ASCII_v15"/>
+             <triangular vertex1="Readout_037(Mirror)_(1)_(1)001_ASCII_v11" vertex2="Readout_037(Mirror)_(1)_(1)001_ASCII_v2" vertex3="Readout_037(Mirror)_(1)_(1)001_ASCII_v1"/>
+             <triangular vertex1="Readout_037(Mirror)_(1)_(1)001_ASCII_v10" vertex2="Readout_037(Mirror)_(1)_(1)001_ASCII_v2" vertex3="Readout_037(Mirror)_(1)_(1)001_ASCII_v11"/>
+             <triangular vertex1="Readout_037(Mirror)_(1)_(1)001_ASCII_v15" vertex2="Readout_037(Mirror)_(1)_(1)001_ASCII_v8" vertex3="Readout_037(Mirror)_(1)_(1)001_ASCII_v7"/>
+             <triangular vertex1="Readout_037(Mirror)_(1)_(1)001_ASCII_v5" vertex2="Readout_037(Mirror)_(1)_(1)001_ASCII_v15" vertex3="Readout_037(Mirror)_(1)_(1)001_ASCII_v7"/>
+             <triangular vertex1="Readout_037(Mirror)_(1)_(1)001_ASCII_v3" vertex2="Readout_037(Mirror)_(1)_(1)001_ASCII_v12" vertex3="Readout_037(Mirror)_(1)_(1)001_ASCII_v15"/>
+             <triangular vertex1="Readout_037(Mirror)_(1)_(1)001_ASCII_v3" vertex2="Readout_037(Mirror)_(1)_(1)001_ASCII_v15" vertex3="Readout_037(Mirror)_(1)_(1)001_ASCII_v5"/>
+             <triangular vertex1="Readout_037(Mirror)_(1)_(1)001_ASCII_v2" vertex2="Readout_037(Mirror)_(1)_(1)001_ASCII_v10" vertex3="Readout_037(Mirror)_(1)_(1)001_ASCII_v12"/>
+             <triangular vertex1="Readout_037(Mirror)_(1)_(1)001_ASCII_v2" vertex2="Readout_037(Mirror)_(1)_(1)001_ASCII_v12" vertex3="Readout_037(Mirror)_(1)_(1)001_ASCII_v3"/>
+             <triangular vertex1="Readout_037(Mirror)_(1)_(1)001_ASCII_v9" vertex2="Readout_037(Mirror)_(1)_(1)001_ASCII_v14" vertex3="Readout_037(Mirror)_(1)_(1)001_ASCII_v6"/>
+             <triangular vertex1="Readout_037(Mirror)_(1)_(1)001_ASCII_v14" vertex2="Readout_037(Mirror)_(1)_(1)001_ASCII_v4" vertex3="Readout_037(Mirror)_(1)_(1)001_ASCII_v6"/>
+             <triangular vertex1="Readout_037(Mirror)_(1)_(1)001_ASCII_v13" vertex2="Readout_037(Mirror)_(1)_(1)001_ASCII_v0" vertex3="Readout_037(Mirror)_(1)_(1)001_ASCII_v14"/>
+             <triangular vertex1="Readout_037(Mirror)_(1)_(1)001_ASCII_v14" vertex2="Readout_037(Mirror)_(1)_(1)001_ASCII_v0" vertex3="Readout_037(Mirror)_(1)_(1)001_ASCII_v4"/>
+             <triangular vertex1="Readout_037(Mirror)_(1)_(1)001_ASCII_v11" vertex2="Readout_037(Mirror)_(1)_(1)001_ASCII_v1" vertex3="Readout_037(Mirror)_(1)_(1)001_ASCII_v13"/>
+             <triangular vertex1="Readout_037(Mirror)_(1)_(1)001_ASCII_v13" vertex2="Readout_037(Mirror)_(1)_(1)001_ASCII_v1" vertex3="Readout_037(Mirror)_(1)_(1)001_ASCII_v0"/>
+        </tessellated>
+    </solids>
+
+    <structure>
+        <volume name="Readout_037(Mirror)_(1)_(1)001_ASCII">
+            <materialref ref="Vacuum"/>
+            <solidref ref="Readout_037(Mirror)_(1)_(1)001_ASCII-SOL"/>
+        </volume>
+    </structure>
+
+    <setup name="Default" version="1.0">
+        <world ref="Readout_037(Mirror)_(1)_(1)001_ASCII"/>
+    </setup>
+</gdml>

@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<gdml xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://service-spi.web.cern.ch/service-spi/app/releases/GDML/schema/gdml.xsd">
+
+    <define>
+        <position name="DataBackbone_015(Mirror)003_ASCII_v0" unit="mm" x="13.0535888672" y="3.45768475533" z="-389.035583496"/>
+        <position name="DataBackbone_015(Mirror)003_ASCII_v1" unit="mm" x="9.8176574707" y="3.85710477829" z="-389.035583496"/>
+        <position name="DataBackbone_015(Mirror)003_ASCII_v2" unit="mm" x="9.8176574707" y="3.85710477829" z="-388.975585938"/>
+        <position name="DataBackbone_015(Mirror)003_ASCII_v3" unit="mm" x="13.0535888672" y="3.45768475533" z="-388.975585938"/>
+        <position name="DataBackbone_015(Mirror)003_ASCII_v4" unit="mm" x="16.2729530334" y="2.94146490097" z="-389.035583496"/>
+        <position name="DataBackbone_015(Mirror)003_ASCII_v5" unit="mm" x="16.2729530334" y="2.94146490097" z="-388.975585938"/>
+        <position name="DataBackbone_015(Mirror)003_ASCII_v6" unit="mm" x="19.471534729" y="2.30912065506" z="-389.035583496"/>
+        <position name="DataBackbone_015(Mirror)003_ASCII_v7" unit="mm" x="19.471534729" y="2.30912065506" z="-388.975585938"/>
+        <position name="DataBackbone_015(Mirror)003_ASCII_v8" unit="mm" x="19.4609527588" y="2.26025342941" z="-388.975585938"/>
+        <position name="DataBackbone_015(Mirror)003_ASCII_v9" unit="mm" x="19.4609527588" y="2.26025342941" z="-389.035583496"/>
+        <position name="DataBackbone_015(Mirror)003_ASCII_v10" unit="mm" x="9.81243133545" y="3.80737876892" z="-388.975585938"/>
+        <position name="DataBackbone_015(Mirror)003_ASCII_v11" unit="mm" x="9.81243133545" y="3.80737876892" z="-389.035583496"/>
+        <position name="DataBackbone_015(Mirror)003_ASCII_v12" unit="mm" x="13.0465669632" y="3.40818023682" z="-388.975585938"/>
+        <position name="DataBackbone_015(Mirror)003_ASCII_v13" unit="mm" x="13.0465669632" y="3.40818023682" z="-389.035583496"/>
+        <position name="DataBackbone_015(Mirror)003_ASCII_v14" unit="mm" x="16.2641448975" y="2.89224672318" z="-388.975585938"/>
+        <position name="DataBackbone_015(Mirror)003_ASCII_v15" unit="mm" x="16.2641448975" y="2.89224672318" z="-389.035583496"/>
+    </define>
+
+    <solids>
+        <tessellated aunit="deg" lunit="mm" name="DataBackbone_015(Mirror)003_ASCII-SOL">
+             <triangular vertex1="DataBackbone_015(Mirror)003_ASCII_v0" vertex2="DataBackbone_015(Mirror)003_ASCII_v1" vertex3="DataBackbone_015(Mirror)003_ASCII_v2"/>
+             <triangular vertex1="DataBackbone_015(Mirror)003_ASCII_v0" vertex2="DataBackbone_015(Mirror)003_ASCII_v2" vertex3="DataBackbone_015(Mirror)003_ASCII_v3"/>
+             <triangular vertex1="DataBackbone_015(Mirror)003_ASCII_v4" vertex2="DataBackbone_015(Mirror)003_ASCII_v3" vertex3="DataBackbone_015(Mirror)003_ASCII_v5"/>
+             <triangular vertex1="DataBackbone_015(Mirror)003_ASCII_v4" vertex2="DataBackbone_015(Mirror)003_ASCII_v0" vertex3="DataBackbone_015(Mirror)003_ASCII_v3"/>
+             <triangular vertex1="DataBackbone_015(Mirror)003_ASCII_v6" vertex2="DataBackbone_015(Mirror)003_ASCII_v5" vertex3="DataBackbone_015(Mirror)003_ASCII_v7"/>
+             <triangular vertex1="DataBackbone_015(Mirror)003_ASCII_v6" vertex2="DataBackbone_015(Mirror)003_ASCII_v4" vertex3="DataBackbone_015(Mirror)003_ASCII_v5"/>
+             <triangular vertex1="DataBackbone_015(Mirror)003_ASCII_v6" vertex2="DataBackbone_015(Mirror)003_ASCII_v8" vertex3="DataBackbone_015(Mirror)003_ASCII_v9"/>
+             <triangular vertex1="DataBackbone_015(Mirror)003_ASCII_v7" vertex2="DataBackbone_015(Mirror)003_ASCII_v8" vertex3="DataBackbone_015(Mirror)003_ASCII_v6"/>
+             <triangular vertex1="DataBackbone_015(Mirror)003_ASCII_v10" vertex2="DataBackbone_015(Mirror)003_ASCII_v11" vertex3="DataBackbone_015(Mirror)003_ASCII_v12"/>
+             <triangular vertex1="DataBackbone_015(Mirror)003_ASCII_v12" vertex2="DataBackbone_015(Mirror)003_ASCII_v13" vertex3="DataBackbone_015(Mirror)003_ASCII_v14"/>
+             <triangular vertex1="DataBackbone_015(Mirror)003_ASCII_v11" vertex2="DataBackbone_015(Mirror)003_ASCII_v13" vertex3="DataBackbone_015(Mirror)003_ASCII_v12"/>
+             <triangular vertex1="DataBackbone_015(Mirror)003_ASCII_v14" vertex2="DataBackbone_015(Mirror)003_ASCII_v15" vertex3="DataBackbone_015(Mirror)003_ASCII_v8"/>
+             <triangular vertex1="DataBackbone_015(Mirror)003_ASCII_v13" vertex2="DataBackbone_015(Mirror)003_ASCII_v15" vertex3="DataBackbone_015(Mirror)003_ASCII_v14"/>
+             <triangular vertex1="DataBackbone_015(Mirror)003_ASCII_v15" vertex2="DataBackbone_015(Mirror)003_ASCII_v9" vertex3="DataBackbone_015(Mirror)003_ASCII_v8"/>
+             <triangular vertex1="DataBackbone_015(Mirror)003_ASCII_v11" vertex2="DataBackbone_015(Mirror)003_ASCII_v2" vertex3="DataBackbone_015(Mirror)003_ASCII_v1"/>
+             <triangular vertex1="DataBackbone_015(Mirror)003_ASCII_v10" vertex2="DataBackbone_015(Mirror)003_ASCII_v2" vertex3="DataBackbone_015(Mirror)003_ASCII_v11"/>
+             <triangular vertex1="DataBackbone_015(Mirror)003_ASCII_v5" vertex2="DataBackbone_015(Mirror)003_ASCII_v14" vertex3="DataBackbone_015(Mirror)003_ASCII_v8"/>
+             <triangular vertex1="DataBackbone_015(Mirror)003_ASCII_v5" vertex2="DataBackbone_015(Mirror)003_ASCII_v8" vertex3="DataBackbone_015(Mirror)003_ASCII_v7"/>
+             <triangular vertex1="DataBackbone_015(Mirror)003_ASCII_v3" vertex2="DataBackbone_015(Mirror)003_ASCII_v12" vertex3="DataBackbone_015(Mirror)003_ASCII_v14"/>
+             <triangular vertex1="DataBackbone_015(Mirror)003_ASCII_v3" vertex2="DataBackbone_015(Mirror)003_ASCII_v14" vertex3="DataBackbone_015(Mirror)003_ASCII_v5"/>
+             <triangular vertex1="DataBackbone_015(Mirror)003_ASCII_v2" vertex2="DataBackbone_015(Mirror)003_ASCII_v10" vertex3="DataBackbone_015(Mirror)003_ASCII_v12"/>
+             <triangular vertex1="DataBackbone_015(Mirror)003_ASCII_v2" vertex2="DataBackbone_015(Mirror)003_ASCII_v12" vertex3="DataBackbone_015(Mirror)003_ASCII_v3"/>
+             <triangular vertex1="DataBackbone_015(Mirror)003_ASCII_v9" vertex2="DataBackbone_015(Mirror)003_ASCII_v15" vertex3="DataBackbone_015(Mirror)003_ASCII_v6"/>
+             <triangular vertex1="DataBackbone_015(Mirror)003_ASCII_v15" vertex2="DataBackbone_015(Mirror)003_ASCII_v4" vertex3="DataBackbone_015(Mirror)003_ASCII_v6"/>
+             <triangular vertex1="DataBackbone_015(Mirror)003_ASCII_v15" vertex2="DataBackbone_015(Mirror)003_ASCII_v13" vertex3="DataBackbone_015(Mirror)003_ASCII_v4"/>
+             <triangular vertex1="DataBackbone_015(Mirror)003_ASCII_v13" vertex2="DataBackbone_015(Mirror)003_ASCII_v0" vertex3="DataBackbone_015(Mirror)003_ASCII_v4"/>
+             <triangular vertex1="DataBackbone_015(Mirror)003_ASCII_v13" vertex2="DataBackbone_015(Mirror)003_ASCII_v11" vertex3="DataBackbone_015(Mirror)003_ASCII_v0"/>
+             <triangular vertex1="DataBackbone_015(Mirror)003_ASCII_v11" vertex2="DataBackbone_015(Mirror)003_ASCII_v1" vertex3="DataBackbone_015(Mirror)003_ASCII_v0"/>
+        </tessellated>
+    </solids>
+
+    <structure>
+        <volume name="DataBackbone_015(Mirror)003_ASCII">
+            <materialref ref="Vacuum"/>
+            <solidref ref="DataBackbone_015(Mirror)003_ASCII-SOL"/>
+        </volume>
+    </structure>
+
+    <setup name="Default" version="1.0">
+        <world ref="DataBackbone_015(Mirror)003_ASCII"/>
+    </setup>
+</gdml>

@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<gdml xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://service-spi.web.cern.ch/service-spi/app/releases/GDML/schema/gdml.xsd">
+
+    <define>
+        <position name="ActivePixelArray_015(Mirror)_(1)_(1)_ASCII_v0" unit="mm" x="-3.67147803307" y="4.24854421616" z="-218.020996094"/>
+        <position name="ActivePixelArray_015(Mirror)_(1)_(1)_ASCII_v1" unit="mm" x="-0.606415688992" y="4.30145263672" z="-218.020996094"/>
+        <position name="ActivePixelArray_015(Mirror)_(1)_(1)_ASCII_v2" unit="mm" x="-0.606415688992" y="4.30145263672" z="-221.591995239"/>
+        <position name="ActivePixelArray_015(Mirror)_(1)_(1)_ASCII_v3" unit="mm" x="-3.67147803307" y="4.24854421616" z="-221.591995239"/>
+        <position name="ActivePixelArray_015(Mirror)_(1)_(1)_ASCII_v4" unit="mm" x="-6.73296689987" y="4.09141540527" z="-218.020996094"/>
+        <position name="ActivePixelArray_015(Mirror)_(1)_(1)_ASCII_v5" unit="mm" x="-6.73296737671" y="4.09141540527" z="-221.591995239"/>
+        <position name="ActivePixelArray_015(Mirror)_(1)_(1)_ASCII_v6" unit="mm" x="-9.78734016418" y="3.83024668694" z="-221.591995239"/>
+        <position name="ActivePixelArray_015(Mirror)_(1)_(1)_ASCII_v7" unit="mm" x="-9.78734016418" y="3.83024668694" z="-218.020996094"/>
+        <position name="ActivePixelArray_015(Mirror)_(1)_(1)_ASCII_v8" unit="mm" x="-9.78223419189" y="3.7805082798" z="-221.591995239"/>
+        <position name="ActivePixelArray_015(Mirror)_(1)_(1)_ASCII_v9" unit="mm" x="-9.78223419189" y="3.7805082798" z="-218.020996094"/>
+        <position name="ActivePixelArray_015(Mirror)_(1)_(1)_ASCII_v10" unit="mm" x="-0.606403172016" y="4.25145244598" z="-221.591995239"/>
+        <position name="ActivePixelArray_015(Mirror)_(1)_(1)_ASCII_v11" unit="mm" x="-3.66976475716" y="4.19857358932" z="-218.020996094"/>
+        <position name="ActivePixelArray_015(Mirror)_(1)_(1)_ASCII_v12" unit="mm" x="-3.66976475716" y="4.19857358932" z="-221.591995239"/>
+        <position name="ActivePixelArray_015(Mirror)_(1)_(1)_ASCII_v13" unit="mm" x="-0.606403172016" y="4.25145244598" z="-218.020996094"/>
+        <position name="ActivePixelArray_015(Mirror)_(1)_(1)_ASCII_v14" unit="mm" x="-6.72955513" y="4.04153156281" z="-218.020996094"/>
+        <position name="ActivePixelArray_015(Mirror)_(1)_(1)_ASCII_v15" unit="mm" x="-6.72955513" y="4.04153156281" z="-221.591995239"/>
+    </define>
+
+    <solids>
+        <tessellated aunit="deg" lunit="mm" name="ActivePixelArray_015(Mirror)_(1)_(1)_ASCII-SOL">
+             <triangular vertex1="ActivePixelArray_015(Mirror)_(1)_(1)_ASCII_v0" vertex2="ActivePixelArray_015(Mirror)_(1)_(1)_ASCII_v1" vertex3="ActivePixelArray_015(Mirror)_(1)_(1)_ASCII_v2"/>
+             <triangular vertex1="ActivePixelArray_015(Mirror)_(1)_(1)_ASCII_v0" vertex2="ActivePixelArray_015(Mirror)_(1)_(1)_ASCII_v2" vertex3="ActivePixelArray_015(Mirror)_(1)_(1)_ASCII_v3"/>
+             <triangular vertex1="ActivePixelArray_015(Mirror)_(1)_(1)_ASCII_v4" vertex2="ActivePixelArray_015(Mirror)_(1)_(1)_ASCII_v3" vertex3="ActivePixelArray_015(Mirror)_(1)_(1)_ASCII_v5"/>
+             <triangular vertex1="ActivePixelArray_015(Mirror)_(1)_(1)_ASCII_v4" vertex2="ActivePixelArray_015(Mirror)_(1)_(1)_ASCII_v5" vertex3="ActivePixelArray_015(Mirror)_(1)_(1)_ASCII_v6"/>
+             <triangular vertex1="ActivePixelArray_015(Mirror)_(1)_(1)_ASCII_v4" vertex2="ActivePixelArray_015(Mirror)_(1)_(1)_ASCII_v0" vertex3="ActivePixelArray_015(Mirror)_(1)_(1)_ASCII_v3"/>
+             <triangular vertex1="ActivePixelArray_015(Mirror)_(1)_(1)_ASCII_v7" vertex2="ActivePixelArray_015(Mirror)_(1)_(1)_ASCII_v4" vertex3="ActivePixelArray_015(Mirror)_(1)_(1)_ASCII_v6"/>
+             <triangular vertex1="ActivePixelArray_015(Mirror)_(1)_(1)_ASCII_v7" vertex2="ActivePixelArray_015(Mirror)_(1)_(1)_ASCII_v8" vertex3="ActivePixelArray_015(Mirror)_(1)_(1)_ASCII_v9"/>
+             <triangular vertex1="ActivePixelArray_015(Mirror)_(1)_(1)_ASCII_v6" vertex2="ActivePixelArray_015(Mirror)_(1)_(1)_ASCII_v8" vertex3="ActivePixelArray_015(Mirror)_(1)_(1)_ASCII_v7"/>
+             <triangular vertex1="ActivePixelArray_015(Mirror)_(1)_(1)_ASCII_v10" vertex2="ActivePixelArray_015(Mirror)_(1)_(1)_ASCII_v11" vertex3="ActivePixelArray_015(Mirror)_(1)_(1)_ASCII_v12"/>
+             <triangular vertex1="ActivePixelArray_015(Mirror)_(1)_(1)_ASCII_v13" vertex2="ActivePixelArray_015(Mirror)_(1)_(1)_ASCII_v11" vertex3="ActivePixelArray_015(Mirror)_(1)_(1)_ASCII_v10"/>
+             <triangular vertex1="ActivePixelArray_015(Mirror)_(1)_(1)_ASCII_v12" vertex2="ActivePixelArray_015(Mirror)_(1)_(1)_ASCII_v14" vertex3="ActivePixelArray_015(Mirror)_(1)_(1)_ASCII_v15"/>
+             <triangular vertex1="ActivePixelArray_015(Mirror)_(1)_(1)_ASCII_v15" vertex2="ActivePixelArray_015(Mirror)_(1)_(1)_ASCII_v14" vertex3="ActivePixelArray_015(Mirror)_(1)_(1)_ASCII_v8"/>
+             <triangular vertex1="ActivePixelArray_015(Mirror)_(1)_(1)_ASCII_v11" vertex2="ActivePixelArray_015(Mirror)_(1)_(1)_ASCII_v14" vertex3="ActivePixelArray_015(Mirror)_(1)_(1)_ASCII_v12"/>
+             <triangular vertex1="ActivePixelArray_015(Mirror)_(1)_(1)_ASCII_v14" vertex2="ActivePixelArray_015(Mirror)_(1)_(1)_ASCII_v9" vertex3="ActivePixelArray_015(Mirror)_(1)_(1)_ASCII_v8"/>
+             <triangular vertex1="ActivePixelArray_015(Mirror)_(1)_(1)_ASCII_v13" vertex2="ActivePixelArray_015(Mirror)_(1)_(1)_ASCII_v2" vertex3="ActivePixelArray_015(Mirror)_(1)_(1)_ASCII_v1"/>
+             <triangular vertex1="ActivePixelArray_015(Mirror)_(1)_(1)_ASCII_v10" vertex2="ActivePixelArray_015(Mirror)_(1)_(1)_ASCII_v2" vertex3="ActivePixelArray_015(Mirror)_(1)_(1)_ASCII_v13"/>
+             <triangular vertex1="ActivePixelArray_015(Mirror)_(1)_(1)_ASCII_v15" vertex2="ActivePixelArray_015(Mirror)_(1)_(1)_ASCII_v8" vertex3="ActivePixelArray_015(Mirror)_(1)_(1)_ASCII_v6"/>
+             <triangular vertex1="ActivePixelArray_015(Mirror)_(1)_(1)_ASCII_v5" vertex2="ActivePixelArray_015(Mirror)_(1)_(1)_ASCII_v15" vertex3="ActivePixelArray_015(Mirror)_(1)_(1)_ASCII_v6"/>
+             <triangular vertex1="ActivePixelArray_015(Mirror)_(1)_(1)_ASCII_v12" vertex2="ActivePixelArray_015(Mirror)_(1)_(1)_ASCII_v15" vertex3="ActivePixelArray_015(Mirror)_(1)_(1)_ASCII_v5"/>
+             <triangular vertex1="ActivePixelArray_015(Mirror)_(1)_(1)_ASCII_v3" vertex2="ActivePixelArray_015(Mirror)_(1)_(1)_ASCII_v12" vertex3="ActivePixelArray_015(Mirror)_(1)_(1)_ASCII_v5"/>
+             <triangular vertex1="ActivePixelArray_015(Mirror)_(1)_(1)_ASCII_v10" vertex2="ActivePixelArray_015(Mirror)_(1)_(1)_ASCII_v12" vertex3="ActivePixelArray_015(Mirror)_(1)_(1)_ASCII_v3"/>
+             <triangular vertex1="ActivePixelArray_015(Mirror)_(1)_(1)_ASCII_v2" vertex2="ActivePixelArray_015(Mirror)_(1)_(1)_ASCII_v10" vertex3="ActivePixelArray_015(Mirror)_(1)_(1)_ASCII_v3"/>
+             <triangular vertex1="ActivePixelArray_015(Mirror)_(1)_(1)_ASCII_v9" vertex2="ActivePixelArray_015(Mirror)_(1)_(1)_ASCII_v14" vertex3="ActivePixelArray_015(Mirror)_(1)_(1)_ASCII_v7"/>
+             <triangular vertex1="ActivePixelArray_015(Mirror)_(1)_(1)_ASCII_v14" vertex2="ActivePixelArray_015(Mirror)_(1)_(1)_ASCII_v4" vertex3="ActivePixelArray_015(Mirror)_(1)_(1)_ASCII_v7"/>
+             <triangular vertex1="ActivePixelArray_015(Mirror)_(1)_(1)_ASCII_v14" vertex2="ActivePixelArray_015(Mirror)_(1)_(1)_ASCII_v11" vertex3="ActivePixelArray_015(Mirror)_(1)_(1)_ASCII_v4"/>
+             <triangular vertex1="ActivePixelArray_015(Mirror)_(1)_(1)_ASCII_v11" vertex2="ActivePixelArray_015(Mirror)_(1)_(1)_ASCII_v0" vertex3="ActivePixelArray_015(Mirror)_(1)_(1)_ASCII_v4"/>
+             <triangular vertex1="ActivePixelArray_015(Mirror)_(1)_(1)_ASCII_v11" vertex2="ActivePixelArray_015(Mirror)_(1)_(1)_ASCII_v13" vertex3="ActivePixelArray_015(Mirror)_(1)_(1)_ASCII_v0"/>
+             <triangular vertex1="ActivePixelArray_015(Mirror)_(1)_(1)_ASCII_v13" vertex2="ActivePixelArray_015(Mirror)_(1)_(1)_ASCII_v1" vertex3="ActivePixelArray_015(Mirror)_(1)_(1)_ASCII_v0"/>
+        </tessellated>
+    </solids>
+
+    <structure>
+        <volume name="ActivePixelArray_015(Mirror)_(1)_(1)_ASCII">
+            <materialref ref="Vacuum"/>
+            <solidref ref="ActivePixelArray_015(Mirror)_(1)_(1)_ASCII-SOL"/>
+        </volume>
+    </structure>
+
+    <setup name="Default" version="1.0">
+        <world ref="ActivePixelArray_015(Mirror)_(1)_(1)_ASCII"/>
+    </setup>
+</gdml>

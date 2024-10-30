@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<gdml xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://service-spi.web.cern.ch/service-spi/app/releases/GDML/schema/gdml.xsd">
+
+    <define>
+        <position name="Readout_295_ASCII_v0" unit="mm" x="-19.0233478546" y="-2.40498900414" z="410.701568604"/>
+        <position name="Readout_295_ASCII_v1" unit="mm" x="-18.9581165314" y="-2.41874361038" z="410.701568604"/>
+        <position name="Readout_295_ASCII_v2" unit="mm" x="-18.9581165314" y="-2.41874361038" z="414.292572021"/>
+        <position name="Readout_295_ASCII_v3" unit="mm" x="-19.0233478546" y="-2.40498876572" z="414.292572021"/>
+        <position name="Readout_295_ASCII_v4" unit="mm" x="-19.0885696411" y="-2.39118599892" z="410.701568604"/>
+        <position name="Readout_295_ASCII_v5" unit="mm" x="-19.0885696411" y="-2.3911857605" z="414.292572021"/>
+        <position name="Readout_295_ASCII_v6" unit="mm" x="-19.1537818909" y="-2.37733459473" z="410.701568604"/>
+        <position name="Readout_295_ASCII_v7" unit="mm" x="-19.1537818909" y="-2.37733459473" z="414.292572021"/>
+        <position name="Readout_295_ASCII_v8" unit="mm" x="-19.1433753967" y="-2.32842969894" z="410.701568604"/>
+        <position name="Readout_295_ASCII_v9" unit="mm" x="-19.1433753967" y="-2.32842946053" z="414.292572021"/>
+        <position name="Readout_295_ASCII_v10" unit="mm" x="-18.9478187561" y="-2.369815588" z="414.292572021"/>
+        <position name="Readout_295_ASCII_v11" unit="mm" x="-18.9478187561" y="-2.369815588" z="410.701568604"/>
+        <position name="Readout_295_ASCII_v12" unit="mm" x="-19.0130138397" y="-2.35606837273" z="414.292572021"/>
+        <position name="Readout_295_ASCII_v13" unit="mm" x="-19.0130138397" y="-2.35606861115" z="410.701568604"/>
+        <position name="Readout_295_ASCII_v14" unit="mm" x="-19.0781993866" y="-2.34227323532" z="410.701568604"/>
+        <position name="Readout_295_ASCII_v15" unit="mm" x="-19.0781993866" y="-2.3422729969" z="414.292572021"/>
+    </define>
+
+    <solids>
+        <tessellated aunit="deg" lunit="mm" name="Readout_295_ASCII-SOL">
+             <triangular vertex1="Readout_295_ASCII_v0" vertex2="Readout_295_ASCII_v1" vertex3="Readout_295_ASCII_v2"/>
+             <triangular vertex1="Readout_295_ASCII_v0" vertex2="Readout_295_ASCII_v2" vertex3="Readout_295_ASCII_v3"/>
+             <triangular vertex1="Readout_295_ASCII_v4" vertex2="Readout_295_ASCII_v3" vertex3="Readout_295_ASCII_v5"/>
+             <triangular vertex1="Readout_295_ASCII_v4" vertex2="Readout_295_ASCII_v0" vertex3="Readout_295_ASCII_v3"/>
+             <triangular vertex1="Readout_295_ASCII_v6" vertex2="Readout_295_ASCII_v5" vertex3="Readout_295_ASCII_v7"/>
+             <triangular vertex1="Readout_295_ASCII_v6" vertex2="Readout_295_ASCII_v4" vertex3="Readout_295_ASCII_v5"/>
+             <triangular vertex1="Readout_295_ASCII_v8" vertex2="Readout_295_ASCII_v6" vertex3="Readout_295_ASCII_v7"/>
+             <triangular vertex1="Readout_295_ASCII_v8" vertex2="Readout_295_ASCII_v7" vertex3="Readout_295_ASCII_v9"/>
+             <triangular vertex1="Readout_295_ASCII_v10" vertex2="Readout_295_ASCII_v11" vertex3="Readout_295_ASCII_v12"/>
+             <triangular vertex1="Readout_295_ASCII_v11" vertex2="Readout_295_ASCII_v13" vertex3="Readout_295_ASCII_v12"/>
+             <triangular vertex1="Readout_295_ASCII_v12" vertex2="Readout_295_ASCII_v14" vertex3="Readout_295_ASCII_v15"/>
+             <triangular vertex1="Readout_295_ASCII_v13" vertex2="Readout_295_ASCII_v14" vertex3="Readout_295_ASCII_v12"/>
+             <triangular vertex1="Readout_295_ASCII_v15" vertex2="Readout_295_ASCII_v8" vertex3="Readout_295_ASCII_v9"/>
+             <triangular vertex1="Readout_295_ASCII_v14" vertex2="Readout_295_ASCII_v8" vertex3="Readout_295_ASCII_v15"/>
+             <triangular vertex1="Readout_295_ASCII_v11" vertex2="Readout_295_ASCII_v10" vertex3="Readout_295_ASCII_v2"/>
+             <triangular vertex1="Readout_295_ASCII_v1" vertex2="Readout_295_ASCII_v11" vertex3="Readout_295_ASCII_v2"/>
+             <triangular vertex1="Readout_295_ASCII_v8" vertex2="Readout_295_ASCII_v14" vertex3="Readout_295_ASCII_v6"/>
+             <triangular vertex1="Readout_295_ASCII_v14" vertex2="Readout_295_ASCII_v4" vertex3="Readout_295_ASCII_v6"/>
+             <triangular vertex1="Readout_295_ASCII_v13" vertex2="Readout_295_ASCII_v0" vertex3="Readout_295_ASCII_v14"/>
+             <triangular vertex1="Readout_295_ASCII_v14" vertex2="Readout_295_ASCII_v0" vertex3="Readout_295_ASCII_v4"/>
+             <triangular vertex1="Readout_295_ASCII_v11" vertex2="Readout_295_ASCII_v1" vertex3="Readout_295_ASCII_v13"/>
+             <triangular vertex1="Readout_295_ASCII_v13" vertex2="Readout_295_ASCII_v1" vertex3="Readout_295_ASCII_v0"/>
+             <triangular vertex1="Readout_295_ASCII_v15" vertex2="Readout_295_ASCII_v9" vertex3="Readout_295_ASCII_v7"/>
+             <triangular vertex1="Readout_295_ASCII_v5" vertex2="Readout_295_ASCII_v15" vertex3="Readout_295_ASCII_v7"/>
+             <triangular vertex1="Readout_295_ASCII_v3" vertex2="Readout_295_ASCII_v12" vertex3="Readout_295_ASCII_v15"/>
+             <triangular vertex1="Readout_295_ASCII_v3" vertex2="Readout_295_ASCII_v15" vertex3="Readout_295_ASCII_v5"/>
+             <triangular vertex1="Readout_295_ASCII_v2" vertex2="Readout_295_ASCII_v10" vertex3="Readout_295_ASCII_v12"/>
+             <triangular vertex1="Readout_295_ASCII_v2" vertex2="Readout_295_ASCII_v12" vertex3="Readout_295_ASCII_v3"/>
+        </tessellated>
+    </solids>
+
+    <structure>
+        <volume name="Readout_295_ASCII">
+            <materialref ref="Vacuum"/>
+            <solidref ref="Readout_295_ASCII-SOL"/>
+        </volume>
+    </structure>
+
+    <setup name="Default" version="1.0">
+        <world ref="Readout_295_ASCII"/>
+    </setup>
+</gdml>

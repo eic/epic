@@ -252,7 +252,24 @@
     <composite n="2" ref="N"/>
     <composite n="5" ref="O"/>
   </material>
-  <material name="PEEK">
+
+<!-- add K9 foam material Long LI 2024-10-30 -->
+  <material name="K9">
+  <!-- not that the foam is simulated as almost pure carbon, ignoring the air pockets in it-->
+   <!-- not that I used data from here: https://ergaerospace.com/carbon-rvc-foam-open-cell-material/#:~:text=Duocel%C2%AE%20Reticulated%20Vitreous%20Carbon,foam%20structure%20is%20extremely%20lightweight.-->
+    <D value="200" unit="kg/m3"/>
+    <fraction n="1" ref="C"/>
+  </material>
+
+  <material name="Ultem"> <!-- aka PEI-->
+    <D value="1.43" unit="g/cm3"/>
+    <composite n="37" ref="C"/>
+    <composite n="24" ref="H"/>
+    <composite n="2" ref="N"/>
+    <composite n="6" ref="O"/>
+  </material>
+  
+   <material name="PEEK">
     <D value="1.37" unit="g/cm3"/>
     <composite n="19" ref="C"/>
     <composite n="12" ref="H"/>

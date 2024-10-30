@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<gdml xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://service-spi.web.cern.ch/service-spi/app/releases/GDML/schema/gdml.xsd">
+
+    <define>
+        <position name="Biasing_034(Mirror)007_ASCII_v0" unit="mm" x="-9.83754634857" y="3.85501265526" z="58.3973045349"/>
+        <position name="Biasing_034(Mirror)007_ASCII_v1" unit="mm" x="-9.81765651703" y="3.85710549355" z="58.3973045349"/>
+        <position name="Biasing_034(Mirror)007_ASCII_v2" unit="mm" x="-9.81765651703" y="3.85710477829" z="54.8263053894"/>
+        <position name="Biasing_034(Mirror)007_ASCII_v3" unit="mm" x="-9.83754634857" y="3.85501194" z="54.8263053894"/>
+        <position name="Biasing_034(Mirror)007_ASCII_v4" unit="mm" x="-9.85743618011" y="3.85291481018" z="54.8263053894"/>
+        <position name="Biasing_034(Mirror)007_ASCII_v5" unit="mm" x="-9.85743618011" y="3.85291552544" z="58.3973045349"/>
+        <position name="Biasing_034(Mirror)007_ASCII_v6" unit="mm" x="-9.87732505798" y="3.85081315041" z="54.8263053894"/>
+        <position name="Biasing_034(Mirror)007_ASCII_v7" unit="mm" x="-9.87732505798" y="3.85081386566" z="58.3973045349"/>
+        <position name="Biasing_034(Mirror)007_ASCII_v8" unit="mm" x="-9.87206554413" y="3.8010904789" z="54.8263053894"/>
+        <position name="Biasing_034(Mirror)007_ASCII_v9" unit="mm" x="-9.87206554413" y="3.80109119415" z="58.3973045349"/>
+        <position name="Biasing_034(Mirror)007_ASCII_v10" unit="mm" x="-9.8124294281" y="3.8073785305" z="54.8263053894"/>
+        <position name="Biasing_034(Mirror)007_ASCII_v11" unit="mm" x="-9.83230876923" y="3.80528759956" z="58.3973045349"/>
+        <position name="Biasing_034(Mirror)007_ASCII_v12" unit="mm" x="-9.83230876923" y="3.80528688431" z="54.8263053894"/>
+        <position name="Biasing_034(Mirror)007_ASCII_v13" unit="mm" x="-9.85218715668" y="3.80319094658" z="54.8263053894"/>
+        <position name="Biasing_034(Mirror)007_ASCII_v14" unit="mm" x="-9.8124294281" y="3.80737924576" z="58.3973045349"/>
+        <position name="Biasing_034(Mirror)007_ASCII_v15" unit="mm" x="-9.85218715668" y="3.80319166183" z="58.3973045349"/>
+    </define>
+
+    <solids>
+        <tessellated aunit="deg" lunit="mm" name="Biasing_034(Mirror)007_ASCII-SOL">
+             <triangular vertex1="Biasing_034(Mirror)007_ASCII_v0" vertex2="Biasing_034(Mirror)007_ASCII_v1" vertex3="Biasing_034(Mirror)007_ASCII_v2"/>
+             <triangular vertex1="Biasing_034(Mirror)007_ASCII_v0" vertex2="Biasing_034(Mirror)007_ASCII_v2" vertex3="Biasing_034(Mirror)007_ASCII_v3"/>
+             <triangular vertex1="Biasing_034(Mirror)007_ASCII_v0" vertex2="Biasing_034(Mirror)007_ASCII_v3" vertex3="Biasing_034(Mirror)007_ASCII_v4"/>
+             <triangular vertex1="Biasing_034(Mirror)007_ASCII_v5" vertex2="Biasing_034(Mirror)007_ASCII_v4" vertex3="Biasing_034(Mirror)007_ASCII_v6"/>
+             <triangular vertex1="Biasing_034(Mirror)007_ASCII_v5" vertex2="Biasing_034(Mirror)007_ASCII_v0" vertex3="Biasing_034(Mirror)007_ASCII_v4"/>
+             <triangular vertex1="Biasing_034(Mirror)007_ASCII_v7" vertex2="Biasing_034(Mirror)007_ASCII_v5" vertex3="Biasing_034(Mirror)007_ASCII_v6"/>
+             <triangular vertex1="Biasing_034(Mirror)007_ASCII_v7" vertex2="Biasing_034(Mirror)007_ASCII_v8" vertex3="Biasing_034(Mirror)007_ASCII_v9"/>
+             <triangular vertex1="Biasing_034(Mirror)007_ASCII_v6" vertex2="Biasing_034(Mirror)007_ASCII_v8" vertex3="Biasing_034(Mirror)007_ASCII_v7"/>
+             <triangular vertex1="Biasing_034(Mirror)007_ASCII_v10" vertex2="Biasing_034(Mirror)007_ASCII_v11" vertex3="Biasing_034(Mirror)007_ASCII_v12"/>
+             <triangular vertex1="Biasing_034(Mirror)007_ASCII_v12" vertex2="Biasing_034(Mirror)007_ASCII_v11" vertex3="Biasing_034(Mirror)007_ASCII_v13"/>
+             <triangular vertex1="Biasing_034(Mirror)007_ASCII_v14" vertex2="Biasing_034(Mirror)007_ASCII_v11" vertex3="Biasing_034(Mirror)007_ASCII_v10"/>
+             <triangular vertex1="Biasing_034(Mirror)007_ASCII_v13" vertex2="Biasing_034(Mirror)007_ASCII_v15" vertex3="Biasing_034(Mirror)007_ASCII_v8"/>
+             <triangular vertex1="Biasing_034(Mirror)007_ASCII_v11" vertex2="Biasing_034(Mirror)007_ASCII_v15" vertex3="Biasing_034(Mirror)007_ASCII_v13"/>
+             <triangular vertex1="Biasing_034(Mirror)007_ASCII_v15" vertex2="Biasing_034(Mirror)007_ASCII_v9" vertex3="Biasing_034(Mirror)007_ASCII_v8"/>
+             <triangular vertex1="Biasing_034(Mirror)007_ASCII_v14" vertex2="Biasing_034(Mirror)007_ASCII_v10" vertex3="Biasing_034(Mirror)007_ASCII_v1"/>
+             <triangular vertex1="Biasing_034(Mirror)007_ASCII_v10" vertex2="Biasing_034(Mirror)007_ASCII_v2" vertex3="Biasing_034(Mirror)007_ASCII_v1"/>
+             <triangular vertex1="Biasing_034(Mirror)007_ASCII_v6" vertex2="Biasing_034(Mirror)007_ASCII_v13" vertex3="Biasing_034(Mirror)007_ASCII_v8"/>
+             <triangular vertex1="Biasing_034(Mirror)007_ASCII_v4" vertex2="Biasing_034(Mirror)007_ASCII_v13" vertex3="Biasing_034(Mirror)007_ASCII_v6"/>
+             <triangular vertex1="Biasing_034(Mirror)007_ASCII_v3" vertex2="Biasing_034(Mirror)007_ASCII_v12" vertex3="Biasing_034(Mirror)007_ASCII_v13"/>
+             <triangular vertex1="Biasing_034(Mirror)007_ASCII_v3" vertex2="Biasing_034(Mirror)007_ASCII_v13" vertex3="Biasing_034(Mirror)007_ASCII_v4"/>
+             <triangular vertex1="Biasing_034(Mirror)007_ASCII_v2" vertex2="Biasing_034(Mirror)007_ASCII_v10" vertex3="Biasing_034(Mirror)007_ASCII_v12"/>
+             <triangular vertex1="Biasing_034(Mirror)007_ASCII_v2" vertex2="Biasing_034(Mirror)007_ASCII_v12" vertex3="Biasing_034(Mirror)007_ASCII_v3"/>
+             <triangular vertex1="Biasing_034(Mirror)007_ASCII_v15" vertex2="Biasing_034(Mirror)007_ASCII_v7" vertex3="Biasing_034(Mirror)007_ASCII_v9"/>
+             <triangular vertex1="Biasing_034(Mirror)007_ASCII_v11" vertex2="Biasing_034(Mirror)007_ASCII_v5" vertex3="Biasing_034(Mirror)007_ASCII_v15"/>
+             <triangular vertex1="Biasing_034(Mirror)007_ASCII_v15" vertex2="Biasing_034(Mirror)007_ASCII_v5" vertex3="Biasing_034(Mirror)007_ASCII_v7"/>
+             <triangular vertex1="Biasing_034(Mirror)007_ASCII_v14" vertex2="Biasing_034(Mirror)007_ASCII_v0" vertex3="Biasing_034(Mirror)007_ASCII_v11"/>
+             <triangular vertex1="Biasing_034(Mirror)007_ASCII_v11" vertex2="Biasing_034(Mirror)007_ASCII_v0" vertex3="Biasing_034(Mirror)007_ASCII_v5"/>
+             <triangular vertex1="Biasing_034(Mirror)007_ASCII_v14" vertex2="Biasing_034(Mirror)007_ASCII_v1" vertex3="Biasing_034(Mirror)007_ASCII_v0"/>
+        </tessellated>
+    </solids>
+
+    <structure>
+        <volume name="Biasing_034(Mirror)007_ASCII">
+            <materialref ref="Vacuum"/>
+            <solidref ref="Biasing_034(Mirror)007_ASCII-SOL"/>
+        </volume>
+    </structure>
+
+    <setup name="Default" version="1.0">
+        <world ref="Biasing_034(Mirror)007_ASCII"/>
+    </setup>
+</gdml>

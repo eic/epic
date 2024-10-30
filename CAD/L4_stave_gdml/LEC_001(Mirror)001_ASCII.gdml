@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<gdml xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://service-spi.web.cern.ch/service-spi/app/releases/GDML/schema/gdml.xsd">
+
+    <define>
+        <position name="LEC_001(Mirror)001_ASCII_v0" unit="mm" x="3.96474719048" y="4.28015375137" z="-109.078872681"/>
+        <position name="LEC_001(Mirror)001_ASCII_v1" unit="mm" x="0.0528799146414" y="4.35010385513" z="-109.078872681"/>
+        <position name="LEC_001(Mirror)001_ASCII_v2" unit="mm" x="0.0528799146414" y="4.35010385513" z="-104.578872681"/>
+        <position name="LEC_001(Mirror)001_ASCII_v3" unit="mm" x="3.96474719048" y="4.28015375137" z="-104.578872681"/>
+        <position name="LEC_001(Mirror)001_ASCII_v4" unit="mm" x="7.86989116669" y="4.04046964645" z="-109.078872681"/>
+        <position name="LEC_001(Mirror)001_ASCII_v5" unit="mm" x="7.86989116669" y="4.04046964645" z="-104.578872681"/>
+        <position name="LEC_001(Mirror)001_ASCII_v6" unit="mm" x="11.7609510422" y="3.63150262833" z="-109.078872681"/>
+        <position name="LEC_001(Mirror)001_ASCII_v7" unit="mm" x="11.7609510422" y="3.63150262833" z="-104.578872681"/>
+        <position name="LEC_001(Mirror)001_ASCII_v8" unit="mm" x="15.6305913925" y="3.05402421951" z="-109.078872681"/>
+        <position name="LEC_001(Mirror)001_ASCII_v9" unit="mm" x="15.6305913925" y="3.05402421951" z="-104.578872681"/>
+        <position name="LEC_001(Mirror)001_ASCII_v10" unit="mm" x="19.4715175629" y="2.30912280083" z="-104.578872681"/>
+        <position name="LEC_001(Mirror)001_ASCII_v11" unit="mm" x="19.4715175629" y="2.30912280083" z="-109.078872681"/>
+        <position name="LEC_001(Mirror)001_ASCII_v12" unit="mm" x="19.4609355927" y="2.2602558136" z="-104.578872681"/>
+        <position name="LEC_001(Mirror)001_ASCII_v13" unit="mm" x="19.4609355927" y="2.2602558136" z="-109.078872681"/>
+        <position name="LEC_001(Mirror)001_ASCII_v14" unit="mm" x="0.0530714355409" y="4.30010461807" z="-104.578872681"/>
+        <position name="LEC_001(Mirror)001_ASCII_v15" unit="mm" x="3.96276831627" y="4.23019313812" z="-109.078872681"/>
+        <position name="LEC_001(Mirror)001_ASCII_v16" unit="mm" x="3.96276831627" y="4.23019313812" z="-104.578872681"/>
+        <position name="LEC_001(Mirror)001_ASCII_v17" unit="mm" x="0.0530714355409" y="4.30010461807" z="-109.078872681"/>
+        <position name="LEC_001(Mirror)001_ASCII_v18" unit="mm" x="7.86574554443" y="3.99064183235" z="-109.078872681"/>
+        <position name="LEC_001(Mirror)001_ASCII_v19" unit="mm" x="7.86574554443" y="3.99064183235" z="-104.578872681"/>
+        <position name="LEC_001(Mirror)001_ASCII_v20" unit="mm" x="11.7546463013" y="3.58190178871" z="-109.078872681"/>
+        <position name="LEC_001(Mirror)001_ASCII_v21" unit="mm" x="11.7546463013" y="3.58190178871" z="-104.578872681"/>
+        <position name="LEC_001(Mirror)001_ASCII_v22" unit="mm" x="15.6221399307" y="3.00474381447" z="-104.578872681"/>
+        <position name="LEC_001(Mirror)001_ASCII_v23" unit="mm" x="15.6221399307" y="3.00474381447" z="-109.078872681"/>
+    </define>
+
+    <solids>
+        <tessellated aunit="deg" lunit="mm" name="LEC_001(Mirror)001_ASCII-SOL">
+             <triangular vertex1="LEC_001(Mirror)001_ASCII_v0" vertex2="LEC_001(Mirror)001_ASCII_v1" vertex3="LEC_001(Mirror)001_ASCII_v2"/>
+             <triangular vertex1="LEC_001(Mirror)001_ASCII_v0" vertex2="LEC_001(Mirror)001_ASCII_v2" vertex3="LEC_001(Mirror)001_ASCII_v3"/>
+             <triangular vertex1="LEC_001(Mirror)001_ASCII_v4" vertex2="LEC_001(Mirror)001_ASCII_v3" vertex3="LEC_001(Mirror)001_ASCII_v5"/>
+             <triangular vertex1="LEC_001(Mirror)001_ASCII_v4" vertex2="LEC_001(Mirror)001_ASCII_v0" vertex3="LEC_001(Mirror)001_ASCII_v3"/>
+             <triangular vertex1="LEC_001(Mirror)001_ASCII_v6" vertex2="LEC_001(Mirror)001_ASCII_v5" vertex3="LEC_001(Mirror)001_ASCII_v7"/>
+             <triangular vertex1="LEC_001(Mirror)001_ASCII_v6" vertex2="LEC_001(Mirror)001_ASCII_v4" vertex3="LEC_001(Mirror)001_ASCII_v5"/>
+             <triangular vertex1="LEC_001(Mirror)001_ASCII_v8" vertex2="LEC_001(Mirror)001_ASCII_v7" vertex3="LEC_001(Mirror)001_ASCII_v9"/>
+             <triangular vertex1="LEC_001(Mirror)001_ASCII_v8" vertex2="LEC_001(Mirror)001_ASCII_v9" vertex3="LEC_001(Mirror)001_ASCII_v10"/>
+             <triangular vertex1="LEC_001(Mirror)001_ASCII_v8" vertex2="LEC_001(Mirror)001_ASCII_v6" vertex3="LEC_001(Mirror)001_ASCII_v7"/>
+             <triangular vertex1="LEC_001(Mirror)001_ASCII_v11" vertex2="LEC_001(Mirror)001_ASCII_v8" vertex3="LEC_001(Mirror)001_ASCII_v10"/>
+             <triangular vertex1="LEC_001(Mirror)001_ASCII_v11" vertex2="LEC_001(Mirror)001_ASCII_v12" vertex3="LEC_001(Mirror)001_ASCII_v13"/>
+             <triangular vertex1="LEC_001(Mirror)001_ASCII_v10" vertex2="LEC_001(Mirror)001_ASCII_v12" vertex3="LEC_001(Mirror)001_ASCII_v11"/>
+             <triangular vertex1="LEC_001(Mirror)001_ASCII_v14" vertex2="LEC_001(Mirror)001_ASCII_v15" vertex3="LEC_001(Mirror)001_ASCII_v16"/>
+             <triangular vertex1="LEC_001(Mirror)001_ASCII_v17" vertex2="LEC_001(Mirror)001_ASCII_v15" vertex3="LEC_001(Mirror)001_ASCII_v14"/>
+             <triangular vertex1="LEC_001(Mirror)001_ASCII_v16" vertex2="LEC_001(Mirror)001_ASCII_v18" vertex3="LEC_001(Mirror)001_ASCII_v19"/>
+             <triangular vertex1="LEC_001(Mirror)001_ASCII_v15" vertex2="LEC_001(Mirror)001_ASCII_v18" vertex3="LEC_001(Mirror)001_ASCII_v16"/>
+             <triangular vertex1="LEC_001(Mirror)001_ASCII_v19" vertex2="LEC_001(Mirror)001_ASCII_v20" vertex3="LEC_001(Mirror)001_ASCII_v21"/>
+             <triangular vertex1="LEC_001(Mirror)001_ASCII_v21" vertex2="LEC_001(Mirror)001_ASCII_v20" vertex3="LEC_001(Mirror)001_ASCII_v22"/>
+             <triangular vertex1="LEC_001(Mirror)001_ASCII_v18" vertex2="LEC_001(Mirror)001_ASCII_v20" vertex3="LEC_001(Mirror)001_ASCII_v19"/>
+             <triangular vertex1="LEC_001(Mirror)001_ASCII_v20" vertex2="LEC_001(Mirror)001_ASCII_v23" vertex3="LEC_001(Mirror)001_ASCII_v22"/>
+             <triangular vertex1="LEC_001(Mirror)001_ASCII_v22" vertex2="LEC_001(Mirror)001_ASCII_v13" vertex3="LEC_001(Mirror)001_ASCII_v12"/>
+             <triangular vertex1="LEC_001(Mirror)001_ASCII_v23" vertex2="LEC_001(Mirror)001_ASCII_v13" vertex3="LEC_001(Mirror)001_ASCII_v22"/>
+             <triangular vertex1="LEC_001(Mirror)001_ASCII_v17" vertex2="LEC_001(Mirror)001_ASCII_v2" vertex3="LEC_001(Mirror)001_ASCII_v1"/>
+             <triangular vertex1="LEC_001(Mirror)001_ASCII_v14" vertex2="LEC_001(Mirror)001_ASCII_v2" vertex3="LEC_001(Mirror)001_ASCII_v17"/>
+             <triangular vertex1="LEC_001(Mirror)001_ASCII_v22" vertex2="LEC_001(Mirror)001_ASCII_v12" vertex3="LEC_001(Mirror)001_ASCII_v10"/>
+             <triangular vertex1="LEC_001(Mirror)001_ASCII_v9" vertex2="LEC_001(Mirror)001_ASCII_v22" vertex3="LEC_001(Mirror)001_ASCII_v10"/>
+             <triangular vertex1="LEC_001(Mirror)001_ASCII_v21" vertex2="LEC_001(Mirror)001_ASCII_v22" vertex3="LEC_001(Mirror)001_ASCII_v9"/>
+             <triangular vertex1="LEC_001(Mirror)001_ASCII_v7" vertex2="LEC_001(Mirror)001_ASCII_v21" vertex3="LEC_001(Mirror)001_ASCII_v9"/>
+             <triangular vertex1="LEC_001(Mirror)001_ASCII_v5" vertex2="LEC_001(Mirror)001_ASCII_v19" vertex3="LEC_001(Mirror)001_ASCII_v21"/>
+             <triangular vertex1="LEC_001(Mirror)001_ASCII_v5" vertex2="LEC_001(Mirror)001_ASCII_v21" vertex3="LEC_001(Mirror)001_ASCII_v7"/>
+             <triangular vertex1="LEC_001(Mirror)001_ASCII_v3" vertex2="LEC_001(Mirror)001_ASCII_v16" vertex3="LEC_001(Mirror)001_ASCII_v19"/>
+             <triangular vertex1="LEC_001(Mirror)001_ASCII_v3" vertex2="LEC_001(Mirror)001_ASCII_v19" vertex3="LEC_001(Mirror)001_ASCII_v5"/>
+             <triangular vertex1="LEC_001(Mirror)001_ASCII_v2" vertex2="LEC_001(Mirror)001_ASCII_v14" vertex3="LEC_001(Mirror)001_ASCII_v16"/>
+             <triangular vertex1="LEC_001(Mirror)001_ASCII_v2" vertex2="LEC_001(Mirror)001_ASCII_v16" vertex3="LEC_001(Mirror)001_ASCII_v3"/>
+             <triangular vertex1="LEC_001(Mirror)001_ASCII_v13" vertex2="LEC_001(Mirror)001_ASCII_v23" vertex3="LEC_001(Mirror)001_ASCII_v11"/>
+             <triangular vertex1="LEC_001(Mirror)001_ASCII_v23" vertex2="LEC_001(Mirror)001_ASCII_v8" vertex3="LEC_001(Mirror)001_ASCII_v11"/>
+             <triangular vertex1="LEC_001(Mirror)001_ASCII_v23" vertex2="LEC_001(Mirror)001_ASCII_v20" vertex3="LEC_001(Mirror)001_ASCII_v8"/>
+             <triangular vertex1="LEC_001(Mirror)001_ASCII_v20" vertex2="LEC_001(Mirror)001_ASCII_v6" vertex3="LEC_001(Mirror)001_ASCII_v8"/>
+             <triangular vertex1="LEC_001(Mirror)001_ASCII_v18" vertex2="LEC_001(Mirror)001_ASCII_v4" vertex3="LEC_001(Mirror)001_ASCII_v20"/>
+             <triangular vertex1="LEC_001(Mirror)001_ASCII_v20" vertex2="LEC_001(Mirror)001_ASCII_v4" vertex3="LEC_001(Mirror)001_ASCII_v6"/>
+             <triangular vertex1="LEC_001(Mirror)001_ASCII_v15" vertex2="LEC_001(Mirror)001_ASCII_v0" vertex3="LEC_001(Mirror)001_ASCII_v18"/>
+             <triangular vertex1="LEC_001(Mirror)001_ASCII_v18" vertex2="LEC_001(Mirror)001_ASCII_v0" vertex3="LEC_001(Mirror)001_ASCII_v4"/>
+             <triangular vertex1="LEC_001(Mirror)001_ASCII_v17" vertex2="LEC_001(Mirror)001_ASCII_v1" vertex3="LEC_001(Mirror)001_ASCII_v15"/>
+             <triangular vertex1="LEC_001(Mirror)001_ASCII_v15" vertex2="LEC_001(Mirror)001_ASCII_v1" vertex3="LEC_001(Mirror)001_ASCII_v0"/>
+        </tessellated>
+    </solids>
+
+    <structure>
+        <volume name="LEC_001(Mirror)001_ASCII">
+            <materialref ref="Vacuum"/>
+            <solidref ref="LEC_001(Mirror)001_ASCII-SOL"/>
+        </volume>
+    </structure>
+
+    <setup name="Default" version="1.0">
+        <world ref="LEC_001(Mirror)001_ASCII"/>
+    </setup>
+</gdml>

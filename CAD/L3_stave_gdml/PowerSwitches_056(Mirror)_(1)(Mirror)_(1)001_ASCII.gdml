@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<gdml xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://service-spi.web.cern.ch/service-spi/app/releases/GDML/schema/gdml.xsd">
+
+    <define>
+        <position name="PowerSwitches_056(Mirror)_(1)(Mirror)_(1)001_ASCII_v0" unit="mm" x="12.9103355408" y="3.45443153381" z="96.3860015869"/>
+        <position name="PowerSwitches_056(Mirror)_(1)(Mirror)_(1)001_ASCII_v1" unit="mm" x="9.84704399109" y="3.82409763336" z="96.3860015869"/>
+        <position name="PowerSwitches_056(Mirror)_(1)(Mirror)_(1)001_ASCII_v2" unit="mm" x="9.84704399109" y="3.82409763336" z="96.4060058594"/>
+        <position name="PowerSwitches_056(Mirror)_(1)(Mirror)_(1)001_ASCII_v3" unit="mm" x="12.9103355408" y="3.45443153381" z="96.4060058594"/>
+        <position name="PowerSwitches_056(Mirror)_(1)(Mirror)_(1)001_ASCII_v4" unit="mm" x="15.9591760635" y="2.98011112213" z="96.3860015869"/>
+        <position name="PowerSwitches_056(Mirror)_(1)(Mirror)_(1)001_ASCII_v5" unit="mm" x="15.9591760635" y="2.98011112213" z="96.4060058594"/>
+        <position name="PowerSwitches_056(Mirror)_(1)(Mirror)_(1)001_ASCII_v6" unit="mm" x="18.9899921417" y="2.40169239044" z="96.4060058594"/>
+        <position name="PowerSwitches_056(Mirror)_(1)(Mirror)_(1)001_ASCII_v7" unit="mm" x="18.9899921417" y="2.40169239044" z="96.3860015869"/>
+        <position name="PowerSwitches_056(Mirror)_(1)(Mirror)_(1)001_ASCII_v8" unit="mm" x="18.9797782898" y="2.35274648666" z="96.4060058594"/>
+        <position name="PowerSwitches_056(Mirror)_(1)(Mirror)_(1)001_ASCII_v9" unit="mm" x="18.9797782898" y="2.35274648666" z="96.3860015869"/>
+        <position name="PowerSwitches_056(Mirror)_(1)(Mirror)_(1)001_ASCII_v10" unit="mm" x="9.8419046402" y="3.77436256409" z="96.4060058594"/>
+        <position name="PowerSwitches_056(Mirror)_(1)(Mirror)_(1)001_ASCII_v11" unit="mm" x="12.9034967422" y="3.40490150452" z="96.3860015869"/>
+        <position name="PowerSwitches_056(Mirror)_(1)(Mirror)_(1)001_ASCII_v12" unit="mm" x="12.9034967422" y="3.40490150452" z="96.4060058594"/>
+        <position name="PowerSwitches_056(Mirror)_(1)(Mirror)_(1)001_ASCII_v13" unit="mm" x="9.8419046402" y="3.77436256409" z="96.3860015869"/>
+        <position name="PowerSwitches_056(Mirror)_(1)(Mirror)_(1)001_ASCII_v14" unit="mm" x="15.9506454468" y="2.93084430695" z="96.3860015869"/>
+        <position name="PowerSwitches_056(Mirror)_(1)(Mirror)_(1)001_ASCII_v15" unit="mm" x="15.9506454468" y="2.93084430695" z="96.4060058594"/>
+    </define>
+
+    <solids>
+        <tessellated aunit="deg" lunit="mm" name="PowerSwitches_056(Mirror)_(1)(Mirror)_(1)001_ASCII-SOL">
+             <triangular vertex1="PowerSwitches_056(Mirror)_(1)(Mirror)_(1)001_ASCII_v0" vertex2="PowerSwitches_056(Mirror)_(1)(Mirror)_(1)001_ASCII_v1" vertex3="PowerSwitches_056(Mirror)_(1)(Mirror)_(1)001_ASCII_v2"/>
+             <triangular vertex1="PowerSwitches_056(Mirror)_(1)(Mirror)_(1)001_ASCII_v0" vertex2="PowerSwitches_056(Mirror)_(1)(Mirror)_(1)001_ASCII_v2" vertex3="PowerSwitches_056(Mirror)_(1)(Mirror)_(1)001_ASCII_v3"/>
+             <triangular vertex1="PowerSwitches_056(Mirror)_(1)(Mirror)_(1)001_ASCII_v4" vertex2="PowerSwitches_056(Mirror)_(1)(Mirror)_(1)001_ASCII_v3" vertex3="PowerSwitches_056(Mirror)_(1)(Mirror)_(1)001_ASCII_v5"/>
+             <triangular vertex1="PowerSwitches_056(Mirror)_(1)(Mirror)_(1)001_ASCII_v4" vertex2="PowerSwitches_056(Mirror)_(1)(Mirror)_(1)001_ASCII_v5" vertex3="PowerSwitches_056(Mirror)_(1)(Mirror)_(1)001_ASCII_v6"/>
+             <triangular vertex1="PowerSwitches_056(Mirror)_(1)(Mirror)_(1)001_ASCII_v4" vertex2="PowerSwitches_056(Mirror)_(1)(Mirror)_(1)001_ASCII_v0" vertex3="PowerSwitches_056(Mirror)_(1)(Mirror)_(1)001_ASCII_v3"/>
+             <triangular vertex1="PowerSwitches_056(Mirror)_(1)(Mirror)_(1)001_ASCII_v7" vertex2="PowerSwitches_056(Mirror)_(1)(Mirror)_(1)001_ASCII_v4" vertex3="PowerSwitches_056(Mirror)_(1)(Mirror)_(1)001_ASCII_v6"/>
+             <triangular vertex1="PowerSwitches_056(Mirror)_(1)(Mirror)_(1)001_ASCII_v8" vertex2="PowerSwitches_056(Mirror)_(1)(Mirror)_(1)001_ASCII_v7" vertex3="PowerSwitches_056(Mirror)_(1)(Mirror)_(1)001_ASCII_v6"/>
+             <triangular vertex1="PowerSwitches_056(Mirror)_(1)(Mirror)_(1)001_ASCII_v9" vertex2="PowerSwitches_056(Mirror)_(1)(Mirror)_(1)001_ASCII_v7" vertex3="PowerSwitches_056(Mirror)_(1)(Mirror)_(1)001_ASCII_v8"/>
+             <triangular vertex1="PowerSwitches_056(Mirror)_(1)(Mirror)_(1)001_ASCII_v10" vertex2="PowerSwitches_056(Mirror)_(1)(Mirror)_(1)001_ASCII_v11" vertex3="PowerSwitches_056(Mirror)_(1)(Mirror)_(1)001_ASCII_v12"/>
+             <triangular vertex1="PowerSwitches_056(Mirror)_(1)(Mirror)_(1)001_ASCII_v13" vertex2="PowerSwitches_056(Mirror)_(1)(Mirror)_(1)001_ASCII_v11" vertex3="PowerSwitches_056(Mirror)_(1)(Mirror)_(1)001_ASCII_v10"/>
+             <triangular vertex1="PowerSwitches_056(Mirror)_(1)(Mirror)_(1)001_ASCII_v12" vertex2="PowerSwitches_056(Mirror)_(1)(Mirror)_(1)001_ASCII_v14" vertex3="PowerSwitches_056(Mirror)_(1)(Mirror)_(1)001_ASCII_v15"/>
+             <triangular vertex1="PowerSwitches_056(Mirror)_(1)(Mirror)_(1)001_ASCII_v15" vertex2="PowerSwitches_056(Mirror)_(1)(Mirror)_(1)001_ASCII_v14" vertex3="PowerSwitches_056(Mirror)_(1)(Mirror)_(1)001_ASCII_v8"/>
+             <triangular vertex1="PowerSwitches_056(Mirror)_(1)(Mirror)_(1)001_ASCII_v11" vertex2="PowerSwitches_056(Mirror)_(1)(Mirror)_(1)001_ASCII_v14" vertex3="PowerSwitches_056(Mirror)_(1)(Mirror)_(1)001_ASCII_v12"/>
+             <triangular vertex1="PowerSwitches_056(Mirror)_(1)(Mirror)_(1)001_ASCII_v14" vertex2="PowerSwitches_056(Mirror)_(1)(Mirror)_(1)001_ASCII_v9" vertex3="PowerSwitches_056(Mirror)_(1)(Mirror)_(1)001_ASCII_v8"/>
+             <triangular vertex1="PowerSwitches_056(Mirror)_(1)(Mirror)_(1)001_ASCII_v1" vertex2="PowerSwitches_056(Mirror)_(1)(Mirror)_(1)001_ASCII_v13" vertex3="PowerSwitches_056(Mirror)_(1)(Mirror)_(1)001_ASCII_v10"/>
+             <triangular vertex1="PowerSwitches_056(Mirror)_(1)(Mirror)_(1)001_ASCII_v1" vertex2="PowerSwitches_056(Mirror)_(1)(Mirror)_(1)001_ASCII_v10" vertex3="PowerSwitches_056(Mirror)_(1)(Mirror)_(1)001_ASCII_v2"/>
+             <triangular vertex1="PowerSwitches_056(Mirror)_(1)(Mirror)_(1)001_ASCII_v9" vertex2="PowerSwitches_056(Mirror)_(1)(Mirror)_(1)001_ASCII_v14" vertex3="PowerSwitches_056(Mirror)_(1)(Mirror)_(1)001_ASCII_v7"/>
+             <triangular vertex1="PowerSwitches_056(Mirror)_(1)(Mirror)_(1)001_ASCII_v14" vertex2="PowerSwitches_056(Mirror)_(1)(Mirror)_(1)001_ASCII_v4" vertex3="PowerSwitches_056(Mirror)_(1)(Mirror)_(1)001_ASCII_v7"/>
+             <triangular vertex1="PowerSwitches_056(Mirror)_(1)(Mirror)_(1)001_ASCII_v14" vertex2="PowerSwitches_056(Mirror)_(1)(Mirror)_(1)001_ASCII_v11" vertex3="PowerSwitches_056(Mirror)_(1)(Mirror)_(1)001_ASCII_v4"/>
+             <triangular vertex1="PowerSwitches_056(Mirror)_(1)(Mirror)_(1)001_ASCII_v11" vertex2="PowerSwitches_056(Mirror)_(1)(Mirror)_(1)001_ASCII_v0" vertex3="PowerSwitches_056(Mirror)_(1)(Mirror)_(1)001_ASCII_v4"/>
+             <triangular vertex1="PowerSwitches_056(Mirror)_(1)(Mirror)_(1)001_ASCII_v11" vertex2="PowerSwitches_056(Mirror)_(1)(Mirror)_(1)001_ASCII_v13" vertex3="PowerSwitches_056(Mirror)_(1)(Mirror)_(1)001_ASCII_v0"/>
+             <triangular vertex1="PowerSwitches_056(Mirror)_(1)(Mirror)_(1)001_ASCII_v13" vertex2="PowerSwitches_056(Mirror)_(1)(Mirror)_(1)001_ASCII_v1" vertex3="PowerSwitches_056(Mirror)_(1)(Mirror)_(1)001_ASCII_v0"/>
+             <triangular vertex1="PowerSwitches_056(Mirror)_(1)(Mirror)_(1)001_ASCII_v15" vertex2="PowerSwitches_056(Mirror)_(1)(Mirror)_(1)001_ASCII_v8" vertex3="PowerSwitches_056(Mirror)_(1)(Mirror)_(1)001_ASCII_v6"/>
+             <triangular vertex1="PowerSwitches_056(Mirror)_(1)(Mirror)_(1)001_ASCII_v5" vertex2="PowerSwitches_056(Mirror)_(1)(Mirror)_(1)001_ASCII_v15" vertex3="PowerSwitches_056(Mirror)_(1)(Mirror)_(1)001_ASCII_v6"/>
+             <triangular vertex1="PowerSwitches_056(Mirror)_(1)(Mirror)_(1)001_ASCII_v12" vertex2="PowerSwitches_056(Mirror)_(1)(Mirror)_(1)001_ASCII_v15" vertex3="PowerSwitches_056(Mirror)_(1)(Mirror)_(1)001_ASCII_v5"/>
+             <triangular vertex1="PowerSwitches_056(Mirror)_(1)(Mirror)_(1)001_ASCII_v3" vertex2="PowerSwitches_056(Mirror)_(1)(Mirror)_(1)001_ASCII_v12" vertex3="PowerSwitches_056(Mirror)_(1)(Mirror)_(1)001_ASCII_v5"/>
+             <triangular vertex1="PowerSwitches_056(Mirror)_(1)(Mirror)_(1)001_ASCII_v10" vertex2="PowerSwitches_056(Mirror)_(1)(Mirror)_(1)001_ASCII_v12" vertex3="PowerSwitches_056(Mirror)_(1)(Mirror)_(1)001_ASCII_v3"/>
+             <triangular vertex1="PowerSwitches_056(Mirror)_(1)(Mirror)_(1)001_ASCII_v2" vertex2="PowerSwitches_056(Mirror)_(1)(Mirror)_(1)001_ASCII_v10" vertex3="PowerSwitches_056(Mirror)_(1)(Mirror)_(1)001_ASCII_v3"/>
+        </tessellated>
+    </solids>
+
+    <structure>
+        <volume name="PowerSwitches_056(Mirror)_(1)(Mirror)_(1)001_ASCII">
+            <materialref ref="Vacuum"/>
+            <solidref ref="PowerSwitches_056(Mirror)_(1)(Mirror)_(1)001_ASCII-SOL"/>
+        </volume>
+    </structure>
+
+    <setup name="Default" version="1.0">
+        <world ref="PowerSwitches_056(Mirror)_(1)(Mirror)_(1)001_ASCII"/>
+    </setup>
+</gdml>

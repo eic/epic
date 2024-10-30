@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<gdml xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://service-spi.web.cern.ch/service-spi/app/releases/GDML/schema/gdml.xsd">
+
+    <define>
+        <position name="PowerSwitches_264_ASCII_v0" unit="mm" x="-12.8802928925" y="-3.48209404945" z="367.289581299"/>
+        <position name="PowerSwitches_264_ASCII_v1" unit="mm" x="-9.81765079498" y="-3.85710549355" z="367.289581299"/>
+        <position name="PowerSwitches_264_ASCII_v2" unit="mm" x="-9.81765079498" y="-3.85710549355" z="367.309570312"/>
+        <position name="PowerSwitches_264_ASCII_v3" unit="mm" x="-12.8802928925" y="-3.48209404945" z="367.309570312"/>
+        <position name="PowerSwitches_264_ASCII_v4" unit="mm" x="-15.9283008575" y="-3.0024535656" z="367.289581299"/>
+        <position name="PowerSwitches_264_ASCII_v5" unit="mm" x="-15.9283008575" y="-3.0024535656" z="367.309570312"/>
+        <position name="PowerSwitches_264_ASCII_v6" unit="mm" x="-18.9581012726" y="-2.41874647141" z="367.309570312"/>
+        <position name="PowerSwitches_264_ASCII_v7" unit="mm" x="-18.9581012726" y="-2.41874647141" z="367.289581299"/>
+        <position name="PowerSwitches_264_ASCII_v8" unit="mm" x="-18.9478034973" y="-2.36981844902" z="367.309570312"/>
+        <position name="PowerSwitches_264_ASCII_v9" unit="mm" x="-18.9478034973" y="-2.36981844902" z="367.289581299"/>
+        <position name="PowerSwitches_264_ASCII_v10" unit="mm" x="-9.81242465973" y="-3.80737948418" z="367.309570312"/>
+        <position name="PowerSwitches_264_ASCII_v11" unit="mm" x="-12.8733673096" y="-3.43257594109" z="367.289581299"/>
+        <position name="PowerSwitches_264_ASCII_v12" unit="mm" x="-12.8733673096" y="-3.43257594109" z="367.309570312"/>
+        <position name="PowerSwitches_264_ASCII_v13" unit="mm" x="-9.81242465973" y="-3.80737948418" z="367.289581299"/>
+        <position name="PowerSwitches_264_ASCII_v14" unit="mm" x="-15.9196844101" y="-2.95320153236" z="367.289581299"/>
+        <position name="PowerSwitches_264_ASCII_v15" unit="mm" x="-15.9196844101" y="-2.95320153236" z="367.309570312"/>
+    </define>
+
+    <solids>
+        <tessellated aunit="deg" lunit="mm" name="PowerSwitches_264_ASCII-SOL">
+             <triangular vertex1="PowerSwitches_264_ASCII_v0" vertex2="PowerSwitches_264_ASCII_v1" vertex3="PowerSwitches_264_ASCII_v2"/>
+             <triangular vertex1="PowerSwitches_264_ASCII_v0" vertex2="PowerSwitches_264_ASCII_v2" vertex3="PowerSwitches_264_ASCII_v3"/>
+             <triangular vertex1="PowerSwitches_264_ASCII_v4" vertex2="PowerSwitches_264_ASCII_v3" vertex3="PowerSwitches_264_ASCII_v5"/>
+             <triangular vertex1="PowerSwitches_264_ASCII_v4" vertex2="PowerSwitches_264_ASCII_v5" vertex3="PowerSwitches_264_ASCII_v6"/>
+             <triangular vertex1="PowerSwitches_264_ASCII_v4" vertex2="PowerSwitches_264_ASCII_v0" vertex3="PowerSwitches_264_ASCII_v3"/>
+             <triangular vertex1="PowerSwitches_264_ASCII_v7" vertex2="PowerSwitches_264_ASCII_v4" vertex3="PowerSwitches_264_ASCII_v6"/>
+             <triangular vertex1="PowerSwitches_264_ASCII_v8" vertex2="PowerSwitches_264_ASCII_v7" vertex3="PowerSwitches_264_ASCII_v6"/>
+             <triangular vertex1="PowerSwitches_264_ASCII_v9" vertex2="PowerSwitches_264_ASCII_v7" vertex3="PowerSwitches_264_ASCII_v8"/>
+             <triangular vertex1="PowerSwitches_264_ASCII_v10" vertex2="PowerSwitches_264_ASCII_v11" vertex3="PowerSwitches_264_ASCII_v12"/>
+             <triangular vertex1="PowerSwitches_264_ASCII_v13" vertex2="PowerSwitches_264_ASCII_v11" vertex3="PowerSwitches_264_ASCII_v10"/>
+             <triangular vertex1="PowerSwitches_264_ASCII_v12" vertex2="PowerSwitches_264_ASCII_v14" vertex3="PowerSwitches_264_ASCII_v15"/>
+             <triangular vertex1="PowerSwitches_264_ASCII_v15" vertex2="PowerSwitches_264_ASCII_v14" vertex3="PowerSwitches_264_ASCII_v8"/>
+             <triangular vertex1="PowerSwitches_264_ASCII_v11" vertex2="PowerSwitches_264_ASCII_v14" vertex3="PowerSwitches_264_ASCII_v12"/>
+             <triangular vertex1="PowerSwitches_264_ASCII_v14" vertex2="PowerSwitches_264_ASCII_v9" vertex3="PowerSwitches_264_ASCII_v8"/>
+             <triangular vertex1="PowerSwitches_264_ASCII_v1" vertex2="PowerSwitches_264_ASCII_v13" vertex3="PowerSwitches_264_ASCII_v10"/>
+             <triangular vertex1="PowerSwitches_264_ASCII_v1" vertex2="PowerSwitches_264_ASCII_v10" vertex3="PowerSwitches_264_ASCII_v2"/>
+             <triangular vertex1="PowerSwitches_264_ASCII_v9" vertex2="PowerSwitches_264_ASCII_v14" vertex3="PowerSwitches_264_ASCII_v7"/>
+             <triangular vertex1="PowerSwitches_264_ASCII_v14" vertex2="PowerSwitches_264_ASCII_v4" vertex3="PowerSwitches_264_ASCII_v7"/>
+             <triangular vertex1="PowerSwitches_264_ASCII_v14" vertex2="PowerSwitches_264_ASCII_v11" vertex3="PowerSwitches_264_ASCII_v4"/>
+             <triangular vertex1="PowerSwitches_264_ASCII_v11" vertex2="PowerSwitches_264_ASCII_v0" vertex3="PowerSwitches_264_ASCII_v4"/>
+             <triangular vertex1="PowerSwitches_264_ASCII_v11" vertex2="PowerSwitches_264_ASCII_v13" vertex3="PowerSwitches_264_ASCII_v0"/>
+             <triangular vertex1="PowerSwitches_264_ASCII_v13" vertex2="PowerSwitches_264_ASCII_v1" vertex3="PowerSwitches_264_ASCII_v0"/>
+             <triangular vertex1="PowerSwitches_264_ASCII_v15" vertex2="PowerSwitches_264_ASCII_v8" vertex3="PowerSwitches_264_ASCII_v6"/>
+             <triangular vertex1="PowerSwitches_264_ASCII_v5" vertex2="PowerSwitches_264_ASCII_v15" vertex3="PowerSwitches_264_ASCII_v6"/>
+             <triangular vertex1="PowerSwitches_264_ASCII_v12" vertex2="PowerSwitches_264_ASCII_v15" vertex3="PowerSwitches_264_ASCII_v5"/>
+             <triangular vertex1="PowerSwitches_264_ASCII_v3" vertex2="PowerSwitches_264_ASCII_v12" vertex3="PowerSwitches_264_ASCII_v5"/>
+             <triangular vertex1="PowerSwitches_264_ASCII_v2" vertex2="PowerSwitches_264_ASCII_v10" vertex3="PowerSwitches_264_ASCII_v12"/>
+             <triangular vertex1="PowerSwitches_264_ASCII_v2" vertex2="PowerSwitches_264_ASCII_v12" vertex3="PowerSwitches_264_ASCII_v3"/>
+        </tessellated>
+    </solids>
+
+    <structure>
+        <volume name="PowerSwitches_264_ASCII">
+            <materialref ref="Vacuum"/>
+            <solidref ref="PowerSwitches_264_ASCII-SOL"/>
+        </volume>
+    </structure>
+
+    <setup name="Default" version="1.0">
+        <world ref="PowerSwitches_264_ASCII"/>
+    </setup>
+</gdml>

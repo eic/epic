@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<gdml xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://service-spi.web.cern.ch/service-spi/app/releases/GDML/schema/gdml.xsd">
+
+    <define>
+        <position name="Biasing_091_ASCII_v0" unit="mm" x="-9.81765460968" y="3.85710453987" z="-152.470870972"/>
+        <position name="Biasing_091_ASCII_v1" unit="mm" x="-9.81765460968" y="3.85710525513" z="-156.041870117"/>
+        <position name="Biasing_091_ASCII_v2" unit="mm" x="-9.83754444122" y="3.85501241684" z="-156.041870117"/>
+        <position name="Biasing_091_ASCII_v3" unit="mm" x="-9.83754444122" y="3.85501170158" z="-152.470870972"/>
+        <position name="Biasing_091_ASCII_v4" unit="mm" x="-9.85743427277" y="3.85291528702" z="-156.041870117"/>
+        <position name="Biasing_091_ASCII_v5" unit="mm" x="-9.85743427277" y="3.85291457176" z="-152.470870972"/>
+        <position name="Biasing_091_ASCII_v6" unit="mm" x="-9.87732315063" y="3.85081291199" z="-152.470870972"/>
+        <position name="Biasing_091_ASCII_v7" unit="mm" x="-9.87732315063" y="3.85081362724" z="-156.041870117"/>
+        <position name="Biasing_091_ASCII_v8" unit="mm" x="-9.87206363678" y="3.80109024048" z="-152.470870972"/>
+        <position name="Biasing_091_ASCII_v9" unit="mm" x="-9.87206363678" y="3.80109119415" z="-156.041870117"/>
+        <position name="Biasing_091_ASCII_v10" unit="mm" x="-9.81242752075" y="3.80737924576" z="-156.041870117"/>
+        <position name="Biasing_091_ASCII_v11" unit="mm" x="-9.81242752075" y="3.8073785305" z="-152.470870972"/>
+        <position name="Biasing_091_ASCII_v12" unit="mm" x="-9.83230686188" y="3.80528759956" z="-156.041870117"/>
+        <position name="Biasing_091_ASCII_v13" unit="mm" x="-9.83230686188" y="3.80528688431" z="-152.470870972"/>
+        <position name="Biasing_091_ASCII_v14" unit="mm" x="-9.852186203" y="3.80319166183" z="-156.041870117"/>
+        <position name="Biasing_091_ASCII_v15" unit="mm" x="-9.852186203" y="3.80319070816" z="-152.470870972"/>
+    </define>
+
+    <solids>
+        <tessellated aunit="deg" lunit="mm" name="Biasing_091_ASCII-SOL">
+             <triangular vertex1="Biasing_091_ASCII_v0" vertex2="Biasing_091_ASCII_v1" vertex3="Biasing_091_ASCII_v2"/>
+             <triangular vertex1="Biasing_091_ASCII_v3" vertex2="Biasing_091_ASCII_v2" vertex3="Biasing_091_ASCII_v4"/>
+             <triangular vertex1="Biasing_091_ASCII_v3" vertex2="Biasing_091_ASCII_v0" vertex3="Biasing_091_ASCII_v2"/>
+             <triangular vertex1="Biasing_091_ASCII_v5" vertex2="Biasing_091_ASCII_v3" vertex3="Biasing_091_ASCII_v4"/>
+             <triangular vertex1="Biasing_091_ASCII_v6" vertex2="Biasing_091_ASCII_v4" vertex3="Biasing_091_ASCII_v7"/>
+             <triangular vertex1="Biasing_091_ASCII_v6" vertex2="Biasing_091_ASCII_v5" vertex3="Biasing_091_ASCII_v4"/>
+             <triangular vertex1="Biasing_091_ASCII_v8" vertex2="Biasing_091_ASCII_v6" vertex3="Biasing_091_ASCII_v7"/>
+             <triangular vertex1="Biasing_091_ASCII_v8" vertex2="Biasing_091_ASCII_v7" vertex3="Biasing_091_ASCII_v9"/>
+             <triangular vertex1="Biasing_091_ASCII_v10" vertex2="Biasing_091_ASCII_v11" vertex3="Biasing_091_ASCII_v12"/>
+             <triangular vertex1="Biasing_091_ASCII_v12" vertex2="Biasing_091_ASCII_v13" vertex3="Biasing_091_ASCII_v14"/>
+             <triangular vertex1="Biasing_091_ASCII_v11" vertex2="Biasing_091_ASCII_v13" vertex3="Biasing_091_ASCII_v12"/>
+             <triangular vertex1="Biasing_091_ASCII_v13" vertex2="Biasing_091_ASCII_v15" vertex3="Biasing_091_ASCII_v14"/>
+             <triangular vertex1="Biasing_091_ASCII_v14" vertex2="Biasing_091_ASCII_v8" vertex3="Biasing_091_ASCII_v9"/>
+             <triangular vertex1="Biasing_091_ASCII_v15" vertex2="Biasing_091_ASCII_v8" vertex3="Biasing_091_ASCII_v14"/>
+             <triangular vertex1="Biasing_091_ASCII_v0" vertex2="Biasing_091_ASCII_v11" vertex3="Biasing_091_ASCII_v10"/>
+             <triangular vertex1="Biasing_091_ASCII_v0" vertex2="Biasing_091_ASCII_v10" vertex3="Biasing_091_ASCII_v1"/>
+             <triangular vertex1="Biasing_091_ASCII_v15" vertex2="Biasing_091_ASCII_v6" vertex3="Biasing_091_ASCII_v8"/>
+             <triangular vertex1="Biasing_091_ASCII_v13" vertex2="Biasing_091_ASCII_v5" vertex3="Biasing_091_ASCII_v15"/>
+             <triangular vertex1="Biasing_091_ASCII_v15" vertex2="Biasing_091_ASCII_v5" vertex3="Biasing_091_ASCII_v6"/>
+             <triangular vertex1="Biasing_091_ASCII_v11" vertex2="Biasing_091_ASCII_v3" vertex3="Biasing_091_ASCII_v13"/>
+             <triangular vertex1="Biasing_091_ASCII_v13" vertex2="Biasing_091_ASCII_v3" vertex3="Biasing_091_ASCII_v5"/>
+             <triangular vertex1="Biasing_091_ASCII_v11" vertex2="Biasing_091_ASCII_v0" vertex3="Biasing_091_ASCII_v3"/>
+             <triangular vertex1="Biasing_091_ASCII_v7" vertex2="Biasing_091_ASCII_v14" vertex3="Biasing_091_ASCII_v9"/>
+             <triangular vertex1="Biasing_091_ASCII_v4" vertex2="Biasing_091_ASCII_v12" vertex3="Biasing_091_ASCII_v14"/>
+             <triangular vertex1="Biasing_091_ASCII_v4" vertex2="Biasing_091_ASCII_v14" vertex3="Biasing_091_ASCII_v7"/>
+             <triangular vertex1="Biasing_091_ASCII_v2" vertex2="Biasing_091_ASCII_v12" vertex3="Biasing_091_ASCII_v4"/>
+             <triangular vertex1="Biasing_091_ASCII_v1" vertex2="Biasing_091_ASCII_v10" vertex3="Biasing_091_ASCII_v12"/>
+             <triangular vertex1="Biasing_091_ASCII_v1" vertex2="Biasing_091_ASCII_v12" vertex3="Biasing_091_ASCII_v2"/>
+        </tessellated>
+    </solids>
+
+    <structure>
+        <volume name="Biasing_091_ASCII">
+            <materialref ref="Vacuum"/>
+            <solidref ref="Biasing_091_ASCII-SOL"/>
+        </volume>
+    </structure>
+
+    <setup name="Default" version="1.0">
+        <world ref="Biasing_091_ASCII"/>
+    </setup>
+</gdml>
