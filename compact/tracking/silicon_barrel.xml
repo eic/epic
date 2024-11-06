@@ -22383,7 +22383,7 @@
           nz       : Number of modules to place in z.
           dr       : Radial displacement parameter, of every other module.
         </comment>
-        <rphi_layout phi_tilt="SiBarrelStaveTilt_angle" nphi="46" phi0="0.0" rc="SiBarrelMod1_rmin" dr="7.0 * mm"/>
+        <rphi_layout phi_tilt="SiBarrelStaveTilt_angle" nphi="1" phi0="0.0" rc="SiBarrelMod1_rmin" dr="7.0 * mm"/>
         <z_layout dr="0.0 * mm" z0="0.0 * mm" nz="1"/>
       </layer>
     </detector>
@@ -30141,7 +30141,10 @@
 
       <module name="L4Module12" vis="TrackerLayerVis">
         <!--bundle-->
-    
+        
+      <comment>
+        comment all silicon parts
+
         <module_component name="ActivePixelArray_480_ASCII.gdml" 
                           matching_name="Active"
                           material="Silicon"
@@ -59270,6 +59273,8 @@
                           vis="TrackerLayerVis"
                           file="CAD/L4_stave_gdml/Readout_480_ASCII.gdml" />
     
+      </comment>
+
         <module_component name="FPC_Mockup_Top001_ASCII.gdml" 
                           matching_name="FPC"
                           material="Kapton"
@@ -59529,7 +59534,7 @@
           nz       : Number of modules to place in z.
           dr       : Radial displacement parameter, of every other module.
         </comment>
-        <rphi_layout phi_tilt="SiBarrelStaveTilt_angle" nphi="70" phi0="0.0" rc="SiBarrelMod2_rmin" dr="6.0 * mm"/>
+        <rphi_layout phi_tilt="SiBarrelStaveTilt_angle" nphi="1" phi0="0.0" rc="SiBarrelMod2_rmin" dr="6.0 * mm"/>
         <z_layout dr="0.0 * mm" z0="0.0 * mm" nz="1"/>
       </layer>
     </detector>
