@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: LGPL-3.0-or-later
-// Copyright (C) 2022-2024 Whitney Armstrong, Nivedith Ramasubramanian, Yann Bedfer, Shujie Li
+// Copyright (C) 2022-2024 Whitney Armstrong, Nivedith Ramasubramanian, Yann Bedfer, Shujie Li, Jonathan Witte
 
 /** \addtogroup Trackers Trackers
  * \brief Type: **Curved Silicon Vertex Tracker Barrel with inactive area**.
@@ -30,15 +30,10 @@ using ROOT::Math::XYVector;
 
 /** Curved Silicon Vertex Tracker Barrel with inactive area
  *
- * - Designed to process "mpgd_barrel.xml" ("mpgd_barrel_ver1" as of 2024/02).
+ * - Designed to process "vertex_barrel_curved.xml" 
  *
- * - Derived from "BarrelTrackerWithFrame_geo.cpp".
- *
- * - "support" tag not addressed.
- *
- * - "frame" tag within the module element.
- *
- *  but a single XML <module> and a single <layer>.
+ * - Derived from "MPGDCylinderBarrelTracker_geo.cpp".
+ * - Build-in RSU structure with four tiles
  *
  * \code
  * \endcode
@@ -60,7 +55,6 @@ static Ref_t create_SVTBarrelTracker(Detector& description, xml_h e, SensitiveDe
   map<string, std::vector<VolPlane>> volplane_surfaces;
 
   PlacedVolume pv;
-
   // Set detector type flag
   dd4hep::xml::setDetectorTypeFlag(x_det, sdet);
   auto& params = DD4hepDetectorHelper::ensureExtension<dd4hep::rec::VariantParameters>(sdet);
@@ -226,7 +220,7 @@ static Ref_t create_SVTBarrelTracker(Detector& description, xml_h e, SensitiveDe
             z_left   = z_right - dz;
           } else if (c_nam == "LowerRightTile") {
             rphi_lo = -BiasingWidth;
-            rphi_hi = rphi_lo - drphi; //hi: farther away from phi=0, with sign
+            rphi_hi = rphi_lo - drphi; //hi: farther away from phi=0. Signed
             rphi_hihi = -sM.width/2;
             z_left  = BackboneLength;
             z_right = z_left + dz;
@@ -244,10 +238,10 @@ static Ref_t create_SVTBarrelTracker(Detector& description, xml_h e, SensitiveDe
           RotationZYX rot(phi,0,0);
           Transform3D tr(rot, pos);
           Tube c_tube(sM.rmin, sM.rmin + sM.uthickness, dz/2, -dphi/2, dphi/2);
-          c_vol = Volume(c_nam, c_tube, description.material(x_comp.materialStr()));
+          c_vol   = Volume(c_nam, c_tube, description.material(x_comp.materialStr()));
           pv_sens = m_vol.placeVolume(c_vol, tr);
-          // subtract tile volume from the inactive frame // doesn't work, has unknown residuals
-          // rsu_frame = SubtractionSolid(rsu_frame, c_tube, tr);
+          
+          // ** inactive areas **
           // biasing
           dphi = BiasingWidth/sM.rmin;
           Tube f_tube1(sM.rmin, sM.rmin + sM.uthickness, dz/2, -dphi/2, dphi/2);
@@ -287,26 +281,28 @@ static Ref_t create_SVTBarrelTracker(Detector& description, xml_h e, SensitiveDe
         // -------- create a measurement plane for the tracking surface attached to the sensitive volume -----
         Vector3D u(-1., 0., 0.);
         Vector3D v(0., -1., 0.);
-        Vector3D n(0., 0., 1.);
+        Vector3D n(0., 0. , 1.);
 
         // Compute the inner (i.e. thickness until mid-sensitive-volume) and
         //             outer (from mid-sensitive-volume to top)
         // thicknesses that need to be assigned to the tracking surface
         double inner_thickness, outer_thickness;
-        if (is_tile){
-          inner_thickness = sM.uthickness / 2;
-          outer_thickness = total_thickness - inner_thickness - sM.uthickness / 2;
+        if (is_tile){ // always put the tile at inner most layer
+          inner_thickness = 0 + sM.uthickness/2;
+          outer_thickness = total_thickness - sM.uthickness/2;
         } else{
-          inner_thickness = thickness_so_far + comp_thickness / 2;
-          outer_thickness = total_thickness - inner_thickness - comp_thickness / 2;
+          inner_thickness = thickness_so_far + comp_thickness/2 ;
+          outer_thickness = total_thickness - inner_thickness;
         }
 
         SurfaceType type(SurfaceType::Sensitive);
         VolPlane surf(c_vol, type, inner_thickness, outer_thickness, u, v, n); //,o ) ;
         volplane_surfaces[sM.name].push_back(surf);
       }
-      comp_rmin += comp_thickness;
-      thickness_so_far += comp_thickness;
+      if (!is_tile){
+        comp_rmin        += comp_thickness;
+        thickness_so_far += comp_thickness;
+      }
     } //end of module component loop
       //place the frame
     // if (sM.has_rsu){

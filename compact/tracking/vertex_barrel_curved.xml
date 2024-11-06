@@ -45,23 +45,23 @@
     <constant name="VertexBarrelLayer_thickness" value="0.2*cm" />
     <constant name="VertexBarrelMod_thickness" value="0.1*cm" />
 
-    <comment> rmin are set to accommodate 12,16,and 38 RSU rows in phi </comment>
+    <comment> rmin are set to accommodate 12,16,and 40 RSU rows in phi </comment>
 
-    <!-- <constant name="VertexBarrelLayer1_rmin"        value="VertexBarrelMod1_rmin -
+    <!-- <constant name="VertexBarrelLayer0_rmin"        value="VertexBarrelMod1_rmin -
     VertexBarrelLayer_thickness/2.0"/> -->
-    <constant name="VertexBarrelLayer1_rmin" value="37.365*mm" />
+    <constant name="VertexBarrelLayer0_rmin" value="RSU_width*12/2/Pi" />
+    <constant name="VertexBarrelLayer0_rmax"
+      value="VertexBarrelLayer0_rmin + VertexBarrelLayer_thickness" />
+    <!-- <constant name="VertexBarrelLayer1_rmin"        value="VertexBarrelMod2_rmin -
+    VertexBarrelLayer_thickness/2.0"/> -->
+    <constant name="VertexBarrelLayer1_rmin" value="RSU_width*16/2/Pi" />
     <constant name="VertexBarrelLayer1_rmax"
       value="VertexBarrelLayer1_rmin + VertexBarrelLayer_thickness" />
-    <!-- <constant name="VertexBarrelLayer2_rmin"        value="VertexBarrelMod2_rmin -
+    <!-- <constant name="VertexBarrelLayer2_rmin"        value="VertexBarrelMod3_rmin -
     VertexBarrelLayer_thickness/2.0"/> -->
-    <constant name="VertexBarrelLayer2_rmin" value="49.820*mm" />
+    <constant name="VertexBarrelLayer2_rmin" value="RSU_width*40/2/Pi" />
     <constant name="VertexBarrelLayer2_rmax"
       value="VertexBarrelLayer2_rmin + VertexBarrelLayer_thickness" />
-    <!-- <constant name="VertexBarrelLayer3_rmin"        value="VertexBarrelMod3_rmin -
-    VertexBarrelLayer_thickness/2.0"/> -->
-    <constant name="VertexBarrelLayer3_rmin" value="118.321*mm" />
-    <constant name="VertexBarrelLayer3_rmax"
-      value="VertexBarrelLayer3_rmin + VertexBarrelLayer_thickness" />
   </define>
 
   <detectors>
@@ -85,7 +85,7 @@
         Tile components will be ignored if no frame (RSU) is provided.
         width and length in component will be ignored for non-tiles. 
       </comment>
-      <module name="L0" vis="VertexLayerVis" rmin="VertexBarrelLayer1_rmin" width="RSU_width" length="RSU_length">
+      <module name="L0" vis="VertexLayerVis" rmin="VertexBarrelLayer0_rmin" width="RSU_width" length="RSU_length">
         <frame name="RSUFrame" vis="VertexSupportLayerVis" material="Silicon"
               thickness="SiVertexSensor_thickness" />
         <module_component name="UpperLeftTile"
@@ -105,7 +105,7 @@
         width="Tile_width" length="Tile_length" thickness="Tile_thickness_dummy"
       />
       </module>
-      <module name="L1" vis="VertexLayerVis" rmin="VertexBarrelLayer2_rmin" width="RSU_width" length="RSU_length">
+      <module name="L1" vis="VertexLayerVis" rmin="VertexBarrelLayer1_rmin" width="RSU_width" length="RSU_length">
         <frame name="RSUFrame" vis="VertexSupportLayerVis" material="Silicon"
               thickness="SiVertexSensor_thickness" />
         <module_component name="UpperLeftTile"
@@ -125,7 +125,7 @@
         width="Tile_width" length="Tile_length" thickness="Tile_thickness_dummy"
       />
       </module>
-      <module name="L2" vis="VertexLayerVis" rmin="VertexBarrelLayer3_rmin" width="RSU_width" length="RSU_length">
+      <module name="L2" vis="VertexLayerVis" rmin="VertexBarrelLayer2_rmin" width="RSU_width" length="RSU_length">
         <frame name="RSUFrame" vis="VertexSupportLayerVis" material="Silicon"
               thickness="SiVertexSensor_thickness" />
         <module_component name="UpperLeftTile"
@@ -148,10 +148,10 @@
      
 
       <comment> Layers composed of many arrayed modules </comment>
-      <layer module="L0" id="1" vis="VertexLayerVis">
+      <layer module="L0" id="0" vis="VertexLayerVis">
         <barrel_envelope
-          inner_r="VertexBarrelLayer1_rmin"
-          outer_r="VertexBarrelLayer1_rmax"
+          inner_r="VertexBarrelLayer0_rmin-1*mm"
+          outer_r="VertexBarrelLayer0_rmax"
           z_length="VertexBarrelLayer_length" />
         <layer_material surface="inner" binning="binPhi,binZ" bins0="100" bins1="100" />
         <layer_material surface="outer" binning="binPhi,binZ" bins0="100" bins1="100" />
@@ -163,10 +163,10 @@
         <z_layout />
       </layer>
 
-      <layer module="L1" id="2" vis="VertexLayerVis">
+      <layer module="L1" id="1" vis="VertexLayerVis">
         <barrel_envelope
-          inner_r="VertexBarrelLayer2_rmin"
-          outer_r="VertexBarrelLayer2_rmax"
+          inner_r="VertexBarrelLayer1_rmin-1*mm"
+          outer_r="VertexBarrelLayer1_rmax"
           z_length="VertexBarrelLayer_length" />
         <layer_material surface="inner" binning="binPhi,binZ" bins0="100" bins1="100" />
         <layer_material surface="outer" binning="binPhi,binZ" bins0="100" bins1="100" />
@@ -178,10 +178,10 @@
         <z_layout />
       </layer>
 
-      <layer module="L2" id="3" vis="VertexLayerVis">
+      <layer module="L2" id="2" vis="VertexLayerVis">
         <barrel_envelope
-          inner_r="VertexBarrelLayer3_rmin"
-          outer_r="VertexBarrelLayer3_rmax"
+          inner_r="VertexBarrelLayer2_rmin-1*mm"
+          outer_r="VertexBarrelLayer2_rmax"
           z_length="VertexBarrelLayer_length" />
         <layer_material surface="inner" binning="binPhi,binZ" bins0="100" bins1="100" />
         <layer_material surface="outer" binning="binPhi,binZ" bins0="100" bins1="100" />
@@ -203,9 +203,13 @@
   </plugins>
 
   <readouts>
-    <readout name="VertexBarrelHits"> TODO: set segmentation for tube
-      <segmentation type="CartesianGridXY" grid_size_x="0.020*mm" grid_size_y="0.020*mm" />
-      <id>system:8,layer:4,module:12,sensor:2,x:32:-16,y:-16</id>
+      <readout name="VertexBarrelHits"> 
+        <segmentation type="MultiSegmentation" key="layer">
+        <segmentation name="L0" type="CylindricalGridPhiZ" key_value="0" grid_size_phi="0.02*mm/VertexBarrelLayer0_rmin" grid_size_z="0.02*mm" radius="VertexBarrelLayer0_rmin+SiVertexSensor_thickness/2.0" />
+        <segmentation name="L1" type="CylindricalGridPhiZ" key_value="1" grid_size_phi="0.02*mm/VertexBarrelLayer1_rmin" grid_size_z="0.02*mm" radius="VertexBarrelLayer1_rmin+SiVertexSensor_thickness/2.0" />
+        <segmentation name="L2" type="CylindricalGridPhiZ" key_value="2" grid_size_phi="0.02*mm/VertexBarrelLayer2_rmin" grid_size_z="0.02*mm" radius="VertexBarrelLayer2_rmin+SiVertexSensor_thickness/2.0" />
+      </segmentation>
+      <id>system:8,layer:4,module:12,sensor:3,phi:30:-18,z:-16</id>
     </readout>
   </readouts>
 
