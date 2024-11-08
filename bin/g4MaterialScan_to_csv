@@ -149,7 +149,7 @@ if __name__ == '__main__':
             help='Start point of the scan, use the format \"x,y,z\", unit is cm.'
             )
     parser.add_argument(
-            '--eta', default='-4.0:4.0:0.1',
+            '--eta', default='-1.0:1.0:0.1',
             help='Eta range, in the format of \"<min>[:<max>[:<step>]]\".'
             )
     parser.add_argument(
@@ -157,7 +157,7 @@ if __name__ == '__main__':
             help='a list of eta values, separated by \",\", this option overwrites --eta.'
             )
     parser.add_argument(
-            '--phi', default='0:30:1',
+            '--phi', default='0:360:1',
             help='Phi angle range, in the format of \"<min>[:<max>[:<step>]]\" (degree).'
             )
     parser.add_argument(
