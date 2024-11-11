@@ -239,7 +239,7 @@ static tuple<Volume, Position> build_specScFiCAL_module(const Detector& descript
       fiberPV.addPhysVolID("fiber_x", ix + 1).addPhysVolID("fiber_y", iy + 1);
 
       //placement of fiber holder 6.6*cm apart c-to-c
-      int num_holders  = 4; // which means 4 regions
+      int num_holders  = 6; // which means 4 regions
       double fh_pos_z0 = -1 * (fbSize.z() / 2.0) + (fh_dz / 2.0);
 
       for (int iz = 0; iz < num_holders; iz++) {
