@@ -41,12 +41,12 @@
     </documentation>
 
     <constant name="VertexBarrelLayer_length" value="VertexBarrel_length + 1*um" />
-    <constant name="VertexBarrelLayer_zoff"   value="0"  /> 
-    <constant name="VertexBarrelLayer_zstart" value="-VertexBarrelLayer_length/2+VertexBarrelLayer_zoff" /> 
-    <constant name="VertexBarrelLayer_z0"    
+    <constant name="VertexBarrelLayer_zoff"   value="0"  />
+    <constant name="VertexBarrelLayer_zstart" value="-VertexBarrelLayer_length/2+VertexBarrelLayer_zoff" />
+    <constant name="VertexBarrelLayer_z0"
     value=" VertexBarrelLayer_zstart + VertexBarrelMod_length/2 " />
-    <comment> 
-      ensure the modules within the z stave with some margin. 
+    <comment>
+      ensure the modules within the z stave with some margin.
       -- not sure where this is used
     </comment>
     <constant name="VertexZCheck" value="sqrt(VertexBarrelLayer_length - VertexBarrelLayer_nz*VertexBarrelMod_length - .1*cm)" />
@@ -61,10 +61,10 @@
     <constant name="VertexBarrelLayer2_rmax"
     value="VertexBarrelLayer2_rmin + VertexBarrelLayer_thickness" />
     <constant name="VertexBarrelLayer3_rmin"
-      value="VertexBarrelMod3_rmin" /> 
+      value="VertexBarrelMod3_rmin" />
     <constant name="VertexBarrelLayer3_rmax"
       value="VertexBarrelLayer3_rmin + VertexBarrelLayer_thickness" />
-    
+
     <comment> ensure we are within the vertex envelope with some margin. </comment>
     <constant name="VertexCheck" value="sqrt(VertexBarrel_rmax - VertexBarrelLayer3_rmax - .1*cm)" />
   </define>
@@ -81,7 +81,7 @@
       insideTrackingVolume="true">
       <type_flags type="DetType_TRACKER + DetType_BARREL" />
       <comment>
-        - Vertex Barrel Modules. 
+        - Vertex Barrel Modules.
         - For tiles (1 module = 1 upper/lower tile):
             --Use [mod_name]_upper and [mod_name]_lower here, and [mod_name] in corresponding layer
           to allow the geo plugin find both modules.
@@ -104,7 +104,7 @@
         <module_component name="RSU" type="lower"
           material="Silicon"
           sensitive="true"
-          thickness="SiVertexSensor_thickness"          
+          thickness="SiVertexSensor_thickness"
           width="Tile_width"
           length="Tile_length"
           vis="VertexLayerVis" />
@@ -125,7 +125,7 @@
         <module_component name="RSU" type="lower"
           material="Silicon"
           sensitive="true"
-          thickness="SiVertexSensor_thickness"          
+          thickness="SiVertexSensor_thickness"
           width="Tile_width"
           length="Tile_length"
           vis="VertexLayerVis" />
@@ -146,7 +146,7 @@
         <module_component name="RSU" type="lower"
           material="Silicon"
           sensitive="true"
-          thickness="SiVertexSensor_thickness"          
+          thickness="SiVertexSensor_thickness"
           width="Tile_width"
           length="Tile_length"
           vis="VertexLayerVis" />

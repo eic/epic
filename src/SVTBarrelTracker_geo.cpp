@@ -1,9 +1,9 @@
 // SPDX-License-Identifier: LGPL-3.0-or-later
-// Copyright (C) 2022 Whitney Armstrong, Jonathan Witte, Shujie Li 
+// Copyright (C) 2022 Whitney Armstrong, Jonathan Witte, Shujie Li
 
-/** Curved Silicon Vertex Tracker Barrel with RSU. 
+/** Curved Silicon Vertex Tracker Barrel with RSU.
  *
- * - Designed to process "vertex_barrel_curved.xml" 
+ * - Designed to process "vertex_barrel_curved.xml"
  *
  * - Derived from "BarrelTrackerWithFrame_geo.cpp".
  * - Build-in RSU structure with four tiles and inactive areas
@@ -12,7 +12,7 @@
  * \endcode
  *
  *
- * @author Whitney Armstrong, Jonathan Witte, Shujie Li 
+ * @author Whitney Armstrong, Jonathan Witte, Shujie Li
  */
 
 #include "DD4hep/DetFactoryHelper.h"
@@ -30,10 +30,8 @@ using namespace dd4hep;
 using namespace dd4hep::rec;
 using namespace dd4hep::detail;
 
-static Ref_t create_SVTBarrelTracker(Detector& description, xml_h e,
-                                            SensitiveDetector sens) {
+static Ref_t create_SVTBarrelTracker(Detector& description, xml_h e, SensitiveDetector sens) {
 
-                                              
   xml_det_t x_det = e;
   Material air    = description.air();
   int det_id      = x_det.id();
@@ -94,16 +92,16 @@ static Ref_t create_SVTBarrelTracker(Detector& description, xml_h e,
     double thickness_so_far = 0.0;
     for (xml_coll_t mci(x_mod, _U(module_component)); mci; ++mci, ++ncomponents) {
       Volume c_vol;
-      xml_comp_t x_comp = mci;
-      const  string c_nam  = x_comp.nameStr();// _toString(ncomponents, "component%d");
-      const  string c_mat  = x_comp.materialStr();
-      double c_thickness   = x_comp.thickness();
-      double c_width       = getAttrOrDefault(x_comp, _U(width) , m_width) ;
-      double c_length      = getAttrOrDefault(x_comp, _U(length), m_length);
-      double c_rmin        = m_rmin+thickness_so_far;
-      double c_dphi        = c_width/c_rmin;
+      xml_comp_t x_comp  = mci;
+      const string c_nam = x_comp.nameStr(); // _toString(ncomponents, "component%d");
+      const string c_mat = x_comp.materialStr();
+      double c_thickness = x_comp.thickness();
+      double c_width     = getAttrOrDefault(x_comp, _U(width), m_width);
+      double c_length    = getAttrOrDefault(x_comp, _U(length), m_length);
+      double c_rmin      = m_rmin + thickness_so_far;
+      double c_dphi      = c_width / c_rmin;
 
-      if (c_nam=="RSU"){ // for RSU, create ONE upper or lower tile.
+      if (c_nam == "RSU") { // for RSU, create ONE upper or lower tile.
         // **** hard-coded RSU design with 4 tiles, plus backbones, readout pads, biasing
         // Having issue including multiple sensitive surfaces in one Tube module (worked with box).
         // Therefore use type "upper" and "lower" to create two tiles. (left right is identical)
@@ -116,67 +114,66 @@ static Ref_t create_SVTBarrelTracker(Detector& description, xml_h e,
         // | ------biasing-------- | -------biasing--------
         // | tile                  | tile
         // | ------readout-------- | -------readout--------
-        const string frame_vis  ="VertexSupportLayerVis";
-        const string c_type     = x_comp.typeStr();
-        const double BiasingWidth        = 0.06*mm;   // need to x2 for two sets
-        const double ReadoutPadsWidth    = m_width-BiasingWidth-c_width;
-        const double BackboneLength      = m_length-c_length;//0.06*mm;
+        const string frame_vis        = "VertexSupportLayerVis";
+        const string c_type           = x_comp.typeStr();
+        const double BiasingWidth     = 0.06 * mm; // need to x2 for two sets
+        const double ReadoutPadsWidth = m_width - BiasingWidth - c_width;
+        const double BackboneLength   = m_length - c_length; //0.06*mm;
 
-        double px=0, py=0, pz=0; 
-        double c_z0 = -m_length/2;
-        double c_z1 = c_z0+BackboneLength;
-        double c_z2 = m_length/2;
-        pz = (c_z1 + c_z2)/2; // tile central z
+        double px = 0, py = 0, pz = 0;
+        double c_z0 = -m_length / 2;
+        double c_z1 = c_z0 + BackboneLength;
+        double c_z2 = m_length / 2;
+        pz          = (c_z1 + c_z2) / 2; // tile central z
 
         double c_phi0 = 0;
         double c_phi1, c_phi2;
-        double c_phi3 = m_width/m_rmin;
+        double c_phi3 = m_width / m_rmin;
         string c_nam1, c_nam2;
-        if (c_type=="upper"){
-          c_phi1 = BiasingWidth/c_rmin;
+        if (c_type == "upper") {
+          c_phi1 = BiasingWidth / c_rmin;
           c_phi2 = c_phi1 + c_dphi;
           c_nam1 = "biasing";
           c_nam2 = "readout";
-        }
-        else if (c_type=="lower"){
-          c_phi1 = ReadoutPadsWidth/c_rmin;
+        } else if (c_type == "lower") {
+          c_phi1 = ReadoutPadsWidth / c_rmin;
           c_phi2 = c_phi1 + c_dphi;
           c_nam1 = "readout";
           c_nam2 = "biasing";
-        }
-        else{
+        } else {
           printout(ERROR, "SVTBarrelTracker",
-               string((string("Module ") + m_nam + string(": invalid RSU component type [")+c_type+string("], should be upper or lower"))).c_str());
+                   string((string("Module ") + m_nam + string(": invalid RSU component type [") +
+                           c_type + string("], should be upper or lower")))
+                       .c_str());
           throw runtime_error("Logics error in building modules.");
         }
 
         // *** inactive areas
         // biasing and readout (horizontal)
-        Tube f_tube1(c_rmin, c_rmin + c_thickness, c_length/2, c_phi0, c_phi1);
+        Tube f_tube1(c_rmin, c_rmin + c_thickness, c_length / 2, c_phi0, c_phi1);
         Volume f_vol1(c_nam1, f_tube1, description.material(c_mat));
-        pv_frame = m_vol.placeVolume(f_vol1, Position(px,py,pz));
+        pv_frame = m_vol.placeVolume(f_vol1, Position(px, py, pz));
         f_vol1.setVisAttributes(description, frame_vis);
 
-        Tube f_tube2(c_rmin, c_rmin + c_thickness, c_length/2, c_phi2, c_phi3);
+        Tube f_tube2(c_rmin, c_rmin + c_thickness, c_length / 2, c_phi2, c_phi3);
         Volume f_vol2(c_nam2, f_tube2, description.material(c_mat));
-        pv_frame = m_vol.placeVolume(f_vol2, Position(px,py,pz));
+        pv_frame = m_vol.placeVolume(f_vol2, Position(px, py, pz));
         f_vol2.setVisAttributes(description, frame_vis);
 
         // backbone (vertical)
-        Tube f_tube3(c_rmin, c_rmin + c_thickness, BackboneLength/2, c_phi0, c_phi3);
+        Tube f_tube3(c_rmin, c_rmin + c_thickness, BackboneLength / 2, c_phi0, c_phi3);
         Volume f_vol3("backbone", f_tube3, description.material(c_mat));
-        pv_frame = m_vol.placeVolume(f_vol3, Position(px, py, (c_z0+c_z1)/2));
+        pv_frame = m_vol.placeVolume(f_vol3, Position(px, py, (c_z0 + c_z1) / 2));
         f_vol3.setVisAttributes(description, frame_vis);
 
         // *** sensitive tile
-        Tube   c_tube(c_rmin, c_rmin+c_thickness, c_length/2, c_phi1, c_phi2);
-        c_vol= Volume(c_nam+"_"+c_type, c_tube, description.material(c_mat));
-        pv = m_vol.placeVolume(c_vol,Position(px, py, pz)); 
-      }
-      else{ // for regular component, no difference b/w upper/lower
-        Tube   c_tube(c_rmin, c_rmin+c_thickness, c_length/2, 0, c_dphi);
-        c_vol= Volume(c_nam, c_tube, description.material(c_mat));
-        pv = m_vol.placeVolume(c_vol,Position(0,0,0));   
+        Tube c_tube(c_rmin, c_rmin + c_thickness, c_length / 2, c_phi1, c_phi2);
+        c_vol = Volume(c_nam + "_" + c_type, c_tube, description.material(c_mat));
+        pv    = m_vol.placeVolume(c_vol, Position(px, py, pz));
+      } else { // for regular component, no difference b/w upper/lower
+        Tube c_tube(c_rmin, c_rmin + c_thickness, c_length / 2, 0, c_dphi);
+        c_vol = Volume(c_nam, c_tube, description.material(c_mat));
+        pv    = m_vol.placeVolume(c_vol, Position(0, 0, 0));
       }
       c_vol.setRegion(description, x_comp.regionStr());
       c_vol.setLimitSet(description, x_comp.limitsStr());
@@ -192,7 +189,7 @@ static Ref_t create_SVTBarrelTracker(Detector& description, xml_h e,
 
         // compute the inner and outer thicknesses that need to be assigned to the tracking surface
         // depending on wether the support is above or below the sensor
-        double inner_thickness = thickness_so_far+c_thickness / 2.0;
+        double inner_thickness = thickness_so_far + c_thickness / 2.0;
         double outer_thickness = total_thickness - inner_thickness;
 
         SurfaceType type(SurfaceType::Sensitive);
@@ -217,22 +214,25 @@ static Ref_t create_SVTBarrelTracker(Detector& description, xml_h e,
     Position lay_pos(0, 0, getAttrOrDefault(x_barrel, _U(z0), 0.));
     lay_vol.setVisAttributes(description.visAttributes(x_layer.visStr()));
 
-    double phi0     = x_layout.phi0();     // Starting phi of first module.
-    int l_nphi      = x_layout.nphi();     // Number of modules in phi.
-    int nphi[2]     = {int((l_nphi+1)/2), int(l_nphi/2)}; // number of modules in uppper and lower modules. 
-    double phi_incr = (M_PI * 2) / l_nphi;   // Phi increment for one module.
+    double phi0     = x_layout.phi0(); // Starting phi of first module.
+    int l_nphi      = x_layout.nphi(); // Number of modules in phi.
+    int nphi[2]     = {int((l_nphi + 1) / 2),
+                       int(l_nphi / 2)};   // number of modules in uppper and lower modules.
+    double phi_incr = (M_PI * 2) / l_nphi; // Phi increment for one module.
     double z0       = z_layout.z0();       // Z position of first module in phi.
     double nz       = z_layout.nz();       // Number of modules to place in z.
 
     Volume module_env[2];
     Placements sensVols[2];
-    string m_nams[2]={m_nam+"_upper",m_nam+"_lower"};
+    string m_nams[2] = {m_nam + "_upper", m_nam + "_lower"};
     // if both upper and lower modules are provided (for RSU tiles)
-    if ((volumes.find(m_nams[0]) != volumes.end())&&(volumes.find(m_nams[1]) != volumes.end())) {
-      if (nphi[0]!=nphi[1]){
+    if ((volumes.find(m_nams[0]) != volumes.end()) && (volumes.find(m_nams[1]) != volumes.end())) {
+      if (nphi[0] != nphi[1]) {
         printout(ERROR, "SVTBarrelTracker",
-               string((string("Layer ")+lay_nam+string(": nphi must be even number to allow upper and lower modules")).c_str()));
-          throw runtime_error("Logics error in building modules.");
+                 string((string("Layer ") + lay_nam +
+                         string(": nphi must be even number to allow upper and lower modules"))
+                            .c_str()));
+        throw runtime_error("Logics error in building modules.");
       }
       module_env[0] = volumes[m_nams[0]];
       module_env[1] = volumes[m_nams[1]];
@@ -240,13 +240,13 @@ static Ref_t create_SVTBarrelTracker(Detector& description, xml_h e,
       sensVols[1]   = sensitives[m_nams[1]];
     }
     // for other regular modules
-    else if(volumes.find(m_nam) != volumes.end()){
+    else if (volumes.find(m_nam) != volumes.end()) {
       module_env[0] = volumes[m_nam];
       module_env[1] = volumes[m_nam];
       sensVols[0]   = sensitives[m_nam];
       sensVols[1]   = sensitives[m_nam];
-      m_nams[0]=m_nam;
-      m_nams[1]=m_nam;
+      m_nams[0]     = m_nam;
+      m_nams[1]     = m_nam;
     }
     DetElement lay_elt(sdet, lay_nam, lay_id);
 
@@ -266,21 +266,22 @@ static Ref_t create_SVTBarrelTracker(Detector& description, xml_h e,
     // the end of cylindrical envelope.
     // double z_incr = nz > 1 ? (2.0 * abs(z0)) / (nz - 1) : 0.0;
     // Starting z for module placement along Z axis.
-    int module      = 1;
+    int module = 1;
 
     // Loop over the number of modules in phi.
-    for (int kk=0; kk<2; kk++){
-      int iphi = nphi[kk];
+    for (int kk = 0; kk < 2; kk++) {
+      int iphi      = nphi[kk];
       double z_incr = module_length[m_nams[kk]][0];
 
       for (int ii = 0; ii < iphi; ii++) {
         // Loop over the number of modules in z.
         double module_z = z0;
-        for (int j = 0; j < nz; j++, module_z+=z_incr) {
+        for (int j = 0; j < nz; j++, module_z += z_incr) {
           string module_name = _toString(module, "module%d");
           DetElement mod_elt(lay_elt, module_name, module);
-          Transform3D tr(RotationZYX(phi0+phi_incr*ii*2, 0, 0), 
-                        Position(0, 0, module_z)); // altering upper and lower module to fill every other row
+          Transform3D tr(
+              RotationZYX(phi0 + phi_incr * ii * 2, 0, 0),
+              Position(0, 0, module_z)); // altering upper and lower module to fill every other row
           pv = lay_vol.placeVolume(module_env[kk], tr);
           pv.addPhysVolID("module", module);
           mod_elt.setPlacement(pv);
@@ -301,7 +302,7 @@ static Ref_t create_SVTBarrelTracker(Detector& description, xml_h e,
           module++;
         }
       }
-      phi0+=phi_incr; // switch from upper to lower modules
+      phi0 += phi_incr; // switch from upper to lower modules
     }
     // Create the PhysicalVolume for the layer.
     pv = assembly.placeVolume(lay_vol, lay_pos); // Place layer in mother
