@@ -227,10 +227,18 @@ static Ref_t create_detector(Detector& desc, xml_h e, SensitiveDetector sens) {
       // Set region, limitset, and vis of layer.
       layer_volume.setAttributes(desc, x_layer.regionStr(), x_layer.limitsStr(), x_layer.visStr());
 
-      // Loop over the staves for this layer.
+      // Loop over the staves for this layer, if the tray is enabled
       int stave_num = 1;
       for (xml_coll_t i_stave(x_layer, _U(stave)); i_stave; ++i_stave) {
         xml_comp_t x_stave = i_stave;
+        // Check if we enabled this silicon tray (actual silicon detector in the slots) at the top level
+        // allowing us to easily disable layers in the XML file without needing multiple
+        // copies of the XML file
+        if (getAttrOrDefault(x_stave, _Unicode(enable), 1) == 0) {
+          // disabled
+          continue;
+        }
+
         int stave_repeat   = x_stave.repeat();
         double stave_thick = x_stave.thickness();
         double stave_dim_x = x_stave.width() / 2.0;
@@ -361,7 +369,7 @@ static Ref_t create_detector(Detector& desc, xml_h e, SensitiveDetector sens) {
         }
       }
 
-      // Place frame
+      // Place frame if defined.
       if (layer_has_frame) {
         xml_comp_t x_frame     = x_layer.child(_Unicode(frame));
         double frame_height    = x_frame.height();

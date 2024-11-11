@@ -1,0 +1,44 @@
+name: Convert to STEP
+
+on:
+  workflow_call:
+    inputs:
+      detector_configs:
+        required: true
+        type: string
+
+jobs:
+  convert-to-step:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        detector_config: ${{fromJson(inputs.detector_configs)}}
+    steps:
+    - uses: actions/checkout@v4
+    - uses: actions/download-artifact@v4
+      with:
+        name: build-gcc-fast-eic-shell
+        path: install/
+    - uses: cvmfs-contrib/github-action-cvmfs@v4
+    - uses: eic/run-cvmfs-osg-eic-shell@main
+      with:
+        platform-release: "jug_xl:nightly"
+        network_types: "none"
+        setup: install/bin/thisepic.sh
+        run: |
+          # For some reason npdet_to_step really wants a space in IFS
+          IFS=$' \n\t'
+          # First get all detectors (except world)
+          declare -A detectors
+          while read d ; do detectors[$d]='-l 3' ; done <<< $(npdet_to_step list $DETECTOR_PATH/${{matrix.detector_config}}.xml  | sed '/world/d;s/.*(vol: \(.*\)).*/\1/g')
+          # Then tweak the levels (default is 1)
+          detectors[HcalBarrel]='-l 1'
+          detectors[LFHCAL]='-l 2'
+          detectors[OuterBarrelMPGDSubAssembly]='-l 4'
+          # Export to one STEP file
+          npdet_to_step $(for d in ${!detectors[@]} ; do echo part ${detectors[$d]} $d ; done) -o ${{matrix.detector_config}} $DETECTOR_PATH/${{matrix.detector_config}}.xml 2>&1 | sed '/TGeoMatrix::dtor/d'
+    - uses: actions/upload-artifact@v4
+      with:
+        name: ${{matrix.detector_config}}.stp
+        path: ${{matrix.detector_config}}.stp
+        if-no-files-found: error

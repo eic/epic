@@ -314,6 +314,7 @@ The unused IDs below are saved for future use.
     <constant name="LumiSpecCAL_ID"          value="194"/>
     <constant name="LumiDirectPCAL_ID"       value="195"/>
 
+    <constant name="BackwardsBeamline_ID"    value="197"/>
     <constant name="TaggerTracker_ID"        value="198"/>
     <constant name="TaggerCalorimeter_ID"    value="199"/>
 
@@ -589,14 +590,14 @@ Service gaps in FW direction (before endcapP ECAL) and BW direction (before endc
 
     <constant name="LFHCAL_zmin"          value="EcalEndcapP_zmin + EcalEndcapP_length"/>
     <comment> LFHCAL is 140 cm total, but current implementation leaves the final 10 cm empty </comment>
-    <constant name="LFHCAL_length"        value="140.0*cm"/>
+    <constant name="LFHCAL_length"        value="134.54*cm"/>
     <constant name="LFHCAL_zmax"          value="LFHCAL_zmin + LFHCAL_length"/>
 
     <constant name="HcalEndcapPInsert_zmin"     value="EcalEndcapP_zmin + EcalEndcapP_length"/>
     <constant name="HcalEndcapPInsert_length"   value="134.75*cm"/>
     <constant name="HcalEndcapPInsert_zmax"     value="HcalEndcapPInsert_zmin + HcalEndcapPInsert_length"/>
-    <constant name="HcalEndcapPInsert_width"    value="59.6*cm"/>
-    <constant name="HcalEndcapPInsert_height"    value="59.7485*cm"/>
+    <constant name="HcalEndcapPInsert_width"    value="59.26*cm"/>
+    <constant name="HcalEndcapPInsert_height"    value="59.29*cm"/>
     <constant name="HcalEndcapPInsert_xposition" value="EcalEndcapPInsert_xposition"/>
     <constant name="HcalEndcapPInsert_yposition" value="EcalEndcapPInsert_yposition"/>
 

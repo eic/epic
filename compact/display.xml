@@ -50,14 +50,14 @@
 
 
     <vis name="FFTrackerVis"        ref="AnlRed" />
-    <vis name="FFTrackerSupportVis" ref="AnlBlue"             visible="true"  showDaughters="false" />
-    <vis name="FFTrackerShieldingVis" ref="AnlGray"           visible="true"  showDaughters="false" />
-    <vis name="FFTrackerServiceVis" ref="AnlGold"             visible="true"  showDaughters="false" />
+    <vis name="FFTrackerSupportVis" ref="AnlBlue"             visible="true"  showDaughters="true" />
+    <vis name="FFTrackerShieldingVis" ref="AnlLightGray"           visible="true"  showDaughters="true" />
+    <vis name="FFTrackerServiceVis" ref="AnlGold"             visible="true"  showDaughters="true" />
     <vis name="FFTrackerLayerVis"   ref="TrackerVis"          visible="true"  showDaughters="true" />
     <vis name="FFTrackerModuleVis"  ref="FFTrackerLayerVis"   visible="true"  showDaughters="true" />
     <vis name="FFTrackerSurfaceVis" ref="FFTrackerLayerVis"   visible="true"  showDaughters="true" />
     <comment> For shielded modules by default just display to module instead of 6 layers </comment>
-    <vis name="FFTrackerShieldedModuleVis" ref="FFTrackerModuleVis"   visible="true"  showDaughters="false" />
+    <vis name="FFTrackerShieldedModuleVis" ref="FFTrackerModuleVis"   visible="true"  showDaughters="true" />
 
     <comment>
       Luminosity Visualisation
@@ -164,6 +164,8 @@
       PID visualization
     </comment>
     <vis name="TOF_envelope"     ref="AnlBlue" drawingStyle="wireframe" showDaughters="true" visible="true" />
+
+    <vis name="PFRICH_vessel_vis"  ref="AnlTeal"     showDaughters="false" visible="true"  alpha="0.5" />
 
     <vis name="DRICH_vessel_vis"  ref="AnlGray"      showDaughters="true" visible="true" />
     <vis name="DRICH_gas_vis"     ref="AnlGreen"     showDaughters="true" visible="true" alpha="0.5" />

@@ -85,6 +85,7 @@
         final_hole_x="EcalEndcapPInsert_hole_xposition"
         initial_hole_y="EcalEndcapPInsert_hole_yposition"
         final_hole_y="EcalEndcapPInsert_hole_yposition"
+        left_right_gap="0.38*cm"
       />
     </detector>
   </detectors>
@@ -99,7 +100,7 @@
         grid_size_x="24.925*mm"
         grid_size_y="24.65*mm"
       />
-      <id>system:8,barrel:3,module:4,layer:8,slice:5,x:32:-16,y:-16</id>
+      <id>system:8,barrel:3,module:4,layer:7,side:1,slice:5,x:32:-16,y:-16</id>
     </readout>
 
   </readouts>

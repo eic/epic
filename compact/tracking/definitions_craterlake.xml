@@ -41,15 +41,18 @@
 
     <comment> Main parameters for Barrel TOF layers </comment>
     <comment> Barrel TOF region </comment>
-    <constant name="BarrelTOF_zmin"          value="112.5*cm"/>
-    <constant name="BarrelTOF_zmax"          value="174.0*cm"/>
+    <constant name="BarrelTOF1_zmin"          value="115.0*cm"/>
+    <constant name="BarrelTOF1_zmax"          value="14.75*cm"/>
+    <constant name="BarrelTOF2_zmin"           value="-15.25*cm"/>
+    <constant name="BarrelTOF2_zmax"           value="174.0*cm"/>
+
     <constant name="BarrelTOF_radius_design" value="64.6*cm"/>
 
     <comment> Forward TOF region  </comment>
     <constant name="ForwardTOFRegion_zmin"        value="174.0*cm" />
     <constant name="ForwardTOFRegion_tan"         value="CentralTrackingRegionP_tan" />
-    <constant name="ForwardTOFRegion_minR"        value="8*cm" />
-    <constant name="ForwardTOFRegion_maxR"        value="50*cm" />
+    <constant name="ForwardTOFRegion_minR"        value="9.5*cm" />
+    <constant name="ForwardTOFRegion_maxR"        value="60.5*cm" />
     <constant name="ForwardTOF_xOffset"           value="-2.75*cm" />
     <constant name="ForwardTOF_det_height"        value="2.0*cm" />
     <constant name="ForwardTOF_length"            value="min(ForwardTOFRegion_length, 2.*cm)"/>
@@ -197,7 +200,7 @@
     <plugin name="epic_FileLoader">
       <arg value="cache:$DETECTOR_PATH:/opt/detector"/>
       <arg value="file:calibrations/materials-map.cbor"/>
-      <arg value="url:https://eicweb.phy.anl.gov/EIC/detectors/athena/uploads/bcebb055b105ead42a4b72bee7533ab1/material-map-june.cbor"/>
+      <arg value="url:https://eicweb.phy.anl.gov/EIC/detectors/athena/uploads/807fdbd7c54e58f22f45d6344f68eea4/material-map-24.08.cbor"/>
     </plugin>
   </plugins>
 
