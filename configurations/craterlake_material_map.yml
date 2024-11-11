@@ -3,7 +3,7 @@ features:
   beampipe:
   tracking:
     definitions_craterlake:
-    vertex_barrel:
+    vertex_barrel_curved:
     silicon_barrel:
     mpgd_barrel:
     support_service_craterlake:
