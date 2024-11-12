@@ -134,7 +134,7 @@
           <placement id="96" x="5*B0ECal_CrystalModule_width_total" y="-3*B0ECal_CrystalModule_width_total" z="z1" rotx="0." roty="0." rotz="0."/>
 
           <placement id="97" x="-4*B0ECal_CrystalModule_width_total" y="-4*B0ECal_CrystalModule_width_total" z="z1" rotx="0." roty="0." rotz="0."/>
-                          <placement id="98" x="-3*B0ECal_CrystalModule_width_total" y="-4*B0ECal_CrystalModule_width_total" z="z1" rotx="0." roty="0." rotz="0."/>
+          <placement id="98" x="-3*B0ECal_CrystalModule_width_total" y="-4*B0ECal_CrystalModule_width_total" z="z1" rotx="0." roty="0." rotz="0."/>
           <placement id="99" x="-2*B0ECal_CrystalModule_width_total" y="-4*B0ECal_CrystalModule_width_total" z="z1" rotx="0." roty="0." rotz="0."/>
           <placement id="100" x="-1*B0ECal_CrystalModule_width_total" y="-4*B0ECal_CrystalModule_width_total" z="z1" rotx="0." roty="0." rotz="0."/>
           <placement id="101" x="0*B0ECal_CrystalModule_width_total" y="-4*B0ECal_CrystalModule_width_total" z="z1" rotx="0." roty="0." rotz="0."/>
@@ -165,15 +165,15 @@
           <placement id="125" x="2*B0ECal_CrystalModule_width_total" y="-6*B0ECal_CrystalModule_width_total" z="z1" rotx="0." roty="0." rotz="0."/>
           <placement id="126" x="3*B0ECal_CrystalModule_width_total" y="-6*B0ECal_CrystalModule_width_total" z="z1" rotx="0." roty="0." rotz="0."/>
 
-          </individuals>
-         <individuals>
-           <module
-             id="2"
-             sizex="B0ECal_CrystalModule_width"
-             sizey="B0ECal_CrystalModule_width"
-             sizez="B0ECal_CrystalModule_length_b"
-             material="LYSO"
-             vis="GreenVis"/>
+        </individuals>
+        <individuals>
+          <module
+            id="2"
+            sizex="B0ECal_CrystalModule_width"
+            sizey="B0ECal_CrystalModule_width"
+            sizez="B0ECal_CrystalModule_length_b"
+            material="LYSO"
+            vis="GreenVis"/>
           <wrapper
             thickness="B0ECal_CrystalModule_wrap"
             material="Epoxy"
@@ -185,9 +185,9 @@
           <placement id="71" x="6*B0ECal_CrystalModule_width_total" y="0*B0ECal_CrystalModule_width_total" z="z2" rotx="0." roty="0." rotz="0."/>
           <placement id="78" x="6*B0ECal_CrystalModule_width_total" y="-1*B0ECal_CrystalModule_width_total" z="z2" rotx="0." roty="0." rotz="0."/>
           <placement id="88" x="6*B0ECal_CrystalModule_width_total" y="-2*B0ECal_CrystalModule_width_total" z="z2" rotx="0." roty="0." rotz="0."/>
-          <!-- <placement id="117" x="5*B0ECal_CrystalModule_width_total" y="-5*B0ECal_CrystalModule_width_total" z="z2" rotx="0." roty="0." rotz="0."/>  -->
+         <!-- <placement id="117" x="5*B0ECal_CrystalModule_width_total" y="-5*B0ECal_CrystalModule_width_total" z="z2" rotx="0." roty="0." rotz="0."/>  -->
 
-          </individuals>
+        </individuals>
 
       </placements>
 
