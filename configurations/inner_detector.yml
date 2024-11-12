@@ -15,6 +15,7 @@ features:
     tof_barrel:
     tof_endcap:
   ecal:
+    forward_homogeneous:
     bic_default:
     backward_PbWO4:
   pid:
