@@ -12,21 +12,22 @@
       - I start from the downstream side of the B0 magnet and an arbitrary offset
         which puts the downstream of the detector 10cm from the end of the magnet.
     </comment>
-    <constant name="B0Tracker1_IP_distance" value="590*cm"/>
-    <constant name="B0Tracker2_IP_distance" value="622*cm"/>
-    <constant name="B0Tracker3_IP_distance" value="655*cm"/>
-    <constant name="B0Tracker4_IP_distance" value="688*cm"/>
-    <constant name="B0Tracker_IP_distance" value="(B0Tracker1_IP_distance+B0Tracker4_IP_distance)/2.0"/>
-    <constant name="B0TrackerCenter_zpos"  value="B0Tracker_IP_distance*cos(ionCrossingAngle)"/>
-    <constant name="B0TrackerCenter_xpos"  value="B0Tracker_IP_distance*sin(ionCrossingAngle)" />
+    <constant name="B0Tracker_length"      value="81.0*cm"/>
+    <constant name="B0Tracker_zoffset"     value="5.0*cm"/>
+    <constant name="B0TrackerCenter_zpos"  value="6.3*m"/>
+    <constant name="B0TrackerCenter_xpos"  value="-0.16000052*m" />
+    <constant name="B0Tracker_zmin"        value="B0TrackerCenter_zpos - B0Tracker_length/2.0 "/>
     <constant name="B0Tracker_rotation"    value="ionCrossingAngle"/>
     <comment>
-      custom position of all tracker layers
+      average of station 2 and 3 x postions below...
     </comment>
-    <constant name="B0TrackerLayer1_zstart" value="B0Tracker1_IP_distance-B0Tracker_IP_distance"/>
-    <constant name="B0TrackerLayer2_zstart" value="B0Tracker2_IP_distance-B0Tracker_IP_distance"/>
-    <constant name="B0TrackerLayer3_zstart" value="B0Tracker3_IP_distance-B0Tracker_IP_distance"/>
-    <constant name="B0TrackerLayer4_zstart" value="B0Tracker4_IP_distance-B0Tracker_IP_distance"/>
+    <constant name="B0TrackerSlope_x" value="0.0249974*m" />
+    <constant name="B0Tracker_nlayers"   value="4"/>
+    <constant name="B0Tracker_dz"        value="B0Tracker_length/(B0Tracker_nlayers-1)"/>
+    <constant name="B0TrackerLayer1_zstart" value="-B0Tracker_length/2.0"/>
+    <constant name="B0TrackerLayer2_zstart" value="-B0Tracker_length/2.0+B0Tracker_dz"/>
+    <constant name="B0TrackerLayer3_zstart" value="-B0Tracker_length/2.0+2*B0Tracker_dz"/>
+    <constant name="B0TrackerLayer4_zstart" value="-B0Tracker_length/2.0+3*B0Tracker_dz"/>
 
     <comment>
       This angle is the angle subtended in phi for each trap segment.
@@ -38,25 +39,26 @@
     <constant name="B0TrackerLayerBigMod_phi0"        value="(B0TrackerLayerSmallMod_nModules/2.0 + 0.5)*B0TrackerModOpeningAngle + Pi"/>
     <constant name="B0TrackerLayerSmallMod_phi0"        value="(B0TrackerLayerSmallMod_nModules/2.0 - 0.5)*B0TrackerModOpeningAngle + Pi"/>
 
-    <constant name="B0TrackerMod1Inner_r"      value="3.275*cm" />  <!-- keep a 2.75mm distance from the hadron beam similar to B0ECAL-->
+    <constant name="B0TrackerMod1Inner_z"      value="1.0*cm" />
+    <constant name="B0TrackerMod1Inner_r"      value="3.5*cm" />
     <constant name="B0TrackerMod1Outer_r"      value="15.0*cm"/>
     <constant name="B0TrackerMod1_x1"          value="2.0*B0TrackerMod1Inner_r*sin(B0TrackerModOpeningAngle/2.0)"/>
     <constant name="B0TrackerMod1_x2"          value="2.0*B0TrackerMod1Outer_r*sin(B0TrackerModOpeningAngle/2.0)"/>
     <constant name="B0TrackerMod1_y"           value="B0TrackerMod1Outer_r*cos(B0TrackerModOpeningAngle/2.0) - B0TrackerMod1Inner_r"/>
 
-    <constant name="B0TrackerMod1SmallOuter_r" value="B0TrackerMod1Inner_r+3.2*cm"/> <!-- 1.6cm pixel size-->
+    <constant name="B0TrackerMod1SmallOuter_r" value="10.0*cm"/>
     <constant name="B0TrackerMod1Small_x2"     value="2.0*B0TrackerMod1SmallOuter_r*sin(B0TrackerModOpeningAngle/2.0)"/>
     <constant name="B0TrackerMod1Small_y"      value="B0TrackerMod1SmallOuter_r*cos(B0TrackerModOpeningAngle/2.0) - B0TrackerMod1Inner_r"/>
 
-    <constant name="B0TrackerMod2SmallOuter_r" value="B0TrackerMod1Inner_r+3.2*cm"/> <!-- 1.6cm pixel size-->
+    <constant name="B0TrackerMod2SmallOuter_r" value="10.0*cm"/>
     <constant name="B0TrackerMod2Small_x2"     value="2.0*B0TrackerMod2SmallOuter_r*sin(B0TrackerModOpeningAngle/2.0)"/>
     <constant name="B0TrackerMod2Small_y"      value="B0TrackerMod2SmallOuter_r*cos(B0TrackerModOpeningAngle/2.0) - B0TrackerMod1Inner_r"/>
 
-    <constant name="B0TrackerMod3SmallOuter_r" value="B0TrackerMod1Inner_r+3.2*cm"/> <!-- 1.6cm pixel size-->
+    <constant name="B0TrackerMod3SmallOuter_r" value="11.0*cm"/>
     <constant name="B0TrackerMod3Small_x2"     value="2.0*B0TrackerMod3SmallOuter_r*sin(B0TrackerModOpeningAngle/2.0)"/>
     <constant name="B0TrackerMod3Small_y"      value="B0TrackerMod3SmallOuter_r*cos(B0TrackerModOpeningAngle/2.0) - B0TrackerMod1Inner_r"/>
 
-    <constant name="B0TrackerMod4SmallOuter_r" value="B0TrackerMod1Inner_r+3.2*cm"/> <!-- 1.6cm pixel size-->
+    <constant name="B0TrackerMod4SmallOuter_r" value="12.0*cm"/>
     <constant name="B0TrackerMod4Small_x2"     value="2.0*B0TrackerMod4SmallOuter_r*sin(B0TrackerModOpeningAngle/2.0)"/>
     <constant name="B0TrackerMod4Small_y"      value="B0TrackerMod4SmallOuter_r*cos(B0TrackerModOpeningAngle/2.0) - B0TrackerMod1Inner_r"/>
 
