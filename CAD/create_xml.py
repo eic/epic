@@ -247,32 +247,47 @@ dict_list = [
 dict_attr_list = ["material", "sensitive", "thickness", "offset"]
   
 
-# Check if the folder path is provided as an argument
-if len(sys.argv) < 3:
-    print("Please provide the L3 and L4 gdml folder paths as the first and second command line arguments respectively.")
-    sys.exit(1)
-
-L3_folder_path = sys.argv[1]
-L4_folder_path = sys.argv[2]
-file_path = "silicon_barrel.xml"
-# Check if the file exists
-if os.path.exists(file_path):
-    raise FileExistsError(f"Error: The file '{file_path}' already exists.")
-    sys.exit(1)
-
-with open(file_path, "w") as xml_file:
+# for external call
+def generate_xml(L3_gdml_path, L4_gdml_path, savefile):
+  with open(savefile, 'w') as xml_file:
     xml_file.write(HEADER)
-
-    file_count_global = 0 #reset the global file count in each new stave
-    for key_dict in dict_list:   
-        scan_and_place(L3_folder_path, key_dict["matching_name"], xml_file, key_dict, "L3")
-    xml_file.write(MIDDLE)
-    file_count_global = 0
+    
     for key_dict in dict_list:
-        scan_and_place(L4_folder_path, key_dict["matching_name"], xml_file, key_dict, "L4")
+      scan_and_place(L3_gdml_path, key_dict['matching_name'], xml_file, key_dict, 'L3')
+    xml_file.write(MIDDLE)
+    
+    for key_dict in dict_list:
+      scan_and_place(L4_gdml_path, key_dict["matching_name"], xml_file, key_dict, 'L4')
     xml_file.write(FOOTER)
 
-# Print the resulting list (optional)
-#print("Found .gdml files:")
-#for file in gdml_files:
-#    print(file)
+
+# Check if the folder path is provided as an argument
+if __name__ == '__name__':
+  if len(sys.argv) < 3:
+      print("Please provide the L3 and L4 gdml folder paths as the first and second command line arguments respectively.")
+      sys.exit(1)
+
+  L3_folder_path = sys.argv[1]
+  L4_folder_path = sys.argv[2]
+  file_path = "silicon_barrel.xml"
+  # Check if the file exists
+  if os.path.exists(file_path):
+      raise FileExistsError(f"Error: The file '{file_path}' already exists.")
+      sys.exit(1)
+
+  with open(file_path, "w") as xml_file:
+      xml_file.write(HEADER)
+
+      file_count_global = 0 #reset the global file count in each new stave
+      for key_dict in dict_list:   
+          scan_and_place(L3_folder_path, key_dict["matching_name"], xml_file, key_dict, "L3")
+      xml_file.write(MIDDLE)
+      file_count_global = 0
+      for key_dict in dict_list:
+          scan_and_place(L4_folder_path, key_dict["matching_name"], xml_file, key_dict, "L4")
+      xml_file.write(FOOTER)
+
+  # Print the resulting list (optional)
+  #print("Found .gdml files:")
+  #for file in gdml_files:
+  #    print(file)

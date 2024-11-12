@@ -107,6 +107,7 @@ def transform_all_components_to_global(doc):
 # Run the script
 
 # Load the FreeCAD file, the directory is the first argument of the script
+
 if len(sys.argv) < 2:
         print("Usage: python refine_step_for_ePIC.py <arg1> where <arg1> is the name of the FreeCAD(.FCStd) file.")
         sys.exit(1)

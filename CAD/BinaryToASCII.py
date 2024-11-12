@@ -23,6 +23,7 @@ for x in range(0,80):
 out.write("\n")
 
 number = data[80] + data[81] + data[82] + data[83] 
+
 faces = struct.unpack('I',number)[0]
 
 for x in range(0,faces):
@@ -48,7 +49,7 @@ for x in range(0,faces):
         out.write(str(struct.unpack('f',xc)[0]) + " ")
         out.write(str(struct.unpack('f',yc)[0]) + " ")
         out.write(str(struct.unpack('f',zc)[0]) + "\n")
-
+    
     out.write("endloop\n")
     out.write("endfacet\n")
 

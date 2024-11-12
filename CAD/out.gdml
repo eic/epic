@@ -481,7 +481,7 @@
             <solidref ref="world_solid"/>
 
             <physvol>
-                <file name="./ALICE_SENSOR_ASSEMBLY005_ASCII.gdml"/>
+                <file name="L4_exportTEST_Long/REC_008_ASCII.gdml"/>
              </physvol>
 
 
