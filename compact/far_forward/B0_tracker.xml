@@ -38,25 +38,25 @@
     <constant name="B0TrackerLayerBigMod_phi0"        value="(B0TrackerLayerSmallMod_nModules/2.0 + 0.5)*B0TrackerModOpeningAngle + Pi"/>
     <constant name="B0TrackerLayerSmallMod_phi0"        value="(B0TrackerLayerSmallMod_nModules/2.0 - 0.5)*B0TrackerModOpeningAngle + Pi"/>
 
-    <constant name="B0TrackerMod1Inner_r"      value="3.5*cm" />  <!-- keep 5mm distance from the hadron beam -->
+    <constant name="B0TrackerMod1Inner_r"      value="3.275*cm" />  <!-- keep a 2.75mm distance from the hadron beam similar to B0ECAL-->
     <constant name="B0TrackerMod1Outer_r"      value="15.0*cm"/>
     <constant name="B0TrackerMod1_x1"          value="2.0*B0TrackerMod1Inner_r*sin(B0TrackerModOpeningAngle/2.0)"/>
     <constant name="B0TrackerMod1_x2"          value="2.0*B0TrackerMod1Outer_r*sin(B0TrackerModOpeningAngle/2.0)"/>
     <constant name="B0TrackerMod1_y"           value="B0TrackerMod1Outer_r*cos(B0TrackerModOpeningAngle/2.0) - B0TrackerMod1Inner_r"/>
 
-    <constant name="B0TrackerMod1SmallOuter_r" value="B0TrackerMod1Inner_r+2*1.6*cm"/> <!-- 1.6cm pixel size-->
+    <constant name="B0TrackerMod1SmallOuter_r" value="B0TrackerMod1Inner_r+3.2*cm"/> <!-- 1.6cm pixel size-->
     <constant name="B0TrackerMod1Small_x2"     value="2.0*B0TrackerMod1SmallOuter_r*sin(B0TrackerModOpeningAngle/2.0)"/>
     <constant name="B0TrackerMod1Small_y"      value="B0TrackerMod1SmallOuter_r*cos(B0TrackerModOpeningAngle/2.0) - B0TrackerMod1Inner_r"/>
 
-    <constant name="B0TrackerMod2SmallOuter_r" value="B0TrackerMod1Inner_r+2*1.6*cm"/> <!-- 1.6cm pixel size-->
+    <constant name="B0TrackerMod2SmallOuter_r" value="B0TrackerMod1Inner_r+3.2*cm"/> <!-- 1.6cm pixel size-->
     <constant name="B0TrackerMod2Small_x2"     value="2.0*B0TrackerMod2SmallOuter_r*sin(B0TrackerModOpeningAngle/2.0)"/>
     <constant name="B0TrackerMod2Small_y"      value="B0TrackerMod2SmallOuter_r*cos(B0TrackerModOpeningAngle/2.0) - B0TrackerMod1Inner_r"/>
 
-    <constant name="B0TrackerMod3SmallOuter_r" value="B0TrackerMod1Inner_r+3*1.6*cm"/> <!-- 1.6cm pixel size-->
+    <constant name="B0TrackerMod3SmallOuter_r" value="B0TrackerMod1Inner_r+3.2*cm"/> <!-- 1.6cm pixel size-->
     <constant name="B0TrackerMod3Small_x2"     value="2.0*B0TrackerMod3SmallOuter_r*sin(B0TrackerModOpeningAngle/2.0)"/>
     <constant name="B0TrackerMod3Small_y"      value="B0TrackerMod3SmallOuter_r*cos(B0TrackerModOpeningAngle/2.0) - B0TrackerMod1Inner_r"/>
 
-    <constant name="B0TrackerMod4SmallOuter_r" value="B0TrackerMod1Inner_r+4*1.6*cm"/> <!-- 1.6cm pixel size-->
+    <constant name="B0TrackerMod4SmallOuter_r" value="B0TrackerMod1Inner_r+3.2*cm"/> <!-- 1.6cm pixel size-->
     <constant name="B0TrackerMod4Small_x2"     value="2.0*B0TrackerMod4SmallOuter_r*sin(B0TrackerModOpeningAngle/2.0)"/>
     <constant name="B0TrackerMod4Small_y"      value="B0TrackerMod4SmallOuter_r*cos(B0TrackerModOpeningAngle/2.0) - B0TrackerMod1Inner_r"/>
 
