@@ -11,7 +11,7 @@
     <constant name="DIRCRefSurf_zmin"               value="273*cm"/>
     <constant name="DIRCRefSurf_zmax"               value="185*cm"/>
     <constant name="DIRCRefSurf_length"             value="(DIRCRefSurf_zmax + DIRCRefSurf_zmin)"/>
-    <constant name="DIRCRefSurf_offset"             value="0.5*(DIRCRefSurf_zmax - DIRCRefSurf_zmin)"/>
+    <constant name="DIRCRefSurf_offset"             value="0.5*(DIRCRefSurf_zmax - DIRCRefSurf_zmin)*0"/>
     <constant name="DIRCRefSurf_rmin"               value="75.5*cm"/>
     <constant name="DIRCRefSurf_rmax"               value="DIRCRefSurf_rmin + 10*um"/>
 
@@ -54,9 +54,9 @@
       <comment> Layers composed of many arrayed modules  </comment>
       <layer module="DIRCRefSurf_Mod" id="1" vis="VertexLayerVis">
         <barrel_envelope
-          inner_r="DIRCRefSurf_rmin"
-          outer_r="DIRCRefSurf_rmax"
-          z_length="DIRCRefSurf_length" />
+          inner_r="DIRCRefSurf_rmin-1*um"
+          outer_r="DIRCRefSurf_rmax+1*um"
+          z_length="DIRCRefSurf_length+2*um" />
         <layer_material surface="inner" binning="binPhi,binZ" bins0="DIRCRefSurfStave_count" bins1="100" />
         <comment>
           phi0     : Starting phi of first module.
@@ -69,7 +69,7 @@
           dr       : Radial displacement parameter, of every other module.
         </comment>
         <rphi_layout phi_tilt="0.0*degree" nphi="DIRCRefSurfStave_count" phi0="0.0" rc="DIRCRefSurf_rmin" dr="0.0 * mm"/>
-        <z_layout dr="0.0 * mm" z0="-1*DIRCRefSurf_offset" nz="1"/>
+        <z_layout dr="0.0 * mm" z0="DIRCRefSurf_offset" nz="1"/>
       </layer>
     </detector>
   </detectors>
