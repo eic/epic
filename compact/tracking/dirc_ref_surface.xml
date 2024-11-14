@@ -8,23 +8,23 @@
       Main parameters
     </comment>
 
-    <constant name="DIRCRefSurf_zmin"               value="273*cm"/>
-    <constant name="DIRCRefSurf_zmax"               value="185*cm"/>
-    <constant name="DIRCRefSurf_length"             value="(DIRCRefSurf_zmax + DIRCRefSurf_zmin)"/>
-    <constant name="DIRCRefSurf_offset"             value="0.5*(DIRCRefSurf_zmax - DIRCRefSurf_zmin)*0"/>
-    <constant name="DIRCRefSurf_rmin"               value="75.5*cm"/>
-    <constant name="DIRCRefSurf_rmax"               value="DIRCRefSurf_rmin + 10*um"/>
+    <constant name="PID01RefSurf_zmin"               value="273*cm"/>
+    <constant name="PID01RefSurf_zmax"               value="185*cm"/>
+    <constant name="PID01RefSurf_length"             value="(PID01RefSurf_zmax + PID01RefSurf_zmin)"/>
+    <constant name="PID01RefSurf_offset"             value="0.5*(PID01RefSurf_zmax - PID01RefSurf_zmin)*0"/>
+    <constant name="PID01RefSurf_rmin"               value="75.5*cm"/>
+    <constant name="PID01RefSurf_rmax"               value="PID01RefSurf_rmin + 10*um"/>
 
-    <constant name="DIRCRefSurfSensor_thickness"    value="1*um"/>
-    <constant name="DIRCRefSurfEnvelope_length"     value="DIRCRefSurf_length"/>
+    <constant name="PID01RefSurfSensor_thickness"    value="1*um"/>
+    <constant name="PID01RefSurfEnvelope_length"     value="PID01RefSurf_length"/>
 
     <comment>
       Extra parameters to approximate a cylinder as a set of skinny staves
       due to ACTS limitations.
       FIXME: this shouldn't be needed anymore, need to update the cylindrical plugin.
     </comment>
-    <constant name="DIRCRefSurfStave_count"         value="4*128"/>
-    <constant name="DIRCRefSurfStave_width"         value="2*DIRCRefSurf_rmin * tan(180*degree/DIRCRefSurfStave_count)"/>
+    <constant name="PID01RefSurfStave_count"         value="4*128"/>
+    <constant name="PID01RefSurfStave_width"         value="2*PID01RefSurf_rmin * tan(180*degree/PID01RefSurfStave_count)"/>
   </define>
 
   <detectors>
@@ -32,32 +32,32 @@
         ### Actual detectors
     </documentation>
     <detector
-      id="RefDIRC_ID"
-      name="DIRCRefSurf"
-      type="epic_RefDIRC"
+      id="RefPID01_ID"
+      name="PID01RefSurf"
+      type="epic_RefPID01"
       readout="PID01RefHits">
       <dimensions
-        rmin="DIRCRefSurf_rmin"
-        rmax="DIRCRefSurf_rmax"
-	      length="DIRCRefSurf_length"/>
-      <position x="0" y="0" z="DIRCRefSurf_offset"/>
+        rmin="PID01RefSurf_rmin"
+        rmax="PID01RefSurf_rmax"
+	      length="PID01RefSurf_length"/>
+      <position x="0" y="0" z="PID01RefSurf_offset"/>
       <comment>Vertex Barrel Modules</comment>
-      <module name="DIRCRefSurf_Mod" vis="VertexLayerVis">
-        <module_component name="DIRCSensor"
+      <module name="PID01RefSurf_Mod" vis="VertexLayerVis">
+        <module_component name="PID01Sensor"
                           material="Silicon"
                           sensitive="true"
-                          width="DIRCRefSurfStave_width"
-                          length="DIRCRefSurf_length"
-                          thickness="DIRCRefSurfSensor_thickness"
+                          width="PID01RefSurfStave_width"
+                          length="PID01RefSurf_length"
+                          thickness="PID01RefSurfSensor_thickness"
                           vis="VertexLayerVis" />
       </module>
       <comment> Layers composed of many arrayed modules  </comment>
-      <layer module="DIRCRefSurf_Mod" id="1" vis="VertexLayerVis">
+      <layer module="PID01RefSurf_Mod" id="1" vis="VertexLayerVis">
         <barrel_envelope
-          inner_r="DIRCRefSurf_rmin-1*um"
-          outer_r="DIRCRefSurf_rmax+1*um"
-          z_length="DIRCRefSurf_length+2*um" />
-        <layer_material surface="inner" binning="binPhi,binZ" bins0="DIRCRefSurfStave_count" bins1="100" />
+          inner_r="PID01RefSurf_rmin-1*um"
+          outer_r="PID01RefSurf_rmax+1*um"
+          z_length="PID01RefSurf_length+2*um" />
+        <layer_material surface="inner" binning="binPhi,binZ" bins0="PID01RefSurfStave_count" bins1="100" />
         <comment>
           phi0     : Starting phi of first module.
           phi_tilt : Phi tilt of a module.
@@ -68,8 +68,8 @@
           nz       : Number of modules to place in z.
           dr       : Radial displacement parameter, of every other module.
         </comment>
-        <rphi_layout phi_tilt="0.0*degree" nphi="DIRCRefSurfStave_count" phi0="0.0" rc="DIRCRefSurf_rmin" dr="0.0 * mm"/>
-        <z_layout dr="0.0 * mm" z0="DIRCRefSurf_offset" nz="1"/>
+        <rphi_layout phi_tilt="0.0*degree" nphi="PID01RefSurfStave_count" phi0="0.0" rc="PID01RefSurf_rmin" dr="0.0 * mm"/>
+        <z_layout dr="0.0 * mm" z0="PID01RefSurf_offset" nz="1"/>
       </layer>
     </detector>
   </detectors>
