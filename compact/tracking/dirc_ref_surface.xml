@@ -1,0 +1,84 @@
+<!-- SPDX-License-Identifier: LGPL-3.0-or-later -->
+<!-- Copyright (C) 2022 Sylvester Joosten, Whitney Armstrong, Shujie Li -->
+<!-- Modified by Matt Posik -->
+
+<lccdd>
+  <define>
+    <comment>
+      Main parameters
+    </comment>
+
+    <constant name="DIRCRefSurf_zmin"               value="273*cm"/>
+    <constant name="DIRCRefSurf_zmax"               value="185*cm"/>
+    <constant name="DIRCRefSurf_length"             value="(DIRCRefSurf_zmax + DIRCRefSurf_zmin)"/>
+    <constant name="DIRCRefSurf_offset"             value="0.5*(DIRCRefSurf_zmax - DIRCRefSurf_zmin)"/>
+    <constant name="DIRCRefSurf_rmin"               value="75.5*cm"/>
+    <constant name="DIRCRefSurf_rmax"               value="DIRCRefSurf_rmin + 10*um"/>
+
+    <constant name="DIRCRefSurfSensor_thickness"    value="1*um"/>
+    <constant name="DIRCRefSurfEnvelope_length"     value="DIRCRefSurf_length"/>
+
+    <comment>
+      Extra parameters to approximate a cylinder as a set of skinny staves
+      due to ACTS limitations.
+      FIXME: this shouldn't be needed anymore, need to update the cylindrical plugin.
+    </comment>
+    <constant name="DIRCRefSurfStave_count"         value="4*128"/>
+    <constant name="DIRCRefSurfStave_width"         value="2*DIRCRefSurf_rmin * tan(180*degree/DIRCRefSurfStave_count)"/>
+  </define>
+
+  <detectors>
+    <documentation level="5">
+        ### Actual detectors
+    </documentation>
+    <detector
+      id="RefDIRC_ID"
+      name="DIRCRefSurf"
+      type="epic_RefDIRC"
+      readout="PID01RefHits">
+      <dimensions
+        rmin="DIRCRefSurf_rmin"
+        rmax="DIRCRefSurf_rmax"
+	      length="DIRCRefSurf_length"/>
+      <position x="0" y="0" z="DIRCRefSurf_offset"/>
+      <comment>Vertex Barrel Modules</comment>
+      <module name="DIRCRefSurf_Mod" vis="VertexLayerVis">
+        <module_component name="DIRCSensor"
+                          material="Silicon"
+                          sensitive="true"
+                          width="DIRCRefSurfStave_width"
+                          length="DIRCRefSurf_length"
+                          thickness="DIRCRefSurfSensor_thickness"
+                          vis="VertexLayerVis" />
+      </module>
+      <comment> Layers composed of many arrayed modules  </comment>
+      <layer module="DIRCRefSurf_Mod" id="1" vis="VertexLayerVis">
+        <barrel_envelope
+          inner_r="DIRCRefSurf_rmin"
+          outer_r="DIRCRefSurf_rmax"
+          z_length="DIRCRefSurf_length" />
+        <layer_material surface="inner" binning="binPhi,binZ" bins0="DIRCRefSurfStave_count" bins1="100" />
+        <comment>
+          phi0     : Starting phi of first module.
+          phi_tilt : Phi tilt of a module.
+          rc       : Radius of the module center.
+          nphi     : Number of modules in phi.
+          rphi_dr  : The delta radius of every other module.
+          z0       : Z position of first module in phi.
+          nz       : Number of modules to place in z.
+          dr       : Radial displacement parameter, of every other module.
+        </comment>
+        <rphi_layout phi_tilt="0.0*degree" nphi="DIRCRefSurfStave_count" phi0="0.0" rc="DIRCRefSurf_rmin" dr="0.0 * mm"/>
+        <z_layout dr="0.0 * mm" z0="-1*DIRCRefSurf_offset" nz="1"/>
+      </layer>
+    </detector>
+  </detectors>
+
+  <readouts>
+    <readout name="PID01RefHits">
+      <segmentation type="CartesianGridXY" grid_size_x="3*mm" grid_size_y="3*mm" />
+      <id>system:8,layer:4,module:12,sensor:2,x:32:-16,y:-16</id>
+    </readout>
+  </readouts>
+
+</lccdd>

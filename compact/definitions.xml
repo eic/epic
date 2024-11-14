@@ -142,6 +142,7 @@ The unused IDs below are saved for future use.
     <constant name="TrackerEndcapP_6_ID"          value="83"/>
     <constant name="TrackerSupport_0_ID"          value="84"/>
     <constant name="TrackerSupport_1_ID"          value="85"/>
+    <constant name="RefDIRC_ID"                   value="86"/>
 
     <documentation>
     #### (86-99) Reserved IDs
