@@ -186,27 +186,77 @@ static Ref_t create_TOFBarrel(Detector& description, xml_h e, SensitiveDetector 
         Box c_box(width / 2, length / 2, thickness / 2);
         Volume c_vol;
 
-        xml_coll_t ci_tube(x_comp, _Unicode(inner_tube));
-        if (ci_tube) {
-          double max_r = 0;
-          for (; ci_tube; ++ci_tube) {
-            // fill the hole with tube
-            xml_comp_t ct = ci_tube;
-            max_r         = std::max(max_r, ct.rmax());
-            Tube c_tube(ct.rmin(), ct.rmax(), length / 2);
-            Volume c_tubevol(c_nam + ct.nameStr(), c_tube, description.material(ct.materialStr()));
-            if (ct.visStr() != "")
-              c_tubevol.setVisAttributes(description, ct.visStr());
-            m_vol.placeVolume(c_tubevol, Transform3D(RotationZYX(0, 0, -M_PI / 2),
-                                                         Position(pos_x, pos_y, pos_z + zoff)));
-          }
+	if(x_comp.hasChild(_Unicode(cooling_pipe))) {
+          xml_comp_t ci_tube = x_comp.child(_Unicode(cooling_pipe));
+          double pipe_max_r = ci_tube.rmax();
+	  double pipe_min_r = ci_tube.rmin();
+	  double bend_r = getAttrOrDefault<double>(ci_tube, _Unicode(bend_r), pipe_max_r);
+	  double bend_y = getAttrOrDefault<double>(ci_tube, _Unicode(bend_y), length/2 - bend_r - pipe_max_r);
+	  std::string direction = getAttrOrDefault<std::string>(ci_tube, _Unicode(direction), "left");
+	  int coord_factor;
+	  if(direction == "left") coord_factor = 1;
+	  else if(direction == "right") coord_factor = -1;
+	  else throw std::runtime_error("BarrelTOF cooling tube direction can only be either left or right, not " + direction + ".");
+	  std::string pipe_material = getAttrOrDefault<std::string>(ci_tube, _Unicode(pipe_material), "");
+	  std::string coolent_material = getAttrOrDefault<std::string>(ci_tube, _Unicode(coolent_material), "");
 
-          Tube c_fbox(0, max_r, length / 2 + 1);
-          SubtractionSolid c_sbox(c_box, c_fbox,
+	  // U-shape water pipes
+	  // The two sides of the "U"
+	  Tube pipe_in(pipe_min_r, pipe_max_r, (length/2 + std::fabs(bend_y))/2);
+	  Volume pipe_in_vol(c_nam + ci_tube.nameStr(), pipe_in, description.material(pipe_material));
+	  m_vol.placeVolume(pipe_in_vol, Transform3D(RotationZYX(0, 0, -M_PI/2),
+				                     Position(pos_x - bend_r, pos_y - coord_factor*(bend_y - length/2)/2, pos_z + zoff)));
+          SubtractionSolid c_sbox1(c_box, pipe_in,
                                       Transform3D(RotationZYX(0, 0, -M_PI / 2),
-                                                  Position(0, 0, 0))); //pos_x, pos_y, pos_z + zoff)));
+                                                  Position(-bend_r, coord_factor*(length/2 - bend_y)/2, 0))); 
+	  // coolent inside the tube
+	  Tube coolent_in(0, pipe_min_r, (length/2 + std::fabs(bend_y))/2);
+	  Volume coolent_in_vol(c_nam + ci_tube.nameStr() + "coolent", coolent_in, description.material(coolent_material));
+	  m_vol.placeVolume(coolent_in_vol, Transform3D(RotationZYX(0, 0, -M_PI/2),
+				                     Position(pos_x - bend_r, pos_y - coord_factor*(bend_y - length/2)/2, pos_z + zoff)));
+          SubtractionSolid c_sbox2(c_sbox1, coolent_in,
+                                      Transform3D(RotationZYX(0, 0, -M_PI / 2),
+                                                  Position(-bend_r, coord_factor*(length/2 - bend_y)/2, 0))); 
 
-          c_vol = Volume(c_nam, c_sbox, description.material(x_comp.materialStr()));
+	  // other long side of the tube
+	  Tube pipe_out(pipe_min_r, pipe_max_r, (length/2 + std::fabs(bend_y))/2);
+	  Volume pipe_out_vol(c_nam + ci_tube.nameStr(), pipe_out, description.material(pipe_material));
+	  m_vol.placeVolume(pipe_out_vol, Transform3D(RotationZYX(0, 0, -M_PI/2),
+	  			                     Position(pos_x + bend_r, pos_y - coord_factor*(bend_y - length/2)/2, pos_z + zoff)));
+          SubtractionSolid c_sbox3(c_sbox2, pipe_out,
+                                      Transform3D(RotationZYX(0, 0, -M_PI / 2),
+                                                  Position(bend_r, coord_factor*(length/2 - bend_y)/2, 0))); 
+	  // coolent inside the tube
+	  Tube coolent_out(0, pipe_min_r, (length/2 + std::fabs(bend_y))/2);
+	  Volume coolent_out_vol(c_nam + ci_tube.nameStr() + "coolent", coolent_out, description.material(coolent_material));
+	  m_vol.placeVolume(coolent_out_vol, Transform3D(RotationZYX(0, 0, -M_PI/2),
+				                     Position(pos_x + bend_r, pos_y - coord_factor*(bend_y - length/2)/2, pos_z + zoff)));
+          SubtractionSolid c_sbox4(c_sbox3, coolent_out,
+                                      Transform3D(RotationZYX(0, 0, -M_PI / 2),
+                                                  Position(bend_r, coord_factor*(length/2 - bend_y)/2, 0)));
+
+
+	  // the U part of the U-shape
+	  Torus pipe_bend(bend_r, pipe_min_r, pipe_max_r, direction == "left"? M_PI : 0, M_PI);
+	  Volume pipe_bend_vol(c_nam + ci_tube.nameStr(), pipe_bend, description.material(pipe_material));
+	  m_vol.placeVolume(pipe_bend_vol, Transform3D(RotationZYX(0, 0, 0),
+	        	                               Position(pos_x, pos_y - coord_factor*bend_y, pos_z + zoff)));
+
+	  SubtractionSolid c_sbox5(c_sbox4, pipe_bend,
+                                      Transform3D(RotationZYX(0, 0, 0),
+                                                  Position(0, -coord_factor*bend_y, 0)));
+	  // coolent
+	  Torus coolent_bend(bend_r, 0, pipe_min_r, direction == "left"? M_PI : 0, M_PI);
+	  Volume coolent_bend_vol(c_nam + ci_tube.nameStr() + "coolent", coolent_bend, description.material(coolent_material));
+	  m_vol.placeVolume(coolent_bend_vol, Transform3D(RotationZYX(0, 0, 0),
+	        	                               Position(pos_x, pos_y - coord_factor*bend_y, pos_z + zoff)));
+
+	  SubtractionSolid c_sbox6(c_sbox5, coolent_bend,
+                                      Transform3D(RotationZYX(0, 0, 0),
+                                                  Position(0, -coord_factor*bend_y, 0)));
+
+
+          c_vol = Volume(c_nam, c_sbox6, description.material(x_comp.materialStr()));
         } else
           c_vol = Volume(c_nam, c_box, description.material(x_comp.materialStr()));
 
