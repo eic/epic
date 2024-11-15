@@ -6,7 +6,7 @@
  * - Designed to process "vertex_barrel_curved.xml"
  *
  * - Derived from "BarrelTrackerWithFrame_geo.cpp".
- * - Build-in RSU structure with four tiles and inactive areas
+ * - Build-in RSU structure with 12 tiles and inactive areas
  *
  * \code
  * \endcode
@@ -101,18 +101,18 @@ static Ref_t create_SVTBarrelTracker(Detector& description, xml_h e, SensitiveDe
       double c_rmin      = m_rmin + thickness_so_far;
       double c_dphi      = c_width / c_rmin;
 
-      if (c_nam == "RSU") { // for RSU, create ONE upper or lower tile.
-        // **** hard-coded RSU design with 4 tiles, plus backbones, readout pads, biasing
+      if (c_nam=="RSU"){ // for RSU, create ONE upper or lower 3-tile sections.
+        // **** hard-coded RSU design with 12 tiles, plus backbones, readout pads, biasing
         // Having issue including multiple sensitive surfaces in one Tube module (worked with box).
-        // Therefore use type "upper" and "lower" to create two tiles. (left right is identical)
+        // Therefore use type "upper" and "lower" to create two mirrored tile sections. (left right is identical)
         //
         // "|" = backbone. Length alone z.
         //
         // | ------readout-------- | -------readout--------
-        // | tile                  | tile
+        // | tilex3                | tilex3
         // | ------biasing-------- | -------biasing--------
         // | ------biasing-------- | -------biasing--------
-        // | tile                  | tile
+        // | tilex3                | tilex3
         // | ------readout-------- | -------readout--------
         const string frame_vis        = "VertexSupportLayerVis";
         const string c_type           = x_comp.typeStr();
@@ -120,11 +120,11 @@ static Ref_t create_SVTBarrelTracker(Detector& description, xml_h e, SensitiveDe
         const double ReadoutPadsWidth = m_width - BiasingWidth - c_width;
         const double BackboneLength   = m_length - c_length; //0.06*mm;
 
-        double px = 0, py = 0, pz = 0;
-        double c_z0 = -m_length / 2;
-        double c_z1 = c_z0 + BackboneLength;
-        double c_z2 = m_length / 2;
-        pz          = (c_z1 + c_z2) / 2; // tile central z
+        double px=0, py=0, pz=0; 
+        double c_z0 = -m_length/2;
+        double c_z1 = c_z0+BackboneLength;
+        double c_z2 = m_length/2;
+        pz = (c_z1 + c_z2)/2; // section central z
 
         double c_phi0 = 0;
         double c_phi1, c_phi2;
@@ -186,7 +186,6 @@ static Ref_t create_SVTBarrelTracker(Detector& description, xml_h e, SensitiveDe
         Vector3D u(-1., 0., 0.);
         Vector3D v(0., -1., 0.);
         Vector3D n(0., 0., 1.);
-
         // compute the inner and outer thicknesses that need to be assigned to the tracking surface
         // depending on wether the support is above or below the sensor
         double inner_thickness = thickness_so_far + c_thickness / 2.0;
@@ -210,6 +209,7 @@ static Ref_t create_SVTBarrelTracker(Detector& description, xml_h e, SensitiveDe
     string m_nam        = x_layer.moduleStr();
     string lay_nam      = det_name + _toString(x_layer.id(), "_layer%d");
     Tube lay_tub(x_barrel.inner_r(), x_barrel.outer_r(), x_barrel.z_length() / 2.0);
+
     Volume lay_vol(lay_nam, lay_tub, air); // Create the layer envelope volume.
     Position lay_pos(0, 0, getAttrOrDefault(x_barrel, _U(z0), 0.));
     lay_vol.setVisAttributes(description.visAttributes(x_layer.visStr()));
