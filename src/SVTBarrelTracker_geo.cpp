@@ -101,7 +101,7 @@ static Ref_t create_SVTBarrelTracker(Detector& description, xml_h e, SensitiveDe
       double c_rmin      = m_rmin + thickness_so_far;
       double c_dphi      = c_width / c_rmin;
 
-      if (c_nam=="RSU"){ // for RSU, create ONE upper or lower 3-tile sections.
+      if (c_nam == "RSU") { // for RSU, create ONE upper or lower 3-tile sections.
         // **** hard-coded RSU design with 12 tiles, plus backbones, readout pads, biasing
         // Having issue including multiple sensitive surfaces in one Tube module (worked with box).
         // Therefore use type "upper" and "lower" to create two mirrored tile sections. (left right is identical)
@@ -120,11 +120,11 @@ static Ref_t create_SVTBarrelTracker(Detector& description, xml_h e, SensitiveDe
         const double ReadoutPadsWidth = m_width - BiasingWidth - c_width;
         const double BackboneLength   = m_length - c_length; //0.06*mm;
 
-        double px=0, py=0, pz=0; 
-        double c_z0 = -m_length/2;
-        double c_z1 = c_z0+BackboneLength;
-        double c_z2 = m_length/2;
-        pz = (c_z1 + c_z2)/2; // section central z
+        double px = 0, py = 0, pz = 0;
+        double c_z0 = -m_length / 2;
+        double c_z1 = c_z0 + BackboneLength;
+        double c_z2 = m_length / 2;
+        pz          = (c_z1 + c_z2) / 2; // section central z
 
         double c_phi0 = 0;
         double c_phi1, c_phi2;
