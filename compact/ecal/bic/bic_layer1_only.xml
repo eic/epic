@@ -175,6 +175,7 @@
         </stave>
       </layer>
     </detector>
+  </detectors>
 
   <readouts>
     <readout name="EcalBarrelImagingHits">
