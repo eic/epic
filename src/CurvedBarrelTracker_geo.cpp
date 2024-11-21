@@ -5,7 +5,7 @@
  * - Derived from "BarrelTrackerWithFrame_geo.cpp".
  *
  * - Designed to process "vertex_barrel.xml":
- *       - When the upper and lower modules are provided, will use the 
+ *       - When the upper and lower modules are provided, will use the
  *         Build-in EIC-LAS RSU structure with four sections and inactive areas
  *
  *
