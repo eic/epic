@@ -1,12 +1,13 @@
 // SPDX-License-Identifier: LGPL-3.0-or-later
 // Copyright (C) 2022-2024 Whitney Armstrong, Jonathan Witte, Shujie Li
 
-/** Curved Silicon Vertex Tracker Barrel with RSU.
- *
- * - Designed to process "vertex_barrel_curved.xml"
- *
+/** Curved Barrel tracker
  * - Derived from "BarrelTrackerWithFrame_geo.cpp".
- * - Build-in RSU structure with 12 tiles and inactive areas
+ *
+ * - Designed to process "vertex_barrel.xml":
+ *       - When the upper and lower modules are provided, will use the 
+ *         Build-in EIC-LAS RSU structure with four sections and inactive areas
+ *
  *
  * \code
  * \endcode
@@ -30,7 +31,7 @@ using namespace dd4hep;
 using namespace dd4hep::rec;
 using namespace dd4hep::detail;
 
-static Ref_t create_SVTBarrelTracker(Detector& description, xml_h e, SensitiveDetector sens) {
+static Ref_t create_CurvedBarrelTracker(Detector& description, xml_h e, SensitiveDetector sens) {
 
   xml_det_t x_det = e;
   Material air    = description.air();
@@ -71,7 +72,7 @@ static Ref_t create_SVTBarrelTracker(Detector& description, xml_h e, SensitiveDe
     module_length[m_nam].push_back(m_length);
 
     if (volumes.find(m_nam) != volumes.end()) {
-      printout(ERROR, "SVTBarrelTracker",
+      printout(ERROR, "CurvedBarrelTracker",
                string((string("Module with named ") + m_nam + string(" already exists."))).c_str());
       throw runtime_error("Logics error in building modules.");
     }
@@ -141,7 +142,7 @@ static Ref_t create_SVTBarrelTracker(Detector& description, xml_h e, SensitiveDe
           c_nam1 = "readout";
           c_nam2 = "biasing";
         } else {
-          printout(ERROR, "SVTBarrelTracker",
+          printout(ERROR, "CurvedBarrelTracker",
                    string((string("Module ") + m_nam + string(": invalid RSU component type [") +
                            c_type + string("], should be upper or lower")))
                        .c_str());
@@ -228,7 +229,7 @@ static Ref_t create_SVTBarrelTracker(Detector& description, xml_h e, SensitiveDe
     // if both upper and lower modules are provided (for RSU tiles)
     if ((volumes.find(m_nams[0]) != volumes.end()) && (volumes.find(m_nams[1]) != volumes.end())) {
       if (nphi[0] != nphi[1]) {
-        printout(ERROR, "SVTBarrelTracker",
+        printout(ERROR, "CurvedBarrelTracker",
                  string((string("Layer ") + lay_nam +
                          string(": nphi must be even number to allow upper and lower modules"))
                             .c_str()));
@@ -321,4 +322,4 @@ static Ref_t create_SVTBarrelTracker(Detector& description, xml_h e, SensitiveDe
 
 //@}
 // clang-format off
-DECLARE_DETELEMENT(epic_CylinderSVTBarrel,    create_SVTBarrelTracker)
+DECLARE_DETELEMENT(epic_CylinderSVTBarrel,create_CurvedBarrelTracker)

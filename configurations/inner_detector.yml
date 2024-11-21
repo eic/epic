@@ -4,7 +4,7 @@ features:
     marco:
   tracking:
     definitions_craterlake:
-    vertex_barrel_curved:
+    vertex_barrel:
     silicon_barrel:
     mpgd_barrel:
     support_service_craterlake:
