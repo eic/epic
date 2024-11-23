@@ -57,8 +57,7 @@ static Ref_t createDetector(Detector& desc, xml_h e, SensitiveDetector sens) {
   int sector_id = 1;
 
   for (xml_coll_t mod(plm, _Unicode(individuals)); mod; ++mod) {
-    auto [sector, nmod] =
-        add_individuals(build_module, desc, detVol, mod, sens, sector_id++);
+    auto [sector, nmod] = add_individuals(build_module, desc, detVol, mod, sens, sector_id++);
     addModuleNumbers(sector, nmod);
   }
 
