@@ -57,7 +57,7 @@ jobs:
 "step_diagnostic_bins": 8,
 "slot_diagnostic": false,
 "slot_diagnostic_prefix": "slot-diag-cpu-"
-}           
+}
 EOF
           # run celeritas
           celer-g4 ${config}.json
