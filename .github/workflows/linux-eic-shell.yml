@@ -191,6 +191,14 @@ jobs:
     with:
       detector_configs: ${{needs.list-detector-configs.outputs.configs_json}}
 
+  celeritas:
+    needs:
+      - build
+      - list-detector-configs
+    uses: ./.github/workflows/celeritas.yml
+    with:
+      detector_configs: "['epic_craterlake_no_bhcal']"
+
   dump-constants:
     runs-on: ubuntu-latest
     needs: build

@@ -39,7 +39,6 @@ def run():
   ui.Commands = [
       '/ddg4/Writer/Output {}'.format(args.output),
       '/ddg4/Writer/OverWrite 1',
-      '/ddg4/Writer/ModuleDepth 1',
       '/ddg4/Writer/write'
       ]
   kernel.configure()
