@@ -1,0 +1,28 @@
+{
+    "geometry_file": "${config}.gdml",
+    "event_file": "root://dtn-eic.jlab.org//work/eic2/EPIC/EVGEN/CI/pythia8NCDIS_5x41_minQ2=1_beamEffects_xAngle=-0.025_hiDiv_1_20ev.hepmc",
+    "output_file": "pythia8NCDIS_5x41_minQ2=1_beamEffects_xAngle=-0.025_hiDiv_1_20ev.json",
+    "offload_output_file": "pythia8NCDIS_5x41_minQ2=1_beamEffects_xAngle=-0.025_hiDiv_1_20ev.offloaded.hepmc",
+    "num_track_slots": 1024,
+    "initializer_capacity": 32768,
+    "secondary_stack_factor": 2,
+    "physics_list": "celer_ftfp_bert",
+    "field_type": "uniform",
+    "field": [
+        0.0,
+        0.0,
+        1.7
+    ],
+    "field_options": {
+        "minimum_step": 1e-06,
+        "delta_chord": 0.025,
+        "delta_intersection": 1e-05,
+        "epsilon_step": 1e-05
+    },
+    "use_device": false,
+    "sd_type": "simple_calo",
+    "step_diagnostic": false,
+    "step_diagnostic_bins": 8,
+    "slot_diagnostic": false,
+    "slot_diagnostic_prefix": "slot-diag-cpu-"
+}
