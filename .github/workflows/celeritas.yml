@@ -30,5 +30,7 @@ jobs:
           scripts/convert_to_gdml.py --compact $DETECTOR_PATH/${{matrix.detector_config}}.xml --output ${{matrix.detector_config}}.gdml | sed '/G4Exception-START/,+7d'
           # create celeritas input file from template
           cat .github/workflows/celeritas.json | envsubst > ${{matrix.detector_config}}.json
+          # copy remote file
+          xrdcp root://dtn-eic.jlab.org//work/eic2/EPIC/EVGEN/CI/pythia8NCDIS_5x41_minQ2=1_beamEffects_xAngle=-0.025_hiDiv_1_20ev.hepmc .
           # run celeritas
           celer-g4 ${{matrix.detector_config}}.json
