@@ -27,8 +27,8 @@ jobs:
         setup: install/bin/thisepic.sh
         run: |
           # convert to gdml, but with sensitive detectors included
-          scripts/convert_to_gdml.py --compact $DETECTOR_PATH/${{detector_config}}.xml --output ${{detector_config}}.gdml
+          scripts/convert_to_gdml.py --compact $DETECTOR_PATH/${{matrix.detector_config}}.xml --output ${{matrix.detector_config}}.gdml
           # create celeritas input file from template
-          cat celeritas.json | envsubst > ${{detector_config}}.json
+          cat .github/workflows/celeritas.json | envsubst > ${{matrix.detector_config}}.json
           # run celeritas
-          celer-g4 ${{detector_config}}.json
+          celer-g4 ${{matrix.detector_config}}.json
