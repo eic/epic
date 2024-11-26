@@ -3,7 +3,7 @@
   "event_file": "pythia8NCDIS_5x41_minQ2=1_beamEffects_xAngle=-0.025_hiDiv_1_20ev.hepmc",
   "output_file": "pythia8NCDIS_5x41_minQ2=1_beamEffects_xAngle=-0.025_hiDiv_1_20ev.json",
   "offload_output_file":
-      "pythia8NCDIS_5x41_minQ2=1_beamEffects_xAngle=-0.025_hiDiv_1_20ev.offloaded.hepmc",
+      "pythia8NCDIS_5x41_minQ2=1_beamEffects_xAngle=-0.025_hiDiv_1_20ev.offloaded.hepmc3",
   "num_track_slots": 1024,
   "initializer_capacity": 32768,
   "secondary_stack_factor": 2,
