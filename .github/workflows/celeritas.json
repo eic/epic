@@ -1,7 +1,6 @@
 {
   "geometry_file": "${config}.gdml",
-  "event_file":
-      "root://dtn-eic.jlab.org//work/eic2/EPIC/EVGEN/CI/pythia8NCDIS_5x41_minQ2=1_beamEffects_xAngle=-0.025_hiDiv_1_20ev.hepmc",
+  "event_file": "pythia8NCDIS_5x41_minQ2=1_beamEffects_xAngle=-0.025_hiDiv_1_20ev.hepmc",
   "output_file": "pythia8NCDIS_5x41_minQ2=1_beamEffects_xAngle=-0.025_hiDiv_1_20ev.json",
   "offload_output_file":
       "pythia8NCDIS_5x41_minQ2=1_beamEffects_xAngle=-0.025_hiDiv_1_20ev.offloaded.hepmc",
