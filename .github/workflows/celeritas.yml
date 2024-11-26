@@ -26,14 +26,9 @@ jobs:
         network_types: "none"
         setup: install/bin/thisepic.sh
         run: |
-          IFS=, read -a configs <<< "${{inputs.detector_configs}}"
-          for config in ${configs[@]} ; do
-            echo "::group::${config}" ;
-            # convert to gdml, but with sensitive detectors included
-            scripts/convert_to_gdml.py --compact $DETECTOR_PATH/${config}.xml --output ${config}.gdml
-            # create celeritas input file from template
-            cat celeritas.json | envsubst > ${config}.json
-            # run celeritas
-            celer-g4 ${config}.json
-            echo "::endgroup::" ;
-          done
+          # convert to gdml, but with sensitive detectors included
+          scripts/convert_to_gdml.py --compact $DETECTOR_PATH/${{detector_config}}.xml --output ${{detector_config}}.gdml
+          # create celeritas input file from template
+          cat celeritas.json | envsubst > ${{detector_config}}.json
+          # run celeritas
+          celer-g4 ${{detector_config}}.json
