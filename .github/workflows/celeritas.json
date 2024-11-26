@@ -1,5 +1,5 @@
 {
-  "geometry_file": "${config}.gdml",
+  "geometry_file": "${detector_config}.gdml",
   "event_file": "pythia8NCDIS_5x41_minQ2=1_beamEffects_xAngle=-0.025_hiDiv_1_20ev.hepmc",
   "output_file": "pythia8NCDIS_5x41_minQ2=1_beamEffects_xAngle=-0.025_hiDiv_1_20ev.json",
   "offload_output_file":
