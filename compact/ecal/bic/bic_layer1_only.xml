@@ -1,0 +1,191 @@
+<!-- SPDX-License-Identifier: LGPL-3.0-or-later -->
+<!-- Copyright (C) 2022 Whitney Armstrong, Chao Peng, Maria Zurek, Jihee Kim -->
+<!-- Active AstroPix layers: 1 -->
+
+
+<lccdd>
+
+    <display>
+    </display>
+  <define>
+    <comment>
+      ---------------------------------------
+      EM Calorimeter Parameters with AstroPix
+      THIS IS A SPECIAL VERSION WITH ONLY THE FIRST IMAGING LAYER ENABLED
+      FOR TRACKING DEBUG PURPOSES ONLY
+      ---------------------------------------
+    </comment>
+    <comment>
+      To change the number of imaging layer slots from, e.g., 9 to 6,
+      change EcalBarrelImagingLayers_nMax variable. Note that this does NOT change the
+      number of silicon frames, as each silicon frame and layer is placed manually.
+
+      This file assumes the EcalBarrel_enable_staves_N variables have been defined to allow
+      changing the configuration by enabling/disabling staves
+    </comment>
+    <!-- Number of imaging layer slots -->
+    <constant name="EcalBarrelImagingLayers_num"     value="1"/>
+    <comment>
+      Active part of the calorimeter is
+      435 cm long
+      -41.25 cm offset
+    </comment>
+    <constant name="EcalBarrel_Calorimeter_zmin"
+      value="min(258.75*cm, EcalBarrelBackward_zmax)"/>
+    <constant name="EcalBarrel_Calorimeter_zmax"
+      value="min(176.25*cm, EcalBarrelForward_zmax)"/>
+    <constant name="EcalBarrel_Readout_zmin"          value="273.75*cm"/>
+    <constant name="EcalBarrel_Readout_zmax"          value="191.25*cm"/>
+    <constant name="EcalBarrel_Calorimeter_length"
+      value="EcalBarrel_Calorimeter_zmax + EcalBarrel_Calorimeter_zmin"/>
+    <constant name="EcalBarrel_Calorimeter_offset"
+      value="(EcalBarrel_Calorimeter_zmax - EcalBarrel_Calorimeter_zmin)/2.0"/>
+
+    <constant name="EcalBarrel_FrontSupportThickness" value="0.5*cm"/>
+    <constant name="EcalBarrel_BackSupportThickness"  value="3*cm"/>
+    <constant name="EcalBarrel_SiliconThickness"      value="500*um"/>
+    <constant name="EcalBarrel_ElectronicsThickness"  value="150*um"/>
+    <constant name="EcalBarrel_CopperThickness"       value="100*um"/>
+    <constant name="EcalBarrel_KaptonThickness"       value="200*um"/>
+    <constant name="EcalBarrel_EpoxyThickness"        value="100*um"/>
+    <constant name="EcalBarrel_CarbonFrameThickness"  value="2*mm"/>
+    <constant name="EcalBarrel_CarbonStaveThickness"  value="0.5*mm"/>
+
+    <constant name="EcalBarrel_AstroPix_width"        value="2*cm"/>
+    <constant name="EcalBarrel_AstroPix_length"       value="2*cm"/>
+    <constant name="EcalBarrel_AstroPix_margin"       value="200*um"/>
+    <constant name="EcalBarrel_AstroPix_thickness"
+      value="EcalBarrel_SiliconThickness
+      + EcalBarrel_ElectronicsThickness
+      + EcalBarrel_CopperThickness
+      + EcalBarrel_KaptonThickness
+      + EcalBarrel_EpoxyThickness"/>
+
+    <constant name="EcalBarrel_Stave_width"           value="EcalBarrel_AstroPix_width + 2. * EcalBarrel_AstroPix_margin"/>
+    <constant name="EcalBarrel_Stave_length"          value="EcalBarrel_Calorimeter_length"/>
+    <constant name="EcalBarrel_Stave_thickness"       value="EcalBarrel_AstroPix_thickness + EcalBarrel_CarbonStaveThickness"/>
+    <constant name="EcalBarrel_StaveTilt_angle"       value="10*degree"/>
+    <constant name="EcalBarrel_Stave_ModuleRepeat"    value="floor(EcalBarrel_Calorimeter_length / (EcalBarrel_AstroPix_length + EcalBarrel_AstroPix_margin))"/>
+
+    <constant name="EcalBarrel_FiberRadius"           value="0.5*mm"/>
+    <constant name="EcalBarrel_FiberXSpacing"         value="1.34*mm"/>
+    <constant name="EcalBarrel_FiberZSpacing"         value="1.22*mm"/>
+    <constant name="EcalBarrel_CladdingThickness"     value="0.04*mm"/>
+    <constant name="EcalBarrel_SpaceBetween"          value="0.01*mm"/>
+    <comment>
+      For Pb/SiFi (GlueX):  X0 ~ 1.45 cm
+      For W/SiFi (sPHENIX): X0 ~ 0.7 cm (but different fiber orientation)
+    </comment>
+    <constant name="EcalBarrel_RadiatorThickness"      value="EcalBarrel_FiberZSpacing * 17"/>
+    <constant name="EcalBarrel_TotalFiberLayers_num"   value="12"/>
+    <constant name="EcalBarrel_RadiatorEdgeThickness"  value="0.61*mm"/>
+    <constant name="EcalBarrel_SectorRepeat"           value="EcalBarrelSectorsN"/>
+    <constant name="EcalBarrel_AvailThickness"         value="EcalBarrelRegion_thickness - EcalBarrel_BackSupportThickness - EcalBarrel_FrontSupportThickness"/>
+
+    <constant name="EcalBarrel_ImagingLayerThickness"  value="1.7*cm"/>
+
+    <constant name="EcalBarrel_ImagingLayerThickness_WithoutFrame"
+      value="EcalBarrel_ImagingLayerThickness
+      - 2*EcalBarrel_CarbonFrameThickness"/>
+
+    <constant name="EcalBarrel_ScFiLayerThickness_Imaging"
+      value="EcalBarrel_RadiatorThickness + 2*EcalBarrel_RadiatorEdgeThickness"/>
+
+    <comment>
+      Adjusting size of the ScFi back chunk to match number of imaging layers
+      and ~17.1 radiation lengths in total
+    </comment>
+    <constant name="EcalBarrel_FiberBulkLayers_num" value = "EcalBarrel_TotalFiberLayers_num-EcalBarrelImagingLayers_num+1"/>
+
+    <constant name="EcalBarrel_ImagingPartThickness"
+        value="EcalBarrelImagingLayers_num * (EcalBarrel_ImagingLayerThickness + EcalBarrel_ScFiLayerThickness_Imaging + EcalBarrel_SpaceBetween)
+         - EcalBarrel_ScFiLayerThickness_Imaging"/>
+    <constant name="EcalBarrel_ScFiPartThickness"
+        value="EcalBarrel_RadiatorThickness*EcalBarrel_FiberBulkLayers_num"/>
+    <constant name="EcalBarrelDetector_rmax"
+        value="EcalBarrel_rmin + EcalBarrel_FrontSupportThickness
+         + EcalBarrel_ImagingPartThickness + EcalBarrel_ScFiPartThickness + EcalBarrel_BackSupportThickness"/>
+
+  </define>
+
+  <limits>
+  </limits>
+
+  <regions>
+  </regions>
+
+  <display>
+  </display>
+
+  <detectors>
+
+    <comment>
+      ---------------------------------------
+      Imaging Layers of Barrel EM Calorimeter
+      ---------------------------------------
+      Silicon (Astropix) readout layers for imaging 3d showers
+    </comment>
+    <detector
+      id="EcalBarrel_ID"
+      name="EcalBarrelImaging"
+      type="epic_EcalBarrelImaging"
+      readout="EcalBarrelImagingHits"
+      calorimeterType="EM_BARREL"
+      vis="EcalBarrelEnvelopeVis"
+      offset="EcalBarrel_Calorimeter_offset">
+      <dimensions numsides="EcalBarrel_SectorRepeat"
+        rmin="EcalBarrel_rmin"
+        z="EcalBarrel_Calorimeter_length"/>
+      <sectors vis="EcalBarrelSectorVis"/>
+
+      <module name="AstroPix_Module"
+              vis="EcalBarrelModuleVis">
+        <module_component name="AstroPix_Chip"
+                          material="Silicon"
+                          width="EcalBarrel_AstroPix_width"
+                          length="EcalBarrel_AstroPix_length"
+                          thickness="EcalBarrel_AstroPix_thickness"
+                          vis="EcalBarrelModuleVis">
+          <slice material="Silicon" thickness="EcalBarrel_SiliconThickness"     vis="EcalBarrelSliceVis" sensitive="yes" limits="cal_limits"/>
+          <slice material="Silicon" thickness="EcalBarrel_ElectronicsThickness" vis="EcalBarrelSliceVis"/>
+          <slice material="Copper" thickness="EcalBarrel_CopperThickness"       vis="EcalBarrelSliceVis"/>
+          <slice material="Kapton" thickness="EcalBarrel_KaptonThickness"       vis="EcalBarrelSliceVis"/>
+          <slice material="Epoxy" thickness="EcalBarrel_EpoxyThickness"         vis="EcalBarrelSliceVis"/>
+        </module_component>
+      </module>
+
+      <support thickness="EcalBarrel_FrontSupportThickness" material="Aluminum" vis="EcalBarrelSupportVis"/>
+
+      <layer repeat="1" vis="EcalBarrelLayerVis"
+             thickness="EcalBarrel_ImagingLayerThickness"
+             space_before="EcalBarrel_FrontSupportThickness">
+        <frame material="CarbonFiber" fill="Air" thickness="EcalBarrel_CarbonFrameThickness" height="EcalBarrel_ImagingLayerThickness" vis="EcalBarrelSliceVis"/>
+        <stave repeat="6"
+               width="EcalBarrel_Stave_width"
+               length="EcalBarrel_Stave_length"
+               thickness="EcalBarrel_Stave_thickness"
+               angle="EcalBarrel_StaveTilt_angle"
+               module="AstroPix_Module"
+               vis="EcalBarrelStaveVis"
+               enable="EcalBarrel_enable_staves_1">
+          <xy_layout
+            dx="EcalBarrel_AstroPix_width + EcalBarrel_AstroPix_margin"
+            dy="EcalBarrel_AstroPix_length + EcalBarrel_AstroPix_margin"
+          />
+        </stave>
+      </layer>
+    </detector>
+  </detectors>
+
+  <readouts>
+    <readout name="EcalBarrelImagingHits">
+      <segmentation type="CartesianGridXY" grid_size_x="0.5 * mm" grid_size_y="0.5 * mm"/>
+      <id>system:8,sector:6,layer:4,stave:4,module:8,slice:2,x:32:-16,y:-16</id>
+    </readout>
+    <readout name="EcalBarrelScFiHits">
+      <segmentation type="CartesianStripZ" strip_size_x="1.0*cm" identifier_x="z"/>
+      <id>system:8,sector:6,layer:6,slice:4,grid:10,fiber:16,z:-14</id>
+    </readout>
+  </readouts>
+
+</lccdd>
