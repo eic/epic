@@ -25,6 +25,5 @@
   "sd_type": "simple_calo",
   "step_diagnostic": false,
   "step_diagnostic_bins": 8,
-  "slot_diagnostic": false,
   "slot_diagnostic_prefix": "slot-diag-cpu-"
 }
