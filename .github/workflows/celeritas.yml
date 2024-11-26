@@ -35,3 +35,8 @@ jobs:
           xrdcp root://dtn-eic.jlab.org//work/eic2/EPIC/EVGEN/CI/pythia8NCDIS_5x41_minQ2=1_beamEffects_xAngle=-0.025_hiDiv_1_20ev.hepmc .
           # run celeritas
           celer-g4 ${{matrix.detector_config}}.json
+    - uses: actions/upload-artifact@v4
+      with:
+        name: celeritas_${{matrix.detector_config}}_pythia8NCDIS_5x41_minQ2=1_beamEffects_xAngle=-0.025_hiDiv_1_20ev.json
+        path: "pythia8NCDIS_5x41_minQ2=1_beamEffects_xAngle=-0.025_hiDiv_1_20ev.json"
+        if-no-files-found: error
