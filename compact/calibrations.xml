@@ -34,6 +34,11 @@
       <arg value="file:calibrations/tof.lut"/>
       <arg value="url:https://github.com/eic/epic-data/raw/c0f0ec03ca98de39cb74bf03407948ea64169eb1/tof.lut"/>
     </plugin>
+    <plugin name="epic_FileLoader">
+      <arg value="cache:$DETECTOR_PATH:/opt/detector"/>
+      <arg value="file:calibrations/onnx/EcalEndcapN_pi_rejection.onnx"/>
+      <arg value="url:https://raw.githubusercontent.com/eic/epic-data/c6e3d56b5dfa2e9fa5998d38d7da20e837d89157/onnx/EcalEndcapN_pi_rejection.onnx"/>
+    </plugin>
   </plugins>
 
 </lccdd>
