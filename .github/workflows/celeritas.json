@@ -2,6 +2,7 @@
   "geometry_file": "${detector_config}.gdml",
   "event_file": "pythia8NCDIS_5x41_minQ2=1_beamEffects_xAngle=-0.025_hiDiv_1_20ev.hepmc",
   "output_file": "pythia8NCDIS_5x41_minQ2=1_beamEffects_xAngle=-0.025_hiDiv_1_20ev.json",
+  "physics_output_file": "pythia8NCDIS_5x41_minQ2=1_beamEffects_xAngle=-0.025_hiDiv_1_20ev.root",
   "offload_output_file":
       "pythia8NCDIS_5x41_minQ2=1_beamEffects_xAngle=-0.025_hiDiv_1_20ev.offloaded.hepmc3",
   "num_track_slots": 1024,
@@ -21,7 +22,7 @@
     "epsilon_step": 1e-05
   },
   "use_device": false,
-  "sd_type": "simple_calo",
+  "sd_type": "event_hit",
   "step_diagnostic": false,
   "step_diagnostic_bins": 8,
   "slot_diagnostic_prefix": "slot-diag-cpu-"
