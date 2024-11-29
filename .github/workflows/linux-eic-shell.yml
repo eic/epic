@@ -605,11 +605,20 @@ jobs:
         setup: install/bin/thisepic.sh
         run: |
           url=root://dtn-eic.jlab.org//work/eic2/EPIC/EVGEN/DIS/NC/${{matrix.beam}}/minQ2=${{matrix.minq2}}/pythia8NCDIS_${{matrix.beam}}_minQ2=${{matrix.minq2}}_beamEffects_xAngle=-0.025_hiDiv_1.hepmc3.tree.root
+          gprofng collect app -o sim_dis_${{matrix.beam}}_minQ2=${{matrix.minq2}}_${{ matrix.detector_config }}.er \
           npsim --compactFile ${DETECTOR_PATH}/${{ matrix.detector_config }}.xml -N 100 --inputFiles ${url} --random.seed 1 --outputFile sim_dis_${{matrix.beam}}_minQ2=${{matrix.minq2}}_${{ matrix.detector_config }}.edm4hep.root -v WARNING
-    - uses: actions/upload-artifact@v4
+          gprofng display text -ctree sim_dis_${{matrix.beam}}_minQ2=${{matrix.minq2}}_${{ matrix.detector_config }}.er > sim_dis_${{matrix.beam}}_minQ2=${{matrix.minq2}}_${{ matrix.detector_config }}.ctree.txt
+    - name: Upload ROOT output
+      uses: actions/upload-artifact@v4
       with:
         name: sim_dis_${{matrix.beam}}_minQ2=${{matrix.minq2}}_${{ matrix.detector_config }}.edm4hep.root
         path: sim_dis_${{matrix.beam}}_minQ2=${{matrix.minq2}}_${{ matrix.detector_config }}.edm4hep.root
+        if-no-files-found: error
+    - name: Upload call tree
+      uses: actions/upload-artifact@v4
+      with:
+        name: sim_dis_${{matrix.beam}}_minQ2=${{matrix.minq2}}_${{ matrix.detector_config }}.ctree.txt
+        path: sim_dis_${{matrix.beam}}_minQ2=${{matrix.minq2}}_${{ matrix.detector_config }}.ctree.txt
         if-no-files-found: error
     - name: Download previous artifact
       id: download_previous_artifact
