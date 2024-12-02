@@ -161,8 +161,6 @@
     <constant name="B1PR_CenterZ"         value="-75.59*m"/>
     <constant name="B1PR_CenterX"         value="1.86*m"/>
     <constant name="B1PR_Length"          value="3.7*m"/>
- //materila definitions needed
-
     <constant name="B1PR_InnerRadius"     value="0.05*m"/>
     <constant name="B1PR_OuterRadius"     value="0.4*m"/>
     <constant name="B1PR_Theta"           value="CrossingAngle"/>
