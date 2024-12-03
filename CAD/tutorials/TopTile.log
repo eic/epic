@@ -1,0 +1,13 @@
+Adding snap-specific PYTHONPATH to sys.path: /home/lilr-local/snap/freecad/common/.local/lib/python3.10/site-packages:/snap/freecad/1202/lib/python3.10/site-packages:/snap/freecad/1202/usr/lib/python3/dist-packages
+Part__Feature ActivePixelArray Placement [Pos=(0,0,0), Yaw-Pitch-Roll=(0,0,0)]
+Part__Feature001 TileBiasing Placement [Pos=(0,-0.06,0), Yaw-Pitch-Roll=(0,0,0)]
+Part__Feature002 PowerSwitches Placement [Pos=(3.571,-0.06,0), Yaw-Pitch-Roll=(0,0,0)]
+Part__Feature003 TileReadout Placement [Pos=(0,9.197,0), Yaw-Pitch-Roll=(0,0,0)]
+Part__Feature004 TilePads Placement [Pos=(0,9.397,0), Yaw-Pitch-Roll=(0,0,0)]
+FreeCAD 1.0.0, Libs: 1.0.0R38641 +468 (Git)
+(C) 2001-2024 FreeCAD contributors
+FreeCAD is free and open-source software licensed under the terms of LGPL2+ license.
+
+Importing project files......
+						(20 %)							(40 %)							(60 %)							(80 %)							(100 %)									Postprocessing......
+						(100 %)									

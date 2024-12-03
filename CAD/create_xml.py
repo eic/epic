@@ -261,8 +261,12 @@ def generate_xml(L3_gdml_path, L4_gdml_path, savefile):
     xml_file.write(FOOTER)
 
 
+
+
+
 # Check if the folder path is provided as an argument
 if __name__ == '__name__':
+  print('Starting...')
   if len(sys.argv) < 3:
       print("Please provide the L3 and L4 gdml folder paths as the first and second command line arguments respectively.")
       sys.exit(1)

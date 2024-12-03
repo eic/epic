@@ -14,5 +14,5 @@
 import stl
 from stl import mesh
 
-binarystl = mesh.Mesh.from_file('data/L3_SolidCarbonFoam.stl')
-binarystl.save('data/L3_SolidCarbonFoam_ASCII.stl', mode=stl.Mode.ASCII)
+binarystl = mesh.Mesh.from_file('data/L3_stave/Pads_033Mirror_1001.stl')
+binarystl.save('data/Pads_033Mirror_1001_ASCII.stl', mode=stl.Mode.ASCII)

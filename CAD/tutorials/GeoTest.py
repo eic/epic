@@ -16,25 +16,29 @@ import argparse
 
 
 def geo_check():
-    doc = fc.openDocument('data/L3_stave.FCStd')
+    doc = fc.openDocument('data/TopQuarterUnit_A2plus.FCStd')
     first = True
     for obj in doc.Objects:
         # print(obj.Label, obj.TypeId)
         if obj.TypeId not in "Part::Feature":
             continue
 
+            
+        print(obj.Name, obj.Label, obj.Placement)
         # for Part::Feature
-        hierarchy = 0
-        while(obj.InList):
-            parent = obj.InList[0]
-            print(hierarchy)
-            placement = parent.Placement
-            print("before multiply:", placement)
+        # hierarchy = 0
+        # while(obj.InList):
+        #     parent = obj.InList[0]
+        #     print(hierarchy)
+        #     placement = obj.Placement
+        #     placement2 = parent.Placement
+        #     print("before multiply:", placement)
+        #     print("Parent placement:", placement2)
 
-            placement = parent.Placement.multiply(placement)
+        #     placement = parent.Placement.multiply(placement)
 
-            print("after multiply:", placement)
-            obj = parent
+        #     print("after multiply:", placement)
+        #     obj = parent
 
 
         

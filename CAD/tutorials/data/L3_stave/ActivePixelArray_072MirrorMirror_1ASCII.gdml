@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<gdml xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://service-spi.web.cern.ch/service-spi/app/releases/GDML/schema/gdml.xsd">
+
+    <define>
+        <position name="ActivePixelArray_072MirrorMirror_1ASCII_v0" unit="mm" x="9.906732" y="3.817909" z="-133.095001"/>
+        <position name="ActivePixelArray_072MirrorMirror_1ASCII_v1" unit="mm" x="9.906732" y="3.817909" z="-129.524002"/>
+        <position name="ActivePixelArray_072MirrorMirror_1ASCII_v2" unit="mm" x="12.949966" y="3.44895" z="-129.524002"/>
+        <position name="ActivePixelArray_072MirrorMirror_1ASCII_v3" unit="mm" x="12.949966" y="3.44895" z="-133.095001"/>
+        <position name="ActivePixelArray_072MirrorMirror_1ASCII_v4" unit="mm" x="15.97889" y="2.976694" z="-129.524002"/>
+        <position name="ActivePixelArray_072MirrorMirror_1ASCII_v5" unit="mm" x="15.97889" y="2.976695" z="-133.095001"/>
+        <position name="ActivePixelArray_072MirrorMirror_1ASCII_v6" unit="mm" x="18.989998" y="2.40169" z="-129.524002"/>
+        <position name="ActivePixelArray_072MirrorMirror_1ASCII_v7" unit="mm" x="18.99" y="2.40169" z="-133.095001"/>
+        <position name="ActivePixelArray_072MirrorMirror_1ASCII_v8" unit="mm" x="18.979786" y="2.352744" z="-129.524002"/>
+        <position name="ActivePixelArray_072MirrorMirror_1ASCII_v9" unit="mm" x="18.979786" y="2.352744" z="-133.095001"/>
+        <position name="ActivePixelArray_072MirrorMirror_1ASCII_v10" unit="mm" x="9.901559" y="3.768177" z="-129.524002"/>
+        <position name="ActivePixelArray_072MirrorMirror_1ASCII_v11" unit="mm" x="12.943105" y="3.399423" z="-133.095001"/>
+        <position name="ActivePixelArray_072MirrorMirror_1ASCII_v12" unit="mm" x="12.943105" y="3.399423" z="-129.524002"/>
+        <position name="ActivePixelArray_072MirrorMirror_1ASCII_v13" unit="mm" x="9.901559" y="3.768178" z="-133.095001"/>
+        <position name="ActivePixelArray_072MirrorMirror_1ASCII_v14" unit="mm" x="15.970348" y="2.92743" z="-133.095001"/>
+        <position name="ActivePixelArray_072MirrorMirror_1ASCII_v15" unit="mm" x="15.970348" y="2.927429" z="-129.524002"/>
+    </define>
+
+    <solids>
+        <tessellated aunit="deg" lunit="mm" name="ActivePixelArray_072MirrorMirror_1ASCII-SOL">
+             <triangular vertex1="ActivePixelArray_072MirrorMirror_1ASCII_v0" vertex2="ActivePixelArray_072MirrorMirror_1ASCII_v1" vertex3="ActivePixelArray_072MirrorMirror_1ASCII_v2"/>
+             <triangular vertex1="ActivePixelArray_072MirrorMirror_1ASCII_v3" vertex2="ActivePixelArray_072MirrorMirror_1ASCII_v2" vertex3="ActivePixelArray_072MirrorMirror_1ASCII_v4"/>
+             <triangular vertex1="ActivePixelArray_072MirrorMirror_1ASCII_v3" vertex2="ActivePixelArray_072MirrorMirror_1ASCII_v0" vertex3="ActivePixelArray_072MirrorMirror_1ASCII_v2"/>
+             <triangular vertex1="ActivePixelArray_072MirrorMirror_1ASCII_v5" vertex2="ActivePixelArray_072MirrorMirror_1ASCII_v4" vertex3="ActivePixelArray_072MirrorMirror_1ASCII_v6"/>
+             <triangular vertex1="ActivePixelArray_072MirrorMirror_1ASCII_v5" vertex2="ActivePixelArray_072MirrorMirror_1ASCII_v3" vertex3="ActivePixelArray_072MirrorMirror_1ASCII_v4"/>
+             <triangular vertex1="ActivePixelArray_072MirrorMirror_1ASCII_v7" vertex2="ActivePixelArray_072MirrorMirror_1ASCII_v5" vertex3="ActivePixelArray_072MirrorMirror_1ASCII_v6"/>
+             <triangular vertex1="ActivePixelArray_072MirrorMirror_1ASCII_v7" vertex2="ActivePixelArray_072MirrorMirror_1ASCII_v6" vertex3="ActivePixelArray_072MirrorMirror_1ASCII_v8"/>
+             <triangular vertex1="ActivePixelArray_072MirrorMirror_1ASCII_v9" vertex2="ActivePixelArray_072MirrorMirror_1ASCII_v7" vertex3="ActivePixelArray_072MirrorMirror_1ASCII_v8"/>
+             <triangular vertex1="ActivePixelArray_072MirrorMirror_1ASCII_v10" vertex2="ActivePixelArray_072MirrorMirror_1ASCII_v11" vertex3="ActivePixelArray_072MirrorMirror_1ASCII_v12"/>
+             <triangular vertex1="ActivePixelArray_072MirrorMirror_1ASCII_v13" vertex2="ActivePixelArray_072MirrorMirror_1ASCII_v11" vertex3="ActivePixelArray_072MirrorMirror_1ASCII_v10"/>
+             <triangular vertex1="ActivePixelArray_072MirrorMirror_1ASCII_v12" vertex2="ActivePixelArray_072MirrorMirror_1ASCII_v14" vertex3="ActivePixelArray_072MirrorMirror_1ASCII_v15"/>
+             <triangular vertex1="ActivePixelArray_072MirrorMirror_1ASCII_v11" vertex2="ActivePixelArray_072MirrorMirror_1ASCII_v14" vertex3="ActivePixelArray_072MirrorMirror_1ASCII_v12"/>
+             <triangular vertex1="ActivePixelArray_072MirrorMirror_1ASCII_v15" vertex2="ActivePixelArray_072MirrorMirror_1ASCII_v9" vertex3="ActivePixelArray_072MirrorMirror_1ASCII_v8"/>
+             <triangular vertex1="ActivePixelArray_072MirrorMirror_1ASCII_v14" vertex2="ActivePixelArray_072MirrorMirror_1ASCII_v9" vertex3="ActivePixelArray_072MirrorMirror_1ASCII_v15"/>
+             <triangular vertex1="ActivePixelArray_072MirrorMirror_1ASCII_v13" vertex2="ActivePixelArray_072MirrorMirror_1ASCII_v10" vertex3="ActivePixelArray_072MirrorMirror_1ASCII_v1"/>
+             <triangular vertex1="ActivePixelArray_072MirrorMirror_1ASCII_v0" vertex2="ActivePixelArray_072MirrorMirror_1ASCII_v13" vertex3="ActivePixelArray_072MirrorMirror_1ASCII_v1"/>
+             <triangular vertex1="ActivePixelArray_072MirrorMirror_1ASCII_v14" vertex2="ActivePixelArray_072MirrorMirror_1ASCII_v5" vertex3="ActivePixelArray_072MirrorMirror_1ASCII_v9"/>
+             <triangular vertex1="ActivePixelArray_072MirrorMirror_1ASCII_v9" vertex2="ActivePixelArray_072MirrorMirror_1ASCII_v5" vertex3="ActivePixelArray_072MirrorMirror_1ASCII_v7"/>
+             <triangular vertex1="ActivePixelArray_072MirrorMirror_1ASCII_v11" vertex2="ActivePixelArray_072MirrorMirror_1ASCII_v3" vertex3="ActivePixelArray_072MirrorMirror_1ASCII_v14"/>
+             <triangular vertex1="ActivePixelArray_072MirrorMirror_1ASCII_v14" vertex2="ActivePixelArray_072MirrorMirror_1ASCII_v3" vertex3="ActivePixelArray_072MirrorMirror_1ASCII_v5"/>
+             <triangular vertex1="ActivePixelArray_072MirrorMirror_1ASCII_v13" vertex2="ActivePixelArray_072MirrorMirror_1ASCII_v0" vertex3="ActivePixelArray_072MirrorMirror_1ASCII_v11"/>
+             <triangular vertex1="ActivePixelArray_072MirrorMirror_1ASCII_v11" vertex2="ActivePixelArray_072MirrorMirror_1ASCII_v0" vertex3="ActivePixelArray_072MirrorMirror_1ASCII_v3"/>
+             <triangular vertex1="ActivePixelArray_072MirrorMirror_1ASCII_v15" vertex2="ActivePixelArray_072MirrorMirror_1ASCII_v8" vertex3="ActivePixelArray_072MirrorMirror_1ASCII_v6"/>
+             <triangular vertex1="ActivePixelArray_072MirrorMirror_1ASCII_v4" vertex2="ActivePixelArray_072MirrorMirror_1ASCII_v15" vertex3="ActivePixelArray_072MirrorMirror_1ASCII_v6"/>
+             <triangular vertex1="ActivePixelArray_072MirrorMirror_1ASCII_v12" vertex2="ActivePixelArray_072MirrorMirror_1ASCII_v15" vertex3="ActivePixelArray_072MirrorMirror_1ASCII_v4"/>
+             <triangular vertex1="ActivePixelArray_072MirrorMirror_1ASCII_v2" vertex2="ActivePixelArray_072MirrorMirror_1ASCII_v12" vertex3="ActivePixelArray_072MirrorMirror_1ASCII_v4"/>
+             <triangular vertex1="ActivePixelArray_072MirrorMirror_1ASCII_v10" vertex2="ActivePixelArray_072MirrorMirror_1ASCII_v12" vertex3="ActivePixelArray_072MirrorMirror_1ASCII_v2"/>
+             <triangular vertex1="ActivePixelArray_072MirrorMirror_1ASCII_v1" vertex2="ActivePixelArray_072MirrorMirror_1ASCII_v10" vertex3="ActivePixelArray_072MirrorMirror_1ASCII_v2"/>
+        </tessellated>
+    </solids>
+
+    <structure>
+        <volume name="ActivePixelArray_072MirrorMirror_1ASCII">
+            <materialref ref="Vacuum"/>
+            <solidref ref="ActivePixelArray_072MirrorMirror_1ASCII-SOL"/>
+        </volume>
+    </structure>
+
+    <setup name="Default" version="1.0">
+        <world ref="ActivePixelArray_072MirrorMirror_1ASCII"/>
+    </setup>
+</gdml>
