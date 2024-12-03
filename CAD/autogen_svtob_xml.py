@@ -24,16 +24,25 @@ import stl_gdml
 import create_xml 
 from pathlib import Path
 
+import socket
 
 
 def generate_xml(args):
     
+    # for different platform whcih Long use, modifiy it for your use
+    localhost = socket.gethostname()
+    if localhost == 'LONG':
+        cmd = '/usr/local/share/FreeCAD/bin/FreeCADCmd'
+        
+    else:
+        cmd = '/snap/bin/freecad.cmd'
+        
     # convert the FCStd file in to stl file
     args.fcstd = sorted(args.fcstd)
     for fcfile in args.fcstd:
         print(f'Processing {fcfile}')
         
-        os.system(f'/snap/bin/freecad.cmd svt_ob_meshing.py {fcfile}') # for Long's laptop setting
+        os.system(f'{cmd} svt_ob_meshing.py {fcfile}') # for Long's laptop setting
         for rootdir, _, files in os.walk(fcfile.replace('.FCStd', '/')):
             for file in files:
                 file = os.path.join(rootdir, file)
