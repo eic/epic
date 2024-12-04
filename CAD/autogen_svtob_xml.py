@@ -34,8 +34,12 @@ def generate_xml(args):
     if localhost == 'LONG':
         cmd = '/usr/local/share/FreeCAD/bin/FreeCADCmd'
         
-    else:
+    elif "UOB" in localhost:
         cmd = '/snap/bin/freecad.cmd'
+
+    else:
+        print("Please give /path/to/your/FreeCAD/Python/API")
+        exit(-1)
         
     # convert the FCStd file in to stl file
     args.fcstd = sorted(args.fcstd)

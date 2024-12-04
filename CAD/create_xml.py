@@ -251,11 +251,12 @@ dict_attr_list = ["material", "sensitive", "thickness", "offset"]
 def generate_xml(L3_gdml_path, L4_gdml_path, savefile):
   with open(savefile, 'w') as xml_file:
     xml_file.write(HEADER)
-    
+    global file_count_global
+    file_count_global = 0
     for key_dict in dict_list:
       scan_and_place(L3_gdml_path, key_dict['matching_name'], xml_file, key_dict, 'L3')
     xml_file.write(MIDDLE)
-    
+    file_count_global = 0
     for key_dict in dict_list:
       scan_and_place(L4_gdml_path, key_dict["matching_name"], xml_file, key_dict, 'L4')
     xml_file.write(FOOTER)
