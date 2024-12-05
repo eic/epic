@@ -81,13 +81,13 @@ jobs:
     - name: Setup CVMFS OSG eic-shell environment
       uses: eic/run-cvmfs-osg-eic-shell@main
       with:
-        platform-release: "jug_xl:nightly"
+        platform-release: "eic_xl:nightly"
         run: |
           eic-info
     - name: Build detector geometry
       uses: eic/run-cvmfs-osg-eic-shell@main
       with:
-        platform-release: "jug_xl:nightly"
+        platform-release: "eic_xl:nightly"
         run: |
           CC=${{ matrix.CC }} CXX=${{ matrix.CXX }} cmake -B build -S . -DCMAKE_INSTALL_PREFIX=${PREFIX} -DCMAKE_C_COMPILER_LAUNCHER=ccache -DCMAKE_CXX_COMPILER_LAUNCHER=ccache
           cmake --build build -- -k -j $(getconf _NPROCESSORS_ONLN) install
@@ -150,7 +150,7 @@ jobs:
     - uses: cvmfs-contrib/github-action-cvmfs@v4
     - uses: eic/run-cvmfs-osg-eic-shell@main
       with:
-        platform-release: "jug_xl:nightly"
+        platform-release: "eic_xl:nightly"
         setup: install/bin/thisepic.sh
         run: |
           pushd scripts/material_map
@@ -206,7 +206,7 @@ jobs:
     - uses: cvmfs-contrib/github-action-cvmfs@v4
     - uses: eic/run-cvmfs-osg-eic-shell@main
       with:
-        platform-release: "jug_xl:nightly"
+        platform-release: "eic_xl:nightly"
         network_types: "none"
         setup: install/bin/thisepic.sh
         run: |
@@ -233,7 +233,7 @@ jobs:
     - uses: cvmfs-contrib/github-action-cvmfs@v4
     - uses: eic/run-cvmfs-osg-eic-shell@main
       with:
-        platform-release: "jug_xl:nightly"
+        platform-release: "eic_xl:nightly"
         network_types: "none"
         setup: install/bin/thisepic.sh
         run: |
@@ -301,7 +301,7 @@ jobs:
     - uses: cvmfs-contrib/github-action-cvmfs@v4
     - uses: eic/run-cvmfs-osg-eic-shell@main
       with:
-        platform-release: "jug_xl:nightly"
+        platform-release: "eic_xl:nightly"
         network_types: "bridge" # this job must succeed even when new artifacts
         setup: install/bin/thisepic.sh
         run: |
@@ -323,7 +323,7 @@ jobs:
     - uses: cvmfs-contrib/github-action-cvmfs@v4
     - uses: eic/run-cvmfs-osg-eic-shell@main
       with:
-        platform-release: "jug_xl:nightly"
+        platform-release: "eic_xl:nightly"
         setup: install/bin/thisepic.sh
         run: |
           mkdir -p doc
@@ -354,7 +354,7 @@ jobs:
     - uses: cvmfs-contrib/github-action-cvmfs@v4
     - uses: eic/run-cvmfs-osg-eic-shell@main
       with:
-        platform-release: "jug_xl:nightly"
+        platform-release: "eic_xl:nightly"
         network_types: "bridge" # this job must succeed even when new artifacts
         setup: install/bin/thisepic.sh
         run: |
@@ -379,7 +379,7 @@ jobs:
     - uses: cvmfs-contrib/github-action-cvmfs@v4
     - uses: eic/run-cvmfs-osg-eic-shell@main
       with:
-        platform-release: "jug_xl:nightly"
+        platform-release: "eic_xl:nightly"
         network_types: "bridge" # this job must succeed even when new artifacts
         setup: install/bin/thisepic.sh
         run: |
@@ -438,7 +438,7 @@ jobs:
     - uses: cvmfs-contrib/github-action-cvmfs@v4
     - uses: eic/run-cvmfs-osg-eic-shell@main
       with:
-        platform-release: "jug_xl:nightly"
+        platform-release: "eic_xl:nightly"
         network_types: "none"
         setup: install/bin/thisepic.sh
         run: |
@@ -467,7 +467,7 @@ jobs:
     - uses: cvmfs-contrib/github-action-cvmfs@v4
     - uses: eic/run-cvmfs-osg-eic-shell@main
       with:
-        platform-release: "jug_xl:nightly"
+        platform-release: "eic_xl:nightly"
         network_types: "none"
         run: |
           mkdir -p images
@@ -497,7 +497,7 @@ jobs:
     - uses: cvmfs-contrib/github-action-cvmfs@v4
     - uses: eic/run-cvmfs-osg-eic-shell@main
       with:
-        platform-release: "jug_xl:nightly"
+        platform-release: "eic_xl:nightly"
         network_types: "none"
         run: |
           mkdir -p images
@@ -542,7 +542,7 @@ jobs:
     - name: Produce simulation files
       uses: eic/run-cvmfs-osg-eic-shell@main
       with:
-        platform-release: "jug_xl:nightly"
+        platform-release: "eic_xl:nightly"
         setup: install/bin/thisepic.sh
         run: |
           npsim --compactFile ${DETECTOR_PATH}/${{ matrix.detector_config }}.xml -G --random.seed 1 --gun.particle "${{ matrix.particle }}-" --gun.momentumMin "1*GeV" --gun.momentumMax "20*GeV" --gun.distribution "uniform" -N 100 --outputFile sim_${{ matrix.particle }}_1GeV_20GeV_${{ matrix.detector_config }}.edm4hep.root -v WARNING
@@ -563,7 +563,7 @@ jobs:
     - name: Compare to previous artifacts
       uses: eic/run-cvmfs-osg-eic-shell@main
       with:
-        platform-release: "jug_xl:nightly"
+        platform-release: "eic_xl:nightly"
         setup: install/bin/thisepic.sh
         run: |
           export PYTHONPATH=$HOME/.local/lib/python3.10/site-packages:$PYTHONPATH
@@ -601,7 +601,7 @@ jobs:
     - name: Produce simulation files
       uses: eic/run-cvmfs-osg-eic-shell@main
       with:
-        platform-release: "jug_xl:nightly"
+        platform-release: "eic_xl:nightly"
         setup: install/bin/thisepic.sh
         run: |
           url=root://dtn-eic.jlab.org//work/eic2/EPIC/EVGEN/DIS/NC/${{matrix.beam}}/minQ2=${{matrix.minq2}}/pythia8NCDIS_${{matrix.beam}}_minQ2=${{matrix.minq2}}_beamEffects_xAngle=-0.025_hiDiv_1.hepmc3.tree.root
@@ -632,7 +632,7 @@ jobs:
     - name: Compare to previous artifacts
       uses: eic/run-cvmfs-osg-eic-shell@main
       with:
-        platform-release: "jug_xl:nightly"
+        platform-release: "eic_xl:nightly"
         setup: install/bin/thisepic.sh
         run: |
           pip install 'pygithub>=2' 'bokeh>=3'
