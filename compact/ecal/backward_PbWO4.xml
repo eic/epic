@@ -128,6 +128,10 @@
             <position x="-3 * EcalEndcapN_crystalmodule_total_width" y="3.5 * EcalEndcapN_crystalmodule_total_width"/>
           </points_extrudedpolygon>
 
+          <placement
+            x_offset="EcalEndcapN_crystalmodule_total_width / 2"
+            y_offset="0 * mm"
+            />
           <module
             modulex="EcalEndcapN_crystalmodule_total_width"
             moduley="EcalEndcapN_crystalmodule_total_width"
