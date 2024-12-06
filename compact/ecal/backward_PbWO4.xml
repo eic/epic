@@ -44,11 +44,11 @@
     <constant name="EcalEndcapN_structure_Oring_length" value="EcalEndcapN_length"/>
     <constant name="EcalEndcapN_inner_support_length" value="25.*cm"/>
     <constant name="EcalEndcapN_envelope_length" value="max(EcalEndcapN_inner_support_length, EcalEndcapN_crystalmodule_total_length)" />
-    <constant name="EcalEndcapN_structure_Oring_thickness" value="0.979*cm"/><!-- Currently not based on CAD thickness, only adjusted to allow correct tower placement. -->
-    <constant name="EcalEndcapN_structure_Oring_max" value="65.00*cm"/>
+    <constant name="EcalEndcapN_structure_Oring_thickness" value="1.708*cm"/><!-- Currently not based on CAD thickness, only adjusted to allow correct tower placement. -->
+    <constant name="EcalEndcapN_structure_Oring_max" value="67.30*cm"/>
     <constant name="EcalEndcapN_structure_Oring_min" value="EcalEndcapN_structure_Oring_max - EcalEndcapN_structure_Oring_thickness"/>
-    <constant name="EcalEndcapN_Protate" value="15.*degree"/>
-    <constant name="EcalEndcapN_Nrotate" value="-15.*degree"/>
+    <constant name="EcalEndcapN_Protate" value="0.*degree"/>
+    <constant name="EcalEndcapN_Nrotate" value="0.*degree"/>
     <constant name="EcalEndcapN_Oring_relative_shift" value="(EcalEndcapN_envelope_length - EcalEndcapN_structure_Oring_length) / 2"/>
     <constant name="EcalEndcapN_Iring_axisA" value="7.0*cm"/>
     <constant name="EcalEndcapN_Iring_axisB" value="5.5*cm"/>
