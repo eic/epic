@@ -328,8 +328,10 @@ static std::tuple<int, std::pair<int, int>> add_12surface_disk(Detector& desc, A
   // Placing The Modules
   //=====================================================================
 
-  auto points = epic::geo::fillRectangles({half_modx, 0.}, modSize.x(), modSize.y(), 0.,
-                                          (rmax / std::cos(Prot)), phimin, phimax);
+  xml_comp_t placement = plm.child(_Unicode(placement));
+  auto points =
+      epic::geo::fillRectangles({placement.x_offset(0.), placement.y_offset(0.)}, modSize.x(),
+                                modSize.y(), 0., (rmax / std::cos(Prot)), phimin, phimax);
 
   std::pair<double, double> c1(0., 0.);
   auto polyVertex = epic::geo::getPolygonVertices(c1, (rmax / std::cos(Prot)), M_PI / 12., 12);
