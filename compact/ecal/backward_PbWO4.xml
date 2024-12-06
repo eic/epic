@@ -44,7 +44,7 @@
     <constant name="EcalEndcapN_structure_Oring_length" value="EcalEndcapN_length"/>
     <constant name="EcalEndcapN_inner_support_length" value="25.*cm"/>
     <constant name="EcalEndcapN_envelope_length" value="max(EcalEndcapN_inner_support_length, EcalEndcapN_crystalmodule_total_length)" />
-    <constant name="EcalEndcapN_structure_Oring_thickness" value="2.0*cm"/>
+    <constant name="EcalEndcapN_structure_Oring_thickness" value="0.979*cm"/><!-- Currently not based on CAD thickness, only adjusted to allow correct tower placement. -->
     <constant name="EcalEndcapN_structure_Oring_max" value="65.00*cm"/>
     <constant name="EcalEndcapN_structure_Oring_min" value="EcalEndcapN_structure_Oring_max - EcalEndcapN_structure_Oring_thickness"/>
     <constant name="EcalEndcapN_Protate" value="15.*degree"/>
@@ -104,7 +104,7 @@
               proton_rmin="35 * mm"
               proton_rmax="43 * mm"
               z_length="EcalEndcapN_inner_support_length"
-              x_offset="-1 * mm"
+              x_offset="-2 * mm"
               proton_x_offset="64 * mm"
               material="Copper"
               vis="AnlOrange"
@@ -114,22 +114,26 @@
             The points information for constructing inner supporting structure [extrudedpolygon shape, 12 points in total]
           </comment>
           <points_extrudedpolygon>
-            <position x="3 * EcalEndcapN_crystalmodule_total_width" y="3.5 * EcalEndcapN_crystalmodule_total_width"/>
-            <position x="3 * EcalEndcapN_crystalmodule_total_width" y="2.5 * EcalEndcapN_crystalmodule_total_width"/>
-            <position x="5 * EcalEndcapN_crystalmodule_total_width" y="2.5 * EcalEndcapN_crystalmodule_total_width"/>
-            <position x="5 * EcalEndcapN_crystalmodule_total_width" y="-2.5 * EcalEndcapN_crystalmodule_total_width"/>
-            <position x="3 * EcalEndcapN_crystalmodule_total_width" y="-2.5 * EcalEndcapN_crystalmodule_total_width"/>
-            <position x="3 * EcalEndcapN_crystalmodule_total_width" y="-3.5 * EcalEndcapN_crystalmodule_total_width"/>
-            <position x="-3 * EcalEndcapN_crystalmodule_total_width" y="-3.5 * EcalEndcapN_crystalmodule_total_width"/>
-            <position x="-3 * EcalEndcapN_crystalmodule_total_width" y="-2.5 * EcalEndcapN_crystalmodule_total_width"/>
-            <position x="-4 * EcalEndcapN_crystalmodule_total_width" y="-2.5 * EcalEndcapN_crystalmodule_total_width"/>
-            <position x="-4 * EcalEndcapN_crystalmodule_total_width" y="2.5 * EcalEndcapN_crystalmodule_total_width"/>
-            <position x="-3 * EcalEndcapN_crystalmodule_total_width" y="2.5 * EcalEndcapN_crystalmodule_total_width"/>
-            <position x="-3 * EcalEndcapN_crystalmodule_total_width" y="3.5 * EcalEndcapN_crystalmodule_total_width"/>
+            <position x="2.5 * EcalEndcapN_crystalmodule_total_width" y="3.5 * EcalEndcapN_crystalmodule_total_width"/>
+            <position x="2.5 * EcalEndcapN_crystalmodule_total_width" y="2.5 * EcalEndcapN_crystalmodule_total_width"/>
+            <position x="4.5 * EcalEndcapN_crystalmodule_total_width" y="2.5 * EcalEndcapN_crystalmodule_total_width"/>
+            <position x="4.5 * EcalEndcapN_crystalmodule_total_width" y="1.5 * EcalEndcapN_crystalmodule_total_width"/>
+            <position x="5.5 * EcalEndcapN_crystalmodule_total_width" y="1.5 * EcalEndcapN_crystalmodule_total_width"/>
+            <position x="5.5 * EcalEndcapN_crystalmodule_total_width" y="-1.5 * EcalEndcapN_crystalmodule_total_width"/>
+            <position x="4.5 * EcalEndcapN_crystalmodule_total_width" y="-1.5 * EcalEndcapN_crystalmodule_total_width"/>
+            <position x="4.5 * EcalEndcapN_crystalmodule_total_width" y="-2.5 * EcalEndcapN_crystalmodule_total_width"/>
+            <position x="2.5 * EcalEndcapN_crystalmodule_total_width" y="-2.5 * EcalEndcapN_crystalmodule_total_width"/>
+            <position x="2.5 * EcalEndcapN_crystalmodule_total_width" y="-3.5 * EcalEndcapN_crystalmodule_total_width"/>
+            <position x="-2.5 * EcalEndcapN_crystalmodule_total_width" y="-3.5 * EcalEndcapN_crystalmodule_total_width"/>
+            <position x="-2.5 * EcalEndcapN_crystalmodule_total_width" y="-2.5 * EcalEndcapN_crystalmodule_total_width"/>
+            <position x="-3.5 * EcalEndcapN_crystalmodule_total_width" y="-2.5 * EcalEndcapN_crystalmodule_total_width"/>
+            <position x="-3.5 * EcalEndcapN_crystalmodule_total_width" y="2.5 * EcalEndcapN_crystalmodule_total_width"/>
+            <position x="-2.5 * EcalEndcapN_crystalmodule_total_width" y="2.5 * EcalEndcapN_crystalmodule_total_width"/>
+            <position x="-2.5 * EcalEndcapN_crystalmodule_total_width" y="3.5 * EcalEndcapN_crystalmodule_total_width"/>
           </points_extrudedpolygon>
 
           <placement
-            x_offset="EcalEndcapN_crystalmodule_total_width / 2"
+            x_offset="0 * mm"
             y_offset="0 * mm"
             />
           <module
