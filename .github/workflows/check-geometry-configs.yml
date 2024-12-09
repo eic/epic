@@ -16,7 +16,7 @@ jobs:
       with:
         name: build-gcc-fast-eic-shell
         path: install/
-    - uses: cvmfs-contrib/github-action-cvmfs@v4
+    - uses: cvmfs-contrib/github-action-cvmfs@v5
     - uses: eic/run-cvmfs-osg-eic-shell@main
       with:
         platform-release: "eic_xl:nightly"
