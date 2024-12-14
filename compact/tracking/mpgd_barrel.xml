@@ -58,6 +58,8 @@
     <constant name="rmin2Sensor" value="MMDriftCuGround_thickness + MMDriftKapton_thickness + MMDriftCuElectrode_thickness + MMGasGap_thickness / 2" />
     <constant name="MMInnerSensor_R" value="MMInnerSector_R + rmin2Sensor" />
     <constant name="MMOuterSensor_R" value="MMOuterSector_R + rmin2Sensor" />
+    <constant name="MMInnerAperture" value="MMModuleWidth/MMInnerSensor_R" />
+    <constant name="MMOuterAperture" value="MMModuleWidth/MMOuterSensor_R" />
   </define>
 
   <detectors>
@@ -122,13 +124,19 @@
       <comment> 768 strips in phi yield a segmentation of 2pi/8/768 ~= 1mrad. Which in turn, yields ~160 um in resolution.
       </comment>
       <segmentation type="MultiSegmentation" key="sensor">
-        <comment> In preparation for a 2-sensors-w/-strip setup. Presently sensors w/ odd key values do not exist. </comment>
-        <segmentation name="InnerPhi" type="CylindricalGridPhiZ" key_value="0" grid_size_phi="1*mrad" grid_size_z="0.150*mm*sqrt(12)" radius="MMInnerSensor_R" />
-        <segmentation name="InnerZ"   type="CylindricalGridPhiZ" key_value="1" grid_size_phi="1*mrad" grid_size_z="0.150*mm*sqrt(12)" radius="MMInnerSensor_R" />
-        <segmentation name="OuterPhi" type="CylindricalGridPhiZ" key_value="2" grid_size_phi="1*mrad" grid_size_z="0.150*mm*sqrt(12)" radius="MMOuterSensor_R" />
-        <segmentation name="OuterZ"   type="CylindricalGridPhiZ" key_value="3" grid_size_phi="1*mrad" grid_size_z="0.150*mm*sqrt(12)" radius="MMOuterSensor_R" />
+        <comment> Strip segmentations ("strip" field !=0) are not used at simulation time but only in digitization at reconstruction time, see digitization class, "MPGDTrackerDigi". </comment>
+	<segmentation name="Inner" type="MultiSegmentation" key_value="0" key="strip">
+          <segmentation name="InnerPix" type="CylindricalGridPhiZ" key_value="0" grid_size_phi="1*mrad"          grid_size_z="0.150*mm*sqrt(12)" radius="MMInnerSensor_R" />
+          <segmentation name="InnerPhi" type="CylindricalGridPhiZ" key_value="1" grid_size_phi="1*mrad"          grid_size_z="MMModuleLength"    radius="MMInnerSensor_R" />
+          <segmentation name="InnerZ"   type="CylindricalGridPhiZ" key_value="2" grid_size_phi="MMInnerAperture" grid_size_z="0.150*mm*sqrt(12)" radius="MMInnerSensor_R" />
+	</segmentation>
+	<segmentation name="Outer" type="MultiSegmentation" key_value="1" key="strip">
+          <segmentation name="OuterPix" type="CylindricalGridPhiZ" key_value="0" grid_size_phi="1*mrad"          grid_size_z="0.150*mm*sqrt(12)" radius="MMOuterSensor_R" />
+          <segmentation name="OuterPhi" type="CylindricalGridPhiZ" key_value="1" grid_size_phi="1*mrad"          grid_size_z="MMModuleLength"    radius="MMOuterSensor_R" />
+          <segmentation name="OuterZ"   type="CylindricalGridPhiZ" key_value="2" grid_size_phi="MMOuterAperture" grid_size_z="0.150*mm*sqrt(12)" radius="MMOuterSensor_R" />
+	</segmentation>
       </segmentation>
-      <id>system:8,layer:4,module:12,sensor:2,phi:32:-16,z:-16</id>
+      <id>system:8,layer:4,module:12,sensor:2,strip:30:2,phi:-16,z:-16</id>
     </readout>
   </readouts>
 
