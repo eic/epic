@@ -522,7 +522,9 @@ static Ref_t create_MPGDCylinderBarrelTracker(Detector& description, xml_h e,
       mod_elt.setPlacement(pv);
       // ***** SENSITIVE COMPONENT
       PlacedVolume& sens_pv = sensitives[iV];
-      DetElement comp_de(mod_elt, std::string("de_") + sens_pv.volume().name() + _toString(8 * iz + iphi, "%02d"), nModules);
+      DetElement comp_de(
+          mod_elt, std::string("de_") + sens_pv.volume().name() + _toString(8 * iz + iphi, "%02d"),
+          nModules);
       comp_de.setPlacement(sens_pv);
       auto& comp_de_params =
           DD4hepDetectorHelper::ensureExtension<dd4hep::rec::VariantParameters>(comp_de);
