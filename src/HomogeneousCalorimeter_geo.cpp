@@ -293,7 +293,7 @@ static std::tuple<int, std::pair<int, int>> add_12surface_disk(Detector& desc, A
   // Outer supporting frame
   //==============================
 
-  PolyhedraRegular solid_ring12(12, r12min, r12max, structure_frame_length);
+  PolyhedraRegular solid_ring12(360, r12min, r12max, structure_frame_length);
   Volume ring12_vol("ring12", solid_ring12, outer_ring_material);
   Transform3D tr_global_Oring = RotationZYX(Prot, 0., 0.) * Translation3D(0., 0., Oring_shift);
   ring12_vol.setVisAttributes(desc.visAttributes(plm.attr<std::string>(_Unicode(vis_struc))));
@@ -334,7 +334,7 @@ static std::tuple<int, std::pair<int, int>> add_12surface_disk(Detector& desc, A
                                 modSize.y(), 0., (rmax / std::cos(Prot)), phimin, phimax);
 
   std::pair<double, double> c1(0., 0.);
-  auto polyVertex = epic::geo::getPolygonVertices(c1, (rmax / std::cos(Prot)), M_PI / 12., 12);
+  auto polyVertex = epic::geo::getPolygonVertices(c1, r12min, M_PI / 360., 360);
   std::vector<epic::geo::Point> out_vertices, in_vertices;
   for (auto p : polyVertex) {
     epic::geo::Point a = {p.first, p.second};
