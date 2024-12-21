@@ -11,7 +11,7 @@ if [[ -z ${DETECTOR_PATH} || -z ${DETECTOR_CONFIG} ]] ; then
 fi
 
 # Download required Acts files
-ACTS_VERSION="00591a593a648430820e980b031301d25c18f1c7" # v33.1.0
+ACTS_VERSION="8e1b7a659d912cd98db9d700906ff59e708da574" # v34.1.0
 ACTS_URL="https://github.com/acts-project/acts/raw/"
 ACTS_FILES=(
   "Examples/Scripts/Python/geometry.py"

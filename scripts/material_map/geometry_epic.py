@@ -36,5 +36,4 @@ if "__main__" == __name__:
         outputObj=False,
         outputCsv=False,
         outputJson=True,
-        outputRoot=True,
     )
