@@ -30,7 +30,7 @@ jobs:
           IFS=$' \n\t'
           # First get all detectors (except world)
           declare -A detectors
-          while read d ; do detectors[$d]='-l 3' ; done <<< $(npdet_to_step list $DETECTOR_PATH/${{matrix.detector_config}}.xml | grep -v "has zero surface area" | sed '/world/d;s/.*(vol: \(.*\)).*/\1/g')
+          while read d ; do detectors[$d]='-l 3' ; done <<< $(npdet_to_step list $DETECTOR_PATH/${{matrix.detector_config}}.xml  | sed '/world/d;s/.*(vol: \(.*\)).*/\1/g')
           # Then tweak the levels (default is 1)
           detectors[HcalBarrel]='-l 1'
           detectors[LFHCAL]='-l 2'
