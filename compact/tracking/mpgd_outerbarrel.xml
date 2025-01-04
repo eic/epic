@@ -162,9 +162,9 @@
     <readout name="OuterMPGDBarrelHits">
       <segmentation type="MultiSegmentation" key="strip">
         <comment> Strip segmentations ("strip" field !=0) are not used at simulation time but only in digitization at reconstruction time, see digitization class, "MPGDTrackerDigi". </comment>
-        <segmentation name="Pixels"  type="CartesianGridUV" key_value="0" grid_size_u="0.150*mm*sqrt(12)"    grid_size_v="0.150*mm*sqrt(12)"    grid_angle="M_PI*rad/4" />
-        <segmentation name="UStrips" type="CartesianGridUV" key_value="1" grid_size_u="0.150*mm*sqrt(12)"    grid_size_v="MPGDOuterStrip_range" grid_angle="M_PI*rad/4" />
-        <segmentation name="VStrips" type="CartesianGridUV" key_value="2" grid_size_u="MPGDOuterStrip_range" grid_size_v="0.150*mm*sqrt(12)"    grid_angle="M_PI*rad/4"/>
+        <segmentation name="Pixels"  type="CartesianGridUV" key_value="0" grid_size_u="0.150*mm*sqrt(12)"    grid_size_v="0.150*mm*sqrt(12)"    grid_angle="pi*rad/4" />
+        <segmentation name="UStrips" type="CartesianGridUV" key_value="1" grid_size_u="0.150*mm*sqrt(12)"    grid_size_v="MPGDOuterStrip_range" grid_angle="pi*rad/4" />
+        <segmentation name="VStrips" type="CartesianGridUV" key_value="2" grid_size_u="MPGDOuterStrip_range" grid_size_v="0.150*mm*sqrt(12)"    grid_angle="pi*rad/4"/>
       </segmentation>
       <id>system:8,layer:4,module:12,sensor:2,strip:30:2,u:-16,v:-16</id>
     </readout>
