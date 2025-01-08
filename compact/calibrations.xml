@@ -24,11 +24,6 @@
       <arg value="file:calibrations/drich.lut"/>
       <arg value="url:https://github.com/eic/epic-data/raw/b863589baf6998acdc22f5e445a5e462bbf72b0a/drich.lut"/>
     </plugin>
-    <plugin name="epic_FileLoader"><!-- DEPRECATED -->
-      <arg value="cache:$DETECTOR_PATH:/opt/detector"/>
-      <arg value="file:calibrations/hpdirc_positive.lut"/>
-      <arg value="url:https://raw.githubusercontent.com/nathanwbrei/fastpid/66acf386f368d8fe95cbf157407492e92344ee7f/hpdirc_positive.lut"/>
-    </plugin>
     <plugin name="epic_FileLoader">
       <arg value="cache:$DETECTOR_PATH:/opt/detector"/>
       <arg value="file:calibrations/hpdirc.lut.gz"/>
@@ -43,6 +38,11 @@
       <arg value="cache:$DETECTOR_PATH:/opt/detector"/>
       <arg value="file:calibrations/tof.lut"/>
       <arg value="url:https://github.com/eic/epic-data/raw/c0f0ec03ca98de39cb74bf03407948ea64169eb1/tof.lut"/>
+    </plugin>
+    <plugin name="epic_FileLoader">
+      <arg value="cache:$DETECTOR_PATH:/opt/detector"/>
+      <arg value="file:calibrations/onnx/EcalEndcapN_pi_rejection.onnx"/>
+      <arg value="url:https://raw.githubusercontent.com/eic/epic-data/c6e3d56b5dfa2e9fa5998d38d7da20e837d89157/onnx/EcalEndcapN_pi_rejection.onnx"/>
     </plugin>
   </plugins>
 

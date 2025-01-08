@@ -1,15 +1,16 @@
 // SPDX-License-Identifier: LGPL-3.0-or-later
 // Copyright (C) 2022 Sakib Rahman, Whitney Armstrong
 
+#include <vector>
+#include <functional>
+
 #include "DD4hep/DetFactoryHelper.h"
 #include "DD4hep/OpticalSurfaces.h"
 #include "DD4hep/Printout.h"
 #include "DDRec/DetectorData.h"
 #include "DDRec/Surface.h"
-#include "GeometryHelper.h"
 #include "Math/Point2D.h"
 #include <XML/Helper.h>
-#include <vector>
 
 //////////////////////////////////////////////////
 // Far Forward B0 Electromagnetic Calorimeter
@@ -24,6 +25,9 @@ using namespace dd4hep;
 
 static tuple<Volume, Position> build_module(Detector& desc, xml_coll_t& plm,
                                             SensitiveDetector& sens);
+static tuple<int, int> add_individuals(
+    std::function<tuple<Volume, Position>(Detector&, xml_coll_t&, SensitiveDetector&)> build_module,
+    Detector& desc, Assembly& env, xml_coll_t& plm, SensitiveDetector& sens, int sid);
 
 static Ref_t createDetector(Detector& desc, xml_h e, SensitiveDetector sens) {
   xml_det_t x_det = e;
@@ -53,13 +57,7 @@ static Ref_t createDetector(Detector& desc, xml_h e, SensitiveDetector sens) {
   int sector_id = 1;
 
   for (xml_coll_t mod(plm, _Unicode(individuals)); mod; ++mod) {
-    auto [sector, nmod] =
-        ip6::geo::add_individuals(build_module, desc, detVol, mod, sens, sector_id++);
-    addModuleNumbers(sector, nmod);
-  }
-
-  for (xml_coll_t disk(plm, _Unicode(disk)); disk; ++disk) {
-    auto [sector, nmod] = ip6::geo::add_disk(build_module, desc, detVol, disk, sens, sector_id++);
+    auto [sector, nmod] = add_individuals(build_module, desc, detVol, mod, sens, sector_id++);
     addModuleNumbers(sector, nmod);
   }
 
@@ -102,6 +100,31 @@ static tuple<Volume, Position> build_module(Detector& desc, xml::Collection_t& p
     wrpVol.setVisAttributes(desc.visAttributes(wrp.attr<string>(_Unicode(vis))));
     return make_tuple(wrpVol, Position{sx + thickness, sy + thickness, sz});
   }
+}
+
+// place modules, id must be provided
+static tuple<int, int> add_individuals(
+    std::function<tuple<Volume, Position>(Detector&, xml_coll_t&, SensitiveDetector&)> build_module,
+    Detector& desc, Assembly& env, xml_coll_t& plm, SensitiveDetector& sens, int sid) {
+  auto [modVol, modSize] = build_module(desc, plm, sens);
+  int sector_id          = dd4hep::getAttrOrDefault<int>(plm, _Unicode(sector), sid);
+  int nmodules           = 0;
+  for (xml_coll_t pl(plm, _Unicode(placement)); pl; ++pl) {
+    Position pos(dd4hep::getAttrOrDefault<double>(pl, _Unicode(x), 0.),
+                 dd4hep::getAttrOrDefault<double>(pl, _Unicode(y), 0.),
+                 dd4hep::getAttrOrDefault<double>(pl, _Unicode(z), 0.));
+    Position rot(dd4hep::getAttrOrDefault<double>(pl, _Unicode(rotx), 0.),
+                 dd4hep::getAttrOrDefault<double>(pl, _Unicode(roty), 0.),
+                 dd4hep::getAttrOrDefault<double>(pl, _Unicode(rotz), 0.));
+    auto mid = pl.attr<int>(_Unicode(id));
+    Transform3D tr =
+        Translation3D(pos.x(), pos.y(), pos.z()) * RotationZYX(rot.z(), rot.y(), rot.x());
+    auto modPV = env.placeVolume(modVol, tr);
+    modPV.addPhysVolID("sector", sector_id).addPhysVolID("module", mid);
+    nmodules++;
+  }
+
+  return {sector_id, nmodules};
 }
 
 DECLARE_DETELEMENT(B0_ECAL, createDetector)
