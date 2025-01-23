@@ -88,7 +88,7 @@ static Ref_t createDetector(Detector& desc, xml_h e, SensitiveDetector sens) {
 
   // Envelope for bars + mirror
   Box Envelope_box("Envelope_box", (mirror_height + 1 * mm) / 2, 5 * (bar_width + 0.15 * mm),
-                   2 * (bar_length + glue_thickness) + 0.5 * mirror_thickness);
+                   0.5 * bar_repeat_z * (bar_length + glue_thickness) + 0.5 * mirror_thickness);
   Volume Envelope_box_vol("Envelope_box_vol", Envelope_box, desc.material("AirOptical"));
   dirc_module.placeVolume(Envelope_box_vol, Position(0, 0, 0.5 * mirror_thickness));
 

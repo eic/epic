@@ -63,7 +63,7 @@
     <constant name="DIRCBar_height"         value="17 * mm"/>
     <constant name="DIRCBar_width"          value="(DIRCPrism_width - (DIRCBar_count_y - 1) * DIRCBar_gap) / DIRCBar_count_y"/>
     <constant name="DIRCGlue_thickness"     value="0.05 * mm"/>
-    <constant name="DIRCBar_length"         value="(DIRCBarAssm_length - 4 * DIRCGlue_thickness)/4"/>
+    <constant name="DIRCBar_length"         value="(DIRCBarAssm_length - DIRCBar_count_z * DIRCGlue_thickness)/DIRCBar_count_z"/>
     <constant name="DIRCBar_center"         value="(DIRC_rmin + DIRC_rmax)/2" comment="Radial position of center of bar"/>
 
   </define>
