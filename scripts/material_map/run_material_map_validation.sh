@@ -3,15 +3,15 @@ set -e
 # script for material map validation with ACTS python bindings
 # run as : ./run_material_map_validation.sh --nevents 1000
 # Shujie Li, 03. 2024 (https://github.com/eic/snippets/pull/3)
-
-# Check if DETECTOR_PATH and DETECTOR_CONFIG are set
-if [[ -z ${DETECTOR_PATH} || -z ${DETECTOR_CONFIG} ]] ; then
-  echo "You must set \$DETECTOR_PATH and \$DETECTOR_CONFIG before running this script."
+MAP_MAP_DETECTOR_CONFIG="epic_craterlake_materialmap"
+# Check if DETECTOR_PATH and MAP_DETECTOR_CONFIG are set
+if [[ -z ${DETECTOR_PATH} || -z ${MAP_DETECTOR_CONFIG} ]] ; then
+  echo "You must set \$DETECTOR_PATH and \$MAP_DETECTOR_CONFIG before running this script."
   exit -1
 fi
 
 # Download required Acts files
-ACTS_VERSION="8e1b7a659d912cd98db9d700906ff59e708da574" # v34.1.0
+ACTS_VERSION="b3b09f46d064c43050dd3d21cdf51d7a412134fc" #v35.2.0
 ACTS_URL="https://github.com/acts-project/acts/raw/"
 ACTS_FILES=(
   "Examples/Scripts/Python/geometry.py"
@@ -20,13 +20,13 @@ ACTS_FILES=(
   "Examples/Scripts/Python/material_validation.py"
   "Examples/Scripts/MaterialMapping/writeMapConfig.py"
   "Examples/Scripts/MaterialMapping/configureMap.py"
+  "Examples/Scripts/MaterialMapping/GeometryVisualisationAndMaterialHandling.py"
   "Examples/Scripts/MaterialMapping/Mat_map.C"
   "Examples/Scripts/MaterialMapping/Mat_map_surface_plot.C"
   "Examples/Scripts/MaterialMapping/Mat_map_surface_plot_ratio.C"
   "Examples/Scripts/MaterialMapping/Mat_map_surface_plot_dist.C"
   "Examples/Scripts/MaterialMapping/Mat_map_surface_plot_1D.C"
   "Examples/Scripts/MaterialMapping/materialPlotHelper.cpp"
-  "Examples/Scripts/MaterialMapping/materialPlotHelper.hpp"
 )
 for file in ${ACTS_FILES[@]} ; do
   if [ ! -f ${file} ] ; then
@@ -78,19 +78,19 @@ set -- "${POSITIONAL[@]}" # restore positional parameters
 
 recordingFile=geant4_material_tracks.root
 geoFile=geometry-map.json
-matFile=material-map.json
+matFile=material-map.cbor
 trackFile=material-map_tracks.root
 propFile=propagation_material
 
 echo "::group::----GEANTINO SCAN------"
 # output geant4_material_tracks.root
 # The result of the geantino scan will be a root file containing material tracks. Those contain the direction and production vertex of the geantino, the total material accumulated and all the interaction points in the detector.
-python material_recording_epic.py -i ${DETECTOR_PATH}/${DETECTOR_CONFIG}.xml -n ${nevents} -t ${nparticles} -o ${recordingFile}
+python material_recording_epic.py -i ${DETECTOR_PATH}/${MAP_DETECTOR_CONFIG}.xml -n ${nevents} -t ${nparticles} -o ${recordingFile}
 echo "::endgroup::"
 
 echo "::group::-----MAPPING Configuration-----"
 # map geometry to geometry-map.json
-python geometry_epic.py -i ${DETECTOR_PATH}/${DETECTOR_CONFIG}.xml
+python geometry_epic.py -i ${DETECTOR_PATH}/${MAP_DETECTOR_CONFIG}.xml
 
 # take geometry-map.json and read out config-map.json
 python Examples/Scripts/MaterialMapping/writeMapConfig.py ${geoFile} config-map.json
@@ -101,19 +101,24 @@ python materialmap_config.py -i config-map.json -o config-map_new.json
 
 # turn config-map.json into modified geometry-map.json
 python Examples/Scripts/MaterialMapping/configureMap.py ${geoFile} config-map_new.json
+
+# generate figures to display tracking layers and volumes as seen by ACTS
+rm -rf plots
+mkdir -p plots
+python Examples/Scripts/MaterialMapping/GeometryVisualisationAndMaterialHandling.py --geometry ${geoFile}
 echo "::endgroup::"
 
 echo "::group::----MAPPING------------"
 # input: geant4_material_tracks.root, geometry-map.json
 # output: material-maps.json or cbor. This is the material map that you want to provide to EICrecon, i.e.  -Pacts:MaterialMap=XXX  .Please --matFile to specify the name and type
 #         material-maps_tracks.root(recorded steps from geantino, for validation purpose)
-python material_mapping_epic.py --xmlFile ${DETECTOR_PATH}/${DETECTOR_CONFIG}.xml --geoFile ${geoFile} --matFile ${matFile}
+python material_mapping_epic.py --xmlFile ${DETECTOR_PATH}/${MAP_DETECTOR_CONFIG}.xml --geoFile ${geoFile} --matFile ${matFile}
 echo "::endgroup::"
 
 echo "::group::----Prepare validation rootfile--------"
 # output propagation-material.root
-python material_validation_epic.py --xmlFile ${DETECTOR_PATH}/${DETECTOR_CONFIG}.xml --outputName ${propFile}_new --matFile ${matFile} -n ${nevents}
-python material_validation_epic.py --xmlFile ${DETECTOR_PATH}/${DETECTOR_CONFIG}.xml --outputName ${propFile}_old --matFile "calibrations/materials-map.cbor" -n ${nevents}
+python material_validation_epic.py --xmlFile ${DETECTOR_PATH}/${MAP_DETECTOR_CONFIG}.xml --outputName ${propFile}_new --matFile ${matFile} -n ${nevents}  -t ${nparticles}
+python material_validation_epic.py --xmlFile ${DETECTOR_PATH}/${MAP_DETECTOR_CONFIG}.xml --outputName ${propFile}_old --matFile "calibrations/materials-map.cbor" -n ${nevents} -t ${nparticles}
 echo "::endgroup::"
 
 echo "::group::-------Comparison plots---------"
