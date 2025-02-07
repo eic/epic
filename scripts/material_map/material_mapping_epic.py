@@ -37,7 +37,7 @@ if "__main__" == __name__:
 
     mapName = args.matFile.split('.')[0]
     if '.json' in args.matFile:
-        mapFormat = JsonFormat.Json        
+        mapFormat = JsonFormat.Json
     elif '.cbor' in args.matFile:
         mapFormat = JsonFormat.Cbor
     else:

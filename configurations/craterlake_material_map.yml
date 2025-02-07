@@ -1,4 +1,6 @@
 # This contains all geometry to be used in the material map
+ebeam: 5
+pbeam: 41
 features:
   beampipe:
   tracking:
@@ -13,5 +15,17 @@ features:
     silicon_disks:
     tof_barrel:
     tof_endcap:
+  pid:
+    dirc:
+    pfrich:
+    drich:
+  ecal:
+    forward_homogeneous:
+    forward_insert_homogeneous:
+  hcal:
+    lfhcal_with_space_for_insert:
+    forward_insert:
   far_forward:
+    default:
+  far_backward:
     default:

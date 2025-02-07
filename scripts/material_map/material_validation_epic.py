@@ -43,9 +43,9 @@ if "__main__" == __name__:
     )
 
     p.add_argument(
-        "-t","--ntracks", 
-        type=int, 
-        default=1000, 
+        "-t","--ntracks",
+        type=int,
+        default=1000,
         help="number of tracks per event")
 
     args = p.parse_args()

@@ -3,7 +3,7 @@ set -e
 # script for material map validation with ACTS python bindings
 # run as : ./run_material_map_validation.sh --nevents 1000
 # Shujie Li, 03. 2024 (https://github.com/eic/snippets/pull/3)
-MAP_MAP_DETECTOR_CONFIG="epic_craterlake_materialmap"
+MAP_DETECTOR_CONFIG="epic_craterlake_material_map"
 # Check if DETECTOR_PATH and MAP_DETECTOR_CONFIG are set
 if [[ -z ${DETECTOR_PATH} || -z ${MAP_DETECTOR_CONFIG} ]] ; then
   echo "You must set \$DETECTOR_PATH and \$MAP_DETECTOR_CONFIG before running this script."
