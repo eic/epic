@@ -5,8 +5,8 @@ set -e
 # Shujie Li, 03. 2024 (https://github.com/eic/snippets/pull/3)
 MAP_DETECTOR_CONFIG="epic_craterlake_material_map"
 # Check if DETECTOR_PATH and MAP_DETECTOR_CONFIG are set
-if [[ -z ${DETECTOR_PATH} || -z ${MAP_DETECTOR_CONFIG} ]] ; then
-  echo "You must set \$DETECTOR_PATH and \$MAP_DETECTOR_CONFIG before running this script."
+if [[ -z ${DETECTOR_PATH} ]] ; then
+  echo "You must set \$DETECTOR_PATH before running this script."
   exit -1
 fi
 
