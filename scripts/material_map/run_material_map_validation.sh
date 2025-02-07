@@ -27,6 +27,7 @@ ACTS_FILES=(
   "Examples/Scripts/MaterialMapping/Mat_map_surface_plot_dist.C"
   "Examples/Scripts/MaterialMapping/Mat_map_surface_plot_1D.C"
   "Examples/Scripts/MaterialMapping/materialPlotHelper.cpp"
+  "Examples/Scripts/MaterialMapping/materialPlotHelper.hpp"
 )
 for file in ${ACTS_FILES[@]} ; do
   if [ ! -f ${file} ] ; then
