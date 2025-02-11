@@ -77,7 +77,7 @@ jobs:
         echo "cache_dir=${{ github.workspace }}/.ccache" >> ~/.ccache/ccache.conf
         echo "max_size=500MB" >> ~/.ccache/ccache.conf
         echo "compression=true" >> ~/.ccache/ccache.conf
-    - uses: cvmfs-contrib/github-action-cvmfs@v4
+    - uses: cvmfs-contrib/github-action-cvmfs@v5
     - name: Setup CVMFS OSG eic-shell environment
       uses: eic/run-cvmfs-osg-eic-shell@main
       with:
@@ -147,7 +147,7 @@ jobs:
       with:
         name: build-gcc-full-eic-shell
         path: install/
-    - uses: cvmfs-contrib/github-action-cvmfs@v4
+    - uses: cvmfs-contrib/github-action-cvmfs@v5
     - uses: eic/run-cvmfs-osg-eic-shell@main
       with:
         platform-release: "eic_xl:nightly"
@@ -203,7 +203,7 @@ jobs:
       with:
         name: build-gcc-full-eic-shell
         path: install/
-    - uses: cvmfs-contrib/github-action-cvmfs@v4
+    - uses: cvmfs-contrib/github-action-cvmfs@v5
     - uses: eic/run-cvmfs-osg-eic-shell@main
       with:
         platform-release: "eic_xl:nightly"
@@ -230,7 +230,7 @@ jobs:
       with:
         name: build-gcc-full-eic-shell
         path: install/
-    - uses: cvmfs-contrib/github-action-cvmfs@v4
+    - uses: cvmfs-contrib/github-action-cvmfs@v5
     - uses: eic/run-cvmfs-osg-eic-shell@main
       with:
         platform-release: "eic_xl:nightly"
@@ -298,7 +298,7 @@ jobs:
       with:
         name: build-gcc-full-eic-shell
         path: install/
-    - uses: cvmfs-contrib/github-action-cvmfs@v4
+    - uses: cvmfs-contrib/github-action-cvmfs@v5
     - uses: eic/run-cvmfs-osg-eic-shell@main
       with:
         platform-release: "eic_xl:nightly"
@@ -320,7 +320,7 @@ jobs:
       with:
         name: build-gcc-full-eic-shell
         path: install/
-    - uses: cvmfs-contrib/github-action-cvmfs@v4
+    - uses: cvmfs-contrib/github-action-cvmfs@v5
     - uses: eic/run-cvmfs-osg-eic-shell@main
       with:
         platform-release: "eic_xl:nightly"
@@ -351,7 +351,7 @@ jobs:
       with:
         name: build-gcc-full-eic-shell
         path: install/
-    - uses: cvmfs-contrib/github-action-cvmfs@v4
+    - uses: cvmfs-contrib/github-action-cvmfs@v5
     - uses: eic/run-cvmfs-osg-eic-shell@main
       with:
         platform-release: "eic_xl:nightly"
@@ -376,7 +376,7 @@ jobs:
       with:
         name: build-gcc-fast-eic-shell
         path: install/
-    - uses: cvmfs-contrib/github-action-cvmfs@v4
+    - uses: cvmfs-contrib/github-action-cvmfs@v5
     - uses: eic/run-cvmfs-osg-eic-shell@main
       with:
         platform-release: "eic_xl:nightly"
@@ -435,7 +435,7 @@ jobs:
       with:
         name: build-gcc-fast-eic-shell
         path: install/
-    - uses: cvmfs-contrib/github-action-cvmfs@v4
+    - uses: cvmfs-contrib/github-action-cvmfs@v5
     - uses: eic/run-cvmfs-osg-eic-shell@main
       with:
         platform-release: "eic_xl:nightly"
@@ -464,7 +464,7 @@ jobs:
       with:
         name: ${{ matrix.detector_config }}.prim
         path: prim/
-    - uses: cvmfs-contrib/github-action-cvmfs@v4
+    - uses: cvmfs-contrib/github-action-cvmfs@v5
     - uses: eic/run-cvmfs-osg-eic-shell@main
       with:
         platform-release: "eic_xl:nightly"
@@ -494,7 +494,7 @@ jobs:
       with:
         name: ${{ matrix.detector_config }}.prim
         path: prim/
-    - uses: cvmfs-contrib/github-action-cvmfs@v4
+    - uses: cvmfs-contrib/github-action-cvmfs@v5
     - uses: eic/run-cvmfs-osg-eic-shell@main
       with:
         platform-release: "eic_xl:nightly"
@@ -538,7 +538,7 @@ jobs:
       with:
         name: build-gcc-full-eic-shell
         path: install/
-    - uses: cvmfs-contrib/github-action-cvmfs@v4
+    - uses: cvmfs-contrib/github-action-cvmfs@v5
     - name: Produce simulation files
       uses: eic/run-cvmfs-osg-eic-shell@main
       with:
@@ -553,7 +553,7 @@ jobs:
         if-no-files-found: error
     - name: Download previous artifact
       id: download_previous_artifact
-      uses: dawidd6/action-download-artifact@v6
+      uses: dawidd6/action-download-artifact@v7
       with:
         branch: ${{ github.event.pull_request.base.ref || github.ref_name }}
         path: ref/
@@ -597,7 +597,7 @@ jobs:
       with:
         name: build-gcc-full-eic-shell
         path: install/
-    - uses: cvmfs-contrib/github-action-cvmfs@v4
+    - uses: cvmfs-contrib/github-action-cvmfs@v5
     - name: Produce simulation files
       uses: eic/run-cvmfs-osg-eic-shell@main
       with:
@@ -622,7 +622,7 @@ jobs:
         if-no-files-found: error
     - name: Download previous artifact
       id: download_previous_artifact
-      uses: dawidd6/action-download-artifact@v6
+      uses: dawidd6/action-download-artifact@v7
       with:
         branch: ${{ github.event.pull_request.base.ref || github.ref_name }}
         path: ref/

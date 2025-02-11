@@ -27,7 +27,7 @@ if "__main__" == __name__:
         "--matFile",
         type=str,
         default="material-map.json",
-        help="input material map file, can be either Json or Cbor",
+        help="input material map file with extension, can be either xx.json or xx.cbor",
     )
     p.add_argument(
         "--outputName",
@@ -38,16 +38,23 @@ if "__main__" == __name__:
     p.add_argument(
         "-n","--nevents",
         type=int,
-        default=100,
+        default=1000,
         help="number of events to run",
     )
+
+    p.add_argument(
+        "-t","--ntracks",
+        type=int,
+        default=1000,
+        help="number of tracks per event")
+
     args = p.parse_args()
 
     detector, trackingGeometry, decorators = epic.getDetector(args.xmlFile, args.matFile)
 
     field = acts.ConstantBField(acts.Vector3(0, 0, 0))
 
-    runMaterialValidation(
+    runMaterialValidation(args.nevents, args.ntracks,
         trackingGeometry, decorators, field,
         outputDir=os.getcwd(), outputName=args.outputName,
         s=Sequencer(events=args.nevents, numThreads=-1)
