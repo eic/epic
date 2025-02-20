@@ -136,9 +136,9 @@ static tuple<Volume, Position> build_specScFiCAL_module(const Detector& descript
                                                         SensitiveDetector& sens) {
 
   //--------------------Module Setup---------------------------------------------------------------------
-  double sx = mod_x.attr<double>(_Unicode(sizex));
-  double sy = mod_x.attr<double>(_Unicode(sizey));
-  double sz = mod_x.attr<double>(_Unicode(sizez));
+  double sx          = mod_x.attr<double>(_Unicode(sizex));
+  double sy          = mod_x.attr<double>(_Unicode(sizey));
+  double sz          = mod_x.attr<double>(_Unicode(sizez));
   double moduleCoatX = mod_x.attr<double>(_Unicode(coatSizeX));
   double moduleCoatY = mod_x.attr<double>(_Unicode(coatSizeY));
 
