@@ -71,7 +71,7 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
   double mod_pos0   = -(detSizeXY / 2.0) + (modSize.x() / 2.0) + layerCoatSizeX;
   double layer_pos0 = -(detSizeZ / 2.0) + (modSize.y() / 2.0) + layerCoatSizeY;
 
-  //Fill uncoated layer with modules
+  //Fill layer with modules (intial position takes care of thin coating structure)
   for (int mod_id = 0; mod_id < nmod_perlayer; mod_id++) {
 
     //Build // to z-axis, then rotate
@@ -88,7 +88,7 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
   Volume sectorVol(det_name + "_sector", sectorBox, Air);
   sectorVol.setVisAttributes(description.visAttributes(x_mod.attr<std::string>(_Unicode(vis))));
 
-  //Fill sector with layers (coated)
+  //Fill sector with layers
   for (int layer_id = 0; layer_id < nlayer; layer_id++) {
 
     double lay_pos_z = -layer_id * (modSize.y() + 2.0 * layerCoatSizeY) - layer_pos0;
@@ -139,6 +139,8 @@ static tuple<Volume, Position> build_specScFiCAL_module(const Detector& descript
   double sx = mod_x.attr<double>(_Unicode(sizex));
   double sy = mod_x.attr<double>(_Unicode(sizey));
   double sz = mod_x.attr<double>(_Unicode(sizez));
+  double moduleCoatX = mod_x.attr<double>(_Unicode(coatSizeX));
+  double moduleCoatY = mod_x.attr<double>(_Unicode(coatSizeY));
 
   Position modSize(sx, sy, sz);
 
@@ -176,8 +178,8 @@ static tuple<Volume, Position> build_specScFiCAL_module(const Detector& descript
   int num_fbX = int(modSize.x() / (fbSize.x() + 2.0 * fb_SpaceXY));
   int num_fbY = int(modSize.y() / (fbSize.y() + 2.0 * fb_SpaceXY));
 
-  double fb_xpos0 = -(modSize.x() / 2.0) + (fbSize.x() / 2.0) + fb_SpaceXY;
-  double fb_ypos0 = -(modSize.y() / 2.0) + (fbSize.y() / 2.0) + fb_SpaceXY;
+  double fb_xpos0 = -(modSize.x() / 2.0) + (fbSize.x() / 2.0) + fb_SpaceXY + moduleCoatX;
+  double fb_ypos0 = -(modSize.y() / 2.0) + (fbSize.y() / 2.0) + fb_SpaceXY + moduleCoatY;
   int nblock      = 0;
 
   for (int iy = 0; iy < num_fbY; iy++) {
@@ -191,7 +193,7 @@ static tuple<Volume, Position> build_specScFiCAL_module(const Detector& descript
     }
   }
 
-  //fiber placement and description in blocks
+  //----------fiber placement and description in blocks----------------------------------------------------
   auto fiberMat = description.material(fiber_tube.attr<std::string>(_Unicode(material)));
   Tube fiberShape(0., fr, fbSize.z() / 2.0);
   Volume fiberVol("fiber_vol", fiberShape, fiberMat);
