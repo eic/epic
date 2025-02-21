@@ -161,7 +161,7 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector /
       Torus s_bend_solid(rOuter2+bendRadius, rOuter2-thickness,rOuter2, 0.0,abs(bendAngle)); 
 
       //Create a vacuum torus to place inside the solid segment
-      Torus s_bend_vac(rOuter2+bendRadius, 0, rOuter2-thickness, 0, bendAngle);
+      Torus s_bend_vac(rOuter2+bendRadius, 0, rOuter2-thickness, 0, abs(bendAngle));
 
       // //Create the volumes
       Volume v_bend_soild("v_bend_solid_" + names[pipeN], s_bend_solid, m_Al);
