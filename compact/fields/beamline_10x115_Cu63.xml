@@ -60,7 +60,7 @@
     They are not perfectly ten-sigma for reasons of physical geometry.
     </comment>
 
-	<constant name="offset_central_RP_section" value ="0.71*cm"/>
+        <constant name="offset_central_RP_section" value ="0.71*cm"/>
     <constant name="offset_intermediate_1_RP_section" value ="0.55*cm"/>
     <constant name="offset_intermediate_2_RP_section" value ="0.0*cm"/>
     <constant name="offset_outer_RP_section" value ="0.0*cm"/>
