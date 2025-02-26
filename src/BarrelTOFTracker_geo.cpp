@@ -295,15 +295,17 @@ static Ref_t create_TOFBarrel(Detector& description, xml_h e, SensitiveDetector 
         double start_y = getAttrOrDefault<double>(x_comp_t, _Unicode(start_y), 0);
         // z-locatino of the center of all sensors (All sensors appears at the same z-layer
         double start_z = getAttrOrDefault<double>(x_comp_t, _Unicode(start_z), 0);
-        // central ring is located to the right of the ny_before_ring th sensor
-        int ny_before_ring = getAttrOrDefault<int>(x_comp_t, _Unicode(ny_before_ring), 0);
         // number of column of sensors for a normal sized sensor (as opposed to the half sensors near the edge
         int n_columns = getAttrOrDefault<int>(x_comp_t, _Unicode(ncolumns), 1);
-        // Extra width caused by the ring
-        // |<--sensors_ydist-->|<--sensors_ydist-->|<-----ring_extra_width------->|<--sensors_ydist-->|
-        //   |<xcomp.width()>|   |<xcomp.width()>|                                   |<xcomp.width()>|
-        //   ring_extra_width is the extra width between boundaries of the sensor boundaries (including dead space)
-        double ring_extra_width = getAttrOrDefault<double>(x_comp_t, _Unicode(ring_extra_width), 0);
+        // Illustration of variables when n_columns = 2
+        //
+        //                    |<-------------sensors_ydist------------>|<-------------sensors_ydist------------>|
+        //   |<xcomp.length()>|<xcomp.length()>|      |<xcomp.length()>|<xcomp.length()>|               |<xcomp.length()>|
+        //   |   sensor with n_columns = 2     |      |   sensor with n_columns = 2     |               |   half sensor  |
+        //
+        //   y-dist is the distance between centers of sensors
+        //   each xcomp represent a column of cell
+        //   sensor is just n_columns of xcomp placing side by side
         auto half_length_str =
             getAttrOrDefault<std::string>(x_comp_t, _Unicode(half_length), "none");
 
@@ -339,8 +341,6 @@ static Ref_t create_TOFBarrel(Detector& description, xml_h e, SensitiveDetector 
             }
             // return current_y to the center of the sensor
             current_y += tmp_sensors_ydist;
-            if (ny + 1 == ny_before_ring)
-              current_y += ring_extra_width;
           }
           current_x += sensors_xdist;
         }
