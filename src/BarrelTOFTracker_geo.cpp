@@ -177,8 +177,7 @@ static Ref_t create_TOFBarrel(Detector& description, xml_h e, SensitiveDetector 
       xml_comp_t x_rot  = x_comp.rotation(false);
       auto make_box     = [&](double width, double length, double thickness, double pos_x = 0,
                           double pos_y = 0, double pos_z = 0, double rot_x = 0, double rot_y = 0,
-                          double rot_z = 0, int column_ID = 1, bool z_stacking = true,
-                          bool increment_sensor_number = true) {
+                          double rot_z = 0, bool z_stacking = true, int segmentation_id = 0) {
         // Utility variable for the relative z-offset based off the previous components
         const double zoff = thickness_sum + thickness / 2.0;
 
@@ -223,10 +222,8 @@ static Ref_t create_TOFBarrel(Detector& description, xml_h e, SensitiveDetector 
         c_vol.setLimitSet(description, x_comp.limitsStr());
         c_vol.setVisAttributes(description, x_comp.visStr());
         if (x_comp.isSensitive()) {
-          pv.addPhysVolID("sensor", sensor_number);
-          pv.addPhysVolID("y", column_ID);
-          if (increment_sensor_number)
-            sensor_number++;
+          pv.addPhysVolID("sensor", sensor_number++);
+	  pv.addPhysVolID("segmentation_id", segmentation_id);
           c_vol.setSensitiveDetector(sens);
           sensitives[m_nam].push_back(pv);
           module_thicknesses[m_nam] = {thickness_so_far + thickness / 2.0,
@@ -295,17 +292,16 @@ static Ref_t create_TOFBarrel(Detector& description, xml_h e, SensitiveDetector 
         double start_y = getAttrOrDefault<double>(x_comp_t, _Unicode(start_y), 0);
         // z-locatino of the center of all sensors (All sensors appears at the same z-layer
         double start_z = getAttrOrDefault<double>(x_comp_t, _Unicode(start_z), 0);
-        // number of column of sensors for a normal sized sensor (as opposed to the half sensors near the edge
-        int n_columns = getAttrOrDefault<int>(x_comp_t, _Unicode(ncolumns), 1);
-        // Illustration of variables when n_columns = 2
+        // Illustration of variables
         //
-        //                    |<-------------sensors_ydist------------>|<-------------sensors_ydist------------>|
-        //   |<xcomp.length()>|<xcomp.length()>|      |<xcomp.length()>|<xcomp.length()>|               |<xcomp.length()>|
-        //   |   sensor with n_columns = 2     |      |   sensor with n_columns = 2     |               |   half sensor  |
+        //               |<-------------sensors_ydist------------>|<-------------sensors_ydist------------>|
+        //   |      <xcomp.length()>       |          |      <xcomp.length()>       |          |helf_sensor|
         //
         //   y-dist is the distance between centers of sensors
         //   each xcomp represent a column of cell
-        //   sensor is just n_columns of xcomp placing side by side
+	//   half sensor has a width of 0.5*xcomp.length()
+	//   In a half sensor, the sensor center is aligned with the edge, ensuring that `sensors_ydist` remains centered on a full sensor.
+	//   Weather the half sensor is placed to the left or right of sensor_ydist depends on half_sensor_str below
         auto half_length_str =
             getAttrOrDefault<std::string>(x_comp_t, _Unicode(half_length), "none");
 
@@ -313,39 +309,43 @@ static Ref_t create_TOFBarrel(Detector& description, xml_h e, SensitiveDetector 
         for (int nx = 0; nx < nsensors_x; ++nx) {
           double current_y = start_y;
           for (int ny = 0; ny < nsensors_y; ++ny) {
-            double tmp_sensors_ydist  = sensors_ydist;
-            int n_columns_this_sensor = n_columns;
-            // distance between centers to the next sensor also has to be reduced by 0.5 times the length of column of cells
-            if (((half_length_str == "left" || half_length_str == "both") && ny == 0)) {
-              n_columns_this_sensor /= 2;
-              current_y += 0.5 * length;
-              tmp_sensors_ydist -= 0.5 * length;
-            } else if (((half_length_str == "right" || half_length_str == "both") &&
-                        ny == nsensors_y - 1)) {
-              n_columns_this_sensor /= 2;
-              current_y -= 0.5 * length;
+            double sensor_length     = length;
+            double tmp_sensors_ydist = sensors_ydist;
+	    bool half_sensor = false;
+            // when we draw half a sensor, the center has to be shifted by 0.25 times the length of a sensor
+            // distance between centers to the next sensor also has to be reduced by 0.25 times the length of a sensor
+            if ((half_length_str == "left" || half_length_str == "both") && ny == 0) {
+              sensor_length = 0.5 * length;
+              current_y += 0.25 * length;
+              tmp_sensors_ydist -= 0.25 * length;
+	      half_sensor = true;
+            }
+            // same idea, but when you are drawing to the right, the right sensor center has to move in -y direction
+            if ((half_length_str == "right" || half_length_str == "both") && ny == nsensors_y - 1) {
+              sensor_length = 0.5 * length;
+              current_y -= 0.25 * length;
               tmp_sensors_ydist += 0.5 * length;
+	      half_sensor = true;
             }
 
-            double sensor_length = length * n_columns_this_sensor;
-            for (int ncol = 0; ncol < n_columns_this_sensor; ++ncol) {
-              bool last_column_in_sensor = ncol == n_columns_this_sensor - 1;
-              bool last_sensor_in_stave =
-                  (nx == nsensors_x - 1) && (ny == nsensors_y - 1) && last_column_in_sensor;
-              make_box(
-                  width, length, thickness, current_x,
-                  current_y + ncol * length - 0.5 * sensor_length + 0.5 * length, start_z, rot_x,
-                  rot_y, rot_z, ncol + 1, last_sensor_in_stave && !keep_layer,
-                  last_column_in_sensor); // all sensors are located at the same z-layer, keep the same sensor number for all columns in the same sensor
-              // increment z-layers only at the end, after the last sensor is added
-            }
+            bool last_sensor_in_stave = ((nx == nsensors_x - 1) && (ny == nsensors_y - 1));
+	    bool segmentation_id = half_sensor? 1 : 0;// keys to distinguish segmentation class for half sensor
+						      //
+            make_box(
+                width, sensor_length, thickness, current_x,
+                current_y, start_z, rot_x,
+                rot_y, rot_z, last_sensor_in_stave && !keep_layer,
+                segmentation_id); // all sensors are located at the same z-layer, keep the same sensor number for all columns in the same sensor
+            // increment z-layers only at the end, after the last sensor is added
             // return current_y to the center of the sensor
             current_y += tmp_sensors_ydist;
           }
           current_x += sensors_xdist;
         }
       } else
-        make_box(width, length, thickness, pos_x, pos_y, pos_z, rot_x, rot_y, rot_z, 1,
+        make_box(width, length, thickness, 
+                 pos_x, pos_y, pos_z, 
+		 rot_x, rot_y, rot_z, 
                  !keep_layer);
     }
   }
