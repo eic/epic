@@ -223,7 +223,7 @@ static Ref_t create_TOFBarrel(Detector& description, xml_h e, SensitiveDetector 
         c_vol.setVisAttributes(description, x_comp.visStr());
         if (x_comp.isSensitive()) {
           pv.addPhysVolID("sensor", sensor_number++);
-	  pv.addPhysVolID("segmentation_id", segmentation_id);
+          pv.addPhysVolID("segmentation_id", segmentation_id);
           c_vol.setSensitiveDetector(sens);
           sensitives[m_nam].push_back(pv);
           module_thicknesses[m_nam] = {thickness_so_far + thickness / 2.0,
@@ -299,9 +299,9 @@ static Ref_t create_TOFBarrel(Detector& description, xml_h e, SensitiveDetector 
         //
         //   y-dist is the distance between centers of sensors
         //   each xcomp represent a column of cell
-	//   half sensor has a width of 0.5*xcomp.length()
-	//   In a half sensor, the sensor center is aligned with the edge, ensuring that `sensors_ydist` remains centered on a full sensor.
-	//   Weather the half sensor is placed to the left or right of sensor_ydist depends on half_sensor_str below
+        //   half sensor has a width of 0.5*xcomp.length()
+        //   In a half sensor, the sensor center is aligned with the edge, ensuring that `sensors_ydist` remains centered on a full sensor.
+        //   Weather the half sensor is placed to the left or right of sensor_ydist depends on half_sensor_str below
         auto half_length_str =
             getAttrOrDefault<std::string>(x_comp_t, _Unicode(half_length), "none");
 
@@ -311,30 +311,30 @@ static Ref_t create_TOFBarrel(Detector& description, xml_h e, SensitiveDetector 
           for (int ny = 0; ny < nsensors_y; ++ny) {
             double sensor_length     = length;
             double tmp_sensors_ydist = sensors_ydist;
-	    bool half_sensor = false;
+            bool half_sensor         = false;
             // when we draw half a sensor, the center has to be shifted by 0.25 times the length of a sensor
             // distance between centers to the next sensor also has to be reduced by 0.25 times the length of a sensor
             if ((half_length_str == "left" || half_length_str == "both") && ny == 0) {
               sensor_length = 0.5 * length;
               current_y += 0.25 * length;
               tmp_sensors_ydist -= 0.25 * length;
-	      half_sensor = true;
+              half_sensor = true;
             }
             // same idea, but when you are drawing to the right, the right sensor center has to move in -y direction
             if ((half_length_str == "right" || half_length_str == "both") && ny == nsensors_y - 1) {
               sensor_length = 0.5 * length;
               current_y -= 0.25 * length;
               tmp_sensors_ydist += 0.5 * length;
-	      half_sensor = true;
+              half_sensor = true;
             }
 
             bool last_sensor_in_stave = ((nx == nsensors_x - 1) && (ny == nsensors_y - 1));
-	    bool segmentation_id = half_sensor? 1 : 0;// keys to distinguish segmentation class for half sensor
-						      //
+            bool segmentation_id =
+                half_sensor ? 1 : 0; // keys to distinguish segmentation class for half sensor
+                //
             make_box(
-                width, sensor_length, thickness, current_x,
-                current_y, start_z, rot_x,
-                rot_y, rot_z, last_sensor_in_stave && !keep_layer,
+                width, sensor_length, thickness, current_x, current_y, start_z, rot_x, rot_y, rot_z,
+                last_sensor_in_stave && !keep_layer,
                 segmentation_id); // all sensors are located at the same z-layer, keep the same sensor number for all columns in the same sensor
             // increment z-layers only at the end, after the last sensor is added
             // return current_y to the center of the sensor
@@ -343,10 +343,7 @@ static Ref_t create_TOFBarrel(Detector& description, xml_h e, SensitiveDetector 
           current_x += sensors_xdist;
         }
       } else
-        make_box(width, length, thickness, 
-                 pos_x, pos_y, pos_z, 
-		 rot_x, rot_y, rot_z, 
-                 !keep_layer);
+        make_box(width, length, thickness, pos_x, pos_y, pos_z, rot_x, rot_y, rot_z, !keep_layer);
     }
   }
 
