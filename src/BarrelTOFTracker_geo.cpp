@@ -331,7 +331,7 @@ static Ref_t create_TOFBarrel(Detector& description, xml_h e, SensitiveDetector 
             bool last_sensor_in_stave = ((nx == nsensors_x - 1) && (ny == nsensors_y - 1));
             bool segmentation_id =
                 half_sensor ? 1 : 0; // keys to distinguish segmentation class for half sensor
-                //
+                                     //
             make_box(
                 width, sensor_length, thickness, current_x, current_y, start_z, rot_x, rot_y, rot_z,
                 last_sensor_in_stave && !keep_layer,
