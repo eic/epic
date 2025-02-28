@@ -135,9 +135,9 @@
             length="BarrelTOF_Sensor_length" 
             thickness="0.5*BarrelTOF_Sensor_thickness" 
             vis="TOFSensorVis" >
-            <GridSensors 
-                start_x="BarrelTOF_Sensor_position" 
-                start_y="0.5*BarrelTOF2_length-(BarrelTOF2_Sensor_amount-1)*(BarrelTOF_Sensor_length+BarrelTOF_Sensor_deadspaceY)+BarrelTOF2_zoffset" 
+            <GridSensors
+                start_x="BarrelTOF_Sensor_position"
+                start_y="0.5*BarrelTOF2_length-(BarrelTOF2_Sensor_amount-1)*(BarrelTOF_Sensor_length+BarrelTOF_Sensor_deadspaceY)+BarrelTOF2_zoffset"
                 start_z="0"
                 xdist="0" 
                 ydist="BarrelTOF_Sensor_length+BarrelTOF_Sensor_deadspaceY" 
