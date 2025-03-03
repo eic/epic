@@ -14,31 +14,33 @@
 
     <comment> Electron magnet dimensions and positions </comment>
 
-    <constant name="Q1eR_InnerRadius"     value="67.5*mm"/>
-    <constant name="Q1eR_Length"          value="1.78*m"/>
+    <constant name="Q1eR_InnerRadius"     value="64.3*mm"/>
+    <constant name="Q1eR_Length"          value="1.883*m"/>
     <constant name="Q1eR_CenterPosition"  value="-6.2*m"/>
 
-    <constant name="Q2eR_InnerRadius"     value="78.0*mm"/>
+    <constant name="Q2eR_InnerRadius"     value="77.0*mm"/>
     <constant name="Q2eR_Length"          value="1.4*m"/>
     <constant name="Q2eR_CenterPosition"  value="-8.3*m"/>
 
-    <constant name="B2AeR_InnerRadius"    value="90.0*mm"/>
+    <constant name="B2AeR_InnerRadius"    value="98.0*mm"/>
     <constant name="B2AeR_Length"         value="1.78*m"/>
     <constant name="B2AeR_CenterPosition" value="-10.5*m"/>
 
-    <constant name="B2BeR_InnerRadius"    value="111.0*mm"/>
-    <constant name="B2BeR_Length"         value="3.18*m"/>
-    <constant name="B2BeR_CenterPosition" value="-13.275*m"/>
+    <constant name="B2BeR_InnerRadius"    value="98.0*mm"/>
+    <constant name="B2BeR_Length"         value="5.500092*m"/>
+    <constant name="B2BeR_Center_x"       value="-27.5*mm"/>
+    <constant name="B2BeR_CenterPosition" value="-19.50*m"/>
+    <constant name="B2BeR_Theta"          value="0.01*rad"/>
 
-    <constant name="Q3eR_InnerRadius"     value="0.05*m"/>
-    <constant name="Q3eR_Length"          value="0.6*m"/>
-    <constant name="Q3eR_StartZ"          value="-37.696067*m"/>
-    <constant name="Q3eR_StartX"          value="-0.460027*m"/>
-    <constant name="Q3eR_EndZ"            value="-38.295969*m"/>
-    <constant name="Q3eR_EndX"            value="-0.470873*m"/>
-    <constant name="Q3eR_XPosition"       value="-0.46545*m"/>
-    <constant name="Q3eR_Theta"           value="0.0180766389*rad"/>
-    <constant name="Q3eR_CenterPosition"  value="-37.996018*m"/>
+    <constant name="Q3eR_InnerRadius"     value="64*mm"/>
+    <constant name="Q3eR_Length"          value="0.25*m"/>
+    <constant name="Q3eR_StartZ"          value="-42.04775868*m"/>
+    <constant name="Q3eR_StartX"          value="-0.451264664*m"/>
+    <constant name="Q3eR_EndZ"            value="-42.29759669*m"/>
+    <constant name="Q3eR_EndX"            value="-0.456264331*m"/>
+    <constant name="Q3eR_XPosition"       value="-0.45376*m"/>
+    <constant name="Q3eR_Theta"           value="0.02*rad"/>
+    <constant name="Q3eR_CenterPosition"  value="-42.1726*m"/>
 
     <comment> Note: Placements for Q4eR, B3eR, B4eR, B5eR, B6eR, B7eR
               are approximate (valid to within ~1 cm).
@@ -184,7 +186,7 @@
     <comment> Dipole focal point in global coordinates </comment>
     <constant name="Dipole_Focus_X"       value="0.0*mm"/>
     <constant name="Dipole_Focus_Y"       value="0.0*mm"/>
-    <constant name="Dipole_Focus_Z"       value="Q3eR_StartZ-Q3eR_StartX/tan(Beam_Theta)"/>
+    <constant name="Dipole_Focus_Z"       value="Q3eR_CenterPosition-Q3eR_XPosition/tan(Beam_Theta)"/>
 
     <comment> Central pipe dimensions </comment>
     <constant name="Beam_Length"          value="(Dipole_Focus_Z-Q3eR_StartZ)/cos(Beam_Theta)"/>
@@ -195,7 +197,7 @@
     <comment> Entry box joining magnets, lumi and tagger systems </comment>
     <constant name="Exit_Height"          value="B2BeR_InnerRadius"/>
     <constant name="Exit_Width"           value="B2BeR_InnerRadius"/>
-    <constant name="Exit_Theta"           value="0.07*rad"/>
+    <constant name="Exit_Theta"           value="0.10*rad"/>
 
     <comment> Timepix4 ASIC dimensions </comment>
     <constant name="Timepix4height"       value="28.16*mm"/>
@@ -209,8 +211,8 @@
     <constant name="Tag_Cal_1_Depth"      value="300*mm"/>
     <constant name="Tagger1_Length"       value="Tag_Tracker_1_Depth"/>
 
-    <constant name="Tagger1_Min_Theta"    value="0.0262*rad"/>
-    <constant name="Tagger1_Max_Theta"    value="0.0410*rad"/>
+    <constant name="Tagger1_Min_Theta"    value="0.03*rad"/>
+    <constant name="Tagger1_Max_Theta"    value="0.0420*rad"/>
     <constant name="Tagger1_Min_Offset"   value="Q3eR_InnerRadius"/>
 
     <constant name="Tagger2_Width"        value="147.84*mm"/>
@@ -220,7 +222,7 @@
     <constant name="Tag_Cal_2_Depth"      value="Tag_Cal_1_Depth"/>
     <constant name="Tagger2_Length"       value="Tag_Tracker_2_Depth"/>
 
-    <constant name="Tagger2_Min_Theta"    value="0.02*rad"/>
+    <constant name="Tagger2_Min_Theta"    value="0.022*rad"/>
     <constant name="Tagger2_Max_Theta"    value="Tagger1_Min_Theta+0.000*rad"/>
     <constant name="Tagger2_Min_Offset"   value="Q3eR_InnerRadius+Backwards_Box_Wall"/>
 
@@ -231,7 +233,7 @@
     <constant name="LumiBeamDiv_pref"     value="5 * 211e-6*rad"/>
 
     <!-- Lumi Exit Window -->
-    <constant name="LumiWin_Zstart"       value="-18.5*m"/>
+    <constant name="LumiWin_Zstart"       value="-25.5*m"/>
     <constant name="LumiWin_thickness"    value="1*cm"/>
     <constant name="LumiWin_R"            value="4*cm"/> <!-- opening radius of tagger box -->
     <constant name="LumiWin_Z"            value="LumiWin_Zstart - LumiWin_thickness/2."/>

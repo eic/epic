@@ -37,8 +37,8 @@
       </pipe>
       <pipe id="6" name="Pipe_B2AeR_to_B2BeR"/>
       <pipe id="7" name="Pipe_in_B2BeR"
-        xcenter="0" zcenter="B2BeR_CenterPosition"
-        length="B2BeR_Length" theta="0"
+        xcenter="B2BeR_Center_x" zcenter="B2BeR_CenterPosition"
+        length="B2BeR_Length" theta="B2BeR_Theta"
         rout1="B2BeR_InnerRadius" rout2="B2BeR_InnerRadius">
       </pipe>
     </detector>
@@ -59,28 +59,19 @@
       <coil dx="2*cm" dy="1.5*cm" /><!--unchecked-->
     </detector>
 
-    <detector name="Magnet_B2AeR" type="ip6_CylindricalDipoleMagnet" vis="FFMagnetVis">
-      <placement  x="0" y="0" z="B2AeR_CenterPosition" theta="0*rad"/>
-      <dimensions x="B2AeR_InnerRadius*4" y="B2AeR_InnerRadius*4" z="B2AeR_Length" r="1.5*B2AeR_InnerRadius"/>
-      <apperture  x="B2AeR_InnerRadius*2" y="B2AeR_InnerRadius*2" r="B2AeR_InnerRadius"/>
-      <coil dx="2*cm" dy="1.5*cm" /><!--unchecked-->
-    </detector>
-
     <detector name="Magnet_B2BeR" type="ip6_CylindricalDipoleMagnet" vis="FFMagnetVis">
-      <placement  x="0" y="0" z="B2BeR_CenterPosition" theta="0*rad"/>
+      <placement  x="B2BeR_Center_x" y="0" z="B2BeR_CenterPosition" theta="B2BeR_Theta"/>
       <dimensions x="B2BeR_InnerRadius*4" y="B2BeR_InnerRadius*4" z="B2BeR_Length" r="1.5*B2BeR_InnerRadius"/>
       <apperture  x="B2BeR_InnerRadius*2" y="B2BeR_InnerRadius*2" r="B2BeR_InnerRadius"/>
       <coil dx="2*cm" dy="1.5*cm" /><!--unchecked-->
     </detector>
 
-    <detector
-    name="Magnets_Q3eR"
-    type="CylindricalMagnetChain"
-    vis="RedVis">
-      <magnet id="0" name="Magnet_Q3eR"
-        x="(Q3eR_StartX+Q3eR_EndX)/2" y="0" z="(Q3eR_StartZ+Q3eR_EndZ)/2" theta="Q3eR_Theta"
-        length="Q3eR_Length" rin="Q3eR_InnerRadius" rout="4*Q3eR_InnerRadius">
-      </magnet>
+
+    <detector name="Magnets_Q3eR" type="ip6_CylindricalDipoleMagnet" vis="FFMagnetVis">
+      <placement  x="Q3eR_XPosition" y="0" z="Q3eR_CenterPosition" theta="Q3eR_Theta"/>
+      <dimensions x="Q3eR_InnerRadius*4" y="Q3eR_InnerRadius*4" z="Q3eR_Length" r="1.5*Q3eR_InnerRadius"/>
+      <apperture  x="Q3eR_InnerRadius*2" y="Q3eR_InnerRadius*2" r="Q3eR_InnerRadius"/>
+      <coil dx="2*cm" dy="1.5*cm" /><!--unchecked-->
     </detector>
 
   </detectors>
