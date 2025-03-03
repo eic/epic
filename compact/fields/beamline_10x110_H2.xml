@@ -14,14 +14,13 @@
        Relevent values in the tables scale linearly with beam energy
     </comment>
 
-
     <!-- Beamline -->
-    <constant name="Q1eR_Gradient"  value="-0.739741*tesla/meter/GeV*ElectronBeamEnergy"/>
-    <constant name="Q2eR_Gradient"  value="0.66821*tesla/meter/GeV*ElectronBeamEnergy"/>
-    <constant name="Q3eR_Gradient"  value="0.21674*tesla/meter/GeV*ElectronBeamEnergy"/>
+    <constant name="Q1eR_Gradient"  value="3.33564*(-0.41401)*tesla/meter/GeV*ElectronBeamEnergy"/>
+    <constant name="Q2eR_Gradient"  value="3.33564*0.316408*tesla/meter/GeV*ElectronBeamEnergy"/>
+    <constant name="Q3eR_Gradient"  value="3.33564*0.111625*tesla/meter/GeV*ElectronBeamEnergy"/>
 
-    <constant name="B2AeR_B"        value="0.0106667*tesla/GeV*ElectronBeamEnergy"/>
-    <constant name="B2BeR_B"        value="0.0132222*tesla/GeV*ElectronBeamEnergy"/>
+    <constant name="B2AeR_B"        value="3.33564*0.0*tesla/GeV*ElectronBeamEnergy"/>
+    <constant name="B2BeR_B"        value="3.33564*0.00364*tesla/GeV*ElectronBeamEnergy"/>
 
     <!-- Luminosity System -->
     <constant name="LumiSweepMag_B" value="1/1.2*tesla"/> <!-- Currently left static before tuning of acceptance -->
