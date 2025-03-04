@@ -4,17 +4,7 @@ features:
     marco:
   tracking:
     definitions_craterlake:
-    vertex_barrel:
-    silicon_barrel:
-    mpgd_barrel:
-    support_service_craterlake:
-    mpgd_outerbarrel:
-    mpgd_forward_endcap:
-    mpgd_backward_endcap:
-    silicon_disks:
-    tof_barrel:
-    tof_endcap:
   far_forward:
-    default:
+    B0_tracker:
   far_backward:
     default:
