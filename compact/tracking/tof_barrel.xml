@@ -313,6 +313,7 @@
                 nx="1"
                 ny="BarrelTOF2_Sensor_amount_back"
                 />
+        </module_component>
         <module_component 
             name="ASICBackTop" 
             material="Kapton" 
@@ -348,8 +349,6 @@
                     nx="1" 
                     ny="BarrelTOF2_Sensor_amount-2"/>
         </module_component>
-
-
 
       </module>
       <layer module="BarrelTOF_Module1" id="1" vis="TOFLayerVis">
