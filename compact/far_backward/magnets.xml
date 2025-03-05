@@ -78,7 +78,7 @@
     type="CylindricalMagnetChain"
     vis="RedVis">
       <magnet id="0" name="Magnet_Q3eR"
-        x="(Q3eR_StartX+Q3eR_EndX)/2" y="0" z="(Q3eR_StartZ+Q3eR_EndZ)/2" theta="Q3eR_Theta"
+        x="Q3eR_XPosition" y="0" z="Q3eR_CenterPosition" theta="Q3eR_Theta"
         length="Q3eR_Length" rin="Q3eR_InnerRadius" rout="4*Q3eR_InnerRadius">
       </magnet>
     </detector>
@@ -105,7 +105,7 @@
 
     <field name="Magnet_Q3eR_Field" type="MultipoleMagnet">
       <shape type="Tube" rmax="Q3eR_InnerRadius" dz="Q3eR_Length/2"/>
-      <position x="0" y="0" z="Q3eR_CenterPosition"/>
+      <position x="Q3eR_XPosition" y="0" z="Q3eR_CenterPosition"/>
       <rotation x="0" y="Q3eR_Theta" z="0"/>
       <coefficient/>
       <coefficient coefficient="Q3eR_Gradient"/>
