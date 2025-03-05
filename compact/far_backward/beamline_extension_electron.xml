@@ -25,36 +25,31 @@
       <pipe id="2" name="Pipe_in_Q3eR"
         xcenter="Q3eR_CenterX" zcenter="Q3eR_CenterZ"
         length="Q3eR_Length" theta="Q3eR_Theta"
-        rout1="Q3eR_InnerRadius" rout2="Q3eR_InnerRadius"
-        limits="kill_limits">
+        rout1="Q3eR_InnerRadius" rout2="Q3eR_InnerRadius">
       </pipe>
       <pipe id="3" name="Pipe_Q3eR_to_SQ4eR"/>
       <pipe id="4" name="Pipe_in_SQ4eR"
         xcenter="SQ4eR_CenterX" zcenter="SQ4eR_CenterZ"
         length="SQ4eR_Length" theta="SQ4eR_Theta"
-        rout1="SQ4eR_InnerRadius" rout2="SQ4eR_InnerRadius"
-        limits="kill_limits">
+        rout1="SQ4eR_InnerRadius" rout2="SQ4eR_InnerRadius">
       </pipe>
       <pipe id="5" name="Pipe_SQ4eR_to_Q4eR"/>
       <pipe id="6" name="Pipe_in_Q4eR"
         xcenter="Q4eR_CenterX" zcenter="Q4eR_CenterZ"
         length="Q4eR_Length" theta="Q4eR_Theta"
-        rout1="Q4eR_InnerRadius" rout2="Q4eR_InnerRadius"
-        limits="kill_limits">
+        rout1="Q4eR_InnerRadius" rout2="Q4eR_InnerRadius">
       </pipe>
       <pipe id="7" name="Pipe_Q4eR_to_SQ5eR"/>
       <pipe id="8" name="Pipe_in_SQ5eR"
         xcenter="SQ5eR_CenterX" zcenter="SQ5eR_CenterZ"
         length="SQ5eR_Length" theta="SQ5eR_Theta"
-        rout1="SQ5eR_InnerRadius" rout2="SQ5eR_InnerRadius"
-        limits="kill_limits">
+        rout1="SQ5eR_InnerRadius" rout2="SQ5eR_InnerRadius">
       </pipe>
       <pipe id="9" name="Pipe_SQ5eR_to_Q5eR"/>
       <pipe id="10" name="Pipe_in_Q5eR"
         xcenter="Q5eR_CenterX" zcenter="Q5eR_CenterZ"
         length="Q5eR_Length" theta="Q5eR_Theta"
-        rout1="Q5eR_InnerRadius" rout2="Q5eR_InnerRadius"
-        limits="kill_limits">
+        rout1="Q5eR_InnerRadius" rout2="Q5eR_InnerRadius">
       </pipe>
       <pipe id="11" name="Pipe_Q5eR_to_B3eR"/>
       <pipe id="12" name="Pipe_in_B3eR"
@@ -63,18 +58,46 @@
         rout1="B3eR_InnerRadius" rout2="B3eR_InnerRadius">
       </pipe>
       <pipe id="13" name="Pipe_B3eR_to_SQ6eR"/>
-      <pipe id="8" name="Pipe_in_SQ6eR"
+      <pipe id="14" name="Pipe_in_SQ6eR"
         xcenter="SQ6eR_CenterX" zcenter="SQ6eR_CenterZ"
         length="SQ6eR_Length" theta="SQ6eR_Theta"
-        rout1="SQ6eR_InnerRadius" rout2="SQ6eR_InnerRadius"
-        limits="kill_limits">
+        rout1="SQ6eR_InnerRadius" rout2="SQ6eR_InnerRadius">
       </pipe>
-      <pipe id="9" name="Pipe_SQ6eR_to_Q6eR"/>
-      <pipe id="10" name="Pipe_in_Q6eR"
+      <pipe id="15" name="Pipe_SQ6eR_to_Q6eR"/>
+      <pipe id="16" name="Pipe_in_Q6eR"
         xcenter="Q6eR_CenterX" zcenter="Q6eR_CenterZ"
         length="Q6eR_Length" theta="Q6eR_Theta"
-        rout1="Q6eR_InnerRadius" rout2="Q6eR_InnerRadius"
-        limits="kill_limits">
+        rout1="Q6eR_InnerRadius" rout2="Q6eR_InnerRadius">
+      </pipe>
+      <pipe id="17" name="Pipe_Q6eR_to_SQ7eR"/>
+      <pipe id="18" name="Pipe_in_SQ7eR"
+        xcenter="SQ7eR_CenterX" zcenter="SQ7eR_CenterZ"
+        length="SQ7eR_Length" theta="SQ7eR_Theta"
+        rout1="SQ7eR_InnerRadius" rout2="SQ7eR_InnerRadius">
+      </pipe>
+      <pipe id="19" name="Pipe_SQ7eR_to_Q7eR"/>
+      <pipe id="20" name="Pipe_in_Q7eR"
+        xcenter="Q7eR_CenterX" zcenter="Q7eR_CenterZ"
+        length="Q7eR_Length" theta="Q7eR_Theta"
+        rout1="Q7eR_InnerRadius" rout2="Q7eR_InnerRadius">
+      </pipe>
+      <pipe id="21" name="Pipe_Q7eR_to_SQ8eR"/>
+      <pipe id="22" name="Pipe_in_SQ8eR"
+        xcenter="SQ8eR_CenterX" zcenter="SQ8eR_CenterZ"
+        length="SQ8eR_Length" theta="SQ8eR_Theta"
+        rout1="SQ8eR_InnerRadius" rout2="SQ8eR_InnerRadius">
+      </pipe>
+      <pipe id="23" name="Pipe_SQ8eR_to_Q8eR"/>
+      <pipe id="24" name="Pipe_in_Q8eR"
+        xcenter="Q8eR_CenterX" zcenter="Q8eR_CenterZ"
+        length="Q8eR_Length" theta="Q8eR_Theta"
+        rout1="Q8eR_InnerRadius" rout2="Q8eR_InnerRadius">
+      </pipe>
+      <pipe id="25" name="Pipe_Q8eR_to_C1eR"/>
+      <pipe id="26" name="Pipe_in_C1eR"
+        xcenter="C1eR_CenterX" zcenter="C1eR_CenterZ"
+        length="C1eR_Length" theta="C1eR_Theta"
+        rout1="C1eR_InnerRadius" rout2="C1eR_InnerRadius">
       </pipe>
     </detector>
 
@@ -112,6 +135,27 @@
         x="Q6eR_CenterX" y="0" z="Q6eR_CenterZ" theta="Q6eR_Theta"
         length="Q6eR_Length" rin="Q6eR_InnerRadius" rout="Q6eR_OuterRadius">
       </magnet>
+      <magnet id="7" name="Magnet_SQ7eR"
+        x="SQ7eR_CenterX" y="0" z="SQ7eR_CenterZ" theta="SQ7eR_Theta"
+        length="SQ7eR_Length" rin="SQ7eR_InnerRadius" rout="SQ7eR_OuterRadius">
+      </magnet>
+      <magnet id="8" name="Magnet_Q7eR"
+        x="Q7eR_CenterX" y="0" z="Q7eR_CenterZ" theta="Q7eR_Theta"
+        length="Q7eR_Length" rin="Q7eR_InnerRadius" rout="Q7eR_OuterRadius">
+      </magnet>
+      <magnet id="9" name="Magnet_SQ8eR"
+        x="SQ8eR_CenterX" y="0" z="SQ8eR_CenterZ" theta="SQ8eR_Theta"
+        length="SQ8eR_Length" rin="SQ8eR_InnerRadius" rout="SQ8eR_OuterRadius">
+      </magnet>
+      <magnet id="10" name="Magnet_Q8eR"
+        x="Q8eR_CenterX" y="0" z="Q8eR_CenterZ" theta="Q8eR_Theta"
+        length="Q8eR_Length" rin="Q8eR_InnerRadius" rout="Q8eR_OuterRadius">
+      </magnet>
+      <magnet id="11" name="Magnet_C1eR"
+        x="C1eR_CenterX" y="0" z="C1eR_CenterZ" theta="C1eR_Theta"
+        length="C1eR_Length" rin="C1eR_InnerRadius" rout="C1eR_OuterRadius">
+      </magnet>
+
     </detector>
 
   </detectors>

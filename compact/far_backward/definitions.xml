@@ -94,11 +94,46 @@
     <constant name="SQ6eR_Theta"           value="0.023175959"/>
 
     <constant name="Q6eR_CenterZ"         value="-56.2383*m"/>
-    <constant name="Q6eR_CenterX"         value="-0.774347*m"/>
+    <constant name="Q6eR_CenterX"         value="-0.74347*m"/>
     <constant name="Q6eR_Length"          value="1.2*m"/>
     <constant name="Q6eR_InnerRadius"     value="SQ3eR_InnerRadius"/>
     <constant name="Q6eR_OuterRadius"     value="0.2*m"/>
     <constant name="Q6eR_Theta"           value="SQ6eR_Theta"/>
+
+    <constant name="SQ7eR_CenterZ"         value="-59.8605*m"/>
+    <constant name="SQ7eR_CenterX"         value="-0.82743*m"/>
+    <constant name="SQ7eR_Length"          value="0.25*m"/>
+    <constant name="SQ7eR_InnerRadius"     value="SQ3eR_InnerRadius"/>
+    <constant name="SQ7eR_OuterRadius"     value="0.2*m"/>
+    <constant name="SQ7eR_Theta"           value="SQ6eR_Theta"/>
+
+    <constant name="Q7eR_CenterZ"         value="-60.7348*m"/>
+    <constant name="Q7eR_CenterX"         value="-0.84770*m"/>
+    <constant name="Q7eR_Length"          value="1.2*m"/>
+    <constant name="Q7eR_InnerRadius"     value="SQ3eR_InnerRadius"/>
+    <constant name="Q7eR_OuterRadius"     value="0.2*m"/>
+    <constant name="Q7eR_Theta"           value="SQ6eR_Theta"/>
+
+    <constant name="SQ8eR_CenterZ"         value="-64.3570*m"/>
+    <constant name="SQ8eR_CenterX"         value="-0.93167*m"/>
+    <constant name="SQ8eR_Length"          value="0.25*m"/>
+    <constant name="SQ8eR_InnerRadius"     value="SQ3eR_InnerRadius"/>
+    <constant name="SQ8eR_OuterRadius"     value="0.2*m"/>
+    <constant name="SQ8eR_Theta"           value="SQ6eR_Theta"/>
+
+    <constant name="Q8eR_CenterZ"         value="-65.2313*m"/>
+    <constant name="Q8eR_CenterX"         value="-0.95913*m"/>
+    <constant name="Q8eR_Length"          value="1.2*m"/>
+    <constant name="Q8eR_InnerRadius"     value="SQ3eR_InnerRadius"/>
+    <constant name="Q8eR_OuterRadius"     value="0.2*m"/>
+    <constant name="Q8eR_Theta"           value="SQ6eR_Theta"/>
+
+    <constant name="C1eR_CenterZ"         value="-68.3290*m"/>
+    <constant name="C1eR_CenterX"         value="-1.02374*m"/>
+    <constant name="C1eR_Length"          value="4*m"/>
+    <constant name="C1eR_InnerRadius"     value="SQ3eR_InnerRadius"/>
+    <constant name="C1eR_OuterRadius"     value="0.2*m"/>
+    <constant name="C1eR_Theta"           value="SQ6eR_Theta"/>
 
 
     <comment> Hadron magnet dimensions and positions </comment>
