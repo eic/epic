@@ -106,7 +106,7 @@
     <detector
     name="Magnets_Q4eR_to_B7eR"
     type="CylindricalMagnetChain"
-    vis="RedVis">
+    vis="FFMagnetVis">
       <magnet id="0" name="Magnet_SQ4eR"
         x="SQ4eR_CenterX" y="0" z="SQ4eR_CenterZ" theta="SQ4eR_Theta"
         length="SQ4eR_Length" rin="SQ4eR_InnerRadius" rout="SQ4eR_OuterRadius">

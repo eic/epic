@@ -33,6 +33,7 @@ static Ref_t create_magnet(Detector& description, xml_h e, SensitiveDetector /* 
     xml_comp_t magnet(magnet_coll);
 
     string name   = getAttrOrDefault<string>(magnet, _Unicode(name), "");
+    int id        = getAttrOrDefault<int>(magnet, _Unicode(id), 0);
     double x      = getAttrOrDefault<double>(magnet, _Unicode(x), 0);
     double y      = getAttrOrDefault<double>(magnet, _Unicode(y), 0);
     double z      = getAttrOrDefault<double>(magnet, _Unicode(z), 0);
@@ -45,9 +46,14 @@ static Ref_t create_magnet(Detector& description, xml_h e, SensitiveDetector /* 
     Tube yoke_tube(rin, rout, 0.5 * length);
     Volume v_yoke("v_yoke_" + name, yoke_tube, m_Iron);
 
-    v_yoke.setVisAttributes(description.visAttributes(vis_name));
+    v_yoke.setVisAttributes(x_det.visStr());
+    
+    auto yoke_pv = assembly.placeVolume(v_yoke, Transform3D(RotationY(theta), Position(x, y, z)));
 
-    assembly.placeVolume(v_yoke, Transform3D(RotationY(theta), Position(x, y, z)));
+    yoke_pv.addPhysVolID("element", id);
+    DetElement yoke_de(sdet, name, id);
+    yoke_de.setPlacement(yoke_pv);
+    yoke_de.setAttributes(description, v_yoke, x_det.regionStr(), x_det.limitsStr(), vis_name);
   }
 
   // Final placement
