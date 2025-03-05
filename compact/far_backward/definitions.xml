@@ -15,7 +15,7 @@
     <comment> Electron magnet dimensions and positions </comment>
 
     <constant name="Q1eR_InnerRadius"     value="64.3*mm"/>
-    <constant name="Q1eR_Length"          value="1.883*m"/>
+    <constant name="Q1eR_Length"          value="1.8*m"/>
     <constant name="Q1eR_CenterPosition"  value="-6.2*m"/>
 
     <constant name="Q2eR_InnerRadius"     value="77.0*mm"/>
