@@ -11,9 +11,9 @@
   <detectors>
 
     <comment> Electron side extended beam pipe volumes </comment>
-    <!-- Beam pipe going from Q3eR to B7eR -->
+    <!-- Beam pipe going from Q3eR to Q6eR -->
     <detector
-    name="Pipe_Q3eR_to_B7eR"
+    name="Pipe_Q3eR_to_Q6eR"
     type="BeamPipeChain"
     wall_thickness="2*mm">
       <pipe id="0" name="Pipe_in_SQ3eR"
@@ -25,44 +25,56 @@
       <pipe id="2" name="Pipe_in_Q3eR"
         xcenter="Q3eR_CenterX" zcenter="Q3eR_CenterZ"
         length="Q3eR_Length" theta="Q3eR_Theta"
-        rout1="Q3eR_InnerRadius" rout2="Q3eR_InnerRadius">
+        rout1="Q3eR_InnerRadius" rout2="Q3eR_InnerRadius"
+        limits="kill_limits">
       </pipe>
-      <pipe id="3" name="Pipe_Q3eR_to_Q4eR"/>
-      <pipe id="4" name="Pipe_in_Q4eR"
+      <pipe id="3" name="Pipe_Q3eR_to_SQ4eR"/>
+      <pipe id="4" name="Pipe_in_SQ4eR"
+        xcenter="SQ4eR_CenterX" zcenter="SQ4eR_CenterZ"
+        length="SQ4eR_Length" theta="SQ4eR_Theta"
+        rout1="SQ4eR_InnerRadius" rout2="SQ4eR_InnerRadius"
+        limits="kill_limits">
+      </pipe>
+      <pipe id="5" name="Pipe_SQ4eR_to_Q4eR"/>
+      <pipe id="6" name="Pipe_in_Q4eR"
         xcenter="Q4eR_CenterX" zcenter="Q4eR_CenterZ"
         length="Q4eR_Length" theta="Q4eR_Theta"
         rout1="Q4eR_InnerRadius" rout2="Q4eR_InnerRadius"
         limits="kill_limits">
       </pipe>
-      <pipe id="5" name="Pipe_Q4eR_to_B3eR"/>
-      <pipe id="6" name="Pipe_in_B3eR"
+      <pipe id="7" name="Pipe_Q4eR_to_SQ5eR"/>
+      <pipe id="8" name="Pipe_in_SQ5eR"
+        xcenter="SQ5eR_CenterX" zcenter="SQ5eR_CenterZ"
+        length="SQ5eR_Length" theta="SQ5eR_Theta"
+        rout1="SQ5eR_InnerRadius" rout2="SQ5eR_InnerRadius"
+        limits="kill_limits">
+      </pipe>
+      <pipe id="9" name="Pipe_SQ5eR_to_Q5eR"/>
+      <pipe id="10" name="Pipe_in_Q5eR"
+        xcenter="Q5eR_CenterX" zcenter="Q5eR_CenterZ"
+        length="Q5eR_Length" theta="Q5eR_Theta"
+        rout1="Q5eR_InnerRadius" rout2="Q5eR_InnerRadius"
+        limits="kill_limits">
+      </pipe>
+      <pipe id="11" name="Pipe_Q5eR_to_B3eR"/>
+      <pipe id="12" name="Pipe_in_B3eR"
         xcenter="B3eR_CenterX" zcenter="B3eR_CenterZ"
         length="B3eR_Length" theta="B3eR_Theta"
         rout1="B3eR_InnerRadius" rout2="B3eR_InnerRadius">
       </pipe>
-      <pipe id="7" name="Pipe_B3eR_to_B4eR"/>
-      <pipe id="8" name="Pipe_in_B4eR"
-        xcenter="B4eR_CenterX" zcenter="B4eR_CenterZ"
-        length="B4eR_Length" theta="B4eR_Theta"
-        rout1="B4eR_InnerRadius" rout2="B4eR_InnerRadius">
+      <pipe id="13" name="Pipe_B3eR_to_SQ6eR"/>
+      <pipe id="8" name="Pipe_in_SQ6eR"
+        xcenter="SQ6eR_CenterX" zcenter="SQ6eR_CenterZ"
+        length="SQ6eR_Length" theta="SQ6eR_Theta"
+        rout1="SQ6eR_InnerRadius" rout2="SQ6eR_InnerRadius"
+        limits="kill_limits">
       </pipe>
-      <pipe id="9" name="Pipe_B4eR_to_B5eR"/>
-      <pipe id="10" name="Pipe_in_B5eR"
-        xcenter="B5eR_CenterX" zcenter="B5eR_CenterZ"
-        length="B5eR_Length" theta="B5eR_Theta"
-        rout1="B5eR_InnerRadius" rout2="B5eR_InnerRadius">
-      </pipe>
-      <pipe id="11" name="Pipe_B5eR_to_B6eR"/>
-      <pipe id="12" name="Pipe_in_B6eR"
-        xcenter="B6eR_CenterX" zcenter="B6eR_CenterZ"
-        length="B6eR_Length" theta="B6eR_Theta"
-        rout1="B6eR_InnerRadius" rout2="B6eR_InnerRadius">
-      </pipe>
-      <pipe id="13" name="Pipe_B6eR_to_B7eR"/>
-      <pipe id="14" name="Pipe_in_B7eR"
-        xcenter="B7eR_CenterX" zcenter="B7eR_CenterZ"
-        length="B7eR_Length" theta="B7eR_Theta"
-        rout1="B7eR_InnerRadius" rout2="B7eR_InnerRadius">
+      <pipe id="9" name="Pipe_SQ6eR_to_Q6eR"/>
+      <pipe id="10" name="Pipe_in_Q6eR"
+        xcenter="Q6eR_CenterX" zcenter="Q6eR_CenterZ"
+        length="Q6eR_Length" theta="Q6eR_Theta"
+        rout1="Q6eR_InnerRadius" rout2="Q6eR_InnerRadius"
+        limits="kill_limits">
       </pipe>
     </detector>
 
@@ -72,29 +84,33 @@
     name="Magnets_Q4eR_to_B7eR"
     type="CylindricalMagnetChain"
     vis="RedVis">
-      <magnet id="0" name="Magnet_Q4eR"
+      <magnet id="0" name="Magnet_SQ4eR"
+        x="SQ4eR_CenterX" y="0" z="SQ4eR_CenterZ" theta="SQ4eR_Theta"
+        length="SQ4eR_Length" rin="SQ4eR_InnerRadius" rout="SQ4eR_OuterRadius">
+      </magnet>
+      <magnet id="1" name="Magnet_Q4eR"
         x="Q4eR_CenterX" y="0" z="Q4eR_CenterZ" theta="Q4eR_Theta"
         length="Q4eR_Length" rin="Q4eR_InnerRadius" rout="Q4eR_OuterRadius">
       </magnet>
-      <magnet id="1" name="Magnet_B3eR"
+      <magnet id="2" name="Magnet_SQ5eR"
+        x="SQ5eR_CenterX" y="0" z="SQ5eR_CenterZ" theta="SQ5eR_Theta"
+        length="SQ5eR_Length" rin="SQ5eR_InnerRadius" rout="SQ5eR_OuterRadius">
+      </magnet>
+      <magnet id="3" name="Magnet_Q5eR"
+        x="Q5eR_CenterX" y="0" z="Q5eR_CenterZ" theta="Q5eR_Theta"
+        length="Q5eR_Length" rin="Q5eR_InnerRadius" rout="Q5eR_OuterRadius">
+      </magnet>
+      <magnet id="4" name="Magnet_B3eR"
         x="B3eR_CenterX" y="0" z="B3eR_CenterZ" theta="B3eR_Theta"
         length="B3eR_Length" rin="B3eR_InnerRadius" rout="B3eR_OuterRadius">
       </magnet>
-      <magnet id="2" name="Magnet_B4eR"
-        x="B4eR_CenterX" y="0" z="B4eR_CenterZ" theta="B4eR_Theta"
-        length="B4eR_Length" rin="B4eR_InnerRadius" rout="B4eR_OuterRadius">
+      <magnet id="5" name="Magnet_SQ6eR"
+        x="SQ6eR_CenterX" y="0" z="SQ6eR_CenterZ" theta="SQ6eR_Theta"
+        length="SQ6eR_Length" rin="SQ6eR_InnerRadius" rout="SQ6eR_OuterRadius">
       </magnet>
-      <magnet id="3" name="Magnet_B5eR"
-        x="B5eR_CenterX" y="0" z="B5eR_CenterZ" theta="B5eR_Theta"
-        length="B5eR_Length" rin="B5eR_InnerRadius" rout="B5eR_OuterRadius">
-      </magnet>
-      <magnet id="4" name="Magnet_B6eR"
-        x="B6eR_CenterX" y="0" z="B6eR_CenterZ" theta="B6eR_Theta"
-        length="B6eR_Length" rin="B6eR_InnerRadius" rout="B6eR_OuterRadius">
-      </magnet>
-      <magnet id="5" name="Magnet_B7eR"
-        x="B7eR_CenterX" y="0" z="B7eR_CenterZ" theta="B7eR_Theta"
-        length="B7eR_Length" rin="B7eR_InnerRadius" rout="B7eR_OuterRadius">
+      <magnet id="6" name="Magnet_Q6eR"
+        x="Q6eR_CenterX" y="0" z="Q6eR_CenterZ" theta="Q6eR_Theta"
+        length="Q6eR_Length" rin="Q6eR_InnerRadius" rout="Q6eR_OuterRadius">
       </magnet>
     </detector>
 
