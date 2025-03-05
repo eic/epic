@@ -106,6 +106,7 @@
     <field name="Magnet_Q3eR_Field" type="MultipoleMagnet">
       <shape type="Tube" rmax="Q3eR_InnerRadius" dz="Q3eR_Length/2"/>
       <position x="0" y="0" z="Q3eR_CenterPosition"/>
+      <rotation x="0" y="Q3eR_Theta" z="0"/>
       <coefficient/>
       <coefficient coefficient="Q3eR_Gradient"/>
     </field>
