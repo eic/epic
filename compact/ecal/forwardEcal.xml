@@ -1,0 +1,77 @@
+<!-- SPDX-License-Identifier: LGPL-3.0-or-later -->
+<!-- Copyright (C) 2025 Akio Ogawa, Whitney Armstrong, Chao Peng, Sylvester Joosten, Zhongling Ji, Ryan Milton -->
+
+<lccdd>
+
+  <info name="forwardEcal.xml"
+        title="forward ECal 2025 design"
+        author="@akioogawa"
+        url="https://github.com/akioogawa"
+        status="development"
+        version="1.0">
+  <comment/></info>
+
+  <define>
+    <documentation>
+      - Forward Ecal Slice Thickness
+    </documentation>
+    <constant name="ForwardEcalCoverThickness"            value="0.343*mm"/>
+    <constant name="ForwardEcalAirThickness"              value="74.157*mm"/>
+    <constant name="ForwardEcalPCBThickness"              value="4.5*mm"/>
+    <constant name="ForwardEcalLightGuideThickness"       value="21.0*mm"/>
+    <constant name="ForwardEcalScintillatorThickness"     value="170.0*mm"/>
+
+    <documentation>
+      - Forward Ecal computed total Thickness
+    </documentation>
+    <constant name="ForwardEcalThickness"
+      value = "ForwardEcalCoverThickness +
+               ForwardEcalAirThickness +
+               ForwardEcalPCBThickness +
+               ForwardEcalLightGuideThickness +
+               ForwardEcalScintillatorThickness "
+    />
+    <constant name="ForwardEcalSlice_NRepeat" value="5"/>
+  </define>
+
+  <limits>
+  </limits>
+
+  <regions>
+  </regions>
+
+  <display>
+  </display>
+
+  <detectors>
+
+    <documentation>
+      ### Forward (Positive Z) Endcap ScFi Electromagnetic Calorimeter
+      Implementation of 2025 design
+      Insert shape is cut out from middle of detector
+    </documentation>
+    <detector id="EcalEndcapP_ID"
+      name="ForwardEcal"
+      type="epic_ForwardEcal"
+      readout="ForwardEcalHits">
+
+      <slice name="Cover_slice" material="Aluminum" thickness="ForwardEcalCoverThickness" vis="AnlRed"/>
+      <slice name="Air_slice" material="Air" thickness="ForwardEcalAirThickness" vis="AnlRed"/>
+      <slice name="PCB_slice" material="Fr4" thickness="ForwardEcalPCBThickness" vis="AnlRed"/>
+      <slice name="LightGuide_slice" material="Plexiglass" thickness="ForwardEcalLightGuideThickness" vis="AnlBlue"/>
+      <slice name="Scintillator_slice" material="AvgTungstenScFi" thickness="ForwardEcalScintillatorThickness" vis="AnlOrange" sensitive="true"/>
+    </detector>
+  </detectors>
+
+  <!--  Definition of the readout segmentation/definition  -->
+  <readouts>
+    <readout name="ForwardEcalHits">
+      <segmentation type="CartesianGridXY" grid_size_x="25*mm" grid_size_y="25*mm"/>
+      <id>system:8,northsouth:1,blockrow:6,blockcol:5,x:32:-16,y:-16</id>
+    </readout>
+  </readouts>
+
+  <plugins>
+  </plugins>
+
+</lccdd>
