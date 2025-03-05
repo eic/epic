@@ -66,9 +66,15 @@
       <coil dx="2*cm" dy="1.5*cm" /><!--unchecked-->
     </detector>
 
+    <detector name="Magnets_SQ3eR" type="ip6_CylindricalDipoleMagnet" vis="FFMagnetVis">
+      <placement  x="SQ3eR_XPosition" y="0" z="SQ3eR_CenterPosition" theta="Q3eR_Theta"/>
+      <dimensions x="SQ3eR_InnerRadius*4" y="SQ3eR_InnerRadius*4" z="SQ3eR_Length" r="1.5*SQ3eR_InnerRadius"/>
+      <apperture  x="SQ3eR_InnerRadius*2" y="SQ3eR_InnerRadius*2" r="SQ3eR_InnerRadius"/>
+      <coil dx="2*cm" dy="1.5*cm" /><!--unchecked-->
+    </detector>
 
     <detector name="Magnets_Q3eR" type="ip6_CylindricalDipoleMagnet" vis="FFMagnetVis">
-      <placement  x="Q3eR_XPosition" y="0" z="Q3eR_CenterPosition" theta="Q3eR_Theta"/>
+      <placement  x="Q3eR_CenterX" y="0" z="Q3eR_CenterZ" theta="Q3eR_Theta"/>
       <dimensions x="Q3eR_InnerRadius*4" y="Q3eR_InnerRadius*4" z="Q3eR_Length" r="1.5*Q3eR_InnerRadius"/>
       <apperture  x="Q3eR_InnerRadius*2" y="Q3eR_InnerRadius*2" r="Q3eR_InnerRadius"/>
       <coil dx="2*cm" dy="1.5*cm" /><!--unchecked-->
@@ -96,7 +102,8 @@
 
     <field name="Magnet_Q3eR_Field" type="MultipoleMagnet">
       <shape type="Tube" rmax="Q3eR_InnerRadius" dz="Q3eR_Length/2"/>
-      <position x="0" y="0" z="Q3eR_CenterPosition"/>
+      <position x="Q3eR_CenterX" y="0" z="Q3eR_CenterZ"/>
+      <rotation x="0" y="Q3eR_Theta" z="0"/>
       <coefficient/>
       <coefficient coefficient="Q3eR_Gradient"/>
     </field>

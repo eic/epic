@@ -32,25 +32,36 @@
     <constant name="B2BeR_CenterPosition" value="-19.50*m"/>
     <constant name="B2BeR_Theta"          value="0.01*rad"/>
 
-    <constant name="Q3eR_InnerRadius"     value="64*mm"/>
-    <constant name="Q3eR_Length"          value="0.25*m"/>
-    <constant name="Q3eR_StartZ"          value="-42.04775868*m"/>
-    <constant name="Q3eR_StartX"          value="-0.451264664*m"/>
-    <constant name="Q3eR_EndZ"            value="-42.29759669*m"/>
-    <constant name="Q3eR_EndX"            value="-0.456264331*m"/>
-    <constant name="Q3eR_XPosition"       value="-0.45376*m"/>
-    <constant name="Q3eR_Theta"           value="0.02*rad"/>
-    <constant name="Q3eR_CenterPosition"  value="-42.1726*m"/>
+    <constant name="SQ3eR_InnerRadius"     value="64*mm"/>
+    <constant name="SQ3eR_Length"          value="0.25*m"/>
+    <constant name="SQ3eR_StartZ"          value="-42.04775868*m"/>
+    <constant name="SQ3eR_StartX"          value="-0.451264664*m"/>
+    <constant name="SQ3eR_EndZ"            value="-42.29759669*m"/>
+    <constant name="SQ3eR_EndX"            value="-0.456264331*m"/>
+    <constant name="SQ3eR_XPosition"       value="-0.45376*m"/>
+    <constant name="SQ3eR_Theta"           value="0.02*rad"/>
+    <constant name="SQ3eR_CenterPosition"  value="-42.1726*m"/>
 
-    <comment> Note: Placements for Q4eR, B3eR, B4eR, B5eR, B6eR, B7eR
-              are approximate (valid to within ~1 cm).
-              Should be updated with detailed input from the accelerator group
-    </comment>
+    <comment> Electron Beamline Extension </comment>
 
-    <constant name="Q4eR_CenterZ"         value="-45.32*m"/>
-    <constant name="Q4eR_CenterX"         value="-0.58*m"/>
+    <constant name="Q3eR_CenterZ"         value="-42.7473*m"/>
+    <constant name="Q3eR_CenterX"         value="-0.46526*m"/>
+    <constant name="Q3eR_Length"          value="0.6*m"/>
+    <constant name="Q3eR_InnerRadius"     value="SQ3eR_InnerRadius"/>
+    <constant name="Q3eR_OuterRadius"     value="0.2*m"/>
+    <constant name="Q3eR_Theta"           value="SQ3eR_Theta"/>
+
+    <constant name="SQ4eR_CenterZ"         value="-46.6786*m"/>
+    <constant name="SQ4eR_CenterX"         value="-0.91721*m"/>
+    <constant name="SQ4eR_Length"          value="0.25*m"/>
+    <constant name="SQ4eR_InnerRadius"     value="SQ3eR_InnerRadius"/>
+    <constant name="SQ4eR_OuterRadius"     value="0.2*m"/>
+    <constant name="SQ4eR_Theta"           value="Q3eR_Theta"/>
+
+    <constant name="Q4eR_CenterZ"         value="-47.2534*m"/>
+    <constant name="Q4eR_CenterX"         value="-0.93331*m"/>
     <constant name="Q4eR_Length"          value="0.6*m"/>
-    <constant name="Q4eR_InnerRadius"     value="0.05*m"/>
+    <constant name="Q4eR_InnerRadius"     value="SQ3eR_InnerRadius"/>
     <constant name="Q4eR_OuterRadius"     value="0.2*m"/>
     <constant name="Q4eR_Theta"           value="Q3eR_Theta"/>
 
@@ -177,7 +188,7 @@
     <constant name="Vacuum_BB_MinY"       value="-1.5*m"/>
     <constant name="Vacuum_BB_MaxY"       value="1.5*m"/>
     <constant name="Vacuum_BB_MinZ"       value="B2BeR_CenterPosition-B2BeR_Length/2"/>
-    <constant name="Vacuum_BB_MaxZ"       value="Q3eR_EndZ"/>
+    <constant name="Vacuum_BB_MaxZ"       value="SQ3eR_EndZ"/>
 
     <constant name="Beam_Theta"           value="Q3eR_Theta"/>
 
@@ -186,13 +197,13 @@
     <comment> Dipole focal point in global coordinates </comment>
     <constant name="Dipole_Focus_X"       value="0.0*mm"/>
     <constant name="Dipole_Focus_Y"       value="0.0*mm"/>
-    <constant name="Dipole_Focus_Z"       value="Q3eR_CenterPosition-Q3eR_XPosition/tan(Beam_Theta)"/>
+    <constant name="Dipole_Focus_Z"       value="SQ3eR_CenterPosition-SQ3eR_XPosition/tan(Beam_Theta)"/>
 
     <comment> Central pipe dimensions </comment>
-    <constant name="Beam_Length"          value="(Dipole_Focus_Z-Q3eR_StartZ)/cos(Beam_Theta)"/>
-    <constant name="Beam_WidthR"          value="Q3eR_InnerRadius"/>
-    <constant name="Beam_WidthL"          value="Q3eR_InnerRadius"/>
-    <constant name="Beam_Height"          value="Q3eR_InnerRadius"/>
+    <constant name="Beam_Length"          value="(Dipole_Focus_Z-SQ3eR_StartZ)/cos(Beam_Theta)"/>
+    <constant name="Beam_WidthR"          value="SQ3eR_InnerRadius"/>
+    <constant name="Beam_WidthL"          value="SQ3eR_InnerRadius"/>
+    <constant name="Beam_Height"          value="SQ3eR_InnerRadius"/>
 
     <comment> Entry box joining magnets, lumi and tagger systems </comment>
     <constant name="Exit_Height"          value="B2BeR_InnerRadius"/>
@@ -213,7 +224,7 @@
 
     <constant name="Tagger1_Min_Theta"    value="0.03*rad"/>
     <constant name="Tagger1_Max_Theta"    value="0.0420*rad"/>
-    <constant name="Tagger1_Min_Offset"   value="Q3eR_InnerRadius"/>
+    <constant name="Tagger1_Min_Offset"   value="SQ3eR_InnerRadius"/>
 
     <constant name="Tagger2_Width"        value="147.84*mm"/>
     <constant name="Tagger2_Height"       value="150.0*mm"/>
@@ -224,7 +235,7 @@
 
     <constant name="Tagger2_Min_Theta"    value="0.022*rad"/>
     <constant name="Tagger2_Max_Theta"    value="Tagger1_Min_Theta+0.000*rad"/>
-    <constant name="Tagger2_Min_Offset"   value="Q3eR_InnerRadius+Backwards_Box_Wall"/>
+    <constant name="Tagger2_Min_Offset"   value="SQ3eR_InnerRadius+Backwards_Box_Wall"/>
 
 
     <!--  -->
