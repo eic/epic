@@ -1,6 +1,6 @@
 features:
+  beampipe:
   fields:
     marco:
   ecal:
     forwardEcal:
-    forward_insert_homogeneous:

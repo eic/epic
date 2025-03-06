@@ -17,13 +17,13 @@ static const int mNColBlock[mMaxNS][mMaxRowBlock]={
   { 3, 6, 9,11,12,13,14,15,16,16,17,17,18,18,18,19,19,19,17,17,17,19,19,19,18,18,18,17,17,16,16,15,14,13,12,11, 9, 6, 3}
 };
 
-static const int    mNTowerInBlock=4;                   //a block contains 4x4 towers
-static const double mBlockSize=10.0;                    //size of block 
-static const double mSpaceBetweenBlock=0.0254;          //gap between blocks
-static const double mOffsetX[mMaxNS]={0.1,0.1};         //gap between north and south halves
-static const double mOffsetY[mMaxNS]={0.0,0.0};         //height offset between beamline and middle of detector  
-static const double mOffsetZ[mMaxNS]={300.0,300.0};     //z position of front face of detector
-static const double mOffsetXBeamPipe[mMaxNS]={7.5,20.0};//3 rows at beamline height is shifted
+static const int    mNTowerInBlock=4;                    //a block contains 4x4 towers
+static const double mBlockSize=10.0;                     //size of block 
+static const double mSpaceBetweenBlock=0.0254;           //gap between blocks
+static const double mOffsetX[mMaxNS]={0.27*2.54/2.0,0.27*2.54/2.0};//gap between north and south halves
+static const double mOffsetY[mMaxNS]={0.0,0.0};          //height offset between beamline and middle of detector  
+static const double mOffsetZ[mMaxNS]={350.0,350.0};      //z position of front face of detector
+static const double mOffsetXBeamPipe[mMaxNS]={7.5,20.05};//3 rows at beamline height is shifted
 
 class forwardEcalMap{
 private:
