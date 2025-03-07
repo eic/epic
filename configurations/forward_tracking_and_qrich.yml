@@ -1,0 +1,15 @@
+features:
+  beampipe:
+  fields:
+    marco:
+  tracking:
+    definitions_craterlake:
+    vertex_barrel:
+    silicon_barrel:
+    mpgd_barrel:
+    silicon_disks:
+    support_service_craterlake:
+    tof_barrel:
+    tof_endcap:
+  pid:
+    qrich:

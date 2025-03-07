@@ -1,0 +1,43 @@
+<!-- SPDX-License-Identifier: LGPL-3.0-or-later -->
+<!-- Copyright (C) 2022, 2023 Christopher Dilks, Chandradoy Chatterjee, Junhuai Xu -->
+
+<lccdd>
+
+<define>
+<constant name="QRICH_num_px"                 value="8"/> <!-- number of pixels along one side of the sensor -->
+<constant name="QRICH_pixel_size"             value="3.0*mm"/> <!-- a single SiPM pixel size -->
+<constant name="QRICH_pixel_gap"              value="0.2*mm"/> <!-- size of gaps between adjacent pixels AND gaps between edge pixels and sensor side -->
+<constant name="QRICH_pixel_pitch"            value="QRICH_pixel_size + QRICH_pixel_gap"/> <!-- center-to-center distance between SiPMs in a 8x8 panel -->
+</define>
+
+<detectors>
+<detector
+  id="ForwardRICH_ID"
+  name="QRICH"
+  type="epic_QRICH"
+  readout="QRICHHits"
+  gas="N2cherenkov"
+  material="Aluminum"
+  >
+
+<sensors>
+<pss
+  material="AirOptical"
+  />
+</sensors>
+</detector>
+</detectors>
+
+<readouts>
+  <readout name="QRICHHits">
+    <segmentation
+      type="CartesianGridXY"
+      grid_size_x="QRICH_pixel_pitch"
+      grid_size_y="QRICH_pixel_pitch"
+      offset_x="-0.5*(QRICH_num_px-1)*QRICH_pixel_pitch"
+      offset_y="-0.5*(QRICH_num_px-1)*QRICH_pixel_pitch"
+      />
+    <id>system:8,sector:3,pdu:12,sipm:6,x:32:-16,y:-16</id>
+  </readout>
+</readouts>
+</lccdd>

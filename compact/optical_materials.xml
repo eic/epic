@@ -533,6 +533,21 @@
       4.0*eV 4.0*cm
       5.1*eV 4.0*cm
       "/>
+    <matrix name="RINDEX__Bialkali" coldim="2" values="
+      1.0*eV 2.800
+      4.0*eV 2.800
+      5.1*eV 2.800
+      "/>
+    <matrix name="RINDEX__Aerogel_QRICH" coldim="2" values="
+      1.0*eV 1.040
+      4.0*eV 1.040
+      5.1*eV 1.040
+      "/>
+    <matrix name="ABSLENGTH__Aerogel_QRICH" coldim="2" values="
+      1.0*eV 4.0*cm
+      4.0*eV 4.0*cm
+      5.1*eV 4.0*cm
+      "/>
     <matrix name="RINDEX__Acrylic" coldim="2" values="
       1240*eV/1100  1.49
       1240*eV/600   1.49
@@ -908,6 +923,20 @@
       <fraction n="0.001" ref="C"/>
       <property name="RINDEX" ref="RINDEX__Aerogel"/>
       <property name="ABSLENGTH" ref="ABSLENGTH__Aerogel"/>
+    </material>
+    <material name="Aerogel_QRICH">
+      <D value="0.2" unit="g / cm3"/>
+      <fraction n="0.625" ref="SiliconOxide"/>
+      <fraction n="0.374" ref="SiliconOxide"/>
+      <fraction n="0.001" ref="C"/>
+      <property name="RINDEX" ref="RINDEX__Aerogel_QRICH"/>
+      <property name="ABSLENGTH" ref="ABSLENGTH__Aerogel_QRICH"/>
+    </material>
+    <material name="Bialkali">
+      <!-- ALL FAKE -->
+      <D value="1.0" unit="g / cm3"/>
+      <fraction n="1.000" ref="N"/>
+      <property name="RINDEX" ref="RINDEX__Bialkali"/>
     </material>
     <material name="AcrylicOptical">
       <D type="density" value="1.18" unit="g/cm3"/>
