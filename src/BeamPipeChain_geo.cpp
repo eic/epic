@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: LGPL-3.0-or-later
-// Copyright (C) 2022-25 Dhevan Gangadharan, Simon Gardner
+// Copyright (C) 2022 - 2025 Dhevan Gangadharan, Simon Gardner
 
 //==========================================================================
 //

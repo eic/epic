@@ -19,7 +19,7 @@ jobs:
       with:
         name: build-gcc-fast-eic-shell
         path: install/
-    - uses: cvmfs-contrib/github-action-cvmfs@v4
+    - uses: cvmfs-contrib/github-action-cvmfs@v5
     - uses: eic/run-cvmfs-osg-eic-shell@main
       with:
         platform-release: "eic_xl:nightly"
@@ -32,6 +32,7 @@ jobs:
           declare -A detectors
           while read d ; do detectors[$d]='-l 3' ; done <<< $(npdet_to_step list $DETECTOR_PATH/${{matrix.detector_config}}.xml  | sed '/world/d;s/.*(vol: \(.*\)).*/\1/g')
           # Then tweak the levels (default is 1)
+          detectors[EcalBarrelImaging]='-l 4'
           detectors[HcalBarrel]='-l 1'
           detectors[LFHCAL]='-l 2'
           detectors[OuterBarrelMPGDSubAssembly]='-l 4'
