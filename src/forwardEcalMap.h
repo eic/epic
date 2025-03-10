@@ -17,13 +17,16 @@ static const int mNColBlock[mMaxNS][mMaxRowBlock]={
   { 3, 6, 9,11,12,13,14,15,16,16,17,17,18,18,18,19,19,19,17,17,17,19,19,19,18,18,18,17,17,16,16,15,14,13,12,11, 9, 6, 3}
 };
 
-static const int    mNTowerInBlock=4;                    //a block contains 4x4 towers
-static const double mBlockSize=10.0;                     //size of block 
-static const double mSpaceBetweenBlock=0.0254;           //gap between blocks
-static const double mOffsetX[mMaxNS]={0.27*2.54/2.0,0.27*2.54/2.0};//gap between north and south halves
-static const double mOffsetY[mMaxNS]={0.0,0.0};          //height offset between beamline and middle of detector  
-static const double mOffsetZ[mMaxNS]={350.0,350.0};      //z position of front face of detector
-static const double mOffsetXBeamPipe[mMaxNS]={7.5,20.05};//3 rows at beamline height is shifted
+static const int    mNTowerInBlock=4;                          //a block contains 4x4 towers
+static const double mBlockSize=10.0;                           //size of block 
+static const double mBlockLength=17.0;                         //size of block 
+static const double mSpaceBetweenBlock=0.1;                    //gap between blocks
+static const double mBackPlateZ = 362.0;                       //Global Z of backplate = start of Hcal
+static const double mOffsetX[mMaxNS]={0.685/2.0,0.685/2.0};    //gap between north and south halves
+static const double mOffsetY[mMaxNS]={0.0,0.0};                //height offset between beamline and middle of detector  
+static const double mOffsetZ[mMaxNS]={mBackPlateZ-mBlockLength,mBackPlateZ-mBlockLength};
+                                                               //z position of front face of detector
+static const double mOffsetXBeamPipe[mMaxNS]={7.5,20.05};      //3 rows at beamline height is shifted, also = insert width
 
 class forwardEcalMap{
 private:
@@ -49,7 +52,9 @@ public:
   int maxColBlock(){return mMaxColBlock;}
   int nColBlock(int ns, int row){return mNColBlock[ns][row];}
   double blockSize(){return mBlockSize;}
+  double blockLength(){return mBlockLength;}
   double spaceBetweenBlock(){return mSpaceBetweenBlock;}
+  double backPlateZ(){return mBackPlateZ;}
   double offsetX(int ns){return mOffsetX[ns];}
   double offsetY(int ns){return mOffsetY[ns];}
   double offsetZ(int ns){return mOffsetZ[ns];}
@@ -57,7 +62,8 @@ public:
   int blockRow(int bid) {return mBlockRow[bid];}
   int blockCol(int bid) {return mBlockCol[bid];}
   int blockId(int ns, int rowB, int colB) {return mBlockId[ns][rowB][colB];}
-
+  double offsetXBeamPipe(int ns){return mOffsetXBeamPipe[ns];}
+  
   // Block of 4x4 towers is the basic unit
   double xBlock(int ns, int row, int col){
     if(row>=18 && row<=20){
@@ -184,6 +190,26 @@ public:
 	  }
 	}
       }
+    }
+  }
+  void decodeMcHit(ULong_t id, int &system, int &ns, int &row, int &col, int &x, int &y){
+    system =  id      & 0xff;
+    ns     = (id>> 8) & 0x1;
+    row    = (id>> 9) & 0x3f;
+    col    = (id>>15) & 0x1f;
+    x      = (id>>20) & 0x3;
+    y      = (id>>22) & 0x3;
+  }
+  void mcHitToTowerRowCol(ULong_t id, int &ns, int &trow, int &tcol){
+    int system,row,col,x,y;
+    decodeMcHit(id,system,ns,row,col,x,y);
+    trow = row*mNTowerInBlock + (3-y);
+    if(ns==0){
+      if(row>=18 && row<=20){tcol = col*mNTowerInBlock + x + 3;}
+      else                  {tcol = col*mNTowerInBlock + x;}
+    }else{
+      if(row>=18 && row<=20){tcol = col*mNTowerInBlock + (3-x) + 8;}
+      else                  {tcol = col*mNTowerInBlock + (3-x);}
     }
   }
 };

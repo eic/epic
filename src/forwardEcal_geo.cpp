@@ -22,30 +22,28 @@ static Ref_t createDetector(Detector& desc, xml_h handle, SensitiveDetector sens
   std::string detName = detElem.nameStr();
   int detID           = detElem.id();
 
-  double blocksize = 10.0;                 // X,Y size of block  
-  double blockgap  = 0.0254;               // Gap between blocks 
-  double nsgap  = 0.27*2.54;               // North-South gap
+  double blocksize = map->blockSize();         // X,Y size of block
+  double blockgap  = map->spaceBetweenBlock(); // Gap between blocks 
+  double nsgap  = mOffsetX[0]+mOffsetX[1];     // North-South gap
   double rmin   = 0.0;                     // Dummy variable. Set to 0 since cutting out insert
   double rmax   = 81*2.54;                 // Max radius of endcap  
   double rmaxWithGap   = rmax + nsgap/2.0; // Max radius with NS gap included
-  double zmax   = 360.73;                  // Face of iron plate fEcal mount to
+  double zmax   = map->backPlateZ();       // Face of back plate fEcal mount to = Hcal start z
   double length = 27.0;                    // Total length
   double zmin   = zmax - length;           // minimum z where detector starts
-  double insert_dx[2] = {7.5, 20.05};      // Insert x width for north and south halves
+  double insert_dx[2] = {map->offsetXBeamPipe(0), map->offsetXBeamPipe(1)};
+                                           // Insert x width for north and south halves
   double insert_dy    = 30.05;             // Insert y height
+  double insert_dz    = 25.4;              // Insert (=Steel beam pipe protector) z depth
   double insert_thickness = 0.5*2.54;      // Insert (=Steel beam pipe protector) thickness
   double insert_x=(insert_dx[0]-insert_dx[1])/2.0;  //Insert center x
-  //printf("zmin=%f\n",zmin);
 
-  //xml_dim_t dim = detElem.dimensions();
-  //double rmin   = dim.rmin(); // Dummy variable. Set to 0 since cutting out insert
-  //double rmax   = dim.rmax(); // Max radius of endcap
-  //double length = dim.z();    // Size along z-axis
-  //xml_dim_t pos = detElem.position();
-  //Getting insert dimensions
-  //const xml::Component& insert_xml = detElem.child(_Unicode(insert));
-  //xml_dim_t insert_dim             = insert_xml.dimensions();
-  //xml_dim_t insert_local_pos       = insert_xml.position();
+  //from compat file
+  xml_dim_t dim = detElem.dimensions();
+  xml_dim_t pos = detElem.position();
+  if(dim.z() != length) printf("WARNING!!! forwardEcal_geo.cpp detect inconsistent Z len %f(compact) %f(map)\n",dim.z(),length);
+  if(pos.z() != zmin)   printf("WARNING!!! forwardEcal_geo.cpp detect inconsistent Z pos %f(compact) %f(map)\n",pos.z(),zmin);
+  printf("forwardEcal_geo : dz=%f %f zmin=%f %f\n",dim.z(),length,pos.z(),zmin);
 
   const double phi1[2]={-M_PI/2.0,M_PI/2.0};
   const double phi2[2]={M_PI/2.0,3.0*M_PI/2.0};
@@ -119,7 +117,7 @@ static Ref_t createDetector(Detector& desc, xml_h handle, SensitiveDetector sens
 	  pv = half_vol.placeVolume(row_vol, Transform3D(RotationZYX(0, 0, 0),Position(xrow,yrow,0)));
 	  pv.addPhysVolID("blockrow", r);  
 	  
-	  //colmn of blocks
+	  //column of blocks
 	  double xcol = -pm[ns]*(dxrow/2.0 - bsize/2.0);
 	  for(int c=0; c<nColBlock; c++){	    
 	    Box col(bsize/2.0,bsize/2.0,slice_thickness/2.0);
@@ -135,21 +133,12 @@ static Ref_t createDetector(Detector& desc, xml_h handle, SensitiveDetector sens
 	    Box block(blocksize/2.0,blocksize/2.0,slice_thickness/2.0);
             std::string block_name = col_name + "_WScFiBlock";
             Volume block_vol(block_name, block, slice_mat);
-	    col_vol.setAttributes(desc, x_slice.regionStr(), x_slice.limitsStr(), x_slice.visStr());
+	    block_vol.setAttributes(desc, x_slice.regionStr(), x_slice.limitsStr(), x_slice.visStr());
             pv = col_vol.placeVolume(block_vol, Transform3D(RotationZYX(0, 0, 0),Position(0,0,0)));
 	    sens.setType("calorimeter");
 	    block_vol.setSensitiveDetector(sens);
 	  }
 	}
-
-	//Steel Beampipe Protector placed in envelope volume
-	Box bpp(insert_dx[ns]/2.0, insert_dy/2.0, slice_thickness/2.0); 
-	std::string bpp_name = detName + "_BeamPipeProtector_" + nsName[ns];
-	Box bpp_hole((insert_dx[ns]-insert_thickness)/2.0, insert_dy/2.0-insert_thickness, slice_thickness/2.0);
-	SubtractionSolid bpp_with_hole(bpp, bpp_hole, Position(-pm[ns]*insert_thickness,0.0, 0.0));
-	Volume bpp_vol(bpp_name,bpp_with_hole,steel);
-	bpp_vol.setAttributes(desc, detElem.regionStr(), detElem.limitsStr(), detElem.visStr());
-	pv = envelopeVol.placeVolume(bpp_vol,Transform3D(RotationZYX(0,0,0), Position(pm[ns]*(insert_dx[ns]+ nsgap)/2.0,0.0,slice_z)));
       }  //end if isSensitive
     }  //end loop over ns    
     slice_z += slice_thickness / 2.; // Going to end of slice
@@ -157,6 +146,17 @@ static Ref_t createDetector(Detector& desc, xml_h handle, SensitiveDetector sens
   } //end loop over slice
   printf("forwardEcal Total thickness=%f Slice end at %f\n",thickness,slice_z);
 
+  //Steel Beampipe Protector placed in envelope volume
+  for (int ns=0; ns<2; ns++){
+    Box bpp(insert_dx[ns]/2.0, insert_dy/2.0, insert_dz/2.0); 
+    std::string bpp_name = detName + "_BeamPipeProtector_" + nsName[ns];
+    Box bpp_hole((insert_dx[ns]-insert_thickness)/2.0, insert_dy/2.0-insert_thickness, insert_dz/2.0);
+    SubtractionSolid bpp_with_hole(bpp, bpp_hole, Position(-pm[ns]*insert_thickness,0.0, 0.0));
+    Volume bpp_vol(bpp_name,bpp_with_hole,steel);
+    bpp_vol.setAttributes(desc, detElem.regionStr(), detElem.limitsStr(), detElem.visStr());
+    pv = envelopeVol.placeVolume(bpp_vol,Transform3D(RotationZYX(0,0,0), Position(pm[ns]*(insert_dx[ns]+ nsgap)/2.0,0.0,(length-insert_dz)/2.0)));
+  }
+  
   DetElement det(detName, detID);
   Volume motherVol = desc.pickMotherVolume(det);
 

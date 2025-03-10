@@ -16,10 +16,11 @@
       - Forward Ecal Slice Thickness
     </documentation>
     <constant name="ForwardEcalCoverThickness"            value="0.343*mm"/>
-    <constant name="ForwardEcalAirThickness"              value="74.157*mm"/>
+    <constant name="ForwardEcalAirThickness"              value="61.457*mm"/>
     <constant name="ForwardEcalPCBThickness"              value="4.5*mm"/>
     <constant name="ForwardEcalLightGuideThickness"       value="21.0*mm"/>
     <constant name="ForwardEcalScintillatorThickness"     value="170.0*mm"/>
+    <constant name="ForwardEcalMountingPlateThickness"    value="12.7*mm"/>
 
     <documentation>
       - Forward Ecal computed total Thickness
@@ -29,9 +30,9 @@
                ForwardEcalAirThickness +
                ForwardEcalPCBThickness +
                ForwardEcalLightGuideThickness +
-               ForwardEcalScintillatorThickness "
+               ForwardEcalScintillatorThickness +
+	       ForwardEcalMountingPlateThickness"
     />
-    <constant name="ForwardEcalSlice_NRepeat" value="5"/>
   </define>
 
   <limits>
@@ -54,20 +55,22 @@
       name="ForwardEcal"
       type="epic_ForwardEcal"
       readout="ForwardEcalHits">
-
+      <position x="0" y="0" z="EcalEndcapP_zmin"/>
+      <dimensions rmin="EcalEndcapP_rmin" rmax="EcalEndcapP_rmax" z="ForwardEcalThickness"/>
       <slice name="Cover_slice" material="Aluminum" thickness="ForwardEcalCoverThickness" vis="AnlGray"/>
       <slice name="Air_slice" material="Air" thickness="ForwardEcalAirThickness" vis="AnlLight_Gray"/>
       <slice name="PCB_slice" material="Fr4" thickness="ForwardEcalPCBThickness" vis="AnlGreen"/>
       <slice name="LightGuide_slice" material="Plexiglass" thickness="ForwardEcalLightGuideThickness" vis="AnlBlue"/>
       <slice name="Scintillator_slice" material="AvgTungstenScFi" thickness="ForwardEcalScintillatorThickness" vis="AnlOrange" sensitive="true"/>
+      <slice name="MountingPlate_slice" material="StainlessSteel" thickness="ForwardEcalMountingPlateThickness" vis="AnlGray"/>
     </detector>
   </detectors>
 
   <!--  Definition of the readout segmentation/definition  -->
   <readouts>
     <readout name="ForwardEcalHits">
-      <segmentation type="CartesianGridXY" grid_size_x="25*mm" grid_size_y="25*mm"/>
-      <id>system:8,northsouth:1,blockrow:6,blockcol:5,x:32:-16,y:-16</id>
+      <segmentation type="CartesianGridXY" grid_size_x="25*mm" grid_size_y="25*mm" offset_x="-37.5*mm" offset_y="-37.5*mm"/>
+      <id>system:8,northsouth:1,blockrow:6,blockcol:5,x:2,y:2</id>
     </readout>
   </readouts>
 

@@ -501,7 +501,7 @@ Examples:
 Service gaps in FW direction (before endcapP ECAL) and BW direction (before endcapN HCAL)
     </documentation>
     <constant name="ForwardInnerEndcapRegionExtraSpace_length" value="4.6*cm"/>
-    <constant name="ForwardServiceGap_length"     value="9.6*cm"/>
+    <constant name="ForwardServiceGap_length"     value="15.4*cm"/>
     <constant name="ForwardServiceGap_zmin"       value="ForwardPIDRegion_zmin + ForwardInnerEndcapRegion_length + ForwardInnerEndcapRegionExtraSpace_length"/>
     <constant name="ForwardServiceGap_zmax"       value="ForwardServiceGap_zmin + ForwardServiceGap_length"/>
 
@@ -520,11 +520,11 @@ Service gaps in FW direction (before endcapP ECAL) and BW direction (before endc
   </documentation>
     <constant name="EcalBarrelSectorsN"             value="48"/>
     <constant name="EcalEndcapP_zmin"               value="ForwardServiceGap_zmax" />
-    <constant name="EcalEndcapP_length"             value="30*cm" />
+    <constant name="EcalEndcapP_length"             value="27*cm" />
     <constant name="EcalEndcapP_zmax"               value="EcalEndcapP_zmin + EcalEndcapP_length"/>
     <constant name="EcalEndcapP_rmin"               value="200.0*mm" />
     <comment> extra 50cm rmax that "protrudes" into the HCAL</comment>
-    <constant name="EcalEndcapP_rmax"               value="195.0*cm"/>
+    <constant name="EcalEndcapP_rmax"               value="206.1464*cm"/>
     <constant name="EcalEndcapP_numLayers"          value="1"/>
 
     <constant name="EcalEndcapPInsert_zmin"           value="EcalEndcapP_zmin"/>
