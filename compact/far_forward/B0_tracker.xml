@@ -164,6 +164,14 @@
       </layer>
     </detector>
 
+    <detector id="B0TrackerSubAssembly_ID"
+      name="B0TrackerSubAssembly"
+      type="DD4hep_SubdetectorAssembly"
+      vis="TrackerSubAssemblyVis">
+      <composite name="B0Tracker"/>
+      <composite name="B0TrackerCompanion"/>
+    </detector>
+
   </detectors>
 
   <readouts>
