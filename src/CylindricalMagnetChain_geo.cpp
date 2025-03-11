@@ -47,7 +47,7 @@ static Ref_t create_magnet(Detector& description, xml_h e, SensitiveDetector /* 
     Volume v_yoke("v_yoke_" + name, yoke_tube, m_Iron);
 
     v_yoke.setVisAttributes(x_det.visStr());
-    
+
     auto yoke_pv = assembly.placeVolume(v_yoke, Transform3D(RotationY(theta), Position(x, y, z)));
 
     yoke_pv.addPhysVolID("element", id);
