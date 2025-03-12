@@ -347,9 +347,9 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
       aerogelRibDE.setPlacement(aerogelRibPV);
 
       auto ribMin = radiatorRmin + (n+1)*((radiatorRmax- radiatorRmin)/5);
-      ConeSegment aerogelRibSolid1(ribThickness / 2, aeroMax,ribMin, aeroMin + boreDelta * aerogelThickness / vesselLength,
-				  aeroMax + snoutDelta * aerogelThickness / snoutLength, phiEnd-0.001*M_PI, ribPhi);
-      Volume aerogelRib1Vol(detName + "_aerogel_rib_out", aerogelRibSolid, ribMat );
+      ConeSegment aerogelRib1Solid(ribThickness / 2, aeroMax,ribMin, aeroMax + boreDelta * aerogelThickness / vesselLength,
+				  ribMin + snoutDelta * aerogelThickness / snoutLength, 0, 2*M_PI);
+      Volume aerogelRib1Vol(detName + "_aerogel_rib_out", aerogelRib1Solid, ribMat );
       aerogelRib1Vol.setVisAttributes(ribVis);
       auto aerogelRib1Placement = Translation3D(radiatorPos) * // re-center to originFront
                           RotationY(radiatorPitch);    // change polar angle to specified pitch
