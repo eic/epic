@@ -312,8 +312,7 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
   int nTiles[5]={10,20,25,30,35};
   // solid and volume: create aerogel and filter
   auto radiatorPos = Position(0., 0., radiatorFrontplane + 0.5 * aerogelThickness) + originFront;
-  
-  std::cout<<radiatorPos<<std::endl;
+  //std::cout<<radiatorPos<<std::endl;
   for(int n=0; n<5; n++){
     for(int p=0; p<nTiles[n]; p++){
       std::string tileName = "tile" + std::to_string(n)+"_"+std::to_string(p);
@@ -357,9 +356,10 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
       auto aerogelRib1PV = gasvolVol.placeVolume(aerogelRib1Vol, aerogelRib1Placement);
       DetElement aerogelRib1DE(det, "aerogel_rib1_de_"+ribName, n);
       aerogelRib1DE.setPlacement(aerogelRib1PV);
-
-      double aerogelZpos = vesselPos.z() + aerogelPV.position().z();
-      desc.add(Constant("DRICH_aerogel_zpos", std::to_string(aerogelZpos)));
+      if(n==0 && p==0){
+	double aerogelZpos = vesselPos.z() + aerogelPV.position().z();
+	desc.add(Constant("DRICH_aerogel_zpos", std::to_string(aerogelZpos)));
+      }
     }
   }
   Cone airgapSolid(airgapThickness / 2, radiatorRmin + boreDelta * aerogelThickness / vesselLength,
