@@ -200,6 +200,16 @@ public:
     x      = (id>>20) & 0x3;
     y      = (id>>22) & 0x3;
   }
+  void decodeMcHit2(ULong_t id, int &system, int &ns, int &row, int &col, int &x, int &y, int &fiberx, int &fibery){
+    system =  id      & 0xff;
+    ns     = (id>> 8) & 0x1;
+    row    = (id>> 9) & 0x3f;
+    col    = (id>>15) & 0x1f;
+    x      = (id>>20) & 0x3;
+    y      = (id>>22) & 0x3;
+    fiberx = (id>>27) & 0x1f;
+    fibery = (id>>32) & 0x1f;
+  }
   void mcHitToTowerRowCol(ULong_t id, int &ns, int &trow, int &tcol){
     int system,row,col,x,y;
     decodeMcHit(id,system,ns,row,col,x,y);

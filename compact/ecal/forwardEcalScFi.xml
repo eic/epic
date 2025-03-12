@@ -1,0 +1,80 @@
+<!-- SPDX-License-Identifier: LGPL-3.0-or-later -->
+<!-- Copyright (C) 2025 Akio Ogawa, Whitney Armstrong, Chao Peng, Sylvester Joosten, Zhongling Ji, Ryan Milton -->
+
+<lccdd>
+
+  <info name="forwardEcalScFi.xml"
+        title="forward ECal 2025 design"
+        author="@akioogawa"
+        url="https://github.com/akioogawa"
+        status="development"
+        version="1.0">
+  <comment/></info>
+
+  <define>
+    <documentation>
+      - Forward Ecal Slice Thickness
+    </documentation>
+    <constant name="ForwardEcalCoverThickness"            value="0.343*mm"/>
+    <constant name="ForwardEcalAirThickness"              value="61.457*mm"/>
+    <constant name="ForwardEcalPCBThickness"              value="4.5*mm"/>
+    <constant name="ForwardEcalLightGuideThickness"       value="21.0*mm"/>
+    <constant name="ForwardEcalScintillatorThickness"     value="170.0*mm"/>
+    <constant name="ForwardEcalMountingPlateThickness"    value="12.7*mm"/>
+
+    <documentation>
+      - Forward Ecal computed total Thickness
+    </documentation>
+    <constant name="ForwardEcalThickness"
+      value = "ForwardEcalCoverThickness +
+               ForwardEcalAirThickness +
+               ForwardEcalPCBThickness +
+               ForwardEcalLightGuideThickness +
+               ForwardEcalScintillatorThickness +
+	       ForwardEcalMountingPlateThickness"
+    />
+  </define>
+
+  <limits>
+  </limits>
+
+  <regions>
+  </regions>
+
+  <display>
+  </display>
+
+  <detectors>
+
+    <documentation>
+      ### Forward (Positive Z) Endcap ScFi Electromagnetic Calorimeter
+      Implementation of 2025 design
+      Insert shape is cut out from middle of detector
+    </documentation>
+    <detector id="EcalEndcapP_ID"
+      name="ForwardEcal"
+      type="epic_ForwardEcalScFi"
+      readout="ForwardEcalHits">
+      <position x="0" y="0" z="EcalEndcapP_zmin"/>
+      <dimensions rmin="EcalEndcapP_rmin" rmax="EcalEndcapP_rmax" z="ForwardEcalThickness"/>
+      <slice name="Cover_slice" material="Aluminum" thickness="ForwardEcalCoverThickness" vis="AnlGray"/>
+      <slice name="Air_slice" material="Air" thickness="ForwardEcalAirThickness" vis="AnlLight_Gray"/>
+      <slice name="PCB_slice" material="Fr4" thickness="ForwardEcalPCBThickness" vis="AnlGreen"/>
+      <slice name="LightGuide_slice" material="Plexiglass" thickness="ForwardEcalLightGuideThickness" vis="AnlBlue"/>
+      <slice name="Scintillator_slice" material="AvgTungstenScFi" thickness="ForwardEcalScintillatorThickness" vis="AnlOrange" sensitive="true"/>
+      <slice name="MountingPlate_slice" material="StainlessSteel" thickness="ForwardEcalMountingPlateThickness" vis="AnlGray"/>
+    </detector>
+  </detectors>
+
+  <!--  Definition of the readout segmentation/definition  -->
+  <readouts>
+    <readout name="ForwardEcalHits">
+      <!-- <id>system:8,northsouth:1,blockrow:6,blockcol:5,x:2,y:2,fx:5,fy:5</id> XXX put this line back if assigning ID to frol and fcol, and will run ok-->
+      <id>system:8,northsouth:1,blockrow:6,blockcol:5,x:2,y:2</id> <!-- XXX I don't want fx and fy, just sum up all fibers into tower energy. This cause a crash-->
+    </readout>
+  </readouts>
+
+  <plugins>
+  </plugins>
+
+</lccdd>
