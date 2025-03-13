@@ -49,7 +49,7 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
 
   // Start optical configuration;
 #ifdef _WITH_OPTICS_
-  auto output_file = TFile::Open("qrich.root", "RECREATE");
+  auto output_file = TFile::Open("qrich-optics.root", "RECREATE");
   auto geometry = new CherenkovDetectorCollection();
   auto cdet = geometry->AddNewDetector("QRICH");
   //det->SetReadoutCellMask(~0x0);
@@ -172,7 +172,7 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
 	gzOffset += acThick/2;
 	gasvolVol.placeVolume(acrylicVol, Position(0, 0, gzOffset));
 	
-#if def _WITH_OPTICS_
+#if 0//def _WITH_OPTICS_
 	{
 	  TVector3 nx(1,0,0), ny(0,-1,0);
 	
@@ -220,7 +220,8 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
       //Volume gasvolVol(detName + "_gas", gasvolSolid, gasvolMat);
       
       //+auto hrppd_log = BuildFakeHRPPD(wnd_log, pd_box, pd);
-#if _LATER_
+      //#if _LATER_
+#ifdef _WITH_OPTICS_
       {	
 	TVector3 nx(1,0,0), ny(0,-1,0);
 	
