@@ -37,7 +37,7 @@
       offset_x="-0.5*(QRICH_num_px-1)*QRICH_pixel_pitch"
       offset_y="-0.5*(QRICH_num_px-1)*QRICH_pixel_pitch"
       />
-    <id>system:8,sector:3,pdu:12,sipm:6,x:32:-16,y:-16</id>
+    <id>system:8,pdu:12,x:32:-16,y:-16</id>
   </readout>
 </readouts>
 </lccdd>

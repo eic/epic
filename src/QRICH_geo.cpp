@@ -12,8 +12,9 @@
 #define _FIDUCIAL_VOLUME_LENGTH_SIMPLE_    (500.0*mm)
 // Choose ePIC dRICH location;
 #define _FIDUCIAL_VOLUME_OFFSET_SIMPLE_   (1550.0*mm)
+#define _FAKE_HRPPD_PITCH_                  (3.25*mm)
 // This one does not really matter;
-#define _FIDUCIAL_VOLUME_WIDTH_SIMPLE_    (2000.0*mm)
+#define _FIDUCIAL_VOLUME_WIDTH_SIMPLE_    (705*_FAKE_HRPPD_PITCH_)//2000.0*mm)
 
 #define _VESSEL_FRONT_SIDE_THICKNESS_        (5.0*mm)
 #define _SENSOR_AREA_LENGTH_                 (5.0*cm)
@@ -32,15 +33,17 @@ using namespace dd4hep;
 #endif
 
 #define _FAKE_HRPPD_WINDOW_THICKNESS_            (5.0*mm)
-#define _FAKE_HRPPD_TILE_SIZE_          (_FIDUCIAL_VOLUME_WIDTH_SIMPLE_ - 10*mm)
-#define _FAKE_HRPPD_ACTIVE_AREA_SIZE_   (_FIDUCIAL_VOLUME_WIDTH_SIMPLE_ - 20*mm)
+#define _FAKE_HRPPD_TILE_SIZE_          (_FIDUCIAL_VOLUME_WIDTH_SIMPLE_ - 3*_FAKE_HRPPD_PITCH_)//10*mm)
+#define _FAKE_HRPPD_ACTIVE_AREA_SIZE_   (_FIDUCIAL_VOLUME_WIDTH_SIMPLE_ - 5*_FAKE_HRPPD_PITCH_)//20*mm)
 #define _FAKE_HRPPD_CONTAINER_VOLUME_HEIGHT_    (32.0*mm)
 
 //#define _FAKE_QE_DOWNSCALING_FACTOR_          (30.0/37.0)
-//#define _FAKE_SENSOR_PLANE_GEOMETRIC_EFFICIENCY_   (1.00)
-//#define _FAKE_SAFETY_FACTOR_                       (0.70)
+#define _FAKE_SENSOR_PLANE_GEOMETRIC_EFFICIENCY_   (1.00)
+#define _FAKE_SAFETY_FACTOR_                       (0.70)
 
 //static CherenkovDetectorCollection *geoptr = new CherenkovDetectorCollection();
+
+//#include <SubtractionSolid.h>
 
 
 static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetector sens)
@@ -59,7 +62,7 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
   xml::DetElement detElem       = handle;
   std::string detName           = detElem.nameStr();
   int detID                     = detElem.id();
-  //OpticalSurfaceManager surfMgr = desc.surfaceManager();
+  OpticalSurfaceManager surfMgr = desc.surfaceManager();
   DetElement det(detName, detID);
   sens.setType("tracker");
 
@@ -67,10 +70,12 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
   //auto gasvolMat    = desc.material("AirOptical");
   auto vesselMat    = desc.material(detElem.attr<std::string>(_Unicode(material)));
   auto gasvolMat    = desc.material(detElem.attr<std::string>(_Unicode(gas)));
+  auto resinMat       = desc.material("Epoxy");
   
   auto pssElem      = detElem.child(_Unicode(sensors)).child(_Unicode(pss));
   auto pssMat       = desc.material(pssElem.attr<std::string>(_Unicode(material)));
   //auto pssSurf      = surfMgr.opticalSurface(pssElem.attr<std::string>(_Unicode(surface)));
+  auto pssSurf      = surfMgr.opticalSurface("SensorSurface_DRICH");
   
   auto aerogelMat   = desc.material("Aerogel_QRICH");
   auto acrylicMat   = desc.material("Acrylic_DRICH");
@@ -85,8 +90,8 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
   /* - `sensorIDfields` is a list of readout fields used to specify a unique sensor ID
    * - `cellMask` is defined such that a hit's `cellID & cellMask` is the corresponding sensor's unique ID
    */
-#if _TODAY_
-  std::vector<std::string> sensorIDfields = {"pdu", "sipm", "sector"};
+#if 1//_TODAY_
+  std::vector<std::string> sensorIDfields = {"pdu"};//, "sipm", "sector"};
   const auto& readoutCoder                = *desc.readout(readoutName).idSpec().decoder();
   // create a unique sensor ID from a sensor's PlacedVolume::volIDs
   auto encodeSensorID = [&readoutCoder](auto ids) {
@@ -163,6 +168,7 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
       }
       
       // Acrylic filter volume;
+#if _TODAY_
       {
 	double acWidth = gvWidth - 1*mm, acThick = _ACRYLIC_THICKNESS_;
 	Box acrylicSolid(acWidth/2, acWidth/2, acThick/2);
@@ -183,20 +189,21 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
 	}
 #endif
       }
+#endif
     }
 
     {
       // Mimic BuildFakePhotonDetectorMatrix() used in the standalone code;
       double fvzOffset = fvOffset, wzOffset = fvLength/2 - _SENSOR_AREA_LENGTH_;
       
-      double pdthick = 1*cm, zpdc = wzOffset + _FAKE_HRPPD_WINDOW_THICKNESS_ + pdthick/2;
+      double pdthick = 0.01*mm, zpdc = wzOffset + _FAKE_HRPPD_WINDOW_THICKNESS_ + pdthick/2;
       //G4Box *pd_box  = new G4Box("PhotoDetector", _FAKE_HRPPD_ACTIVE_AREA_SIZE_/2,
       //			     _FAKE_HRPPD_ACTIVE_AREA_SIZE_/2, pdthick/2);
       auto pd_box  = Box(/*"PhotoDetector",*/ _FAKE_HRPPD_ACTIVE_AREA_SIZE_/2,
 			 _FAKE_HRPPD_ACTIVE_AREA_SIZE_/2, pdthick/2);
-      Volume pd_log(detName + "_photodetector", pd_box, pssMat);//bialkaliMat);
+      Volume pssVol(detName + "_photodetector", pd_box, pssMat);//bialkaliMat);
       //gasvolVol.placeVolume(pd_log, Position(0, 0, 0));
-      pd_log.setSensitiveDetector(sens);
+      pssVol.setSensitiveDetector(sens);
   
 #ifdef _WITH_OPTICS_
       //auto pd = new CherenkovPhotonDetector(pd_box, m_Bialkali);
@@ -207,7 +214,7 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
       //+geometry->AddPhotonDetector(detector, 0, pd);
       geometry->AddPhotonDetector(cdet, 0, pd);
 #endif
-      
+	
       // Full size quartz window; FIXME: Sapphire, here and in all other places;
       //auto wnd_box = new G4Box("QuartzWindow", _FAKE_HRPPD_TILE_SIZE_/2, _FAKE_HRPPD_TILE_SIZE_/2,
       //			   _FAKE_HRPPD_WINDOW_THICKNESS_/2);
@@ -278,10 +285,49 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
 	  // Photodector layer (photocathode);
 	  //new G4PVPlacement(0, G4ThreeVector(0.0, 0.0, accu + pdthick/2), pd->GetLogicalVolume(), "PhotoDetector", 
 	  //		    hrppd_log, false, 0);
-	  hrppd_log.placeVolume(pd_log, Position(0, 0, accu + pdthick/2));
+	  auto pssPlacement = Position(0, 0, accu + pdthick/2);
+	  auto pssPV = hrppd_log.placeVolume(pssVol, pssPlacement);//Position(0, 0, accu + pdthick/2));
 	  //gasvolVol.placeVolume(pd_log, Position(0, 0, 0));
-	  //accu += pdthick;
+	  accu += pdthick;
 	  //#endif
+	  {
+	    double pssThickness = pdthick;
+	    double resinSide = _FAKE_HRPPD_ACTIVE_AREA_SIZE_ + 1*mm, resinThickness = pssThickness + 1*mm;
+	    Box resinSolid(resinSide / 2., resinSide / 2., resinThickness / 2.);
+
+	    // embed pss solid in resin solid, by subtracting `pssSolid` from `resinSolid`
+#if 1
+	    //SubtractionSolid resinSolidEmbedded(
+	    //					resinSolid, pssVol,//Solid,
+	    //					Transform3D(Translation3D(0., 0., (resinThickness - pssThickness) / 2.)));
+	    auto resinPlacement = Position(0, 0, accu + resinThickness/2);
+	    Volume resinVol("_resin_", resinSolid/*Embedded*/, resinMat);
+	    hrppd_log.placeVolume(resinVol, resinPlacement);
+#endif
+	  }
+	  {
+	    // sensor readout // NOTE: follow `sensorIDfields`
+#if _TODAY_
+	    pssPV.addPhysVolID("sector", isec)
+	      .addPhysVolID("pdu", ipdu)
+	      .addPhysVolID("sipm", isipm);
+#endif
+	    pssPV.addPhysVolID("pdu", 0);//0);//isec)
+	    
+	    // sensor DetElement
+#if 1//_TODAY_
+	    auto sensorID = encodeSensorID(pssPV.volIDs());
+	    //std::string sensorIDname =
+	    //secName + "_pdu" + std::to_string(ipdu) + "_sipm" + std::to_string(isipm);
+	    DetElement pssDE(det, "sensor_de_"/* + sensorIDname*/, sensorID);
+	    pssDE.setPlacement(pssPV);
+#endif
+	    {
+	      SkinSurface pssSkin(desc, pssDE, "sensor_optical_surface_"/* + sensorIDname*/, pssSurf,
+				  pssVol);
+	      pssSkin.isValid();
+	    }
+	  }
 	}
 
 #if _THINK_
@@ -307,9 +353,9 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
 		    // NB: last argument: want a built-in selection of unused photons, which follow the QE(lambda);
 		    // see CherenkovSteppingAction::UserSteppingAction() for a usage case;
 		    new G4DataInterpolation(qePhotonEnergy, qeData, qeEntries, 0.0, 0.0), qemax ? 1.0/qemax : 1.0);
-	  pd->SetGeometricEfficiency(_FAKE_SENSOR_PLANE_GEOMETRIC_EFFICIENCY_ * _FAKE_SAFETY_FACTOR_);
 	}
 #endif
+	pd->SetGeometricEfficiency(_FAKE_SENSOR_PLANE_GEOMETRIC_EFFICIENCY_ * _FAKE_SAFETY_FACTOR_);
    
 	//new G4PVPlacement(0, G4ThreeVector(0.0, 0.0, wzOffset + _FAKE_HRPPD_CONTAINER_VOLUME_HEIGHT_/2), 
 	//		hrppd_log, "HRPPD", dbox->m_fiducial_volume_phys->GetLogicalVolume(), false, 0);
