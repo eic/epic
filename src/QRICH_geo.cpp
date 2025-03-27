@@ -24,7 +24,7 @@
 #define _AEROGEL_THICKNESS_                  (2.5*cm)
 #define _ACRYLIC_THICKNESS_                  (3.0*mm)
 
-#define _MAGIC_CFF_                          (1239.8)
+//#define _MAGIC_CFF_                          (1239.8)
 
 using namespace dd4hep;
 
@@ -37,7 +37,6 @@ using namespace dd4hep;
 #define _FAKE_HRPPD_ACTIVE_AREA_SIZE_   (_FIDUCIAL_VOLUME_WIDTH_SIMPLE_ - 5*_FAKE_HRPPD_PITCH_)//20*mm)
 #define _FAKE_HRPPD_CONTAINER_VOLUME_HEIGHT_    (32.0*mm)
 
-//#define _FAKE_QE_DOWNSCALING_FACTOR_          (30.0/37.0)
 #define _FAKE_SENSOR_PLANE_GEOMETRIC_EFFICIENCY_   (1.00)
 #define _FAKE_SAFETY_FACTOR_                       (0.70)
 
@@ -79,7 +78,7 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
   
   auto aerogelMat   = desc.material("Aerogel_QRICH");
   auto acrylicMat   = desc.material("Acrylic_DRICH");
-  auto quartzMat    = desc.material("QuartzOptical");
+  auto quartzMat    = desc.material("AirOptical");//"QuartzOptical");
   //auto vacuumMat    = desc.material("AirOptical");//VacuumOptical");
   //auto bialkaliMat  = desc.material("Bialkali");
   
@@ -134,7 +133,8 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
       // FIXME: Z-location does not really matter here, right?;
       auto boundary = new FlatSurface(TVector3(0,0,0), /*sign**/TVector3(1,0,0), TVector3(0,-1,0));
       
-      geometry->SetContainerVolume(cdet, "GasVolume", 0, (G4LogicalVolume*)(0x0), 0, boundary);
+      auto radiator = geometry->SetContainerVolume(cdet, "GasVolume", 0, (G4LogicalVolume*)(0x0), 0, boundary);
+      radiator->SetReferenceRefractiveIndex(1.00033);
     }
 #endif
     
@@ -169,6 +169,7 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
       
       // Acrylic filter volume;
 #if _TODAY_
+      set ref. <n>!
       {
 	double acWidth = gvWidth - 1*mm, acThick = _ACRYLIC_THICKNESS_;
 	Box acrylicSolid(acWidth/2, acWidth/2, acThick/2);
@@ -235,8 +236,10 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
 	auto surface = 
 	  new FlatSurface((1/mm)*TVector3(0,0,fvzOffset + wzOffset + _FAKE_HRPPD_WINDOW_THICKNESS_/2), nx, ny);
 	
-	geometry->AddFlatRadiator(cdet, "QuartzWindow", CherenkovDetector::Downstream, 
-				  0, (G4LogicalVolume*)(0x3), 0, /*wnd_log, m_FusedSilica,*/ surface, _FAKE_HRPPD_WINDOW_THICKNESS_/mm);
+	auto radiator = geometry->AddFlatRadiator(cdet, "QuartzWindow", CherenkovDetector::Downstream, 
+						  0, (G4LogicalVolume*)(0x3), 0, /*wnd_log, m_FusedSilica,*/ surface,
+						  _FAKE_HRPPD_WINDOW_THICKNESS_/mm);
+	radiator->SetReferenceRefractiveIndex(1.00029);
       }	
 #endif
       
@@ -254,7 +257,7 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
 	//?pd->DefineLogicalVolume();
 	//pd->SetColor(G4Colour(1, 0, 0, 1.0));
 	// Cannot access GEANT shapes in the reconstruction code -> store this value;
-	pd->SetActiveAreaSize(_FAKE_HRPPD_ACTIVE_AREA_SIZE_);
+	pd->SetActiveAreaSize(_FAKE_HRPPD_ACTIVE_AREA_SIZE_/mm);
 #endif
 	
 #if _LATER_
@@ -271,8 +274,8 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
 	  //+auto wnd_phys = 
 	  //new G4PVPlacement(0, G4ThreeVector(0.0, 0.0, accu + _FAKE_HRPPD_WINDOW_THICKNESS_/2), wnd_log, 
 	  //		    "QuartzWindow", hrppd_log, false, 0);
-	  //+hrppd_log.placeVolume(wnd_log, Position(0, 0, accu + _FAKE_HRPPD_WINDOW_THICKNESS_/2));
-	  //+accu += _FAKE_HRPPD_WINDOW_THICKNESS_;
+	  hrppd_log.placeVolume(wnd_log, Position(0, 0, accu + _FAKE_HRPPD_WINDOW_THICKNESS_/2));
+	  accu += _FAKE_HRPPD_WINDOW_THICKNESS_;
 	  
 	  //#if _TODAY_
 	  // Fake photodector layer (photocathode);
@@ -330,42 +333,20 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
 	  }
 	}
 
-#if _THINK_
-	// Is this stuff really needed here?;
-	{                      
-	  const unsigned qeEntries = 26;
-	  
-	  // Create HRPPD QE table; use LAPPD #126 from Alexey's March 2022 LAPPD Workshop presentation;
-	  double WL[qeEntries] = { 160,  180,  200,  220,  240,  260,  280,  300,  320,  340,  360,  380,  400,  
-				   420,  440,  460,  480,  500,  520,  540,  560,  580,  600,  620,  640,  660};
-	  double QE[qeEntries] = {0.25, 0.26, 0.27, 0.30, 0.32, 0.35, 0.36, 0.36, 0.36, 0.36, 0.37, 0.35, 0.30, 
-				  0.27, 0.24, 0.20, 0.18, 0.15, 0.13, 0.11, 0.10, 0.09, 0.08, 0.07, 0.05, 0.05};  
-	  
-	  double qemax = 0.0, qePhotonEnergy[qeEntries], qeData[qeEntries];
-	  for(int iq=0; iq<qeEntries; iq++) {
-	    qePhotonEnergy[iq] = eV * _MAGIC_CFF_ / (WL[qeEntries - iq - 1] + 0.0);
-	    qeData        [iq] =                     QE[qeEntries - iq - 1] * _FAKE_QE_DOWNSCALING_FACTOR_;
-	    
-	    if (qeData[iq] > qemax) qemax = qeData[iq];
-	  } //for iq
-	  
-	  pd->SetQE(eV * _MAGIC_CFF_ / WL[qeEntries-1], eV * _MAGIC_CFF_ / WL[0], 
-		    // NB: last argument: want a built-in selection of unused photons, which follow the QE(lambda);
-		    // see CherenkovSteppingAction::UserSteppingAction() for a usage case;
-		    new G4DataInterpolation(qePhotonEnergy, qeData, qeEntries, 0.0, 0.0), qemax ? 1.0/qemax : 1.0);
-	}
-#endif
 	pd->SetGeometricEfficiency(_FAKE_SENSOR_PLANE_GEOMETRIC_EFFICIENCY_ * _FAKE_SAFETY_FACTOR_);
    
 	//new G4PVPlacement(0, G4ThreeVector(0.0, 0.0, wzOffset + _FAKE_HRPPD_CONTAINER_VOLUME_HEIGHT_/2), 
 	//		hrppd_log, "HRPPD", dbox->m_fiducial_volume_phys->GetLogicalVolume(), false, 0);
-	gasvolVol.placeVolume(hrppd_log, Position(0, 0, wzOffset + _FAKE_HRPPD_CONTAINER_VOLUME_HEIGHT_/2));
+	//gasvolVol.placeVolume(hrppd_log, Position(0, 0, wzOffset + _FAKE_HRPPD_CONTAINER_VOLUME_HEIGHT_/2));
+	vesselVol.placeVolume(hrppd_log, Position(0, 0, wzOffset + _FAKE_HRPPD_CONTAINER_VOLUME_HEIGHT_/2));
       }
       
 #ifdef _WITH_OPTICS_
       {
 	// Photocathode surface;
-	auto surface = new FlatSurface((1/mm)*TVector3(0.0, 0.0, fvzOffset + zpdc), 
+	auto surface = new FlatSurface((1/mm)*TVector3(0.0, 0.0, fvzOffset + zpdc),
+	//printf("@@@ %f\n", fvzOffset + zpdc); exit(0);
+	//auto surface = new FlatSurface((1/mm)*TVector3(0.0, 0.0, 172.7505), 
 				       TVector3(1,0,0), TVector3(0,-1,0));
 	
 	{
