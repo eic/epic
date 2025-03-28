@@ -168,8 +168,8 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
       }
       
       // Acrylic filter volume;
-#if _TODAY_
-      set ref. <n>!
+#if 1//_TODAY_
+      //set ref. <n>!
       {
 	double acWidth = gvWidth - 1*mm, acThick = _ACRYLIC_THICKNESS_;
 	Box acrylicSolid(acWidth/2, acWidth/2, acThick/2);
@@ -179,14 +179,15 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
 	gzOffset += acThick/2;
 	gasvolVol.placeVolume(acrylicVol, Position(0, 0, gzOffset));
 	
-#if 0//def _WITH_OPTICS_
+#ifdef _WITH_OPTICS_
 	{
 	  TVector3 nx(1,0,0), ny(0,-1,0);
 	
 	  auto surface = new FlatSurface((1/mm)*TVector3(0,0,fvOffset + gvOffset + gzOffset), nx, ny);
 	  
-	  /*auto radiator =*/ geometry->AddFlatRadiator(cdet, "Acrylic", CherenkovDetector::Upstream, 
-							0, (G4LogicalVolume*)(0x2), 0, surface, acThick/mm);
+	  auto radiator = geometry->AddFlatRadiator(cdet, "Acrylic", CherenkovDetector::Upstream, 
+						    0, (G4LogicalVolume*)(0x2), 0, surface, acThick/mm);
+	  radiator->SetReferenceRefractiveIndex(1.5017);
 	}
 #endif
       }

@@ -539,12 +539,101 @@
       5.1*eV 2.800
       "/>
     <matrix name="RINDEX__Aerogel_QRICH" coldim="2" values="
-      1240*eV/600  1.040
-      1240*eV/300  1.040
+   1.68*eV    1.039
+   1.85*eV    1.039
+   2.02*eV    1.039
+   2.20*eV    1.039
+   2.38*eV    1.039
+   2.55*eV    1.039
+   2.73*eV    1.040
+   2.90*eV    1.040
+   3.08*eV    1.040
+   3.25*eV    1.040
+   3.42*eV    1.040
+   3.60*eV    1.041
+   3.77*eV    1.041
+   3.95*eV    1.041
+   4.12*eV    1.042
+   4.30*eV    1.042
+   4.47*eV    1.042
+   4.65*eV    1.043
+   4.83*eV    1.043
+   5.00*eV    1.044
+   5.17*eV    1.044
+   5.35*eV    1.044
+   5.53*eV    1.045
+   5.70*eV    1.045
+   5.88*eV    1.046
+   6.05*eV    1.046
+   6.22*eV    1.047
+   6.40*eV    1.047
+   6.58*eV    1.048
+   6.75*eV    1.049
+   6.92*eV    1.049
+   7.10*eV    1.050
+   7.28*eV    1.050
+   7.45*eV    1.051
       "/>
     <matrix name="ABSLENGTH__Aerogel_QRICH" coldim="2" values="
-      1240*eV/600  4.0*cm
-      1240*eV/300  4.0*cm
+   1.63*eV  178.646*mm
+   1.73*eV  177.265*mm
+   1.86*eV  178.447*mm
+   2.02*eV  179.624*mm
+   2.20*eV  182.134*mm
+   2.43*eV  187.362*mm
+   2.64*eV  184.580*mm
+   2.84*eV  192.689*mm
+   3.07*eV  205.574*mm
+   3.32*eV  217.744*mm
+   3.52*eV  201.034*mm
+   3.75*eV  177.724*mm
+   3.95*eV  139.950*mm
+   4.10*eV  104.014*mm
+   4.26*eV   72.958*mm
+   4.39*eV   50.078*mm
+   4.67*eV   36.948*mm
+   4.97*eV   27.659*mm
+   5.18*eV   21.314*mm
+   5.42*eV   15.841*mm
+   5.92*eV   11.858*mm
+   6.89*eV    5.772*mm
+   7.75*eV    1.644*mm	
+      "/>
+    <matrix name="RAYLEIGH__Aerogel_QRICH" coldim="2" values="
+   1.68*eV  417.210*mm
+   1.85*eV  311.297*mm
+   2.02*eV  234.939*mm
+   2.20*eV  178.908*mm
+   2.38*eV  137.277*mm
+   2.55*eV  105.973*mm
+   2.73*eV   82.489*mm
+   2.90*eV   65.344*mm
+   3.08*eV   52.151*mm
+   3.25*eV   41.799*mm
+   3.42*eV   33.753*mm
+   3.60*eV   27.372*mm
+   3.77*eV   22.141*mm
+   3.95*eV   18.017*mm
+   4.12*eV   14.533*mm
+   4.30*eV   11.913*mm
+   4.47*eV    9.746*mm
+   4.65*eV    8.055*mm
+   4.83*eV    6.711*mm
+   5.00*eV    5.573*mm
+   5.17*eV    4.856*mm
+   5.35*eV    4.251*mm
+   5.53*eV    3.738*mm
+   5.70*eV    3.300*mm
+   5.88*eV    2.924*mm
+   6.05*eV    2.600*mm
+   6.22*eV    2.320*mm
+   6.40*eV    2.076*mm
+   6.58*eV    1.864*mm
+   6.75*eV    1.678*mm
+   6.92*eV    1.515*mm
+   7.10*eV    1.371*mm
+   7.28*eV    1.243*mm
+   7.45*eV    1.131*mm
       "/>
     <matrix name="RINDEX__Acrylic" coldim="2" values="
       1240*eV/1100  1.49
@@ -929,6 +1018,7 @@
       <fraction n="0.001" ref="C"/>
       <property name="RINDEX" ref="RINDEX__Aerogel_QRICH"/>
       <property name="ABSLENGTH" ref="ABSLENGTH__Aerogel_QRICH"/>
+      <property name="RAYLEIGH"  ref="RAYLEIGH__Aerogel_QRICH"/>
     </material>
     <material name="Bialkali">
       <!-- ALL FAKE -->
