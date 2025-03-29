@@ -16,15 +16,15 @@
   name="QRICH"
   type="epic_QRICH"
   readout="QRICHHits"
+  
+  vessel="Aluminum"
   gas="N2cherenkov"
-  material="Aluminum"
+  aerogel="Aerogel_QRICH"
+  acrylic="Acrylic_DRICH"
+  
+  window="AirOptical"
+  photocathode="AirOptical"
   >
-
-<sensors>
-<pss
-  material="AirOptical"
-  />
-</sensors>
 </detector>
 </detectors>
 
