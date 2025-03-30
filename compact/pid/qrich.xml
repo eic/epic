@@ -20,7 +20,7 @@
   vessel="Aluminum"
   gas="N2cherenkov"
   aerogel="Aerogel_QRICH"
-  acrylic="Acrylic_DRICH"
+  acrylic="Acrylic_QRICH"
   
   window="AirOptical"
   photocathode="AirOptical"

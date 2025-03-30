@@ -186,5 +186,5 @@ SET( DUMMY_SRC
 
 #add_executable(${DUMMY_EXE} ${DUMMY_SRC})
 add_library(${a_lib_name} SHARED ${DUMMY_SRC})
-target_link_libraries(${a_lib_name} ${ROOT_LIBRARIES} DD4hep::DDCore DD4hep::DDRec fmt::fmt /DATA00/ayk/ePIC/prefix/lib/libIRT.so)
+target_link_libraries(${a_lib_name} ${ROOT_LIBRARIES} DD4hep::DDCore DD4hep::DDRec fmt::fmt ${CMAKE_INSTALL_PREFIX}/lib/libIRT.so)
 install(TARGETS ${a_lib_name}  DESTINATION lib)

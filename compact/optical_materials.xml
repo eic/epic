@@ -539,40 +539,40 @@
       5.1*eV 2.800
       "/>
     <matrix name="RINDEX__Aerogel_QRICH" coldim="2" values="
-   1.68*eV    1.039
-   1.85*eV    1.039
-   2.02*eV    1.039
-   2.20*eV    1.039
-   2.38*eV    1.039
-   2.55*eV    1.039
-   2.73*eV    1.040
-   2.90*eV    1.040
-   3.08*eV    1.040
-   3.25*eV    1.040
-   3.42*eV    1.040
-   3.60*eV    1.041
-   3.77*eV    1.041
-   3.95*eV    1.041
-   4.12*eV    1.042
-   4.30*eV    1.042
-   4.47*eV    1.042
-   4.65*eV    1.043
-   4.83*eV    1.043
-   5.00*eV    1.044
-   5.17*eV    1.044
-   5.35*eV    1.044
-   5.53*eV    1.045
-   5.70*eV    1.045
-   5.88*eV    1.046
-   6.05*eV    1.046
-   6.22*eV    1.047
-   6.40*eV    1.047
-   6.58*eV    1.048
-   6.75*eV    1.049
-   6.92*eV    1.049
-   7.10*eV    1.050
-   7.28*eV    1.050
-   7.45*eV    1.051
+   1.68*eV  1.03864
+   1.85*eV  1.03877
+   2.02*eV  1.03889
+   2.20*eV  1.03905
+   2.38*eV  1.03921
+   2.55*eV  1.03939
+   2.73*eV  1.03958
+   2.90*eV  1.03979
+   3.08*eV  1.04001
+   3.25*eV  1.04024
+   3.42*eV  1.04049
+   3.60*eV  1.04076
+   3.77*eV  1.04105
+   3.95*eV  1.04135
+   4.12*eV  1.04167
+   4.30*eV  1.04201
+   4.47*eV  1.04238
+   4.65*eV  1.04276
+   4.83*eV  1.04315
+   5.00*eV  1.04358
+   5.17*eV  1.04376
+   5.35*eV  1.04443
+   5.53*eV  1.04485
+   5.70*eV  1.04531
+   5.88*eV  1.04579
+   6.05*eV  1.04630
+   6.22*eV  1.04684
+   6.40*eV  1.04736
+   6.58*eV  1.04795
+   6.75*eV  1.04851
+   6.92*eV  1.04906
+   7.10*eV  1.04968
+   7.28*eV  1.05027
+   7.45*eV  1.05094
       "/>
     <matrix name="ABSLENGTH__Aerogel_QRICH" coldim="2" values="
    1.63*eV  178.646*mm
@@ -634,6 +634,51 @@
    7.10*eV    1.371*mm
    7.28*eV    1.243*mm
    7.45*eV    1.131*mm
+      "/>
+    <matrix name="RINDEX__Acrylic_QRICH" coldim="2" values="
+      1.60*eV  1.5017
+      7.40*eV  1.5017
+      "/>
+    <matrix name="ABSLENGTH__Acrylic_QRICH" coldim="2" values="
+      1.60000*eV  82.0704*mm
+      4.13281*eV  82.0704*mm
+      4.22099*eV  36.9138*mm
+      4.30916*eV  13.3325*mm
+      4.39734*eV  5.03627*mm
+      4.48552*eV  2.3393*mm
+      4.57369*eV  1.36177*mm
+      4.66187*eV  0.933192*mm
+      4.75005*eV  0.708268*mm
+      4.83822*eV  0.573082*mm
+      4.9264*eV   0.483641*mm
+      5.01458*eV  0.420282*mm
+      5.10275*eV  0.373102*mm
+      5.19093*eV  0.33662*mm
+      5.27911*eV  0.307572*mm
+      5.36728*eV  0.283902*mm
+      5.45546*eV  0.264235*mm
+      5.54364*eV  0.247641*mm
+      5.63181*eV  0.233453*mm
+      5.71999*eV  0.221177*mm
+      5.80817*eV  0.210456*mm
+      5.89634*eV  0.201012*mm
+      5.98452*eV  0.192627*mm
+      6.0727*eV   0.185134*mm
+      6.16087*eV  0.178399*mm
+      6.24905*eV  0.172309*mm
+      6.33723*eV  0.166779*mm
+      6.4254*eV   0.166779*mm
+      6.51358*eV  0.166779*mm
+      6.60176*eV  0.166779*mm
+      6.68993*eV  0.166779*mm
+      6.77811*eV  0.166779*mm
+      6.86629*eV  0.166779*mm
+      6.95446*eV  0.166779*mm
+      7.04264*eV  0.166779*mm
+      7.13082*eV  0.166779*mm
+      7.21899*eV  0.166779*mm
+      7.30717*eV  0.166779*mm
+      7.39535*eV  0.166779*mm
       "/>
     <matrix name="RINDEX__Acrylic" coldim="2" values="
       1240*eV/1100  1.49
@@ -1065,6 +1110,14 @@
       <fraction n="0.01" ref="PolyvinylAcetate"/>
       <property name="RINDEX"    ref="RINDEX__Acrylic_DRICH"/>
       <property name="ABSLENGTH" ref="ABSLENGTH__Acrylic_DRICH"/>
+    </material>
+    <material name="Acrylic_QRICH">
+      <D type="density" value="1.19" unit="g/cm3"/>
+      <comment> TO BE IMPROVED </comment>
+      <fraction n="0.99" ref="Plexiglass"/>
+      <fraction n="0.01" ref="PolyvinylAcetate"/>
+      <property name="RINDEX"    ref="RINDEX__Acrylic_QRICH"/>
+      <property name="ABSLENGTH" ref="ABSLENGTH__Acrylic_QRICH"/>
     </material>
     <!-- END dRICH and pfRICH material definitions -->
     <material name="QuartzOptical">
