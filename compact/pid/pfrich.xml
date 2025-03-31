@@ -136,7 +136,7 @@
   thickness="PFRICH_sensor_thickness"
   gap="0.2*mm"
   
-  windowmat="AirOptical"
+  windowmat="QuartzOptical"
   photocathode="AirOptical"
   
   pcbmat="G10"
@@ -250,7 +250,7 @@
 <mirror
   material="CarbonFiber"
   surface="MirrorSurface_QRICH"
-  vis="DRICH_mirror_vis"
+  vis="PFRICH_mirror_vis"
   backplane="DRICH_window_thickness + 1.0*cm"
   rmin="DRICH_rmin1 + DRICH_wall_thickness - 1.0*cm"
   rmax="DRICH_rmax2 - DRICH_wall_thickness - 3.0*cm"
