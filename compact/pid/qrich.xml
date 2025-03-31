@@ -4,15 +4,13 @@
 <lccdd>
 
 <define>
-<constant name="QRICH_num_px"                 value="8"/> <!-- number of pixels along one side of the sensor -->
-<constant name="QRICH_pixel_size"             value="3.0*mm"/> <!-- a single SiPM pixel size -->
-<constant name="QRICH_pixel_gap"              value="0.2*mm"/> <!-- size of gaps between adjacent pixels AND gaps between edge pixels and sensor side -->
-<constant name="QRICH_pixel_pitch"            value="QRICH_pixel_size + QRICH_pixel_gap"/> <!-- center-to-center distance between SiPMs in a 8x8 panel -->
+<constant name="HRPPD_num_px"                 value="32"/> <!-- number of EIC HRPPD pixels along one side of the sensor -->
+<constant name="HRPPD_pixel_pitch"            value="3.25*mm"/> <!-- center-to-center distance between HRPPD pixels -->
 </define>
 
 <detectors>
 <detector
-  id="ForwardRICH_ID"
+  id="BackwardRICH_ID"
   name="QRICH"
   type="epic_QRICH"
   readout="QRICHHits"
@@ -24,6 +22,11 @@
   
   window="AirOptical"
   photocathode="AirOptical"
+  absorber="Vacuum"
+  
+  mirror="MirrorSurface_QRICH"
+  
+  optics="qrich-optics.root"
   >
 </detector>
 </detectors>
@@ -32,12 +35,12 @@
   <readout name="QRICHHits">
     <segmentation
       type="CartesianGridXY"
-      grid_size_x="QRICH_pixel_pitch"
-      grid_size_y="QRICH_pixel_pitch"
-      offset_x="-0.5*(QRICH_num_px-1)*QRICH_pixel_pitch"
-      offset_y="-0.5*(QRICH_num_px-1)*QRICH_pixel_pitch"
+      grid_size_x="HRPPD_pixel_pitch"
+      grid_size_y="HRPPD_pixel_pitch"
+      offset_x="-0.5*(HRPPD_num_px-1)*HRPPD_pixel_pitch"
+      offset_y="-0.5*(HRPPD_num_px-1)*HRPPD_pixel_pitch"
       />
-    <id>system:8,pdu:12,x:32:-16,y:-16</id>
+    <id>system:8,hrppd:8,x:32:-16,y:-16</id>
   </readout>
 </readouts>
 </lccdd>

@@ -5,6 +5,13 @@
 
 <define>
 
+<constant name="FIDUCIAL_VOLUME_LENGTH" value="49.1*cm"/>
+<constant name="FIDUCIAL_VOLUME_OFFSET" value="-1236.0*mm - FIDUCIAL_VOLUME_LENGTH/2"/>
+<constant name="VESSEL_OUTER_RADIUS"    value="65.0*cm"/>
+<constant name="SENSOR_AREA_LENGTH"     value="5.0*cm"/>
+<constant name="PFRICH_wall_thickness"  value="0.5*cm"/>                           <!-- thickness of radial walls -->
+
+<constant name="HRPPD_CONTAINER_VOLUME_HEIGHT" value="3.2*cm"/>
 
 <!-- ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
 <!-- Actual global parameters -->
@@ -20,7 +27,6 @@
 
 <constant name="PFRICH_proximity_gap"      value="30*cm"/>                            <!-- distance between aerogel exit plane and sensor entrance plane -->
 <constant name="PFRICH_services_length"    value="15*cm"/>                            <!-- span of service materials behind the sensors -->
-<constant name="PFRICH_wall_thickness"     value="0.5*cm"/>                           <!-- thickness of radial walls -->
 <constant name="PFRICH_window_thickness"   value="0.1*cm"/>                           <!-- thickness of entrance and exit walls -->
 <constant name="PFRICH_aerogel_thickness"  value="3.0*cm"/>                           <!-- aerogel thickness -->
 <constant name="PFRICH_filter_thickness"   value="0.3*mm"/>                           <!-- filter thickness -->
@@ -33,17 +39,17 @@
 <constant name="PFRICH_pixel_gap"             value="0.2*mm"/>                                <!-- size of gaps between adjacent pixels AND gaps between edge pixels and sensor side -->
 <constant name="PFRICH_sensor_sensitive_size" value="PFRICH_sensor_size - PFRICH_pixel_gap"/> <!-- side length of photosensitive surface (to be segmented) -->
 <constant name="PFRICH_sensor_thickness"      value="0.5*mm"/>
-<constant name="PFRICH_num_px"                value="8"/>                                     <!-- number of pixels along one side of the sensor -->
-<constant name="PFRICH_pixel_size"            value="3.0*mm"/>                                <!-- a single SiPM pixel size -->
-<constant name="PFRICH_pixel_pitch"           value="PFRICH_pixel_size + PFRICH_pixel_gap"/>  <!-- center-to-center distance between SiPMs in a 8x8 panel -->
+
+<constant name="HRPPD_num_px"                 value="32"/> <!-- number of EIC HRPPD pixels along one side of the sensor -->
+<constant name="HRPPD_pixel_pitch"            value="3.25*mm"/> <!-- center-to-center distance between HRPPD pixels -->
 
 <constant name="PFRICH_debug_optics"  value="0"/>
 
 <!-- Flange -->
 <constant name="FLANGE_EPIPE_DIAMETER" value="10.53*cm"/>
 <constant name="FLANGE_HPIPE_DIAMETER" value="4.47*cm"/>
-<constant name="FLANGE_HPIPE_OFFSET" value="6.76*cm"/>
-<constant name="CLEARANCE" value="0.5*cm"/>
+<constant name="FLANGE_HPIPE_OFFSET"   value="6.76*cm"/>
+<constant name="FLANGE_CLEARANCE"      value="0.5*cm"/>
 
 <!-- Mirrors -->
 
@@ -52,11 +58,10 @@
 <constant name="INNER_MIRROR_THICKNESS" value="0.1*cm"/>
 <constant name="OUTER_MIRROR_THICKNESS" value="0.2*cm"/>
 
-<constant name="FIDUCIAL_VOLUME_LENGTH" value="49.1*cm"/>
-<constant name="SENSOR_AREA_LENGTH" value="5*cm"/>
+
+
 <constant name="HRPPD_CENTRAL_ROW_OFFSET" value="4.0*cm"/>
 <constant name="HRPPD_WINDOW_THICKNESS" value="0.38*cm"/>
-<constant name="HRPPD_CONTAINER_VOLUME_HEIGHT" value="3.2*cm"/>
 <constant name="HRPPD_INSTALLATION_GAP" value="0.25*cm"/>
 
 <constant name="HRPPD_SUPPORT_GRID_BAR_HEIGHT" value="0.2*cm"/>
@@ -80,9 +85,7 @@
 <constant name="AEROGEL_INNER_WALL_THICKNESS" value="0.01"/>
 <constant name="VESSEL_INNER_WALL_THICKNESS" value="0.29 * 2.54"/>
 <constant name="VESSEL_OUTER_WALL_THICKNESS" value="0.54 * 2.54"/>
-<constant name="VESSEL_OUTER_RADIUS" value="63.8"/>
 <constant name="VESSEL_FRONT_SIDE_THICKNESS" value="0.29 * 2.54"/>
-<constant name="FLANGE_CLEARANCE" value="0.5"/>
 <constant name="BUILDING_BLOCK_CLEARANCE" value="0.1"/>
 <constant name="AEROGEL_BAND_COUNT" value="3"/>
 <constant name="AEROGEL_SEPARATOR_WALL_THICKNESS" value="0.05"/>
@@ -91,20 +94,23 @@
 <!-- hardcoded constants -->
 </define>
 
-  <detectors>
-
+<detectors>
 <detector
   id="BackwardRICH_ID"
-  name="RICHEndcapN"
+  name="PFRICH"
   type="epic_PFRICH"
-  readout="RICHEndcapNHits"
+  
+  readout="PFRICHHits"
+  
   gas="N2cherenkov"
   material="CarbonFiber"
   vis_vessel="PFRICH_vessel_vis"
   vis_gas="DRICH_gas_vis"
+  
+  optics="pfrich-optics.root"
   >
 
-    <parent name="/world_volume"/>
+    <!-- parent name="/world_volume"/ -->
 
     <dimensions
       zmin="PFRICH_zmin"
@@ -129,7 +135,10 @@
   side="PFRICH_sensor_sensitive_size"
   thickness="PFRICH_sensor_thickness"
   gap="0.2*mm"
-  windowmat="Quartz"
+  
+  windowmat="AirOptical"
+  photocathode="AirOptical"
+  
   pcbmat="G10"
   mpdmat="SiliconDioxide"
   asicmat="SiliconCarbide"
@@ -222,17 +231,17 @@
   pitch="0*degree"
   >
   <aerogel
-    material="Aerogel_DRICH"
+    material="Aerogel_QRICH"
     vis="DRICH_aerogel_vis"
     thickness="PFRICH_aerogel_thickness"
     />
   <airgap
-    material="AirOptical"
+    material="N2cherenkov"
     vis="DRICH_gas_vis"
     thickness="PFRICH_aerogel_filter_gap"
     />
   <filter
-    material="Acrylic_DRICH"
+    material="Acrylic_QRICH"
     vis="DRICH_filter_vis"
     thickness="PFRICH_filter_thickness"
     />
@@ -240,7 +249,7 @@
 
 <mirror
   material="CarbonFiber"
-  surface="MirrorSurface_DRICH"
+  surface="MirrorSurface_QRICH"
   vis="DRICH_mirror_vis"
   backplane="DRICH_window_thickness + 1.0*cm"
   rmin="DRICH_rmin1 + DRICH_wall_thickness - 1.0*cm"
@@ -255,15 +264,15 @@
 </detectors>
 
 <readouts>
-  <readout name="RICHEndcapNHits">
+  <readout name="PFRICHHits">
     <segmentation
       type="CartesianGridXY"
-      grid_size_x="PFRICH_pixel_pitch"
-      grid_size_y="PFRICH_pixel_pitch"
-      offset_x="-0.5*(PFRICH_num_px-1)*PFRICH_pixel_pitch"
-      offset_y="-0.5*(PFRICH_num_px-1)*PFRICH_pixel_pitch"
+      grid_size_x="HRPPD_pixel_pitch"
+      grid_size_y="HRPPD_pixel_pitch"
+      offset_x="-0.5*(HRPPD_num_px-1)*HRPPD_pixel_pitch"
+      offset_y="-0.5*(HRPPD_num_px-1)*HRPPD_pixel_pitch"
       />
-    <id>system:8,module:12,x:32:-16,y:-16</id>
+    <id>system:8,hrppd:12,x:32:-16,y:-16</id>
   </readout>
 </readouts>
 

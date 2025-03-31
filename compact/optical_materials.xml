@@ -1241,6 +1241,12 @@
         7*eV  0.9
         "/>
     </opticalsurface>
+    <opticalsurface name="MirrorSurface_QRICH" model="unified" finish="polished" type="dielectric_metal">
+      <property name="REFLECTIVITY" coldim="2" values="
+        1*eV  0.9
+        7*eV  0.9
+        "/>
+    </opticalsurface>
     <opticalsurface name="SensorSurface_DRICH" model="glisur" finish="polished" type="dielectric_dielectric">
       <property name="EFFICIENCY" coldim="2" values="
         1*eV  1
