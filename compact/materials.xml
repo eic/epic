@@ -283,7 +283,7 @@
     <fraction n="0.006" ref="Fe"/>
   </material>
   <material name="AvgTungstenScFi">
-    <D value="10.15" unit="g / cm3"/>
+    <D value="9.5" unit="g / cm3"/>  <!-- More realistic number from Oleg -->
     <fraction n="0.948" ref="W"/>
     <fraction n="0.052*19./40" ref="C"/>
     <fraction n="0.052*21./40" ref="H"/>

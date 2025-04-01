@@ -52,25 +52,26 @@
       Insert shape is cut out from middle of detector
     </documentation>
     <detector id="EcalEndcapP_ID"
-      name="ForwardEcal"
+      name="ForwardfEcalScFi"
       type="epic_ForwardEcalScFi"
       readout="ForwardEcalHits">
       <position x="0" y="0" z="EcalEndcapP_zmin"/>
       <dimensions rmin="EcalEndcapP_rmin" rmax="EcalEndcapP_rmax" z="ForwardEcalThickness"/>
-      <slice name="Cover_slice" material="Aluminum" thickness="ForwardEcalCoverThickness" vis="AnlGray"/>
-      <slice name="Air_slice" material="Air" thickness="ForwardEcalAirThickness" vis="AnlLight_Gray"/>
-      <slice name="PCB_slice" material="Fr4" thickness="ForwardEcalPCBThickness" vis="AnlGreen"/>
-      <slice name="LightGuide_slice" material="Plexiglass" thickness="ForwardEcalLightGuideThickness" vis="AnlBlue"/>
-      <slice name="Scintillator_slice" material="AvgTungstenScFi" thickness="ForwardEcalScintillatorThickness" vis="AnlOrange" sensitive="true"/>
-      <slice name="MountingPlate_slice" material="StainlessSteel" thickness="ForwardEcalMountingPlateThickness" vis="AnlGray"/>
+      <slice name="Cover" material="Aluminum" thickness="ForwardEcalCoverThickness" vis="AnlGray"/>
+      <slice name="Air" material="Air" thickness="ForwardEcalAirThickness" vis="AnlLight_Gray"/>
+      <slice name="PCB" material="Fr4" thickness="ForwardEcalPCBThickness" vis="AnlGreen"/>
+      <slice name="LG" material="Plexiglass" thickness="ForwardEcalLightGuideThickness" vis="AnlBlue"/>
+      <slice name="WScFi" material="AvgTungstenScFi" thickness="ForwardEcalScintillatorThickness" vis="AnlOrange" sensitive="true"/>
+      <slice name="MountingPlate" material="StainlessSteel" thickness="ForwardEcalMountingPlateThickness" vis="AnlGray"/>
     </detector>
   </detectors>
 
   <!--  Definition of the readout segmentation/definition  -->
   <readouts>
     <readout name="ForwardEcalHits">
-      <!-- <id>system:8,northsouth:1,blockrow:6,blockcol:5,x:2,y:2,fx:5,fy:5</id> XXX put this line back if assigning ID to frol and fcol, and will run ok-->
-      <id>system:8,northsouth:1,blockrow:6,blockcol:5,x:2,y:2</id> <!-- XXX I don't want fx and fy, just sum up all fibers into tower energy. This cause a crash-->
+      <!-- <segmentation type="NoSegmentation"/> -->  <!-- Adding this slow down startup to >30min -->
+      <segmentation type="CartesianGridXY" grid_size_x="2*cm" grid_size_y="2*cm" offset_x="-0.1*cm" offset_y="-0.1*mm"/>
+      <id>system:8,northsouth:1,blockrow:6,blockcol:5,towerx:2,towery:2,fiberx:5,fibery:5,x:1,y:1</id>
     </readout>
   </readouts>
 

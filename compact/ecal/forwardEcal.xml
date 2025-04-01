@@ -57,12 +57,12 @@
       readout="ForwardEcalHits">
       <position x="0" y="0" z="EcalEndcapP_zmin"/>
       <dimensions rmin="EcalEndcapP_rmin" rmax="EcalEndcapP_rmax" z="ForwardEcalThickness"/>
-      <slice name="Cover_slice" material="Aluminum" thickness="ForwardEcalCoverThickness" vis="AnlGray"/>
-      <slice name="Air_slice" material="Air" thickness="ForwardEcalAirThickness" vis="AnlLight_Gray"/>
-      <slice name="PCB_slice" material="Fr4" thickness="ForwardEcalPCBThickness" vis="AnlGreen"/>
-      <slice name="LightGuide_slice" material="Plexiglass" thickness="ForwardEcalLightGuideThickness" vis="AnlBlue"/>
-      <slice name="Scintillator_slice" material="AvgTungstenScFi" thickness="ForwardEcalScintillatorThickness" vis="AnlOrange" sensitive="true"/>
-      <slice name="MountingPlate_slice" material="StainlessSteel" thickness="ForwardEcalMountingPlateThickness" vis="AnlGray"/>
+      <slice name="Cover" material="Aluminum" thickness="ForwardEcalCoverThickness" vis="AnlGray"/>
+      <slice name="Air" material="Air" thickness="ForwardEcalAirThickness" vis="AnlLight_Gray"/>
+      <slice name="PCB" material="Fr4" thickness="ForwardEcalPCBThickness" vis="AnlGreen"/>
+      <slice name="LG" material="Plexiglass" thickness="ForwardEcalLightGuideThickness" vis="AnlBlue"/>
+      <slice name="WScFi" material="AvgTungstenScFi" thickness="ForwardEcalScintillatorThickness" vis="AnlOrange" sensitive="true"/>
+      <slice name="MountingPlate" material="StainlessSteel" thickness="ForwardEcalMountingPlateThickness" vis="AnlGray"/>
     </detector>
   </detectors>
 

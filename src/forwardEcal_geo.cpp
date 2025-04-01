@@ -47,7 +47,7 @@ static Ref_t createDetector(Detector& desc, xml_h handle, SensitiveDetector sens
 
   const double phi1[2]={-M_PI/2.0,M_PI/2.0};
   const double phi2[2]={M_PI/2.0,3.0*M_PI/2.0};
-  const char* nsName[2]={"North","South"};
+  const char* nsName[2]={"N","S"};
   const double pm[2]={1.0,-1.0}; //positive x for north, and negative for south
   
   PlacedVolume pv;
@@ -63,16 +63,16 @@ static Ref_t createDetector(Detector& desc, xml_h handle, SensitiveDetector sens
   Volume envelopeVol(detName, envelope_with_inserthole, air);
   envelopeVol.setAttributes(desc, detElem.regionStr(), detElem.limitsStr(), detElem.visStr());
 
-  double thickness=0.0;
+  //double thickness=0.0;
   //int slice_num  = 1;
   double slice_z = -length / 2.0; // Keeps track of slices' z locations in each layer
   // Looping over each layer's slices
   for (xml_coll_t sl(detElem, _U(slice)); sl; ++sl) {
     xml_comp_t x_slice     = sl;
     double slice_thickness = x_slice.thickness();
-    thickness+=slice_thickness;
+    //thickness+=slice_thickness;
     //printf("forwardEcal slice=%1d %8.4f %s \n",slice_num,slice_thickness,x_slice.materialStr().c_str());
-    std::string slice_name = detName + "_" + x_slice.materialStr();
+    std::string slice_name = "fEcal" + x_slice.nameStr();
     Material slice_mat     = desc.material(x_slice.materialStr());
     slice_z += slice_thickness / 2.; // Going to slice halfway point	
     Tube slice(rmin, rmaxWithGap, slice_thickness / 2.);
@@ -88,7 +88,6 @@ static Ref_t createDetector(Detector& desc, xml_h handle, SensitiveDetector sens
     for (int ns=0; ns<2; ns++){
       Tube half(rmin, rmax, slice_thickness/2.0, phi1[ns], phi2[ns]);
       std::string half_name = slice_name + "_"  + nsName[ns];
-      
       // Removing insert shape from each slice & halves   
       Box half_insert(insert_dx[ns]/2.0, insert_dy/2.0, slice_thickness/2.0);
       SubtractionSolid half_with_inserthole(half, half_insert,Position(pm[ns]*insert_dx[ns]/2.0, 0.0, 0.0));
@@ -103,6 +102,14 @@ static Ref_t createDetector(Detector& desc, xml_h handle, SensitiveDetector sens
       // For detector (sensitive) slice, placing detector blocks in col and row
       double bsize=blocksize+blockgap;
       if (x_slice.isSensitive()) {	
+
+	//Define sensitive WSiFi block (4x4 towers)
+	Box block(blocksize/2.0,blocksize/2.0,slice_thickness/2.0);
+	Volume block_vol("fEcalBlock", block, slice_mat);
+	block_vol.setAttributes(desc, x_slice.regionStr(), x_slice.limitsStr(), x_slice.visStr());
+	sens.setType("calorimeter");
+	block_vol.setSensitiveDetector(sens);
+
 	//rows of blocks
 	int nRowBlock = map->maxRowBlock(); //# of rows
 	for(int r=0; r<nRowBlock; r++){
@@ -129,14 +136,8 @@ static Ref_t createDetector(Detector& desc, xml_h handle, SensitiveDetector sens
 	    //printf("r=%2d dx=%8.3f x=%8.3f y=%8.3f   c=%2d %8.3f  mapx=%8.3f\n",r,dxrow,xrow,yrow,c,xcol,map->xBlock(ns,r,c)); 
 	    xcol += pm[ns]*bsize;
 
-	    //place actual WSiFi block inside
-	    Box block(blocksize/2.0,blocksize/2.0,slice_thickness/2.0);
-            std::string block_name = col_name + "_WScFiBlock";
-            Volume block_vol(block_name, block, slice_mat);
-	    block_vol.setAttributes(desc, x_slice.regionStr(), x_slice.limitsStr(), x_slice.visStr());
+	    //place actual WSiFi block (4x4 towers) inside
             pv = col_vol.placeVolume(block_vol, Transform3D(RotationZYX(0, 0, 0),Position(0,0,0)));
-	    sens.setType("calorimeter");
-	    block_vol.setSensitiveDetector(sens);
 	  }
 	}
       }  //end if isSensitive
@@ -144,7 +145,7 @@ static Ref_t createDetector(Detector& desc, xml_h handle, SensitiveDetector sens
     slice_z += slice_thickness / 2.; // Going to end of slice
     //++slice_num;
   } //end loop over slice
-  printf("forwardEcal Total thickness=%f Slice end at %f\n",thickness,slice_z);
+  //printf("forwardEcal Total thickness=%f Slice end at %f\n",thickness,slice_z);
 
   //Al Beampipe Protector placed in envelope volume
   for (int ns=0; ns<2; ns++){

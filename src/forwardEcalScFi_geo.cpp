@@ -40,7 +40,7 @@ static Ref_t createDetector(Detector& desc, xml_h handle, SensitiveDetector sens
 
   const double phi1[2]={-M_PI/2.0,M_PI/2.0};
   const double phi2[2]={M_PI/2.0,3.0*M_PI/2.0};
-  const char* nsName[2]={"North","South"};
+  const char* nsName[2]={"N","S"};
   const double pm[2]={1.0,-1.0}; //positive x for north, and negative for south
   
   //from compact files
@@ -79,7 +79,7 @@ static Ref_t createDetector(Detector& desc, xml_h handle, SensitiveDetector sens
     double slice_thickness = x_slice.thickness();
     //thickness+=slice_thickness;
     //printf("forwardEcal slice=%1d %8.4f %s \n",slice_num,slice_thickness,x_slice.materialStr().c_str());
-    std::string slice_name = detName + "_" + x_slice.materialStr();
+    std::string slice_name = "fEcal" + x_slice.nameStr();
     Material slice_mat     = desc.material(x_slice.materialStr());
     slice_z += slice_thickness / 2.; // Going to slice halfway point	
     Tube slice(rmin, rmaxWithGap, slice_thickness / 2.);
@@ -111,8 +111,7 @@ static Ref_t createDetector(Detector& desc, xml_h handle, SensitiveDetector sens
       double bsize=blocksize+blockgap;
       if (x_slice.isSensitive()) {	
 
-	//define shapes and volumes to avoid making too many of them
-	//a block with 4x4 towers
+	//Define WSiFi block (4x4 towers)       
 	Box block(blocksize/2.0,blocksize/2.0,slice_thickness/2.0);
 	Volume block_vol("fEcalBlock", block, air);
 	block_vol.setAttributes(desc, x_slice.regionStr(), x_slice.limitsStr(), x_slice.visStr());
@@ -123,7 +122,7 @@ static Ref_t createDetector(Detector& desc, xml_h handle, SensitiveDetector sens
 	trow_vol.setAttributes(desc, x_slice.regionStr(), x_slice.limitsStr(), x_slice.visStr());
 	for(int tr=0; tr<4; tr++){
 	  pv = block_vol.placeVolume(trow_vol, Transform3D(RotationZYX(0, 0, 0),Position(0.0,(tr-1.5)*blocksize/4,0)));
-	  pv.addPhysVolID("y", tr);
+	  pv.addPhysVolID("towery", tr);
 	}
 	
 	//4 towers in a row - finally a W powder volume, not air
@@ -132,7 +131,7 @@ static Ref_t createDetector(Detector& desc, xml_h handle, SensitiveDetector sens
 	tower_vol.setAttributes(desc, x_slice.regionStr(), x_slice.limitsStr(), x_slice.visStr());
 	for(int tc=0; tc<4; tc++){
 	  pv = trow_vol.placeVolume(tower_vol, Transform3D(RotationZYX(0, 0, 0),Position((tc-1.5)*blocksize/4,0,0)));
-	  pv.addPhysVolID("x", tc);				
+	  pv.addPhysVolID("towerx", tc);
 	}
 
 	//rows of fibers
@@ -145,29 +144,29 @@ static Ref_t createDetector(Detector& desc, xml_h handle, SensitiveDetector sens
 	  if(iy%2 == 1) xx+=fiberDistanceX/2.0; 
 	  pv = tower_vol.placeVolume(frow_vol, Transform3D(RotationZYX(0, 0, 0),Position(xx,(iy-ny/2.0+0.5)*blocksize/4.0/ny,0)));
 	  //printf("iy=%2d dy=%8.4f fiberRx2=%8.4f xx=%8.4f\n",iy,blocksize/4.0/ny,rFiber*2,xx);
-	  //pv.addPhysVolID("fy", iy);   // XXX put this line (and fx below) then it runs
+	  pv.addPhysVolID("fibery", iy);
 	}
 	
 	//columns of fibers, with 1/2 fiber distance shifted each row
 	Box fcol(fiberDistanceX/2.0,blocksize/8.0/ny,slice_thickness/2.0);
-	Volume fcol_vol("FecalFiberCol", fcol, Wpowder);
+	Volume fcol_vol("fEcalFiberCol", fcol, Wpowder);
 	fcol_vol.setAttributes(desc, x_slice.regionStr(), x_slice.limitsStr(), x_slice.visStr());
 	for(int ix=0; ix<nx; ix++){
 	  double xx=(ix - nx/2.0 + 0.5)*fiberDistanceX;
 	  pv = frow_vol.placeVolume(fcol_vol, Transform3D(RotationZYX(0, 0, 0),Position(xx,0,0)));
 	  //printf("ix=%2d dx=%8.4f xx=%8.4f x0=%8.4f x1=%8.4f\n",ix,fiberDistanceX,xx,xx-fiberDistanceX/2,xx+fiberDistanceX/2);
-	  //pv.addPhysVolID("fx", ix);    // XXX put this line (and fy above) then it runs
+	  pv.addPhysVolID("fiberx", ix);
 	}
-	  	
+
 	//a fiber (with coating material, not sensitive yet) 
 	Tube fiber(0,rFiber,slice_thickness/2.0);
-	Volume fiber_vol("FecalFiber", fiber, PMMA);
+	Volume fiber_vol("fEcalFiber", fiber, PMMA);
 	fiber_vol.setAttributes(desc, x_slice.regionStr(), x_slice.limitsStr(), x_slice.visStr());
 	pv = fcol_vol.placeVolume(fiber_vol, Transform3D(RotationZYX(0, 0, 0),Position(0,0,0)));		    
 
 	//scintillating fiber core - and finally a sensitive volume
 	Tube scfi(0,rScfi,slice_thickness/2.0);
-	Volume scfi_vol("FecalSiFi", fiber, ScFi);
+	Volume scfi_vol("fEcalScFi", scfi, ScFi);
 	scfi_vol.setAttributes(desc, x_slice.regionStr(), x_slice.limitsStr(), x_slice.visStr());
 	pv = fiber_vol.placeVolume(scfi_vol, Transform3D(RotationZYX(0, 0, 0),Position(0,0,0)));		    
 	sens.setType("calorimeter");
