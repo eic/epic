@@ -7,6 +7,7 @@
 
 #define _ELECTRON_GOING_ENDCAP_CASE_
 
+
 #define _WITH_OPTICS_
 #define _WITH_MIRROR_
 
@@ -229,14 +230,16 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
 
 #ifdef _WITH_MIRROR_
     {
-      double L = 350.0*mm, R0 = 350.0*mm, R1 = R0 + 0.01*mm;
+      double L = 350.0*mm, R0 = 400.0*mm, R1 = R0 + 0.01*mm;
       Tube mirrorSolid(R0, R1, L/2);
 
+      auto mirrorVis  = desc.visAttributes("MirrorSurface_QRICH");//mirrorElem.attr<std::string>(_Unicode(vis)));
+  
       // mirror volume, attributes, and placement
       Volume mirrorVol(detName + "_mirror_" /*+ secName*/, mirrorSolid, vesselMaterial);
-      //mirrorVol.setVisAttributes(mirrorVis);
+      mirrorVol.setVisAttributes(mirrorVis);
       //auto mirrorSectorPlacement = Transform3D(sectorRotation); // rotate about beam axis to sector
-      auto mirrorPV = gasvolVol.placeVolume(mirrorVol);//, mirrorSectorPlacement);
+      auto mirrorPV = gasvolVol.placeVolume(mirrorVol, Position(0,0,0));//, mirrorSectorPlacement);
       
       // properties
       DetElement mirrorDE(det, "mirror_de_"/* + secName*/, 0);//isec);
