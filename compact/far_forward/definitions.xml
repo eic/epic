@@ -9,7 +9,7 @@
 
     <constant name="IPBeampipe_rmax" value="2.501*25.4*mm/2.0"/>
     <constant name="Beampipe_rmax"   value="IPBeampipe_rmax"/>
-    <constant name="BeampipeOD"      value="2.0*IPBeampipe_rmax"/>
+    <constant name="IPBeampipeID" desc="IP6 beam pipe inner diam w/o coating" value="62*mm"/>
 
 
     <comment>

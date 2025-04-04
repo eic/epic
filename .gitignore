@@ -47,3 +47,7 @@ vendor/
 .jekyll-metadata
 .sass-cache/
 _site/
+
+compile.bash
+install/
+.DS_Store
