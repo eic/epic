@@ -4,7 +4,7 @@
 <lccdd>
   <define>
     <constant name="IPBeampipeUpstreamStraightLength" value="74.8 * cm"/>
-    <constant name="IPBeampipeDownstreamStraightLength" value="64.8 * mm"/>
+    <constant name="IPBeampipeDownstreamStraightLength" value="64.8 * cm"/>
     <constant name="BeampipeOD" value="62 * mm"/>
   </define>
 
@@ -30,9 +30,9 @@
       <comment> For upstream beampipe, we subtract the vacuum from the matter </comment>
       <upstream reflect="true"
                 place_vacuum="true">
-        <outgoing_lepton wall_thickness="1.0 * mm"
+        <outgoing_lepton wall_thickness="2.5 * mm"
 		coating_thickness="30 * um">
-          <zplane z="75.6 * cm" ID="IPBeampipeID"/>
+          <zplane z="IPBeampipeUpstreamStraightLength" ID="IPBeampipeID"/>
           <zplane z="454.449 * cm" ID="IPBeampipeID"/>
         </outgoing_lepton>
         <incoming_hadron wall_thickness="1.65 * mm"

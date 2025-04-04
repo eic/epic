@@ -63,6 +63,17 @@ static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector /* sens *
 	double upstream_straight_length   = IP_pipe_c.attr<double>(_Unicode(upstream_straight_length));
 	double downstream_straight_length = IP_pipe_c.attr<double>(_Unicode(downstream_straight_length));
 
+	// visualization
+	VisAttr wallVis("wall");
+	VisAttr coatingVis("coating");
+	VisAttr IPwallVis("IPwall");
+	VisAttr IPcoatingVis("IPcoating");
+
+    	wallVis.setColor(0.0, 0.0, 1.0, 1.0);  // r, g, b, alpha
+    	coatingVis.setColor(1.0, 0.0, 0.0, 1.0);
+    	IPwallVis.setColor(0.0, 1.0, 0.0, 1.0);
+    	IPcoatingVis.setColor(1.0, 1.0, 0.0, 1.0);
+
 	// central acts beampipe volume
 	Tube central_tube(
 		0.5 * IP_acts_beampipe_ID, 
@@ -126,6 +137,11 @@ static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector /* sens *
 	Volume v_upstream_IP_vacuum_padding("v_upstream_IP_vacuum_padding", upstream_IP_vacuum_padding, m_Vacuum);
 	Volume v_upstream_IP_coating("v_upstream_IP_coating", upstream_IP_coating, IP_beampipe_coating_material);
 	Volume v_upstream_IP_tube("v_upstream_IP_tube", upstream_IP_tube, IP_beampipe_wall_material);
+
+	v_downstream_IP_tube.setVisAttributes(IPwallVis);
+	v_upstream_IP_tube.setVisAttributes(IPwallVis);
+	v_downstream_IP_coating.setVisAttributes(IPcoatingVis);
+	v_upstream_IP_coating.setVisAttributes(IPcoatingVis);
 
 	sdet.setAttributes(det, v_upstream_IP_coating, x_det.regionStr(), x_det.limitsStr(), vis_name);
 	sdet.setAttributes(det, v_upstream_IP_tube, x_det.regionStr(), x_det.limitsStr(), vis_name);
@@ -198,7 +214,7 @@ static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector /* sens *
 				Transform3D(RotationY(crossing_angle)) *
 				Transform3D(Position(0, 0, -axis_intersection));
 
-		// union of all matter and vacuum
+		// union of wall, coating, and vacuum
 		UnionSolid wall_union(		std::get<0>(pipe1_polycones), std::get<0>(pipe2_polycones), tf);
 		UnionSolid coating_union(	std::get<1>(pipe1_polycones), std::get<1>(pipe2_polycones), tf);
 		UnionSolid vacuum_union(	std::get<2>(pipe1_polycones), std::get<2>(pipe2_polycones), tf);
@@ -207,28 +223,27 @@ static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector /* sens *
 
 		if(name == "upstream") // upstream
 		{
-			// subtract coating from matter
-			wall = SubtractionSolid(wall_union, coating_union);
-			// subtract vacuum from matter
-			wall = SubtractionSolid(wall, vacuum_union);
 			// subtract vacuum from coating
 			coating = SubtractionSolid(coating_union, vacuum_union);
+			// subtract vacuum from wall
+			wall = SubtractionSolid(wall_union, vacuum_union);
 			// get vacuum
 			vacuum = vacuum_union;
 		}
+
 		else // downstream
 		{
-			// subtract matter from vacuum
+			// subtract wall from vacuum
 			vacuum = SubtractionSolid(vacuum_union, wall_union);
 			// subtract coating from vacuum
 			vacuum = SubtractionSolid(vacuum, coating_union);
-			// get matter
+			// get wall
 			wall = wall_union;
 			// get coating
 			coating = coating_union;
 		}
 
-		// subtract additional vacuum from matter
+		// subtract additional vacuum from wall and coating
 		for (; x_additional_subtraction_i; ++x_additional_subtraction_i) 
 		{
 			xml_comp_t x_additional_subtraction = x_additional_subtraction_i;
@@ -266,6 +281,9 @@ static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector /* sens *
 		outgoing_lepton_c, 
 		incoming_hadron_c,
 		additional_subtractions_upstream);
+    
+	std::get<0>(volumes_upstream).setVisAttributes(wallVis);
+	std::get<1>(volumes_upstream).setVisAttributes(coatingVis);
 
 	auto tf_upstream = Transform3D(RotationZYX(0, 0, 0));
 	if (getAttrOrDefault<bool>(upstream_c, _Unicode(reflect), true)) 
