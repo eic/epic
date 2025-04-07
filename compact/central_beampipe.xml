@@ -6,6 +6,7 @@
     <constant name="IPBeampipeUpstreamStraightLength" value="74.8 * cm"/>
     <constant name="IPBeampipeDownstreamStraightLength" value="64.8 * cm"/>
     <constant name="BeampipeOD" value="62 * mm"/>
+    <constant name="HadronConeOpenAngle" value="0.020 * rad + abs(CrossingAngle)"/>
   </define>
 
   <display>
@@ -27,7 +28,7 @@
         downstream_straight_length="IPBeampipeDownstreamStraightLength"
       />
 
-      <comment> For upstream beampipe, we subtract the vacuum from the matter </comment>
+      <comment> For upstream beampipe, we subtract the vacuum from wall and coating </comment>
       <upstream reflect="true"
                 place_vacuum="true">
         <outgoing_lepton wall_thickness="2.5 * mm"
@@ -47,31 +48,46 @@
         </incoming_hadron>
       </upstream>
 
-      <comment> For downstream beampipe (where on is inside the vacuum of the other), we subtract the matter from the vacuum, and subtract an additional pipe to create the angled cutout</comment>
+      <comment> For the downstream hadron cone, CAD - oblique cone, DD4Hep - oblique cone does not exist --> rotated standard cone + subtractions. 1) get oblique cone vertex z position: h = 6.41cm/tan(45mrad); 2) standard cone raius with the same open angle and vertex position: r = h*sin(45mrad/2) </comment>
       <downstream reflect="false"
-                  place_vacuum="true"
-                  subtract_vacuum="false"
-                  subtract_matter="true">
-        <incoming_lepton thickness="1.0*mm">
-          <zplane z="IPBeampipeDownstreamStraightLength" OD="BeampipeOD"/>
-          <zplane z="4484.25 * mm" OD="BeampipeOD"/>
+                  place_vacuum="true">
+        <incoming_lepton wall_thickness="1.0 * mm"
+		coating_thickness="30 * um">
+          <zplane z="251.629 * cm" ID="2.6 * cm"/>
+          <zplane z="(251.629 + 8.0) * cm" ID="4.2 * cm"/>
+          <zplane z="(251.629 + 8.0 + 127.8) * cm" ID="4.2 * cm"/>
+          <zplane z="(251.629 + 8.0 + 127.8 + 5.0) * cm" ID="5.2 * cm"/>
+          <zplane z="(251.629 + 8.0 + 127.8 + 5.0 + 103.585) * cm" ID="5.2 * cm"/>
+	  <racetrack_lepton wall_thickness="1.0 * mm"
+		coating_thickness="30 * um"
+		semiCircle_rmin="2.3 * cm"
+		length="125.420 * cm"
+		rectangle_h="1.6 * cm"
+		offset_z="72.425 * cm">
+	  </racetrack_lepton>
         </incoming_lepton>
-        <outgoing_hadron thickness="4.0*mm"
-                         axis_intersection="670.0 * mm"
-                         crossing_angle="CrossingAngle">
-          <!-- avoid overlap with IP beampipe by starting slightly displaced -->
-          <zplane z="IPBeampipeDownstreamStraightLength + 0.5 * BeampipeOD * tan(abs(CrossingAngle))" OD="BeampipeOD"/>
-          <zplane z="1750.00 * mm" OD=" 92.06 * mm"/>
-          <zplane z="4455.80 * mm" OD="257.92 * mm"/>
-          <!-- removed due to vacuum overlap with far forward electron beampipe -->
-          <!--zplane z="5000.00 * mm" OD="340.60 * mm"/-->
+        <outgoing_hadron wall_thickness="2.0 * mm"
+			 coating_thickness="30 * um"
+                         axis_intersection="66.10 * cm"
+                         crossing_angle="-HadronConeOpenAngle/2.">
+          <zplane z="66.0 * cm" 
+		ID="2. * 6.41 / tan(HadronConeOpenAngle) * sin(HadronConeOpenAngle/2.) * cm"/>
+          <zplane z="500.0 * cm" 
+		ID="2. * ((500.0 - 66.10) + 6.41 / tan(HadronConeOpenAngle)) * sin(HadronConeOpenAngle/2.) * cm"/>
         </outgoing_hadron>
-        <additional_subtraction thickness="4.0*mm"
-                                crossing_angle="CrossingAngle">
-          <!-- these are somewhat arbitrary to get the right hole shape -->
-          <zplane z="IPBeampipeDownstreamStraightLength" OD="32. * mm"/>
-          <zplane z="4484.25 * mm" OD="120. * mm"/>
+
+	<!-- cut on the IP side -->
+        <additional_subtraction unite_vacuum="false">
+          <zplane z="0 * cm * cm" ID="200. * cm"/>
+          <zplane z="66.10 * cm" ID="200. * cm"/>
         </additional_subtraction>
+
+	<!-- cut on the non-IP side -->
+        <additional_subtraction unite_vacuum="false">
+          <zplane z="494.556 * cm" ID="200. * cm"/>
+          <zplane z="1000.0 * cm" ID="200. * cm"/>
+        </additional_subtraction>
+
       </downstream>
     </detector>
 
