@@ -112,6 +112,13 @@
           <zplane z="494.556 * cm" ID="200. * cm"/>
           <zplane z="1000.0 * cm" ID="200. * cm"/>
         </additional_subtraction>
+
+	<!-- cut on the non-IP side -->
+        <additional_subtraction unite_vacuum="false">
+          <zplane z="494.556 * cm" ID="200. * cm"/>
+          <zplane z="1000.0 * cm" ID="200. * cm"/>
+        </additional_subtraction>
+
       </downstream>
     </detector>
 
