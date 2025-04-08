@@ -176,14 +176,15 @@ static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector /* sens *
 		std::vector<double> zero, z;
 		std::vector<double> rmax_wall, rmax_coating, rmax_vacuum;
 		std::vector<double> rmin_wall, rmin_coating, rmin_vacuum;
+		// thickness
+		auto wall_thickness = 
+			getAttrOrDefault(x_pipe, _Unicode(wall_thickness), 1 * mm);
+		auto coating_thickness = 
+			getAttrOrDefault(x_pipe, _Unicode(coating_thickness), 30 * um);
+	
 		for (xml_coll_t x_zplane_i(x_pipe, _Unicode(zplane)); x_zplane_i; ++x_zplane_i) 
 		{
 			xml_comp_t x_zplane = x_zplane_i;
-			// thickness
-			auto wall_thickness = 
-				getAttrOrDefault(x_zplane, _Unicode(wall_thickness), 1 * mm);
-			auto coating_thickness = 
-				getAttrOrDefault(x_zplane, _Unicode(coating_thickness), 30 * um);
 			// z position
 			z.push_back(x_zplane.attr<double>(_Unicode(z)));
 			// outer radius
@@ -398,38 +399,78 @@ static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector /* sens *
 		if(name == "downstream")
 		{
 			xml::Component racetrack_lepton_c = x_pipe1.child(_Unicode(racetrack_lepton));
+
+			// ---- Read geometry parameters ----
+			int nSegments = // number of tesellated facet segments
+				getAttrOrDefault<int>(racetrack_lepton_c, _Unicode(nSegments), 100);
+			double cylRadius_1 = // cylinder radius on the IP side
+				getAttrOrDefault(racetrack_lepton_c, _Unicode(cylRadius_1), 6.2/2. * cm);
+			double cylRadius_2 = // cylinder radius on the non-IP side
+				getAttrOrDefault(racetrack_lepton_c, _Unicode(cylRadius_2), 2.6/2. * cm);
+			double rtRadius = // racetrack radius
+				getAttrOrDefault(racetrack_lepton_c, _Unicode(semiCircle_rmin), 2.3 * cm);
+			double flatHeight = // racetrack side height
+				getAttrOrDefault(racetrack_lepton_c, _Unicode(flatHeight), 1.6 * cm);
+			double wall_thickness = // wall thickness
+				getAttrOrDefault(racetrack_lepton_c, _Unicode(wall_thickness), 1.0 * mm);
+			double coating_thickness = // coating thickness
+				getAttrOrDefault(racetrack_lepton_c, _Unicode(coating_thickness), 30.0 * um);
+			double interface_startz_1 = // interface start position
+				getAttrOrDefault(racetrack_lepton_c, _Unicode(interface_startz_1), 66.385 * cm); 
+			double interface_endz_1 = // interface end position
+				getAttrOrDefault(racetrack_lepton_c, _Unicode(interface_endz_1), 72.385 * cm); 
+			double interface_startz_2 = // interface start position
+				getAttrOrDefault(racetrack_lepton_c, _Unicode(interface_startz_2), 197.805 * cm); 
+			double interface_endz_2 = // interface end position
+				getAttrOrDefault(racetrack_lepton_c, _Unicode(interface_endz_2), 211.301 * cm); 
+			double straight_pipe_startz = // straight pipe on the IP side, start position
+				getAttrOrDefault(racetrack_lepton_c, _Unicode(straight_pipe_startz), 66.10 * cm);
+			double straight_pipe_endz = interface_startz_1;// straight pipe on the IP side, end position
+			double elliptical_cut_rx_1 = // elliptical cut (IP side) rX for the hadron beam opening
+				getAttrOrDefault(racetrack_lepton_c, _Unicode(elliptical_cut_rx_1), 0.305 * m);
+			double elliptical_cut_ry_1 = // elliptical cut (IP side) rY for the hadron beam opening
+				getAttrOrDefault(racetrack_lepton_c, _Unicode(elliptical_cut_ry_1), 0.021 * m);
+			double elliptical_cut_rx_2 = // elliptical cut (non-IP side) rX for the hadron beam opening
+				getAttrOrDefault(racetrack_lepton_c, _Unicode(elliptical_cut_rx_2), 0.152 * m);
+			double elliptical_cut_ry_2 = // elliptical cut (non-IP side) rY for the hadron beam opening
+				getAttrOrDefault(racetrack_lepton_c, _Unicode(elliptical_cut_ry_2), 0.021 * m);
+			double  rectangular_cut_a = // rectangular cut A for the hadron beam opening
+				getAttrOrDefault(racetrack_lepton_c, _Unicode(rectangular_cut_a), 0.81/2. * m);
+			double  rectangular_cut_b = // rectangular cut B for the hadron beam opening
+				getAttrOrDefault(racetrack_lepton_c, _Unicode(rectangular_cut_b), 0.021 * m);
+			double elliptical_cut_dz = // thickness of the cut for the hadron beam opening
+				getAttrOrDefault(racetrack_lepton_c, _Unicode(elliptical_cut_dz), 1.0 * cm); 
+			double elliptical_cut_offset_z_1 = // offset of the elliptical cut (IP side)
+				getAttrOrDefault(racetrack_lepton_c, _Unicode(elliptical_cut_offset_z_1), (0.976) * m);
+			double elliptical_cut_offset_z_2 = // offset of the elliptical cut (non-IP side)
+				getAttrOrDefault(racetrack_lepton_c, _Unicode(elliptical_cut_offset_z_2), (0.976 + 0.810) * m);
+			double rectangular_cut_offset_z = // offset of the rectangular cut
+				getAttrOrDefault(racetrack_lepton_c, _Unicode(rectangular_cut_offset_z), (0.976 + 0.810/2.) * m);
+
+			// ---- Create racetrack solids ----
 			auto racetrack_solids = create_racetrack_solids(racetrack_lepton_c);
 
-			// create an interface between racetrack and cylindrical beam pipe
-			int nSegments = 100;
+			// ---- Create an interface between racetrack and cylindrical beam pipe ----
 
-			// circular to racetrack intefrace on the IP side
-			double cylRadius_1 = 6.2 * cm/2.;
-			double rtRadius_1 = 2.3 * cm;
-			double flatHeight_1 = 1.6 * cm;
-
+			// IP side
 			auto wall_interfaceSolid_1 = makeInterfaceHollow(
-				cylRadius_1, rtRadius_1, flatHeight_1, nSegments, 1.0 * mm, 
-				66.385 * cm, 72.385 * cm, false);
+				cylRadius_1, rtRadius, flatHeight, nSegments, wall_thickness, 
+				interface_startz_1, interface_endz_1, false);
 
 			// straight pipe on the IP side 
-			std::vector<double> z = {65.750 * cm, 66.385 * cm};
+			std::vector<double> z = {straight_pipe_startz, straight_pipe_endz};
 			std::vector<double> wall_rmin = {cylRadius_1, cylRadius_1};
-			std::vector<double> wall_rmax = {cylRadius_1 + 1.0 * mm, cylRadius_1 + 1.0 * mm};
-			std::vector<double> coating_rmin = {cylRadius_1 - 30 * um, cylRadius_1 - 30 * um};
+			std::vector<double> wall_rmax = {cylRadius_1 + wall_thickness, cylRadius_1 + wall_thickness};
+			std::vector<double> coating_rmin = {cylRadius_1 - coating_thickness, cylRadius_1 - coating_thickness};
 			std::vector<double> coating_rmax = wall_rmin;
 
 			Polycone wall_pipe(0, 2.0 * M_PI, wall_rmin, wall_rmax, z);
 			Polycone coating_pipe(0, 2.0 * M_PI, coating_rmin, coating_rmax, z);
 
-			// circular to racetrack intefrace on the non-IP side
-			double cylRadius_2 = 2.6 * cm/2.;
-			double rtRadius_2 = 2.3 * cm;
-			double flatHeight_2 = 1.6 * cm;
-
+			// non-IP side
 			auto wall_interfaceSolid_2 = makeInterfaceHollow(
-				cylRadius_2, rtRadius_2, flatHeight_2, nSegments, 1.0 * mm,
-				197.805 * cm, 211.301 * cm, true);
+				cylRadius_2, rtRadius, flatHeight, nSegments, wall_thickness,
+				interface_startz_2, interface_endz_2, true);
 
 			// unite two parts of the interface 
 			auto wall_interface_union = 
@@ -446,13 +487,18 @@ static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector /* sens *
 				UnionSolid("coating_racetrack_pipe",coating_pipe,std::get<1>(racetrack_solids), racetrack_tf);
 
 			// create a cut volume - vacuum = two ellipses + rectangle
-			double semiCircle_rmin = getAttrOrDefault(racetrack_lepton_c, _Unicode(semiCircle_rmin), 0.0);
-			EllipticalTube elliptical_cut_1("elliptical_cut_1", 0.305 * m, 0.021 * m, 1. * cm);
-			EllipticalTube elliptical_cut_2("elliptical_cut_2", 0.152 * m, 0.021 * m, 1. * cm);
-			Box box_cut_3("box_cut_3", 0.81 * m / 2., 0.021 * m, 1. * cm);
-			Transform3D tf_cut_1(RotationZYX(0, M_PI_2, 0), Position(-semiCircle_rmin, 0, (0.976) * m));
-			Transform3D tf_cut_2(RotationZYX(0, M_PI_2, 0), Position(-semiCircle_rmin, 0, (0.976 + 0.810) * m));
-			Transform3D tf_cut_3(RotationZYX(0, M_PI_2, 0), Position(-semiCircle_rmin, 0, (0.976 + 0.810/2.) * m));
+			EllipticalTube elliptical_cut_1(
+				"elliptical_cut_1", elliptical_cut_rx_1, elliptical_cut_ry_1, elliptical_cut_dz);
+			EllipticalTube elliptical_cut_2(
+				"elliptical_cut_2", elliptical_cut_rx_2, elliptical_cut_ry_2, elliptical_cut_dz);
+			Box rectangular_cut_3(
+				"rectangular_cut_3", rectangular_cut_a, rectangular_cut_b, elliptical_cut_dz);
+			Transform3D tf_cut_1(
+				RotationZYX(0, M_PI_2, 0), Position(-rtRadius, 0, elliptical_cut_offset_z_1));
+			Transform3D tf_cut_2(
+				RotationZYX(0, M_PI_2, 0), Position(-rtRadius, 0, elliptical_cut_offset_z_2));
+			Transform3D tf_cut_3(
+				RotationZYX(0, M_PI_2, 0), Position(-rtRadius, 0, rectangular_cut_offset_z));
 
 			// subtract from interface wall
 			wall_interface_final =
@@ -464,7 +510,7 @@ static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector /* sens *
 			SubtractionSolid wall_racetrack_cut_2 = 
 				SubtractionSolid("wall_racetrack_cut_1",wall_racetrack_cut_1,elliptical_cut_2,tf_cut_2);
 			wall_racetrack_final = 
-				SubtractionSolid("wall_racetrack_final",wall_racetrack_cut_2,box_cut_3,tf_cut_3);
+				SubtractionSolid("wall_racetrack_final",wall_racetrack_cut_2,rectangular_cut_3,tf_cut_3);
 
 			// subtract from racetrack coating
 			SubtractionSolid coating_racetrack_cut_1 = 
@@ -472,7 +518,7 @@ static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector /* sens *
 			SubtractionSolid coating_racetrack_cut_2 = 
 				SubtractionSolid("coating_racetrack_cut_2",coating_racetrack_cut_1,elliptical_cut_2,tf_cut_2);
 			coating_racetrack_final = 
-				SubtractionSolid("coating_racetrack_final",coating_racetrack_cut_2,box_cut_3,tf_cut_3);
+				SubtractionSolid("coating_racetrack_final",coating_racetrack_cut_2,rectangular_cut_3,tf_cut_3);
 		}
 
 		Solid wall_interface(wall_interface_final);
@@ -500,7 +546,7 @@ static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector /* sens *
 				vacuum_union, std::get<2>(additional_polycones), additional_tf);
 		}
 
-		Solid wall, coating, vacuum;
+		Solid wall, coating, vacuum, wall_ipflange, coating_ipflange, vacuum_ipflange;
 
 		if(name == "upstream") // upstream
 		{
@@ -526,7 +572,7 @@ static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector /* sens *
 			gGeoManager->GetListOfShapes()->Add((TGeoShape*)sub2.ptr());
 			gGeoManager->GetListOfShapes()->Add((TGeoShape*)sub3.ptr());
 
-			TGeoCompositeShape* composite = new TGeoCompositeShape("composite","main - sub1 - sub2 - sub3"); 
+			TGeoCompositeShape* composite = new TGeoCompositeShape("composite","main - sub1 - sub2 - sub3"); 	
 
 			// get vacuum
 			vacuum = composite;
@@ -536,15 +582,26 @@ static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector /* sens *
 
 			// get coating
 			coating = coating_union;
+
+			// get a flange between the FWD and IP beam pipes
+			xml::Component fwdipflange_c = x_pipe1.child(_Unicode(fwdipflange));
+			auto fwdipflange_polycones = zplane_to_polycones(fwdipflange_c);
+
+			wall_ipflange = std::get<0>(fwdipflange_polycones);
+			coating_ipflange = std::get<1>(fwdipflange_polycones);
+			vacuum_ipflange = std::get<2>(fwdipflange_polycones);
 		}
 
-		return std::tuple<Volume, Volume, Volume, Volume, Volume, Volume>(
+		return std::tuple<Volume, Volume, Volume, Volume, Volume, Volume, Volume, Volume, Volume>(
 			{"v_" + name + "_wall", wall, m_Wall},
 			{"v_" + name + "_coating", coating, m_Coating},
 			{"v_" + name + "_vacuum", vacuum, m_Vacuum},
 			{"v_" + name + "_wall_interface", wall_interface, m_Wall},
 			{"v_" + name + "_wall_racetrack", wall_racetrack, m_Wall},
-			{"v_" + name + "_coating_racetrack", coating_racetrack, m_Coating}
+			{"v_" + name + "_coating_racetrack", coating_racetrack, m_Coating},
+			{"v_" + name + "_wall_ipflange", wall_ipflange, m_Wall},
+			{"v_" + name + "_coating_ipflange", coating_ipflange, m_Coating},
+			{"v_" + name + "_vacuum_ipflange", vacuum_ipflange, m_Vacuum}
 		);
 	};
 
@@ -601,6 +658,8 @@ static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector /* sens *
 	std::get<3>(volumes_downstream).setVisAttributes(wallVis);
 	std::get<4>(volumes_downstream).setVisAttributes(wallVis);
 	std::get<5>(volumes_downstream).setVisAttributes(coatingVis);
+	std::get<6>(volumes_downstream).setVisAttributes(wallVis);
+	std::get<7>(volumes_downstream).setVisAttributes(coatingVis);
 
 	auto tf_downstream = Transform3D(RotationZYX(0, 0, 0));
 	if (getAttrOrDefault<bool>(downstream_c, _Unicode(reflect), true)) 
@@ -616,6 +675,7 @@ static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector /* sens *
 	if (getAttrOrDefault<bool>(downstream_c, _Unicode(place_vacuum), true)) 
 	{
 		assembly.placeVolume(std::get<2>(volumes_downstream), tf_downstream);
+		assembly.placeVolume(std::get<8>(volumes_downstream), tf_downstream);
 	}
 	// place interface
 	assembly.placeVolume(std::get<3>(volumes_downstream), tf_downstream);
@@ -623,6 +683,10 @@ static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector /* sens *
 	assembly.placeVolume(std::get<4>(volumes_downstream), tf_downstream);
 	// place racetrack coating
 	assembly.placeVolume(std::get<5>(volumes_downstream), tf_downstream);
+	// place FWD IP flange wall
+	assembly.placeVolume(std::get<6>(volumes_downstream), tf_downstream);
+	// place FWD IP flange coating
+	assembly.placeVolume(std::get<7>(volumes_downstream), tf_downstream);
 
 	// -----------------------------
 	// final placement
