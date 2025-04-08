@@ -303,6 +303,7 @@ static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector /* sens *
 		auto facetInner0 = makeCircleFace(cylRadius, segments);
 		auto facetInner1 = makeRacetrackFace(rtRadius, flatH, segments);
 
+		// to flip the order for vertices in the facets
 		if(firstRacetrack)
 		{
 			facetOuter0 = makeRacetrackFace(rtRadius + wallThickness, flatH, segments);
@@ -391,8 +392,9 @@ static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector /* sens *
 		BooleanSolid vacuum_union = UnionSolid(
 			std::get<2>(pipe1_polycones), std::get<2>(pipe2_polycones), tf);
 
-		BooleanSolid wall_interface;
+		BooleanSolid wall_interface_final, wall_racetrack_final, coating_racetrack_final;
 
+		// downstream side is more complex and requires additional effort to create all the volumes 
 		if(name == "downstream")
 		{
 			xml::Component racetrack_lepton_c = x_pipe1.child(_Unicode(racetrack_lepton));
@@ -430,18 +432,52 @@ static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector /* sens *
 				197.805 * cm, 211.301 * cm, true);
 
 			// unite two parts of the interface 
-			wall_interface = UnionSolid("wall_interface", wall_interfaceSolid_1, wall_interfaceSolid_2, Transform3D());;
+			auto wall_interface_union = 
+				UnionSolid("wall_interface_union", wall_interfaceSolid_1, wall_interfaceSolid_2, Transform3D());;
 
 			// unite racetrack and straight pipe with the rest of the pipe
 			double offset_z = getAttrOrDefault(racetrack_lepton_c, _Unicode(offset_z), 0.0); 
 			double length = getAttrOrDefault(racetrack_lepton_c, _Unicode(length), 0.0);
 			Transform3D racetrack_tf(RotationZYX(0, 0, 0), Position(0, 0, offset_z + length/2.));
 
-			wall_union = UnionSolid("wall_union",wall_union,wall_pipe, Transform3D());
-			wall_union = UnionSolid("wall_union",wall_union,std::get<0>(racetrack_solids), racetrack_tf);
-			coating_union = UnionSolid("coating_union",coating_union,coating_pipe, Transform3D());
-			coating_union = UnionSolid("coating_union",coating_union,std::get<1>(racetrack_solids), racetrack_tf);
+			UnionSolid wall_racetrack_pipe = 
+				UnionSolid("wall_racetrack_pipe",wall_pipe,std::get<0>(racetrack_solids), racetrack_tf);
+			UnionSolid coating_racetrack_pipe = 
+				UnionSolid("coating_racetrack_pipe",coating_pipe,std::get<1>(racetrack_solids), racetrack_tf);
+
+			// create a cut volume - vacuum = two ellipses + rectangle
+			double semiCircle_rmin = getAttrOrDefault(racetrack_lepton_c, _Unicode(semiCircle_rmin), 0.0);
+			EllipticalTube elliptical_cut_1("elliptical_cut_1", 0.305 * m, 0.021 * m, 1. * cm);
+			EllipticalTube elliptical_cut_2("elliptical_cut_2", 0.152 * m, 0.021 * m, 1. * cm);
+			Box box_cut_3("box_cut_3", 0.81 * m / 2., 0.021 * m, 1. * cm);
+			Transform3D tf_cut_1(RotationZYX(0, M_PI_2, 0), Position(-semiCircle_rmin, 0, (0.976) * m));
+			Transform3D tf_cut_2(RotationZYX(0, M_PI_2, 0), Position(-semiCircle_rmin, 0, (0.976 + 0.810) * m));
+			Transform3D tf_cut_3(RotationZYX(0, M_PI_2, 0), Position(-semiCircle_rmin, 0, (0.976 + 0.810/2.) * m));
+
+			// subtract from interface wall
+			wall_interface_final =
+				SubtractionSolid("wall_interface_final", wall_interface_union, elliptical_cut_1, tf_cut_1);
+
+			// subtract from racetrack wall
+			SubtractionSolid wall_racetrack_cut_1 = 
+				SubtractionSolid("wall_racetrack_cut_1",wall_racetrack_pipe,elliptical_cut_1,tf_cut_1);
+			SubtractionSolid wall_racetrack_cut_2 = 
+				SubtractionSolid("wall_racetrack_cut_1",wall_racetrack_cut_1,elliptical_cut_2,tf_cut_2);
+			wall_racetrack_final = 
+				SubtractionSolid("wall_racetrack_final",wall_racetrack_cut_2,box_cut_3,tf_cut_3);
+
+			// subtract from racetrack coating
+			SubtractionSolid coating_racetrack_cut_1 = 
+				SubtractionSolid("coating_racetrack_cut_1",coating_racetrack_pipe,elliptical_cut_1,tf_cut_1);
+			SubtractionSolid coating_racetrack_cut_2 = 
+				SubtractionSolid("coating_racetrack_cut_2",coating_racetrack_cut_1,elliptical_cut_2,tf_cut_2);
+			coating_racetrack_final = 
+				SubtractionSolid("coating_racetrack_final",coating_racetrack_cut_2,box_cut_3,tf_cut_3);
 		}
+
+		Solid wall_interface(wall_interface_final);
+		Solid wall_racetrack(wall_racetrack_final);
+		Solid coating_racetrack(coating_racetrack_final);
 
 		// subtract additional vacuum from wall and coating
 		for (; x_additional_subtraction_i; ++x_additional_subtraction_i) 
@@ -462,43 +498,53 @@ static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector /* sens *
 				coating_union, std::get<2>(additional_polycones), additional_tf);
 			vacuum_union = SubtractionSolid(
 				vacuum_union, std::get<2>(additional_polycones), additional_tf);
-			// unite vacuums
-			if(getAttrOrDefault<bool>(x_additional_subtraction, _Unicode(unite_vacuum), false))
-			{
-				vacuum_union = UnionSolid(
-					vacuum_union, std::get<2>(additional_polycones), additional_tf);
-			}
 		}
 
-		BooleanSolid wall, coating, vacuum;
+		Solid wall, coating, vacuum;
 
 		if(name == "upstream") // upstream
 		{
 			// subtract vacuum from coating
 			coating = SubtractionSolid(coating_union, vacuum_union);
+
 			// subtract vacuum from wall
 			wall = SubtractionSolid(wall_union, vacuum_union);
+
 			// get vacuum
 			vacuum = vacuum_union;
 		}
 		else // downstream
 		{
-			// subtract wall from vacuum
-			vacuum = SubtractionSolid(vacuum_union, wall_union);
-			vacuum = SubtractionSolid(vacuum, wall_interface);
-			// subtract coating from vacuum
-			vacuum = SubtractionSolid(vacuum, coating_union);
+			// subtract walls and coatings from vacuum
+			auto main = vacuum_union;	main.setName("main"); 
+			auto sub1 = wall_union; 	sub1.setName("sub1"); 
+			auto sub2 = wall_interface; 	sub2.setName("sub2"); 
+			auto sub3 = coating_union; 	sub3.setName("sub3"); 
+
+			gGeoManager->GetListOfShapes()->Add((TGeoShape*)main.ptr());
+			gGeoManager->GetListOfShapes()->Add((TGeoShape*)sub1.ptr());
+			gGeoManager->GetListOfShapes()->Add((TGeoShape*)sub2.ptr());
+			gGeoManager->GetListOfShapes()->Add((TGeoShape*)sub3.ptr());
+
+			TGeoCompositeShape* composite = new TGeoCompositeShape("composite","main - sub1 - sub2 - sub3"); 
+
+			// get vacuum
+			vacuum = composite;
+
 			// get wall
 			wall = wall_union;
+
 			// get coating
 			coating = coating_union;
 		}
 
-		return std::tuple<Volume, Volume, Volume, Volume>(
+		return std::tuple<Volume, Volume, Volume, Volume, Volume, Volume>(
 			{"v_" + name + "_wall", wall, m_Wall},
 			{"v_" + name + "_coating", coating, m_Coating},
 			{"v_" + name + "_vacuum", vacuum, m_Vacuum},
-			{"v_" + name + "_wall_interface", wall_interface, m_Wall}
+			{"v_" + name + "_wall_interface", wall_interface, m_Wall},
+			{"v_" + name + "_wall_racetrack", wall_racetrack, m_Wall},
+			{"v_" + name + "_coating_racetrack", coating_racetrack, m_Coating}
 		);
 	};
 
@@ -553,6 +599,8 @@ static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector /* sens *
 	std::get<0>(volumes_downstream).setVisAttributes(wallVis);
 	std::get<1>(volumes_downstream).setVisAttributes(coatingVis);
 	std::get<3>(volumes_downstream).setVisAttributes(wallVis);
+	std::get<4>(volumes_downstream).setVisAttributes(wallVis);
+	std::get<5>(volumes_downstream).setVisAttributes(coatingVis);
 
 	auto tf_downstream = Transform3D(RotationZYX(0, 0, 0));
 	if (getAttrOrDefault<bool>(downstream_c, _Unicode(reflect), true)) 
@@ -571,6 +619,10 @@ static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector /* sens *
 	}
 	// place interface
 	assembly.placeVolume(std::get<3>(volumes_downstream), tf_downstream);
+	// place racetrack wall
+	assembly.placeVolume(std::get<4>(volumes_downstream), tf_downstream);
+	// place racetrack coating
+	assembly.placeVolume(std::get<5>(volumes_downstream), tf_downstream);
 
 	// -----------------------------
 	// final placement
