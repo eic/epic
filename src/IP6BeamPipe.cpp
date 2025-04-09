@@ -18,6 +18,7 @@
 #include <tuple>
 #include "TGeoTessellated.h"
 #include "DD4hep/Shapes.h"
+#include "TGDMLParse.h"
 
 using namespace std;
 using namespace dd4hep;
@@ -255,119 +256,6 @@ static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector /* sens *
 		return std::tuple<Solid,Solid,Solid>(wall_subtract,coating_subtract,vacuum_subtract);
 	};
 	//---------------------------------------------------------------------------------------------------------
-	// Helper function to build a circular face
-	auto makeCircleFace = [](double r, int segments)
-	{
-		std::vector<std::pair<double, double>> pts;
-		for (int i = 0; i < segments; ++i) 
-		{
-			double theta = 2. * M_PI * i / segments;
-			pts.emplace_back(r * cos(theta), r * sin(theta));
-		}
-		return pts;
-	};
-	//---------------------------------------------------------------------------------------------------------
-	// Helper function to build a racetrack face (flat sides + semicircles)
-	auto makeRacetrackFace = [](double radius, double flatHeight, int segments)
-	{
-		std::vector<std::pair<double, double>> pts;
-		int arcSegments = segments / 2.;
-
-		// Top semicircle (right to left)
-		for (int i = 0; i <= arcSegments; ++i) 
-		{
-			double theta = M_PI * i / arcSegments;
-			double x = radius * cos(theta);
-			double y = flatHeight / 2.0 + radius * sin(theta);
-			pts.emplace_back(x, y);
-		}
-
-		// Bottom semicircle (left to right)
-		for (int i = 0; i <= arcSegments; ++i) 
-		{
-			double theta = M_PI * i / arcSegments;
-			double x = radius * cos(M_PI - theta);
-			double y = -flatHeight / 2.0 - radius * sin(M_PI - theta);
-			pts.emplace_back(x, y);
-		}
-
-		return pts;
-	};
-	//---------------------------------------------------------------------------------------------------------
-	// Helper function to build the tessellated interface solid
-	auto makeInterfaceHollow = [&](double cylRadius, double rtRadius, double flatH,
-		int segments, double wallThickness, double z0, double z1, bool firstRacetrack)
-	{
-		auto facetOuter0 = makeCircleFace(cylRadius + wallThickness, segments);
-		auto facetOuter1 = makeRacetrackFace(rtRadius + wallThickness, flatH, segments);
-
-		auto facetInner0 = makeCircleFace(cylRadius, segments);
-		auto facetInner1 = makeRacetrackFace(rtRadius, flatH, segments);
-
-		// to flip the order for vertices in the facets
-		if(firstRacetrack)
-		{
-			facetOuter0 = makeRacetrackFace(rtRadius + wallThickness, flatH, segments);
-			facetOuter1 = makeCircleFace(cylRadius + wallThickness, segments);
-
-			facetInner0 = makeRacetrackFace(rtRadius, flatH, segments);
-			facetInner1 = makeCircleFace(cylRadius, segments);
-		}
-
-		auto* tess = new TGeoTessellated();
-
-		// --- Outer wall (circle outer → racetrack outer)
-		for (int i = 0; i < segments; ++i) 
-		{
-			int next = (i + 1) % segments;
-			auto p0 = TGeoTessellated::Vertex_t{facetOuter0[i].first,    facetOuter0[i].second,    z0};
-			auto p1 = TGeoTessellated::Vertex_t{facetOuter0[next].first, facetOuter0[next].second, z0};
-			auto p2 = TGeoTessellated::Vertex_t{facetOuter1[next].first, facetOuter1[next].second, z1};
-			auto p3 = TGeoTessellated::Vertex_t{facetOuter1[i].first,    facetOuter1[i].second,    z1};
-			tess->AddFacet(p0, p1, p2);
-			tess->AddFacet(p0, p2, p3);
-		}
-
-		// --- Inner wall (facetInner1 → facetInner0)
-		for (int i = 0; i < segments; ++i) 
-		{
-			int next = (i + 1) % segments;
-			auto p0 = TGeoTessellated::Vertex_t{facetInner1[i].first,    facetInner1[i].second,    z1};
-			auto p1 = TGeoTessellated::Vertex_t{facetInner1[next].first, facetInner1[next].second, z1};
-			auto p2 = TGeoTessellated::Vertex_t{facetInner0[next].first, facetInner0[next].second, z0};
-			auto p3 = TGeoTessellated::Vertex_t{facetInner0[i].first,    facetInner0[i].second,    z0};
-			tess->AddFacet(p0, p1, p2);
-			tess->AddFacet(p0, p2, p3);
-		}
-
-		// --- Side wall at z0 (circle outer → circle inner)
-		for (int i = 0; i < segments; ++i) 
-		{
-			int next = (i + 1) % segments;
-			auto p0 = TGeoTessellated::Vertex_t{facetOuter0[i].first,    facetOuter0[i].second,    z0};
-			auto p1 = TGeoTessellated::Vertex_t{facetOuter0[next].first, facetOuter0[next].second, z0};
-			auto p2 = TGeoTessellated::Vertex_t{facetInner0[next].first, facetInner0[next].second, z0};
-			auto p3 = TGeoTessellated::Vertex_t{facetInner0[i].first,    facetInner0[i].second,    z0};
-			tess->AddFacet(p0, p1, p2);
-			tess->AddFacet(p0, p2, p3);
-		}
-
-		// --- Side wall at z1 (race inner → race outer)
-		for (int i = 0; i < segments; ++i) 
-		{
-			int next = (i + 1) % segments;
-			auto p0 = TGeoTessellated::Vertex_t{facetInner1[i].first,    facetInner1[i].second,    z1};
-			auto p1 = TGeoTessellated::Vertex_t{facetInner1[next].first, facetInner1[next].second, z1};
-			auto p2 = TGeoTessellated::Vertex_t{facetOuter1[next].first, facetOuter1[next].second, z1};
-			auto p3 = TGeoTessellated::Vertex_t{facetOuter1[i].first,    facetOuter1[i].second,    z1};
-			tess->AddFacet(p0, p1, p2);
-			tess->AddFacet(p0, p2, p3);
-		}
-
-		tess->CloseShape(false, false, false);
-		return Solid(tess);
-	};
-	//---------------------------------------------------------------------------------------------------------
 	// Helper function to create union of lepton and hadron volumes
   	auto create_volumes = [&](
 		const std::string& name, 
@@ -393,7 +281,7 @@ static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector /* sens *
 		BooleanSolid vacuum_union = UnionSolid(
 			std::get<2>(pipe1_polycones), std::get<2>(pipe2_polycones), tf);
 
-		BooleanSolid wall_interface_final, wall_racetrack_final, coating_racetrack_final;
+		BooleanSolid wall_racetrack_final, coating_racetrack_final; 
 
 		// downstream side is more complex and requires additional effort to create all the volumes 
 		if(name == "downstream")
@@ -401,31 +289,18 @@ static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector /* sens *
 			xml::Component racetrack_lepton_c = x_pipe1.child(_Unicode(racetrack_lepton));
 
 			// ---- Read geometry parameters ----
-			int nSegments = // number of tesellated facet segments
-				getAttrOrDefault<int>(racetrack_lepton_c, _Unicode(nSegments), 100);
 			double cylRadius_1 = // cylinder radius on the IP side
 				getAttrOrDefault(racetrack_lepton_c, _Unicode(cylRadius_1), 6.2/2. * cm);
-			double cylRadius_2 = // cylinder radius on the non-IP side
-				getAttrOrDefault(racetrack_lepton_c, _Unicode(cylRadius_2), 2.6/2. * cm);
 			double rtRadius = // racetrack radius
 				getAttrOrDefault(racetrack_lepton_c, _Unicode(semiCircle_rmin), 2.3 * cm);
-			double flatHeight = // racetrack side height
-				getAttrOrDefault(racetrack_lepton_c, _Unicode(flatHeight), 1.6 * cm);
 			double wall_thickness = // wall thickness
 				getAttrOrDefault(racetrack_lepton_c, _Unicode(wall_thickness), 1.0 * mm);
 			double coating_thickness = // coating thickness
 				getAttrOrDefault(racetrack_lepton_c, _Unicode(coating_thickness), 30.0 * um);
-			double interface_startz_1 = // interface start position
-				getAttrOrDefault(racetrack_lepton_c, _Unicode(interface_startz_1), 66.385 * cm); 
-			double interface_endz_1 = // interface end position
-				getAttrOrDefault(racetrack_lepton_c, _Unicode(interface_endz_1), 72.385 * cm); 
-			double interface_startz_2 = // interface start position
-				getAttrOrDefault(racetrack_lepton_c, _Unicode(interface_startz_2), 197.805 * cm); 
-			double interface_endz_2 = // interface end position
-				getAttrOrDefault(racetrack_lepton_c, _Unicode(interface_endz_2), 211.301 * cm); 
 			double straight_pipe_startz = // straight pipe on the IP side, start position
 				getAttrOrDefault(racetrack_lepton_c, _Unicode(straight_pipe_startz), 66.10 * cm);
-			double straight_pipe_endz = interface_startz_1;// straight pipe on the IP side, end position
+			double straight_pipe_endz = // straight pipe on the IP side, end position
+				getAttrOrDefault(racetrack_lepton_c, _Unicode(straight_pipe_endz), 66.385 * cm);
 			double elliptical_cut_rx_1 = // elliptical cut (IP side) rX for the hadron beam opening
 				getAttrOrDefault(racetrack_lepton_c, _Unicode(elliptical_cut_rx_1), 0.305 * m);
 			double elliptical_cut_ry_1 = // elliptical cut (IP side) rY for the hadron beam opening
@@ -450,14 +325,37 @@ static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector /* sens *
 			// ---- Create racetrack solids ----
 			auto racetrack_solids = create_racetrack_solids(racetrack_lepton_c);
 
-			// ---- Create an interface between racetrack and cylindrical beam pipe ----
+/*
+// ---- Create an interface between racetrack and cylindrical beam pipe ----
+TGDMLParse parser;
+string fileName_1 = "/Users/andriinatochii/Desktop/EIC_IR6_BeamPipeModel_in_DD4Hep/interface_vol1.gdml";
+string fileName_2 = "/Users/andriinatochii/Desktop/EIC_IR6_BeamPipeModel_in_DD4Hep/interface_vol2.gdml";
+Volume interface_vol_1 = parser.GDMLReadFile(fileName_1.c_str());
+Volume interface_vol_2 = parser.GDMLReadFile(fileName_2.c_str());
+if (!interface_vol_1.isValid()) 
+{
+	printout(WARNING, "IP6BeamPipe", "%s", fileName_1.c_str());
+	printout(WARNING, "IP6BeamPipe", "interface_vol_1 invalid, GDML parser failed!");
+	std::_Exit(EXIT_FAILURE);
+}
+if (!interface_vol_2.isValid()) 
+{
+	printout(WARNING, "IP6BeamPipe", "%s", fileName_2.c_str());
+	printout(WARNING, "IP6BeamPipe", "interface_vol_2 invalid, GDML parser failed!");
+	std::_Exit(EXIT_FAILURE);
+}
 
-			// IP side
-			auto wall_interfaceSolid_1 = makeInterfaceHollow(
-				cylRadius_1, rtRadius, flatHeight, nSegments, wall_thickness, 
-				interface_startz_1, interface_endz_1, false);
+interface_vol_1.import();
+TessellatedSolid interface_solid_1 = interface_vol_1.solid();
+interface_solid_1->CloseShape(true, true, true); // tesselated solid not closed by import!
+interface_vol_1.setMaterial(m_Wall);
 
-			// straight pipe on the IP side 
+interface_vol_2.import();
+TessellatedSolid interface_solid_2 = interface_vol_2.solid();
+interface_solid_2->CloseShape(true, true, true); // tesselated solid not closed by import!
+interface_vol_2.setMaterial(m_Wall);
+*/
+			// --- Create a straight pipe on the IP side ---
 			std::vector<double> z = {straight_pipe_startz, straight_pipe_endz};
 			std::vector<double> wall_rmin = {cylRadius_1, cylRadius_1};
 			std::vector<double> wall_rmax = {cylRadius_1 + wall_thickness, cylRadius_1 + wall_thickness};
@@ -467,16 +365,9 @@ static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector /* sens *
 			Polycone wall_pipe(0, 2.0 * M_PI, wall_rmin, wall_rmax, z);
 			Polycone coating_pipe(0, 2.0 * M_PI, coating_rmin, coating_rmax, z);
 
-			// non-IP side
-			auto wall_interfaceSolid_2 = makeInterfaceHollow(
-				cylRadius_2, rtRadius, flatHeight, nSegments, wall_thickness,
-				interface_startz_2, interface_endz_2, true);
+			Polycone wall_pipe_2(0, 2.0 * M_PI, wall_rmin, wall_rmax, z);
 
-			// unite two parts of the interface 
-			auto wall_interface_union = 
-				UnionSolid("wall_interface_union", wall_interfaceSolid_1, wall_interfaceSolid_2, Transform3D());;
-
-			// unite racetrack and straight pipe with the rest of the pipe
+			// --- Unite racetrack and straight pipe with the rest of the pipe
 			double offset_z = getAttrOrDefault(racetrack_lepton_c, _Unicode(offset_z), 0.0); 
 			double length = getAttrOrDefault(racetrack_lepton_c, _Unicode(length), 0.0);
 			Transform3D racetrack_tf(RotationZYX(0, 0, 0), Position(0, 0, offset_z + length/2.));
@@ -485,6 +376,12 @@ static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector /* sens *
 				UnionSolid("wall_racetrack_pipe",wall_pipe,std::get<0>(racetrack_solids), racetrack_tf);
 			UnionSolid coating_racetrack_pipe = 
 				UnionSolid("coating_racetrack_pipe",coating_pipe,std::get<1>(racetrack_solids), racetrack_tf);
+
+			// --- Subtract racetrack sections from vacuum
+			vacuum_union = 
+				SubtractionSolid("vacuum_racetrack_cut_1",vacuum_union,wall_racetrack_pipe,Transform3D());
+			vacuum_union = 
+				SubtractionSolid("vacuum_racetrack_cut_2",vacuum_union,coating_racetrack_pipe,Transform3D());
 
 			// create a cut volume - vacuum = two ellipses + rectangle
 			EllipticalTube elliptical_cut_1(
@@ -499,10 +396,6 @@ static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector /* sens *
 				RotationZYX(0, M_PI_2, 0), Position(-rtRadius, 0, elliptical_cut_offset_z_2));
 			Transform3D tf_cut_3(
 				RotationZYX(0, M_PI_2, 0), Position(-rtRadius, 0, rectangular_cut_offset_z));
-
-			// subtract from interface wall
-			wall_interface_final =
-				SubtractionSolid("wall_interface_final", wall_interface_union, elliptical_cut_1, tf_cut_1);
 
 			// subtract from racetrack wall
 			SubtractionSolid wall_racetrack_cut_1 = 
@@ -521,7 +414,6 @@ static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector /* sens *
 				SubtractionSolid("coating_racetrack_final",coating_racetrack_cut_2,rectangular_cut_3,tf_cut_3);
 		}
 
-		Solid wall_interface(wall_interface_final);
 		Solid wall_racetrack(wall_racetrack_final);
 		Solid coating_racetrack(coating_racetrack_final);
 
@@ -564,18 +456,17 @@ static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector /* sens *
 			// subtract walls and coatings from vacuum
 			auto main = vacuum_union;	main.setName("main"); 
 			auto sub1 = wall_union; 	sub1.setName("sub1"); 
-			auto sub2 = wall_interface; 	sub2.setName("sub2"); 
-			auto sub3 = coating_union; 	sub3.setName("sub3"); 
+			auto sub2 = coating_union; 	sub2.setName("sub2"); 
 
 			gGeoManager->GetListOfShapes()->Add((TGeoShape*)main.ptr());
 			gGeoManager->GetListOfShapes()->Add((TGeoShape*)sub1.ptr());
 			gGeoManager->GetListOfShapes()->Add((TGeoShape*)sub2.ptr());
-			gGeoManager->GetListOfShapes()->Add((TGeoShape*)sub3.ptr());
 
-			TGeoCompositeShape* composite = new TGeoCompositeShape("composite","main - sub1 - sub2 - sub3"); 	
+			TGeoCompositeShape* composite = new TGeoCompositeShape("composite","main - sub1 - sub2"); 
 
 			// get vacuum
-			vacuum = composite;
+			vacuum = (TGeoCompositeShape*)composite->Clone("vacuum_composite");
+			delete composite;
 
 			// get wall
 			wall = wall_union;
@@ -592,16 +483,15 @@ static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector /* sens *
 			vacuum_ipflange = std::get<2>(fwdipflange_polycones);
 		}
 
-		return std::tuple<Volume, Volume, Volume, Volume, Volume, Volume, Volume, Volume, Volume>(
+		return std::tuple<Volume, Volume, Volume, Volume, Volume, Volume, Volume, Volume>(
 			{"v_" + name + "_wall", wall, m_Wall},
 			{"v_" + name + "_coating", coating, m_Coating},
 			{"v_" + name + "_vacuum", vacuum, m_Vacuum},
-			{"v_" + name + "_wall_interface", wall_interface, m_Wall},
+			{"v_" + name + "_vacuum_ipflange", vacuum_ipflange, m_Vacuum},
 			{"v_" + name + "_wall_racetrack", wall_racetrack, m_Wall},
 			{"v_" + name + "_coating_racetrack", coating_racetrack, m_Coating},
 			{"v_" + name + "_wall_ipflange", wall_ipflange, m_Wall},
-			{"v_" + name + "_coating_ipflange", coating_ipflange, m_Coating},
-			{"v_" + name + "_vacuum_ipflange", vacuum_ipflange, m_Vacuum}
+			{"v_" + name + "_coating_ipflange", coating_ipflange, m_Coating}
 		);
 	};
 
@@ -653,6 +543,7 @@ static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector /* sens *
 		outgoing_hadron_c,
 		additional_subtractions_downstream);
 
+	// add colors
 	std::get<0>(volumes_downstream).setVisAttributes(wallVis);
 	std::get<1>(volumes_downstream).setVisAttributes(coatingVis);
 	std::get<3>(volumes_downstream).setVisAttributes(wallVis);
@@ -675,10 +566,8 @@ static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector /* sens *
 	if (getAttrOrDefault<bool>(downstream_c, _Unicode(place_vacuum), true)) 
 	{
 		assembly.placeVolume(std::get<2>(volumes_downstream), tf_downstream);
-		assembly.placeVolume(std::get<8>(volumes_downstream), tf_downstream);
+		assembly.placeVolume(std::get<3>(volumes_downstream), tf_downstream);
 	}
-	// place interface
-	assembly.placeVolume(std::get<3>(volumes_downstream), tf_downstream);
 	// place racetrack wall
 	assembly.placeVolume(std::get<4>(volumes_downstream), tf_downstream);
 	// place racetrack coating

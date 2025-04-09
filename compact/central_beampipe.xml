@@ -65,15 +65,9 @@
 		length="125.420 * cm"
 		rectangle_h="1.6 * cm"
 		offset_z="72.425 * cm"
-		nSegments="100"
 		cylRadius_1="6.2/2. * cm"
-		interface_startz_1="66.385 * cm"
-		interface_endz_1="72.385 * cm"
-		cylRadius_2="2.6/2. * cm"
-		interface_startz_2="197.805 * cm"
-		interface_endz_2="211.301 * cm"
-		flatHeight="1.6 * cm"
 		straight_pipe_startz="66.10 * cm"
+		straight_pipe_endz="66.385 * cm"
 		elliptical_cut_rx_1="0.305 * m"
 		elliptical_cut_ry_1="0.021 * m"
 		elliptical_cut_rx_2="0.152 * m"
@@ -90,7 +84,6 @@
             <zplane z="IPBeampipeDownstreamStraightLength" ID="IPBeampipeID"/>
             <zplane z="66.10 * cm" ID="IPBeampipeID"/>
           </fwdipflange>
-
         </incoming_lepton>
         <outgoing_hadron wall_thickness="2.0 * mm"
 			 coating_thickness="30 * um"
