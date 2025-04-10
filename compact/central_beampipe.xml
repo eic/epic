@@ -18,11 +18,11 @@
       <type_flags type="DetType_TRACKER + DetType_BEAMPIPE" />
       <beampipe/>
       <IP_pipe
-	ID="IPBeampipeID"
+        ID="IPBeampipeID"
         wall_thickness="0.757*mm"
-	wall_material="Beryllium"
+        wall_material="Beryllium"
         coating_thickness="5*um"
-	coating_material="Gold"
+        coating_material="Gold"
         crossing_angle="CrossingAngle"
         upstream_straight_length="IPBeampipeUpstreamStraightLength"
         downstream_straight_length="IPBeampipeDownstreamStraightLength"
@@ -32,12 +32,12 @@
       <upstream reflect="true"
                 place_vacuum="true">
         <outgoing_lepton wall_thickness="2.5 * mm"
-		coating_thickness="30 * um">
+                coating_thickness="30 * um">
           <zplane z="IPBeampipeUpstreamStraightLength" ID="IPBeampipeID"/>
           <zplane z="454.449 * cm" ID="IPBeampipeID"/>
         </outgoing_lepton>
         <incoming_hadron wall_thickness="1.65 * mm"
-			 coating_thickness="30 * um"
+                         coating_thickness="30 * um"
                          crossing_angle="CrossingAngle">
           <zplane z="75.6 * cm" ID="2.527 * cm"/>
           <zplane z="247.298 * cm" ID="2.527 * cm"/>
@@ -52,62 +52,62 @@
       <downstream reflect="false"
                   place_vacuum="false">
         <incoming_lepton wall_thickness="1.0 * mm"
-		coating_thickness="30 * um"
-		lepton_pipe_vac_tube_startz="66.10 * cm"
-		lepton_pipe_vac_tube_endz="494.556 * cm"
-		ipBeampipe_ID="IPBeampipeID">
+                coating_thickness="30 * um"
+                lepton_pipe_vac_tube_startz="66.10 * cm"
+                lepton_pipe_vac_tube_endz="494.556 * cm"
+                ipBeampipe_ID="IPBeampipeID">
           <zplane z="(211.301) * cm" ID="2.6 * cm"/>
           <zplane z="(211.301 + 40.328) * cm" ID="2.6 * cm"/>
           <zplane z="(211.301 + 40.328 + 8.0) * cm" ID="4.2 * cm"/>
           <zplane z="(211.301 + 40.328 + 8.0 + 127.8) * cm" ID="4.2 * cm"/>
           <zplane z="(211.301 + 40.328 + 8.0 + 127.8 + 5.0) * cm" ID="5.2 * cm"/>
           <zplane z="(211.301 + 40.328 + 8.0 + 127.8 + 5.0 + 103.585) * cm" ID="5.2 * cm"/>
-	  <racetrack_lepton wall_thickness="1.0 * mm"
-		coating_thickness="30 * um"
-		semiCircle_rmin="2.3 * cm"
-		length="125.420 * cm"
-		rectangle_h="1.6 * cm"
-		offset_z="72.385 * cm"
-		cylRadius1="6.2/2. * cm"
-		cylRadius2="2.6/2. * cm"
-		interface_length_1="6. * cm"
-		interface_length_2="13.495 * cm"
-		straight_pipe_startz="66.10 * cm"
-		straight_pipe_endz="66.385 * cm"
-		elliptical_cut_rx_1="0.305 * m"
-		elliptical_cut_ry_1="0.021 * m"
-		elliptical_cut_rx_2="0.152 * m"
-		elliptical_cut_ry_2="0.021 * m"
-		rectangular_cut_a="0.81/2. * m"
-		rectangular_cut_b="0.021 * m"
-		elliptical_cut_dz="1. * cm"
-		elliptical_cut_offset_z_1="(0.976) * m"
-		elliptical_cut_offset_z_2="(0.976 + 0.810) * m"
-		rectangular_cut_offset_z="(0.976 + 0.810/2.) * m">
-	  </racetrack_lepton>
+          <racetrack_lepton wall_thickness="1.0 * mm"
+                coating_thickness="30 * um"
+                semiCircle_rmin="2.3 * cm"
+                length="125.420 * cm"
+                rectangle_h="1.6 * cm"
+                offset_z="72.385 * cm"
+                cylRadius1="6.2/2. * cm"
+                cylRadius2="2.6/2. * cm"
+                interface_length_1="6. * cm"
+                interface_length_2="13.495 * cm"
+                straight_pipe_startz="66.10 * cm"
+                straight_pipe_endz="66.385 * cm"
+                elliptical_cut_rx_1="0.305 * m"
+                elliptical_cut_ry_1="0.021 * m"
+                elliptical_cut_rx_2="0.152 * m"
+                elliptical_cut_ry_2="0.021 * m"
+                rectangular_cut_a="0.81/2. * m"
+                rectangular_cut_b="0.021 * m"
+                elliptical_cut_dz="1. * cm"
+                elliptical_cut_offset_z_1="(0.976) * m"
+                elliptical_cut_offset_z_2="(0.976 + 0.810) * m"
+                rectangular_cut_offset_z="(0.976 + 0.810/2.) * m">
+          </racetrack_lepton>
           <fwdipflange wall_thickness="3.0 * mm"
-			 coating_thickness="30 * um">
+                         coating_thickness="30 * um">
             <zplane z="IPBeampipeDownstreamStraightLength" ID="IPBeampipeID"/>
             <zplane z="66.10 * cm" ID="IPBeampipeID"/>
           </fwdipflange>
         </incoming_lepton>
         <outgoing_hadron wall_thickness="2.0 * mm"
-			 coating_thickness="30 * um"
+                         coating_thickness="30 * um"
                          axis_intersection="66.10 * cm"
                          crossing_angle="-HadronConeOpenAngle/2.">
-          <zplane z="66.0 * cm" 
-		ID="2. * 6.41 / tan(HadronConeOpenAngle) * sin(HadronConeOpenAngle/2.) * cm"/>
-          <zplane z="500.0 * cm" 
-		ID="2. * ((500.0 - 66.10) + 6.41 / tan(HadronConeOpenAngle)) * sin(HadronConeOpenAngle/2.) * cm"/>
+          <zplane z="66.0 * cm"
+                ID="2. * 6.41 / tan(HadronConeOpenAngle) * sin(HadronConeOpenAngle/2.) * cm"/>
+          <zplane z="500.0 * cm"
+                ID="2. * ((500.0 - 66.10) + 6.41 / tan(HadronConeOpenAngle)) * sin(HadronConeOpenAngle/2.) * cm"/>
         </outgoing_hadron>
 
-	<!-- cut on the IP side -->
+        <!-- cut on the IP side -->
         <additional_subtraction>
           <zplane z="0 * cm" ID="200. * cm"/>
           <zplane z="66.10 * cm" ID="200. * cm"/>
         </additional_subtraction>
 
-	<!-- cut on the non-IP side -->
+        <!-- cut on the non-IP side -->
         <additional_subtraction>
           <zplane z="494.556 * cm" ID="200. * cm"/>
           <zplane z="1000.0 * cm" ID="200. * cm"/>
