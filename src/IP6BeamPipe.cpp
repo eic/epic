@@ -210,6 +210,7 @@ static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector /* sens *
 		// get geometry parameters
 		double semiCircle_rmin = getAttrOrDefault(x_racetrack, _Unicode(semiCircle_rmin), 0.0);
 		double wall_thickness = getAttrOrDefault(x_racetrack, _Unicode(wall_thickness), 0.0);
+		double coating_thickness = getAttrOrDefault(x_racetrack, _Unicode(coating_thickness), 0.0);
 		double length = getAttrOrDefault(x_racetrack, _Unicode(length), 0.0);
 		double rectangle_h = getAttrOrDefault(x_racetrack, _Unicode(rectangle_h), 0.0);
 		
@@ -220,8 +221,8 @@ static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector /* sens *
 		Tube coating_semiCircle(0, semiCircle_rmin, length/2.);
 		Box coating_rectangle(semiCircle_rmin, rectangle_h/2., length/2.);
 
-		Tube vacuum_semiCircle(0, semiCircle_rmin -  wall_thickness, length/2.);
-		Box vacuum_rectangle(semiCircle_rmin - wall_thickness, rectangle_h/2., length/2.);
+		Tube vacuum_semiCircle(0, semiCircle_rmin -  coating_thickness, length/2.);
+		Box vacuum_rectangle(semiCircle_rmin - coating_thickness, rectangle_h/2., length/2.);
 
 		// unite semicylinders and boxes
 		Transform3D upShift_tf(RotationZYX(0, 0, 0), Position(0, rectangle_h/2., 0));
@@ -256,6 +257,144 @@ static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector /* sens *
 		return std::tuple<Solid,Solid,Solid>(wall_subtract,coating_subtract,vacuum_subtract);
 	};
 	//---------------------------------------------------------------------------------------------------------
+	// Helper function to build cones for interface 
+	auto build_interface_cones = [](
+		std::vector<double>& wall_interface_cone1_rmax,
+		std::vector<double>& coating_interface_cone1_rmax,
+		std::vector<double>& vacuum_interface_cone1_rmax,
+		std::vector<double>& wall_interface_cone2_rmax,
+		std::vector<double>& coating_interface_cone2_rmax,
+		std::vector<double>& vacuum_interface_cone2_rmax,
+		std::vector<double>& interface_rmin,
+		std::vector<double>& interface_z,
+		double offset1_y, double offset2_y)
+	{
+		// wall cones
+		Polycone wall_interface_cone1(0, 2.0 * M_PI, 
+			interface_rmin, wall_interface_cone1_rmax, interface_z);
+		Polycone wall_interface_cone2(0, 2.0 * M_PI, 
+			interface_rmin, wall_interface_cone2_rmax, interface_z);
+		// coating cones
+		Polycone coating_interface_cone1(0, 2.0 * M_PI, 
+			interface_rmin, coating_interface_cone1_rmax, interface_z);
+		Polycone coating_interface_cone2(0, 2.0 * M_PI, 
+			interface_rmin, coating_interface_cone2_rmax, interface_z);
+		// vacuum cones
+		Polycone vacuum_interface_cone1(0, 2.0 * M_PI, 
+			interface_rmin, vacuum_interface_cone1_rmax, interface_z);
+		Polycone vacuum_interface_cone2(0, 2.0 * M_PI, 
+			interface_rmin, vacuum_interface_cone2_rmax, interface_z);
+
+		Transform3D tf1(RotationZYX(0, 0, 0), Position(0, offset1_y, 0));
+		Transform3D tf2(RotationZYX(0, 0, 0), Position(0, offset2_y, 0));
+
+		// ---- Create wall
+		// unite wall cones
+		auto wall_interface_final = UnionSolid(wall_interface_cone1,wall_interface_cone2,tf1);
+		wall_interface_final = UnionSolid(wall_interface_final,wall_interface_cone2,tf2);
+		Solid wall_interface_vac_cut(wall_interface_final);
+		// subtract coating cones
+		wall_interface_final = SubtractionSolid(wall_interface_final,coating_interface_cone1,Transform3D());
+		wall_interface_final = SubtractionSolid(wall_interface_final,coating_interface_cone2,tf1);
+		wall_interface_final = SubtractionSolid(wall_interface_final,coating_interface_cone2,tf2);
+
+		// --- Create coating
+		// unite coating cones
+		auto coating_interface_final = UnionSolid(coating_interface_cone1,coating_interface_cone2,tf1);
+		coating_interface_final = UnionSolid(coating_interface_final,coating_interface_cone2,tf2);
+		// subtract vacuum cones
+		coating_interface_final = SubtractionSolid(coating_interface_final,vacuum_interface_cone1,Transform3D());
+		coating_interface_final = SubtractionSolid(coating_interface_final,vacuum_interface_cone2,tf1);
+		coating_interface_final = SubtractionSolid(coating_interface_final,vacuum_interface_cone2,tf2);
+
+		return std::tuple<Solid,Solid,Solid>(
+			wall_interface_final,coating_interface_final,wall_interface_vac_cut);
+	};
+	//---------------------------------------------------------------------------------------------------------
+	// Helper function to create an interface between racetrack and circular pipes 
+  	auto create_interface_solids = [&](xml::Component& x_racetrack)
+	{
+		// get geometry parameters
+		double semiCircle_rmin = getAttrOrDefault(x_racetrack, _Unicode(semiCircle_rmin), 2.3 * cm);
+		double wall_thickness = getAttrOrDefault(x_racetrack, _Unicode(wall_thickness), 1.0 * mm);
+		double coating_thickness = getAttrOrDefault(x_racetrack, _Unicode(coating_thickness), 30 * um);
+		double rectangle_h = getAttrOrDefault(x_racetrack, _Unicode(rectangle_h), 1.6 * cm);
+		double cylRadius1 = getAttrOrDefault(x_racetrack, _Unicode(cylRadius1), 6.2/2. * cm);
+		double cylRadius2 = getAttrOrDefault(x_racetrack, _Unicode(cylRadius2), 2.6/2. * cm);
+		double straight_pipe_endz = getAttrOrDefault(x_racetrack, _Unicode(straight_pipe_endz), 66.385 * cm);
+		double offset_z = getAttrOrDefault(x_racetrack, _Unicode(offset_z), 72.385 * cm); 
+		double length = getAttrOrDefault(x_racetrack, _Unicode(length), 125.420 * cm);
+		double interface_length_1 = getAttrOrDefault(x_racetrack, _Unicode(interface_length_1), 6.0 * cm); 
+		double interface_length_2 = getAttrOrDefault(x_racetrack, _Unicode(interface_length_2), 13.495 * cm); 
+
+		if(cylRadius2 - rectangle_h/2. < 0)
+		{
+			printout(ERROR, "IP6BeamPipe_geo", "Negative cone base size: (%f - %f/2) < 0",
+				cylRadius2, rectangle_h);
+			throw std::runtime_error("IP6BeamPipe failed to build a cone");
+		}
+
+		std::vector<double> interface_rmin = {0, 0};
+
+		// interface-1
+		std::vector<double> interface_z_1 = {straight_pipe_endz, straight_pipe_endz + interface_length_1};
+		// interface-2
+		std::vector<double> interface_z_2 = {offset_z + length, offset_z + length + interface_length_2};
+
+		// --- Central cones
+		// interface-1
+		std::vector<double> wall_interface_cone1_rmax_1 = 
+			{cylRadius1 + wall_thickness, semiCircle_rmin + wall_thickness};
+		std::vector<double> coating_interface_cone1_rmax_1 = 
+			{cylRadius1, semiCircle_rmin};
+		std::vector<double> vacuum_interface_cone1_rmax_1 = 
+			{cylRadius1 - coating_thickness, semiCircle_rmin - coating_thickness};
+		// interface-2
+		std::vector<double> wall_interface_cone1_rmax_2 = 
+			{semiCircle_rmin + wall_thickness, cylRadius2 + wall_thickness};
+		std::vector<double> coating_interface_cone1_rmax_2 = 
+			{semiCircle_rmin, cylRadius2};
+		std::vector<double> vacuum_interface_cone1_rmax_2 = 
+			{semiCircle_rmin - coating_thickness, cylRadius2 - coating_thickness};
+
+		// --- Shifted cones
+		// interface-1
+		std::vector<double> wall_interface_cone2_rmax_1 = 
+			{semiCircle_rmin + wall_thickness, semiCircle_rmin + wall_thickness};
+		std::vector<double> coating_interface_cone2_rmax_1 = 
+			{semiCircle_rmin, semiCircle_rmin};
+		std::vector<double> vacuum_interface_cone2_rmax_1 = 
+			{semiCircle_rmin - coating_thickness, semiCircle_rmin - coating_thickness};
+		// interface-2
+		std::vector<double> wall_interface_cone2_rmax_2 = 
+			{semiCircle_rmin + wall_thickness, (cylRadius2 - rectangle_h/2.) + wall_thickness};
+		std::vector<double> coating_interface_cone2_rmax_2 = 
+			{semiCircle_rmin, (cylRadius2 - rectangle_h/2.)};
+		std::vector<double> vacuum_interface_cone2_rmax_2 = 
+			{semiCircle_rmin - coating_thickness, (cylRadius2 - rectangle_h/2.) - coating_thickness};
+
+		// vertical shifts
+		double offset1_y = rectangle_h/2.;
+		double offset2_y = -rectangle_h/2.;
+
+		// -- Build cones
+		// interface-1
+		auto interface_cones_1 = build_interface_cones(
+			wall_interface_cone1_rmax_1, coating_interface_cone1_rmax_1, vacuum_interface_cone1_rmax_1,
+			wall_interface_cone2_rmax_1, coating_interface_cone2_rmax_1, vacuum_interface_cone2_rmax_1,
+			interface_rmin, interface_z_1, offset1_y, offset2_y);
+		// interface-2
+		auto interface_cones_2 = build_interface_cones(
+			wall_interface_cone1_rmax_2, coating_interface_cone1_rmax_2, vacuum_interface_cone1_rmax_2,
+			wall_interface_cone2_rmax_2, coating_interface_cone2_rmax_2, vacuum_interface_cone2_rmax_2,
+			interface_rmin, interface_z_2, offset1_y, offset2_y);
+
+		return std::tuple<Solid,Solid,Solid,Solid,Solid,Solid>(
+			std::get<0>(interface_cones_1), std::get<1>(interface_cones_1), std::get<2>(interface_cones_1),
+			std::get<0>(interface_cones_2), std::get<1>(interface_cones_2), std::get<2>(interface_cones_2)
+		);
+	};
+	//---------------------------------------------------------------------------------------------------------
 	// Helper function to create union of lepton and hadron volumes
   	auto create_volumes = [&](
 		const std::string& name, 
@@ -281,7 +420,25 @@ static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector /* sens *
 		BooleanSolid vacuum_union = UnionSolid(
 			std::get<2>(pipe1_polycones), std::get<2>(pipe2_polycones), tf);
 
-		BooleanSolid wall_racetrack_final, coating_racetrack_final; 
+		BooleanSolid wall_racetrack_final, coating_racetrack_final;
+		BooleanSolid wall_interface_final_1, coating_interface_final_1;
+		BooleanSolid wall_interface_final_2, coating_interface_final_2;
+		BooleanSolid lepton_pipe_vac;
+
+		// --- Create a vacuum cylinder to place a lepton pipe inside and cut it out of the hadron cone vacuum
+		// --- This helps to avoid problems with nested solid unions and subtractions for the hadron vacuum
+		std::vector<double> posz_vac = {
+			getAttrOrDefault(x_pipe1, _Unicode(lepton_pipe_vac_tube_startz), 66.10 * cm), 
+			getAttrOrDefault(x_pipe1, _Unicode(lepton_pipe_vac_tube_endz), 494.556 * cm)};
+		std::vector<double> rmin_vac = {0, 0};
+		std::vector<double> rmax_vac = {
+			getAttrOrDefault(x_pipe1, _Unicode(ipBeampipe_ID), 6.2/2. * cm)/2. + 
+			getAttrOrDefault(x_pipe1, _Unicode(wall_thickness), 1.0 * mm), 
+			getAttrOrDefault(x_pipe1, _Unicode(ipBeampipe_ID), 6.2/2. * cm)/2. + 
+			getAttrOrDefault(x_pipe1, _Unicode(wall_thickness), 1.0 * mm)};
+		Polycone lepton_pipe_vac_tube(0, 2.0 * M_PI, rmin_vac, rmax_vac, posz_vac);
+		// subtract the lepton beam pipe vacuum from the hadron beam pipe vacuum
+		vacuum_union = SubtractionSolid("vacuum_union", vacuum_union, lepton_pipe_vac_tube);
 
 		// downstream side is more complex and requires additional effort to create all the volumes 
 		if(name == "downstream")
@@ -289,8 +446,8 @@ static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector /* sens *
 			xml::Component racetrack_lepton_c = x_pipe1.child(_Unicode(racetrack_lepton));
 
 			// ---- Read geometry parameters ----
-			double cylRadius_1 = // cylinder radius on the IP side
-				getAttrOrDefault(racetrack_lepton_c, _Unicode(cylRadius_1), 6.2/2. * cm);
+			double cylRadius1 = // cylinder radius on the IP side
+				getAttrOrDefault(racetrack_lepton_c, _Unicode(cylRadius1), 6.2/2. * cm);
 			double rtRadius = // racetrack radius
 				getAttrOrDefault(racetrack_lepton_c, _Unicode(semiCircle_rmin), 2.3 * cm);
 			double wall_thickness = // wall thickness
@@ -325,41 +482,14 @@ static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector /* sens *
 			// ---- Create racetrack solids ----
 			auto racetrack_solids = create_racetrack_solids(racetrack_lepton_c);
 
-/*
-// ---- Create an interface between racetrack and cylindrical beam pipe ----
-TGDMLParse parser;
-string fileName_1 = "/Users/andriinatochii/Desktop/EIC_IR6_BeamPipeModel_in_DD4Hep/interface_vol1.gdml";
-string fileName_2 = "/Users/andriinatochii/Desktop/EIC_IR6_BeamPipeModel_in_DD4Hep/interface_vol2.gdml";
-Volume interface_vol_1 = parser.GDMLReadFile(fileName_1.c_str());
-Volume interface_vol_2 = parser.GDMLReadFile(fileName_2.c_str());
-if (!interface_vol_1.isValid()) 
-{
-	printout(WARNING, "IP6BeamPipe", "%s", fileName_1.c_str());
-	printout(WARNING, "IP6BeamPipe", "interface_vol_1 invalid, GDML parser failed!");
-	std::_Exit(EXIT_FAILURE);
-}
-if (!interface_vol_2.isValid()) 
-{
-	printout(WARNING, "IP6BeamPipe", "%s", fileName_2.c_str());
-	printout(WARNING, "IP6BeamPipe", "interface_vol_2 invalid, GDML parser failed!");
-	std::_Exit(EXIT_FAILURE);
-}
-
-interface_vol_1.import();
-TessellatedSolid interface_solid_1 = interface_vol_1.solid();
-interface_solid_1->CloseShape(true, true, true); // tesselated solid not closed by import!
-interface_vol_1.setMaterial(m_Wall);
-
-interface_vol_2.import();
-TessellatedSolid interface_solid_2 = interface_vol_2.solid();
-interface_solid_2->CloseShape(true, true, true); // tesselated solid not closed by import!
-interface_vol_2.setMaterial(m_Wall);
-*/
+			// ---- Create an interface between racetrack and cylindrical beam pipe ----
+			auto interface_solids = create_interface_solids(racetrack_lepton_c);
+	
 			// --- Create a straight pipe on the IP side ---
 			std::vector<double> z = {straight_pipe_startz, straight_pipe_endz};
-			std::vector<double> wall_rmin = {cylRadius_1, cylRadius_1};
-			std::vector<double> wall_rmax = {cylRadius_1 + wall_thickness, cylRadius_1 + wall_thickness};
-			std::vector<double> coating_rmin = {cylRadius_1 - coating_thickness, cylRadius_1 - coating_thickness};
+			std::vector<double> wall_rmin = {cylRadius1, cylRadius1};
+			std::vector<double> wall_rmax = {cylRadius1 + wall_thickness, cylRadius1 + wall_thickness};
+			std::vector<double> coating_rmin = {cylRadius1 - coating_thickness, cylRadius1 - coating_thickness};
 			std::vector<double> coating_rmax = wall_rmin;
 
 			Polycone wall_pipe(0, 2.0 * M_PI, wall_rmin, wall_rmax, z);
@@ -377,11 +507,19 @@ interface_vol_2.setMaterial(m_Wall);
 			UnionSolid coating_racetrack_pipe = 
 				UnionSolid("coating_racetrack_pipe",coating_pipe,std::get<1>(racetrack_solids), racetrack_tf);
 
-			// --- Subtract racetrack sections from vacuum
-			vacuum_union = 
-				SubtractionSolid("vacuum_racetrack_cut_1",vacuum_union,wall_racetrack_pipe,Transform3D());
-			vacuum_union = 
-				SubtractionSolid("vacuum_racetrack_cut_2",vacuum_union,coating_racetrack_pipe,Transform3D());
+			// --- Subtract racetrack and interface sections from vacuum
+			lepton_pipe_vac = 
+				SubtractionSolid("vacuum_racetrack_cut_1",
+					lepton_pipe_vac_tube,wall_racetrack_pipe,Transform3D());
+			lepton_pipe_vac = 
+				SubtractionSolid("vacuum_racetrack_cut_2",
+					lepton_pipe_vac,coating_racetrack_pipe,Transform3D());
+			lepton_pipe_vac = 
+				SubtractionSolid("vacuum_interface_cut_3",
+					lepton_pipe_vac,std::get<2>(interface_solids),Transform3D());
+			lepton_pipe_vac = 
+				SubtractionSolid("vacuum_interface_cut_4",
+					lepton_pipe_vac,std::get<5>(interface_solids),Transform3D());
 
 			// create a cut volume - vacuum = two ellipses + rectangle
 			EllipticalTube elliptical_cut_1(
@@ -412,10 +550,26 @@ interface_vol_2.setMaterial(m_Wall);
 				SubtractionSolid("coating_racetrack_cut_2",coating_racetrack_cut_1,elliptical_cut_2,tf_cut_2);
 			coating_racetrack_final = 
 				SubtractionSolid("coating_racetrack_final",coating_racetrack_cut_2,rectangular_cut_3,tf_cut_3);
+
+			// subtract from interface-1 wall
+			wall_interface_final_1 = SubtractionSolid("wall_interface_final_1",
+				std::get<0>(interface_solids),elliptical_cut_1,tf_cut_1);
+
+			// subtract from interface-1 coating
+			coating_interface_final_1 = SubtractionSolid("coating_interface_final_1",
+				std::get<1>(interface_solids),elliptical_cut_1,tf_cut_1);
+
+			// get  interface-2 w/o subtraction
+			wall_interface_final_2 = std::get<3>(interface_solids);
+			coating_interface_final_2 = std::get<4>(interface_solids);
 		}
 
 		Solid wall_racetrack(wall_racetrack_final);
 		Solid coating_racetrack(coating_racetrack_final);
+		Solid wall_interface_1(wall_interface_final_1);
+		Solid coating_interface_1(coating_interface_final_1);
+		Solid wall_interface_2(wall_interface_final_2);
+		Solid coating_interface_2(coating_interface_final_2);
 
 		// subtract additional vacuum from wall and coating
 		for (; x_additional_subtraction_i; ++x_additional_subtraction_i) 
@@ -483,7 +637,7 @@ interface_vol_2.setMaterial(m_Wall);
 			vacuum_ipflange = std::get<2>(fwdipflange_polycones);
 		}
 
-		return std::tuple<Volume, Volume, Volume, Volume, Volume, Volume, Volume, Volume>(
+		return std::tuple<Volume, Volume, Volume, Volume, Volume, Volume, Volume, Volume, Volume, Volume, Volume, Volume, Volume>(
 			{"v_" + name + "_wall", wall, m_Wall},
 			{"v_" + name + "_coating", coating, m_Coating},
 			{"v_" + name + "_vacuum", vacuum, m_Vacuum},
@@ -491,7 +645,12 @@ interface_vol_2.setMaterial(m_Wall);
 			{"v_" + name + "_wall_racetrack", wall_racetrack, m_Wall},
 			{"v_" + name + "_coating_racetrack", coating_racetrack, m_Coating},
 			{"v_" + name + "_wall_ipflange", wall_ipflange, m_Wall},
-			{"v_" + name + "_coating_ipflange", coating_ipflange, m_Coating}
+			{"v_" + name + "_coating_ipflange", coating_ipflange, m_Coating},
+			{"v_" + name + "_wall_interface_1", wall_interface_1, m_Wall},
+			{"v_" + name + "_coating_interface_1", coating_interface_1, m_Coating},
+			{"v_" + name + "_wall_interface_2", wall_interface_2, m_Wall},
+			{"v_" + name + "_coating_interface_2", coating_interface_2, m_Coating},
+			{"v_" + name + "_lepton_pipe_vac", lepton_pipe_vac, m_Vacuum}
 		);
 	};
 
@@ -546,11 +705,14 @@ interface_vol_2.setMaterial(m_Wall);
 	// add colors
 	std::get<0>(volumes_downstream).setVisAttributes(wallVis);
 	std::get<1>(volumes_downstream).setVisAttributes(coatingVis);
-	std::get<3>(volumes_downstream).setVisAttributes(wallVis);
 	std::get<4>(volumes_downstream).setVisAttributes(wallVis);
 	std::get<5>(volumes_downstream).setVisAttributes(coatingVis);
 	std::get<6>(volumes_downstream).setVisAttributes(wallVis);
 	std::get<7>(volumes_downstream).setVisAttributes(coatingVis);
+	std::get<8>(volumes_downstream).setVisAttributes(wallVis);
+	std::get<9>(volumes_downstream).setVisAttributes(coatingVis);
+	std::get<10>(volumes_downstream).setVisAttributes(wallVis);
+	std::get<11>(volumes_downstream).setVisAttributes(coatingVis);
 
 	auto tf_downstream = Transform3D(RotationZYX(0, 0, 0));
 	if (getAttrOrDefault<bool>(downstream_c, _Unicode(reflect), true)) 
@@ -567,6 +729,7 @@ interface_vol_2.setMaterial(m_Wall);
 	{
 		assembly.placeVolume(std::get<2>(volumes_downstream), tf_downstream);
 		assembly.placeVolume(std::get<3>(volumes_downstream), tf_downstream);
+		assembly.placeVolume(std::get<12>(volumes_downstream), tf_downstream);
 	}
 	// place racetrack wall
 	assembly.placeVolume(std::get<4>(volumes_downstream), tf_downstream);
@@ -576,6 +739,12 @@ interface_vol_2.setMaterial(m_Wall);
 	assembly.placeVolume(std::get<6>(volumes_downstream), tf_downstream);
 	// place FWD IP flange coating
 	assembly.placeVolume(std::get<7>(volumes_downstream), tf_downstream);
+	// place interface wall 
+	assembly.placeVolume(std::get<8>(volumes_downstream), tf_downstream);
+	assembly.placeVolume(std::get<10>(volumes_downstream), tf_downstream);
+	// place interface coating
+	assembly.placeVolume(std::get<9>(volumes_downstream), tf_downstream);
+	assembly.placeVolume(std::get<11>(volumes_downstream), tf_downstream);
 
 	// -----------------------------
 	// final placement
