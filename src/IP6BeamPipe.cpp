@@ -285,7 +285,7 @@ static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector /* sens *
         // unite wall cones
         auto wall_interface_final = UnionSolid(wall_interface_cone1, wall_interface_cone2, tf1);
         wall_interface_final      = UnionSolid(wall_interface_final, wall_interface_cone2, tf2);
-        Solid wall_interface_vac_cut(wall_interface_final);
+        Solid wall_interface_vac_cut(wall_interface_final); // cut cut out the interface volume from lepton beam pipe vac
         // subtract coating cones
         wall_interface_final =
             SubtractionSolid(wall_interface_final, coating_interface_cone1, Transform3D());
@@ -305,8 +305,14 @@ static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector /* sens *
         coating_interface_final =
             SubtractionSolid(coating_interface_final, vacuum_interface_cone2, tf2);
 
-        return std::tuple<Solid, Solid, Solid>(wall_interface_final, coating_interface_final,
-                                               wall_interface_vac_cut);
+        // --- Create vacuum
+        // unite vacuum cones
+        auto vacuum_interface_final =
+            UnionSolid(vacuum_interface_cone1, vacuum_interface_cone2, tf1);
+        vacuum_interface_final = UnionSolid(vacuum_interface_final, vacuum_interface_cone2, tf2);
+
+        return std::tuple<Solid, Solid, Solid, Solid>(wall_interface_final, coating_interface_final, 
+	    vacuum_interface_final, wall_interface_vac_cut);
       };
   //---------------------------------------------------------------------------------------------------------
   // Helper function to create an interface between racetrack and circular pipes
@@ -386,10 +392,11 @@ static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector /* sens *
         wall_interface_cone2_rmax_2, coating_interface_cone2_rmax_2, vacuum_interface_cone2_rmax_2,
         interface_rmin, interface_z_2, offset1_y, offset2_y);
 
-    return std::tuple<Solid, Solid, Solid, Solid, Solid, Solid>(
-        std::get<0>(interface_cones_1), std::get<1>(interface_cones_1),
-        std::get<2>(interface_cones_1), std::get<0>(interface_cones_2),
-        std::get<1>(interface_cones_2), std::get<2>(interface_cones_2));
+    return std::tuple<Solid, Solid, Solid, Solid, Solid, Solid, Solid, Solid>(
+        std::get<0>(interface_cones_1), std::get<1>(interface_cones_1), std::get<2>(interface_cones_1), 
+	std::get<3>(interface_cones_1), 
+        std::get<0>(interface_cones_2), std::get<1>(interface_cones_2), std::get<2>(interface_cones_2), 
+	std::get<3>(interface_cones_2));
   };
   //---------------------------------------------------------------------------------------------------------
   // Helper function to create union of lepton and hadron volumes
@@ -416,7 +423,7 @@ static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector /* sens *
     BooleanSolid wall_racetrack_final, coating_racetrack_final;
     BooleanSolid wall_interface_final_1, coating_interface_final_1;
     BooleanSolid wall_interface_final_2, coating_interface_final_2;
-    BooleanSolid lepton_pipe_vac;
+    BooleanSolid vacuum_interface, lepton_pipe_vac;
 
     // --- Create a vacuum cylinder to place a lepton pipe inside and cut it out of the hadron cone vacuum
     // --- This helps to avoid problems with nested solid unions and subtractions for the hadron vacuum
@@ -430,11 +437,12 @@ static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector /* sens *
         getAttrOrDefault(x_pipe1, _Unicode(ipBeampipe_ID), 6.2 / 2. * cm) / 2. +
             getAttrOrDefault(x_pipe1, _Unicode(wall_thickness), 1.0 * mm)};
     Polycone lepton_pipe_vac_tube(0, 2.0 * M_PI, rmin_vac, rmax_vac, posz_vac);
-    // subtract the lepton beam pipe vacuum from the hadron beam pipe vacuum
-    vacuum_union = SubtractionSolid("vacuum_union", vacuum_union, lepton_pipe_vac_tube);
 
     // downstream side is more complex and requires additional effort to create all the volumes
     if (name == "downstream") {
+      // subtract the lepton beam pipe vacuum from the hadron beam pipe vacuum
+      vacuum_union = SubtractionSolid("vacuum_union", vacuum_union, lepton_pipe_vac_tube);
+
       xml::Component racetrack_lepton_c = x_pipe1.child(_Unicode(racetrack_lepton));
 
       // ---- Read geometry parameters ----
@@ -478,6 +486,8 @@ static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector /* sens *
 
       // ---- Create an interface between racetrack and cylindrical beam pipe ----
       auto interface_solids = create_interface_solids(racetrack_lepton_c);
+      vacuum_interface = // unite interface vacuum solids
+          UnionSolid("vacuum_interface", std::get<2>(interface_solids), std::get<6>(interface_solids), Transform3D());
 
       // --- Create a straight pipe on the IP side ---
       std::vector<double> z            = {straight_pipe_startz, straight_pipe_endz};
@@ -508,9 +518,9 @@ static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector /* sens *
       lepton_pipe_vac = SubtractionSolid("vacuum_racetrack_cut_2", lepton_pipe_vac,
                                          coating_racetrack_pipe, Transform3D());
       lepton_pipe_vac = SubtractionSolid("vacuum_interface_cut_3", lepton_pipe_vac,
-                                         std::get<2>(interface_solids), Transform3D());
+                                         std::get<3>(interface_solids), Transform3D());
       lepton_pipe_vac = SubtractionSolid("vacuum_interface_cut_4", lepton_pipe_vac,
-                                         std::get<5>(interface_solids), Transform3D());
+                                         std::get<7>(interface_solids), Transform3D());
       // --- Subtract wall and coating from vacuum
       lepton_pipe_vac =
           SubtractionSolid("vacuum_interface_cut_5", lepton_pipe_vac, wall_union, Transform3D());
@@ -556,8 +566,8 @@ static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector /* sens *
           "coating_interface_final_1", std::get<1>(interface_solids), elliptical_cut_1, tf_cut_1);
 
       // get  interface-2 w/o subtraction
-      wall_interface_final_2    = std::get<3>(interface_solids);
-      coating_interface_final_2 = std::get<4>(interface_solids);
+      wall_interface_final_2    = std::get<4>(interface_solids);
+      coating_interface_final_2 = std::get<5>(interface_solids);
     }
 
     Solid wall_racetrack(wall_racetrack_final);
@@ -634,7 +644,7 @@ static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector /* sens *
     }
 
     return std::tuple<Volume, Volume, Volume, Volume, Volume, Volume, Volume, Volume, Volume,
-                      Volume, Volume, Volume, Volume>(
+                      Volume, Volume, Volume, Volume, Volume>(
         {"v_" + name + "_wall", wall, m_Wall}, {"v_" + name + "_coating", coating, m_Coating},
         {"v_" + name + "_vacuum", vacuum, m_Vacuum},
         {"v_" + name + "_vacuum_ipflange", vacuum_ipflange, m_Vacuum},
@@ -646,6 +656,7 @@ static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector /* sens *
         {"v_" + name + "_coating_interface_1", coating_interface_1, m_Coating},
         {"v_" + name + "_wall_interface_2", wall_interface_2, m_Wall},
         {"v_" + name + "_coating_interface_2", coating_interface_2, m_Coating},
+        {"v_" + name + "_vacuum_interface", vacuum_interface, m_Vacuum},
         {"v_" + name + "_lepton_pipe_vac", lepton_pipe_vac, m_Vacuum});
   };
 
@@ -715,6 +726,7 @@ static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector /* sens *
     assembly.placeVolume(std::get<2>(volumes_downstream), tf_downstream);
     assembly.placeVolume(std::get<3>(volumes_downstream), tf_downstream);
     assembly.placeVolume(std::get<12>(volumes_downstream), tf_downstream);
+    assembly.placeVolume(std::get<13>(volumes_downstream), tf_downstream);
   }
   // place racetrack wall
   assembly.placeVolume(std::get<4>(volumes_downstream), tf_downstream);
