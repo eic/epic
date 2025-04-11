@@ -148,7 +148,8 @@ static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector /* sens *
   //-------------------------------------------
 
   double endOfCentralBeamPipe_z =
-      494.556 * dd4hep::cm + 2. * dd4hep::mm; //extracted from central_beampipe.xml, line 112 + offset to avoid overlaps
+      494.556 * dd4hep::cm +
+      2. * dd4hep::mm; //extracted from central_beampipe.xml, line 112 + offset to avoid overlaps
   double diameterReduce = 11.0 * dd4hep::cm; //size reduction to avoid overlap with electron pipe
   double vacuumDiameterEntrance =
       25.792 * dd4hep::cm - diameterReduce; //extracted from central_beampipe.xml, line 64
