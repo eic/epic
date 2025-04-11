@@ -50,7 +50,7 @@
 
       <comment> For the downstream hadron cone, CAD - oblique cone, DD4Hep - oblique cone does not exist --> rotated standard cone + subtractions. 1) get oblique cone vertex z position: h = 6.41cm/tan(45mrad); 2) standard cone raius with the same open angle and vertex position: r = h*sin(45mrad/2) </comment>
       <downstream reflect="false"
-                  place_vacuum="false">
+                  place_vacuum="true">
         <incoming_lepton wall_thickness="1.0 * mm"
 		coating_thickness="30 * um"
 		lepton_pipe_vac_tube_startz="66.10 * cm"
