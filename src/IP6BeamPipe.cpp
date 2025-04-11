@@ -254,66 +254,67 @@ static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector /* sens *
   };
   //---------------------------------------------------------------------------------------------------------
   // Helper function to build cones for interface
-  auto build_interface_cones =
-      [](std::vector<double>& wall_interface_cone1_rmax,
-         std::vector<double>& coating_interface_cone1_rmax,
-         std::vector<double>& vacuum_interface_cone1_rmax,
-         std::vector<double>& wall_interface_cone2_rmax,
-         std::vector<double>& coating_interface_cone2_rmax,
-         std::vector<double>& vacuum_interface_cone2_rmax, std::vector<double>& interface_rmin,
-         std::vector<double>& interface_z, double offset1_y, double offset2_y) {
-        // wall cones
-        Polycone wall_interface_cone1(0, 2.0 * M_PI, interface_rmin, wall_interface_cone1_rmax,
-                                      interface_z);
-        Polycone wall_interface_cone2(0, 2.0 * M_PI, interface_rmin, wall_interface_cone2_rmax,
-                                      interface_z);
-        // coating cones
-        Polycone coating_interface_cone1(0, 2.0 * M_PI, interface_rmin,
-                                         coating_interface_cone1_rmax, interface_z);
-        Polycone coating_interface_cone2(0, 2.0 * M_PI, interface_rmin,
-                                         coating_interface_cone2_rmax, interface_z);
-        // vacuum cones
-        Polycone vacuum_interface_cone1(0, 2.0 * M_PI, interface_rmin, vacuum_interface_cone1_rmax,
-                                        interface_z);
-        Polycone vacuum_interface_cone2(0, 2.0 * M_PI, interface_rmin, vacuum_interface_cone2_rmax,
-                                        interface_z);
+  auto build_interface_cones = [](std::vector<double>& wall_interface_cone1_rmax,
+                                  std::vector<double>& coating_interface_cone1_rmax,
+                                  std::vector<double>& vacuum_interface_cone1_rmax,
+                                  std::vector<double>& wall_interface_cone2_rmax,
+                                  std::vector<double>& coating_interface_cone2_rmax,
+                                  std::vector<double>& vacuum_interface_cone2_rmax,
+                                  std::vector<double>& interface_rmin,
+                                  std::vector<double>& interface_z, double offset1_y,
+                                  double offset2_y) {
+    // wall cones
+    Polycone wall_interface_cone1(0, 2.0 * M_PI, interface_rmin, wall_interface_cone1_rmax,
+                                  interface_z);
+    Polycone wall_interface_cone2(0, 2.0 * M_PI, interface_rmin, wall_interface_cone2_rmax,
+                                  interface_z);
+    // coating cones
+    Polycone coating_interface_cone1(0, 2.0 * M_PI, interface_rmin, coating_interface_cone1_rmax,
+                                     interface_z);
+    Polycone coating_interface_cone2(0, 2.0 * M_PI, interface_rmin, coating_interface_cone2_rmax,
+                                     interface_z);
+    // vacuum cones
+    Polycone vacuum_interface_cone1(0, 2.0 * M_PI, interface_rmin, vacuum_interface_cone1_rmax,
+                                    interface_z);
+    Polycone vacuum_interface_cone2(0, 2.0 * M_PI, interface_rmin, vacuum_interface_cone2_rmax,
+                                    interface_z);
 
-        Transform3D tf1(RotationZYX(0, 0, 0), Position(0, offset1_y, 0));
-        Transform3D tf2(RotationZYX(0, 0, 0), Position(0, offset2_y, 0));
+    Transform3D tf1(RotationZYX(0, 0, 0), Position(0, offset1_y, 0));
+    Transform3D tf2(RotationZYX(0, 0, 0), Position(0, offset2_y, 0));
 
-        // ---- Create wall
-        // unite wall cones
-        auto wall_interface_final = UnionSolid(wall_interface_cone1, wall_interface_cone2, tf1);
-        wall_interface_final      = UnionSolid(wall_interface_final, wall_interface_cone2, tf2);
-        Solid wall_interface_vac_cut(wall_interface_final); // cut cut out the interface volume from lepton beam pipe vac
-        // subtract coating cones
-        wall_interface_final =
-            SubtractionSolid(wall_interface_final, coating_interface_cone1, Transform3D());
-        wall_interface_final = SubtractionSolid(wall_interface_final, coating_interface_cone2, tf1);
-        wall_interface_final = SubtractionSolid(wall_interface_final, coating_interface_cone2, tf2);
+    // ---- Create wall
+    // unite wall cones
+    auto wall_interface_final = UnionSolid(wall_interface_cone1, wall_interface_cone2, tf1);
+    wall_interface_final      = UnionSolid(wall_interface_final, wall_interface_cone2, tf2);
+    Solid wall_interface_vac_cut(
+        wall_interface_final); // cut cut out the interface volume from lepton beam pipe vac
+    // subtract coating cones
+    wall_interface_final =
+        SubtractionSolid(wall_interface_final, coating_interface_cone1, Transform3D());
+    wall_interface_final = SubtractionSolid(wall_interface_final, coating_interface_cone2, tf1);
+    wall_interface_final = SubtractionSolid(wall_interface_final, coating_interface_cone2, tf2);
 
-        // --- Create coating
-        // unite coating cones
-        auto coating_interface_final =
-            UnionSolid(coating_interface_cone1, coating_interface_cone2, tf1);
-        coating_interface_final = UnionSolid(coating_interface_final, coating_interface_cone2, tf2);
-        // subtract vacuum cones
-        coating_interface_final =
-            SubtractionSolid(coating_interface_final, vacuum_interface_cone1, Transform3D());
-        coating_interface_final =
-            SubtractionSolid(coating_interface_final, vacuum_interface_cone2, tf1);
-        coating_interface_final =
-            SubtractionSolid(coating_interface_final, vacuum_interface_cone2, tf2);
+    // --- Create coating
+    // unite coating cones
+    auto coating_interface_final =
+        UnionSolid(coating_interface_cone1, coating_interface_cone2, tf1);
+    coating_interface_final = UnionSolid(coating_interface_final, coating_interface_cone2, tf2);
+    // subtract vacuum cones
+    coating_interface_final =
+        SubtractionSolid(coating_interface_final, vacuum_interface_cone1, Transform3D());
+    coating_interface_final =
+        SubtractionSolid(coating_interface_final, vacuum_interface_cone2, tf1);
+    coating_interface_final =
+        SubtractionSolid(coating_interface_final, vacuum_interface_cone2, tf2);
 
-        // --- Create vacuum
-        // unite vacuum cones
-        auto vacuum_interface_final =
-            UnionSolid(vacuum_interface_cone1, vacuum_interface_cone2, tf1);
-        vacuum_interface_final = UnionSolid(vacuum_interface_final, vacuum_interface_cone2, tf2);
+    // --- Create vacuum
+    // unite vacuum cones
+    auto vacuum_interface_final = UnionSolid(vacuum_interface_cone1, vacuum_interface_cone2, tf1);
+    vacuum_interface_final      = UnionSolid(vacuum_interface_final, vacuum_interface_cone2, tf2);
 
-        return std::tuple<Solid, Solid, Solid, Solid>(wall_interface_final, coating_interface_final, 
-	    vacuum_interface_final, wall_interface_vac_cut);
-      };
+    return std::tuple<Solid, Solid, Solid, Solid>(wall_interface_final, coating_interface_final,
+                                                  vacuum_interface_final, wall_interface_vac_cut);
+  };
   //---------------------------------------------------------------------------------------------------------
   // Helper function to create an interface between racetrack and circular pipes
   auto create_interface_solids = [&](xml::Component& x_racetrack) {
@@ -393,10 +394,10 @@ static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector /* sens *
         interface_rmin, interface_z_2, offset1_y, offset2_y);
 
     return std::tuple<Solid, Solid, Solid, Solid, Solid, Solid, Solid, Solid>(
-        std::get<0>(interface_cones_1), std::get<1>(interface_cones_1), std::get<2>(interface_cones_1), 
-	std::get<3>(interface_cones_1), 
-        std::get<0>(interface_cones_2), std::get<1>(interface_cones_2), std::get<2>(interface_cones_2), 
-	std::get<3>(interface_cones_2));
+        std::get<0>(interface_cones_1), std::get<1>(interface_cones_1),
+        std::get<2>(interface_cones_1), std::get<3>(interface_cones_1),
+        std::get<0>(interface_cones_2), std::get<1>(interface_cones_2),
+        std::get<2>(interface_cones_2), std::get<3>(interface_cones_2));
   };
   //---------------------------------------------------------------------------------------------------------
   // Helper function to create union of lepton and hadron volumes
@@ -486,8 +487,9 @@ static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector /* sens *
 
       // ---- Create an interface between racetrack and cylindrical beam pipe ----
       auto interface_solids = create_interface_solids(racetrack_lepton_c);
-      vacuum_interface = // unite interface vacuum solids
-          UnionSolid("vacuum_interface", std::get<2>(interface_solids), std::get<6>(interface_solids), Transform3D());
+      vacuum_interface      = // unite interface vacuum solids
+          UnionSolid("vacuum_interface", std::get<2>(interface_solids),
+                     std::get<6>(interface_solids), Transform3D());
 
       // --- Create a straight pipe on the IP side ---
       std::vector<double> z            = {straight_pipe_startz, straight_pipe_endz};
