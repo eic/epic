@@ -511,6 +511,11 @@ static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector /* sens *
                                          std::get<2>(interface_solids), Transform3D());
       lepton_pipe_vac = SubtractionSolid("vacuum_interface_cut_4", lepton_pipe_vac,
                                          std::get<5>(interface_solids), Transform3D());
+      // --- Subtract wall and coating from vacuum
+      lepton_pipe_vac =
+          SubtractionSolid("vacuum_interface_cut_5", lepton_pipe_vac, wall_union, Transform3D());
+      lepton_pipe_vac =
+          SubtractionSolid("vacuum_interface_cut_6", lepton_pipe_vac, coating_union, Transform3D());
 
       // create a cut volume - vacuum = two ellipses + rectangle
       EllipticalTube elliptical_cut_1("elliptical_cut_1", elliptical_cut_rx_1, elliptical_cut_ry_1,
