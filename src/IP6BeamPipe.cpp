@@ -16,9 +16,6 @@
 #include "XML/Utilities.h"
 #include "DD4hepDetectorHelper.h"
 #include <tuple>
-#include "TGeoTessellated.h"
-#include "DD4hep/Shapes.h"
-#include "TGDMLParse.h"
 
 using namespace std;
 using namespace dd4hep;
