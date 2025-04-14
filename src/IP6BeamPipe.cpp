@@ -559,20 +559,17 @@ static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector /* sens *
       coating_racetrack_final = SubtractionSolid("coating_racetrack_final", coating_racetrack_cut_2,
                                                  rectangular_cut_3, tf_cut_3);
       // unite with lepton pipe vacuum
-      lepton_pipe_vac = UnionSolid(
-          "lepton_pipe_vac_uni_7", lepton_pipe_vac, elliptical_cut_1, tf_cut_1);
-      lepton_pipe_vac = UnionSolid(
-          "lepton_pipe_vac_uni_8", lepton_pipe_vac, elliptical_cut_2, tf_cut_2);
-      lepton_pipe_vac = UnionSolid(
-          "lepton_pipe_vac_uni_9", lepton_pipe_vac, rectangular_cut_3, tf_cut_3);
+      lepton_pipe_vac =
+          UnionSolid("lepton_pipe_vac_uni_7", lepton_pipe_vac, elliptical_cut_1, tf_cut_1);
+      lepton_pipe_vac =
+          UnionSolid("lepton_pipe_vac_uni_8", lepton_pipe_vac, elliptical_cut_2, tf_cut_2);
+      lepton_pipe_vac =
+          UnionSolid("lepton_pipe_vac_uni_9", lepton_pipe_vac, rectangular_cut_3, tf_cut_3);
 
       // subtract from hadron cone pipe vacuum
-      vacuum_union = SubtractionSolid(
-          "vacuum_union_sub_1", vacuum_union, elliptical_cut_1, tf_cut_1);
-      vacuum_union = SubtractionSolid(
-          "vacuum_union_sub_2", vacuum_union, elliptical_cut_2, tf_cut_2);
-      vacuum_union = SubtractionSolid(
-          "vacuum_union_sub_3", vacuum_union, rectangular_cut_3, tf_cut_3);
+      vacuum_union = UnionSolid("vacuum_union_sub_1", vacuum_union, elliptical_cut_1, tf_cut_1);
+      vacuum_union = UnionSolid("vacuum_union_sub_2", vacuum_union, elliptical_cut_2, tf_cut_2);
+      vacuum_union = UnionSolid("vacuum_union_sub_3", vacuum_union, rectangular_cut_3, tf_cut_3);
 
       // subtract from interface-1 wall
       wall_interface_final_1 = SubtractionSolid(
@@ -583,8 +580,8 @@ static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector /* sens *
           "coating_interface_final_1", std::get<1>(interface_solids), elliptical_cut_1, tf_cut_1);
 
       // subtract from interface vacuum
-      vacuum_interface = SubtractionSolid(
-          "vacuum_interface", vacuum_interface, elliptical_cut_1, tf_cut_1);
+      vacuum_interface =
+          SubtractionSolid("vacuum_interface", vacuum_interface, elliptical_cut_1, tf_cut_1);
 
       // get  interface-2 w/o subtraction
       wall_interface_final_2    = std::get<4>(interface_solids);
