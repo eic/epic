@@ -80,7 +80,7 @@
                 elliptical_cut_ry_2="0.021 * m"
                 rectangular_cut_a="0.81/2. * m"
                 rectangular_cut_b="0.021 * m"
-                elliptical_cut_dz="1. * cm"
+                elliptical_cut_dz="0.7 * cm"
                 elliptical_cut_offset_z_1="(0.976) * m"
                 elliptical_cut_offset_z_2="(0.976 + 0.810) * m"
                 rectangular_cut_offset_z="(0.976 + 0.810/2.) * m">

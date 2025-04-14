@@ -472,7 +472,7 @@ static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector /* sens *
       double rectangular_cut_b = // rectangular cut B for the hadron beam opening
           getAttrOrDefault(racetrack_lepton_c, _Unicode(rectangular_cut_b), 0.021 * m);
       double elliptical_cut_dz = // thickness of the cut for the hadron beam opening
-          getAttrOrDefault(racetrack_lepton_c, _Unicode(elliptical_cut_dz), 1.0 * cm);
+          getAttrOrDefault(racetrack_lepton_c, _Unicode(elliptical_cut_dz), 0.7 * cm);
       double elliptical_cut_offset_z_1 = // offset of the elliptical cut (IP side)
           getAttrOrDefault(racetrack_lepton_c, _Unicode(elliptical_cut_offset_z_1), (0.976) * m);
       double elliptical_cut_offset_z_2 = // offset of the elliptical cut (non-IP side)
@@ -558,6 +558,21 @@ static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector /* sens *
           "coating_racetrack_cut_2", coating_racetrack_cut_1, elliptical_cut_2, tf_cut_2);
       coating_racetrack_final = SubtractionSolid("coating_racetrack_final", coating_racetrack_cut_2,
                                                  rectangular_cut_3, tf_cut_3);
+      // unite with lepton pipe vacuum
+      lepton_pipe_vac = UnionSolid(
+          "lepton_pipe_vac_uni_7", lepton_pipe_vac, elliptical_cut_1, tf_cut_1);
+      lepton_pipe_vac = UnionSolid(
+          "lepton_pipe_vac_uni_8", lepton_pipe_vac, elliptical_cut_2, tf_cut_2);
+      lepton_pipe_vac = UnionSolid(
+          "lepton_pipe_vac_uni_9", lepton_pipe_vac, rectangular_cut_3, tf_cut_3);
+
+      // subtract from hadron cone pipe vacuum
+      vacuum_union = UnionSolid(
+          "vacuum_union_sub_1", vacuum_union, elliptical_cut_1, tf_cut_1);
+      vacuum_union = UnionSolid(
+          "vacuum_union_sub_2", vacuum_union, elliptical_cut_2, tf_cut_2);
+      vacuum_union = UnionSolid(
+          "vacuum_union_sub_3", vacuum_union, rectangular_cut_3, tf_cut_3);
 
       // subtract from interface-1 wall
       wall_interface_final_1 = SubtractionSolid(
@@ -566,6 +581,10 @@ static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector /* sens *
       // subtract from interface-1 coating
       coating_interface_final_1 = SubtractionSolid(
           "coating_interface_final_1", std::get<1>(interface_solids), elliptical_cut_1, tf_cut_1);
+
+      // subtract from interface vacuum
+      vacuum_interface = SubtractionSolid(
+          "vacuum_interface", vacuum_interface, elliptical_cut_1, tf_cut_1);
 
       // get  interface-2 w/o subtraction
       wall_interface_final_2    = std::get<4>(interface_solids);
