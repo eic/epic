@@ -567,11 +567,11 @@ static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector /* sens *
           "lepton_pipe_vac_uni_9", lepton_pipe_vac, rectangular_cut_3, tf_cut_3);
 
       // subtract from hadron cone pipe vacuum
-      vacuum_union = UnionSolid(
+      vacuum_union = SubtractionSolid(
           "vacuum_union_sub_1", vacuum_union, elliptical_cut_1, tf_cut_1);
-      vacuum_union = UnionSolid(
+      vacuum_union = SubtractionSolid(
           "vacuum_union_sub_2", vacuum_union, elliptical_cut_2, tf_cut_2);
-      vacuum_union = UnionSolid(
+      vacuum_union = SubtractionSolid(
           "vacuum_union_sub_3", vacuum_union, rectangular_cut_3, tf_cut_3);
 
       // subtract from interface-1 wall
