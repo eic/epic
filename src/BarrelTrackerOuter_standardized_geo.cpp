@@ -54,9 +54,9 @@ class TriangularFacet
   int concavity_score = 0;
   void compute_facet_properties(TessellatedSolid::Facet facet, TessellatedSolid c_sol){
     //get the vertex indices
-    iv0 = facet.GetVertexIndex(0);
-    iv1 = facet.GetVertexIndex(1);
-    iv2 = facet.GetVertexIndex(2);
+    iv0 = facet[0]; 
+    iv1 = facet[1];
+    iv2 = facet[2];
     //add the vertices to a vector
     vertices.push_back(c_sol->GetVertex(iv0));
     vertices.push_back(c_sol->GetVertex(iv1));
