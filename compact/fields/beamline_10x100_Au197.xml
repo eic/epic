@@ -4,7 +4,7 @@
   <define>
 
     <constant name="ElectronBeamEnergy" value="10*GeV"  />
-    <constant name="IonBeamEnergy"      value="115*GeV" />
+    <constant name="IonBeamEnergy"      value="100*GeV" />
 
     <constant name="FieldScaleFactor" value="250.0/275.0"  /> <!-- only use for light ion beams!!! ASK FF EXPERTS -->
 
