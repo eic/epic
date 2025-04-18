@@ -632,8 +632,10 @@ static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector /* sens *
     } else // downstream
     {
       // subtract walls and coatings from vacuum
-      vacuum_union = SubtractionSolid("vacuum_union_sub_2", vacuum_union, wall_union, Transform3D());
-      vacuum_union = SubtractionSolid("vacuum_union_sub_3", vacuum_union, coating_union, Transform3D());
+      vacuum_union =
+          SubtractionSolid("vacuum_union_sub_2", vacuum_union, wall_union, Transform3D());
+      vacuum_union =
+          SubtractionSolid("vacuum_union_sub_3", vacuum_union, coating_union, Transform3D());
 
       // get vacuum
       vacuum = vacuum_union;
