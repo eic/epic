@@ -629,22 +629,11 @@ static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector /* sens *
     } else // downstream
     {
       // subtract walls and coatings from vacuum
-      auto main = vacuum_union;
-      main.setName("main");
-      auto sub1 = wall_union;
-      sub1.setName("sub1");
-      auto sub2 = coating_union;
-      sub2.setName("sub2");
-
-      gGeoManager->GetListOfShapes()->Add((TGeoShape*)main.ptr());
-      gGeoManager->GetListOfShapes()->Add((TGeoShape*)sub1.ptr());
-      gGeoManager->GetListOfShapes()->Add((TGeoShape*)sub2.ptr());
-
-      TGeoCompositeShape* composite = new TGeoCompositeShape("composite", "main - sub1 - sub2");
+      vacuum_union = SubtractionSolid("vacuum_union_sub_2", vacuum_union, wall_union, Transform3D());
+      vacuum_union = SubtractionSolid("vacuum_union_sub_3", vacuum_union, coating_union, Transform3D());
 
       // get vacuum
-      vacuum = (TGeoCompositeShape*)composite->Clone("vacuum_composite");
-      delete composite;
+      vacuum = vacuum_union;
 
       // get wall
       wall = wall_union;
