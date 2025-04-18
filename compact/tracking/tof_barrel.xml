@@ -26,12 +26,11 @@
     <constant name="BarrelTOF_Coolant_thickness"      value="0.08*cm"/>
 
     <constant name="BarrelTOF_zOffset"                 value="0*cm"/>
-    <constant name="BarrelTOF_Module_width_design"     value="56.0*mm"/>
-    <constant name="BarrelTOF_Sensor_width_design"     value="32.0*mm"/>
+    <constant name="BarrelTOF_Module_width_design"     value="60.0*mm"/>
+    <constant name="BarrelTOF_Sensor_width_design"     value="36.4*mm"/>
     <constant name="BarrelTOF_CFoam_width_design"      value="BarrelTOF_Sensor_width_design"/>
     <constant name="BarrelTOF_CHoneycomb_width_design" value="BarrelTOF_Module_width_design-BarrelTOF_CFoam_width_design"/>
     <constant name="BarrelTOF_CoolingTube_width_design" value="0.75*cm"/>
-    <constant name="BarrelTOF_Coolant_width_design"    value="0.75*cm"/>
 
     <constant name="BarrelTOF_Sensor_position_design"  value="0.5*(BarrelTOF_Sensor_width_design-BarrelTOF_Module_width_design)"/>
     <constant name="BarrelTOF_CFoam_position_design"   value="0.5*(BarrelTOF_CFoam_width_design-BarrelTOF_Module_width_design)"/>
@@ -46,7 +45,6 @@
     <constant name="BarrelTOF_CFoam_width"         value="BarrelTOF_scale * BarrelTOF_CFoam_width_design"/>
     <constant name="BarrelTOF_CHoneycomb_width"    value="BarrelTOF_scale * BarrelTOF_CHoneycomb_width_design"/>
     <constant name="BarrelTOF_CoolingTube_width"   value="BarrelTOF_scale * BarrelTOF_CoolingTube_width_design"/>
-    <constant name="BarrelTOF_Coolant_width"       value="BarrelTOF_scale * BarrelTOF_Coolant_width_design"/>
     <constant name="BarrelTOF_Sensor_position"     value="BarrelTOF_scale * BarrelTOF_Sensor_position_design"/>
     <constant name="BarrelTOF_CFoam_position"      value="BarrelTOF_scale * BarrelTOF_CFoam_position_design"/>
     <constant name="BarrelTOF_CHoneycomb_position" value="BarrelTOF_scale * BarrelTOF_CHoneycomb_position_design"/>
@@ -79,7 +77,12 @@
 
     <constant name="BarrelTOF_ASIC_length"         value="1.5*cm"/>
     <constant name="BarrelTOF_ASIC_thickness"      value="0.4*mm"/>
-    <constant name="BarrelTOF_Cooling_pipe_r"      value="1*cm"/>
+    <constant name="BarrelTOF_Cooling_pipe_rmin"   value="1.335*mm"/>
+    <constant name="BarrelTOF_Cooling_pipe_rmax"   value="(1.335 + 0.25)*mm"/>
+    <constant name="BarrelTOF_Cooling_pipe_bend_center"   value="20*mm"/>
+    <constant name="BarrelTOF_Cooling_pipe_r"             value="8.41*mm + BarrelTOF_Cooling_pipe_rmax"/>
+    <constant name="BarrelTOF_Cooling_pipe_x_center"      value="0*mm"/>
+
 
   </define>
 
@@ -225,12 +228,27 @@
         </comment>
         <module_component name="cfoam" material="CarbonFoam" sensitive="false" width="BarrelTOF_CFoam_width" length="BarrelTOF1_length" thickness="BarrelTOF_CFoam_thickness" vis="TOFCFoamVis" keep_layer="true">
           <position x="BarrelTOF_CFoam_position" y="BarrelTOF1_zoffset" z="0" />
-          <cooling_pipe name="cooling_pipe" pipe_material="Aluminum" coolent_material="Water" rmin="0.2*BarrelTOF_CFoam_thickness" rmax="0.24*BarrelTOF_CFoam_thickness" bend_r="BarrelTOF_Cooling_pipe_r"/>
+	  <cooling_pipe name="cooling_pipe" 
+		        pipe_material="Aluminum" 
+		        coolent_material="Water" 
+		        rmin="BarrelTOF_Cooling_pipe_rmin" 
+		        rmax="BarrelTOF_Cooling_pipe_rmax" 
+		        offset_x="BarrelTOF_Cooling_pipe_x_center"
+		        bend_y="0.5*BarrelTOF1_length-BarrelTOF_Cooling_pipe_bend_center-BarrelTOF_Cooling_pipe_rmax"
+		        bend_r="BarrelTOF_Cooling_pipe_r"/>
         </module_component>
 
         <module_component name="cfoam" material="CarbonFoam" sensitive="false" width="BarrelTOF_CFoam_width" length="BarrelTOF2_length" thickness="BarrelTOF_CFoam_thickness" vis="TOFCFoamVis" keep_layer="true">
           <position x="BarrelTOF_CFoam_position" y="BarrelTOF2_zoffset" z="0" />
-          <cooling_pipe name="cooling_pipe" pipe_material="Aluminum" coolent_material="Water" rmin="0.2*BarrelTOF_CFoam_thickness" rmax="0.24*BarrelTOF_CFoam_thickness" bend_r="BarrelTOF_Cooling_pipe_r" direction="right"/>
+	  <cooling_pipe name="cooling_pipe" 
+		        pipe_material="Aluminum" 
+		        coolent_material="Water" 
+	                rmin="BarrelTOF_Cooling_pipe_rmin" 
+	                rmax="BarrelTOF_Cooling_pipe_rmax" 
+		        offset_x="BarrelTOF_Cooling_pipe_x_center"
+		        bend_y="0.5*BarrelTOF2_length-BarrelTOF_Cooling_pipe_bend_center-BarrelTOF_Cooling_pipe_rmax"
+	                bend_r="BarrelTOF_Cooling_pipe_r"
+		        direction="right"/>
         </module_component>
 
         <module_component name="cfoam2" material="CarbonFoam" sensitive="false" width="BarrelTOF_CHoneycomb_width" length="BarrelTOF1_length" thickness="BarrelTOF_CHoneycomb_thickness" vis="TOFCFoamVis" keep_layer="true">
