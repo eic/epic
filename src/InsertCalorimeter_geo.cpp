@@ -54,6 +54,8 @@ static Ref_t createDetector(Detector& desc, xml_h handle, SensitiveDetector sens
       pos.y();
   const std::pair<double, double> hole_y_parameters(hole_y_initial, hole_y_final);
 
+  const double left_right_gap =
+      dd4hep::getAttrOrDefault<double>(detElem, _Unicode(left_right_gap), 0.38 * cm);
   // Getting thickness of backplate
   /*
     The hole radius & position is determined by liner interpolation
@@ -100,93 +102,107 @@ static Ref_t createDetector(Detector& desc, xml_h handle, SensitiveDetector sens
   // FIXME Workaround for https://github.com/eic/epic/issues/411
   assembly.setVisAttributes(desc.visAttributes("InvisibleWithDaughters"));
   PlacedVolume pv;
+  for (int side_num = 0; side_num < 2; side_num++) { // 0 = right, 1 = left
+    std::string side_name = side_num == 1 ? "L" : "R";
+    // Keeps track of the z location as we move longiduinally through the insert
+    // Will use this tracking variable as input to get_hole_rxy
+    double z_distance_traversed = 0.;
 
-  // Keeps track of the z location as we move longiduinally through the insert
-  // Will use this tracking variable as input to get_hole_rxy
-  double z_distance_traversed = 0.;
+    int layer_num = 1;
 
-  int layer_num = 1;
+    // Looping through all the different layer sections (W/Sc, Steel/Sc, backplate)
+    for (xml_coll_t c(detElem, _U(layer)); c; c++) {
+      xml_comp_t x_layer     = c;
+      int repeat             = x_layer.repeat();
+      double layer_thickness = x_layer.thickness();
 
-  // Looping through all the different layer sections (W/Sc, Steel/Sc, backplate)
-  for (xml_coll_t c(detElem, _U(layer)); c; c++) {
-    xml_comp_t x_layer     = c;
-    int repeat             = x_layer.repeat();
-    double layer_thickness = x_layer.thickness();
+      // Looping through the number of repeated layers in each section
+      for (int i = 0; i < repeat; i++) {
+        std::string layer_name = detName + _toString(layer_num, "_layer%d") + "_" + side_name;
+        Box layer(width / 2., height / 2., layer_thickness / 2.);
 
-    // Looping through the number of repeated layers in each section
-    for (int i = 0; i < repeat; i++) {
-      std::string layer_name = detName + _toString(layer_num, "_layer%d");
-      Box layer(width / 2., height / 2., layer_thickness / 2.);
+        // Hole radius and position for each layer is determined from z position at the front of the layer
+        const auto hole_rxy = get_hole_rxy(z_distance_traversed);
+        double hole_r       = std::get<0>(hole_rxy);
+        double hole_x       = std::get<1>(hole_rxy);
+        double hole_y       = std::get<2>(hole_rxy);
 
-      // Hole radius and position for each layer is determined from z position at the front of the layer
-      const auto hole_rxy = get_hole_rxy(z_distance_traversed);
-      double hole_r       = std::get<0>(hole_rxy);
-      double hole_x       = std::get<1>(hole_rxy);
-      double hole_y       = std::get<2>(hole_rxy);
+        // Removing beampipe shape from each layer
+        Tube layer_hole(0., hole_r, layer_thickness / 2.);
+        SubtractionSolid layer_with_hole(layer, layer_hole, Position(hole_x, hole_y, 0.));
+        // Only select the left or right side of the layer
+        Box side_cut(width / 2., height, layer_thickness);
+        Position side_cut_position((width / 2 - left_right_gap / 2) * (1 - 2 * side_num) - pos.x(),
+                                   0, 0);
+        SubtractionSolid layer_side_with_hole(layer_with_hole, side_cut, side_cut_position);
+        Volume layer_vol(layer_name, layer_side_with_hole, air);
 
-      // Removing beampipe shape from each layer
-      Tube layer_hole(0., hole_r, layer_thickness / 2.);
-      SubtractionSolid layer_with_hole(layer, layer_hole, Position(hole_x, hole_y, 0.));
-      Volume layer_vol(layer_name, layer_with_hole, air);
+        int slice_num  = 1;
+        double slice_z = -layer_thickness / 2.; // Keeps track of slices' z locations in each layer
 
-      int slice_num  = 1;
-      double slice_z = -layer_thickness / 2.; // Keeps track of slices' z locations in each layer
+        // Looping over each layer's slices
+        for (xml_coll_t l(x_layer, _U(slice)); l; l++) {
+          xml_comp_t x_slice     = l;
+          double slice_thickness = x_slice.thickness();
+          std::string slice_name = layer_name + _toString(slice_num, "slice%d");
+          Material slice_mat     = desc.material(x_slice.materialStr());
+          slice_z += slice_thickness / 2.; // Going to slice halfway point
 
-      // Looping over each layer's slices
-      for (xml_coll_t l(x_layer, _U(slice)); l; l++) {
-        xml_comp_t x_slice     = l;
-        double slice_thickness = x_slice.thickness();
-        std::string slice_name = layer_name + _toString(slice_num, "slice%d");
-        Material slice_mat     = desc.material(x_slice.materialStr());
-        slice_z += slice_thickness / 2.; // Going to slice halfway point
+          // Each slice within a layer has the same hole radius and x-y position
+          Box slice(width / 2., height / 2., slice_thickness / 2.);
+          Tube slice_hole(0., hole_r, slice_thickness / 2.);
+          SubtractionSolid slice_with_hole(slice, slice_hole, Position(hole_x, hole_y, 0.));
+          Box side_cut_slice(width / 2., height, layer_thickness);
+          Position side_cut_position_slice(
+              (width / 2 - left_right_gap / 2) * (1 - 2 * side_num) - pos.x(), 0, 0);
+          SubtractionSolid slice_side_with_hole(slice_with_hole, side_cut_slice,
+                                                side_cut_position_slice);
+          Volume slice_vol(slice_name, slice_side_with_hole, slice_mat);
 
-        // Each slice within a layer has the same hole radius and x-y position
-        Box slice(width / 2., height / 2., slice_thickness / 2.);
-        Tube slice_hole(0., hole_r, slice_thickness / 2.);
-        SubtractionSolid slice_with_hole(slice, slice_hole, Position(hole_x, hole_y, 0.));
-        Volume slice_vol(slice_name, slice_with_hole, slice_mat);
+          // Setting appropriate slices as sensitive
+          if (x_slice.isSensitive()) {
+            sens.setType("calorimeter");
+            slice_vol.setSensitiveDetector(sens);
+          }
 
-        // Setting appropriate slices as sensitive
-        if (x_slice.isSensitive()) {
-          sens.setType("calorimeter");
-          slice_vol.setSensitiveDetector(sens);
+          // Setting slice attributes
+          slice_vol.setAttributes(desc, x_slice.regionStr(), x_slice.limitsStr(), x_slice.visStr());
+
+          // Placing slice within layer
+          pv = layer_vol.placeVolume(slice_vol,
+                                     Transform3D(RotationZYX(0, 0, 0), Position(0., 0., slice_z)));
+          pv.addPhysVolID("slice", slice_num);
+          pv.addPhysVolID("side", side_num);
+          slice_z += slice_thickness / 2.;
+          z_distance_traversed += slice_thickness;
+          slice_num++;
         }
 
-        // Setting slice attributes
-        slice_vol.setAttributes(desc, x_slice.regionStr(), x_slice.limitsStr(), x_slice.visStr());
+        // Setting layer attributes
+        layer_vol.setAttributes(desc, x_layer.regionStr(), x_layer.limitsStr(), x_layer.visStr());
+        /*
+          Placing each layer inside assembly
+          -length/2. is front of detector in global coordinate system
+          + (z_distance_traversed - layer_thickness) goes to the front of each layer
+          + layer_thickness/2. places layer in correct spot
+          Example: After placement of slices in first layer, z_distance_traversed = layer_thickness
+                   Subtracting layer_thickness goes back to the front of the first slice (Now, z = -length/2)
+                   Adding layer_thickness / 2. goes to half the first layer thickness (proper place to put layer)
+                   Each loop over repeat will increases z_distance_traversed by layer_thickness
+        */
+        pv = assembly.placeVolume(
+            layer_vol,
+            Transform3D(RotationZYX(0, 0, 0),
+                        Position(0., 0.,
+                                 -length / 2. + (z_distance_traversed - layer_thickness) +
+                                     layer_thickness / 2.)));
 
-        // Placing slice within layer
-        pv = layer_vol.placeVolume(slice_vol,
-                                   Transform3D(RotationZYX(0, 0, 0), Position(0., 0., slice_z)));
-        pv.addPhysVolID("slice", slice_num);
-        slice_z += slice_thickness / 2.;
-        z_distance_traversed += slice_thickness;
-        slice_num++;
+        pv.addPhysVolID("layer", layer_num);
+        pv.addPhysVolID("side", side_num);
+        layer_num++;
       }
-
-      // Setting layer attributes
-      layer_vol.setAttributes(desc, x_layer.regionStr(), x_layer.limitsStr(), x_layer.visStr());
-      /*
-        Placing each layer inside assembly
-        -length/2. is front of detector in global coordinate system
-        + (z_distance_traversed - layer_thickness) goes to the front of each layer
-        + layer_thickness/2. places layer in correct spot
-        Example: After placement of slices in first layer, z_distance_traversed = layer_thickness
-                 Subtracting layer_thickness goes back to the front of the first slice (Now, z = -length/2)
-                 Adding layer_thickness / 2. goes to half the first layer thickness (proper place to put layer)
-                 Each loop over repeat will increases z_distance_traversed by layer_thickness
-      */
-      pv = assembly.placeVolume(
-          layer_vol, Transform3D(RotationZYX(0, 0, 0),
-                                 Position(0., 0.,
-                                          -length / 2. + (z_distance_traversed - layer_thickness) +
-                                              layer_thickness / 2.)));
-
-      pv.addPhysVolID("layer", layer_num);
-      layer_num++;
     }
   }
-
   DetElement det(detName, detID);
   Volume motherVol = desc.pickMotherVolume(det);
 

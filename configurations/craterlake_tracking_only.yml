@@ -1,7 +1,7 @@
 features:
+  beampipe:
   fields:
     marco:
-  beampipe:
   tracking:
     definitions_craterlake:
     vertex_barrel:
@@ -15,4 +15,6 @@ features:
     tof_barrel:
     tof_endcap:
   far_forward:
+    default:
+  far_backward:
     default:

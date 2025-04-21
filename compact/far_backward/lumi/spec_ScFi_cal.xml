@@ -4,10 +4,16 @@
 <lccdd>
 
         <detectors>
-                <detector id="LumiSpecCAL_ID" name="LumiSpecCAL" type="EcalLumiSpecWScFi" vis="FFPreVis" readout="EcalLumiSpecHits" sizeXY="LumiSpecCAL_DXY" sizeZ="LumiSpecCAL_DZ" nmod_perlayer="LumiSpecCAL_XYLayers" nlayer="LumiSpecCAL_ZLayers" >
+                <detector id="LumiSpecCAL_ID" name="LumiSpecCAL" type="EcalLumiSpecWScFi" vis="LumiSpecCAL_LayerVis" readout="EcalLumiSpecHits" sizeXY="LumiSpecCAL_DXY" sizeZ="LumiSpecCAL_DZ" nmod_perlayer="LumiSpecCAL_XYLayers" nlayer="LumiSpecCAL_ZLayers" >
                         <position x="0.0*cm"  y="0.0*cm"  z="0.0*cm"/>
                         <rotation x="0.0*rad" y="0.0*rad" z="0.0*rad"/>
+
+                        <layer  sizeX="LumiSpecCAL_XYLayers*LumiSpecCAL_ModSizeX + 2.0*LumiSpecCAL_LayerCoatX" sizeY="LumiSpecCAL_ModSizeY + 2.0*LumiSpecCAL_LayerCoatY" sizeZ="LumiSpecCAL_ModSizeZ" coatSizeX="LumiSpecCAL_LayerCoatX" coatSizeY="LumiSpecCAL_LayerCoatY" material="Polystyrene" vis="LumiSpecCAL_LayerVis"/>
+
                         <module sizex="LumiSpecCAL_ModSizeX" sizey="LumiSpecCAL_ModSizeY" sizez="LumiSpecCAL_ModSizeZ"  material="WPowderplusEpoxy" vis="LumiSpecCAL_ModuleVis">
+
+                                <block sizeX="LumiSpecCAL_SiPMSizeXY" sizeY="LumiSpecCAL_SiPMSizeXY" sizeZ="LumiSpecCAL_ModSizeZ" SpaceXY="LumiSpecCAL_SiPMSpaceXY"/>
+
                                 <fiber
                                  material="Polystyrene"
                                  radius="LumiSpecCAL_FiberRadius"
@@ -30,7 +36,7 @@
         <readouts>
                 <readout name="EcalLumiSpecHits">
                         <segmentation type="NoSegmentation"/>
-                        <id>system:8,sector:4,orientation:4,layer:8,module:4,fiber_x:16,fiber_y:16</id>
+                        <id>system:8,sector:8,layer:8,module:8,block:8,fiber_x:4,fiber_y:4</id>
                 </readout>
         </readouts>
 

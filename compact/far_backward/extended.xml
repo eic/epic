@@ -13,4 +13,6 @@
   <!-- Luminosity detector -->
   <include ref="lumi.xml"/>
 
+  <include ref="beamline_tracking.xml"/>
+
 </lccdd>

@@ -349,5 +349,4 @@ static Ref_t create_BarrelTrackerWithFrame(Detector& description, xml_h e, Sensi
 DECLARE_DETELEMENT(epic_BarrelTrackerWithFrame, create_BarrelTrackerWithFrame)
 DECLARE_DETELEMENT(epic_TrackerBarrel,   create_BarrelTrackerWithFrame)
 DECLARE_DETELEMENT(epic_VertexBarrel,    create_BarrelTrackerWithFrame)
-DECLARE_DETELEMENT(epic_TOFBarrel,       create_BarrelTrackerWithFrame)
 DECLARE_DETELEMENT(epic_InnerMPGDBarrel,       create_BarrelTrackerWithFrame)

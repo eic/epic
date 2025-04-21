@@ -25,7 +25,8 @@
       <pipe id="2" name="Pipe_in_Q4eR"
         xcenter="Q4eR_CenterX" zcenter="Q4eR_CenterZ"
         length="Q4eR_Length" theta="Q4eR_Theta"
-        rout1="Q4eR_InnerRadius" rout2="Q4eR_InnerRadius">
+        rout1="Q4eR_InnerRadius" rout2="Q4eR_InnerRadius"
+        limits="kill_limits">
       </pipe>
       <pipe id="3" name="Pipe_Q4eR_to_B3eR"/>
       <pipe id="4" name="Pipe_in_B3eR"

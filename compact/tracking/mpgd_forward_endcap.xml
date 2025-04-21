@@ -75,8 +75,8 @@
         <module name="ForwardModule1" vis="MPGDModuleVis">
           <trd x1="ForwardMPGDMod1_x1/2.0" x2="ForwardMPGDMod1_x2/2.0" z="ForwardMPGDMod1_y/2"/>
           <comment> Window and drift region </comment>
-          <module_component thickness="ForwardMPGDDriftGap_thickness" material="Ar" sensitive="true" vis="MPGDVis"/>
-          <module_component thickness="ForwardMPGDWindowGap_thickness" material="Ar" sensitive="false" vis="MPGDVis"/>
+          <module_component thickness="ForwardMPGDDriftGap_thickness" material="Ar90IsoButane" sensitive="true" vis="MPGDVis"/>
+          <module_component thickness="ForwardMPGDWindowGap_thickness" material="Ar90IsoButane" sensitive="false" vis="MPGDVis"/>
           <module_component thickness="ForwardMPGDWindow_thickness" material="Kapton" sensitive="false" vis="MPGDVis"/>
           <comment> HV Cathode </comment>
           <module_component name="Cathode Kapton" thickness="ForwardMPGDFoilKapton_thickness" material="Kapton" sensitive="false" vis="MPGDVis"/>
@@ -93,8 +93,8 @@
         <module name="ForwardModule2" vis="MPGDModuleVis">
           <trd x1="ForwardMPGDMod2_x1/2.0" x2="ForwardMPGDMod2_x2/2.0" z="ForwardMPGDMod2_y/2"/>
           <comment> Window and drift region </comment>
-          <module_component thickness="ForwardMPGDDriftGap_thickness" material="Ar" sensitive="true" vis="MPGDVis"/>
-          <module_component thickness="ForwardMPGDWindowGap_thickness" material="Ar" sensitive="false" vis="MPGDVis"/>
+          <module_component thickness="ForwardMPGDDriftGap_thickness" material="Ar90IsoButane" sensitive="true" vis="MPGDVis"/>
+          <module_component thickness="ForwardMPGDWindowGap_thickness" material="Ar90IsoButane" sensitive="false" vis="MPGDVis"/>
           <module_component thickness="ForwardMPGDWindow_thickness" material="Kapton" sensitive="false" vis="MPGDVis"/>
           <comment> HV Cathode </comment>
           <module_component name="Cathode Kapton" thickness="ForwardMPGDFoilKapton_thickness" material="Kapton" sensitive="false" vis="MPGDVis"/>

@@ -338,7 +338,7 @@
     <composite n="4" ref="O"/>
     <constant name="BirksConstant" value="0.0333*mm/MeV"/>
   </material>
-  <material name="Ar10CO2">
+  <material name="Ar90CO2">
     <D type="density" value="1.802" unit="mg / cm3"/>
     <composite n="0.891" ref="Argon"/>
     <!--<composite n="0.109" ref="CarbonDioxide"/>-->

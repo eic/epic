@@ -1,0 +1,80 @@
+
+<lccdd>
+
+  <detectors>
+    <detector
+    id="BackwardsBeamline_ID"
+    type="BeamPipeTracking"
+    name="Pipe_tracker"
+    readout="BackwardsBeamlineHits">
+
+        <slice
+        pipe_id="0"
+        grandmother="Pipe_Q1eR_to_B2BeR"
+        mother="Pipe_to_Q1eR_vacuum"
+        name="Pipe_to_Q1eR_tracker"/>
+
+        <slice
+        pipe_id="1"
+        grandmother="Pipe_Q1eR_to_B2BeR"
+        mother="Pipe_in_Q1eR_vacuum"
+        name="Pipe_in_Q1eR_tracker"/>
+
+        <slice
+        pipe_id="2"
+        grandmother="Pipe_Q1eR_to_B2BeR"
+        mother="Pipe_in_Q2eR_vacuum"
+        name="Pipe_in_Q2eR_tracker"/>
+
+        <slice
+        pipe_id="3"
+        grandmother="Pipe_Q1eR_to_B2BeR"
+        mother="Pipe_in_B2AeR_vacuum"
+        name="Pipe_in_B2AeR_tracker"/>
+
+        <slice
+        pipe_id="4"
+        grandmother="Pipe_Q1eR_to_B2BeR"
+        mother="Pipe_in_B2BeR_vacuum"
+        name="Pipe_in_B2BeR_tracker"/>
+
+        <slice
+        pipe_id="5"
+        grandmother="Pipe_Q3eR_to_B7eR"
+        mother="Pipe_in_Q3eR_vacuum"
+        name="Pipe_in_Q3eR_tracker_start"
+        end="false"/>
+
+        <slice
+        pipe_id="6"
+        grandmother="Pipe_Q3eR_to_B7eR"
+        mother="Pipe_in_Q3eR_vacuum"
+        name="Pipe_in_Q3eR_tracker_end"/>
+
+        <slice
+        pipe_id="7"
+        grandmother="Pipe_Q3eR_to_B7eR"
+        mother="Pipe_in_Q4eR_vacuum"
+        name="Pipe_in_Q4eR_tracker"/>
+
+    </detector>
+
+    <detector
+        type="BeamPipeStop"
+        name="Backwards_Pipe_Stop"
+        grandmother="Pipe_Q3eR_to_B7eR"
+        mother="Pipe_Q4eR_to_B3eR_vacuum"
+    />
+
+  </detectors>
+
+  <readouts>
+
+    <readout name="BackwardsBeamlineHits">
+      <segmentation type="NoSegmentation"/>
+      <id>system:8,pipe:8,end:2</id>
+    </readout>
+
+  </readouts>
+
+</lccdd>
