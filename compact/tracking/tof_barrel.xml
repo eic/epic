@@ -17,26 +17,21 @@
       Barrel TOF Parameters
       --------------------------
     </comment>
-    <constant name="BarrelTOF_Sensor_thickness"       value="0.2*mm"/>
+    <constant name="BarrelTOF_Sensor_thickness"       value="0.35*mm"/>
     <constant name="BarrelTOF_Hybrid_thickness"       value="2*0.008125*cm"/>
     <constant name="BarrelTOF_CFSkin_thickness"       value="2*0.0075*cm"/>
     <constant name="BarrelTOF_CFoam_thickness"        value="2*0.29*cm"/>
     <constant name="BarrelTOF_CHoneycomb_thickness"   value="2*0.29*cm"/>
-    <constant name="BarrelTOF_CoolingTube_thickness"  value="0.08*cm"/>
-    <constant name="BarrelTOF_Coolant_thickness"      value="0.08*cm"/>
 
     <constant name="BarrelTOF_zOffset"                 value="0*cm"/>
     <constant name="BarrelTOF_Module_width_design"     value="60.0*mm"/>
-    <constant name="BarrelTOF_Sensor_width_design"     value="36.4*mm"/>
-    <constant name="BarrelTOF_CFoam_width_design"      value="BarrelTOF_Sensor_width_design"/>
+    <constant name="BarrelTOF_Sensor_width_design"     value="30.0*mm"/>
+    <constant name="BarrelTOF_CFoam_width_design"      value="32.0*mm"/>
     <constant name="BarrelTOF_CHoneycomb_width_design" value="BarrelTOF_Module_width_design-BarrelTOF_CFoam_width_design"/>
-    <constant name="BarrelTOF_CoolingTube_width_design" value="0.75*cm"/>
 
-    <constant name="BarrelTOF_Sensor_position_design"  value="0.5*(BarrelTOF_Sensor_width_design-BarrelTOF_Module_width_design)"/>
+    <constant name="BarrelTOF_Sensor_position_design"  value="0.5*(BarrelTOF_CFoam_width_design-BarrelTOF_Module_width_design)"/>
     <constant name="BarrelTOF_CFoam_position_design"   value="0.5*(BarrelTOF_CFoam_width_design-BarrelTOF_Module_width_design)"/>
     <constant name="BarrelTOF_CHoneycomb_position_design"  value="0.5*(BarrelTOF_Module_width_design-BarrelTOF_CHoneycomb_width_design)"/>
-    <constant name="BarrelTOF_CoolingTube_position_design"  value="BarrelTOF_CHoneycomb_position_design"/>
-    <constant name="BarrelTOF_Coolant_position_design" value="BarrelTOF_CHoneycomb_position_design"/>
     <constant name="BarrelTOF_Service_position_design" value="0.0*mm"/>
 
     <constant name="BarrelTOF_scale"               value="1.0"/>
@@ -44,15 +39,12 @@
     <constant name="BarrelTOF_Sensor_width"        value="BarrelTOF_scale * BarrelTOF_Sensor_width_design"/>
     <constant name="BarrelTOF_CFoam_width"         value="BarrelTOF_scale * BarrelTOF_CFoam_width_design"/>
     <constant name="BarrelTOF_CHoneycomb_width"    value="BarrelTOF_scale * BarrelTOF_CHoneycomb_width_design"/>
-    <constant name="BarrelTOF_CoolingTube_width"   value="BarrelTOF_scale * BarrelTOF_CoolingTube_width_design"/>
     <constant name="BarrelTOF_Sensor_position"     value="BarrelTOF_scale * BarrelTOF_Sensor_position_design"/>
     <constant name="BarrelTOF_CFoam_position"      value="BarrelTOF_scale * BarrelTOF_CFoam_position_design"/>
     <constant name="BarrelTOF_CHoneycomb_position" value="BarrelTOF_scale * BarrelTOF_CHoneycomb_position_design"/>
-    <constant name="BarrelTOF_CoolingTube_position" value="BarrelTOF_scale * BarrelTOF_CoolingTube_position_design"/>
-    <constant name="BarrelTOF_Coolant_position"    value="BarrelTOF_scale * BarrelTOF_Coolant_position_design"/>
     <constant name="BarrelTOF_Service_position"    value="BarrelTOF_scale * BarrelTOF_Service_position_design"/>
     <constant name="BarrelTOF_Module_width"        value="BarrelTOF_scale*BarrelTOF_Module_width_design"/>
-    <constant name="BarrelTOF_Module_tiltangle"    value="20*degree"/>
+    <constant name="BarrelTOF_Module_tiltangle"    value="18*degree"/>
     <constant name="BarrelTOF_Module_nphi"         value="144"/>
     <constant name="BarrelTOF_Module_nz"           value="1"/>
 
@@ -72,11 +64,14 @@
     <constant name="BarrelTOF_Sensor_deadspaceY"   value="2*cm - BarrelTOF_Sensor_overlap"/>
     <constant name="BarrelTOF1_Sensor_amount"      value="33"/>
     <constant name="BarrelTOF1_Sensor_amount_back" value="33"/>
-    <constant name="BarrelTOF2_Sensor_amount"      value="41"/>
-    <constant name="BarrelTOF2_Sensor_amount_back" value="40"/>
+    <constant name="BarrelTOF2_Sensor_amount"      value="33"/>
+    <constant name="BarrelTOF2_Sensor_amount_back" value="33"/>
 
     <constant name="BarrelTOF_ASIC_length"         value="1.5*cm"/>
-    <constant name="BarrelTOF_ASIC_thickness"      value="0.4*mm"/>
+    <constant name="BarrelTOF_ASIC_thickness"      value="0.55*mm"/>
+    <constant name="BarrelTOF_ASICChip_length"     value="1*cm"/>
+    <constant name="BarrelTOF_ASICChip_width"      value="1*cm"/>
+    <constant name="BarrelTOF_ASICChip_thickness"  value="0.45*mm"/>
     <constant name="BarrelTOF_Cooling_pipe_rmin"   value="1.335*mm"/>
     <constant name="BarrelTOF_Cooling_pipe_rmax"   value="(1.335 + 0.25)*mm"/>
     <constant name="BarrelTOF_Cooling_pipe_bend_center"   value="20*mm"/>
@@ -106,6 +101,43 @@
         Tracker Barrel Modules
       </comment>
       <module name="BarrelTOF_Module1" vis="TOFBarrelModuleVis">
+        <module_component 
+            name="ASICChipFront" 
+            material="Silicon" 
+            sensitive="false" 
+            width="BarrelTOF_ASICChip_width" 
+            length="BarrelTOF_ASICChip_length" 
+            thickness="BarrelTOF_ASICChip_thickness" 
+            vis="TOFASICChipVis" 
+            keep_layer="true">
+            <GridSensors 
+                start_x="BarrelTOF_Sensor_position" 
+                start_y="-0.5*BarrelTOF1_length + BarrelTOF1_zoffset + BarrelTOF_Sensor_length - 0.5*BarrelTOF_Sensor_overlap" 
+                start_z="0" 
+                xdist="0" 
+                ydist="BarrelTOF_Sensor_length+BarrelTOF_Sensor_deadspaceY" 
+                nx="1" 
+                ny="BarrelTOF1_Sensor_amount-1"/>
+        </module_component>
+        <module_component 
+            name="ASICChipFront" 
+            material="Silicon" 
+            sensitive="false" 
+            width="BarrelTOF_ASICChip_width" 
+            length="BarrelTOF_ASICChip_length" 
+            thickness="BarrelTOF_ASICChip_thickness" 
+	    vis="TOFASICChipVis"
+	    keep_layer="false"> 
+            <GridSensors 
+                start_x="BarrelTOF_Sensor_position" 
+                start_y="0.5*BarrelTOF2_length-(BarrelTOF2_Sensor_amount-1)*(BarrelTOF_Sensor_length+BarrelTOF_Sensor_deadspaceY)+BarrelTOF2_zoffset + BarrelTOF_Sensor_length - 0.5*BarrelTOF_Sensor_overlap" 
+                start_z="0" 
+                xdist="0" 
+                ydist="BarrelTOF_Sensor_length+BarrelTOF_Sensor_deadspaceY" 
+                nx="1" 
+                ny="BarrelTOF2_Sensor_amount-1"/>
+        </module_component>
+
               <comment>
                       keep_layer means the next module is located at the same thickness level
                       so you can place component side by side
@@ -159,7 +191,7 @@
             <GridSensors
                 start_x="BarrelTOF_Sensor_position"
                 start_y="-0.5*BarrelTOF1_length + BarrelTOF1_zoffset"
-                start_z="0"
+                start_z="0" 
                 xdist="0"
                 ydist="BarrelTOF_Sensor_length+BarrelTOF_Sensor_deadspaceY"
                 nx="1"
@@ -180,12 +212,12 @@
             <GridSensors
                 start_x="BarrelTOF_Sensor_position"
                 start_y="0.5*BarrelTOF2_length-(BarrelTOF2_Sensor_amount-1)*(BarrelTOF_Sensor_length+BarrelTOF_Sensor_deadspaceY)+BarrelTOF2_zoffset"
-                start_z="0"
+                start_z="0" 
                 xdist="0"
                 ydist="BarrelTOF_Sensor_length+BarrelTOF_Sensor_deadspaceY"
                 nx="1"
                 ny="BarrelTOF2_Sensor_amount"
-                half_length="both"
+                half_length="right"
                 />
         </module_component>
         <module_component name="ASICFrontBottom" 
@@ -311,7 +343,6 @@
                 ydist="BarrelTOF_Sensor_length+BarrelTOF_Sensor_deadspaceY"
                 nx="1"
                 ny="BarrelTOF1_Sensor_amount_back"
-                half_length="right"
                 />
         </module_component>
         <module_component
@@ -351,7 +382,7 @@
                     ny="BarrelTOF1_Sensor_amount-1"/>
         </module_component>
         <module_component 
-            name="ASICFrontTop" 
+            name="ASICBackTop" 
             material="Kapton" 
             sensitive="true" 
             width="BarrelTOF_Sensor_width" 
@@ -365,8 +396,46 @@
                     xdist="0" 
                     ydist="BarrelTOF_Sensor_length+BarrelTOF_Sensor_deadspaceY" 
                     nx="1" 
-                    ny="BarrelTOF2_Sensor_amount-2"/>
+                    ny="BarrelTOF2_Sensor_amount-1"/>
         </module_component>
+        <module_component 
+            name="ASICChipBack" 
+            material="Silicon" 
+            sensitive="false" 
+            width="BarrelTOF_ASICChip_width" 
+            length="BarrelTOF_ASICChip_length" 
+            thickness="BarrelTOF_ASICChip_thickness" 
+            vis="TOFASICChipVis" 
+            keep_layer="true">
+            <GridSensors 
+                start_x="BarrelTOF_Sensor_position" 
+                start_y="-0.5*BarrelTOF1_length + BarrelTOF_Sensor_length + BarrelTOF1_zoffset-0.5*BarrelTOF_Sensor_overlap + BarrelTOF_Sensor_length - 0.5*BarrelTOF_Sensor_overlap" 
+                start_z="0" 
+                xdist="0" 
+                ydist="BarrelTOF_Sensor_length+BarrelTOF_Sensor_deadspaceY" 
+                nx="1" 
+                ny="BarrelTOF1_Sensor_amount-1"/>
+        </module_component>
+        <module_component 
+            name="ASICChipBack" 
+            material="Silicon" 
+            sensitive="false" 
+            width="BarrelTOF_ASICChip_width" 
+            length="BarrelTOF_ASICChip_length" 
+            thickness="BarrelTOF_ASICChip_thickness" 
+	    vis="TOFASICChipVis"
+	    keep_layer="false"> 
+            <GridSensors 
+                start_x="BarrelTOF_Sensor_position" 
+                start_y="0.5*BarrelTOF2_length-(BarrelTOF2_Sensor_amount_back-1)*(BarrelTOF_Sensor_length+BarrelTOF_Sensor_deadspaceY)-BarrelTOF_Sensor_length+BarrelTOF2_zoffset+0.5*BarrelTOF_Sensor_overlap + BarrelTOF_Sensor_length - 0.5*BarrelTOF_Sensor_overlap" 
+                start_z="0" 
+                xdist="0" 
+                ydist="BarrelTOF_Sensor_length+BarrelTOF_Sensor_deadspaceY" 
+                nx="1" 
+                ny="BarrelTOF2_Sensor_amount-1"/>
+        </module_component>
+
+
 
       </module>
       <layer module="BarrelTOF_Module1" id="1" vis="TOFLayerVis">

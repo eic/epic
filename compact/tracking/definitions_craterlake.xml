@@ -44,7 +44,7 @@
     <constant name="BarrelTOF1_zmin"          value="115.0*cm"/>
     <constant name="BarrelTOF1_zmax"          value="14.75*cm"/>
     <constant name="BarrelTOF2_zmin"           value="-15.25*cm"/>
-    <constant name="BarrelTOF2_zmax"           value="174.0*cm"/>
+    <constant name="BarrelTOF2_zmax"           value="145.0*cm"/>
 
     <constant name="BarrelTOF_radius_design" value="64.6*cm"/>
 
