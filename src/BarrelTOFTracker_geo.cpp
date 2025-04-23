@@ -190,14 +190,14 @@ static Ref_t create_TOFBarrel(Detector& description, xml_h e, SensitiveDetector 
           /*************************************
            * Illustraction of pipe parameters
            *+----------------------------------------------------
-           *|   ---> y               
-           *|  |                
+           *|   ---> y
+           *|  |
            *|  |            ----------------------------
-           *|  v         /                           ^      
-	   *|  x      /                              v pipe_max_r
+           *|  v         /                           ^
+           *|  x      /                              v pipe_max_r
            *|        /       ---------------------------
-           *|       /      /                 
-           *|     /      /                    
+           *|       /      /
+           *|     /      /
            *|    /     /                        ---------------------x (center of the module)
            *|   /     /         -pipe_offset_x  ^                    |
            *|  |     |                          v                    |
@@ -208,14 +208,14 @@ static Ref_t create_TOFBarrel(Detector& description, xml_h e, SensitiveDetector 
            *|     \      \
            *|       \      \
            *|         \      ---------------------------
-	   *|          \
+           *|          \
            *|             \
            *|                ---------------------------
-           *| 
+           *|
            *+---------------------------------------------------
-	   * pipe_min_r (not shown) is the radius of the inside of the cooling pipe
-	   * pipe_max_r is the radius of the outside of the cooling pipe
-	   * pipe_offset_x and bend_y are defined with respect to the center of the module
+           * pipe_min_r (not shown) is the radius of the inside of the cooling pipe
+           * pipe_max_r is the radius of the outside of the cooling pipe
+           * pipe_offset_x and bend_y are defined with respect to the center of the module
            **********************************/
           xml_comp_t ci_tube   = x_comp.child(_Unicode(cooling_pipe));
           double pipe_max_r    = ci_tube.rmax();
