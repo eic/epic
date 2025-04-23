@@ -168,7 +168,8 @@
             width="BarrelTOF_Sensor_width" 
             length="BarrelTOF_ASIC_length" 
             thickness="BarrelTOF_ASIC_thickness-BarrelTOF_Sensor_thickness" 
-            vis="TOFHybridVis">
+		vis="TOFHybridVis"
+		keep_layer="false">
             <GridSensors 
                 start_x="BarrelTOF_Sensor_position" 
                 start_y="0.5*BarrelTOF2_length-(BarrelTOF2_Sensor_amount-1)*(BarrelTOF_Sensor_length+BarrelTOF_Sensor_deadspaceY)+BarrelTOF2_zoffset + BarrelTOF_Sensor_length - 0.5*BarrelTOF_Sensor_overlap" 
@@ -185,7 +186,7 @@
             sensitive="true"
             width="BarrelTOF_Sensor_width"
             length="BarrelTOF_Sensor_length"
-            thickness="0.5*BarrelTOF_Sensor_thickness"
+            thickness="BarrelTOF_Sensor_thickness"
             vis="TOFSensorVis"
             keep_layer="true">
             <GridSensors
@@ -206,7 +207,7 @@
             sensitive="true"
             width="BarrelTOF_Sensor_width"
             length="BarrelTOF_Sensor_length"
-            thickness="0.5*BarrelTOF_Sensor_thickness"
+            thickness="BarrelTOF_Sensor_thickness"
             vis="TOFSensorVis"
             keep_layer="true">
             <GridSensors
@@ -222,7 +223,7 @@
         </module_component>
         <module_component name="ASICFrontBottom" 
             material="Kapton" 
-            sensitive="true" 
+            sensitive="false" 
             width="BarrelTOF_Sensor_width" 
             length="BarrelTOF_ASIC_length" 
             thickness="BarrelTOF_Sensor_thickness" 
@@ -239,11 +240,12 @@
 
         <module_component name="ASICFrontBottom" 
             material="Kapton" 
-            sensitive="true" 
+            sensitive="false" 
             width="BarrelTOF_Sensor_width" 
             length="BarrelTOF_ASIC_length" 
             thickness="BarrelTOF_Sensor_thickness" 
-            vis="TOFHybridVis">
+		vis="TOFHybridVis"
+		keep_layer="false">
             <GridSensors 
                  start_x="BarrelTOF_Sensor_position" 
                  start_y="0.5*BarrelTOF2_length-(BarrelTOF2_Sensor_amount-1)*(BarrelTOF_Sensor_length+BarrelTOF_Sensor_deadspaceY)+BarrelTOF2_zoffset + BarrelTOF_Sensor_length - 0.5*BarrelTOF_Sensor_overlap" 
@@ -309,7 +311,7 @@
                 ny="BarrelTOF1_Sensor_amount-1"/>
         </module_component>
         <module_component 
-            name="ASICFrontBottom" 
+            name="ASICBackBottom" 
             material="Kapton" 
             sensitive="false" 
             width="BarrelTOF_Sensor_width" 
@@ -332,7 +334,7 @@
             sensitive="true"
             width="BarrelTOF_Sensor_width"
             length="BarrelTOF_Sensor_length"
-            thickness="0.5*BarrelTOF_Sensor_thickness"
+            thickness="BarrelTOF_Sensor_thickness"
             vis="TOFSensorVis"
             keep_layer="true">
             <GridSensors
@@ -351,8 +353,9 @@
             sensitive="true"
             width="BarrelTOF_Sensor_width"
             length="BarrelTOF_Sensor_length"
-            thickness="0.5*BarrelTOF_Sensor_thickness"
-            vis="TOFSensorVis" >
+            thickness="BarrelTOF_Sensor_thickness"
+		vis="TOFSensorVis" 
+		keep_layer="false">
             <GridSensors
                 start_x="BarrelTOF_Sensor_position"
                 start_y="0.5*BarrelTOF2_length-(BarrelTOF2_Sensor_amount_back-1)*(BarrelTOF_Sensor_length+BarrelTOF_Sensor_deadspaceY)-BarrelTOF_Sensor_length+BarrelTOF2_zoffset+0.5*BarrelTOF_Sensor_overlap"
@@ -388,7 +391,8 @@
             width="BarrelTOF_Sensor_width" 
             length="BarrelTOF_ASIC_length" 
             thickness="BarrelTOF_ASIC_thickness-BarrelTOF_Sensor_thickness" 
-            vis="TOFHybridVis">
+		vis="TOFHybridVis"
+		keep_layer="false">
             <GridSensors 
                     start_x="BarrelTOF_Sensor_position" 
                     start_y="0.5*BarrelTOF2_length-(BarrelTOF2_Sensor_amount_back-1)*(BarrelTOF_Sensor_length+BarrelTOF_Sensor_deadspaceY)-BarrelTOF_Sensor_length+BarrelTOF2_zoffset+0.5*BarrelTOF_Sensor_overlap + BarrelTOF_Sensor_length - 0.5*BarrelTOF_Sensor_overlap" 
