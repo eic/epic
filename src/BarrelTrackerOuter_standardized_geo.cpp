@@ -1,21 +1,17 @@
 // SPDX-License-Identifier: LGPL-3.0-or-later
 // Copyright (C) 2022 Whitney Armstrong
-
-/** \addtogroup Trackers Trackers
- * \brief Type: **BarrelTrackerWithFrame**.
- * \author W. Armstrong
- *
- * \ingroup trackers
- *
- * @{
- */
+//
+// Build L3 and L4 outer barrels from gdml files created from CAD drawings
+//
+// Created from BarrelTrackerWithFrame_geo.cpp by Tuna Tasali, August 2024
+// Modified by Sam Henry to fix bugs and simply, March 2025
 
 #include "XML/Layering.h"
 #include "XML/Utilities.h"
 #include "TGDMLParseBiggerFiles.h"
-//#include "CADPlugins.h"
 #include "FileLoaderHelper.h"
-#include "ImportCADHelper.h" //include utilities
+#include "ImportCADHelper.h" 
+#include "TRandom3.h"
 #include <fstream>
 
 using namespace std;
@@ -52,11 +48,12 @@ class TriangularFacet
   //+1 if the position of the facet and its normal are both pointing up from the yz plane
   //-1 if one is pointing up and the other is pointing down or vice-versa
   int concavity_score = 0;
+  
   void compute_facet_properties(TessellatedSolid::Facet facet, TessellatedSolid c_sol){
     //get the vertex indices
-    iv0 = facet[0]; 
-    iv1 = facet[1];
-    iv2 = facet[2];
+    iv0 = facet[0]; // facet.GetVertexIndex(0);
+    iv1 = facet[1]; // facet.GetVertexIndex(1);
+    iv2 = facet[2]; // facet.GetVertexIndex(2);
     //add the vertices to a vector
     vertices.push_back(c_sol->GetVertex(iv0));
     vertices.push_back(c_sol->GetVertex(iv1));
@@ -71,13 +68,16 @@ class TriangularFacet
     //this is a geometric requirement when determining concavity this way
     TessellatedSolid::Vertex shift(0., -1000., 1.);
     centroid -= shift;
+    
+    
+    
     double centroidscore = TessellatedSolid::Vertex::Dot(xhat, centroid);
     concavity_score = sgn(normalscore*centroidscore);
     //set initialization flag    
     initialized = true;
   }
-  TessellatedSolid::Vertex compute_normal()
-  {
+  
+  TessellatedSolid::Vertex compute_normal() {
     //figure out the castings here
     TessellatedSolid::Vertex vec1 = vertices.at(1) - vertices.at(2);
     TessellatedSolid::Vertex vec2 = vertices.at(0) - vertices.at(2);
@@ -90,8 +90,8 @@ class TriangularFacet
     }
     return normal_return;
   }
-  double compute_area()
-  {
+  
+  double compute_area(){
     //figure out the castings here
     TessellatedSolid::Vertex vec1 = vertices.at(1) - vertices.at(2);
     TessellatedSolid::Vertex vec2 = vertices.at(0) - vertices.at(2);
@@ -101,8 +101,8 @@ class TriangularFacet
     TessellatedSolid::Vertex normal_return = TessellatedSolid::Vertex::Cross(vec1, vec2);
     return(normal_return.Mag()/2);
   }
+  
   TessellatedSolid create_TriangularPrism(double extrusion_length) {
-    
     if(!initialized) {
       printout(ERROR, "BarrelTrackerOuter_standardized", "Try running struct TriangularPrism construct_from_facet_and_solid()");
       throw runtime_error("Vertices not initialized! Triangular prisim construction failed.");
@@ -165,25 +165,6 @@ class TriangularFacet
   }
 };
 
-/** Barrel Tracker imported from GDML file
- *
- *
- * The shapes are created using createShape which can be one of many basic geomtries.
- * See the examples Check_shape_*.xml in
- * [dd4hep's examples/ClientTests/compact](https://github.com/AIDASoft/DD4hep/tree/master/examples/ClientTests/compact)
- * directory.
- *
- *
- * 
- *
- * \ingroup trackers
- *
- * \code
- * \endcode
- *
- *
- * @author Whitney Armstrong, Tuna Tasali
- */
 
 //a conversion function between Vector3D and TessellatedSolid::Vertex
 Vector3D vertex_to_vector3D(TessellatedSolid::Vertex vertex) 
@@ -192,16 +173,65 @@ Vector3D vertex_to_vector3D(TessellatedSolid::Vertex vertex)
   return(vec);
 }
 
-static Ref_t create_BarrelTrackerOuterStandardized(Detector& description, xml_h e, SensitiveDetector sens) {
+// Debugging tool - export x,y,z of all vertices in TGeoVolume to text file, after applying translations and rotations
+ofstream dbvfile;
+int level;
+void ExtractVertices(TGeoNode* node, TGeoHMatrix parentMatrix){	      	
+     	auto nodevol = node->GetVolume();
+     	TGeoShape* shape = nodevol->GetShape();
+	TGeoHMatrix matrix(parentMatrix);   	
+	matrix.Multiply( node->GetMatrix());
+//	Double_t* tr = matrix.GetTranslation();
+//	dbvfile << "Level: " << level << " Translation: " <<tr[0] << "   " << tr[1] << "   " << tr[2] << endl;  // Write out translation vector for node
+//	Double_t* rt = matrix.GetRotationMatrix();
+//	dbvfile << "Rotation: ";
+//	for (int i=0; i<9; ++i)  dbvfile << rt[i] << "   ";  // Write out rotation matrix elements for node
+//	dbvfile << endl;
+	if (shape->IsA() == TGeoTessellated::Class()) {  // This assumes all the shapes in the TGeoVolume are TGeoTessellated
+            TGeoTessellated* tes = (TGeoTessellated*)shape;
+            int Nvert = tes->GetNvertices();
+            for(int i=0; i<Nvert; ++i){
+               auto v = tes->GetVertex(i);               
+               double local[3] = {v.x(), v.y(), v.z() };
+               double global[3];
+               matrix.LocalToMaster(local, global);
+               dbvfile << global[0] << "\t" << global[1] << "\t" << global[2] << endl; // Write out coordinates in global reference frame (after applying rotation and translation
+//		dbvfile << local[0] << "\t" << local[1] << "\t" << local[2] << endl; // Write out coordinates without applying rotation and translation
+            }
+        }
+        // Recursively process child nodes
+        for (int i = 0; i < nodevol->GetNdaughters(); ++i) {
+            level += 1;
+            ExtractVertices(nodevol->GetNode(i), matrix);
+        }	
+}
 
+void ExportVolumePoints(TGeoVolume* vol, string file_suffix){
+	dbvfile.open("debugVol"+file_suffix+".txt");
+	for(int i=0; i<vol->GetNdaughters(); ++i){	
+//	dbvfile << "Daughter: " << i << endl;   // Write number of each daughter volume
+	      	auto topnode = vol->GetNode(i);
+	      	if(topnode){
+	      		TGeoHMatrix matrix;
+	      		level=0;
+	      		ExtractVertices(topnode, matrix);
+	      	}
+	}
+	dbvfile.close();
+}      
+
+// Code to build barrel starts here - parameters are read from silicon_barrel.xml
+
+static Ref_t create_BarrelTrackerOuterStandardized(Detector& description, xml_h e, SensitiveDetector sens) {
+ // ofstream dbfile; // file for debugging information
+//  dbfile.open("debug.txt");             // add , ios::app to append to file                                       //  dbfile << "Extra debugging notes" << endl;
   typedef vector<PlacedVolume> Placements;
   xml_det_t x_det = e;
   Material air    = description.air();
-  //Material vacuum = description.vacuum();
-  //Material silicon = description.material();
   int det_id      = x_det.id();
   string det_name = x_det.nameStr();
   DetElement sdet(det_name, det_id);
+
 
   map<string, Volume> volumes;
   vector<string> module_names;
@@ -222,18 +252,11 @@ static Ref_t create_BarrelTrackerOuterStandardized(Detector& description, xml_h 
                                                     "boundary_material");
   }
 
-  // dd4hep::xml::Dimension dimensions(x_det.dimensions());
-  // Tube topVolumeShape(dimensions.rmin(), dimensions.rmax(), dimensions.length() * 0.5);
-  // Volume assembly(det_name,topVolumeShape,air);
   Assembly assembly(det_name);
 
-  //you can pick between these two options
   sens.setType("tracker");
-  //sens.setType("calorimeter");
-  //
-  //
 
-  // Loop over the suports
+  // Loop over the suports - this is not current run as there are no supports in silicon_barrel.xml
   for (xml_coll_t su(x_det, _U(support)); su; ++su) {
     xml_comp_t x_support     = su;
     double support_thickness = getAttrOrDefault(x_support, _U(thickness), 2.0 * mm);
@@ -270,12 +293,12 @@ static Ref_t create_BarrelTrackerOuterStandardized(Detector& description, xml_h 
     support_vol.setVisAttributes(description.visAttributes(support_vis));
     pv = assembly.placeVolume(support_vol, tr);
     // pv = assembly.placeVolume(support_vol, Position(0, 0, support_zstart + support_length / 2));
+
   }
 
 
-
   // loop over the modules
-  // to parse GDML files
+  //  The components of each module of each layer are defined by GDML files specified in silicon_barrel.xml
 
   //needed for some reports
   double sensitive_area = 0;
@@ -296,18 +319,11 @@ static Ref_t create_BarrelTrackerOuterStandardized(Detector& description, xml_h 
     int sensor_number      = 1;
     double total_thickness = 0;
 
-    // Compute module total thickness from components
-    xml_coll_t ci(x_mod, _U(module_component));
-    for (ci.reset(), total_thickness = 0.0; ci; ++ci) {
-      double thic = getAttrOrDefault(ci, _U(thickness), 0 * mm);
-      total_thickness += thic;
-    }
     Assembly m_vol(m_nam);
     volumes[m_nam] = m_vol;
     m_vol.setVisAttributes(description.visAttributes(x_mod.visStr()));
 
     double thickness_so_far = 0.0;
-    double thickness_sum    = -total_thickness / 2.0;
     for (xml_coll_t mci(x_mod, _U(module_component)); mci; ++mci, ++ncomponents) {
       xml_comp_t x_comp  = mci;
       xml_comp_t x_pos   = x_comp.position(false);
@@ -315,16 +331,16 @@ static Ref_t create_BarrelTrackerOuterStandardized(Detector& description, xml_h 
       const string c_nam = _toString(ncomponents, "component%d");
       const string c_nam_mesh = _toString(ncomponents, "component%d_MESH");
 
-      //new code that consturcts them from GDML files
-      //import the GDML file from the "file" attribute of the module_component
-      std::string gdml_file =
-          getAttrOrDefault<std::string>(x_comp, _Unicode(file), " ");
+      // New code that constructs component from GDML files. Import the GDML file from the "file" attribute of the module_component
+      std::string gdml_file =          getAttrOrDefault<std::string>(x_comp, _Unicode(file), " ");
       //printout(WARNING, "BarrelTrackerOuter", gdml_file);
       std::string given_name = getAttrOrDefault<std::string>(x_comp, _Unicode(name), " ");
 
       Volume c_vol(c_nam);
+
       //printout(WARNING, "BarrelTrackerOuter", "Parsing a large GDML file may lead to segfault or heap overflow.");
       c_vol = parser->GDMLReadFile(gdml_file.c_str());
+           
       //check the validity of the volume
       if (!c_vol.isValid()) {
         printout(WARNING, "BarrelTrackerOuter", "%s", gdml_file.c_str());
@@ -342,19 +358,13 @@ static Ref_t create_BarrelTrackerOuterStandardized(Detector& description, xml_h 
       c_vol.setSolid(c_sol);
       c_vol.setRegion(description, x_comp.regionStr());
       c_vol.setLimitSet(description, x_comp.limitsStr());
-
-      //an important offset variable that allows radial offsetting to prevent overlaps:
-      const double radial_offset =
-          getAttrOrDefault<double>(x_comp, _Unicode(offset), 0);
       
-      // Utility variable for the relative z-offset based off the previous components
-      const double zoff = thickness_sum + radial_offset / 2.0;
-
       // now, the code branches in the following way:
       // if the volume is sensitive, build the tesselated solid into thickened pixels of extruded polyogons
       // and place those under m_vol
       // else, just place c_vol under m_vol
-      if (x_comp.isSensitive()) {
+            
+      if (x_comp.isSensitive() ) {
         //loop over the facets of c_vol to define volumes and set them as sensitive
         //note these facets won't be actual pixels, but rather just bits of the mesh
         //some variables to monitor if any sensitive area is lost
@@ -402,8 +412,8 @@ static Ref_t create_BarrelTrackerOuterStandardized(Detector& description, xml_h 
           sc_vol_facet.setRegion(description, x_comp.regionStr());
           sc_vol_facet.setLimitSet(description, x_comp.limitsStr());
           //now place the volume
-          RotationZYX c_rot(0, 0, -M_PI/2);
-          pv = m_vol.placeVolume(sc_vol_facet, Transform3D(c_rot, Position(0, 0, zoff)));
+          RotationZYX c_rot(0, 0, 0);  // RotationZYX c_rot(0, 0, -M_PI/2);
+          pv = m_vol.placeVolume(sc_vol_facet, Transform3D(c_rot, Position(0, 0, 0)));
           sc_vol_facet.setVisAttributes(description, x_comp.visStr());
           pv.addPhysVolID("sensor", sensor_number);
           sensor_number = sensor_number + 1;
@@ -437,34 +447,24 @@ static Ref_t create_BarrelTrackerOuterStandardized(Detector& description, xml_h 
       else { // not a sensitive volume
         //place the volume
         if (x_pos && x_rot) {
-          Position c_pos(x_pos.x(0), x_pos.y(0), x_pos.z(0) + zoff);
+          Position c_pos(x_pos.x(0), x_pos.y(0), x_pos.z(0) );
           RotationZYX c_rot(x_rot.z(0), x_rot.y(0), x_rot.x(0));
           pv = m_vol.placeVolume(c_vol, Transform3D(c_rot, c_pos));
         } else if (x_rot) {
-          Position c_pos(0, 0, zoff);
+          Position c_pos(0, 0, 0);
           pv = m_vol.placeVolume(c_vol,
                                 Transform3D(RotationZYX(x_rot.z(0), x_rot.y(0), x_rot.x(0)), c_pos));
         } else if (x_pos) {
-          pv = m_vol.placeVolume(c_vol, Position(x_pos.x(0), x_pos.y(0), x_pos.z(0) + zoff));
+          pv = m_vol.placeVolume(c_vol, Position(x_pos.x(0), x_pos.y(0), x_pos.z(0) ));
         } else {
           //the c_rot is a temporary adjustment I added
-          RotationZYX c_rot(0, 0, -M_PI/2);
-          pv = m_vol.placeVolume(c_vol, Transform3D(c_rot, Position(0, 0, zoff)));
-        
+          RotationZYX c_rot(0, 0, 0);  
+          pv = m_vol.placeVolume(c_vol, Transform3D(c_rot, Position(0, 0, 0)));
         }
         c_vol.setVisAttributes(description, x_comp.visStr());
         
       }
-      //double thic = getAttrOrDefault<double>(x_comp, _U(thickness), 0 * mm);
-      thickness_sum += radial_offset;
-      thickness_so_far += radial_offset;
-      // apply relative offsets in z-position used to stack components side-by-side
-      if (x_pos) {
-        thickness_sum += x_pos.z(0);
-        thickness_so_far += x_pos.z(0);
-      }
-    }
-    
+  }
   }
   delete parser;
   
@@ -485,6 +485,7 @@ static Ref_t create_BarrelTrackerOuterStandardized(Detector& description, xml_h 
     xml_comp_t z_layout = x_layer.child(_U(z_layout)); // Get the <z_layout> element.
     int lay_id          = x_layer.id();
     string lay_nam      = det_name + _toString(x_layer.id(), "_layer%d");
+        
     Tube lay_tub(x_barrel.inner_r(), x_barrel.outer_r(), x_barrel.z_length() / 2.0);
     Volume lay_vol(lay_nam, lay_tub, air); // Create the layer envelope volume.
     Position lay_pos(0, 0, getAttrOrDefault(x_barrel, _U(z0), 0.));
@@ -501,8 +502,10 @@ static Ref_t create_BarrelTrackerOuterStandardized(Detector& description, xml_h 
     double phi0     = x_layout.phi0();     // Starting phi of first module.
     double phi_tilt = x_layout.phi_tilt(); // Phi tilt of a module.
     double rc       = x_layout.rc();       // Radius of the module center.
+   double rc0 = rc;
     int nphi        = x_layout.nphi();     // Number of modules in phi.
     double rphi_dr  = x_layout.dr();       // The delta radius of every other module.
+    double rphi_dr0 = rphi_dr;
     double phi_incr = (M_PI * 2) / nphi;   // Phi increment for one module.
     double phic     = phi0;                // Phi of the module center.
     double z0       = z_layout.z0();       // Z position of first module in phi.
@@ -521,23 +524,24 @@ static Ref_t create_BarrelTrackerOuterStandardized(Detector& description, xml_h 
     double module_z = -z0;
     int module      = 1;
     for(auto& m_nam : module_names) {
-
+      phic=phi0;
+      rc=rc0;
+      rphi_dr=rphi_dr0;
+ 
       Volume module_env = volumes[m_nam];
+      
       // Loop over the number of modules in phi.
       for (int ii = 0; ii < nphi; ii++) {
         double dx = z_dr * std::cos(phic + phi_tilt); // Delta x of module position.
         double dy = z_dr * std::sin(phic + phi_tilt); // Delta y of module position.
         double x  = rc * std::cos(phic);              // Basic x module position.
         double y  = rc * std::sin(phic);              // Basic y module position.
-
+  
         // Loop over the number of modules in z. note that for a system working with stave designs nz = 1 always
         for (int j = 0; j < nz; j++) {
           string module_name = _toString(module, "module%d");
           DetElement mod_elt(lay_elt, module_name, module);
-
-          Transform3D tr(RotationZYX(0, ((M_PI / 2) - phic - phi_tilt), -M_PI/2), /*RotationZ(phic)*/
-                          Position(x, y, module_z));
-
+          Transform3D tr(RotationZYX((-M_PI / 2) + phic + phi_tilt, 0, 0), Position(x, y, module_z));
           pv = lay_vol.placeVolume(module_env, tr);
           pv.addPhysVolID("module", module);
           mod_elt.setPlacement(pv);
@@ -552,9 +556,6 @@ static Ref_t create_BarrelTrackerOuterStandardized(Detector& description, xml_h 
             auto& comp_de_params =
                 DD4hepDetectorHelper::ensureExtension<dd4hep::rec::VariantParameters>(comp_de);
             comp_de_params.set<string>("axis_definitions", "XYZ");
-            //comp_de.setAttributes(description, sens_pv.volume(), x_layer.regionStr(), x_layer.limitsStr(),
-                                  //xml_det_t(xmleles[m_nam]).visStr());
-            //
 
             volSurfaceList(comp_de)->push_back(volplane_surfaces[m_nam][ic]);
             }
@@ -581,8 +582,8 @@ static Ref_t create_BarrelTrackerOuterStandardized(Detector& description, xml_h 
     pv.addPhysVolID("layer", lay_id);            // Set the layer ID.
     lay_elt.setAttributes(description, lay_vol, x_layer.regionStr(), x_layer.limitsStr(),
                           x_layer.visStr());
-    //lay_vol.setVisAttributes(description.invisible());
     lay_elt.setPlacement(pv); 
+  
   }
   
   //finally, place the world
@@ -592,7 +593,7 @@ static Ref_t create_BarrelTrackerOuterStandardized(Detector& description, xml_h 
   pv.addPhysVolID("system", det_id); // Set the subdetector system ID.
   sdet.setPlacement(pv);
   //printout(WARNING, "BarrelTrackerOuter", "DetElement instance \"sdet\" might be corrupted if the GDML design file is too big.");	
-  
+ // dbfile.close();
   return sdet;
 }
 

@@ -5,43 +5,29 @@
       Main parameters - this is for the more realistic June 2022 design
     </comment>
 
-    <constant name="SiBarrelMod1_rmin"             value="SiBarrel1_rmin+1*mm"/>
-    <constant name="SiBarrelMod2_rmin"             value="SiBarrel2_rmin+1*cm"/>
-    <constant name="SiBarrelMod_angle"             value="SiBarrel_angle"/>
+    <constant name="SiBarrelMod1_rmin"             value="SiBarrel1_rmin"/> # 269mm
+    <constant name="SiBarrelMod2_rmin"             value="SiBarrel2_rmin"/> # 421mm
+     <constant name="SiBarrelMod_angle"             value="SiBarrel_angle"/>
     <constant name="SiBarrelMod_dz"                value="SiBarrel_dz"/>
-
-    <constant name="SiBarrelSensor_thickness"      value="40*um"/>
-
-    <constant name="SiBarrelMod1Service_thickness" value="0.15*mm"/>
-    <constant name="SiBarrelMod2Service_thickness" value="0.37*mm"/>
-    <constant name="SiBarrelMod1Frame_thickness"   value="0.06*mm"/>
-    <constant name="SiBarrelMod2Frame_thickness"   value="0.12*mm"/>
-    <constant name="SiBarrelMod1Frame_height"      value="0.8*cm"/>
-    <constant name="SiBarrelMod2Frame_height"      value="0.8*cm"/>
-    <constant name="SiBarrelStave1_width"          value="4*cm"/>
-    <constant name="SiBarrelStave2_width"          value="4*cm"/>
 
     <comment>
       Actual parametrization
     </comment>
 
     <constant name="SiBarrelMod1_length"        value="2 * SiBarrelMod1_rmin / tan(SiBarrelMod_angle) - SiBarrel_dz"/>
-    <comment> 84cm=2*42cm is the engineer max </comment>
     <constant name="SiBarrelMod2_length"        value="84*cm"/>
 
     <constant name="SiBarrelLayer1_length"      value="SiBarrelMod1_length + 1*um"/>
     <constant name="SiBarrelLayer2_length"      value="SiBarrelMod2_length + 1*um"/>
     <constant name="SiBarrelEnvelope_length"    value="SiBarrelLayer2_length + 1*um" />
 
-    <constant name="SiBarrelLayer_thickness"    value="3.0*cm"/>
+    <constant name="SiBarrelLayer_thickness"    value="3.0*cm"/>		
     <constant name="SiBarrelLayer1_rmin"        value="SiBarrelMod1_rmin "/>
     <constant name="SiBarrelLayer1_rmax"        value="SiBarrelLayer1_rmin + SiBarrelLayer_thickness"/>
     <constant name="SiBarrelLayer2_rmin"        value="SiBarrelMod2_rmin "/>
     <constant name="SiBarrelLayer2_rmax"        value="SiBarrelLayer2_rmin + SiBarrelLayer_thickness"/>
 
-    <constant name="SiBarrelStaveTilt_angle"     value="3.0*degree"/>
-    <constant name="SiBarrelStave1_count"        value="floor(180.*degree/asin(SiBarrelStave1_width*cos(SiBarrelStaveTilt_angle)/2/SiBarrelMod1_rmin))+2"/>
-    <constant name="SiBarrelStave2_count"        value="floor(180.*degree/asin(SiBarrelStave2_width*cos(SiBarrelStaveTilt_angle)/2/SiBarrelMod2_rmin))+2"/>
+    <constant name="SiBarrelStaveTilt_angle"     value="0.0*degree"/>
     
   </define>
 
@@ -22383,7 +22369,7 @@
           nz       : Number of modules to place in z.
           dr       : Radial displacement parameter, of every other module.
         </comment>
-        <rphi_layout phi_tilt="SiBarrelStaveTilt_angle" nphi="1" phi0="0.0" rc="SiBarrelMod1_rmin" dr="7.0 * mm"/>
+        <rphi_layout phi_tilt="SiBarrelStaveTilt_angle" nphi="46" phi0="0.0" rc="SiBarrelMod1_rmin" dr="6.0 * mm"/>
         <z_layout dr="0.0 * mm" z0="0.0 * mm" nz="1"/>
       </layer>
     </detector>
@@ -22403,8 +22389,6 @@
         length="SiBarrelLayer2_length" />
       <comment>Silicon Barrel Modules</comment>
       <comment> L4 Stave </comment>
-      <comment>
-      disable the sensitive silcon facet
       <module name="L4Module0" vis="TrackerLayerVis">
         <!--bundle-->
 
@@ -23042,7 +23026,7 @@
     
         <!--end bundle-->    
       </module> 
-      <module name="L4Module1" vis="TrackerLayerVis">
+    <module name="L4Module1" vis="TrackerLayerVis">
         <!--bundle-->
     
         <module_component name="ActivePixelArray_009(Mirror)_ASCII.gdml" 
@@ -23687,7 +23671,7 @@
     
         <!--end bundle-->    
       </module> 
-      <module name="L4Module2" vis="TrackerLayerVis">
+    <module name="L4Module2" vis="TrackerLayerVis">
         <!--bundle-->
     
         <module_component name="ActivePixelArray_018(Mirror)007_ASCII.gdml" 
@@ -24332,7 +24316,7 @@
     
         <!--end bundle-->    
       </module> 
-      <module name="L4Module3" vis="TrackerLayerVis">
+    <module name="L4Module3" vis="TrackerLayerVis">
         <!--bundle-->
     
         <module_component name="ActivePixelArray_027(Mirror)005_ASCII.gdml" 
@@ -24977,7 +24961,7 @@
     
         <!--end bundle-->    
       </module> 
-      <module name="L4Module4" vis="TrackerLayerVis">
+    <module name="L4Module4" vis="TrackerLayerVis">
         <!--bundle-->
     
         <module_component name="ActivePixelArray_036(Mirror)004_ASCII.gdml" 
@@ -25622,7 +25606,7 @@
     
         <!--end bundle-->    
       </module> 
-      <module name="L4Module5" vis="TrackerLayerVis">
+    <module name="L4Module5" vis="TrackerLayerVis">
         <!--bundle-->
     
         <module_component name="ActivePixelArray_045(Mirror)004_ASCII.gdml" 
@@ -26267,7 +26251,7 @@
     
         <!--end bundle-->    
       </module> 
-      <module name="L4Module6" vis="TrackerLayerVis">
+    <module name="L4Module6" vis="TrackerLayerVis">
         <!--bundle-->
     
         <module_component name="ActivePixelArray_054(Mirror)002_ASCII.gdml" 
@@ -26912,7 +26896,7 @@
     
         <!--end bundle-->    
       </module> 
-      <module name="L4Module7" vis="TrackerLayerVis">
+    <module name="L4Module7" vis="TrackerLayerVis">
         <!--bundle-->
     
         <module_component name="ActivePixelArray_080_ASCII.gdml" 
@@ -27557,7 +27541,7 @@
     
         <!--end bundle-->    
       </module> 
-      <module name="L4Module8" vis="TrackerLayerVis">
+    <module name="L4Module8" vis="TrackerLayerVis">
         <!--bundle-->
     
         <module_component name="ActivePixelArray_160_ASCII.gdml" 
@@ -28202,7 +28186,7 @@
     
         <!--end bundle-->    
       </module> 
-      <module name="L4Module9" vis="TrackerLayerVis">
+    <module name="L4Module9" vis="TrackerLayerVis">
         <!--bundle-->
     
         <module_component name="ActivePixelArray_240_ASCII.gdml" 
@@ -28847,7 +28831,7 @@
     
         <!--end bundle-->    
       </module> 
-      <module name="L4Module10" vis="TrackerLayerVis">
+    <module name="L4Module10" vis="TrackerLayerVis">
         <!--bundle-->
     
         <module_component name="ActivePixelArray_320_ASCII.gdml" 
@@ -29492,7 +29476,7 @@
     
         <!--end bundle-->    
       </module> 
-      <module name="L4Module11" vis="TrackerLayerVis">
+    <module name="L4Module11" vis="TrackerLayerVis">
         <!--bundle-->
     
         <module_component name="ActivePixelArray_400_ASCII.gdml" 
@@ -30137,14 +30121,9 @@
     
         <!--end bundle-->    
       </module> 
-    </comment>
-
-      <module name="L4Module12" vis="TrackerLayerVis">
+    <module name="L4Module12" vis="TrackerLayerVis">
         <!--bundle-->
-        
-      <comment>
-        comment all silicon parts
-
+    
         <module_component name="ActivePixelArray_480_ASCII.gdml" 
                           matching_name="Active"
                           material="Silicon"
@@ -59273,8 +59252,6 @@
                           vis="TrackerLayerVis"
                           file="CAD/L4_stave_gdml/Readout_480_ASCII.gdml" />
     
-      </comment>
-
         <module_component name="FPC_Mockup_Top001_ASCII.gdml" 
                           matching_name="FPC"
                           material="Kapton"
@@ -59515,7 +59492,6 @@
     
         <!--end bundle-->    
       </module>
-
       <comment> Layers composed of many arrayed modules  </comment>
       <layer module="L4Module" id="1" vis="TrackerLayerVis">
         <barrel_envelope
@@ -59534,7 +59510,7 @@
           nz       : Number of modules to place in z.
           dr       : Radial displacement parameter, of every other module.
         </comment>
-        <rphi_layout phi_tilt="SiBarrelStaveTilt_angle" nphi="1" phi0="0.0" rc="SiBarrelMod2_rmin" dr="6.0 * mm"/>
+        <rphi_layout phi_tilt="SiBarrelStaveTilt_angle" nphi="70" phi0="0.0" rc="SiBarrelMod2_rmin" dr="6.0 * mm"/>
         <z_layout dr="0.0 * mm" z0="0.0 * mm" nz="1"/>
       </layer>
     </detector>
