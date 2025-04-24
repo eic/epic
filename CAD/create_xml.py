@@ -6,50 +6,28 @@ import sys
 HEADER = '''
 <lccdd>
   <define>
-    <comment>
-      Main parameters - this is for the more realistic June 2022 design
-    </comment>
-
-    <constant name="SiBarrelMod1_rmin"             value="SiBarrel1_rmin+1*mm"/>
-    <constant name="SiBarrelMod2_rmin"             value="SiBarrel2_rmin+1*cm"/>
-    <constant name="SiBarrelMod_angle"             value="SiBarrel_angle"/>
+  
+    <constant name="SiBarrelMod1_rmin"             value="SiBarrel1_rmin"/> # 269mm
+    <constant name="SiBarrelMod2_rmin"             value="SiBarrel2_rmin"/> # 421mm
+     <constant name="SiBarrelMod_angle"             value="SiBarrel_angle"/>
     <constant name="SiBarrelMod_dz"                value="SiBarrel_dz"/>
 
-    <constant name="SiBarrelSensor_thickness"      value="40*um"/>
-
-    <constant name="SiBarrelMod1Service_thickness" value="0.15*mm"/>
-    <constant name="SiBarrelMod2Service_thickness" value="0.37*mm"/>
-    <constant name="SiBarrelMod1Frame_thickness"   value="0.06*mm"/>
-    <constant name="SiBarrelMod2Frame_thickness"   value="0.12*mm"/>
-    <constant name="SiBarrelMod1Frame_height"      value="0.8*cm"/>
-    <constant name="SiBarrelMod2Frame_height"      value="0.8*cm"/>
-    <constant name="SiBarrelStave1_width"          value="4*cm"/>
-    <constant name="SiBarrelStave2_width"          value="4*cm"/>
-
-    <comment>
-      Actual parametrization
-    </comment>
-
     <constant name="SiBarrelMod1_length"        value="2 * SiBarrelMod1_rmin / tan(SiBarrelMod_angle) - SiBarrel_dz"/>
-    <comment> 84cm=2*42cm is the engineer max </comment>
     <constant name="SiBarrelMod2_length"        value="84*cm"/>
 
     <constant name="SiBarrelLayer1_length"      value="SiBarrelMod1_length + 1*um"/>
     <constant name="SiBarrelLayer2_length"      value="SiBarrelMod2_length + 1*um"/>
     <constant name="SiBarrelEnvelope_length"    value="SiBarrelLayer2_length + 1*um" />
 
-    <constant name="SiBarrelLayer_thickness"    value="3.0*cm"/>
+    <constant name="SiBarrelLayer_thickness"    value="3.0*cm"/>		
     <constant name="SiBarrelLayer1_rmin"        value="SiBarrelMod1_rmin "/>
     <constant name="SiBarrelLayer1_rmax"        value="SiBarrelLayer1_rmin + SiBarrelLayer_thickness"/>
     <constant name="SiBarrelLayer2_rmin"        value="SiBarrelMod2_rmin "/>
     <constant name="SiBarrelLayer2_rmax"        value="SiBarrelLayer2_rmin + SiBarrelLayer_thickness"/>
 
-    <constant name="SiBarrelStaveTilt_angle"     value="3.0*degree"/>
-    <constant name="SiBarrelStave1_count"        value="floor(180.*degree/asin(SiBarrelStave1_width*cos(SiBarrelStaveTilt_angle)/2/SiBarrelMod1_rmin))+2"/>
-    <constant name="SiBarrelStave2_count"        value="floor(180.*degree/asin(SiBarrelStave2_width*cos(SiBarrelStaveTilt_angle)/2/SiBarrelMod2_rmin))+2"/>
+    <constant name="SiBarrelStaveTilt_angle"     value="0.0*degree"/>
     
   </define>
-
 
   <detectors>
     <documentation level="5">
@@ -199,7 +177,7 @@ def module_component(component_path, component_name, my_dict, file_count, stave_
           sens = True
     COMPONENT_FOOTER = f'''
                           vis="TrackerLayerVis"
-                          file="CAD/{component_path}" />
+                          file="{component_path}" />
     '''
     COMPONENT = COMPONENT_HEADER + COMPONENT_BODY + COMPONENT_FOOTER
     
@@ -247,52 +225,32 @@ dict_list = [
 dict_attr_list = ["material", "sensitive", "thickness", "offset"]
   
 
-# for external call
-def generate_xml(L3_gdml_path, L4_gdml_path, savefile):
-  with open(savefile, 'w') as xml_file:
+# Check if the folder path is provided as an argument
+if len(sys.argv) < 3:
+    print("Please provide the L3 and L4 gdml folder paths as the first and second command line arguments respectively.")
+    sys.exit(1)
+
+L3_folder_path = sys.argv[1]
+L4_folder_path = sys.argv[2]
+file_path = "silicon_barrel.xml"
+# Check if the file exists
+if os.path.exists(file_path):
+    raise FileExistsError(f"Error: The file '{file_path}' already exists.")
+    sys.exit(1)
+
+with open(file_path, "w") as xml_file:
     xml_file.write(HEADER)
-    global file_count_global
-    file_count_global = 0
-    for key_dict in dict_list:
-      scan_and_place(L3_gdml_path, key_dict['matching_name'], xml_file, key_dict, 'L3')
+
+    file_count_global = 0 #reset the global file count in each new stave
+    for key_dict in dict_list:   
+        scan_and_place(L3_folder_path, key_dict["matching_name"], xml_file, key_dict, "L3")
     xml_file.write(MIDDLE)
     file_count_global = 0
     for key_dict in dict_list:
-      scan_and_place(L4_gdml_path, key_dict["matching_name"], xml_file, key_dict, 'L4')
+        scan_and_place(L4_folder_path, key_dict["matching_name"], xml_file, key_dict, "L4")
     xml_file.write(FOOTER)
 
-
-
-
-
-# Check if the folder path is provided as an argument
-if __name__ == '__name__':
-  print('Starting...')
-  if len(sys.argv) < 3:
-      print("Please provide the L3 and L4 gdml folder paths as the first and second command line arguments respectively.")
-      sys.exit(1)
-
-  L3_folder_path = sys.argv[1]
-  L4_folder_path = sys.argv[2]
-  file_path = "silicon_barrel.xml"
-  # Check if the file exists
-  if os.path.exists(file_path):
-      raise FileExistsError(f"Error: The file '{file_path}' already exists.")
-      sys.exit(1)
-
-  with open(file_path, "w") as xml_file:
-      xml_file.write(HEADER)
-
-      file_count_global = 0 #reset the global file count in each new stave
-      for key_dict in dict_list:   
-          scan_and_place(L3_folder_path, key_dict["matching_name"], xml_file, key_dict, "L3")
-      xml_file.write(MIDDLE)
-      file_count_global = 0
-      for key_dict in dict_list:
-          scan_and_place(L4_folder_path, key_dict["matching_name"], xml_file, key_dict, "L4")
-      xml_file.write(FOOTER)
-
-  # Print the resulting list (optional)
-  #print("Found .gdml files:")
-  #for file in gdml_files:
-  #    print(file)
+# Print the resulting list (optional)
+#print("Found .gdml files:")
+#for file in gdml_files:
+#    print(file)
