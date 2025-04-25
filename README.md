@@ -115,5 +115,11 @@ ddsim --compactFile $DETECTOR_PATH/epic_craterlake_tracking_only.xml --outputFil
 Material Scans
 ---------------
 
+Material thickness scans can be done using the *g4MaterialScan_to_csv* script by Chao Peng (located in *epic/bin*). The plot the results of SVT barrel scans, I wrote these ROOT macros: PlotMaterialScan.C, PlotMaterialScan2D.C. These are in the *tools* directory.
+
+
 Tracking performance benchmark tests
 -----------------------------------------
+
+Tuna Tasali has written adapted the benchmark scripts developed by Shyam Kumar to produce plots of the momentum resolution for this geometry. This needs to be updated for the new version. His original is at https://github.com/Tunat66/epicUK/blob/UK_Contribution
+
