@@ -49,30 +49,32 @@ Converting CAD files to GDML
 This section outlines how to convert a CAD file to a folder of GDML files and produce the *silicon_barrel.xml file*
 
 To configure the CAD utility:
-
-1-  Download a FreeCAD AppImage and place it in a directory of your choice
-2-  Extract the AppImage: run the appimage (as if it is an executable) with the option '--appimage-extract'
-3-  A directory named 'squashfs-root' should have appeared next to the AppImage
-4-  Navigate to the directory of the freecadcmd executable, it is normally under 'squashfs-root/usr/bin/'
-5-  Get that directory with 'pwd' and paste it as the first line of the file 'freecadcmd_dir'
-
+<ol>
+<li>Download a FreeCAD AppImage and place it in a directory of your choice</li>
+<li>Extract the AppImage: run the appimage (as if it is an executable) with the option '--appimage-extract'</li>
+<li>A directory named 'squashfs-root' should have appeared next to the AppImage</li>
+<li>Navigate to the directory of the freecadcmd executable, it is normally under 'squashfs-root/usr/bin/'</li>
+<li>Get that directory with 'pwd' and paste it as the first line of the file 'freecadcmd_dir'</li>
+</ol>
 Copy files in CAD/CAD_to_GDML to the directory containing the .STEP, as well as freecadcmd_dir
 
 To start using the CAD utility:
-
-1-  Open your STEP file in FreeCAD and save it as a FreeCAD(.FCStd) file with a name of your choice.
-2-  Source the script with arguments: source FCStd_to_gdml.sh <FreeCAD_file_name>
+<ol>
+<li>Open your STEP file in FreeCAD and save it as a FreeCAD(.FCStd) file with a name of your choice.</li>
+<li>Source the script with arguments: source FCStd_to_gdml.sh <FreeCAD_file_name>
     NOTE: this file contains a few parameters, adjust them to your own needs: 
         MAX_COMPONENT_NUMBER: maximum number of sensitive <module_component/>s per <module/>
-        dict_list: a map allowing file names to be mapped to materials and sensitive/insensitive etc. 
-3-  A folder containing the .gdml files named <FreeCAD_file_name> will be generated.
+        dict_list: a map allowing file names to be mapped to materials and sensitive/insensitive etc. </li>
+<li>A folder containing the .gdml files named <FreeCAD_file_name> will be generated.</li>
+</ol>
 
 You can also produce the *silicon_barrel.xml* automatically. For this process you need to have produced two folders contining gdml files 
 for components of the L3 stave and L4 stave. 
-
-1-  Run the *create_xml.py* script with arguments <L3_stave_gdml_folder_name> <L4_stave_gdml_folder_name>. Not it may be useful to use the full path length for the directories so it can be used in any location.
-2-  Move the *silicon_barrel.xml* file to the ../compact/tracking folder (make sure to backup the older version with a git commit!!)
-3-  Source the script: source ../recompile.sh to get the .xml file copied over to $DETECTOR_PATH and then you are done!
+<ol>
+<li>Run the *create_xml.py* script with arguments <L3_stave_gdml_folder_name> <L4_stave_gdml_folder_name>. Not it may be useful to use the full path length for the directories so it can be used in any location.</li>
+<li>Move the *silicon_barrel.xml* file to the ../compact/tracking folder (make sure to backup the older version with a git commit!!)</li>
+<li>Source the script: source ../recompile.sh to get the .xml file copied over to $DETECTOR_PATH and then you are done!</li>
+</ol>
 
 
 
