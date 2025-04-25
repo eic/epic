@@ -68,11 +68,20 @@ To start using the CAD utility:
 <li>A folder containing the .gdml files named <FreeCAD_file_name> will be generated.</li>
 </ol>
 
+*FCStd_to_gdml.sh* runs the following scripts:
+<ul>
+<li>refine_step_for_ePIC.py - to convert the .FCStd file to .stl files</li>
+<li>BinaryToASCII.py - to convert the binary .stl files to ASCII</li>
+<li>stl_gdml.py - to convert the ASCII .stl files to .gdml</li>
+</ul>
+
+On offset on the coordinate system can be set on lines 51-53 of *stl_gdml.py*
+
 You can also produce the *silicon_barrel.xml* automatically. For this process you need to have produced two folders contining gdml files 
 for components of the L3 stave and L4 stave. 
 <ol>
-<li>Run the *create_xml.py* script with arguments <L3_stave_gdml_folder_name> <L4_stave_gdml_folder_name>. Not it may be useful to use the full path length for the directories so it can be used in any location.</li>
-<li>Move the *silicon_barrel.xml* file to the ../compact/tracking folder (make sure to backup the older version with a git commit!!)</li>
+<li>Run the create_xml.py script with arguments <L3_stave_gdml_folder_name> <L4_stave_gdml_folder_name>. Not it may be useful to use the full path length for the directories so it can be used in any location.</li>
+<li>Move the silicon_barrel.xml file to the ../compact/tracking folder (make sure to backup the older version with a git commit!!)</li>
 <li>Source the script: source ../recompile.sh to get the .xml file copied over to $DETECTOR_PATH and then you are done!</li>
 </ol>
 
@@ -80,6 +89,28 @@ for components of the L3 stave and L4 stave.
 
 Visualization and debugging tools
 -----------------------------------
+
+To help debug code and verify the correct placement of the staves, I wrote some visualization tools which are in the *tools* directory.
+
+*ExtractVertexCoordinates.C* is a ROOT C++ macro to plot the x,y coordinates of all vertices and draw circles at the radii of the barrels. This reads the *detector_geometry.root* file, which can be created by:
+```
+dd_web_display --export $DETECTOR_PATH/epic_silicon_barrel_only.xml
+```
+*epic_silicon_barrel_only.xml* is created from *epic_inner_detector_only.xml* by removing all components except the barrels. It can be copied from *tools* to the $DETECTOR_PATH directory.
+
+Due to the very large number of vertices, it is not possible to view the detector_geometry.root file using the ROOT geoviewer unless the number of the staves is reduced to 1.
+
+*read_edm4hep_SiBarrel.C* plots the x,y coordinartes of the silicon barrel hits in an edm4hep.root file. This can be produced by running ddsim. For example, to simulate 100000 muons:
+```
+ddsim --compactFile $DETECTOR_PATH/epic_craterlake_tracking_only.xml --outputFile TestHitMap.edm4hep.root --numberOfEvents 100000 --enableGun --gun
+.thetaMin 63*deg --gun.thetaMax 117*deg --gun.particle mu- --gun.momentumMin 10*GeV --gun.momentumMax 11*GeV --gun.distribution eta --gun.multiplicity 1 
+--random.seed 100000
+```
+
+*gdml_xy_vertices.py* will read all the .gdml files in a directory and write the x,y,z coordinates to a text file. These can be plotted using *plotXY.C*
+
+*BarrelTrackerOuter_standardized_geo.cpp* contains a function *ExportVolumePoints(TGeoVolume* vol, string file_suffix)* which will extract the x,y,z coordinates of all vertices in a TGeoVolume object and write these to a text file.
+
 
 Material Scans
 ---------------
