@@ -47,7 +47,11 @@ FOOTER = '</gdml>'
 
 AUNIT  = 'deg'
 LUNIT  = 'mm'
-Y_OFFSET = -418.0
+
+X_OFFSET = 0.0
+Y_OFFSET = 0.0
+Z_OFFSET = 0.0
+
 
 MATERIALS_INFO = '''
 
@@ -786,9 +790,9 @@ def stl_to_gdml(fname):
 	for triangle in get_triangles(fname):
 		triangles.append(triangle)
 		for vertex in triangle["vertex"]:
-			x = __float_to_str__(vertex[0])
+			x = __float_to_str__(vertex[0] + X_OFFSET)
 			y = __float_to_str__(vertex[1] + Y_OFFSET)
-			z = __float_to_str__(vertex[2])
+			z = __float_to_str__(vertex[2] + Z_OFFSET)
 			thekey = x+y+z
 			sortedvertexes.append(thekey)
 
@@ -819,9 +823,9 @@ def stl_to_gdml(fname):
 			__print_and_terminate__("Illegal number of vertices per triangle: "+str(triangle["vertex"]))
 		ids = []
 		for vertex in triangle["vertex"]:
-			x = __float_to_str__(vertex[0])
-			y = __float_to_str__(vertex[1]+Y_OFFSET)
-			z = __float_to_str__(vertex[2])
+			x = __float_to_str__(vertex[0] + X_OFFSET)
+			y = __float_to_str__(vertex[1] + Y_OFFSET)
+			z = __float_to_str__(vertex[2] + Z_OFFSET)
 			thekey = x+y+z
 			theitem = bisect(sortednoduplicates, thekey)-1
 			assert(theitem>=0)
