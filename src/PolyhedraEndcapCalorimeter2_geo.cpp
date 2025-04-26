@@ -110,8 +110,8 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
   Assembly assembly(det_name);
   DetElement endcapAssyDE(det_name, det_id);
   Volume motherVol = description.pickMotherVolume(endcapAssyDE);
-  pv = assembly.placeVolume(
-      endcapVol, Transform3D(RotationZYX(0, M_PI, 0), Position(0, 0, -z_pos)));
+  pv =
+      assembly.placeVolume(endcapVol, Transform3D(RotationZYX(0, M_PI, 0), Position(0, 0, -z_pos)));
   pv.addPhysVolID("barrel", 2);
   Ref_t(endcap)->SetName((det_name + "_backward").c_str());
   endcap.setPlacement(pv);
