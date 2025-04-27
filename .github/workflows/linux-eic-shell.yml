@@ -155,7 +155,7 @@ jobs:
         network_types: "none"
         setup: install/bin/thisepic.sh
         run: |
-          geoPluginRun -input ${DETECTOR_PATH}/${{matrix.detector_config}}.xml -plugin DetectorChecksum
+          geoPluginRun -input ${DETECTOR_PATH}/${{matrix.detector_config}}.xml -plugin DD4hepDetectorChecksum
 
   validate-material-map:
     runs-on: ubuntu-latest
