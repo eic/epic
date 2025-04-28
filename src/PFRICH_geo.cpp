@@ -423,7 +423,7 @@ static Ref_t createDetector(Detector& description, xml_h e, SensitiveDetector se
   PlacedVolume qdboxPV = hrppdVol_air.placeVolume(qdboxVol, Position(0.0, 0.0, accu + pdthick / 2));
 
   DetElement qdboxDE(sdet, "qdbox_de", 0);
-  pdboxDE.setPlacement(qdboxPV);
+  qdboxDE.setPlacement(qdboxPV);
 
   accu += certhick + 1 * mm;
 
