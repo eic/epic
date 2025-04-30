@@ -156,7 +156,7 @@ jobs:
         setup: install/bin/thisepic.sh
         run: |
           if ! geoPluginRun -print ERROR -input ${DETECTOR_PATH}/${DETECTOR_CONFIG}.xml -plugin DD4hep_DetectorDump -level 0 | grep ERROR ; then
-            geoPluginRun -print ERROR -input ${DETECTOR_PATH}/${{matrix.detector_config}}.xml -plugin DD4hepDetectorChecksum
+            geoPluginRun -print ERROR -input ${DETECTOR_PATH}/${{matrix.detector_config}}.xml -plugin DD4hepDetectorChecksum -meshes -readout
           else
             exit 1
           fi
