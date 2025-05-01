@@ -1,3 +1,4 @@
+
 <!-- SPDX-License-Identifier: LGPL-3.0-or-later -->
 <!-- Copyright (C) 2025 Akio Ogawa, Whitney Armstrong, Chao Peng, Sylvester Joosten, Zhongling Ji, Ryan Milton -->
 
@@ -12,6 +13,11 @@
   <comment/></info>
 
   <define>
+    <documentation>
+      - Forward Ecal Homogeneous or ScFi Model
+    </documentation>
+    <constant name="ForwardEcal_Homogeneous_Scfi"         value="1"/>
+
     <documentation>
       - Forward Ecal Slice Thickness
     </documentation>
@@ -52,9 +58,9 @@
       Insert shape is cut out from middle of detector
     </documentation>
     <detector id="EcalEndcapP_ID"
-      name="ForwardEcal"
+      name="EcalEndcapP"
       type="epic_ForwardEcal"
-      readout="ForwardEcalHits">
+      readout="EcalEndcapPHits">
       <position x="0" y="0" z="EcalEndcapP_zmin"/>
       <dimensions rmin="EcalEndcapP_rmin" rmax="EcalEndcapP_rmax" z="ForwardEcalThickness"/>
       <slice name="Cover" material="Aluminum" thickness="ForwardEcalCoverThickness" vis="AnlGray"/>
@@ -68,7 +74,7 @@
 
   <!--  Definition of the readout segmentation/definition  -->
   <readouts>
-    <readout name="ForwardEcalHits">
+    <readout name="EcalEndcapPHits">
       <segmentation type="CartesianGridXY" grid_size_x="25*mm" grid_size_y="25*mm" offset_x="-37.5*mm" offset_y="-37.5*mm"/>
       <id>system:8,northsouth:1,blockrow:6,blockcol:5,x:2,y:2</id>
     </readout>

@@ -13,6 +13,11 @@
 
   <define>
     <documentation>
+      - Forward Ecal Homogeneous(1) or ScFi Model
+    </documentation>
+    <constant name="ForwardEcal_Homogeneous_Scfi"         value="2"/>
+    
+    <documentation>
       - Forward Ecal Slice Thickness
     </documentation>
     <constant name="ForwardEcalCoverThickness"            value="0.343*mm"/>
@@ -52,9 +57,9 @@
       Insert shape is cut out from middle of detector
     </documentation>
     <detector id="EcalEndcapP_ID"
-      name="ForwardfEcalScFi"
+      name="EcalEndcapP"
       type="epic_ForwardEcalScFi"
-      readout="ForwardEcalHits">
+      readout="EcalEndcapPHits">
       <position x="0" y="0" z="EcalEndcapP_zmin"/>
       <dimensions rmin="EcalEndcapP_rmin" rmax="EcalEndcapP_rmax" z="ForwardEcalThickness"/>
       <slice name="Cover" material="Aluminum" thickness="ForwardEcalCoverThickness" vis="AnlGray"/>
@@ -68,9 +73,9 @@
 
   <!--  Definition of the readout segmentation/definition  -->
   <readouts>
-    <readout name="ForwardEcalHits">
+    <readout name="EcalEndcapPHits">
       <!-- <segmentation type="NoSegmentation"/> -->  <!-- Adding this slow down startup to >30min -->
-      <segmentation type="CartesianGridXY" grid_size_x="2*cm" grid_size_y="2*cm" offset_x="-0.1*cm" offset_y="-0.1*mm"/>
+      <segmentation type="CartesianGridXY" grid_size_x="10*cm" grid_size_y="10*cm" offset_x="-0.0*cm" offset_y="-0.0*cm"/>
       <id>system:8,northsouth:1,blockrow:6,blockcol:5,towerx:2,towery:2,fiberx:5,fibery:5,x:1,y:1</id>
     </readout>
   </readouts>

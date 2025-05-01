@@ -87,8 +87,9 @@ public:
   double towerSize(){return mBlockSize/double(mNTowerInBlock);}
   int colBlock(int colTower){return colTower/mNTowerInBlock;}
   int rowBlock(int rowTower){return rowTower/mNTowerInBlock;}
+  int blockIdFromTower(int ns, int rowT, int colT){return blockId(ns,rowBlock(rowT),colBlock(colT));}
   double xTower(int ns, int row, int col){return  xBlock(ns, rowBlock(row), colBlock(col)) + (1-2*ns)*(col%mNTowerInBlock - 1.5)*towerSize();}
-  double yTower(int ns, int row){return  yBlock(ns, rowBlock(row)) + (1-2*ns)*(row%mNTowerInBlock - 1.5)*towerSize();}
+  double yTower(int ns, int row)         {return  yBlock(ns, rowBlock(row)) - (row%mNTowerInBlock - 1.5)*towerSize();}
   double doesTowerExist(int ns, int row, int col){return doesBlockExist(ns,rowBlock(row),colBlock(col));}
   int towerNS (int tid) {return mTowerNS [tid];}
   int towerRow(int tid) {return mTowerRow[tid];}
