@@ -1,5 +1,12 @@
-static const int mMaxNS = 2;
+// SPDX-License-Identifier: LGPL-3.0-or-later                                                                                     
+// Copyright (C) 2025 Akio Ogawa
+//==========================================================================
+//  Implementation of forward calorimeter Mapping and numbering
+//==========================================================================
+//  Author: Akio Ogawa (BNL)
+//==========================================================================
 
+static const int mMaxNS = 2;
 static const int mMaxBlockId  = 1145;
 static const int mMaxRowBlock = 39;
 static const int mMaxColBlock = 19;
