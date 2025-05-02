@@ -37,7 +37,7 @@
                ForwardEcalPCBThickness +
                ForwardEcalLightGuideThickness +
                ForwardEcalScintillatorThickness +
-	       ForwardEcalMountingPlateThickness"
+               ForwardEcalMountingPlateThickness"
     />
   </define>
 

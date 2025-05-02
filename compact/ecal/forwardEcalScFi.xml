@@ -16,7 +16,7 @@
       - Forward Ecal Homogeneous(1) or ScFi Model
     </documentation>
     <constant name="ForwardEcal_Homogeneous_Scfi"         value="2"/>
-    
+
     <documentation>
       - Forward Ecal Slice Thickness
     </documentation>
@@ -36,7 +36,7 @@
                ForwardEcalPCBThickness +
                ForwardEcalLightGuideThickness +
                ForwardEcalScintillatorThickness +
-	       ForwardEcalMountingPlateThickness"
+               ForwardEcalMountingPlateThickness"
     />
   </define>
 
