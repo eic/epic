@@ -50,11 +50,13 @@ static Ref_t createDetector(Detector& desc, xml_h handle, SensitiveDetector sens
   int detID           = detElem.id();
 
   int Homogeneous_Scfi = 0;
-  Homogeneous_Scfi = desc.constant<int>("forwardEcal_Homogeneous_Scfi");
-  printf("forwardEcal_geo Homogeneous_Scfi=%d\n",Homogeneous_Scfi);	 
-  if(Homogeneous_Scfi<=1) printout(WARNING, "FEMCAL", "forwardEcal_geo.cpp making Homogeneous model\n");
-  else                    printout(WARNING, "FEMCAL", "forwardEcal_geo.cpp making ScFi  model\n");
-  
+  Homogeneous_Scfi     = desc.constant<int>("forwardEcal_Homogeneous_Scfi");
+  printf("forwardEcal_geo Homogeneous_Scfi=%d\n", Homogeneous_Scfi);
+  if (Homogeneous_Scfi <= 1)
+    printout(WARNING, "FEMCAL", "forwardEcal_geo.cpp making Homogeneous model\n");
+  else
+    printout(WARNING, "FEMCAL", "forwardEcal_geo.cpp making ScFi  model\n");
+
   xml_dim_t dim = detElem.dimensions();
   xml_dim_t pos = detElem.position();
   if (dim.z() != length)
@@ -76,8 +78,8 @@ static Ref_t createDetector(Detector& desc, xml_h handle, SensitiveDetector sens
   Tube envelope(rmin, rmaxWithGap, length / 2.0);
 
   // Removing insert shape from envelope
-  Box insert((insert_dx[0] + insert_dx[1] - insert_thickness*2 + nsgap) / 2.0,
-             (insert_dy - insert_thickness*2) / 2.0, length / 2.);
+  Box insert((insert_dx[0] + insert_dx[1] - insert_thickness * 2 + nsgap) / 2.0,
+             (insert_dy - insert_thickness * 2) / 2.0, length / 2.);
   SubtractionSolid envelope_with_inserthole(envelope, insert, Position(insert_x, 0.0, 0.0));
   Volume envelopeVol(detName, envelope_with_inserthole, air);
   envelopeVol.setAttributes(desc, detElem.regionStr(), detElem.limitsStr(), detElem.visStr());
@@ -132,103 +134,116 @@ static Ref_t createDetector(Detector& desc, xml_h handle, SensitiveDetector sens
         Box block(blocksize / 2.0, blocksize / 2.0, slice_thickness / 2.0);
         Volume block_vol("fEcalBlock", block, air);
         block_vol.setAttributes(desc, x_slice.regionStr(), x_slice.limitsStr(), x_slice.visStr());
-	if(Homogeneous_Scfi<=1){
-	  sens.setType("calorimeter");
+        if (Homogeneous_Scfi <= 1) {
+          sens.setType("calorimeter");
           block_vol.setSensitiveDetector(sens);
-	} // end if Homogeneous_Scfi<=1
+        } // end if Homogeneous_Scfi<=1
 
-	if(Homogeneous_Scfi==2){
-	  //4 rows of towers
-	  Box trow(blocksize / 2.0, blocksize / 8.0, slice_thickness / 2.0);
-	  Volume trow_vol("fEcalTowerRow", trow, air);
-	  trow_vol.setAttributes(desc, x_slice.regionStr(), x_slice.limitsStr(), x_slice.visStr());
-	  for (int tr = 0; tr < 4; tr++) {
-	    pv = block_vol.placeVolume(trow_vol,Transform3D(RotationZYX(0,0,0), Position(0.0,(tr-1.5)*blocksize/4,0)));
+        if (Homogeneous_Scfi == 2) {
+          //4 rows of towers
+          Box trow(blocksize / 2.0, blocksize / 8.0, slice_thickness / 2.0);
+          Volume trow_vol("fEcalTowerRow", trow, air);
+          trow_vol.setAttributes(desc, x_slice.regionStr(), x_slice.limitsStr(), x_slice.visStr());
+          for (int tr = 0; tr < 4; tr++) {
+            pv = block_vol.placeVolume(
+                trow_vol,
+                Transform3D(RotationZYX(0, 0, 0), Position(0.0, (tr - 1.5) * blocksize / 4, 0)));
             pv.addPhysVolID("towery", tr);
-	  }
+          }
 
-	  //4 towers in a row - finally a W powder volume, not air
-	  Box tower(blocksize / 8.0, blocksize / 8.0, slice_thickness / 2.0);
-	  Volume tower_vol("fEcalTower", tower, Wpowder);
-	  tower_vol.setAttributes(desc, x_slice.regionStr(), x_slice.limitsStr(), x_slice.visStr());
-	  for (int tc = 0; tc < 4; tc++) {
-	    pv = trow_vol.placeVolume(tower_vol,Transform3D(RotationZYX(0,0,0), Position((tc-1.5)*blocksize/4,0,0)));
-	    pv.addPhysVolID("towerx", tc);
-	  }
+          //4 towers in a row - finally a W powder volume, not air
+          Box tower(blocksize / 8.0, blocksize / 8.0, slice_thickness / 2.0);
+          Volume tower_vol("fEcalTower", tower, Wpowder);
+          tower_vol.setAttributes(desc, x_slice.regionStr(), x_slice.limitsStr(), x_slice.visStr());
+          for (int tc = 0; tc < 4; tc++) {
+            pv = trow_vol.placeVolume(
+                tower_vol,
+                Transform3D(RotationZYX(0, 0, 0), Position((tc - 1.5) * blocksize / 4, 0, 0)));
+            pv.addPhysVolID("towerx", tc);
+          }
 
-	  //rows of fibers
-	  double fiberDistanceX = blocksize / 4.0 / (nx + 0.5); //exrea 0.5 for even/odd rows shifted by 1/2
-	  Box frow(blocksize / 8.0 - fiberDistanceX / 2.0, blocksize / 8.0 / ny,slice_thickness / 2.0);
-	  Volume frow_vol("fEcalFiberRow", frow, Wpowder);
-	  frow_vol.setAttributes(desc, x_slice.regionStr(), x_slice.limitsStr(), x_slice.visStr());
-	  for (int iy = 0; iy < ny; iy++) {
-	    double xx = 0;
-	    if (iy % 2 == 1) xx += fiberDistanceX / 2.0;
-	    pv = tower_vol.placeVolume(frow_vol, Transform3D(RotationZYX(0, 0, 0),
-				       Position(xx, (iy - ny / 2.0 + 0.5) * blocksize / 4.0 / ny, 0)));
-	    //printf("iy=%2d dy=%8.4f fiberRx2=%8.4f xx=%8.4f\n",iy,blocksize/4.0/ny,rFiber*2,xx);
-	    pv.addPhysVolID("fibery", iy);
-	  }
+          //rows of fibers
+          double fiberDistanceX =
+              blocksize / 4.0 / (nx + 0.5); //exrea 0.5 for even/odd rows shifted by 1/2
+          Box frow(blocksize / 8.0 - fiberDistanceX / 2.0, blocksize / 8.0 / ny,
+                   slice_thickness / 2.0);
+          Volume frow_vol("fEcalFiberRow", frow, Wpowder);
+          frow_vol.setAttributes(desc, x_slice.regionStr(), x_slice.limitsStr(), x_slice.visStr());
+          for (int iy = 0; iy < ny; iy++) {
+            double xx = 0;
+            if (iy % 2 == 1)
+              xx += fiberDistanceX / 2.0;
+            pv = tower_vol.placeVolume(
+                frow_vol,
+                Transform3D(RotationZYX(0, 0, 0),
+                            Position(xx, (iy - ny / 2.0 + 0.5) * blocksize / 4.0 / ny, 0)));
+            //printf("iy=%2d dy=%8.4f fiberRx2=%8.4f xx=%8.4f\n",iy,blocksize/4.0/ny,rFiber*2,xx);
+            pv.addPhysVolID("fibery", iy);
+          }
 
-	  //columns of fibers, with 1/2 fiber distance shifted each row
-	  Box fcol(fiberDistanceX / 2.0, blocksize / 8.0 / ny, slice_thickness / 2.0);
-	  Volume fcol_vol("fEcalFiberCol", fcol, Wpowder);
-	  fcol_vol.setAttributes(desc, x_slice.regionStr(), x_slice.limitsStr(), x_slice.visStr());
-	  for (int ix = 0; ix < nx; ix++) {
-	    double xx = (ix - nx / 2.0 + 0.5) * fiberDistanceX;
-	    pv = frow_vol.placeVolume(fcol_vol, Transform3D(RotationZYX(0, 0, 0), Position(xx, 0, 0)));
-	    //printf("ix=%2d dx=%8.4f xx=%8.4f x0=%8.4f x1=%8.4f\n",ix,fiberDistanceX,xx,xx-fiberDistanceX/2,xx+fiberDistanceX/2);
-	    pv.addPhysVolID("fiberx", ix);
-	  }
+          //columns of fibers, with 1/2 fiber distance shifted each row
+          Box fcol(fiberDistanceX / 2.0, blocksize / 8.0 / ny, slice_thickness / 2.0);
+          Volume fcol_vol("fEcalFiberCol", fcol, Wpowder);
+          fcol_vol.setAttributes(desc, x_slice.regionStr(), x_slice.limitsStr(), x_slice.visStr());
+          for (int ix = 0; ix < nx; ix++) {
+            double xx = (ix - nx / 2.0 + 0.5) * fiberDistanceX;
+            pv        = frow_vol.placeVolume(fcol_vol,
+                                             Transform3D(RotationZYX(0, 0, 0), Position(xx, 0, 0)));
+            //printf("ix=%2d dx=%8.4f xx=%8.4f x0=%8.4f x1=%8.4f\n",ix,fiberDistanceX,xx,xx-fiberDistanceX/2,xx+fiberDistanceX/2);
+            pv.addPhysVolID("fiberx", ix);
+          }
 
-	  //a fiber (with coating material, not sensitive yet)
-	  Tube fiber(0, rFiber, slice_thickness / 2.0);
-	  Volume fiber_vol("fEcalFiber", fiber, PMMA);
-	  fiber_vol.setAttributes(desc, x_slice.regionStr(), x_slice.limitsStr(), x_slice.visStr());
-	  pv = fcol_vol.placeVolume(fiber_vol, Transform3D(RotationZYX(0, 0, 0), Position(0, 0, 0)));
+          //a fiber (with coating material, not sensitive yet)
+          Tube fiber(0, rFiber, slice_thickness / 2.0);
+          Volume fiber_vol("fEcalFiber", fiber, PMMA);
+          fiber_vol.setAttributes(desc, x_slice.regionStr(), x_slice.limitsStr(), x_slice.visStr());
+          pv =
+              fcol_vol.placeVolume(fiber_vol, Transform3D(RotationZYX(0, 0, 0), Position(0, 0, 0)));
 
-	  //scintillating fiber core - and finally a sensitive volume
-	  Tube scfi(0, rScfi, slice_thickness / 2.0);
-	  Volume scfi_vol("fEcalScFi", scfi, ScFi);
-	  scfi_vol.setAttributes(desc, x_slice.regionStr(), x_slice.limitsStr(), x_slice.visStr());
-	  pv = fiber_vol.placeVolume(scfi_vol, Transform3D(RotationZYX(0, 0, 0), Position(0, 0, 0)));
-	  sens.setType("calorimeter");
-	  scfi_vol.setSensitiveDetector(sens);
-	}//end if Homogeneous_Scfi==2
-	  
-	//rows of blocks
-	int nRowBlock = map->maxRowBlock(); //# of rows
-	for (int r = 0; r < nRowBlock; r++) {
-	  int nColBlock = map->nColBlock(ns, r);
-	  double dxrow  = bsize * nColBlock;
-	  Box row(dxrow / 2.0, bsize / 2.0, slice_thickness / 2.0);
-	  std::string row_name = half_name + _toString(r, "_R%02d");
-	  Volume row_vol(row_name, row, air);
-	  row_vol.setAttributes(desc, x_slice.regionStr(), x_slice.limitsStr(), x_slice.visStr());
-	  double xrow = (map->xBlock(ns, r, 0) + map->xBlock(ns, r, nColBlock - 1)) / 2.0 - pm[ns] * nsgap / 2.0;
-	  double yrow = map->yBlock(ns, r);
-	  pv          = half_vol.placeVolume(row_vol,
-					     Transform3D(RotationZYX(0, 0, 0), Position(xrow, yrow, 0)));
-	  pv.addPhysVolID("blockrow", r);
-	  
-	  //column of blocks
-	  double xcol = -pm[ns] * (dxrow / 2.0 - bsize / 2.0);
-	  for (int c = 0; c < nColBlock; c++) {
-	    Box col(bsize / 2.0, bsize / 2.0, slice_thickness / 2.0);
-	    std::string col_name = row_name + _toString(c, "C%02d");
-	    Volume col_vol(col_name, col, air);
-	    col_vol.setAttributes(desc, x_slice.regionStr(), x_slice.limitsStr(), x_slice.visStr());
-	    pv = row_vol.placeVolume(col_vol,
-				     Transform3D(RotationZYX(0, 0, 0), Position(xcol, 0, 0)));
-	    pv.addPhysVolID("blockcol", c);
-	    //printf("r=%2d dx=%8.3f x=%8.3f y=%8.3f   c=%2d %8.3f  mapx=%8.3f\n",r,dxrow,xrow,yrow,c,xcol,map->xBlock(ns,r,c));
-	    xcol += pm[ns] * bsize;
-	    
-	    //a block inside with air gap
-	    pv = col_vol.placeVolume(block_vol,
-				     Transform3D(RotationZYX(0, 0, 0), Position(0, 0, 0)));
-	  } //end loop block col
-	} //end loop block raw
+          //scintillating fiber core - and finally a sensitive volume
+          Tube scfi(0, rScfi, slice_thickness / 2.0);
+          Volume scfi_vol("fEcalScFi", scfi, ScFi);
+          scfi_vol.setAttributes(desc, x_slice.regionStr(), x_slice.limitsStr(), x_slice.visStr());
+          pv =
+              fiber_vol.placeVolume(scfi_vol, Transform3D(RotationZYX(0, 0, 0), Position(0, 0, 0)));
+          sens.setType("calorimeter");
+          scfi_vol.setSensitiveDetector(sens);
+        } //end if Homogeneous_Scfi==2
+
+        //rows of blocks
+        int nRowBlock = map->maxRowBlock(); //# of rows
+        for (int r = 0; r < nRowBlock; r++) {
+          int nColBlock = map->nColBlock(ns, r);
+          double dxrow  = bsize * nColBlock;
+          Box row(dxrow / 2.0, bsize / 2.0, slice_thickness / 2.0);
+          std::string row_name = half_name + _toString(r, "_R%02d");
+          Volume row_vol(row_name, row, air);
+          row_vol.setAttributes(desc, x_slice.regionStr(), x_slice.limitsStr(), x_slice.visStr());
+          double xrow = (map->xBlock(ns, r, 0) + map->xBlock(ns, r, nColBlock - 1)) / 2.0 -
+                        pm[ns] * nsgap / 2.0;
+          double yrow = map->yBlock(ns, r);
+          pv          = half_vol.placeVolume(row_vol,
+                                             Transform3D(RotationZYX(0, 0, 0), Position(xrow, yrow, 0)));
+          pv.addPhysVolID("blockrow", r);
+
+          //column of blocks
+          double xcol = -pm[ns] * (dxrow / 2.0 - bsize / 2.0);
+          for (int c = 0; c < nColBlock; c++) {
+            Box col(bsize / 2.0, bsize / 2.0, slice_thickness / 2.0);
+            std::string col_name = row_name + _toString(c, "C%02d");
+            Volume col_vol(col_name, col, air);
+            col_vol.setAttributes(desc, x_slice.regionStr(), x_slice.limitsStr(), x_slice.visStr());
+            pv = row_vol.placeVolume(col_vol,
+                                     Transform3D(RotationZYX(0, 0, 0), Position(xcol, 0, 0)));
+            pv.addPhysVolID("blockcol", c);
+            //printf("r=%2d dx=%8.3f x=%8.3f y=%8.3f   c=%2d %8.3f  mapx=%8.3f\n",r,dxrow,xrow,yrow,c,xcol,map->xBlock(ns,r,c));
+            xcol += pm[ns] * bsize;
+
+            //a block inside with air gap
+            pv = col_vol.placeVolume(block_vol,
+                                     Transform3D(RotationZYX(0, 0, 0), Position(0, 0, 0)));
+          } //end loop block col
+        } //end loop block raw
       } //end if isSensitive
     } //end loop over ns
     slice_z += slice_thickness / 2.; // Going to end of slice
