@@ -14,7 +14,7 @@
 
   <define>
     <documentation>
-      - Forward Ecal Homogeneous or ScFi Model
+      - Forward Ecal Homogeneous(1) or ScFi(2) Model
     </documentation>
     <constant name="ForwardEcal_Homogeneous_Scfi"         value="1"/>
 

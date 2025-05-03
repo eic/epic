@@ -13,7 +13,7 @@
 
   <define>
     <documentation>
-      - Forward Ecal Homogeneous(1) or ScFi Model
+      - Forward Ecal Homogeneous(1) or ScFi(2)  Model
     </documentation>
     <constant name="ForwardEcal_Homogeneous_Scfi"         value="2"/>
 
@@ -58,7 +58,7 @@
     </documentation>
     <detector id="EcalEndcapP_ID"
       name="EcalEndcapP"
-      type="epic_ForwardEcalScFi"
+      type="epic_ForwardEcal"
       readout="EcalEndcapPHits">
       <position x="0" y="0" z="EcalEndcapP_zmin"/>
       <dimensions rmin="EcalEndcapP_rmin" rmax="EcalEndcapP_rmax" z="ForwardEcalThickness"/>
