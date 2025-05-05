@@ -2,8 +2,7 @@ features:
   beampipe:
   solenoid:
   ecal:
-    forward_homogeneous:
-    forward_insert_homogeneous:
+    forwardEcal:
     bic_default:
     backward_PbWO4:
   hcal:
