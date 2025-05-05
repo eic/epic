@@ -37,7 +37,7 @@
       type="epic_PolyhedraEndcapCalorimeter2"
       readout="HcalEndcapNHits"
       vis="HcalEndcapVis"
-      calorimeterType="HAD_ENDCAP" reflect="true">
+      calorimeterType="HAD_ENDCAP">
       <position x="0" y="0" z="0"/>
       <dimensions
         numsides="HcalEndcapN_CaloSides"
