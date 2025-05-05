@@ -49,7 +49,7 @@ static Ref_t createDetector(Detector& desc, xml_h handle, SensitiveDetector sens
   std::string detName = detElem.nameStr();
   int detID           = detElem.id();
 
-  int Homogeneous_Scfi = 0;                  
+  int Homogeneous_Scfi = 0;
   Homogeneous_Scfi     = desc.constant<int>("ForwardEcal_Homogeneous_Scfi");
   if (Homogeneous_Scfi <= 1)
     printout(INFO, "FEMCAL", "Making Homogeneous geometry model\n");
