@@ -45,23 +45,7 @@ jobs:
         echo "configs_json=${CONFIGS_JSON}" | tee -a $GITHUB_OUTPUT
 
   list-open-prs:
-    runs-on: ubuntu-latest
-    outputs:
-      json: ${{ steps.remap.outputs.json }}
-    steps:
-      - uses: octokit/request-action@v2.x
-        id: query
-        with:
-          route: GET /repos/${{ github.repository }}/pulls?state=open&per_page=100
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      - name: Remap open PRs
-        id: remap
-        uses: nickofthyme/object-remap@v3
-        with:
-          __case: snake
-          include.*.pr: ${{ toJSON(fromJSON(steps.query.outputs.data).*.number) }}
-          include.*.head_sha: ${{ toJSON(fromJSON(steps.query.outputs.data).*.head.sha) }}
+    uses: eic/actions/.github/workflows/list-open-prs.yml@main
 
   build:
     runs-on: ubuntu-latest
