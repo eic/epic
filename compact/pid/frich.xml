@@ -17,7 +17,7 @@
   
   vessel="Aluminum"
   gas="N2cherenkov"
-  aerogel="Aerogel_QRICH"
+  aerogel="Aerogel_DRICH"
   acrylic="Acrylic_QRICH"
   
   window="AirOptical"
@@ -40,7 +40,7 @@
       offset_x="-0.5*(HRPPD_num_px-1)*HRPPD_pixel_pitch"
       offset_y="-0.5*(HRPPD_num_px-1)*HRPPD_pixel_pitch"
       />
-    <id>system:8,hrppd:8,x:32:-16,y:-16</id>
+    <id>system:8,hrppd:12,x:32:-16,y:-16</id>
   </readout>
 </readouts>
 </lccdd>

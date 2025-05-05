@@ -204,6 +204,7 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
       }
       
       // Acrylic filter volume;
+#if _TODAY_
       {
 	const double acWidth = gvWidth - 1*mm, acThick = _ACRYLIC_THICKNESS_;
 	Box acrylicSolid(acWidth/2, acWidth/2, acThick/2);
@@ -225,6 +226,7 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
 	}
 #endif
       }
+#endif
     }
 
 #ifdef _WITH_MIRROR_

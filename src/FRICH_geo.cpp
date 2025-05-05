@@ -8,14 +8,14 @@
 //#define _ELECTRON_GOING_ENDCAP_CASE_
 
 #define _WITH_OPTICS_
-#define _WITH_MIRROR_
+//#define _WITH_MIRROR_
 
 // Mimic ePIC pfRICH vessel length;
-#define _FIDUCIAL_VOLUME_LENGTH_              (500.0*mm)
+#define _FIDUCIAL_VOLUME_LENGTH_             (1500.0*mm)
 // Choose ePIC dRICH location in the forward endcap;
-#define _FIDUCIAL_VOLUME_OFFSET_             (1550.0*mm)
+#define _FIDUCIAL_VOLUME_OFFSET_             (2500.0*mm)
 
-#define _HRPPD_MATRIX_DIM_                           (9)
+#define _HRPPD_MATRIX_DIM_                          (20)
 // FIXME: may want to use qrich.xml where 32 and 3.25mm are also defined;
 #define _HRPPD_PITCH_                          (3.25*mm)
 #define _HRPPD_ACTIVE_AREA_SIZE_      (32*_HRPPD_PITCH_)
@@ -25,7 +25,7 @@
 #define _FIDUCIAL_VOLUME_WIDTH_ (_HRPPD_TILE_SIZE_*_HRPPD_MATRIX_DIM_ + \
 				 _HRPPD_INSTALLATION_GAP_*(_HRPPD_MATRIX_DIM_+1) + 50.0*mm)
 
-#define _VESSEL_FRONT_SIDE_THICKNESS_           (5.0*mm)
+//#define _VESSEL_FRONT_SIDE_THICKNESS_           (5.0*mm)
 #define _SENSOR_AREA_LENGTH_                   (50.0*mm)
 
 #define _BUILDING_BLOCK_CLEARANCE_              (1.0*mm)
@@ -43,7 +43,8 @@ using namespace dd4hep;
 
 #ifdef _WITH_OPTICS_
 #include "IRT/CherenkovDetectorCollection.h"
-#include "IRT/CylindricalSurface.h"
+//#include "IRT/CylindricalSurface.h"
+#include "IRT/FlatSurface.h"
 #endif
 
 static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetector sens)
@@ -53,9 +54,9 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
   int detID                     = detElem.id();
   DetElement det(detName, detID);
 
-#ifdef _WITH_MIRROR_
+  //#ifdef _WITH_MIRROR_
   OpticalSurfaceManager surfMgr = desc.surfaceManager();
-#endif
+  //#endif
   
   // Whatever this means;
   sens.setType("tracker");
@@ -97,9 +98,9 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
   auto absorberMaterial    = desc.material(detElem.attr<std::string>(_Unicode(absorber)));
 
   // Mirror surface description;
-#ifdef _WITH_MIRROR_
+  //#ifdef _WITH_MIRROR_
   auto mirrorSurf          = surfMgr.opticalSurface(detElem.attr<std::string>(_Unicode(mirror)));
-#endif
+  //#endif
   
   // Sensor readout
   auto readoutName         = detElem.attr<std::string>(_Unicode(readout));
@@ -145,20 +146,22 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
   vesselPV.addPhysVolID("system", detID);
   det.setPlacement(vesselPV);
 
-#if defined(_WITH_OPTICS_) && defined(_WITH_MIRROR_)
-  CylindricalSurface *msurface = 0;
+  //#if defined(_WITH_OPTICS_) && defined(_WITH_MIRROR_)
+  //-CylindricalSurface *msurface = 0;
+  FlatSurface *msurface = 0;
   OpticalBoundary *mboundary = 0;
-#endif
+  //#endif
     
   // Gas volume, aerogel, acrylic filter, mirrors;
   {
     const double gvWidth = fvWidth - 1*mm;
-    const double gvLength = fvLength - _VESSEL_FRONT_SIDE_THICKNESS_ - _SENSOR_AREA_LENGTH_;
+    const double gvLength = fvLength /*- _VESSEL_FRONT_SIDE_THICKNESS_*/ - _SENSOR_AREA_LENGTH_;
     auto gasvolSolid = Box(gvWidth/2, gvWidth/2, gvLength/2);
     Volume gasvolVol(detName + "_gas", gasvolSolid, gasvolMaterial);
     
     // Place gas volume into the vessel;
-    double gvOffset = -(_SENSOR_AREA_LENGTH_ - _VESSEL_FRONT_SIDE_THICKNESS_)/2;
+    //+double gvOffset = -(_SENSOR_AREA_LENGTH_ /*- _VESSEL_FRONT_SIDE_THICKNESS_*/)/2;
+    double gvOffset = (_SENSOR_AREA_LENGTH_ /*- _VESSEL_FRONT_SIDE_THICKNESS_*/)/2;
     PlacedVolume gasvolPV = vesselVolume.placeVolume(gasvolVol, Position(0, 0, gvOffset));
     DetElement gasvolDE(det, "gasvol_de", 0);
     gasvolDE.setPlacement(gasvolPV);
@@ -204,6 +207,7 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
       }
       
       // Acrylic filter volume;
+#if _LATER_
       {
 	const double acWidth = gvWidth - 1*mm, acThick = _ACRYLIC_THICKNESS_;
 	Box acrylicSolid(acWidth/2, acWidth/2, acThick/2);
@@ -225,12 +229,15 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
 	}
 #endif
       }
+#endif
     }
 
-#ifdef _WITH_MIRROR_
+    //#ifdef _WITH_MIRROR_
     {
-      double L = 350.0*mm, R0 = 400.0*mm, R1 = R0 + 0.01*mm;
-      Tube mirrorSolid(R0, R1, L/2);
+      //double L = 350.0*mm, R0 = 400.0*mm, R1 = R0 + 0.01*mm;
+      //Tube mirrorSolid(R0, R1, L/2);
+      const double miWidth = gvWidth - 1*mm, miThick = 1*mm;//_ACRYLIC_THICKNESS_;
+      Box mirrorSolid(miWidth/2, miWidth/2, miThick/2);
 
       auto mirrorVis  = desc.visAttributes("MirrorSurface_QRICH");//mirrorElem.attr<std::string>(_Unicode(vis)));
   
@@ -238,7 +245,8 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
       Volume mirrorVol(detName + "_mirror_" /*+ secName*/, mirrorSolid, vesselMaterial);
       mirrorVol.setVisAttributes(mirrorVis);
       //auto mirrorSectorPlacement = Transform3D(sectorRotation); // rotate about beam axis to sector
-      auto mirrorPV = gasvolVol.placeVolume(mirrorVol, Position(0,0,0));//, mirrorSectorPlacement);
+      //+auto mirrorPV = gasvolVol.placeVolume(mirrorVol, Position(0,0,0));//, mirrorSectorPlacement);
+      auto mirrorPV = gasvolVol.placeVolume(mirrorVol, Position(0,0,gvLength/2 - miThick/2));//, mirrorSectorPlacement);
       
       // properties
       DetElement mirrorDE(det, "mirror_de_"/* + secName*/, 0);//isec);
@@ -248,13 +256,15 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
       mirrorSkin.isValid();
 
 #ifdef _WITH_OPTICS_
-      msurface = new CylindricalSurface(sign*(1/mm)*TVector3(0,0,fvOffset + gvOffset), sign*TVector3(0,0,1), R0/mm, L/mm);
+      //+msurface = new CylindricalSurface(sign*(1/mm)*TVector3(0,0,fvOffset + gvOffset), sign*TVector3(0,0,1), R0/mm, L/mm);
+      msurface = new FlatSurface(sign*(1/mm)*TVector3(0,0,fvOffset + gvOffset + gvLength/2 - miThick), sign*TVector3(1,0,0), TVector3(0,-1,0));
+      //-sign*TVector3(0,0,1));//, R0/mm, L/mm);
       mboundary = new OpticalBoundary(cdet->GetRadiator("GasVolume"), msurface, false);
       // Need to store it in a separate call, see a comment in CherenkovDetector.h;
       cdet->StoreOpticalBoundary(mboundary);
 #endif
     }
-#endif
+    //#endif
   }
 
   // A fake HRPPD container volume, window, photocathode;
@@ -276,16 +286,20 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
 #endif
     
     // Mimic BuildFakePhotonDetectorMatrix() used in the standalone code;
-    const double fvzOffset = fvOffset, wzOffset = fvLength/2 - _SENSOR_AREA_LENGTH_;
-    const double pdthick = 0.01*mm, zpdc = wzOffset + _HRPPD_WINDOW_THICKNESS_ + pdthick/2;
+    //+const double fvzOffset = fvOffset, wzOffset = fvLength/2 - _SENSOR_AREA_LENGTH_;
+    const double fvzOffset = fvOffset, _wzOffset = -fvLength/2 + _SENSOR_AREA_LENGTH_;
+    //+const double pdthick = 0.01*mm, zpdc = wzOffset + _HRPPD_WINDOW_THICKNESS_ + pdthick/2;
+    const double pdthick = 0.01*mm, _zpdc = _wzOffset - _HRPPD_WINDOW_THICKNESS_ - pdthick/2;
     
     // For now assume it is a unique surface, same for all HRPPDs;
 #ifdef _WITH_OPTICS_
     {	
-      TVector3 nx(1*sign,0,0), ny(0,-1,0);
+      //TVector3 nx(1*sign,0,0), ny(0,-1,0);
+      TVector3 nx(-1*sign,0,0), ny(0,-1,0);
       
       auto surface = 
-	new FlatSurface(sign*(1/mm)*TVector3(0,0,fvzOffset + wzOffset + _HRPPD_WINDOW_THICKNESS_/2), nx, ny);
+	//+new FlatSurface(sign*(1/mm)*TVector3(0,0,fvzOffset + wzOffset + _HRPPD_WINDOW_THICKNESS_/2), nx, ny);
+	new FlatSurface(sign*(1/mm)*TVector3(0,0,fvzOffset + _wzOffset - _HRPPD_WINDOW_THICKNESS_/2), nx, ny);
       
       auto radiator = geometry->AddFlatRadiator(cdet, "QuartzWindow", CherenkovDetector::Downstream, 
 						0, (G4LogicalVolume*)(0x3), 0, /*wndVol, m_FusedSilica,*/ surface,
@@ -352,25 +366,29 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
 	    hrppdVol.placeVolume(absVol, Position(0.0, 0.0, accu + pdthick/2));
 	  }
 	}
-	
-	vesselVolume.placeVolume(hrppdVol, Position(xOffset, yOffset, wzOffset + _HRPPD_CONTAINER_VOLUME_HEIGHT_/2));
+
+	// FIXME: 180 degree rotation!;
+	//+vesselVolume.placeVolume(hrppdVol, Position(xOffset, yOffset, wzOffset + _HRPPD_CONTAINER_VOLUME_HEIGHT_/2));
+	vesselVolume.placeVolume(hrppdVol, Position(xOffset, yOffset, _wzOffset - _HRPPD_CONTAINER_VOLUME_HEIGHT_/2));
 	
 #ifdef _WITH_OPTICS_
 	{
 	  // Photocathode surface;
-	  auto surface = new FlatSurface((1/mm)*TVector3(sign*xOffset, yOffset, sign*(fvzOffset + zpdc)),
-					 TVector3(1*sign,0,0), TVector3(0,-1,0));
+	  //+auto surface = new FlatSurface((1/mm)*TVector3(sign*xOffset, yOffset, sign*(fvzOffset + zpdc)),
+	  //+				 TVector3(1*sign,0,0), TVector3(0,-1,0));
+	  auto surface = new FlatSurface((1/mm)*TVector3(sign*xOffset, yOffset, sign*(fvzOffset + _zpdc)),
+					 TVector3(-1*sign,0,0), TVector3(0,-1,0));
 
 	  {
 	    // '0': QRICH has no division in sectors (unlike e.g. dRICH);
 	    unsigned sector = 0;
 	    
 	    // Just two configurations: with and without a reflection on a conical mirror;
-#ifdef _WITH_MIRROR_
-	    for(unsigned iq=0; iq<2; iq++) {
-#else
+	    //#ifdef _WITH_MIRROR_
+	    //for(unsigned iq=0; iq<2; iq++) {
+	    //#else
 	    for(unsigned iq=0; iq<1; iq++) {
-#endif
+	      //#endif
 	      auto irt = pd->AllocateIRT(sector, sensorID);
 	      
 	      // Aerogel and acrylic;
@@ -380,9 +398,9 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
 		  irt->AddOpticalBoundary(boundary);
 
 	      // Optional mirror reflection;
-#ifdef _WITH_MIRROR_
-	      if (iq) irt->AddOpticalBoundary(mboundary);
-#endif
+	      //#ifdef _WITH_MIRROR_
+	      /*if (iq)*/ irt->AddOpticalBoundary(mboundary);
+	      //#endif
 	      
 	      // Fused silica windows;
 	      if (cdet->m_OpticalBoundaries[CherenkovDetector::Downstream].find(sector) != 
