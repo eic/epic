@@ -160,7 +160,8 @@ include_directories(
 SET( DUMMY_SRC
    #${PROJECT_SOURCE_DIR}/src/dummy.cc 
    #${PROJECT_SOURCE_DIR}/src/DRICH_geo.cpp
-   ${PROJECT_SOURCE_DIR}/src/QRICH_geo.cpp
+   ${PROJECT_SOURCE_DIR}/src/FRICH_geo.cpp
+   ${PROJECT_SOURCE_DIR}/src/BRICH_geo.cpp
    ${PROJECT_SOURCE_DIR}/src/PFRICH_geo.cpp
    
    ${PROJECT_SOURCE_DIR}/src/FileLoader.cpp

@@ -5,8 +5,7 @@
 
 #include <XML/Helper.h>
 
-#define _ELECTRON_GOING_ENDCAP_CASE_
-
+//#define _ELECTRON_GOING_ENDCAP_CASE_
 
 #define _WITH_OPTICS_
 #define _WITH_MIRROR_
@@ -111,7 +110,7 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
   uint64_t cellMask = 0;
   for (const auto& idField : sensorIDfields)
     cellMask |= readoutCoder[idField].mask();
-  desc.add(Constant("QRICH_cell_mask", std::to_string(cellMask)));
+  desc.add(Constant("FRICH_cell_mask", std::to_string(cellMask)));
 #ifdef _WITH_OPTICS_
   // Do not mind to store it twice;
   cdet->SetReadoutCellMask(cellMask);
@@ -133,16 +132,16 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
 
   // Place vessel into the mother volume;
   Volume motherVol = desc.pickMotherVolume(det);
-#ifdef _ELECTRON_GOING_ENDCAP_CASE_
-  Rotation3D rot(RotationZYX(0, M_PI, 0));
-  Transform3D transform(rot, Position(0, 0, -_FIDUCIAL_VOLUME_OFFSET_));
-  PlacedVolume vesselPV = motherVol.placeVolume(vesselVolume,  transform);
-  const bool flip = true;
-#else
+  //#ifdef _ELECTRON_GOING_ENDCAP_CASE_
+  //Rotation3D rot(RotationZYX(0, M_PI, 0));
+  //Transform3D transform(rot, Position(0, 0, -_FIDUCIAL_VOLUME_OFFSET_));
+  //PlacedVolume vesselPV = motherVol.placeVolume(vesselVolume,  transform);
+  //const bool flip = true;
+  //#else
   PlacedVolume vesselPV = motherVol.placeVolume(vesselVolume,  Position(0, 0, fvOffset));
-  const bool flip = false;
-#endif
-  const double sign = flip ? -1.0 : 1.0;
+  //const bool flip = false;
+  //#endif
+  const double sign = 1.0;//flip ? -1.0 : 1.0;
   vesselPV.addPhysVolID("system", detID);
   det.setPlacement(vesselPV);
 
@@ -410,4 +409,4 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
   return det;
 }
 
-DECLARE_DETELEMENT(epic_QRICH, createDetector)
+DECLARE_DETELEMENT(epic_FRICH, createDetector)

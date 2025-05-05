@@ -10,10 +10,10 @@
 
 <detectors>
 <detector
-  id="BackwardRICH_ID"
-  name="QRICH"
-  type="epic_QRICH"
-  readout="QRICHHits"
+  id="ForwardRICH_ID"
+  name="FRICH"
+  type="epic_FRICH"
+  readout="FRICHHits"
   
   vessel="Aluminum"
   gas="N2cherenkov"
@@ -26,13 +26,13 @@
   
   mirror="MirrorSurface_QRICH"
   
-  optics="qrich-optics.root"
+  optics="frich-optics.root"
   >
 </detector>
 </detectors>
 
 <readouts>
-  <readout name="QRICHHits">
+  <readout name="FRICHHits">
     <segmentation
       type="CartesianGridXY"
       grid_size_x="HRPPD_pixel_pitch"

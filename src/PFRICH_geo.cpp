@@ -223,7 +223,8 @@ static Ref_t createDetector(Detector& description, xml_h e, SensitiveDetector se
   auto _FLANGE_CLEARANCE_   = description.constant<double>("FLANGE_CLEARANCE");
   SubtractionSolid pfRICH_volume_shape(pfRICH_air_volume,
 				       FlangeCut(description, _FIDUCIAL_VOLUME_LENGTH_ + 1*mm, _FLANGE_CLEARANCE_));
-  Volume pfRICH_volume(detName + "_Vol", pfRICH_volume_shape, vesselGas); 
+  //-Volume pfRICH_volume(detName + "_Vol", pfRICH_volume_shape, vesselGas); 
+  Volume pfRICH_volume(detName, pfRICH_volume_shape, vesselGas); 
   
   Volume mother = description.pickMotherVolume(sdet);
   auto _FIDUCIAL_VOLUME_OFFSET_ = description.constant<double>("FIDUCIAL_VOLUME_OFFSET");
@@ -232,7 +233,8 @@ static Ref_t createDetector(Detector& description, xml_h e, SensitiveDetector se
   if (id != 0) pv.addPhysVolID("system", id);
   sdet.setPlacement(pv);
 
-  double fvOffset = _FIDUCIAL_VOLUME_OFFSET_;
+  // FIXME: do it better later;
+  double fvOffset = fabs(_FIDUCIAL_VOLUME_OFFSET_);
   
   //
   // Gas volume;
@@ -443,6 +445,12 @@ static Ref_t createDetector(Detector& description, xml_h e, SensitiveDetector se
       
       auto radiator = geometry->AddFlatRadiator(cdet, "Aerogel", CherenkovDetector::Upstream, 
 						0, (G4LogicalVolume*)(0x1), 0, surface, agthick/mm);//agThick/mm);
+      {
+	auto sf = dynamic_cast<FlatSurface*>(radiator->GetFrontSide(0));//isec);
+	auto sr = dynamic_cast<FlatSurface*>(radiator->GetRearSide(0));//isec);
+	double zf = sf->GetCenter().Z(), zr = sr->GetCenter().Z();
+	printf("@R@ %f %f %f\n", sign, zf, zr);
+      }
       radiator->SetAlternativeMaterialName("Aerogel_QRICH");//aerogelMaterialName.c_str());
       // FIXME: what is it good for in ePIC IRT 2.0 implementation?;
       geometry->AddRadiatorLogicalVolume(radiator, (G4LogicalVolume*)(0x1));

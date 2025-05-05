@@ -1,0 +1,46 @@
+<!-- SPDX-License-Identifier: LGPL-3.0-or-later -->
+<!-- Copyright (C) 2022, 2023 Christopher Dilks, Chandradoy Chatterjee, Junhuai Xu -->
+
+<lccdd>
+
+<define>
+<constant name="HRPPD_num_px"                 value="32"/> <!-- number of EIC HRPPD pixels along one side of the sensor -->
+<constant name="HRPPD_pixel_pitch"            value="3.25*mm"/> <!-- center-to-center distance between HRPPD pixels -->
+</define>
+
+<detectors>
+<detector
+  id="BackwardRICH_ID"
+  name="BRICH"
+  type="epic_BRICH"
+  readout="BRICHHits"
+  
+  vessel="Aluminum"
+  gas="N2cherenkov"
+  aerogel="Aerogel_QRICH"
+  acrylic="Acrylic_QRICH"
+  
+  window="AirOptical"
+  photocathode="AirOptical"
+  absorber="Vacuum"
+  
+  mirror="MirrorSurface_QRICH"
+  
+  optics="brich-optics.root"
+  >
+</detector>
+</detectors>
+
+<readouts>
+  <readout name="BRICHHits">
+    <segmentation
+      type="CartesianGridXY"
+      grid_size_x="HRPPD_pixel_pitch"
+      grid_size_y="HRPPD_pixel_pitch"
+      offset_x="-0.5*(HRPPD_num_px-1)*HRPPD_pixel_pitch"
+      offset_y="-0.5*(HRPPD_num_px-1)*HRPPD_pixel_pitch"
+      />
+    <id>system:8,hrppd:8,x:32:-16,y:-16</id>
+  </readout>
+</readouts>
+</lccdd>
