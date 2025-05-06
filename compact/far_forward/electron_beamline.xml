@@ -56,7 +56,7 @@
     </detector>
 
     <!-- Q0eF magnet -->
-    <detector name="Q0EF" type="ip6_CylindricalDipoleMagnet" vis="RedVis">
+    <detector name="Q0EF" type="ip6_CylindricalDipoleMagnet" vis="FFMagnetVis">
       <placement  x="0" y="0" z="(Q0EF_StartZ+Q0EF_EndZ)/2." theta="0"/>
       <dimensions x="Q0EF_InnerRadius*4" y="Q0EF_InnerRadius*4" z="Q0EF_StartZ-Q0EF_EndZ" r="1.9*Q0EF_InnerRadius" />
       <apperture  x="Q0EF_InnerRadius*2" y="Q0EF_InnerRadius*2" r="Q0EF_InnerRadius" />
@@ -72,7 +72,7 @@
     </detector>
 
     <!-- Q1eF magnet -->
-    <detector name="Q1EF" type="ip6_CylindricalDipoleMagnet" vis="RedVis">
+    <detector name="Q1EF" type="ip6_CylindricalDipoleMagnet" vis="FFMagnetVis">
       <placement  x="0" y="0" z="(Q1EF_StartZ+Q1EF_EndZ)/2." theta="0"/>
       <dimensions x="Q1EF_InnerRadius*4" y="Q1EF_InnerRadius*4" z="Q1EF_StartZ-Q1EF_EndZ" r="1.9*Q1EF_InnerRadius" />
       <apperture  x="Q1EF_InnerRadius*2" y="Q1EF_InnerRadius*2" r="Q1EF_InnerRadius" />

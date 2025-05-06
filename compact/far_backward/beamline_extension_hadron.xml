@@ -13,7 +13,7 @@
 
     <comment> Hadron side beam magnet volumes </comment>
 
-    <detector name="Magnet_Q2PR" type="ip6_CylindricalDipoleMagnet" vis="RedVis">
+    <detector name="Magnet_Q2PR" type="ip6_CylindricalDipoleMagnet" vis="FFMagnetVis">
       <placement  x="(Q2PR_StartX+Q2PR_EndX)/2" y="0" z="(Q2PR_StartZ+Q2PR_EndZ)/2" theta="Q1BPR_Theta"/>
       <dimensions x="Q2PR_InnerRadius*4" y="Q2PR_InnerRadius*4" z="Q2PR_Length" r="2.0*Q2PR_InnerRadius"/>
       <apperture  x="Q2PR_InnerRadius*2" y="Q2PR_InnerRadius*2" r="Q2PR_InnerRadius"/>
