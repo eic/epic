@@ -256,7 +256,7 @@ static Ref_t createDetector(Detector& desc, xml_h handle, SensitiveDetector sens
     std::string bpp_name = detName + "_BeamPipeProtector_" + nsName[ns];
     Box bpp_hole((insert_dx[ns] - insert_thickness) / 2.0, insert_dy / 2.0 - insert_thickness,
                  insert_dz / 2.0);
-    SubtractionSolid bpp_with_hole(bpp, bpp_hole, Position(-pm[ns] * insert_thickness, 0.0, 0.0));
+    SubtractionSolid bpp_with_hole(bpp, bpp_hole, Position(-pm[ns] * insert_thickness/2.0, 0.0, 0.0));
     Volume bpp_vol(bpp_name, bpp_with_hole, alumi);
     bpp_vol.setAttributes(desc, detElem.regionStr(), detElem.limitsStr(), detElem.visStr());
     pv = envelopeVol.placeVolume(
