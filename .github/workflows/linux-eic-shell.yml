@@ -779,7 +779,8 @@ jobs:
     - name: Download GitHub Pages staging artifact
       uses: actions/download-artifact@v4
       with:
-        path: artifacts/
+        name: github-pages-staging
+        path: publishing_docs/
     - name: Build jekyll page
       uses: actions/jekyll-build-pages@v1
     - name: Make PR summary page
