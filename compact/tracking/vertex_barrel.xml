@@ -1,5 +1,5 @@
 <!-- SPDX-License-Identifier: LGPL-3.0-or-later -->
-<!-- Copyright (C) 2022 Sylvester Joosten, Whitney Armstrong, Shujie Li -->
+<!-- Copyright (C) 2024 Sylvester Joosten, Whitney Armstrong, Shujie Li -->
 
 <lccdd>
   <define>
@@ -7,151 +7,223 @@
       Main parameters
     </comment>
 
-    <constant name="VertexBarrelMod_length"             value="VertexBarrel_length"/>
-    <constant name="VertexBarrelMod_rmin"               value="VertexBarrel_rmin"/>
-
-    <constant name="SiVertexSensor_thickness"           value="40*um"/>
-
-
-    <constant name="VertexBarrelMod1_rmin"              value="VertexBarrelMod_rmin"/>
-    <constant name="VertexBarrelMod2_rmin"              value="VertexBarrelMod_rmin + 1.2*cm"/>
-    <constant name="VertexBarrelMod3_rmin"              value="12.0*cm"/>
-
-    <comment> ensure we are within the vertex envelope with some margin. </comment>
-    <constant name="VertexCheck"                        value="sqrt(VertexBarrel_rmax - VertexBarrelMod3_rmin - .1*cm)"/>
-
-    <documentation>
-      - Currently there are 3 sensor layers. Each is composed of 2 half-cylinders modules with only 40um of silicon thickness.
-      - Both support shells are 300um thick, implemented as the integrated tracker support/service setup
-
-    </documentation>
-
-    <constant name="VertexBarrelEnvelope_length"    value="VertexTrackingRegion_length"/>
-    <constant name="VertexBarrelLayer_length"       value="VertexBarrelMod_length + 1*um"/>
-
-    <constant name="VertexBarrelLayer_thickness"    value="0.2*cm"/>
-    <constant name="VertexBarrelMod_thickness"      value="0.1*cm"/>
-
-    <comment> Layer 3 already set as main parameter </comment>
-
-    <constant name="VertexBarrelLayer1_rmin"        value="VertexBarrelMod1_rmin - VertexBarrelLayer_thickness/2.0"/>
-    <constant name="VertexBarrelLayer1_rmax"        value="VertexBarrelLayer1_rmin + VertexBarrelLayer_thickness"/>
-    <constant name="VertexBarrelLayer2_rmin"        value="VertexBarrelMod2_rmin - VertexBarrelLayer_thickness/2.0"/>
-    <constant name="VertexBarrelLayer2_rmax"        value="VertexBarrelLayer2_rmin + VertexBarrelLayer_thickness"/>
-    <constant name="VertexBarrelLayer3_rmin"        value="VertexBarrelMod3_rmin - VertexBarrelLayer_thickness/2.0"/>
-    <constant name="VertexBarrelLayer3_rmax"        value="VertexBarrelLayer3_rmin + VertexBarrelLayer_thickness"/>
+    <constant name="SiVertexSensor_thickness" value="40*um" />
+    <constant name="RSU_width"   value="19.564*mm" />
+    <constant name="RSU_length"  value="21.666*mm" />
+    <constant name="Section_width"  value="9.197*mm"/>
+    <constant name="Section_length" value="10.773*mm"/>
 
     <comment>
-      Extra parameters to approximate a cylinder as a set of skinny staves
-      due to ACTS limitations.
-      FIXME: this shouldn't be needed anymore, need to update the cylindrical plugin.
+      1 RSU              = 2x6 tiles with inactive areas == 2x2 sections
+      1 section (module) = 3-tiles along z
+      1 "stave"          = 1 row of 12 RSU
     </comment>
-    <constant name="VertexBarrelStave_count1"       value="128"/>
-    <constant name="VertexBarrelStave_count2"       value="128"/>
-    <constant name="VertexBarrelStave_count3"       value="128"/>
-    <constant name="VertexBarrelStave1_width"      value="2*VertexBarrelMod1_rmin * tan(180*degree/VertexBarrelStave_count1)"/>
-    <constant name="VertexBarrelStave2_width"      value="2*VertexBarrelMod2_rmin * tan(180*degree/VertexBarrelStave_count2)"/>
-    <constant name="VertexBarrelStave3_width"      value="2*VertexBarrelMod3_rmin * tan(180*degree/VertexBarrelStave_count3)"/>
+    <constant name="VertexBarrelMod_length"   value="RSU_length/2" />
+    <constant name="VertexBarrelLayer_nz"     value="12*2" />
+    <comment>
+      # of RSU in phi: 12, 16, 40 RSUs = 24, 32, 80 sections
+    </comment>
+    <constant name="VertexBarrelL0_nphi" value="12*2" />
+    <constant name="VertexBarrelL1_nphi" value="16*2" />
+    <constant name="VertexBarrelL2_nphi" value="40*2" />
+
+    <constant name="VertexBarrelStaveL0_width" value="RSU_width/2" />
+    <constant name="VertexBarrelStaveL1_width" value="RSU_width/2" />
+    <constant name="VertexBarrelStaveL2_width" value="RSU_width/2" />
+
+    <constant name="VertexBarrelModL0_rmin" value="VertexBarrelL0_nphi*VertexBarrelStaveL0_width/2/Pi" />
+    <constant name="VertexBarrelModL1_rmin" value="VertexBarrelL1_nphi*VertexBarrelStaveL1_width/2/Pi" />
+    <constant name="VertexBarrelModL2_rmin" value="VertexBarrelL2_nphi*VertexBarrelStaveL2_width/2/Pi" />
+
+    <documentation>
+      for the segmentation. Assume sensors are placed at the inner most surface for each layer
+    </documentation>
+    <constant name="VertexBarrelSegL0_r" value="VertexBarrelModL0_rmin+SiVertexSensor_thickness/2.0" />
+    <constant name="VertexBarrelSegL1_r" value="VertexBarrelModL1_rmin+SiVertexSensor_thickness/2.0" />
+    <constant name="VertexBarrelSegL2_r" value="VertexBarrelModL2_rmin+SiVertexSensor_thickness/2.0" />
+
+    <documentation>
+      - Currently there are 3 sensor layers: Layer 1,2,3 = L0, L1, L2.
+      - assume they are of the same length and aligned.
+    </documentation>
+    <constant name="VertexBarrelEnvelope_length"    value="VertexTrackingRegion_length"/>
+    <constant name="VertexBarrelLayer_length" value="VertexBarrel_length" />
+    <constant name="VertexBarrelLayer_zoff"   value="0"  />
+    <constant name="VertexBarrelLayer_zstart" value="-VertexBarrelLayer_length/2+VertexBarrelLayer_zoff" />
+    <constant name="VertexBarrelLayer_z0"     value=" VertexBarrelLayer_zstart + VertexBarrelMod_length/2 " />
+
+    <constant name="VertexBarrelLayer_thickness" value="0.2*cm" />
+    <constant name="VertexBarrelLayer0_rmin"  value="VertexBarrelModL0_rmin" />
+    <constant name="VertexBarrelLayer0_rmax"  value="VertexBarrelLayer0_rmin + VertexBarrelLayer_thickness" />
+    <constant name="VertexBarrelLayer1_rmin"  value="VertexBarrelModL1_rmin" />
+    <constant name="VertexBarrelLayer1_rmax"  value="VertexBarrelLayer1_rmin + VertexBarrelLayer_thickness" />
+    <constant name="VertexBarrelLayer2_rmin"  value="VertexBarrelModL2_rmin" />
+    <constant name="VertexBarrelLayer2_rmax"  value="VertexBarrelLayer2_rmin + VertexBarrelLayer_thickness" />
   </define>
 
   <detectors>
     <documentation level="5">
-        ### Actual detectors
+      ### Actual detectors
     </documentation>
     <detector
       id="VertexBarrel_0_ID"
       name="VertexBarrel"
-      type="epic_VertexBarrel"
+      type="epic_CylinderSVTBarrel"
       readout="VertexBarrelHits"
       insideTrackingVolume="true">
-      <type_flags type="DetType_TRACKER + DetType_BARREL"/>
-      <dimensions
-        rmin="VertexBarrelLayer1_rmin"
-        rmax="VertexBarrelLayer3_rmax"
-        length="VertexBarrelEnvelope_length" />
-      <comment>Vertex Barrel Modules</comment>
-      <module name="Module1" vis="VertexLayerVis">
-        <module_component name="ITS3"
-                          material="Silicon"
-                          sensitive="true"
-                          width="VertexBarrelStave1_width"
-                          length="VertexBarrelMod_length"
-                          thickness="SiVertexSensor_thickness"
-                          vis="VertexLayerVis" />
+      <type_flags type="DetType_TRACKER + DetType_BARREL" />
+      <comment>
+        - Vertex Barrel Modules.
+        - For RSU (1 module = 1 upper/lower section of three tiles):
+            --Use [mod_name]_upper and [mod_name]_lower here, and [mod_name] in corresponding layer
+          to allow the geo plugin find both modules.
+            -- also need to specify type="upper" or "lower" in components.
+        - for other modules and components:
+            no need to specify upper and lower anywhere.
+        - one RSU ("|" = backbone. Length alone z.):
+         | ------readout-------- | -------readout--------
+         | tilex3                | tilex3
+         | ------biasing-------- | -------biasing--------
+         | ------biasing-------- | -------biasing--------
+         | tilex3                | tilex3
+         | ------readout-------- | -------readout--------
+
+      </comment>
+      <module name="Module0_upper" rmin="VertexBarrelModL0_rmin"  width="VertexBarrelStaveL0_width"
+      length="VertexBarrelMod_length">
+        <module_component name="RSU" type="upper"
+          material="Silicon"
+          sensitive="true"
+          thickness="SiVertexSensor_thickness"
+          width="Section_width"
+          length="Section_length"
+          vis="VertexLayerVis" />
       </module>
-      <module name="Module2" vis="VertexLayerVis">
-        <module_component name="ITS3"
-                          material="Silicon"
-                          sensitive="true"
-                          width="VertexBarrelStave2_width"
-                          length="VertexBarrelMod_length"
-                          thickness="SiVertexSensor_thickness"
-                          vis="VertexLayerVis" />
+      <module name="Module0_lower" rmin="VertexBarrelModL0_rmin"  width="VertexBarrelStaveL0_width"
+      length="VertexBarrelMod_length">
+        <module_component name="RSU" type="lower"
+          material="Silicon"
+          sensitive="true"
+          thickness="SiVertexSensor_thickness"
+          width="Section_width"
+          length="Section_length"
+          vis="VertexLayerVis" />
       </module>
-      <module name="Module3" vis="VertexLayerVis">
-        <module_component name="ITS3"
-                          material="Silicon"
-                          sensitive="true"
-                          width="VertexBarrelStave3_width"
-                          length="VertexBarrelMod_length"
-                          thickness="SiVertexSensor_thickness"
-                          vis="VertexLayerVis" />
+
+      <module name="Module1_upper" rmin="VertexBarrelModL1_rmin"  width="VertexBarrelStaveL1_width"
+      length="VertexBarrelMod_length">
+        <module_component name="RSU" type="upper"
+          material="Silicon"
+          sensitive="true"
+          thickness="SiVertexSensor_thickness"
+          width="Section_width"
+          length="Section_length"
+          vis="VertexLayerVis" />
       </module>
-      <comment> Layers composed of many arrayed modules  </comment>
+      <module name="Module1_lower" rmin="VertexBarrelModL1_rmin"  width="VertexBarrelStaveL1_width"
+      length="VertexBarrelMod_length">
+        <module_component name="RSU" type="lower"
+          material="Silicon"
+          sensitive="true"
+          thickness="SiVertexSensor_thickness"
+          width="Section_width"
+          length="Section_length"
+          vis="VertexLayerVis" />
+      </module>
+
+      <module name="Module2_upper" rmin="VertexBarrelModL2_rmin"  width="VertexBarrelStaveL2_width"
+      length="VertexBarrelMod_length">
+        <module_component name="RSU" type="upper"
+          material="Silicon"
+          sensitive="true"
+          thickness="SiVertexSensor_thickness"
+          width="Section_width"
+          length="Section_length"
+          vis="VertexLayerVis" />
+      </module>
+      <module name="Module2_lower" rmin="VertexBarrelModL2_rmin"  width="VertexBarrelStaveL2_width"
+      length="VertexBarrelMod_length">
+        <module_component name="RSU" type="lower"
+          material="Silicon"
+          sensitive="true"
+          thickness="SiVertexSensor_thickness"
+          width="Section_width"
+          length="Section_length"
+          vis="VertexLayerVis" />
+      </module>
+
+      <comment> Layers composed of many arrayed modules </comment>
+      <comment> L0 </comment>
+      <layer module="Module0" id="0" vis="VertexLayerVis">
+        <barrel_envelope
+          inner_r="VertexBarrelLayer0_rmin"
+          outer_r="VertexBarrelLayer0_rmax"
+          z_length="VertexBarrelLayer_length" />
+        <layer_material surface="inner" binning="binPhi,binZ" bins0="VertexBarrelL0_nphi"
+          bins1="100" />
+        <layer_material surface="outer" binning="binPhi,binZ" bins0="VertexBarrelL0_nphi"
+          bins1="100" />
+        <comment>
+          phi0 : Starting phi of first module.
+          nphi : Number of modules in phi.
+          z0 : Z position of first module's center.
+          nz : Number of modules to place in z.
+        </comment>
+        <rphi_layout nphi="VertexBarrelL0_nphi" phi0="0.0" dr="0.0 * mm" />
+        <z_layout z0="VertexBarrelLayer_z0" nz="VertexBarrelLayer_nz" />
+      </layer>
+
+      <comment> L1 </comment>
       <layer module="Module1" id="1" vis="VertexLayerVis">
         <barrel_envelope
           inner_r="VertexBarrelLayer1_rmin"
           outer_r="VertexBarrelLayer1_rmax"
           z_length="VertexBarrelLayer_length" />
-        <layer_material surface="inner" binning="binPhi,binZ" bins0="VertexBarrelStave_count1" bins1="100" />
-        <layer_material surface="outer" binning="binPhi,binZ" bins0="VertexBarrelStave_count1" bins1="100" />
-        <comment>
-          phi0     : Starting phi of first module.
-          phi_tilt : Phi tilt of a module.
-          rc       : Radius of the module center.
-          nphi     : Number of modules in phi.
-          rphi_dr  : The delta radius of every other module.
-          z0       : Z position of first module in phi.
-          nz       : Number of modules to place in z.
-          dr       : Radial displacement parameter, of every other module.
-        </comment>
-        <rphi_layout phi_tilt="0.0*degree" nphi="VertexBarrelStave_count1" phi0="0.0" rc="VertexBarrelMod1_rmin" dr="0.0 * mm"/>
-        <z_layout dr="0.0 * mm" z0="0.0 * mm" nz="1"/>
+        <layer_material surface="inner" binning="binPhi,binZ" bins0="VertexBarrelL1_nphi"
+          bins1="100" />
+        <layer_material surface="outer" binning="binPhi,binZ" bins0="VertexBarrelL1_nphi"
+          bins1="100" />
+        <rphi_layout nphi="VertexBarrelL1_nphi" phi0="0.0" dr="0.0 * mm" />
+        <z_layout z0="VertexBarrelLayer_z0" nz="VertexBarrelLayer_nz" />
       </layer>
+
+      <comment> L2 </comment>
       <layer module="Module2" id="2" vis="VertexLayerVis">
         <barrel_envelope
           inner_r="VertexBarrelLayer2_rmin"
           outer_r="VertexBarrelLayer2_rmax"
           z_length="VertexBarrelLayer_length" />
-        <layer_material surface="inner" binning="binPhi,binZ" bins0="VertexBarrelStave_count2" bins1="100" />
-        <layer_material surface="outer" binning="binPhi,binZ" bins0="VertexBarrelStave_count2" bins1="100" />
-        <rphi_layout phi_tilt="0.0*degree" nphi="VertexBarrelStave_count2" phi0="0.0*degree" rc="VertexBarrelMod2_rmin" dr="0.0 * mm"/>
-        <z_layout dr="0.0 * mm" z0="0.0 * mm" nz="1"/>
-      </layer>
-      <layer module="Module3" id="4" vis="VertexLayerVis">
-        <barrel_envelope
-          inner_r="VertexBarrelLayer3_rmin"
-          outer_r="VertexBarrelLayer3_rmax"
-          z_length="VertexBarrelLayer_length" />
-        <layer_material surface="inner" binning="binPhi,binZ" bins0="VertexBarrelStave_count3" bins1="100" />
-        <layer_material surface="outer" binning="binPhi,binZ" bins0="VertexBarrelStave_count3" bins1="100" />
-        <rphi_layout phi_tilt="0.0*degree" nphi="VertexBarrelStave_count3" phi0="0.0" rc="VertexBarrelMod3_rmin" dr="0.0 * mm"/>
-        <z_layout dr="0.0 * mm" z0="0.0 * mm" nz="1"/>
+        <layer_material surface="inner" binning="binPhi,binZ" bins0="VertexBarrelL2_nphi"
+          bins1="100" />
+        <layer_material surface="outer" binning="binPhi,binZ" bins0="VertexBarrelL2_nphi"
+          bins1="100" />
+        <rphi_layout nphi="VertexBarrelL2_nphi" phi0="0.0" dr="0.0 * mm" />
+        <z_layout z0="VertexBarrelLayer_z0" nz="VertexBarrelLayer_nz" />
       </layer>
     </detector>
   </detectors>
 
   <plugins>
     <plugin name="DD4hep_ParametersPlugin">
-      <argument value="VertexBarrel"/>
-      <argument value="layer_pattern: str=VertexBarrel_layer\d"/>
+      <argument value="VertexBarrel" />
+      <argument value="layer_pattern: str=VertexBarrel_layer\d" />
     </plugin>
   </plugins>
 
   <readouts>
     <readout name="VertexBarrelHits">
-      <segmentation type="CartesianGridXY" grid_size_x="0.020*mm" grid_size_y="0.020*mm" />
-      <id>system:8,layer:4,module:12,sensor:2,x:32:-16,y:-16</id>
+      <segmentation type="MultiSegmentation" key="layer">
+        <segmentation name="L0" type="CylindricalGridPhiZ" key_value="0"
+          grid_size_phi="0.02*mm/VertexBarrelSegL0_r" grid_size_z="0.02*mm"
+          radius="VertexBarrelSegL0_r" />
+        <segmentation name="L1" type="CylindricalGridPhiZ" key_value="1"
+          grid_size_phi="0.02*mm/VertexBarrelSegL1_r" grid_size_z="0.02*mm"
+          radius="VertexBarrelSegL1_r" />
+        <segmentation name="L2" type="CylindricalGridPhiZ" key_value="2"
+          grid_size_phi="0.02*mm/VertexBarrelSegL2_r" grid_size_z="0.02*mm"
+          radius="VertexBarrelSegL2_r" />
+      </segmentation>
+      <id>system:8,layer:4,module:12,sensor:2,phi:32:-16,z:-16</id>
     </readout>
   </readouts>
 
