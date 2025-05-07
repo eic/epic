@@ -130,7 +130,8 @@ static Ref_t createDetector(Detector& desc, xml_h handle, SensitiveDetector sens
       if (x_slice.isSensitive()) {
 
         //Define WSiFi block (4x4 towers)
-	if(Homogeneous_Scfi <= 1) mat=slice_mat;
+        if (Homogeneous_Scfi <= 1)
+          mat = slice_mat;
         Box block(blocksize / 2.0, blocksize / 2.0, slice_thickness / 2.0);
         Volume block_vol("FEMCBlock", block, mat);
         block_vol.setAttributes(desc, x_slice.regionStr(), x_slice.limitsStr(), x_slice.visStr());
