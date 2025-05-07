@@ -52,9 +52,9 @@ static Ref_t createDetector(Detector& desc, xml_h handle, SensitiveDetector sens
   int Homogeneous_Scfi = 0;
   Homogeneous_Scfi     = desc.constant<int>("ForwardEcal_Homogeneous_Scfi");
   if (Homogeneous_Scfi <= 1)
-    printout(INFO, "FEMCAL", "Making Homogeneous geometry model\n");
+    printout(INFO, "FEMC", "Making Homogeneous geometry model\n");
   else
-    printout(INFO, "FEMCAL", "Making ScFi geometry model\n");
+    printout(INFO, "FEMC", "Making ScFi geometry model\n");
 
   xml_dim_t dim = detElem.dimensions();
   xml_dim_t pos = detElem.position();
@@ -130,8 +130,9 @@ static Ref_t createDetector(Detector& desc, xml_h handle, SensitiveDetector sens
       if (x_slice.isSensitive()) {
 
         //Define WSiFi block (4x4 towers)
+	if(Homogeneous_Scfi <= 1) mat=slice_mat;
         Box block(blocksize / 2.0, blocksize / 2.0, slice_thickness / 2.0);
-        Volume block_vol("fEcalBlock", block, air);
+        Volume block_vol("FEMCBlock", block, mat);
         block_vol.setAttributes(desc, x_slice.regionStr(), x_slice.limitsStr(), x_slice.visStr());
         if (Homogeneous_Scfi <= 1) {
           sens.setType("calorimeter");
@@ -141,7 +142,7 @@ static Ref_t createDetector(Detector& desc, xml_h handle, SensitiveDetector sens
         if (Homogeneous_Scfi == 2) {
           //4 rows of towers
           Box trow(blocksize / 2.0, blocksize / 8.0, slice_thickness / 2.0);
-          Volume trow_vol("fEcalTowerRow", trow, air);
+          Volume trow_vol("FEMCTowerRow", trow, air);
           trow_vol.setAttributes(desc, x_slice.regionStr(), x_slice.limitsStr(), x_slice.visStr());
           for (int tr = 0; tr < 4; tr++) {
             pv = block_vol.placeVolume(
@@ -152,7 +153,7 @@ static Ref_t createDetector(Detector& desc, xml_h handle, SensitiveDetector sens
 
           //4 towers in a row - finally a W powder volume, not air
           Box tower(blocksize / 8.0, blocksize / 8.0, slice_thickness / 2.0);
-          Volume tower_vol("fEcalTower", tower, Wpowder);
+          Volume tower_vol("FEMCTower", tower, Wpowder);
           tower_vol.setAttributes(desc, x_slice.regionStr(), x_slice.limitsStr(), x_slice.visStr());
           for (int tc = 0; tc < 4; tc++) {
             pv = trow_vol.placeVolume(
@@ -166,7 +167,7 @@ static Ref_t createDetector(Detector& desc, xml_h handle, SensitiveDetector sens
               blocksize / 4.0 / (nx + 0.5); //exrea 0.5 for even/odd rows shifted by 1/2
           Box frow(blocksize / 8.0 - fiberDistanceX / 2.0, blocksize / 8.0 / ny,
                    slice_thickness / 2.0);
-          Volume frow_vol("fEcalFiberRow", frow, Wpowder);
+          Volume frow_vol("FEMCFiberRow", frow, Wpowder);
           frow_vol.setAttributes(desc, x_slice.regionStr(), x_slice.limitsStr(), x_slice.visStr());
           for (int iy = 0; iy < ny; iy++) {
             double xx = 0;
@@ -182,7 +183,7 @@ static Ref_t createDetector(Detector& desc, xml_h handle, SensitiveDetector sens
 
           //columns of fibers, with 1/2 fiber distance shifted each row
           Box fcol(fiberDistanceX / 2.0, blocksize / 8.0 / ny, slice_thickness / 2.0);
-          Volume fcol_vol("fEcalFiberCol", fcol, Wpowder);
+          Volume fcol_vol("FEMCFiberCol", fcol, Wpowder);
           fcol_vol.setAttributes(desc, x_slice.regionStr(), x_slice.limitsStr(), x_slice.visStr());
           for (int ix = 0; ix < nx; ix++) {
             double xx = (ix - nx / 2.0 + 0.5) * fiberDistanceX;
@@ -194,14 +195,14 @@ static Ref_t createDetector(Detector& desc, xml_h handle, SensitiveDetector sens
 
           //a fiber (with coating material, not sensitive yet)
           Tube fiber(0, rFiber, slice_thickness / 2.0);
-          Volume fiber_vol("fEcalFiber", fiber, PMMA);
+          Volume fiber_vol("FEMCFiber", fiber, PMMA);
           fiber_vol.setAttributes(desc, x_slice.regionStr(), x_slice.limitsStr(), x_slice.visStr());
           pv =
               fcol_vol.placeVolume(fiber_vol, Transform3D(RotationZYX(0, 0, 0), Position(0, 0, 0)));
 
           //scintillating fiber core - and finally a sensitive volume
           Tube scfi(0, rScfi, slice_thickness / 2.0);
-          Volume scfi_vol("fEcalScFi", scfi, ScFi);
+          Volume scfi_vol("FEMCScFi", scfi, ScFi);
           scfi_vol.setAttributes(desc, x_slice.regionStr(), x_slice.limitsStr(), x_slice.visStr());
           pv =
               fiber_vol.placeVolume(scfi_vol, Transform3D(RotationZYX(0, 0, 0), Position(0, 0, 0)));
