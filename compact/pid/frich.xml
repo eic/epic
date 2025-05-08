@@ -16,15 +16,15 @@
   readout="FRICHHits"
   
   vessel="Aluminum"
-  gas="N2cherenkov"
+  gas="C2F6_DRICH"
   aerogel="Aerogel_DRICH"
-  acrylic="Acrylic_QRICH"
+  acrylic="Acrylic_DRICH"
   
   window="AirOptical"
   photocathode="AirOptical"
   absorber="Vacuum"
   
-  mirror="MirrorSurface_QRICH"
+  mirror="MirrorSurface_DRICH"
   
   optics="frich-optics.root"
   >
