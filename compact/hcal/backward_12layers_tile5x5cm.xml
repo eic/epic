@@ -13,6 +13,7 @@
         <constant name="HcalEndcapN_polyhedron_rmax"    value="251.444*cm"/>
         <constant name="HcalEndcapN_segments_rmin"              value="19.9431*cm"/>
         <constant name="HcalEndcapN_segments_rmax"              value="HcalEndcapN_rmax/(cos(180*deg/HcalEndcapN_CaloSides))"/>
+        <constant name="HcalEndcapN_length_new"              value="54 * cm"/>
 
 
     <documentation>
@@ -21,7 +22,7 @@
 
     <constant name="HcalEndcapNSingleLayerThickness"
              value="HcalEndcapNSteelThickness + HcalEndcapNPolystyreneThickness + HcalEndcapNLayerGap"/>
-    <constant name="HcalEndcapNLayer_NRepeat"   value="floor(HcalEndcapN_length / HcalEndcapNSingleLayerThickness)"/>
+    <constant name="HcalEndcapNLayer_NRepeat"   value="floor(HcalEndcapN_length_new / HcalEndcapNSingleLayerThickness)"/>
     <constant name="HcalEndcapN_thickness"              value="HcalEndcapNLayer_NRepeat * HcalEndcapNSingleLayerThickness"/>
   </define>
 
@@ -56,7 +57,7 @@
   <!--  Definition of the readout segmentation/definition  -->
   <readouts>
     <readout name="HcalEndcapNHits">
-                <segmentation type="CartesianGridXY" grid_size_x="100 * mm" grid_size_y ="100 * mm"/>
+                <segmentation type="CartesianGridXY" grid_size_x="50 * mm" grid_size_y ="50 * mm"/>
         <id>system:8,barrel:3,module:4,layer:8,slice:5,x:32:-16,y:-16</id>
     </readout>
   </readouts>
