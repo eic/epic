@@ -11,9 +11,9 @@
 //#define _WITH_MIRROR_
 
 // Mimic ePIC pfRICH vessel length;
-#define _FIDUCIAL_VOLUME_LENGTH_             (1500.0*mm)
+#define _FIDUCIAL_VOLUME_LENGTH_             (1000.0*mm)
 // Choose ePIC dRICH location in the forward endcap;
-#define _FIDUCIAL_VOLUME_OFFSET_             (2500.0*mm)
+#define _FIDUCIAL_VOLUME_OFFSET_             (2700.0*mm)
 
 #define _HRPPD_MATRIX_DIM_                          (20)
 // FIXME: may want to use qrich.xml where 32 and 3.25mm are also defined;
@@ -30,7 +30,7 @@
 
 #define _BUILDING_BLOCK_CLEARANCE_              (1.0*mm)
 
-#define _AEROGEL_THICKNESS_                    (25.0*mm)
+#define _AEROGEL_THICKNESS_                    (40.0*mm)
 #define _ACRYLIC_THICKNESS_                     (3.0*mm)
 
 #define _HRPPD_WINDOW_THICKNESS_                (5.0*mm)
@@ -181,7 +181,9 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
     
       // Aerogel volume;
       {
-	const double agWidth = gvWidth - 1*mm, agThick = _AEROGEL_THICKNESS_;
+	// FIXME: for now tweak this size such that reflected light at {eta=2.5,phi=90}
+	// does not pass through this aerogel layer twice; 
+	const double agWidth = /*gvWidth - 1*mm*/100*cm, agThick = _AEROGEL_THICKNESS_;
 	Box aerogelSolid(agWidth/2, agWidth/2, agThick/2);
 	Volume aerogelVol(detName + "_aerogel", aerogelSolid, aerogelMaterial);
 	
@@ -369,7 +371,15 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
 
 	// FIXME: 180 degree rotation!;
 	//+vesselVolume.placeVolume(hrppdVol, Position(xOffset, yOffset, wzOffset + _HRPPD_CONTAINER_VOLUME_HEIGHT_/2));
+#if 0
 	vesselVolume.placeVolume(hrppdVol, Position(xOffset, yOffset, _wzOffset - _HRPPD_CONTAINER_VOLUME_HEIGHT_/2));
+#else
+	{
+	  Rotation3D rot(RotationZYX(0, M_PI, 0));
+	  Transform3D transform(rot,  Position(xOffset, yOffset, _wzOffset - _HRPPD_CONTAINER_VOLUME_HEIGHT_/2));
+	  vesselVolume.placeVolume(hrppdVol, transform);
+	}
+#endif
 	
 #ifdef _WITH_OPTICS_
 	{
