@@ -45,4 +45,3 @@ with open(sys.argv[1], 'rb') as infile, open(file_with_no_extension + '_ASCII.st
     out.write("endsolid\n")
 
 print("end")
-

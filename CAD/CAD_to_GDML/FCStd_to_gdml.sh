@@ -11,7 +11,7 @@ folder_name="${1%.*}"
 mkdir $folder_name
 
 # Execute the command stored in the variable
-eval "$freecaddir_executable"  
+eval "$freecaddir_executable"
 ./remove_whitespace.sh $folder_name
 ./convert.sh $folder_name
 rm $folder_name/*.stl

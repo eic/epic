@@ -39,7 +39,6 @@ if __name__ == "__main__":
     print("Write to "+args.directory+".txt")
     f  = open(args.directory+".txt","w")
     for line in all_vertices:
-    	f.write(str(line[0]+"\t"+str(line[1])+"\t"+str(line[2]))+"\n")
-    f.close()    
-    
+        f.write(str(line[0]+"\t"+str(line[1])+"\t"+str(line[2]))+"\n")
+    f.close()
 

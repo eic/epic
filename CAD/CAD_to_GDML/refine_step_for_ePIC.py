@@ -36,7 +36,7 @@ def export_component_as_mesh(component, filename, tessellation_level = 0.1): #fi
     # Ensure the filename ends with .stl
     if not filename.lower().endswith(".stl"):
         raise ValueError("Filename must have a .stl extension")
-    
+
     # Get the shape from the component
     shape = component.Shape
 
@@ -45,13 +45,13 @@ def export_component_as_mesh(component, filename, tessellation_level = 0.1): #fi
     placement = get_global_placement(component)
     transformed_shape = shape.copy()
     transformed_shape.Placement = placement
-    
+
     # Check if the shape is valid
     if shape.isNull():
         raise ValueError("Shape is null or invalid")
-    
+
     # Recursion Case
-    
+
     # Base Case
     # Tessellate the shape
     try:
@@ -66,7 +66,7 @@ def export_component_as_mesh(component, filename, tessellation_level = 0.1): #fi
     # Create a Mesh::Feature object and set its mesh
     mesh_obj = App.ActiveDocument.addObject("Mesh::Feature", "Mesh")
     mesh_obj.Mesh = Mesh.Mesh(mesh_data)
-    
+
     # Save the mesh as an STL file
     global freecad_file
     dir_path = os.path.splitext(freecad_file)[0] #remove the freecad extension from the freecad filename
@@ -103,7 +103,7 @@ def transform_all_components_to_global(doc):
     print(f"{len(components)} bodies found.")
     for component in components:
         process_component(doc, component)
-        
+
 # Run the script
 
 # Load the FreeCAD file, the directory is the first argument of the script

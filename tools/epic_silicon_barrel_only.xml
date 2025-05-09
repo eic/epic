@@ -117,5 +117,5 @@
 
   <include ref="${DETECTOR_PATH}/compact/tracking/definitions_craterlake.xml"/>
    <include ref="${DETECTOR_PATH}/compact/tracking/silicon_barrel.xml"/>
-  
+
 </lccdd>

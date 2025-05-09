@@ -16,7 +16,7 @@ for f in $(find . -type f -name "*.stl" ! -name "*_ASCII.stl"); do
         # Process the STL file with stl_gdml.py
     else
         echo "Converting $f from binary to ASCII STL."
-        python ../BinaryToASCII.py "$f"    
+        python ../BinaryToASCII.py "$f"
     fi
     # Reset IFS for the next iteration
     IFS=$'\n'
@@ -28,11 +28,11 @@ for f in $(find . -name '*_ASCII.stl'); do
     unset IFS
     # Check if the STL file is binary or ASCII
     if grep -q 'solid' "$f"; then
-        
+
         echo "Converting $f from ASCII STL to .gdml"
         python ../stl_gdml.py ../out.gdml "$f"
     else
-        echo "$f is probably a binary STL without ASCII start token solid and should not have the _ASCII.stl name ending."  
+        echo "$f is probably a binary STL without ASCII start token solid and should not have the _ASCII.stl name ending."
     fi
     # Reset IFS for the next iteration
     IFS=$'\n'

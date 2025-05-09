@@ -6,7 +6,7 @@ import sys
 HEADER = '''
 <lccdd>
   <define>
-  
+
     <constant name="SiBarrelMod1_rmin"             value="SiBarrel1_rmin"/> # 269mm
     <constant name="SiBarrelMod2_rmin"             value="SiBarrel2_rmin"/> # 421mm
      <constant name="SiBarrelMod_angle"             value="SiBarrel_angle"/>
@@ -19,14 +19,14 @@ HEADER = '''
     <constant name="SiBarrelLayer2_length"      value="SiBarrelMod2_length + 1*um"/>
     <constant name="SiBarrelEnvelope_length"    value="SiBarrelLayer2_length + 1*um" />
 
-    <constant name="SiBarrelLayer_thickness"    value="3.0*cm"/>		
+    <constant name="SiBarrelLayer_thickness"    value="3.0*cm"/>
     <constant name="SiBarrelLayer1_rmin"        value="SiBarrelMod1_rmin "/>
     <constant name="SiBarrelLayer1_rmax"        value="SiBarrelLayer1_rmin + SiBarrelLayer_thickness"/>
     <constant name="SiBarrelLayer2_rmin"        value="SiBarrelMod2_rmin "/>
     <constant name="SiBarrelLayer2_rmax"        value="SiBarrelLayer2_rmin + SiBarrelLayer_thickness"/>
 
     <constant name="SiBarrelStaveTilt_angle"     value="0.0*degree"/>
-    
+
   </define>
 
   <detectors>
@@ -57,13 +57,13 @@ def string_module_begin(stave_name ,module_number):
     return MODULE_BEGIN
 def string_module_end():
     MODULE_END = '''
-        <!--end bundle-->    
+        <!--end bundle-->
       </module> '''
     return MODULE_END
 
 
 MIDDLE = '''
-        <!--end bundle-->    
+        <!--end bundle-->
       </module>
       <comment> Layers composed of many arrayed modules  </comment>
       <layer module="L3Module" id="1" vis="TrackerLayerVis">
@@ -107,7 +107,7 @@ MIDDLE = '''
         <!--bundle-->
 '''
 FOOTER = '''
-        <!--end bundle-->    
+        <!--end bundle-->
       </module>
       <comment> Layers composed of many arrayed modules  </comment>
       <layer module="L4Module" id="1" vis="TrackerLayerVis">
@@ -166,7 +166,7 @@ def module_component(component_path, component_name, my_dict, file_count, stave_
 
     sens = False
     #print the attributes of the dictionary
-    COMPONENT_BODY = ""      
+    COMPONENT_BODY = ""
     for key, value in my_dict.items():
         COMPONENT_BODY += f"\n                          {key}=\"{value}\""
                           #material="{component_material}"
@@ -180,7 +180,7 @@ def module_component(component_path, component_name, my_dict, file_count, stave_
                           file="{component_path}" />
     '''
     COMPONENT = COMPONENT_HEADER + COMPONENT_BODY + COMPONENT_FOOTER
-    
+
     #note: do module nesting only for sensitive components (note that this approach might introduce some bugs)
     remainder = file_count % MAX_COMPONENT_NUMBER
     if remainder + 1 == MAX_COMPONENT_NUMBER and sens:
@@ -189,7 +189,7 @@ def module_component(component_path, component_name, my_dict, file_count, stave_
       return COMPONENT
     else:
       return COMPONENT
-    
+
 file_count_global = 0
 def scan_and_place(folder_path, search_string, xml_file, my_dict, stave_name):
     # scan folder for gdml name with string and place certain attributes accordingly
@@ -201,7 +201,7 @@ def scan_and_place(folder_path, search_string, xml_file, my_dict, stave_name):
                 # Get the relative path and add to the list
                 full_path = os.path.join(root, file)
                 global file_count_global
-                xml_file.write(module_component(full_path, file, my_dict, file_count_global, stave_name))     
+                xml_file.write(module_component(full_path, file, my_dict, file_count_global, stave_name))
                 file_count_global += 1
 
 
@@ -223,7 +223,7 @@ dict_list = [
     {"matching_name": "Ultem", "material": "Ultem"          , "sensitive": "false"},
 ] #extend as required
 dict_attr_list = ["material", "sensitive", "thickness", "offset"]
-  
+
 
 # Check if the folder path is provided as an argument
 if len(sys.argv) < 3:
@@ -242,7 +242,7 @@ with open(file_path, "w") as xml_file:
     xml_file.write(HEADER)
 
     file_count_global = 0 #reset the global file count in each new stave
-    for key_dict in dict_list:   
+    for key_dict in dict_list:
         scan_and_place(L3_folder_path, key_dict["matching_name"], xml_file, key_dict, "L3")
     xml_file.write(MIDDLE)
     file_count_global = 0

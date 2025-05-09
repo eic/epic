@@ -11,4 +11,4 @@ for file in $(find . -name '*.stl');
 do
   mv -- "$file" "${file// /_}"
 done
-unset IFS 
+unset IFS

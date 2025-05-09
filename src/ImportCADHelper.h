@@ -9,11 +9,8 @@
 #include "DD4hepDetectorHelper.h"
 #include <cmath>
 
-
 #include "TVector3.h"
 //#include "TGDMLParse.h"
-
-
 
 //typedef Object::Vertex_t Vertex;
 

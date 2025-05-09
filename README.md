@@ -66,7 +66,7 @@ To start using the CAD utility:
 <ol>
 <li>Open your STEP file in FreeCAD and save it as a FreeCAD(.FCStd) file with a name of your choice.</li>
 <li>Source the script with arguments: source FCStd_to_gdml.sh <FreeCAD_file_name>
-    NOTE: this file contains a few parameters, adjust them to your own needs: 
+    NOTE: this file contains a few parameters, adjust them to your own needs:
         MAX_COMPONENT_NUMBER: maximum number of sensitive <module_component/>s per <module/>
         dict_list: a map allowing file names to be mapped to materials and sensitive/insensitive etc. </li>
 <li>A folder containing the .gdml files named <FreeCAD_file_name> will be generated.</li>
@@ -81,8 +81,8 @@ To start using the CAD utility:
 
 On offset on the coordinate system can be set on lines 51-53 of *stl_gdml.py*
 
-You can also produce the *silicon_barrel.xml* automatically. For this process you need to have produced two folders contining gdml files 
-for components of the L3 stave and L4 stave. 
+You can also produce the *silicon_barrel.xml* automatically. For this process you need to have produced two folders contining gdml files
+for components of the L3 stave and L4 stave.
 <ol>
 <li>Run the create_xml.py script with arguments <L3_stave_gdml_folder_name> <L4_stave_gdml_folder_name>. Not it may be useful to use the full path length for the directories so it can be used in any location.</li>
 <li>Move the silicon_barrel.xml file to the ../compact/tracking folder (make sure to backup the older version with a git commit!!)</li>
@@ -107,7 +107,7 @@ Due to the very large number of vertices, it is not possible to view the detecto
 *read_edm4hep_SiBarrel.C* plots the x,y coordinartes of the silicon barrel hits in an edm4hep.root file. This can be produced by running ddsim. For example, to simulate 100000 muons:
 ```
 ddsim --compactFile $DETECTOR_PATH/epic_craterlake_tracking_only.xml --outputFile TestHitMap.edm4hep.root --numberOfEvents 100000 --enableGun --gun
-.thetaMin 63*deg --gun.thetaMax 117*deg --gun.particle mu- --gun.momentumMin 10*GeV --gun.momentumMax 11*GeV --gun.distribution eta --gun.multiplicity 1 
+.thetaMin 63*deg --gun.thetaMax 117*deg --gun.particle mu- --gun.momentumMin 10*GeV --gun.momentumMax 11*GeV --gun.distribution eta --gun.multiplicity 1
 --random.seed 100000
 ```
 
@@ -126,4 +126,3 @@ Tracking performance benchmark tests
 -----------------------------------------
 
 Tuna Tasali has written adapted the benchmark scripts developed by Shyam Kumar to produce plots of the momentum resolution for this geometry. This needs to be updated for the new version. His original is at https://github.com/Tunat66/epicUK/blob/UK_Contribution
-

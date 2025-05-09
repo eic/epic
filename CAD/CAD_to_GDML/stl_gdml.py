@@ -1,8 +1,8 @@
 """
 Author      : Andrii Tykhonov (andrii.tykhonov@cern.ch)
-Description : A light-weight tool to convert CAD drawings 
+Description : A light-weight tool to convert CAD drawings
               (.stl) into geant4 compatible format (.gdml)
-              
+
               MIT License
 
 Copyright (c) 2018 Andrii Tykhonov
@@ -25,7 +25,7 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 
-              
+
 """
 
 import ast
@@ -35,7 +35,7 @@ from bisect import bisect
 import __main__
 
 if int(sys.version_info.major)>=3:
-	xrange = range
+        xrange = range
 
 EMAIL         = "andrii.tykhonov@cernSPAMNOT.ch"
 ERROR_CONTACT = "\nPlease contact %s for more information"%EMAIL
@@ -64,7 +64,7 @@ MATERIALS_INFO = '''
 #@            - CarbonFibre
 #@       - Adhesives
 #@            - DC3140 (Glue, Dow Corning)
-#@       - PCB 
+#@       - PCB
 #@            - FR4
 #@            - Copper
 #@            - Kapton
@@ -75,7 +75,7 @@ MATERIALS_INFO = '''
 #@            - Palladium
 #@            - Tin
 #@            - Platinum
-#@       - Detector materials: 
+#@       - Detector materials:
 #@            - Silicon
 #@            - CdTe
 #@            - Tungsten
@@ -83,8 +83,8 @@ MATERIALS_INFO = '''
 #@            - BGO
 #@            - BC254 (neutron detector)
 #@            - CdWO4 (cadmium tungstanate)
-#@       - Others: 
-#@            - Glass 
+#@       - Others:
+#@            - Glass
 #@            - Lead
 #@            - Q235 (Steel)
 #@            - AL5052-H32 (Aluminium alloy)
@@ -94,44 +94,44 @@ MATERIALS_INFO = '''
 #@            - EpoxyResin
 #@            - AlNO
 #@            - SAC305
-#@       
-#@  Please contact the author to implement more materials, 
+#@
+#@  Please contact the author to implement more materials,
 #@  or (and) feel free to implement them yourself
 #@
 '''
 
 MATERIALS_LIST = [
-	{"name" : "Vacuum",       "group" : "Other"},
-	{"name" : "Aluminum",     "group" : "Mechanic tructures"},
-	{"name" : "Honeycomb",    "group" : "Mechanic tructures"},
-	{"name" : "CarbonFibre",  "group" : "Mechanic tructures"},
-	{"name" : "DC3140",       "group" : "Adhesives"}, 
-	{"name" : "FR4",          "group" : "PCB"},
-	{"name" : "Copper",       "group" : "PCB"},
-	{"name" : "Gold",         "group" : "PCB"},
-	{"name" : "Nickel",       "group" : "PCB"},
-	{"name" : "Titanium",     "group" : "PCB"},
-	{"name" : "Silver",       "group" : "PCB"},
-	{"name" : "Palladium",    "group" : "PCB"},
-	{"name" : "Tin",          "group" : "PCB"},
-	{"name" : "Platinum",     "group" : "PCB"},
-	{"name" : "Silicon",      "group" : "Detector Elements"},
-	{"name" : "CdTe",         "group" : "Detector Elements"},
-	{"name" : "Tungsten",     "group" : "Detector Elements"},
-	{"name" : "PMT",          "group" : "Detector Elements"},
-	{"name" : "BGO",          "group" : "Detector Elements"},
-	{"name" : "BC254",        "group" : "Detector Elements"},
-	{"name" : "CdWO4",        "group" : "Detector Elements"},
-	{"name" : "Glass",        "group" : "Other"},
-	{"name" : "FibrousGlass", "group" : "Other"},
-	{"name" : "PDMS",         "group" : "Other"},
-	{"name" : "EpoxyResin",   "group" : "Other"},
-	{"name" : "AlNO",         "group" : "Other"},
-	{"name" : "SAC305",       "group" : "Other"},
-	{"name" : "Lead",         "group" : "Other"},
-	{"name" : "Q235",         "group" : "Other"},
-	{"name" : "AL5052-H32",   "group" : "Other"},
-	{"name" : "Brass",        "group" : "Other"},
+        {"name" : "Vacuum",       "group" : "Other"},
+        {"name" : "Aluminum",     "group" : "Mechanic tructures"},
+        {"name" : "Honeycomb",    "group" : "Mechanic tructures"},
+        {"name" : "CarbonFibre",  "group" : "Mechanic tructures"},
+        {"name" : "DC3140",       "group" : "Adhesives"},
+        {"name" : "FR4",          "group" : "PCB"},
+        {"name" : "Copper",       "group" : "PCB"},
+        {"name" : "Gold",         "group" : "PCB"},
+        {"name" : "Nickel",       "group" : "PCB"},
+        {"name" : "Titanium",     "group" : "PCB"},
+        {"name" : "Silver",       "group" : "PCB"},
+        {"name" : "Palladium",    "group" : "PCB"},
+        {"name" : "Tin",          "group" : "PCB"},
+        {"name" : "Platinum",     "group" : "PCB"},
+        {"name" : "Silicon",      "group" : "Detector Elements"},
+        {"name" : "CdTe",         "group" : "Detector Elements"},
+        {"name" : "Tungsten",     "group" : "Detector Elements"},
+        {"name" : "PMT",          "group" : "Detector Elements"},
+        {"name" : "BGO",          "group" : "Detector Elements"},
+        {"name" : "BC254",        "group" : "Detector Elements"},
+        {"name" : "CdWO4",        "group" : "Detector Elements"},
+        {"name" : "Glass",        "group" : "Other"},
+        {"name" : "FibrousGlass", "group" : "Other"},
+        {"name" : "PDMS",         "group" : "Other"},
+        {"name" : "EpoxyResin",   "group" : "Other"},
+        {"name" : "AlNO",         "group" : "Other"},
+        {"name" : "SAC305",       "group" : "Other"},
+        {"name" : "Lead",         "group" : "Other"},
+        {"name" : "Q235",         "group" : "Other"},
+        {"name" : "AL5052-H32",   "group" : "Other"},
+        {"name" : "Brass",        "group" : "Other"},
 ]
 
 MATERIALS = '''
@@ -171,7 +171,7 @@ MATERIALS = '''
 
 
         <!--                    -->
-	<!-- composite elements -->
+        <!-- composite elements -->
         <!--                    -->
 
         <isotope name="B10"  N="5" Z="5">   <atom unit="g/mole" value="10.0129369"/>  </isotope>
@@ -265,7 +265,7 @@ MATERIALS = '''
         </element>
 
 
-    
+
         <!--          -->
         <!-- vacuum   -->
         <!--          -->
@@ -277,7 +277,7 @@ MATERIALS = '''
 
 
         <!--           -->
-	<!-- materials -->
+        <!-- materials -->
         <!--           -->
 
         <!-- FR4 submaterials -->
@@ -347,25 +347,25 @@ MATERIALS = '''
            <D value="1.98281" unit="g/cm3"/>
            <fraction n="0.47" ref="EpoxyResin"/>
            <fraction n="0.53" ref="FibrousGlass"/>
-       </material>  
-  
- 
+       </material>
+
+
        <!-- Glue (DC3140, Dow Corning) sub materials -->
-   
+
        <material name="dimethylsiloxane_hydroxy_terminated" formula="HOSiCH3CH3OH">
            <D value="0.98" unit="g/cm3"/>
            <composite n="2" ref="oxygen"/>
            <composite n="8" ref="hydrogen"/>
            <composite n="2" ref="carbon"/>
            <composite n="1" ref="silicon"/>
-       </material>  
-   
+       </material>
+
        <material name="trimethylated_silica" formula="O2Si">
            <D value="2.6" unit="g/cm3"/>
-           <composite n="2" ref="oxygen"/>    
+           <composite n="2" ref="oxygen"/>
            <composite n="1" ref="silicon"/>
-       </material>  
-   
+       </material>
+
        <material name="methyltrimethoxysilane" formula="C4H12O3Si">
            <D value="0.955" unit="g/cm3"/>
            <composite n="3"  ref="oxygen"/>
@@ -373,28 +373,28 @@ MATERIALS = '''
            <composite n="4"  ref="carbon"/>
            <composite n="1"  ref="silicon"/>
        </material>
-   
+
        <material name="DC3140">
            <D value="1.2" unit="g/cm3"/>
            <fraction n="0.60" ref="dimethylsiloxane_hydroxy_terminated"/>
            <fraction n="0.30" ref="trimethylated_silica"/>
-           <fraction n="0.10" ref="methyltrimethoxysilane"/>    
-       </material>  
-   
+           <fraction n="0.10" ref="methyltrimethoxysilane"/>
+       </material>
+
 
       <!-- Conductive materials for PCB -->
-   
+
       <material name="Copper" state="solid">
            <D value="8.960" unit="g/cm3"/>
            <fraction n="1." ref="copper"/>
       </material>
-   
+
      <material name="Gold" state="solid">
            <D value="19.32" unit="g/cm3"/>
            <fraction n="1." ref="gold"/>
      </material>
-   
-   
+
+
      <material name="Nickel" state="solid">
            <D value="8.96" unit="g/cm3"/>
            <fraction n="1." ref="nickel"/>
@@ -498,10 +498,10 @@ MATERIALS = '''
      </material>
 
 
-   
-   
+
+
      <!-- Kapton -->
-   
+
      <material name="Kapton" state="solid">
            <D value="1.42" unit="g/cm3"/>
            <fraction n="0.0273" ref="hydrogen"/>
@@ -509,7 +509,7 @@ MATERIALS = '''
            <fraction n="0.0765" ref="nitrogen"/>
            <fraction n="0.1749" ref="oxygen"/>
      </material>
-   
+
 
 
       <!-- Aluminum, Hineycomb, Carbon fibre, etc. (simple materials) -->
@@ -518,14 +518,14 @@ MATERIALS = '''
            <D value="2.700" unit="g/cm3"/>
            <fraction n="1." ref="aluminum"/>
       </material>
-        
-      <material name="CarbonFibre" state="solid">      
+
+      <material name="CarbonFibre" state="solid">
            <D unit="g/cm3" value="1.55"/>
-           <fraction n="0.85" ref="carbon"/>      
-           <fraction n="0.03" ref="hydrogen"/>      
+           <fraction n="0.85" ref="carbon"/>
+           <fraction n="0.03" ref="hydrogen"/>
            <fraction n="0.04" ref="nitrogen"/>
            <fraction n="0.08" ref="oxygen"/>
-      </material>     
+      </material>
 
       <material name="Honeycomb" state="solid">
            <D value="0.030" unit="g/cm3"/>
@@ -542,7 +542,7 @@ MATERIALS = '''
       <material name="Tungsten" state="solid">
           <D value="19.3" unit="g/cm3"/>
           <fraction n="1." ref="tungsten"/>
-      </material> 
+      </material>
 
      <!-- Cadmium Telluride -->
      <material name="CdTe" state="solid">
@@ -593,7 +593,7 @@ MATERIALS = '''
         <fraction n="0.0033" ref="B"/>
      </material>
 
-     <!-- CdWO4 -->  
+     <!-- CdWO4 -->
      <!-- see https://www.tandfonline.com/doi/pdf/10.1080/00223131.2008.10875862 -->
      <!-- see https://www.convertunits.com/molarmass/CdWO4 -->
      <material name="CdWO4" state="solid">
@@ -622,10 +622,10 @@ STRUCTURE = '''
     </structure>
 '''
 
-MODULE_NAME  = __main__.__file__.split("/")[-1].split("\\")[-1] 
-HELP_MESSAGE = ''' 
+MODULE_NAME  = __main__.__file__.split("/")[-1].split("\\")[-1]
+HELP_MESSAGE = '''
 
-    Usage: 
+    Usage:
             python  %s  out_name  input_file_1.stl input_file_2.stl  input_file_N.stl"
 
             or
@@ -634,12 +634,12 @@ HELP_MESSAGE = '''
 
 
     Materials:
- 
+
             Material are encoded in the stl file name
             For instance, my_geometry_part_Aluminum.stl - this part will be parsed as made of aluminum
             See  %s --materials to display list of available materials
-              
-	
+
+
 '''%(MODULE_NAME,MODULE_NAME,MODULE_NAME)
 
 
@@ -648,287 +648,287 @@ HELP_MESSAGE = '''
 
 
 def __is_help__():
-	ishelp = False 
-	for arg in sys.argv:
-		if "-h" in arg.lower() and arg[0]=="-": ishelp = True 
-		if "help" in arg.lower(): ishelp = True
-	if ishelp: print (HELP_MESSAGE)
+        ishelp = False
+        for arg in sys.argv:
+                if "-h" in arg.lower() and arg[0]=="-": ishelp = True
+                if "help" in arg.lower(): ishelp = True
+        if ishelp: print (HELP_MESSAGE)
 
 
 def __print_error__(text):
-	print (text)
+        print (text)
 
 
 def __print__(text):
-	print (text)
+        print (text)
 
 
 def __print_progress_bar__(text,percentage):
-	sys.stdout.write("\r%s %5.1f%%"%(text,percentage))
-	sys.stdout.flush()
-	if percentage==100.: print()
+        sys.stdout.write("\r%s %5.1f%%"%(text,percentage))
+        sys.stdout.flush()
+        if percentage==100.: print()
 
 
 def __print_and_terminate__(text):
-	__print_error__(text + " ==> terminating the program!")
-	__print__(ERROR_CONTACT)
-	raise SystemExit
-	
+        __print_error__(text + " ==> terminating the program!")
+        __print__(ERROR_CONTACT)
+        raise SystemExit
+
 
 def __str_to_float__(text):
-	try:
-		return ast.literal_eval(text)
-	except Exception as e:
-		__print_and_terminate__("String to float conversion failed due to: "+str(e))
+        try:
+                return ast.literal_eval(text)
+        except Exception as e:
+                __print_and_terminate__("String to float conversion failed due to: "+str(e))
 
 def __float_to_str__(val):
-	return '{}'.format(val)
-		
+        return '{}'.format(val)
+
 def __get_three_values__(line, delimiter):
-	vals = line.split(delimiter)[-1]
-	vals = vals.split()
-	if len(vals)!=3:
-		#print 
-		#print delimiter
-		#print vals
-		__print_and_terminate__("Input format inconsistency: more than 3 values per line: "+line)
-	return [__str_to_float__(val) for val in vals]
+        vals = line.split(delimiter)[-1]
+        vals = vals.split()
+        if len(vals)!=3:
+                #print
+                #print delimiter
+                #print vals
+                __print_and_terminate__("Input format inconsistency: more than 3 values per line: "+line)
+        return [__str_to_float__(val) for val in vals]
 
 
 #def __get_orientation__(norm, vertex1, vertex2, vertex3):
-#	v1 = np.array(vertex1)
-#	v2 = np.array(vertex2)
-#	v3 = np.array(vertex3)
-#	vec1 = v2 - v1
-#	vec2 = v3 - v2
-#	norm1 = np.cross(vec1,vec2)
-#	return 1 if np.inner(norm,norm1)>0 else -1
+#       v1 = np.array(vertex1)
+#       v2 = np.array(vertex2)
+#       v3 = np.array(vertex3)
+#       vec1 = v2 - v1
+#       vec2 = v3 - v2
+#       norm1 = np.cross(vec1,vec2)
+#       return 1 if np.inner(norm,norm1)>0 else -1
 
 def __vectr_subtr__(vector1, vector2):
-	return [x[0]-x[1] for x in zip(vector1,vector2)]
+        return [x[0]-x[1] for x in zip(vector1,vector2)]
 
 def __vector_cross__(vector1, vector2):
-	return [
+        return [
                   vector1[1]*vector2[2] - vector1[2]*vector2[1],
                 - vector1[0]*vector2[2] + vector1[2]*vector2[0],
                   vector1[0]*vector2[1] - vector1[1]*vector2[0],
                         ]
 
 def __vector_inner__(vector1,vector2):
-	return sum([x[0]*x[1] for x in zip(vector1,vector2)])
+        return sum([x[0]*x[1] for x in zip(vector1,vector2)])
 
 def __get_orientation__(norm, v1, v2, v3):
-	vec1 = __vectr_subtr__(v2, v1)
-	vec2 = __vectr_subtr__(v3, v2)
-	norm1 = __vector_cross__(vec1,vec2)
-	return 1 if __vector_inner__(norm,norm1)>0 else -1
+        vec1 = __vectr_subtr__(v2, v1)
+        vec2 = __vectr_subtr__(v3, v2)
+        norm1 = __vector_cross__(vec1,vec2)
+        return 1 if __vector_inner__(norm,norm1)>0 else -1
 
 def __get_inputname_base__(fname):
-	return fname.split("/")[-1].split(".stl")[0]
+        return fname.split("/")[-1].split(".stl")[0]
 
 
 def get_triangles(fname):
-	f=open(fname,"r")
-	solid = None
+        f=open(fname,"r")
+        solid = None
 
-	lines  = f.readlines()
-	nlines = len(lines)
-	for l in xrange(nlines):
-		__print_progress_bar__("Processing file     %s: "%fname,100.*(l+1)/nlines)
-		line = lines[l].lower()
-	
-
-		# start facet 
-		if "facet " in line:
-			solid = {}
-
-		# Get normal to triangle
-		if "normal" in line:
-			if "normal" in solid.keys():
-				__print_and_terminate__("Input format inconsistency: duplicate normal for triangle")
-			solid["normal"] = __get_three_values__(line, "normal")
-			continue
+        lines  = f.readlines()
+        nlines = len(lines)
+        for l in xrange(nlines):
+                __print_progress_bar__("Processing file     %s: "%fname,100.*(l+1)/nlines)
+                line = lines[l].lower()
 
 
-		# Get vertices
-		if "vertex" in line:
-			if "vertex" not in solid:
-				solid["vertex"] = []
-			if len(solid["vertex"])>=3:
-				__print_and_terminate__("Input format inconsistency: more than 3 vertices per triangle")
-			solid["vertex"].append(__get_three_values__(line,"vertex"))
-			continue
+                # start facet
+                if "facet " in line:
+                        solid = {}
+
+                # Get normal to triangle
+                if "normal" in line:
+                        if "normal" in solid.keys():
+                                __print_and_terminate__("Input format inconsistency: duplicate normal for triangle")
+                        solid["normal"] = __get_three_values__(line, "normal")
+                        continue
 
 
-		# Finalize the triangle
-		if "endfacet" in line:
-			yield solid
+                # Get vertices
+                if "vertex" in line:
+                        if "vertex" not in solid:
+                                solid["vertex"] = []
+                        if len(solid["vertex"])>=3:
+                                __print_and_terminate__("Input format inconsistency: more than 3 vertices per triangle")
+                        solid["vertex"].append(__get_three_values__(line,"vertex"))
+                        continue
+
+
+                # Finalize the triangle
+                if "endfacet" in line:
+                        yield solid
 
 
 def guess_material(fname):
-	target = fname.lower()
-	materials = [m["name"] for m in MATERIALS_LIST if m["name"].lower() in target]
-	if len(materials)>1:
-		__print__("    Ambigous materials for file: %s:"%fname)
-		[__print__("        %s"%x) for x in materials]
-		__print__("        ... please specify name properly - assigning Vacuum to this volume!")
-		return MATERIALS_LIST[0]["name"]
-	elif not materials:
-		__print__("    Could not parse material for the file %s: - asigning Vacuum to this volume!"%fname)
-		return MATERIALS_LIST[0]["name"]
-	
-	__print__("    File %s - material parsed: %s"%(fname,materials[0]))
-	return materials[0]
+        target = fname.lower()
+        materials = [m["name"] for m in MATERIALS_LIST if m["name"].lower() in target]
+        if len(materials)>1:
+                __print__("    Ambigous materials for file: %s:"%fname)
+                [__print__("        %s"%x) for x in materials]
+                __print__("        ... please specify name properly - assigning Vacuum to this volume!")
+                return MATERIALS_LIST[0]["name"]
+        elif not materials:
+                __print__("    Could not parse material for the file %s: - asigning Vacuum to this volume!"%fname)
+                return MATERIALS_LIST[0]["name"]
+
+        __print__("    File %s - material parsed: %s"%(fname,materials[0]))
+        return materials[0]
 
 def stl_to_gdml(fname):
-	outname = __get_inputname_base__(fname)
-	outsolidname = outname+"-SOL"
+        outname = __get_inputname_base__(fname)
+        outsolidname = outname+"-SOL"
 
-	# sort vertices
-	triangles = []
-	sortedvertexes = []
-	for triangle in get_triangles(fname):
-		triangles.append(triangle)
-		for vertex in triangle["vertex"]:
-			x = __float_to_str__(vertex[0] + X_OFFSET)
-			y = __float_to_str__(vertex[1] + Y_OFFSET)
-			z = __float_to_str__(vertex[2] + Z_OFFSET)
-			thekey = x+y+z
-			sortedvertexes.append(thekey)
+        # sort vertices
+        triangles = []
+        sortedvertexes = []
+        for triangle in get_triangles(fname):
+                triangles.append(triangle)
+                for vertex in triangle["vertex"]:
+                        x = __float_to_str__(vertex[0] + X_OFFSET)
+                        y = __float_to_str__(vertex[1] + Y_OFFSET)
+                        z = __float_to_str__(vertex[2] + Z_OFFSET)
+                        thekey = x+y+z
+                        sortedvertexes.append(thekey)
 
-	#__print__("Soring vertices - may take some time...")
-	sortedvertexes = sorted(sortedvertexes)
-	#__print__("... done sorting")
+        #__print__("Soring vertices - may take some time...")
+        sortedvertexes = sorted(sortedvertexes)
+        #__print__("... done sorting")
 
-	# remove duplicates from verticves
-	previous = None
-	sortednoduplicates = []
-	vertexidnoduplicates = []
-	for tmpvertex in sortedvertexes:
-		if tmpvertex == previous: continue
-		sortednoduplicates.append(tmpvertex)
-		vertexidnoduplicates.append(None)
-		previous = tmpvertex
-	
-	# create gdml vertices
-	# create gdml solids
-	vertices = '\n    <define>\n'
-	solids   = '\n    <solids>\n'
-	solids  += '        <tessellated aunit="%s" lunit="%s" name="%s">\n'%(AUNIT,LUNIT,outsolidname)
-	vertexid = 0
-	for i in xrange(len(triangles)):
-		triangle = triangles[i]
-		__print_progress_bar__("generating gdml for %s: "%fname,100.*(i+1)/len(triangles))
-		if len(triangle["vertex"])!=3:
-			__print_and_terminate__("Illegal number of vertices per triangle: "+str(triangle["vertex"]))
-		ids = []
-		for vertex in triangle["vertex"]:
-			x = __float_to_str__(vertex[0] + X_OFFSET)
-			y = __float_to_str__(vertex[1] + Y_OFFSET)
-			z = __float_to_str__(vertex[2] + Z_OFFSET)
-			thekey = x+y+z
-			theitem = bisect(sortednoduplicates, thekey)-1
-			assert(theitem>=0)
-			# add vertex to gdml
-			if vertexidnoduplicates[theitem] is None: 
-				vertices+='        <position name="%s_v%d" unit="%s" x="%s" y="%s" z="%s"/>\n'%	(outname,
-														vertexid,
-														LUNIT,
-														x,
-														y,
-														z
-														) 
-				vertexidnoduplicates[theitem] = vertexid
-				vertexid+=1
-			#  add vertex to facet
-			ids.append(vertexidnoduplicates[theitem])
+        # remove duplicates from verticves
+        previous = None
+        sortednoduplicates = []
+        vertexidnoduplicates = []
+        for tmpvertex in sortedvertexes:
+                if tmpvertex == previous: continue
+                sortednoduplicates.append(tmpvertex)
+                vertexidnoduplicates.append(None)
+                previous = tmpvertex
 
-		# create facet
-		orientation = __get_orientation__(triangle["normal"], *triangle["vertex"])
-		idsforsolid = ids if orientation>0 else [ids[2],ids[1],ids[0]]
-		solids+= '             <triangular vertex1="%s_v%d" vertex2="%s_v%d" vertex3="%s_v%d"/>\n'%(outname, idsforsolid[0],
-													outname, idsforsolid[1],
-													outname, idsforsolid[2]
-													)
+        # create gdml vertices
+        # create gdml solids
+        vertices = '\n    <define>\n'
+        solids   = '\n    <solids>\n'
+        solids  += '        <tessellated aunit="%s" lunit="%s" name="%s">\n'%(AUNIT,LUNIT,outsolidname)
+        vertexid = 0
+        for i in xrange(len(triangles)):
+                triangle = triangles[i]
+                __print_progress_bar__("generating gdml for %s: "%fname,100.*(i+1)/len(triangles))
+                if len(triangle["vertex"])!=3:
+                        __print_and_terminate__("Illegal number of vertices per triangle: "+str(triangle["vertex"]))
+                ids = []
+                for vertex in triangle["vertex"]:
+                        x = __float_to_str__(vertex[0] + X_OFFSET)
+                        y = __float_to_str__(vertex[1] + Y_OFFSET)
+                        z = __float_to_str__(vertex[2] + Z_OFFSET)
+                        thekey = x+y+z
+                        theitem = bisect(sortednoduplicates, thekey)-1
+                        assert(theitem>=0)
+                        # add vertex to gdml
+                        if vertexidnoduplicates[theitem] is None:
+                                vertices+='        <position name="%s_v%d" unit="%s" x="%s" y="%s" z="%s"/>\n'% (outname,
+                                                                                                                vertexid,
+                                                                                                                LUNIT,
+                                                                                                                x,
+                                                                                                                y,
+                                                                                                                z
+                                                                                                                )
+                                vertexidnoduplicates[theitem] = vertexid
+                                vertexid+=1
+                        #  add vertex to facet
+                        ids.append(vertexidnoduplicates[theitem])
 
-			
-			
-	
-	# finalize 
-	vertices+= '    </define>\n'
-	solids+=   '        </tessellated>\n'
-	solids+=   '    </solids>\n'
-
-	# material
-	material = guess_material(fname) # "Vacuum"
+                # create facet
+                orientation = __get_orientation__(triangle["normal"], *triangle["vertex"])
+                idsforsolid = ids if orientation>0 else [ids[2],ids[1],ids[0]]
+                solids+= '             <triangular vertex1="%s_v%d" vertex2="%s_v%d" vertex3="%s_v%d"/>\n'%(outname, idsforsolid[0],
+                                                                                                        outname, idsforsolid[1],
+                                                                                                        outname, idsforsolid[2]
+                                                                                                        )
 
 
-	# structure
-	structure = STRUCTURE%(outname, material, outsolidname,"")
 
-	# world
-	world = WORLD%outname
-	
 
-	
-	# create output gdml file
+        # finalize
+        vertices+= '    </define>\n'
+        solids+=   '        </tessellated>\n'
+        solids+=   '    </solids>\n'
+
+        # material
+        material = guess_material(fname) # "Vacuum"
+
+
+        # structure
+        structure = STRUCTURE%(outname, material, outsolidname,"")
+
+        # world
+        world = WORLD%outname
+
+
+
+        # create output gdml file
     # I performed some modifications here so that the output file is produced
     # at the same directory except with a .gdml extension
-	outfilename = fname[:-4] + ".gdml"
-	fout = open(outfilename,"w")
-	fout.write(HEADER)
-	fout.write(SCHEMA)
-	#fout.write(MATERIALS)
-	fout.write(vertices)
-	fout.write(solids)
-	fout.write(structure)
-	fout.write(world)
-	fout.write(FOOTER)
-	fout.close()
-	return outfilename
-					 									
+        outfilename = fname[:-4] + ".gdml"
+        fout = open(outfilename,"w")
+        fout.write(HEADER)
+        fout.write(SCHEMA)
+        #fout.write(MATERIALS)
+        fout.write(vertices)
+        fout.write(solids)
+        fout.write(structure)
+        fout.write(world)
+        fout.write(FOOTER)
+        fout.close()
+        return outfilename
+
 
 def creat_gdml_bundle(outname, infiles):
-	# some world constants
-	WORLD_BOX_SIZE = __float_to_str__(10000.)
-	SOLIDNMAE  = "world_solid"
-	VOLUMENAME = "world_volume"
+        # some world constants
+        WORLD_BOX_SIZE = __float_to_str__(10000.)
+        SOLIDNMAE  = "world_solid"
+        VOLUMENAME = "world_volume"
 
-	# solids
-	solid  = '\n    <solids>\n'
-	solid += '        <box lunit="%s" name="%s" x="%s" y="%s" z="%s" />\n'%(LUNIT,SOLIDNMAE,WORLD_BOX_SIZE,WORLD_BOX_SIZE,WORLD_BOX_SIZE)
-	solid += '    </solids>\n'
+        # solids
+        solid  = '\n    <solids>\n'
+        solid += '        <box lunit="%s" name="%s" x="%s" y="%s" z="%s" />\n'%(LUNIT,SOLIDNMAE,WORLD_BOX_SIZE,WORLD_BOX_SIZE,WORLD_BOX_SIZE)
+        solid += '    </solids>\n'
 
-	# structure 
-	includes  = "\n\n"
-	for fname in infiles:
-		gdmlname = stl_to_gdml(fname)
-		includes += '            <physvol>\n'
-		includes += '                <file name="%s"/>\n'%gdmlname
-		#includes += '                <position name="stk_corner_bolts_pos" x="stk_adjust_x_position" y="stk_adjust_y_position" z="stk_adjust_z_position" unit="mm"/>'
-		#includes += '                <rotationref ref="old_to_new_coordinatesystem_rotation" />'
-		includes += '             </physvol>\n'
+        # structure
+        includes  = "\n\n"
+        for fname in infiles:
+                gdmlname = stl_to_gdml(fname)
+                includes += '            <physvol>\n'
+                includes += '                <file name="%s"/>\n'%gdmlname
+                #includes += '                <position name="stk_corner_bolts_pos" x="stk_adjust_x_position" y="stk_adjust_y_position" z="stk_adjust_z_position" unit="mm"/>'
+                #includes += '                <rotationref ref="old_to_new_coordinatesystem_rotation" />'
+                includes += '             </physvol>\n'
 
-	includes += "\n"
-	structure = STRUCTURE%(VOLUMENAME,"Vacuum", SOLIDNMAE,includes)
+        includes += "\n"
+        structure = STRUCTURE%(VOLUMENAME,"Vacuum", SOLIDNMAE,includes)
 
-	# world
-	world = WORLD%VOLUMENAME
+        # world
+        world = WORLD%VOLUMENAME
 
 
-	# create top level gdml file
-	outname = outname+".gdml"
-	fout = open(outname,"w")
-	fout.write(HEADER)
-	fout.write(SCHEMA)
-	fout.write(MATERIALS)
-	fout.write(solid)
-	fout.write(structure)
-	fout.write(world)
-	fout.write(FOOTER)
-	fout.close()
-	
-		
+        # create top level gdml file
+        outname = outname+".gdml"
+        fout = open(outname,"w")
+        fout.write(HEADER)
+        fout.write(SCHEMA)
+        fout.write(MATERIALS)
+        fout.write(solid)
+        fout.write(structure)
+        fout.write(world)
+        fout.write(FOOTER)
+        fout.close()
+
+
 
 #__is_help__()
 #stl_to_gdml(sys.argv[1])
@@ -936,20 +936,20 @@ def creat_gdml_bundle(outname, infiles):
 
 __is_help__()
 if "--materials" in sys.argv:
-	__print__(MATERIALS_INFO)
-	raise SystemExit
+        __print__(MATERIALS_INFO)
+        raise SystemExit
 if len(sys.argv)<3:
-	__print__('Not enough argumnets provided! see  "python %s -h" for more details'%MODULE_NAME)
-	raise SystemExit
+        __print__('Not enough argumnets provided! see  "python %s -h" for more details'%MODULE_NAME)
+        raise SystemExit
 matchnames = [item for item in sys.argv[2:] if sys.argv[1].lower().split('.gdml')[0] == item.lower().split('.stl')[0]]
 if matchnames:
-	__print__('[out_name] should not coincide with one of the input .stl file names  "python %s -h" for more details'%MODULE_NAME)
-	__print__('[out_name] = ' + sys.argv[1] + ' mathces with ' + matchnames[0] + ' - please use different name for the [out_name], for example "top.gdml"')
-	raise SystemExit
+        __print__('[out_name] should not coincide with one of the input .stl file names  "python %s -h" for more details'%MODULE_NAME)
+        __print__('[out_name] = ' + sys.argv[1] + ' mathces with ' + matchnames[0] + ' - please use different name for the [out_name], for example "top.gdml"')
+        raise SystemExit
 if ".stl" in sys.argv[1]:
-	__print__('Please provide output file name! see  "python %s -h" for more details'%MODULE_NAME)
-	raise SystemExit
+        __print__('Please provide output file name! see  "python %s -h" for more details'%MODULE_NAME)
+        raise SystemExit
 creat_gdml_bundle(sys.argv[1].split('.gdml')[0],sys.argv[2:])
-	
-	
-	
+
+
+
