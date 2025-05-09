@@ -18,6 +18,11 @@ Get a copy of this branch from this repository:
 ```bash
 git clone -b SVTOB_UK https://github.com/eic/epic.git
 ```
+Install and set up eic-shell:
+```bash
+curl --location https://get.epic-eic.org | bash
+./eic-shell
+```
 
 Configure, build, and install in eic-shell in the usual way:
 ```bash
