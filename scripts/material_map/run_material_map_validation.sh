@@ -125,10 +125,10 @@ echo "::endgroup::"
 echo "::group::-------Comparison plots---------"
 rm -rf Validation/new
 mkdir -p Validation/new
-root -l -b -q Examples/Scripts/MaterialMapping/Mat_map.C'("'${propFile}_new'.root","'${trackFile}'","Validation/new")'
+root -l -b -q mat_map_local.C'("'${propFile}_new'.root","'${trackFile}'","Validation/new")'
 rm -rf Validation/old
 mkdir -p Validation/old
-root -l -b -q Examples/Scripts/MaterialMapping/Mat_map.C'("'${propFile}_old'.root","'${trackFile}'","Validation/old")'
+root -l -b -q mat_map_local.C'("'${propFile}_old'.root","'${trackFile}'","Validation/old")'
 
 rm -rf Surfaces
 mkdir -p Surfaces/new/ratio_plot
