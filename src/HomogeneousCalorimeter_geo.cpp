@@ -40,56 +40,66 @@ template <class XmlComp> Position get_xml_xyz(XmlComp& comp, dd4hep::xml::Strng_
   return pos;
 }
 
-static Volume inner_support_collar(Detector& desc, xml_comp_t handle) {
+static Volume build_inner_support(Detector& desc, xml_comp_t handle,
+                                  xml_coll_t pts_extrudedpolygon) {
   // This consists of two circular tubes joined by straight sections
 
   Material inner_ring_material = desc.material(handle.materialStr());
 
-  double electron_rmin   = handle.attr<double>(_Unicode(electron_rmin));
-  double electron_rmax   = handle.attr<double>(_Unicode(electron_rmax));
-  double proton_rmin     = handle.attr<double>(_Unicode(proton_rmin));
-  double proton_rmax     = handle.attr<double>(_Unicode(proton_rmax));
+  double electron_r      = handle.attr<double>(_Unicode(electron_r));
+  double proton_r        = handle.attr<double>(_Unicode(proton_r));
   double proton_x_offset = handle.attr<double>(_Unicode(proton_x_offset));
   double z_length        = handle.z_length();
 
-  double straight_section_tilt =
-      acos(((electron_rmax + electron_rmin) - (proton_rmax + proton_rmin)) / 2 / proton_x_offset);
-  double mean_radius = (electron_rmax + electron_rmin + proton_rmax + proton_rmin) / 4;
+  std::vector<double> pt_innerframe_x; //The points information for inner supporting frame
+  std::vector<double> pt_innerframe_y;
+  for (xml_coll_t position_i(pts_extrudedpolygon, _U(position)); position_i; ++position_i) {
+    xml_comp_t position_comp = position_i;
+    pt_innerframe_x.push_back((position_comp.x()));
+    pt_innerframe_y.push_back((position_comp.y()));
+  }
+
+  std::vector<double> sec_z  = {-z_length / 2., z_length / 2.};
+  std::vector<double> sec_x  = {0., 0.};
+  std::vector<double> sec_y  = {0., 0.};
+  std::vector<double> zscale = {1., 1.};
+
+  ExtrudedPolygon inner_support_envelope(pt_innerframe_x, pt_innerframe_y, sec_z, sec_x, sec_y,
+                                         zscale);
+
+  double straight_section_tilt = acos((electron_r - proton_r) / proton_x_offset);
+  double straight_section_length =
+      proton_x_offset + (proton_r - electron_r) * cos(straight_section_tilt);
   Position straight_section_offset{
-      proton_x_offset / 2 + cos(straight_section_tilt) * mean_radius,
-      sin(straight_section_tilt) * mean_radius,
-      0,
-  };
-  Position straight_section_offset_mirror_y{
-      straight_section_offset.x(),
-      -straight_section_offset.y(),
-      straight_section_offset.z(),
+      straight_section_length / 2 + cos(straight_section_tilt) * electron_r,
+      0.,
+      0.,
   };
 
-  Tube electron_side{electron_rmin, electron_rmax, z_length / 2, straight_section_tilt,
-                     -straight_section_tilt};
-  Tube proton_side{proton_rmin, proton_rmax, z_length / 2, -straight_section_tilt,
-                   straight_section_tilt};
+  // use double length for cutout (any value larger than 1 would work)
+  double cutout_length = 2 * z_length;
+
+  Tube electron_side{0., electron_r, cutout_length / 2};
+  Tube proton_side{0., proton_r, cutout_length / 2};
   Trd1 electron_proton_straight_section{
-      (electron_rmax - electron_rmin) / 2,
-      (proton_rmax - proton_rmin) / 2,
-      z_length / 2,
-      proton_x_offset * sin(straight_section_tilt) / 2,
+      electron_r * sin(straight_section_tilt),
+      proton_r * sin(straight_section_tilt),
+      cutout_length / 2,
+      straight_section_length / 2,
   };
-  UnionSolid inner_support{
+  UnionSolid inner_support_hole{
       UnionSolid{
-          UnionSolid{
-              electron_side,
-              proton_side,
-              Position{proton_x_offset, 0., 0.},
-          },
-          electron_proton_straight_section,
-          Transform3D{straight_section_offset} * RotationZ(straight_section_tilt) *
-              RotationX(90 * deg),
+          electron_side,
+          proton_side,
+          Position{proton_x_offset, 0., 0.},
       },
       electron_proton_straight_section,
-      Transform3D{straight_section_offset_mirror_y} * RotationZ(-straight_section_tilt) *
-          RotationX(-90 * deg),
+      Transform3D{straight_section_offset} * RotationZ(90 * deg) * RotationX(90 * deg),
+  };
+
+  SubtractionSolid inner_support{
+      inner_support_envelope,
+      inner_support_hole,
   };
 
   Volume inner_support_vol{"inner_support_vol", inner_support, inner_ring_material};
@@ -275,9 +285,8 @@ static std::tuple<int, std::pair<int, int>> add_12surface_disk(Detector& desc, A
   double Innerb                 = plm.attr<double>(_Unicode(inneradiusb));
   double phimin                 = dd4hep::getAttrOrDefault<double>(plm, _Unicode(phimin), 0.);
   double phimax = dd4hep::getAttrOrDefault<double>(plm, _Unicode(phimax), 2. * M_PI);
+  xml_coll_t pts_extrudedpolygon(plm, _Unicode(points_extrudedpolygon));
 
-  std::vector<double> pt_innerframe_x; //The points information for inner supporting frame
-  std::vector<double> pt_innerframe_y;
   double half_modx = modSize.x() * 0.5, half_mody = modSize.y() * 0.5;
 
   //=========================================================
@@ -316,8 +325,8 @@ static std::tuple<int, std::pair<int, int>> add_12surface_disk(Detector& desc, A
     env.placeVolume(env_vol, tr_global);          // Place the mother volume for all modules
     env.placeVolume(ring12_vol, tr_global_Oring); // Place the outer supporting frame
 
-    xml_comp_t collar_comp   = plm.child(_Unicode(inner_support_collar));
-    Volume inner_support_vol = inner_support_collar(desc, collar_comp);
+    xml_comp_t collar_comp   = plm.child(_Unicode(inner_support));
+    Volume inner_support_vol = build_inner_support(desc, collar_comp, pts_extrudedpolygon);
     env_vol.placeVolume(inner_support_vol,
                         Transform3D{RotationZ{Nrot}} * Translation3D(collar_comp.x_offset(0.),
                                                                      collar_comp.y_offset(0.),
@@ -328,8 +337,10 @@ static std::tuple<int, std::pair<int, int>> add_12surface_disk(Detector& desc, A
   // Placing The Modules
   //=====================================================================
 
-  auto points = epic::geo::fillRectangles({half_modx, 0.}, modSize.x(), modSize.y(), 0.,
-                                          (rmax / std::cos(Prot)), phimin, phimax);
+  xml_comp_t placement = plm.child(_Unicode(placement));
+  auto points =
+      epic::geo::fillRectangles({placement.x_offset(0.), placement.y_offset(0.)}, modSize.x(),
+                                modSize.y(), 0., (rmax / std::cos(Prot)), phimin, phimax);
 
   std::pair<double, double> c1(0., 0.);
   auto polyVertex = epic::geo::getPolygonVertices(c1, (rmax / std::cos(Prot)), M_PI / 12., 12);
@@ -339,7 +350,6 @@ static std::tuple<int, std::pair<int, int>> add_12surface_disk(Detector& desc, A
     out_vertices.push_back(a);
   }
 
-  xml_coll_t pts_extrudedpolygon(plm, _Unicode(points_extrudedpolygon));
   for (xml_coll_t position_i(pts_extrudedpolygon, _U(position)); position_i; ++position_i) {
     xml_comp_t position_comp = position_i;
     epic::geo::Point inpt    = {position_comp.x(), position_comp.y()};

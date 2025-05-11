@@ -61,7 +61,6 @@ private:
   Transform3D fieldRot, fieldRot_inv;                      // field rotation
   std::vector<float> steps, mins, maxs;                    // B map cell info
   int ir, ix, iy, iz;                                      // lookup indices
-  float idx_1_f, idx_2_f, idx_3_f;                         // transient float indicies
   float dr, dx, dy, dz;                                    // deltas for interpolation
   std::vector<std::vector<std::array<float, 2>>> Bvals_RZ; // B map values:  {R}, {Z}, {Br,Bz}
   std::vector<std::vector<std::vector<std::array<float, 3>>>>
@@ -134,6 +133,7 @@ bool FieldMapB::GetIndices(float R, float Z, int* idxR, int* idxZ, float* deltaR
   }
 
   // get indices
+  float idx_1_f, idx_2_f;
   *deltaR = std::modf((R - mins[0]) / steps[0], &idx_1_f);
   *deltaZ = std::modf((Z - mins[1]) / steps[1], &idx_2_f);
   *idxR   = static_cast<int>(idx_1_f);
@@ -151,6 +151,7 @@ bool FieldMapB::GetIndices(float X, float Y, float Z, int* idxX, int* idxY, int*
   }
 
   // get indices
+  float idx_1_f, idx_2_f, idx_3_f;
   *deltaX = std::modf((X - mins[0]) / steps[0], &idx_1_f);
   *deltaY = std::modf((Y - mins[1]) / steps[1], &idx_2_f);
   *deltaZ = std::modf((Z - mins[2]) / steps[2], &idx_3_f);

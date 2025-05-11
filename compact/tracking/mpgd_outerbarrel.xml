@@ -27,7 +27,7 @@
     <constant name="MPGDOuterBarrel_length"                        value="MPGDOuterBarrelModule_zmin1 + MPGDOuterBarrelModule_zmin2"/>
     <constant name="MPGDOuterBarrelModule_length"                  value="0.5*(MPGDOuterBarrelModule_zmin1 + MPGDOuterBarrelModule_zmin2 + MPGDOuterBarrelModule_zoverlap)"/>
     <constant name="MPGDOuterBarrelModule_offset"                  value="(MPGDOuterBarrelModule_zmin2 - MPGDOuterBarrelModule_zmin1)/2.0"/>
-
+    <constant name="MPGDOuterStrip_range"                          value="(MPGDOuterBarrelModule_length + MPGDOuterBarrelModule_width)/2.0*sqrt(2)"/>
 
     <comment> Layer parameters </comment>
     <constant name="MPGDOuterBarrelWindow_thickness"             value="50*um"/>
@@ -39,14 +39,6 @@
     <constant name="MPGDOuterBarrelReadOutNomex_thickness"       value="50*um"/>
     <constant name="MPGDOuterBarrelReadOutKapton_thickness"      value="50*um"/>
     <constant name="MPGDOuterBarrelPCB_thickness"                value="2.8*mm"/>
-
-    <comment> Thickness values </comment>
-    <constant name="MPGDOuterBarrelCathode_thickness"          value="MPGDOuterBarrelFoilKapton_thickness + MPGDOuterBarrelFoilCu_thickness"/>
-    <constant name="MPGDOuterBarrelFoil_thickness"             value="MPGDOuterBarrelFoilKapton_thickness + MPGDOuterBarrelFoilCu_thickness"/>
-    <constant name="MPGDOuterBarrelReadOut_thickness"          value="MPGDOuterBarrelReadOutNomex_thickness + MPGDOuterBarrelReadOutElectrode_thickness + MPGDOuterBarrelReadOutKapton_thickness"/>
-    <constant name="MPGDOuterBarrelModule_thickness"           value="MPGDOuterBarrelWindow_thickness + MPGDOuterBarrelCathode_thickness +
-                                                            MPGDOuterBarrelFoil_thickness + MPGDOuterBarrelReadOut_thickness +
-                                                            MPGDOuterBarrelPCB_thickness + MPGDOuterBarrelFrame_thickness" />
   </define>
 
    <detectors>
@@ -168,8 +160,13 @@
 
   <readouts>
     <readout name="OuterMPGDBarrelHits">
-      <segmentation type="CartesianGridXY" grid_size_x="0.150*mm*sqrt(12)" grid_size_y="0.150*mm*sqrt(12)" />
-      <id>system:8,layer:4,module:12,sensor:2,x:32:-14,y:-18</id>
+      <segmentation type="MultiSegmentation" key="strip">
+        <comment> Strip segmentations ("strip" field !=0) are not used at simulation time but only in digitization at reconstruction time, see digitization class, "MPGDTrackerDigi". </comment>
+        <segmentation name="Pixels"  type="CartesianGridUV" key_value="0" grid_size_u="0.150*mm*sqrt(12)"    grid_size_v="0.150*mm*sqrt(12)"    grid_angle="pi*rad/4" />
+        <segmentation name="UStrips" type="CartesianGridUV" key_value="1" grid_size_u="0.150*mm*sqrt(12)"    grid_size_v="MPGDOuterStrip_range" grid_angle="pi*rad/4" />
+        <segmentation name="VStrips" type="CartesianGridUV" key_value="2" grid_size_u="MPGDOuterStrip_range" grid_size_v="0.150*mm*sqrt(12)"    grid_angle="pi*rad/4"/>
+      </segmentation>
+      <id>system:8,layer:4,module:12,sensor:2,strip:30:2,u:-16,v:-16</id>
     </readout>
   </readouts>
 
