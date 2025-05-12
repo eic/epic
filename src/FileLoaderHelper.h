@@ -188,7 +188,7 @@ inline void EnsureFileFromURLExists(std::string url, std::string file, std::stri
                  "but a file already exists there and we will not remove it automatically");
     printout(ERROR, "FileLoader", "hint: backup the file, remove it manually, and retry");
     std::_Exit(EXIT_FAILURE);
-  }    
+  }
   // file_path now does not exist
 
   // symlink file_path to hash_path
