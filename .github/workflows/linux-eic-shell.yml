@@ -57,8 +57,11 @@ jobs:
         include:
           - CC: gcc
             CXX: g++
+            # -Wno-error=maybe-uninitialized for GCC only as it has issues with /usr/include/c++/12/bits/std_function.h
+            CXXFLAGS: -Werror -Wall -Wextra -Wno-error=maybe-uninitialized
           - CC: clang
             CXX: clang++
+            CXXFLAGS: -Werror -Wall -Wextra
     env:
       PREFIX: ${{ github.workspace }}/install
     steps:
@@ -94,7 +97,7 @@ jobs:
       with:
         platform-release: "eic_xl:nightly"
         run: |
-          CC=${{ matrix.CC }} CXX=${{ matrix.CXX }} cmake -B build -S . -DCMAKE_BUILD_TYPE=Debug -DCMAKE_INSTALL_PREFIX=${PREFIX} -DCMAKE_C_COMPILER_LAUNCHER=ccache -DCMAKE_CXX_COMPILER_LAUNCHER=ccache -DUSE_ASAN=ON -DUSE_UBSAN=ON
+          CC=${{ matrix.CC }} CXX=${{ matrix.CXX }} CXXFLAGS="${{ matrix.CXXFLAGS }}" cmake -B build -S . -DCMAKE_BUILD_TYPE=Debug -DCMAKE_INSTALL_PREFIX=${PREFIX} -DCMAKE_C_COMPILER_LAUNCHER=ccache -DCMAKE_CXX_COMPILER_LAUNCHER=ccache -DUSE_ASAN=ON -DUSE_UBSAN=ON
           cmake --build build -- -k -j $(getconf _NPROCESSORS_ONLN) install
     - uses: actions/upload-artifact@v4
       with:
