@@ -180,6 +180,15 @@ inline void EnsureFileFromURLExists(std::string url, std::string file, std::stri
       printout(ERROR, "FileLoader", "hint: backup the file, remove it manually, and retry");
       std::_Exit(EXIT_FAILURE);
     }
+  } else {
+    // file does not exists
+    if (fs::is_symlink(file_path)) {
+      // file is (dead) symllink
+      if (fs::remove(file_path) == false) {
+        printout(ERROR, "FileLoader", "unable to remove symlink " + file_path.string());
+        std::_Exit(EXIT_FAILURE);
+      }
+    }
   }
   // file_path now does not exist
 
