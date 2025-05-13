@@ -264,7 +264,7 @@
           <position x="BarrelTOF_CFoam_position" y="BarrelTOF1_zoffset" z="0" />
           <cooling_pipe name="cooling_pipe"
                         pipe_material="Aluminum"
-                        coolent_material="Water"
+                        coolant_material="Water"
                         rmin="BarrelTOF_Cooling_pipe_rmin"
                         rmax="BarrelTOF_Cooling_pipe_rmax"
                         offset_x="BarrelTOF_Cooling_pipe_x_center"
@@ -276,7 +276,7 @@
           <position x="BarrelTOF_CFoam_position" y="BarrelTOF2_zoffset" z="0" />
           <cooling_pipe name="cooling_pipe"
                         pipe_material="Aluminum"
-                        coolent_material="Water"
+                        coolant_material="Water"
                         rmin="BarrelTOF_Cooling_pipe_rmin"
                         rmax="BarrelTOF_Cooling_pipe_rmax"
                         offset_x="BarrelTOF_Cooling_pipe_x_center"
