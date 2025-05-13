@@ -755,6 +755,12 @@ static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector /* sens *
   assembly.placeVolume(std::get<9>(volumes_downstream), tf_downstream);
   assembly.placeVolume(std::get<11>(volumes_downstream), tf_downstream);
 
+  // delete temporaries
+  wallVis.destroy();
+  coatingVis.destroy();
+  IPwallVis.destroy();
+  IPcoatingVis.destroy();
+
   // -----------------------------
   // final placement
   auto pv_assembly = det.pickMotherVolume(sdet).placeVolume(assembly);
