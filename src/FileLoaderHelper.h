@@ -180,14 +180,16 @@ inline void EnsureFileFromURLExists(std::string url, std::string file, std::stri
       }
     }
   } else {
-    // failure mode: file exists but not symlink, and we won't remove files
-    printout(ERROR, "FileLoader",
-             "file " + file_path.string() + " already exists but is not a symlink");
-    printout(ERROR, "FileLoader",
-             "we tried to create a symlink " + file_path.string() + " to the actual resource, " +
-                 "but a file already exists there and we will not remove it automatically");
-    printout(ERROR, "FileLoader", "hint: backup the file, remove it manually, and retry");
-    std::_Exit(EXIT_FAILURE);
+    if (fs::exists(file_path)) {
+      // failure mode: file exists but not symlink, and we won't remove files
+      printout(ERROR, "FileLoader",
+               "file " + file_path.string() + " already exists but is not a symlink");
+      printout(ERROR, "FileLoader",
+               "we tried to create a symlink " + file_path.string() + " to the actual resource, " +
+                   "but a file already exists there and we will not remove it automatically");
+      printout(ERROR, "FileLoader", "hint: backup the file, remove it manually, and retry");
+      std::_Exit(EXIT_FAILURE);
+    }
   }
   // file_path now does not exist
 
