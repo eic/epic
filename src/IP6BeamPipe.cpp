@@ -52,7 +52,6 @@ static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector /* sens *
   Material m_Vacuum  = det.material("Vacuum");
   Material m_Wall    = det.material("StainlessSteel");
   Material m_Coating = det.material("Copper");
-  string vis_name    = x_det.visStr();
 
   // IP Beampipe
   double IP_beampipe_ID                = IP_pipe_c.attr<double>(_Unicode(ID));
@@ -65,10 +64,10 @@ static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector /* sens *
   double downstream_straight_length = IP_pipe_c.attr<double>(_Unicode(downstream_straight_length));
 
   // visualization
-  VisAttr wallVis("wall");
-  VisAttr coatingVis("coating");
-  VisAttr IPwallVis("IPwall");
-  VisAttr IPcoatingVis("IPcoating");
+  auto wallVis      = det.visAttributes(x_det.attr<std::string>(_Unicode(vis_wall)));
+  auto coatingVis   = det.visAttributes(x_det.attr<std::string>(_Unicode(vis_coating)));
+  auto IPwallVis    = det.visAttributes(x_det.attr<std::string>(_Unicode(vis_IPwall)));
+  auto IPcoatingVis = det.visAttributes(x_det.attr<std::string>(_Unicode(vis_IPcoating)));
 
   // colors: (r, g, b, alpha)
   wallVis.setColor(0.0, 0.0, 1.0, 1.0);      // blue
@@ -146,17 +145,15 @@ static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector /* sens *
                                IP_beampipe_coating_material);
   Volume v_upstream_IP_tube("v_upstream_IP_tube", upstream_IP_tube, IP_beampipe_wall_material);
 
-  // set vis colors
-  v_downstream_IP_tube.setVisAttributes(IPwallVis);
-  v_upstream_IP_tube.setVisAttributes(IPwallVis);
-  v_downstream_IP_coating.setVisAttributes(IPcoatingVis);
-  v_upstream_IP_coating.setVisAttributes(IPcoatingVis);
-
   // set names
-  sdet.setAttributes(det, v_upstream_IP_coating, x_det.regionStr(), x_det.limitsStr(), vis_name);
-  sdet.setAttributes(det, v_upstream_IP_tube, x_det.regionStr(), x_det.limitsStr(), vis_name);
-  sdet.setAttributes(det, v_downstream_IP_coating, x_det.regionStr(), x_det.limitsStr(), vis_name);
-  sdet.setAttributes(det, v_downstream_IP_tube, x_det.regionStr(), x_det.limitsStr(), vis_name);
+  sdet.setAttributes(det, v_upstream_IP_coating, x_det.regionStr(), x_det.limitsStr(),
+                     x_det.attr<std::string>(_Unicode(vis_IPcoating)));
+  sdet.setAttributes(det, v_upstream_IP_tube, x_det.regionStr(), x_det.limitsStr(),
+                     x_det.attr<std::string>(_Unicode(vis_IPwall)));
+  sdet.setAttributes(det, v_downstream_IP_coating, x_det.regionStr(), x_det.limitsStr(),
+                     x_det.attr<std::string>(_Unicode(vis_IPcoating)));
+  sdet.setAttributes(det, v_downstream_IP_tube, x_det.regionStr(), x_det.limitsStr(),
+                     x_det.attr<std::string>(_Unicode(vis_IPwall)));
 
   // place volumes
   assembly.placeVolume(v_upstream_IP_vacuum_fill, Position(0, 0, -upstream_straight_length / 2.0));
