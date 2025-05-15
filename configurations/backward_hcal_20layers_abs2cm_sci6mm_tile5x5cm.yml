@@ -2,5 +2,5 @@ features:
   fields:
     marco:
   hcal:
-    backward_25layers_LFHCAL_tile5x5cm:
+    backward_20layers_abs2cm_sci6mm_tile5x5cm:
     backward_endcap_flux:
