@@ -33,6 +33,7 @@
     <vis name="TOFModuleVis"      ref="TOFVis"              visible="true"  showdaughters="true"/>
     <vis name="TOFSupportVis"     ref="TrackerSupportVis"   visible="true"  showDaughters="true"/>
     <vis name="TOFSensorVis"      ref="TOFVis"              visible="true"  showDaughters="true"/>
+    <vis name="TOFASICChipVis"    ref="TOFVis"              visible="true"  showDaughters="true"/>
     <vis name="TOFBarrelModuleVis" ref="TOFVis"             visible="true"  showdaughters="true"/>
     <vis name="TOFHybridVis"      ref="AnlGold"             visible="true"  showDaughters="true"/>
     <vis name="TOFCoolingTube"    ref="AnlRed"              visible="true"  showDaughters="true"/>
