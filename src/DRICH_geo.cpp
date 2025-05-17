@@ -72,6 +72,11 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
   auto airgapMat       = desc.material(airgapElem.attr<std::string>(_Unicode(material)));
   auto airgapVis       = desc.visAttributes(airgapElem.attr<std::string>(_Unicode(vis)));
   auto airgapThickness = airgapElem.attr<double>(_Unicode(thickness));
+  //ribs
+  auto ribElem      = radiatorElem.child(_Unicode(rib));
+  auto ribMat       = desc.material(ribElem.attr<std::string>(_Unicode(material)));
+  auto ribVis       = desc.visAttributes(ribElem.attr<std::string>(_Unicode(vis)));
+  auto ribThickness = ribElem.attr<double>(_Unicode(thickness));
   // - mirror
   auto mirrorElem      = detElem.child(_Unicode(mirror));
   auto mirrorMat       = desc.material(mirrorElem.attr<std::string>(_Unicode(material)));
@@ -300,11 +305,67 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
   det.setPlacement(vesselPV);
 
   // BUILD RADIATOR ====================================================================
-
+  float aeroMin  = 0.;
+  float aeroMax  = 0.;
+  float phiStart = 0.;
+  float phiEnd   = 0.;
+  int nTiles[5]  = {10, 20, 25, 30, 35};
   // solid and volume: create aerogel and filter
-  Cone aerogelSolid(aerogelThickness / 2, radiatorRmin, radiatorRmax,
-                    radiatorRmin + boreDelta * aerogelThickness / vesselLength,
-                    radiatorRmax + snoutDelta * aerogelThickness / snoutLength);
+  auto radiatorPos = Position(0., 0., radiatorFrontplane + 0.5 * aerogelThickness) + originFront;
+  //std::cout<<radiatorPos<<std::endl;
+  for (int n = 0; n < 5; n++) {
+    for (int p = 0; p < nTiles[n]; p++) {
+      std::string tileName = "tile" + std::to_string(n) + "_" + std::to_string(p);
+      std::string ribName  = "rib" + std::to_string(n) + "_" + std::to_string(p);
+      aeroMin              = radiatorRmin + n * ((radiatorRmax - radiatorRmin) / 5);
+      aeroMax              = radiatorRmin + (n + 1) * ((radiatorRmax - radiatorRmin) / 5) - 0.5;
+      phiStart             = p * (2. / nTiles[n]) * M_PI; //phiStart+ p*0.6*M_PI;
+      phiEnd               = (p + 1) * (2. / nTiles[n]) * M_PI - 0.001 * M_PI; //(p+1)*0.6*M_PI ;
+
+      ConeSegment aerogelSolid(aerogelThickness / 2, aeroMin, aeroMax,
+                               aeroMin + boreDelta * aerogelThickness / vesselLength,
+                               aeroMax + snoutDelta * aerogelThickness / snoutLength, phiStart,
+                               phiEnd);
+
+      float ribPhi = (p + 1) * (2. / nTiles[n]) * M_PI;
+      ConeSegment aerogelRibSolid(
+          ribThickness / 2, aeroMin, aeroMax, aeroMin + boreDelta * aerogelThickness / vesselLength,
+          aeroMax + snoutDelta * aerogelThickness / snoutLength, phiEnd - 0.001 * M_PI, ribPhi);
+
+      Volume aerogelVol(detName + "_aerogel", aerogelSolid, aerogelMat);
+      aerogelVol.setVisAttributes(aerogelVis);
+
+      auto aerogelPlacement = Translation3D(radiatorPos) * // re-center to originFront
+                              RotationY(radiatorPitch);    // change polar angle to specified pitch
+      auto aerogelPV = gasvolVol.placeVolume(aerogelVol, aerogelPlacement);
+      DetElement aerogelDE(det, "aerogel_tile_de_" + tileName, n);
+      aerogelDE.setPlacement(aerogelPV);
+
+      Volume aerogelRibVol(detName + "_aerogel_rib", aerogelRibSolid, ribMat);
+      aerogelRibVol.setVisAttributes(ribVis);
+      auto aerogelRibPlacement = Translation3D(radiatorPos) * // re-center to originFront
+                                 RotationY(radiatorPitch); // change polar angle to specified pitch
+      auto aerogelRibPV = gasvolVol.placeVolume(aerogelRibVol, aerogelRibPlacement);
+      DetElement aerogelRibDE(det, "aerogel_rib_de_" + ribName, n);
+      aerogelRibDE.setPlacement(aerogelRibPV);
+
+      auto ribMin = radiatorRmin + (n + 1) * ((radiatorRmax - radiatorRmin) / 5);
+      ConeSegment aerogelRib1Solid(
+          ribThickness / 2, aeroMax, ribMin, aeroMax + boreDelta * aerogelThickness / vesselLength,
+          ribMin + snoutDelta * aerogelThickness / snoutLength, 0, 2 * M_PI);
+      Volume aerogelRib1Vol(detName + "_aerogel_rib_out", aerogelRib1Solid, ribMat);
+      aerogelRib1Vol.setVisAttributes(ribVis);
+      auto aerogelRib1Placement = Translation3D(radiatorPos) * // re-center to originFront
+                                  RotationY(radiatorPitch); // change polar angle to specified pitch
+      auto aerogelRib1PV = gasvolVol.placeVolume(aerogelRib1Vol, aerogelRib1Placement);
+      DetElement aerogelRib1DE(det, "aerogel_rib1_de_" + ribName, n);
+      aerogelRib1DE.setPlacement(aerogelRib1PV);
+      if (n == 0 && p == 0) {
+        double aerogelZpos = vesselPos.z() + aerogelPV.position().z();
+        desc.add(Constant("DRICH_aerogel_zpos", std::to_string(aerogelZpos)));
+      }
+    }
+  }
   Cone airgapSolid(airgapThickness / 2, radiatorRmin + boreDelta * aerogelThickness / vesselLength,
                    radiatorRmax + snoutDelta * aerogelThickness / snoutLength,
                    radiatorRmin + boreDelta * (aerogelThickness + airgapThickness) / vesselLength,
@@ -318,26 +379,29 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
       radiatorRmax +
           snoutDelta * (aerogelThickness + airgapThickness + filterThickness) / snoutLength);
 
-  Volume aerogelVol(detName + "_aerogel", aerogelSolid, aerogelMat);
+  //Volume aerogelVol(detName + "_aerogel", aerogelSolid, aerogelMat);
   Volume airgapVol(detName + "_airgap", airgapSolid, airgapMat);
   Volume filterVol(detName + "_filter", filterSolid, filterMat);
-  aerogelVol.setVisAttributes(aerogelVis);
+  //aerogelVol.setVisAttributes(aerogelVis);
   airgapVol.setVisAttributes(airgapVis);
   filterVol.setVisAttributes(filterVis);
-
+  //auto radiatorPos = Position(0., 0., radiatorFrontplane + 0.5 * aerogelThickness) + originFront;
   // aerogel placement and surface properties
   // TODO [low-priority]: define skin properties for aerogel and filter
   // FIXME: radiatorPitch might not be working correctly (not yet used)
+  /*
   auto radiatorPos = Position(0., 0., radiatorFrontplane + 0.5 * aerogelThickness) + originFront;
   auto aerogelPlacement = Translation3D(radiatorPos) * // re-center to originFront
                           RotationY(radiatorPitch);    // change polar angle to specified pitch
   auto aerogelPV = gasvolVol.placeVolume(aerogelVol, aerogelPlacement);
   DetElement aerogelDE(det, "aerogel_de", 0);
   aerogelDE.setPlacement(aerogelPV);
+  */
   // SkinSurface aerogelSkin(desc, aerogelDE, "mirror_optical_surface", aerogelSurf, aerogelVol);
   // aerogelSkin.isValid();
 
   // airgap and filter placement and surface properties
+
   if (!debugOptics) {
 
     auto airgapPlacement =
@@ -362,10 +426,10 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
     // filterSkin.isValid();
 
     // radiator z-positions (w.r.t. IP); only needed downstream if !debugOptics
-    double aerogelZpos = vesselPos.z() + aerogelPV.position().z();
-    double airgapZpos  = vesselPos.z() + airgapPV.position().z();
-    double filterZpos  = vesselPos.z() + filterPV.position().z();
-    desc.add(Constant("DRICH_aerogel_zpos", std::to_string(aerogelZpos)));
+    //double aerogelZpos = vesselPos.z() + aerogelPV.position().z();
+    double airgapZpos = vesselPos.z() + airgapPV.position().z();
+    double filterZpos = vesselPos.z() + filterPV.position().z();
+    //desc.add(Constant("DRICH_aerogel_zpos", std::to_string(aerogelZpos)));
     desc.add(Constant("DRICH_airgap_zpos", std::to_string(airgapZpos)));
     desc.add(Constant("DRICH_filter_zpos", std::to_string(filterZpos)));
   }
