@@ -2,12 +2,6 @@
 <!-- Copyright (C) 2022 Wouter Deconinck, Whitney Armstrong -->
 
 <lccdd>
-  <define>
-    <constant name="IPBeampipeUpstreamStraightLength" value="74.8 * cm"/>
-    <constant name="IPBeampipeDownstreamStraightLength" value="64.8 * cm"/>
-    <constant name="BeampipeOD" value="62 * mm"/>
-    <constant name="HadronConeOpenAngle" value="0.020 * rad + abs(CrossingAngle)"/>
-  </define>
 
   <display>
   </display>
@@ -33,18 +27,18 @@
                 place_vacuum="true">
         <outgoing_lepton wall_thickness="2.5 * mm"
                 coating_thickness="30 * um">
-          <zplane z="IPBeampipeUpstreamStraightLength" ID="IPBeampipeID"/>
-          <zplane z="454.449 * cm" ID="IPBeampipeID"/>
+          <zplane z="OutgoingLeptonBeamPipe_z0" ID="OutgoingLeptonBeamPipe_d0"/>
+          <zplane z="OutgoingLeptonBeamPipe_z1" ID="OutgoingLeptonBeamPipe_d1"/>
         </outgoing_lepton>
         <incoming_hadron wall_thickness="1.65 * mm"
                          coating_thickness="30 * um"
                          crossing_angle="CrossingAngle">
-          <zplane z="75.6 * cm" ID="2.527 * cm"/>
-          <zplane z="247.298 * cm" ID="2.527 * cm"/>
-          <zplane z="(247.298 + 2.54) * cm" ID="3.48 * cm"/>
-          <zplane z="(247.298 + 2.54 + 170.2) * cm" ID="3.48 * cm"/>
-          <zplane z="(247.298 + 2.54 + 170.2 + 1.27) * cm" ID="4.115 * cm"/>
-          <zplane z="(247.298 + 2.54 + 170.2 + 1.27 + 32.769) * cm" ID="4.115 * cm"/>
+          <zplane z="IncomingHadronBeamPipe_z0" ID="IncomingHadronBeamPipe_d0"/>
+          <zplane z="IncomingHadronBeamPipe_z1" ID="IncomingHadronBeamPipe_d1"/>
+          <zplane z="IncomingHadronBeamPipe_z2" ID="IncomingHadronBeamPipe_d2"/>
+          <zplane z="IncomingHadronBeamPipe_z3" ID="IncomingHadronBeamPipe_d3"/>
+          <zplane z="IncomingHadronBeamPipe_z4" ID="IncomingHadronBeamPipe_d4"/>
+          <zplane z="IncomingHadronBeamPipe_z5" ID="IncomingHadronBeamPipe_d5"/>
         </incoming_hadron>
       </upstream>
 
