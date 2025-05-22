@@ -661,84 +661,10 @@ jobs:
     steps:
     - uses: actions/upload-artifact/merge@v4
       with:
-        name: capybara
+        name: capybara-report
         pattern: |
           *.capy
         delete-merged: true
-
-  get-docs-from-open-prs:
-    runs-on: ubuntu-latest
-    needs:
-      - list-open-prs
-      - merge-npsim-capybara
-    strategy:
-      matrix: ${{ fromJSON(needs.list-open-prs.outputs.json) }}
-      fail-fast: false
-      max-parallel: 4
-    steps:
-      - name: Download capybara artifact (other PRs)
-        id: download_capybara
-        uses: dawidd6/action-download-artifact@v9
-        if: github.event.pull_request.number != matrix.pr
-        with:
-          commit: ${{ matrix.head_sha }}
-          path: publishing_docs/pr/${{ matrix.pr }}/capybara/
-          name: capybara
-          workflow: ".github/workflows/linux-eic-shell.yml"
-          workflow_conclusion: "completed"
-          if_no_artifact_found: ignore
-      - name: Download capybara artifact (this PR)
-        uses: actions/download-artifact@v4
-        if: github.event.pull_request.number == matrix.pr
-        with:
-          name: capybara
-          path: publishing_docs/pr/${{ matrix.pr }}/capybara/
-      - uses: actions/upload-artifact@v4
-        with:
-          name: github-pages-staging-pr-${{ matrix.pr }}
-          path: publishing_docs/
-          if-no-files-found: ignore
-
-  get-docs-from-main:
-    runs-on: ubuntu-latest
-    needs:
-      - merge-npsim-capybara
-    steps:
-      # Note:
-      # - If we run this on a non-main branch, we download from main with action-download-artifact.
-      # - If we run this on the main branch, we have to download from this pipeline with download-artifact.
-      - name: Download capybara artifact (in PR)
-        id: download_capybara
-        uses: dawidd6/action-download-artifact@v9
-        if: github.ref_name != 'main'
-        with:
-          commit: ${{ matrix.head_sha }}
-          path: publishing_docs/capybara/
-          name: capybara
-          workflow: ".github/workflows/linux-eic-shell.yml"
-          workflow_conclusion: "completed"
-          if_no_artifact_found: ignore
-      - name: Download capybara artifact (on main)
-        uses: actions/download-artifact@v4
-        if: github.ref_name == 'main'
-        with:
-          name: capybara
-          path: publishing_docs/capybara/
-      - name: Populate capybara summary (on main)
-        if: github.ref_name == 'main' || steps.download_capybara.outputs.found_artifact == 'true'
-        run: |
-         echo "### Capybara summary for main" >> publishing_docs/capybara/index.md
-         find publishing_docs/capybara/ -mindepth 1 -maxdepth 1 -type d -printf \
-           "- [%f](https://eicrecon.epic-eic.org/capybara/%f/index.html)\n" | sort >> publishing_docs/capybara/index.md
-      - name: Create capybara step summary (this PR)
-        if: github.ref_name == 'main'
-        run: |
-          cat publishing_docs/capybara/index.md >> $GITHUB_STEP_SUMMARY
-      - uses: actions/upload-artifact@v4
-        with:
-          name: github-pages-staging-main
-          path: publishing_docs/
-          if-no-files-found: error
 
   build-artifacts-page:
     runs-on: ubuntu-latest
@@ -748,61 +674,23 @@ jobs:
     - merge-constants
     - merge-parameter-table
     - merge-dawn-view
-    - get-docs-from-open-prs
-    - get-docs-from-main
     steps:
-    - name: Checkout jekyll page
-      uses: actions/checkout@v4
-    - name: Merge GitHub Pages staging artifact
-      uses: actions/upload-artifact/merge@v4
-      with:
-        name: github-pages-staging
-        pattern: |
-          github-pages-staging-*
-        delete-merged: true
-    - name: Download GitHub Pages staging artifact
-      uses: actions/download-artifact@v4
+    - uses: actions/checkout@v4
+    - uses: actions/download-artifact@v4
       with:
         path: artifacts/
-    - name: Build jekyll page
-      uses: actions/jekyll-build-pages@v1
-    - name: Make PR summary page
-      run: |
-        echo "### PRs" >> publishing_docs/pr/index.md
-        find publishing_docs/pr -mindepth 1 -maxdepth 1 -type d -printf "- [%f](%f/index.md)\n" | sort >> publishing_docs/pr/index.md
-    - name: List content to publish
-      run:
-        find publishing_docs/
-    - name: Upload GitHub Pages artifact
-      uses: actions/upload-pages-artifact@v3
+    - uses: actions/jekyll-build-pages@v1
+    - uses: actions/upload-pages-artifact@v3
       with:
-        path: publishing_docs/
         retention-days: 7
-    - name: Populate capybara summary
-      if: ${{ github.event_name == 'pull_request' }}
-      run: |
-        echo "### Capybara summary for PR ${{ github.event.pull_request.number }}" >> capybara_${{ github.event.pull_request.number }}.md
-        find publishing_docs/pr/${{ github.event.pull_request.number }}/capybara/ -mindepth 1 -maxdepth 1 -type d -printf \
-          "- [%f](https://eicrecon.epic-eic.org/pr/${{ github.event.pull_request.number }}/capybara/%f/index.html)\n" | sort >> capybara_${{ github.event.pull_request.number }}.md
-        echo "<sup><sub>Last updated $(TZ=America/New_York date -Iminutes) ${{github.event.pull_request.head.sha}}</sub></sup>" >> capybara_${{ github.event.pull_request.number }}.md
-    - name: Create capybara step summary
-      if: ${{ github.event_name == 'pull_request' }}
-      run: |
-        cat capybara_${{ github.event.pull_request.number }}.md >> $GITHUB_STEP_SUMMARY
-    - name: Upload capybara summary
-      if: ${{ github.event_name == 'pull_request' }}
-      uses: actions/upload-artifact@v4
-      with:
-        name: capybara_${{ github.event.pull_request.number }}.md
-        path: capybara_${{ github.event.pull_request.number }}.md
 
   deploy-artifacts-page:
     needs:
     - build-artifacts-page
+    if: github.ref == 'refs/heads/main'
     permissions:
       pages: write
       id-token: write
-      pull-requests: write
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
@@ -811,24 +699,3 @@ jobs:
     - name: Deploy to GitHub Pages
       id: deployment
       uses: actions/deploy-pages@v4
-    - name: Find capybara comment
-      if: ${{ github.event_name == 'pull_request' }}
-      id: find_comment
-      uses: peter-evans/find-comment@v3
-      with:
-        issue-number: ${{ github.event.pull_request.number }}
-        comment-author: 'github-actions[bot]'
-        body-includes: Capybara summary
-    - name: Fetch capybara summary
-      if: ${{ github.event_name == 'pull_request' }}
-      uses: actions/download-artifact@v4
-      with:
-        name: capybara_${{ github.event.pull_request.number }}.md
-    - name: Create or update capybara comment
-      if: ${{ github.event_name == 'pull_request' }}
-      uses: peter-evans/create-or-update-comment@v4
-      with:
-        comment-id: ${{ steps.find_comment.outputs.comment-id }}
-        issue-number: ${{ github.event.pull_request.number }}
-        body-file: capybara_${{ github.event.pull_request.number }}.md
-        edit-mode: replace
