@@ -92,7 +92,7 @@
       allSensitive="0"
       >
 
-      <position x="0" y="0" z="LFHCAL_zmin"/>
+      <position x="0" y="0" z="-HcalEndcapN_zmin-LFHCAL_length"/>
       <dimensions
         z="LFHCAL_length"
         rmin="20*cm"
