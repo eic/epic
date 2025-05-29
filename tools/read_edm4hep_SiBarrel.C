@@ -59,23 +59,27 @@ void read_edm4hep_SiBarrel(TString infile="TestHitMap.edm4hep.root") {
   TTreeReaderArray<Double_t> SiB_x(tr,"SiBarrelHits.position.x");
   TTreeReaderArray<Double_t> SiB_y(tr,"SiBarrelHits.position.y");
   TTreeReaderArray<Double_t> SiB_z(tr,"SiBarrelHits.position.z");
-  int EventCount=0, Nhits=0;
+  int EventCount=0, Nhits=0, L3hits=0, L4hits=0;
   while (tr.Next()) {
 
     for(int i = 0; i < SiB_x.GetSize(); i++) {
-    if(SiB_z[i]>0.0){
+//    if(SiB_z[i]>0.0){
   	double R = sqrt(SiB_x[i]*SiB_x[i] + SiB_y[i]*SiB_y[i] );
   // double R = SiB_y[i];
          h0->Fill(R);
          g1->SetPoint(Nhits,SiB_x[i],SiB_y[i]);
+//         g1->SetPoint(Nhits,SiB_z[i],R);
          Nhits++;
+         if (R>300) L4hits++; else L3hits++;
          }
-    }
+  //  }
     EventCount++;
   }
   cout << "Events: " << Nevents << endl;
   cout << "Counted: " << EventCount << endl;
   cout << "Hits: " << Nhits << endl;
+  cout << "L3 hits: " << L3hits << endl;
+  cout << "L4 hits " << L4hits << endl;
   TCanvas *c1 = new TCanvas("c1","hist",200,10,1400,1000);
   gStyle->SetOptStat(0);
 

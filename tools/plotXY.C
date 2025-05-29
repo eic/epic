@@ -12,7 +12,8 @@ void plotXY(string infile="debugVol.txt") {
       in >> x >> y >> z;
       if (!in.good()) break;
       if (np < 5) printf("x=%8f, y=%8f, z=%8f\n",x,y,z);
-      g1->SetPoint(np,x,y);
+           g1->SetPoint(np,x,y);
+// g1->SetPoint(np,z,x);
       np++;
    }
 
