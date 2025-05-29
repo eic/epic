@@ -123,25 +123,25 @@ python material_validation_epic.py --xmlFile ${DETECTOR_PATH}/${DETECTOR_CONFIG}
 echo "::endgroup::"
 
 echo "::group::-------Comparison plots---------"
-rm -rf Validation/new
-mkdir -p Validation/new
-root -l -b -q Examples/Scripts/MaterialMapping/Mat_map.C'("'${propFile}_regenerated'.root","'${trackFile}'","Validation/new")'
-rm -rf Validation/old
-mkdir -p Validation/old
-root -l -b -q Examples/Scripts/MaterialMapping/Mat_map.C'("'${propFile}_current'.root","'${trackFile}'","Validation/old")'
+rm -rf Validation/regenerated
+mkdir -p Validation/regenerated
+root -l -b -q Examples/Scripts/MaterialMapping/Mat_map.C'("'${propFile}_regenerated'.root","'${trackFile}'","Validation/regenerated")'
+rm -rf Validation/current
+mkdir -p Validation/current
+root -l -b -q Examples/Scripts/MaterialMapping/Mat_map.C'("'${propFile}_current'.root","'${trackFile}'","Validation/current")'
 
 rm -rf Surfaces
-mkdir -p Surfaces/new/ratio_plot
-mkdir -p Surfaces/new/prop_plot
-mkdir -p Surfaces/new/map_plot
-mkdir -p Surfaces/old/ratio_plot
-mkdir -p Surfaces/old/prop_plot
-mkdir -p Surfaces/old/map_plot
+mkdir -p Surfaces/regenerated/ratio_plot
+mkdir -p Surfaces/regenerated/prop_plot
+mkdir -p Surfaces/regenerated/map_plot
+mkdir -p Surfaces/current/ratio_plot
+mkdir -p Surfaces/current/prop_plot
+mkdir -p Surfaces/current/map_plot
 mkdir -p Surfaces/dist_plot
 mkdir -p Surfaces/1D_plot
 
-root -l -b -q Examples/Scripts/MaterialMapping/Mat_map_surface_plot_ratio.C'("'${propFile}_regenerated'.root","'${trackFile}'",-1,"Surfaces/new/ratio_plot","Surfaces/new/prop_plot","Surfaces/new/map_plot")'
-root -l -b -q Examples/Scripts/MaterialMapping/Mat_map_surface_plot_ratio.C'("'${propFile}_current'.root","'${trackFile}'",-1,"Surfaces/old/ratio_plot","Surfaces/old/prop_plot","Surfaces/old/map_plot")'
+root -l -b -q Examples/Scripts/MaterialMapping/Mat_map_surface_plot_ratio.C'("'${propFile}_regenerated'.root","'${trackFile}'",-1,"Surfaces/regenerated/ratio_plot","Surfaces/regenerated/prop_plot","Surfaces/regenerated/map_plot")'
+root -l -b -q Examples/Scripts/MaterialMapping/Mat_map_surface_plot_ratio.C'("'${propFile}_current'.root","'${trackFile}'",-1,"Surfaces/current/ratio_plot","Surfaces/current/prop_plot","Surfaces/current/map_plot")'
 root -l -b -q Examples/Scripts/MaterialMapping/Mat_map_surface_plot_dist.C'("'${trackFile}'",-1,"Surfaces/dist_plot")'
 root -l -b -q Examples/Scripts/MaterialMapping/Mat_map_surface_plot_1D.C'("'${trackFile}'",-1,"Surfaces/1D_plot")'
 echo "::endgroup::"
