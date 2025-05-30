@@ -36,9 +36,17 @@ if "__main__" == __name__:
     args = p.parse_args()
 
     mapName = args.matFile.split('.')[0]
+    if '.json' in args.matFile:
+        mapFormat = JsonFormat.Json
+    elif '.cbor' in args.matFile:
+        mapFormat = JsonFormat.Cbor
+    else:
+        print('ERROR(material_mapping_epic.py): please provide a material map file in .json or .cbor format')
+        exit()
 
     detector, trackingGeometry, decorators = epic.getDetector(
         args.xmlFile, args.geoFile)
+
 
     runMaterialMapping(
         trackingGeometry,
@@ -48,4 +56,5 @@ if "__main__" == __name__:
         readCachedSurfaceInformation=False,
         mapVolume= False,
         mapName  = mapName,
+        mapFormat = mapFormat,
     ).run()

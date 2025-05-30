@@ -112,12 +112,12 @@ static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector /* sens *
   // that beam pipe geometry
   //-------------------------------------------
 
-  radii_magnet[0]    = 2.9;    // cm
-  lengths_magnet[0]  = 120.0;  // cm
-  rotation_magnet[0] = -0.025; // radians
-  x_elem_magnet[0]   = -16.5;  // cm
-  y_elem_magnet[0]   = 0.0;    // cm
-  z_elem_magnet[0]   = 640.0;  // cm
+  radii_magnet[0]    = 2.9;                 // cm
+  lengths_magnet[0]  = 120.0;               // cm
+  rotation_magnet[0] = -0.025;              // radians
+  x_elem_magnet[0]   = 640.0 * sin(-0.025); // cm
+  y_elem_magnet[0]   = 0.0;                 // cm
+  z_elem_magnet[0]   = 640.0 * cos(-0.025); // cm
 
   //-------------------------------------------
   //calculate entrance/exit points of magnets
@@ -148,7 +148,8 @@ static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector /* sens *
   //-------------------------------------------
 
   double endOfCentralBeamPipe_z =
-      445.580 * dd4hep::cm;                  //extracted from central_beampipe.xml, line 64
+      494.556 * dd4hep::cm +
+      2. * dd4hep::mm; //extracted from central_beampipe.xml, line 112 + offset to avoid overlaps
   double diameterReduce = 11.0 * dd4hep::cm; //size reduction to avoid overlap with electron pipe
   double vacuumDiameterEntrance =
       25.792 * dd4hep::cm - diameterReduce; //extracted from central_beampipe.xml, line 64
@@ -176,7 +177,7 @@ static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector /* sens *
   for (int gapIdx = 0; gapIdx < numGaps; gapIdx++) {
 
     inRadius.push_back(0.0);
-    outRadius.push_back(radii_magnet[gapIdx + 1]);
+    outRadius.push_back(radii_magnet[gapIdx]);
     phi_initial.push_back(0.0);
     phi_final.push_back(2 * M_PI);
     nxLow.push_back(-(length_gap[gapIdx] / 2.0) *

@@ -3,7 +3,7 @@
 <lccdd>
 
   <info name="bic_default"
-        title="Default ePIC BIC configuration with 4 AstroPix layers"
+        title="Alternate ePIC BIC configuration with 6 AstroPix layers"
         author="@sly2j"
         url="https://github.com/sly2j"
         status="development"
