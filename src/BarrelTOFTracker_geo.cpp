@@ -255,7 +255,7 @@ static Ref_t create_TOFBarrel(Detector& description, xml_h e, SensitiveDetector 
                   Position(-bend_r + pipe_offset_x, coord_factor * (length / 2 - bend_y) / 2, 0)));
           // coolant inside the tube
           Tube coolant_in(0, pipe_min_r, (length / 2 + std::fabs(bend_y)) / 2);
-          Volume coolant_in_vol(ci_tube.nameStr() + "_coolent1" + suffix, coolant_in,
+          Volume coolant_in_vol(ci_tube.nameStr() + "_coolant1" + suffix, coolant_in,
                                     description.material(coolant_material));
           m_vol.placeVolume(coolant_in_vol,
                                 Transform3D(RotationZYX(0, 0, -M_PI / 2),
@@ -284,7 +284,7 @@ static Ref_t create_TOFBarrel(Detector& description, xml_h e, SensitiveDetector 
                   Position(bend_r + pipe_offset_x, coord_factor * (length / 2 - bend_y) / 2, 0)));
           // coolant inside the tube
           Tube coolant_out(0, pipe_min_r, (length / 2 + std::fabs(bend_y)) / 2);
-          Volume coolant_out_vol(ci_tube.nameStr() + "coolant2" + suffix, coolant_out,
+          Volume coolant_out_vol(ci_tube.nameStr() + "_coolant2" + suffix, coolant_out,
                                      description.material(coolant_material));
           m_vol.placeVolume(coolant_out_vol,
                                 Transform3D(RotationZYX(0, 0, -M_PI / 2),
