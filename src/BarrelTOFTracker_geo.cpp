@@ -176,7 +176,8 @@ static Ref_t create_TOFBarrel(Detector& description, xml_h e, SensitiveDetector 
       xml_comp_t x_rot  = x_comp.rotation(false);
       auto make_box     = [&](double width, double length, double thickness, double pos_x = 0,
                           double pos_y = 0, double pos_z = 0, double rot_x = 0, double rot_y = 0,
-                          double rot_z = 0, bool z_stacking = true, int segmentation_id = 0, const std::string& suffix="") {
+                          double rot_z = 0, bool z_stacking = true, int segmentation_id = 0,
+                          const std::string& suffix = "") {
         // Utility variable for the relative z-offset based off the previous components
         const double zoff = thickness_sum + thickness / 2.0;
 
@@ -449,11 +450,11 @@ static Ref_t create_TOFBarrel(Detector& description, xml_h e, SensitiveDetector 
                 half_sensor ? 1 : 0; // keys to distinguish segmentation class for half sensor
                                      //
             make_box(
-                width, sensor_length, thickness, 
-		current_x, current_y, start_z, 
-		rot_x, rot_y, rot_z,
-                last_sensor_in_stave && !keep_layer,
-                segmentation_id, "_ix" + std::to_string(nx) + "_iy" + std::to_string(ny)); // all sensors are located at the same z-layer, keep the same sensor number for all columns in the same sensor
+                width, sensor_length, thickness, current_x, current_y, start_z, rot_x, rot_y, rot_z,
+                last_sensor_in_stave && !keep_layer, segmentation_id,
+                "_ix" + std::to_string(nx) + "_iy" +
+                    std::to_string(
+                        ny)); // all sensors are located at the same z-layer, keep the same sensor number for all columns in the same sensor
             // increment z-layers only at the end, after the last sensor is added
             // return current_y to the center of the sensor
             current_y += tmp_sensors_ydist;
