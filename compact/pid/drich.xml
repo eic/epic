@@ -143,6 +143,11 @@
     vis="DRICH_filter_vis"
     thickness="DRICH_filter_thickness"
     />
+  <rib
+    material="CarbonFiber_15percent"
+    vis="DRICH_vessel_vis"
+    thickness="DRICH_aerogel_thickness"
+  />
 </radiator>
 
 
