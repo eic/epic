@@ -129,7 +129,6 @@ static Ref_t create_TOFBarrel(Detector& description, xml_h e, SensitiveDetector 
       throw runtime_error("Logics error in building modules.");
     }
 
-    int ncomponents        = 0;
     int sensor_number      = 1;
     double total_thickness = 0;
 
@@ -177,12 +176,11 @@ static Ref_t create_TOFBarrel(Detector& description, xml_h e, SensitiveDetector 
       xml_comp_t x_rot  = x_comp.rotation(false);
       auto make_box     = [&](double width, double length, double thickness, double pos_x = 0,
                           double pos_y = 0, double pos_z = 0, double rot_x = 0, double rot_y = 0,
-                          double rot_z = 0, bool z_stacking = true, int segmentation_id = 0) {
+                          double rot_z = 0, bool z_stacking = true, int segmentation_id = 0, const std::string& suffix="") {
         // Utility variable for the relative z-offset based off the previous components
         const double zoff = thickness_sum + thickness / 2.0;
 
-        const string c_nam = _toString(ncomponents, "component%d");
-        ++ncomponents;
+        const string c_nam = "component_" + x_comp.nameStr() + suffix;
         Box c_box(width / 2, length / 2, thickness / 2);
         Volume c_vol;
 
@@ -243,7 +241,7 @@ static Ref_t create_TOFBarrel(Detector& description, xml_h e, SensitiveDetector 
           // U-shape water pipes
           // The two sides of the "U"
           Tube pipe_in(pipe_min_r, pipe_max_r, (length / 2 + std::fabs(bend_y)) / 2);
-          Volume pipe_in_vol(c_nam + ci_tube.nameStr(), pipe_in,
+          Volume pipe_in_vol(ci_tube.nameStr() + "_pipe1" + suffix, pipe_in,
                                  description.material(pipe_material));
           m_vol.placeVolume(pipe_in_vol,
                                 Transform3D(RotationZYX(0, 0, -M_PI / 2),
@@ -257,7 +255,7 @@ static Ref_t create_TOFBarrel(Detector& description, xml_h e, SensitiveDetector 
                   Position(-bend_r + pipe_offset_x, coord_factor * (length / 2 - bend_y) / 2, 0)));
           // coolant inside the tube
           Tube coolant_in(0, pipe_min_r, (length / 2 + std::fabs(bend_y)) / 2);
-          Volume coolant_in_vol(c_nam + ci_tube.nameStr() + "coolant", coolant_in,
+          Volume coolant_in_vol(ci_tube.nameStr() + "_coolent1" + suffix, coolant_in,
                                     description.material(coolant_material));
           m_vol.placeVolume(coolant_in_vol,
                                 Transform3D(RotationZYX(0, 0, -M_PI / 2),
@@ -272,7 +270,7 @@ static Ref_t create_TOFBarrel(Detector& description, xml_h e, SensitiveDetector 
 
           // other long side of the tube
           Tube pipe_out(pipe_min_r, pipe_max_r, (length / 2 + std::fabs(bend_y)) / 2);
-          Volume pipe_out_vol(c_nam + ci_tube.nameStr(), pipe_out,
+          Volume pipe_out_vol(ci_tube.nameStr() + "_pipe2" + suffix, pipe_out,
                                   description.material(pipe_material));
           m_vol.placeVolume(pipe_out_vol,
                                 Transform3D(RotationZYX(0, 0, -M_PI / 2),
@@ -286,7 +284,7 @@ static Ref_t create_TOFBarrel(Detector& description, xml_h e, SensitiveDetector 
                   Position(bend_r + pipe_offset_x, coord_factor * (length / 2 - bend_y) / 2, 0)));
           // coolant inside the tube
           Tube coolant_out(0, pipe_min_r, (length / 2 + std::fabs(bend_y)) / 2);
-          Volume coolant_out_vol(c_nam + ci_tube.nameStr() + "coolant", coolant_out,
+          Volume coolant_out_vol(ci_tube.nameStr() + "coolant2" + suffix, coolant_out,
                                      description.material(coolant_material));
           m_vol.placeVolume(coolant_out_vol,
                                 Transform3D(RotationZYX(0, 0, -M_PI / 2),
@@ -302,7 +300,7 @@ static Ref_t create_TOFBarrel(Detector& description, xml_h e, SensitiveDetector 
           // the U part of the U-shape
           Torus pipe_bend(bend_r, pipe_min_r, pipe_max_r + 0.001, direction == "left" ? M_PI : 0,
                               M_PI);
-          Volume pipe_bend_vol(c_nam + ci_tube.nameStr(), pipe_bend,
+          Volume pipe_bend_vol(ci_tube.nameStr() + "_pipeU" + suffix, pipe_bend,
                                    description.material(pipe_material));
           m_vol.placeVolume(pipe_bend_vol,
                                 Transform3D(RotationZYX(0, 0, 0),
@@ -311,7 +309,7 @@ static Ref_t create_TOFBarrel(Detector& description, xml_h e, SensitiveDetector 
 
           // coolant
           Torus coolant_bend(bend_r, 0, pipe_min_r, direction == "left" ? M_PI : 0, M_PI);
-          Volume coolant_bend_vol(c_nam + ci_tube.nameStr() + "coolant", coolant_bend,
+          Volume coolant_bend_vol(ci_tube.nameStr() + "_coolantU" + suffix, coolant_bend,
                                       description.material(coolant_material));
           m_vol.placeVolume(coolant_bend_vol,
                                 Transform3D(RotationZYX(0, 0, 0),
@@ -451,9 +449,11 @@ static Ref_t create_TOFBarrel(Detector& description, xml_h e, SensitiveDetector 
                 half_sensor ? 1 : 0; // keys to distinguish segmentation class for half sensor
                                      //
             make_box(
-                width, sensor_length, thickness, current_x, current_y, start_z, rot_x, rot_y, rot_z,
+                width, sensor_length, thickness, 
+		current_x, current_y, start_z, 
+		rot_x, rot_y, rot_z,
                 last_sensor_in_stave && !keep_layer,
-                segmentation_id); // all sensors are located at the same z-layer, keep the same sensor number for all columns in the same sensor
+                segmentation_id, "_ix" + std::to_string(nx) + "_iy" + std::to_string(ny)); // all sensors are located at the same z-layer, keep the same sensor number for all columns in the same sensor
             // increment z-layers only at the end, after the last sensor is added
             // return current_y to the center of the sensor
             current_y += tmp_sensors_ydist;
