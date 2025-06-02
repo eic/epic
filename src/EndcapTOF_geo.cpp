@@ -102,6 +102,7 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
   for (bool left : std::vector<bool>{true, false}) {
     for (bool front : std::vector<bool>{true, false}) {
       int module   = (front << 1) + left;
+      const std::string locStr = std::string(left? "Left" : "Right") + std::string(front? "Front" : "Back");
       float ycoord = envelope.rmax() -
                      module_y / 2.; // y-center-coord of the top sensor. Start from the top row
       int iy                     = 0;
@@ -195,7 +196,7 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
             xml_comp_t x_comp  = mci;
             xml_comp_t x_pos   = x_comp.position(false);
             xml_comp_t x_rot   = x_comp.rotation(false);
-            const string c_nam = Form("component_%d_%d_%d", module, ix, iy);
+            const string c_nam = Form("component_%s_%s_ix%d_iy%d", x_comp.nameStr().c_str(), locStr.c_str(), ix, iy);
 
             Box c_box(x_comp.width() / 2, x_comp.length() / 2, x_comp.thickness() / 2);
             Volume c_vol(c_nam, c_box, description.material(x_comp.materialStr()));
