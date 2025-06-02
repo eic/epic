@@ -76,7 +76,7 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
       sliceZ += s_thick / 2;
       PlacedVolume s_phv = l_vol.placeVolume(s_vol, Position(0, 0, sliceZ));
       s_phv.addPhysVolID("slice", s_num);
-      if (x_slice.isSensitive() || allSensitive == 1) {
+      if (x_slice.isSensitive() || allSensitive) {
         sens.setType("calorimeter");
         s_vol.setSensitiveDetector(sens);
         sensitives.push_back(s_phv);
