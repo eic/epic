@@ -29,6 +29,7 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
   xml_dim_t dim      = x_det.dimensions();
   int det_id         = x_det.id();
   string det_name    = x_det.nameStr();
+  bool allSensitive	 = getAttrOrDefault(x_det, _Unicode(allSensitive), 0.);
   Material air       = description.air();
   int numsides       = dim.numsides();
   xml::Component pos = x_det.position();
@@ -75,7 +76,7 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
       sliceZ += s_thick / 2;
       PlacedVolume s_phv = l_vol.placeVolume(s_vol, Position(0, 0, sliceZ));
       s_phv.addPhysVolID("slice", s_num);
-      if (x_slice.isSensitive()) {
+      if (x_slice.isSensitive() || allSensitive==1) {
         sens.setType("calorimeter");
         s_vol.setSensitiveDetector(sens);
         sensitives.push_back(s_phv);
