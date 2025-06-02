@@ -29,7 +29,7 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
   xml_dim_t dim      = x_det.dimensions();
   int det_id         = x_det.id();
   string det_name    = x_det.nameStr();
-  bool allSensitive  = getAttrOrDefault(x_det, _Unicode(allSensitive), 0.);
+  bool allSensitive  = getAttrOrDefault(x_det, _Unicode(allSensitive), false);
   Material air       = description.air();
   int numsides       = dim.numsides();
   xml::Component pos = x_det.position();
