@@ -86,7 +86,7 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
     xml_comp_t x_ma = ma;
     string ma_name  = x_ma.nameStr();
     Assembly ma_vol(ma_name);
-    DetElement ma_de(ma_name, x_det.id());
+    DetElement ma_de(sdet, ma_name, x_det.id());
     module_assemblies[ma_name]         = ma_vol;
     module_assembly_delements[ma_name] = ma_de;
 
@@ -156,6 +156,7 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
       auto comp_vol = module_assemblies[comp_assembly];
       auto comp_de =
           module_assembly_delements[comp_assembly].clone(comp_assembly + std::to_string(l_num));
+      sdet.add(comp_de);
       if (c_pos) {
         pv = l_vol.placeVolume(comp_vol, Position(c_pos.x(), c_pos.y(), c_pos.z()));
       } else {
@@ -168,6 +169,9 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
     pv = assembly.placeVolume(l_vol, l_pos);
     pv.addPhysVolID("layer", l_num);
   }
+
+  // delete unplaced volumes
+  module_assembly_delements.clear();
 
   Transform3D posAndRot(RotationZYX(rot.z(), rot.y(), rot.x()),
                         Position(pos.x(), pos.y(), pos.z()));
