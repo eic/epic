@@ -18,5 +18,5 @@ features:
     forward_homogeneous:
     forward_insert_homogeneous:
   hcal:
-    lfhcal_with_space_for_insert:
+    lfhcal:
     forward_insert:
