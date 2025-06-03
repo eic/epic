@@ -9,6 +9,8 @@
   ><comment/></info>
 
   <define>
+    <include ref="lfhcal/module_definitions.xml"/>
+
     <documentation>
       #### Material Thickness
     </documentation>
