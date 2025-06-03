@@ -1031,7 +1031,6 @@ static Ref_t createTestBeam(Detector& desc, xml_h handle, SensitiveDetector sens
       getAttrOrDefault(eightMmod_dim, _Unicode(pcbWidth), 0.), eightM_xml.visStr(),
       eightM_xml.regionStr(), eightM_xml.limitsStr());
 
-
   std::vector<sliceParamsStrct> slice_Params;
   int layer_num  = 0;
   int readLayerC = 0;
