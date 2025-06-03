@@ -44,6 +44,9 @@ jobs:
         echo "configs_csv=${CONFIGS_CSV}" | tee -a $GITHUB_OUTPUT
         echo "configs_json=${CONFIGS_JSON}" | tee -a $GITHUB_OUTPUT
 
+  list-open-prs:
+    uses: eic/actions/.github/workflows/list-open-prs.yml@main
+
   build:
     runs-on: ubuntu-latest
     needs: xmllint-before-build

@@ -411,6 +411,50 @@ Examples:
     <constant name="SolenoidBarrel_length"     value="Solenoid_length"/>
 
     <documentation>
+      ## IP6 Beam Pipe Parameters - Note might need cleaning
+    </documentation>
+    <constant name="CrossingAngle" value="-0.025*rad "/>
+    <constant name="ionCrossingAngle" value="CrossingAngle"/>
+    <constant name="electronCrossingAngle" value="0.0"/>
+    <constant name="CrossingSlope" value="CrossingAngle"/>
+
+    <constant name="IPBeampipe_rmax" value="2.501*25.4*mm/2.0"/>
+    <constant name="Beampipe_rmax"   value="IPBeampipe_rmax"/>
+    <constant name="IPBeampipeID" desc="IP6 beam pipe inner diam w/o coating" value="62*mm"/>
+
+    <documentation>
+      ## Central Beam Pipe Parameters
+    </documentation>
+    <constant name="IPBeampipeUpstreamStraightLength" value="74.8 * cm"/>
+    <constant name="IPBeampipeDownstreamStraightLength" value="64.8 * cm"/>
+    <constant name="BeampipeOD" value="62 * mm"/>
+    <constant name="HadronConeOpenAngle" value="0.020 * rad + abs(CrossingAngle)"/>
+
+    <documentation>
+      ## Outgoing Lepton Beam Pipe Parameters
+    </documentation>
+    <constant name="OutgoingLeptonBeamPipe_z0" value="IPBeampipeUpstreamStraightLength"/>
+    <constant name="OutgoingLeptonBeamPipe_z1" value="454.449 * cm"/>
+    <constant name="OutgoingLeptonBeamPipe_d0" value="IPBeampipeID"/>
+    <constant name="OutgoingLeptonBeamPipe_d1" value="IPBeampipeID"/>
+
+    <documentation>
+      ## Incoming Hadron Beam Pipe Parameters
+    </documentation>
+    <constant name="IncomingHadronBeamPipe_z0" value="75.6*cm"/>
+    <constant name="IncomingHadronBeamPipe_z1" value="247.298*cm"/>
+    <constant name="IncomingHadronBeamPipe_z2" value="IncomingHadronBeamPipe_z1 + 2.54*cm"/>
+    <constant name="IncomingHadronBeamPipe_z3" value="IncomingHadronBeamPipe_z2 + 170.2*cm"/>
+    <constant name="IncomingHadronBeamPipe_z4" value="IncomingHadronBeamPipe_z3 + 1.27*cm"/>
+    <constant name="IncomingHadronBeamPipe_z5" value="IncomingHadronBeamPipe_z4 + 32.769*cm"/>
+    <constant name="IncomingHadronBeamPipe_d0" value="2.527*cm"/>
+    <constant name="IncomingHadronBeamPipe_d1" value="2.527*cm"/>
+    <constant name="IncomingHadronBeamPipe_d2" value="3.48*cm"/>
+    <constant name="IncomingHadronBeamPipe_d3" value="3.48*cm"/>
+    <constant name="IncomingHadronBeamPipe_d4" value="4.115*cm"/>
+    <constant name="IncomingHadronBeamPipe_d5" value="4.115*cm"/>
+
+    <documentation>
       ## Tracking Detector Parameters
     </documentation>
 
@@ -457,8 +501,8 @@ Examples:
     <constant name="ForwardRICHRegion_zmin"       value="ForwardPIDRegion_zmin + ForwardTOFRegion_length" />
     <constant name="ForwardRICHRegion_length"     value="ForwardPIDRegion_length - ForwardTOFRegion_length" />
     <comment> Tangent of the opening angle at the front and back of the RICH </comment>
-    <constant name="ForwardRICHRegion_tan1"        value="CentralTrackingRegionP_tan * 0.88" />
-    <constant name="ForwardRICHRegion_tan2"        value="Eta3_6_tan * 0.89" />
+    <constant name="ForwardRICHRegion_tan1"        value="CentralTrackingRegionP_tan * 1.20" />
+    <constant name="ForwardRICHRegion_tan2"        value="Eta3_6_tan * 1.20" />
 
     <comment> Backward PID region, TOF + pfRICH </comment>
     <comment> Important: CentralTrackingRegionN_zmax is positive, we treat it like that here as well. Inside pfrich.xml it gets correctly assigned  </comment>

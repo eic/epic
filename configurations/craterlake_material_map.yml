@@ -19,11 +19,6 @@ features:
     dirc:
     pfrich:
     drich:
-  ecal:
-    forwardEcal:
-  hcal:
-    lfhcal_with_space_for_insert:
-    forward_insert:
   far_forward:
     default:
   far_backward:
