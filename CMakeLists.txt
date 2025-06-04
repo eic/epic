@@ -81,7 +81,8 @@ foreach(config_yml ${CONFIG_YMLS})
                 --output ${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}_${config}.xml
         COMMENT "Creating configuration ${config} for ${PROJECT_NAME}"
         )
-    install(FILES ${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}_${config}.xml
+    file(GLOB GENERATED_XMLS "${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}_${config}*.xml")
+    install(FILES ${GENERATED_XMLS}
         DESTINATION ${CMAKE_INSTALL_DATADIR}/${PROJECT_NAME}/
         )
 endforeach()

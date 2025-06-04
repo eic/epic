@@ -29,3 +29,34 @@ if args.config is not None:
 # render the template
 with open(args.output, 'w') as output:
     output.write(template.render(**config))
+
+# If the config contains far_forward or far_backward create new xml files with ebeam and pbeam set
+if 'features' in config and ('far_forward' in config['features'] or 'far_backward' in config['features']):
+
+    # Dictonary of potential ebeam and pbeam values
+    ebeam_pbeam_values = [
+        {'ebeam': '5', 'pbeam': '41'},
+        {'ebeam': '5', 'pbeam': '100'},
+        {'ebeam': '10', 'pbeam': '100'},
+        {'ebeam': '10', 'pbeam': '100_Au197'},
+        {'ebeam': '10', 'pbeam': '115_Cu63'},
+        {'ebeam': '10', 'pbeam': '115_Ru96'},
+        {'ebeam': '10', 'pbeam': '130'},
+        {'ebeam': '10', 'pbeam': '130_H2'},
+        {'ebeam': '10', 'pbeam': '166_He3'},
+        {'ebeam': '10', 'pbeam': '250'},
+        {'ebeam': '10', 'pbeam': '275'},
+        {'ebeam': '18', 'pbeam': '110_Au'},
+        {'ebeam': '18', 'pbeam': '110_He3'},
+        {'ebeam': '18', 'pbeam': '275'},
+    ]
+
+    for values in ebeam_pbeam_values:
+        # Create a new config dictionary with the current ebeam and pbeam values
+        new_config = config.copy()
+        new_config.update(values)
+
+        # Render the template with the new config
+        new_output = args.output.replace('.xml', f"_{values['ebeam']}x{values['pbeam']}.xml")
+        with open(new_output, 'w') as output:
+            output.write(template.render(**new_config))
