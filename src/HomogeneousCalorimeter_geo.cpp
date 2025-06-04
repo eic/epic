@@ -296,7 +296,7 @@ static std::tuple<int, std::pair<int, int>> add_12surface_disk(Detector& desc, A
   // Material for the structure and mother space
   //
   Material outer_ring_material =
-      desc.material(getAttrOrDefault<std::string>(plm, _U(material), "StainlessSteel"));
+      desc.material(getAttrOrDefault<std::string>(plm, _U(material), "StainlessSteelSAE304"));
 
   //==============================
   // Outer supporting frame

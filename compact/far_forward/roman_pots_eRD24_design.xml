@@ -49,7 +49,7 @@
         <constant name="ForwardRomanPot_ModuleHeight"   value="1.6*cm"/>
 
         <!-- materials -->
-        <!-- <constant name="ForwardRomanPot_RFShieldMat"     value="StainlessSteel"/> -->
+        <!-- <constant name="ForwardRomanPot_RFShieldMat"     value="StainlessSteelSAE304"/> -->
         <!-- <constant name="ForwardRomanPot_LGADMat"         value="SiliconOxide"/>   -->
         <!-- <constant name="ForwardRomanPot_ASICMat"         value="SiliconOxide"/>   -->
         <!-- <constant name="ForwardRomanPot_ThermalStripMat" value="Copper"/>         -->
