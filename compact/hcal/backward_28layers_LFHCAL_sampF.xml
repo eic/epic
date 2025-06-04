@@ -48,7 +48,7 @@
         rmin="HcalEndcapN_rmin"
         rmax="HcalEndcapN_rmax"/>
       <layer repeat="HcalEndcapNLayer_NRepeat" vis="HcalEndcapLayerVis" >
-        <slice material="StainlessSteel" thickness="HcalEndcapNSteelThickness" vis="HcalAbsorberVis"/>
+        <slice material="StainlessSteelSAE304" thickness="HcalEndcapNSteelThickness" vis="HcalAbsorberVis"/>
         <slice material="Air" thickness="HcalEndcapNLayerGap/2" vis="InvisibleNoDaughters"/>
         <slice material="Polystyrene" thickness="HcalEndcapNPolystyreneThickness" vis="HcalSensorVis" sensitive="yes" limits="cal_limits"/>
         <slice material="Air" thickness="HcalEndcapNLayerGap/2" vis="InvisibleNoDaughters"/>
