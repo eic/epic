@@ -146,18 +146,19 @@ inline void EnsureFileFromURLExists(std::string url, std::string file, std::stri
     }
   }
 
-  // check if file already exists
-  if (fs::exists(file_path)) {
-    // file already exists
-    if (fs::is_symlink(file_path)) {
-      // file is symlink
+  // check if file is symlink
+  if (fs::is_symlink(file_path)) {
+    // file is symlink, i.e. valid symlink
+    if (fs::exists(file_path)) {
+      // file already exists
       fs::path symlink_target = fs::read_symlink(file_path);
       if (fs::exists(symlink_target) && fs::equivalent(hash_path, symlink_target)) {
         // link points to correct path
         return;
       } else {
-        // link points to incorrect path
+        // link points to incorrect path -> remove symlink
         if (fs::remove(file_path) == false) {
+          // failure mode: cannot remove incorrect symlink
           printout(ERROR, "FileLoader", "unable to remove symlink " + file_path.string());
           printout(ERROR, "FileLoader",
                    "we tried to create a symlink " + file_path.string() +
@@ -171,7 +172,16 @@ inline void EnsureFileFromURLExists(std::string url, std::string file, std::stri
         }
       }
     } else {
-      // file exists but not symlink
+      // file does not exists, i.e. dead symllink -> remove symlink
+      if (fs::remove(file_path) == false) {
+        // failure mode; cannot remove dead symlink
+        printout(ERROR, "FileLoader", "unable to remove symlink " + file_path.string());
+        std::_Exit(EXIT_FAILURE);
+      }
+    }
+  } else {
+    if (fs::exists(file_path)) {
+      // failure mode: file exists but not symlink, and we won't remove files
       printout(ERROR, "FileLoader",
                "file " + file_path.string() + " already exists but is not a symlink");
       printout(ERROR, "FileLoader",

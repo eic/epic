@@ -20,7 +20,7 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector /
   xml_comp_t x_rot = x_det.rotation();
   //
   string det_name = x_det.nameStr();
-  string mat_name = dd4hep::getAttrOrDefault<string>(x_det, _U(material), "StainlessSteel");
+  string mat_name = dd4hep::getAttrOrDefault<string>(x_det, _U(material), "StainlessSteelSAE304");
   //
   double sizeR     = x_dim.r();
   double sizeZ     = x_dim.z();
