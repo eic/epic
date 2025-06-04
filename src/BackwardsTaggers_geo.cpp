@@ -41,7 +41,7 @@ static Ref_t create_detector(Detector& desc, xml_h e, SensitiveDetector sens) {
 
   // Materials
   Material Vacuum = desc.material("Vacuum");
-  Material Steel  = desc.material("StainlessSteel");
+  Material Steel  = desc.material("StainlessSteelSAE304");
 
   // Central focal point of the geometry
   xml::Component pos = x_det.child(_Unicode(focus));
