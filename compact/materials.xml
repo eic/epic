@@ -411,7 +411,7 @@
     <composite n="8" ref="H"/>
     <composite n="2" ref="O"/>
   </material>
-  <material name="StainlessSteel">
+  <material name="StainlessSteelSAE304">
     <D type="density" value="7.9" unit="g / cm3"/>
     <fraction n="0.74" ref="Fe"/>
     <fraction n="0.18" ref="Cr"/>
