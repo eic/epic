@@ -1,0 +1,47 @@
+name: Celeritas
+
+on:
+  workflow_call:
+    inputs:
+      detector_configs:
+        required: true
+        type: string
+
+jobs:
+  celeritas:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        detector_config: ${{fromJson(inputs.detector_configs)}}
+    steps:
+    - uses: actions/checkout@v4
+    - uses: actions/download-artifact@v4
+      with:
+        name: build-gcc-fast-eic-shell
+        path: install/
+    - uses: cvmfs-contrib/github-action-cvmfs@v4
+    - uses: eic/run-cvmfs-osg-eic-shell@main
+      with:
+        platform-release: "jug_xl:nightly"
+        network_types: "none"
+        setup: install/bin/thisepic.sh
+        run: |
+          # convert to gdml, but with sensitive detectors included
+          scripts/convert_to_gdml.py --compact $DETECTOR_PATH/${{matrix.detector_config}}.xml --output ${{matrix.detector_config}}.gdml | sed '/G4Exception-START/,+7d'
+          # create celeritas input file from template
+          export detector_config=${{matrix.detector_config}}
+          cat .github/workflows/celeritas.json | envsubst > ${{matrix.detector_config}}.json
+          # copy remote file
+          xrdcp root://dtn-eic.jlab.org//work/eic2/EPIC/EVGEN/CI/pythia8NCDIS_5x41_minQ2=1_beamEffects_xAngle=-0.025_hiDiv_1_20ev.hepmc .
+          # run celeritas
+          celer-g4 ${{matrix.detector_config}}.json
+    - uses: actions/upload-artifact@v4
+      with:
+        name: celeritas_${{matrix.detector_config}}_pythia8NCDIS_5x41_minQ2=1_beamEffects_xAngle=-0.025_hiDiv_1_20ev.json
+        path: "pythia8NCDIS_5x41_minQ2=1_beamEffects_xAngle=-0.025_hiDiv_1_20ev.json"
+        if-no-files-found: error
+    - uses: actions/upload-artifact@v4
+      with:
+        name: celeritas_${{matrix.detector_config}}_pythia8NCDIS_5x41_minQ2=1_beamEffects_xAngle=-0.025_hiDiv_1_20ev.root
+        path: "pythia8NCDIS_5x41_minQ2=1_beamEffects_xAngle=-0.025_hiDiv_1_20ev.root"
+        if-no-files-found: error
