@@ -33,14 +33,18 @@ jobs:
     - uses: actions/checkout@v4
     - id: list-detector-configs
       run: |
-        CONFIGS_CSV=$(
-          ls -1 configurations | sed 's/^/epic_/g' | xargs | sed 's/\.yml//g;s/ /,/g'
-        )
-        CONFIGS_JSON=$((
-          echo '['
-          ls -1 configurations | sed 's/^/epic_/g' | xargs | sed 's/\.yml//g;s/ /, /g' | xargs -n 1 echo | sed -r 's/^([^,]*)(,?)$/"\1"\2/'
-          echo ']'
-        ) | jq -c .)
+        # Collect all config names from all YAMLs, one per line
+        CONFIGS="$(
+          for config in configurations/*.yml; do
+            ./bin/make_detector_configuration -d templates -t epic.xml.jinja2 -c "$config" -o "epic_$(basename "$config" .yml).xml" -p 
+          done | sort -u
+        )"
+        
+        # CSV
+        CONFIGS_CSV="$(echo "$CONFIGS" | paste -sd, -)"
+        # JSON
+        CONFIGS_JSON="$(echo "$CONFIGS" | jq -R -s -c 'split("\n")[:-1]')"
+
         echo "configs_csv=${CONFIGS_CSV}" | tee -a $GITHUB_OUTPUT
         echo "configs_json=${CONFIGS_JSON}" | tee -a $GITHUB_OUTPUT
 
