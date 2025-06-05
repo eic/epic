@@ -141,9 +141,11 @@
     <comment>
       Beam line with magnets
     </comment>
-    <vis name="BeamPipeVis"         ref="AnlLightGray"       showDaughters="true" visible="true"/>
-    <vis name="FFMagnetVis"         ref="AnlGreen"            showDaughters="true" visible="true"/>
-    <vis name="FFMagnetCoilVis"     ref="AnlRed"              showDaughters="true" visible="true"/>
+    <vis name="BeamPipeVis"		ref="AnlLightGray"	showDaughters="true" visible="true"/>
+    <vis name="FFMagnetVis"		ref="AnlBlue"		showDaughters="true" visible="true"/>
+    <vis name="FFMagnetCoilVis"		ref="AnlGreen"		showDaughters="true" visible="true"/>
+    <vis name="FFMagnetSupportTubeVis"	ref="AnlCyan"		showDaughters="true" visible="true"/>
+    <vis name="FFMagnetEndPlateVis"	ref="AnlRed"		showDaughters="true" visible="true"/>
 
     <comment>
       ZDC visualization
