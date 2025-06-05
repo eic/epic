@@ -15,48 +15,231 @@ using namespace dd4hep::rec;
 using namespace ROOT::Math;
 
 static Ref_t build_magnet(Detector& dtor, xml_h e, SensitiveDetector /* sens */) {
-  xml_det_t x_det     = e;
-  int det_id          = x_det.id();
-  string det_name     = x_det.nameStr();
-  xml_dim_t pos       = x_det.child(_U(placement));
-  double pos_x        = pos.x();
-  double pos_y        = pos.y();
-  double pos_z        = pos.z();
-  double pos_theta    = pos.attr<double>(_U(theta));
-  xml_dim_t dims      = x_det.dimensions();
-  double dim_r        = dims.r();
-  double dim_z        = dims.z();
-  xml_dim_t apperture = x_det.child(_Unicode(apperture));
-  double app_r        = apperture.r();
-  Material iron       = dtor.material("Iron");
+	xml_det_t x_det     = e;
+	int det_id          = x_det.id();
+	string det_name     = x_det.nameStr();
+	Material iron       = dtor.material("Iron");
 
-  DetElement sdet(det_name, det_id);
-  Assembly assembly(det_name + "_assembly");
+	DetElement sdet(det_name, det_id);
+	Assembly assembly(det_name + "_assembly");
 
-  const string module_name = "Quad_magnet";
+	const string yoke_vis = dd4hep::getAttrOrDefault<std::string>(x_det, _Unicode(vis), "FFMagnetVis");
+	sdet.setAttributes(dtor, assembly, x_det.regionStr(), x_det.limitsStr(), yoke_vis);
 
-  const string yoke_vis =
-      dd4hep::getAttrOrDefault<std::string>(x_det, _Unicode(vis), "FFMagnetVis");
+	//---- YOKE ----
+	// get all yokes
+	xml_coll_t yokes_c(x_det, _Unicode(yoke));
+	int yoke_id = 1;
+	// loop over yokes
+	for (; yokes_c; ++yokes_c) 
+	{
+		// get one yoke
+      		xml_comp_t yoke_c 	= yokes_c;
+		// get placement coordinates
+		xml_dim_t yoke_pos	= yoke_c.child(_U(placement));
+		double yoke_theta	= yoke_pos.attr<double>("theta");
+		// get dimentions
+		xml_dim_t yoke_dim	= yoke_c.child(_U(dimensions));
+		double yoke_rmin	= yoke_dim.attr<double>("rmin");
+		double yoke_rmax	= yoke_dim.attr<double>("rmax");
+		double yoke_half_l	= yoke_dim.attr<double>("half_length");
 
-  sdet.setAttributes(dtor, assembly, x_det.regionStr(), x_det.limitsStr(), yoke_vis);
+		// build solid
+		Tube yoke_tube(yoke_rmin,yoke_rmax,yoke_half_l);
+		Solid yoke_final(yoke_tube);
 
-  // -- yoke
-  Tube yoke_tube(app_r, dim_r, 0.5 * dim_z);
-  Volume yoke_vol("yoke_vol", yoke_tube, iron);
-  auto yoke_pv = assembly.placeVolume(yoke_vol);
-  yoke_pv.addPhysVolID("element", 1);
-  DetElement yoke_de(sdet, "yoke_de", 1);
-  yoke_de.setPlacement(yoke_pv);
-  yoke_de.setAttributes(dtor, yoke_vol, x_det.regionStr(), x_det.limitsStr(), yoke_vis);
+		// get all cuts
+		xml_coll_t cuts_c(yoke_c, _Unicode(cut));
+		// loop over cuts
+		for (; cuts_c; ++cuts_c)
+		{
+			// get one cut
+			xml_comp_t cut_c	= cuts_c;
+			// get placement coordinates
+			xml_dim_t cut_pos	= cut_c.child(_U(placement));
+			double cut_theta	= cut_pos.attr<double>("theta");
+			// get dimentions
+			xml_dim_t cut_dim	= cut_c.child(_U(dimensions));
+			double cut_rmin		= cut_dim.attr<double>("rmin");
+			double cut_rmax		= cut_dim.attr<double>("rmax");
+			double cut_half_l	= cut_dim.attr<double>("half_length");
+			// get rotation coordinates
+			xml_dim_t cut_rot       = cut_c.child(_U(rotation));
+			int cut_rot_num		= cut_rot.attr<int>("num");
+			double cut_rot_step	= cut_rot.attr<double>("step");
+			string cut_rot_axis 	= cut_rot.attr<string>("axis");
 
-  // -- finishing steps
-  auto final_pos = Transform3D(Translation3D(pos_x, pos_y, pos_z) * RotationY(pos_theta));
-  auto pv        = dtor.pickMotherVolume(sdet).placeVolume(assembly, final_pos);
-  pv.addPhysVolID("system", det_id);
-  sdet.setPlacement(pv);
+			// build a solid
+			Tube cut_tube(cut_rmin,cut_rmax,cut_half_l);
 
-  assembly->GetShape()->ComputeBBox();
-  return sdet;
+			// loop over rot steps
+			for(int i = 0; i < cut_rot_num; i++)
+			{
+				Position pos_tmp(cut_pos.x(),cut_pos.y(),cut_pos.z());
+				double ang_tmp = i * cut_rot_step;
+				Rotation3D rot_tmp;
+				if 	(cut_rot_axis == "X")  	{rot_tmp = RotationX(ang_tmp);}
+				else if (cut_rot_axis == "Y")  	{rot_tmp = RotationY(ang_tmp);}
+				else  				{rot_tmp = RotationZ(ang_tmp);}
+				pos_tmp = rot_tmp * pos_tmp;
+
+      				Transform3D tf_tmp(RotationZYX(0, cut_theta, 0),pos_tmp);
+				// subtract the cut from yoke solid
+				yoke_final = SubtractionSolid("yoke_tube",yoke_final,cut_tube,tf_tmp);
+			}
+		}
+
+		// create volume
+		string yoke_vol_name = "yoke_vol_" + to_string(yoke_id);
+		Volume yoke_vol(yoke_vol_name, yoke_final, iron);
+
+		// placement 
+		auto yoke_pv = assembly.placeVolume(yoke_vol);
+		yoke_pv.addPhysVolID("element", yoke_id);
+		DetElement yoke_de(sdet, "yoke_de", yoke_id);
+		yoke_de.setPlacement(yoke_pv);
+		yoke_de.setAttributes(dtor, yoke_vol, x_det.regionStr(), x_det.limitsStr(), yoke_vis);
+		yoke_id++;
+
+		// finishing steps
+		auto final_pos = Transform3D(
+			Translation3D(yoke_pos.x(),yoke_pos.y(),yoke_pos.z()) * RotationY(yoke_theta));
+		auto pv = dtor.pickMotherVolume(sdet).placeVolume(assembly, final_pos);
+		pv.addPhysVolID("system", det_id);
+		sdet.setPlacement(pv);
+		
+		// update bounding box
+		assembly->GetShape()->ComputeBBox();
+	}
+
+	return sdet;
 }
 
 DECLARE_DETELEMENT(ip6_CylindricalDipoleMagnet, build_magnet)
+
+/* from compact/far_forward/ion_beamline.xml  
+    <detector id="B0PF_ID" name="B0PF_BeamlineMagnet" vis="FFMagnetVis" type="ip6_CylindricalDipoleMagnet">
+      <placement x="B0PF_XPosition" y="0*m" z="B0PF_CenterPosition" theta="B0PF_RotationAngle" />
+      <dimensions x="B0PF_InnerRadius*4" y="B0PF_InnerRadius*4" z="B0PF_Length" r="B0PF_InnerRadius*2.0" />
+      <apperture x="B0PF_InnerRadius" y="B0PF_InnerRadius" r="B0PF_InnerRadius" />
+      <coil vis="FFMagnetCoilVis" dx="2*cm" dy="1.5*cm" />
+    </detector>
+      <detector id="B0APF_ID" name="B0APF_BeamlineMagnet" vis="FFMagnetVis" type="ip6_CylindricalDipoleMagnet">
+      <placement x="B0APF_XPosition" y="0*m" z="B0APF_CenterPosition" theta="B0APF_RotationAngle" />
+      <dimensions x="B0APF_InnerRadius*4" y="B0APF_InnerRadius*4" z="B0APF_Length" r="B0APF_InnerRadius*2.0" />
+      <apperture x="B0APF_InnerRadius" y="B0APF_InnerRadius" r="B0APF_InnerRadius" />
+      <coil vis="FFMagnetCoilVis" dx="2*cm" dy="1.5*cm" />
+    </detector>
+      <detector id="Q1APF_ID" name="Q1APF_BeamlineMagnet" vis="FFMagnetVis" type="ip6_CylindricalDipoleMagnet">
+      <placement x="Q1APF_XPosition" y="0*m" z="Q1APF_CenterPosition" theta="Q1APF_RotationAngle" />
+      <dimensions x="Q1APF_InnerRadius*4" y="Q1APF_InnerRadius*4" z="Q1APF_Length" r="2.0*Q1APF_InnerRadius"/>
+      <apperture x="Q1APF_InnerRadius*2" y="Q1APF_InnerRadius*2"  r="Q1APF_InnerRadius"/>
+      <coil vis="FFMagnetCoilVis" dx="2*cm" dy="1.5*cm" />
+    </detector>
+    <detector id="Q1BPF_ID" name="Q1BPF_BeamlineMagnet" vis="FFMagnetVis" type="ip6_CylindricalDipoleMagnet">
+      <placement x="Q1BPF_XPosition" y="0*m" z="Q1BPF_CenterPosition" theta="Q1BPF_RotationAngle" />
+      <dimensions x="Q1BPF_InnerRadius*4" y="Q1BPF_InnerRadius*4" z="Q1BPF_Length"  r="2.0*Q1BPF_InnerRadius"/>
+      <apperture x="Q1BPF_InnerRadius*2" y="Q1BPF_InnerRadius*2"  r="Q1BPF_InnerRadius"/>
+      <coil vis="FFMagnetCoilVis" dx="1*cm" dy="0.5*cm" />
+    </detector>
+    <detector id="Q2PF_ID" name="Q2PF_BeamlineMagnet" vis="FFMagnetVis" type="ip6_CylindricalDipoleMagnet">
+      <placement x="Q2PF_XPosition" y="0*m" z="Q2PF_CenterPosition" theta="Q2PF_RotationAngle" />
+      <dimensions x="Q2PF_InnerRadius*4" y="Q2PF_InnerRadius*4" z="Q2PF_Length" r="2.0*Q2PF_InnerRadius" />
+      <apperture x="Q2PF_InnerRadius*2" y="Q2PF_InnerRadius*2"  r="Q2PF_InnerRadius"/>
+      <coil vis="FFMagnetCoilVis" dx="1*cm" dy="0.5*cm" />
+    </detector>
+    <detector id="B1PF_ID" name="B1PF_BeamlineMagnet" vis="FFMagnetVis" type="ip6_CylindricalDipoleMagnet">
+      <placement x="B1PF_XPosition" y="0*m" z="B1PF_CenterPosition" theta="B1PF_RotationAngle" />
+      <dimensions x="B1PF_InnerRadius*4" y="B1PF_InnerRadius*4" z="B1PF_Length" r="2.0*B1PF_InnerRadius"  />
+      <apperture x="B1PF_InnerRadius*2" y="B1PF_InnerRadius*2"  r="B1PF_InnerRadius" />
+      <coil vis="FFMagnetCoilVis" dx="1*cm" dy="0.5*cm" />
+    </detector>
+    <detector id="B1APF_ID" name="B1APF_BeamlineMagnet" vis="FFMagnetVis" type="ip6_CylindricalDipoleMagnet">
+      <placement x="B1APF_XPosition" y="0*m" z="B1APF_CenterPosition" theta="B1APF_RotationAngle" />
+      <dimensions x="B1APF_InnerRadius*4" y="B1APF_InnerRadius*4" z="B1APF_Length" r="2.0*B1APF_InnerRadius" />
+      <apperture x="B1APF_InnerRadius*2" y="B1APF_InnerRadius*2"  r="B1APF_InnerRadius"/>
+      <coil vis="FFMagnetCoilVis" dx="1*cm" dy="0.5*cm" />
+    </detector>
+    <detector id="B2PF_ID" name="B2PF_BeamlineMagnet" vis="FFMagnetVis" type="ip6_CylindricalDipoleMagnet">
+      <placement x="B2PF_XPosition" y="0*m" z="B2PF_CenterPosition" theta="B2PF_RotationAngle" />
+      <dimensions x="B2PF_InnerRadius*4" y="B2PF_InnerRadius*4" z="B2PF_Length" r="2.0*B2PF_InnerRadius" />
+      <apperture x="B2PF_InnerRadius*2" y="B2PF_InnerRadius*2"  r="B2PF_InnerRadius"/>
+      <coil vis="FFMagnetCoilVis" dx="1*cm" dy="0.5*cm" />
+    </detector>
+*/
+
+
+/* from compact/far_forward/ion_beamline.xml
+    <!-- Q0eF magnet -->
+    <detector name="Q0EF" type="ip6_CylindricalDipoleMagnet" vis="RedVis">
+      <placement  x="0" y="0" z="(Q0EF_StartZ+Q0EF_EndZ)/2." theta="0"/>
+      <dimensions x="Q0EF_InnerRadius*4" y="Q0EF_InnerRadius*4" z="Q0EF_StartZ-Q0EF_EndZ" r="1.9*Q0EF_InnerRadius" />
+      <apperture  x="Q0EF_InnerRadius*2" y="Q0EF_InnerRadius*2" r="Q0EF_InnerRadius" />
+      <coil dx="2*cm" dy="1.5*cm" />!--unchecked--
+    </detector>
+
+    <!-- inner vacuum for Q0eF -->
+    <detector name="Q0EF_vac" type="DD4hep_TubeSegment" vis="VisFwElInvisible">
+      <material name="Vacuum"/>
+      <tubs rmin="0" rmax="Q0EF_InnerRadius" zhalf="(Q0EF_StartZ-Q0EF_EndZ)/2."/>
+      <position x="0" y="0" z="(Q0EF_StartZ+Q0EF_EndZ)/2."/>
+      <rotation x="0" y="0" z="0"/>
+    </detector>
+
+    <!-- Q1eF magnet -->
+    <detector name="Q1EF" type="ip6_CylindricalDipoleMagnet" vis="RedVis">
+      <placement  x="0" y="0" z="(Q1EF_StartZ+Q1EF_EndZ)/2." theta="0"/>
+      <dimensions x="Q1EF_InnerRadius*4" y="Q1EF_InnerRadius*4" z="Q1EF_StartZ-Q1EF_EndZ" r="1.9*Q1EF_InnerRadius" />
+      <apperture  x="Q1EF_InnerRadius*2" y="Q1EF_InnerRadius*2" r="Q1EF_InnerRadius" />
+      <coil dx="2*cm" dy="1.5*cm" />!--unchecked--
+    </detector>
+
+    <!-- inner vacuum for Q1eF -->
+    <detector name="Q1EF_vac" type="DD4hep_TubeSegment" vis="VisFwElInvisible">
+      <material name="Vacuum"/>
+      <tubs rmin="0" rmax="Q1EF_InnerRadius" zhalf="(Q1EF_StartZ-Q1EF_EndZ)/2."/>
+      <position x="0" y="0" z="(Q1EF_StartZ+Q1EF_EndZ)/2."/>
+      <rotation x="0" y="0" z="0"/>
+    </detector>
+
+*/
+
+/* from compact/far_backward/magnets.xml 
+    <detector name="Magnet_Q1eR" type="ip6_CylindricalDipoleMagnet" vis="FFMagnetVis">
+      <placement  x="0" y="0" z="Q1eR_CenterPosition" theta="0*rad"/>
+      <dimensions x="Q1eR_InnerRadius*4" y="Q1eR_InnerRadius*4" z="Q1eR_Length" r="1.5*Q1eR_InnerRadius" />
+      <apperture  x="Q1eR_InnerRadius*2" y="Q1eR_InnerRadius*2" r="Q1eR_InnerRadius" />
+      <coil dx="2*cm" dy="1.5*cm" /><!--unchecked-->
+    </detector>
+
+    <detector name="Magnet_Q2eR" type="ip6_CylindricalDipoleMagnet" vis="FFMagnetVis">
+      <placement  x="0" y="0" z="Q2eR_CenterPosition" theta="0*rad"/>
+      <dimensions x="Q2eR_InnerRadius*4" y="Q2eR_InnerRadius*4" z="Q2eR_Length" r="1.5*Q2eR_InnerRadius"/>
+      <apperture  x="Q2eR_InnerRadius*2" y="Q2eR_InnerRadius*2" r="Q2eR_InnerRadius"/>
+      <coil dx="2*cm" dy="1.5*cm" /><!--unchecked-->
+    </detector>
+
+    <detector name="Magnet_B2AeR" type="ip6_CylindricalDipoleMagnet" vis="FFMagnetVis">
+      <placement  x="0" y="0" z="B2AeR_CenterPosition" theta="0*rad"/>
+      <dimensions x="B2AeR_InnerRadius*4" y="B2AeR_InnerRadius*4" z="B2AeR_Length" r="1.5*B2AeR_InnerRadius"/>
+      <apperture  x="B2AeR_InnerRadius*2" y="B2AeR_InnerRadius*2" r="B2AeR_InnerRadius"/>
+      <coil dx="2*cm" dy="1.5*cm" /><!--unchecked-->
+    </detector>
+
+    <detector name="Magnet_B2BeR" type="ip6_CylindricalDipoleMagnet" vis="FFMagnetVis">
+      <placement  x="0" y="0" z="B2BeR_CenterPosition" theta="0*rad"/>
+      <dimensions x="B2BeR_InnerRadius*4" y="B2BeR_InnerRadius*4" z="B2BeR_Length" r="1.5*B2BeR_InnerRadius"/>
+      <apperture  x="B2BeR_InnerRadius*2" y="B2BeR_InnerRadius*2" r="B2BeR_InnerRadius"/>
+      <coil dx="2*cm" dy="1.5*cm" /><!--unchecked-->
+    </detector>
+
+*/
+
+/* from compact/far_backward/beamline_extension_hadron.xml
+    <detector name="Magnet_Q2PR" type="ip6_CylindricalDipoleMagnet" vis="RedVis">
+      <placement  x="(Q2PR_StartX+Q2PR_EndX)/2" y="0" z="(Q2PR_StartZ+Q2PR_EndZ)/2" theta="Q1BPR_Theta"/>
+      <dimensions x="Q2PR_InnerRadius*4" y="Q2PR_InnerRadius*4" z="Q2PR_Length" r="2.0*Q2PR_InnerRadius"/>
+      <apperture  x="Q2PR_InnerRadius*2" y="Q2PR_InnerRadius*2" r="Q2PR_InnerRadius"/>
+      <coil dx="2*cm" dy="1.5*cm" />
+    </detector>
+*/
