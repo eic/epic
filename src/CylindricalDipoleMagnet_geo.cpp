@@ -14,42 +14,94 @@ using namespace dd4hep;
 using namespace dd4hep::rec;
 using namespace ROOT::Math;
 
-static Ref_t build_magnet(Detector& dtor, xml_h e, SensitiveDetector /* sens */) {
-	xml_det_t x_det     = e;
-	int det_id          = x_det.id();
-	string det_name     = x_det.nameStr();
-	Material iron       = dtor.material("Iron");
+void buildMagElement(dd4hep::DetElement &sdet,
+                  dd4hep::Assembly &assembly,
+                  dd4hep::Detector &dtor,
+                  dd4hep::xml::DetElement x_det,
+                  string element,
+                  dd4hep::Material material); 
+void buildCryoElement(dd4hep::DetElement &sdet,
+                  dd4hep::Assembly &assembly,
+                  dd4hep::Detector &dtor,
+                  dd4hep::xml::DetElement x_det,
+                  string element,
+                  dd4hep::Material material);
+
+static Ref_t build_magnet(Detector& dtor, xml_h e, SensitiveDetector /* sens */) 
+{
+	xml_det_t x_det	= e;
+	int det_id	= x_det.id();
+	string det_name	= x_det.nameStr();
 
 	DetElement sdet(det_name, det_id);
 	Assembly assembly(det_name + "_assembly");
 
-	const string yoke_vis = dd4hep::getAttrOrDefault<std::string>(x_det, _Unicode(vis), "FFMagnetVis");
-	sdet.setAttributes(dtor, assembly, x_det.regionStr(), x_det.limitsStr(), yoke_vis);
+	// get materials
+	Material iron	= dtor.material("Iron");
+	Material nbti	= dtor.material("SolenoidCoil");
+	Material steel	= dtor.material("StainlessSteel");
 
-	//---- YOKE ----
-	// get all yokes
-	xml_coll_t yokes_c(x_det, _Unicode(yoke));
-	int yoke_id = 1;
-	// loop over yokes
-	for (; yokes_c; ++yokes_c) 
+	// build magnet components
+	buildMagElement(sdet,assembly,dtor,x_det,"yoke",iron);
+	buildMagElement(sdet,assembly,dtor,x_det,"coil",nbti);
+	buildMagElement(sdet,assembly,dtor,x_det,"tube",steel);
+	buildCryoElement(sdet,assembly,dtor,x_det,"endplate",steel);
+
+	// final placement
+	auto pv_assembly = dtor.pickMotherVolume(sdet).placeVolume(assembly);
+	pv_assembly.addPhysVolID("system", det_id);
+	sdet.setPlacement(pv_assembly);
+
+	// update bounding box
+	assembly->GetShape()->ComputeBBox();
+
+	return sdet;
+}
+
+void buildCryoElement(dd4hep::DetElement &sdet,
+                  dd4hep::Assembly &assembly,
+                  dd4hep::Detector &dtor,
+                  dd4hep::xml::DetElement x_det,
+                  string element,
+                  dd4hep::Material material) 
+{
+	// get all elems
+	xml_coll_t elems_c(x_det, element.c_str());
+	int elem_id = 1;
+
+	// loop over elems
+	for (; elems_c; ++elems_c) 
 	{
-		// get one yoke
-      		xml_comp_t yoke_c 	= yokes_c;
+		// get one element
+      		xml_comp_t elem_c 	= elems_c;
+		string elem_name	= elem_c.nameStr();
 		// get placement coordinates
-		xml_dim_t yoke_pos	= yoke_c.child(_U(placement));
-		double yoke_theta	= yoke_pos.attr<double>("theta");
-		// get dimentions
-		xml_dim_t yoke_dim	= yoke_c.child(_U(dimensions));
-		double yoke_rmin	= yoke_dim.attr<double>("rmin");
-		double yoke_rmax	= yoke_dim.attr<double>("rmax");
-		double yoke_half_l	= yoke_dim.attr<double>("half_length");
+		xml_dim_t elem_pos	= elem_c.child(_U(placement));
+		double elem_theta	= elem_pos.attr<double>("theta");
+		std::vector<double> z;
+		std::vector<double> rmax;
+		std::vector<double> rmin;
+		// loop over z-planes
+		xml_coll_t zplanes_c(elem_c, _Unicode(zplane));
+		for (; zplanes_c; ++zplanes_c)
+		{
+			// get z-plane
+			xml_comp_t zplane_c = zplanes_c;
+			z.push_back(zplane_c.attr<double>(_Unicode(z)));
+			rmin.push_back(zplane_c.attr<double>(_Unicode(rmin)));
+			rmax.push_back(zplane_c.attr<double>(_Unicode(rmax)));
+		}
+
+		// set attributes
+		const string elem_vis = dd4hep::getAttrOrDefault<std::string>(elem_c, _Unicode(vis), "FFMagnetVis");
+		sdet.setAttributes(dtor, assembly, x_det.regionStr(), x_det.limitsStr(), elem_vis);
 
 		// build solid
-		Tube yoke_tube(yoke_rmin,yoke_rmax,yoke_half_l);
-		Solid yoke_final(yoke_tube);
-
+		Polycone elem_tube(0, 2.0 * M_PI, rmin, rmax, z);
+		Solid elem_final(elem_tube);
+		
 		// get all cuts
-		xml_coll_t cuts_c(yoke_c, _Unicode(cut));
+		xml_coll_t cuts_c(elem_c, _Unicode(cut));
 		// loop over cuts
 		for (; cuts_c; ++cuts_c)
 		{
@@ -84,35 +136,137 @@ static Ref_t build_magnet(Detector& dtor, xml_h e, SensitiveDetector /* sens */)
 				pos_tmp = rot_tmp * pos_tmp;
 
       				Transform3D tf_tmp(RotationZYX(0, cut_theta, 0),pos_tmp);
-				// subtract the cut from yoke solid
-				yoke_final = SubtractionSolid("yoke_tube",yoke_final,cut_tube,tf_tmp);
+				// subtract the cut from the element solid
+				elem_final = SubtractionSolid("elem_tube",elem_final,cut_tube,tf_tmp);
 			}
 		}
 
 		// create volume
-		string yoke_vol_name = "yoke_vol_" + to_string(yoke_id);
-		Volume yoke_vol(yoke_vol_name, yoke_final, iron);
+		Volume elem_vol(elem_name, elem_final, material);
 
 		// placement 
-		auto yoke_pv = assembly.placeVolume(yoke_vol);
-		yoke_pv.addPhysVolID("element", yoke_id);
-		DetElement yoke_de(sdet, "yoke_de", yoke_id);
-		yoke_de.setPlacement(yoke_pv);
-		yoke_de.setAttributes(dtor, yoke_vol, x_det.regionStr(), x_det.limitsStr(), yoke_vis);
-		yoke_id++;
-
-		// finishing steps
-		auto final_pos = Transform3D(
-			Translation3D(yoke_pos.x(),yoke_pos.y(),yoke_pos.z()) * RotationY(yoke_theta));
-		auto pv = dtor.pickMotherVolume(sdet).placeVolume(assembly, final_pos);
-		pv.addPhysVolID("system", det_id);
-		sdet.setPlacement(pv);
-		
-		// update bounding box
-		assembly->GetShape()->ComputeBBox();
+		auto elem_pv = assembly.placeVolume(elem_vol,
+			Transform3D(	Translation3D(elem_pos.x(),elem_pos.y(),elem_pos.z()) * 
+					RotationY(elem_theta)));
+		elem_pv.addPhysVolID(element, elem_id);
+		DetElement elem_de(sdet, elem_name, elem_id);
+		elem_de.setPlacement(elem_pv);
+		elem_de.setAttributes(dtor, elem_vol, x_det.regionStr(), x_det.limitsStr(), elem_vis);
+		elem_id++;
 	}
 
-	return sdet;
+	return;
+}
+
+void buildMagElement(dd4hep::DetElement &sdet,
+                  dd4hep::Assembly &assembly,
+                  dd4hep::Detector &dtor,
+                  dd4hep::xml::DetElement x_det,
+                  string element,
+                  dd4hep::Material material) 
+{
+	// get all elems
+	xml_coll_t elems_c(x_det, element.c_str());
+	int elem_id = 1;
+
+	// loop over elems
+	for (; elems_c; ++elems_c) 
+	{
+		// get one element
+      		xml_comp_t elem_c 	= elems_c;
+		string elem_name	= elem_c.nameStr();
+		// get placement coordinates
+		xml_dim_t elem_pos	= elem_c.child(_U(placement));
+		double elem_theta	= elem_pos.attr<double>("theta");
+		// get dimentions
+		xml_dim_t elem_dim	= elem_c.child(_U(dimensions));
+		double elem_rmin	= elem_dim.attr<double>("rmin");
+		double elem_rmax	= elem_dim.attr<double>("rmax");
+		double elem_half_l	= elem_dim.attr<double>("half_length");
+		double elem_sphi	= elem_dim.attr<double>("sphi"); 
+		double elem_dphi	= elem_dim.attr<double>("dphi"); 
+
+		// set attributes
+		const string elem_vis = dd4hep::getAttrOrDefault<std::string>(elem_c, _Unicode(vis), "FFMagnetVis");
+		sdet.setAttributes(dtor, assembly, x_det.regionStr(), x_det.limitsStr(), elem_vis);
+
+		// build solid
+		Tube elem_tube(elem_rmin,elem_rmax,elem_half_l,elem_sphi,elem_sphi+elem_dphi);
+		Solid elem_final(elem_tube);
+		
+		// combine sub-elements
+		if(elem_pos.hasAttr(_Unicode(phiNum)))
+		{
+			int phi_num 		= elem_pos.attr<int>("phiNum");
+			double phi_step		= elem_pos.attr<double>("phiStep");
+			double phi_start	= elem_pos.attr<double>("phiStart");
+
+			// loop over steps
+			for(int i = 0; i < phi_num; i++)
+			{
+				double phi_tmp = phi_start + i * phi_step;
+      				Transform3D tf_tmp(RotationZ(phi_tmp),Position(0,0,0));
+				// unite sub-elements
+				elem_final = UnionSolid("elem_tube",elem_final,elem_tube,tf_tmp);
+			}
+		}
+
+		// get all cuts
+		xml_coll_t cuts_c(elem_c, _Unicode(cut));
+		// loop over cuts
+		for (; cuts_c; ++cuts_c)
+		{
+			// get one cut
+			xml_comp_t cut_c	= cuts_c;
+			// get placement coordinates
+			xml_dim_t cut_pos	= cut_c.child(_U(placement));
+			double cut_theta	= cut_pos.attr<double>("theta");
+			// get dimentions
+			xml_dim_t cut_dim	= cut_c.child(_U(dimensions));
+			double cut_rmin		= cut_dim.attr<double>("rmin");
+			double cut_rmax		= cut_dim.attr<double>("rmax");
+			double cut_half_l	= cut_dim.attr<double>("half_length");
+			// get rotation coordinates
+			xml_dim_t cut_rot       = cut_c.child(_U(rotation));
+			int cut_rot_num		= cut_rot.attr<int>("num");
+			double cut_rot_step	= cut_rot.attr<double>("step");
+			string cut_rot_axis 	= cut_rot.attr<string>("axis");
+
+			// build a solid
+			Tube cut_tube(cut_rmin,cut_rmax,cut_half_l);
+
+			// loop over rot steps
+			for(int i = 0; i < cut_rot_num; i++)
+			{
+				Position pos_tmp(cut_pos.x(),cut_pos.y(),cut_pos.z());
+				double ang_tmp = i * cut_rot_step;
+				Rotation3D rot_tmp;
+				if 	(cut_rot_axis == "X")  	{rot_tmp = RotationX(ang_tmp);}
+				else if (cut_rot_axis == "Y")  	{rot_tmp = RotationY(ang_tmp);}
+				else  				{rot_tmp = RotationZ(ang_tmp);}
+				pos_tmp = rot_tmp * pos_tmp;
+
+      				Transform3D tf_tmp(RotationZYX(0, cut_theta, 0),pos_tmp);
+				// subtract the cut from the element solid
+				elem_final = SubtractionSolid("elem_tube",elem_final,cut_tube,tf_tmp);
+			}
+		}
+
+		// create volume
+		Volume elem_vol(elem_name, elem_final, material);
+
+		// placement 
+		auto elem_pv = assembly.placeVolume(elem_vol,
+			Transform3D(	Translation3D(elem_pos.x(),elem_pos.y(),elem_pos.z()) * 
+					RotationY(elem_theta)));
+		elem_pv.addPhysVolID(element, elem_id);
+		DetElement elem_de(sdet, elem_name, elem_id);
+		elem_de.setPlacement(elem_pv);
+		elem_de.setAttributes(dtor, elem_vol, x_det.regionStr(), x_det.limitsStr(), elem_vis);
+		elem_id++;
+	}
+
+	return;
 }
 
 DECLARE_DETELEMENT(ip6_CylindricalDipoleMagnet, build_magnet)
