@@ -36,10 +36,10 @@ jobs:
         # Collect all config names from all YAMLs, one per line
         CONFIGS="$(
           for config in configurations/*.yml; do
-            ./bin/make_detector_configuration -d templates -t epic.xml.jinja2 -c "$config" -o "epic_$(basename "$config" .yml).xml" -p 
+            ./bin/make_detector_configuration -d templates -t epic.xml.jinja2 -c "$config" -o "epic_$(basename "$config" .yml).xml" -p
           done | sort -u
         )"
-        
+
         # CSV
         CONFIGS_CSV="$(echo "$CONFIGS" | paste -sd, -)"
         # JSON

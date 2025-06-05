@@ -63,7 +63,7 @@ if 'features' in config and ('far_forward' in config['features'] or 'far_backwar
         # Create a new config dictionary with the current ebeam and pbeam values
         new_config = config.copy()
         new_config.update(values)
-        
+
         if not args.print:
             with open(new_output, 'w') as output:
                 output.write(template.render(**new_config))
