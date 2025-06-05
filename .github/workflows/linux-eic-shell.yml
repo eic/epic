@@ -34,11 +34,11 @@ jobs:
     - id: list-detector-configs
       run: |
         CONFIGS_CSV=$(
-          ls -1 install/share/epic/ | sed 's/^/epic_/g' | xargs | sed 's/\.xml//g;s/ /,/g'
+          ls -1 configurations | sed 's/^/epic_/g' | xargs | sed 's/\.yml//g;s/ /,/g'
         )
         CONFIGS_JSON=$((
           echo '['
-          ls -1 install/share/epic/ | sed 's/^/epic_/g' | xargs | sed 's/\.xml//g;s/ /, /g' | xargs -n 1 echo | sed -r 's/^([^,]*)(,?)$/"\1"\2/'
+          ls -1 configurations | sed 's/^/epic_/g' | xargs | sed 's/\.yml//g;s/ /, /g' | xargs -n 1 echo | sed -r 's/^([^,]*)(,?)$/"\1"\2/'
           echo ']'
         ) | jq -c .)
         echo "configs_csv=${CONFIGS_CSV}" | tee -a $GITHUB_OUTPUT
