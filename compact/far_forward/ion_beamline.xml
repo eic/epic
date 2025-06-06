@@ -398,7 +398,11 @@
           <dimensions rmin="0 * cm" rmax="15.24 * cm / 2." half_length="400. * cm / 2."/>
           <rotation num="1" start="90 * deg" step="0 * deg" axis="Z"/>
         </cut>
-
+        <cut shape="Box">
+          <placement x="-31.128 * cm" y="+31.128 * cm" z="0 * cm" rotX="0 * rad" rotY="0 * rad" rotZ="0 * rad"/>
+          <dimensions dx="20.693 * cm / 2." dy="20.693 * cm / 2." dz="400. * cm / 2."/>
+          <rotation num="4" start="0 * deg" step="90 * deg" axis="Z"/>
+        </cut>
       </yoke>
     </detector>
 
