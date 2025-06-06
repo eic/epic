@@ -14,13 +14,13 @@ using namespace dd4hep;
 using namespace dd4hep::rec;
 using namespace ROOT::Math;
 
-void buildMagElement(dd4hep::DetElement &sdet,
+void buildTubeElement(dd4hep::DetElement &sdet,
                   dd4hep::Assembly &assembly,
                   dd4hep::Detector &dtor,
                   dd4hep::xml::DetElement x_det,
                   string element,
                   dd4hep::Material material); 
-void buildCryoElement(dd4hep::DetElement &sdet,
+void buildPolyElement(dd4hep::DetElement &sdet,
                   dd4hep::Assembly &assembly,
                   dd4hep::Detector &dtor,
                   dd4hep::xml::DetElement x_det,
@@ -37,15 +37,22 @@ static Ref_t build_magnet(Detector& dtor, xml_h e, SensitiveDetector /* sens */)
 	Assembly assembly(det_name + "_assembly");
 
 	// get materials
-	Material iron	= dtor.material("Iron");
-	Material nbti	= dtor.material("SolenoidCoil");
-	Material steel	= dtor.material("StainlessSteel");
+	Material iron		= dtor.material("Iron");
+	Material nbti		= dtor.material("SolenoidCoil");
+	Material steel_304l	= dtor.material("StainlessSteel");
+	Material alum		= dtor.material("Al6061T6");
+	Material steel_a53  	= dtor.material("StainlessSteelA53");
 
 	// build magnet components
-	buildMagElement(sdet,assembly,dtor,x_det,"yoke",iron);
-	buildMagElement(sdet,assembly,dtor,x_det,"coil",nbti);
-	buildMagElement(sdet,assembly,dtor,x_det,"tube",steel);
-	buildCryoElement(sdet,assembly,dtor,x_det,"endplate",steel);
+	buildTubeElement(sdet,assembly,dtor,x_det,"yoke",iron);
+	buildTubeElement(sdet,assembly,dtor,x_det,"coil",nbti);
+	buildTubeElement(sdet,assembly,dtor,x_det,"tube",steel_304l);
+	buildPolyElement(sdet,assembly,dtor,x_det,"endplate",steel_304l);
+	buildTubeElement(sdet,assembly,dtor,x_det,"yokeshield",steel_304l);
+	buildTubeElement(sdet,assembly,dtor,x_det,"heatshieldbarrel",alum);
+	buildPolyElement(sdet,assembly,dtor,x_det,"heatshieldend",alum);
+	buildTubeElement(sdet,assembly,dtor,x_det,"cryobarrel",steel_a53);
+	buildPolyElement(sdet,assembly,dtor,x_det,"cryoend",steel_a53);
 
 	// final placement
 	auto pv_assembly = dtor.pickMotherVolume(sdet).placeVolume(assembly);
@@ -58,7 +65,7 @@ static Ref_t build_magnet(Detector& dtor, xml_h e, SensitiveDetector /* sens */)
 	return sdet;
 }
 
-void buildCryoElement(dd4hep::DetElement &sdet,
+void buildPolyElement(dd4hep::DetElement &sdet,
                   dd4hep::Assembly &assembly,
                   dd4hep::Detector &dtor,
                   dd4hep::xml::DetElement x_det,
@@ -100,6 +107,53 @@ void buildCryoElement(dd4hep::DetElement &sdet,
 		Polycone elem_tube(0, 2.0 * M_PI, rmin, rmax, z);
 		Solid elem_final(elem_tube);
 		
+		// get all adds
+		xml_coll_t adds_c(elem_c, _Unicode(add));
+		// loop over adds
+		for (; adds_c; ++adds_c)
+		{
+			// get one cut
+			xml_comp_t add_c	= adds_c;
+			// get shape
+			string add_shape	= add_c.attr<string>("shape");
+			// get placement coordinates
+			xml_dim_t add_pos	= add_c.child(_U(placement));
+			double add_theta	= add_pos.attr<double>("theta");
+			// get dimentions
+			xml_dim_t add_dim	= add_c.child(_U(dimensions));
+
+			Transform3D tf_tmp(
+				RotationZYX(0, add_theta, 0),
+				Position(add_pos.x(),add_pos.y(),add_pos.z()));
+
+			if(add_shape == "Prism")
+			{
+				double add_pdx1	= add_dim.attr<double>("pdx1");
+				double add_pdx2	= add_dim.attr<double>("pdx2");
+				double add_pdy1	= add_dim.attr<double>("pdy1");
+				double add_pdy2	= add_dim.attr<double>("pdy2");
+				double add_pdz	= add_dim.attr<double>("pdz");
+
+				// build a solid
+				Trapezoid add_prism(add_pdx1,add_pdx2,add_pdy1,add_pdy2,add_pdz);
+
+				// unite the add with the element solid
+				elem_final = UnionSolid("elem_final",elem_final,add_prism,tf_tmp);
+			}
+			else if(add_shape == "Tube")
+			{
+				double add_rmin		= add_dim.attr<double>("rmin");
+				double add_rmax		= add_dim.attr<double>("rmax");
+				double add_half_l	= add_dim.attr<double>("half_length");
+
+				// build a solid
+				Tube add_tube(add_rmin,add_rmax,add_half_l);
+
+				// unite the add with the element solid
+				elem_final = UnionSolid("elem_final",elem_final,add_tube,tf_tmp);
+			}
+		}
+
 		// get all cuts
 		xml_coll_t cuts_c(elem_c, _Unicode(cut));
 		// loop over cuts
@@ -115,30 +169,15 @@ void buildCryoElement(dd4hep::DetElement &sdet,
 			double cut_rmin		= cut_dim.attr<double>("rmin");
 			double cut_rmax		= cut_dim.attr<double>("rmax");
 			double cut_half_l	= cut_dim.attr<double>("half_length");
-			// get rotation coordinates
-			xml_dim_t cut_rot       = cut_c.child(_U(rotation));
-			int cut_rot_num		= cut_rot.attr<int>("num");
-			double cut_rot_step	= cut_rot.attr<double>("step");
-			string cut_rot_axis 	= cut_rot.attr<string>("axis");
 
 			// build a solid
 			Tube cut_tube(cut_rmin,cut_rmax,cut_half_l);
 
-			// loop over rot steps
-			for(int i = 0; i < cut_rot_num; i++)
-			{
-				Position pos_tmp(cut_pos.x(),cut_pos.y(),cut_pos.z());
-				double ang_tmp = i * cut_rot_step;
-				Rotation3D rot_tmp;
-				if 	(cut_rot_axis == "X")  	{rot_tmp = RotationX(ang_tmp);}
-				else if (cut_rot_axis == "Y")  	{rot_tmp = RotationY(ang_tmp);}
-				else  				{rot_tmp = RotationZ(ang_tmp);}
-				pos_tmp = rot_tmp * pos_tmp;
-
-      				Transform3D tf_tmp(RotationZYX(0, cut_theta, 0),pos_tmp);
-				// subtract the cut from the element solid
-				elem_final = SubtractionSolid("elem_tube",elem_final,cut_tube,tf_tmp);
-			}
+     			Transform3D tf_tmp(
+				RotationZYX(0, cut_theta, 0),	
+				Position(cut_pos.x(),cut_pos.y(),cut_pos.z()));
+			// subtract the cut from the element solid
+			elem_final = SubtractionSolid("elem_final",elem_final,cut_tube,tf_tmp);
 		}
 
 		// create volume
@@ -158,7 +197,7 @@ void buildCryoElement(dd4hep::DetElement &sdet,
 	return;
 }
 
-void buildMagElement(dd4hep::DetElement &sdet,
+void buildTubeElement(dd4hep::DetElement &sdet,
                   dd4hep::Assembly &assembly,
                   dd4hep::Detector &dtor,
                   dd4hep::xml::DetElement x_det,
@@ -207,7 +246,7 @@ void buildMagElement(dd4hep::DetElement &sdet,
 				double phi_tmp = phi_start + i * phi_step;
       				Transform3D tf_tmp(RotationZ(phi_tmp),Position(0,0,0));
 				// unite sub-elements
-				elem_final = UnionSolid("elem_tube",elem_final,elem_tube,tf_tmp);
+				elem_final = UnionSolid("elem_final",elem_final,elem_tube,tf_tmp);
 			}
 		}
 
@@ -248,7 +287,7 @@ void buildMagElement(dd4hep::DetElement &sdet,
 
       				Transform3D tf_tmp(RotationZYX(0, cut_theta, 0),pos_tmp);
 				// subtract the cut from the element solid
-				elem_final = SubtractionSolid("elem_tube",elem_final,cut_tube,tf_tmp);
+				elem_final = SubtractionSolid("elem_final",elem_final,cut_tube,tf_tmp);
 			}
 		}
 

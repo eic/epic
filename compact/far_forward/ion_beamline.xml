@@ -58,19 +58,77 @@
       </tube>
       <tube name="B0PF_OuterSupport_Tube" vis="FFMagnetSupportTubeVis">
         <placement x="-3.40264 * cm" y="0 * cm" z="640.648 * cm" theta="0 * rad"/>
-        <dimensions rmin="69.448680 * cm / 2." rmax="70.647560 * cm / 2." half_length="130.810000 * cm / 2." sphi="0 * deg" dphi="360.0 * deg"/>
+        <dimensions rmin="69.448680 * cm / 2." rmax="70.647560 * cm / 2." half_length="130.81 * cm / 2." sphi="0 * deg" dphi="360.0 * deg"/>
       </tube>
       <endplate name="B0PF_EndPlate_IP" vis="FFMagnetEndPlateVis">
         <placement x="-3.40264 * cm" y="0 * cm" z="640.648 * cm" theta="0 * rad"/>
 	<zplane z="-(134.9 * cm / 2.)" rmin="31.396940 * cm" rmax="142.539974 * cm / 2."/>
-	<zplane z="-(134.9 * cm / 2. + 6.350000 * cm)" rmin="31.396940 * cm" rmax="142.539974 * cm / 2."/>
+	<zplane z="-(134.9 * cm / 2. + 6.35 * cm)" rmin="31.396940 * cm" rmax="142.539974 * cm / 2."/>
       </endplate>
       <endplate name="B0PF_EndPlate_nonIP" vis="FFMagnetEndPlateVis">
         <placement x="-3.40264 * cm" y="0 * cm" z="640.648 * cm" theta="0 * rad"/>
 	<zplane z="(134.9 * cm / 2.)" rmin="31.396940 * cm" rmax="142.539974 * cm / 2."/>
-	<zplane z="(134.9 * cm / 2. + 6.350000 * cm)" rmin="31.396940 * cm" rmax="142.539974 * cm / 2."/>
+	<zplane z="(134.9 * cm / 2. + 6.35 * cm)" rmin="31.396940 * cm" rmax="142.539974 * cm / 2."/>
       </endplate>
+      <yokeshield name="B0PF_YoketShield" vis="FFMagnetEndPlateVis">
+        <placement x="-3.40264 * cm" y="0 * cm" z="640.648 * cm" theta="0 * rad"/>
+        <dimensions rmin="140.0 * cm / 2." rmax="142.54 * cm/ 2." half_length="134.8 * cm / 2." sphi="0 * deg" dphi="360.0 * deg"/>
+      </yokeshield>
+      <heatshieldbarrel name="B0PF_HeatShield_Barrel" vis="FFMagnetHeatShieldVis">
+        <placement x="-3.40264 * cm" y="0 * cm" z="640.648 * cm" theta="0 * rad"/>
+        <dimensions rmin="170.18 * cm / 2." rmax="171.45 * cm/ 2." half_length="174.139860 * cm / 2." sphi="0 * deg" dphi="360.0 * deg"/>
+      </heatshieldbarrel>
+      <heatshieldend name="B0PF_HeatShield_End_IP" vis="FFMagnetHeatShieldVis">
+        <placement x="-3.40264 * cm" y="0 * cm" z="640.648 * cm" theta="0 * rad"/>
+	<zplane z="-(174.139860 * cm / 2.)" rmin="29.391 * cm" rmax="171.45 * cm / 2."/>
+	<zplane z="-(174.139860 * cm / 2. + 0.635 * cm)" rmin="29.391 * cm" rmax="171.45 * cm / 2."/>
+        <add shape="Tube">
+          <placement x="3.4 * cm" y="0 * cm" z="-(174.139860 * cm / 2. + 0.635 * cm / 2.)" theta="0 * rad"/>
+          <dimensions rmin="0 * cm" rmax="8.845 * cm" half_length="0.635 * cm / 2."/>
+        </add>
+        <add shape="Prism">
+          <placement x="35.3 * cm / 2." y="0 * cm" z="-(174.139860 * cm / 2. + 0.635 * cm / 2.)" theta="90 * deg"/>
+          <dimensions pdx1="0.635 * cm / 2." pdx2="0.635 * cm / 2." pdy1="16.4 * cm / 2." pdy2="48.9 * cm / 2." pdz="35.3 * cm / 2."/>
+        </add>
+        <cut>
+          <placement x="3.4 * cm" y="0 * cm" z="-(174.139860 * cm / 2. + 0.635 * cm / 2.)" theta="0 * rad"/>
+          <dimensions rmin="0 * cm" rmax="6.827520 * cm / 2." half_length="200. * cm / 2."/>
+        </cut>
+      </heatshieldend>
+      <heatshieldend name="B0PF_HeatShield_End_nonIP" vis="FFMagnetHeatShieldVis">
+        <placement x="-3.40264 * cm" y="0 * cm" z="640.648 * cm" theta="0 * rad"/>
+	<zplane z="(174.139860 * cm / 2.)" rmin="0 * cm" rmax="171.45 * cm / 2."/>
+	<zplane z=" (174.139860 * cm / 2. + 0.635 * cm)" rmin="0 * cm" rmax="171.45 * cm / 2."/>
+        <cut>
+          <placement x="3.4 * cm" y="0 * cm" z="(174.139860 * cm / 2. + 0.635 * cm / 2.)" theta="0 * rad"/>
+          <dimensions rmin="0 * cm" rmax="9.5 * cm / 2." half_length="200. * cm / 2."/>
+        </cut>
+        <cut>
+          <placement x="-15.4 * cm" y="0 * cm" z="(174.139860 * cm / 2. + 0.635 * cm / 2.)" theta="0 * rad"/>
+          <dimensions rmin="0 * cm" rmax="5.5 * cm / 2." half_length="200. * cm / 2."/>
+        </cut>
+      </heatshieldend>
+      <cryobarrel name="B0PF_Cryo_Barrel" vis="FFMagnetCryoVis">
+        <placement x="-3.40264 * cm" y="0 * cm" z="640.648 * cm - (132.86 * cm / 2. + 22.54 * cm - 162.709860 * cm / 2.)" theta="0 * rad"/>
+        <dimensions rmin="180.34 * cm / 2." rmax="182.88 * cm/ 2." half_length="162.709860 * cm / 2." sphi="0 * deg" dphi="360.0 * deg"/>
+      </cryobarrel>
+      <cryoend name="B0PF_Cryo_End_IP" vis="FFMagnetCryoVis">
+        <placement x="-3.40264 * cm" y="0 * cm" z="640.648 * cm" theta="0 * rad"/>
+	<zplane z="-(132.86 * cm / 2. + 22.54 * cm)" rmin="27.403501 * cm" rmax="182.880000 * cm / 2."/>
+	<zplane z="-(132.86 * cm / 2. + 22.54* cm + 2.54 * cm)" rmin="27.403501 * cm" rmax="182.880000 * cm / 2."/>
+        <add shape="Tube">
+          <placement x="3.4 * cm" y="0 * cm" z="-(132.86 * cm / 2. + 22.54 * cm + 2.54 * cm / 2.)" theta="0 * rad"/>
+          <dimensions rmin="0 * cm" rmax="8.845 * cm" half_length="2.54 * cm / 2."/>
+        </add>
+        <add shape="Prism">
+          <placement x="35.3 * cm / 2." y="0 * cm" z="-(132.86 * cm / 2. + 22.54 * cm + 2.54 * cm / 2.)" theta="90 * deg"/>
+          <dimensions pdx1="2.54 * cm / 2." pdx2="2.54 * cm / 2." pdy1="16.4 * cm / 2." pdy2="48.9 * cm / 2." pdz="35.3 * cm / 2."/>
+        </add>
+        <cut>
+          <placement x="3.4 * cm" y="0 * cm" z="-(132.86 * cm / 2. + 22.54 * cm + 2.54 * cm / 2.)" theta="0 * rad"/>
+          <dimensions rmin="0 * cm" rmax="6.827520 * cm / 2." half_length="200. * cm / 2."/>
+        </cut>
+      </cryoend>
     </detector>
   </detectors>
-
 </lccdd>
