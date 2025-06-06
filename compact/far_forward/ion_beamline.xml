@@ -21,6 +21,7 @@
       =====================================
   </comment>
   <detectors>
+    <!-- B0pF magnet -->
     <detector id="B0PF_ID" name="B0PF_BeamlineMagnet" type="ip6_CylindricalDipoleMagnet">
       <yoke name="B0PF_Yoke" vis="FFMagnetVis">
         <placement x="-3.40264 * cm" y="0 * cm" z="640.648 * cm" theta="0 * rad"/>
