@@ -538,4 +538,24 @@
     <fraction n="0.18046" ref="O"/>
     <fraction n="0.00190" ref="Ce"/>
   </material>
+  <material name="Al6061T6"> <!-- 6061-T6 Aluminum Alloy -->
+    <D type="density" unit="g/cm3" value="2.70"/> <!-- Density: 2.70 g/cm^3 -->
+    <fraction n="0.9748" ref="Al"/>
+    <fraction n="0.0100" ref="Mg"/>
+    <fraction n="0.0060" ref="Si"/>
+    <fraction n="0.0035" ref="Fe"/>
+    <fraction n="0.0020" ref="Cu"/>
+    <fraction n="0.0020" ref="Cr"/>
+    <fraction n="0.0015" ref="Zn"/>
+    <fraction n="0.0008" ref="Ti"/>
+    <fraction n="0.0004" ref="Mn"/>
+  </material>
+  <material name="StainlessSteelA53"> <!-- Define the A53 carbon-steel alloy -->
+    <D type="density" unit="g/cm3" value="7.85"/>
+    <fraction n="0.980" ref="Fe"/>
+    <fraction n="0.003" ref="C"/>
+    <fraction n="0.010" ref="Mn"/>
+    <fraction n="0.002" ref="P"/>
+    <fraction n="0.005" ref="S"/>
+  </material>
 </materials>
