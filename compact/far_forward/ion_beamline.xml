@@ -23,6 +23,11 @@
     <constant name="Q1BPF_Yoke_Center_posY" value="0 * cm"/>
     <constant name="Q1BPF_Yoke_Center_posZ" value="1157.15"/>
     <constant name="Q1BPF_Yoke_Rotation_Angle" value="0.0135542 * rad"/>
+    <!-- Q2pF Yoke Center Position -->
+    <constant name="Q2PF_Yoke_Center_posX" value="-40.6057 * cm"/>
+    <constant name="Q2PF_Yoke_Center_posY" value="0 * cm"/>
+    <constant name="Q2PF_Yoke_Center_posZ" value="1467.41 * cm"/>
+    <constant name="Q2PF_Yoke_Rotation_Angle" value="0.0138003 * rad"/>
 
   </define>
 
@@ -50,12 +55,12 @@
         <cut>
           <placement x="11.841 * cm" y="-44.1911 * cm" z="0 * cm" rotX="0 * rad" rotY="0 * rad" rotZ="0 * rad"/>
           <dimensions rmin="0 * cm" rmax="12.7 * cm / 2." half_length="400. * cm / 2."/>
-          <rotation num="4" step="90 * deg" axis="Z"/>
+          <rotation num="4" start="0 * deg" step="90 * deg" axis="Z"/>
         </cut>
         <cut>
           <placement x="-11.841 * cm" y="-44.1911 * cm" z="0 * cm" rotX="0 * rad" rotY="0 * rad" rotZ="0 * rad"/>
           <dimensions rmin="0 * cm" rmax="12.7 * cm / 2." half_length="400. * cm / 2."/>
-          <rotation num="4" step="90 * deg" axis="Z"/>
+          <rotation num="4" start="0 * deg" step="90 * deg" axis="Z"/>
         </cut>
       </yoke>
       <coil name="B0PF_Quad_Coil" vis="FFMagnetCoilVis">
@@ -161,7 +166,7 @@
         <cut>
           <placement x="(15.543 + (16.858-15.543)/2. + 5.2) * cm" y="0 * cm" z="0 * cm" rotX="0 * rad" rotY="-1.255321 * deg" rotZ="0 * rad"/>
           <dimensions rmin="0 * cm" rmax="10.4 * cm / 2." half_length="400. * cm / 2."/>
-          <rotation num="1" step="0 * deg" axis="Z"/>
+          <rotation num="1" start="0 * deg" step="0 * deg" axis="Z"/>
         </cut>
       </yoke>
       <coil name="B0APF_Dummy_Coil_In" vis="FFMagnetCoilVis">
@@ -230,27 +235,27 @@
         <cut>
           <placement x="(17.346 + (20.480-17.346)/2. + 6.91) * cm" y="0 * cm" z="0 * cm" rotX="0 * rad" rotY="-1.196077 * deg" rotZ="0 * rad"/>
           <dimensions rmin="0 * cm" rmax="13.82 * cm / 2." half_length="400. * cm / 2."/>
-          <rotation num="1" step="0 * deg" axis="Z"/>
+          <rotation num="1" start="0 * deg" step="0 * deg" axis="Z"/>
         </cut>
         <cut>
           <placement x="-(44.117+11.43)/2. * cm" y="-(20.743+11.43/2.) * cm" z="0 * cm" rotX="0 * rad" rotY="0 * rad" rotZ="0 * rad"/>
           <dimensions rmin="0 * cm" rmax="11.43 * cm / 2." half_length="400. * cm / 2."/>
-          <rotation num="1" step="0 * deg" axis="Z"/>
+          <rotation num="1" start="0 * deg" step="0 * deg" axis="Z"/>
         </cut>
         <cut>
           <placement x="(44.117+11.43)/2. * cm" y="-(20.743+11.43/2.) * cm" z="0 * cm" rotX="0 * rad" rotY="0 * rad" rotZ="0 * rad"/>
           <dimensions rmin="0 * cm" rmax="11.43 * cm / 2." half_length="400. * cm / 2."/>
-          <rotation num="1" step="0 * deg" axis="Z"/>
+          <rotation num="1" start="0 * deg" step="0 * deg" axis="Z"/>
         </cut>
         <cut>
           <placement x="(44.117+11.43)/2. * cm" y="(20.743+11.43/2.) * cm" z="0 * cm" rotX="0 * rad" rotY="0 * rad" rotZ="0 * rad"/>
           <dimensions rmin="0 * cm" rmax="11.43 * cm / 2." half_length="400. * cm / 2."/>
-          <rotation num="1" step="0 * deg" axis="Z"/>
+          <rotation num="1" start="0 * deg" step="0 * deg" axis="Z"/>
         </cut>
         <cut>
           <placement x="-(44.117+11.43)/2. * cm" y="(20.743+11.43/2.) * cm" z="0 * cm" rotX="0 * rad" rotY="0 * rad" rotZ="0 * rad"/>
           <dimensions rmin="0 * cm" rmax="11.43 * cm / 2." half_length="400. * cm / 2."/>
-          <rotation num="1" step="0 * deg" axis="Z"/>
+          <rotation num="1" start="0 * deg" step="0 * deg" axis="Z"/>
         </cut>
       </yoke>
       <coil name="Q1APF_Dummy_Coil" vis="FFMagnetCoilVis">
@@ -259,12 +264,12 @@
         <cut shape="Box">
           <placement x="0 * cm" y="0 * cm" z="0 * cm" rotX="0 * rad" rotY="0 * rad" rotZ="45.0 * deg"/>
           <dimensions dx="2.994422 * cm / 2." dy="50. * cm / 2." dz="126.591756 * cm / 2."/>
-          <rotation num="1" step="0 * deg" axis="Z"/>
+          <rotation num="1" start="0 * deg" step="0 * deg" axis="Z"/>
         </cut>
         <cut shape="Box">
           <placement x="0 * cm" y="0 * cm" z="0 * cm" rotX="0 * rad" rotY="0 * rad" rotZ="-45.0 * deg"/>
           <dimensions dx="2.994422 * cm / 2." dy="50. * cm / 2." dz="126.591756 * cm / 2."/>
-          <rotation num="1" step="0 * deg" axis="Z"/>
+          <rotation num="1" start="0 * deg" step="0 * deg" axis="Z"/>
         </cut>
       </coil>
       <endplate name="Q1APF_EndPlate_IP" vis="FFMagnetEndPlateVis">
@@ -299,27 +304,27 @@
         <cut>
           <placement x="(20.647 + (22.821-20.647)/2. + 9.58) * cm" y="0 * cm" z="0 * cm" rotX="0 * rad" rotY="-0.776621 * deg" rotZ="0 * rad"/>
           <dimensions rmin="0 * cm" rmax="19.15 * cm / 2." half_length="400. * cm / 2."/>
-          <rotation num="1" step="0 * deg" axis="Z"/>
+          <rotation num="1" start="0 * deg" step="0 * deg" axis="Z"/>
         </cut>
         <cut>
           <placement x="-(49.204+11.43)/2. * cm" y="-(22.442+11.43/2.) * cm" z="0 * cm" rotX="0 * rad" rotY="0 * rad" rotZ="0 * rad"/>
           <dimensions rmin="0 * cm" rmax="11.43 * cm / 2." half_length="400. * cm / 2."/>
-          <rotation num="1" step="0 * deg" axis="Z"/>
+          <rotation num="1" start="0 * deg" step="0 * deg" axis="Z"/>
         </cut>
         <cut>
           <placement x="(49.204+11.43)/2. * cm" y="-(22.442+11.43/2.) * cm" z="0 * cm" rotX="0 * rad" rotY="0 * rad" rotZ="0 * rad"/>
           <dimensions rmin="0 * cm" rmax="11.43 * cm / 2." half_length="400. * cm / 2."/>
-          <rotation num="1" step="0 * deg" axis="Z"/>
+          <rotation num="1" start="0 * deg" step="0 * deg" axis="Z"/>
         </cut>
         <cut>
           <placement x="(49.204+11.43)/2. * cm" y="(22.442+11.43/2.) * cm" z="0 * cm" rotX="0 * rad" rotY="0 * rad" rotZ="0 * rad"/>
           <dimensions rmin="0 * cm" rmax="11.43 * cm / 2." half_length="400. * cm / 2."/>
-          <rotation num="1" step="0 * deg" axis="Z"/>
+          <rotation num="1" start="0 * deg" step="0 * deg" axis="Z"/>
         </cut>
         <cut>
           <placement x="-(49.204+11.43)/2. * cm" y="(22.442+11.43/2.) * cm" z="0 * cm" rotX="0 * rad" rotY="0 * rad" rotZ="0 * rad"/>
           <dimensions rmin="0 * cm" rmax="11.43 * cm / 2." half_length="400. * cm / 2."/>
-          <rotation num="1" step="0 * deg" axis="Z"/>
+          <rotation num="1" start="0 * deg" step="0 * deg" axis="Z"/>
         </cut>
       </yoke>
       <coil name="Q1BPF_Dummy_Coil" vis="FFMagnetCoilVis">
@@ -328,12 +333,12 @@
         <cut shape="Box">
           <placement x="0 * cm" y="0 * cm" z="0 * cm" rotX="0 * rad" rotY="0 * rad" rotZ="45.0 * deg"/>
           <dimensions dx="3.881058 * cm / 2." dy="50. * cm / 2." dz="128.549400 * cm / 2."/>
-          <rotation num="1" step="0 * deg" axis="Z"/>
+          <rotation num="1" start="0 * deg" step="0 * deg" axis="Z"/>
         </cut>
         <cut shape="Box">
           <placement x="0 * cm" y="0 * cm" z="0 * cm" rotX="0 * rad" rotY="0 * rad" rotZ="-45.0 * deg"/>
           <dimensions dx="3.881058 * cm / 2." dy="50. * cm / 2." dz="128.549400 * cm / 2."/>
-          <rotation num="1" step="0 * deg" axis="Z"/>
+          <rotation num="1" start="0 * deg" step="0 * deg" axis="Z"/>
         </cut>
       </coil>
       <endplate name="Q1BPF_EndPlate_IP" vis="FFMagnetEndPlateVis">
@@ -366,7 +371,35 @@
         <placement x="-26.9339 * cm" y="0 * cm" z="1016.98 * cm" theta="0.0208759 * rad"/>
         <dimensions rmin="182.245000 * cm / 2." rmax="182.880000 * cm / 2." half_length="447.040000 * cm / 2." sphi="0 * deg" dphi="360.0 * deg"/>
       </cryobarrel>
+    </detector>
 
+    <!-- Q2pF magnet -->
+    <detector id="Q2PF_ID" name="Q2PF_BeamlineMagnet" type="ip6_CylindricalDipoleMagnet">
+      <yoke name="Q2PF_Yoke" vis="FFMagnetVis">
+        <placement x="Q2PF_Yoke_Center_posX" y="Q2PF_Yoke_Center_posY" z="Q2PF_Yoke_Center_posZ" theta="Q2PF_Yoke_Rotation_Angle"/>
+        <dimensions rmin="40.4 * cm / 2." rmax="120. * cm / 2." half_length="366.522 * cm / 2." sphi="0 * deg" dphi="360.0 * deg"/>
+        <cut>
+          <placement x="(30.458 + (35.517-30.458)/2. + 7.62) * cm" y="0 * cm" z="0 * cm" rotX="0 * rad" rotY="-0.790717 * deg" rotZ="0 * rad"/>
+          <dimensions rmin="0 * cm" rmax="15.24 * cm / 2." half_length="400. * cm / 2."/>
+          <rotation num="1" start="0 * deg" step="0 * deg" axis="Z"/>
+        </cut>
+        <cut>
+          <placement x="-(30.458 + (35.517-30.458)/2. + 7.62) * cm" y="0 * cm" z="0 * cm" rotX="0 * rad" rotY="0.790717 * deg" rotZ="0 * rad"/>
+          <dimensions rmin="0 * cm" rmax="15.24 * cm / 2." half_length="400. * cm / 2."/>
+          <rotation num="1" start="0 * deg" step="0 * deg" axis="Z"/>
+        </cut>
+        <cut>
+          <placement x="(30.458 + (35.517-30.458)/2. + 7.62) * cm" y="0 * cm" z="0 * cm" rotX="0.790717 * deg" rotY="0 * rad" rotZ="0 * rad"/>
+          <dimensions rmin="0 * cm" rmax="15.24 * cm / 2." half_length="400. * cm / 2."/>
+          <rotation num="1" start="90 * deg" step="0 * deg" axis="Z"/>
+        </cut>
+        <cut>
+          <placement x="-(30.458 + (35.517-30.458)/2. + 7.62) * cm" y="0 * cm" z="0 * cm" rotX="-0.790717 * deg" rotY="0 * rad" rotZ="0 * rad"/>
+          <dimensions rmin="0 * cm" rmax="15.24 * cm / 2." half_length="400. * cm / 2."/>
+          <rotation num="1" start="90 * deg" step="0 * deg" axis="Z"/>
+        </cut>
+
+      </yoke>
     </detector>
 
   </detectors>
