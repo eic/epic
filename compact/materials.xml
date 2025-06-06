@@ -417,6 +417,12 @@
     <fraction n="0.18" ref="Cr"/>
     <fraction n="0.08" ref="Ni"/>
   </material>
+  <material name="StainlessSteelSAE304">
+    <D type="density" value="7.9" unit="g / cm3"/>
+    <fraction n="0.74" ref="Fe"/>
+    <fraction n="0.18" ref="Cr"/>
+    <fraction n="0.08" ref="Ni"/>
+  </material>
   <material name="Copper">
     <D type="density" value="8.96" unit="g / cm3"/>
     <fraction n="1." ref="Cu"/>
