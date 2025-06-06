@@ -42,7 +42,7 @@ static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector /* sens *
   // Material   m_Cu    = det.material("Copper");
   // Material   m_Al    = det.material("Aluminum");
   Material m_Be   = det.material("Beryllium");
-  Material m_SS   = det.material("StainlessSteelSAE304");
+  Material m_SS   = det.material("StainlessSteel");
   Material m_vac  = det.material("Vacuum");
   string vis_name = x_det.visStr();
 
