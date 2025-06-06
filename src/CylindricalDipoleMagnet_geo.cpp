@@ -271,6 +271,7 @@ void buildTubeElement(dd4hep::DetElement &sdet,
 			xml_dim_t cut_rot       = cut_c.child(_U(rotation));
 			int cut_rot_num		= cut_rot.attr<int>("num");
 			double cut_rot_step	= cut_rot.attr<double>("step");
+			double cut_rot_start	= cut_rot.attr<double>("start");
 			string cut_rot_axis 	= cut_rot.attr<string>("axis");
 
 			Solid cut_elem;
@@ -302,7 +303,7 @@ void buildTubeElement(dd4hep::DetElement &sdet,
 			for(int i = 0; i < cut_rot_num; i++)
 			{
 				Position pos_tmp(cut_pos.x(),cut_pos.y(),cut_pos.z());
-				double ang_tmp = i * cut_rot_step;
+				double ang_tmp = cut_rot_start + i * cut_rot_step;
 				Rotation3D rot_tmp;
 				if 	(cut_rot_axis == "X")  	{rot_tmp = RotationX(ang_tmp);}
 				else if (cut_rot_axis == "Y")  	{rot_tmp = RotationY(ang_tmp);}
