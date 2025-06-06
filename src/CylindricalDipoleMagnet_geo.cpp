@@ -112,6 +112,7 @@ void buildPolyElement(dd4hep::DetElement &sdet,
 		// loop over adds
 		for (; adds_c; ++adds_c)
 		{
+			Solid add_elem;
 			// get one cut
 			xml_comp_t add_c	= adds_c;
 			// get shape
@@ -136,9 +137,7 @@ void buildPolyElement(dd4hep::DetElement &sdet,
 
 				// build a solid
 				Trapezoid add_prism(add_pdx1,add_pdx2,add_pdy1,add_pdy2,add_pdz);
-
-				// unite the add with the element solid
-				elem_final = UnionSolid("elem_final",elem_final,add_prism,tf_tmp);
+				add_elem = add_prism;
 			}
 			else if(add_shape == "Tube")
 			{
@@ -148,10 +147,11 @@ void buildPolyElement(dd4hep::DetElement &sdet,
 
 				// build a solid
 				Tube add_tube(add_rmin,add_rmax,add_half_l);
-
-				// unite the add with the element solid
-				elem_final = UnionSolid("elem_final",elem_final,add_tube,tf_tmp);
+				add_elem = add_tube;
 			}
+
+			// unite the add with the element solid
+			elem_final = UnionSolid("elem_final",elem_final,add_elem,tf_tmp);
 		}
 
 		// get all cuts
@@ -163,7 +163,9 @@ void buildPolyElement(dd4hep::DetElement &sdet,
 			xml_comp_t cut_c	= cuts_c;
 			// get placement coordinates
 			xml_dim_t cut_pos	= cut_c.child(_U(placement));
-			double cut_theta	= cut_pos.attr<double>("theta");
+			double cut_rotX		= cut_pos.attr<double>("rotX");
+			double cut_rotY		= cut_pos.attr<double>("rotY");
+			double cut_rotZ		= cut_pos.attr<double>("rotZ");
 			// get dimentions
 			xml_dim_t cut_dim	= cut_c.child(_U(dimensions));
 			double cut_rmin		= cut_dim.attr<double>("rmin");
@@ -174,7 +176,7 @@ void buildPolyElement(dd4hep::DetElement &sdet,
 			Tube cut_tube(cut_rmin,cut_rmax,cut_half_l);
 
      			Transform3D tf_tmp(
-				RotationZYX(0, cut_theta, 0),	
+				RotationZYX(cut_rotX,cut_rotY,cut_rotZ),	
 				Position(cut_pos.x(),cut_pos.y(),cut_pos.z()));
 			// subtract the cut from the element solid
 			elem_final = SubtractionSolid("elem_final",elem_final,cut_tube,tf_tmp);
@@ -257,23 +259,45 @@ void buildTubeElement(dd4hep::DetElement &sdet,
 		{
 			// get one cut
 			xml_comp_t cut_c	= cuts_c;
+			// get shape
+			string add_shape	= dd4hep::getAttrOrDefault<std::string>(
+							cut_c, _Unicode(shape), "Tube"); 
 			// get placement coordinates
 			xml_dim_t cut_pos	= cut_c.child(_U(placement));
-			double cut_theta	= cut_pos.attr<double>("theta");
-			// get dimentions
-			xml_dim_t cut_dim	= cut_c.child(_U(dimensions));
-			double cut_rmin		= cut_dim.attr<double>("rmin");
-			double cut_rmax		= cut_dim.attr<double>("rmax");
-			double cut_half_l	= cut_dim.attr<double>("half_length");
+			double cut_rotX		= cut_pos.attr<double>("rotX");
+			double cut_rotY		= cut_pos.attr<double>("rotY");
+			double cut_rotZ		= cut_pos.attr<double>("rotZ");
 			// get rotation coordinates
 			xml_dim_t cut_rot       = cut_c.child(_U(rotation));
 			int cut_rot_num		= cut_rot.attr<int>("num");
 			double cut_rot_step	= cut_rot.attr<double>("step");
 			string cut_rot_axis 	= cut_rot.attr<string>("axis");
 
-			// build a solid
-			Tube cut_tube(cut_rmin,cut_rmax,cut_half_l);
+			Solid cut_elem;
+			if(add_shape == "Box")
+			{
+				// get dimentions
+				xml_dim_t cut_dim	= cut_c.child(_U(dimensions));
+				double cut_dx		= cut_dim.attr<double>("dx");
+				double cut_dy		= cut_dim.attr<double>("dy");
+				double cut_dz		= cut_dim.attr<double>("dz");
 
+				// build a solid
+				Box cut_box(cut_dx,cut_dy,cut_dz);
+				cut_elem = cut_box;
+			}
+			else if(add_shape == "Tube")
+			{
+				// get dimentions
+				xml_dim_t cut_dim	= cut_c.child(_U(dimensions));
+				double cut_rmin		= cut_dim.attr<double>("rmin");
+				double cut_rmax		= cut_dim.attr<double>("rmax");
+				double cut_half_l	= cut_dim.attr<double>("half_length");
+
+				// build a solid
+				Tube cut_tube(cut_rmin,cut_rmax,cut_half_l);
+				cut_elem = cut_tube;
+			}
 			// loop over rot steps
 			for(int i = 0; i < cut_rot_num; i++)
 			{
@@ -285,9 +309,9 @@ void buildTubeElement(dd4hep::DetElement &sdet,
 				else  				{rot_tmp = RotationZ(ang_tmp);}
 				pos_tmp = rot_tmp * pos_tmp;
 
-      				Transform3D tf_tmp(RotationZYX(0, cut_theta, 0),pos_tmp);
+				Transform3D tf_tmp(RotationZYX(cut_rotZ,cut_rotY,cut_rotX),pos_tmp);
 				// subtract the cut from the element solid
-				elem_final = SubtractionSolid("elem_final",elem_final,cut_tube,tf_tmp);
+				elem_final = SubtractionSolid("elem_final",elem_final,cut_elem,tf_tmp);
 			}
 		}
 
@@ -362,7 +386,7 @@ DECLARE_DETELEMENT(ip6_CylindricalDipoleMagnet, build_magnet)
 */
 
 
-/* from compact/far_forward/ion_beamline.xml
+/* from compact/far_forward/electron_beamline.xml  
     <!-- Q0eF magnet -->
     <detector name="Q0EF" type="ip6_CylindricalDipoleMagnet" vis="RedVis">
       <placement  x="0" y="0" z="(Q0EF_StartZ+Q0EF_EndZ)/2." theta="0"/>
