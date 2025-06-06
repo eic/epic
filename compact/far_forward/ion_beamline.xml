@@ -8,6 +8,11 @@
     <constant name="B0PF_Yoke_Center_posY" value="0 * cm"/>
     <constant name="B0PF_Yoke_Center_posZ" value="640.648 * cm"/>
     <constant name="B0PF_Yoke_Rotation_Angle" value="0 * rad"/>
+    <!-- B0ApF Yoke Center Position -->
+    <constant name="B0APF_Yoke_Center_posX" value="-21.3736 * cm"/>
+    <constant name="B0APF_Yoke_Center_posY" value="0 * cm"/>
+    <constant name="B0APF_Yoke_Center_posZ" value="820.648 * cm"/>
+    <constant name="B0APF_Yoke_Rotation_Angle" value="0.0219093 * rad"/>
 
   </define>
 
@@ -137,5 +142,76 @@
         </cut>
       </cryoend>
     </detector>
+
+    <!-- B0ApF magnet -->
+    <detector id="B0APF_ID" name="B0APF_BeamlineMagnet" type="ip6_CylindricalDipoleMagnet">
+      <yoke name="B0APF_Yoke" vis="FFMagnetVis">
+        <placement x="B0APF_Yoke_Center_posX" y="B0APF_Yoke_Center_posY" z="B0APF_Yoke_Center_posZ" theta="B0APF_Yoke_Rotation_Angle"/>
+        <dimensions rmin="22. * cm / 2." rmax="60. * cm / 2." half_length="60. * cm / 2." sphi="0 * deg" dphi="360.0 * deg"/>
+        <cut>
+          <placement x="(15.543 + (16.858-15.543)/2. + 5.2) * cm" y="0 * cm" z="0 * cm" theta="-1.255321 * deg"/>
+          <dimensions rmin="0 * cm" rmax="10.4 * cm / 2." half_length="400. * cm / 2."/>
+          <rotation num="1" step="0 * deg" axis="Z"/>
+        </cut>
+      </yoke>
+      <coil name="B0APF_Dummy_Coil_In" vis="FFMagnetCoilVis">
+        <placement x="B0APF_Yoke_Center_posX" y="B0APF_Yoke_Center_posY" z="B0APF_Yoke_Center_posZ" theta="B0APF_Yoke_Rotation_Angle" phiNum="3" phiStart="90 * deg" phiStep="90 * deg"/>
+        <dimensions rmin="11.917680 * cm / 2." rmax="14.127480 * cm / 2." half_length="52.379880 * cm / 2." sphi="0 * deg" dphi="360.0 * deg"/>
+      </coil>
+      <coil name="B0APF_Dummy_Coil_Out" vis="FFMagnetCoilVis">
+        <placement x="B0APF_Yoke_Center_posX" y="B0APF_Yoke_Center_posY" z="B0APF_Yoke_Center_posZ" theta="B0APF_Yoke_Rotation_Angle" phiNum="3" phiStart="90 * deg" phiStep="90 * deg"/>
+        <dimensions rmin="15.742920 * cm / 2." rmax="19.405600 * cm / 2." half_length="52.379880 * cm / 2." sphi="0 * deg" dphi="360.0 * deg"/>
+      </coil>
+      <tube name="B0APF_InnerSupport_Tube" vis="FFMagnetSupportTubeVis">
+        <placement x="B0APF_Yoke_Center_posX" y="B0APF_Yoke_Center_posY" z="B0APF_Yoke_Center_posZ" theta="B0APF_Yoke_Rotation_Angle"/>
+        <dimensions rmin="10.901680 * cm / 2." rmax="11.902440 * cm / 2." half_length="57.459880 * cm / 2." sphi="0 * deg" dphi="360.0 * deg"/>
+      </tube>
+      <tube name="B0APF_OuterSupport_Tube" vis="FFMagnetSupportTubeVis">
+        <placement x="B0APF_Yoke_Center_posX" y="B0APF_Yoke_Center_posY" z="B0APF_Yoke_Center_posZ" theta="B0APF_Yoke_Rotation_Angle"/>
+        <dimensions rmin="14.726920 * cm / 2." rmax="15.727680 * cm / 2." half_length="57.459880 * cm / 2." sphi="0 * deg" dphi="360.0 * deg"/>
+      </tube>
+      <endplate name="B0APF_EndPlate_IP" vis="FFMagnetEndPlateVis">
+        <placement x="B0APF_Yoke_Center_posX" y="B0APF_Yoke_Center_posY" z="B0APF_Yoke_Center_posZ" theta="B0APF_Yoke_Rotation_Angle"/>
+	<zplane z="-60. * cm / 2." rmin="10.957560 * cm / 2." rmax="53.340000 * cm / 2."/>
+	<zplane z="-(60. * cm / 2. + 1.2 * cm)" rmin="10.957560 * cm / 2." rmax="53.340000 * cm / 2."/>
+        <cut>
+          <placement x="(15.543 + (16.858-15.543)/2. + 5.2) * cm" y="0 * cm" z="0 * cm" theta="-1.255321 * deg"/>
+          <dimensions rmin="0 * cm" rmax="5.2 * cm" half_length="200. * cm / 2."/>
+        </cut>
+      </endplate>
+      <endplate name="B0APF_EndPlate_nonIP" vis="FFMagnetEndPlateVis">
+        <placement x="B0APF_Yoke_Center_posX" y="B0APF_Yoke_Center_posY" z="B0APF_Yoke_Center_posZ" theta="B0APF_Yoke_Rotation_Angle"/>
+	<zplane z="60. * cm / 2." rmin="10.957560 * cm / 2." rmax="53.340000 * cm / 2."/>
+	<zplane z="(60. * cm / 2. + 1.2 * cm)" rmin="10.957560 * cm / 2." rmax="53.340000 * cm / 2."/>
+        <cut>
+          <placement x="(15.543 + (16.858-15.543)/2. + 5.2) * cm" y="0 * cm" z="0 * cm" theta="-1.255321 * deg"/>
+          <dimensions rmin="0 * cm" rmax="5.2 * cm" half_length="200. * cm / 2."/>
+        </cut>
+      </endplate>
+      <yokeshield name="B0APF_YoketShield" vis="FFMagnetEndPlateVis">
+        <placement x="B0APF_Yoke_Center_posX" y="B0APF_Yoke_Center_posY" z="B0APF_Yoke_Center_posZ" theta="B0APF_Yoke_Rotation_Angle"/>
+        <dimensions rmin="30. * cm" rmax="31.27 * cm" half_length="60. * cm / 2." sphi="0 * deg" dphi="360.0 * deg"/>
+      </yokeshield>
+      <endplate name="B0APF_Head_IP" vis="FFMagnetEndPlateVis">
+        <placement x="B0APF_Yoke_Center_posX" y="B0APF_Yoke_Center_posY" z="B0APF_Yoke_Center_posZ" theta="B0APF_Yoke_Rotation_Angle"/>
+	<zplane z="-60. * cm / 2." rmin="60.827815 * cm / 2." rmax="62.535247 * cm / 2."/>
+	<zplane z="-(60. * cm / 2. + 1.7 * cm)" rmin="60.827815 * cm / 2." rmax="62.535247 * cm / 2."/>
+        <cut>
+          <placement x="(15.543 + (16.858-15.543)/2. + 5.2) * cm" y="0 * cm" z="0 * cm" theta="-1.255321 * deg"/>
+          <dimensions rmin="0 * cm" rmax="5.2 * cm" half_length="200. * cm / 2."/>
+        </cut>
+      </endplate>
+      <endplate name="B0APF_Head_nonIP" vis="FFMagnetEndPlateVis">
+        <placement x="B0APF_Yoke_Center_posX" y="B0APF_Yoke_Center_posY" z="B0APF_Yoke_Center_posZ" theta="B0APF_Yoke_Rotation_Angle"/>
+	<zplane z="-(60. * cm / 2. + 1.7 * cm)" rmin="9.062720 * cm / 2." rmax="62.535247 * cm / 2."/>
+	<zplane z="-(60. * cm / 2. + 1.7 * cm + 0.9 * cm)" rmin="9.062720 * cm / 2." rmax="62.535247 * cm / 2."/>
+        <cut>
+          <placement x="(15.543 + (16.858-15.543)/2. + 5.2) * cm" y="0 * cm" z="0 * cm" theta="-1.255321 * deg"/>
+          <dimensions rmin="0 * cm" rmax="5.2 * cm" half_length="200. * cm / 2."/>
+        </cut>
+      </endplate>
+
+    </detector>
+
   </detectors>
 </lccdd>
