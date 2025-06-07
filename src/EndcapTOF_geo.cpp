@@ -31,7 +31,6 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
   std::string det_name = x_det.nameStr();
   DetElement sdet(det_name, det_id);
   Material air    = description.material("Air");
-  Material carbon = description.material("CarbonFiber");
   PlacedVolume pv;
 
   map<string, std::array<double, 2>> module_thicknesses;
@@ -50,32 +49,6 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
   assembly.setVisAttributes(description.invisible());
   sens.setType("tracker");
 
-  float zPos = 0;
-  // now build the envelope for the detector
-  xml_comp_t x_layer  = x_det.child(_Unicode(layer));
-  xml_comp_t envelope = x_layer.child(_Unicode(envelope), false);
-  int lay_id          = x_layer.id();
-  string l_nam        = x_layer.moduleStr();
-  string lay_nam      = det_name + _toString(x_layer.id(), "_layer%d");
-  Tube lay_tub(envelope.rmin(), envelope.rmax(), envelope.length() / 2.0);
-  Volume lay_vol(lay_nam, lay_tub, air); // Create the layer envelope volume.
-  zPos = envelope.zstart();
-  Position lay_pos(0, 0, 0);
-  lay_vol.setVisAttributes(description.visAttributes(x_layer.visStr()));
-
-  DetElement lay_elt(sdet, lay_nam, lay_id);
-
-  // the local coordinate systems of modules in dd4hep and acts differ
-  // see http://acts.web.cern.ch/ACTS/latest/doc/group__DD4hepPlugins.html
-  auto& layerParams =
-      DD4hepDetectorHelper::ensureExtension<dd4hep::rec::VariantParameters>(lay_elt);
-
-  for (xml_coll_t lmat(x_layer, _Unicode(layer_material)); lmat; ++lmat) {
-    xml_comp_t x_layer_material = lmat;
-    DD4hepDetectorHelper::xmlToProtoSurfaceMaterial(x_layer_material, layerParams,
-                                                    "layer_material");
-  }
-
   // dimensions of the modules (2x2 sensors)
   xml_comp_t x_modsz = x_det.child(_Unicode(modsize));
 
@@ -86,9 +59,6 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
   double board_gap      = getAttrOrDefault(x_modsz, _Unicode(board_gap), 0.);
 
   //! Add support structure
-  xml_comp_t x_supp          = x_det.child(_Unicode(support));
-  xml_comp_t x_supp_envelope = x_supp.child(_Unicode(envelope), false);
-
   xml_comp_t x_modFrontLeft  = x_det.child(_Unicode(moduleFrontLeft));
   xml_comp_t x_modFrontRight = x_det.child(_Unicode(moduleFrontRight));
   xml_comp_t x_modBackLeft   = x_det.child(_Unicode(moduleBackLeft));
@@ -101,12 +71,9 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
 
   for (bool left : std::vector<bool>{true, false}) {
     for (bool front : std::vector<bool>{true, false}) {
-      int module = (front << 1) + left;
       const std::string locStr =
           std::string(left ? "Left" : "Right") + std::string(front ? "Front" : "Back");
-      float ycoord = envelope.rmax() -
-                     module_y / 2.; // y-center-coord of the top sensor. Start from the top row
-      int iy                     = 0;
+
       xml_comp_t x_sensor_layout = x_sensor_layout_front_left;
       xml_comp_t x_modCurr       = x_modFrontLeft;
 
@@ -127,6 +94,39 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
           x_modCurr       = x_modBackRight;
         }
       }
+
+      // now build the envelope for the detector
+      xml_comp_t x_layer = x_sensor_layout;
+      xml_comp_t envelope = x_layer.child(_Unicode(envelope), false);
+      int lay_id          = x_layer.id();
+      string l_nam        = x_layer.moduleStr();
+      string lay_nam      = det_name + "_" + locStr;
+      double phimin = dd4hep::getAttrOrDefault<double>(envelope, _Unicode(phimin), 0.);
+      double phimax = dd4hep::getAttrOrDefault<double>(envelope, _Unicode(phimax), 2*M_PI);
+
+      Tube lay_tub(envelope.rmin(), envelope.rmax(), envelope.length() / 2.0, phimin, phimax);
+      Volume lay_vol(lay_nam, lay_tub, air); // Create the layer envelope volume.
+      Position lay_pos(0, 0, envelope.zstart());
+      lay_vol.setVisAttributes(description.visAttributes(x_layer.visStr()));
+
+      DetElement lay_elt(sdet, lay_nam, lay_id);
+
+      // the local coordinate systems of modules in dd4hep and acts differ
+      // see http://acts.web.cern.ch/ACTS/latest/doc/group__DD4hepPlugins.html
+      auto& layerParams =
+          DD4hepDetectorHelper::ensureExtension<dd4hep::rec::VariantParameters>(lay_elt);
+    
+      for (xml_coll_t lmat(x_sensor_layout, _Unicode(layer_material)); lmat; ++lmat) {
+        xml_comp_t x_layer_material = lmat;
+        DD4hepDetectorHelper::xmlToProtoSurfaceMaterial(x_layer_material, layerParams,
+                                                        "layer_material");
+      }
+
+      int module = (front << 1) + left;
+      float ycoord = envelope.rmax() -
+                     module_y / 2.; // y-center-coord of the top sensor. Start from the top row
+      int iy                     = 0;
+
 
       double total_thickness = 0;
       // Compute module total thickness from components
@@ -174,7 +174,7 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
                          +(left ? -accum_xoffset : accum_xoffset);
           //! Note the module ordering is different for front and back side
 
-          double module_z = x_supp_envelope.length() / 2.0 + total_thickness / 2;
+          double module_z = total_thickness / 2;
           if (front)
             module_z *= -1;
 
@@ -191,7 +191,6 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
 
           double thickness_so_far     = 0.0;
           double thickness_sum        = -total_thickness / 2.0;
-          double thickness_carbonsupp = 0.0;
           int sensitive_id            = 0;
           for (xml_coll_t mci(x_modCurr, _U(module_component)); mci; ++mci, ++ncomponents) {
             xml_comp_t x_comp = mci;
@@ -202,9 +201,6 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
 
             Box c_box(x_comp.width() / 2, x_comp.length() / 2, x_comp.thickness() / 2);
             Volume c_vol(c_nam, c_box, description.material(x_comp.materialStr()));
-            if (x_comp.materialStr() == "CarbonFiber") {
-              thickness_carbonsupp = x_comp.thickness();
-            }
             // Utility variable for the relative z-offset based off the previous components
             const double zoff = thickness_sum + x_comp.thickness() / 2.0;
             if (x_pos && x_rot) {
@@ -273,20 +269,6 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
             }
           }
 
-          if (front) {
-            // only draw support bar on one side
-            // if you draw on both sides, they may overlap
-            const string suppb_nam =
-                Form("suppbar_%d_%d", ix, iy); //_toString(ncomponents, "component%d");
-            Box suppb_box((module_x + module_spacing) / 2, thickness_carbonsupp / 2,
-                          x_supp_envelope.length() / 2);
-            Volume suppb_vol(suppb_nam, suppb_box, carbon);
-            Transform3D trsupp(RotationZYX(0, 0, 0),
-                               Position(xcoord, ycoord + module_y / 2 - module_overlap / 2, 0));
-            suppb_vol.setVisAttributes(description, "AnlGray");
-
-            pv = lay_vol.placeVolume(suppb_vol, trsupp);
-          }
           // module built!
 
           Transform3D tr(RotationZYX(M_PI / 2, 0, 0), Position(xcoord, ycoord, module_z));
@@ -298,16 +280,15 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
         ycoord -= (module_y - module_overlap);
         ++iy;
       }
+      // Create the PhysicalVolume for the layer.
+      pv = assembly.placeVolume(lay_vol, lay_pos); // Place layer in mother
+      pv.addPhysVolID("layer", lay_id);            // Set the layer ID.
+      lay_elt.setAttributes(description, lay_vol, x_layer.regionStr(), x_layer.limitsStr(),
+                            x_layer.visStr());
+      lay_elt.setPlacement(pv);
     }
   }
-  // Create the PhysicalVolume for the layer.
-  pv = assembly.placeVolume(lay_vol, lay_pos); // Place layer in mother
-  pv.addPhysVolID("layer", lay_id);            // Set the layer ID.
-  lay_elt.setAttributes(description, lay_vol, x_layer.regionStr(), x_layer.limitsStr(),
-                        x_layer.visStr());
-  lay_elt.setPlacement(pv);
-
-  pv = description.pickMotherVolume(sdet).placeVolume(assembly, Position(0, 0, zPos));
+  pv = description.pickMotherVolume(sdet).placeVolume(assembly, Position(0, 0, 0));
   pv.addPhysVolID("system", det_id);
   sdet.setPlacement(pv);
 
