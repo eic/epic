@@ -28,6 +28,11 @@
     <constant name="Q2PF_Yoke_Center_posY" value="0 * cm"/>
     <constant name="Q2PF_Yoke_Center_posZ" value="1467.41 * cm"/>
     <constant name="Q2PF_Yoke_Rotation_Angle" value="0.0138003 * rad"/>
+    <!-- B1pF Yoke Center Position -->
+    <constant name="B1PF_Yoke_Center_posX" value="-51.4896 * cm"/>
+    <constant name="B1PF_Yoke_Center_posY" value="0 * cm"/>
+    <constant name="B1PF_Yoke_Center_posZ" value="1857.67"/>
+    <constant name="B1PF_Yoke_Rotation_Angle" value="0.0277921 * rad"/>
 
   </define>
 
@@ -439,6 +444,53 @@
       <cryobarrel name="Q2PF_Cryo_Barrel" vis="FFMagnetCryoVis">
         <placement x="-40.497 * cm" y="0 * cm" z="1459.53 * cm" theta="Q2PF_Yoke_Rotation_Angle"/>
         <dimensions rmin="182.245000 * cm / 2." rmax="182.880000 * cm / 2." half_length="382.270000 * cm / 2." sphi="0 * deg" dphi="360.0 * deg"/>
+      </cryobarrel>
+    </detector>
+
+    <!-- B1pF magnet -->
+    <detector id="B1PF_ID" name="B1PF_BeamlineMagnet" type="ip6_CylindricalDipoleMagnet">
+      <yoke name="B1PF_Yoke" vis="FFMagnetVis">
+        <placement x="B1PF_Yoke_Center_posX" y="B1PF_Yoke_Center_posY" z="B1PF_Yoke_Center_posZ" theta="B1PF_Yoke_Rotation_Angle"/>
+        <dimensions rmin="66. * cm / 2." rmax="145. * cm / 2." half_length="305.077 * cm / 2." sphi="0 * deg" dphi="360.0 * deg"/>
+        <cut>
+          <placement x="(40.265 + (48.747-40.265)/2. + 7.) * cm" y="0 * cm" z="0 * cm" rotX="0 * rad" rotY="-1.592379 * deg" rotZ="0 * rad"/>
+          <dimensions rmin="0 * cm" rmax="14. * cm / 2." half_length="400. * cm / 2."/>
+          <rotation num="1" start="0 * deg" step="0 * deg" axis="Z"/>
+        </cut>
+        <cut>
+          <placement x="0 * cm" y="46.243 * cm" z="0 * cm" rotX="0 * rad" rotY="0 * rad" rotZ="0 * rad"/>
+          <dimensions rmin="0 * cm" rmax="16.568 * cm / 2." half_length="400. * cm / 2."/>
+          <rotation num="4" start="45.0 * deg" step="90.0 * deg" axis="Z"/>
+        </cut>
+      </yoke>
+      <coil name="B1PF_Dummy_Coil" vis="FFMagnetCoilVis">
+        <placement x="B1PF_Yoke_Center_posX" y="B1PF_Yoke_Center_posY" z="B1PF_Yoke_Center_posZ" theta="B1PF_Yoke_Rotation_Angle" phiNum="1" phiStart="0 * deg" phiStep="0 * deg"/>
+        <dimensions rmin="30. * cm / 2." rmax="34. * cm / 2." half_length="304.728880 * cm / 2." sphi="0 * deg" dphi="360.0 * deg"/>
+      </coil>
+      <tube name="B1PF_InnerSupport_Tube" vis="FFMagnetSupportTubeVis">
+        <placement x="B1PF_Yoke_Center_posX" y="B1PF_Yoke_Center_posY" z="B1PF_Yoke_Center_posZ" theta="B1PF_Yoke_Rotation_Angle"/>
+        <dimensions rmin="28.143200 * cm / 2." rmax="28.829000 * cm / 2." half_length="340.111080 * cm / 2." sphi="0 * deg" dphi="360.0 * deg"/>
+      </tube>
+      <endplate name="B1PF_EndPlates_OuterSupport_Tube" vis="FFMagnetEndPlateVis">
+        <placement x="B1PF_Yoke_Center_posX" y="B1PF_Yoke_Center_posY" z="B1PF_Yoke_Center_posZ" theta="B1PF_Yoke_Rotation_Angle"/>
+	<zplane z="-340.212680 * cm / 2." rmin="14.999970 * cm" rmax="33.000000 * cm"/>
+	<zplane z="-340.212680 * cm / 2. + 15.240000 * cm" rmin="14.999970 * cm" rmax="33.000000 * cm"/>
+	<zplane z="-340.212680 * cm / 2. + 15.240000 * cm" rmin="25.000000 * cm" rmax="33.000000 * cm"/>
+	<zplane z="340.212680 * cm / 2. - 15.240000 * cm" rmin="25.000000 * cm" rmax="33.000000 * cm"/>
+	<zplane z="340.212680 * cm / 2. - 15.240000 * cm" rmin="14.999970 * cm" rmax="33.000000 * cm"/>
+	<zplane z="340.212680 * cm / 2." rmin="14.999970 * cm" rmax="33.000000 * cm"/>
+      </endplate>
+      <yokeshield name="B1PF_YoketShield" vis="FFMagnetEndPlateVis">
+        <placement x="-51.3125 * cm" y="0 * cm" z="1851.3 * cm" theta="B1PF_Yoke_Rotation_Angle"/>
+        <dimensions rmin="73. * cm" rmax="74. * cm" half_length="317.776860 * cm / 2." sphi="0 * deg" dphi="360.0 * deg"/>
+      </yokeshield>
+      <heatshieldbarrel name="B1OPF_HeatShield_Barrel" vis="FFMagnetHeatShieldVis">
+        <placement x="-51.489 * cm" y="0 * cm" z="1857.65 * cm" theta="B1PF_Yoke_Rotation_Angle"/>
+        <dimensions rmin="90.170000 * cm" rmax="91.440000 * cm" half_length="299.720000 * cm / 2." sphi="0 * deg" dphi="360.0 * deg"/>
+      </heatshieldbarrel>
+      <cryobarrel name="B1PF_Cryo_Barrel" vis="FFMagnetCryoVis">
+        <placement x="-50.8183 * cm" y="0 * cm" z="1833.53 * cm" theta="B1PF_Yoke_Rotation_Angle"/>
+        <dimensions rmin="210.820000 * cm / 2." rmax="214.630000 * cm / 2." half_length="302.260000 * cm / 2." sphi="0 * deg" dphi="360.0 * deg"/>
       </cryobarrel>
 
     </detector>
