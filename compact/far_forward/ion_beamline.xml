@@ -12,27 +12,27 @@
     <constant name="B0APF_Yoke_Center_posX" value="-21.3736 * cm"/>
     <constant name="B0APF_Yoke_Center_posY" value="0 * cm"/>
     <constant name="B0APF_Yoke_Center_posZ" value="820.648 * cm"/>
-    <constant name="B0APF_Yoke_Rotation_Angle" value="0.0219093 * rad"/>
+    <constant name="B0APF_Yoke_Rotation_Angle" value="-0.0219093 * rad"/>
     <!-- Q1ApF Yoke Center Position -->
     <constant name="Q1APF_Yoke_Center_posX" value="-25.8207 * cm"/>
     <constant name="Q1APF_Yoke_Center_posY" value="0 * cm"/>
     <constant name="Q1APF_Yoke_Center_posZ" value="963.648 * cm"/>
-    <constant name="Q1APF_Yoke_Rotation_Angle" value="0.0208752 * rad"/>
+    <constant name="Q1APF_Yoke_Rotation_Angle" value="-0.0208752 * rad"/>
     <!-- Q1BpF Yoke Center Position -->
     <constant name="Q1BPF_Yoke_Center_posX" value="-31.3088"/>
     <constant name="Q1BPF_Yoke_Center_posY" value="0 * cm"/>
     <constant name="Q1BPF_Yoke_Center_posZ" value="1157.15"/>
-    <constant name="Q1BPF_Yoke_Rotation_Angle" value="0.0135542 * rad"/>
+    <constant name="Q1BPF_Yoke_Rotation_Angle" value="-0.0135542 * rad"/>
     <!-- Q2pF Yoke Center Position -->
     <constant name="Q2PF_Yoke_Center_posX" value="-40.6057 * cm"/>
     <constant name="Q2PF_Yoke_Center_posY" value="0 * cm"/>
     <constant name="Q2PF_Yoke_Center_posZ" value="1467.41 * cm"/>
-    <constant name="Q2PF_Yoke_Rotation_Angle" value="0.0138003 * rad"/>
+    <constant name="Q2PF_Yoke_Rotation_Angle" value="-0.0138003 * rad"/>
     <!-- B1pF Yoke Center Position -->
     <constant name="B1PF_Yoke_Center_posX" value="-51.4896 * cm"/>
     <constant name="B1PF_Yoke_Center_posY" value="0 * cm"/>
     <constant name="B1PF_Yoke_Center_posZ" value="1857.67"/>
-    <constant name="B1PF_Yoke_Rotation_Angle" value="0.0277921 * rad"/>
+    <constant name="B1PF_Yoke_Rotation_Angle" value="-0.0277921 * rad"/>
 
   </define>
 
@@ -169,7 +169,7 @@
         <placement x="B0APF_Yoke_Center_posX" y="B0APF_Yoke_Center_posY" z="B0APF_Yoke_Center_posZ" theta="B0APF_Yoke_Rotation_Angle"/>
         <dimensions rmin="22. * cm / 2." rmax="60. * cm / 2." half_length="60. * cm / 2." sphi="0 * deg" dphi="360.0 * deg"/>
         <cut>
-          <placement x="(15.543 + (16.858-15.543)/2. + 5.2) * cm" y="0 * cm" z="0 * cm" rotX="0 * rad" rotY="-1.255321 * deg" rotZ="0 * rad"/>
+          <placement x="(15.543 + (16.858-15.543)/2. + 5.2) * cm" y="0 * cm" z="0 * cm" rotX="0 * rad" rotY="1.255321 * deg" rotZ="0 * rad"/>
           <dimensions rmin="0 * cm" rmax="10.4 * cm / 2." half_length="400. * cm / 2."/>
           <rotation num="1" start="0 * deg" step="0 * deg" axis="Z"/>
         </cut>
@@ -195,7 +195,7 @@
 	<zplane z="-60. * cm / 2." rmin="10.957560 * cm / 2." rmax="53.340000 * cm / 2."/>
 	<zplane z="-(60. * cm / 2. + 1.2 * cm)" rmin="10.957560 * cm / 2." rmax="53.340000 * cm / 2."/>
         <cut>
-          <placement x="(15.543 + (16.858-15.543)/2. + 5.2) * cm" y="0 * cm" z="0 * cm" rotX="0 * rad" rotY="-1.255321 * deg" rotZ="0 * rad"/>
+          <placement x="(15.543 + (16.858-15.543)/2. + 5.2) * cm" y="0 * cm" z="0 * cm" rotX="0 * rad" rotY="1.255321 * deg" rotZ="0 * rad"/>
           <dimensions rmin="0 * cm" rmax="5.2 * cm" half_length="200. * cm / 2."/>
         </cut>
       </endplate>
@@ -204,7 +204,7 @@
 	<zplane z="60. * cm / 2." rmin="10.957560 * cm / 2." rmax="53.340000 * cm / 2."/>
 	<zplane z="(60. * cm / 2. + 1.2 * cm)" rmin="10.957560 * cm / 2." rmax="53.340000 * cm / 2."/>
         <cut>
-          <placement x="(15.543 + (16.858-15.543)/2. + 5.2) * cm" y="0 * cm" z="0 * cm" rotX="0 * rad" rotY="-1.255321 * deg" rotZ="0 * rad"/>
+          <placement x="(15.543 + (16.858-15.543)/2. + 5.2) * cm" y="0 * cm" z="0 * cm" rotX="0 * rad" rotY="1.255321 * deg" rotZ="0 * rad"/>
           <dimensions rmin="0 * cm" rmax="5.2 * cm" half_length="200. * cm / 2."/>
         </cut>
       </endplate>
@@ -217,7 +217,7 @@
 	<zplane z="-60. * cm / 2." rmin="60.827815 * cm / 2." rmax="62.535247 * cm / 2."/>
 	<zplane z="-(60. * cm / 2. + 1.7 * cm)" rmin="60.827815 * cm / 2." rmax="62.535247 * cm / 2."/>
         <cut>
-          <placement x="(15.543 + (16.858-15.543)/2. + 5.2) * cm" y="0 * cm" z="0 * cm" rotX="0 * rad" rotY="-1.255321 * deg" rotZ="0 * rad"/>
+          <placement x="(15.543 + (16.858-15.543)/2. + 5.2) * cm" y="0 * cm" z="0 * cm" rotX="0 * rad" rotY="1.255321 * deg" rotZ="0 * rad"/>
           <dimensions rmin="0 * cm" rmax="5.2 * cm" half_length="200. * cm / 2."/>
         </cut>
       </endplate>
@@ -226,7 +226,7 @@
 	<zplane z="-(60. * cm / 2. + 1.7 * cm)" rmin="9.062720 * cm / 2." rmax="62.535247 * cm / 2."/>
 	<zplane z="-(60. * cm / 2. + 1.7 * cm + 0.9 * cm)" rmin="9.062720 * cm / 2." rmax="62.535247 * cm / 2."/>
         <cut>
-          <placement x="(15.543 + (16.858-15.543)/2. + 5.2) * cm" y="0 * cm" z="0 * cm" rotX="0 * rad" rotY="-1.255321 * deg" rotZ="0 * rad"/>
+          <placement x="(15.543 + (16.858-15.543)/2. + 5.2) * cm" y="0 * cm" z="0 * cm" rotX="0 * rad" rotY="1.255321 * deg" rotZ="0 * rad"/>
           <dimensions rmin="0 * cm" rmax="5.2 * cm" half_length="200. * cm / 2."/>
         </cut>
       </endplate>
@@ -238,7 +238,7 @@
         <placement x="Q1APF_Yoke_Center_posX" y="Q1APF_Yoke_Center_posY" z="Q1APF_Yoke_Center_posZ" theta="Q1APF_Yoke_Rotation_Angle"/>
         <dimensions rmin="26.4 * cm / 2." rmax="120. * cm / 2." half_length="150.114 * cm / 2." sphi="0 * deg" dphi="360.0 * deg"/>
         <cut>
-          <placement x="(17.346 + (20.480-17.346)/2. + 6.91) * cm" y="0 * cm" z="0 * cm" rotX="0 * rad" rotY="-1.196077 * deg" rotZ="0 * rad"/>
+          <placement x="(17.346 + (20.480-17.346)/2. + 6.91) * cm" y="0 * cm" z="0 * cm" rotX="0 * rad" rotY="1.196077 * deg" rotZ="0 * rad"/>
           <dimensions rmin="0 * cm" rmax="13.82 * cm / 2." half_length="400. * cm / 2."/>
           <rotation num="1" start="0 * deg" step="0 * deg" axis="Z"/>
         </cut>
@@ -282,7 +282,7 @@
 	<zplane z="-(160.817560 * cm / 2.)" rmin="7.114540 * cm" rmax="29.210000 * cm"/>
 	<zplane z="-(160.817560 * cm / 2. + 15.246221 * cm)" rmin="7.114540 * cm" rmax="29.210000 * cm"/>
         <cut>
-          <placement x="(17.346 + (20.480-17.346)/2. + 6.91) * cm" y="0 * cm" z="0 * cm" rotX="0 * rad" rotY="-1.196077 * deg" rotZ="0 * rad"/>
+          <placement x="(17.346 + (20.480-17.346)/2. + 6.91) * cm" y="0 * cm" z="0 * cm" rotX="0 * rad" rotY="1.196077 * deg" rotZ="0 * rad"/>
           <dimensions rmin="0 * cm" rmax="13.82 * cm / 2." half_length="400. * cm / 2."/>
         </cut>
       </endplate>
@@ -291,7 +291,7 @@
 	<zplane z="(160.817560 * cm / 2.)" rmin="14.229080 * cm / 2." rmax="29.210000 * cm"/>
 	<zplane z="(160.817560 * cm / 2. + 10.160000 * cm)" rmin="14.229080 * cm / 2." rmax="29.210000 * cm"/>
         <cut>
-          <placement x="(17.346 + (20.480-17.346)/2. + 6.91) * cm" y="0 * cm" z="0 * cm" rotX="0 * rad" rotY="-1.196077 * deg" rotZ="0 * rad"/>
+          <placement x="(17.346 + (20.480-17.346)/2. + 6.91) * cm" y="0 * cm" z="0 * cm" rotX="0 * rad" rotY="1.196077 * deg" rotZ="0 * rad"/>
           <dimensions rmin="0 * cm" rmax="13.82 * cm / 2." half_length="400. * cm / 2."/>
         </cut>
       </endplate>
@@ -307,7 +307,7 @@
         <placement x="Q1BPF_Yoke_Center_posX" y="Q1BPF_Yoke_Center_posY" z="Q1BPF_Yoke_Center_posZ" theta="Q1BPF_Yoke_Rotation_Angle"/>
         <dimensions rmin="30.6 * cm / 2." rmax="120. * cm / 2." half_length="160.365 * cm / 2." sphi="0 * deg" dphi="360.0 * deg"/>
         <cut>
-          <placement x="(20.647 + (22.821-20.647)/2. + 9.58) * cm" y="0 * cm" z="0 * cm" rotX="0 * rad" rotY="-0.776621 * deg" rotZ="0 * rad"/>
+          <placement x="(20.647 + (22.821-20.647)/2. + 9.58) * cm" y="0 * cm" z="0 * cm" rotX="0 * rad" rotY="0.776621 * deg" rotZ="0 * rad"/>
           <dimensions rmin="0 * cm" rmax="19.15 * cm / 2." half_length="400. * cm / 2."/>
           <rotation num="1" start="0 * deg" step="0 * deg" axis="Z"/>
         </cut>
@@ -351,7 +351,7 @@
 	<zplane z="-(164.244020 * cm / 2.)" rmin="9.300210 * cm" rmax="30.480000 * cm"/>
 	<zplane z="-(164.244020 * cm / 2. + 14.605008 * cm)" rmin="9.300210 * cm" rmax="30.480000 * cm"/>
         <cut>
-          <placement x="(20.647 + (22.821-20.647)/2. + 9.58) * cm" y="0 * cm" z="0 * cm" rotX="0 * rad" rotY="-0.776621 * deg" rotZ="0 * rad"/>
+          <placement x="(20.647 + (22.821-20.647)/2. + 9.58) * cm" y="0 * cm" z="0 * cm" rotX="0 * rad" rotY="0.776621 * deg" rotZ="0 * rad"/>
           <dimensions rmin="0 * cm" rmax="19.15 * cm / 2." half_length="400. * cm / 2."/>
         </cut>
       </endplate>
@@ -360,7 +360,7 @@
 	<zplane z="(164.244020 * cm / 2.)" rmin="18.600420 * cm / 2." rmax="30.480000 * cm"/>
 	<zplane z="(164.244020 * cm / 2. + 12.065167 * cm)" rmin="18.600420 * cm / 2." rmax="30.480000 * cm"/>
         <cut>
-          <placement x="(20.647 + (22.821-20.647)/2. + 9.58) * cm" y="0 * cm" z="0 * cm" rotX="0 * rad" rotY="-0.776621 * deg" rotZ="0 * rad"/>
+          <placement x="(20.647 + (22.821-20.647)/2. + 9.58) * cm" y="0 * cm" z="0 * cm" rotX="0 * rad" rotY="0.776621 * deg" rotZ="0 * rad"/>
           <dimensions rmin="0 * cm" rmax="19.15 * cm / 2." half_length="400. * cm / 2."/>
         </cut>
       </endplate>
@@ -369,11 +369,11 @@
         <dimensions rmin="60. * cm" rmax="62.54 * cm" half_length="173.77 * cm / 2." sphi="0 * deg" dphi="360.0 * deg"/>
       </yokeshield>
       <heatshieldbarrel name="Q1BOPF_HeatShield_Barrel" vis="FFMagnetHeatShieldVis">
-        <placement x="-27.9262 * cm" y="0 * cm" z="1064.49 * cm" theta="0.0208752 * cm"/>
+        <placement x="-27.9262 * cm" y="0 * cm" z="1064.49 * cm" theta="-0.0208752 * cm"/>
         <dimensions rmin="75.882500 * cm" rmax="76.200000 * cm" half_length="351.848420 * cm / 2." sphi="0 * deg" dphi="360.0 * deg"/>
       </heatshieldbarrel>
       <cryobarrel name="Q1BPF_Cryo_Barrel" vis="FFMagnetCryoVis">
-        <placement x="-26.9339 * cm" y="0 * cm" z="1016.98 * cm" theta="0.0208759 * rad"/>
+        <placement x="-26.9339 * cm" y="0 * cm" z="1016.98 * cm" theta="-0.0208759 * rad"/>
         <dimensions rmin="182.245000 * cm / 2." rmax="182.880000 * cm / 2." half_length="447.040000 * cm / 2." sphi="0 * deg" dphi="360.0 * deg"/>
       </cryobarrel>
     </detector>
@@ -384,7 +384,7 @@
         <placement x="Q2PF_Yoke_Center_posX" y="Q2PF_Yoke_Center_posY" z="Q2PF_Yoke_Center_posZ" theta="Q2PF_Yoke_Rotation_Angle"/>
         <dimensions rmin="40.4 * cm / 2." rmax="120. * cm / 2." half_length="366.522 * cm / 2." sphi="0 * deg" dphi="360.0 * deg"/>
         <cut>
-          <placement x="(30.458 + (35.517-30.458)/2. + 7.62) * cm" y="0 * cm" z="0 * cm" rotX="0 * rad" rotY="-0.790717 * deg" rotZ="0 * rad"/>
+          <placement x="(30.458 + (35.517-30.458)/2. + 7.62) * cm" y="0 * cm" z="0 * cm" rotX="0 * rad" rotY="0.790717 * deg" rotZ="0 * rad"/>
           <dimensions rmin="0 * cm" rmax="15.24 * cm / 2." half_length="400. * cm / 2."/>
           <rotation num="1" start="0 * deg" step="0 * deg" axis="Z"/>
         </cut>
@@ -453,7 +453,7 @@
         <placement x="B1PF_Yoke_Center_posX" y="B1PF_Yoke_Center_posY" z="B1PF_Yoke_Center_posZ" theta="B1PF_Yoke_Rotation_Angle"/>
         <dimensions rmin="66. * cm / 2." rmax="145. * cm / 2." half_length="305.077 * cm / 2." sphi="0 * deg" dphi="360.0 * deg"/>
         <cut>
-          <placement x="(40.265 + (48.747-40.265)/2. + 7.) * cm" y="0 * cm" z="0 * cm" rotX="0 * rad" rotY="-1.592379 * deg" rotZ="0 * rad"/>
+          <placement x="(40.265 + (48.747-40.265)/2. + 7.) * cm" y="0 * cm" z="0 * cm" rotX="0 * rad" rotY="1.592379 * deg" rotZ="0 * rad"/>
           <dimensions rmin="0 * cm" rmax="14. * cm / 2." half_length="400. * cm / 2."/>
           <rotation num="1" start="0 * deg" step="0 * deg" axis="Z"/>
         </cut>
