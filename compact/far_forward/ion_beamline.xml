@@ -404,6 +404,43 @@
           <rotation num="4" start="0 * deg" step="90 * deg" axis="Z"/>
         </cut>
       </yoke>
+      <coil name="Q2PF_Dummy_Coil" vis="FFMagnetCoilVis">
+        <placement x="Q2PF_Yoke_Center_posX" y="Q2PF_Yoke_Center_posY" z="Q2PF_Yoke_Center_posZ" theta="Q2PF_Yoke_Rotation_Angle" phiNum="1" phiStart="0 * deg" phiStep="0 * deg"/>
+        <dimensions rmin="28.064321 * cm / 2." rmax="34.284785 * cm / 2." half_length="360.457852 * cm / 2." sphi="0 * deg" dphi="360.0 * deg"/>
+        <cut shape="Box">
+          <placement x="0 * cm" y="0 * cm" z="0 * cm" rotX="0 * rad" rotY="0 * rad" rotZ="0 * deg"/>
+          <dimensions dx="5.653406 * cm / 2." dy="50. * cm / 2." dz="300.271832 * cm / 2."/>
+          <rotation num="1" start="0 * deg" step="0 * deg" axis="Z"/>
+        </cut>
+        <cut shape="Box">
+          <placement x="0 * cm" y="0 * cm" z="0 * cm" rotX="0 * rad" rotY="0 * rad" rotZ="90.0 * deg"/>
+          <dimensions dx="5.653406 * cm / 2." dy="50. * cm / 2." dz="300.271832 * cm / 2."/>
+          <rotation num="1" start="0 * deg" step="0 * deg" axis="Z"/>
+        </cut>
+      </coil>
+      <endplate name="Q2PF_EndPlate_IP" vis="FFMagnetEndPlateVis">
+        <placement x="Q2PF_Yoke_Center_posX" y="Q2PF_Yoke_Center_posY" z="Q2PF_Yoke_Center_posZ" theta="Q2PF_Yoke_Rotation_Angle"/>
+	<zplane z="-(371.650028 * cm / 2.)" rmin="13.817600 * cm" rmax="30.162500 * cm"/>
+	<zplane z="-(371.650028 * cm / 2. + 12.700000 * cm)" rmin="13.817600 * cm" rmax="30.162500 * cm"/>
+      </endplate>
+      <endplate name="Q2PF_EndPlate_nonIP" vis="FFMagnetEndPlateVis">
+        <placement x="Q2PF_Yoke_Center_posX" y="Q2PF_Yoke_Center_posY" z="Q2PF_Yoke_Center_posZ" theta="Q2PF_Yoke_Rotation_Angle"/>
+	<zplane z="(371.650028 * cm / 2.)" rmin="27.635200 * cm / 2." rmax="60.325000 * cm / 2."/>
+	<zplane z="(371.650028 * cm / 2. + 12.700000 * cm)" rmin="27.635200 * cm / 2." rmax="60.325000 * cm / 2."/>
+      </endplate>
+      <yokeshield name="Q2PF_YoketShield" vis="FFMagnetEndPlateVis">
+        <placement x="Q2PF_Yoke_Center_posX" y="Q2PF_Yoke_Center_posY" z="Q2PF_Yoke_Center_posZ" theta="Q2PF_Yoke_Rotation_Angle"/>
+        <dimensions rmin="60. * cm" rmax="61.269852 * cm" half_length="366.897920 * cm / 2." sphi="0 * deg" dphi="360.0 * deg"/>
+      </yokeshield>
+      <heatshieldbarrel name="Q2OPF_HeatShield_Barrel" vis="FFMagnetHeatShieldVis">
+        <placement x="Q2PF_Yoke_Center_posX" y="Q2PF_Yoke_Center_posY" z="Q2PF_Yoke_Center_posZ" theta="Q2PF_Yoke_Rotation_Angle"/>
+        <dimensions rmin="71.424800 * cm" rmax="71.742300 * cm" half_length="376.814080 * cm / 2." sphi="0 * deg" dphi="360.0 * deg"/>
+      </heatshieldbarrel>
+      <cryobarrel name="Q2PF_Cryo_Barrel" vis="FFMagnetCryoVis">
+        <placement x="-40.497 * cm" y="0 * cm" z="1459.53 * cm" theta="Q2PF_Yoke_Rotation_Angle"/>
+        <dimensions rmin="182.245000 * cm / 2." rmax="182.880000 * cm / 2." half_length="382.270000 * cm / 2." sphi="0 * deg" dphi="360.0 * deg"/>
+      </cryobarrel>
+
     </detector>
 
   </detectors>
