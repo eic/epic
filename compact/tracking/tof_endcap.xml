@@ -213,7 +213,7 @@
       reflect="false">
       <type_flags type="DetType_TRACKER + DetType_ENDCAP"/>
       <position x="0*cm" y="0*cm" z="ForwardTOF_zmin" />
-      <moduleFrontRight name="EndcapTOF_Module1" vis="TOFEndcapModuleVis">
+      <module name="FrontRight" vis="TOFEndcapModuleVis">
         <module_component name="hybridkaptontop" material="Kapton" sensitive="false" width="EndcapTOF_Module_width" length="EndcapTOF_Module_length" thickness="EndcapTOF_Hybrid_thickness" vis="TOFHybridVis" >
           <position x="EndcapTOF_Service_position" y="0" z="0" />
         </module_component>
@@ -241,9 +241,9 @@
         <module_component name="carbonsupport" material="CarbonFiber" sensitive="false" width="EndcapTOF_Module_width" length="EndcapTOF_Module_length" thickness="EndcapTOF_CFSupp_thickness" vis="AnlGray" >
           <position x="EndcapTOF_Support_position" y="0" z="0" />
         </module_component>
-      </moduleFrontRight>
+      </module>
 
-      <moduleFrontLeft name="EndcapTOF_Module1" vis="TOFEndcapModuleVis">
+      <module name="FrontLeft" vis="TOFEndcapModuleVis">
         <module_component name="hybridkaptontop" material="Kapton" sensitive="false" width="EndcapTOF_Module_width" length="EndcapTOF_Module_length" thickness="EndcapTOF_Hybrid_thickness" vis="TOFHybridVis" >
           <position x="EndcapTOF_Service_position" y="0" z="0" />
         </module_component>
@@ -272,9 +272,9 @@
         <module_component name="carbonsupport" material="CarbonFiber" sensitive="false" width="EndcapTOF_Module_width" length="EndcapTOF_Module_length" thickness="EndcapTOF_CFSupp_thickness" vis="AnlGray" >
           <position x="EndcapTOF_Support_position" y="0" z="0" />
         </module_component>
-      </moduleFrontLeft>
+      </module>
 
-      <moduleBackRight name="EndcapTOF_Module1" vis="TOFEndcapModuleVis">
+      <module name="BackRight" vis="TOFEndcapModuleVis">
         <module_component name="carbonsupport" material="CarbonFiber" sensitive="false" width="EndcapTOF_Module_width" length="EndcapTOF_Module_length" thickness="EndcapTOF_CFSupp_thickness" vis="AnlGray" >
           <position x="EndcapTOF_Support_position" y="0" z="0" />
         </module_component>
@@ -302,9 +302,9 @@
         <module_component name="hybridkaptontop" material="Kapton" sensitive="false" width="EndcapTOF_Module_width" length="EndcapTOF_Module_length" thickness="EndcapTOF_Hybrid_thickness" vis="TOFHybridVis" >
           <position x="EndcapTOF_Service_position" y="0" z="0" />
         </module_component>
-      </moduleBackRight>
+      </module>
 
-      <moduleBackLeft name="EndcapTOF_Module1" vis="TOFEndcapModuleVis">
+      <module name="BackLeft" vis="TOFEndcapModuleVis">
         <module_component name="carbonsupport" material="CarbonFiber" sensitive="false" width="EndcapTOF_Module_width" length="EndcapTOF_Module_length" thickness="EndcapTOF_CFSupp_thickness" vis="AnlGray" >
           <position x="EndcapTOF_Support_position" y="0" z="0" />
         </module_component>
@@ -332,17 +332,17 @@
         <module_component name="hybridkaptontop" material="Kapton" sensitive="false" width="EndcapTOF_Module_width" length="EndcapTOF_Module_length" thickness="EndcapTOF_Hybrid_thickness" vis="TOFHybridVis" >
           <position x="EndcapTOF_Service_position" y="0" z="0" />
         </module_component>
-      </moduleBackLeft>
+      </module>
 
-      <sensor_layout_front_left id="0">
+      <layer id="0" module="FrontLeft" front="true" left="true" name="FrontLeft">
 
       <envelope vis="TOF_envelope"
         rmin="ForwardTOFLayer_rmin"
         rmax="ForwardTOFLayer_rmax"
       phimin="90*deg"
       phimax="270*deg"
-        length="3*cm"
-        zstart="ForwardTOF_zmin"
+        length="1.5*cm"
+        zstart="ForwardTOF_zmin - 0.75*cm"
         xoffset="EndcapTOF_Module_length_design/2"
       />
 
@@ -421,16 +421,16 @@
                 <row x_offset="EndcapTOF_Board_spacing/2" nsensors="3">
                   <board nsensors="3"/>
                 </row>
-      </sensor_layout_front_left>
+      </layer>
 
-      <sensor_layout_front_right id="1">
+      <layer id="1" front="true" left="false" module="FrontRight" name="FrontRight">
       <envelope vis="TOF_envelope"
         rmin="ForwardTOFLayer_rmin"
         rmax="ForwardTOFLayer_rmax"
       phimin="-90*deg"
       phimax="90*deg"
-        length="3*cm"
-        zstart="ForwardTOF_zmin"
+        length="1.5*cm"
+        zstart="ForwardTOF_zmin - 0.75*cm"
         xoffset="EndcapTOF_Module_length_design/2"
       />
 
@@ -508,16 +508,16 @@
                 <row x_offset="EndcapTOF_Board_spacing/2" nsensors="3">
                   <board nsensors="3"/>
                 </row>
-        </sensor_layout_front_right>
+        </layer>
 
-      <sensor_layout_back_left id="2">
+      <layer id="2" front="false" left="true" name="BackLeft" module="BackLeft">
       <envelope vis="TOF_envelope"
         rmin="ForwardTOFLayer_rmin"
         rmax="ForwardTOFLayer_rmax"
       phimin="90*deg"
       phimax="270*deg"
-        length="3*cm"
-        zstart="ForwardTOF_zmin + 3*cm"
+        length="1.5*cm"
+        zstart="ForwardTOF_zmin + 0.75*cm"
         xoffset="EndcapTOF_Module_length_design/2"
       />
 
@@ -594,9 +594,9 @@
                 <row x_offset="EndcapTOF_Board_spacing/2" nsensors="3">
                   <board nsensors="3"/>
                 </row>
-        </sensor_layout_back_left>
+        </layer>
 
-      <sensor_layout_back_right id="3">
+      <layer id="3" front="false" left="false" name="BackRight" module="BackRight">
         <layer_material surface="inner" binning="binPhi,binR" bins0="30" bins1="30"/>
         <layer_material surface="outer" binning="binPhi,binR" bins0="30" bins1="30"/>
         <y_layout dr="0.0*mm" z0="EndcapTOF_zOffset" nz="EndcapTOF_Module_nz"/>
@@ -607,8 +607,8 @@
         rmax="ForwardTOFLayer_rmax"
       phimin="-90*deg"
       phimax="90*deg"
-        length="3*cm"
-        zstart="ForwardTOF_zmin + 3*cm"
+        length="1.5*cm"
+        zstart="ForwardTOF_zmin + 0.75*cm"
         xoffset="EndcapTOF_Module_length_design/2"
       />
 
@@ -682,7 +682,7 @@
                 <row x_offset="EndcapTOF_Board_spacing/2" nsensors="3">
                   <board nsensors="3"/>
                 </row>
-      </sensor_layout_back_right>
+      </layer>
 
       <modsize
           width="EndcapTOF_Module_width"
