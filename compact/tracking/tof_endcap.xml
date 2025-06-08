@@ -349,8 +349,6 @@
 
         <layer_material surface="inner" binning="binPhi,binR" bins0="30" bins1="30"/>
         <layer_material surface="outer" binning="binPhi,binR" bins0="30" bins1="30"/>
-        <y_layout dr="0.0*mm" z0="EndcapTOF_zOffset" nz="EndcapTOF_Module_nz"/>
-        <z_layout z0="ForwardTOF_zmin"/>
 
                 <row deadspace="15*mm + EndcapTOF_yOffset"/>
                 <row x_offset="EndcapTOF_Board_spacing/2" nsensors="3">
@@ -437,9 +435,6 @@
 
         <layer_material surface="inner" binning="binPhi,binR" bins0="30" bins1="30"/>
         <layer_material surface="outer" binning="binPhi,binR" bins0="30" bins1="30"/>
-        <y_layout dr="0.0*mm" z0="EndcapTOF_zOffset" nz="EndcapTOF_Module_nz"/>
-        <z_layout z0="ForwardTOF_zmin"/>
-
 
                 <row deadspace="25.5*mm + EndcapTOF_yOffset"/>
                 <row x_offset="EndcapTOF_Board_spacing/2" nsensors="3">
@@ -524,8 +519,6 @@
 
         <layer_material surface="inner" binning="binPhi,binR" bins0="30" bins1="30"/>
         <layer_material surface="outer" binning="binPhi,binR" bins0="30" bins1="30"/>
-        <y_layout dr="0.0*mm" z0="EndcapTOF_zOffset" nz="EndcapTOF_Module_nz"/>
-        <z_layout z0="ForwardTOF_zmin"/>
 
                 <row deadspace="25.5*mm + EndcapTOF_yOffset"/>
                 <row x_offset="EndcapTOF_Board_spacing/2" nsensors="3">
@@ -599,8 +592,6 @@
       <layer id="3" front="false" left="false" name="BackRight" module="BackRight">
         <layer_material surface="inner" binning="binPhi,binR" bins0="30" bins1="30"/>
         <layer_material surface="outer" binning="binPhi,binR" bins0="30" bins1="30"/>
-        <y_layout dr="0.0*mm" z0="EndcapTOF_zOffset" nz="EndcapTOF_Module_nz"/>
-        <z_layout z0="ForwardTOF_zmin"/>
 
       <envelope vis="TOF_envelope"
         rmin="ForwardTOFLayer_rmin"
