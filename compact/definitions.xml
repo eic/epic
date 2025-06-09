@@ -320,6 +320,11 @@ The unused IDs below are saved for future use.
     <constant name="TaggerCalorimeter_ID"    value="199"/>
 
     <documentation>
+      #### (200-210) Far Backward Beamline Magnets
+    </documentation>
+    <constant name="Q1APR_ID"  value="200"/>
+
+    <documentation>
 ## Detector Definition Parameters
 
 ## Constant naming convention

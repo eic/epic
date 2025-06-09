@@ -299,6 +299,20 @@ void buildTubeElement(dd4hep::DetElement &sdet,
 				Tube cut_tube(cut_rmin,cut_rmax,cut_half_l);
 				cut_elem = cut_tube;
 			}
+			else if(add_shape == "Cone")
+			{
+				// get dimentions
+				xml_dim_t cut_dim	= cut_c.child(_U(dimensions));
+				double cut_rmin1	= cut_dim.attr<double>("rmin1");
+				double cut_rmax1	= cut_dim.attr<double>("rmax1");
+				double cut_rmin2	= cut_dim.attr<double>("rmin2");
+				double cut_rmax2	= cut_dim.attr<double>("rmax2");
+				double cut_dz		= cut_dim.attr<double>("dz");
+
+				// build a solid
+				Cone cut_cone(cut_dz,cut_rmin1,cut_rmax1,cut_rmin2,cut_rmax2);
+				cut_elem = cut_cone;
+			}
 			// loop over rot steps
 			for(int i = 0; i < cut_rot_num; i++)
 			{
