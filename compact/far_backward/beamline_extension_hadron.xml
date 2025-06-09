@@ -8,10 +8,31 @@
      Implemented to allow overlap checks with the far backwards systems
   </comment>
 
+  <define>
+    <!-- Q1ApR Yoke Center Position -->
+    <constant name="Q1APR_Yoke_Center_posX" value="10.5099 * cm"/>
+    <constant name="Q1APR_Yoke_Center_posY" value="0 * cm"/>
+    <constant name="Q1APR_Yoke_Center_posZ" value="-619.783 * cm"/>
+    <constant name="Q1APR_Yoke_Rotation_Angle" value="-0.025 * rad"/>
+  </define>
+
   <detectors>
 
 
     <comment> Hadron side beam magnet volumes </comment>
+
+    <!-- Q1ApR magnet -->
+    <detector id="Q1APR_ID" name="Q1APR_BeamlineMagnet" type="ip6_CylindricalDipoleMagnet">
+      <yoke name="Q1APR_Yoke" vis="FFMagnetVis">
+        <placement x="Q1APR_Yoke_Center_posX" y="Q1APR_Yoke_Center_posY" z="Q1APR_Yoke_Center_posZ" theta="Q1APR_Yoke_Rotation_Angle"/>
+        <dimensions rmin="0 * cm" rmax="50. * cm / 2." half_length="180. * cm / 2." sphi="0 * deg" dphi="360.0 * deg"/>
+        <cut shape="Cone">
+          <placement x="5.0 * cm" y="0 * cm" z="0 * cm" rotX="0 * rad" rotY="0 * rad" rotZ="0 * rad"/>
+          <dimensions rmin1="0 * cm" rmax1="12.6 * cm / 2." rmin2="0 * cm" rmax2="11.4 * cm / 2." dz="181.0 * cm / 2."/>
+          <rotation num="1" start="0 * deg" step="0 * deg" axis="Z"/>
+        </cut>
+      </yoke>
+    </detector>
 
 
     <detector
