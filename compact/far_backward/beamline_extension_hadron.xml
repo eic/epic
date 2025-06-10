@@ -14,6 +14,11 @@
     <constant name="Q1APR_Yoke_Center_posY" value="0 * cm"/>
     <constant name="Q1APR_Yoke_Center_posZ" value="-619.783 * cm"/>
     <constant name="Q1APR_Yoke_Rotation_Angle" value="-0.025 * rad"/>
+    <!-- Q1ApR Coil Center Position -->
+    <constant name="Q1APR_Coil_Center_posX" value="15.5083 * cm"/>
+    <constant name="Q1APR_Coil_Center_posY" value="0 * cm"/>
+    <constant name="Q1APR_Coil_Center_posZ" value="-619.659 * cm"/>
+
   </define>
 
   <detectors>
@@ -31,7 +36,21 @@
           <dimensions rmin1="0 * cm" rmax1="12.6 * cm / 2." rmin2="0 * cm" rmax2="11.4 * cm / 2." dz="181.0 * cm / 2."/>
           <rotation num="1" start="0 * deg" step="0 * deg" axis="Z"/>
         </cut>
+        <cut shape="Cone">
+          <placement x="-10.519 * cm" y="0 * cm" z="0 * cm" rotX="0 * rad" rotY="1.432510 * deg" rotZ="0 * rad"/>
+          <dimensions rmin1="0 * cm" rmax1="7.6 * cm" rmin2="0 * cm" rmax2="6.8 * cm" dz="181.0 * cm / 2."/>
+          <rotation num="1" start="0 * deg" step="0 * deg" axis="Z"/>
+        </cut>
       </yoke>
+      <coil name="Q1APR_Coil" vis="FFMagnetCoilVis" shape="ConeSegment">
+        <placement x="Q1APR_Coil_Center_posX" y="Q1APR_Coil_Center_posY" z="Q1APR_Coil_Center_posZ" theta="Q1APR_Yoke_Rotation_Angle" phiNum="3" phiStart="90 * deg" phiStep="90 * deg"/>
+        <dimensions rmin1="3.878580 * cm" rmax1="4.823460 * cm" rmin2="3.279140 * cm" rmax2="4.224020 * cm" dz="160.0 * cm / 2." sphi="-60. * deg / 2." dphi="60. * deg"/>
+      </coil>
+      <tube name="Q1APR_InnerSupport_Tube" vis="FFMagnetSupportTubeVis" shape="Cone">
+        <placement x="Q1APR_Coil_Center_posX" y="Q1APR_Coil_Center_posY" z="Q1APR_Coil_Center_posZ" theta="Q1APR_Yoke_Rotation_Angle"/>
+          <dimensions rmin1="7.121052 * cm / 2." rmax1="3.8 * cm" rmin2="5.617656 * cm / 2." rmax2="3.2 * cm" dz="200.639934 * cm / 2."/>
+      </tube>
+
     </detector>
 
 
