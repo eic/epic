@@ -411,8 +411,17 @@
     <composite n="8" ref="H"/>
     <composite n="2" ref="O"/>
   </material>
-  <material name="StainlessSteel">
-    <D type="density" value="8.3" unit="g / cm3"/>
+  <material name="StainlessSteelP506">
+    <!-- Same density as the 304 grade steel is assumed -->
+    <D type="density" value="7.9" unit="g / cm3"/>
+    <!-- https://cds.cern.ch/record/1636422/files/Vacuum%20Technical%20Note%2097-17.pdf -->
+    <fraction n="0.576" ref="Fe"/>
+    <fraction n="0.193" ref="Cr"/>
+    <fraction n="0.11" ref="Ni"/>
+    <fraction n="0.121" ref="Mn"/>
+  </material>
+  <material name="StainlessSteelSAE304">
+    <D type="density" value="7.9" unit="g / cm3"/>
     <fraction n="0.74" ref="Fe"/>
     <fraction n="0.18" ref="Cr"/>
     <fraction n="0.08" ref="Ni"/>

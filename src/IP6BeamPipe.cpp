@@ -50,7 +50,7 @@ static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector /* sens *
   Material IP_beampipe_coating_material =
       det.material(IP_pipe_c.attr<string>(_Unicode(coating_material)));
   Material m_Vacuum  = det.material("Vacuum");
-  Material m_Wall    = det.material("StainlessSteel");
+  Material m_Wall    = det.material("StainlessSteelP506");
   Material m_Coating = det.material("Copper");
 
   // IP Beampipe
