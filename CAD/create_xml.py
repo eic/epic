@@ -7,8 +7,8 @@ HEADER = '''
 <lccdd>
   <define>
   
-    <constant name="SiBarrelMod1_rmin"             value="SiBarrel1_rmin"/> # 269mm
-    <constant name="SiBarrelMod2_rmin"             value="SiBarrel2_rmin"/> # 421mm
+    <constant name="SiBarrelMod1_rmin"             value="SiBarrel1_rmin - 1*mm"/> # 269mm
+    <constant name="SiBarrelMod2_rmin"             value="SiBarrel2_rmin + 1*mm"/> # 421mm
      <constant name="SiBarrelMod_angle"             value="SiBarrel_angle"/>
     <constant name="SiBarrelMod_dz"                value="SiBarrel_dz"/>
 
@@ -83,7 +83,7 @@ MIDDLE = '''
           nz       : Number of modules to place in z.
           dr       : Radial displacement parameter, of every other module.
         </comment>
-        <rphi_layout phi_tilt="SiBarrelStaveTilt_angle" nphi="46" phi0="0.0" rc="SiBarrelMod1_rmin" dr="7.0 * mm"/>
+        <rphi_layout phi_tilt="SiBarrelStaveTilt_angle" nphi="46" phi0="0.0" rc="SiBarrelMod1_rmin" dr="6.0 * mm"/>
         <z_layout dr="0.0 * mm" z0="0.0 * mm" nz="1"/>
       </layer>
     </detector>
