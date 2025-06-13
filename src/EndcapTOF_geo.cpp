@@ -163,10 +163,11 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
     xml_comp_t envelope = x_layer.child(_Unicode(envelope), false);
     int lay_id          = x_layer.id();
     string m_nam        = x_layer.moduleStr();
-    string lay_nam      = det_name + "_" + locStr;
+    string lay_nam      = det_name + _toString(lay_id, "_layer%d");
     double phimin       = dd4hep::getAttrOrDefault<double>(envelope, _Unicode(phimin), 0.);
     double phimax       = dd4hep::getAttrOrDefault<double>(envelope, _Unicode(phimax), 2 * M_PI);
     Volume m_vol        = modules[m_nam];
+    double xoffset      = getAttrOrDefault<double>(envelope, _Unicode(xoffset), 0);
     //int mod_num         = 0;
 
     double total_thickness = mod_thickness[m_nam];
@@ -174,7 +175,7 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
 
     Tube lay_tub(envelope.rmin(), envelope.rmax(), envelope.length() / 2.0, phimin, phimax);
     Volume lay_vol(lay_nam, lay_tub, air); // Create the layer envelope volume.
-    Position lay_pos(0, 0, envelope.zstart());
+    Position lay_pos(xoffset, 0, envelope.zstart());
     lay_vol.setVisAttributes(description.visAttributes(x_layer.visStr()));
 
     DetElement lay_elt(sdet, lay_nam, lay_id);

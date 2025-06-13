@@ -9,7 +9,7 @@
       --------------------------
     </comment>
     <comment> Forward TOF position </comment>
-    <constant name="ForwardTOF_nlayers"             value="1"/>
+    <constant name="ForwardTOF_nlayers"             value="5"/>
     <constant name="ForwardTOFMod_offset"           value="1.2*cm"/>
 
     <comment> LGAD parameters for the endcap TOFs </comment>
@@ -334,7 +334,7 @@
         </module_component>
       </module>
 
-      <layer id="0" module="FrontLeft" front="true" left="true" name="FrontLeft">
+      <layer id="1" module="FrontLeft" front="true" left="true" name="FrontLeft">
 
       <envelope vis="TOF_envelope"
         rmin="ForwardTOFLayer_rmin"
@@ -342,8 +342,8 @@
       phimin="90*deg"
       phimax="270*deg"
         length="1.5*cm"
-        zstart="ForwardTOF_zmin - 0.75*cm"
-        xoffset="EndcapTOF_Module_length_design/2"
+        zstart="ForwardTOF_zmin - 0.75*cm - EndcapTOF_CFSupp_thickness"
+        xoffset="-EndcapTOF_Board_spacing/2"
       />
 
 
@@ -421,15 +421,15 @@
                 </row>
       </layer>
 
-      <layer id="1" front="true" left="false" module="FrontRight" name="FrontRight">
+      <layer id="2" front="true" left="false" module="FrontRight" name="FrontRight">
       <envelope vis="TOF_envelope"
         rmin="ForwardTOFLayer_rmin"
         rmax="ForwardTOFLayer_rmax"
       phimin="-90*deg"
       phimax="90*deg"
         length="1.5*cm"
-        zstart="ForwardTOF_zmin - 0.75*cm"
-        xoffset="EndcapTOF_Module_length_design/2"
+        zstart="ForwardTOF_zmin - 0.75*cm - EndcapTOF_CFSupp_thickness"
+        xoffset="EndcapTOF_Board_spacing/2"
       />
 
 
@@ -505,15 +505,15 @@
                 </row>
         </layer>
 
-      <layer id="2" front="false" left="true" name="BackLeft" module="BackLeft">
+      <layer id="3" front="false" left="true" name="BackLeft" module="BackLeft">
       <envelope vis="TOF_envelope"
         rmin="ForwardTOFLayer_rmin"
         rmax="ForwardTOFLayer_rmax"
       phimin="90*deg"
       phimax="270*deg"
         length="1.5*cm"
-        zstart="ForwardTOF_zmin + 0.75*cm"
-        xoffset="EndcapTOF_Module_length_design/2"
+        zstart="ForwardTOF_zmin + 0.75*cm + EndcapTOF_CFSupp_thickness + 1*um"
+        xoffset="-EndcapTOF_Board_spacing/2"
       />
 
 
@@ -589,19 +589,20 @@
                 </row>
         </layer>
 
-      <layer id="3" front="false" left="false" name="BackRight" module="BackRight">
-        <layer_material surface="inner" binning="binPhi,binR" bins0="30" bins1="30"/>
-        <layer_material surface="outer" binning="binPhi,binR" bins0="30" bins1="30"/>
-
+      <layer id="4" front="false" left="false" name="BackRight" module="BackRight">
       <envelope vis="TOF_envelope"
         rmin="ForwardTOFLayer_rmin"
         rmax="ForwardTOFLayer_rmax"
       phimin="-90*deg"
       phimax="90*deg"
         length="1.5*cm"
-        zstart="ForwardTOF_zmin + 0.75*cm"
-        xoffset="EndcapTOF_Module_length_design/2"
+        zstart="ForwardTOF_zmin + 0.75*cm + EndcapTOF_CFSupp_thickness"
+      xoffset="EndcapTOF_Board_spacing/2"
       />
+
+
+        <layer_material surface="inner" binning="binPhi,binR" bins0="30" bins1="30"/>
+        <layer_material surface="outer" binning="binPhi,binR" bins0="30" bins1="30"/>
 
 
                 <row deadspace="15*mm + EndcapTOF_yOffset"/>
@@ -674,6 +675,7 @@
                   <board nsensors="3"/>
                 </row>
       </layer>
+
 
       <modsize
           width="EndcapTOF_Module_width"
