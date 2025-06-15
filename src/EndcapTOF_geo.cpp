@@ -152,9 +152,8 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
   }
 
   int module = 0;
-  for (xml_coll_t li(x_det, _U(layer)); li; ++li, ++module) {
+  for (xml_coll_t li(x_det, _U(layer)); li; ++li) {
     xml_comp_t x_layer = li;
-    bool left          = x_layer.attr<bool>(_Unicode(left));
     bool front         = x_layer.attr<bool>(_Unicode(front));
 
     const std::string locStr = x_layer.nameStr();
@@ -162,16 +161,11 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
     // now build the envelope for the detector
     xml_comp_t envelope = x_layer.child(_Unicode(envelope), false);
     int lay_id          = x_layer.id();
-    string m_nam        = x_layer.moduleStr();
     string lay_nam      = det_name + _toString(lay_id, "_layer%d");
     double phimin       = dd4hep::getAttrOrDefault<double>(envelope, _Unicode(phimin), 0.);
     double phimax       = dd4hep::getAttrOrDefault<double>(envelope, _Unicode(phimax), 2 * M_PI);
-    Volume m_vol        = modules[m_nam];
     double xoffset      = getAttrOrDefault<double>(envelope, _Unicode(xoffset), 0);
     //int mod_num         = 0;
-
-    double total_thickness = mod_thickness[m_nam];
-    Placements& sensVols   = sensitives[m_nam];
 
     Tube lay_tub(envelope.rmin(), envelope.rmax(), envelope.length() / 2.0, phimin, phimax);
     Volume lay_vol(lay_nam, lay_tub, air); // Create the layer envelope volume.
@@ -197,11 +191,20 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
                                                       "layer_material");
     }
 
+    for(xml_coll_t llayout(x_layer, _Unicode(layout)); llayout; ++llayout, ++module) {
+    xml_comp_t x_layout = llayout;
+    bool left          = x_layout.attr<bool>(_Unicode(left));
+    string m_nam        = x_layout.moduleStr();
+    Volume m_vol        = modules[m_nam];
+    double total_thickness = mod_thickness[m_nam];
+    Placements& sensVols   = sensitives[m_nam];
+
+
     float ycoord =
         envelope.rmax() - module_y / 2.; // y-center-coord of the top sensor. Start from the top row
     int iy = 0;
 
-    for (xml_coll_t lrow(x_layer, _Unicode(row)); lrow; ++lrow) {
+    for (xml_coll_t lrow(x_layout, _Unicode(row)); lrow; ++lrow) {
       xml_comp_t x_row = lrow;
       double deadspace = getAttrOrDefault<double>(x_row, _Unicode(deadspace), 0);
       if (deadspace > 0) {
@@ -249,7 +252,7 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
         pv.addPhysVolID("idy", iy);
         pv.addPhysVolID("module", module);
 
-        string comp_nam = Form("ix%d_iy%d", ix, iy);
+        string comp_nam = Form("%s_%s_ix%d_iy%d", lay_nam.c_str(), m_nam.c_str(), ix, iy);
         DetElement comp_elt(lay_elt, comp_nam, det_id);
         comp_elt.setPlacement(pv);
 
@@ -266,6 +269,7 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
       }
       ycoord -= (module_y - module_overlap);
       ++iy;
+    }
     }
   }
   pv = description.pickMotherVolume(sdet).placeVolume(assembly, Position(0, 0, 0));

@@ -334,13 +334,13 @@
         </module_component>
       </module>
 
-      <layer id="1" module="FrontLeft" front="true" left="true" name="FrontLeft">
+      <layer id="1" front="true" name="Front">
 
       <envelope vis="TOF_envelope"
         rmin="ForwardTOFLayer_rmin"
         rmax="ForwardTOFLayer_rmax"
-      phimin="90*deg"
-      phimax="270*deg"
+      phimin="0*deg"
+      phimax="360*deg"
         length="1.5*cm"
         zstart="ForwardTOF_zmin - 0.75*cm - EndcapTOF_CFSupp_thickness"
         xoffset="-EndcapTOF_Board_spacing/2"
@@ -350,6 +350,7 @@
         <layer_material surface="inner" binning="binPhi,binR" bins0="30" bins1="30"/>
         <layer_material surface="outer" binning="binPhi,binR" bins0="30" bins1="30"/>
 
+	<layout module="FrontLeft" left="true">
                 <row deadspace="15*mm + EndcapTOF_yOffset"/>
                 <row x_offset="EndcapTOF_Board_spacing/2" nsensors="3">
                   <board nsensors="3"/>
@@ -419,23 +420,8 @@
                 <row x_offset="EndcapTOF_Board_spacing/2" nsensors="3">
                   <board nsensors="3"/>
                 </row>
-      </layer>
-
-      <layer id="2" front="true" left="false" module="FrontRight" name="FrontRight">
-      <envelope vis="TOF_envelope"
-        rmin="ForwardTOFLayer_rmin"
-        rmax="ForwardTOFLayer_rmax"
-      phimin="-90*deg"
-      phimax="90*deg"
-        length="1.5*cm"
-        zstart="ForwardTOF_zmin - 0.75*cm - EndcapTOF_CFSupp_thickness"
-        xoffset="EndcapTOF_Board_spacing/2"
-      />
-
-
-        <layer_material surface="inner" binning="binPhi,binR" bins0="30" bins1="30"/>
-        <layer_material surface="outer" binning="binPhi,binR" bins0="30" bins1="30"/>
-
+          </layout>`
+	  <layout left="false" module="FrontRight">
                 <row deadspace="25.5*mm + EndcapTOF_yOffset"/>
                 <row x_offset="EndcapTOF_Board_spacing/2" nsensors="3">
                   <board nsensors="3"/>
@@ -503,14 +489,13 @@
                 <row x_offset="EndcapTOF_Board_spacing/2" nsensors="3">
                   <board nsensors="3"/>
                 </row>
-        </layer>
+	</layout>
+      </layer>
 
-      <layer id="3" front="false" left="true" name="BackLeft" module="BackLeft">
+      <layer id="2" front="false" name="Back">
       <envelope vis="TOF_envelope"
         rmin="ForwardTOFLayer_rmin"
         rmax="ForwardTOFLayer_rmax"
-      phimin="90*deg"
-      phimax="270*deg"
         length="1.5*cm"
         zstart="ForwardTOF_zmin + 0.75*cm + EndcapTOF_CFSupp_thickness + 1*um"
         xoffset="-EndcapTOF_Board_spacing/2"
@@ -520,6 +505,7 @@
         <layer_material surface="inner" binning="binPhi,binR" bins0="30" bins1="30"/>
         <layer_material surface="outer" binning="binPhi,binR" bins0="30" bins1="30"/>
 
+	<layout left="true" module="BackLeft">
                 <row deadspace="25.5*mm + EndcapTOF_yOffset"/>
                 <row x_offset="EndcapTOF_Board_spacing/2" nsensors="3">
                   <board nsensors="3"/>
@@ -587,24 +573,9 @@
                 <row x_offset="EndcapTOF_Board_spacing/2" nsensors="3">
                   <board nsensors="3"/>
                 </row>
-        </layer>
+        </layout>
 
-      <layer id="4" front="false" left="false" name="BackRight" module="BackRight">
-      <envelope vis="TOF_envelope"
-        rmin="ForwardTOFLayer_rmin"
-        rmax="ForwardTOFLayer_rmax"
-      phimin="-90*deg"
-      phimax="90*deg"
-        length="1.5*cm"
-        zstart="ForwardTOF_zmin + 0.75*cm + EndcapTOF_CFSupp_thickness"
-      xoffset="EndcapTOF_Board_spacing/2"
-      />
-
-
-        <layer_material surface="inner" binning="binPhi,binR" bins0="30" bins1="30"/>
-        <layer_material surface="outer" binning="binPhi,binR" bins0="30" bins1="30"/>
-
-
+        <layout left="false" module="BackRight">
                 <row deadspace="15*mm + EndcapTOF_yOffset"/>
                 <row x_offset="EndcapTOF_Board_spacing/2" nsensors="3">
                   <board nsensors="3"/>
@@ -674,7 +645,10 @@
                 <row x_offset="EndcapTOF_Board_spacing/2" nsensors="3">
                   <board nsensors="3"/>
                 </row>
+	</layout>
       </layer>
+
+
 
 
       <modsize
