@@ -191,85 +191,84 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
                                                       "layer_material");
     }
 
-    for(xml_coll_t llayout(x_layer, _Unicode(layout)); llayout; ++llayout, ++module) {
-    xml_comp_t x_layout = llayout;
-    bool left          = x_layout.attr<bool>(_Unicode(left));
-    string m_nam        = x_layout.moduleStr();
-    Volume m_vol        = modules[m_nam];
-    double total_thickness = mod_thickness[m_nam];
-    Placements& sensVols   = sensitives[m_nam];
+    for (xml_coll_t llayout(x_layer, _Unicode(layout)); llayout; ++llayout, ++module) {
+      xml_comp_t x_layout    = llayout;
+      bool left              = x_layout.attr<bool>(_Unicode(left));
+      string m_nam           = x_layout.moduleStr();
+      Volume m_vol           = modules[m_nam];
+      double total_thickness = mod_thickness[m_nam];
+      Placements& sensVols   = sensitives[m_nam];
 
+      float ycoord = envelope.rmax() -
+                     module_y / 2.; // y-center-coord of the top sensor. Start from the top row
+      int iy = 0;
 
-    float ycoord =
-        envelope.rmax() - module_y / 2.; // y-center-coord of the top sensor. Start from the top row
-    int iy = 0;
-
-    for (xml_coll_t lrow(x_layout, _Unicode(row)); lrow; ++lrow) {
-      xml_comp_t x_row = lrow;
-      double deadspace = getAttrOrDefault<double>(x_row, _Unicode(deadspace), 0);
-      if (deadspace > 0) {
-        ycoord -= deadspace;
-        continue;
-      }
-      double x_offset = getAttrOrDefault<double>(x_row, _Unicode(x_offset), 0);
-      int nsensors    = getAttrOrDefault<int>(x_row, _Unicode(nsensors), 0);
-
-      // find the sensor id that corrsponds to the rightmost sensor in a board
-      // we need to know where to apply additional spaces between neighboring board
-      std::unordered_set<int> sensors_id_board_edge;
-      int curr_ix = nsensors; // the first sensor to the right of center has ix of nsensors
-      for (xml_coll_t lboard(x_row, _Unicode(board)); lboard; ++lboard) {
-        xml_comp_t x_board = lboard;
-        int nboard_sensors = getAttrOrDefault<int>(x_board, _Unicode(nsensors), 1);
-        curr_ix += nboard_sensors;
-        sensors_id_board_edge.insert(curr_ix);
-        sensors_id_board_edge.insert(2 * nsensors - curr_ix -
-                                     1); // reflected to sensor id on the left
-      }
-
-      double accum_xoffset = x_offset;
-
-      for (int ix = (left ? nsensors - 1 : nsensors); (ix >= 0) && (ix < 2 * nsensors);
-           ix     = ix + (left ? -1 : 1)) {
-        // add board spacing
-        if (sensors_id_board_edge.find(ix) != sensors_id_board_edge.end())
-          accum_xoffset = accum_xoffset + board_gap;
-
-        // there is a hole in the middle, with radius = x_offset
-        float xcoord = (ix - nsensors + 0.5) * (module_x + module_spacing) +
-                       +(left ? -accum_xoffset : accum_xoffset);
-        //! Note the module ordering is different for front and back side
-
-        double module_z = -0.5 * envelope.length();
-        if (front)
-          module_z = 0.5 * envelope.length() - total_thickness;
-
-        // module built!
-        Transform3D tr(RotationZYX(M_PI / 2, 0, 0), Position(xcoord, ycoord, module_z));
-
-        pv = lay_vol.placeVolume(m_vol, tr);
-        pv.addPhysVolID("idx", ix);
-        pv.addPhysVolID("idy", iy);
-        pv.addPhysVolID("module", module);
-
-        string comp_nam = Form("%s_%s_ix%d_iy%d", lay_nam.c_str(), m_nam.c_str(), ix, iy);
-        DetElement comp_elt(lay_elt, comp_nam, det_id);
-        comp_elt.setPlacement(pv);
-
-        for (size_t ic = 0; ic < sensVols.size(); ++ic) {
-          PlacedVolume sens_pv = sensVols[ic];
-          DetElement sensor_elt(comp_elt, sens_pv.volume().name(), module);
-          sensor_elt.setPlacement(sens_pv);
-          auto& sensor_elt_params =
-              DD4hepDetectorHelper::ensureExtension<dd4hep::rec::VariantParameters>(sensor_elt);
-          sensor_elt_params.set<string>("axis_definitions", "XYZ");
-          volSurfaceList(sensor_elt)->push_back(volplane_surfaces[m_nam][ic]);
+      for (xml_coll_t lrow(x_layout, _Unicode(row)); lrow; ++lrow) {
+        xml_comp_t x_row = lrow;
+        double deadspace = getAttrOrDefault<double>(x_row, _Unicode(deadspace), 0);
+        if (deadspace > 0) {
+          ycoord -= deadspace;
+          continue;
         }
-        //++mod_num;
+        double x_offset = getAttrOrDefault<double>(x_row, _Unicode(x_offset), 0);
+        int nsensors    = getAttrOrDefault<int>(x_row, _Unicode(nsensors), 0);
+
+        // find the sensor id that corrsponds to the rightmost sensor in a board
+        // we need to know where to apply additional spaces between neighboring board
+        std::unordered_set<int> sensors_id_board_edge;
+        int curr_ix = nsensors; // the first sensor to the right of center has ix of nsensors
+        for (xml_coll_t lboard(x_row, _Unicode(board)); lboard; ++lboard) {
+          xml_comp_t x_board = lboard;
+          int nboard_sensors = getAttrOrDefault<int>(x_board, _Unicode(nsensors), 1);
+          curr_ix += nboard_sensors;
+          sensors_id_board_edge.insert(curr_ix);
+          sensors_id_board_edge.insert(2 * nsensors - curr_ix -
+                                       1); // reflected to sensor id on the left
+        }
+
+        double accum_xoffset = x_offset;
+
+        for (int ix = (left ? nsensors - 1 : nsensors); (ix >= 0) && (ix < 2 * nsensors);
+             ix     = ix + (left ? -1 : 1)) {
+          // add board spacing
+          if (sensors_id_board_edge.find(ix) != sensors_id_board_edge.end())
+            accum_xoffset = accum_xoffset + board_gap;
+
+          // there is a hole in the middle, with radius = x_offset
+          float xcoord = (ix - nsensors + 0.5) * (module_x + module_spacing) +
+                         +(left ? -accum_xoffset : accum_xoffset);
+          //! Note the module ordering is different for front and back side
+
+          double module_z = -0.5 * envelope.length();
+          if (front)
+            module_z = 0.5 * envelope.length() - total_thickness;
+
+          // module built!
+          Transform3D tr(RotationZYX(M_PI / 2, 0, 0), Position(xcoord, ycoord, module_z));
+
+          pv = lay_vol.placeVolume(m_vol, tr);
+          pv.addPhysVolID("idx", ix);
+          pv.addPhysVolID("idy", iy);
+          pv.addPhysVolID("module", module);
+
+          string comp_nam = Form("%s_%s_ix%d_iy%d", lay_nam.c_str(), m_nam.c_str(), ix, iy);
+          DetElement comp_elt(lay_elt, comp_nam, det_id);
+          comp_elt.setPlacement(pv);
+
+          for (size_t ic = 0; ic < sensVols.size(); ++ic) {
+            PlacedVolume sens_pv = sensVols[ic];
+            DetElement sensor_elt(comp_elt, sens_pv.volume().name(), module);
+            sensor_elt.setPlacement(sens_pv);
+            auto& sensor_elt_params =
+                DD4hepDetectorHelper::ensureExtension<dd4hep::rec::VariantParameters>(sensor_elt);
+            sensor_elt_params.set<string>("axis_definitions", "XYZ");
+            volSurfaceList(sensor_elt)->push_back(volplane_surfaces[m_nam][ic]);
+          }
+          //++mod_num;
+        }
+        ycoord -= (module_y - module_overlap);
+        ++iy;
       }
-      ycoord -= (module_y - module_overlap);
-      ++iy;
-    }
     }
   }
   pv = description.pickMotherVolume(sdet).placeVolume(assembly, Position(0, 0, 0));
