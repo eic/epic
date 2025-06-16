@@ -156,30 +156,70 @@ void buildPolyElement(dd4hep::DetElement &sdet,
 
 		// get all cuts
 		xml_coll_t cuts_c(elem_c, _Unicode(cut));
+
+		Solid cut_final;
 		// loop over cuts
 		for (; cuts_c; ++cuts_c)
 		{
 			// get one cut
-			xml_comp_t cut_c	= cuts_c;
+			xml_comp_t cut_c = cuts_c;
+			// get shape
+			string cut_shape = dd4hep::getAttrOrDefault<std::string>(cut_c, _Unicode(shape), "Tube"); 
+
 			// get placement coordinates
 			xml_dim_t cut_pos	= cut_c.child(_U(placement));
 			double cut_rotX		= cut_pos.attr<double>("rotX");
 			double cut_rotY		= cut_pos.attr<double>("rotY");
 			double cut_rotZ		= cut_pos.attr<double>("rotZ");
-			// get dimentions
-			xml_dim_t cut_dim	= cut_c.child(_U(dimensions));
-			double cut_rmin		= cut_dim.attr<double>("rmin");
-			double cut_rmax		= cut_dim.attr<double>("rmax");
-			double cut_half_l	= cut_dim.attr<double>("half_length");
+			// get rotation coordinates
+			xml_dim_t cut_rot       = cut_c.child(_U(rotation));
+			int cut_rot_num		= cut_rot.attr<int>("num");
+			double cut_rot_step	= cut_rot.attr<double>("step");
+			double cut_rot_start	= cut_rot.attr<double>("start");
+			string cut_rot_axis 	= cut_rot.attr<string>("axis");
 
-			// build a solid
-			Tube cut_tube(cut_rmin,cut_rmax,cut_half_l);
+			if(cut_shape == "Cone")
+			{
+				// get dimentions
+				xml_dim_t cut_dim	= cut_c.child(_U(dimensions));
+				double cut_rmin1	= cut_dim.attr<double>("rmin1");
+				double cut_rmax1	= cut_dim.attr<double>("rmax1");
+				double cut_rmin2	= cut_dim.attr<double>("rmin2");
+				double cut_rmax2	= cut_dim.attr<double>("rmax2");
+				double cut_dz		= cut_dim.attr<double>("dz");
 
-     			Transform3D tf_tmp(
-				RotationZYX(cut_rotX,cut_rotY,cut_rotZ),	
-				Position(cut_pos.x(),cut_pos.y(),cut_pos.z()));
-			// subtract the cut from the element solid
-			elem_final = SubtractionSolid("elem_final",elem_final,cut_tube,tf_tmp);
+				// build a solid
+				Cone cut_cone(cut_dz,cut_rmin1,cut_rmax1,cut_rmin2,cut_rmax2);
+				cut_final = cut_cone;
+			}
+			else if(cut_shape == "Tube")
+			{
+				// get dimentions
+				xml_dim_t cut_dim	= cut_c.child(_U(dimensions));
+				double cut_rmin		= cut_dim.attr<double>("rmin");
+				double cut_rmax		= cut_dim.attr<double>("rmax");
+				double cut_half_l	= cut_dim.attr<double>("half_length");
+
+				// build a solid
+				Tube cut_tube(cut_rmin,cut_rmax,cut_half_l);
+				cut_final = cut_tube;
+			}
+
+			// loop over rot steps
+			for(int i = 0; i < cut_rot_num; i++)
+			{
+				Position pos_tmp(cut_pos.x(),cut_pos.y(),cut_pos.z());
+				double ang_tmp = cut_rot_start + i * cut_rot_step;
+				Rotation3D rot_tmp;
+				if 	(cut_rot_axis == "X")  	{rot_tmp = RotationX(ang_tmp);}
+				else if (cut_rot_axis == "Y")  	{rot_tmp = RotationY(ang_tmp);}
+				else  				{rot_tmp = RotationZ(ang_tmp);}
+				pos_tmp = rot_tmp * pos_tmp;
+
+				Transform3D tf_tmp(RotationZYX(cut_rotZ,cut_rotY,cut_rotX),pos_tmp);
+				// subtract the cut from the element solid
+				elem_final = SubtractionSolid("elem_final",elem_final,cut_final,tf_tmp);
+			}
 		}
 
 		// create volume
