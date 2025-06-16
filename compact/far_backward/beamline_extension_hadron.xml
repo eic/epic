@@ -399,9 +399,7 @@
           <dimensions rmin="0 * cm" rmax="18.022824 * cm / 2." half_length="800. * cm / 2."/>
           <rotation num="1" start="0 * deg" step="0 * deg" axis="Z"/>
         </cut>
-
       </cryoend>
-
     </detector>
 
 
