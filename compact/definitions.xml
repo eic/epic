@@ -324,6 +324,7 @@ The unused IDs below are saved for future use.
     </documentation>
     <constant name="Q1APR_ID"  value="200"/>
     <constant name="Q1BPR_ID"  value="201"/>
+    <constant name="Q2PR_ID"   value="202"/>
 
     <documentation>
 ## Detector Definition Parameters
