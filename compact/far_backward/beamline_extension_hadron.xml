@@ -18,6 +18,15 @@
     <constant name="Q1APR_Coil_Center_posX" value="15.5083 * cm"/>
     <constant name="Q1APR_Coil_Center_posY" value="0 * cm"/>
     <constant name="Q1APR_Coil_Center_posZ" value="-619.659 * cm"/>
+    <!-- Q1BpR Yoke Center Position -->
+    <constant name="Q1BPR_Yoke_Center_posX" value="6.32227 * cm"/>
+    <constant name="Q1BPR_Yoke_Center_posY" value="0 * cm"/>
+    <constant name="Q1BPR_Yoke_Center_posZ" value="-829.954 * cm"/>
+    <constant name="Q1BPR_Yoke_Rotation_Angle" value="-0.025 * rad"/>
+    <!-- Q1BpR Coil Center Position -->
+    <constant name="Q1BPR_Coil_Center_posX" value="20.7578 * cm"/>
+    <constant name="Q1BPR_Coil_Center_posY" value="0 * cm"/>
+    <constant name="Q1BPR_Coil_Center_posZ" value="-829.593 * cm"/>
 
   </define>
 
@@ -95,7 +104,7 @@
           <rotation num="4" start="45.0 * deg" step="90.0 * deg" axis="Z"/>
         </cut>
       </endplate>
-      <endplate name="Q1APR_EndPlate_IP2" vis="FFMagnetEndPlateVis">
+      <endplate name="Q1APR_EndPlate2_IP" vis="FFMagnetEndPlateVis">
         <placement x="Q1APR_Yoke_Center_posX" y="Q1APR_Yoke_Center_posY" z="Q1APR_Yoke_Center_posZ" theta="Q1APR_Yoke_Rotation_Angle"/>
 	<zplane z="-(189.9 * cm / 2.)" rmin="0.0 * cm" rmax="52.539900 * cm / 2."/>
 	<zplane z="-(189.9 * cm / 2. + 4.127500 * cm)" rmin="0.0 * cm" rmax="52.539900 * cm / 2."/>
@@ -115,7 +124,7 @@
           <rotation num="4" start="45.0 * deg" step="90.0 * deg" axis="Z"/>
         </cut>
       </endplate>
-      <endplate name="Q1APR_EndPlate_nonIP2" vis="FFMagnetEndPlateVis">
+      <endplate name="Q1APR_EndPlate2_nonIP" vis="FFMagnetEndPlateVis">
         <placement x="Q1APR_Yoke_Center_posX" y="Q1APR_Yoke_Center_posY" z="Q1APR_Yoke_Center_posZ" theta="Q1APR_Yoke_Rotation_Angle"/>
 	<zplane z="(189.9 * cm / 2.)" rmin="0.0 * cm" rmax="52.539900 * cm / 2."/>
 	<zplane z="(189.9 * cm / 2. + 4.127500 * cm)" rmin="0.0 * cm" rmax="52.539900 * cm / 2."/>
@@ -164,7 +173,105 @@
           <rotation num="1" start="0 * deg" step="0 * deg" axis="Z"/>
         </cut>
       </cryoend>
+    </detector>
 
+    <!-- Q1BpR magnet -->
+    <detector id="Q1BPR_ID" name="Q1BPR_BeamlineMagnet" type="ip6_CylindricalDipoleMagnet">
+      <yoke name="Q1BPR_Yoke" vis="FFMagnetVis">
+        <placement x="Q1BPR_Yoke_Center_posX" y="Q1BPR_Yoke_Center_posY" z="Q1BPR_Yoke_Center_posZ" theta="Q1BPR_Yoke_Rotation_Angle"/>
+        <dimensions rmin="0 * cm" rmax="71.12 * cm / 2." half_length="140. * cm / 2." sphi="0 * deg" dphi="360.0 * deg"/>
+        <cut>
+          <placement x="14.44 * cm" y="0 * cm" z="0 * cm" rotX="0 * rad" rotY="0 * rad" rotZ="0 * rad"/>
+          <dimensions rmin="0 * cm" rmax="10.662 * cm / 2." half_length="400. * cm / 2."/>
+          <rotation num="1" start="0 * deg" step="0 * deg" axis="Z"/>
+        </cut>
+        <cut>
+          <placement x="(0.515283 + abs(0.515283-4.019476)/2. - 8.579) * cm" y="0 * cm" z="0 * cm" rotX="0 * rad" rotY="1.434018 * deg" rotZ="0 * rad"/>
+          <dimensions rmin="0 * cm" rmax="17.157 * cm / 2." half_length="400. * cm / 2."/>
+          <rotation num="1" start="0 * deg" step="0 * deg" axis="Z"/>
+        </cut>
+        <cut>
+          <placement x="0 * cm" y="25.144717 * cm" z="0 * cm" rotX="0 * rad" rotY="0 * rad" rotZ="0 * rad"/>
+          <dimensions rmin="0 * cm" rmax="5.08 * cm / 2." half_length="400. * cm / 2."/>
+          <rotation num="4" start="45.0 * deg" step="90.0 * deg" axis="Z"/>
+        </cut>
+      </yoke>
+      <coil name="Q1BPR_Coil" vis="FFMagnetCoilVis" shape="ConeSegment">
+        <placement x="Q1BPR_Coil_Center_posX" y="Q1BPR_Coil_Center_posY" z="Q1BPR_Coil_Center_posZ" theta="Q1BPR_Yoke_Rotation_Angle" phiNum="3" phiStart="90 * deg" phiStep="90 * deg"/>
+        <dimensions rmin1="3.952240 * cm" rmax1="4.912360 * cm" rmin2="3.952240 * cm" rmax2="4.912360 * cm" dz="134.92 * cm / 2." sphi="-60. * deg / 2." dphi="60. * deg"/>
+      </coil>
+      <tube name="Q1BPR_InnerSupport_Tube" vis="FFMagnetSupportTubeVis">
+        <placement x="Q1BPR_Coil_Center_posX" y="Q1BPR_Coil_Center_posY" z="Q1BPR_Coil_Center_posZ" theta="Q1BPR_Yoke_Rotation_Angle"/>
+          <dimensions rmin="6.83 * cm / 2." rmax="7.6454 * cm / 2." half_length="148.413724 * cm / 2." sphi="0 * deg" dphi="360.0 * deg"/>
+      </tube>
+      <endplate name="Q1BPR_EndPlate_IP" vis="FFMagnetEndPlateVis">
+        <placement x="Q1BPR_Yoke_Center_posX" y="Q1BPR_Yoke_Center_posY" z="Q1BPR_Yoke_Center_posZ" theta="Q1BPR_Yoke_Rotation_Angle"/>
+	<zplane z="-(140.0 * cm / 2. + 0.5 * cm)" rmin="0.0 * cm" rmax="70.961250 * cm / 2."/>
+	<zplane z="-(140.0 * cm / 2. + 3.810000 * cm)" rmin="0.0 * cm" rmax="70.961250 * cm / 2."/>
+        <cut>
+          <placement x="14.44 * cm" y="0 * cm" z="0 * cm" rotX="0 * rad" rotY="0 * rad" rotZ="0 * rad"/>
+          <dimensions rmin="0 * cm" rmax="5.461000 * cm" half_length="400. * cm / 2."/>
+          <rotation num="1" start="0 * deg" step="0 * deg" axis="Z"/>
+        </cut>
+        <cut>
+          <placement x="(0.515283 + abs(0.515283-4.019476)/2. - 8.579) * cm" y="0 * cm" z="0 * cm" rotX="0 * rad" rotY="1.434018 * deg" rotZ="0 * rad"/>
+          <dimensions rmin="0 * cm" rmax="9.050020 * cm" half_length="400. * cm / 2."/>
+          <rotation num="1" start="0 * deg" step="0 * deg" axis="Z"/>
+        </cut>
+      </endplate>
+      <endplate name="Q1BPR_EndPlate_nonIP" vis="FFMagnetEndPlateVis">
+        <placement x="Q1BPR_Yoke_Center_posX" y="Q1BPR_Yoke_Center_posY" z="Q1BPR_Yoke_Center_posZ" theta="Q1BPR_Yoke_Rotation_Angle"/>
+	<zplane z="(140.0 * cm / 2. + 0.5 * cm)" rmin="0.0 * cm" rmax="70.961250 * cm / 2."/>
+	<zplane z="(140.0 * cm / 2. + 3.810000 * cm)" rmin="0.0 * cm" rmax="70.961250 * cm / 2."/>
+        <cut>
+          <placement x="14.44 * cm" y="0 * cm" z="0 * cm" rotX="0 * rad" rotY="0 * rad" rotZ="0 * rad"/>
+          <dimensions rmin="0 * cm" rmax="5.461000 * cm" half_length="400. * cm / 2."/>
+          <rotation num="1" start="0 * deg" step="0 * deg" axis="Z"/>
+        </cut>
+        <cut>
+          <placement x="(0.515283 + abs(0.515283-4.019476)/2. - 8.579) * cm" y="0 * cm" z="0 * cm" rotX="0 * rad" rotY="1.434018 * deg" rotZ="0 * rad"/>
+          <dimensions rmin="0 * cm" rmax="9.050020 * cm" half_length="400. * cm / 2."/>
+          <rotation num="1" start="0 * deg" step="0 * deg" axis="Z"/>
+        </cut>
+      </endplate>
+      <endplate name="Q1BPR_EndPlate2_IP" vis="FFMagnetEndPlateVis">
+        <placement x="Q1BPR_Yoke_Center_posX" y="Q1BPR_Yoke_Center_posY" z="Q1BPR_Yoke_Center_posZ" theta="Q1BPR_Yoke_Rotation_Angle"/>
+	<zplane z="-(154.454352 * cm / 2.)" rmin="0.0 * cm" rmax="73.660000 * cm / 2."/>
+	<zplane z="-(154.454352 * cm / 2. + 5.430520 * cm)" rmin="0.0 * cm" rmax="73.660000 * cm / 2."/>
+        <cut>
+          <placement x="14.44 * cm" y="0 * cm" z="0 * cm" rotX="0 * rad" rotY="0 * rad" rotZ="0 * rad"/>
+          <dimensions rmin="0 * cm" rmax="6.400800 * cm" half_length="400. * cm / 2."/>
+          <rotation num="1" start="0 * deg" step="0 * deg" axis="Z"/>
+        </cut>
+        <cut>
+          <placement x="(0.515283 + abs(0.515283-4.019476)/2. - 8.579) * cm" y="0 * cm" z="0 * cm" rotX="0 * rad" rotY="1.434018 * deg" rotZ="0 * rad"/>
+          <dimensions rmin="0 * cm" rmax="7.813040 * cm" half_length="400. * cm / 2."/>
+          <rotation num="1" start="0 * deg" step="0 * deg" axis="Z"/>
+        </cut>
+      </endplate>
+      <endplate name="Q1BPR_EndPlate2_nonIP" vis="FFMagnetEndPlateVis">
+        <placement x="Q1BPR_Yoke_Center_posX" y="Q1BPR_Yoke_Center_posY" z="Q1BPR_Yoke_Center_posZ" theta="Q1BPR_Yoke_Rotation_Angle"/>
+	<zplane z="(154.454352 * cm / 2.)" rmin="0.0 * cm" rmax="73.660000 * cm / 2."/>
+	<zplane z="(154.454352 * cm / 2. + 5.430520 * cm)" rmin="0.0 * cm" rmax="73.660000 * cm / 2."/>
+        <cut>
+          <placement x="14.44 * cm" y="0 * cm" z="0 * cm" rotX="0 * rad" rotY="0 * rad" rotZ="0 * rad"/>
+          <dimensions rmin="0 * cm" rmax="6.400800 * cm" half_length="400. * cm / 2."/>
+          <rotation num="1" start="0 * deg" step="0 * deg" axis="Z"/>
+        </cut>
+        <cut>
+          <placement x="(0.515283 + abs(0.515283-4.019476)/2. - 8.579) * cm" y="0 * cm" z="0 * cm" rotX="0 * rad" rotY="1.434018 * deg" rotZ="0 * rad"/>
+          <dimensions rmin="0 * cm" rmax="7.813040 * cm" half_length="400. * cm / 2."/>
+          <rotation num="1" start="0 * deg" step="0 * deg" axis="Z"/>
+        </cut>
+      </endplate>
+      <yokeshield name="Q1BPR_YoketShield" vis="FFMagnetEndPlateVis">
+        <placement x="Q1BPR_Yoke_Center_posX" y="Q1BPR_Yoke_Center_posY" z="Q1BPR_Yoke_Center_posZ" theta="Q1BPR_Yoke_Rotation_Angle"/>
+        <dimensions rmin="112.395000 * cm / 2." rmax="113.030000 * cm / 2." half_length="152.400000 * cm / 2." sphi="0 * deg" dphi="360.0 * deg"/>
+      </yokeshield>
+      <cryobarrel name="Q1BPR_Cryo_Barrel" vis="FFMagnetCryoVis">
+        <placement x="Q1BPR_Yoke_Center_posX" y="Q1BPR_Yoke_Center_posY" z="Q1BPR_Yoke_Center_posZ" theta="Q1BPR_Yoke_Rotation_Angle"/>
+        <dimensions rmin="135.255000 * cm / 2." rmax="137.160000 * cm / 2." half_length="162.560000 * cm / 2." sphi="0 * deg" dphi="360.0 * deg"/>
+      </cryobarrel>
     </detector>
 
 
