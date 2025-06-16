@@ -26,11 +26,11 @@
   <detectors>
     <!-- Q1eR magnet -->
     <detector id="Q1ER_ID" name="Q1ER_BeamlineMagnet" type="ip6_CylindricalDipoleMagnet">
-      <coil name="Q1ER_Quad_Coil" vis="FFMagnetCoilVis" shape="ConeSegment">
+      <coil name="Q1ER_Quad_Coil" vis="MagnetCoilVis" shape="ConeSegment">
         <placement x="Q1ER_Center_posX" y="Q1ER_Center_posY" z="Q1ER_Center_posZ" theta="Q1ER_Rotation_Angle" phiNum="3" phiStart="90 * deg" phiStep="90 * deg"/>
         <dimensions rmin1="6.748780 * cm" rmax1="7.040880 * cm" rmin2="5.938520 * cm" rmax2="6.230620 * cm" dz="180.0 * cm / 2." sphi="-60.0 * deg / 2." dphi="60.0 * deg"/>
       </coil>
-      <tube name="Q1ER_InnerSupport_Tube" vis="FFMagnetSupportTubeVis" shape="Cone">
+      <tube name="Q1ER_InnerSupport_Tube" vis="MagnetSupportTubeVis" shape="Cone">
         <placement x="Q1ER_Center_posX" y="Q1ER_Center_posY" z="Q1ER_Center_posZ" theta="Q1ER_Rotation_Angle"/>
         <dimensions rmin1="12.809257 * cm / 2." rmax1="6.6 * cm" rmin2="10.994364 * cm / 2." rmax2="5.8 * cm" dz="201.592038 * cm / 2."/>
       </tube>
@@ -38,11 +38,11 @@
 
     <!-- Q2eR magnet -->
     <detector id="Q2ER_ID" name="Q2ER_BeamlineMagnet" type="ip6_CylindricalDipoleMagnet">
-      <coil name="Q2ER_Quad_Coil" vis="FFMagnetCoilVis" shape="ConeSegment">
+      <coil name="Q2ER_Quad_Coil" vis="MagnetCoilVis" shape="ConeSegment">
         <placement x="Q2ER_Center_posX" y="Q2ER_Center_posY" z="Q2ER_Center_posZ" theta="Q2ER_Rotation_Angle" phiNum="3" phiStart="90 * deg" phiStep="90 * deg"/>
         <dimensions rmin1="7.810500 * cm" rmax1="8.176260 * cm" rmin2="7.810500 * cm" rmax2="8.176260 * cm" dz="134.919999 * cm / 2." sphi="45.0 * deg - 60.0 * deg / 2." dphi="60.0 * deg"/>
       </coil>
-      <tube name="Q2ER_InnerSupport_Tube" vis="FFMagnetSupportTubeVis">
+      <tube name="Q2ER_InnerSupport_Tube" vis="MagnetSupportTubeVis">
         <placement x="Q2ER_Center_posX" y="Q2ER_Center_posY" z="Q2ER_Center_posZ" theta="Q2ER_Rotation_Angle"/>
         <dimensions rmin="14.361160 * cm / 2." rmax="15.362000 * cm / 2." half_length="147.822239 * cm / 2." sphi="0 * deg" dphi="360.0 * deg"/>
       </tube>

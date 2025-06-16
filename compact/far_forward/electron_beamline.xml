@@ -71,23 +71,23 @@
   <detectors>
     <!-- Q0eF magnet -->
     <detector id="Q0EF_ID" name="Q0EF_BeamlineMagnet" type="ip6_CylindricalDipoleMagnet">
-      <coil name="Q0EF_Quad_Coil" vis="FFMagnetCoilVis">
+      <coil name="Q0EF_Quad_Coil" vis="MagnetCoilVis">
         <placement x="Q0EF_Center_posX" y="Q0EF_Center_posY" z="Q0EF_Center_posZ" theta="Q0EF_Rotation_Angle" phiNum="3" phiStart="90 * deg" phiStep="90 * deg"/>
         <dimensions rmin="4.817872 * cm" rmax="5.186172 * cm" half_length="125.199140 * cm / 2." sphi="-60.0 * deg / 2." dphi="60.0 * deg"/>
       </coil>
-      <coil name="Q0EF_Dipole_Coil" vis="FFMagnetCoilVis">
+      <coil name="Q0EF_Dipole_Coil" vis="MagnetCoilVis">
         <placement x="Q0EF_Center_posX" y="Q0EF_Center_posY" z="Q0EF_Center_posZ" theta="Q0EF_Rotation_Angle" phiNum="1" phiStart="180 * deg" phiStep="180 * deg"/>
         <dimensions rmin="5.186680 * cm" rmax="5.351 * cm" half_length="125.199140 * cm / 2." sphi="-120.0 * deg / 2." dphi="120.0 * deg"/>
       </coil>
-      <coil name="Q0EF_SkewQuad_Coil" vis="FFMagnetCoilVis">
+      <coil name="Q0EF_SkewQuad_Coil" vis="MagnetCoilVis">
         <placement x="Q0EF_Center_posX" y="Q0EF_Center_posY" z="Q0EF_Center_posZ" theta="Q0EF_Rotation_Angle" phiNum="3" phiStart="90 * deg" phiStep="90 * deg"/>
         <dimensions rmin="5.351780 * cm" rmax="5.486400 * cm" half_length="127.0 * cm / 2." sphi="45 * deg - 60.0 * deg / 2." dphi="60.0 * deg"/>
       </coil>
-      <tube name="Q0EF_InnerSupport_Tube" vis="FFMagnetSupportTubeVis">
+      <tube name="Q0EF_InnerSupport_Tube" vis="MagnetSupportTubeVis">
         <placement x="Q0EF_Center_posX" y="Q0EF_Center_posY" z="Q0EF_Center_posZ" theta="Q0EF_Rotation_Angle"/>
         <dimensions rmin="8.634984 * cm / 2." rmax="9.635744 * cm / 2." half_length="135.529747 * cm / 2." sphi="0 * deg" dphi="360.0 * deg"/>
       </tube>
-      <tube name="Q0EF_OuterSupport_Tube" vis="FFMagnetSupportTubeVis">
+      <tube name="Q0EF_OuterSupport_Tube" vis="MagnetSupportTubeVis">
         <placement x="Q0EF_Center_posX" y="Q0EF_Center_posY" z="Q0EF_Center_posZ" theta="Q0EF_Rotation_Angle"/>
         <dimensions rmin="11.572240 * cm / 2." rmax="12.171680 * cm / 2." half_length="135.712954 * cm / 2." sphi="0 * deg" dphi="360.0 * deg"/>
       </tube>
@@ -95,7 +95,7 @@
 
     <!-- Q1eF magnet -->
     <detector id="Q1EF_ID" name="Q1EF_BeamlineMagnet" type="ip6_CylindricalDipoleMagnet">
-      <coil name="Q1EF_Quad_Coil" vis="FFMagnetCoilVis">
+      <coil name="Q1EF_Quad_Coil" vis="MagnetCoilVis">
         <placement x="Q1EF_Center_posX" y="Q1EF_Center_posY" z="Q1EF_Center_posZ" theta="Q1EF_Rotation_Angle" phiNum="1" phiStart="0 * deg" phiStep="0 * deg"/>
         <dimensions rmin="8.5 * cm" rmax="9.0 * cm" half_length="161. * cm / 2." sphi="0 * deg" dphi="360.0 * deg"/>
       </coil>
