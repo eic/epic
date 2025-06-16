@@ -130,6 +130,7 @@
         <cut>
           <placement x="3.4 * cm" y="0 * cm" z="-(174.139860 * cm / 2. + 0.635 * cm / 2.)" rotX="0 * rad" rotY="0 * rad" rotZ="0 * rad"/>
           <dimensions rmin="0 * cm" rmax="6.827520 * cm / 2." half_length="200. * cm / 2."/>
+          <rotation num="1" start="0 * deg" step="0 * deg" axis="Z"/>
         </cut>
       </heatshieldend>
       <heatshieldend name="B0PF_HeatShield_End_nonIP" vis="FFMagnetHeatShieldVis">
@@ -139,10 +140,12 @@
         <cut>
           <placement x="3.4 * cm" y="0 * cm" z="(174.139860 * cm / 2. + 0.635 * cm / 2.)" rotX="0 * rad" rotY="0 * rad" rotZ="0 * rad"/>
           <dimensions rmin="0 * cm" rmax="9.5 * cm / 2." half_length="200. * cm / 2."/>
+          <rotation num="1" start="0 * deg" step="0 * deg" axis="Z"/>
         </cut>
         <cut>
           <placement x="-15.4 * cm" y="0 * cm" z="(174.139860 * cm / 2. + 0.635 * cm / 2.)" rotX="0 * rad" rotY="0 * rad" rotZ="0 * rad"/>
           <dimensions rmin="0 * cm" rmax="5.5 * cm / 2." half_length="200. * cm / 2."/>
+          <rotation num="1" start="0 * deg" step="0 * deg" axis="Z"/>
         </cut>
       </heatshieldend>
       <cryobarrel name="B0PF_Cryo_Barrel" vis="FFMagnetCryoVis">
@@ -164,6 +167,7 @@
         <cut>
           <placement x="3.4 * cm" y="0 * cm" z="-(132.86 * cm / 2. + 22.54 * cm + 2.54 * cm / 2.)" rotX="0 * rad" rotY="0 * rad" rotZ="0 * rad"/>
           <dimensions rmin="0 * cm" rmax="6.827520 * cm / 2." half_length="200. * cm / 2."/>
+          <rotation num="1" start="0 * deg" step="0 * deg" axis="Z"/>
         </cut>
       </cryoend>
     </detector>
@@ -202,6 +206,7 @@
         <cut>
           <placement x="(15.543 + (16.858-15.543)/2. + 5.2) * cm" y="0 * cm" z="0 * cm" rotX="0 * rad" rotY="1.255321 * deg" rotZ="0 * rad"/>
           <dimensions rmin="0 * cm" rmax="5.2 * cm" half_length="200. * cm / 2."/>
+          <rotation num="1" start="0 * deg" step="0 * deg" axis="Z"/>
         </cut>
       </endplate>
       <endplate name="B0APF_EndPlate_nonIP" vis="FFMagnetEndPlateVis">
@@ -211,6 +216,7 @@
         <cut>
           <placement x="(15.543 + (16.858-15.543)/2. + 5.2) * cm" y="0 * cm" z="0 * cm" rotX="0 * rad" rotY="1.255321 * deg" rotZ="0 * rad"/>
           <dimensions rmin="0 * cm" rmax="5.2 * cm" half_length="200. * cm / 2."/>
+          <rotation num="1" start="0 * deg" step="0 * deg" axis="Z"/>
         </cut>
       </endplate>
       <yokeshield name="B0APF_YoketShield" vis="FFMagnetEndPlateVis">
@@ -224,6 +230,7 @@
         <cut>
           <placement x="(15.543 + (16.858-15.543)/2. + 5.2) * cm" y="0 * cm" z="0 * cm" rotX="0 * rad" rotY="1.255321 * deg" rotZ="0 * rad"/>
           <dimensions rmin="0 * cm" rmax="5.2 * cm" half_length="200. * cm / 2."/>
+          <rotation num="1" start="0 * deg" step="0 * deg" axis="Z"/>
         </cut>
       </endplate>
       <endplate name="B0APF_Head_nonIP" vis="FFMagnetEndPlateVis">
@@ -233,6 +240,7 @@
         <cut>
           <placement x="(15.543 + (16.858-15.543)/2. + 5.2) * cm" y="0 * cm" z="0 * cm" rotX="0 * rad" rotY="1.255321 * deg" rotZ="0 * rad"/>
           <dimensions rmin="0 * cm" rmax="5.2 * cm" half_length="200. * cm / 2."/>
+          <rotation num="1" start="0 * deg" step="0 * deg" axis="Z"/>
         </cut>
       </endplate>
     </detector>
@@ -289,6 +297,7 @@
         <cut>
           <placement x="(17.346 + (20.480-17.346)/2. + 6.91) * cm" y="0 * cm" z="0 * cm" rotX="0 * rad" rotY="1.196077 * deg" rotZ="0 * rad"/>
           <dimensions rmin="0 * cm" rmax="13.82 * cm / 2." half_length="400. * cm / 2."/>
+          <rotation num="1" start="0 * deg" step="0 * deg" axis="Z"/>
         </cut>
       </endplate>
       <endplate name="Q1APF_EndPlate_nonIP" vis="FFMagnetEndPlateVis">
@@ -298,6 +307,7 @@
         <cut>
           <placement x="(17.346 + (20.480-17.346)/2. + 6.91) * cm" y="0 * cm" z="0 * cm" rotX="0 * rad" rotY="1.196077 * deg" rotZ="0 * rad"/>
           <dimensions rmin="0 * cm" rmax="13.82 * cm / 2." half_length="400. * cm / 2."/>
+          <rotation num="1" start="0 * deg" step="0 * deg" axis="Z"/>
         </cut>
       </endplate>
       <yokeshield name="Q1APF_YoketShield" vis="FFMagnetEndPlateVis">
@@ -358,6 +368,7 @@
         <cut>
           <placement x="(20.647 + (22.821-20.647)/2. + 9.58) * cm" y="0 * cm" z="0 * cm" rotX="0 * rad" rotY="0.776621 * deg" rotZ="0 * rad"/>
           <dimensions rmin="0 * cm" rmax="19.15 * cm / 2." half_length="400. * cm / 2."/>
+          <rotation num="1" start="0 * deg" step="0 * deg" axis="Z"/>
         </cut>
       </endplate>
       <endplate name="Q1BPF_EndPlate_nonIP" vis="FFMagnetEndPlateVis">
@@ -367,6 +378,7 @@
         <cut>
           <placement x="(20.647 + (22.821-20.647)/2. + 9.58) * cm" y="0 * cm" z="0 * cm" rotX="0 * rad" rotY="0.776621 * deg" rotZ="0 * rad"/>
           <dimensions rmin="0 * cm" rmax="19.15 * cm / 2." half_length="400. * cm / 2."/>
+          <rotation num="1" start="0 * deg" step="0 * deg" axis="Z"/>
         </cut>
       </endplate>
       <yokeshield name="Q1BPF_YoketShield" vis="FFMagnetEndPlateVis">
@@ -603,17 +615,19 @@
         <cut>
           <placement x="(46.852850 + (50.128391-46.852850)/2. + 13.1) * cm" y="0 * cm" z="0 * cm" rotX="0 * rad" rotY="1.203225 * deg" rotZ="0 * rad"/>
           <dimensions rmin="0 * cm" rmax="26.2 * cm / 2." half_length="800. * cm / 2."/>
+          <rotation num="1" start="0 * deg" step="0 * deg" axis="Z"/>
         </cut>
         <cut>
           <placement x="-(46.852850 + (50.128391-46.852850)/2. + 13.1) * cm" y="0 * cm" z="0 * cm" rotX="0 * rad" rotY="-1.203225 * deg" rotZ="0 * rad"/>
           <dimensions rmin="0 * cm" rmax="26.2 * cm / 2." half_length="800. * cm / 2."/>
+          <rotation num="1" start="0 * deg" step="0 * deg" axis="Z"/>
         </cut>
       </endplate>
       <cryobarrel name="B1APF_Cryo_Barrel" vis="FFMagnetCryoVis">
         <placement x="-63.3423 * cm" y="0 * cm" z="2216.32 * cm" theta="B1APF_Yoke_Rotation_Angle"/>
         <dimensions rmin="224.790000 * cm / 2." rmax="228.600000 * cm / 2." half_length="299.470742 * cm / 2." sphi="0 * deg" dphi="360.0 * deg"/>
       </cryobarrel>
-      <cryoend name="B1APF_Cryo_End_IP" vis="FFMagnetCryoVis">
+      <cryoend name="B1APF_Cryo_End_nonIP" vis="FFMagnetCryoVis">
         <placement x="B1APF_Yoke_Center_posX" y="B1APF_Yoke_Center_posY" z="B1APF_Yoke_Center_posZ" theta="B1APF_Yoke_Rotation_Angle"/>
 	<zplane z="(160.581412 * cm / 2. + 155.448020 * cm)" rmin="226.060000 * cm / 2." rmax="228.600000 * cm / 2."/>
 	<zplane z="(160.581412 * cm / 2. + 155.448020 * cm + 7.620000 * cm)" rmin="226.060000 * cm / 2." rmax="228.600000 * cm / 2."/>
@@ -622,10 +636,12 @@
         <cut>
           <placement x="(46.852850 + (50.128391-46.852850)/2. + 13.1) * cm" y="0 * cm" z="0 * cm" rotX="0 * rad" rotY="1.203225 * deg" rotZ="0 * rad"/>
           <dimensions rmin="0 * cm" rmax="26.2 * cm / 2." half_length="800. * cm / 2."/>
+          <rotation num="1" start="0 * deg" step="0 * deg" axis="Z"/>
         </cut>
         <cut>
           <placement x="-(46.852850 + (50.128391-46.852850)/2. + 13.1) * cm" y="0 * cm" z="0 * cm" rotX="0 * rad" rotY="-1.203225 * deg" rotZ="0 * rad"/>
           <dimensions rmin="0 * cm" rmax="26.2 * cm / 2." half_length="800. * cm / 2."/>
+          <rotation num="1" start="0 * deg" step="0 * deg" axis="Z"/>
         </cut>
       </cryoend>
     </detector>
