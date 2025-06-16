@@ -323,6 +323,7 @@ The unused IDs below are saved for future use.
       #### (200-210) Far Backward Beamline Magnets
     </documentation>
     <constant name="Q1APR_ID"  value="200"/>
+    <constant name="Q1BPR_ID"  value="201"/>
 
     <documentation>
 ## Detector Definition Parameters
