@@ -33,35 +33,23 @@
     <constant name="Q1EF_EndZ" value="10760.*mm"/>
     <!--<constant name="Q1EF_InnerRadius" value="63*mm"/>-->
 
-    <!-- beam section at forward region to +15 meters -->
-    <constant name="Beampipe_fwd_pos_EndZ" value="15000.*mm"/>
+    <!-- beam section at forward region to the end of the FWD cryostat -->
+    <constant name="Beampipe_fwd_pos_EndZ" value="25000.*mm"/>
 
   </define>
 
   <detectors>
 
-    <!-- Beam Pipe from central section at positive z to +15 meters -->
+    <!-- Beam Pipe from central section at positive z to the end of the FWD cryostat -->
     <detector
       name="Pipe_cen_to_pos"
       type="BeamPipeChain"
       wall_thickness="Beampipe_cen_pos_Thickness">
 
-      <pipe id="0" name="Pipe_to_Q0EF"
-        xcenter="0" zcenter="(Q0EF_EndZ+Beampipe_cen_pos_EndZ)/2."
-        length="Q0EF_EndZ-Beampipe_cen_pos_EndZ" theta="0"
-        rout1="Q0EF_InnerRadius" rout2="Beampipe_cen_pos_r1">
-      </pipe>
-
-      <pipe id="1" name="Pipe_Q0EF_to_Q1EF"
-        xcenter="0" zcenter="(Q1EF_EndZ+Q0EF_StartZ)/2."
-        length="Q1EF_EndZ-Q0EF_StartZ" theta="0"
-        rout1="Q1EF_InnerRadius" rout2="Q0EF_InnerRadius">
-      </pipe>
-
-      <pipe id="2" name="Pipe_Q1EF_to_pos"
-      xcenter="0" zcenter="(Beampipe_fwd_pos_EndZ+Q1EF_StartZ)/2."
-      length="Beampipe_fwd_pos_EndZ-Q1EF_StartZ" theta="0"
-      rout1="Q1EF_InnerRadius" rout2="Q1EF_InnerRadius">
+      <pipe id="0" name="Pipe_FWD_electron"
+        xcenter="0" zcenter="(Beampipe_fwd_pos_EndZ+Beampipe_cen_pos_EndZ)/2."
+        length="Beampipe_fwd_pos_EndZ-Beampipe_cen_pos_EndZ" theta="0"
+        rout1="Beampipe_cen_pos_r1" rout2="Beampipe_cen_pos_r1">
       </pipe>
 
     </detector>
