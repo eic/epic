@@ -144,7 +144,7 @@
         </cut>
         <cut>
           <placement x="-15.4 * cm" y="0 * cm" z="(174.139860 * cm / 2. + 0.635 * cm / 2.)" rotX="0 * rad" rotY="0 * rad" rotZ="0 * rad"/>
-          <dimensions rmin="0 * cm" rmax="5.5 * cm / 2." half_length="200. * cm / 2."/>
+          <dimensions rmin="0 * cm" rmax="7.0 * cm / 2." half_length="200. * cm / 2."/>
           <rotation num="1" start="0 * deg" step="0 * deg" axis="Z"/>
         </cut>
       </heatshieldend>
