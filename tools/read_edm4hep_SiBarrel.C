@@ -65,10 +65,12 @@ void read_edm4hep_SiBarrel(TString infile="TestHitMap.edm4hep.root") {
     for(int i = 0; i < SiB_x.GetSize(); i++) {
 //    if(SiB_z[i]>0.0){
   	double R = sqrt(SiB_x[i]*SiB_x[i] + SiB_y[i]*SiB_y[i] );
+  	double phi=atan(SiB_y[i]/SiB_x[i]);
   // double R = SiB_y[i];
          h0->Fill(R);
-         g1->SetPoint(Nhits,SiB_x[i],SiB_y[i]);
+  //       g1->SetPoint(Nhits,SiB_x[i],SiB_y[i]);
 //         g1->SetPoint(Nhits,SiB_z[i],R);
+g1->SetPoint(Nhits,SiB_z[i],phi);
          Nhits++;
          if (R>300) L4hits++; else L3hits++;
          }

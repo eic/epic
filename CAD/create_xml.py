@@ -203,7 +203,10 @@ def scan_and_place(folder_path, search_string, xml_file, my_dict, stave_name):
                 global file_count_global
                 xml_file.write(module_component(full_path, file, my_dict, file_count_global, stave_name))     
                 file_count_global += 1
-
+                if(stave_name=="L3"):
+                    L3_files_processed[file]+=1
+                if(stave_name=="L4"):
+                    L4_files_processed[file]+=1
 
 
 #dictionaries to contain the filename patterns
@@ -213,12 +216,16 @@ dict_list = [
     {"matching_name": "Biasing", "material": "Silicon"      , "sensitive": "false" , "thickness": f"{default_thickness_sensitive} * mm"},
     {"matching_name": "DataBackbone", "material": "Silicon" , "sensitive": "false" , "thickness": f"{default_thickness_sensitive} * mm"},
     {"matching_name": "Pads", "material": "Silicon"         , "sensitive": "false" , "thickness": f"{default_thickness_sensitive} * mm"},
-    {"matching_name": "PowerSwitches", "material": "Silicon", "sensitive": "false" , "thickness": f"{default_thickness_sensitive} * mm"},
+#    {"matching_name": "PowerSwitches", "material": "Silicon", "sensitive": "false" , "thickness": f"{default_thickness_sensitive} * mm"},
     {"matching_name": "Readout", "material": "Silicon"      , "sensitive": "false" , "thickness": f"{default_thickness_sensitive} * mm"},
+    {"matching_name": "Switches", "material": "Silicon"      , "sensitive": "false" , "thickness": f"{default_thickness_sensitive} * mm"},
+    {"matching_name": "REC", "material": "Silicon"      , "sensitive": "false" , "thickness": f"{default_thickness_sensitive} * mm"},
+    {"matching_name": "LEC", "material": "Silicon"      , "sensitive": "false" , "thickness": f"{default_thickness_sensitive} * mm"},
     {"matching_name": "FPC", "material": "Kapton"           , "sensitive": "false"},
     {"matching_name": "kapton", "material": "Kapton"        , "sensitive": "false"},
     {"matching_name": "Kapton", "material": "Kapton"        , "sensitive": "false"},
     {"matching_name": "K9", "material": "K9"                , "sensitive": "false"},
+    {"matching_name": "RPV", "material": "K9"                , "sensitive": "false"},
     {"matching_name": "Carbon", "material": "CarbonFiber"   , "sensitive": "false"},
     {"matching_name": "Ultem", "material": "Ultem"          , "sensitive": "false"},
 ] #extend as required
@@ -238,9 +245,19 @@ if os.path.exists(file_path):
     raise FileExistsError(f"Error: The file '{file_path}' already exists.")
     sys.exit(1)
 
+L3_files_processed ={}
+for root, dirs, files in os.walk(L3_folder_path):
+    for file in files:
+        L3_files_processed[file]=0
+L4_files_processed ={}
+for root, dirs, files in os.walk(L4_folder_path):
+    for file in files:
+        L4_files_processed[file]=0
+
 with open(file_path, "w") as xml_file:
     xml_file.write(HEADER)
 
+    
     file_count_global = 0 #reset the global file count in each new stave
     for key_dict in dict_list:   
         scan_and_place(L3_folder_path, key_dict["matching_name"], xml_file, key_dict, "L3")
@@ -249,8 +266,27 @@ with open(file_path, "w") as xml_file:
     for key_dict in dict_list:
         scan_and_place(L4_folder_path, key_dict["matching_name"], xml_file, key_dict, "L4")
     xml_file.write(FOOTER)
-
-# Print the resulting list (optional)
-#print("Found .gdml files:")
-#for file in gdml_files:
-#    print(file)
+    print("Processed "+str(file_count_global)+" files.")
+    print()
+    print("L3 files not processed: ")
+    for file in L3_files_processed:
+    	if(L3_files_processed[file]<1):
+    	    print(file)
+    print()
+    print("L3 files processed more than once: ")
+    for file in L3_files_processed:
+    	if(L3_files_processed[file]>1):
+    	    print(file)
+    print()
+    print("L4 files not processed: ")
+    for file in L4_files_processed:
+    	if(L4_files_processed[file]<1):
+    	    print(file)
+    print()
+    print("L4 files processed more than once: ")
+    for file in L4_files_processed:
+    	if(L4_files_processed[file]>1):
+    	    print(file)
+    	        	    
+    	    
+    	    
