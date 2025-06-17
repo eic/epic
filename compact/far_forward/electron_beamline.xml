@@ -9,7 +9,7 @@
     <constant name="Beampipe_cen_pos_Thickness" value="1.0*mm"/>
 
     <!-- end of central section -->
-    <constant name="Beampipe_cen_pos_EndZ" value="4484.25*mm"/>
+    <constant name="Beampipe_cen_pos_EndZ" value="494.556*cm"/>
     <constant name="Beampipe_cen_pos_r1" value="BeampipeOD/2."/>
 
     <!-- Q0eF quadrupole magnet -->
