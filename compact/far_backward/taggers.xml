@@ -17,6 +17,7 @@
       <bounding   xmin="Vacuum_BB_MinX" xmax="Vacuum_BB_MaxX"
                   ymin="Vacuum_BB_MinY" ymax="Vacuum_BB_MaxY"
                   zmin="Vacuum_BB_MinZ" zmax="Vacuum_BB_MaxZ"
+                  theta="B2BeR_Theta"
       />
       <rotation   theta="Beam_Theta"/>
       <dimensions xL="Beam_WidthL" xR="Beam_WidthR" y="Beam_Height" z="Beam_Length"/>
