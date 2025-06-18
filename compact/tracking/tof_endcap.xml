@@ -9,7 +9,6 @@
       --------------------------
     </comment>
     <comment> Forward TOF position </comment>
-    <constant name="ForwardTOF_nlayers"             value="5"/>
     <constant name="ForwardTOFMod_offset"           value="1.2*cm"/>
 
     <comment> LGAD parameters for the endcap TOFs </comment>
