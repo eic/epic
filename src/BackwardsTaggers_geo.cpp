@@ -48,7 +48,7 @@ static Ref_t create_detector(Detector& desc, xml_h e, SensitiveDetector sens) {
   double off         = pos.z();
 
   // Beamline rotation
-  double out_theta   = x_det.rotation().theta();
+  double out_theta = x_det.rotation().theta();
 
   // Beampipe thickness
   double wall = dd4hep::getAttrOrDefault<double>(x_det, _Unicode(wall), 1 * mm);
@@ -77,7 +77,7 @@ static Ref_t create_detector(Detector& desc, xml_h e, SensitiveDetector sens) {
   double Lumi_R     = EB.attr<double>(_Unicode(lumiR));
 
   // Maximum theta to exit the dipole from
-  double maxTheta   = EB.attr<double>(_Unicode(maxTheta));
+  double maxTheta = EB.attr<double>(_Unicode(maxTheta));
 
   // Generic box for making intersection solid with
   double xbox = 10 * m;
@@ -234,8 +234,7 @@ static Ref_t create_detector(Detector& desc, xml_h e, SensitiveDetector sens) {
   //-----------------------------------------------------------------
   double exitDist = BB_MinZ - off;
   double cutX     = (ED_X - exitDist * tan(-out_theta)) * cos(out_theta);
-  double cutZ =
-      (ED_X - exitDist * tan(-out_theta)) * sin(out_theta) + exitDist * cos(out_theta);
+  double cutZ = (ED_X - exitDist * tan(-out_theta)) * sin(out_theta) + exitDist * cos(out_theta);
   double cutXwall = (ED_X - wall - exitDist * tan(-out_theta)) * cos(out_theta);
   double cutZwall =
       (ED_X - wall - exitDist * tan(-out_theta)) * sin(out_theta) + exitDist * cos(out_theta);
@@ -249,8 +248,8 @@ static Ref_t create_detector(Detector& desc, xml_h e, SensitiveDetector sens) {
   //-----------------------------------------------------------------
   // Cut solids so they are only in the far backwards box
   //-----------------------------------------------------------------
-  RotationY rotate2(in_theta-out_theta);
-  Position position(0, 0, (exitDist - BB_Z) / cos(out_theta-in_theta));
+  RotationY rotate2(in_theta - out_theta);
+  Position position(0, 0, (exitDist - BB_Z) / cos(out_theta - in_theta));
 
   IntersectionSolid Wall_Box_Sub(Wall_Box, Far_Backwards_Box, Transform3D(rotate2, position));
   IntersectionSolid Vacuum_Box_Sub(Vacuum_Box, Far_Backwards_Box, Transform3D(rotate2, position));
