@@ -117,6 +117,13 @@
 
   <detectors>
 
+    <detector id="TrackerSubAssembly_8_ID"
+      name="EcalBarrelTrackerSubAssembly"
+      type="DD4hep_SubdetectorAssembly"
+      vis="TrackerSubAssemblyVis">
+      <composite name="EcalBarrelImaging"/>
+    </detector>
+
     <comment>
       ---------------------------------------
       Imaging Layers of Barrel EM Calorimeter
@@ -131,9 +138,17 @@
       calorimeterType="EM_BARREL"
       vis="EcalBarrelEnvelopeVis"
       offset="EcalBarrel_Calorimeter_offset">
+      <type_flags type="DetType_TRACKER + DetType_CALORIMETER + DetType_BARREL"/>
       <dimensions numsides="EcalBarrel_SectorRepeat"
         rmin="EcalBarrel_rmin"
         z="EcalBarrel_Calorimeter_length"/>
+      <envelope vis="EcalBarrelImaging_envelope"
+        rmin="EcalBarrel_rmin"
+        rmax="EcalBarrel_rmin + 2.0 * EcalBarrel_ImagingLayerThickness"
+        length="EcalBarrel_Calorimeter_length"
+        zstart="EcalBarrel_Calorimeter_zmin"
+        xoffset="0"
+      />
       <sectors vis="EcalBarrelSectorVis"/>
 
       <module name="AstroPix_Module"
@@ -176,6 +191,8 @@
       <layer repeat="1" vis="EcalBarrelLayerVis"
              thickness="EcalBarrel_ImagingLayerThickness"
              space_before="EcalBarrel_ScFiLayerThickness_Imaging + EcalBarrel_SpaceBetween">
+        <layer_material surface="inner" binning="binPhi,binR" bins0="30" bins1="30"/>
+        <layer_material surface="outer" binning="binPhi,binR" bins0="30" bins1="30"/>
         <frame material="CarbonFiber" fill="Air" thickness="EcalBarrel_CarbonFrameThickness" height="EcalBarrel_ImagingLayerThickness" vis="EcalBarrelSliceVis"/>
         <stave repeat="6"
                width="EcalBarrel_Stave_width"
@@ -371,5 +388,12 @@
       <id>system:8,sector:6,layer:6,slice:4,grid:10,fiber:16,z:-14</id>
     </readout>
   </readouts>
+
+  <plugins>
+    <plugin name="DD4hep_ParametersPlugin">
+      <argument value="EcalBarrelImaging"/>
+      <argument value="layer_pattern: str=EcalBarrelImaging_envelope"/>
+    </plugin>
+  </plugins>
 
 </lccdd>
