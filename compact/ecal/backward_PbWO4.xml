@@ -90,7 +90,7 @@
             inneradiusa="EcalEndcapN_Iring_axisA"
             inneradiusb="EcalEndcapN_Iring_axisB"
             envelope="true"
-            ringmaterial="StainlessSteel"
+            ringmaterial="StainlessSteelSAE304"
             sector="1"
             vis_struc="RPVis"
             vis_steel_gap="InvisibleWithDaughters">
