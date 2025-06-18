@@ -30,12 +30,12 @@ jobs:
           bin/acts_geo_check check_tracking_geometry.out
     - uses: actions/upload-artifact@v4
       with:
-        name: tracking-surfaces-obj-mtl-${{matrix.detector_config}}
+        name: ${{matrix.detector_config}}.obj
         path: |
           *.obj
           *.mpl
     - uses: actions/upload-artifact@v4
       with:
-        name: tracking-surfaces-ply-${{matrix.detector_config}}
+        name: ${{matrix.detector_config}}.ply
         path: |
           *.ply
