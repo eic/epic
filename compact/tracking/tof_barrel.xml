@@ -397,8 +397,8 @@
     <readout name="TOFBarrelHits">
       <segmentation type="MultiSegmentation" key="segmentation_id">
         <comment> Half sensor has to use a varied segmentation </comment>
-        <segmentation type="CartesianGridXY" key_value="0" grid_size_x="0.5*mm" grid_size_y="1*cm" offset_x="0.25*mm" offset_y="0.5*cm"/>
-        <segmentation type="CartesianGridXY" key_value="1" grid_size_x="0.5*mm" grid_size_y="1*cm" offset_x="0.25*mm" offset_y="0"/>
+        <segmentation type="CartesianGridXY" key_value="0" grid_size_x="0.1*mm" grid_size_y="1*cm" offset_x="0.05*mm" offset_y="0.5*cm"/>
+        <segmentation type="CartesianGridXY" key_value="1" grid_size_x="0.1*mm" grid_size_y="1*cm" offset_x="0.05*mm" offset_y="0"/>
       </segmentation>
       <id>system:8,layer:4,module:12,sensor:10,segmentation_id:2,x:40:-8,y:-16</id>
     </readout>
