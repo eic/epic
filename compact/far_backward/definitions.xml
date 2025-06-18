@@ -288,7 +288,7 @@
     <constant name="LumiColl_DZ"          value="30*cm"/>
     <constant name="LumiColl_X"           value="0*m"/>
     <constant name="LumiColl_Y"           value="0*m"/>
-    <constant name="LumiColl_Z"           value="-22.6*m"/>
+    <constant name="LumiColl_Z"           value="-32.6*m"/>
 
     <!-- Lumi lead walls -->
     <constant name="LumiWall_DX"          value="0.5*m"/>
