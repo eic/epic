@@ -14,19 +14,19 @@
 
     <comment> Electron magnet dimensions and positions </comment>
 
-    <constant name="Q1eR_InnerRadius"     value="67.5*mm"/>
+    <constant name="Q1eR_InnerRadius"     value="10.0 * cm / 2."/>
     <constant name="Q1eR_Length"          value="1.78*m"/>
     <constant name="Q1eR_CenterPosition"  value="-6.2*m"/>
 
-    <constant name="Q2eR_InnerRadius"     value="78.0*mm"/>
+    <constant name="Q2eR_InnerRadius"     value="14.0 * cm / 2."/>
     <constant name="Q2eR_Length"          value="1.4*m"/>
     <constant name="Q2eR_CenterPosition"  value="-8.3*m"/>
 
-    <constant name="B2AeR_InnerRadius"    value="90.0*mm"/>
+    <constant name="B2AeR_InnerRadius"    value="10.0 * cm / 2."/>
     <constant name="B2AeR_Length"         value="1.78*m"/>
     <constant name="B2AeR_CenterPosition" value="-10.5*m"/>
 
-    <constant name="B2BeR_InnerRadius"    value="111.0*mm"/>
+    <constant name="B2BeR_InnerRadius"    value="10.0 * cm / 2."/>
     <constant name="B2BeR_Length"         value="3.18*m"/>
     <constant name="B2BeR_CenterPosition" value="-13.275*m"/>
 
