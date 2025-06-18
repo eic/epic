@@ -18,7 +18,7 @@ static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector /* sens *
   Assembly assembly(det_name + "_assembly");
   Material m_Al    = det.material("Aluminum");
   Material m_Be    = det.material("Beryllium");
-  Material m_SS    = det.material("StainlessSteelSAE304");
+  Material m_SS    = det.material("StainlessSteelP506");
   Material m_vac   = det.material("Vacuum");
   string vis_name  = x_det.visStr();
   xml_comp_t x_pos = x_det.position();
