@@ -30,7 +30,7 @@
       readout="ForwardOffMTrackerHits"
       vis="FFTrackerVis"
       reflect="false">
-      <position x="-780.0*mm" y="0" z="22500*mm"/>
+      <position x="-780.0*mm" y="0" z="25500*mm"/>
       <rotation x="0*rad" y="-0.047*rad" z="0*rad"/>
       <module name="OMD1Mod1" vis="FFTrackerShieldedModuleVis">
         <shape x="10.0*cm" y="20.0*cm"/>
@@ -55,7 +55,7 @@
       readout="ForwardOffMTrackerHits"
       vis="AnlRed"
       reflect="false">
-      <position x="-780.0*mm" y="0" z="22520*mm"/>
+      <position x="-780.0*mm" y="0" z="25520*mm"/>
       <rotation x="0*rad" y="-0.047*rad" z="0*rad"/>
       <module name="OMD2Mod1" vis="FFTrackerShieldedModuleVis">
         <shape x="10.0*cm" y="20.0*cm"/>
@@ -80,7 +80,7 @@
       readout="ForwardOffMTrackerHits"
       vis="FFTrackerVis"
       reflect="false">
-      <position x="-870.0*mm" y="0" z="24500*mm"/>
+      <position x="-870.0*mm" y="0" z="27000*mm"/>
       <rotation x="0*rad" y="-0.047*rad" z="0*rad"/>
       <module name="OMD3Mod1" vis="FFTrackerShieldedModuleVis">
         <shape x="10.0*cm" y="20.0*cm"/>
@@ -105,7 +105,7 @@
       readout="ForwardOffMTrackerHits"
       vis="FFTrackerVis"
       reflect="false">
-      <position x="-870.0*mm" y="0" z="24520*mm"/>
+      <position x="-870.0*mm" y="0" z="27020*mm"/>
       <rotation x="0*rad" y="-0.047*rad" z="0*rad"/>
       <module name="OMD4Mod1" vis="FFTrackerShieldedModuleVis">
         <shape x="10.0*cm" y="20.0*cm"/>
