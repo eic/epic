@@ -28,7 +28,9 @@
 
     <constant name="B2BeR_InnerRadius"    value="111.0*mm"/>
     <constant name="B2BeR_Length"         value="3.18*m"/>
+    <constant name="B2BeR_CenterX"       value="0*mm"/>
     <constant name="B2BeR_CenterPosition" value="-13.275*m"/>
+    <constant name="B2BeR_Theta"          value="0.0*rad"/>
 
     <constant name="Q3eR_InnerRadius"     value="0.05*m"/>
     <constant name="Q3eR_Length"          value="0.6*m"/>

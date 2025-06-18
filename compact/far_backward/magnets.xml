@@ -37,7 +37,7 @@
       </pipe>
       <pipe id="6" name="Pipe_B2AeR_to_B2BeR"/>
       <pipe id="7" name="Pipe_in_B2BeR"
-        xcenter="B2BeR_Center_x" zcenter="B2BeR_CenterPosition"
+        xcenter="B2BeR_CenterX" zcenter="B2BeR_CenterPosition"
         length="B2BeR_Length" theta="B2BeR_Theta"
         rout1="B2BeR_InnerRadius" rout2="B2BeR_InnerRadius">
       </pipe>
@@ -67,7 +67,7 @@
     </detector>
 
     <detector name="Magnet_B2BeR" type="ip6_CylindricalDipoleMagnet" vis="FFMagnetVis">
-      <placement  x="B2BeR_Center_x" y="0" z="B2BeR_CenterPosition" theta="B2BeR_Theta"/>
+      <placement  x="B2BeR_CenterX" y="0" z="B2BeR_CenterPosition" theta="B2BeR_Theta"/>
       <dimensions x="B2BeR_InnerRadius*4" y="B2BeR_InnerRadius*4" z="B2BeR_Length" r="1.5*B2BeR_InnerRadius"/>
       <apperture  x="B2BeR_InnerRadius*2" y="B2BeR_InnerRadius*2" r="B2BeR_InnerRadius"/>
       <coil dx="2*cm" dy="1.5*cm" /><!--unchecked-->
