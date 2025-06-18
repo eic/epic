@@ -20,7 +20,7 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector /
   string det_name = x_det.nameStr();
   DetElement sdet(det_name, x_det.id());
   Assembly assembly(det_name + "_assembly");
-  Material m_Steel = description.material("StainlessSteelSAE304");
+  Material m_Steel = description.material("StainlessSteel");
   string vis_name  = x_det.visStr();
 
   // Create outer box
