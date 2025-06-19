@@ -154,6 +154,21 @@
         length="EcalBarrel_Calorimeter_length"
         zstart="EcalBarrel_Calorimeter_zmin"
       />
+
+      <comment>
+        The layer material for ACTS purposes is at the top level, since the entire BIC detector
+        is treated as a single layer. The binning should likely be an integer multiple of the
+        number of sectors, and of the numer of modules.
+      </comment>
+      <layer_material surface="inner"
+                      binning="binPhi,binZ"
+                      bins0="6 * EcalBarrel_SectorRepeat"
+                      bins1="floor(2. * EcalBarrel_Stave_length / (EcalBarrel_AstroPix_length + EcalBarrel_AstroPix_margin))"/>
+      <layer_material surface="outer"
+                      binning="binPhi,binZ"
+                      bins0="6 * EcalBarrel_SectorRepeat"
+                      bins1="floor(2. * EcalBarrel_Stave_length / (EcalBarrel_AstroPix_length + EcalBarrel_AstroPix_margin))"/>
+
       <sectors vis="EcalBarrelSectorVis"/>
 
       <module name="AstroPix_Module"
@@ -196,8 +211,6 @@
       <layer repeat="1" vis="EcalBarrelLayerVis"
              thickness="EcalBarrel_ImagingLayerThickness"
              space_before="EcalBarrel_ScFiLayerThickness_Imaging + EcalBarrel_SpaceBetween">
-        <layer_material surface="inner" binning="binPhi,binR" bins0="30" bins1="30"/>
-        <layer_material surface="outer" binning="binPhi,binR" bins0="30" bins1="30"/>
         <frame material="CarbonFiber" fill="Air" thickness="EcalBarrel_CarbonFrameThickness" height="EcalBarrel_ImagingLayerThickness" vis="EcalBarrelSliceVis"/>
         <stave repeat="6"
                width="EcalBarrel_Stave_width"
