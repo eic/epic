@@ -58,7 +58,7 @@
 
   <detectors>
     <!-- Q0eF magnet -->
-    <detector name="Q0EF_BeamlineMagnet" type="ip6_CylindricalDipoleMagnet">
+    <detector name="Q0EF_BeamlineMagnet" type="ip6_CryostatMagnet">
       <coil name="Q0EF_Quad_Coil" vis="MagnetCoilVis">
         <placement x="Q0EF_Center_posX" y="Q0EF_Center_posY" z="Q0EF_Center_posZ" theta="Q0EF_Rotation_Angle" phiNum="3" phiStart="90 * deg" phiStep="90 * deg"/>
         <dimensions rmin="4.817872 * cm" rmax="5.186172 * cm" half_length="125.199140 * cm / 2." sphi="-60.0 * deg / 2." dphi="60.0 * deg"/>
@@ -82,7 +82,7 @@
     </detector>
 
     <!-- Q1eF magnet -->
-    <detector name="Q1EF_BeamlineMagnet" type="ip6_CylindricalDipoleMagnet">
+    <detector name="Q1EF_BeamlineMagnet" type="ip6_CryostatMagnet">
       <coil name="Q1EF_Quad_Coil" vis="MagnetCoilVis">
         <placement x="Q1EF_Center_posX" y="Q1EF_Center_posY" z="Q1EF_Center_posZ" theta="Q1EF_Rotation_Angle" phiNum="1" phiStart="0 * deg" phiStep="0 * deg"/>
         <dimensions rmin="8.5 * cm" rmax="9.0 * cm" half_length="161. * cm / 2." sphi="0 * deg" dphi="360.0 * deg"/>

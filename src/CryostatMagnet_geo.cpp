@@ -391,4 +391,4 @@ void buildTubeElement(dd4hep::DetElement& sdet, dd4hep::Assembly& assembly, dd4h
   return;
 }
 
-DECLARE_DETELEMENT(ip6_CylindricalDipoleMagnet, build_magnet)
+DECLARE_DETELEMENT(ip6_CryostatMagnet, build_magnet)

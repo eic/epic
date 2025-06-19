@@ -58,7 +58,7 @@
   </comment>
   <detectors>
     <!-- B0pF magnet -->
-    <detector id="B0PF_ID" name="B0PF_BeamlineMagnet" type="ip6_CylindricalDipoleMagnet">
+    <detector id="B0PF_ID" name="B0PF_BeamlineMagnet" type="ip6_CryostatMagnet">
       <yoke name="B0PF_Yoke" vis="MagnetVis">
         <placement x="B0PF_Yoke_Center_posX" y="B0PF_Yoke_Center_posY" z="B0PF_Yoke_Center_posZ" theta="B0PF_Yoke_Rotation_Angle"/>
         <dimensions rmin="74. * cm / 2." rmax="140. * cm / 2." half_length="127. * cm / 2." sphi="0 * deg" dphi="360.0 * deg"/>
@@ -173,7 +173,7 @@
     </detector>
 
     <!-- B0ApF magnet -->
-    <detector id="B0APF_ID" name="B0APF_BeamlineMagnet" type="ip6_CylindricalDipoleMagnet">
+    <detector id="B0APF_ID" name="B0APF_BeamlineMagnet" type="ip6_CryostatMagnet">
       <yoke name="B0APF_Yoke" vis="MagnetVis">
         <placement x="B0APF_Yoke_Center_posX" y="B0APF_Yoke_Center_posY" z="B0APF_Yoke_Center_posZ" theta="B0APF_Yoke_Rotation_Angle"/>
         <dimensions rmin="22. * cm / 2." rmax="60. * cm / 2." half_length="60. * cm / 2." sphi="0 * deg" dphi="360.0 * deg"/>
@@ -246,7 +246,7 @@
     </detector>
 
     <!-- Q1ApF magnet -->
-    <detector id="Q1APF_ID" name="Q1APF_BeamlineMagnet" type="ip6_CylindricalDipoleMagnet">
+    <detector id="Q1APF_ID" name="Q1APF_BeamlineMagnet" type="ip6_CryostatMagnet">
       <yoke name="Q1APF_Yoke" vis="MagnetVis">
         <placement x="Q1APF_Yoke_Center_posX" y="Q1APF_Yoke_Center_posY" z="Q1APF_Yoke_Center_posZ" theta="Q1APF_Yoke_Rotation_Angle"/>
         <dimensions rmin="26.4 * cm / 2." rmax="120. * cm / 2." half_length="150.114 * cm / 2." sphi="0 * deg" dphi="360.0 * deg"/>
@@ -317,7 +317,7 @@
     </detector>
 
     <!-- Q1BpF magnet -->
-    <detector id="Q1BPF_ID" name="Q1BPF_BeamlineMagnet" type="ip6_CylindricalDipoleMagnet">
+    <detector id="Q1BPF_ID" name="Q1BPF_BeamlineMagnet" type="ip6_CryostatMagnet">
       <yoke name="Q1BPF_Yoke" vis="MagnetVis">
         <placement x="Q1BPF_Yoke_Center_posX" y="Q1BPF_Yoke_Center_posY" z="Q1BPF_Yoke_Center_posZ" theta="Q1BPF_Yoke_Rotation_Angle"/>
         <dimensions rmin="30.6 * cm / 2." rmax="120. * cm / 2." half_length="160.365 * cm / 2." sphi="0 * deg" dphi="360.0 * deg"/>
@@ -396,7 +396,7 @@
     </detector>
 
     <!-- Q2pF magnet -->
-    <detector id="Q2PF_ID" name="Q2PF_BeamlineMagnet" type="ip6_CylindricalDipoleMagnet">
+    <detector id="Q2PF_ID" name="Q2PF_BeamlineMagnet" type="ip6_CryostatMagnet">
       <yoke name="Q2PF_Yoke" vis="MagnetVis">
         <placement x="Q2PF_Yoke_Center_posX" y="Q2PF_Yoke_Center_posY" z="Q2PF_Yoke_Center_posZ" theta="Q2PF_Yoke_Rotation_Angle"/>
         <dimensions rmin="40.4 * cm / 2." rmax="120. * cm / 2." half_length="366.522 * cm / 2." sphi="0 * deg" dphi="360.0 * deg"/>
@@ -465,7 +465,7 @@
     </detector>
 
     <!-- B1pF magnet -->
-    <detector id="B1PF_ID" name="B1PF_BeamlineMagnet" type="ip6_CylindricalDipoleMagnet">
+    <detector id="B1PF_ID" name="B1PF_BeamlineMagnet" type="ip6_CryostatMagnet">
       <yoke name="B1PF_Yoke" vis="MagnetVis">
         <placement x="B1PF_Yoke_Center_posX" y="B1PF_Yoke_Center_posY" z="B1PF_Yoke_Center_posZ" theta="B1PF_Yoke_Rotation_Angle"/>
         <dimensions rmin="66. * cm / 2." rmax="145. * cm / 2." half_length="305.077 * cm / 2." sphi="0 * deg" dphi="360.0 * deg"/>
@@ -512,7 +512,7 @@
     </detector>
 
     <!-- B1ApF magnet -->
-    <detector id="B1APF_ID" name="B1APF_BeamlineMagnet" type="ip6_CylindricalDipoleMagnet">
+    <detector id="B1APF_ID" name="B1APF_BeamlineMagnet" type="ip6_CryostatMagnet">
       <yoke name="B1APF_Yoke_Bot" vis="MagnetVis">
         <placement x="B1APF_Yoke_Center_posX" y="B1APF_Yoke_Center_posY + B1APF_Yoke_Center_offsetY" z="B1APF_Yoke_Center_posZ" theta="B1APF_Yoke_Rotation_Angle"/>
         <dimensions rmin="0 * cm" rmax="183. * cm / 2." half_length="155.956 * cm / 2." sphi="0 * deg" dphi="360.0 * deg"/>
