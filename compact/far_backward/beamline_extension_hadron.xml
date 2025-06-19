@@ -75,8 +75,8 @@
       </tube>
       <endplate name="Q1APR_EndPlate_IP" vis="MagnetEndPlateVis">
         <placement x="Q1APR_Yoke_Center_posX" y="Q1APR_Yoke_Center_posY" z="Q1APR_Yoke_Center_posZ" theta="Q1APR_Yoke_Rotation_Angle"/>
-	<zplane z="-(180.0 * cm / 2. + 0.5 * cm)" rmin="0.0 * cm" rmax="50.0 * cm / 2."/>
-	<zplane z="-(180.0 * cm / 2. + 1.905000 * cm)" rmin="0.0 * cm" rmax="50.0 * cm / 2."/>
+        <zplane z="-(180.0 * cm / 2. + 0.5 * cm)" rmin="0.0 * cm" rmax="50.0 * cm / 2."/>
+        <zplane z="-(180.0 * cm / 2. + 1.905000 * cm)" rmin="0.0 * cm" rmax="50.0 * cm / 2."/>
         <cut shape="Cone">
           <placement x="5.0 * cm" y="0 * cm" z="0 * cm" rotX="0 * rad" rotY="0 * rad" rotZ="0 * rad"/>
           <dimensions rmin1="0 * cm" rmax1="7.92 * cm / 2." rmin2="0 * cm" rmax2="6.5 * cm / 2." dz="200.0 * cm / 2."/>
@@ -95,8 +95,8 @@
       </endplate>
       <endplate name="Q1APR_EndPlate_nonIP" vis="MagnetEndPlateVis">
         <placement x="Q1APR_Yoke_Center_posX" y="Q1APR_Yoke_Center_posY" z="Q1APR_Yoke_Center_posZ" theta="Q1APR_Yoke_Rotation_Angle"/>
-	<zplane z="(180.0 * cm / 2. + 0.5 * cm)" rmin="0.0 * cm" rmax="50.0 * cm / 2."/>
-	<zplane z="(180.0 * cm / 2. + 1.905000 * cm)" rmin="0.0 * cm" rmax="50.0 * cm / 2."/>
+        <zplane z="(180.0 * cm / 2. + 0.5 * cm)" rmin="0.0 * cm" rmax="50.0 * cm / 2."/>
+        <zplane z="(180.0 * cm / 2. + 1.905000 * cm)" rmin="0.0 * cm" rmax="50.0 * cm / 2."/>
         <cut shape="Cone">
           <placement x="5.0 * cm" y="0 * cm" z="0 * cm" rotX="0 * rad" rotY="0 * rad" rotZ="0 * rad"/>
           <dimensions rmin1="0 * cm" rmax1="7.92 * cm / 2." rmin2="0 * cm" rmax2="6.5 * cm / 2." dz="200.0 * cm / 2."/>
@@ -115,8 +115,8 @@
       </endplate>
       <endplate name="Q1APR_EndPlate2_IP" vis="MagnetEndPlateVis">
         <placement x="Q1APR_Yoke_Center_posX" y="Q1APR_Yoke_Center_posY" z="Q1APR_Yoke_Center_posZ" theta="Q1APR_Yoke_Rotation_Angle"/>
-	<zplane z="-(189.9 * cm / 2.)" rmin="0.0 * cm" rmax="52.539900 * cm / 2."/>
-	<zplane z="-(189.9 * cm / 2. + 4.127500 * cm)" rmin="0.0 * cm" rmax="52.539900 * cm / 2."/>
+        <zplane z="-(189.9 * cm / 2.)" rmin="0.0 * cm" rmax="52.539900 * cm / 2."/>
+        <zplane z="-(189.9 * cm / 2. + 4.127500 * cm)" rmin="0.0 * cm" rmax="52.539900 * cm / 2."/>
         <cut shape="Cone">
           <placement x="5.0 * cm" y="0 * cm" z="0 * cm" rotX="0 * rad" rotY="0 * rad" rotZ="0 * rad"/>
           <dimensions rmin1="0 * cm" rmax1="7.92 * cm / 2." rmin2="0 * cm" rmax2="6.5 * cm / 2." dz="200.0 * cm / 2."/>
@@ -135,8 +135,8 @@
       </endplate>
       <endplate name="Q1APR_EndPlate2_nonIP" vis="MagnetEndPlateVis">
         <placement x="Q1APR_Yoke_Center_posX" y="Q1APR_Yoke_Center_posY" z="Q1APR_Yoke_Center_posZ" theta="Q1APR_Yoke_Rotation_Angle"/>
-	<zplane z="(189.9 * cm / 2.)" rmin="0.0 * cm" rmax="52.539900 * cm / 2."/>
-	<zplane z="(189.9 * cm / 2. + 4.127500 * cm)" rmin="0.0 * cm" rmax="52.539900 * cm / 2."/>
+        <zplane z="(189.9 * cm / 2.)" rmin="0.0 * cm" rmax="52.539900 * cm / 2."/>
+        <zplane z="(189.9 * cm / 2. + 4.127500 * cm)" rmin="0.0 * cm" rmax="52.539900 * cm / 2."/>
         <cut shape="Cone">
           <placement x="5.0 * cm" y="0 * cm" z="0 * cm" rotX="0 * rad" rotY="0 * rad" rotZ="0 * rad"/>
           <dimensions rmin1="0 * cm" rmax1="7.92 * cm / 2." rmin2="0 * cm" rmax2="6.5 * cm / 2." dz="200.0 * cm / 2."/>
@@ -167,10 +167,10 @@
       </cryobarrel>
       <cryoend name="Q1APR_Cryo_End_IP" vis="MagnetCryoVis">
         <placement x="Q1APR_Yoke_Center_posX" y="Q1APR_Yoke_Center_posY" z="Q1APR_Yoke_Center_posZ" theta="Q1APR_Yoke_Rotation_Angle"/>
-	<zplane z="(180.0 * cm / 2. - 10.7 * cm)" rmin="103.505000 * cm / 2." rmax="106.680000 * cm / 2."/>
-	<zplane z="(180.0 * cm / 2. - 10.7 * cm + 30.0 * cm)" rmin="103.505000 * cm / 2." rmax="106.680000 * cm / 2."/>
-	<zplane z="(180.0 * cm / 2. - 10.7 * cm + 30.0 * cm)" rmin="0 * cm / 2." rmax="106.680000 * cm / 2."/>
-	<zplane z="(180.0 * cm / 2. - 10.7 * cm + 30.0 * cm + 1.588983 * cm)" rmin="0 * cm / 2." rmax="106.680000 * cm / 2."/>
+        <zplane z="(180.0 * cm / 2. - 10.7 * cm)" rmin="103.505000 * cm / 2." rmax="106.680000 * cm / 2."/>
+        <zplane z="(180.0 * cm / 2. - 10.7 * cm + 30.0 * cm)" rmin="103.505000 * cm / 2." rmax="106.680000 * cm / 2."/>
+        <zplane z="(180.0 * cm / 2. - 10.7 * cm + 30.0 * cm)" rmin="0 * cm / 2." rmax="106.680000 * cm / 2."/>
+        <zplane z="(180.0 * cm / 2. - 10.7 * cm + 30.0 * cm + 1.588983 * cm)" rmin="0 * cm / 2." rmax="106.680000 * cm / 2."/>
         <cut shape="Cone">
           <placement x="5.0 * cm" y="0 * cm" z="0 * cm" rotX="0 * rad" rotY="0 * rad" rotZ="0 * rad"/>
           <dimensions rmin1="0 * cm" rmax1="6.5 * cm / 2." rmin2="0 * cm" rmax2="6.5 * cm / 2." dz="400.0 * cm / 2."/>
@@ -215,8 +215,8 @@
       </tube>
       <endplate name="Q1BPR_EndPlate_IP" vis="MagnetEndPlateVis">
         <placement x="Q1BPR_Yoke_Center_posX" y="Q1BPR_Yoke_Center_posY" z="Q1BPR_Yoke_Center_posZ" theta="Q1BPR_Yoke_Rotation_Angle"/>
-	<zplane z="-(140.0 * cm / 2. + 0.5 * cm)" rmin="0.0 * cm" rmax="70.961250 * cm / 2."/>
-	<zplane z="-(140.0 * cm / 2. + 3.810000 * cm)" rmin="0.0 * cm" rmax="70.961250 * cm / 2."/>
+        <zplane z="-(140.0 * cm / 2. + 0.5 * cm)" rmin="0.0 * cm" rmax="70.961250 * cm / 2."/>
+        <zplane z="-(140.0 * cm / 2. + 3.810000 * cm)" rmin="0.0 * cm" rmax="70.961250 * cm / 2."/>
         <cut>
           <placement x="14.44 * cm" y="0 * cm" z="0 * cm" rotX="0 * rad" rotY="0 * rad" rotZ="0 * rad"/>
           <dimensions rmin="0 * cm" rmax="5.461000 * cm" half_length="400. * cm / 2."/>
@@ -230,8 +230,8 @@
       </endplate>
       <endplate name="Q1BPR_EndPlate_nonIP" vis="MagnetEndPlateVis">
         <placement x="Q1BPR_Yoke_Center_posX" y="Q1BPR_Yoke_Center_posY" z="Q1BPR_Yoke_Center_posZ" theta="Q1BPR_Yoke_Rotation_Angle"/>
-	<zplane z="(140.0 * cm / 2. + 0.5 * cm)" rmin="0.0 * cm" rmax="70.961250 * cm / 2."/>
-	<zplane z="(140.0 * cm / 2. + 3.810000 * cm)" rmin="0.0 * cm" rmax="70.961250 * cm / 2."/>
+        <zplane z="(140.0 * cm / 2. + 0.5 * cm)" rmin="0.0 * cm" rmax="70.961250 * cm / 2."/>
+        <zplane z="(140.0 * cm / 2. + 3.810000 * cm)" rmin="0.0 * cm" rmax="70.961250 * cm / 2."/>
         <cut>
           <placement x="14.44 * cm" y="0 * cm" z="0 * cm" rotX="0 * rad" rotY="0 * rad" rotZ="0 * rad"/>
           <dimensions rmin="0 * cm" rmax="5.461000 * cm" half_length="400. * cm / 2."/>
@@ -245,8 +245,8 @@
       </endplate>
       <endplate name="Q1BPR_EndPlate2_IP" vis="MagnetEndPlateVis">
         <placement x="Q1BPR_Yoke_Center_posX" y="Q1BPR_Yoke_Center_posY" z="Q1BPR_Yoke_Center_posZ" theta="Q1BPR_Yoke_Rotation_Angle"/>
-	<zplane z="-(154.454352 * cm / 2.)" rmin="0.0 * cm" rmax="73.660000 * cm / 2."/>
-	<zplane z="-(154.454352 * cm / 2. + 5.430520 * cm)" rmin="0.0 * cm" rmax="73.660000 * cm / 2."/>
+        <zplane z="-(154.454352 * cm / 2.)" rmin="0.0 * cm" rmax="73.660000 * cm / 2."/>
+        <zplane z="-(154.454352 * cm / 2. + 5.430520 * cm)" rmin="0.0 * cm" rmax="73.660000 * cm / 2."/>
         <cut>
           <placement x="14.44 * cm" y="0 * cm" z="0 * cm" rotX="0 * rad" rotY="0 * rad" rotZ="0 * rad"/>
           <dimensions rmin="0 * cm" rmax="6.400800 * cm" half_length="400. * cm / 2."/>
@@ -260,8 +260,8 @@
       </endplate>
       <endplate name="Q1BPR_EndPlate2_nonIP" vis="MagnetEndPlateVis">
         <placement x="Q1BPR_Yoke_Center_posX" y="Q1BPR_Yoke_Center_posY" z="Q1BPR_Yoke_Center_posZ" theta="Q1BPR_Yoke_Rotation_Angle"/>
-	<zplane z="(154.454352 * cm / 2.)" rmin="0.0 * cm" rmax="73.660000 * cm / 2."/>
-	<zplane z="(154.454352 * cm / 2. + 5.430520 * cm)" rmin="0.0 * cm" rmax="73.660000 * cm / 2."/>
+        <zplane z="(154.454352 * cm / 2.)" rmin="0.0 * cm" rmax="73.660000 * cm / 2."/>
+        <zplane z="(154.454352 * cm / 2. + 5.430520 * cm)" rmin="0.0 * cm" rmax="73.660000 * cm / 2."/>
         <cut>
           <placement x="14.44 * cm" y="0 * cm" z="0 * cm" rotX="0 * rad" rotY="0 * rad" rotZ="0 * rad"/>
           <dimensions rmin="0 * cm" rmax="6.400800 * cm" half_length="400. * cm / 2."/>
@@ -313,8 +313,8 @@
       </tube>
       <endplate name="Q2PR_EndPlate_IP" vis="MagnetEndPlateVis">
         <placement x="Q2PR_Yoke_Center_posX" y="Q2PR_Yoke_Center_posY" z="Q2PR_Yoke_Center_posZ" theta="Q2PR_Yoke_Rotation_Angle"/>
-	<zplane z="-(552.54 * cm / 2. + 0.5 * cm)" rmin="0.0 * cm" rmax="90. * cm / 2."/>
-	<zplane z="-(552.54 * cm / 2. + 3.810000 * cm)" rmin="0.0 * cm" rmax="90. * cm / 2."/>
+        <zplane z="-(552.54 * cm / 2. + 0.5 * cm)" rmin="0.0 * cm" rmax="90. * cm / 2."/>
+        <zplane z="-(552.54 * cm / 2. + 3.810000 * cm)" rmin="0.0 * cm" rmax="90. * cm / 2."/>
         <cut>
           <placement x="15.0 * cm" y="0 * cm" z="0 * cm" rotX="0 * rad" rotY="0 * rad" rotZ="0 * rad"/>
           <dimensions rmin="0 * cm" rmax="8.458200 * cm" half_length="800. * cm / 2."/>
@@ -328,8 +328,8 @@
       </endplate>
       <endplate name="Q2PR_EndPlate_nonIP" vis="MagnetEndPlateVis">
         <placement x="Q2PR_Yoke_Center_posX" y="Q2PR_Yoke_Center_posY" z="Q2PR_Yoke_Center_posZ" theta="Q2PR_Yoke_Rotation_Angle"/>
-	<zplane z="(552.54 * cm / 2. + 0.5 * cm)" rmin="0.0 * cm" rmax="90. * cm / 2."/>
-	<zplane z="(552.54 * cm / 2. + 3.810000 * cm)" rmin="0.0 * cm" rmax="90. * cm / 2."/>
+        <zplane z="(552.54 * cm / 2. + 0.5 * cm)" rmin="0.0 * cm" rmax="90. * cm / 2."/>
+        <zplane z="(552.54 * cm / 2. + 3.810000 * cm)" rmin="0.0 * cm" rmax="90. * cm / 2."/>
         <cut>
           <placement x="15.0 * cm" y="0 * cm" z="0 * cm" rotX="0 * rad" rotY="0 * rad" rotZ="0 * rad"/>
           <dimensions rmin="0 * cm" rmax="8.458200 * cm" half_length="800. * cm / 2."/>
@@ -343,8 +343,8 @@
       </endplate>
       <endplate name="Q2PR_EndPlate2_IP" vis="MagnetEndPlateVis">
         <placement x="Q2PR_Yoke_Center_posX" y="Q2PR_Yoke_Center_posY" z="Q2PR_Yoke_Center_posZ" theta="Q2PR_Yoke_Rotation_Angle"/>
-	<zplane z="-(571.500000 * cm / 2.)" rmin="0.0 * cm" rmax="92.540074 * cm / 2."/>
-	<zplane z="-(571.500000 * cm / 2. + 6.822440 * cm)" rmin="0.0 * cm" rmax="92.540074 * cm / 2."/>
+        <zplane z="-(571.500000 * cm / 2.)" rmin="0.0 * cm" rmax="92.540074 * cm / 2."/>
+        <zplane z="-(571.500000 * cm / 2. + 6.822440 * cm)" rmin="0.0 * cm" rmax="92.540074 * cm / 2."/>
         <cut>
           <placement x="15.0 * cm" y="0 * cm" z="0 * cm" rotX="0 * rad" rotY="0 * rad" rotZ="0 * rad"/>
           <dimensions rmin="0 * cm" rmax="13.249072 * cm / 2." half_length="800. * cm / 2."/>
@@ -358,8 +358,8 @@
       </endplate>
       <endplate name="Q2PR_EndPlate2_nonIP" vis="MagnetEndPlateVis">
         <placement x="Q2PR_Yoke_Center_posX" y="Q2PR_Yoke_Center_posY" z="Q2PR_Yoke_Center_posZ" theta="Q2PR_Yoke_Rotation_Angle"/>
-	<zplane z="(571.500000 * cm / 2.)" rmin="0.0 * cm" rmax="92.540074 * cm / 2."/>
-	<zplane z="(571.500000 * cm / 2. + 6.822440 * cm)" rmin="0.0 * cm" rmax="92.540074 * cm / 2."/>
+        <zplane z="(571.500000 * cm / 2.)" rmin="0.0 * cm" rmax="92.540074 * cm / 2."/>
+        <zplane z="(571.500000 * cm / 2. + 6.822440 * cm)" rmin="0.0 * cm" rmax="92.540074 * cm / 2."/>
         <cut>
           <placement x="15.0 * cm" y="0 * cm" z="0 * cm" rotX="0 * rad" rotY="0 * rad" rotZ="0 * rad"/>
           <dimensions rmin="0 * cm" rmax="13.249072 * cm / 2." half_length="800. * cm / 2."/>
@@ -385,10 +385,10 @@
       </cryobarrel>
       <cryoend name="Q2PR_Cryo_End_nonIP" vis="MagnetCryoVis">
         <placement x="Q2PR_Yoke_Center_posX" y="Q2PR_Yoke_Center_posY" z="Q2PR_Yoke_Center_posZ" theta="Q2PR_Yoke_Rotation_Angle"/>
-	<zplane z="-(552.54 * cm / 2. + 5.7 * cm)" rmin="164.465000 * cm / 2." rmax="167.640000 * cm / 2."/>
-	<zplane z="-(552.54 * cm / 2. + 5.7 * cm + 30.0 * cm)" rmin="164.465000 * cm / 2." rmax="167.640000 * cm / 2."/>
-	<zplane z="-(552.54 * cm / 2. + 5.7 * cm + 30.0 * cm)" rmin="0 * cm / 2." rmax="167.640000 * cm / 2."/>
-	<zplane z="-(552.54 * cm / 2. + 5.7 * cm + 30.0 * cm + 1.619677 * cm)" rmin="0 * cm / 2." rmax="167.640000 * cm / 2."/>
+        <zplane z="-(552.54 * cm / 2. + 5.7 * cm)" rmin="164.465000 * cm / 2." rmax="167.640000 * cm / 2."/>
+        <zplane z="-(552.54 * cm / 2. + 5.7 * cm + 30.0 * cm)" rmin="164.465000 * cm / 2." rmax="167.640000 * cm / 2."/>
+        <zplane z="-(552.54 * cm / 2. + 5.7 * cm + 30.0 * cm)" rmin="0 * cm / 2." rmax="167.640000 * cm / 2."/>
+        <zplane z="-(552.54 * cm / 2. + 5.7 * cm + 30.0 * cm + 1.619677 * cm)" rmin="0 * cm / 2." rmax="167.640000 * cm / 2."/>
         <cut>
           <placement x="15.0 * cm" y="0 * cm" z="0 * cm" rotX="0 * rad" rotY="0 * rad" rotZ="0 * rad"/>
           <dimensions rmin="0 * cm" rmax="13.249072 * cm / 2." half_length="800. * cm / 2."/>

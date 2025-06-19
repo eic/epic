@@ -294,11 +294,9 @@ static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector /* sens *
 
   //-----------------------------------------------------------------
   // Cut on the IP side to avoid overlaps with the fwd cryostat
-  tmpAfterB1APF = SubtractionSolid(
-      tmpAfterB1APF, cutout_for_FWD_cryo,
-      Position(0.0, 0.0, (-beampipe_dimensions[pieceIdx].length) / 2)); 
+  tmpAfterB1APF = SubtractionSolid(tmpAfterB1APF, cutout_for_FWD_cryo,
+                                   Position(0.0, 0.0, (-beampipe_dimensions[pieceIdx].length) / 2));
   //-----------------------------------------------------------------
-
 
   Volume v_pipeAfterB1APF(Form("v_pipeAfterB1APF_%d", pieceIdx), tmpAfterB1APF, m_SS);
   sdet.setAttributes(det, v_pipeAfterB1APF, x_det.regionStr(), x_det.limitsStr(), vis_name);
@@ -534,13 +532,15 @@ static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector /* sens *
 
   //-----------------------------------------------------------------
   // Cut on the IP side to avoid overlaps with the fwd cryostat
-  final_vacuum_main_pipe =
-      SubtractionSolid(final_vacuum_main_pipe, cutout_for_FWD_cryo,
-                       Position(0.0, 0.0, (2400.0 * dd4hep::cm - 2 * dd4hep::m - beampipe_dimensions[pieceIdx].zCenter)));
+  final_vacuum_main_pipe = SubtractionSolid(
+      final_vacuum_main_pipe, cutout_for_FWD_cryo,
+      Position(0.0, 0.0,
+               (2400.0 * dd4hep::cm - 2 * dd4hep::m - beampipe_dimensions[pieceIdx].zCenter)));
   Tube pipe_for_FWD_cryo(0.0, 16.0 * dd4hep::cm, 97.0 * dd4hep::cm);
-  final_vacuum_main_pipe = 
-      UnionSolid(final_vacuum_main_pipe, pipe_for_FWD_cryo,
-          Position(6.5 * dd4hep::cm, 0.0, (2400.0 * dd4hep::cm - 97.0 * dd4hep::cm - beampipe_dimensions[pieceIdx].zCenter)));
+  final_vacuum_main_pipe = UnionSolid(
+      final_vacuum_main_pipe, pipe_for_FWD_cryo,
+      Position(6.5 * dd4hep::cm, 0.0,
+               (2400.0 * dd4hep::cm - 97.0 * dd4hep::cm - beampipe_dimensions[pieceIdx].zCenter)));
   //-----------------------------------------------------------------
 
   Volume v_vacuum_main_pipe("v_vacuum_main_pipe", final_vacuum_main_pipe, m_vac);
