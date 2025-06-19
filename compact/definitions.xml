@@ -522,7 +522,7 @@ Examples:
 
     <comment> Note: PID has space for DIRC, ExtraSpace sits past the PID</comment>
     <constant name="BarrelPIDRegion_thickness"    value="7.0 * cm" />
-    <constant name="BarrelExtraSpace_thickness"   value="1.5 * cm" />
+    <constant name="BarrelExtraSpace_thickness"   value="0.0 * cm" />
 
     <documentation>
     ## Forward/backward tracking region behind the PID detectors
