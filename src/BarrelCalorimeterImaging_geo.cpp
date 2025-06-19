@@ -58,7 +58,8 @@ static Ref_t create_detector(Detector& desc, xml_h e, SensitiveDetector sens) {
 
   // Set detector type flag
   dd4hep::xml::setDetectorTypeFlag(x_detector, sdet);
-  auto& params [[maybe_unused]] = DD4hepDetectorHelper::ensureExtension<dd4hep::rec::VariantParameters>(sdet);
+  auto& params [[maybe_unused]] =
+      DD4hepDetectorHelper::ensureExtension<dd4hep::rec::VariantParameters>(sdet);
 
   detector_physvol.addPhysVolID("system", detector_id);
   sdet.setPlacement(detector_physvol);
@@ -385,9 +386,8 @@ static Ref_t create_detector(Detector& desc, xml_h e, SensitiveDetector sens) {
           PlacedVolume stave_physvol = layer_volume.placeVolume(stave_volume, stave_tr);
           stave_physvol.addPhysVolID("stave", stave_num + stave_j);
           DetElement stave_j_element =
-              (stave_j == 0)
-                  ? stave_element
-                  : stave_element.clone(Form("stave%d", stave_num + stave_j));
+              (stave_j == 0) ? stave_element
+                             : stave_element.clone(Form("stave%d", stave_num + stave_j));
           stave_j_element.setPlacement(stave_physvol);
           layer_element.add(stave_j_element);
 
@@ -457,9 +457,8 @@ static Ref_t create_detector(Detector& desc, xml_h e, SensitiveDetector sens) {
     Transform3D tr(RotationZYX(0, phi, M_PI * 0.5), Translation3D(0, 0, 0));
     PlacedVolume sector_physvol = envelope_volume.placeVolume(sector_volume, tr);
     sector_physvol.addPhysVolID("sector", sector_num + 1);
-    DetElement sd = (sector_num == 0)
-                        ? sector_element
-                        : sector_element.clone(Form("sector%d", sector_num));
+    DetElement sd =
+        (sector_num == 0) ? sector_element : sector_element.clone(Form("sector%d", sector_num));
     sd.setPlacement(sector_physvol);
     envelope_element.add(sd);
   }
