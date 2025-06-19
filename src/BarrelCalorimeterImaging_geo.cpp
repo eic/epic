@@ -79,18 +79,19 @@ static Ref_t create_detector(Detector& desc, xml_h e, SensitiveDetector sens) {
                                 getAttrOrDefault(x_envelope, _Unicode(envelope_z_max), 0.));
   }
   // Add the volume boundary material if configured
-  for (xml_coll_t boundary_material(x_detector, _Unicode(boundary_material)); boundary_material; ++boundary_material) {
+  for (xml_coll_t boundary_material(x_detector, _Unicode(boundary_material)); boundary_material;
+       ++boundary_material) {
     xml_comp_t x_boundary_material = boundary_material;
     DD4hepDetectorHelper::xmlToProtoSurfaceMaterial(x_boundary_material, envelope_params,
                                                     "boundary_material");
   }
   // Add the volume layer material if configured
-  for (xml_coll_t layer_material(x_detector, _Unicode(layer_material)); layer_material; ++layer_material) {
+  for (xml_coll_t layer_material(x_detector, _Unicode(layer_material)); layer_material;
+       ++layer_material) {
     xml_comp_t x_layer_material = layer_material;
     DD4hepDetectorHelper::xmlToProtoSurfaceMaterial(x_layer_material, envelope_params,
                                                     "layer_material");
   }
-
 
   // build a sector
   DetElement sector_element("sector0", detector_id);
