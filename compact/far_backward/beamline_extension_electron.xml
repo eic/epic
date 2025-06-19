@@ -25,7 +25,7 @@
 
   <detectors>
     <!-- Q1eR magnet -->
-    <detector id="Q1ER_ID" name="Q1ER_BeamlineMagnet" type="ip6_CylindricalDipoleMagnet">
+    <detector name="Q1ER_BeamlineMagnet" type="ip6_CylindricalDipoleMagnet">
       <coil name="Q1ER_Quad_Coil" vis="MagnetCoilVis" shape="ConeSegment">
         <placement x="Q1ER_Center_posX" y="Q1ER_Center_posY" z="Q1ER_Center_posZ" theta="Q1ER_Rotation_Angle" phiNum="3" phiStart="90 * deg" phiStep="90 * deg"/>
         <dimensions rmin1="6.748780 * cm" rmax1="7.040880 * cm" rmin2="5.938520 * cm" rmax2="6.230620 * cm" dz="180.0 * cm / 2." sphi="-60.0 * deg / 2." dphi="60.0 * deg"/>
@@ -37,7 +37,7 @@
     </detector>
 
     <!-- Q2eR magnet -->
-    <detector id="Q2ER_ID" name="Q2ER_BeamlineMagnet" type="ip6_CylindricalDipoleMagnet">
+    <detector name="Q2ER_BeamlineMagnet" type="ip6_CylindricalDipoleMagnet">
       <coil name="Q2ER_Quad_Coil" vis="MagnetCoilVis" shape="ConeSegment">
         <placement x="Q2ER_Center_posX" y="Q2ER_Center_posY" z="Q2ER_Center_posZ" theta="Q2ER_Rotation_Angle" phiNum="3" phiStart="90 * deg" phiStep="90 * deg"/>
         <dimensions rmin1="7.810500 * cm" rmax1="8.176260 * cm" rmin2="7.810500 * cm" rmax2="8.176260 * cm" dz="134.919999 * cm / 2." sphi="45.0 * deg - 60.0 * deg / 2." dphi="60.0 * deg"/>

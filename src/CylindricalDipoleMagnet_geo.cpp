@@ -39,7 +39,7 @@ static Ref_t build_magnet(Detector& dtor, xml_h e, SensitiveDetector /* sens */)
 	// get materials
 	Material iron		= dtor.material("Iron");
 	Material nbti		= dtor.material("SolenoidCoil");
-	Material steel_304l	= dtor.material("StainlessSteel");
+	Material steel_304l	= dtor.material("StainlessSteelSAE304");
 	Material alum		= dtor.material("Al6061T6");
 	Material steel_a53  	= dtor.material("StainlessSteelA53");
 
