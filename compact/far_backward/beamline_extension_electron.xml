@@ -17,7 +17,7 @@
     type="BeamPipeChain"
     wall_thickness="2*mm">
       <pipe id="0" name="Pipe_in_Q3eR"
-        xcenter="Q3eR_XPosition" zcenter="Q3eR_CenterPosition"
+        xcenter="Q3eR_CenterX" zcenter="Q3eR_CenterZ"
         length="Q3eR_Length" theta="Q3eR_Theta"
         rout1="Q3eR_InnerRadius" rout2="Q3eR_InnerRadius">
       </pipe>

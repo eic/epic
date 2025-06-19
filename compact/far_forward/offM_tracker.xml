@@ -8,8 +8,8 @@
       Forward Off-Momentum Tracker Parameters
       ----------------------------------------
     </comment>
-    <constant name="ForwardOffMTracker_zpos" value="B1APF_CenterPosition + B1APF_Length/2.0 + 10.0*cm"/>
-    <constant name="ForwardOffMTracker_xpos" value="B1APF_XPosition+40.0*cm"/>
+    <constant name="ForwardOffMTracker_zpos" value="B1APF_CenterZ + B1APF_Length/2.0 + 10.0*cm"/>
+    <constant name="ForwardOffMTracker_xpos" value="B1APF_CenterX+40.0*cm"/>
 
     <!-- Thicknesses -->
     <constant name="ForwardOffMTracker_RFShieldThickness"          value="1.0*mm"/>
