@@ -247,7 +247,7 @@ static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector /* sens *
     std::string piece_name = Form("GapVacuum%d", numGaps + numMagnets);
 
     ConeSegment specialGap(piece_name, specialGapLength / 2, 0.0, vacuumDiameterEntrance / 2, 0.0,
-                    vacuumDiameterExit / 2, 40 * deg, (360 - 40) * deg);
+                           vacuumDiameterExit / 2, 40 * deg, (360 - 40) * deg);
 
     Volume specialGap_v(piece_name, specialGap, m_Vac);
     sdet.setAttributes(det, specialGap_v, x_det.regionStr(), x_det.limitsStr(), vis_name);
