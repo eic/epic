@@ -117,7 +117,7 @@
 
   <detectors>
 
-    <detector id="TrackerSubAssembly_8_ID"
+    <detector id="EcalSubAssembly_ID"
       name="EcalBarrelTrackerSubAssembly"
       type="DD4hep_SubdetectorAssembly"
       vis="TrackerSubAssemblyVis">
@@ -142,12 +142,17 @@
       <dimensions numsides="EcalBarrel_SectorRepeat"
         rmin="EcalBarrel_rmin"
         z="EcalBarrel_Calorimeter_length"/>
+
+      <comment>
+        The envelope for ACTS purposes needs to include only the first layer. The following
+        definition includes the front support and is tangential to the outer edge of the
+        first tray. This allows the envelope to avoid the first SFIL.
+      </comment>
       <envelope vis="EcalBarrelImaging_envelope"
         rmin="EcalBarrel_rmin"
-        rmax="EcalBarrel_rmin + 2.0 * EcalBarrel_ImagingLayerThickness"
+        rmax="EcalBarrel_rmin + EcalBarrel_FrontSupportThickness + EcalBarrel_ImagingLayerThickness"
         length="EcalBarrel_Calorimeter_length"
         zstart="EcalBarrel_Calorimeter_zmin"
-        xoffset="0"
       />
       <sectors vis="EcalBarrelSectorVis"/>
 
@@ -392,7 +397,7 @@
   <plugins>
     <plugin name="DD4hep_ParametersPlugin">
       <argument value="EcalBarrelImaging"/>
-      <argument value="layer_pattern: str=EcalBarrelImaging_envelope"/>
+      <argument value="layer_pattern: str=envelope"/>
     </plugin>
   </plugins>
 

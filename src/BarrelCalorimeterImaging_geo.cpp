@@ -58,21 +58,14 @@ static Ref_t create_detector(Detector& desc, xml_h e, SensitiveDetector sens) {
 
   // Set detector type flag
   dd4hep::xml::setDetectorTypeFlag(x_detector, sdet);
-  auto& params = DD4hepDetectorHelper::ensureExtension<dd4hep::rec::VariantParameters>(sdet);
-
-  // Add the volume boundary material if configured
-  for (xml_coll_t bmat(x_detector, _Unicode(boundary_material)); bmat; ++bmat) {
-    xml_comp_t x_boundary_material = bmat;
-    DD4hepDetectorHelper::xmlToProtoSurfaceMaterial(x_boundary_material, params,
-                                                    "boundary_material");
-  }
+  auto& params [[maybe_unused]] = DD4hepDetectorHelper::ensureExtension<dd4hep::rec::VariantParameters>(sdet);
 
   detector_physvol.addPhysVolID("system", detector_id);
   sdet.setPlacement(detector_physvol);
 
   // build the envelope assembly
-  DetElement envelope_element(detector_name + "_envelope", detector_id);
-  Assembly envelope_volume(detector_name + "_envelope");
+  DetElement envelope_element("envelope", detector_id);
+  Assembly envelope_volume("envelope");
   auto& envelope_params =
       DD4hepDetectorHelper::ensureExtension<dd4hep::rec::VariantParameters>(envelope_element);
   if (x_detector.hasChild(_Unicode(envelope))) {
@@ -239,7 +232,7 @@ static Ref_t create_detector(Detector& desc, xml_h e, SensitiveDetector sens) {
     for (int layer_j = 0; layer_j < layer_repeat; layer_j++) {
 
       // Make an envelope for this layer
-      std::string layer_name = detector_name + Form("_layer%d", layer_num);
+      std::string layer_name = Form("layer%d", layer_num);
       double layer_dim_x     = tan_half_dphi * layer_pos_z;
       auto layer_mat         = desc.air();
 
@@ -281,12 +274,13 @@ static Ref_t create_detector(Detector& desc, xml_h e, SensitiveDetector sens) {
         double stave_pitch = -2.0 * stave_pos_x / (stave_repeat - 1);
 
         // Make one stave
-        std::string stave_name = detector_name + Form("_stave%d", stave_num);
+        std::string stave_name = Form("stave%d", stave_num);
         auto stave_material    = desc.air();
         Box stave_shape(stave_dim_x, stave_dim_y, stave_dim_z);
         Volume stave_volume(stave_name, stave_shape, stave_material);
         stave_volume.setAttributes(desc, x_stave.regionStr(), x_stave.limitsStr(),
                                    x_stave.visStr());
+        // No parent, since it will be added on cloning and placement
         DetElement stave_element(stave_name, detector_id);
 
         // Loop over the slices for this stave
@@ -393,7 +387,7 @@ static Ref_t create_detector(Detector& desc, xml_h e, SensitiveDetector sens) {
           DetElement stave_j_element =
               (stave_j == 0)
                   ? stave_element
-                  : stave_element.clone(detector_name + Form("_stave%d", stave_num + stave_j));
+                  : stave_element.clone(Form("stave%d", stave_num + stave_j));
           stave_j_element.setPlacement(stave_physvol);
           layer_element.add(stave_j_element);
 
@@ -465,7 +459,7 @@ static Ref_t create_detector(Detector& desc, xml_h e, SensitiveDetector sens) {
     sector_physvol.addPhysVolID("sector", sector_num + 1);
     DetElement sd = (sector_num == 0)
                         ? sector_element
-                        : sector_element.clone(detector_name + Form("_sector%d", sector_num));
+                        : sector_element.clone(Form("sector%d", sector_num));
     sd.setPlacement(sector_physvol);
     envelope_element.add(sd);
   }
