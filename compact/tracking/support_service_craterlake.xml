@@ -438,7 +438,7 @@
         vis="TrackerSupportVis"
         rmin1="OuterSupportConeN_rmin2"
         rmin2="OuterSupportConeN_rmin1"
-        rmax="InnerDetectorBarrelSupportCylCF_rmax"
+        rmax="InnerDetectorBarrelSupportCylCF_rmin"
         length="OuterSupportConeN_length"
         thickness="OuterSupportConeN_thickness">
           <position x="0*cm" y="0*cm" z="-OuterSupportConeN_z" />
