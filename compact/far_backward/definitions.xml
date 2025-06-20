@@ -176,7 +176,7 @@
     <constant name="Vacuum_BB_MaxX"       value="0.5*m"/>
     <constant name="Vacuum_BB_MinY"       value="-1.5*m"/>
     <constant name="Vacuum_BB_MaxY"       value="1.5*m"/>
-    <constant name="Vacuum_BB_MinZ"       value="B2BeR_CenterZ-       B2BeR_Length/2"/>
+    <constant name="Vacuum_BB_MinZ"       value="B2BeR_CenterZ-B2BeR_Length/2"/>
     <constant name="Vacuum_BB_MaxZ"       value="Q3eR_EndZ"/>
 
     <constant name="Beam_Theta"           value="Q3eR_Theta"/>
