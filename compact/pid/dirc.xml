@@ -66,6 +66,10 @@
     <constant name="DIRCBar_length"         value="(DIRCBarAssm_length - DIRCBar_count_z * DIRCGlue_thickness)/DIRCBar_count_z"/>
     <constant name="DIRCBar_center"         value="(DIRC_rmin + DIRC_rmax)/2" comment="Radial position of center of bar"/>
 
+    <!-- Rail -->
+    <constant name="DIRCRail_rmin"          value="InnerDetectorBarrelSupportCylCF_rmin + InnerDetectorBarrelSupportCylCF_thickness"/>
+    <constant name="DIRCRail_rmax"          value="EcalBarrel_rmin"/>
+    <constant name="DIRCRail_width"         value="2 * (DIRCRail_rmax - DIRCRail_rmin) * sin(360*degree / DIRCBox_count / 2)"/>
   </define>
 
   <materials>
@@ -158,8 +162,15 @@
         />
       </module>
       <support>
-        <rail height="78.50*mm" width="46.17*mm" length="DIRCBar_count_z*DIRCBar_length" material="Aluminum">
-          <position x="20*mm" y="0" z="0"/>
+        <comment>
+          Rail is a triangle with its point on the carbon fiber support cylinder,
+          and its edges perpendicular to the DIRC planes (30 degree opening angle).
+          The width is the length of the outer chord.
+        </comment>
+        <rail rmin="DIRCRail_rmin" rmax="DIRCRail_rmax"
+              length="DIRCBar_count_z * DIRCBar_length"
+              material="Aluminum">
+          <position x="(DIRCRail_rmax + DIRCRail_rmin) / 2.0 - DIRCBar_center" y="0" z="0"/>
         </rail>
       </support>
     </detector>
