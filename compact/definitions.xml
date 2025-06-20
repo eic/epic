@@ -488,7 +488,7 @@ Examples:
     <constant name="CentralTrackingRegionN_tan"   value="Eta4_0_tan * 0.99" />
 
     <constant name="InnerDetectorBarrelSupportCylinder_thickness" value="1*cm"/>
-    <constant name="InnerDetectorBarrelSupportCylinder_rmin"      value="71.0*cm"/>
+    <constant name="InnerDetectorBarrelSupportCylinder_rmin"      value="71.0*cm"/> <!-- EPIC Envelope - 03-12-2025.stp -->
     <constant name="InnerDetectorBarrelSupportCylinder_rmax"      value="InnerDetectorBarrelSupportCylinder_rmin + InnerDetectorBarrelSupportCylinder_thickness"/>
 
     <documentation level="0">
