@@ -46,19 +46,19 @@
     <constant name="B0TrackerMod1_x2"          value="2.0*B0TrackerMod1Outer_r*sin(B0TrackerModOpeningAngle/2.0)"/>
     <constant name="B0TrackerMod1_y"           value="B0TrackerMod1Outer_r*cos(B0TrackerModOpeningAngle/2.0) - B0TrackerMod1Inner_r"/>
 
-    <constant name="B0TrackerMod1SmallOuter_r" value="10.0*cm"/>
+    <constant name="B0TrackerMod1SmallOuter_r" value="8.5*cm"/>
     <constant name="B0TrackerMod1Small_x2"     value="2.0*B0TrackerMod1SmallOuter_r*sin(B0TrackerModOpeningAngle/2.0)"/>
     <constant name="B0TrackerMod1Small_y"      value="B0TrackerMod1SmallOuter_r*cos(B0TrackerModOpeningAngle/2.0) - B0TrackerMod1Inner_r"/>
 
-    <constant name="B0TrackerMod2SmallOuter_r" value="10.0*cm"/>
+    <constant name="B0TrackerMod2SmallOuter_r" value="9.5*cm"/>
     <constant name="B0TrackerMod2Small_x2"     value="2.0*B0TrackerMod2SmallOuter_r*sin(B0TrackerModOpeningAngle/2.0)"/>
     <constant name="B0TrackerMod2Small_y"      value="B0TrackerMod2SmallOuter_r*cos(B0TrackerModOpeningAngle/2.0) - B0TrackerMod1Inner_r"/>
 
-    <constant name="B0TrackerMod3SmallOuter_r" value="11.0*cm"/>
+    <constant name="B0TrackerMod3SmallOuter_r" value="10.0*cm"/>
     <constant name="B0TrackerMod3Small_x2"     value="2.0*B0TrackerMod3SmallOuter_r*sin(B0TrackerModOpeningAngle/2.0)"/>
     <constant name="B0TrackerMod3Small_y"      value="B0TrackerMod3SmallOuter_r*cos(B0TrackerModOpeningAngle/2.0) - B0TrackerMod1Inner_r"/>
 
-    <constant name="B0TrackerMod4SmallOuter_r" value="12.0*cm"/>
+    <constant name="B0TrackerMod4SmallOuter_r" value="10.5*cm"/>
     <constant name="B0TrackerMod4Small_x2"     value="2.0*B0TrackerMod4SmallOuter_r*sin(B0TrackerModOpeningAngle/2.0)"/>
     <constant name="B0TrackerMod4Small_y"      value="B0TrackerMod4SmallOuter_r*cos(B0TrackerModOpeningAngle/2.0) - B0TrackerMod1Inner_r"/>
 
