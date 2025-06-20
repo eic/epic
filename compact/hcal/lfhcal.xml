@@ -9,51 +9,6 @@
 
   <define>
     <include ref="lfhcal/module_definitions.xml"/>
-
-    <documentation>
-      #### Material Thickness
-    </documentation>
-    <constant name="LFHCALAbsorberThickness"      value="1.52* cm"/>
-    <constant name="LFHCALPolystyreneThickness"   value="0.4* cm"/>
-    <constant name="LFHCALKaptonThickness"        value="0.08* cm"/>
-    <constant name="LFHCALAirOffset"              value="0.05* cm"/>
-    <constant name="LFHCALElectronicsThickness"   value="10.0* cm"/>
-    <documentation>
-      - Hcal Endcap N Layers and computed Thickness
-    </documentation>
-
-    <comment> FIXME: Need actual values once they are decided upon </comment>
-    <constant name="LFHCALLayer_NSteelRepeatSFirst"    value="5"/> <!--      6 x 10 steel layers -->
-    <constant name="LFHCALLayer_NSteelRepeatS"    value="10"/> <!--      6 x 10 steel layers -->
-    <constant name="LFHCALLayer_NTungstenRepeat"  value="0"/>
-    <constant name="Mod_MountingPlateThickness" value="25.4* mm"/>
-    <constant name="Mod_SideWallThickness"    value="1.9* mm"/>
-    <constant name="Mod_TopWallThickness"     value="1.9* mm"/>
-    <constant name="Mod_FrontWallThickness"   value="15* mm"/>
-    <constant name="Mod_BackWallThickness"    value="15* mm"/>
-    <constant name="Mod_NotchDepth"           value="5* mm"/>
-    <constant name="Mod_NotchHeight"          value="78* mm"/>
-    <constant name="Mod_FoilThick"            value="0.1* mm"/>
-    <constant name="Mod_PCBWidth"             value="70* mm"/>
-    <constant name="Mod_PCBThickness"         value="4* mm"/>
-    <constant name="Mod_PCBLength"            value="125* cm"/>
-
-
-    <constant name="EightM_xArr"              value="4" />
-    <constant name="EightM_yArr"              value="2" />
-    <constant name="EightM_OuterWidth"        value="20.188* cm"/>
-    <constant name="EightM_OuterHeight"       value="10.1* cm"/>
-    <constant name="EightM_BackInnerWidth"    value="15.0* cm"/>
-    <constant name="EightM_BackInnerHeight"   value="7.0* cm"/>
-    <constant name="FourM_xArr"               value="2" />
-    <constant name="FourM_yArr"               value="2" />
-    <constant name="FourM_OuterWidth"         value="10.094* cm"/>
-    <constant name="FourM_OuterHeight"        value="10.1* cm"/>
-    <constant name="FourM_BackInnerWidth"     value="7.0* cm"/>
-    <constant name="FourM_BackInnerHeight"    value="7.0* cm"/>
-    <constant name="FourM_NotchHeight"        value="75* mm"/>
-
-
   </define>
 
   <display>
