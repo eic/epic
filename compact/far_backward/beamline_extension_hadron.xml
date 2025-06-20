@@ -55,7 +55,7 @@
           <rotation num="1" start="0 * deg" step="0 * deg" axis="Z"/>
         </cut>
         <cut shape="Cone">
-          <placement x="-10.519 * cm" y="0 * cm" z="0 * cm" rotX="0 * rad" rotY="1.432510 * deg" rotZ="0 * rad"/>
+          <placement x="-10.519 * cm" y="0 * cm" z="0 * cm" rotX="0 * rad" rotY="abs(CrossingAngle)" rotZ="0 * rad"/>
           <dimensions rmin1="0 * cm" rmax1="7.6 * cm" rmin2="0 * cm" rmax2="6.8 * cm" dz="181.0 * cm / 2."/>
           <rotation num="1" start="0 * deg" step="0 * deg" axis="Z"/>
         </cut>
@@ -83,7 +83,7 @@
           <rotation num="1" start="0 * deg" step="0 * deg" axis="Z"/>
         </cut>
         <cut shape="Cone">
-          <placement x="-10.519 * cm" y="0 * cm" z="0 * cm" rotX="0 * rad" rotY="1.432510 * deg" rotZ="0 * rad"/>
+          <placement x="-10.519 * cm" y="0 * cm" z="0 * cm" rotX="0 * rad" rotY="abs(CrossingAngle)" rotZ="0 * rad"/>
           <dimensions rmin1="0 * cm" rmax1="6.8 * cm" rmin2="0 * cm" rmax2="6.0 * cm" dz="200.0 * cm / 2."/>
           <rotation num="1" start="0 * deg" step="0 * deg" axis="Z"/>
         </cut>
@@ -103,7 +103,7 @@
           <rotation num="1" start="0 * deg" step="0 * deg" axis="Z"/>
         </cut>
         <cut shape="Cone">
-          <placement x="-10.519 * cm" y="0 * cm" z="0 * cm" rotX="0 * rad" rotY="1.432510 * deg" rotZ="0 * rad"/>
+          <placement x="-10.519 * cm" y="0 * cm" z="0 * cm" rotX="0 * rad" rotY="abs(CrossingAngle)" rotZ="0 * rad"/>
           <dimensions rmin1="0 * cm" rmax1="6.8 * cm" rmin2="0 * cm" rmax2="6.0 * cm" dz="200.0 * cm / 2."/>
           <rotation num="1" start="0 * deg" step="0 * deg" axis="Z"/>
         </cut>
@@ -123,7 +123,7 @@
           <rotation num="1" start="0 * deg" step="0 * deg" axis="Z"/>
         </cut>
         <cut shape="Cone">
-          <placement x="-10.519 * cm" y="0 * cm" z="0 * cm" rotX="0 * rad" rotY="1.432510 * deg" rotZ="0 * rad"/>
+          <placement x="-10.519 * cm" y="0 * cm" z="0 * cm" rotX="0 * rad" rotY="abs(CrossingAngle)" rotZ="0 * rad"/>
           <dimensions rmin1="0 * cm" rmax1="6.8 * cm" rmin2="0 * cm" rmax2="6.0 * cm" dz="200.0 * cm / 2."/>
           <rotation num="1" start="0 * deg" step="0 * deg" axis="Z"/>
         </cut>
@@ -143,7 +143,7 @@
           <rotation num="1" start="0 * deg" step="0 * deg" axis="Z"/>
         </cut>
         <cut shape="Cone">
-          <placement x="-10.519 * cm" y="0 * cm" z="0 * cm" rotX="0 * rad" rotY="1.432510 * deg" rotZ="0 * rad"/>
+          <placement x="-10.519 * cm" y="0 * cm" z="0 * cm" rotX="0 * rad" rotY="abs(CrossingAngle)" rotZ="0 * rad"/>
           <dimensions rmin1="0 * cm" rmax1="6.8 * cm" rmin2="0 * cm" rmax2="6.0 * cm" dz="200.0 * cm / 2."/>
           <rotation num="1" start="0 * deg" step="0 * deg" axis="Z"/>
         </cut>
@@ -177,7 +177,7 @@
           <rotation num="1" start="0 * deg" step="0 * deg" axis="Z"/>
         </cut>
         <cut shape="Cone">
-          <placement x="-10.519 * cm" y="0 * cm" z="0 * cm" rotX="0 * rad" rotY="1.432510 * deg" rotZ="0 * rad"/>
+          <placement x="-10.519 * cm" y="0 * cm" z="0 * cm" rotX="0 * rad" rotY="abs(CrossingAngle)" rotZ="0 * rad"/>
           <dimensions rmin1="0 * cm" rmax1="6. * cm" rmin2="0 * cm" rmax2="6. * cm" dz="400.0 * cm / 2."/>
           <rotation num="1" start="0 * deg" step="0 * deg" axis="Z"/>
         </cut>
@@ -195,7 +195,7 @@
           <rotation num="1" start="0 * deg" step="0 * deg" axis="Z"/>
         </cut>
         <cut>
-          <placement x="(0.515283 + abs(0.515283-4.019476)/2. - 8.579) * cm" y="0 * cm" z="0 * cm" rotX="0 * rad" rotY="1.434018 * deg" rotZ="0 * rad"/>
+          <placement x="(0.515283 + abs(0.515283-4.019476)/2. - 8.579) * cm" y="0 * cm" z="0 * cm" rotX="0 * rad" rotY="abs(CrossingAngle)" rotZ="0 * rad"/>
           <dimensions rmin="0 * cm" rmax="17.157 * cm / 2." half_length="400. * cm / 2."/>
           <rotation num="1" start="0 * deg" step="0 * deg" axis="Z"/>
         </cut>
@@ -223,7 +223,7 @@
           <rotation num="1" start="0 * deg" step="0 * deg" axis="Z"/>
         </cut>
         <cut>
-          <placement x="(0.515283 + abs(0.515283-4.019476)/2. - 8.579) * cm" y="0 * cm" z="0 * cm" rotX="0 * rad" rotY="1.434018 * deg" rotZ="0 * rad"/>
+          <placement x="(0.515283 + abs(0.515283-4.019476)/2. - 8.579) * cm" y="0 * cm" z="0 * cm" rotX="0 * rad" rotY="abs(CrossingAngle)" rotZ="0 * rad"/>
           <dimensions rmin="0 * cm" rmax="9.050020 * cm" half_length="400. * cm / 2."/>
           <rotation num="1" start="0 * deg" step="0 * deg" axis="Z"/>
         </cut>
@@ -238,7 +238,7 @@
           <rotation num="1" start="0 * deg" step="0 * deg" axis="Z"/>
         </cut>
         <cut>
-          <placement x="(0.515283 + abs(0.515283-4.019476)/2. - 8.579) * cm" y="0 * cm" z="0 * cm" rotX="0 * rad" rotY="1.434018 * deg" rotZ="0 * rad"/>
+          <placement x="(0.515283 + abs(0.515283-4.019476)/2. - 8.579) * cm" y="0 * cm" z="0 * cm" rotX="0 * rad" rotY="abs(CrossingAngle)" rotZ="0 * rad"/>
           <dimensions rmin="0 * cm" rmax="9.050020 * cm" half_length="400. * cm / 2."/>
           <rotation num="1" start="0 * deg" step="0 * deg" axis="Z"/>
         </cut>
@@ -253,7 +253,7 @@
           <rotation num="1" start="0 * deg" step="0 * deg" axis="Z"/>
         </cut>
         <cut>
-          <placement x="(0.515283 + abs(0.515283-4.019476)/2. - 8.579) * cm" y="0 * cm" z="0 * cm" rotX="0 * rad" rotY="1.434018 * deg" rotZ="0 * rad"/>
+          <placement x="(0.515283 + abs(0.515283-4.019476)/2. - 8.579) * cm" y="0 * cm" z="0 * cm" rotX="0 * rad" rotY="abs(CrossingAngle)" rotZ="0 * rad"/>
           <dimensions rmin="0 * cm" rmax="7.813040 * cm" half_length="400. * cm / 2."/>
           <rotation num="1" start="0 * deg" step="0 * deg" axis="Z"/>
         </cut>
@@ -268,7 +268,7 @@
           <rotation num="1" start="0 * deg" step="0 * deg" axis="Z"/>
         </cut>
         <cut>
-          <placement x="(0.515283 + abs(0.515283-4.019476)/2. - 8.579) * cm" y="0 * cm" z="0 * cm" rotX="0 * rad" rotY="1.434018 * deg" rotZ="0 * rad"/>
+          <placement x="(0.515283 + abs(0.515283-4.019476)/2. - 8.579) * cm" y="0 * cm" z="0 * cm" rotX="0 * rad" rotY="abs(CrossingAngle)" rotZ="0 * rad"/>
           <dimensions rmin="0 * cm" rmax="7.813040 * cm" half_length="400. * cm / 2."/>
           <rotation num="1" start="0 * deg" step="0 * deg" axis="Z"/>
         </cut>
@@ -298,8 +298,9 @@
           <rotation num="1" start="0 * deg" step="0 * deg" axis="Z"/>
         </cut>
         <cut>
-          <placement x="-15.663 * cm" y="0 * cm" z="0 * cm" rotX="0 * rad" rotY="1.432409 * deg" rotZ="0 * rad"/>
-          <dimensions rmin="0 * cm" rmax="25.0 * cm / 2." half_length="4000. * cm / 2."/>
+          <placement x="-15.663 * cm" y="0 * cm" z="0 * cm" rotX="0 * rad" rotY="abs(CrossingAngle)" rotZ="0 * rad"/>
+          <!-- dimensions rmin="0 * cm" rmax="25.0 * cm / 2." half_length="4000. * cm / 2."/ (actual dimensions, temporarily commented to avoid overlap with the outdated electron beam pipe)-->
+          <dimensions rmin="0 * cm" rmax="30.0 * cm / 2." half_length="4000. * cm / 2."/>
           <rotation num="1" start="0 * deg" step="0 * deg" axis="Z"/>
         </cut>
       </yoke>
@@ -311,7 +312,7 @@
         <placement x="Q2PR_Coil_Center_posX" y="Q2PR_Coil_Center_posY" z="Q2PR_Coil_Center_posZ" theta="Q2PR_Yoke_Rotation_Angle"/>
           <dimensions rmin="11.267440 * cm / 2." rmax="12.466320 * cm / 2." half_length="486.410000 * cm / 2." sphi="0 * deg" dphi="360.0 * deg"/>
       </tube>
-      <endplate name="Q2PR_EndPlate_IP" vis="MagnetEndPlateVis">
+      <endplate name="Q2PR_EndPlate_nonIP" vis="MagnetEndPlateVis">
         <placement x="Q2PR_Yoke_Center_posX" y="Q2PR_Yoke_Center_posY" z="Q2PR_Yoke_Center_posZ" theta="Q2PR_Yoke_Rotation_Angle"/>
         <zplane z="-(552.54 * cm / 2. + 0.5 * cm)" rmin="0.0 * cm" rmax="90. * cm / 2."/>
         <zplane z="-(552.54 * cm / 2. + 3.810000 * cm)" rmin="0.0 * cm" rmax="90. * cm / 2."/>
@@ -321,12 +322,13 @@
           <rotation num="1" start="0 * deg" step="0 * deg" axis="Z"/>
         </cut>
         <cut>
-          <placement x="-15.663 * cm" y="0 * cm" z="0 * cm" rotX="0 * rad" rotY="1.432409 * deg" rotZ="0 * rad"/>
-          <dimensions rmin="0 * cm" rmax="8.458200 * cm" half_length="800. * cm / 2."/>
+          <placement x="-15.663 * cm" y="0 * cm" z="0 * cm" rotX="0 * rad" rotY="abs(CrossingAngle)" rotZ="0 * rad"/>
+          <!-- dimensions rmin="0 * cm" rmax="8.458200 * cm" half_length="800. * cm / 2."/ (actual dimensions, temporarily commented to avoid overlap with the outdated electron beam pipe)-->
+          <dimensions rmin="0 * cm" rmax="40 * cm / 2." half_length="800. * cm / 2."/>
           <rotation num="1" start="0 * deg" step="0 * deg" axis="Z"/>
         </cut>
       </endplate>
-      <endplate name="Q2PR_EndPlate_nonIP" vis="MagnetEndPlateVis">
+      <endplate name="Q2PR_EndPlate_IP" vis="MagnetEndPlateVis">
         <placement x="Q2PR_Yoke_Center_posX" y="Q2PR_Yoke_Center_posY" z="Q2PR_Yoke_Center_posZ" theta="Q2PR_Yoke_Rotation_Angle"/>
         <zplane z="(552.54 * cm / 2. + 0.5 * cm)" rmin="0.0 * cm" rmax="90. * cm / 2."/>
         <zplane z="(552.54 * cm / 2. + 3.810000 * cm)" rmin="0.0 * cm" rmax="90. * cm / 2."/>
@@ -336,12 +338,12 @@
           <rotation num="1" start="0 * deg" step="0 * deg" axis="Z"/>
         </cut>
         <cut>
-          <placement x="-15.663 * cm" y="0 * cm" z="0 * cm" rotX="0 * rad" rotY="1.432409 * deg" rotZ="0 * rad"/>
+          <placement x="-15.663 * cm" y="0 * cm" z="0 * cm" rotX="0 * rad" rotY="abs(CrossingAngle)" rotZ="0 * rad"/>
           <dimensions rmin="0 * cm" rmax="8.458200 * cm" half_length="800. * cm / 2."/>
           <rotation num="1" start="0 * deg" step="0 * deg" axis="Z"/>
         </cut>
       </endplate>
-      <endplate name="Q2PR_EndPlate2_IP" vis="MagnetEndPlateVis">
+      <endplate name="Q2PR_EndPlate2_nonIP" vis="MagnetEndPlateVis">
         <placement x="Q2PR_Yoke_Center_posX" y="Q2PR_Yoke_Center_posY" z="Q2PR_Yoke_Center_posZ" theta="Q2PR_Yoke_Rotation_Angle"/>
         <zplane z="-(571.500000 * cm / 2.)" rmin="0.0 * cm" rmax="92.540074 * cm / 2."/>
         <zplane z="-(571.500000 * cm / 2. + 6.822440 * cm)" rmin="0.0 * cm" rmax="92.540074 * cm / 2."/>
@@ -351,12 +353,13 @@
           <rotation num="1" start="0 * deg" step="0 * deg" axis="Z"/>
         </cut>
         <cut>
-          <placement x="-15.663 * cm" y="0 * cm" z="0 * cm" rotX="0 * rad" rotY="1.432409 * deg" rotZ="0 * rad"/>
-          <dimensions rmin="0 * cm" rmax="18.022824 * cm / 2." half_length="800. * cm / 2."/>
+          <placement x="-15.663 * cm" y="0 * cm" z="0 * cm" rotX="0 * rad" rotY="abs(CrossingAngle)" rotZ="0 * rad"/>
+          <!-- dimensions rmin="0 * cm" rmax="18.022824 * cm / 2." half_length="800. * cm / 2."/ (actual dimensions, temporarily commented to avoid overlap with the outdated electron beam pipe)-->
+          <dimensions rmin="0 * cm" rmax="40 * cm / 2." half_length="800. * cm / 2."/>
           <rotation num="1" start="0 * deg" step="0 * deg" axis="Z"/>
         </cut>
       </endplate>
-      <endplate name="Q2PR_EndPlate2_nonIP" vis="MagnetEndPlateVis">
+      <endplate name="Q2PR_EndPlate2_IP" vis="MagnetEndPlateVis">
         <placement x="Q2PR_Yoke_Center_posX" y="Q2PR_Yoke_Center_posY" z="Q2PR_Yoke_Center_posZ" theta="Q2PR_Yoke_Rotation_Angle"/>
         <zplane z="(571.500000 * cm / 2.)" rmin="0.0 * cm" rmax="92.540074 * cm / 2."/>
         <zplane z="(571.500000 * cm / 2. + 6.822440 * cm)" rmin="0.0 * cm" rmax="92.540074 * cm / 2."/>
@@ -366,7 +369,7 @@
           <rotation num="1" start="0 * deg" step="0 * deg" axis="Z"/>
         </cut>
         <cut>
-          <placement x="-15.663 * cm" y="0 * cm" z="0 * cm" rotX="0 * rad" rotY="1.432409 * deg" rotZ="0 * rad"/>
+          <placement x="-15.663 * cm" y="0 * cm" z="0 * cm" rotX="0 * rad" rotY="abs(CrossingAngle)" rotZ="0 * rad"/>
           <dimensions rmin="0 * cm" rmax="18.022824 * cm / 2." half_length="800. * cm / 2."/>
           <rotation num="1" start="0 * deg" step="0 * deg" axis="Z"/>
         </cut>
@@ -395,8 +398,9 @@
           <rotation num="1" start="0 * deg" step="0 * deg" axis="Z"/>
         </cut>
         <cut>
-          <placement x="-15.663 * cm" y="0 * cm" z="0 * cm" rotX="0 * rad" rotY="1.432409 * deg" rotZ="0 * rad"/>
-          <dimensions rmin="0 * cm" rmax="18.022824 * cm / 2." half_length="800. * cm / 2."/>
+          <placement x="-15.663 * cm" y="0 * cm" z="0 * cm" rotX="0 * rad" rotY="abs(CrossingAngle)" rotZ="0 * rad"/>
+          <!-- dimensions rmin="0 * cm" rmax="18.022824 * cm / 2." half_length="800. * cm / 2."/ (actual dimensions, temporarily commented to avoid overlap with the outdated electron beam pipe)-->
+          <dimensions rmin="0 * cm" rmax="40 * cm / 2." half_length="800. * cm / 2."/>
           <rotation num="1" start="0 * deg" step="0 * deg" axis="Z"/>
         </cut>
       </cryoend>
