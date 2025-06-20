@@ -165,9 +165,10 @@
         <comment>
           Rail is a triangle with its point on the carbon fiber support cylinder,
           and its edges perpendicular to the DIRC planes (30 degree opening angle).
-          The width is the length of the outer chord.
+          The width is the length of the outer chord, with addition of the width
+          specified below to avoid singular points of contact with the cylinder.
         </comment>
-        <rail rmin="DIRCRail_rmin" rmax="DIRCRail_rmax"
+        <rail rmin="DIRCRail_rmin" rmax="DIRCRail_rmax" width="2*mm"
               length="DIRCBar_count_z * DIRCBar_length"
               material="Aluminum">
           <position x="(DIRCRail_rmax + DIRCRail_rmin) / 2.0 - DIRCBar_center" y="0" z="0"/>
