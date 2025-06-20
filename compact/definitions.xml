@@ -487,6 +487,10 @@ Examples:
     <constant name="CentralTrackingRegionP_tan"   value="Eta3_7_tan * 1.00" />
     <constant name="CentralTrackingRegionN_tan"   value="Eta4_0_tan * 0.99" />
 
+    <constant name="InnerDetectorBarrelSupportCylinder_thickness" value="1*cm"/>
+    <constant name="InnerDetectorBarrelSupportCylinder_rmin"      value="71.0*cm"/>
+    <constant name="InnerDetectorBarrelSupportCylinder_rmax"      value="InnerDetectorBarrelSupportCylinder_rmin + InnerDetectorBarrelSupportCylinder_thickness"/>
+
     <documentation level="0">
 ### PID Detector Region Parameters
     </documentation>

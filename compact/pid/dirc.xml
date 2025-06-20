@@ -67,7 +67,7 @@
     <constant name="DIRCBar_center"         value="(DIRC_rmin + DIRC_rmax)/2" comment="Radial position of center of bar"/>
 
     <!-- Rail -->
-    <constant name="DIRCRail_rmin"          value="InnerDetectorBarrelSupportCylCF_rmin + InnerDetectorBarrelSupportCylCF_thickness"/>
+    <constant name="DIRCRail_rmin"          value="InnerDetectorBarrelSupportCylinder_rmax"/>
     <constant name="DIRCRail_rmax"          value="EcalBarrel_rmin"/>
     <constant name="DIRCRail_width"         value="2 * (DIRCRail_rmax - DIRCRail_rmin) * sin(360*degree / DIRCBox_count / 2)"/>
   </define>
