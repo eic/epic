@@ -51,7 +51,7 @@ static Ref_t create_detector(Detector& desc, xml_h e, SensitiveDetector sens) {
   detector_volume.setAttributes(desc, x_detector.regionStr(), x_detector.limitsStr(),
                                 x_detector.visStr());
 
-  Transform3D detector_tr       = Translation3D(0, 0, offset) * RotationZ(half_dphi);
+  Transform3D detector_tr       = Translation3D(0, 0, offset) * RotationZ(0);
   PlacedVolume detector_physvol = mother_volume.placeVolume(detector_volume, detector_tr);
   sens.setType("calorimeter");
 
