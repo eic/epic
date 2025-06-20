@@ -250,14 +250,15 @@ static Ref_t createDetector(Detector& desc, xml_h e, SensitiveDetector sens) {
   dirc_support.setVisAttributes(desc.visAttributes(xml_support.visStr()));
 
   // Rail
-  xml_comp_t xml_rail            = xml_support.child(_Unicode(rail));
-  xml_dim_t rail_pos             = xml_rail.position();
-  double rail_height             = (xml_rail.rmax() - xml_rail.rmin()) * cos(dphi / 2);
-  double rail_width_at_rmax      = 2 * (xml_rail.rmax() - xml_rail.rmin()) * sin(dphi / 2);
-  double rail_width_at_rmin      = 0;
-  double rail_length             = xml_rail.length();
+  xml_comp_t xml_rail       = xml_support.child(_Unicode(rail));
+  xml_dim_t rail_pos        = xml_rail.position();
+  double rail_height        = (xml_rail.rmax() - xml_rail.rmin()) * cos(dphi / 2);
+  double rail_width_at_rmax = 2 * (xml_rail.rmax() - xml_rail.rmin()) * sin(dphi / 2);
+  double rail_width_at_rmin = 0;
+  double rail_length        = xml_rail.length();
   Trap rail_trap("rail_trap", rail_length / 2, 0, 0, rail_height / 2, rail_width_at_rmin / 2,
-                 rail_width_at_rmax / 2, 0, rail_height / 2, rail_width_at_rmin / 2, rail_width_at_rmax / 2, 0);
+                 rail_width_at_rmax / 2, 0, rail_height / 2, rail_width_at_rmin / 2,
+                 rail_width_at_rmax / 2, 0);
   Volume rail_vol("rail_vol", rail_trap, desc.material(xml_rail.materialStr()));
   rail_vol.setVisAttributes(desc.visAttributes(xml_rail.visStr()));
 
