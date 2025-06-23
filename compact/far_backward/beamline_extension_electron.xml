@@ -21,6 +21,7 @@
   <comment>
      Outgoing electron beam pipes
      Implemented to allow overlap checks with the far backwards systems
+     See compact/far_forward/ion_beamline.xml for hadron magnet element coordinate description - the same is applied to the electron magnet elements
   </comment>
 
   <detectors>

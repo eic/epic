@@ -3,7 +3,12 @@
 
 <lccdd>
 
+  <comment>
+     See compact/far_forward/ion_beamline.xml for hadron magnet element coordinate description - the same is applied to the electron magnet elements
+  </comment>
+
   <define>
+
     <!-- Q0eF Center Position -->
     <constant name="Q0EF_Center_posX" value="-0.00259434 * cm"/>
     <constant name="Q0EF_Center_posY" value="0 * cm"/>

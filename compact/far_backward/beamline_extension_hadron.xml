@@ -6,7 +6,9 @@
   <comment>
      Incident hadron beam pipes
      Implemented to allow overlap checks with the far backwards systems
+     See compact/far_forward/ion_beamline.xml for magnet element coordinate description
   </comment>
+
 
   <define>
     <!-- Q1ApR Yoke Center Position -->
