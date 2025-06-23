@@ -52,7 +52,7 @@
 	- Both the forward (FWD) and backward (BWD/rear) cryostats contain multiple sub-cryostats, primarily associated with hadron magnets.
 	- The main components are the magnet yokes; most other elements—such as coils, support tubes, yoke shielding, heat shielding, and vessels—are positioned relative to these yokes.
 	- Since the STEP file provides coordinates in the RHIC coordinate system, a rotation and translation must be applied before using them in the geometry XML files. See page 19 of the following PDF from the IR Meeting on May 30, 2025:
-	[https://brookhavenlab.sharepoint.com/:b:/r/sites/eRHIC/bnl%26slac/EIC%20IR%20Meeting%20Minutes%20%20Documents/IR-Meeting/2025/05-30-2025/EIC_CRYO_GEANT4_May2025_NATOCHII_UPDATED.pdf?csf=1&web=1&e=7Vhl0m]
+	[https://brookhavenlab.sharepoint.com/:b:/r/sites/eRHIC/bnl%26slac/EIC%20IR%20Meeting%20Minutes%20%20Documents/IR-Meeting/2025/05-30-2025/EIC_CRYO_GEANT4_May2025_NATOCHII_UPDATED.pdf]
 
 	-- Apply a shift of 81 cm (the offset between RHIC and EIC IP6 interaction points).
 	-- Apply a rotation of 8 mrad to align with the ePIC detector axis.
@@ -73,7 +73,7 @@
 		double deltaZ = coord2.Z() - coord1.Z();
 		double rotY_angle = atan(deltaX / deltaZ) * rad;
 		// Threshold small angles
-		if (std::abs(rotY_angle) < 1e-6) {
+		if (1e-6 > std::abs(rotY_angle)) {
 		    rotY_angle = 0;
 		}
 		// Add 'center' and 'rotY_angle' to the XML file
