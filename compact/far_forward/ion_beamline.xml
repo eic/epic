@@ -42,11 +42,11 @@
   </define>
 
   <comment>
-	Instructions on how to obtain magnet element coordinates and dimensions.
+        Instructions on how to obtain magnet element coordinates and dimensions.
 
-	The reference STEP file, provided by the Superconducting Magnet Division (SMD), is available on SharePoint:
-	EIC Public Sharing Docs → Documents → Experimental Program → ePIC → Engineering → STR-Files → IR6_CRYOSTAT_2200m_top_4-24-2025.stp
-	[https://brookhavenlab.sharepoint.com/:u:/s/EICPublicSharingDocs/EdR44ODny1BEmMTTks61CCwBe8tJYMc0iWkPIYY_EjYEuw?e=2XLUEt]
+        The reference STEP file, provided by the Superconducting Magnet Division (SMD), is available on SharePoint:
+        EIC Public Sharing Docs → Documents → Experimental Program → ePIC → Engineering → STR-Files → IR6_CRYOSTAT_2200m_top_4-24-2025.stp
+        [https://brookhavenlab.sharepoint.com/:u:/s/EICPublicSharingDocs/EdR44ODny1BEmMTTks61CCwBe8tJYMc0iWkPIYY_EjYEuw?e=2XLUEt]
 
 	- The file can be opened using Onshape (www.onshape.com), a free, cloud-based CAD platform for 3D modeling and mechanical design.
 	- Both the forward (FWD) and backward (BWD/rear) cryostats contain multiple sub-cryostats, primarily associated with hadron magnets.
@@ -54,10 +54,10 @@
 	- Since the STEP file provides coordinates in the RHIC coordinate system, a rotation and translation must be applied before using them in the geometry XML files. See page 19 of the following PDF from the IR Meeting on May 30, 2025:
 	[https://brookhavenlab.sharepoint.com/:b:/r/sites/eRHIC/bnl%26slac/EIC%20IR%20Meeting%20Minutes%20%20Documents/IR-Meeting/2025/05-30-2025/EIC_CRYO_GEANT4_May2025_NATOCHII_UPDATED.pdf]
 
-	-- Apply a shift of 81 cm (the offset between RHIC and EIC IP6 interaction points).
-	-- Apply a rotation of 8 mrad to align with the ePIC detector axis.
+        -- Apply a shift of 81 cm (the offset between RHIC and EIC IP6 interaction points).
+        -- Apply a rotation of 8 mrad to align with the ePIC detector axis.
 
-	Example of how to extract coordinates from Onshape and compute the yoke's position and orientation:
+        Example of how to extract coordinates from Onshape and compute the yoke's position and orientation:
 
 		TVector3 coord1(-47.389536 * cm, 0, -1704.865494 * cm); // B1pF yoke endcap — IP side
 		TVector3 coord2(-41.351827 * cm, 0, -2009.882603 * cm); // B1pF yoke endcap — non-IP side
@@ -78,14 +78,14 @@
 		}
 		// Add 'center' and 'rotY_angle' to the XML file
 
-	- Some barrel elements (e.g., heat shield, vessel) and endplates are described using polygons with two or more Z-planes. Example:
+        - Some barrel elements (e.g., heat shield, vessel) and endplates are described using polygons with two or more Z-planes. Example:
 
-		<placement x="Q1APF_Yoke_Center_posX" y="Q1APF_Yoke_Center_posY" z="Q1APF_Yoke_Center_posZ" theta="Q1APF_Yoke_Rotation_Angle"/>
-		<zplane z="-(160.817560 * cm / 2.)" rmin="7.114540 * cm" rmax="29.210000 * cm"/>
-		<zplane z="-(160.817560 * cm / 2. + 15.246221 * cm)" rmin="7.114540 * cm" rmax="29.210000 * cm"/>
+                <placement x="Q1APF_Yoke_Center_posX" y="Q1APF_Yoke_Center_posY" z="Q1APF_Yoke_Center_posZ" theta="Q1APF_Yoke_Rotation_Angle"/>
+                <zplane z="-(160.817560 * cm / 2.)" rmin="7.114540 * cm" rmax="29.210000 * cm"/>
+                <zplane z="-(160.817560 * cm / 2. + 15.246221 * cm)" rmin="7.114540 * cm" rmax="29.210000 * cm"/>
 
-	Here, 160.817560 cm is the distance between the inner surfaces of the two Q1ApF endplates (mounted on both ends of the magnet),
-	and 15.246221 cm is the Z-thickness of the endplate on the IP side (note the minus sign).
+        Here, 160.817560 cm is the distance between the inner surfaces of the two Q1ApF endplates (mounted on both ends of the magnet),
+        and 15.246221 cm is the Z-thickness of the endplate on the IP side (note the minus sign).
   </comment>
 
   <comment>
