@@ -10,14 +10,14 @@
       ## World volume
     </documentation>
     <constant name="backward_dx" value="2*m"/>
-    <constant name="backward_dy" value="0.5*m"/>
-    <constant name="backward_dz" value="65*m"/>
+    <constant name="backward_dy" value="1*m"/>
+    <constant name="backward_dz" value="35*m"/>
     <constant name="exp_hall_dx" value="3.5*m"/>
     <constant name="exp_hall_dy" value="3.5*m"/>
     <constant name="exp_hall_dz" value="5.5*m"/>
-    <constant name="forward_dx" value="1*m"/>
+    <constant name="forward_dx" value="2*m"/>
     <constant name="forward_dy" value="1*m"/>
-    <constant name="forward_dz" value="65*m"/>
+    <constant name="forward_dz" value="25*m"/>
 
     <documentation>
       ## Detector IDs
