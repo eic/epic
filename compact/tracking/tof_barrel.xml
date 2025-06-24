@@ -400,7 +400,7 @@
         <segmentation type="CartesianGridXY" key_value="0" grid_size_x="0.1*mm" grid_size_y="1*cm" offset_x="0.05*mm" offset_y="0.5*cm"/>
         <segmentation type="CartesianGridXY" key_value="1" grid_size_x="0.1*mm" grid_size_y="1*cm" offset_x="0.05*mm" offset_y="0"/>
       </segmentation>
-      <id>system:8,layer:4,module:12,sensor:10,segmentation_id:2,x:40:-8,y:-16</id>
+      <id>system:8,layer:4,module:12,sensor:10,segmentation_id:2,x:40:-16,y:-8</id>
     </readout>
   </readouts>
 
