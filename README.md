@@ -7,7 +7,7 @@ Overview
 
 **Detector geometry:**
 - [Empty viewer](https://eic.github.io/epic/geoviewer)
-- Craterlake: [viewer](https://eic.github.io/epic/geoviewer?nobrowser&file=artifacts/tgeo/epic_craterlake.root&item=default;1&opt=clipx;clipy;transp30;zoom120;ROTY320;ROTZ340;trz0;trr0;ctrl;all) [step](https://eic.github.io/epic//artifacts/epic_craterlake_no_bhcal.stp/epic_craterlake_no_bhcal.stp)
+- Craterlake: [viewer](https://eic.github.io/epic/geoviewer?nobrowser&file=artifacts/tgeo/epic_craterlake.root&item=default;1&opt=clipx;clipy;transp30;zoom120;ROTY320;ROTZ340;trz0;trr0;ctrl;all) [tgeo](https://eic.github.io/epic//artifacts/tgeo/epic_craterlake.root) [step](https://eic.github.io/epic//artifacts/epic_craterlake_no_bhcal.stp/epic_craterlake_no_bhcal.stp)
 - Subsystems:
   - Inner detector: [viewer](https://eic.github.io/epic/geoviewer?nobrowser&file=artifacts/tgeo/epic_inner_detector.root&item=default;1&opt=clipx;clipy;transp30;zoom120;ROTY320;ROTZ340;trz0;trr0;ctrl;all) [tgeo](https://eic.github.io/epic//artifacts/tgeo/epic_inner_detector.root)
   - Calorimetry: [viewer](https://eic.github.io/epic/geoviewer?nobrowser&file=artifacts/tgeo/epic_calorimeters.root&item=default;1&opt=clipx;clipy;transp30;zoom120;ROTY320;ROTZ340;trz0;trr0;ctrl;all) [tgeo](https://eic.github.io/epic//artifacts/tgeo/epic_calorimeters.root)
