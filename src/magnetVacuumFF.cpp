@@ -99,6 +99,9 @@ static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector /* sens *
     z_elem_magnet.push_back(pos_z * dd4hep::cm);
   }
 
+  xml_comp_t x_end_of_the_world = x_det.child(_Unicode(end_of_the_world));
+  double end_of_the_world_z     = x_end_of_the_world.attr<double>(_Unicode(z));
+
   int numMagnets = radii_magnet.size(); //number of actual FF magnets between IP and FF detectors
   int numGaps =
       numMagnets -
@@ -265,7 +268,7 @@ static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector /* sens *
 
     int pieceIdx           = numMagnets - 1; // last B2PF magnet
     std::string piece_name = Form("GapVacuum%d", numGaps + numMagnets + 1);
-    double endGapLength    = (10000.0 - z_end[pieceIdx]) / cos(rotation_magnet[pieceIdx]);
+    double endGapLength = (end_of_the_world_z - z_end[pieceIdx]) / cos(rotation_magnet[pieceIdx]);
     endGapLength =
         endGapLength -
         4 * radii_magnet[pieceIdx] *
