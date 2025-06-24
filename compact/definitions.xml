@@ -9,6 +9,7 @@
     <documentation>
       ## World volume
     </documentation>
+    <constant name="backward_x0" value="0.5*m"/>
     <constant name="backward_dx" value="2*m"/>
     <constant name="backward_dy" value="1*m"/>
     <constant name="backward_dz" value="35*m"/>
