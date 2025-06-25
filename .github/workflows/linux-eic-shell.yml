@@ -164,8 +164,8 @@ jobs:
       with:
         name: material_map
         path: |
-          "scripts/material_map/*.json"
-          "scripts/material_map/*.root"
+          scripts/material_map/*.json
+          scripts/material_map/*.root
           scripts/material_map/Surfaces/
           scripts/material_map/Validation/
         if-no-files-found: error
@@ -556,7 +556,7 @@ jobs:
         if-no-files-found: error
     - name: Download previous artifact
       id: download_previous_artifact
-      uses: dawidd6/action-download-artifact@v9
+      uses: dawidd6/action-download-artifact@v11
       with:
         branch: ${{ github.event.pull_request.base.ref || github.ref_name }}
         path: ref/
@@ -625,7 +625,7 @@ jobs:
         if-no-files-found: error
     - name: Download previous artifact
       id: download_previous_artifact
-      uses: dawidd6/action-download-artifact@v9
+      uses: dawidd6/action-download-artifact@v11
       with:
         branch: ${{ github.event.pull_request.base.ref || github.ref_name }}
         path: ref/
