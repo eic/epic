@@ -58,7 +58,8 @@
         </cut>
         <cut shape="Cone">
           <placement x="-10.519 * cm" y="0 * cm" z="0 * cm" rotX="0 * rad" rotY="abs(CrossingAngle)" rotZ="0 * rad"/>
-          <dimensions rmin1="0 * cm" rmax1="7.6 * cm" rmin2="0 * cm" rmax2="6.8 * cm" dz="181.0 * cm / 2."/>
+          <!-- dimensions rmin1="0 * cm" rmax1="7.6 * cm" rmin2="0 * cm" rmax2="6.8 * cm" dz="181.0 * cm / 2."/ (actual dimensions, temporarily commented to avoid overlap with the outdated electron beam pipe)-->
+          <dimensions rmin1="0 * cm" rmax1="(67.5 + 5.0) * mm + 15 * mm" rmin2="0 * cm" rmax2="(67.5 + 5.0) * mm + 15 * mm" dz="181.0 * cm / 2."/>
           <rotation num="1" start="0 * deg" step="0 * deg" axis="Z"/>
         </cut>
         <cut>
@@ -86,7 +87,8 @@
         </cut>
         <cut shape="Cone">
           <placement x="-10.519 * cm" y="0 * cm" z="0 * cm" rotX="0 * rad" rotY="abs(CrossingAngle)" rotZ="0 * rad"/>
-          <dimensions rmin1="0 * cm" rmax1="6.8 * cm" rmin2="0 * cm" rmax2="6.0 * cm" dz="200.0 * cm / 2."/>
+          <!-- dimensions rmin1="0 * cm" rmax1="6.8 * cm" rmin2="0 * cm" rmax2="6.0 * cm" dz="200.0 * cm / 2."/ (actual dimensions, temporarily commented to avoid overlap with the outdated electron beam pipe)-->
+          <dimensions rmin1="0 * cm" rmax1="(67.5 + 5.0) * mm + 15 * mm" rmin2="0 * cm" rmax2="(67.5 + 5.0) * mm + 15 * mm" dz="200.0 * cm / 2."/>
           <rotation num="1" start="0 * deg" step="0 * deg" axis="Z"/>
         </cut>
         <cut>
@@ -106,7 +108,8 @@
         </cut>
         <cut shape="Cone">
           <placement x="-10.519 * cm" y="0 * cm" z="0 * cm" rotX="0 * rad" rotY="abs(CrossingAngle)" rotZ="0 * rad"/>
-          <dimensions rmin1="0 * cm" rmax1="6.8 * cm" rmin2="0 * cm" rmax2="6.0 * cm" dz="200.0 * cm / 2."/>
+          <!-- dimensions rmin1="0 * cm" rmax1="6.8 * cm" rmin2="0 * cm" rmax2="6.0 * cm" dz="200.0 * cm / 2."/ (actual dimensions, temporarily commented to avoid overlap with the outdated electron beam pipe)-->
+          <dimensions rmin1="0 * cm" rmax1="(67.5 + 5.0) * mm + 15 * mm" rmin2="0 * cm" rmax2="(67.5 + 5.0) * mm + 15 * mm" dz="200.0 * cm / 2."/>
           <rotation num="1" start="0 * deg" step="0 * deg" axis="Z"/>
         </cut>
         <cut>
@@ -126,7 +129,8 @@
         </cut>
         <cut shape="Cone">
           <placement x="-10.519 * cm" y="0 * cm" z="0 * cm" rotX="0 * rad" rotY="abs(CrossingAngle)" rotZ="0 * rad"/>
-          <dimensions rmin1="0 * cm" rmax1="6.8 * cm" rmin2="0 * cm" rmax2="6.0 * cm" dz="200.0 * cm / 2."/>
+          <!-- dimensions rmin1="0 * cm" rmax1="6.8 * cm" rmin2="0 * cm" rmax2="6.0 * cm" dz="200.0 * cm / 2."/ (actual dimensions, temporarily commented to avoid overlap with the outdated electron beam pipe)-->
+          <dimensions rmin1="0 * cm" rmax1="(67.5 + 5.0) * mm + 15 * mm" rmin2="0 * cm" rmax2="(67.5 + 5.0) * mm + 15 * mm" dz="200.0 * cm / 2."/>
           <rotation num="1" start="0 * deg" step="0 * deg" axis="Z"/>
         </cut>
         <cut>
@@ -146,7 +150,8 @@
         </cut>
         <cut shape="Cone">
           <placement x="-10.519 * cm" y="0 * cm" z="0 * cm" rotX="0 * rad" rotY="abs(CrossingAngle)" rotZ="0 * rad"/>
-          <dimensions rmin1="0 * cm" rmax1="6.8 * cm" rmin2="0 * cm" rmax2="6.0 * cm" dz="200.0 * cm / 2."/>
+          <!-- dimensions rmin1="0 * cm" rmax1="6.8 * cm" rmin2="0 * cm" rmax2="6.0 * cm" dz="200.0 * cm / 2."/ (actual dimensions, temporarily commented to avoid overlap with the outdated electron beam pipe)-->
+          <dimensions rmin1="0 * cm" rmax1="(67.5 + 5.0) * mm + 15 * mm" rmin2="0 * cm" rmax2="(67.5 + 5.0) * mm + 15 * mm" dz="200.0 * cm / 2."/>
           <rotation num="1" start="0 * deg" step="0 * deg" axis="Z"/>
         </cut>
         <cut>
@@ -198,7 +203,8 @@
         </cut>
         <cut>
           <placement x="(0.515283 + abs(0.515283-4.019476)/2. - 8.579) * cm" y="0 * cm" z="0 * cm" rotX="0 * rad" rotY="abs(CrossingAngle)" rotZ="0 * rad"/>
-          <dimensions rmin="0 * cm" rmax="17.157 * cm / 2." half_length="400. * cm / 2."/>
+          <!-- dimensions rmin="0 * cm" rmax="17.157 * cm / 2." half_length="400. * cm / 2."/ (actual dimensions, temporarily commented to avoid overlap with the outdated electron beam pipe)-->
+          <dimensions rmin="0 * cm" rmax="(78.0 + 5.0) * mm + 11.0 * mm" half_length="400. * cm / 2."/>
           <rotation num="1" start="0 * deg" step="0 * deg" axis="Z"/>
         </cut>
         <cut>
@@ -241,7 +247,8 @@
         </cut>
         <cut>
           <placement x="(0.515283 + abs(0.515283-4.019476)/2. - 8.579) * cm" y="0 * cm" z="0 * cm" rotX="0 * rad" rotY="abs(CrossingAngle)" rotZ="0 * rad"/>
-          <dimensions rmin="0 * cm" rmax="9.050020 * cm" half_length="400. * cm / 2."/>
+          <!-- dimensions rmin="0 * cm" rmax="9.050020 * cm" half_length="400. * cm / 2."/ (actual dimensions, temporarily commented to avoid overlap with the outdated electron beam pipe)-->
+          <dimensions rmin="0 * cm" rmax="(78.0 + 5.0) * mm + 11.0 * mm" half_length="400. * cm / 2."/>
           <rotation num="1" start="0 * deg" step="0 * deg" axis="Z"/>
         </cut>
       </endplate>
@@ -256,7 +263,8 @@
         </cut>
         <cut>
           <placement x="(0.515283 + abs(0.515283-4.019476)/2. - 8.579) * cm" y="0 * cm" z="0 * cm" rotX="0 * rad" rotY="abs(CrossingAngle)" rotZ="0 * rad"/>
-          <dimensions rmin="0 * cm" rmax="7.813040 * cm" half_length="400. * cm / 2."/>
+          <!-- dimensions rmin="0 * cm" rmax="7.813040 * cm" half_length="400. * cm / 2."/ (actual dimensions, temporarily commented to avoid overlap with the outdated electron beam pipe)-->
+          <dimensions rmin="0 * cm" rmax="(78.0 + 5.0) * mm + 11.0 * mm" half_length="400. * cm / 2."/>
           <rotation num="1" start="0 * deg" step="0 * deg" axis="Z"/>
         </cut>
       </endplate>
@@ -271,7 +279,8 @@
         </cut>
         <cut>
           <placement x="(0.515283 + abs(0.515283-4.019476)/2. - 8.579) * cm" y="0 * cm" z="0 * cm" rotX="0 * rad" rotY="abs(CrossingAngle)" rotZ="0 * rad"/>
-          <dimensions rmin="0 * cm" rmax="7.813040 * cm" half_length="400. * cm / 2."/>
+          <!-- dimensions rmin="0 * cm" rmax="7.813040 * cm" half_length="400. * cm / 2."/ (actual dimensions, temporarily commented to avoid overlap with the outdated electron beam pipe)-->
+          <dimensions rmin="0 * cm" rmax="(78.0 + 5.0) * mm + 11.0 * mm" half_length="400. * cm / 2."/>
           <rotation num="1" start="0 * deg" step="0 * deg" axis="Z"/>
         </cut>
       </endplate>
@@ -302,7 +311,7 @@
         <cut>
           <placement x="-15.663 * cm" y="0 * cm" z="0 * cm" rotX="0 * rad" rotY="abs(CrossingAngle)" rotZ="0 * rad"/>
           <!-- dimensions rmin="0 * cm" rmax="25.0 * cm / 2." half_length="4000. * cm / 2."/ (actual dimensions, temporarily commented to avoid overlap with the outdated electron beam pipe)-->
-          <dimensions rmin="0 * cm" rmax="30.0 * cm / 2." half_length="4000. * cm / 2."/>
+          <dimensions rmin="0 * cm" rmax="40.0 * cm / 2." half_length="4000. * cm / 2."/>
           <rotation num="1" start="0 * deg" step="0 * deg" axis="Z"/>
         </cut>
       </yoke>
@@ -341,7 +350,8 @@
         </cut>
         <cut>
           <placement x="-15.663 * cm" y="0 * cm" z="0 * cm" rotX="0 * rad" rotY="abs(CrossingAngle)" rotZ="0 * rad"/>
-          <dimensions rmin="0 * cm" rmax="8.458200 * cm" half_length="800. * cm / 2."/>
+          <!-- dimensions rmin="0 * cm" rmax="8.458200 * cm" half_length="800. * cm / 2."/ (actual dimensions, temporarily commented to avoid overlap with the outdated electron beam pipe)-->
+          <dimensions rmin="0 * cm" rmax="10 * cm" half_length="800. * cm / 2."/>
           <rotation num="1" start="0 * deg" step="0 * deg" axis="Z"/>
         </cut>
       </endplate>
@@ -402,7 +412,7 @@
         <cut>
           <placement x="-15.663 * cm" y="0 * cm" z="0 * cm" rotX="0 * rad" rotY="abs(CrossingAngle)" rotZ="0 * rad"/>
           <!-- dimensions rmin="0 * cm" rmax="18.022824 * cm / 2." half_length="800. * cm / 2."/ (actual dimensions, temporarily commented to avoid overlap with the outdated electron beam pipe)-->
-          <dimensions rmin="0 * cm" rmax="40 * cm / 2." half_length="800. * cm / 2."/>
+          <dimensions rmin="0 * cm" rmax="45 * cm / 2." half_length="800. * cm / 2."/>
           <rotation num="1" start="0 * deg" step="0 * deg" axis="Z"/>
         </cut>
       </cryoend>
