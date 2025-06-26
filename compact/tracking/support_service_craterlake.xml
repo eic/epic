@@ -309,12 +309,13 @@
     <constant name="TrackerSupportDRICHCylSegment_length"        value="TrackerSupportDRICHCylSegment_zmax - TrackerSupportDRICHCylSegment_zmin" />
 
     <comment> Inner detector support cylinder </comment>
-    <constant name="InnerDetectorBarrelSupportCylCF_thickness"   value="1.0*cm" />
+    <constant name="InnerDetectorBarrelSupportCylCF_thickness"   value="InnerDetectorBarrelSupportCylinder_thickness" />
     <constant name="InnerDetectorBarrelSupportCylCF_zmin1"       value="DIRCBackward_zmax" />
     <constant name="InnerDetectorBarrelSupportCylCF_zmin2"       value="DIRCForward_zmax" />
     <constant name="InnerDetectorBarrelSupportCylCF_length"      value="InnerDetectorBarrelSupportCylCF_zmin1 + InnerDetectorBarrelSupportCylCF_zmin2" />
     <constant name="InnerDetectorBarrelSupportCylCF_offset"      value="(InnerDetectorBarrelSupportCylCF_zmin2 - InnerDetectorBarrelSupportCylCF_zmin1)/2.0"/>
-    <constant name="InnerDetectorBarrelSupportCylCF_rmin"        value="MPGDOuterBarrelModule_rmin - InnerDetectorBarrelSupportCylCF_thickness - 2*mm" />
+    <constant name="InnerDetectorBarrelSupportCylCF_rmin"        value="InnerDetectorBarrelSupportCylinder_rmin" />
+    <constant name="InnerDetectorBarrelSupportCylCF_rmax"        value="InnerDetectorBarrelSupportCylinder_rmin + InnerDetectorBarrelSupportCylinder_thickness" />
 
   </define>
 
@@ -437,6 +438,7 @@
         vis="TrackerSupportVis"
         rmin1="OuterSupportConeN_rmin2"
         rmin2="OuterSupportConeN_rmin1"
+        rmax="InnerDetectorBarrelSupportCylCF_rmin"
         length="OuterSupportConeN_length"
         thickness="OuterSupportConeN_thickness">
           <position x="0*cm" y="0*cm" z="-OuterSupportConeN_z" />
