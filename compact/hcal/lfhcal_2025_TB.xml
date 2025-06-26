@@ -29,7 +29,7 @@
     <documentation>
       ### Forward (Positive Z) Endcap Hadronic Calorimeter
       Test beam setup 2025
-        
+
       This is the ECCE LFHCAL design without individual tower placements and electronics
       The original design was 60 layers of Steel/Sc and 10 layers of W/Sc, both 1.6 cm/0.4 cm
       This is too long, so 5 layers of tungsten were removed as a placeholder until the final design is chosen
@@ -128,8 +128,8 @@
       <eightmodulepositions>
         <position x="-100.5*mm" y="-50*mm" z="0*mm"/>
         <position x="-100.5*mm" y="-150*mm" z="0*mm"/>
-        <position x="-100.5*mm" y="50*mm" z="0*mm"/> 
-        <position x="-100.5*mm" y="150*mm" z="0*mm"/> 
+        <position x="-100.5*mm" y="50*mm" z="0*mm"/>
+        <position x="-100.5*mm" y="150*mm" z="0*mm"/>
         <position x="100.5*mm" y="-50*mm" z="0*mm"/>
         <position x="100.5*mm" y="-150*mm" z="0*mm"/>
         <position x="100.5*mm" y="50*mm" z="0*mm"/>
