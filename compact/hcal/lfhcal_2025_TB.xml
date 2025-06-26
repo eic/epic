@@ -10,9 +10,6 @@
 
   <define>
     <include ref="lfhcal/module_definitions.xml"/>
-    <constant name="Mod_MountingPlateThickness" value="0* mm"/>
-    <constant name="Mod_PCBLength"              value="135* cm"/>
-
   </define>
 
   <display>
@@ -31,11 +28,15 @@
   <detectors>
     <documentation>
       ### Forward (Positive Z) Endcap Hadronic Calorimeter
-
+      Test beam setup 2025
+        
       This is the ECCE LFHCAL design without individual tower placements and electronics
-      As deployed during thestbeam in 2024
+      The original design was 60 layers of Steel/Sc and 10 layers of W/Sc, both 1.6 cm/0.4 cm
+      This is too long, so 5 layers of tungsten were removed as a placeholder until the final design is chosen
+
       The HCal forward insert shape is cut out from this detector
 
+      Currently don't have an implementation of electronics, so just leave that area (final 10 cm) empty
       So then, actual detector area is "LFHCAL_length - LFHCALElectronicsThickness" long
     </documentation>
     <detector
@@ -51,12 +52,11 @@
 
       <position x="0" y="0" z="0"/>
       <dimensions
-        z="140*cm"
+        z="LFHCAL_length"
         rmin="20*cm"
         rmax="LFHCAL_rmax"
-        x="EightM_OuterWidth"
-        y="EightM_OuterHeight"
-        x0="-FourM_OuterWidth"/>
+        x="EightM_OuterWidth*2+1*cm"
+        y="EightM_OuterHeight*4+1*cm"/>
       <envelope material="Steel235"/>
 
       <eightmodule name="8MModule" vis="InvisibleWithDaughters" repeat="0" >
@@ -79,7 +79,7 @@
         pcbThick="Mod_PCBThickness"
         pcbWidth="Mod_PCBWidth"
         />
-        <position x="50*cm" y="50*cm" z="140*cm - LFHCALElectronicsThickness" />
+        <position x="50*cm" y="50*cm" z="LFHCAL_length - LFHCALElectronicsThickness" />
       </eightmodule>
       <layer repeat="LFHCALLayer_NSteelRepeatSFirst" vis="InvisibleWithDaughters" readoutlayer="0">
         <slice material="Polystyrene" thickness="LFHCALPolystyreneThickness" vis="LFHCALLayerScintVis" sensitive="yes" limits="cal_limits" type="3" />
@@ -121,22 +121,24 @@
         <slice material="Kapton" thickness="LFHCALKaptonThickness" vis="LFHCALLayerKaptonVis" type="2" offset="LFHCALAirOffset"/>
         <slice material="Steel235" thickness="LFHCALAbsorberThickness" vis="LFHCALLayerSteelVis" type="1"/>
       </layer>
-      <layer repeat="LFHCALLayer_NSteelRepeatSFirst" vis="InvisibleWithDaughters" readoutlayer="8">
-        <slice material="Polystyrene" thickness="LFHCALPolystyreneThickness" vis="LFHCALLayerScintVis" sensitive="yes" limits="cal_limits" type="3" />
-        <slice material="Kapton" thickness="LFHCALKaptonThickness" vis="LFHCALLayerKaptonVis" type="2" offset="LFHCALAirOffset"/>
-        <slice material="Steel235" thickness="LFHCALAbsorberThickness" vis="LFHCALLayerSteelVis" type="1"/>
-      </layer>
 
       <documentation>
         ### for testing of a single module
       </documentation>
       <eightmodulepositions>
-        <position x="0*mm" y="0*mm" z="0*mm"/>
+        <position x="-100.5*mm" y="-50*mm" z="0*mm"/>
+        <position x="-100.5*mm" y="-150*mm" z="0*mm"/>
+        <position x="-100.5*mm" y="50*mm" z="0*mm"/> 
+        <position x="-100.5*mm" y="150*mm" z="0*mm"/> 
+        <position x="100.5*mm" y="-50*mm" z="0*mm"/>
+        <position x="100.5*mm" y="-150*mm" z="0*mm"/>
+        <position x="100.5*mm" y="50*mm" z="0*mm"/>
+        <position x="100.5*mm" y="150*mm" z="0*mm"/>
       </eightmodulepositions>
 
 
       <documentation>
-      ### positions of modules for full area LFHCAL (sorted by ascending r, x, y)
+      ### positions of modules for full area LFHCAL (sorted by ascending x, y)
       </documentation>
       <fourmodulepositions>
       </fourmodulepositions>
