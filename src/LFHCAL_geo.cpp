@@ -467,7 +467,8 @@ Assembly createScintillatorPlateFourM(Detector& desc, std::string basename,
 Volume createEightMModule(Detector& desc, moduleParamsStrct mod_params,
                           std::vector<sliceParamsStrct> sl_params,
                           //                               int modID,
-                          double length, SensitiveDetector sens, bool renderComp, bool allSen, bool testbeam) {
+                          double length, SensitiveDetector sens, bool renderComp, bool allSen,
+                          bool testbeam) {
   std::string baseName = "LFHCAL_8M";
 
   // assembly definition
@@ -525,7 +526,7 @@ Volume createEightMModule(Detector& desc, moduleParamsStrct mod_params,
   }
 
   if (renderComp) {
-    if  (!testbeam) 
+    if (!testbeam)
       vol_mountingPlate.setAttributes(desc, mod_params.mod_regStr, mod_params.mod_limStr,
                                       // mod_params.mod_visStr);
                                       "LFHCALLayerTungstenVis");
@@ -546,7 +547,7 @@ Volume createEightMModule(Detector& desc, moduleParamsStrct mod_params,
                                      //  mod_params.mod_visStr);
                                      "LFHCALLayerSteelVis");
   } else {
-    if  (!testbeam) 
+    if (!testbeam)
       vol_mountingPlate.setAttributes(desc, mod_params.mod_regStr, mod_params.mod_limStr,
                                       "InvisibleNoDaughters");
     vol_modFrontPlate.setAttributes(desc, mod_params.mod_regStr, mod_params.mod_limStr,
@@ -650,10 +651,10 @@ Volume createEightMModule(Detector& desc, moduleParamsStrct mod_params,
   }
 
   // placement 8M module casing
-  if  (!testbeam) 
+  if (!testbeam)
     pvm = vol_mod.placeVolume(vol_mountingPlate,
                               Position(0, 0, -(length - mod_params.mod_MPThick) / 2.));
-    
+
   pvm = vol_mod.placeVolume(
       vol_modFrontPlate,
       Position(0, 0, -(length - mod_params.mod_FWThick) / 2. + mod_params.mod_MPThick));
@@ -1040,23 +1041,27 @@ static Ref_t createTestBeam(Detector& desc, xml_h handle, SensitiveDetector sens
       getAttrOrDefault(eightMmod_dim, _Unicode(pcbWidth), 0.), eightM_xml.visStr(),
       eightM_xml.regionStr(), eightM_xml.limitsStr());
 
-  
   double minX = 10000;
   double minY = 10000;
   double maxX = -10000;
   double maxY = -10000;
-  
+
   for (int e = 0; e < (int)pos8M.size(); e++) {
-    if (minX > pos8M[e].x) minX = pos8M[e].x;
-    if (minY > pos8M[e].y) minY = pos8M[e].y;
-    if (maxX < pos8M[e].x) maxX = pos8M[e].x;
-    if (maxY < pos8M[e].y) maxY = pos8M[e].y;
+    if (minX > pos8M[e].x)
+      minX = pos8M[e].x;
+    if (minY > pos8M[e].y)
+      minY = pos8M[e].y;
+    if (maxX < pos8M[e].x)
+      maxX = pos8M[e].x;
+    if (maxY < pos8M[e].y)
+      maxY = pos8M[e].y;
   }
-  std::cout << "X: " << minX << "\t-\t" << maxX << "\t Y: " << minY << "\t - \t" << maxY << std::endl;
-  
+  std::cout << "X: " << minX << "\t-\t" << maxX << "\t Y: " << minY << "\t - \t" << maxY
+            << std::endl;
+
   // envelope volume
   xml_comp_t x_env = detElem.child(_Unicode(envelope));
-  Box env_box( dim.x() / 2, dim.y() / 2, dim.z() / 2);
+  Box env_box(dim.x() / 2, dim.y() / 2, dim.z() / 2);
   Volume env_vol(detName + "_env", env_box, desc.material(x_env.materialStr()));
 
   bool renderComponents = getAttrOrDefault(detElem, _Unicode(renderComponents), 0.);
@@ -1113,9 +1118,10 @@ static Ref_t createTestBeam(Detector& desc, xml_h handle, SensitiveDetector sens
                "LFHCAL placing 8M module: " + _toString(e) + "/" + _toString((int)pos8M.size()) +
                    "\t" + _toString(pos8M[e].x) + "\t" + _toString(pos8M[e].y) + "\t" +
                    _toString(pos8M[e].z));
-    moduleIDx = (int(pos8M[e].x + 20)/ 10);
-    moduleIDy = (int(pos8M[e].y + 15)/ 10);
-    std::cout << moduleIDx << "\t" << moduleIDy << "\t" << pos8M[e].x << "\t"<< (pos8M[e].x + 20)<< "\t" << pos8M[e].y  << "\t"<< (pos8M[e].y + 15) << std::endl;
+    moduleIDx = (int(pos8M[e].x + 20) / 10);
+    moduleIDy = (int(pos8M[e].y + 15) / 10);
+    std::cout << moduleIDx << "\t" << moduleIDy << "\t" << pos8M[e].x << "\t" << (pos8M[e].x + 20)
+              << "\t" << pos8M[e].y << "\t" << (pos8M[e].y + 15) << std::endl;
     if (moduleIDx < 0 || moduleIDy < 0) {
       printout(DEBUG, "LFHCAL_geo",
                "LFHCAL WRONG ID FOR 8M module: " + _toString(e) + "/" +

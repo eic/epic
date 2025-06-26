@@ -127,8 +127,8 @@
       <eightmodulepositions>
         <position x="-100.5*mm" y="-50*mm" z="0*mm"/>
         <position x="-100.5*mm" y="-150*mm" z="0*mm"/>
-        <position x="-100.5*mm" y="50*mm" z="0*mm"/> 
-        <position x="-100.5*mm" y="150*mm" z="0*mm"/> 
+        <position x="-100.5*mm" y="50*mm" z="0*mm"/>
+        <position x="-100.5*mm" y="150*mm" z="0*mm"/>
         <position x="100.5*mm" y="-50*mm" z="0*mm"/>
         <position x="100.5*mm" y="-150*mm" z="0*mm"/>
         <position x="100.5*mm" y="50*mm" z="0*mm"/>
