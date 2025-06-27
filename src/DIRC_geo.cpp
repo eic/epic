@@ -53,14 +53,10 @@ static Ref_t createDetector(Detector& desc, xml_h e, SensitiveDetector sens) {
       DD4hepDetectorHelper::ensureExtension<dd4hep::rec::VariantParameters>(det);
   if (xml_det.hasChild(_Unicode(envelope))) {
     xml_comp_t x_envelope = xml_det.child(_Unicode(envelope));
-    envelope_params.set<double>("envelope_r_min",
-                                getAttrOrDefault(x_envelope, _U(rmin), 0.));
-    envelope_params.set<double>("envelope_r_max",
-                                getAttrOrDefault(x_envelope, _U(rmax), 0.));
-    envelope_params.set<double>("envelope_z_min",
-                                getAttrOrDefault(x_envelope, _U(zmin), 0.));
-    envelope_params.set<double>("envelope_z_max",
-                                getAttrOrDefault(x_envelope, _U(zmax), 0.));
+    envelope_params.set<double>("envelope_r_min", getAttrOrDefault(x_envelope, _U(rmin), 0.));
+    envelope_params.set<double>("envelope_r_max", getAttrOrDefault(x_envelope, _U(rmax), 0.));
+    envelope_params.set<double>("envelope_z_min", getAttrOrDefault(x_envelope, _U(zmin), 0.));
+    envelope_params.set<double>("envelope_z_max", getAttrOrDefault(x_envelope, _U(zmax), 0.));
   }
   // Add the volume boundary material if configured
   for (xml_coll_t boundary_material(xml_det, _Unicode(boundary_material)); boundary_material;
