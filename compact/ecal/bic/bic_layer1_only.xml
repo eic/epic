@@ -119,6 +119,13 @@
 
   <detectors>
 
+    <detector id="EcalSubAssembly_ID"
+      name="EcalBarrelTrackerSubAssembly"
+      type="DD4hep_SubdetectorAssembly"
+      vis="TrackerSubAssemblyVis">
+      <composite name="EcalBarrelImaging"/>
+    </detector>
+
     <comment>
       ---------------------------------------
       Imaging Layers of Barrel EM Calorimeter
@@ -133,9 +140,37 @@
       calorimeterType="EM_BARREL"
       vis="EcalBarrelEnvelopeVis"
       offset="EcalBarrel_Calorimeter_offset">
+      <type_flags type="DetType_TRACKER + DetType_CALORIMETER + DetType_BARREL + DetType_ELECTROMAGNETIC"/>
       <dimensions numsides="EcalBarrel_SectorRepeat"
         rmin="EcalBarrel_rmin"
         z="EcalBarrel_Calorimeter_length"/>
+
+      <comment>
+        The envelope for ACTS purposes needs to include only the first layer. The following
+        definition includes the front support and is tangential to the outer edge of the
+        first tray. This allows the envelope to avoid the first SFIL.
+      </comment>
+      <envelope vis="EcalBarrelImaging_envelope"
+        rmin="EcalBarrel_rmin"
+        rmax="EcalBarrel_rmin + EcalBarrel_FrontSupportThickness + EcalBarrel_ImagingLayerThickness"
+        length="EcalBarrel_Calorimeter_length"
+        zstart="EcalBarrel_Calorimeter_zmin"
+      />
+
+      <comment>
+        The layer material for ACTS purposes is at the top level, since the entire BIC detector
+        is treated as a single layer. The binning should likely be an integer multiple of the
+        number of sectors, and of the numer of modules.
+      </comment>
+      <layer_material surface="inner"
+                      binning="binPhi,binZ"
+                      bins0="6 * EcalBarrel_SectorRepeat"
+                      bins1="floor(2. * EcalBarrel_Stave_length / (EcalBarrel_AstroPix_length + EcalBarrel_AstroPix_margin))"/>
+      <layer_material surface="outer"
+                      binning="binPhi,binZ"
+                      bins0="6 * EcalBarrel_SectorRepeat"
+                      bins1="floor(2. * EcalBarrel_Stave_length / (EcalBarrel_AstroPix_length + EcalBarrel_AstroPix_margin))"/>
+
       <sectors vis="EcalBarrelSectorVis"/>
 
       <module name="AstroPix_Module"

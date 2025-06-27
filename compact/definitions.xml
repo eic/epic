@@ -175,7 +175,8 @@ The unused IDs below are saved for future use.
       Unused IDs: 107-109
 
     </documentation>
-    <constant name="ECalSubAssembly_ID"   value="100"/><!-- UNUSED -->
+    <constant name="ECalSubAssembly_ID"   value="100"/><!-- DEPRECATED -->
+    <constant name="EcalSubAssembly_ID"   value="100"/>
     <constant name="ECalBarrel_ID"        value="101"/><!-- DEPRECATED -->
     <constant name="EcalBarrel_ID"        value="101"/>
     <constant name="ECalEndcapP_ID"       value="102"/><!-- DEPRECATED -->
