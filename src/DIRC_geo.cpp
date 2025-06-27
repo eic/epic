@@ -1,12 +1,14 @@
 // SPDX-License-Identifier: LGPL-3.0-or-later
 // Copyright (C) 2022 - 2026 Wouter Deconinck, Dmitry Romanov, Bill Llope
 
+#include "DD4hepDetectorHelper.h"
 #include "DD4hep/DetFactoryHelper.h"
 #include "DD4hep/OpticalSurfaces.h"
 #include "DD4hep/Printout.h"
 #include "DDRec/DetectorData.h"
 #include "DDRec/Surface.h"
 #include <XML/Helper.h>
+#include <XML/Utilities.h>
 
 //////////////////////////////////
 // Central Barrel DIRC
@@ -77,6 +79,9 @@ static Ref_t createDetector(Detector& desc, xml_h e, SensitiveDetector sens) {
   //---- Detector type
   sens.setType("tracker");
 
+  // Set detector type flag
+  dd4hep::xml::setDetectorTypeFlag(xml_det, det);
+
   //---- Entire DIRC assembly
   Assembly det_volume("DIRC");
   det_volume.setAttributes(desc, xml_det.regionStr(), xml_det.limitsStr(), xml_det.visStr());
@@ -84,8 +89,37 @@ static Ref_t createDetector(Detector& desc, xml_h e, SensitiveDetector sens) {
   det.setPlacement(
       desc.pickMotherVolume(det).placeVolume(det_volume, det_tr).addPhysVolID("system", det_id));
 
+  // ACTS support
+  auto& envelope_params =
+      DD4hepDetectorHelper::ensureExtension<dd4hep::rec::VariantParameters>(det);
+  if (xml_det.hasChild(_Unicode(envelope))) {
+    xml_comp_t x_envelope = xml_det.child(_Unicode(envelope));
+    envelope_params.set<double>("envelope_r_min",
+                                getAttrOrDefault(x_envelope, _U(rmin), 0.));
+    envelope_params.set<double>("envelope_r_max",
+                                getAttrOrDefault(x_envelope, _U(rmax), 0.));
+    envelope_params.set<double>("envelope_z_min",
+                                getAttrOrDefault(x_envelope, _U(zmin), 0.));
+    envelope_params.set<double>("envelope_z_max",
+                                getAttrOrDefault(x_envelope, _U(zmax), 0.));
+  }
+  // Add the volume boundary material if configured
+  for (xml_coll_t boundary_material(xml_det, _Unicode(boundary_material)); boundary_material;
+       ++boundary_material) {
+    xml_comp_t x_boundary_material = boundary_material;
+    DD4hepDetectorHelper::xmlToProtoSurfaceMaterial(x_boundary_material, envelope_params,
+                                                    "boundary_material");
+  }
+  // Add the volume layer material if configured
+  for (xml_coll_t layer_material(xml_det, _Unicode(layer_material)); layer_material;
+       ++layer_material) {
+    xml_comp_t x_layer_material = layer_material;
+    DD4hepDetectorHelper::xmlToProtoSurfaceMaterial(x_layer_material, envelope_params,
+                                                    "layer_material");
+  }
+
   //---- Assembly dirc_module holds all the hpDIRC
-  //
+  // Construct module
   xml_comp_t xml_module = xml_det.child(_U(module));
   Assembly dirc_module("DIRCModule");
   dirc_module.setVisAttributes(desc.visAttributes(xml_module.visStr()));
