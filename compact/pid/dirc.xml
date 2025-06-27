@@ -91,9 +91,25 @@
   </display>
 
   <detectors>
+    <detector id="DIRCSubAssembly_ID"
+      name="DIRCTrackerSubAssembly"
+      type="DD4hep_SubdetectorAssembly"
+      vis="TrackerSubAssemblyVis">
+      <composite name="cb_DIRC"/>
+    </detector>
+
     <detector id="BarrelDIRC_ID" name="cb_DIRC" type="epic_DIRC" readout="DIRCBarHits" vis="DIRCTube">
+      <type_flags type="DetType_TRACKER + DetType_CHERENKOV + DetType_BARREL"/>
       <dimensions rmin="DIRCBar_center - DIRCBar_height/2" rmax="DIRCBar_center + DIRCBar_height/2" length="DIRC_length"/>
       <position x="0" y="0" z="DIRC_offset"/>
+
+      <envelope vis="BarrelDIRC_envelope"
+        rmin="DIRC_rmin"
+        rmax="DIRC_rmax"
+        length="DIRC_length"
+        zstart="-DIRCBackward_zmax"
+      />
+
       <module name="DIRCBox" repeat="DIRCBox_count" width="DIRCPrism_width + 1*mm" height="DIRCPrism_height*2" length="DIRCBarAssm_length + 550*mm" vis="DIRCBox">
         <!-- Mirror (at the end of the module) -->
         <mirror
@@ -173,6 +189,10 @@
   </readouts>
 
   <plugins>
+    <plugin name="DD4hep_ParametersPlugin">
+      <argument value="cb_DIRC"/>
+      <argument value="layer_pattern: str=envelope"/>
+    </plugin>
   </plugins>
 
   <fields>
