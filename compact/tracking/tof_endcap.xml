@@ -197,7 +197,7 @@
       actsType="endcap"
       vis="TrackerSubAssemblyVis">
       <type_flags type="DetType_TRACKER + DetType_ENDCAP"/>
-      <position x="0*cm" y="0*cm" z="0*cm" />
+      <position x="0*cm" y="0*cm" z="-1*um" />
     </detector>
     <detector
       id="ForwardTOF_ID"
