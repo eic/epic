@@ -170,14 +170,15 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
     // envelope thickness is the max layer thickness to accomodate all layers
     double envelope_length = 0;
     for (xml_coll_t llayout(x_layer, _Unicode(layout)); llayout; ++llayout) {
-      xml_comp_t x_layout    = llayout;
-      string m_nam           = x_layout.moduleStr();
-      envelope_length = std::max(envelope_length, mod_thickness[m_nam]);
+      xml_comp_t x_layout = llayout;
+      string m_nam        = x_layout.moduleStr();
+      envelope_length     = std::max(envelope_length, mod_thickness[m_nam]);
     }
 
     Tube lay_tub(envelope.rmin(), envelope.rmax(), envelope_length / 2.0, phimin, phimax);
     Volume lay_vol(lay_nam, lay_tub, air); // Create the layer envelope volume.
-    Position lay_pos(xoffset, 0, envelope.zstart() + (front? -0.5*envelope_length : 0.5*envelope_length));
+    Position lay_pos(xoffset, 0,
+                     envelope.zstart() + (front ? -0.5 * envelope_length : 0.5 * envelope_length));
     lay_vol.setVisAttributes(description.visAttributes(x_layer.visStr()));
 
     DetElement lay_elt(sdet, lay_nam, lay_id);
