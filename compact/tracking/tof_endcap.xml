@@ -3,6 +3,10 @@
 
 <lccdd>
   <define>
+    <documentation>
+      ## Forward TOF double-disks
+    </documentation>
+
     <comment>
       --------------------------
       Forward TOF Parameters
@@ -90,16 +94,9 @@
     <constant name="SH_PB_offset"           value="0.0*mm" />
     <constant name="SH_PB_length"           value="TOFEndcap_baseplate_length" />
 
-  </define>
-
-  <documentation>
-    ## Forward TOF double-disks
-  </documentation>
-
   <comment>
     Actual detector implementation.
   </comment>
-  <define>
 
     <constant name="TOFEndcapMod_thickness"     value="TOFEndcapSensor_thickness + TOFEndcapService_thickness" />
     <constant name="TOFEndcapMod_angle"         value="360.0*degree / TOFEndcapMod_count * (1 + TOFEndcapMod_overlap)" />
@@ -200,7 +197,7 @@
       actsType="endcap"
       vis="TrackerSubAssemblyVis">
       <type_flags type="DetType_TRACKER + DetType_ENDCAP"/>
-      <position x="0*cm" y="0*cm" z="-1*um" />
+      <position x="0*cm" y="0*cm" z="0*cm" />
     </detector>
     <detector
       id="ForwardTOF_ID"
@@ -338,10 +335,7 @@
       <envelope vis="TOF_envelope"
         rmin="ForwardTOFLayer_rmin"
         rmax="ForwardTOFLayer_rmax"
-      phimin="0*deg"
-      phimax="360*deg"
-        length="1.5*cm"
-        zstart="ForwardTOF_zmin - 0.75*cm - EndcapTOF_CFSupp_thickness"
+        zstart="ForwardTOF_zmin - EndcapTOF_CFSupp_thickness"
         xoffset="-EndcapTOF_Board_spacing/2"
       />
 
@@ -419,7 +413,7 @@
                 <row x_offset="EndcapTOF_Board_spacing/2" nsensors="3">
                   <board nsensors="3"/>
                 </row>
-          </layout>`
+          </layout>
           <layout left="false" module="FrontRight">
                 <row deadspace="25.5*mm + EndcapTOF_yOffset"/>
                 <row x_offset="EndcapTOF_Board_spacing/2" nsensors="3">
@@ -495,8 +489,7 @@
       <envelope vis="TOF_envelope"
         rmin="ForwardTOFLayer_rmin"
         rmax="ForwardTOFLayer_rmax"
-        length="1.5*cm"
-        zstart="ForwardTOF_zmin + 0.75*cm + EndcapTOF_CFSupp_thickness + 1*um"
+        zstart="ForwardTOF_zmin + EndcapTOF_CFSupp_thickness"
         xoffset="-EndcapTOF_Board_spacing/2"
       />
 
