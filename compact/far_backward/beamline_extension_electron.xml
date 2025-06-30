@@ -3,60 +3,12 @@
 
 <lccdd>
 
-  <define>
-    <!-- Q1eR Center Position -->
-    <constant name="Q1ER_Center_posX" value="-0.00285949"/>
-    <constant name="Q1ER_Center_posY" value="0*cm"/>
-    <constant name="Q1ER_Center_posZ" value="-620.047"/>
-    <constant name="Q1ER_Rotation_Angle" value="0*rad"/>
-
-    <!-- Q2eR Center Position -->
-    <constant name="Q2ER_Center_posX" value="0.0122616"/>
-    <constant name="Q2ER_Center_posY" value="0*cm"/>
-    <constant name="Q2ER_Center_posZ" value="-830.112"/>
-    <constant name="Q2ER_Rotation_Angle" value="0*rad"/>
-
-  </define>
-
   <comment>
      Outgoing electron beam pipes
      Implemented to allow overlap checks with the far backwards systems
-     See compact/far_forward/ion_beamline.xml for hadron magnet element coordinate description-the same is applied to the electron magnet elements
   </comment>
 
   <detectors>
-    <!-- Q1eR magnet -->
-    <detector name="Q1ER_BeamlineMagnet" type="ip6_CryostatMagnet">
-      <coil name="Q1ER_Quad_Coil" vis="MagnetCoilVis" shape="ConeSegment">
-        <placement x="Q1ER_Center_posX" y="Q1ER_Center_posY" z="Q1ER_Center_posZ" theta="Q1ER_Rotation_Angle" phiNum="3" phiStart="90*deg" phiStep="90*deg"/>
-        <!-- dimensions rmin1="6.748780*cm" rmax1="7.040880*cm" rmin2="5.938520*cm" rmax2="6.230620*cm" dz="180.0*cm/2." sphi="-60.0*deg/2." dphi="60.0*deg"/ (actual dimensions, temporarily commented to avoid overlap with the outdated electron beam pipe)-->
-        <dimensions rmin1="(67.5+5.0)*mm+5*mm" rmax1="(67.5+5.0)*mm+12*mm" rmin2="(67.5+5.0)*mm+5*mm" rmax2="(67.5+5.0)*mm+12*mm" dz="180.0*cm/2." sphi="-60.0*deg/2." dphi="60.0*deg"/>
-      </coil>
-      <tube name="Q1ER_InnerSupport_Tube" vis="MagnetSupportTubeVis" shape="Cone">
-        <placement x="Q1ER_Center_posX" y="Q1ER_Center_posY" z="Q1ER_Center_posZ" theta="Q1ER_Rotation_Angle"/>
-        <!-- dimensions rmin1="12.809257*cm/2." rmax1="6.6*cm" rmin2="10.994364*cm/2." rmax2="5.8*cm" dz="201.592038*cm/2."/ (actual dimensions, temporarily commented to avoid overlap with the outdated electron beam pipe)-->
-        <dimensions rmin1="(67.5+5.0)*mm" rmax1="(67.5+5.0)*mm+2*mm" rmin2="(67.5+5.0)*mm" rmax2="(67.5+5.0)*mm+2*mm" dz="201.592038*cm/2."/>
-      </tube>
-    </detector>
-
-    <!-- Q2eR magnet -->
-    <detector name="Q2ER_BeamlineMagnet" type="ip6_CryostatMagnet">
-      <coil name="Q2ER_Quad_Coil" vis="MagnetCoilVis" shape="ConeSegment">
-        <placement x="Q2ER_Center_posX" y="Q2ER_Center_posY" z="Q2ER_Center_posZ" theta="Q2ER_Rotation_Angle" phiNum="3" phiStart="90*deg" phiStep="90*deg"/>
-        <!-- dimensions rmin1="7.810500*cm" rmax1="8.176260*cm" rmin2="7.810500*cm" rmax2="8.176260*cm" dz="134.919999*cm/2." sphi="45.0*deg-60.0*deg/2." dphi="60.0*deg"/ (actual dimensions, temporarily commented to avoid overlap with the outdated electron beam pipe)-->
-        <dimensions rmin1="(78.0+5.0)*mm+5.0*mm" rmax1="(78.0+5.0)*mm+8.0*mm" rmin2="(78.0+5.0)*mm+5.0*mm" rmax2="(78.0+5.0)*mm+8.0*mm" dz="134.919999*cm/2." sphi="45.0*deg-60.0*deg/2." dphi="60.0*deg"/>
-      </coil>
-      <tube name="Q2ER_InnerSupport_Tube" vis="MagnetSupportTubeVis">
-        <placement x="Q2ER_Center_posX" y="Q2ER_Center_posY" z="Q2ER_Center_posZ" theta="Q2ER_Rotation_Angle"/>
-        <!-- dimensions rmin="14.361160*cm/2." rmax="15.362000*cm/2." half_length="147.822239*cm/2." sphi="0*deg" dphi="360.0*deg"/ (actual dimensions, temporarily commented to avoid overlap with the outdated electron beam pipe)-->
-        <dimensions rmin="(78.0+5.0)*mm" rmax="(78.0+5.0)*mm+2.0*mm" half_length="147.822239*cm/2." sphi="0*deg" dphi="360.0*deg"/>
-      </tube>
-    </detector>
-
-  </detectors>
-
-  <detectors>
-
     <comment> Electron side extended beam pipe volumes </comment>
     <!-- Beam pipe going from Q3eR to B7eR -->
     <detector
