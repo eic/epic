@@ -4,41 +4,41 @@
 <lccdd>
   <define>
     <!-- B0pF Yoke Center Position -->
-    <constant name="B0PF_Yoke_Center_posX" value="-3.40264 * cm"/>
-    <constant name="B0PF_Yoke_Center_posY" value="0 * cm"/>
-    <constant name="B0PF_Yoke_Center_posZ" value="640.648 * cm"/>
-    <constant name="B0PF_Yoke_Rotation_Angle" value="0 * rad"/>
+    <constant name="B0PF_Yoke_Center_posX" value="-3.40264*cm"/>
+    <constant name="B0PF_Yoke_Center_posY" value="0*cm"/>
+    <constant name="B0PF_Yoke_Center_posZ" value="640.648*cm"/>
+    <constant name="B0PF_Yoke_Rotation_Angle" value="0*rad"/>
     <!-- B0ApF Yoke Center Position -->
-    <constant name="B0APF_Yoke_Center_posX" value="-21.3736 * cm"/>
-    <constant name="B0APF_Yoke_Center_posY" value="0 * cm"/>
-    <constant name="B0APF_Yoke_Center_posZ" value="820.648 * cm"/>
-    <constant name="B0APF_Yoke_Rotation_Angle" value="-0.0219093 * rad"/>
+    <constant name="B0APF_Yoke_Center_posX" value="-21.3736*cm"/>
+    <constant name="B0APF_Yoke_Center_posY" value="0*cm"/>
+    <constant name="B0APF_Yoke_Center_posZ" value="820.648*cm"/>
+    <constant name="B0APF_Yoke_Rotation_Angle" value="-0.0219093*rad"/>
     <!-- Q1ApF Yoke Center Position -->
-    <constant name="Q1APF_Yoke_Center_posX" value="-25.8207 * cm"/>
-    <constant name="Q1APF_Yoke_Center_posY" value="0 * cm"/>
-    <constant name="Q1APF_Yoke_Center_posZ" value="963.648 * cm"/>
-    <constant name="Q1APF_Yoke_Rotation_Angle" value="-0.0208752 * rad"/>
+    <constant name="Q1APF_Yoke_Center_posX" value="-25.8207*cm"/>
+    <constant name="Q1APF_Yoke_Center_posY" value="0*cm"/>
+    <constant name="Q1APF_Yoke_Center_posZ" value="963.648*cm"/>
+    <constant name="Q1APF_Yoke_Rotation_Angle" value="-0.0208752*rad"/>
     <!-- Q1BpF Yoke Center Position -->
     <constant name="Q1BPF_Yoke_Center_posX" value="-31.3088"/>
-    <constant name="Q1BPF_Yoke_Center_posY" value="0 * cm"/>
+    <constant name="Q1BPF_Yoke_Center_posY" value="0*cm"/>
     <constant name="Q1BPF_Yoke_Center_posZ" value="1157.15"/>
-    <constant name="Q1BPF_Yoke_Rotation_Angle" value="-0.0135542 * rad"/>
+    <constant name="Q1BPF_Yoke_Rotation_Angle" value="-0.0135542*rad"/>
     <!-- Q2pF Yoke Center Position -->
-    <constant name="Q2PF_Yoke_Center_posX" value="-40.6057 * cm"/>
-    <constant name="Q2PF_Yoke_Center_posY" value="0 * cm"/>
-    <constant name="Q2PF_Yoke_Center_posZ" value="1467.41 * cm"/>
-    <constant name="Q2PF_Yoke_Rotation_Angle" value="-0.0138003 * rad"/>
+    <constant name="Q2PF_Yoke_Center_posX" value="-40.6057*cm"/>
+    <constant name="Q2PF_Yoke_Center_posY" value="0*cm"/>
+    <constant name="Q2PF_Yoke_Center_posZ" value="1467.41*cm"/>
+    <constant name="Q2PF_Yoke_Rotation_Angle" value="-0.0138003*rad"/>
     <!-- B1pF Yoke Center Position -->
-    <constant name="B1PF_Yoke_Center_posX" value="-51.4896 * cm"/>
-    <constant name="B1PF_Yoke_Center_posY" value="0 * cm"/>
+    <constant name="B1PF_Yoke_Center_posX" value="-51.4896*cm"/>
+    <constant name="B1PF_Yoke_Center_posY" value="0*cm"/>
     <constant name="B1PF_Yoke_Center_posZ" value="1857.67"/>
-    <constant name="B1PF_Yoke_Rotation_Angle" value="-0.0277921 * rad"/>
+    <constant name="B1PF_Yoke_Rotation_Angle" value="-0.0277921*rad"/>
     <!-- B1ApF Yoke Center Position -->
-    <constant name="B1APF_Yoke_Center_posX" value="-61.5849 * cm"/>
-    <constant name="B1APF_Yoke_Center_posY" value="0 * cm"/>
-    <constant name="B1APF_Yoke_Center_posZ" value="2132.65 * cm"/>
-    <constant name="B1APF_Yoke_Rotation_Angle" value="-0.021 * rad"/>
-    <constant name="B1APF_Yoke_Center_offsetY" value="16.5 * cm"/>
+    <constant name="B1APF_Yoke_Center_posX" value="-61.5849*cm"/>
+    <constant name="B1APF_Yoke_Center_posY" value="0*cm"/>
+    <constant name="B1APF_Yoke_Center_posZ" value="2132.65*cm"/>
+    <constant name="B1APF_Yoke_Rotation_Angle" value="-0.021*rad"/>
+    <constant name="B1APF_Yoke_Center_offsetY" value="16.5*cm"/>
   </define>
 
   <comment>
@@ -48,10 +48,10 @@
         EIC Public Sharing Docs → Documents → Experimental Program → ePIC → Engineering → STR-Files → IR6_CRYOSTAT_2200m_top_4-24-2025.stp
         [https://brookhavenlab.sharepoint.com/:u:/s/EICPublicSharingDocs/EdR44ODny1BEmMTTks61CCwBe8tJYMc0iWkPIYY_EjYEuw?e=2XLUEt]
 
-        - The file can be opened using Onshape (www.onshape.com), a free, cloud-based CAD platform for 3D modeling and mechanical design.
-        - Both the forward (FWD) and backward (BWD/rear) cryostats contain multiple sub-cryostats, primarily associated with hadron magnets.
-        - The main components are the magnet yokes; most other elements—such as coils, support tubes, yoke shielding, heat shielding, and vessels—are positioned relative to these yokes.
-        - Since the STEP file provides coordinates in the RHIC coordinate system, a rotation and translation must be applied before using them in the geometry XML files. See page 19 of the following PDF from the IR Meeting on May 30, 2025:
+       -The file can be opened using Onshape (www.onshape.com), a free, cloud-based CAD platform for 3D modeling and mechanical design.
+       -Both the forward (FWD) and backward (BWD/rear) cryostats contain multiple sub-cryostats, primarily associated with hadron magnets.
+       -The main components are the magnet yokes; most other elements—such as coils, support tubes, yoke shielding, heat shielding, and vessels—are positioned relative to these yokes.
+       -Since the STEP file provides coordinates in the RHIC coordinate system, a rotation and translation must be applied before using them in the geometry XML files. See page 19 of the following PDF from the IR Meeting on May 30, 2025:
         [https://brookhavenlab.sharepoint.com/:b:/r/sites/eRHIC/bnl%26slac/EIC%20IR%20Meeting%20Minutes%20%20Documents/IR-Meeting/2025/05-30-2025/EIC_CRYO_GEANT4_May2025_NATOCHII_UPDATED.pdf]
 
         -- Apply a shift of 81 cm (the offset between RHIC and EIC IP6 interaction points).
@@ -59,30 +59,30 @@
 
         Example of how to extract coordinates from Onshape and compute the yoke's position and orientation:
 
-                TVector3 coord1(-47.389536 * cm, 0, -1704.865494 * cm); // B1pF yoke endcap — IP side
-                TVector3 coord2(-41.351827 * cm, 0, -2009.882603 * cm); // B1pF yoke endcap — non-IP side
-                // Rotate around the Y axis by (π - 8e-3)
-                double angle = M_PI - 8e-3; // π flips the Z-axis; 8e-3 rad aligns with ePIC axis
-                coord1.RotateY(angle * rad);
-                coord2.RotateY(angle * rad);
+                TVector3 coord1(-47.389536*cm, 0, -1704.865494*cm); // B1pF yoke endcap — IP side
+                TVector3 coord2(-41.351827*cm, 0, -2009.882603*cm); // B1pF yoke endcap — non-IP side
+                // Rotate around the Y axis by (π-8e-3)
+                double angle = M_PI-8e-3; // π flips the Z-axis; 8e-3 rad aligns with ePIC axis
+                coord1.RotateY(angle*rad);
+                coord2.RotateY(angle*rad);
                 // Compute center
-                TVector3 center = 0.5 * (coord1 + coord2);
-                center += TVector3(-81. * cm, 0, 0); // Apply RHIC → EIC IP6 offset
+                TVector3 center = 0.5*(coord1+coord2);
+                center += TVector3(-81.*cm, 0, 0); // Apply RHIC → EIC IP6 offset
                 // Compute rotation angle around Y
-                double deltaX = coord2.X() - coord1.X();
-                double deltaZ = coord2.Z() - coord1.Z();
-                double rotY_angle = atan(deltaX / deltaZ) * rad;
+                double deltaX = coord2.X()-coord1.X();
+                double deltaZ = coord2.Z()-coord1.Z();
+                double rotY_angle = atan(deltaX/deltaZ)*rad;
                 // Threshold small angles
                 if (1e-6 > std::abs(rotY_angle)) {
                     rotY_angle = 0;
                 }
                 // Add 'center' and 'rotY_angle' to the XML file
 
-        - Some barrel elements (e.g., heat shield, vessel) and endplates are described using polygons with two or more Z-planes. Example:
+       -Some barrel elements (e.g., heat shield, vessel) and endplates are described using polygons with two or more Z-planes. Example:
 
                 <placement x="Q1APF_Yoke_Center_posX" y="Q1APF_Yoke_Center_posY" z="Q1APF_Yoke_Center_posZ" theta="Q1APF_Yoke_Rotation_Angle"/>
-                <zplane z="-(160.817560 * cm / 2.)" rmin="7.114540 * cm" rmax="29.210000 * cm"/>
-                <zplane z="-(160.817560 * cm / 2. + 15.246221 * cm)" rmin="7.114540 * cm" rmax="29.210000 * cm"/>
+                <zplane z="-(160.817560*cm/2.)" rmin="7.114540*cm" rmax="29.210000*cm"/>
+                <zplane z="-(160.817560*cm/2.+15.246221*cm)" rmin="7.114540*cm" rmax="29.210000*cm"/>
 
         Here, 160.817560 cm is the distance between the inner surfaces of the two Q1ApF endplates (mounted on both ends of the magnet),
         and 15.246221 cm is the Z-thickness of the endplate on the IP side (note the minus sign).
@@ -108,113 +108,113 @@
     <detector id="B0PF_ID" name="B0PF_BeamlineMagnet" type="ip6_CryostatMagnet">
       <yoke name="B0PF_Yoke" vis="MagnetVis">
         <placement x="B0PF_Yoke_Center_posX" y="B0PF_Yoke_Center_posY" z="B0PF_Yoke_Center_posZ" theta="B0PF_Yoke_Rotation_Angle"/>
-        <dimensions rmin="74. * cm / 2." rmax="140. * cm / 2." half_length="127. * cm / 2." sphi="0 * deg" dphi="360.0 * deg"/>
+        <dimensions rmin="74.*cm/2." rmax="140.*cm/2." half_length="127.*cm/2." sphi="0*deg" dphi="360.0*deg"/>
         <cut>
-          <placement x="11.841 * cm" y="-44.1911 * cm" z="0 * cm" rotX="0 * rad" rotY="0 * rad" rotZ="0 * rad"/>
-          <dimensions rmin="0 * cm" rmax="12.7 * cm / 2." half_length="400. * cm / 2."/>
-          <rotation num="4" start="0 * deg" step="90 * deg" axis="Z"/>
+          <placement x="11.841*cm" y="-44.1911*cm" z="0*cm" rotX="0*rad" rotY="0*rad" rotZ="0*rad"/>
+          <dimensions rmin="0*cm" rmax="12.7*cm/2." half_length="400.*cm/2."/>
+          <rotation num="4" start="0*deg" step="90*deg" axis="Z"/>
         </cut>
         <cut>
-          <placement x="-11.841 * cm" y="-44.1911 * cm" z="0 * cm" rotX="0 * rad" rotY="0 * rad" rotZ="0 * rad"/>
-          <dimensions rmin="0 * cm" rmax="12.7 * cm / 2." half_length="400. * cm / 2."/>
-          <rotation num="4" start="0 * deg" step="90 * deg" axis="Z"/>
+          <placement x="-11.841*cm" y="-44.1911*cm" z="0*cm" rotX="0*rad" rotY="0*rad" rotZ="0*rad"/>
+          <dimensions rmin="0*cm" rmax="12.7*cm/2." half_length="400.*cm/2."/>
+          <rotation num="4" start="0*deg" step="90*deg" axis="Z"/>
         </cut>
       </yoke>
       <coil name="B0PF_Quad_Coil" vis="MagnetCoilVis">
-        <placement x="B0PF_Yoke_Center_posX" y="B0PF_Yoke_Center_posY" z="B0PF_Yoke_Center_posZ" theta="B0PF_Yoke_Rotation_Angle" phiNum="3" phiStart="90 * deg" phiStep="90 * deg"/>
-        <dimensions rmin="32.595820 * cm" rmax="34.424620 * cm" half_length="127.0 * cm / 2." sphi="-69.0 * deg / 2." dphi="69.0 * deg"/>
+        <placement x="B0PF_Yoke_Center_posX" y="B0PF_Yoke_Center_posY" z="B0PF_Yoke_Center_posZ" theta="B0PF_Yoke_Rotation_Angle" phiNum="3" phiStart="90*deg" phiStep="90*deg"/>
+        <dimensions rmin="32.595820*cm" rmax="34.424620*cm" half_length="127.0*cm/2." sphi="-69.0*deg/2." dphi="69.0*deg"/>
       </coil>
       <coil name="B0PF_Dipole_Coil" vis="MagnetCoilVis">
-        <placement x="B0PF_Yoke_Center_posX" y="B0PF_Yoke_Center_posY" z="B0PF_Yoke_Center_posZ" theta="B0PF_Yoke_Rotation_Angle" phiNum="1" phiStart="180 * deg" phiStep="180 * deg"/>
-        <dimensions rmin="35.323780 * cm" rmax="35.796 * cm" half_length="127.0 * cm / 2." sphi="-152.0 * deg / 2." dphi="152.0 * deg"/>
+        <placement x="B0PF_Yoke_Center_posX" y="B0PF_Yoke_Center_posY" z="B0PF_Yoke_Center_posZ" theta="B0PF_Yoke_Rotation_Angle" phiNum="1" phiStart="180*deg" phiStep="180*deg"/>
+        <dimensions rmin="35.323780*cm" rmax="35.796*cm" half_length="127.0*cm/2." sphi="-152.0*deg/2." dphi="152.0*deg"/>
       </coil>
       <coil name="B0PF_SkewQuad_Coil" vis="MagnetCoilVis">
-        <placement x="B0PF_Yoke_Center_posX" y="B0PF_Yoke_Center_posY" z="B0PF_Yoke_Center_posZ" theta="B0PF_Yoke_Rotation_Angle" phiNum="3" phiStart="90 * deg" phiStep="90 * deg"/>
-        <dimensions rmin="35.796220 * cm" rmax="36.047680 * cm" half_length="127.0 * cm / 2." sphi="45 * deg - 60.0 * deg / 2." dphi="60.0 * deg"/>
+        <placement x="B0PF_Yoke_Center_posX" y="B0PF_Yoke_Center_posY" z="B0PF_Yoke_Center_posZ" theta="B0PF_Yoke_Rotation_Angle" phiNum="3" phiStart="90*deg" phiStep="90*deg"/>
+        <dimensions rmin="35.796220*cm" rmax="36.047680*cm" half_length="127.0*cm/2." sphi="45*deg-60.0*deg/2." dphi="60.0*deg"/>
       </coil>
       <coil name="B0PF_SkewDipole_Coil" vis="MagnetCoilVis">
-        <placement x="B0PF_Yoke_Center_posX" y="B0PF_Yoke_Center_posY" z="B0PF_Yoke_Center_posZ" theta="B0PF_Yoke_Rotation_Angle" phiNum="1" phiStart="180 * deg" phiStep="180 * deg"/>
-        <dimensions rmin="36.047680 * cm" rmax="36.329620 * cm" half_length="127.0 * cm / 2." sphi="90 * deg - 152.0 * deg / 2." dphi="152.0 * deg"/>
+        <placement x="B0PF_Yoke_Center_posX" y="B0PF_Yoke_Center_posY" z="B0PF_Yoke_Center_posZ" theta="B0PF_Yoke_Rotation_Angle" phiNum="1" phiStart="180*deg" phiStep="180*deg"/>
+        <dimensions rmin="36.047680*cm" rmax="36.329620*cm" half_length="127.0*cm/2." sphi="90*deg-152.0*deg/2." dphi="152.0*deg"/>
       </coil>
       <tube name="B0PF_InnerSupport_Tube" vis="MagnetSupportTubeVis">
         <placement x="B0PF_Yoke_Center_posX" y="B0PF_Yoke_Center_posY" z="B0PF_Yoke_Center_posZ" theta="B0PF_Yoke_Rotation_Angle"/>
-        <dimensions rmin="62.793880 * cm / 2." rmax="65.191640 * cm / 2." half_length="134.769860 * cm / 2." sphi="0 * deg" dphi="360.0 * deg"/>
+        <dimensions rmin="62.793880*cm/2." rmax="65.191640*cm/2." half_length="134.769860*cm/2." sphi="0*deg" dphi="360.0*deg"/>
       </tube>
       <tube name="B0PF_OuterSupport_Tube" vis="MagnetSupportTubeVis">
         <placement x="B0PF_Yoke_Center_posX" y="B0PF_Yoke_Center_posY" z="B0PF_Yoke_Center_posZ" theta="B0PF_Yoke_Rotation_Angle"/>
-        <dimensions rmin="69.448680 * cm / 2." rmax="70.647560 * cm / 2." half_length="130.81 * cm / 2." sphi="0 * deg" dphi="360.0 * deg"/>
+        <dimensions rmin="69.448680*cm/2." rmax="70.647560*cm/2." half_length="130.81*cm/2." sphi="0*deg" dphi="360.0*deg"/>
       </tube>
       <endplate name="B0PF_EndPlate_IP" vis="MagnetEndPlateVis">
         <placement x="B0PF_Yoke_Center_posX" y="B0PF_Yoke_Center_posY" z="B0PF_Yoke_Center_posZ" theta="B0PF_Yoke_Rotation_Angle"/>
-        <zplane z="-(134.9 * cm / 2.)" rmin="31.396940 * cm" rmax="142.539974 * cm / 2."/>
-        <zplane z="-(134.9 * cm / 2. + 6.35 * cm)" rmin="31.396940 * cm" rmax="142.539974 * cm / 2."/>
+        <zplane z="-(134.9*cm/2.)" rmin="31.396940*cm" rmax="142.539974*cm/2."/>
+        <zplane z="-(134.9*cm/2.+6.35*cm)" rmin="31.396940*cm" rmax="142.539974*cm/2."/>
       </endplate>
       <endplate name="B0PF_EndPlate_nonIP" vis="MagnetEndPlateVis">
         <placement x="B0PF_Yoke_Center_posX" y="B0PF_Yoke_Center_posY" z="B0PF_Yoke_Center_posZ" theta="B0PF_Yoke_Rotation_Angle"/>
-        <zplane z="(134.9 * cm / 2.)" rmin="31.396940 * cm" rmax="142.539974 * cm / 2."/>
-        <zplane z="(134.9 * cm / 2. + 6.35 * cm)" rmin="31.396940 * cm" rmax="142.539974 * cm / 2."/>
+        <zplane z="(134.9*cm/2.)" rmin="31.396940*cm" rmax="142.539974*cm/2."/>
+        <zplane z="(134.9*cm/2.+6.35*cm)" rmin="31.396940*cm" rmax="142.539974*cm/2."/>
       </endplate>
       <yokeshield name="B0PF_YoketShield" vis="MagnetEndPlateVis">
         <placement x="B0PF_Yoke_Center_posX" y="B0PF_Yoke_Center_posY" z="B0PF_Yoke_Center_posZ" theta="B0PF_Yoke_Rotation_Angle"/>
-        <dimensions rmin="140.0 * cm / 2." rmax="142.54 * cm/ 2." half_length="134.8 * cm / 2." sphi="0 * deg" dphi="360.0 * deg"/>
+        <dimensions rmin="140.0*cm/2." rmax="142.54*cm/ 2." half_length="134.8*cm/2." sphi="0*deg" dphi="360.0*deg"/>
       </yokeshield>
       <heatshieldbarrel name="B0PF_HeatShield_Barrel" vis="MagnetHeatShieldVis">
         <placement x="B0PF_Yoke_Center_posX" y="B0PF_Yoke_Center_posY" z="B0PF_Yoke_Center_posZ" theta="B0PF_Yoke_Rotation_Angle"/>
-        <dimensions rmin="170.18 * cm / 2." rmax="171.45 * cm/ 2." half_length="174.139860 * cm / 2." sphi="0 * deg" dphi="360.0 * deg"/>
+        <dimensions rmin="170.18*cm/2." rmax="171.45*cm/ 2." half_length="174.139860*cm/2." sphi="0*deg" dphi="360.0*deg"/>
       </heatshieldbarrel>
       <heatshieldend name="B0PF_HeatShield_End_IP" vis="MagnetHeatShieldVis">
         <placement x="B0PF_Yoke_Center_posX" y="B0PF_Yoke_Center_posY" z="B0PF_Yoke_Center_posZ" theta="B0PF_Yoke_Rotation_Angle"/>
-        <zplane z="-(174.139860 * cm / 2.)" rmin="29.391 * cm" rmax="171.45 * cm / 2."/>
-        <zplane z="-(174.139860 * cm / 2. + 0.635 * cm)" rmin="29.391 * cm" rmax="171.45 * cm / 2."/>
+        <zplane z="-(174.139860*cm/2.)" rmin="29.391*cm" rmax="171.45*cm/2."/>
+        <zplane z="-(174.139860*cm/2.+0.635*cm)" rmin="29.391*cm" rmax="171.45*cm/2."/>
         <add shape="Tube">
-          <placement x="3.4 * cm" y="0 * cm" z="-(174.139860 * cm / 2. + 0.635 * cm / 2.)" theta="0 * rad"/>
-          <dimensions rmin="0 * cm" rmax="8.845 * cm" half_length="0.635 * cm / 2."/>
+          <placement x="3.4*cm" y="0*cm" z="-(174.139860*cm/2.+0.635*cm/2.)" theta="0*rad"/>
+          <dimensions rmin="0*cm" rmax="8.845*cm" half_length="0.635*cm/2."/>
         </add>
         <add shape="Prism">
-          <placement x="35.3 * cm / 2." y="0 * cm" z="-(174.139860 * cm / 2. + 0.635 * cm / 2.)" theta="90 * deg"/>
-          <dimensions pdx1="0.635 * cm / 2." pdx2="0.635 * cm / 2." pdy1="16.4 * cm / 2." pdy2="48.9 * cm / 2." pdz="35.3 * cm / 2."/>
+          <placement x="35.3*cm/2." y="0*cm" z="-(174.139860*cm/2.+0.635*cm/2.)" theta="90*deg"/>
+          <dimensions pdx1="0.635*cm/2." pdx2="0.635*cm/2." pdy1="16.4*cm/2." pdy2="48.9*cm/2." pdz="35.3*cm/2."/>
         </add>
         <cut>
-          <placement x="3.4 * cm" y="0 * cm" z="-(174.139860 * cm / 2. + 0.635 * cm / 2.)" rotX="0 * rad" rotY="0 * rad" rotZ="0 * rad"/>
-          <dimensions rmin="0 * cm" rmax="6.827520 * cm / 2." half_length="200. * cm / 2."/>
-          <rotation num="1" start="0 * deg" step="0 * deg" axis="Z"/>
+          <placement x="3.4*cm" y="0*cm" z="-(174.139860*cm/2.+0.635*cm/2.)" rotX="0*rad" rotY="0*rad" rotZ="0*rad"/>
+          <dimensions rmin="0*cm" rmax="6.827520*cm/2." half_length="200.*cm/2."/>
+          <rotation num="1" start="0*deg" step="0*deg" axis="Z"/>
         </cut>
       </heatshieldend>
       <heatshieldend name="B0PF_HeatShield_End_nonIP" vis="MagnetHeatShieldVis">
         <placement x="B0PF_Yoke_Center_posX" y="B0PF_Yoke_Center_posY" z="B0PF_Yoke_Center_posZ" theta="B0PF_Yoke_Rotation_Angle"/>
-        <zplane z="(174.139860 * cm / 2.)" rmin="0 * cm" rmax="171.45 * cm / 2."/>
-        <zplane z=" (174.139860 * cm / 2. + 0.635 * cm)" rmin="0 * cm" rmax="171.45 * cm / 2."/>
+        <zplane z="(174.139860*cm/2.)" rmin="0*cm" rmax="171.45*cm/2."/>
+        <zplane z=" (174.139860*cm/2.+0.635*cm)" rmin="0*cm" rmax="171.45*cm/2."/>
         <cut>
-          <placement x="3.4 * cm" y="0 * cm" z="(174.139860 * cm / 2. + 0.635 * cm / 2.)" rotX="0 * rad" rotY="0 * rad" rotZ="0 * rad"/>
-          <dimensions rmin="0 * cm" rmax="9.5 * cm / 2." half_length="200. * cm / 2."/>
-          <rotation num="1" start="0 * deg" step="0 * deg" axis="Z"/>
+          <placement x="3.4*cm" y="0*cm" z="(174.139860*cm/2.+0.635*cm/2.)" rotX="0*rad" rotY="0*rad" rotZ="0*rad"/>
+          <dimensions rmin="0*cm" rmax="9.5*cm/2." half_length="200.*cm/2."/>
+          <rotation num="1" start="0*deg" step="0*deg" axis="Z"/>
         </cut>
         <cut>
-          <placement x="-15.4 * cm" y="0 * cm" z="(174.139860 * cm / 2. + 0.635 * cm / 2.)" rotX="0 * rad" rotY="0 * rad" rotZ="0 * rad"/>
-          <dimensions rmin="0 * cm" rmax="7.0 * cm / 2." half_length="200. * cm / 2."/>
-          <rotation num="1" start="0 * deg" step="0 * deg" axis="Z"/>
+          <placement x="-15.4*cm" y="0*cm" z="(174.139860*cm/2.+0.635*cm/2.)" rotX="0*rad" rotY="0*rad" rotZ="0*rad"/>
+          <dimensions rmin="0*cm" rmax="7.0*cm/2." half_length="200.*cm/2."/>
+          <rotation num="1" start="0*deg" step="0*deg" axis="Z"/>
         </cut>
       </heatshieldend>
       <cryobarrel name="B0PF_Cryo_Barrel" vis="MagnetCryoVis">
-        <placement x="B0PF_Yoke_Center_posX" y="B0PF_Yoke_Center_posY" z="B0PF_Yoke_Center_posZ - (132.86 * cm / 2. + 22.54 * cm - 162.709860 * cm / 2.)" theta="B0PF_Yoke_Rotation_Angle"/>
-        <dimensions rmin="180.34 * cm / 2." rmax="182.88 * cm/ 2." half_length="162.709860 * cm / 2." sphi="0 * deg" dphi="360.0 * deg"/>
+        <placement x="B0PF_Yoke_Center_posX" y="B0PF_Yoke_Center_posY" z="B0PF_Yoke_Center_posZ-(132.86*cm/2.+22.54*cm-162.709860*cm/2.)" theta="B0PF_Yoke_Rotation_Angle"/>
+        <dimensions rmin="180.34*cm/2." rmax="182.88*cm/ 2." half_length="162.709860*cm/2." sphi="0*deg" dphi="360.0*deg"/>
       </cryobarrel>
       <cryoend name="B0PF_Cryo_End_IP" vis="MagnetCryoVis">
         <placement x="B0PF_Yoke_Center_posX" y="B0PF_Yoke_Center_posY" z="B0PF_Yoke_Center_posZ" theta="B0PF_Yoke_Rotation_Angle"/>
-        <zplane z="-(132.86 * cm / 2. + 22.54 * cm)" rmin="27.403501 * cm" rmax="182.88 * cm / 2."/>
-        <zplane z="-(132.86 * cm / 2. + 22.54* cm + 2.54 * cm)" rmin="27.403501 * cm" rmax="182.88 * cm / 2."/>
+        <zplane z="-(132.86*cm/2.+22.54*cm)" rmin="27.403501*cm" rmax="182.88*cm/2."/>
+        <zplane z="-(132.86*cm/2.+22.54* cm+2.54*cm)" rmin="27.403501*cm" rmax="182.88*cm/2."/>
         <add shape="Tube">
-          <placement x="3.4 * cm" y="0 * cm" z="-(132.86 * cm / 2. + 22.54 * cm + 2.54 * cm / 2.)" theta="0 * rad"/>
-          <dimensions rmin="0 * cm" rmax="8.845 * cm" half_length="2.54 * cm / 2."/>
+          <placement x="3.4*cm" y="0*cm" z="-(132.86*cm/2.+22.54*cm+2.54*cm/2.)" theta="0*rad"/>
+          <dimensions rmin="0*cm" rmax="8.845*cm" half_length="2.54*cm/2."/>
         </add>
         <add shape="Prism">
-          <placement x="35.3 * cm / 2." y="0 * cm" z="-(132.86 * cm / 2. + 22.54 * cm + 2.54 * cm / 2.)" theta="90 * deg"/>
-          <dimensions pdx1="2.54 * cm / 2." pdx2="2.54 * cm / 2." pdy1="16.4 * cm / 2." pdy2="48.9 * cm / 2." pdz="35.3 * cm / 2."/>
+          <placement x="35.3*cm/2." y="0*cm" z="-(132.86*cm/2.+22.54*cm+2.54*cm/2.)" theta="90*deg"/>
+          <dimensions pdx1="2.54*cm/2." pdx2="2.54*cm/2." pdy1="16.4*cm/2." pdy2="48.9*cm/2." pdz="35.3*cm/2."/>
         </add>
         <cut>
-          <placement x="3.4 * cm" y="0 * cm" z="-(132.86 * cm / 2. + 22.54 * cm + 2.54 * cm / 2.)" rotX="0 * rad" rotY="0 * rad" rotZ="0 * rad"/>
-          <dimensions rmin="0 * cm" rmax="6.827520 * cm / 2." half_length="200. * cm / 2."/>
-          <rotation num="1" start="0 * deg" step="0 * deg" axis="Z"/>
+          <placement x="3.4*cm" y="0*cm" z="-(132.86*cm/2.+22.54*cm+2.54*cm/2.)" rotX="0*rad" rotY="0*rad" rotZ="0*rad"/>
+          <dimensions rmin="0*cm" rmax="6.827520*cm/2." half_length="200.*cm/2."/>
+          <rotation num="1" start="0*deg" step="0*deg" axis="Z"/>
         </cut>
       </cryoend>
     </detector>
@@ -223,71 +223,71 @@
     <detector id="B0APF_ID" name="B0APF_BeamlineMagnet" type="ip6_CryostatMagnet">
       <yoke name="B0APF_Yoke" vis="MagnetVis">
         <placement x="B0APF_Yoke_Center_posX" y="B0APF_Yoke_Center_posY" z="B0APF_Yoke_Center_posZ" theta="B0APF_Yoke_Rotation_Angle"/>
-        <dimensions rmin="22. * cm / 2." rmax="60. * cm / 2." half_length="60. * cm / 2." sphi="0 * deg" dphi="360.0 * deg"/>
+        <dimensions rmin="22.*cm/2." rmax="60.*cm/2." half_length="60.*cm/2." sphi="0*deg" dphi="360.0*deg"/>
         <cut>
-          <placement x="(15.543 + (16.858-15.543)/2. + 5.2) * cm" y="0 * cm" z="0 * cm" rotX="0 * rad" rotY="1.255321 * deg" rotZ="0 * rad"/>
-          <dimensions rmin="0 * cm" rmax="10.4 * cm / 2." half_length="400. * cm / 2."/>
-          <rotation num="1" start="0 * deg" step="0 * deg" axis="Z"/>
+          <placement x="(15.543+(16.858-15.543)/2.+5.2)*cm" y="0*cm" z="0*cm" rotX="0*rad" rotY="1.255321*deg" rotZ="0*rad"/>
+          <dimensions rmin="0*cm" rmax="10.4*cm/2." half_length="400.*cm/2."/>
+          <rotation num="1" start="0*deg" step="0*deg" axis="Z"/>
         </cut>
       </yoke>
       <coil name="B0APF_Dummy_Coil_In" vis="MagnetCoilVis">
-        <placement x="B0APF_Yoke_Center_posX" y="B0APF_Yoke_Center_posY" z="B0APF_Yoke_Center_posZ" theta="B0APF_Yoke_Rotation_Angle" phiNum="3" phiStart="90 * deg" phiStep="90 * deg"/>
-        <dimensions rmin="11.917680 * cm / 2." rmax="14.127480 * cm / 2." half_length="52.379880 * cm / 2." sphi="0 * deg" dphi="360.0 * deg"/>
+        <placement x="B0APF_Yoke_Center_posX" y="B0APF_Yoke_Center_posY" z="B0APF_Yoke_Center_posZ" theta="B0APF_Yoke_Rotation_Angle" phiNum="3" phiStart="90*deg" phiStep="90*deg"/>
+        <dimensions rmin="11.917680*cm/2." rmax="14.127480*cm/2." half_length="52.379880*cm/2." sphi="0*deg" dphi="360.0*deg"/>
       </coil>
       <coil name="B0APF_Dummy_Coil_Out" vis="MagnetCoilVis">
-        <placement x="B0APF_Yoke_Center_posX" y="B0APF_Yoke_Center_posY" z="B0APF_Yoke_Center_posZ" theta="B0APF_Yoke_Rotation_Angle" phiNum="3" phiStart="90 * deg" phiStep="90 * deg"/>
-        <dimensions rmin="15.742920 * cm / 2." rmax="19.405600 * cm / 2." half_length="52.379880 * cm / 2." sphi="0 * deg" dphi="360.0 * deg"/>
+        <placement x="B0APF_Yoke_Center_posX" y="B0APF_Yoke_Center_posY" z="B0APF_Yoke_Center_posZ" theta="B0APF_Yoke_Rotation_Angle" phiNum="3" phiStart="90*deg" phiStep="90*deg"/>
+        <dimensions rmin="15.742920*cm/2." rmax="19.405600*cm/2." half_length="52.379880*cm/2." sphi="0*deg" dphi="360.0*deg"/>
       </coil>
       <tube name="B0APF_InnerSupport_Tube" vis="MagnetSupportTubeVis">
         <placement x="B0APF_Yoke_Center_posX" y="B0APF_Yoke_Center_posY" z="B0APF_Yoke_Center_posZ" theta="B0APF_Yoke_Rotation_Angle"/>
-        <dimensions rmin="10.901680 * cm / 2." rmax="11.902440 * cm / 2." half_length="57.459880 * cm / 2." sphi="0 * deg" dphi="360.0 * deg"/>
+        <dimensions rmin="10.901680*cm/2." rmax="11.902440*cm/2." half_length="57.459880*cm/2." sphi="0*deg" dphi="360.0*deg"/>
       </tube>
       <tube name="B0APF_OuterSupport_Tube" vis="MagnetSupportTubeVis">
         <placement x="B0APF_Yoke_Center_posX" y="B0APF_Yoke_Center_posY" z="B0APF_Yoke_Center_posZ" theta="B0APF_Yoke_Rotation_Angle"/>
-        <dimensions rmin="14.726920 * cm / 2." rmax="15.727680 * cm / 2." half_length="57.459880 * cm / 2." sphi="0 * deg" dphi="360.0 * deg"/>
+        <dimensions rmin="14.726920*cm/2." rmax="15.727680*cm/2." half_length="57.459880*cm/2." sphi="0*deg" dphi="360.0*deg"/>
       </tube>
       <endplate name="B0APF_EndPlate_IP" vis="MagnetEndPlateVis">
         <placement x="B0APF_Yoke_Center_posX" y="B0APF_Yoke_Center_posY" z="B0APF_Yoke_Center_posZ" theta="B0APF_Yoke_Rotation_Angle"/>
-        <zplane z="-60. * cm / 2." rmin="10.957560 * cm / 2." rmax="53.340000 * cm / 2."/>
-        <zplane z="-(60. * cm / 2. + 1.2 * cm)" rmin="10.957560 * cm / 2." rmax="53.340000 * cm / 2."/>
+        <zplane z="-60.*cm/2." rmin="10.957560*cm/2." rmax="53.340000*cm/2."/>
+        <zplane z="-(60.*cm/2.+1.2*cm)" rmin="10.957560*cm/2." rmax="53.340000*cm/2."/>
         <cut>
-          <placement x="(15.543 + (16.858-15.543)/2. + 5.2) * cm" y="0 * cm" z="0 * cm" rotX="0 * rad" rotY="1.255321 * deg" rotZ="0 * rad"/>
-          <dimensions rmin="0 * cm" rmax="5.2 * cm" half_length="200. * cm / 2."/>
-          <rotation num="1" start="0 * deg" step="0 * deg" axis="Z"/>
+          <placement x="(15.543+(16.858-15.543)/2.+5.2)*cm" y="0*cm" z="0*cm" rotX="0*rad" rotY="1.255321*deg" rotZ="0*rad"/>
+          <dimensions rmin="0*cm" rmax="5.2*cm" half_length="200.*cm/2."/>
+          <rotation num="1" start="0*deg" step="0*deg" axis="Z"/>
         </cut>
       </endplate>
       <endplate name="B0APF_EndPlate_nonIP" vis="MagnetEndPlateVis">
         <placement x="B0APF_Yoke_Center_posX" y="B0APF_Yoke_Center_posY" z="B0APF_Yoke_Center_posZ" theta="B0APF_Yoke_Rotation_Angle"/>
-        <zplane z="60. * cm / 2." rmin="10.957560 * cm / 2." rmax="53.340000 * cm / 2."/>
-        <zplane z="(60. * cm / 2. + 1.2 * cm)" rmin="10.957560 * cm / 2." rmax="53.340000 * cm / 2."/>
+        <zplane z="60.*cm/2." rmin="10.957560*cm/2." rmax="53.340000*cm/2."/>
+        <zplane z="(60.*cm/2.+1.2*cm)" rmin="10.957560*cm/2." rmax="53.340000*cm/2."/>
         <cut>
-          <placement x="(15.543 + (16.858-15.543)/2. + 5.2) * cm" y="0 * cm" z="0 * cm" rotX="0 * rad" rotY="1.255321 * deg" rotZ="0 * rad"/>
-          <dimensions rmin="0 * cm" rmax="5.2 * cm" half_length="200. * cm / 2."/>
-          <rotation num="1" start="0 * deg" step="0 * deg" axis="Z"/>
+          <placement x="(15.543+(16.858-15.543)/2.+5.2)*cm" y="0*cm" z="0*cm" rotX="0*rad" rotY="1.255321*deg" rotZ="0*rad"/>
+          <dimensions rmin="0*cm" rmax="5.2*cm" half_length="200.*cm/2."/>
+          <rotation num="1" start="0*deg" step="0*deg" axis="Z"/>
         </cut>
       </endplate>
       <yokeshield name="B0APF_YoketShield" vis="MagnetEndPlateVis">
         <placement x="B0APF_Yoke_Center_posX" y="B0APF_Yoke_Center_posY" z="B0APF_Yoke_Center_posZ" theta="B0APF_Yoke_Rotation_Angle"/>
-        <dimensions rmin="30. * cm" rmax="31.27 * cm" half_length="60. * cm / 2." sphi="0 * deg" dphi="360.0 * deg"/>
+        <dimensions rmin="30.*cm" rmax="31.27*cm" half_length="60.*cm/2." sphi="0*deg" dphi="360.0*deg"/>
       </yokeshield>
       <endplate name="B0APF_Head_IP" vis="MagnetEndPlateVis">
         <placement x="B0APF_Yoke_Center_posX" y="B0APF_Yoke_Center_posY" z="B0APF_Yoke_Center_posZ" theta="B0APF_Yoke_Rotation_Angle"/>
-        <zplane z="-60. * cm / 2." rmin="60.827815 * cm / 2." rmax="62.535247 * cm / 2."/>
-        <zplane z="-(60. * cm / 2. + 1.7 * cm)" rmin="60.827815 * cm / 2." rmax="62.535247 * cm / 2."/>
+        <zplane z="-60.*cm/2." rmin="60.827815*cm/2." rmax="62.535247*cm/2."/>
+        <zplane z="-(60.*cm/2.+1.7*cm)" rmin="60.827815*cm/2." rmax="62.535247*cm/2."/>
         <cut>
-          <placement x="(15.543 + (16.858-15.543)/2. + 5.2) * cm" y="0 * cm" z="0 * cm" rotX="0 * rad" rotY="1.255321 * deg" rotZ="0 * rad"/>
-          <dimensions rmin="0 * cm" rmax="5.2 * cm" half_length="200. * cm / 2."/>
-          <rotation num="1" start="0 * deg" step="0 * deg" axis="Z"/>
+          <placement x="(15.543+(16.858-15.543)/2.+5.2)*cm" y="0*cm" z="0*cm" rotX="0*rad" rotY="1.255321*deg" rotZ="0*rad"/>
+          <dimensions rmin="0*cm" rmax="5.2*cm" half_length="200.*cm/2."/>
+          <rotation num="1" start="0*deg" step="0*deg" axis="Z"/>
         </cut>
       </endplate>
       <endplate name="B0APF_Head_nonIP" vis="MagnetEndPlateVis">
         <placement x="B0APF_Yoke_Center_posX" y="B0APF_Yoke_Center_posY" z="B0APF_Yoke_Center_posZ" theta="B0APF_Yoke_Rotation_Angle"/>
-        <zplane z="-(60. * cm / 2. + 1.7 * cm)" rmin="9.062720 * cm / 2." rmax="62.535247 * cm / 2."/>
-        <zplane z="-(60. * cm / 2. + 1.7 * cm + 0.9 * cm)" rmin="9.062720 * cm / 2." rmax="62.535247 * cm / 2."/>
+        <zplane z="-(60.*cm/2.+1.7*cm)" rmin="9.062720*cm/2." rmax="62.535247*cm/2."/>
+        <zplane z="-(60.*cm/2.+1.7*cm+0.9*cm)" rmin="9.062720*cm/2." rmax="62.535247*cm/2."/>
         <cut>
-          <placement x="(15.543 + (16.858-15.543)/2. + 5.2) * cm" y="0 * cm" z="0 * cm" rotX="0 * rad" rotY="1.255321 * deg" rotZ="0 * rad"/>
-          <dimensions rmin="0 * cm" rmax="5.2 * cm" half_length="200. * cm / 2."/>
-          <rotation num="1" start="0 * deg" step="0 * deg" axis="Z"/>
+          <placement x="(15.543+(16.858-15.543)/2.+5.2)*cm" y="0*cm" z="0*cm" rotX="0*rad" rotY="1.255321*deg" rotZ="0*rad"/>
+          <dimensions rmin="0*cm" rmax="5.2*cm" half_length="200.*cm/2."/>
+          <rotation num="1" start="0*deg" step="0*deg" axis="Z"/>
         </cut>
       </endplate>
     </detector>
@@ -296,70 +296,70 @@
     <detector id="Q1APF_ID" name="Q1APF_BeamlineMagnet" type="ip6_CryostatMagnet">
       <yoke name="Q1APF_Yoke" vis="MagnetVis">
         <placement x="Q1APF_Yoke_Center_posX" y="Q1APF_Yoke_Center_posY" z="Q1APF_Yoke_Center_posZ" theta="Q1APF_Yoke_Rotation_Angle"/>
-        <dimensions rmin="26.4 * cm / 2." rmax="120. * cm / 2." half_length="150.114 * cm / 2." sphi="0 * deg" dphi="360.0 * deg"/>
+        <dimensions rmin="26.4*cm/2." rmax="120.*cm/2." half_length="150.114*cm/2." sphi="0*deg" dphi="360.0*deg"/>
         <cut>
-          <placement x="(17.346 + (20.480-17.346)/2. + 6.91) * cm" y="0 * cm" z="0 * cm" rotX="0 * rad" rotY="1.196077 * deg" rotZ="0 * rad"/>
-          <dimensions rmin="0 * cm" rmax="13.82 * cm / 2." half_length="400. * cm / 2."/>
-          <rotation num="1" start="0 * deg" step="0 * deg" axis="Z"/>
+          <placement x="(17.346+(20.480-17.346)/2.+6.91)*cm" y="0*cm" z="0*cm" rotX="0*rad" rotY="1.196077*deg" rotZ="0*rad"/>
+          <dimensions rmin="0*cm" rmax="13.82*cm/2." half_length="400.*cm/2."/>
+          <rotation num="1" start="0*deg" step="0*deg" axis="Z"/>
         </cut>
         <cut>
-          <placement x="-(44.117+11.43)/2. * cm" y="-(20.743+11.43/2.) * cm" z="0 * cm" rotX="0 * rad" rotY="0 * rad" rotZ="0 * rad"/>
-          <dimensions rmin="0 * cm" rmax="11.43 * cm / 2." half_length="400. * cm / 2."/>
-          <rotation num="1" start="0 * deg" step="0 * deg" axis="Z"/>
+          <placement x="-(44.117+11.43)/2.*cm" y="-(20.743+11.43/2.)*cm" z="0*cm" rotX="0*rad" rotY="0*rad" rotZ="0*rad"/>
+          <dimensions rmin="0*cm" rmax="11.43*cm/2." half_length="400.*cm/2."/>
+          <rotation num="1" start="0*deg" step="0*deg" axis="Z"/>
         </cut>
         <cut>
-          <placement x="(44.117+11.43)/2. * cm" y="-(20.743+11.43/2.) * cm" z="0 * cm" rotX="0 * rad" rotY="0 * rad" rotZ="0 * rad"/>
-          <dimensions rmin="0 * cm" rmax="11.43 * cm / 2." half_length="400. * cm / 2."/>
-          <rotation num="1" start="0 * deg" step="0 * deg" axis="Z"/>
+          <placement x="(44.117+11.43)/2.*cm" y="-(20.743+11.43/2.)*cm" z="0*cm" rotX="0*rad" rotY="0*rad" rotZ="0*rad"/>
+          <dimensions rmin="0*cm" rmax="11.43*cm/2." half_length="400.*cm/2."/>
+          <rotation num="1" start="0*deg" step="0*deg" axis="Z"/>
         </cut>
         <cut>
-          <placement x="(44.117+11.43)/2. * cm" y="(20.743+11.43/2.) * cm" z="0 * cm" rotX="0 * rad" rotY="0 * rad" rotZ="0 * rad"/>
-          <dimensions rmin="0 * cm" rmax="11.43 * cm / 2." half_length="400. * cm / 2."/>
-          <rotation num="1" start="0 * deg" step="0 * deg" axis="Z"/>
+          <placement x="(44.117+11.43)/2.*cm" y="(20.743+11.43/2.)*cm" z="0*cm" rotX="0*rad" rotY="0*rad" rotZ="0*rad"/>
+          <dimensions rmin="0*cm" rmax="11.43*cm/2." half_length="400.*cm/2."/>
+          <rotation num="1" start="0*deg" step="0*deg" axis="Z"/>
         </cut>
         <cut>
-          <placement x="-(44.117+11.43)/2. * cm" y="(20.743+11.43/2.) * cm" z="0 * cm" rotX="0 * rad" rotY="0 * rad" rotZ="0 * rad"/>
-          <dimensions rmin="0 * cm" rmax="11.43 * cm / 2." half_length="400. * cm / 2."/>
-          <rotation num="1" start="0 * deg" step="0 * deg" axis="Z"/>
+          <placement x="-(44.117+11.43)/2.*cm" y="(20.743+11.43/2.)*cm" z="0*cm" rotX="0*rad" rotY="0*rad" rotZ="0*rad"/>
+          <dimensions rmin="0*cm" rmax="11.43*cm/2." half_length="400.*cm/2."/>
+          <rotation num="1" start="0*deg" step="0*deg" axis="Z"/>
         </cut>
       </yoke>
       <coil name="Q1APF_Dummy_Coil" vis="MagnetCoilVis">
-        <placement x="Q1APF_Yoke_Center_posX" y="Q1APF_Yoke_Center_posY" z="Q1APF_Yoke_Center_posZ" theta="Q1APF_Yoke_Rotation_Angle" phiNum="1" phiStart="0 * deg" phiStep="0 * deg"/>
-        <dimensions rmin="14.198600 * cm / 2." rmax="20.523200 * cm / 2." half_length="157.007560 * cm / 2." sphi="0 * deg" dphi="360.0 * deg"/>
+        <placement x="Q1APF_Yoke_Center_posX" y="Q1APF_Yoke_Center_posY" z="Q1APF_Yoke_Center_posZ" theta="Q1APF_Yoke_Rotation_Angle" phiNum="1" phiStart="0*deg" phiStep="0*deg"/>
+        <dimensions rmin="14.198600*cm/2." rmax="20.523200*cm/2." half_length="157.007560*cm/2." sphi="0*deg" dphi="360.0*deg"/>
         <cut shape="Box">
-          <placement x="0 * cm" y="0 * cm" z="0 * cm" rotX="0 * rad" rotY="0 * rad" rotZ="45.0 * deg"/>
-          <dimensions dx="2.994422 * cm / 2." dy="50. * cm / 2." dz="126.591756 * cm / 2."/>
-          <rotation num="1" start="0 * deg" step="0 * deg" axis="Z"/>
+          <placement x="0*cm" y="0*cm" z="0*cm" rotX="0*rad" rotY="0*rad" rotZ="45.0*deg"/>
+          <dimensions dx="2.994422*cm/2." dy="50.*cm/2." dz="126.591756*cm/2."/>
+          <rotation num="1" start="0*deg" step="0*deg" axis="Z"/>
         </cut>
         <cut shape="Box">
-          <placement x="0 * cm" y="0 * cm" z="0 * cm" rotX="0 * rad" rotY="0 * rad" rotZ="-45.0 * deg"/>
-          <dimensions dx="2.994422 * cm / 2." dy="50. * cm / 2." dz="126.591756 * cm / 2."/>
-          <rotation num="1" start="0 * deg" step="0 * deg" axis="Z"/>
+          <placement x="0*cm" y="0*cm" z="0*cm" rotX="0*rad" rotY="0*rad" rotZ="-45.0*deg"/>
+          <dimensions dx="2.994422*cm/2." dy="50.*cm/2." dz="126.591756*cm/2."/>
+          <rotation num="1" start="0*deg" step="0*deg" axis="Z"/>
         </cut>
       </coil>
       <endplate name="Q1APF_EndPlate_IP" vis="MagnetEndPlateVis">
         <placement x="Q1APF_Yoke_Center_posX" y="Q1APF_Yoke_Center_posY" z="Q1APF_Yoke_Center_posZ" theta="Q1APF_Yoke_Rotation_Angle"/>
-        <zplane z="-(160.817560 * cm / 2.)" rmin="7.114540 * cm" rmax="29.210000 * cm"/>
-        <zplane z="-(160.817560 * cm / 2. + 15.246221 * cm)" rmin="7.114540 * cm" rmax="29.210000 * cm"/>
+        <zplane z="-(160.817560*cm/2.)" rmin="7.114540*cm" rmax="29.210000*cm"/>
+        <zplane z="-(160.817560*cm/2.+15.246221*cm)" rmin="7.114540*cm" rmax="29.210000*cm"/>
         <cut>
-          <placement x="(17.346 + (20.480-17.346)/2. + 6.91) * cm" y="0 * cm" z="0 * cm" rotX="0 * rad" rotY="1.196077 * deg" rotZ="0 * rad"/>
-          <dimensions rmin="0 * cm" rmax="13.82 * cm / 2." half_length="400. * cm / 2."/>
-          <rotation num="1" start="0 * deg" step="0 * deg" axis="Z"/>
+          <placement x="(17.346+(20.480-17.346)/2.+6.91)*cm" y="0*cm" z="0*cm" rotX="0*rad" rotY="1.196077*deg" rotZ="0*rad"/>
+          <dimensions rmin="0*cm" rmax="13.82*cm/2." half_length="400.*cm/2."/>
+          <rotation num="1" start="0*deg" step="0*deg" axis="Z"/>
         </cut>
       </endplate>
       <endplate name="Q1APF_EndPlate_nonIP" vis="MagnetEndPlateVis">
         <placement x="Q1APF_Yoke_Center_posX" y="Q1APF_Yoke_Center_posY" z="Q1APF_Yoke_Center_posZ" theta="Q1APF_Yoke_Rotation_Angle"/>
-        <zplane z="(160.817560 * cm / 2.)" rmin="14.229080 * cm / 2." rmax="29.210000 * cm"/>
-        <zplane z="(160.817560 * cm / 2. + 10.160000 * cm)" rmin="14.229080 * cm / 2." rmax="29.210000 * cm"/>
+        <zplane z="(160.817560*cm/2.)" rmin="14.229080*cm/2." rmax="29.210000*cm"/>
+        <zplane z="(160.817560*cm/2.+10.160000*cm)" rmin="14.229080*cm/2." rmax="29.210000*cm"/>
         <cut>
-          <placement x="(17.346 + (20.480-17.346)/2. + 6.91) * cm" y="0 * cm" z="0 * cm" rotX="0 * rad" rotY="1.196077 * deg" rotZ="0 * rad"/>
-          <dimensions rmin="0 * cm" rmax="13.82 * cm / 2." half_length="400. * cm / 2."/>
-          <rotation num="1" start="0 * deg" step="0 * deg" axis="Z"/>
+          <placement x="(17.346+(20.480-17.346)/2.+6.91)*cm" y="0*cm" z="0*cm" rotX="0*rad" rotY="1.196077*deg" rotZ="0*rad"/>
+          <dimensions rmin="0*cm" rmax="13.82*cm/2." half_length="400.*cm/2."/>
+          <rotation num="1" start="0*deg" step="0*deg" axis="Z"/>
         </cut>
       </endplate>
       <yokeshield name="Q1APF_YoketShield" vis="MagnetEndPlateVis">
         <placement x="Q1APF_Yoke_Center_posX" y="Q1APF_Yoke_Center_posY" z="Q1APF_Yoke_Center_posZ" theta="Q1APF_Yoke_Rotation_Angle"/>
-        <dimensions rmin="60. * cm" rmax="62.54 * cm" half_length="157. * cm / 2." sphi="0 * deg" dphi="360.0 * deg"/>
+        <dimensions rmin="60.*cm" rmax="62.54*cm" half_length="157.*cm/2." sphi="0*deg" dphi="360.0*deg"/>
       </yokeshield>
     </detector>
 
@@ -367,78 +367,78 @@
     <detector id="Q1BPF_ID" name="Q1BPF_BeamlineMagnet" type="ip6_CryostatMagnet">
       <yoke name="Q1BPF_Yoke" vis="MagnetVis">
         <placement x="Q1BPF_Yoke_Center_posX" y="Q1BPF_Yoke_Center_posY" z="Q1BPF_Yoke_Center_posZ" theta="Q1BPF_Yoke_Rotation_Angle"/>
-        <dimensions rmin="30.6 * cm / 2." rmax="120. * cm / 2." half_length="160.365 * cm / 2." sphi="0 * deg" dphi="360.0 * deg"/>
+        <dimensions rmin="30.6*cm/2." rmax="120.*cm/2." half_length="160.365*cm/2." sphi="0*deg" dphi="360.0*deg"/>
         <cut>
-          <placement x="(20.647 + (22.821-20.647)/2. + 9.58) * cm" y="0 * cm" z="0 * cm" rotX="0 * rad" rotY="0.776621 * deg" rotZ="0 * rad"/>
-          <dimensions rmin="0 * cm" rmax="19.15 * cm / 2." half_length="400. * cm / 2."/>
-          <rotation num="1" start="0 * deg" step="0 * deg" axis="Z"/>
+          <placement x="(20.647+(22.821-20.647)/2.+9.58)*cm" y="0*cm" z="0*cm" rotX="0*rad" rotY="0.776621*deg" rotZ="0*rad"/>
+          <dimensions rmin="0*cm" rmax="19.15*cm/2." half_length="400.*cm/2."/>
+          <rotation num="1" start="0*deg" step="0*deg" axis="Z"/>
         </cut>
         <cut>
-          <placement x="-(49.204+11.43)/2. * cm" y="-(22.442+11.43/2.) * cm" z="0 * cm" rotX="0 * rad" rotY="0 * rad" rotZ="0 * rad"/>
-          <dimensions rmin="0 * cm" rmax="11.43 * cm / 2." half_length="400. * cm / 2."/>
-          <rotation num="1" start="0 * deg" step="0 * deg" axis="Z"/>
+          <placement x="-(49.204+11.43)/2.*cm" y="-(22.442+11.43/2.)*cm" z="0*cm" rotX="0*rad" rotY="0*rad" rotZ="0*rad"/>
+          <dimensions rmin="0*cm" rmax="11.43*cm/2." half_length="400.*cm/2."/>
+          <rotation num="1" start="0*deg" step="0*deg" axis="Z"/>
         </cut>
         <cut>
-          <placement x="(49.204+11.43)/2. * cm" y="-(22.442+11.43/2.) * cm" z="0 * cm" rotX="0 * rad" rotY="0 * rad" rotZ="0 * rad"/>
-          <dimensions rmin="0 * cm" rmax="11.43 * cm / 2." half_length="400. * cm / 2."/>
-          <rotation num="1" start="0 * deg" step="0 * deg" axis="Z"/>
+          <placement x="(49.204+11.43)/2.*cm" y="-(22.442+11.43/2.)*cm" z="0*cm" rotX="0*rad" rotY="0*rad" rotZ="0*rad"/>
+          <dimensions rmin="0*cm" rmax="11.43*cm/2." half_length="400.*cm/2."/>
+          <rotation num="1" start="0*deg" step="0*deg" axis="Z"/>
         </cut>
         <cut>
-          <placement x="(49.204+11.43)/2. * cm" y="(22.442+11.43/2.) * cm" z="0 * cm" rotX="0 * rad" rotY="0 * rad" rotZ="0 * rad"/>
-          <dimensions rmin="0 * cm" rmax="11.43 * cm / 2." half_length="400. * cm / 2."/>
-          <rotation num="1" start="0 * deg" step="0 * deg" axis="Z"/>
+          <placement x="(49.204+11.43)/2.*cm" y="(22.442+11.43/2.)*cm" z="0*cm" rotX="0*rad" rotY="0*rad" rotZ="0*rad"/>
+          <dimensions rmin="0*cm" rmax="11.43*cm/2." half_length="400.*cm/2."/>
+          <rotation num="1" start="0*deg" step="0*deg" axis="Z"/>
         </cut>
         <cut>
-          <placement x="-(49.204+11.43)/2. * cm" y="(22.442+11.43/2.) * cm" z="0 * cm" rotX="0 * rad" rotY="0 * rad" rotZ="0 * rad"/>
-          <dimensions rmin="0 * cm" rmax="11.43 * cm / 2." half_length="400. * cm / 2."/>
-          <rotation num="1" start="0 * deg" step="0 * deg" axis="Z"/>
+          <placement x="-(49.204+11.43)/2.*cm" y="(22.442+11.43/2.)*cm" z="0*cm" rotX="0*rad" rotY="0*rad" rotZ="0*rad"/>
+          <dimensions rmin="0*cm" rmax="11.43*cm/2." half_length="400.*cm/2."/>
+          <rotation num="1" start="0*deg" step="0*deg" axis="Z"/>
         </cut>
       </yoke>
       <coil name="Q1BPF_Dummy_Coil" vis="MagnetCoilVis">
-        <placement x="Q1BPF_Yoke_Center_posX" y="Q1BPF_Yoke_Center_posY" z="Q1BPF_Yoke_Center_posZ" theta="Q1BPF_Yoke_Rotation_Angle" phiNum="1" phiStart="0 * deg" phiStep="0 * deg"/>
-        <dimensions rmin="18.600420 * cm / 2." rmax="21.706840 * cm / 2." half_length="160.434020 * cm / 2." sphi="0 * deg" dphi="360.0 * deg"/>
+        <placement x="Q1BPF_Yoke_Center_posX" y="Q1BPF_Yoke_Center_posY" z="Q1BPF_Yoke_Center_posZ" theta="Q1BPF_Yoke_Rotation_Angle" phiNum="1" phiStart="0*deg" phiStep="0*deg"/>
+        <dimensions rmin="18.600420*cm/2." rmax="21.706840*cm/2." half_length="160.434020*cm/2." sphi="0*deg" dphi="360.0*deg"/>
         <cut shape="Box">
-          <placement x="0 * cm" y="0 * cm" z="0 * cm" rotX="0 * rad" rotY="0 * rad" rotZ="45.0 * deg"/>
-          <dimensions dx="3.881058 * cm / 2." dy="50. * cm / 2." dz="128.549400 * cm / 2."/>
-          <rotation num="1" start="0 * deg" step="0 * deg" axis="Z"/>
+          <placement x="0*cm" y="0*cm" z="0*cm" rotX="0*rad" rotY="0*rad" rotZ="45.0*deg"/>
+          <dimensions dx="3.881058*cm/2." dy="50.*cm/2." dz="128.549400*cm/2."/>
+          <rotation num="1" start="0*deg" step="0*deg" axis="Z"/>
         </cut>
         <cut shape="Box">
-          <placement x="0 * cm" y="0 * cm" z="0 * cm" rotX="0 * rad" rotY="0 * rad" rotZ="-45.0 * deg"/>
-          <dimensions dx="3.881058 * cm / 2." dy="50. * cm / 2." dz="128.549400 * cm / 2."/>
-          <rotation num="1" start="0 * deg" step="0 * deg" axis="Z"/>
+          <placement x="0*cm" y="0*cm" z="0*cm" rotX="0*rad" rotY="0*rad" rotZ="-45.0*deg"/>
+          <dimensions dx="3.881058*cm/2." dy="50.*cm/2." dz="128.549400*cm/2."/>
+          <rotation num="1" start="0*deg" step="0*deg" axis="Z"/>
         </cut>
       </coil>
       <endplate name="Q1BPF_EndPlate_IP" vis="MagnetEndPlateVis">
         <placement x="Q1BPF_Yoke_Center_posX" y="Q1BPF_Yoke_Center_posY" z="Q1BPF_Yoke_Center_posZ" theta="Q1BPF_Yoke_Rotation_Angle"/>
-        <zplane z="-(164.244020 * cm / 2.)" rmin="9.300210 * cm" rmax="30.480000 * cm"/>
-        <zplane z="-(164.244020 * cm / 2. + 14.605008 * cm)" rmin="9.300210 * cm" rmax="30.480000 * cm"/>
+        <zplane z="-(164.244020*cm/2.)" rmin="9.300210*cm" rmax="30.480000*cm"/>
+        <zplane z="-(164.244020*cm/2.+14.605008*cm)" rmin="9.300210*cm" rmax="30.480000*cm"/>
         <cut>
-          <placement x="(20.647 + (22.821-20.647)/2. + 9.58) * cm" y="0 * cm" z="0 * cm" rotX="0 * rad" rotY="0.776621 * deg" rotZ="0 * rad"/>
-          <dimensions rmin="0 * cm" rmax="19.15 * cm / 2." half_length="400. * cm / 2."/>
-          <rotation num="1" start="0 * deg" step="0 * deg" axis="Z"/>
+          <placement x="(20.647+(22.821-20.647)/2.+9.58)*cm" y="0*cm" z="0*cm" rotX="0*rad" rotY="0.776621*deg" rotZ="0*rad"/>
+          <dimensions rmin="0*cm" rmax="19.15*cm/2." half_length="400.*cm/2."/>
+          <rotation num="1" start="0*deg" step="0*deg" axis="Z"/>
         </cut>
       </endplate>
       <endplate name="Q1BPF_EndPlate_nonIP" vis="MagnetEndPlateVis">
         <placement x="Q1BPF_Yoke_Center_posX" y="Q1BPF_Yoke_Center_posY" z="Q1BPF_Yoke_Center_posZ" theta="Q1BPF_Yoke_Rotation_Angle"/>
-        <zplane z="(164.244020 * cm / 2.)" rmin="18.600420 * cm / 2." rmax="30.480000 * cm"/>
-        <zplane z="(164.244020 * cm / 2. + 12.065167 * cm)" rmin="18.600420 * cm / 2." rmax="30.480000 * cm"/>
+        <zplane z="(164.244020*cm/2.)" rmin="18.600420*cm/2." rmax="30.480000*cm"/>
+        <zplane z="(164.244020*cm/2.+12.065167*cm)" rmin="18.600420*cm/2." rmax="30.480000*cm"/>
         <cut>
-          <placement x="(20.647 + (22.821-20.647)/2. + 9.58) * cm" y="0 * cm" z="0 * cm" rotX="0 * rad" rotY="0.776621 * deg" rotZ="0 * rad"/>
-          <dimensions rmin="0 * cm" rmax="19.15 * cm / 2." half_length="400. * cm / 2."/>
-          <rotation num="1" start="0 * deg" step="0 * deg" axis="Z"/>
+          <placement x="(20.647+(22.821-20.647)/2.+9.58)*cm" y="0*cm" z="0*cm" rotX="0*rad" rotY="0.776621*deg" rotZ="0*rad"/>
+          <dimensions rmin="0*cm" rmax="19.15*cm/2." half_length="400.*cm/2."/>
+          <rotation num="1" start="0*deg" step="0*deg" axis="Z"/>
         </cut>
       </endplate>
       <yokeshield name="Q1BPF_YoketShield" vis="MagnetEndPlateVis">
         <placement x="Q1BPF_Yoke_Center_posX" y="Q1BPF_Yoke_Center_posY" z="Q1BPF_Yoke_Center_posZ" theta="Q1BPF_Yoke_Rotation_Angle"/>
-        <dimensions rmin="60. * cm" rmax="62.54 * cm" half_length="173.77 * cm / 2." sphi="0 * deg" dphi="360.0 * deg"/>
+        <dimensions rmin="60.*cm" rmax="62.54*cm" half_length="173.77*cm/2." sphi="0*deg" dphi="360.0*deg"/>
       </yokeshield>
       <heatshieldbarrel name="Q1BOPF_HeatShield_Barrel" vis="MagnetHeatShieldVis">
-        <placement x="-27.9262 * cm" y="0 * cm" z="1064.49 * cm" theta="-0.0208752 * cm"/>
-        <dimensions rmin="75.882500 * cm" rmax="76.200000 * cm" half_length="351.848420 * cm / 2." sphi="0 * deg" dphi="360.0 * deg"/>
+        <placement x="-27.9262*cm" y="0*cm" z="1064.49*cm" theta="-0.0208752*cm"/>
+        <dimensions rmin="75.882500*cm" rmax="76.200000*cm" half_length="351.848420*cm/2." sphi="0*deg" dphi="360.0*deg"/>
       </heatshieldbarrel>
       <cryobarrel name="Q1BPF_Cryo_Barrel" vis="MagnetCryoVis">
-        <placement x="-26.9339 * cm" y="0 * cm" z="1016.98 * cm" theta="-0.0208759 * rad"/>
-        <dimensions rmin="182.245000 * cm / 2." rmax="182.880000 * cm / 2." half_length="447.040000 * cm / 2." sphi="0 * deg" dphi="360.0 * deg"/>
+        <placement x="-26.9339*cm" y="0*cm" z="1016.98*cm" theta="-0.0208759*rad"/>
+        <dimensions rmin="182.245000*cm/2." rmax="182.880000*cm/2." half_length="447.040000*cm/2." sphi="0*deg" dphi="360.0*deg"/>
       </cryobarrel>
     </detector>
 
@@ -446,68 +446,68 @@
     <detector id="Q2PF_ID" name="Q2PF_BeamlineMagnet" type="ip6_CryostatMagnet">
       <yoke name="Q2PF_Yoke" vis="MagnetVis">
         <placement x="Q2PF_Yoke_Center_posX" y="Q2PF_Yoke_Center_posY" z="Q2PF_Yoke_Center_posZ" theta="Q2PF_Yoke_Rotation_Angle"/>
-        <dimensions rmin="40.4 * cm / 2." rmax="120. * cm / 2." half_length="366.522 * cm / 2." sphi="0 * deg" dphi="360.0 * deg"/>
+        <dimensions rmin="40.4*cm/2." rmax="120.*cm/2." half_length="366.522*cm/2." sphi="0*deg" dphi="360.0*deg"/>
         <cut>
-          <placement x="(30.458 + (35.517-30.458)/2. + 7.62) * cm" y="0 * cm" z="0 * cm" rotX="0 * rad" rotY="0.790717 * deg" rotZ="0 * rad"/>
-          <dimensions rmin="0 * cm" rmax="15.24 * cm / 2." half_length="400. * cm / 2."/>
-          <rotation num="1" start="0 * deg" step="0 * deg" axis="Z"/>
+          <placement x="(30.458+(35.517-30.458)/2.+7.62)*cm" y="0*cm" z="0*cm" rotX="0*rad" rotY="0.790717*deg" rotZ="0*rad"/>
+          <dimensions rmin="0*cm" rmax="15.24*cm/2." half_length="400.*cm/2."/>
+          <rotation num="1" start="0*deg" step="0*deg" axis="Z"/>
         </cut>
         <cut>
-          <placement x="-(30.458 + (35.517-30.458)/2. + 7.62) * cm" y="0 * cm" z="0 * cm" rotX="0 * rad" rotY="-0.790717 * deg" rotZ="0 * rad"/>
-          <dimensions rmin="0 * cm" rmax="15.24 * cm / 2." half_length="400. * cm / 2."/>
-          <rotation num="1" start="0 * deg" step="0 * deg" axis="Z"/>
+          <placement x="-(30.458+(35.517-30.458)/2.+7.62)*cm" y="0*cm" z="0*cm" rotX="0*rad" rotY="-0.790717*deg" rotZ="0*rad"/>
+          <dimensions rmin="0*cm" rmax="15.24*cm/2." half_length="400.*cm/2."/>
+          <rotation num="1" start="0*deg" step="0*deg" axis="Z"/>
         </cut>
         <cut>
-          <placement x="(30.458 + (35.517-30.458)/2. + 7.62) * cm" y="0 * cm" z="0 * cm" rotX="0.790717 * deg" rotY="0 * rad" rotZ="0 * rad"/>
-          <dimensions rmin="0 * cm" rmax="15.24 * cm / 2." half_length="400. * cm / 2."/>
-          <rotation num="1" start="90 * deg" step="0 * deg" axis="Z"/>
+          <placement x="(30.458+(35.517-30.458)/2.+7.62)*cm" y="0*cm" z="0*cm" rotX="0.790717*deg" rotY="0*rad" rotZ="0*rad"/>
+          <dimensions rmin="0*cm" rmax="15.24*cm/2." half_length="400.*cm/2."/>
+          <rotation num="1" start="90*deg" step="0*deg" axis="Z"/>
         </cut>
         <cut>
-          <placement x="-(30.458 + (35.517-30.458)/2. + 7.62) * cm" y="0 * cm" z="0 * cm" rotX="-0.790717 * deg" rotY="0 * rad" rotZ="0 * rad"/>
-          <dimensions rmin="0 * cm" rmax="15.24 * cm / 2." half_length="400. * cm / 2."/>
-          <rotation num="1" start="90 * deg" step="0 * deg" axis="Z"/>
+          <placement x="-(30.458+(35.517-30.458)/2.+7.62)*cm" y="0*cm" z="0*cm" rotX="-0.790717*deg" rotY="0*rad" rotZ="0*rad"/>
+          <dimensions rmin="0*cm" rmax="15.24*cm/2." half_length="400.*cm/2."/>
+          <rotation num="1" start="90*deg" step="0*deg" axis="Z"/>
         </cut>
         <cut shape="Box">
-          <placement x="-31.128 * cm" y="+31.128 * cm" z="0 * cm" rotX="0 * rad" rotY="0 * rad" rotZ="0 * rad"/>
-          <dimensions dx="20.693 * cm / 2." dy="20.693 * cm / 2." dz="400. * cm / 2."/>
-          <rotation num="4" start="0 * deg" step="90 * deg" axis="Z"/>
+          <placement x="-31.128*cm" y="+31.128*cm" z="0*cm" rotX="0*rad" rotY="0*rad" rotZ="0*rad"/>
+          <dimensions dx="20.693*cm/2." dy="20.693*cm/2." dz="400.*cm/2."/>
+          <rotation num="4" start="0*deg" step="90*deg" axis="Z"/>
         </cut>
       </yoke>
       <coil name="Q2PF_Dummy_Coil" vis="MagnetCoilVis">
-        <placement x="Q2PF_Yoke_Center_posX" y="Q2PF_Yoke_Center_posY" z="Q2PF_Yoke_Center_posZ" theta="Q2PF_Yoke_Rotation_Angle" phiNum="1" phiStart="0 * deg" phiStep="0 * deg"/>
-        <dimensions rmin="28.064321 * cm / 2." rmax="34.284785 * cm / 2." half_length="360.457852 * cm / 2." sphi="0 * deg" dphi="360.0 * deg"/>
+        <placement x="Q2PF_Yoke_Center_posX" y="Q2PF_Yoke_Center_posY" z="Q2PF_Yoke_Center_posZ" theta="Q2PF_Yoke_Rotation_Angle" phiNum="1" phiStart="0*deg" phiStep="0*deg"/>
+        <dimensions rmin="28.064321*cm/2." rmax="34.284785*cm/2." half_length="360.457852*cm/2." sphi="0*deg" dphi="360.0*deg"/>
         <cut shape="Box">
-          <placement x="0 * cm" y="0 * cm" z="0 * cm" rotX="0 * rad" rotY="0 * rad" rotZ="0 * deg"/>
-          <dimensions dx="5.653406 * cm / 2." dy="50. * cm / 2." dz="300.271832 * cm / 2."/>
-          <rotation num="1" start="0 * deg" step="0 * deg" axis="Z"/>
+          <placement x="0*cm" y="0*cm" z="0*cm" rotX="0*rad" rotY="0*rad" rotZ="0*deg"/>
+          <dimensions dx="5.653406*cm/2." dy="50.*cm/2." dz="300.271832*cm/2."/>
+          <rotation num="1" start="0*deg" step="0*deg" axis="Z"/>
         </cut>
         <cut shape="Box">
-          <placement x="0 * cm" y="0 * cm" z="0 * cm" rotX="0 * rad" rotY="0 * rad" rotZ="90.0 * deg"/>
-          <dimensions dx="5.653406 * cm / 2." dy="50. * cm / 2." dz="300.271832 * cm / 2."/>
-          <rotation num="1" start="0 * deg" step="0 * deg" axis="Z"/>
+          <placement x="0*cm" y="0*cm" z="0*cm" rotX="0*rad" rotY="0*rad" rotZ="90.0*deg"/>
+          <dimensions dx="5.653406*cm/2." dy="50.*cm/2." dz="300.271832*cm/2."/>
+          <rotation num="1" start="0*deg" step="0*deg" axis="Z"/>
         </cut>
       </coil>
       <endplate name="Q2PF_EndPlate_IP" vis="MagnetEndPlateVis">
         <placement x="Q2PF_Yoke_Center_posX" y="Q2PF_Yoke_Center_posY" z="Q2PF_Yoke_Center_posZ" theta="Q2PF_Yoke_Rotation_Angle"/>
-        <zplane z="-(371.650028 * cm / 2.)" rmin="13.817600 * cm" rmax="30.162500 * cm"/>
-        <zplane z="-(371.650028 * cm / 2. + 12.700000 * cm)" rmin="13.817600 * cm" rmax="30.162500 * cm"/>
+        <zplane z="-(371.650028*cm/2.)" rmin="13.817600*cm" rmax="30.162500*cm"/>
+        <zplane z="-(371.650028*cm/2.+12.700000*cm)" rmin="13.817600*cm" rmax="30.162500*cm"/>
       </endplate>
       <endplate name="Q2PF_EndPlate_nonIP" vis="MagnetEndPlateVis">
         <placement x="Q2PF_Yoke_Center_posX" y="Q2PF_Yoke_Center_posY" z="Q2PF_Yoke_Center_posZ" theta="Q2PF_Yoke_Rotation_Angle"/>
-        <zplane z="(371.650028 * cm / 2.)" rmin="27.635200 * cm / 2." rmax="60.325000 * cm / 2."/>
-        <zplane z="(371.650028 * cm / 2. + 12.700000 * cm)" rmin="27.635200 * cm / 2." rmax="60.325000 * cm / 2."/>
+        <zplane z="(371.650028*cm/2.)" rmin="27.635200*cm/2." rmax="60.325000*cm/2."/>
+        <zplane z="(371.650028*cm/2.+12.700000*cm)" rmin="27.635200*cm/2." rmax="60.325000*cm/2."/>
       </endplate>
       <yokeshield name="Q2PF_YoketShield" vis="MagnetEndPlateVis">
         <placement x="Q2PF_Yoke_Center_posX" y="Q2PF_Yoke_Center_posY" z="Q2PF_Yoke_Center_posZ" theta="Q2PF_Yoke_Rotation_Angle"/>
-        <dimensions rmin="60. * cm" rmax="61.269852 * cm" half_length="366.897920 * cm / 2." sphi="0 * deg" dphi="360.0 * deg"/>
+        <dimensions rmin="60.*cm" rmax="61.269852*cm" half_length="366.897920*cm/2." sphi="0*deg" dphi="360.0*deg"/>
       </yokeshield>
       <heatshieldbarrel name="Q2OPF_HeatShield_Barrel" vis="MagnetHeatShieldVis">
         <placement x="Q2PF_Yoke_Center_posX" y="Q2PF_Yoke_Center_posY" z="Q2PF_Yoke_Center_posZ" theta="Q2PF_Yoke_Rotation_Angle"/>
-        <dimensions rmin="71.424800 * cm" rmax="71.742300 * cm" half_length="376.814080 * cm / 2." sphi="0 * deg" dphi="360.0 * deg"/>
+        <dimensions rmin="71.424800*cm" rmax="71.742300*cm" half_length="376.814080*cm/2." sphi="0*deg" dphi="360.0*deg"/>
       </heatshieldbarrel>
       <cryobarrel name="Q2PF_Cryo_Barrel" vis="MagnetCryoVis">
-        <placement x="-40.497 * cm" y="0 * cm" z="1459.53 * cm" theta="Q2PF_Yoke_Rotation_Angle"/>
-        <dimensions rmin="182.245000 * cm / 2." rmax="182.880000 * cm / 2." half_length="382.270000 * cm / 2." sphi="0 * deg" dphi="360.0 * deg"/>
+        <placement x="-40.497*cm" y="0*cm" z="1459.53*cm" theta="Q2PF_Yoke_Rotation_Angle"/>
+        <dimensions rmin="182.245000*cm/2." rmax="182.880000*cm/2." half_length="382.270000*cm/2." sphi="0*deg" dphi="360.0*deg"/>
       </cryobarrel>
     </detector>
 
@@ -515,180 +515,180 @@
     <detector id="B1PF_ID" name="B1PF_BeamlineMagnet" type="ip6_CryostatMagnet">
       <yoke name="B1PF_Yoke" vis="MagnetVis">
         <placement x="B1PF_Yoke_Center_posX" y="B1PF_Yoke_Center_posY" z="B1PF_Yoke_Center_posZ" theta="B1PF_Yoke_Rotation_Angle"/>
-        <dimensions rmin="66. * cm / 2." rmax="145. * cm / 2." half_length="305.077 * cm / 2." sphi="0 * deg" dphi="360.0 * deg"/>
+        <dimensions rmin="66.*cm/2." rmax="145.*cm/2." half_length="305.077*cm/2." sphi="0*deg" dphi="360.0*deg"/>
         <cut>
-          <placement x="(40.265 + (48.747-40.265)/2. + 7.) * cm" y="0 * cm" z="0 * cm" rotX="0 * rad" rotY="1.592379 * deg" rotZ="0 * rad"/>
-          <dimensions rmin="0 * cm" rmax="14. * cm / 2." half_length="400. * cm / 2."/>
-          <rotation num="1" start="0 * deg" step="0 * deg" axis="Z"/>
+          <placement x="(40.265+(48.747-40.265)/2.+7.)*cm" y="0*cm" z="0*cm" rotX="0*rad" rotY="1.592379*deg" rotZ="0*rad"/>
+          <dimensions rmin="0*cm" rmax="14.*cm/2." half_length="400.*cm/2."/>
+          <rotation num="1" start="0*deg" step="0*deg" axis="Z"/>
         </cut>
         <cut>
-          <placement x="0 * cm" y="46.243 * cm" z="0 * cm" rotX="0 * rad" rotY="0 * rad" rotZ="0 * rad"/>
-          <dimensions rmin="0 * cm" rmax="16.568 * cm / 2." half_length="400. * cm / 2."/>
-          <rotation num="4" start="45.0 * deg" step="90.0 * deg" axis="Z"/>
+          <placement x="0*cm" y="46.243*cm" z="0*cm" rotX="0*rad" rotY="0*rad" rotZ="0*rad"/>
+          <dimensions rmin="0*cm" rmax="16.568*cm/2." half_length="400.*cm/2."/>
+          <rotation num="4" start="45.0*deg" step="90.0*deg" axis="Z"/>
         </cut>
       </yoke>
       <coil name="B1PF_Dummy_Coil" vis="MagnetCoilVis">
-        <placement x="B1PF_Yoke_Center_posX" y="B1PF_Yoke_Center_posY" z="B1PF_Yoke_Center_posZ" theta="B1PF_Yoke_Rotation_Angle" phiNum="1" phiStart="0 * deg" phiStep="0 * deg"/>
-        <dimensions rmin="30. * cm / 2." rmax="34. * cm / 2." half_length="304.728880 * cm / 2." sphi="0 * deg" dphi="360.0 * deg"/>
+        <placement x="B1PF_Yoke_Center_posX" y="B1PF_Yoke_Center_posY" z="B1PF_Yoke_Center_posZ" theta="B1PF_Yoke_Rotation_Angle" phiNum="1" phiStart="0*deg" phiStep="0*deg"/>
+        <dimensions rmin="30.*cm/2." rmax="34.*cm/2." half_length="304.728880*cm/2." sphi="0*deg" dphi="360.0*deg"/>
       </coil>
       <tube name="B1PF_InnerSupport_Tube" vis="MagnetSupportTubeVis">
         <placement x="B1PF_Yoke_Center_posX" y="B1PF_Yoke_Center_posY" z="B1PF_Yoke_Center_posZ" theta="B1PF_Yoke_Rotation_Angle"/>
-        <dimensions rmin="28.143200 * cm / 2." rmax="28.829000 * cm / 2." half_length="340.111080 * cm / 2." sphi="0 * deg" dphi="360.0 * deg"/>
+        <dimensions rmin="28.143200*cm/2." rmax="28.829000*cm/2." half_length="340.111080*cm/2." sphi="0*deg" dphi="360.0*deg"/>
       </tube>
       <endplate name="B1PF_EndPlates_OuterSupport_Tube" vis="MagnetEndPlateVis">
         <placement x="B1PF_Yoke_Center_posX" y="B1PF_Yoke_Center_posY" z="B1PF_Yoke_Center_posZ" theta="B1PF_Yoke_Rotation_Angle"/>
-        <zplane z="-340.212680 * cm / 2." rmin="14.999970 * cm" rmax="33.000000 * cm"/>
-        <zplane z="-340.212680 * cm / 2. + 15.240000 * cm" rmin="14.999970 * cm" rmax="33.000000 * cm"/>
-        <zplane z="-340.212680 * cm / 2. + 15.240000 * cm" rmin="25.000000 * cm" rmax="33.000000 * cm"/>
-        <zplane z="340.212680 * cm / 2. - 15.240000 * cm" rmin="25.000000 * cm" rmax="33.000000 * cm"/>
-        <zplane z="340.212680 * cm / 2. - 15.240000 * cm" rmin="14.999970 * cm" rmax="33.000000 * cm"/>
-        <zplane z="340.212680 * cm / 2." rmin="14.999970 * cm" rmax="33.000000 * cm"/>
+        <zplane z="-340.212680*cm/2." rmin="14.999970*cm" rmax="33.000000*cm"/>
+        <zplane z="-340.212680*cm/2.+15.240000*cm" rmin="14.999970*cm" rmax="33.000000*cm"/>
+        <zplane z="-340.212680*cm/2.+15.240000*cm" rmin="25.000000*cm" rmax="33.000000*cm"/>
+        <zplane z="340.212680*cm/2.-15.240000*cm" rmin="25.000000*cm" rmax="33.000000*cm"/>
+        <zplane z="340.212680*cm/2.-15.240000*cm" rmin="14.999970*cm" rmax="33.000000*cm"/>
+        <zplane z="340.212680*cm/2." rmin="14.999970*cm" rmax="33.000000*cm"/>
       </endplate>
       <yokeshield name="B1PF_YoketShield" vis="MagnetEndPlateVis">
-        <placement x="-51.3125 * cm" y="0 * cm" z="1851.3 * cm" theta="B1PF_Yoke_Rotation_Angle"/>
-        <dimensions rmin="73. * cm" rmax="74. * cm" half_length="317.776860 * cm / 2." sphi="0 * deg" dphi="360.0 * deg"/>
+        <placement x="-51.3125*cm" y="0*cm" z="1851.3*cm" theta="B1PF_Yoke_Rotation_Angle"/>
+        <dimensions rmin="73.*cm" rmax="74.*cm" half_length="317.776860*cm/2." sphi="0*deg" dphi="360.0*deg"/>
       </yokeshield>
       <heatshieldbarrel name="B1PF_HeatShield_Barrel" vis="MagnetHeatShieldVis">
-        <placement x="-51.489 * cm" y="0 * cm" z="1857.65 * cm" theta="B1PF_Yoke_Rotation_Angle"/>
-        <dimensions rmin="90.170000 * cm" rmax="91.440000 * cm" half_length="299.720000 * cm / 2." sphi="0 * deg" dphi="360.0 * deg"/>
+        <placement x="-51.489*cm" y="0*cm" z="1857.65*cm" theta="B1PF_Yoke_Rotation_Angle"/>
+        <dimensions rmin="90.170000*cm" rmax="91.440000*cm" half_length="299.720000*cm/2." sphi="0*deg" dphi="360.0*deg"/>
       </heatshieldbarrel>
       <cryobarrel name="B1PF_Cryo_Barrel" vis="MagnetCryoVis">
-        <placement x="-50.8183 * cm" y="0 * cm" z="1833.53 * cm" theta="B1PF_Yoke_Rotation_Angle"/>
-        <dimensions rmin="210.820000 * cm / 2." rmax="214.630000 * cm / 2." half_length="302.260000 * cm / 2." sphi="0 * deg" dphi="360.0 * deg"/>
+        <placement x="-50.8183*cm" y="0*cm" z="1833.53*cm" theta="B1PF_Yoke_Rotation_Angle"/>
+        <dimensions rmin="210.820000*cm/2." rmax="214.630000*cm/2." half_length="302.260000*cm/2." sphi="0*deg" dphi="360.0*deg"/>
       </cryobarrel>
     </detector>
 
     <!-- B1ApF magnet -->
     <detector id="B1APF_ID" name="B1APF_BeamlineMagnet" type="ip6_CryostatMagnet">
       <yoke name="B1APF_Yoke_Bot" vis="MagnetVis">
-        <placement x="B1APF_Yoke_Center_posX" y="B1APF_Yoke_Center_posY + B1APF_Yoke_Center_offsetY" z="B1APF_Yoke_Center_posZ" theta="B1APF_Yoke_Rotation_Angle"/>
-        <dimensions rmin="0 * cm" rmax="183. * cm / 2." half_length="155.956 * cm / 2." sphi="0 * deg" dphi="360.0 * deg"/>
+        <placement x="B1APF_Yoke_Center_posX" y="B1APF_Yoke_Center_posY+B1APF_Yoke_Center_offsetY" z="B1APF_Yoke_Center_posZ" theta="B1APF_Yoke_Rotation_Angle"/>
+        <dimensions rmin="0*cm" rmax="183.*cm/2." half_length="155.956*cm/2." sphi="0*deg" dphi="360.0*deg"/>
         <cut>
-          <placement x="0 * cm" y="-B1APF_Yoke_Center_offsetY" z="0 * cm" rotX="0 * rad" rotY="0 * rad" rotZ="0 * rad"/>
-          <dimensions rmin="0 * cm" rmax="60.8 * cm / 2." half_length="400. * cm / 2."/>
-          <rotation num="1" start="0 * deg" step="0 * deg" axis="Z"/>
+          <placement x="0*cm" y="-B1APF_Yoke_Center_offsetY" z="0*cm" rotX="0*rad" rotY="0*rad" rotZ="0*rad"/>
+          <dimensions rmin="0*cm" rmax="60.8*cm/2." half_length="400.*cm/2."/>
+          <rotation num="1" start="0*deg" step="0*deg" axis="Z"/>
         </cut>
         <cut shape="Box">
-          <placement x="0 * cm" y="-B1APF_Yoke_Center_offsetY + 200. * cm / 2." z="0 * cm" rotX="0 * rad" rotY="0 * rad" rotZ="0 * rad"/>
-          <dimensions dx="200. * cm / 2." dy="200. * cm / 2." dz="400. * cm / 2."/>
-          <rotation num="1" start="0 * deg" step="0 * deg" axis="Z"/>
+          <placement x="0*cm" y="-B1APF_Yoke_Center_offsetY+200.*cm/2." z="0*cm" rotX="0*rad" rotY="0*rad" rotZ="0*rad"/>
+          <dimensions dx="200.*cm/2." dy="200.*cm/2." dz="400.*cm/2."/>
+          <rotation num="1" start="0*deg" step="0*deg" axis="Z"/>
         </cut>
         <cut>
-          <placement x="(46.852850 + (50.128391-46.852850)/2. + 13.1) * cm" y="-B1APF_Yoke_Center_offsetY" z="0 * cm" rotX="0 * rad" rotY="1.203225 * deg" rotZ="0 * rad"/>
-          <dimensions rmin="0 * cm" rmax="26.2 * cm / 2." half_length="400. * cm / 2."/>
-          <rotation num="1" start="0 * deg" step="0 * deg" axis="Z"/>
+          <placement x="(46.852850+(50.128391-46.852850)/2.+13.1)*cm" y="-B1APF_Yoke_Center_offsetY" z="0*cm" rotX="0*rad" rotY="1.203225*deg" rotZ="0*rad"/>
+          <dimensions rmin="0*cm" rmax="26.2*cm/2." half_length="400.*cm/2."/>
+          <rotation num="1" start="0*deg" step="0*deg" axis="Z"/>
         </cut>
         <cut>
-          <placement x="-(46.852850 + (50.128391-46.852850)/2. + 13.1) * cm" y="-B1APF_Yoke_Center_offsetY" z="0 * cm" rotX="0 * rad" rotY="-1.203225 * deg" rotZ="0 * rad"/>
-          <dimensions rmin="0 * cm" rmax="26.2 * cm / 2." half_length="400. * cm / 2."/>
-          <rotation num="1" start="0 * deg" step="0 * deg" axis="Z"/>
+          <placement x="-(46.852850+(50.128391-46.852850)/2.+13.1)*cm" y="-B1APF_Yoke_Center_offsetY" z="0*cm" rotX="0*rad" rotY="-1.203225*deg" rotZ="0*rad"/>
+          <dimensions rmin="0*cm" rmax="26.2*cm/2." half_length="400.*cm/2."/>
+          <rotation num="1" start="0*deg" step="0*deg" axis="Z"/>
         </cut>
         <cut>
-          <placement x="0 * cm" y="51.543 * cm" z="0 * cm" rotX="0 * rad" rotY="0 * rad" rotZ="0 * rad"/>
-          <dimensions rmin="0 * cm" rmax="16.52 * cm / 2." half_length="400. * cm / 2."/>
-          <rotation num="4" start="45.0 * deg" step="90.0 * deg" axis="Z"/>
+          <placement x="0*cm" y="51.543*cm" z="0*cm" rotX="0*rad" rotY="0*rad" rotZ="0*rad"/>
+          <dimensions rmin="0*cm" rmax="16.52*cm/2." half_length="400.*cm/2."/>
+          <rotation num="4" start="45.0*deg" step="90.0*deg" axis="Z"/>
         </cut>
       </yoke>
       <yoke name="B1APF_Yoke_Top" vis="MagnetVis">
-        <placement x="B1APF_Yoke_Center_posX" y="B1APF_Yoke_Center_posY - B1APF_Yoke_Center_offsetY" z="B1APF_Yoke_Center_posZ" theta="B1APF_Yoke_Rotation_Angle"/>
-        <dimensions rmin="0 * cm" rmax="183. * cm / 2." half_length="155.956 * cm / 2." sphi="0 * deg" dphi="360.0 * deg"/>
+        <placement x="B1APF_Yoke_Center_posX" y="B1APF_Yoke_Center_posY-B1APF_Yoke_Center_offsetY" z="B1APF_Yoke_Center_posZ" theta="B1APF_Yoke_Rotation_Angle"/>
+        <dimensions rmin="0*cm" rmax="183.*cm/2." half_length="155.956*cm/2." sphi="0*deg" dphi="360.0*deg"/>
         <cut>
-          <placement x="0 * cm" y="B1APF_Yoke_Center_offsetY" z="0 * cm" rotX="0 * rad" rotY="0 * rad" rotZ="0 * rad"/>
-          <dimensions rmin="0 * cm" rmax="60.8 * cm / 2." half_length="400. * cm / 2."/>
-          <rotation num="1" start="0 * deg" step="0 * deg" axis="Z"/>
+          <placement x="0*cm" y="B1APF_Yoke_Center_offsetY" z="0*cm" rotX="0*rad" rotY="0*rad" rotZ="0*rad"/>
+          <dimensions rmin="0*cm" rmax="60.8*cm/2." half_length="400.*cm/2."/>
+          <rotation num="1" start="0*deg" step="0*deg" axis="Z"/>
         </cut>
         <cut shape="Box">
-          <placement x="0 * cm" y="B1APF_Yoke_Center_offsetY - 200. * cm / 2." z="0 * cm" rotX="0 * rad" rotY="0 * rad" rotZ="0 * rad"/>
-          <dimensions dx="200. * cm / 2." dy="200. * cm / 2." dz="400. * cm / 2."/>
-          <rotation num="1" start="0 * deg" step="0 * deg" axis="Z"/>
+          <placement x="0*cm" y="B1APF_Yoke_Center_offsetY-200.*cm/2." z="0*cm" rotX="0*rad" rotY="0*rad" rotZ="0*rad"/>
+          <dimensions dx="200.*cm/2." dy="200.*cm/2." dz="400.*cm/2."/>
+          <rotation num="1" start="0*deg" step="0*deg" axis="Z"/>
         </cut>
         <cut>
-          <placement x="(46.852850 + (50.128391-46.852850)/2. + 13.1) * cm" y="B1APF_Yoke_Center_offsetY" z="0 * cm" rotX="0 * rad" rotY="1.203225 * deg" rotZ="0 * rad"/>
-          <dimensions rmin="0 * cm" rmax="26.2 * cm / 2." half_length="400. * cm / 2."/>
-          <rotation num="1" start="0 * deg" step="0 * deg" axis="Z"/>
+          <placement x="(46.852850+(50.128391-46.852850)/2.+13.1)*cm" y="B1APF_Yoke_Center_offsetY" z="0*cm" rotX="0*rad" rotY="1.203225*deg" rotZ="0*rad"/>
+          <dimensions rmin="0*cm" rmax="26.2*cm/2." half_length="400.*cm/2."/>
+          <rotation num="1" start="0*deg" step="0*deg" axis="Z"/>
         </cut>
         <cut>
-          <placement x="-(46.852850 + (50.128391-46.852850)/2. + 13.1) * cm" y="B1APF_Yoke_Center_offsetY" z="0 * cm" rotX="0 * rad" rotY="-1.203225 * deg" rotZ="0 * rad"/>
-          <dimensions rmin="0 * cm" rmax="26.2 * cm / 2." half_length="400. * cm / 2."/>
-          <rotation num="1" start="0 * deg" step="0 * deg" axis="Z"/>
+          <placement x="-(46.852850+(50.128391-46.852850)/2.+13.1)*cm" y="B1APF_Yoke_Center_offsetY" z="0*cm" rotX="0*rad" rotY="-1.203225*deg" rotZ="0*rad"/>
+          <dimensions rmin="0*cm" rmax="26.2*cm/2." half_length="400.*cm/2."/>
+          <rotation num="1" start="0*deg" step="0*deg" axis="Z"/>
         </cut>
         <cut>
-          <placement x="0 * cm" y="51.543 * cm" z="0 * cm" rotX="0 * rad" rotY="0 * rad" rotZ="0 * rad"/>
-          <dimensions rmin="0 * cm" rmax="16.52 * cm / 2." half_length="400. * cm / 2."/>
-          <rotation num="4" start="45.0 * deg" step="90.0 * deg" axis="Z"/>
+          <placement x="0*cm" y="51.543*cm" z="0*cm" rotX="0*rad" rotY="0*rad" rotZ="0*rad"/>
+          <dimensions rmin="0*cm" rmax="16.52*cm/2." half_length="400.*cm/2."/>
+          <rotation num="4" start="45.0*deg" step="90.0*deg" axis="Z"/>
         </cut>
       </yoke>
       <coil name="B1APF_Dummy_Coil" vis="MagnetCoilVis">
-        <placement x="B1APF_Yoke_Center_posX" y="B1APF_Yoke_Center_posY" z="B1APF_Yoke_Center_posZ" theta="B1APF_Yoke_Rotation_Angle" phiNum="1" phiStart="0 * deg" phiStep="0 * deg"/>
-        <dimensions rmin="37.091470 * cm / 2." rmax="40.092722 * cm / 2." half_length="150.171652 * cm / 2." sphi="0 * deg" dphi="360.0 * deg"/>
+        <placement x="B1APF_Yoke_Center_posX" y="B1APF_Yoke_Center_posY" z="B1APF_Yoke_Center_posZ" theta="B1APF_Yoke_Rotation_Angle" phiNum="1" phiStart="0*deg" phiStep="0*deg"/>
+        <dimensions rmin="37.091470*cm/2." rmax="40.092722*cm/2." half_length="150.171652*cm/2." sphi="0*deg" dphi="360.0*deg"/>
         <cut shape="Box">
-          <placement x="0 * cm" y="0 * cm" z="0 * cm" rotX="0 * rad" rotY="0 * rad" rotZ="0 * rad"/>
-          <dimensions dx="14.696868 * cm / 2." dy="50. * cm / 2." dz="42.028349 * cm / 2."/>
-          <rotation num="1" start="0 * deg" step="0 * deg" axis="Z"/>
+          <placement x="0*cm" y="0*cm" z="0*cm" rotX="0*rad" rotY="0*rad" rotZ="0*rad"/>
+          <dimensions dx="14.696868*cm/2." dy="50.*cm/2." dz="42.028349*cm/2."/>
+          <rotation num="1" start="0*deg" step="0*deg" axis="Z"/>
         </cut>
       </coil>
       <tube name="B1APF_InnerSupport_Tube" vis="MagnetSupportTubeVis">
         <placement x="B1APF_Yoke_Center_posX" y="B1APF_Yoke_Center_posY" z="B1APF_Yoke_Center_posZ" theta="B1APF_Yoke_Rotation_Angle"/>
-        <dimensions rmin="36. * cm / 2." rmax="37. * cm / 2." half_length="156.471692 * cm / 2." sphi="0 * deg" dphi="360.0 * deg"/>
+        <dimensions rmin="36.*cm/2." rmax="37.*cm/2." half_length="156.471692*cm/2." sphi="0*deg" dphi="360.0*deg"/>
       </tube>
       <tube name="B1APF_OuterSupport_Tube" vis="MagnetSupportTubeVis">
         <placement x="B1APF_Yoke_Center_posX" y="B1APF_Yoke_Center_posY" z="B1APF_Yoke_Center_posZ" theta="B1APF_Yoke_Rotation_Angle"/>
-        <dimensions rmin="20.12 * cm" rmax="30. * cm" half_length="156.471692 * cm / 2." sphi="0 * deg" dphi="360.0 * deg"/>
+        <dimensions rmin="20.12*cm" rmax="30.*cm" half_length="156.471692*cm/2." sphi="0*deg" dphi="360.0*deg"/>
       </tube>
       <endplate name="B1APF_EndPlate_IP" vis="MagnetEndPlateVis">
         <placement x="B1APF_Yoke_Center_posX" y="B1APF_Yoke_Center_posY" z="B1APF_Yoke_Center_posZ" theta="B1APF_Yoke_Rotation_Angle"/>
-        <zplane z="-(160.581412 * cm / 2.)" rmin="37.000180 * cm / 2." rmax="60.960000 * cm / 2."/>
-        <zplane z="-(160.581412 * cm / 2. + 14.935200 * cm)" rmin="37.000180 * cm / 2." rmax="60.960000 * cm / 2."/>
+        <zplane z="-(160.581412*cm/2.)" rmin="37.000180*cm/2." rmax="60.960000*cm/2."/>
+        <zplane z="-(160.581412*cm/2.+14.935200*cm)" rmin="37.000180*cm/2." rmax="60.960000*cm/2."/>
       </endplate>
       <endplate name="B1APF_EndPlate_nonIP" vis="MagnetEndPlateVis">
         <placement x="B1APF_Yoke_Center_posX" y="B1APF_Yoke_Center_posY" z="B1APF_Yoke_Center_posZ" theta="B1APF_Yoke_Rotation_Angle"/>
-        <zplane z="(160.581412 * cm / 2.)" rmin="37.000180 * cm / 2." rmax="60.960000 * cm / 2."/>
-        <zplane z="(160.581412 * cm / 2. + 14.935200 * cm)" rmin="37.000180 * cm / 2." rmax="60.960000 * cm / 2."/>
+        <zplane z="(160.581412*cm/2.)" rmin="37.000180*cm/2." rmax="60.960000*cm/2."/>
+        <zplane z="(160.581412*cm/2.+14.935200*cm)" rmin="37.000180*cm/2." rmax="60.960000*cm/2."/>
       </endplate>
       <yokeshield name="B1APF_YoketShield" vis="MagnetEndPlateVis">
-        <placement x="-61.5849 * cm" y="0 * cm" z="2132.65 * cm" theta="B1APF_Yoke_Rotation_Angle"/>
-        <dimensions rmin="91.5 * cm" rmax="93.0 * cm" half_length="155.956000 * cm / 2." sphi="0 * deg" dphi="360.0 * deg"/>
+        <placement x="-61.5849*cm" y="0*cm" z="2132.65*cm" theta="B1APF_Yoke_Rotation_Angle"/>
+        <dimensions rmin="91.5*cm" rmax="93.0*cm" half_length="155.956000*cm/2." sphi="0*deg" dphi="360.0*deg"/>
       </yokeshield>
       <heatshieldbarrel name="B1APF_HeatShield_Barrel" vis="MagnetHeatShieldVis">
-        <placement x="-62.5449 * cm" y="0 * cm" z="2178.36 * cm" theta="B1APF_Yoke_Rotation_Angle"/>
-        <dimensions rmin="97.790000 * cm" rmax="99.060000 * cm" half_length="238.760000 * cm / 2." sphi="0 * deg" dphi="360.0 * deg"/>
+        <placement x="-62.5449*cm" y="0*cm" z="2178.36*cm" theta="B1APF_Yoke_Rotation_Angle"/>
+        <dimensions rmin="97.790000*cm" rmax="99.060000*cm" half_length="238.760000*cm/2." sphi="0*deg" dphi="360.0*deg"/>
       </heatshieldbarrel>
       <endplate name="B1APF_Head_nonIP" vis="MagnetEndPlateVis">
         <placement x="B1APF_Yoke_Center_posX" y="B1APF_Yoke_Center_posY" z="B1APF_Yoke_Center_posZ" theta="B1APF_Yoke_Rotation_Angle"/>
-        <zplane z="(160.581412 * cm / 2.)" rmin="158.395137 * cm / 2." rmax="162.560000 * cm / 2."/>
-        <zplane z="(160.581412 * cm / 2. + 37.374794 * cm)" rmin="158.395137 * cm / 2." rmax="162.560000 * cm / 2."/>
-        <zplane z="(160.581412 * cm / 2. + 37.374794 * cm)" rmin="34.701480 * cm / 2." rmax="162.560000 * cm / 2."/>
-        <zplane z="(160.581412 * cm / 2. + 37.374794 * cm + 2. * cm)" rmin="34.701480 * cm / 2." rmax="162.560000 * cm / 2."/>
+        <zplane z="(160.581412*cm/2.)" rmin="158.395137*cm/2." rmax="162.560000*cm/2."/>
+        <zplane z="(160.581412*cm/2.+37.374794*cm)" rmin="158.395137*cm/2." rmax="162.560000*cm/2."/>
+        <zplane z="(160.581412*cm/2.+37.374794*cm)" rmin="34.701480*cm/2." rmax="162.560000*cm/2."/>
+        <zplane z="(160.581412*cm/2.+37.374794*cm+2.*cm)" rmin="34.701480*cm/2." rmax="162.560000*cm/2."/>
         <cut>
-          <placement x="(46.852850 + (50.128391-46.852850)/2. + 13.1) * cm" y="0 * cm" z="0 * cm" rotX="0 * rad" rotY="1.203225 * deg" rotZ="0 * rad"/>
-          <dimensions rmin="0 * cm" rmax="26.2 * cm / 2." half_length="800. * cm / 2."/>
-          <rotation num="1" start="0 * deg" step="0 * deg" axis="Z"/>
+          <placement x="(46.852850+(50.128391-46.852850)/2.+13.1)*cm" y="0*cm" z="0*cm" rotX="0*rad" rotY="1.203225*deg" rotZ="0*rad"/>
+          <dimensions rmin="0*cm" rmax="26.2*cm/2." half_length="800.*cm/2."/>
+          <rotation num="1" start="0*deg" step="0*deg" axis="Z"/>
         </cut>
         <cut>
-          <placement x="-(46.852850 + (50.128391-46.852850)/2. + 13.1) * cm" y="0 * cm" z="0 * cm" rotX="0 * rad" rotY="-1.203225 * deg" rotZ="0 * rad"/>
-          <dimensions rmin="0 * cm" rmax="26.2 * cm / 2." half_length="800. * cm / 2."/>
-          <rotation num="1" start="0 * deg" step="0 * deg" axis="Z"/>
+          <placement x="-(46.852850+(50.128391-46.852850)/2.+13.1)*cm" y="0*cm" z="0*cm" rotX="0*rad" rotY="-1.203225*deg" rotZ="0*rad"/>
+          <dimensions rmin="0*cm" rmax="26.2*cm/2." half_length="800.*cm/2."/>
+          <rotation num="1" start="0*deg" step="0*deg" axis="Z"/>
         </cut>
       </endplate>
       <cryobarrel name="B1APF_Cryo_Barrel" vis="MagnetCryoVis">
-        <placement x="-63.3423 * cm" y="0 * cm" z="2216.32 * cm" theta="B1APF_Yoke_Rotation_Angle"/>
-        <dimensions rmin="224.790000 * cm / 2." rmax="228.600000 * cm / 2." half_length="299.470742 * cm / 2." sphi="0 * deg" dphi="360.0 * deg"/>
+        <placement x="-63.3423*cm" y="0*cm" z="2216.32*cm" theta="B1APF_Yoke_Rotation_Angle"/>
+        <dimensions rmin="224.790000*cm/2." rmax="228.600000*cm/2." half_length="299.470742*cm/2." sphi="0*deg" dphi="360.0*deg"/>
       </cryobarrel>
       <cryoend name="B1APF_Cryo_End_nonIP" vis="MagnetCryoVis">
         <placement x="B1APF_Yoke_Center_posX" y="B1APF_Yoke_Center_posY" z="B1APF_Yoke_Center_posZ" theta="B1APF_Yoke_Rotation_Angle"/>
-        <zplane z="(160.581412 * cm / 2. + 155.448020 * cm)" rmin="226.060000 * cm / 2." rmax="228.600000 * cm / 2."/>
-        <zplane z="(160.581412 * cm / 2. + 155.448020 * cm + 7.620000 * cm)" rmin="226.060000 * cm / 2." rmax="228.600000 * cm / 2."/>
-        <zplane z="(160.581412 * cm / 2. + 155.448020 * cm + 7.620000 * cm)" rmin=" 34.701480 * cm / 2." rmax="228.600000 * cm / 2."/>
-        <zplane z="(160.581412 * cm / 2. + 155.448020 * cm + 7.620000 * cm + 1.275521 * cm)" rmin="34.701480 * cm / 2." rmax="228.600000 * cm / 2."/>
+        <zplane z="(160.581412*cm/2.+155.448020*cm)" rmin="226.060000*cm/2." rmax="228.600000*cm/2."/>
+        <zplane z="(160.581412*cm/2.+155.448020*cm+7.620000*cm)" rmin="226.060000*cm/2." rmax="228.600000*cm/2."/>
+        <zplane z="(160.581412*cm/2.+155.448020*cm+7.620000*cm)" rmin=" 34.701480*cm/2." rmax="228.600000*cm/2."/>
+        <zplane z="(160.581412*cm/2.+155.448020*cm+7.620000*cm+1.275521*cm)" rmin="34.701480*cm/2." rmax="228.600000*cm/2."/>
         <cut>
-          <placement x="(46.852850 + (50.128391-46.852850)/2. + 13.1) * cm" y="0 * cm" z="0 * cm" rotX="0 * rad" rotY="1.203225 * deg" rotZ="0 * rad"/>
-          <dimensions rmin="0 * cm" rmax="26.2 * cm / 2." half_length="800. * cm / 2."/>
-          <rotation num="1" start="0 * deg" step="0 * deg" axis="Z"/>
+          <placement x="(46.852850+(50.128391-46.852850)/2.+13.1)*cm" y="0*cm" z="0*cm" rotX="0*rad" rotY="1.203225*deg" rotZ="0*rad"/>
+          <dimensions rmin="0*cm" rmax="26.2*cm/2." half_length="800.*cm/2."/>
+          <rotation num="1" start="0*deg" step="0*deg" axis="Z"/>
         </cut>
         <cut>
-          <placement x="-(46.852850 + (50.128391-46.852850)/2. + 13.1) * cm" y="0 * cm" z="0 * cm" rotX="0 * rad" rotY="-1.203225 * deg" rotZ="0 * rad"/>
-          <dimensions rmin="0 * cm" rmax="26.2 * cm / 2." half_length="800. * cm / 2."/>
-          <rotation num="1" start="0 * deg" step="0 * deg" axis="Z"/>
+          <placement x="-(46.852850+(50.128391-46.852850)/2.+13.1)*cm" y="0*cm" z="0*cm" rotX="0*rad" rotY="-1.203225*deg" rotZ="0*rad"/>
+          <dimensions rmin="0*cm" rmax="26.2*cm/2." half_length="800.*cm/2."/>
+          <rotation num="1" start="0*deg" step="0*deg" axis="Z"/>
         </cut>
       </cryoend>
     </detector>
