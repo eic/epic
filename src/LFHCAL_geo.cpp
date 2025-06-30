@@ -504,13 +504,13 @@ Volume createEightMModule(Detector& desc, moduleParamsStrct mod_params,
   SubtractionSolid modBackPlate(modBackPlateFull, modBackCutOut);
 
   // volume definition 8M module casing
-  Volume vol_mountingPlate(baseName + "_MountingPlate", MountingPlate, desc.material("Steel235"));
-  Volume vol_modFrontPlate(baseName + "_FrontPlate", modFrontPlate, desc.material("Steel235"));
-  Volume vol_modBackPlate(baseName + "_BackPlate", modBackPlate, desc.material("Steel235"));
-  Volume vol_modSidePlateL(baseName + "_LeftSidePlate", modSidePlateL, desc.material("Steel235"));
-  Volume vol_modSidePlateR(baseName + "_RightSidePlate", modSidePlateR, desc.material("Steel235"));
-  Volume vol_modTopPlate(baseName + "_TopPlate", modTopPlate, desc.material("Steel235"));
-  Volume vol_modBottomPlate(baseName + "_BottomPlate", modBottomPlate, desc.material("Steel235"));
+  Volume vol_mountingPlate(baseName + "_MountingPlate", MountingPlate, desc.material("StainlessSteelSAE304"));
+  Volume vol_modFrontPlate(baseName + "_FrontPlate", modFrontPlate, desc.material("StainlessSteelSAE304"));
+  Volume vol_modBackPlate(baseName + "_BackPlate", modBackPlate, desc.material("StainlessSteelSAE304"));
+  Volume vol_modSidePlateL(baseName + "_LeftSidePlate", modSidePlateL, desc.material("StainlessSteelSAE304"));
+  Volume vol_modSidePlateR(baseName + "_RightSidePlate", modSidePlateR, desc.material("StainlessSteelSAE304"));
+  Volume vol_modTopPlate(baseName + "_TopPlate", modTopPlate, desc.material("StainlessSteelSAE304"));
+  Volume vol_modBottomPlate(baseName + "_BottomPlate", modBottomPlate, desc.material("StainlessSteelSAE304"));
 
   if (allSen) {
     sens.setType("calorimeter");
@@ -761,13 +761,13 @@ Volume createFourMModule(Detector& desc, moduleParamsStrct mod_params,
   SubtractionSolid modBackPlate(modBackPlateFull, modBackCutOut);
 
   // volume definition 8M module casing
-  Volume vol_mountingPlate(baseName + "_MountingPlate", MountingPlate, desc.material("Steel235"));
-  Volume vol_modFrontPlate(baseName + "_FrontPlate", modFrontPlate, desc.material("Steel235"));
-  Volume vol_modBackPlate(baseName + "_BackPlate", modBackPlate, desc.material("Steel235"));
-  Volume vol_modSidePlateL(baseName + "_LeftSidePlate", modSidePlateL, desc.material("Steel235"));
-  Volume vol_modSidePlateR(baseName + "_RightSidePlate", modSidePlateR, desc.material("Steel235"));
-  Volume vol_modTopPlate(baseName + "_TopPlate", modTopPlate, desc.material("Steel235"));
-  Volume vol_modBottomPlate(baseName + "_BottomPlate", modBottomPlate, desc.material("Steel235"));
+  Volume vol_mountingPlate(baseName + "_MountingPlate", MountingPlate, desc.material("StainlessSteelSAE304"));
+  Volume vol_modFrontPlate(baseName + "_FrontPlate", modFrontPlate, desc.material("StainlessSteelSAE304"));
+  Volume vol_modBackPlate(baseName + "_BackPlate", modBackPlate, desc.material("StainlessSteelSAE304"));
+  Volume vol_modSidePlateL(baseName + "_LeftSidePlate", modSidePlateL, desc.material("StainlessSteelSAE304"));
+  Volume vol_modSidePlateR(baseName + "_RightSidePlate", modSidePlateR, desc.material("StainlessSteelSAE304"));
+  Volume vol_modTopPlate(baseName + "_TopPlate", modTopPlate, desc.material("StainlessSteelSAE304"));
+  Volume vol_modBottomPlate(baseName + "_BottomPlate", modBottomPlate, desc.material("StainlessSteelSAE304"));
 
   if (allSen) {
     sens.setType("calorimeter");
