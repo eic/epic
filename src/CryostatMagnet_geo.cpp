@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: LGPL-3.0-or-later
-// Copyright (C) 2022 Alex Jentsch, Wouter Deconinck, Whitney Armstrong
+// Copyright (C) 2022 Alex Jentsch, Wouter Deconinck, Whitney Armstrong, Andrii Natochii
 
 #include "DD4hep/DetFactoryHelper.h"
 #include "DD4hep/Printout.h"
