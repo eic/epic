@@ -3,9 +3,9 @@
 
 <lccdd>
 
-    <comment> 
-	See compact/far_forward/ion_beamline.xml for hadron magnet element coordinate description-the same is applied to the electron magnet elements 
-    </comment> 
+    <comment>
+        See compact/far_forward/ion_beamline.xml for hadron magnet element coordinate description-the same is applied to the electron magnet elements
+    </comment>
 
   <define>
 
