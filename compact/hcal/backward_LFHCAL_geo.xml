@@ -38,7 +38,8 @@
     <constant name="Mod_FoilThick"            value="0.1* mm"/>
     <constant name="Mod_PCBWidth"             value="70* mm"/>
     <constant name="Mod_PCBThickness"         value="4* mm"/>
-    <constant name="Mod_PCBLength"            value="59.4* cm"/>
+    <constant name="Mod_PCBLength"            value="61.0* cm"/>
+    <!--<constant name="Mod_PCBLength"            value="59.4* cm"/>-->
     <!--<constant name="Mod_PCBLength"            value="125* cm"/>-->
 
 
@@ -63,8 +64,8 @@
     <vis name="LFHCAL8MModVis"          ref="AnlBlue"       showDaughters="true"  visible="true"/>
     <vis name="LFHCAL4MModVis"          ref="AnlViolet"     showDaughters="true"  visible="true"/>
     <vis name="LFHCAL8MModOuter"        ref="AnlBlue"       showDaughters="true"  visible="true"/>
-    <vis name="LFHCALLayerScintVis"     ref="AnlLight_Gray" showDaughters="false" visible="true"/>
-    <vis name="LFHCALLayerSteelVis"     ref="AnlRed"        showDaughters="false" visible="true"/>
+    <vis name="LFHCALLayerScintVis"     ref="AnlOrange" showDaughters="false" visible="true"/>
+    <vis name="LFHCALLayerSteelVis"     ref="AnlLight_Gray"        showDaughters="false" visible="true"/>
     <vis name="LFHCALLayerTungstenVis"  ref="AnlViolet"     showDaughters="false" visible="true"/>
     <vis name="LFHCALLayerKaptonVis"    ref="AnlGold"       showDaughters="false" visible="true"/>
     <vis name="LFHCALLayerFoilVis"      ref="AnlGray"       showDaughters="false" visible="true"/>
@@ -92,7 +93,7 @@
       readout="HcalEndcapNHits"
       vis="InvisibleWithDaughters"
       calorimeterType="HAD_ENDCAP"
-      renderComponents="0"
+      renderComponents="1"
       allSensitive="0"
       >
 

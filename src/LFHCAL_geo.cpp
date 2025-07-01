@@ -573,6 +573,8 @@ Volume createEightMModule(Detector& desc, moduleParamsStrct mod_params,
                              "InvisibleNoDaughters");
   }
 
+  double lastSliceThick = 0.0;
+
   int layer_num  = 0;
   double slice_z = -length / 2 + mod_params.mod_MPThick +
                    mod_params.mod_FWThick; // Keeps track of layers' local z locations
@@ -644,6 +646,8 @@ Volume createEightMModule(Detector& desc, moduleParamsStrct mod_params,
                                         Position((mod_params.mod_notchDepth) / 2., 0, slice_z)));
     }
     slice_z += sl_params[i].slice_thick / 2.;
+    if(sl_params[i].slice_partID == 3 && layer_num == 0) lastSliceThick = sl_params[i].slice_thick/2.;
+    if(sl_params[i].slice_partID == 2 && layer_num == 0) lastSliceThick += sl_params[i].slice_thick;
   }
 
   // placement 8M module casing
@@ -705,7 +709,7 @@ Volume createEightMModule(Detector& desc, moduleParamsStrct mod_params,
       length - mod_params.mod_FWThick - mod_params.mod_MPThick + mod_params.mod_BWThick / 2;
   double z_offSetPCB =
       (mod_params.mod_FWThick + mod_params.mod_MPThick + mod_params.mod_BWThick) / 2 -
-      (lengthA - mod_params.mod_pcbLength) / 2.;
+      (lengthA - mod_params.mod_pcbLength) / 2.-lastSliceThick;
 
   pvm = vol_mod.placeVolume(
       vol_modPCB,
@@ -830,6 +834,8 @@ Volume createFourMModule(Detector& desc, moduleParamsStrct mod_params,
                              "InvisibleNoDaughters");
   }
 
+  double lastSliceThick = 0.0;
+
   int layer_num  = 0;
   double slice_z = -length / 2 + mod_params.mod_MPThick +
                    mod_params.mod_FWThick; // Keeps track of layers' local z locations
@@ -902,6 +908,8 @@ Volume createFourMModule(Detector& desc, moduleParamsStrct mod_params,
                                         Position((mod_params.mod_notchDepth) / 2., 0, slice_z)));
     }
     slice_z += sl_params[i].slice_thick / 2.;
+    if(sl_params[i].slice_partID == 3 && layer_num == 0) lastSliceThick = sl_params[i].slice_thick/2.;
+    if(sl_params[i].slice_partID == 2 && layer_num == 0) lastSliceThick += sl_params[i].slice_thick;
   }
 
   // placement 4M module casing
@@ -963,7 +971,7 @@ Volume createFourMModule(Detector& desc, moduleParamsStrct mod_params,
       length - mod_params.mod_FWThick - mod_params.mod_MPThick + mod_params.mod_BWThick / 2;
   double z_offSetPCB =
       (mod_params.mod_FWThick + mod_params.mod_MPThick + mod_params.mod_BWThick) / 2 -
-      (lengthA - mod_params.mod_pcbLength) / 2.;
+      (lengthA - mod_params.mod_pcbLength) / 2.-lastSliceThick;
 
   pvm = vol_mod.placeVolume(
       vol_modPCB,
