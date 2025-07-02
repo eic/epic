@@ -1,6 +1,4 @@
 features:
-  fields:
-    marco:
   hcal:
     backward_28layers_LFHCAL_sampF:
     backward_endcap_flux:

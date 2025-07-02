@@ -1,6 +1,4 @@
 features:
-  fields:
-    marco:
   hcal:
     backward_tile5x5cm_sampF:
     backward_endcap_flux:
