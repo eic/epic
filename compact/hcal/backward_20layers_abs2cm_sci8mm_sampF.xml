@@ -13,7 +13,7 @@
         <constant name="HcalEndcapN_polyhedron_rmax"    value="251.444*cm"/>
         <constant name="HcalEndcapN_segments_rmin"              value="19.9431*cm"/>
         <constant name="HcalEndcapN_segments_rmax"              value="HcalEndcapN_rmax/(cos(180*deg/HcalEndcapN_CaloSides))"/>
-        <constant name="HcalEndcapN_length_new"              value="58.0 * cm"/>
+        <constant name="HcalEndcapN_length_new"              value="5*58.0 * cm"/>
 
 
     <documentation>
