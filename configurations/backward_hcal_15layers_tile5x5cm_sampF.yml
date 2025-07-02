@@ -1,4 +1,3 @@
 features:
   hcal:
     backward_15layers_tile5x5cm_sampF:
-    backward_endcap_flux:

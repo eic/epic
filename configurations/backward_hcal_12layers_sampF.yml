@@ -1,4 +1,3 @@
 features:
   hcal:
     backward_12layers_sampF:
-    backward_endcap_flux:

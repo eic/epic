@@ -1,4 +1,3 @@
 features:
   hcal:
     backward_20layers_abs2cm_sci6mm_tile5x5cm_sampF:
-    backward_endcap_flux:
