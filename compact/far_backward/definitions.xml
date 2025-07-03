@@ -22,11 +22,11 @@
     <constant name="Q2eR_Length"          value="1.4*m"/>
     <constant name="Q2eR_CenterPosition"  value="-8.3*m"/>
 
-    <constant name="B2AeR_InnerRadius"    value="98.0*mm"/>
+    <constant name="B2AeR_InnerRadius"    value="50.0*mm"/>
     <constant name="B2AeR_Length"         value="1.78*m"/>
     <constant name="B2AeR_CenterPosition" value="-10.5*m"/>
 
-    <constant name="B2BeR_InnerRadius"    value="98.0*mm"/>
+    <constant name="B2BeR_InnerRadius"    value="50.0*mm"/>
     <constant name="B2BeR_Length"         value="5.500092*m"/>
     <constant name="B2BeR_Center_x"       value="-27.5*mm"/>
     <constant name="B2BeR_CenterPosition" value="-19.50*m"/>
