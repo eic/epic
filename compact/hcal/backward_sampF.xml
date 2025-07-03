@@ -1,17 +1,17 @@
 <!-- SPDX-License-Identifier: LGPL-3.0-or-later -->
-<!-- Copyright (C) 2022 - 2025 Wouter Deconinck, Leszek Kosarzewski, Ryan Milton -->
+<!-- Copyright (C) Leszek Kosarzewski -->
 
 <lccdd>
 
-  <info name="backward.xml"
-        title="EPIC nHCal default"
+  <info name="backward_sampF.xml"
+        title="EPIC nHCal with all layers sensitive"
         author="L. Kosarzewski"
         status="development"
         version="1.0"
   ><comment/></info>
 
   <define>
-    <constant name="HcalEndcapN_allSensitive" value="0"/>
+    <constant name="HcalEndcapN_allSensitive" value="1"/>
   </define>
 
   <include ref="backward_template.xml"/>

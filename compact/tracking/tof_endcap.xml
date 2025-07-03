@@ -658,7 +658,7 @@
 
   <readouts>
     <readout name="TOFEndcapHits">
-      <segmentation type="CartesianGridXY" grid_size_x="1*mm" grid_size_y="0.8*cm" offset_y="0.4*cm" offset_x="0.5*mm"/>
+      <segmentation type="CartesianGridXY" grid_size_x="0.1*mm" grid_size_y="0.1*mm" offset_y="0.05*mm" offset_x="0.05*mm"/>
       <id>system:8,layer:4,module:2,idx:5,idy:5,ids:6,x:36:-12,y:-16</id>
     </readout>
   </readouts>
