@@ -42,9 +42,9 @@
     <constant name="B0PF_InnerRadius"  value="20.0*cm"/>
     <constant name="B0APF_InnerRadius" value="4.3*cm"/>
     <constant name="Q1APF_InnerRadius" value="5.6*cm"/>
-    <constant name="Q1BPF_InnerRadius" value="7.2*cm"/>
-    <constant name="Q2PF_InnerRadius"  value="11.5*cm"/>
-    <constant name="B1PF_InnerRadius"  value="11.5*cm"/>
+    <constant name="Q1BPF_InnerRadius" value="7.8*cm"/>
+    <constant name="Q2PF_InnerRadius"  value="13.15*cm"/>
+    <constant name="B1PF_InnerRadius"  value="13.5*cm"/>
     <constant name="B1APF_InnerRadius" value="16.8*cm"/>
     <constant name="B2PF_InnerRadius"  value="20.0*cm"/>
 
