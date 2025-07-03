@@ -97,9 +97,6 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector /
   for (uint i = 1; i < thetas.size(); i++) {
 
 
-    std::cout << "Pipe " << i<< ": " << names[i] << std::endl;
-    std::cout << "theta: " << thetas[i-1] << std::endl;
-    std::cout << "theta: " << thetas[i] << std::endl;
     // Start at the join between the first two pipes ending at the join between the last two pipes N-1
     double bendAngle  = thetas[i] - thetas[i - 1];
     if (std::abs(bendAngle) < 0.00001) {
@@ -108,8 +105,6 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector /
     {
       double bendLength = abs(rOuters1[i] * tan(bendAngle / 2));
       bendLengths.push_back(bendLength + bendRadius);
-      std::cout << "bendAngle: " << bendAngle << std::endl;
-      std::cout << "bendLength: " << bendLength << std::endl;
     }
   }
 
