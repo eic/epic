@@ -8,10 +8,10 @@
       Far Forward B0 Tracker Parameters
       ---------------------------------
     </comment>
-    <constant name="ForwardRomanPotA_zpos" value="B1APF_CenterPosition + B1APF_Length/2.0 + 20.0*cm"/>
-    <constant name="ForwardRomanPotA_xpos" value="B1APF_XPosition"/>
-    <constant name="ForwardRomanPotB_zpos" value="B2PF_CenterPosition - B2PF_Length/2.0 - 20.0*cm"/>
-    <constant name="ForwardRomanPotB_xpos" value="B2PF_XPosition "/>
+    <constant name="ForwardRomanPotA_zpos" value="B1APF_CenterZ + B1APF_Length/2.0 + 20.0*cm"/>
+    <constant name="ForwardRomanPotA_xpos" value="B1APF_CenterX"/>
+    <constant name="ForwardRomanPotB_zpos" value="B2PF_CenterZ - B2PF_Length/2.0 - 20.0*cm"/>
+    <constant name="ForwardRomanPotB_xpos" value="B2PF_CenterX "/>
   </define>
 
   <include ref="roman_pots_eRD24_design.xml"/>
