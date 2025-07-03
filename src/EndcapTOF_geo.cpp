@@ -68,8 +68,7 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
     xml_comp_t x_mod       = mi;
     double total_thickness = 0;
     // Compute module total thickness from components
-    xml_coll_t ci(x_mod, _U(module_component));
-    for (ci.reset(); ci; ++ci) {
+    for (xml_coll_t ci(x_mod, _U(module_component)); ci; ++ci) {
       xml_comp_t x_comp    = ci;
       bool keep_same_layer = getAttrOrDefault<bool>(x_comp, _Unicode(keep_layer), false);
       if (!keep_same_layer)
