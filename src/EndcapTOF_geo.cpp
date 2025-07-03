@@ -77,7 +77,6 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
     }
 
     double thickness_so_far = 0.0;
-    //double thickness_sum        = -total_thickness / 2.0;
     int sensitive_id        = 0;
     const std::string m_nam = x_mod.nameStr();
     mod_thickness[m_nam]    = total_thickness;
@@ -165,7 +164,6 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
     double phimin       = dd4hep::getAttrOrDefault<double>(envelope, _Unicode(phimin), 0.);
     double phimax       = dd4hep::getAttrOrDefault<double>(envelope, _Unicode(phimax), 2 * M_PI);
     double xoffset      = getAttrOrDefault<double>(envelope, _Unicode(xoffset), 0);
-    //int mod_num         = 0;
 
     // envelope thickness is the max layer thickness to accomodate all layers
     double envelope_length = 0;
@@ -273,7 +271,6 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
             sensor_elt_params.set<string>("axis_definitions", "XYZ");
             volSurfaceList(sensor_elt)->push_back(volplane_surfaces[m_nam][ic]);
           }
-          //++mod_num;
         }
         ycoord -= (module_y - module_overlap);
         ++iy;
