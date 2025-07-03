@@ -116,7 +116,8 @@
 
     <field name="Magnet_B2BeR_Field" type="MultipoleMagnet">
       <shape type="Tube" rmax="B2BeR_InnerRadius" dz="B2BeR_Length/2"/>
-      <position x="0" y="0" z="B2BeR_CenterPosition"/>
+      <position x="B2BeR_Center_x" y="0" z="B2BeR_CenterPosition"/>
+      <rotation x="0" y="B2BeR_Theta" z="0"/>
       <coefficient coefficient="B2BeR_B"/>
     </field>
 
