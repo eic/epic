@@ -19,9 +19,9 @@
     <constant name="Q1APF_Yoke_Center_posZ" value="963.648*cm"/>
     <constant name="Q1APF_Yoke_Rotation_Angle" value="-0.0208752*rad"/>
     <!-- Q1BpF Yoke Center Position -->
-    <constant name="Q1BPF_Yoke_Center_posX" value="-31.3088"/>
+    <constant name="Q1BPF_Yoke_Center_posX" value="-31.3088*cm"/>
     <constant name="Q1BPF_Yoke_Center_posY" value="0*cm"/>
-    <constant name="Q1BPF_Yoke_Center_posZ" value="1157.15"/>
+    <constant name="Q1BPF_Yoke_Center_posZ" value="1157.15*cm"/>
     <constant name="Q1BPF_Yoke_Rotation_Angle" value="-0.0135542*rad"/>
     <!-- Q2pF Yoke Center Position -->
     <constant name="Q2PF_Yoke_Center_posX" value="-40.6057*cm"/>
@@ -31,7 +31,7 @@
     <!-- B1pF Yoke Center Position -->
     <constant name="B1PF_Yoke_Center_posX" value="-51.4896*cm"/>
     <constant name="B1PF_Yoke_Center_posY" value="0*cm"/>
-    <constant name="B1PF_Yoke_Center_posZ" value="1857.67"/>
+    <constant name="B1PF_Yoke_Center_posZ" value="1857.67*cm"/>
     <constant name="B1PF_Yoke_Rotation_Angle" value="-0.0277921*rad"/>
     <!-- B1ApF Yoke Center Position -->
     <constant name="B1APF_Yoke_Center_posX" value="-61.5849*cm"/>
