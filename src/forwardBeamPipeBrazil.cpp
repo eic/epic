@@ -525,10 +525,10 @@ static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector /* sens *
 
   SubtractionSolid final_vacuum_main_pipe(
       vacuum_main_pipe, cutout_for_OMD_station,
-      Position(0.0, 0.0, (2551.0 - beampipe_dimensions[pieceIdx].zCenter)));
+      Position(0.0, 0.0, (2551.0 * dd4hep::cm - beampipe_dimensions[pieceIdx].zCenter)));
   final_vacuum_main_pipe =
       SubtractionSolid(final_vacuum_main_pipe, cutout_for_OMD_station,
-                       Position(0.0, 0.0, (2701.0 - beampipe_dimensions[pieceIdx].zCenter)));
+                       Position(0.0, 0.0, (2701.0 * dd4hep::cm - beampipe_dimensions[pieceIdx].zCenter)));
 
   //-----------------------------------------------------------------
   // Cut on the IP side to avoid overlaps with the fwd cryostat

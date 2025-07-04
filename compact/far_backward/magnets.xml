@@ -10,15 +10,15 @@
   <define>
 
     <!-- Q1eR Center Position -->
-    <constant name="Q1ER_Center_posX" value="-0.00285949"/>
+    <constant name="Q1ER_Center_posX" value="-0.00285949*cm"/>
     <constant name="Q1ER_Center_posY" value="0*cm"/>
-    <constant name="Q1ER_Center_posZ" value="-620.047"/>
+    <constant name="Q1ER_Center_posZ" value="-620.047*cm"/>
     <constant name="Q1ER_Rotation_Angle" value="0*rad"/>
 
     <!-- Q2eR Center Position -->
-    <constant name="Q2ER_Center_posX" value="0.0122616"/>
+    <constant name="Q2ER_Center_posX" value="0.0122616*cm"/>
     <constant name="Q2ER_Center_posY" value="0*cm"/>
-    <constant name="Q2ER_Center_posZ" value="-830.112"/>
+    <constant name="Q2ER_Center_posZ" value="-830.112*cm"/>
     <constant name="Q2ER_Rotation_Angle" value="0*rad"/>
 
     <!-- Q1ApR Yoke Center Position -->

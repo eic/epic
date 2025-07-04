@@ -88,8 +88,8 @@ static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector /* sens *
     double pos_theta    = pos.attr<double>(_U(theta));
     xml_dim_t dims      = c.child(_U(dimensions)); //dimensions();
     double dim_z        = dims.z();
-    xml_dim_t apperture = c.child(_Unicode(apperture));
-    double app_r        = apperture.r();
+    xml_dim_t aperture 	= c.child(_Unicode(aperture));
+    double app_r        = aperture.r();
 
     radii_magnet.push_back(app_r);        // cm
     lengths_magnet.push_back(dim_z);      //cm
