@@ -81,15 +81,15 @@ static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector /* sens *
 
   for (xml_coll_t c(x_det, _U(element)); c; ++c) {
 
-    xml_dim_t pos       = c.child(_U(placement));
-    double pos_x        = pos.x();
-    double pos_y        = pos.y();
-    double pos_z        = pos.z();
-    double pos_theta    = pos.attr<double>(_U(theta));
-    xml_dim_t dims      = c.child(_U(dimensions)); //dimensions();
-    double dim_z        = dims.z();
-    xml_dim_t apperture = c.child(_Unicode(apperture));
-    double app_r        = apperture.r();
+    xml_dim_t pos      = c.child(_U(placement));
+    double pos_x       = pos.x();
+    double pos_y       = pos.y();
+    double pos_z       = pos.z();
+    double pos_theta   = pos.attr<double>(_U(theta));
+    xml_dim_t dims     = c.child(_U(dimensions)); //dimensions();
+    double dim_z       = dims.z();
+    xml_dim_t aperture = c.child(_Unicode(aperture));
+    double app_r       = aperture.r();
 
     radii_magnet.push_back(app_r);        // cm
     lengths_magnet.push_back(dim_z);      //cm
@@ -246,8 +246,8 @@ static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector /* sens *
 
     std::string piece_name = Form("GapVacuum%d", numGaps + numMagnets);
 
-    Cone specialGap(piece_name, specialGapLength / 2, 0.0, vacuumDiameterEntrance / 2, 0.0,
-                    vacuumDiameterExit / 2);
+    ConeSegment specialGap(piece_name, specialGapLength / 2, 0.0, vacuumDiameterEntrance / 2, 0.0,
+                           vacuumDiameterExit / 2, 40 * deg, (360 - 40) * deg);
 
     Volume specialGap_v(piece_name, specialGap, m_Vac);
     sdet.setAttributes(det, specialGap_v, x_det.regionStr(), x_det.limitsStr(), vis_name);
