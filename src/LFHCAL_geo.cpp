@@ -34,13 +34,14 @@ struct moduleParamsStrct {
       , mod_pcbLength(0.)
       , mod_pcbThick(0.)
       , mod_pcbWidth(0.)
+  	  , mod_pcbOffset(0.)
       , mod_visStr("")
       , mod_regStr("")
       , mod_limStr("") {}
   moduleParamsStrct(double BIwidth, double BIheight, double SWThick, double TWThick, double MPThick,
                     double FWThick, double BWThick, double width, double height, double notchDepth,
                     double notchHeight, double foilThick, double pcbLegth, double pcbThick,
-                    double pcbWidth, std::string visStr, std::string regStr, std::string limStr) {
+                    double pcbWidth, double pcbOffset, std::string visStr, std::string regStr, std::string limStr) {
     mod_BIwidth     = BIwidth;
     mod_BIheight    = BIheight;
     mod_SWThick     = SWThick;
@@ -56,6 +57,7 @@ struct moduleParamsStrct {
     mod_pcbLength   = pcbLegth;
     mod_pcbThick    = pcbThick;
     mod_pcbWidth    = pcbWidth;
+    mod_pcbOffset    = pcbOffset;
     mod_visStr      = visStr;
     mod_regStr      = regStr;
     mod_limStr      = limStr;
@@ -75,6 +77,7 @@ struct moduleParamsStrct {
   double mod_pcbLength   = 0.;
   double mod_pcbThick    = 0.;
   double mod_pcbWidth    = 0.;
+  double mod_pcbOffset    = 0.;
   std::string mod_visStr = "";
   std::string mod_regStr = "";
   std::string mod_limStr = "";
@@ -578,7 +581,6 @@ Volume createEightMModule(Detector& desc, moduleParamsStrct mod_params,
                              "InvisibleNoDaughters");
   }
 
-  double lastSliceThick = 0.0;
 
   int layer_num  = 0;
   double slice_z = -length / 2 + mod_params.mod_MPThick +
@@ -651,8 +653,6 @@ Volume createEightMModule(Detector& desc, moduleParamsStrct mod_params,
                                         Position((mod_params.mod_notchDepth) / 2., 0, slice_z)));
     }
     slice_z += sl_params[i].slice_thick / 2.;
-    if(sl_params[i].slice_partID == 3 && layer_num == 0) lastSliceThick = sl_params[i].slice_thick/2.;
-    if(sl_params[i].slice_partID == 2 && layer_num == 0) lastSliceThick += sl_params[i].slice_thick;
   }
 
   // placement 8M module casing
@@ -714,7 +714,7 @@ Volume createEightMModule(Detector& desc, moduleParamsStrct mod_params,
       length - mod_params.mod_FWThick - mod_params.mod_MPThick + mod_params.mod_BWThick / 2;
   double z_offSetPCB =
       (mod_params.mod_FWThick + mod_params.mod_MPThick + mod_params.mod_BWThick) / 2 -
-      (lengthA - mod_params.mod_pcbLength) / 2.-lastSliceThick;
+      (lengthA - mod_params.mod_pcbLength) / 2.-mod_params.mod_pcbOffset;
 
   pvm = vol_mod.placeVolume(
       vol_modPCB,
@@ -845,7 +845,6 @@ Volume createFourMModule(Detector& desc, moduleParamsStrct mod_params,
                              "InvisibleNoDaughters");
   }
 
-  double lastSliceThick = 0.0;
 
   int layer_num  = 0;
   double slice_z = -length / 2 + mod_params.mod_MPThick +
@@ -919,8 +918,6 @@ Volume createFourMModule(Detector& desc, moduleParamsStrct mod_params,
                                         Position((mod_params.mod_notchDepth) / 2., 0, slice_z)));
     }
     slice_z += sl_params[i].slice_thick / 2.;
-    if(sl_params[i].slice_partID == 3 && layer_num == 0) lastSliceThick = sl_params[i].slice_thick/2.;
-    if(sl_params[i].slice_partID == 2 && layer_num == 0) lastSliceThick += sl_params[i].slice_thick;
   }
 
   // placement 4M module casing
@@ -982,7 +979,7 @@ Volume createFourMModule(Detector& desc, moduleParamsStrct mod_params,
       length - mod_params.mod_FWThick - mod_params.mod_MPThick + mod_params.mod_BWThick / 2;
   double z_offSetPCB =
       (mod_params.mod_FWThick + mod_params.mod_MPThick + mod_params.mod_BWThick) / 2 -
-      (lengthA - mod_params.mod_pcbLength) / 2.-lastSliceThick;
+      (lengthA - mod_params.mod_pcbLength) / 2.-mod_params.mod_pcbOffset;
 
   pvm = vol_mod.placeVolume(
       vol_modPCB,

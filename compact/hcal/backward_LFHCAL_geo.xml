@@ -39,6 +39,7 @@
     <constant name="Mod_PCBWidth"             value="70* mm"/>
     <constant name="Mod_PCBThickness"         value="4* mm"/>
     <constant name="Mod_PCBLength"            value="61.0* cm"/>
+    <constant name="Mod_PCBOffset"            value="0.28* cm+"/>
     <!--<constant name="Mod_PCBLength"            value="59.4* cm"/>-->
     <!--<constant name="Mod_PCBLength"            value="125* cm"/>-->
 
@@ -126,6 +127,7 @@
         pcbLength="Mod_PCBLength"
         pcbThick="Mod_PCBThickness"
         pcbWidth="Mod_PCBWidth"
+        pcbOffset="Mod_PCBOffset"
         />
         <position x="50*cm" y="50*cm" z="nHCal_LFHCAL_length - LFHCALElectronicsThickness" />
       </eightmodule>
@@ -148,6 +150,7 @@
         pcbLength="Mod_PCBLength"
         pcbThick="Mod_PCBThickness"
         pcbWidth="Mod_PCBWidth"
+        pcbOffset="Mod_PCBOffset"
         />
         <position x="50*cm" y="60*cm" z="nHCal_LFHCAL_length - LFHCALElectronicsThickness" />
       </fourmodule>
