@@ -28,7 +28,7 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector /
   Material m_Vacuum = description.material("Vacuum");
   string vis_name   = dd4hep::getAttrOrDefault<std::string>(x_det, _Unicode(vis), "BeamPipeVis");
   double thickness  = getAttrOrDefault<double>(x_det, _Unicode(wall_thickness), 0);
-  double bendRadius = 0.00001*mm; //Small bend radius to allow the construction of toruses
+  double bendRadius = 0.00001 * mm; //Small bend radius to allow the construction of toruses
 
   vector<string> names;
   vector<int> ids;
@@ -97,7 +97,7 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector /
 
     // Start at the join between the first two pipes ending at the join between the last two pipes N-1
     double bendAngle = thetas[i] - thetas[i - 1];
-    if (std::abs(bendAngle) < 0.01*mrad) {
+    if (std::abs(bendAngle) < 0.01 * mrad) {
       bendLengths.push_back(0);
     } else // Correct for tubes, not yet cones so imperfect
     {
