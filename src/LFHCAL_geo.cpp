@@ -504,13 +504,18 @@ Volume createEightMModule(Detector& desc, moduleParamsStrct mod_params,
   SubtractionSolid modBackPlate(modBackPlateFull, modBackCutOut);
 
   // volume definition 8M module casing
-  Volume vol_mountingPlate(baseName + "_MountingPlate", MountingPlate, desc.material("StainlessSteelSAE304"));
-  Volume vol_modFrontPlate(baseName + "_FrontPlate", modFrontPlate, desc.material("StainlessSteelSAE304"));
-  Volume vol_modBackPlate(baseName + "_BackPlate", modBackPlate, desc.material("StainlessSteelSAE304"));
-  Volume vol_modSidePlateL(baseName + "_LeftSidePlate", modSidePlateL, desc.material("StainlessSteelSAE304"));
-  Volume vol_modSidePlateR(baseName + "_RightSidePlate", modSidePlateR, desc.material("StainlessSteelSAE304"));
-  Volume vol_modTopPlate(baseName + "_TopPlate", modTopPlate, desc.material("StainlessSteelSAE304"));
-  Volume vol_modBottomPlate(baseName + "_BottomPlate", modBottomPlate, desc.material("StainlessSteelSAE304"));
+  Material plates_mat;
+  for (int i = 0; i < (int)sl_params.size(); i++) {
+	  if(sl_params[i].slice_partID == 1)
+		  plates_mat = desc.material(sl_params[i].slice_matStr);
+  }
+  Volume vol_mountingPlate(baseName + "_MountingPlate", MountingPlate, plates_mat);
+  Volume vol_modFrontPlate(baseName + "_FrontPlate", modFrontPlate, plates_mat);
+  Volume vol_modBackPlate(baseName + "_BackPlate", modBackPlate, plates_mat);
+  Volume vol_modSidePlateL(baseName + "_LeftSidePlate", modSidePlateL, plates_mat);
+  Volume vol_modSidePlateR(baseName + "_RightSidePlate", modSidePlateR, plates_mat);
+  Volume vol_modTopPlate(baseName + "_TopPlate", modTopPlate, plates_mat);
+  Volume vol_modBottomPlate(baseName + "_BottomPlate", modBottomPlate, plates_mat);
 
   if (allSen) {
     sens.setType("calorimeter");
@@ -765,13 +770,19 @@ Volume createFourMModule(Detector& desc, moduleParamsStrct mod_params,
   SubtractionSolid modBackPlate(modBackPlateFull, modBackCutOut);
 
   // volume definition 8M module casing
-  Volume vol_mountingPlate(baseName + "_MountingPlate", MountingPlate, desc.material("StainlessSteelSAE304"));
-  Volume vol_modFrontPlate(baseName + "_FrontPlate", modFrontPlate, desc.material("StainlessSteelSAE304"));
-  Volume vol_modBackPlate(baseName + "_BackPlate", modBackPlate, desc.material("StainlessSteelSAE304"));
-  Volume vol_modSidePlateL(baseName + "_LeftSidePlate", modSidePlateL, desc.material("StainlessSteelSAE304"));
-  Volume vol_modSidePlateR(baseName + "_RightSidePlate", modSidePlateR, desc.material("StainlessSteelSAE304"));
-  Volume vol_modTopPlate(baseName + "_TopPlate", modTopPlate, desc.material("StainlessSteelSAE304"));
-  Volume vol_modBottomPlate(baseName + "_BottomPlate", modBottomPlate, desc.material("StainlessSteelSAE304"));
+  // Looping through the number of repeated layers & slices in each section
+  Material plates_mat;
+  for (int i = 0; i < (int)sl_params.size(); i++) {
+	  if(sl_params[i].slice_partID == 1)
+		  plates_mat = desc.material(sl_params[i].slice_matStr);
+  }
+  Volume vol_mountingPlate(baseName + "_MountingPlate", MountingPlate, plates_mat);
+  Volume vol_modFrontPlate(baseName + "_FrontPlate", modFrontPlate, plates_mat);
+  Volume vol_modBackPlate(baseName + "_BackPlate", modBackPlate, plates_mat);
+  Volume vol_modSidePlateL(baseName + "_LeftSidePlate", modSidePlateL, plates_mat);
+  Volume vol_modSidePlateR(baseName + "_RightSidePlate", modSidePlateR, plates_mat);
+  Volume vol_modTopPlate(baseName + "_TopPlate", modTopPlate, plates_mat);
+  Volume vol_modBottomPlate(baseName + "_BottomPlate", modBottomPlate, plates_mat);
 
   if (allSen) {
     sens.setType("calorimeter");
