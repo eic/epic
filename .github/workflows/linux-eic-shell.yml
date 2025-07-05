@@ -346,7 +346,7 @@ jobs:
       - build
     strategy:
       matrix:
-        detector_config: [epic_craterlake]
+        detector_config: [epic_craterlake, epic_ip6_extended]
       fail-fast: false
     steps:
     - uses: actions/checkout@v4
