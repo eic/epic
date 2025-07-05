@@ -293,7 +293,7 @@ jobs:
     strategy:
       matrix:
         option: ['m'] #, 's'] # FIXME
-        detector_config: [epic_craterlake] # FIXME
+        detector_config: [epic_craterlake, epic_ip6_extended] # FIXME
       fail-fast: false
     steps:
     - uses: actions/checkout@v4
