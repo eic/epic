@@ -293,6 +293,7 @@ jobs:
     strategy:
       matrix:
         option: ['m'] #, 's'] # FIXME
+        tolerance_mm: [0.1, 0.01]
         detector_config: [epic_craterlake, epic_ip6_extended] # FIXME
       fail-fast: false
     steps:
@@ -309,7 +310,7 @@ jobs:
         setup: install/bin/thisepic.sh
         run: |
           mkdir -p doc
-          checkOverlaps --option ${{ matrix.option }} -c ${DETECTOR_PATH}/${{ matrix.detector_config }}.xml | tee doc/overlap_check_tgeo.out
+          checkOverlaps --option ${{ matrix.option }} -t ${{ matrix.tolerance_mm }} -c ${DETECTOR_PATH}/${{ matrix.detector_config }}.xml | tee doc/overlap_check_tgeo.out
           noverlaps="$(grep -c ovlp doc/overlap_check_tgeo.out || true)"
           if [[ "${noverlaps}" -gt "0" ]] ; then echo "${noverlaps} overlaps found!" && false ; fi
 
