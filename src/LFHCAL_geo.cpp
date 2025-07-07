@@ -34,14 +34,15 @@ struct moduleParamsStrct {
       , mod_pcbLength(0.)
       , mod_pcbThick(0.)
       , mod_pcbWidth(0.)
-  	  , mod_pcbOffset(0.)
+      , mod_pcbOffset(0.)
       , mod_visStr("")
       , mod_regStr("")
       , mod_limStr("") {}
   moduleParamsStrct(double BIwidth, double BIheight, double SWThick, double TWThick, double MPThick,
                     double FWThick, double BWThick, double width, double height, double notchDepth,
                     double notchHeight, double foilThick, double pcbLegth, double pcbThick,
-                    double pcbWidth, double pcbOffset, std::string visStr, std::string regStr, std::string limStr) {
+                    double pcbWidth, double pcbOffset, std::string visStr, std::string regStr,
+                    std::string limStr) {
     mod_BIwidth     = BIwidth;
     mod_BIheight    = BIheight;
     mod_SWThick     = SWThick;
@@ -57,7 +58,7 @@ struct moduleParamsStrct {
     mod_pcbLength   = pcbLegth;
     mod_pcbThick    = pcbThick;
     mod_pcbWidth    = pcbWidth;
-    mod_pcbOffset    = pcbOffset;
+    mod_pcbOffset   = pcbOffset;
     mod_visStr      = visStr;
     mod_regStr      = regStr;
     mod_limStr      = limStr;
@@ -77,7 +78,7 @@ struct moduleParamsStrct {
   double mod_pcbLength   = 0.;
   double mod_pcbThick    = 0.;
   double mod_pcbWidth    = 0.;
-  double mod_pcbOffset    = 0.;
+  double mod_pcbOffset   = 0.;
   std::string mod_visStr = "";
   std::string mod_regStr = "";
   std::string mod_limStr = "";
@@ -509,8 +510,8 @@ Volume createEightMModule(Detector& desc, moduleParamsStrct mod_params,
   // volume definition 8M module casing
   Material plates_mat;
   for (int i = 0; i < (int)sl_params.size(); i++) {
-	  if(sl_params[i].slice_partID == 1)
-		  plates_mat = desc.material(sl_params[i].slice_matStr);
+    if (sl_params[i].slice_partID == 1)
+      plates_mat = desc.material(sl_params[i].slice_matStr);
   }
   Volume vol_mountingPlate(baseName + "_MountingPlate", MountingPlate, plates_mat);
   Volume vol_modFrontPlate(baseName + "_FrontPlate", modFrontPlate, plates_mat);
@@ -580,7 +581,6 @@ Volume createEightMModule(Detector& desc, moduleParamsStrct mod_params,
     vol_modPCB.setAttributes(desc, mod_params.mod_regStr, mod_params.mod_limStr,
                              "InvisibleNoDaughters");
   }
-
 
   int layer_num  = 0;
   double slice_z = -length / 2 + mod_params.mod_MPThick +
@@ -714,7 +714,7 @@ Volume createEightMModule(Detector& desc, moduleParamsStrct mod_params,
       length - mod_params.mod_FWThick - mod_params.mod_MPThick + mod_params.mod_BWThick / 2;
   double z_offSetPCB =
       (mod_params.mod_FWThick + mod_params.mod_MPThick + mod_params.mod_BWThick) / 2 -
-      (lengthA - mod_params.mod_pcbLength) / 2.-mod_params.mod_pcbOffset;
+      (lengthA - mod_params.mod_pcbLength) / 2. - mod_params.mod_pcbOffset;
 
   pvm = vol_mod.placeVolume(
       vol_modPCB,
@@ -773,8 +773,8 @@ Volume createFourMModule(Detector& desc, moduleParamsStrct mod_params,
   // Looping through the number of repeated layers & slices in each section
   Material plates_mat;
   for (int i = 0; i < (int)sl_params.size(); i++) {
-	  if(sl_params[i].slice_partID == 1)
-		  plates_mat = desc.material(sl_params[i].slice_matStr);
+    if (sl_params[i].slice_partID == 1)
+      plates_mat = desc.material(sl_params[i].slice_matStr);
   }
   Volume vol_mountingPlate(baseName + "_MountingPlate", MountingPlate, plates_mat);
   Volume vol_modFrontPlate(baseName + "_FrontPlate", modFrontPlate, plates_mat);
@@ -844,7 +844,6 @@ Volume createFourMModule(Detector& desc, moduleParamsStrct mod_params,
     vol_modPCB.setAttributes(desc, mod_params.mod_regStr, mod_params.mod_limStr,
                              "InvisibleNoDaughters");
   }
-
 
   int layer_num  = 0;
   double slice_z = -length / 2 + mod_params.mod_MPThick +
@@ -979,7 +978,7 @@ Volume createFourMModule(Detector& desc, moduleParamsStrct mod_params,
       length - mod_params.mod_FWThick - mod_params.mod_MPThick + mod_params.mod_BWThick / 2;
   double z_offSetPCB =
       (mod_params.mod_FWThick + mod_params.mod_MPThick + mod_params.mod_BWThick) / 2 -
-      (lengthA - mod_params.mod_pcbLength) / 2.-mod_params.mod_pcbOffset;
+      (lengthA - mod_params.mod_pcbLength) / 2. - mod_params.mod_pcbOffset;
 
   pvm = vol_mod.placeVolume(
       vol_modPCB,

@@ -11,7 +11,7 @@
   <define>
     <documentation>
       #### Material Thickness
-    </documentation>    
+    </documentation>
     <!--<constant name="nHCal_LFHCAL_length"      value="134.54*cm"/>-->
     <constant name="nHCal_LFHCAL_length"      value="68.94*cm"/>
     <constant name="LFHCALAbsorberThickness"      value="1.52* cm"/>
