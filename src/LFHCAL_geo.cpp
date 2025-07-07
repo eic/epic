@@ -1044,7 +1044,8 @@ static Ref_t createDetector(Detector& desc, xml_h handle, SensitiveDetector sens
       getAttrOrDefault(eightMmod_dim, _Unicode(foilThick), 0.),
       getAttrOrDefault(eightMmod_dim, _Unicode(pcbLength), 0.),
       getAttrOrDefault(eightMmod_dim, _Unicode(pcbThick), 0.),
-      getAttrOrDefault(eightMmod_dim, _Unicode(pcbWidth), 0.), eightM_xml.visStr(),
+      getAttrOrDefault(eightMmod_dim, _Unicode(pcbWidth), 0.),
+      getAttrOrDefault(eightMmod_dim, _Unicode(pcbOffset), 0.), eightM_xml.visStr(),
       eightM_xml.regionStr(), eightM_xml.limitsStr());
 
   // 4M module specific loading
@@ -1065,7 +1066,8 @@ static Ref_t createDetector(Detector& desc, xml_h handle, SensitiveDetector sens
       getAttrOrDefault(fourMmod_dim, _Unicode(foilThick), 0.),
       getAttrOrDefault(fourMmod_dim, _Unicode(pcbLength), 0.),
       getAttrOrDefault(fourMmod_dim, _Unicode(pcbThick), 0.),
-      getAttrOrDefault(fourMmod_dim, _Unicode(pcbWidth), 0.), fourM_xml.visStr(),
+      getAttrOrDefault(fourMmod_dim, _Unicode(pcbWidth), 0.),
+      getAttrOrDefault(fourMmod_dim, _Unicode(pcbOffset), 0.), fourM_xml.visStr(),
       fourM_xml.regionStr(), fourM_xml.limitsStr());
 
   std::vector<sliceParamsStrct> slice_Params;
