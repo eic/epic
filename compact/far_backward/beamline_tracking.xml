@@ -40,20 +40,20 @@
 
         <slice
         pipe_id="5"
-        grandmother="Pipe_Q3eR_to_B7eR"
+        grandmother="Pipe_Q3eR_to_Q6eR"
         mother="Pipe_in_Q3eR_vacuum"
         name="Pipe_in_Q3eR_tracker_start"
         end="false"/>
 
         <slice
         pipe_id="6"
-        grandmother="Pipe_Q3eR_to_B7eR"
+        grandmother="Pipe_Q3eR_to_Q6eR"
         mother="Pipe_in_Q3eR_vacuum"
         name="Pipe_in_Q3eR_tracker_end"/>
 
         <slice
         pipe_id="7"
-        grandmother="Pipe_Q3eR_to_B7eR"
+        grandmother="Pipe_Q3eR_to_Q6eR"
         mother="Pipe_in_Q4eR_vacuum"
         name="Pipe_in_Q4eR_tracker"/>
 
@@ -62,8 +62,8 @@
     <detector
         type="BeamPipeStop"
         name="Backwards_Pipe_Stop"
-        grandmother="Pipe_Q3eR_to_B7eR"
-        mother="Pipe_Q4eR_to_B3eR_vacuum"
+        grandmother="Pipe_Q3eR_to_Q6eR"
+        mother="Pipe_in_Q6eR_vacuum"
     />
 
   </detectors>

@@ -16,12 +16,17 @@
 
 
     <!-- Beamline -->
-    <constant name="Q1eR_Gradient"  value="-0.739741*tesla/meter/GeV*ElectronBeamEnergy"/>
-    <constant name="Q2eR_Gradient"  value="0.66821*tesla/meter/GeV*ElectronBeamEnergy"/>
-    <constant name="Q3eR_Gradient"  value="0.21674*tesla/meter/GeV*ElectronBeamEnergy"/>
+    <constant name="Q1eR_K1L"       value="-0.41401"/>
+    <constant name="Q2eR_K1L"       value="0.316408"/>
+    <constant name="Q3eR_K1L"       value="0.111625"/>
+    <constant name="Q1eR_Gradient"  value="3.33564*Q1eR_K1L/Q1eR_Length*tesla/GeV*ElectronBeamEnergy"/>
+    <constant name="Q2eR_Gradient"  value="3.33564*Q2eR_K1L/Q2eR_Length*tesla/GeV*ElectronBeamEnergy"/>
+    <constant name="Q3eR_Gradient"  value="3.33564*Q3eR_K1L/Q3eR_Length*tesla/GeV*ElectronBeamEnergy"/>
 
-    <constant name="B2AeR_B"        value="0.0106667*tesla/GeV*ElectronBeamEnergy"/>
-    <constant name="B2BeR_B"        value="0.0132222*tesla/GeV*ElectronBeamEnergy"/>
+    <constant name="B2AeR_BendAngle" value="0.0*rad"/>
+    <constant name="B2BeR_BendAngle" value="0.020*rad"/>
+    <constant name="B2AeR_B"         value="3.33564*B2AeR_BendAngle/B2AeR_Length*meter*tesla/GeV*ElectronBeamEnergy"/>
+    <constant name="B2BeR_B"         value="3.33564*B2BeR_BendAngle/B2BeR_Length*meter*tesla/GeV*ElectronBeamEnergy"/>
 
     <!-- Luminosity System -->
     <constant name="LumiSweepMag_B"     value="1/1.2*tesla"/>

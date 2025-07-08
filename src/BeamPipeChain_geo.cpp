@@ -94,12 +94,13 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector /
 
   // If there is an bend in the pipe, calculate the length reduction of the pipe and joint length
   for (uint i = 1; i < thetas.size(); i++) {
+
     // Start at the join between the first two pipes ending at the join between the last two pipes N-1
-    if (thetas[i - 1] == thetas[i]) {
+    double bendAngle = thetas[i] - thetas[i - 1];
+    if (std::abs(bendAngle) < 0.00001) {
       bendLengths.push_back(0);
     } else // Correct for tubes, not yet cones so imperfect
     {
-      double bendAngle  = thetas[i] - thetas[i - 1];
       double bendLength = abs(rOuters1[i] * tan(bendAngle / 2));
       bendLengths.push_back(bendLength + bendRadius);
     }
