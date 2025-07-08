@@ -28,3 +28,14 @@ jobs:
         run: |
           root -b -q "scripts/test_ACTS.cxx+(\"${DETECTOR_PATH}/${{matrix.detector_config}}.xml\")" | tee check_tracking_geometry.out
           bin/acts_geo_check check_tracking_geometry.out
+    - uses: actions/upload-artifact@v4
+      with:
+        name: ${{matrix.detector_config}}.obj
+        path: |
+          *.obj
+          *.mpl
+    - uses: actions/upload-artifact@v4
+      with:
+        name: ${{matrix.detector_config}}.ply
+        path: |
+          *.ply
