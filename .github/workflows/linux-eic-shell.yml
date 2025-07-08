@@ -348,6 +348,7 @@ jobs:
     strategy:
       matrix:
         detector_config: [epic_craterlake, epic_ip6_extended]
+        tolerance_mm: [0.1, 0.01]
       fail-fast: false
     steps:
     - uses: actions/checkout@v4
@@ -363,7 +364,7 @@ jobs:
         setup: install/bin/thisepic.sh
         run: |
           mkdir -p doc
-          python scripts/checkOverlaps.py -c ${DETECTOR_PATH}/${{ matrix.detector_config }}.xml | tee doc/overlap_check_geant4.out
+          python scripts/checkOverlaps.py -t ${{ matrix.tolerance_mm }} -c ${DETECTOR_PATH}/${{ matrix.detector_config }}.xml | tee doc/overlap_check_geant4.out
           noverlaps="$(grep -c GeomVol1002 doc/overlap_check_geant4.out || true)"
           if [[ "${noverlaps}" -gt "0" ]] ; then echo "${noverlaps} overlaps found!" && false ; fi
 
