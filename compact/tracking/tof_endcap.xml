@@ -3,13 +3,16 @@
 
 <lccdd>
   <define>
+    <documentation>
+      ## Forward TOF double-disks
+    </documentation>
+
     <comment>
       --------------------------
       Forward TOF Parameters
       --------------------------
     </comment>
     <comment> Forward TOF position </comment>
-    <constant name="ForwardTOF_nlayers"             value="1"/>
     <constant name="ForwardTOFMod_offset"           value="1.2*cm"/>
 
     <comment> LGAD parameters for the endcap TOFs </comment>
@@ -91,16 +94,9 @@
     <constant name="SH_PB_offset"           value="0.0*mm" />
     <constant name="SH_PB_length"           value="TOFEndcap_baseplate_length" />
 
-  </define>
-
-  <documentation>
-    ## Forward TOF double-disks
-  </documentation>
-
   <comment>
     Actual detector implementation.
   </comment>
-  <define>
 
     <constant name="TOFEndcapMod_thickness"     value="TOFEndcapSensor_thickness + TOFEndcapService_thickness" />
     <constant name="TOFEndcapMod_angle"         value="360.0*degree / TOFEndcapMod_count * (1 + TOFEndcapMod_overlap)" />
@@ -213,7 +209,7 @@
       reflect="false">
       <type_flags type="DetType_TRACKER + DetType_ENDCAP"/>
       <position x="0*cm" y="0*cm" z="ForwardTOF_zmin" />
-      <moduleFrontRight name="EndcapTOF_Module1" vis="TOFEndcapModuleVis">
+      <module name="FrontRight" vis="TOFEndcapModuleVis">
         <module_component name="hybridkaptontop" material="Kapton" sensitive="false" width="EndcapTOF_Module_width" length="EndcapTOF_Module_length" thickness="EndcapTOF_Hybrid_thickness" vis="TOFHybridVis" >
           <position x="EndcapTOF_Service_position" y="0" z="0" />
         </module_component>
@@ -241,9 +237,9 @@
         <module_component name="carbonsupport" material="CarbonFiber" sensitive="false" width="EndcapTOF_Module_width" length="EndcapTOF_Module_length" thickness="EndcapTOF_CFSupp_thickness" vis="AnlGray" >
           <position x="EndcapTOF_Support_position" y="0" z="0" />
         </module_component>
-      </moduleFrontRight>
+      </module>
 
-      <moduleFrontLeft name="EndcapTOF_Module1" vis="TOFEndcapModuleVis">
+      <module name="FrontLeft" vis="TOFEndcapModuleVis">
         <module_component name="hybridkaptontop" material="Kapton" sensitive="false" width="EndcapTOF_Module_width" length="EndcapTOF_Module_length" thickness="EndcapTOF_Hybrid_thickness" vis="TOFHybridVis" >
           <position x="EndcapTOF_Service_position" y="0" z="0" />
         </module_component>
@@ -272,9 +268,9 @@
         <module_component name="carbonsupport" material="CarbonFiber" sensitive="false" width="EndcapTOF_Module_width" length="EndcapTOF_Module_length" thickness="EndcapTOF_CFSupp_thickness" vis="AnlGray" >
           <position x="EndcapTOF_Support_position" y="0" z="0" />
         </module_component>
-      </moduleFrontLeft>
+      </module>
 
-      <moduleBackRight name="EndcapTOF_Module1" vis="TOFEndcapModuleVis">
+      <module name="BackRight" vis="TOFEndcapModuleVis">
         <module_component name="carbonsupport" material="CarbonFiber" sensitive="false" width="EndcapTOF_Module_width" length="EndcapTOF_Module_length" thickness="EndcapTOF_CFSupp_thickness" vis="AnlGray" >
           <position x="EndcapTOF_Support_position" y="0" z="0" />
         </module_component>
@@ -302,9 +298,9 @@
         <module_component name="hybridkaptontop" material="Kapton" sensitive="false" width="EndcapTOF_Module_width" length="EndcapTOF_Module_length" thickness="EndcapTOF_Hybrid_thickness" vis="TOFHybridVis" >
           <position x="EndcapTOF_Service_position" y="0" z="0" />
         </module_component>
-      </moduleBackRight>
+      </module>
 
-      <moduleBackLeft name="EndcapTOF_Module1" vis="TOFEndcapModuleVis">
+      <module name="BackLeft" vis="TOFEndcapModuleVis">
         <module_component name="carbonsupport" material="CarbonFiber" sensitive="false" width="EndcapTOF_Module_width" length="EndcapTOF_Module_length" thickness="EndcapTOF_CFSupp_thickness" vis="AnlGray" >
           <position x="EndcapTOF_Support_position" y="0" z="0" />
         </module_component>
@@ -332,31 +328,246 @@
         <module_component name="hybridkaptontop" material="Kapton" sensitive="false" width="EndcapTOF_Module_width" length="EndcapTOF_Module_length" thickness="EndcapTOF_Hybrid_thickness" vis="TOFHybridVis" >
           <position x="EndcapTOF_Service_position" y="0" z="0" />
         </module_component>
-      </moduleBackLeft>
+      </module>
 
-      <layer module="EndcapTOF_Module1" id="1">
-        <envelope vis="TOF_envelope"
-          rmin="ForwardTOFLayer_rmin"
-          rmax="ForwardTOFLayer_rmax"
-          length="3*cm"
-          zstart="ForwardTOF_zmin"
-          xoffset="EndcapTOF_Module_length_design/2"
-        />
+      <layer id="1" front="true" name="Front">
+
+      <envelope vis="TOF_envelope"
+        rmin="ForwardTOFLayer_rmin"
+        rmax="ForwardTOFLayer_rmax"
+        zstart="ForwardTOF_zmin - EndcapTOF_CFSupp_thickness"
+        xoffset="-EndcapTOF_Board_spacing/2"
+      />
+
+
         <layer_material surface="inner" binning="binPhi,binR" bins0="30" bins1="30"/>
         <layer_material surface="outer" binning="binPhi,binR" bins0="30" bins1="30"/>
-        <y_layout dr="0.0*mm" z0="EndcapTOF_zOffset" nz="EndcapTOF_Module_nz"/>
-        <z_layout z0="ForwardTOF_zmin"/>
+
+        <layout module="FrontLeft" left="true">
+                <row deadspace="15*mm + EndcapTOF_yOffset"/>
+                <row x_offset="EndcapTOF_Board_spacing/2" nsensors="3">
+                  <board nsensors="3"/>
+                </row>
+                <row x_offset="EndcapTOF_Board_spacing/2" nsensors="9">
+                  <board nsensors="6"/>
+                  <board nsensors="3"/>
+                </row>
+                <row x_offset="EndcapTOF_Board_spacing/2" nsensors="10">
+                  <board nsensors="7"/>
+                  <board nsensors="3"/>
+                </row>
+                <row x_offset="EndcapTOF_Board_spacing/2" nsensors="13">
+                  <board nsensors="7"/>
+                  <board nsensors="6"/>
+                </row>
+                <row x_offset="EndcapTOF_Board_spacing/2" nsensors="14">
+                  <board nsensors="7"/>
+                  <board nsensors="7"/>
+                </row>
+                <row x_offset="EndcapTOF_Board_spacing/2" nsensors="14">
+                  <board nsensors="7"/>
+                  <board nsensors="7"/>
+                </row>
+                <row x_offset="EndcapTOF_Board_spacing/2" nsensors="16">
+                  <board nsensors="7"/>
+                  <board nsensors="6"/>
+                  <board nsensors="3"/>
+                </row>
+                <row x_offset="10.5*cm + 17*mm" nsensors="13">
+                  <board nsensors="7"/>
+                  <board nsensors="6"/>
+                </row>
+                <row x_offset="10.5*cm + 17*mm" nsensors="13">
+                  <board nsensors="7"/>
+                  <board nsensors="6"/>
+                </row>
+                <row x_offset="10.5*cm + 17*mm" nsensors="13">
+                  <board nsensors="7"/>
+                  <board nsensors="6"/>
+                </row>
+                <row x_offset="EndcapTOF_Board_spacing/2" nsensors="16">
+                  <board nsensors="7"/>
+                  <board nsensors="6"/>
+                  <board nsensors="3"/>
+                </row>
+                <row x_offset="EndcapTOF_Board_spacing/2" nsensors="14">
+                  <board nsensors="7"/>
+                  <board nsensors="7"/>
+                </row>
+                <row x_offset="EndcapTOF_Board_spacing/2" nsensors="14">
+                  <board nsensors="7"/>
+                  <board nsensors="7"/>
+                </row>
+                <row x_offset="EndcapTOF_Board_spacing/2" nsensors="13">
+                  <board nsensors="7"/>
+                  <board nsensors="6"/>
+                </row>
+                <row x_offset="EndcapTOF_Board_spacing/2" nsensors="10">
+                  <board nsensors="7"/>
+                  <board nsensors="3"/>
+                </row>
+                <row x_offset="EndcapTOF_Board_spacing/2" nsensors="9">
+                  <board nsensors="6"/>
+                  <board nsensors="3"/>
+                </row>
+                <row x_offset="EndcapTOF_Board_spacing/2" nsensors="3">
+                  <board nsensors="3"/>
+                </row>
+          </layout>
+          <layout left="false" module="FrontRight">
+                <row deadspace="25.5*mm + EndcapTOF_yOffset"/>
+                <row x_offset="EndcapTOF_Board_spacing/2" nsensors="3">
+                  <board nsensors="3"/>
+                </row>
+                <row x_offset="EndcapTOF_Board_spacing/2" nsensors="9">
+                  <board nsensors="6"/>
+                  <board nsensors="3"/>
+                </row>
+                <row x_offset="EndcapTOF_Board_spacing/2" nsensors="10">
+                  <board nsensors="7"/>
+                  <board nsensors="3"/>
+                </row>
+                <row x_offset="EndcapTOF_Board_spacing/2" nsensors="13">
+                  <board nsensors="7"/>
+                  <board nsensors="6"/>
+                </row>
+                <row x_offset="EndcapTOF_Board_spacing/2" nsensors="14">
+                  <board nsensors="7"/>
+                  <board nsensors="7"/>
+                </row>
+                <row x_offset="EndcapTOF_Board_spacing/2" nsensors="14">
+                  <board nsensors="7"/>
+                  <board nsensors="7"/>
+                </row>
+                <row x_offset="8.25*cm" nsensors="14">
+                  <board nsensors="7"/>
+                  <board nsensors="7"/>
+                </row>
+                <row x_offset="10.5*cm + 17*mm" nsensors="13">
+                  <board nsensors="7"/>
+                  <board nsensors="6"/>
+                </row>
+                <row x_offset="10.5*cm + 17*mm" nsensors="13">
+                  <board nsensors="7"/>
+                  <board nsensors="6"/>
+                </row>
+                <row x_offset="10.5*cm + 17*mm" nsensors="13">
+                  <board nsensors="7"/>
+                  <board nsensors="6"/>
+                </row>
+                <row x_offset="EndcapTOF_Board_spacing/2" nsensors="16">
+                  <board nsensors="7"/>
+                  <board nsensors="6"/>
+                  <board nsensors="3"/>
+                </row>
+                <row x_offset="EndcapTOF_Board_spacing/2" nsensors="14">
+                  <board nsensors="7"/>
+                  <board nsensors="7"/>
+                </row>
+                <row x_offset="EndcapTOF_Board_spacing/2" nsensors="14">
+                  <board nsensors="7"/>
+                  <board nsensors="7"/>
+                </row>
+                <row x_offset="EndcapTOF_Board_spacing/2" nsensors="13">
+                  <board nsensors="7"/>
+                  <board nsensors="6"/>
+                </row>
+                <row x_offset="EndcapTOF_Board_spacing/2" nsensors="10">
+                  <board nsensors="7"/>
+                  <board nsensors="3"/>
+                </row>
+                <row x_offset="EndcapTOF_Board_spacing/2" nsensors="7">
+                  <board nsensors="7"/>
+                </row>
+                <row x_offset="EndcapTOF_Board_spacing/2" nsensors="3">
+                  <board nsensors="3"/>
+                </row>
+        </layout>
       </layer>
-      <support module="EndcapTOF_SupportDummy" id="1" vis="InvisibleWithDaughters">
-        <envelope vis="AnlGray"
-          rmin="ForwardTOFLayer_rmin"
-          rmax="ForwardTOFLayer_rmax"
-          length="12*mm"
-          zstart="ForwardTOF_zmin"
-          xoffset="EndcapTOF_Module_length_design/2" />
 
-      </support>
-      <sensor_layout_front_left>
+      <layer id="2" front="false" name="Back">
+      <envelope vis="TOF_envelope"
+        rmin="ForwardTOFLayer_rmin"
+        rmax="ForwardTOFLayer_rmax"
+        zstart="ForwardTOF_zmin + EndcapTOF_CFSupp_thickness"
+        xoffset="-EndcapTOF_Board_spacing/2"
+      />
+
+
+        <layer_material surface="inner" binning="binPhi,binR" bins0="30" bins1="30"/>
+        <layer_material surface="outer" binning="binPhi,binR" bins0="30" bins1="30"/>
+
+        <layout left="true" module="BackLeft">
+                <row deadspace="25.5*mm + EndcapTOF_yOffset"/>
+                <row x_offset="EndcapTOF_Board_spacing/2" nsensors="3">
+                  <board nsensors="3"/>
+                </row>
+                <row x_offset="EndcapTOF_Board_spacing/2" nsensors="9">
+                  <board nsensors="6"/>
+                  <board nsensors="3"/>
+                </row>
+                <row x_offset="EndcapTOF_Board_spacing/2" nsensors="10">
+                  <board nsensors="7"/>
+                  <board nsensors="3"/>
+                </row>
+                <row x_offset="EndcapTOF_Board_spacing/2" nsensors="13">
+                  <board nsensors="7"/>
+                  <board nsensors="6"/>
+                </row>
+                <row x_offset="EndcapTOF_Board_spacing/2" nsensors="14">
+                  <board nsensors="7"/>
+                  <board nsensors="7"/>
+                </row>
+                <row x_offset="EndcapTOF_Board_spacing/2" nsensors="14">
+                  <board nsensors="7"/>
+                  <board nsensors="7"/>
+                </row>
+                <row x_offset="8.25*cm" nsensors="14">
+                  <board nsensors="7"/>
+                  <board nsensors="7"/>
+                </row>
+                <row x_offset="10.5*cm + 17*mm" nsensors="13">
+                  <board nsensors="7"/>
+                  <board nsensors="6"/>
+                </row>
+                <row x_offset="10.5*cm + 17*mm" nsensors="13">
+                  <board nsensors="7"/>
+                  <board nsensors="6"/>
+                </row>
+                <row x_offset="10.5*cm + 17*mm" nsensors="13">
+                  <board nsensors="7"/>
+                  <board nsensors="6"/>
+                </row>
+                <row x_offset="EndcapTOF_Board_spacing/2" nsensors="16">
+                  <board nsensors="7"/>
+                  <board nsensors="6"/>
+                  <board nsensors="3"/>
+                </row>
+                <row x_offset="EndcapTOF_Board_spacing/2" nsensors="14">
+                  <board nsensors="7"/>
+                  <board nsensors="7"/>
+                </row>
+                <row x_offset="EndcapTOF_Board_spacing/2" nsensors="14">
+                  <board nsensors="7"/>
+                  <board nsensors="7"/>
+                </row>
+                <row x_offset="EndcapTOF_Board_spacing/2" nsensors="13">
+                  <board nsensors="7"/>
+                  <board nsensors="6"/>
+                </row>
+                <row x_offset="EndcapTOF_Board_spacing/2" nsensors="10">
+                  <board nsensors="7"/>
+                  <board nsensors="3"/>
+                </row>
+                <row x_offset="EndcapTOF_Board_spacing/2" nsensors="7">
+                  <board nsensors="7"/>
+                </row>
+                <row x_offset="EndcapTOF_Board_spacing/2" nsensors="3">
+                  <board nsensors="3"/>
+                </row>
+        </layout>
+
+        <layout left="false" module="BackRight">
                 <row deadspace="15*mm + EndcapTOF_yOffset"/>
                 <row x_offset="EndcapTOF_Board_spacing/2" nsensors="3">
                   <board nsensors="3"/>
@@ -426,219 +637,11 @@
                 <row x_offset="EndcapTOF_Board_spacing/2" nsensors="3">
                   <board nsensors="3"/>
                 </row>
-      </sensor_layout_front_left>
+        </layout>
+      </layer>
 
-      <sensor_layout_front_right>
-                <row deadspace="25.5*mm + EndcapTOF_yOffset"/>
-                <row x_offset="EndcapTOF_Board_spacing/2" nsensors="3">
-                  <board nsensors="3"/>
-                </row>
-                <row x_offset="EndcapTOF_Board_spacing/2" nsensors="9">
-                  <board nsensors="6"/>
-                  <board nsensors="3"/>
-                </row>
-                <row x_offset="EndcapTOF_Board_spacing/2" nsensors="10">
-                  <board nsensors="7"/>
-                  <board nsensors="3"/>
-                </row>
-                <row x_offset="EndcapTOF_Board_spacing/2" nsensors="13">
-                  <board nsensors="7"/>
-                  <board nsensors="6"/>
-                </row>
-                <row x_offset="EndcapTOF_Board_spacing/2" nsensors="14">
-                  <board nsensors="7"/>
-                  <board nsensors="7"/>
-                </row>
-                <row x_offset="EndcapTOF_Board_spacing/2" nsensors="14">
-                  <board nsensors="7"/>
-                  <board nsensors="7"/>
-                </row>
-                <row x_offset="8.25*cm" nsensors="14">
-                  <board nsensors="7"/>
-                  <board nsensors="7"/>
-                </row>
-                <row x_offset="10.5*cm + 17*mm" nsensors="13">
-                  <board nsensors="7"/>
-                  <board nsensors="6"/>
-                </row>
-                <row x_offset="10.5*cm + 17*mm" nsensors="13">
-                  <board nsensors="7"/>
-                  <board nsensors="6"/>
-                </row>
-                <row x_offset="10.5*cm + 17*mm" nsensors="13">
-                  <board nsensors="7"/>
-                  <board nsensors="6"/>
-                </row>
-                <row x_offset="EndcapTOF_Board_spacing/2" nsensors="16">
-                  <board nsensors="7"/>
-                  <board nsensors="6"/>
-                  <board nsensors="3"/>
-                </row>
-                <row x_offset="EndcapTOF_Board_spacing/2" nsensors="14">
-                  <board nsensors="7"/>
-                  <board nsensors="7"/>
-                </row>
-                <row x_offset="EndcapTOF_Board_spacing/2" nsensors="14">
-                  <board nsensors="7"/>
-                  <board nsensors="7"/>
-                </row>
-                <row x_offset="EndcapTOF_Board_spacing/2" nsensors="13">
-                  <board nsensors="7"/>
-                  <board nsensors="6"/>
-                </row>
-                <row x_offset="EndcapTOF_Board_spacing/2" nsensors="10">
-                  <board nsensors="7"/>
-                  <board nsensors="3"/>
-                </row>
-                <row x_offset="EndcapTOF_Board_spacing/2" nsensors="7">
-                  <board nsensors="7"/>
-                </row>
-                <row x_offset="EndcapTOF_Board_spacing/2" nsensors="3">
-                  <board nsensors="3"/>
-                </row>
-        </sensor_layout_front_right>
 
-      <sensor_layout_back_left>
-                <row deadspace="25.5*mm + EndcapTOF_yOffset"/>
-                <row x_offset="EndcapTOF_Board_spacing/2" nsensors="3">
-                  <board nsensors="3"/>
-                </row>
-                <row x_offset="EndcapTOF_Board_spacing/2" nsensors="9">
-                  <board nsensors="6"/>
-                  <board nsensors="3"/>
-                </row>
-                <row x_offset="EndcapTOF_Board_spacing/2" nsensors="10">
-                  <board nsensors="7"/>
-                  <board nsensors="3"/>
-                </row>
-                <row x_offset="EndcapTOF_Board_spacing/2" nsensors="13">
-                  <board nsensors="7"/>
-                  <board nsensors="6"/>
-                </row>
-                <row x_offset="EndcapTOF_Board_spacing/2" nsensors="14">
-                  <board nsensors="7"/>
-                  <board nsensors="7"/>
-                </row>
-                <row x_offset="EndcapTOF_Board_spacing/2" nsensors="14">
-                  <board nsensors="7"/>
-                  <board nsensors="7"/>
-                </row>
-                <row x_offset="8.25*cm" nsensors="14">
-                  <board nsensors="7"/>
-                  <board nsensors="7"/>
-                </row>
-                <row x_offset="10.5*cm + 17*mm" nsensors="13">
-                  <board nsensors="7"/>
-                  <board nsensors="6"/>
-                </row>
-                <row x_offset="10.5*cm + 17*mm" nsensors="13">
-                  <board nsensors="7"/>
-                  <board nsensors="6"/>
-                </row>
-                <row x_offset="10.5*cm + 17*mm" nsensors="13">
-                  <board nsensors="7"/>
-                  <board nsensors="6"/>
-                </row>
-                <row x_offset="EndcapTOF_Board_spacing/2" nsensors="16">
-                  <board nsensors="7"/>
-                  <board nsensors="6"/>
-                  <board nsensors="3"/>
-                </row>
-                <row x_offset="EndcapTOF_Board_spacing/2" nsensors="14">
-                  <board nsensors="7"/>
-                  <board nsensors="7"/>
-                </row>
-                <row x_offset="EndcapTOF_Board_spacing/2" nsensors="14">
-                  <board nsensors="7"/>
-                  <board nsensors="7"/>
-                </row>
-                <row x_offset="EndcapTOF_Board_spacing/2" nsensors="13">
-                  <board nsensors="7"/>
-                  <board nsensors="6"/>
-                </row>
-                <row x_offset="EndcapTOF_Board_spacing/2" nsensors="10">
-                  <board nsensors="7"/>
-                  <board nsensors="3"/>
-                </row>
-                <row x_offset="EndcapTOF_Board_spacing/2" nsensors="7">
-                  <board nsensors="7"/>
-                </row>
-                <row x_offset="EndcapTOF_Board_spacing/2" nsensors="3">
-                  <board nsensors="3"/>
-                </row>
-        </sensor_layout_back_left>
 
-      <sensor_layout_back_right>
-                <row deadspace="15*mm + EndcapTOF_yOffset"/>
-                <row x_offset="EndcapTOF_Board_spacing/2" nsensors="3">
-                  <board nsensors="3"/>
-                </row>
-                <row x_offset="EndcapTOF_Board_spacing/2" nsensors="9">
-                  <board nsensors="6"/>
-                  <board nsensors="3"/>
-                </row>
-                <row x_offset="EndcapTOF_Board_spacing/2" nsensors="10">
-                  <board nsensors="7"/>
-                  <board nsensors="3"/>
-                </row>
-                <row x_offset="EndcapTOF_Board_spacing/2" nsensors="13">
-                  <board nsensors="7"/>
-                  <board nsensors="6"/>
-                </row>
-                <row x_offset="EndcapTOF_Board_spacing/2" nsensors="14">
-                  <board nsensors="7"/>
-                  <board nsensors="7"/>
-                </row>
-                <row x_offset="EndcapTOF_Board_spacing/2" nsensors="14">
-                  <board nsensors="7"/>
-                  <board nsensors="7"/>
-                </row>
-                <row x_offset="EndcapTOF_Board_spacing/2" nsensors="16">
-                  <board nsensors="7"/>
-                  <board nsensors="6"/>
-                  <board nsensors="3"/>
-                </row>
-                <row x_offset="10.5*cm + 17*mm" nsensors="13">
-                  <board nsensors="7"/>
-                  <board nsensors="6"/>
-                </row>
-                <row x_offset="10.5*cm + 17*mm" nsensors="13">
-                  <board nsensors="7"/>
-                  <board nsensors="6"/>
-                </row>
-                <row x_offset="10.5*cm + 17*mm" nsensors="13">
-                  <board nsensors="7"/>
-                  <board nsensors="6"/>
-                </row>
-                <row x_offset="EndcapTOF_Board_spacing/2" nsensors="16">
-                  <board nsensors="7"/>
-                  <board nsensors="6"/>
-                  <board nsensors="3"/>
-                </row>
-                <row x_offset="EndcapTOF_Board_spacing/2" nsensors="14">
-                  <board nsensors="7"/>
-                  <board nsensors="7"/>
-                </row>
-                <row x_offset="EndcapTOF_Board_spacing/2" nsensors="14">
-                  <board nsensors="7"/>
-                  <board nsensors="7"/>
-                </row>
-                <row x_offset="EndcapTOF_Board_spacing/2" nsensors="13">
-                  <board nsensors="7"/>
-                  <board nsensors="6"/>
-                </row>
-                <row x_offset="EndcapTOF_Board_spacing/2" nsensors="10">
-                  <board nsensors="7"/>
-                  <board nsensors="3"/>
-                </row>
-                <row x_offset="EndcapTOF_Board_spacing/2" nsensors="9">
-                  <board nsensors="6"/>
-                  <board nsensors="3"/>
-                </row>
-                <row x_offset="EndcapTOF_Board_spacing/2" nsensors="3">
-                  <board nsensors="3"/>
-                </row>
-      </sensor_layout_back_right>
 
       <modsize
           width="EndcapTOF_Module_width"
