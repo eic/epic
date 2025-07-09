@@ -48,7 +48,7 @@ static Ref_t create_detector(Detector& desc, xml_h e, SensitiveDetector sens) {
   double off         = pos.z();
 
   // Beamline rotation
-  xml_dim_t rot = x_det.rotation();
+  double out_theta = x_det.rotation().theta();
 
   // Beampipe thickness
   double wall = dd4hep::getAttrOrDefault<double>(x_det, _Unicode(wall), 1 * mm);
@@ -61,6 +61,7 @@ static Ref_t create_detector(Detector& desc, xml_h e, SensitiveDetector sens) {
   double BB_MaxX    = BB.xmax();
   double BB_MaxY    = BB.ymax();
   double BB_MaxZ    = BB.zmax();
+  double in_theta   = BB.theta();
 
   double BB_X = abs(BB_MaxX - BB_MinX);
   double BB_Y = abs(BB_MaxY - BB_MinY);
@@ -76,7 +77,7 @@ static Ref_t create_detector(Detector& desc, xml_h e, SensitiveDetector sens) {
   double Lumi_R     = EB.attr<double>(_Unicode(lumiR));
 
   // Maximum theta to exit the dipole from
-  double exitTheta = EB.attr<double>(_Unicode(maxTheta));
+  double maxTheta = EB.attr<double>(_Unicode(maxTheta));
 
   // Generic box for making intersection solid with
   double xbox = 10 * m;
@@ -117,9 +118,9 @@ static Ref_t create_detector(Detector& desc, xml_h e, SensitiveDetector sens) {
 
     // Theta coverage expected
     double thetamin =
-        dd4hep::getAttrOrDefault<double>(mod, _Unicode(theta_min), 0.030 * rad) - rot.theta();
+        dd4hep::getAttrOrDefault<double>(mod, _Unicode(theta_min), 0.030 * rad) - out_theta;
     double thetamax =
-        dd4hep::getAttrOrDefault<double>(mod, _Unicode(theta_max), 0.030 * rad) - rot.theta();
+        dd4hep::getAttrOrDefault<double>(mod, _Unicode(theta_max), 0.030 * rad) - out_theta;
 
     // Align box to max or minimum theta expected at the tagger from focal point
     bool max_align = dd4hep::getAttrOrDefault<bool>(mod, _Unicode(max_align), false);
@@ -223,33 +224,32 @@ static Ref_t create_detector(Detector& desc, xml_h e, SensitiveDetector sens) {
     // CutTube Lumi_Exit       (0,    Lumi_R,      ED_Z,        0,2*pi, sin(angle),0,cos(angle), 0,0,1);
 
     // Add entry boxes to main beamline volume
-    Wall_Box   = UnionSolid(Wall_Box, Entry_Beam_Box, Transform3D(RotationY(-rot.theta())));
-    Vacuum_Box = UnionSolid(Vacuum_Box, Entry_Vacuum_Box, Transform3D(RotationY(-rot.theta())));
-    Vacuum_Box = UnionSolid(Vacuum_Box, Lumi_Exit, Transform3D(RotationY(-rot.theta())));
+    Wall_Box   = UnionSolid(Wall_Box, Entry_Beam_Box, Transform3D(RotationY(-out_theta)));
+    Vacuum_Box = UnionSolid(Vacuum_Box, Entry_Vacuum_Box, Transform3D(RotationY(-out_theta)));
+    Vacuum_Box = UnionSolid(Vacuum_Box, Lumi_Exit, Transform3D(RotationY(-out_theta)));
   }
 
   //-----------------------------------------------------------------
-  // Restrict tagger boxes into region defined by exitTheta from the dipole magnet
+  // Restrict tagger boxes into region defined by maxTheta from the dipole magnet
   //-----------------------------------------------------------------
   double exitDist = BB_MinZ - off;
-  double cutX     = (ED_X - exitDist * tan(-rot.theta())) * cos(rot.theta());
-  double cutZ =
-      (ED_X - exitDist * tan(-rot.theta())) * sin(rot.theta()) + exitDist * cos(rot.theta());
-  double cutXwall = (ED_X - wall - exitDist * tan(-rot.theta())) * cos(rot.theta());
+  double cutX     = (ED_X - exitDist * tan(-out_theta)) * cos(out_theta);
+  double cutZ = (ED_X - exitDist * tan(-out_theta)) * sin(out_theta) + exitDist * cos(out_theta);
+  double cutXwall = (ED_X - wall - exitDist * tan(-out_theta)) * cos(out_theta);
   double cutZwall =
-      (ED_X - wall - exitDist * tan(-rot.theta())) * sin(rot.theta()) + exitDist * cos(rot.theta());
+      (ED_X - wall - exitDist * tan(-out_theta)) * sin(out_theta) + exitDist * cos(out_theta);
 
   Wall_Box = IntersectionSolid(Wall_Box, Cut_Box,
-                               Transform3D(RotationY(exitTheta), Position(xbox - cutX, 0, cutZ)));
+                               Transform3D(RotationY(maxTheta), Position(xbox - cutX, 0, cutZ)));
   Vacuum_Box =
       IntersectionSolid(Vacuum_Box, Cut_Box,
-                        Transform3D(RotationY(exitTheta), Position(xbox - cutXwall, 0, cutZwall)));
+                        Transform3D(RotationY(maxTheta), Position(xbox - cutXwall, 0, cutZwall)));
 
   //-----------------------------------------------------------------
   // Cut solids so they are only in the far backwards box
   //-----------------------------------------------------------------
-  RotationY rotate2(-rot.theta());
-  Position position(0, 0, (exitDist - BB_Z) / cos(rot.theta()));
+  RotationY rotate2(in_theta - out_theta);
+  Position position(0, 0, (exitDist - BB_Z) / cos(out_theta - in_theta));
 
   IntersectionSolid Wall_Box_Sub(Wall_Box, Far_Backwards_Box, Transform3D(rotate2, position));
   IntersectionSolid Vacuum_Box_Sub(Vacuum_Box, Far_Backwards_Box, Transform3D(rotate2, position));
@@ -271,7 +271,7 @@ static Ref_t create_detector(Detector& desc, xml_h e, SensitiveDetector sens) {
     backAssembly.placeVolume(DetAssemblyAir);
 
   // placement in mother volume
-  Transform3D tr(RotationY(rot.theta()), Position(pos.x(), pos.y(), pos.z()));
+  Transform3D tr(RotationY(out_theta), Position(pos.x(), pos.y(), pos.z()));
   PlacedVolume detPV = desc.pickMotherVolume(det).placeVolume(backAssembly, tr);
   detPV.addPhysVolID("system", detID);
 
