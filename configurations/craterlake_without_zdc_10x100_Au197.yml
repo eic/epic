@@ -33,6 +33,6 @@ features:
     backward:
     backward_endcap_flux:
   far_forward:
-    default_NO_ZDC:
+    default_without_zdc:
   far_backward:
     default:
