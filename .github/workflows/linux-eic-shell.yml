@@ -166,6 +166,7 @@ jobs:
         path: |
           scripts/material_map/*.json
           scripts/material_map/*.root
+          scripts/material_map/material-map.cbor
           scripts/material_map/Surfaces/
           scripts/material_map/Validation/
         if-no-files-found: error
