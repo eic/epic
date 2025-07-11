@@ -15,7 +15,7 @@
   <define>
     <documentation>
       #### Material Thickness
-    </documentation>    
+    </documentation>
     <!--<constant name="HcalEndcapN_LFHCAL_length"      value="134.54*cm"/>-->
     <constant name="HcalEndcapN_LFHCAL_length"      value="68.94*cm"/>
     <constant name="HcalEndcapN_AbsorberThickness"      value="1.52* cm"/>
@@ -87,7 +87,7 @@
 
       Currently don't have an implementation of electronics, so just leave that area (final 10 (VERIFY!) cm) empty
       So then, actual detector area is "HcalEndcapN_LFHCAL_length - LFHCALElectronicsThickness" long
-      
+
       Contains extra fowrward/backward and mounting plates
     </documentation>
     <detector
