@@ -14,7 +14,6 @@ def parse_gdml_vertices(gdml_file):
         x = position.attrib.get('x')
         y = position.attrib.get('y')
         z = position.attrib.get('z')
-#        print(str(x)+", "+str(y))
         vertices.append((x, y, z))
 
     return vertices

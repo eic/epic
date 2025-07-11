@@ -37,44 +37,37 @@ using namespace ROOT::Math;
 // Used to test the SVT OB geometry constructed using imported gdml files
 // draws circle of the OB radii to check correct placement of staves
 // https://github.com/eic/epic/tree/SVTOB_UK
-// Sam Henry 25 April 2025
+// updated Sam Henry 11 July 2025
 
 
 void read_edm4hep_SiBarrel(TString infile="TestHitMap.edm4hep.root") {
   
-  int nbins=100;
-  double maxR=500.; 
-  double binwidth = 2.0 * maxR / (double)nbins;
-
-  TH1* h0 = new TH1D("h0","Radius [mm]",nbins,0.0,maxR);
   TGraph* g1 = new TGraph();
 
   TFile* eicFile = new TFile(infile);
   TTree* eicTree = (TTree*)eicFile->Get("events");
-
   int Nevents = eicTree->GetEntries();
-
   TTreeReader tr(eicTree);
-
   TTreeReaderArray<Double_t> SiB_x(tr,"SiBarrelHits.position.x");
   TTreeReaderArray<Double_t> SiB_y(tr,"SiBarrelHits.position.y");
   TTreeReaderArray<Double_t> SiB_z(tr,"SiBarrelHits.position.z");
   int EventCount=0, Nhits=0, L3hits=0, L4hits=0;
   while (tr.Next()) {
-
     for(int i = 0; i < SiB_x.GetSize(); i++) {
-//    if(SiB_z[i]>0.0){
   	double R = sqrt(SiB_x[i]*SiB_x[i] + SiB_y[i]*SiB_y[i] );
   	double phi=atan(SiB_y[i]/SiB_x[i]);
-  // double R = SiB_y[i];
-         h0->Fill(R);
+	if (SiB_x[i] < 0) 
+  	    phi += TMath::Pi(); 
+  	if (phi < 0.0)
+  	    phi += 2.0*TMath::Pi();
+        if(R>300){
   //       g1->SetPoint(Nhits,SiB_x[i],SiB_y[i]);
 //         g1->SetPoint(Nhits,SiB_z[i],R);
-g1->SetPoint(Nhits,SiB_z[i],phi);
-         Nhits++;
+           g1->SetPoint(Nhits,SiB_z[i],phi);
+           Nhits++;
+        }
          if (R>300) L4hits++; else L3hits++;
          }
-  //  }
     EventCount++;
   }
   cout << "Events: " << Nevents << endl;
@@ -85,9 +78,6 @@ g1->SetPoint(Nhits,SiB_z[i],phi);
   TCanvas *c1 = new TCanvas("c1","hist",200,10,1400,1000);
   gStyle->SetOptStat(0);
 
-  h0->GetXaxis()->SetTitle("Radius");
-  h0->GetYaxis()->SetTitle("Hits");
-  //h0->Draw();
   g1->Draw("AP");
-//  c1->Print("Hist_SiBarrel.pdf");
+//  c1->Print("SiBarrel.pdf");
 }
