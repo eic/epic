@@ -6,8 +6,8 @@
 
   <info name="backward_LFHCAL_geo.xml"
         title="EPIC nHCal with LFHCAL geo"
-        author="@FriederikeBock"
-        url="https://github.com/FriederikeBock"
+        author="@lkosarz"
+        url="https://github.com/lkosarz"
         status="development"
         version="1.0"
   ><comment/></info>
