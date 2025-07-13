@@ -182,6 +182,7 @@
     <vis name="PFRICH_mirror_vis"  alpha="0.6" ref="AnlBlue" showDaughters="true" visible="true" />
     <vis name="PFRICH_service_vis"  ref="AnlTeal" showDaughters="true" visible="true" />
     <vis name="PFRICH_sensor_vis"  ref="AnlRed" showDaughters="true" visible="true" />
+    <vis name="FRICH_sensor_vis"  alpha="0.6" ref="AnlRed" showDaughters="true" visible="true" />
     
     <vis name="RICHServiceVis"  ref="AnlGray" showDaughters="true" visible="true" />
 
