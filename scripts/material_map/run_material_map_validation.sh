@@ -69,7 +69,7 @@ export PYTHONPATH=$PWD/Examples/Scripts/Python:$PYTHONPATH
 export ACTS_SEQUENCER_DISABLE_FPEMON=1
 
 # Default arguments
-nevents=10000
+nevents=1000
 nparticles=1000
 while [[ $# -gt 1 ]]
 do
