@@ -396,6 +396,8 @@ jobs:
     runs-on: ubuntu-latest
     if: github.actor != 'dependabot[bot]' && github.ref != 'refs/heads/main'
     needs: [check-overlap-tgeo, check-overlap-geant4-fast]
+    outputs:
+      json: ${{ steps.trigger.outputs.json }}
     steps:
     - uses: eic/trigger-gitlab-ci@v3
       id: trigger
@@ -700,3 +702,16 @@ jobs:
     - name: Deploy to GitHub Pages
       id: deployment
       uses: actions/deploy-pages@v4
+
+  cancel-container:
+    if: cancelled() || failure()
+    needs:
+    - trigger-container
+    - deploy-artifacts-page
+    runs-on: ubuntu-latest
+    steps:
+      - name: Cancel container
+        run: |
+          curl --request POST \
+             --header "PRIVATE-TOKEN: ${{ secrets.EICWEB_CONTAINER_CANCEL }}" \
+             https://eicweb.phy.anl.gov/api/v4/projects/290/pipelines/$(echo '${{ needs.trigger-container.outputs.json }}' | jq --raw-output .id)/cancel
