@@ -39,13 +39,13 @@ diff -aru a/Examples/Scripts/MaterialMapping/Mat_map.C b/Examples/Scripts/Materi
 --- a/Examples/Scripts/MaterialMapping/Mat_map.C
 +++ b/Examples/Scripts/MaterialMapping/Mat_map.C
 @@ -145,7 +145,8 @@
- 
+
      // 2D map for Validation input
      TCanvas *VM = new TCanvas("VM","Validation Map") ;
 -    Val_file->Draw("mat_y:mat_z","fabs(mat_x)<1");
 +    Val_file->Draw("sqrt(mat_x**2+mat_y**2):mat_z>>mat_map1","(mat_z>-5000)&(mat_z<8000)");
 +    VM->SetGrid();
- 
+
      eta_0->Draw("Same");
      eta_1p->Draw("Same");
 EOF
