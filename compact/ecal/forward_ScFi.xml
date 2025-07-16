@@ -67,7 +67,7 @@
       <slice name="PCB" material="Fr4" thickness="ForwardEcalPCBThickness" vis="AnlGreen"/>
       <slice name="LG" material="Plexiglass" thickness="ForwardEcalLightGuideThickness" vis="AnlBlue"/>
       <slice name="WScFi" material="AvgTungstenScFi" thickness="ForwardEcalScintillatorThickness" vis="AnlOrange" sensitive="true"/>
-      <slice name="MountingPlate" material="StainlessSteel" thickness="ForwardEcalMountingPlateThickness" vis="AnlGray"/>
+      <slice name="MountingPlate" material="StainlessSteelSAE304" thickness="ForwardEcalMountingPlateThickness" vis="AnlGray"/>
     </detector>
   </detectors>
 
