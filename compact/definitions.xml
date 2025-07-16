@@ -18,7 +18,7 @@
     <constant name="exp_hall_dz" value="5.5*m"/>
     <constant name="forward_x0" value="-1*m"/>
     <constant name="forward_dx" value="2*m"/>
-    <constant name="forward_dy" value="1*m"/>
+    <constant name="forward_dy" value="1.5*m"/>
     <constant name="forward_dz" value="25*m"/>
 
     <documentation>
