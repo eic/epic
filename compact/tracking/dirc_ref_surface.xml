@@ -1,0 +1,85 @@
+<!-- SPDX-License-Identifier: LGPL-3.0-or-later -->
+<!-- Copyright (C) 2022 Matt Posik, Wouter Deconinck -->
+
+<lccdd>
+<info name="mrwell_outerbarrel.xml"
+      title="Micro-Pattern Gas Detector Planar Barrel Layer"
+      author="mposik1983"
+      url="https://github.com/mposik1983"
+      status="development"
+      version="1.0"
+><comment/>
+</info>
+
+<define>
+    <comment> Module constants </comment>
+    <constant name="PID01RefModule_roverlap"                value="0*cm"/>
+    <constant name="PID01RefModule_zoverlap"                value="0"/>
+    <constant name="PID01RefModule_count"                   value="12" />
+    <constant name="PID01RefModule_allowed_space"           value="2.5*cm"/>
+
+    <constant name="PID01RefModule_rmin"                    value="75.5*cm"/>
+    <constant name="PID01RefModule_rmax"                    value="78.6*cm" />
+    <constant name="PID01RefModule_roffset"                 value="0.0*cm" />
+    <constant name="PID01RefModule_width"                   value="36.0*cm"/>
+    <constant name="PID01RefModule_zmin1"                   value="273.0*cm"/>
+    <constant name="PID01RefModule_zmin2"                   value="185.0*cm"/>
+
+    <constant name="PID01Ref_length"                        value="PID01RefModule_zmin1 + PID01RefModule_zmin2"/>
+    <constant name="PID01RefModule_length"                  value="0.5*(PID01RefModule_zmin1 + PID01RefModule_zmin2 + PID01RefModule_zoverlap)"/>
+    <constant name="PID01RefModule_offset"                  value="(PID01RefModule_zmin2 - PID01RefModule_zmin1)/2.0"/>
+    <constant name="PID01RefStrip_range"                    value="(PID01RefModule_length + PID01RefModule_width)/2.0*sqrt(2)"/>
+    <constant name="PID01Ref_thickness"                     value="0.01*mm"/>
+
+  </define>
+
+   <detectors>
+   <detector id="RefPID01_ID" name="PID01RefSurf" type="epic_RefPID01" readout="PID01RefHits" vis="TrackerVis">
+	   <!--  <type_flags type="DetType_TRACKER + DetType_BARREL"/>-->
+     <dimensions width="PID01RefModule_width" length="PID01RefModule_length" height="PIDRef01Module_allowed_space" />
+     <position x="0" y="0" z="PID01RefModule_offset" />
+
+    <comment> MPGD DIRC module components</comment>
+    <module name="PID01RefModule" vis="TrackerVis">
+
+        <module_component name="Bar"
+               material="Silicon"
+               sensitive="true"
+               width="PID01RefModule_width"
+               thickness="PID01Ref_thickness"
+               vis="TrackerMPGDGasVis"
+               length="PID01RefModule_length"/>
+
+   <comment> Frame width gets subtracted from the gas module volumes
+      see src/BarrelPlanarMPGDTracker_geo.cpp
+        </comment>
+
+</module>
+<comment> Layout for MPGD DIRC layers </comment>
+  <layer module="PID01RefModule" id="0" vis="TrackerSupportVis">
+          <envelope_tolerance r_min="0*mm" r_max="0*mm" z_min="0*mm" z_max="0*mm"/>
+    <layer_material surface="inner" binning="binPhi,binZ" bins0="PID01RefModule_count*10" bins1="100" />
+    <layer_material surface="outer" binning="binPhi,binZ" bins0="PID01RefModule_count*10" bins1="100" />
+    <rphi_layout
+          phi_tilt="0"
+          nphi="PID01RefModule_count"
+          phi0="0"
+          rc="0.5*(PID01RefModule_rmin + PID01RefModule_rmax)"
+          dr="0" />
+    <z_layout
+          dr = "PID01RefModule_roverlap"
+          z0 = "PID01RefModule_zoverlap"
+          nz = "2"/>
+   </layer>
+</detector>
+</detectors>
+
+
+  <readouts>
+    <readout name="PID01RefHits">
+        <segmentation type="CartesianGridXY" grid_size_x="3*mm"  grid_size_y="3*mm" />
+      <id>system:8,layer:4,module:12,sensor:2,x:32:-16,y:-16</id>
+    </readout>
+  </readouts>
+
+</lccdd>

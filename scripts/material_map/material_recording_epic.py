@@ -27,7 +27,6 @@ u = acts.UnitConstants
 
 _material_recording_executed = False
 
-
 def main():
 
     p = argparse.ArgumentParser()
@@ -67,7 +66,8 @@ def main():
     runMaterialRecording(
         detectorConstructionFactory=detectorConstructionFactory,
         tracksPerEvent=args.tracks,
-        outputDir=os.getcwd(),
+        outputDir="/gpfs02/eic/mposik/ePIC/material_maps/defaults/25_04_1/5k_events",
+        #outputDir=os.getcwd(),
         etaRange=(args.eta_min, args.eta_max),
         s=acts.examples.Sequencer(events=args.events, numThreads=1),
     ).run()

@@ -309,7 +309,7 @@
     <constant name="TrackerSupportDRICHCylSegment_length"        value="TrackerSupportDRICHCylSegment_zmax - TrackerSupportDRICHCylSegment_zmin" />
 
     <comment> Inner detector support cylinder </comment>
-    <constant name="InnerDetectorBarrelSupportCylCF_thickness"   value="1.0*cm" />
+    <constant name="InnerDetectorBarrelSupportCylCF_thickness"   value="1*cm" />
     <constant name="InnerDetectorBarrelSupportCylCF_zmin1"       value="DIRCBackward_zmax" />
     <constant name="InnerDetectorBarrelSupportCylCF_zmin2"       value="DIRCForward_zmax" />
     <constant name="InnerDetectorBarrelSupportCylCF_length"      value="InnerDetectorBarrelSupportCylCF_zmin1 + InnerDetectorBarrelSupportCylCF_zmin2" />

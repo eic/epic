@@ -32,7 +32,8 @@ if "__main__" == __name__:
     runGeometry(
         trackingGeometry,
         decorators,
-        outputDir=os.getcwd(),
+        outputDir="/gpfs02/eic/mposik/ePIC/material_maps/defaults/25_04_1/5k_events",
+        #outputDir=os.getcwd(),
         outputObj=False,
         outputCsv=False,
         outputJson=True,

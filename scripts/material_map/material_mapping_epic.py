@@ -51,8 +51,10 @@ if "__main__" == __name__:
     runMaterialMapping(
         trackingGeometry,
         decorators,
-        outputDir = os.getcwd(),
-        inputDir  = os.getcwd(),
+        #outputDir = os.getcwd(),
+        #inputDir  = os.getcwd(),
+        outputDir ="/gpfs02/eic/mposik/ePIC/material_maps/defaults/25_04_1/5k_events",
+        inputDir = "/gpfs02/eic/mposik/ePIC/material_maps/defaults/25_04_1/5k_events",
         readCachedSurfaceInformation=False,
         mapVolume= False,
         mapName  = mapName,

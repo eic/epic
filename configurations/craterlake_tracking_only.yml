@@ -14,7 +14,4 @@ features:
     silicon_disks:
     tof_barrel:
     tof_endcap:
-  far_forward:
-    default:
-  far_backward:
-    default:
+    dirc_ref_surface:

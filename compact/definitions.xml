@@ -142,6 +142,7 @@ The unused IDs below are saved for future use.
     <constant name="TrackerEndcapP_6_ID"          value="83"/>
     <constant name="TrackerSupport_0_ID"          value="84"/>
     <constant name="TrackerSupport_1_ID"          value="85"/>
+    <constant name="RefPID01_ID"                  value="86"/>
 
     <documentation>
     #### (86-99) Reserved IDs
@@ -432,7 +433,7 @@ Examples:
 
     </documentation>
 
-    <constant name="CentralTrackingRegion_rmax"   value="755.0*mm" />
+    <constant name="CentralTrackingRegion_rmax"   value="855.0*mm" />
     <constant name="CentralTrackingRegionP_zmax"  value="1800.0*mm" />
     <constant name="CentralTrackingRegionN_zmax"  value="1235.0*mm" />
     <constant name="CentralTrackingRegion_length" value="CentralTrackingRegionP_zmax + CentralTrackingRegionN_zmax" />

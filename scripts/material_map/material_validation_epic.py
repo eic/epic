@@ -56,6 +56,7 @@ if "__main__" == __name__:
 
     runMaterialValidation(args.nevents, args.ntracks,
         trackingGeometry, decorators, field,
-        outputDir=os.getcwd(), outputName=args.outputName,
+        outputDir="/gpfs02/eic/mposik/ePIC/material_maps/defaults/25_04_1/5k_events", outputName=args.outputName,
+        #outputDir=os.getcwd(), outputName=args.outputName,
         s=Sequencer(events=args.nevents, numThreads=-1)
     ).run()
