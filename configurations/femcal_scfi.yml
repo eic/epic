@@ -3,4 +3,4 @@ features:
   fields:
     marco:
   ecal:
-    forwardEcalScFi:
+    forward_scfi:

@@ -15,6 +15,6 @@ features:
     dirc:
     drich:
   ecal:
-    forwardEcal:
+    forward_averaged_homogenious:
   hcal:
     lfhcal_without_space_for_insert:
