@@ -1,6 +1,5 @@
-# This contains all geometry to be used in the material map
 ebeam: 5
-pbeam: 41
+pbeam: 41_Au197
 features:
   beampipe:
   tracking:
@@ -15,13 +14,25 @@ features:
     silicon_disks:
     tof_barrel:
     tof_endcap:
-  ecal:
-    bic_layer1_only:
   pid:
     dirc:
     pfrich:
     drich:
+  ecal:
+    forward_homogeneous:
+    forward_insert_homogeneous:
+    bic_default:
+    backward_PbWO4:
+  solenoid:
+  hcal:
+    lfhcal_with_space_for_insert:
+    forward_insert:
+    forward_endcap_flux:
+    barrel_flux_return:
+    barrel_gdml:
+    backward:
+    backward_endcap_flux:
   far_forward:
-    default:
+    default_no_zdc:
   far_backward:
     default:
