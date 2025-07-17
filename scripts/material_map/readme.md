@@ -12,7 +12,7 @@ pre-requiests:
 2. set up your ```$DETECTOR_PATH``` and install epic.
 
 to run:
-```./run_material_map_validation.sh --nevents 5000 --nparticles 1000 ```
+```./run_material_map_validation.sh --nevents 1000 --nparticles 5000 ```
 See comments for details.
 
 This takes about two hours, and >10GB disk space.
