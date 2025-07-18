@@ -11,7 +11,7 @@ if [[ -z ${DETECTOR_PATH} ]] ; then
 fi
 
 # Download required Acts files
-ACTS_VERSION="v36.3.2"
+ACTS_VERSION="v39.2.0"
 ACTS_URL="https://github.com/acts-project/acts/raw/"
 ACTS_FILES=(
   "Examples/Scripts/Python/geometry.py"
@@ -42,7 +42,7 @@ diff -aru a/Examples/Scripts/MaterialMapping/Mat_map.C b/Examples/Scripts/Materi
 
      // 2D map for Validation input
      TCanvas *VM = new TCanvas("VM","Validation Map") ;
--    Val_file->Draw("mat_y:mat_z","fabs(mat_x)<1");
+-    Val_file->Draw("mat_y:mat_z","std::abs(mat_x)<1");
 +    Val_file->Draw("sqrt(mat_x**2+mat_y**2):mat_z>>mat_map1","(mat_z>-5000)&(mat_z<8000)");
 +    VM->SetGrid();
 
