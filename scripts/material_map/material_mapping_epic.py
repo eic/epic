@@ -44,9 +44,10 @@ if "__main__" == __name__:
         print('ERROR(material_mapping_epic.py): please provide a material map file in .json or .cbor format')
         exit()
 
-    detector, trackingGeometry, decorators = epic.getDetector(
+    detector = epic.getDetector(
         args.xmlFile, args.geoFile)
-
+    trackingGeometry = detector.trackingGeometry()
+    decorators = detector.contextDecorators()
 
     runMaterialMapping(
         trackingGeometry,
