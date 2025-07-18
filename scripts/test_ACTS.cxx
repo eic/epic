@@ -30,19 +30,11 @@ void test_ACTS(const char* compact = "epic.xml") {
   acts_tracking_geometry->visitSurfaces([](const Acts::Surface* surface) {});
 
   // Export to obj+mtl and ply collections
-#if Acts_VERSION_MAJOR >= 37
   Acts::ViewConfig containerView{.color = {220, 220, 220}}; // alto
   Acts::ViewConfig volumeView{.color = {220, 220, 0}};      // barberry yellow
   Acts::ViewConfig sensitiveView{.color = {0, 180, 240}};   // picton blue
   Acts::ViewConfig passiveView{.color = {240, 180, 0}};     // lightning yellow
   Acts::ViewConfig gridView{.color = {220, 0, 0}};          // scarlet red
-#else
-  Acts::ViewConfig containerView{{220, 220, 220}}; // alto
-  Acts::ViewConfig volumeView{{220, 220, 0}};      // barberry yellow
-  Acts::ViewConfig sensitiveView{{0, 180, 240}};   // picton blue
-  Acts::ViewConfig passiveView{{240, 180, 0}};     // lightning yellow
-  Acts::ViewConfig gridView{{220, 0, 0}};          // scarlet red
-#endif
   Acts::GeometryContext trackingGeoCtx;
   const Acts::TrackingVolume* world = acts_tracking_geometry->highestTrackingVolume();
   // Export to obj+mtl
