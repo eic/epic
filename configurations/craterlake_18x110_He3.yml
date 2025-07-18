@@ -25,7 +25,7 @@ features:
     backward_PbWO4:
   solenoid:
   hcal:
-    lfhcal_with_space_for_insert:
+    lfhcal:
     forward_insert:
     barrel_gdml:
     barrel_flux_return:

@@ -18,4 +18,4 @@ features:
     forward_homogeneous:
     forward_insert_homogeneous:
   hcal:
-    lfhcal_without_space_for_insert:
+    lfhcal:
