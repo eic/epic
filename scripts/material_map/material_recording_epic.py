@@ -18,7 +18,6 @@ from acts.examples import (
 
 import acts.examples.dd4hep
 import acts.examples.geant4
-import acts.examples.geant4.dd4hep
 
 import epic
 from material_recording import runMaterialRecording
@@ -57,15 +56,11 @@ def main():
     )
     args = p.parse_args()
 
-    detector, trackingGeometry, decorators = epic.getDetector(
+    detector = epic.getDetector(
         args.xmlFile)
 
-    detectorConstructionFactory = (
-        acts.examples.geant4.dd4hep.DDG4DetectorConstructionFactory(detector)
-    )
-
     runMaterialRecording(
-        detectorConstructionFactory=detectorConstructionFactory,
+        detector=detector,
         tracksPerEvent=args.tracks,
         outputDir=os.getcwd(),
         etaRange=(args.eta_min, args.eta_max),
