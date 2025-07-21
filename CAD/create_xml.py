@@ -199,7 +199,7 @@ def scan_and_place(folder_path, search_string, xml_file, my_dict, stave_name):
         for file in files:
             if file.endswith(".gdml") and search_string in file:
                 # Get the relative path and add to the list
-                full_path = os.path.join(root, file)
+                full_path = os.path.join(os.path.abspath(root), file)
                 global file_count_global
                 xml_file.write(module_component(full_path, file, my_dict, file_count_global, stave_name))     
                 file_count_global += 1
