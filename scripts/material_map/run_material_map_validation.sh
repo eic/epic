@@ -71,6 +71,18 @@ export ACTS_SEQUENCER_DISABLE_FPEMON=1
 # Default arguments
 nevents=1000
 nparticles=5000
+
+function print_the_help {
+  echo "USAGE:    [--nevents <int>] [--nparticles <int>]"
+  echo "OPTIONAL ARGUMENTS:"
+  echo "          --nevents       Number of events (default: $nevents)"
+  echo "          --nparticles    Number of particles per event (default: $nparticles)"
+  echo "          -h,--help     Print this message"
+  echo ""
+  echo "  Run material map validation."
+  exit
+}
+
 while [[ $# -gt 1 ]]
 do
   key="$1"
