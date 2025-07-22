@@ -17,5 +17,5 @@ features:
   ecal:
     forward_averaged_homogenious:
   hcal:
-    lfhcal_with_space_for_insert:
+    lfhcal:
     forward_insert:
