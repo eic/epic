@@ -1,0 +1,8 @@
+features:
+  fields:
+    marco:
+  ecal:
+    forward_averaged_homogenious:
+  hcal:
+    lfhcal_with_space_for_insert:
+    forward_insert:
