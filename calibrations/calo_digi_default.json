@@ -1,0 +1,66 @@
+{
+  "ecal_neg_endcap": {
+    "readout": "module",
+    "dynamicRange": "20*GeV",
+    "capacityBitsADC": 14,
+    "pedestalMean": 100,
+    "pedestalSigma": 1,
+    "thresholdValue": 3
+  },
+  "hcal_neg_endcap": {
+    "readout": "tile",
+    "dynamicRange": "20*MeV",
+    "capacityBitsADC": 8,
+    "pedestalMean": 20,
+    "pedestalSigma": 0.3,
+    "thresholdValue": 1
+  },
+  "ecal_pos_endcap": {
+    "readout": "module",
+    "dynamicRange": "3*GeV",
+    "capacityBitsADC": 14,
+    "pedestalMean": 100,
+    "pedestalSigma": 0.7,
+    "thresholdValue": 2
+  },
+  "hcal_pos_endcap": {
+    "readout": "tile",
+    "dynamicRange": "3.6*GeV",
+    "capacityBitsADC": 10,
+    "pedestalMean": 20,
+    "pedestalSigma": 0.8,
+    "thresholdValue": 3
+  },
+  "hcal_pos_endcap_insert": {
+    "readout": "tile",
+    "dynamicRange": "200*MeV",
+    "capacityBitsADC": 15,
+    "pedestalMean": 400,
+    "pedestalSigma": 10,
+    "thresholdValue": 0
+  },
+  "ecal_barrel_imaging": {
+    "readout": "pixel",
+    "dynamicRange": "3*MeV",
+    "capacityBitsADC": 13,
+    "pedestalMean": 100,
+    "pedestalSigma": 14,
+    "thresholdValue": 50
+  },
+  "ecal_barrel_scfi": {
+    "readout": "light_guide",
+    "dynamicRange": "750*MeV",
+    "capacityBitsADC": 14,
+    "pedestalMean": 20,
+    "pedestalSigma": 0.3,
+    "thresholdValue": 1
+  },
+  "hcal_barrel": {
+    "readout": "tile",
+    "dynamicRange": "20*MeV",
+    "capacityBitsADC": 8,
+    "pedestalMean": 20,
+    "pedestalSigma": 0.3,
+    "thresholdValue": 1
+  }
+}

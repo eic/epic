@@ -1,0 +1,9 @@
+{
+  "electron": {
+    "particle_name": "electron",
+    "sampling_fraction": 0.10856976476514045,
+    "sampling_fraction_img": 0.00595078393326404,
+    "sampling_fraction_scfi": 0.10262666247845109,
+    "thrown_energy": 4.975791477972636
+  }
+}
