@@ -28,7 +28,7 @@
     <comment> Global Si endcap variables </comment>
     <constant name="SiTrackerEndcapMod_thickness"   value="SiTrackerEndcapCF_thickness + SiTrackerEndcapAl_thickness + SiTrackerSensor_thickness" />
     <constant name="SiTrackerEndcapMod_angle"       value="360.0*degree / SiTrackerEndcapMod_count * (1 + SiTrackerEndcapMod_overlap)" />
-    <constant name="SiTrackerEndcapLayer_thickness" value="SiTrackerEndcapMod_thickness + 2 * SiTrackerEndcapMod_dz + 1*um" />
+    <constant name="SiTrackerEndcapLayer_thickness" value="SiTrackerEndcapMod_thickness + 2 * SiTrackerEndcapMod_dz" />
 
     <comment> Acts envelope buffer distances </comment>
     <constant name="SiTrackerEndcap_envelope_rmin_delta" value="1*mm"/>
@@ -46,8 +46,8 @@
     <constant name="InnerTrackerEndcapPMod1_x1"     value="2 * InnerTrackerEndcapPMod1_rmin * tan(SiTrackerEndcapMod_angle/2)" />
     <constant name="InnerTrackerEndcapPMod1_x2"     value="2 * InnerTrackerEndcapPMod1_rmax * sin(SiTrackerEndcapMod_angle/2)" />
     <constant name="InnerTrackerEndcapPMod1_y"      value="InnerTrackerEndcapPMod1_rmax * cos(SiTrackerEndcapMod_angle/2) - InnerTrackerEndcapPMod1_rmin" />
-    <constant name="InnerTrackerEndcapPLayer1_rmin" value="InnerTrackerEndcapPMod1_rmin - 1*um" />
-    <constant name="InnerTrackerEndcapPLayer1_rmax" value="InnerTrackerEndcapPMod1_rmax + 1*um" />
+    <constant name="InnerTrackerEndcapPLayer1_rmin" value="InnerTrackerEndcapPMod1_rmin" />
+    <constant name="InnerTrackerEndcapPLayer1_rmax" value="InnerTrackerEndcapPMod1_rmax" />
     <constant name="InnerTrackerEndcapPLayer1_zmin" value="InnerTrackerEndcapPMod1_zmin - SiTrackerEndcapLayer_thickness/2" />
 
     <constant name="InnerTrackerEndcapNMod1_zmin"   value="InnerTrackerEndcapN_zmin" />
@@ -56,8 +56,8 @@
     <constant name="InnerTrackerEndcapNMod1_x1"     value="2 * InnerTrackerEndcapNMod1_rmin * tan(SiTrackerEndcapMod_angle/2)" />
     <constant name="InnerTrackerEndcapNMod1_x2"     value="2 * InnerTrackerEndcapNMod1_rmax * sin(SiTrackerEndcapMod_angle/2)" />
     <constant name="InnerTrackerEndcapNMod1_y"      value="InnerTrackerEndcapNMod1_rmax * cos(SiTrackerEndcapMod_angle/2) - InnerTrackerEndcapNMod1_rmin" />
-    <constant name="InnerTrackerEndcapNLayer1_rmin" value="InnerTrackerEndcapNMod1_rmin - 1*um" />
-    <constant name="InnerTrackerEndcapNLayer1_rmax" value="InnerTrackerEndcapNMod1_rmax + 1*um" />
+    <constant name="InnerTrackerEndcapNLayer1_rmin" value="InnerTrackerEndcapNMod1_rmin" />
+    <constant name="InnerTrackerEndcapNLayer1_rmax" value="InnerTrackerEndcapNMod1_rmax" />
     <constant name="InnerTrackerEndcapNLayer1_zmin" value="InnerTrackerEndcapNMod1_zmin - SiTrackerEndcapLayer_thickness/2" />
   </define>
   <detectors>
@@ -134,8 +134,8 @@
     <constant name="TrackerEndcapPMod1_x1"     value="2 * TrackerEndcapPMod1_rmin * tan(SiTrackerEndcapMod_angle/2)" />
     <constant name="TrackerEndcapPMod1_x2"     value="2 * TrackerEndcapPMod1_rmax * sin(SiTrackerEndcapMod_angle/2)" />
     <constant name="TrackerEndcapPMod1_y"      value="TrackerEndcapPMod1_rmax * cos(SiTrackerEndcapMod_angle/2) - TrackerEndcapPMod1_rmin" />
-    <constant name="TrackerEndcapPLayer1_rmin" value="TrackerEndcapPMod1_rmin - 1*um" />
-    <constant name="TrackerEndcapPLayer1_rmax" value="TrackerEndcapPMod1_rmax + 1*um" />
+    <constant name="TrackerEndcapPLayer1_rmin" value="TrackerEndcapPMod1_rmin" />
+    <constant name="TrackerEndcapPLayer1_rmax" value="TrackerEndcapPMod1_rmax" />
     <constant name="TrackerEndcapPLayer1_zmin" value="TrackerEndcapPMod1_zmin - SiTrackerEndcapLayer_thickness/2" />
     <constant name="TrackerEndcapPMod2_zmin"   value="TrackerEndcapPDisk2_zmin" />
     <constant name="TrackerEndcapPMod2_rmin"   value="TrackerEndcapPDisk2_rmin" />
@@ -143,8 +143,8 @@
     <constant name="TrackerEndcapPMod2_x1"     value="2 * TrackerEndcapPMod2_rmin * tan(SiTrackerEndcapMod_angle/2)" />
     <constant name="TrackerEndcapPMod2_x2"     value="2 * TrackerEndcapPMod2_rmax * sin(SiTrackerEndcapMod_angle/2)" />
     <constant name="TrackerEndcapPMod2_y"      value="TrackerEndcapPMod2_rmax * cos(SiTrackerEndcapMod_angle/2) - TrackerEndcapPMod2_rmin" />
-    <constant name="TrackerEndcapPLayer2_rmin" value="TrackerEndcapPMod2_rmin - 1*um" />
-    <constant name="TrackerEndcapPLayer2_rmax" value="TrackerEndcapPMod2_rmax + 1*um" />
+    <constant name="TrackerEndcapPLayer2_rmin" value="TrackerEndcapPMod2_rmin" />
+    <constant name="TrackerEndcapPLayer2_rmax" value="TrackerEndcapPMod2_rmax" />
     <constant name="TrackerEndcapPLayer2_zmin" value="TrackerEndcapPMod2_zmin - SiTrackerEndcapLayer_thickness/2" />
     <constant name="TrackerEndcapPMod3_zmin"   value="TrackerEndcapPDisk3_zmin" />
     <constant name="TrackerEndcapPMod3_rmin"   value="TrackerEndcapPDisk3_rmin" />
@@ -152,8 +152,8 @@
     <constant name="TrackerEndcapPMod3_x1"     value="2 * TrackerEndcapPMod3_rmin * tan(SiTrackerEndcapMod_angle/2)" />
     <constant name="TrackerEndcapPMod3_x2"     value="2 * TrackerEndcapPMod3_rmax * sin(SiTrackerEndcapMod_angle/2)" />
     <constant name="TrackerEndcapPMod3_y"      value="TrackerEndcapPMod3_rmax * cos(SiTrackerEndcapMod_angle/2) - TrackerEndcapPMod3_rmin" />
-    <constant name="TrackerEndcapPLayer3_rmin" value="TrackerEndcapPMod3_rmin - 1*um" />
-    <constant name="TrackerEndcapPLayer3_rmax" value="TrackerEndcapPMod3_rmax + 1*um" />
+    <constant name="TrackerEndcapPLayer3_rmin" value="TrackerEndcapPMod3_rmin" />
+    <constant name="TrackerEndcapPLayer3_rmax" value="TrackerEndcapPMod3_rmax" />
     <constant name="TrackerEndcapPLayer3_zmin" value="TrackerEndcapPMod3_zmin - SiTrackerEndcapLayer_thickness/2" />
     <constant name="TrackerEndcapPMod4_zmin"   value="TrackerEndcapPDisk4_zmin" />
     <constant name="TrackerEndcapPMod4_rmin"   value="TrackerEndcapPDisk4_rmin" />
@@ -161,8 +161,8 @@
     <constant name="TrackerEndcapPMod4_x1"     value="2 * TrackerEndcapPMod4_rmin * tan(SiTrackerEndcapMod_angle/2)" />
     <constant name="TrackerEndcapPMod4_x2"     value="2 * TrackerEndcapPMod4_rmax * sin(SiTrackerEndcapMod_angle/2)" />
     <constant name="TrackerEndcapPMod4_y"      value="TrackerEndcapPMod4_rmax * cos(SiTrackerEndcapMod_angle/2) - TrackerEndcapPMod4_rmin" />
-    <constant name="TrackerEndcapPLayer4_rmin" value="TrackerEndcapPMod4_rmin - 1*um" />
-    <constant name="TrackerEndcapPLayer4_rmax" value="TrackerEndcapPMod4_rmax + 1*um" />
+    <constant name="TrackerEndcapPLayer4_rmin" value="TrackerEndcapPMod4_rmin" />
+    <constant name="TrackerEndcapPLayer4_rmax" value="TrackerEndcapPMod4_rmax" />
     <constant name="TrackerEndcapPLayer4_zmin" value="TrackerEndcapPMod4_zmin - SiTrackerEndcapLayer_thickness/2" />
 
     <constant name="TrackerEndcapNMod1_zmin"   value="TrackerEndcapNDisk1_zmin" />
@@ -171,8 +171,8 @@
     <constant name="TrackerEndcapNMod1_x1"     value="2 * TrackerEndcapNMod1_rmin * tan(SiTrackerEndcapMod_angle/2)" />
     <constant name="TrackerEndcapNMod1_x2"     value="2 * TrackerEndcapNMod1_rmax * sin(SiTrackerEndcapMod_angle/2)" />
     <constant name="TrackerEndcapNMod1_y"      value="TrackerEndcapNMod1_rmax * cos(SiTrackerEndcapMod_angle/2) - TrackerEndcapNMod1_rmin" />
-    <constant name="TrackerEndcapNLayer1_rmin" value="TrackerEndcapNMod1_rmin - 1*um" />
-    <constant name="TrackerEndcapNLayer1_rmax" value="TrackerEndcapNMod1_rmax + 1*um" />
+    <constant name="TrackerEndcapNLayer1_rmin" value="TrackerEndcapNMod1_rmin" />
+    <constant name="TrackerEndcapNLayer1_rmax" value="TrackerEndcapNMod1_rmax" />
     <constant name="TrackerEndcapNLayer1_zmin" value="TrackerEndcapNMod1_zmin - SiTrackerEndcapLayer_thickness/2" />
     <constant name="TrackerEndcapNMod2_zmin"   value="TrackerEndcapNDisk2_zmin" />
     <constant name="TrackerEndcapNMod2_rmin"   value="TrackerEndcapNDisk2_rmin" />
@@ -180,8 +180,8 @@
     <constant name="TrackerEndcapNMod2_x1"     value="2 * TrackerEndcapNMod2_rmin * tan(SiTrackerEndcapMod_angle/2)" />
     <constant name="TrackerEndcapNMod2_x2"     value="2 * TrackerEndcapNMod2_rmax * sin(SiTrackerEndcapMod_angle/2)" />
     <constant name="TrackerEndcapNMod2_y"      value="TrackerEndcapNMod2_rmax * cos(SiTrackerEndcapMod_angle/2) - TrackerEndcapNMod2_rmin" />
-    <constant name="TrackerEndcapNLayer2_rmin" value="TrackerEndcapNMod2_rmin - 1*um" />
-    <constant name="TrackerEndcapNLayer2_rmax" value="TrackerEndcapNMod2_rmax + 1*um" />
+    <constant name="TrackerEndcapNLayer2_rmin" value="TrackerEndcapNMod2_rmin" />
+    <constant name="TrackerEndcapNLayer2_rmax" value="TrackerEndcapNMod2_rmax" />
     <constant name="TrackerEndcapNLayer2_zmin" value="TrackerEndcapNMod2_zmin - SiTrackerEndcapLayer_thickness/2" />
     <constant name="TrackerEndcapNMod3_zmin"   value="TrackerEndcapNDisk3_zmin" />
     <constant name="TrackerEndcapNMod3_rmin"   value="TrackerEndcapNDisk3_rmin" />
@@ -189,8 +189,8 @@
     <constant name="TrackerEndcapNMod3_x1"     value="2 * TrackerEndcapNMod3_rmin * tan(SiTrackerEndcapMod_angle/2)" />
     <constant name="TrackerEndcapNMod3_x2"     value="2 * TrackerEndcapNMod3_rmax * sin(SiTrackerEndcapMod_angle/2)" />
     <constant name="TrackerEndcapNMod3_y"      value="TrackerEndcapNMod3_rmax * cos(SiTrackerEndcapMod_angle/2) - TrackerEndcapNMod3_rmin" />
-    <constant name="TrackerEndcapNLayer3_rmin" value="TrackerEndcapNMod3_rmin - 1*um" />
-    <constant name="TrackerEndcapNLayer3_rmax" value="TrackerEndcapNMod3_rmax + 1*um" />
+    <constant name="TrackerEndcapNLayer3_rmin" value="TrackerEndcapNMod3_rmin" />
+    <constant name="TrackerEndcapNLayer3_rmax" value="TrackerEndcapNMod3_rmax" />
     <constant name="TrackerEndcapNLayer3_zmin" value="TrackerEndcapNMod3_zmin - SiTrackerEndcapLayer_thickness/2" />
     <commnet> symmetric N and P disks (5 each)</commnet>
     <constant name="TrackerEndcapNMod4_zmin"   value="TrackerEndcapNDisk4_zmin" />
@@ -199,8 +199,8 @@
     <constant name="TrackerEndcapNMod4_x1"     value="2 * TrackerEndcapNMod4_rmin * tan(SiTrackerEndcapMod_angle/2)" />
     <constant name="TrackerEndcapNMod4_x2"     value="2 * TrackerEndcapNMod4_rmax * sin(SiTrackerEndcapMod_angle/2)" />
     <constant name="TrackerEndcapNMod4_y"      value="TrackerEndcapNMod4_rmax * cos(SiTrackerEndcapMod_angle/2) - TrackerEndcapNMod4_rmin" />
-    <constant name="TrackerEndcapNLayer4_rmin" value="TrackerEndcapNMod4_rmin - 1*um" />
-    <constant name="TrackerEndcapNLayer4_rmax" value="TrackerEndcapNMod4_rmax + 1*um" />
+    <constant name="TrackerEndcapNLayer4_rmin" value="TrackerEndcapNMod4_rmin" />
+    <constant name="TrackerEndcapNLayer4_rmax" value="TrackerEndcapNMod4_rmax" />
     <constant name="TrackerEndcapNLayer4_zmin" value="TrackerEndcapNMod4_zmin - SiTrackerEndcapLayer_thickness/2" />
 
   </define>
