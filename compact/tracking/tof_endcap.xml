@@ -107,8 +107,8 @@
     <constant name="ForwardTOFMod_rmax"         value="ForwardTOFRegion_maxR" />
     <constant name="ForwardTOFMod1_zmin"        value="ForwardTOF_zmin" />
     <constant name="ForwardTOFMod2_zmin"        value="ForwardTOF_zmin + ForwardTOFMod_offset" />
-    <constant name="ForwardTOFLayer_rmin"       value="ForwardTOFMod_rmin - 1*um" />
-    <constant name="ForwardTOFLayer_rmax"       value="ForwardTOFMod_rmax + 1*um" />
+    <constant name="ForwardTOFLayer_rmin"       value="ForwardTOFMod_rmin" />
+    <constant name="ForwardTOFLayer_rmax"       value="ForwardTOFMod_rmax" />
     <constant name="ForwardTOFLayer1_zmin"      value="ForwardTOFMod1_zmin - TOFEndcapLayer_thickness / 2" />
     <constant name="ForwardTOFLayer2_zmin"      value="ForwardTOFMod2_zmin - TOFEndcapLayer_thickness / 2" />
 
