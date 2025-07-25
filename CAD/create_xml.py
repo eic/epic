@@ -6,24 +6,25 @@ import sys
 HEADER = '''
 <lccdd>
   <define>
-  
+
     <constant name="SiBarrelMod1_rmin"             value="SiBarrel1_rmin - 1*mm"/> # 269mm
     <constant name="SiBarrelMod2_rmin"             value="SiBarrel2_rmin + 1*mm"/> # 421mm
      <constant name="SiBarrelMod_angle"             value="SiBarrel_angle"/>
     <constant name="SiBarrelMod_dz"                value="SiBarrel_dz"/>
 
-    <constant name="SiBarrelMod1_length"        value="2 * SiBarrelMod1_rmin / tan(SiBarrelMod_angle) - SiBarrel_dz"/>
-    <constant name="SiBarrelMod2_length"        value="84*cm"/>
+    <constant name="SiBarrelMod1_length"        value="59.4*cm"/>
+    <constant name="SiBarrelMod2_length"        value="95.4*cm"/>
 
     <constant name="SiBarrelLayer1_length"      value="SiBarrelMod1_length + 1*um"/>
     <constant name="SiBarrelLayer2_length"      value="SiBarrelMod2_length + 1*um"/>
-    <constant name="SiBarrelEnvelope_length"    value="SiBarrelLayer2_length + 1*um" />
-
+    
+    <constant name="SiBarrelEnvelope_length"    value="SiBarrelLayer2_length + 1*um" /> 
     <constant name="SiBarrelLayer_thickness"    value="3.0*cm"/>		
-    <constant name="SiBarrelLayer1_rmin"        value="SiBarrelMod1_rmin "/>
-    <constant name="SiBarrelLayer1_rmax"        value="SiBarrelLayer1_rmin + SiBarrelLayer_thickness"/>
-    <constant name="SiBarrelLayer2_rmin"        value="SiBarrelMod2_rmin "/>
-    <constant name="SiBarrelLayer2_rmax"        value="SiBarrelLayer2_rmin + SiBarrelLayer_thickness"/>
+    
+    <constant name="SiBarrelLayer1_rmin"        value="SiBarrelMod1_rmin -4.3*mm"/>
+    <constant name="SiBarrelLayer1_rmax"        value="SiBarrelLayer1_rmin + 3.26*cm"/>
+    <constant name="SiBarrelLayer2_rmin"        value="SiBarrelMod2_rmin -4.3*mm "/>
+    <constant name="SiBarrelLayer2_rmax"        value="SiBarrelLayer2_rmin + 3.26*cm"/>
 
     <constant name="SiBarrelStaveTilt_angle"     value="0.0*degree"/>
     
@@ -40,10 +41,6 @@ HEADER = '''
       readout="SiBarrelHits"
       insideTrackingVolume="true">
       <type_flags type="DetType_TRACKER + DetType_BARREL"/>
-      <dimensions
-        rmin="SiBarrelLayer1_rmin"
-        rmax="SiBarrelLayer1_rmax"
-        length="SiBarrelLayer1_length" />
       <comment>Silicon Barrel Modules</comment>
       <!-- L3 Stave -->
       <module name="L3Module0" vis="TrackerLayerVis">
@@ -68,9 +65,9 @@ MIDDLE = '''
       <comment> Layers composed of many arrayed modules  </comment>
       <layer module="L3Module" id="1" vis="TrackerLayerVis">
         <barrel_envelope
-          inner_r="SiBarrelLayer1_rmin-10.0*mm"
+          inner_r="SiBarrelLayer1_rmin"
           outer_r="SiBarrelLayer1_rmax"
-          z_length="SiBarrelLayer1_length + 50*mm" />
+          z_length="SiBarrelLayer1_length" />
         <layer_material surface="inner" binning="binPhi,binZ" bins0="46" bins1="100" />
         <layer_material surface="outer" binning="binPhi,binZ" bins0="46" bins1="100" />
         <comment>
@@ -97,10 +94,6 @@ MIDDLE = '''
       readout="SiBarrelHits"
       insideTrackingVolume="true">
       <type_flags type="DetType_TRACKER + DetType_BARREL"/>
-      <dimensions
-        rmin="SiBarrelLayer2_rmin"
-        rmax="SiBarrelLayer2_rmax"
-        length="SiBarrelLayer2_length" />
       <comment>Silicon Barrel Modules</comment>
       <comment> L4 Stave </comment>
       <module name="L4Module0" vis="TrackerLayerVis">
@@ -112,7 +105,7 @@ FOOTER = '''
       <comment> Layers composed of many arrayed modules  </comment>
       <layer module="L4Module" id="1" vis="TrackerLayerVis">
         <barrel_envelope
-          inner_r="SiBarrelLayer2_rmin-10.0*mm"
+          inner_r="SiBarrelLayer2_rmin"
           outer_r="SiBarrelLayer2_rmax"
           z_length="SiBarrelLayer2_length + 50*mm" />
         <layer_material surface="inner" binning="binPhi,binZ" bins0="128" bins1="100" />

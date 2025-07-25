@@ -75,7 +75,7 @@
     <constant name="InnerTrackerEndcapP_rmax"        value="24.0*cm" />
     <constant name="TrackerEndcapPDisk1_zmin"        value="45.0*cm" />
     <constant name="TrackerEndcapPDisk1_rmin"        value="Beampipe_rmax + Beampipe_bakeout_buffer" />
-    <constant name="TrackerEndcapPDisk1_rmax"        value="TrackerEndcapDisk_rmax - 15*mm" />
+    <constant name="TrackerEndcapPDisk1_rmax"        value="TrackerEndcapDisk_rmax - 15.4*mm" />
     <constant name="TrackerEndcapPDisk2_zmin"        value="70.0*cm" />
     <constant name="TrackerEndcapPDisk2_rmin"        value="32.86*mm + Beampipe_bakeout_buffer + 0.6*mm" />
     <constant name="TrackerEndcapPDisk2_rmax"        value="TrackerEndcapDisk_rmax * .98" />

@@ -17,6 +17,9 @@ ofstream outputFile;
 int level = 0;
 TGraph* g1 = new TGraph();
 int np=0;
+double L3min=500, L3max=0, L4min=500, L4max=0;
+double L3Zmin=500, L3Zmax=-500, L4Zmin=500, L4Zmax=-500;
+
 
    // Function to recursively extract vertices from a node
    void extractVertices(TGeoNode* node, TGeoHMatrix parentMatrix) {
@@ -52,6 +55,16 @@ int np=0;
 //               g1->SetPoint(np,global[2], r);
                g1->SetPoint(np,global[0], global[1]);
                np++;
+               if (r>L4max) L4max=r;
+               if(r<L4min && r>35) L4min=r;
+               if(r<L3min) L3min=r;
+               if(r>L3max && r<35) L3max=r;
+               double z=global[2];
+               if (z>L4Zmax && r>35) L4Zmax=z;
+               if(z<L4Zmin && r>35) L4Zmin=z;
+               if(z<L3Zmin && r<35) L3Zmin=z;
+               if(z>L3Zmax && r<35) L3Zmax=z;
+
             }
         }
         // Recursively process child nodes
@@ -98,6 +111,15 @@ circle4->SetFillStyle(0); // Transparent fill
     circle4->Draw();
 
    c1->Update();
+   cout << "L3 minimum radius: " << L3min << " = 26.9 - " << 26.9-L3min << endl;
+   cout << "L3 maximum radius: " << L3max << " = 26.9 + " << L3max-26.9 << endl;
+   cout << "L4 minimum radius: " << L4min << " = 42.1 - " << 42.1-L4min << endl;
+   cout << "L4 maximum radius: " << L4max << " = 42.1 + " << L4max-42.1 << endl;
+   cout << "L3 minimum Z: " << L3Zmin  << " -> length " << 2.0*abs(L3Zmin) << endl;
+   cout << "L3 maximum Z: " << L3Zmax << " -> length " << 2.0*L3Zmax << endl;
+   cout << "L4 minimum Z: " << L4Zmin <<" -> length " << 2.0*abs(L4Zmin)<<  endl;
+   cout << "L4 maximum Z: " << L4Zmax<< " -> length " << 2.0*L4Zmax  << endl;
+   
 }
 
 
