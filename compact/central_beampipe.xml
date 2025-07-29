@@ -7,10 +7,17 @@
   </display>
 
   <detectors>
-
     <detector id="BeamPipe_ID" name="BeamPipe" type="IP6BeamPipe" vis_wall="AnlBlue" vis_coating="AnlRed" vis_IPwall="AnlGreen" vis_IPcoating="AnlOrange">
       <type_flags type="DetType_TRACKER + DetType_BEAMPIPE" />
       <beampipe/>
+
+      <sens_pipe wall_thickness="1 * um">
+   	  <zplane z="-170.0 * cm" ID="114 * mm"/>
+   	  <zplane z=" -74.8 * cm" ID=" 70 * mm"/>
+   	  <zplane z="  64.8 * cm" ID=" 70 * mm"/>
+   	  <zplane z=" 180.0 * cm" ID="176 * mm"/>
+      </sens_pipe>
+
       <IP_pipe
         ID="IPBeampipeID"
         wall_thickness="0.757*mm"
