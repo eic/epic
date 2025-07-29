@@ -2,6 +2,8 @@
 <!-- Copyright (C) 2022 Wouter Deconinck, Whitney Armstrong -->
 
 <lccdd>
+  <include ref="central_beampipe_sens.xml"/>
+
   <define>
     <constant name="BeampipeUpstreamStraightLength" value="800.0 * mm"/>
     <constant name="BeampipeDownstreamStraightLength" value="670.0 * mm"/>
@@ -15,13 +17,6 @@
     <detector id="BeamPipe_ID" name="BeamPipe" type="IP6BeamPipe" vis="BeamPipeVis">
       <type_flags type="DetType_TRACKER + DetType_BEAMPIPE" />
       <beampipe/>
-
-      <sens_pipe thickness="1 * um">
-          <zplane z="-170.0 * cm" OD="114 * mm + 2*1 * um"/>
-          <zplane z=" -74.8 * cm" OD=" 70 * mm + 2*1 * um"/>
-          <zplane z="  64.8 * cm" OD=" 70 * mm + 2*1 * um"/>
-          <zplane z=" 180.0 * cm" OD="176 * mm + 2*1 * um"/>
-      </sens_pipe>
 
       <IP_pipe
         OD="BeampipeOD"

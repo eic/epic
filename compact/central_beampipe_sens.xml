@@ -1,0 +1,31 @@
+<!-- SPDX-License-Identifier: LGPL-3.0-or-later -->
+
+<lccdd>
+
+  <!-- Central Beampipe Sensitive -->
+
+  <detectors>
+    <detector
+      id="BeamPipeSens_ID"
+      name="BeamPipeSens"
+      type="BeamPipeSens"
+      material="Vacuum"
+      vis="AnlLightGray"
+      readout="BeamPipeSensHits">
+      <sens_pipe wall_thickness="1 * um">
+          <zplane z="-170.0 * cm" ID="114 * mm"/>
+          <zplane z=" -74.8 * cm" ID=" 70 * mm"/>
+          <zplane z="  64.8 * cm" ID=" 70 * mm"/>
+          <zplane z=" 180.0 * cm" ID="176 * mm"/>
+      </sens_pipe>
+    </detector>
+  </detectors>
+
+  <readouts>
+    <readout name="BeamPipeSensHits">
+      <segmentation type="NoSegmentation"/>
+      <id>system:8</id>
+    </readout>
+  </readouts>
+
+</lccdd>

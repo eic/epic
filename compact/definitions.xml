@@ -50,6 +50,7 @@ The unused IDs below are saved for future use.
       - Unused   IDs: 12-24
 
     </documentation>
+    <constant name="BeamPipeSens_ID" value="9"/>
     <constant name="BeamPipe_ID" value="10"/>
     <constant name="BeamPipeB0_ID" value="11"/>
 
