@@ -218,6 +218,12 @@ static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector /* sens *
                                           {"v_" + name + "_vacuum", vacuum, m_Vacuum});
   };
 
+  xml::Component sens_pipe_c = x_det.child(_Unicode(sens_pipe));
+  auto sens_pipe_polycones = zplane_to_polycones(sens_pipe_c);
+  Volume sens_pipe_vol = {"v_" + det_name + "_sens", std::get<0>(sens_pipe_polycones), m_Vacuum};
+  assembly.placeVolume(sens_pipe_vol, 0);
+
+
   // -----------------------------
   // Upstream:
   // - incoming hadron tube: straight section, tapered section, straight section
