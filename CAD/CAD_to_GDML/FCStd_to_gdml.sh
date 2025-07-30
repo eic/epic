@@ -14,4 +14,4 @@ mkdir $folder_name
 eval "$freecaddir_executable"  
 ./remove_whitespace.sh $folder_name
 ./convert.sh $folder_name
-rm $folder_name/*.stl
+# rm $folder_name/*.stl
