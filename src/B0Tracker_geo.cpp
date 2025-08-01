@@ -163,17 +163,12 @@ static Ref_t create_B0Tracker(Detector& description, xml_h e, SensitiveDetector 
     xml_comp_t l_env  = x_layer.child(_U(envelope));
     string layer_name = det_name + std::string("_layer") + std::to_string(l_id);
 
-    std::string layer_vis       = l_env.attr<std::string>(_Unicode(vis));
-    double layer_rmin_tolerance = l_env.attr<double>(_Unicode(rmin_tolerance));
-    double layer_rmax_tolerance = l_env.attr<double>(_Unicode(rmax_tolerance));
-    double layer_zmin_tolerance = l_env.attr<double>(_Unicode(zmin_tolerance));
-    double layer_zmax_tolerance = l_env.attr<double>(_Unicode(zmax_tolerance));
-    double layer_length         = l_env.attr<double>(_Unicode(length));
-    double layer_zstart         = l_env.attr<double>(_Unicode(zstart));
-    double layer_center_z       = layer_zstart + layer_length / 2.0;
-    // printout(INFO,"ROOTGDMLParse","+++ Read geometry from GDML file file:%s",input.c_str());
-    // std::cout << "SiTracker Endcap layer " << l_id << " zstart = " << layer_zstart/dd4hep::mm << "mm ( " <<
-    // layer_length/dd4hep::mm << " mm thick )\n";
+    std::string layer_vis = l_env.attr<std::string>(_Unicode(vis));
+    double envelope_r_min = l_env.attr<double>(_Unicode(rmin));
+    double envelope_r_max = l_env.attr<double>(_Unicode(rmax));
+    double envelope_z_min = l_env.attr<double>(_Unicode(zmin));
+    double envelope_z_max = l_env.attr<double>(_Unicode(zmax));
+    double layer_center_z = (envelope_z_min + envelope_z_max) / 2.0;
 
     Assembly layer_vol(layer_name);
     PlacedVolume layer_pv;
@@ -226,10 +221,10 @@ static Ref_t create_B0Tracker(Detector& description, xml_h e, SensitiveDetector 
       }
     }
     layer_vol->GetShape()->ComputeBBox();
-    layerParams.set<double>("envelope_r_min", layer_rmin_tolerance / dd4hep::mm);
-    layerParams.set<double>("envelope_r_max", layer_rmax_tolerance / dd4hep::mm);
-    layerParams.set<double>("envelope_z_min", layer_zmin_tolerance / dd4hep::mm);
-    layerParams.set<double>("envelope_z_max", layer_zmax_tolerance / dd4hep::mm);
+    layerParams.set<double>("envelope_r_min", envelope_r_min);
+    layerParams.set<double>("envelope_r_max", envelope_r_max);
+    layerParams.set<double>("envelope_z_min", envelope_z_min);
+    layerParams.set<double>("envelope_z_max", envelope_z_max);
 
     for (xml_coll_t lmat(x_layer, _Unicode(layer_material)); lmat; ++lmat) {
       xml_comp_t x_layer_material = lmat;
