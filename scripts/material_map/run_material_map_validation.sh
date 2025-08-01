@@ -155,7 +155,7 @@ echo "::group::----MAPPING------------"
 sed -i 's/acts\.logging\.INFO/acts.logging.VERBOSE/g' Examples/Scripts/Python/material_mapping.py
 sed -i 's/navigator = Navigator($/&level=acts.logging.VERBOSE,/' Examples/Scripts/Python/material_mapping.py
 sed -i 's/propagator = Propagator(stepper, navigator/&, loglevel=acts.logging.VERBOSE/' Examples/Scripts/Python/material_mapping.py
-python material_mapping_epic.py --xmlFile ${DETECTOR_PATH}/${DETECTOR_CONFIG}.xml --geoFile ${geoFile} --matFile ${matFile} | tail -n 500
+python material_mapping_epic.py --xmlFile ${DETECTOR_PATH}/${DETECTOR_CONFIG}.xml --geoFile ${geoFile} --matFile ${matFile} | tail -n 5000
 echo "::endgroup::"
 
 echo "::group::----Prepare validation rootfile--------"
