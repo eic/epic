@@ -3,4 +3,4 @@ features:
   fields:
     marco:
   ecal:
-    forward_averaged_homogenious:
+    forward_averaged_homogeneous:

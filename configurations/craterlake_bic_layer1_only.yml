@@ -19,7 +19,7 @@ features:
     pfrich:
     drich:
   ecal:
-    forward_averaged_homogenious:
+    forward_averaged_homogeneous:
     bic_layer1_only:
     backward_PbWO4:
   solenoid:
