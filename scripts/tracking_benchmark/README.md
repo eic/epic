@@ -11,7 +11,7 @@ https://github.com/Tunat66/epicUK/blob/UK_Contribution
 
 This version is set up to run on the Oxford Particle Physics Linux system and will need to be adapted for non-Oxford users. Oxford users can follow these steps:
 
-Edit lines 15, 16, 19, 21 of ```run_single_momentum.sh``` to point to the startup script, compact file, and material map that you want to use.
+Edit lines 15, 16, 18 of ```run_single_momentum.sh``` to point to the startup script, compact file, and material map that you want to use.
 
 Edit ```epicUK.sh``` to point to your eic-shell
 
