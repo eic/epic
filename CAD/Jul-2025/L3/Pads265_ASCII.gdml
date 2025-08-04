@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<gdml xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://service-spi.web.cern.ch/service-spi/app/releases/GDML/schema/gdml.xsd">
+
+    <define>
+        <position name="Pads265_ASCII_v0" unit="mm" x="-19.374343872070312" y="-2.344146728515625" z="163.07899755859376"/>
+        <position name="Pads265_ASCII_v1" unit="mm" x="-19.48039436340332" y="-2.322021484375" z="163.07899755859376"/>
+        <position name="Pads265_ASCII_v2" unit="mm" x="-19.48039436340332" y="-2.322021484375" z="159.487994140625"/>
+        <position name="Pads265_ASCII_v3" unit="mm" x="-19.374343872070312" y="-2.344146728515625" z="159.487994140625"/>
+        <position name="Pads265_ASCII_v4" unit="mm" x="-19.268266677856445" y="-2.36614990234375" z="163.07899755859376"/>
+        <position name="Pads265_ASCII_v5" unit="mm" x="-19.268266677856445" y="-2.36614990234375" z="159.487994140625"/>
+        <position name="Pads265_ASCII_v6" unit="mm" x="-19.16216468811035" y="-2.388031005859375" z="163.07899755859376"/>
+        <position name="Pads265_ASCII_v7" unit="mm" x="-19.16216468811035" y="-2.388031005859375" z="159.487994140625"/>
+        <position name="Pads265_ASCII_v8" unit="mm" x="-19.152099609375" y="-2.33905029296875" z="159.487994140625"/>
+        <position name="Pads265_ASCII_v9" unit="mm" x="-19.152099609375" y="-2.33905029296875" z="163.07899755859376"/>
+        <position name="Pads265_ASCII_v10" unit="mm" x="-19.470151901245117" y="-2.2730712890625" z="159.487994140625"/>
+        <position name="Pads265_ASCII_v11" unit="mm" x="-19.470151901245117" y="-2.2730712890625" z="163.07899755859376"/>
+        <position name="Pads265_ASCII_v12" unit="mm" x="-19.364160537719727" y="-2.295196533203125" z="159.487994140625"/>
+        <position name="Pads265_ASCII_v13" unit="mm" x="-19.364160537719727" y="-2.295196533203125" z="163.07899755859376"/>
+        <position name="Pads265_ASCII_v14" unit="mm" x="-19.25814437866211" y="-2.31719970703125" z="159.487994140625"/>
+        <position name="Pads265_ASCII_v15" unit="mm" x="-19.25814437866211" y="-2.31719970703125" z="163.07899755859376"/>
+    </define>
+
+    <solids>
+        <tessellated aunit="deg" lunit="mm" name="Pads265_ASCII-SOL">
+             <triangular vertex1="Pads265_ASCII_v0" vertex2="Pads265_ASCII_v1" vertex3="Pads265_ASCII_v2"/>
+             <triangular vertex1="Pads265_ASCII_v0" vertex2="Pads265_ASCII_v2" vertex3="Pads265_ASCII_v3"/>
+             <triangular vertex1="Pads265_ASCII_v4" vertex2="Pads265_ASCII_v3" vertex3="Pads265_ASCII_v5"/>
+             <triangular vertex1="Pads265_ASCII_v4" vertex2="Pads265_ASCII_v0" vertex3="Pads265_ASCII_v3"/>
+             <triangular vertex1="Pads265_ASCII_v6" vertex2="Pads265_ASCII_v5" vertex3="Pads265_ASCII_v7"/>
+             <triangular vertex1="Pads265_ASCII_v6" vertex2="Pads265_ASCII_v4" vertex3="Pads265_ASCII_v5"/>
+             <triangular vertex1="Pads265_ASCII_v6" vertex2="Pads265_ASCII_v7" vertex3="Pads265_ASCII_v8"/>
+             <triangular vertex1="Pads265_ASCII_v9" vertex2="Pads265_ASCII_v6" vertex3="Pads265_ASCII_v8"/>
+             <triangular vertex1="Pads265_ASCII_v10" vertex2="Pads265_ASCII_v11" vertex3="Pads265_ASCII_v12"/>
+             <triangular vertex1="Pads265_ASCII_v12" vertex2="Pads265_ASCII_v13" vertex3="Pads265_ASCII_v14"/>
+             <triangular vertex1="Pads265_ASCII_v11" vertex2="Pads265_ASCII_v13" vertex3="Pads265_ASCII_v12"/>
+             <triangular vertex1="Pads265_ASCII_v13" vertex2="Pads265_ASCII_v15" vertex3="Pads265_ASCII_v14"/>
+             <triangular vertex1="Pads265_ASCII_v14" vertex2="Pads265_ASCII_v9" vertex3="Pads265_ASCII_v8"/>
+             <triangular vertex1="Pads265_ASCII_v15" vertex2="Pads265_ASCII_v9" vertex3="Pads265_ASCII_v14"/>
+             <triangular vertex1="Pads265_ASCII_v1" vertex2="Pads265_ASCII_v11" vertex3="Pads265_ASCII_v10"/>
+             <triangular vertex1="Pads265_ASCII_v1" vertex2="Pads265_ASCII_v10" vertex3="Pads265_ASCII_v2"/>
+             <triangular vertex1="Pads265_ASCII_v9" vertex2="Pads265_ASCII_v15" vertex3="Pads265_ASCII_v6"/>
+             <triangular vertex1="Pads265_ASCII_v15" vertex2="Pads265_ASCII_v4" vertex3="Pads265_ASCII_v6"/>
+             <triangular vertex1="Pads265_ASCII_v15" vertex2="Pads265_ASCII_v13" vertex3="Pads265_ASCII_v4"/>
+             <triangular vertex1="Pads265_ASCII_v13" vertex2="Pads265_ASCII_v0" vertex3="Pads265_ASCII_v4"/>
+             <triangular vertex1="Pads265_ASCII_v13" vertex2="Pads265_ASCII_v11" vertex3="Pads265_ASCII_v0"/>
+             <triangular vertex1="Pads265_ASCII_v11" vertex2="Pads265_ASCII_v1" vertex3="Pads265_ASCII_v0"/>
+             <triangular vertex1="Pads265_ASCII_v14" vertex2="Pads265_ASCII_v8" vertex3="Pads265_ASCII_v7"/>
+             <triangular vertex1="Pads265_ASCII_v5" vertex2="Pads265_ASCII_v14" vertex3="Pads265_ASCII_v7"/>
+             <triangular vertex1="Pads265_ASCII_v3" vertex2="Pads265_ASCII_v12" vertex3="Pads265_ASCII_v14"/>
+             <triangular vertex1="Pads265_ASCII_v3" vertex2="Pads265_ASCII_v14" vertex3="Pads265_ASCII_v5"/>
+             <triangular vertex1="Pads265_ASCII_v2" vertex2="Pads265_ASCII_v10" vertex3="Pads265_ASCII_v12"/>
+             <triangular vertex1="Pads265_ASCII_v2" vertex2="Pads265_ASCII_v12" vertex3="Pads265_ASCII_v3"/>
+        </tessellated>
+    </solids>
+
+    <structure>
+        <volume name="Pads265_ASCII">
+            <materialref ref="Vacuum"/>
+            <solidref ref="Pads265_ASCII-SOL"/>
+        </volume>
+    </structure>
+
+    <setup name="Default" version="1.0">
+        <world ref="Pads265_ASCII"/>
+    </setup>
+</gdml>

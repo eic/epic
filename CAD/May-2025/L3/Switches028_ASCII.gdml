@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<gdml xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://service-spi.web.cern.ch/service-spi/app/releases/GDML/schema/gdml.xsd">
+
+    <define>
+        <position name="Switches028_ASCII_v0" unit="mm" x="-3.6582796573638916" y="4.194091796875" z="62.00700659179688"/>
+        <position name="Switches028_ASCII_v1" unit="mm" x="-0.572990894317627" y="4.231536865234375" z="62.00700659179688"/>
+        <position name="Switches028_ASCII_v2" unit="mm" x="-0.572990894317627" y="4.231536865234375" z="61.98700231933594"/>
+        <position name="Switches028_ASCII_v3" unit="mm" x="-3.6582796573638916" y="4.194091796875" z="61.98700231933594"/>
+        <position name="Switches028_ASCII_v4" unit="mm" x="-6.740478038787842" y="4.051055908203125" z="62.00700659179688"/>
+        <position name="Switches028_ASCII_v5" unit="mm" x="-6.740478038787842" y="4.051055908203125" z="61.98700231933594"/>
+        <position name="Switches028_ASCII_v6" unit="mm" x="-9.815972328186035" y="3.802581787109375" z="61.98700231933594"/>
+        <position name="Switches028_ASCII_v7" unit="mm" x="-9.815972328186035" y="3.802581787109375" z="62.00700659179688"/>
+        <position name="Switches028_ASCII_v8" unit="mm" x="-9.8110933303833" y="3.7528076171875" z="61.98700231933594"/>
+        <position name="Switches028_ASCII_v9" unit="mm" x="-9.8110933303833" y="3.7528076171875" z="62.00700659179688"/>
+        <position name="Switches028_ASCII_v10" unit="mm" x="-0.5732401609420776" y="4.1815185546875" z="62.00700659179688"/>
+        <position name="Switches028_ASCII_v11" unit="mm" x="-3.6568169593811035" y="4.14410400390625" z="62.00700659179688"/>
+        <position name="Switches028_ASCII_v12" unit="mm" x="-0.5732401609420776" y="4.1815185546875" z="61.98700231933594"/>
+        <position name="Switches028_ASCII_v13" unit="mm" x="-3.6568169593811035" y="4.14410400390625" z="61.98700231933594"/>
+        <position name="Switches028_ASCII_v14" unit="mm" x="-6.737305164337158" y="4.00115966796875" z="62.00700659179688"/>
+        <position name="Switches028_ASCII_v15" unit="mm" x="-6.737305164337158" y="4.00115966796875" z="61.98700231933594"/>
+    </define>
+
+    <solids>
+        <tessellated aunit="deg" lunit="mm" name="Switches028_ASCII-SOL">
+             <triangular vertex1="Switches028_ASCII_v0" vertex2="Switches028_ASCII_v1" vertex3="Switches028_ASCII_v2"/>
+             <triangular vertex1="Switches028_ASCII_v0" vertex2="Switches028_ASCII_v2" vertex3="Switches028_ASCII_v3"/>
+             <triangular vertex1="Switches028_ASCII_v4" vertex2="Switches028_ASCII_v3" vertex3="Switches028_ASCII_v5"/>
+             <triangular vertex1="Switches028_ASCII_v4" vertex2="Switches028_ASCII_v5" vertex3="Switches028_ASCII_v6"/>
+             <triangular vertex1="Switches028_ASCII_v4" vertex2="Switches028_ASCII_v0" vertex3="Switches028_ASCII_v3"/>
+             <triangular vertex1="Switches028_ASCII_v7" vertex2="Switches028_ASCII_v4" vertex3="Switches028_ASCII_v6"/>
+             <triangular vertex1="Switches028_ASCII_v8" vertex2="Switches028_ASCII_v7" vertex3="Switches028_ASCII_v6"/>
+             <triangular vertex1="Switches028_ASCII_v9" vertex2="Switches028_ASCII_v7" vertex3="Switches028_ASCII_v8"/>
+             <triangular vertex1="Switches028_ASCII_v10" vertex2="Switches028_ASCII_v11" vertex3="Switches028_ASCII_v12"/>
+             <triangular vertex1="Switches028_ASCII_v12" vertex2="Switches028_ASCII_v11" vertex3="Switches028_ASCII_v13"/>
+             <triangular vertex1="Switches028_ASCII_v13" vertex2="Switches028_ASCII_v14" vertex3="Switches028_ASCII_v15"/>
+             <triangular vertex1="Switches028_ASCII_v15" vertex2="Switches028_ASCII_v14" vertex3="Switches028_ASCII_v8"/>
+             <triangular vertex1="Switches028_ASCII_v11" vertex2="Switches028_ASCII_v14" vertex3="Switches028_ASCII_v13"/>
+             <triangular vertex1="Switches028_ASCII_v14" vertex2="Switches028_ASCII_v9" vertex3="Switches028_ASCII_v8"/>
+             <triangular vertex1="Switches028_ASCII_v1" vertex2="Switches028_ASCII_v10" vertex3="Switches028_ASCII_v12"/>
+             <triangular vertex1="Switches028_ASCII_v1" vertex2="Switches028_ASCII_v12" vertex3="Switches028_ASCII_v2"/>
+             <triangular vertex1="Switches028_ASCII_v9" vertex2="Switches028_ASCII_v14" vertex3="Switches028_ASCII_v7"/>
+             <triangular vertex1="Switches028_ASCII_v14" vertex2="Switches028_ASCII_v4" vertex3="Switches028_ASCII_v7"/>
+             <triangular vertex1="Switches028_ASCII_v11" vertex2="Switches028_ASCII_v0" vertex3="Switches028_ASCII_v14"/>
+             <triangular vertex1="Switches028_ASCII_v14" vertex2="Switches028_ASCII_v0" vertex3="Switches028_ASCII_v4"/>
+             <triangular vertex1="Switches028_ASCII_v10" vertex2="Switches028_ASCII_v1" vertex3="Switches028_ASCII_v11"/>
+             <triangular vertex1="Switches028_ASCII_v11" vertex2="Switches028_ASCII_v1" vertex3="Switches028_ASCII_v0"/>
+             <triangular vertex1="Switches028_ASCII_v5" vertex2="Switches028_ASCII_v15" vertex3="Switches028_ASCII_v8"/>
+             <triangular vertex1="Switches028_ASCII_v5" vertex2="Switches028_ASCII_v8" vertex3="Switches028_ASCII_v6"/>
+             <triangular vertex1="Switches028_ASCII_v3" vertex2="Switches028_ASCII_v13" vertex3="Switches028_ASCII_v15"/>
+             <triangular vertex1="Switches028_ASCII_v3" vertex2="Switches028_ASCII_v15" vertex3="Switches028_ASCII_v5"/>
+             <triangular vertex1="Switches028_ASCII_v2" vertex2="Switches028_ASCII_v12" vertex3="Switches028_ASCII_v13"/>
+             <triangular vertex1="Switches028_ASCII_v2" vertex2="Switches028_ASCII_v13" vertex3="Switches028_ASCII_v3"/>
+        </tessellated>
+    </solids>
+
+    <structure>
+        <volume name="Switches028_ASCII">
+            <materialref ref="Vacuum"/>
+            <solidref ref="Switches028_ASCII-SOL"/>
+        </volume>
+    </structure>
+
+    <setup name="Default" version="1.0">
+        <world ref="Switches028_ASCII"/>
+    </setup>
+</gdml>

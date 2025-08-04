@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<gdml xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://service-spi.web.cern.ch/service-spi/app/releases/GDML/schema/gdml.xsd">
+
+    <define>
+        <position name="Readout_881_ASCII_v0" unit="mm" x="-0.3445604145526886" y="-4.201080322265625" z="339.5118408203125"/>
+        <position name="Readout_881_ASCII_v1" unit="mm" x="-0.2778937518596649" y="-4.201080322265625" z="339.5118408203125"/>
+        <position name="Readout_881_ASCII_v2" unit="mm" x="-0.2778937816619873" y="-4.201080322265625" z="343.10284423828125"/>
+        <position name="Readout_881_ASCII_v3" unit="mm" x="-0.344560444355011" y="-4.201080322265625" z="343.10284423828125"/>
+        <position name="Readout_881_ASCII_v4" unit="mm" x="-0.4112270474433899" y="-4.201019287109375" z="339.5118408203125"/>
+        <position name="Readout_881_ASCII_v5" unit="mm" x="-0.4112270772457123" y="-4.201019287109375" z="343.10284423828125"/>
+        <position name="Readout_881_ASCII_v6" unit="mm" x="-0.4778936207294464" y="-4.200897216796875" z="339.5118408203125"/>
+        <position name="Readout_881_ASCII_v7" unit="mm" x="-0.4778936505317688" y="-4.200897216796875" z="343.10284423828125"/>
+        <position name="Readout_881_ASCII_v8" unit="mm" x="-0.4777938723564148" y="-4.150909423828125" z="343.10284423828125"/>
+        <position name="Readout_881_ASCII_v9" unit="mm" x="-0.4777938425540924" y="-4.150909423828125" z="339.5118408203125"/>
+        <position name="Readout_881_ASCII_v10" unit="mm" x="-0.2779049575328827" y="-4.151092529296875" z="343.10284423828125"/>
+        <position name="Readout_881_ASCII_v11" unit="mm" x="-0.2779049277305603" y="-4.151092529296875" z="339.5118408203125"/>
+        <position name="Readout_881_ASCII_v12" unit="mm" x="-0.34453463554382324" y="-4.151092529296875" z="343.10284423828125"/>
+        <position name="Readout_881_ASCII_v13" unit="mm" x="-0.34453460574150085" y="-4.151092529296875" z="339.5118408203125"/>
+        <position name="Readout_881_ASCII_v14" unit="mm" x="-0.411164253950119" y="-4.151031494140625" z="339.5118408203125"/>
+        <position name="Readout_881_ASCII_v15" unit="mm" x="-0.4111642837524414" y="-4.151031494140625" z="343.10284423828125"/>
+    </define>
+
+    <solids>
+        <tessellated aunit="deg" lunit="mm" name="Readout_881_ASCII-SOL">
+             <triangular vertex1="Readout_881_ASCII_v0" vertex2="Readout_881_ASCII_v1" vertex3="Readout_881_ASCII_v2"/>
+             <triangular vertex1="Readout_881_ASCII_v0" vertex2="Readout_881_ASCII_v2" vertex3="Readout_881_ASCII_v3"/>
+             <triangular vertex1="Readout_881_ASCII_v4" vertex2="Readout_881_ASCII_v3" vertex3="Readout_881_ASCII_v5"/>
+             <triangular vertex1="Readout_881_ASCII_v4" vertex2="Readout_881_ASCII_v0" vertex3="Readout_881_ASCII_v3"/>
+             <triangular vertex1="Readout_881_ASCII_v6" vertex2="Readout_881_ASCII_v5" vertex3="Readout_881_ASCII_v7"/>
+             <triangular vertex1="Readout_881_ASCII_v6" vertex2="Readout_881_ASCII_v4" vertex3="Readout_881_ASCII_v5"/>
+             <triangular vertex1="Readout_881_ASCII_v6" vertex2="Readout_881_ASCII_v8" vertex3="Readout_881_ASCII_v9"/>
+             <triangular vertex1="Readout_881_ASCII_v7" vertex2="Readout_881_ASCII_v8" vertex3="Readout_881_ASCII_v6"/>
+             <triangular vertex1="Readout_881_ASCII_v10" vertex2="Readout_881_ASCII_v11" vertex3="Readout_881_ASCII_v12"/>
+             <triangular vertex1="Readout_881_ASCII_v11" vertex2="Readout_881_ASCII_v13" vertex3="Readout_881_ASCII_v12"/>
+             <triangular vertex1="Readout_881_ASCII_v12" vertex2="Readout_881_ASCII_v14" vertex3="Readout_881_ASCII_v15"/>
+             <triangular vertex1="Readout_881_ASCII_v13" vertex2="Readout_881_ASCII_v14" vertex3="Readout_881_ASCII_v12"/>
+             <triangular vertex1="Readout_881_ASCII_v15" vertex2="Readout_881_ASCII_v9" vertex3="Readout_881_ASCII_v8"/>
+             <triangular vertex1="Readout_881_ASCII_v14" vertex2="Readout_881_ASCII_v9" vertex3="Readout_881_ASCII_v15"/>
+             <triangular vertex1="Readout_881_ASCII_v11" vertex2="Readout_881_ASCII_v2" vertex3="Readout_881_ASCII_v1"/>
+             <triangular vertex1="Readout_881_ASCII_v10" vertex2="Readout_881_ASCII_v2" vertex3="Readout_881_ASCII_v11"/>
+             <triangular vertex1="Readout_881_ASCII_v15" vertex2="Readout_881_ASCII_v8" vertex3="Readout_881_ASCII_v7"/>
+             <triangular vertex1="Readout_881_ASCII_v5" vertex2="Readout_881_ASCII_v15" vertex3="Readout_881_ASCII_v7"/>
+             <triangular vertex1="Readout_881_ASCII_v3" vertex2="Readout_881_ASCII_v12" vertex3="Readout_881_ASCII_v15"/>
+             <triangular vertex1="Readout_881_ASCII_v3" vertex2="Readout_881_ASCII_v15" vertex3="Readout_881_ASCII_v5"/>
+             <triangular vertex1="Readout_881_ASCII_v2" vertex2="Readout_881_ASCII_v10" vertex3="Readout_881_ASCII_v12"/>
+             <triangular vertex1="Readout_881_ASCII_v2" vertex2="Readout_881_ASCII_v12" vertex3="Readout_881_ASCII_v3"/>
+             <triangular vertex1="Readout_881_ASCII_v9" vertex2="Readout_881_ASCII_v14" vertex3="Readout_881_ASCII_v6"/>
+             <triangular vertex1="Readout_881_ASCII_v14" vertex2="Readout_881_ASCII_v4" vertex3="Readout_881_ASCII_v6"/>
+             <triangular vertex1="Readout_881_ASCII_v14" vertex2="Readout_881_ASCII_v13" vertex3="Readout_881_ASCII_v4"/>
+             <triangular vertex1="Readout_881_ASCII_v13" vertex2="Readout_881_ASCII_v0" vertex3="Readout_881_ASCII_v4"/>
+             <triangular vertex1="Readout_881_ASCII_v13" vertex2="Readout_881_ASCII_v11" vertex3="Readout_881_ASCII_v0"/>
+             <triangular vertex1="Readout_881_ASCII_v11" vertex2="Readout_881_ASCII_v1" vertex3="Readout_881_ASCII_v0"/>
+        </tessellated>
+    </solids>
+
+    <structure>
+        <volume name="Readout_881_ASCII">
+            <materialref ref="Vacuum"/>
+            <solidref ref="Readout_881_ASCII-SOL"/>
+        </volume>
+    </structure>
+
+    <setup name="Default" version="1.0">
+        <world ref="Readout_881_ASCII"/>
+    </setup>
+</gdml>

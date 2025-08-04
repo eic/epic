@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<gdml xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://service-spi.web.cern.ch/service-spi/app/releases/GDML/schema/gdml.xsd">
+
+    <define>
+        <position name="RPV_Longeron002_ASCII_v0" unit="mm" x="-20.858915328979492" y="-1.57098388671875" z="-225.67953491210938"/>
+        <position name="RPV_Longeron002_ASCII_v1" unit="mm" x="-18.858915328979492" y="2.0" z="-225.67953491210938"/>
+        <position name="RPV_Longeron002_ASCII_v2" unit="mm" x="-20.858915328979492" y="1.57098388671875" z="-225.67953491210938"/>
+        <position name="RPV_Longeron002_ASCII_v3" unit="mm" x="-18.858915328979492" y="-2.0" z="-225.67953491210938"/>
+        <position name="RPV_Longeron002_ASCII_v4" unit="mm" x="-20.858915328979492" y="-1.57098388671875" z="-447.25433349609375"/>
+        <position name="RPV_Longeron002_ASCII_v5" unit="mm" x="-20.858915328979492" y="1.57098388671875" z="-447.25433349609375"/>
+        <position name="RPV_Longeron002_ASCII_v6" unit="mm" x="-18.858915328979492" y="-2.0" z="-447.25433349609375"/>
+        <position name="RPV_Longeron002_ASCII_v7" unit="mm" x="-18.858915328979492" y="2.0" z="-447.25433349609375"/>
+    </define>
+
+    <solids>
+        <tessellated aunit="deg" lunit="mm" name="RPV_Longeron002_ASCII-SOL">
+             <triangular vertex1="RPV_Longeron002_ASCII_v0" vertex2="RPV_Longeron002_ASCII_v1" vertex3="RPV_Longeron002_ASCII_v2"/>
+             <triangular vertex1="RPV_Longeron002_ASCII_v3" vertex2="RPV_Longeron002_ASCII_v1" vertex3="RPV_Longeron002_ASCII_v0"/>
+             <triangular vertex1="RPV_Longeron002_ASCII_v4" vertex2="RPV_Longeron002_ASCII_v5" vertex3="RPV_Longeron002_ASCII_v6"/>
+             <triangular vertex1="RPV_Longeron002_ASCII_v5" vertex2="RPV_Longeron002_ASCII_v7" vertex3="RPV_Longeron002_ASCII_v6"/>
+             <triangular vertex1="RPV_Longeron002_ASCII_v7" vertex2="RPV_Longeron002_ASCII_v5" vertex3="RPV_Longeron002_ASCII_v1"/>
+             <triangular vertex1="RPV_Longeron002_ASCII_v1" vertex2="RPV_Longeron002_ASCII_v5" vertex3="RPV_Longeron002_ASCII_v2"/>
+             <triangular vertex1="RPV_Longeron002_ASCII_v7" vertex2="RPV_Longeron002_ASCII_v1" vertex3="RPV_Longeron002_ASCII_v6"/>
+             <triangular vertex1="RPV_Longeron002_ASCII_v6" vertex2="RPV_Longeron002_ASCII_v1" vertex3="RPV_Longeron002_ASCII_v3"/>
+             <triangular vertex1="RPV_Longeron002_ASCII_v4" vertex2="RPV_Longeron002_ASCII_v6" vertex3="RPV_Longeron002_ASCII_v0"/>
+             <triangular vertex1="RPV_Longeron002_ASCII_v0" vertex2="RPV_Longeron002_ASCII_v6" vertex3="RPV_Longeron002_ASCII_v3"/>
+             <triangular vertex1="RPV_Longeron002_ASCII_v2" vertex2="RPV_Longeron002_ASCII_v5" vertex3="RPV_Longeron002_ASCII_v0"/>
+             <triangular vertex1="RPV_Longeron002_ASCII_v0" vertex2="RPV_Longeron002_ASCII_v5" vertex3="RPV_Longeron002_ASCII_v4"/>
+        </tessellated>
+    </solids>
+
+    <structure>
+        <volume name="RPV_Longeron002_ASCII">
+            <materialref ref="Vacuum"/>
+            <solidref ref="RPV_Longeron002_ASCII-SOL"/>
+        </volume>
+    </structure>
+
+    <setup name="Default" version="1.0">
+        <world ref="RPV_Longeron002_ASCII"/>
+    </setup>
+</gdml>

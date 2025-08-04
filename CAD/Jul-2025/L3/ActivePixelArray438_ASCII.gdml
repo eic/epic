@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<gdml xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://service-spi.web.cern.ch/service-spi/app/releases/GDML/schema/gdml.xsd">
+
+    <define>
+        <position name="ActivePixelArray438_ASCII_v0" unit="mm" x="-15.952157974243164" y="2.987274169921875" z="-253.24294763183593"/>
+        <position name="ActivePixelArray438_ASCII_v1" unit="mm" x="-18.966236114501953" y="2.428070068359375" z="-253.24294763183593"/>
+        <position name="ActivePixelArray438_ASCII_v2" unit="mm" x="-18.966236114501953" y="2.428070068359375" z="-249.67194848632812"/>
+        <position name="ActivePixelArray438_ASCII_v3" unit="mm" x="-15.952157974243164" y="2.987274169921875" z="-249.67194848632812"/>
+        <position name="ActivePixelArray438_ASCII_v4" unit="mm" x="-12.92080307006836" y="3.44366455078125" z="-249.67194848632812"/>
+        <position name="ActivePixelArray438_ASCII_v5" unit="mm" x="-12.92080307006836" y="3.44366455078125" z="-253.24294763183593"/>
+        <position name="ActivePixelArray438_ASCII_v6" unit="mm" x="-9.875678062438965" y="3.79669189453125" z="-249.67194848632812"/>
+        <position name="ActivePixelArray438_ASCII_v7" unit="mm" x="-9.875678062438965" y="3.79669189453125" z="-253.24294763183593"/>
+        <position name="ActivePixelArray438_ASCII_v8" unit="mm" x="-18.956279754638672" y="2.379058837890625" z="-253.24294763183593"/>
+        <position name="ActivePixelArray438_ASCII_v9" unit="mm" x="-18.956279754638672" y="2.379058837890625" z="-249.67194848632812"/>
+        <position name="ActivePixelArray438_ASCII_v10" unit="mm" x="-15.94387435913086" y="2.93798828125" z="-253.24294763183593"/>
+        <position name="ActivePixelArray438_ASCII_v11" unit="mm" x="-15.94387435913086" y="2.93798828125" z="-249.67194848632812"/>
+        <position name="ActivePixelArray438_ASCII_v12" unit="mm" x="-12.914200782775879" y="3.39410400390625" z="-249.67194848632812"/>
+        <position name="ActivePixelArray438_ASCII_v13" unit="mm" x="-12.914200782775879" y="3.39410400390625" z="-253.24294763183593"/>
+        <position name="ActivePixelArray438_ASCII_v14" unit="mm" x="-9.870765686035156" y="3.7469482421875" z="-249.67194848632812"/>
+        <position name="ActivePixelArray438_ASCII_v15" unit="mm" x="-9.870766639709473" y="3.7469482421875" z="-253.24294763183593"/>
+    </define>
+
+    <solids>
+        <tessellated aunit="deg" lunit="mm" name="ActivePixelArray438_ASCII-SOL">
+             <triangular vertex1="ActivePixelArray438_ASCII_v0" vertex2="ActivePixelArray438_ASCII_v1" vertex3="ActivePixelArray438_ASCII_v2"/>
+             <triangular vertex1="ActivePixelArray438_ASCII_v0" vertex2="ActivePixelArray438_ASCII_v3" vertex3="ActivePixelArray438_ASCII_v4"/>
+             <triangular vertex1="ActivePixelArray438_ASCII_v0" vertex2="ActivePixelArray438_ASCII_v2" vertex3="ActivePixelArray438_ASCII_v3"/>
+             <triangular vertex1="ActivePixelArray438_ASCII_v5" vertex2="ActivePixelArray438_ASCII_v4" vertex3="ActivePixelArray438_ASCII_v6"/>
+             <triangular vertex1="ActivePixelArray438_ASCII_v5" vertex2="ActivePixelArray438_ASCII_v0" vertex3="ActivePixelArray438_ASCII_v4"/>
+             <triangular vertex1="ActivePixelArray438_ASCII_v7" vertex2="ActivePixelArray438_ASCII_v5" vertex3="ActivePixelArray438_ASCII_v6"/>
+             <triangular vertex1="ActivePixelArray438_ASCII_v1" vertex2="ActivePixelArray438_ASCII_v8" vertex3="ActivePixelArray438_ASCII_v9"/>
+             <triangular vertex1="ActivePixelArray438_ASCII_v1" vertex2="ActivePixelArray438_ASCII_v9" vertex3="ActivePixelArray438_ASCII_v2"/>
+             <triangular vertex1="ActivePixelArray438_ASCII_v8" vertex2="ActivePixelArray438_ASCII_v10" vertex3="ActivePixelArray438_ASCII_v9"/>
+             <triangular vertex1="ActivePixelArray438_ASCII_v9" vertex2="ActivePixelArray438_ASCII_v10" vertex3="ActivePixelArray438_ASCII_v11"/>
+             <triangular vertex1="ActivePixelArray438_ASCII_v12" vertex2="ActivePixelArray438_ASCII_v13" vertex3="ActivePixelArray438_ASCII_v14"/>
+             <triangular vertex1="ActivePixelArray438_ASCII_v11" vertex2="ActivePixelArray438_ASCII_v13" vertex3="ActivePixelArray438_ASCII_v12"/>
+             <triangular vertex1="ActivePixelArray438_ASCII_v10" vertex2="ActivePixelArray438_ASCII_v13" vertex3="ActivePixelArray438_ASCII_v11"/>
+             <triangular vertex1="ActivePixelArray438_ASCII_v13" vertex2="ActivePixelArray438_ASCII_v15" vertex3="ActivePixelArray438_ASCII_v14"/>
+             <triangular vertex1="ActivePixelArray438_ASCII_v7" vertex2="ActivePixelArray438_ASCII_v6" vertex3="ActivePixelArray438_ASCII_v14"/>
+             <triangular vertex1="ActivePixelArray438_ASCII_v15" vertex2="ActivePixelArray438_ASCII_v7" vertex3="ActivePixelArray438_ASCII_v14"/>
+             <triangular vertex1="ActivePixelArray438_ASCII_v0" vertex2="ActivePixelArray438_ASCII_v10" vertex3="ActivePixelArray438_ASCII_v1"/>
+             <triangular vertex1="ActivePixelArray438_ASCII_v1" vertex2="ActivePixelArray438_ASCII_v10" vertex3="ActivePixelArray438_ASCII_v8"/>
+             <triangular vertex1="ActivePixelArray438_ASCII_v5" vertex2="ActivePixelArray438_ASCII_v13" vertex3="ActivePixelArray438_ASCII_v0"/>
+             <triangular vertex1="ActivePixelArray438_ASCII_v0" vertex2="ActivePixelArray438_ASCII_v13" vertex3="ActivePixelArray438_ASCII_v10"/>
+             <triangular vertex1="ActivePixelArray438_ASCII_v7" vertex2="ActivePixelArray438_ASCII_v15" vertex3="ActivePixelArray438_ASCII_v5"/>
+             <triangular vertex1="ActivePixelArray438_ASCII_v5" vertex2="ActivePixelArray438_ASCII_v15" vertex3="ActivePixelArray438_ASCII_v13"/>
+             <triangular vertex1="ActivePixelArray438_ASCII_v3" vertex2="ActivePixelArray438_ASCII_v2" vertex3="ActivePixelArray438_ASCII_v9"/>
+             <triangular vertex1="ActivePixelArray438_ASCII_v11" vertex2="ActivePixelArray438_ASCII_v3" vertex3="ActivePixelArray438_ASCII_v9"/>
+             <triangular vertex1="ActivePixelArray438_ASCII_v4" vertex2="ActivePixelArray438_ASCII_v3" vertex3="ActivePixelArray438_ASCII_v11"/>
+             <triangular vertex1="ActivePixelArray438_ASCII_v12" vertex2="ActivePixelArray438_ASCII_v4" vertex3="ActivePixelArray438_ASCII_v11"/>
+             <triangular vertex1="ActivePixelArray438_ASCII_v6" vertex2="ActivePixelArray438_ASCII_v4" vertex3="ActivePixelArray438_ASCII_v12"/>
+             <triangular vertex1="ActivePixelArray438_ASCII_v14" vertex2="ActivePixelArray438_ASCII_v6" vertex3="ActivePixelArray438_ASCII_v12"/>
+        </tessellated>
+    </solids>
+
+    <structure>
+        <volume name="ActivePixelArray438_ASCII">
+            <materialref ref="Vacuum"/>
+            <solidref ref="ActivePixelArray438_ASCII-SOL"/>
+        </volume>
+    </structure>
+
+    <setup name="Default" version="1.0">
+        <world ref="ActivePixelArray438_ASCII"/>
+    </setup>
+</gdml>

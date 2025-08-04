@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<gdml xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://service-spi.web.cern.ch/service-spi/app/releases/GDML/schema/gdml.xsd">
+
+    <define>
+        <position name="Pads536_ASCII_v0" unit="mm" x="0.1563136726617813" y="4.228485107421875" z="-202.72894960021972"/>
+        <position name="Pads536_ASCII_v1" unit="mm" x="0.047985997051000595" y="4.227386474609375" z="-202.72894960021972"/>
+        <position name="Pads536_ASCII_v2" unit="mm" x="0.047986071556806564" y="4.227386474609375" z="-199.13794999694824"/>
+        <position name="Pads536_ASCII_v3" unit="mm" x="0.15631374716758728" y="4.228485107421875" z="-199.13794999694824"/>
+        <position name="Pads536_ASCII_v4" unit="mm" x="0.2646426856517792" y="4.229461669921875" z="-199.13794999694824"/>
+        <position name="Pads536_ASCII_v5" unit="mm" x="0.264642596244812" y="4.229461669921875" z="-202.72894960021972"/>
+        <position name="Pads536_ASCII_v6" unit="mm" x="0.372972697019577" y="4.230316162109375" z="-199.13794999694824"/>
+        <position name="Pads536_ASCII_v7" unit="mm" x="0.37297263741493225" y="4.230316162109375" z="-202.72894960021972"/>
+        <position name="Pads536_ASCII_v8" unit="mm" x="0.048526570200920105" y="4.177398681640625" z="-202.72894960021972"/>
+        <position name="Pads536_ASCII_v9" unit="mm" x="0.048526644706726074" y="4.177398681640625" z="-199.13794999694824"/>
+        <position name="Pads536_ASCII_v10" unit="mm" x="0.15679414570331573" y="4.178497314453125" z="-202.72894960021972"/>
+        <position name="Pads536_ASCII_v11" unit="mm" x="0.1567942202091217" y="4.178497314453125" z="-199.13794999694824"/>
+        <position name="Pads536_ASCII_v12" unit="mm" x="0.2650630474090576" y="4.179473876953125" z="-199.13794999694824"/>
+        <position name="Pads536_ASCII_v13" unit="mm" x="0.26506295800209045" y="4.179473876953125" z="-202.72894960021972"/>
+        <position name="Pads536_ASCII_v14" unit="mm" x="0.3733329772949219" y="4.180328369140625" z="-199.13794999694824"/>
+        <position name="Pads536_ASCII_v15" unit="mm" x="0.3733328878879547" y="4.180328369140625" z="-202.72894960021972"/>
+    </define>
+
+    <solids>
+        <tessellated aunit="deg" lunit="mm" name="Pads536_ASCII-SOL">
+             <triangular vertex1="Pads536_ASCII_v0" vertex2="Pads536_ASCII_v1" vertex3="Pads536_ASCII_v2"/>
+             <triangular vertex1="Pads536_ASCII_v0" vertex2="Pads536_ASCII_v3" vertex3="Pads536_ASCII_v4"/>
+             <triangular vertex1="Pads536_ASCII_v0" vertex2="Pads536_ASCII_v2" vertex3="Pads536_ASCII_v3"/>
+             <triangular vertex1="Pads536_ASCII_v5" vertex2="Pads536_ASCII_v4" vertex3="Pads536_ASCII_v6"/>
+             <triangular vertex1="Pads536_ASCII_v5" vertex2="Pads536_ASCII_v0" vertex3="Pads536_ASCII_v4"/>
+             <triangular vertex1="Pads536_ASCII_v7" vertex2="Pads536_ASCII_v5" vertex3="Pads536_ASCII_v6"/>
+             <triangular vertex1="Pads536_ASCII_v1" vertex2="Pads536_ASCII_v8" vertex3="Pads536_ASCII_v9"/>
+             <triangular vertex1="Pads536_ASCII_v1" vertex2="Pads536_ASCII_v9" vertex3="Pads536_ASCII_v2"/>
+             <triangular vertex1="Pads536_ASCII_v8" vertex2="Pads536_ASCII_v10" vertex3="Pads536_ASCII_v9"/>
+             <triangular vertex1="Pads536_ASCII_v9" vertex2="Pads536_ASCII_v10" vertex3="Pads536_ASCII_v11"/>
+             <triangular vertex1="Pads536_ASCII_v12" vertex2="Pads536_ASCII_v13" vertex3="Pads536_ASCII_v14"/>
+             <triangular vertex1="Pads536_ASCII_v11" vertex2="Pads536_ASCII_v13" vertex3="Pads536_ASCII_v12"/>
+             <triangular vertex1="Pads536_ASCII_v10" vertex2="Pads536_ASCII_v13" vertex3="Pads536_ASCII_v11"/>
+             <triangular vertex1="Pads536_ASCII_v13" vertex2="Pads536_ASCII_v15" vertex3="Pads536_ASCII_v14"/>
+             <triangular vertex1="Pads536_ASCII_v7" vertex2="Pads536_ASCII_v6" vertex3="Pads536_ASCII_v14"/>
+             <triangular vertex1="Pads536_ASCII_v15" vertex2="Pads536_ASCII_v7" vertex3="Pads536_ASCII_v14"/>
+             <triangular vertex1="Pads536_ASCII_v0" vertex2="Pads536_ASCII_v10" vertex3="Pads536_ASCII_v1"/>
+             <triangular vertex1="Pads536_ASCII_v1" vertex2="Pads536_ASCII_v10" vertex3="Pads536_ASCII_v8"/>
+             <triangular vertex1="Pads536_ASCII_v5" vertex2="Pads536_ASCII_v13" vertex3="Pads536_ASCII_v0"/>
+             <triangular vertex1="Pads536_ASCII_v0" vertex2="Pads536_ASCII_v13" vertex3="Pads536_ASCII_v10"/>
+             <triangular vertex1="Pads536_ASCII_v5" vertex2="Pads536_ASCII_v7" vertex3="Pads536_ASCII_v13"/>
+             <triangular vertex1="Pads536_ASCII_v7" vertex2="Pads536_ASCII_v15" vertex3="Pads536_ASCII_v13"/>
+             <triangular vertex1="Pads536_ASCII_v11" vertex2="Pads536_ASCII_v3" vertex3="Pads536_ASCII_v2"/>
+             <triangular vertex1="Pads536_ASCII_v11" vertex2="Pads536_ASCII_v2" vertex3="Pads536_ASCII_v9"/>
+             <triangular vertex1="Pads536_ASCII_v4" vertex2="Pads536_ASCII_v3" vertex3="Pads536_ASCII_v11"/>
+             <triangular vertex1="Pads536_ASCII_v12" vertex2="Pads536_ASCII_v4" vertex3="Pads536_ASCII_v11"/>
+             <triangular vertex1="Pads536_ASCII_v6" vertex2="Pads536_ASCII_v4" vertex3="Pads536_ASCII_v12"/>
+             <triangular vertex1="Pads536_ASCII_v14" vertex2="Pads536_ASCII_v6" vertex3="Pads536_ASCII_v12"/>
+        </tessellated>
+    </solids>
+
+    <structure>
+        <volume name="Pads536_ASCII">
+            <materialref ref="Vacuum"/>
+            <solidref ref="Pads536_ASCII-SOL"/>
+        </volume>
+    </structure>
+
+    <setup name="Default" version="1.0">
+        <world ref="Pads536_ASCII"/>
+    </setup>
+</gdml>

@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<gdml xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://service-spi.web.cern.ch/service-spi/app/releases/GDML/schema/gdml.xsd">
+
+    <define>
+        <position name="DataBackbone187_ASCII_v0" unit="mm" x="3.308377742767334" y="4.203643798828125" z="-155.80594735717773"/>
+        <position name="DataBackbone187_ASCII_v1" unit="mm" x="0.04797541722655296" y="4.227386474609375" z="-155.80594735717773"/>
+        <position name="DataBackbone187_ASCII_v2" unit="mm" x="0.04797542095184326" y="4.227386474609375" z="-155.74594789123535"/>
+        <position name="DataBackbone187_ASCII_v3" unit="mm" x="3.308377742767334" y="4.203643798828125" z="-155.74594789123535"/>
+        <position name="DataBackbone187_ASCII_v4" unit="mm" x="6.565787315368652" y="4.061981201171875" z="-155.80594735717773"/>
+        <position name="DataBackbone187_ASCII_v5" unit="mm" x="6.565787315368652" y="4.061981201171875" z="-155.74594789123535"/>
+        <position name="DataBackbone187_ASCII_v6" unit="mm" x="9.815939903259277" y="3.802581787109375" z="-155.80594735717773"/>
+        <position name="DataBackbone187_ASCII_v7" unit="mm" x="9.815939903259277" y="3.802581787109375" z="-155.74594789123535"/>
+        <position name="DataBackbone187_ASCII_v8" unit="mm" x="0.048516009002923965" y="4.177398681640625" z="-155.80594735717773"/>
+        <position name="DataBackbone187_ASCII_v9" unit="mm" x="0.048516009002923965" y="4.177398681640625" z="-155.74594789123535"/>
+        <position name="DataBackbone187_ASCII_v10" unit="mm" x="3.3071093559265137" y="4.153656005859375" z="-155.80594735717773"/>
+        <position name="DataBackbone187_ASCII_v11" unit="mm" x="3.3071093559265137" y="4.153656005859375" z="-155.74594789123535"/>
+        <position name="DataBackbone187_ASCII_v12" unit="mm" x="6.562711715698242" y="4.0120849609375" z="-155.74594789123535"/>
+        <position name="DataBackbone187_ASCII_v13" unit="mm" x="6.562711715698242" y="4.0120849609375" z="-155.80594735717773"/>
+        <position name="DataBackbone187_ASCII_v14" unit="mm" x="9.811060905456543" y="3.7528076171875" z="-155.74594789123535"/>
+        <position name="DataBackbone187_ASCII_v15" unit="mm" x="9.811060905456543" y="3.7528076171875" z="-155.80594926452636"/>
+    </define>
+
+    <solids>
+        <tessellated aunit="deg" lunit="mm" name="DataBackbone187_ASCII-SOL">
+             <triangular vertex1="DataBackbone187_ASCII_v0" vertex2="DataBackbone187_ASCII_v1" vertex3="DataBackbone187_ASCII_v2"/>
+             <triangular vertex1="DataBackbone187_ASCII_v0" vertex2="DataBackbone187_ASCII_v2" vertex3="DataBackbone187_ASCII_v3"/>
+             <triangular vertex1="DataBackbone187_ASCII_v4" vertex2="DataBackbone187_ASCII_v3" vertex3="DataBackbone187_ASCII_v5"/>
+             <triangular vertex1="DataBackbone187_ASCII_v4" vertex2="DataBackbone187_ASCII_v0" vertex3="DataBackbone187_ASCII_v3"/>
+             <triangular vertex1="DataBackbone187_ASCII_v6" vertex2="DataBackbone187_ASCII_v5" vertex3="DataBackbone187_ASCII_v7"/>
+             <triangular vertex1="DataBackbone187_ASCII_v6" vertex2="DataBackbone187_ASCII_v4" vertex3="DataBackbone187_ASCII_v5"/>
+             <triangular vertex1="DataBackbone187_ASCII_v1" vertex2="DataBackbone187_ASCII_v8" vertex3="DataBackbone187_ASCII_v9"/>
+             <triangular vertex1="DataBackbone187_ASCII_v1" vertex2="DataBackbone187_ASCII_v9" vertex3="DataBackbone187_ASCII_v2"/>
+             <triangular vertex1="DataBackbone187_ASCII_v8" vertex2="DataBackbone187_ASCII_v10" vertex3="DataBackbone187_ASCII_v9"/>
+             <triangular vertex1="DataBackbone187_ASCII_v9" vertex2="DataBackbone187_ASCII_v10" vertex3="DataBackbone187_ASCII_v11"/>
+             <triangular vertex1="DataBackbone187_ASCII_v12" vertex2="DataBackbone187_ASCII_v13" vertex3="DataBackbone187_ASCII_v14"/>
+             <triangular vertex1="DataBackbone187_ASCII_v11" vertex2="DataBackbone187_ASCII_v13" vertex3="DataBackbone187_ASCII_v12"/>
+             <triangular vertex1="DataBackbone187_ASCII_v10" vertex2="DataBackbone187_ASCII_v13" vertex3="DataBackbone187_ASCII_v11"/>
+             <triangular vertex1="DataBackbone187_ASCII_v13" vertex2="DataBackbone187_ASCII_v15" vertex3="DataBackbone187_ASCII_v14"/>
+             <triangular vertex1="DataBackbone187_ASCII_v6" vertex2="DataBackbone187_ASCII_v7" vertex3="DataBackbone187_ASCII_v14"/>
+             <triangular vertex1="DataBackbone187_ASCII_v15" vertex2="DataBackbone187_ASCII_v6" vertex3="DataBackbone187_ASCII_v14"/>
+             <triangular vertex1="DataBackbone187_ASCII_v1" vertex2="DataBackbone187_ASCII_v0" vertex3="DataBackbone187_ASCII_v8"/>
+             <triangular vertex1="DataBackbone187_ASCII_v0" vertex2="DataBackbone187_ASCII_v10" vertex3="DataBackbone187_ASCII_v8"/>
+             <triangular vertex1="DataBackbone187_ASCII_v0" vertex2="DataBackbone187_ASCII_v4" vertex3="DataBackbone187_ASCII_v10"/>
+             <triangular vertex1="DataBackbone187_ASCII_v4" vertex2="DataBackbone187_ASCII_v13" vertex3="DataBackbone187_ASCII_v10"/>
+             <triangular vertex1="DataBackbone187_ASCII_v4" vertex2="DataBackbone187_ASCII_v6" vertex3="DataBackbone187_ASCII_v13"/>
+             <triangular vertex1="DataBackbone187_ASCII_v6" vertex2="DataBackbone187_ASCII_v15" vertex3="DataBackbone187_ASCII_v13"/>
+             <triangular vertex1="DataBackbone187_ASCII_v3" vertex2="DataBackbone187_ASCII_v2" vertex3="DataBackbone187_ASCII_v9"/>
+             <triangular vertex1="DataBackbone187_ASCII_v11" vertex2="DataBackbone187_ASCII_v3" vertex3="DataBackbone187_ASCII_v9"/>
+             <triangular vertex1="DataBackbone187_ASCII_v5" vertex2="DataBackbone187_ASCII_v3" vertex3="DataBackbone187_ASCII_v11"/>
+             <triangular vertex1="DataBackbone187_ASCII_v12" vertex2="DataBackbone187_ASCII_v5" vertex3="DataBackbone187_ASCII_v11"/>
+             <triangular vertex1="DataBackbone187_ASCII_v7" vertex2="DataBackbone187_ASCII_v5" vertex3="DataBackbone187_ASCII_v12"/>
+             <triangular vertex1="DataBackbone187_ASCII_v14" vertex2="DataBackbone187_ASCII_v7" vertex3="DataBackbone187_ASCII_v12"/>
+        </tessellated>
+    </solids>
+
+    <structure>
+        <volume name="DataBackbone187_ASCII">
+            <materialref ref="Vacuum"/>
+            <solidref ref="DataBackbone187_ASCII-SOL"/>
+        </volume>
+    </structure>
+
+    <setup name="Default" version="1.0">
+        <world ref="DataBackbone187_ASCII"/>
+    </setup>
+</gdml>

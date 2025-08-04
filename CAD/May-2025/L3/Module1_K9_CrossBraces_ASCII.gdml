@@ -1,0 +1,1014 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<gdml xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://service-spi.web.cern.ch/service-spi/app/releases/GDML/schema/gdml.xsd">
+
+    <define>
+        <position name="Module1_K9_CrossBraces_ASCII_v0" unit="mm" x="2.081433057785034" y="-3.875885009765625" z="250.50050634765626"/>
+        <position name="Module1_K9_CrossBraces_ASCII_v1" unit="mm" x="2.9966635704040527" y="-3.850006103515625" z="250.50050634765626"/>
+        <position name="Module1_K9_CrossBraces_ASCII_v2" unit="mm" x="2.9966635704040527" y="-3.850006103515625" z="255.50050634765626"/>
+        <position name="Module1_K9_CrossBraces_ASCII_v3" unit="mm" x="2.081433057785034" y="-3.875885009765625" z="255.50050634765626"/>
+        <position name="Module1_K9_CrossBraces_ASCII_v4" unit="mm" x="1.165986180305481" y="-3.892425537109375" z="250.50050634765626"/>
+        <position name="Module1_K9_CrossBraces_ASCII_v5" unit="mm" x="1.165986180305481" y="-3.892425537109375" z="255.50050634765626"/>
+        <position name="Module1_K9_CrossBraces_ASCII_v6" unit="mm" x="0.25041821599006653" y="-3.899658203125" z="250.50050634765626"/>
+        <position name="Module1_K9_CrossBraces_ASCII_v7" unit="mm" x="0.25041821599006653" y="-3.899658203125" z="255.50050634765626"/>
+        <position name="Module1_K9_CrossBraces_ASCII_v8" unit="mm" x="3.0" y="-3.949951171875" z="250.50050634765626"/>
+        <position name="Module1_K9_CrossBraces_ASCII_v9" unit="mm" x="3.0" y="-3.949951171875" z="255.50050634765626"/>
+        <position name="Module1_K9_CrossBraces_ASCII_v10" unit="mm" x="0.24058949947357178" y="-3.89935302734375" z="255.50050634765626"/>
+        <position name="Module1_K9_CrossBraces_ASCII_v11" unit="mm" x="0.24058949947357178" y="-3.89935302734375" z="250.50050634765626"/>
+        <position name="Module1_K9_CrossBraces_ASCII_v12" unit="mm" x="0.23080122470855713" y="-3.898406982421875" z="255.50050634765626"/>
+        <position name="Module1_K9_CrossBraces_ASCII_v13" unit="mm" x="0.23080122470855713" y="-3.898406982421875" z="250.50050634765626"/>
+        <position name="Module1_K9_CrossBraces_ASCII_v14" unit="mm" x="0.22109545767307281" y="-3.8968505859375" z="255.50050634765626"/>
+        <position name="Module1_K9_CrossBraces_ASCII_v15" unit="mm" x="0.22109545767307281" y="-3.8968505859375" z="250.50050634765626"/>
+        <position name="Module1_K9_CrossBraces_ASCII_v16" unit="mm" x="0.21151389181613922" y="-3.894622802734375" z="255.50050634765626"/>
+        <position name="Module1_K9_CrossBraces_ASCII_v17" unit="mm" x="0.21151389181613922" y="-3.894622802734375" z="250.50050634765626"/>
+        <position name="Module1_K9_CrossBraces_ASCII_v18" unit="mm" x="0.20209771394729614" y="-3.89178466796875" z="255.50050634765626"/>
+        <position name="Module1_K9_CrossBraces_ASCII_v19" unit="mm" x="0.20209771394729614" y="-3.89178466796875" z="250.50050634765626"/>
+        <position name="Module1_K9_CrossBraces_ASCII_v20" unit="mm" x="0.19288739562034607" y="-3.88836669921875" z="255.50050634765626"/>
+        <position name="Module1_K9_CrossBraces_ASCII_v21" unit="mm" x="0.19288739562034607" y="-3.88836669921875" z="250.50050634765626"/>
+        <position name="Module1_K9_CrossBraces_ASCII_v22" unit="mm" x="0.18392251431941986" y="-3.884307861328125" z="255.50050634765626"/>
+        <position name="Module1_K9_CrossBraces_ASCII_v23" unit="mm" x="0.18392251431941986" y="-3.884307861328125" z="250.50050634765626"/>
+        <position name="Module1_K9_CrossBraces_ASCII_v24" unit="mm" x="0.1752415895462036" y="-3.87969970703125" z="255.50050634765626"/>
+        <position name="Module1_K9_CrossBraces_ASCII_v25" unit="mm" x="0.1752415895462036" y="-3.87969970703125" z="250.50050634765626"/>
+        <position name="Module1_K9_CrossBraces_ASCII_v26" unit="mm" x="0.16688193380832672" y="-3.87451171875" z="255.50050634765626"/>
+        <position name="Module1_K9_CrossBraces_ASCII_v27" unit="mm" x="0.16688193380832672" y="-3.87451171875" z="250.50050634765626"/>
+        <position name="Module1_K9_CrossBraces_ASCII_v28" unit="mm" x="0.15887945890426636" y="-3.868804931640625" z="255.50050634765626"/>
+        <position name="Module1_K9_CrossBraces_ASCII_v29" unit="mm" x="0.15887945890426636" y="-3.868804931640625" z="250.50050634765626"/>
+        <position name="Module1_K9_CrossBraces_ASCII_v30" unit="mm" x="0.15126855671405792" y="-3.862579345703125" z="255.50050634765626"/>
+        <position name="Module1_K9_CrossBraces_ASCII_v31" unit="mm" x="0.15126855671405792" y="-3.862579345703125" z="250.50050634765626"/>
+        <position name="Module1_K9_CrossBraces_ASCII_v32" unit="mm" x="0.1440819501876831" y="-3.855865478515625" z="255.50050634765626"/>
+        <position name="Module1_K9_CrossBraces_ASCII_v33" unit="mm" x="0.1440819501876831" y="-3.855865478515625" z="250.50050634765626"/>
+        <position name="Module1_K9_CrossBraces_ASCII_v34" unit="mm" x="0.13735051453113556" y="-3.84869384765625" z="255.50050634765626"/>
+        <position name="Module1_K9_CrossBraces_ASCII_v35" unit="mm" x="0.13735051453113556" y="-3.84869384765625" z="250.50050634765626"/>
+        <position name="Module1_K9_CrossBraces_ASCII_v36" unit="mm" x="0.13110315799713135" y="-3.841094970703125" z="255.50050634765626"/>
+        <position name="Module1_K9_CrossBraces_ASCII_v37" unit="mm" x="0.13110315799713135" y="-3.841094970703125" z="250.50050634765626"/>
+        <position name="Module1_K9_CrossBraces_ASCII_v38" unit="mm" x="0.12536676228046417" y="-3.8331298828125" z="255.50050634765626"/>
+        <position name="Module1_K9_CrossBraces_ASCII_v39" unit="mm" x="0.12536676228046417" y="-3.8331298828125" z="250.50050634765626"/>
+        <position name="Module1_K9_CrossBraces_ASCII_v40" unit="mm" x="0.12016595155000687" y="-3.82476806640625" z="255.50050634765626"/>
+        <position name="Module1_K9_CrossBraces_ASCII_v41" unit="mm" x="0.12016595155000687" y="-3.82476806640625" z="250.50050634765626"/>
+        <position name="Module1_K9_CrossBraces_ASCII_v42" unit="mm" x="0.1155230849981308" y="-3.81610107421875" z="255.50050634765626"/>
+        <position name="Module1_K9_CrossBraces_ASCII_v43" unit="mm" x="0.1155230849981308" y="-3.81610107421875" z="250.50050634765626"/>
+        <position name="Module1_K9_CrossBraces_ASCII_v44" unit="mm" x="0.11145811527967453" y="-3.807159423828125" z="255.50050634765626"/>
+        <position name="Module1_K9_CrossBraces_ASCII_v45" unit="mm" x="0.11145811527967453" y="-3.807159423828125" z="250.50050634765626"/>
+        <position name="Module1_K9_CrossBraces_ASCII_v46" unit="mm" x="0.10798851400613785" y="-3.797943115234375" z="255.50050634765626"/>
+        <position name="Module1_K9_CrossBraces_ASCII_v47" unit="mm" x="0.10798851400613785" y="-3.797943115234375" z="250.50050634765626"/>
+        <position name="Module1_K9_CrossBraces_ASCII_v48" unit="mm" x="0.1051291823387146" y="-3.788543701171875" z="255.50050634765626"/>
+        <position name="Module1_K9_CrossBraces_ASCII_v49" unit="mm" x="0.1051291823387146" y="-3.788543701171875" z="250.50050634765626"/>
+        <position name="Module1_K9_CrossBraces_ASCII_v50" unit="mm" x="0.10289241373538971" y="-3.778961181640625" z="255.50050634765626"/>
+        <position name="Module1_K9_CrossBraces_ASCII_v51" unit="mm" x="0.10289241373538971" y="-3.778961181640625" z="250.50050634765626"/>
+        <position name="Module1_K9_CrossBraces_ASCII_v52" unit="mm" x="0.1012878268957138" y="-3.769256591796875" z="255.50050634765626"/>
+        <position name="Module1_K9_CrossBraces_ASCII_v53" unit="mm" x="0.1012878268957138" y="-3.769256591796875" z="250.50050634765626"/>
+        <position name="Module1_K9_CrossBraces_ASCII_v54" unit="mm" x="0.10032229870557785" y="-3.759490966796875" z="255.50050634765626"/>
+        <position name="Module1_K9_CrossBraces_ASCII_v55" unit="mm" x="0.10032229870557785" y="-3.759490966796875" z="250.50050634765626"/>
+        <position name="Module1_K9_CrossBraces_ASCII_v56" unit="mm" x="0.10000000149011612" y="-3.749664306640625" z="255.50050634765626"/>
+        <position name="Module1_K9_CrossBraces_ASCII_v57" unit="mm" x="0.10000000149011612" y="-3.749664306640625" z="250.50050634765626"/>
+        <position name="Module1_K9_CrossBraces_ASCII_v58" unit="mm" x="3.0" y="3.949951171875" z="250.50050634765626"/>
+        <position name="Module1_K9_CrossBraces_ASCII_v59" unit="mm" x="3.0" y="3.949951171875" z="262.00050634765626"/>
+        <position name="Module1_K9_CrossBraces_ASCII_v60" unit="mm" x="6.993347644805908" y="3.727630615234375" z="262.00050634765626"/>
+        <position name="Module1_K9_CrossBraces_ASCII_v61" unit="mm" x="6.993347644805908" y="3.727630615234375" z="250.50050634765626"/>
+        <position name="Module1_K9_CrossBraces_ASCII_v62" unit="mm" x="10.972858428955078" y="3.32794189453125" z="262.00050634765626"/>
+        <position name="Module1_K9_CrossBraces_ASCII_v63" unit="mm" x="10.972858428955078" y="3.32794189453125" z="250.50050634765626"/>
+        <position name="Module1_K9_CrossBraces_ASCII_v64" unit="mm" x="14.930657386779785" y="2.751678466796875" z="262.00050634765626"/>
+        <position name="Module1_K9_CrossBraces_ASCII_v65" unit="mm" x="14.930657386779785" y="2.751678466796875" z="250.50050634765626"/>
+        <position name="Module1_K9_CrossBraces_ASCII_v66" unit="mm" x="18.858915328979492" y="2.0" z="250.50050634765626"/>
+        <position name="Module1_K9_CrossBraces_ASCII_v67" unit="mm" x="18.858915328979492" y="2.0" z="262.00050634765626"/>
+        <position name="Module1_K9_CrossBraces_ASCII_v68" unit="mm" x="18.858915328979492" y="-2.0" z="250.50050634765626"/>
+        <position name="Module1_K9_CrossBraces_ASCII_v69" unit="mm" x="18.858915328979492" y="-2.0" z="262.00050634765626"/>
+        <position name="Module1_K9_CrossBraces_ASCII_v70" unit="mm" x="17.98239517211914" y="-2.1834716796875" z="256.66737646484376"/>
+        <position name="Module1_K9_CrossBraces_ASCII_v71" unit="mm" x="17.962560653686523" y="-2.1875" z="256.6956052246094"/>
+        <position name="Module1_K9_CrossBraces_ASCII_v72" unit="mm" x="17.94143295288086" y="-2.191802978515625" z="256.72291845703126"/>
+        <position name="Module1_K9_CrossBraces_ASCII_v73" unit="mm" x="18.000905990600586" y="-2.1796875" z="256.6382626953125"/>
+        <position name="Module1_K9_CrossBraces_ASCII_v74" unit="mm" x="17.91904067993164" y="-2.196380615234375" z="256.74928564453126"/>
+        <position name="Module1_K9_CrossBraces_ASCII_v75" unit="mm" x="18.01806640625" y="-2.176177978515625" z="256.6083249511719"/>
+        <position name="Module1_K9_CrossBraces_ASCII_v76" unit="mm" x="17.89541244506836" y="-2.201171875" z="256.774615234375"/>
+        <position name="Module1_K9_CrossBraces_ASCII_v77" unit="mm" x="18.033845901489258" y="-2.172943115234375" z="256.5775632324219"/>
+        <position name="Module1_K9_CrossBraces_ASCII_v78" unit="mm" x="17.8706111907959" y="-2.206207275390625" z="256.79884619140626"/>
+        <position name="Module1_K9_CrossBraces_ASCII_v79" unit="mm" x="18.048215866088867" y="-2.170013427734375" z="256.546099609375"/>
+        <position name="Module1_K9_CrossBraces_ASCII_v80" unit="mm" x="17.84480094909668" y="-2.21142578125" z="256.8218259277344"/>
+        <position name="Module1_K9_CrossBraces_ASCII_v81" unit="mm" x="18.061132431030273" y="-2.1673583984375" z="256.51390356445313"/>
+        <position name="Module1_K9_CrossBraces_ASCII_v82" unit="mm" x="17.81804084777832" y="-2.21685791015625" z="256.84349340820313"/>
+        <position name="Module1_K9_CrossBraces_ASCII_v83" unit="mm" x="18.072542190551758" y="-2.165008544921875" z="256.4811276855469"/>
+        <position name="Module1_K9_CrossBraces_ASCII_v84" unit="mm" x="17.790388107299805" y="-2.222442626953125" z="256.86387915039063"/>
+        <position name="Module1_K9_CrossBraces_ASCII_v85" unit="mm" x="18.082429885864258" y="-2.162994384765625" z="256.4478330078125"/>
+        <position name="Module1_K9_CrossBraces_ASCII_v86" unit="mm" x="17.761898040771484" y="-2.228179931640625" z="256.88292211914063"/>
+        <position name="Module1_K9_CrossBraces_ASCII_v87" unit="mm" x="18.090778350830078" y="-2.161285400390625" z="256.4141110839844"/>
+        <position name="Module1_K9_CrossBraces_ASCII_v88" unit="mm" x="17.732624053955078" y="-2.23406982421875" z="256.900591796875"/>
+        <position name="Module1_K9_CrossBraces_ASCII_v89" unit="mm" x="18.097570419311523" y="-2.159881591796875" z="256.38002294921876"/>
+        <position name="Module1_K9_CrossBraces_ASCII_v90" unit="mm" x="17.702619552612305" y="-2.240081787109375" z="256.9169187011719"/>
+        <position name="Module1_K9_CrossBraces_ASCII_v91" unit="mm" x="18.10279083251953" y="-2.1588134765625" z="256.34569067382813"/>
+        <position name="Module1_K9_CrossBraces_ASCII_v92" unit="mm" x="17.67194175720215" y="-2.246246337890625" z="256.931841796875"/>
+        <position name="Module1_K9_CrossBraces_ASCII_v93" unit="mm" x="18.10642433166504" y="-2.158050537109375" z="256.31117529296876"/>
+        <position name="Module1_K9_CrossBraces_ASCII_v94" unit="mm" x="17.640642166137695" y="-2.25250244140625" z="256.9453610839844"/>
+        <position name="Module1_K9_CrossBraces_ASCII_v95" unit="mm" x="18.10845375061035" y="-2.15765380859375" z="256.276568359375"/>
+        <position name="Module1_K9_CrossBraces_ASCII_v96" unit="mm" x="17.60877799987793" y="-2.258880615234375" z="256.9574765625"/>
+        <position name="Module1_K9_CrossBraces_ASCII_v97" unit="mm" x="18.10886573791504" y="-2.157562255859375" z="256.24193090820313"/>
+        <position name="Module1_K9_CrossBraces_ASCII_v98" unit="mm" x="17.576404571533203" y="-2.265350341796875" z="256.9680966796875"/>
+        <position name="Module1_K9_CrossBraces_ASCII_v99" unit="mm" x="17.5435733795166" y="-2.271881103515625" z="256.97728247070313"/>
+        <position name="Module1_K9_CrossBraces_ASCII_v100" unit="mm" x="17.51034164428711" y="-2.27850341796875" z="256.9849423828125"/>
+        <position name="Module1_K9_CrossBraces_ASCII_v101" unit="mm" x="17.476760864257812" y="-2.28515625" z="256.99110693359376"/>
+        <position name="Module1_K9_CrossBraces_ASCII_v102" unit="mm" x="17.442890167236328" y="-2.2918701171875" z="256.99574560546876"/>
+        <position name="Module1_K9_CrossBraces_ASCII_v103" unit="mm" x="17.40877914428711" y="-2.298614501953125" z="256.9988278808594"/>
+        <position name="Module1_K9_CrossBraces_ASCII_v104" unit="mm" x="17.383886337280273" y="-2.30352783203125" z="257.0000791015625"/>
+        <position name="Module1_K9_CrossBraces_ASCII_v105" unit="mm" x="17.358915328979492" y="-2.308441162109375" z="257.00050634765626"/>
+        <position name="Module1_K9_CrossBraces_ASCII_v106" unit="mm" x="14.930657386779785" y="-2.751678466796875" z="262.00050634765626"/>
+        <position name="Module1_K9_CrossBraces_ASCII_v107" unit="mm" x="17.393247604370117" y="-2.301666259765625" z="255.5012998046875"/>
+        <position name="Module1_K9_CrossBraces_ASCII_v108" unit="mm" x="17.358915328979492" y="-2.308441162109375" z="255.50050634765626"/>
+        <position name="Module1_K9_CrossBraces_ASCII_v109" unit="mm" x="17.42738151550293" y="-2.294921875" z="255.503619140625"/>
+        <position name="Module1_K9_CrossBraces_ASCII_v110" unit="mm" x="17.461280822753906" y="-2.288238525390625" z="255.50749487304688"/>
+        <position name="Module1_K9_CrossBraces_ASCII_v111" unit="mm" x="17.494911193847656" y="-2.28155517578125" z="255.512896484375"/>
+        <position name="Module1_K9_CrossBraces_ASCII_v112" unit="mm" x="17.52823257446289" y="-2.27496337890625" z="255.51982397460938"/>
+        <position name="Module1_K9_CrossBraces_ASCII_v113" unit="mm" x="17.561208724975586" y="-2.268402099609375" z="255.52827734375"/>
+        <position name="Module1_K9_CrossBraces_ASCII_v114" unit="mm" x="17.593801498413086" y="-2.26190185546875" z="255.53822607421876"/>
+        <position name="Module1_K9_CrossBraces_ASCII_v115" unit="mm" x="17.6259765625" y="-2.255462646484375" z="255.54967016601563"/>
+        <position name="Module1_K9_CrossBraces_ASCII_v116" unit="mm" x="17.657682418823242" y="-2.249114990234375" z="255.5625791015625"/>
+        <position name="Module1_K9_CrossBraces_ASCII_v117" unit="mm" x="17.688772201538086" y="-2.242889404296875" z="255.57695288085938"/>
+        <position name="Module1_K9_CrossBraces_ASCII_v118" unit="mm" x="17.71916961669922" y="-2.236785888671875" z="255.59273046875"/>
+        <position name="Module1_K9_CrossBraces_ASCII_v119" unit="mm" x="17.748817443847656" y="-2.230804443359375" z="255.60988134765626"/>
+        <position name="Module1_K9_CrossBraces_ASCII_v120" unit="mm" x="17.777660369873047" y="-2.225006103515625" z="255.62834448242188"/>
+        <position name="Module1_K9_CrossBraces_ASCII_v121" unit="mm" x="17.805639266967773" y="-2.2193603515625" z="255.64811987304688"/>
+        <position name="Module1_K9_CrossBraces_ASCII_v122" unit="mm" x="17.832698822021484" y="-2.213897705078125" z="255.669146484375"/>
+        <position name="Module1_K9_CrossBraces_ASCII_v123" unit="mm" x="17.858781814575195" y="-2.2086181640625" z="255.69139379882813"/>
+        <position name="Module1_K9_CrossBraces_ASCII_v124" unit="mm" x="17.88382911682129" y="-2.203521728515625" z="255.71483129882813"/>
+        <position name="Module1_K9_CrossBraces_ASCII_v125" unit="mm" x="17.907798767089844" y="-2.19866943359375" z="255.73942846679688"/>
+        <position name="Module1_K9_CrossBraces_ASCII_v126" unit="mm" x="17.930648803710938" y="-2.194000244140625" z="255.76515478515626"/>
+        <position name="Module1_K9_CrossBraces_ASCII_v127" unit="mm" x="17.95233154296875" y="-2.189605712890625" z="255.79197973632813"/>
+        <position name="Module1_K9_CrossBraces_ASCII_v128" unit="mm" x="17.97279167175293" y="-2.1854248046875" z="255.81978125"/>
+        <position name="Module1_K9_CrossBraces_ASCII_v129" unit="mm" x="17.991979598999023" y="-2.1815185546875" z="255.84852880859376"/>
+        <position name="Module1_K9_CrossBraces_ASCII_v130" unit="mm" x="18.009843826293945" y="-2.1778564453125" z="255.87810034179688"/>
+        <position name="Module1_K9_CrossBraces_ASCII_v131" unit="mm" x="18.026330947875977" y="-2.17449951171875" z="255.90846533203126"/>
+        <position name="Module1_K9_CrossBraces_ASCII_v132" unit="mm" x="18.04138946533203" y="-2.171417236328125" z="255.93950170898438"/>
+        <position name="Module1_K9_CrossBraces_ASCII_v133" unit="mm" x="18.05497169494629" y="-2.168609619140625" z="255.97120947265626"/>
+        <position name="Module1_K9_CrossBraces_ASCII_v134" unit="mm" x="18.067073822021484" y="-2.1661376953125" z="256.0035886230469"/>
+        <position name="Module1_K9_CrossBraces_ASCII_v135" unit="mm" x="18.077686309814453" y="-2.163970947265625" z="256.036578125"/>
+        <position name="Module1_K9_CrossBraces_ASCII_v136" unit="mm" x="18.0867862701416" y="-2.162078857421875" z="256.07008642578126"/>
+        <position name="Module1_K9_CrossBraces_ASCII_v137" unit="mm" x="18.09435272216797" y="-2.160552978515625" z="256.10399145507813"/>
+        <position name="Module1_K9_CrossBraces_ASCII_v138" unit="mm" x="18.100366592407227" y="-2.1593017578125" z="256.1382321777344"/>
+        <position name="Module1_K9_CrossBraces_ASCII_v139" unit="mm" x="18.10480308532715" y="-2.15838623046875" z="256.1726865234375"/>
+        <position name="Module1_K9_CrossBraces_ASCII_v140" unit="mm" x="18.107643127441406" y="-2.157806396484375" z="256.20729345703126"/>
+        <position name="Module1_K9_CrossBraces_ASCII_v141" unit="mm" x="13.796865463256836" y="-2.9351806640625" z="257.00050634765626"/>
+        <position name="Module1_K9_CrossBraces_ASCII_v142" unit="mm" x="10.972858428955078" y="-3.32794189453125" z="262.00050634765626"/>
+        <position name="Module1_K9_CrossBraces_ASCII_v143" unit="mm" x="10.212491989135742" y="-3.41815185546875" z="257.00050634765626"/>
+        <position name="Module1_K9_CrossBraces_ASCII_v144" unit="mm" x="6.993347644805908" y="-3.727630615234375" z="262.00050634765626"/>
+        <position name="Module1_K9_CrossBraces_ASCII_v145" unit="mm" x="14.930657386779785" y="-2.751678466796875" z="250.50050634765626"/>
+        <position name="Module1_K9_CrossBraces_ASCII_v146" unit="mm" x="13.796865463256836" y="-2.9351806640625" z="255.50050634765626"/>
+        <position name="Module1_K9_CrossBraces_ASCII_v147" unit="mm" x="6.6115946769714355" y="-3.756591796875" z="257.00050634765626"/>
+        <position name="Module1_K9_CrossBraces_ASCII_v148" unit="mm" x="3.0" y="-3.949951171875" z="262.00050634765626"/>
+        <position name="Module1_K9_CrossBraces_ASCII_v149" unit="mm" x="10.972858428955078" y="-3.32794189453125" z="250.50050634765626"/>
+        <position name="Module1_K9_CrossBraces_ASCII_v150" unit="mm" x="10.212491989135742" y="-3.41815185546875" z="255.50050634765626"/>
+        <position name="Module1_K9_CrossBraces_ASCII_v151" unit="mm" x="3.0" y="-3.949951171875" z="257.00050634765626"/>
+        <position name="Module1_K9_CrossBraces_ASCII_v152" unit="mm" x="6.993347644805908" y="-3.727630615234375" z="250.50050634765626"/>
+        <position name="Module1_K9_CrossBraces_ASCII_v153" unit="mm" x="6.6115946769714355" y="-3.756591796875" z="255.50050634765626"/>
+        <position name="Module1_K9_CrossBraces_ASCII_v154" unit="mm" x="2.9966635704040527" y="-3.850006103515625" z="262.00050634765626"/>
+        <position name="Module1_K9_CrossBraces_ASCII_v155" unit="mm" x="0.25041821599006653" y="-3.899658203125" z="262.00050634765626"/>
+        <position name="Module1_K9_CrossBraces_ASCII_v156" unit="mm" x="0.22109545767307281" y="-3.8968505859375" z="262.00050634765626"/>
+        <position name="Module1_K9_CrossBraces_ASCII_v157" unit="mm" x="0.24058949947357178" y="-3.89935302734375" z="262.00050634765626"/>
+        <position name="Module1_K9_CrossBraces_ASCII_v158" unit="mm" x="0.23080122470855713" y="-3.898406982421875" z="262.00050634765626"/>
+        <position name="Module1_K9_CrossBraces_ASCII_v159" unit="mm" x="0.21151389181613922" y="-3.894622802734375" z="262.00050634765626"/>
+        <position name="Module1_K9_CrossBraces_ASCII_v160" unit="mm" x="0.19288739562034607" y="-3.88836669921875" z="262.00050634765626"/>
+        <position name="Module1_K9_CrossBraces_ASCII_v161" unit="mm" x="0.20209771394729614" y="-3.89178466796875" z="262.00050634765626"/>
+        <position name="Module1_K9_CrossBraces_ASCII_v162" unit="mm" x="0.1752415895462036" y="-3.87969970703125" z="262.00050634765626"/>
+        <position name="Module1_K9_CrossBraces_ASCII_v163" unit="mm" x="0.18392251431941986" y="-3.884307861328125" z="262.00050634765626"/>
+        <position name="Module1_K9_CrossBraces_ASCII_v164" unit="mm" x="0.16688193380832672" y="-3.87451171875" z="262.00050634765626"/>
+        <position name="Module1_K9_CrossBraces_ASCII_v165" unit="mm" x="0.15126855671405792" y="-3.862579345703125" z="262.00050634765626"/>
+        <position name="Module1_K9_CrossBraces_ASCII_v166" unit="mm" x="0.15887945890426636" y="-3.868804931640625" z="262.00050634765626"/>
+        <position name="Module1_K9_CrossBraces_ASCII_v167" unit="mm" x="0.12536676228046417" y="-3.8331298828125" z="262.00050634765626"/>
+        <position name="Module1_K9_CrossBraces_ASCII_v168" unit="mm" x="0.1440819501876831" y="-3.855865478515625" z="262.00050634765626"/>
+        <position name="Module1_K9_CrossBraces_ASCII_v169" unit="mm" x="0.13735051453113556" y="-3.84869384765625" z="262.00050634765626"/>
+        <position name="Module1_K9_CrossBraces_ASCII_v170" unit="mm" x="0.13110315799713135" y="-3.841094970703125" z="262.00050634765626"/>
+        <position name="Module1_K9_CrossBraces_ASCII_v171" unit="mm" x="0.1155230849981308" y="-3.81610107421875" z="262.00050634765626"/>
+        <position name="Module1_K9_CrossBraces_ASCII_v172" unit="mm" x="0.12016595155000687" y="-3.82476806640625" z="262.00050634765626"/>
+        <position name="Module1_K9_CrossBraces_ASCII_v173" unit="mm" x="0.11145811527967453" y="-3.807159423828125" z="262.00050634765626"/>
+        <position name="Module1_K9_CrossBraces_ASCII_v174" unit="mm" x="0.1051291823387146" y="-3.788543701171875" z="262.00050634765626"/>
+        <position name="Module1_K9_CrossBraces_ASCII_v175" unit="mm" x="0.10798851400613785" y="-3.797943115234375" z="262.00050634765626"/>
+        <position name="Module1_K9_CrossBraces_ASCII_v176" unit="mm" x="0.10289241373538971" y="-3.778961181640625" z="262.00050634765626"/>
+        <position name="Module1_K9_CrossBraces_ASCII_v177" unit="mm" x="0.1012878268957138" y="-3.769256591796875" z="262.00050634765626"/>
+        <position name="Module1_K9_CrossBraces_ASCII_v178" unit="mm" x="0.10032229870557785" y="-3.759490966796875" z="262.00050634765626"/>
+        <position name="Module1_K9_CrossBraces_ASCII_v179" unit="mm" x="0.10000000149011612" y="-3.749664306640625" z="262.00050634765626"/>
+        <position name="Module1_K9_CrossBraces_ASCII_v180" unit="mm" x="1.165986180305481" y="-3.892425537109375" z="262.00050634765626"/>
+        <position name="Module1_K9_CrossBraces_ASCII_v181" unit="mm" x="2.9966635704040527" y="3.850006103515625" z="262.00050634765626"/>
+        <position name="Module1_K9_CrossBraces_ASCII_v182" unit="mm" x="2.081433057785034" y="-3.875885009765625" z="262.00050634765626"/>
+        <position name="Module1_K9_CrossBraces_ASCII_v183" unit="mm" x="2.081433057785034" y="3.875885009765625" z="262.00050634765626"/>
+        <position name="Module1_K9_CrossBraces_ASCII_v184" unit="mm" x="1.165986180305481" y="3.892425537109375" z="262.00050634765626"/>
+        <position name="Module1_K9_CrossBraces_ASCII_v185" unit="mm" x="0.25041821599006653" y="3.899658203125" z="262.00050634765626"/>
+        <position name="Module1_K9_CrossBraces_ASCII_v186" unit="mm" x="0.10000000149011612" y="3.749664306640625" z="262.00050634765626"/>
+        <position name="Module1_K9_CrossBraces_ASCII_v187" unit="mm" x="0.24058949947357178" y="3.89935302734375" z="262.00050634765626"/>
+        <position name="Module1_K9_CrossBraces_ASCII_v188" unit="mm" x="0.23080122470855713" y="3.898406982421875" z="262.00050634765626"/>
+        <position name="Module1_K9_CrossBraces_ASCII_v189" unit="mm" x="0.1012878268957138" y="3.769256591796875" z="262.00050634765626"/>
+        <position name="Module1_K9_CrossBraces_ASCII_v190" unit="mm" x="0.10032229870557785" y="3.759490966796875" z="262.00050634765626"/>
+        <position name="Module1_K9_CrossBraces_ASCII_v191" unit="mm" x="0.22109545767307281" y="3.8968505859375" z="262.00050634765626"/>
+        <position name="Module1_K9_CrossBraces_ASCII_v192" unit="mm" x="0.10289241373538971" y="3.778961181640625" z="262.00050634765626"/>
+        <position name="Module1_K9_CrossBraces_ASCII_v193" unit="mm" x="0.21151389181613922" y="3.894622802734375" z="262.00050634765626"/>
+        <position name="Module1_K9_CrossBraces_ASCII_v194" unit="mm" x="0.20209771394729614" y="3.89178466796875" z="262.00050634765626"/>
+        <position name="Module1_K9_CrossBraces_ASCII_v195" unit="mm" x="0.19288739562034607" y="3.88836669921875" z="262.00050634765626"/>
+        <position name="Module1_K9_CrossBraces_ASCII_v196" unit="mm" x="0.11145811527967453" y="3.807159423828125" z="262.00050634765626"/>
+        <position name="Module1_K9_CrossBraces_ASCII_v197" unit="mm" x="0.1051291823387146" y="3.788543701171875" z="262.00050634765626"/>
+        <position name="Module1_K9_CrossBraces_ASCII_v198" unit="mm" x="0.10798851400613785" y="3.797943115234375" z="262.00050634765626"/>
+        <position name="Module1_K9_CrossBraces_ASCII_v199" unit="mm" x="0.18392251431941986" y="3.884307861328125" z="262.00050634765626"/>
+        <position name="Module1_K9_CrossBraces_ASCII_v200" unit="mm" x="0.1155230849981308" y="3.81610107421875" z="262.00050634765626"/>
+        <position name="Module1_K9_CrossBraces_ASCII_v201" unit="mm" x="0.1752415895462036" y="3.87969970703125" z="262.00050634765626"/>
+        <position name="Module1_K9_CrossBraces_ASCII_v202" unit="mm" x="0.16688193380832672" y="3.87451171875" z="262.00050634765626"/>
+        <position name="Module1_K9_CrossBraces_ASCII_v203" unit="mm" x="0.13110315799713135" y="3.841094970703125" z="262.00050634765626"/>
+        <position name="Module1_K9_CrossBraces_ASCII_v204" unit="mm" x="0.12016595155000687" y="3.82476806640625" z="262.00050634765626"/>
+        <position name="Module1_K9_CrossBraces_ASCII_v205" unit="mm" x="0.12536676228046417" y="3.8331298828125" z="262.00050634765626"/>
+        <position name="Module1_K9_CrossBraces_ASCII_v206" unit="mm" x="0.15887945890426636" y="3.868804931640625" z="262.00050634765626"/>
+        <position name="Module1_K9_CrossBraces_ASCII_v207" unit="mm" x="0.15126855671405792" y="3.862579345703125" z="262.00050634765626"/>
+        <position name="Module1_K9_CrossBraces_ASCII_v208" unit="mm" x="0.1440819501876831" y="3.855865478515625" z="262.00050634765626"/>
+        <position name="Module1_K9_CrossBraces_ASCII_v209" unit="mm" x="0.13735051453113556" y="3.84869384765625" z="262.00050634765626"/>
+        <position name="Module1_K9_CrossBraces_ASCII_v210" unit="mm" x="2.9966635704040527" y="3.850006103515625" z="250.50050634765626"/>
+        <position name="Module1_K9_CrossBraces_ASCII_v211" unit="mm" x="2.081433057785034" y="3.875885009765625" z="250.50050634765626"/>
+        <position name="Module1_K9_CrossBraces_ASCII_v212" unit="mm" x="1.165986180305481" y="3.892425537109375" z="250.50050634765626"/>
+        <position name="Module1_K9_CrossBraces_ASCII_v213" unit="mm" x="0.10000000149011612" y="3.749664306640625" z="250.50050634765626"/>
+        <position name="Module1_K9_CrossBraces_ASCII_v214" unit="mm" x="0.25041821599006653" y="3.899658203125" z="250.50050634765626"/>
+        <position name="Module1_K9_CrossBraces_ASCII_v215" unit="mm" x="0.23080122470855713" y="3.898406982421875" z="250.50050634765626"/>
+        <position name="Module1_K9_CrossBraces_ASCII_v216" unit="mm" x="0.24058949947357178" y="3.89935302734375" z="250.50050634765626"/>
+        <position name="Module1_K9_CrossBraces_ASCII_v217" unit="mm" x="0.1012878268957138" y="3.769256591796875" z="250.50050634765626"/>
+        <position name="Module1_K9_CrossBraces_ASCII_v218" unit="mm" x="0.10032229870557785" y="3.759490966796875" z="250.50050634765626"/>
+        <position name="Module1_K9_CrossBraces_ASCII_v219" unit="mm" x="0.10289241373538971" y="3.778961181640625" z="250.50050634765626"/>
+        <position name="Module1_K9_CrossBraces_ASCII_v220" unit="mm" x="0.21151389181613922" y="3.894622802734375" z="250.50050634765626"/>
+        <position name="Module1_K9_CrossBraces_ASCII_v221" unit="mm" x="0.22109545767307281" y="3.8968505859375" z="250.50050634765626"/>
+        <position name="Module1_K9_CrossBraces_ASCII_v222" unit="mm" x="0.20209771394729614" y="3.89178466796875" z="250.50050634765626"/>
+        <position name="Module1_K9_CrossBraces_ASCII_v223" unit="mm" x="0.11145811527967453" y="3.807159423828125" z="250.50050634765626"/>
+        <position name="Module1_K9_CrossBraces_ASCII_v224" unit="mm" x="0.1051291823387146" y="3.788543701171875" z="250.50050634765626"/>
+        <position name="Module1_K9_CrossBraces_ASCII_v225" unit="mm" x="0.10798851400613785" y="3.797943115234375" z="250.50050634765626"/>
+        <position name="Module1_K9_CrossBraces_ASCII_v226" unit="mm" x="0.1752415895462036" y="3.87969970703125" z="250.50050634765626"/>
+        <position name="Module1_K9_CrossBraces_ASCII_v227" unit="mm" x="0.18392251431941986" y="3.884307861328125" z="250.50050634765626"/>
+        <position name="Module1_K9_CrossBraces_ASCII_v228" unit="mm" x="0.19288739562034607" y="3.88836669921875" z="250.50050634765626"/>
+        <position name="Module1_K9_CrossBraces_ASCII_v229" unit="mm" x="0.16688193380832672" y="3.87451171875" z="250.50050634765626"/>
+        <position name="Module1_K9_CrossBraces_ASCII_v230" unit="mm" x="0.12536676228046417" y="3.8331298828125" z="250.50050634765626"/>
+        <position name="Module1_K9_CrossBraces_ASCII_v231" unit="mm" x="0.1155230849981308" y="3.81610107421875" z="250.50050634765626"/>
+        <position name="Module1_K9_CrossBraces_ASCII_v232" unit="mm" x="0.12016595155000687" y="3.82476806640625" z="250.50050634765626"/>
+        <position name="Module1_K9_CrossBraces_ASCII_v233" unit="mm" x="0.13110315799713135" y="3.841094970703125" z="250.50050634765626"/>
+        <position name="Module1_K9_CrossBraces_ASCII_v234" unit="mm" x="0.15887945890426636" y="3.868804931640625" z="250.50050634765626"/>
+        <position name="Module1_K9_CrossBraces_ASCII_v235" unit="mm" x="0.1440819501876831" y="3.855865478515625" z="250.50050634765626"/>
+        <position name="Module1_K9_CrossBraces_ASCII_v236" unit="mm" x="0.15126855671405792" y="3.862579345703125" z="250.50050634765626"/>
+        <position name="Module1_K9_CrossBraces_ASCII_v237" unit="mm" x="0.13735051453113556" y="3.84869384765625" z="250.50050634765626"/>
+        <position name="Module1_K9_CrossBraces_ASCII_v238" unit="mm" x="0.10000000149011612" y="2.0" z="257.00050634765626"/>
+        <position name="Module1_K9_CrossBraces_ASCII_v239" unit="mm" x="0.10000000149011612" y="2.0" z="255.50050634765626"/>
+        <position name="Module1_K9_CrossBraces_ASCII_v240" unit="mm" x="0.10000000149011612" y="-3.749664306640625" z="257.00050634765626"/>
+        <position name="Module1_K9_CrossBraces_ASCII_v241" unit="mm" x="2.081433057785034" y="-3.875885009765625" z="257.00050634765626"/>
+        <position name="Module1_K9_CrossBraces_ASCII_v242" unit="mm" x="2.9966635704040527" y="-3.850006103515625" z="257.00050634765626"/>
+        <position name="Module1_K9_CrossBraces_ASCII_v243" unit="mm" x="1.165986180305481" y="-3.892425537109375" z="257.00050634765626"/>
+        <position name="Module1_K9_CrossBraces_ASCII_v244" unit="mm" x="0.25041821599006653" y="-3.899658203125" z="257.00050634765626"/>
+        <position name="Module1_K9_CrossBraces_ASCII_v245" unit="mm" x="0.24058949947357178" y="-3.89935302734375" z="257.00050634765626"/>
+        <position name="Module1_K9_CrossBraces_ASCII_v246" unit="mm" x="0.23080122470855713" y="-3.898406982421875" z="257.00050634765626"/>
+        <position name="Module1_K9_CrossBraces_ASCII_v247" unit="mm" x="0.22109545767307281" y="-3.8968505859375" z="257.00050634765626"/>
+        <position name="Module1_K9_CrossBraces_ASCII_v248" unit="mm" x="0.21151389181613922" y="-3.894622802734375" z="257.00050634765626"/>
+        <position name="Module1_K9_CrossBraces_ASCII_v249" unit="mm" x="0.20209771394729614" y="-3.89178466796875" z="257.00050634765626"/>
+        <position name="Module1_K9_CrossBraces_ASCII_v250" unit="mm" x="0.19288739562034607" y="-3.88836669921875" z="257.00050634765626"/>
+        <position name="Module1_K9_CrossBraces_ASCII_v251" unit="mm" x="0.18392251431941986" y="-3.884307861328125" z="257.00050634765626"/>
+        <position name="Module1_K9_CrossBraces_ASCII_v252" unit="mm" x="0.1752415895462036" y="-3.87969970703125" z="257.00050634765626"/>
+        <position name="Module1_K9_CrossBraces_ASCII_v253" unit="mm" x="0.16688193380832672" y="-3.87451171875" z="257.00050634765626"/>
+        <position name="Module1_K9_CrossBraces_ASCII_v254" unit="mm" x="0.15887945890426636" y="-3.868804931640625" z="257.00050634765626"/>
+        <position name="Module1_K9_CrossBraces_ASCII_v255" unit="mm" x="0.15126855671405792" y="-3.862579345703125" z="257.00050634765626"/>
+        <position name="Module1_K9_CrossBraces_ASCII_v256" unit="mm" x="0.1440819501876831" y="-3.855865478515625" z="257.00050634765626"/>
+        <position name="Module1_K9_CrossBraces_ASCII_v257" unit="mm" x="0.13735051453113556" y="-3.84869384765625" z="257.00050634765626"/>
+        <position name="Module1_K9_CrossBraces_ASCII_v258" unit="mm" x="0.13110315799713135" y="-3.841094970703125" z="257.00050634765626"/>
+        <position name="Module1_K9_CrossBraces_ASCII_v259" unit="mm" x="0.12536676228046417" y="-3.8331298828125" z="257.00050634765626"/>
+        <position name="Module1_K9_CrossBraces_ASCII_v260" unit="mm" x="0.12016595155000687" y="-3.82476806640625" z="257.00050634765626"/>
+        <position name="Module1_K9_CrossBraces_ASCII_v261" unit="mm" x="0.1155230849981308" y="-3.81610107421875" z="257.00050634765626"/>
+        <position name="Module1_K9_CrossBraces_ASCII_v262" unit="mm" x="0.11145811527967453" y="-3.807159423828125" z="257.00050634765626"/>
+        <position name="Module1_K9_CrossBraces_ASCII_v263" unit="mm" x="0.10798851400613785" y="-3.797943115234375" z="257.00050634765626"/>
+        <position name="Module1_K9_CrossBraces_ASCII_v264" unit="mm" x="0.1051291823387146" y="-3.788543701171875" z="257.00050634765626"/>
+        <position name="Module1_K9_CrossBraces_ASCII_v265" unit="mm" x="0.10289241373538971" y="-3.778961181640625" z="257.00050634765626"/>
+        <position name="Module1_K9_CrossBraces_ASCII_v266" unit="mm" x="0.1012878268957138" y="-3.769256591796875" z="257.00050634765626"/>
+        <position name="Module1_K9_CrossBraces_ASCII_v267" unit="mm" x="0.10032229870557785" y="-3.759490966796875" z="257.00050634765626"/>
+        <position name="Module1_K9_CrossBraces_ASCII_v268" unit="mm" x="17.358915328979492" y="2.0" z="255.50050634765626"/>
+        <position name="Module1_K9_CrossBraces_ASCII_v269" unit="mm" x="17.396299362182617" y="2.0" z="255.50145239257813"/>
+        <position name="Module1_K9_CrossBraces_ASCII_v270" unit="mm" x="17.433591842651367" y="2.0" z="255.5042294921875"/>
+        <position name="Module1_K9_CrossBraces_ASCII_v271" unit="mm" x="17.4706974029541" y="2.0" z="255.50889868164063"/>
+        <position name="Module1_K9_CrossBraces_ASCII_v272" unit="mm" x="17.507524490356445" y="2.0" z="255.51536840820313"/>
+        <position name="Module1_K9_CrossBraces_ASCII_v273" unit="mm" x="17.543983459472656" y="2.0" z="255.52369970703126"/>
+        <position name="Module1_K9_CrossBraces_ASCII_v274" unit="mm" x="17.57998275756836" y="2.0" z="255.53383154296876"/>
+        <position name="Module1_K9_CrossBraces_ASCII_v275" unit="mm" x="17.61543083190918" y="2.0" z="255.5457333984375"/>
+        <position name="Module1_K9_CrossBraces_ASCII_v276" unit="mm" x="17.65024185180664" y="2.0" z="255.5594052734375"/>
+        <position name="Module1_K9_CrossBraces_ASCII_v277" unit="mm" x="17.684328079223633" y="2.0" z="255.5747861328125"/>
+        <position name="Module1_K9_CrossBraces_ASCII_v278" unit="mm" x="17.717605590820312" y="2.0" z="255.59184545898438"/>
+        <position name="Module1_K9_CrossBraces_ASCII_v279" unit="mm" x="17.74999237060547" y="2.0" z="255.610552734375"/>
+        <position name="Module1_K9_CrossBraces_ASCII_v280" unit="mm" x="17.78140640258789" y="2.0" z="255.63084692382813"/>
+        <position name="Module1_K9_CrossBraces_ASCII_v281" unit="mm" x="17.811769485473633" y="2.0" z="255.6526669921875"/>
+        <position name="Module1_K9_CrossBraces_ASCII_v282" unit="mm" x="17.841007232666016" y="2.0" z="255.675982421875"/>
+        <position name="Module1_K9_CrossBraces_ASCII_v283" unit="mm" x="17.86904525756836" y="2.0" z="255.70073217773438"/>
+        <position name="Module1_K9_CrossBraces_ASCII_v284" unit="mm" x="17.895814895629883" y="2.0" z="255.72682470703126"/>
+        <position name="Module1_K9_CrossBraces_ASCII_v285" unit="mm" x="17.92125129699707" y="2.0" z="255.75426000976563"/>
+        <position name="Module1_K9_CrossBraces_ASCII_v286" unit="mm" x="17.945289611816406" y="2.0" z="255.78288549804688"/>
+        <position name="Module1_K9_CrossBraces_ASCII_v287" unit="mm" x="17.96786880493164" y="2.0" z="255.812701171875"/>
+        <position name="Module1_K9_CrossBraces_ASCII_v288" unit="mm" x="17.988935470581055" y="2.0" z="255.84361547851563"/>
+        <position name="Module1_K9_CrossBraces_ASCII_v289" unit="mm" x="18.008434295654297" y="2.0" z="255.87550634765626"/>
+        <position name="Module1_K9_CrossBraces_ASCII_v290" unit="mm" x="18.02631950378418" y="2.0" z="255.90834326171876"/>
+        <position name="Module1_K9_CrossBraces_ASCII_v291" unit="mm" x="18.042545318603516" y="2.0" z="255.94203466796876"/>
+        <position name="Module1_K9_CrossBraces_ASCII_v292" unit="mm" x="18.057071685791016" y="2.0" z="255.97651953125"/>
+        <position name="Module1_K9_CrossBraces_ASCII_v293" unit="mm" x="18.069860458374023" y="2.0" z="256.0116452636719"/>
+        <position name="Module1_K9_CrossBraces_ASCII_v294" unit="mm" x="18.080883026123047" y="2.0" z="256.04738134765626"/>
+        <position name="Module1_K9_CrossBraces_ASCII_v295" unit="mm" x="18.090110778808594" y="2.0" z="256.08360571289063"/>
+        <position name="Module1_K9_CrossBraces_ASCII_v296" unit="mm" x="18.09752082824707" y="2.0" z="256.1202878417969"/>
+        <position name="Module1_K9_CrossBraces_ASCII_v297" unit="mm" x="18.10309600830078" y="2.0" z="256.15724462890626"/>
+        <position name="Module1_K9_CrossBraces_ASCII_v298" unit="mm" x="18.10681915283203" y="2.0" z="256.19447607421876"/>
+        <position name="Module1_K9_CrossBraces_ASCII_v299" unit="mm" x="18.10868263244629" y="2.0" z="256.23179907226563"/>
+        <position name="Module1_K9_CrossBraces_ASCII_v300" unit="mm" x="18.10868263244629" y="2.0" z="256.2692136230469"/>
+        <position name="Module1_K9_CrossBraces_ASCII_v301" unit="mm" x="18.10681915283203" y="2.0" z="256.3065671386719"/>
+        <position name="Module1_K9_CrossBraces_ASCII_v302" unit="mm" x="18.10309600830078" y="2.0" z="256.34376806640626"/>
+        <position name="Module1_K9_CrossBraces_ASCII_v303" unit="mm" x="18.09752082824707" y="2.0" z="256.38075537109376"/>
+        <position name="Module1_K9_CrossBraces_ASCII_v304" unit="mm" x="18.090110778808594" y="2.0" z="256.4174069824219"/>
+        <position name="Module1_K9_CrossBraces_ASCII_v305" unit="mm" x="18.080883026123047" y="2.0" z="256.45363134765626"/>
+        <position name="Module1_K9_CrossBraces_ASCII_v306" unit="mm" x="18.069860458374023" y="2.0" z="256.48936743164063"/>
+        <position name="Module1_K9_CrossBraces_ASCII_v307" unit="mm" x="18.057071685791016" y="2.0" z="256.52452368164063"/>
+        <position name="Module1_K9_CrossBraces_ASCII_v308" unit="mm" x="18.042545318603516" y="2.0" z="256.55897802734376"/>
+        <position name="Module1_K9_CrossBraces_ASCII_v309" unit="mm" x="18.02631950378418" y="2.0" z="256.59266943359376"/>
+        <position name="Module1_K9_CrossBraces_ASCII_v310" unit="mm" x="18.008434295654297" y="2.0" z="256.62550634765626"/>
+        <position name="Module1_K9_CrossBraces_ASCII_v311" unit="mm" x="17.988935470581055" y="2.0" z="256.657427734375"/>
+        <position name="Module1_K9_CrossBraces_ASCII_v312" unit="mm" x="17.96786880493164" y="2.0" z="256.6883115234375"/>
+        <position name="Module1_K9_CrossBraces_ASCII_v313" unit="mm" x="17.945289611816406" y="2.0" z="256.71812719726563"/>
+        <position name="Module1_K9_CrossBraces_ASCII_v314" unit="mm" x="17.92125129699707" y="2.0" z="256.746783203125"/>
+        <position name="Module1_K9_CrossBraces_ASCII_v315" unit="mm" x="17.895814895629883" y="2.0" z="256.77418798828126"/>
+        <position name="Module1_K9_CrossBraces_ASCII_v316" unit="mm" x="17.86904525756836" y="2.0" z="256.80031103515626"/>
+        <position name="Module1_K9_CrossBraces_ASCII_v317" unit="mm" x="17.841007232666016" y="2.0" z="256.8250302734375"/>
+        <position name="Module1_K9_CrossBraces_ASCII_v318" unit="mm" x="17.811769485473633" y="2.0" z="256.848345703125"/>
+        <position name="Module1_K9_CrossBraces_ASCII_v319" unit="mm" x="17.78140640258789" y="2.0" z="256.8701962890625"/>
+        <position name="Module1_K9_CrossBraces_ASCII_v320" unit="mm" x="17.74999237060547" y="2.0" z="256.89049047851563"/>
+        <position name="Module1_K9_CrossBraces_ASCII_v321" unit="mm" x="17.717605590820312" y="2.0" z="256.90916723632813"/>
+        <position name="Module1_K9_CrossBraces_ASCII_v322" unit="mm" x="17.684328079223633" y="2.0" z="256.9262265625"/>
+        <position name="Module1_K9_CrossBraces_ASCII_v323" unit="mm" x="17.65024185180664" y="2.0" z="256.941607421875"/>
+        <position name="Module1_K9_CrossBraces_ASCII_v324" unit="mm" x="17.61543083190918" y="2.0" z="256.955279296875"/>
+        <position name="Module1_K9_CrossBraces_ASCII_v325" unit="mm" x="17.57998275756836" y="2.0" z="256.96718115234376"/>
+        <position name="Module1_K9_CrossBraces_ASCII_v326" unit="mm" x="17.543983459472656" y="2.0" z="256.97731298828126"/>
+        <position name="Module1_K9_CrossBraces_ASCII_v327" unit="mm" x="17.507524490356445" y="2.0" z="256.9856442871094"/>
+        <position name="Module1_K9_CrossBraces_ASCII_v328" unit="mm" x="17.4706974029541" y="2.0" z="256.99214453125"/>
+        <position name="Module1_K9_CrossBraces_ASCII_v329" unit="mm" x="17.433591842651367" y="2.0" z="256.996783203125"/>
+        <position name="Module1_K9_CrossBraces_ASCII_v330" unit="mm" x="17.396299362182617" y="2.0" z="256.9995908203125"/>
+        <position name="Module1_K9_CrossBraces_ASCII_v331" unit="mm" x="17.358915328979492" y="2.0" z="257.00050634765626"/>
+    </define>
+
+    <solids>
+        <tessellated aunit="deg" lunit="mm" name="Module1_K9_CrossBraces_ASCII-SOL">
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v0" vertex2="Module1_K9_CrossBraces_ASCII_v1" vertex3="Module1_K9_CrossBraces_ASCII_v2"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v0" vertex2="Module1_K9_CrossBraces_ASCII_v2" vertex3="Module1_K9_CrossBraces_ASCII_v3"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v4" vertex2="Module1_K9_CrossBraces_ASCII_v3" vertex3="Module1_K9_CrossBraces_ASCII_v5"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v4" vertex2="Module1_K9_CrossBraces_ASCII_v0" vertex3="Module1_K9_CrossBraces_ASCII_v3"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v6" vertex2="Module1_K9_CrossBraces_ASCII_v5" vertex3="Module1_K9_CrossBraces_ASCII_v7"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v6" vertex2="Module1_K9_CrossBraces_ASCII_v4" vertex3="Module1_K9_CrossBraces_ASCII_v5"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v2" vertex2="Module1_K9_CrossBraces_ASCII_v8" vertex3="Module1_K9_CrossBraces_ASCII_v9"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v1" vertex2="Module1_K9_CrossBraces_ASCII_v8" vertex3="Module1_K9_CrossBraces_ASCII_v2"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v6" vertex2="Module1_K9_CrossBraces_ASCII_v7" vertex3="Module1_K9_CrossBraces_ASCII_v10"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v11" vertex2="Module1_K9_CrossBraces_ASCII_v10" vertex3="Module1_K9_CrossBraces_ASCII_v12"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v11" vertex2="Module1_K9_CrossBraces_ASCII_v6" vertex3="Module1_K9_CrossBraces_ASCII_v10"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v13" vertex2="Module1_K9_CrossBraces_ASCII_v12" vertex3="Module1_K9_CrossBraces_ASCII_v14"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v13" vertex2="Module1_K9_CrossBraces_ASCII_v11" vertex3="Module1_K9_CrossBraces_ASCII_v12"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v15" vertex2="Module1_K9_CrossBraces_ASCII_v14" vertex3="Module1_K9_CrossBraces_ASCII_v16"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v15" vertex2="Module1_K9_CrossBraces_ASCII_v13" vertex3="Module1_K9_CrossBraces_ASCII_v14"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v17" vertex2="Module1_K9_CrossBraces_ASCII_v16" vertex3="Module1_K9_CrossBraces_ASCII_v18"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v17" vertex2="Module1_K9_CrossBraces_ASCII_v15" vertex3="Module1_K9_CrossBraces_ASCII_v16"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v19" vertex2="Module1_K9_CrossBraces_ASCII_v18" vertex3="Module1_K9_CrossBraces_ASCII_v20"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v19" vertex2="Module1_K9_CrossBraces_ASCII_v17" vertex3="Module1_K9_CrossBraces_ASCII_v18"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v21" vertex2="Module1_K9_CrossBraces_ASCII_v20" vertex3="Module1_K9_CrossBraces_ASCII_v22"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v21" vertex2="Module1_K9_CrossBraces_ASCII_v19" vertex3="Module1_K9_CrossBraces_ASCII_v20"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v23" vertex2="Module1_K9_CrossBraces_ASCII_v22" vertex3="Module1_K9_CrossBraces_ASCII_v24"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v23" vertex2="Module1_K9_CrossBraces_ASCII_v21" vertex3="Module1_K9_CrossBraces_ASCII_v22"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v25" vertex2="Module1_K9_CrossBraces_ASCII_v24" vertex3="Module1_K9_CrossBraces_ASCII_v26"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v25" vertex2="Module1_K9_CrossBraces_ASCII_v23" vertex3="Module1_K9_CrossBraces_ASCII_v24"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v27" vertex2="Module1_K9_CrossBraces_ASCII_v26" vertex3="Module1_K9_CrossBraces_ASCII_v28"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v27" vertex2="Module1_K9_CrossBraces_ASCII_v25" vertex3="Module1_K9_CrossBraces_ASCII_v26"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v29" vertex2="Module1_K9_CrossBraces_ASCII_v28" vertex3="Module1_K9_CrossBraces_ASCII_v30"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v29" vertex2="Module1_K9_CrossBraces_ASCII_v27" vertex3="Module1_K9_CrossBraces_ASCII_v28"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v31" vertex2="Module1_K9_CrossBraces_ASCII_v30" vertex3="Module1_K9_CrossBraces_ASCII_v32"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v31" vertex2="Module1_K9_CrossBraces_ASCII_v29" vertex3="Module1_K9_CrossBraces_ASCII_v30"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v33" vertex2="Module1_K9_CrossBraces_ASCII_v31" vertex3="Module1_K9_CrossBraces_ASCII_v32"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v33" vertex2="Module1_K9_CrossBraces_ASCII_v32" vertex3="Module1_K9_CrossBraces_ASCII_v34"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v35" vertex2="Module1_K9_CrossBraces_ASCII_v33" vertex3="Module1_K9_CrossBraces_ASCII_v34"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v35" vertex2="Module1_K9_CrossBraces_ASCII_v34" vertex3="Module1_K9_CrossBraces_ASCII_v36"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v37" vertex2="Module1_K9_CrossBraces_ASCII_v35" vertex3="Module1_K9_CrossBraces_ASCII_v36"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v37" vertex2="Module1_K9_CrossBraces_ASCII_v36" vertex3="Module1_K9_CrossBraces_ASCII_v38"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v39" vertex2="Module1_K9_CrossBraces_ASCII_v37" vertex3="Module1_K9_CrossBraces_ASCII_v38"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v39" vertex2="Module1_K9_CrossBraces_ASCII_v38" vertex3="Module1_K9_CrossBraces_ASCII_v40"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v41" vertex2="Module1_K9_CrossBraces_ASCII_v40" vertex3="Module1_K9_CrossBraces_ASCII_v42"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v41" vertex2="Module1_K9_CrossBraces_ASCII_v39" vertex3="Module1_K9_CrossBraces_ASCII_v40"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v43" vertex2="Module1_K9_CrossBraces_ASCII_v42" vertex3="Module1_K9_CrossBraces_ASCII_v44"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v43" vertex2="Module1_K9_CrossBraces_ASCII_v41" vertex3="Module1_K9_CrossBraces_ASCII_v42"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v45" vertex2="Module1_K9_CrossBraces_ASCII_v44" vertex3="Module1_K9_CrossBraces_ASCII_v46"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v45" vertex2="Module1_K9_CrossBraces_ASCII_v43" vertex3="Module1_K9_CrossBraces_ASCII_v44"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v47" vertex2="Module1_K9_CrossBraces_ASCII_v46" vertex3="Module1_K9_CrossBraces_ASCII_v48"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v47" vertex2="Module1_K9_CrossBraces_ASCII_v45" vertex3="Module1_K9_CrossBraces_ASCII_v46"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v49" vertex2="Module1_K9_CrossBraces_ASCII_v48" vertex3="Module1_K9_CrossBraces_ASCII_v50"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v49" vertex2="Module1_K9_CrossBraces_ASCII_v47" vertex3="Module1_K9_CrossBraces_ASCII_v48"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v51" vertex2="Module1_K9_CrossBraces_ASCII_v50" vertex3="Module1_K9_CrossBraces_ASCII_v52"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v51" vertex2="Module1_K9_CrossBraces_ASCII_v49" vertex3="Module1_K9_CrossBraces_ASCII_v50"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v53" vertex2="Module1_K9_CrossBraces_ASCII_v52" vertex3="Module1_K9_CrossBraces_ASCII_v54"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v53" vertex2="Module1_K9_CrossBraces_ASCII_v51" vertex3="Module1_K9_CrossBraces_ASCII_v52"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v55" vertex2="Module1_K9_CrossBraces_ASCII_v54" vertex3="Module1_K9_CrossBraces_ASCII_v56"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v55" vertex2="Module1_K9_CrossBraces_ASCII_v53" vertex3="Module1_K9_CrossBraces_ASCII_v54"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v57" vertex2="Module1_K9_CrossBraces_ASCII_v55" vertex3="Module1_K9_CrossBraces_ASCII_v56"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v58" vertex2="Module1_K9_CrossBraces_ASCII_v59" vertex3="Module1_K9_CrossBraces_ASCII_v60"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v61" vertex2="Module1_K9_CrossBraces_ASCII_v60" vertex3="Module1_K9_CrossBraces_ASCII_v62"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v61" vertex2="Module1_K9_CrossBraces_ASCII_v58" vertex3="Module1_K9_CrossBraces_ASCII_v60"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v63" vertex2="Module1_K9_CrossBraces_ASCII_v62" vertex3="Module1_K9_CrossBraces_ASCII_v64"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v63" vertex2="Module1_K9_CrossBraces_ASCII_v61" vertex3="Module1_K9_CrossBraces_ASCII_v62"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v65" vertex2="Module1_K9_CrossBraces_ASCII_v63" vertex3="Module1_K9_CrossBraces_ASCII_v64"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v66" vertex2="Module1_K9_CrossBraces_ASCII_v64" vertex3="Module1_K9_CrossBraces_ASCII_v67"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v66" vertex2="Module1_K9_CrossBraces_ASCII_v65" vertex3="Module1_K9_CrossBraces_ASCII_v64"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v68" vertex2="Module1_K9_CrossBraces_ASCII_v66" vertex3="Module1_K9_CrossBraces_ASCII_v69"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v69" vertex2="Module1_K9_CrossBraces_ASCII_v66" vertex3="Module1_K9_CrossBraces_ASCII_v67"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v70" vertex2="Module1_K9_CrossBraces_ASCII_v69" vertex3="Module1_K9_CrossBraces_ASCII_v71"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v72" vertex2="Module1_K9_CrossBraces_ASCII_v71" vertex3="Module1_K9_CrossBraces_ASCII_v69"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v73" vertex2="Module1_K9_CrossBraces_ASCII_v69" vertex3="Module1_K9_CrossBraces_ASCII_v70"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v74" vertex2="Module1_K9_CrossBraces_ASCII_v72" vertex3="Module1_K9_CrossBraces_ASCII_v69"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v75" vertex2="Module1_K9_CrossBraces_ASCII_v69" vertex3="Module1_K9_CrossBraces_ASCII_v73"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v76" vertex2="Module1_K9_CrossBraces_ASCII_v74" vertex3="Module1_K9_CrossBraces_ASCII_v69"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v77" vertex2="Module1_K9_CrossBraces_ASCII_v69" vertex3="Module1_K9_CrossBraces_ASCII_v75"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v78" vertex2="Module1_K9_CrossBraces_ASCII_v76" vertex3="Module1_K9_CrossBraces_ASCII_v69"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v79" vertex2="Module1_K9_CrossBraces_ASCII_v69" vertex3="Module1_K9_CrossBraces_ASCII_v77"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v80" vertex2="Module1_K9_CrossBraces_ASCII_v78" vertex3="Module1_K9_CrossBraces_ASCII_v69"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v81" vertex2="Module1_K9_CrossBraces_ASCII_v69" vertex3="Module1_K9_CrossBraces_ASCII_v79"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v82" vertex2="Module1_K9_CrossBraces_ASCII_v80" vertex3="Module1_K9_CrossBraces_ASCII_v69"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v83" vertex2="Module1_K9_CrossBraces_ASCII_v69" vertex3="Module1_K9_CrossBraces_ASCII_v81"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v84" vertex2="Module1_K9_CrossBraces_ASCII_v82" vertex3="Module1_K9_CrossBraces_ASCII_v69"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v85" vertex2="Module1_K9_CrossBraces_ASCII_v69" vertex3="Module1_K9_CrossBraces_ASCII_v83"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v86" vertex2="Module1_K9_CrossBraces_ASCII_v84" vertex3="Module1_K9_CrossBraces_ASCII_v69"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v87" vertex2="Module1_K9_CrossBraces_ASCII_v69" vertex3="Module1_K9_CrossBraces_ASCII_v85"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v88" vertex2="Module1_K9_CrossBraces_ASCII_v86" vertex3="Module1_K9_CrossBraces_ASCII_v69"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v89" vertex2="Module1_K9_CrossBraces_ASCII_v69" vertex3="Module1_K9_CrossBraces_ASCII_v87"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v90" vertex2="Module1_K9_CrossBraces_ASCII_v88" vertex3="Module1_K9_CrossBraces_ASCII_v69"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v91" vertex2="Module1_K9_CrossBraces_ASCII_v69" vertex3="Module1_K9_CrossBraces_ASCII_v89"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v92" vertex2="Module1_K9_CrossBraces_ASCII_v90" vertex3="Module1_K9_CrossBraces_ASCII_v69"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v93" vertex2="Module1_K9_CrossBraces_ASCII_v69" vertex3="Module1_K9_CrossBraces_ASCII_v91"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v94" vertex2="Module1_K9_CrossBraces_ASCII_v92" vertex3="Module1_K9_CrossBraces_ASCII_v69"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v95" vertex2="Module1_K9_CrossBraces_ASCII_v69" vertex3="Module1_K9_CrossBraces_ASCII_v93"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v96" vertex2="Module1_K9_CrossBraces_ASCII_v94" vertex3="Module1_K9_CrossBraces_ASCII_v69"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v97" vertex2="Module1_K9_CrossBraces_ASCII_v69" vertex3="Module1_K9_CrossBraces_ASCII_v95"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v98" vertex2="Module1_K9_CrossBraces_ASCII_v96" vertex3="Module1_K9_CrossBraces_ASCII_v69"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v99" vertex2="Module1_K9_CrossBraces_ASCII_v98" vertex3="Module1_K9_CrossBraces_ASCII_v69"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v100" vertex2="Module1_K9_CrossBraces_ASCII_v99" vertex3="Module1_K9_CrossBraces_ASCII_v69"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v101" vertex2="Module1_K9_CrossBraces_ASCII_v100" vertex3="Module1_K9_CrossBraces_ASCII_v69"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v102" vertex2="Module1_K9_CrossBraces_ASCII_v101" vertex3="Module1_K9_CrossBraces_ASCII_v69"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v103" vertex2="Module1_K9_CrossBraces_ASCII_v102" vertex3="Module1_K9_CrossBraces_ASCII_v69"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v104" vertex2="Module1_K9_CrossBraces_ASCII_v103" vertex3="Module1_K9_CrossBraces_ASCII_v69"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v105" vertex2="Module1_K9_CrossBraces_ASCII_v69" vertex3="Module1_K9_CrossBraces_ASCII_v106"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v105" vertex2="Module1_K9_CrossBraces_ASCII_v104" vertex3="Module1_K9_CrossBraces_ASCII_v69"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v68" vertex2="Module1_K9_CrossBraces_ASCII_v107" vertex3="Module1_K9_CrossBraces_ASCII_v108"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v68" vertex2="Module1_K9_CrossBraces_ASCII_v109" vertex3="Module1_K9_CrossBraces_ASCII_v107"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v68" vertex2="Module1_K9_CrossBraces_ASCII_v110" vertex3="Module1_K9_CrossBraces_ASCII_v109"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v68" vertex2="Module1_K9_CrossBraces_ASCII_v111" vertex3="Module1_K9_CrossBraces_ASCII_v110"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v68" vertex2="Module1_K9_CrossBraces_ASCII_v112" vertex3="Module1_K9_CrossBraces_ASCII_v111"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v68" vertex2="Module1_K9_CrossBraces_ASCII_v113" vertex3="Module1_K9_CrossBraces_ASCII_v112"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v68" vertex2="Module1_K9_CrossBraces_ASCII_v114" vertex3="Module1_K9_CrossBraces_ASCII_v113"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v68" vertex2="Module1_K9_CrossBraces_ASCII_v115" vertex3="Module1_K9_CrossBraces_ASCII_v114"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v68" vertex2="Module1_K9_CrossBraces_ASCII_v116" vertex3="Module1_K9_CrossBraces_ASCII_v115"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v68" vertex2="Module1_K9_CrossBraces_ASCII_v117" vertex3="Module1_K9_CrossBraces_ASCII_v116"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v68" vertex2="Module1_K9_CrossBraces_ASCII_v118" vertex3="Module1_K9_CrossBraces_ASCII_v117"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v68" vertex2="Module1_K9_CrossBraces_ASCII_v119" vertex3="Module1_K9_CrossBraces_ASCII_v118"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v68" vertex2="Module1_K9_CrossBraces_ASCII_v120" vertex3="Module1_K9_CrossBraces_ASCII_v119"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v68" vertex2="Module1_K9_CrossBraces_ASCII_v121" vertex3="Module1_K9_CrossBraces_ASCII_v120"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v68" vertex2="Module1_K9_CrossBraces_ASCII_v122" vertex3="Module1_K9_CrossBraces_ASCII_v121"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v68" vertex2="Module1_K9_CrossBraces_ASCII_v123" vertex3="Module1_K9_CrossBraces_ASCII_v122"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v68" vertex2="Module1_K9_CrossBraces_ASCII_v124" vertex3="Module1_K9_CrossBraces_ASCII_v123"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v68" vertex2="Module1_K9_CrossBraces_ASCII_v125" vertex3="Module1_K9_CrossBraces_ASCII_v124"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v68" vertex2="Module1_K9_CrossBraces_ASCII_v126" vertex3="Module1_K9_CrossBraces_ASCII_v125"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v68" vertex2="Module1_K9_CrossBraces_ASCII_v127" vertex3="Module1_K9_CrossBraces_ASCII_v126"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v68" vertex2="Module1_K9_CrossBraces_ASCII_v128" vertex3="Module1_K9_CrossBraces_ASCII_v127"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v68" vertex2="Module1_K9_CrossBraces_ASCII_v129" vertex3="Module1_K9_CrossBraces_ASCII_v128"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v68" vertex2="Module1_K9_CrossBraces_ASCII_v130" vertex3="Module1_K9_CrossBraces_ASCII_v129"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v68" vertex2="Module1_K9_CrossBraces_ASCII_v131" vertex3="Module1_K9_CrossBraces_ASCII_v130"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v68" vertex2="Module1_K9_CrossBraces_ASCII_v132" vertex3="Module1_K9_CrossBraces_ASCII_v131"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v68" vertex2="Module1_K9_CrossBraces_ASCII_v133" vertex3="Module1_K9_CrossBraces_ASCII_v132"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v68" vertex2="Module1_K9_CrossBraces_ASCII_v134" vertex3="Module1_K9_CrossBraces_ASCII_v133"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v68" vertex2="Module1_K9_CrossBraces_ASCII_v135" vertex3="Module1_K9_CrossBraces_ASCII_v134"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v68" vertex2="Module1_K9_CrossBraces_ASCII_v69" vertex3="Module1_K9_CrossBraces_ASCII_v97"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v68" vertex2="Module1_K9_CrossBraces_ASCII_v136" vertex3="Module1_K9_CrossBraces_ASCII_v135"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v68" vertex2="Module1_K9_CrossBraces_ASCII_v137" vertex3="Module1_K9_CrossBraces_ASCII_v136"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v68" vertex2="Module1_K9_CrossBraces_ASCII_v138" vertex3="Module1_K9_CrossBraces_ASCII_v137"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v68" vertex2="Module1_K9_CrossBraces_ASCII_v139" vertex3="Module1_K9_CrossBraces_ASCII_v138"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v68" vertex2="Module1_K9_CrossBraces_ASCII_v140" vertex3="Module1_K9_CrossBraces_ASCII_v139"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v68" vertex2="Module1_K9_CrossBraces_ASCII_v97" vertex3="Module1_K9_CrossBraces_ASCII_v140"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v141" vertex2="Module1_K9_CrossBraces_ASCII_v106" vertex3="Module1_K9_CrossBraces_ASCII_v142"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v141" vertex2="Module1_K9_CrossBraces_ASCII_v105" vertex3="Module1_K9_CrossBraces_ASCII_v106"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v143" vertex2="Module1_K9_CrossBraces_ASCII_v142" vertex3="Module1_K9_CrossBraces_ASCII_v144"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v143" vertex2="Module1_K9_CrossBraces_ASCII_v141" vertex3="Module1_K9_CrossBraces_ASCII_v142"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v145" vertex2="Module1_K9_CrossBraces_ASCII_v68" vertex3="Module1_K9_CrossBraces_ASCII_v108"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v145" vertex2="Module1_K9_CrossBraces_ASCII_v108" vertex3="Module1_K9_CrossBraces_ASCII_v146"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v147" vertex2="Module1_K9_CrossBraces_ASCII_v144" vertex3="Module1_K9_CrossBraces_ASCII_v148"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v147" vertex2="Module1_K9_CrossBraces_ASCII_v143" vertex3="Module1_K9_CrossBraces_ASCII_v144"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v149" vertex2="Module1_K9_CrossBraces_ASCII_v145" vertex3="Module1_K9_CrossBraces_ASCII_v146"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v149" vertex2="Module1_K9_CrossBraces_ASCII_v146" vertex3="Module1_K9_CrossBraces_ASCII_v150"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v151" vertex2="Module1_K9_CrossBraces_ASCII_v147" vertex3="Module1_K9_CrossBraces_ASCII_v148"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v152" vertex2="Module1_K9_CrossBraces_ASCII_v149" vertex3="Module1_K9_CrossBraces_ASCII_v150"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v152" vertex2="Module1_K9_CrossBraces_ASCII_v150" vertex3="Module1_K9_CrossBraces_ASCII_v153"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v8" vertex2="Module1_K9_CrossBraces_ASCII_v152" vertex3="Module1_K9_CrossBraces_ASCII_v153"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v8" vertex2="Module1_K9_CrossBraces_ASCII_v153" vertex3="Module1_K9_CrossBraces_ASCII_v9"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v67" vertex2="Module1_K9_CrossBraces_ASCII_v64" vertex3="Module1_K9_CrossBraces_ASCII_v69"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v69" vertex2="Module1_K9_CrossBraces_ASCII_v64" vertex3="Module1_K9_CrossBraces_ASCII_v106"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v106" vertex2="Module1_K9_CrossBraces_ASCII_v64" vertex3="Module1_K9_CrossBraces_ASCII_v142"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v142" vertex2="Module1_K9_CrossBraces_ASCII_v62" vertex3="Module1_K9_CrossBraces_ASCII_v144"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v64" vertex2="Module1_K9_CrossBraces_ASCII_v62" vertex3="Module1_K9_CrossBraces_ASCII_v142"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v144" vertex2="Module1_K9_CrossBraces_ASCII_v154" vertex3="Module1_K9_CrossBraces_ASCII_v148"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v155" vertex2="Module1_K9_CrossBraces_ASCII_v156" vertex3="Module1_K9_CrossBraces_ASCII_v157"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v157" vertex2="Module1_K9_CrossBraces_ASCII_v156" vertex3="Module1_K9_CrossBraces_ASCII_v158"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v155" vertex2="Module1_K9_CrossBraces_ASCII_v159" vertex3="Module1_K9_CrossBraces_ASCII_v156"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v159" vertex2="Module1_K9_CrossBraces_ASCII_v160" vertex3="Module1_K9_CrossBraces_ASCII_v161"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v155" vertex2="Module1_K9_CrossBraces_ASCII_v160" vertex3="Module1_K9_CrossBraces_ASCII_v159"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v155" vertex2="Module1_K9_CrossBraces_ASCII_v162" vertex3="Module1_K9_CrossBraces_ASCII_v160"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v160" vertex2="Module1_K9_CrossBraces_ASCII_v162" vertex3="Module1_K9_CrossBraces_ASCII_v163"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v155" vertex2="Module1_K9_CrossBraces_ASCII_v164" vertex3="Module1_K9_CrossBraces_ASCII_v162"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v155" vertex2="Module1_K9_CrossBraces_ASCII_v165" vertex3="Module1_K9_CrossBraces_ASCII_v164"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v164" vertex2="Module1_K9_CrossBraces_ASCII_v165" vertex3="Module1_K9_CrossBraces_ASCII_v166"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v155" vertex2="Module1_K9_CrossBraces_ASCII_v167" vertex3="Module1_K9_CrossBraces_ASCII_v165"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v165" vertex2="Module1_K9_CrossBraces_ASCII_v167" vertex3="Module1_K9_CrossBraces_ASCII_v168"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v168" vertex2="Module1_K9_CrossBraces_ASCII_v167" vertex3="Module1_K9_CrossBraces_ASCII_v169"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v169" vertex2="Module1_K9_CrossBraces_ASCII_v167" vertex3="Module1_K9_CrossBraces_ASCII_v170"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v167" vertex2="Module1_K9_CrossBraces_ASCII_v171" vertex3="Module1_K9_CrossBraces_ASCII_v172"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v167" vertex2="Module1_K9_CrossBraces_ASCII_v173" vertex3="Module1_K9_CrossBraces_ASCII_v171"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v155" vertex2="Module1_K9_CrossBraces_ASCII_v174" vertex3="Module1_K9_CrossBraces_ASCII_v167"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v167" vertex2="Module1_K9_CrossBraces_ASCII_v174" vertex3="Module1_K9_CrossBraces_ASCII_v173"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v173" vertex2="Module1_K9_CrossBraces_ASCII_v174" vertex3="Module1_K9_CrossBraces_ASCII_v175"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v155" vertex2="Module1_K9_CrossBraces_ASCII_v176" vertex3="Module1_K9_CrossBraces_ASCII_v174"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v155" vertex2="Module1_K9_CrossBraces_ASCII_v177" vertex3="Module1_K9_CrossBraces_ASCII_v176"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v155" vertex2="Module1_K9_CrossBraces_ASCII_v178" vertex3="Module1_K9_CrossBraces_ASCII_v177"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v155" vertex2="Module1_K9_CrossBraces_ASCII_v179" vertex3="Module1_K9_CrossBraces_ASCII_v178"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v180" vertex2="Module1_K9_CrossBraces_ASCII_v179" vertex3="Module1_K9_CrossBraces_ASCII_v155"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v62" vertex2="Module1_K9_CrossBraces_ASCII_v60" vertex3="Module1_K9_CrossBraces_ASCII_v144"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v154" vertex2="Module1_K9_CrossBraces_ASCII_v181" vertex3="Module1_K9_CrossBraces_ASCII_v182"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v60" vertex2="Module1_K9_CrossBraces_ASCII_v181" vertex3="Module1_K9_CrossBraces_ASCII_v144"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v144" vertex2="Module1_K9_CrossBraces_ASCII_v181" vertex3="Module1_K9_CrossBraces_ASCII_v154"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v60" vertex2="Module1_K9_CrossBraces_ASCII_v59" vertex3="Module1_K9_CrossBraces_ASCII_v181"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v181" vertex2="Module1_K9_CrossBraces_ASCII_v183" vertex3="Module1_K9_CrossBraces_ASCII_v182"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v182" vertex2="Module1_K9_CrossBraces_ASCII_v184" vertex3="Module1_K9_CrossBraces_ASCII_v180"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v183" vertex2="Module1_K9_CrossBraces_ASCII_v184" vertex3="Module1_K9_CrossBraces_ASCII_v182"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v185" vertex2="Module1_K9_CrossBraces_ASCII_v186" vertex3="Module1_K9_CrossBraces_ASCII_v184"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v180" vertex2="Module1_K9_CrossBraces_ASCII_v186" vertex3="Module1_K9_CrossBraces_ASCII_v179"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v184" vertex2="Module1_K9_CrossBraces_ASCII_v186" vertex3="Module1_K9_CrossBraces_ASCII_v180"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v187" vertex2="Module1_K9_CrossBraces_ASCII_v188" vertex3="Module1_K9_CrossBraces_ASCII_v185"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v186" vertex2="Module1_K9_CrossBraces_ASCII_v189" vertex3="Module1_K9_CrossBraces_ASCII_v190"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v188" vertex2="Module1_K9_CrossBraces_ASCII_v191" vertex3="Module1_K9_CrossBraces_ASCII_v185"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v186" vertex2="Module1_K9_CrossBraces_ASCII_v192" vertex3="Module1_K9_CrossBraces_ASCII_v189"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v191" vertex2="Module1_K9_CrossBraces_ASCII_v193" vertex3="Module1_K9_CrossBraces_ASCII_v185"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v194" vertex2="Module1_K9_CrossBraces_ASCII_v195" vertex3="Module1_K9_CrossBraces_ASCII_v193"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v193" vertex2="Module1_K9_CrossBraces_ASCII_v195" vertex3="Module1_K9_CrossBraces_ASCII_v185"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v192" vertex2="Module1_K9_CrossBraces_ASCII_v196" vertex3="Module1_K9_CrossBraces_ASCII_v197"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v197" vertex2="Module1_K9_CrossBraces_ASCII_v196" vertex3="Module1_K9_CrossBraces_ASCII_v198"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v186" vertex2="Module1_K9_CrossBraces_ASCII_v196" vertex3="Module1_K9_CrossBraces_ASCII_v192"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v195" vertex2="Module1_K9_CrossBraces_ASCII_v199" vertex3="Module1_K9_CrossBraces_ASCII_v185"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v185" vertex2="Module1_K9_CrossBraces_ASCII_v200" vertex3="Module1_K9_CrossBraces_ASCII_v186"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v186" vertex2="Module1_K9_CrossBraces_ASCII_v200" vertex3="Module1_K9_CrossBraces_ASCII_v196"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v201" vertex2="Module1_K9_CrossBraces_ASCII_v202" vertex3="Module1_K9_CrossBraces_ASCII_v199"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v199" vertex2="Module1_K9_CrossBraces_ASCII_v202" vertex3="Module1_K9_CrossBraces_ASCII_v185"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v200" vertex2="Module1_K9_CrossBraces_ASCII_v203" vertex3="Module1_K9_CrossBraces_ASCII_v204"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v204" vertex2="Module1_K9_CrossBraces_ASCII_v203" vertex3="Module1_K9_CrossBraces_ASCII_v205"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v185" vertex2="Module1_K9_CrossBraces_ASCII_v203" vertex3="Module1_K9_CrossBraces_ASCII_v200"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v206" vertex2="Module1_K9_CrossBraces_ASCII_v207" vertex3="Module1_K9_CrossBraces_ASCII_v202"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v202" vertex2="Module1_K9_CrossBraces_ASCII_v207" vertex3="Module1_K9_CrossBraces_ASCII_v185"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v203" vertex2="Module1_K9_CrossBraces_ASCII_v208" vertex3="Module1_K9_CrossBraces_ASCII_v209"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v207" vertex2="Module1_K9_CrossBraces_ASCII_v208" vertex3="Module1_K9_CrossBraces_ASCII_v185"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v185" vertex2="Module1_K9_CrossBraces_ASCII_v208" vertex3="Module1_K9_CrossBraces_ASCII_v203"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v65" vertex2="Module1_K9_CrossBraces_ASCII_v66" vertex3="Module1_K9_CrossBraces_ASCII_v68"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v65" vertex2="Module1_K9_CrossBraces_ASCII_v68" vertex3="Module1_K9_CrossBraces_ASCII_v145"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v65" vertex2="Module1_K9_CrossBraces_ASCII_v145" vertex3="Module1_K9_CrossBraces_ASCII_v149"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v63" vertex2="Module1_K9_CrossBraces_ASCII_v149" vertex3="Module1_K9_CrossBraces_ASCII_v152"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v63" vertex2="Module1_K9_CrossBraces_ASCII_v65" vertex3="Module1_K9_CrossBraces_ASCII_v149"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v1" vertex2="Module1_K9_CrossBraces_ASCII_v152" vertex3="Module1_K9_CrossBraces_ASCII_v8"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v17" vertex2="Module1_K9_CrossBraces_ASCII_v13" vertex3="Module1_K9_CrossBraces_ASCII_v15"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v17" vertex2="Module1_K9_CrossBraces_ASCII_v11" vertex3="Module1_K9_CrossBraces_ASCII_v13"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v21" vertex2="Module1_K9_CrossBraces_ASCII_v17" vertex3="Module1_K9_CrossBraces_ASCII_v19"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v21" vertex2="Module1_K9_CrossBraces_ASCII_v11" vertex3="Module1_K9_CrossBraces_ASCII_v17"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v25" vertex2="Module1_K9_CrossBraces_ASCII_v21" vertex3="Module1_K9_CrossBraces_ASCII_v23"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v27" vertex2="Module1_K9_CrossBraces_ASCII_v21" vertex3="Module1_K9_CrossBraces_ASCII_v25"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v29" vertex2="Module1_K9_CrossBraces_ASCII_v11" vertex3="Module1_K9_CrossBraces_ASCII_v21"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v29" vertex2="Module1_K9_CrossBraces_ASCII_v21" vertex3="Module1_K9_CrossBraces_ASCII_v27"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v29" vertex2="Module1_K9_CrossBraces_ASCII_v6" vertex3="Module1_K9_CrossBraces_ASCII_v11"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v33" vertex2="Module1_K9_CrossBraces_ASCII_v29" vertex3="Module1_K9_CrossBraces_ASCII_v31"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v39" vertex2="Module1_K9_CrossBraces_ASCII_v35" vertex3="Module1_K9_CrossBraces_ASCII_v37"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v39" vertex2="Module1_K9_CrossBraces_ASCII_v33" vertex3="Module1_K9_CrossBraces_ASCII_v35"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v45" vertex2="Module1_K9_CrossBraces_ASCII_v29" vertex3="Module1_K9_CrossBraces_ASCII_v33"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v45" vertex2="Module1_K9_CrossBraces_ASCII_v33" vertex3="Module1_K9_CrossBraces_ASCII_v39"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v45" vertex2="Module1_K9_CrossBraces_ASCII_v41" vertex3="Module1_K9_CrossBraces_ASCII_v43"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v45" vertex2="Module1_K9_CrossBraces_ASCII_v39" vertex3="Module1_K9_CrossBraces_ASCII_v41"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v47" vertex2="Module1_K9_CrossBraces_ASCII_v6" vertex3="Module1_K9_CrossBraces_ASCII_v29"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v47" vertex2="Module1_K9_CrossBraces_ASCII_v29" vertex3="Module1_K9_CrossBraces_ASCII_v45"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v51" vertex2="Module1_K9_CrossBraces_ASCII_v47" vertex3="Module1_K9_CrossBraces_ASCII_v49"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v55" vertex2="Module1_K9_CrossBraces_ASCII_v51" vertex3="Module1_K9_CrossBraces_ASCII_v53"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v55" vertex2="Module1_K9_CrossBraces_ASCII_v47" vertex3="Module1_K9_CrossBraces_ASCII_v51"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v57" vertex2="Module1_K9_CrossBraces_ASCII_v4" vertex3="Module1_K9_CrossBraces_ASCII_v6"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v57" vertex2="Module1_K9_CrossBraces_ASCII_v6" vertex3="Module1_K9_CrossBraces_ASCII_v47"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v57" vertex2="Module1_K9_CrossBraces_ASCII_v47" vertex3="Module1_K9_CrossBraces_ASCII_v55"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v61" vertex2="Module1_K9_CrossBraces_ASCII_v63" vertex3="Module1_K9_CrossBraces_ASCII_v152"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v210" vertex2="Module1_K9_CrossBraces_ASCII_v1" vertex3="Module1_K9_CrossBraces_ASCII_v0"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v210" vertex2="Module1_K9_CrossBraces_ASCII_v61" vertex3="Module1_K9_CrossBraces_ASCII_v152"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v210" vertex2="Module1_K9_CrossBraces_ASCII_v152" vertex3="Module1_K9_CrossBraces_ASCII_v1"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v58" vertex2="Module1_K9_CrossBraces_ASCII_v61" vertex3="Module1_K9_CrossBraces_ASCII_v210"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v211" vertex2="Module1_K9_CrossBraces_ASCII_v0" vertex3="Module1_K9_CrossBraces_ASCII_v4"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v211" vertex2="Module1_K9_CrossBraces_ASCII_v210" vertex3="Module1_K9_CrossBraces_ASCII_v0"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v212" vertex2="Module1_K9_CrossBraces_ASCII_v211" vertex3="Module1_K9_CrossBraces_ASCII_v4"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v213" vertex2="Module1_K9_CrossBraces_ASCII_v214" vertex3="Module1_K9_CrossBraces_ASCII_v212"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v213" vertex2="Module1_K9_CrossBraces_ASCII_v212" vertex3="Module1_K9_CrossBraces_ASCII_v4"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v213" vertex2="Module1_K9_CrossBraces_ASCII_v4" vertex3="Module1_K9_CrossBraces_ASCII_v57"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v215" vertex2="Module1_K9_CrossBraces_ASCII_v216" vertex3="Module1_K9_CrossBraces_ASCII_v214"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v217" vertex2="Module1_K9_CrossBraces_ASCII_v213" vertex3="Module1_K9_CrossBraces_ASCII_v218"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v219" vertex2="Module1_K9_CrossBraces_ASCII_v213" vertex3="Module1_K9_CrossBraces_ASCII_v217"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v220" vertex2="Module1_K9_CrossBraces_ASCII_v221" vertex3="Module1_K9_CrossBraces_ASCII_v215"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v220" vertex2="Module1_K9_CrossBraces_ASCII_v214" vertex3="Module1_K9_CrossBraces_ASCII_v213"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v220" vertex2="Module1_K9_CrossBraces_ASCII_v215" vertex3="Module1_K9_CrossBraces_ASCII_v214"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v222" vertex2="Module1_K9_CrossBraces_ASCII_v213" vertex3="Module1_K9_CrossBraces_ASCII_v219"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v222" vertex2="Module1_K9_CrossBraces_ASCII_v220" vertex3="Module1_K9_CrossBraces_ASCII_v213"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v223" vertex2="Module1_K9_CrossBraces_ASCII_v224" vertex3="Module1_K9_CrossBraces_ASCII_v225"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v223" vertex2="Module1_K9_CrossBraces_ASCII_v219" vertex3="Module1_K9_CrossBraces_ASCII_v224"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v226" vertex2="Module1_K9_CrossBraces_ASCII_v227" vertex3="Module1_K9_CrossBraces_ASCII_v228"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v229" vertex2="Module1_K9_CrossBraces_ASCII_v228" vertex3="Module1_K9_CrossBraces_ASCII_v222"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v229" vertex2="Module1_K9_CrossBraces_ASCII_v222" vertex3="Module1_K9_CrossBraces_ASCII_v219"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v229" vertex2="Module1_K9_CrossBraces_ASCII_v226" vertex3="Module1_K9_CrossBraces_ASCII_v228"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v230" vertex2="Module1_K9_CrossBraces_ASCII_v231" vertex3="Module1_K9_CrossBraces_ASCII_v232"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v233" vertex2="Module1_K9_CrossBraces_ASCII_v234" vertex3="Module1_K9_CrossBraces_ASCII_v229"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v233" vertex2="Module1_K9_CrossBraces_ASCII_v223" vertex3="Module1_K9_CrossBraces_ASCII_v231"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v233" vertex2="Module1_K9_CrossBraces_ASCII_v219" vertex3="Module1_K9_CrossBraces_ASCII_v223"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v233" vertex2="Module1_K9_CrossBraces_ASCII_v231" vertex3="Module1_K9_CrossBraces_ASCII_v230"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v233" vertex2="Module1_K9_CrossBraces_ASCII_v229" vertex3="Module1_K9_CrossBraces_ASCII_v219"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v235" vertex2="Module1_K9_CrossBraces_ASCII_v236" vertex3="Module1_K9_CrossBraces_ASCII_v234"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v235" vertex2="Module1_K9_CrossBraces_ASCII_v233" vertex3="Module1_K9_CrossBraces_ASCII_v237"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v235" vertex2="Module1_K9_CrossBraces_ASCII_v234" vertex3="Module1_K9_CrossBraces_ASCII_v233"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v58" vertex2="Module1_K9_CrossBraces_ASCII_v210" vertex3="Module1_K9_CrossBraces_ASCII_v59"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v59" vertex2="Module1_K9_CrossBraces_ASCII_v210" vertex3="Module1_K9_CrossBraces_ASCII_v181"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v214" vertex2="Module1_K9_CrossBraces_ASCII_v185" vertex3="Module1_K9_CrossBraces_ASCII_v184"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v212" vertex2="Module1_K9_CrossBraces_ASCII_v184" vertex3="Module1_K9_CrossBraces_ASCII_v183"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v212" vertex2="Module1_K9_CrossBraces_ASCII_v214" vertex3="Module1_K9_CrossBraces_ASCII_v184"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v211" vertex2="Module1_K9_CrossBraces_ASCII_v183" vertex3="Module1_K9_CrossBraces_ASCII_v181"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v211" vertex2="Module1_K9_CrossBraces_ASCII_v212" vertex3="Module1_K9_CrossBraces_ASCII_v183"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v210" vertex2="Module1_K9_CrossBraces_ASCII_v211" vertex3="Module1_K9_CrossBraces_ASCII_v181"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v238" vertex2="Module1_K9_CrossBraces_ASCII_v179" vertex3="Module1_K9_CrossBraces_ASCII_v186"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v186" vertex2="Module1_K9_CrossBraces_ASCII_v239" vertex3="Module1_K9_CrossBraces_ASCII_v238"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v186" vertex2="Module1_K9_CrossBraces_ASCII_v213" vertex3="Module1_K9_CrossBraces_ASCII_v239"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v238" vertex2="Module1_K9_CrossBraces_ASCII_v240" vertex3="Module1_K9_CrossBraces_ASCII_v179"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v239" vertex2="Module1_K9_CrossBraces_ASCII_v57" vertex3="Module1_K9_CrossBraces_ASCII_v56"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v213" vertex2="Module1_K9_CrossBraces_ASCII_v57" vertex3="Module1_K9_CrossBraces_ASCII_v239"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v241" vertex2="Module1_K9_CrossBraces_ASCII_v242" vertex3="Module1_K9_CrossBraces_ASCII_v154"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v241" vertex2="Module1_K9_CrossBraces_ASCII_v154" vertex3="Module1_K9_CrossBraces_ASCII_v182"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v243" vertex2="Module1_K9_CrossBraces_ASCII_v182" vertex3="Module1_K9_CrossBraces_ASCII_v180"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v243" vertex2="Module1_K9_CrossBraces_ASCII_v180" vertex3="Module1_K9_CrossBraces_ASCII_v155"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v243" vertex2="Module1_K9_CrossBraces_ASCII_v241" vertex3="Module1_K9_CrossBraces_ASCII_v182"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v244" vertex2="Module1_K9_CrossBraces_ASCII_v243" vertex3="Module1_K9_CrossBraces_ASCII_v155"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v154" vertex2="Module1_K9_CrossBraces_ASCII_v242" vertex3="Module1_K9_CrossBraces_ASCII_v148"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v242" vertex2="Module1_K9_CrossBraces_ASCII_v151" vertex3="Module1_K9_CrossBraces_ASCII_v148"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v213" vertex2="Module1_K9_CrossBraces_ASCII_v186" vertex3="Module1_K9_CrossBraces_ASCII_v190"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v218" vertex2="Module1_K9_CrossBraces_ASCII_v190" vertex3="Module1_K9_CrossBraces_ASCII_v189"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v218" vertex2="Module1_K9_CrossBraces_ASCII_v213" vertex3="Module1_K9_CrossBraces_ASCII_v190"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v217" vertex2="Module1_K9_CrossBraces_ASCII_v189" vertex3="Module1_K9_CrossBraces_ASCII_v192"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v217" vertex2="Module1_K9_CrossBraces_ASCII_v218" vertex3="Module1_K9_CrossBraces_ASCII_v189"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v219" vertex2="Module1_K9_CrossBraces_ASCII_v192" vertex3="Module1_K9_CrossBraces_ASCII_v197"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v219" vertex2="Module1_K9_CrossBraces_ASCII_v217" vertex3="Module1_K9_CrossBraces_ASCII_v192"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v224" vertex2="Module1_K9_CrossBraces_ASCII_v197" vertex3="Module1_K9_CrossBraces_ASCII_v198"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v224" vertex2="Module1_K9_CrossBraces_ASCII_v219" vertex3="Module1_K9_CrossBraces_ASCII_v197"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v225" vertex2="Module1_K9_CrossBraces_ASCII_v198" vertex3="Module1_K9_CrossBraces_ASCII_v196"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v225" vertex2="Module1_K9_CrossBraces_ASCII_v224" vertex3="Module1_K9_CrossBraces_ASCII_v198"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v223" vertex2="Module1_K9_CrossBraces_ASCII_v196" vertex3="Module1_K9_CrossBraces_ASCII_v200"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v223" vertex2="Module1_K9_CrossBraces_ASCII_v225" vertex3="Module1_K9_CrossBraces_ASCII_v196"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v231" vertex2="Module1_K9_CrossBraces_ASCII_v200" vertex3="Module1_K9_CrossBraces_ASCII_v204"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v231" vertex2="Module1_K9_CrossBraces_ASCII_v223" vertex3="Module1_K9_CrossBraces_ASCII_v200"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v232" vertex2="Module1_K9_CrossBraces_ASCII_v204" vertex3="Module1_K9_CrossBraces_ASCII_v205"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v232" vertex2="Module1_K9_CrossBraces_ASCII_v231" vertex3="Module1_K9_CrossBraces_ASCII_v204"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v230" vertex2="Module1_K9_CrossBraces_ASCII_v205" vertex3="Module1_K9_CrossBraces_ASCII_v203"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v230" vertex2="Module1_K9_CrossBraces_ASCII_v232" vertex3="Module1_K9_CrossBraces_ASCII_v205"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v233" vertex2="Module1_K9_CrossBraces_ASCII_v203" vertex3="Module1_K9_CrossBraces_ASCII_v209"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v233" vertex2="Module1_K9_CrossBraces_ASCII_v230" vertex3="Module1_K9_CrossBraces_ASCII_v203"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v237" vertex2="Module1_K9_CrossBraces_ASCII_v209" vertex3="Module1_K9_CrossBraces_ASCII_v208"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v237" vertex2="Module1_K9_CrossBraces_ASCII_v233" vertex3="Module1_K9_CrossBraces_ASCII_v209"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v235" vertex2="Module1_K9_CrossBraces_ASCII_v237" vertex3="Module1_K9_CrossBraces_ASCII_v208"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v235" vertex2="Module1_K9_CrossBraces_ASCII_v208" vertex3="Module1_K9_CrossBraces_ASCII_v207"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v236" vertex2="Module1_K9_CrossBraces_ASCII_v235" vertex3="Module1_K9_CrossBraces_ASCII_v207"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v236" vertex2="Module1_K9_CrossBraces_ASCII_v207" vertex3="Module1_K9_CrossBraces_ASCII_v206"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v234" vertex2="Module1_K9_CrossBraces_ASCII_v236" vertex3="Module1_K9_CrossBraces_ASCII_v206"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v234" vertex2="Module1_K9_CrossBraces_ASCII_v206" vertex3="Module1_K9_CrossBraces_ASCII_v202"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v229" vertex2="Module1_K9_CrossBraces_ASCII_v234" vertex3="Module1_K9_CrossBraces_ASCII_v202"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v229" vertex2="Module1_K9_CrossBraces_ASCII_v202" vertex3="Module1_K9_CrossBraces_ASCII_v201"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v226" vertex2="Module1_K9_CrossBraces_ASCII_v201" vertex3="Module1_K9_CrossBraces_ASCII_v199"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v226" vertex2="Module1_K9_CrossBraces_ASCII_v229" vertex3="Module1_K9_CrossBraces_ASCII_v201"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v227" vertex2="Module1_K9_CrossBraces_ASCII_v199" vertex3="Module1_K9_CrossBraces_ASCII_v195"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v227" vertex2="Module1_K9_CrossBraces_ASCII_v226" vertex3="Module1_K9_CrossBraces_ASCII_v199"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v228" vertex2="Module1_K9_CrossBraces_ASCII_v195" vertex3="Module1_K9_CrossBraces_ASCII_v194"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v228" vertex2="Module1_K9_CrossBraces_ASCII_v227" vertex3="Module1_K9_CrossBraces_ASCII_v195"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v222" vertex2="Module1_K9_CrossBraces_ASCII_v194" vertex3="Module1_K9_CrossBraces_ASCII_v193"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v222" vertex2="Module1_K9_CrossBraces_ASCII_v228" vertex3="Module1_K9_CrossBraces_ASCII_v194"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v220" vertex2="Module1_K9_CrossBraces_ASCII_v193" vertex3="Module1_K9_CrossBraces_ASCII_v191"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v220" vertex2="Module1_K9_CrossBraces_ASCII_v222" vertex3="Module1_K9_CrossBraces_ASCII_v193"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v221" vertex2="Module1_K9_CrossBraces_ASCII_v191" vertex3="Module1_K9_CrossBraces_ASCII_v188"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v221" vertex2="Module1_K9_CrossBraces_ASCII_v220" vertex3="Module1_K9_CrossBraces_ASCII_v191"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v215" vertex2="Module1_K9_CrossBraces_ASCII_v188" vertex3="Module1_K9_CrossBraces_ASCII_v187"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v215" vertex2="Module1_K9_CrossBraces_ASCII_v221" vertex3="Module1_K9_CrossBraces_ASCII_v188"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v216" vertex2="Module1_K9_CrossBraces_ASCII_v187" vertex3="Module1_K9_CrossBraces_ASCII_v185"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v216" vertex2="Module1_K9_CrossBraces_ASCII_v215" vertex3="Module1_K9_CrossBraces_ASCII_v187"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v214" vertex2="Module1_K9_CrossBraces_ASCII_v216" vertex3="Module1_K9_CrossBraces_ASCII_v185"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v244" vertex2="Module1_K9_CrossBraces_ASCII_v155" vertex3="Module1_K9_CrossBraces_ASCII_v157"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v245" vertex2="Module1_K9_CrossBraces_ASCII_v244" vertex3="Module1_K9_CrossBraces_ASCII_v157"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v246" vertex2="Module1_K9_CrossBraces_ASCII_v157" vertex3="Module1_K9_CrossBraces_ASCII_v158"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v246" vertex2="Module1_K9_CrossBraces_ASCII_v245" vertex3="Module1_K9_CrossBraces_ASCII_v157"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v247" vertex2="Module1_K9_CrossBraces_ASCII_v158" vertex3="Module1_K9_CrossBraces_ASCII_v156"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v247" vertex2="Module1_K9_CrossBraces_ASCII_v246" vertex3="Module1_K9_CrossBraces_ASCII_v158"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v248" vertex2="Module1_K9_CrossBraces_ASCII_v156" vertex3="Module1_K9_CrossBraces_ASCII_v159"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v248" vertex2="Module1_K9_CrossBraces_ASCII_v247" vertex3="Module1_K9_CrossBraces_ASCII_v156"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v249" vertex2="Module1_K9_CrossBraces_ASCII_v159" vertex3="Module1_K9_CrossBraces_ASCII_v161"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v249" vertex2="Module1_K9_CrossBraces_ASCII_v248" vertex3="Module1_K9_CrossBraces_ASCII_v159"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v250" vertex2="Module1_K9_CrossBraces_ASCII_v161" vertex3="Module1_K9_CrossBraces_ASCII_v160"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v250" vertex2="Module1_K9_CrossBraces_ASCII_v249" vertex3="Module1_K9_CrossBraces_ASCII_v161"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v251" vertex2="Module1_K9_CrossBraces_ASCII_v160" vertex3="Module1_K9_CrossBraces_ASCII_v163"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v251" vertex2="Module1_K9_CrossBraces_ASCII_v250" vertex3="Module1_K9_CrossBraces_ASCII_v160"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v252" vertex2="Module1_K9_CrossBraces_ASCII_v163" vertex3="Module1_K9_CrossBraces_ASCII_v162"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v252" vertex2="Module1_K9_CrossBraces_ASCII_v251" vertex3="Module1_K9_CrossBraces_ASCII_v163"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v253" vertex2="Module1_K9_CrossBraces_ASCII_v162" vertex3="Module1_K9_CrossBraces_ASCII_v164"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v253" vertex2="Module1_K9_CrossBraces_ASCII_v252" vertex3="Module1_K9_CrossBraces_ASCII_v162"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v254" vertex2="Module1_K9_CrossBraces_ASCII_v164" vertex3="Module1_K9_CrossBraces_ASCII_v166"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v254" vertex2="Module1_K9_CrossBraces_ASCII_v253" vertex3="Module1_K9_CrossBraces_ASCII_v164"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v255" vertex2="Module1_K9_CrossBraces_ASCII_v166" vertex3="Module1_K9_CrossBraces_ASCII_v165"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v255" vertex2="Module1_K9_CrossBraces_ASCII_v254" vertex3="Module1_K9_CrossBraces_ASCII_v166"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v256" vertex2="Module1_K9_CrossBraces_ASCII_v255" vertex3="Module1_K9_CrossBraces_ASCII_v165"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v256" vertex2="Module1_K9_CrossBraces_ASCII_v165" vertex3="Module1_K9_CrossBraces_ASCII_v168"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v257" vertex2="Module1_K9_CrossBraces_ASCII_v256" vertex3="Module1_K9_CrossBraces_ASCII_v168"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v257" vertex2="Module1_K9_CrossBraces_ASCII_v168" vertex3="Module1_K9_CrossBraces_ASCII_v169"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v258" vertex2="Module1_K9_CrossBraces_ASCII_v257" vertex3="Module1_K9_CrossBraces_ASCII_v169"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v258" vertex2="Module1_K9_CrossBraces_ASCII_v169" vertex3="Module1_K9_CrossBraces_ASCII_v170"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v259" vertex2="Module1_K9_CrossBraces_ASCII_v258" vertex3="Module1_K9_CrossBraces_ASCII_v170"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v259" vertex2="Module1_K9_CrossBraces_ASCII_v170" vertex3="Module1_K9_CrossBraces_ASCII_v167"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v260" vertex2="Module1_K9_CrossBraces_ASCII_v259" vertex3="Module1_K9_CrossBraces_ASCII_v167"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v260" vertex2="Module1_K9_CrossBraces_ASCII_v167" vertex3="Module1_K9_CrossBraces_ASCII_v172"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v261" vertex2="Module1_K9_CrossBraces_ASCII_v260" vertex3="Module1_K9_CrossBraces_ASCII_v172"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v261" vertex2="Module1_K9_CrossBraces_ASCII_v172" vertex3="Module1_K9_CrossBraces_ASCII_v171"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v262" vertex2="Module1_K9_CrossBraces_ASCII_v261" vertex3="Module1_K9_CrossBraces_ASCII_v171"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v262" vertex2="Module1_K9_CrossBraces_ASCII_v171" vertex3="Module1_K9_CrossBraces_ASCII_v173"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v263" vertex2="Module1_K9_CrossBraces_ASCII_v262" vertex3="Module1_K9_CrossBraces_ASCII_v173"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v263" vertex2="Module1_K9_CrossBraces_ASCII_v173" vertex3="Module1_K9_CrossBraces_ASCII_v175"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v264" vertex2="Module1_K9_CrossBraces_ASCII_v263" vertex3="Module1_K9_CrossBraces_ASCII_v175"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v264" vertex2="Module1_K9_CrossBraces_ASCII_v175" vertex3="Module1_K9_CrossBraces_ASCII_v174"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v265" vertex2="Module1_K9_CrossBraces_ASCII_v264" vertex3="Module1_K9_CrossBraces_ASCII_v174"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v265" vertex2="Module1_K9_CrossBraces_ASCII_v174" vertex3="Module1_K9_CrossBraces_ASCII_v176"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v266" vertex2="Module1_K9_CrossBraces_ASCII_v265" vertex3="Module1_K9_CrossBraces_ASCII_v176"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v266" vertex2="Module1_K9_CrossBraces_ASCII_v176" vertex3="Module1_K9_CrossBraces_ASCII_v177"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v267" vertex2="Module1_K9_CrossBraces_ASCII_v266" vertex3="Module1_K9_CrossBraces_ASCII_v177"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v267" vertex2="Module1_K9_CrossBraces_ASCII_v177" vertex3="Module1_K9_CrossBraces_ASCII_v178"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v240" vertex2="Module1_K9_CrossBraces_ASCII_v267" vertex3="Module1_K9_CrossBraces_ASCII_v178"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v240" vertex2="Module1_K9_CrossBraces_ASCII_v178" vertex3="Module1_K9_CrossBraces_ASCII_v179"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v108" vertex2="Module1_K9_CrossBraces_ASCII_v107" vertex3="Module1_K9_CrossBraces_ASCII_v268"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v268" vertex2="Module1_K9_CrossBraces_ASCII_v107" vertex3="Module1_K9_CrossBraces_ASCII_v269"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v107" vertex2="Module1_K9_CrossBraces_ASCII_v109" vertex3="Module1_K9_CrossBraces_ASCII_v269"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v269" vertex2="Module1_K9_CrossBraces_ASCII_v109" vertex3="Module1_K9_CrossBraces_ASCII_v270"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v109" vertex2="Module1_K9_CrossBraces_ASCII_v110" vertex3="Module1_K9_CrossBraces_ASCII_v270"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v270" vertex2="Module1_K9_CrossBraces_ASCII_v110" vertex3="Module1_K9_CrossBraces_ASCII_v271"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v110" vertex2="Module1_K9_CrossBraces_ASCII_v111" vertex3="Module1_K9_CrossBraces_ASCII_v271"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v271" vertex2="Module1_K9_CrossBraces_ASCII_v111" vertex3="Module1_K9_CrossBraces_ASCII_v272"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v272" vertex2="Module1_K9_CrossBraces_ASCII_v112" vertex3="Module1_K9_CrossBraces_ASCII_v273"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v111" vertex2="Module1_K9_CrossBraces_ASCII_v112" vertex3="Module1_K9_CrossBraces_ASCII_v272"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v273" vertex2="Module1_K9_CrossBraces_ASCII_v113" vertex3="Module1_K9_CrossBraces_ASCII_v274"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v112" vertex2="Module1_K9_CrossBraces_ASCII_v113" vertex3="Module1_K9_CrossBraces_ASCII_v273"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v274" vertex2="Module1_K9_CrossBraces_ASCII_v114" vertex3="Module1_K9_CrossBraces_ASCII_v275"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v113" vertex2="Module1_K9_CrossBraces_ASCII_v114" vertex3="Module1_K9_CrossBraces_ASCII_v274"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v275" vertex2="Module1_K9_CrossBraces_ASCII_v115" vertex3="Module1_K9_CrossBraces_ASCII_v276"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v114" vertex2="Module1_K9_CrossBraces_ASCII_v115" vertex3="Module1_K9_CrossBraces_ASCII_v275"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v276" vertex2="Module1_K9_CrossBraces_ASCII_v116" vertex3="Module1_K9_CrossBraces_ASCII_v277"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v115" vertex2="Module1_K9_CrossBraces_ASCII_v116" vertex3="Module1_K9_CrossBraces_ASCII_v276"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v277" vertex2="Module1_K9_CrossBraces_ASCII_v117" vertex3="Module1_K9_CrossBraces_ASCII_v278"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v116" vertex2="Module1_K9_CrossBraces_ASCII_v117" vertex3="Module1_K9_CrossBraces_ASCII_v277"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v278" vertex2="Module1_K9_CrossBraces_ASCII_v118" vertex3="Module1_K9_CrossBraces_ASCII_v279"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v117" vertex2="Module1_K9_CrossBraces_ASCII_v118" vertex3="Module1_K9_CrossBraces_ASCII_v278"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v118" vertex2="Module1_K9_CrossBraces_ASCII_v119" vertex3="Module1_K9_CrossBraces_ASCII_v279"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v279" vertex2="Module1_K9_CrossBraces_ASCII_v120" vertex3="Module1_K9_CrossBraces_ASCII_v280"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v119" vertex2="Module1_K9_CrossBraces_ASCII_v120" vertex3="Module1_K9_CrossBraces_ASCII_v279"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v280" vertex2="Module1_K9_CrossBraces_ASCII_v121" vertex3="Module1_K9_CrossBraces_ASCII_v281"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v120" vertex2="Module1_K9_CrossBraces_ASCII_v121" vertex3="Module1_K9_CrossBraces_ASCII_v280"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v281" vertex2="Module1_K9_CrossBraces_ASCII_v122" vertex3="Module1_K9_CrossBraces_ASCII_v282"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v121" vertex2="Module1_K9_CrossBraces_ASCII_v122" vertex3="Module1_K9_CrossBraces_ASCII_v281"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v282" vertex2="Module1_K9_CrossBraces_ASCII_v123" vertex3="Module1_K9_CrossBraces_ASCII_v283"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v122" vertex2="Module1_K9_CrossBraces_ASCII_v123" vertex3="Module1_K9_CrossBraces_ASCII_v282"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v283" vertex2="Module1_K9_CrossBraces_ASCII_v124" vertex3="Module1_K9_CrossBraces_ASCII_v284"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v123" vertex2="Module1_K9_CrossBraces_ASCII_v124" vertex3="Module1_K9_CrossBraces_ASCII_v283"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v124" vertex2="Module1_K9_CrossBraces_ASCII_v125" vertex3="Module1_K9_CrossBraces_ASCII_v284"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v284" vertex2="Module1_K9_CrossBraces_ASCII_v125" vertex3="Module1_K9_CrossBraces_ASCII_v285"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v125" vertex2="Module1_K9_CrossBraces_ASCII_v126" vertex3="Module1_K9_CrossBraces_ASCII_v285"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v285" vertex2="Module1_K9_CrossBraces_ASCII_v126" vertex3="Module1_K9_CrossBraces_ASCII_v286"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v126" vertex2="Module1_K9_CrossBraces_ASCII_v127" vertex3="Module1_K9_CrossBraces_ASCII_v286"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v286" vertex2="Module1_K9_CrossBraces_ASCII_v127" vertex3="Module1_K9_CrossBraces_ASCII_v287"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v127" vertex2="Module1_K9_CrossBraces_ASCII_v128" vertex3="Module1_K9_CrossBraces_ASCII_v287"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v287" vertex2="Module1_K9_CrossBraces_ASCII_v128" vertex3="Module1_K9_CrossBraces_ASCII_v288"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v128" vertex2="Module1_K9_CrossBraces_ASCII_v129" vertex3="Module1_K9_CrossBraces_ASCII_v288"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v288" vertex2="Module1_K9_CrossBraces_ASCII_v129" vertex3="Module1_K9_CrossBraces_ASCII_v289"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v129" vertex2="Module1_K9_CrossBraces_ASCII_v130" vertex3="Module1_K9_CrossBraces_ASCII_v289"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v289" vertex2="Module1_K9_CrossBraces_ASCII_v130" vertex3="Module1_K9_CrossBraces_ASCII_v290"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v130" vertex2="Module1_K9_CrossBraces_ASCII_v131" vertex3="Module1_K9_CrossBraces_ASCII_v290"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v131" vertex2="Module1_K9_CrossBraces_ASCII_v132" vertex3="Module1_K9_CrossBraces_ASCII_v290"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v290" vertex2="Module1_K9_CrossBraces_ASCII_v132" vertex3="Module1_K9_CrossBraces_ASCII_v291"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v132" vertex2="Module1_K9_CrossBraces_ASCII_v133" vertex3="Module1_K9_CrossBraces_ASCII_v291"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v291" vertex2="Module1_K9_CrossBraces_ASCII_v133" vertex3="Module1_K9_CrossBraces_ASCII_v292"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v292" vertex2="Module1_K9_CrossBraces_ASCII_v134" vertex3="Module1_K9_CrossBraces_ASCII_v293"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v133" vertex2="Module1_K9_CrossBraces_ASCII_v134" vertex3="Module1_K9_CrossBraces_ASCII_v292"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v293" vertex2="Module1_K9_CrossBraces_ASCII_v135" vertex3="Module1_K9_CrossBraces_ASCII_v294"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v134" vertex2="Module1_K9_CrossBraces_ASCII_v135" vertex3="Module1_K9_CrossBraces_ASCII_v293"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v294" vertex2="Module1_K9_CrossBraces_ASCII_v136" vertex3="Module1_K9_CrossBraces_ASCII_v295"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v135" vertex2="Module1_K9_CrossBraces_ASCII_v136" vertex3="Module1_K9_CrossBraces_ASCII_v294"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v295" vertex2="Module1_K9_CrossBraces_ASCII_v137" vertex3="Module1_K9_CrossBraces_ASCII_v296"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v136" vertex2="Module1_K9_CrossBraces_ASCII_v137" vertex3="Module1_K9_CrossBraces_ASCII_v295"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v296" vertex2="Module1_K9_CrossBraces_ASCII_v138" vertex3="Module1_K9_CrossBraces_ASCII_v297"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v137" vertex2="Module1_K9_CrossBraces_ASCII_v138" vertex3="Module1_K9_CrossBraces_ASCII_v296"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v297" vertex2="Module1_K9_CrossBraces_ASCII_v139" vertex3="Module1_K9_CrossBraces_ASCII_v298"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v138" vertex2="Module1_K9_CrossBraces_ASCII_v139" vertex3="Module1_K9_CrossBraces_ASCII_v297"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v298" vertex2="Module1_K9_CrossBraces_ASCII_v140" vertex3="Module1_K9_CrossBraces_ASCII_v299"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v139" vertex2="Module1_K9_CrossBraces_ASCII_v140" vertex3="Module1_K9_CrossBraces_ASCII_v298"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v299" vertex2="Module1_K9_CrossBraces_ASCII_v97" vertex3="Module1_K9_CrossBraces_ASCII_v300"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v140" vertex2="Module1_K9_CrossBraces_ASCII_v97" vertex3="Module1_K9_CrossBraces_ASCII_v299"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v300" vertex2="Module1_K9_CrossBraces_ASCII_v95" vertex3="Module1_K9_CrossBraces_ASCII_v301"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v97" vertex2="Module1_K9_CrossBraces_ASCII_v95" vertex3="Module1_K9_CrossBraces_ASCII_v300"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v301" vertex2="Module1_K9_CrossBraces_ASCII_v93" vertex3="Module1_K9_CrossBraces_ASCII_v302"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v95" vertex2="Module1_K9_CrossBraces_ASCII_v93" vertex3="Module1_K9_CrossBraces_ASCII_v301"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v302" vertex2="Module1_K9_CrossBraces_ASCII_v91" vertex3="Module1_K9_CrossBraces_ASCII_v303"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v93" vertex2="Module1_K9_CrossBraces_ASCII_v91" vertex3="Module1_K9_CrossBraces_ASCII_v302"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v91" vertex2="Module1_K9_CrossBraces_ASCII_v89" vertex3="Module1_K9_CrossBraces_ASCII_v303"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v303" vertex2="Module1_K9_CrossBraces_ASCII_v87" vertex3="Module1_K9_CrossBraces_ASCII_v304"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v89" vertex2="Module1_K9_CrossBraces_ASCII_v87" vertex3="Module1_K9_CrossBraces_ASCII_v303"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v304" vertex2="Module1_K9_CrossBraces_ASCII_v85" vertex3="Module1_K9_CrossBraces_ASCII_v305"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v87" vertex2="Module1_K9_CrossBraces_ASCII_v85" vertex3="Module1_K9_CrossBraces_ASCII_v304"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v305" vertex2="Module1_K9_CrossBraces_ASCII_v83" vertex3="Module1_K9_CrossBraces_ASCII_v306"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v85" vertex2="Module1_K9_CrossBraces_ASCII_v83" vertex3="Module1_K9_CrossBraces_ASCII_v305"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v306" vertex2="Module1_K9_CrossBraces_ASCII_v81" vertex3="Module1_K9_CrossBraces_ASCII_v307"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v83" vertex2="Module1_K9_CrossBraces_ASCII_v81" vertex3="Module1_K9_CrossBraces_ASCII_v306"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v81" vertex2="Module1_K9_CrossBraces_ASCII_v79" vertex3="Module1_K9_CrossBraces_ASCII_v307"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v307" vertex2="Module1_K9_CrossBraces_ASCII_v79" vertex3="Module1_K9_CrossBraces_ASCII_v308"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v79" vertex2="Module1_K9_CrossBraces_ASCII_v77" vertex3="Module1_K9_CrossBraces_ASCII_v308"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v308" vertex2="Module1_K9_CrossBraces_ASCII_v77" vertex3="Module1_K9_CrossBraces_ASCII_v309"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v77" vertex2="Module1_K9_CrossBraces_ASCII_v75" vertex3="Module1_K9_CrossBraces_ASCII_v309"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v309" vertex2="Module1_K9_CrossBraces_ASCII_v75" vertex3="Module1_K9_CrossBraces_ASCII_v310"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v75" vertex2="Module1_K9_CrossBraces_ASCII_v73" vertex3="Module1_K9_CrossBraces_ASCII_v310"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v310" vertex2="Module1_K9_CrossBraces_ASCII_v73" vertex3="Module1_K9_CrossBraces_ASCII_v311"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v73" vertex2="Module1_K9_CrossBraces_ASCII_v70" vertex3="Module1_K9_CrossBraces_ASCII_v311"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v311" vertex2="Module1_K9_CrossBraces_ASCII_v70" vertex3="Module1_K9_CrossBraces_ASCII_v312"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v70" vertex2="Module1_K9_CrossBraces_ASCII_v71" vertex3="Module1_K9_CrossBraces_ASCII_v312"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v312" vertex2="Module1_K9_CrossBraces_ASCII_v71" vertex3="Module1_K9_CrossBraces_ASCII_v313"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v313" vertex2="Module1_K9_CrossBraces_ASCII_v72" vertex3="Module1_K9_CrossBraces_ASCII_v314"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v71" vertex2="Module1_K9_CrossBraces_ASCII_v72" vertex3="Module1_K9_CrossBraces_ASCII_v313"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v314" vertex2="Module1_K9_CrossBraces_ASCII_v74" vertex3="Module1_K9_CrossBraces_ASCII_v315"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v72" vertex2="Module1_K9_CrossBraces_ASCII_v74" vertex3="Module1_K9_CrossBraces_ASCII_v314"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v74" vertex2="Module1_K9_CrossBraces_ASCII_v76" vertex3="Module1_K9_CrossBraces_ASCII_v315"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v315" vertex2="Module1_K9_CrossBraces_ASCII_v78" vertex3="Module1_K9_CrossBraces_ASCII_v316"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v76" vertex2="Module1_K9_CrossBraces_ASCII_v78" vertex3="Module1_K9_CrossBraces_ASCII_v315"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v316" vertex2="Module1_K9_CrossBraces_ASCII_v80" vertex3="Module1_K9_CrossBraces_ASCII_v317"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v78" vertex2="Module1_K9_CrossBraces_ASCII_v80" vertex3="Module1_K9_CrossBraces_ASCII_v316"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v317" vertex2="Module1_K9_CrossBraces_ASCII_v82" vertex3="Module1_K9_CrossBraces_ASCII_v318"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v80" vertex2="Module1_K9_CrossBraces_ASCII_v82" vertex3="Module1_K9_CrossBraces_ASCII_v317"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v318" vertex2="Module1_K9_CrossBraces_ASCII_v84" vertex3="Module1_K9_CrossBraces_ASCII_v319"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v82" vertex2="Module1_K9_CrossBraces_ASCII_v84" vertex3="Module1_K9_CrossBraces_ASCII_v318"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v319" vertex2="Module1_K9_CrossBraces_ASCII_v86" vertex3="Module1_K9_CrossBraces_ASCII_v320"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v84" vertex2="Module1_K9_CrossBraces_ASCII_v86" vertex3="Module1_K9_CrossBraces_ASCII_v319"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v320" vertex2="Module1_K9_CrossBraces_ASCII_v88" vertex3="Module1_K9_CrossBraces_ASCII_v321"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v86" vertex2="Module1_K9_CrossBraces_ASCII_v88" vertex3="Module1_K9_CrossBraces_ASCII_v320"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v321" vertex2="Module1_K9_CrossBraces_ASCII_v90" vertex3="Module1_K9_CrossBraces_ASCII_v322"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v88" vertex2="Module1_K9_CrossBraces_ASCII_v90" vertex3="Module1_K9_CrossBraces_ASCII_v321"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v322" vertex2="Module1_K9_CrossBraces_ASCII_v92" vertex3="Module1_K9_CrossBraces_ASCII_v323"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v90" vertex2="Module1_K9_CrossBraces_ASCII_v92" vertex3="Module1_K9_CrossBraces_ASCII_v322"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v323" vertex2="Module1_K9_CrossBraces_ASCII_v94" vertex3="Module1_K9_CrossBraces_ASCII_v324"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v92" vertex2="Module1_K9_CrossBraces_ASCII_v94" vertex3="Module1_K9_CrossBraces_ASCII_v323"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v324" vertex2="Module1_K9_CrossBraces_ASCII_v96" vertex3="Module1_K9_CrossBraces_ASCII_v325"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v94" vertex2="Module1_K9_CrossBraces_ASCII_v96" vertex3="Module1_K9_CrossBraces_ASCII_v324"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v325" vertex2="Module1_K9_CrossBraces_ASCII_v98" vertex3="Module1_K9_CrossBraces_ASCII_v326"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v96" vertex2="Module1_K9_CrossBraces_ASCII_v98" vertex3="Module1_K9_CrossBraces_ASCII_v325"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v98" vertex2="Module1_K9_CrossBraces_ASCII_v99" vertex3="Module1_K9_CrossBraces_ASCII_v326"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v326" vertex2="Module1_K9_CrossBraces_ASCII_v100" vertex3="Module1_K9_CrossBraces_ASCII_v327"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v99" vertex2="Module1_K9_CrossBraces_ASCII_v100" vertex3="Module1_K9_CrossBraces_ASCII_v326"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v327" vertex2="Module1_K9_CrossBraces_ASCII_v101" vertex3="Module1_K9_CrossBraces_ASCII_v328"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v100" vertex2="Module1_K9_CrossBraces_ASCII_v101" vertex3="Module1_K9_CrossBraces_ASCII_v327"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v328" vertex2="Module1_K9_CrossBraces_ASCII_v102" vertex3="Module1_K9_CrossBraces_ASCII_v329"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v101" vertex2="Module1_K9_CrossBraces_ASCII_v102" vertex3="Module1_K9_CrossBraces_ASCII_v328"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v329" vertex2="Module1_K9_CrossBraces_ASCII_v103" vertex3="Module1_K9_CrossBraces_ASCII_v330"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v102" vertex2="Module1_K9_CrossBraces_ASCII_v103" vertex3="Module1_K9_CrossBraces_ASCII_v329"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v330" vertex2="Module1_K9_CrossBraces_ASCII_v104" vertex3="Module1_K9_CrossBraces_ASCII_v331"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v103" vertex2="Module1_K9_CrossBraces_ASCII_v104" vertex3="Module1_K9_CrossBraces_ASCII_v330"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v104" vertex2="Module1_K9_CrossBraces_ASCII_v105" vertex3="Module1_K9_CrossBraces_ASCII_v331"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v312" vertex2="Module1_K9_CrossBraces_ASCII_v314" vertex3="Module1_K9_CrossBraces_ASCII_v315"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v312" vertex2="Module1_K9_CrossBraces_ASCII_v313" vertex3="Module1_K9_CrossBraces_ASCII_v314"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v319" vertex2="Module1_K9_CrossBraces_ASCII_v317" vertex3="Module1_K9_CrossBraces_ASCII_v318"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v309" vertex2="Module1_K9_CrossBraces_ASCII_v311" vertex3="Module1_K9_CrossBraces_ASCII_v312"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v309" vertex2="Module1_K9_CrossBraces_ASCII_v310" vertex3="Module1_K9_CrossBraces_ASCII_v311"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v307" vertex2="Module1_K9_CrossBraces_ASCII_v308" vertex3="Module1_K9_CrossBraces_ASCII_v309"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v304" vertex2="Module1_K9_CrossBraces_ASCII_v306" vertex3="Module1_K9_CrossBraces_ASCII_v307"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v304" vertex2="Module1_K9_CrossBraces_ASCII_v305" vertex3="Module1_K9_CrossBraces_ASCII_v306"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v302" vertex2="Module1_K9_CrossBraces_ASCII_v303" vertex3="Module1_K9_CrossBraces_ASCII_v304"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v300" vertex2="Module1_K9_CrossBraces_ASCII_v301" vertex3="Module1_K9_CrossBraces_ASCII_v302"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v331" vertex2="Module1_K9_CrossBraces_ASCII_v329" vertex3="Module1_K9_CrossBraces_ASCII_v330"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v331" vertex2="Module1_K9_CrossBraces_ASCII_v328" vertex3="Module1_K9_CrossBraces_ASCII_v329"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v331" vertex2="Module1_K9_CrossBraces_ASCII_v327" vertex3="Module1_K9_CrossBraces_ASCII_v328"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v331" vertex2="Module1_K9_CrossBraces_ASCII_v326" vertex3="Module1_K9_CrossBraces_ASCII_v327"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v331" vertex2="Module1_K9_CrossBraces_ASCII_v325" vertex3="Module1_K9_CrossBraces_ASCII_v326"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v331" vertex2="Module1_K9_CrossBraces_ASCII_v324" vertex3="Module1_K9_CrossBraces_ASCII_v325"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v331" vertex2="Module1_K9_CrossBraces_ASCII_v323" vertex3="Module1_K9_CrossBraces_ASCII_v324"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v331" vertex2="Module1_K9_CrossBraces_ASCII_v322" vertex3="Module1_K9_CrossBraces_ASCII_v323"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v331" vertex2="Module1_K9_CrossBraces_ASCII_v304" vertex3="Module1_K9_CrossBraces_ASCII_v307"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v331" vertex2="Module1_K9_CrossBraces_ASCII_v321" vertex3="Module1_K9_CrossBraces_ASCII_v322"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v331" vertex2="Module1_K9_CrossBraces_ASCII_v320" vertex3="Module1_K9_CrossBraces_ASCII_v321"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v331" vertex2="Module1_K9_CrossBraces_ASCII_v319" vertex3="Module1_K9_CrossBraces_ASCII_v320"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v331" vertex2="Module1_K9_CrossBraces_ASCII_v316" vertex3="Module1_K9_CrossBraces_ASCII_v317"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v331" vertex2="Module1_K9_CrossBraces_ASCII_v315" vertex3="Module1_K9_CrossBraces_ASCII_v316"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v331" vertex2="Module1_K9_CrossBraces_ASCII_v302" vertex3="Module1_K9_CrossBraces_ASCII_v304"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v331" vertex2="Module1_K9_CrossBraces_ASCII_v312" vertex3="Module1_K9_CrossBraces_ASCII_v315"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v331" vertex2="Module1_K9_CrossBraces_ASCII_v317" vertex3="Module1_K9_CrossBraces_ASCII_v319"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v331" vertex2="Module1_K9_CrossBraces_ASCII_v307" vertex3="Module1_K9_CrossBraces_ASCII_v309"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v331" vertex2="Module1_K9_CrossBraces_ASCII_v309" vertex3="Module1_K9_CrossBraces_ASCII_v312"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v297" vertex2="Module1_K9_CrossBraces_ASCII_v300" vertex3="Module1_K9_CrossBraces_ASCII_v302"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v297" vertex2="Module1_K9_CrossBraces_ASCII_v299" vertex3="Module1_K9_CrossBraces_ASCII_v300"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v297" vertex2="Module1_K9_CrossBraces_ASCII_v298" vertex3="Module1_K9_CrossBraces_ASCII_v299"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v297" vertex2="Module1_K9_CrossBraces_ASCII_v302" vertex3="Module1_K9_CrossBraces_ASCII_v331"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v295" vertex2="Module1_K9_CrossBraces_ASCII_v296" vertex3="Module1_K9_CrossBraces_ASCII_v297"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v294" vertex2="Module1_K9_CrossBraces_ASCII_v295" vertex3="Module1_K9_CrossBraces_ASCII_v297"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v293" vertex2="Module1_K9_CrossBraces_ASCII_v297" vertex3="Module1_K9_CrossBraces_ASCII_v331"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v293" vertex2="Module1_K9_CrossBraces_ASCII_v294" vertex3="Module1_K9_CrossBraces_ASCII_v297"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v288" vertex2="Module1_K9_CrossBraces_ASCII_v289" vertex3="Module1_K9_CrossBraces_ASCII_v290"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v286" vertex2="Module1_K9_CrossBraces_ASCII_v290" vertex3="Module1_K9_CrossBraces_ASCII_v291"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v286" vertex2="Module1_K9_CrossBraces_ASCII_v287" vertex3="Module1_K9_CrossBraces_ASCII_v288"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v286" vertex2="Module1_K9_CrossBraces_ASCII_v288" vertex3="Module1_K9_CrossBraces_ASCII_v290"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v285" vertex2="Module1_K9_CrossBraces_ASCII_v292" vertex3="Module1_K9_CrossBraces_ASCII_v293"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v285" vertex2="Module1_K9_CrossBraces_ASCII_v291" vertex3="Module1_K9_CrossBraces_ASCII_v292"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v285" vertex2="Module1_K9_CrossBraces_ASCII_v293" vertex3="Module1_K9_CrossBraces_ASCII_v331"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v285" vertex2="Module1_K9_CrossBraces_ASCII_v286" vertex3="Module1_K9_CrossBraces_ASCII_v291"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v282" vertex2="Module1_K9_CrossBraces_ASCII_v284" vertex3="Module1_K9_CrossBraces_ASCII_v285"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v282" vertex2="Module1_K9_CrossBraces_ASCII_v283" vertex3="Module1_K9_CrossBraces_ASCII_v284"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v279" vertex2="Module1_K9_CrossBraces_ASCII_v281" vertex3="Module1_K9_CrossBraces_ASCII_v282"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v279" vertex2="Module1_K9_CrossBraces_ASCII_v280" vertex3="Module1_K9_CrossBraces_ASCII_v281"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v279" vertex2="Module1_K9_CrossBraces_ASCII_v285" vertex3="Module1_K9_CrossBraces_ASCII_v331"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v279" vertex2="Module1_K9_CrossBraces_ASCII_v282" vertex3="Module1_K9_CrossBraces_ASCII_v285"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v277" vertex2="Module1_K9_CrossBraces_ASCII_v278" vertex3="Module1_K9_CrossBraces_ASCII_v279"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v276" vertex2="Module1_K9_CrossBraces_ASCII_v277" vertex3="Module1_K9_CrossBraces_ASCII_v279"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v274" vertex2="Module1_K9_CrossBraces_ASCII_v275" vertex3="Module1_K9_CrossBraces_ASCII_v276"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v272" vertex2="Module1_K9_CrossBraces_ASCII_v273" vertex3="Module1_K9_CrossBraces_ASCII_v274"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v272" vertex2="Module1_K9_CrossBraces_ASCII_v274" vertex3="Module1_K9_CrossBraces_ASCII_v276"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v271" vertex2="Module1_K9_CrossBraces_ASCII_v279" vertex3="Module1_K9_CrossBraces_ASCII_v331"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v271" vertex2="Module1_K9_CrossBraces_ASCII_v276" vertex3="Module1_K9_CrossBraces_ASCII_v279"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v271" vertex2="Module1_K9_CrossBraces_ASCII_v272" vertex3="Module1_K9_CrossBraces_ASCII_v276"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v268" vertex2="Module1_K9_CrossBraces_ASCII_v270" vertex3="Module1_K9_CrossBraces_ASCII_v271"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v268" vertex2="Module1_K9_CrossBraces_ASCII_v269" vertex3="Module1_K9_CrossBraces_ASCII_v270"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v268" vertex2="Module1_K9_CrossBraces_ASCII_v271" vertex3="Module1_K9_CrossBraces_ASCII_v331"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v239" vertex2="Module1_K9_CrossBraces_ASCII_v331" vertex3="Module1_K9_CrossBraces_ASCII_v238"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v239" vertex2="Module1_K9_CrossBraces_ASCII_v268" vertex3="Module1_K9_CrossBraces_ASCII_v331"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v108" vertex2="Module1_K9_CrossBraces_ASCII_v268" vertex3="Module1_K9_CrossBraces_ASCII_v146"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v268" vertex2="Module1_K9_CrossBraces_ASCII_v150" vertex3="Module1_K9_CrossBraces_ASCII_v146"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v153" vertex2="Module1_K9_CrossBraces_ASCII_v2" vertex3="Module1_K9_CrossBraces_ASCII_v9"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v7" vertex2="Module1_K9_CrossBraces_ASCII_v14" vertex3="Module1_K9_CrossBraces_ASCII_v10"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v10" vertex2="Module1_K9_CrossBraces_ASCII_v14" vertex3="Module1_K9_CrossBraces_ASCII_v12"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v7" vertex2="Module1_K9_CrossBraces_ASCII_v16" vertex3="Module1_K9_CrossBraces_ASCII_v14"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v16" vertex2="Module1_K9_CrossBraces_ASCII_v20" vertex3="Module1_K9_CrossBraces_ASCII_v18"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v20" vertex2="Module1_K9_CrossBraces_ASCII_v28" vertex3="Module1_K9_CrossBraces_ASCII_v22"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v22" vertex2="Module1_K9_CrossBraces_ASCII_v28" vertex3="Module1_K9_CrossBraces_ASCII_v24"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v24" vertex2="Module1_K9_CrossBraces_ASCII_v28" vertex3="Module1_K9_CrossBraces_ASCII_v26"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v20" vertex2="Module1_K9_CrossBraces_ASCII_v30" vertex3="Module1_K9_CrossBraces_ASCII_v28"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v16" vertex2="Module1_K9_CrossBraces_ASCII_v32" vertex3="Module1_K9_CrossBraces_ASCII_v20"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v20" vertex2="Module1_K9_CrossBraces_ASCII_v32" vertex3="Module1_K9_CrossBraces_ASCII_v30"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v32" vertex2="Module1_K9_CrossBraces_ASCII_v36" vertex3="Module1_K9_CrossBraces_ASCII_v34"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v32" vertex2="Module1_K9_CrossBraces_ASCII_v38" vertex3="Module1_K9_CrossBraces_ASCII_v36"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v16" vertex2="Module1_K9_CrossBraces_ASCII_v38" vertex3="Module1_K9_CrossBraces_ASCII_v32"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v38" vertex2="Module1_K9_CrossBraces_ASCII_v42" vertex3="Module1_K9_CrossBraces_ASCII_v40"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v7" vertex2="Module1_K9_CrossBraces_ASCII_v44" vertex3="Module1_K9_CrossBraces_ASCII_v16"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v38" vertex2="Module1_K9_CrossBraces_ASCII_v44" vertex3="Module1_K9_CrossBraces_ASCII_v42"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v16" vertex2="Module1_K9_CrossBraces_ASCII_v44" vertex3="Module1_K9_CrossBraces_ASCII_v38"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v44" vertex2="Module1_K9_CrossBraces_ASCII_v48" vertex3="Module1_K9_CrossBraces_ASCII_v46"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v7" vertex2="Module1_K9_CrossBraces_ASCII_v48" vertex3="Module1_K9_CrossBraces_ASCII_v44"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v48" vertex2="Module1_K9_CrossBraces_ASCII_v54" vertex3="Module1_K9_CrossBraces_ASCII_v50"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v50" vertex2="Module1_K9_CrossBraces_ASCII_v54" vertex3="Module1_K9_CrossBraces_ASCII_v52"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v5" vertex2="Module1_K9_CrossBraces_ASCII_v56" vertex3="Module1_K9_CrossBraces_ASCII_v7"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v7" vertex2="Module1_K9_CrossBraces_ASCII_v56" vertex3="Module1_K9_CrossBraces_ASCII_v48"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v48" vertex2="Module1_K9_CrossBraces_ASCII_v56" vertex3="Module1_K9_CrossBraces_ASCII_v54"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v3" vertex2="Module1_K9_CrossBraces_ASCII_v239" vertex3="Module1_K9_CrossBraces_ASCII_v5"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v2" vertex2="Module1_K9_CrossBraces_ASCII_v239" vertex3="Module1_K9_CrossBraces_ASCII_v3"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v150" vertex2="Module1_K9_CrossBraces_ASCII_v239" vertex3="Module1_K9_CrossBraces_ASCII_v153"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v268" vertex2="Module1_K9_CrossBraces_ASCII_v239" vertex3="Module1_K9_CrossBraces_ASCII_v150"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v153" vertex2="Module1_K9_CrossBraces_ASCII_v239" vertex3="Module1_K9_CrossBraces_ASCII_v2"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v5" vertex2="Module1_K9_CrossBraces_ASCII_v239" vertex3="Module1_K9_CrossBraces_ASCII_v56"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v240" vertex2="Module1_K9_CrossBraces_ASCII_v244" vertex3="Module1_K9_CrossBraces_ASCII_v267"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v267" vertex2="Module1_K9_CrossBraces_ASCII_v244" vertex3="Module1_K9_CrossBraces_ASCII_v266"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v266" vertex2="Module1_K9_CrossBraces_ASCII_v244" vertex3="Module1_K9_CrossBraces_ASCII_v265"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v265" vertex2="Module1_K9_CrossBraces_ASCII_v244" vertex3="Module1_K9_CrossBraces_ASCII_v264"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v264" vertex2="Module1_K9_CrossBraces_ASCII_v244" vertex3="Module1_K9_CrossBraces_ASCII_v263"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v263" vertex2="Module1_K9_CrossBraces_ASCII_v244" vertex3="Module1_K9_CrossBraces_ASCII_v262"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v262" vertex2="Module1_K9_CrossBraces_ASCII_v244" vertex3="Module1_K9_CrossBraces_ASCII_v261"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v261" vertex2="Module1_K9_CrossBraces_ASCII_v244" vertex3="Module1_K9_CrossBraces_ASCII_v260"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v260" vertex2="Module1_K9_CrossBraces_ASCII_v244" vertex3="Module1_K9_CrossBraces_ASCII_v259"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v259" vertex2="Module1_K9_CrossBraces_ASCII_v244" vertex3="Module1_K9_CrossBraces_ASCII_v258"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v258" vertex2="Module1_K9_CrossBraces_ASCII_v244" vertex3="Module1_K9_CrossBraces_ASCII_v257"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v257" vertex2="Module1_K9_CrossBraces_ASCII_v244" vertex3="Module1_K9_CrossBraces_ASCII_v256"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v256" vertex2="Module1_K9_CrossBraces_ASCII_v244" vertex3="Module1_K9_CrossBraces_ASCII_v255"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v255" vertex2="Module1_K9_CrossBraces_ASCII_v244" vertex3="Module1_K9_CrossBraces_ASCII_v254"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v254" vertex2="Module1_K9_CrossBraces_ASCII_v244" vertex3="Module1_K9_CrossBraces_ASCII_v253"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v253" vertex2="Module1_K9_CrossBraces_ASCII_v244" vertex3="Module1_K9_CrossBraces_ASCII_v252"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v252" vertex2="Module1_K9_CrossBraces_ASCII_v244" vertex3="Module1_K9_CrossBraces_ASCII_v251"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v251" vertex2="Module1_K9_CrossBraces_ASCII_v244" vertex3="Module1_K9_CrossBraces_ASCII_v250"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v250" vertex2="Module1_K9_CrossBraces_ASCII_v244" vertex3="Module1_K9_CrossBraces_ASCII_v249"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v249" vertex2="Module1_K9_CrossBraces_ASCII_v244" vertex3="Module1_K9_CrossBraces_ASCII_v248"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v248" vertex2="Module1_K9_CrossBraces_ASCII_v244" vertex3="Module1_K9_CrossBraces_ASCII_v247"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v247" vertex2="Module1_K9_CrossBraces_ASCII_v244" vertex3="Module1_K9_CrossBraces_ASCII_v246"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v246" vertex2="Module1_K9_CrossBraces_ASCII_v244" vertex3="Module1_K9_CrossBraces_ASCII_v245"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v240" vertex2="Module1_K9_CrossBraces_ASCII_v243" vertex3="Module1_K9_CrossBraces_ASCII_v244"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v241" vertex2="Module1_K9_CrossBraces_ASCII_v238" vertex3="Module1_K9_CrossBraces_ASCII_v242"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v243" vertex2="Module1_K9_CrossBraces_ASCII_v238" vertex3="Module1_K9_CrossBraces_ASCII_v241"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v240" vertex2="Module1_K9_CrossBraces_ASCII_v238" vertex3="Module1_K9_CrossBraces_ASCII_v243"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v242" vertex2="Module1_K9_CrossBraces_ASCII_v147" vertex3="Module1_K9_CrossBraces_ASCII_v151"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v238" vertex2="Module1_K9_CrossBraces_ASCII_v147" vertex3="Module1_K9_CrossBraces_ASCII_v242"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v238" vertex2="Module1_K9_CrossBraces_ASCII_v143" vertex3="Module1_K9_CrossBraces_ASCII_v147"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v141" vertex2="Module1_K9_CrossBraces_ASCII_v331" vertex3="Module1_K9_CrossBraces_ASCII_v105"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v143" vertex2="Module1_K9_CrossBraces_ASCII_v331" vertex3="Module1_K9_CrossBraces_ASCII_v141"/>
+             <triangular vertex1="Module1_K9_CrossBraces_ASCII_v238" vertex2="Module1_K9_CrossBraces_ASCII_v331" vertex3="Module1_K9_CrossBraces_ASCII_v143"/>
+        </tessellated>
+    </solids>
+
+    <structure>
+        <volume name="Module1_K9_CrossBraces_ASCII">
+            <materialref ref="Vacuum"/>
+            <solidref ref="Module1_K9_CrossBraces_ASCII-SOL"/>
+        </volume>
+    </structure>
+
+    <setup name="Default" version="1.0">
+        <world ref="Module1_K9_CrossBraces_ASCII"/>
+    </setup>
+</gdml>

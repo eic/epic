@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<gdml xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://service-spi.web.cern.ch/service-spi/app/releases/GDML/schema/gdml.xsd">
+
+    <define>
+        <position name="Switches064_ASCII_v0" unit="mm" x="-3.6582961082458496" y="4.194091796875" z="-2.9910097656249945"/>
+        <position name="Switches064_ASCII_v1" unit="mm" x="-0.573007345199585" y="4.231536865234375" z="-2.9910097656249945"/>
+        <position name="Switches064_ASCII_v2" unit="mm" x="-0.573007345199585" y="4.231536865234375" z="-3.0109987792968695"/>
+        <position name="Switches064_ASCII_v3" unit="mm" x="-3.6582961082458496" y="4.194091796875" z="-3.0109987792968695"/>
+        <position name="Switches064_ASCII_v4" unit="mm" x="-6.740494251251221" y="4.051055908203125" z="-2.9910097656249945"/>
+        <position name="Switches064_ASCII_v5" unit="mm" x="-6.740494251251221" y="4.051055908203125" z="-3.0109987792968695"/>
+        <position name="Switches064_ASCII_v6" unit="mm" x="-9.81598949432373" y="3.802581787109375" z="-2.9910097656249945"/>
+        <position name="Switches064_ASCII_v7" unit="mm" x="-9.81598949432373" y="3.802581787109375" z="-3.0109987792968695"/>
+        <position name="Switches064_ASCII_v8" unit="mm" x="-9.81110954284668" y="3.7528076171875" z="-3.0109987792968695"/>
+        <position name="Switches064_ASCII_v9" unit="mm" x="-9.81110954284668" y="3.7528076171875" z="-2.9910097656249945"/>
+        <position name="Switches064_ASCII_v10" unit="mm" x="-0.5732566714286804" y="4.1815185546875" z="-2.9910097656249945"/>
+        <position name="Switches064_ASCII_v11" unit="mm" x="-3.6568334102630615" y="4.14410400390625" z="-2.9910097656249945"/>
+        <position name="Switches064_ASCII_v12" unit="mm" x="-0.5732566714286804" y="4.1815185546875" z="-3.0109987792968695"/>
+        <position name="Switches064_ASCII_v13" unit="mm" x="-3.6568334102630615" y="4.14410400390625" z="-3.0109987792968695"/>
+        <position name="Switches064_ASCII_v14" unit="mm" x="-6.737321853637695" y="4.00115966796875" z="-2.9910097656249945"/>
+        <position name="Switches064_ASCII_v15" unit="mm" x="-6.737321853637695" y="4.00115966796875" z="-3.0109987792968695"/>
+    </define>
+
+    <solids>
+        <tessellated aunit="deg" lunit="mm" name="Switches064_ASCII-SOL">
+             <triangular vertex1="Switches064_ASCII_v0" vertex2="Switches064_ASCII_v1" vertex3="Switches064_ASCII_v2"/>
+             <triangular vertex1="Switches064_ASCII_v0" vertex2="Switches064_ASCII_v2" vertex3="Switches064_ASCII_v3"/>
+             <triangular vertex1="Switches064_ASCII_v4" vertex2="Switches064_ASCII_v3" vertex3="Switches064_ASCII_v5"/>
+             <triangular vertex1="Switches064_ASCII_v4" vertex2="Switches064_ASCII_v0" vertex3="Switches064_ASCII_v3"/>
+             <triangular vertex1="Switches064_ASCII_v6" vertex2="Switches064_ASCII_v5" vertex3="Switches064_ASCII_v7"/>
+             <triangular vertex1="Switches064_ASCII_v6" vertex2="Switches064_ASCII_v4" vertex3="Switches064_ASCII_v5"/>
+             <triangular vertex1="Switches064_ASCII_v8" vertex2="Switches064_ASCII_v6" vertex3="Switches064_ASCII_v7"/>
+             <triangular vertex1="Switches064_ASCII_v9" vertex2="Switches064_ASCII_v6" vertex3="Switches064_ASCII_v8"/>
+             <triangular vertex1="Switches064_ASCII_v10" vertex2="Switches064_ASCII_v11" vertex3="Switches064_ASCII_v12"/>
+             <triangular vertex1="Switches064_ASCII_v12" vertex2="Switches064_ASCII_v11" vertex3="Switches064_ASCII_v13"/>
+             <triangular vertex1="Switches064_ASCII_v13" vertex2="Switches064_ASCII_v14" vertex3="Switches064_ASCII_v15"/>
+             <triangular vertex1="Switches064_ASCII_v11" vertex2="Switches064_ASCII_v14" vertex3="Switches064_ASCII_v13"/>
+             <triangular vertex1="Switches064_ASCII_v15" vertex2="Switches064_ASCII_v9" vertex3="Switches064_ASCII_v8"/>
+             <triangular vertex1="Switches064_ASCII_v14" vertex2="Switches064_ASCII_v9" vertex3="Switches064_ASCII_v15"/>
+             <triangular vertex1="Switches064_ASCII_v1" vertex2="Switches064_ASCII_v10" vertex3="Switches064_ASCII_v12"/>
+             <triangular vertex1="Switches064_ASCII_v1" vertex2="Switches064_ASCII_v12" vertex3="Switches064_ASCII_v2"/>
+             <triangular vertex1="Switches064_ASCII_v14" vertex2="Switches064_ASCII_v4" vertex3="Switches064_ASCII_v9"/>
+             <triangular vertex1="Switches064_ASCII_v9" vertex2="Switches064_ASCII_v4" vertex3="Switches064_ASCII_v6"/>
+             <triangular vertex1="Switches064_ASCII_v11" vertex2="Switches064_ASCII_v0" vertex3="Switches064_ASCII_v14"/>
+             <triangular vertex1="Switches064_ASCII_v14" vertex2="Switches064_ASCII_v0" vertex3="Switches064_ASCII_v4"/>
+             <triangular vertex1="Switches064_ASCII_v10" vertex2="Switches064_ASCII_v1" vertex3="Switches064_ASCII_v11"/>
+             <triangular vertex1="Switches064_ASCII_v11" vertex2="Switches064_ASCII_v1" vertex3="Switches064_ASCII_v0"/>
+             <triangular vertex1="Switches064_ASCII_v5" vertex2="Switches064_ASCII_v15" vertex3="Switches064_ASCII_v8"/>
+             <triangular vertex1="Switches064_ASCII_v5" vertex2="Switches064_ASCII_v8" vertex3="Switches064_ASCII_v7"/>
+             <triangular vertex1="Switches064_ASCII_v3" vertex2="Switches064_ASCII_v13" vertex3="Switches064_ASCII_v15"/>
+             <triangular vertex1="Switches064_ASCII_v3" vertex2="Switches064_ASCII_v15" vertex3="Switches064_ASCII_v5"/>
+             <triangular vertex1="Switches064_ASCII_v12" vertex2="Switches064_ASCII_v13" vertex3="Switches064_ASCII_v3"/>
+             <triangular vertex1="Switches064_ASCII_v2" vertex2="Switches064_ASCII_v12" vertex3="Switches064_ASCII_v3"/>
+        </tessellated>
+    </solids>
+
+    <structure>
+        <volume name="Switches064_ASCII">
+            <materialref ref="Vacuum"/>
+            <solidref ref="Switches064_ASCII-SOL"/>
+        </volume>
+    </structure>
+
+    <setup name="Default" version="1.0">
+        <world ref="Switches064_ASCII"/>
+    </setup>
+</gdml>

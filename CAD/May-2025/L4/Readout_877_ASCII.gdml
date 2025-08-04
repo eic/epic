@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<gdml xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://service-spi.web.cern.ch/service-spi/app/releases/GDML/schema/gdml.xsd">
+
+    <define>
+        <position name="Readout_877_ASCII_v0" unit="mm" x="-0.3445606827735901" y="-4.201080322265625" z="353.93585205078125"/>
+        <position name="Readout_877_ASCII_v1" unit="mm" x="-0.2778940200805664" y="-4.201080322265625" z="353.93585205078125"/>
+        <position name="Readout_877_ASCII_v2" unit="mm" x="-0.2778940498828888" y="-4.201080322265625" z="357.52685546875"/>
+        <position name="Readout_877_ASCII_v3" unit="mm" x="-0.3445607125759125" y="-4.201080322265625" z="357.52685546875"/>
+        <position name="Readout_877_ASCII_v4" unit="mm" x="-0.4112273156642914" y="-4.201019287109375" z="353.93585205078125"/>
+        <position name="Readout_877_ASCII_v5" unit="mm" x="-0.41122734546661377" y="-4.201019287109375" z="357.52685546875"/>
+        <position name="Readout_877_ASCII_v6" unit="mm" x="-0.4778938889503479" y="-4.200897216796875" z="353.93585205078125"/>
+        <position name="Readout_877_ASCII_v7" unit="mm" x="-0.4778939187526703" y="-4.200897216796875" z="357.52685546875"/>
+        <position name="Readout_877_ASCII_v8" unit="mm" x="-0.4777941405773163" y="-4.150909423828125" z="357.52685546875"/>
+        <position name="Readout_877_ASCII_v9" unit="mm" x="-0.4777941107749939" y="-4.150909423828125" z="353.93585205078125"/>
+        <position name="Readout_877_ASCII_v10" unit="mm" x="-0.2779052257537842" y="-4.151092529296875" z="357.52685546875"/>
+        <position name="Readout_877_ASCII_v11" unit="mm" x="-0.2779051959514618" y="-4.151092529296875" z="353.93585205078125"/>
+        <position name="Readout_877_ASCII_v12" unit="mm" x="-0.34453490376472473" y="-4.151092529296875" z="357.52685546875"/>
+        <position name="Readout_877_ASCII_v13" unit="mm" x="-0.34453487396240234" y="-4.151092529296875" z="353.93585205078125"/>
+        <position name="Readout_877_ASCII_v14" unit="mm" x="-0.4111645221710205" y="-4.151031494140625" z="353.93585205078125"/>
+        <position name="Readout_877_ASCII_v15" unit="mm" x="-0.4111645519733429" y="-4.151031494140625" z="357.52685546875"/>
+    </define>
+
+    <solids>
+        <tessellated aunit="deg" lunit="mm" name="Readout_877_ASCII-SOL">
+             <triangular vertex1="Readout_877_ASCII_v0" vertex2="Readout_877_ASCII_v1" vertex3="Readout_877_ASCII_v2"/>
+             <triangular vertex1="Readout_877_ASCII_v0" vertex2="Readout_877_ASCII_v2" vertex3="Readout_877_ASCII_v3"/>
+             <triangular vertex1="Readout_877_ASCII_v4" vertex2="Readout_877_ASCII_v3" vertex3="Readout_877_ASCII_v5"/>
+             <triangular vertex1="Readout_877_ASCII_v4" vertex2="Readout_877_ASCII_v0" vertex3="Readout_877_ASCII_v3"/>
+             <triangular vertex1="Readout_877_ASCII_v6" vertex2="Readout_877_ASCII_v5" vertex3="Readout_877_ASCII_v7"/>
+             <triangular vertex1="Readout_877_ASCII_v6" vertex2="Readout_877_ASCII_v4" vertex3="Readout_877_ASCII_v5"/>
+             <triangular vertex1="Readout_877_ASCII_v6" vertex2="Readout_877_ASCII_v8" vertex3="Readout_877_ASCII_v9"/>
+             <triangular vertex1="Readout_877_ASCII_v7" vertex2="Readout_877_ASCII_v8" vertex3="Readout_877_ASCII_v6"/>
+             <triangular vertex1="Readout_877_ASCII_v10" vertex2="Readout_877_ASCII_v11" vertex3="Readout_877_ASCII_v12"/>
+             <triangular vertex1="Readout_877_ASCII_v11" vertex2="Readout_877_ASCII_v13" vertex3="Readout_877_ASCII_v12"/>
+             <triangular vertex1="Readout_877_ASCII_v12" vertex2="Readout_877_ASCII_v14" vertex3="Readout_877_ASCII_v15"/>
+             <triangular vertex1="Readout_877_ASCII_v13" vertex2="Readout_877_ASCII_v14" vertex3="Readout_877_ASCII_v12"/>
+             <triangular vertex1="Readout_877_ASCII_v15" vertex2="Readout_877_ASCII_v9" vertex3="Readout_877_ASCII_v8"/>
+             <triangular vertex1="Readout_877_ASCII_v14" vertex2="Readout_877_ASCII_v9" vertex3="Readout_877_ASCII_v15"/>
+             <triangular vertex1="Readout_877_ASCII_v11" vertex2="Readout_877_ASCII_v2" vertex3="Readout_877_ASCII_v1"/>
+             <triangular vertex1="Readout_877_ASCII_v10" vertex2="Readout_877_ASCII_v2" vertex3="Readout_877_ASCII_v11"/>
+             <triangular vertex1="Readout_877_ASCII_v15" vertex2="Readout_877_ASCII_v8" vertex3="Readout_877_ASCII_v7"/>
+             <triangular vertex1="Readout_877_ASCII_v5" vertex2="Readout_877_ASCII_v15" vertex3="Readout_877_ASCII_v7"/>
+             <triangular vertex1="Readout_877_ASCII_v3" vertex2="Readout_877_ASCII_v12" vertex3="Readout_877_ASCII_v15"/>
+             <triangular vertex1="Readout_877_ASCII_v3" vertex2="Readout_877_ASCII_v15" vertex3="Readout_877_ASCII_v5"/>
+             <triangular vertex1="Readout_877_ASCII_v2" vertex2="Readout_877_ASCII_v10" vertex3="Readout_877_ASCII_v12"/>
+             <triangular vertex1="Readout_877_ASCII_v2" vertex2="Readout_877_ASCII_v12" vertex3="Readout_877_ASCII_v3"/>
+             <triangular vertex1="Readout_877_ASCII_v9" vertex2="Readout_877_ASCII_v14" vertex3="Readout_877_ASCII_v6"/>
+             <triangular vertex1="Readout_877_ASCII_v14" vertex2="Readout_877_ASCII_v4" vertex3="Readout_877_ASCII_v6"/>
+             <triangular vertex1="Readout_877_ASCII_v13" vertex2="Readout_877_ASCII_v0" vertex3="Readout_877_ASCII_v14"/>
+             <triangular vertex1="Readout_877_ASCII_v14" vertex2="Readout_877_ASCII_v0" vertex3="Readout_877_ASCII_v4"/>
+             <triangular vertex1="Readout_877_ASCII_v11" vertex2="Readout_877_ASCII_v1" vertex3="Readout_877_ASCII_v13"/>
+             <triangular vertex1="Readout_877_ASCII_v13" vertex2="Readout_877_ASCII_v1" vertex3="Readout_877_ASCII_v0"/>
+        </tessellated>
+    </solids>
+
+    <structure>
+        <volume name="Readout_877_ASCII">
+            <materialref ref="Vacuum"/>
+            <solidref ref="Readout_877_ASCII-SOL"/>
+        </volume>
+    </structure>
+
+    <setup name="Default" version="1.0">
+        <world ref="Readout_877_ASCII"/>
+    </setup>
+</gdml>

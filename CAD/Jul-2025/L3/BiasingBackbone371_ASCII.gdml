@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<gdml xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://service-spi.web.cern.ch/service-spi/app/releases/GDML/schema/gdml.xsd">
+
+    <define>
+        <position name="BiasingBackbone371_ASCII_v0" unit="mm" x="-9.776148796081543" y="-3.80645751953125" z="-107.31799798583984"/>
+        <position name="BiasingBackbone371_ASCII_v1" unit="mm" x="-9.756243705749512" y="-3.80841064453125" z="-107.31799798583984"/>
+        <position name="BiasingBackbone371_ASCII_v2" unit="mm" x="-9.756243705749512" y="-3.80841064453125" z="-103.74699884033203"/>
+        <position name="BiasingBackbone371_ASCII_v3" unit="mm" x="-9.776148796081543" y="-3.80645751953125" z="-103.74699884033203"/>
+        <position name="BiasingBackbone371_ASCII_v4" unit="mm" x="-9.796053886413574" y="-3.80450439453125" z="-107.31799798583984"/>
+        <position name="BiasingBackbone371_ASCII_v5" unit="mm" x="-9.796053886413574" y="-3.80450439453125" z="-103.74699884033203"/>
+        <position name="BiasingBackbone371_ASCII_v6" unit="mm" x="-9.815958976745605" y="-3.802581787109375" z="-103.74699884033203"/>
+        <position name="BiasingBackbone371_ASCII_v7" unit="mm" x="-9.815958976745605" y="-3.802581787109375" z="-107.31799798583984"/>
+        <position name="BiasingBackbone371_ASCII_v8" unit="mm" x="-9.751397132873535" y="-3.758636474609375" z="-107.31799798583984"/>
+        <position name="BiasingBackbone371_ASCII_v9" unit="mm" x="-9.751397132873535" y="-3.758636474609375" z="-103.74699884033203"/>
+        <position name="BiasingBackbone371_ASCII_v10" unit="mm" x="-9.771291732788086" y="-3.7567138671875" z="-107.31799798583984"/>
+        <position name="BiasingBackbone371_ASCII_v11" unit="mm" x="-9.771291732788086" y="-3.7567138671875" z="-103.74699884033203"/>
+        <position name="BiasingBackbone371_ASCII_v12" unit="mm" x="-9.791186332702637" y="-3.7547607421875" z="-103.74699884033203"/>
+        <position name="BiasingBackbone371_ASCII_v13" unit="mm" x="-9.791186332702637" y="-3.7547607421875" z="-107.31799798583984"/>
+        <position name="BiasingBackbone371_ASCII_v14" unit="mm" x="-9.811079978942871" y="-3.7528076171875" z="-103.74699884033203"/>
+        <position name="BiasingBackbone371_ASCII_v15" unit="mm" x="-9.811079978942871" y="-3.7528076171875" z="-107.31799798583984"/>
+    </define>
+
+    <solids>
+        <tessellated aunit="deg" lunit="mm" name="BiasingBackbone371_ASCII-SOL">
+             <triangular vertex1="BiasingBackbone371_ASCII_v0" vertex2="BiasingBackbone371_ASCII_v1" vertex3="BiasingBackbone371_ASCII_v2"/>
+             <triangular vertex1="BiasingBackbone371_ASCII_v0" vertex2="BiasingBackbone371_ASCII_v2" vertex3="BiasingBackbone371_ASCII_v3"/>
+             <triangular vertex1="BiasingBackbone371_ASCII_v4" vertex2="BiasingBackbone371_ASCII_v5" vertex3="BiasingBackbone371_ASCII_v6"/>
+             <triangular vertex1="BiasingBackbone371_ASCII_v4" vertex2="BiasingBackbone371_ASCII_v3" vertex3="BiasingBackbone371_ASCII_v5"/>
+             <triangular vertex1="BiasingBackbone371_ASCII_v4" vertex2="BiasingBackbone371_ASCII_v0" vertex3="BiasingBackbone371_ASCII_v3"/>
+             <triangular vertex1="BiasingBackbone371_ASCII_v7" vertex2="BiasingBackbone371_ASCII_v4" vertex3="BiasingBackbone371_ASCII_v6"/>
+             <triangular vertex1="BiasingBackbone371_ASCII_v8" vertex2="BiasingBackbone371_ASCII_v9" vertex3="BiasingBackbone371_ASCII_v2"/>
+             <triangular vertex1="BiasingBackbone371_ASCII_v1" vertex2="BiasingBackbone371_ASCII_v8" vertex3="BiasingBackbone371_ASCII_v2"/>
+             <triangular vertex1="BiasingBackbone371_ASCII_v8" vertex2="BiasingBackbone371_ASCII_v10" vertex3="BiasingBackbone371_ASCII_v9"/>
+             <triangular vertex1="BiasingBackbone371_ASCII_v11" vertex2="BiasingBackbone371_ASCII_v10" vertex3="BiasingBackbone371_ASCII_v12"/>
+             <triangular vertex1="BiasingBackbone371_ASCII_v9" vertex2="BiasingBackbone371_ASCII_v10" vertex3="BiasingBackbone371_ASCII_v11"/>
+             <triangular vertex1="BiasingBackbone371_ASCII_v12" vertex2="BiasingBackbone371_ASCII_v13" vertex3="BiasingBackbone371_ASCII_v14"/>
+             <triangular vertex1="BiasingBackbone371_ASCII_v10" vertex2="BiasingBackbone371_ASCII_v13" vertex3="BiasingBackbone371_ASCII_v12"/>
+             <triangular vertex1="BiasingBackbone371_ASCII_v13" vertex2="BiasingBackbone371_ASCII_v15" vertex3="BiasingBackbone371_ASCII_v14"/>
+             <triangular vertex1="BiasingBackbone371_ASCII_v15" vertex2="BiasingBackbone371_ASCII_v7" vertex3="BiasingBackbone371_ASCII_v6"/>
+             <triangular vertex1="BiasingBackbone371_ASCII_v15" vertex2="BiasingBackbone371_ASCII_v6" vertex3="BiasingBackbone371_ASCII_v14"/>
+             <triangular vertex1="BiasingBackbone371_ASCII_v4" vertex2="BiasingBackbone371_ASCII_v10" vertex3="BiasingBackbone371_ASCII_v0"/>
+             <triangular vertex1="BiasingBackbone371_ASCII_v0" vertex2="BiasingBackbone371_ASCII_v10" vertex3="BiasingBackbone371_ASCII_v1"/>
+             <triangular vertex1="BiasingBackbone371_ASCII_v1" vertex2="BiasingBackbone371_ASCII_v10" vertex3="BiasingBackbone371_ASCII_v8"/>
+             <triangular vertex1="BiasingBackbone371_ASCII_v7" vertex2="BiasingBackbone371_ASCII_v13" vertex3="BiasingBackbone371_ASCII_v4"/>
+             <triangular vertex1="BiasingBackbone371_ASCII_v4" vertex2="BiasingBackbone371_ASCII_v13" vertex3="BiasingBackbone371_ASCII_v10"/>
+             <triangular vertex1="BiasingBackbone371_ASCII_v7" vertex2="BiasingBackbone371_ASCII_v15" vertex3="BiasingBackbone371_ASCII_v13"/>
+             <triangular vertex1="BiasingBackbone371_ASCII_v9" vertex2="BiasingBackbone371_ASCII_v3" vertex3="BiasingBackbone371_ASCII_v2"/>
+             <triangular vertex1="BiasingBackbone371_ASCII_v11" vertex2="BiasingBackbone371_ASCII_v5" vertex3="BiasingBackbone371_ASCII_v3"/>
+             <triangular vertex1="BiasingBackbone371_ASCII_v11" vertex2="BiasingBackbone371_ASCII_v3" vertex3="BiasingBackbone371_ASCII_v9"/>
+             <triangular vertex1="BiasingBackbone371_ASCII_v12" vertex2="BiasingBackbone371_ASCII_v6" vertex3="BiasingBackbone371_ASCII_v5"/>
+             <triangular vertex1="BiasingBackbone371_ASCII_v12" vertex2="BiasingBackbone371_ASCII_v5" vertex3="BiasingBackbone371_ASCII_v11"/>
+             <triangular vertex1="BiasingBackbone371_ASCII_v14" vertex2="BiasingBackbone371_ASCII_v6" vertex3="BiasingBackbone371_ASCII_v12"/>
+        </tessellated>
+    </solids>
+
+    <structure>
+        <volume name="BiasingBackbone371_ASCII">
+            <materialref ref="Vacuum"/>
+            <solidref ref="BiasingBackbone371_ASCII-SOL"/>
+        </volume>
+    </structure>
+
+    <setup name="Default" version="1.0">
+        <world ref="BiasingBackbone371_ASCII"/>
+    </setup>
+</gdml>

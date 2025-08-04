@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<gdml xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://service-spi.web.cern.ch/service-spi/app/releases/GDML/schema/gdml.xsd">
+
+    <define>
+        <position name="DataBackbone_157_ASCII_v0" unit="mm" x="-3.313058614730835" y="4.1539306640625" z="235.5708465576172"/>
+        <position name="DataBackbone_157_ASCII_v1" unit="mm" x="-0.05290137976408005" y="4.200439453125" z="235.5708465576172"/>
+        <position name="DataBackbone_157_ASCII_v2" unit="mm" x="-0.05290137976408005" y="4.200439453125" z="235.51084899902344"/>
+        <position name="DataBackbone_157_ASCII_v3" unit="mm" x="-3.313058614730835" y="4.1539306640625" z="235.51084899902344"/>
+        <position name="DataBackbone_157_ASCII_v4" unit="mm" x="-6.569399833679199" y="3.989532470703125" z="235.5708465576172"/>
+        <position name="DataBackbone_157_ASCII_v5" unit="mm" x="-6.569399833679199" y="3.989532470703125" z="235.51084899902344"/>
+        <position name="DataBackbone_157_ASCII_v6" unit="mm" x="-9.817662239074707" y="3.707427978515625" z="235.51084899902344"/>
+        <position name="DataBackbone_157_ASCII_v7" unit="mm" x="-9.817662239074707" y="3.707427978515625" z="235.5708465576172"/>
+        <position name="DataBackbone_157_ASCII_v8" unit="mm" x="-9.8124361038208" y="3.65771484375" z="235.51084899902344"/>
+        <position name="DataBackbone_157_ASCII_v9" unit="mm" x="-9.8124361038208" y="3.65771484375" z="235.5708465576172"/>
+        <position name="DataBackbone_157_ASCII_v10" unit="mm" x="-0.05309288576245308" y="4.150421142578125" z="235.51084899902344"/>
+        <position name="DataBackbone_157_ASCII_v11" unit="mm" x="-3.31144118309021" y="4.103973388671875" z="235.5708465576172"/>
+        <position name="DataBackbone_157_ASCII_v12" unit="mm" x="-3.31144118309021" y="4.103973388671875" z="235.51084899902344"/>
+        <position name="DataBackbone_157_ASCII_v13" unit="mm" x="-6.565975666046143" y="3.93963623046875" z="235.51084899902344"/>
+        <position name="DataBackbone_157_ASCII_v14" unit="mm" x="-0.05309288576245308" y="4.150421142578125" z="235.5708465576172"/>
+        <position name="DataBackbone_157_ASCII_v15" unit="mm" x="-6.565975666046143" y="3.93963623046875" z="235.5708465576172"/>
+    </define>
+
+    <solids>
+        <tessellated aunit="deg" lunit="mm" name="DataBackbone_157_ASCII-SOL">
+             <triangular vertex1="DataBackbone_157_ASCII_v0" vertex2="DataBackbone_157_ASCII_v1" vertex3="DataBackbone_157_ASCII_v2"/>
+             <triangular vertex1="DataBackbone_157_ASCII_v0" vertex2="DataBackbone_157_ASCII_v2" vertex3="DataBackbone_157_ASCII_v3"/>
+             <triangular vertex1="DataBackbone_157_ASCII_v4" vertex2="DataBackbone_157_ASCII_v3" vertex3="DataBackbone_157_ASCII_v5"/>
+             <triangular vertex1="DataBackbone_157_ASCII_v4" vertex2="DataBackbone_157_ASCII_v5" vertex3="DataBackbone_157_ASCII_v6"/>
+             <triangular vertex1="DataBackbone_157_ASCII_v4" vertex2="DataBackbone_157_ASCII_v0" vertex3="DataBackbone_157_ASCII_v3"/>
+             <triangular vertex1="DataBackbone_157_ASCII_v7" vertex2="DataBackbone_157_ASCII_v4" vertex3="DataBackbone_157_ASCII_v6"/>
+             <triangular vertex1="DataBackbone_157_ASCII_v7" vertex2="DataBackbone_157_ASCII_v6" vertex3="DataBackbone_157_ASCII_v8"/>
+             <triangular vertex1="DataBackbone_157_ASCII_v9" vertex2="DataBackbone_157_ASCII_v7" vertex3="DataBackbone_157_ASCII_v8"/>
+             <triangular vertex1="DataBackbone_157_ASCII_v10" vertex2="DataBackbone_157_ASCII_v11" vertex3="DataBackbone_157_ASCII_v12"/>
+             <triangular vertex1="DataBackbone_157_ASCII_v12" vertex2="DataBackbone_157_ASCII_v11" vertex3="DataBackbone_157_ASCII_v13"/>
+             <triangular vertex1="DataBackbone_157_ASCII_v14" vertex2="DataBackbone_157_ASCII_v11" vertex3="DataBackbone_157_ASCII_v10"/>
+             <triangular vertex1="DataBackbone_157_ASCII_v13" vertex2="DataBackbone_157_ASCII_v15" vertex3="DataBackbone_157_ASCII_v8"/>
+             <triangular vertex1="DataBackbone_157_ASCII_v11" vertex2="DataBackbone_157_ASCII_v15" vertex3="DataBackbone_157_ASCII_v13"/>
+             <triangular vertex1="DataBackbone_157_ASCII_v15" vertex2="DataBackbone_157_ASCII_v9" vertex3="DataBackbone_157_ASCII_v8"/>
+             <triangular vertex1="DataBackbone_157_ASCII_v14" vertex2="DataBackbone_157_ASCII_v10" vertex3="DataBackbone_157_ASCII_v2"/>
+             <triangular vertex1="DataBackbone_157_ASCII_v1" vertex2="DataBackbone_157_ASCII_v14" vertex3="DataBackbone_157_ASCII_v2"/>
+             <triangular vertex1="DataBackbone_157_ASCII_v9" vertex2="DataBackbone_157_ASCII_v15" vertex3="DataBackbone_157_ASCII_v7"/>
+             <triangular vertex1="DataBackbone_157_ASCII_v15" vertex2="DataBackbone_157_ASCII_v4" vertex3="DataBackbone_157_ASCII_v7"/>
+             <triangular vertex1="DataBackbone_157_ASCII_v15" vertex2="DataBackbone_157_ASCII_v11" vertex3="DataBackbone_157_ASCII_v4"/>
+             <triangular vertex1="DataBackbone_157_ASCII_v11" vertex2="DataBackbone_157_ASCII_v0" vertex3="DataBackbone_157_ASCII_v4"/>
+             <triangular vertex1="DataBackbone_157_ASCII_v11" vertex2="DataBackbone_157_ASCII_v14" vertex3="DataBackbone_157_ASCII_v0"/>
+             <triangular vertex1="DataBackbone_157_ASCII_v14" vertex2="DataBackbone_157_ASCII_v1" vertex3="DataBackbone_157_ASCII_v0"/>
+             <triangular vertex1="DataBackbone_157_ASCII_v5" vertex2="DataBackbone_157_ASCII_v13" vertex3="DataBackbone_157_ASCII_v8"/>
+             <triangular vertex1="DataBackbone_157_ASCII_v5" vertex2="DataBackbone_157_ASCII_v8" vertex3="DataBackbone_157_ASCII_v6"/>
+             <triangular vertex1="DataBackbone_157_ASCII_v3" vertex2="DataBackbone_157_ASCII_v12" vertex3="DataBackbone_157_ASCII_v13"/>
+             <triangular vertex1="DataBackbone_157_ASCII_v3" vertex2="DataBackbone_157_ASCII_v13" vertex3="DataBackbone_157_ASCII_v5"/>
+             <triangular vertex1="DataBackbone_157_ASCII_v2" vertex2="DataBackbone_157_ASCII_v10" vertex3="DataBackbone_157_ASCII_v12"/>
+             <triangular vertex1="DataBackbone_157_ASCII_v2" vertex2="DataBackbone_157_ASCII_v12" vertex3="DataBackbone_157_ASCII_v3"/>
+        </tessellated>
+    </solids>
+
+    <structure>
+        <volume name="DataBackbone_157_ASCII">
+            <materialref ref="Vacuum"/>
+            <solidref ref="DataBackbone_157_ASCII-SOL"/>
+        </volume>
+    </structure>
+
+    <setup name="Default" version="1.0">
+        <world ref="DataBackbone_157_ASCII"/>
+    </setup>
+</gdml>
