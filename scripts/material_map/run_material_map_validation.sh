@@ -116,7 +116,7 @@ propFile=propagation_material
 echo "::group::----GEANTINO SCAN------"
 # output geant4_material_tracks.root
 # The result of the geantino scan will be a root file containing material tracks. Those contain the direction and production vertex of the geantino, the total material accumulated and all the interaction points in the detector.
-sed -i 's/seed=228/seed=306/' Examples/Scripts/Python/material_recording.py
+sed -i 's/seed=228/seed=1306/' Examples/Scripts/Python/material_recording.py
 python material_recording_epic.py -i ${DETECTOR_PATH}/${DETECTOR_CONFIG}.xml -n ${nevents} -t ${nparticles} -o ${recordingFile}
 echo "::endgroup::"
 
