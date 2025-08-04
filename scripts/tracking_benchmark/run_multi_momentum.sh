@@ -5,11 +5,10 @@
 # first argument is the name of the folder in which the results will go
 
 #some initial setup
-source epic/install/bin/thisepic.sh
+# source epic/install/bin/thisepic.sh
 
 #CONFIG_VARIABLES
 mom_array=(0.50 0.75 1.0 1.25 1.75 2.0 2.50 3.0 4.0 5.0 7.0 8.5 10.0 12.5 15.0)
-#mom_array=(12.5 15.0)
 #note that these variables must match between the single and multi momentum scripts
 particle_array=("pi-")
 filename=("tracking_output") 
