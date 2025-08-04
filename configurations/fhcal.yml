@@ -2,5 +2,5 @@ features:
   fields:
     marco:
   hcal:
-    lfhcal_with_space_for_insert:
+    lfhcal:
     forward_insert:
