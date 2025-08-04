@@ -1,0 +1,11 @@
+executable              = epicUK.sh
+arguments               = $(MOM)
+getenv                  = true
+request_memory          = 8 GB
+output                  = output/results.output.$(ClusterId)
+error                   = error/results.error.$(ClusterId)
+log                     = log/results.log.$(ClusterId)
+notification            = never
+queue 1
+
+
