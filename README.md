@@ -126,5 +126,5 @@ Material thickness scans can be done using the *g4MaterialScan_to_csv* script by
 Tracking performance benchmark tests
 -----------------------------------------
 
-Tuna Tasali has written adapted the benchmark scripts developed by Shyam Kumar to produce plots of the momentum resolution for this geometry. This needs to be updated for the new version. His original is at https://github.com/Tunat66/epicUK/blob/UK_Contribution
+Tuna Tasali has written adapted the benchmark scripts developed by Shyam Kumar to produce plots of the momentum resolution for this geometry. See: https://github.com/eic/epic/tree/SVTOB_UK/scripts/tracking_benchmark
 
