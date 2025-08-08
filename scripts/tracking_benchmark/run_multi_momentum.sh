@@ -4,22 +4,17 @@
 # shyam.kumar@ba.infn.it; shyam055119@gmail.com
 # first argument is the name of the folder in which the results will go
 
-#some initial setup
-# source epic/install/bin/thisepic.sh
-
 #CONFIG_VARIABLES
+#                    0       1      2    3      4      5    6      7    8   9     10  11  12    13   14 
 mom_array=(0.50 0.75 1.0 1.25 1.75 2.0 2.50 3.0 4.0 5.0 7.0 8.5 10.0 12.5 15.0)
 #note that these variables must match between the single and multi momentum scripts
 particle_array=("pi-")
 filename=("tracking_output") 
 etabin_array=(-3.5 -2.5 -1.0 1.0 2.5 3.5)
-
 nevents=10000
-#ADJUST THESE VALUES!!!!!!
 results_dir="results_test"
 compact_file_name="epic_craterlake_tracking_only.xml"
 
-#rm -rf truthseed/ realseed/ *.root
 if [ -d "$results_dir" ]; then
     echo "Directory '$results_dir' already exists. Aborting program to avoid overwriting data."
     exit 1
@@ -40,5 +35,6 @@ done
 # run the simulation and the reconstruction
 
 for ((i=0; i<${#formatted_mom_array[@]}; i++)); do
+    echo "Submit run $i '${formatted_mom_array[i]}' to cluster"
     condor_submit MOM=${formatted_mom_array[i]} run_simulation.submit
 done

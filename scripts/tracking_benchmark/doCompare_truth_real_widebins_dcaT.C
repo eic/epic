@@ -22,8 +22,8 @@ void doCompare_truth_real_widebins_dcaT(TString particle = "pi-",double etamin=-
    gStyle->SetOptFit(1);
    gStyle->SetOptStat(1);
   
-   const Int_t nptbins = 10;
-   double pt[nptbins] ={0.2, 0.3, 0.5,1.0, 1.5, 2.0, 5.0, 8.0, 10., 15.0};
+   const Int_t nptbins = 15;
+   double pt[nptbins] = { 0.50, 0.75, 1.0, 1.25, 1.75, 2.0, 2.50, 3.0, 4.0, 5.0, 7.0, 8.5, 10.0, 12.5, 15.0};
    Double_t variation = 0.1; // 10 % variation 
    std::vector<double> momV_truth, momV_real;
    std::vector<double> dcaTresolV_truth, err_dcaTresolV_truth, dcaTresolV_real, err_dcaTresolV_real;
