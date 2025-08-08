@@ -467,7 +467,8 @@ Assembly createScintillatorPlateFourM(Detector& desc, std::string basename,
 Volume createEightMModule(Detector& desc, moduleParamsStrct mod_params,
                           std::vector<sliceParamsStrct> sl_params,
                           //                               int modID,
-                          double length, SensitiveDetector sens, bool renderComp, bool allSen) {
+                          double length, SensitiveDetector sens, bool renderComp, bool allSen,
+                          bool testbeam) {
   std::string baseName = "LFHCAL_8M";
 
   // assembly definition
@@ -514,7 +515,8 @@ Volume createEightMModule(Detector& desc, moduleParamsStrct mod_params,
 
   if (allSen) {
     sens.setType("calorimeter");
-    vol_mountingPlate.setSensitiveDetector(sens);
+    if (!testbeam)
+      vol_mountingPlate.setSensitiveDetector(sens);
     vol_modFrontPlate.setSensitiveDetector(sens);
     vol_modBackPlate.setSensitiveDetector(sens);
     vol_modSidePlateL.setSensitiveDetector(sens);
@@ -524,9 +526,10 @@ Volume createEightMModule(Detector& desc, moduleParamsStrct mod_params,
   }
 
   if (renderComp) {
-    vol_mountingPlate.setAttributes(desc, mod_params.mod_regStr, mod_params.mod_limStr,
-                                    // mod_params.mod_visStr);
-                                    "LFHCALLayerTungstenVis");
+    if (!testbeam)
+      vol_mountingPlate.setAttributes(desc, mod_params.mod_regStr, mod_params.mod_limStr,
+                                      // mod_params.mod_visStr);
+                                      "LFHCALLayerTungstenVis");
     vol_modFrontPlate.setAttributes(desc, mod_params.mod_regStr, mod_params.mod_limStr,
                                     // mod_params.mod_visStr);
                                     "LFHCALLayerSteelVis");
@@ -544,8 +547,9 @@ Volume createEightMModule(Detector& desc, moduleParamsStrct mod_params,
                                      //  mod_params.mod_visStr);
                                      "LFHCALLayerSteelVis");
   } else {
-    vol_mountingPlate.setAttributes(desc, mod_params.mod_regStr, mod_params.mod_limStr,
-                                    "InvisibleNoDaughters");
+    if (!testbeam)
+      vol_mountingPlate.setAttributes(desc, mod_params.mod_regStr, mod_params.mod_limStr,
+                                      "InvisibleNoDaughters");
     vol_modFrontPlate.setAttributes(desc, mod_params.mod_regStr, mod_params.mod_limStr,
                                     "InvisibleNoDaughters");
     vol_modBackPlate.setAttributes(desc, mod_params.mod_regStr, mod_params.mod_limStr,
@@ -647,8 +651,10 @@ Volume createEightMModule(Detector& desc, moduleParamsStrct mod_params,
   }
 
   // placement 8M module casing
-  pvm = vol_mod.placeVolume(vol_mountingPlate,
-                            Position(0, 0, -(length - mod_params.mod_MPThick) / 2.));
+  if (!testbeam)
+    pvm = vol_mod.placeVolume(vol_mountingPlate,
+                              Position(0, 0, -(length - mod_params.mod_MPThick) / 2.));
+
   pvm = vol_mod.placeVolume(
       vol_modFrontPlate,
       Position(0, 0, -(length - mod_params.mod_FWThick) / 2. + mod_params.mod_MPThick));
@@ -975,6 +981,174 @@ Volume createFourMModule(Detector& desc, moduleParamsStrct mod_params,
 
 //********************************************************************************************
 //*                                                                                          *
+//*                              Create test beam                                            *
+//==============================  MAIN FUNCTION  =============================================
+//*                                                                                          *
+//* The Test Beam setup only include 8M module support.                                      *
+//*                                                                                          *
+//********************************************************************************************
+static Ref_t createTestBeam(Detector& desc, xml_h handle, SensitiveDetector sens) {
+  // global detector variables
+  xml_det_t detElem   = handle;
+  std::string detName = detElem.nameStr();
+  int detID           = detElem.id();
+
+  // general detector dimensions
+  xml_dim_t dim = detElem.dimensions();
+  double length = dim.z(); // Size along z-axis
+
+  // general detector position
+  xml_dim_t pos = detElem.position();
+  printout(DEBUG, "LFHCAL_geo",
+           "global LFHCal position " + _toString(pos.x()) + "\t" + _toString(pos.y()) + "\t" +
+               _toString(pos.z()));
+
+  struct position {
+    double x, y, z;
+  };
+
+  std::vector<position> pos8M;
+
+  xml_coll_t eightMPos(detElem, _Unicode(eightmodulepositions));
+  for (xml_coll_t position_i(eightMPos, _U(position)); position_i; ++position_i) {
+    xml_comp_t position_comp = position_i;
+    if (!getAttrOrDefault(position_comp, _Unicode(if), true)) {
+      printout(DEBUG, "LFHCAL_geo", "skipping x = %.1f cm, y = %.1f cm", position_comp.x(),
+               position_comp.y());
+      continue;
+    }
+    pos8M.push_back({position_comp.x(), position_comp.y(), position_comp.z()});
+  }
+
+  // 8M module specific loading
+  xml_comp_t eightM_xml   = detElem.child(_Unicode(eightmodule));
+  xml_dim_t eightMmod_dim = eightM_xml.dimensions();
+  moduleParamsStrct eightM_params(
+      getAttrOrDefault(eightMmod_dim, _Unicode(widthBackInner), 0.),
+      getAttrOrDefault(eightMmod_dim, _Unicode(heightBackInner), 0.),
+      getAttrOrDefault(eightMmod_dim, _Unicode(widthSideWall), 0.),
+      getAttrOrDefault(eightMmod_dim, _Unicode(widthTopWall), 0.),
+      getAttrOrDefault(eightMmod_dim, _Unicode(thicknessMountingPlate), 0.),
+      getAttrOrDefault(eightMmod_dim, _Unicode(thicknessFrontWall), 0.),
+      getAttrOrDefault(eightMmod_dim, _Unicode(thicknessBackWall), 0.),
+      getAttrOrDefault(eightMmod_dim, _Unicode(width), 0.),
+      getAttrOrDefault(eightMmod_dim, _Unicode(height), 0.),
+      getAttrOrDefault(eightMmod_dim, _Unicode(notchDepth), 0.),
+      getAttrOrDefault(eightMmod_dim, _Unicode(notchHeight), 0.),
+      getAttrOrDefault(eightMmod_dim, _Unicode(foilThick), 0.),
+      getAttrOrDefault(eightMmod_dim, _Unicode(pcbLength), 0.),
+      getAttrOrDefault(eightMmod_dim, _Unicode(pcbThick), 0.),
+      getAttrOrDefault(eightMmod_dim, _Unicode(pcbWidth), 0.), eightM_xml.visStr(),
+      eightM_xml.regionStr(), eightM_xml.limitsStr());
+
+  double minX = 10000;
+  double minY = 10000;
+  double maxX = -10000;
+  double maxY = -10000;
+
+  for (int e = 0; e < (int)pos8M.size(); e++) {
+    if (minX > pos8M[e].x)
+      minX = pos8M[e].x;
+    if (minY > pos8M[e].y)
+      minY = pos8M[e].y;
+    if (maxX < pos8M[e].x)
+      maxX = pos8M[e].x;
+    if (maxY < pos8M[e].y)
+      maxY = pos8M[e].y;
+  }
+  std::cout << "X: " << minX << "\t-\t" << maxX << "\t Y: " << minY << "\t - \t" << maxY
+            << std::endl;
+
+  // envelope volume
+  xml_comp_t x_env = detElem.child(_Unicode(envelope));
+  Box env_box(dim.x() / 2, dim.y() / 2, dim.z() / 2);
+  Volume env_vol(detName + "_env", env_box, desc.material(x_env.materialStr()));
+
+  bool renderComponents = getAttrOrDefault(detElem, _Unicode(renderComponents), 0.);
+  bool allSensitive     = getAttrOrDefault(detElem, _Unicode(allSensitive), 0.);
+  if (renderComponents) {
+    printout(DEBUG, "LFHCAL_geo", "enabled visualization");
+  } else {
+    printout(DEBUG, "LFHCAL_geo", "switchted off visualization");
+  }
+
+  std::vector<sliceParamsStrct> slice_Params;
+  int layer_num  = 0;
+  int readLayerC = 0;
+  for (xml_coll_t c(detElem, _U(layer)); c; ++c) {
+    xml_comp_t x_layer = c;
+    int repeat         = x_layer.repeat();
+    int readlayer      = getAttrOrDefault(x_layer, _Unicode(readoutlayer), 0.);
+    if (readLayerC != readlayer) {
+      readLayerC = readlayer;
+      layer_num  = 0;
+    }
+    // Looping through the number of repeated layers in each section
+    for (int i = 0; i < repeat; i++) {
+      int slice_num = 0;
+
+      // Looping over each layer's slices
+      for (xml_coll_t l(x_layer, _U(slice)); l; ++l) {
+        xml_comp_t x_slice = l;
+        sliceParamsStrct slice_param(layer_num, slice_num, getAttrOrDefault(l, _Unicode(type), 0.),
+                                     x_slice.thickness(), getAttrOrDefault(l, _Unicode(offset), 0.),
+                                     readlayer, x_slice.materialStr(), x_slice.visStr(),
+                                     x_slice.regionStr(), x_slice.limitsStr());
+        slice_Params.push_back(slice_param);
+        ++slice_num;
+      }
+      layer_num++;
+    }
+  }
+
+  // create mother volume
+  DetElement det(detName, detID);
+  Assembly assembly(detName);
+  PlacedVolume phv;
+
+  int moduleIDx = -1;
+  int moduleIDy = -1;
+
+  // create 8M modules
+  Volume eightMassembly = createEightMModule(desc, eightM_params, slice_Params, length, sens,
+                                             renderComponents, allSensitive, true);
+  for (int e = 0; e < (int)pos8M.size(); e++) {
+    if (e % 20 == 0)
+      printout(DEBUG, "LFHCAL_geo",
+               "LFHCAL placing 8M module: " + _toString(e) + "/" + _toString((int)pos8M.size()) +
+                   "\t" + _toString(pos8M[e].x) + "\t" + _toString(pos8M[e].y) + "\t" +
+                   _toString(pos8M[e].z));
+    moduleIDx = (int(pos8M[e].x + 20) / 10);
+    moduleIDy = (int(pos8M[e].y + 15) / 10);
+    std::cout << moduleIDx << "\t" << moduleIDy << "\t" << pos8M[e].x << "\t" << (pos8M[e].x + 20)
+              << "\t" << pos8M[e].y << "\t" << (pos8M[e].y + 15) << std::endl;
+    if (moduleIDx < 0 || moduleIDy < 0) {
+      printout(DEBUG, "LFHCAL_geo",
+               "LFHCAL WRONG ID FOR 8M module: " + _toString(e) + "/" +
+                   _toString((int)pos8M.size()) + "\t" + _toString(moduleIDx) + "\t" +
+                   _toString(moduleIDy));
+    }
+
+    // Placing modules in world volume
+    auto tr8M = Transform3D(Position(-pos8M[e].x, -pos8M[e].y, pos8M[e].z));
+    phv       = assembly.placeVolume(eightMassembly, tr8M);
+    phv.addPhysVolID("moduleIDx", moduleIDx)
+        .addPhysVolID("moduleIDy", moduleIDy)
+        .addPhysVolID("moduletype", 0);
+  }
+
+  Volume motherVol = desc.pickMotherVolume(det);
+  phv              = env_vol.placeVolume(assembly);
+  phv              = motherVol.placeVolume(env_vol,
+                                           Transform3D(Position(pos.x(), pos.y(), pos.z() + length / 2.)));
+  phv.addPhysVolID("system", detID);
+  det.setPlacement(phv);
+
+  return det;
+}
+
+//********************************************************************************************
+//*                                                                                          *
 //*                              Create detector                                             *
 //==============================  MAIN FUNCTION  =============================================
 //*                                                                                          *
@@ -1103,7 +1277,7 @@ static Ref_t createDetector(Detector& desc, xml_h handle, SensitiveDetector sens
 
   // create 8M modules
   Volume eightMassembly = createEightMModule(desc, eightM_params, slice_Params, length, sens,
-                                             renderComponents, allSensitive);
+                                             renderComponents, allSensitive, false);
   for (int e = 0; e < (int)pos8M.size(); e++) {
     if (e % 20 == 0)
       printout(DEBUG, "LFHCAL_geo",
@@ -1169,4 +1343,6 @@ static Ref_t createDetector(Detector& desc, xml_h handle, SensitiveDetector sens
 
   return det;
 }
+
 DECLARE_DETELEMENT(epic_LFHCAL, createDetector)
+DECLARE_DETELEMENT(epic_LFHCAL_TestBeam, createTestBeam)
