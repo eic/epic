@@ -16,6 +16,11 @@
     </plugin>
     <plugin name="epic_FileLoader">
       <arg value="cache:$DETECTOR_PATH:/opt/detector"/>
+      <arg value="file:calibrations/onnx/Low-Q2_Steering_Reconstruction.onnx"/>
+      <arg value="url:https://github.com/eic/epic-data/raw/c9c83c1bcb65cf2fd9e97a0bf6499ef989df8d83/onnx/Low-Q2_Steering_Reconstruction.onnx"/>
+    </plugin>
+    <plugin name="epic_FileLoader">
+      <arg value="cache:$DETECTOR_PATH:/opt/detector"/>
       <arg value="file:calibrations/onnx/identity_gemm_w1x1_b1.onnx"/>
       <arg value="url:https://github.com/eic/epic-data/raw/27ef75b2b6108b5e72d3ab891f32aeeb3770c7bd/onnx/identity_gemm_w1x1_b1.onnx"/>
     </plugin>
