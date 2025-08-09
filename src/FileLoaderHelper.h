@@ -22,7 +22,8 @@ using dd4hep::ERROR, dd4hep::WARNING, dd4hep::VERBOSE, dd4hep::INFO;
 using dd4hep::printout;
 
 namespace FileLoaderHelper {
-static constexpr const char* const kCurlCommand = "curl --retry 5 --location --fail {0} --output {1}";
+static constexpr const char* const kCurlCommand =
+    "curl --retry 5 --location --fail {0} --output {1}";
 static constexpr const char* const kXrootdCommand = "xrdcp --retry 5 {0} {1}";
 } // namespace FileLoaderHelper
 
