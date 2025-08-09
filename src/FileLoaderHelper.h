@@ -22,7 +22,7 @@ using dd4hep::ERROR, dd4hep::WARNING, dd4hep::VERBOSE, dd4hep::INFO;
 using dd4hep::printout;
 
 namespace FileLoaderHelper {
-static constexpr const char* const kCommand = "curl --retry 5 --location --fail {0} --output {1}";
+static constexpr const char* const kCurlCommand = "curl --retry 5 --location --fail {0} --output {1}";
 static constexpr const char* const kXrootdCommand = "xrdcp --retry 5 {0} {1}";
 } // namespace FileLoaderHelper
 
@@ -137,7 +137,7 @@ inline void EnsureFileFromURLExists(std::string url, std::string file, std::stri
     if (url.find("root://") == 0) {
       cmd = fmt::format(FileLoaderHelper::kXrootdCommand, url, hash_path.c_str());
     } else {
-      cmd = fmt::format(FileLoaderHelper::kCommand, url, hash_path.c_str());
+      cmd = fmt::format(FileLoaderHelper::kCurlCommand, url, hash_path.c_str());
     }
     printout(INFO, "FileLoader", "downloading " + file + " as hash " + hash + " with " + cmd);
 
