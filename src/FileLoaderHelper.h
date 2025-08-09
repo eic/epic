@@ -22,8 +22,10 @@ using dd4hep::ERROR, dd4hep::WARNING, dd4hep::VERBOSE, dd4hep::INFO;
 using dd4hep::printout;
 
 namespace FileLoaderHelper {
-static constexpr const char* const kCommand = "curl --retry 5 --location --fail {0} --output {1}";
-}
+static constexpr const char* const kCurlCommand =
+    "curl --retry 5 --location --fail {0} --output {1}";
+static constexpr const char* const kXrootdCommand = "xrdcp --retry 5 {0} {1}";
+} // namespace FileLoaderHelper
 
 // Function to download files
 inline void EnsureFileFromURLExists(std::string url, std::string file, std::string cache_str = "") {
@@ -131,9 +133,15 @@ inline void EnsureFileFromURLExists(std::string url, std::string file, std::stri
 
   // if hash does not exist, we try to retrieve file from url
   if (!fs::exists(hash_path)) {
-    std::string cmd =
-        fmt::format(FileLoaderHelper::kCommand, url, hash_path.c_str()); // TODO: Use c++20 std::fmt
+    std::string cmd;
+
+    if (url.find("root://") == 0) {
+      cmd = fmt::format(FileLoaderHelper::kXrootdCommand, url, hash_path.c_str());
+    } else {
+      cmd = fmt::format(FileLoaderHelper::kCurlCommand, url, hash_path.c_str());
+    }
     printout(INFO, "FileLoader", "downloading " + file + " as hash " + hash + " with " + cmd);
+
     // run cmd
     auto ret = std::system(cmd.c_str());
     if (!fs::exists(hash_path)) {
