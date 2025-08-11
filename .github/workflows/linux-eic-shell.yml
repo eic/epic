@@ -310,7 +310,7 @@ jobs:
         setup: install/bin/thisepic.sh
         run: |
           mkdir -p doc
-          checkOverlaps --option ${{ matrix.option }} -c ${DETECTOR_PATH}/${{ matrix.detector_config }}.xml | tee doc/overlap_check_tgeo.out
+          checkOverlaps --option ${{ matrix.option }} --tolerance 0.01 -c ${DETECTOR_PATH}/${{ matrix.detector_config }}.xml | tee doc/overlap_check_tgeo.out
           noverlaps="$(grep -c ovlp doc/overlap_check_tgeo.out || true)"
           if [[ "${noverlaps}" -gt "0" ]] ; then echo "${noverlaps} overlaps found!" && false ; fi
 
