@@ -50,7 +50,9 @@ if "__main__" == __name__:
 
     args = p.parse_args()
 
-    detector, trackingGeometry, decorators = epic.getDetector(args.xmlFile, args.matFile)
+    detector = epic.getDetector(args.xmlFile, args.matFile)
+    trackingGeometry = detector.trackingGeometry()
+    decorators = detector.contextDecorators()
 
     field = acts.ConstantBField(acts.Vector3(0, 0, 0))
 
