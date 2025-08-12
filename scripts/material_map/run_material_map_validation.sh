@@ -11,7 +11,7 @@ if [[ -z ${DETECTOR_PATH} ]] ; then
 fi
 
 # Download required Acts files
-ACTS_VERSION="b3b09f46d064c43050dd3d21cdf51d7a412134fc" #v35.2.0
+ACTS_VERSION="v36.3.2"
 ACTS_URL="https://github.com/acts-project/acts/raw/"
 ACTS_FILES=(
   "Examples/Scripts/Python/geometry.py"
@@ -32,6 +32,24 @@ ACTS_FILES=(
 for file in ${ACTS_FILES[@]} ; do
   if [ ! -f ${file} ] ; then
     curl --silent --location --create-dirs --output ${file} ${ACTS_URL}/${ACTS_VERSION}/${file}
+    if [ "${file}" = "Examples/Scripts/MaterialMapping/Mat_map.C" ] ; then
+      # help with B0 being cropped
+      patch -p1 <<EOF
+diff -aru a/Examples/Scripts/MaterialMapping/Mat_map.C b/Examples/Scripts/MaterialMapping/Mat_map.C
+--- a/Examples/Scripts/MaterialMapping/Mat_map.C
++++ b/Examples/Scripts/MaterialMapping/Mat_map.C
+@@ -145,7 +145,8 @@
+
+     // 2D map for Validation input
+     TCanvas *VM = new TCanvas("VM","Validation Map") ;
+-    Val_file->Draw("mat_y:mat_z","fabs(mat_x)<1");
++    Val_file->Draw("sqrt(mat_x**2+mat_y**2):mat_z>>mat_map1","(mat_z>-5000)&(mat_z<8000)");
++    VM->SetGrid();
+
+     eta_0->Draw("Same");
+     eta_1p->Draw("Same");
+EOF
+    fi
   fi
 done
 export PYTHONPATH=$PWD/Examples/Scripts/Python:$PYTHONPATH
@@ -52,7 +70,7 @@ export ACTS_SEQUENCER_DISABLE_FPEMON=1
 
 # Default arguments
 nevents=1000
-nparticles=1000
+nparticles=5000
 while [[ $# -gt 1 ]]
 do
   key="$1"
@@ -98,10 +116,10 @@ python Examples/Scripts/MaterialMapping/writeMapConfig.py ${geoFile} config-map.
 
 # turn on approaches and beampipe surfaces for material mapping
 # you can always manually adjust the mapmaterial flag and binnings in config-map.json
-python materialmap_config.py -i config-map.json -o config-map_new.json
+python materialmap_config.py -i config-map.json -o config-map_regenerated.json
 
 # turn config-map.json into modified geometry-map.json
-python Examples/Scripts/MaterialMapping/configureMap.py ${geoFile} config-map_new.json
+python Examples/Scripts/MaterialMapping/configureMap.py ${geoFile} config-map_regenerated.json
 
 # generate figures to display tracking layers and volumes as seen by ACTS
 rm -rf plots
@@ -118,30 +136,30 @@ echo "::endgroup::"
 
 echo "::group::----Prepare validation rootfile--------"
 # output propagation-material.root
-python material_validation_epic.py --xmlFile ${DETECTOR_PATH}/${DETECTOR_CONFIG}.xml --outputName ${propFile}_new --matFile ${matFile} -n ${nevents}  -t ${nparticles}
-python material_validation_epic.py --xmlFile ${DETECTOR_PATH}/${DETECTOR_CONFIG}.xml --outputName ${propFile}_old --matFile "calibrations/materials-map.cbor" -n ${nevents} -t ${nparticles}
+python material_validation_epic.py --xmlFile ${DETECTOR_PATH}/${DETECTOR_CONFIG}.xml --outputName ${propFile}_regenerated --matFile ${matFile} -n ${nevents}  -t ${nparticles}
+python material_validation_epic.py --xmlFile ${DETECTOR_PATH}/${DETECTOR_CONFIG}.xml --outputName ${propFile}_current --matFile "calibrations/materials-map.cbor" -n ${nevents} -t ${nparticles}
 echo "::endgroup::"
 
 echo "::group::-------Comparison plots---------"
-rm -rf Validation/new
-mkdir -p Validation/new
-root -l -b -q Examples/Scripts/MaterialMapping/Mat_map.C'("'${propFile}_new'.root","'${trackFile}'","Validation/new")'
-rm -rf Validation/old
-mkdir -p Validation/old
-root -l -b -q Examples/Scripts/MaterialMapping/Mat_map.C'("'${propFile}_old'.root","'${trackFile}'","Validation/old")'
+rm -rf Validation/regenerated
+mkdir -p Validation/regenerated
+root -l -b -q Examples/Scripts/MaterialMapping/Mat_map.C'("'${propFile}_regenerated'.root","'${trackFile}'","Validation/regenerated")'
+rm -rf Validation/current
+mkdir -p Validation/current
+root -l -b -q Examples/Scripts/MaterialMapping/Mat_map.C'("'${propFile}_current'.root","'${trackFile}'","Validation/current")'
 
 rm -rf Surfaces
-mkdir -p Surfaces/new/ratio_plot
-mkdir -p Surfaces/new/prop_plot
-mkdir -p Surfaces/new/map_plot
-mkdir -p Surfaces/old/ratio_plot
-mkdir -p Surfaces/old/prop_plot
-mkdir -p Surfaces/old/map_plot
+mkdir -p Surfaces/regenerated/ratio_plot
+mkdir -p Surfaces/regenerated/prop_plot
+mkdir -p Surfaces/regenerated/map_plot
+mkdir -p Surfaces/current/ratio_plot
+mkdir -p Surfaces/current/prop_plot
+mkdir -p Surfaces/current/map_plot
 mkdir -p Surfaces/dist_plot
 mkdir -p Surfaces/1D_plot
 
-root -l -b -q Examples/Scripts/MaterialMapping/Mat_map_surface_plot_ratio.C'("'${propFile}_new'.root","'${trackFile}'",-1,"Surfaces/new/ratio_plot","Surfaces/new/prop_plot","Surfaces/new/map_plot")'
-root -l -b -q Examples/Scripts/MaterialMapping/Mat_map_surface_plot_ratio.C'("'${propFile}_old'.root","'${trackFile}'",-1,"Surfaces/old/ratio_plot","Surfaces/old/prop_plot","Surfaces/old/map_plot")'
+root -l -b -q Examples/Scripts/MaterialMapping/Mat_map_surface_plot_ratio.C'("'${propFile}_regenerated'.root","'${trackFile}'",-1,"Surfaces/regenerated/ratio_plot","Surfaces/regenerated/prop_plot","Surfaces/regenerated/map_plot")'
+root -l -b -q Examples/Scripts/MaterialMapping/Mat_map_surface_plot_ratio.C'("'${propFile}_current'.root","'${trackFile}'",-1,"Surfaces/current/ratio_plot","Surfaces/current/prop_plot","Surfaces/current/map_plot")'
 root -l -b -q Examples/Scripts/MaterialMapping/Mat_map_surface_plot_dist.C'("'${trackFile}'",-1,"Surfaces/dist_plot")'
 root -l -b -q Examples/Scripts/MaterialMapping/Mat_map_surface_plot_1D.C'("'${trackFile}'",-1,"Surfaces/1D_plot")'
 echo "::endgroup::"

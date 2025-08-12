@@ -411,8 +411,17 @@
     <composite n="8" ref="H"/>
     <composite n="2" ref="O"/>
   </material>
-  <material name="StainlessSteel">
-    <D type="density" value="8.3" unit="g / cm3"/>
+  <material name="StainlessSteelP506">
+    <!-- Same density as the 304 grade steel is assumed -->
+    <D type="density" value="7.9" unit="g / cm3"/>
+    <!-- https://cds.cern.ch/record/1636422/files/Vacuum%20Technical%20Note%2097-17.pdf -->
+    <fraction n="0.576" ref="Fe"/>
+    <fraction n="0.193" ref="Cr"/>
+    <fraction n="0.11" ref="Ni"/>
+    <fraction n="0.121" ref="Mn"/>
+  </material>
+  <material name="StainlessSteelSAE304">
+    <D type="density" value="7.9" unit="g / cm3"/>
     <fraction n="0.74" ref="Fe"/>
     <fraction n="0.18" ref="Cr"/>
     <fraction n="0.08" ref="Ni"/>
@@ -537,5 +546,25 @@
     <fraction n="0.06338" ref="Si"/>
     <fraction n="0.18046" ref="O"/>
     <fraction n="0.00190" ref="Ce"/>
+  </material>
+  <material name="Al6061T6"> <!-- 6061-T6 Aluminum Alloy -->
+    <D type="density" unit="g/cm3" value="2.70"/> <!-- Density: 2.70 g/cm^3 -->
+    <fraction n="0.9748" ref="Al"/>
+    <fraction n="0.0100" ref="Mg"/>
+    <fraction n="0.0060" ref="Si"/>
+    <fraction n="0.0035" ref="Fe"/>
+    <fraction n="0.0020" ref="Cu"/>
+    <fraction n="0.0020" ref="Cr"/>
+    <fraction n="0.0015" ref="Zn"/>
+    <fraction n="0.0008" ref="Ti"/>
+    <fraction n="0.0004" ref="Mn"/>
+  </material>
+  <material name="StainlessSteelA53"> <!-- Define the A53 carbon-steel alloy -->
+    <D type="density" unit="g/cm3" value="7.85"/>
+    <fraction n="0.980" ref="Fe"/>
+    <fraction n="0.003" ref="C"/>
+    <fraction n="0.010" ref="Mn"/>
+    <fraction n="0.002" ref="P"/>
+    <fraction n="0.005" ref="S"/>
   </material>
 </materials>

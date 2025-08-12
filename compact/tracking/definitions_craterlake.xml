@@ -44,7 +44,7 @@
     <constant name="BarrelTOF1_zmin"          value="115.0*cm"/>
     <constant name="BarrelTOF1_zmax"          value="14.75*cm"/>
     <constant name="BarrelTOF2_zmin"           value="-15.25*cm"/>
-    <constant name="BarrelTOF2_zmax"           value="174.0*cm"/>
+    <constant name="BarrelTOF2_zmax"           value="145.0*cm"/>
 
     <constant name="BarrelTOF_radius_design" value="64.6*cm"/>
 
@@ -200,7 +200,7 @@
     <plugin name="epic_FileLoader">
       <arg value="cache:$DETECTOR_PATH:/opt/detector"/>
       <arg value="file:calibrations/materials-map.cbor"/>
-      <arg value="url:https://eicweb.phy.anl.gov/-/project/473/uploads/4ddba30cd7ab7a426ae95fc8e6ef002b/material-map.cbor"/>
+      <arg value="url:https://eicweb.phy.anl.gov/-/project/473/uploads/f175e13500b2708877522736da0127a1/material-map.cbor"/>
     </plugin>
   </plugins>
 
