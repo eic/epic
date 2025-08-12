@@ -1,8 +1,16 @@
-#script to create dd4hep xml file
+import argparse
 import os
-import sys
 
-#initialize some string literals
+parser = argparse.ArgumentParser()
+parser.add_argument("L3folder")
+parser.add_argument("L4folder")
+parser.add_argument("-l3","-L3","--L3", help="Create xml file for L3 only",action="store_true")
+parser.add_argument("-l4","-L4","--L4", help="Create xml file for L4 only",action="store_true")
+parser.add_argument("-s","--single", help="Create xml file for a single stave at 90 degrees",action="store_true")
+parser.add_argument("-b","--bridge",help="Include Bridge FPC files",action="store_true")
+args = parser.parse_args()
+
+    
 HEADER = '''
 <lccdd>
   <define>
@@ -29,8 +37,10 @@ HEADER = '''
     <constant name="SiBarrelStaveTilt_angle"     value="0.0*degree"/>
     
   </define>
+'''
 
-  <detectors>
+L3HEADER = '''
+<detectors>
     <documentation level="5">
         ### Actual detectors
     </documentation>
@@ -47,20 +57,8 @@ HEADER = '''
         <!--bundle-->
     '''
 
-def string_module_begin(stave_name ,module_number):
-    MODULE_BEGIN = f'''<module name="{stave_name}Module{module_number}" vis="TrackerLayerVis">
-        <!--bundle-->
-    '''
-    return MODULE_BEGIN
-def string_module_end():
-    MODULE_END = '''
-        <!--end bundle-->    
-      </module> '''
-    return MODULE_END
-
-
-MIDDLE = '''
-        <!--end bundle-->    
+L3FOOTER='''
+    <!--end bundle-->    
       </module>
       <comment> Layers composed of many arrayed modules  </comment>
       <layer module="L3Module" id="1" vis="TrackerLayerVis">
@@ -80,14 +78,22 @@ MIDDLE = '''
           nz       : Number of modules to place in z.
           dr       : Radial displacement parameter, of every other module.
         </comment>
-        <rphi_layout phi_tilt="SiBarrelStaveTilt_angle" nphi="46" phi0="0.0" rc="SiBarrelMod1_rmin" dr="6.0 * mm"/>
+        '''
+if args.single:
+    L3FOOTER += ''' <rphi_layout phi_tilt="SiBarrelStaveTilt_angle" nphi="1" phi0="90.0*degree" rc="SiBarrelMod1_rmin" dr="6.0 * mm"/>
         <z_layout dr="0.0 * mm" z0="0.0 * mm" nz="1"/>
       </layer>
     </detector>
-    <documentation level="5">
-        ### Actual detectors
-    </documentation>
-    <detector
+'''
+else:
+    L3FOOTER += ''' <rphi_layout phi_tilt="SiBarrelStaveTilt_angle" nphi="46" phi0="0.0" rc="SiBarrelMod1_rmin" dr="6.0 * mm"/>
+        <z_layout dr="0.0 * mm" z0="0.0 * mm" nz="1"/>
+      </layer>
+    </detector>
+'''
+
+L4HEADER = '''
+   <detector
       id="TrackerBarrel_1_ID"
       name="OuterSiBarrel"
       type="epic_SiliconBarrelStandardized"
@@ -99,7 +105,8 @@ MIDDLE = '''
       <module name="L4Module0" vis="TrackerLayerVis">
         <!--bundle-->
 '''
-FOOTER = '''
+
+L4FOOTER = '''
         <!--end bundle-->    
       </module>
       <comment> Layers composed of many arrayed modules  </comment>
@@ -120,21 +127,38 @@ FOOTER = '''
           nz       : Number of modules to place in z.
           dr       : Radial displacement parameter, of every other module.
         </comment>
-        <rphi_layout phi_tilt="SiBarrelStaveTilt_angle" nphi="70" phi0="0.0" rc="SiBarrelMod2_rmin" dr="6.0 * mm"/>
+'''
+if args.single:
+    L4FOOTER += '''        <rphi_layout phi_tilt="SiBarrelStaveTilt_angle" nphi="1" phi0="90.0*degree" rc="SiBarrelMod2_rmin" dr="6.0 * mm"/>
         <z_layout dr="0.0 * mm" z0="0.0 * mm" nz="1"/>
       </layer>
     </detector>
+''' 
+else:
+   L4FOOTER += '''        <rphi_layout phi_tilt="SiBarrelStaveTilt_angle" nphi="70" phi0="0.0" rc="SiBarrelMod2_rmin" dr="6.0 * mm"/>
+        <z_layout dr="0.0 * mm" z0="0.0 * mm" nz="1"/>
+      </layer>
+    </detector>
+'''    
+MIDDLE = '''    
   </detectors>
 
   <plugins>
+  '''
+  
+L3PLUGIN = '''  
     <plugin name="DD4hep_ParametersPlugin">
       <argument value="SagittaSiBarrel"/>
       <argument value="layer_pattern: str=SagittaSiBarrel_layer\d"/>
     </plugin>
+'''
+L4PLUGIN = '''
     <plugin name="DD4hep_ParametersPlugin">
       <argument value="OuterSiBarrel"/>
       <argument value="layer_pattern: str=OuterSiBarrel_layer\d"/>
     </plugin>
+'''
+FOOTER = '''
   </plugins>
 
   <readouts>
@@ -148,6 +172,21 @@ FOOTER = '''
 </lccdd>
 
 '''
+
+
+
+
+def string_module_begin(stave_name ,module_number):
+    MODULE_BEGIN = f'''<module name="{stave_name}Module{module_number}" vis="TrackerLayerVis">
+        <!--bundle-->
+    '''
+    return MODULE_BEGIN
+def string_module_end():
+    MODULE_END = '''
+        <!--end bundle-->    
+      </module> '''
+    return MODULE_END
+
 
 MAX_COMPONENT_NUMBER = 80 #less then 2 to the 9 which is what we allocated for sensors
 
@@ -209,7 +248,6 @@ dict_list = [
     {"matching_name": "Biasing", "material": "Silicon"      , "sensitive": "false" , "thickness": f"{default_thickness_sensitive} * mm"},
     {"matching_name": "DataBackbone", "material": "Silicon" , "sensitive": "false" , "thickness": f"{default_thickness_sensitive} * mm"},
     {"matching_name": "Pads", "material": "Silicon"         , "sensitive": "false" , "thickness": f"{default_thickness_sensitive} * mm"},
-#    {"matching_name": "PowerSwitches", "material": "Silicon", "sensitive": "false" , "thickness": f"{default_thickness_sensitive} * mm"},
     {"matching_name": "Readout", "material": "Silicon"      , "sensitive": "false" , "thickness": f"{default_thickness_sensitive} * mm"},
     {"matching_name": "Switches", "material": "Silicon"      , "sensitive": "false" , "thickness": f"{default_thickness_sensitive} * mm"},
     {"matching_name": "REC", "material": "Silicon"      , "sensitive": "false" , "thickness": f"{default_thickness_sensitive} * mm"},
@@ -222,16 +260,21 @@ dict_list = [
     {"matching_name": "Carbon", "material": "CarbonFiber"   , "sensitive": "false"},
     {"matching_name": "Ultem", "material": "Ultem"          , "sensitive": "false"},
 ] #extend as required
+
+
+if args.bridge:
+    dict_list.append(   {"matching_name": "Bridge", "material": "Aluminum5083"          , "sensitive": "false"}, )
 dict_attr_list = ["material", "sensitive", "thickness", "offset"]
   
 
-# Check if the folder path is provided as an argument
-if len(sys.argv) < 3:
-    print("Please provide the L3 and L4 gdml folder paths as the first and second command line arguments respectively.")
-    sys.exit(1)
-
-L3_folder_path = sys.argv[1]
-L4_folder_path = sys.argv[2]
+L3_folder_path = args.L3folder
+L4_folder_path = args.L4folder
+doL3=True
+doL4=True
+if args.L3:
+    doL4 = False
+if args.L4:
+    doL3 = False
 file_path = "silicon_barrel.xml"
 # Check if the file exists
 if os.path.exists(file_path):
@@ -249,15 +292,23 @@ for root, dirs, files in os.walk(L4_folder_path):
 
 with open(file_path, "w") as xml_file:
     xml_file.write(HEADER)
-
-    
-    file_count_global = 0 #reset the global file count in each new stave
-    for key_dict in dict_list:   
-        scan_and_place(L3_folder_path, key_dict["matching_name"], xml_file, key_dict, "L3")
-    xml_file.write(MIDDLE)
-    file_count_global = 0
-    for key_dict in dict_list:
-        scan_and_place(L4_folder_path, key_dict["matching_name"], xml_file, key_dict, "L4")
+    if doL3:
+        xml_file.write(L3HEADER)
+        file_count_global = 0 #reset the global file count in each new stave
+        for key_dict in dict_list:   
+            scan_and_place(L3_folder_path, key_dict["matching_name"], xml_file, key_dict, "L3")
+        xml_file.write(L3FOOTER)
+    if doL4:
+        xml_file.write(L4HEADER)        
+        file_count_global = 0
+        for key_dict in dict_list:
+            scan_and_place(L4_folder_path, key_dict["matching_name"], xml_file, key_dict, "L4")
+        xml_file.write(L4FOOTER)        
+    xml_file.write(MIDDLE)        
+    if doL3:
+        xml_file.write(L3PLUGIN)
+    if doL4:
+        xml_file.write(L4PLUGIN)
     xml_file.write(FOOTER)
     print("Processed "+str(file_count_global)+" files.")
     print()
