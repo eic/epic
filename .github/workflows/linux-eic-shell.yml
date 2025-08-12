@@ -18,7 +18,7 @@ jobs:
   xmllint-before-build:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v5
     - run: |
         sudo apt-get update
         sudo apt-get install -y libxml2-utils
@@ -30,7 +30,7 @@ jobs:
       configs_csv: ${{ steps.list-detector-configs.outputs.configs_csv }}
       configs_json: ${{ steps.list-detector-configs.outputs.configs_json }}
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v5
     - id: list-detector-configs
       run: |
         CONFIGS_CSV=$(
@@ -60,7 +60,7 @@ jobs:
     env:
       PREFIX: ${{ github.workspace }}/install
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v5
     - name: Prepare ccache timestamp
       id: ccache_cache_timestamp
       run: |
@@ -145,7 +145,7 @@ jobs:
       - build
       - check-tracking-geometry
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v5
     - uses: actions/download-artifact@v4
       with:
         name: build-gcc-full-eic-shell
@@ -201,7 +201,7 @@ jobs:
       matrix:
         detector_config: [epic_craterlake]
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v5
     - uses: actions/download-artifact@v4
       with:
         name: build-gcc-full-eic-shell
@@ -228,7 +228,7 @@ jobs:
       matrix:
         detector_config: [epic_craterlake]
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v5
     - uses: actions/download-artifact@v4
       with:
         name: build-gcc-full-eic-shell
@@ -296,7 +296,7 @@ jobs:
         detector_config: [epic_craterlake] # FIXME
       fail-fast: false
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v5
     - uses: actions/download-artifact@v4
       with:
         name: build-gcc-full-eic-shell
@@ -318,7 +318,7 @@ jobs:
     needs: build
     if: github.ref == 'refs/heads/main'
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v5
     - uses: actions/download-artifact@v4
       with:
         name: build-gcc-full-eic-shell
@@ -349,7 +349,7 @@ jobs:
         detector_config: [epic_craterlake]
       fail-fast: false
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v5
     - uses: actions/download-artifact@v4
       with:
         name: build-gcc-full-eic-shell
@@ -374,7 +374,7 @@ jobs:
         detector_config: [epic_inner_detector, epic_craterlake]
       fail-fast: false
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v5
     - uses: actions/download-artifact@v4
       with:
         name: build-gcc-fast-eic-shell
@@ -435,7 +435,7 @@ jobs:
         detector_config: [epic_craterlake]
       fail-fast: false
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v5
     - uses: actions/download-artifact@v4
       with:
         name: build-gcc-fast-eic-shell
@@ -464,7 +464,7 @@ jobs:
         detector_config: [epic_craterlake]
       fail-fast: false
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v5
     - uses: actions/download-artifact@v4
       with:
         name: ${{ matrix.detector_config }}.prim
@@ -494,7 +494,7 @@ jobs:
         detector_config: [epic_craterlake]
       fail-fast: false
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v5
     - uses: actions/download-artifact@v4
       with:
         name: ${{ matrix.detector_config }}.prim
@@ -538,7 +538,7 @@ jobs:
         particle: [pi, e]
         detector_config: [epic_craterlake]
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v5
     - uses: actions/download-artifact@v4
       with:
         name: build-gcc-full-eic-shell
@@ -597,7 +597,7 @@ jobs:
         - beam: 5x41
           minq2: 1000
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v5
     - uses: actions/download-artifact@v4
       with:
         name: build-gcc-full-eic-shell
@@ -677,7 +677,7 @@ jobs:
     - merge-parameter-table
     - merge-dawn-view
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v5
     - uses: actions/download-artifact@v4
       with:
         path: artifacts/
