@@ -7,7 +7,7 @@ macro(set_git_version VERSION)
   if(GIT_EXECUTABLE)
     # Generate a git-describe version string from Git repository tags
     execute_process(
-      COMMAND ${GIT_EXECUTABLE} describe --tags --dirty --match "v*"
+      COMMAND ${GIT_EXECUTABLE} describe --tags --dirty --match "*.*.*"
       WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
       OUTPUT_VARIABLE GIT_DESCRIBE_VERSION
       RESULT_VARIABLE GIT_DESCRIBE_ERROR_CODE
