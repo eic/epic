@@ -37,7 +37,7 @@ static dd4hep::Ref_t create_detector(dd4hep::Detector& description, xml_h e,
 
     dd4hep::Material l_mat = description.material(x_layer.materialStr());
 
-    dd4hep::DetElement disk_ele("disk_ele", layer_id);
+    dd4hep::DetElement disk_ele(sdet, Form("disk_ele_%d", layer_id), layer_id);
     dd4hep::Volume disk(x_layer.nameStr(),
                         dd4hep::Tube(layer_rmin, layer_rmax, layer_thickness / 2, 0.0, 2.0 * M_PI),
                         air);

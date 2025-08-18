@@ -33,6 +33,7 @@
     <vis name="TOFModuleVis"      ref="TOFVis"              visible="true"  showdaughters="true"/>
     <vis name="TOFSupportVis"     ref="TrackerSupportVis"   visible="true"  showDaughters="true"/>
     <vis name="TOFSensorVis"      ref="TOFVis"              visible="true"  showDaughters="true"/>
+    <vis name="TOFASICChipVis"    ref="TOFVis"              visible="true"  showDaughters="true"/>
     <vis name="TOFBarrelModuleVis" ref="TOFVis"             visible="true"  showdaughters="true"/>
     <vis name="TOFHybridVis"      ref="AnlGold"             visible="true"  showDaughters="true"/>
     <vis name="TOFCoolingTube"    ref="AnlRed"              visible="true"  showDaughters="true"/>
@@ -112,13 +113,6 @@
     <vis name="DIRCSupportVis"  ref="AnlTeal"       showDaughters="true" visible="true"/>
     <vis name="DIRCFrameVis"    ref="AnlOrange"     showDaughters="true" visible="true"/>
     <vis name="DIRCBarVis"      ref="AnlTeal"       showDaughters="true" visible="true"/>
-
-    <comment>
-      Beam line with magnets
-    </comment>
-    <vis name="BeamPipeVis"         ref="AnlLightGray"       showDaughters="true" visible="true"/>
-    <vis name="FFMagnetVis"         ref="AnlGreen"            showDaughters="true" visible="true"/>
-    <vis name="FFMagnetCoilVis"     ref="AnlRed"              showDaughters="true" visible="true"/>
 
     <comment>
       ZDC visualization

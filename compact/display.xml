@@ -62,9 +62,10 @@
     <comment>
       Luminosity Visualisation
     </comment>
-    <vis    name="LumiSpecCAL_ModuleVis"       ref="AnlGold"    alpha="0.5"     visible="true" showDaughters="true"/>
-    <vis    name="LumiSpecCAL_FiberVis"        ref="AnlRed"     alpha="0.8"     visible="true"/>
-    <vis    name="LumiSpecCAL_FiberHolderVis"  ref="AnlBlue"    alpha="1.0"     visible="true"/>
+    <vis    name="LumiSpecCAL_LayerVis"         ref="AnlOrange" alpha="0.2"     visible="true" showDaughters = "false"/>
+    <vis    name="LumiSpecCAL_ModuleVis"        ref="AnlGold"   alpha="0.5"     visible="true" showDaughters="false"/>
+    <vis    name="LumiSpecCAL_FiberVis"         ref="AnlRed"    alpha="0.8"     visible="true"/>
+    <vis    name="LumiSpecCAL_FiberHolderVis"   ref="AnlBlue"   alpha="1.0"     visible="true"/>
 
 
     <comment>
@@ -140,9 +141,13 @@
     <comment>
       Beam line with magnets
     </comment>
-    <vis name="BeamPipeVis"         ref="AnlLightGray"       showDaughters="true" visible="true"/>
-    <vis name="FFMagnetVis"         ref="AnlGreen"            showDaughters="true" visible="true"/>
-    <vis name="FFMagnetCoilVis"     ref="AnlRed"              showDaughters="true" visible="true"/>
+    <vis name="BeamPipeVis"             ref="AnlLightGray"      showDaughters="true" visible="true"/>
+    <vis name="MagnetVis"               ref="AnlBlue"           showDaughters="true" visible="true"/>
+    <vis name="MagnetCoilVis"           ref="AnlGreen"          showDaughters="true" visible="true"/>
+    <vis name="MagnetSupportTubeVis"    ref="AnlCyan"           showDaughters="true" visible="true"/>
+    <vis name="MagnetEndPlateVis"       ref="AnlRed"            showDaughters="true" visible="true"/>
+    <vis name="MagnetHeatShieldVis"     ref="AnlGray"           showDaughters="true" visible="true"/>
+    <vis name="MagnetCryoVis"           ref="AnlOrange"         showDaughters="true" visible="true"/>
 
     <comment>
       ZDC visualization

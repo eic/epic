@@ -88,7 +88,7 @@ static Ref_t createDetector(Detector& desc, xml_h e, SensitiveDetector sens) {
 
   // Envelope for bars + mirror
   Box Envelope_box("Envelope_box", (mirror_height + 1 * mm) / 2, 5 * (bar_width + 0.15 * mm),
-                   2 * (bar_length + glue_thickness) + 0.5 * mirror_thickness);
+                   0.5 * bar_repeat_z * (bar_length + glue_thickness) + 0.5 * mirror_thickness);
   Volume Envelope_box_vol("Envelope_box_vol", Envelope_box, desc.material("AirOptical"));
   dirc_module.placeVolume(Envelope_box_vol, Position(0, 0, 0.5 * mirror_thickness));
 
@@ -250,16 +250,16 @@ static Ref_t createDetector(Detector& desc, xml_h e, SensitiveDetector sens) {
   dirc_support.setVisAttributes(desc.visAttributes(xml_support.visStr()));
 
   // Rail
-  xml_comp_t xml_rail            = xml_support.child(_Unicode(rail));
-  xml_dim_t rail_pos             = xml_rail.position();
-  double rail_height             = xml_rail.height();
-  double rail_width2             = xml_rail.width();
-  double rail_distance_to_chord2 = rail_width2 / 2 / tan(dphi / 2);
-  double rail_distance_to_chord1 = rail_distance_to_chord2 - rail_height;
-  double rail_width1             = 2 * rail_distance_to_chord1 * tan(dphi / 2);
-  double rail_length             = xml_rail.length();
-  Trap rail_trap("rail_trap", rail_length / 2, 0, 0, rail_height / 2, rail_width1 / 2,
-                 rail_width2 / 2, 0, rail_height / 2, rail_width1 / 2, rail_width2 / 2, 0);
+  xml_comp_t xml_rail = xml_support.child(_Unicode(rail));
+  xml_dim_t rail_pos  = xml_rail.position();
+  double rail_height  = (xml_rail.rmax() - xml_rail.rmin()) * cos(dphi / 2);
+  double rail_width_at_rmax =
+      xml_rail.width() + 2 * (xml_rail.rmax() - xml_rail.rmin()) * sin(dphi / 2);
+  double rail_width_at_rmin = xml_rail.width();
+  double rail_length        = xml_rail.length();
+  Trap rail_trap("rail_trap", rail_length / 2, 0, 0, rail_height / 2, rail_width_at_rmin / 2,
+                 rail_width_at_rmax / 2, 0, rail_height / 2, rail_width_at_rmin / 2,
+                 rail_width_at_rmax / 2, 0);
   Volume rail_vol("rail_vol", rail_trap, desc.material(xml_rail.materialStr()));
   rail_vol.setVisAttributes(desc.visAttributes(xml_rail.visStr()));
 

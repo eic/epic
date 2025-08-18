@@ -30,7 +30,7 @@ using ROOT::Math::XYVector;
 
 /** Micromegas Barrel Tracker with space frame
  *
- * - Designed to process "mpgd_barrel.xml" ("mpgd_barrel_ver1" as of 2024/02).
+ * - Designed to process "mpgd_barrel.xml".
  *
  * - Derived from "BarrelTrackerWithFrame_geo.cpp".
  *
@@ -317,10 +317,9 @@ static Ref_t create_MPGDCylinderBarrelTracker(Detector& description, xml_h e,
   double total_length = 0; // Total length including frames
   for (int iSM = 0; iSM < nStaveModels; iSM++) {
     // "sensor_number" = Bit field in cellID identifying the sensitive surface.
-    // We intend to use it to set up two discrimination schemes:
-    // i) Stave model w/ its distinctive radius.
-    // ii) Readout coordinate: phi or Z.
-    int sensor_number      = 2 * iSM;
+    // It is used to set up the MultiSegmentation discrimination scheme
+    // catering for the distinct radii of the inner/outer sectors.
+    int sensor_number      = iSM;
     StaveModel& staveModel = staveModels[iSM];
     // phi range, when excluding frames
     double stave_rmin = staveModel.rmin;
@@ -417,7 +416,7 @@ static Ref_t create_MPGDCylinderBarrelTracker(Detector& description, xml_h e,
           throw runtime_error("Logics error in building modules.");
         }
         sensitiveComp = &x_comp; // TODO: Add second sensitive
-        pv.addPhysVolID("sensor", sensor_number++);
+        pv.addPhysVolID("sensor", sensor_number);
         c_vol.setSensitiveDetector(sens);
         sensitives.push_back(pv);
 
@@ -501,7 +500,7 @@ static Ref_t create_MPGDCylinderBarrelTracker(Detector& description, xml_h e,
       double x1, y1; // Coordinates of the centre of curvature of
       x1                 = rc * std::cos(phic);
       y1                 = rc * std::sin(phic);
-      string module_name = _toString(10 * iz + iphi, "module%02d");
+      string module_name = _toString(8 * iz + iphi, "module%02d");
       DetElement mod_elt(lay_elt, module_name, nModules);
       printout(DEBUG, "MPGDCylinderBarrelTracker",
                "System %d Layer \"%s\",id=%d Module \"%s\",id=%d: x,y,r: %7.4f,%7.4f,%7.4f cm",
@@ -523,7 +522,9 @@ static Ref_t create_MPGDCylinderBarrelTracker(Detector& description, xml_h e,
       mod_elt.setPlacement(pv);
       // ***** SENSITIVE COMPONENT
       PlacedVolume& sens_pv = sensitives[iV];
-      DetElement comp_de(mod_elt, std::string("de_") + sens_pv.volume().name(), nModules);
+      DetElement comp_de(
+          mod_elt, std::string("de_") + sens_pv.volume().name() + _toString(8 * iz + iphi, "%02d"),
+          nModules);
       comp_de.setPlacement(sens_pv);
       auto& comp_de_params =
           DD4hepDetectorHelper::ensureExtension<dd4hep::rec::VariantParameters>(comp_de);

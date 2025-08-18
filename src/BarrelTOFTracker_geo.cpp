@@ -129,7 +129,6 @@ static Ref_t create_TOFBarrel(Detector& description, xml_h e, SensitiveDetector 
       throw runtime_error("Logics error in building modules.");
     }
 
-    int ncomponents        = 0;
     int sensor_number      = 1;
     double total_thickness = 0;
 
@@ -177,36 +176,154 @@ static Ref_t create_TOFBarrel(Detector& description, xml_h e, SensitiveDetector 
       xml_comp_t x_rot  = x_comp.rotation(false);
       auto make_box     = [&](double width, double length, double thickness, double pos_x = 0,
                           double pos_y = 0, double pos_z = 0, double rot_x = 0, double rot_y = 0,
-                          double rot_z = 0, bool z_stacking = true) {
+                          double rot_z = 0, bool z_stacking = true, int segmentation_id = 0,
+                          const std::string& suffix = "") {
         // Utility variable for the relative z-offset based off the previous components
         const double zoff = thickness_sum + thickness / 2.0;
 
-        const string c_nam = _toString(ncomponents, "component%d");
-        ++ncomponents;
+        const string c_nam = "component_" + x_comp.nameStr() + suffix;
         Box c_box(width / 2, length / 2, thickness / 2);
         Volume c_vol;
 
-        xml_coll_t ci_tube(x_comp, _Unicode(inner_tube));
-        if (ci_tube) {
-          double max_r = 0;
-          for (; ci_tube; ++ci_tube) {
-            // fill the hole with tube
-            xml_comp_t ct = ci_tube;
-            max_r         = std::max(max_r, ct.rmax());
-            Tube c_tube(ct.rmin(), ct.rmax(), length / 2);
-            Volume c_tubevol(c_nam + ct.nameStr(), c_tube, description.material(ct.materialStr()));
-            if (ct.visStr() != "")
-              c_tubevol.setVisAttributes(description, ct.visStr());
-            m_vol.placeVolume(c_tubevol, Transform3D(RotationZYX(0, 0, -M_PI / 2),
-                                                         Position(pos_x, pos_y, pos_z + zoff)));
-          }
+        if (x_comp.hasChild(_Unicode(cooling_pipe))) {
+          /*************************************
+           * Illustraction of pipe parameters
+           *+----------------------------------------------------
+           *|   ---> y
+           *|  |
+           *|  |            ----------------------------
+           *|  v         /                           ^
+           *|  x      /                              v pipe_max_r
+           *|        /       ---------------------------
+           *|       /      /
+           *|     /      /
+           *|    /     /                        ---------------------x (center of the module)
+           *|   /     /         -pipe_offset_x  ^                    |
+           *|  |     |                          v                    |
+           *|  |  |<-+------>x<------------------------------------->|
+           *|  |     |bend_r                   bend_y
+           *|   \     \
+           *|    \      \
+           *|     \      \
+           *|       \      \
+           *|         \      ---------------------------
+           *|          \
+           *|             \
+           *|                ---------------------------
+           *|
+           *+---------------------------------------------------
+           * pipe_min_r (not shown) is the radius of the inside of the cooling pipe
+           * pipe_max_r is the radius of the outside of the cooling pipe
+           * pipe_offset_x and bend_y are defined with respect to the center of the module
+           **********************************/
+          xml_comp_t ci_tube   = x_comp.child(_Unicode(cooling_pipe));
+          double pipe_max_r    = ci_tube.rmax();
+          double pipe_min_r    = ci_tube.rmin();
+          double bend_r        = getAttrOrDefault<double>(ci_tube, _Unicode(bend_r), pipe_max_r);
+          double pipe_offset_x = getAttrOrDefault<double>(ci_tube, _Unicode(offset_x), 0);
+          double bend_y =
+              getAttrOrDefault<double>(ci_tube, _Unicode(bend_y), length / 2 - bend_r - pipe_max_r);
+          std::string direction =
+              getAttrOrDefault<std::string>(ci_tube, _Unicode(direction), "left");
+          int coord_factor;
+          if (direction == "left")
+            coord_factor = 1;
+          else if (direction == "right")
+            coord_factor = -1;
+          else
+            throw std::runtime_error(
+                "BarrelTOF cooling tube direction can only be either left or right, not " +
+                direction + ".");
+          std::string pipe_material =
+              getAttrOrDefault<std::string>(ci_tube, _Unicode(pipe_material), "");
+          std::string coolant_material =
+              getAttrOrDefault<std::string>(ci_tube, _Unicode(coolant_material), "");
 
-          Tube c_fbox(0, max_r, length / 2 + 1);
-          SubtractionSolid c_sbox(c_box, c_fbox,
-                                      Transform3D(RotationZYX(0, 0, -M_PI / 2),
-                                                  Position(0, 0, 0))); //pos_x, pos_y, pos_z + zoff)));
+          // U-shape water pipes
+          // The two sides of the "U"
+          Tube pipe_in(pipe_min_r, pipe_max_r, (length / 2 + std::fabs(bend_y)) / 2);
+          Volume pipe_in_vol(ci_tube.nameStr() + "_pipe1" + suffix, pipe_in,
+                                 description.material(pipe_material));
+          m_vol.placeVolume(pipe_in_vol,
+                                Transform3D(RotationZYX(0, 0, -M_PI / 2),
+                                            Position(pos_x - bend_r + pipe_offset_x,
+                                                     pos_y - coord_factor * (bend_y - length / 2) / 2,
+                                                     pos_z + zoff)));
+          SubtractionSolid c_sbox1(
+              c_box, pipe_in,
+              Transform3D(
+                  RotationZYX(0, 0, -M_PI / 2),
+                  Position(-bend_r + pipe_offset_x, coord_factor * (length / 2 - bend_y) / 2, 0)));
+          // coolant inside the tube
+          Tube coolant_in(0, pipe_min_r, (length / 2 + std::fabs(bend_y)) / 2);
+          Volume coolant_in_vol(ci_tube.nameStr() + "_coolant1" + suffix, coolant_in,
+                                    description.material(coolant_material));
+          m_vol.placeVolume(coolant_in_vol,
+                                Transform3D(RotationZYX(0, 0, -M_PI / 2),
+                                            Position(pos_x - bend_r + pipe_offset_x,
+                                                     pos_y - coord_factor * (bend_y - length / 2) / 2,
+                                                     pos_z + zoff)));
+          SubtractionSolid c_sbox2(
+              c_sbox1, coolant_in,
+              Transform3D(
+                  RotationZYX(0, 0, -M_PI / 2),
+                  Position(-bend_r + pipe_offset_x, coord_factor * (length / 2 - bend_y) / 2, 0)));
 
-          c_vol = Volume(c_nam, c_sbox, description.material(x_comp.materialStr()));
+          // other long side of the tube
+          Tube pipe_out(pipe_min_r, pipe_max_r, (length / 2 + std::fabs(bend_y)) / 2);
+          Volume pipe_out_vol(ci_tube.nameStr() + "_pipe2" + suffix, pipe_out,
+                                  description.material(pipe_material));
+          m_vol.placeVolume(pipe_out_vol,
+                                Transform3D(RotationZYX(0, 0, -M_PI / 2),
+                                            Position(pos_x + bend_r + pipe_offset_x,
+                                                     pos_y - coord_factor * (bend_y - length / 2) / 2,
+                                                     pos_z + zoff)));
+          SubtractionSolid c_sbox3(
+              c_sbox2, pipe_out,
+              Transform3D(
+                  RotationZYX(0, 0, -M_PI / 2),
+                  Position(bend_r + pipe_offset_x, coord_factor * (length / 2 - bend_y) / 2, 0)));
+          // coolant inside the tube
+          Tube coolant_out(0, pipe_min_r, (length / 2 + std::fabs(bend_y)) / 2);
+          Volume coolant_out_vol(ci_tube.nameStr() + "_coolant2" + suffix, coolant_out,
+                                     description.material(coolant_material));
+          m_vol.placeVolume(coolant_out_vol,
+                                Transform3D(RotationZYX(0, 0, -M_PI / 2),
+                                            Position(pos_x + bend_r + pipe_offset_x,
+                                                     pos_y - coord_factor * (bend_y - length / 2) / 2,
+                                                     pos_z + zoff)));
+          SubtractionSolid c_sbox4(
+              c_sbox3, coolant_out,
+              Transform3D(
+                  RotationZYX(0, 0, -M_PI / 2),
+                  Position(bend_r + pipe_offset_x, coord_factor * (length / 2 - bend_y) / 2, 0)));
+
+          // the U part of the U-shape
+          Torus pipe_bend(bend_r, pipe_min_r, pipe_max_r + 0.001, direction == "left" ? M_PI : 0,
+                              M_PI);
+          Volume pipe_bend_vol(ci_tube.nameStr() + "_pipeU" + suffix, pipe_bend,
+                                   description.material(pipe_material));
+          m_vol.placeVolume(pipe_bend_vol,
+                                Transform3D(RotationZYX(0, 0, 0),
+                                            Position(pos_x + pipe_offset_x,
+                                                     pos_y - coord_factor * bend_y, pos_z + zoff)));
+
+          // coolant
+          Torus coolant_bend(bend_r, 0, pipe_min_r, direction == "left" ? M_PI : 0, M_PI);
+          Volume coolant_bend_vol(ci_tube.nameStr() + "_coolantU" + suffix, coolant_bend,
+                                      description.material(coolant_material));
+          m_vol.placeVolume(coolant_bend_vol,
+                                Transform3D(RotationZYX(0, 0, 0),
+                                            Position(pos_x + pipe_offset_x,
+                                                     pos_y - coord_factor * bend_y, pos_z + zoff)));
+
+          // carve out the U-bent from stave
+          Torus coolant_bend_carveout(bend_r, 0, pipe_max_r, direction == "left" ? M_PI : 0, M_PI);
+          SubtractionSolid c_sbox5(c_sbox4, coolant_bend_carveout,
+                                       Transform3D(RotationZYX(0, 0, 0),
+                                                   Position(pipe_offset_x, -coord_factor * bend_y, 0)));
+
+          c_vol = Volume(c_nam, c_sbox5, description.material(x_comp.materialStr()));
         } else
           c_vol = Volume(c_nam, c_box, description.material(x_comp.materialStr()));
 
@@ -223,6 +340,7 @@ static Ref_t create_TOFBarrel(Detector& description, xml_h e, SensitiveDetector 
         c_vol.setVisAttributes(description, x_comp.visStr());
         if (x_comp.isSensitive()) {
           pv.addPhysVolID("sensor", sensor_number++);
+          pv.addPhysVolID("segmentation_id", segmentation_id);
           c_vol.setSensitiveDetector(sens);
           sensitives[m_nam].push_back(pv);
           module_thicknesses[m_nam] = {thickness_so_far + thickness / 2.0,
@@ -291,13 +409,16 @@ static Ref_t create_TOFBarrel(Detector& description, xml_h e, SensitiveDetector 
         double start_y = getAttrOrDefault<double>(x_comp_t, _Unicode(start_y), 0);
         // z-locatino of the center of all sensors (All sensors appears at the same z-layer
         double start_z = getAttrOrDefault<double>(x_comp_t, _Unicode(start_z), 0);
-        // central ring is located to the right of the ny_before_ring th sensor
-        int ny_before_ring = getAttrOrDefault<int>(x_comp_t, _Unicode(ny_before_ring), 0);
-        // Extra width caused by the ring
-        // |<--sensors_ydist-->|<--sensors_ydist-->|<-----ring_extra_width------->|<--sensors_ydist-->|
-        //   |<xcomp.width()>|   |<xcomp.width()>|                                   |<xcomp.width()>|
-        //   ring_extra_width is the extra width between boundaries of the sensor boundaries (including dead space)
-        double ring_extra_width = getAttrOrDefault<double>(x_comp_t, _Unicode(ring_extra_width), 0);
+        // Illustration of variables
+        //
+        //               |<-------------sensors_ydist------------>|<-------------sensors_ydist------------>|
+        //   |      <xcomp.length()>       |          |      <xcomp.length()>       |          |helf_sensor|
+        //
+        //   y-dist is the distance between centers of sensors
+        //   each xcomp represent a column of cell
+        //   half sensor has a width of 0.5*xcomp.length()
+        //   In a half sensor, the sensor center is aligned with the edge, ensuring that `sensors_ydist` remains centered on a full sensor.
+        //   Weather the half sensor is placed to the left or right of sensor_ydist depends on half_sensor_str below
         auto half_length_str =
             getAttrOrDefault<std::string>(x_comp_t, _Unicode(half_length), "none");
 
@@ -307,26 +428,36 @@ static Ref_t create_TOFBarrel(Detector& description, xml_h e, SensitiveDetector 
           for (int ny = 0; ny < nsensors_y; ++ny) {
             double sensor_length     = length;
             double tmp_sensors_ydist = sensors_ydist;
+            bool half_sensor         = false;
             // when we draw half a sensor, the center has to be shifted by 0.25 times the length of a sensor
             // distance between centers to the next sensor also has to be reduced by 0.25 times the length of a sensor
             if ((half_length_str == "left" || half_length_str == "both") && ny == 0) {
               sensor_length = 0.5 * length;
               current_y += 0.25 * length;
               tmp_sensors_ydist -= 0.25 * length;
+              half_sensor = true;
             }
             // same idea, but when you are drawing to the right, the right sensor center has to move in -y direction
             if ((half_length_str == "right" || half_length_str == "both") && ny == nsensors_y - 1) {
               sensor_length = 0.5 * length;
               current_y -= 0.25 * length;
+              tmp_sensors_ydist += 0.5 * length;
+              half_sensor = true;
             }
-            make_box(width, sensor_length, thickness, current_x, current_y, start_z, rot_x, rot_y,
-                     rot_z,
-                     (((nx == nsensors_x - 1) && (ny == nsensors_y - 1))) &&
-                         !keep_layer); // all sensors are located at the same z-layer
+
+            bool last_sensor_in_stave = ((nx == nsensors_x - 1) && (ny == nsensors_y - 1));
+            bool segmentation_id =
+                half_sensor ? 1 : 0; // keys to distinguish segmentation class for half sensor
+                                     //
+            make_box(
+                width, sensor_length, thickness, current_x, current_y, start_z, rot_x, rot_y, rot_z,
+                last_sensor_in_stave && !keep_layer, segmentation_id,
+                "_ix" + std::to_string(nx) + "_iy" +
+                    std::to_string(
+                        ny)); // all sensors are located at the same z-layer, keep the same sensor number for all columns in the same sensor
             // increment z-layers only at the end, after the last sensor is added
+            // return current_y to the center of the sensor
             current_y += tmp_sensors_ydist;
-            if (ny + 1 == ny_before_ring)
-              current_y += ring_extra_width;
           }
           current_x += sensors_xdist;
         }
