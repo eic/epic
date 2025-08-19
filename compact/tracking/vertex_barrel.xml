@@ -31,10 +31,22 @@
     <constant name="VertexBarrelStaveL1_width" value="RSU_width/2" />
     <constant name="VertexBarrelStaveL2_width" value="RSU_width/2" />
 
-    <constant name="VertexBarrelModL0_rmin" value="VertexBarrelL0_nphi*VertexBarrelStaveL0_width/2/Pi" />
-    <constant name="VertexBarrelModL1_rmin" value="VertexBarrelL1_nphi*VertexBarrelStaveL1_width/2/Pi" />
+    <comment>
+      the radius here include a gap b/w upper and lower half.
+      L0 and L1 values from drawing (see vertex_barrel_support.xml)
+    </comment>
+    <constant name="VertexBarrelMod_thickness" value="0.2*mm" />
+    <constant name="VertexBarrelModL0_rmin" value="38*mm" />
+    <constant name="VertexBarrelModL1_rmin" value="50.3*mm+1*um" />
     <constant name="VertexBarrelModL2_rmin" value="VertexBarrelL2_nphi*VertexBarrelStaveL2_width/2/Pi" />
 
+    <constant name="VertexBarrelMod_vert_off" value="1.0*mm" /> <comment>roughly (38.15*2pi-234.8)/4 </comment>
+    <constant name="VertexBarrelModL0_dphi"   value="VertexBarrelMod_vert_off/VertexBarrelModL0_rmin" />
+    <constant name="VertexBarrelModL1_dphi"   value="VertexBarrelMod_vert_off/VertexBarrelModL1_rmin" />
+
+    <!-- <constant name="VertexBarrelModL0_rmin" value="VertexBarrelL0_nphi*VertexBarrelStaveL0_width/2/Pi" />
+    <constant name="VertexBarrelModL1_rmin" value="VertexBarrelL1_nphi*VertexBarrelStaveL1_width/2/Pi" />
+    -->
     <documentation>
       for the segmentation. Assume sensors are placed at the inner most surface for each layer
     </documentation>
@@ -46,13 +58,12 @@
       - Currently there are 3 sensor layers: Layer 1,2,3 = L0, L1, L2.
       - assume they are of the same length and aligned.
     </documentation>
-    <constant name="VertexBarrelEnvelope_length"    value="VertexTrackingRegion_length"/>
     <constant name="VertexBarrelLayer_length" value="VertexBarrel_length" />
     <constant name="VertexBarrelLayer_zoff"   value="0"  />
     <constant name="VertexBarrelLayer_zstart" value="-VertexBarrelLayer_length/2+VertexBarrelLayer_zoff" />
     <constant name="VertexBarrelLayer_z0"     value=" VertexBarrelLayer_zstart + VertexBarrelMod_length/2 " />
 
-    <constant name="VertexBarrelLayer_thickness" value="0.2*cm" />
+    <constant name="VertexBarrelLayer_thickness" value="VertexBarrelMod_thickness" />
     <constant name="VertexBarrelLayer0_rmin"  value="VertexBarrelModL0_rmin" />
     <constant name="VertexBarrelLayer0_rmax"  value="VertexBarrelLayer0_rmin + VertexBarrelLayer_thickness" />
     <constant name="VertexBarrelLayer1_rmin"  value="VertexBarrelModL1_rmin" />
@@ -82,10 +93,10 @@
             no need to specify upper and lower anywhere.
         - one RSU ("|" = backbone. Length alone z.):
          | ------readout-------- | -------readout--------
-         | tilex3                | tilex3
+         | tile*3                | tile*3                      upper module
          | ------biasing-------- | -------biasing--------
          | ------biasing-------- | -------biasing--------
-         | tilex3                | tilex3
+         | tile*3                | tile*3                      lower module
          | ------readout-------- | -------readout--------
 
       </comment>
@@ -164,12 +175,12 @@
         <layer_material surface="outer" binning="binPhi,binZ" bins0="VertexBarrelL0_nphi"
           bins1="100" />
         <comment>
-          phi0 : Starting phi of first module.
+          phi0 : Starting phi of first module at the first/second halve.
           nphi : Number of modules in phi.
           z0 : Z position of first module's center.
           nz : Number of modules to place in z.
         </comment>
-        <rphi_layout nphi="VertexBarrelL0_nphi" phi0="0.0" dr="0.0 * mm" />
+        <rphi_layout nphi="VertexBarrelL0_nphi" phi0="VertexBarrelModL0_dphi" dr="0.0 * mm" />
         <z_layout z0="VertexBarrelLayer_z0" nz="VertexBarrelLayer_nz" />
       </layer>
 
@@ -183,7 +194,7 @@
           bins1="100" />
         <layer_material surface="outer" binning="binPhi,binZ" bins0="VertexBarrelL1_nphi"
           bins1="100" />
-        <rphi_layout nphi="VertexBarrelL1_nphi" phi0="0.0" dr="0.0 * mm" />
+        <rphi_layout nphi="VertexBarrelL1_nphi" phi0="VertexBarrelModL1_dphi"  dr="0.0 * mm" />
         <z_layout z0="VertexBarrelLayer_z0" nz="VertexBarrelLayer_nz" />
       </layer>
 
