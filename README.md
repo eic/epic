@@ -27,6 +27,8 @@ The test script runs a simulation shooting 1000 muons through the vertex and sil
 
 **Tests**
 
+Run tests in eic-shell --version 25.07.0-stable . In the latest version, eicrecon generates errors and the control test fails, presumably due to issues with a new ACTs version. 
+
 Control test with epic-main geometry
 ```
 source /opt/detector/epic-main/bin/thisepic.sh
