@@ -119,7 +119,7 @@
     ## Electric and magnetic fields
   </documentation>
   <include ref="${DETECTOR_PATH}/compact/fields/marco.xml"/>
-  
+
   <documentation level="10">
     ## Central tracking detectors
   </documentation>
@@ -128,7 +128,7 @@
   <include ref="${DETECTOR_PATH}/compact/tracking/vertex_barrel.xml"/>
   <include ref="${DETECTOR_PATH}/compact/tracking/silicon_barrel.xml"/>
   <include ref="${DETECTOR_PATH}/compact/tracking/silicon_disks.xml"/>
-  
+
   <documentation level="11">
     ## Central beam pipe
   </documentation>

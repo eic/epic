@@ -173,40 +173,44 @@ static Ref_t create_BarrelTrackerWithFrame(Detector& description, xml_h e, Sensi
       xml_comp_t x_pos   = x_comp.position(false);
       xml_comp_t x_rot   = x_comp.rotation(false);
       const string c_nam = _toString(ncomponents, "component%d");
-      
-      Volume c_vol;
-      if(x_comp.nameStr().find("CurvedSilicon") != std::string::npos){
-            	double c_rmin = x_comp.radius(); 				// radius of curvature in cm
-      		double c_phi0 = x_comp.phi0();       			// start and stop angle of segment in rad - zero is centre of stave
-      		double c_phi1 = x_comp.phi1(); 
-      		double c_z0 = x_comp.offset(); 				// position of centre of cylinder in cm ( = radius of curvature - maximum height of curved surface above flat base)
-          	Tube c_tube(c_rmin, c_rmin + x_comp.thickness(),  x_comp.length()/2, M_PI/2 + c_phi0, M_PI/2 + c_phi1);
-          	c_vol = Volume(c_nam, c_tube, description.material(x_comp.materialStr()));
- 	        const double zoff = thickness_sum + x_comp.thickness() / 2.0;
-	  	Position c_pos(0,0,c_z0 + zoff); 
-          	RotationZYX c_rot(0,0,M_PI/2);
-          	pv = m_vol.placeVolume(c_vol, Transform3D(c_rot, c_pos));
-      }
-      else {
-	      Box c_box(x_comp.width() / 2, x_comp.length() / 2, x_comp.thickness() / 2);
-	      c_vol = Volume (c_nam, c_box, description.material(x_comp.materialStr()));
 
-	      // Utility variable for the relative z-offset based off the previous components
-	      const double zoff = thickness_sum + x_comp.thickness() / 2.0;
-	      if (x_pos && x_rot) {
-		Position c_pos(x_pos.x(0), x_pos.y(0), x_pos.z(0) + zoff);
-		RotationZYX c_rot(x_rot.z(0), x_rot.y(0), x_rot.x(0));
-		pv = m_vol.placeVolume(c_vol, Transform3D(c_rot, c_pos));
-	      } else if (x_rot) {
-		Position c_pos(0, 0, zoff);
-		pv = m_vol.placeVolume(c_vol, Transform3D(RotationZYX(x_rot.z(0), x_rot.y(0), x_rot.x(0)), c_pos));
-	      } else if (x_pos) {
-		pv = m_vol.placeVolume(c_vol, Position(x_pos.x(0), x_pos.y(0), x_pos.z(0) + zoff));
-	      } else {
-		pv = m_vol.placeVolume(c_vol, Position(0, 0, zoff));
-	      }
+      Volume c_vol;
+      if (x_comp.nameStr().find("CurvedSilicon") != std::string::npos) {
+        double c_rmin = x_comp.radius(); // radius of curvature in cm
+        double c_phi0 =
+            x_comp.phi0(); // start and stop angle of segment in rad - zero is centre of stave
+        double c_phi1 = x_comp.phi1();
+        double c_z0 =
+            x_comp
+                .offset(); // position of centre of cylinder in cm ( = radius of curvature - maximum height of curved surface above flat base)
+        Tube c_tube(c_rmin, c_rmin + x_comp.thickness(), x_comp.length() / 2, M_PI / 2 + c_phi0,
+                    M_PI / 2 + c_phi1);
+        c_vol             = Volume(c_nam, c_tube, description.material(x_comp.materialStr()));
+        const double zoff = thickness_sum + x_comp.thickness() / 2.0;
+        Position c_pos(0, 0, c_z0 + zoff);
+        RotationZYX c_rot(0, 0, M_PI / 2);
+        pv = m_vol.placeVolume(c_vol, Transform3D(c_rot, c_pos));
+      } else {
+        Box c_box(x_comp.width() / 2, x_comp.length() / 2, x_comp.thickness() / 2);
+        c_vol = Volume(c_nam, c_box, description.material(x_comp.materialStr()));
+
+        // Utility variable for the relative z-offset based off the previous components
+        const double zoff = thickness_sum + x_comp.thickness() / 2.0;
+        if (x_pos && x_rot) {
+          Position c_pos(x_pos.x(0), x_pos.y(0), x_pos.z(0) + zoff);
+          RotationZYX c_rot(x_rot.z(0), x_rot.y(0), x_rot.x(0));
+          pv = m_vol.placeVolume(c_vol, Transform3D(c_rot, c_pos));
+        } else if (x_rot) {
+          Position c_pos(0, 0, zoff);
+          pv = m_vol.placeVolume(
+              c_vol, Transform3D(RotationZYX(x_rot.z(0), x_rot.y(0), x_rot.x(0)), c_pos));
+        } else if (x_pos) {
+          pv = m_vol.placeVolume(c_vol, Position(x_pos.x(0), x_pos.y(0), x_pos.z(0) + zoff));
+        } else {
+          pv = m_vol.placeVolume(c_vol, Position(0, 0, zoff));
+        }
       }
-      
+
       c_vol.setRegion(description, x_comp.regionStr());
       c_vol.setLimitSet(description, x_comp.limitsStr());
       c_vol.setVisAttributes(description, x_comp.visStr());

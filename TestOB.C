@@ -1,4 +1,4 @@
-void TestOB(){
+void TestOB() {
   TFile* eicFile = new TFile("reconTest.edm4eic.root");
   TTree* eicTree = (TTree*)eicFile->Get("events");
   eicTree->Draw("CentralCKFTrajectories.nMeasurements>>nM");

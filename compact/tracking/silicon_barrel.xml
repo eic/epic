@@ -74,14 +74,14 @@
         length="SiBarrelLayer1_length" />
       <comment>Silicon Barrel Modules</comment>
       <module name="Module1" vis="TrackerLayerVis">
-      
+
   <module_component name="Support"
           material="CarbonFiber"
           sensitive="false"
           width="SiBarrelStave1_width"
           length="SiBarrelMod1_length"
           thickness="SiBarrelMod2Frame_thickness"
-          vis="TrackerLayerVis" />  
+          vis="TrackerLayerVis" />
    <module_component name="Service"
           material="Aluminum"
           sensitive="false"
@@ -99,7 +99,7 @@
           length="SiBarrelMod1_length"
           thickness="SiBarrelSensor_thickness"
           vis="TrackerLayerVis" />
-       
+
       </module>
       <comment> Layers composed of many arrayed modules </comment>
       <layer module="Module1" id="3" vis="TrackerLayerVis">
@@ -166,7 +166,7 @@
           length="SiBarrelMod2_length"
           thickness="SiBarrelSensor_thickness"
           vis="TrackerLayerVis" />
-    
+
       </module>
 
       <comment> Layers composed of many arrayed modules </comment>
@@ -203,7 +203,7 @@
       <argument value="layer_pattern: str=OuterSiBarrel_layer\d" />
     </plugin>
   </plugins>
-  
+
    <readouts>
     <readout name="SiBarrelHits">
       <segmentation type="CylindricalGridPhiZ" grid_size_phi="0.02*mm/(80.0*mm)" grid_size_z="0.02*mm" radius="80.0*mm" />

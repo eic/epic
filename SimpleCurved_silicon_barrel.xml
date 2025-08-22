@@ -70,7 +70,7 @@
                height="SiBarrelMod1Frame_height"
                length="SiBarrelMod1_length"
                thickness="SiBarrelMod1Frame_thickness" />
-   
+
         <module_component name="Service"
                           material="Aluminum"
                           sensitive="false"
@@ -82,7 +82,7 @@
                           material="Silicon"
                           sensitive="true"
                           radius="SiBarrelMod1_rmin+6*mm"
-                          offset="-SiBarrelMod1_rmin" 
+                          offset="-SiBarrelMod1_rmin"
                           phi0="-0.068" phi1="0.068"
                           width="SiBarrelStave1_width"
                           length="SiBarrelMod1_length"
@@ -151,8 +151,8 @@
                           length="SiBarrelMod2_length"
                           thickness="SiBarrelSensor_thickness"
                           vis="TrackerLayerVis"  />
-        </module>    
-    
+        </module>
+
       <comment> Layers composed of many arrayed modules  </comment>
       <layer module="Module1" id="4" vis="TrackerLayerVis">
         <barrel_envelope
@@ -190,7 +190,7 @@
 
  <readouts>
     <readout name="SiBarrelHits">
-        <segmentation type="MultiSegmentation" key="layer">    
+        <segmentation type="MultiSegmentation" key="layer">
             <segmentation name="L3" type="CylindricalGridPhiZ"  key_value="3"  grid_size_phi="0.02*mm/(SiBarrelMod1_rmin+6*mm)" grid_size_z="0.02*mm" radius="SiBarrelMod1_rmin+6*mm" />
             <segmentation name="L4" type="CylindricalGridPhiZ"  key_value="4"  grid_size_phi="0.04*mm/(SiBarrelMod2_rmin+6*mm)" grid_size_z="0.04*mm" radius="SiBarrelMod2_rmin+6*mm" />
         </segmentation>

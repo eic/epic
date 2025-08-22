@@ -5,7 +5,7 @@ This branch has been created by Sam Henry to test a new outer barrel geometry wi
 
 The OB stave structure has replaced the flat silicon surface with a curved surface. The carbon fibre frame has been replaced with a flat layer. The staves are no longer tilted and are positioned alternately at radii separated by 6mm.
 
-In this test, the curved silicon surface for each stave is modelled as a single module - a segment of a cylinder with a radius of 80mm. In the final version we will include the top and bottom layers of the stave with 4 modules for L3 and 8 for L4. 
+In this test, the curved silicon surface for each stave is modelled as a single module - a segment of a cylinder with a radius of 80mm. In the final version we will include the top and bottom layers of the stave with 4 modules for L3 and 8 for L4.
 
 This is not yet working - eicrecon does not see the outer barrel hits.
 
@@ -27,7 +27,7 @@ The test script runs a simulation shooting 1000 muons through the vertex and sil
 
 **Tests**
 
-Run tests in eic-shell --version 25.07.0-stable . In the latest version, eicrecon generates errors and the control test fails, presumably due to issues with a new ACTs version. 
+Run tests in eic-shell --version 25.07.0-stable . In the latest version, eicrecon generates errors and the control test fails, presumably due to issues with a new ACTs version.
 
 Control test with epic-main geometry
 ```
@@ -45,7 +45,7 @@ Mean nMeasurements: 3
 ```
 Test simple curved model
 ```
-cp SimpleCurved_silicon_barrel.xml install/share/epic/compact/tracking/silicon_barrel.xml 
+cp SimpleCurved_silicon_barrel.xml install/share/epic/compact/tracking/silicon_barrel.xml
 ./TestOB.sh
 ```
 Mean nMeasurements: 4.947
