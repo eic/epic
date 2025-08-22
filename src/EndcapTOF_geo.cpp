@@ -93,9 +93,9 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
       bool cylindrical   = getAttrOrDefault<bool>(x_comp, _Unicode(cylindrical), false);
 
       Volume c_vol;
-      if(cylindrical) {
-        Tube c_tub(x_comp.rmin(), x_comp.rmax(), x_comp.thickness() / 2.0, 0, 2*M_PI);
-        c_vol = Volume(c_nam, c_tub, description.material(x_comp.materialStr())); 
+      if (cylindrical) {
+        Tube c_tub(x_comp.rmin(), x_comp.rmax(), x_comp.thickness() / 2.0, 0, 2 * M_PI);
+        c_vol = Volume(c_nam, c_tub, description.material(x_comp.materialStr()));
       } else {
         Box c_box(x_comp.width() / 2, x_comp.length() / 2, x_comp.thickness() / 2);
         c_vol = Volume(c_nam, c_box, description.material(x_comp.materialStr()));
@@ -156,7 +156,7 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
     modules[m_nam] = m_vol;
   }
 
-  int module = 0;
+  int module       = 0;
   double current_z = std::numeric_limits<double>::lowest();
   for (xml_coll_t li(x_det, _U(layer)); li; ++li) {
     xml_comp_t x_layer = li;
@@ -181,17 +181,20 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
       envelope_length     = std::max(envelope_length, mod_thickness[m_nam]);
     }
 
-    double zstart = 0;  
-    if(zstack) {
-      if(current_z == std::numeric_limits<double>::lowest()) 
-        throw std::runtime_error("You cannot enable stack on the first layer. You need to place the first layer with 'zstart', then you can stack the next layer.");
+    double zstart = 0;
+    if (zstack) {
+      if (current_z == std::numeric_limits<double>::lowest())
+        throw std::runtime_error(
+            "You cannot enable stack on the first layer. You need to place the first layer with "
+            "'zstart', then you can stack the next layer.");
       else
         zstart = current_z;
-    } else zstart = envelope.zstart();
+    } else
+      zstart = envelope.zstart();
 
     Tube lay_tub(envelope.rmin(), envelope.rmax(), envelope_length / 2.0, phimin, phimax);
     Volume lay_vol(lay_nam, lay_tub, air); // Create the layer envelope volume.
-    Position lay_pos(xoffset, 0, zstart + 0.5*envelope_length);
+    Position lay_pos(xoffset, 0, zstart + 0.5 * envelope_length);
     current_z = zstart + envelope_length;
     lay_vol.setVisAttributes(description.visAttributes(x_layer.visStr()));
 
