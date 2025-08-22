@@ -210,7 +210,7 @@
       <type_flags type="DetType_TRACKER + DetType_ENDCAP"/>
       <position x="0*cm" y="0*cm" z="ForwardTOF_zmin" />
       <module name="Support" vis="TOFEndcapModuleVis">
-	      <module_component name="Support" cylindrical="true" material="CarbonFoam" rmin="ForwardTOFLayer_rmin" rmax="ForwardTOFLayer_rmax" thickness="EndcapTOF_CFSupp_thickness" vis="AnlGray"/>
+              <module_component name="Support" cylindrical="true" material="CarbonFoam" rmin="ForwardTOFLayer_rmin" rmax="ForwardTOFLayer_rmax" thickness="EndcapTOF_CFSupp_thickness" vis="AnlGray"/>
       </module>
       <module name="FrontRight" vis="TOFEndcapModuleVis">
         <module_component name="hybridkaptontop" material="Kapton" sensitive="false" width="EndcapTOF_Module_width" length="EndcapTOF_Module_length" thickness="EndcapTOF_Hybrid_thickness" vis="TOFHybridVis" >
@@ -493,15 +493,15 @@
       <envelope vis="TOF_envelope"
         rmin="ForwardTOFLayer_rmin"
         rmax="ForwardTOFLayer_rmax"
-	zstack="true"
+        zstack="true"
         xoffset="0"
       />
         <layout left="true" module="Support">
-		<row deadspace="ForwardTOFLayer_rmax - EndcapTOF_Module_width/2"/>
-		<row x_offset="(-EndcapTOF_Module_length)/2" nsensors="1">
+                <row deadspace="ForwardTOFLayer_rmax - EndcapTOF_Module_width/2"/>
+                <row x_offset="(-EndcapTOF_Module_length)/2" nsensors="1">
                   <board nsensors="1"/>
                 </row>
-	</layout>
+        </layout>
       </layer>
 
 
@@ -509,7 +509,7 @@
       <envelope vis="TOF_envelope"
         rmin="ForwardTOFLayer_rmin"
         rmax="ForwardTOFLayer_rmax"
-	zstack="true"
+        zstack="true"
         xoffset="-EndcapTOF_Board_spacing/2"
       />
 
