@@ -210,7 +210,7 @@
       <type_flags type="DetType_TRACKER + DetType_ENDCAP"/>
       <position x="0*cm" y="0*cm" z="ForwardTOF_zmin" />
       <module name="Support" vis="TOFEndcapModuleVis">
-	      <module_component name="Support" cylindrical="true" material="Carbon" rmin="ForwardTOFLayer_rmin" rmax="ForwardTOFLayer_rmax" thickness="EndcapTOF_CFSupp_thickness" vis="AnlGray"/>
+	      <module_component name="Support" cylindrical="true" material="CarbonFoam" rmin="ForwardTOFLayer_rmin" rmax="ForwardTOFLayer_rmax" thickness="EndcapTOF_CFSupp_thickness" vis="AnlGray"/>
       </module>
       <module name="FrontRight" vis="TOFEndcapModuleVis">
         <module_component name="hybridkaptontop" material="Kapton" sensitive="false" width="EndcapTOF_Module_width" length="EndcapTOF_Module_length" thickness="EndcapTOF_Hybrid_thickness" vis="TOFHybridVis" >
