@@ -1,5 +1,5 @@
 ebeam: 5
-pbeam: 41
+pbeam: 41_He3
 features:
   beampipe:
   tracking:
