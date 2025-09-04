@@ -4,9 +4,9 @@
 <lccdd>
   <define>
     <comment>
-         This version is for the flat_OB geometry - a more accurate model with carbon fiber braces to 
+         This version is for the flat_OB geometry - a more accurate model with carbon fiber braces to
          reproduce the peaks in the material thickness scan.
-         
+
         Edited by Aditya Yalavatti and Sam Henry, University of Oxford
     </comment>
 
@@ -82,7 +82,7 @@
           vis="TrackerSupportVis">
           <position x="-1*mm" y="0" z="0" />
         </module_component>
-        
+
         <module_component name="Brace0" material="CarbonFiber"
           width="SiBarrelStave1_width*0.9"
           thickness="2*SiBarrelBrace_halfthick_r"
@@ -211,7 +211,7 @@
           vis="TrackerSupportVis">
           <position x="-1*mm" y="0" z="0" />
         </module_component>
-        
+
         <!-- Carbon fibre braces -->
         <module_component name="Brace0" material="CarbonFiber"
           width="SiBarrelStave2_width*0.9"
@@ -291,7 +291,7 @@
           length="SiBarrelMod2_length"
           thickness="SiBarrelMod2Service_thickness*0.1785"
           vis="TrackerLayerVis" /> <!-- multiply thickness by 0.17 and change from aluminum to Kapton -->
-     
+
         <module_component name="Silicon_right"
           material="Silicon"
           sensitive="true"
@@ -319,7 +319,7 @@
           vis="TrackerLayerVis"> <!-- multiply thickness by 2.7 this increases thickness by 0.00034 -->
     <position x="-0.25*mm - SiBarrelStave2_width/4" y="0" z="-SiBarrelSensor_thickness*2.7" />
         </module_component>
-        
+
       </module>
       <comment> Layers composed of many arrayed modules </comment>
       <layer module="Module1" id="1" vis="TrackerLayerVis">
