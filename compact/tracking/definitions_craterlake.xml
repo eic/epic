@@ -28,8 +28,8 @@
 
     <comment> Main parameters for the outer MPGD barrel layer </comment>
     <constant name="MPGDOuterBarrelModule_rmin"      value="735*mm"/>
-    <constant name="MPGDOuterBarrelModule_zmin1"     value="1825*mm"/>
-    <constant name="MPGDOuterBarrelModule_zmin2"     value="1875*mm"/>
+    <constant name="MPGDOuterBarrelModule_zmin1"     value="1795*mm"/>
+    <constant name="MPGDOuterBarrelModule_zmin2"     value="1845*mm"/>
 
     <comment> Inner MPGD unsegmented barrel </comment>
     <constant name="InnerMPGDBarrel_rmin"            value="550*mm"/>
