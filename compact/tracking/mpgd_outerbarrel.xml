@@ -46,7 +46,7 @@
    <detector id="TrackerBarrel_5_ID" name="MPGDOuterBarrel" type="epic_OuterMPGDBarrel" readout="OuterMPGDBarrelHits" vis="TrackerVis">
      <type_flags type="DetType_TRACKER + DetType_BARREL"/>
      <dimensions width="MPGDOuterBarrelModule_width" length="MPGDOuterBarrelModule_length" height="MPGDOuterBarrelModule_allowed_space" />
-	  <position x="0" y="0" z="MPGDOuterBarrelModule_offset" />
+          <position x="0" y="0" z="MPGDOuterBarrelModule_offset" />
 
      <comment> MPGD DIRC module components</comment>
 
@@ -128,9 +128,9 @@
                sensitive="false"
                width="MPGDOuterBarrelModule_width"
                thickness="MPGDOuterBarrelPCB_thickness"
-	       vis="TrackerVis"
+               vis="TrackerVis"
                offset="MPGDOuterBarrelModule_feb_ext"
-	       length="MPGDOuterBarrelModule_length"/>
+               length="MPGDOuterBarrelModule_length"/>
 
    <comment> Frame width gets subtracted from the gas module volumes
       see src/BarrelPlanarMPGDTracker_geo.cpp
@@ -142,7 +142,7 @@
                thickness="MPGDOuterBarrelFrame_thickness"/>
 
 </module>
-	    
+
 <comment> Layout for MPGD DIRC layers </comment>
   <layer module="MPGDOuterBarrelModule" id="0" vis="TrackerSupportVis">
     <envelope_tolerance r_min="0*mm" r_max="0*mm" z_min="0*mm" z_max="0*mm"/>
