@@ -352,7 +352,7 @@
           dr : Radial displacement parameter, of every other module.
         </comment>
         <rphi_layout phi_tilt="0.0" nphi="SiBarrelStave2_count" phi0="0.0"
-          rc="SiBarrelMod2_rmin+SiBarrel1_radius_offset" dr="SiBarrel2_radius_castellation" />
+          rc="SiBarrelMod2_rmin+SiBarrel2_radius_offset" dr="SiBarrel2_radius_castellation" />
         <z_layout dr="0.0 * mm" z0="0.0 * mm" nz="1" />
       </layer>
     </detector>
