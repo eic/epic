@@ -153,6 +153,7 @@ jobs:
     - uses: cvmfs-contrib/github-action-cvmfs@v5
     - uses: eic/run-cvmfs-osg-eic-shell@main
       with:
+        organization: "eic"
         platform-release: "eic_xl:nightly"
         setup: install/bin/thisepic.sh
         run: |
