@@ -22,6 +22,7 @@ jobs:
     - uses: cvmfs-contrib/github-action-cvmfs@v5
     - uses: eic/run-cvmfs-osg-eic-shell@main
       with:
+        organization: "eic"
         platform-release: "eic_xl:nightly"
         network_types: "none"
         setup: install/bin/thisepic.sh
