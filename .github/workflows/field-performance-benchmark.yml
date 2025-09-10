@@ -45,7 +45,7 @@ jobs:
         compiler: [gcc, clang]
         optimization: [O2, O3]
       fail-fast: false
-    
+
     steps:
     - name: Checkout code
       uses: actions/checkout@v4
@@ -65,7 +65,7 @@ jobs:
           echo "Setting up build environment..."
           export CC=${{ matrix.compiler }}
           export CXX=${{ matrix.compiler == 'gcc' && 'g++' || 'clang++' }}
-          
+
           # Build with specific optimization level
           cmake -B build -S . \
             -DCMAKE_INSTALL_PREFIX=${{ github.workspace }}/install \
@@ -108,18 +108,18 @@ jobs:
         setup: install/bin/thisepic.sh
         run: |
           export PYTHONPATH=$HOME/.local/lib/python3.11/site-packages:$PYTHONPATH
-          
+
           echo "Running field performance benchmark..."
           echo "Compiler: ${{ matrix.compiler }}, Optimization: ${{ matrix.optimization }}"
           echo "Samples: ${{ steps.benchmark-params.outputs.samples }}"
-          
+
           # Run benchmark
           python3 scripts/benchmarks/field_performance_benchmark.py \
             --detector-path ${{ github.workspace }} \
             --output-dir benchmark_results \
             --samples $(echo "${{ steps.benchmark-params.outputs.samples }}" | tr ',' ' ') \
             --verbose
-          
+
           # Add compiler and optimization info to results
           cd benchmark_results
           jq --arg compiler "${{ matrix.compiler }}" \
@@ -137,36 +137,36 @@ jobs:
         run: |
           if [ -f baseline/field_benchmark_results.json ]; then
             echo "Comparing performance with baseline..."
-            
+
             # Create comparison script
             cat > compare_performance.py << 'EOF'
           import json
           import sys
           from pathlib import Path
-          
+
           def compare_results(baseline_file, current_file, threshold=0.1):
               """Compare benchmark results and check for performance regressions."""
-              
+
               with open(baseline_file) as f:
                   baseline = json.load(f)
               with open(current_file) as f:
                   current = json.load(f)
-              
+
               comparison = {
                   'performance_changes': {},
                   'regressions': [],
                   'improvements': []
               }
-              
+
               # Compare performance summaries
               baseline_perf = baseline.get('performance_summary', {})
               current_perf = current.get('performance_summary', {})
-              
+
               for config in baseline_perf:
                   if config in current_perf:
                       baseline_rate = baseline_perf[config].get('avg_evaluations_per_second', 0)
                       current_rate = current_perf[config].get('avg_evaluations_per_second', 0)
-                      
+
                       if baseline_rate > 0:
                           change = (current_rate - baseline_rate) / baseline_rate
                           comparison['performance_changes'][config] = {
@@ -176,29 +176,29 @@ jobs:
                               'is_regression': change < -threshold,
                               'is_improvement': change > threshold
                           }
-                          
+
                           if change < -threshold:
                               comparison['regressions'].append(config)
                           elif change > threshold:
                               comparison['improvements'].append(config)
-              
+
               return comparison
-          
+
           if __name__ == '__main__':
               baseline_file = sys.argv[1]
-              current_file = sys.argv[2] 
+              current_file = sys.argv[2]
               threshold = float(sys.argv[3]) if len(sys.argv) > 3 else 0.1
-              
+
               comparison = compare_results(baseline_file, current_file, threshold)
-              
+
               # Save comparison results
               with open('performance_comparison.json', 'w') as f:
                   json.dump(comparison, f, indent=2)
-              
+
               # Print summary
               print("Performance Comparison Summary:")
               print("=" * 40)
-              
+
               if comparison['regressions']:
                   print(f"⚠️  Performance regressions detected in: {', '.join(comparison['regressions'])}")
                   for config in comparison['regressions']:
@@ -212,9 +212,9 @@ jobs:
                       print(f"  {config}: {change['change_percent']:.1f}% faster")
               else:
                   print("✅ No significant performance changes detected")
-          
+
           EOF
-            
+
             python3 compare_performance.py \
               baseline/field_benchmark_results.json \
               benchmark_results/field_benchmark_results.json \
@@ -229,35 +229,35 @@ jobs:
         platform-release: "eic_xl:nightly"
         run: |
           cd benchmark_results
-          
+
           # Create detailed markdown report
           cat > performance_report.md << 'EOF'
           # Field Performance Benchmark Report
-          
-          **Configuration**: ${{ matrix.compiler }}-${{ matrix.optimization }}  
-          **Commit**: ${{ github.sha }}  
-          **Branch**: ${{ github.ref_name }}  
+
+          **Configuration**: ${{ matrix.compiler }}-${{ matrix.optimization }}
+          **Commit**: ${{ github.sha }}
+          **Branch**: ${{ github.ref_name }}
           **Timestamp**: $(date -u +"%Y-%m-%d %H:%M:%S UTC")
-          
+
           ## Summary
-          
+
           EOF
-          
+
           # Extract key metrics and add to report
           python3 -c "
           import json
           with open('field_benchmark_results.json') as f:
               data = json.load(f)
-          
+
           summary = data.get('performance_summary', {})
-          
+
           print('| Configuration | Avg Evaluations/sec | Avg Time/eval (ns) | Scalability Score |')
           print('|---------------|--------------------|--------------------|-------------------|')
-          
+
           for config, metrics in summary.items():
               print(f'| {config} | {metrics.get(\"avg_evaluations_per_second\", 0):.0f} | {metrics.get(\"avg_time_per_evaluation_ns\", 0):.1f} | {metrics.get(\"scalability_score\", 0):.3f} |')
           " >> performance_report.md
-          
+
           echo "" >> performance_report.md
           echo "## Detailed Results" >> performance_report.md
           echo "" >> performance_report.md
@@ -286,21 +286,21 @@ jobs:
       with:
         script: |
           const fs = require('fs');
-          
+
           try {
             // Read performance report
             let reportContent = '## Field Performance Benchmark Results\\n\\n';
             reportContent += `**Configuration**: ${{ matrix.compiler }}-${{ matrix.optimization }}\\n\\n`;
-            
+
             if (fs.existsSync('benchmark_results/performance_report.md')) {
               const report = fs.readFileSync('benchmark_results/performance_report.md', 'utf8');
               reportContent += report;
             }
-            
+
             // Add comparison results if available
             if (fs.existsSync('performance_comparison.json')) {
               const comparison = JSON.parse(fs.readFileSync('performance_comparison.json', 'utf8'));
-              
+
               if (comparison.regressions && comparison.regressions.length > 0) {
                 reportContent += '\\n### ⚠️ Performance Regressions Detected\\n\\n';
                 for (const config of comparison.regressions) {
@@ -315,21 +315,21 @@ jobs:
                 }
               }
             }
-            
+
             reportContent += '\\n📊 Full benchmark results and plots available in workflow artifacts.';
-            
+
             // Find existing comment and update or create new one
             const comments = await github.rest.issues.listComments({
               owner: context.repo.owner,
               repo: context.repo.repo,
               issue_number: context.issue.number,
             });
-            
-            const botComment = comments.data.find(comment => 
-              comment.user.login === 'github-actions[bot]' && 
+
+            const botComment = comments.data.find(comment =>
+              comment.user.login === 'github-actions[bot]' &&
               comment.body.includes('Field Performance Benchmark Results')
             );
-            
+
             if (botComment) {
               await github.rest.issues.updateComment({
                 owner: context.repo.owner,
@@ -353,7 +353,7 @@ jobs:
     runs-on: ubuntu-latest
     if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
     needs: field-performance-benchmark
-    
+
     steps:
     - name: Checkout code
       uses: actions/checkout@v4
@@ -375,7 +375,7 @@ jobs:
         echo "Tracking long-term performance trends for EPIC field evaluation." >> trend_report.md
         echo "" >> trend_report.md
         echo "Generated: $(date -u)" >> trend_report.md
-        
+
         # This would contain more sophisticated trend analysis
         # For now, just a placeholder for the framework
 

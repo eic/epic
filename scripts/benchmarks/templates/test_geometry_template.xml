@@ -12,7 +12,7 @@
   <define>
     <constant name="world_side" value="10*m"/>
     <constant name="world_x" value="world_side"/>
-    <constant name="world_y" value="world_side"/> 
+    <constant name="world_y" value="world_side"/>
     <constant name="world_z" value="world_side"/>
   </define>
 
