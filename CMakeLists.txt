@@ -46,6 +46,7 @@ include(GNUInstallDirs)
 # Dependencies
 find_package(DD4hep 1.27 REQUIRED COMPONENTS DDCore DDRec)
 find_package(fmt REQUIRED)
+find_package(covfie REQUIRED)
 
 #-----------------------------------------------------------------------------------
 set(a_lib_name ${PROJECT_NAME})
