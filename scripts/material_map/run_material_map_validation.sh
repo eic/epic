@@ -154,7 +154,8 @@ echo "::group::----MAPPING------------"
 #         material-maps_tracks.root(recorded steps from geantino, for validation purpose)
 sed -i 's/acts\.logging\.INFO/acts.logging.VERBOSE/g' Examples/Scripts/Python/material_mapping.py
 sed -i 's/navigator = Navigator($/&level=acts.logging.VERBOSE,/' Examples/Scripts/Python/material_mapping.py
-sed -i 's/propagator = Propagator(stepper, navigator/&, loglevel=acts.logging.VERBOSE/' Examples/Scripts/Python/material_mapping.py
+sed -i 's/propagator = Propagator(stepper, navigator)$/propagator = Propagator(stepper, navigator, loglevel=acts.logging.VERBOSE)/' Examples/Scripts/Python/material_mapping.py
+set -o pipefail
 python material_mapping_epic.py --xmlFile ${DETECTOR_PATH}/${DETECTOR_CONFIG}.xml --geoFile ${geoFile} --matFile ${matFile} | tail -n 5000
 echo "::endgroup::"
 
