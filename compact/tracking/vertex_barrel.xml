@@ -27,7 +27,7 @@
     </documentation>
 
     <constant name="VertexBarrelEnvelope_length"    value="VertexTrackingRegion_length"/>
-    <constant name="VertexBarrelLayer_length"       value="VertexBarrelMod_length + 1*um"/>
+    <constant name="VertexBarrelLayer_length"       value="VertexBarrelMod_length"/>
 
     <constant name="VertexBarrelLayer_thickness"    value="0.2*cm"/>
     <constant name="VertexBarrelMod_thickness"      value="0.1*cm"/>

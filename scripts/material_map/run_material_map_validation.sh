@@ -11,7 +11,7 @@ if [[ -z ${DETECTOR_PATH} ]] ; then
 fi
 
 # Download required Acts files
-ACTS_VERSION="v36.3.2"
+ACTS_VERSION="v39.2.0"
 ACTS_URL="https://github.com/acts-project/acts/raw/"
 ACTS_FILES=(
   "Examples/Scripts/Python/geometry.py"
@@ -42,7 +42,7 @@ diff -aru a/Examples/Scripts/MaterialMapping/Mat_map.C b/Examples/Scripts/Materi
 
      // 2D map for Validation input
      TCanvas *VM = new TCanvas("VM","Validation Map") ;
--    Val_file->Draw("mat_y:mat_z","fabs(mat_x)<1");
+-    Val_file->Draw("mat_y:mat_z","std::abs(mat_x)<1");
 +    Val_file->Draw("sqrt(mat_x**2+mat_y**2):mat_z>>mat_map1","(mat_z>-5000)&(mat_z<8000)");
 +    VM->SetGrid();
 
@@ -71,6 +71,18 @@ export ACTS_SEQUENCER_DISABLE_FPEMON=1
 # Default arguments
 nevents=1000
 nparticles=5000
+
+function print_the_help {
+  echo "USAGE:    [--nevents <int>] [--nparticles <int>]"
+  echo "OPTIONAL ARGUMENTS:"
+  echo "          --nevents       Number of events (default: $nevents)"
+  echo "          --nparticles    Number of particles per event (default: $nparticles)"
+  echo "          -h,--help     Print this message"
+  echo ""
+  echo "  Run material map validation."
+  exit
+}
+
 while [[ $# -gt 1 ]]
 do
   key="$1"
@@ -104,6 +116,7 @@ propFile=propagation_material
 echo "::group::----GEANTINO SCAN------"
 # output geant4_material_tracks.root
 # The result of the geantino scan will be a root file containing material tracks. Those contain the direction and production vertex of the geantino, the total material accumulated and all the interaction points in the detector.
+sed -i 's/seed=228/seed=1306/' Examples/Scripts/Python/material_recording.py
 python material_recording_epic.py -i ${DETECTOR_PATH}/${DETECTOR_CONFIG}.xml -n ${nevents} -t ${nparticles} -o ${recordingFile}
 echo "::endgroup::"
 
@@ -127,11 +140,24 @@ mkdir -p plots
 python Examples/Scripts/MaterialMapping/GeometryVisualisationAndMaterialHandling.py --geometry ${geoFile}
 echo "::endgroup::"
 
+echo "::group::----MAPPING Debugging-----"
+echo "Volumes by name:"
+jq -r '.Volumes.entries[] | "vol=\(.volume): \(.value.NAME)"' geometry-map.json
+echo "Volume surfaces:"
+jq -r '.Surfaces.entries[] | select(.boundary != null) | "vol=\(.volume)|bnd=\(.boundary): \(.value.type) \(.value.bounds.type) \(.value.bounds.values) rot=\(.value.transform.rotation) pos=\(.value.transform.translation)"' geometry-map.json
+echo "Layer surfaces:"
+jq -r '.Surfaces.entries[] | select(.volume < 40 and .layer != null) | "vol=\(.volume)|lay=\(.layer): \(.value.type) \(.value.bounds.type) \(.value.bounds.values) rot=\(.value.transform.rotation) pos=\(.value.transform.translation)"' geometry-map.json
+echo "::endgroup::"
+
 echo "::group::----MAPPING------------"
 # input: geant4_material_tracks.root, geometry-map.json
 # output: material-maps.json or cbor. This is the material map that you want to provide to EICrecon, i.e.  -Pacts:MaterialMap=XXX  .Please --matFile to specify the name and type
 #         material-maps_tracks.root(recorded steps from geantino, for validation purpose)
-python material_mapping_epic.py --xmlFile ${DETECTOR_PATH}/${DETECTOR_CONFIG}.xml --geoFile ${geoFile} --matFile ${matFile}
+sed -i 's/acts\.logging\.INFO/acts.logging.VERBOSE/g' Examples/Scripts/Python/material_mapping.py
+sed -i 's/navigator = Navigator($/&level=acts.logging.VERBOSE,/' Examples/Scripts/Python/material_mapping.py
+sed -i 's/propagator = Propagator(stepper, navigator)$/propagator = Propagator(stepper, navigator, loglevel=acts.logging.VERBOSE)/' Examples/Scripts/Python/material_mapping.py
+set -o pipefail
+python material_mapping_epic.py --xmlFile ${DETECTOR_PATH}/${DETECTOR_CONFIG}.xml --geoFile ${geoFile} --matFile ${matFile} | tail -n 5000
 echo "::endgroup::"
 
 echo "::group::----Prepare validation rootfile--------"
