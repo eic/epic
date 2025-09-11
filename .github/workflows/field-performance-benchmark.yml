@@ -80,7 +80,7 @@ jobs:
         run: |
           python -m venv .venv
           source .venv/bin/activate
-          pip install --user numpy matplotlib psutil
+          pip install numpy matplotlib psutil
 
     - name: Determine benchmark parameters
       id: benchmark-params
