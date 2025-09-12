@@ -105,7 +105,12 @@ The unused IDs below are saved for future use.
     <constant name="TrackerSubAssembly_8_ID"      value="48"/>
     <constant name="TrackerSubAssembly_9_ID"      value="49"/>
 
-    <constant name="TrackerCompositeBarrel_0_ID"  value="50"/>
+    <constant name="SVT_IB_Support_0_ID"          value="50"/>
+    <constant name="SVT_IB_Support_1_ID"          value="51"/>
+    <constant name="SVT_IB_Support_2_ID"          value="52"/>
+    <constant name="SVT_IB_Support_3_ID"          value="53"/>
+
+    <!-- <constant name="TrackerCompositeBarrel_0_ID"  value="50"/>
     <constant name="TrackerCompositeEndcapN_0_ID" value="51"/>
     <constant name="TrackerCompositeEndcapN_1_ID" value="52"/>
     <constant name="TrackerCompositeEndcapN_2_ID" value="53"/>
@@ -113,7 +118,7 @@ The unused IDs below are saved for future use.
     <constant name="TrackerCompositeEndcapP_0_ID" value="55"/>
     <constant name="TrackerCompositeEndcapP_1_ID" value="56"/>
     <constant name="TrackerCompositeEndcapP_2_ID" value="57"/>
-    <constant name="TrackerCompositeEndcapP_3_ID" value="58"/>
+    <constant name="TrackerCompositeEndcapP_3_ID" value="58"/> -->
 
     <constant name="TrackerBarrel_0_ID"           value="59"/>
     <constant name="TrackerBarrel_1_ID"           value="60"/>
