@@ -75,7 +75,7 @@ export ACTS_SEQUENCER_DISABLE_FPEMON=1
 #   nparticles=5000
 # but reduced to get the job to complete...
 nevents=100
-nparticles=100
+nparticles=500
 
 function print_the_help {
   echo "USAGE:    [--nevents <int>] [--nparticles <int>]"
