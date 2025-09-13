@@ -6,7 +6,7 @@
     <comment>
          This version is for the flat_OB geometry - a more accurate model with carbon fiber braces to
          reproduce the peaks in the material thickness scan.
-         
+
          Presentation: https://indico.bnl.gov/event/29542
 
          Edited by Aditya Yalavatti and Sam Henry, University of Oxford
@@ -49,10 +49,10 @@
     <constant name="SiBarrel2_radius_castellation" value="6*mm" />
     <constant name="SiBarrel1_radius_offset" value="0*mm" />
     <constant name="SiBarrel2_radius_offset" value="0*mm" />
-    
-    
-        
-    <constant name="SiBarrelBrace_width" value="10*mm" /> 
+
+
+
+    <constant name="SiBarrelBrace_width" value="10*mm" />
     <constant name="SiBarrelBrace_thickness" value="2*mm" />
     <constant name="SiBarrelBrace_StaveWidthFraction" value="0.9" />
     <constant name="SiBarrelBrace_Position_X" value="-1*mm" />
