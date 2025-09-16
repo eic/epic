@@ -33,6 +33,7 @@
 
     <comment> Inner MPGD unsegmented barrel </comment>
     <constant name="InnerMPGDBarrel_rmin"            value="550*mm"/>
+    <constant name="InnerMPGDBarrel_rmax"            value="605*mm"/>
     <constant name="InnerMPGDBarrel_dz"              value="0"/>
     <constant name="InnerMPGDBarrel_zmin"            value="1025*mm"/> <comment> negative z </comment>
     <constant name="InnerMPGDBarrel_zmax"            value="1450*mm"/> <comment> positive z </comment>
