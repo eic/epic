@@ -10,9 +10,10 @@
          
          15 September 2025, Sam Henry, University of Oxford
     </comment>
+   
 
-    <constant name="SiBarrelMod1_rmin" value="SiBarrel1_rmin - 1*mm" />
-    <constant name="SiBarrelMod2_rmin" value="SiBarrel2_rmin + 1*mm" />
+    <constant name="SiBarrelMod1_rmin" value="SiBarrel1_rmin + 1*mm" />
+    <constant name="SiBarrelMod2_rmin" value="SiBarrel2_rmin + 1*cm" />
     <constant name="SiBarrelMod_angle" value="SiBarrel_angle" />
     <constant name="SiBarrelMod_dz" value="SiBarrel_dz" />
 
@@ -26,28 +27,28 @@
     <constant name="SiBarrelMod1Frame_height" value="0.8*cm" />
     <constant name="SiBarrelMod2Frame_height" value="0.8*cm" />
     <constant name="SiBarrelStave1_width" value="3.8*cm" />
-    <constant name="SiBarrelStave2_width" value="3.8*cm" />
+    <constant name="SiBarrelStave2_width" value="3.9*cm" />
 
-    <constant name="SiBarrelMod1_length"        value="2 * SiBarrelMod1_rmin / tan(SiBarrelMod_angle) - SiBarrel_dz - 12*mm"/>
+    <constant name="SiBarrelMod1_length"        value="2 * SiBarrelMod1_rmin / tan(SiBarrelMod_angle) - SiBarrel_dz "/>
     <comment> 84cm=2*42cm is the engineer max </comment>
-    <constant name="SiBarrelMod2_length" value="84*cm - 40*mm" />
+    <constant name="SiBarrelMod2_length" value="84*cm " />
 
     <constant name="SiBarrelLayer1_length" value="SiBarrelMod1_length + 1*um" />
     <constant name="SiBarrelLayer2_length" value="SiBarrelMod2_length + 1*um" />
     <constant name="SiBarrelEnvelope_length" value="SiBarrelLayer2_length + 1*um" />
 
     <constant name="SiBarrelLayer_thickness" value="3.0*cm" />
-    <constant name="SiBarrelLayer1_rmin" value="SiBarrelMod1_rmin - 6*mm " />
+    <constant name="SiBarrelLayer1_rmin" value="SiBarrelMod1_rmin" />
     <constant name="SiBarrelLayer1_rmax" value="SiBarrelLayer1_rmin + SiBarrelLayer_thickness" />
-    <constant name="SiBarrelLayer2_rmin" value="SiBarrelMod2_rmin - 10*mm" />
+    <constant name="SiBarrelLayer2_rmin" value="SiBarrelMod2_rmin" />
     <constant name="SiBarrelLayer2_rmax" value="SiBarrelLayer2_rmin + SiBarrelLayer_thickness" />
 
     <constant name="SiBarrelStave1_count" value="46" />
     <constant name="SiBarrelStave2_count" value="70" />
     <constant name="SiBarrel1_radius_castellation" value="6*mm" />
     <constant name="SiBarrel2_radius_castellation" value="6*mm" />
-    <constant name="SiBarrel1_radius_offset" value="0*mm" />
-    <constant name="SiBarrel2_radius_offset" value="0*mm" />
+    <constant name="SiBarrel1_radius_offset" value="5.5*mm" />
+    <constant name="SiBarrel2_radius_offset" value="10.0*mm" />
         
     <constant name="SiBarrelBrace_width" value="10*mm" /> 
     <constant name="SiBarrelBrace_thickness" value="2*mm" />
@@ -61,7 +62,7 @@
     <constant name="SiBarrel2_Brace1_Position_Y" value="11.3*cm" />
     <constant name="SiBarrel2_Brace2_Position_Y" value="21.6*cm" />
     <constant name="SiBarrel2_Brace3_Position_Y" value="32.8*cm" />
-    <constant name="SiBarrel2_Brace4_Position_Y" value="39.5*cm" />
+    <constant name="SiBarrel2_Brace4_Position_Y" value="41.0*cm" />
 
 <constant name="SiBarrelSiliconHeight" value="1*mm" />
 <constant name="SiBarrel1_SiliconTilt" value="atan(2*SiBarrelSiliconHeight/(SiBarrelStave1_width - SiBarrelSiliconGap_width))" />
