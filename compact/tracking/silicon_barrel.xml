@@ -3,52 +3,77 @@
 
 <lccdd>
   <define>
-    <comment>
-      Main parameters - this is for the more realistic June 2022 design
+ <comment>
+         This version is for the modular_OB geometry - an improvement on the flat_OB model
+         This version divides the active silicon surface into modules, placed on the top or bottom of
+         the staves, in a traingular shape to give a better approximation to the surfaced surface
+         
+         15 September 2025, Sam Henry, University of Oxford
     </comment>
 
-    <constant name="SiBarrelMod1_rmin"             value="SiBarrel1_rmin+1*mm"/>
-    <constant name="SiBarrelMod2_rmin"             value="SiBarrel2_rmin+1*cm"/>
-    <constant name="SiBarrelMod_angle"             value="SiBarrel_angle"/>
-    <constant name="SiBarrelMod_dz"                value="SiBarrel_dz"/>
+    <constant name="SiBarrelMod1_rmin" value="SiBarrel1_rmin - 1*mm" />
+    <constant name="SiBarrelMod2_rmin" value="SiBarrel2_rmin + 1*mm" />
+    <constant name="SiBarrelMod_angle" value="SiBarrel_angle" />
+    <constant name="SiBarrelMod_dz" value="SiBarrel_dz" />
 
-    <constant name="SiBarrelSensor_thickness"      value="40*um"/>
+    <constant name="SiBarrelSensor_thickness" value="40*um" />
+    <constant name="SiBarrelSiliconGap_width" value="1.14*mm" />
 
-    <constant name="SiBarrelMod1Service_thickness" value="0.15*mm"/>
-    <constant name="SiBarrelMod2Service_thickness" value="0.37*mm"/>
-    <constant name="SiBarrelMod1Frame_thickness"   value="0.06*mm"/>
-    <constant name="SiBarrelMod2Frame_thickness"   value="0.12*mm"/>
-    <constant name="SiBarrelMod1Frame_height"      value="0.8*cm"/>
-    <constant name="SiBarrelMod2Frame_height"      value="0.8*cm"/>
-    <constant name="SiBarrelStave1_width"          value="4*cm"/>
-    <constant name="SiBarrelStave2_width"          value="4*cm"/>
+    <constant name="SiBarrelMod1Service_thickness" value="0.07875*mm" />
+    <constant name="SiBarrelMod2Service_thickness" value="0.066045*mm" />
+    <constant name="SiBarrelMod1Frame_thickness" value="0.06*mm" />
+    <constant name="SiBarrelMod2Frame_thickness" value="0.12*mm" />
+    <constant name="SiBarrelMod1Frame_height" value="0.8*cm" />
+    <constant name="SiBarrelMod2Frame_height" value="0.8*cm" />
+    <constant name="SiBarrelStave1_width" value="3.8*cm" />
+    <constant name="SiBarrelStave2_width" value="3.8*cm" />
 
-    <comment>
-      Actual parametrization
-    </comment>
-
-    <constant name="SiBarrelMod1_length"        value="2 * SiBarrelMod1_rmin / tan(SiBarrelMod_angle) - SiBarrel_dz"/>
+    <constant name="SiBarrelMod1_length"        value="2 * SiBarrelMod1_rmin / tan(SiBarrelMod_angle) - SiBarrel_dz - 12*mm"/>
     <comment> 84cm=2*42cm is the engineer max </comment>
-    <constant name="SiBarrelMod2_length"        value="84*cm"/>
+    <constant name="SiBarrelMod2_length" value="84*cm - 40*mm" />
 
-    <constant name="SiBarrelLayer1_length"      value="SiBarrelMod1_length + 1*um"/>
-    <constant name="SiBarrelLayer2_length"      value="SiBarrelMod2_length + 1*um"/>
-    <constant name="SiBarrelEnvelope_length"    value="SiBarrelLayer2_length + 1*um" />
+    <constant name="SiBarrelLayer1_length" value="SiBarrelMod1_length + 1*um" />
+    <constant name="SiBarrelLayer2_length" value="SiBarrelMod2_length + 1*um" />
+    <constant name="SiBarrelEnvelope_length" value="SiBarrelLayer2_length + 1*um" />
 
-    <constant name="SiBarrelLayer_thickness"    value="3.0*cm"/>
-    <constant name="SiBarrelLayer1_rmin"        value="SiBarrelMod1_rmin "/>
-    <constant name="SiBarrelLayer1_rmax"        value="SiBarrelLayer1_rmin + SiBarrelLayer_thickness"/>
-    <constant name="SiBarrelLayer2_rmin"        value="SiBarrelMod2_rmin "/>
-    <constant name="SiBarrelLayer2_rmax"        value="SiBarrelLayer2_rmin + SiBarrelLayer_thickness"/>
+    <constant name="SiBarrelLayer_thickness" value="3.0*cm" />
+    <constant name="SiBarrelLayer1_rmin" value="SiBarrelMod1_rmin - 6*mm " />
+    <constant name="SiBarrelLayer1_rmax" value="SiBarrelLayer1_rmin + SiBarrelLayer_thickness" />
+    <constant name="SiBarrelLayer2_rmin" value="SiBarrelMod2_rmin - 10*mm" />
+    <constant name="SiBarrelLayer2_rmax" value="SiBarrelLayer2_rmin + SiBarrelLayer_thickness" />
 
-    <constant name="SiBarrelStaveTilt_angle"     value="3.0*degree"/>
-    <constant name="SiBarrelStave1_count"        value="floor(180.*degree/asin(SiBarrelStave1_width*cos(SiBarrelStaveTilt_angle)/2/SiBarrelMod1_rmin))+2"/>
-    <constant name="SiBarrelStave2_count"        value="floor(180.*degree/asin(SiBarrelStave2_width*cos(SiBarrelStaveTilt_angle)/2/SiBarrelMod2_rmin))+2"/>
+    <constant name="SiBarrelStave1_count" value="46" />
+    <constant name="SiBarrelStave2_count" value="70" />
+    <constant name="SiBarrel1_radius_castellation" value="6*mm" />
+    <constant name="SiBarrel2_radius_castellation" value="6*mm" />
+    <constant name="SiBarrel1_radius_offset" value="0*mm" />
+    <constant name="SiBarrel2_radius_offset" value="0*mm" />
+        
+    <constant name="SiBarrelBrace_width" value="10*mm" /> 
+    <constant name="SiBarrelBrace_thickness" value="2*mm" />
+    <constant name="SiBarrelBrace_StaveWidthFraction" value="0.9" />
+    <constant name="SiBarrelBrace_Position_X" value="-1*mm" />
+
+    <constant name="SiBarrel1_Brace0_Position_Y" value="0.0" />
+    <constant name="SiBarrel1_Brace1_Position_Y" value="13.20*cm" />
+    <constant name="SiBarrel1_Brace2_Position_Y" value="24.0*cm" />
+    <constant name="SiBarrel2_Brace0_Position_Y" value="0.0" />
+    <constant name="SiBarrel2_Brace1_Position_Y" value="11.3*cm" />
+    <constant name="SiBarrel2_Brace2_Position_Y" value="21.6*cm" />
+    <constant name="SiBarrel2_Brace3_Position_Y" value="32.8*cm" />
+    <constant name="SiBarrel2_Brace4_Position_Y" value="39.5*cm" />
+
+<constant name="SiBarrelSiliconHeight" value="1*mm" />
+<constant name="SiBarrel1_SiliconTilt" value="atan(2*SiBarrelSiliconHeight/(SiBarrelStave1_width - SiBarrelSiliconGap_width))" />
+<constant name="SiBarrel2_SiliconTilt" value="atan(2*SiBarrelSiliconHeight/(SiBarrelStave2_width - SiBarrelSiliconGap_width))" />
+<constant name="SiBarrel1_SiliconWidth" value="SiBarrelSiliconHeight/sin(SiBarrel1_SiliconTilt)" />
+<constant name="SiBarrel2_SiliconWidth" value="SiBarrelSiliconHeight/sin(SiBarrel2_SiliconTilt)" />
+
   </define>
 
   <detectors>
     <documentation level="5">
-        ### Actual detectors
+      ### Actual detectors
     </documentation>
     <detector
       id="TrackerBarrel_0_ID"
@@ -56,58 +81,228 @@
       type="epic_TrackerBarrel"
       readout="SiBarrelHits"
       insideTrackingVolume="true">
-      <type_flags type="DetType_TRACKER + DetType_BARREL"/>
+      <type_flags type="DetType_TRACKER + DetType_BARREL" />
       <dimensions
         rmin="SiBarrelLayer1_rmin"
         rmax="SiBarrelLayer1_rmax"
         length="SiBarrelLayer1_length" />
       <comment>Silicon Barrel Modules</comment>
       <module name="Module1" vis="TrackerLayerVis">
-        <frame material="CarbonFiber"
-               vis="TrackerSupportVis"
-               width="SiBarrelStave1_width"
-               height="SiBarrelMod1Frame_height"
-               length="SiBarrelMod1_length"
-               thickness="SiBarrelMod1Frame_thickness" />
-        <module_component name="ITS3"
-                          material="Silicon"
-                          sensitive="true"
-                          width="SiBarrelStave1_width"
-                          length="SiBarrelMod1_length"
-                          thickness="SiBarrelSensor_thickness"
-                          vis="TrackerLayerVis" />
+      
+        <module_component name="Si0C"
+          material="Silicon"
+          sensitive="false"
+          width="SiBarrelSiliconGap_width"
+          length="SiBarrelMod1_length/4"
+          thickness="SiBarrelSensor_thickness*2.7"
+          vis="TrackerLayerVis"> <!-- multiply thickness by 2.7 this increases thickness by 0.00034 -->
+        <position x="0" y="-3*SiBarrelMod1_length/8" z="0" />
+        </module_component>
+     
+        <module_component name="Si2C"
+          material="Silicon"
+          sensitive="false"
+          width="SiBarrelSiliconGap_width"
+          length="SiBarrelMod1_length/4"
+          thickness="SiBarrelSensor_thickness*2.7"
+          vis="TrackerLayerVis"> <!-- multiply thickness by 2.7 this increases thickness by 0.00034 -->
+        <position x="0" y="SiBarrelMod1_length/8" z="-SiBarrelSensor_thickness*2.7" />
+        </module_component>
+      
+        <module_component name="Si0R"
+          material="Silicon"
+          sensitive="true"
+          width="SiBarrel1_SiliconWidth"
+          length="SiBarrelMod1_length/4"
+          thickness="SiBarrelSensor_thickness*2.7"
+          vis="TrackerLayerVis"> <!-- multiply thickness by 2.7 this increases thickness by 0.00034 -->
+          <position x="SiBarrelSiliconGap_width/2 + SiBarrel1_SiliconWidth/2" y="-3*SiBarrelMod1_length/8" z="-SiBarrelSensor_thickness*2.7 + SiBarrelSiliconHeight/2" />
+          <rotation x="0" y="-SiBarrel1_SiliconTilt" z="0" />
+        </module_component>
+        
+         <module_component name="Si0L"
+          material="Silicon"
+          sensitive="true"
+          width="SiBarrel1_SiliconWidth"
+          length="SiBarrelMod1_length/4"
+          thickness="SiBarrelSensor_thickness*2.7"
+          vis="TrackerLayerVis"> <!-- multiply thickness by 2.7 this increases thickness by 0.00034 -->
+          <position x="-SiBarrelSiliconGap_width/2 - SiBarrel1_SiliconWidth/2" y="-3*SiBarrelMod1_length/8" z="-SiBarrelSensor_thickness*2.7 " />
+          <rotation x="0" y="SiBarrel1_SiliconTilt" z="0" />
+        </module_component>
+      
+        <module_component name="Si2R"
+          material="Silicon"
+          sensitive="true"
+          width="SiBarrel1_SiliconWidth"
+          length="SiBarrelMod1_length/4"
+          thickness="SiBarrelSensor_thickness*2.7"
+          vis="TrackerLayerVis"> <!-- multiply thickness by 2.7 this increases thickness by 0.00034 -->
+          <position x="SiBarrelSiliconGap_width/2 + SiBarrel1_SiliconWidth/2" y="SiBarrelMod1_length/8" z="-SiBarrelSensor_thickness*2.7" />
+          <rotation x="0" y="-SiBarrel1_SiliconTilt" z="0" />
+        </module_component>
+     
+        <module_component name="Si2L"
+          material="Silicon"
+          sensitive="true"
+          width="SiBarrel1_SiliconWidth"
+          length="SiBarrelMod1_length/4"
+          thickness="SiBarrelSensor_thickness*2.7"
+          vis="TrackerLayerVis"> <!-- multiply thickness by 2.7 this increases thickness by 0.00034 -->
+        <position x="-SiBarrelSiliconGap_width/2 - SiBarrel1_SiliconWidth/2" y="SiBarrelMod1_length/8" z="-SiBarrelSensor_thickness*2.7" />
+           <rotation x="0" y="SiBarrel1_SiliconTilt" z="0" />
+        </module_component>
+
+        <module_component name="Frame"
+          material="CarbonFiber"
+          sensitive="false"
+          width="SiBarrelStave1_width"
+          length="SiBarrelMod1_length"
+          thickness="SiBarrelMod1Frame_thickness"
+          vis="TrackerSupportVis" >
+          <position x="0" y="0" z="SiBarrelSiliconHeight/2" />
+        </module_component>
+
+        <module_component name="Brace" material="CarbonFiber"
+          width="SiBarrelStave1_width*SiBarrelBrace_StaveWidthFraction"
+          thickness="SiBarrelBrace_thickness"
+          length="SiBarrelBrace_width"
+          vis="TrackerSupportVis">
+          <position x="SiBarrelBrace_Position_X" y="SiBarrel1_Brace0_Position_Y" z="0" />
+        </module_component>
+
+        <module_component name="Brace" material="CarbonFiber"
+          width="SiBarrelStave1_width*SiBarrelBrace_StaveWidthFraction"
+          thickness="SiBarrelBrace_thickness"
+          length="SiBarrelBrace_width"
+          vis="TrackerSupportVis">
+          <position x="SiBarrelBrace_Position_X" y="SiBarrel1_Brace1_Position_Y" z=" - SiBarrelBrace_thickness" />
+        </module_component>
+
+        <module_component name="Brace" material="CarbonFiber"
+          width="SiBarrelStave1_width*SiBarrelBrace_StaveWidthFraction"
+          thickness="SiBarrelBrace_thickness"
+          length="SiBarrelBrace_width"
+          vis="TrackerSupportVis">
+          <position x="SiBarrelBrace_Position_X" y="-SiBarrel1_Brace1_Position_Y" z="- SiBarrelBrace_thickness" />
+        </module_component>
+
+        <module_component name="Brace" material="CarbonFiber"
+          width="SiBarrelStave1_width*SiBarrelBrace_StaveWidthFraction"
+          thickness="SiBarrelBrace_thickness"
+          length="SiBarrelBrace_width"
+          vis="TrackerSupportVis">
+          <position x="SiBarrelBrace_Position_X" y="SiBarrel1_Brace2_Position_Y" z="- SiBarrelBrace_thickness" />
+        </module_component>
+
+        <module_component name="Brace" material="CarbonFiber"
+          width="SiBarrelStave1_width*SiBarrelBrace_StaveWidthFraction"
+          thickness="SiBarrelBrace_thickness"
+          length="SiBarrelBrace_width"
+          vis="TrackerSupportVis">
+          <position x="SiBarrelBrace_Position_X" y="-SiBarrel1_Brace2_Position_Y" z=" - SiBarrelBrace_thickness" />
+        </module_component>
+
         <module_component name="Service"
-                          material="Aluminum"
-                          sensitive="false"
-                          width="SiBarrelStave1_width"
-                          length="SiBarrelMod1_length"
-                          thickness="SiBarrelMod1Service_thickness"
-                          vis="TrackerLayerVis"/>
+          material="Kapton"
+          sensitive="false"
+          width="SiBarrelStave1_width"
+          length="SiBarrelMod1_length"
+          thickness="SiBarrelMod1Service_thickness"
+          vis="TrackerLayerVis"/>
+
+
+        <module_component name="Si1R"
+          material="Silicon"
+          sensitive="true"
+          width="SiBarrel1_SiliconWidth"
+          length="SiBarrelMod1_length/4"
+          thickness="SiBarrelSensor_thickness*2.7"
+          vis="TrackerLayerVis"> <!-- multiply thickness by 2.7 this increases thickness by 0.00034 -->
+          <position x="SiBarrelSiliconGap_width/2 + SiBarrel1_SiliconWidth/2" y="-SiBarrelMod1_length/8" z="SiBarrelSiliconHeight/2" />
+          <rotation x="0" y="SiBarrel1_SiliconTilt" z="0" />
+        </module_component>
+
+        <module_component name="Si1L"
+          material="Silicon"
+          sensitive="true"
+          width="SiBarrel1_SiliconWidth"
+          length="SiBarrelMod1_length/4"
+          thickness="SiBarrelSensor_thickness*2.7"
+          vis="TrackerLayerVis"> <!-- multiply thickness by 2.7 this increases thickness by 0.00034 -->
+          <position x="-SiBarrelSiliconGap_width/2 - SiBarrel1_SiliconWidth/2" y="-SiBarrelMod1_length/8" z="-SiBarrelSensor_thickness*2.7" />
+          <rotation x="0" y="-SiBarrel1_SiliconTilt" z="0" />
+        </module_component>
+
+        <module_component name="Si3R"
+          material="Silicon"
+          sensitive="true"
+          width="SiBarrel1_SiliconWidth"
+          length="SiBarrelMod1_length/4"
+          thickness="SiBarrelSensor_thickness*2.7"
+          vis="TrackerLayerVis"> <!-- multiply thickness by 2.7 this increases thickness by 0.00034 -->
+          <position x="SiBarrelSiliconGap_width/2 + SiBarrel1_SiliconWidth/2" y="3*SiBarrelMod1_length/8" z="-SiBarrelSensor_thickness*2.7" />
+          <rotation x="0" y="SiBarrel1_SiliconTilt" z="0" />
+        </module_component>
+               <module_component name="Si3L"
+          material="Silicon"
+          sensitive="true"
+          width="SiBarrel1_SiliconWidth"
+          length="SiBarrelMod1_length/4"
+          thickness="SiBarrelSensor_thickness*2.7"
+          vis="TrackerLayerVis"> <!-- multiply thickness by 2.7 this increases thickness by 0.00034 -->
+        <position x="-SiBarrelSiliconGap_width/2 - SiBarrel1_SiliconWidth/2" y="3*SiBarrelMod1_length/8" z="-SiBarrelSensor_thickness*2.7" />
+        <rotation x="0" y="-SiBarrel1_SiliconTilt" z="0" />
+        </module_component>
+        
+        <module_component name="Si1C"
+          material="Silicon"
+          sensitive="false"
+          width="SiBarrelSiliconGap_width"
+          length="SiBarrelMod1_length/4"
+          thickness="SiBarrelSensor_thickness*2.7"
+          vis="TrackerLayerVis"> <!-- multiply thickness by 2.7 this increases thickness by 0.00034 -->
+        <position x="0" y="-SiBarrelMod1_length/8" z="SiBarrelSiliconHeight/2 - SiBarrelSensor_thickness*2.7" />
+        </module_component>
+         <module_component name="Si3C"
+          material="Silicon"
+          sensitive="false"
+          width="SiBarrelSiliconGap_width"
+          length="SiBarrelMod1_length/4"
+          thickness="SiBarrelSensor_thickness*2.7"
+          vis="TrackerLayerVis"> <!-- multiply thickness by 2.7 this increases thickness by 0.00034 -->
+        <position x="0" y="3*SiBarrelMod1_length/8" z="-SiBarrelSensor_thickness*2.7" />
+        </module_component>
+
+
       </module>
-      <comment> Layers composed of many arrayed modules  </comment>
+      <comment> Layers composed of many arrayed modules </comment>
       <layer module="Module1" id="1" vis="TrackerLayerVis">
         <barrel_envelope
           inner_r="SiBarrelLayer1_rmin-0.5*mm"
           outer_r="SiBarrelLayer1_rmax"
           z_length="SiBarrelLayer1_length" />
-        <layer_material surface="inner" binning="binPhi,binZ" bins0="SiBarrelStave1_count" bins1="100" />
-        <layer_material surface="outer" binning="binPhi,binZ" bins0="SiBarrelStave1_count" bins1="100" />
+        <layer_material surface="inner" binning="binPhi,binZ" bins0="SiBarrelStave1_count"
+          bins1="100" />
+        <layer_material surface="outer" binning="binPhi,binZ" bins0="SiBarrelStave1_count"
+          bins1="100" />
         <comment>
-          phi0     : Starting phi of first module.
+          phi0 : Starting phi of first module.
           phi_tilt : Phi tilt of a module.
-          rc       : Radius of the module center.
-          nphi     : Number of modules in phi.
-          rphi_dr  : The delta radius of every other module.
-          z0       : Z position of first module in phi.
-          nz       : Number of modules to place in z.
-          dr       : Radial displacement parameter, of every other module.
+          rc : Radius of the module center.
+          nphi : Number of modules in phi.
+          rphi_dr : The delta radius of every other module.
+          z0 : Z position of first module in phi.
+          nz : Number of modules to place in z.
+          dr : Radial displacement parameter, of every other module.
         </comment>
-        <rphi_layout phi_tilt="SiBarrelStaveTilt_angle" nphi="SiBarrelStave1_count" phi0="0.0" rc="SiBarrelMod1_rmin" dr="0.0 * mm"/>
-        <z_layout dr="0.0 * mm" z0="0.0 * mm" nz="1"/>
+        <rphi_layout phi_tilt="0.0" nphi="SiBarrelStave1_count" phi0="0.0"
+          rc="SiBarrelMod1_rmin+SiBarrel1_radius_offset" dr="SiBarrel1_radius_castellation" />
+        <z_layout dr="0.0 * mm" z0="0.0 * mm" nz="1" />
       </layer>
     </detector>
     <documentation level="5">
-        ### Actual detectors
+      ### Actual detectors
     </documentation>
     <detector
       id="TrackerBarrel_1_ID"
@@ -115,73 +310,396 @@
       type="epic_TrackerBarrel"
       readout="SiBarrelHits"
       insideTrackingVolume="true">
-      <type_flags type="DetType_TRACKER + DetType_BARREL"/>
+      <type_flags type="DetType_TRACKER + DetType_BARREL" />
       <dimensions
         rmin="SiBarrelLayer2_rmin"
         rmax="SiBarrelLayer2_rmax"
         length="SiBarrelLayer2_length" />
       <comment>Silicon Barrel Modules</comment>
       <module name="Module1" vis="TrackerLayerVis">
-        <frame material="CarbonFiber"
-               vis="TrackerSupportVis"
-               width="SiBarrelStave2_width"
-               height="SiBarrelMod2Frame_height"
-               length="SiBarrelMod2_length"
-               thickness="SiBarrelMod2Frame_thickness" />
-        <module_component name="ITS3"
-                          material="Silicon"
-                          sensitive="true"
-                          width="SiBarrelStave2_width"
-                          length="SiBarrelMod2_length"
-                          thickness="SiBarrelSensor_thickness"
-                          vis="TrackerLayerVis" />
-        <module_component name="Service"
-                          material="Aluminum"
-                          sensitive="false"
-                          width="SiBarrelStave2_width"
-                          length="SiBarrelMod2_length"
-                          thickness="SiBarrelMod2Service_thickness"
-                          vis="TrackerLayerVis"/>
+
+     <module_component name="Si0C"
+          material="Silicon"
+          sensitive="false"
+          width="SiBarrelSiliconGap_width"
+          length="SiBarrelMod2_length/8"
+          thickness="SiBarrelSensor_thickness*2.7"
+          vis="TrackerLayerVis"> <!-- multiply thickness by 2.7 this increases thickness by 0.00034 -->
+       <position x="0" y="-7*SiBarrelMod2_length/16" z="0" />
+        </module_component>
+
+        <module_component name="Si2C"
+          material="Silicon"
+          sensitive="false"
+          width="SiBarrelSiliconGap_width"
+          length="SiBarrelMod2_length/8"
+          thickness="SiBarrelSensor_thickness*2.7"
+          vis="TrackerLayerVis"> <!-- multiply thickness by 2.7 this increases thickness by 0.00034 -->
+       <position x="0" y="-3*SiBarrelMod2_length/16" z="-SiBarrelSensor_thickness*2.7" />
+        </module_component>
+
+        <module_component name="Si4C"
+          material="Silicon"
+          sensitive="false"
+          width="SiBarrelSiliconGap_width"
+          length="SiBarrelMod2_length/8"
+          thickness="SiBarrelSensor_thickness*2.7"
+          vis="TrackerLayerVis"> <!-- multiply thickness by 2.7 this increases thickness by 0.00034 -->
+       <position x="0" y="SiBarrelMod2_length/16" z="-SiBarrelSensor_thickness*2.7" />
+        </module_component>
+        
+         <module_component name="Si6C"
+          material="Silicon"
+          sensitive="false"
+          width="SiBarrelSiliconGap_width"
+          length="SiBarrelMod2_length/8"
+          thickness="SiBarrelSensor_thickness*2.7"
+          vis="TrackerLayerVis"> <!-- multiply thickness by 2.7 this increases thickness by 0.00034 -->
+       <position x="0" y="5*SiBarrelMod2_length/16" z="-SiBarrelSensor_thickness*2.7" />
+        </module_component>
+
+        <module_component name="Si0R"
+          material="Silicon"
+          sensitive="true"
+          width="SiBarrel2_SiliconWidth"
+          length="SiBarrelMod2_length/8"
+          thickness="SiBarrelSensor_thickness*2.7"
+          vis="TrackerLayerVis"> <!-- multiply thickness by 2.7 this increases thickness by 0.00034 -->
+          <position x="SiBarrelSiliconGap_width/2 + SiBarrel2_SiliconWidth/2" y="-7*SiBarrelMod2_length/16" z="-SiBarrelSensor_thickness*2.7 + SiBarrelSiliconHeight/2" />
+          <rotation x="0" y="-SiBarrel2_SiliconTilt" z="0" />
+        </module_component>
+   
+        <module_component name="Si0L"
+          material="Silicon"
+          sensitive="true"
+          width="SiBarrel2_SiliconWidth"
+          length="SiBarrelMod2_length/8"
+          thickness="SiBarrelSensor_thickness*2.7"
+          vis="TrackerLayerVis"> <!-- multiply thickness by 2.7 this increases thickness by 0.00034 -->
+    <position x="-SiBarrelSiliconGap_width/2 - SiBarrel2_SiliconWidth/2" y="-7*SiBarrelMod2_length/16" z="-SiBarrelSensor_thickness*2.7" />
+    <rotation x="0" y="SiBarrel2_SiliconTilt" z="0" />
+        </module_component>
+
+        <module_component name="Si2R"
+          material="Silicon"
+          sensitive="true"
+          width="SiBarrel2_SiliconWidth"
+          length="SiBarrelMod2_length/8"
+          thickness="SiBarrelSensor_thickness*2.7"
+          vis="TrackerLayerVis"> <!-- multiply thickness by 2.7 this increases thickness by 0.00034 -->
+          <position x="SiBarrelSiliconGap_width/2 + SiBarrel2_SiliconWidth/2" y="-3*SiBarrelMod2_length/16" z="-SiBarrelSensor_thickness*2.7" />
+           <rotation x="0" y="-SiBarrel2_SiliconTilt" z="0" />
+        </module_component>
+
+        <module_component name="Si2L"
+          material="Silicon"
+          sensitive="true"
+          width="SiBarrel2_SiliconWidth"
+          length="SiBarrelMod2_length/8"
+          thickness="SiBarrelSensor_thickness*2.7"
+          vis="TrackerLayerVis"> <!-- multiply thickness by 2.7 this increases thickness by 0.00034 -->
+    <position x="-SiBarrelSiliconGap_width/2 - SiBarrel2_SiliconWidth/2" y="-3*SiBarrelMod2_length/16" z="-SiBarrelSensor_thickness*2.7" />
+    <rotation x="0" y="SiBarrel2_SiliconTilt" z="0" />
+        </module_component>
+
+        <module_component name="Si4R"
+          material="Silicon"
+          sensitive="true"
+          width="SiBarrel2_SiliconWidth"
+          length="SiBarrelMod2_length/8"
+          thickness="SiBarrelSensor_thickness*2.7"
+          vis="TrackerLayerVis"> <!-- multiply thickness by 2.7 this increases thickness by 0.00034 -->
+          <position x="SiBarrelSiliconGap_width/2 + SiBarrel2_SiliconWidth/2" y="SiBarrelMod2_length/16" z="-SiBarrelSensor_thickness*2.7" />
+           <rotation x="0" y="-SiBarrel2_SiliconTilt" z="0" />
+        </module_component>
+
+        <module_component name="Si4L"
+          material="Silicon"
+          sensitive="true"
+          width="SiBarrel2_SiliconWidth"
+          length="SiBarrelMod2_length/8"
+          thickness="SiBarrelSensor_thickness*2.7"
+          vis="TrackerLayerVis"> <!-- multiply thickness by 2.7 this increases thickness by 0.00034 -->
+    <position x="-SiBarrelSiliconGap_width/2 - SiBarrel2_SiliconWidth/2" y="SiBarrelMod2_length/16" z="-SiBarrelSensor_thickness*2.7" />
+    <rotation x="0" y="SiBarrel2_SiliconTilt" z="0" />
+        </module_component>
+
+        <module_component name="Si6R"
+          material="Silicon"
+          sensitive="true"
+          width="SiBarrel2_SiliconWidth"
+          length="SiBarrelMod2_length/8"
+          thickness="SiBarrelSensor_thickness*2.7"
+          vis="TrackerLayerVis"> <!-- multiply thickness by 2.7 this increases thickness by 0.00034 -->
+          <position x="SiBarrelSiliconGap_width/2 + SiBarrel2_SiliconWidth/2" y="5*SiBarrelMod2_length/16" z="-SiBarrelSensor_thickness*2.7" />
+           <rotation x="0" y="-SiBarrel2_SiliconTilt" z="0" />
+        </module_component>
+       
+        <module_component name="Si6L"
+          material="Silicon"
+          sensitive="true"
+          width="SiBarrel2_SiliconWidth"
+          length="SiBarrelMod2_length/8"
+          thickness="SiBarrelSensor_thickness*2.7"
+          vis="TrackerLayerVis"> <!-- multiply thickness by 2.7 this increases thickness by 0.00034 -->
+    <position x="-SiBarrelSiliconGap_width/2 - SiBarrel2_SiliconWidth/2" y="5*SiBarrelMod2_length/16" z="-SiBarrelSensor_thickness*2.7" />
+     <rotation x="0" y="SiBarrel2_SiliconTilt" z="0" />
+        </module_component>
+
+        <module_component name="Frame"
+          material="CarbonFiber"
+          sensitive="false"
+          width="SiBarrelStave2_width"
+          length="SiBarrelMod2_length"
+          thickness="SiBarrelMod2Frame_thickness"
+          vis="TrackerSupportVis" >
+          <position x="0" y="0" z="SiBarrelSiliconHeight/2" />
+        </module_component>
+        
+        <module_component name="Brace" material="CarbonFiber"
+          width="SiBarrelStave2_width*SiBarrelBrace_StaveWidthFraction"
+          thickness="SiBarrelBrace_thickness"
+          length="SiBarrelBrace_width"
+          vis="TrackerSupportVis">
+          <position x="SiBarrelBrace_Position_X" y="SiBarrel2_Brace0_Position_Y" z="0" />
+        </module_component>
+
+        <module_component name="Brace" material="CarbonFiber"
+          width="SiBarrelStave2_width*SiBarrelBrace_StaveWidthFraction"
+          thickness="SiBarrelBrace_thickness"
+          length="SiBarrelBrace_width"
+          vis="TrackerSupportVis">
+          <position x="SiBarrelBrace_Position_X" y="SiBarrel2_Brace1_Position_Y" z="- SiBarrelBrace_thickness" />
+        </module_component>
+
+        <module_component name="Brace" material="CarbonFiber"
+          width="SiBarrelStave2_width*SiBarrelBrace_StaveWidthFraction"
+          thickness="SiBarrelBrace_thickness"
+          length="SiBarrelBrace_width"
+          vis="TrackerSupportVis">
+          <position x="SiBarrelBrace_Position_X" y="-SiBarrel2_Brace1_Position_Y" z=" - SiBarrelBrace_thickness" />
+        </module_component>
+
+        <module_component name="Brace" material="CarbonFiber"
+          width="SiBarrelStave2_width*SiBarrelBrace_StaveWidthFraction"
+          thickness="SiBarrelBrace_thickness"
+          length="SiBarrelBrace_width"
+          vis="TrackerSupportVis">
+          <position x="SiBarrelBrace_Position_X" y="SiBarrel2_Brace2_Position_Y" z="- SiBarrelBrace_thickness" />
+        </module_component>
+
+        <module_component name="Brace" material="CarbonFiber"
+          width="SiBarrelStave2_width*SiBarrelBrace_StaveWidthFraction"
+          thickness="SiBarrelBrace_thickness"
+          length="SiBarrelBrace_width"
+          vis="TrackerSupportVis">
+          <position x="SiBarrelBrace_Position_X" y="-SiBarrel2_Brace2_Position_Y" z="- SiBarrelBrace_thickness" />
+        </module_component>
+
+        <module_component name="Brace" material="CarbonFiber"
+          width="SiBarrelStave2_width*SiBarrelBrace_StaveWidthFraction"
+          thickness="SiBarrelBrace_thickness"
+          length="SiBarrelBrace_width"
+          vis="TrackerSupportVis">
+          <position x="SiBarrelBrace_Position_X" y="SiBarrel2_Brace3_Position_Y" z="- SiBarrelBrace_thickness" />
+        </module_component>
+
+        <module_component name="Brace" material="CarbonFiber"
+          width="SiBarrelStave2_width*SiBarrelBrace_StaveWidthFraction"
+          thickness="SiBarrelBrace_thickness"
+          length="SiBarrelBrace_width"
+          vis="TrackerSupportVis">
+          <position x="SiBarrelBrace_Position_X" y="-SiBarrel2_Brace3_Position_Y" z="- SiBarrelBrace_thickness" />
+        </module_component>
+
+        <module_component name="Brace" material="CarbonFiber"
+          width="SiBarrelStave2_width*SiBarrelBrace_StaveWidthFraction"
+          thickness="SiBarrelBrace_thickness"
+          length="SiBarrelBrace_width"
+          vis="TrackerSupportVis">
+          <position x="SiBarrelBrace_Position_X" y="SiBarrel2_Brace4_Position_Y" z="- SiBarrelBrace_thickness" />
+        </module_component>
+
+        <module_component name="Brace" material="CarbonFiber"
+          width="SiBarrelStave2_width*SiBarrelBrace_StaveWidthFraction"
+          thickness="SiBarrelBrace_thickness"
+          length="SiBarrelBrace_width"
+          vis="TrackerSupportVis">
+          <position x="SiBarrelBrace_Position_X" y="-SiBarrel2_Brace4_Position_Y" z="- SiBarrelBrace_thickness" />
+        </module_component>
+
+      <module_component name="Service"
+          material="Kapton"
+          sensitive="false"
+          width="SiBarrelStave2_width"
+          length="SiBarrelMod2_length"
+          thickness="SiBarrelMod2Service_thickness"
+          vis="TrackerLayerVis" /> <!-- multiply thickness by 0.17 and change from aluminum to Kapton -->
+
+        <module_component name="Si1R"
+          material="Silicon"
+          sensitive="true"
+          width="SiBarrel2_SiliconWidth"
+          length="SiBarrelMod2_length/8"
+          thickness="SiBarrelSensor_thickness*2.7"
+          vis="TrackerLayerVis"> <!-- multiply thickness by 2.7 this increases thickness by 0.00034 -->
+          <position x="SiBarrelSiliconGap_width/2 + SiBarrel2_SiliconWidth/2" y="-5*SiBarrelMod2_length/16" z="SiBarrelSiliconHeight/2" />
+            <rotation x="0" y="SiBarrel2_SiliconTilt" z="0" />
+        </module_component>
+        <module_component name="Si1L"
+          material="Silicon"
+          sensitive="true"
+          width="SiBarrel2_SiliconWidth"
+          length="SiBarrelMod2_length/8"
+          thickness="SiBarrelSensor_thickness*2.7"
+          vis="TrackerLayerVis"> <!-- multiply thickness by 2.7 this increases thickness by 0.00034 -->
+    <position x="-SiBarrelSiliconGap_width/2 - SiBarrel2_SiliconWidth/2" y="-5*SiBarrelMod2_length/16" z="-SiBarrelSensor_thickness*2.7" />
+      <rotation x="0" y="-SiBarrel2_SiliconTilt" z="0" />
+        </module_component>
+
+        <module_component name="Si3R"
+          material="Silicon"
+          sensitive="true"
+          width="SiBarrel2_SiliconWidth"
+          length="SiBarrelMod2_length/8"
+          thickness="SiBarrelSensor_thickness*2.7"
+          vis="TrackerLayerVis"> <!-- multiply thickness by 2.7 this increases thickness by 0.00034 -->
+          <position x="SiBarrelSiliconGap_width/2 + SiBarrel2_SiliconWidth/2" y="-SiBarrelMod2_length/16" z="-SiBarrelSensor_thickness*2.7" />
+            <rotation x="0" y="SiBarrel2_SiliconTilt" z="0" />
+        </module_component>
+    
+            <module_component name="Si3L"
+          material="Silicon"
+          sensitive="true"
+          width="SiBarrel2_SiliconWidth"
+          length="SiBarrelMod2_length/8"
+          thickness="SiBarrelSensor_thickness*2.7"
+          vis="TrackerLayerVis"> <!-- multiply thickness by 2.7 this increases thickness by 0.00034 -->
+    <position x="-SiBarrelSiliconGap_width/2 - SiBarrel2_SiliconWidth/2" y="-SiBarrelMod2_length/16" z="-SiBarrelSensor_thickness*2.7" />
+      <rotation x="0" y="-SiBarrel2_SiliconTilt" z="0" />
+        </module_component>
+
+        <module_component name="Si5R"
+          material="Silicon"
+          sensitive="true"
+          width="SiBarrel2_SiliconWidth"
+          length="SiBarrelMod2_length/8"
+          thickness="SiBarrelSensor_thickness*2.7"
+          vis="TrackerLayerVis"> <!-- multiply thickness by 2.7 this increases thickness by 0.00034 -->
+          <position x="SiBarrelSiliconGap_width/2 + SiBarrel2_SiliconWidth/2" y="3*SiBarrelMod2_length/16" z="-SiBarrelSensor_thickness*2.7" />
+            <rotation x="0" y="SiBarrel2_SiliconTilt" z="0" />
+        </module_component>
+    
+        <module_component name="Si5L"
+          material="Silicon"
+          sensitive="true"
+          width="SiBarrel2_SiliconWidth"
+          length="SiBarrelMod2_length/8"
+          thickness="SiBarrelSensor_thickness*2.7"
+          vis="TrackerLayerVis"> <!-- multiply thickness by 2.7 this increases thickness by 0.00034 -->
+    <position x="-SiBarrelSiliconGap_width/2 - SiBarrel2_SiliconWidth/2" y="3*SiBarrelMod2_length/16" z="-SiBarrelSensor_thickness*2.7" />
+      <rotation x="0" y="-SiBarrel2_SiliconTilt" z="0" />
+        </module_component>
+
+        <module_component name="Si7R"
+          material="Silicon"
+          sensitive="true"
+          width="SiBarrel2_SiliconWidth"
+          length="SiBarrelMod2_length/8"
+          thickness="SiBarrelSensor_thickness*2.7"
+          vis="TrackerLayerVis"> <!-- multiply thickness by 2.7 this increases thickness by 0.00034 -->
+          <position x="SiBarrelSiliconGap_width/2 + SiBarrel2_SiliconWidth/2" y="7*SiBarrelMod2_length/16" z="-SiBarrelSensor_thickness*2.7" />
+            <rotation x="0" y="SiBarrel2_SiliconTilt" z="0" />
+        </module_component>
+    
+        <module_component name="Si7L"
+          material="Silicon"
+          sensitive="true"
+          width="SiBarrel2_SiliconWidth"
+          length="SiBarrelMod2_length/8"
+          thickness="SiBarrelSensor_thickness*2.7"
+          vis="TrackerLayerVis"> <!-- multiply thickness by 2.7 this increases thickness by 0.00034 -->
+    <position x="-SiBarrelSiliconGap_width/2 - SiBarrel2_SiliconWidth/2" y="7*SiBarrelMod2_length/16" z="-SiBarrelSensor_thickness*2.7" />
+      <rotation x="0" y="-SiBarrel2_SiliconTilt" z="0" />
+        </module_component>
+
+        <module_component name="Si1C"
+          material="Silicon"
+          sensitive="false"
+          width="SiBarrelSiliconGap_width"
+          length="SiBarrelMod2_length/8"
+          thickness="SiBarrelSensor_thickness*2.7"
+          vis="TrackerLayerVis"> <!-- multiply thickness by 2.7 this increases thickness by 0.00034 -->
+       <position x="0" y="-5*SiBarrelMod2_length/16" z="-SiBarrelSensor_thickness*2.7 + SiBarrelSiliconHeight/2" />
+        </module_component>
+    <module_component name="Si3C"
+          material="Silicon"
+          sensitive="false"
+          width="SiBarrelSiliconGap_width"
+          length="SiBarrelMod2_length/8"
+          thickness="SiBarrelSensor_thickness*2.7"
+          vis="TrackerLayerVis"> <!-- multiply thickness by 2.7 this increases thickness by 0.00034 -->
+       <position x="0" y="-SiBarrelMod2_length/16" z="-SiBarrelSensor_thickness*2.7" />
+        </module_component>
+    <module_component name="Si5C"
+          material="Silicon"
+          sensitive="false"
+          width="SiBarrelSiliconGap_width"
+          length="SiBarrelMod2_length/8"
+          thickness="SiBarrelSensor_thickness*2.7"
+          vis="TrackerLayerVis"> <!-- multiply thickness by 2.7 this increases thickness by 0.00034 -->
+       <position x="0" y="3*SiBarrelMod2_length/16" z="-SiBarrelSensor_thickness*2.7" />
+        </module_component>
+    <module_component name="Si7C"
+          material="Silicon"
+          sensitive="false"
+          width="SiBarrelSiliconGap_width"
+          length="SiBarrelMod2_length/8"
+          thickness="SiBarrelSensor_thickness*2.7"
+          vis="TrackerLayerVis"> <!-- multiply thickness by 2.7 this increases thickness by 0.00034 -->
+       <position x="0" y="7*SiBarrelMod2_length/16" z="-SiBarrelSensor_thickness*2.7" />
+        </module_component>
       </module>
-      <comment> Layers composed of many arrayed modules  </comment>
+      <comment> Layers composed of many arrayed modules </comment>
       <layer module="Module1" id="1" vis="TrackerLayerVis">
         <barrel_envelope
-          inner_r="SiBarrelLayer2_rmin-1.0*mm"
+          inner_r="SiBarrelLayer2_rmin-0.5*mm"
           outer_r="SiBarrelLayer2_rmax"
           z_length="SiBarrelLayer2_length" />
         <layer_material surface="inner" binning="binPhi,binZ" bins0="128" bins1="100" />
         <layer_material surface="outer" binning="binPhi,binZ" bins0="128" bins1="100" />
         <comment>
-          phi0     : Starting phi of first module.
+          phi0 : Starting phi of first module.
           phi_tilt : Phi tilt of a module.
-          rc       : Radius of the module center.
-          nphi     : Number of modules in phi.
-          rphi_dr  : The delta radius of every other module.
-          z0       : Z position of first module in phi.
-          nz       : Number of modules to place in z.
-          dr       : Radial displacement parameter, of every other module.
+          rc : Radius of the module center.
+          nphi : Number of modules in phi.
+          rphi_dr : The delta radius of every other module.
+          z0 : Z position of first module in phi.
+          nz : Number of modules to place in z.
+          dr : Radial displacement parameter, of every other module.
         </comment>
-        <rphi_layout phi_tilt="SiBarrelStaveTilt_angle" nphi="SiBarrelStave2_count" phi0="0.0" rc="SiBarrelMod2_rmin" dr="0.0 * mm"/>
-        <z_layout dr="0.0 * mm" z0="0.0 * mm" nz="1"/>
+        <rphi_layout phi_tilt="0.0" nphi="SiBarrelStave2_count" phi0="0.0"
+          rc="SiBarrelMod2_rmin+SiBarrel2_radius_offset" dr="SiBarrel2_radius_castellation" />
+        <z_layout dr="0.0 * mm" z0="0.0 * mm" nz="1" />
       </layer>
     </detector>
   </detectors>
 
   <plugins>
     <plugin name="DD4hep_ParametersPlugin">
-      <argument value="SagittaSiBarrel"/>
-      <argument value="layer_pattern: str=SagittaSiBarrel_layer\d"/>
+      <argument value="SagittaSiBarrel" />
+      <argument value="layer_pattern: str=SagittaSiBarrel_layer\d" />
     </plugin>
     <plugin name="DD4hep_ParametersPlugin">
-      <argument value="OuterSiBarrel"/>
-      <argument value="layer_pattern: str=OuterSiBarrel_layer\d"/>
+      <argument value="OuterSiBarrel" />
+      <argument value="layer_pattern: str=OuterSiBarrel_layer\d" />
     </plugin>
   </plugins>
 
   <readouts>
     <readout name="SiBarrelHits">
       <segmentation type="CartesianGridXY" grid_size_x="0.020*mm" grid_size_y="0.020*mm" />
-      <id>system:8,layer:4,module:12,sensor:2,x:32:-12,y:-20</id>
+      <id>system:8,layer:4,module:10,sensor:4,x:32:-12,y:-20</id>
     </readout>
   </readouts>
 
