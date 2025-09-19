@@ -166,8 +166,7 @@
           dr="0" />
     <z_layout
           dr = "MPGDOuterBarrelModule_roverlap"
-          z0 = "MPGDOuterBarrelModule_zoverlap"
-          nz = "2"/>
+          z0 = "MPGDOuterBarrelModule_zoverlap"/>
    </layer>
 </detector>
 </detectors>

@@ -261,7 +261,8 @@ static Ref_t create_BarrelPlanarMPGDTracker_geo(Detector& description, xml_h e,
     double rphi_dr  = x_layout.dr();       // The delta radius of every other module
     double phi_incr = (2 * M_PI) / nphi;   // Phi increment for one module
     double phic     = phi0;                // Phi of the module
-    double nz       = z_layout.nz();       // Number of modules placed in z
+    //double nz       = z_layout.nz();       // Number of modules placed in z
+    int    nz       = 2;                   // Number of modules placed in z
     double z_dr     = z_layout.dr();       // Radial offest of modules in z
     double z0       = z_layout.z0();       // Sets how much overlap in z the nz modules have
 
