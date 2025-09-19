@@ -162,8 +162,9 @@ static Ref_t create_BarrelPlanarMPGDTracker_geo(Detector& description, xml_h e,
       c_vol.setVisAttributes(description, x_comp.visStr());
 
       pcb_feb_ext = x_comp.offset();
-      
-      pv = m_vol.placeVolume(c_vol, Position(0, -pcb_feb_ext / 2.0, thickness_sum + x_comp.thickness() / 2.0));
+
+      pv = m_vol.placeVolume(
+          c_vol, Position(0, -pcb_feb_ext / 2.0, thickness_sum + x_comp.thickness() / 2.0));
 
       if (x_comp.isSensitive()) {
         pv.addPhysVolID("sensor", sensor_number++);
