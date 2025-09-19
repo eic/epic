@@ -58,6 +58,7 @@
                width="MPGDOuterBarrelModule_width"
                thickness="MPGDOuterBarrelDriftGap_thickness"
                vis="TrackerMPGDGasVis"
+	       offset="0"
                length="MPGDOuterBarrelModule_length - MPGDOuterBarrelModule_PCB_offset"/>
 
         <module_component name="WindowGasGap"
@@ -66,6 +67,7 @@
                width="MPGDOuterBarrelModule_width"
                thickness="MPGDOuterBarrelWindowGap_thickness"
                vis="TrackerMPGDGasVis"
+	       offset="0"
                length="MPGDOuterBarrelModule_length - MPGDOuterBarrelModule_PCB_offset"/>
         <module_component name="Window"
                material="Kapton"
@@ -73,6 +75,7 @@
                width="MPGDOuterBarrelModule_width"
                thickness="MPGDOuterBarrelWindow_thickness"
                vis="TrackerVis"
+	       offset="0"
                length="MPGDOuterBarrelModule_length - MPGDOuterBarrelModule_PCB_offset"/>
         <module_component name="Cathode_Kapton"
                material="Kapton"
@@ -80,6 +83,7 @@
                width="MPGDOuterBarrelModule_width"
                thickness="MPGDOuterBarrelFoilKapton_thickness"
                vis="TrackerVis"
+	       offset="0"
                length="MPGDOuterBarrelModule_length - MPGDOuterBarrelModule_PCB_offset"/>
         <module_component name="Cathode_Cu"
                material="Copper"
@@ -87,6 +91,7 @@
                width="MPGDOuterBarrelModule_width"
                thickness="MPGDOuterBarrelFoilCu_thickness"
                vis="TrackerVis"
+	       offset="0"
                length="MPGDOuterBarrelModule_length - MPGDOuterBarrelModule_PCB_offset"/>
         <module_component name="RWELL_Cu"
                material="Copper"
@@ -94,6 +99,7 @@
                width="MPGDOuterBarrelModule_width"
                thickness="MPGDOuterBarrelFoilCu_thickness"
                vis="TrackerVis"
+	       offset="0"
                length="MPGDOuterBarrelModule_length - MPGDOuterBarrelModule_PCB_offset"/>
         <module_component name="RWELL_Kapton"
                material="Kapton"
@@ -101,6 +107,7 @@
                width="MPGDOuterBarrelModule_width"
                thickness="MPGDOuterBarrelFoilKapton_thickness"
                vis="TrackerVis"
+	       offset="0"
                length="MPGDOuterBarrelModule_length - MPGDOuterBarrelModule_PCB_offset"/>
         <module_component name="Nomex"
                material="Nomex"
@@ -108,6 +115,7 @@
                width="MPGDOuterBarrelModule_width"
                thickness="MPGDOuterBarrelReadOutNomex_thickness"
                vis="TrackerVis"
+	       offset="0"
                length="MPGDOuterBarrelModule_length - MPGDOuterBarrelModule_PCB_offset"/>
         <module_component name="ReadOutElectrodes"
                material="Copper"
@@ -115,12 +123,14 @@
                width="MPGDOuterBarrelModule_width"
                thickness="MPGDOuterBarrelReadOutElectrode_thickness"
                vis="TrackerVis"
+	       offset="0"
                length="MPGDOuterBarrelModule_length - MPGDOuterBarrelModule_PCB_offset"/>
         <module_component name="ReadOutKapton"
                material="Kapton"
                sensitive="false"
                width="MPGDOuterBarrelModule_width"
                thickness="MPGDOuterBarrelReadOutKapton_thickness"
+	       offset="0"
                vis="TrackerVis"
                length="MPGDOuterBarrelModule_length - MPGDOuterBarrelModule_PCB_offset"/>
         <module_component name="PCB"
@@ -129,7 +139,7 @@
                width="MPGDOuterBarrelModule_width"
                thickness="MPGDOuterBarrelPCB_thickness"
                vis="TrackerVis"
-               offset="MPGDOuterBarrelModule_PCB_offset"
+	       offset="MPGDOuterBarrelModule_PCB_offset"
                length="MPGDOuterBarrelModule_length"/>
 
    <comment> Frame width gets subtracted from the gas module volumes
