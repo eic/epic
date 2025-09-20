@@ -300,7 +300,7 @@ static Ref_t create_BarrelPlanarMPGDTracker_geo(Detector& description, xml_h e,
             Position(
                 xc, yc,
                 mpgd_pos.z() + z_placement +
-                    z_offset)); //RotZYX rotates planes around azimuth, RotZ flip plane so pcb_feb_ext is faceing endcaps
+                    z_offset)); //RotZYX rotates planes around azimuth, RotZ flips plane so pcb_feb_ext is facing endcaps
 
         pv = layer_assembly.placeVolume(module_env, tr);
         pv.addPhysVolID("module", module);
