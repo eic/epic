@@ -53,6 +53,8 @@ static Ref_t create_BarrelPlanarMPGDTracker_geo(Detector& description, xml_h e,
   xml_dim_t mpgd_pos = x_det.position();
   Assembly assembly(det_name);
 
+  double pcb_feb_ext = 0.0; //extension of PCB board to hold FEBs.
+
   // Set detector type flag
   dd4hep::xml::setDetectorTypeFlag(x_det, sdet);
   auto& params = DD4hepDetectorHelper::ensureExtension<dd4hep::rec::VariantParameters>(sdet);
@@ -159,7 +161,10 @@ static Ref_t create_BarrelPlanarMPGDTracker_geo(Detector& description, xml_h e,
       c_vol.setLimitSet(description, x_comp.limitsStr());
       c_vol.setVisAttributes(description, x_comp.visStr());
 
-      pv = m_vol.placeVolume(c_vol, Position(0, 0, thickness_sum + x_comp.thickness() / 2.0));
+      pcb_feb_ext = x_comp.offset();
+
+      pv = m_vol.placeVolume(
+          c_vol, Position(0, -pcb_feb_ext / 2.0, thickness_sum + x_comp.thickness() / 2.0));
 
       if (x_comp.isSensitive()) {
         pv.addPhysVolID("sensor", sensor_number++);
@@ -256,7 +261,7 @@ static Ref_t create_BarrelPlanarMPGDTracker_geo(Detector& description, xml_h e,
     double rphi_dr  = x_layout.dr();       // The delta radius of every other module
     double phi_incr = (2 * M_PI) / nphi;   // Phi increment for one module
     double phic     = phi0;                // Phi of the module
-    double nz       = z_layout.nz();       // Number of modules placed in z
+    int nz          = 2;                   // Number of modules placed in z
     double z_dr     = z_layout.dr();       // Radial offest of modules in z
     double z0       = z_layout.z0();       // Sets how much overlap in z the nz modules have
 
@@ -283,14 +288,20 @@ static Ref_t create_BarrelPlanarMPGDTracker_geo(Detector& description, xml_h e,
         string module_name = _toString(module, "module%d");
         DetElement mod_elt(lay_elt, module_name, module);
         double mod_z       = 0.5 * dimensions.length();
-        double z_placement = mod_z - j * nz * mod_z; // z location for module placement
+        double z_placement = mod_z - 0.5 * pcb_feb_ext -
+                             j * (nz * mod_z - pcb_feb_ext); // z location for module placement
         double z_offset =
             z_placement > 0
                 ? -z0 / 2.0
                 : z0 / 2.0; // determine the amount of overlap in z the z nz modules have
 
-        Transform3D tr(RotationZYX(0.0, ((M_PI / 2) - phic - phi_tilt), -M_PI / 2),
-                       Position(xc, yc, mpgd_pos.z() + z_placement + z_offset)); // in x-y plane,
+        Transform3D tr(
+            RotationZYX(0, ((M_PI / 2) - phic - phi_tilt), -M_PI / 2) * RotationZ(j * M_PI),
+            Position(
+                xc, yc,
+                mpgd_pos.z() + z_placement +
+                    z_offset)); //RotZYX rotates planes around azimuth, RotZ flips plane so pcb_feb_ext is facing endcaps
+
         pv = layer_assembly.placeVolume(module_env, tr);
         pv.addPhysVolID("module", module);
         mod_elt.setPlacement(pv);
