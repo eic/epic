@@ -48,6 +48,60 @@ find_package(DD4hep 1.27 REQUIRED COMPONENTS DDCore DDRec)
 find_package(fmt REQUIRED)
 
 #-----------------------------------------------------------------------------------
+
+# Address sanitizer
+option(USE_ASAN "Compile with address sanitizer" OFF)
+if(${USE_ASAN})
+  execute_process(
+    COMMAND ${CMAKE_CXX_COMPILER} -print-file-name=libasan.so
+    OUTPUT_VARIABLE PRELOAD_SANITIZER_LIB_ASAN
+    OUTPUT_STRIP_TRAILING_WHITESPACE)
+  list(PREPEND PRELOAD_SANITIZER_LIB ${PRELOAD_SANITIZER_LIB_ASAN})
+endif()
+
+# Undefined behavior sanitizer
+option(USE_UBSAN "Compile with undefined behavior sanitizer" OFF)
+if(${USE_UBSAN})
+  execute_process(
+    COMMAND ${CMAKE_CXX_COMPILER} -print-file-name=libubsan.so
+    OUTPUT_VARIABLE PRELOAD_SANITIZER_LIB_UBSAN
+    OUTPUT_STRIP_TRAILING_WHITESPACE)
+  list(PREPEND PRELOAD_SANITIZER_LIB ${PRELOAD_SANITIZER_LIB_UBSAN})
+endif()
+
+#-----------------------------------------------------------------------------------
+
+function(dd4hep_generate_rootmap library)
+
+  if(APPLE)
+    set(ENV_VAR DYLD_LIBRARY_PATH)
+  else()
+    set(ENV_VAR LD_LIBRARY_PATH)
+  endif()
+  set(${ENV_VAR}_VALUE $<TARGET_FILE_DIR:${library}>:$<TARGET_FILE_DIR:DD4hep::DD4hepGaudiPluginMgr>:$ENV{${ENV_VAR}})
+
+  set(rootmapfile ${CMAKE_SHARED_MODULE_PREFIX}${library}.components)
+  string(JOIN ":" LD_PRELOAD ${PRELOAD_SANITIZER_LIB})
+
+  add_custom_command(OUTPUT ${rootmapfile}
+                     DEPENDS ${library}
+                     COMMAND ${ENV_VAR}=${${ENV_VAR}_VALUE} LD_PRELOAD=${LD_PRELOAD} $<TARGET_FILE:DD4hep::listcomponents> -o ${rootmapfile} $<TARGET_FILE_NAME:${library}>
+                     WORKING_DIRECTORY ${LIBRARY_OUTPUT_PATH}
+                     COMMAND_EXPAND_LISTS
+                     )
+
+  add_custom_target(Components_${library} ALL DEPENDS ${rootmapfile})
+  SET( install_destination "lib" )
+  if( CMAKE_INSTALL_LIBDIR )
+    SET( install_destination ${CMAKE_INSTALL_LIBDIR} )
+  endif()
+  install(FILES $<TARGET_FILE_DIR:${library}>/${rootmapfile}
+    DESTINATION ${install_destination}
+  )
+endfunction()
+
+#-----------------------------------------------------------------------------------
+
 set(a_lib_name ${PROJECT_NAME})
 
 set(DD4HEP_SET_RPATH TRUE)
@@ -62,6 +116,34 @@ dd4hep_add_plugin(${a_lib_name}
 target_link_libraries(${a_lib_name}
   PUBLIC DD4hep::DDCore DD4hep::DDRec fmt::fmt
   )
+
+#-----------------------------------------------------------------------------------
+
+# Address sanitizer
+if(${USE_ASAN})
+  target_compile_options(${a_lib_name} PRIVATE -fsanitize=address -fno-omit-frame-pointer -g -O1)
+  target_link_options(${a_lib_name} PRIVATE -fsanitize=address)
+  target_link_libraries(${a_lib_name} PRIVATE asan)
+  install(FILES .github/asan.supp .github/lsan.supp
+          DESTINATION ${CMAKE_INSTALL_DATADIR}/${PROJECT_NAME})
+endif()
+
+# Undefined behavior sanitizer
+option(USE_UBSAN "Compile with undefined behavior sanitizer" OFF)
+if(${USE_UBSAN})
+  foreach(sanitizer undefined float-divide-by-zero unsigned-integer-overflow
+                    implicit-conversion local-bounds nullability)
+    check_cxx_compiler_flag("-fsanitize=${sanitizer}"
+                            CXX_COMPILER_HAS_sanitize_${sanitizer})
+    if(CXX_COMPILER_HAS_sanitize_${sanitizer})
+      target_compile_options(${a_lib_name} PRIVATE -fsanitize=${sanitizer} -g -O1)
+      target_link_options(${a_lib_name} PRIVATE -fsanitize=${sanitizer})
+      target_link_libraries(${a_lib_name} PRIVATE ubsan)
+    endif()
+  endforeach()
+  install(FILES .github/ubsan.supp
+          DESTINATION ${CMAKE_INSTALL_DATADIR}/${PROJECT_NAME})
+endif()
 
 #-----------------------------------------------------------------------------------
 # Parse jinja templates: once by default, and once for all yml files
