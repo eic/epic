@@ -15,11 +15,8 @@ features:
     silicon_disks:
     tof_barrel:
     tof_endcap:
-  #ecal:
-    # FIXME: disabled due to:
-    #   Error in <TGeoVoxelFinder::SortAll>:
-    #   Wrong bounding box for volume envelope26
-    #bic_layer1_only:
+  ecal:
+    bic_layer1_only:
   pid:
     dirc:
     pfrich:
