@@ -68,7 +68,7 @@ target_link_libraries(${a_lib_name}
 set(TEMPLATE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/templates)
 set(TEMPLATE_XML ${PROJECT_NAME}.xml.jinja2)
 
-file(GLOB CONFIG_YMLS ${CMAKE_CURRENT_SOURCE_DIR}/configurations/*.yml)
+file(GLOB CONFIG_YMLS CONFIGURE_DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/configurations/*.yml)
 foreach(config_yml ${CONFIG_YMLS})
     get_filename_component(config ${config_yml} NAME_WE)
     add_custom_target(${config}.xml ALL)
