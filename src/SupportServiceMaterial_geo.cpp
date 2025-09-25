@@ -263,7 +263,7 @@ static Ref_t create_SupportServiceMaterial(Detector& description, xml_h e,
     for (xml_coll_t com{x_sup, _U(component)}; com; ++com) {
       xml_comp_t x_com = com;
       auto [cvol, ctr] = build_shape(description, x_det, x_sup, x_com, cumulative_thickness);
-      vol.placeVolume(cvol, tr_rot*ctr);
+      vol.placeVolume(cvol, ctr);
       cumulative_thickness += x_com.thickness();
     }
   }
