@@ -32,11 +32,11 @@
     <constant name="L0_plate_length"            value=" L0_plate_zmax-L0_plate_zmin" />
     <constant name="L0_plate_height1"           value=" L0_ring1_dr-0.5*mm" />
     <constant name="L0_plate_height2"           value=" L0_ring2_dr-0.5*mm" />
-    <constant name="L0_plate_vert_off"          value=" 1.5*mm" /> 
-    <constant name="L0_plate_vert_center"       value=" L0_plate_vert_off + L0_plate_thickness/2" /> 
-    <constant name="L0_plate_horiz_center1"     value=" L0_ring1_rmin + L0_ring1_dr/2" /> 
-    <constant name="L0_plate_horiz_center2"     value=" L0_ring2_rmin + L0_ring2_dr/2" /> 
-    <constant name="L0_plate_mid_rot"           value=" 90*deg" /> 
+    <constant name="L0_plate_vert_off"          value=" 1.5*mm" />
+    <constant name="L0_plate_vert_center"       value=" L0_plate_vert_off + L0_plate_thickness/2" />
+    <constant name="L0_plate_horiz_center1"     value=" L0_ring1_rmin + L0_ring1_dr/2" />
+    <constant name="L0_plate_horiz_center2"     value=" L0_ring2_rmin + L0_ring2_dr/2" />
+    <constant name="L0_plate_mid_rot"           value=" 90*deg" />
 
     <comment> innner (smaller abs(z)) and outer endcap rings on negative and postive direction </comment>
     <constant name="L0_inner_ring_dz"              value="6.35*mm" />
@@ -132,10 +132,10 @@
     <constant name="L1_plate2_zcenter"           value="(L1_plate2_zmax+L1_plate2_zmin)/2" />
     <constant name="L1_plate2_length"            value=" L1_plate2_zmax-L1_plate2_zmin" />
     <constant name="L1_plate2_dr"                value=" L1_plate_thickness" />
-    <constant name="L1_plate2_rmin"              value=" L1_ring2_rmax" /> 
-    <constant name="L1_plate2_dl"                value=" 7*mm - L1_plate_thickness" /> 
-    <constant name="L1_plate2_dphi"              value=" (L1_plate2_dl-L1_plate_thickness)/L1_plate2_rmin" /> 
-    <constant name="L1_plate2_phi0"              value=" (L1_plate1_2_vert_off+L1_plate_thickness)/L1_plate2_rmin" /> 
+    <constant name="L1_plate2_rmin"              value=" L1_ring2_rmax" />
+    <constant name="L1_plate2_dl"                value=" 7*mm - L1_plate_thickness" />
+    <constant name="L1_plate2_dphi"              value=" (L1_plate2_dl-L1_plate_thickness)/L1_plate2_rmin" />
+    <constant name="L1_plate2_phi0"              value=" (L1_plate1_2_vert_off+L1_plate_thickness)/L1_plate2_rmin" />
 
     <constant name="L1_cooling_ring1_dz"           value="12.5*mm" />
     <constant name="L1_cooling_ring1_zmin"         value="172.5*mm" />
@@ -182,11 +182,11 @@
 
     <comment>   L1PosCone    </comment>
     <constant name="L1_pos_cone_thickness"    value=" IB_CF_thickness" />
-    <comment>start the cone at r1 to avoid overlap with plate1_2midleft/right    </comment>    
-    <constant name="L1_pos_cone_r1"           value=" L1_ring2_rmax"/>          
-    <constant name="L1_pos_cone_r2"           value=" 115.4*mm"/>         
-    <constant name="L1_pos_cone_r3"           value=" 176.7*mm"/>         
-    <constant name="L1_pos_cone_r4"           value=" IB_frame_rmax"/>         
+    <comment>start the cone at r1 to avoid overlap with plate1_2midleft/right    </comment>
+    <constant name="L1_pos_cone_r1"           value=" L1_ring2_rmax"/>
+    <constant name="L1_pos_cone_r2"           value=" 115.4*mm"/>
+    <constant name="L1_pos_cone_r3"           value=" 176.7*mm"/>
+    <constant name="L1_pos_cone_r4"           value=" IB_frame_rmax"/>
     <constant name="L1_pos_cone_z1"           value=" 178*mm+5*mm" />
     <constant name="L1_pos_cone_z2"           value=" 192*mm" />
     <constant name="L1_pos_cone_z3"           value=" 208*mm" />
@@ -200,8 +200,8 @@
     <constant name="L1_pos_cone_leg_theta"    value=" -atan(L1_pos_cone_leg_dz/L1_pos_cone_leg_dr)" />
     <constant name="L1_pos_cone_leg_length"   value=" sqrt(L1_pos_cone_leg_dr*L1_pos_cone_leg_dr+L1_pos_cone_leg_dz*L1_pos_cone_leg_dz)" />
 
-    
-    <comment>   L1NegCone    </comment>  
+
+    <comment>   L1NegCone    </comment>
     <constant name="L1_neg_cone_thickness"    value=" IB_CF_thickness" />
     <constant name="L1_neg_cone_ring_rmin"    value=" 67*mm"/>
     <constant name="L1_neg_cone_ring_rmax"    value=" 86.4*mm"/>
@@ -224,7 +224,7 @@
 
 
     <comment> ------------------------------
-                    L2 inner frame (sheet 6) 
+                    L2 inner frame (sheet 6)
               ------------------------------</comment>
     <constant name="L2_inner_ring_rmin"         value="125.35*mm" />
     <constant name="L2_inner_ring_rmax"         value="145*mm" />
@@ -237,13 +237,13 @@
     <constant name="L2_inner_plate_zcenter"           value="(L2_inner_plate_zmax+L2_inner_plate_zmin)/2" />
     <constant name="L2_inner_plate_length"            value=" L2_inner_plate_zmax-L2_inner_plate_zmin" />
     <constant name="L2_inner_plate_height"            value=" L2_inner_ring_dr" />
-    <constant name="L2_inner_plate_vert_off"          value=" 1.5*mm" /> 
-    <constant name="L2_inner_plate_vert_center"       value=" L2_inner_plate_vert_off + L2_inner_plate_thickness/2" /> 
-    <constant name="L2_inner_plate_horiz_center"      value=" L2_inner_ring_rmin + L2_inner_ring_dr/2" /> 
-    <constant name="L2_inner_plate_mid_rot"           value=" 90*deg" /> 
+    <constant name="L2_inner_plate_vert_off"          value=" 1.5*mm" />
+    <constant name="L2_inner_plate_vert_center"       value=" L2_inner_plate_vert_off + L2_inner_plate_thickness/2" />
+    <constant name="L2_inner_plate_horiz_center"      value=" L2_inner_ring_rmin + L2_inner_ring_dr/2" />
+    <constant name="L2_inner_plate_mid_rot"           value=" 90*deg" />
 
     <comment> endcap rings (2 each side, ring1 has smaller abs(z)) on negative and postive direction </comment>
-    <constant name="L2_inner_ring1_dz"                value="6.35*mm" /> 
+    <constant name="L2_inner_ring1_dz"                value="6.35*mm" />
     <constant name="L2_inner_ring2_dz"                value="25.4*mm" />
     <constant name="L2_inner_ring_gap_z"              value="5.5*mm"  />
     <constant name="L2_inner_neg_ring1_zcenter"     value="L2_inner_plate_zmin - L2_inner_ring1_dz/2." />
@@ -253,7 +253,7 @@
 
 
     <comment> ------------------------------
-                    L2 outer frame (sheet 7) 
+                    L2 outer frame (sheet 7)
               ------------------------------</comment>
     <comment> ring1 (smaller r) and 2. ring1_2 is the disk connecting two rings </comment>
     <constant name="L2_outer_ring_dr"             value="IB_CF_thickness" />
@@ -297,36 +297,36 @@
     <constant name="L2_outer_plate1_2_zcenter"         value="(L2_outer_plate1_2_zmax+L2_outer_plate1_2_zmin)/2" />
     <constant name="L2_outer_plate1_2_length"          value=" L2_outer_plate1_2_zmax-L2_outer_plate1_2_zmin" />
     <constant name="L2_outer_plate1_2_dr"              value=" L2_outer_ring2_rmax - L2_outer_ring1_rmax" />
-    <constant name="L2_outer_plate1_2_vert_off"        value=" 0.5*mm" /> 
-    <constant name="L2_outer_plate1_2_vert_center"     value=" L2_outer_plate1_2_vert_off + L2_outer_plate_thickness/2" /> 
-    <constant name="L2_outer_plate1_2_rcenter"         value=" (L2_outer_ring1_rmax + L2_outer_ring2_rmax)/2" /> 
-    <constant name="L2_outer_plate1_2_mid_angle"       value=" 3.16*deg" /> 
+    <constant name="L2_outer_plate1_2_vert_off"        value=" 0.5*mm" />
+    <constant name="L2_outer_plate1_2_vert_center"     value=" L2_outer_plate1_2_vert_off + L2_outer_plate_thickness/2" />
+    <constant name="L2_outer_plate1_2_rcenter"         value=" (L2_outer_ring1_rmax + L2_outer_ring2_rmax)/2" />
+    <constant name="L2_outer_plate1_2_mid_angle"       value=" 3.16*deg" />
 
     <constant name="L2_outer_plate1_zmin"              value=" L2_outer_neg_ring1_zmax" />
     <constant name="L2_outer_plate1_zmax"              value=" L2_outer_pos_ring1_zmin" />
     <constant name="L2_outer_plate1_zcenter"           value="(L2_outer_plate1_zmax+L2_outer_plate1_zmin)/2" />
     <constant name="L2_outer_plate1_length"            value=" L2_outer_plate1_zmax-L2_outer_plate1_zmin" />
     <constant name="L2_outer_plate1_dr"                value=" L2_outer_plate_thickness" />
-    <constant name="L2_outer_plate1_rmin"              value=" L2_outer_ring1_rmin" /> 
-    <constant name="L2_outer_plate1_dl"                value=" 6.1*mm" /> 
-    <constant name="L2_outer_plate1_side_dphi"         value=" L2_outer_plate1_dl/L2_outer_plate1_rmin" /> 
-    <constant name="L2_outer_plate1_side_phi0"         value=" (L2_outer_plate1_2_vert_off)/L2_outer_plate1_rmin" /> 
-    <constant name="L2_outer_plate1_mid_dphi"          value=" L2_outer_plate1_2_mid_angle" /> 
+    <constant name="L2_outer_plate1_rmin"              value=" L2_outer_ring1_rmin" />
+    <constant name="L2_outer_plate1_dl"                value=" 6.1*mm" />
+    <constant name="L2_outer_plate1_side_dphi"         value=" L2_outer_plate1_dl/L2_outer_plate1_rmin" />
+    <constant name="L2_outer_plate1_side_phi0"         value=" (L2_outer_plate1_2_vert_off)/L2_outer_plate1_rmin" />
+    <constant name="L2_outer_plate1_mid_dphi"          value=" L2_outer_plate1_2_mid_angle" />
 
     <constant name="L2_outer_plate2_zmin"              value=" L2_outer_neg_ring2_zmax" />
     <constant name="L2_outer_plate2_zmax"              value=" L2_outer_pos_ring2_zmin" />
     <constant name="L2_outer_plate2_zcenter"           value="(L2_outer_plate2_zmax+L2_outer_plate2_zmin)/2" />
     <constant name="L2_outer_plate2_length"            value=" L2_outer_plate2_zmax-L2_outer_plate2_zmin" />
     <constant name="L2_outer_plate2_dr"                value=" L2_outer_plate_thickness" />
-    <constant name="L2_outer_plate2_rmin"              value=" L2_outer_ring2_rmax" /> 
-    <constant name="L2_outer_plate2_dl"                value=" 7*mm - L2_outer_plate_thickness" /> 
-    <constant name="L2_outer_plate2_dphi"              value=" (L2_outer_plate2_dl-L2_outer_plate_thickness)/L2_outer_plate2_rmin" /> 
-    <constant name="L2_outer_plate2_phi0"              value=" (L2_outer_plate1_2_vert_off+L2_outer_plate_thickness)/L2_outer_plate2_rmin" /> 
+    <constant name="L2_outer_plate2_rmin"              value=" L2_outer_ring2_rmax" />
+    <constant name="L2_outer_plate2_dl"                value=" 7*mm - L2_outer_plate_thickness" />
+    <constant name="L2_outer_plate2_dphi"              value=" (L2_outer_plate2_dl-L2_outer_plate_thickness)/L2_outer_plate2_rmin" />
+    <constant name="L2_outer_plate2_phi0"              value=" (L2_outer_plate1_2_vert_off+L2_outer_plate_thickness)/L2_outer_plate2_rmin" />
 
     <comment> ------------------------------
-                L2 Legs (sheet 8) 
+                L2 Legs (sheet 8)
           ------------------------------</comment>
-    <comment>   pos and neg legs, 8 each, leg 1-4 lower half, 4-8 upper    </comment>  
+    <comment>   pos and neg legs, 8 each, leg 1-4 lower half, 4-8 upper    </comment>
     <constant name="L2_cone_leg1_phi0"     value=" -13.5*deg" />
     <constant name="L2_cone_leg2_phi0"     value=" -L2_cone_leg1_phi0-90*deg" />
     <constant name="L2_cone_leg3_phi0"     value="  L2_cone_leg1_phi0-90*deg" />
@@ -338,8 +338,8 @@
     <constant name="L2_cone_leg8_phi0"     value=" -L2_cone_leg4_phi0" />
 
     <constant name="L2_cone_thickness"        value=" IB_CF_thickness" />
-    <constant name="L2_cone_ring_rmin"        value=" 152*mm"/>         
-    <constant name="L2_cone_ring_rmax"        value=" 168.8*mm"/>     
+    <constant name="L2_cone_ring_rmin"        value=" 152*mm"/>
+    <constant name="L2_cone_ring_rmax"        value=" 168.8*mm"/>
     <constant name="L2_cone_ring_dphi"        value=" 10*deg" />
 
     <constant name="L2_neg_cone_ring_zmin"    value=" L2_outer_neg_ring1_2_zmax" />
@@ -349,10 +349,10 @@
     <constant name="L2_pos_cone_ring_zmin"    value=" L2_pos_cone_ring_zmax-L2_cone_thickness" />
     <constant name="L2_pos_cone_ring_zcenter" value=" (L2_pos_cone_ring_zmin+L2_pos_cone_ring_zmax)/2-overlap_buffer" />
 
-    <constant name="L2_cone_leg_rmin"     value=" L2_cone_ring_rmax"/>         
-    <constant name="L2_cone_leg_rmax"     value=" IB_frame_rmax"/>       
-    <constant name="L2_cone_leg_dr"       value=" L2_cone_leg_rmax-L2_cone_leg_rmin"/>       
-    <constant name="L2_cone_leg_rcenter"  value=" (L2_cone_leg_rmax+L2_cone_leg_rmin)/2"/>       
+    <constant name="L2_cone_leg_rmin"     value=" L2_cone_ring_rmax"/>
+    <constant name="L2_cone_leg_rmax"     value=" IB_frame_rmax"/>
+    <constant name="L2_cone_leg_dr"       value=" L2_cone_leg_rmax-L2_cone_leg_rmin"/>
+    <constant name="L2_cone_leg_rcenter"  value=" (L2_cone_leg_rmax+L2_cone_leg_rmin)/2"/>
 
     <constant name="L2_cone_leg_width"    value=" 20*mm" />
 
@@ -410,14 +410,14 @@
     <subtraction name="IBFPCNegRing2" material="Copper" vis="SVTReadoutVis">
       <position x="0" y="0" z="IB_FPC_neg_ring_zcenter"/>
       <shape1 type="Tube" name="FPC_neg_ring2_main"
-              rmin="IB_FPC_ring2_rmin" 
-              thickness="IB_FPC_ring_thickness" 
-              length="IB_FPC_neg_ring_dz" 
+              rmin="IB_FPC_ring2_rmin"
+              thickness="IB_FPC_ring_thickness"
+              length="IB_FPC_neg_ring_dz"
               material="Copper"/>
       <shape2 type="Box" name="FPC_neg_ring2_cutout"
-              x="IB_FPC_ring2_rmax*2" 
-              y="IB_FPC_ring_vert_off*2" 
-              z="IB_FPC_neg_ring_dz"  
+              x="IB_FPC_ring2_rmax*2"
+              y="IB_FPC_ring_vert_off*2"
+              z="IB_FPC_neg_ring_dz"
               material="Air">
         <!-- This position is relative to the tube's center, not absolute -->
         <position x="0" y="0" z="0"/>
@@ -427,14 +427,14 @@
     <subtraction name="IBFPCPosRing2" material="Copper" vis="SVTReadoutVis">
       <position x="0" y="0" z="IB_FPC_pos_ring_zcenter"/>
       <shape1 type="Tube" name="FPC_pos_ring2_main"
-              rmin="IB_FPC_ring2_rmin" 
-              thickness="IB_FPC_ring_thickness" 
-              length="IB_FPC_pos_ring_dz" 
+              rmin="IB_FPC_ring2_rmin"
+              thickness="IB_FPC_ring_thickness"
+              length="IB_FPC_pos_ring_dz"
               material="Copper"/>
       <shape2 type="Box" name="FPC_pos_ring2_cutout"
-              x="IB_FPC_ring2_rmax*2" 
-              y="IB_FPC_ring_vert_off*2" 
-              z="IB_FPC_pos_ring_dz"  
+              x="IB_FPC_ring2_rmax*2"
+              y="IB_FPC_ring_vert_off*2"
+              z="IB_FPC_pos_ring_dz"
               material="Air">
         <!-- This position is relative to the tube's center, not absolute -->
         <position x="0" y="0" z="0"/>
@@ -1095,8 +1095,8 @@
       thickness="L2_outer_pos_ring1_2_dz">
         <position x="0*cm" y="0*cm" z="L2_outer_pos_ring1_2_zcenter" />
         <component material="CarbonFiber" thickness="L2_outer_pos_ring1_2_dz" name="Support" vis="SVTSupportVis"/>
-    </support>  
-    
+    </support>
+
     <comment> Backward (negative) rings </comment>
     <support type="Disk"
       name="L2OuterNegRing1"
@@ -1124,10 +1124,10 @@
       thickness="L2_outer_neg_ring1_2_dz">
         <position x="0*cm" y="0*cm" z="L2_outer_neg_ring1_2_zcenter" />
         <component material="CarbonFiber" thickness="L2_outer_neg_ring1_2_dz" name="Support" vis="SVTSupportVis"/>
-    </support>  
+    </support>
 
-    <comment> 
-    -------------------------------L2 inner frame (sheet 6)---------------------------------  
+    <comment>
+    -------------------------------L2 inner frame (sheet 6)---------------------------------
     </comment>
 
     <comment> Forward (positive) rings </comment>
@@ -1462,14 +1462,14 @@
                 material="CarbonFiber"/>
 
         <shape2 type="Box" name="L1PosCone_cutout"
-                x="L1_pos_cone_r2*2" 
-                y="L1_pos_cone_inner_vert_off*2" 
-                z="L1_pos_cone_z2"  
+                x="L1_pos_cone_r2*2"
+                y="L1_pos_cone_inner_vert_off*2"
+                z="L1_pos_cone_z2"
                 material="Air">
         </shape2>
       </subtraction>
 
- 
+
 
     <comment>
       ----------------------------------------------
@@ -1478,18 +1478,18 @@
     <comment> attach fanning out FPC cables to positive cone </comment>
      <subtraction name="L1PosConeFPC" material="Copper" vis="SVTReadoutVis">
         <position x="0" y="0" z="(L1_pos_cone_z3+L1_pos_cone_z1)/2+L1_pos_cone_thickness+overlap_buffer*2"/>
-        
+
         <shape1 type="Cone" name="L1PosConeFPC_main"
                 rmin1="L1_pos_cone_r1"
                 rmin2="L1_pos_cone_r3-overlap_buffer"
                 length="L1_pos_cone_z3-L1_pos_cone_z1"
                 thickness="L1_pos_cone_FPC_thickness"
                 material="Copper"/>
-        
+
         <shape2 type="Box" name="L1PosConeFPC_cutout"
-                x="L1_pos_cone_r2*2" 
-                y="L1_pos_cone_inner_vert_off*2" 
-                z="L1_pos_cone_z2"  
+                x="L1_pos_cone_r2*2"
+                y="L1_pos_cone_inner_vert_off*2"
+                z="L1_pos_cone_z2"
                 material="Air">
         </shape2>
       </subtraction>
@@ -1499,14 +1499,14 @@
     <subtraction name="IBFPCNegRing0" material="Copper" vis="SVTReadoutVis">
       <position x="0" y="0" z="IB_FPC_neg_ring_zcenter"/>
       <shape1 type="Tube" name="FPC_neg_ring0_main"
-              rmin="IB_FPC_ring0_rmin" 
-              thickness="IB_FPC_ring_thickness" 
-              length="IB_FPC_neg_ring_dz" 
+              rmin="IB_FPC_ring0_rmin"
+              thickness="IB_FPC_ring_thickness"
+              length="IB_FPC_neg_ring_dz"
               material="Copper"/>
       <shape2 type="Box" name="FPC_neg_ring0_cutout"
-              x="IB_FPC_ring0_rmax*2" 
-              y="IB_FPC_ring_vert_off*2" 
-              z="IB_FPC_neg_ring_dz"  
+              x="IB_FPC_ring0_rmax*2"
+              y="IB_FPC_ring_vert_off*2"
+              z="IB_FPC_neg_ring_dz"
               material="Air">
         <!-- This position is relative to the tube's center, not absolute -->
         <position x="0" y="0" z="0"/>
@@ -1516,14 +1516,14 @@
    <subtraction name="IBFPCNegRing1" material="Copper" vis="SVTReadoutVis">
       <position x="0" y="0" z="IB_FPC_neg_ring_zcenter"/>
       <shape1 type="Tube" name="FPC_neg_ring1_main"
-              rmin="IB_FPC_ring1_rmin" 
-              thickness="IB_FPC_ring_thickness" 
-              length="IB_FPC_neg_ring_dz" 
+              rmin="IB_FPC_ring1_rmin"
+              thickness="IB_FPC_ring_thickness"
+              length="IB_FPC_neg_ring_dz"
               material="Copper"/>
       <shape2 type="Box" name="FPC_neg_ring1_cutout"
-              x="IB_FPC_ring1_rmax*2" 
-              y="IB_FPC_ring_vert_off*2" 
-              z="IB_FPC_neg_ring_dz"  
+              x="IB_FPC_ring1_rmax*2"
+              y="IB_FPC_ring_vert_off*2"
+              z="IB_FPC_neg_ring_dz"
               material="Air">
         <!-- This position is relative to the tube's center, not absolute -->
         <position x="0" y="0" z="0"/>
@@ -1533,14 +1533,14 @@
     <subtraction name="IBFPCPosRing0" material="Copper" vis="SVTReadoutVis">
       <position x="0" y="0" z="IB_FPC_pos_ring_zcenter"/>
       <shape1 type="Tube" name="FPC_pos_ring0_main"
-              rmin="IB_FPC_ring0_rmin" 
-              thickness="IB_FPC_ring_thickness" 
-              length="IB_FPC_pos_ring_dz" 
+              rmin="IB_FPC_ring0_rmin"
+              thickness="IB_FPC_ring_thickness"
+              length="IB_FPC_pos_ring_dz"
               material="Copper"/>
       <shape2 type="Box" name="FPC_pos_ring0_cutout"
-              x="IB_FPC_ring0_rmax*2" 
-              y="IB_FPC_ring_vert_off*2" 
-              z="IB_FPC_pos_ring_dz"  
+              x="IB_FPC_ring0_rmax*2"
+              y="IB_FPC_ring_vert_off*2"
+              z="IB_FPC_pos_ring_dz"
               material="Air">
         <!-- This position is relative to the tube's center, not absolute -->
         <position x="0" y="0" z="0"/>
@@ -1550,14 +1550,14 @@
     <subtraction name="IBFPCPosRing1" material="Copper" vis="SVTReadoutVis">
       <position x="0" y="0" z="IB_FPC_pos_ring_zcenter"/>
       <shape1 type="Tube" name="FPC_pos_ring1_main"
-              rmin="IB_FPC_ring1_rmin" 
-              thickness="IB_FPC_ring_thickness" 
-              length="IB_FPC_pos_ring_dz" 
+              rmin="IB_FPC_ring1_rmin"
+              thickness="IB_FPC_ring_thickness"
+              length="IB_FPC_pos_ring_dz"
               material="Copper"/>
       <shape2 type="Box" name="FPC_pos_ring1_cutout"
-              x="IB_FPC_ring1_rmax*2" 
-              y="IB_FPC_ring_vert_off*2" 
-              z="IB_FPC_pos_ring_dz"  
+              x="IB_FPC_ring1_rmax*2"
+              y="IB_FPC_ring_vert_off*2"
+              z="IB_FPC_pos_ring_dz"
               material="Air">
         <!-- This position is relative to the tube's center, not absolute -->
         <position x="0" y="0" z="0"/>

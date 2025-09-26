@@ -27,7 +27,7 @@
     N (-)                         └         ┘                                        (+) P
     ──·──·──·──·──·────·──·──·──·──·── x ──·──·──·──·──·──·──·──·──·────·──·──·──·──·──·── z
   ########
-  Updates 
+  Updates
   ########
   09.2025: the inner vertex barrel support (up to the first disk) are replaced by a more detailed design in vertex_barrel_support.xml
   </comment>
@@ -41,7 +41,7 @@
     <constant name="InnerSupportConeP_thickness"          value="InnerSupportConePAl_thickness + InnerSupportConeCF_thickness" />
     <constant name="InnerSupportConeN_thickness"          value="InnerSupportConeNAl_thickness + InnerSupportConeCF_thickness" />
     <constant name="InnerSupportCone_zmin"                value="InnerTrackerEndcapP_zmin + 0.5*mm" />  <comment>start the cone at the first disk (assume P and N symmetric)</comment>
-    <constant name="InnerSupportCone_rmin1"               value="InnerSupportCone_zmin/tan(TrackerPrimaryAngle)" /> 
+    <constant name="InnerSupportCone_rmin1"               value="InnerSupportCone_zmin/tan(TrackerPrimaryAngle)" />
 
     <constant name="InnerSupportCone_rmin2"               value="TrackerSupportCyl_rmin1" />
     <constant name="InnerSupportCone_zmax"                value="InnerSupportCone_rmin2/tan(TrackerPrimaryAngle)" />
