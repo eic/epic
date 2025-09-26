@@ -371,8 +371,10 @@
     <constant name="L2_pos_cone_leg_length"   value=" sqrt(L2_cone_leg_dr*L2_cone_leg_dr+L2_pos_cone_leg_dz*L2_pos_cone_leg_dz)" />
 
     <comment>---------------FPC , sheet5,  sheet 9---------------</comment>
-    <comment> FPC from the silicon sensor, assume uniformly distributed cylinder of copper</comment>
-    <constant name="IB_FPC_ring_thickness"    value=" 0.555*mm" />
+    <comment> FPC from the silicon sensor, assume uniformly distributed cylinder of copper. 
+      Assume 70um thick of copper for both digi/analog and signal FPC, see https://github.com/eic/epic/pull/803</comment>
+    <constant name="IB_FPC_thickness"    value="0.07*mm" />
+    <constant name="IB_FPC_ring_thickness"    value="IB_FPC_thickness" />
     <constant name="IB_FPC_ring_vert_off"    value=" 0.5*mm" />
 
     <constant name="IB_FPC_ring0_rmax"        value="38*mm" />
@@ -393,7 +395,7 @@
     <constant name="IB_FPC_pos_ring_zcenter"   value="(IB_FPC_pos_ring_zmax + IB_FPC_pos_ring_zmin)/2" />
 
     <comment>   FPC cables along the cone on the Hadron (Pos) side    </comment>
-    <constant name="L1_pos_cone_FPC_thickness"    value=" 0.555*mm" />
+    <constant name="L1_pos_cone_FPC_thickness"    value="IB_FPC_thickness" />
 
 
   </define>
