@@ -3,8 +3,8 @@
 
 <lccdd>
   <comment>
-    Tracker support and service materials for IB converted from the CAD drawing, see
-
+    Tracker support and service materials for IB converted from the CAD drawings, see https://github.com/eic/epic/pull/803.
+    This replaced part of the inner support cone (within first disk, and L3) in support_service_craterlake.xml (already modified accordingly).
   </comment>
   <define>
     <constant name="IB_CF_thickness"           value="0.5*mm" />
@@ -373,7 +373,6 @@
     <comment>---------------FPC , sheet5,  sheet 9---------------</comment>
     <comment> FPC from the silicon sensor, assume uniformly distributed cylinder of copper</comment>
     <constant name="IB_FPC_ring_thickness"    value=" 0.555*mm" />
-    <!-- <constant name="IB_FPC_ring_thickness"    value=" 0.555*mm" /> -->
     <constant name="IB_FPC_ring_vert_off"    value=" 0.5*mm" />
 
     <constant name="IB_FPC_ring0_rmax"        value="38*mm" />
