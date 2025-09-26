@@ -1,12 +1,15 @@
 <!-- SPDX-License-Identifier: LGPL-3.0-or-later -->
-<!-- Copyright (C) 2022 Sylvester Joosten, Shujie Li -->
+<!-- Copyright (C) 2025 Shujie Li -->
 
 <lccdd>
   <comment>
-    Tracker support and service materials for IB
+    Tracker support and service materials for IB converted from the CAD drawing, see
+
   </comment>
   <define>
     <constant name="IB_CF_thickness"           value="0.5*mm" />
+    <constant name="IB_frame_rmax"   value='258*mm'/>
+    <constant name="IB_frame_zmax"   value='232*mm'/>
 
     <constant name="overlap_buffer"   value="0.5*mm" /> <comment>to avoid overlaps between simple geo shape boundaries e.g. when connecting box with ring</comment>
     <comment> ------------------------------
@@ -167,8 +170,7 @@
               ------------------------------</comment>
 
 
-    <constant name="IB_frame_rmax"   value='258*mm'/>
-    <constant name="IB_frame_zmax"   value='232*mm'/>
+
     <constant name="L1_cone_leg1_phi0"     value=" -22.5*deg" />
     <constant name="L1_cone_leg2_phi0"     value=" L1_cone_leg1_phi0-45*deg" />
     <constant name="L1_cone_leg3_phi0"     value=" L1_cone_leg2_phi0-45*deg" />
@@ -371,6 +373,7 @@
     <comment>---------------FPC , sheet5,  sheet 9---------------</comment>
     <comment> FPC from the silicon sensor, assume uniformly distributed cylinder of copper</comment>
     <constant name="IB_FPC_ring_thickness"    value=" 0.555*mm" />
+    <!-- <constant name="IB_FPC_ring_thickness"    value=" 0.555*mm" /> -->
     <constant name="IB_FPC_ring_vert_off"    value=" 0.5*mm" />
 
     <constant name="IB_FPC_ring0_rmax"        value="38*mm" />

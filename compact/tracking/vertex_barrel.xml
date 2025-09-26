@@ -13,8 +13,11 @@
 
     <constant name="RSU_width"   value="19.564*mm" />
     <constant name="RSU_length"  value="21.666*mm" />
-    <constant name="Section_width"  value="RSU_width/2-0.06*mm-0.398*mm"/>
-    <constant name="Section_length" value="RSU_length/2-0.09*mm"/>
+    <constant name="Periphery_width" value="0.398*mm"/>
+    <constant name="bias_width" value="0.06*mm"/>
+    <constant name="backbone_width" value="0.09*mm"/>
+    <constant name="Section_width"  value="RSU_width/2-bias_width-Periphery_width"/>
+    <constant name="Section_length" value="RSU_length/2-backbone_width"/>
 
     <constant name="VertexBarrelMod_length"   value="RSU_length/2" />
     <constant name="VertexBarrelLayer_nz"     value="12*2" />
