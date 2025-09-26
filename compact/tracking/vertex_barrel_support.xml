@@ -371,7 +371,7 @@
     <constant name="L2_pos_cone_leg_length"   value=" sqrt(L2_cone_leg_dr*L2_cone_leg_dr+L2_pos_cone_leg_dz*L2_pos_cone_leg_dz)" />
 
     <comment>---------------FPC , sheet5,  sheet 9---------------</comment>
-    <comment> FPC from the silicon sensor, assume uniformly distributed cylinder of copper. 
+    <comment> FPC from the silicon sensor, assume uniformly distributed cylinder of copper.
       Assume 70um thick of copper for both digi/analog and signal FPC, see https://github.com/eic/epic/pull/803</comment>
     <constant name="IB_FPC_thickness"    value="0.07*mm" />
     <constant name="IB_FPC_ring_thickness"    value="IB_FPC_thickness" />
