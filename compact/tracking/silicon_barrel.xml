@@ -12,10 +12,11 @@
          Edited by Aditya Yalavatti and Sam Henry, University of Oxford
     </comment>
 
-    <constant name="SiBarrelMod1_rmin" value="SiBarrel1_rmin - 1*mm" />
-    <constant name="SiBarrelMod2_rmin" value="SiBarrel2_rmin + 1*mm" />
-    <constant name="SiBarrelMod_angle" value="SiBarrel_angle" />
-    <constant name="SiBarrelMod_dz" value="SiBarrel_dz" />
+    <constant name="SiBarrelMod1_rmin" value="SiBarrel1_rmin - 0.5*cm" /> <!-- 26.5 cm--> 
+    <constant name="SiBarrelMod2_rmin" value="SiBarrel2_rmin" /> <!-- 42 cm --> 
+
+    <constant name="SiBarrelMod_angle" value="SiBarrel_angle" /> <!-- pi/4 or 45 deg --> 
+    <constant name="SiBarrelMod_dz" value="SiBarrel_dz" /> <!-- 2 cm --> 
 
     <constant name="SiBarrelSensor_thickness" value="40*um" />
     <constant name="SiBarrelSiliconGap_width" value="1*mm" />
@@ -27,28 +28,30 @@
     <constant name="SiBarrelMod1Frame_height" value="0.8*cm" />
     <constant name="SiBarrelMod2Frame_height" value="0.8*cm" />
     <constant name="SiBarrelStave1_width" value="3.8*cm" />
-    <constant name="SiBarrelStave2_width" value="3.8*cm" />
+    <constant name="SiBarrelStave2_width" value="3.8*cm" /> <!--UPDATED from 3.9 to 3.8-->
 
-    <constant name="SiBarrelMod1_length"        value="2 * SiBarrelMod1_rmin / tan(SiBarrelMod_angle) - SiBarrel_dz - 12*mm"/>
+
+    <constant name="SiBarrelMod1_length"        value="2 * SiBarrelMod1_rmin / tan(SiBarrelMod_angle) - SiBarrel_dz - 7*mm"/> <!--UPDATED from SiBarrel_dz to SiBarrel_dz -12*mm (2*26.5/1 -2-0.7 = 50.3cm)-->
+
     <comment> 84cm=2*42cm is the engineer max </comment>
-    <constant name="SiBarrelMod2_length" value="84*cm - 40*mm" />
+    <constant name="SiBarrelMod2_length" value="84*cm - 4.7*cm" /> <!--UPDATED from 84*cm to 84*cm - 4.7*cm = 79.3cm-->
 
     <constant name="SiBarrelLayer1_length" value="SiBarrelMod1_length + 1*um" />
     <constant name="SiBarrelLayer2_length" value="SiBarrelMod2_length + 1*um" />
     <constant name="SiBarrelEnvelope_length" value="SiBarrelLayer2_length + 1*um" />
 
     <constant name="SiBarrelLayer_thickness" value="3.0*cm" />
-    <constant name="SiBarrelLayer1_rmin" value="SiBarrelMod1_rmin - 6*mm " />
+    <constant name="SiBarrelLayer1_rmin" value="SiBarrelMod1_rmin - 6*mm " /> <!--UPDATED from SiBarrelMod1_rmin to SiBarrelMod1_rmin -6*mm -->
     <constant name="SiBarrelLayer1_rmax" value="SiBarrelLayer1_rmin + SiBarrelLayer_thickness" />
-    <constant name="SiBarrelLayer2_rmin" value="SiBarrelMod2_rmin - 10*mm" />
+    <constant name="SiBarrelLayer2_rmin" value="SiBarrelMod2_rmin " />  <!--Problem child SiBarrelMod2_rmin-10*mm -->
     <constant name="SiBarrelLayer2_rmax" value="SiBarrelLayer2_rmin + SiBarrelLayer_thickness" />
 
     <constant name="SiBarrelStave1_count" value="46" />
     <constant name="SiBarrelStave2_count" value="70" />
     <constant name="SiBarrel1_radius_castellation" value="6*mm" />
     <constant name="SiBarrel2_radius_castellation" value="6*mm" />
-    <constant name="SiBarrel1_radius_offset" value="0*mm" />
-    <constant name="SiBarrel2_radius_offset" value="0*mm" />
+    <constant name="SiBarrel1_radius_offset" value="0*mm" /> <!--from 5.5*mm to 0*mm -->
+    <constant name="SiBarrel2_radius_offset" value="9.5*mm" /> <!--Problem child 0mm -->
 
 
 
@@ -64,7 +67,7 @@
     <constant name="SiBarrel2_Brace1_Position_Y" value="11.3*cm" />
     <constant name="SiBarrel2_Brace2_Position_Y" value="21.6*cm" />
     <constant name="SiBarrel2_Brace3_Position_Y" value="32.8*cm" />
-    <constant name="SiBarrel2_Brace4_Position_Y" value="39.5*cm" />
+    <constant name="SiBarrel2_Brace4_Position_Y" value="39.5*cm" /> <!--UPDATED from 41.0 cm to 39.5 cm -->
 
 
 
