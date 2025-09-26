@@ -23,10 +23,10 @@
     <vis name="TrackerGEMModuleVis"  ref="TrackerMPGDVis"  visible="true"  showDaughters="false" />
     <vis name="TrackerMMGASLayerVis" ref="TrackerMPGDVis"  visible="true"  showDaughters="false" />
 
-    <vis name="VertexLayerVis"   ref="AnlGold"         visible="true"  showDaughters="true" />
-    <vis name="VertexSupportLayerVis" ref="AnlBlue"         visible="true"  showDaughters="false" />
-    <vis name="VertexSupportVis"      ref="VertexSupportLayerVis" visible="true"  showDaughters="true" />
-    <vis name="VertexModuleVis"  ref="TrackerLayerVis" visible="true"  showDaughters="false" />
+    <vis name="SVTSensorVis"       ref="AnlGold"        visible="true"  showDaughters="true" />
+    <vis name="SVTReadoutVis"      ref="AnlDarkGreen"   visible="true"  showDaughters="true" />
+    <vis name="SVTSupportVis"      ref="AnlLight_Gray"  visible="true"  showDaughters="false" />
+    <vis name="VertexLayerVis"     ref="SVTSensorVis"   visible="true"  showDaughters="true" />
 
     <vis name="TOFVis"            ref="AnlTeal"             visible="true"  showDaughters="true"/>
     <vis name="TOFLayerVis"       ref="TOFVis"              visible="true"  showdaughters="true"/>

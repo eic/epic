@@ -567,4 +567,8 @@
     <fraction n="0.002" ref="P"/>
     <fraction n="0.005" ref="S"/>
   </material>
+  <material name="CarbonFoam_LowDensity"><!-- low density 45kg/m3 for SVT L0 -->
+    <D type="density" value="0.045" unit="g/cm3"/>
+    <fraction n="1.00" ref="C"/>
+  </material>
 </materials>
