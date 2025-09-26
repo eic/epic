@@ -219,10 +219,10 @@ static Ref_t create_CurvedBarrelTracker(Detector& description, xml_h e, Sensitiv
     int l_nphi      = x_layout.nphi(); // Number of modules in phi.
     double phi0     = x_layout.phi0(); // Starting phi of first module.
     int nphi[2]     = {int((l_nphi + 1) / 2),
-                       int(l_nphi / 2)};   // number of modules in uppper and lower modules.
-    double phi_incr = (M_PI*2 - phi0*2) / l_nphi; // Phi increment for one module.
-    double z0       = z_layout.z0();       // Z position of first module in phi.
-    double nz       = z_layout.nz();       // Number of modules to place in z.
+                       int(l_nphi / 2)}; // number of modules in uppper and lower modules.
+    double phi_incr = (M_PI * 2 - phi0 * 2) / l_nphi; // Phi increment for one module.
+    double z0       = z_layout.z0();                  // Z position of first module in phi.
+    double nz       = z_layout.nz();                  // Number of modules to place in z.
 
     Volume module_env[2];
     Placements sensVols[2];
@@ -274,16 +274,16 @@ static Ref_t create_CurvedBarrelTracker(Detector& description, xml_h e, Sensitiv
       int iphi      = nphi[kk];
       double z_incr = module_length[m_nams[kk]][0];
       for (int ii = 0; ii < iphi; ii++) {
-        double dphi=phi0;
-        if (ii>(iphi/2)-1)
-          dphi=2*phi0;
+        double dphi = phi0;
+        if (ii > (iphi / 2) - 1)
+          dphi = 2 * phi0;
         // Loop over the number of modules in z.
         double module_z = z0;
         for (int j = 0; j < nz; j++, module_z += z_incr) {
           string module_name = _toString(module, "module%d");
           DetElement mod_elt(lay_elt, module_name, module);
           Transform3D tr(
-              RotationZYX(dphi + phi_incr*kk + phi_incr * ii * 2, 0, 0),
+              RotationZYX(dphi + phi_incr * kk + phi_incr * ii * 2, 0, 0),
               Position(0, 0, module_z)); // altering upper and lower module to fill every other row
           pv = lay_vol.placeVolume(module_env[kk], tr);
           pv.addPhysVolID("module", module);

@@ -13,10 +13,10 @@
 
     <constant name="overlap_buffer"   value="0.5*mm" /> <comment>to avoid overlaps between simple geo shape boundaries e.g. when connecting box with ring</comment>
     <comment> ------------------------------
-                    L0 L1 (sheet 1) 
+                    L0 L1 (sheet 1)
               ------------------------------</comment>
-    <comment> Radius: ring1 is the inner ring (L0), ring2 is the outer ring (L1). 
-                      ring1_2 is the disk connecti∂ng ring1 and 2 </comment>
+    <comment> Radius: ring1 is the inner ring (L0), ring2 is the outer ring (L1).
+                      ring1_2 is the disk connecting ring1 and 2 </comment>
     <constant name="L0_ring1_rmin"         value="38.15*mm" />
     <constant name="L0_ring1_rmax"         value="50.30*mm" />
     <constant name="L0_ring1_dr"           value="L0_ring1_rmax-L0_ring1_rmin" />
@@ -39,7 +39,7 @@
     <constant name="L0_plate_mid_rot"           value=" 90*deg" /> 
 
     <comment> innner (smaller abs(z)) and outer endcap rings on negative and postive direction </comment>
-    <constant name="L0_inner_ring_dz"              value="6.35*mm" /> 
+    <constant name="L0_inner_ring_dz"              value="6.35*mm" />
     <constant name="L0_outer_ring_dz"              value="25.4*mm" />
     <constant name="L0_ring_gap_z"                 value="5.5*mm"  />
     <constant name="L0_neg_inner_ring_zcenter"     value="L0_plate_zmin - L0_inner_ring_dz/2." />
@@ -48,7 +48,7 @@
     <constant name="L0_pos_outer_ring_zcenter"     value="L0_plate_zmax + L0_inner_ring_dz + L0_ring_gap_z + L0_outer_ring_dz/2." />
 
     <comment> ------------------------------
-                  L0 L1 (sheet 3) 
+                  L0 L1 (sheet 3)
             ------------------------------</comment>
     <comment> L0 and L1 air tubes on the positive end (approx as disk), sheet 3 </comment>
     <constant name="L0L1_cooling_tube_dz"         value="25.2*mm" />
@@ -67,7 +67,7 @@
     <constant name="L0L1_cooling_tube_phi_off"     value="L0L1_cooling_tube_vert_off/L0_cooling_tube_rmin" />
 
     <comment> ------------------------------
-                    L1 (sheet 2) 
+                    L1 (sheet 2)
               ------------------------------</comment>
     <comment> ring1 (smaller r) and 2. ring1_2 is the disk connecting two rings </comment>
     <constant name="L1_ring_dr"             value="IB_CF_thickness" />
@@ -111,21 +111,21 @@
     <constant name="L1_plate1_2_zcenter"         value="(L1_plate1_2_zmax+L1_plate1_2_zmin)/2" />
     <constant name="L1_plate1_2_length"          value=" L1_plate1_2_zmax-L1_plate1_2_zmin" />
     <constant name="L1_plate1_2_dr"              value=" L1_ring2_rmax - L1_ring1_rmax" />
-    <constant name="L1_plate1_2_vert_off"        value=" 0.5*mm" /> 
-    <constant name="L1_plate1_2_vert_center"     value=" L1_plate1_2_vert_off + L1_plate_thickness/2" /> 
-    <constant name="L1_plate1_2_rcenter"         value=" (L1_ring1_rmax + L1_ring2_rmax)/2" /> 
-    <constant name="L1_plate1_2_mid_angle"       value=" 7.3*deg" /> 
+    <constant name="L1_plate1_2_vert_off"        value=" 0.5*mm" />
+    <constant name="L1_plate1_2_vert_center"     value=" L1_plate1_2_vert_off + L1_plate_thickness/2" />
+    <constant name="L1_plate1_2_rcenter"         value=" (L1_ring1_rmax + L1_ring2_rmax)/2" />
+    <constant name="L1_plate1_2_mid_angle"       value=" 7.3*deg" />
 
     <constant name="L1_plate1_zmin"              value=" L1_neg_ring1_zmax" />
     <constant name="L1_plate1_zmax"              value=" L1_pos_ring1_zmin" />
     <constant name="L1_plate1_zcenter"           value="(L1_plate1_zmax+L1_plate1_zmin)/2" />
     <constant name="L1_plate1_length"            value=" L1_plate1_zmax-L1_plate1_zmin" />
     <constant name="L1_plate1_dr"                value=" L1_plate_thickness" />
-    <constant name="L1_plate1_rmin"              value=" L1_ring1_rmin" /> 
-    <constant name="L1_plate1_dl"                value=" 5.2*mm" /> 
-    <constant name="L1_plate1_side_dphi"         value=" L1_plate1_dl/L1_plate1_rmin" /> 
-    <constant name="L1_plate1_side_phi0"         value=" (L1_plate1_2_vert_off)/L1_plate1_rmin" /> 
-    <constant name="L1_plate1_mid_dphi"          value=" L1_plate1_2_mid_angle" /> 
+    <constant name="L1_plate1_rmin"              value=" L1_ring1_rmin" />
+    <constant name="L1_plate1_dl"                value=" 5.2*mm" />
+    <constant name="L1_plate1_side_dphi"         value=" L1_plate1_dl/L1_plate1_rmin" />
+    <constant name="L1_plate1_side_phi0"         value=" (L1_plate1_2_vert_off)/L1_plate1_rmin" />
+    <constant name="L1_plate1_mid_dphi"          value=" L1_plate1_2_mid_angle" />
 
     <constant name="L1_plate2_zmin"              value=" L1_neg_ring2_zmax" />
     <constant name="L1_plate2_zmax"              value=" L1_pos_ring2_zmin" />
@@ -161,12 +161,12 @@
     <constant name="L1_cooling_pad_rmax"         value=" L1_cooling_ring1_rmin - 0.5*mm" />
     <constant name="L1_cooling_pad_rmin"         value=" 39.4*mm" />
     <constant name="L1_cooling_pad_dr"           value=" L1_cooling_pad_rmax - L1_cooling_pad_rmin" />
-    <constant name="L1_cooling_pad_vert_off"     value=" 0.5*mm" /> 
-    <constant name="L1_cooling_pad_vert_center"  value=" L1_cooling_pad_vert_off + L1_cooling_pad_thickness/2" /> 
-    <constant name="L1_cooling_pad_rcenter"      value=" (L1_cooling_pad_rmin + L1_cooling_pad_rmax)/2" /> 
+    <constant name="L1_cooling_pad_vert_off"     value=" 0.5*mm" />
+    <constant name="L1_cooling_pad_vert_center"  value=" L1_cooling_pad_vert_off + L1_cooling_pad_thickness/2" />
+    <constant name="L1_cooling_pad_rcenter"      value=" (L1_cooling_pad_rmin + L1_cooling_pad_rmax)/2" />
 
     <comment> ------------------------------
-                    Frame (sheet 4) 
+                    Frame (sheet 4)
               ------------------------------</comment>
 
 
@@ -203,17 +203,17 @@
     
     <comment>   L1NegCone    </comment>  
     <constant name="L1_neg_cone_thickness"    value=" IB_CF_thickness" />
-    <constant name="L1_neg_cone_ring_rmin"    value=" 67*mm"/>         
-    <constant name="L1_neg_cone_ring_rmax"    value=" 86.4*mm"/>         
+    <constant name="L1_neg_cone_ring_rmin"    value=" 67*mm"/>
+    <constant name="L1_neg_cone_ring_rmax"    value=" 86.4*mm"/>
     <constant name="L1_neg_cone_ring_zmin"    value=" L1_neg_ring1_2_zmax" />
     <constant name="L1_neg_cone_ring_zmax"    value=" L1_neg_cone_ring_zmin+L1_neg_cone_thickness" />
     <constant name="L1_neg_cone_ring_zcenter" value=" (L1_neg_cone_ring_zmax+L1_neg_cone_ring_zmin)/2+overlap_buffer" />
     <constant name="L1_neg_cone_ring_dphi"     value=" 17.5*deg" />
 
-    <constant name="L1_neg_cone_leg_rmin"     value=" L1_neg_cone_ring_rmax"/>         
-    <constant name="L1_neg_cone_leg_rmax"     value=" IB_frame_rmax"/>       
-    <constant name="L1_neg_cone_leg_dr"       value=" L1_neg_cone_leg_rmax-L1_neg_cone_leg_rmin"/>       
-    <constant name="L1_neg_cone_leg_rcenter"  value=" (L1_neg_cone_leg_rmax+L1_neg_cone_leg_rmin)/2"/>       
+    <constant name="L1_neg_cone_leg_rmin"     value=" L1_neg_cone_ring_rmax"/>
+    <constant name="L1_neg_cone_leg_rmax"     value=" IB_frame_rmax"/>
+    <constant name="L1_neg_cone_leg_dr"       value=" L1_neg_cone_leg_rmax-L1_neg_cone_leg_rmin"/>
+    <constant name="L1_neg_cone_leg_rcenter"  value=" (L1_neg_cone_leg_rmax+L1_neg_cone_leg_rmin)/2"/>
     <constant name="L1_neg_cone_leg_zmax"     value=" L1_neg_cone_ring_zmin" />
     <constant name="L1_neg_cone_leg_zmin"     value=" -IB_frame_zmax" />
     <constant name="L1_neg_cone_leg_dz"       value=" L1_neg_cone_leg_zmax-L1_neg_cone_leg_zmin" />
@@ -1233,8 +1233,8 @@
 
     </detector>
 
-    <comment> 
-    -------------------------------L1---------------------------------------------  
+    <comment>
+    -------------------------------L1---------------------------------------------
     </comment>
     <detector type="epic_SupportServiceMaterial"
       name="SVT_IB_Support_L1"
@@ -1453,14 +1453,14 @@
     <comment>positive cone (sheet 4) </comment>
     <subtraction name="L1PosCone" material="CarbonFiber" vis="SVTSupportVis">
         <position x="0" y="0" z="(L1_pos_cone_z3+L1_pos_cone_z1)/2"/>
-        
+
         <shape1 type="Cone" name="L1PosCone_main"
                 rmin1="L1_pos_cone_r1"
                 rmin2="L1_pos_cone_r3-overlap_buffer"
                 length="L1_pos_cone_z3-L1_pos_cone_z1"
                 thickness="L1_pos_cone_thickness"
                 material="CarbonFiber"/>
-        
+
         <shape2 type="Box" name="L1PosCone_cutout"
                 x="L1_pos_cone_r2*2" 
                 y="L1_pos_cone_inner_vert_off*2" 
@@ -1985,8 +1985,8 @@
         thickness="L1_pos_ring1_2_dz">
           <position x="0*cm" y="0*cm" z="L1_pos_ring1_2_zcenter" />
           <component material="CarbonFiber" thickness="L1_pos_ring1_2_dz" name="Support" vis="SVTSupportVis"/>
-      </support>  
-      
+      </support>
+
       <comment> Backward (negative) rings </comment>
       <support type="Disk"
         name="L1NegRing1"
@@ -2014,12 +2014,12 @@
         thickness="L1_neg_ring1_2_dz">
           <position x="0*cm" y="0*cm" z="L1_neg_ring1_2_zcenter" />
           <component material="CarbonFiber" thickness="L1_neg_ring1_2_dz" name="Support" vis="SVTSupportVis"/>
-      </support>  
-          
+      </support>
+
     </detector>
-  
-    <comment> 
-    -------------------------------L0 and L1 (sheet1 and sheet 3)---------------------------------  
+
+    <comment>
+    -------------------------------L0 and L1 (sheet1 and sheet 3)---------------------------------
     </comment>
     <detector type="epic_SupportServiceMaterial"
       name="SVT_IB_Support_L0_L1"
@@ -2028,17 +2028,17 @@
       <comment> air cooling tubes on sheet 3</comment>
       <subtraction name="L1CoolingTube" material="PEEK" vis="AnlOrange">
         <position x="0" y="0" z="L0L1_cooling_tube_zcenter"/>
-        
+
         <shape1 type="Tube" name="cooling_tube_main"
-                rmin="L1_cooling_tube_rmin" 
-                thickness="L1_cooling_tube_dr" 
-                length="L0L1_cooling_tube_dz" 
+                rmin="L1_cooling_tube_rmin"
+                thickness="L1_cooling_tube_dr"
+                length="L0L1_cooling_tube_dz"
                 material="PEEK"/>
-        
+
         <shape2 type="Box" name="cooling_tube_cutout"
-                x="L1_cooling_tube_rmax*2" 
-                y="L0L1_cooling_tube_vert_off*2" 
-                z="L0L1_cooling_tube_dz"  
+                x="L1_cooling_tube_rmax*2"
+                y="L0L1_cooling_tube_vert_off*2"
+                z="L0L1_cooling_tube_dz"
                 material="Air">
           <!-- This position is relative to the tube's center, not absolute -->
           <position x="0" y="0" z="0"/>
@@ -2047,18 +2047,18 @@
 
       <subtraction name="L0CoolingTube" material="PEEK" vis="AnlOrange">
         <position x="0" y="0" z="L0L1_cooling_tube_zcenter"/>
-        
+
         <shape1 type="Tube" name="cooling_tube_main"
-                rmin="L0_cooling_tube_rmin" 
-                thickness="L0_cooling_tube_dr" 
-                length="L0L1_cooling_tube_dz" 
+                rmin="L0_cooling_tube_rmin"
+                thickness="L0_cooling_tube_dr"
+                length="L0L1_cooling_tube_dz"
                 material="PEEK"/>
-        
+
         <!-- Shape to subtract: position is RELATIVE to shape1's center -->
         <shape2 type="Box" name="cooling_tube_cutout"
-                x="L0_cooling_tube_rmax*2" 
-                y="L0L1_cooling_tube_vert_off*2" 
-                z="L0L1_cooling_tube_dz"  
+                x="L0_cooling_tube_rmax*2"
+                y="L0L1_cooling_tube_vert_off*2"
+                z="L0L1_cooling_tube_dz"
                 material="Air">
           <!-- This position is relative to the tube's center, not absolute -->
           <position x="0" y="0" z="0"/>
