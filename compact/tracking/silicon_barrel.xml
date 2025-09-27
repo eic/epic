@@ -1,5 +1,5 @@
 <!-- SPDX-License-Identifier: LGPL-3.0-or-later -->
-<!-- Copyright (C) 2022 Sylvester Joosten, Wouter Deconinck, Shujie Li -->
+<!-- Copyright (C) 2022 - 2025 Sylvester Joosten, Wouter Deconinck, Shujie Li, Aditya Yalavatti, Sam Henry -->
 
 <lccdd>
   <define>
@@ -8,8 +8,6 @@
          reproduce the peaks in the material thickness scan.
 
          Presentation: https://indico.bnl.gov/event/29542
-
-         Edited by Aditya Yalavatti and Sam Henry, University of Oxford
     </comment>
 
     <constant name="SiBarrelMod1_rmin" value="SiBarrel1_rmin - 0.5*cm" /> <!-- 26.5 cm-->
