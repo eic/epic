@@ -158,24 +158,24 @@
         <position x="50*cm" y="60*cm" z="HcalEndcapN_LFHCAL_length - HcalEndcapN_ElectronicsThickness" />
       </fourmodule>
       <layer repeat="HcalEndcapN_Layer_NSteelRepeatSFirst" vis="InvisibleWithDaughters" readoutlayer="0">
-        <slice material="Polystyrene" thickness="HcalEndcapN_PolystyreneThickness" vis="HcalEndcapN_LayerScintVis" sensitive="yes" limits="cal_limits" type="3" />
-        <slice material="Kapton" thickness="HcalEndcapN_KaptonThickness" vis="HcalEndcapN_LayerKaptonVis" type="2" offset="HcalEndcapN_AirOffset"/>
         <slice material="StainlessSteelSAE304" thickness="HcalEndcapN_AbsorberThickness" vis="HcalEndcapN_LayerSteelVis" type="1"/>
+        <slice material="Kapton" thickness="HcalEndcapN_KaptonThickness" vis="HcalEndcapN_LayerKaptonVis" type="2" offset="HcalEndcapN_AirOffset"/>
+        <slice material="Polystyrene" thickness="HcalEndcapN_PolystyreneThickness" vis="HcalEndcapN_LayerScintVis" sensitive="yes" limits="cal_limits" type="3" />
       </layer>
      <layer repeat="HcalEndcapN_Layer_NSteelRepeatSFirst" vis="InvisibleWithDaughters" readoutlayer="1">
-        <slice material="Polystyrene" thickness="HcalEndcapN_PolystyreneThickness" vis="HcalEndcapN_LayerScintVis" sensitive="yes" limits="cal_limits" type="3" />
-        <slice material="Kapton" thickness="HcalEndcapN_KaptonThickness" vis="HcalEndcapN_LayerKaptonVis" type="2" offset="HcalEndcapN_AirOffset"/>
         <slice material="StainlessSteelSAE304" thickness="HcalEndcapN_AbsorberThickness" vis="HcalEndcapN_LayerSteelVis" type="1"/>
+        <slice material="Kapton" thickness="HcalEndcapN_KaptonThickness" vis="HcalEndcapN_LayerKaptonVis" type="2" offset="HcalEndcapN_AirOffset"/>
+        <slice material="Polystyrene" thickness="HcalEndcapN_PolystyreneThickness" vis="HcalEndcapN_LayerScintVis" sensitive="yes" limits="cal_limits" type="3" />
       </layer>
       <layer repeat="HcalEndcapN_Layer_NSteelRepeatS" vis="InvisibleWithDaughters" readoutlayer="2">
-        <slice material="Polystyrene" thickness="HcalEndcapN_PolystyreneThickness" vis="HcalEndcapN_LayerScintVis" sensitive="yes" limits="cal_limits" type="3" />
-        <slice material="Kapton" thickness="HcalEndcapN_KaptonThickness" vis="HcalEndcapN_LayerKaptonVis" type="2" offset="HcalEndcapN_AirOffset"/>
         <slice material="StainlessSteelSAE304" thickness="HcalEndcapN_AbsorberThickness" vis="HcalEndcapN_LayerSteelVis" type="1"/>
+        <slice material="Kapton" thickness="HcalEndcapN_KaptonThickness" vis="HcalEndcapN_LayerKaptonVis" type="2" offset="HcalEndcapN_AirOffset"/>
+        <slice material="Polystyrene" thickness="HcalEndcapN_PolystyreneThickness" vis="HcalEndcapN_LayerScintVis" sensitive="yes" limits="cal_limits" type="3" />
       </layer>
       <layer repeat="HcalEndcapN_Layer_NSteelRepeatS" vis="InvisibleWithDaughters" readoutlayer="3">
-        <slice material="Polystyrene" thickness="HcalEndcapN_PolystyreneThickness" vis="HcalEndcapN_LayerScintVis" sensitive="yes" limits="cal_limits" type="3" />
-        <slice material="Kapton" thickness="HcalEndcapN_KaptonThickness" vis="HcalEndcapN_LayerKaptonVis" type="2" offset="HcalEndcapN_AirOffset"/>
         <slice material="StainlessSteelSAE304" thickness="HcalEndcapN_AbsorberThickness" vis="HcalEndcapN_LayerSteelVis" type="1"/>
+        <slice material="Kapton" thickness="HcalEndcapN_KaptonThickness" vis="HcalEndcapN_LayerKaptonVis" type="2" offset="HcalEndcapN_AirOffset"/>
+        <slice material="Polystyrene" thickness="HcalEndcapN_PolystyreneThickness" vis="HcalEndcapN_LayerScintVis" sensitive="yes" limits="cal_limits" type="3" />
       </layer>
 <!--       <layer repeat="HcalEndcapN_Layer_NSteelRepeatS" vis="InvisibleWithDaughters" readoutlayer="4">
         <slice material="Polystyrene" thickness="HcalEndcapN_PolystyreneThickness" vis="HcalEndcapN_LayerScintVis" sensitive="yes" limits="cal_limits" type="3" />
