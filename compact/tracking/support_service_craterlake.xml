@@ -49,9 +49,9 @@
     <constant name="InnerSupportConeP_thickness"          value="InnerSupportConePAl_thickness + InnerSupportConeCF_thickness" />
     <constant name="InnerSupportConeN_thickness"          value="InnerSupportConeNAl_thickness + InnerSupportConeCF_thickness" />
     <constant name="InnerSupportCone_zmin"                value="VertexSupportRing_zmax" />
-    <constant name="InnerSupportCone_rmin1"               value="InnerSupportCone_zmin/tan(TrackerPrimaryAngle)" />
+    <constant name="InnerSupportCone_rmin1"               value="InnerSupportCone_zmin/tan(TrackerPrimaryAngle)-3*mm" /> <comment>09.29.2025: use -3*mm to avoid overlap with the updated OB. The cone itself should be updated later. </comment>
 
-    <constant name="InnerSupportCone_rmin2"               value="TrackerSupportCyl_rmin1" />
+    <constant name="InnerSupportCone_rmin2"               value="TrackerSupportCyl_rmin1-3*mm" />
     <constant name="InnerSupportCone_zmax"                value="InnerSupportCone_rmin2/tan(TrackerPrimaryAngle)" />
 
     <constant name="InnerSupportCone_z"                   value="0.5*(InnerSupportCone_zmax + InnerSupportCone_zmin)" />

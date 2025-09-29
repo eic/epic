@@ -17,8 +17,8 @@
     <constant name="VertexBarrel_rmax"               value="12.6*cm"/>
 
     <comment> Main parameters for the SiBarrel layer geometry </comment>
-    <constant name="SiBarrel1_rmin"                  value="27.0*cm"/>
-    <constant name="SiBarrel2_rmin"                  value="42.0*cm"/>
+    <constant name="SiBarrel1_rmin"                  value="25.9*cm"/>
+    <constant name="SiBarrel2_rmin"                  value="41.4*cm"/>
     <constant name="SiBarrel_angle"                  value="TrackerPrimaryAngle"/>
     <constant name="SiBarrel_dz"                     value="2*cm"/>
 
