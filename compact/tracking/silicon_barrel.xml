@@ -30,9 +30,9 @@
     <constant name="SiBarrelEnvelope_length" value="SiBarrelLayer2_length + 1*um" />
 
     <constant name="SiBarrelLayer_thickness" value="1.2*cm" />
-    <constant name="SiBarrelLayer1_rmin" value="SiBarrel1_rmin " /> 
+    <constant name="SiBarrelLayer1_rmin" value="SiBarrel1_rmin " />
     <constant name="SiBarrelLayer1_rmax" value="SiBarrelLayer1_rmin + SiBarrelLayer_thickness" />
-    <constant name="SiBarrelLayer2_rmin" value="SiBarrel2_rmin " />  
+    <constant name="SiBarrelLayer2_rmin" value="SiBarrel2_rmin " />
     <constant name="SiBarrelLayer2_rmax" value="SiBarrelLayer2_rmin + SiBarrelLayer_thickness" />
 
     <constant name="SiBarrelMod1_rc" value="26.5*cm" /> <!-- 26.5 cm is the average radius for inner sub-layer of 262mm and outer of 267mm-->
@@ -144,7 +144,7 @@
           width="SiBarrelStave1_width/2 - SiBarrelSiliconGap_width/2"
           length="SiBarrelMod1_length"
           thickness="SiBarrelSensorMod_thickness"
-          vis="TrackerLayerVis"> 
+          vis="TrackerLayerVis">
           <position x="SiBarrelSiliconGap_width/4 + SiBarrelStave1_width/4" y="0" z="0" />
         </module_component>
         <module_component name="Silicon_center"
@@ -153,7 +153,7 @@
           width="SiBarrelSiliconGap_width"
           length="SiBarrelMod1_length"
           thickness="SiBarrelSensorMod_thickness"
-          vis="TrackerLayerVis"> 
+          vis="TrackerLayerVis">
         <position x="0" y="0" z="-SiBarrelSensorMod_thickness" />
         </module_component>
         <module_component name="Silicon_left"
@@ -162,7 +162,7 @@
           width="SiBarrelStave1_width/2 - SiBarrelSiliconGap_width/2"
           length="SiBarrelMod1_length"
           thickness="SiBarrelSensorMod_thickness"
-          vis="TrackerLayerVis"> 
+          vis="TrackerLayerVis">
         <position x="-SiBarrelSiliconGap_width/4 - SiBarrelStave1_width/4" y="0" z="-SiBarrelSensorMod_thickness" />
         </module_component>
 
@@ -304,7 +304,7 @@
           width="SiBarrelStave2_width/2 - SiBarrelSiliconGap_width/2"
           length="SiBarrelMod2_length"
           thickness="SiBarrelSensorMod_thickness"
-          vis="TrackerLayerVis"> 
+          vis="TrackerLayerVis">
           <position x="SiBarrelSiliconGap_width/4 + SiBarrelStave2_width/4" y="0" z="0" />
         </module_component>
         <module_component name="Silicon_center"
@@ -313,7 +313,7 @@
           width="SiBarrelSiliconGap_width"
           length="SiBarrelMod2_length"
           thickness="SiBarrelSensorMod_thickness"
-          vis="TrackerLayerVis"> 
+          vis="TrackerLayerVis">
        <position x="0" y="0" z="-SiBarrelSensorMod_thickness" />
         </module_component>
         <module_component name="Silicon_left"
@@ -322,7 +322,7 @@
           width="SiBarrelStave2_width/2 - SiBarrelSiliconGap_width/2"
           length="SiBarrelMod2_length"
           thickness="SiBarrelSensorMod_thickness"
-          vis="TrackerLayerVis"> 
+          vis="TrackerLayerVis">
     <position x="-SiBarrelSiliconGap_width/4 - SiBarrelStave2_width/4" y="0" z="-SiBarrelSensorMod_thickness" />
         </module_component>
 
