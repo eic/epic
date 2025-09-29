@@ -72,7 +72,7 @@ file(GLOB CONFIG_YMLS ${CMAKE_CURRENT_SOURCE_DIR}/configurations/*.yml)
 foreach(config_yml ${CONFIG_YMLS})
     get_filename_component(config ${config_yml} NAME_WE)
     add_custom_target(${config}.xml ALL)
-    add_custom_command(TARGET ${config}.xml
+    add_custom_command(TARGET ${config}.xml POST_BUILD
         COMMAND
             ${CMAKE_CURRENT_SOURCE_DIR}/bin/make_detector_configuration
                 --dir ${TEMPLATE_DIR}
