@@ -1,0 +1,396 @@
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (C) 2022 - 2025 Dhevan Gangadharan, Simon Gardner
+
+//==========================================================================
+//
+// Places a chain of beam pipe segments within and between the beamline magnets.
+//
+// Approximation used for beam pipes in between magnets.
+//
+//==========================================================================
+
+#include "DD4hep/DetFactoryHelper.h"
+#include "DD4hep/Printout.h"
+#include "TMath.h"
+#include <XML/Helper.h>
+#include "DD4hep/Shapes.h"
+#include "DD4hep/Objects.h"
+#include "TGeoTessellated.h"
+#include "TGeoManager.h"
+#include "TVector3.h"
+
+using namespace std;
+using namespace dd4hep;
+
+//- post_d1ef
+const double s_post_d1ef_start = 3000 * cm;
+const double s_post_d1ef_stop = 2350 * cm;
+const double rx_post_d1ef_min = 100/2. * mm;
+const double ry_post_d1ef_min = 100/2. * mm;
+
+//- pre_q1ef
+const double s_pre_q1ef_start = 2300 * cm;
+const double s_pre_q1ef_stop = 1237 * cm;
+const double rx_pre_q1ef_min = 126/2. * mm;
+const double ry_pre_q1ef_min = 100/2. * mm;
+
+//- q1ef
+const double s_q1ef_start = s_pre_q1ef_stop;
+const double s_q1ef_stop = 1076 * cm;
+const double rx_q1ef_min = rx_pre_q1ef_min;
+const double ry_q1ef_min = ry_pre_q1ef_min;
+
+//- post_q1ef
+const double s_post_q1ef_start = s_q1ef_stop;
+const double s_post_q1ef_stop = 1050 * cm;
+const double rx_post_q1ef_min = rx_pre_q1ef_min;
+const double ry_post_q1ef_min = ry_pre_q1ef_min;
+
+//- pre_q0ef
+const double s_pre_q0ef_start = 720 * cm;
+const double s_pre_q0ef_stop = 700 * cm;
+const double r_pre_q0ef_min = 54/2. * mm;
+
+//- q0ef
+const double s_q0ef_start = s_pre_q0ef_stop;
+const double s_q0ef_stop = 580 * cm;
+const double r_q0ef_min = r_pre_q0ef_min;
+
+//- post_q0ef
+const double s_post_q0ef_start = s_q0ef_stop;
+const double s_post_q0ef_stop = 494.556 * cm;
+const double r_post_q0ef_min = r_pre_q0ef_min;
+
+//- tapper0
+const double s_tapper0_start = s_post_d1ef_stop;
+const double s_tapper0_stop = s_pre_q1ef_start;
+const double rx_tapper0_min_start = rx_post_d1ef_min;
+const double ry_tapper0_min_start = ry_post_d1ef_min;
+const double rx_tapper0_min_stop = rx_pre_q1ef_min;
+const double ry_tapper0_min_stop = ry_pre_q1ef_min;
+
+//- tapper1
+const double s_tapper1_start = s_post_q1ef_stop;
+const double s_tapper1_middle = 1000 * cm;
+const double s_tapper1_stop = s_pre_q0ef_start;
+const double rx_tapper1_min_start = rx_pre_q1ef_min;
+const double ry_tapper1_min_start = ry_pre_q1ef_min;
+const double rx_tapper1_min_middle = 5.75 * cm;
+const double ry_tapper1_min_middle = r_pre_q0ef_min;
+const double rx_tapper1_min_stop = r_pre_q0ef_min;
+const double ry_tapper1_min_stop = r_pre_q0ef_min;
+/*
+//- bwd_polycone
+const int n_bwd 		= 10; 
+const double s_bwd[n_bwd] 	= {-20.0 * m, -16.0 * m,  -15.0 * m, -11.4140 * m, -11.3640 * m, -9.3640 * m, -9.2880 * m, -7.4050 * m, -7.3420 * m,  -5.0 * m};
+const double d_bwd_min[n_bwd]  	= {  0.1 * m,   0.1 * m, 0.1960 * m,   0.1960 * m,   0.1540 * m,  0.1540 * m,  0.1286 * m,  0.1286 * m,  0.1114 * m, 0.062 * m};
+*/
+const double screen_gap = 100 * um; // to avaid overlaps
+const double coating_thickness = 30 * um;
+const double screen_thickness = 1 * mm;
+
+void BuildSectionSolid(	Detector& det,
+			std::string name,
+			double rx_min, double ry_min,
+			double s_start, double s_stop,
+			Assembly& assembly)
+{
+	double halfLength = std::abs(s_start - s_stop) / 2.0;
+	double zpos       = s_start - (s_start - s_stop) / 2.0;
+
+	// vacuum-1
+	EllipticalTube vacuum1_solid(rx_min, ry_min, halfLength + 1.0*dd4hep::cm);
+
+	EllipticalTube vacuum_solid(rx_min, ry_min, halfLength);
+	Volume vacuum_log(
+		name + "_vacuum",
+		vacuum_solid,
+		det.material("Vacuum"));
+	assembly.placeVolume(vacuum_log, Position(0,0,zpos));
+
+	// coating (subtract vacuum-1)
+	EllipticalTube coating_outer(
+		rx_min + coating_thickness,
+		ry_min + coating_thickness,
+		halfLength);
+	SubtractionSolid coating_solid(coating_outer, vacuum1_solid);
+	Volume coating_log(
+		name + "_coating",
+		coating_solid,
+		det.material("Copper"));
+	assembly.placeVolume(coating_log, Position(0,0,zpos));
+	coating_log.setVisAttributes(det.visAttributes("BrownVis"));
+
+	// vacuum-2
+	EllipticalTube vacuum2_solid(
+		rx_min + coating_thickness + screen_gap,
+		ry_min + coating_thickness + screen_gap,
+		halfLength + 1.0*dd4hep::cm);
+
+	// screen (subtract vacuum-2)
+	EllipticalTube screen_outer(
+		rx_min + coating_thickness + screen_gap + screen_thickness,
+		ry_min + coating_thickness + screen_gap + screen_thickness,
+		halfLength);
+	SubtractionSolid screen_solid(screen_outer, vacuum2_solid);
+	Volume screen_log(
+		name + "_screen",
+		screen_solid,
+		det.material("StainlessSteelP506"));
+	screen_log.setVisAttributes(det.visAttributes("YellowVis"));
+	assembly.placeVolume(screen_log, Position(0,0,zpos));
+
+	return;
+}
+
+std::vector<Position> GetPolygonSection(double rx, double ry, double ss) 
+{
+	std::vector<Position> vertices;
+	const int numPoints = 1800;  // Number of points in the ellipse
+	const double step = 2.0 * M_PI / numPoints;
+
+	// reverse loop to preserve winding order (same as Geant4 code)
+	for (int i = numPoints - 1; i >= 0; --i) 
+	{
+		double theta = i * step;
+		double x = rx * std::cos(theta);
+		double y = ry * std::sin(theta);
+		vertices.emplace_back(x, y, ss);
+	}
+
+	return vertices;
+}
+
+Solid CreatePolygonTube3(
+	double rx1, double ry1, double s1,
+	double rx2, double ry2, double s2,
+	double rx3, double ry3, double s3,
+	double thickness)
+{
+	// Collect all triangles as dd4hep::Vertex
+	std::vector<TessellatedSolid::Vertex> allVertices;
+
+	// Inner and outer layers
+	std::vector<std::vector<Position>> layers = {
+		GetPolygonSection(rx1, ry1, s1),
+		GetPolygonSection(rx2, ry2, s2),
+		GetPolygonSection(rx3, ry3, s3),
+		GetPolygonSection(rx3+thickness, ry3+thickness, s3),
+		GetPolygonSection(rx2+thickness, ry2+thickness, s2),
+		GetPolygonSection(rx1+thickness, ry1+thickness, s1),
+		GetPolygonSection(rx1, ry1, s1)
+	};
+
+	// Loop over consecutive layers and collect triangles
+	for (size_t k = 0; k < layers.size() - 1; ++k) 
+	{
+		auto& layer1 = layers[k];
+		auto& layer2 = layers[k+1];
+		size_t nVerts = layer1.size();
+
+		for (size_t i = 0; i < nVerts; ++i) 
+		{
+			size_t next = (i + 1) % nVerts;
+
+			// First triangle
+			allVertices.emplace_back(TessellatedSolid::Vertex(layer1[i].x(), layer1[i].y(), layer1[i].z()));
+			allVertices.emplace_back(TessellatedSolid::Vertex(layer2[i].x(), layer2[i].y(), layer2[i].z()));
+			allVertices.emplace_back(TessellatedSolid::Vertex(layer2[next].x(), layer2[next].y(), layer2[next].z()));
+
+			// Second triangle
+			allVertices.emplace_back(TessellatedSolid::Vertex(layer1[i].x(), layer1[i].y(), layer1[i].z()));
+			allVertices.emplace_back(TessellatedSolid::Vertex(layer2[next].x(), layer2[next].y(), layer2[next].z()));
+			allVertices.emplace_back(TessellatedSolid::Vertex(layer1[next].x(), layer1[next].y(), layer1[next].z()));
+		}
+	}
+
+	// Construct TessellatedSolid directly from the vector of Vertex_t
+	TessellatedSolid solid("polygonTube", allVertices);
+
+	return solid;
+}
+
+// Discretize ellipse into polygon points
+std::vector<Position> MakeEllipse(double rx, double ry, double z, int nseg) {
+    std::vector<Position> pts;
+    pts.reserve(nseg);
+    for (int i = 0; i < nseg; i++) {
+        double phi = 2.0 * M_PI * i / nseg;
+        pts.emplace_back(rx * cos(phi), ry * sin(phi), z);
+    }
+    return pts;
+}
+
+TGeoTessellated* CreatePolygonTube2(
+	double rx1_in, double ry1_in, double z1,
+	double rx2_in, double ry2_in, double z2,
+	double thickness)
+{
+auto* tess = new TGeoTessellated();
+
+	const int nSegments = 64;
+
+std::vector<TVector3> outer1, outer2, inner1, inner2;
+
+  // Generate vertices for inner and outer ellipses
+  for (int i = 0; i < nSegments; ++i) {
+    double phi = 2.0 * M_PI * i / nSegments;
+
+    // Inner ellipses
+    inner1.emplace_back(rx1_in * cos(phi), ry1_in * sin(phi), z1);
+    inner2.emplace_back(rx2_in * cos(phi), ry2_in * sin(phi), z2);
+
+    // Outer ellipses = inner + thickness
+    outer1.emplace_back((rx1_in + thickness) * cos(phi),
+                        (ry1_in + thickness) * sin(phi), z1);
+    outer2.emplace_back((rx2_in + thickness) * cos(phi),
+                        (ry2_in + thickness) * sin(phi), z2);
+  }
+
+auto makeVertex = [](const TVector3& v) {
+    return TGeoTessellated::Vertex_t{v.X(), v.Y(), v.Z()};
+};
+
+// --- Outer wall ---
+for (int i = 0; i < nSegments; ++i) {
+    int j = (i + 1) % nSegments;
+    tess->AddFacet(makeVertex(outer1[i]), makeVertex(outer2[i]), makeVertex(outer2[j]));
+    tess->AddFacet(makeVertex(outer1[i]), makeVertex(outer2[j]), makeVertex(outer1[j]));
+}
+
+// --- Inner wall ---
+for (int i = 0; i < nSegments; ++i) {
+    int j = (i + 1) % nSegments;
+    // Reverse order for inward normals
+    tess->AddFacet(makeVertex(inner1[i]), makeVertex(inner2[j]), makeVertex(inner2[i]));
+    tess->AddFacet(makeVertex(inner1[i]), makeVertex(inner1[j]), makeVertex(inner2[j]));
+}
+
+// --- End cap at z1 ---
+for (int i = 0; i < nSegments; ++i) {
+    int j = (i + 1) % nSegments;
+    tess->AddFacet(makeVertex(outer1[i]), makeVertex(inner1[i]), makeVertex(inner1[j]));
+    tess->AddFacet(makeVertex(outer1[i]), makeVertex(inner1[j]), makeVertex(outer1[j]));
+}
+
+// --- End cap at z2 ---
+for (int i = 0; i < nSegments; ++i) {
+    int j = (i + 1) % nSegments;
+    tess->AddFacet(makeVertex(outer2[i]), makeVertex(inner2[j]), makeVertex(inner2[i]));
+    tess->AddFacet(makeVertex(outer2[i]), makeVertex(outer2[j]), makeVertex(inner2[j]));
+}
+
+  tess->CloseShape();
+  return tess;
+}
+
+void BuildTapper1(Detector& det, Assembly& assembly) 
+{
+	// --- coating ---
+	Solid tapper1_coating_solid = CreatePolygonTube3(
+		rx_tapper1_min_start,
+		ry_tapper1_min_start, s_tapper1_start,
+		rx_tapper1_min_middle,
+		ry_tapper1_min_middle, s_tapper1_middle,
+		rx_tapper1_min_stop,
+		ry_tapper1_min_stop, s_tapper1_stop,
+		coating_thickness);
+
+	Volume tapper1_coating_vol("tapper1_coating", tapper1_coating_solid, det.material("Copper"));
+	assembly.placeVolume(tapper1_coating_vol, Position(0,0,0));
+	tapper1_coating_vol.setVisAttributes(det.visAttributes("BrownVis"));
+
+	// --- screen ---
+	Solid tapper1_screen_solid = CreatePolygonTube3(
+		rx_tapper1_min_start + coating_thickness + screen_gap,
+		ry_tapper1_min_start + coating_thickness + screen_gap, s_tapper1_start,
+		rx_tapper1_min_middle + coating_thickness + screen_gap,
+		ry_tapper1_min_middle + coating_thickness + screen_gap, s_tapper1_middle,
+		rx_tapper1_min_stop + coating_thickness + screen_gap,
+		ry_tapper1_min_stop + coating_thickness + screen_gap, s_tapper1_stop,
+		screen_thickness);
+
+	Volume tapper1_screen_vol("tapper1_screen", tapper1_screen_solid, det.material("StainlessSteelP506"));
+	tapper1_screen_vol.setVisAttributes(det.visAttributes("YellowVis"));
+	assembly.placeVolume(tapper1_screen_vol, Position(0,0,0));
+
+	return;
+}
+
+void BuildTapper0(Detector& det, Assembly& assembly) 
+{
+	// --- coating ---
+	TGeoTessellated* rawShape_coating = CreatePolygonTube2(
+		rx_tapper0_min_start,
+		ry_tapper0_min_start, s_tapper0_start,
+		rx_tapper0_min_stop,
+		ry_tapper0_min_stop, s_tapper0_stop,
+		coating_thickness);
+
+	Solid tapper0_coating_solid(rawShape_coating);
+
+	Volume tapper0_coating_vol("tapper0_coating", tapper0_coating_solid, det.material("Copper"));
+	assembly.placeVolume(tapper0_coating_vol, Position(0,0,0));
+	tapper0_coating_vol.setVisAttributes(det.visAttributes("BrownVis"));
+
+	// --- screen ---
+	TGeoTessellated* rawShape_screen = CreatePolygonTube2(
+		rx_tapper0_min_start + coating_thickness + screen_gap,
+		ry_tapper0_min_start + coating_thickness + screen_gap, s_tapper0_start,
+		rx_tapper0_min_stop + coating_thickness + screen_gap,
+		ry_tapper0_min_stop + coating_thickness + screen_gap, s_tapper0_stop,
+		screen_thickness);
+	Solid tapper0_screen_solid(rawShape_screen);
+
+	Volume tapper0_screen_vol("tapper0_screen", tapper0_screen_solid, det.material("StainlessSteelP506"));
+	tapper0_screen_vol.setVisAttributes(det.visAttributes("YellowVis"));
+	assembly.placeVolume(tapper0_screen_vol, Position(0,0,0));
+
+	return;
+}
+
+static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector /* sens */) 
+{
+	using namespace ROOT::Math;
+	xml_det_t x_det = e;
+	string det_name = x_det.nameStr();
+	DetElement sdet(det_name, x_det.id());
+	Assembly assembly(det_name + "_assembly");
+
+	//- post_d1ef
+	BuildSectionSolid(det,"post_d1ef",rx_post_d1ef_min,ry_post_d1ef_min,s_post_d1ef_start,s_post_d1ef_stop,assembly);
+
+	//- tapper0
+	BuildTapper0(det,assembly);
+
+	//- pre_q1ef
+	BuildSectionSolid(det,"pre_q1ef",rx_pre_q1ef_min,ry_pre_q1ef_min,s_pre_q1ef_start,s_pre_q1ef_stop,assembly);
+
+	//- q1ef
+	BuildSectionSolid(det,"q1ef",rx_q1ef_min,ry_q1ef_min,s_q1ef_start,s_q1ef_stop,assembly);
+
+	//- post_q1ef
+	BuildSectionSolid(det,"post_q1ef",rx_post_q1ef_min,ry_post_q1ef_min,s_post_q1ef_start,s_post_q1ef_stop,assembly);
+
+	//- pre_q0ef
+	BuildSectionSolid(det,"pre_q0ef",r_pre_q0ef_min,r_pre_q0ef_min,s_pre_q0ef_start,s_pre_q0ef_stop,assembly);
+
+	//- q0ef
+	BuildSectionSolid(det,"q0ef",r_q0ef_min,r_q0ef_min,s_q0ef_start,s_q0ef_stop,assembly);
+
+	//- post_q0ef
+	BuildSectionSolid(det,"post_q0ef",r_post_q0ef_min,r_post_q0ef_min,s_post_q0ef_start,s_post_q0ef_stop,assembly);
+
+	//- tapper1
+//	BuildTapper1(det,assembly);
+
+	// Final placement
+	auto pv_assembly =
+		det.pickMotherVolume(sdet).placeVolume(assembly, Position(0.0, 0.0, 0.0));
+	sdet.setPlacement(pv_assembly);
+	assembly->GetShape()->ComputeBBox();
+
+	return sdet;
+}
+
+DECLARE_DETELEMENT(ElectronBeamPipeChain, create_detector)

@@ -47,6 +47,11 @@
 
     <!-- Beam Pipe from central section at positive z to the end of the FWD cryostat -->
     <detector
+	name="Pipe_cen_to_pos"
+	type="ElectronBeamPipeChain">
+    </detector>
+
+    <!--detector
       name="Pipe_cen_to_pos"
       type="BeamPipeChain"
       wall_thickness="Beampipe_cen_pos_Thickness">
@@ -57,7 +62,7 @@
         rout1="Beampipe_cen_pos_r1" rout2="Beampipe_cen_pos_r1">
       </pipe>
 
-    </detector>
+    </detector -->
 
   </detectors>
 
