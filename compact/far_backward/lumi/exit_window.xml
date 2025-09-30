@@ -6,7 +6,7 @@
   <!-- Luminosity exit window -->
 
   <detectors>
-    <detector
+    <!-- detector
       id="LumiWindow_ID"
       name="LumiWindow"
       type="LumiWindow"
@@ -15,7 +15,7 @@
       <dimensions x="LumiWin_R" y="LumiWin_R" z="LumiWin_thickness/2" />
       <position   x="0" y="0" z="LumiWin_Z" />
       <rotation   x="0*rad" y="0*rad" z="0*rad" />
-    </detector>
+    </detector -->
   </detectors>
 
 </lccdd>
