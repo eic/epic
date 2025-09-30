@@ -143,151 +143,299 @@ void BuildSectionSolid(	Detector& det,
 	return;
 }
 
-std::vector<Position> GetPolygonSection(double rx, double ry, double ss) 
-{
-	std::vector<Position> vertices;
-	const int numPoints = 1800;  // Number of points in the ellipse
-	const double step = 2.0 * M_PI / numPoints;
-
-	// reverse loop to preserve winding order (same as Geant4 code)
-	for (int i = numPoints - 1; i >= 0; --i) 
-	{
-		double theta = i * step;
-		double x = rx * std::cos(theta);
-		double y = ry * std::sin(theta);
-		vertices.emplace_back(x, y, ss);
-	}
-
-	return vertices;
-}
-
-Solid CreatePolygonTube3(
-	double rx1, double ry1, double s1,
-	double rx2, double ry2, double s2,
-	double rx3, double ry3, double s3,
-	double thickness)
-{
-	// Collect all triangles as dd4hep::Vertex
-	std::vector<TessellatedSolid::Vertex> allVertices;
-
-	// Inner and outer layers
-	std::vector<std::vector<Position>> layers = {
-		GetPolygonSection(rx1, ry1, s1),
-		GetPolygonSection(rx2, ry2, s2),
-		GetPolygonSection(rx3, ry3, s3),
-		GetPolygonSection(rx3+thickness, ry3+thickness, s3),
-		GetPolygonSection(rx2+thickness, ry2+thickness, s2),
-		GetPolygonSection(rx1+thickness, ry1+thickness, s1),
-		GetPolygonSection(rx1, ry1, s1)
-	};
-
-	// Loop over consecutive layers and collect triangles
-	for (size_t k = 0; k < layers.size() - 1; ++k) 
-	{
-		auto& layer1 = layers[k];
-		auto& layer2 = layers[k+1];
-		size_t nVerts = layer1.size();
-
-		for (size_t i = 0; i < nVerts; ++i) 
-		{
-			size_t next = (i + 1) % nVerts;
-
-			// First triangle
-			allVertices.emplace_back(TessellatedSolid::Vertex(layer1[i].x(), layer1[i].y(), layer1[i].z()));
-			allVertices.emplace_back(TessellatedSolid::Vertex(layer2[i].x(), layer2[i].y(), layer2[i].z()));
-			allVertices.emplace_back(TessellatedSolid::Vertex(layer2[next].x(), layer2[next].y(), layer2[next].z()));
-
-			// Second triangle
-			allVertices.emplace_back(TessellatedSolid::Vertex(layer1[i].x(), layer1[i].y(), layer1[i].z()));
-			allVertices.emplace_back(TessellatedSolid::Vertex(layer2[next].x(), layer2[next].y(), layer2[next].z()));
-			allVertices.emplace_back(TessellatedSolid::Vertex(layer1[next].x(), layer1[next].y(), layer1[next].z()));
-		}
-	}
-
-	// Construct TessellatedSolid directly from the vector of Vertex_t
-	TessellatedSolid solid("polygonTube", allVertices);
-
-	return solid;
-}
-
 // Discretize ellipse into polygon points
-std::vector<Position> MakeEllipse(double rx, double ry, double z, int nseg) {
-    std::vector<Position> pts;
-    pts.reserve(nseg);
-    for (int i = 0; i < nseg; i++) {
-        double phi = 2.0 * M_PI * i / nseg;
-        pts.emplace_back(rx * cos(phi), ry * sin(phi), z);
-    }
-    return pts;
+std::vector<Position> MakeEllipse(double rx, double ry, double z, int nseg) 
+{
+	std::vector<Position> pts;
+	pts.reserve(nseg);
+	for (int i = 0; i < nseg; i++) 
+	{
+		double phi = 2.0 * M_PI * i / nseg;
+		pts.emplace_back(rx * cos(phi), ry * sin(phi), z);
+	}
+	return pts;
 }
 
-TGeoTessellated* CreatePolygonTube2(
+TGeoTessellated* CreatePolygonHollowTube2(
 	double rx1_in, double ry1_in, double z1,
 	double rx2_in, double ry2_in, double z2,
 	double thickness)
 {
-auto* tess = new TGeoTessellated();
+	auto* tess = new TGeoTessellated();
+	const int nSegments = 1000;
 
-	const int nSegments = 64;
+	std::vector<TVector3> outer1, outer2, inner1, inner2;
 
-std::vector<TVector3> outer1, outer2, inner1, inner2;
+	// Generate vertices for inner and outer ellipses
+	for (int i = 0; i < nSegments; ++i) 
+	{
+		double phi = 2.0 * M_PI * i / nSegments;
 
-  // Generate vertices for inner and outer ellipses
-  for (int i = 0; i < nSegments; ++i) {
-    double phi = 2.0 * M_PI * i / nSegments;
+		// Inner ellipses
+		inner1.emplace_back(rx1_in * cos(phi), ry1_in * sin(phi), z1);
+		inner2.emplace_back(rx2_in * cos(phi), ry2_in * sin(phi), z2);
 
-    // Inner ellipses
-    inner1.emplace_back(rx1_in * cos(phi), ry1_in * sin(phi), z1);
-    inner2.emplace_back(rx2_in * cos(phi), ry2_in * sin(phi), z2);
+		// Outer ellipses = inner + thickness
+		outer1.emplace_back((rx1_in + thickness) * cos(phi),
+		(ry1_in + thickness) * sin(phi), z1);
+		outer2.emplace_back((rx2_in + thickness) * cos(phi),
+		(ry2_in + thickness) * sin(phi), z2);
+	}
 
-    // Outer ellipses = inner + thickness
-    outer1.emplace_back((rx1_in + thickness) * cos(phi),
-                        (ry1_in + thickness) * sin(phi), z1);
-    outer2.emplace_back((rx2_in + thickness) * cos(phi),
-                        (ry2_in + thickness) * sin(phi), z2);
-  }
+	auto makeVertex = [](const TVector3& v) 
+	{
+		return TGeoTessellated::Vertex_t{v.X(), v.Y(), v.Z()};
+	};
 
-auto makeVertex = [](const TVector3& v) {
-    return TGeoTessellated::Vertex_t{v.X(), v.Y(), v.Z()};
-};
+	// --- Outer wall ---
+	for (int i = 0; i < nSegments; ++i) 
+	{
+		int j = (i + 1) % nSegments;
+		tess->AddFacet(makeVertex(outer1[i]), makeVertex(outer2[i]), makeVertex(outer2[j]));
+		tess->AddFacet(makeVertex(outer1[i]), makeVertex(outer2[j]), makeVertex(outer1[j]));
+	}
 
-// --- Outer wall ---
-for (int i = 0; i < nSegments; ++i) {
-    int j = (i + 1) % nSegments;
-    tess->AddFacet(makeVertex(outer1[i]), makeVertex(outer2[i]), makeVertex(outer2[j]));
-    tess->AddFacet(makeVertex(outer1[i]), makeVertex(outer2[j]), makeVertex(outer1[j]));
+	// --- Inner wall ---
+	for (int i = 0; i < nSegments; ++i) 
+	{
+		int j = (i + 1) % nSegments;
+		// Swap vertices to ensure normals point inward
+		tess->AddFacet(makeVertex(inner1[i]), makeVertex(inner2[i]), makeVertex(inner2[j]));
+		tess->AddFacet(makeVertex(inner1[i]), makeVertex(inner2[j]), makeVertex(inner1[j]));
+	}
+
+	// --- End cap at z1 ---
+	for (int i = 0; i < nSegments; ++i) 
+	{
+		int j = (i + 1) % nSegments;
+		tess->AddFacet(makeVertex(outer1[i]), makeVertex(inner1[i]), makeVertex(inner1[j]));
+		tess->AddFacet(makeVertex(outer1[i]), makeVertex(inner1[j]), makeVertex(outer1[j]));
+	}
+
+	// --- End cap at z2 ---
+	for (int i = 0; i < nSegments; ++i) 
+	{
+		int j = (i + 1) % nSegments;
+		tess->AddFacet(makeVertex(outer2[i]), makeVertex(inner2[j]), makeVertex(inner2[i]));
+		tess->AddFacet(makeVertex(outer2[i]), makeVertex(outer2[j]), makeVertex(inner2[j]));
+	}
+
+	tess->CloseShape();
+	return tess;
 }
 
-// --- Inner wall ---
-for (int i = 0; i < nSegments; ++i) {
-    int j = (i + 1) % nSegments;
-    // Reverse order for inward normals
-    tess->AddFacet(makeVertex(inner1[i]), makeVertex(inner2[j]), makeVertex(inner2[i]));
-    tess->AddFacet(makeVertex(inner1[i]), makeVertex(inner1[j]), makeVertex(inner2[j]));
+
+TGeoTessellated* CreatePolygonFilledTube2(
+	double rx1, double ry1, double z1,
+	double rx2, double ry2, double z2)
+{
+	auto* tess = new TGeoTessellated();
+	const int nSegments = 1000;
+
+	std::vector<TVector3> bottom, top;
+
+	// Generate vertices for bottom and top ellipses
+	for (int i = 0; i < nSegments; ++i) 
+	{
+		double phi = 2.0 * M_PI * i / nSegments;
+
+		bottom.emplace_back(rx1 * cos(phi), ry1 * sin(phi), z1);
+		top.emplace_back(rx2 * cos(phi), ry2 * sin(phi), z2);
+	}
+
+	auto makeVertex = [](const TVector3& v) 
+	{
+		return TGeoTessellated::Vertex_t{v.X(), v.Y(), v.Z()};
+	};
+
+	// --- Side walls ---
+	for (int i = 0; i < nSegments; ++i) 
+	{
+		int j = (i + 1) % nSegments;
+
+		// Swap order to ensure outward normals
+		tess->AddFacet(makeVertex(bottom[i]), makeVertex(top[j]), makeVertex(top[i]));
+		tess->AddFacet(makeVertex(bottom[i]), makeVertex(bottom[j]), makeVertex(top[j]));
+	}
+
+	// --- End cap at z1 (bottom) ---
+	TVector3 centerBottom(0, 0, z1);
+	auto centerB = makeVertex(centerBottom);
+	for (int i = 0; i < nSegments; ++i) 
+	{
+		int j = (i + 1) % nSegments;
+		tess->AddFacet(centerB, makeVertex(bottom[j]), makeVertex(bottom[i]));
+	}
+
+	// --- End cap at z2 (top) ---
+	TVector3 centerTop(0, 0, z2);
+	auto centerT = makeVertex(centerTop);
+	for (int i = 0; i < nSegments; ++i) 
+	{
+		int j = (i + 1) % nSegments;
+		tess->AddFacet(centerT, makeVertex(top[i]), makeVertex(top[j]));
+	}
+
+	tess->CloseShape();
+    	return tess;
 }
 
-// --- End cap at z1 ---
-for (int i = 0; i < nSegments; ++i) {
-    int j = (i + 1) % nSegments;
-    tess->AddFacet(makeVertex(outer1[i]), makeVertex(inner1[i]), makeVertex(inner1[j]));
-    tess->AddFacet(makeVertex(outer1[i]), makeVertex(inner1[j]), makeVertex(outer1[j]));
+TGeoTessellated* CreatePolygonHollowTube3(
+        double rx1_in, double ry1_in, double z1,
+        double rx2_in, double ry2_in, double z2,
+        double rx3_in, double ry3_in, double z3,
+        double thickness)
+{
+	auto* tess = new TGeoTessellated();
+	const int nSegments = 1000;
+
+	std::vector<TVector3> outer1, outer2, outer3;
+	std::vector<TVector3> inner1, inner2, inner3;
+
+	// Generate vertices for inner and outer ellipses
+	for (int i = 0; i < nSegments; ++i)
+	{
+		double phi = 2.0 * M_PI * i / nSegments;
+
+		// Inner ellipses
+		inner1.emplace_back(rx1_in * cos(phi), ry1_in * sin(phi), z1);
+		inner2.emplace_back(rx2_in * cos(phi), ry2_in * sin(phi), z2);
+		inner3.emplace_back(rx3_in * cos(phi), ry3_in * sin(phi), z3);
+
+		// Outer ellipses = inner + thickness
+		outer1.emplace_back((rx1_in + thickness) * cos(phi),
+			(ry1_in + thickness) * sin(phi), z1);
+		outer2.emplace_back((rx2_in + thickness) * cos(phi),
+			(ry2_in + thickness) * sin(phi), z2);
+		outer3.emplace_back((rx3_in + thickness) * cos(phi),
+			(ry3_in + thickness) * sin(phi), z3);
+	}
+
+	auto makeVertex = [](const TVector3& v)
+	{
+		return TGeoTessellated::Vertex_t{v.X(), v.Y(), v.Z()};
+	};
+
+	// --- Outer walls ---
+	for (int i = 0; i < nSegments; ++i)
+	{
+		int j = (i + 1) % nSegments;
+		// z1 → z2
+		tess->AddFacet(makeVertex(outer1[i]), makeVertex(outer2[i]), makeVertex(outer2[j]));
+		tess->AddFacet(makeVertex(outer1[i]), makeVertex(outer2[j]), makeVertex(outer1[j]));
+		// z2 → z3
+		tess->AddFacet(makeVertex(outer2[i]), makeVertex(outer3[i]), makeVertex(outer3[j]));
+		tess->AddFacet(makeVertex(outer2[i]), makeVertex(outer3[j]), makeVertex(outer2[j]));
+	}
+
+	// --- Inner walls ---
+	for (int i = 0; i < nSegments; ++i)
+	{
+		int j = (i + 1) % nSegments;
+
+		// z1 → z2
+		tess->AddFacet(makeVertex(inner2[i]), makeVertex(inner2[j]), makeVertex(inner1[i]));
+		tess->AddFacet(makeVertex(inner2[j]), makeVertex(inner1[j]), makeVertex(inner1[i]));
+
+		// z2 → z3
+		tess->AddFacet(makeVertex(inner3[i]), makeVertex(inner3[j]), makeVertex(inner2[i]));
+		tess->AddFacet(makeVertex(inner3[j]), makeVertex(inner2[j]), makeVertex(inner2[i]));
+	}
+
+	// --- End caps ---
+	for (int i = 0; i < nSegments; ++i)
+	{
+		int j = (i + 1) % nSegments;
+		// Cap at z1
+		tess->AddFacet(makeVertex(outer1[i]), makeVertex(inner1[i]), makeVertex(inner1[j]));
+		tess->AddFacet(makeVertex(outer1[i]), makeVertex(inner1[j]), makeVertex(outer1[j]));
+		// Cap at z3
+		tess->AddFacet(makeVertex(outer3[i]), makeVertex(inner3[j]), makeVertex(inner3[i]));
+		tess->AddFacet(makeVertex(outer3[i]), makeVertex(outer3[j]), makeVertex(inner3[j]));
+	}
+
+	tess->CloseShape();
+	return tess;
 }
 
-// --- End cap at z2 ---
-for (int i = 0; i < nSegments; ++i) {
-    int j = (i + 1) % nSegments;
-    tess->AddFacet(makeVertex(outer2[i]), makeVertex(inner2[j]), makeVertex(inner2[i]));
-    tess->AddFacet(makeVertex(outer2[i]), makeVertex(outer2[j]), makeVertex(inner2[j]));
-}
+TGeoTessellated* CreatePolygonFilledTube3(
+	double rx1, double ry1, double z1,
+	double rx2, double ry2, double z2,
+	double rx3, double ry3, double z3)
+{
+	auto* tess = new TGeoTessellated();
+	const int nSegments = 1000;
 
-  tess->CloseShape();
-  return tess;
+	std::vector<TVector3> bottom, middle, top;
+
+	// Generate vertices for three elliptical planes
+	for (int i = 0; i < nSegments; ++i)
+	{
+		double phi = 2.0 * M_PI * i / nSegments;
+
+		bottom.emplace_back(rx1 * cos(phi), ry1 * sin(phi), z1);
+		middle.emplace_back(rx2 * cos(phi), ry2 * sin(phi), z2);
+		top.emplace_back(rx3 * cos(phi), ry3 * sin(phi), z3);
+	}
+
+	auto makeVertex = [](const TVector3& v)
+	{
+		return TGeoTessellated::Vertex_t{v.X(), v.Y(), v.Z()};
+	};
+
+	// --- Side walls between bottom → middle and middle → top ---
+	for (int i = 0; i < nSegments; ++i)
+	{
+		int j = (i + 1) % nSegments;
+
+		// bottom → middle
+		tess->AddFacet(makeVertex(bottom[i]), makeVertex(middle[j]), makeVertex(middle[i]));
+		tess->AddFacet(makeVertex(bottom[i]), makeVertex(bottom[j]), makeVertex(middle[j]));
+
+		// middle → top
+		tess->AddFacet(makeVertex(middle[i]), makeVertex(top[j]), makeVertex(top[i]));
+		tess->AddFacet(makeVertex(middle[i]), makeVertex(middle[j]), makeVertex(top[j]));
+	}
+
+	// --- End cap at z1 (bottom) ---
+	TVector3 centerBottom(0, 0, z1);
+	auto centerB = makeVertex(centerBottom);
+	for (int i = 0; i < nSegments; ++i)
+	{
+		int j = (i + 1) % nSegments;
+		tess->AddFacet(centerB, makeVertex(bottom[j]), makeVertex(bottom[i]));
+	}
+
+	// --- End cap at z3 (top) ---
+	TVector3 centerTop(0, 0, z3);
+	auto centerT = makeVertex(centerTop);
+	for (int i = 0; i < nSegments; ++i)
+	{
+		int j = (i + 1) % nSegments;
+		tess->AddFacet(centerT, makeVertex(top[i]), makeVertex(top[j]));
+	}
+
+	tess->CloseShape();
+	return tess;
 }
 
 void BuildTapper1(Detector& det, Assembly& assembly) 
 {
+	// --- vacuum ---
+	TGeoTessellated* rawShape_vacuum = CreatePolygonFilledTube3(
+		rx_tapper1_min_start - screen_gap,
+		ry_tapper1_min_start - screen_gap, s_tapper1_start,
+		rx_tapper1_min_middle - screen_gap,
+		ry_tapper1_min_middle - screen_gap, s_tapper1_middle,
+		rx_tapper1_min_stop - screen_gap,
+		ry_tapper1_min_stop - screen_gap, s_tapper1_stop);
+	Solid tapper1_vacuum_solid(rawShape_vacuum);
+
+	Volume tapper1_vacuum_vol("tapper1_vacuum", tapper1_vacuum_solid, det.material("Vacuum"));
+	assembly.placeVolume(tapper1_vacuum_vol, Position(0,0,0));
+
 	// --- coating ---
-	Solid tapper1_coating_solid = CreatePolygonTube3(
+	TGeoTessellated* rawShape_coating = CreatePolygonHollowTube3(
 		rx_tapper1_min_start,
 		ry_tapper1_min_start, s_tapper1_start,
 		rx_tapper1_min_middle,
@@ -295,13 +443,14 @@ void BuildTapper1(Detector& det, Assembly& assembly)
 		rx_tapper1_min_stop,
 		ry_tapper1_min_stop, s_tapper1_stop,
 		coating_thickness);
+	Solid tapper1_coating_solid(rawShape_coating);
 
 	Volume tapper1_coating_vol("tapper1_coating", tapper1_coating_solid, det.material("Copper"));
-	assembly.placeVolume(tapper1_coating_vol, Position(0,0,0));
 	tapper1_coating_vol.setVisAttributes(det.visAttributes("BrownVis"));
+	assembly.placeVolume(tapper1_coating_vol, Position(0,0,0));
 
 	// --- screen ---
-	Solid tapper1_screen_solid = CreatePolygonTube3(
+	TGeoTessellated* rawShape_screen = CreatePolygonHollowTube3(
 		rx_tapper1_min_start + coating_thickness + screen_gap,
 		ry_tapper1_min_start + coating_thickness + screen_gap, s_tapper1_start,
 		rx_tapper1_min_middle + coating_thickness + screen_gap,
@@ -309,6 +458,7 @@ void BuildTapper1(Detector& det, Assembly& assembly)
 		rx_tapper1_min_stop + coating_thickness + screen_gap,
 		ry_tapper1_min_stop + coating_thickness + screen_gap, s_tapper1_stop,
 		screen_thickness);
+	Solid tapper1_screen_solid(rawShape_screen);
 
 	Volume tapper1_screen_vol("tapper1_screen", tapper1_screen_solid, det.material("StainlessSteelP506"));
 	tapper1_screen_vol.setVisAttributes(det.visAttributes("YellowVis"));
@@ -319,8 +469,20 @@ void BuildTapper1(Detector& det, Assembly& assembly)
 
 void BuildTapper0(Detector& det, Assembly& assembly) 
 {
+	// --- vacuum ---
+	TGeoTessellated* rawShape_vacuum = CreatePolygonFilledTube2(
+		rx_tapper0_min_start - screen_gap,
+		ry_tapper0_min_start - screen_gap, s_tapper0_start,
+		rx_tapper0_min_stop - screen_gap,
+		ry_tapper0_min_stop - screen_gap, s_tapper0_stop);
+
+	Solid tapper0_vacuum_solid(rawShape_vacuum);
+
+	Volume tapper0_vacuum_vol("tapper0_vacuum", tapper0_vacuum_solid, det.material("Vacuum"));
+	assembly.placeVolume(tapper0_vacuum_vol, Position(0,0,0));
+
 	// --- coating ---
-	TGeoTessellated* rawShape_coating = CreatePolygonTube2(
+	TGeoTessellated* rawShape_coating = CreatePolygonHollowTube2(
 		rx_tapper0_min_start,
 		ry_tapper0_min_start, s_tapper0_start,
 		rx_tapper0_min_stop,
@@ -330,11 +492,11 @@ void BuildTapper0(Detector& det, Assembly& assembly)
 	Solid tapper0_coating_solid(rawShape_coating);
 
 	Volume tapper0_coating_vol("tapper0_coating", tapper0_coating_solid, det.material("Copper"));
-	assembly.placeVolume(tapper0_coating_vol, Position(0,0,0));
 	tapper0_coating_vol.setVisAttributes(det.visAttributes("BrownVis"));
+	assembly.placeVolume(tapper0_coating_vol, Position(0,0,0));
 
 	// --- screen ---
-	TGeoTessellated* rawShape_screen = CreatePolygonTube2(
+	TGeoTessellated* rawShape_screen = CreatePolygonHollowTube2(
 		rx_tapper0_min_start + coating_thickness + screen_gap,
 		ry_tapper0_min_start + coating_thickness + screen_gap, s_tapper0_start,
 		rx_tapper0_min_stop + coating_thickness + screen_gap,
@@ -382,7 +544,7 @@ static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector /* sens *
 	BuildSectionSolid(det,"post_q0ef",r_post_q0ef_min,r_post_q0ef_min,s_post_q0ef_start,s_post_q0ef_stop,assembly);
 
 	//- tapper1
-//	BuildTapper1(det,assembly);
+	BuildTapper1(det,assembly);
 
 	// Final placement
 	auto pv_assembly =
