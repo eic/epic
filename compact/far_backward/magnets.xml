@@ -85,8 +85,14 @@
 
     <comment> Electron side beam pipe volumes </comment>
 
-    <!-- Beam pipe going from Q1eR to B2BeR -->
+    <!-- Beam Pipe from central section at negative z to the end of the REAR cryostat -->
     <detector
+	name="Pipe_cen_to_neg"
+	type="ElectronBeamPipeChain">
+    </detector>
+
+    <!-- Beam pipe going from Q1eR to B2BeR -->
+    <!-- detector
     name="Pipe_Q1eR_to_B2BeR"
     type="BeamPipeChain"
     wall_thickness="1 * mm"
@@ -119,7 +125,7 @@
         length="B2BeR_Length" theta="0"
         rout1="B2BeR_InnerRadius" rout2="B2BeR_InnerRadius">
       </pipe>
-    </detector>
+    </detector -->
 
     <comment> Electron side beam magnet volumes </comment>
 

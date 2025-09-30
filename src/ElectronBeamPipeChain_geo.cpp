@@ -79,12 +79,16 @@ const double rx_tapper1_min_middle = 5.75 * cm;
 const double ry_tapper1_min_middle = r_pre_q0ef_min;
 const double rx_tapper1_min_stop = r_pre_q0ef_min;
 const double ry_tapper1_min_stop = r_pre_q0ef_min;
-/*
+
 //- bwd_polycone
-const int n_bwd 		= 10; 
-const double s_bwd[n_bwd] 	= {-20.0 * m, -16.0 * m,  -15.0 * m, -11.4140 * m, -11.3640 * m, -9.3640 * m, -9.2880 * m, -7.4050 * m, -7.3420 * m,  -5.0 * m};
-const double d_bwd_min[n_bwd]  	= {  0.1 * m,   0.1 * m, 0.1960 * m,   0.1960 * m,   0.1540 * m,  0.1540 * m,  0.1286 * m,  0.1286 * m,  0.1114 * m, 0.062 * m};
-*/
+const int n_bwd 		= 11; 
+const double s_bwd[n_bwd] 	= {
+	-20.0 * m, -16.0 * m,  -15.0 * m, -11.4140 * m, -11.3640 * m, -9.3640 * m, 
+	-9.2880 * m, -7.4050 * m, -7.3420 * m,  -5.0 * m, -454.449 * cm};
+const double d_bwd_min[n_bwd]  	= {  
+	0.1 * m,   0.1 * m, 0.1960 * m,   0.1960 * m,   0.1540 * m,  0.1540 * m,  
+	0.1286 * m,  0.1286 * m,  0.1114 * m, 0.062 * m, 0.062 * m};
+
 const double screen_gap = 100 * um; // to avaid overlaps
 const double coating_thickness = 30 * um;
 const double screen_thickness = 1 * mm;
@@ -99,27 +103,27 @@ void BuildSectionSolid(	Detector& det,
 	double zpos       = s_start - (s_start - s_stop) / 2.0;
 
 	// vacuum-1
-	EllipticalTube vacuum1_solid(rx_min, ry_min, halfLength + 1.0*dd4hep::cm);
+	EllipticalTube cut_solid(rx_min, ry_min, halfLength + 1.0*dd4hep::cm);
 
 	EllipticalTube vacuum_solid(rx_min, ry_min, halfLength);
-	Volume vacuum_log(
+	Volume vacuum_vol(
 		name + "_vacuum",
 		vacuum_solid,
 		det.material("Vacuum"));
-	assembly.placeVolume(vacuum_log, Position(0,0,zpos));
+	assembly.placeVolume(vacuum_vol, Position(0,0,zpos));
 
 	// coating (subtract vacuum-1)
 	EllipticalTube coating_outer(
 		rx_min + coating_thickness,
 		ry_min + coating_thickness,
 		halfLength);
-	SubtractionSolid coating_solid(coating_outer, vacuum1_solid);
-	Volume coating_log(
+	SubtractionSolid coating_solid(coating_outer, cut_solid);
+	Volume coating_vol(
 		name + "_coating",
 		coating_solid,
 		det.material("Copper"));
-	assembly.placeVolume(coating_log, Position(0,0,zpos));
-	coating_log.setVisAttributes(det.visAttributes("BrownVis"));
+	assembly.placeVolume(coating_vol, Position(0,0,zpos));
+	coating_vol.setVisAttributes(det.visAttributes("BrownVis"));
 
 	// vacuum-2
 	EllipticalTube vacuum2_solid(
@@ -133,12 +137,12 @@ void BuildSectionSolid(	Detector& det,
 		ry_min + coating_thickness + screen_gap + screen_thickness,
 		halfLength);
 	SubtractionSolid screen_solid(screen_outer, vacuum2_solid);
-	Volume screen_log(
+	Volume screen_vol(
 		name + "_screen",
 		screen_solid,
 		det.material("StainlessSteelP506"));
-	screen_log.setVisAttributes(det.visAttributes("YellowVis"));
-	assembly.placeVolume(screen_log, Position(0,0,zpos));
+	screen_vol.setVisAttributes(det.visAttributes("YellowVis"));
+	assembly.placeVolume(screen_vol, Position(0,0,zpos));
 
 	return;
 }
@@ -511,6 +515,52 @@ void BuildTapper0(Detector& det, Assembly& assembly)
 	return;
 }
 
+void BuildPolyconeSection(
+	Detector& det, 
+	std::string name,
+	const double* pos, 
+	const double* dia,
+	std::size_t num,
+	Assembly& assembly)
+{
+	std::vector<double> r_min(num), r_max(num), z_vec(num);
+
+	// --- Vacuum ---
+	for (size_t i=0; i<num; ++i) 
+	{
+		r_min[i] = 0;
+		r_max[i] = dia[i]/2.;
+		z_vec[i] = pos[i];
+	}
+	Solid vacuum_solid = Polycone(0, 2*M_PI, r_min, r_max, z_vec);
+	Volume vacuum_vol(name + "_vacuum", vacuum_solid, det.material("Vacuum"));
+	assembly.placeVolume(vacuum_vol, Position(0,0,0));
+
+	// --- Coating ---
+	for (size_t i=0; i<num; ++i) 
+	{
+		r_min[i] = dia[i]/2.;
+		r_max[i] = dia[i]/2. + coating_thickness;
+	}
+	Solid coating_solid = Polycone(0, 2*M_PI, r_min, r_max, z_vec);
+	Volume coating_vol(name + "_coating", coating_solid, det.material("Copper"));
+	coating_vol.setVisAttributes(det.visAttributes("BrownVis"));
+	assembly.placeVolume(coating_vol, Position(0,0,0));
+
+	// --- Screen ---
+	for (size_t i=0; i<num; ++i) 
+	{
+		r_min[i] = dia[i]/2. + coating_thickness;
+		r_max[i] = r_min[i] + screen_thickness;
+	}
+	Solid screen_solid = Polycone(0, 2*M_PI, r_min, r_max, z_vec);
+	Volume screen_vol(name + "_screen", screen_solid, det.material("StainlessSteelP506"));
+	screen_vol.setVisAttributes(det.visAttributes("YellowVis"));
+	assembly.placeVolume(screen_vol, Position(0,0,0));
+
+	return;
+}
+
 static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector /* sens */) 
 {
 	using namespace ROOT::Math;
@@ -519,32 +569,40 @@ static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector /* sens *
 	DetElement sdet(det_name, x_det.id());
 	Assembly assembly(det_name + "_assembly");
 
-	//- post_d1ef
-	BuildSectionSolid(det,"post_d1ef",rx_post_d1ef_min,ry_post_d1ef_min,s_post_d1ef_start,s_post_d1ef_stop,assembly);
+	if(det_name == "Pipe_cen_to_pos") // forward side
+	{
+		//- post_d1ef
+		BuildSectionSolid(det,"post_d1ef",rx_post_d1ef_min,ry_post_d1ef_min,s_post_d1ef_start,s_post_d1ef_stop,assembly);
 
-	//- tapper0
-	BuildTapper0(det,assembly);
+		//- tapper0
+		BuildTapper0(det,assembly);
 
-	//- pre_q1ef
-	BuildSectionSolid(det,"pre_q1ef",rx_pre_q1ef_min,ry_pre_q1ef_min,s_pre_q1ef_start,s_pre_q1ef_stop,assembly);
+		//- pre_q1ef
+		BuildSectionSolid(det,"pre_q1ef",rx_pre_q1ef_min,ry_pre_q1ef_min,s_pre_q1ef_start,s_pre_q1ef_stop,assembly);
 
-	//- q1ef
-	BuildSectionSolid(det,"q1ef",rx_q1ef_min,ry_q1ef_min,s_q1ef_start,s_q1ef_stop,assembly);
+		//- q1ef
+		BuildSectionSolid(det,"q1ef",rx_q1ef_min,ry_q1ef_min,s_q1ef_start,s_q1ef_stop,assembly);
 
-	//- post_q1ef
-	BuildSectionSolid(det,"post_q1ef",rx_post_q1ef_min,ry_post_q1ef_min,s_post_q1ef_start,s_post_q1ef_stop,assembly);
+		//- post_q1ef
+		BuildSectionSolid(det,"post_q1ef",rx_post_q1ef_min,ry_post_q1ef_min,s_post_q1ef_start,s_post_q1ef_stop,assembly);
 
-	//- pre_q0ef
-	BuildSectionSolid(det,"pre_q0ef",r_pre_q0ef_min,r_pre_q0ef_min,s_pre_q0ef_start,s_pre_q0ef_stop,assembly);
+		//- pre_q0ef
+		BuildSectionSolid(det,"pre_q0ef",r_pre_q0ef_min,r_pre_q0ef_min,s_pre_q0ef_start,s_pre_q0ef_stop,assembly);
 
-	//- q0ef
-	BuildSectionSolid(det,"q0ef",r_q0ef_min,r_q0ef_min,s_q0ef_start,s_q0ef_stop,assembly);
+		//- q0ef
+		BuildSectionSolid(det,"q0ef",r_q0ef_min,r_q0ef_min,s_q0ef_start,s_q0ef_stop,assembly);
 
-	//- post_q0ef
-	BuildSectionSolid(det,"post_q0ef",r_post_q0ef_min,r_post_q0ef_min,s_post_q0ef_start,s_post_q0ef_stop,assembly);
+		//- post_q0ef
+		BuildSectionSolid(det,"post_q0ef",r_post_q0ef_min,r_post_q0ef_min,s_post_q0ef_start,s_post_q0ef_stop,assembly);
 
-	//- tapper1
-	BuildTapper1(det,assembly);
+		//- tapper1
+		BuildTapper1(det,assembly);
+	}
+	else if(det_name == "Pipe_cen_to_neg") // rear side
+	{
+		//- pre_q1er_post_q2er
+		BuildPolyconeSection(det,"pre_q1er_post_q2er",s_bwd,d_bwd_min,n_bwd,assembly);
+	}
 
 	// Final placement
 	auto pv_assembly =

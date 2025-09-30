@@ -1,7 +1,7 @@
 
 <lccdd>
 
-  <detectors>
+  <!-- detectors>
     <detector
     id="BackwardsBeamline_ID"
     type="BeamPipeTracking"
@@ -66,7 +66,7 @@
         mother="Pipe_Q4eR_to_B3eR_vacuum"
     />
 
-  </detectors>
+  </detectors -->
 
   <readouts>
 
