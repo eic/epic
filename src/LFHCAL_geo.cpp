@@ -583,12 +583,12 @@ Volume createEightMModule(Detector& desc, moduleParamsStrct mod_params,
   }
 
   int layer_num  = 0;
-  double slice_z = length / 2 - 10.0 +mod_params.mod_MPThick +
-                   mod_params.mod_FWThick-mod_params.mod_BWThick; // Keeps track of layers' local z locations
+  double slice_z = length / 2 - 10.0 + mod_params.mod_MPThick + mod_params.mod_FWThick -
+                   mod_params.mod_BWThick; // Keeps track of layers' local z locations
   // Looping through the number of repeated layers & slices in each section
   for (int i = 0; i < (int)sl_params.size(); i++) {
-//    slice_z += sl_params[i].slice_offset +
-//               sl_params[i].slice_thick / 2.; // Going to halfway point in layer
+    //    slice_z += sl_params[i].slice_offset +
+    //               sl_params[i].slice_thick / 2.; // Going to halfway point in layer
     slice_z -= sl_params[i].slice_offset +
                sl_params[i].slice_thick / 2.; // Going to halfway point in layer
     layer_num = sl_params[i].layer_ID;
@@ -847,10 +847,10 @@ Volume createFourMModule(Detector& desc, moduleParamsStrct mod_params,
                              "InvisibleNoDaughters");
   }
 
-  int layer_num  = 0;
+  int layer_num = 0;
 
-  double slice_z = length / 2 - 10.0 +mod_params.mod_MPThick +
-                   mod_params.mod_FWThick-mod_params.mod_BWThick; // Keeps track of layers' local z locations
+  double slice_z = length / 2 - 10.0 + mod_params.mod_MPThick + mod_params.mod_FWThick -
+                   mod_params.mod_BWThick; // Keeps track of layers' local z locations
   // Looping through the number of repeated layers & slices in each section
   for (int i = 0; i < (int)sl_params.size(); i++) {
     slice_z -= sl_params[i].slice_offset +
