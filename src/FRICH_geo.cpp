@@ -79,8 +79,8 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
   auto aerogelMaterial     = desc.material(aerogelMaterialName);
 
   // Acrylic filter;
-  //auto acrylicMaterialName = detElem.attr<std::string>(_Unicode(acrylic));
-  //auto acrylicMaterial     = desc.material(acrylicMaterialName);
+  auto acrylicMaterialName = detElem.attr<std::string>(_Unicode(acrylic));
+  auto acrylicMaterial     = desc.material(acrylicMaterialName);
   
   // HRPPD window;
   auto windowMaterialName  = detElem.attr<std::string>(_Unicode(window));
@@ -197,7 +197,7 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
       }
       
       // Acrylic filter volume;
-#if _LATER_
+#if 1//_LATER_
       {
 	const double acWidth = 5*cm, acThick = _ACRYLIC_THICKNESS_;
 	Box acrylicSolid(acWidth/2, acWidth/2, acThick/2);

@@ -960,6 +960,7 @@
       "/>
     <!-- dRICH acrylic filter -->
     <matrix name="RINDEX__Acrylic_DRICH" coldim="2" values="
+      1.23984*eV  1.5017
       4.13281*eV  1.5017
       8.45347*eV  1.5017
       "/>
