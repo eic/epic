@@ -40,7 +40,6 @@
     <constant name="VertexBarrelModL0_rmin" value="38*mm" />
     <constant name="VertexBarrelModL1_rmin" value="50.3*mm+1*um" />
     <constant name="VertexBarrelModL2_rmin" value="125.2*mm+1*um" />
-    <!-- <constant name="VertexBarrelModL2_rmin" value="VertexBarrelL2_nphi*VertexBarrelStaveL2_width/2/Pi" /> -->
 
     <constant name="VertexBarrelMod_vert_off" value="1.0*mm" /> <comment>roughly (38.15*2pi-234.8)/4 </comment>
     <constant name="VertexBarrelModL0_dphi"   value="VertexBarrelMod_vert_off/VertexBarrelModL0_rmin" />
