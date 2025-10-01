@@ -2,5 +2,5 @@ features:
   fields:
     marco:
   hcal:
-    backward_LFHCAL_geo:
+    backward:
     backward_endcap_flux:
