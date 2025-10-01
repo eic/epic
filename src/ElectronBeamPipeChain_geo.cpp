@@ -166,7 +166,7 @@ TGeoTessellated* CreatePolygonHollowTube2(
 	double thickness)
 {
 	auto* tess = new TGeoTessellated();
-	const int nSegments = 1000;
+	const int nSegments = 360;
 
 	std::vector<TVector3> outer1, outer2, inner1, inner2;
 
@@ -180,10 +180,12 @@ TGeoTessellated* CreatePolygonHollowTube2(
 		inner2.emplace_back(rx2_in * cos(phi), ry2_in * sin(phi), z2);
 
 		// Outer ellipses = inner + thickness
-		outer1.emplace_back((rx1_in + thickness) * cos(phi),
-		(ry1_in + thickness) * sin(phi), z1);
-		outer2.emplace_back((rx2_in + thickness) * cos(phi),
-		(ry2_in + thickness) * sin(phi), z2);
+		outer1.emplace_back(
+			(rx1_in + thickness) * cos(phi),
+			(ry1_in + thickness) * sin(phi), z1);
+		outer2.emplace_back((
+			rx2_in + thickness) * cos(phi),
+			(ry2_in + thickness) * sin(phi), z2);
 	}
 
 	auto makeVertex = [](const TVector3& v) 
@@ -203,38 +205,36 @@ TGeoTessellated* CreatePolygonHollowTube2(
 	for (int i = 0; i < nSegments; ++i) 
 	{
 		int j = (i + 1) % nSegments;
-		// Swap vertices to ensure normals point inward
-		tess->AddFacet(makeVertex(inner1[i]), makeVertex(inner2[i]), makeVertex(inner2[j]));
-		tess->AddFacet(makeVertex(inner1[i]), makeVertex(inner2[j]), makeVertex(inner1[j]));
+		tess->AddFacet(makeVertex(inner1[i]), makeVertex(inner2[j]), makeVertex(inner2[i]));
+		tess->AddFacet(makeVertex(inner1[i]), makeVertex(inner1[j]), makeVertex(inner2[j]));
 	}
 
 	// --- End cap at z1 ---
 	for (int i = 0; i < nSegments; ++i) 
 	{
 		int j = (i + 1) % nSegments;
-		tess->AddFacet(makeVertex(outer1[i]), makeVertex(inner1[i]), makeVertex(inner1[j]));
-		tess->AddFacet(makeVertex(outer1[i]), makeVertex(inner1[j]), makeVertex(outer1[j]));
+		tess->AddFacet(makeVertex(inner1[i]), makeVertex(outer1[i]), makeVertex(outer1[j]));
+		tess->AddFacet(makeVertex(inner1[i]), makeVertex(outer1[j]), makeVertex(inner1[j]));
 	}
 
 	// --- End cap at z2 ---
 	for (int i = 0; i < nSegments; ++i) 
 	{
 		int j = (i + 1) % nSegments;
-		tess->AddFacet(makeVertex(outer2[i]), makeVertex(inner2[j]), makeVertex(inner2[i]));
-		tess->AddFacet(makeVertex(outer2[i]), makeVertex(outer2[j]), makeVertex(inner2[j]));
+		tess->AddFacet(makeVertex(outer2[i]), makeVertex(inner2[i]), makeVertex(inner2[j]));
+		tess->AddFacet(makeVertex(outer2[i]), makeVertex(inner2[j]), makeVertex(outer2[j]));
 	}
 
 	tess->CloseShape();
 	return tess;
 }
 
-
 TGeoTessellated* CreatePolygonFilledTube2(
 	double rx1, double ry1, double z1,
 	double rx2, double ry2, double z2)
 {
 	auto* tess = new TGeoTessellated();
-	const int nSegments = 1000;
+	const int nSegments = 360;
 
 	std::vector<TVector3> bottom, top;
 
@@ -257,9 +257,8 @@ TGeoTessellated* CreatePolygonFilledTube2(
 	{
 		int j = (i + 1) % nSegments;
 
-		// Swap order to ensure outward normals
-		tess->AddFacet(makeVertex(bottom[i]), makeVertex(top[j]), makeVertex(top[i]));
-		tess->AddFacet(makeVertex(bottom[i]), makeVertex(bottom[j]), makeVertex(top[j]));
+		tess->AddFacet(makeVertex(bottom[i]), makeVertex(top[i]), makeVertex(top[j]));
+		tess->AddFacet(makeVertex(bottom[i]), makeVertex(top[j]), makeVertex(bottom[j]));
 	}
 
 	// --- End cap at z1 (bottom) ---
@@ -268,7 +267,7 @@ TGeoTessellated* CreatePolygonFilledTube2(
 	for (int i = 0; i < nSegments; ++i) 
 	{
 		int j = (i + 1) % nSegments;
-		tess->AddFacet(centerB, makeVertex(bottom[j]), makeVertex(bottom[i]));
+		tess->AddFacet(centerB, makeVertex(bottom[i]), makeVertex(bottom[j]));
 	}
 
 	// --- End cap at z2 (top) ---
@@ -277,7 +276,7 @@ TGeoTessellated* CreatePolygonFilledTube2(
 	for (int i = 0; i < nSegments; ++i) 
 	{
 		int j = (i + 1) % nSegments;
-		tess->AddFacet(centerT, makeVertex(top[i]), makeVertex(top[j]));
+		tess->AddFacet(centerT, makeVertex(top[j]), makeVertex(top[i]));
 	}
 
 	tess->CloseShape();
@@ -291,7 +290,7 @@ TGeoTessellated* CreatePolygonHollowTube3(
         double thickness)
 {
 	auto* tess = new TGeoTessellated();
-	const int nSegments = 1000;
+	const int nSegments = 360;
 
 	std::vector<TVector3> outer1, outer2, outer3;
 	std::vector<TVector3> inner1, inner2, inner3;
@@ -327,6 +326,7 @@ TGeoTessellated* CreatePolygonHollowTube3(
 		// z1 → z2
 		tess->AddFacet(makeVertex(outer1[i]), makeVertex(outer2[i]), makeVertex(outer2[j]));
 		tess->AddFacet(makeVertex(outer1[i]), makeVertex(outer2[j]), makeVertex(outer1[j]));
+
 		// z2 → z3
 		tess->AddFacet(makeVertex(outer2[i]), makeVertex(outer3[i]), makeVertex(outer3[j]));
 		tess->AddFacet(makeVertex(outer2[i]), makeVertex(outer3[j]), makeVertex(outer2[j]));
@@ -338,12 +338,12 @@ TGeoTessellated* CreatePolygonHollowTube3(
 		int j = (i + 1) % nSegments;
 
 		// z1 → z2
-		tess->AddFacet(makeVertex(inner2[i]), makeVertex(inner2[j]), makeVertex(inner1[i]));
-		tess->AddFacet(makeVertex(inner2[j]), makeVertex(inner1[j]), makeVertex(inner1[i]));
+		tess->AddFacet(makeVertex(inner1[i]), makeVertex(inner2[j]), makeVertex(inner2[i]));
+		tess->AddFacet(makeVertex(inner1[i]), makeVertex(inner1[j]), makeVertex(inner2[j]));
 
 		// z2 → z3
-		tess->AddFacet(makeVertex(inner3[i]), makeVertex(inner3[j]), makeVertex(inner2[i]));
-		tess->AddFacet(makeVertex(inner3[j]), makeVertex(inner2[j]), makeVertex(inner2[i]));
+		tess->AddFacet(makeVertex(inner2[i]), makeVertex(inner3[j]), makeVertex(inner3[i]));
+		tess->AddFacet(makeVertex(inner2[i]), makeVertex(inner2[j]), makeVertex(inner3[j]));
 	}
 
 	// --- End caps ---
@@ -351,11 +351,11 @@ TGeoTessellated* CreatePolygonHollowTube3(
 	{
 		int j = (i + 1) % nSegments;
 		// Cap at z1
-		tess->AddFacet(makeVertex(outer1[i]), makeVertex(inner1[i]), makeVertex(inner1[j]));
-		tess->AddFacet(makeVertex(outer1[i]), makeVertex(inner1[j]), makeVertex(outer1[j]));
+		tess->AddFacet(makeVertex(inner1[i]), makeVertex(outer1[i]), makeVertex(outer1[j]));
+		tess->AddFacet(makeVertex(inner1[i]), makeVertex(outer1[j]), makeVertex(inner1[j]));
 		// Cap at z3
-		tess->AddFacet(makeVertex(outer3[i]), makeVertex(inner3[j]), makeVertex(inner3[i]));
-		tess->AddFacet(makeVertex(outer3[i]), makeVertex(outer3[j]), makeVertex(inner3[j]));
+		tess->AddFacet(makeVertex(outer3[i]), makeVertex(inner3[i]), makeVertex(inner3[j]));
+		tess->AddFacet(makeVertex(outer3[i]), makeVertex(inner3[j]), makeVertex(outer3[j]));
 	}
 
 	tess->CloseShape();
@@ -368,7 +368,7 @@ TGeoTessellated* CreatePolygonFilledTube3(
 	double rx3, double ry3, double z3)
 {
 	auto* tess = new TGeoTessellated();
-	const int nSegments = 1000;
+	const int nSegments = 360;
 
 	std::vector<TVector3> bottom, middle, top;
 
@@ -393,12 +393,12 @@ TGeoTessellated* CreatePolygonFilledTube3(
 		int j = (i + 1) % nSegments;
 
 		// bottom → middle
-		tess->AddFacet(makeVertex(bottom[i]), makeVertex(middle[j]), makeVertex(middle[i]));
-		tess->AddFacet(makeVertex(bottom[i]), makeVertex(bottom[j]), makeVertex(middle[j]));
+		tess->AddFacet(makeVertex(bottom[i]), makeVertex(middle[i]), makeVertex(middle[j]));
+		tess->AddFacet(makeVertex(bottom[i]), makeVertex(middle[j]), makeVertex(bottom[j]));
 
 		// middle → top
-		tess->AddFacet(makeVertex(middle[i]), makeVertex(top[j]), makeVertex(top[i]));
-		tess->AddFacet(makeVertex(middle[i]), makeVertex(middle[j]), makeVertex(top[j]));
+		tess->AddFacet(makeVertex(middle[i]), makeVertex(top[i]), makeVertex(top[j]));
+		tess->AddFacet(makeVertex(middle[i]), makeVertex(top[j]), makeVertex(middle[j]));
 	}
 
 	// --- End cap at z1 (bottom) ---
@@ -407,7 +407,7 @@ TGeoTessellated* CreatePolygonFilledTube3(
 	for (int i = 0; i < nSegments; ++i)
 	{
 		int j = (i + 1) % nSegments;
-		tess->AddFacet(centerB, makeVertex(bottom[j]), makeVertex(bottom[i]));
+		tess->AddFacet(centerB, makeVertex(bottom[i]), makeVertex(bottom[j]));
 	}
 
 	// --- End cap at z3 (top) ---
@@ -416,7 +416,7 @@ TGeoTessellated* CreatePolygonFilledTube3(
 	for (int i = 0; i < nSegments; ++i)
 	{
 		int j = (i + 1) % nSegments;
-		tess->AddFacet(centerT, makeVertex(top[i]), makeVertex(top[j]));
+		tess->AddFacet(centerT, makeVertex(top[j]), makeVertex(top[i]));
 	}
 
 	tess->CloseShape();
