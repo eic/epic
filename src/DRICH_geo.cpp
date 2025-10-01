@@ -65,14 +65,14 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
 #ifdef _WITH_IRT_OPTICS_
   cdet->SetSectorCount(nSectors);
   // The way Chris defined it in the geometry;
-  cdet->SetSectorPhase(0.0);//-M_PI/6);
+  cdet->SetSectorPhase(0.0);
 #endif
   auto wallThickness   = dims.attr<double>(_Unicode(wall_thickness));
   auto windowThickness = dims.attr<double>(_Unicode(window_thickness));
   auto vesselMat       = desc.material(detElem.attr<std::string>(_Unicode(material)));
   
-  auto gasvolMat       = desc.material(detElem.attr<std::string>(_Unicode(gas)));
-  auto gasvolMaterialName = detElem.attr<std::string>(_Unicode(gas));
+  auto gasvolMatName   = detElem.attr<std::string>(_Unicode(gas));
+  auto gasvolMat       = desc.material(gasvolMatName);
   
   auto vesselVis       = desc.visAttributes(detElem.attr<std::string>(_Unicode(vis_vessel)));
   auto gasvolVis       = desc.visAttributes(detElem.attr<std::string>(_Unicode(vis_gas)));
@@ -85,15 +85,15 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
   
   // - aerogel
   auto aerogelElem      = radiatorElem.child(_Unicode(aerogel));
-  auto aerogelMat       = desc.material(aerogelElem.attr<std::string>(_Unicode(material)));
-  auto aerogelMaterialName = aerogelElem.attr<std::string>(_Unicode(material));
+  auto aerogelMatName   = aerogelElem.attr<std::string>(_Unicode(material));
+  auto aerogelMat       = desc.material(aerogelMatName);
   auto aerogelVis       = desc.visAttributes(aerogelElem.attr<std::string>(_Unicode(vis)));
   auto aerogelThickness = aerogelElem.attr<double>(_Unicode(thickness));
   
   // - filter
   auto filterElem      = radiatorElem.child(_Unicode(filter));
-  auto filterMat       = desc.material(filterElem.attr<std::string>(_Unicode(material)));
-  auto filterMaterialName = filterElem.attr<std::string>(_Unicode(material));
+  auto filterMatName   = filterElem.attr<std::string>(_Unicode(material));
+  auto filterMat       = desc.material(filterMatName);
   auto filterVis       = desc.visAttributes(filterElem.attr<std::string>(_Unicode(vis)));
   auto filterThickness = filterElem.attr<double>(_Unicode(thickness));
   
@@ -175,14 +175,10 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
       return det;
     }
   }
-
-#ifdef _WITH_IRT_OPTICS_
-  const double sign = 1.0;
-#endif
   
   // if debugging anything, draw only one sector and adjust visibility
-  //if (debugOptics || debugMirror || debugSensors)
-  debugSector = true;
+  if (debugOptics || debugMirror || debugSensors)
+    debugSector = true;
   if (debugSector)
     gasvolVis = vesselVis = desc.invisible();
 
@@ -210,8 +206,9 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
     return enc;
   };
 #ifdef _WITH_IRT_OPTICS_
-  // Do not mind to store it twice;
-  cdet->SetReadoutCellMask(cellMask);
+  uint64_t sector_mask = ~(0x0ul) ^ readoutCoder["sector"].mask();
+  // Want to mask away dRICH sector bits in this mask;
+  cdet->SetReadoutCellMask(cellMask & sector_mask);
 #endif
 
   // BUILD VESSEL ====================================================================
@@ -279,14 +276,9 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
   UnionSolid vesselUnion(vesselTank, vesselSnout, Position(0., 0., -vesselLength / 2.));
   UnionSolid gasvolUnion(gasvolTank, gasvolSnout,
                          Position(0., 0., -vesselLength / 2. + windowThickness));
-
-  //int iSector = 0;//1;
   
   // union: add sensorboxes for all sectors
   for (int isec = 0; isec < nSectors; isec++) {
-    //{
-    //int isec = iSector;
-
     RotationZ sectorRotation((isec + 0.5) * 2 * M_PI / nSectors);
     vesselUnion = UnionSolid(
         vesselUnion, vesselSensorboxTube,
@@ -340,20 +332,6 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
   PlacedVolume gasvolPV = vesselVol.placeVolume(gasvolVol, Position(0, 0, 0));
   DetElement gasvolDE(det, "gasvol_de", 0);
   gasvolDE.setPlacement(gasvolPV);
-
-#ifdef _WITH_IRT_OPTICS_
-  for (int isec = 0; isec < nSectors; isec++) {
-    //{
-    // FIXME: Z-location does not really matter here, right?;
-    auto boundary = new FlatSurface(TVector3(0,0,0), sign*TVector3(1,0,0), TVector3(0,-1,0));
-    
-    //auto radiator = geometry->SetContainerVolume(cdet, "GasVolume", 0, (G4LogicalVolume*)(0x0), 0, boundary);
-    auto radiator = geometry->SetContainerVolume(cdet, "GasVolume", /*iSector*/isec, (G4LogicalVolume*)(0x0), 0, boundary);
-    radiator->SetAlternativeMaterialName(gasvolMaterialName.c_str());
-    // FIXME: what is it good for in ePIC IRT 2.0 implementation?;
-    geometry->AddRadiatorLogicalVolume(radiator, (G4LogicalVolume*)(0x0));
-  }
-#endif
     
   // place mother volume (vessel)
   Volume motherVol      = desc.pickMotherVolume(det);
@@ -420,81 +398,76 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
     auto filterPV = gasvolVol.placeVolume(filterVol, filterPlacement);
     DetElement filterDE(det, "filter_de", 0);
     filterDE.setPlacement(filterPV);
-    //- SkinSurface filterSkin(desc, filterDE, "mirror_optical_surface", filterSurf, filterVol);
-    //- filterSkin.isValid();
+    // SkinSurface filterSkin(desc, filterDE, "mirror_optical_surface", filterSurf, filterVol);
+    // filterSkin.isValid();
 
     // radiator z-positions (w.r.t. IP); only needed downstream if !debugOptics
     double aerogelZpos = vesselPos.z() + aerogelPV.position().z();
-    double airgapZpos  = vesselPos.z() + airgapPV.position().z();
+    //+double airgapZpos  = vesselPos.z() + airgapPV.position().z();
     double filterZpos  = vesselPos.z() + filterPV.position().z();
-    //printf("@Q@ %f %f (%f)\n", aerogelZpos, filterZpos, mm);
-    desc.add(Constant("DRICH_aerogel_zpos", std::to_string(aerogelZpos)));
-    desc.add(Constant("DRICH_airgap_zpos", std::to_string(airgapZpos)));
-    desc.add(Constant("DRICH_filter_zpos", std::to_string(filterZpos)));
+    //+desc.add(Constant("DRICH_aerogel_zpos", std::to_string(aerogelZpos)));
+    //+desc.add(Constant("DRICH_airgap_zpos", std::to_string(airgapZpos)));
+    //+desc.add(Constant("DRICH_filter_zpos", std::to_string(filterZpos)));
     
 #ifdef _WITH_IRT_OPTICS_
     {
-      TVector3 nx(1*sign,0,0), ny(0,-1,0);
+      TVector3 nx(1,0,0), ny(0,-1,0);
       
       for (int isec = 0; isec < nSectors; isec++) {
-	//{
-	//auto surface = new FlatSurface(sign*(1/mm)*TVector3(0,0,fvOffset + gvOffset + gzOffset), nx, ny);
-	auto surface = new FlatSurface(sign*(1/mm)*TVector3(0,0,aerogelZpos), nx, ny);
+	{
+	  // FIXME: Z-location does not really matter here, right?;
+	  auto boundary = new FlatSurface(TVector3(0,0,0), nx, ny);
+	
+	  auto radiator = geometry->SetContainerVolume(cdet, "GasVolume", isec, (G4LogicalVolume*)(0x0), 0, boundary);
+	  radiator->SetAlternativeMaterialName(gasvolMatName.c_str());
+	}
+    
+	{
+	  auto surface = new FlatSurface((1/mm)*TVector3(0,0,aerogelZpos), nx, ny);
       
-	auto radiator = geometry->AddFlatRadiator(cdet, "Aerogel", CherenkovDetector::Upstream, 
-						  //0, (G4LogicalVolume*)(0x1), 0, surface, agThick/mm);
-						  /*iSector*/isec, (G4LogicalVolume*)(0x1), 0, surface, aerogelThickness/mm);
-	radiator->SetAlternativeMaterialName(aerogelMaterialName.c_str());
-	// FIXME: what is it good for in ePIC IRT 2.0 implementation?;
-	geometry->AddRadiatorLogicalVolume(radiator, (G4LogicalVolume*)(0x1));
-      }
-      for (int isec = 0; isec < nSectors; isec++) {
-	//{
-	auto surface = new FlatSurface(sign*(1/mm)*TVector3(0,0,filterZpos), nx, ny);
-      
-	auto radiator = geometry->AddFlatRadiator(cdet, "Acrylic", CherenkovDetector::Upstream, 
-						  //0, (G4LogicalVolume*)(0x1), 0, surface, agThick/mm);
-						  /*iSector*/isec, (G4LogicalVolume*)(0x2), 0, surface, filterThickness/mm);
-	radiator->SetAlternativeMaterialName(filterMaterialName.c_str());
-	// FIXME: what is it good for in ePIC IRT 2.0 implementation?;
-	geometry->AddRadiatorLogicalVolume(radiator, (G4LogicalVolume*)(0x2));
-      }
+	  auto radiator = geometry->AddFlatRadiator(cdet, "Aerogel", CherenkovDetector::Upstream, 
+						    isec, (G4LogicalVolume*)(0x1), 0, surface, aerogelThickness/mm);
+	  radiator->SetAlternativeMaterialName(aerogelMatName.c_str());
+	}
+	
+	{
+	  auto surface = new FlatSurface((1/mm)*TVector3(0,0,filterZpos), nx, ny);
+	  
+	  auto radiator = geometry->AddFlatRadiator(cdet, "Acrylic", CherenkovDetector::Upstream, 
+						    isec, (G4LogicalVolume*)(0x2), 0, surface, filterThickness/mm);
+	  radiator->SetAlternativeMaterialName(filterMatName.c_str());
+	}
+      } //for isec
     }
 #endif
   }
 
   // radiator material names
-  desc.add(Constant("DRICH_aerogel_material", aerogelMat.ptr()->GetName(), "string"));
-  desc.add(Constant("DRICH_airgap_material", airgapMat.ptr()->GetName(), "string"));
-  desc.add(Constant("DRICH_filter_material", filterMat.ptr()->GetName(), "string"));
-  desc.add(Constant("DRICH_gasvol_material", gasvolMat.ptr()->GetName(), "string"));
+  //+desc.add(Constant("DRICH_aerogel_material", aerogelMat.ptr()->GetName(), "string"));
+  //+desc.add(Constant("DRICH_airgap_material", airgapMat.ptr()->GetName(), "string"));
+  //+desc.add(Constant("DRICH_filter_material", filterMat.ptr()->GetName(), "string"));
+  //+desc.add(Constant("DRICH_gasvol_material", gasvolMat.ptr()->GetName(), "string"));
 
-    //printf("@Q@ %f\n", pssSide); 
 #ifdef _WITH_IRT_OPTICS_
-    // [0,0]: have neither access to G4VSolid nor to G4Material; IRT code does not care; fine;
-    auto pd = new CherenkovPhotonDetector(0, 0);
-    
-    // FIXME: '0' stands for the unknown (and irrelevant) G4LogicalVolume;
-    geometry->AddPhotonDetector(cdet, 0, pd);
-    
-    // Cannot access GEANT shapes in the reconstruction code -> store this value;
-    //pd->SetActiveAreaSize(_HRPPD_ACTIVE_AREA_SIZE_/mm);
-    pd->SetActiveAreaSize(pssSide/mm);
-    
-    //pd->SetGeometricEfficiency(_SENSOR_PLANE_GEOMETRIC_EFFICIENCY_);// * _SAFETY_FACTOR_);
-    // FIXME: calculate it properly later;
-    pd->SetGeometricEfficiency(0.74);//1.0);
+  // [0,0]: have neither access to G4VSolid nor to G4Material; IRT code does not care; fine;
+  auto pd = new CherenkovPhotonDetector(0, 0);
+  
+  // FIXME: '0' stands for the unknown (and irrelevant) G4LogicalVolume;
+  geometry->AddPhotonDetector(cdet, 0, pd);
+  
+  // Cannot access GEANT shapes in the reconstruction code -> store this value;
+  pd->SetActiveAreaSize(pssSide/mm);
+  
+  // FIXME: calculate it properly later; see S13361-3050NE-08 specs;
+  pd->SetGeometricEfficiency(0.74);
 #endif
     
   // SECTOR LOOP //////////////////////////////////////////////////////////////////////
   for (int isec = 0; isec < nSectors; isec++) {
-    //{
-    //int isec = iSector;
-
     // debugging filters, limiting the number of sectors
-    //+if (debugSector && isec != 0)
-    //+continue;
-
+    if (debugSector && isec != 0)
+      continue;
+  
     // sector rotation about z axis
     RotationZ sectorRotation((isec + 0.5) * 2 * M_PI / nSectors);
     std::string secName = "sec" + std::to_string(isec);
@@ -570,28 +543,23 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
     // - access sector center after `sectorRotation`
     auto mirrorFinalPlacement = mirrorSectorPlacement * mirrorPlacement;
     auto mirrorFinalCenter    = vesselPos + mirrorFinalPlacement.Translation().Vect();
-    desc.add(Constant("DRICH_mirror_center_x_" + secName, std::to_string(mirrorFinalCenter.x())));
-    desc.add(Constant("DRICH_mirror_center_y_" + secName, std::to_string(mirrorFinalCenter.y())));
-    desc.add(Constant("DRICH_mirror_center_z_" + secName, std::to_string(mirrorFinalCenter.z())));
-    if (isec == 0)//iSector)//0)
-      desc.add(Constant("DRICH_mirror_radius", std::to_string(mirrorRadius)));
+    //+desc.add(Constant("DRICH_mirror_center_x_" + secName, std::to_string(mirrorFinalCenter.x())));
+    //+desc.add(Constant("DRICH_mirror_center_y_" + secName, std::to_string(mirrorFinalCenter.y())));
+    //+desc.add(Constant("DRICH_mirror_center_z_" + secName, std::to_string(mirrorFinalCenter.z())));
+    //+if (isec == 0)
+    //+  desc.add(Constant("DRICH_mirror_radius", std::to_string(mirrorRadius)));
 
-    //printf(" @Q@ %f %f %f ... %f\n", mirrorFinalCenter.x(), mirrorFinalCenter.y(), mirrorFinalCenter.z(), mirrorRadius); 
 #ifdef _WITH_IRT_OPTICS_
     {
       // NB: default is concave, which is fine;
-      //msurface = new SphericalSurface(sign*(1/mm)*TVector3(0,0,fvOffset + gvOffset + gvLength/2 - miRadius), (1/mm)*miRadius);
-      msurface = new SphericalSurface(sign*(1/mm)*TVector3(mirrorFinalCenter.x(), mirrorFinalCenter.y(), mirrorFinalCenter.z()),
+      msurface = new SphericalSurface((1/mm)*TVector3(mirrorFinalCenter.x(), mirrorFinalCenter.y(), mirrorFinalCenter.z()),
 				      (1/mm)*mirrorRadius);
       mboundary = new OpticalBoundary(cdet->GetRadiator("GasVolume"), msurface, false);
       // Need to store it in a separate call, see a comment in CherenkovDetector.h;
       cdet->StoreOpticalBoundary(mboundary);
 
       // Assign gas volume rear surface (this mirror) by hand;
-      //printf("@B@ createDetector() %p\n", msurface);
-      cdet->GetContainerVolume()->m_Borders[isec].second = msurface;//mboundary;
-      //printf("@B@ createDetector() (%p) (%p)\n", cdet->GetContainerVolume()->GetRearSide(0),
-      //     cdet->GetContainerVolume()->m_Borders[0].second.GetObject());//, name);
+      cdet->GetContainerVolume()->m_Borders[isec].second = msurface;
     }
 #endif
       
@@ -605,14 +573,14 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
     // reconstruction constants
     auto sensorSphPos         = Position(sensorSphCenterX, 0., sensorSphCenterZ) + originFront;
     auto sensorSphFinalCenter = sectorRotation * Position(xS, 0.0, zS);
-    desc.add(
-        Constant("DRICH_sensor_sph_center_x_" + secName, std::to_string(sensorSphFinalCenter.x())));
-    desc.add(
-        Constant("DRICH_sensor_sph_center_y_" + secName, std::to_string(sensorSphFinalCenter.y())));
-    desc.add(
-        Constant("DRICH_sensor_sph_center_z_" + secName, std::to_string(sensorSphFinalCenter.z())));
-    if (isec == 0)//iSector)//0)
-      desc.add(Constant("DRICH_sensor_sph_radius", std::to_string(sensorSphRadius)));
+    //+desc.add(
+    //+    Constant("DRICH_sensor_sph_center_x_" + secName, std::to_string(sensorSphFinalCenter.x())));
+    //+desc.add(
+    //+    Constant("DRICH_sensor_sph_center_y_" + secName, std::to_string(sensorSphFinalCenter.y())));
+    //+desc.add(
+    //+    Constant("DRICH_sensor_sph_center_z_" + secName, std::to_string(sensorSphFinalCenter.z())));
+    //+if (isec == 0)
+    //+  desc.add(Constant("DRICH_sensor_sph_radius", std::to_string(sensorSphRadius)));
 
     // SENSOR MODULE LOOP ------------------------
     /* ALGORITHM: generate sphere of positions
@@ -804,13 +772,13 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
                 return pduAssemblyPlacement * n;
               };
               auto sensorNormX = normVector(Direction{
-                  -1.*sign, //1.,
+                 -1., //1.,
                   0.,
                   0.,
               });
               auto sensorNormY = normVector(Direction{
                   0.,
-                  -1.,//1.,
+                 -1.,//1.,
                   0.,
               });
 
@@ -851,65 +819,51 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
               }
 
               // add these optics parameters to this sensor's parameter map
-              auto pssVarMap = pssDE.extension<VariantParameters>(false);
-              if (pssVarMap == nullptr) {
-                pssVarMap = new VariantParameters();
-                pssDE.addExtension<VariantParameters>(pssVarMap);
-              }
-              auto addVecToMap = [pssVarMap](std::string key, auto vec) {
-                pssVarMap->set<double>(key + "_x", vec.x());
-                pssVarMap->set<double>(key + "_y", vec.y());
-                pssVarMap->set<double>(key + "_z", vec.z());
-              };
-              addVecToMap("pos", sensorPos);
-              addVecToMap("normX", sensorNormX);
-              addVecToMap("normY", sensorNormY);	
+              //+auto pssVarMap = pssDE.extension<VariantParameters>(false);
+              //+if (pssVarMap == nullptr) {
+              //+  pssVarMap = new VariantParameters();
+              //+  pssDE.addExtension<VariantParameters>(pssVarMap);
+              //+}
+              //+auto addVecToMap = [pssVarMap](std::string key, auto vec) {
+              //+  pssVarMap->set<double>(key + "_x", vec.x());
+              //+  pssVarMap->set<double>(key + "_y", vec.y());
+              //+  pssVarMap->set<double>(key + "_z", vec.z());
+              //+};
+              //+addVecToMap("pos", sensorPos);
+              //+addVecToMap("normX", sensorNormX);
+              //+addVecToMap("normY", sensorNormY);
 #ifdef _WITH_IRT_OPTICS_
 	      {
-		// Photocathode surface;
-		//auto surface = new FlatSurface((1/mm)*TVector3(sign*xOffset, yOffset, sign*(fvzOffset + _zpdc)),
-		//			       TVector3(-1*sign,0,0), TVector3(0,-1,0));
+		// SiPM panel surface;
 		auto surface = new FlatSurface((1/mm)*TVector3(sensorPos.x(), sensorPos.y(), sensorPos.z()),
 					       TVector3(sensorNormX.x(), sensorNormX.y(), sensorNormX.z()), 
 					       TVector3(sensorNormY.x(), sensorNormY.y(), sensorNormY.z())); 
 
-		//if (/*isec == 0 &&*/ ipdu == 0 && isipm == 0)
-		{
-		  // Let it be a single sector;
-		  unsigned sector = isec;
+		// Wipe out sector bits; FIXME: it seems this is not really needed?;
+		auto irt = pd->AllocateIRT(isec, sensorID & sector_mask);
 		  
-		  auto irt = pd->AllocateIRT(sector, sensorID & 0xFFFFFFFFFFFFF8FF);
-		  {
-		    //auto ptr = pd->GetIRTs(sensorID & 0xFFFFFFFFFFFFF8FF);
-		    //printf("@Q@ %ld; %4d %4d %4d -> %8lX %8lX\n",
-		    //	   ptr->size(), isec, ipdu, isipm, sensorID, sensorID & 0xFFFFFFFFFFFFF8FF);
-		  }
-		  
-		  // Aerogel and acrylic;
-		  if (cdet->m_OpticalBoundaries[CherenkovDetector::Upstream].find(sector) != 
-		      cdet->m_OpticalBoundaries[CherenkovDetector::Upstream].end())
-		    for(auto boundary: cdet->m_OpticalBoundaries[CherenkovDetector::Upstream][sector])
-		      irt->AddOpticalBoundary(boundary);
-		  
-		  // Mirror;
-		  irt->AddOpticalBoundary(mboundary);
-		  
-		  // Fused silica windows;
-		  //if (cdet->m_OpticalBoundaries[CherenkovDetector::Downstream].find(sector) != 
-		  //  cdet->m_OpticalBoundaries[CherenkovDetector::Downstream].end())
-		  //for(auto boundary: cdet->m_OpticalBoundaries[CherenkovDetector::Downstream][sector])
-		  //  irt->AddOpticalBoundary(boundary);
-		  
-		  // Terminate the optical path;
-		  pd->AddItselfToOpticalBoundaries(irt, surface);
-		}
+		// Aerogel and acrylic;
+		if (cdet->m_OpticalBoundaries[CherenkovDetector::Upstream].find(isec) != 
+		    cdet->m_OpticalBoundaries[CherenkovDetector::Upstream].end())
+		  for(auto boundary: cdet->m_OpticalBoundaries[CherenkovDetector::Upstream][isec])
+		    irt->AddOpticalBoundary(boundary);
+		
+		// Mirror;
+		irt->AddOpticalBoundary(mboundary);
+		
+		// FIXME: eventually there should be a quartz window defined as part of the
+		// cdet->m_OpticalBoundaries[CherenkovDetector::Downstream] boundaries;
+		
+		// Terminate the optical path;
+		pd->AddItselfToOpticalBoundaries(irt, surface);
 	      } 
 #endif
               printout(DEBUG, "DRICH_geo", "sensor %s:", sensorIDname.c_str());
-              for (auto kv : pssVarMap->variantParameters)
-                printout(DEBUG, "DRICH_geo", "    %s: %f", kv.first.c_str(),
-                         pssVarMap->get<double>(kv.first));
 
+              //+for (auto kv : pssVarMap->variantParameters)
+	      //+printout(DEBUG, "DRICH_geo", "    %s: %f", kv.first.c_str(),
+	      //+         pssVarMap->get<double>(kv.first));
+	      
               // increment SIPM number
               isipm++;
             }
@@ -996,11 +950,10 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
     // END SENSOR MODULE LOOP ------------------------
 
     // add constant for access to the number of PDUs per sector
-    if (isec == 0)//iSector)//0)
-      desc.add(Constant("DRICH_num_pdus", std::to_string(ipdu)));
-    else if (ipdu != desc.constant<int>("DRICH_num_pdus"))
-      printout(WARNING, "DRICH_geo", "number of PDUs is not the same for each sector");
-
+    //+if (isec == 0)
+    //+desc.add(Constant("DRICH_num_pdus", std::to_string(ipdu)));
+    //+else if (ipdu != desc.constant<int>("DRICH_num_pdus"))
+    //+printout(WARNING, "DRICH_geo", "number of PDUs is not the same for each sector");
   } // END SECTOR LOOP //////////////////////////
 
   // Write out optical configuration;
