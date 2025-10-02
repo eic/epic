@@ -295,6 +295,7 @@ static Ref_t create_CurvedBarrelTracker(Detector& description, xml_h e, Sensitiv
             auto& comp_de_params =
                 DD4hepDetectorHelper::ensureExtension<dd4hep::rec::VariantParameters>(comp_de);
             comp_de_params.set<string>("axis_definitions", "XYZ");
+            // note from Wouter: Region allows setting specific physics in regions of space. Limits similar but with production limits. Currently unused in simulations. But we'd sort of tried to make sure we don't prevent ourselves from using it entirely.
             // comp_de.setAttributes(description, sens_pv.volume(), x_layer.regionStr(), x_layer.limitsStr(),
             //                       xml_det_t(xmleles[m_nam]).visStr());
             //
