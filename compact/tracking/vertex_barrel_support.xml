@@ -373,7 +373,7 @@
     <comment>---------------FPC , sheet5,  sheet 9---------------</comment>
     <comment> FPC from the silicon sensor, assume uniformly distributed cylinder.
       Each FPC layer (digi, analog, or signal) contains 70um thick of copper
-      replace it with 100um of Aluminum. 
+      replace it with 100um of Aluminum.
       see https://github.com/eic/epic/pull/803</comment>
     <constant name="IB_FPC_thickness"    value="0.1*mm" />
     <constant name="IB_FPC_neg_ring_thickness"    value="2*IB_FPC_thickness" />
