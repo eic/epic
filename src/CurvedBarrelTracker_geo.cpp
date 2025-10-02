@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: LGPL-3.0-or-later
-// Copyright (C) 2022-2024 Whitney Armstrong, Jonathan Witte, Shujie Li
+// Copyright (C) 2022 - 2025 Whitney Armstrong, Jonathan Witte, Shujie Li
 
 /** Curved Barrel tracker
  * - Derived from "BarrelTrackerWithFrame_geo.cpp".

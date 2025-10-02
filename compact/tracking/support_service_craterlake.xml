@@ -340,7 +340,7 @@
           <position x="0*cm" y="0*cm" z="InnerSupportCone_z" />
           <component material="Aluminum" thickness="InnerSupportConePAl_thickness" name="Services" vis="TrackerServiceVis" />
           <component material="CarbonFiber" thickness="InnerSupportConeCF_thickness" name="Support" vis="TrackerSupportVis"/>
-      </support> -->
+      </support>
 
       <support type="Cylinder"
         name="TrackerSupportCylEndcapN1A"
