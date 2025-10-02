@@ -373,9 +373,9 @@
     <comment>---------------FPC , sheet5,  sheet 9---------------</comment>
     <comment> FPC from the silicon sensor, assume uniformly distributed cylinder.
       Each FPC layer (digi, analog, or signal) contains 70um thick of copper
-      replace it with 100um of aluminum. 
+      replace it with 100um of Aluminum. 
       see https://github.com/eic/epic/pull/803</comment>
-    <constant name="IB_FPC_thickness"    value="0.07*mm" />
+    <constant name="IB_FPC_thickness"    value="0.1*mm" />
     <constant name="IB_FPC_neg_ring_thickness"    value="2*IB_FPC_thickness" />
     <constant name="IB_FPC_pos_ring_thickness"    value="3*IB_FPC_thickness" />
     <constant name="IB_FPC_ring_vert_off"    value=" 0.5*mm" />
@@ -415,13 +415,13 @@
     <comment>-------------FPC connected to the sensors (see L1PosConeFPC for the cone), 9---------------</comment>
 
 
-    <subtraction name="IBFPCNegRing2" material="aluminum" vis="SVTReadoutVis">
+    <subtraction name="IBFPCNegRing2" material="Aluminum" vis="SVTReadoutVis">
       <position x="0" y="0" z="IB_FPC_neg_ring_zcenter"/>
       <shape1 type="Tube" name="FPC_neg_ring2_main"
               rmin="IB_FPC_neg_ring2_rmin"
               thickness="IB_FPC_neg_ring_thickness"
               length="IB_FPC_neg_ring_dz"
-              material="aluminum"/>
+              material="Aluminum"/>
       <shape2 type="Box" name="FPC_neg_ring2_cutout"
               x="IB_FPC_ring2_rmax*2"
               y="IB_FPC_ring_vert_off*2"
@@ -432,7 +432,7 @@
       </shape2>
     </subtraction>
 
-    <subtraction name="IBFPCPosRing2" material="aluminum" vis="SVTReadoutVis">
+    <subtraction name="IBFPCPosRing2" material="Aluminum" vis="SVTReadoutVis">
       <position x="0" y="0" z="IB_FPC_pos_ring_zcenter"/>
       <shape1 type="Tube" name="FPC_pos_ring2_main"
               rmin="IB_FPC_pos_ring2_rmin"
@@ -1504,13 +1504,13 @@
 
     <comment> cable connected to the silicon layer, approximated by ring</comment>
 
-    <subtraction name="IBFPCNegRing0" material="aluminum" vis="SVTReadoutVis">
+    <subtraction name="IBFPCNegRing0" material="Aluminum" vis="SVTReadoutVis">
       <position x="0" y="0" z="IB_FPC_neg_ring_zcenter"/>
       <shape1 type="Tube" name="FPC_neg_ring0_main"
               rmin="IB_FPC_neg_ring0_rmin"
               thickness="IB_FPC_neg_ring_thickness"
               length="IB_FPC_neg_ring_dz"
-              material="aluminum"/>
+              material="Aluminum"/>
       <shape2 type="Box" name="FPC_neg_ring0_cutout"
               x="IB_FPC_ring0_rmax*2"
               y="IB_FPC_ring_vert_off*2"
@@ -1521,13 +1521,13 @@
       </shape2>
     </subtraction>
 
-   <subtraction name="IBFPCNegRing1" material="aluminum" vis="SVTReadoutVis">
+   <subtraction name="IBFPCNegRing1" material="Aluminum" vis="SVTReadoutVis">
       <position x="0" y="0" z="IB_FPC_neg_ring_zcenter"/>
       <shape1 type="Tube" name="FPC_neg_ring1_main"
               rmin="IB_FPC_ring1_rmin"
               thickness="IB_FPC_neg_ring_thickness"
               length="IB_FPC_neg_ring_dz"
-              material="aluminum"/>
+              material="Aluminum"/>
       <shape2 type="Box" name="FPC_neg_ring1_cutout"
               x="IB_FPC_neg_ring1_rmax*2"
               y="IB_FPC_ring_vert_off*2"
@@ -1538,13 +1538,13 @@
       </shape2>
     </subtraction>
 
-    <subtraction name="IBFPCPosRing0" material="aluminum" vis="SVTReadoutVis">
+    <subtraction name="IBFPCPosRing0" material="Aluminum" vis="SVTReadoutVis">
       <position x="0" y="0" z="IB_FPC_pos_ring_zcenter"/>
       <shape1 type="Tube" name="FPC_pos_ring0_main"
               rmin="IB_FPC_pos_ring0_rmin"
               thickness="IB_FPC_pos_ring_thickness"
               length="IB_FPC_pos_ring_dz"
-              material="aluminum"/>
+              material="Aluminum"/>
       <shape2 type="Box" name="FPC_pos_ring0_cutout"
               x="IB_FPC_ring0_rmax*2"
               y="IB_FPC_ring_vert_off*2"
@@ -1555,13 +1555,13 @@
       </shape2>
     </subtraction>
 
-    <subtraction name="IBFPCPosRing1" material="aluminum" vis="SVTReadoutVis">
+    <subtraction name="IBFPCPosRing1" material="Aluminum" vis="SVTReadoutVis">
       <position x="0" y="0" z="IB_FPC_pos_ring_zcenter"/>
       <shape1 type="Tube" name="FPC_pos_ring1_main"
               rmin="IB_FPC_ring1_rmin"
               thickness="IB_FPC_pos_ring_thickness"
               length="IB_FPC_pos_ring_dz"
-              material="aluminum"/>
+              material="Aluminum"/>
       <shape2 type="Box" name="FPC_pos_ring1_cutout"
               x="IB_FPC_pos_ring1_rmax*2"
               y="IB_FPC_ring_vert_off*2"
