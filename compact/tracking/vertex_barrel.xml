@@ -71,12 +71,6 @@
     <constant name="VertexBarrelLayer2_rmin"  value="VertexBarrelModL2_rmin" />
     <constant name="VertexBarrelLayer2_rmax"  value="VertexBarrelLayer2_rmin + VertexBarrelLayer_thickness" />
 
-    <comment>
-      FPC cables
-    </comment>
-    <constant name="IB_FPC_thickness"    value=" 0.555*mm" />
-
-
   </define>
 
   <detectors>
