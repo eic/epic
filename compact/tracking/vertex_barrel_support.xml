@@ -371,18 +371,24 @@
     <constant name="L2_pos_cone_leg_length"   value=" sqrt(L2_cone_leg_dr*L2_cone_leg_dr+L2_pos_cone_leg_dz*L2_pos_cone_leg_dz)" />
 
     <comment>---------------FPC , sheet5,  sheet 9---------------</comment>
-    <comment> FPC from the silicon sensor, assume uniformly distributed cylinder of copper. 
-      Assume 70um thick of copper for both digi/analog and signal FPC, see https://github.com/eic/epic/pull/803</comment>
+    <comment> FPC from the silicon sensor, assume uniformly distributed cylinder.
+      Each FPC layer (digi, analog, or signal) contains 70um thick of copper
+      replace it with 100um of aluminum. 
+      see https://github.com/eic/epic/pull/803</comment>
     <constant name="IB_FPC_thickness"    value="0.07*mm" />
-    <constant name="IB_FPC_ring_thickness"    value="IB_FPC_thickness" />
+    <constant name="IB_FPC_neg_ring_thickness"    value="2*IB_FPC_thickness" />
+    <constant name="IB_FPC_pos_ring_thickness"    value="3*IB_FPC_thickness" />
     <constant name="IB_FPC_ring_vert_off"    value=" 0.5*mm" />
 
     <constant name="IB_FPC_ring0_rmax"        value="38*mm" />
-    <constant name="IB_FPC_ring0_rmin"        value="IB_FPC_ring0_rmax-IB_FPC_ring_thickness" />
+    <constant name="IB_FPC_neg_ring0_rmin"        value="IB_FPC_ring0_rmax-IB_FPC_neg_ring_thickness" />
+    <constant name="IB_FPC_pos_ring0_rmin"        value="IB_FPC_ring0_rmax-IB_FPC_pos_ring_thickness" />
     <constant name="IB_FPC_ring1_rmin"        value="50.4*mm" />
-    <constant name="IB_FPC_ring1_rmax"        value="IB_FPC_ring1_rmin+IB_FPC_ring_thickness" />
+    <constant name="IB_FPC_neg_ring1_rmax"        value="IB_FPC_ring1_rmin+IB_FPC_neg_ring_thickness" />
+    <constant name="IB_FPC_pos_ring1_rmax"        value="IB_FPC_ring1_rmin+IB_FPC_pos_ring_thickness" />
     <constant name="IB_FPC_ring2_rmax"        value="125.2*mm" />
-    <constant name="IB_FPC_ring2_rmin"        value="IB_FPC_ring2_rmax-IB_FPC_ring_thickness" />
+    <constant name="IB_FPC_neg_ring2_rmin"        value="IB_FPC_ring2_rmax-IB_FPC_neg_ring_thickness" />
+    <constant name="IB_FPC_pos_ring2_rmin"        value="IB_FPC_ring2_rmax-IB_FPC_pos_ring_thickness" />
 
     <constant name="IB_FPC_neg_ring_dz"        value="34*mm" />
     <constant name="IB_FPC_neg_ring_zmax"      value="-131.5*mm" />
@@ -395,7 +401,7 @@
     <constant name="IB_FPC_pos_ring_zcenter"   value="(IB_FPC_pos_ring_zmax + IB_FPC_pos_ring_zmin)/2" />
 
     <comment>   FPC cables along the cone on the Hadron (Pos) side    </comment>
-    <constant name="L1_pos_cone_FPC_thickness"    value="IB_FPC_thickness" />
+    <constant name="L1_pos_cone_FPC_thickness"    value="2*IB_FPC_thickness" /> <comment>the cone holds cables from L0 and L1, assume uniformly spreaded along the cone, the average thickness is reduced due to cable fanning out.</comment>
 
 
   </define>
@@ -409,13 +415,13 @@
     <comment>-------------FPC connected to the sensors (see L1PosConeFPC for the cone), 9---------------</comment>
 
 
-    <subtraction name="IBFPCNegRing2" material="Copper" vis="SVTReadoutVis">
+    <subtraction name="IBFPCNegRing2" material="aluminum" vis="SVTReadoutVis">
       <position x="0" y="0" z="IB_FPC_neg_ring_zcenter"/>
       <shape1 type="Tube" name="FPC_neg_ring2_main"
-              rmin="IB_FPC_ring2_rmin"
-              thickness="IB_FPC_ring_thickness"
+              rmin="IB_FPC_neg_ring2_rmin"
+              thickness="IB_FPC_neg_ring_thickness"
               length="IB_FPC_neg_ring_dz"
-              material="Copper"/>
+              material="aluminum"/>
       <shape2 type="Box" name="FPC_neg_ring2_cutout"
               x="IB_FPC_ring2_rmax*2"
               y="IB_FPC_ring_vert_off*2"
@@ -426,13 +432,13 @@
       </shape2>
     </subtraction>
 
-    <subtraction name="IBFPCPosRing2" material="Copper" vis="SVTReadoutVis">
+    <subtraction name="IBFPCPosRing2" material="aluminum" vis="SVTReadoutVis">
       <position x="0" y="0" z="IB_FPC_pos_ring_zcenter"/>
       <shape1 type="Tube" name="FPC_pos_ring2_main"
-              rmin="IB_FPC_ring2_rmin"
-              thickness="IB_FPC_ring_thickness"
+              rmin="IB_FPC_pos_ring2_rmin"
+              thickness="IB_FPC_pos_ring_thickness"
               length="IB_FPC_pos_ring_dz"
-              material="Copper"/>
+              material="Aluminum"/>
       <shape2 type="Box" name="FPC_pos_ring2_cutout"
               x="IB_FPC_ring2_rmax*2"
               y="IB_FPC_ring_vert_off*2"
@@ -1478,7 +1484,7 @@
        FPC cables connected to each end of the silicon layer (sheet 5)
       --------------------------------------------------------- </comment>
     <comment> attach fanning out FPC cables to positive cone </comment>
-     <subtraction name="L1PosConeFPC" material="Copper" vis="SVTReadoutVis">
+     <subtraction name="L1PosConeFPC" material="Aluminum" vis="SVTReadoutVis">
         <position x="0" y="0" z="(L1_pos_cone_z3+L1_pos_cone_z1)/2+L1_pos_cone_thickness+overlap_buffer*2"/>
 
         <shape1 type="Cone" name="L1PosConeFPC_main"
@@ -1486,7 +1492,7 @@
                 rmin2="L1_pos_cone_r3-overlap_buffer"
                 length="L1_pos_cone_z3-L1_pos_cone_z1"
                 thickness="L1_pos_cone_FPC_thickness"
-                material="Copper"/>
+                material="Aluminum"/>
 
         <shape2 type="Box" name="L1PosConeFPC_cutout"
                 x="L1_pos_cone_r2*2"
@@ -1498,13 +1504,13 @@
 
     <comment> cable connected to the silicon layer, approximated by ring</comment>
 
-    <subtraction name="IBFPCNegRing0" material="Copper" vis="SVTReadoutVis">
+    <subtraction name="IBFPCNegRing0" material="aluminum" vis="SVTReadoutVis">
       <position x="0" y="0" z="IB_FPC_neg_ring_zcenter"/>
       <shape1 type="Tube" name="FPC_neg_ring0_main"
-              rmin="IB_FPC_ring0_rmin"
-              thickness="IB_FPC_ring_thickness"
+              rmin="IB_FPC_neg_ring0_rmin"
+              thickness="IB_FPC_neg_ring_thickness"
               length="IB_FPC_neg_ring_dz"
-              material="Copper"/>
+              material="aluminum"/>
       <shape2 type="Box" name="FPC_neg_ring0_cutout"
               x="IB_FPC_ring0_rmax*2"
               y="IB_FPC_ring_vert_off*2"
@@ -1515,15 +1521,15 @@
       </shape2>
     </subtraction>
 
-   <subtraction name="IBFPCNegRing1" material="Copper" vis="SVTReadoutVis">
+   <subtraction name="IBFPCNegRing1" material="aluminum" vis="SVTReadoutVis">
       <position x="0" y="0" z="IB_FPC_neg_ring_zcenter"/>
       <shape1 type="Tube" name="FPC_neg_ring1_main"
               rmin="IB_FPC_ring1_rmin"
-              thickness="IB_FPC_ring_thickness"
+              thickness="IB_FPC_neg_ring_thickness"
               length="IB_FPC_neg_ring_dz"
-              material="Copper"/>
+              material="aluminum"/>
       <shape2 type="Box" name="FPC_neg_ring1_cutout"
-              x="IB_FPC_ring1_rmax*2"
+              x="IB_FPC_neg_ring1_rmax*2"
               y="IB_FPC_ring_vert_off*2"
               z="IB_FPC_neg_ring_dz"
               material="Air">
@@ -1532,13 +1538,13 @@
       </shape2>
     </subtraction>
 
-    <subtraction name="IBFPCPosRing0" material="Copper" vis="SVTReadoutVis">
+    <subtraction name="IBFPCPosRing0" material="aluminum" vis="SVTReadoutVis">
       <position x="0" y="0" z="IB_FPC_pos_ring_zcenter"/>
       <shape1 type="Tube" name="FPC_pos_ring0_main"
-              rmin="IB_FPC_ring0_rmin"
-              thickness="IB_FPC_ring_thickness"
+              rmin="IB_FPC_pos_ring0_rmin"
+              thickness="IB_FPC_pos_ring_thickness"
               length="IB_FPC_pos_ring_dz"
-              material="Copper"/>
+              material="aluminum"/>
       <shape2 type="Box" name="FPC_pos_ring0_cutout"
               x="IB_FPC_ring0_rmax*2"
               y="IB_FPC_ring_vert_off*2"
@@ -1549,15 +1555,15 @@
       </shape2>
     </subtraction>
 
-    <subtraction name="IBFPCPosRing1" material="Copper" vis="SVTReadoutVis">
+    <subtraction name="IBFPCPosRing1" material="aluminum" vis="SVTReadoutVis">
       <position x="0" y="0" z="IB_FPC_pos_ring_zcenter"/>
       <shape1 type="Tube" name="FPC_pos_ring1_main"
               rmin="IB_FPC_ring1_rmin"
-              thickness="IB_FPC_ring_thickness"
+              thickness="IB_FPC_pos_ring_thickness"
               length="IB_FPC_pos_ring_dz"
-              material="Copper"/>
+              material="aluminum"/>
       <shape2 type="Box" name="FPC_pos_ring1_cutout"
-              x="IB_FPC_ring1_rmax*2"
+              x="IB_FPC_pos_ring1_rmax*2"
               y="IB_FPC_ring_vert_off*2"
               z="IB_FPC_pos_ring_dz"
               material="Air">
