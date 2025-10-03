@@ -1,5 +1,5 @@
 ebeam: 10
-pbeam: 100
+pbeam: 100_Au197
 features:
   beampipe:
   tracking:
@@ -33,6 +33,6 @@ features:
     backward:
     backward_endcap_flux:
   far_forward:
-    default:
+    default_no_zdc:
   far_backward:
     default:

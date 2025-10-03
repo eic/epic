@@ -175,7 +175,8 @@ The unused IDs below are saved for future use.
       Unused IDs: 107-109
 
     </documentation>
-    <constant name="ECalSubAssembly_ID"   value="100"/><!-- UNUSED -->
+    <constant name="ECalSubAssembly_ID"   value="100"/><!-- DEPRECATED -->
+    <constant name="EcalSubAssembly_ID"   value="100"/>
     <constant name="ECalBarrel_ID"        value="101"/><!-- DEPRECATED -->
     <constant name="EcalBarrel_ID"        value="101"/>
     <constant name="ECalEndcapP_ID"       value="102"/><!-- DEPRECATED -->
@@ -487,6 +488,10 @@ Examples:
     <constant name="CentralTrackingRegionP_tan"   value="Eta3_7_tan * 1.00" />
     <constant name="CentralTrackingRegionN_tan"   value="Eta4_0_tan * 0.99" />
 
+    <constant name="InnerDetectorBarrelSupportCylinder_thickness" value="1*cm"/>
+    <constant name="InnerDetectorBarrelSupportCylinder_rmin"      value="71.0*cm"/> <!-- EPIC Envelope - 03-12-2025.stp -->
+    <constant name="InnerDetectorBarrelSupportCylinder_rmax"      value="InnerDetectorBarrelSupportCylinder_rmin + InnerDetectorBarrelSupportCylinder_thickness"/>
+
     <documentation level="0">
 ### PID Detector Region Parameters
     </documentation>
@@ -522,7 +527,7 @@ Examples:
 
     <comment> Note: PID has space for DIRC, ExtraSpace sits past the PID</comment>
     <constant name="BarrelPIDRegion_thickness"    value="7.0 * cm" />
-    <constant name="BarrelExtraSpace_thickness"   value="1.5 * cm" />
+    <constant name="BarrelExtraSpace_thickness"   value="0.0 * cm" />
 
     <documentation>
     ## Forward/backward tracking region behind the PID detectors

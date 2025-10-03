@@ -115,13 +115,6 @@
     <vis name="DIRCBarVis"      ref="AnlTeal"       showDaughters="true" visible="true"/>
 
     <comment>
-      Beam line with magnets
-    </comment>
-    <vis name="BeamPipeVis"         ref="AnlLightGray"       showDaughters="true" visible="true"/>
-    <vis name="FFMagnetVis"         ref="AnlGreen"            showDaughters="true" visible="true"/>
-    <vis name="FFMagnetCoilVis"     ref="AnlRed"              showDaughters="true" visible="true"/>
-
-    <comment>
       ZDC visualization
     </comment>
 

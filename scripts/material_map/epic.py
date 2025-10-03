@@ -35,15 +35,11 @@ def getDetector(
             level=customLogLevel(maxLevel=acts.logging.INFO),
         )
 
-    dd4hepConfig = acts.examples.dd4hep.DD4hepGeometryService.Config(
+    dd4hepConfig = acts.examples.dd4hep.DD4hepDetector.Config(
         xmlFileNames=[xmlFile],
         logLevel=logLevel,
         dd4hepLogLevel=customLogLevel(),
     )
-    detector = acts.examples.dd4hep.DD4hepDetector()
+    detector = acts.examples.dd4hep.DD4hepDetector(dd4hepConfig)
 
-    config = acts.MaterialMapJsonConverter.Config()
-
-    trackingGeometry, deco = detector.finalize(dd4hepConfig, matDeco)
-
-    return detector, trackingGeometry, deco
+    return detector

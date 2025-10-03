@@ -1,66 +1,19 @@
 <!-- SPDX-License-Identifier: LGPL-3.0-or-later -->
-<!-- Copyright (C) 2022 Wouter Deconinck, Leszek Kosarzewski, Ryan Milton -->
+<!-- Copyright (C) Leszek Kosarzewski -->
 
 <lccdd>
+
+  <info name="backward_sampF.xml"
+        title="EPIC nHCal with all layers sensitive"
+        author="L. Kosarzewski"
+        status="development"
+        version="1.0"
+  ><comment/></info>
+
   <define>
-    <documentation>
-      #### Material Thickness
-    </documentation>
-    <constant name="HcalEndcapNSteelThickness"          value="4.0 * cm"/>
-    <constant name="HcalEndcapNPolystyreneThickness" value="0.4 * cm"/>
-        <constant name="HcalEndcapNLayerGap"                    value="0.1 * cm"/> <!-- 2*thicker than LFHCAL -->
-
-        <constant name="HcalEndcapN_polyhedron_rmax"    value="251.444*cm"/>
-        <constant name="HcalEndcapN_segments_rmin"              value="19.9431*cm"/>
-        <constant name="HcalEndcapN_segments_rmax"              value="HcalEndcapN_rmax/(cos(180*deg/HcalEndcapN_CaloSides))"/>
-
-
-    <documentation>
-      - Hcal Endcap N Layers and computed Thickness
-    </documentation>
-
-    <constant name="HcalEndcapNSingleLayerThickness"
-             value="HcalEndcapNSteelThickness + HcalEndcapNPolystyreneThickness + HcalEndcapNLayerGap"/>
-    <constant name="HcalEndcapNLayer_NRepeat"   value="floor(5*HcalEndcapN_length / HcalEndcapNSingleLayerThickness)"/>
-    <constant name="HcalEndcapN_thickness"              value="HcalEndcapNLayer_NRepeat * HcalEndcapNSingleLayerThickness"/>
+    <constant name="HcalEndcapN_allSensitive" value="1"/>
   </define>
 
-
-  <!-- Define detector -->
-  <detectors>
-    <documentation>
-      ### Backwards (Negative Z) Endcap Hadronic Calorimeter
-    </documentation>
-    <detector
-      id="HcalEndcapN_ID"
-      name="HcalEndcapN"
-      type="epic_PolyhedraEndcapCalorimeter2"
-      readout="HcalEndcapNHits"
-      vis="HcalEndcapVis"
-      calorimeterType="HAD_ENDCAP"
-      allSensitive="1"
-      >
-      <position x="0" y="0" z="0"/>
-      <dimensions
-        numsides="HcalEndcapN_CaloSides"
-        zmin="HcalEndcapN_zmin"
-        rmin="HcalEndcapN_rmin"
-        rmax="HcalEndcapN_rmax"/>
-      <layer repeat="HcalEndcapNLayer_NRepeat" vis="HcalEndcapLayerVis" >
-        <slice material="StainlessSteelSAE304" thickness="HcalEndcapNSteelThickness" vis="HcalAbsorberVis"/>
-        <slice material="Air" thickness="HcalEndcapNLayerGap/2" vis="InvisibleNoDaughters"/>
-        <slice material="Polystyrene" thickness="HcalEndcapNPolystyreneThickness" vis="HcalSensorVis" sensitive="yes" limits="cal_limits"/>
-        <slice material="Air" thickness="HcalEndcapNLayerGap/2" vis="InvisibleNoDaughters"/>
-      </layer>
-    </detector>
-  </detectors>
-
-  <!--  Definition of the readout segmentation/definition  -->
-  <readouts>
-    <readout name="HcalEndcapNHits">
-                <segmentation type="CartesianGridXY" grid_size_x="100 * mm" grid_size_y ="100 * mm"/>
-        <id>system:8,barrel:3,module:4,layer:8,slice:5,x:32:-16,y:-16</id>
-    </readout>
-  </readouts>
+  <include ref="backward_template.xml"/>
 
 </lccdd>
