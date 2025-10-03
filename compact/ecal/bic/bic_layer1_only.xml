@@ -223,4 +223,11 @@
     </readout>
   </readouts>
 
+  <plugins>
+    <plugin name="DD4hep_ParametersPlugin">
+      <argument value="EcalBarrelImaging"/>
+      <argument value="layer_pattern: str=envelope"/>
+    </plugin>
+  </plugins>
+
 </lccdd>
