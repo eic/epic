@@ -605,7 +605,7 @@
       "/>
 
  <!-- dRICH aerogel, n = 1.026 -->
-    
+
 <matrix name="RINDEX__Aerogel_DRICH" coldim="2" values="
         1.2398*eV       1.02498
         1.30505*eV      1.025
