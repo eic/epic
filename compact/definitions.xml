@@ -545,7 +545,8 @@ Examples:
 Service gaps in FW direction (before endcapP ECAL) and BW direction (before endcapN HCAL)
     </documentation>
     <constant name="ForwardInnerEndcapRegionExtraSpace_length" value="4.6*cm"/>
-    <constant name="ForwardServiceGap_length"     value="9.6*cm"/>
+    <!--- Gap extended to move the LFHCAL in compliance with project envelope (October 2025) -->
+    <constant name="ForwardServiceGap_length"     value="12.4*cm"/>
     <constant name="ForwardServiceGap_zmin"       value="ForwardPIDRegion_zmin + ForwardInnerEndcapRegion_length + ForwardInnerEndcapRegionExtraSpace_length"/>
     <constant name="ForwardServiceGap_zmax"       value="ForwardServiceGap_zmin + ForwardServiceGap_length"/>
 
@@ -634,7 +635,7 @@ Service gaps in FW direction (before endcapP ECAL) and BW direction (before endc
     <constant name="HcalBarrelStavesN"          value="12"/>
 
     <constant name="LFHCAL_zmin"          value="EcalEndcapP_zmin + EcalEndcapP_length"/>
-    <comment> LFHCAL is 140 cm total, but current implementation leaves the final 10 cm empty </comment>
+    <comment> LFHCAL module is 132 cm total, attached to 1-inch mounting plate </comment>
     <constant name="LFHCAL_length"        value="134.54*cm"/>
     <constant name="LFHCAL_zmax"          value="LFHCAL_zmin + LFHCAL_length"/>
 
