@@ -21,16 +21,16 @@
                  \─1C──1B──1A─\ ----------------/─1A────1B─────1C────/ Outer Support Cone
                                \ inner support /
                                 \    cone     /
-                                =============== L2          
-                                           
-                                           
+                                =============== L2
+
+
     N (-)                                                                        (+) P
     ──·──·──·──·──·────·──·──·──·──·── x ──·──·──·──·──·──·──·──·──·────·──·──·──·──·──·── z
   ########
   Updates
   ########
   09.2025: the inner vertex barrel support (up to the first disk) are replaced by a more detailed design in vertex_barrel_support.xml
-  10.2025: add CF cylinder on the central region to form the one-piece PST. 
+  10.2025: add CF cylinder on the central region to form the one-piece PST.
   </comment>
   <define>
 
