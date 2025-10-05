@@ -5,16 +5,12 @@ features:
   tracking:
     definitions_craterlake:
     vertex_barrel:
+    vertex_barrel_support:
     silicon_barrel:
-    mpgd_barrel:
+    # mpgd_barrel:
     support_service_craterlake:
-    mpgd_outerbarrel:
-    mpgd_forward_endcap:
-    mpgd_backward_endcap:
+    # mpgd_outerbarrel:
+    # mpgd_forward_endcap:
+    # mpgd_backward_endcap:
     silicon_disks:
-    tof_barrel:
-    tof_endcap:
-  far_forward:
-    default:
-  far_backward:
-    default:
+
