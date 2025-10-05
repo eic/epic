@@ -37,14 +37,14 @@
     <constant name="EcalBarrel_Calorimeter_offset"
       value="(EcalBarrel_Calorimeter_zmax - EcalBarrel_Calorimeter_zmin)/2.0"/>
 
-    <constant name="EcalBarrel_LightGuide_length"      value="5*cm"/>
-    <constant name="EcalBarrel_EndOfSectorBox_length"  value="12*cm"/>
-    <constant name="EcalBarrel_LightGuide_zmin"        value="EcalBarrel_Calorimeter_zmin + EcalBarrel_LightGuide_length"/>
-    <constant name="EcalBarrel_LightGuide_zmax"        value="EcalBarrel_Calorimeter_zmax + EcalBarrel_LightGuide_length"/>
-    <constant name="EcalBarrel_Readout_zmin"           value="EcalBarrel_Calorimeter_zmin + EcalBarrel_EndOfSectorBox_length"/>
-    <constant name="EcalBarrel_Readout_zmax"           value="EcalBarrel_Calorimeter_zmax + EcalBarrel_EndOfSectorBox_length"/>
-    <constant name="EcalBarrel_LightGuide_eGoing_posZ" value="-EcalBarrel_LightGuide_zmin"/>
-    <constant name="EcalBarrel_LightGuide_pGoing_posZ" value="EcalBarrel_LightGuide_zmax"/>
+    <constant name="EcalBarrel_LightGuide_length"       value="5*cm"/>
+    <constant name="EcalBarrel_EndOfSectorBox_length"   value="12*cm"/>
+    <constant name="EcalBarrel_LightGuide_zmin"         value="EcalBarrel_Calorimeter_zmin + EcalBarrel_LightGuide_length"/>
+    <constant name="EcalBarrel_LightGuide_zmax"         value="EcalBarrel_Calorimeter_zmax + EcalBarrel_LightGuide_length"/>
+    <constant name="EcalBarrel_Readout_zmin"            value="EcalBarrel_Calorimeter_zmin + EcalBarrel_EndOfSectorBox_length"/>
+    <constant name="EcalBarrel_Readout_zmax"            value="EcalBarrel_Calorimeter_zmax + EcalBarrel_EndOfSectorBox_length"/>
+    <constant name="EcalBarrel_LightGuide_NegativePosZ" value="-EcalBarrel_LightGuide_zmin"/>
+    <constant name="EcalBarrel_LightGuide_PositivePosZ" value="EcalBarrel_LightGuide_zmax"/>
 
     <constant name="EcalBarrel_FrontSupportThickness" value="0.5*cm"/>
     <constant name="EcalBarrel_BackSupportThickness"  value="3*cm"/>
