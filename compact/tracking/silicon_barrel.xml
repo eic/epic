@@ -25,7 +25,7 @@
     <comment> 84cm=2*42cm is the engineer max </comment>
     <constant name="SiBarrelMod2_length" value="84*cm - 4.7*cm" /> <!--UPDATED from 84*cm to 84*cm - 4.7*cm = 79.3cm-->
 
-    <constant name="SiBarrelLayer1_length" value="SiBarrelMod1_length + 1*um" />
+    <constant name="SiBarrelLayer1_length" value="SiBarrelMod1_length + 1*um + 0.6*cm" />
     <constant name="SiBarrelLayer2_length" value="SiBarrelMod2_length + 1*um" />
     <constant name="SiBarrelEnvelope_length" value="SiBarrelLayer2_length + 1*um" />
 
