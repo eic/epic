@@ -88,7 +88,8 @@
     <!-- Beam Pipe from central section at negative z to the end of the REAR cryostat -->
     <detector
 	name="Pipe_cen_to_neg"
-	type="ElectronBeamPipeChain">
+	type="ElectronBeamPipeChain"
+	shielding="3*mm">
     </detector>
 
     <!-- Beam pipe going from Q1eR to B2BeR -->
