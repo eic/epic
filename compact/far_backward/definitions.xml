@@ -271,7 +271,7 @@
     <constant name="LumiConverter_DZ"     value="1*mm"/>
 
     <!-- Lumi spectrometer CAL -->
-    <constant name="LumiSpecCAL_SiPMSizeXY"       value="4*mm"/>
+    <constant name="LumiSpecCAL_SiPMSizeXY"       value="0.4*cm"/>
     <constant name="LumiSpecCAL_SiPMNumX"         value="14"/>
     <constant name="LumiSpecCAL_SiPMNumY"         value="2"/>
     <constant name="LumiSpecCAL_ZLayers"          value="20"/>
@@ -281,7 +281,11 @@
       Rotation of modules wrt XY axis after construction.
     </comment>
 
-    <constant name="LumiSpecCAL_SiPMSpaceXY"      value="0.15*mm"/> <!-- mechanical space for adjacent SiPMs-->
+    <constant name="LumiSpecCAL_FiberRadius"      value="0.025*cm"/>
+    <constant name="LumiSpecCAL_FiberSpaceX"      value="0.025*cm"/>
+    <constant name="LumiSpecCAL_FiberSpaceY"      value="0.025*cm"/>
+
+    <constant name="LumiSpecCAL_SiPMSpaceXY"      value="0.015*cm"/> <!-- mechanical space for adjacent SiPMs-->
     <constant name="LumiSpecCAL_LayerCoatX"       value="0.25*cm"/> <!-- mechanical covering of layers, def without rotation-->
     <constant name="LumiSpecCAL_LayerCoatY"       value="0.25*cm"/> <!-- mechanical covering of layers, def without rotation -->
     <constant name="LumiSpecCAL_ModuleCoatX" 	  value="0.02*cm"/> <!-- W layer formed during module production for test beams-->
@@ -299,10 +303,7 @@
     <constant name="LumiSpecCAL_FiveSigma"        value="LumiBeamDiv_pref * fabs(LumiSpecCAL_Z)"/>
     <constant name="LumiSpecCAL_Y"                value="LumiSpecCAL_FiveSigma + LumiSpecCAL_DXY/2.0"/>
 
-    <constant name="LumiSpecCAL_FiberRadius"      value="0.25*mm"/>
-    <constant name="LumiSpecCAL_FiberSpaceX"      value="0.25*mm"/>
-    <constant name="LumiSpecCAL_FiberSpaceY"      value="0.25*mm"/>
-
+    
     <!-- Lumi spectrometer trackers -->
     <constant name="LumiSpecTracker_pixelSize"  value="0.1*mm"/>
     <constant name="LumiSpecTracker_DXY"  value="0.2*m"/>

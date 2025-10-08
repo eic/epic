@@ -26,6 +26,9 @@ Construct the sweeper and analyzer dipole magnets for the luminosity subsystem.
   <constant name="LumiMag_DY1_Legs"              value="0.500*m"/>
   <constant name="LumiMag_DY2_Legs"              value="0.500*m"/>
   <constant name="CenterY_Bfield"                value="0*m"/>
+
+  <constant name="LumiSweepIdealMag_B"		 value="0.4*tesla"/>
+  <constant name="LumiAnalyzerIdealMag_B" 	 value="0.4*tesla"/>
 </define>
 
 
@@ -80,7 +83,6 @@ Construct the sweeper and analyzer dipole magnets for the luminosity subsystem.
   <fields>
 
     <comment> Ideal fields </comment>
-    <comment>
     <field name="LumiSweeperField" type="MultipoleMagnet">
       <position x="LumiSweepMag_X" y="LumiSweepMag_Y" z="LumiSweepMag_Z"/>
       <rotation x="0" y="0" z="0"/>
@@ -94,10 +96,12 @@ Construct the sweeper and analyzer dipole magnets for the luminosity subsystem.
       <shape type="Box" dx="LumiMag_DX_InnerBox/2.0" dy="LumiMag_DY_InnerBox/2.0" dz="LumiMagMainBody_DZ/2.0"/>
       <coefficient coefficient="0" skew="LumiAnalyzerIdealMag_B"/>
     </field>
-    </comment>
-
+    
     <comment> Calculated fields </comment>
-    <field type="epic_FieldMapB" name="LumiSweeperField" field_type="magnetic" coord_type="BxByBz"
+    
+    <comment>
+	    
+	    <field type="epic_FieldMapB" name="LumiSweeperField" field_type="magnetic" coord_type="BxByBz"
            field_map="fieldmaps/LumiDipoleMapping_2023_09_15_XYZ_coords_cm_T.txt"
            url="https://github.com/eic/epic-data/raw/5a6bc4cd583fb3330bce475cf25b599661b902ee/LumiDipoleMapping_2023_09_15_XYZ_coords_cm_T.txt"
            cache="$DETECTOR_PATH:/opt/detector"
@@ -109,9 +113,9 @@ Construct the sweeper and analyzer dipole magnets for the luminosity subsystem.
         <translationCoord x="LumiSweepMag_X" y="LumiSweepMag_Y" z="LumiSweepMag_Z" />
         <rotationField x="0" y="0" z="0" />
       </dimensions>
-    </field>
+      </field>
 
-    <field type="epic_FieldMapB" name="LumiAnalyzerField" field_type="magnetic" coord_type="BxByBz"
+      <field type="epic_FieldMapB" name="LumiAnalyzerField" field_type="magnetic" coord_type="BxByBz"
            field_map="fieldmaps/LumiDipoleMapping_2023_09_15_XYZ_coords_cm_T.txt"
            url="https://github.com/eic/epic-data/raw/5a6bc4cd583fb3330bce475cf25b599661b902ee/LumiDipoleMapping_2023_09_15_XYZ_coords_cm_T.txt"
            cache="$DETECTOR_PATH:/opt/detector"
@@ -123,8 +127,10 @@ Construct the sweeper and analyzer dipole magnets for the luminosity subsystem.
         <translationCoord x="LumiAnalyzerMag_X" y="LumiAnalyzerMag_Y" z="LumiAnalyzerMag_Z" />
         <rotationField x="0" y="0" z="0" />
       </dimensions>
-    </field>
+      </field>
 
+  </comment>
+  
   </fields>
 
 </lccdd>

@@ -45,6 +45,8 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
   int nmod_perlayer = getAttrOrDefault(x_det, _Unicode(nmod_perlayer), 3);
   int nlayer        = getAttrOrDefault(x_det, _Unicode(nlayer), 20);
 
+  //cout<<"detSizeXY : "<<detSizeXY<<" detSizeZ : "<<detSizeZ<<endl;
+
   // Global detector position and resolution
   xml_comp_t pos = x_det.position();
   xml_comp_t rot = x_det.rotation();
@@ -61,6 +63,8 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
   double layerCoatSizeX = getAttrOrDefault(x_layer, _Unicode(coatSizeX), 1.0 * cm);
   double layerCoatSizeY = getAttrOrDefault(x_layer, _Unicode(coatSizeY), 1.0 * cm);
 
+  //cout<<"laySizeX : "<<laySizeX<<"laySizeY : "<<laySizeY<<"laySizeZ : "<<laySizeZ<<endl;
+
   Material layMat = description.material(x_layer.attr<std::string>(_Unicode(material)));
 
   Box layerBox(laySizeX / 2.0, laySizeY / 2.0, laySizeZ / 2.0);
@@ -70,6 +74,9 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
   // Position of first module, layer from center of CAL
   double mod_pos0   = -(detSizeXY / 2.0) + (modSize.x() / 2.0) + layerCoatSizeX;
   double layer_pos0 = -(detSizeZ / 2.0) + (modSize.y() / 2.0) + layerCoatSizeY;
+
+  //cout<<"mod_pos0 : "<<mod_pos0<<" layer_pos0 : "<<layer_pos0<<endl;
+  //cout<<"modSize.x : "<<modSize.x()<<" modSize.y : "<<modSize.y()<<"modSize.z : "<<modSize.z()<<endl;
 
   //Fill layer with modules (intial position takes care of thin coating structure)
   for (int mod_id = 0; mod_id < nmod_perlayer; mod_id++) {
@@ -81,6 +88,9 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
 
     PlacedVolume modPV = layerVol.placeVolume(modVol, Position(mod_pos_x, mod_pos_y, mod_pos_z));
     modPV.addPhysVolID("module", mod_id);
+  
+    //cout<<"mod_pos_x : "<<mod_pos_x<<endl;
+
   } //imod-loop close
 
   //sector definition
@@ -91,7 +101,7 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
   //Fill sector with layers
   for (int layer_id = 0; layer_id < nlayer; layer_id++) {
 
-    double lay_pos_z = -layer_id * (modSize.y() + 2.0 * layerCoatSizeY) - layer_pos0;
+    double lay_pos_z = -layer_id * (laySizeY) - layer_pos0;
     double lay_pos_y = 0.0 * cm;
     double lay_pos_x = 0.0 * cm;
     int orientation  = layer_id % 2 == 0;
@@ -104,6 +114,8 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
     PlacedVolume layPV = sectorVol.placeVolume(
         layerVol, Transform3D(lay_rot, Position(lay_pos_x, lay_pos_y, lay_pos_z)));
     layPV.addPhysVolID("layer", layer_id);
+  
+    //cout<<"layed_id : "<<layer_id<<" lay_z : "<<lay_pos_z<<" lay_x : "<<lay_pos_x<<" lay_y : "<<lay_pos_y<<endl;
   } //layer_id-loop close
 
   // loop over sectors(top, bottom)
@@ -118,6 +130,9 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
         sectorVol, Transform3D(RotationZYX(sec_rot.z(), sec_rot.y(), sec_rot.x()),
                                Position(sec_pos.x(), sec_pos.y(), sec_pos.z())));
     secPV.addPhysVolID("sector", sector_id);
+
+    //cout<<"sec_pos.x : "<<sec_pos.x()<<" sec_pos.y : "<<sec_pos.y()<<" sec_pos.z : "<<sec_pos.z()<<endl;
+
   } // sectors
 
   // Place assembly into mother volume.  Assembly is centered at origin
@@ -175,12 +190,15 @@ static tuple<Volume, Position> build_specScFiCAL_module(const Detector& descript
   fbVol.setVisAttributes(
       description.visAttributes(mod_x.attr<std::string>(_Unicode(vis)))); //same as module
 
-  int num_fbX = int(modSize.x() / (fbSize.x() + 2.0 * fb_SpaceXY));
-  int num_fbY = int(modSize.y() / (fbSize.y() + 2.0 * fb_SpaceXY));
+  int num_fbX = int( (modSize.x() - 2*moduleCoatX)/ (fbSize.x() + 2.0 * fb_SpaceXY));
+  int num_fbY = int( (modSize.y() - 2*moduleCoatY)/ (fbSize.y() + 2.0 * fb_SpaceXY));
 
   double fb_xpos0 = -(modSize.x() / 2.0) + (fbSize.x() / 2.0) + fb_SpaceXY + moduleCoatX;
   double fb_ypos0 = -(modSize.y() / 2.0) + (fbSize.y() / 2.0) + fb_SpaceXY + moduleCoatY;
   int nblock      = 0;
+
+  //cout<<" #blockX : " << num_fbX << " #blockY : " << num_fbY << endl;
+  //cout<<" fb_xpos0 : " << fb_xpos0 << " fb_ypos0 : " << fb_ypos0 << endl;
 
   for (int iy = 0; iy < num_fbY; iy++) {
     for (int ix = 0; ix < num_fbX; ix++) {
@@ -190,6 +208,8 @@ static tuple<Volume, Position> build_specScFiCAL_module(const Detector& descript
 
       auto fbPV = modVol.placeVolume(fbVol, nblock, Position{fb_pos_x, fb_pos_y, fb_pos_z});
       fbPV.addPhysVolID("block", nblock++);
+
+      //cout<<"fb_pos_x : "<<fb_pos_x<<"fb_pos_y : "<<fb_pos_y<<endl;
     }
   }
 
