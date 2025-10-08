@@ -26,20 +26,12 @@
                                   │         │
     N (-)                         └         ┘                                        (+) P
     ──·──·──·──·──·────·──·──·──·──·── x ──·──·──·──·──·──·──·──·──·────·──·──·──·──·──·── z
-
+  ########
+  Updates
+  ########
+  09.2025: the inner vertex barrel support (up to the first disk) are replaced by a more detailed design in vertex_barrel_support.xml
   </comment>
   <define>
-
-    <comment> use a disk to connect vertex barrels to cone</comment>
-    <constant name="VertexSupportRingCF_thickness"         value="2.0*mm" />
-    <constant name="VertexSupportRingAl_thickness"         value="1.0*mm" />
-    <constant name="VertexSupportRing_thickness"           value="VertexSupportRingCF_thickness+VertexSupportRingAl_thickness+2*um" />
-    <constant name="VertexSupportRing_zmin"        value="VertexBarrel_length/2.+ 2*um" />
-    <constant name="VertexSupportRing_zmax"        value="VertexSupportRing_zmin + VertexSupportRing_thickness" />
-    <constant name="VertexSupportRing_rmin"        value="VertexBarrel_rmin+2*um" />
-    <constant name="VertexSupportRing_rmax"        value="VertexSupportRing_zmax/tan(TrackerPrimaryAngle)" />
-    <constant name="VertexSupportRing_z"           value="0.5*(VertexSupportRing_zmin + VertexSupportRing_zmax)" />
-
 
     <comment> Inner tracker service/support cones, symmetric </comment>
     <constant name="InnerSupportConeCF_thickness"         value="2.0*mm" />
@@ -48,7 +40,7 @@
     <constant name="InnerSupportConeNAl_thickness"        value="4.4*mm - 0.5*mm" /> <comment> Ref: Services Material Budget 24.03.13.stp - 0.5*mm to avoid overlap with OuterSiBarrel </comment>
     <constant name="InnerSupportConeP_thickness"          value="InnerSupportConePAl_thickness + InnerSupportConeCF_thickness" />
     <constant name="InnerSupportConeN_thickness"          value="InnerSupportConeNAl_thickness + InnerSupportConeCF_thickness" />
-    <constant name="InnerSupportCone_zmin"                value="VertexSupportRing_zmax" />
+    <constant name="InnerSupportCone_zmin"                value="InnerTrackerEndcapP_zmin + 0.5*mm" />  <comment>start the cone at the first disk (assume P and N symmetric)</comment>
     <constant name="InnerSupportCone_rmin1"               value="InnerSupportCone_zmin/tan(TrackerPrimaryAngle)" />
 
     <constant name="InnerSupportCone_rmin2"               value="TrackerSupportCyl_rmin1" />
@@ -309,12 +301,13 @@
     <constant name="TrackerSupportDRICHCylSegment_length"        value="TrackerSupportDRICHCylSegment_zmax - TrackerSupportDRICHCylSegment_zmin" />
 
     <comment> Inner detector support cylinder </comment>
-    <constant name="InnerDetectorBarrelSupportCylCF_thickness"   value="1.0*cm" />
+    <constant name="InnerDetectorBarrelSupportCylCF_thickness"   value="InnerDetectorBarrelSupportCylinder_thickness" />
     <constant name="InnerDetectorBarrelSupportCylCF_zmin1"       value="DIRCBackward_zmax" />
     <constant name="InnerDetectorBarrelSupportCylCF_zmin2"       value="DIRCForward_zmax" />
     <constant name="InnerDetectorBarrelSupportCylCF_length"      value="InnerDetectorBarrelSupportCylCF_zmin1 + InnerDetectorBarrelSupportCylCF_zmin2" />
     <constant name="InnerDetectorBarrelSupportCylCF_offset"      value="(InnerDetectorBarrelSupportCylCF_zmin2 - InnerDetectorBarrelSupportCylCF_zmin1)/2.0"/>
-    <constant name="InnerDetectorBarrelSupportCylCF_rmin"        value="MPGDOuterBarrelModule_rmin - InnerDetectorBarrelSupportCylCF_thickness - 2*mm" />
+    <constant name="InnerDetectorBarrelSupportCylCF_rmin"        value="InnerDetectorBarrelSupportCylinder_rmin" />
+    <constant name="InnerDetectorBarrelSupportCylCF_rmax"        value="InnerDetectorBarrelSupportCylinder_rmin + InnerDetectorBarrelSupportCylinder_thickness" />
 
   </define>
 
@@ -323,28 +316,6 @@
       name="InnerTrackerSupport"
       id="TrackerSupport_0_ID"
     >
-      <comment> Forward </comment>
-      <support type="Disk"
-        name="VertexSupportRingForward"
-        vis="TrackerSupportVis"
-        rmin="VertexSupportRing_rmin"
-        rmax="VertexSupportRing_rmax"
-        thickness="VertexSupportRing_thickness">
-          <position x="0*cm" y="0*cm" z="VertexSupportRing_z" />
-          <component material="CarbonFiber" thickness="VertexSupportRingCF_thickness" name="Support" vis="TrackerSupportVis"/>
-          <component material="Aluminum" thickness="VertexSupportRingAl_thickness" name="Services" vis="TrackerServiceVis" />
-      </support>
-      <comment> Backward </comment>
-      <support type="Disk"
-        name="VertexSupportRingBackward"
-        vis="TrackerSupportVis"
-        rmin="VertexSupportRing_rmin"
-        rmax="VertexSupportRing_rmax"
-        thickness="VertexSupportRing_thickness">
-          <position x="0*cm" y="0*cm" z="-VertexSupportRing_z" />
-          <component material="Aluminum" thickness="VertexSupportRingAl_thickness" name="Services" vis="TrackerServiceVis" />
-          <component material="CarbonFiber" thickness="VertexSupportRingCF_thickness" name="Support" vis="TrackerSupportVis"/>
-      </support>
 
       <support type="Cone"
         name="InnerSupportConeEndcapN"
@@ -437,6 +408,7 @@
         vis="TrackerSupportVis"
         rmin1="OuterSupportConeN_rmin2"
         rmin2="OuterSupportConeN_rmin1"
+        rmax="InnerDetectorBarrelSupportCylCF_rmin"
         length="OuterSupportConeN_length"
         thickness="OuterSupportConeN_thickness">
           <position x="0*cm" y="0*cm" z="-OuterSupportConeN_z" />

@@ -144,7 +144,6 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
     if (l_pos) {
       layer_pos = Position(l_pos.x(), l_pos.y(), l_pos.z());
     }
-    DetElement layer(sdet, l_nam + "_pos", l_num);
 
     int i_assembly = 1;
     xml_coll_t ci(x_layer, _U(component));
@@ -164,7 +163,6 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
       }
       pv.addPhysVolID("assembly", i_assembly);
       comp_de.setPlacement(pv);
-      layer.add(comp_de);
       i_assembly++;
     }
     pv = assembly.placeVolume(l_vol, l_pos);

@@ -3,7 +3,85 @@
 
 <lccdd>
 
+    <comment>
+        See compact/far_forward/ion_beamline.xml for hadron magnet element coordinate description-the same is applied to the electron magnet elements
+    </comment>
+
+  <define>
+
+    <!-- Q1eR Center Position -->
+    <constant name="Q1ER_Center_posX" value="-0.00285949*cm"/>
+    <constant name="Q1ER_Center_posY" value="0*cm"/>
+    <constant name="Q1ER_Center_posZ" value="-620.047*cm"/>
+    <constant name="Q1ER_Rotation_Angle" value="0*rad"/>
+
+    <!-- Q2eR Center Position -->
+    <constant name="Q2ER_Center_posX" value="0.0122616*cm"/>
+    <constant name="Q2ER_Center_posY" value="0*cm"/>
+    <constant name="Q2ER_Center_posZ" value="-830.112*cm"/>
+    <constant name="Q2ER_Rotation_Angle" value="0*rad"/>
+
+    <!-- Q1ApR Yoke Center Position -->
+    <constant name="Q1APR_Yoke_Center_posX" value="10.5099*cm"/>
+    <constant name="Q1APR_Yoke_Center_posY" value="0*cm"/>
+    <constant name="Q1APR_Yoke_Center_posZ" value="-619.783*cm"/>
+    <constant name="Q1APR_Yoke_Rotation_Angle" value="-0.025*rad"/>
+    <!-- Q1ApR Coil Center Position -->
+    <constant name="Q1APR_Coil_Center_posX" value="15.5083*cm"/>
+    <constant name="Q1APR_Coil_Center_posY" value="0*cm"/>
+    <constant name="Q1APR_Coil_Center_posZ" value="-619.659*cm"/>
+    <!-- Q1BpR Yoke Center Position -->
+    <constant name="Q1BPR_Yoke_Center_posX" value="6.32227*cm"/>
+    <constant name="Q1BPR_Yoke_Center_posY" value="0*cm"/>
+    <constant name="Q1BPR_Yoke_Center_posZ" value="-829.954*cm"/>
+    <constant name="Q1BPR_Yoke_Rotation_Angle" value="-0.025*rad"/>
+    <!-- Q1BpR Coil Center Position -->
+    <constant name="Q1BPR_Coil_Center_posX" value="20.7578*cm"/>
+    <constant name="Q1BPR_Coil_Center_posY" value="0*cm"/>
+    <constant name="Q1BPR_Coil_Center_posZ" value="-829.593*cm"/>
+    <!-- Q2pR Yoke Center Position -->
+    <constant name="Q2PR_Yoke_Center_posX" value="15.6655*cm"/>
+    <constant name="Q2PR_Yoke_Center_posY" value="0*cm"/>
+    <constant name="Q2PR_Yoke_Center_posZ" value="-1226.01*cm"/>
+    <constant name="Q2PR_Yoke_Rotation_Angle" value="-0.025*rad"/>
+    <!-- Q2pR Coil Center Position -->
+    <constant name="Q2PR_Coil_Center_posX" value="31.888*cm"/>
+    <constant name="Q2PR_Coil_Center_posY" value="0*cm"/>
+    <constant name="Q2PR_Coil_Center_posZ" value="-1274.73*cm"/>
+
+  </define>
+
+    <comment> Electron side magnets </comment>
+
   <detectors>
+
+    <!-- Q1eR magnet -->
+    <detector name="Q1ER_BeamlineMagnet" type="ip6_CryostatMagnet">
+      <coil name="Q1ER_Quad_Coil" vis="MagnetCoilVis" shape="ConeSegment">
+        <placement x="Q1ER_Center_posX" y="Q1ER_Center_posY" z="Q1ER_Center_posZ" theta="Q1ER_Rotation_Angle" phiNum="3" phiStart="90*deg" phiStep="90*deg"/>
+        <!-- dimensions rmin1="6.748780*cm" rmax1="7.040880*cm" rmin2="5.938520*cm" rmax2="6.230620*cm" dz="180.0*cm/2." sphi="-60.0*deg/2." dphi="60.0*deg"/ (actual dimensions, temporarily commented to avoid overlap with the outdated electron beam pipe)-->
+        <dimensions rmin1="(67.5+5.0)*mm+5*mm" rmax1="(67.5+5.0)*mm+12*mm" rmin2="(67.5+5.0)*mm+5*mm" rmax2="(67.5+5.0)*mm+12*mm" dz="180.0*cm/2." sphi="-60.0*deg/2." dphi="60.0*deg"/>
+      </coil>
+      <tube name="Q1ER_InnerSupport_Tube" vis="MagnetSupportTubeVis" shape="Cone">
+        <placement x="Q1ER_Center_posX" y="Q1ER_Center_posY" z="Q1ER_Center_posZ" theta="Q1ER_Rotation_Angle"/>
+        <!-- dimensions rmin1="12.809257*cm/2." rmax1="6.6*cm" rmin2="10.994364*cm/2." rmax2="5.8*cm" dz="201.592038*cm/2."/ (actual dimensions, temporarily commented to avoid overlap with the outdated electron beam pipe)-->
+        <dimensions rmin1="(67.5+5.0)*mm" rmax1="(67.5+5.0)*mm+2*mm" rmin2="(67.5+5.0)*mm" rmax2="(67.5+5.0)*mm+2*mm" dz="201.592038*cm/2."/>
+      </tube>
+    </detector>
+
+    <!-- Q2eR magnet -->
+    <detector name="Q2ER_BeamlineMagnet" type="ip6_CryostatMagnet">
+      <coil name="Q2ER_Quad_Coil" vis="MagnetCoilVis" shape="ConeSegment">
+        <placement x="Q2ER_Center_posX" y="Q2ER_Center_posY" z="Q2ER_Center_posZ" theta="Q2ER_Rotation_Angle" phiNum="3" phiStart="90*deg" phiStep="90*deg"/>
+        <!-- dimensions rmin1="7.810500*cm" rmax1="8.176260*cm" rmin2="7.810500*cm" rmax2="8.176260*cm" dz="134.919999*cm/2." sphi="45.0*deg-60.0*deg/2." dphi="60.0*deg"/ (actual dimensions, temporarily commented to avoid overlap with the outdated electron beam pipe)-->
+        <dimensions rmin1="(78.0+5.0)*mm+5.0*mm" rmax1="(78.0+5.0)*mm+8.0*mm" rmin2="(78.0+5.0)*mm+5.0*mm" rmax2="(78.0+5.0)*mm+8.0*mm" dz="134.919999*cm/2." sphi="45.0*deg-60.0*deg/2." dphi="60.0*deg"/>
+      </coil>
+      <tube name="Q2ER_InnerSupport_Tube" vis="MagnetSupportTubeVis">
+        <placement x="Q2ER_Center_posX" y="Q2ER_Center_posY" z="Q2ER_Center_posZ" theta="Q2ER_Rotation_Angle"/>
+        <!-- dimensions rmin="14.361160*cm/2." rmax="15.362000*cm/2." half_length="147.822239*cm/2." sphi="0*deg" dphi="360.0*deg"/ (actual dimensions, temporarily commented to avoid overlap with the outdated electron beam pipe)-->
+        <dimensions rmin="(78.0+5.0)*mm" rmax="(78.0+5.0)*mm+2.0*mm" half_length="147.822239*cm/2." sphi="0*deg" dphi="360.0*deg"/>
+      </tube>
+    </detector>
 
     <comment> Electron side beam pipe volumes </comment>
 
@@ -11,7 +89,7 @@
     <detector
     name="Pipe_Q1eR_to_B2BeR"
     type="BeamPipeChain"
-    wall_thickness="2*mm"
+    wall_thickness="1 * mm"
     vis="BeamPipeVis">
       <pipe id="0" name="Pipe_to_Q1eR"
         xcenter="0" zcenter="(Center_Beampipe_End + Q1eR_CenterPosition+Q1eR_Length/2)/2"
@@ -45,42 +123,389 @@
 
     <comment> Electron side beam magnet volumes </comment>
 
-    <detector name="Magnet_Q1eR" type="ip6_CylindricalDipoleMagnet" vis="FFMagnetVis">
-      <placement  x="0" y="0" z="Q1eR_CenterPosition" theta="0*rad"/>
-      <dimensions x="Q1eR_InnerRadius*4" y="Q1eR_InnerRadius*4" z="Q1eR_Length" r="1.5*Q1eR_InnerRadius" />
-      <apperture  x="Q1eR_InnerRadius*2" y="Q1eR_InnerRadius*2" r="Q1eR_InnerRadius" />
-      <coil dx="2*cm" dy="1.5*cm" /><!--unchecked-->
-    </detector>
-
-    <detector name="Magnet_Q2eR" type="ip6_CylindricalDipoleMagnet" vis="FFMagnetVis">
-      <placement  x="0" y="0" z="Q2eR_CenterPosition" theta="0*rad"/>
-      <dimensions x="Q2eR_InnerRadius*4" y="Q2eR_InnerRadius*4" z="Q2eR_Length" r="1.5*Q2eR_InnerRadius"/>
-      <apperture  x="Q2eR_InnerRadius*2" y="Q2eR_InnerRadius*2" r="Q2eR_InnerRadius"/>
-      <coil dx="2*cm" dy="1.5*cm" /><!--unchecked-->
-    </detector>
-
-    <detector name="Magnet_B2AeR" type="ip6_CylindricalDipoleMagnet" vis="FFMagnetVis">
-      <placement  x="0" y="0" z="B2AeR_CenterPosition" theta="0*rad"/>
-      <dimensions x="B2AeR_InnerRadius*4" y="B2AeR_InnerRadius*4" z="B2AeR_Length" r="1.5*B2AeR_InnerRadius"/>
-      <apperture  x="B2AeR_InnerRadius*2" y="B2AeR_InnerRadius*2" r="B2AeR_InnerRadius"/>
-      <coil dx="2*cm" dy="1.5*cm" /><!--unchecked-->
-    </detector>
-
-    <detector name="Magnet_B2BeR" type="ip6_CylindricalDipoleMagnet" vis="FFMagnetVis">
-      <placement  x="0" y="0" z="B2BeR_CenterPosition" theta="0*rad"/>
-      <dimensions x="B2BeR_InnerRadius*4" y="B2BeR_InnerRadius*4" z="B2BeR_Length" r="1.5*B2BeR_InnerRadius"/>
-      <apperture  x="B2BeR_InnerRadius*2" y="B2BeR_InnerRadius*2" r="B2BeR_InnerRadius"/>
-      <coil dx="2*cm" dy="1.5*cm" /><!--unchecked-->
-    </detector>
-
     <detector
     name="Magnets_Q3eR"
     type="CylindricalMagnetChain"
     vis="RedVis">
       <magnet id="0" name="Magnet_Q3eR"
-        x="(Q3eR_StartX+Q3eR_EndX)/2" y="0" z="(Q3eR_StartZ+Q3eR_EndZ)/2" theta="Q3eR_Theta"
+        x="Q3eR_XPosition" y="0" z="Q3eR_CenterPosition" theta="Q3eR_Theta"
         length="Q3eR_Length" rin="Q3eR_InnerRadius" rout="4*Q3eR_InnerRadius">
       </magnet>
+    </detector>
+
+
+    <comment> Hadron side magnets </comment>
+
+    <!-- Q1ApR magnet -->
+    <detector name="Q1APR_BeamlineMagnet" type="ip6_CryostatMagnet">
+      <yoke name="Q1APR_Yoke" vis="MagnetVis">
+        <placement x="Q1APR_Yoke_Center_posX" y="Q1APR_Yoke_Center_posY" z="Q1APR_Yoke_Center_posZ" theta="Q1APR_Yoke_Rotation_Angle"/>
+        <dimensions rmin="0*cm" rmax="50.*cm/2." half_length="180.*cm/2." sphi="0*deg" dphi="360.0*deg"/>
+        <cut shape="Cone">
+          <placement x="5.0*cm" y="0*cm" z="0*cm" rotX="0*rad" rotY="0*rad" rotZ="0*rad"/>
+          <dimensions rmin1="0*cm" rmax1="12.6*cm/2." rmin2="0*cm" rmax2="11.4*cm/2." dz="181.0*cm/2."/>
+          <rotation num="1" start="0*deg" step="0*deg" axis="Z"/>
+        </cut>
+        <cut shape="Cone">
+          <placement x="-10.519*cm" y="0*cm" z="0*cm" rotX="0*rad" rotY="abs(CrossingAngle)" rotZ="0*rad"/>
+          <!-- dimensions rmin1="0*cm" rmax1="7.6*cm" rmin2="0*cm" rmax2="6.8*cm" dz="181.0*cm/2."/ (actual dimensions, temporarily commented to avoid overlap with the outdated electron beam pipe)-->
+          <dimensions rmin1="0*cm" rmax1="(67.5+5.0)*mm+15*mm" rmin2="0*cm" rmax2="(67.5+5.0)*mm+15*mm" dz="181.0*cm/2."/>
+          <rotation num="1" start="0*deg" step="0*deg" axis="Z"/>
+        </cut>
+        <cut>
+          <placement x="0*cm" y="19.757*cm" z="0*cm" rotX="0*rad" rotY="0*rad" rotZ="0*rad"/>
+          <dimensions rmin="0*cm" rmax="5.08*cm/2." half_length="400.*cm/2."/>
+          <rotation num="4" start="45.0*deg" step="90.0*deg" axis="Z"/>
+        </cut>
+      </yoke>
+      <coil name="Q1APR_Coil" vis="MagnetCoilVis" shape="ConeSegment">
+        <placement x="Q1APR_Coil_Center_posX" y="Q1APR_Coil_Center_posY" z="Q1APR_Coil_Center_posZ" theta="Q1APR_Yoke_Rotation_Angle" phiNum="3" phiStart="90*deg" phiStep="90*deg"/>
+        <dimensions rmin1="3.878580*cm" rmax1="4.823460*cm" rmin2="3.279140*cm" rmax2="4.224020*cm" dz="160.0*cm/2." sphi="-60.*deg/2." dphi="60.*deg"/>
+      </coil>
+      <tube name="Q1APR_InnerSupport_Tube" vis="MagnetSupportTubeVis" shape="Cone">
+        <placement x="Q1APR_Coil_Center_posX" y="Q1APR_Coil_Center_posY" z="Q1APR_Coil_Center_posZ" theta="Q1APR_Yoke_Rotation_Angle"/>
+          <dimensions rmin1="7.121052*cm/2." rmax1="3.8*cm" rmin2="5.617656*cm/2." rmax2="3.2*cm" dz="200.639934*cm/2."/>
+      </tube>
+      <endplate name="Q1APR_EndPlate_IP" vis="MagnetEndPlateVis">
+        <placement x="Q1APR_Yoke_Center_posX" y="Q1APR_Yoke_Center_posY" z="Q1APR_Yoke_Center_posZ" theta="Q1APR_Yoke_Rotation_Angle"/>
+        <zplane z="-(180.0*cm/2.+0.5*cm)" rmin="0.0*cm" rmax="50.0*cm/2."/>
+        <zplane z="-(180.0*cm/2.+1.905000*cm)" rmin="0.0*cm" rmax="50.0*cm/2."/>
+        <cut shape="Cone">
+          <placement x="5.0*cm" y="0*cm" z="0*cm" rotX="0*rad" rotY="0*rad" rotZ="0*rad"/>
+          <dimensions rmin1="0*cm" rmax1="7.92*cm/2." rmin2="0*cm" rmax2="6.5*cm/2." dz="200.0*cm/2."/>
+          <rotation num="1" start="0*deg" step="0*deg" axis="Z"/>
+        </cut>
+        <cut shape="Cone">
+          <placement x="-10.519*cm" y="0*cm" z="0*cm" rotX="0*rad" rotY="abs(CrossingAngle)" rotZ="0*rad"/>
+          <!-- dimensions rmin1="0*cm" rmax1="6.8*cm" rmin2="0*cm" rmax2="6.0*cm" dz="200.0*cm/2."/ (actual dimensions, temporarily commented to avoid overlap with the outdated electron beam pipe)-->
+          <dimensions rmin1="0*cm" rmax1="(67.5+5.0)*mm+15*mm" rmin2="0*cm" rmax2="(67.5+5.0)*mm+15*mm" dz="200.0*cm/2."/>
+          <rotation num="1" start="0*deg" step="0*deg" axis="Z"/>
+        </cut>
+        <cut>
+          <placement x="0*cm" y="19.757*cm" z="0*cm" rotX="0*rad" rotY="0*rad" rotZ="0*rad"/>
+          <dimensions rmin="0*cm" rmax="5.08*cm/2." half_length="400.*cm/2."/>
+          <rotation num="4" start="45.0*deg" step="90.0*deg" axis="Z"/>
+        </cut>
+      </endplate>
+      <endplate name="Q1APR_EndPlate_nonIP" vis="MagnetEndPlateVis">
+        <placement x="Q1APR_Yoke_Center_posX" y="Q1APR_Yoke_Center_posY" z="Q1APR_Yoke_Center_posZ" theta="Q1APR_Yoke_Rotation_Angle"/>
+        <zplane z="(180.0*cm/2.+0.5*cm)" rmin="0.0*cm" rmax="50.0*cm/2."/>
+        <zplane z="(180.0*cm/2.+1.905000*cm)" rmin="0.0*cm" rmax="50.0*cm/2."/>
+        <cut shape="Cone">
+          <placement x="5.0*cm" y="0*cm" z="0*cm" rotX="0*rad" rotY="0*rad" rotZ="0*rad"/>
+          <dimensions rmin1="0*cm" rmax1="7.92*cm/2." rmin2="0*cm" rmax2="6.5*cm/2." dz="200.0*cm/2."/>
+          <rotation num="1" start="0*deg" step="0*deg" axis="Z"/>
+        </cut>
+        <cut shape="Cone">
+          <placement x="-10.519*cm" y="0*cm" z="0*cm" rotX="0*rad" rotY="abs(CrossingAngle)" rotZ="0*rad"/>
+          <!-- dimensions rmin1="0*cm" rmax1="6.8*cm" rmin2="0*cm" rmax2="6.0*cm" dz="200.0*cm/2."/ (actual dimensions, temporarily commented to avoid overlap with the outdated electron beam pipe)-->
+          <dimensions rmin1="0*cm" rmax1="(67.5+5.0)*mm+15*mm" rmin2="0*cm" rmax2="(67.5+5.0)*mm+15*mm" dz="200.0*cm/2."/>
+          <rotation num="1" start="0*deg" step="0*deg" axis="Z"/>
+        </cut>
+        <cut>
+          <placement x="0*cm" y="19.757*cm" z="0*cm" rotX="0*rad" rotY="0*rad" rotZ="0*rad"/>
+          <dimensions rmin="0*cm" rmax="5.08*cm/2." half_length="400.*cm/2."/>
+          <rotation num="4" start="45.0*deg" step="90.0*deg" axis="Z"/>
+        </cut>
+      </endplate>
+      <endplate name="Q1APR_EndPlate2_IP" vis="MagnetEndPlateVis">
+        <placement x="Q1APR_Yoke_Center_posX" y="Q1APR_Yoke_Center_posY" z="Q1APR_Yoke_Center_posZ" theta="Q1APR_Yoke_Rotation_Angle"/>
+        <zplane z="-(189.9*cm/2.)" rmin="0.0*cm" rmax="52.539900*cm/2."/>
+        <zplane z="-(189.9*cm/2.+4.127500*cm)" rmin="0.0*cm" rmax="52.539900*cm/2."/>
+        <cut shape="Cone">
+          <placement x="5.0*cm" y="0*cm" z="0*cm" rotX="0*rad" rotY="0*rad" rotZ="0*rad"/>
+          <dimensions rmin1="0*cm" rmax1="7.92*cm/2." rmin2="0*cm" rmax2="6.5*cm/2." dz="200.0*cm/2."/>
+          <rotation num="1" start="0*deg" step="0*deg" axis="Z"/>
+        </cut>
+        <cut shape="Cone">
+          <placement x="-10.519*cm" y="0*cm" z="0*cm" rotX="0*rad" rotY="abs(CrossingAngle)" rotZ="0*rad"/>
+          <!-- dimensions rmin1="0*cm" rmax1="6.8*cm" rmin2="0*cm" rmax2="6.0*cm" dz="200.0*cm/2."/ (actual dimensions, temporarily commented to avoid overlap with the outdated electron beam pipe)-->
+          <dimensions rmin1="0*cm" rmax1="(67.5+5.0)*mm+15*mm" rmin2="0*cm" rmax2="(67.5+5.0)*mm+15*mm" dz="200.0*cm/2."/>
+          <rotation num="1" start="0*deg" step="0*deg" axis="Z"/>
+        </cut>
+        <cut>
+          <placement x="0*cm" y="19.757*cm" z="0*cm" rotX="0*rad" rotY="0*rad" rotZ="0*rad"/>
+          <dimensions rmin="0*cm" rmax="5.08*cm/2." half_length="400.*cm/2."/>
+          <rotation num="4" start="45.0*deg" step="90.0*deg" axis="Z"/>
+        </cut>
+      </endplate>
+      <endplate name="Q1APR_EndPlate2_nonIP" vis="MagnetEndPlateVis">
+        <placement x="Q1APR_Yoke_Center_posX" y="Q1APR_Yoke_Center_posY" z="Q1APR_Yoke_Center_posZ" theta="Q1APR_Yoke_Rotation_Angle"/>
+        <zplane z="(189.9*cm/2.)" rmin="0.0*cm" rmax="52.539900*cm/2."/>
+        <zplane z="(189.9*cm/2.+4.127500*cm)" rmin="0.0*cm" rmax="52.539900*cm/2."/>
+        <cut shape="Cone">
+          <placement x="5.0*cm" y="0*cm" z="0*cm" rotX="0*rad" rotY="0*rad" rotZ="0*rad"/>
+          <dimensions rmin1="0*cm" rmax1="7.92*cm/2." rmin2="0*cm" rmax2="6.5*cm/2." dz="200.0*cm/2."/>
+          <rotation num="1" start="0*deg" step="0*deg" axis="Z"/>
+        </cut>
+        <cut shape="Cone">
+          <placement x="-10.519*cm" y="0*cm" z="0*cm" rotX="0*rad" rotY="abs(CrossingAngle)" rotZ="0*rad"/>
+          <!-- dimensions rmin1="0*cm" rmax1="6.8*cm" rmin2="0*cm" rmax2="6.0*cm" dz="200.0*cm/2."/ (actual dimensions, temporarily commented to avoid overlap with the outdated electron beam pipe)-->
+          <dimensions rmin1="0*cm" rmax1="(67.5+5.0)*mm+15*mm" rmin2="0*cm" rmax2="(67.5+5.0)*mm+15*mm" dz="200.0*cm/2."/>
+          <rotation num="1" start="0*deg" step="0*deg" axis="Z"/>
+        </cut>
+        <cut>
+          <placement x="0*cm" y="19.757*cm" z="0*cm" rotX="0*rad" rotY="0*rad" rotZ="0*rad"/>
+          <dimensions rmin="0*cm" rmax="5.08*cm/2." half_length="400.*cm/2."/>
+          <rotation num="4" start="45.0*deg" step="90.0*deg" axis="Z"/>
+        </cut>
+      </endplate>
+      <yokeshield name="Q1APR_YoketShield" vis="MagnetEndPlateVis">
+        <placement x="Q1APR_Yoke_Center_posX" y="Q1APR_Yoke_Center_posY" z="Q1APR_Yoke_Center_posZ" theta="Q1APR_Yoke_Rotation_Angle"/>
+        <dimensions rmin="25.*cm" rmax="26.27*cm" half_length="189.9*cm/2." sphi="0*deg" dphi="360.0*deg"/>
+      </yokeshield>
+      <heatshieldbarrel name="Q1APR_HeatShield_Barrel" vis="MagnetHeatShieldVis">
+        <placement x="10.7196*cm" y="0*cm" z="-628.17*cm" theta="Q1APR_Yoke_Rotation_Angle"/>
+        <dimensions rmin="44.132500*cm" rmax="44.450000*cm" half_length="170.180000*cm/2." sphi="0*deg" dphi="360.0*deg"/>
+      </heatshieldbarrel>
+      <cryobarrel name="Q1APR_Cryo_Barrel" vis="MagnetCryoVis">
+        <placement x="10.719*cm" y="0*cm" z="-628.17*cm" theta="Q1APR_Yoke_Rotation_Angle"/>
+        <dimensions rmin="105.089960*cm/2." rmax="106.680000*cm/2." half_length="175.260000*cm/2." sphi="0*deg" dphi="360.0*deg"/>
+      </cryobarrel>
+      <cryoend name="Q1APR_Cryo_End_IP" vis="MagnetCryoVis">
+        <placement x="Q1APR_Yoke_Center_posX" y="Q1APR_Yoke_Center_posY" z="Q1APR_Yoke_Center_posZ" theta="Q1APR_Yoke_Rotation_Angle"/>
+        <zplane z="(180.0*cm/2.-10.7*cm)" rmin="103.505000*cm/2." rmax="106.680000*cm/2."/>
+        <zplane z="(180.0*cm/2.-10.7*cm+30.0*cm)" rmin="103.505000*cm/2." rmax="106.680000*cm/2."/>
+        <zplane z="(180.0*cm/2.-10.7*cm+30.0*cm)" rmin="0*cm/2." rmax="106.680000*cm/2."/>
+        <zplane z="(180.0*cm/2.-10.7*cm+30.0*cm+1.588983*cm)" rmin="0*cm/2." rmax="106.680000*cm/2."/>
+        <cut shape="Cone">
+          <placement x="5.0*cm" y="0*cm" z="0*cm" rotX="0*rad" rotY="0*rad" rotZ="0*rad"/>
+          <dimensions rmin1="0*cm" rmax1="6.5*cm/2." rmin2="0*cm" rmax2="6.5*cm/2." dz="400.0*cm/2."/>
+          <rotation num="1" start="0*deg" step="0*deg" axis="Z"/>
+        </cut>
+        <cut shape="Cone">
+          <placement x="-10.519*cm" y="0*cm" z="0*cm" rotX="0*rad" rotY="abs(CrossingAngle)" rotZ="0*rad"/>
+          <dimensions rmin1="0*cm" rmax1="6.*cm" rmin2="0*cm" rmax2="6.*cm" dz="400.0*cm/2."/>
+          <rotation num="1" start="0*deg" step="0*deg" axis="Z"/>
+        </cut>
+      </cryoend>
+    </detector>
+
+    <!-- Q1BpR magnet -->
+    <detector name="Q1BPR_BeamlineMagnet" type="ip6_CryostatMagnet">
+      <yoke name="Q1BPR_Yoke" vis="MagnetVis">
+        <placement x="Q1BPR_Yoke_Center_posX" y="Q1BPR_Yoke_Center_posY" z="Q1BPR_Yoke_Center_posZ" theta="Q1BPR_Yoke_Rotation_Angle"/>
+        <dimensions rmin="0*cm" rmax="71.12*cm/2." half_length="140.*cm/2." sphi="0*deg" dphi="360.0*deg"/>
+        <cut>
+          <placement x="14.44*cm" y="0*cm" z="0*cm" rotX="0*rad" rotY="0*rad" rotZ="0*rad"/>
+          <dimensions rmin="0*cm" rmax="10.662*cm/2." half_length="400.*cm/2."/>
+          <rotation num="1" start="0*deg" step="0*deg" axis="Z"/>
+        </cut>
+        <cut>
+          <placement x="(0.515283+abs(0.515283-4.019476)/2.-8.579)*cm" y="0*cm" z="0*cm" rotX="0*rad" rotY="abs(CrossingAngle)" rotZ="0*rad"/>
+          <!-- dimensions rmin="0*cm" rmax="17.157*cm/2." half_length="400.*cm/2."/ (actual dimensions, temporarily commented to avoid overlap with the outdated electron beam pipe)-->
+          <dimensions rmin="0*cm" rmax="(78.0+5.0)*mm+11.0*mm" half_length="400.*cm/2."/>
+          <rotation num="1" start="0*deg" step="0*deg" axis="Z"/>
+        </cut>
+        <cut>
+          <placement x="0*cm" y="25.144717*cm" z="0*cm" rotX="0*rad" rotY="0*rad" rotZ="0*rad"/>
+          <dimensions rmin="0*cm" rmax="5.08*cm/2." half_length="400.*cm/2."/>
+          <rotation num="4" start="45.0*deg" step="90.0*deg" axis="Z"/>
+        </cut>
+      </yoke>
+      <coil name="Q1BPR_Coil" vis="MagnetCoilVis" shape="ConeSegment">
+        <placement x="Q1BPR_Coil_Center_posX" y="Q1BPR_Coil_Center_posY" z="Q1BPR_Coil_Center_posZ" theta="Q1BPR_Yoke_Rotation_Angle" phiNum="3" phiStart="90*deg" phiStep="90*deg"/>
+        <dimensions rmin1="3.952240*cm" rmax1="4.912360*cm" rmin2="3.952240*cm" rmax2="4.912360*cm" dz="134.92*cm/2." sphi="-60.*deg/2." dphi="60.*deg"/>
+      </coil>
+      <tube name="Q1BPR_InnerSupport_Tube" vis="MagnetSupportTubeVis">
+        <placement x="Q1BPR_Coil_Center_posX" y="Q1BPR_Coil_Center_posY" z="Q1BPR_Coil_Center_posZ" theta="Q1BPR_Yoke_Rotation_Angle"/>
+          <dimensions rmin="6.83*cm/2." rmax="7.6454*cm/2." half_length="148.413724*cm/2." sphi="0*deg" dphi="360.0*deg"/>
+      </tube>
+      <endplate name="Q1BPR_EndPlate_IP" vis="MagnetEndPlateVis">
+        <placement x="Q1BPR_Yoke_Center_posX" y="Q1BPR_Yoke_Center_posY" z="Q1BPR_Yoke_Center_posZ" theta="Q1BPR_Yoke_Rotation_Angle"/>
+        <zplane z="-(140.0*cm/2.+0.5*cm)" rmin="0.0*cm" rmax="70.961250*cm/2."/>
+        <zplane z="-(140.0*cm/2.+3.810000*cm)" rmin="0.0*cm" rmax="70.961250*cm/2."/>
+        <cut>
+          <placement x="14.44*cm" y="0*cm" z="0*cm" rotX="0*rad" rotY="0*rad" rotZ="0*rad"/>
+          <dimensions rmin="0*cm" rmax="5.461000*cm" half_length="400.*cm/2."/>
+          <rotation num="1" start="0*deg" step="0*deg" axis="Z"/>
+        </cut>
+        <cut>
+          <placement x="(0.515283+abs(0.515283-4.019476)/2.-8.579)*cm" y="0*cm" z="0*cm" rotX="0*rad" rotY="abs(CrossingAngle)" rotZ="0*rad"/>
+          <dimensions rmin="0*cm" rmax="9.050020*cm" half_length="400.*cm/2."/>
+          <rotation num="1" start="0*deg" step="0*deg" axis="Z"/>
+        </cut>
+      </endplate>
+      <endplate name="Q1BPR_EndPlate_nonIP" vis="MagnetEndPlateVis">
+        <placement x="Q1BPR_Yoke_Center_posX" y="Q1BPR_Yoke_Center_posY" z="Q1BPR_Yoke_Center_posZ" theta="Q1BPR_Yoke_Rotation_Angle"/>
+        <zplane z="(140.0*cm/2.+0.5*cm)" rmin="0.0*cm" rmax="70.961250*cm/2."/>
+        <zplane z="(140.0*cm/2.+3.810000*cm)" rmin="0.0*cm" rmax="70.961250*cm/2."/>
+        <cut>
+          <placement x="14.44*cm" y="0*cm" z="0*cm" rotX="0*rad" rotY="0*rad" rotZ="0*rad"/>
+          <dimensions rmin="0*cm" rmax="5.461000*cm" half_length="400.*cm/2."/>
+          <rotation num="1" start="0*deg" step="0*deg" axis="Z"/>
+        </cut>
+        <cut>
+          <placement x="(0.515283+abs(0.515283-4.019476)/2.-8.579)*cm" y="0*cm" z="0*cm" rotX="0*rad" rotY="abs(CrossingAngle)" rotZ="0*rad"/>
+          <!-- dimensions rmin="0*cm" rmax="9.050020*cm" half_length="400.*cm/2."/ (actual dimensions, temporarily commented to avoid overlap with the outdated electron beam pipe)-->
+          <dimensions rmin="0*cm" rmax="(78.0+5.0)*mm+11.0*mm" half_length="400.*cm/2."/>
+          <rotation num="1" start="0*deg" step="0*deg" axis="Z"/>
+        </cut>
+      </endplate>
+      <endplate name="Q1BPR_EndPlate2_IP" vis="MagnetEndPlateVis">
+        <placement x="Q1BPR_Yoke_Center_posX" y="Q1BPR_Yoke_Center_posY" z="Q1BPR_Yoke_Center_posZ" theta="Q1BPR_Yoke_Rotation_Angle"/>
+        <zplane z="-(154.454352*cm/2.)" rmin="0.0*cm" rmax="73.660000*cm/2."/>
+        <zplane z="-(154.454352*cm/2.+5.430520*cm)" rmin="0.0*cm" rmax="73.660000*cm/2."/>
+        <cut>
+          <placement x="14.44*cm" y="0*cm" z="0*cm" rotX="0*rad" rotY="0*rad" rotZ="0*rad"/>
+          <dimensions rmin="0*cm" rmax="6.400800*cm" half_length="400.*cm/2."/>
+          <rotation num="1" start="0*deg" step="0*deg" axis="Z"/>
+        </cut>
+        <cut>
+          <placement x="(0.515283+abs(0.515283-4.019476)/2.-8.579)*cm" y="0*cm" z="0*cm" rotX="0*rad" rotY="abs(CrossingAngle)" rotZ="0*rad"/>
+          <!-- dimensions rmin="0*cm" rmax="7.813040*cm" half_length="400.*cm/2."/ (actual dimensions, temporarily commented to avoid overlap with the outdated electron beam pipe)-->
+          <dimensions rmin="0*cm" rmax="(78.0+5.0)*mm+11.0*mm" half_length="400.*cm/2."/>
+          <rotation num="1" start="0*deg" step="0*deg" axis="Z"/>
+        </cut>
+      </endplate>
+      <endplate name="Q1BPR_EndPlate2_nonIP" vis="MagnetEndPlateVis">
+        <placement x="Q1BPR_Yoke_Center_posX" y="Q1BPR_Yoke_Center_posY" z="Q1BPR_Yoke_Center_posZ" theta="Q1BPR_Yoke_Rotation_Angle"/>
+        <zplane z="(154.454352*cm/2.)" rmin="0.0*cm" rmax="73.660000*cm/2."/>
+        <zplane z="(154.454352*cm/2.+5.430520*cm)" rmin="0.0*cm" rmax="73.660000*cm/2."/>
+        <cut>
+          <placement x="14.44*cm" y="0*cm" z="0*cm" rotX="0*rad" rotY="0*rad" rotZ="0*rad"/>
+          <dimensions rmin="0*cm" rmax="6.400800*cm" half_length="400.*cm/2."/>
+          <rotation num="1" start="0*deg" step="0*deg" axis="Z"/>
+        </cut>
+        <cut>
+          <placement x="(0.515283+abs(0.515283-4.019476)/2.-8.579)*cm" y="0*cm" z="0*cm" rotX="0*rad" rotY="abs(CrossingAngle)" rotZ="0*rad"/>
+          <!-- dimensions rmin="0*cm" rmax="7.813040*cm" half_length="400.*cm/2."/ (actual dimensions, temporarily commented to avoid overlap with the outdated electron beam pipe)-->
+          <dimensions rmin="0*cm" rmax="(78.0+5.0)*mm+11.0*mm" half_length="400.*cm/2."/>
+          <rotation num="1" start="0*deg" step="0*deg" axis="Z"/>
+        </cut>
+      </endplate>
+      <yokeshield name="Q1BPR_YoketShield" vis="MagnetEndPlateVis">
+        <placement x="Q1BPR_Yoke_Center_posX" y="Q1BPR_Yoke_Center_posY" z="Q1BPR_Yoke_Center_posZ" theta="Q1BPR_Yoke_Rotation_Angle"/>
+        <dimensions rmin="35.560000*cm" rmax="36.830000*cm" half_length="154.0*cm/2." sphi="0*deg" dphi="360.0*deg"/>
+      </yokeshield>
+      <heatshieldbarrel name="Q1BPR_HeatShield_Barrel" vis="MagnetHeatShieldVis">
+        <placement x="6.32227*cm" y="0*cm" z="-829.954*cm" theta="Q1BPR_Yoke_Rotation_Angle"/>
+        <dimensions rmin="112.395000*cm/2." rmax="113.030000*cm/2." half_length="152.400000*cm/2." sphi="0*deg" dphi="360.0*deg"/>
+      </heatshieldbarrel>
+      <cryobarrel name="Q1BPR_Cryo_Barrel" vis="MagnetCryoVis">
+        <placement x="Q1BPR_Yoke_Center_posX" y="Q1BPR_Yoke_Center_posY" z="Q1BPR_Yoke_Center_posZ" theta="Q1BPR_Yoke_Rotation_Angle"/>
+        <dimensions rmin="135.255000*cm/2." rmax="137.160000*cm/2." half_length="162.560000*cm/2." sphi="0*deg" dphi="360.0*deg"/>
+      </cryobarrel>
+    </detector>
+
+    <!-- Q2pR magnet -->
+    <detector name="Q2PR_BeamlineMagnet" type="ip6_CryostatMagnet">
+      <yoke name="Q2PR_Yoke" vis="MagnetVis">
+        <placement x="Q2PR_Yoke_Center_posX" y="Q2PR_Yoke_Center_posY" z="Q2PR_Yoke_Center_posZ" theta="Q2PR_Yoke_Rotation_Angle"/>
+        <dimensions rmin="0*cm" rmax="90.*cm/2." half_length="552.540*cm/2." sphi="0*deg" dphi="360.0*deg"/>
+        <cut>
+          <placement x="15.0*cm" y="0*cm" z="0*cm" rotX="0*rad" rotY="0*rad" rotZ="0*rad"/>
+          <dimensions rmin="0*cm" rmax="21.0*cm/2." half_length="4000.*cm/2."/>
+          <rotation num="1" start="0*deg" step="0*deg" axis="Z"/>
+        </cut>
+        <cut>
+          <placement x="-15.663*cm" y="0*cm" z="0*cm" rotX="0*rad" rotY="abs(CrossingAngle)" rotZ="0*rad"/>
+          <!-- dimensions rmin="0*cm" rmax="25.0*cm/2." half_length="4000.*cm/2."/ (actual dimensions, temporarily commented to avoid overlap with the outdated electron beam pipe)-->
+          <dimensions rmin="0*cm" rmax="40.0*cm/2." half_length="4000.*cm/2."/>
+          <rotation num="1" start="0*deg" step="0*deg" axis="Z"/>
+        </cut>
+      </yoke>
+      <coil name="Q2PR_Coil" vis="MagnetCoilVis" shape="ConeSegment">
+        <placement x="Q2PR_Coil_Center_posX" y="Q2PR_Coil_Center_posY" z="Q2PR_Coil_Center_posZ" theta="Q2PR_Yoke_Rotation_Angle" phiNum="3" phiStart="90*deg" phiStep="90*deg"/>
+        <dimensions rmin1="6.233160*cm" rmax1="7.056120*cm" rmin2="6.233160*cm" rmax2="7.056120*cm" dz="450.*cm/2." sphi="-60.*deg/2." dphi="60.*deg"/>
+      </coil>
+      <tube name="Q2PR_InnerSupport_Tube" vis="MagnetSupportTubeVis">
+        <placement x="Q2PR_Coil_Center_posX" y="Q2PR_Coil_Center_posY" z="Q2PR_Coil_Center_posZ" theta="Q2PR_Yoke_Rotation_Angle"/>
+          <dimensions rmin="11.267440*cm/2." rmax="12.466320*cm/2." half_length="486.410000*cm/2." sphi="0*deg" dphi="360.0*deg"/>
+      </tube>
+      <endplate name="Q2PR_EndPlate_nonIP" vis="MagnetEndPlateVis">
+        <placement x="Q2PR_Yoke_Center_posX" y="Q2PR_Yoke_Center_posY" z="Q2PR_Yoke_Center_posZ" theta="Q2PR_Yoke_Rotation_Angle"/>
+        <zplane z="-(552.54*cm/2.+0.5*cm)" rmin="0.0*cm" rmax="90.*cm/2."/>
+        <zplane z="-(552.54*cm/2.+3.810000*cm)" rmin="0.0*cm" rmax="90.*cm/2."/>
+        <cut>
+          <placement x="15.0*cm" y="0*cm" z="0*cm" rotX="0*rad" rotY="0*rad" rotZ="0*rad"/>
+          <dimensions rmin="0*cm" rmax="8.458200*cm" half_length="800.*cm/2."/>
+          <rotation num="1" start="0*deg" step="0*deg" axis="Z"/>
+        </cut>
+        <cut>
+          <placement x="-15.663*cm" y="0*cm" z="0*cm" rotX="0*rad" rotY="abs(CrossingAngle)" rotZ="0*rad"/>
+          <!-- dimensions rmin="0*cm" rmax="8.458200*cm" half_length="800.*cm/2."/ (actual dimensions, temporarily commented to avoid overlap with the outdated electron beam pipe)-->
+          <dimensions rmin="0*cm" rmax="40*cm/2." half_length="800.*cm/2."/>
+          <rotation num="1" start="0*deg" step="0*deg" axis="Z"/>
+        </cut>
+      </endplate>
+      <endplate name="Q2PR_EndPlate_IP" vis="MagnetEndPlateVis">
+        <placement x="Q2PR_Yoke_Center_posX" y="Q2PR_Yoke_Center_posY" z="Q2PR_Yoke_Center_posZ" theta="Q2PR_Yoke_Rotation_Angle"/>
+        <zplane z="(552.54*cm/2.+0.5*cm)" rmin="0.0*cm" rmax="90.*cm/2."/>
+        <zplane z="(552.54*cm/2.+3.810000*cm)" rmin="0.0*cm" rmax="90.*cm/2."/>
+        <cut>
+          <placement x="15.0*cm" y="0*cm" z="0*cm" rotX="0*rad" rotY="0*rad" rotZ="0*rad"/>
+          <dimensions rmin="0*cm" rmax="8.458200*cm" half_length="800.*cm/2."/>
+          <rotation num="1" start="0*deg" step="0*deg" axis="Z"/>
+        </cut>
+        <cut>
+          <placement x="-15.663*cm" y="0*cm" z="0*cm" rotX="0*rad" rotY="abs(CrossingAngle)" rotZ="0*rad"/>
+          <!-- dimensions rmin="0*cm" rmax="8.458200*cm" half_length="800.*cm/2."/ (actual dimensions, temporarily commented to avoid overlap with the outdated electron beam pipe)-->
+          <dimensions rmin="0*cm" rmax="10*cm" half_length="800.*cm/2."/>
+          <rotation num="1" start="0*deg" step="0*deg" axis="Z"/>
+        </cut>
+      </endplate>
+      <endplate name="Q2PR_EndPlate2_nonIP" vis="MagnetEndPlateVis">
+        <placement x="Q2PR_Yoke_Center_posX" y="Q2PR_Yoke_Center_posY" z="Q2PR_Yoke_Center_posZ" theta="Q2PR_Yoke_Rotation_Angle"/>
+        <zplane z="-(571.500000*cm/2.)" rmin="0.0*cm" rmax="92.540074*cm/2."/>
+        <zplane z="-(571.500000*cm/2.+6.822440*cm)" rmin="0.0*cm" rmax="92.540074*cm/2."/>
+        <cut>
+          <placement x="15.0*cm" y="0*cm" z="0*cm" rotX="0*rad" rotY="0*rad" rotZ="0*rad"/>
+          <dimensions rmin="0*cm" rmax="13.249072*cm/2." half_length="800.*cm/2."/>
+          <rotation num="1" start="0*deg" step="0*deg" axis="Z"/>
+        </cut>
+        <cut>
+          <placement x="-15.663*cm" y="0*cm" z="0*cm" rotX="0*rad" rotY="abs(CrossingAngle)" rotZ="0*rad"/>
+          <!-- dimensions rmin="0*cm" rmax="18.022824*cm/2." half_length="800.*cm/2."/ (actual dimensions, temporarily commented to avoid overlap with the outdated electron beam pipe)-->
+          <dimensions rmin="0*cm" rmax="40*cm/2." half_length="800.*cm/2."/>
+          <rotation num="1" start="0*deg" step="0*deg" axis="Z"/>
+        </cut>
+      </endplate>
+      <endplate name="Q2PR_EndPlate2_IP" vis="MagnetEndPlateVis">
+        <placement x="Q2PR_Yoke_Center_posX" y="Q2PR_Yoke_Center_posY" z="Q2PR_Yoke_Center_posZ" theta="Q2PR_Yoke_Rotation_Angle"/>
+        <zplane z="(571.500000*cm/2.)" rmin="0.0*cm" rmax="92.540074*cm/2."/>
+        <zplane z="(571.500000*cm/2.+6.822440*cm)" rmin="0.0*cm" rmax="92.540074*cm/2."/>
+        <cut>
+          <placement x="15.0*cm" y="0*cm" z="0*cm" rotX="0*rad" rotY="0*rad" rotZ="0*rad"/>
+          <dimensions rmin="0*cm" rmax="13.249072*cm/2." half_length="800.*cm/2."/>
+          <rotation num="1" start="0*deg" step="0*deg" axis="Z"/>
+        </cut>
+        <cut>
+          <placement x="-15.663*cm" y="0*cm" z="0*cm" rotX="0*rad" rotY="abs(CrossingAngle)" rotZ="0*rad"/>
+          <dimensions rmin="0*cm" rmax="18.022824*cm/2." half_length="800.*cm/2."/>
+          <rotation num="1" start="0*deg" step="0*deg" axis="Z"/>
+        </cut>
+      </endplate>
+      <yokeshield name="Q2PR_YoketShield" vis="MagnetEndPlateVis">
+        <placement x="Q2PR_Yoke_Center_posX" y="Q2PR_Yoke_Center_posY" z="Q2PR_Yoke_Center_posZ" theta="Q2PR_Yoke_Rotation_Angle"/>
+        <dimensions rmin="45.000037*cm" rmax="46.270037*cm" half_length="571.0*cm/2." sphi="0*deg" dphi="360.0*deg"/>
+      </yokeshield>
+      <heatshieldbarrel name="Q2PR_HeatShield_Barrel" vis="MagnetHeatShieldVis">
+        <placement x="15.6338*cm" y="0*cm" z="-1224.74*cm" theta="Q2PR_Yoke_Rotation_Angle"/>
+        <dimensions rmin="135.255000*cm/2." rmax="135.890000*cm/2." half_length="561.340000*cm/2." sphi="0*deg" dphi="360.0*deg"/>
+      </heatshieldbarrel>
+      <cryobarrel name="Q2PR_Cryo_Barrel" vis="MagnetCryoVis">
+        <placement x="15.6338*cm" y="0*rad" z="-1224.74*cm" theta="Q2PR_Yoke_Rotation_Angle"/>
+        <dimensions rmin="165.100000*cm/2." rmax="167.640000*cm/2." half_length="566.420000*cm/2." sphi="0*deg" dphi="360.0*deg"/>
+      </cryobarrel>
+      <cryoend name="Q2PR_Cryo_End_nonIP" vis="MagnetCryoVis">
+        <placement x="Q2PR_Yoke_Center_posX" y="Q2PR_Yoke_Center_posY" z="Q2PR_Yoke_Center_posZ" theta="Q2PR_Yoke_Rotation_Angle"/>
+        <zplane z="-(552.54*cm/2.+5.7*cm)" rmin="164.465000*cm/2." rmax="167.640000*cm/2."/>
+        <zplane z="-(552.54*cm/2.+5.7*cm+30.0*cm)" rmin="164.465000*cm/2." rmax="167.640000*cm/2."/>
+        <zplane z="-(552.54*cm/2.+5.7*cm+30.0*cm)" rmin="0*cm/2." rmax="167.640000*cm/2."/>
+        <zplane z="-(552.54*cm/2.+5.7*cm+30.0*cm+1.619677*cm)" rmin="0*cm/2." rmax="167.640000*cm/2."/>
+        <cut>
+          <placement x="15.0*cm" y="0*cm" z="0*cm" rotX="0*rad" rotY="0*rad" rotZ="0*rad"/>
+          <dimensions rmin="0*cm" rmax="13.249072*cm/2." half_length="800.*cm/2."/>
+          <rotation num="1" start="0*deg" step="0*deg" axis="Z"/>
+        </cut>
+        <cut>
+          <placement x="-15.663*cm" y="0*cm" z="0*cm" rotX="0*rad" rotY="abs(CrossingAngle)" rotZ="0*rad"/>
+          <!-- dimensions rmin="0*cm" rmax="18.022824*cm/2." half_length="800.*cm/2."/ (actual dimensions, temporarily commented to avoid overlap with the outdated electron beam pipe)-->
+          <dimensions rmin="0*cm" rmax="45*cm/2." half_length="800.*cm/2."/>
+          <rotation num="1" start="0*deg" step="0*deg" axis="Z"/>
+        </cut>
+      </cryoend>
     </detector>
 
   </detectors>
@@ -105,7 +530,8 @@
 
     <field name="Magnet_Q3eR_Field" type="MultipoleMagnet">
       <shape type="Tube" rmax="Q3eR_InnerRadius" dz="Q3eR_Length/2"/>
-      <position x="0" y="0" z="Q3eR_CenterPosition"/>
+      <position x="Q3eR_XPosition" y="0" z="Q3eR_CenterPosition"/>
+      <rotation x="0" y="Q3eR_Theta" z="0"/>
       <coefficient/>
       <coefficient coefficient="Q3eR_Gradient"/>
     </field>

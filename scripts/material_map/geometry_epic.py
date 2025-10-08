@@ -27,7 +27,9 @@ if "__main__" == __name__:
     )
     args = p.parse_args()
 
-    detector, trackingGeometry, decorators = epic.getDetector(args.xmlFile)
+    detector = epic.getDetector(args.xmlFile)
+    trackingGeometry = detector.trackingGeometry()
+    decorators = detector.contextDecorators()
 
     runGeometry(
         trackingGeometry,
