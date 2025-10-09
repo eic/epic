@@ -3,7 +3,7 @@
 export DETECTOR=epic
 export DETECTOR_PATH=/home/aranya/eic/epic/install/share/epic
 export DETECTOR_CONFIG=${1:-epic}
-export DETECTOR_VERSION=v0.0.0-unknown
+export DETECTOR_VERSION=25.02.0-88-g538b65434-dirty
 
 ## Warn is not the right name (this script is sourced, hence $1)
 if [[ "$(basename ${BASH_SOURCE[0]})" != "thisepic.sh" ]]; then
