@@ -70,7 +70,7 @@
 
     <constant name="TrackerSupportCylEndcapP_zmax1A"       value="TrackerEndcapPDisk2_zmin" />
     <constant name="TrackerSupportCylEndcapP_zmax1B"       value="TrackerEndcapPDisk3_zmin" />
-    <constant name="TrackerSupportCylEndcapP_zmax1C"       value="129.7*cm" /> <comment> Ref: Services Material Budget 24.03.13.stp </comment>
+    <constant name="TrackerSupportCylEndcapP_zmax1C"       value="1624*mm" /> <comment> Ref:  SVT PST Drawing PACKET SEP 2025.pdf</comment>
     <constant name="TrackerSupportCylEndcapP_z1A"          value="0.5*(TrackerSupportCylEndcapP_zmin1A + TrackerSupportCylEndcapP_zmax1A)" />
     <constant name="TrackerSupportCylEndcapP_z1B"          value="0.5*(TrackerSupportCylEndcapP_zmin1B + TrackerSupportCylEndcapP_zmax1B)" />
     <constant name="TrackerSupportCylEndcapP_z1C"          value="0.5*(TrackerSupportCylEndcapP_zmin1C + TrackerSupportCylEndcapP_zmax1C)" />
@@ -93,7 +93,7 @@
 
     <constant name="TrackerSupportCylEndcapN_zmax1A"       value="TrackerEndcapNDisk2_zmin" />
     <constant name="TrackerSupportCylEndcapN_zmax1B"       value="TrackerEndcapNDisk3_zmin" />
-    <constant name="TrackerSupportCylEndcapN_zmax1C"       value="101.0*cm" /> <comment> Ref: Services Material Budget 24.03.13.stp. FIXME: need to update this to PST zmax once figure out connection to the outer cone </comment>
+    <constant name="TrackerSupportCylEndcapN_zmax1C"       value="107*cm" /> <comment> Ref:  SVT PST Drawing PACKET SEP 2025.pdf</comment>
 
     <constant name="TrackerSupportCylEndcapN_z1A"          value="0.5*(TrackerSupportCylEndcapN_zmin1A + TrackerSupportCylEndcapN_zmax1A)" />
     <constant name="TrackerSupportCylEndcapN_z1B"          value="0.5*(TrackerSupportCylEndcapN_zmin1B + TrackerSupportCylEndcapN_zmax1B)" />
