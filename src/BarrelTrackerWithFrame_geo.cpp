@@ -132,9 +132,14 @@ static Ref_t create_BarrelTrackerWithFrame(Detector& description, xml_h e, Sensi
     double total_thickness = 0;
 
     // Compute module total thickness from components
+    // add pos z to allow several components being placed at the same z without double-counting the total thickness.
     xml_coll_t ci(x_mod, _U(module_component));
     for (ci.reset(), total_thickness = 0.0; ci; ++ci) {
-      total_thickness += xml_comp_t(ci).thickness();
+      xml_comp_t x_pos = xml_comp_t(ci).position(false);
+      double mod_z_off = 0;
+      if (x_pos)
+        mod_z_off = x_pos.z(0);
+      total_thickness += xml_comp_t(ci).thickness() + mod_z_off;
     }
     // the module assembly volume
     Assembly m_vol(m_nam);
