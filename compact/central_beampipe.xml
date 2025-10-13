@@ -8,6 +8,11 @@
 
   <detectors>
 
+    <detector 
+	name="Sensitive_IR6_Confinment" 
+	type="SensConfinment">
+    </detector>
+
     <detector id="BeamPipe_ID" name="BeamPipe" type="IP6BeamPipe" vis_wall="AnlBlue" vis_coating="AnlRed" vis_IPwall="AnlGreen" vis_IPcoating="AnlOrange">
       <type_flags type="DetType_TRACKER + DetType_BEAMPIPE" />
       <beampipe/>
