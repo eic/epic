@@ -1,0 +1,10 @@
+<!-- SPDX-License-Identifier: LGPL-3.0-or-later -->
+<!-- Copyright (C) 2022 Dmitry Kalinkin, Wouter Deconinck, Whitney Armstrong -->
+
+<lccdd>
+  <fields>
+    <field name="MagnetFields_Constant" type="ConstantField" field="magnetic">
+      <strength x="0" y="0" z="1.7*tesla"/>
+    </field>
+  </fields>
+</lccdd>
