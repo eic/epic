@@ -186,7 +186,7 @@
     <constant name="L1_pos_cone_r1"           value=" L1_ring2_rmax"/>
     <constant name="L1_pos_cone_r2"           value=" 115.4*mm"/>
     <constant name="L1_pos_cone_r3"           value=" 176.7*mm"/>
-    <constant name="L1_pos_cone_r4"           value=" IB_frame_rmax"/>
+    <constant name="L1_pos_cone_r4"           value=" IB_frame_rmax-1*mm"/>
     <constant name="L1_pos_cone_z1"           value=" 178*mm+5*mm" />
     <constant name="L1_pos_cone_z2"           value=" 192*mm" />
     <constant name="L1_pos_cone_z3"           value=" 208*mm" />
@@ -211,7 +211,7 @@
     <constant name="L1_neg_cone_ring_dphi"     value=" 17.5*deg" />
 
     <constant name="L1_neg_cone_leg_rmin"     value=" L1_neg_cone_ring_rmax"/>
-    <constant name="L1_neg_cone_leg_rmax"     value=" IB_frame_rmax"/>
+    <constant name="L1_neg_cone_leg_rmax"     value=" IB_frame_rmax-1*mm"/>
     <constant name="L1_neg_cone_leg_dr"       value=" L1_neg_cone_leg_rmax-L1_neg_cone_leg_rmin"/>
     <constant name="L1_neg_cone_leg_rcenter"  value=" (L1_neg_cone_leg_rmax+L1_neg_cone_leg_rmin)/2"/>
     <constant name="L1_neg_cone_leg_zmax"     value=" L1_neg_cone_ring_zmin" />
@@ -350,7 +350,7 @@
     <constant name="L2_pos_cone_ring_zcenter" value=" (L2_pos_cone_ring_zmin+L2_pos_cone_ring_zmax)/2-overlap_buffer" />
 
     <constant name="L2_cone_leg_rmin"     value=" L2_cone_ring_rmax"/>
-    <constant name="L2_cone_leg_rmax"     value=" IB_frame_rmax"/>
+    <constant name="L2_cone_leg_rmax"     value=" IB_frame_rmax-1*mm"/>
     <constant name="L2_cone_leg_dr"       value=" L2_cone_leg_rmax-L2_cone_leg_rmin"/>
     <constant name="L2_cone_leg_rcenter"  value=" (L2_cone_leg_rmax+L2_cone_leg_rmin)/2"/>
 
