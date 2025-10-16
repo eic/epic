@@ -32,6 +32,7 @@ using namespace dd4hep::detail;
 static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector sens) {
 
   // printout(WARNING, "BarrelHCalCalorimeter", "called create_detector ");
+  
 
   xml_det_t x_det = e;
   int det_id      = x_det.id();
@@ -255,18 +256,23 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
         Transform3D(RotationZ(-k * sec_rot_angle * dd4hep::deg) * RotationY(180.0 * dd4hep::deg),
                     Translation3D(0, 0, 0)));
   }
+  
   BarrelHCAL.placeVolume(
       barrel_csector_vol, 0,
       Transform3D(RotationZ(sec_rot_angle * dd4hep::deg) * RotationY(180.0 * dd4hep::deg),
                   Translation3D(0, 0, 0)));
+                  
   BarrelHCAL.placeVolume(barrel_csector_vol, 1,
                          Transform3D(RotationY(180.0 * dd4hep::deg), Translation3D(0, 0, 0)));
+                         
   BarrelHCAL.placeVolume(
       barrel_csector_vol, 2,
       Transform3D(RotationZ(-sec_rot_angle * dd4hep::deg) * RotationY(180.0 * dd4hep::deg),
                   Translation3D(0, 0, 0)));
+                  
   BarrelHCAL.placeVolume(barrel_er_vol, 0,
                          Transform3D(RotationY(180.0 * dd4hep::deg), Translation3D(0, 0, 0)));
+                         
   BarrelHCAL.placeVolume(barrel_er_vol, 1,
                          Transform3D(RotationY(0.0 * dd4hep::deg), Translation3D(0, 0, 0)));
 
@@ -374,7 +380,7 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
 
       if (i_eta > 3) {
 
-        // ordinary sector tiles
+        // ordinary sector tiles        
 
         PlacedVolume phv1 = BarrelHCAL.placeVolume(
             Tile[i_eta], i_phi + i_eta * 320,
@@ -416,37 +422,37 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
         if (i_phi > 29) {
 
           // ordinary sector tiles
-
+   
           PlacedVolume phv1 = BarrelHCAL.placeVolume(
-              Tile[i_eta], i_phi + i_eta * 320,
+              Tile[i_eta], i_phi + i_eta * 320,         
               RotationZ(i_phi * increment_angle + increment_offset) *
                   Transform3D(
                       RotationY(90.0 * dd4hep::deg),
                       Translation3D(xposOuter[0] * dd4hep::mm, yposOuter[0] * dd4hep::mm, 0.0)) *
                   RotationX(-tilePlaneRotate * dd4hep::deg) *
-                  Translation3D((xposTile[tnum] + (tnum + 1) * tile_tolerance) * dd4hep::mm,
-                                yposTile[tnum] * dd4hep::mm, zposTile[tnum] * dd4hep::mm));
+                  Translation3D(-(xposTile[tnum] + (tnum + 1) * tile_tolerance) * dd4hep::mm,
+                                    yposTile[tnum] * dd4hep::mm, -zposTile[tnum] * dd4hep::mm));
 
           phv1.addPhysVolID("eta", i_eta).addPhysVolID("phi", i_phi);
           DetElement sd1 = tile_det.clone(_toString(i_eta, "eta%d ") + _toString(i_phi, "phi%d"));
           sd1.setPlacement(phv1);
           sdet.add(sd1);
-
+          
+          
           PlacedVolume phv0 = BarrelHCAL.placeVolume(
-              Tile[i_eta], i_phi + (12 + tnum) * 320,
+              Tile[i_eta], i_phi + (12 + tnum) * 320,        
               RotationZ(i_phi * increment_angle + increment_offset) *
                   Transform3D(
                       RotationY(90.0 * dd4hep::deg),
                       Translation3D(xposOuter[0] * dd4hep::mm, yposOuter[0] * dd4hep::mm, 0.0)) *
                   RotationX(-tilePlaneRotate * dd4hep::deg) *
                   Transform3D(
-                      RotationY(180.0 * dd4hep::deg),
-                      Translation3D(-(xposTile[tnum] + (tnum + 1) * tile_tolerance) * dd4hep::mm,
-                                    yposTile[tnum] * dd4hep::mm, -zposTile[tnum] * dd4hep::mm)));
+                      RotationY(180.0 * dd4hep::deg), 
+                      Translation3D((xposTile[tnum] + (tnum + 1) * tile_tolerance) * dd4hep::mm,
+                                yposTile[tnum] * dd4hep::mm, zposTile[tnum] * dd4hep::mm)));
 
           phv0.addPhysVolID("eta", (12 + tnum)).addPhysVolID("phi", i_phi);
-          DetElement sd0 =
-              tile_det.clone(_toString((12 + tnum), "eta%d ") + _toString(i_phi, "phi%d"));
+          DetElement sd0 = tile_det.clone(_toString((12 + tnum), "eta%d ") + _toString(i_phi, "phi%d"));
           sd0.setPlacement(phv0);
           sdet.add(sd0);
 
@@ -467,10 +473,10 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
                                 zposChimneyTileS[tnum - 8] * dd4hep::mm));
 
           phv1.addPhysVolID("eta", (12 + tnum)).addPhysVolID("phi", i_phi);
-          DetElement sd1 =
-              tile_det.clone(_toString((12 + tnum), "eta%d ") + _toString(i_phi, "phi%d"));
+          DetElement sd1 = tile_det.clone(_toString((12 + tnum), "eta%d ") + _toString(i_phi, "phi%d"));
           sd1.setPlacement(phv1);
           sdet.add(sd1);
+
 
           PlacedVolume phv0 = BarrelHCAL.placeVolume(
               Tile[i_eta], i_phi + i_eta * 320,
@@ -478,14 +484,15 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
                   Transform3D(
                       RotationY(90.0 * dd4hep::deg),
                       Translation3D(xposOuter[0] * dd4hep::mm, yposOuter[0] * dd4hep::mm, 0.0)) *
-                  RotationX(-tilePlaneRotate * dd4hep::deg) *
-                  Translation3D((xposTile[tnum] + (tnum + 1) * tile_tolerance) * dd4hep::mm,
-                                yposTile[tnum] * dd4hep::mm, zposTile[tnum] * dd4hep::mm));
-
+                  RotationX(-tilePlaneRotate * dd4hep::deg) *                  
+                  Translation3D(-(xposTile[tnum] + (tnum + 1) * tile_tolerance) * dd4hep::mm,
+                                    yposTile[tnum] * dd4hep::mm, -zposTile[tnum] * dd4hep::mm));
+                  
           phv0.addPhysVolID("eta", i_eta).addPhysVolID("phi", i_phi);
           DetElement sd0 = tile_det.clone(_toString(i_eta, "eta%d ") + _toString(i_phi, "phi%d"));
           sd0.setPlacement(phv0);
           sdet.add(sd0);
+
         }
       }
     }
