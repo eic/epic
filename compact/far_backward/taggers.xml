@@ -11,54 +11,40 @@
 
   <detectors>
 
-    <comment> Main beamline vacuum volume spanning between B2BeR and Q3eR magnets</comment>
-    <detector id="TaggerTracker_ID" name="BackwardsTaggerStation" type="BackwardsTagger" wall="Backwards_Box_Wall" lumi="true" vis="BeamPipeVis" readout="TaggerTrackerHits">
-      <focus      x="Dipole_Focus_X"    y="Dipole_Focus_Y"    z="Dipole_Focus_Z" />
-      <bounding   xmin="Vacuum_BB_MinX" xmax="Vacuum_BB_MaxX"
-                  ymin="Vacuum_BB_MinY" ymax="Vacuum_BB_MaxY"
-                  zmin="Vacuum_BB_MinZ" zmax="Vacuum_BB_MaxZ"
-      />
-      <rotation   theta="Beam_Theta"/>
-      <dimensions xL="Beam_WidthL" xR="Beam_WidthR" y="Beam_Height" z="Beam_Length"/>
+    <detector id="TaggerTracker_ID" name="BackwardsTaggerStation" type="BackwardsTagger" readout="TaggerTrackerHits">
 
-      <comment> Vacuum volume joining with lumi </comment>
-      <exitdim    x="Exit_Width"   y="Exit_Height"  lumiZ="LumiWin_Zstart" lumiR="LumiWin_R" maxTheta="Exit_Theta"/>
-
-      <comment> Tagger stations and extended vacuum volume </comment>
-      <module id="1"
-        name="Tagger1"
-        theta_min="Tagger1_Min_Theta"
-        max_align="false"
-        offset_min="Tagger1_Min_Offset"
-        extend_vacuum="true"
-        >
-        <dimensions x="Tagger1_Width/2" y="Tagger1_Height/2" z="Tagger1_Length"/>
-        <foilLayer   id="0" type="foil"    z="0*mm"   thickness="100*um" angle="70*deg"/>
+      <comment> Tagger stations </comment>
+      <module id="1" name="Tagger1">
+        <comment> Position and rotation refer to the center front of tagger assembly, this should line up with the back of the exit window </comment>
+        <position    x="Tagger1_X" y="Tagger1_Y" z="Tagger1_Z"/>
+        <rotation    x="0*deg" y="Tagger1_Theta+180*deg" z="0*deg"/>
+        
+        <dimensions  x="Tagger1_Width" y="Tagger1_Height"/>
+        
+        <comment> Where z is the position of the front face of the detector layer </comment>
         <trackLayer  id="0" type="timepix" z="3*mm"   sensor_thickness="400*um"/>
         <trackLayer  id="1" type="timepix" z="103*mm" sensor_thickness="400*um"/>
         <trackLayer  id="2" type="timepix" z="203*mm" sensor_thickness="400*um"/>
         <trackLayer  id="3" type="timepix" z="303*mm" sensor_thickness="400*um"/>
-        <windowLayer id="1" type="window"  z="0*mm"   thickness="2*mm" material="CarbonFiber"/>
       </module>
-      <module id="2"
-        name="Tagger2"
-        theta_min="Tagger2_Min_Theta"
-        theta_max="Tagger1_Min_Theta"
-        max_align="true"
-        offset_min="Tagger2_Min_Offset"
-        extend_vacuum="true"
-        overlap="Backwards_Box_Wall"
-        >
-        <dimensions x="Tagger2_Width/2" y="Tagger2_Height/2" z="Tagger2_Length"/>
-        <foilLayer   id="0" type="foil"    z="0*mm"   thickness="100*um" angle="70*deg"/>
+
+      <module id="2" name="Tagger2">      
+        <comment> Position and rotation refer to the center front of tagger assembly, this should line up with the back of the exit window </comment>
+        <position    x="Tagger2_X" y="Tagger2_Y" z="Tagger2_Z"/>
+        <rotation    x="0*deg" y="Tagger2_Theta+180*deg" z="0*deg"/>
+
+        <dimensions  x="Tagger2_Width" y="Tagger2_Height"/>
+
+        <comment> Where z is the position of the front face of the detector layer </comment>
         <trackLayer  id="0" type="timepix" z="3*mm"   sensor_thickness="400*um"/>
         <trackLayer  id="1" type="timepix" z="103*mm" sensor_thickness="400*um"/>
         <trackLayer  id="2" type="timepix" z="203*mm" sensor_thickness="400*um"/>
         <trackLayer  id="3" type="timepix" z="303*mm" sensor_thickness="400*um"/>
-        <windowLayer id="1" type="window"  z="0*mm"   thickness="2*mm" material="CarbonFiber"/>
       </module>
 
     </detector>
+
+    <comment> Add calorimeter here... </comment>
 
   </detectors>
 

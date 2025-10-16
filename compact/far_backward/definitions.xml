@@ -201,7 +201,7 @@
     <constant name="Timepix4height"       value="28.16*mm"/>
     <constant name="Timepix4width"        value="24.64*mm"/>
 
-    <comment> Tagger box and dimensions and positions </comment>
+    <comment> Tagger1 box and dimensions and positions </comment>
     <constant name="Tagger1_Width"        value="147.84*mm"/>
     <constant name="Tagger1_Height"       value="200*mm"/>
 
@@ -211,8 +211,19 @@
 
     <constant name="Tagger1_Min_Theta"    value="0.0262*rad"/>
     <constant name="Tagger1_Max_Theta"    value="0.0410*rad"/>
-    <constant name="Tagger1_Min_Offset"   value="Q3eR_InnerRadius"/>
+    <constant name="Tagger1_Min_Offset"   value="Q3eR_InnerRadius+Backwards_Box_Wall"/>
+    <constant name="Tagger1_Theta"        value="Tagger1_Min_Theta"/>
 
+    <comment> Tagger1 calculated constants, shared between vacuum and detector </comment>
+    <constant name="Tagger1_Vac_Offset_X" value="-0.5*Tagger1_Width*cos(Tagger1_Theta-Beam_Theta)"/>
+    <constant name="Tagger1_Vac_Offset_Z" value="0.5*Tagger1_Width*sin(Tagger1_Theta-Beam_Theta)"/>
+    <constant name="Tagger1_Vac_Length"   value="(Tagger1_Min_Offset)/sin(Tagger1_Theta-Beam_Theta)"/>
+
+    <constant name="Tagger1_X"            value="Dipole_Focus_X+Tagger1_Vac_Offset_X-Tagger1_Vac_Length*sin(Tagger1_Theta)"/>
+    <constant name="Tagger1_Y"            value="Dipole_Focus_Y"/>
+    <constant name="Tagger1_Z"            value="Dipole_Focus_Z+Tagger1_Vac_Offset_Z-Tagger1_Vac_Length*cos(Tagger1_Theta)"/>
+
+    <comment> Tagger2 box and dimensions and positions </comment>
     <constant name="Tagger2_Width"        value="147.84*mm"/>
     <constant name="Tagger2_Height"       value="150.0*mm"/>
 
@@ -221,8 +232,19 @@
     <constant name="Tagger2_Length"       value="Tag_Tracker_2_Depth"/>
 
     <constant name="Tagger2_Min_Theta"    value="0.02*rad"/>
-    <constant name="Tagger2_Max_Theta"    value="Tagger1_Min_Theta+0.000*rad"/>
+    <constant name="Tagger2_Max_Theta"    value="Tagger1_Min_Theta"/>
     <constant name="Tagger2_Min_Offset"   value="Q3eR_InnerRadius+Backwards_Box_Wall"/>
+
+    <constant name="Tagger2_Theta"        value="Tagger2_Max_Theta"/>
+
+    <comment> Tagger2 calculated constants, shared between vacuum and detector </comment>
+    <constant name="Tagger2_Vac_Offset_X" value="0.5*Tagger2_Width*cos(Tagger2_Theta-Beam_Theta)"/>
+    <constant name="Tagger2_Vac_Offset_Z" value="0.5*Tagger2_Width*sin(Tagger2_Theta-Beam_Theta)"/>
+    <constant name="Tagger2_Vac_Length"   value="(2*Tagger2_Vac_Offset_X+Tagger2_Min_Offset)/sin(Tagger2_Theta-Beam_Theta)"/>
+
+    <constant name="Tagger2_X"            value="Dipole_Focus_X+Tagger2_Vac_Offset_X-Tagger2_Vac_Length*sin(Tagger2_Theta)"/>
+    <constant name="Tagger2_Y"            value="Dipole_Focus_Y"/>
+    <constant name="Tagger2_Z"            value="Dipole_Focus_Z+Tagger2_Vac_Offset_Z-Tagger2_Vac_Length*cos(Tagger2_Theta)"/>
 
 
     <!--  -->
