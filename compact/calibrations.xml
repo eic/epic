@@ -66,7 +66,7 @@
     </plugin>
     <plugin name="epic_FileLoader">
       <arg value="cache:$DETECTOR_PATH:/opt/detector"/>
-      <arg value="file:calibrations/onnx/RP_60_xL_100_beamEnergy_41.xL.lut"/>
+      <arg value="file:calibrations/RP_60_xL_100_beamEnergy_41.xL.lut"/>
       <arg value="url:https://raw.githubusercontent.com/eic/epic-data/9675e7f8781afbe0a9255b133f46f857678d4e23/RP_60_xL_100_beamEnergy_41.xL.lut"/>
     </plugin>
    </plugins>
