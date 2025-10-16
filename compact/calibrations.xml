@@ -49,6 +49,26 @@
       <arg value="file:calibrations/onnx/EcalEndcapN_pi_rejection.onnx"/>
       <arg value="url:https://raw.githubusercontent.com/eic/epic-data/c6e3d56b5dfa2e9fa5998d38d7da20e837d89157/onnx/EcalEndcapN_pi_rejection.onnx"/>
     </plugin>
-  </plugins>
+    <plugin name="epic_FileLoader">
+      <arg value="cache:$DETECTOR_PATH:/opt/detector"/>
+      <arg value="file:calibrations/RP_60_xL_100_beamEnergy_100.xL.lut"/>
+      <arg value="url:https://raw.githubusercontent.com/eic/epic-data/e35b38b6f09214cec18999ce0bb220f10687733b/RP_60_xL_100_beamEnergy_100.xL.lut"/>
+    </plugin>
+    <plugin name="epic_FileLoader">
+      <arg value="cache:$DETECTOR_PATH:/opt/detector"/>
+      <arg value="file:calibrations/RP_60_xL_100_beamEnergy_130.xL.lut"/>
+      <arg value="url:https://raw.githubusercontent.com/eic/epic-data/e35b38b6f09214cec18999ce0bb220f10687733b/RP_60_xL_100_beamEnergy_130.xL.lut"/>
+    </plugin>
+    <plugin name="epic_FileLoader">
+      <arg value="cache:$DETECTOR_PATH:/opt/detector"/>
+      <arg value="file:calibrations/RP_60_xL_100_beamEnergy_275.xL.lut"/>
+      <arg value="url:https://raw.githubusercontent.com/eic/epic-data/e35b38b6f09214cec18999ce0bb220f10687733b/RP_60_xL_100_beamEnergy_275.xL.lut"/>
+    </plugin>
+    <plugin name="epic_FileLoader">
+      <arg value="cache:$DETECTOR_PATH:/opt/detector"/>
+      <arg value="file:calibrations/onnx/RP_60_xL_100_beamEnergy_41.xL.lut"/>
+      <arg value="url:https://raw.githubusercontent.com/eic/epic-data/9675e7f8781afbe0a9255b133f46f857678d4e23/RP_60_xL_100_beamEnergy_41.xL.lut"/>
+    </plugin>
+   </plugins>
 
 </lccdd>
