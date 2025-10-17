@@ -107,9 +107,10 @@ static Ref_t create_detector(Detector& desc, xml_h e, SensitiveDetector /* sens 
     xml_dim_t mod_pos_global = mod.child(_U(position));
     xml_dim_t mod_rot_global = mod.child(_U(rotation));
     Position mod_pos(mod_pos_global.x(), mod_pos_global.y(), mod_pos_global.z());
-    Position vac_pos(mod_pos_global.x()+wall*cos(mod_rot_global.theta()), mod_pos_global.y(), mod_pos_global.z()+wall*sin(mod_rot_global.theta()));
+    Position vac_pos(mod_pos_global.x() + wall * cos(mod_rot_global.theta()), mod_pos_global.y(),
+                     mod_pos_global.z() + wall * sin(mod_rot_global.theta()));
     RotationY mod_rot(mod_rot_global.theta() - rot.theta());
-    
+
     // Size f the actual tagger box, replicated in BackwardsTagger
     xml_dim_t moddim = mod.child(_Unicode(dimensions));
     double vac_w     = moddim.x() / 2;
@@ -123,7 +124,7 @@ static Ref_t create_detector(Detector& desc, xml_h e, SensitiveDetector /* sens 
     // auto l          = 100 * cm; // Length of the tagger box, arbitrary as long as > thickness of tagger
 
     Box TagWallBox(box_w, box_h, vac_l);
-    Box TagVacBox(vac_w+wall/2, vac_h, vac_l);
+    Box TagVacBox(vac_w + wall / 2, vac_h, vac_l);
 
     Wall_Box   = UnionSolid(Wall_Box, TagWallBox, Transform3D(mod_rot, mod_pos));
     Vacuum_Box = UnionSolid(Vacuum_Box, TagVacBox, Transform3D(mod_rot, vac_pos));
