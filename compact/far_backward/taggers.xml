@@ -18,9 +18,9 @@
         <comment> Position and rotation refer to the center front of tagger assembly, this should line up with the back of the exit window </comment>
         <position    x="Tagger1_X" y="Tagger1_Y" z="Tagger1_Z"/>
         <rotation    x="0*deg" y="Tagger1_Theta+180*deg" z="0*deg"/>
-        
+
         <dimensions  x="Tagger1_Width" y="Tagger1_Height"/>
-        
+
         <comment> Where z is the position of the front face of the detector layer </comment>
         <trackLayer  id="0" type="timepix" z="3*mm"   sensor_thickness="400*um"/>
         <trackLayer  id="1" type="timepix" z="103*mm" sensor_thickness="400*um"/>
@@ -28,7 +28,7 @@
         <trackLayer  id="3" type="timepix" z="303*mm" sensor_thickness="400*um"/>
       </module>
 
-      <module id="2" name="Tagger2">      
+      <module id="2" name="Tagger2">
         <comment> Position and rotation refer to the center front of tagger assembly, this should line up with the back of the exit window </comment>
         <position    x="Tagger2_X" y="Tagger2_Y" z="Tagger2_Z"/>
         <rotation    x="0*deg" y="Tagger2_Theta+180*deg" z="0*deg"/>

@@ -8,7 +8,7 @@
 #include "DDRec/Surface.h"
 
 //////////////////////////////////////////////////
-// Low Q2 tagger trackers 
+// Low Q2 tagger trackers
 //////////////////////////////////////////////////
 
 using namespace std;
@@ -34,12 +34,12 @@ static Ref_t create_detector(Detector& desc, xml_h e, SensitiveDetector sens) {
 
   // Add Tagger stations (modules) to the Assembly
   for (xml_coll_t mod(x_det, _Unicode(module)); mod; ++mod) {
-    int    moduleID   = dd4hep::getAttrOrDefault<int>(mod, _Unicode(id), 0);
+    int moduleID      = dd4hep::getAttrOrDefault<int>(mod, _Unicode(id), 0);
     string moduleName = dd4hep::getAttrOrDefault<std::string>(mod, _Unicode(name), "Tagger0");
 
     // Size of the actual tagger box, replicated in BackwardsTagger
-    xml_dim_t pos    = mod.child(_U(position));
-    xml_dim_t rot    = mod.child(_U(rotation));
+    xml_dim_t pos = mod.child(_U(position));
+    xml_dim_t rot = mod.child(_U(rotation));
 
     // Create a DetElement for the module
     DetElement moddet(det, moduleName, moduleID);
@@ -51,13 +51,14 @@ static Ref_t create_detector(Detector& desc, xml_h e, SensitiveDetector sens) {
     Make_Tagger(desc, mod, moduleAssembly, moddet, sens);
 
     // Place the module assembly into the taggerAssembly at the specified position/rotation
-    PlacedVolume pv_mod = taggerAssembly.placeVolume(moduleAssembly, Transform3D(RotationY(rot.y()), Position(pos.x(), pos.y(), pos.z())));
+    PlacedVolume pv_mod = taggerAssembly.placeVolume(
+        moduleAssembly, Transform3D(RotationY(rot.y()), Position(pos.x(), pos.y(), pos.z())));
     pv_mod.addPhysVolID("module", moduleID);
     moddet.setPlacement(pv_mod);
   }
 
   // Place the taggerAssembly into the mother volume
-  Volume motherVol = desc.pickMotherVolume(det);
+  Volume motherVol       = desc.pickMotherVolume(det);
   PlacedVolume pv_tagger = motherVol.placeVolume(taggerAssembly, Position(0, 0, 0));
   det.setPlacement(pv_tagger);
 
@@ -72,8 +73,8 @@ static void Make_Tagger(Detector& desc, xml_coll_t& mod, Assembly& env, DetEleme
   Material Silicon = desc.material("Silicon");
 
   xml_dim_t moddim = mod.child(_Unicode(dimensions));
-  double tag_w     = moddim.x()/2;
-  double tag_h     = moddim.y()/2;
+  double tag_w     = moddim.x() / 2;
+  double tag_h     = moddim.y() / 2;
 
   // Add Hodoscope layers
   int N_layers = 0;
@@ -81,9 +82,10 @@ static void Make_Tagger(Detector& desc, xml_coll_t& mod, Assembly& env, DetEleme
 
     int layerID      = dd4hep::getAttrOrDefault<int>(lay, _Unicode(id), 0);
     string layerType = dd4hep::getAttrOrDefault<std::string>(lay, _Unicode(type), "timepix");
-    string layerVis  = dd4hep::getAttrOrDefault<std::string>(lay, _Unicode(vis), "FFTrackerLayerVis");
-    double layerRot  = dd4hep::getAttrOrDefault<double>(lay, _Unicode(angle), 0);
-    double layerZ    = dd4hep::getAttrOrDefault<double>(lay, _Unicode(z), 0 * mm);
+    string layerVis =
+        dd4hep::getAttrOrDefault<std::string>(lay, _Unicode(vis), "FFTrackerLayerVis");
+    double layerRot = dd4hep::getAttrOrDefault<double>(lay, _Unicode(angle), 0);
+    double layerZ   = dd4hep::getAttrOrDefault<double>(lay, _Unicode(z), 0 * mm);
     double layerThickness =
         dd4hep::getAttrOrDefault<double>(lay, _Unicode(sensor_thickness), 200 * um);
 
@@ -94,8 +96,8 @@ static void Make_Tagger(Detector& desc, xml_coll_t& mod, Assembly& env, DetEleme
     layVol.setSensitiveDetector(sens);
     layVol.setVisAttributes(desc.visAttributes(layerVis));
 
-    PlacedVolume pv_layer = env.placeVolume(
-        layVol, Transform3D(rotate, Position(0, 0, layerZ - layerThickness / 2)));
+    PlacedVolume pv_layer =
+        env.placeVolume(layVol, Transform3D(rotate, Position(0, 0, layerZ - layerThickness / 2)));
     pv_layer.addPhysVolID("layer", layerID);
 
     DetElement laydet(modElement, "layerName" + std::to_string(layerID), layerID);
