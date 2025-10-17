@@ -107,13 +107,13 @@ static Ref_t create_detector(Detector& desc, xml_h e, SensitiveDetector /* sens 
     xml_dim_t mod_pos_global = mod.child(_U(position));
     xml_dim_t mod_rot_global = mod.child(_U(rotation));
     Position mod_pos(mod_pos_global.x(), mod_pos_global.y(), mod_pos_global.z());
-    RotationY mod_rot(mod_rot_global.theta()-rot.theta());
-    
+    RotationY mod_rot(mod_rot_global.theta() - rot.theta());
+
     // Size f the actual tagger box, replicated in BackwardsTagger
     xml_dim_t moddim = mod.child(_Unicode(dimensions));
-    double vac_w     = moddim.x()/2;
-    double vac_h     = moddim.y()/2;
-    double vac_l     = moddim.z()/2;
+    double vac_w     = moddim.x() / 2;
+    double vac_h     = moddim.y() / 2;
+    double vac_l     = moddim.z() / 2;
 
     // Width and height of box volume
     auto box_w = vac_w + wall;
@@ -124,15 +124,16 @@ static Ref_t create_detector(Detector& desc, xml_h e, SensitiveDetector /* sens 
     Box TagWallBox(box_w, box_h, vac_l);
     Box TagVacBox(vac_w, vac_h, vac_l);
 
-
-    Wall_Box = UnionSolid(Wall_Box, TagWallBox, Transform3D(mod_rot, mod_pos));
+    Wall_Box   = UnionSolid(Wall_Box, TagWallBox, Transform3D(mod_rot, mod_pos));
     Vacuum_Box = UnionSolid(Vacuum_Box, TagVacBox, Transform3D(mod_rot, mod_pos));
-
 
     Assembly TaggerAssembly("Tagger_module_assembly");
 
     PlacedVolume pv_mod2 = DetAssembly.placeVolume(
-        TaggerAssembly, Transform3D(mod_rot, mod_pos+Position(-vac_l*sin(mod_rot_global.theta()-rot.theta()),0,-vac_l*cos(mod_rot_global.theta()-rot.theta()))));
+        TaggerAssembly,
+        Transform3D(mod_rot,
+                    mod_pos + Position(-vac_l * sin(mod_rot_global.theta() - rot.theta()), 0,
+                                       -vac_l * cos(mod_rot_global.theta() - rot.theta()))));
     DetElement moddet(det, moduleName, moduleID);
     pv_mod2.addPhysVolID("module", moduleID);
     moddet.setPlacement(pv_mod2);
@@ -221,12 +222,11 @@ static Ref_t create_detector(Detector& desc, xml_h e, SensitiveDetector /* sens 
 static void Make_Tagger(Detector& desc, xml_coll_t& mod, Assembly& env) {
 
   xml_dim_t moddim = mod.child(_Unicode(dimensions));
-  double tag_w     = moddim.x()/2;
-  double tag_h     = moddim.y()/2;
-  double tag_l     = 0;//moddim.z()/2;
+  double tag_w     = moddim.x() / 2;
+  double tag_h     = moddim.y() / 2;
+  double tag_l     = 0; //moddim.z()/2;
 
-
-  double airThickness    = 0;
+  double airThickness = 0;
 
   // Add window layer and air-vacuum boxes
   for (xml_coll_t lay(mod, _Unicode(foilLayer)); lay; ++lay) {
@@ -271,7 +271,7 @@ static void Make_Tagger(Detector& desc, xml_coll_t& mod, Assembly& env) {
 
     RotationY rotate(layerRot);
 
-    airThickness    = tag_l - layerZ;
+    airThickness = tag_l - layerZ;
 
     Box Window_Box(tag_w, tag_h, layerThickness / 2);
     Volume layVol("WindowVolume", Window_Box, WindowMaterial);
@@ -282,7 +282,6 @@ static void Make_Tagger(Detector& desc, xml_coll_t& mod, Assembly& env) {
     // Currently only one "window" layer implemented
     break;
   }
-
 }
 
 DECLARE_DETELEMENT(FarBackwardVacuum, create_detector)

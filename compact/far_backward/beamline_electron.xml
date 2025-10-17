@@ -31,7 +31,7 @@
         <position    x="Tagger2_Vac_Offset_X" y="Tagger2_Y" z="Tagger2_Vac_Offset_Z"/>
         <rotation    theta="Tagger2_Theta"/>
         <dimensions  x="Tagger2_Width" y="Tagger2_Height" z="2*Tagger2_Vac_Length"/>
-        
+
         <foilLayer   id="0" type="foil"    z="0*mm"   thickness="100*um" angle="70*deg"/>
         <windowLayer id="1" type="window"  z="0*mm"   thickness="2*mm" material="CarbonFiber"/>
       </module>
