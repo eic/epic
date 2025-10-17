@@ -19,27 +19,19 @@
       <exitdim    x="Exit_Width"   y="Exit_Height"  lumiZ="LumiWin_Zstart" lumiR="LumiWin_R" maxTheta="Exit_Theta"/>
 
       <comment> Extended vacuum volume for taggers </comment>
-      <module id="1"
-        name="Tagger1"
-        theta_min="Tagger1_Min_Theta"
-        max_align="false"
-        offset_min="Tagger1_Min_Offset"
-        extend_vacuum="true"
-        >
-        <dimensions x="Tagger1_Width/2" y="Tagger1_Height/2" z="0"/>
+      <module id="1" name="Tagger1">
+        <position    x="Tagger1_Vac_Offset_X" y="Tagger1_Y" z="Tagger1_Vac_Offset_Z"/>
+        <rotation    theta="Tagger1_Theta"/>
+        <dimensions  x="Tagger1_Width" y="Tagger1_Height" z="2*Tagger1_Vac_Length"/>
+
         <foilLayer   id="0" type="foil"    z="0*mm"   thickness="100*um" angle="70*deg"/>
         <windowLayer id="1" type="window"  z="0*mm"   thickness="2*mm" material="CarbonFiber"/>
       </module>
-      <module id="2"
-        name="Tagger2"
-        theta_min="Tagger2_Min_Theta"
-        theta_max="Tagger1_Min_Theta"
-        max_align="true"
-        offset_min="Tagger2_Min_Offset"
-        extend_vacuum="true"
-        overlap="Backwards_Box_Wall"
-        >
-        <dimensions x="Tagger2_Width/2" y="Tagger2_Height/2" z="Tag_Tracker_2_Depth"/>
+      <module id="2" name="Tagger2">
+        <position    x="Tagger2_Vac_Offset_X" y="Tagger2_Y" z="Tagger2_Vac_Offset_Z"/>
+        <rotation    theta="Tagger2_Theta"/>
+        <dimensions  x="Tagger2_Width" y="Tagger2_Height" z="2*Tagger2_Vac_Length"/>
+        
         <foilLayer   id="0" type="foil"    z="0*mm"   thickness="100*um" angle="70*deg"/>
         <windowLayer id="1" type="window"  z="0*mm"   thickness="2*mm" material="CarbonFiber"/>
       </module>

@@ -215,8 +215,8 @@
     <constant name="Tagger1_Theta"        value="Tagger1_Min_Theta"/>
 
     <comment> Tagger1 calculated constants, shared between vacuum and detector </comment>
-    <constant name="Tagger1_Vac_Offset_X" value="-0.5*Tagger1_Width*cos(Tagger1_Theta-Beam_Theta)"/>
-    <constant name="Tagger1_Vac_Offset_Z" value="0.5*Tagger1_Width*sin(Tagger1_Theta-Beam_Theta)"/>
+    <constant name="Tagger1_Vac_Offset_X" value="(-0.5*Tagger1_Width-Backwards_Box_Wall)*cos(Tagger1_Theta-Beam_Theta)"/>
+    <constant name="Tagger1_Vac_Offset_Z" value="(0.5*Tagger1_Width+Backwards_Box_Wall)*sin(Tagger1_Theta-Beam_Theta)"/>
     <constant name="Tagger1_Vac_Length"   value="(Tagger1_Min_Offset)/sin(Tagger1_Theta-Beam_Theta)"/>
 
     <constant name="Tagger1_X"            value="Dipole_Focus_X+Tagger1_Vac_Offset_X-Tagger1_Vac_Length*sin(Tagger1_Theta)"/>

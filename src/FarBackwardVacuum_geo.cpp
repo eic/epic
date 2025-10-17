@@ -95,9 +95,6 @@ static Ref_t create_detector(Detector& desc, xml_h e, SensitiveDetector /* sens 
   Solid Vacuum_Box = Extended_Vacuum_Box;
 
   Assembly DetAssembly("Tagger_vacuum_assembly");
-  Assembly DetAssemblyAir("Tagger_air_assembly");
-  int nVacuum = 0;
-  int nAir    = 0;
 
   //-----------------------------------------------------------------
   // Add Tagger box containers and vacuum box extension for modules
@@ -107,78 +104,35 @@ static Ref_t create_detector(Detector& desc, xml_h e, SensitiveDetector /* sens 
     int moduleID      = dd4hep::getAttrOrDefault<int>(mod, _Unicode(id), 0);
     string moduleName = dd4hep::getAttrOrDefault<std::string>(mod, _Unicode(name), "Tagger0");
 
-    // Offset from the electron beam
-    double tagoff = dd4hep::getAttrOrDefault<double>(mod, _Unicode(offset_min), 50.0 * mm);
-
-    // Overlap left beyond theta setting
-    double overlap = dd4hep::getAttrOrDefault<double>(mod, _Unicode(overlap), 0.0 * mm);
-
-    // Theta coverage expected
-    double thetamin =
-        dd4hep::getAttrOrDefault<double>(mod, _Unicode(theta_min), 0.030 * rad) - rot.theta();
-    double thetamax =
-        dd4hep::getAttrOrDefault<double>(mod, _Unicode(theta_max), 0.030 * rad) - rot.theta();
-
-    // Align box to max or minimum theta expected at the tagger from focal point
-    bool max_align = dd4hep::getAttrOrDefault<bool>(mod, _Unicode(max_align), false);
-
-    // Extend the beam vacuum around the taggers
-    bool extend_vacuum = dd4hep::getAttrOrDefault<bool>(mod, _Unicode(extend_vacuum), true);
-
+    xml_dim_t mod_pos_global = mod.child(_U(position));
+    xml_dim_t mod_rot_global = mod.child(_U(rotation));
+    Position mod_pos(mod_pos_global.x(), mod_pos_global.y(), mod_pos_global.z());
+    RotationY mod_rot(mod_rot_global.theta()-rot.theta());
+    
     // Size f the actual tagger box, replicated in BackwardsTagger
     xml_dim_t moddim = mod.child(_Unicode(dimensions));
-    double vac_w     = moddim.x();
-    double vac_h     = moddim.y();
-    double tagboxL   = moddim.z();
+    double vac_w     = moddim.x()/2;
+    double vac_h     = moddim.y()/2;
+    double vac_l     = moddim.z()/2;
 
     // Width and height of box volume
     auto box_w = vac_w + wall;
     auto box_h = vac_h + wall;
 
-    // Angle in relation to the main beam
-    auto theta = thetamin;
+    // auto l          = 100 * cm; // Length of the tagger box, arbitrary as long as > thickness of tagger
 
-    auto vacoffsetx = -vac_w * (cos(theta));
-    auto vacoffsetz = vac_w * (sin(theta));
-    auto l          = (tagoff) / (sin(theta));
+    Box TagWallBox(box_w, box_h, vac_l);
+    Box TagVacBox(vac_w, vac_h, vac_l);
 
-    if (max_align) {
-      theta      = thetamax;
-      vacoffsetx = (overlap + vac_w) * (cos(theta));
-      vacoffsetz = -(overlap + vac_w) * (sin(theta));
-      l          = (2 * vacoffsetx + tagoff) / sin(theta) - tagboxL;
-    }
-    
-    auto tagoffsetx = vacoffsetx - (l)*sin(theta);
-    auto tagoffsetz = vacoffsetz - (l)*cos(theta);
 
-    Box TagWallBox(box_w, box_h, l);
-    Box TagVacBox(vac_w, vac_h, l);
+    Wall_Box = UnionSolid(Wall_Box, TagWallBox, Transform3D(mod_rot, mod_pos));
+    Vacuum_Box = UnionSolid(Vacuum_Box, TagVacBox, Transform3D(mod_rot, mod_pos));
 
-    RotationY rotate(theta);
-
-    Volume mother = DetAssemblyAir;
-
-    if (extend_vacuum) {
-      Wall_Box =
-          UnionSolid(Wall_Box, TagWallBox, Transform3D(rotate, Position(vacoffsetx, 0, vacoffsetz)));
-      Vacuum_Box = UnionSolid(Vacuum_Box, TagVacBox,
-                              Transform3D(rotate, Position(vacoffsetx, 0, vacoffsetz)));
-      mother     = DetAssembly;
-      nVacuum++;
-    } else {
-      nAir++;
-    }
 
     Assembly TaggerAssembly("Tagger_module_assembly");
 
-    PlacedVolume pv_mod2 = mother.placeVolume(
-        TaggerAssembly,
-        Transform3D(
-            rotate,
-            Position(
-                tagoffsetx, 0,
-                tagoffsetz))); // Very strange y is not centered and offset needs correcting for...
+    PlacedVolume pv_mod2 = DetAssembly.placeVolume(
+        TaggerAssembly, Transform3D(mod_rot, mod_pos+Position(-vac_l*sin(mod_rot_global.theta()-rot.theta()),0,-vac_l*cos(mod_rot_global.theta()-rot.theta()))));
     DetElement moddet(det, moduleName, moduleID);
     pv_mod2.addPhysVolID("module", moduleID);
     moddet.setPlacement(pv_mod2);
@@ -245,8 +199,7 @@ static Ref_t create_detector(Detector& desc, xml_h e, SensitiveDetector /* sens 
 
   Volume vacVol("TaggerStation_Vacuum", Vacuum_Box_Sub, Vacuum);
   vacVol.setVisAttributes(desc.visAttributes("BackwardsVac"));
-  if (nVacuum > 0)
-    vacVol.placeVolume(DetAssembly);
+  vacVol.placeVolume(DetAssembly);
 
   Volume wallVol("TaggerStation_Container", Wall_Box_Out, Steel);
   wallVol.setVisAttributes(desc.visAttributes(vis_name));
@@ -254,9 +207,6 @@ static Ref_t create_detector(Detector& desc, xml_h e, SensitiveDetector /* sens 
   Assembly backAssembly(detName + "_assembly");
   backAssembly.placeVolume(wallVol);
   backAssembly.placeVolume(vacVol);
-
-  if (nAir > 0)
-    backAssembly.placeVolume(DetAssemblyAir);
 
   // placement in mother volume
   Transform3D tr(RotationY(rot.theta()), Position(pos.x(), pos.y(), pos.z()));
@@ -270,15 +220,11 @@ static Ref_t create_detector(Detector& desc, xml_h e, SensitiveDetector /* sens 
 
 static void Make_Tagger(Detector& desc, xml_coll_t& mod, Assembly& env) {
 
-
-  Material Air     = desc.material("Air");
-
   xml_dim_t moddim = mod.child(_Unicode(dimensions));
-  double tag_w     = moddim.x();
-  double tag_h     = moddim.y();
-  double tagboxL   = moddim.z();
+  double tag_w     = moddim.x()/2;
+  double tag_h     = moddim.y()/2;
+  double tag_l     = 0;//moddim.z()/2;
 
-  Volume Tagger_Air;
 
   double airThickness    = 0;
 
@@ -288,7 +234,7 @@ static void Make_Tagger(Detector& desc, xml_coll_t& mod, Assembly& env) {
     string layerType = dd4hep::getAttrOrDefault<std::string>(lay, _Unicode(type), "foil");
     string layerVis =
         dd4hep::getAttrOrDefault<std::string>(lay, _Unicode(vis), "FFTrackerShieldingVis");
-    double layerZ   = dd4hep::getAttrOrDefault<double>(lay, _Unicode(z), 0 * mm);
+    // double layerZ   = dd4hep::getAttrOrDefault<double>(lay, _Unicode(z), 0 * mm);
     double layerRot = dd4hep::getAttrOrDefault<double>(lay, _Unicode(angle), 45 * deg);
     double layerThickness =
         dd4hep::getAttrOrDefault<double>(lay, _Unicode(sensor_thickness), 100 * um);
@@ -298,18 +244,12 @@ static void Make_Tagger(Detector& desc, xml_coll_t& mod, Assembly& env) {
 
     RotationY rotate(layerRot);
 
-    airThickness    = tagboxL - layerZ;
-
-    Box Box_Air(tag_w, tag_h, airThickness / 2);
-    Tagger_Air = Volume("AirVolume", Box_Air, Air);
-    Tagger_Air.setVisAttributes(desc.visAttributes("BackwardsAir"));
-
     Box Foil_Box(tag_w / cos(layerRot) - 0.5 * layerThickness * tan(layerRot), tag_h,
                  layerThickness / 2);
     Volume layVol("FoilVolume", Foil_Box, FoilMaterial);
     layVol.setVisAttributes(desc.visAttributes(layerVis));
 
-    env.placeVolume(layVol, Transform3D(rotate, Position(0, 0, tagboxL + tag_w * tan(layerRot))));
+    env.placeVolume(layVol, Transform3D(rotate, Position(0, 0, tag_l + tag_w * tan(layerRot))));
 
     // Currently only one "foil" layer implemented
     break;
@@ -331,19 +271,13 @@ static void Make_Tagger(Detector& desc, xml_coll_t& mod, Assembly& env) {
 
     RotationY rotate(layerRot);
 
-    airThickness    = tagboxL - layerZ;
-
-    Box Box_Air(tag_w, tag_h, airThickness / 2);
-    Tagger_Air = Volume("AirVolume", Box_Air, Air);
-    Tagger_Air.setVisAttributes(desc.visAttributes("BackwardsAir"));
+    airThickness    = tag_l - layerZ;
 
     Box Window_Box(tag_w, tag_h, layerThickness / 2);
     Volume layVol("WindowVolume", Window_Box, WindowMaterial);
     layVol.setVisAttributes(desc.visAttributes(layerVis));
 
-    Tagger_Air.placeVolume(layVol, Position(0, 0, airThickness / 2 + layerThickness / 2));
-
-    env.placeVolume(Tagger_Air, Position(0, 0, tagboxL - airThickness / 2));
+    env.placeVolume(layVol, Position(0, 0, airThickness / 2 + layerThickness / 2));
 
     // Currently only one "window" layer implemented
     break;

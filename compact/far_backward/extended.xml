@@ -4,6 +4,7 @@
 <lccdd>
 
   <include ref="magnets.xml"/>
+  <include ref="beamline_electron.xml"/>
   <include ref="beamline_extension_hadron.xml"/>
   <include ref="beamline_extension_electron.xml"/>
 
