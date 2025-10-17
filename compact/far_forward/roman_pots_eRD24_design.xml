@@ -55,7 +55,7 @@
         <!-- <constant name="ForwardRomanPot_ThermalStripMat" value="Copper"/>         -->
 
         <!-- Thicknesses -->
-        <constant name="ForwardRomanPot_RFShieldThickness"          value="1.0*mm"/> 
+        <constant name="ForwardRomanPot_RFShieldThickness"          value="1.0*mm"/>
         <!-- RF shielding commented out below until the need is understood and material/thickness chosen-->
         <constant name="ForwardRomanPot_LGADThickness"              value="0.3*mm"/>
         <constant name="ForwardRomanPot_ASICThickness"              value="0.3*mm"/>
