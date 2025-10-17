@@ -4,7 +4,7 @@
 <lccdd>
 
   <detectors>
-  
+
     <comment> Electron side beam pipe volumes </comment>
 
     <!-- Beam pipe going from Q1eR to B2BeR -->
