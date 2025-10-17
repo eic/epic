@@ -17,8 +17,8 @@
     <constant name="VertexBarrel_rmax"               value="13.0*cm"/>
 
     <comment> Main parameters for the SiBarrel layer geometry </comment>
-    <constant name="SiBarrel1_rmin"                  value="27.0*cm"/>
-    <constant name="SiBarrel2_rmin"                  value="42.0*cm"/>
+    <constant name="SiBarrel1_rmin"                  value="25.9*cm"/>
+    <constant name="SiBarrel2_rmin"                  value="41.4*cm"/>
     <constant name="SiBarrel_angle"                  value="TrackerPrimaryAngle"/>
     <constant name="SiBarrel_dz"                     value="2*cm"/>
 
@@ -60,7 +60,8 @@
     <constant name="ForwardTOF_zmin"              value="ForwardTOFRegion_zmin + ForwardTOFRegion_length - ForwardTOF_length - 1*cm"/>
 
     <comment> Service/Support setup </comment>
-    <constant name="TrackerSupportCyl_rmin1"          value="TrackerEndcapDisk_rmax + 2*cm"/> <comment> Ref: Services Material Budget 24.03.04..stp -- 450.00 mm </comment>
+    <constant name="PST_support_tube_rmin"   value=" 535*mm"/>
+    <constant name="TrackerSupportCyl_rmin1"          value="PST_support_tube_rmin"/> <comment> Ref:  SVT PST Drawing PACKET SEP 2025.pdf</comment>
     <constant name="TrackerSupportCylEndcapN_rmin2"   value="BackwardPIDRegion_rmax + 4.5*cm"/> <comment> Ref: Services Material Budget 24.03.13.stp -- 670.00 mm, nudged 5 mm </comment>
     <constant name="TrackerSupportCylEndcapP_rmin2"   value="ForwardTOFRegion_maxR + 2*cm"/> <comment> Ref: Services Material Budget 24.03.04..stp -- 520.00 mm </comment>
     <comment> These may belong in definitions.xml </comment>
@@ -137,48 +138,58 @@
       <composite name="InnerTrackerEndcapP"/>
     </detector>
     <detector id="TrackerSubAssembly_1_ID"
-      name="MiddleSiTrackerSubAssembly"
+      name="MiddleSiBarrelrSubAssembly"
+      type="DD4hep_SubdetectorAssembly"
+      vis="TrackerSubAssemblyVis">
+      <composite name="SagittaSiBarrel"/>
+    </detector>
+      <detector id="TrackerSubAssembly_1_ID"
+      name="OuterSiBarrelrSubAssembly"
+      type="DD4hep_SubdetectorAssembly"
+      vis="TrackerSubAssemblyVis">
+      <composite name="OuterSiBarrel"/>
+    </detector>
+    <detector id="TrackerSubAssembly_2_ID"
+      name="MiddleSiEndcapSubAssembly"
       type="DD4hep_SubdetectorAssembly"
       vis="TrackerSubAssemblyVis">
       <composite name="MiddleTrackerEndcapN"/>
-      <composite name="SagittaSiBarrel"/>
       <composite name="MiddleTrackerEndcapP"/>
     </detector>
-    <detector id="TrackerSubAssembly_2_ID"
-      name="OuterSiTrackerSubAssembly"
+    <detector id="TrackerSubAssembly_3_ID"
+      name="OuterSiEndcapSubAssembly"
       type="DD4hep_SubdetectorAssembly"
       vis="TrackerSubAssemblyVis">
       <composite name="OuterTrackerEndcapN"/>
-      <composite name="OuterSiBarrel"/>
       <composite name="OuterTrackerEndcapP"/>
     </detector>
-    <detector id="TrackerSubAssembly_3_ID"
+    <detector id="TrackerSubAssembly_4_ID"
       name="EndcapMPGDSubAssembly"
       type="DD4hep_SubdetectorAssembly"
       vis="TrackerSubAssemblyVis">
       <composite name="BackwardMPGD"/>
       <composite name="ForwardMPGD"/>
     </detector>
-    <detector id="TrackerSubAssembly_4_ID"
+    <detector id="TrackerSubAssembly_5_ID"
       name="InnerMPGDBarrelSubAssembly"
       type="DD4hep_SubdetectorAssembly"
       vis="TrackerSubAssemblyVis">
       <composite name="InnerMPGDBarrel"/>
     </detector>
-    <detector id="TrackerSubAssembly_5_ID"
+    <detector id="TrackerSubAssembly_6_ID"
       name="EndcapTOFSubAssembly"
       type="DD4hep_SubdetectorAssembly"
       vis="TrackerSubAssemblyVis">
       <composite name="BackwardTOF"/>
       <composite name="ForwardTOF"/>
     </detector>
-    <detector id="TrackerSubAssembly_6_ID"
+    <detector id="TrackerSubAssembly_7_ID"
       name="BarrelTOFSubAssembly"
       type="DD4hep_SubdetectorAssembly"
       vis="TrackerSubAssemblyVis">
       <composite name="BarrelTOF"/>
     </detector>
-    <detector id="TrackerSubAssembly_7_ID"
+    <detector id="TrackerSubAssembly_8_ID"
       name="OuterBarrelMPGDSubAssembly"
       type="DD4hep_SubdetectorAssembly"
       vis="TrackerSubAssemblyVis">
@@ -201,7 +212,7 @@
     <plugin name="epic_FileLoader">
       <arg value="cache:$DETECTOR_PATH:/opt/detector"/>
       <arg value="file:calibrations/materials-map.cbor"/>
-      <arg value="url:https://eicweb.phy.anl.gov/-/project/473/uploads/f175e13500b2708877522736da0127a1/material-map.cbor"/>
+      <arg value="url:https://eicweb.phy.anl.gov/-/project/473/uploads/f892256ac21a4ff1151acca260f8913b/material-map.cbor"/>
     </plugin>
   </plugins>
 
