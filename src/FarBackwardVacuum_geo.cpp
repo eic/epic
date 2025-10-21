@@ -240,7 +240,7 @@ static void Make_Tagger(Detector& desc, xml_coll_t& mod, Assembly& env) {
     double layerThickness =
         dd4hep::getAttrOrDefault<double>(lay, _Unicode(sensor_thickness), 1 * mm);
     string layerMaterial = dd4hep::getAttrOrDefault<std::string>(lay, _Unicode(material), "Copper");
-    
+
     window_thickness = layerThickness;
 
     Material WindowMaterial = desc.material(layerMaterial);
@@ -278,12 +278,12 @@ static void Make_Tagger(Detector& desc, xml_coll_t& mod, Assembly& env) {
     Volume layVol("FoilVolume", Foil_Box, FoilMaterial);
     layVol.setVisAttributes(desc.visAttributes(layerVis));
 
-    env.placeVolume(layVol, Transform3D(rotate, Position(0, 0, window_thickness+tag_w * tan(layerRot))));
+    env.placeVolume(layVol,
+                    Transform3D(rotate, Position(0, 0, window_thickness + tag_w * tan(layerRot))));
 
     // Currently only one "foil" layer implemented
     break;
   }
-
 }
 
 DECLARE_DETELEMENT(FarBackwardVacuum, create_detector)
