@@ -227,9 +227,35 @@ static void Make_Tagger(Detector& desc, xml_coll_t& mod, Assembly& env) {
   xml_dim_t moddim = mod.child(_Unicode(dimensions));
   double tag_w     = moddim.x() / 2;
   double tag_h     = moddim.y() / 2;
-  double tag_l     = 0; //moddim.z()/2;
 
-  double airThickness = 0;
+  double window_thickness = 0;
+
+  // Add window layer and air-vacuum boxes
+  for (xml_coll_t lay(mod, _Unicode(windowLayer)); lay; ++lay) {
+
+    string layerType = dd4hep::getAttrOrDefault<std::string>(lay, _Unicode(type), "window");
+    string layerVis =
+        dd4hep::getAttrOrDefault<std::string>(lay, _Unicode(vis), "FFTrackerShieldingVis");
+    double layerRot = dd4hep::getAttrOrDefault<double>(lay, _Unicode(angle), 0);
+    double layerThickness =
+        dd4hep::getAttrOrDefault<double>(lay, _Unicode(sensor_thickness), 1 * mm);
+    string layerMaterial = dd4hep::getAttrOrDefault<std::string>(lay, _Unicode(material), "Copper");
+    
+    window_thickness = layerThickness;
+
+    Material WindowMaterial = desc.material(layerMaterial);
+
+    RotationY rotate(layerRot);
+
+    Box Window_Box(tag_w, tag_h, layerThickness / 2);
+    Volume layVol("WindowVolume", Window_Box, WindowMaterial);
+    layVol.setVisAttributes(desc.visAttributes(layerVis));
+
+    env.placeVolume(layVol, Position(0, 0, layerThickness / 2));
+
+    // Currently only one "window" layer implemented
+    break;
+  }
 
   // Add window layer and air-vacuum boxes
   for (xml_coll_t lay(mod, _Unicode(foilLayer)); lay; ++lay) {
@@ -252,39 +278,12 @@ static void Make_Tagger(Detector& desc, xml_coll_t& mod, Assembly& env) {
     Volume layVol("FoilVolume", Foil_Box, FoilMaterial);
     layVol.setVisAttributes(desc.visAttributes(layerVis));
 
-    env.placeVolume(layVol, Transform3D(rotate, Position(0, 0, tag_l + tag_w * tan(layerRot))));
+    env.placeVolume(layVol, Transform3D(rotate, Position(0, 0, window_thickness+tag_w * tan(layerRot))));
 
     // Currently only one "foil" layer implemented
     break;
   }
 
-  // Add window layer and air-vacuum boxes
-  for (xml_coll_t lay(mod, _Unicode(windowLayer)); lay; ++lay) {
-
-    string layerType = dd4hep::getAttrOrDefault<std::string>(lay, _Unicode(type), "window");
-    string layerVis =
-        dd4hep::getAttrOrDefault<std::string>(lay, _Unicode(vis), "FFTrackerShieldingVis");
-    double layerZ   = dd4hep::getAttrOrDefault<double>(lay, _Unicode(z), 0 * mm);
-    double layerRot = dd4hep::getAttrOrDefault<double>(lay, _Unicode(angle), 0);
-    double layerThickness =
-        dd4hep::getAttrOrDefault<double>(lay, _Unicode(sensor_thickness), 1 * mm);
-    string layerMaterial = dd4hep::getAttrOrDefault<std::string>(lay, _Unicode(material), "Copper");
-
-    Material WindowMaterial = desc.material(layerMaterial);
-
-    RotationY rotate(layerRot);
-
-    airThickness = tag_l - layerZ;
-
-    Box Window_Box(tag_w, tag_h, layerThickness / 2);
-    Volume layVol("WindowVolume", Window_Box, WindowMaterial);
-    layVol.setVisAttributes(desc.visAttributes(layerVis));
-
-    env.placeVolume(layVol, Position(0, 0, airThickness / 2 + layerThickness / 2));
-
-    // Currently only one "window" layer implemented
-    break;
-  }
 }
 
 DECLARE_DETELEMENT(FarBackwardVacuum, create_detector)
