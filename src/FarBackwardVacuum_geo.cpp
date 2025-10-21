@@ -107,8 +107,8 @@ static Ref_t create_detector(Detector& desc, xml_h e, SensitiveDetector /* sens 
     xml_dim_t mod_pos_global = mod.child(_U(position));
     xml_dim_t mod_rot_global = mod.child(_U(rotation));
     Position mod_pos(mod_pos_global.x(), mod_pos_global.y(), mod_pos_global.z());
-    Position vac_pos(mod_pos_global.x() + wall * cos(mod_rot_global.theta()), mod_pos_global.y(),
-                     mod_pos_global.z() + wall * sin(mod_rot_global.theta()));
+    Position vac_pos(mod_pos_global.x() + wall/2 * cos(mod_rot_global.theta()), mod_pos_global.y(),
+                     mod_pos_global.z() + wall/2 * sin(mod_rot_global.theta()));
     RotationY mod_rot(mod_rot_global.theta() - rot.theta());
 
     // Size f the actual tagger box, replicated in BackwardsTagger
