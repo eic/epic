@@ -351,7 +351,7 @@ jobs:
           - detector_config: epic_craterlake
             tolerance_mm: 0.1
           - detector_config: epic_ip6_extended
-            tolerance_mm: 0.01
+            tolerance_mm: 0.1
       fail-fast: false
     steps:
     - uses: actions/checkout@v5

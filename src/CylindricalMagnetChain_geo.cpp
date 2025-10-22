@@ -42,7 +42,9 @@ static Ref_t create_magnet(Detector& description, xml_h e, SensitiveDetector /* 
     double rout   = getAttrOrDefault<double>(magnet, _Unicode(rout), 0);
 
     // -- yoke
-    Tube yoke_tube(rin, rout, 0.5 * length);
+    // Factor of 1.01 is to avoid overlap with small bends before/after the main inner tube
+    // The magnets here are placeholders and may be replaced with more detailed geometries later
+    Tube yoke_tube(rin*1.01, rout, 0.5 * length);
     Volume v_yoke("v_yoke_" + name, yoke_tube, m_Iron);
 
     v_yoke.setVisAttributes(description.visAttributes(vis_name));
