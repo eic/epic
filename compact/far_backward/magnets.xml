@@ -545,7 +545,7 @@
     <field name="Magnet_B2BeR_Field" type="MultipoleMagnet">
       <shape type="Tube" rmax="B2BeR_InnerRadius" dz="B2BeR_Length/2"/>
       <position x="0" y="0" z="B2BeR_CenterPosition"/>
-      <coefficient coefficient="B2BeR_B"/>
+      <coefficient coefficient="1.1*B2BeR_B"/>
     </field>
 
   </fields>
