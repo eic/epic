@@ -14,21 +14,38 @@
 #include <XML/Layering.h>
 #include "forwardEcalMap.h"
 
+double xBlock(int ns, int row, int col) {
+  if (row >= 18 && row <= 20) {
+    return (1 - 2 * ns) * (mOffsetX[ns] + mOffsetXBeamPipe[ns] +
+			   (mBlockSize + mSpaceBetweenBlock) * (col + 0.5));
+  } else {
+    return (1 - 2 * ns) * (mOffsetX[ns] + (mBlockSize + mSpaceBetweenBlock) * (col + 0.5));
+  }
+}
+
+double yBlock(int ns, int row) {
+  return mOffsetY[ns] + (mBlockSize + mSpaceBetweenBlock) * (mMaxRowBlock / 2.0 - row - 0.5);
+}
+
 using namespace dd4hep;
 
 static Ref_t createDetector(Detector& desc, xml_h handle, SensitiveDetector sens) {
 
-  forwardEcalMap* map = new forwardEcalMap();
-  double blocksize    = map->blockSize();          // X,Y size of block
-  double blockgap     = map->spaceBetweenBlock();  // Gap between blocks
+  //forwardEcalMap* map = new forwardEcalMap();
+  //double blocksize    = map->blockSize();          // X,Y size of block
+  //double blockgap     = map->spaceBetweenBlock();  // Gap between blocks
+  double blocksize    = mBlockSize;
+  double blockgap     = mSpaceBetweenBlock;
   double nsgap        = mOffsetX[0] + mOffsetX[1]; // North-South gap
   double rmin         = 0.0;                // Dummy variable. Set to 0 since cutting out insert
   double rmax         = 81 * 2.54;          // Max radius of endcap
   double rmaxWithGap  = rmax + nsgap / 2.0; // Max radius with NS gap included
-  double zmax         = map->backPlateZ();  // Face of back plate fEcal mount to = Hcal start z
+  //double zmax       = map->backPlateZ();  // Face of back plate fEcal mount to = Hcal start z
+  double zmax         = mBackPlateZ;        // Face of back plate fEcal mount to = Hcal start z
   double length       = 27.0;               // Total length
   double zmin         = zmax - length;      // minimum z where detector starts
-  double insert_dx[2] = {map->offsetXBeamPipe(0), map->offsetXBeamPipe(1)};
+  //double insert_dx[2] = {map->offsetXBeamPipe(0), map->offsetXBeamPipe(1)};
+  double insert_dx[2] = {mOffsetXBeamPipe[0], mOffsetXBeamPipe[1]};
   // Insert x width for north and south halves
   double insert_dy        = 30.05;       // Insert y height
   double insert_dz        = 27.0;        // Insert (=Al beam pipe protector) z depth
@@ -212,17 +229,22 @@ static Ref_t createDetector(Detector& desc, xml_h handle, SensitiveDetector sens
         } //end if Homogeneous_Scfi==2
 
         //rows of blocks
-        int nRowBlock = map->maxRowBlock(); //# of rows
+        //int nRowBlock = map->maxRowBlock(); //# of rows
+	int nRowBlock = mMaxRowBlock;
         for (int r = 0; r < nRowBlock; r++) {
-          int nColBlock = map->nColBlock(ns, r);
+          //int nColBlock = map->nColBlock(ns, r);
+	  int nColBlock = mNColBlock[ns][r];
           double dxrow  = bsize * nColBlock;
           Box row(dxrow / 2.0, bsize / 2.0, slice_thickness / 2.0);
           std::string row_name = half_name + _toString(r, "_R%02d");
           Volume row_vol(row_name, row, air);
           row_vol.setAttributes(desc, x_slice.regionStr(), x_slice.limitsStr(), x_slice.visStr());
-          double xrow = (map->xBlock(ns, r, 0) + map->xBlock(ns, r, nColBlock - 1)) / 2.0 -
+          //double xrow = (map->xBlock(ns, r, 0) + map->xBlock(ns, r, nColBlock - 1)) / 2.0 -
+          //              pm[ns] * nsgap / 2.0;
+          //double yrow = map->yBlock(ns, r);
+          double xrow = (xBlock(ns, r, 0) + xBlock(ns, r, nColBlock - 1)) / 2.0 -
                         pm[ns] * nsgap / 2.0;
-          double yrow = map->yBlock(ns, r);
+          double yrow = yBlock(ns, r);
           pv          = half_vol.placeVolume(row_vol,
                                              Transform3D(RotationZYX(0, 0, 0), Position(xrow, yrow, 0)));
           pv.addPhysVolID("blockrow", r);
