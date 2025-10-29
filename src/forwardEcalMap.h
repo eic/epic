@@ -38,4 +38,3 @@ static const double mOffsetZ[mMaxNS] = {mBackPlateZ - mBlockLength, mBackPlateZ 
 //z position of front face of detector
 static const double mOffsetXBeamPipe[mMaxNS] = {
     7.5, 20.05}; //3 rows at beamline height is shifted, also = insert width
-
