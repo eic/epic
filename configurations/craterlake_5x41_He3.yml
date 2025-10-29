@@ -1,5 +1,5 @@
 ebeam: 5
-pbeam: 41
+pbeam: 41_He3
 features:
   beampipe:
   tracking:
@@ -20,7 +20,8 @@ features:
     pfrich:
     drich:
   ecal:
-    forward_averaged_homogeneous:
+    forward_homogeneous:
+    forward_insert_homogeneous:
     bic_default:
     backward_PbWO4:
   solenoid:
@@ -28,6 +29,8 @@ features:
     lfhcal:
     forward_insert:
     barrel_gdml:
+    barrel_flux_return:
+    forward_endcap_flux:
     backward:
     backward_endcap_flux:
   far_forward:
