@@ -110,6 +110,21 @@
     <constant name="TrackerSupportCylN_thickness1B"        value="TrackerSupportCylAlN_thickness1B + TrackerSupportCylCF_thickness1" />
     <constant name="TrackerSupportCylN_thickness1C"        value="TrackerSupportCylAlN_thickness1C + TrackerSupportCylCF_thickness1" />
 
+    <comment> Servives Routing Flange (WIP) for SVT : 1 Cylinder + 1 Cone </comment>
+    <comment> Cylinder dimensions </comment>
+    <constant name="SupportRoutingFlangeCyl_length"        value="49.46*mm"/> <comment> From SVT PST Drawing PACKET SEP 2025.pdf </comment> 
+    <constant name="SupportRoutingFlangeCyl_zmax"          value="-TrackerSupportCylEndcapN_zmax1C"/>
+    <constant name="SupportRoutingFlangeCyl_zmin"          value="SupportRoutingFlangeCyl_zmax+SupportRoutingFlangeCyl_length"/>
+    <constant name="SupportRoutingFlangeCyl_zcenter"       value="0.5*(SupportRoutingFlangeCyl_zmax+SupportRoutingFlangeCyl_zmin)"/>
+    <constant name="SupportRoutingFlangeCyl_rmin1"         value="PST_support_tube_rmin+InnerSupportConeCF_thickness+0.1*mm"/>
+    <comment> Cone dimensions </comment>
+    <constant name="SupportRoutingFlangeCone_length"       value="136.6*mm-SupportRoutingFlangeCyl_length"/> <comment> From SVT PST Drawing PACKET SEP 2025.pdf </comment> 
+    <constant name="SupportRoutingFlangeCone_zmin"         value="SupportRoutingFlangeCyl_zmax"/>
+    <constant name="SupportRoutingFlangeCone_zmax"         value="SupportRoutingFlangeCone_zmin-SupportRoutingFlangeCone_length"/>
+    <constant name="SupportRoutingFlangeCone_zcenter"      value="0.5*(SupportRoutingFlangeCone_zmax+SupportRoutingFlangeCone_zmin)"/>
+    <constant name="SupportRoutingFlangeCone_rmin1"        value="SupportRoutingFlangeCyl_rmin1"/>
+    <constant name="SupportRoutingFlangeCone_rmin2"        value="588.83*mm"/> <comment> From SVT PST Drawing PACKET SEP 2025.pdf </comment>
+    <!-- .qq -->
 
     <comment> Outer tracker service/support cones, asymmetric </comment>
     <constant name="OuterSupportConeCF_thickness"          value="2.0*mm" />
@@ -324,6 +339,26 @@
       id="TrackerSupport_0_ID"
     >
 
+      <support type="Cylinder"
+        name="SupportRoutingFlangeCyl"
+        vis="TrackerSupportVis"
+        rmin="SupportRoutingFlangeCyl_rmin1"
+        length="SupportRoutingFlangeCyl_length"
+        thickness="InnerSupportConeCF_thickness">
+          <position x="0*cm" y="0*cm" z="SupportRoutingFlangeCyl_zcenter" />
+          <component material="CarbonFiber" thickness="InnerSupportConeCF_thickness" name="Support" vis="TrackerSupportVis"/>
+      </support>
+      <support type="Cone"
+        name="SupportRoutingFlangeCone"
+        vis="TrackerSupportVis"
+        rmin1="SupportRoutingFlangeCone_rmin2"
+        rmin2="SupportRoutingFlangeCone_rmin1"
+        length="SupportRoutingFlangeCone_length"
+        thickness="InnerSupportConeCF_thickness"> 
+          <position x="0*cm" y="0*cm" z="SupportRoutingFlangeCone_zcenter" />
+          <component material="CarbonFiber" thickness="InnerSupportConeCF_thickness" name="Support" vis="TrackerSupportVis"/>
+      </support>
+
       <support type="Cone"
         name="InnerSupportConeEndcapN"
         vis="TrackerSupportVis"
@@ -420,7 +455,7 @@
           <component material="CarbonFiber" thickness="TrackerSupportCylCF_thickness1" name="Support" vis="TrackerSupportVis"/>
       </support>
 
-      <support type="Cone"
+      <!-- <support type="Cone"
         name="OuterSupportConeEndcapN"
         vis="TrackerSupportVis"
         rmin1="OuterSupportConeN_rmin2"
@@ -431,8 +466,8 @@
           <position x="0*cm" y="0*cm" z="-OuterSupportConeN_z" />
           <component material="Aluminum" thickness="OuterSupportConeNAl_thickness" name="Services" vis="TrackerServiceVis" />
           <component material="CarbonFiber" thickness="OuterSupportConeCF_thickness" name="Support" vis="TrackerSupportVis"/>
-      </support>
-      <support type="Cone"
+      </support> -->
+      <!-- <support type="Cone"
         name="OuterSupportConeEndcapP"
         vis="TrackerSupportVis"
         rmin1="OuterSupportConeP_rmin1"
@@ -442,7 +477,7 @@
           <position x="0*cm" y="0*cm" z="OuterSupportConeP_z" />
           <component material="Aluminum" thickness="OuterSupportConePAl_thickness" name="Services" vis="TrackerServiceVis" />
           <component material="CarbonFiber" thickness="OuterSupportConeCF_thickness" name="Support" vis="TrackerSupportVis"/>
-      </support>
+      </support> -->
 
       <comment> outer barrel </comment>
       <support type="Cylinder"
