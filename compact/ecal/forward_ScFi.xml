@@ -76,7 +76,7 @@
     <readout name="EcalEndcapPHits">
       <!-- <segmentation type="NoSegmentation"/> -->  <!-- Adding this slow down startup to >30min -->
       <segmentation type="CartesianGridXY" grid_size_x="10*cm" grid_size_y="10*cm" offset_x="-0.0*cm" offset_y="-0.0*cm"/>
-      <id>system:8,northsouth:1,blockrow:6,blockcol:5,towerx:2,towery:2,fiberx:5,fibery:5,x:1,y:1</id>
+      <id>system:8,northsouth:1,blockrow:6,blockcol:5,tower_x:2,tower_y:2,fiber_x:5,fiber_y:5,x:1,y:1</id>
     </readout>
   </readouts>
 

@@ -166,7 +166,7 @@ static Ref_t createDetector(Detector& desc, xml_h handle, SensitiveDetector sens
             pv = block_vol.placeVolume(
                 trow_vol,
                 Transform3D(RotationZYX(0, 0, 0), Position(0.0, (tr - 1.5) * blocksize / 4, 0)));
-            pv.addPhysVolID("towery", tr);
+            pv.addPhysVolID("tower_y", tr);
           }
 
           //4 towers in a row - finally a W powder volume, not air
@@ -177,7 +177,7 @@ static Ref_t createDetector(Detector& desc, xml_h handle, SensitiveDetector sens
             pv = trow_vol.placeVolume(
                 tower_vol,
                 Transform3D(RotationZYX(0, 0, 0), Position((tc - 1.5) * blocksize / 4, 0, 0)));
-            pv.addPhysVolID("towerx", tc);
+            pv.addPhysVolID("tower_x", tc);
           }
 
           //rows of fibers
@@ -196,7 +196,7 @@ static Ref_t createDetector(Detector& desc, xml_h handle, SensitiveDetector sens
                 Transform3D(RotationZYX(0, 0, 0),
                             Position(xx, (iy - ny / 2.0 + 0.5) * blocksize / 4.0 / ny, 0)));
             //printf("iy=%2d dy=%8.4f fiberRx2=%8.4f xx=%8.4f\n",iy,blocksize/4.0/ny,rFiber*2,xx);
-            pv.addPhysVolID("fibery", iy);
+            pv.addPhysVolID("fiber_y", iy);
           }
 
           //columns of fibers, with 1/2 fiber distance shifted each row
@@ -208,7 +208,7 @@ static Ref_t createDetector(Detector& desc, xml_h handle, SensitiveDetector sens
             pv        = frow_vol.placeVolume(fcol_vol,
                                              Transform3D(RotationZYX(0, 0, 0), Position(xx, 0, 0)));
             //printf("ix=%2d dx=%8.4f xx=%8.4f x0=%8.4f x1=%8.4f\n",ix,fiberDistanceX,xx,xx-fiberDistanceX/2,xx+fiberDistanceX/2);
-            pv.addPhysVolID("fiberx", ix);
+            pv.addPhysVolID("fiber_x", ix);
           }
 
           //a fiber (with coating material, not sensitive yet)
