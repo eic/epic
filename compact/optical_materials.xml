@@ -530,6 +530,7 @@
       The mirror reflectivity data, expressed as a function of wavelength, was added as a matrix on 11/02/2025.
       Mirror Coating Information:
       Coating Batch 53 includes six mirrors coated with 5.04 kA of chromium (Cr) and 20.22 kA of aluminum (Al).
+      53_purdue_1 data was shown.
     </comment>
 
     <matrix name = "REFLECTIVITY_PFRICH_mirror" coldim="2" values="
