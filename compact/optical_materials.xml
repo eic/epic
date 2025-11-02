@@ -523,6 +523,58 @@
       3.99949*eV  0.927
       4.13281*eV  0.9215
       "/>
+
+    <comment>
+      The best mirror reflectivity result from the pfRICH mirror project so far is provided here.
+      This result may be useful for future pfRICH simulation studies.
+      The mirror reflectivity data, expressed as a function of wavelength, was added as a matrix on 11/02/2025.
+      Mirror Coating Information:
+      Coating Batch 53 includes six mirrors coated with 5.04 kA of chromium (Cr) and 20.22 kA of aluminum (Al).
+    </comment>
+
+    <matrix name = "REFLECTIVITY_PFRICH_mirror" coldim="2" values="
+      207.5*nm  0.89098
+      222.5*nm  0.877347
+      237.5*nm  0.868242
+      252.5*nm  0.871153
+      267.5*nm  0.878631
+      282.5*nm  0.885751
+      297.5*nm  0.88786
+      312.5*nm  0.894157
+      327.5*nm  0.895331
+      342.5*nm  0.898498
+      357.5*nm  0.903268
+      372.5*nm  0.908119
+      387.5*nm  0.905915
+      402.5*nm  0.90662
+      417.5*nm  0.904206
+      432.5*nm  0.906525
+      447.5*nm  0.90527
+      462.5*nm  0.905159
+      477.5*nm  0.904196
+      492.5*nm  0.907093
+      507.5*nm  0.905641
+      522.5*nm  0.903252
+      537.5*nm  0.905889
+      552.5*nm  0.901025
+      567.5*nm  0.90091
+      582.5*nm  0.902174
+      597.5*nm  0.903194
+      612.5*nm  0.898724
+      627.5*nm  0.895776
+      642.5*nm  0.897481
+      657.5*nm  0.896123
+      672.5*nm  0.891675
+      687.5*nm  0.891897
+      702.5*nm  0.884201
+      717.5*nm  0.881216
+      732.5*nm  0.876046
+      747.5*nm  0.872974
+      762.5*nm  0.870306
+      777.5*nm  0.86943
+      792.5*nm  0.858807
+      "/>
+
     <matrix name="RINDEX__Aerogel" coldim="2" values="
       1.0*eV 1.030
       4.0*eV 1.030
