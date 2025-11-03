@@ -12,7 +12,7 @@
     <plugin name="epic_FileLoader">
       <arg value="cache:$DETECTOR_PATH:/opt/detector"/>
       <arg value="file:calibrations/onnx/Low-Q2_Steering_Reconstruction.onnx"/>
-      <arg value="url:root://dtn-eic.jlab.org//volatile/eic/EPIC/xrdtest/CALIB/2025/5a202b05d865214e3c399883ee13859318044678f87d7b3d9fa8ff526b4909b6/Low-Q2_Steering_Reconstruction.onnx"/>
+      <arg value="url:root://dtn-eic.jlab.org//volatile/eic/EPIC/xrdtest/CALIB//9bf974ad66c7787586a5535d1df9215fca4ccbb7de62be27593f3777d0001dbd/Low-Q2_Steering_Reconstruction.onnx"/>
     </plugin>
     <plugin name="epic_FileLoader">
       <arg value="cache:$DETECTOR_PATH:/opt/detector"/>
