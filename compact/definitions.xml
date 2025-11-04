@@ -579,7 +579,8 @@ Service gaps in FW direction (before endcapP ECAL) and BW direction (before endc
     <constant name="EcalEndcapP_yOffsetNorth"           value="0.0*cm"/>
     <constant name="EcalEndcapP_yOffsetSouth"           value="0.0*cm"/>
     <constant name="EcalEndcapP_nsGap"                  value="EcalEndcapP_xOffsetNorth+EcalEndcapP_xOffsetSouth"/>
-    <constant name="EcalEndcapP_rmax"                   value="81*inch"/>
+    <constant name="EcalEndcapP_rmin"                   value="0.0*inch"/>
+    <constant name="EcalEndcapP_rmax"                   value="81.0*inch"/>
     <constant name="EcalEndcapP_rmaxWithGap"            value="EcalEndcapP_rmax + EcalEndcapP_nsGap/2.0"/>
     <constant name="EcalEndcapP_blockSize"              value="10.0*cm"/>
     <constant name="EcalEndcapP_blockLength"            value="17.0*cm"/>
