@@ -121,7 +121,7 @@
         initial_hole_x/y: Hole x/y position (global coordinates) in first layer
         final_hole_x/y: Hole x/y position (global coordinates) in steel backplate
         Initial hole parameters are the same for the hole in the ecal insert
-	(no more ecal insert, so new HcalEndcapPInsert_hole_xxx constants)
+        (no more ecal insert, so new HcalEndcapPInsert_hole_xxx constants)
       </documentation>
       <beampipe_hole
         initial_hole_radius="HcalEndcapPInsert_hole_radius"
