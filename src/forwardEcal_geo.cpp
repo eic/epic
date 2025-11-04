@@ -56,10 +56,10 @@ static Ref_t createDetector(Detector& desc, xml_h handle, SensitiveDetector sens
   //double rFiber           = 0.0235;                              //fiber radius (PMMA outside)
   //double rScfi            = 0.02209;                             //Scintillating fiber core radius
 
-  double blocksize   = desc.constant<double>("EcalEndcapP_blockSize");
-  double blockgap    = desc.constant<double>("EcalEndcapP_spaceBetweenBlock");
-  double nsgap       = desc.constant<double>("EcalEndcapP_xOffsetNorth")
-                      +desc.constant<double>("EcalEndcapP_xOffsetSouth");
+  double blocksize = desc.constant<double>("EcalEndcapP_blockSize");
+  double blockgap  = desc.constant<double>("EcalEndcapP_spaceBetweenBlock");
+  double nsgap     = desc.constant<double>("EcalEndcapP_xOffsetNorth") +
+                 desc.constant<double>("EcalEndcapP_xOffsetSouth");
   double rmin        = 0.0; // Dummy variable. Set to 0 since cutting out insert
   double rmax        = desc.constant<double>("EcalEndcapP_rmax");
   double rmaxWithGap = desc.constant<double>("EcalEndcapP_rmaxWithGap");
@@ -67,17 +67,17 @@ static Ref_t createDetector(Detector& desc, xml_h handle, SensitiveDetector sens
   double length      = desc.constant<double>("EcalEndcapP_length");
   double zmin        = desc.constant<double>("EcalEndcapP_zmin");
   double insert_dx[2];
-  insert_dx[0]       = desc.constant<double>("EcalEndcapP_xOffsetBeamPipeNorth");
-  insert_dx[1]       = desc.constant<double>("EcalEndcapP_xOffsetBeamPipeSouth");
-  double insert_dy   = desc.constant<double>("EcalEndcapP_insert_dy");
-  double insert_dz   = desc.constant<double>("EcalEndcapP_insert_dz");
+  insert_dx[0]            = desc.constant<double>("EcalEndcapP_xOffsetBeamPipeNorth");
+  insert_dx[1]            = desc.constant<double>("EcalEndcapP_xOffsetBeamPipeSouth");
+  double insert_dy        = desc.constant<double>("EcalEndcapP_insert_dy");
+  double insert_dz        = desc.constant<double>("EcalEndcapP_insert_dz");
   double insert_thickness = desc.constant<double>("EcalEndcapP_insert_thickness");
-  double insert_x    = desc.constant<double>("EcalEndcapP_insert_center_x");
-  int nx             = desc.constant<int>("EcalEndcapP_nfiber_x");
-  int ny             = desc.constant<int>("EcalEndcapP_nfiber_y");
-  double rFiber      = desc.constant<double>("EcalEndcapP_rfiber");
-  double rScfi       = desc.constant<double>("EcalEndcapP_rscfi");
-  
+  double insert_x         = desc.constant<double>("EcalEndcapP_insert_center_x");
+  int nx                  = desc.constant<int>("EcalEndcapP_nfiber_x");
+  int ny                  = desc.constant<int>("EcalEndcapP_nfiber_y");
+  double rFiber           = desc.constant<double>("EcalEndcapP_rfiber");
+  double rScfi            = desc.constant<double>("EcalEndcapP_rscfi");
+
   const double phi1[2]  = {-M_PI / 2.0, M_PI / 2.0};
   const double phi2[2]  = {M_PI / 2.0, 3.0 * M_PI / 2.0};
   const char* nsName[2] = {"N", "S"};
@@ -98,8 +98,8 @@ static Ref_t createDetector(Detector& desc, xml_h handle, SensitiveDetector sens
   //xml_dim_t dim = detElem.dimensions();
   //xml_dim_t pos = detElem.position();
   if (zmax != mBackPlateZ)
-    printf("WARNING!!! forwardEcal_geo.cpp detect inconsistent Z pos %f(compact) %f(map)\n",
-           zmax, mBackPlateZ);
+    printf("WARNING!!! forwardEcal_geo.cpp detect inconsistent Z pos %f(compact) %f(map)\n", zmax,
+           mBackPlateZ);
   //printf("forwardEcal_geo : zmax= %f vs %f\n",zmax,mBackPlateZ);
 
   PlacedVolume pv;
