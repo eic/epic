@@ -30,32 +30,54 @@ double yBlock(int ns, int row) {
 using namespace dd4hep;
 
 static Ref_t createDetector(Detector& desc, xml_h handle, SensitiveDetector sens) {
-
   //forwardEcalMap* map = new forwardEcalMap();
   //double blocksize    = map->blockSize();          // X,Y size of block
   //double blockgap     = map->spaceBetweenBlock();  // Gap between blocks
-  double blocksize   = mBlockSize;
-  double blockgap    = mSpaceBetweenBlock;
-  double nsgap       = mOffsetX[0] + mOffsetX[1]; // North-South gap
-  double rmin        = 0.0;                // Dummy variable. Set to 0 since cutting out insert
-  double rmax        = 81 * 2.54;          // Max radius of endcap
-  double rmaxWithGap = rmax + nsgap / 2.0; // Max radius with NS gap included
-  //double zmax       = map->backPlateZ();  // Face of back plate fEcal mount to = Hcal start z
-  double zmax   = mBackPlateZ;   // Face of back plate fEcal mount to = Hcal start z
-  double length = 27.0;          // Total length
-  double zmin   = zmax - length; // minimum z where detector starts
-  //double insert_dx[2] = {map->offsetXBeamPipe(0), map->offsetXBeamPipe(1)};
-  double insert_dx[2] = {mOffsetXBeamPipe[0], mOffsetXBeamPipe[1]};
-  // Insert x width for north and south halves
-  double insert_dy        = 30.05;       // Insert y height
-  double insert_dz        = 27.0;        // Insert (=Al beam pipe protector) z depth
-  double insert_thickness = 0.25 * 2.54; // Insert (=Al beam pipe protector) thickness
-  double insert_x         = (insert_dx[0] - insert_dx[1]) / 2.0; //Insert center x
-  int nx                  = 26;                                  //number of fibers in a row
-  int ny                  = 30;                                  //numbers of row of fibers
-  double rFiber           = 0.0235;                              //fiber radius (PMMA outside)
-  double rScfi            = 0.02209;                             //Scintillating fiber core radius
 
+  //double blocksize   = mBlockSize;
+  //double blockgap    = mSpaceBetweenBlock;
+  //double nsgap       = mOffsetX[0] + mOffsetX[1]; // North-South gap
+  //double rmin      = 0.0;                // Dummy variable. Set to 0 since cutting out insert
+  //double rmax        = 81 * 2.54;          // Max radius of endcap
+  //double rmaxWithGap = rmax + nsgap / 2.0; // Max radius with NS gap included
+  ////double zmax       = map->backPlateZ();  // Face of back plate fEcal mount to = Hcal start z
+  //double zmax   = mBackPlateZ;   // Face of back plate fEcal mount to = Hcal start z
+  //double length = 27.0;          // Total length
+  //double zmin   = zmax - length; // minimum z where detector starts
+  ////double insert_dx[2] = {map->offsetXBeamPipe(0), map->offsetXBeamPipe(1)};
+  //double insert_dx[2] = {mOffsetXBeamPipe[0], mOffsetXBeamPipe[1]};
+  //// Insert x width for north and south halves
+  //double insert_dy        = 30.05;       // Insert y height
+  //double insert_dz        = 27.0;        // Insert (=Al beam pipe protector) z depth
+  //double insert_thickness = 0.25 * 2.54; // Insert (=Al beam pipe protector) thickness
+  //double insert_x         = (insert_dx[0] - insert_dx[1]) / 2.0; //Insert center x
+  //int nx                  = 26;                                  //number of fibers in a row
+  //int ny                  = 30;                                  //numbers of row of fibers
+  //double rFiber           = 0.0235;                              //fiber radius (PMMA outside)
+  //double rScfi            = 0.02209;                             //Scintillating fiber core radius
+
+  double blocksize   = desc.constant<double>("EcalEndcapP_blockSize");
+  double blockgap    = desc.constant<double>("EcalEndcapP_spaceBetweenBlock");
+  double nsgap       = desc.constant<double>("EcalEndcapP_xOffsetNorth")
+                      +desc.constant<double>("EcalEndcapP_xOffsetSouth");
+  double rmin        = 0.0; // Dummy variable. Set to 0 since cutting out insert
+  double rmax        = desc.constant<double>("EcalEndcapP_rmax");
+  double rmaxWithGap = desc.constant<double>("EcalEndcapP_rmaxWithGap");
+  double zmax        = desc.constant<double>("EcalEndcapP_zmax");
+  double length      = desc.constant<double>("EcalEndcapP_length");
+  double zmin        = desc.constant<double>("EcalEndcapP_zmin");
+  double insert_dx[2];
+  insert_dx[0]       = desc.constant<double>("EcalEndcapP_xOffsetBeamPipeNorth");
+  insert_dx[1]       = desc.constant<double>("EcalEndcapP_xOffsetBeamPipeSouth");
+  double insert_dy   = desc.constant<double>("EcalEndcapP_insert_dy");
+  double insert_dz   = desc.constant<double>("EcalEndcapP_insert_dz");
+  double insert_thickness = desc.constant<double>("EcalEndcapP_insert_thickness");
+  double insert_x    = desc.constant<double>("EcalEndcapP_insert_center_x");
+  int nx             = desc.constant<int>("EcalEndcapP_nfiber_x");
+  int ny             = desc.constant<int>("EcalEndcapP_nfiber_y");
+  double rFiber      = desc.constant<double>("EcalEndcapP_rfiber");
+  double rScfi       = desc.constant<double>("EcalEndcapP_rscfi");
+  
   const double phi1[2]  = {-M_PI / 2.0, M_PI / 2.0};
   const double phi2[2]  = {M_PI / 2.0, 3.0 * M_PI / 2.0};
   const char* nsName[2] = {"N", "S"};
@@ -73,15 +95,12 @@ static Ref_t createDetector(Detector& desc, xml_h handle, SensitiveDetector sens
   else
     printout(INFO, "FEMC", "Making ScFi geometry model\n");
 
-  xml_dim_t dim = detElem.dimensions();
-  xml_dim_t pos = detElem.position();
-  if (dim.z() != length)
-    printf("WARNING!!! forwardEcal_geo.cpp detect inconsistent Z len %f(compact) %f(map)\n",
-           dim.z(), length);
-  if (pos.z() != zmin)
+  //xml_dim_t dim = detElem.dimensions();
+  //xml_dim_t pos = detElem.position();
+  if (zmax != mBackPlateZ)
     printf("WARNING!!! forwardEcal_geo.cpp detect inconsistent Z pos %f(compact) %f(map)\n",
-           pos.z(), zmin);
-  //printf("forwardEcal_geo : dz=%f %f zmin=%f %f\n",dim.z(),length,pos.z(),zmin);
+           zmax, mBackPlateZ);
+  //printf("forwardEcal_geo : zmax= %f vs %f\n",zmax,mBackPlateZ);
 
   PlacedVolume pv;
   Material air     = desc.material("Air");
