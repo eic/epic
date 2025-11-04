@@ -659,7 +659,10 @@ Service gaps in FW direction (before endcapP ECAL) and BW direction (before endc
     <constant name="HcalEndcapPInsert_height"    value="59.29*cm"/>
     <constant name="HcalEndcapPInsert_xposition" value="-10.0*cm"/>
     <constant name="HcalEndcapPInsert_yposition" value="0.0*cm"/>
-
+    <constant name="HcalEndcapPInsert_hole_radius"    value="14.61*cm"/>
+    <constant name="HcalEndcapPInsert_hole_xposition" value="-7.20*cm"/>
+    <constant name="HcalEndcapPInsert_hole_yposition" value="0.0*cm"/>
+    
     <constant name="HcalEndcapN_CaloSides"      value="60"/>
     <constant name="HcalEndcapN_zmin"     value="BackwardServiceGap_zmax + 64.0 * cm"/> <!-- 64 cm gap between service gap, includes 28.5 cm oculus -->
     <constant name="HcalEndcapN_length"   value="45.0*cm"/>
