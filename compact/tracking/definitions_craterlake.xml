@@ -18,9 +18,12 @@
 
     <comment> Main parameters for the SiBarrel layer geometry </comment>
     <constant name="SiBarrel1_rmin"                  value="25.9*cm"/>
-    <constant name="SiBarrel2_rmin"                  value="41.4*cm"/>
+    <constant name="delta_SiBarrel2_rmin"            value="20.5*cm"/>
+    <constant name="SiBarrel2_rmin"                  value="SiBarrel1_rmin + delta_SiBarrel2_rmin"/>
     <constant name="SiBarrel_angle"                  value="TrackerPrimaryAngle"/>
     <constant name="SiBarrel_dz"                     value="2*cm"/>
+    <constant name="SiBarrel1_length"                value="50.3*cm"/>
+    <constant name="SiBarrel2_length"                value="84*cm - 4.7*cm"/>
 
     <comment> Main parameters for the Si Endcaps geometry </comment>
 
@@ -72,36 +75,44 @@
     <comment> Assume the disk are centered along z. The inner radii are larger than designed to account for the beampipe offset. Need to be fixed later </comment>
     <constant name="Beampipe_bakeout_buffer"        value="5*mm" />
 
-    <constant name="InnerTrackerEndcapP_zmin"        value="25.0*cm" />
+    <constant name="InnerTrackerEndcapP_zmin"        value="25*cm" />
     <constant name="InnerTrackerEndcapP_rmin"        value="Beampipe_rmax + Beampipe_bakeout_buffer" />
-    <constant name="InnerTrackerEndcapP_rmax"        value="24.0*cm" />
-    <constant name="TrackerEndcapPDisk1_zmin"        value="45.0*cm" />
+    <constant name="InnerTrackerEndcapP_rmax"        value="min(SiBarrel2_rmin - 15*mm, TrackerEndcapDisk_rmax - 15*mm)" />
+    <constant name="delta_TrackerEndcapPDisk1_zmin"    value="20.0*cm" />
+    <constant name="TrackerEndcapPDisk1_zmin"        value="InnerTrackerEndcapP_zmin + delta_TrackerEndcapPDisk1_zmin" />
     <constant name="TrackerEndcapPDisk1_rmin"        value="Beampipe_rmax + Beampipe_bakeout_buffer" />
     <constant name="TrackerEndcapPDisk1_rmax"        value="TrackerEndcapDisk_rmax - 15*mm" />
-    <constant name="TrackerEndcapPDisk2_zmin"        value="70.0*cm" />
+    <constant name="delta_TrackerEndcapPDisk2_zmin"    value="25.0*cm" />
+    <constant name="TrackerEndcapPDisk2_zmin"        value="TrackerEndcapPDisk1_zmin + delta_TrackerEndcapPDisk2_zmin" />
     <constant name="TrackerEndcapPDisk2_rmin"        value="32.86*mm + Beampipe_bakeout_buffer + 0.6*mm" />
     <constant name="TrackerEndcapPDisk2_rmax"        value="TrackerEndcapDisk_rmax * .98" />
-    <constant name="TrackerEndcapPDisk3_zmin"        value="100.0*cm" />
+    <constant name="delta_TrackerEndcapPDisk3_zmin"    value="30.0*cm" />
+    <constant name="TrackerEndcapPDisk3_zmin"        value="TrackerEndcapPDisk2_zmin + delta_TrackerEndcapPDisk3_zmin" />
     <constant name="TrackerEndcapPDisk3_rmin"        value="40.58*mm + Beampipe_bakeout_buffer + 7.85*mm" />
     <constant name="TrackerEndcapPDisk3_rmax"        value="TrackerEndcapDisk_rmax * .98" />
-    <constant name="TrackerEndcapPDisk4_zmin"        value="135.0*cm" />
+    <constant name="delta_TrackerEndcapPDisk4_zmin"    value="35.0*cm" />
+    <constant name="TrackerEndcapPDisk4_zmin"        value="TrackerEndcapPDisk3_zmin + delta_TrackerEndcapPDisk4_zmin" />
     <constant name="TrackerEndcapPDisk4_rmin"        value="49.12*mm + Beampipe_bakeout_buffer + 16.02*mm" />
     <constant name="TrackerEndcapPDisk4_rmax"        value="TrackerEndcapDisk_rmax * .98" />
 
     <comment> Main parameters for the negative silicon disks (will be reflected, so positive z-values here)</comment>
-    <constant name="InnerTrackerEndcapN_zmin"        value="InnerTrackerEndcapP_zmin" />
+    <constant name="InnerTrackerEndcapN_zmin"        value="25.0*cm" />
     <constant name="InnerTrackerEndcapN_rmin"        value="InnerTrackerEndcapP_rmin" />
     <constant name="InnerTrackerEndcapN_rmax"        value="InnerTrackerEndcapP_rmax" />
-    <constant name="TrackerEndcapNDisk1_zmin"        value="TrackerEndcapPDisk1_zmin" />
+    <constant name="delta_TrackerEndcapNDisk1_zmin"    value="20.0*cm" />
+    <constant name="TrackerEndcapNDisk1_zmin"        value="InnerTrackerEndcapN_zmin + delta_TrackerEndcapNDisk1_zmin" />
     <constant name="TrackerEndcapNDisk1_rmin"        value="TrackerEndcapPDisk1_rmin" />
     <constant name="TrackerEndcapNDisk1_rmax"        value="TrackerEndcapPDisk1_rmax" />
-    <constant name="TrackerEndcapNDisk2_zmin"        value="65*cm" />
+    <constant name="delta_TrackerEndcapNDisk2_zmin"    value="20.0*cm" />
+    <constant name="TrackerEndcapNDisk2_zmin"        value="TrackerEndcapNDisk1_zmin + delta_TrackerEndcapNDisk2_zmin" />
     <constant name="TrackerEndcapNDisk2_rmin"        value="Beampipe_rmax + Beampipe_bakeout_buffer"   />
     <constant name="TrackerEndcapNDisk2_rmax"        value="TrackerEndcapPDisk2_rmax" />
-    <constant name="TrackerEndcapNDisk3_zmin"        value="85*cm" />
+    <constant name="delta_TrackerEndcapNDisk3_zmin"    value="20.0*cm" />
+    <constant name="TrackerEndcapNDisk3_zmin"        value="TrackerEndcapNDisk2_zmin + delta_TrackerEndcapNDisk3_zmin" />
     <constant name="TrackerEndcapNDisk3_rmin"        value="34.244*mm + Beampipe_bakeout_buffer + 0.817*mm" />
     <constant name="TrackerEndcapNDisk3_rmax"        value="TrackerEndcapPDisk3_rmax" />
-    <constant name="TrackerEndcapNDisk4_zmin"        value="102*cm" />
+    <constant name="delta_TrackerEndcapNDisk4_zmin"    value="17.0*cm" />
+    <constant name="TrackerEndcapNDisk4_zmin"        value="TrackerEndcapNDisk3_zmin + delta_TrackerEndcapNDisk4_zmin" />
     <constant name="TrackerEndcapNDisk4_rmin"        value="38.043*mm + Beampipe_bakeout_buffer + 3.310*mm" />
     <constant name="TrackerEndcapNDisk4_rmax"        value="TrackerEndcapPDisk4_rmax" />
 
