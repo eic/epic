@@ -21,7 +21,6 @@ features:
     drich:
   ecal:
     forward_averaged_homogeneous:
-    forward_insert_homogeneous:
     bic_default:
     backward_PbWO4:
   solenoid:
