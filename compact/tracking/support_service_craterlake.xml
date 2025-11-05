@@ -110,21 +110,191 @@
     <constant name="TrackerSupportCylN_thickness1B"        value="TrackerSupportCylAlN_thickness1B + TrackerSupportCylCF_thickness1" />
     <constant name="TrackerSupportCylN_thickness1C"        value="TrackerSupportCylAlN_thickness1C + TrackerSupportCylCF_thickness1" />
 
-    <comment> Servives Routing Flange (WIP) for SVT : 1 Cylinder + 1 Cone </comment>
+    <comment> Services Routing Flange (WIP) for SVT : 1 Cylinder + 1 Cone </comment>
+    <comment> From SVT PST Drawing PACKET SEP 2025.pdf </comment>
     <comment> Cylinder dimensions </comment>
-    <constant name="SupportRoutingFlangeCyl_length"        value="49.46*mm"/> <comment> From SVT PST Drawing PACKET SEP 2025.pdf </comment> 
-    <constant name="SupportRoutingFlangeCyl_zmax"          value="-TrackerSupportCylEndcapN_zmax1C"/>
-    <constant name="SupportRoutingFlangeCyl_zmin"          value="SupportRoutingFlangeCyl_zmax+SupportRoutingFlangeCyl_length"/>
-    <constant name="SupportRoutingFlangeCyl_zcenter"       value="0.5*(SupportRoutingFlangeCyl_zmax+SupportRoutingFlangeCyl_zmin)"/>
+    <constant name="SupportRoutingFlangeCyl_length"        value="49.46*mm"/>  
+    <constant name="SupportRoutingFlangeCyl_zmin"          value="995*mm"/>
+    <constant name="SupportRoutingFlangeCyl_zmax"          value="SupportRoutingFlangeCyl_zmin+SupportRoutingFlangeCyl_length"/>
+    <!-- <constant name="SupportRoutingFlangeCyl_zmax"          value="-TrackerSupportCylEndcapN_zmax1C"/>
+    <constant name="SupportRoutingFlangeCyl_zmin"          value="SupportRoutingFlangeCyl_zmax+SupportRoutingFlangeCyl_length"/> -->
+    <constant name="SupportRoutingFlangeCyl_zcenter"       value="-0.5*(SupportRoutingFlangeCyl_zmax+SupportRoutingFlangeCyl_zmin)"/>
     <constant name="SupportRoutingFlangeCyl_rmin1"         value="PST_support_tube_rmin+InnerSupportConeCF_thickness+0.1*mm"/>
     <comment> Cone dimensions </comment>
-    <constant name="SupportRoutingFlangeCone_length"       value="136.6*mm-SupportRoutingFlangeCyl_length"/> <comment> From SVT PST Drawing PACKET SEP 2025.pdf </comment> 
+    <constant name="SupportRoutingFlangeCone_length"       value="136.6*mm-SupportRoutingFlangeCyl_length"/> 
     <constant name="SupportRoutingFlangeCone_zmin"         value="SupportRoutingFlangeCyl_zmax"/>
-    <constant name="SupportRoutingFlangeCone_zmax"         value="SupportRoutingFlangeCone_zmin-SupportRoutingFlangeCone_length"/>
-    <constant name="SupportRoutingFlangeCone_zcenter"      value="0.5*(SupportRoutingFlangeCone_zmax+SupportRoutingFlangeCone_zmin)"/>
+    <constant name="SupportRoutingFlangeCone_zmax"         value="SupportRoutingFlangeCone_zmin+SupportRoutingFlangeCone_length"/>
+    <constant name="SupportRoutingFlangeCone_zcenter"      value="-0.5*(SupportRoutingFlangeCone_zmax+SupportRoutingFlangeCone_zmin)"/>
     <constant name="SupportRoutingFlangeCone_rmin1"        value="SupportRoutingFlangeCyl_rmin1"/>
     <constant name="SupportRoutingFlangeCone_rmin2"        value="588.83*mm"/> <comment> From SVT PST Drawing PACKET SEP 2025.pdf </comment>
     <!-- .qq -->
+
+    <comment> (Negative) Service Passthrough Plate </comment>
+    <!-- The geometry will be implemented in 4 parts:
+          1) base ring
+          2) top half ring holes
+          3) bottom half ring holes
+          4) beampipe support plate cutouts (left and right)
+     -->
+    <comment> Specifications are from SVT PST Drawing PACKET SEP 2025.pdf </comment> 
+    <comment> General dimensions (we assume hole-specs are the same for top and bottom half) </comment>
+    <constant name="ServicePassthroughHoleN_rmin1"          value="461*mm"/>
+    <constant name="ServicePassthroughHoleN_thickness"      value="525*mm-ServicePassthroughHoleN_rmin1"/>
+    <constant name="ServicePassthroughHoleN_gap"            value="3.35*deg"/> <comment> Gap between two holes </comment>
+    <constant name="ServicePassthroughSmallHoleN_width"     value="9.3*deg"/>
+    <constant name="ServicePassthroughBigHoleN_width"       value="16*deg"/>
+    <constant name="ServicePassthroughRingN_length"         value="2*mm"/>
+    <constant name="ServicePassthroughRingN_thickness"      value="95*mm"/>
+    <constant name="ServicePassthroughRingN_phimin"         value="0*deg"/>
+    <constant name="ServicePassthroughRingN_phimax"         value="360*deg"/>
+    <constant name="ServicePassthroughRingN_rmax"           value="TrackerSupportCyl_rmin1"/>    
+    <constant name="ServicePassthroughRingN_rmin1"          value="ServicePassthroughRingN_rmax-ServicePassthroughRingN_thickness"/>    
+    <constant name="ServicePassthroughRingN_zmax"           value="-TrackerSupportCylEndcapN_zmax1C"/>
+    <constant name="ServicePassthroughRingN_zmin"           value="ServicePassthroughRingN_zmax+ServicePassthroughRingN_length"/>
+    <constant name="ServicePassthroughRingN_zcenter"        value="0.5*(ServicePassthroughRingN_zmax+ServicePassthroughRingN_zmin)"/>
+    <constant name="ServicePassthroughCut_halfwidth"        value="50.5*mm"/> <comment> half-width of beampipe support plate cutout </comment>
+    <comment> Top half ring holes </comment>
+    <constant name="ServicePassthroughTopRingN_phimin"      value="8.35*deg"/>
+    <!-- Hole wedge 1 -->
+    <constant name="ServicePassthroughTopRing1N_phimin"     value="ServicePassthroughTopRingN_phimin"/>
+    <constant name="ServicePassthroughTopRingHole1N_phimin" value="ServicePassthroughTopRing1N_phimin"/>
+    <constant name="ServicePassthroughTopRingHole1N_phimax" value="ServicePassthroughTopRingHole1N_phimin+ServicePassthroughSmallHoleN_width"/>
+    <constant name="ServicePassthroughTopRing1N_phimax"     value="ServicePassthroughTopRingHole1N_phimax+ServicePassthroughHoleN_gap"/>
+    <!-- Hole wedge 2 -->
+    <constant name="ServicePassthroughTopRing2N_phimin"     value="ServicePassthroughTopRing1N_phimax"/>
+    <constant name="ServicePassthroughTopRingHole2N_phimin" value="ServicePassthroughTopRing2N_phimin"/>
+    <constant name="ServicePassthroughTopRingHole2N_phimax" value="ServicePassthroughTopRingHole2N_phimin+ServicePassthroughBigHoleN_width"/>
+    <constant name="ServicePassthroughTopRing2N_phimax"     value="ServicePassthroughTopRingHole2N_phimax+ServicePassthroughHoleN_gap"/>
+    <!-- Hole wedge 3 -->
+    <constant name="ServicePassthroughTopRing3N_phimin"     value="ServicePassthroughTopRing2N_phimax"/>
+    <constant name="ServicePassthroughTopRingHole3N_phimin" value="ServicePassthroughTopRing3N_phimin"/>
+    <constant name="ServicePassthroughTopRingHole3N_phimax" value="ServicePassthroughTopRingHole3N_phimin+ServicePassthroughSmallHoleN_width"/>
+    <constant name="ServicePassthroughTopRing3N_phimax"     value="ServicePassthroughTopRingHole3N_phimax+ServicePassthroughHoleN_gap"/>    
+    <!-- Hole wedge 4 -->
+    <constant name="ServicePassthroughTopRing4N_phimin"     value="ServicePassthroughTopRing3N_phimax"/>
+    <constant name="ServicePassthroughTopRingHole4N_phimin" value="ServicePassthroughTopRing4N_phimin"/>
+    <constant name="ServicePassthroughTopRingHole4N_phimax" value="ServicePassthroughTopRingHole4N_phimin+ServicePassthroughBigHoleN_width"/>
+    <constant name="ServicePassthroughTopRing4N_phimax"     value="ServicePassthroughTopRingHole4N_phimax+ServicePassthroughHoleN_gap"/> 
+    <!-- Hole wedge 5 -->
+    <constant name="ServicePassthroughTopRing5N_phimin"     value="ServicePassthroughTopRing4N_phimax"/>
+    <constant name="ServicePassthroughTopRingHole5N_phimin" value="ServicePassthroughTopRing5N_phimin"/>
+    <constant name="ServicePassthroughTopRingHole5N_phimax" value="ServicePassthroughTopRingHole5N_phimin+ServicePassthroughBigHoleN_width"/>   
+    <constant name="ServicePassthroughTopRing5N_phimax"     value="ServicePassthroughTopRingHole5N_phimax+ServicePassthroughHoleN_gap"/>
+    <!-- Hole wedge 6 -->
+    <constant name="ServicePassthroughTopRing6N_phimin"     value="ServicePassthroughTopRing5N_phimax"/>
+    <constant name="ServicePassthroughTopRingHole6N_phimin" value="ServicePassthroughTopRing6N_phimin"/>
+    <constant name="ServicePassthroughTopRingHole6N_phimax" value="ServicePassthroughTopRingHole6N_phimin+ServicePassthroughBigHoleN_width"/>
+    <constant name="ServicePassthroughTopRing6N_phimax"     value="ServicePassthroughTopRingHole6N_phimax+ServicePassthroughHoleN_gap"/>
+    <!-- Hole wedge 7 -->
+    <constant name="ServicePassthroughTopRing7N_phimin"     value="ServicePassthroughTopRing6N_phimax"/>
+    <constant name="ServicePassthroughTopRingHole7N_phimin" value="ServicePassthroughTopRing7N_phimin"/>
+    <constant name="ServicePassthroughTopRingHole7N_phimax" value="ServicePassthroughTopRingHole7N_phimin+ServicePassthroughBigHoleN_width"/>
+    <constant name="ServicePassthroughTopRing7N_phimax"     value="ServicePassthroughTopRingHole7N_phimax+ServicePassthroughHoleN_gap"/>
+    <!-- Hole wedge 8 -->
+    <constant name="ServicePassthroughTopRing8N_phimin"     value="ServicePassthroughTopRing7N_phimax"/>
+    <constant name="ServicePassthroughTopRingHole8N_phimin" value="ServicePassthroughTopRing8N_phimin"/>
+    <constant name="ServicePassthroughTopRingHole8N_phimax" value="ServicePassthroughTopRingHole8N_phimin+ServicePassthroughSmallHoleN_width"/>
+    <constant name="ServicePassthroughTopRing8N_phimax"     value="ServicePassthroughTopRingHole8N_phimax+ServicePassthroughHoleN_gap"/>
+    <!-- Hole wedge 9 -->
+    <constant name="ServicePassthroughTopRing9N_phimin"     value="ServicePassthroughTopRing8N_phimax"/>
+    <constant name="ServicePassthroughTopRingHole9N_phimin" value="ServicePassthroughTopRing9N_phimin"/>
+    <constant name="ServicePassthroughTopRingHole9N_phimax" value="ServicePassthroughTopRingHole9N_phimin+ServicePassthroughBigHoleN_width"/>
+    <constant name="ServicePassthroughTopRing9N_phimax"     value="ServicePassthroughTopRingHole9N_phimax+ServicePassthroughHoleN_gap"/>  
+    <!-- Hole wedge 10 -->
+    <constant name="ServicePassthroughTopRing10N_phimin"     value="ServicePassthroughTopRing9N_phimax"/>
+    <constant name="ServicePassthroughTopRingHole10N_phimin" value="ServicePassthroughTopRing10N_phimin"/>
+    <constant name="ServicePassthroughTopRingHole10N_phimax" value="ServicePassthroughTopRingHole10N_phimin+ServicePassthroughSmallHoleN_width"/>
+    <constant name="ServicePassthroughTopRing10N_phimax"     value="ServicePassthroughTopRingHole10N_phimax+ServicePassthroughHoleN_gap"/>
+    <!-- general top half ring var -->
+    <constant name="ServicePassthroughTopRingN_phimax"      value="ServicePassthroughTopRingHole10N_phimax"/>
+    <comment> Bottom half ring holes </comment>
+    <constant name="ServicePassthroughBotRingN_phimin"      value="180*deg+ServicePassthroughTopRingN_phimin"/>
+    <!-- Hole wedge 1 -->
+    <constant name="ServicePassthroughBotRing1N_phimin"     value="ServicePassthroughBotRingN_phimin"/>
+    <constant name="ServicePassthroughBotRingHole1N_phimin" value="ServicePassthroughBotRing1N_phimin"/>
+    <constant name="ServicePassthroughBotRingHole1N_phimax" value="ServicePassthroughBotRingHole1N_phimin+ServicePassthroughSmallHoleN_width"/>
+    <constant name="ServicePassthroughBotRing1N_phimax"     value="ServicePassthroughBotRingHole1N_phimax+ServicePassthroughHoleN_gap"/>
+    <!-- Hole wedge 2 -->
+    <constant name="ServicePassthroughBotRing2N_phimin"     value="ServicePassthroughBotRing1N_phimax"/>
+    <constant name="ServicePassthroughBotRingHole2N_phimin" value="ServicePassthroughBotRing2N_phimin"/>
+    <constant name="ServicePassthroughBotRingHole2N_phimax" value="ServicePassthroughBotRingHole2N_phimin+ServicePassthroughBigHoleN_width"/>
+    <constant name="ServicePassthroughBotRing2N_phimax"     value="ServicePassthroughBotRingHole2N_phimax+ServicePassthroughHoleN_gap"/>
+    <!-- Hole wedge 3 -->
+    <constant name="ServicePassthroughBotRing3N_phimin"     value="ServicePassthroughBotRing2N_phimax"/>
+    <constant name="ServicePassthroughBotRingHole3N_phimin" value="ServicePassthroughBotRing3N_phimin"/>
+    <constant name="ServicePassthroughBotRingHole3N_phimax" value="ServicePassthroughBotRingHole3N_phimin+ServicePassthroughSmallHoleN_width"/>
+    <constant name="ServicePassthroughBotRing3N_phimax"     value="ServicePassthroughBotRingHole3N_phimax+ServicePassthroughHoleN_gap"/>    
+    <!-- Hole wedge 4 -->
+    <constant name="ServicePassthroughBotRing4N_phimin"     value="ServicePassthroughBotRing3N_phimax"/>
+    <constant name="ServicePassthroughBotRingHole4N_phimin" value="ServicePassthroughBotRing4N_phimin"/>
+    <constant name="ServicePassthroughBotRingHole4N_phimax" value="ServicePassthroughBotRingHole4N_phimin+ServicePassthroughBigHoleN_width"/>
+    <constant name="ServicePassthroughBotRing4N_phimax"     value="ServicePassthroughBotRingHole4N_phimax+ServicePassthroughHoleN_gap"/> 
+    <!-- Hole wedge 5 -->
+    <constant name="ServicePassthroughBotRing5N_phimin"     value="ServicePassthroughBotRing4N_phimax"/>
+    <constant name="ServicePassthroughBotRingHole5N_phimin" value="ServicePassthroughBotRing5N_phimin"/>
+    <constant name="ServicePassthroughBotRingHole5N_phimax" value="ServicePassthroughBotRingHole5N_phimin+ServicePassthroughBigHoleN_width"/>   
+    <constant name="ServicePassthroughBotRing5N_phimax"     value="ServicePassthroughBotRingHole5N_phimax+ServicePassthroughHoleN_gap"/>
+    <!-- Hole wedge 6 -->
+    <constant name="ServicePassthroughBotRing6N_phimin"     value="ServicePassthroughBotRing5N_phimax"/>
+    <constant name="ServicePassthroughBotRingHole6N_phimin" value="ServicePassthroughBotRing6N_phimin"/>
+    <constant name="ServicePassthroughBotRingHole6N_phimax" value="ServicePassthroughBotRingHole6N_phimin+ServicePassthroughBigHoleN_width"/>
+    <constant name="ServicePassthroughBotRing6N_phimax"     value="ServicePassthroughBotRingHole6N_phimax+ServicePassthroughHoleN_gap"/>
+    <!-- Hole wedge 7 -->
+    <constant name="ServicePassthroughBotRing7N_phimin"     value="ServicePassthroughBotRing6N_phimax"/>
+    <constant name="ServicePassthroughBotRingHole7N_phimin" value="ServicePassthroughBotRing7N_phimin"/>
+    <constant name="ServicePassthroughBotRingHole7N_phimax" value="ServicePassthroughBotRingHole7N_phimin+ServicePassthroughBigHoleN_width"/>
+    <constant name="ServicePassthroughBotRing7N_phimax"     value="ServicePassthroughBotRingHole7N_phimax+ServicePassthroughHoleN_gap"/>
+    <!-- Hole wedge 8 -->
+    <constant name="ServicePassthroughBotRing8N_phimin"     value="ServicePassthroughBotRing7N_phimax"/>
+    <constant name="ServicePassthroughBotRingHole8N_phimin" value="ServicePassthroughBotRing8N_phimin"/>
+    <constant name="ServicePassthroughBotRingHole8N_phimax" value="ServicePassthroughBotRingHole8N_phimin+ServicePassthroughSmallHoleN_width"/>
+    <constant name="ServicePassthroughBotRing8N_phimax"     value="ServicePassthroughBotRingHole8N_phimax+ServicePassthroughHoleN_gap"/>
+    <!-- Hole wedge 9 -->
+    <constant name="ServicePassthroughBotRing9N_phimin"     value="ServicePassthroughBotRing8N_phimax"/>
+    <constant name="ServicePassthroughBotRingHole9N_phimin" value="ServicePassthroughBotRing9N_phimin"/>
+    <constant name="ServicePassthroughBotRingHole9N_phimax" value="ServicePassthroughBotRingHole9N_phimin+ServicePassthroughBigHoleN_width"/>
+    <constant name="ServicePassthroughBotRing9N_phimax"     value="ServicePassthroughBotRingHole9N_phimax+ServicePassthroughHoleN_gap"/>  
+    <!-- Hole wedge 10 -->
+    <constant name="ServicePassthroughBotRing10N_phimin"     value="ServicePassthroughBotRing9N_phimax"/>
+    <constant name="ServicePassthroughBotRingHole10N_phimin" value="ServicePassthroughBotRing10N_phimin"/>
+    <constant name="ServicePassthroughBotRingHole10N_phimax" value="ServicePassthroughBotRingHole10N_phimin+ServicePassthroughSmallHoleN_width"/>
+    <constant name="ServicePassthroughBotRing10N_phimax"     value="ServicePassthroughBotRingHole10N_phimax+ServicePassthroughHoleN_gap"/>
+    <constant name="ServicePassthroughBotRingN_phimax"      value="ServicePassthroughBotRingHole10N_phimax"/>
+    <comment> Beampipe support cutouts </comment>    
+    <!-- The wedges in the middle parts of the negative service passthrough plate to make way for the beampipe support.  
+         There are two halves: left and right (while looking towards the hadron going side) 
+         For each half, we need to cut two holes:
+         1) a wedge spanning the width of the beampipe support plate
+         2) a rectangular box to create the flat edge     
+    -->
+    <comment> Left half </comment>
+    <!-- specs for the wegde shaped cut -->
+    <constant name="ServicePassthroughWedgeCutLeftN_rmin1"   value="ServicePassthroughRingN_rmin1"/>
+    <constant name="ServicePassthroughWedgeCutLeftN_thickness" value="ServicePassthroughRingN_thickness"/>
+    <constant name="ServicePassthroughWedgeCutLeftN_length"  value="ServicePassthroughRingN_length"/> 
+    <constant name="ServicePassthroughWedgeCutLeftN_phimax"  value="asin(ServicePassthroughCut_halfwidth/ServicePassthroughRingN_rmax)*(180/Pi)*deg"/>
+    <constant name="ServicePassthroughWedgeCutLeftN_phimin"  value="360*deg-ServicePassthroughWedgeCutLeftN_phimax"/>  
+    <!-- specs for the rectangular box cut -->
+    <constant name="ServicePassthroughBoxCutLeftN_dx"        value="ServicePassthroughRingN_thickness"/> 
+    <constant name="ServicePassthroughBoxCutLeftN_dy"        value="ServicePassthroughCut_halfwidth*2"/>
+    <constant name="ServicePassthroughBoxCutLeftN_dz"        value="ServicePassthroughRingN_length"/> 
+    <constant name="ServicePassthroughBoxCutLeftN_xcenter_off" value="ServicePassthroughRingN_rmax-sqrt(ServicePassthroughRingN_rmax**2-ServicePassthroughCut_halfwidth**2)+0.3*mm"/> <!-- 0.3mm ad-hoc offset to tackel round-off error -->
+    <constant name="ServicePassthroughBoxCutLeftN_xcenter"   value="ServicePassthroughRingN_rmin1+(ServicePassthroughRingN_thickness/2)-ServicePassthroughBoxCutLeftN_xcenter_off"/> 
+    <comment> Right half </comment>
+    <!-- specs for the wegde shaped cut -->
+    <constant name="ServicePassthroughWedgeCutRightN_rmin1"   value="ServicePassthroughWedgeCutLeftN_rmin1"/>
+    <constant name="ServicePassthroughWedgeCutRightN_thickness" value="ServicePassthroughWedgeCutLeftN_thickness"/>
+    <constant name="ServicePassthroughWedgeCutRightN_length"  value="ServicePassthroughWedgeCutLeftN_length"/> 
+    <constant name="ServicePassthroughWedgeCutRightN_phimax"  value="180*deg+ServicePassthroughWedgeCutLeftN_phimax"/>  
+    <constant name="ServicePassthroughWedgeCutRightN_phimin"  value="ServicePassthroughWedgeCutLeftN_phimin-180*deg"/>  
+    <!-- specs for the rectangular box cut -->
+    <constant name="ServicePassthroughBoxCutRightN_dx"        value="ServicePassthroughBoxCutLeftN_dx"/> 
+    <constant name="ServicePassthroughBoxCutRightN_dy"        value="ServicePassthroughBoxCutLeftN_dy"/> 
+    <constant name="ServicePassthroughBoxCutRightN_dz"        value="ServicePassthroughBoxCutLeftN_dz"/> 
+    <constant name="ServicePassthroughBoxCutRightN_xcenter"   value="-ServicePassthroughBoxCutLeftN_xcenter"/>
+    <!-- qq-->
+
+
 
     <comment> Outer tracker service/support cones, asymmetric </comment>
     <constant name="OuterSupportConeCF_thickness"          value="2.0*mm" />
@@ -339,6 +509,261 @@
       id="TrackerSupport_0_ID"
     >
 
+    <!-- |||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||| -->
+    <comment> (Negative) Service passthrough ring implementation </comment>
+    <!-- |||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||| -->
+      <subtraction name="ServicePassthroughRingN" material="Air" vis="TrackerSupportVis"> 
+      <position x="0" y="0" z="ServicePassthroughRingN_zcenter"/> <!-- Base half-ring -->
+      <shape role="base" type="Cylinder"
+            name="ServicePassthroughTopRingBaseN"
+            rmin="ServicePassthroughRingN_rmin1"
+            length="ServicePassthroughRingN_length"
+            thickness="ServicePassthroughRingN_thickness"
+            phimin="ServicePassthroughRingN_phimin"
+            phimax="ServicePassthroughRingN_phimax"
+            material="CarbonFiber"/>
+      <!-- Hole wedge 1 -->
+      <shape role="hole" type="Cylinder"
+            name="ServicePassthroughTopRingHole1N"
+            rmin="ServicePassthroughHoleN_rmin1"
+            length="ServicePassthroughRingN_length"
+            thickness="ServicePassthroughHoleN_thickness"
+            phimin="ServicePassthroughTopRingHole1N_phimin"
+            phimax="ServicePassthroughTopRingHole1N_phimax">
+      <position x="0*cm" y="0*cm" z="0*cm"/>
+      </shape>
+      <!-- Hole wedge 2 -->
+      <shape role="hole" type="Cylinder"
+            name="ServicePassthroughTopRingHole2N"
+            rmin="ServicePassthroughHoleN_rmin1"
+            length="ServicePassthroughRingN_length"
+            thickness="ServicePassthroughHoleN_thickness"
+            phimin="ServicePassthroughTopRingHole2N_phimin"
+            phimax="ServicePassthroughTopRingHole2N_phimax">
+      <position x="0*cm" y="0*cm" z="0*cm"/>
+      </shape>
+      <!-- Hole wedge 3 -->
+      <shape role="hole" type="Cylinder"
+            name="ServicePassthroughTopRingHole3N"
+            rmin="ServicePassthroughHoleN_rmin1"
+            length="ServicePassthroughRingN_length"
+            thickness="ServicePassthroughHoleN_thickness"
+            phimin="ServicePassthroughTopRingHole3N_phimin"
+            phimax="ServicePassthroughTopRingHole3N_phimax">
+      <position x="0*cm" y="0*cm" z="0*cm"/>
+      </shape>
+      <!-- Hole wedge 4 -->
+      <shape role="hole" type="Cylinder"
+            name="ServicePassthroughTopRingHole4N"
+            rmin="ServicePassthroughHoleN_rmin1"
+            length="ServicePassthroughRingN_length"
+            thickness="ServicePassthroughHoleN_thickness"
+            phimin="ServicePassthroughTopRingHole4N_phimin"
+            phimax="ServicePassthroughTopRingHole4N_phimax">
+      <position x="0*cm" y="0*cm" z="0*cm"/>
+      </shape>      
+      <!-- Hole wedge 5 -->
+      <shape role="hole" type="Cylinder"
+            name="ServicePassthroughTopRingHole5N"
+            rmin="ServicePassthroughHoleN_rmin1"
+            length="ServicePassthroughRingN_length"
+            thickness="ServicePassthroughHoleN_thickness"
+            phimin="ServicePassthroughTopRingHole5N_phimin"
+            phimax="ServicePassthroughTopRingHole5N_phimax">
+      <position x="0*cm" y="0*cm" z="0*cm"/>
+      </shape>
+      <!-- Hole wedge 6 -->
+      <shape role="hole" type="Cylinder"
+            name="ServicePassthroughTopRingHole6N"
+            rmin="ServicePassthroughHoleN_rmin1"
+            length="ServicePassthroughRingN_length"
+            thickness="ServicePassthroughHoleN_thickness"
+            phimin="ServicePassthroughTopRingHole6N_phimin"
+            phimax="ServicePassthroughTopRingHole6N_phimax">
+      <position x="0*cm" y="0*cm" z="0*cm"/>
+      </shape>      
+      <!-- Hole wedge 7 -->
+      <shape role="hole" type="Cylinder"
+            name="ServicePassthroughTopRingHole7N"
+            rmin="ServicePassthroughHoleN_rmin1"
+            length="ServicePassthroughRingN_length"
+            thickness="ServicePassthroughHoleN_thickness"
+            phimin="ServicePassthroughTopRingHole7N_phimin"
+            phimax="ServicePassthroughTopRingHole7N_phimax">
+      <position x="0*cm" y="0*cm" z="0*cm"/>
+      </shape>      
+      <!-- Hole wedge 8 -->
+      <shape role="hole" type="Cylinder"
+            name="ServicePassthroughTopRingHole8N"
+            rmin="ServicePassthroughHoleN_rmin1"
+            length="ServicePassthroughRingN_length"
+            thickness="ServicePassthroughHoleN_thickness"
+            phimin="ServicePassthroughTopRingHole8N_phimin"
+            phimax="ServicePassthroughTopRingHole8N_phimax">
+      <position x="0*cm" y="0*cm" z="0*cm"/>
+      </shape>      
+      <!-- Hole wedge 9 -->
+      <shape role="hole" type="Cylinder"
+            name="ServicePassthroughTopRingHole9N"
+            rmin="ServicePassthroughHoleN_rmin1"
+            length="ServicePassthroughRingN_length"
+            thickness="ServicePassthroughHoleN_thickness"
+            phimin="ServicePassthroughTopRingHole9N_phimin"
+            phimax="ServicePassthroughTopRingHole9N_phimax">
+      <position x="0*cm" y="0*cm" z="0*cm"/>
+      </shape>      
+      <!-- Hole wedge 10 -->
+      <shape role="hole" type="Cylinder"
+            name="ServicePassthroughTopRingHole10N"
+            rmin="ServicePassthroughHoleN_rmin1"
+            length="ServicePassthroughRingN_length"
+            thickness="ServicePassthroughHoleN_thickness"
+            phimin="ServicePassthroughTopRingHole10N_phimin"
+            phimax="ServicePassthroughTopRingHole10N_phimax">
+      <position x="0*cm" y="0*cm" z="0*cm"/>
+      </shape>      
+      <comment> Making holes in the bottom half-ring </comment>
+      <!-- Hole wedge 1 -->
+      <shape role="hole" type="Cylinder"
+            name="ServicePassthroughBotRingHole1N"
+            rmin="ServicePassthroughHoleN_rmin1"
+            length="ServicePassthroughRingN_length"
+            thickness="ServicePassthroughHoleN_thickness"
+            phimin="ServicePassthroughBotRingHole1N_phimin"
+            phimax="ServicePassthroughBotRingHole1N_phimax">
+      <position x="0*cm" y="0*cm" z="0*cm"/>
+      </shape>
+      <!-- Hole wedge 2 -->
+      <shape role="hole" type="Cylinder"
+            name="ServicePassthroughBotRingHole2N"
+            rmin="ServicePassthroughHoleN_rmin1"
+            length="ServicePassthroughRingN_length"
+            thickness="ServicePassthroughHoleN_thickness"
+            phimin="ServicePassthroughBotRingHole2N_phimin"
+            phimax="ServicePassthroughBotRingHole2N_phimax">
+      <position x="0*cm" y="0*cm" z="0*cm"/>
+      </shape>
+      <!-- Hole wedge 3 -->
+      <shape role="hole" type="Cylinder"
+            name="ServicePassthroughBotRingHole3N"
+            rmin="ServicePassthroughHoleN_rmin1"
+            length="ServicePassthroughRingN_length"
+            thickness="ServicePassthroughHoleN_thickness"
+            phimin="ServicePassthroughBotRingHole3N_phimin"
+            phimax="ServicePassthroughBotRingHole3N_phimax">
+      <position x="0*cm" y="0*cm" z="0*cm"/>
+      </shape>
+      <!-- Hole wedge 4 -->
+      <shape role="hole" type="Cylinder"
+            name="ServicePassthroughBotRingHole4N"
+            rmin="ServicePassthroughHoleN_rmin1"
+            length="ServicePassthroughRingN_length"
+            thickness="ServicePassthroughHoleN_thickness"
+            phimin="ServicePassthroughBotRingHole4N_phimin"
+            phimax="ServicePassthroughBotRingHole4N_phimax">
+      <position x="0*cm" y="0*cm" z="0*cm"/>
+      </shape>      
+      <!-- Hole wedge 5 -->
+      <shape role="hole" type="Cylinder"
+            name="ServicePassthroughBotRingHole5N"
+            rmin="ServicePassthroughHoleN_rmin1"
+            length="ServicePassthroughRingN_length"
+            thickness="ServicePassthroughHoleN_thickness"
+            phimin="ServicePassthroughBotRingHole5N_phimin"
+            phimax="ServicePassthroughBotRingHole5N_phimax">
+      <position x="0*cm" y="0*cm" z="0*cm"/>
+      </shape>
+      <!-- Hole wedge 6 -->
+      <shape role="hole" type="Cylinder"
+            name="ServicePassthroughBotRingHole6N"
+            rmin="ServicePassthroughHoleN_rmin1"
+            length="ServicePassthroughRingN_length"
+            thickness="ServicePassthroughHoleN_thickness"
+            phimin="ServicePassthroughBotRingHole6N_phimin"
+            phimax="ServicePassthroughBotRingHole6N_phimax">
+      <position x="0*cm" y="0*cm" z="0*cm"/>
+      </shape>      
+      <!-- Hole wedge 7 -->
+      <shape role="hole" type="Cylinder"
+            name="ServicePassthroughBotRingHole7N"
+            rmin="ServicePassthroughHoleN_rmin1"
+            length="ServicePassthroughRingN_length"
+            thickness="ServicePassthroughHoleN_thickness"
+            phimin="ServicePassthroughBotRingHole7N_phimin"
+            phimax="ServicePassthroughBotRingHole7N_phimax">
+      <position x="0*cm" y="0*cm" z="0*cm"/>
+      </shape>      
+      <!-- Hole wedge 8 -->
+      <shape role="hole" type="Cylinder"
+            name="ServicePassthroughBotRingHole8N"
+            rmin="ServicePassthroughHoleN_rmin1"
+            length="ServicePassthroughRingN_length"
+            thickness="ServicePassthroughHoleN_thickness"
+            phimin="ServicePassthroughBotRingHole8N_phimin"
+            phimax="ServicePassthroughBotRingHole8N_phimax">
+      <position x="0*cm" y="0*cm" z="0*cm"/>
+      </shape>      
+      <!-- Hole wedge 9 -->
+      <shape role="hole" type="Cylinder"
+            name="ServicePassthroughBotRingHole9N"
+            rmin="ServicePassthroughHoleN_rmin1"
+            length="ServicePassthroughRingN_length"
+            thickness="ServicePassthroughHoleN_thickness"
+            phimin="ServicePassthroughBotRingHole9N_phimin"
+            phimax="ServicePassthroughBotRingHole9N_phimax">
+      <position x="0*cm" y="0*cm" z="0*cm"/>
+      </shape>      
+      <!-- Hole wedge 10 -->
+      <shape role="hole" type="Cylinder"
+            name="ServicePassthroughBotRingHole10N"
+            rmin="ServicePassthroughHoleN_rmin1"
+            length="ServicePassthroughRingN_length"
+            thickness="ServicePassthroughHoleN_thickness"
+            phimin="ServicePassthroughBotRingHole10N_phimin"
+            phimax="ServicePassthroughBotRingHole10N_phimax">
+      <position x="0*cm" y="0*cm" z="0*cm"/>
+      </shape>      
+      <comment> Making left beampipe support cutout </comment>
+      <!-- wedge shpaed cut -->      
+      <shape role="hole" type="Cylinder"
+            name="ServicePassthroughWedgeCutLeftN"
+            rmin="ServicePassthroughWedgeCutLeftN_rmin1"
+            length="ServicePassthroughWedgeCutLeftN_length"
+            thickness="ServicePassthroughWedgeCutLeftN_thickness"
+            phimin="ServicePassthroughWedgeCutLeftN_phimin"
+            phimax="ServicePassthroughWedgeCutLeftN_phimax">
+      <position x="0*cm" y="0*cm" z="0*cm"/>
+      </shape>      
+      <!-- box shaped cut -->     
+      <shape role="hole" type="Box"
+            name="ServicePassthroughBoxCutLeftN"
+            x="ServicePassthroughBoxCutLeftN_dx+1*mm"
+            y="ServicePassthroughBoxCutLeftN_dy"
+            z="ServicePassthroughBoxCutLeftN_dz">
+      <position x="ServicePassthroughBoxCutLeftN_xcenter" y="0*cm" z="0*cm"/>
+      </shape> 
+      <comment> Making right beampipe support cutout </comment>
+      <!-- wedge shpaed cut -->      
+      <shape role="hole" type="Cylinder"
+            name="ServicePassthroughWedgeCutRightN"
+            rmin="ServicePassthroughWedgeCutRightN_rmin1"
+            length="ServicePassthroughWedgeCutRightN_length"
+            thickness="ServicePassthroughWedgeCutRightN_thickness"
+            phimin="ServicePassthroughWedgeCutRightN_phimin"
+            phimax="ServicePassthroughWedgeCutRightN_phimax">
+      <position x="0*cm" y="0*cm" z="0*cm"/>
+      </shape>      
+      <!-- box shaped cut -->     
+      <shape role="hole" type="Box"
+            name="ServicePassthroughBoxCutRightN"
+            x="ServicePassthroughBoxCutRightN_dx+1*mm"
+            y="ServicePassthroughBoxCutRightN_dy"
+            z="ServicePassthroughBoxCutRightN_dz">
+      <position x="ServicePassthroughBoxCutRightN_xcenter" y="0*cm" z="0*cm"/>
+      </shape>                  
+      </subtraction>
+      <!-- |||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||| -->
+
       <support type="Cylinder"
         name="SupportRoutingFlangeCyl"
         vis="TrackerSupportVis"
@@ -397,7 +822,7 @@
       <support type="Cylinder"
         name="TrackerSupportCylEndcapN1A"
         vis="TrackerSupportVis"
-        rmin="TrackerSupportCyl_rmin1"
+        rmin="TrackerSupportCyl_rmin1-TrackerSupportCylAlN_thickness1A"
         length="TrackerSupportCylEndcapN_length1A"
         thickness="TrackerSupportCylN_thickness1A">
           <position x="0*cm" y="0*cm" z="-TrackerSupportCylEndcapN_z1A" />
@@ -407,7 +832,7 @@
       <support type="Cylinder"
         name="TrackerSupportCylEndcapN1B"
         vis="TrackerSupportVis"
-        rmin="TrackerSupportCyl_rmin1"
+        rmin="TrackerSupportCyl_rmin1-TrackerSupportCylAlN_thickness1B"
         length="TrackerSupportCylEndcapN_length1B"
         thickness="TrackerSupportCylN_thickness1B">
           <position x="0*cm" y="0*cm" z="-TrackerSupportCylEndcapN_z1B" />
@@ -417,7 +842,7 @@
       <support type="Cylinder"
         name="TrackerSupportCylEndcapN1C"
         vis="TrackerSupportVis"
-        rmin="TrackerSupportCyl_rmin1"
+        rmin="TrackerSupportCyl_rmin1-TrackerSupportCylAlN_thickness1C"
         length="TrackerSupportCylEndcapN_length1C"
         thickness="TrackerSupportCylN_thickness1C">
           <position x="0*cm" y="0*cm" z="-TrackerSupportCylEndcapN_z1C" />
@@ -427,7 +852,7 @@
       <support type="Cylinder"
         name="TrackerSupportCylEndcapP1A"
         vis="TrackerSupportVis"
-        rmin="TrackerSupportCyl_rmin1"
+        rmin="TrackerSupportCyl_rmin1-TrackerSupportCylAlP_thickness1A"
         length="TrackerSupportCylEndcapP_length1A"
         thickness="TrackerSupportCylP_thickness1A">
           <position x="0*cm" y="0*cm" z="TrackerSupportCylEndcapP_z1A" />
@@ -435,7 +860,7 @@
           <component material="CarbonFiber" thickness="TrackerSupportCylCF_thickness1" name="Support" vis="TrackerSupportVis"/>
       </support>
       <support type="Cylinder"
-        name="TrackerSupportCylEndcapP1B"
+        name="TrackerSupportCylEndcapP1BTrackerSupportCylAlP_thickness1B"
         vis="TrackerSupportVis"
         rmin="TrackerSupportCyl_rmin1"
         length="TrackerSupportCylEndcapP_length1B"
@@ -445,7 +870,7 @@
           <component material="CarbonFiber" thickness="TrackerSupportCylCF_thickness1" name="Support" vis="TrackerSupportVis"/>
       </support>
       <support type="Cylinder"
-        name="TrackerSupportCylEndcapP1C"
+        name="TrackerSupportCylEndcapP1C-TrackerSupportCylAlP_thickness1C"
         vis="TrackerSupportVis"
         rmin="TrackerSupportCyl_rmin1"
         length="TrackerSupportCylEndcapP_length1C"
