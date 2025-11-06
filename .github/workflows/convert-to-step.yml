@@ -15,7 +15,7 @@ jobs:
         detector_config: ${{fromJson(inputs.detector_configs)}}
     steps:
     - uses: actions/checkout@v5
-    - uses: actions/download-artifact@v5
+    - uses: actions/download-artifact@v6
       with:
         name: build-gcc-nightly-fast-eic-shell
         path: install/
@@ -38,7 +38,7 @@ jobs:
           detectors[OuterBarrelMPGDSubAssembly]='-l 4'
           # Export to one STEP file
           npdet_to_step $(for d in ${!detectors[@]} ; do echo part ${detectors[$d]} $d ; done) -o ${{matrix.detector_config}} $DETECTOR_PATH/${{matrix.detector_config}}.xml 2>&1 | sed '/TGeoMatrix::dtor/d'
-    - uses: actions/upload-artifact@v4
+    - uses: actions/upload-artifact@v5
       with:
         name: ${{matrix.detector_config}}.stp
         path: ${{matrix.detector_config}}.stp
