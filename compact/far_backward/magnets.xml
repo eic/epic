@@ -49,6 +49,32 @@
     <constant name="Q2PR_Coil_Center_posY" value="0*cm"/>
     <constant name="Q2PR_Coil_Center_posZ" value="-1274.73*cm"/>
 
+    <!-- B2eRA Parameters-->
+    <constant name="B2eRA_OuterWidth"  value="412.55*mm"/>
+    <constant name="B2eRA_OuterHeight" value="298.48*mm"/>
+    <constant name="B2eRA_InnerWidth"  value="332.55*mm"/>
+    <constant name="B2eRA_InnerHeight" value="218.48*mm"/>
+    <constant name="B2eRA_Length"      value="3800.0*mm"/>
+    <constant name="B2eRA_PoleGap"     value="120*mm"/>
+    <constant name="B2eRA_YokeOuterWidth"  value="221.15*mm"/>
+    <constant name="B2eRA_YokeInnerWidth"  value="191.45*mm"/>
+
+    <!-- B2eRB Parameters-->
+    <constant name="B2eRB_OuterWidth"  value="825.21*mm"/>
+    <constant name="B2eRB_OuterHeight" value="966.83*mm"/>
+    <constant name="B2eRB_InnerWidth"  value="585.21*mm"/>
+    <constant name="B2eRB_InnerHeight" value="676.83*mm"/>
+    <constant name="B2eRB_Length"      value="1500.0*mm"/>
+    <constant name="B2eRB_PoleGap"     value="120*mm"/>
+    <constant name="B2eRB_YokeOuterWidth"  value="305.21*mm"/>
+    <constant name="B2eRB_YokeInnerWidth"  value="245.56*mm"/>
+
+    <constant name="B2eRB_Bar_Width"  value="18.0*mm"/>
+    <constant name="B2eRB_Bar_Height" value="250.0*mm"/>
+    <constant name="B2eRB_Bar_Xpos1"  value="168.605*mm"/>
+    <constant name="B2eRB_Bar_Xpos2"  value="190.605*mm"/>
+    <constant name="B2eRB_Bar_Ypos"   value="206.415*mm"/>
+
   </define>
 
     <comment> Electron side magnets </comment>
@@ -120,8 +146,48 @@
         rout1="B2BeR_InnerRadius" rout2="B2BeR_InnerRadius">
       </pipe>
     </detector>
-
     <comment> Electron side beam magnet volumes </comment>
+
+    <detector
+    name="Magnets_B2eRA"
+    type="BeamlineDipoleMagnet"
+    vis="BeamPipeVis"
+    pole_gap="B2eRA_PoleGap"
+    yoke_outer_width="B2eRA_YokeOuterWidth"
+    yoke_inner_width="B2eRA_YokeInnerWidth">
+      <dimensions_mainbody_outer x="B2eRA_OuterWidth" y="B2eRA_OuterHeight" z="B2eRA_Length" />
+      <dimensions_mainbody_inner x="B2eRA_InnerWidth" y="B2eRA_InnerHeight" z="B2eRA_Length" />
+      <dimensions_leg_outer x="10*cm" y="10*cm" z="10*cm" />
+      <dimensions_leg_inner x="10*cm" y="10*cm" z="10*cm" />
+      <position   x="-2*m" y="0" z="0" />
+      <rotation   x="0*rad" y="0*rad" z="0*rad" />
+    </detector>
+
+    <detector
+    name="Magnets_B2eRB"
+    type="BeamlineDipoleMagnet"
+    vis="BeamPipeVis"
+    pole_gap="B2eRB_PoleGap"
+    yoke_outer_width="B2eRB_YokeOuterWidth"
+    yoke_inner_width="B2eRB_YokeInnerWidth">
+      <dimensions_mainbody_outer x="B2eRB_OuterWidth" y="B2eRB_OuterHeight" z="B2eRB_Length" />
+      <dimensions_mainbody_inner x="B2eRB_InnerWidth" y="B2eRB_InnerHeight" z="B2eRB_Length" />
+      <dimensions_leg_outer x="10*cm" y="10*cm" z="10*cm" />
+      <dimensions_leg_inner x="10*cm" y="10*cm" z="10*cm" />
+      <position   x="2*m" y="0" z="0" />
+      <rotation   x="0*rad" y="0*rad" z="0*rad" />
+      <bar width="B2eRB_Bar_Width" height="B2eRB_Bar_Height"  length="B2eRB_Length">
+        <position x="B2eRB_Bar_Xpos1" y="B2eRB_Bar_Ypos" z="0*cm"/>
+        <position x="B2eRB_Bar_Xpos2" y="B2eRB_Bar_Ypos" z="0*cm"/>
+        <position x="B2eRB_Bar_Xpos1" y="-B2eRB_Bar_Ypos" z="0*cm"/>
+        <position x="B2eRB_Bar_Xpos2" y="-B2eRB_Bar_Ypos" z="0*cm"/>
+        <position x="-B2eRB_Bar_Xpos1" y="B2eRB_Bar_Ypos" z="0*cm"/>
+        <position x="-B2eRB_Bar_Xpos2" y="B2eRB_Bar_Ypos" z="0*cm"/>
+        <position x="-B2eRB_Bar_Xpos1" y="-B2eRB_Bar_Ypos" z="0*cm"/>
+        <position x="-B2eRB_Bar_Xpos2" y="-B2eRB_Bar_Ypos" z="0*cm"/>
+      </bar>
+    </detector>
+
 
     <detector
     name="Magnets_Q3eR"
@@ -135,7 +201,6 @@
 
 
     <comment> Hadron side magnets </comment>
-
     <!-- Q1ApR magnet -->
     <detector name="Q1APR_BeamlineMagnet" type="ip6_CryostatMagnet">
       <yoke name="Q1APR_Yoke" vis="MagnetVis">
@@ -507,7 +572,6 @@
         </cut>
       </cryoend>
     </detector>
-
   </detectors>
 
   <fields>
