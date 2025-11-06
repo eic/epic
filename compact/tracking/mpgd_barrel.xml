@@ -53,8 +53,6 @@
 
     <comment> In principle, stave count should not be independenty specified: it is fixed by above intrinsic parameters </comment>
     <constant name="MPGDBarrelStave_count"                  value="8"/>
-    <constant name="InnerMPGDBarrelLayer_rmin"              value="InnerMPGDBarrel_rmin"/>
-    <constant name="InnerMPGDBarrelLayer_rmax"              value="MMOuterSector_R + MMRadial_offset / 2 + 1*cm"/>
     <constant name="rmin2Sensor" value="MMDriftCuGround_thickness + MMDriftKapton_thickness + MMDriftCuElectrode_thickness + MMGasGap_thickness / 2" />
     <constant name="MMInnerSensor_R" value="MMInnerSector_R + rmin2Sensor" />
     <constant name="MMOuterSensor_R" value="MMOuterSector_R + rmin2Sensor" />
@@ -100,8 +98,8 @@
 
       <layer module="InnerMPGDBarrel_Mod1" id="1" vis="InvisibleWithDaughters">
         <barrel_envelope
-          inner_r="InnerMPGDBarrelLayer_rmin"
-          outer_r="InnerMPGDBarrelLayer_rmax"
+          inner_r="InnerMPGDBarrel_rmin"
+          outer_r="InnerMPGDBarrel_rmax"
           z_length="InnerMPGDBarrelLayer_length"
           z0="InnerMPGDBarrel_zoffset"/>
         <layer_material surface="inner" binning="binPhi,binZ" bins0="MPGDBarrelStave_count*24" bins1="100" />
