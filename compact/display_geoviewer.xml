@@ -97,9 +97,9 @@
     <comment>
       Solenoid
     </comment>
-    <vis name="SolenoidCoilVis"     ref="AnlLight_Gray" showDaughters="true"  visible="true" lineStyle="solid" drawingStyle="solid" />
-    <vis name="SolenoidCryostatVis" ref="AnlGray"       showDaughters="true"  visible="true" lineStyle="solid" drawingStyle="solid" />
-    <vis name="SolenoidYokeVis"     ref="AnlLight_Gray" showDaughters="false" visible="true" lineStyle="solid" drawingStyle="solid" />
+    <vis name="SolenoidCoilVis"     ref="AnlLightGray" showDaughters="true"  visible="true" lineStyle="solid" drawingStyle="solid" />
+    <vis name="SolenoidCryostatVis" ref="AnlGray"      showDaughters="true"  visible="true" lineStyle="solid" drawingStyle="solid" />
+    <vis name="SolenoidYokeVis"     ref="AnlLightGray" showDaughters="false" visible="true" lineStyle="solid" drawingStyle="solid" />
 
 
     <comment>

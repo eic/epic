@@ -16,8 +16,7 @@
   <vis name="AnlBlue"         alpha="1" r="0/256"   g="96/256"  b="156/256"/>
   <vis name="AnlTeal"         alpha="1" r="0/256"   g="161/256" b="156/256"/>
   <vis name="AnlGray"         alpha="1" r="102/256" g="102/256" b="102/256"/>
-  <vis name="AnlLight_Gray"   alpha="1" r="209/256" g="209/256" b="209/256"/>
-  <vis name="AnlLightGray"    ref="AnlLight_Gray" />
+  <vis name="AnlLightGray"    alpha="1" r="209/256" g="209/256" b="209/256"/>
   <!-- off-white (or white) don't work! -->
   <!--vis name="AnlOff_White"    alpha="1" r="242/256" g="242/256" b="242/256"/-->
   <vis name="AnlDarkRed"      alpha="1" r="161/256" g="45/256"  b="45/256"/>
