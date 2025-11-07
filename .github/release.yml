@@ -1,0 +1,36 @@
+changelog:
+  exclude:
+    authors:
+      - 'dependabot'
+      - 'pre-commit-ci'
+  categories:
+    - title: 🕸️ Tracking
+      labels:
+        - 'topic: tracking'
+    - title: 🪪 Particle identification
+      labels:
+        - 'topic: PID'
+    - title: 🚿 Calorimetry
+      labels:
+        - 'topic: calorimetry'
+    - title: ◀️ Backward
+      labels:
+        - 'topic: backward'
+    - title: ▶️ Forward
+      labels:
+        - 'topic: forward'
+    - title: ⏪ Far Backward
+      labels:
+        - 'topic: far-backward'
+    - title: ⏩ Far Forward
+      labels:
+        - 'topic: far-forward'
+    - title: ⚙️ Infrastructure
+      labels:
+        - 'topic: infrastructure'
+    - title: 🐛 Bugs fixed
+      labels:
+        - 'bug'
+    - title: 🔩 Other Changes
+      labels:
+        - '*'
