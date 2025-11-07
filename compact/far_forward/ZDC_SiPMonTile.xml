@@ -35,8 +35,8 @@
     <constant name="HcalFarForwardZDC_SiPMonTile_BackplateThickness" value="HcalFarForwardZDC_SiPMonTile_AbsorberThickness"/>
     <constant name="HcalFarForwardZDC_SiPMonTile_Layer_NSteelRepeat" value="64"/>
 
-    <constant name="HcalFarForwardZDC_SiPMonTile_HexSideLength" value="31.3*mm"/>
-    <constant name="HcalFarForwardZDC_SiPMonTile_stagger" value="2"/>
+    <constant name="HcalFarForwardZDC_SiPMonTile_SquareSideLength" value="47.8*mm"/>
+    <constant name="HcalFarForwardZDC_SiPMonTile_stagger" value="1"/>
 
     <constant name="HcalFarForwardZDC_SiPMonTile_width" value= "60*cm"/>
     <constant name="HcalFarForwardZDC_SiPMonTile_height" value= "60*cm"/>
@@ -106,9 +106,11 @@
   <readouts>
     <readout name="HcalFarForwardZDCHits">
       <segmentation
-        type="HexGrid"
-        side_length="HcalFarForwardZDC_SiPMonTile_HexSideLength"
-        stagger="HcalFarForwardZDC_SiPMonTile_stagger"
+        type="CartesianGridXYStaggered"
+        grid_size_x="HcalFarForwardZDC_SiPMonTile_SquareSideLength"
+	grid_size_y="HcalFarForwardZDC_SiPMonTile_SquareSideLength"
+        stagger_x="HcalFarForwardZDC_SiPMonTile_stagger"
+	stagger_y="HcalFarForwardZDC_SiPMonTile_stagger"
         />
       <id>system:8,layer:8,slice:5,x:32:-16,y:-16</id>
     </readout>
