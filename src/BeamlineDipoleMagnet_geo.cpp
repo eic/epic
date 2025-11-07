@@ -16,7 +16,7 @@ static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector /* sens *
   string det_name = x_det.nameStr();
   DetElement sdet(det_name, x_det.id());
   Assembly assembly(det_name + "_assembly");
-  Material m_Iron   = det.material("Iron");
+  Material m_Iron = det.material("Iron");
   // Material m_Copper = det.material("Copper");
   const string vis1 = getAttrOrDefault<string>(x_det, _Unicode(vis), "AnlGreen");
   // auto vis_air  = det.visAttributes("BackwardsVac");
@@ -36,11 +36,10 @@ static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector /* sens *
   double inner_width           = inner_box_dim.attr<double>(_Unicode(x));
 
   // Yoke/coil parameters
-  double pole_gap = getAttrOrDefault<double>(x_det, _Unicode(pole_gap), inner_height/2.0);
-  double yoke_height = inner_height / 2.0 - pole_gap/2;
+  double pole_gap       = getAttrOrDefault<double>(x_det, _Unicode(pole_gap), inner_height / 2.0);
+  double yoke_height    = inner_height / 2.0 - pole_gap / 2;
   double yoke_outer_dim = getAttrOrDefault<double>(x_det, _Unicode(yoke_outer_width), inner_width);
   double yoke_inner_dim = getAttrOrDefault<double>(x_det, _Unicode(yoke_inner_width), inner_width);
-
 
   // // Creates the outer box for the shape of the coils
   // xml::Component box_dim_3 = x_det.child(_Unicode(dimensions_coils_outer));
@@ -128,8 +127,7 @@ static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector /* sens *
   vol_right.setAttributes(det, x_det.regionStr(), x_det.limitsStr(), vis1);
 
   // Upper coils/yoke - This is not entirely accurate as CAD has curved edges
-  Trd1 yoke_trap(yoke_outer_dim / 2.0, yoke_inner_dim / 2.0,
-                  outer_depth / 2.0, yoke_height / 2.0);
+  Trd1 yoke_trap(yoke_outer_dim / 2.0, yoke_inner_dim / 2.0, outer_depth / 2.0, yoke_height / 2.0);
   Volume vol_yoke(det_name + "_vol_yoke", yoke_trap, m_Iron);
   vol_yoke.setAttributes(det, x_det.regionStr(), x_det.limitsStr(), vis1);
 
@@ -139,29 +137,30 @@ static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector /* sens *
   // Place the 4 walls
   // Top wall at +y
   magnet_assembly.placeVolume(vol_top, Position(0, outer_height / 2.0 - thickness_y / 2.0, 0));
-  
+
   // Bottom wall at -y
   magnet_assembly.placeVolume(vol_bottom, Position(0, -outer_height / 2.0 + thickness_y / 2.0, 0));
-  
+
   // Left wall at -x
   magnet_assembly.placeVolume(vol_left, Position(-outer_width / 2.0 + thickness_x / 2.0, 0, 0));
-  
+
   // Right wall at +x
   magnet_assembly.placeVolume(vol_right, Position(outer_width / 2.0 - thickness_x / 2.0, 0, 0));
 
   //Translation for top and bottom yoke
-  
 
   // Place the top yoke with position and rotation around X axis
-  magnet_assembly.placeVolume(
-      vol_yoke, Transform3D(RotationX(TMath::Pi()/2), Position(0, inner_height / 2.0 - yoke_height / 2.0, 0)));
+  magnet_assembly.placeVolume(vol_yoke,
+                              Transform3D(RotationX(TMath::Pi() / 2),
+                                          Position(0, inner_height / 2.0 - yoke_height / 2.0, 0)));
 
   // Place the bottom yoke
-  magnet_assembly.placeVolume(
-      vol_yoke, Transform3D(RotationX(-TMath::Pi()/2), Position(0, -inner_height / 2.0 + yoke_height / 2.0, 0)));
+  magnet_assembly.placeVolume(vol_yoke,
+                              Transform3D(RotationX(-TMath::Pi() / 2),
+                                          Position(0, -inner_height / 2.0 + yoke_height / 2.0, 0)));
 
   // Bar parameters
- for (xml_coll_t bar_coll(x_det, _Unicode(bar)); bar_coll; ++bar_coll) {
+  for (xml_coll_t bar_coll(x_det, _Unicode(bar)); bar_coll; ++bar_coll) {
     double bar_width  = bar_coll.attr<double>(_Unicode(width));
     double bar_height = bar_coll.attr<double>(_Unicode(height));
     double bar_length = bar_coll.attr<double>(_Unicode(length));
@@ -169,7 +168,7 @@ static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector /* sens *
     Box bar_box(bar_width / 2., bar_height / 2., bar_length / 2.);
     Volume vol_bar(det_name + "_vol_bar", bar_box, m_Iron);
     vol_bar.setAttributes(det, x_det.regionStr(), x_det.limitsStr(), vis1);
-    for(xml_coll_t pos(bar_coll, _Unicode(position)); pos; ++pos) {
+    for (xml_coll_t pos(bar_coll, _Unicode(position)); pos; ++pos) {
       double posX = pos.attr<double>(_Unicode(x));
       double posY = pos.attr<double>(_Unicode(y));
       double posZ = pos.attr<double>(_Unicode(z));
@@ -177,7 +176,6 @@ static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector /* sens *
       magnet_assembly.placeVolume(vol_bar, Position(posX, posY, posZ));
     }
   }
-
 
   // Subtractes the volume of the inner box from the outer box for the main body
   // BooleanSolid main_body = SubtractionSolid(box_outer, box_inner);
