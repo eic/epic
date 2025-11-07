@@ -42,30 +42,77 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
     // Get the mother volume
     Volume mother_vol = mother.volume();
 
-    // Get mother volume shape as cone segment
-    ConeSegment mother_shape = mother_vol.solid();
-
-    // Get the parameters of the mother volume
-    double rOuter1 = mother_shape.rMax1();
-    double rOuter2 = mother_shape.rMax2();
-    double length  = 2 * mother_shape.dZ();
-
     double sensitive_thickness = 0.1 * mm;
+    Solid sensitive_solid;
+    Position disk_position;
 
-    //Calculate R or cone after sensitive layer
+    // Check if we should use plane-based cross section (default: false, use cone)
+    bool use_plane_xs = getAttrOrDefault<bool>(slice_coll, _Unicode(use_cross_section), false);
 
-    double rEnd = rOuter2 - (rOuter2 - rOuter1) * sensitive_thickness / length;
-    double zPos = length / 2.0 - sensitive_thickness / 2.0;
-    if (detStart) {
-      rEnd = rOuter1 - (rOuter1 - rOuter2) * sensitive_thickness / length;
-      zPos = -length / 2.0 + sensitive_thickness / 2.0;
+    if (use_plane_xs) {
+      // Use plane-based cross section
+      
+      // Get plane definition from XML (normal vector and distance from origin)
+      double plane_nx = getAttrOrDefault<double>(slice_coll, _Unicode(plane_nx), 0.0);
+      double plane_ny = getAttrOrDefault<double>(slice_coll, _Unicode(plane_ny), 0.0);
+      double plane_nz = getAttrOrDefault<double>(slice_coll, _Unicode(plane_nz), 1.0);
+      double plane_d  = getAttrOrDefault<double>(slice_coll, _Unicode(plane_d), 0.0);
+      
+      // Normalize the plane normal vector
+      double norm = sqrt(plane_nx*plane_nx + plane_ny*plane_ny + plane_nz*plane_nz);
+      plane_nx /= norm;
+      plane_ny /= norm;
+      plane_nz /= norm;
+      
+      // Get maximum dimension for cutting box
+      double max_dim = getAttrOrDefault<double>(slice_coll, _Unicode(max_dimension), 1.0 * m);
+      
+      // Create a thin box perpendicular to the plane normal
+      Box cutting_box(max_dim, max_dim, sensitive_thickness / 2);
+      
+      // Calculate rotation to align box with plane normal
+      // Default box normal is along Z, rotate to align with plane normal
+      RotationZYX rotation;
+      if (fabs(plane_nz - 1.0) > 1e-6 || fabs(plane_nx) > 1e-6 || fabs(plane_ny) > 1e-6) {
+        // Calculate rotation angles to align Z-axis with plane normal
+        double theta = acos(plane_nz); // angle from Z axis
+        double phi = atan2(plane_ny, plane_nx); // angle in XY plane
+        rotation = RotationZYX(0.0, theta, phi);
+      }
+      
+      // Position the cutting plane at distance plane_d along the normal
+      Position plane_pos(plane_nx * plane_d, plane_ny * plane_d, plane_nz * plane_d);
+      
+      // Create intersection of mother volume with the cutting box
+      sensitive_solid = IntersectionSolid(mother_vol.solid(), cutting_box, 
+                                          Transform3D(rotation, plane_pos));
+      disk_position = Position(0.0, 0.0, 0.0);
+
+    } else {
+      // Use cone segment (default behavior)
+      ConeSegment mother_shape = mother_vol.solid();
+      
+      // Get the parameters of the mother volume
+      double rOuter1 = mother_shape.rMax1();
+      double rOuter2 = mother_shape.rMax2();
+      double length  = 2 * mother_shape.dZ();
+
+      //Calculate R of cone after sensitive layer
+      double rEnd = rOuter2 - (rOuter2 - rOuter1) * sensitive_thickness / length;
+      double zPos = length / 2.0 - sensitive_thickness / 2.0;
+      if (detStart) {
+        rEnd = rOuter1 - (rOuter1 - rOuter2) * sensitive_thickness / length;
+        zPos = -length / 2.0 + sensitive_thickness / 2.0;
+      }
+
+      sensitive_solid = ConeSegment(sensitive_thickness / 2, 0.0, rOuter2, 0.0, rEnd);
+      disk_position = Position(0.0, 0.0, zPos);
     }
 
-    ConeSegment s_start_disk(sensitive_thickness / 2, 0.0, rOuter2, 0.0, rEnd);
-    Volume v_start_disk("v_start_disk_" + motherName, s_start_disk, m_Vacuum);
+    Volume v_start_disk("v_start_disk_" + motherName, sensitive_solid, m_Vacuum);
     v_start_disk.setSensitiveDetector(sens);
 
-    auto disk_placement = mother_vol.placeVolume(v_start_disk, Position(0.0, 0.0, zPos));
+    auto disk_placement = mother_vol.placeVolume(v_start_disk, disk_position);
     disk_placement.addPhysVolID("end", detStart);
     disk_placement.addPhysVolID("pipe", pipe_id);
     disk_placement.addPhysVolID("system", det_id);
