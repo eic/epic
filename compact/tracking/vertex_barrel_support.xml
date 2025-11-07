@@ -1,0 +1,2279 @@
+<!-- SPDX-License-Identifier: LGPL-3.0-or-later -->
+<!-- Copyright (C) 2025 Shujie Li -->
+
+<lccdd>
+  <comment>
+    Tracker support and service materials for IB converted from the CAD drawings, see https://github.com/eic/epic/pull/803.
+    This replaced part of the inner support cone (within first disk, and L3) in support_service_craterlake.xml (already modified accordingly).
+  </comment>
+  <define>
+    <constant name="IB_CF_thickness"           value="0.5*mm" />
+    <constant name="IB_frame_rmax"   value='258*mm'/>
+    <constant name="IB_frame_zmax"   value='232*mm'/>
+
+    <constant name="overlap_buffer"   value="0.5*mm" /> <comment>to avoid overlaps between simple geo shape boundaries e.g. when connecting box with ring</comment>
+    <comment> ------------------------------
+                    L0 L1 (sheet 1)
+              ------------------------------</comment>
+    <comment> Radius: ring1 is the inner ring (L0), ring2 is the outer ring (L1).
+                      ring1_2 is the disk connecting ring1 and 2 </comment>
+    <constant name="L0_ring1_rmin"         value="38.15*mm" />
+    <constant name="L0_ring1_rmax"         value="50.30*mm" />
+    <constant name="L0_ring1_dr"           value="L0_ring1_rmax-L0_ring1_rmin" />
+    <constant name="L0_ring2_rmin"         value="50.55*mm + overlap_buffer" />
+    <constant name="L0_ring2_rmax"         value="62.40*mm" />
+    <constant name="L0_ring2_dr"           value="L0_ring2_rmax-L0_ring2_rmin" />
+
+    <comment> all plates have same thickness and length </comment>
+    <constant name="L0_plate_thickness"         value=" 3.2*mm" />
+    <constant name="L0_plate_zmin"              value="-124.15*mm" />
+    <constant name="L0_plate_zmax"              value=" 127.15*mm" />
+    <constant name="L0_plate_zcenter"           value="(L0_plate_zmax+L0_plate_zmin)/2" />
+    <constant name="L0_plate_length"            value=" L0_plate_zmax-L0_plate_zmin" />
+    <constant name="L0_plate_height1"           value=" L0_ring1_dr-0.5*mm" />
+    <constant name="L0_plate_height2"           value=" L0_ring2_dr-0.5*mm" />
+    <constant name="L0_plate_vert_off"          value=" 1.5*mm" />
+    <constant name="L0_plate_vert_center"       value=" L0_plate_vert_off + L0_plate_thickness/2" />
+    <constant name="L0_plate_horiz_center1"     value=" L0_ring1_rmin + L0_ring1_dr/2" />
+    <constant name="L0_plate_horiz_center2"     value=" L0_ring2_rmin + L0_ring2_dr/2" />
+    <constant name="L0_plate_mid_rot"           value=" 90*deg" />
+
+    <comment> innner (smaller abs(z)) and outer endcap rings on negative and postive direction </comment>
+    <constant name="L0_inner_ring_dz"              value="6.35*mm" />
+    <constant name="L0_outer_ring_dz"              value="25.4*mm" />
+    <constant name="L0_ring_gap_z"                 value="5.5*mm"  />
+    <constant name="L0_neg_inner_ring_zcenter"     value="L0_plate_zmin - L0_inner_ring_dz/2." />
+    <constant name="L0_neg_outer_ring_zcenter"     value="L0_plate_zmin - L0_inner_ring_dz - L0_ring_gap_z - L0_outer_ring_dz/2." />
+    <constant name="L0_pos_inner_ring_zcenter"     value="L0_plate_zmax + L0_inner_ring_dz/2." />
+    <constant name="L0_pos_outer_ring_zcenter"     value="L0_plate_zmax + L0_inner_ring_dz + L0_ring_gap_z + L0_outer_ring_dz/2." />
+
+    <comment> ------------------------------
+                  L0 L1 (sheet 3)
+            ------------------------------</comment>
+    <comment> L0 and L1 air tubes on the positive end (approx as disk), sheet 3 </comment>
+    <constant name="L0L1_cooling_tube_dz"         value="25.2*mm" />
+    <constant name="L0L1_cooling_tube_zmin"       value="171.5*mm" />
+    <constant name="L0L1_cooling_tube_zmax"       value="L0L1_cooling_tube_zmin + L0L1_cooling_tube_dz" />
+    <constant name="L0L1_cooling_tube_zcenter"    value="(L0L1_cooling_tube_zmin + L0L1_cooling_tube_zmax)/2" />
+    <constant name="L0_cooling_tube_rmax"       value="45*mm" />
+    <constant name="L0_cooling_tube_rmin"       value="42*mm" />
+    <constant name="L0_cooling_tube_rcenter"    value="(L0_cooling_tube_rmax+L0_cooling_tube_rmin)/2" />
+    <constant name="L0_cooling_tube_dr"         value="L0_cooling_tube_rmax-L0_cooling_tube_rmin" />
+    <constant name="L1_cooling_tube_rmax"       value="56.75*mm" />
+    <constant name="L1_cooling_tube_rmin"       value="53.25*mm" />
+    <constant name="L1_cooling_tube_rcenter"    value="(L1_cooling_tube_rmax+L1_cooling_tube_rmin)/2" />
+    <constant name="L1_cooling_tube_dr"         value="L1_cooling_tube_rmax-L1_cooling_tube_rmin" />
+    <constant name="L0L1_cooling_tube_vert_off"    value="3*mm" />
+    <constant name="L0L1_cooling_tube_phi_off"     value="L0L1_cooling_tube_vert_off/L0_cooling_tube_rmin" />
+
+    <comment> ------------------------------
+                    L1 (sheet 2)
+              ------------------------------</comment>
+    <comment> ring1 (smaller r) and 2. ring1_2 is the disk connecting two rings </comment>
+    <constant name="L1_ring_dr"             value="IB_CF_thickness" />
+    <constant name="L1_ring1_rmin"          value="62.5*mm" />
+    <constant name="L1_ring1_rmax"          value="L1_ring1_rmin+L1_ring_dr" />
+    <constant name="L1_ring2_rmin"          value="83.5*mm" />
+    <constant name="L1_ring2_rmax"          value="L1_ring2_rmin+L1_ring_dr" />
+    <constant name="L1_ring1_2_rmin"        value="L1_ring1_rmax" />
+    <constant name="L1_ring1_2_rmax"        value="L1_ring2_rmax" />
+    <constant name="L1_ring1_2_dr"          value="L1_ring1_2_rmax - L1_ring1_2_rmin" />
+
+    <constant name="L1_neg_ring1_dz"        value="45*mm" />
+    <constant name="L1_neg_ring1_zmax"      value="-124*mm" />
+    <constant name="L1_neg_ring1_zmin"      value="L1_neg_ring1_zmax-L1_neg_ring1_dz" />
+    <constant name="L1_neg_ring1_zcenter"   value="(L1_neg_ring1_zmin + L1_neg_ring1_zmax)/2" />
+    <constant name="L1_neg_ring2_dz"        value="5.5*mm" />
+    <constant name="L1_neg_ring2_zmax"      value="L1_neg_ring1_zmin" />
+    <constant name="L1_neg_ring2_zmin"      value="L1_neg_ring2_zmax-L1_neg_ring2_dz" />
+    <constant name="L1_neg_ring2_zcenter"   value="(L1_neg_ring2_zmin + L1_neg_ring2_zmax)/2" />
+    <constant name="L1_neg_ring1_2_dz"      value="L1_ring_dr" />
+    <constant name="L1_neg_ring1_2_zmin"    value="L1_neg_ring1_zmin" />
+    <constant name="L1_neg_ring1_2_zmax"    value="L1_neg_ring1_zmin+L1_neg_ring1_2_dz" />
+    <constant name="L1_neg_ring1_2_zcenter" value="(L1_neg_ring1_2_zmin + L1_neg_ring1_2_zmax)/2" />
+
+    <constant name="L1_pos_ring1_dz"        value="57*mm" />
+    <constant name="L1_pos_ring2_dz"        value="5.5*mm" />
+    <constant name="L1_pos_ring1_zmin"      value="127*mm" />
+    <constant name="L1_pos_ring1_zmax"      value="L1_pos_ring1_zmin + L1_pos_ring1_dz" />
+    <constant name="L1_pos_ring1_zcenter"   value="(L1_pos_ring1_zmin + L1_pos_ring1_zmax)/2" />
+    <constant name="L1_pos_ring2_zmin"      value="L1_pos_ring1_zmax" />
+    <constant name="L1_pos_ring2_zmax"      value="L1_pos_ring2_zmin + L1_pos_ring2_dz" />
+    <constant name="L1_pos_ring2_zcenter"   value="(L1_pos_ring2_zmin + L1_pos_ring2_zmax)/2" />
+    <constant name="L1_pos_ring1_2_dz"      value="L1_ring_dr" />
+    <constant name="L1_pos_ring1_2_zmax"    value="L1_pos_ring1_zmax" />
+    <constant name="L1_pos_ring1_2_zmin"    value="L1_pos_ring1_zmax - L1_pos_ring1_2_dz" />
+    <constant name="L1_pos_ring1_2_zcenter" value="(L1_pos_ring1_2_zmin + L1_pos_ring1_2_zmax)/2" />
+
+    <constant name="L1_plate_thickness"          value=" IB_CF_thickness" />
+    <constant name="L1_plate1_2_zmin"            value=" L1_neg_ring1_2_zmax" />
+    <constant name="L1_plate1_2_zmax"            value=" L1_pos_ring1_2_zmin" />
+    <constant name="L1_plate1_2_zcenter"         value="(L1_plate1_2_zmax+L1_plate1_2_zmin)/2" />
+    <constant name="L1_plate1_2_length"          value=" L1_plate1_2_zmax-L1_plate1_2_zmin" />
+    <constant name="L1_plate1_2_dr"              value=" L1_ring2_rmax - L1_ring1_rmax" />
+    <constant name="L1_plate1_2_vert_off"        value=" 0.5*mm" />
+    <constant name="L1_plate1_2_vert_center"     value=" L1_plate1_2_vert_off + L1_plate_thickness/2" />
+    <constant name="L1_plate1_2_rcenter"         value=" (L1_ring1_rmax + L1_ring2_rmax)/2" />
+    <constant name="L1_plate1_2_mid_angle"       value=" 7.3*deg" />
+
+    <constant name="L1_plate1_zmin"              value=" L1_neg_ring1_zmax" />
+    <constant name="L1_plate1_zmax"              value=" L1_pos_ring1_zmin" />
+    <constant name="L1_plate1_zcenter"           value="(L1_plate1_zmax+L1_plate1_zmin)/2" />
+    <constant name="L1_plate1_length"            value=" L1_plate1_zmax-L1_plate1_zmin" />
+    <constant name="L1_plate1_dr"                value=" L1_plate_thickness" />
+    <constant name="L1_plate1_rmin"              value=" L1_ring1_rmin" />
+    <constant name="L1_plate1_dl"                value=" 5.2*mm" />
+    <constant name="L1_plate1_side_dphi"         value=" L1_plate1_dl/L1_plate1_rmin" />
+    <constant name="L1_plate1_side_phi0"         value=" (L1_plate1_2_vert_off)/L1_plate1_rmin" />
+    <constant name="L1_plate1_mid_dphi"          value=" L1_plate1_2_mid_angle" />
+
+    <constant name="L1_plate2_zmin"              value=" L1_neg_ring2_zmax" />
+    <constant name="L1_plate2_zmax"              value=" L1_pos_ring2_zmin" />
+    <constant name="L1_plate2_zcenter"           value="(L1_plate2_zmax+L1_plate2_zmin)/2" />
+    <constant name="L1_plate2_length"            value=" L1_plate2_zmax-L1_plate2_zmin" />
+    <constant name="L1_plate2_dr"                value=" L1_plate_thickness" />
+    <constant name="L1_plate2_rmin"              value=" L1_ring2_rmax" />
+    <constant name="L1_plate2_dl"                value=" 7*mm - L1_plate_thickness" />
+    <constant name="L1_plate2_dphi"              value=" (L1_plate2_dl-L1_plate_thickness)/L1_plate2_rmin" />
+    <constant name="L1_plate2_phi0"              value=" (L1_plate1_2_vert_off+L1_plate_thickness)/L1_plate2_rmin" />
+
+    <constant name="L1_cooling_ring1_dz"           value="12.5*mm" />
+    <constant name="L1_cooling_ring1_zmin"         value="172.5*mm" />
+    <constant name="L1_cooling_ring1_zmax"         value="L1_cooling_ring1_zmin + L1_cooling_ring1_dz" />
+    <constant name="L1_cooling_ring1_zcenter"      value="(L1_cooling_ring1_zmin + L1_cooling_ring1_zmax)/2" />
+    <constant name="L1_cooling_ring1_rmax"         value="124.8*mm/2" />
+    <constant name="L1_cooling_ring1_rmin"         value="61.4*mm" />
+    <constant name="L1_cooling_ring1_dr"           value="L1_cooling_ring1_rmax-L1_cooling_ring1_rmin" />
+
+    <constant name="L1_cooling_ring1_2_dz"         value="1*mm" />
+    <constant name="L1_cooling_ring1_2_zmin"       value="185*mm" />
+    <constant name="L1_cooling_ring1_2_zmax"       value="L1_cooling_ring1_2_zmin + L1_cooling_ring1_2_dz" />
+    <constant name="L1_cooling_ring1_2_zcenter"    value="(L1_cooling_ring1_2_zmin + L1_cooling_ring1_2_zmax)/2" />
+    <constant name="L1_cooling_ring1_2_rmax"       value="71.4*mm" />
+    <constant name="L1_cooling_ring1_2_rmin"       value="L1_cooling_ring1_rmin" />
+    <constant name="L1_cooling_ring1_2_dr"         value="L1_cooling_ring1_2_rmax-L1_cooling_ring1_2_rmin" />
+
+    <constant name="L1_cooling_pad_thickness"    value="2*mm" />
+    <constant name="L1_cooling_pad_zmin"         value=" 172.5*mm" />
+    <constant name="L1_cooling_pad_length"       value=" 23.5*mm" />
+    <constant name="L1_cooling_pad_zmax"         value=" L1_cooling_pad_zmin + L1_cooling_pad_length" />
+    <constant name="L1_cooling_pad_zcenter"      value="(L1_cooling_pad_zmin + L1_cooling_pad_zmax)/2" />
+    <constant name="L1_cooling_pad_rmax"         value=" L1_cooling_ring1_rmin - 0.5*mm" />
+    <constant name="L1_cooling_pad_rmin"         value=" 39.4*mm" />
+    <constant name="L1_cooling_pad_dr"           value=" L1_cooling_pad_rmax - L1_cooling_pad_rmin" />
+    <constant name="L1_cooling_pad_vert_off"     value=" 0.5*mm" />
+    <constant name="L1_cooling_pad_vert_center"  value=" L1_cooling_pad_vert_off + L1_cooling_pad_thickness/2" />
+    <constant name="L1_cooling_pad_rcenter"      value=" (L1_cooling_pad_rmin + L1_cooling_pad_rmax)/2" />
+
+    <comment> ------------------------------
+                    Frame (sheet 4)
+              ------------------------------</comment>
+
+
+
+    <constant name="L1_cone_leg1_phi0"     value=" -22.5*deg" />
+    <constant name="L1_cone_leg2_phi0"     value=" L1_cone_leg1_phi0-45*deg" />
+    <constant name="L1_cone_leg3_phi0"     value=" L1_cone_leg2_phi0-45*deg" />
+    <constant name="L1_cone_leg4_phi0"     value=" L1_cone_leg3_phi0-45*deg" />
+    <constant name="L1_cone_leg5_phi0"     value=" L1_cone_leg1_phi0+45*deg" />
+    <constant name="L1_cone_leg6_phi0"     value=" L1_cone_leg5_phi0+45*deg" />
+    <constant name="L1_cone_leg7_phi0"     value=" L1_cone_leg6_phi0+45*deg" />
+    <constant name="L1_cone_leg8_phi0"     value=" L1_cone_leg7_phi0+45*deg" />
+
+    <comment>   L1PosCone    </comment>
+    <constant name="L1_pos_cone_thickness"    value=" IB_CF_thickness" />
+    <comment>start the cone at r1 to avoid overlap with plate1_2midleft/right    </comment>
+    <constant name="L1_pos_cone_r1"           value=" L1_ring2_rmax"/>
+    <constant name="L1_pos_cone_r2"           value=" 115.4*mm"/>
+    <constant name="L1_pos_cone_r3"           value=" 176.7*mm"/>
+    <constant name="L1_pos_cone_r4"           value=" IB_frame_rmax-1*mm"/>
+    <constant name="L1_pos_cone_z1"           value=" 178*mm+5*mm" />
+    <constant name="L1_pos_cone_z2"           value=" 192*mm" />
+    <constant name="L1_pos_cone_z3"           value=" 208*mm" />
+    <constant name="L1_pos_cone_z4"           value=" IB_frame_zmax" />
+    <constant name="L1_pos_cone_inner_vert_off"     value=" 10*mm" />
+    <constant name="L1_pos_cone_leg_width"    value=" 21.7*mm" />
+    <constant name="L1_pos_cone_leg_rcenter"  value="(L1_pos_cone_r4+L1_pos_cone_r3)/2" />
+    <constant name="L1_pos_cone_leg_dr"       value=" L1_pos_cone_r4-L1_pos_cone_r3" />
+    <constant name="L1_pos_cone_leg_dz"       value=" L1_pos_cone_z4-L1_pos_cone_z3" />
+    <constant name="L1_pos_cone_leg_zcenter"  value="(L1_pos_cone_z4+L1_pos_cone_z3)/2+overlap_buffer" />
+    <constant name="L1_pos_cone_leg_theta"    value=" -atan(L1_pos_cone_leg_dz/L1_pos_cone_leg_dr)" />
+    <constant name="L1_pos_cone_leg_length"   value=" sqrt(L1_pos_cone_leg_dr*L1_pos_cone_leg_dr+L1_pos_cone_leg_dz*L1_pos_cone_leg_dz)" />
+
+
+    <comment>   L1NegCone    </comment>
+    <constant name="L1_neg_cone_thickness"    value=" IB_CF_thickness" />
+    <constant name="L1_neg_cone_ring_rmin"    value=" 67*mm"/>
+    <constant name="L1_neg_cone_ring_rmax"    value=" 86.4*mm"/>
+    <constant name="L1_neg_cone_ring_zmin"    value=" L1_neg_ring1_2_zmax" />
+    <constant name="L1_neg_cone_ring_zmax"    value=" L1_neg_cone_ring_zmin+L1_neg_cone_thickness" />
+    <constant name="L1_neg_cone_ring_zcenter" value=" (L1_neg_cone_ring_zmax+L1_neg_cone_ring_zmin)/2+overlap_buffer" />
+    <constant name="L1_neg_cone_ring_dphi"     value=" 17.5*deg" />
+
+    <constant name="L1_neg_cone_leg_rmin"     value=" L1_neg_cone_ring_rmax"/>
+    <constant name="L1_neg_cone_leg_rmax"     value=" IB_frame_rmax-1*mm"/>
+    <constant name="L1_neg_cone_leg_dr"       value=" L1_neg_cone_leg_rmax-L1_neg_cone_leg_rmin"/>
+    <constant name="L1_neg_cone_leg_rcenter"  value=" (L1_neg_cone_leg_rmax+L1_neg_cone_leg_rmin)/2"/>
+    <constant name="L1_neg_cone_leg_zmax"     value=" L1_neg_cone_ring_zmin" />
+    <constant name="L1_neg_cone_leg_zmin"     value=" -IB_frame_zmax" />
+    <constant name="L1_neg_cone_leg_dz"       value=" L1_neg_cone_leg_zmax-L1_neg_cone_leg_zmin" />
+    <constant name="L1_neg_cone_leg_zcenter"  value=" (L1_neg_cone_leg_zmax+L1_neg_cone_leg_zmin)/2" />
+    <constant name="L1_neg_cone_leg_width"    value=" 14*mm" />
+    <constant name="L1_neg_cone_leg_theta"    value=" atan(L1_neg_cone_leg_dz/L1_neg_cone_leg_dr)" />
+    <constant name="L1_neg_cone_leg_length"   value=" sqrt(L1_neg_cone_leg_dr*L1_neg_cone_leg_dr+L1_neg_cone_leg_dz*L1_neg_cone_leg_dz)" />
+
+
+    <comment> ------------------------------
+                    L2 inner frame (sheet 6)
+              ------------------------------</comment>
+    <constant name="L2_inner_ring_rmin"         value="125.35*mm" />
+    <constant name="L2_inner_ring_rmax"         value="145*mm" />
+    <constant name="L2_inner_ring_dr"           value="L2_inner_ring_rmax-L2_inner_ring_rmin" />
+
+    <comment> all plates have same thickness and length </comment>
+    <constant name="L2_inner_plate_thickness"         value=" 6.35*mm" />
+    <constant name="L2_inner_plate_zmin"              value="-123.5*mm" />
+    <constant name="L2_inner_plate_zmax"              value=" 126.5*mm" />
+    <constant name="L2_inner_plate_zcenter"           value="(L2_inner_plate_zmax+L2_inner_plate_zmin)/2" />
+    <constant name="L2_inner_plate_length"            value=" L2_inner_plate_zmax-L2_inner_plate_zmin" />
+    <constant name="L2_inner_plate_height"            value=" L2_inner_ring_dr" />
+    <constant name="L2_inner_plate_vert_off"          value=" 1.5*mm" />
+    <constant name="L2_inner_plate_vert_center"       value=" L2_inner_plate_vert_off + L2_inner_plate_thickness/2" />
+    <constant name="L2_inner_plate_horiz_center"      value=" L2_inner_ring_rmin + L2_inner_ring_dr/2" />
+    <constant name="L2_inner_plate_mid_rot"           value=" 90*deg" />
+
+    <comment> endcap rings (2 each side, ring1 has smaller abs(z)) on negative and postive direction </comment>
+    <constant name="L2_inner_ring1_dz"                value="6.35*mm" />
+    <constant name="L2_inner_ring2_dz"                value="25.4*mm" />
+    <constant name="L2_inner_ring_gap_z"              value="5.5*mm"  />
+    <constant name="L2_inner_neg_ring1_zcenter"     value="L2_inner_plate_zmin - L2_inner_ring1_dz/2." />
+    <constant name="L2_inner_neg_ring2_zcenter"     value="L2_inner_plate_zmin - L2_inner_ring1_dz - L2_inner_ring_gap_z - L2_inner_ring2_dz/2." />
+    <constant name="L2_inner_pos_ring1_zcenter"     value="L2_inner_plate_zmax + L2_inner_ring1_dz/2." />
+    <constant name="L2_inner_pos_ring2_zcenter"     value="L2_inner_plate_zmax + L2_inner_ring1_dz + L2_inner_ring_gap_z + L2_inner_ring2_dz/2." />
+
+
+    <comment> ------------------------------
+                    L2 outer frame (sheet 7)
+              ------------------------------</comment>
+    <comment> ring1 (smaller r) and 2. ring1_2 is the disk connecting two rings </comment>
+    <constant name="L2_outer_ring_dr"             value="IB_CF_thickness" />
+    <constant name="L2_outer_ring1_rmin"          value="145.1*mm" />
+    <constant name="L2_outer_ring1_rmax"          value="L2_outer_ring1_rmin+L2_outer_ring_dr" />
+    <constant name="L2_outer_ring2_rmin"          value="165*mm" />
+    <constant name="L2_outer_ring2_rmax"          value="L2_outer_ring2_rmin+L2_outer_ring_dr" />
+    <constant name="L2_outer_ring1_2_rmin"        value="L2_outer_ring1_rmax" />
+    <constant name="L2_outer_ring1_2_rmax"        value="L2_outer_ring2_rmax" />
+    <constant name="L2_outer_ring1_2_dr"          value="L2_outer_ring1_2_rmax - L2_outer_ring1_2_rmin" />
+
+    <constant name="L2_outer_neg_ring1_dz"        value="45*mm" />
+    <constant name="L2_outer_neg_ring1_zmax"      value="-124*mm" />
+    <constant name="L2_outer_neg_ring1_zmin"      value="L2_outer_neg_ring1_zmax-L2_outer_neg_ring1_dz" />
+    <constant name="L2_outer_neg_ring1_zcenter"   value="(L2_outer_neg_ring1_zmin + L2_outer_neg_ring1_zmax)/2" />
+    <constant name="L2_outer_neg_ring2_dz"        value="5.5*mm" />
+    <constant name="L2_outer_neg_ring2_zmax"      value="L2_outer_neg_ring1_zmin" />
+    <constant name="L2_outer_neg_ring2_zmin"      value="L2_outer_neg_ring2_zmax-L2_outer_neg_ring2_dz" />
+    <constant name="L2_outer_neg_ring2_zcenter"   value="(L2_outer_neg_ring2_zmin + L2_outer_neg_ring2_zmax)/2" />
+    <constant name="L2_outer_neg_ring1_2_dz"      value="L2_outer_ring_dr" />
+    <constant name="L2_outer_neg_ring1_2_zmin"    value="L2_outer_neg_ring1_zmin" />
+    <constant name="L2_outer_neg_ring1_2_zmax"    value="L2_outer_neg_ring1_zmin+L2_outer_neg_ring1_2_dz" />
+    <constant name="L2_outer_neg_ring1_2_zcenter" value="(L2_outer_neg_ring1_2_zmin + L2_outer_neg_ring1_2_zmax)/2" />
+
+    <constant name="L2_outer_pos_ring1_dz"        value="57*mm" />
+    <constant name="L2_outer_pos_ring2_dz"        value="5.5*mm" />
+    <constant name="L2_outer_pos_ring1_zmin"      value="127*mm" />
+    <constant name="L2_outer_pos_ring1_zmax"      value="L2_outer_pos_ring1_zmin + L2_outer_pos_ring1_dz" />
+    <constant name="L2_outer_pos_ring1_zcenter"   value="(L2_outer_pos_ring1_zmin + L2_outer_pos_ring1_zmax)/2" />
+    <constant name="L2_outer_pos_ring2_zmin"      value="L2_outer_pos_ring1_zmax" />
+    <constant name="L2_outer_pos_ring2_zmax"      value="L2_outer_pos_ring2_zmin + L2_outer_pos_ring2_dz" />
+    <constant name="L2_outer_pos_ring2_zcenter"   value="(L2_outer_pos_ring2_zmin + L2_outer_pos_ring2_zmax)/2" />
+    <constant name="L2_outer_pos_ring1_2_dz"      value="L2_outer_ring_dr" />
+    <constant name="L2_outer_pos_ring1_2_zmax"    value="L2_outer_pos_ring1_zmax" />
+    <constant name="L2_outer_pos_ring1_2_zmin"    value="L2_outer_pos_ring1_zmax - L2_outer_pos_ring1_2_dz" />
+    <constant name="L2_outer_pos_ring1_2_zcenter" value="(L2_outer_pos_ring1_2_zmin + L2_outer_pos_ring1_2_zmax)/2" />
+
+        <constant name="L2_outer_plate_thickness"          value=" IB_CF_thickness" />
+    <constant name="L2_outer_plate1_2_zmin"            value=" L2_outer_neg_ring1_2_zmax" />
+    <constant name="L2_outer_plate1_2_zmax"            value=" L2_outer_pos_ring1_2_zmin" />
+    <constant name="L2_outer_plate1_2_zcenter"         value="(L2_outer_plate1_2_zmax+L2_outer_plate1_2_zmin)/2" />
+    <constant name="L2_outer_plate1_2_length"          value=" L2_outer_plate1_2_zmax-L2_outer_plate1_2_zmin" />
+    <constant name="L2_outer_plate1_2_dr"              value=" L2_outer_ring2_rmax - L2_outer_ring1_rmax" />
+    <constant name="L2_outer_plate1_2_vert_off"        value=" 0.5*mm" />
+    <constant name="L2_outer_plate1_2_vert_center"     value=" L2_outer_plate1_2_vert_off + L2_outer_plate_thickness/2" />
+    <constant name="L2_outer_plate1_2_rcenter"         value=" (L2_outer_ring1_rmax + L2_outer_ring2_rmax)/2" />
+    <constant name="L2_outer_plate1_2_mid_angle"       value=" 3.16*deg" />
+
+    <constant name="L2_outer_plate1_zmin"              value=" L2_outer_neg_ring1_zmax" />
+    <constant name="L2_outer_plate1_zmax"              value=" L2_outer_pos_ring1_zmin" />
+    <constant name="L2_outer_plate1_zcenter"           value="(L2_outer_plate1_zmax+L2_outer_plate1_zmin)/2" />
+    <constant name="L2_outer_plate1_length"            value=" L2_outer_plate1_zmax-L2_outer_plate1_zmin" />
+    <constant name="L2_outer_plate1_dr"                value=" L2_outer_plate_thickness" />
+    <constant name="L2_outer_plate1_rmin"              value=" L2_outer_ring1_rmin" />
+    <constant name="L2_outer_plate1_dl"                value=" 6.1*mm" />
+    <constant name="L2_outer_plate1_side_dphi"         value=" L2_outer_plate1_dl/L2_outer_plate1_rmin" />
+    <constant name="L2_outer_plate1_side_phi0"         value=" (L2_outer_plate1_2_vert_off)/L2_outer_plate1_rmin" />
+    <constant name="L2_outer_plate1_mid_dphi"          value=" L2_outer_plate1_2_mid_angle" />
+
+    <constant name="L2_outer_plate2_zmin"              value=" L2_outer_neg_ring2_zmax" />
+    <constant name="L2_outer_plate2_zmax"              value=" L2_outer_pos_ring2_zmin" />
+    <constant name="L2_outer_plate2_zcenter"           value="(L2_outer_plate2_zmax+L2_outer_plate2_zmin)/2" />
+    <constant name="L2_outer_plate2_length"            value=" L2_outer_plate2_zmax-L2_outer_plate2_zmin" />
+    <constant name="L2_outer_plate2_dr"                value=" L2_outer_plate_thickness" />
+    <constant name="L2_outer_plate2_rmin"              value=" L2_outer_ring2_rmax" />
+    <constant name="L2_outer_plate2_dl"                value=" 7*mm - L2_outer_plate_thickness" />
+    <constant name="L2_outer_plate2_dphi"              value=" (L2_outer_plate2_dl-L2_outer_plate_thickness)/L2_outer_plate2_rmin" />
+    <constant name="L2_outer_plate2_phi0"              value=" (L2_outer_plate1_2_vert_off+L2_outer_plate_thickness)/L2_outer_plate2_rmin" />
+
+    <comment> ------------------------------
+                L2 Legs (sheet 8)
+          ------------------------------</comment>
+    <comment>   pos and neg legs, 8 each, leg 1-4 lower half, 4-8 upper    </comment>
+    <constant name="L2_cone_leg1_phi0"     value=" -13.5*deg" />
+    <constant name="L2_cone_leg2_phi0"     value=" -L2_cone_leg1_phi0-90*deg" />
+    <constant name="L2_cone_leg3_phi0"     value="  L2_cone_leg1_phi0-90*deg" />
+    <constant name="L2_cone_leg4_phi0"     value=" -L2_cone_leg1_phi0-180*deg" />
+
+    <constant name="L2_cone_leg5_phi0"     value=" -L2_cone_leg1_phi0" />
+    <constant name="L2_cone_leg6_phi0"     value=" -L2_cone_leg2_phi0" />
+    <constant name="L2_cone_leg7_phi0"     value=" -L2_cone_leg3_phi0" />
+    <constant name="L2_cone_leg8_phi0"     value=" -L2_cone_leg4_phi0" />
+
+    <constant name="L2_cone_thickness"        value=" IB_CF_thickness" />
+    <constant name="L2_cone_ring_rmin"        value=" 152*mm"/>
+    <constant name="L2_cone_ring_rmax"        value=" 168.8*mm"/>
+    <constant name="L2_cone_ring_dphi"        value=" 10*deg" />
+
+    <constant name="L2_neg_cone_ring_zmin"    value=" L2_outer_neg_ring1_2_zmax" />
+    <constant name="L2_neg_cone_ring_zmax"    value=" L2_neg_cone_ring_zmin+L2_cone_thickness" />
+    <constant name="L2_neg_cone_ring_zcenter" value=" (L2_neg_cone_ring_zmin+L2_neg_cone_ring_zmax)/2+overlap_buffer" />
+    <constant name="L2_pos_cone_ring_zmax"    value=" L2_outer_pos_ring1_2_zmin" />
+    <constant name="L2_pos_cone_ring_zmin"    value=" L2_pos_cone_ring_zmax-L2_cone_thickness" />
+    <constant name="L2_pos_cone_ring_zcenter" value=" (L2_pos_cone_ring_zmin+L2_pos_cone_ring_zmax)/2-overlap_buffer" />
+
+    <constant name="L2_cone_leg_rmin"     value=" L2_cone_ring_rmax"/>
+    <constant name="L2_cone_leg_rmax"     value=" IB_frame_rmax-1*mm"/>
+    <constant name="L2_cone_leg_dr"       value=" L2_cone_leg_rmax-L2_cone_leg_rmin"/>
+    <constant name="L2_cone_leg_rcenter"  value=" (L2_cone_leg_rmax+L2_cone_leg_rmin)/2"/>
+
+    <constant name="L2_cone_leg_width"    value=" 20*mm" />
+
+    <constant name="L2_neg_cone_leg_zmax"     value=" L2_neg_cone_ring_zmin" />
+    <constant name="L2_neg_cone_leg_zmin"     value=" -IB_frame_zmax" />
+    <constant name="L2_neg_cone_leg_dz"       value="  L2_neg_cone_leg_zmax-L2_neg_cone_leg_zmin" />
+    <constant name="L2_neg_cone_leg_zcenter"  value=" (L2_neg_cone_leg_zmax+L2_neg_cone_leg_zmin)/2" />
+    <constant name="L2_neg_cone_leg_theta"    value=" atan(L2_neg_cone_leg_dz/L2_cone_leg_dr)" />
+    <constant name="L2_neg_cone_leg_length"   value=" sqrt(L2_cone_leg_dr*L2_cone_leg_dr+L2_neg_cone_leg_dz*L2_neg_cone_leg_dz)" />
+
+    <constant name="L2_pos_cone_leg_zmin"     value=" L2_pos_cone_ring_zmax" />
+    <constant name="L2_pos_cone_leg_zmax"     value=" IB_frame_zmax" />
+    <constant name="L2_pos_cone_leg_dz"       value="  L2_pos_cone_leg_zmax-L2_pos_cone_leg_zmin" />
+    <constant name="L2_pos_cone_leg_zcenter"  value=" (L2_pos_cone_leg_zmax+L2_pos_cone_leg_zmin)/2" />
+    <constant name="L2_pos_cone_leg_theta"    value=" -atan(L2_pos_cone_leg_dz/L2_cone_leg_dr)" />
+    <constant name="L2_pos_cone_leg_length"   value=" sqrt(L2_cone_leg_dr*L2_cone_leg_dr+L2_pos_cone_leg_dz*L2_pos_cone_leg_dz)" />
+
+    <comment>---------------FPC , sheet5,  sheet 9---------------</comment>
+    <comment> FPC from the silicon sensor, assume uniformly distributed cylinder.
+      Each FPC layer (digi, analog, or signal) contains 70um thick of copper
+      replace it with 100um of Aluminum.
+      see https://github.com/eic/epic/pull/803</comment>
+    <constant name="IB_FPC_thickness"    value="0.1*mm" />
+    <constant name="IB_FPC_neg_ring_thickness"    value="2*IB_FPC_thickness" />
+    <constant name="IB_FPC_pos_ring_thickness"    value="3*IB_FPC_thickness" />
+    <constant name="IB_FPC_ring_vert_off"    value=" 0.5*mm" />
+
+    <constant name="IB_FPC_ring0_rmax"        value="38*mm" />
+    <constant name="IB_FPC_neg_ring0_rmin"        value="IB_FPC_ring0_rmax-IB_FPC_neg_ring_thickness" />
+    <constant name="IB_FPC_pos_ring0_rmin"        value="IB_FPC_ring0_rmax-IB_FPC_pos_ring_thickness" />
+    <constant name="IB_FPC_ring1_rmin"        value="50.4*mm" />
+    <constant name="IB_FPC_neg_ring1_rmax"        value="IB_FPC_ring1_rmin+IB_FPC_neg_ring_thickness" />
+    <constant name="IB_FPC_pos_ring1_rmax"        value="IB_FPC_ring1_rmin+IB_FPC_pos_ring_thickness" />
+    <constant name="IB_FPC_ring2_rmax"        value="125.2*mm" />
+    <constant name="IB_FPC_neg_ring2_rmin"        value="IB_FPC_ring2_rmax-IB_FPC_neg_ring_thickness" />
+    <constant name="IB_FPC_pos_ring2_rmin"        value="IB_FPC_ring2_rmax-IB_FPC_pos_ring_thickness" />
+
+    <constant name="IB_FPC_neg_ring_dz"        value="34*mm" />
+    <constant name="IB_FPC_neg_ring_zmax"      value="-131.5*mm" />
+    <constant name="IB_FPC_neg_ring_zmin"      value="IB_FPC_neg_ring_zmax-IB_FPC_neg_ring_dz" />
+    <constant name="IB_FPC_neg_ring_zcenter"   value="(IB_FPC_neg_ring_zmin + IB_FPC_neg_ring_zmax)/2" />
+
+    <constant name="IB_FPC_pos_ring_dz"        value="35*mm" />
+    <constant name="IB_FPC_pos_ring_zmin"      value="134.5*mm" />
+    <constant name="IB_FPC_pos_ring_zmax"      value="IB_FPC_pos_ring_zmin  + IB_FPC_pos_ring_dz" />
+    <constant name="IB_FPC_pos_ring_zcenter"   value="(IB_FPC_pos_ring_zmax + IB_FPC_pos_ring_zmin)/2" />
+
+    <comment>   FPC cables along the cone on the Hadron (Pos) side    </comment>
+    <constant name="L1_pos_cone_FPC_thickness"    value="2*IB_FPC_thickness" /> <comment>the cone holds cables from L0 and L1, assume uniformly spreaded along the cone, the average thickness is reduced due to cable fanning out.</comment>
+
+
+  </define>
+
+
+  <detectors>
+    <detector type="epic_SupportServiceMaterial"
+      name="SVT_IB_Support_L2"
+      id="SVT_IB_Support_2_ID"
+    >
+    <comment>-------------FPC connected to the sensors (see L1PosConeFPC for the cone), 9---------------</comment>
+
+
+    <subtraction name="IBFPCNegRing2" material="Aluminum" vis="SVTReadoutVis">
+      <position x="0" y="0" z="IB_FPC_neg_ring_zcenter"/>
+      <shape1 type="Tube" name="FPC_neg_ring2_main"
+              rmin="IB_FPC_neg_ring2_rmin"
+              thickness="IB_FPC_neg_ring_thickness"
+              length="IB_FPC_neg_ring_dz"
+              material="Aluminum"/>
+      <shape2 type="Box" name="FPC_neg_ring2_cutout"
+              x="IB_FPC_ring2_rmax*2"
+              y="IB_FPC_ring_vert_off*2"
+              z="IB_FPC_neg_ring_dz"
+              material="Air">
+        <!-- This position is relative to the tube's center, not absolute -->
+        <position x="0" y="0" z="0"/>
+      </shape2>
+    </subtraction>
+
+    <subtraction name="IBFPCPosRing2" material="Aluminum" vis="SVTReadoutVis">
+      <position x="0" y="0" z="IB_FPC_pos_ring_zcenter"/>
+      <shape1 type="Tube" name="FPC_pos_ring2_main"
+              rmin="IB_FPC_pos_ring2_rmin"
+              thickness="IB_FPC_pos_ring_thickness"
+              length="IB_FPC_pos_ring_dz"
+              material="Aluminum"/>
+      <shape2 type="Box" name="FPC_pos_ring2_cutout"
+              x="IB_FPC_ring2_rmax*2"
+              y="IB_FPC_ring_vert_off*2"
+              z="IB_FPC_pos_ring_dz"
+              material="Air">
+        <!-- This position is relative to the tube's center, not absolute -->
+        <position x="0" y="0" z="0"/>
+      </shape2>
+    </subtraction>
+
+    <comment>---------------L2 legs, sheet 8---------------</comment>
+
+    <!--negative leg 1 ring+leg -->
+    <support type="Disk"
+            name="L2NegConeRing1"
+            vis="SVTSupportVis"
+            rmin="L2_cone_ring_rmin"
+            rmax="L2_cone_ring_rmax"
+            thickness="L2_cone_thickness"
+            phimin="L2_cone_leg1_phi0-L2_cone_ring_dphi"
+            phimax="L2_cone_leg1_phi0+L2_cone_ring_dphi">
+      <position x="0*cm" y="0*cm" z="L2_neg_cone_ring_zcenter" />
+      <component material="CarbonFiber" thickness="L2_cone_thickness" name="Support" vis="SVTSupportVis"/>
+    </support>
+
+    <support type="Box"
+            name="L2NegConeLeg1"
+            vis="SVTSupportVis"
+            x="L2_neg_cone_leg_length"
+            y="L2_cone_leg_width"
+            z="L2_cone_thickness"
+            >
+      <position y="L2_cone_leg_rcenter*sin(L2_cone_leg1_phi0)" x="L2_cone_leg_rcenter*cos(L2_cone_leg1_phi0)" z="L2_neg_cone_leg_zcenter" />
+      <rotation y="L2_neg_cone_leg_theta" z="L2_cone_leg1_phi0" />
+      <component material="CarbonFiber" thickness="L2_cone_thickness" name="Support" vis="SVTSupportVis"/>
+    </support>
+
+    <!--leg 2 ring+leg -->
+    <support type="Disk"
+            name="L2NegConeRing2"
+            vis="SVTSupportVis"
+            rmin="L2_cone_ring_rmin"
+            rmax="L2_cone_ring_rmax"
+            thickness="L2_cone_thickness"
+            phimin="L2_cone_leg2_phi0-L2_cone_ring_dphi"
+            phimax="L2_cone_leg2_phi0+L2_cone_ring_dphi">
+      <position x="0*cm" y="0*cm" z="L2_neg_cone_ring_zcenter" />
+      <component material="CarbonFiber" thickness="L2_cone_thickness" name="Support" vis="SVTSupportVis"/>
+    </support>
+
+    <support type="Box"
+            name="L2NegConeLeg2"
+            vis="SVTSupportVis"
+            x="L2_neg_cone_leg_length"
+            y="L2_cone_leg_width"
+            z="L2_cone_thickness"
+            phi0="L2_cone_leg2_phi0">
+      <position y="0" x="L2_cone_leg_rcenter" z="L2_neg_cone_leg_zcenter" />
+      <rotation y="L2_neg_cone_leg_theta" />
+      <component material="CarbonFiber" thickness="L2_cone_thickness" name="Support" vis="SVTSupportVis"/>
+    </support>
+
+    <!--leg 3 ring+leg -->
+    <support type="Disk"
+            name="L2NegConeRing3"
+            vis="SVTSupportVis"
+            rmin="L2_cone_ring_rmin"
+            rmax="L2_cone_ring_rmax"
+            thickness="L2_cone_thickness"
+            phimin="L2_cone_leg3_phi0-L2_cone_ring_dphi"
+            phimax="L2_cone_leg3_phi0+L2_cone_ring_dphi">
+      <position x="0*cm" y="0*cm" z="L2_neg_cone_ring_zcenter" />
+      <component material="CarbonFiber" thickness="L2_cone_thickness" name="Support" vis="SVTSupportVis"/>
+    </support>
+
+    <support type="Box"
+            name="L2NegConeLeg3"
+            vis="SVTSupportVis"
+            x="L2_neg_cone_leg_length"
+            y="L2_cone_leg_width"
+            z="L2_cone_thickness"
+            phi0="L2_cone_leg3_phi0">
+      <position y="0" x="L2_cone_leg_rcenter" z="L2_neg_cone_leg_zcenter" />
+      <rotation y="L2_neg_cone_leg_theta" />
+      <component material="CarbonFiber" thickness="L2_cone_thickness" name="Support" vis="SVTSupportVis"/>
+    </support>
+
+    <!--leg 4 ring+leg -->
+    <support type="Disk"
+            name="L2NegConeRing4"
+            vis="SVTSupportVis"
+            rmin="L2_cone_ring_rmin"
+            rmax="L2_cone_ring_rmax"
+            thickness="L2_cone_thickness"
+            phimin="L2_cone_leg4_phi0-L2_cone_ring_dphi"
+            phimax="L2_cone_leg4_phi0+L2_cone_ring_dphi">
+      <position x="0*cm" y="0*cm" z="L2_neg_cone_ring_zcenter" />
+      <component material="CarbonFiber" thickness="L2_cone_thickness" name="Support" vis="SVTSupportVis"/>
+    </support>
+
+    <support type="Box"
+            name="L2NegConeLeg4"
+            vis="SVTSupportVis"
+            x="L2_neg_cone_leg_length"
+            y="L2_cone_leg_width"
+            z="L2_cone_thickness"
+            phi0="L2_cone_leg4_phi0">
+      <position y="0" x="L2_cone_leg_rcenter" z="L2_neg_cone_leg_zcenter" />
+      <rotation y="L2_neg_cone_leg_theta" />
+      <component material="CarbonFiber" thickness="L2_cone_thickness" name="Support" vis="SVTSupportVis"/>
+    </support>
+
+    <!--leg 5 ring+leg -->
+    <support type="Disk"
+            name="L2NegConeRing5"
+            vis="SVTSupportVis"
+            rmin="L2_cone_ring_rmin"
+            rmax="L2_cone_ring_rmax"
+            thickness="L2_cone_thickness"
+            phimin="L2_cone_leg5_phi0-L2_cone_ring_dphi"
+            phimax="L2_cone_leg5_phi0+L2_cone_ring_dphi">
+      <position x="0*cm" y="0*cm" z="L2_neg_cone_ring_zcenter" />
+      <component material="CarbonFiber" thickness="L2_cone_thickness" name="Support" vis="SVTSupportVis"/>
+    </support>
+
+    <support type="Box"
+            name="L2NegConeLeg5"
+            vis="SVTSupportVis"
+            x="L2_neg_cone_leg_length"
+            y="L2_cone_leg_width"
+            z="L2_cone_thickness"
+            phi0="L2_cone_leg5_phi0">
+      <position y="0" x="L2_cone_leg_rcenter" z="L2_neg_cone_leg_zcenter" />
+      <rotation y="L2_neg_cone_leg_theta" />
+      <component material="CarbonFiber" thickness="L2_cone_thickness" name="Support" vis="SVTSupportVis"/>
+    </support>
+
+    <!--leg 6 ring+leg -->
+    <support type="Disk"
+            name="L2NegConeRing6"
+            vis="SVTSupportVis"
+            rmin="L2_cone_ring_rmin"
+            rmax="L2_cone_ring_rmax"
+            thickness="L2_cone_thickness"
+            phimin="L2_cone_leg6_phi0-L2_cone_ring_dphi"
+            phimax="L2_cone_leg6_phi0+L2_cone_ring_dphi">
+      <position x="0*cm" y="0*cm" z="L2_neg_cone_ring_zcenter" />
+      <component material="CarbonFiber" thickness="L2_cone_thickness" name="Support" vis="SVTSupportVis"/>
+    </support>
+
+    <support type="Box"
+            name="L2NegConeLeg6"
+            vis="SVTSupportVis"
+            x="L2_neg_cone_leg_length"
+            y="L2_cone_leg_width"
+            z="L2_cone_thickness"
+            phi0="L2_cone_leg6_phi0">
+      <position y="0" x="L2_cone_leg_rcenter" z="L2_neg_cone_leg_zcenter" />
+      <rotation y="L2_neg_cone_leg_theta" />
+      <component material="CarbonFiber" thickness="L2_cone_thickness" name="Support" vis="SVTSupportVis"/>
+    </support>
+
+    <!--leg 7 ring+leg -->
+    <support type="Disk"
+            name="L2NegConeRing7"
+            vis="SVTSupportVis"
+            rmin="L2_cone_ring_rmin"
+            rmax="L2_cone_ring_rmax"
+            thickness="L2_cone_thickness"
+            phimin="L2_cone_leg7_phi0-L2_cone_ring_dphi"
+            phimax="L2_cone_leg7_phi0+L2_cone_ring_dphi">
+      <position x="0*cm" y="0*cm" z="L2_neg_cone_ring_zcenter" />
+      <component material="CarbonFiber" thickness="L2_cone_thickness" name="Support" vis="SVTSupportVis"/>
+    </support>
+
+    <support type="Box"
+            name="L2NegConeLeg7"
+            vis="SVTSupportVis"
+            x="L2_neg_cone_leg_length"
+            y="L2_cone_leg_width"
+            z="L2_cone_thickness"
+            phi0="L2_cone_leg7_phi0">
+      <position y="0" x="L2_cone_leg_rcenter" z="L2_neg_cone_leg_zcenter" />
+      <rotation y="L2_neg_cone_leg_theta" />
+      <component material="CarbonFiber" thickness="L2_cone_thickness" name="Support" vis="SVTSupportVis"/>
+    </support>
+
+    <!--leg 8 ring+leg -->
+    <support type="Disk"
+            name="L2NegConeRing8"
+            vis="SVTSupportVis"
+            rmin="L2_cone_ring_rmin"
+            rmax="L2_cone_ring_rmax"
+            thickness="L2_cone_thickness"
+            phimin="L2_cone_leg8_phi0-L2_cone_ring_dphi"
+            phimax="L2_cone_leg8_phi0+L2_cone_ring_dphi">
+      <position x="0*cm" y="0*cm" z="L2_neg_cone_ring_zcenter" />
+      <component material="CarbonFiber" thickness="L2_cone_thickness" name="Support" vis="SVTSupportVis"/>
+    </support>
+
+    <support type="Box"
+            name="L2NegConeLeg8"
+            vis="SVTSupportVis"
+            x="L2_neg_cone_leg_length"
+            y="L2_cone_leg_width"
+            z="L2_cone_thickness"
+            phi0="L2_cone_leg8_phi0">
+      <position y="0" x="L2_cone_leg_rcenter" z="L2_neg_cone_leg_zcenter" />
+      <rotation y="L2_neg_cone_leg_theta" />
+      <component material="CarbonFiber" thickness="L2_cone_thickness" name="Support" vis="SVTSupportVis"/>
+    </support>
+
+    <!--Positive legs -->
+    <!--leg 1 ring+leg -->
+    <support type="Disk"
+            name="L2PosConeRing1"
+            vis="SVTSupportVis"
+            rmin="L2_cone_ring_rmin"
+            rmax="L2_cone_ring_rmax"
+            thickness="L2_cone_thickness"
+            phimin="L2_cone_leg1_phi0-L2_cone_ring_dphi"
+            phimax="L2_cone_leg1_phi0+L2_cone_ring_dphi">
+      <position x="0*cm" y="0*cm" z="L2_pos_cone_ring_zcenter" />
+      <component material="CarbonFiber" thickness="L2_cone_thickness" name="Support" vis="SVTSupportVis"/>
+    </support>
+
+    <support type="Box"
+            name="L2PosConeLeg1"
+            vis="SVTSupportVis"
+            x="L2_pos_cone_leg_length"
+            y="L2_cone_leg_width"
+            z="L2_cone_thickness"
+            phi0="L2_cone_leg1_phi0">
+      <position y="0" x="L2_cone_leg_rcenter" z="L2_pos_cone_leg_zcenter" />
+      <rotation y="L2_pos_cone_leg_theta" />
+      <component material="CarbonFiber" thickness="L2_cone_thickness" name="Support" vis="SVTSupportVis"/>
+    </support>
+
+    <!--leg 2 ring+leg -->
+    <support type="Disk"
+            name="L2PosConeRing2"
+            vis="SVTSupportVis"
+            rmin="L2_cone_ring_rmin"
+            rmax="L2_cone_ring_rmax"
+            thickness="L2_cone_thickness"
+            phimin="L2_cone_leg2_phi0-L2_cone_ring_dphi"
+            phimax="L2_cone_leg2_phi0+L2_cone_ring_dphi">
+      <position x="0*cm" y="0*cm" z="L2_pos_cone_ring_zcenter" />
+      <component material="CarbonFiber" thickness="L2_cone_thickness" name="Support" vis="SVTSupportVis"/>
+    </support>
+
+    <support type="Box"
+            name="L2PosConeLeg2"
+            vis="SVTSupportVis"
+            x="L2_pos_cone_leg_length"
+            y="L2_cone_leg_width"
+            z="L2_cone_thickness"
+            phi0="L2_cone_leg2_phi0">
+      <position y="0" x="L2_cone_leg_rcenter" z="L2_pos_cone_leg_zcenter" />
+      <rotation y="L2_pos_cone_leg_theta" />
+      <component material="CarbonFiber" thickness="L2_cone_thickness" name="Support" vis="SVTSupportVis"/>
+    </support>
+
+    <!--leg 3 ring+leg -->
+    <support type="Disk"
+            name="L2PosConeRing3"
+            vis="SVTSupportVis"
+            rmin="L2_cone_ring_rmin"
+            rmax="L2_cone_ring_rmax"
+            thickness="L2_cone_thickness"
+            phimin="L2_cone_leg3_phi0-L2_cone_ring_dphi"
+            phimax="L2_cone_leg3_phi0+L2_cone_ring_dphi">
+      <position x="0*cm" y="0*cm" z="L2_pos_cone_ring_zcenter" />
+      <component material="CarbonFiber" thickness="L2_cone_thickness" name="Support" vis="SVTSupportVis"/>
+    </support>
+
+    <support type="Box"
+            name="L2PosConeLeg3"
+            vis="SVTSupportVis"
+            x="L2_pos_cone_leg_length"
+            y="L2_cone_leg_width"
+            z="L2_cone_thickness"
+            phi0="L2_cone_leg3_phi0">
+      <position y="0" x="L2_cone_leg_rcenter" z="L2_pos_cone_leg_zcenter" />
+      <rotation y="L2_pos_cone_leg_theta" />
+      <component material="CarbonFiber" thickness="L2_cone_thickness" name="Support" vis="SVTSupportVis"/>
+    </support>
+
+    <!--leg 4 ring+leg -->
+    <support type="Disk"
+            name="L2PosConeRing4"
+            vis="SVTSupportVis"
+            rmin="L2_cone_ring_rmin"
+            rmax="L2_cone_ring_rmax"
+            thickness="L2_cone_thickness"
+            phimin="L2_cone_leg4_phi0-L2_cone_ring_dphi"
+            phimax="L2_cone_leg4_phi0+L2_cone_ring_dphi">
+      <position x="0*cm" y="0*cm" z="L2_pos_cone_ring_zcenter" />
+      <component material="CarbonFiber" thickness="L2_cone_thickness" name="Support" vis="SVTSupportVis"/>
+    </support>
+
+    <support type="Box"
+            name="L2PosConeLeg4"
+            vis="SVTSupportVis"
+            x="L2_pos_cone_leg_length"
+            y="L2_cone_leg_width"
+            z="L2_cone_thickness"
+            phi0="L2_cone_leg4_phi0">
+      <position y="0" x="L2_cone_leg_rcenter" z="L2_pos_cone_leg_zcenter" />
+      <rotation y="L2_pos_cone_leg_theta" />
+      <component material="CarbonFiber" thickness="L2_cone_thickness" name="Support" vis="SVTSupportVis"/>
+    </support>
+
+    <!--leg 5 ring+leg -->
+    <support type="Disk"
+            name="L2PosConeRing5"
+            vis="SVTSupportVis"
+            rmin="L2_cone_ring_rmin"
+            rmax="L2_cone_ring_rmax"
+            thickness="L2_cone_thickness"
+            phimin="L2_cone_leg5_phi0-L2_cone_ring_dphi"
+            phimax="L2_cone_leg5_phi0+L2_cone_ring_dphi">
+      <position x="0*cm" y="0*cm" z="L2_pos_cone_ring_zcenter" />
+      <component material="CarbonFiber" thickness="L2_cone_thickness" name="Support" vis="SVTSupportVis"/>
+    </support>
+
+    <support type="Box"
+            name="L2PosConeLeg5"
+            vis="SVTSupportVis"
+            x="L2_pos_cone_leg_length"
+            y="L2_cone_leg_width"
+            z="L2_cone_thickness"
+            phi0="L2_cone_leg5_phi0">
+      <position y="0" x="L2_cone_leg_rcenter" z="L2_pos_cone_leg_zcenter" />
+      <rotation y="L2_pos_cone_leg_theta" />
+      <component material="CarbonFiber" thickness="L2_cone_thickness" name="Support" vis="SVTSupportVis"/>
+    </support>
+
+    <!--leg 6 ring+leg -->
+    <support type="Disk"
+            name="L2PosConeRing6"
+            vis="SVTSupportVis"
+            rmin="L2_cone_ring_rmin"
+            rmax="L2_cone_ring_rmax"
+            thickness="L2_cone_thickness"
+            phimin="L2_cone_leg6_phi0-L2_cone_ring_dphi"
+            phimax="L2_cone_leg6_phi0+L2_cone_ring_dphi">
+      <position x="0*cm" y="0*cm" z="L2_pos_cone_ring_zcenter" />
+      <component material="CarbonFiber" thickness="L2_cone_thickness" name="Support" vis="SVTSupportVis"/>
+    </support>
+
+    <support type="Box"
+            name="L2PosConeLeg6"
+            vis="SVTSupportVis"
+            x="L2_pos_cone_leg_length"
+            y="L2_cone_leg_width"
+            z="L2_cone_thickness"
+            phi0="L2_cone_leg6_phi0">
+      <position y="0" x="L2_cone_leg_rcenter" z="L2_pos_cone_leg_zcenter" />
+      <rotation y="L2_pos_cone_leg_theta" />
+      <component material="CarbonFiber" thickness="L2_cone_thickness" name="Support" vis="SVTSupportVis"/>
+    </support>
+
+    <!--leg 7 ring+leg -->
+    <support type="Disk"
+            name="L2PosConeRing7"
+            vis="SVTSupportVis"
+            rmin="L2_cone_ring_rmin"
+            rmax="L2_cone_ring_rmax"
+            thickness="L2_cone_thickness"
+            phimin="L2_cone_leg7_phi0-L2_cone_ring_dphi"
+            phimax="L2_cone_leg7_phi0+L2_cone_ring_dphi">
+      <position x="0*cm" y="0*cm" z="L2_pos_cone_ring_zcenter" />
+      <component material="CarbonFiber" thickness="L2_cone_thickness" name="Support" vis="SVTSupportVis"/>
+    </support>
+
+    <support type="Box"
+            name="L2PosConeLeg7"
+            vis="SVTSupportVis"
+            x="L2_pos_cone_leg_length"
+            y="L2_cone_leg_width"
+            z="L2_cone_thickness"
+            phi0="L2_cone_leg7_phi0">
+      <position y="0" x="L2_cone_leg_rcenter" z="L2_pos_cone_leg_zcenter" />
+      <rotation y="L2_pos_cone_leg_theta" />
+      <component material="CarbonFiber" thickness="L2_cone_thickness" name="Support" vis="SVTSupportVis"/>
+    </support>
+
+    <!--leg 8 ring+leg -->
+    <support type="Disk"
+            name="L2PosConeRing8"
+            vis="SVTSupportVis"
+            rmin="L2_cone_ring_rmin"
+            rmax="L2_cone_ring_rmax"
+            thickness="L2_cone_thickness"
+            phimin="L2_cone_leg8_phi0-L2_cone_ring_dphi"
+            phimax="L2_cone_leg8_phi0+L2_cone_ring_dphi">
+      <position x="0*cm" y="0*cm" z="L2_pos_cone_ring_zcenter" />
+      <component material="CarbonFiber" thickness="L2_cone_thickness" name="Support" vis="SVTSupportVis"/>
+    </support>
+
+    <support type="Box"
+            name="L2PosConeLeg8"
+            vis="SVTSupportVis"
+            x="L2_pos_cone_leg_length"
+            y="L2_cone_leg_width"
+            z="L2_cone_thickness"
+            phi0="L2_cone_leg8_phi0">
+      <position y="0" x="L2_cone_leg_rcenter" z="L2_pos_cone_leg_zcenter" />
+      <rotation y="L2_pos_cone_leg_theta" />
+      <component material="CarbonFiber" thickness="L2_cone_thickness" name="Support" vis="SVTSupportVis"/>
+    </support>
+
+    <comment>---------------L2 outer frame, sheet 7---------------</comment>
+
+    <comment> plate2</comment>
+    <support type="Tube"
+      name="L2OuterPlateLeft"
+      vis="SVTSupportVis"
+      thickness="L2_outer_plate_thickness"
+      length="L2_outer_plate2_length"
+      rmin="L2_outer_plate2_rmin"
+      phimin="-L2_outer_plate2_dphi-L2_outer_plate2_phi0"
+      phimax="-L2_outer_plate2_phi0"
+      >
+        <position y="0" x="0" z="L2_outer_plate2_zcenter" />
+        <component material="CarbonFiber" thickness="L2_outer_plate_thickness"   name="Support" vis="SVTSupportVis"/>
+      </support>
+    <support type="Tube"
+      name="L2OuterPlateRight"
+      vis="SVTSupportVis"
+      thickness="L2_outer_plate_thickness"
+      length="L2_outer_plate2_length"
+      rmin="L2_outer_plate2_rmin"
+      phimin="180*deg+L2_outer_plate2_phi0"
+      phimax="180*deg+L2_outer_plate2_phi0+L2_outer_plate2_dphi"
+      >
+        <position y="0" x="0" z="L2_outer_plate2_zcenter" />
+        <component material="CarbonFiber" thickness="L2_outer_plate_thickness"   name="Support" vis="SVTSupportVis"/>
+      </support>
+
+    <support type="Tube"
+      name="L2OuterPlateLeft"
+      vis="SVTSupportVis"
+      thickness="L2_outer_plate_thickness"
+      length="L2_outer_plate2_length"
+      rmin="L2_outer_plate2_rmin"
+      phimin="L2_outer_plate2_phi0"
+      phimax="L2_outer_plate2_dphi+L2_outer_plate2_phi0"
+      >
+        <position y="0" x="0" z="L2_outer_plate2_zcenter" />
+        <component material="CarbonFiber" thickness="L2_outer_plate_thickness"   name="Support" vis="SVTSupportVis"/>
+      </support>
+    <support type="Tube"
+      name="L2OuterPlateRight"
+      vis="SVTSupportVis"
+      thickness="L2_outer_plate_thickness"
+      length="L2_outer_plate2_length"
+      rmin="L2_outer_plate2_rmin"
+      phimin="180*deg-L2_outer_plate2_phi0-L2_outer_plate2_dphi"
+      phimax="180*deg-L2_outer_plate2_phi0"
+      >
+        <position y="0" x="0" z="L2_outer_plate2_zcenter" />
+        <component material="CarbonFiber" thickness="L2_outer_plate_thickness"   name="Support" vis="SVTSupportVis"/>
+      </support>
+
+    <comment> plate1 (lower)</comment>
+      <support type="Tube"
+      name="L2OuterPlate1Middle"
+      vis="SVTSupportVis"
+      thickness="L2_outer_plate_thickness"
+      length="L2_outer_plate1_length"
+      rmin="L2_outer_plate1_rmin"
+      phimin="-90*deg-L2_outer_plate1_mid_dphi/2"
+      phimax="-90*deg+L2_outer_plate1_mid_dphi/2"
+      >
+        <position y="0" x="0" z="L2_outer_plate1_zcenter" />
+        <component material="CarbonFiber" thickness="L2_outer_plate_thickness"   name="Support" vis="SVTSupportVis"/>
+      </support>
+
+      <support type="Tube"
+      name="L2OuterPlate1Left"
+      vis="SVTSupportVis"
+      thickness="L2_outer_plate_thickness"
+      length="L2_outer_plate1_length"
+      rmin="L2_outer_plate1_rmin"
+      phimin="-L2_outer_plate1_side_dphi-L2_outer_plate1_side_phi0"
+      phimax="-L2_outer_plate1_side_phi0"
+      >
+        <position y="0" x="0" z="L2_outer_plate1_zcenter" />
+        <component material="CarbonFiber" thickness="L2_outer_plate_thickness"   name="Support" vis="SVTSupportVis"/>
+      </support>
+      <support type="Tube"
+      name="L2OuterPlate1Right"
+      vis="SVTSupportVis"
+      thickness="L2_outer_plate_thickness"
+      length="L2_outer_plate1_length"
+      rmin="L2_outer_plate1_rmin"
+      phimin="180*deg+L2_outer_plate1_side_phi0"
+      phimax="180*deg+L2_outer_plate1_side_phi0+L2_outer_plate1_side_dphi"
+      >
+        <position y="0" x="0" z="L2_outer_plate1_zcenter" />
+        <component material="CarbonFiber" thickness="L2_outer_plate_thickness"   name="Support" vis="SVTSupportVis"/>
+      </support>
+
+      <comment> plate1 (upper)</comment>
+      <support type="Tube"
+      name="L2OuterPlate1Middle"
+      vis="SVTSupportVis"
+      thickness="L2_outer_plate_thickness"
+      length="L2_outer_plate1_length"
+      rmin="L2_outer_plate1_rmin"
+      phimin="90*deg-L2_outer_plate1_mid_dphi/2"
+      phimax="90*deg+L2_outer_plate1_mid_dphi/2"
+      >
+        <position y="0" x="0" z="L2_outer_plate1_zcenter" />
+        <component material="CarbonFiber" thickness="L2_outer_plate_thickness"   name="Support" vis="SVTSupportVis"/>
+      </support>
+
+      <support type="Tube"
+      name="L2OuterPlate1Left"
+      vis="SVTSupportVis"
+      thickness="L2_outer_plate_thickness"
+      length="L2_outer_plate1_length"
+      rmin="L2_outer_plate1_rmin"
+      phimin="0"
+      phimax="L2_outer_plate1_side_dphi"
+      >
+        <position y="0" x="0" z="L2_outer_plate1_zcenter" />
+        <component material="CarbonFiber" thickness="L2_outer_plate_thickness"   name="Support" vis="SVTSupportVis"/>
+      </support>
+      <support type="Tube"
+      name="L2OuterPlate1Right"
+      vis="SVTSupportVis"
+      thickness="L2_outer_plate_thickness"
+      length="L2_outer_plate1_length"
+      rmin="L2_outer_plate1_rmin"
+      phimin="180*deg-L2_outer_plate1_side_dphi"
+      phimax="180*deg"
+      >
+        <position y="0" x="0" z="L2_outer_plate1_zcenter" />
+        <component material="CarbonFiber" thickness="L2_outer_plate_thickness"   name="Support" vis="SVTSupportVis"/>
+      </support>
+
+      <comment> plate 1_2 (lower)</comment>
+      <support type="Box"
+      name="L2OuterPlate1_2Left"
+      vis="SVTSupportVis"
+      x="L2_outer_plate1_2_dr"
+      y="L2_outer_plate_thickness"
+      z="L2_outer_plate1_2_length"
+      >
+        <position y="-L2_outer_plate1_2_vert_center" x="L2_outer_plate1_2_rcenter" z="L2_outer_plate1_2_zcenter" />
+        <component material="CarbonFiber" thickness="L2_outer_plate_thickness"   name="Support" vis="SVTSupportVis"/>
+      </support>
+
+      <support type="Box"
+      name="L2OuterPlate1_2Right"
+      vis="SVTSupportVis"
+      x="L2_outer_plate1_2_dr"
+      y="L2_outer_plate_thickness"
+      z="L2_outer_plate1_2_length"
+      >
+        <position y="-L2_outer_plate1_2_vert_center" x="-L2_outer_plate1_2_rcenter" z="L2_outer_plate1_2_zcenter" />
+        <component material="CarbonFiber" thickness="L2_outer_plate_thickness"   name="Support" vis="SVTSupportVis"/>
+      </support>
+
+      <support type="Box"
+      name="L2OuterPlate1_2MidLeft"
+      vis="SVTSupportVis"
+      x="L2_outer_plate1_2_dr"
+      y="L2_outer_plate_thickness"
+      z="L2_outer_plate1_2_length"
+      phi0="-(90*deg - L2_outer_plate1_2_mid_angle/2)"
+      >
+        <position y="0" x="L2_outer_plate1_2_rcenter" z="L2_outer_plate1_2_zcenter" />
+        <component material="CarbonFiber" thickness="L2_outer_plate_thickness"   name="Support" vis="SVTSupportVis"/>
+      </support>
+
+      <support type="Box"
+      name="L2OuterPlate1_2MidRight"
+      vis="SVTSupportVis"
+      x="L2_outer_plate1_2_dr"
+      y="L2_outer_plate_thickness"
+      z="L2_outer_plate1_2_length"
+      phi0="-(90*deg + L2_outer_plate1_2_mid_angle/2)"
+      >
+        <position y="0" x="L2_outer_plate1_2_rcenter" z="L2_outer_plate1_2_zcenter" />
+        <component material="CarbonFiber" thickness="L2_outer_plate_thickness"   name="Support" vis="SVTSupportVis"/>
+      </support>
+
+      <comment> plate 1_2 (upper)</comment>
+      <support type="Box"
+      name="L2OuterPlate1_2Left"
+      vis="SVTSupportVis"
+      x="L2_outer_plate1_2_dr"
+      y="L2_outer_plate_thickness"
+      z="L2_outer_plate1_2_length"
+      >
+        <position y="L2_outer_plate1_2_vert_center" x="L2_outer_plate1_2_rcenter" z="L2_outer_plate1_2_zcenter" />
+        <component material="CarbonFiber" thickness="L2_outer_plate_thickness"   name="Support" vis="SVTSupportVis"/>
+      </support>
+
+      <support type="Box"
+      name="L2OuterPlate1_2Right"
+      vis="SVTSupportVis"
+      x="L2_outer_plate1_2_dr"
+      y="L2_outer_plate_thickness"
+      z="L2_outer_plate1_2_length"
+      >
+        <position y="L2_outer_plate1_2_vert_center" x="-L2_outer_plate1_2_rcenter" z="L2_outer_plate1_2_zcenter" />
+        <component material="CarbonFiber" thickness="L2_outer_plate_thickness"   name="Support" vis="SVTSupportVis"/>
+      </support>
+
+      <support type="Box"
+      name="L2OuterPlate1_2MidLeft"
+      vis="SVTSupportVis"
+      x="L2_outer_plate1_2_dr"
+      y="L2_outer_plate_thickness"
+      z="L2_outer_plate1_2_length"
+      phi0="(90*deg - L2_outer_plate1_2_mid_angle/2)"
+      >
+        <position y="0" x="L2_outer_plate1_2_rcenter" z="L2_outer_plate1_2_zcenter" />
+        <component material="CarbonFiber" thickness="L2_outer_plate_thickness"   name="Support" vis="SVTSupportVis"/>
+      </support>
+      <support type="Box"
+      name="L2OuterPlate1_2MidRight"
+      vis="SVTSupportVis"
+      x="L2_outer_plate1_2_dr"
+      y="L2_outer_plate_thickness"
+      z="L2_outer_plate1_2_length"
+      phi0="(90*deg + L2_outer_plate1_2_mid_angle/2)"
+      >
+        <position y="0" x="L2_outer_plate1_2_rcenter" z="L2_outer_plate1_2_zcenter" />
+        <component material="CarbonFiber" thickness="L2_outer_plate_thickness"   name="Support" vis="SVTSupportVis"/>
+      </support>
+
+      <comment> Forward (positive) rings </comment>
+    <support type="Disk"
+      name="L2OuterPosRing1"
+      vis="SVTSupportVis"
+      rmin="L2_outer_ring1_rmin"
+      rmax="L2_outer_ring1_rmax"
+      thickness="L2_outer_pos_ring1_dz">
+        <position x="0*cm" y="0*cm" z="L2_outer_pos_ring1_zcenter" />
+        <component material="CarbonFiber" thickness="L2_outer_pos_ring1_dz" name="Support" vis="SVTSupportVis"/>
+    </support>
+    <support type="Disk"
+      name="L2OuterPosRing2"
+      vis="SVTSupportVis"
+      rmin="L2_outer_ring2_rmin"
+      rmax="L2_outer_ring2_rmax"
+      thickness="L2_outer_pos_ring2_dz">
+        <position x="0*cm" y="0*cm" z="L2_outer_pos_ring2_zcenter" />
+        <component material="CarbonFiber" thickness="L2_outer_pos_ring2_dz" name="Support" vis="SVTSupportVis"/>
+    </support>
+    <support type="Disk"
+      name="L2OuterPosRing1_2"
+      vis="SVTSupportVis"
+      rmin="L2_outer_ring1_2_rmin"
+      rmax="L2_outer_ring1_2_rmax"
+      thickness="L2_outer_pos_ring1_2_dz">
+        <position x="0*cm" y="0*cm" z="L2_outer_pos_ring1_2_zcenter" />
+        <component material="CarbonFiber" thickness="L2_outer_pos_ring1_2_dz" name="Support" vis="SVTSupportVis"/>
+    </support>
+
+    <comment> Backward (negative) rings </comment>
+    <support type="Disk"
+      name="L2OuterNegRing1"
+      vis="SVTSupportVis"
+      rmin="L2_outer_ring1_rmin"
+      rmax="L2_outer_ring1_rmax"
+      thickness="L2_outer_neg_ring1_dz">
+        <position x="0*cm" y="0*cm" z="L2_outer_neg_ring1_zcenter" />
+        <component material="CarbonFiber" thickness="L2_outer_neg_ring1_dz" name="Support" vis="SVTSupportVis"/>
+    </support>
+    <support type="Disk"
+      name="L2OuterNegRing2"
+      vis="SVTSupportVis"
+      rmin="L2_outer_ring2_rmin"
+      rmax="L2_outer_ring2_rmax"
+      thickness="L2_outer_neg_ring2_dz">
+        <position x="0*cm" y="0*cm" z="L2_outer_neg_ring2_zcenter" />
+        <component material="CarbonFoam_LowDensity" thickness="L2_outer_neg_ring2_dz" name="Support" vis="SVTSupportVis"/>
+    </support>
+    <support type="Disk"
+      name="L2OuterNegRing1_2"
+      vis="SVTSupportVis"
+      rmin="L2_outer_ring1_2_rmin"
+      rmax="L2_outer_ring1_2_rmax"
+      thickness="L2_outer_neg_ring1_2_dz">
+        <position x="0*cm" y="0*cm" z="L2_outer_neg_ring1_2_zcenter" />
+        <component material="CarbonFiber" thickness="L2_outer_neg_ring1_2_dz" name="Support" vis="SVTSupportVis"/>
+    </support>
+
+    <comment>
+    -------------------------------L2 inner frame (sheet 6)---------------------------------
+    </comment>
+
+    <comment> Forward (positive) rings </comment>
+    <support type="Disk"
+      name="L2InnerPosRing1"
+      vis="SVTSupportVis"
+      rmin="L2_inner_ring_rmin"
+      rmax="L2_inner_ring_rmax"
+      thickness="L2_inner_ring1_dz">
+        <position x="0*cm" y="0*cm" z="L2_inner_pos_ring1_zcenter" />
+        <component material="CarbonFoam_LowDensity" thickness="L2_inner_ring1_dz" name="Support" vis="SVTSupportVis"/>
+    </support>
+    <support type="Disk"
+      name="L2InnerPosRing2"
+      vis="SVTSupportVis"
+      rmin="L2_inner_ring_rmin"
+      rmax="L2_inner_ring_rmax"
+      thickness="L2_inner_ring2_dz">
+        <position x="0*cm" y="0*cm" z="L2_inner_pos_ring2_zcenter" />
+        <component material="CarbonFoam_LowDensity" thickness="L2_inner_ring2_dz" name="Support" vis="SVTSupportVis"/>
+    </support>
+
+    <comment> Backward (negative) rings </comment>
+    <support type="Disk"
+      name="L2InnerNegRing1"
+      vis="SVTSupportVis"
+      rmin="L2_inner_ring_rmin"
+      rmax="L2_inner_ring_rmax"
+      thickness="L2_inner_ring1_dz">
+        <position x="0*cm" y="0*cm" z="L2_inner_neg_ring1_zcenter" />
+        <component material="CarbonFoam_LowDensity" thickness="L2_inner_ring1_dz" name="Support" vis="SVTSupportVis"/>
+    </support>
+    <support type="Disk"
+      name="L2InnerNegRing2"
+      vis="SVTSupportVis"
+      rmin="L2_inner_ring_rmin"
+      rmax="L2_inner_ring_rmax"
+      thickness="L2_inner_ring2_dz">
+        <position x="0*cm" y="0*cm" z="L2_inner_neg_ring2_zcenter" />
+        <component material="CarbonFoam_LowDensity" thickness="L2_inner_ring2_dz" name="Support" vis="SVTSupportVis"/>
+    </support>
+
+    <comment> plates (upper)</comment>
+    <support type="Box"
+      name="L2InnerPlateUpperLeft"
+      vis="SVTSupportVis"
+      x="L2_inner_plate_height"
+      y="L2_inner_plate_thickness"
+      z="L2_inner_plate_length">
+        <position x="L2_inner_plate_horiz_center" y="L2_inner_plate_vert_center" z="L2_inner_plate_zcenter" />
+        <component material="CarbonFoam_LowDensity" thickness="L2_inner_plate_thickness"   name="Support" vis="SVTSupportVis"/>
+    </support>
+    <support type="Box"
+      name="L2InnerPlateUpperRight"
+      vis="SVTSupportVis"
+      x="L2_inner_plate_height"
+      y="L2_inner_plate_thickness"
+      z="L2_inner_plate_length">
+        <position x="-L2_inner_plate_horiz_center" y="L2_inner_plate_vert_center" z="L2_inner_plate_zcenter" />
+        <component material="CarbonFoam_LowDensity" thickness="L2_inner_plate_thickness"   name="Support" vis="SVTSupportVis"/>
+    </support>
+    <support type="Box"
+      name="L2InnerPlateUpperMid"
+      vis="SVTSupportVis"
+      x="L2_inner_plate_height"
+      y="L2_inner_plate_thickness"
+      z="L2_inner_plate_length">
+        <position y="L2_inner_plate_horiz_center" x="0" z="L2_inner_plate_zcenter" />
+        <rotation z="L2_inner_plate_mid_rot" />
+        <component material="CarbonFoam_LowDensity" thickness="L2_inner_plate_thickness"   name="Support" vis="SVTSupportVis"/>
+    </support>
+
+
+    <comment> plates (lower)</comment>
+    <support type="Box"
+      name="L2InnerPlateLowerLeft"
+      vis="SVTSupportVis"
+      x="L2_inner_plate_height"
+      y="L2_inner_plate_thickness"
+      z="L2_inner_plate_length">
+        <position x="L2_inner_plate_horiz_center" y="-L2_inner_plate_vert_center" z="L2_inner_plate_zcenter" />
+        <component material="CarbonFoam_LowDensity" thickness="L2_inner_plate_thickness"   name="Support" vis="SVTSupportVis"/>
+    </support>
+    <support type="Box"
+      name="L2InnerPlateLowerRight"
+      vis="SVTSupportVis"
+      x="L2_inner_plate_height"
+      y="L2_inner_plate_thickness"
+      z="L2_inner_plate_length">
+        <position x="-L2_inner_plate_horiz_center" y="-L2_inner_plate_vert_center" z="L2_inner_plate_zcenter" />
+        <component material="CarbonFoam_LowDensity" thickness="L2_inner_plate_thickness"   name="Support" vis="SVTSupportVis"/>
+    </support>
+    <support type="Box"
+      name="L2InnerPlateLowerMid"
+      vis="SVTSupportVis"
+      x="L2_inner_plate_height"
+      y="L2_inner_plate_thickness"
+      z="L2_inner_plate_length">
+        <position y="-L2_inner_plate_horiz_center" x="0" z="L2_inner_plate_zcenter" />
+        <rotation z="L2_inner_plate_mid_rot" />
+        <component material="CarbonFoam_LowDensity" thickness="L2_inner_plate_thickness"   name="Support" vis="SVTSupportVis"/>
+    </support>
+
+    </detector>
+
+    <comment>
+    -------------------------------L1---------------------------------------------
+    </comment>
+    <detector type="epic_SupportServiceMaterial"
+      name="SVT_IB_Support_L1"
+      id="SVT_IB_Support_1_ID"
+    >
+    <comment>negative cone (sheet 4) </comment>
+    <!-- Ring 1 -->
+    <support type="Disk"
+            name="L1NegConeRing1"
+            vis="SVTSupportVis"
+            rmin="L1_neg_cone_ring_rmin"
+            rmax="L1_neg_cone_ring_rmax"
+            thickness="L1_neg_cone_thickness"
+            phimin="L1_cone_leg1_phi0-L1_neg_cone_ring_dphi"
+            phimax="L1_cone_leg1_phi0+L1_neg_cone_ring_dphi">
+      <position x="0*cm" y="0*cm" z="L1_neg_cone_ring_zcenter" />
+      <component material="CarbonFiber" thickness="L1_neg_cone_thickness" name="Support" vis="SVTSupportVis"/>
+    </support>
+
+    <!-- Ring 2 -->
+    <support type="Disk"
+            name="L1NegConeRing2"
+            vis="SVTSupportVis"
+            rmin="L1_neg_cone_ring_rmin"
+            rmax="L1_neg_cone_ring_rmax"
+            thickness="L1_neg_cone_thickness"
+            phimin="L1_cone_leg2_phi0-L1_neg_cone_ring_dphi"
+            phimax="L1_cone_leg2_phi0+L1_neg_cone_ring_dphi">
+      <position x="0*cm" y="0*cm" z="L1_neg_cone_ring_zcenter" />
+      <component material="CarbonFiber" thickness="L1_neg_cone_thickness" name="Support" vis="SVTSupportVis"/>
+    </support>
+
+    <!-- Ring 3 -->
+    <support type="Disk"
+            name="L1NegConeRing3"
+            vis="SVTSupportVis"
+            rmin="L1_neg_cone_ring_rmin"
+            rmax="L1_neg_cone_ring_rmax"
+            thickness="L1_neg_cone_thickness"
+            phimin="L1_cone_leg3_phi0-L1_neg_cone_ring_dphi"
+            phimax="L1_cone_leg3_phi0+L1_neg_cone_ring_dphi">
+      <position x="0*cm" y="0*cm" z="L1_neg_cone_ring_zcenter" />
+      <component material="CarbonFiber" thickness="L1_neg_cone_thickness" name="Support" vis="SVTSupportVis"/>
+    </support>
+
+    <!-- Ring 4 -->
+    <support type="Disk"
+            name="L1NegConeRing4"
+            vis="SVTSupportVis"
+            rmin="L1_neg_cone_ring_rmin"
+            rmax="L1_neg_cone_ring_rmax"
+            thickness="L1_neg_cone_thickness"
+            phimin="L1_cone_leg4_phi0-L1_neg_cone_ring_dphi"
+            phimax="L1_cone_leg4_phi0+L1_neg_cone_ring_dphi">
+      <position x="0*cm" y="0*cm" z="L1_neg_cone_ring_zcenter" />
+      <component material="CarbonFiber" thickness="L1_neg_cone_thickness" name="Support" vis="SVTSupportVis"/>
+    </support>
+
+    <!-- Ring 5 -->
+    <support type="Disk"
+            name="L1NegConeRing5"
+            vis="SVTSupportVis"
+            rmin="L1_neg_cone_ring_rmin"
+            rmax="L1_neg_cone_ring_rmax"
+            thickness="L1_neg_cone_thickness"
+            phimin="L1_cone_leg5_phi0-L1_neg_cone_ring_dphi"
+            phimax="L1_cone_leg5_phi0+L1_neg_cone_ring_dphi">
+      <position x="0*cm" y="0*cm" z="L1_neg_cone_ring_zcenter" />
+      <component material="CarbonFiber" thickness="L1_neg_cone_thickness" name="Support" vis="SVTSupportVis"/>
+    </support>
+
+    <!-- Ring 6 -->
+    <support type="Disk"
+            name="L1NegConeRing6"
+            vis="SVTSupportVis"
+            rmin="L1_neg_cone_ring_rmin"
+            rmax="L1_neg_cone_ring_rmax"
+            thickness="L1_neg_cone_thickness"
+            phimin="L1_cone_leg6_phi0-L1_neg_cone_ring_dphi"
+            phimax="L1_cone_leg6_phi0+L1_neg_cone_ring_dphi">
+      <position x="0*cm" y="0*cm" z="L1_neg_cone_ring_zcenter" />
+      <component material="CarbonFiber" thickness="L1_neg_cone_thickness" name="Support" vis="SVTSupportVis"/>
+    </support>
+
+    <!-- Ring 7 -->
+    <support type="Disk"
+            name="L1NegConeRing7"
+            vis="SVTSupportVis"
+            rmin="L1_neg_cone_ring_rmin"
+            rmax="L1_neg_cone_ring_rmax"
+            thickness="L1_neg_cone_thickness"
+            phimin="L1_cone_leg7_phi0-L1_neg_cone_ring_dphi"
+            phimax="L1_cone_leg7_phi0+L1_neg_cone_ring_dphi">
+      <position x="0*cm" y="0*cm" z="L1_neg_cone_ring_zcenter" />
+      <component material="CarbonFiber" thickness="L1_neg_cone_thickness" name="Support" vis="SVTSupportVis"/>
+    </support>
+
+    <!-- Ring 8 -->
+    <support type="Disk"
+            name="L1NegConeRing8"
+            vis="SVTSupportVis"
+            rmin="L1_neg_cone_ring_rmin"
+            rmax="L1_neg_cone_ring_rmax"
+            thickness="L1_neg_cone_thickness"
+            phimin="L1_cone_leg8_phi0-L1_neg_cone_ring_dphi"
+            phimax="L1_cone_leg8_phi0+L1_neg_cone_ring_dphi">
+      <position x="0*cm" y="0*cm" z="L1_neg_cone_ring_zcenter" />
+      <component material="CarbonFiber" thickness="L1_neg_cone_thickness" name="Support" vis="SVTSupportVis"/>
+    </support>
+
+      <!-- Leg 1 -->
+      <support type="Box"
+              name="L1NegConeLeg1"
+              vis="SVTSupportVis"
+              x="L1_neg_cone_leg_length"
+              y="L1_neg_cone_leg_width"
+              z="L1_neg_cone_thickness"
+              phi0="L1_cone_leg1_phi0">
+        <position y="0" x="L1_neg_cone_leg_rcenter" z="L1_neg_cone_leg_zcenter" />
+        <rotation y="L1_neg_cone_leg_theta" />
+        <component material="CarbonFiber" thickness="L1_neg_cone_thickness" name="Support" vis="SVTSupportVis"/>
+      </support>
+
+      <!-- Leg 2 -->
+      <support type="Box"
+              name="L1NegConeLeg2"
+              vis="SVTSupportVis"
+              x="L1_neg_cone_leg_length"
+              y="L1_neg_cone_leg_width"
+              z="L1_neg_cone_thickness"
+              phi0="L1_cone_leg2_phi0">
+        <position y="0" x="L1_neg_cone_leg_rcenter" z="L1_neg_cone_leg_zcenter" />
+        <rotation y="L1_neg_cone_leg_theta" />
+        <component material="CarbonFiber" thickness="L1_neg_cone_thickness" name="Support" vis="SVTSupportVis"/>
+      </support>
+
+      <!-- Leg 3 -->
+      <support type="Box"
+              name="L1NegConeLeg3"
+              vis="SVTSupportVis"
+              x="L1_neg_cone_leg_length"
+              y="L1_neg_cone_leg_width"
+              z="L1_neg_cone_thickness"
+              phi0="L1_cone_leg3_phi0">
+        <position y="0" x="L1_neg_cone_leg_rcenter" z="L1_neg_cone_leg_zcenter" />
+        <rotation y="L1_neg_cone_leg_theta" />
+        <component material="CarbonFiber" thickness="L1_neg_cone_thickness" name="Support" vis="SVTSupportVis"/>
+      </support>
+
+      <!-- Leg 4 -->
+      <support type="Box"
+              name="L1NegConeLeg4"
+              vis="SVTSupportVis"
+              x="L1_neg_cone_leg_length"
+              y="L1_neg_cone_leg_width"
+              z="L1_neg_cone_thickness"
+              phi0="L1_cone_leg4_phi0">
+        <position y="0" x="L1_neg_cone_leg_rcenter" z="L1_neg_cone_leg_zcenter" />
+        <rotation y="L1_neg_cone_leg_theta" />
+        <component material="CarbonFiber" thickness="L1_neg_cone_thickness" name="Support" vis="SVTSupportVis"/>
+      </support>
+
+      <!-- Leg 5 -->
+      <support type="Box"
+              name="L1NegConeLeg5"
+              vis="SVTSupportVis"
+              x="L1_neg_cone_leg_length"
+              y="L1_neg_cone_leg_width"
+              z="L1_neg_cone_thickness"
+              phi0="L1_cone_leg5_phi0">
+        <position y="0" x="L1_neg_cone_leg_rcenter" z="L1_neg_cone_leg_zcenter" />
+        <rotation y="L1_neg_cone_leg_theta" />
+        <component material="CarbonFiber" thickness="L1_neg_cone_thickness" name="Support" vis="SVTSupportVis"/>
+      </support>
+
+      <!-- Leg 6 -->
+      <support type="Box"
+              name="L1NegConeLeg6"
+              vis="SVTSupportVis"
+              x="L1_neg_cone_leg_length"
+              y="L1_neg_cone_leg_width"
+              z="L1_neg_cone_thickness"
+              phi0="L1_cone_leg6_phi0">
+        <position y="0" x="L1_neg_cone_leg_rcenter" z="L1_neg_cone_leg_zcenter" />
+        <rotation y="L1_neg_cone_leg_theta" />
+        <component material="CarbonFiber" thickness="L1_neg_cone_thickness" name="Support" vis="SVTSupportVis"/>
+      </support>
+
+      <!-- Leg 7 -->
+      <support type="Box"
+              name="L1NegConeLeg7"
+              vis="SVTSupportVis"
+              x="L1_neg_cone_leg_length"
+              y="L1_neg_cone_leg_width"
+              z="L1_neg_cone_thickness"
+              phi0="L1_cone_leg7_phi0">
+        <position y="0" x="L1_neg_cone_leg_rcenter" z="L1_neg_cone_leg_zcenter" />
+        <rotation y="L1_neg_cone_leg_theta" />
+        <component material="CarbonFiber" thickness="L1_neg_cone_thickness" name="Support" vis="SVTSupportVis"/>
+      </support>
+
+      <!-- Leg 8 -->
+      <support type="Box"
+              name="L1NegConeLeg8"
+              vis="SVTSupportVis"
+              x="L1_neg_cone_leg_length"
+              y="L1_neg_cone_leg_width"
+              z="L1_neg_cone_thickness"
+              phi0="L1_cone_leg8_phi0">
+        <position y="0" x="L1_neg_cone_leg_rcenter" z="L1_neg_cone_leg_zcenter" />
+        <rotation y="L1_neg_cone_leg_theta" />
+        <component material="CarbonFiber" thickness="L1_neg_cone_thickness" name="Support" vis="SVTSupportVis"/>
+      </support>
+
+
+    <comment>positive cone (sheet 4) </comment>
+    <subtraction name="L1PosCone" material="CarbonFiber" vis="SVTSupportVis">
+        <position x="0" y="0" z="(L1_pos_cone_z3+L1_pos_cone_z1)/2"/>
+
+        <shape1 type="Cone" name="L1PosCone_main"
+                rmin1="L1_pos_cone_r1"
+                rmin2="L1_pos_cone_r3-overlap_buffer"
+                length="L1_pos_cone_z3-L1_pos_cone_z1"
+                thickness="L1_pos_cone_thickness"
+                material="CarbonFiber"/>
+
+        <shape2 type="Box" name="L1PosCone_cutout"
+                x="L1_pos_cone_r2*2"
+                y="L1_pos_cone_inner_vert_off*2"
+                z="L1_pos_cone_z2"
+                material="Air">
+        </shape2>
+      </subtraction>
+
+
+
+    <comment>
+      ----------------------------------------------
+       FPC cables connected to each end of the silicon layer (sheet 5)
+      --------------------------------------------------------- </comment>
+    <comment> attach fanning out FPC cables to positive cone </comment>
+     <subtraction name="L1PosConeFPC" material="Aluminum" vis="SVTReadoutVis">
+        <position x="0" y="0" z="(L1_pos_cone_z3+L1_pos_cone_z1)/2+L1_pos_cone_thickness+overlap_buffer*2"/>
+
+        <shape1 type="Cone" name="L1PosConeFPC_main"
+                rmin1="L1_pos_cone_r1"
+                rmin2="L1_pos_cone_r3-overlap_buffer"
+                length="L1_pos_cone_z3-L1_pos_cone_z1"
+                thickness="L1_pos_cone_FPC_thickness"
+                material="Aluminum"/>
+
+        <shape2 type="Box" name="L1PosConeFPC_cutout"
+                x="L1_pos_cone_r2*2"
+                y="L1_pos_cone_inner_vert_off*2"
+                z="L1_pos_cone_z2"
+                material="Air">
+        </shape2>
+      </subtraction>
+
+    <comment> cable connected to the silicon layer, approximated by ring</comment>
+
+    <subtraction name="IBFPCNegRing0" material="Aluminum" vis="SVTReadoutVis">
+      <position x="0" y="0" z="IB_FPC_neg_ring_zcenter"/>
+      <shape1 type="Tube" name="FPC_neg_ring0_main"
+              rmin="IB_FPC_neg_ring0_rmin"
+              thickness="IB_FPC_neg_ring_thickness"
+              length="IB_FPC_neg_ring_dz"
+              material="Aluminum"/>
+      <shape2 type="Box" name="FPC_neg_ring0_cutout"
+              x="IB_FPC_ring0_rmax*2"
+              y="IB_FPC_ring_vert_off*2"
+              z="IB_FPC_neg_ring_dz"
+              material="Air">
+        <!-- This position is relative to the tube's center, not absolute -->
+        <position x="0" y="0" z="0"/>
+      </shape2>
+    </subtraction>
+
+   <subtraction name="IBFPCNegRing1" material="Aluminum" vis="SVTReadoutVis">
+      <position x="0" y="0" z="IB_FPC_neg_ring_zcenter"/>
+      <shape1 type="Tube" name="FPC_neg_ring1_main"
+              rmin="IB_FPC_ring1_rmin"
+              thickness="IB_FPC_neg_ring_thickness"
+              length="IB_FPC_neg_ring_dz"
+              material="Aluminum"/>
+      <shape2 type="Box" name="FPC_neg_ring1_cutout"
+              x="IB_FPC_neg_ring1_rmax*2"
+              y="IB_FPC_ring_vert_off*2"
+              z="IB_FPC_neg_ring_dz"
+              material="Air">
+        <!-- This position is relative to the tube's center, not absolute -->
+        <position x="0" y="0" z="0"/>
+      </shape2>
+    </subtraction>
+
+    <subtraction name="IBFPCPosRing0" material="Aluminum" vis="SVTReadoutVis">
+      <position x="0" y="0" z="IB_FPC_pos_ring_zcenter"/>
+      <shape1 type="Tube" name="FPC_pos_ring0_main"
+              rmin="IB_FPC_pos_ring0_rmin"
+              thickness="IB_FPC_pos_ring_thickness"
+              length="IB_FPC_pos_ring_dz"
+              material="Aluminum"/>
+      <shape2 type="Box" name="FPC_pos_ring0_cutout"
+              x="IB_FPC_ring0_rmax*2"
+              y="IB_FPC_ring_vert_off*2"
+              z="IB_FPC_pos_ring_dz"
+              material="Air">
+        <!-- This position is relative to the tube's center, not absolute -->
+        <position x="0" y="0" z="0"/>
+      </shape2>
+    </subtraction>
+
+    <subtraction name="IBFPCPosRing1" material="Aluminum" vis="SVTReadoutVis">
+      <position x="0" y="0" z="IB_FPC_pos_ring_zcenter"/>
+      <shape1 type="Tube" name="FPC_pos_ring1_main"
+              rmin="IB_FPC_ring1_rmin"
+              thickness="IB_FPC_pos_ring_thickness"
+              length="IB_FPC_pos_ring_dz"
+              material="Aluminum"/>
+      <shape2 type="Box" name="FPC_pos_ring1_cutout"
+              x="IB_FPC_pos_ring1_rmax*2"
+              y="IB_FPC_ring_vert_off*2"
+              z="IB_FPC_pos_ring_dz"
+              material="Air">
+        <!-- This position is relative to the tube's center, not absolute -->
+        <position x="0" y="0" z="0"/>
+      </shape2>
+    </subtraction>
+
+
+
+
+    <comment> pos cone legs (sheet 4) </comment>
+      <support type="Box"
+              name="L1PosConeLeg1"
+              vis="SVTSupportVis"
+              x="L1_pos_cone_leg_length"
+              y="L1_pos_cone_leg_width"
+              z="L1_pos_cone_thickness"
+              phi0="L1_cone_leg1_phi0">
+        <position y="0" x="L1_pos_cone_leg_rcenter" z="L1_pos_cone_leg_zcenter" />
+        <rotation y="L1_pos_cone_leg_theta" />
+        <component material="CarbonFiber" thickness="L1_pos_cone_thickness" name="Support" vis="SVTSupportVis"/>
+      </support>
+
+      <!-- Leg 2 -->
+      <support type="Box"
+              name="L1PosConeLeg2"
+              vis="SVTSupportVis"
+              x="L1_pos_cone_leg_length"
+              y="L1_pos_cone_leg_width"
+              z="L1_pos_cone_thickness"
+              phi0="L1_cone_leg2_phi0">
+        <position y="0" x="L1_pos_cone_leg_rcenter" z="L1_pos_cone_leg_zcenter" />
+        <rotation y="L1_pos_cone_leg_theta" />
+        <component material="CarbonFiber" thickness="L1_pos_cone_thickness" name="Support" vis="SVTSupportVis"/>
+      </support>
+
+      <!-- Leg 3 -->
+      <support type="Box"
+              name="L1PosConeLeg3"
+              vis="SVTSupportVis"
+              x="L1_pos_cone_leg_length"
+              y="L1_pos_cone_leg_width"
+              z="L1_pos_cone_thickness"
+              phi0="L1_cone_leg3_phi0">
+        <position y="0" x="L1_pos_cone_leg_rcenter" z="L1_pos_cone_leg_zcenter" />
+        <rotation y="L1_pos_cone_leg_theta" />
+        <component material="CarbonFiber" thickness="L1_pos_cone_thickness" name="Support" vis="SVTSupportVis"/>
+      </support>
+
+      <!-- Leg 4 -->
+      <support type="Box"
+              name="L1PosConeLeg4"
+              vis="SVTSupportVis"
+              x="L1_pos_cone_leg_length"
+              y="L1_pos_cone_leg_width"
+              z="L1_pos_cone_thickness"
+              phi0="L1_cone_leg4_phi0">
+        <position y="0" x="L1_pos_cone_leg_rcenter" z="L1_pos_cone_leg_zcenter" />
+        <rotation y="L1_pos_cone_leg_theta" />
+        <component material="CarbonFiber" thickness="L1_pos_cone_thickness" name="Support" vis="SVTSupportVis"/>
+      </support>
+
+      <!-- Leg 5 -->
+      <support type="Box"
+              name="L1PosConeLeg5"
+              vis="SVTSupportVis"
+              x="L1_pos_cone_leg_length"
+              y="L1_pos_cone_leg_width"
+              z="L1_pos_cone_thickness"
+              phi0="L1_cone_leg5_phi0">
+        <position y="0" x="L1_pos_cone_leg_rcenter" z="L1_pos_cone_leg_zcenter" />
+        <rotation y="L1_pos_cone_leg_theta" />
+        <component material="CarbonFiber" thickness="L1_pos_cone_thickness" name="Support" vis="SVTSupportVis"/>
+      </support>
+
+      <!-- Leg 6 -->
+      <support type="Box"
+              name="L1PosConeLeg6"
+              vis="SVTSupportVis"
+              x="L1_pos_cone_leg_length"
+              y="L1_pos_cone_leg_width"
+              z="L1_pos_cone_thickness"
+              phi0="L1_cone_leg6_phi0">
+        <position y="0" x="L1_pos_cone_leg_rcenter" z="L1_pos_cone_leg_zcenter" />
+        <rotation y="L1_pos_cone_leg_theta" />
+        <component material="CarbonFiber" thickness="L1_pos_cone_thickness" name="Support" vis="SVTSupportVis"/>
+      </support>
+
+      <!-- Leg 7 -->
+      <support type="Box"
+              name="L1PosConeLeg7"
+              vis="SVTSupportVis"
+              x="L1_pos_cone_leg_length"
+              y="L1_pos_cone_leg_width"
+              z="L1_pos_cone_thickness"
+              phi0="L1_cone_leg7_phi0">
+        <position y="0" x="L1_pos_cone_leg_rcenter" z="L1_pos_cone_leg_zcenter" />
+        <rotation y="L1_pos_cone_leg_theta" />
+        <component material="CarbonFiber" thickness="L1_pos_cone_thickness" name="Support" vis="SVTSupportVis"/>
+      </support>
+
+      <!-- Leg 8 -->
+      <support type="Box"
+              name="L1PosConeLeg8"
+              vis="SVTSupportVis"
+              x="L1_pos_cone_leg_length"
+              y="L1_pos_cone_leg_width"
+              z="L1_pos_cone_thickness"
+              phi0="L1_cone_leg8_phi0">
+        <position y="0" x="L1_pos_cone_leg_rcenter" z="L1_pos_cone_leg_zcenter" />
+        <rotation y="L1_pos_cone_leg_theta" />
+        <component material="CarbonFiber" thickness="L1_pos_cone_thickness" name="Support" vis="SVTSupportVis"/>
+      </support>
+
+      <comment>-----------------------------sheet 2---------------</comment>
+      <comment> air cooling support</comment>
+      <support type="Disk"
+        name="L1CoolingRing1_2"
+        vis="SVTSupportVis"
+        rmin="L1_cooling_ring1_2_rmin"
+        rmax="L1_cooling_ring1_2_rmax"
+        thickness="L1_cooling_ring1_2_dz">
+          <position x="0*cm" y="0*cm" z="L1_cooling_ring1_2_zcenter" />
+          <component material="CarbonFiber" thickness="L1_cooling_ring1_2_dz" name="Support" vis="SVTSupportVis"/>
+      </support>
+      <support type="Disk"
+        name="L1CoolingRing1"
+        vis="SVTSupportVis"
+        rmin="L1_cooling_ring1_rmin"
+        rmax="L1_cooling_ring1_rmax"
+        thickness="L1_cooling_ring1_dz">
+          <position x="0*cm" y="0*cm" z="L1_cooling_ring1_zcenter" />
+          <component material="CarbonFiber" thickness="L1_cooling_ring1_dz" name="Support" vis="SVTSupportVis"/>
+      </support>
+
+      <support type="Box"
+      name="L1CoolingPadLeft"
+      vis="SVTSupportVis"
+      x="L1_cooling_pad_dr"
+      y="L1_cooling_pad_thickness"
+      z="L1_cooling_pad_length"
+      >
+        <position y="-L1_cooling_pad_vert_center" x="-L1_cooling_pad_rcenter" z="L1_cooling_pad_zcenter" />
+        <component material="CarbonFiber" thickness="L1_cooling_pad_thickness"   name="Support" vis="SVTSupportVis"/>
+      </support>
+
+      <support type="Box"
+      name="L1CoolingPadRight"
+      vis="SVTSupportVis"
+      x="L1_cooling_pad_dr"
+      y="L1_cooling_pad_thickness"
+      z="L1_cooling_pad_length"
+      >
+        <position y="-L1_cooling_pad_vert_center" x="L1_cooling_pad_rcenter" z="L1_cooling_pad_zcenter" />
+        <component material="CarbonFiber" thickness="L1_cooling_pad_thickness"   name="Support" vis="SVTSupportVis"/>
+      </support>
+
+      <support type="Box"
+      name="L1CoolingPadLeft"
+      vis="SVTSupportVis"
+      x="L1_cooling_pad_dr"
+      y="L1_cooling_pad_thickness"
+      z="L1_cooling_pad_length"
+      >
+        <position y="L1_cooling_pad_vert_center" x="-L1_cooling_pad_rcenter" z="L1_cooling_pad_zcenter" />
+        <component material="CarbonFiber" thickness="L1_cooling_pad_thickness"   name="Support" vis="SVTSupportVis"/>
+      </support>
+
+      <support type="Box"
+      name="L1CoolingPadRight"
+      vis="SVTSupportVis"
+      x="L1_cooling_pad_dr"
+      y="L1_cooling_pad_thickness"
+      z="L1_cooling_pad_length"
+      >
+        <position y="L1_cooling_pad_vert_center" x="L1_cooling_pad_rcenter" z="L1_cooling_pad_zcenter" />
+        <component material="CarbonFiber" thickness="L1_cooling_pad_thickness"   name="Support" vis="SVTSupportVis"/>
+      </support>
+
+      <comment> plate2</comment>
+      <support type="Tube"
+        name="L1Plate2Left"
+        vis="SVTSupportVis"
+        thickness="L1_plate_thickness"
+        length="L1_plate2_length"
+        rmin="L1_plate2_rmin"
+        phimin="-L1_plate2_dphi-L1_plate2_phi0"
+        phimax="-L1_plate2_phi0"
+        >
+          <position y="0" x="0" z="L1_plate2_zcenter" />
+          <component material="CarbonFiber" thickness="L1_plate_thickness"   name="Support" vis="SVTSupportVis"/>
+        </support>
+      <support type="Tube"
+        name="L1Plate2Right"
+        vis="SVTSupportVis"
+        thickness="L1_plate_thickness"
+        length="L1_plate2_length"
+        rmin="L1_plate2_rmin"
+        phimin="180*deg+L1_plate2_phi0"
+        phimax="180*deg+L1_plate2_phi0+L1_plate2_dphi"
+        >
+          <position y="0" x="0" z="L1_plate2_zcenter" />
+          <component material="CarbonFiber" thickness="L1_plate_thickness"   name="Support" vis="SVTSupportVis"/>
+        </support>
+
+      <support type="Tube"
+        name="L1Plate2Left"
+        vis="SVTSupportVis"
+        thickness="L1_plate_thickness"
+        length="L1_plate2_length"
+        rmin="L1_plate2_rmin"
+        phimin="L1_plate2_phi0"
+        phimax="L1_plate2_dphi+L1_plate2_phi0"
+        >
+          <position y="0" x="0" z="L1_plate2_zcenter" />
+          <component material="CarbonFiber" thickness="L1_plate_thickness"   name="Support" vis="SVTSupportVis"/>
+        </support>
+      <support type="Tube"
+        name="L1Plate2Right"
+        vis="SVTSupportVis"
+        thickness="L1_plate_thickness"
+        length="L1_plate2_length"
+        rmin="L1_plate2_rmin"
+        phimin="180*deg-L1_plate2_phi0-L1_plate2_dphi"
+        phimax="180*deg-L1_plate2_phi0"
+        >
+          <position y="0" x="0" z="L1_plate2_zcenter" />
+          <component material="CarbonFiber" thickness="L1_plate_thickness"   name="Support" vis="SVTSupportVis"/>
+        </support>
+
+      <comment> plate1 (lower)</comment>
+        <support type="Tube"
+        name="L1Plate1Middle"
+        vis="SVTSupportVis"
+        thickness="L1_plate_thickness"
+        length="L1_plate1_length"
+        rmin="L1_plate1_rmin"
+        phimin="-90*deg-L1_plate1_mid_dphi/2"
+        phimax="-90*deg+L1_plate1_mid_dphi/2"
+        >
+          <position y="0" x="0" z="L1_plate1_zcenter" />
+          <component material="CarbonFiber" thickness="L1_plate_thickness"   name="Support" vis="SVTSupportVis"/>
+        </support>
+
+        <support type="Tube"
+        name="L1Plate1Left"
+        vis="SVTSupportVis"
+        thickness="L1_plate_thickness"
+        length="L1_plate1_length"
+        rmin="L1_plate1_rmin"
+        phimin="-L1_plate1_side_dphi-L1_plate1_side_phi0"
+        phimax="-L1_plate1_side_phi0"
+        >
+          <position y="0" x="0" z="L1_plate1_zcenter" />
+          <component material="CarbonFiber" thickness="L1_plate_thickness"   name="Support" vis="SVTSupportVis"/>
+        </support>
+        <support type="Tube"
+        name="L1Plate1Right"
+        vis="SVTSupportVis"
+        thickness="L1_plate_thickness"
+        length="L1_plate1_length"
+        rmin="L1_plate1_rmin"
+        phimin="180*deg+L1_plate1_side_phi0"
+        phimax="180*deg+L1_plate1_side_phi0+L1_plate1_side_dphi"
+        >
+          <position y="0" x="0" z="L1_plate1_zcenter" />
+          <component material="CarbonFiber" thickness="L1_plate_thickness"   name="Support" vis="SVTSupportVis"/>
+        </support>
+
+        <comment> plate1 (upper)</comment>
+        <support type="Tube"
+        name="L1Plate1Middle"
+        vis="SVTSupportVis"
+        thickness="L1_plate_thickness"
+        length="L1_plate1_length"
+        rmin="L1_plate1_rmin"
+        phimin="90*deg-L1_plate1_mid_dphi/2"
+        phimax="90*deg+L1_plate1_mid_dphi/2"
+        >
+          <position y="0" x="0" z="L1_plate1_zcenter" />
+          <component material="CarbonFiber" thickness="L1_plate_thickness"   name="Support" vis="SVTSupportVis"/>
+        </support>
+
+        <support type="Tube"
+        name="L1Plate1Left"
+        vis="SVTSupportVis"
+        thickness="L1_plate_thickness"
+        length="L1_plate1_length"
+        rmin="L1_plate1_rmin"
+        phimin="0"
+        phimax="L1_plate1_side_dphi"
+        >
+          <position y="0" x="0" z="L1_plate1_zcenter" />
+          <component material="CarbonFiber" thickness="L1_plate_thickness"   name="Support" vis="SVTSupportVis"/>
+        </support>
+        <support type="Tube"
+        name="L1Plate1Right"
+        vis="SVTSupportVis"
+        thickness="L1_plate_thickness"
+        length="L1_plate1_length"
+        rmin="L1_plate1_rmin"
+        phimin="180*deg-L1_plate1_side_dphi"
+        phimax="180*deg"
+        >
+          <position y="0" x="0" z="L1_plate1_zcenter" />
+          <component material="CarbonFiber" thickness="L1_plate_thickness"   name="Support" vis="SVTSupportVis"/>
+        </support>
+
+        <comment> plate 1_2 (lower)</comment>
+        <support type="Box"
+        name="L1Plate1_2Left"
+        vis="SVTSupportVis"
+        x="L1_plate1_2_dr"
+        y="L1_plate_thickness"
+        z="L1_plate1_2_length"
+        >
+          <position y="-L1_plate1_2_vert_center" x="L1_plate1_2_rcenter" z="L1_plate1_2_zcenter" />
+          <component material="CarbonFiber" thickness="L1_plate_thickness"   name="Support" vis="SVTSupportVis"/>
+        </support>
+
+        <support type="Box"
+        name="L1Plate1_2Right"
+        vis="SVTSupportVis"
+        x="L1_plate1_2_dr"
+        y="L1_plate_thickness"
+        z="L1_plate1_2_length"
+        >
+          <position y="-L1_plate1_2_vert_center" x="-L1_plate1_2_rcenter" z="L1_plate1_2_zcenter" />
+          <component material="CarbonFiber" thickness="L1_plate_thickness"   name="Support" vis="SVTSupportVis"/>
+        </support>
+
+        <support type="Box"
+        name="L1Plate1_2MidLeft"
+        vis="SVTSupportVis"
+        x="L1_plate1_2_dr"
+        y="L1_plate_thickness"
+        z="L1_plate1_2_length"
+        phi0="-(90*deg - L1_plate1_2_mid_angle/2)"
+        >
+          <position y="0" x="L1_plate1_2_rcenter" z="L1_plate1_2_zcenter" />
+          <component material="CarbonFiber" thickness="L1_plate_thickness"   name="Support" vis="SVTSupportVis"/>
+        </support>
+
+        <support type="Box"
+        name="L1Plate1_2MidRight"
+        vis="SVTSupportVis"
+        x="L1_plate1_2_dr"
+        y="L1_plate_thickness"
+        z="L1_plate1_2_length"
+        phi0="-(90*deg + L1_plate1_2_mid_angle/2)"
+        >
+          <position y="0" x="L1_plate1_2_rcenter" z="L1_plate1_2_zcenter" />
+          <component material="CarbonFiber" thickness="L1_plate_thickness"   name="Support" vis="SVTSupportVis"/>
+        </support>
+
+       <comment> plate 1_2 (upper)</comment>
+        <support type="Box"
+        name="L1Plate1_2Left"
+        vis="SVTSupportVis"
+        x="L1_plate1_2_dr"
+        y="L1_plate_thickness"
+        z="L1_plate1_2_length"
+        >
+          <position y="L1_plate1_2_vert_center" x="L1_plate1_2_rcenter" z="L1_plate1_2_zcenter" />
+          <component material="CarbonFiber" thickness="L1_plate_thickness"   name="Support" vis="SVTSupportVis"/>
+        </support>
+
+        <support type="Box"
+        name="L1Plate1_2Right"
+        vis="SVTSupportVis"
+        x="L1_plate1_2_dr"
+        y="L1_plate_thickness"
+        z="L1_plate1_2_length"
+        >
+          <position y="L1_plate1_2_vert_center" x="-L1_plate1_2_rcenter" z="L1_plate1_2_zcenter" />
+          <component material="CarbonFiber" thickness="L1_plate_thickness"   name="Support" vis="SVTSupportVis"/>
+        </support>
+
+        <support type="Box"
+        name="L1Plate1_2MidLeft"
+        vis="SVTSupportVis"
+        x="L1_plate1_2_dr"
+        y="L1_plate_thickness"
+        z="L1_plate1_2_length"
+        phi0="(90*deg - L1_plate1_2_mid_angle/2)"
+        >
+          <position y="0" x="L1_plate1_2_rcenter" z="L1_plate1_2_zcenter" />
+          <component material="CarbonFiber" thickness="L1_plate_thickness"   name="Support" vis="SVTSupportVis"/>
+        </support>
+        <support type="Box"
+        name="L1Plate1_2MidRight"
+        vis="SVTSupportVis"
+        x="L1_plate1_2_dr"
+        y="L1_plate_thickness"
+        z="L1_plate1_2_length"
+        phi0="(90*deg + L1_plate1_2_mid_angle/2)"
+        >
+          <position y="0" x="L1_plate1_2_rcenter" z="L1_plate1_2_zcenter" />
+          <component material="CarbonFiber" thickness="L1_plate_thickness"   name="Support" vis="SVTSupportVis"/>
+        </support>
+
+       <comment> Forward (positive) rings </comment>
+      <support type="Disk"
+        name="L1PosRing1"
+        vis="SVTSupportVis"
+        rmin="L1_ring1_rmin"
+        rmax="L1_ring1_rmax"
+        thickness="L1_pos_ring1_dz">
+          <position x="0*cm" y="0*cm" z="L1_pos_ring1_zcenter" />
+          <component material="CarbonFiber" thickness="L1_pos_ring1_dz" name="Support" vis="SVTSupportVis"/>
+      </support>
+      <support type="Disk"
+        name="L1PosRing2"
+        vis="SVTSupportVis"
+        rmin="L1_ring2_rmin"
+        rmax="L1_ring2_rmax"
+        thickness="L1_pos_ring2_dz">
+          <position x="0*cm" y="0*cm" z="L1_pos_ring2_zcenter" />
+          <component material="CarbonFiber" thickness="L1_pos_ring2_dz" name="Support" vis="SVTSupportVis"/>
+      </support>
+      <support type="Disk"
+        name="L1PosRing1_2"
+        vis="SVTSupportVis"
+        rmin="L1_ring1_2_rmin"
+        rmax="L1_ring1_2_rmax"
+        thickness="L1_pos_ring1_2_dz">
+          <position x="0*cm" y="0*cm" z="L1_pos_ring1_2_zcenter" />
+          <component material="CarbonFiber" thickness="L1_pos_ring1_2_dz" name="Support" vis="SVTSupportVis"/>
+      </support>
+
+      <comment> Backward (negative) rings </comment>
+      <support type="Disk"
+        name="L1NegRing1"
+        vis="SVTSupportVis"
+        rmin="L1_ring1_rmin"
+        rmax="L1_ring1_rmax"
+        thickness="L1_neg_ring1_dz">
+          <position x="0*cm" y="0*cm" z="L1_neg_ring1_zcenter" />
+          <component material="CarbonFiber" thickness="L1_neg_ring1_dz" name="Support" vis="SVTSupportVis"/>
+      </support>
+      <support type="Disk"
+        name="L1NegRing2"
+        vis="SVTSupportVis"
+        rmin="L1_ring2_rmin"
+        rmax="L1_ring2_rmax"
+        thickness="L1_neg_ring2_dz">
+          <position x="0*cm" y="0*cm" z="L1_neg_ring2_zcenter" />
+          <component material="CarbonFoam_LowDensity" thickness="L1_neg_ring2_dz" name="Support" vis="SVTSupportVis"/>
+      </support>
+      <support type="Disk"
+        name="L1NegRing1_2"
+        vis="SVTSupportVis"
+        rmin="L1_ring1_2_rmin"
+        rmax="L1_ring1_2_rmax"
+        thickness="L1_neg_ring1_2_dz">
+          <position x="0*cm" y="0*cm" z="L1_neg_ring1_2_zcenter" />
+          <component material="CarbonFiber" thickness="L1_neg_ring1_2_dz" name="Support" vis="SVTSupportVis"/>
+      </support>
+
+    </detector>
+
+    <comment>
+    -------------------------------L0 and L1 (sheet1 and sheet 3)---------------------------------
+    </comment>
+    <detector type="epic_SupportServiceMaterial"
+      name="SVT_IB_Support_L0_L1"
+      id="SVT_IB_Support_0_ID"
+    >
+      <comment> air cooling tubes on sheet 3</comment>
+      <subtraction name="L1CoolingTube" material="PEEK" vis="AnlOrange">
+        <position x="0" y="0" z="L0L1_cooling_tube_zcenter"/>
+
+        <shape1 type="Tube" name="cooling_tube_main"
+                rmin="L1_cooling_tube_rmin"
+                thickness="L1_cooling_tube_dr"
+                length="L0L1_cooling_tube_dz"
+                material="PEEK"/>
+
+        <shape2 type="Box" name="cooling_tube_cutout"
+                x="L1_cooling_tube_rmax*2"
+                y="L0L1_cooling_tube_vert_off*2"
+                z="L0L1_cooling_tube_dz"
+                material="Air">
+          <!-- This position is relative to the tube's center, not absolute -->
+          <position x="0" y="0" z="0"/>
+        </shape2>
+      </subtraction>
+
+      <subtraction name="L0CoolingTube" material="PEEK" vis="AnlOrange">
+        <position x="0" y="0" z="L0L1_cooling_tube_zcenter"/>
+
+        <shape1 type="Tube" name="cooling_tube_main"
+                rmin="L0_cooling_tube_rmin"
+                thickness="L0_cooling_tube_dr"
+                length="L0L1_cooling_tube_dz"
+                material="PEEK"/>
+
+        <!-- Shape to subtract: position is RELATIVE to shape1's center -->
+        <shape2 type="Box" name="cooling_tube_cutout"
+                x="L0_cooling_tube_rmax*2"
+                y="L0L1_cooling_tube_vert_off*2"
+                z="L0L1_cooling_tube_dz"
+                material="Air">
+          <!-- This position is relative to the tube's center, not absolute -->
+          <position x="0" y="0" z="0"/>
+        </shape2>
+      </subtraction>
+
+      <comment> Forward (positive) rings </comment>
+      <support type="Disk"
+        name="L0PosInnerRing"
+        vis="SVTSupportVis"
+        rmin="L0_ring1_rmin"
+        rmax="L0_ring1_rmax"
+        thickness="L0_inner_ring_dz">
+          <position x="0*cm" y="0*cm" z="L0_pos_inner_ring_zcenter" />
+          <component material="CarbonFoam_LowDensity" thickness="L0_inner_ring_dz" name="Support" vis="SVTSupportVis"/>
+      </support>
+      <support type="Disk"
+        name="L1PosInnerRing"
+        vis="SVTSupportVis"
+        rmin="L0_ring2_rmin"
+        rmax="L0_ring2_rmax"
+        thickness="L0_inner_ring_dz">
+          <position x="0*cm" y="0*cm" z="L0_pos_inner_ring_zcenter" />
+          <component material="CarbonFoam_LowDensity" thickness="L0_inner_ring_dz" name="Support" vis="SVTSupportVis"/>
+      </support>
+
+      <support type="Disk"
+        name="L0PosOuterRing"
+        vis="SVTSupportVis"
+        rmin="L0_ring1_rmin"
+        rmax="L0_ring1_rmax"
+        thickness="L0_outer_ring_dz">
+          <position x="0*cm" y="0*cm" z="L0_pos_outer_ring_zcenter" />
+          <component material="CarbonFoam_LowDensity" thickness="L0_outer_ring_dz" name="Support" vis="SVTSupportVis"/>
+      </support>
+      <support type="Disk"
+        name="L1PosOuterRing"
+        vis="SVTSupportVis"
+        rmin="L0_ring2_rmin"
+        rmax="L0_ring2_rmax"
+        thickness="L0_outer_ring_dz">
+          <position x="0*cm" y="0*cm" z="L0_pos_outer_ring_zcenter" />
+          <component material="CarbonFoam_LowDensity" thickness="L0_outer_ring_dz" name="Support" vis="SVTSupportVis"/>
+      </support>
+
+      <comment> Backward (negative) rings </comment>
+      <support type="Disk"
+        name="L0NegInnerRing"
+        vis="SVTSupportVis"
+        rmin="L0_ring1_rmin"
+        rmax="L0_ring1_rmax"
+        thickness="L0_inner_ring_dz">
+          <position x="0*cm" y="0*cm" z="L0_neg_inner_ring_zcenter" />
+          <component material="CarbonFoam_LowDensity" thickness="L0_inner_ring_dz" name="Support" vis="SVTSupportVis"/>
+      </support>
+      <support type="Disk"
+        name="L1NegInnerRing"
+        vis="SVTSupportVis"
+        rmin="L0_ring2_rmin"
+        rmax="L0_ring2_rmax"
+        thickness="L0_inner_ring_dz">
+          <position x="0*cm" y="0*cm" z="L0_neg_inner_ring_zcenter" />
+          <component material="CarbonFoam_LowDensity" thickness="L0_inner_ring_dz" name="Support" vis="SVTSupportVis"/>
+      </support>
+
+      <support type="Disk"
+        name="L0NegOuterRing"
+        vis="SVTSupportVis"
+        rmin="L0_ring1_rmin"
+        rmax="L0_ring1_rmax"
+        thickness="L0_outer_ring_dz">
+          <position x="0*cm" y="0*cm" z="L0_neg_outer_ring_zcenter" />
+          <component material="CarbonFoam_LowDensity" thickness="L0_outer_ring_dz" name="Support" vis="SVTSupportVis"/>
+      </support>
+      <support type="Disk"
+        name="L1NegOuterRing"
+        vis="SVTSupportVis"
+        rmin="L0_ring2_rmin"
+        rmax="L0_ring2_rmax"
+        thickness="L0_outer_ring_dz">
+          <position x="0*cm" y="0*cm" z="L0_neg_outer_ring_zcenter" />
+          <component material="CarbonFoam_LowDensity" thickness="L0_outer_ring_dz" name="Support" vis="SVTSupportVis"/>
+      </support>
+
+      <comment> plates (lower left)</comment>
+      <support type="Box"
+        name="L0PlateLowerLeft"
+        vis="SVTSupportVis"
+        x="L0_plate_height1"
+        y="L0_plate_thickness"
+        z="L0_plate_length">
+          <position x="L0_plate_horiz_center1" y="-L0_plate_vert_center" z="L0_plate_zcenter" />
+          <component material="CarbonFoam_LowDensity" thickness="L0_plate_thickness"   name="Support" vis="SVTSupportVis"/>
+      </support>
+      <support type="Box"
+        name="L1PlateLowerLeft"
+        vis="SVTSupportVis"
+        x="L0_plate_height2"
+        y="L0_plate_thickness"
+        z="L0_plate_length">
+          <position x="L0_plate_horiz_center2" y="-L0_plate_vert_center" z="L0_plate_zcenter" />
+          <component material="CarbonFoam_LowDensity" thickness="L0_plate_thickness" name="Support" vis="SVTSupportVis"/>
+      </support>
+
+      <comment> plates (lower right)</comment>
+      <support type="Box"
+        name="L0PlateLowerRight"
+        vis="SVTSupportVis"
+        x="L0_plate_height1"
+        y="L0_plate_thickness"
+        z="L0_plate_length">
+          <position x="-L0_plate_horiz_center1" y="-L0_plate_vert_center" z="L0_plate_zcenter" />
+          <component material="CarbonFoam_LowDensity" thickness="L0_plate_thickness"   name="Support" vis="SVTSupportVis"/>
+      </support>
+      <support type="Box"
+        name="L1PlateLowerRight"
+        vis="SVTSupportVis"
+        x="L0_plate_height2"
+        y="L0_plate_thickness"
+        z="L0_plate_length">
+          <position x="-L0_plate_horiz_center2" y="-L0_plate_vert_center" z="L0_plate_zcenter" />
+          <component material="CarbonFoam_LowDensity" thickness="L0_plate_thickness" name="Support" vis="SVTSupportVis"/>
+      </support>
+
+      <comment> plates (lower middle)</comment>
+      <support type="Box"
+        name="L0PlateLowerMiddle"
+        vis="SVTSupportVis"
+        x="L0_plate_height1"
+        y="L0_plate_thickness"
+        z="L0_plate_length">
+          <position y="-L0_plate_horiz_center1" x="0" z="L0_plate_zcenter" />
+          <rotation z="L0_plate_mid_rot" />
+          <component material="CarbonFoam_LowDensity" thickness="L0_plate_thickness"   name="Support" vis="SVTSupportVis"/>
+      </support>
+      <support type="Box"
+        name="L1PlateLowerMiddle"
+        vis="SVTSupportVis"
+        x="L0_plate_height2"
+        y="L0_plate_thickness"
+        z="L0_plate_length">
+          <position y="-L0_plate_horiz_center2" x="0" z="L0_plate_zcenter" />
+          <rotation z="L0_plate_mid_rot" />
+          <component material="CarbonFoam_LowDensity" thickness="L0_plate_thickness"   name="Support" vis="SVTSupportVis"/>
+      </support>
+
+      <comment> plates (upper left)</comment>
+      <support type="Box"
+        name="L0PlateUpperLeft"
+        vis="SVTSupportVis"
+        x="L0_plate_height1"
+        y="L0_plate_thickness"
+        z="L0_plate_length">
+          <position x="L0_plate_horiz_center1" y="L0_plate_vert_center" z="L0_plate_zcenter" />
+          <component material="CarbonFoam_LowDensity" thickness="L0_plate_thickness"   name="Support" vis="SVTSupportVis"/>
+      </support>
+      <support type="Box"
+        name="L1PlateUpperLeft"
+        vis="SVTSupportVis"
+        x="L0_plate_height2"
+        y="L0_plate_thickness"
+        z="L0_plate_length">
+          <position x="L0_plate_horiz_center2" y="L0_plate_vert_center" z="L0_plate_zcenter" />
+          <component material="CarbonFoam_LowDensity" thickness="L0_plate_thickness" name="Support" vis="SVTSupportVis"/>
+      </support>
+
+      <comment> plates (upper right)</comment>
+      <support type="Box"
+        name="L0PlateUpperRight"
+        vis="SVTSupportVis"
+        x="L0_plate_height1"
+        y="L0_plate_thickness"
+        z="L0_plate_length">
+          <position x="-L0_plate_horiz_center1" y="L0_plate_vert_center" z="L0_plate_zcenter" />
+          <component material="CarbonFoam_LowDensity" thickness="L0_plate_thickness"   name="Support" vis="SVTSupportVis"/>
+      </support>
+      <support type="Box"
+        name="L1PlateUpperRight"
+        vis="SVTSupportVis"
+        x="L0_plate_height2"
+        y="L0_plate_thickness"
+        z="L0_plate_length">
+          <position x="-L0_plate_horiz_center2" y="L0_plate_vert_center" z="L0_plate_zcenter" />
+          <component material="CarbonFoam_LowDensity" thickness="L0_plate_thickness" name="Support" vis="SVTSupportVis"/>
+      </support>
+
+      <comment> plates (Upper middle)</comment>
+      <support type="Box"
+        name="L0PlateUpperMiddle"
+        vis="SVTSupportVis"
+        x="L0_plate_height1"
+        y="L0_plate_thickness"
+        z="L0_plate_length">
+          <position y="L0_plate_horiz_center1" x="0" z="L0_plate_zcenter" />
+          <rotation z="L0_plate_mid_rot" />
+          <component material="CarbonFoam_LowDensity" thickness="L0_plate_thickness"   name="Support" vis="SVTSupportVis"/>
+      </support>
+      <support type="Box"
+        name="L1PlateUpperMiddle"
+        vis="SVTSupportVis"
+        x="L0_plate_height2"
+        y="L0_plate_thickness"
+        z="L0_plate_length">
+          <position y="L0_plate_horiz_center2" x="0" z="L0_plate_zcenter" />
+          <rotation z="L0_plate_mid_rot" />
+          <component material="CarbonFoam_LowDensity" thickness="L0_plate_thickness"   name="Support" vis="SVTSupportVis"/>
+      </support>
+    </detector>
+  </detectors>
+</lccdd>
