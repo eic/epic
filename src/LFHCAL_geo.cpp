@@ -34,15 +34,13 @@ struct moduleParamsStrct {
       , mod_pcbLength(0.)
       , mod_pcbThick(0.)
       , mod_pcbWidth(0.)
-      , mod_pcbOffset(0.)
       , mod_visStr("")
       , mod_regStr("")
       , mod_limStr("") {}
   moduleParamsStrct(double BIwidth, double BIheight, double SWThick, double TWThick, double MPThick,
                     double FWThick, double BWThick, double width, double height, double notchDepth,
                     double notchHeight, double foilThick, double pcbLegth, double pcbThick,
-                    double pcbWidth, double pcbOffset, std::string visStr, std::string regStr,
-                    std::string limStr) {
+                    double pcbWidth, std::string visStr, std::string regStr, std::string limStr) {
     mod_BIwidth     = BIwidth;
     mod_BIheight    = BIheight;
     mod_SWThick     = SWThick;
@@ -58,7 +56,6 @@ struct moduleParamsStrct {
     mod_pcbLength   = pcbLegth;
     mod_pcbThick    = pcbThick;
     mod_pcbWidth    = pcbWidth;
-    mod_pcbOffset   = pcbOffset;
     mod_visStr      = visStr;
     mod_regStr      = regStr;
     mod_limStr      = limStr;
@@ -78,7 +75,6 @@ struct moduleParamsStrct {
   double mod_pcbLength   = 0.;
   double mod_pcbThick    = 0.;
   double mod_pcbWidth    = 0.;
-  double mod_pcbOffset   = 0.;
   std::string mod_visStr = "";
   std::string mod_regStr = "";
   std::string mod_limStr = "";
@@ -508,18 +504,13 @@ Volume createEightMModule(Detector& desc, moduleParamsStrct mod_params,
   SubtractionSolid modBackPlate(modBackPlateFull, modBackCutOut);
 
   // volume definition 8M module casing
-  Material plates_mat;
-  for (int i = 0; i < (int)sl_params.size(); i++) {
-    if (sl_params[i].slice_partID == 1)
-      plates_mat = desc.material(sl_params[i].slice_matStr);
-  }
-  Volume vol_mountingPlate(baseName + "_MountingPlate", MountingPlate, plates_mat);
-  Volume vol_modFrontPlate(baseName + "_FrontPlate", modFrontPlate, plates_mat);
-  Volume vol_modBackPlate(baseName + "_BackPlate", modBackPlate, plates_mat);
-  Volume vol_modSidePlateL(baseName + "_LeftSidePlate", modSidePlateL, plates_mat);
-  Volume vol_modSidePlateR(baseName + "_RightSidePlate", modSidePlateR, plates_mat);
-  Volume vol_modTopPlate(baseName + "_TopPlate", modTopPlate, plates_mat);
-  Volume vol_modBottomPlate(baseName + "_BottomPlate", modBottomPlate, plates_mat);
+  Volume vol_mountingPlate(baseName + "_MountingPlate", MountingPlate, desc.material("Steel235"));
+  Volume vol_modFrontPlate(baseName + "_FrontPlate", modFrontPlate, desc.material("Steel235"));
+  Volume vol_modBackPlate(baseName + "_BackPlate", modBackPlate, desc.material("Steel235"));
+  Volume vol_modSidePlateL(baseName + "_LeftSidePlate", modSidePlateL, desc.material("Steel235"));
+  Volume vol_modSidePlateR(baseName + "_RightSidePlate", modSidePlateR, desc.material("Steel235"));
+  Volume vol_modTopPlate(baseName + "_TopPlate", modTopPlate, desc.material("Steel235"));
+  Volume vol_modBottomPlate(baseName + "_BottomPlate", modBottomPlate, desc.material("Steel235"));
 
   if (allSen) {
     sens.setType("calorimeter");
@@ -583,13 +574,11 @@ Volume createEightMModule(Detector& desc, moduleParamsStrct mod_params,
   }
 
   int layer_num  = 0;
-  double slice_z = length / 2 - 10.0 + mod_params.mod_MPThick + mod_params.mod_FWThick -
-                   mod_params.mod_BWThick; // Keeps track of layers' local z locations
+  double slice_z = -length / 2 + mod_params.mod_MPThick +
+                   mod_params.mod_FWThick; // Keeps track of layers' local z locations
   // Looping through the number of repeated layers & slices in each section
   for (int i = 0; i < (int)sl_params.size(); i++) {
-    //    slice_z += sl_params[i].slice_offset +
-    //               sl_params[i].slice_thick / 2.; // Going to halfway point in layer
-    slice_z -= sl_params[i].slice_offset +
+    slice_z += sl_params[i].slice_offset +
                sl_params[i].slice_thick / 2.; // Going to halfway point in layer
     layer_num = sl_params[i].layer_ID;
     //*************************************************
@@ -654,7 +643,7 @@ Volume createEightMModule(Detector& desc, moduleParamsStrct mod_params,
           modScintAssembly, Transform3D(RotationZYX(0, 0, 0),
                                         Position((mod_params.mod_notchDepth) / 2., 0, slice_z)));
     }
-    slice_z -= sl_params[i].slice_thick / 2.;
+    slice_z += sl_params[i].slice_thick / 2.;
   }
 
   // placement 8M module casing
@@ -716,7 +705,7 @@ Volume createEightMModule(Detector& desc, moduleParamsStrct mod_params,
       length - mod_params.mod_FWThick - mod_params.mod_MPThick + mod_params.mod_BWThick / 2;
   double z_offSetPCB =
       (mod_params.mod_FWThick + mod_params.mod_MPThick + mod_params.mod_BWThick) / 2 -
-      (lengthA - mod_params.mod_pcbLength) / 2. - mod_params.mod_pcbOffset;
+      (lengthA - mod_params.mod_pcbLength) / 2.;
 
   pvm = vol_mod.placeVolume(
       vol_modPCB,
@@ -772,19 +761,13 @@ Volume createFourMModule(Detector& desc, moduleParamsStrct mod_params,
   SubtractionSolid modBackPlate(modBackPlateFull, modBackCutOut);
 
   // volume definition 8M module casing
-  // Looping through the number of repeated layers & slices in each section
-  Material plates_mat;
-  for (int i = 0; i < (int)sl_params.size(); i++) {
-    if (sl_params[i].slice_partID == 1)
-      plates_mat = desc.material(sl_params[i].slice_matStr);
-  }
-  Volume vol_mountingPlate(baseName + "_MountingPlate", MountingPlate, plates_mat);
-  Volume vol_modFrontPlate(baseName + "_FrontPlate", modFrontPlate, plates_mat);
-  Volume vol_modBackPlate(baseName + "_BackPlate", modBackPlate, plates_mat);
-  Volume vol_modSidePlateL(baseName + "_LeftSidePlate", modSidePlateL, plates_mat);
-  Volume vol_modSidePlateR(baseName + "_RightSidePlate", modSidePlateR, plates_mat);
-  Volume vol_modTopPlate(baseName + "_TopPlate", modTopPlate, plates_mat);
-  Volume vol_modBottomPlate(baseName + "_BottomPlate", modBottomPlate, plates_mat);
+  Volume vol_mountingPlate(baseName + "_MountingPlate", MountingPlate, desc.material("Steel235"));
+  Volume vol_modFrontPlate(baseName + "_FrontPlate", modFrontPlate, desc.material("Steel235"));
+  Volume vol_modBackPlate(baseName + "_BackPlate", modBackPlate, desc.material("Steel235"));
+  Volume vol_modSidePlateL(baseName + "_LeftSidePlate", modSidePlateL, desc.material("Steel235"));
+  Volume vol_modSidePlateR(baseName + "_RightSidePlate", modSidePlateR, desc.material("Steel235"));
+  Volume vol_modTopPlate(baseName + "_TopPlate", modTopPlate, desc.material("Steel235"));
+  Volume vol_modBottomPlate(baseName + "_BottomPlate", modBottomPlate, desc.material("Steel235"));
 
   if (allSen) {
     sens.setType("calorimeter");
@@ -847,13 +830,13 @@ Volume createFourMModule(Detector& desc, moduleParamsStrct mod_params,
                              "InvisibleNoDaughters");
   }
 
-  int layer_num = 0;
+  int layer_num  = 0;
+  double slice_z = -length / 2 + mod_params.mod_MPThick +
+                   mod_params.mod_FWThick; // Keeps track of layers' local z locations
 
-  double slice_z = length / 2 - 10.0 + mod_params.mod_MPThick + mod_params.mod_FWThick -
-                   mod_params.mod_BWThick; // Keeps track of layers' local z locations
   // Looping through the number of repeated layers & slices in each section
   for (int i = 0; i < (int)sl_params.size(); i++) {
-    slice_z -= sl_params[i].slice_offset +
+    slice_z += sl_params[i].slice_offset +
                sl_params[i].slice_thick / 2.; // Going to halfway point in layer
     layer_num = sl_params[i].layer_ID;
     //*************************************************
@@ -918,7 +901,7 @@ Volume createFourMModule(Detector& desc, moduleParamsStrct mod_params,
           modScintAssembly, Transform3D(RotationZYX(0, 0, 0),
                                         Position((mod_params.mod_notchDepth) / 2., 0, slice_z)));
     }
-    slice_z -= sl_params[i].slice_thick / 2.;
+    slice_z += sl_params[i].slice_thick / 2.;
   }
 
   // placement 4M module casing
@@ -980,7 +963,7 @@ Volume createFourMModule(Detector& desc, moduleParamsStrct mod_params,
       length - mod_params.mod_FWThick - mod_params.mod_MPThick + mod_params.mod_BWThick / 2;
   double z_offSetPCB =
       (mod_params.mod_FWThick + mod_params.mod_MPThick + mod_params.mod_BWThick) / 2 -
-      (lengthA - mod_params.mod_pcbLength) / 2. - mod_params.mod_pcbOffset;
+      (lengthA - mod_params.mod_pcbLength) / 2.;
 
   pvm = vol_mod.placeVolume(
       vol_modPCB,
@@ -1045,8 +1028,7 @@ static Ref_t createDetector(Detector& desc, xml_h handle, SensitiveDetector sens
       getAttrOrDefault(eightMmod_dim, _Unicode(foilThick), 0.),
       getAttrOrDefault(eightMmod_dim, _Unicode(pcbLength), 0.),
       getAttrOrDefault(eightMmod_dim, _Unicode(pcbThick), 0.),
-      getAttrOrDefault(eightMmod_dim, _Unicode(pcbWidth), 0.),
-      getAttrOrDefault(eightMmod_dim, _Unicode(pcbOffset), 0.), eightM_xml.visStr(),
+      getAttrOrDefault(eightMmod_dim, _Unicode(pcbWidth), 0.), eightM_xml.visStr(),
       eightM_xml.regionStr(), eightM_xml.limitsStr());
 
   // 4M module specific loading
@@ -1067,8 +1049,7 @@ static Ref_t createDetector(Detector& desc, xml_h handle, SensitiveDetector sens
       getAttrOrDefault(fourMmod_dim, _Unicode(foilThick), 0.),
       getAttrOrDefault(fourMmod_dim, _Unicode(pcbLength), 0.),
       getAttrOrDefault(fourMmod_dim, _Unicode(pcbThick), 0.),
-      getAttrOrDefault(fourMmod_dim, _Unicode(pcbWidth), 0.),
-      getAttrOrDefault(fourMmod_dim, _Unicode(pcbOffset), 0.), fourM_xml.visStr(),
+      getAttrOrDefault(fourMmod_dim, _Unicode(pcbWidth), 0.), fourM_xml.visStr(),
       fourM_xml.regionStr(), fourM_xml.limitsStr());
 
   std::vector<sliceParamsStrct> slice_Params;
