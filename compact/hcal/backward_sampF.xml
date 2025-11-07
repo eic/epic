@@ -12,6 +12,7 @@
 
   <define>
     <constant name="HcalEndcapN_allSensitive" value="1"/>
+    <constant name="HcalEndcapN_length_new"              value="5.0*HcalEndcapN_length"/>
   </define>
 
   <include ref="backward_template.xml"/>
