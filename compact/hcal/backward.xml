@@ -12,7 +12,7 @@
 
   <define>
     <constant name="HcalEndcapN_allSensitive" value="0"/>
-    <constant name="HcalEndcapN_length_new"              value="HcalEndcapN_length"/>
+    <constant name="HcalEndcapN_extension_for_sampF"              value="0.0*cm"/>
   </define>
 
   <include ref="backward_template.xml"/>

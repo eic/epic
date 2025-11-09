@@ -21,7 +21,7 @@
 
     <constant name="HcalEndcapNSingleLayerThickness"
              value="HcalEndcapNSteelThickness + HcalEndcapNPolystyreneThickness + HcalEndcapNLayerGap"/>
-    <constant name="HcalEndcapNLayer_NRepeat"   value="floor(HcalEndcapN_length_new / HcalEndcapNSingleLayerThickness)"/>
+    <constant name="HcalEndcapNLayer_NRepeat"   value="floor((HcalEndcapN_length + HcalEndcapN_extension_for_sampF) / HcalEndcapNSingleLayerThickness)"/>
     <constant name="HcalEndcapN_thickness"              value="HcalEndcapNLayer_NRepeat * HcalEndcapNSingleLayerThickness"/>
   </define>
 
