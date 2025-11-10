@@ -59,7 +59,7 @@ static Ref_t createDetector(Detector& desc, xml_h handle, SensitiveDetector sens
   double blocksize = desc.constant<double>("EcalEndcapP_blockSize");
   double blockgap  = desc.constant<double>("EcalEndcapP_spaceBetweenBlock");
   double nsgap     = desc.constant<double>("EcalEndcapP_xOffsetNorth") +
-                 desc.constant<double>("EcalEndcapP_xOffsetSouth");
+                     desc.constant<double>("EcalEndcapP_xOffsetSouth");
   double rmin        = 0.0; // Dummy variable. Set to 0 since cutting out insert
   double rmax        = desc.constant<double>("EcalEndcapP_rmax");
   double rmaxWithGap = desc.constant<double>("EcalEndcapP_rmaxWithGap");

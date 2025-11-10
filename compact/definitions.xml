@@ -590,7 +590,7 @@ Service gaps in FW direction (before endcapP ECAL) and BW direction (before endc
     <constant name="EcalEndcapP_insert_dy"              value="3.0*EcalEndcapP_blockSize + 3.0*EcalEndcapP_spaceBetweenBlock"/>
     <constant name="EcalEndcapP_insert_dz"              value="EcalEndcapP_length"/>
     <constant name="EcalEndcapP_insert_thickness"       value="0.25*inch"/>
-    <constant name="EcalEndcapP_insert_center_x"        value="(EcalEndcapP_xOffsetBeamPipeNorth+EcalEndcapP_xOffsetBeamPipeSouth)/2.0"/>
+    <constant name="EcalEndcapP_insert_center_x"        value="(EcalEndcapP_xOffsetBeamPipeNorth-EcalEndcapP_xOffsetBeamPipeSouth)/2.0"/>
     <constant name="EcalEndcapP_nfiber_x"               value="26"/>
     <constant name="EcalEndcapP_nfiber_y"               value="30"/>
     <constant name="EcalEndcapP_rfiber"                 value="0.0235*cm"/>
