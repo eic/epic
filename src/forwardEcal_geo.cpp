@@ -14,20 +14,23 @@
 #include <XML/Layering.h>
 #include "forwardEcalMap.h"
 
+using namespace dd4hep;
+
+double blocksize, blockgap, offsetX[2], offsetY[2], insert_dx[2];
+
 double xBlock(int ns, int row, int col) {
   if (row >= 18 && row <= 20) {
     return (1 - 2 * ns) *
-           (mOffsetX[ns] + mOffsetXBeamPipe[ns] + (mBlockSize + mSpaceBetweenBlock) * (col + 0.5));
+      (offsetX[ns] + insert_dx[ns] + (blocksize + blockgap) * (col + 0.5));
   } else {
-    return (1 - 2 * ns) * (mOffsetX[ns] + (mBlockSize + mSpaceBetweenBlock) * (col + 0.5));
+    return (1 - 2 * ns) * (offsetX[ns] + (blocksize + blockgap) * (col + 0.5));
   }
 }
 
 double yBlock(int ns, int row) {
-  return mOffsetY[ns] + (mBlockSize + mSpaceBetweenBlock) * (mMaxRowBlock / 2.0 - row - 0.5);
+  return offsetY[ns] + (blocksize + blockgap) * (mMaxRowBlock / 2.0 - row - 0.5);
 }
 
-using namespace dd4hep;
 
 static Ref_t createDetector(Detector& desc, xml_h handle, SensitiveDetector sens) {
   //forwardEcalMap* map = new forwardEcalMap();
@@ -56,8 +59,8 @@ static Ref_t createDetector(Detector& desc, xml_h handle, SensitiveDetector sens
   //double rFiber           = 0.0235;                              //fiber radius (PMMA outside)
   //double rScfi            = 0.02209;                             //Scintillating fiber core radius
 
-  double blocksize = desc.constant<double>("EcalEndcapP_blockSize");
-  double blockgap  = desc.constant<double>("EcalEndcapP_spaceBetweenBlock");
+  blocksize        = desc.constant<double>("EcalEndcapP_blockSize");
+  blockgap         = desc.constant<double>("EcalEndcapP_spaceBetweenBlock");
   double nsgap     = desc.constant<double>("EcalEndcapP_xOffsetNorth") +
                  desc.constant<double>("EcalEndcapP_xOffsetSouth");
   double rmin        = 0.0; // Dummy variable. Set to 0 since cutting out insert
@@ -66,7 +69,10 @@ static Ref_t createDetector(Detector& desc, xml_h handle, SensitiveDetector sens
   double zmax        = desc.constant<double>("EcalEndcapP_zmax");
   double length      = desc.constant<double>("EcalEndcapP_length");
   double zmin        = desc.constant<double>("EcalEndcapP_zmin");
-  double insert_dx[2];
+  offsetX[0]              = desc.constant<double>("EcalEndcapP_xOffsetNorth");
+  offsetX[1]              = desc.constant<double>("EcalEndcapP_xOffsetSouth");
+  offsetY[0]              = desc.constant<double>("EcalEndcapP_yOffsetNorth");
+  offsetY[1]              = desc.constant<double>("EcalEndcapP_yOffsetSouth");
   insert_dx[0]            = desc.constant<double>("EcalEndcapP_xOffsetBeamPipeNorth");
   insert_dx[1]            = desc.constant<double>("EcalEndcapP_xOffsetBeamPipeSouth");
   double insert_dy        = desc.constant<double>("EcalEndcapP_insert_dy");
