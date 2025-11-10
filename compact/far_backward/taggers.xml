@@ -32,7 +32,7 @@
         offset_min="Tagger1_Min_Offset"
         extend_vacuum="true"
         >
-        <dimensions x="Tagger1_Width/2" y="Tagger1_Height/2" z="Tagger1_Length"/>
+        <dimensions x="Tagger1_Width/4" y="Tagger1_Height/4" z="Tagger1_Length"/>
         <foilLayer   id="0" type="foil"    z="0*mm"   thickness="100*um" angle="70*deg"/>
         <trackLayer  id="0" type="timepix" z="3*mm"   sensor_thickness="400*um"/>
         <trackLayer  id="1" type="timepix" z="103*mm" sensor_thickness="400*um"/>
