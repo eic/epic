@@ -224,7 +224,7 @@ static Ref_t create_BarrelTrackerWithFrame(Detector& description, xml_h e, Sensi
         // depending on wether the support is above or below the sensor
         double inner_thickness = module_thicknesses[m_nam][0];
         double outer_thickness = module_thicknesses[m_nam][1];
-                  
+
         SurfaceType type(SurfaceType::Sensitive);
 
         // if( isStripDetector )
