@@ -106,19 +106,21 @@
     <constant name="TrackerEndcapNDisk4_rmax"        value="TrackerEndcapPDisk4_rmax" />
 
     <comment> Main parameters for MPGD endcap disks, offset here is the distance between disks </comment>
-    <constant name="ForwardMPGD_zmin"             value="1500.0*mm"/>
+    <constant name="ForwardMPGD_zmin"             value="1285.0*mm"/>
     <constant name="ForwardMPGDMod_offset"        value="125.0*mm"/>
-    <constant name="ForwardMPGDMod1_rmin"         value="81.24*mm" />
-    <constant name="ForwardMPGDMod2_rmin"         value="81.24*mm"/>
-    <constant name="ForwardMPGDMod1_rmax"         value="400*mm" />
-    <constant name="ForwardMPGDMod2_rmax"         value="400*mm" />
+    <constant name="ForwardMPGDMod1_rmin"         value="70.0*mm" />
+    <constant name="ForwardMPGDMod2_rmin"         value="70.0*mm"/>
+    <comment> rmax = active area radius </comment>
+    <constant name="ForwardMPGDMod1_rmax"         value="420*mm" /> 
+    <constant name="ForwardMPGDMod2_rmax"         value="420*mm" />
 
     <constant name="BackwardMPGD_zmin"             value="1075.0*mm"/>
     <constant name="BackwardMPGDMod_offset"        value="125.0*mm"/>
-    <constant name="BackwardMPGDMod1_rmin"         value="70.0*mm" />
-    <constant name="BackwardMPGDMod2_rmin"         value="70.0*mm" />
-    <constant name="BackwardMPGDMod1_rmax"         value="400.0*mm" />
-    <constant name="BackwardMPGDMod2_rmax"         value="400.0*mm" />
+    <constant name="BackwardMPGDMod1_rmin"         value="50.0*mm" />
+    <constant name="BackwardMPGDMod2_rmin"         value="50.0*mm" />
+    <comment> rmax = active area radius </comment>
+    <constant name="BackwardMPGDMod1_rmax"         value="420.0*mm" />
+    <constant name="BackwardMPGDMod2_rmax"         value="420.0*mm" />
 
   </define>
   <comment> See compact/definitions.xml for reserved detector id
