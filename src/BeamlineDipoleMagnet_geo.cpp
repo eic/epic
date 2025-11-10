@@ -16,7 +16,7 @@ static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector /* sens *
   string det_name = x_det.nameStr();
   DetElement sdet(det_name, x_det.id());
   Assembly assembly(det_name + "_assembly");
-  Material m_Iron = det.material("Iron");
+  Material m_Iron   = det.material("Iron");
   const string vis1 = getAttrOrDefault<string>(x_det, _Unicode(vis), "AnlGreen");
 
   // Creates the outer box for the main body
