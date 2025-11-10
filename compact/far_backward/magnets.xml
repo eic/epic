@@ -69,11 +69,11 @@
     <constant name="B2BeR_YokeOuterWidth"  value="305.21*mm"/>
     <constant name="B2BeR_YokeInnerWidth"  value="245.56*mm"/>
 
-    <constant name="B2BeR_Bar_Width"  value="18.0*mm"/>
-    <constant name="B2BeR_Bar_Height" value="250.0*mm"/>
-    <constant name="B2BeR_Bar_Xpos1"  value="168.605*mm"/>
-    <constant name="B2BeR_Bar_Xpos2"  value="190.605*mm"/>
-    <constant name="B2BeR_Bar_Ypos"   value="206.415*mm"/>
+    <constant name="B2BeR_Coil_Width"  value="18.0*mm"/>
+    <constant name="B2BeR_Coil_Height" value="250.0*mm"/>
+    <constant name="B2BeR_Coil_Xpos1"  value="168.605*mm"/>
+    <constant name="B2BeR_Coil_Xpos2"  value="190.605*mm"/>
+    <constant name="B2BeR_Coil_Ypos"   value="206.415*mm"/>
 
   </define>
 
@@ -176,16 +176,16 @@
       <dimensions_leg_inner x="10*cm" y="10*cm" z="10*cm" />
       <position   x="2*m" y="0" z="0" />
       <rotation   x="0*rad" y="0*rad" z="0*rad" />
-      <bar width="B2BeR_Bar_Width" height="B2BeR_Bar_Height"  length="B2BeR_Length">
-        <position x="B2BeR_Bar_Xpos1" y="B2BeR_Bar_Ypos" z="0*cm"/>
-        <position x="B2BeR_Bar_Xpos2" y="B2BeR_Bar_Ypos" z="0*cm"/>
-        <position x="B2BeR_Bar_Xpos1" y="-B2BeR_Bar_Ypos" z="0*cm"/>
-        <position x="B2BeR_Bar_Xpos2" y="-B2BeR_Bar_Ypos" z="0*cm"/>
-        <position x="-B2BeR_Bar_Xpos1" y="B2BeR_Bar_Ypos" z="0*cm"/>
-        <position x="-B2BeR_Bar_Xpos2" y="B2BeR_Bar_Ypos" z="0*cm"/>
-        <position x="-B2BeR_Bar_Xpos1" y="-B2BeR_Bar_Ypos" z="0*cm"/>
-        <position x="-B2BeR_Bar_Xpos2" y="-B2BeR_Bar_Ypos" z="0*cm"/>
-      </bar>
+      <coil width="B2BeR_Coil_Width" height="B2BeR_Coil_Height"  length="B2BeR_Length">
+        <position x="B2BeR_Coil_Xpos1" y="B2BeR_Coil_Ypos" z="0*cm"/>
+        <position x="B2BeR_Coil_Xpos2" y="B2BeR_Coil_Ypos" z="0*cm"/>
+        <position x="B2BeR_Coil_Xpos1" y="-B2BeR_Coil_Ypos" z="0*cm"/>
+        <position x="B2BeR_Coil_Xpos2" y="-B2BeR_Coil_Ypos" z="0*cm"/>
+        <position x="-B2BeR_Coil_Xpos1" y="B2BeR_Coil_Ypos" z="0*cm"/>
+        <position x="-B2BeR_Coil_Xpos2" y="B2BeR_Coil_Ypos" z="0*cm"/>
+        <position x="-B2BeR_Coil_Xpos1" y="-B2BeR_Coil_Ypos" z="0*cm"/>
+        <position x="-B2BeR_Coil_Xpos2" y="-B2BeR_Coil_Ypos" z="0*cm"/>
+      </coil>
     </detector>
 
 

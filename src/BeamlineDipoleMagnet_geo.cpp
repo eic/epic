@@ -100,21 +100,21 @@ static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector /* sens *
                               Transform3D(RotationX(-TMath::Pi() / 2),
                                           Position(0, -inner_height / 2.0 + yoke_height / 2.0, 0)));
 
-  // Bar parameters
-  for (xml_coll_t bar_coll(x_det, _Unicode(bar)); bar_coll; ++bar_coll) {
-    double bar_width  = bar_coll.attr<double>(_Unicode(width));
-    double bar_height = bar_coll.attr<double>(_Unicode(height));
-    double bar_length = bar_coll.attr<double>(_Unicode(length));
-    // Create box for bar
-    Box bar_box(bar_width / 2., bar_height / 2., bar_length / 2.);
-    Volume vol_bar(det_name + "_vol_bar", bar_box, m_Iron);
-    vol_bar.setAttributes(det, x_det.regionStr(), x_det.limitsStr(), vis1);
-    for (xml_coll_t pos(bar_coll, _Unicode(position)); pos; ++pos) {
+  // Coil parameters
+  for (xml_coll_t coil_coll(x_det, _Unicode(coil)); coil_coll; ++coil_coll) {
+    double coil_width  = coil_coll.attr<double>(_Unicode(width));
+    double coil_height = coil_coll.attr<double>(_Unicode(height));
+    double coil_length = coil_coll.attr<double>(_Unicode(length));
+    // Create box for coil
+    Box coil_box(coil_width / 2., coil_height / 2., coil_length / 2.);
+    Volume vol_coil(det_name + "_vol_coil", coil_box, m_Iron);
+    vol_coil.setAttributes(det, x_det.regionStr(), x_det.limitsStr(), vis1);
+    for (xml_coll_t pos(coil_coll, _Unicode(position)); pos; ++pos) {
       double posX = pos.attr<double>(_Unicode(x));
       double posY = pos.attr<double>(_Unicode(y));
       double posZ = pos.attr<double>(_Unicode(z));
-      // Place bar at specified position
-      magnet_assembly.placeVolume(vol_bar, Position(posX, posY, posZ));
+      // Place coil at specified position
+      magnet_assembly.placeVolume(vol_coil, Position(posX, posY, posZ));
     }
   }
 
