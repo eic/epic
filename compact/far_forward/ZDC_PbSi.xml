@@ -28,10 +28,10 @@
       <rotation x="ZDC_PbSi_rotateX_angle" y="ZDC_PbSi_rotateY_angle" z="ZDC_PbSi_rotateZ_angle"/>
       <dimensions x="ZDC_PbSi_x" y="ZDC_PbSi_y" z="ZDC_PbSi_z"/>
       <layer nlayer="ZDC_PbSi_nlayers" gapspace="ZDC_Si_Air_thickness">
-        <slice name="lead"      material="Lead"    thickness="ZDC_Lead_thickness"  vis="AnlLight_Gray"/>
-        <slice name="glue"      material="G10"     thickness="ZDC_glue_thickness"  vis="AnlLight_Gray"/>
+        <slice name="lead"      material="Lead"    thickness="ZDC_Lead_thickness"  vis="AnlLightGray"/>
+        <slice name="glue"      material="G10"     thickness="ZDC_glue_thickness"  vis="AnlLightGray"/>
         <slice name="silicon"   material="Silicon" thickness="ZDC_pad_thickness"   vis="AnlTeal"  sensitive="true"/>
-        <slice name="glue"      material="G10"     thickness="ZDC_glue_thickness"  vis="AnlLight_Gray"/>
+        <slice name="glue"      material="G10"     thickness="ZDC_glue_thickness"  vis="AnlLightGray"/>
         <slice name="pcb"       material="ZDC_PET" thickness="ZDC_PCB_thickness"   vis="AnlGreen"/>
       </layer>
     </detector>
