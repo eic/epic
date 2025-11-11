@@ -60,6 +60,7 @@ static Ref_t create_detector(Detector& desc, xml_h e, SensitiveDetector sens) {
   // Place the taggerAssembly into the mother volume
   Volume motherVol       = desc.pickMotherVolume(det);
   PlacedVolume pv_tagger = motherVol.placeVolume(taggerAssembly, Position(0, 0, 0));
+  pv_tagger.addPhysVolID("system", detID);
   det.setPlacement(pv_tagger);
 
   return det;
