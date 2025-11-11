@@ -111,7 +111,7 @@
     <constant name="ForwardMPGDMod1_rmin"         value="70.0*mm" />
     <constant name="ForwardMPGDMod2_rmin"         value="70.0*mm"/>
     <comment> rmax = active area radius </comment>
-    <constant name="ForwardMPGDMod1_rmax"         value="420*mm" /> 
+    <constant name="ForwardMPGDMod1_rmax"         value="420*mm" />
     <constant name="ForwardMPGDMod2_rmax"         value="420*mm" />
 
     <constant name="BackwardMPGD_zmin"             value="1075.0*mm"/>
