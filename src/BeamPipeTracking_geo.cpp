@@ -59,7 +59,7 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
       double plane_yrot = getAttrOrDefault<double>(slice_coll, _Unicode(plane_yrot), 0.0);
 
       // Get the mother volume's transformation to world frame
-      auto mother_matrix   = mother.nominal().worldTransformation();
+      auto mother_matrix          = mother.nominal().worldTransformation();
       const Double_t* translation = mother_matrix.GetTranslation();
       const Double_t* rotation    = mother_matrix.GetRotationMatrix();
 
