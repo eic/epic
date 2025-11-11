@@ -44,7 +44,7 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
 
     double sensitive_thickness = 0.1 * mm;
     Solid sensitive_solid;
-    Position disk_position;
+    Transform3D disk_transform; // Full placement transform
 
     // Check if we should use plane-based cross section (default: false, use cone)
     bool use_plane_xs = getAttrOrDefault<bool>(slice_coll, _Unicode(use_cross_section), false);
@@ -52,41 +52,42 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
     if (use_plane_xs) {
       // Use plane-based cross section
       
-      // Get plane definition from XML (normal vector and distance from origin)
-      double plane_nx = getAttrOrDefault<double>(slice_coll, _Unicode(plane_nx), 0.0);
-      double plane_ny = getAttrOrDefault<double>(slice_coll, _Unicode(plane_ny), 0.0);
-      double plane_nz = getAttrOrDefault<double>(slice_coll, _Unicode(plane_nz), 1.0);
-      double plane_d  = getAttrOrDefault<double>(slice_coll, _Unicode(plane_d), 0.0);
+      // Get plane definition from XML (in world frame)
+      double plane_x = getAttrOrDefault<double>(slice_coll, _Unicode(plane_x), 0.0);
+      double plane_y = getAttrOrDefault<double>(slice_coll, _Unicode(plane_y), 0.0);
+      double plane_z = getAttrOrDefault<double>(slice_coll, _Unicode(plane_z), 0.0);
+      double plane_yrot  = getAttrOrDefault<double>(slice_coll, _Unicode(plane_yrot), 0.0);          
       
-      // Normalize the plane normal vector
-      double norm = sqrt(plane_nx*plane_nx + plane_ny*plane_ny + plane_nz*plane_nz);
-      plane_nx /= norm;
-      plane_ny /= norm;
-      plane_nz /= norm;
+      // Get the mother volume's transformation to world frame
+      const auto& mother_matrix = mother.nominal().worldTransformation();
+      const Double_t* translation = mother_matrix.GetTranslation();
+      const Double_t* rotation = mother_matrix.GetRotationMatrix();
+      
+      // Build Transform3D from TGeoMatrix
+      Transform3D mother_to_world(
+        rotation[0], rotation[1], rotation[2], translation[0],
+        rotation[3], rotation[4], rotation[5], translation[1],
+        rotation[6], rotation[7], rotation[8], translation[2]
+      );
+      
+      // Transform the plane position and rotation from world frame to mother's local frame
+      Position plane_pos_world(plane_x, plane_y, plane_z);
+      RotationY plane_rot_world(plane_yrot);
+      Transform3D plane_transform_world(plane_rot_world, plane_pos_world);
+      
+      // Apply inverse transformation to get plane in mother's local coordinates
+      disk_transform = mother_to_world.Inverse() * plane_transform_world;
       
       // Get maximum dimension for cutting box
       double max_dim = getAttrOrDefault<double>(slice_coll, _Unicode(max_dimension), 1.0 * m);
       
       // Create a thin box perpendicular to the plane normal
       Box cutting_box(max_dim, max_dim, sensitive_thickness / 2);
-      
-      // Calculate rotation to align box with plane normal
-      // Default box normal is along Z, rotate to align with plane normal
-      RotationZYX rotation;
-      if (fabs(plane_nz - 1.0) > 1e-6 || fabs(plane_nx) > 1e-6 || fabs(plane_ny) > 1e-6) {
-        // Calculate rotation angles to align Z-axis with plane normal
-        double theta = acos(plane_nz); // angle from Z axis
-        double phi = atan2(plane_ny, plane_nx); // angle in XY plane
-        rotation = RotationZYX(0.0, theta, phi);
-      }
-      
-      // Position the cutting plane at distance plane_d along the normal
-      Position plane_pos(plane_nx * plane_d, plane_ny * plane_d, plane_nz * plane_d);
-      
-      // Create intersection of mother volume with the cutting box
-      sensitive_solid = IntersectionSolid(mother_vol.solid(), cutting_box, 
-                                          Transform3D(rotation, plane_pos));
-      disk_position = Position(0.0, 0.0, 0.0);
+
+      // Create intersection of cutting box with mother volume (reversed order to preserve rotation)
+      // Apply the inverse transform to the second operand (mother) to express it in the box frame
+      sensitive_solid = IntersectionSolid(cutting_box, mother_vol.solid(), disk_transform.Inverse());
+
 
     } else {
       // Use cone segment (default behavior)
@@ -106,24 +107,23 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
       }
 
       sensitive_solid = ConeSegment(sensitive_thickness / 2, 0.0, rOuter2, 0.0, rEnd);
-      disk_position = Position(0.0, 0.0, zPos);
+      disk_transform = Transform3D(Rotation3D(), Position(0.0, 0.0, zPos));
     }
 
     Volume v_start_disk("v_start_disk_" + motherName, sensitive_solid, m_Vacuum);
     v_start_disk.setSensitiveDetector(sens);
 
-    auto disk_placement = mother_vol.placeVolume(v_start_disk, disk_position);
+    auto disk_placement = mother_vol.placeVolume(v_start_disk, disk_transform);
     disk_placement.addPhysVolID("end", detStart);
     disk_placement.addPhysVolID("pipe", pipe_id);
     disk_placement.addPhysVolID("system", det_id);
 
-    DetElement slice_element(sdet, slice_name, pipe_id);
+    DetElement slice_element(mother, slice_name, pipe_id);
 
     slice_element.setPlacement(disk_placement);
-    description.declareParent(slice_name, mother);
   }
 
-  auto pv_assembly = description.worldVolume().placeVolume(assembly, Position(0.0, 0.0, 0.0));
+  auto pv_assembly = description.worldVolume().placeVolume(assembly);
   pv_assembly.addPhysVolID("system", det_id);
   sdet.setPlacement(pv_assembly);
 
