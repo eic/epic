@@ -200,7 +200,7 @@ static Ref_t create_BarrelTrackerWithCurves(Detector& description, xml_h e, Sens
             double segwidth = sqrt( (Xp[i+1] - Xp[i])*(Xp[i+1] - Xp[i]) + (Zp[i+1] - Zp[i])*(Zp[i+1] - Zp[i]));
             double midX = 0.5*(Xp[i] + Xp[i+1]);
             double midZ = 0.5*(Zp[i] + Zp[i+1]);
-            Box seg_box ((segwidth/2) * ((c_rmin + x_comp.thickness()/2)/c_rmin), x_comp.length()/2, x_comp.thickness()/2);
+            Box seg_box ((segwidth/2) * ((c_rmin - x_comp.thickness()/2)/c_rmin), x_comp.length()/2, x_comp.thickness()/2);
 //            Trd1 seg_box( (segwidth/2) * ((c_rmin - x_comp.thickness()/2)/c_rmin), (segwidth/2) * ((c_rmin + x_comp.thickness()/2)/c_rmin), x_comp.length()/2, x_comp.thickness()/2);
             string seg_nam = c_nam + "." + _toString(i);
             Volume seg_vol(seg_nam, seg_box, description.material(x_comp.materialStr()));
