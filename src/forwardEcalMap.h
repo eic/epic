@@ -25,4 +25,4 @@ static const int mNColBlock[mMaxNS][mMaxRowBlock] = {
     {3,  6,  9,  11, 12, 13, 14, 15, 16, 16, 17, 17, 18, 18, 18, 19, 19, 19, 17, 17,
      17, 19, 19, 19, 18, 18, 18, 17, 17, 16, 16, 15, 14, 13, 12, 11, 9,  6,  3}};
 
-static const double mBackPlateZ        = 362.0; //Global Z of backplate = start of Hcal
+static const double mBackPlateZ = 362.0; //Global Z of backplate = start of Hcal
