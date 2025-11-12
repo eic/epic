@@ -17,30 +17,6 @@
       - Forward Ecal Homogeneous(1) or ScFi(2) Model
     </documentation>
     <constant name="ForwardEcal_Homogeneous_Scfi"         value="1"/>
-
-    <!--
-    <documentation>
-      - Forward Ecal Slice Thickness
-    </documentation>
-    <constant name="ForwardEcalCoverThickness"            value="0.343*mm"/>
-    <constant name="ForwardEcalAirThickness"              value="61.457*mm"/>
-    <constant name="ForwardEcalPCBThickness"              value="4.5*mm"/>
-    <constant name="ForwardEcalLightGuideThickness"       value="21.0*mm"/>
-    <constant name="ForwardEcalScintillatorThickness"     value="170.0*mm"/>
-    <constant name="ForwardEcalMountingPlateThickness"    value="12.7*mm"/>
-
-    <documentation>
-      - Forward Ecal computed total Thickness
-    </documentation>
-    <constant name="ForwardEcalThickness"
-      value = "ForwardEcalCoverThickness +
-               ForwardEcalAirThickness +
-               ForwardEcalPCBThickness +
-               ForwardEcalLightGuideThickness +
-               ForwardEcalScintillatorThickness +
-               ForwardEcalMountingPlateThickness"
-               />
-    -->
   </define>
 
   <limits>
@@ -64,15 +40,6 @@
       type="epic_ForwardEcal"
       readout="EcalEndcapPHits">
       <position x="0" y="0" z="EcalEndcapP_zmin"/>
-      <!--
-      <dimensions rmin="EcalEndcapP_rmin" rmax="EcalEndcapP_rmax" z="ForwardEcalThickness"/>
-      <slice name="Cover" material="Aluminum" thickness="ForwardEcalCoverThickness" vis="AnlGray"/>
-      <slice name="Air" material="Air" thickness="ForwardEcalAirThickness" vis="AnlLight_Gray"/>
-      <slice name="PCB" material="Fr4" thickness="ForwardEcalPCBThickness" vis="AnlGreen"/>
-      <slice name="LG" material="Plexiglass" thickness="ForwardEcalLightGuideThickness" vis="AnlBlue"/>
-      <slice name="WScFi" material="AvgTungstenScFi" thickness="ForwardEcalScintillatorThickness" vis="AnlOrange" sensitive="true"/>
-      <slice name="MountingPlate" material="StainlessSteelSAE304" thickness="ForwardEcalMountingPlateThickness" vis="AnlGray"/>
-      -->
       <dimensions rmin="EcalEndcapP_rmin" rmax="EcalEndcapP_rmax" z="EcalEndcapP_length"/>
       <slice name="Cover" material="Aluminum" thickness="EcalEndcapP_CoverThickness" vis="AnlGray"/>
       <slice name="Air" material="Air" thickness="EcalEndcapP_AirThickness" vis="AnlLight_Gray"/>
