@@ -31,32 +31,6 @@ double yBlock(int ns, int row) {
 }
 
 static Ref_t createDetector(Detector& desc, xml_h handle, SensitiveDetector sens) {
-  //forwardEcalMap* map = new forwardEcalMap();
-  //double blocksize    = map->blockSize();          // X,Y size of block
-  //double blockgap     = map->spaceBetweenBlock();  // Gap between blocks
-
-  //double blocksize   = mBlockSize;
-  //double blockgap    = mSpaceBetweenBlock;
-  //double nsgap       = mOffsetX[0] + mOffsetX[1]; // North-South gap
-  //double rmin      = 0.0;                // Dummy variable. Set to 0 since cutting out insert
-  //double rmax        = 81 * 2.54;          // Max radius of endcap
-  //double rmaxWithGap = rmax + nsgap / 2.0; // Max radius with NS gap included
-  ////double zmax       = map->backPlateZ();  // Face of back plate fEcal mount to = Hcal start z
-  //double zmax   = mBackPlateZ;   // Face of back plate fEcal mount to = Hcal start z
-  //double length = 27.0;          // Total length
-  //double zmin   = zmax - length; // minimum z where detector starts
-  ////double insert_dx[2] = {map->offsetXBeamPipe(0), map->offsetXBeamPipe(1)};
-  //double insert_dx[2] = {mOffsetXBeamPipe[0], mOffsetXBeamPipe[1]};
-  //// Insert x width for north and south halves
-  //double insert_dy        = 30.05;       // Insert y height
-  //double insert_dz        = 27.0;        // Insert (=Al beam pipe protector) z depth
-  //double insert_thickness = 0.25 * 2.54; // Insert (=Al beam pipe protector) thickness
-  //double insert_x         = (insert_dx[0] - insert_dx[1]) / 2.0; //Insert center x
-  //int nx                  = 26;                                  //number of fibers in a row
-  //int ny                  = 30;                                  //numbers of row of fibers
-  //double rFiber           = 0.0235;                              //fiber radius (PMMA outside)
-  //double rScfi            = 0.02209;                             //Scintillating fiber core radius
-
   blocksize    = desc.constant<double>("EcalEndcapP_blockSize");
   blockgap     = desc.constant<double>("EcalEndcapP_spaceBetweenBlock");
   double nsgap = desc.constant<double>("EcalEndcapP_xOffsetNorth") +
