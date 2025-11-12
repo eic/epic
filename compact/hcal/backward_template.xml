@@ -7,7 +7,7 @@
       #### Material Thickness
     </documentation>
     <constant name="HcalEndcapNSteelThickness"          value="4.0 * cm"/>
-    <constant name="HcalEndcapNPolystyreneThickness" value="0.4 * cm"/>
+    <constant name="HcalEndcapNPolystyreneThickness" value="2.4 * cm"/>
         <constant name="HcalEndcapNLayerGap"                    value="0.1 * cm"/> <!-- 2*thicker than LFHCAL -->
 
         <constant name="HcalEndcapN_polyhedron_rmax"    value="251.444*cm"/>
@@ -21,7 +21,7 @@
 
     <constant name="HcalEndcapNSingleLayerThickness"
              value="HcalEndcapNSteelThickness + HcalEndcapNPolystyreneThickness + HcalEndcapNLayerGap"/>
-    <constant name="HcalEndcapNLayer_NRepeat"   value="floor(HcalEndcapN_length / HcalEndcapNSingleLayerThickness)"/>
+    <constant name="HcalEndcapNLayer_NRepeat"   value="floor((HcalEndcapN_length + HcalEndcapN_extension_for_sampF) / HcalEndcapNSingleLayerThickness)"/>
     <constant name="HcalEndcapN_thickness"              value="HcalEndcapNLayer_NRepeat * HcalEndcapNSingleLayerThickness"/>
   </define>
 
