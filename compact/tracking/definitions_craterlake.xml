@@ -138,13 +138,13 @@
       <composite name="InnerTrackerEndcapP"/>
     </detector>
     <detector id="TrackerSubAssembly_1_ID"
-      name="MiddleSiBarrelrSubAssembly"
+      name="MiddleSiBarrelSubAssembly"
       type="DD4hep_SubdetectorAssembly"
       vis="TrackerSubAssemblyVis">
       <composite name="SagittaSiBarrel"/>
     </detector>
       <detector id="TrackerSubAssembly_1_ID"
-      name="OuterSiBarrelrSubAssembly"
+      name="OuterSiBarrelSubAssembly"
       type="DD4hep_SubdetectorAssembly"
       vis="TrackerSubAssemblyVis">
       <composite name="OuterSiBarrel"/>
