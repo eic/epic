@@ -112,7 +112,7 @@ static Ref_t create_detector(Detector& desc, xml_h e, SensitiveDetector /* sens 
                      mod_pos_global.z() + wall / 2 * sin(mod_rot_global.theta()));
     RotationY mod_rot(mod_rot_global.theta() - rot.theta());
 
-    // Size f the actual tagger box, replicated in BackwardsTagger
+    // Size of the actual tagger box, replicated in BackwardsTagger
     xml_dim_t moddim = mod.child(_Unicode(dimensions));
     double vac_w     = moddim.x() / 2;
     double vac_h     = moddim.y() / 2;
@@ -263,7 +263,6 @@ static void Make_Tagger(Detector& desc, xml_coll_t& mod, Assembly& env) {
     string layerType = dd4hep::getAttrOrDefault<std::string>(lay, _Unicode(type), "foil");
     string layerVis =
         dd4hep::getAttrOrDefault<std::string>(lay, _Unicode(vis), "FFTrackerShieldingVis");
-    // double layerZ   = dd4hep::getAttrOrDefault<double>(lay, _Unicode(z), 0 * mm);
     double layerRot = dd4hep::getAttrOrDefault<double>(lay, _Unicode(angle), 45 * deg);
     double layerThickness =
         dd4hep::getAttrOrDefault<double>(lay, _Unicode(sensor_thickness), 100 * um);
