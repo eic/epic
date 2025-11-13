@@ -123,7 +123,9 @@ static Ref_t create_detector(Detector& desc, xml_h e, SensitiveDetector /* sens 
     auto box_h = vac_h + wall;
 
     Box TagWallBox(box_w, box_h, vac_l);
-    Box TagVacBox(vac_w + wall / 2, vac_h, vac_l); // Vacuum box extends into wall on beamline side to ensure no residual material
+    Box TagVacBox(
+        vac_w + wall / 2, vac_h,
+        vac_l); // Vacuum box extends into wall on beamline side to ensure no residual material
 
     Wall_Box   = UnionSolid(Wall_Box, TagWallBox, Transform3D(mod_rot, mod_pos));
     Vacuum_Box = UnionSolid(Vacuum_Box, TagVacBox, Transform3D(mod_rot, vac_pos));

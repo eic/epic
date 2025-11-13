@@ -15,8 +15,8 @@
 
       <comment> Tagger stations </comment>
       <module id="1" name="Tagger1">
-        <comment> 
-        Position and rotation refer to the center front of tagger assembly, this should line up with the back of the exit window 
+        <comment>
+        Position and rotation refer to the center front of tagger assembly, this should line up with the back of the exit window
         Rotation Tagger1_Theta is relative to electron beamline axis, so we add 180deg to transform into detector coordinates
         </comment>
         <position    x="Tagger1_X" y="Tagger1_Y" z="Tagger1_Z"/>
