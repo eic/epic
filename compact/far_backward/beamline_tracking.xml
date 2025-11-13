@@ -18,11 +18,7 @@
         pipe_id="1"
         grandmother="Pipe_Q1eR_to_B2BeR"
         mother="Pipe_in_Q1eR_vacuum"
-        name="Pipe_in_Q1eR_tracker"
-        use_cross_section="true"
-        plane_z="Q1eR_CenterPosition-Q1eR_Length/2"
-        plane_x="0*mm"
-        plane_yrot="0*deg"/>
+        name="Pipe_in_Q1eR_tracker"/>
 
         <slice
         pipe_id="2"
@@ -40,7 +36,11 @@
         pipe_id="4"
         grandmother="Pipe_Q1eR_to_B2BeR"
         mother="Pipe_in_B2BeR_vacuum"
-        name="Pipe_in_B2BeR_tracker"/>
+        name="Pipe_in_B2BeR_tracker"
+        use_cross_section="true"
+        plane_z="B2BeR_CenterPosition-B2BeR_Length/2"
+        plane_x="0*mm"
+        plane_yrot="0*deg"/>
 
         <slice
         pipe_id="5"
