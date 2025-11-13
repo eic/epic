@@ -97,7 +97,7 @@ static Ref_t create_detector(Detector& desc, xml_h e, SensitiveDetector /* sens 
   Assembly DetAssembly("Tagger_vacuum_assembly");
 
   //-----------------------------------------------------------------
-  // Add Tagger box containers and vacuum box extension for modules
+  // Add Tagger box containers and vacuum box extension to main beamline for modules
   //-----------------------------------------------------------------
   for (xml_coll_t mod(x_det, _Unicode(module)); mod; ++mod) {
 
@@ -122,24 +122,22 @@ static Ref_t create_detector(Detector& desc, xml_h e, SensitiveDetector /* sens 
     auto box_w = vac_w + wall;
     auto box_h = vac_h + wall;
 
-    // auto l          = 100 * cm; // Length of the tagger box, arbitrary as long as > thickness of tagger
-
     Box TagWallBox(box_w, box_h, vac_l);
-    Box TagVacBox(vac_w + wall / 2, vac_h, vac_l);
+    Box TagVacBox(vac_w + wall / 2, vac_h, vac_l); // Vacuum box extends into wall on beamline side to ensure no residual material
 
     Wall_Box   = UnionSolid(Wall_Box, TagWallBox, Transform3D(mod_rot, mod_pos));
     Vacuum_Box = UnionSolid(Vacuum_Box, TagVacBox, Transform3D(mod_rot, vac_pos));
 
     Assembly TaggerAssembly("Tagger_module_assembly");
 
-    PlacedVolume pv_mod2 = DetAssembly.placeVolume(
+    PlacedVolume pv_mod = DetAssembly.placeVolume(
         TaggerAssembly,
         Transform3D(mod_rot,
                     mod_pos + Position(-vac_l * sin(mod_rot_global.theta() - rot.theta()), 0,
                                        -vac_l * cos(mod_rot_global.theta() - rot.theta()))));
     DetElement moddet(det, moduleName, moduleID);
-    pv_mod2.addPhysVolID("module", moduleID);
-    moddet.setPlacement(pv_mod2);
+    pv_mod.addPhysVolID("module", moduleID);
+    moddet.setPlacement(pv_mod);
 
     Make_Tagger(desc, mod, TaggerAssembly);
   }
@@ -230,7 +228,7 @@ static void Make_Tagger(Detector& desc, xml_coll_t& mod, Assembly& env) {
 
   double window_thickness = 0;
 
-  // Add window layer and air-vacuum boxes
+  // Add vacuum exit window
   for (xml_coll_t lay(mod, _Unicode(windowLayer)); lay; ++lay) {
 
     string layerType = dd4hep::getAttrOrDefault<std::string>(lay, _Unicode(type), "window");
@@ -257,7 +255,7 @@ static void Make_Tagger(Detector& desc, xml_coll_t& mod, Assembly& env) {
     break;
   }
 
-  // Add window layer and air-vacuum boxes
+  // Add foil layer angled to reduce beam impedance
   for (xml_coll_t lay(mod, _Unicode(foilLayer)); lay; ++lay) {
 
     string layerType = dd4hep::getAttrOrDefault<std::string>(lay, _Unicode(type), "foil");
