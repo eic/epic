@@ -179,11 +179,6 @@
     <vis name="DRICH_sensor_vis"  ref="AnlBlue"      showDaughters="true" visible="true" />
     <vis name="DRICH_service_vis" ref="AnlGreen"     showDaughters="true" visible="true" />
 
-    <vis name="MRICH_aerogel_vis" ref="AnlTeal" showDaughters="true" visible="true" />
-    <vis name="MRICH_frame_vis" ref="AnlGold" showDaughters="true" visible="true" />
-    <vis name="MRICH_lens_vis" ref="AnlGray" showDaughters="true" visible="true" />
-    <vis name="MRICH_mirror_vis"  ref="AnlGray" showDaughters="true" visible="true" />
-
     <vis name="RICHServiceVis"  ref="AnlGray" showDaughters="true" visible="true" />
 
     <comment>
