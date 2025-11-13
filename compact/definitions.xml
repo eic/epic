@@ -224,7 +224,6 @@ The unused IDs below are saved for future use.
       - Unused IDs: 133-139
 
     </documentation>
-    <constant name="MRICH_ID"           value="130"/>
     <constant name="BackwardRICH_ID"    value="131"/>
     <constant name="BackwardTOF_ID"     value="132"/>
 
@@ -325,7 +324,7 @@ SubSystemNameFurtherDescriptor_quantity
 Examples:
  - TrackerBarrelInside_length
  - EcalEndcapP_rmin
- - MRichFresnelLens_thickness
+ - TOFEndcapLayer_thickness
 
 ### Naming Barrel and Endcaps
 
