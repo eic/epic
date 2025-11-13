@@ -1,9 +1,9 @@
 // SPDX-License-Identifier: LGPL-3.0-or-later
-// Copyright (C) 2024 Simon Gardner
+// Copyright (C) 2024-2025 Simon Gardner
 
 //==========================================================================
 //
-// Places a small sensitive disk of vacuum at the end of beam pipes
+// Places thin sensitive slices of vacuum along a beam pipe
 //
 //==========================================================================
 
@@ -29,7 +29,7 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
   DetElement sdet(det_name, det_id);
   Assembly assembly(det_name + "_assembly");
 
-  // Grab info for beamline magnets
+  // Loop over each requested slice from the geometry description
   for (xml_coll_t slice_coll(x_det, _Unicode(slice)); slice_coll; slice_coll++) { // pipes
 
     string grandmotherName = slice_coll.attr<string>(_Unicode(grandmother));
@@ -50,7 +50,6 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
     bool use_plane_xs = getAttrOrDefault<bool>(slice_coll, _Unicode(use_cross_section), false);
 
     if (use_plane_xs) {
-      // Use plane-based cross section
 
       // Get plane definition from XML (in world frame)
       double plane_x    = getAttrOrDefault<double>(slice_coll, _Unicode(plane_x), 0.0);
@@ -88,7 +87,7 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
           IntersectionSolid(cutting_box, mother_vol.solid(), disk_transform.Inverse());
 
     } else {
-      // Use cone segment (default behavior)
+      // Use cone segment (default behavior before outline of xs is implemented in benchmark)
       ConeSegment mother_shape = mother_vol.solid();
 
       // Get the parameters of the mother volume
