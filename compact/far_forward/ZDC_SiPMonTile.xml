@@ -77,6 +77,7 @@
       readout="HcalFarForwardZDCHits"
       vis="InvisibleWithDaughters"
     >
+      <type_flags type="DetType_CALORIMETER + DetType_ENDCAP + DetType_HADRONIC"/>
       <position x="HcalFarForwardZDC_SiPMonTile_x_pos"         y="HcalFarForwardZDC_SiPMonTile_y_pos"         z="HcalFarForwardZDC_SiPMonTile_z_pos"/>
       <rotation x="HcalFarForwardZDC_SiPMonTile_rotateX_angle" y="HcalFarForwardZDC_SiPMonTile_rotateY_angle" z="HcalFarForwardZDC_SiPMonTile_rotateZ_angle"/>
       <dimensions

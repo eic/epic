@@ -8,6 +8,8 @@
     name="Pipe_tracker"
     readout="BackwardsBeamlineHits">
 
+        <type_flags type="DetType_TRACKER + DetType_ENDCAP + DetType_BEAMPIPE"/>
+
         <slice
         pipe_id="0"
         grandmother="Pipe_Q1eR_to_B2BeR"

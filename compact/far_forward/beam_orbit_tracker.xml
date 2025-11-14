@@ -20,6 +20,7 @@
       insideTrackingVolume="true"
       reflect="false"
       vis="RedVis">
+      <type_flags type="DetType_TRACKER + DetType_ENDCAP"/>
       <position x="-217.98*mm" y="0" z="8498.952*mm"/> <!-- end of B0apf + 1mm -->
       <rotation x="0*rad" y="-25.0*0.001*rad" z="0*rad"/>
       <module name="Module1" vis="AnlProcess_Blue">
@@ -41,6 +42,7 @@
       insideTrackingVolume="true"
       reflect="false"
       vis="RedVis">
+      <type_flags type="DetType_TRACKER + DetType_ENDCAP"/>
       <position x="-631.65*mm" y="0" z="22062.85*mm"/> <!-- end of B1apf + 1mm -->
       <rotation x="0*rad" y="-25.0*0.001*rad" z="0*rad"/>
       <module name="Module1" vis="AnlProcess_Blue">

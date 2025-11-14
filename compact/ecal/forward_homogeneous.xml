@@ -57,6 +57,7 @@
       name="EcalEndcapP"
       type="epic_EndcapCalorimeterWithInsertCutout"
       readout="EcalEndcapPHits">
+      <type_flags type="DetType_CALORIMETER + DetType_ENDCAP + DetType_ELECTROMAGNETIC"/>
       <position x="0" y="0" z="EcalEndcapP_zmin"/>
       <dimensions
         rmin="EcalEndcapP_rmin"

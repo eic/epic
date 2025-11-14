@@ -34,6 +34,7 @@
       type="epic_ScFiCalorimeter"
       vis="EcalEndcapVis"
       readout="EcalEndcapPHits">
+      <type_flags type="DetType_CALORIMETER + DetType_ENDCAP + DetType_ELECTROMAGNETIC"/>
       <position x="0" y="0" z="EcalEndcapP_zmin + EcalEndcapP_length/2."/>
       <dimensions rmin="EcalEndcapP_rmin" rmax="EcalEndcapP_rmax" length="EcalEndcapP_length"/>
       <module sizex="25*mm" sizey="25*mm" sizez="170*mm" material="TungstenDens24" vis="EcalEndcapBlockVis">
