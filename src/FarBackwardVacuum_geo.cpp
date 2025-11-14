@@ -34,7 +34,7 @@ static Ref_t create_detector(Detector& desc, xml_h e, SensitiveDetector /* sens 
   double WidthR      = dim.attr<double>(_Unicode(xR));
 
   double Width     = (WidthL + WidthR) / 2;
-  double Height    = dim.y();
+  // double Height    = dim.y();
   double Thickness = dim.z();
 
   // Materials
@@ -69,7 +69,7 @@ static Ref_t create_detector(Detector& desc, xml_h e, SensitiveDetector /* sens 
   // Entry box geometry description joining magnet, taggers and lumi
   xml::Component EB = x_det.child(_Unicode(exitdim));
   double ED_X       = EB.x();
-  double ED_Y       = EB.y();
+  // double ED_Y       = EB.y();
   double ED_Z       = off - EB.attr<double>(_Unicode(lumiZ));
   double Lumi_R     = EB.attr<double>(_Unicode(lumiR));
 
@@ -84,12 +84,12 @@ static Ref_t create_detector(Detector& desc, xml_h e, SensitiveDetector /* sens 
   Box Cut_Box(xbox, ybox, zbox);
 
   // Central pipe box
-  //Tube Extended_Beam_Box(Width,Width+wall,Thickness); // More realistic tube pipe
-  Box Extended_Beam_Box(Width + wall, Height + wall, Thickness); // Simpler box pipe
+  Tube Extended_Beam_Box(Width,Width+wall,Thickness); // More realistic tube pipe
+  // Box Extended_Beam_Box(Width + wall, Height + wall, Thickness); // Simpler box pipe
 
   // Central vacuum box
-  //Tube Extended_Vacuum_Box(0,Width,Thickness); // More realistic tube pipe
-  Box Extended_Vacuum_Box(Width, Height, Thickness); // Simpler box pipe
+  Tube Extended_Vacuum_Box(0,Width,Thickness); // More realistic tube pipe
+  // Box Extended_Vacuum_Box(Width, Height, Thickness); // Simpler box pipe
 
   Solid Wall_Box   = Extended_Beam_Box;
   Solid Vacuum_Box = Extended_Vacuum_Box;
@@ -158,8 +158,10 @@ static Ref_t create_detector(Detector& desc, xml_h e, SensitiveDetector /* sens 
 
   if (addLumi) {
 
-    Box Entry_Beam_Box(ED_X + wall, ED_Y + wall, ED_Z);
-    Box Entry_Vacuum_Box(ED_X, ED_Y, ED_Z - wall);
+    // Box Entry_Beam_Box(ED_X + wall, ED_Y + wall, ED_Z);
+    Tube Entry_Beam_Box(ED_X, ED_X + wall, ED_Z);
+    // Box Entry_Vacuum_Box(ED_X, ED_Y, ED_Z - wall);
+    Tube Entry_Vacuum_Box(0, ED_X, ED_Z - wall);
     Tube Lumi_Exit(0, Lumi_R, ED_Z);
 
     // Future angled exit window and more realistic tube shaped pipe.
