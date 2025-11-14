@@ -67,7 +67,7 @@ static Ref_t createDetector(Detector& desc, xml_h handle, SensitiveDetector sens
   int detID           = detElem.id();
 
   int Homogeneous_Scfi = 0;
-  Homogeneous_Scfi     = desc.constant<int>("ForwardEcal_Homogeneous_Scfi");
+  Homogeneous_Scfi     = desc.constant<int>("EcalEndcapP_Homogeneous_ScFi");
   if (Homogeneous_Scfi <= 1)
     printout(INFO, "FEMC", "Making Homogeneous geometry model\n");
   else
