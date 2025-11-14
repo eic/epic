@@ -1,0 +1,300 @@
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (C) 2025 Akio Ogawa
+
+//==========================================================================
+//  Implementation of forward calorimeter with 2025 design and
+//  the insert shape cut out, with ScFi
+//--------------------------------------------------------------------------
+//  Author: Akio Ogawa (BNL)
+//==========================================================================
+
+#include "DD4hep/DetFactoryHelper.h"
+#include "DD4hep/Printout.h"
+#include <XML/Helper.h>
+#include <XML/Layering.h>
+#include "forwardEcalMap.h"
+
+using namespace dd4hep;
+
+double blocksize, blockgap, offsetX[2], offsetY[2], insert_dx[2];
+
+double xBlock(int ns, int row, int col) {
+  if (row >= 18 && row <= 20) {
+    return (1 - 2 * ns) * (offsetX[ns] + insert_dx[ns] + (blocksize + blockgap) * (col + 0.5));
+  } else {
+    return (1 - 2 * ns) * (offsetX[ns] + (blocksize + blockgap) * (col + 0.5));
+  }
+}
+
+double yBlock(int ns, int row) {
+  return offsetY[ns] + (blocksize + blockgap) * (mMaxRowBlock / 2.0 - row - 0.5);
+}
+
+static Ref_t createDetector(Detector& desc, xml_h handle, SensitiveDetector sens) {
+  blocksize    = desc.constant<double>("EcalEndcapP_blockSize");
+  blockgap     = desc.constant<double>("EcalEndcapP_spaceBetweenBlock");
+  double nsgap = desc.constant<double>("EcalEndcapP_xOffsetNorth") +
+                 desc.constant<double>("EcalEndcapP_xOffsetSouth");
+  double rmin             = 0.0; // Dummy variable. Set to 0 since cutting out insert
+  double rmax             = desc.constant<double>("EcalEndcapP_rmax");
+  double rmaxWithGap      = desc.constant<double>("EcalEndcapP_rmaxWithGap");
+  double zmax             = desc.constant<double>("EcalEndcapP_zmax");
+  double length           = desc.constant<double>("EcalEndcapP_length");
+  double zmin             = desc.constant<double>("EcalEndcapP_zmin");
+  offsetX[0]              = desc.constant<double>("EcalEndcapP_xOffsetNorth");
+  offsetX[1]              = desc.constant<double>("EcalEndcapP_xOffsetSouth");
+  offsetY[0]              = desc.constant<double>("EcalEndcapP_yOffsetNorth");
+  offsetY[1]              = desc.constant<double>("EcalEndcapP_yOffsetSouth");
+  insert_dx[0]            = desc.constant<double>("EcalEndcapP_xOffsetBeamPipeNorth");
+  insert_dx[1]            = desc.constant<double>("EcalEndcapP_xOffsetBeamPipeSouth");
+  double insert_dy        = desc.constant<double>("EcalEndcapP_insert_dy");
+  double insert_dz        = desc.constant<double>("EcalEndcapP_insert_dz");
+  double insert_thickness = desc.constant<double>("EcalEndcapP_insert_thickness");
+  double insert_x         = desc.constant<double>("EcalEndcapP_insert_center_x");
+  int nx                  = desc.constant<int>("EcalEndcapP_nfiber_x");
+  int ny                  = desc.constant<int>("EcalEndcapP_nfiber_y");
+  double rFiber           = desc.constant<double>("EcalEndcapP_rfiber");
+  double rScfi            = desc.constant<double>("EcalEndcapP_rscfi");
+
+  const double phi1[2]  = {-M_PI / 2.0, M_PI / 2.0};
+  const double phi2[2]  = {M_PI / 2.0, 3.0 * M_PI / 2.0};
+  const char* nsName[2] = {"N", "S"};
+  const double pm[2]    = {1.0, -1.0}; //positive x for north, and negative for south
+
+  //from compact files
+  xml_det_t detElem   = handle;
+  std::string detName = detElem.nameStr();
+  int detID           = detElem.id();
+
+  int Homogeneous_Scfi = 0;
+  Homogeneous_Scfi     = desc.constant<int>("EcalEndcapP_Homogeneous_ScFi");
+  if (Homogeneous_Scfi <= 1)
+    printout(INFO, "FEMC", "Making Homogeneous geometry model\n");
+  else
+    printout(INFO, "FEMC", "Making ScFi geometry model\n");
+
+  //xml_dim_t dim = detElem.dimensions();
+  //xml_dim_t pos = detElem.position();
+  if (zmax != mBackPlateZ)
+    printf("WARNING!!! forwardEcal_geo.cpp detect inconsistent Z pos %f(compact) %f(map)\n", zmax,
+           mBackPlateZ);
+  //printf("forwardEcal_geo : zmax= %f vs %f\n",zmax,mBackPlateZ);
+
+  PlacedVolume pv;
+  Material air     = desc.material("Air");
+  Material alumi   = desc.material("Aluminum5083"); //actually using 6061... does it matter?
+  Material Wpowder = desc.material("WPowderplusEpoxy");
+  Material PMMA    = desc.material("Plexiglass");
+  Material ScFi    = desc.material("Polystyrene");
+
+  // Defining envelope with full phi,with slightly increased radius for NS gap
+  Tube envelope(rmin, rmaxWithGap, length / 2.0);
+
+  // Removing insert shape from envelope
+  Box insert((insert_dx[0] + insert_dx[1] - insert_thickness * 2 + nsgap) / 2.0,
+             (insert_dy - insert_thickness * 2) / 2.0, length / 2.);
+  SubtractionSolid envelope_with_inserthole(envelope, insert, Position(insert_x, 0.0, 0.0));
+  Volume envelopeVol(detName, envelope_with_inserthole, air);
+  envelopeVol.setAttributes(desc, detElem.regionStr(), detElem.limitsStr(), detElem.visStr());
+
+  //double thickness=0.0;
+  //int slice_num  = 1;
+  double slice_z = -length / 2.0; // Keeps track of slices' z locations in each layer
+  // Looping over each layer's slices
+  for (xml_coll_t sl(detElem, _U(slice)); sl; ++sl) {
+    xml_comp_t x_slice     = sl;
+    double slice_thickness = x_slice.thickness();
+    //thickness+=slice_thickness;
+    //printf("forwardEcal slice=%1d %8.4f %s \n",slice_num,slice_thickness,x_slice.materialStr().c_str());
+    std::string slice_name = "fEcal" + x_slice.nameStr();
+    Material slice_mat     = desc.material(x_slice.materialStr());
+    slice_z += slice_thickness / 2.; // Going to slice halfway point
+    Tube slice(rmin, rmaxWithGap, slice_thickness / 2.);
+
+    // Removing insert shape from each slice
+    Box slice_insert((insert_dx[0] + insert_dx[1] + nsgap) / 2.0, insert_dy / 2.0,
+                     slice_thickness / 2.0);
+    SubtractionSolid slice_with_inserthole(slice, slice_insert, Position(insert_x, 0.0, 0.0));
+    Volume slice_vol(slice_name, slice_with_inserthole, air); //Still air
+    slice_vol.setAttributes(desc, x_slice.regionStr(), x_slice.limitsStr(), x_slice.visStr());
+    pv = envelopeVol.placeVolume(slice_vol,
+                                 Transform3D(RotationZYX(0, 0, 0), Position(0., 0., slice_z)));
+
+    //Loop over north and south halves
+    for (int ns = 0; ns < 2; ns++) {
+      Tube half(rmin, rmax, slice_thickness / 2.0, phi1[ns], phi2[ns]);
+      std::string half_name = slice_name + "_" + nsName[ns];
+
+      // Removing insert shape from each slice & halves
+      Box half_insert(insert_dx[ns] / 2.0, insert_dy / 2.0, slice_thickness / 2.0);
+      SubtractionSolid half_with_inserthole(half, half_insert,
+                                            Position(pm[ns] * insert_dx[ns] / 2.0, 0.0, 0.0));
+
+      Material mat = slice_mat;
+      if (x_slice.isSensitive())
+        mat = air; //for calorimeter itself, still air to place blocks inside
+      Volume half_vol(half_name, half_with_inserthole, mat);
+      half_vol.setAttributes(desc, x_slice.regionStr(), x_slice.limitsStr(), x_slice.visStr());
+      pv = slice_vol.placeVolume(
+          half_vol, Transform3D(RotationZYX(0, 0, 0), Position(pm[ns] * nsgap / 2.0, 0.0, 0.0)));
+      pv.addPhysVolID("northsouth", ns);
+
+      // For detector (sensitive) slice, placing detector blocks in col and row
+      double bsize = blocksize + blockgap;
+      if (x_slice.isSensitive()) {
+
+        //Define WSiFi block (4x4 towers)
+        if (Homogeneous_Scfi <= 1)
+          mat = slice_mat;
+        Box block(blocksize / 2.0, blocksize / 2.0, slice_thickness / 2.0);
+        Volume block_vol("FEMCBlock", block, mat);
+        block_vol.setAttributes(desc, x_slice.regionStr(), x_slice.limitsStr(), x_slice.visStr());
+        if (Homogeneous_Scfi <= 1) {
+          sens.setType("calorimeter");
+          block_vol.setSensitiveDetector(sens);
+        } // end if Homogeneous_Scfi<=1
+
+        if (Homogeneous_Scfi == 2) {
+          //4 rows of towers
+          Box trow(blocksize / 2.0, blocksize / 8.0, slice_thickness / 2.0);
+          Volume trow_vol("FEMCTowerRow", trow, air);
+          trow_vol.setAttributes(desc, x_slice.regionStr(), x_slice.limitsStr(), x_slice.visStr());
+          for (int tr = 0; tr < 4; tr++) {
+            pv = block_vol.placeVolume(
+                trow_vol,
+                Transform3D(RotationZYX(0, 0, 0), Position(0.0, (tr - 1.5) * blocksize / 4, 0)));
+            pv.addPhysVolID("tower_y", tr);
+          }
+
+          //4 towers in a row - finally a W powder volume, not air
+          Box tower(blocksize / 8.0, blocksize / 8.0, slice_thickness / 2.0);
+          Volume tower_vol("FEMCTower", tower, Wpowder);
+          tower_vol.setAttributes(desc, x_slice.regionStr(), x_slice.limitsStr(), x_slice.visStr());
+          for (int tc = 0; tc < 4; tc++) {
+            pv = trow_vol.placeVolume(
+                tower_vol,
+                Transform3D(RotationZYX(0, 0, 0), Position((tc - 1.5) * blocksize / 4, 0, 0)));
+            pv.addPhysVolID("tower_x", tc);
+          }
+
+          //rows of fibers
+          double fiberDistanceX =
+              blocksize / 4.0 / (nx + 0.5); //exrea 0.5 for even/odd rows shifted by 1/2
+          Box frow(blocksize / 8.0 - fiberDistanceX / 2.0, blocksize / 8.0 / ny,
+                   slice_thickness / 2.0);
+          Volume frow_vol("FEMCFiberRow", frow, Wpowder);
+          frow_vol.setAttributes(desc, x_slice.regionStr(), x_slice.limitsStr(), x_slice.visStr());
+          for (int iy = 0; iy < ny; iy++) {
+            double xx = 0;
+            if (iy % 2 == 1)
+              xx += fiberDistanceX / 2.0;
+            pv = tower_vol.placeVolume(
+                frow_vol,
+                Transform3D(RotationZYX(0, 0, 0),
+                            Position(xx, (iy - ny / 2.0 + 0.5) * blocksize / 4.0 / ny, 0)));
+            //printf("iy=%2d dy=%8.4f fiberRx2=%8.4f xx=%8.4f\n",iy,blocksize/4.0/ny,rFiber*2,xx);
+            pv.addPhysVolID("fiber_y", iy);
+          }
+
+          //columns of fibers, with 1/2 fiber distance shifted each row
+          Box fcol(fiberDistanceX / 2.0, blocksize / 8.0 / ny, slice_thickness / 2.0);
+          Volume fcol_vol("FEMCFiberCol", fcol, Wpowder);
+          fcol_vol.setAttributes(desc, x_slice.regionStr(), x_slice.limitsStr(), x_slice.visStr());
+          for (int ix = 0; ix < nx; ix++) {
+            double xx = (ix - nx / 2.0 + 0.5) * fiberDistanceX;
+            pv        = frow_vol.placeVolume(fcol_vol,
+                                             Transform3D(RotationZYX(0, 0, 0), Position(xx, 0, 0)));
+            //printf("ix=%2d dx=%8.4f xx=%8.4f x0=%8.4f x1=%8.4f\n",ix,fiberDistanceX,xx,xx-fiberDistanceX/2,xx+fiberDistanceX/2);
+            pv.addPhysVolID("fiber_x", ix);
+          }
+
+          //a fiber (with coating material, not sensitive yet)
+          Tube fiber(0, rFiber, slice_thickness / 2.0);
+          Volume fiber_vol("FEMCFiber", fiber, PMMA);
+          fiber_vol.setAttributes(desc, x_slice.regionStr(), x_slice.limitsStr(), x_slice.visStr());
+          pv =
+              fcol_vol.placeVolume(fiber_vol, Transform3D(RotationZYX(0, 0, 0), Position(0, 0, 0)));
+
+          //scintillating fiber core - and finally a sensitive volume
+          Tube scfi(0, rScfi, slice_thickness / 2.0);
+          Volume scfi_vol("FEMCScFi", scfi, ScFi);
+          scfi_vol.setAttributes(desc, x_slice.regionStr(), x_slice.limitsStr(), x_slice.visStr());
+          pv =
+              fiber_vol.placeVolume(scfi_vol, Transform3D(RotationZYX(0, 0, 0), Position(0, 0, 0)));
+          sens.setType("calorimeter");
+          scfi_vol.setSensitiveDetector(sens);
+        } //end if Homogeneous_Scfi==2
+
+        //rows of blocks
+        //int nRowBlock = map->maxRowBlock(); //# of rows
+        int nRowBlock = mMaxRowBlock;
+        for (int r = 0; r < nRowBlock; r++) {
+          //int nColBlock = map->nColBlock(ns, r);
+          int nColBlock = mNColBlock[ns][r];
+          double dxrow  = bsize * nColBlock;
+          Box row(dxrow / 2.0, bsize / 2.0, slice_thickness / 2.0);
+          std::string row_name = half_name + _toString(r, "_R%02d");
+          Volume row_vol(row_name, row, air);
+          row_vol.setAttributes(desc, x_slice.regionStr(), x_slice.limitsStr(), x_slice.visStr());
+          //double xrow = (map->xBlock(ns, r, 0) + map->xBlock(ns, r, nColBlock - 1)) / 2.0 -
+          //              pm[ns] * nsgap / 2.0;
+          //double yrow = map->yBlock(ns, r);
+          double xrow =
+              (xBlock(ns, r, 0) + xBlock(ns, r, nColBlock - 1)) / 2.0 - pm[ns] * nsgap / 2.0;
+          double yrow = yBlock(ns, r);
+          pv          = half_vol.placeVolume(row_vol,
+                                             Transform3D(RotationZYX(0, 0, 0), Position(xrow, yrow, 0)));
+          pv.addPhysVolID("blockrow", r);
+
+          //column of blocks
+          double xcol = -pm[ns] * (dxrow / 2.0 - bsize / 2.0);
+          for (int c = 0; c < nColBlock; c++) {
+            Box col(bsize / 2.0, bsize / 2.0, slice_thickness / 2.0);
+            std::string col_name = row_name + _toString(c, "C%02d");
+            Volume col_vol(col_name, col, air);
+            col_vol.setAttributes(desc, x_slice.regionStr(), x_slice.limitsStr(), x_slice.visStr());
+            pv = row_vol.placeVolume(col_vol,
+                                     Transform3D(RotationZYX(0, 0, 0), Position(xcol, 0, 0)));
+            pv.addPhysVolID("blockcol", c);
+            //printf("r=%2d dx=%8.3f x=%8.3f y=%8.3f   c=%2d %8.3f  mapx=%8.3f\n",r,dxrow,xrow,yrow,c,xcol,map->xBlock(ns,r,c));
+            xcol += pm[ns] * bsize;
+
+            //a block inside with air gap
+            pv = col_vol.placeVolume(block_vol,
+                                     Transform3D(RotationZYX(0, 0, 0), Position(0, 0, 0)));
+          } //end loop block col
+        } //end loop block raw
+      } //end if isSensitive
+    } //end loop over ns
+    slice_z += slice_thickness / 2.; // Going to end of slice
+    //++slice_num;
+  } //end loop over slice
+  //printf("forwardEcal Total thickness=%f Slice end at %f\n",thickness,slice_z);
+
+  //Al Beampipe Protector placed in envelope volume outside slices
+  for (int ns = 0; ns < 2; ns++) {
+    Box bpp(insert_dx[ns] / 2.0, insert_dy / 2.0, insert_dz / 2.0);
+    std::string bpp_name = detName + "_BeamPipeProtector_" + nsName[ns];
+    Box bpp_hole((insert_dx[ns] - insert_thickness) / 2.0, insert_dy / 2.0 - insert_thickness,
+                 insert_dz / 2.0);
+    SubtractionSolid bpp_with_hole(bpp, bpp_hole,
+                                   Position(-pm[ns] * insert_thickness / 2.0, 0.0, 0.0));
+    Volume bpp_vol(bpp_name, bpp_with_hole, alumi);
+    bpp_vol.setAttributes(desc, detElem.regionStr(), detElem.limitsStr(), detElem.visStr());
+    pv = envelopeVol.placeVolume(
+        bpp_vol, Transform3D(RotationZYX(0, 0, 0), Position(pm[ns] * (insert_dx[ns] + nsgap) / 2.0,
+                                                            0.0, (length - insert_dz) / 2.0)));
+  }
+
+  // Placing in the world volume
+  DetElement det(detName, detID);
+  Volume motherVol = desc.pickMotherVolume(det);
+  auto tr          = Transform3D(Position(0.0, 0.0, zmin + length / 2.0));
+  pv               = motherVol.placeVolume(envelopeVol, tr);
+  pv.addPhysVolID("system", detID);
+  det.setPlacement(pv);
+
+  //printf("forwardEcal_geo Done\n");
+  return det;
+}
+DECLARE_DETELEMENT(epic_ForwardEcal, createDetector)
