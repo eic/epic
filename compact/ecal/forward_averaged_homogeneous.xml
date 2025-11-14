@@ -16,7 +16,7 @@
     <documentation>
       - Forward Ecal Homogeneous(1) or ScFi(2) Model
     </documentation>
-    <constant name="ForwardEcal_Homogeneous_Scfi"         value="1"/>
+    <constant name="EcalEndcapP_Homogeneous_ScFi"         value="1"/>
   </define>
 
   <limits>
