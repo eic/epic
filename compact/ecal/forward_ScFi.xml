@@ -53,7 +53,7 @@
   <readouts>
     <readout name="EcalEndcapPHits">
       <segmentation type="NoSegmentation"/>
-      <id>system:8,northsouth:1,blockrow:6,blockcol:5,tower_x:2,tower_y:2,fiber_x:5,fiber_y:5,x:1,y:1</id>
+      <id>system:8,northsouth:1,blockrow:6,blockcol:5,x:2,y:2,fiber_x:5,fiber_y:5</id>
     </readout>
   </readouts>
 
