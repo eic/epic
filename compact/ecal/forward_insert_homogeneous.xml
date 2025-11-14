@@ -58,6 +58,7 @@
       vis="HcalEndcapInsertVis"
       readout="EcalEndcapPInsertHits"
     >
+      <type_flags type="DetType_CALORIMETER + DetType_ENDCAP + DetType_ELECTROMAGNETIC"/>
       <position x="EcalEndcapPInsert_xposition" y="EcalEndcapPInsert_yposition" z="EcalEndcapPInsert_zmin"/>
       <dimensions
         x="EcalEndcapPInsert_width"
