@@ -105,6 +105,7 @@
       readout="ForwardOffMTrackerHits"
       vis="FFTrackerVis"
       reflect="false">
+      <type_flags type="DetType_TRACKER + DetType_ENDCAP"/>
       <position x="-1032.0*mm" y="0" z="27020*mm"/>
       <rotation x="0*rad" y="-0.047*rad" z="0*rad"/>
       <module name="OMD4Mod1" vis="FFTrackerShieldedModuleVis">
