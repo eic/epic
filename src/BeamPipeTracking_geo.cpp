@@ -1,9 +1,9 @@
 // SPDX-License-Identifier: LGPL-3.0-or-later
-// Copyright (C) 2024 Simon Gardner
+// Copyright (C) 2024-2025 Simon Gardner
 
 //==========================================================================
 //
-// Places a small sensitive disk of vacuum at the end of beam pipes
+// Places thin sensitive slices of vacuum along a beam pipe
 //
 //==========================================================================
 
@@ -29,7 +29,7 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
   DetElement sdet(det_name, det_id);
   Assembly assembly(det_name + "_assembly");
 
-  // Grab info for beamline magnets
+  // Loop over each requested slice from the geometry description
   for (xml_coll_t slice_coll(x_det, _Unicode(slice)); slice_coll; slice_coll++) { // pipes
 
     string grandmotherName = slice_coll.attr<string>(_Unicode(grandmother));
@@ -42,41 +42,85 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
     // Get the mother volume
     Volume mother_vol = mother.volume();
 
-    // Get mother volume shape as cone segment
-    ConeSegment mother_shape = mother_vol.solid();
-
-    // Get the parameters of the mother volume
-    double rOuter1 = mother_shape.rMax1();
-    double rOuter2 = mother_shape.rMax2();
-    double length  = 2 * mother_shape.dZ();
-
     double sensitive_thickness = 0.1 * mm;
+    Solid sensitive_solid;
+    Transform3D disk_transform; // Full placement transform
 
-    //Calculate R or cone after sensitive layer
+    // Check if we should use plane-based cross section (default: false, use cone)
+    bool use_plane_xs = getAttrOrDefault<bool>(slice_coll, _Unicode(use_cross_section), false);
 
-    double rEnd = rOuter2 - (rOuter2 - rOuter1) * sensitive_thickness / length;
-    double zPos = length / 2.0 - sensitive_thickness / 2.0;
-    if (detStart) {
-      rEnd = rOuter1 - (rOuter1 - rOuter2) * sensitive_thickness / length;
-      zPos = -length / 2.0 + sensitive_thickness / 2.0;
+    if (use_plane_xs) {
+
+      // Get plane definition from XML (in world frame)
+      double plane_x    = getAttrOrDefault<double>(slice_coll, _Unicode(plane_x), 0.0);
+      double plane_y    = getAttrOrDefault<double>(slice_coll, _Unicode(plane_y), 0.0);
+      double plane_z    = getAttrOrDefault<double>(slice_coll, _Unicode(plane_z), 0.0);
+      double plane_yrot = getAttrOrDefault<double>(slice_coll, _Unicode(plane_yrot), 0.0);
+
+      // Get the mother volume's transformation to world frame
+      auto mother_matrix          = mother.nominal().worldTransformation();
+      const Double_t* translation = mother_matrix.GetTranslation();
+      const Double_t* rotation    = mother_matrix.GetRotationMatrix();
+
+      // Build Transform3D from TGeoMatrix
+      Transform3D mother_to_world(rotation[0], rotation[1], rotation[2], translation[0],
+                                  rotation[3], rotation[4], rotation[5], translation[1],
+                                  rotation[6], rotation[7], rotation[8], translation[2]);
+
+      // Transform the plane position and rotation from world frame to mother's local frame
+      Position plane_pos_world(plane_x, plane_y, plane_z);
+      RotationY plane_rot_world(plane_yrot);
+      Transform3D plane_transform_world(plane_rot_world, plane_pos_world);
+
+      // Apply inverse transformation to get plane in mother's local coordinates
+      disk_transform = mother_to_world.Inverse() * plane_transform_world;
+
+      // Get maximum dimension for cutting box
+      double max_dim = getAttrOrDefault<double>(slice_coll, _Unicode(max_dimension), 1.0 * m);
+
+      // Create a thin box perpendicular to the plane normal
+      Box cutting_box(max_dim, max_dim, sensitive_thickness / 2);
+
+      // Create intersection of cutting box with mother volume (reversed order to preserve rotation)
+      // Apply the inverse transform to the second operand (mother) to express it in the box frame
+      sensitive_solid =
+          IntersectionSolid(cutting_box, mother_vol.solid(), disk_transform.Inverse());
+
+    } else {
+      // Use cone segment (default behavior before outline of xs is implemented in benchmark)
+      ConeSegment mother_shape = mother_vol.solid();
+
+      // Get the parameters of the mother volume
+      double rOuter1 = mother_shape.rMax1();
+      double rOuter2 = mother_shape.rMax2();
+      double length  = 2 * mother_shape.dZ();
+
+      //Calculate R of cone after sensitive layer
+      double rEnd = rOuter2 - (rOuter2 - rOuter1) * sensitive_thickness / length;
+      double zPos = length / 2.0 - sensitive_thickness / 2.0;
+      if (detStart) {
+        rEnd = rOuter1 - (rOuter1 - rOuter2) * sensitive_thickness / length;
+        zPos = -length / 2.0 + sensitive_thickness / 2.0;
+      }
+
+      sensitive_solid = ConeSegment(sensitive_thickness / 2, 0.0, rOuter2, 0.0, rEnd);
+      disk_transform  = Transform3D(Rotation3D(), Position(0.0, 0.0, zPos));
     }
 
-    ConeSegment s_start_disk(sensitive_thickness / 2, 0.0, rOuter2, 0.0, rEnd);
-    Volume v_start_disk("v_start_disk_" + motherName, s_start_disk, m_Vacuum);
+    Volume v_start_disk("v_start_disk_" + motherName, sensitive_solid, m_Vacuum);
     v_start_disk.setSensitiveDetector(sens);
 
-    auto disk_placement = mother_vol.placeVolume(v_start_disk, Position(0.0, 0.0, zPos));
+    auto disk_placement = mother_vol.placeVolume(v_start_disk, disk_transform);
     disk_placement.addPhysVolID("end", detStart);
     disk_placement.addPhysVolID("pipe", pipe_id);
     disk_placement.addPhysVolID("system", det_id);
 
-    DetElement slice_element(sdet, slice_name, pipe_id);
+    DetElement slice_element(mother, slice_name, pipe_id);
 
     slice_element.setPlacement(disk_placement);
-    description.declareParent(slice_name, mother);
   }
 
-  auto pv_assembly = description.worldVolume().placeVolume(assembly, Position(0.0, 0.0, 0.0));
+  auto pv_assembly = description.worldVolume().placeVolume(assembly);
   pv_assembly.addPhysVolID("system", det_id);
   sdet.setPlacement(pv_assembly);
 

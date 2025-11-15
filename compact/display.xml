@@ -25,7 +25,7 @@
 
     <vis name="SVTSensorVis"       ref="AnlGold"        visible="true"  showDaughters="true" />
     <vis name="SVTReadoutVis"      ref="AnlDarkGreen"   visible="true"  showDaughters="true" />
-    <vis name="SVTSupportVis"      ref="AnlLight_Gray"  visible="true"  showDaughters="false" />
+    <vis name="SVTSupportVis"      ref="AnlLightGray"   visible="true"  showDaughters="false" />
     <vis name="VertexLayerVis"     ref="SVTSensorVis"   visible="true"  showDaughters="true" />
 
     <vis name="TOFVis"            ref="AnlTeal"             visible="true"  showDaughters="true"/>
@@ -122,8 +122,8 @@
       Solenoid
     </comment>
     <vis name="SolenoidCoilVis"     ref="AnlLightGray" showDaughters="true"  visible="true" lineStyle="solid" drawingStyle="solid" />
-    <vis name="SolenoidCryostatVis" ref="AnlGray"       showDaughters="true"  visible="true" lineStyle="solid" drawingStyle="solid" />
-    <vis name="SolenoidYokeVis"     ref="AnlLight_Gray" showDaughters="false" visible="true" lineStyle="solid" drawingStyle="solid" />
+    <vis name="SolenoidCryostatVis" ref="AnlGray"      showDaughters="true"  visible="true" lineStyle="solid" drawingStyle="solid" />
+    <vis name="SolenoidYokeVis"     ref="AnlLightGray" showDaughters="false" visible="true" lineStyle="solid" drawingStyle="solid" />
 
 
     <comment>
@@ -162,7 +162,7 @@
     </comment>
     <vis name="BackwardsBox"      alpha="0.3" ref="AnlGray"       showDaughters="true" visible="true"/>
     <vis name="BackwardsAir"      alpha="0.7" ref="AnlBlue"       showDaughters="true" visible="true"/>
-    <vis name="BackwardsVac"      alpha="0.1" ref="AnlLight_Gray" showDaughters="true" visible="true"/>
+    <vis name="BackwardsVac"      alpha="0.1" ref="AnlLightGray"  showDaughters="true" visible="true"/>
 
     <comment>
       PID visualization
@@ -178,11 +178,6 @@
     <vis name="DRICH_mirror_vis"  ref="AnlLightGray" showDaughters="true" visible="true" />
     <vis name="DRICH_sensor_vis"  ref="AnlBlue"      showDaughters="true" visible="true" />
     <vis name="DRICH_service_vis" ref="AnlGreen"     showDaughters="true" visible="true" />
-
-    <vis name="MRICH_aerogel_vis" ref="AnlTeal" showDaughters="true" visible="true" />
-    <vis name="MRICH_frame_vis" ref="AnlGold" showDaughters="true" visible="true" />
-    <vis name="MRICH_lens_vis" ref="AnlGray" showDaughters="true" visible="true" />
-    <vis name="MRICH_mirror_vis"  ref="AnlGray" showDaughters="true" visible="true" />
 
     <vis name="RICHServiceVis"  ref="AnlGray" showDaughters="true" visible="true" />
 
