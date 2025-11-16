@@ -27,7 +27,8 @@
     <constant name="MPGDOuterBarrel_length"                        value="MPGDOuterBarrelModule_zmin1 + MPGDOuterBarrelModule_zmin2"/>
     <constant name="MPGDOuterBarrelModule_length"                  value="0.5*(MPGDOuterBarrelModule_zmin1 + MPGDOuterBarrelModule_zmin2 + MPGDOuterBarrelModule_zoverlap)"/>
     <constant name="MPGDOuterBarrelModule_offset"                  value="0.5*(MPGDOuterBarrelModule_zmin2 - MPGDOuterBarrelModule_zmin1)"/>
-    <constant name="MPGDOuterBarrelModule_PCB_offset"                 value="110*mm"/>
+    <constant name="MPGDOuterBarrelModule_PCB_offset"              value="110*mm"/>
+    <constant name="MPGDOuterBarrelModule_Inset_length"            value="MPGDOuterBarrelModule_length - MPGDOuterBarrelModule_PCB_offset"/>
     <constant name="MPGDOuterStrip_range"                          value="(MPGDOuterBarrelModule_length + MPGDOuterBarrelModule_width)/2.0*sqrt(2)"/>
 
     <comment> Layer parameters </comment>
@@ -59,7 +60,7 @@
                thickness="MPGDOuterBarrelDriftGap_thickness"
                vis="TrackerMPGDGasVis"
                offset="0"
-               length="MPGDOuterBarrelModule_length - MPGDOuterBarrelModule_PCB_offset"/>
+               length="MPGDOuterBarrelModule_Inset_length"/>
 
         <module_component name="WindowGasGap"
                material="Ar90IsoButane"
@@ -68,7 +69,7 @@
                thickness="MPGDOuterBarrelWindowGap_thickness"
                vis="TrackerMPGDGasVis"
                offset="0"
-               length="MPGDOuterBarrelModule_length - MPGDOuterBarrelModule_PCB_offset"/>
+               length="MPGDOuterBarrelModule_Inset_length"/>
         <module_component name="Window"
                material="Kapton"
                sensitive="false"
@@ -76,7 +77,7 @@
                thickness="MPGDOuterBarrelWindow_thickness"
                vis="TrackerVis"
                offset="0"
-               length="MPGDOuterBarrelModule_length - MPGDOuterBarrelModule_PCB_offset"/>
+               length="MPGDOuterBarrelModule_Inset_length"/>
         <module_component name="Cathode_Kapton"
                material="Kapton"
                sensitive="false"
@@ -84,7 +85,7 @@
                thickness="MPGDOuterBarrelFoilKapton_thickness"
                vis="TrackerVis"
                offset="0"
-               length="MPGDOuterBarrelModule_length - MPGDOuterBarrelModule_PCB_offset"/>
+               length="MPGDOuterBarrelModule_Inset_length"/>
         <module_component name="Cathode_Cu"
                material="Copper"
                sensitive="false"
@@ -92,7 +93,7 @@
                thickness="MPGDOuterBarrelFoilCu_thickness"
                vis="TrackerVis"
                offset="0"
-               length="MPGDOuterBarrelModule_length - MPGDOuterBarrelModule_PCB_offset"/>
+               length="MPGDOuterBarrelModule_Inset_length"/>
         <module_component name="RWELL_Cu"
                material="Copper"
                sensitive="false"
@@ -100,7 +101,7 @@
                thickness="MPGDOuterBarrelFoilCu_thickness"
                vis="TrackerVis"
                offset="0"
-               length="MPGDOuterBarrelModule_length - MPGDOuterBarrelModule_PCB_offset"/>
+               length="MPGDOuterBarrelModule_Inset_length"/>
         <module_component name="RWELL_Kapton"
                material="Kapton"
                sensitive="false"
@@ -108,7 +109,7 @@
                thickness="MPGDOuterBarrelFoilKapton_thickness"
                vis="TrackerVis"
                offset="0"
-               length="MPGDOuterBarrelModule_length - MPGDOuterBarrelModule_PCB_offset"/>
+               length="MPGDOuterBarrelModule_Inset_length"/>
         <module_component name="Nomex"
                material="Nomex"
                sensitive="false"
@@ -116,7 +117,7 @@
                thickness="MPGDOuterBarrelReadOutNomex_thickness"
                vis="TrackerVis"
                offset="0"
-               length="MPGDOuterBarrelModule_length - MPGDOuterBarrelModule_PCB_offset"/>
+               length="MPGDOuterBarrelModule_Inset_length"/>
         <module_component name="ReadOutElectrodes"
                material="Copper"
                sensitive="false"
@@ -124,7 +125,7 @@
                thickness="MPGDOuterBarrelReadOutElectrode_thickness"
                vis="TrackerVis"
                offset="0"
-               length="MPGDOuterBarrelModule_length - MPGDOuterBarrelModule_PCB_offset"/>
+               length="MPGDOuterBarrelModule_Inset_length"/>
         <module_component name="ReadOutKapton"
                material="Kapton"
                sensitive="false"
@@ -132,7 +133,7 @@
                thickness="MPGDOuterBarrelReadOutKapton_thickness"
                offset="0"
                vis="TrackerVis"
-               length="MPGDOuterBarrelModule_length - MPGDOuterBarrelModule_PCB_offset"/>
+               length="MPGDOuterBarrelModule_Inset_length"/>
         <module_component name="PCB"
                material="Fr4"
                sensitive="false"
@@ -173,13 +174,9 @@
 
   <readouts>
     <readout name="OuterMPGDBarrelHits">
-      <segmentation type="MultiSegmentation" key="strip">
-        <comment> Strip segmentations ("strip" field !=0) are not used at simulation time but only in digitization at reconstruction time, see digitization class, "MPGDTrackerDigi". </comment>
-        <segmentation name="Pixels"  type="CartesianGridUV" key_value="0" grid_size_u="0.150*mm*sqrt(12)"    grid_size_v="0.150*mm*sqrt(12)"    grid_angle="pi*rad/4" />
-        <segmentation name="UStrips" type="CartesianGridUV" key_value="1" grid_size_u="0.150*mm*sqrt(12)"    grid_size_v="MPGDOuterStrip_range" grid_angle="pi*rad/4" />
-        <segmentation name="VStrips" type="CartesianGridUV" key_value="2" grid_size_u="MPGDOuterStrip_range" grid_size_v="0.150*mm*sqrt(12)"    grid_angle="pi*rad/4"/>
-      </segmentation>
-      <id>system:8,layer:4,module:12,sensor:2,strip:30:2,u:-16,v:-16</id>
+      <segmentation name="Pixels"  type="CartesianGridXY" key_value="0" grid_size_x="0.150*mm*sqrt(12)"    grid_size_y="0.150*mm*sqrt(12)"/>
+      <comment> "strip" field is ineffective... but required. </comment>
+      <id>system:8,layer:4,module:12,sensor:2,strip:28:4,x:-16,y:-16</id>
     </readout>
   </readouts>
 

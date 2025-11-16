@@ -354,8 +354,8 @@ static Ref_t create_BarrelPlanarMPGDTracker_geo(Detector& description, xml_h e,
   for (int ii = 0; ii < nphi; ii++) {
     double xc = rc * std::cos(phic);              // Basic x position of module
     double yc = rc * std::sin(phic);              // Basic y position of module
-    double dx = z_dr * std::cos(phic + phi_tilt); // Deta x of module position
-    double dy = z_dr * std::sin(phic + phi_tilt); // Deta y of module position
+    double dx = z_dr * std::cos(phic + phi_tilt); // Delta x of module position
+    double dy = z_dr * std::sin(phic + phi_tilt); // Delta y of module position
     // loop over the modules in z
     for (int j = 0; j < nz; j++) {
       string module_name = _toString(module, "module%02d");
