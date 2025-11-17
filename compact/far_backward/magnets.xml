@@ -90,7 +90,7 @@
     type="CylindricalMagnetChain"
     vis="RedVis">
       <magnet id="0" name="Magnet_Q3eR"
-        x="Q3eR_XPosition" y="0" z="Q3eR_CenterPosition" theta="Q3eR_Theta"
+        x="Q3eR_CenterX" y="0" z="Q3eR_CenterZ" theta="Q3eR_Theta"
         length="Q3eR_Length" rin="Q3eR_InnerRadius" rout="4*Q3eR_InnerRadius">
       </magnet>
     </detector>
@@ -478,21 +478,23 @@
 
     <field name="Magnet_Q1eR_Field" type="MultipoleMagnet">
       <shape type="Tube" rmax="Q1eR_InnerRadius" dz="Q1eR_Length/2"/>
-      <position x="0" y="0" z="Q1eR_CenterPosition"/>
+      <position x="Q1eR_CenterX" y="0" z="Q1eR_CenterZ"/>
+      <rotation x="0" y="Q1eR_Theta" z="0"/>
       <coefficient/>
       <coefficient coefficient="Q1eR_Gradient"/>
     </field>
 
     <field name="Magnet_Q2eR_Field" type="MultipoleMagnet">
       <shape type="Tube" rmax="Q2eR_InnerRadius" dz="Q2eR_Length/2"/>
-      <position x="0" y="0" z="Q2eR_CenterPosition"/>
+      <position x="Q2eR_CenterX" y="0" z="Q2eR_CenterZ"/>
+      <rotation x="0" y="Q2eR_Theta" z="0"/>
       <coefficient/>
       <coefficient coefficient="Q2eR_Gradient"/>
     </field>
 
     <field name="Magnet_Q3eR_Field" type="MultipoleMagnet">
       <shape type="Tube" rmax="Q3eR_InnerRadius" dz="Q3eR_Length/2"/>
-      <position x="Q3eR_XPosition" y="0" z="Q3eR_CenterPosition"/>
+      <position x="Q3eR_CenterX" y="0" z="Q3eR_CenterZ"/>
       <rotation x="0" y="Q3eR_Theta" z="0"/>
       <coefficient/>
       <coefficient coefficient="Q3eR_Gradient"/>
@@ -500,13 +502,15 @@
 
     <field name="Magnet_B2AeR_Field" type="MultipoleMagnet">
       <shape type="Tube" rmax="B2AeR_InnerRadius" dz="B2AeR_Length/2"/>
-      <position x="0" y="0" z="B2AeR_CenterPosition"/>
+      <position x="B2AeR_CenterX" y="0" z="B2AeR_CenterZ"/>
+      <rotation x="0" y="B2AeR_Theta" z="0"/>
       <coefficient coefficient="B2AeR_B"/>
     </field>
 
     <field name="Magnet_B2BeR_Field" type="MultipoleMagnet">
       <shape type="Tube" rmax="B2BeR_InnerRadius" dz="B2BeR_Length/2"/>
-      <position x="0" y="0" z="B2BeR_CenterPosition"/>
+      <position x="B2BeR_CenterX" y="0" z="B2BeR_CenterZ"/>
+      <rotation x="0" y="B2BeR_Theta" z="0"/>
       <coefficient coefficient="B2BeR_B"/>
     </field>
 
