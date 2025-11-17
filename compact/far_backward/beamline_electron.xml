@@ -43,7 +43,7 @@
       </pipe>
     </detector>
 
-    <comment> Main beamline vacuum volume spanning between B2BeR and Q3eR magnets</comment>
+    <comment> Main beamline vacuum volume spanning between B2BeR and SQ3eR magnets</comment>
     <detector name="BackwardsTaggerVacuum" type="FarBackwardVacuum" wall="Backwards_Box_Wall" lumi="true" vis="BeamPipeVis" >
       <focus      x="Dipole_Focus_X"    y="Dipole_Focus_Y"    z="Dipole_Focus_Z" />
       <bounding   xmin="Vacuum_BB_MinX" xmax="Vacuum_BB_MaxX"

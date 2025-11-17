@@ -12,21 +12,21 @@
     <comment> Electron side extended beam pipe volumes </comment>
     <!-- Beam pipe going from Q3eR through all magnets to D4eR_5 -->
     <detector
-    name="Pipe_Q3eR_to_D4eR_5"
+    name="Pipe_SQ3eR_to_D4eR_5"
     type="BeamPipeChain"
     wall_thickness="2*mm">
-      <pipe id="0" name="Pipe_in_Q3eR"
-        xcenter="Q3eR_CenterX" zcenter="Q3eR_CenterZ"
-        length="Q3eR_Length" theta="Q3eR_Theta"
-        rout1="Q3eR_InnerRadius" rout2="Q3eR_InnerRadius">
-      </pipe>
-      <pipe id="1" name="Pipe_Q3eR_to_SQ3eR"/>
-      <pipe id="2" name="Pipe_in_SQ3eR"
+      <pipe id="0" name="Pipe_in_SQ3eR"
         xcenter="SQ3eR_CenterX" zcenter="SQ3eR_CenterZ"
         length="SQ3eR_Length" theta="SQ3eR_Theta"
         rout1="SQ3eR_InnerRadius" rout2="SQ3eR_InnerRadius">
       </pipe>
-      <pipe id="3" name="Pipe_SQ3eR_to_SQ4eR"/>
+      <pipe id="1" name="Pipe_SQ3eR_to_Q3eR"/>
+      <pipe id="2" name="Pipe_in_Q3eR"
+        xcenter="Q3eR_CenterX" zcenter="Q3eR_CenterZ"
+        length="Q3eR_Length" theta="Q3eR_Theta"
+        rout1="Q3eR_InnerRadius" rout2="Q3eR_InnerRadius">
+      </pipe>
+      <pipe id="3" name="Pipe_Q3eR_to_SQ4eR"/>
       <pipe id="4" name="Pipe_in_SQ4eR"
         xcenter="SQ4eR_CenterX" zcenter="SQ4eR_CenterZ"
         length="SQ4eR_Length" theta="SQ4eR_Theta"
@@ -152,12 +152,12 @@
     <comment> Electron side extended beam magnet volumes </comment>
 
     <detector
-    name="Magnets_SQ3eR_to_D4eR_5"
+    name="Magnets_Q3eR_to_D4eR_5"
     type="CylindricalMagnetChain"
     vis="RedVis">
-      <magnet id="0" name="Magnet_SQ3eR"
-        x="SQ3eR_CenterX" y="0" z="SQ3eR_CenterZ" theta="SQ3eR_Theta"
-        length="SQ3eR_Length" rin="SQ3eR_InnerRadius" rout="SQ3eR_OuterRadius">
+      <magnet id="0" name="Magnet_Q3eR"
+        x="Q3eR_CenterX" y="0" z="Q3eR_CenterZ" theta="Q3eR_Theta"
+        length="Q3eR_Length" rin="Q3eR_InnerRadius" rout="Q3eR_OuterRadius">
       </magnet>
       <magnet id="1" name="Magnet_SQ4eR"
         x="SQ4eR_CenterX" y="0" z="SQ4eR_CenterZ" theta="SQ4eR_Theta"

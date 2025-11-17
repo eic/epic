@@ -86,12 +86,12 @@
     <comment> Electron side beam magnet volumes </comment>
 
     <detector
-    name="Magnets_Q3eR"
+    name="Magnets_SQ3eR"
     type="CylindricalMagnetChain"
     vis="RedVis">
-      <magnet id="0" name="Magnet_Q3eR"
-        x="Q3eR_CenterX" y="0" z="Q3eR_CenterZ" theta="Q3eR_Theta"
-        length="Q3eR_Length" rin="Q3eR_InnerRadius" rout="4*Q3eR_InnerRadius">
+      <magnet id="0" name="Magnet_SQ3eR"
+        x="SQ3eR_CenterX" y="0" z="SQ3eR_CenterZ" theta="SQ3eR_Theta"
+        length="SQ3eR_Length" rin="SQ3eR_InnerRadius" rout="4*SQ3eR_InnerRadius">
       </magnet>
     </detector>
 
