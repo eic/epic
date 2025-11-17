@@ -240,56 +240,6 @@
     <constant name="ServicePassthroughBoxCutRightN_xcenter"   value="-ServicePassthroughBoxCutLeftN_xcenter"/>
     <!-- qq-->
 
-    <comment> (Negative) beampipe Support Plate </comment>
-    <!--- The geometry will be implemented in 4 parts:
-          1) ring shaped sheet in the middle
-          2) left rectangular sheet
-          3) right rectangular sheet
-          4) core
-    -->
-    <comment> Specifications are from SVT PST Drawing PACKET SEP 2025.pdf </comment> 
-    <comment> General dimensions </comment>    
-    <constant name="BeampipeSupportPlateSheetN_length"      value="1*mm"/>
-    <constant name="BeampipeSupportPlateCoreN_length"       value="3*mm"/>    
-    <constant name="BeampipeSupportPlateN_zcenter"          value="-1040*mm"/>    
-    <constant name="BeampipeSupportPlateN_thickness"        value="ServicePassthroughRingN_rmax"/>    
-    <comment> dimensions of the ring shaped sheet in the middle </comment>
-    <constant name="BeampipeSupportPlateRingN_rmin"         value="70*mm"/> <!-- 140mm/2 -->
-    <constant name="BeampipeSupportPlateRingN_rmax"         value="120*mm"/> <!-- 240mm/2 -->    
-    <constant name="BeampipeSupportPlateRingN_thickness"    value="BeampipeSupportPlateRingN_rmax-BeampipeSupportPlateRingN_rmin"/> 
-    <comment> dimensions of the rectangular sheet </comment>
-    <!--- It has two halves: left and right (while looking towards the hadron going side)
-          Each half is a combination of the following two shapes:
-          1) a wedge that spans the full thickness
-             - from it a rectangular box will be cut to create the flat edge
-          2) a rectangle that spans the full thickness
-             - from it a disk will be cut to make passage for the ring shaped sheet
-    -->
-    <constant name="BeampipeSupportPlateBoxN_halfwidth"  value="50*mm"/> <!-- 100mm/2 -->
-    <constant name="BeampipeSupportPlateBoxN_xmin"       value="sqrt(BeampipeSupportPlateRingN_rmax**2-BeampipeSupportPlateBoxN_halfwidth**2)"/> 
-    <constant name="BeampipeSupportPlateBoxN_xmax"       value="sqrt(BeampipeSupportPlateN_thickness**2-BeampipeSupportPlateBoxN_halfwidth**2)"/> 
-    <constant name="BeampipeSupportPlateBoxN_xcenter"    value="0.5*(BeampipeSupportPlateBoxN_xmax+BeampipeSupportPlateBoxN_xmin)"/> 
-    <!-- Left half -->
-    <constant name="BeampipeSupportPlateWedgeLeftN_rmin"      value="BeampipeSupportPlateBoxN_xcenter"/>
-    <constant name="BeampipeSupportPlateWedgeLeftN_thickness" value="BeampipeSupportPlateN_thickness-BeampipeSupportPlateWedgeLeftN_rmin"/>
-    <constant name="BeampipeSupportPlateWedgeLeftN_length"    value="BeampipeSupportPlateSheetN_length"/> 
-    <constant name="BeampipeSupportPlateWedgeLeftN_phimax"    value="asin(BeampipeSupportPlateBoxN_halfwidth/BeampipeSupportPlateN_thickness)*(180/Pi)*deg"/>
-    <constant name="BeampipeSupportPlateWedgeLeftN_phimin"    value="360*deg-BeampipeSupportPlateWedgeLeftN_phimax"/>  
-    <constant name="BeampipeSupportPlateRectLeftN_dx"         value="BeampipeSupportPlateBoxN_xmax-BeampipeSupportPlateBoxN_xmin"/> 
-    <constant name="BeampipeSupportPlateRectLeftN_dy"         value="BeampipeSupportPlateBoxN_halfwidth*2"/> 
-    <constant name="BeampipeSupportPlateRectLeftN_dz"         value="BeampipeSupportPlateSheetN_length"/>
-    <!-- Right half -->
-    <constant name="BeampipeSupportPlateWedgeRightN_rmin"      value="BeampipeSupportPlateBoxN_xcenter"/>
-    <constant name="BeampipeSupportPlateWedgeRightN_thickness" value="BeampipeSupportPlateN_thickness-BeampipeSupportPlateWedgeRightN_rmin"/>
-    <constant name="BeampipeSupportPlateWedgeRightN_length"    value="BeampipeSupportPlateSheetN_length"/> 
-    <constant name="BeampipeSupportPlateWedgeRightN_phimax"    value="180*deg+BeampipeSupportPlateWedgeLeftN_phimax"/>
-    <constant name="BeampipeSupportPlateWedgeRightN_phimin"    value="BeampipeSupportPlateWedgeLeftN_phimin-180*deg"/>  
-    <constant name="BeampipeSupportPlateRectRightN_dx"         value="BeampipeSupportPlateBoxN_xmax-BeampipeSupportPlateBoxN_xmin"/> 
-    <constant name="BeampipeSupportPlateRectRightN_dy"         value="BeampipeSupportPlateBoxN_halfwidth*2"/> 
-    <constant name="BeampipeSupportPlateRectRightN_dz"         value="BeampipeSupportPlateSheetN_length"/>     
-    <!-- qq-->
-
-
     <comment> (Positive) Service Passthrough Plate </comment>
     <!-- The geometry will be implemented in 4 parts:
           1) base ring
@@ -455,6 +405,75 @@
     <constant name="ServicePassthroughBoxCutRightP_xcenter"   value="-ServicePassthroughBoxCutLeftP_xcenter"/>
     <!-- qq-->
 
+   <comment> (Negative) beampipe Support Plate </comment>
+    <!--- The geometry will be implemented in 4 parts:
+          1) ring shaped sheet in the middle
+          2) left rectangular sheet
+          3) right rectangular sheet
+          4) core
+    -->
+    <comment> Specifications are from SVT PST Drawing PACKET SEP 2025.pdf </comment> 
+    <comment> General dimensions </comment>    
+    <constant name="BeampipeSupportPlateSheetN_length"      value="1*mm"/>
+    <constant name="BeampipeSupportPlateCoreN_length"       value="3*mm"/>    
+    <constant name="BeampipeSupportPlateN_zcenter"          value="-1040*mm"/>    
+    <constant name="BeampipeSupportPlateN_thickness"        value="ServicePassthroughRingN_rmax"/>    
+    <comment> dimensions of the ring shaped sheet in the middle </comment>
+    <constant name="BeampipeSupportPlateRingN_rmin"         value="70*mm"/> <!-- 140mm/2 -->
+    <constant name="BeampipeSupportPlateRingN_rmax"         value="120*mm"/> <!-- 240mm/2 -->    
+    <constant name="BeampipeSupportPlateRingN_thickness"    value="BeampipeSupportPlateRingN_rmax-BeampipeSupportPlateRingN_rmin"/> 
+    <comment> dimensions of the rectangular sheet </comment>
+    <!--- It has two halves: left and right (while looking towards the hadron going side)
+          Each half is a combination of the following two shapes:
+          1) a wedge that spans the full thickness
+             - from it a rectangular box will be cut to create the flat edge
+          2) a rectangle that spans the full thickness
+             - from it a disk will be cut to make passage for the ring shaped sheet
+    -->
+    <constant name="BeampipeSupportPlateBoxN_halfwidth"  value="50*mm"/> <!-- 100mm/2 -->
+    <constant name="BeampipeSupportPlateBoxN_xmin"       value="sqrt(BeampipeSupportPlateRingN_rmax**2-BeampipeSupportPlateBoxN_halfwidth**2)"/> 
+    <constant name="BeampipeSupportPlateBoxN_xmax"       value="sqrt(BeampipeSupportPlateN_thickness**2-BeampipeSupportPlateBoxN_halfwidth**2)"/> 
+    <constant name="BeampipeSupportPlateBoxN_xcenter"    value="0.5*(BeampipeSupportPlateBoxN_xmax+BeampipeSupportPlateBoxN_xmin)"/> 
+    <!-- Left half -->
+    <constant name="BeampipeSupportPlateWedgeLeftN_rmin"      value="BeampipeSupportPlateBoxN_xcenter"/>
+    <constant name="BeampipeSupportPlateWedgeLeftN_thickness" value="BeampipeSupportPlateN_thickness-BeampipeSupportPlateWedgeLeftN_rmin"/>
+    <constant name="BeampipeSupportPlateWedgeLeftN_phimax"    value="asin(BeampipeSupportPlateBoxN_halfwidth/BeampipeSupportPlateN_thickness)*(180/Pi)*deg"/>
+    <constant name="BeampipeSupportPlateWedgeLeftN_phimin"    value="360*deg-BeampipeSupportPlateWedgeLeftN_phimax"/>  
+    <constant name="BeampipeSupportPlateRectLeftN_dx"         value="BeampipeSupportPlateBoxN_xmax-BeampipeSupportPlateBoxN_xmin"/> 
+    <constant name="BeampipeSupportPlateRectLeftN_dy"         value="BeampipeSupportPlateBoxN_halfwidth*2"/> 
+    <!-- Right half -->
+    <constant name="BeampipeSupportPlateWedgeRightN_rmin"      value="BeampipeSupportPlateBoxN_xcenter"/>
+    <constant name="BeampipeSupportPlateWedgeRightN_thickness" value="BeampipeSupportPlateN_thickness-BeampipeSupportPlateWedgeRightN_rmin"/>
+    <constant name="BeampipeSupportPlateWedgeRightN_phimax"    value="180*deg+BeampipeSupportPlateWedgeLeftN_phimax"/>
+    <constant name="BeampipeSupportPlateWedgeRightN_phimin"    value="BeampipeSupportPlateWedgeLeftN_phimin-180*deg"/>  
+    <constant name="BeampipeSupportPlateRectRightN_dx"         value="BeampipeSupportPlateBoxN_xmax-BeampipeSupportPlateBoxN_xmin"/> 
+    <constant name="BeampipeSupportPlateRectRightN_dy"         value="BeampipeSupportPlateBoxN_halfwidth*2"/> 
+    <!-- Each half has three layers: 
+         1) layer 1: CFiber (1mm)
+         2) layer 2: AIREX (3mm)
+         3) layer 3: CFiber (1mm)
+         NOTE: Layer 1 is closest to the center
+    -->
+    <!-- Layer 1 -->
+    <constant name="BeampipeSupportPlateLayer1N_zcenter"             value="BeampipeSupportPlateN_zcenter-0.5*(BeampipeSupportPlateCoreN_length+BeampipeSupportPlateSheetN_length)"/>    
+    <constant name="BeampipeSupportPlateWedgeLeftLayer1N_length"     value="BeampipeSupportPlateSheetN_length"/> 
+    <constant name="BeampipeSupportPlateRectLeftLayer1N_dz"          value="BeampipeSupportPlateSheetN_length"/>
+    <constant name="BeampipeSupportPlateWedgeRightLayer1N_length"    value="BeampipeSupportPlateSheetN_length"/> 
+    <constant name="BeampipeSupportPlateRectRightLayer1N_dz"         value="BeampipeSupportPlateSheetN_length"/>     
+    <!-- Layer 2 -->
+    <constant name="BeampipeSupportPlateLayer2N_zcenter"             value="BeampipeSupportPlateN_zcenter"/>    
+    <constant name="BeampipeSupportPlateWedgeLeftLayer2N_length"     value="BeampipeSupportPlateCoreN_length"/> 
+    <constant name="BeampipeSupportPlateRectLeftLayer2N_dz"          value="BeampipeSupportPlateCoreN_length"/>
+    <constant name="BeampipeSupportPlateWedgeRightLayer2N_length"    value="BeampipeSupportPlateCoreN_length"/> 
+    <constant name="BeampipeSupportPlateRectRightLayer2N_dz"         value="BeampipeSupportPlateCoreN_length"/>     
+    <!-- Layer 3 -->    
+    <constant name="BeampipeSupportPlateLayer3N_zcenter"             value="BeampipeSupportPlateN_zcenter+0.5*(BeampipeSupportPlateCoreN_length+BeampipeSupportPlateSheetN_length)"/>    
+    <constant name="BeampipeSupportPlateWedgeLeftLayer3N_length"     value="BeampipeSupportPlateSheetN_length"/> 
+    <constant name="BeampipeSupportPlateRectLeftLayer3N_dz"          value="BeampipeSupportPlateSheetN_length"/>
+    <constant name="BeampipeSupportPlateWedgeRightLayer3N_length"    value="BeampipeSupportPlateSheetN_length"/> 
+    <constant name="BeampipeSupportPlateRectRightLayer3N_dz"         value="BeampipeSupportPlateSheetN_length"/>         
+    <!-- qq-->
+
     <comment> (Positive) beampipe Support Plate </comment>
     <!--- The geometry will be implemented in 4 parts:
           1) ring shaped sheet in the middle
@@ -489,24 +508,44 @@
     <constant name="BeampipeSupportPlateBoxLeftP_xcenter"    value="0.5*(BeampipeSupportPlateBoxLeftP_xmax+BeampipeSupportPlateBoxLeftP_xmin)"/>     
     <constant name="BeampipeSupportPlateWedgeLeftP_rmin"      value="BeampipeSupportPlateBoxLeftP_xcenter"/>
     <constant name="BeampipeSupportPlateWedgeLeftP_thickness" value="BeampipeSupportPlateP_thickness-BeampipeSupportPlateWedgeLeftP_rmin"/>
-    <constant name="BeampipeSupportPlateWedgeLeftP_length"    value="BeampipeSupportPlateSheetP_length"/> 
     <constant name="BeampipeSupportPlateWedgeLeftP_phimax"    value="asin(BeampipeSupportPlateBoxP_halfwidth/BeampipeSupportPlateP_thickness)*(180/Pi)*deg"/>
     <constant name="BeampipeSupportPlateWedgeLeftP_phimin"    value="360*deg-BeampipeSupportPlateWedgeLeftP_phimax"/>  
     <constant name="BeampipeSupportPlateRectLeftP_dx"         value="BeampipeSupportPlateBoxLeftP_xmax-BeampipeSupportPlateBoxLeftP_xmin"/> 
     <constant name="BeampipeSupportPlateRectLeftP_dy"         value="BeampipeSupportPlateBoxP_halfwidth*2"/> 
-    <constant name="BeampipeSupportPlateRectLeftP_dz"         value="BeampipeSupportPlateSheetP_length"/>
     <!-- Right half -->
     <constant name="BeampipeSupportPlateBoxRightP_xmin"        value="sqrt(BeampipeSupportPlateRingP_rmax**2-BeampipeSupportPlateBoxP_halfwidth**2)+BeampipeSupportPlateP_xcenter_off"/> 
     <constant name="BeampipeSupportPlateBoxRightP_xmax"        value="sqrt(BeampipeSupportPlateP_thickness**2-BeampipeSupportPlateBoxP_halfwidth**2)"/> 
     <constant name="BeampipeSupportPlateBoxRightP_xcenter"     value="0.5*(BeampipeSupportPlateBoxRightP_xmax+BeampipeSupportPlateBoxRightP_xmin)"/>         
     <constant name="BeampipeSupportPlateWedgeRightP_rmin"      value="BeampipeSupportPlateBoxRightP_xcenter"/>
     <constant name="BeampipeSupportPlateWedgeRightP_thickness" value="BeampipeSupportPlateP_thickness-BeampipeSupportPlateWedgeRightP_rmin"/>
-    <constant name="BeampipeSupportPlateWedgeRightP_length"    value="BeampipeSupportPlateSheetP_length"/> 
     <constant name="BeampipeSupportPlateWedgeRightP_phimax"    value="180*deg+BeampipeSupportPlateWedgeLeftP_phimax"/>
     <constant name="BeampipeSupportPlateWedgeRightP_phimin"    value="BeampipeSupportPlateWedgeLeftP_phimin-180*deg"/>  
     <constant name="BeampipeSupportPlateRectRightP_dx"         value="BeampipeSupportPlateBoxRightP_xmax-BeampipeSupportPlateBoxRightP_xmin"/> 
     <constant name="BeampipeSupportPlateRectRightP_dy"         value="BeampipeSupportPlateBoxP_halfwidth*2"/> 
-    <constant name="BeampipeSupportPlateRectRightP_dz"         value="BeampipeSupportPlateSheetP_length"/>     
+    <!-- Each half has three layers: 
+         1) layer 1: CFiber (1mm)
+         2) layer 2: AIREX (3mm)
+         3) layer 3: CFiber (1mm)
+         NOTE: Layer 1 is closest to the center
+    -->
+    <!-- Layer 1 -->
+    <constant name="BeampipeSupportPlateLayer1P_zcenter"             value="BeampipeSupportPlateP_zcenter-0.5*(BeampipeSupportPlateCoreP_length+BeampipeSupportPlateSheetP_length)"/>    
+    <constant name="BeampipeSupportPlateWedgeLeftLayer1P_length"     value="BeampipeSupportPlateSheetP_length"/> 
+    <constant name="BeampipeSupportPlateRectLeftLayer1P_dz"          value="BeampipeSupportPlateSheetP_length"/>
+    <constant name="BeampipeSupportPlateWedgeRightLayer1P_length"    value="BeampipeSupportPlateSheetP_length"/> 
+    <constant name="BeampipeSupportPlateRectRightLayer1P_dz"         value="BeampipeSupportPlateSheetP_length"/>     
+    <!-- Layer 2 -->
+    <constant name="BeampipeSupportPlateLayer2P_zcenter"             value="BeampipeSupportPlateP_zcenter"/>    
+    <constant name="BeampipeSupportPlateWedgeLeftLayer2P_length"     value="BeampipeSupportPlateCoreP_length"/> 
+    <constant name="BeampipeSupportPlateRectLeftLayer2P_dz"          value="BeampipeSupportPlateCoreP_length"/>
+    <constant name="BeampipeSupportPlateWedgeRightLayer2P_length"    value="BeampipeSupportPlateCoreP_length"/> 
+    <constant name="BeampipeSupportPlateRectRightLayer2P_dz"         value="BeampipeSupportPlateCoreP_length"/>     
+    <!-- Layer 3 -->    
+    <constant name="BeampipeSupportPlateLayer3P_zcenter"             value="BeampipeSupportPlateP_zcenter+0.5*(BeampipeSupportPlateCoreP_length+BeampipeSupportPlateSheetP_length)"/>    
+    <constant name="BeampipeSupportPlateWedgeLeftLayer3P_length"     value="BeampipeSupportPlateSheetP_length"/> 
+    <constant name="BeampipeSupportPlateRectLeftLayer3P_dz"          value="BeampipeSupportPlateSheetP_length"/>
+    <constant name="BeampipeSupportPlateWedgeRightLayer3P_length"    value="BeampipeSupportPlateSheetP_length"/> 
+    <constant name="BeampipeSupportPlateRectRightLayer3P_dz"         value="BeampipeSupportPlateSheetP_length"/>     
     <!-- qq-->
 
    <comment> Inner tracker service/support cones, symmetric </comment>
@@ -1095,181 +1134,543 @@
       <!-- end of (Positive) Service passthrough ring implementation -->    
 
     <comment> (Positive) Beampipe Support Plate </comment>
+    <!-- 
+        Layer 1 
+    -->
     <!-- ring shaped sheet in the middle -->
       <support type="Cylinder"
           name="BeampipeSupportPlateRingP"
           vis="TrackerSupportVis"
           rmin="BeampipeSupportPlateRingP_rmin"
-          length="BeampipeSupportPlateSheetP_length"
+          length="BeampipeSupportPlateWedgeLeftLayer1P_length"
           thickness="BeampipeSupportPlateRingP_thickness">
-            <position x="BeampipeSupportPlateRingP_xcenter" y="0*cm" z="BeampipeSupportPlateP_zcenter" />
+            <position x="BeampipeSupportPlateRingP_xcenter" y="0*cm" z="BeampipeSupportPlateLayer1P_zcenter" />
             <component material="CarbonFiber" thickness="BeampipeSupportPlateRingP_thickness" name="Support" vis="TrackerSupportVis"/>
       </support>
       <!-- left half rectangular sheet (part 1) -->
-      <subtraction name="BeampipeSupportPlateWedgeLeftP" material="Air" vis="TrackerSupportVis">
-      <position x="0" y="0" z="BeampipeSupportPlateP_zcenter"/>
+      <subtraction name="BeampipeSupportPlateWedgeLeftLayer1P" material="Air" vis="TrackerSupportVis">
+      <position x="0" y="0" z="BeampipeSupportPlateLayer1P_zcenter"/>
       <shape role="base" type="Cylinder"
-            name="BeampipeSupportPlateWedgeLeftP"
+            name="BeampipeSupportPlateWedgeLeftLayer1P"
             rmin="BeampipeSupportPlateWedgeLeftP_rmin"
-            length="BeampipeSupportPlateWedgeLeftP_length"
+            length="BeampipeSupportPlateWedgeLeftLayer1P_length"
             thickness="BeampipeSupportPlateWedgeLeftP_thickness"
             phimin="BeampipeSupportPlateWedgeLeftP_phimin"
             phimax="BeampipeSupportPlateWedgeLeftP_phimax"
             material="CarbonFiber"/>
       <!-- box shaped cut -->     
       <shape role="hole" type="Box"
-            name="BeampipeSupportPlateRectLeftP_hole"
+            name="BeampipeSupportPlateRectLeftLayer1P_hole"
             x="BeampipeSupportPlateRectLeftP_dx"
             y="BeampipeSupportPlateRectLeftP_dy"
-            z="BeampipeSupportPlateRectLeftP_dz">
+            z="BeampipeSupportPlateRectLeftLayer1P_dz">
       <position x="BeampipeSupportPlateBoxLeftP_xcenter" y="0*cm" z="0*cm"/>
       </shape>                  
       </subtraction>      
       <!-- (part 2) -->
-      <subtraction name="BeampipeSupportPlateRectLeftP" material="Air" vis="TrackerSupportVis">
-      <position x="BeampipeSupportPlateBoxLeftP_xcenter" y="0" z="BeampipeSupportPlateP_zcenter"/>
+      <subtraction name="BeampipeSupportPlateRectLeftLayer1P" material="Air" vis="TrackerSupportVis">
+      <position x="BeampipeSupportPlateBoxLeftP_xcenter" y="0" z="BeampipeSupportPlateLayer1P_zcenter"/>
       <shape role="base" type="Box"
-            name="BeampipeSupportPlateRectLeftP"
+            name="BeampipeSupportPlateRectLeftLayer1P"
             x="BeampipeSupportPlateRectLeftP_dx"
             y="BeampipeSupportPlateRectLeftP_dy"
-            z="BeampipeSupportPlateRectLeftP_dz"
+            z="BeampipeSupportPlateRectLeftLayer1P_dz"
             material="CarbonFiber"/>
       <!-- ring shaped cut -->         
       <shape role="hole" type="Cylinder"
-          name="BeampipeSupportPlateRingP_hole"
+          name="BeampipeSupportPlateRingLayer1P_hole"
           rmin="BeampipeSupportPlateRingP_rmin"
-          length="BeampipeSupportPlateSheetP_length"
+          length="BeampipeSupportPlateWedgeLeftLayer1P_length"
           thickness="BeampipeSupportPlateRingP_thickness">
       <position x="BeampipeSupportPlateRingP_xcenter-BeampipeSupportPlateBoxLeftP_xcenter" y="0*cm" z="0*cm"/>
       </shape>                  
       </subtraction>
       <!-- right half rectangular sheet (part 1) -->
-      <subtraction name="BeampipeSupportPlateWedgeRightP" material="Air" vis="TrackerSupportVis">
-      <position x="0" y="0" z="BeampipeSupportPlateP_zcenter"/>
+      <subtraction name="BeampipeSupportPlateWedgeRightLayer1P" material="Air" vis="TrackerSupportVis">
+      <position x="0" y="0" z="BeampipeSupportPlateLayer1P_zcenter"/>
       <shape role="base" type="Cylinder"
-            name="BeampipeSupportPlateWedgeRightP"
+            name="BeampipeSupportPlateWedgeRightLayer1P"
             rmin="BeampipeSupportPlateWedgeRightP_rmin"
-            length="BeampipeSupportPlateWedgeRightP_length"
+            length="BeampipeSupportPlateWedgeRightLayer1P_length"
             thickness="BeampipeSupportPlateWedgeRightP_thickness"
             phimin="BeampipeSupportPlateWedgeRightP_phimin"
             phimax="BeampipeSupportPlateWedgeRightP_phimax"
             material="CarbonFiber"/>
       <!-- box shaped cut -->     
       <shape role="hole" type="Box"
-            name="BeampipeSupportPlateRectRightP_hole"
+            name="BeampipeSupportPlateRectRightLayer1P_hole"
             x="BeampipeSupportPlateRectRightP_dx"
             y="BeampipeSupportPlateRectRightP_dy"
-            z="BeampipeSupportPlateRectRightP_dz">
+            z="BeampipeSupportPlateRectRightLayer1P_dz">
       <position x="-BeampipeSupportPlateBoxRightP_xcenter" y="0*cm" z="0*cm"/>
       </shape>                  
       </subtraction>      
       <!-- (part 2) -->
-      <subtraction name="BeampipeSupportPlateRectRightP" material="Air" vis="TrackerSupportVis">
-      <position x="-BeampipeSupportPlateBoxRightP_xcenter" y="0" z="BeampipeSupportPlateP_zcenter"/>
+      <subtraction name="BeampipeSupportPlateRectRightLayer1P" material="Air" vis="TrackerSupportVis">
+      <position x="-BeampipeSupportPlateBoxRightP_xcenter" y="0" z="BeampipeSupportPlateLayer1P_zcenter"/>
       <shape role="base" type="Box"
-            name="BeampipeSupportPlateRectRightP"
+            name="BeampipeSupportPlateRectRightLayer1P"
             x="BeampipeSupportPlateRectRightP_dx"
             y="BeampipeSupportPlateRectRightP_dy"
-            z="BeampipeSupportPlateRectRightP_dz"
+            z="BeampipeSupportPlateRectRightLayer1P_dz"
             material="CarbonFiber"/>
       <!-- ring shaped cut -->         
       <shape role="hole" type="Cylinder"
-          name="BeampipeSupportPlateRingP_hole"
+          name="BeampipeSupportPlateRingLayer1P_hole"
           rmin="BeampipeSupportPlateRingP_rmin"
-          length="BeampipeSupportPlateSheetP_length"
+          length="BeampipeSupportPlateWedgeRightLayer1P_length"
           thickness="BeampipeSupportPlateRingP_thickness">
       <position x="BeampipeSupportPlateRingP_xcenter+BeampipeSupportPlateBoxRightP_xcenter" y="0*cm" z="0*cm"/>
       </shape>                  
       </subtraction>
+    <!-- 
+        Layer 2 
+    -->
+    <!-- ring shaped sheet in the middle -->
+      <support type="Cylinder"
+          name="BeampipeSupportPlateRingP"
+          vis="TrackerSupportVis"
+          rmin="BeampipeSupportPlateRingP_rmin"
+          length="BeampipeSupportPlateWedgeLeftLayer2P_length"
+          thickness="BeampipeSupportPlateRingP_thickness">
+            <position x="BeampipeSupportPlateRingP_xcenter" y="0*cm" z="BeampipeSupportPlateLayer2P_zcenter" />
+            <component material="AIREX_R82_80" thickness="BeampipeSupportPlateRingP_thickness" name="Support" vis="TrackerSupportVis"/>
+      </support>
+      <!-- left half rectangular sheet (part 1) -->
+      <subtraction name="BeampipeSupportPlateWedgeLeftLayer2P" material="Air" vis="TrackerSupportVis">
+      <position x="0" y="0" z="BeampipeSupportPlateLayer2P_zcenter"/>
+      <shape role="base" type="Cylinder"
+            name="BeampipeSupportPlateWedgeLeftLayer2P"
+            rmin="BeampipeSupportPlateWedgeLeftP_rmin"
+            length="BeampipeSupportPlateWedgeLeftLayer2P_length"
+            thickness="BeampipeSupportPlateWedgeLeftP_thickness"
+            phimin="BeampipeSupportPlateWedgeLeftP_phimin"
+            phimax="BeampipeSupportPlateWedgeLeftP_phimax"
+            material="AIREX_R82_80"/>
+      <!-- box shaped cut -->     
+      <shape role="hole" type="Box"
+            name="BeampipeSupportPlateRectLeftLayer2P_hole"
+            x="BeampipeSupportPlateRectLeftP_dx"
+            y="BeampipeSupportPlateRectLeftP_dy"
+            z="BeampipeSupportPlateRectLeftLayer2P_dz">
+      <position x="BeampipeSupportPlateBoxLeftP_xcenter" y="0*cm" z="0*cm"/>
+      </shape>                  
+      </subtraction>      
+      <!-- (part 2) -->
+      <subtraction name="BeampipeSupportPlateRectLeftLayer2P" material="Air" vis="TrackerSupportVis">
+      <position x="BeampipeSupportPlateBoxLeftP_xcenter" y="0" z="BeampipeSupportPlateLayer2P_zcenter"/>
+      <shape role="base" type="Box"
+            name="BeampipeSupportPlateRectLeftLayer2P"
+            x="BeampipeSupportPlateRectLeftP_dx"
+            y="BeampipeSupportPlateRectLeftP_dy"
+            z="BeampipeSupportPlateRectLeftLayer2P_dz"
+            material="AIREX_R82_80"/>
+      <!-- ring shaped cut -->         
+      <shape role="hole" type="Cylinder"
+          name="BeampipeSupportPlateRingLayer2P_hole"
+          rmin="BeampipeSupportPlateRingP_rmin"
+          length="BeampipeSupportPlateWedgeLeftLayer2P_length"
+          thickness="BeampipeSupportPlateRingP_thickness">
+      <position x="BeampipeSupportPlateRingP_xcenter-BeampipeSupportPlateBoxLeftP_xcenter" y="0*cm" z="0*cm"/>
+      </shape>                  
+      </subtraction>
+      <!-- right half rectangular sheet (part 1) -->
+      <subtraction name="BeampipeSupportPlateWedgeRightLayer2P" material="Air" vis="TrackerSupportVis">
+      <position x="0" y="0" z="BeampipeSupportPlateLayer2P_zcenter"/>
+      <shape role="base" type="Cylinder"
+            name="BeampipeSupportPlateWedgeRightLayer2P"
+            rmin="BeampipeSupportPlateWedgeRightP_rmin"
+            length="BeampipeSupportPlateWedgeRightLayer2P_length"
+            thickness="BeampipeSupportPlateWedgeRightP_thickness"
+            phimin="BeampipeSupportPlateWedgeRightP_phimin"
+            phimax="BeampipeSupportPlateWedgeRightP_phimax"
+            material="AIREX_R82_80"/>
+      <!-- box shaped cut -->     
+      <shape role="hole" type="Box"
+            name="BeampipeSupportPlateRectRightLayer2P_hole"
+            x="BeampipeSupportPlateRectRightP_dx"
+            y="BeampipeSupportPlateRectRightP_dy"
+            z="BeampipeSupportPlateRectRightLayer2P_dz">
+      <position x="-BeampipeSupportPlateBoxRightP_xcenter" y="0*cm" z="0*cm"/>
+      </shape>                  
+      </subtraction>      
+      <!-- (part 2) -->
+      <subtraction name="BeampipeSupportPlateRectRightLayer2P" material="Air" vis="TrackerSupportVis">
+      <position x="-BeampipeSupportPlateBoxRightP_xcenter" y="0" z="BeampipeSupportPlateLayer2P_zcenter"/>
+      <shape role="base" type="Box"
+            name="BeampipeSupportPlateRectRightLayer2P"
+            x="BeampipeSupportPlateRectRightP_dx"
+            y="BeampipeSupportPlateRectRightP_dy"
+            z="BeampipeSupportPlateRectRightLayer2P_dz"
+            material="AIREX_R82_80"/>
+      <!-- ring shaped cut -->         
+      <shape role="hole" type="Cylinder"
+          name="BeampipeSupportPlateRingLayer2P_hole"
+          rmin="BeampipeSupportPlateRingP_rmin"
+          length="BeampipeSupportPlateWedgeRightLayer2P_length"
+          thickness="BeampipeSupportPlateRingP_thickness">
+      <position x="BeampipeSupportPlateRingP_xcenter+BeampipeSupportPlateBoxRightP_xcenter" y="0*cm" z="0*cm"/>
+      </shape>                  
+      </subtraction>      
+    <!-- 
+        Layer 3 
+    -->
+    <!-- ring shaped sheet in the middle -->
+      <support type="Cylinder"
+          name="BeampipeSupportPlateRingP"
+          vis="TrackerSupportVis"
+          rmin="BeampipeSupportPlateRingP_rmin"
+          length="BeampipeSupportPlateWedgeLeftLayer3P_length"
+          thickness="BeampipeSupportPlateRingP_thickness">
+            <position x="BeampipeSupportPlateRingP_xcenter" y="0*cm" z="BeampipeSupportPlateLayer3P_zcenter" />
+            <component material="CarbonFiber" thickness="BeampipeSupportPlateRingP_thickness" name="Support" vis="TrackerSupportVis"/>
+      </support>
+      <!-- left half rectangular sheet (part 1) -->
+      <subtraction name="BeampipeSupportPlateWedgeLeftLayer3P" material="Air" vis="TrackerSupportVis">
+      <position x="0" y="0" z="BeampipeSupportPlateLayer3P_zcenter"/>
+      <shape role="base" type="Cylinder"
+            name="BeampipeSupportPlateWedgeLeftLayer3P"
+            rmin="BeampipeSupportPlateWedgeLeftP_rmin"
+            length="BeampipeSupportPlateWedgeLeftLayer3P_length"
+            thickness="BeampipeSupportPlateWedgeLeftP_thickness"
+            phimin="BeampipeSupportPlateWedgeLeftP_phimin"
+            phimax="BeampipeSupportPlateWedgeLeftP_phimax"
+            material="CarbonFiber"/>
+      <!-- box shaped cut -->     
+      <shape role="hole" type="Box"
+            name="BeampipeSupportPlateRectLeftLayer3P_hole"
+            x="BeampipeSupportPlateRectLeftP_dx"
+            y="BeampipeSupportPlateRectLeftP_dy"
+            z="BeampipeSupportPlateRectLeftLayer3P_dz">
+      <position x="BeampipeSupportPlateBoxLeftP_xcenter" y="0*cm" z="0*cm"/>
+      </shape>                  
+      </subtraction>      
+      <!-- (part 2) -->
+      <subtraction name="BeampipeSupportPlateRectLeftLayer3P" material="Air" vis="TrackerSupportVis">
+      <position x="BeampipeSupportPlateBoxLeftP_xcenter" y="0" z="BeampipeSupportPlateLayer3P_zcenter"/>
+      <shape role="base" type="Box"
+            name="BeampipeSupportPlateRectLeftLayer3P"
+            x="BeampipeSupportPlateRectLeftP_dx"
+            y="BeampipeSupportPlateRectLeftP_dy"
+            z="BeampipeSupportPlateRectLeftLayer3P_dz"
+            material="CarbonFiber"/>
+      <!-- ring shaped cut -->         
+      <shape role="hole" type="Cylinder"
+          name="BeampipeSupportPlateRingLayer3P_hole"
+          rmin="BeampipeSupportPlateRingP_rmin"
+          length="BeampipeSupportPlateWedgeLeftLayer3P_length"
+          thickness="BeampipeSupportPlateRingP_thickness">
+      <position x="BeampipeSupportPlateRingP_xcenter-BeampipeSupportPlateBoxLeftP_xcenter" y="0*cm" z="0*cm"/>
+      </shape>                  
+      </subtraction>
+      <!-- right half rectangular sheet (part 1) -->
+      <subtraction name="BeampipeSupportPlateWedgeRightLayer3P" material="Air" vis="TrackerSupportVis">
+      <position x="0" y="0" z="BeampipeSupportPlateLayer3P_zcenter"/>
+      <shape role="base" type="Cylinder"
+            name="BeampipeSupportPlateWedgeRightLayer3P"
+            rmin="BeampipeSupportPlateWedgeRightP_rmin"
+            length="BeampipeSupportPlateWedgeRightLayer3P_length"
+            thickness="BeampipeSupportPlateWedgeRightP_thickness"
+            phimin="BeampipeSupportPlateWedgeRightP_phimin"
+            phimax="BeampipeSupportPlateWedgeRightP_phimax"
+            material="CarbonFiber"/>
+      <!-- box shaped cut -->     
+      <shape role="hole" type="Box"
+            name="BeampipeSupportPlateRectRightLayer3P_hole"
+            x="BeampipeSupportPlateRectRightP_dx"
+            y="BeampipeSupportPlateRectRightP_dy"
+            z="BeampipeSupportPlateRectRightLayer3P_dz">
+      <position x="-BeampipeSupportPlateBoxRightP_xcenter" y="0*cm" z="0*cm"/>
+      </shape>                  
+      </subtraction>      
+      <!-- (part 2) -->
+      <subtraction name="BeampipeSupportPlateRectRightLayer3P" material="Air" vis="TrackerSupportVis">
+      <position x="-BeampipeSupportPlateBoxRightP_xcenter" y="0" z="BeampipeSupportPlateLayer3P_zcenter"/>
+      <shape role="base" type="Box"
+            name="BeampipeSupportPlateRectRightLayer3P"
+            x="BeampipeSupportPlateRectRightP_dx"
+            y="BeampipeSupportPlateRectRightP_dy"
+            z="BeampipeSupportPlateRectRightLayer3P_dz"
+            material="CarbonFiber"/>
+      <!-- ring shaped cut -->         
+      <shape role="hole" type="Cylinder"
+          name="BeampipeSupportPlateRingLayer3P_hole"
+          rmin="BeampipeSupportPlateRingP_rmin"
+          length="BeampipeSupportPlateWedgeRightLayer3P_length"
+          thickness="BeampipeSupportPlateRingP_thickness">
+      <position x="BeampipeSupportPlateRingP_xcenter+BeampipeSupportPlateBoxRightP_xcenter" y="0*cm" z="0*cm"/>
+      </shape>                  
+      </subtraction>      
       <!-- end of (Positive) Beampipe Support Plate implementation -->
 
     <comment> (Negative) Beampipe Support Plate </comment>
+    <!-- 
+        Layer 1 
+    -->    
     <!-- ring shaped sheet in the middle -->
       <support type="Cylinder"
           name="BeampipeSupportPlateRingN"
           vis="TrackerSupportVis"
           rmin="BeampipeSupportPlateRingN_rmin"
-          length="BeampipeSupportPlateSheetN_length"
+          length="BeampipeSupportPlateWedgeLeftLayer1N_length"
           thickness="BeampipeSupportPlateRingN_thickness">
-            <position x="0*cm" y="0*cm" z="BeampipeSupportPlateN_zcenter" />
+            <position x="0*cm" y="0*cm" z="BeampipeSupportPlateLayer1N_zcenter" />
             <component material="CarbonFiber" thickness="BeampipeSupportPlateRingN_thickness" name="Support" vis="TrackerSupportVis"/>
       </support>
       <!-- left half rectangular sheet (part 1) -->
-      <subtraction name="BeampipeSupportPlateWedgeLeftN" material="Air" vis="TrackerSupportVis">
-      <position x="0" y="0" z="BeampipeSupportPlateN_zcenter"/>
+      <subtraction name="BeampipeSupportPlateWedgeLeftLayer1N" material="Air" vis="TrackerSupportVis">
+      <position x="0" y="0" z="BeampipeSupportPlateLayer1N_zcenter"/>
       <shape role="base" type="Cylinder"
             name="BeampipeSupportPlateWedgeLeftN"
             rmin="BeampipeSupportPlateWedgeLeftN_rmin"
-            length="BeampipeSupportPlateWedgeLeftN_length"
+            length="BeampipeSupportPlateWedgeLeftLayer1N_length"
             thickness="BeampipeSupportPlateWedgeLeftN_thickness"
             phimin="BeampipeSupportPlateWedgeLeftN_phimin"
             phimax="BeampipeSupportPlateWedgeLeftN_phimax"
             material="CarbonFiber"/>
       <!-- box shaped cut -->     
       <shape role="hole" type="Box"
-            name="BeampipeSupportPlateRectLeftN_hole"
+            name="BeampipeSupportPlateRectLeftLayer1N_hole"
             x="BeampipeSupportPlateRectLeftN_dx"
             y="BeampipeSupportPlateRectLeftN_dy"
-            z="BeampipeSupportPlateRectLeftN_dz">
+            z="BeampipeSupportPlateRectLeftLayer1N_dz">
       <position x="BeampipeSupportPlateBoxN_xcenter" y="0*cm" z="0*cm"/>
       </shape>                  
       </subtraction>      
       <!-- (part 2) -->
-      <subtraction name="BeampipeSupportPlateRectLeftN" material="Air" vis="TrackerSupportVis">
-      <position x="BeampipeSupportPlateBoxN_xcenter" y="0" z="BeampipeSupportPlateN_zcenter"/>
+      <subtraction name="BeampipeSupportPlateRectLeftLayer1N" material="Air" vis="TrackerSupportVis">
+      <position x="BeampipeSupportPlateBoxN_xcenter" y="0" z="BeampipeSupportPlateLayer1N_zcenter"/>
       <shape role="base" type="Box"
-            name="BeampipeSupportPlateRectLeftN"
+            name="BeampipeSupportPlateRectLeftLayer1N"
             x="BeampipeSupportPlateRectLeftN_dx"
             y="BeampipeSupportPlateRectLeftN_dy"
-            z="BeampipeSupportPlateRectLeftN_dz"
+            z="BeampipeSupportPlateRectLeftLayer1N_dz"
             material="CarbonFiber"/>
       <!-- ring shaped cut -->         
       <shape role="hole" type="Cylinder"
-          name="BeampipeSupportPlateRingN_hole"
+          name="BeampipeSupportPlateRingLayer1N_hole"
           rmin="BeampipeSupportPlateRingN_rmin"
-          length="BeampipeSupportPlateSheetN_length"
+          length="BeampipeSupportPlateWedgeLeftLayer1N_length"
           thickness="BeampipeSupportPlateRingN_thickness">
       <position x="-BeampipeSupportPlateBoxN_xcenter" y="0*cm" z="0*cm"/>
       </shape>                  
       </subtraction>
       <!-- right half rectangular sheet (part 1) -->
-      <subtraction name="BeampipeSupportPlateWedgeRightN" material="Air" vis="TrackerSupportVis">
-      <position x="0" y="0" z="BeampipeSupportPlateN_zcenter"/>
+      <subtraction name="BeampipeSupportPlateWedgeRightLayer1N" material="Air" vis="TrackerSupportVis">
+      <position x="0" y="0" z="BeampipeSupportPlateLayer1N_zcenter"/>
       <shape role="base" type="Cylinder"
-            name="BeampipeSupportPlateWedgeRightN"
+            name="BeampipeSupportPlateWedgeRightLayer1N"
             rmin="BeampipeSupportPlateWedgeRightN_rmin"
-            length="BeampipeSupportPlateWedgeRightN_length"
+            length="BeampipeSupportPlateWedgeRightLayer1N_length"
             thickness="BeampipeSupportPlateWedgeRightN_thickness"
             phimin="BeampipeSupportPlateWedgeRightN_phimin"
             phimax="BeampipeSupportPlateWedgeRightN_phimax"
             material="CarbonFiber"/>
       <!-- box shaped cut -->     
       <shape role="hole" type="Box"
-            name="BeampipeSupportPlateRectRightN_hole"
+            name="BeampipeSupportPlateRectRightLayer1N_hole"
             x="BeampipeSupportPlateRectRightN_dx"
             y="BeampipeSupportPlateRectRightN_dy"
-            z="BeampipeSupportPlateRectRightN_dz">
+            z="BeampipeSupportPlateRectRightLayer1N_dz">
       <position x="-BeampipeSupportPlateBoxN_xcenter" y="0*cm" z="0*cm"/>
       </shape>                  
       </subtraction>      
       <!-- (part 2) -->
-      <subtraction name="BeampipeSupportPlateRectRightN" material="Air" vis="TrackerSupportVis">
-      <position x="-BeampipeSupportPlateBoxN_xcenter" y="0" z="BeampipeSupportPlateN_zcenter"/>
+      <subtraction name="BeampipeSupportPlateRectRightLayer1N" material="Air" vis="TrackerSupportVis">
+      <position x="-BeampipeSupportPlateBoxN_xcenter" y="0" z="BeampipeSupportPlateLayer1N_zcenter"/>
       <shape role="base" type="Box"
-            name="BeampipeSupportPlateRectRightN"
+            name="BeampipeSupportPlateRectRightLayer1N"
             x="BeampipeSupportPlateRectRightN_dx"
             y="BeampipeSupportPlateRectRightN_dy"
-            z="BeampipeSupportPlateRectRightN_dz"
+            z="BeampipeSupportPlateRectRightLayer1N_dz"
             material="CarbonFiber"/>
       <!-- ring shaped cut -->         
       <shape role="hole" type="Cylinder"
-          name="BeampipeSupportPlateRingN_hole"
+          name="BeampipeSupportPlateRingLayer1N_hole"
           rmin="BeampipeSupportPlateRingN_rmin"
-          length="BeampipeSupportPlateSheetN_length"
+          length="BeampipeSupportPlateWedgeRightLayer1N_length"
           thickness="BeampipeSupportPlateRingN_thickness">
       <position x="BeampipeSupportPlateBoxN_xcenter" y="0*cm" z="0*cm"/>
       </shape>                  
-      </subtraction>            
+      </subtraction>     
+    <!-- 
+        Layer 2 
+    -->          
+    <!-- ring shaped sheet in the middle -->
+      <support type="Cylinder"
+          name="BeampipeSupportPlateRingN"
+          vis="TrackerSupportVis"
+          rmin="BeampipeSupportPlateRingN_rmin"
+          length="BeampipeSupportPlateWedgeLeftLayer2N_length"
+          thickness="BeampipeSupportPlateRingN_thickness">
+            <position x="0*cm" y="0*cm" z="BeampipeSupportPlateLayer2N_zcenter" />
+            <component material="AIREX_R82_80" thickness="BeampipeSupportPlateRingN_thickness" name="Support" vis="TrackerSupportVis"/>
+      </support>
+      <!-- left half rectangular sheet (part 1) -->
+      <subtraction name="BeampipeSupportPlateWedgeLeftLayer2N" material="Air" vis="TrackerSupportVis">
+      <position x="0" y="0" z="BeampipeSupportPlateLayer2N_zcenter"/>
+      <shape role="base" type="Cylinder"
+            name="BeampipeSupportPlateWedgeLeftN"
+            rmin="BeampipeSupportPlateWedgeLeftN_rmin"
+            length="BeampipeSupportPlateWedgeLeftLayer2N_length"
+            thickness="BeampipeSupportPlateWedgeLeftN_thickness"
+            phimin="BeampipeSupportPlateWedgeLeftN_phimin"
+            phimax="BeampipeSupportPlateWedgeLeftN_phimax"
+            material="AIREX_R82_80"/>
+      <!-- box shaped cut -->     
+      <shape role="hole" type="Box"
+            name="BeampipeSupportPlateRectLeftLayer2N_hole"
+            x="BeampipeSupportPlateRectLeftN_dx"
+            y="BeampipeSupportPlateRectLeftN_dy"
+            z="BeampipeSupportPlateRectLeftLayer2N_dz">
+      <position x="BeampipeSupportPlateBoxN_xcenter" y="0*cm" z="0*cm"/>
+      </shape>                  
+      </subtraction>      
+      <!-- (part 2) -->
+      <subtraction name="BeampipeSupportPlateRectLeftLayer2N" material="Air" vis="TrackerSupportVis">
+      <position x="BeampipeSupportPlateBoxN_xcenter" y="0" z="BeampipeSupportPlateLayer2N_zcenter"/>
+      <shape role="base" type="Box"
+            name="BeampipeSupportPlateRectLeftLayer2N"
+            x="BeampipeSupportPlateRectLeftN_dx"
+            y="BeampipeSupportPlateRectLeftN_dy"
+            z="BeampipeSupportPlateRectLeftLayer2N_dz"
+            material="AIREX_R82_80"/>
+      <!-- ring shaped cut -->         
+      <shape role="hole" type="Cylinder"
+          name="BeampipeSupportPlateRingLayer2N_hole"
+          rmin="BeampipeSupportPlateRingN_rmin"
+          length="BeampipeSupportPlateWedgeLeftLayer2N_length"
+          thickness="BeampipeSupportPlateRingN_thickness">
+      <position x="-BeampipeSupportPlateBoxN_xcenter" y="0*cm" z="0*cm"/>
+      </shape>                  
+      </subtraction>
+      <!-- right half rectangular sheet (part 1) -->
+      <subtraction name="BeampipeSupportPlateWedgeRightLayer2N" material="Air" vis="TrackerSupportVis">
+      <position x="0" y="0" z="BeampipeSupportPlateLayer2N_zcenter"/>
+      <shape role="base" type="Cylinder"
+            name="BeampipeSupportPlateWedgeRightLayer2N"
+            rmin="BeampipeSupportPlateWedgeRightN_rmin"
+            length="BeampipeSupportPlateWedgeRightLayer2N_length"
+            thickness="BeampipeSupportPlateWedgeRightN_thickness"
+            phimin="BeampipeSupportPlateWedgeRightN_phimin"
+            phimax="BeampipeSupportPlateWedgeRightN_phimax"
+            material="AIREX_R82_80"/>
+      <!-- box shaped cut -->     
+      <shape role="hole" type="Box"
+            name="BeampipeSupportPlateRectRightLayer2N_hole"
+            x="BeampipeSupportPlateRectRightN_dx"
+            y="BeampipeSupportPlateRectRightN_dy"
+            z="BeampipeSupportPlateRectRightLayer2N_dz">
+      <position x="-BeampipeSupportPlateBoxN_xcenter" y="0*cm" z="0*cm"/>
+      </shape>                  
+      </subtraction>      
+      <!-- (part 2) -->
+      <subtraction name="BeampipeSupportPlateRectRightLayer1N" material="Air" vis="TrackerSupportVis">
+      <position x="-BeampipeSupportPlateBoxN_xcenter" y="0" z="BeampipeSupportPlateLayer2N_zcenter"/>
+      <shape role="base" type="Box"
+            name="BeampipeSupportPlateRectRightLayer1N"
+            x="BeampipeSupportPlateRectRightN_dx"
+            y="BeampipeSupportPlateRectRightN_dy"
+            z="BeampipeSupportPlateRectRightLayer1N_dz"
+            material="AIREX_R82_80"/>
+      <!-- ring shaped cut -->         
+      <shape role="hole" type="Cylinder"
+          name="BeampipeSupportPlateRingLayer1N_hole"
+          rmin="BeampipeSupportPlateRingN_rmin"
+          length="BeampipeSupportPlateWedgeRightLayer2N_length"
+          thickness="BeampipeSupportPlateRingN_thickness">
+      <position x="BeampipeSupportPlateBoxN_xcenter" y="0*cm" z="0*cm"/>
+      </shape>                  
+      </subtraction>       
+    <!-- 
+        Layer 3 
+    -->      
+   <!-- ring shaped sheet in the middle -->
+      <support type="Cylinder"
+          name="BeampipeSupportPlateRingN"
+          vis="TrackerSupportVis"
+          rmin="BeampipeSupportPlateRingN_rmin"
+          length="BeampipeSupportPlateWedgeLeftLayer3N_length"
+          thickness="BeampipeSupportPlateRingN_thickness">
+            <position x="0*cm" y="0*cm" z="BeampipeSupportPlateLayer3N_zcenter" />
+            <component material="CarbonFiber" thickness="BeampipeSupportPlateRingN_thickness" name="Support" vis="TrackerSupportVis"/>
+      </support>
+      <!-- left half rectangular sheet (part 1) -->
+      <subtraction name="BeampipeSupportPlateWedgeLeftLayer3N" material="Air" vis="TrackerSupportVis">
+      <position x="0" y="0" z="BeampipeSupportPlateLayer3N_zcenter"/>
+      <shape role="base" type="Cylinder"
+            name="BeampipeSupportPlateWedgeLeftN"
+            rmin="BeampipeSupportPlateWedgeLeftN_rmin"
+            length="BeampipeSupportPlateWedgeLeftLayer3N_length"
+            thickness="BeampipeSupportPlateWedgeLeftN_thickness"
+            phimin="BeampipeSupportPlateWedgeLeftN_phimin"
+            phimax="BeampipeSupportPlateWedgeLeftN_phimax"
+            material="CarbonFiber"/>
+      <!-- box shaped cut -->     
+      <shape role="hole" type="Box"
+            name="BeampipeSupportPlateRectLeftLayer3N_hole"
+            x="BeampipeSupportPlateRectLeftN_dx"
+            y="BeampipeSupportPlateRectLeftN_dy"
+            z="BeampipeSupportPlateRectLeftLayer3N_dz">
+      <position x="BeampipeSupportPlateBoxN_xcenter" y="0*cm" z="0*cm"/>
+      </shape>                  
+      </subtraction>      
+      <!-- (part 2) -->
+      <subtraction name="BeampipeSupportPlateRectLeftLayer3N" material="Air" vis="TrackerSupportVis">
+      <position x="BeampipeSupportPlateBoxN_xcenter" y="0" z="BeampipeSupportPlateLayer3N_zcenter"/>
+      <shape role="base" type="Box"
+            name="BeampipeSupportPlateRectLeftLayer3N"
+            x="BeampipeSupportPlateRectLeftN_dx"
+            y="BeampipeSupportPlateRectLeftN_dy"
+            z="BeampipeSupportPlateRectLeftLayer3N_dz"
+            material="CarbonFiber"/>
+      <!-- ring shaped cut -->         
+      <shape role="hole" type="Cylinder"
+          name="BeampipeSupportPlateRingLayer3N_hole"
+          rmin="BeampipeSupportPlateRingN_rmin"
+          length="BeampipeSupportPlateWedgeLeftLayer3N_length"
+          thickness="BeampipeSupportPlateRingN_thickness">
+      <position x="-BeampipeSupportPlateBoxN_xcenter" y="0*cm" z="0*cm"/>
+      </shape>                  
+      </subtraction>
+      <!-- right half rectangular sheet (part 1) -->
+      <subtraction name="BeampipeSupportPlateWedgeRightLayer3N" material="Air" vis="TrackerSupportVis">
+      <position x="0" y="0" z="BeampipeSupportPlateLayer3N_zcenter"/>
+      <shape role="base" type="Cylinder"
+            name="BeampipeSupportPlateWedgeRightLayer3N"
+            rmin="BeampipeSupportPlateWedgeRightN_rmin"
+            length="BeampipeSupportPlateWedgeRightLayer3N_length"
+            thickness="BeampipeSupportPlateWedgeRightN_thickness"
+            phimin="BeampipeSupportPlateWedgeRightN_phimin"
+            phimax="BeampipeSupportPlateWedgeRightN_phimax"
+            material="CarbonFiber"/>
+      <!-- box shaped cut -->     
+      <shape role="hole" type="Box"
+            name="BeampipeSupportPlateRectRightLayer3N_hole"
+            x="BeampipeSupportPlateRectRightN_dx"
+            y="BeampipeSupportPlateRectRightN_dy"
+            z="BeampipeSupportPlateRectRightLayer3N_dz">
+      <position x="-BeampipeSupportPlateBoxN_xcenter" y="0*cm" z="0*cm"/>
+      </shape>                  
+      </subtraction>      
+      <!-- (part 2) -->
+      <subtraction name="BeampipeSupportPlateRectRightLayer3N" material="Air" vis="TrackerSupportVis">
+      <position x="-BeampipeSupportPlateBoxN_xcenter" y="0" z="BeampipeSupportPlateLayer3N_zcenter"/>
+      <shape role="base" type="Box"
+            name="BeampipeSupportPlateRectRightLayer3N"
+            x="BeampipeSupportPlateRectRightN_dx"
+            y="BeampipeSupportPlateRectRightN_dy"
+            z="BeampipeSupportPlateRectRightLayer3N_dz"
+            material="CarbonFiber"/>
+      <!-- ring shaped cut -->         
+      <shape role="hole" type="Cylinder"
+          name="BeampipeSupportPlateRingLayer3N_hole"
+          rmin="BeampipeSupportPlateRingN_rmin"
+          length="BeampipeSupportPlateWedgeRightLayer3N_length"
+          thickness="BeampipeSupportPlateRingN_thickness">
+      <position x="BeampipeSupportPlateBoxN_xcenter" y="0*cm" z="0*cm"/>
+      </shape>                  
+      </subtraction>     
       <!-- end of (Negative) Beampipe Support Plate implementation -->
 
     <!-- |||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||| -->
