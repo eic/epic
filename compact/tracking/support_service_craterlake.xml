@@ -406,11 +406,10 @@
     <!-- qq-->
 
    <comment> (Negative) beampipe Support Plate </comment>
-    <!--- The geometry will be implemented in 4 parts:
+    <!--- The geometry will be implemented in 3 parts:
           1) ring shaped sheet in the middle
           2) left rectangular sheet
           3) right rectangular sheet
-          4) core
     -->
     <comment> Specifications are from SVT PST Drawing PACKET SEP 2025.pdf </comment> 
     <comment> General dimensions </comment>    
@@ -475,24 +474,23 @@
     <!-- qq-->
 
     <comment> (Positive) beampipe Support Plate </comment>
-    <!--- The geometry will be implemented in 4 parts:
+    <!--- The geometry will be implemented in 3 parts:
           1) ring shaped sheet in the middle
           2) left rectangular sheet
           3) right rectangular sheet
-          4) core
     -->
     <comment> Specifications are from SVT PST Drawing PACKET SEP 2025.pdf </comment> 
     <comment> General dimensions </comment>    
     <constant name="BeampipeSupportPlateSheetP_length"      value="1*mm"/>
     <constant name="BeampipeSupportPlateCoreP_length"       value="3*mm"/>    
     <constant name="BeampipeSupportPlateP_zcenter"          value="1420*mm"/>    
-    <constant name="BeampipeSupportPlateP_xcenter_off"      value="19.4*mm"/>    
+    <constant name="BeampipeSupportPlateP_xcenter_off"      value="-19.4*mm"/>    
     <constant name="BeampipeSupportPlateP_thickness"        value="ServicePassthroughRingP_rmax"/>    
     <comment> dimensions of the ring shaped sheet in the middle </comment>
     <constant name="BeampipeSupportPlateRingP_rmin"         value="78.46*mm"/> <!-- 156.92mm/2 -->
     <constant name="BeampipeSupportPlateRingP_rmax"         value="105*mm"/> <!-- 210mm/2 -->    
     <constant name="BeampipeSupportPlateRingP_thickness"    value="BeampipeSupportPlateRingP_rmax-BeampipeSupportPlateRingP_rmin"/> 
-    <constant name="BeampipeSupportPlateRingP_xcenter"      value="-BeampipeSupportPlateP_xcenter_off"/> 
+    <constant name="BeampipeSupportPlateRingP_xcenter"      value="0*mm+BeampipeSupportPlateP_xcenter_off"/> 
     <comment> dimensions of the rectangular sheet </comment>
     <!--- It has two halves: left and right (while looking towards the hadron going side)
           Each half is a combination of the following two shapes:
@@ -503,7 +501,7 @@
     -->
     <constant name="BeampipeSupportPlateBoxP_halfwidth"  value="50*mm"/> <!-- 100mm/2 -->
     <!-- Left half -->
-    <constant name="BeampipeSupportPlateBoxLeftP_xmin"       value="sqrt(BeampipeSupportPlateRingP_rmax**2-BeampipeSupportPlateBoxP_halfwidth**2)-BeampipeSupportPlateP_xcenter_off"/> 
+    <constant name="BeampipeSupportPlateBoxLeftP_xmin"       value="sqrt(BeampipeSupportPlateRingP_rmax**2-BeampipeSupportPlateBoxP_halfwidth**2)+BeampipeSupportPlateP_xcenter_off"/> 
     <constant name="BeampipeSupportPlateBoxLeftP_xmax"       value="sqrt(BeampipeSupportPlateP_thickness**2-BeampipeSupportPlateBoxP_halfwidth**2)"/> 
     <constant name="BeampipeSupportPlateBoxLeftP_xcenter"    value="0.5*(BeampipeSupportPlateBoxLeftP_xmax+BeampipeSupportPlateBoxLeftP_xmin)"/>     
     <constant name="BeampipeSupportPlateWedgeLeftP_rmin"      value="BeampipeSupportPlateBoxLeftP_xcenter"/>
@@ -513,7 +511,7 @@
     <constant name="BeampipeSupportPlateRectLeftP_dx"         value="BeampipeSupportPlateBoxLeftP_xmax-BeampipeSupportPlateBoxLeftP_xmin"/> 
     <constant name="BeampipeSupportPlateRectLeftP_dy"         value="BeampipeSupportPlateBoxP_halfwidth*2"/> 
     <!-- Right half -->
-    <constant name="BeampipeSupportPlateBoxRightP_xmin"        value="sqrt(BeampipeSupportPlateRingP_rmax**2-BeampipeSupportPlateBoxP_halfwidth**2)+BeampipeSupportPlateP_xcenter_off"/> 
+    <constant name="BeampipeSupportPlateBoxRightP_xmin"        value="sqrt(BeampipeSupportPlateRingP_rmax**2-BeampipeSupportPlateBoxP_halfwidth**2)-BeampipeSupportPlateP_xcenter_off"/> 
     <constant name="BeampipeSupportPlateBoxRightP_xmax"        value="sqrt(BeampipeSupportPlateP_thickness**2-BeampipeSupportPlateBoxP_halfwidth**2)"/> 
     <constant name="BeampipeSupportPlateBoxRightP_xcenter"     value="0.5*(BeampipeSupportPlateBoxRightP_xmax+BeampipeSupportPlateBoxRightP_xmin)"/>         
     <constant name="BeampipeSupportPlateWedgeRightP_rmin"      value="BeampipeSupportPlateBoxRightP_xcenter"/>
@@ -548,7 +546,53 @@
     <constant name="BeampipeSupportPlateRectRightLayer3P_dz"         value="BeampipeSupportPlateSheetP_length"/>     
     <!-- qq-->
 
-   <comment> Inner tracker service/support cones, symmetric </comment>
+    <comment> (Positive) beampipe support mechanism </comment>
+    <!--- The geometry will be implemented in 3 parts:
+          1) the central ring
+          2) the periferal half-ring attached to beampipe support plate
+          3) additional stuff attached to the periferal half-ring
+    -->    
+    <comment> Specifications are from SVT PST Drawing PACKET SEP 2025.pdf </comment>     
+    <comment> central ring </comment>
+    <!-- it will be implemented using two different shapes 
+            1) a full ring
+            2) box cuts to make the flat edges
+    -->
+    <!-- 1) full ring dimensions -->
+    <constant name="BeampipeSupportMechCRingSheetP_length"           value="1*mm"/>
+    <constant name="BeampipeSupportMechCRingCoreP_length"            value="3*mm"/>
+    <constant name="BeampipeSupportMechCRingP_rmin"                  value="51.1*mm"/>
+    <constant name="BeampipeSupportMechCRingP_rmax"                  value="61.1*mm"/>
+    <constant name="BeampipeSupportMechCRingP_thickness"             value="BeampipeSupportMechCRingP_rmax-BeampipeSupportMechCRingP_rmin"/>
+    <constant name="BeampipeSupportMechCRingP_zcenter"               value="BeampipeSupportPlateP_zcenter"/>
+    <constant name="BeampipeSupportMechCRingP_xcenter_off"           value="-16.04*mm"/>
+    <constant name="BeampipeSupportMechCRingP_xcenter"               value="0*mm+BeampipeSupportMechCRingP_xcenter_off"/>
+    <!-- 1) box cut dimensions -->
+    <constant name="BeampipeSupportMechCRingBoxCutP_dx"              value="112.2*mm"/>
+    <constant name="BeampipeSupportMechCRingBoxCutP_dy"              value="112.2*mm"/>
+    <constant name="BeampipeSupportMechCRingBoxCutP_xtranslation"    value="BeampipeSupportMechCRingBoxCutP_dx"/>
+    <constant name="BeampipeSupportMechCRingBoxCutP_ytranslation"    value="BeampipeSupportMechCRingBoxCutP_dy"/>
+    <!-- Each part has three layers: 
+         1) layer 1: CFiber (1mm)
+         2) layer 2: AIREX (3mm)
+         3) layer 3: CFiber (1mm)
+         NOTE: Layer 1 is closest to the center
+    -->
+    <!-- Layer 1 -->
+    <constant name="BeampipeSupportMechCRingLayer1P_zcenter"         value="BeampipeSupportPlateP_zcenter-0.5*(BeampipeSupportMechCRingSheetP_length+BeampipeSupportMechCRingCoreP_length)"/>
+    <constant name="BeampipeSupportMechCRingLayer1P_length"          value="BeampipeSupportMechCRingSheetP_length"/>
+    <constant name="BeampipeSupportMechCRingBoxCutLayer1P_dz"        value="BeampipeSupportMechCRingLayer1P_length"/>
+    <!-- Layer 2 -->
+    <constant name="BeampipeSupportMechCRingLayer2P_zcenter"         value="BeampipeSupportPlateP_zcenter-0.5*(BeampipeSupportMechCRingSheetP_length+BeampipeSupportMechCRingCoreP_length)"/>
+    <constant name="BeampipeSupportMechCRingLayer2P_length"          value="BeampipeSupportMechCRingCoreP_length"/>
+    <constant name="BeampipeSupportMechCRingBoxCutLayer2P_dz"        value="BeampipeSupportMechCRingLayer2P_length"/>
+    <!-- Layer 3 -->
+    <constant name="BeampipeSupportMechCRingLayer3P_zcenter"         value="BeampipeSupportPlateP_zcenter-0.5*(BeampipeSupportMechCRingSheetP_length+BeampipeSupportMechCRingCoreP_length)"/>
+    <constant name="BeampipeSupportMechCRingLayer3P_length"          value="BeampipeSupportMechCRingSheetP_length"/>
+    <constant name="BeampipeSupportMechCRingBoxCutLayer3P_dz"        value="BeampipeSupportMechCRingLayer3P_length"/>
+    <!-- qq-->
+
+    <comment> Inner tracker service/support cones, symmetric </comment>
     <constant name="InnerSupportConeCF_thickness"         value="2.0*mm" />
     <comment> Effective Aluminum for services for now </comment>
     <constant name="InnerSupportConePAl_thickness"        value="3.79*mm" /> <comment> use  TrackerSupportCylAlP_thickness1A </comment>
@@ -1402,6 +1446,145 @@
       </shape>                  
       </subtraction>      
       <!-- end of (Positive) Beampipe Support Plate implementation -->
+
+
+    <comment> (Positive) Beampipe Support Mechanism Implemeantion </comment>
+    <!-- 
+        Layer 1 
+    -->    
+    <!-- central ring -->    
+      <subtraction name="BeampipeSupportMechanismCRingLayer1P" material="CarbonFiber" vis="TrackerSupportVis">
+      <position x="BeampipeSupportMechCRingP_xcenter" y="0" z="BeampipeSupportMechCRingLayer1P_zcenter"/>
+       <shape role="base" type="Cylinder"
+            name="BeampipeSupportMechanismCRingLayer1P"
+            rmin="BeampipeSupportMechCRingP_rmin"
+            length="BeampipeSupportMechCRingLayer1P_length"
+            thickness="BeampipeSupportMechCRingP_thickness"
+            material="CarbonFiber"/>
+      <!-- box shaped cut on left -->
+      <shape role="hole" type="Box"
+            name="BeampipeSupportMechCRingBoxCutP_Left"
+            x="BeampipeSupportMechCRingBoxCutP_dx"
+            y="BeampipeSupportMechCRingBoxCutP_dy"
+            z="BeampipeSupportMechCRingBoxCutLayer1P_dz">
+      <position x="BeampipeSupportMechCRingBoxCutP_xtranslation" y="0*cm" z="0*cm"/>
+      </shape>
+      <!-- box shaped cut on right -->
+      <shape role="hole" type="Box"
+            name="BeampipeSupportMechCRingBoxCutP_Left"
+            x="BeampipeSupportMechCRingBoxCutP_dx"
+            y="BeampipeSupportMechCRingBoxCutP_dy"
+            z="BeampipeSupportMechCRingBoxCutLayer1P_dz">
+      <position x="-BeampipeSupportMechCRingBoxCutP_xtranslation" y="0*cm" z="0*cm"/>
+      </shape>
+      <!-- box shaped cut on top -->
+      <shape role="hole" type="Box"
+            name="BeampipeSupportMechCRingBoxCutP_Left"
+            x="BeampipeSupportMechCRingBoxCutP_dx"
+            y="BeampipeSupportMechCRingBoxCutP_dy"
+            z="BeampipeSupportMechCRingBoxCutLayer1P_dz">
+      <position x="0" y="BeampipeSupportMechCRingBoxCutP_xtranslation" z="0*cm"/>
+      </shape>
+      <!-- box shaped cut on bottom -->
+      <shape role="hole" type="Box"
+            name="BeampipeSupportMechCRingBoxCutP_Left"
+            x="BeampipeSupportMechCRingBoxCutP_dx"
+            y="BeampipeSupportMechCRingBoxCutP_dy"
+            z="BeampipeSupportMechCRingBoxCutLayer1P_dz">
+      <position x="0" y="-BeampipeSupportMechCRingBoxCutP_xtranslation" z="0*cm"/>
+      </shape>                      
+      </subtraction> 
+    <!-- 
+        Layer 2 
+    -->    
+    <!-- central ring -->    
+      <subtraction name="BeampipeSupportMechanismCRingLayer2P" material="AIREX_R82_80" vis="TrackerSupportVis">
+      <position x="BeampipeSupportMechCRingP_xcenter" y="0" z="BeampipeSupportMechCRingLayer2P_zcenter"/>
+       <shape role="base" type="Cylinder"
+            name="BeampipeSupportMechanismCRingLayer2P"
+            rmin="BeampipeSupportMechCRingP_rmin"
+            length="BeampipeSupportMechCRingLayer2P_length"
+            thickness="BeampipeSupportMechCRingP_thickness"
+            material="CarbonFiber"/>
+      <!-- box shaped cut on left -->
+      <shape role="hole" type="Box"
+            name="BeampipeSupportMechCRingBoxCutP_Left"
+            x="BeampipeSupportMechCRingBoxCutP_dx"
+            y="BeampipeSupportMechCRingBoxCutP_dy"
+            z="BeampipeSupportMechCRingBoxCutLayer2P_dz">
+      <position x="BeampipeSupportMechCRingBoxCutP_xtranslation" y="0*cm" z="0*cm"/>
+      </shape>
+      <!-- box shaped cut on right -->
+      <shape role="hole" type="Box"
+            name="BeampipeSupportMechCRingBoxCutP_Left"
+            x="BeampipeSupportMechCRingBoxCutP_dx"
+            y="BeampipeSupportMechCRingBoxCutP_dy"
+            z="BeampipeSupportMechCRingBoxCutLayer2P_dz">
+      <position x="-BeampipeSupportMechCRingBoxCutP_xtranslation" y="0*cm" z="0*cm"/>
+      </shape>
+      <!-- box shaped cut on top -->
+      <shape role="hole" type="Box"
+            name="BeampipeSupportMechCRingBoxCutP_Left"
+            x="BeampipeSupportMechCRingBoxCutP_dx"
+            y="BeampipeSupportMechCRingBoxCutP_dy"
+            z="BeampipeSupportMechCRingBoxCutLayer2P_dz">
+      <position x="0" y="BeampipeSupportMechCRingBoxCutP_xtranslation" z="0*cm"/>
+      </shape>
+      <!-- box shaped cut on bottom -->
+      <shape role="hole" type="Box"
+            name="BeampipeSupportMechCRingBoxCutP_Left"
+            x="BeampipeSupportMechCRingBoxCutP_dx"
+            y="BeampipeSupportMechCRingBoxCutP_dy"
+            z="BeampipeSupportMechCRingBoxCutLayer2P_dz">
+      <position x="0" y="-BeampipeSupportMechCRingBoxCutP_xtranslation" z="0*cm"/>
+      </shape>                      
+      </subtraction> 
+   <!-- 
+        Layer 3 
+    -->    
+    <!-- central ring -->    
+      <subtraction name="BeampipeSupportMechanismCRingLayer3P" material="AIREX_R82_80" vis="TrackerSupportVis">
+      <position x="BeampipeSupportMechCRingP_xcenter" y="0" z="BeampipeSupportMechCRingLayer3P_zcenter"/>
+       <shape role="base" type="Cylinder"
+            name="BeampipeSupportMechanismCRingLayer3P"
+            rmin="BeampipeSupportMechCRingP_rmin"
+            length="BeampipeSupportMechCRingLayer3P_length"
+            thickness="BeampipeSupportMechCRingP_thickness"
+            material="CarbonFiber"/>
+      <!-- box shaped cut on left -->
+      <shape role="hole" type="Box"
+            name="BeampipeSupportMechCRingBoxCutP_Left"
+            x="BeampipeSupportMechCRingBoxCutP_dx"
+            y="BeampipeSupportMechCRingBoxCutP_dy"
+            z="BeampipeSupportMechCRingBoxCutLayer3P_dz">
+      <position x="BeampipeSupportMechCRingBoxCutP_xtranslation" y="0*cm" z="0*cm"/>
+      </shape>
+      <!-- box shaped cut on right -->
+      <shape role="hole" type="Box"
+            name="BeampipeSupportMechCRingBoxCutP_Left"
+            x="BeampipeSupportMechCRingBoxCutP_dx"
+            y="BeampipeSupportMechCRingBoxCutP_dy"
+            z="BeampipeSupportMechCRingBoxCutLayer3P_dz">
+      <position x="-BeampipeSupportMechCRingBoxCutP_xtranslation" y="0*cm" z="0*cm"/>
+      </shape>
+      <!-- box shaped cut on top -->
+      <shape role="hole" type="Box"
+            name="BeampipeSupportMechCRingBoxCutP_Left"
+            x="BeampipeSupportMechCRingBoxCutP_dx"
+            y="BeampipeSupportMechCRingBoxCutP_dy"
+            z="BeampipeSupportMechCRingBoxCutLayer3P_dz">
+      <position x="0" y="BeampipeSupportMechCRingBoxCutP_xtranslation" z="0*cm"/>
+      </shape>
+      <!-- box shaped cut on bottom -->
+      <shape role="hole" type="Box"
+            name="BeampipeSupportMechCRingBoxCutP_Left"
+            x="BeampipeSupportMechCRingBoxCutP_dx"
+            y="BeampipeSupportMechCRingBoxCutP_dy"
+            z="BeampipeSupportMechCRingBoxCutLayer3P_dz">
+      <position x="0" y="-BeampipeSupportMechCRingBoxCutP_xtranslation" z="0*cm"/>
+      </shape>                      
+      </subtraction>                         
+      <!-- end of (Positive) Beampipe Support Mechanism implementation -->  
 
     <comment> (Negative) Beampipe Support Plate </comment>
     <!-- 
