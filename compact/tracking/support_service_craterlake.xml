@@ -591,6 +591,33 @@
     <constant name="BeampipeSupportMechCRingLayer3P_length"          value="BeampipeSupportMechCRingSheetP_length"/>
     <constant name="BeampipeSupportMechCRingBoxCutLayer3P_dz"        value="BeampipeSupportMechCRingLayer3P_length"/>
     <!-- qq-->
+    <comment> peripheral half-central ring </comment>
+    <constant name="BeampipeSupportMechPRingP_length"                value="3*mm"/>
+    <constant name="BeampipeSupportMechPRingP_rmin"                  value="70.6*mm"/>
+    <constant name="BeampipeSupportMechPRingP_rmax"                  value="90.6*mm"/>
+    <constant name="BeampipeSupportMechPRingP_thickness"             value="BeampipeSupportMechPRingP_rmax-BeampipeSupportMechPRingP_rmin"/>
+    <constant name="BeampipeSupportMechPRingP_angspan"               value="213.303*deg"/> <comment> from SVT PST Drawing PACKET SEP 2025 STP file </comment>
+    <constant name="BeampipeSupportMechPRingP_phimax"                value="0.5*(BeampipeSupportMechPRingP_angspan-180*deg)"/>
+    <constant name="BeampipeSupportMechPRingP_phimin"                value="180*deg-BeampipeSupportMechPRingP_phimax"/>
+    <constant name="BeampipeSupportMechPRingP_xcenter"               value="BeampipeSupportPlateRingP_xcenter"/>
+    <constant name="BeampipeSupportMechPRingP_zcenter"               value="BeampipeSupportPlateLayer3P_zcenter+0.5*(BeampipeSupportPlateWedgeLeftLayer3P_length+BeampipeSupportMechPRingP_length)"/>
+    <comment> beampipe support clamp </comment>
+    <!-- Made up of two shapes:
+            1) base (the part that sits on the periferal half-ring)
+            2) top (the part that clamps onto the central ring) 
+    -->
+    <!-- 1) base (3 of them placed at 0 deg, 180 deg, and 270 deg) -->
+    <constant name="BeampipeSupportMechClampBaseP_length"            value="17*mm"/>
+    <constant name="BeampipeSupportMechClampBaseP_rmin"              value="BeampipeSupportMechPRingP_rmin" />
+    <constant name="BeampipeSupportMechClampBaseP_thickness"         value="10*mm" /> <comment> an approximation </comment>
+    <constant name="BeampipeSupportMechClampBaseP_angspan"           value="20*deg" />
+    <constant name="BeampipeSupportMechClampBaseP_xcenter"           value="BeampipeSupportPlateRingP_xcenter"/>
+    <constant name="BeampipeSupportMechClampBaseP_zcenter"           value="BeampipeSupportMechPRingP_zcenter+0.5*(BeampipeSupportMechPRingP_length+BeampipeSupportMechClampBaseP_length)"/>
+
+
+    <!-- qq-->
+
+
 
     <comment> Inner tracker service/support cones, symmetric </comment>
     <constant name="InnerSupportConeCF_thickness"         value="2.0*mm" />
@@ -1450,9 +1477,11 @@
 
     <comment> (Positive) Beampipe Support Mechanism Implemeantion </comment>
     <!-- 
+      the central ring (3 layers) 
+    -->    
+    <!-- 
         Layer 1 
     -->    
-    <!-- central ring -->    
       <subtraction name="BeampipeSupportMechanismCRingLayer1P" material="CarbonFiber" vis="TrackerSupportVis">
       <position x="BeampipeSupportMechCRingP_xcenter" y="0" z="BeampipeSupportMechCRingLayer1P_zcenter"/>
        <shape role="base" type="Cylinder"
@@ -1497,7 +1526,6 @@
     <!-- 
         Layer 2 
     -->    
-    <!-- central ring -->    
       <subtraction name="BeampipeSupportMechanismCRingLayer2P" material="AIREX_R82_80" vis="TrackerSupportVis">
       <position x="BeampipeSupportMechCRingP_xcenter" y="0" z="BeampipeSupportMechCRingLayer2P_zcenter"/>
        <shape role="base" type="Cylinder"
@@ -1542,7 +1570,6 @@
    <!-- 
         Layer 3 
     -->    
-    <!-- central ring -->    
       <subtraction name="BeampipeSupportMechanismCRingLayer3P" material="AIREX_R82_80" vis="TrackerSupportVis">
       <position x="BeampipeSupportMechCRingP_xcenter" y="0" z="BeampipeSupportMechCRingLayer3P_zcenter"/>
        <shape role="base" type="Cylinder"
@@ -1584,7 +1611,61 @@
       <position x="0" y="-BeampipeSupportMechCRingBoxCutP_xtranslation" z="0*cm"/>
       </shape>                      
       </subtraction>                         
+    <!-- 
+      the peripheral half-ring
+    -->      
+      <support type="Cylinder"
+        name="BeampipeSupportMechPRingP"
+        vis="TrackerSupportVis"
+        rmin="BeampipeSupportMechPRingP_rmin"
+        phimin="160*deg"
+        phimax="BeampipeSupportMechPRingP_phimax"
+        length="BeampipeSupportMechPRingP_length"
+        thickness="BeampipeSupportMechPRingP_thickness">
+          <position x="BeampipeSupportMechPRingP_xcenter" y="0*cm" z="BeampipeSupportMechPRingP_zcenter" />
+          <component material="CarbonFiber" thickness="BeampipeSupportMechPRingP_thickness" name="Support" vis="TrackerSupportVis"/>
+      </support>  
+   <!-- 
+      the support clamps
+    -->      
+      <!-- base at 0 deg -->
+      <support type="Cylinder"
+        name="BeampipeSupportMechClampBaseP_at0deg"
+        vis="TrackerSupportVis"
+        rmin="BeampipeSupportMechClampBaseP_rmin"
+        phimin="-0.5*BeampipeSupportMechClampBaseP_angspan"
+        phimax="0.5*BeampipeSupportMechClampBaseP_angspan"
+        length="BeampipeSupportMechClampBaseP_length"
+        thickness="BeampipeSupportMechClampBaseP_thickness">
+          <position x="BeampipeSupportMechClampBaseP_xcenter" y="0*cm" z="BeampipeSupportMechClampBaseP_zcenter" />
+          <component material="CarbonFiber" thickness="BeampipeSupportMechClampBaseP_thickness" name="Support" vis="TrackerSupportVis"/>
+      </support>  
+      <!-- base at 180 deg -->
+      <support type="Cylinder"
+        name="BeampipeSupportMechClampBaseP_at0deg"
+        vis="TrackerSupportVis"
+        rmin="BeampipeSupportMechClampBaseP_rmin"
+        phimin="180*deg-0.5*BeampipeSupportMechClampBaseP_angspan"
+        phimax="180*deg+0.5*BeampipeSupportMechClampBaseP_angspan"
+        length="BeampipeSupportMechClampBaseP_length"
+        thickness="BeampipeSupportMechClampBaseP_thickness">
+          <position x="BeampipeSupportMechClampBaseP_xcenter" y="0*cm" z="BeampipeSupportMechClampBaseP_zcenter" />
+          <component material="CarbonFiber" thickness="BeampipeSupportMechClampBaseP_thickness" name="Support" vis="TrackerSupportVis"/>
+      </support>  
+      <!-- base at 2700 deg -->
+      <support type="Cylinder"
+        name="BeampipeSupportMechClampBaseP_at0deg"
+        vis="TrackerSupportVis"
+        rmin="BeampipeSupportMechClampBaseP_rmin"
+        phimin="270*deg-0.5*BeampipeSupportMechClampBaseP_angspan"
+        phimax="270*deg+0.5*BeampipeSupportMechClampBaseP_angspan"
+        length="BeampipeSupportMechClampBaseP_length"
+        thickness="BeampipeSupportMechClampBaseP_thickness">
+          <position x="BeampipeSupportMechClampBaseP_xcenter" y="0*cm" z="BeampipeSupportMechClampBaseP_zcenter" />
+          <component material="CarbonFiber" thickness="BeampipeSupportMechClampBaseP_thickness" name="Support" vis="TrackerSupportVis"/>
+      </support>                     
       <!-- end of (Positive) Beampipe Support Mechanism implementation -->  
+
 
     <comment> (Negative) Beampipe Support Plate </comment>
     <!-- 
