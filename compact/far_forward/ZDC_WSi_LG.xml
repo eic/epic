@@ -1,0 +1,76 @@
+<lccdd>
+  <comment>
+    //////////////////////////////////////////////////
+    // Far Forward Zero Degree Calorimeter
+    // WSi Only Pad
+    //////////////////////////////////////////////////
+  </comment>
+
+  <define>
+    <constant name="ZDC_WSi_x"       value="60*cm"/>
+    <constant name="ZDC_WSi_y"       value="60*cm"/>
+
+    <constant name="ZDC_rotateX_angle" value="0.0 * rad"/>
+    <constant name="ZDC_rotateY_angle" value="ionCrossingAngle"/>
+    <constant name="ZDC_rotateZ_angle" value="0.0 * rad"/>
+
+    <constant name="ZDC_WSi_r_pos"               value="35.82*m"/>
+    <constant name="ZDC_WSi_z_pos"               value="ZDC_WSi_r_pos * cos(ionCrossingAngle)"/>
+    <constant name="ZDC_WSi_x_pos"               value="ZDC_WSi_r_pos * sin(ionCrossingAngle)"/>
+    <constant name="ZDC_WSi_y_pos"               value="0 * cm" />
+    <constant name="ZDC_WSi_rotateX_angle"       value="ZDC_rotateX_angle"/>
+    <constant name="ZDC_WSi_rotateY_angle"       value="ZDC_rotateY_angle"/>
+    <constant name="ZDC_WSi_rotateZ_angle"       value="ZDC_rotateZ_angle"/>
+    <constant name="ZDC_WSi_nblocks"             value="2"/>
+    <constant name="ZDC_WSi_pad_nlayers_per_block"         value="5"/>
+
+    <constant name="ZDC_pad_thickness"           value="320.0 * um"/>
+    <constant name="ZDC_pixel_thickness"         value="300.0 * um"/>
+    <constant name="ZDC_glue_thickness"          value="0.11 * mm"/>
+    <constant name="ZDC_PCB_thickness"           value="1.6 * mm"/>
+    <constant name="ZDC_Si_Air_thickness"        value=".5 * mm"/>
+    <constant name="ZDC_Tungsten_thickness"      value="3.5 * mm"/>
+
+    //Modify so there are no HG layers
+    <constant name="ZDC_WSi_pix_nlayers" value="0"/>
+    <constant name="ZDC_WSi_pad_nlayers" value="20"/>
+    <constant name="ZDC_WSi_pad_layerthickness"
+              value="ZDC_Tungsten_thickness + ZDC_glue_thickness + ZDC_pad_thickness + ZDC_glue_thickness + ZDC_PCB_thickness + ZDC_Si_Air_thickness"/>
+    <constant name="ZDC_WSi_pixel_layerthickness"
+              value="ZDC_Tungsten_thickness + ZDC_glue_thickness + ZDC_pixel_thickness + ZDC_glue_thickness + ZDC_PCB_thickness + ZDC_Si_Air_thickness"/>
+    <constant name="ZDC_WSi_z"
+              value="ZDC_WSi_pix_nlayers * ZDC_WSi_pixel_layerthickness - ZDC_Tungsten_thickness - ZDC_glue_thickness + ZDC_WSi_pad_nlayers * ZDC_WSi_pad_layerthickness"/>
+  </define>
+
+  <detectors>
+    <detector
+        id="ZDC_WSi_ID"
+        name="ZDC_WSi"
+        type="ZDC_ImagingCal"
+        vis="ZDC_WSi_Vis"
+        readout="ZDC_WSi_Hits">
+      <position x="ZDC_WSi_x_pos"         y="ZDC_WSi_y_pos"         z="ZDC_WSi_z_pos"/>
+      <rotation x="ZDC_WSi_rotateX_angle" y="ZDC_WSi_rotateY_angle" z="ZDC_WSi_rotateZ_angle"/>
+      <dimensions x="ZDC_WSi_x" y="ZDC_WSi_y" z="ZDC_WSi_z"/>
+     <layer id="2" nlayer="20" gapspace="ZDC_Si_Air_thickness">
+        <slice name="tungsten"  material="ZDC_Tungsten"     thickness="ZDC_Tungsten_thickness"  vis="AnlLight_Gray"/>
+        <slice name="glue"      material="G10"     thickness="ZDC_glue_thickness"  vis="AnlLight_Gray"/>
+        <slice name="silicon"    material="Silicon" thickness="ZDC_pad_thickness"   vis="AnlTeal"  sensitive="true"/>
+        <slice name="glue"      material="G10"     thickness="ZDC_glue_thickness"  vis="AnlLight_Gray"/>
+        <slice name="pcb"       material="ZDC_PET" thickness="ZDC_PCB_thickness"   vis="AnlGreen"/>
+      </layer>
+      
+    </detector>
+  </detectors>
+
+  <readouts>
+  	<readout name="ZDC_WSi_Hits">
+    	<!-- Drop MultiSegmentation -->
+    	<segmentation name="WSi_Pad" type="CartesianGridXY"
+                  grid_size_x="1.*cm" grid_size_y="1.*cm"/>
+    	<!-- Keep silicon field for compatibility -->
+    	<id>system:8,silicon:6,x:24:-12,y:-12</id>
+  	</readout>
+  </readouts>
+
+</lccdd>
