@@ -1899,17 +1899,17 @@
       </shape>                  
       </subtraction>      
       <!-- (part 2) -->
-      <subtraction name="BeampipeSupportPlateRectRightLayer1N" material="Air" vis="TrackerSupportVis">
+      <subtraction name="BeampipeSupportPlateRectRightLayer2N" material="Air" vis="TrackerSupportVis">
       <position x="-BeampipeSupportPlateBoxN_xcenter" y="0" z="-BeampipeSupportPlateLayer2N_zcenter"/>
       <shape role="base" type="Box"
-            name="BeampipeSupportPlateRectRightLayer1N"
+            name="BeampipeSupportPlateRectRightLayer2N"
             x="BeampipeSupportPlateRectRightN_dx"
             y="BeampipeSupportPlateRectRightN_dy"
-            z="BeampipeSupportPlateRectRightLayer1N_dz"
+            z="BeampipeSupportPlateRectRightLayer2N_dz"
             material="AIREX_R82_80"/>
       <!-- ring shaped cut -->         
       <shape role="hole" type="Cylinder"
-          name="BeampipeSupportPlateRingLayer1N_hole"
+          name="BeampipeSupportPlateRingLayer2N_hole"
           rmin="BeampipeSupportPlateRingN_rmin"
           length="BeampipeSupportPlateWedgeRightLayer2N_length"
           thickness="BeampipeSupportPlateRingN_thickness">
