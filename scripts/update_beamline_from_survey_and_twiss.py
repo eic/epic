@@ -100,14 +100,20 @@ def compute_epic_positions(survey_df: pd.DataFrame, ip_name: str = 'IP6') -> pd.
     ip_row = survey_df.loc[ip_candidates[0]]
     ip_x = ip_row.get('X', 0.0)
     ip_z = ip_row.get('Z', 0.0)
-    
+    ip_theta = ip_row.get('THETA', 0.0)
+
     # Z in SURVEY is the downstream end position
     # Center = end + L/2 (going upstream for backwards beam)
-    survey_df['epic_center_z'] = (survey_df['Z'] + survey_df['L']/2.0) - ip_z
-    survey_df['epic_center_x'] = survey_df['X'] - ip_x
+    # Compute center in local frame
+    dx = survey_df['X'] - ip_x - (survey_df['L']/2.0) * np.sin(survey_df['THETA'])
+    dz = survey_df['Z'] - ip_z - (survey_df['L']/2.0) * np.cos(survey_df['THETA'])
+    # Rotate global vector into EPIC/IP frame: use only IP angle
+    c = np.cos(ip_theta)
+    s = np.sin(ip_theta)
+    survey_df['epic_center_x'] = - dx * c + dz * s
+    survey_df['epic_center_z'] = - dx * s - dz * c
     # THETA is the beam angle at this element
     # Convert to EPIC frame: subtract IP theta to get relative angle
-    ip_theta = ip_row.get('THETA', 0.0)
     survey_df['epic_theta'] = survey_df['THETA'] - ip_theta
     return survey_df
 

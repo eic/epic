@@ -44,6 +44,12 @@ static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector /* sens *
   double y               = box_pos.attr<double>(_Unicode(y));
   double z               = box_pos.attr<double>(_Unicode(z));
 
+  // Sets box rotation
+  xml::Component box_rot = x_det.child(_Unicode(rotation));
+  double rot_x           = box_rot.attr<double>(_Unicode(x));
+  double rot_y           = box_rot.attr<double>(_Unicode(y));
+  double rot_z           = box_rot.attr<double>(_Unicode(z));
+
   // Calculate wall thickness
   double thickness_x = (outer_width - inner_width) / 2.0;
   double thickness_y = (outer_height - inner_height) / 2.0;
@@ -120,7 +126,7 @@ static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector /* sens *
 
   // Final placement
   auto pv_assembly = det.pickMotherVolume(sdet).placeVolume(
-      magnet_assembly, Transform3D(RotationZYX(0.0, 0.0, 0.0), Position(x, y, z)));
+      magnet_assembly, Transform3D(RotationZYX(rot_z, rot_y, rot_x), Position(x, y, z)));
 
   sdet.setPlacement(pv_assembly);
 

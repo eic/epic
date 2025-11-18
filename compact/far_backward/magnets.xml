@@ -112,12 +112,12 @@
     pole_gap="B2AeR_PoleGap"
     yoke_outer_width="B2AeR_YokeOuterWidth"
     yoke_inner_width="B2AeR_YokeInnerWidth">
+      <position   x="B2AeR_CenterX" y="0" z="B2AeR_CenterZ" />
+      <rotation   x="0*rad" y="B2AeR_Theta" z="0*rad" />
       <dimensions_mainbody_outer x="B2AeR_OuterWidth" y="B2AeR_OuterHeight" z="B2AeR_Length" />
       <dimensions_mainbody_inner x="B2AeR_InnerWidth" y="B2AeR_InnerHeight" z="B2AeR_Length" />
       <dimensions_leg_outer x="10*cm" y="10*cm" z="10*cm" />
       <dimensions_leg_inner x="10*cm" y="10*cm" z="10*cm" />
-      <position   x="B2AeR_CenterX" y="0" z="B2AeR_CenterZ" />
-      <rotation   x="0*rad" y="B2AeR_Theta" z="0*rad" />
     </detector>
 
     <detector
@@ -127,12 +127,12 @@
     pole_gap="B2BeR_PoleGap"
     yoke_outer_width="B2BeR_YokeOuterWidth"
     yoke_inner_width="B2BeR_YokeInnerWidth">
+      <position   x="B2BeR_CenterX" y="0" z="B2BeR_CenterZ" />
+      <rotation   x="0*rad" y="B2BeR_Theta" z="0*rad" />
       <dimensions_mainbody_outer x="B2BeR_OuterWidth" y="B2BeR_OuterHeight" z="B2BeR_Length" />
       <dimensions_mainbody_inner x="B2BeR_InnerWidth" y="B2BeR_InnerHeight" z="B2BeR_Length" />
       <dimensions_leg_outer x="10*cm" y="10*cm" z="10*cm" />
       <dimensions_leg_inner x="10*cm" y="10*cm" z="10*cm" />
-      <position   x="B2BeR_CenterX" y="0" z="B2BeR_CenterZ" />
-      <rotation   x="0*rad" y="B2BeR_Theta" z="0*rad" />
       <coil width="B2BeR_Coil_Width" height="B2BeR_Coil_Height"  length="B2BeR_Length">
         <position x="B2BeR_Coil_Xpos1" y="B2BeR_Coil_Ypos" z="0*cm"/>
         <position x="B2BeR_Coil_Xpos2" y="B2BeR_Coil_Ypos" z="0*cm"/>

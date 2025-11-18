@@ -30,12 +30,10 @@ static Ref_t create_detector(Detector& desc, xml_h e, SensitiveDetector /* sens 
 
   // Dimensions of main beamline pipe
   xml::Component dim = x_det.child(_Unicode(dimensions));
-  double WidthL      = dim.attr<double>(_Unicode(xL));
-  double WidthR      = dim.attr<double>(_Unicode(xR));
 
-  double Width     = (WidthL + WidthR) / 2;
+  double Width     = dim.x();
   // double Height    = dim.y();
-  double Thickness = dim.z();
+  double Length = dim.z();
 
   // Materials
   Material Vacuum = desc.material("Vacuum");
@@ -47,24 +45,10 @@ static Ref_t create_detector(Detector& desc, xml_h e, SensitiveDetector /* sens 
 
   // Beamline rotation
   xml_dim_t rot = x_det.rotation();
+  double global_theta = rot.theta();
 
   // Beampipe thickness
   double wall = dd4hep::getAttrOrDefault<double>(x_det, _Unicode(wall), 1 * mm);
-
-  // Make bounding box to make IntersectionSolid with other components
-  xml::Component BB = x_det.child(_Unicode(bounding));
-  double BB_MinX    = BB.xmin();
-  double BB_MinY    = BB.ymin();
-  double BB_MinZ    = BB.zmin();
-  double BB_MaxX    = BB.xmax();
-  double BB_MaxY    = BB.ymax();
-  double BB_MaxZ    = BB.zmax();
-
-  double BB_X = abs(BB_MaxX - BB_MinX);
-  double BB_Y = abs(BB_MaxY - BB_MinY);
-  double BB_Z = abs(BB_MaxZ - BB_MinZ);
-
-  Box Far_Backwards_Box(BB_X, BB_Y, BB_Z);
 
   // Entry box geometry description joining magnet, taggers and lumi
   xml::Component EB = x_det.child(_Unicode(exitdim));
@@ -73,23 +57,13 @@ static Ref_t create_detector(Detector& desc, xml_h e, SensitiveDetector /* sens 
   double ED_Z       = off - EB.attr<double>(_Unicode(lumiZ));
   double Lumi_R     = EB.attr<double>(_Unicode(lumiR));
 
-  // Maximum theta to exit the dipole from
-  double exitTheta = EB.attr<double>(_Unicode(maxTheta));
-
-  // Generic box for making intersection solid with
-  double xbox = 10 * m;
-  double ybox = 10 * m;
-  double zbox = 50 * m;
-
-  Box Cut_Box(xbox, ybox, zbox);
-
   // Central pipe box
-  Tube Extended_Beam_Box(Width,Width+wall,Thickness); // More realistic tube pipe
-  // Box Extended_Beam_Box(Width + wall, Height + wall, Thickness); // Simpler box pipe
+  Tube Extended_Beam_Box(Width,Width+wall,Length); // More realistic tube pipe
+  // Box Extended_Beam_Box(Width + wall, Height + wall, Length); // Simpler box pipe
 
   // Central vacuum box
-  Tube Extended_Vacuum_Box(0,Width,Thickness); // More realistic tube pipe
-  // Box Extended_Vacuum_Box(Width, Height, Thickness); // Simpler box pipe
+  Tube Extended_Vacuum_Box(0,Width,Length); // More realistic tube pipe
+  // Box Extended_Vacuum_Box(Width, Height, Length); // Simpler box pipe
 
   Solid Wall_Box   = Extended_Beam_Box;
   Solid Vacuum_Box = Extended_Vacuum_Box;
@@ -110,7 +84,7 @@ static Ref_t create_detector(Detector& desc, xml_h e, SensitiveDetector /* sens 
     Position vac_pos(mod_pos_global.x() + wall / 2 * cos(mod_rot_global.theta()),
                      mod_pos_global.y(),
                      mod_pos_global.z() + wall / 2 * sin(mod_rot_global.theta()));
-    RotationY mod_rot(mod_rot_global.theta() - rot.theta());
+    RotationY mod_rot(mod_rot_global.theta() - global_theta);
 
     // Size of the actual tagger box, replicated in BackwardsTagger
     xml_dim_t moddim = mod.child(_Unicode(dimensions));
@@ -135,8 +109,8 @@ static Ref_t create_detector(Detector& desc, xml_h e, SensitiveDetector /* sens 
     PlacedVolume pv_mod = DetAssembly.placeVolume(
         TaggerAssembly,
         Transform3D(mod_rot,
-                    mod_pos + Position(-vac_l * sin(mod_rot_global.theta() - rot.theta()), 0,
-                                       -vac_l * cos(mod_rot_global.theta() - rot.theta()))));
+                    mod_pos + Position(-vac_l * sin(mod_rot_global.theta() - global_theta), 0,
+                                       -vac_l * cos(mod_rot_global.theta() - global_theta))));
     DetElement moddet(det, moduleName, moduleID);
     pv_mod.addPhysVolID("module", moduleID);
     moddet.setPlacement(pv_mod);
@@ -148,8 +122,8 @@ static Ref_t create_detector(Detector& desc, xml_h e, SensitiveDetector /* sens 
   // Cut off any vacuum right of the main beamline
   //-----------------------------------------------------------------
 
-  Wall_Box   = IntersectionSolid(Wall_Box, Cut_Box, Position(-xbox + Width + wall, 0, 0));
-  Vacuum_Box = IntersectionSolid(Vacuum_Box, Cut_Box, Position(-xbox + Width, 0, 0));
+  // Wall_Box   = IntersectionSolid(Wall_Box, Cut_Box, Position(-xbox + Width + wall, 0, 0));
+  // Vacuum_Box = IntersectionSolid(Vacuum_Box, Cut_Box, Position(-xbox + Width, 0, 0));
 
   //-----------------------------------------------------------------
   // Luminosity connecting box
@@ -171,39 +145,39 @@ static Ref_t create_detector(Detector& desc, xml_h e, SensitiveDetector /* sens 
     // CutTube Lumi_Exit       (0,    Lumi_R,      ED_Z,        0,2*pi, sin(angle),0,cos(angle), 0,0,1);
 
     // Add entry boxes to main beamline volume
-    Wall_Box   = UnionSolid(Wall_Box, Entry_Beam_Box, Transform3D(RotationY(-rot.theta())));
-    Vacuum_Box = UnionSolid(Vacuum_Box, Entry_Vacuum_Box, Transform3D(RotationY(-rot.theta())));
-    Vacuum_Box = UnionSolid(Vacuum_Box, Lumi_Exit, Transform3D(RotationY(-rot.theta())));
+    Wall_Box   = UnionSolid(Wall_Box, Entry_Beam_Box, Transform3D(RotationY(-global_theta)));
+    Vacuum_Box = UnionSolid(Vacuum_Box, Entry_Vacuum_Box, Transform3D(RotationY(-global_theta)));
+    Vacuum_Box = UnionSolid(Vacuum_Box, Lumi_Exit, Transform3D(RotationY(-global_theta)));
   }
 
   //-----------------------------------------------------------------
   // Restrict tagger boxes into region defined by exitTheta from the dipole magnet
   //-----------------------------------------------------------------
-  double exitDist = BB_MinZ - off;
-  double cutX     = (ED_X - exitDist * tan(-rot.theta())) * cos(rot.theta());
-  double cutZ =
-      (ED_X - exitDist * tan(-rot.theta())) * sin(rot.theta()) + exitDist * cos(rot.theta());
-  double cutXwall = (ED_X - wall - exitDist * tan(-rot.theta())) * cos(rot.theta());
-  double cutZwall =
-      (ED_X - wall - exitDist * tan(-rot.theta())) * sin(rot.theta()) + exitDist * cos(rot.theta());
+  // double exitDist = BB_MinZ - off;
+  // double cutX     = (ED_X - exitDist * tan(-global_theta)) * cos(global_theta);
+  // double cutZ =
+  //     (ED_X - exitDist * tan(-global_theta)) * sin(global_theta) + exitDist * cos(global_theta);
+  // double cutXwall = (ED_X - wall - exitDist * tan(-global_theta)) * cos(global_theta);
+  // double cutZwall =
+  //     (ED_X - wall - exitDist * tan(-global_theta)) * sin(global_theta) + exitDist * cos(global_theta);
 
-  Wall_Box = IntersectionSolid(Wall_Box, Cut_Box,
-                               Transform3D(RotationY(exitTheta), Position(xbox - cutX, 0, cutZ)));
-  Vacuum_Box =
-      IntersectionSolid(Vacuum_Box, Cut_Box,
-                        Transform3D(RotationY(exitTheta), Position(xbox - cutXwall, 0, cutZwall)));
+  // Wall_Box = IntersectionSolid(Wall_Box, Cut_Box,
+  //                              Transform3D(RotationY(exitTheta), Position(xbox - cutX, 0, cutZ)));
+  // Vacuum_Box =
+  //     IntersectionSolid(Vacuum_Box, Cut_Box,
+  //                       Transform3D(RotationY(exitTheta), Position(xbox - cutXwall, 0, cutZwall)));
 
   //-----------------------------------------------------------------
   // Cut solids so they are only in the far backwards box
   //-----------------------------------------------------------------
-  RotationY rotate2(-rot.theta());
-  Position position(0, 0, (exitDist - BB_Z) / cos(rot.theta()));
+  // RotationY rotate2(-global_theta);
+  // Position position(0, 0, (exitDist - BB_Z) / cos(global_theta));
 
-  IntersectionSolid Wall_Box_Sub(Wall_Box, Far_Backwards_Box, Transform3D(rotate2, position));
-  IntersectionSolid Vacuum_Box_Sub(Vacuum_Box, Far_Backwards_Box, Transform3D(rotate2, position));
-  SubtractionSolid Wall_Box_Out(Wall_Box_Sub, Vacuum_Box_Sub);
+  // IntersectionSolid Wall_Box_Sub(Wall_Box, Far_Backwards_Box, Transform3D(rotate2, position));
+  // IntersectionSolid Vacuum_Box_Sub(Vacuum_Box, Far_Backwards_Box, Transform3D(rotate2, position));
+  SubtractionSolid Wall_Box_Out(Wall_Box, Vacuum_Box);
 
-  Volume vacVol("TaggerStation_Vacuum", Vacuum_Box_Sub, Vacuum);
+  Volume vacVol("TaggerStation_Vacuum", Vacuum_Box, Vacuum);
   vacVol.setVisAttributes(desc.visAttributes("BackwardsVac"));
   vacVol.placeVolume(DetAssembly);
 
@@ -215,7 +189,7 @@ static Ref_t create_detector(Detector& desc, xml_h e, SensitiveDetector /* sens 
   backAssembly.placeVolume(vacVol);
 
   // placement in mother volume
-  Transform3D tr(RotationY(rot.theta()), Position(pos.x(), pos.y(), pos.z()));
+  Transform3D tr(RotationY(global_theta), Position(pos.x(), pos.y(), pos.z()));
   PlacedVolume detPV = desc.pickMotherVolume(det).placeVolume(backAssembly, tr);
   detPV.addPhysVolID("system", detID);
 
