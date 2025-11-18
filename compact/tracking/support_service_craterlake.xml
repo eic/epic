@@ -550,7 +550,7 @@
     <!--- The geometry will be implemented in 3 parts:
           1) the central ring
           2) the periferal half-ring attached to beampipe support plate
-          3) additional stuff attached to the periferal half-ring
+          3) clamp base attached to the periferal half-ring
     -->    
     <comment> Specifications are from SVT PST Drawing PACKET SEP 2025.pdf </comment>     
     <comment> central ring </comment>
@@ -579,15 +579,15 @@
          NOTE: Layer 1 is closest to the center
     -->
     <!-- Layer 1 -->
-    <constant name="BeampipeSupportMechCRingLayer1P_zcenter"         value="BeampipeSupportPlateP_zcenter-0.5*(BeampipeSupportMechCRingSheetP_length+BeampipeSupportMechCRingCoreP_length)"/>
+    <constant name="BeampipeSupportMechCRingLayer1P_zcenter"         value="BeampipeSupportMechCRingP_zcenter-0.5*(BeampipeSupportMechCRingSheetP_length+BeampipeSupportMechCRingCoreP_length)"/>
     <constant name="BeampipeSupportMechCRingLayer1P_length"          value="BeampipeSupportMechCRingSheetP_length"/>
     <constant name="BeampipeSupportMechCRingBoxCutLayer1P_dz"        value="BeampipeSupportMechCRingLayer1P_length"/>
     <!-- Layer 2 -->
-    <constant name="BeampipeSupportMechCRingLayer2P_zcenter"         value="BeampipeSupportPlateP_zcenter-0.5*(BeampipeSupportMechCRingSheetP_length+BeampipeSupportMechCRingCoreP_length)"/>
+    <constant name="BeampipeSupportMechCRingLayer2P_zcenter"         value="BeampipeSupportMechCRingP_zcenter"/>
     <constant name="BeampipeSupportMechCRingLayer2P_length"          value="BeampipeSupportMechCRingCoreP_length"/>
     <constant name="BeampipeSupportMechCRingBoxCutLayer2P_dz"        value="BeampipeSupportMechCRingLayer2P_length"/>
     <!-- Layer 3 -->
-    <constant name="BeampipeSupportMechCRingLayer3P_zcenter"         value="BeampipeSupportPlateP_zcenter-0.5*(BeampipeSupportMechCRingSheetP_length+BeampipeSupportMechCRingCoreP_length)"/>
+    <constant name="BeampipeSupportMechCRingLayer3P_zcenter"         value="BeampipeSupportMechCRingP_zcenter+0.5*(BeampipeSupportMechCRingSheetP_length+BeampipeSupportMechCRingCoreP_length)"/>
     <constant name="BeampipeSupportMechCRingLayer3P_length"          value="BeampipeSupportMechCRingSheetP_length"/>
     <constant name="BeampipeSupportMechCRingBoxCutLayer3P_dz"        value="BeampipeSupportMechCRingLayer3P_length"/>
     <!-- qq-->
@@ -613,11 +613,7 @@
     <constant name="BeampipeSupportMechClampBaseP_angspan"           value="20*deg" />
     <constant name="BeampipeSupportMechClampBaseP_xcenter"           value="BeampipeSupportPlateRingP_xcenter"/>
     <constant name="BeampipeSupportMechClampBaseP_zcenter"           value="BeampipeSupportMechPRingP_zcenter+0.5*(BeampipeSupportMechPRingP_length+BeampipeSupportMechClampBaseP_length)"/>
-
-
     <!-- qq-->
-
-
 
     <comment> Inner tracker service/support cones, symmetric </comment>
     <constant name="InnerSupportConeCF_thickness"         value="2.0*mm" />
