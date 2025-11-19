@@ -55,14 +55,14 @@
 
       <comment> Extended vacuum volume for taggers </comment>
       <module id="1" name="Tagger1">
-        <position    x="Tagger1_Vac_Offset_X" y="Tagger1_Y" z="Tagger1_Vac_Offset_Z"/>
-        <rotation    theta="Tagger1_Theta"/>
+        <position    x="Tagger1_Offset_X" y="Tagger1_Offset_Y" z="Tagger1_Offset_Z"/>
+        <rotation    theta="0"/>
         <dimensions  x="Tagger1_Width" y="Tagger1_Height" z="Tagger1_Vac_Length"/>
         <windowLayer id="1" type="window" thickness="2*mm" material="CarbonFiber"/>
       </module>
       <module id="2" name="Tagger2">
-        <position    x="Tagger2_Vac_Offset_X" y="Tagger2_Y" z="Tagger2_Vac_Offset_Z"/>
-        <rotation    theta="Tagger2_Theta"/>
+        <position    x="Tagger2_Offset_X" y="Tagger2_Offset_Y" z="Tagger2_Offset_Z"/>
+        <rotation    theta="0"/>
         <dimensions  x="Tagger2_Width" y="Tagger2_Height" z="Tagger2_Vac_Length"/>
         <windowLayer id="1" type="window" thickness="2*mm" material="CarbonFiber"/>
       </module>

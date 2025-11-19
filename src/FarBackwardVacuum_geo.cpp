@@ -80,15 +80,12 @@ static Ref_t create_detector(Detector& desc, xml_h e, SensitiveDetector /* sens 
 
     xml_dim_t mod_pos_global = mod.child(_U(position));
     xml_dim_t mod_rot_global = mod.child(_U(rotation));
-    Position mod_pos(mod_pos_global.x(), mod_pos_global.y(), mod_pos_global.z());
-    Position vac_pos(mod_pos_global.x() + wall / 2 * cos(mod_rot_global.theta()),
-                     mod_pos_global.y(),
-                     mod_pos_global.z() + wall / 2 * sin(mod_rot_global.theta()));
-    RotationY mod_rot(mod_rot_global.theta() - global_theta);
-
+    Position mod_pos_start(mod_pos_global.x(), mod_pos_global.y(), mod_pos_global.z());
+    RotationY mod_rot(mod_rot_global.theta());
+    // Width and height of tagger vacuum volume   
     // Size of the actual tagger box, replicated in BackwardsTagger
     xml_dim_t moddim = mod.child(_Unicode(dimensions));
-    double vac_w     = moddim.x() / 2;
+    double vac_w     = moddim.x() / 2 + Width/2;
     double vac_h     = moddim.y() / 2;
     double vac_l     = moddim.z() / 2;
 
@@ -96,21 +93,23 @@ static Ref_t create_detector(Detector& desc, xml_h e, SensitiveDetector /* sens 
     auto box_w = vac_w + wall;
     auto box_h = vac_h + wall;
 
+    // Shift the box center position so the box starts at mod_pos_start and extends outward by length
+    Position mod_pos_center = mod_pos_start + Position(Width/2, 0, Length/2 - vac_l);
+    Position vac_pos_center = mod_pos_start + Position(Width/2, 0, Length/2 - vac_l - wall/2);
+
     Box TagWallBox(box_w, box_h, vac_l);
     Box TagVacBox(
         vac_w + wall / 2, vac_h,
-        vac_l); // Vacuum box extends into wall on beamline side to ensure no residual material
+        vac_l - wall / 2); // Vacuum box extends into wall on beamline side to ensure no residual material
 
-    Wall_Box   = UnionSolid(Wall_Box, TagWallBox, Transform3D(mod_rot, mod_pos));
-    Vacuum_Box = UnionSolid(Vacuum_Box, TagVacBox, Transform3D(mod_rot, vac_pos));
+    Wall_Box   = UnionSolid(Wall_Box,   TagWallBox, Transform3D(mod_rot, mod_pos_center));
+    Vacuum_Box = UnionSolid(Vacuum_Box, TagVacBox,  Transform3D(mod_rot, vac_pos_center));
 
     Assembly TaggerAssembly("Tagger_module_assembly");
 
     PlacedVolume pv_mod = DetAssembly.placeVolume(
         TaggerAssembly,
-        Transform3D(mod_rot,
-                    mod_pos + Position(-vac_l * sin(mod_rot_global.theta() - global_theta), 0,
-                                       -vac_l * cos(mod_rot_global.theta() - global_theta))));
+        Transform3D(mod_rot, mod_pos_start + Position(0, 0, Length/2-2*vac_l)));
     DetElement moddet(det, moduleName, moduleID);
     pv_mod.addPhysVolID("module", moduleID);
     moddet.setPlacement(pv_mod);
@@ -226,7 +225,7 @@ static void Make_Tagger(Detector& desc, xml_coll_t& mod, Assembly& env) {
         dd4hep::getAttrOrDefault<std::string>(lay, _Unicode(vis), "FFTrackerShieldingVis");
     double layerRot = dd4hep::getAttrOrDefault<double>(lay, _Unicode(angle), 0);
     double layerThickness =
-        dd4hep::getAttrOrDefault<double>(lay, _Unicode(sensor_thickness), 1 * mm);
+        dd4hep::getAttrOrDefault<double>(lay, _Unicode(thickness), 1 * mm);
     string layerMaterial = dd4hep::getAttrOrDefault<std::string>(lay, _Unicode(material), "Copper");
 
     window_thickness = layerThickness;
@@ -253,7 +252,7 @@ static void Make_Tagger(Detector& desc, xml_coll_t& mod, Assembly& env) {
         dd4hep::getAttrOrDefault<std::string>(lay, _Unicode(vis), "FFTrackerShieldingVis");
     double layerRot = dd4hep::getAttrOrDefault<double>(lay, _Unicode(angle), 45 * deg);
     double layerThickness =
-        dd4hep::getAttrOrDefault<double>(lay, _Unicode(sensor_thickness), 100 * um);
+        dd4hep::getAttrOrDefault<double>(lay, _Unicode(thickness), 100 * um);
     string layerMaterial = dd4hep::getAttrOrDefault<std::string>(lay, _Unicode(material), "Copper");
 
     Material FoilMaterial = desc.material(layerMaterial);

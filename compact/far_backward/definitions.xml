@@ -393,8 +393,6 @@
     <constant name="Tag_Cal_1_Depth"      value="300*mm"/>
     <constant name="Tagger1_Length"       value="Tag_Tracker_1_Depth"/>
 
-    <constant name="Tagger1_Min_Theta"    value="0.0262*rad"/>
-    <constant name="Tagger1_Max_Theta"    value="0.0410*rad"/>
     <constant name="Tagger1_Min_Offset"   value="Q3eR_InnerRadius+Backwards_Box_Wall"/>
     <constant name="Tagger1_Theta"        value="Beam_Theta"/>
 
@@ -402,13 +400,26 @@
     <!-- <constant name="Tagger1_Vac_Offset_X" value="(-0.5*Tagger1_Width-Backwards_Box_Wall)*cos(Tagger1_Theta-Beam_Theta)"/> -->
     <!-- <constant name="Tagger1_Vac_Offset_Z" value="(0.5*Tagger1_Width+Backwards_Box_Wall)*sin(Tagger1_Theta-Beam_Theta)"/> -->
     <!-- <constant name="Tagger1_Vac_Length"   value="(Tagger1_Min_Offset)/sin(Tagger1_Theta-Beam_Theta)"/> -->
-    <constant name="Tagger1_Vac_Offset_X" value="(-0.5*Tagger1_Width-Backwards_Box_Wall-Beam_Width/2)"/>
-    <constant name="Tagger1_Vac_Offset_Z" value="0"/>
-    <constant name="Tagger1_Vac_Length"   value="10.0*m"/>
-
-    <constant name="Tagger1_X"            value="Dipole_Focus_X+Tagger1_Vac_Offset_X-Tagger1_Vac_Length*sin(Tagger1_Theta)"/>
+    <constant name="Tagger1_Offset_X"     value="(-0.5*Tagger1_Width-2*Backwards_Box_Wall-Beam_Width)"/> <!-- In far-backwards beamline coordinates -->
+    <constant name="Tagger1_Offset_Y"     value="0*m"/>
+    <constant name="Tagger1_Offset_Z"     value="0*m"/> <!-- In far-backwards beamline coordinates -->
+    <constant name="Tagger1_Vac_Length"   value="3.0*m"/> 
+    <!-- Tagger1 position semantics: X,Z below are START (negative end) of vacuum length.
+         Local (beamline) coordinates rotated into global using standard matrix:
+           Xg = X0 + Xloc*cos(theta) - Zloc*sin(theta)
+           Zg = Z0 + Xloc*sin(theta) + Zloc*cos(theta)
+         End and center helper constants added for downstream use. -->
+    <!-- Standard right-handed rotation about Y: Xg = X0 + Xloc*cos + Zloc*sin ; Zg = Z0 - Xloc*sin + Zloc*cos -->
+    <constant name="Tagger1_StartX"       value="Dipole_Focus_X + Tagger1_Offset_X*cos(Tagger1_Theta) + Tagger1_Offset_Z*sin(Tagger1_Theta)"/>
+    <constant name="Tagger1_StartZ"       value="Dipole_Focus_Z - Tagger1_Offset_X*sin(Tagger1_Theta) + Tagger1_Offset_Z*cos(Tagger1_Theta)"/>
+    <constant name="Tagger1_CenterX"      value="Tagger1_StartX - 0.5*Tagger1_Vac_Length*sin(Tagger1_Theta)"/>
+    <constant name="Tagger1_CenterZ"      value="Tagger1_StartZ - 0.5*Tagger1_Vac_Length*cos(Tagger1_Theta)"/>
+    <constant name="Tagger1_EndX"         value="Tagger1_StartX - Tagger1_Vac_Length*sin(Tagger1_Theta)"/>
+    <constant name="Tagger1_EndZ"         value="Tagger1_StartZ - Tagger1_Vac_Length*cos(Tagger1_Theta)"/>
+    <!-- Backward-compatible names (Tagger1_X/Z/Y) map to start. -->
+    <constant name="Tagger1_X"            value="Tagger1_EndX"/>
     <constant name="Tagger1_Y"            value="Dipole_Focus_Y"/>
-    <constant name="Tagger1_Z"            value="Dipole_Focus_Z+Tagger1_Vac_Offset_Z-Tagger1_Vac_Length*cos(Tagger1_Theta)"/>
+    <constant name="Tagger1_Z"            value="Tagger1_EndZ"/>
 
     <comment> Tagger2 box and dimensions and positions </comment>
     <constant name="Tagger2_Width"        value="147.84*mm"/>
@@ -418,8 +429,6 @@
     <constant name="Tag_Cal_2_Depth"      value="Tag_Cal_1_Depth"/>
     <constant name="Tagger2_Length"       value="Tag_Tracker_2_Depth"/>
 
-    <constant name="Tagger2_Min_Theta"    value="0.02*rad"/>
-    <constant name="Tagger2_Max_Theta"    value="Tagger1_Min_Theta"/>
     <constant name="Tagger2_Min_Offset"   value="Q3eR_InnerRadius+Backwards_Box_Wall"/>
 
     <constant name="Tagger2_Theta"        value="Beam_Theta"/>
@@ -428,13 +437,21 @@
     <!-- <constant name="Tagger2_Vac_Offset_X" value="0.5*Tagger2_Width*cos(Tagger2_Theta-Beam_Theta)"/> -->
     <!-- <constant name="Tagger2_Vac_Offset_Z" value="0.5*Tagger2_Width*sin(Tagger2_Theta-Beam_Theta)"/> -->
     <!-- <constant name="Tagger2_Vac_Length"   value="(2*Tagger2_Vac_Offset_X+Tagger2_Min_Offset)/sin(Tagger2_Theta-Beam_Theta)"/> -->
-    <constant name="Tagger2_Vac_Offset_X" value="(-0.5*Tagger2_Width-Backwards_Box_Wall-Beam_Width/2)"/>
-    <constant name="Tagger2_Vac_Offset_Z" value="0"/>
-    <constant name="Tagger2_Vac_Length"   value="20.0*m"/>
-
-    <constant name="Tagger2_X"            value="Dipole_Focus_X+Tagger2_Vac_Offset_X-Tagger2_Vac_Length*sin(Tagger2_Theta)"/>
+    <constant name="Tagger2_Offset_X"     value="(-0.5*Tagger2_Width-2*Backwards_Box_Wall-Beam_Width)"/>
+    <constant name="Tagger2_Offset_Y"     value="0*m"/>
+    <constant name="Tagger2_Offset_Z"     value="-3.5*m"/>
+    <constant name="Tagger2_Vac_Length"   value="15.0*m"/>
+    <!-- Tagger2 position semantics mirror Tagger1; includes non-zero local Z offset. -->
+    <constant name="Tagger2_StartX"       value="Dipole_Focus_X + Tagger2_Offset_X*cos(Tagger2_Theta) + Tagger2_Offset_Z*sin(Tagger2_Theta)"/>
+    <constant name="Tagger2_StartZ"       value="Dipole_Focus_Z - Tagger2_Offset_X*sin(Tagger2_Theta) + Tagger2_Offset_Z*cos(Tagger2_Theta)"/>
+    <constant name="Tagger2_CenterX"      value="Tagger2_StartX - 0.5*Tagger2_Vac_Length*sin(Tagger2_Theta)"/>
+    <constant name="Tagger2_CenterZ"      value="Tagger2_StartZ - 0.5*Tagger2_Vac_Length*cos(Tagger2_Theta)"/>
+    <constant name="Tagger2_EndX"         value="Tagger2_StartX - Tagger2_Vac_Length*sin(Tagger2_Theta)"/>
+    <constant name="Tagger2_EndZ"         value="Tagger2_StartZ - Tagger2_Vac_Length*cos(Tagger2_Theta)"/>
+    <!-- Backward-compatible names -->
+    <constant name="Tagger2_X"            value="Tagger2_EndX"/>
     <constant name="Tagger2_Y"            value="Dipole_Focus_Y"/>
-    <constant name="Tagger2_Z"            value="Dipole_Focus_Z+Tagger2_Vac_Offset_Z-Tagger2_Vac_Length*cos(Tagger2_Theta)"/>
+    <constant name="Tagger2_Z"            value="Tagger2_EndZ"/>
 
 
     <!--  -->
