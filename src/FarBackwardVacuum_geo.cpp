@@ -31,7 +31,7 @@ static Ref_t create_detector(Detector& desc, xml_h e, SensitiveDetector /* sens 
   // Dimensions of main beamline pipe
   xml::Component dim = x_det.child(_Unicode(dimensions));
 
-  double Width     = dim.x();
+  double Width = dim.x();
   // double Height    = dim.y();
   double Length = dim.z();
 
@@ -44,7 +44,7 @@ static Ref_t create_detector(Detector& desc, xml_h e, SensitiveDetector /* sens 
   double off         = pos.z();
 
   // Beamline rotation
-  xml_dim_t rot = x_det.rotation();
+  xml_dim_t rot       = x_det.rotation();
   double global_theta = rot.theta();
 
   // Beampipe thickness
@@ -54,15 +54,15 @@ static Ref_t create_detector(Detector& desc, xml_h e, SensitiveDetector /* sens 
   xml::Component EB = x_det.child(_Unicode(exitdim));
   double ED_X       = EB.x();
   // double ED_Y       = EB.y();
-  double ED_Z       = off - EB.attr<double>(_Unicode(lumiZ));
-  double Lumi_R     = EB.attr<double>(_Unicode(lumiR));
+  double ED_Z   = off - EB.attr<double>(_Unicode(lumiZ));
+  double Lumi_R = EB.attr<double>(_Unicode(lumiR));
 
   // Central pipe box
-  Tube Extended_Beam_Box(Width,Width+wall,Length/2); // More realistic tube pipe
+  Tube Extended_Beam_Box(Width, Width + wall, Length / 2); // More realistic tube pipe
   // Box Extended_Beam_Box(Width + wall, Height + wall, Length); // Simpler box pipe
 
   // Central vacuum box
-  Tube Extended_Vacuum_Box(0,Width,Length/2); // More realistic tube pipe
+  Tube Extended_Vacuum_Box(0, Width, Length / 2); // More realistic tube pipe
   // Box Extended_Vacuum_Box(Width, Height, Length); // Simpler box pipe
 
   Solid Wall_Box   = Extended_Beam_Box;
@@ -82,10 +82,10 @@ static Ref_t create_detector(Detector& desc, xml_h e, SensitiveDetector /* sens 
     xml_dim_t mod_rot_global = mod.child(_U(rotation));
     Position mod_pos_start(mod_pos_global.x(), mod_pos_global.y(), mod_pos_global.z());
     RotationY mod_rot(mod_rot_global.theta());
-    // Width and height of tagger vacuum volume   
+    // Width and height of tagger vacuum volume
     // Size of the actual tagger box, replicated in BackwardsTagger
     xml_dim_t moddim = mod.child(_Unicode(dimensions));
-    double vac_w     = moddim.x() / 2 + Width/2;
+    double vac_w     = moddim.x() / 2 + Width / 2;
     double vac_h     = moddim.y() / 2;
     double vac_l     = moddim.z() / 2;
 
@@ -94,22 +94,24 @@ static Ref_t create_detector(Detector& desc, xml_h e, SensitiveDetector /* sens 
     auto box_h = vac_h + wall;
 
     // Shift the box center position so the box starts at mod_pos_start and extends outward by length
-    Position mod_pos_center = mod_pos_start + Position(Width/2, 0, Length/2 - vac_l);
-    Position vac_pos_center = mod_pos_start + Position(Width/2, 0, Length/2 - vac_l - wall/2);
+    Position mod_pos_center = mod_pos_start + Position(Width / 2, 0, Length / 2 - vac_l);
+    Position vac_pos_center = mod_pos_start + Position(Width / 2, 0, Length / 2 - vac_l - wall / 2);
 
     Box TagWallBox(box_w, box_h, vac_l);
     Box TagVacBox(
         vac_w + wall / 2, vac_h,
-        vac_l - wall / 2); // Vacuum box extends into wall on beamline side to ensure no residual material
+        vac_l -
+            wall /
+                2); // Vacuum box extends into wall on beamline side to ensure no residual material
 
-    Wall_Box   = UnionSolid(Wall_Box,   TagWallBox, Transform3D(mod_rot, mod_pos_center));
-    Vacuum_Box = UnionSolid(Vacuum_Box, TagVacBox,  Transform3D(mod_rot, vac_pos_center));
+    Wall_Box   = UnionSolid(Wall_Box, TagWallBox, Transform3D(mod_rot, mod_pos_center));
+    Vacuum_Box = UnionSolid(Vacuum_Box, TagVacBox, Transform3D(mod_rot, vac_pos_center));
 
     Assembly TaggerAssembly("Tagger_module_assembly");
 
     PlacedVolume pv_mod = DetAssembly.placeVolume(
         TaggerAssembly,
-        Transform3D(mod_rot, mod_pos_start + Position(0, 0, Length/2-2*vac_l)));
+        Transform3D(mod_rot, mod_pos_start + Position(0, 0, Length / 2 - 2 * vac_l)));
     DetElement moddet(det, moduleName, moduleID);
     pv_mod.addPhysVolID("module", moduleID);
     moddet.setPlacement(pv_mod);
@@ -132,10 +134,10 @@ static Ref_t create_detector(Detector& desc, xml_h e, SensitiveDetector /* sens 
   if (addLumi) {
 
     // Box Entry_Beam_Box(ED_X + wall, ED_Y + wall, ED_Z);
-    Tube Entry_Beam_Box(ED_X, ED_X + wall, ED_Z/2);
+    Tube Entry_Beam_Box(ED_X, ED_X + wall, ED_Z / 2);
     // Box Entry_Vacuum_Box(ED_X, ED_Y, ED_Z - wall);
-    Tube Entry_Vacuum_Box(0, ED_X, ED_Z/2 - wall);
-    Tube Lumi_Exit(0, Lumi_R, ED_Z/2);
+    Tube Entry_Vacuum_Box(0, ED_X, ED_Z / 2 - wall);
+    Tube Lumi_Exit(0, Lumi_R, ED_Z / 2);
 
     // Future angled exit window and more realistic tube shaped pipe.
     // double angle = -pi/4;
@@ -143,14 +145,12 @@ static Ref_t create_detector(Detector& desc, xml_h e, SensitiveDetector /* sens 
     // CutTube Entry_Vacuum_Box(0,    ED_X,        ED_Z - wall, 0,2*pi, sin(angle),0,cos(angle), 0,0,1);
     // CutTube Lumi_Exit       (0,    Lumi_R,      ED_Z,        0,2*pi, sin(angle),0,cos(angle), 0,0,1);
 
-    // Transformation to place entry box at the start of the beamline box and rotated. 
+    // Transformation to place entry box at the start of the beamline box and rotated.
     // Subtract half of the length of the main beampipe to get to the end position.
     // The rotate into golbal coordinates and then add half of the length of the lumi exit pipe
-    Transform3D entry_tr(
-        RotationY(-global_theta),
-        Position((Length / 2 - ED_Z / 2) * sin(global_theta),
-                 0,
-                 (Length / 2 - ED_Z / 2) * cos(global_theta)));
+    Transform3D entry_tr(RotationY(-global_theta),
+                         Position((Length / 2 - ED_Z / 2) * sin(global_theta), 0,
+                                  (Length / 2 - ED_Z / 2) * cos(global_theta)));
 
     // Add entry boxes to main beamline volume
     Wall_Box   = UnionSolid(Wall_Box, Entry_Beam_Box, entry_tr);
@@ -203,7 +203,8 @@ static Ref_t create_detector(Detector& desc, xml_h e, SensitiveDetector /* sens 
 
   // placement in mother volume
   Position entryPosition(pos.x(), pos.y(), pos.z());
-  Position centerPosition = entryPosition - Position(Length/2*sin(global_theta),0,Length/2*cos(global_theta));
+  Position centerPosition =
+      entryPosition - Position(Length / 2 * sin(global_theta), 0, Length / 2 * cos(global_theta));
 
   Transform3D tr(RotationY(global_theta), centerPosition);
   PlacedVolume detPV = desc.pickMotherVolume(det).placeVolume(backAssembly, tr);
@@ -228,9 +229,8 @@ static void Make_Tagger(Detector& desc, xml_coll_t& mod, Assembly& env) {
     string layerType = dd4hep::getAttrOrDefault<std::string>(lay, _Unicode(type), "window");
     string layerVis =
         dd4hep::getAttrOrDefault<std::string>(lay, _Unicode(vis), "FFTrackerShieldingVis");
-    double layerRot = dd4hep::getAttrOrDefault<double>(lay, _Unicode(angle), 0);
-    double layerThickness =
-        dd4hep::getAttrOrDefault<double>(lay, _Unicode(thickness), 1 * mm);
+    double layerRot       = dd4hep::getAttrOrDefault<double>(lay, _Unicode(angle), 0);
+    double layerThickness = dd4hep::getAttrOrDefault<double>(lay, _Unicode(thickness), 1 * mm);
     string layerMaterial = dd4hep::getAttrOrDefault<std::string>(lay, _Unicode(material), "Copper");
 
     window_thickness = layerThickness;
@@ -255,9 +255,8 @@ static void Make_Tagger(Detector& desc, xml_coll_t& mod, Assembly& env) {
     string layerType = dd4hep::getAttrOrDefault<std::string>(lay, _Unicode(type), "foil");
     string layerVis =
         dd4hep::getAttrOrDefault<std::string>(lay, _Unicode(vis), "FFTrackerShieldingVis");
-    double layerRot = dd4hep::getAttrOrDefault<double>(lay, _Unicode(angle), 45 * deg);
-    double layerThickness =
-        dd4hep::getAttrOrDefault<double>(lay, _Unicode(thickness), 100 * um);
+    double layerRot       = dd4hep::getAttrOrDefault<double>(lay, _Unicode(angle), 45 * deg);
+    double layerThickness = dd4hep::getAttrOrDefault<double>(lay, _Unicode(thickness), 100 * um);
     string layerMaterial = dd4hep::getAttrOrDefault<std::string>(lay, _Unicode(material), "Copper");
 
     Material FoilMaterial = desc.material(layerMaterial);

@@ -57,15 +57,15 @@ def parse_tfs_file(tfs_path: Path) -> pd.DataFrame:
         row['_is_survey'] = is_survey
         rows.append(row)
     df = pd.DataFrame(rows)
-    
+
     # Create unique element_key by adding occurrence index for duplicates
     df['element_key'] = df['NAME'] + '_' + df['KEYWORD']
     df['occurrence'] = df.groupby('element_key').cumcount()
-    
+
     # For duplicated keys, append occurrence number (e.g., D4ER_6_RBEND_0, D4ER_6_RBEND_1, ...)
     mask = df['element_key'].duplicated(keep=False)
     df.loc[mask, 'element_key'] = df.loc[mask, 'element_key'] + '_' + df.loc[mask, 'occurrence'].astype(str)
-    
+
     df.set_index('element_key', inplace=True)
     return df
 
@@ -87,9 +87,9 @@ def compute_epic_positions(survey_df: pd.DataFrame, ip_name: str = 'IP6') -> pd.
     IMPORTANT: In SURVEY files, Z represents the DOWNSTREAM END of each element.
     For upstream (backwards) magnets, we need to compute the center position:
       CenterZ = Z_end + L/2  (moves upstream toward center since Z is negative)
-    
+
     EPIC convention: upstream magnets have negative Z positions.
-    
+
     CenterZ (EPIC) = (Z_survey_end + L/2) - Z_IP
     CenterX (EPIC) = X_survey - X_IP
     """
@@ -136,19 +136,19 @@ def merge_element_data(survey_df: pd.DataFrame, twiss_df: pd.DataFrame, mapping:
         else:
             # Not in index - try appending keyword types
             survey_key_opts = [
-                f"{tfs_name}_QUADRUPOLE", 
-                f"{tfs_name}_RBEND", 
+                f"{tfs_name}_QUADRUPOLE",
+                f"{tfs_name}_RBEND",
                 f"{tfs_name}_CRABCAVITY",
                 f"{tfs_name}_CRABCAVITY_0",  # Handle indexed CRABCAVITY
-                f"{tfs_name}_DRIFT", 
+                f"{tfs_name}_DRIFT",
                 f"{tfs_name}_MARKER"
             ]
             twiss_key_opts = [
-                f"{tfs_name}_QUADRUPOLE", 
-                f"{tfs_name}_RBEND", 
+                f"{tfs_name}_QUADRUPOLE",
+                f"{tfs_name}_RBEND",
                 f"{tfs_name}_CRABCAVITY"
             ]
-        
+
         survey_row = None
         twiss_row = None
         for k in survey_key_opts:
@@ -159,10 +159,10 @@ def merge_element_data(survey_df: pd.DataFrame, twiss_df: pd.DataFrame, mapping:
             if k in twiss_df.index:
                 twiss_row = twiss_df.loc[k]
                 break
-        
+
         if survey_row is None:
             continue  # Need at least survey data for positions
-        
+
         data = {}
         # Positions from survey
         data['CenterZ'] = survey_row['epic_center_z']
@@ -178,7 +178,7 @@ def merge_element_data(survey_df: pd.DataFrame, twiss_df: pd.DataFrame, mapping:
             L = survey_row.get('L', np.nan)
         if not np.isnan(L):
             data['Length'] = L
-        
+
         # Strengths - only if TWISS data available
         if twiss_row is not None:
             # Get keyword from whichever source has it
@@ -187,7 +187,7 @@ def merge_element_data(survey_df: pd.DataFrame, twiss_df: pd.DataFrame, mapping:
                 keyword = survey_row.get('KEYWORD', '')
             if not keyword and hasattr(twiss_row, 'get'):
                 keyword = twiss_row.get('KEYWORD', '')
-            
+
             if 'QUADRUPOLE' in keyword:
                 K1L = twiss_row.get('K1L', np.nan)
                 if not np.isnan(K1L) and not np.isnan(L) and L != 0:
@@ -198,7 +198,7 @@ def merge_element_data(survey_df: pd.DataFrame, twiss_df: pd.DataFrame, mapping:
                 if not np.isnan(angle):
                     data['BendAngle'] = angle
             # CRABCAVITY doesn't need K1L or BendAngle - just position and length
-        
+
         merged[prefix] = data
     return merged
 
@@ -237,7 +237,7 @@ def update_xml(xml_path: Path, merged_data: dict, dry_run: bool = False) -> int:
 
 def main():
     ap = argparse.ArgumentParser(description='Merge SURVEY and TWISS TFS files to update XML.')
-    ap.add_argument('survey_file', type=Path, nargs='?', 
+    ap.add_argument('survey_file', type=Path, nargs='?',
                     default=Path('calibrations/electron_storage_ring/esr-survey-tilt_20250723.tfs'),
                     help='Path to SURVEY TFS file (default: calibrations/electron_storage_ring/esr-survey-tilt_20250723.tfs)')
     ap.add_argument('twiss_file', type=Path, nargs='?',
@@ -294,7 +294,7 @@ def main():
             d4er_mapping[key] = f'D4eR_{occurrence + 1}'  # XML uses 1-based indexing
             s_pos = survey_df.loc[key, 'S']
             print(f"  Mapping {key} (S={s_pos:.3f}) -> D4eR_{occurrence + 1}")
-    
+
     # Combine mappings
     full_mapping = {**mapping, **d4er_mapping}
 

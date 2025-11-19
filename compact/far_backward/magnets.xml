@@ -368,7 +368,7 @@
         </cut>
         <cut>
           <placement x="(0.515283+abs(0.515283-4.019476)/2.-8.579)*cm" y="0*cm" z="0*cm" rotX="0*rad" rotY="abs(CrossingAngle)" rotZ="0*rad"/>
-          <dimensions rmin="0*cm" rmax="7.813040*cm" half_length="400.*cm/2."/>          
+          <dimensions rmin="0*cm" rmax="7.813040*cm" half_length="400.*cm/2."/>
           <rotation num="1" start="0*deg" step="0*deg" axis="Z"/>
         </cut>
       </endplate>

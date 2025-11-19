@@ -412,7 +412,7 @@
     <constant name="Tagger1_Offset_X"     value="(-0.5*Tagger1_Width-2*Backwards_Box_Wall-Beam_Width)"/> <!-- In far-backwards beamline coordinates -->
     <constant name="Tagger1_Offset_Y"     value="0*m"/>
     <constant name="Tagger1_Offset_Z"     value="0.0*m"/> <!-- In far-backwards beamline coordinates -->
-    <constant name="Tagger1_Vac_Length"   value="3.0*m+B2BeR_Length"/> 
+    <constant name="Tagger1_Vac_Length"   value="3.0*m+B2BeR_Length"/>
     <!-- Tagger1 position semantics: X,Z below are START (negative end) of vacuum length.
          Local (beamline) coordinates rotated into global using standard matrix:
            Xg = X0 + Xloc*cos(theta) - Zloc*sin(theta)
