@@ -443,7 +443,7 @@
     <constant name="LumiBeamDiv_pref"     value="5 * 211e-6*rad"/>
 
     <!-- Lumi Exit Window -->
-    <constant name="LumiWin_Zstart"       value="-18.5*m"/>
+    <constant name="LumiWin_Zstart"       value="-30.0*m"/>
     <constant name="LumiWin_thickness"    value="1*cm"/>
     <constant name="LumiWin_R"            value="4*cm"/> <!-- opening radius of tagger box -->
     <constant name="LumiWin_Z"            value="LumiWin_Zstart - LumiWin_thickness/2."/>
@@ -452,7 +452,7 @@
     <constant name="LumiColl_DZ"          value="30*cm"/>
     <constant name="LumiColl_X"           value="0*m"/>
     <constant name="LumiColl_Y"           value="0*m"/>
-    <constant name="LumiColl_Z"           value="-22.6*m"/>
+    <constant name="LumiColl_Z"           value="-32.6*m"/>
 
     <!-- Lumi lead walls -->
     <constant name="LumiWall_DX"          value="0.5*m"/>

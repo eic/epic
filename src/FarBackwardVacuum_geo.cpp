@@ -133,10 +133,10 @@ static Ref_t create_detector(Detector& desc, xml_h e, SensitiveDetector /* sens 
   if (addLumi) {
 
     // Box Entry_Beam_Box(ED_X + wall, ED_Y + wall, ED_Z);
-    Tube Entry_Beam_Box(ED_X, ED_X + wall, ED_Z);
+    Tube Entry_Beam_Box(ED_X, ED_X + wall, ED_Z/2);
     // Box Entry_Vacuum_Box(ED_X, ED_Y, ED_Z - wall);
-    Tube Entry_Vacuum_Box(0, ED_X, ED_Z - wall);
-    Tube Lumi_Exit(0, Lumi_R, ED_Z);
+    Tube Entry_Vacuum_Box(0, ED_X, ED_Z/2 - wall);
+    Tube Lumi_Exit(0, Lumi_R, ED_Z/2);
 
     // Future angled exit window and more realistic tube shaped pipe.
     // double angle = -pi/4;
@@ -144,10 +144,19 @@ static Ref_t create_detector(Detector& desc, xml_h e, SensitiveDetector /* sens 
     // CutTube Entry_Vacuum_Box(0,    ED_X,        ED_Z - wall, 0,2*pi, sin(angle),0,cos(angle), 0,0,1);
     // CutTube Lumi_Exit       (0,    Lumi_R,      ED_Z,        0,2*pi, sin(angle),0,cos(angle), 0,0,1);
 
+    // Transformation to place entry box at the start of the beamline box and rotated. 
+    // Subtract half of the length of the main beampipe to get to the end position.
+    // The rotate into golbal coordinates and then add half of the length of the lumi exit pipe
+    Transform3D entry_tr(
+        RotationY(-global_theta),
+        Position((Length / 2 - ED_Z / 2) * sin(global_theta),
+                 0,
+                 (Length / 2 - ED_Z / 2) * cos(global_theta)));
+
     // Add entry boxes to main beamline volume
-    Wall_Box   = UnionSolid(Wall_Box, Entry_Beam_Box, Transform3D(RotationY(-global_theta)));
-    Vacuum_Box = UnionSolid(Vacuum_Box, Entry_Vacuum_Box, Transform3D(RotationY(-global_theta)));
-    Vacuum_Box = UnionSolid(Vacuum_Box, Lumi_Exit, Transform3D(RotationY(-global_theta)));
+    Wall_Box   = UnionSolid(Wall_Box, Entry_Beam_Box, entry_tr);
+    Vacuum_Box = UnionSolid(Vacuum_Box, Entry_Vacuum_Box, entry_tr);
+    Vacuum_Box = UnionSolid(Vacuum_Box, Lumi_Exit, entry_tr);
   }
 
   //-----------------------------------------------------------------
