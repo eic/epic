@@ -187,17 +187,19 @@ static Ref_t create_detector(Detector& desc, xml_h e, SensitiveDetector /* sens 
 
   Volume vacVol("TaggerStation_Vacuum", Vacuum_Box, Vacuum);
   vacVol.setVisAttributes(desc.visAttributes("BackwardsVac"));
-  PlacedVolume placedVac = vacVol.placeVolume(DetAssembly);
-
-  DetElement valElement(det, "TaggerStation_Vacuum", detID);
-  valElement.setPlacement(placedVac);
 
   Volume wallVol("TaggerStation_Container", Wall_Box_Out, Steel);
   wallVol.setVisAttributes(desc.visAttributes(vis_name));
 
   Assembly backAssembly(detName + "_assembly");
   backAssembly.placeVolume(wallVol);
-  backAssembly.placeVolume(vacVol);
+  // Place the DetAssembly (modules) and the vacuum into the world assembly
+  backAssembly.placeVolume(DetAssembly);
+  PlacedVolume placedVac = backAssembly.placeVolume(vacVol);
+
+  // Bind the DetElement to the actual placed vacuum volume so tracking can find it
+  DetElement valElement(det, "TaggerStation_Vacuum", detID);
+  valElement.setPlacement(placedVac);
 
   // placement in mother volume
   Position entryPosition(pos.x(), pos.y(), pos.z());

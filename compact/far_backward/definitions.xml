@@ -449,7 +449,7 @@
     <constant name="Tagger2_Offset_X"     value="(-0.5*Tagger2_Width-2*Backwards_Box_Wall-Beam_Width)"/>
     <constant name="Tagger2_Offset_Y"     value="0*m"/>
     <constant name="Tagger2_Offset_Z"     value="-3.5*m-B2BeR_Length"/>
-    <constant name="Tagger2_Vac_Length"   value="15.0*m"/>
+    <constant name="Tagger2_Vac_Length"   value="16.0*m"/>
     <!-- Tagger2 position semantics mirror Tagger1; includes non-zero local Z offset. -->
     <constant name="Tagger2_StartX"       value="Dipole_Focus_X + Tagger2_Offset_X*cos(Tagger2_Theta) + Tagger2_Offset_Z*sin(Tagger2_Theta)"/>
     <constant name="Tagger2_StartZ"       value="Dipole_Focus_Z - Tagger2_Offset_X*sin(Tagger2_Theta) + Tagger2_Offset_Z*cos(Tagger2_Theta)"/>
