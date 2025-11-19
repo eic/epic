@@ -58,11 +58,11 @@ static Ref_t create_detector(Detector& desc, xml_h e, SensitiveDetector /* sens 
   double Lumi_R     = EB.attr<double>(_Unicode(lumiR));
 
   // Central pipe box
-  Tube Extended_Beam_Box(Width,Width+wall,Length); // More realistic tube pipe
+  Tube Extended_Beam_Box(Width,Width+wall,Length/2); // More realistic tube pipe
   // Box Extended_Beam_Box(Width + wall, Height + wall, Length); // Simpler box pipe
 
   // Central vacuum box
-  Tube Extended_Vacuum_Box(0,Width,Length); // More realistic tube pipe
+  Tube Extended_Vacuum_Box(0,Width,Length/2); // More realistic tube pipe
   // Box Extended_Vacuum_Box(Width, Height, Length); // Simpler box pipe
 
   Solid Wall_Box   = Extended_Beam_Box;
@@ -189,7 +189,10 @@ static Ref_t create_detector(Detector& desc, xml_h e, SensitiveDetector /* sens 
   backAssembly.placeVolume(vacVol);
 
   // placement in mother volume
-  Transform3D tr(RotationY(global_theta), Position(pos.x(), pos.y(), pos.z()));
+  Position entryPosition(pos.x(), pos.y(), pos.z());
+  Position centerPosition = entryPosition - Position(Length/2*sin(global_theta),0,Length/2*cos(global_theta));
+
+  Transform3D tr(RotationY(global_theta), centerPosition);
   PlacedVolume detPV = desc.pickMotherVolume(det).placeVolume(backAssembly, tr);
   detPV.addPhysVolID("system", detID);
 

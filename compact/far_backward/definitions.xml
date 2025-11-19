@@ -42,6 +42,8 @@
     <constant name="B2BeR_Theta"          value="0.0200*rad"/>
     <constant name="B2BeR_CenterZ"        value="-21.700*m"/>
     <constant name="B2BeR_CenterX"        value="-0.0153*m"/>
+    <constant name="B2BeR_EndZ"           value="B2BeR_CenterZ - (B2BeR_Length/2)*cos(B2BeR_Theta)"/>
+    <constant name="B2BeR_EndX"           value="B2BeR_CenterX - (B2BeR_Length/2)*sin(B2BeR_Theta)"/>
     <constant name="B2BeR_BendAngle"      value="-0.0150*rad"/>
 
     <constant name="SQ3eR_InnerRadius"    value="0.051*m"/>
@@ -364,13 +366,13 @@
     <constant name="Backwards_Box_Wall"   value="2*mm"/>
 
     <comment> Dipole focal point in global coordinates </comment>
-    <constant name="Dipole_Focus_X"       value="B2BeR_CenterX"/>
+    <constant name="Dipole_Focus_X"       value="B2BeR_EndX"/>
     <constant name="Dipole_Focus_Y"       value="0.0*mm"/>
-    <constant name="Dipole_Focus_Z"       value="B2BeR_CenterZ"/>
+    <constant name="Dipole_Focus_Z"       value="B2BeR_EndZ"/>
 
     <comment> Central pipe dimensions </comment>
-    <!-- <constant name="Beam_Length"          value="sqrt((B2BeR_CenterX-SQ3eR_CenterX)*(B2BeR_CenterX-SQ3eR_CenterX)+(B2BeR_CenterZ-SQ3eR_CenterZ)*(B2BeR_CenterZ-SQ3eR_CenterZ))"/> -->
-    <constant name="Beam_Length"          value="10*m"/>
+    <constant name="Beam_Length"          value="sqrt((B2BeR_EndX-SQ3eR_StartX)*(B2BeR_EndX-SQ3eR_StartX)+(B2BeR_EndZ-SQ3eR_StartZ)*(B2BeR_EndZ-SQ3eR_StartZ))"/>
+    <!-- <constant name="Beam_Length"          value="10*m"/> -->
     <constant name="Beam_Width"           value="SQ3eR_InnerRadius"/>
     <constant name="Beam_Height"          value="SQ3eR_InnerRadius"/>
 
@@ -400,7 +402,7 @@
     <!-- <constant name="Tagger1_Vac_Offset_X" value="(-0.5*Tagger1_Width-Backwards_Box_Wall)*cos(Tagger1_Theta-Beam_Theta)"/> -->
     <!-- <constant name="Tagger1_Vac_Offset_Z" value="(0.5*Tagger1_Width+Backwards_Box_Wall)*sin(Tagger1_Theta-Beam_Theta)"/> -->
     <!-- <constant name="Tagger1_Vac_Length"   value="(Tagger1_Min_Offset)/sin(Tagger1_Theta-Beam_Theta)"/> -->
-    <constant name="Tagger1_Vac_Offset_X" value="(-0.5*Tagger1_Width-Backwards_Box_Wall)"/>
+    <constant name="Tagger1_Vac_Offset_X" value="(-0.5*Tagger1_Width-Backwards_Box_Wall-Beam_Width/2)"/>
     <constant name="Tagger1_Vac_Offset_Z" value="0"/>
     <constant name="Tagger1_Vac_Length"   value="10.0*m"/>
 
@@ -426,7 +428,7 @@
     <!-- <constant name="Tagger2_Vac_Offset_X" value="0.5*Tagger2_Width*cos(Tagger2_Theta-Beam_Theta)"/> -->
     <!-- <constant name="Tagger2_Vac_Offset_Z" value="0.5*Tagger2_Width*sin(Tagger2_Theta-Beam_Theta)"/> -->
     <!-- <constant name="Tagger2_Vac_Length"   value="(2*Tagger2_Vac_Offset_X+Tagger2_Min_Offset)/sin(Tagger2_Theta-Beam_Theta)"/> -->
-    <constant name="Tagger2_Vac_Offset_X" value="(-0.5*Tagger2_Width-Backwards_Box_Wall)"/>
+    <constant name="Tagger2_Vac_Offset_X" value="(-0.5*Tagger2_Width-Backwards_Box_Wall-Beam_Width/2)"/>
     <constant name="Tagger2_Vac_Offset_Z" value="0"/>
     <constant name="Tagger2_Vac_Length"   value="20.0*m"/>
 
