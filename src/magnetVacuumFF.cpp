@@ -81,15 +81,15 @@ static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector /* sens *
 
   for (xml_coll_t c(x_det, _U(element)); c; ++c) {
 
-    xml_dim_t pos       = c.child(_U(placement));
-    double pos_x        = pos.x();
-    double pos_y        = pos.y();
-    double pos_z        = pos.z();
-    double pos_theta    = pos.attr<double>(_U(theta));
-    xml_dim_t dims      = c.child(_U(dimensions)); //dimensions();
-    double dim_z        = dims.z();
-    xml_dim_t apperture = c.child(_Unicode(apperture));
-    double app_r        = apperture.r();
+    xml_dim_t pos      = c.child(_U(placement));
+    double pos_x       = pos.x();
+    double pos_y       = pos.y();
+    double pos_z       = pos.z();
+    double pos_theta   = pos.attr<double>(_U(theta));
+    xml_dim_t dims     = c.child(_U(dimensions)); //dimensions();
+    double dim_z       = dims.z();
+    xml_dim_t aperture = c.child(_Unicode(aperture));
+    double app_r       = aperture.r();
 
     radii_magnet.push_back(app_r);        // cm
     lengths_magnet.push_back(dim_z);      //cm
@@ -148,7 +148,8 @@ static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector /* sens *
   //-------------------------------------------
 
   double endOfCentralBeamPipe_z =
-      445.580 * dd4hep::cm;                  //extracted from central_beampipe.xml, line 64
+      494.556 * dd4hep::cm +
+      2. * dd4hep::mm; //extracted from central_beampipe.xml, line 112 + offset to avoid overlaps
   double diameterReduce = 11.0 * dd4hep::cm; //size reduction to avoid overlap with electron pipe
   double vacuumDiameterEntrance =
       25.792 * dd4hep::cm - diameterReduce; //extracted from central_beampipe.xml, line 64
@@ -245,8 +246,8 @@ static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector /* sens *
 
     std::string piece_name = Form("GapVacuum%d", numGaps + numMagnets);
 
-    Cone specialGap(piece_name, specialGapLength / 2, 0.0, vacuumDiameterEntrance / 2, 0.0,
-                    vacuumDiameterExit / 2);
+    ConeSegment specialGap(piece_name, specialGapLength / 2, 0.0, vacuumDiameterEntrance / 2, 0.0,
+                           vacuumDiameterExit / 2, 40 * deg, (360 - 40) * deg);
 
     Volume specialGap_v(piece_name, specialGap, m_Vac);
     sdet.setAttributes(det, specialGap_v, x_det.regionStr(), x_det.limitsStr(), vis_name);

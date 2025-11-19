@@ -28,8 +28,8 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
   xml_det_t x_det    = e;
   xml_dim_t dim      = x_det.dimensions();
   int det_id         = x_det.id();
-  bool reflect       = x_det.reflect(true);
   string det_name    = x_det.nameStr();
+  bool allSensitive  = getAttrOrDefault(x_det, _Unicode(allSensitive), false);
   Material air       = description.air();
   int numsides       = dim.numsides();
   xml::Component pos = x_det.position();
@@ -70,14 +70,13 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
       string s_name      = _toString(s_num, "slice%d");
       double s_thick     = x_slice.thickness();
       Material s_mat     = description.material(x_slice.materialStr());
-      Volume s_vol(s_name, PolyhedraRegular(numsides, M_PI / numsides, rmin, rmax, s_thick), s_mat);
+      Volume s_vol(s_name, PolyhedraRegular(numsides, rmin, rmax, s_thick), s_mat);
 
       s_vol.setVisAttributes(description.visAttributes(x_slice.visStr()));
       sliceZ += s_thick / 2;
-      PlacedVolume s_phv = l_vol.placeVolume(
-          s_vol, Transform3D(RotationZYX(-M_PI / numsides, 0, 0), Position(0, 0, sliceZ)));
+      PlacedVolume s_phv = l_vol.placeVolume(s_vol, Position(0, 0, sliceZ));
       s_phv.addPhysVolID("slice", s_num);
-      if (x_slice.isSensitive()) {
+      if (x_slice.isSensitive() || allSensitive) {
         sens.setType("calorimeter");
         s_vol.setSensitiveDetector(sens);
         sensitives.push_back(s_phv);
@@ -112,19 +111,11 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
   Assembly assembly(det_name);
   DetElement endcapAssyDE(det_name, det_id);
   Volume motherVol = description.pickMotherVolume(endcapAssyDE);
-  if (reflect) {
-    pv = assembly.placeVolume(
-        endcapVol, Transform3D(RotationZYX(M_PI / numsides, M_PI, 0), Position(0, 0, -z_pos)));
-    pv.addPhysVolID("barrel", 2);
-    Ref_t(endcap)->SetName((det_name + "_backward").c_str());
-    endcap.setPlacement(pv);
-  } else {
-    pv = assembly.placeVolume(
-        endcapVol, Transform3D(RotationZYX(M_PI / numsides, 0, 0), Position(0, 0, z_pos)));
-    pv.addPhysVolID("barrel", 1);
-    Ref_t(endcap)->SetName((det_name + "_forward").c_str());
-    endcap.setPlacement(pv);
-  }
+  pv =
+      assembly.placeVolume(endcapVol, Transform3D(RotationZYX(0, M_PI, 0), Position(0, 0, -z_pos)));
+  pv.addPhysVolID("barrel", 2);
+  Ref_t(endcap)->SetName((det_name + "_backward").c_str());
+  endcap.setPlacement(pv);
   endcapAssyDE.add(endcap);
   pv = motherVol.placeVolume(assembly, Position(pos.x(), pos.y(), pos.z()));
   pv.addPhysVolID("system", det_id);

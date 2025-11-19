@@ -11,8 +11,6 @@
       <dimensions>
         <R step="2.0*cm" min="0*cm" max="998*cm" />
         <Z step="2.0*cm" min="-800*cm" max="798*cm" />
-        <translationCoord x="0.0*cm" y="0.0*cm" z="0.0*cm" />
-        <rotationField x="0" y="0" z="0" />
       </dimensions>
     </field>
   </fields>

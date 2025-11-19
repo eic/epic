@@ -1,0 +1,26 @@
+# This contains all geometry to be used in the material map
+ebeam: 5
+pbeam: 41
+features:
+  beampipe:
+  tracking:
+    definitions_craterlake:
+    vertex_barrel:
+    vertex_barrel_support:
+    silicon_barrel:
+    mpgd_barrel:
+    support_service_craterlake:
+    mpgd_outerbarrel:
+    mpgd_forward_endcap:
+    mpgd_backward_endcap:
+    silicon_disks:
+    tof_barrel:
+    tof_endcap:
+  ecal:
+    bic_layer1_only:
+  pid:
+    dirc:
+    pfrich:
+    drich:
+  far_forward:
+    default:

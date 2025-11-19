@@ -2,7 +2,6 @@
 - changed-files:
   - any-glob-to-any-file:
     - "compact/**/backward_*"
-    - "compact/**/mrich*"
     - "compact/**/pfrich*"
 
 "topic: barrel":
@@ -88,7 +87,6 @@
     - "src/*RICH*"
     - "src/*DIRC*"
     - "src/*TOF*"
-    - "src/MRich*"
 
 "topic: tracking":
 - all:

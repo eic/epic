@@ -20,6 +20,7 @@
 #include "Math/Point2D.h"
 #include "TGeoPolygon.h"
 #include "XML/Layering.h"
+#include "XML/Utilities.h"
 #include <functional>
 
 #include "DD4hepDetectorHelper.h"
@@ -51,19 +52,65 @@ static Ref_t create_detector(Detector& desc, xml_h e, SensitiveDetector sens) {
   detector_volume.setAttributes(desc, x_detector.regionStr(), x_detector.limitsStr(),
                                 x_detector.visStr());
 
-  Transform3D detector_tr       = Translation3D(0, 0, offset) * RotationZ(half_dphi);
+  Transform3D detector_tr       = Translation3D(0, 0, offset) * RotationZ(0);
   PlacedVolume detector_physvol = mother_volume.placeVolume(detector_volume, detector_tr);
   sens.setType("calorimeter");
+
+  // Set detector type flag
+  dd4hep::xml::setDetectorTypeFlag(x_detector, sdet);
 
   detector_physvol.addPhysVolID("system", detector_id);
   sdet.setPlacement(detector_physvol);
 
-  // build a single sector
-  DetElement sector_element("sector0", detector_id);
-  Assembly sector_volume("sector");
+  // Build the envelope assembly for layer 1
+  DetElement envelope1_element("envelope1", detector_id);
+  Assembly envelope1_volume("envelope1");
+  auto& envelope1_params =
+      DD4hepDetectorHelper::ensureExtension<dd4hep::rec::VariantParameters>(envelope1_element);
+  if (x_detector.hasChild(_Unicode(envelope))) {
+    xml_comp_t x_envelope = x_detector.child(_Unicode(envelope));
+    envelope1_params.set<double>("envelope_r_min",
+                                 getAttrOrDefault(x_envelope, _Unicode(envelope_r_min), 0.));
+    envelope1_params.set<double>("envelope_r_max",
+                                 getAttrOrDefault(x_envelope, _Unicode(envelope_r_max), 0.));
+    envelope1_params.set<double>("envelope_z_min",
+                                 getAttrOrDefault(x_envelope, _Unicode(envelope_z_min), 0.));
+    envelope1_params.set<double>("envelope_z_max",
+                                 getAttrOrDefault(x_envelope, _Unicode(envelope_z_max), 0.));
+  }
+  // Add the volume boundary material if configured
+  for (xml_coll_t boundary_material(x_detector, _Unicode(boundary_material)); boundary_material;
+       ++boundary_material) {
+    xml_comp_t x_boundary_material = boundary_material;
+    DD4hepDetectorHelper::xmlToProtoSurfaceMaterial(x_boundary_material, envelope1_params,
+                                                    "boundary_material");
+  }
+  // Add the volume layer material if configured
+  for (xml_coll_t layer_material(x_detector, _Unicode(layer_material)); layer_material;
+       ++layer_material) {
+    xml_comp_t x_layer_material = layer_material;
+    DD4hepDetectorHelper::xmlToProtoSurfaceMaterial(x_layer_material, envelope1_params,
+                                                    "layer_material");
+  }
+
+  // Build the envelope assembly for layers 2 to 6 (no Acts support)
+  DetElement envelope26_element("envelope26", detector_id);
+  Assembly envelope26_volume("envelope26");
+
+  // Build a sector for layer 1
+  DetElement sector1_element("sector1", detector_id);
+  Assembly sector1_volume("sector1");
   if (x_detector.hasChild(_Unicode(sectors))) {
     xml_comp_t x_sectors = x_detector.child(_Unicode(sectors));
-    sector_volume.setVisAttributes(desc.visAttributes(x_sectors.visStr()));
+    sector1_volume.setVisAttributes(desc.visAttributes(x_sectors.visStr()));
+  }
+
+  // Build a sector for layers 2 to 6
+  DetElement sector26_element("sector26", detector_id);
+  Assembly sector26_volume("sector26");
+  if (x_detector.hasChild(_Unicode(sectors))) {
+    xml_comp_t x_sectors = x_detector.child(_Unicode(sectors));
+    sector26_volume.setVisAttributes(desc.visAttributes(x_sectors.visStr()));
   }
 
   // keep tracking of the total thickness
@@ -192,7 +239,7 @@ static Ref_t create_detector(Detector& desc, xml_h e, SensitiveDetector sens) {
     }
   }
   if (x_detector.hasChild(_Unicode(support))) {
-    buildSupport(desc, sector_volume, x_detector.child(_Unicode(support)),
+    buildSupport(desc, sector1_volume, x_detector.child(_Unicode(support)),
                  {inner_r, layer_pos_z, x_dimensions.z(), half_dphi});
   }
   //Loop over the sets of layer elements in the detector.
@@ -222,7 +269,12 @@ static Ref_t create_detector(Detector& desc, xml_h e, SensitiveDetector sens) {
       double layer_trd_z  = layer_thickness / 2; // account for frame
       Trapezoid layer_shape(layer_trd_x1, layer_trd_x2, layer_trd_y1, layer_trd_y2, layer_trd_z);
       Volume layer_volume(layer_name, layer_shape, layer_mat);
-      DetElement layer_element(sector_element, layer_name, detector_id);
+      DetElement layer_element(layer_name, detector_id);
+      if (layer_num == 1) {
+        sector1_element.add(layer_element);
+      } else {
+        sector26_element.add(layer_element);
+      }
 
       // Set region, limitset, and vis of layer.
       layer_volume.setAttributes(desc, x_layer.regionStr(), x_layer.limitsStr(), x_layer.visStr());
@@ -258,7 +310,8 @@ static Ref_t create_detector(Detector& desc, xml_h e, SensitiveDetector sens) {
         Volume stave_volume(stave_name, stave_shape, stave_material);
         stave_volume.setAttributes(desc, x_stave.regionStr(), x_stave.limitsStr(),
                                    x_stave.visStr());
-        DetElement stave_element(layer_element, stave_name, detector_id);
+        // No parent, since it will be added on cloning and placement
+        DetElement stave_element(stave_name, detector_id);
 
         // Loop over the slices for this stave
         double slice_pos_z = -(stave_thick / 2.);
@@ -360,12 +413,15 @@ static Ref_t create_detector(Detector& desc, xml_h e, SensitiveDetector sens) {
           RotationY stave_rot(layer_j % 2 == 0 ? +stave_rot_y : -stave_rot_y);
           Transform3D stave_tr(stave_rot, stave_pos);
           PlacedVolume stave_physvol = layer_volume.placeVolume(stave_volume, stave_tr);
-          stave_physvol.addPhysVolID("stave", stave_num);
-          stave_element.setPlacement(stave_physvol);
+          stave_physvol.addPhysVolID("stave", stave_num + stave_j);
+          DetElement stave_j_element =
+              (stave_j == 0) ? stave_element
+                             : stave_element.clone(Form("stave%d", stave_num + stave_j));
+          stave_j_element.setPlacement(stave_physvol);
+          layer_element.add(stave_j_element);
 
           // Increment X position of stave
           stave_pos_x += stave_pitch;
-          ++stave_num;
         }
       }
 
@@ -408,7 +464,9 @@ static Ref_t create_detector(Detector& desc, xml_h e, SensitiveDetector sens) {
       }
 
       // Place layer into sector
-      PlacedVolume layer_physvol = sector_volume.placeVolume(layer_volume, layer_pos);
+      PlacedVolume layer_physvol = (layer_num == 1)
+                                       ? sector1_volume.placeVolume(layer_volume, layer_pos)
+                                       : sector26_volume.placeVolume(layer_volume, layer_pos);
       layer_physvol.addPhysVolID("layer", layer_num);
       layer_element.setPlacement(layer_physvol);
 
@@ -423,16 +481,37 @@ static Ref_t create_detector(Detector& desc, xml_h e, SensitiveDetector sens) {
 
   // Phi start for a sector.
   double phi = M_PI / nsides;
+
   // Create nsides sectors.
-  for (int i = 0; i < nsides; i++, phi -= dphi) { // i is sector number
+  for (int sector_num = 0; sector_num < nsides; sector_num++, phi -= dphi) {
     // Compute the sector position
     Transform3D tr(RotationZYX(0, phi, M_PI * 0.5), Translation3D(0, 0, 0));
-    PlacedVolume sector_physvol = detector_volume.placeVolume(sector_volume, tr);
-    sector_physvol.addPhysVolID("sector", i + 1);
-    DetElement sd = (i == 0) ? sector_element : sector_element.clone(Form("sector%d", i));
-    sd.setPlacement(sector_physvol);
-    sdet.add(sd);
+
+    // Place 1st layer
+    PlacedVolume sector1_physvol = envelope1_volume.placeVolume(sector1_volume, tr);
+    sector1_physvol.addPhysVolID("sector", sector_num + 1);
+    DetElement sd1 =
+        (sector_num == 0) ? sector1_element : sector1_element.clone(Form("sector1_%d", sector_num));
+    sd1.setPlacement(sector1_physvol);
+    envelope1_element.add(sd1);
+
+    // Place layers 2 through 6
+    PlacedVolume sector26_physvol = envelope26_volume.placeVolume(sector26_volume, tr);
+    sector26_physvol.addPhysVolID("sector", sector_num + 1);
+    DetElement sd26 = (sector_num == 0) ? sector26_element
+                                        : sector26_element.clone(Form("sector26_%d", sector_num));
+    sd26.setPlacement(sector26_physvol);
+    envelope26_element.add(sd26);
   }
+
+  // Place envelope
+  PlacedVolume envelope1_physvol = detector_volume.placeVolume(envelope1_volume);
+  envelope1_element.setPlacement(envelope1_physvol);
+  sdet.add(envelope1_element);
+
+  PlacedVolume envelope26_physvol = detector_volume.placeVolume(envelope26_volume);
+  envelope26_element.setPlacement(envelope26_physvol);
+  sdet.add(envelope26_element);
 
   return sdet;
 }

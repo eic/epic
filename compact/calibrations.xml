@@ -11,18 +11,23 @@
     </plugin>
     <plugin name="epic_FileLoader">
       <arg value="cache:$DETECTOR_PATH:/opt/detector"/>
-      <arg value="file:calibrations/onnx/TaggerTrackerTransportation.onnx"/>
-      <arg value="url:https://raw.githubusercontent.com/eic/epic-data/81a03e1ece63f9ecf956a605a674d89813d354a9/onnx/TaggerTrackerTransportation.onnx"/>
+      <arg value="file:calibrations/onnx/Low-Q2_Steering_Reconstruction.onnx"/>
+      <arg value="url:root://dtn-eic.jlab.org//volatile/eic/EPIC/xrdtest/CALIB/2025/5a202b05d865214e3c399883ee13859318044678f87d7b3d9fa8ff526b4909b6/Low-Q2_Steering_Reconstruction.onnx"/>
     </plugin>
     <plugin name="epic_FileLoader">
       <arg value="cache:$DETECTOR_PATH:/opt/detector"/>
       <arg value="file:calibrations/onnx/identity_gemm_w1x1_b1.onnx"/>
       <arg value="url:https://github.com/eic/epic-data/raw/27ef75b2b6108b5e72d3ab891f32aeeb3770c7bd/onnx/identity_gemm_w1x1_b1.onnx"/>
     </plugin>
-    <plugin name="epic_FileLoader">
+    <plugin name="epic_FileLoader"><!-- Previous version for backwards-compatibility -->
       <arg value="cache:$DETECTOR_PATH:/opt/detector"/>
       <arg value="file:calibrations/drich.lut"/>
       <arg value="url:https://github.com/eic/epic-data/raw/b863589baf6998acdc22f5e445a5e462bbf72b0a/drich.lut"/>
+    </plugin>
+    <plugin name="epic_FileLoader">
+      <arg value="cache:$DETECTOR_PATH:/opt/detector"/>
+      <arg value="file:calibrations/drich.lut.gz"/>
+      <arg value="url:https://github.com/eic/epic-data/raw/d51255773e7f4370363cacee9ec536941568acc4/drich.lut.gz"/>
     </plugin>
     <plugin name="epic_FileLoader">
       <arg value="cache:$DETECTOR_PATH:/opt/detector"/>
@@ -44,6 +49,26 @@
       <arg value="file:calibrations/onnx/EcalEndcapN_pi_rejection.onnx"/>
       <arg value="url:https://raw.githubusercontent.com/eic/epic-data/c6e3d56b5dfa2e9fa5998d38d7da20e837d89157/onnx/EcalEndcapN_pi_rejection.onnx"/>
     </plugin>
-  </plugins>
+    <plugin name="epic_FileLoader">
+      <arg value="cache:$DETECTOR_PATH:/opt/detector"/>
+      <arg value="file:calibrations/RP_60_xL_100_beamEnergy_100.xL.lut"/>
+      <arg value="url:https://raw.githubusercontent.com/eic/epic-data/1882ccb5ddf13d7e5838c5eec85eaa29bca6c83a/RP_60_xL_100_beamEnergy_100.xL.lut"/>
+    </plugin>
+    <plugin name="epic_FileLoader">
+      <arg value="cache:$DETECTOR_PATH:/opt/detector"/>
+      <arg value="file:calibrations/RP_60_xL_100_beamEnergy_130.xL.lut"/>
+      <arg value="url:https://raw.githubusercontent.com/eic/epic-data/1882ccb5ddf13d7e5838c5eec85eaa29bca6c83a/RP_60_xL_100_beamEnergy_130.xL.lut"/>
+    </plugin>
+    <plugin name="epic_FileLoader">
+      <arg value="cache:$DETECTOR_PATH:/opt/detector"/>
+      <arg value="file:calibrations/RP_60_xL_100_beamEnergy_275.xL.lut"/>
+      <arg value="url:https://raw.githubusercontent.com/eic/epic-data/1882ccb5ddf13d7e5838c5eec85eaa29bca6c83a/RP_60_xL_100_beamEnergy_275.xL.lut"/>
+    </plugin>
+    <plugin name="epic_FileLoader">
+      <arg value="cache:$DETECTOR_PATH:/opt/detector"/>
+      <arg value="file:calibrations/RP_60_xL_100_beamEnergy_41.xL.lut"/>
+      <arg value="url:https://raw.githubusercontent.com/eic/epic-data/1882ccb5ddf13d7e5838c5eec85eaa29bca6c83a/RP_60_xL_100_beamEnergy_41.xL.lut"/>
+    </plugin>
+   </plugins>
 
 </lccdd>

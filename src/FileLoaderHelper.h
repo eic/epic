@@ -22,8 +22,10 @@ using dd4hep::ERROR, dd4hep::WARNING, dd4hep::VERBOSE, dd4hep::INFO;
 using dd4hep::printout;
 
 namespace FileLoaderHelper {
-static constexpr const char* const kCommand = "curl --retry 5 --location --fail {0} --output {1}";
-}
+static constexpr const char* const kCurlCommand =
+    "curl --retry 5 --location --fail {0} --output {1}";
+static constexpr const char* const kXrootdCommand = "xrdcp --retry 5 {0} {1}";
+} // namespace FileLoaderHelper
 
 // Function to download files
 inline void EnsureFileFromURLExists(std::string url, std::string file, std::string cache_str = "") {
@@ -131,9 +133,15 @@ inline void EnsureFileFromURLExists(std::string url, std::string file, std::stri
 
   // if hash does not exist, we try to retrieve file from url
   if (!fs::exists(hash_path)) {
-    std::string cmd =
-        fmt::format(FileLoaderHelper::kCommand, url, hash_path.c_str()); // TODO: Use c++20 std::fmt
+    std::string cmd;
+
+    if (url.find("root://") == 0) {
+      cmd = fmt::format(FileLoaderHelper::kXrootdCommand, url, hash_path.c_str());
+    } else {
+      cmd = fmt::format(FileLoaderHelper::kCurlCommand, url, hash_path.c_str());
+    }
     printout(INFO, "FileLoader", "downloading " + file + " as hash " + hash + " with " + cmd);
+
     // run cmd
     auto ret = std::system(cmd.c_str());
     if (!fs::exists(hash_path)) {
@@ -146,18 +154,19 @@ inline void EnsureFileFromURLExists(std::string url, std::string file, std::stri
     }
   }
 
-  // check if file already exists
-  if (fs::exists(file_path)) {
-    // file already exists
-    if (fs::is_symlink(file_path)) {
-      // file is symlink
+  // check if file is symlink
+  if (fs::is_symlink(file_path)) {
+    // file is symlink, i.e. valid symlink
+    if (fs::exists(file_path)) {
+      // file already exists
       fs::path symlink_target = fs::read_symlink(file_path);
       if (fs::exists(symlink_target) && fs::equivalent(hash_path, symlink_target)) {
         // link points to correct path
         return;
       } else {
-        // link points to incorrect path
+        // link points to incorrect path -> remove symlink
         if (fs::remove(file_path) == false) {
+          // failure mode: cannot remove incorrect symlink
           printout(ERROR, "FileLoader", "unable to remove symlink " + file_path.string());
           printout(ERROR, "FileLoader",
                    "we tried to create a symlink " + file_path.string() +
@@ -171,7 +180,16 @@ inline void EnsureFileFromURLExists(std::string url, std::string file, std::stri
         }
       }
     } else {
-      // file exists but not symlink
+      // file does not exists, i.e. dead symllink -> remove symlink
+      if (fs::remove(file_path) == false) {
+        // failure mode; cannot remove dead symlink
+        printout(ERROR, "FileLoader", "unable to remove symlink " + file_path.string());
+        std::_Exit(EXIT_FAILURE);
+      }
+    }
+  } else {
+    if (fs::exists(file_path)) {
+      // failure mode: file exists but not symlink, and we won't remove files
       printout(ERROR, "FileLoader",
                "file " + file_path.string() + " already exists but is not a symlink");
       printout(ERROR, "FileLoader",

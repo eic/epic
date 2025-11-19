@@ -345,7 +345,6 @@ static Ref_t createDetector(Detector& description, xml_h e, SensitiveDetector se
 
   hrppdVol_air.setSensitiveDetector(sens);
   hrppdVol_air.setVisAttributes(gasvolVis);
-  DetElement hrppdDE(sdet, "hrppd_de", 0);
 
   // Quartz Window
   Box wnd_Solid(xysize / 2, xysize / 2, wndthick / 2);
@@ -357,7 +356,7 @@ static Ref_t createDetector(Detector& description, xml_h e, SensitiveDetector se
 
   PlacedVolume wndPV = hrppdVol_air.placeVolume(wndVol, Position(0, 0, accu + wndthick / 2));
 
-  DetElement wndDE(hrppdDE, "wnd_de", 0);
+  DetElement wndDE(sdet, "wnd_de", 0);
   wndDE.setPlacement(wndPV);
 
   //  double pitch = xysize + _HRPPD_INSTALLATION_GAP_;
@@ -424,7 +423,7 @@ static Ref_t createDetector(Detector& description, xml_h e, SensitiveDetector se
   PlacedVolume qdboxPV = hrppdVol_air.placeVolume(qdboxVol, Position(0.0, 0.0, accu + pdthick / 2));
 
   DetElement qdboxDE(sdet, "qdbox_de", 0);
-  pdboxDE.setPlacement(qdboxPV);
+  qdboxDE.setPlacement(qdboxPV);
 
   accu += certhick + 1 * mm;
 

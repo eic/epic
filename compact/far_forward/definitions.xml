@@ -2,15 +2,6 @@
 <!-- Copyright (C) 2022 Alex Jentsch, Whitney Armstrong, Chao Peng -->
 
   <define>
-    <constant name="CrossingAngle" value="-0.025*rad "/>
-    <constant name="ionCrossingAngle" value="CrossingAngle"/>
-    <constant name="electronCrossingAngle" value="0.0"/>
-    <constant name="CrossingSlope" value="CrossingAngle"/>
-
-    <constant name="IPBeampipe_rmax" value="2.501*25.4*mm/2.0"/>
-    <constant name="Beampipe_rmax"   value="IPBeampipe_rmax"/>
-    <constant name="BeampipeOD"      value="2.0*IPBeampipe_rmax"/>
-
 
     <comment>
                                     Hadron Magnets -- PRE BIG FLIP COORDINATES
