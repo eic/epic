@@ -36,9 +36,9 @@
         rout1="B2AeR_InnerRadius" rout2="B2AeR_InnerRadius">
       </pipe>
       <pipe id="6" name="Pipe_B2AeR_to_B2BeR"/>
-      <pipe id="7" name="Pipe_in_B2BeR"
-        xcenter="B2BeR_CenterX" zcenter="B2BeR_CenterZ"
-        length="B2BeR_Length" theta="B2BeR_Theta"
+      <pipe id="7" name="Pipe_connection_to_B2BeR"
+        xcenter="B2AeR_Connection_CenterX" zcenter="B2AeR_Connection_CenterZ"
+        length="B2AeR_Connection_Length" theta="B2BeR_Theta"
         rout1="B2BeR_InnerRadius" rout2="B2BeR_InnerRadius">
       </pipe>
     </detector>

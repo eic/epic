@@ -187,7 +187,10 @@ static Ref_t create_detector(Detector& desc, xml_h e, SensitiveDetector /* sens 
 
   Volume vacVol("TaggerStation_Vacuum", Vacuum_Box, Vacuum);
   vacVol.setVisAttributes(desc.visAttributes("BackwardsVac"));
-  vacVol.placeVolume(DetAssembly);
+  PlacedVolume placedVac = vacVol.placeVolume(DetAssembly);
+
+  DetElement valElement(det, "TaggerStation_Vacuum", detID);
+  valElement.setPlacement(placedVac);
 
   Volume wallVol("TaggerStation_Container", Wall_Box_Out, Steel);
   wallVol.setVisAttributes(desc.visAttributes(vis_name));

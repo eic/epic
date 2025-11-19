@@ -35,7 +35,16 @@
     <constant name="B2AeR_Theta"          value="0.0050*rad"/>
     <constant name="B2AeR_CenterZ"        value="-18.650*m"/>
     <constant name="B2AeR_CenterX"        value="-0.000000*m"/>
+    <constant name="B2AeR_EndZ"           value="B2AeR_CenterZ - (B2AeR_Length/2)*cos(B2AeR_Theta)"/>
+    <constant name="B2AeR_EndX"           value="B2AeR_CenterX - (B2AeR_Length/2)*sin(B2AeR_Theta)"/>
     <constant name="B2AeR_BendAngle"      value="-0.0050*rad"/>
+
+    <constant name="B2AeR_Connection_Length" value="1.0*cm"/>
+    <constant name="B2AeR_Connection_CenterZ"  value="B2AeR_EndZ - B2AeR_Connection_Length*cos(B2AeR_Theta)"/>
+    <constant name="B2AeR_Connection_CenterX"  value="B2AeR_EndX - B2AeR_Connection_Length*sin(B2AeR_Theta)"/>
+    <constant name="B2AeR_Connection_EndZ"     value="B2AeR_Connection_CenterZ - B2AeR_Connection_Length/2*cos(B2AeR_Theta)"/>
+    <constant name="B2AeR_Connection_EndX"     value="B2AeR_Connection_CenterX - B2AeR_Connection_Length/2*sin(B2AeR_Theta)"/>
+
 
     <constant name="B2BeR_InnerRadius"    value="50.0*mm"/>
     <constant name="B2BeR_Length"         value="1.500*m"/>
@@ -366,12 +375,12 @@
     <constant name="Backwards_Box_Wall"   value="2*mm"/>
 
     <comment> Dipole focal point in global coordinates </comment>
-    <constant name="Dipole_Focus_X"       value="B2BeR_EndX"/>
+    <constant name="Dipole_Focus_X"       value="B2AeR_Connection_EndX"/>
     <constant name="Dipole_Focus_Y"       value="0.0*mm"/>
-    <constant name="Dipole_Focus_Z"       value="B2BeR_EndZ"/>
+    <constant name="Dipole_Focus_Z"       value="B2AeR_Connection_EndZ"/>
 
     <comment> Central pipe dimensions </comment>
-    <constant name="Beam_Length"          value="sqrt((B2BeR_EndX-SQ3eR_StartX)*(B2BeR_EndX-SQ3eR_StartX)+(B2BeR_EndZ-SQ3eR_StartZ)*(B2BeR_EndZ-SQ3eR_StartZ))"/>
+    <constant name="Beam_Length"          value="sqrt((Dipole_Focus_X-SQ3eR_StartX)*(Dipole_Focus_X-SQ3eR_StartX)+(Dipole_Focus_Z-SQ3eR_StartZ)*(Dipole_Focus_Z-SQ3eR_StartZ))"/>
     <!-- <constant name="Beam_Length"          value="10*m"/> -->
     <constant name="Beam_Width"           value="SQ3eR_InnerRadius"/>
     <constant name="Beam_Height"          value="SQ3eR_InnerRadius"/>
@@ -402,8 +411,8 @@
     <!-- <constant name="Tagger1_Vac_Length"   value="(Tagger1_Min_Offset)/sin(Tagger1_Theta-Beam_Theta)"/> -->
     <constant name="Tagger1_Offset_X"     value="(-0.5*Tagger1_Width-2*Backwards_Box_Wall-Beam_Width)"/> <!-- In far-backwards beamline coordinates -->
     <constant name="Tagger1_Offset_Y"     value="0*m"/>
-    <constant name="Tagger1_Offset_Z"     value="0*m"/> <!-- In far-backwards beamline coordinates -->
-    <constant name="Tagger1_Vac_Length"   value="3.0*m"/> 
+    <constant name="Tagger1_Offset_Z"     value="0.0*m"/> <!-- In far-backwards beamline coordinates -->
+    <constant name="Tagger1_Vac_Length"   value="3.0*m+B2BeR_Length"/> 
     <!-- Tagger1 position semantics: X,Z below are START (negative end) of vacuum length.
          Local (beamline) coordinates rotated into global using standard matrix:
            Xg = X0 + Xloc*cos(theta) - Zloc*sin(theta)
@@ -439,7 +448,7 @@
     <!-- <constant name="Tagger2_Vac_Length"   value="(2*Tagger2_Vac_Offset_X+Tagger2_Min_Offset)/sin(Tagger2_Theta-Beam_Theta)"/> -->
     <constant name="Tagger2_Offset_X"     value="(-0.5*Tagger2_Width-2*Backwards_Box_Wall-Beam_Width)"/>
     <constant name="Tagger2_Offset_Y"     value="0*m"/>
-    <constant name="Tagger2_Offset_Z"     value="-3.5*m"/>
+    <constant name="Tagger2_Offset_Z"     value="-3.5*m-B2BeR_Length"/>
     <constant name="Tagger2_Vac_Length"   value="15.0*m"/>
     <!-- Tagger2 position semantics mirror Tagger1; includes non-zero local Z offset. -->
     <constant name="Tagger2_StartX"       value="Dipole_Focus_X + Tagger2_Offset_X*cos(Tagger2_Theta) + Tagger2_Offset_Z*sin(Tagger2_Theta)"/>
