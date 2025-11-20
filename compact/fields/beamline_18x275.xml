@@ -17,7 +17,7 @@
     </comment>
 
     <!-- Scale reference field strengths by beam energy ratio -->
-    
+
     <!-- Quadrupole gradients scaled to beam energy -->
     <constant name="Q1eR_Gradient"  value="Q1eR_Gradient_perGeV * ElectronBeamEnergy"/>
     <constant name="Q2eR_Gradient"  value="Q2eR_Gradient_perGeV * ElectronBeamEnergy"/>
@@ -37,7 +37,7 @@
     <constant name="Q11eR_Gradient"  value="Q11eR_Gradient_perGeV * ElectronBeamEnergy"/>
     <constant name="Q12eR_Gradient"  value="Q12eR_Gradient_perGeV * ElectronBeamEnergy"/>
     <constant name="Q13eR_Gradient"  value="Q13eR_Gradient_perGeV * ElectronBeamEnergy"/>
-    
+
     <!-- Dipole fields scaled to beam energy -->
     <constant name="B2AeR_B"        value="B2AeR_B_perGeV * ElectronBeamEnergy"/>
     <constant name="B2BeR_B"        value="B2BeR_B_perGeV * ElectronBeamEnergy"/>
