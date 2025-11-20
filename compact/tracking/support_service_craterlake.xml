@@ -564,7 +564,7 @@
     <constant name="BeampipeSupportMechCRingP_rmin"                  value="51.1*mm"/>
     <constant name="BeampipeSupportMechCRingP_rmax"                  value="61.1*mm"/>
     <constant name="BeampipeSupportMechCRingP_thickness"             value="BeampipeSupportMechCRingP_rmax-BeampipeSupportMechCRingP_rmin"/>
-    <constant name="BeampipeSupportMechCRingP_zcenter"               value="BeampipeSupportPlateP_zcenter"/>
+    <constant name="BeampipeSupportMechCRingP_zcenter"               value="1265*mm"/> <comment> From SVT PST Drawing PACKET SEP 2025 STP File </comment>
     <constant name="BeampipeSupportMechCRingP_xcenter_off"           value="-16.04*mm"/>
     <constant name="BeampipeSupportMechCRingP_xcenter"               value="0*mm+BeampipeSupportMechCRingP_xcenter_off"/>
     <!-- 1) box cut dimensions -->
@@ -634,7 +634,7 @@
     <constant name="BeampipeSupportMechCRingN_rmin"                  value="35.93*mm"/>
     <constant name="BeampipeSupportMechCRingN_rmax"                  value="50*mm"/>
     <constant name="BeampipeSupportMechCRingN_thickness"             value="BeampipeSupportMechCRingN_rmax-BeampipeSupportMechCRingN_rmin"/>
-    <constant name="BeampipeSupportMechCRingN_zcenter"               value="BeampipeSupportPlateN_zcenter"/>
+    <constant name="BeampipeSupportMechCRingN_zcenter"               value="1066*mm"/> <comment> From SVT PST Drawing PACKET SEP 2025 STP File </comment>
     <!-- 2) box cut dimensions -->
     <constant name="BeampipeSupportMechCRingBoxCutN_dx"              value="81.85*mm"/>
     <constant name="BeampipeSupportMechCRingBoxCutN_dy"              value="BeampipeSupportMechCRingBoxCutN_dx"/>
