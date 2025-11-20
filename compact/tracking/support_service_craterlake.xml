@@ -2775,7 +2775,7 @@
           <component material="Aluminum" thickness="TrackerSupportCylAlN_thickness1B" name="Services" vis="TrackerServiceVis" />
           <component material="CarbonFiber" thickness="TrackerSupportCylCF_thickness1" name="Support" vis="TrackerSupportVis"/>
       </support>
-      <support type="Cylinder"
+      <!-- <support type="Cylinder"
         name="TrackerSupportCylEndcapN1C"
         vis="TrackerSupportVis"
         rmin="TrackerSupportCyl_rmin1-TrackerSupportCylAlN_thickness1C"
@@ -2784,7 +2784,16 @@
           <position x="0*cm" y="0*cm" z="-TrackerSupportCylEndcapN_z1C" />
           <component material="Aluminum" thickness="TrackerSupportCylAlN_thickness1C" name="Services" vis="TrackerServiceVis" />
           <component material="CarbonFiber" thickness="TrackerSupportCylCF_thickness1" name="Support" vis="TrackerSupportVis"/>
-      </support>
+      </support> -->
+      <support type="Cylinder"
+        name="TrackerSupportCylEndcapN1C"
+        vis="TrackerSupportVis"
+        rmin="TrackerSupportCyl_rmin1"
+        length="TrackerSupportCylEndcapN_length1C"
+        thickness="TrackerSupportCylCF_thickness1">
+          <position x="0*cm" y="0*cm" z="-TrackerSupportCylEndcapN_z1C" />
+          <component material="CarbonFiber" thickness="TrackerSupportCylCF_thickness1" name="Support" vis="TrackerSupportVis"/>
+      </support>      
       <support type="Cylinder"
         name="TrackerSupportCylEndcapP1A"
         vis="TrackerSupportVis"
@@ -2805,7 +2814,7 @@
           <component material="Aluminum" thickness="TrackerSupportCylAlP_thickness1B" name="Services" vis="TrackerServiceVis" />
           <component material="CarbonFiber" thickness="TrackerSupportCylCF_thickness1" name="Support" vis="TrackerSupportVis"/>
       </support>
-      <support type="Cylinder"
+      <!-- <support type="Cylinder"
         name="TrackerSupportCylEndcapP1C"
         vis="TrackerSupportVis"
         rmin="TrackerSupportCyl_rmin1-TrackerSupportCylAlP_thickness1C"
@@ -2814,7 +2823,16 @@
           <position x="0*cm" y="0*cm" z="TrackerSupportCylEndcapP_z1C" />
           <component material="Aluminum" thickness="TrackerSupportCylAlP_thickness1C" name="Services" vis="TrackerServiceVis" />
           <component material="CarbonFiber" thickness="TrackerSupportCylCF_thickness1" name="Support" vis="TrackerSupportVis"/>
-      </support>
+      </support> -->
+      <support type="Cylinder"
+        name="TrackerSupportCylEndcapP1C"
+        vis="TrackerSupportVis"
+        rmin="TrackerSupportCyl_rmin1"
+        length="TrackerSupportCylEndcapP_length1C"
+        thickness="TrackerSupportCylCF_thickness1">
+          <position x="0*cm" y="0*cm" z="TrackerSupportCylEndcapP_z1C" />
+          <component material="CarbonFiber" thickness="TrackerSupportCylCF_thickness1" name="Support" vis="TrackerSupportVis"/>
+      </support>      
 
 
       <!-- <support type="Cone"
