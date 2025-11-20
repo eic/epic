@@ -75,9 +75,6 @@ static Ref_t create_detector(Detector& desc, xml_h e, SensitiveDetector /* sens 
   //-----------------------------------------------------------------
   for (xml_coll_t mod(x_det, _Unicode(module)); mod; ++mod) {
 
-    int moduleID      = dd4hep::getAttrOrDefault<int>(mod, _Unicode(id), 0);
-    string moduleName = dd4hep::getAttrOrDefault<std::string>(mod, _Unicode(name), "Tagger0");
-
     xml_dim_t mod_pos_global = mod.child(_U(position));
     xml_dim_t mod_rot_global = mod.child(_U(rotation));
     Position mod_pos_start(mod_pos_global.x(), mod_pos_global.y(), mod_pos_global.z());
@@ -109,12 +106,9 @@ static Ref_t create_detector(Detector& desc, xml_h e, SensitiveDetector /* sens 
 
     Assembly TaggerAssembly("Tagger_module_assembly");
 
-    PlacedVolume pv_mod = DetAssembly.placeVolume(
+    DetAssembly.placeVolume(
         TaggerAssembly,
         Transform3D(mod_rot, mod_pos_start + Position(0, 0, Length / 2 - 2 * vac_l)));
-    DetElement moddet(det, moduleName, moduleID);
-    pv_mod.addPhysVolID("module", moduleID);
-    moddet.setPlacement(pv_mod);
 
     Make_Tagger(desc, mod, TaggerAssembly);
   }
@@ -208,7 +202,7 @@ static Ref_t create_detector(Detector& desc, xml_h e, SensitiveDetector /* sens 
 
   Transform3D tr(RotationY(global_theta), centerPosition);
   PlacedVolume detPV = desc.pickMotherVolume(det).placeVolume(backAssembly, tr);
-  detPV.addPhysVolID("system", detID);
+  // detPV.addPhysVolID("system", detID);
 
   det.setPlacement(detPV);
 
