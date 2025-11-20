@@ -10,18 +10,43 @@
 
     <comment>
        Backwards Fields
-       Values taken from: https://indico.bnl.gov/event/10974/contributions/51260/
-       Relevent values in the tables scale linearly with beam energy
+       Reference field strengths at 18 GeV defined in beamline_constants.xml
+       Scale by electron beam energy ratio for this configuration
     </comment>
 
+    <xi:include href="beamline_constants.xml" xmlns:xi="http://www.w3.org/2001/XInclude"/>
 
-    <!-- Beamline -->
-    <constant name="Q1eR_Gradient"  value="-0.739741*tesla/meter/GeV*ElectronBeamEnergy"/>
-    <constant name="Q2eR_Gradient"  value="0.66821*tesla/meter/GeV*ElectronBeamEnergy"/>
-    <constant name="Q3eR_Gradient"  value="0.21674*tesla/meter/GeV*ElectronBeamEnergy"/>
-
-    <constant name="B2AeR_B"        value="0.0106667*tesla/GeV*ElectronBeamEnergy"/>
-    <constant name="B2BeR_B"        value="0.0132222*tesla/GeV*ElectronBeamEnergy"/>
+    <!-- Scale reference field strengths by beam energy ratio -->
+    
+    <!-- Quadrupole gradients scaled to beam energy -->
+    <constant name="Q1eR_Gradient"  value="Q1eR_Gradient_perGeV * ElectronBeamEnergy"/>
+    <constant name="Q2eR_Gradient"  value="Q2eR_Gradient_perGeV * ElectronBeamEnergy"/>
+    <constant name="Q3eR_Gradient"  value="Q3eR_Gradient_perGeV * ElectronBeamEnergy"/>
+    <constant name="SQ3eR_Gradient"  value="SQ3eR_Gradient_perGeV * ElectronBeamEnergy"/>
+    <constant name="SQ4eR_Gradient"  value="SQ4eR_Gradient_perGeV * ElectronBeamEnergy"/>
+    <constant name="Q4eR_Gradient"  value="Q4eR_Gradient_perGeV * ElectronBeamEnergy"/>
+    <constant name="SQ5eR_Gradient"  value="SQ5eR_Gradient_perGeV * ElectronBeamEnergy"/>
+    <constant name="Q5eR_Gradient"  value="Q5eR_Gradient_perGeV * ElectronBeamEnergy"/>
+    <constant name="SQ6eR_Gradient"  value="SQ6eR_Gradient_perGeV * ElectronBeamEnergy"/>
+    <constant name="SQ7eR_Gradient"  value="SQ7eR_Gradient_perGeV * ElectronBeamEnergy"/>
+    <constant name="SQ8eR_Gradient"  value="SQ8eR_Gradient_perGeV * ElectronBeamEnergy"/>
+    <constant name="Q8eR_Gradient"  value="Q8eR_Gradient_perGeV * ElectronBeamEnergy"/>
+    <constant name="Q9eR_Gradient"  value="Q9eR_Gradient_perGeV * ElectronBeamEnergy"/>
+    <constant name="SQ10eR_Gradient"  value="SQ10eR_Gradient_perGeV * ElectronBeamEnergy"/>
+    <constant name="Q10eR_Gradient"  value="Q10eR_Gradient_perGeV * ElectronBeamEnergy"/>
+    <constant name="Q11eR_Gradient"  value="Q11eR_Gradient_perGeV * ElectronBeamEnergy"/>
+    <constant name="Q12eR_Gradient"  value="Q12eR_Gradient_perGeV * ElectronBeamEnergy"/>
+    <constant name="Q13eR_Gradient"  value="Q13eR_Gradient_perGeV * ElectronBeamEnergy"/>
+    
+    <!-- Dipole fields scaled to beam energy -->
+    <constant name="B2AeR_B"        value="B2AeR_B_perGeV * ElectronBeamEnergy"/>
+    <constant name="B2BeR_B"        value="B2BeR_B_perGeV * ElectronBeamEnergy"/>
+    <constant name="B3eR_B"        value="B3eR_B_perGeV * ElectronBeamEnergy"/>
+    <constant name="D4eR_1_B"        value="D4eR_1_B_perGeV * ElectronBeamEnergy"/>
+    <constant name="D4eR_2_B"        value="D4eR_2_B_perGeV * ElectronBeamEnergy"/>
+    <constant name="D4eR_3_B"        value="D4eR_3_B_perGeV * ElectronBeamEnergy"/>
+    <constant name="D4eR_4_B"        value="D4eR_4_B_perGeV * ElectronBeamEnergy"/>
+    <constant name="D4eR_5_B"        value="D4eR_5_B_perGeV * ElectronBeamEnergy"/>
 
     <!-- Luminosity System -->
     <constant name="LumiSweepMag_B"     value="1/1.2*tesla"/>
