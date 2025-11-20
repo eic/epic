@@ -45,34 +45,34 @@
     <!-- Positive side -->
     <constant name="PSTThermalMembraneP_zcenter"           value="1250*mm"/>
 
-    <comment> (Negative) SVT PST Feet </comment>
+    <comment> (Negative) SVT PST Fingure </comment>
     <comment> Specifications are from SVT PST Drawing PACKET SEP 2025.pdf </comment>
-    <constant name="PSTFeetN_length"                       value="165*mm"/>
-    <constant name="PSTFeetN_thickness"                    value="2*mm"/>
-    <constant name="PSTFeetN_zmin"                         value="1070*mm"/>
-    <constant name="PSTFeetN_zmax"                         value="PSTFeetN_zmin+PSTFeetN_length"/>
-    <constant name="PSTFeetN_zcenter"                      value="0.5*(PSTFeetN_zmax+PSTFeetN_zmin)"/>
-    <constant name="PSTFeetN_rmin1"                        value="PST_support_tube_rmin"/>
-    <constant name="PSTFeetBaseN_width"                    value="118.19*mm"/>
-    <constant name="PSTFeetHeadN_width"                    value="60*mm"/>
-    <constant name="PSTFeetBaseN_ang_halfwidth"            value="asin((0.5*PSTFeetBaseN_width)/PST_support_tube_rmin)*(180/Pi)*deg"/>
-    <constant name="PSTFeetCutBoxN_rotation"               value="10*deg"/>
-    <constant name="PSTFeetCutBoxN_translation"            value="(3*PSTFeetBaseN_width+PSTFeetHeadN_width)/4"/>
+    <constant name="PSTFingureN_length"                       value="165*mm"/>
+    <constant name="PSTFingureN_thickness"                    value="2*mm"/>
+    <constant name="PSTFingureN_zmin"                         value="1070*mm"/>
+    <constant name="PSTFingureN_zmax"                         value="PSTFingureN_zmin+PSTFingureN_length"/>
+    <constant name="PSTFingureN_zcenter"                      value="0.5*(PSTFingureN_zmax+PSTFingureN_zmin)"/>
+    <constant name="PSTFingureN_rmin1"                        value="PST_support_tube_rmin"/>
+    <constant name="PSTFingureBaseN_width"                    value="118.19*mm"/>
+    <constant name="PSTFingureHeadN_width"                    value="60*mm"/>
+    <constant name="PSTFingureBaseN_ang_halfwidth"            value="asin((0.5*PSTFingureBaseN_width)/PST_support_tube_rmin)*(180/Pi)*deg"/>
+    <constant name="PSTFingureCutBoxN_rotation"               value="10*deg"/>
+    <constant name="PSTFingureCutBoxN_translation"            value="(3*PSTFingureBaseN_width+PSTFingureHeadN_width)/4"/>
     <!-- .qq -->
 
-    <comment> (Positive) SVT PST Feet </comment>
+    <comment> (Positive) SVT PST Fingure </comment>
     <comment> Specifications are from SVT PST Drawing PACKET SEP 2025.pdf </comment>
-    <constant name="PSTFeetP_length"                       value="355*mm"/>
-    <constant name="PSTFeetP_thickness"                    value="2*mm"/>
-    <constant name="PSTFeetP_zmin"                         value="1270*mm"/>
-    <constant name="PSTFeetP_zmax"                         value="PSTFeetP_zmin+PSTFeetP_length"/>
-    <constant name="PSTFeetP_zcenter"                      value="0.5*(PSTFeetP_zmax+PSTFeetP_zmin)"/>
-    <constant name="PSTFeetP_rmin1"                        value="PST_support_tube_rmin"/>
-    <constant name="PSTFeetBaseP_width"                    value="185.19*mm"/>
-    <constant name="PSTFeetHeadP_width"                    value="60*mm"/>
-    <constant name="PSTFeetBaseP_ang_halfwidth"            value="asin((0.5*PSTFeetBaseP_width)/PST_support_tube_rmin)*(180/Pi)*deg"/>
-    <constant name="PSTFeetCutBoxP_rotation"               value="10*deg"/>
-    <constant name="PSTFeetCutBoxP_translation"            value="(3*PSTFeetBaseP_width+PSTFeetHeadP_width)/4"/>
+    <constant name="PSTFingureP_length"                       value="355*mm"/>
+    <constant name="PSTFingureP_thickness"                    value="2*mm"/>
+    <constant name="PSTFingureP_zmin"                         value="1270*mm"/>
+    <constant name="PSTFingureP_zmax"                         value="PSTFingureP_zmin+PSTFingureP_length"/>
+    <constant name="PSTFingureP_zcenter"                      value="0.5*(PSTFingureP_zmax+PSTFingureP_zmin)"/>
+    <constant name="PSTFingureP_rmin1"                        value="PST_support_tube_rmin"/>
+    <constant name="PSTFingureBaseP_width"                    value="185.19*mm"/>
+    <constant name="PSTFingureHeadP_width"                    value="60*mm"/>
+    <constant name="PSTFingureBaseP_ang_halfwidth"            value="asin((0.5*PSTFingureBaseP_width)/PST_support_tube_rmin)*(180/Pi)*deg"/>
+    <constant name="PSTFingureCutBoxP_rotation"               value="10*deg"/>
+    <constant name="PSTFingureCutBoxP_translation"            value="(3*PSTFingureBaseP_width+PSTFingureHeadP_width)/4"/>
     <!-- .qq -->
 
     <comment> (Negative) Service Passthrough Plate </comment>
@@ -95,7 +95,7 @@
     <constant name="ServicePassthroughRingN_phimax"         value="360*deg"/>
     <constant name="ServicePassthroughRingN_rmax"           value="PST_support_tube_rmin"/>    
     <constant name="ServicePassthroughRingN_rmin1"          value="ServicePassthroughRingN_rmax-ServicePassthroughRingN_thickness"/>    
-    <constant name="ServicePassthroughRingN_zmax"           value="PSTFeetN_zmin"/>
+    <constant name="ServicePassthroughRingN_zmax"           value="PSTFingureN_zmin"/>
     <constant name="ServicePassthroughRingN_zmin"           value="ServicePassthroughRingN_zmax-ServicePassthroughRingN_length"/>
     <constant name="ServicePassthroughRingN_zcenter"        value="0.5*(ServicePassthroughRingN_zmax+ServicePassthroughRingN_zmin)"/>
     <constant name="ServicePassthroughCutN_halfwidth"       value="50.5*mm"/> <comment> half-width of beampipe support plate cutout </comment>
@@ -748,7 +748,7 @@
 
     <constant name="TrackerSupportCylEndcapN_zmax1A"       value="TrackerEndcapNDisk2_zmin" />
     <constant name="TrackerSupportCylEndcapN_zmax1B"       value="TrackerEndcapNDisk3_zmin" />
-    <constant name="TrackerSupportCylEndcapN_zmax1C"       value="PSTFeetN_zmin" /> <comment> Ref:  SVT PST Drawing PACKET SEP 2025.pdf</comment>
+    <constant name="TrackerSupportCylEndcapN_zmax1C"       value="PSTFingureN_zmin" /> <comment> Ref:  SVT PST Drawing PACKET SEP 2025.pdf</comment>
 
     <constant name="TrackerSupportCylEndcapN_z1A"          value="0.5*(TrackerSupportCylEndcapN_zmin1A + TrackerSupportCylEndcapN_zmax1A)" />
     <constant name="TrackerSupportCylEndcapN_z1B"          value="0.5*(TrackerSupportCylEndcapN_zmin1B + TrackerSupportCylEndcapN_zmax1B)" />
@@ -2498,227 +2498,227 @@
       </support>
       <!-- end of Support routing flange implementation -->
 
-     <comment> (Negative) SVT PST feet implementation </comment>
+     <comment> (Negative) SVT PST Fingure implementation </comment>
      <!-- (Negative) PST foot at 0 deg -->
-     <subtraction name="PSTFeetN90deg" material="CarbonFiber" vis="TrackerSupportVis">
-      <position x="0*cm" y="0*cm" z="-PSTFeetN_zcenter"/>
+     <subtraction name="PSTFingureN0deg" material="CarbonFiber" vis="TrackerSupportVis">
+      <position x="0*cm" y="0*cm" z="-PSTFingureN_zcenter"/>
       <shape role="base" type="Cylinder"
-            name="PSTFeetN90degCyl"
-            rmin="PSTFeetN_rmin1"
-            length="PSTFeetN_length"
-            thickness="PSTFeetN_thickness"
-            phimin = "0*deg-PSTFeetBaseN_ang_halfwidth"
-            phimax = "0*deg+PSTFeetBaseN_ang_halfwidth"/>   
+            name="PSTFingureN0degCyl"
+            rmin="PSTFingureN_rmin1"
+            length="PSTFingureN_length"
+            thickness="PSTFingureN_thickness"
+            phimin = "0*deg-PSTFingureBaseN_ang_halfwidth"
+            phimax = "0*deg+PSTFingureBaseN_ang_halfwidth"/>   
       <shape role="hole" type="Box"
-            name="PSTFeetN90degCutBoxRight"
-            x="PSTFeetBaseN_width"
-            y="PSTFeetBaseN_width+20*mm"
-            z="2*PSTFeetBaseN_width">
-            <position x="PSTFeetN_rmin1" y="-PSTFeetCutBoxN_translation" z="0*mm"/>
-            <rotation x="PSTFeetCutBoxN_rotation" y="0*deg" z="0*deg"/>
+            name="PSTFingureN0degCutBoxRight"
+            x="PSTFingureBaseN_width"
+            y="PSTFingureBaseN_width+20*mm"
+            z="2*PSTFingureBaseN_width">
+            <position x="PSTFingureN_rmin1" y="-PSTFingureCutBoxN_translation" z="0*mm"/>
+            <rotation x="PSTFingureCutBoxN_rotation" y="0*deg" z="0*deg"/>
       </shape>
       <shape role="hole" type="Box"
-            name="PSTFeetN90degCutBoxLeft"
-            x="PSTFeetBaseN_width"
-            y="PSTFeetBaseN_width+20*mm"
-            z="2*PSTFeetBaseN_width">
-            <position x="PSTFeetN_rmin1" y="PSTFeetCutBoxN_translation" z="0*mm"/>
-            <rotation x="-PSTFeetCutBoxN_rotation" y="0*deg" z="0*deg"/>
+            name="PSTFingureN0degCutBoxLeft"
+            x="PSTFingureBaseN_width"
+            y="PSTFingureBaseN_width+20*mm"
+            z="2*PSTFingureBaseN_width">
+            <position x="PSTFingureN_rmin1" y="PSTFingureCutBoxN_translation" z="0*mm"/>
+            <rotation x="-PSTFingureCutBoxN_rotation" y="0*deg" z="0*deg"/>
       </shape>      
       </subtraction>
      <!-- (Negative) PST foot at 90 deg -->
-     <subtraction name="PSTFeetN90deg" material="CarbonFiber" vis="TrackerSupportVis">
-      <position x="0*cm" y="0*cm" z="-PSTFeetN_zcenter"/>
+     <subtraction name="PSTFingureN90deg" material="CarbonFiber" vis="TrackerSupportVis">
+      <position x="0*cm" y="0*cm" z="-PSTFingureN_zcenter"/>
       <shape role="base" type="Cylinder"
-            name="PSTFeetN90degCyl"
-            rmin="PSTFeetN_rmin1"
-            length="PSTFeetN_length"
-            thickness="PSTFeetN_thickness"
-            phimin = "90*deg-PSTFeetBaseN_ang_halfwidth"
-            phimax = "90*deg+PSTFeetBaseN_ang_halfwidth"/>   
+            name="PSTFingureN90degCyl"
+            rmin="PSTFingureN_rmin1"
+            length="PSTFingureN_length"
+            thickness="PSTFingureN_thickness"
+            phimin = "90*deg-PSTFingureBaseN_ang_halfwidth"
+            phimax = "90*deg+PSTFingureBaseN_ang_halfwidth"/>   
       <shape role="hole" type="Box"
-            name="PSTFeetN90degCutBoxRight"
-            x="PSTFeetBaseN_width"
-            y="PSTFeetBaseN_width+20*mm"
-            z="2*PSTFeetBaseN_width">
-            <position x="-PSTFeetCutBoxN_translation" y="PSTFeetN_rmin1" z="0*mm"/>
-            <rotation x="0*deg" y="-PSTFeetCutBoxN_rotation" z="0*deg"/>
+            name="PSTFingureN90degCutBoxRight"
+            x="PSTFingureBaseN_width"
+            y="PSTFingureBaseN_width+20*mm"
+            z="2*PSTFingureBaseN_width">
+            <position x="-PSTFingureCutBoxN_translation" y="PSTFingureN_rmin1" z="0*mm"/>
+            <rotation x="0*deg" y="-PSTFingureCutBoxN_rotation" z="0*deg"/>
       </shape>
       <shape role="hole" type="Box"
-            name="PSTFeetN90degCutBoxLeft"
-            x="PSTFeetBaseN_width"
-            y="PSTFeetBaseN_width+20*mm"
-            z="2*PSTFeetBaseN_width">
-            <position x="PSTFeetCutBoxN_translation" y="PSTFeetN_rmin1" z="0*mm"/>
-            <rotation x="0*deg" y="PSTFeetCutBoxN_rotation" z="0*deg"/>
+            name="PSTFingureN90degCutBoxLeft"
+            x="PSTFingureBaseN_width"
+            y="PSTFingureBaseN_width+20*mm"
+            z="2*PSTFingureBaseN_width">
+            <position x="PSTFingureCutBoxN_translation" y="PSTFingureN_rmin1" z="0*mm"/>
+            <rotation x="0*deg" y="PSTFingureCutBoxN_rotation" z="0*deg"/>
       </shape>      
       </subtraction>
      <!-- (Negative) PST foot at 180 deg -->
-     <subtraction name="PSTFeetN90deg" material="CarbonFiber" vis="TrackerSupportVis">
-      <position x="0*cm" y="0*cm" z="-PSTFeetN_zcenter"/>
+     <subtraction name="PSTFingureN180deg" material="CarbonFiber" vis="TrackerSupportVis">
+      <position x="0*cm" y="0*cm" z="-PSTFingureN_zcenter"/>
       <shape role="base" type="Cylinder"
-            name="PSTFeetN90degCyl"
-            rmin="PSTFeetN_rmin1"
-            length="PSTFeetN_length"
-            thickness="PSTFeetN_thickness"
-            phimin = "180*deg-PSTFeetBaseN_ang_halfwidth"
-            phimax = "180*deg+PSTFeetBaseN_ang_halfwidth"/>   
+            name="PSTFingureN180degCyl"
+            rmin="PSTFingureN_rmin1"
+            length="PSTFingureN_length"
+            thickness="PSTFingureN_thickness"
+            phimin = "180*deg-PSTFingureBaseN_ang_halfwidth"
+            phimax = "180*deg+PSTFingureBaseN_ang_halfwidth"/>   
       <shape role="hole" type="Box"
-            name="PSTFeetN90degCutBoxRight"
-            x="PSTFeetBaseN_width"
-            y="PSTFeetBaseN_width+20*mm"
-            z="2*PSTFeetBaseN_width">
-            <position x="-PSTFeetN_rmin1" y="-PSTFeetCutBoxN_translation" z="0*mm"/>
-            <rotation x="PSTFeetCutBoxN_rotation" y="0*deg" z="0*deg"/>
+            name="PSTFingureN180degCutBoxRight"
+            x="PSTFingureBaseN_width"
+            y="PSTFingureBaseN_width+20*mm"
+            z="2*PSTFingureBaseN_width">
+            <position x="-PSTFingureN_rmin1" y="-PSTFingureCutBoxN_translation" z="0*mm"/>
+            <rotation x="PSTFingureCutBoxN_rotation" y="0*deg" z="0*deg"/>
       </shape>
       <shape role="hole" type="Box"
-            name="PSTFeetN90degCutBoxLeft"
-            x="PSTFeetBaseN_width"
-            y="PSTFeetBaseN_width+20*mm"
-            z="2*PSTFeetBaseN_width">
-            <position x="-PSTFeetN_rmin1" y="PSTFeetCutBoxN_translation" z="0*mm"/>
-            <rotation x="-PSTFeetCutBoxN_rotation" y="0*deg" z="0*deg"/>
+            name="PSTFingureN180degCutBoxLeft"
+            x="PSTFingureBaseN_width"
+            y="PSTFingureBaseN_width+20*mm"
+            z="2*PSTFingureBaseN_width">
+            <position x="-PSTFingureN_rmin1" y="PSTFingureCutBoxN_translation" z="0*mm"/>
+            <rotation x="-PSTFingureCutBoxN_rotation" y="0*deg" z="0*deg"/>
       </shape>      
       </subtraction>
      <!-- (Negative) PST foot at 270 deg -->
-     <subtraction name="PSTFeetN90deg" material="CarbonFiber" vis="TrackerSupportVis">
-      <position x="0*cm" y="0*cm" z="-PSTFeetN_zcenter"/>
+     <subtraction name="PSTFingureN270deg" material="CarbonFiber" vis="TrackerSupportVis">
+      <position x="0*cm" y="0*cm" z="-PSTFingureN_zcenter"/>
       <shape role="base" type="Cylinder"
-            name="PSTFeetN90degCyl"
-            rmin="PSTFeetN_rmin1"
-            length="PSTFeetN_length"
-            thickness="PSTFeetN_thickness"
-            phimin = "270*deg-PSTFeetBaseN_ang_halfwidth"
-            phimax = "270*deg+PSTFeetBaseN_ang_halfwidth"/>   
+            name="PSTFingureN270degCyl"
+            rmin="PSTFingureN_rmin1"
+            length="PSTFingureN_length"
+            thickness="PSTFingureN_thickness"
+            phimin = "270*deg-PSTFingureBaseN_ang_halfwidth"
+            phimax = "270*deg+PSTFingureBaseN_ang_halfwidth"/>   
       <shape role="hole" type="Box"
-            name="PSTFeetN90degCutBoxRight"
-            x="PSTFeetBaseN_width"
-            y="PSTFeetBaseN_width+20*mm"
-            z="2*PSTFeetBaseN_width">
-            <position x="-PSTFeetCutBoxN_translation" y="-PSTFeetN_rmin1" z="0*mm"/>
-            <rotation x="0*deg" y="-PSTFeetCutBoxN_rotation" z="0*deg"/>
+            name="PSTFingureN270degCutBoxRight"
+            x="PSTFingureBaseN_width"
+            y="PSTFingureBaseN_width+20*mm"
+            z="2*PSTFingureBaseN_width">
+            <position x="-PSTFingureCutBoxN_translation" y="-PSTFingureN_rmin1" z="0*mm"/>
+            <rotation x="0*deg" y="-PSTFingureCutBoxN_rotation" z="0*deg"/>
       </shape>
       <shape role="hole" type="Box"
-            name="PSTFeetN90degCutBoxLeft"
-            x="PSTFeetBaseN_width"
-            y="PSTFeetBaseN_width+20*mm"
-            z="2*PSTFeetBaseN_width">
-            <position x="PSTFeetCutBoxN_translation" y="-PSTFeetN_rmin1" z="0*mm"/>
-            <rotation x="0*deg" y="PSTFeetCutBoxN_rotation" z="0*deg"/>
+            name="PSTFingureN270degCutBoxLeft"
+            x="PSTFingureBaseN_width"
+            y="PSTFingureBaseN_width+20*mm"
+            z="2*PSTFingureBaseN_width">
+            <position x="PSTFingureCutBoxN_translation" y="-PSTFingureN_rmin1" z="0*mm"/>
+            <rotation x="0*deg" y="PSTFingureCutBoxN_rotation" z="0*deg"/>
       </shape>      
       </subtraction>      
-      <!-- end of (Negative) SVT PST feet implementation -->
+      <!-- end of (Negative) SVT PST Fingure implementation -->
 
-     <comment> (Positive) SVT PST feet implementation </comment>
+     <comment> (Positive) SVT PST Fingure implementation </comment>
      <!-- (Positive) PST foot at 0 deg -->
-     <subtraction name="PSTFeetN90deg" material="CarbonFiber" vis="TrackerSupportVis">
-      <position x="0*cm" y="0*cm" z="PSTFeetP_zcenter"/>
+     <subtraction name="PSTFingureP0deg" material="CarbonFiber" vis="TrackerSupportVis">
+      <position x="0*cm" y="0*cm" z="PSTFingureP_zcenter"/>
       <shape role="base" type="Cylinder"
-            name="PSTFeetN90degCyl"
-            rmin="PSTFeetP_rmin1"
-            length="PSTFeetP_length"
-            thickness="PSTFeetP_thickness"
-            phimin = "0*deg-PSTFeetBaseP_ang_halfwidth"
-            phimax = "0*deg+PSTFeetBaseP_ang_halfwidth"/>   
+            name="PSTFingureP0degCyl"
+            rmin="PSTFingureP_rmin1"
+            length="PSTFingureP_length"
+            thickness="PSTFingureP_thickness"
+            phimin = "0*deg-PSTFingureBaseP_ang_halfwidth"
+            phimax = "0*deg+PSTFingureBaseP_ang_halfwidth"/>   
       <shape role="hole" type="Box"
-            name="PSTFeetN90degCutBoxRight"
-            x="PSTFeetBaseP_width"
-            y="PSTFeetBaseP_width+20*mm"
-            z="3*PSTFeetBaseP_width">
-            <position x="PSTFeetP_rmin1" y="-PSTFeetCutBoxP_translation" z="0*mm"/>
-            <rotation x="-PSTFeetCutBoxP_rotation" y="0*deg" z="0*deg"/>
+            name="PSTFingureP0degCutBoxRight"
+            x="PSTFingureBaseP_width"
+            y="PSTFingureBaseP_width+20*mm"
+            z="3*PSTFingureBaseP_width">
+            <position x="PSTFingureP_rmin1" y="-PSTFingureCutBoxP_translation" z="0*mm"/>
+            <rotation x="-PSTFingureCutBoxP_rotation" y="0*deg" z="0*deg"/>
       </shape>
       <shape role="hole" type="Box"
-            name="PSTFeetN90degCutBoxLeft"
-            x="PSTFeetBaseP_width"
-            y="PSTFeetBaseP_width+20*mm"
-            z="3*PSTFeetBaseP_width">
-            <position x="PSTFeetP_rmin1" y="PSTFeetCutBoxP_translation" z="0*mm"/>
-            <rotation x="PSTFeetCutBoxP_rotation" y="0*deg" z="0*deg"/>
+            name="PSTFingureP0degCutBoxLeft"
+            x="PSTFingureBaseP_width"
+            y="PSTFingureBaseP_width+20*mm"
+            z="3*PSTFingureBaseP_width">
+            <position x="PSTFingureP_rmin1" y="PSTFingureCutBoxP_translation" z="0*mm"/>
+            <rotation x="PSTFingureCutBoxP_rotation" y="0*deg" z="0*deg"/>
       </shape>      
       </subtraction>
      <!-- (Positive) PST foot at 90 deg -->
-     <subtraction name="PSTFeetN90deg" material="CarbonFiber" vis="TrackerSupportVis">
-      <position x="0*cm" y="0*cm" z="PSTFeetP_zcenter"/>
+     <subtraction name="PSTFingureP90deg" material="CarbonFiber" vis="TrackerSupportVis">
+      <position x="0*cm" y="0*cm" z="PSTFingureP_zcenter"/>
       <shape role="base" type="Cylinder"
-            name="PSTFeetN90degCyl"
-            rmin="PSTFeetP_rmin1"
-            length="PSTFeetP_length"
-            thickness="PSTFeetP_thickness"
-            phimin = "90*deg-PSTFeetBaseP_ang_halfwidth"
-            phimax = "90*deg+PSTFeetBaseP_ang_halfwidth"/>   
+            name="PSTFingureP90degCyl"
+            rmin="PSTFingureP_rmin1"
+            length="PSTFingureP_length"
+            thickness="PSTFingureP_thickness"
+            phimin = "90*deg-PSTFingureBaseP_ang_halfwidth"
+            phimax = "90*deg+PSTFingureBaseP_ang_halfwidth"/>   
       <shape role="hole" type="Box"
-            name="PSTFeetN90degCutBoxRight"
-            x="PSTFeetBaseP_width"
-            y="PSTFeetBaseP_width+20*mm"
-            z="3*PSTFeetBaseP_width">
-            <position x="-PSTFeetCutBoxP_translation" y="PSTFeetP_rmin1" z="0*mm"/>
-            <rotation x="0*deg" y="PSTFeetCutBoxP_rotation" z="0*deg"/>
+            name="PSTFingureP90degCutBoxRight"
+            x="PSTFingureBaseP_width"
+            y="PSTFingureBaseP_width+20*mm"
+            z="3*PSTFingureBaseP_width">
+            <position x="-PSTFingureCutBoxP_translation" y="PSTFingureP_rmin1" z="0*mm"/>
+            <rotation x="0*deg" y="PSTFingureCutBoxP_rotation" z="0*deg"/>
       </shape>
       <shape role="hole" type="Box"
-            name="PSTFeetN90degCutBoxLeft"
-            x="PSTFeetBaseP_width"
-            y="PSTFeetBaseP_width+20*mm"
-            z="3*PSTFeetBaseP_width">
-            <position x="PSTFeetCutBoxP_translation" y="PSTFeetP_rmin1" z="0*mm"/>
-            <rotation x="0*deg" y="-PSTFeetCutBoxP_rotation" z="0*deg"/>
+            name="PSTFingureP90degCutBoxLeft"
+            x="PSTFingureBaseP_width"
+            y="PSTFingureBaseP_width+20*mm"
+            z="3*PSTFingureBaseP_width">
+            <position x="PSTFingureCutBoxP_translation" y="PSTFingureP_rmin1" z="0*mm"/>
+            <rotation x="0*deg" y="-PSTFingureCutBoxP_rotation" z="0*deg"/>
       </shape>      
       </subtraction>
      <!-- (Positive) PST foot at 180 deg -->
-     <subtraction name="PSTFeetN90deg" material="CarbonFiber" vis="TrackerSupportVis">
-      <position x="0*cm" y="0*cm" z="PSTFeetP_zcenter"/>
+     <subtraction name="PSTFingureP180deg" material="CarbonFiber" vis="TrackerSupportVis">
+      <position x="0*cm" y="0*cm" z="PSTFingureP_zcenter"/>
       <shape role="base" type="Cylinder"
-            name="PSTFeetN90degCyl"
-            rmin="PSTFeetP_rmin1"
-            length="PSTFeetP_length"
-            thickness="PSTFeetP_thickness"
-            phimin = "180*deg-PSTFeetBaseP_ang_halfwidth"
-            phimax = "180*deg+PSTFeetBaseP_ang_halfwidth"/>   
+            name="PSTFingureP180degCyl"
+            rmin="PSTFingureP_rmin1"
+            length="PSTFingureP_length"
+            thickness="PSTFingureP_thickness"
+            phimin = "180*deg-PSTFingureBaseP_ang_halfwidth"
+            phimax = "180*deg+PSTFingureBaseP_ang_halfwidth"/>   
       <shape role="hole" type="Box"
-            name="PSTFeetN90degCutBoxRight"
-            x="PSTFeetBaseP_width"
-            y="PSTFeetBaseP_width+20*mm"
-            z="3*PSTFeetBaseP_width">
-            <position x="-PSTFeetP_rmin1" y="-PSTFeetCutBoxP_translation" z="0*mm"/>
-            <rotation x="-PSTFeetCutBoxP_rotation" y="0*deg" z="0*deg"/>
+            name="PSTFingureP180degCutBoxRight"
+            x="PSTFingureBaseP_width"
+            y="PSTFingureBaseP_width+20*mm"
+            z="3*PSTFingureBaseP_width">
+            <position x="-PSTFingureP_rmin1" y="-PSTFingureCutBoxP_translation" z="0*mm"/>
+            <rotation x="-PSTFingureCutBoxP_rotation" y="0*deg" z="0*deg"/>
       </shape>
       <shape role="hole" type="Box"
-            name="PSTFeetN90degCutBoxLeft"
-            x="PSTFeetBaseP_width"
-            y="PSTFeetBaseP_width+20*mm"
-            z="3*PSTFeetBaseP_width">
-            <position x="-PSTFeetP_rmin1" y="PSTFeetCutBoxP_translation" z="0*mm"/>
-            <rotation x="PSTFeetCutBoxP_rotation" y="0*deg" z="0*deg"/>
+            name="PSTFingureP180degCutBoxLeft"
+            x="PSTFingureBaseP_width"
+            y="PSTFingureBaseP_width+20*mm"
+            z="3*PSTFingureBaseP_width">
+            <position x="-PSTFingureP_rmin1" y="PSTFingureCutBoxP_translation" z="0*mm"/>
+            <rotation x="PSTFingureCutBoxP_rotation" y="0*deg" z="0*deg"/>
       </shape>      
       </subtraction>
      <!-- (Positive) PST foot at 270 deg -->
-     <subtraction name="PSTFeetN90deg" material="CarbonFiber" vis="TrackerSupportVis">
-      <position x="0*cm" y="0*cm" z="PSTFeetP_zcenter"/>
+     <subtraction name="PSTFingureP270deg" material="CarbonFiber" vis="TrackerSupportVis">
+      <position x="0*cm" y="0*cm" z="PSTFingureP_zcenter"/>
       <shape role="base" type="Cylinder"
-            name="PSTFeetN90degCyl"
-            rmin="PSTFeetP_rmin1"
-            length="PSTFeetP_length"
-            thickness="PSTFeetP_thickness"
-            phimin = "270*deg-PSTFeetBaseP_ang_halfwidth"
-            phimax = "270*deg+PSTFeetBaseP_ang_halfwidth"/>   
+            name="PSTFingureP270degCyl"
+            rmin="PSTFingureP_rmin1"
+            length="PSTFingureP_length"
+            thickness="PSTFingureP_thickness"
+            phimin = "270*deg-PSTFingureBaseP_ang_halfwidth"
+            phimax = "270*deg+PSTFingureBaseP_ang_halfwidth"/>   
       <shape role="hole" type="Box"
-            name="PSTFeetN90degCutBoxRight"
-            x="PSTFeetBaseP_width"
-            y="PSTFeetBaseP_width+20*mm"
-            z="3*PSTFeetBaseP_width">
-            <position x="-PSTFeetCutBoxP_translation" y="-PSTFeetP_rmin1" z="0*mm"/>
-            <rotation x="0*deg" y="PSTFeetCutBoxP_rotation" z="0*deg"/>
+            name="PSTFingureP270degCutBoxRight"
+            x="PSTFingureBaseP_width"
+            y="PSTFingureBaseP_width+20*mm"
+            z="3*PSTFingureBaseP_width">
+            <position x="-PSTFingureCutBoxP_translation" y="-PSTFingureP_rmin1" z="0*mm"/>
+            <rotation x="0*deg" y="PSTFingureCutBoxP_rotation" z="0*deg"/>
       </shape>
       <shape role="hole" type="Box"
-            name="PSTFeetN90degCutBoxLeft"
-            x="PSTFeetBaseP_width"
-            y="PSTFeetBaseP_width+20*mm"
-            z="3*PSTFeetBaseP_width">
-            <position x="PSTFeetCutBoxP_translation" y="-PSTFeetP_rmin1" z="0*mm"/>
-            <rotation x="0*deg" y="-PSTFeetCutBoxP_rotation" z="0*deg"/>
+            name="PSTFingureP270degCutBoxLeft"
+            x="PSTFingureBaseP_width"
+            y="PSTFingureBaseP_width+20*mm"
+            z="3*PSTFingureBaseP_width">
+            <position x="PSTFingureCutBoxP_translation" y="-PSTFingureP_rmin1" z="0*mm"/>
+            <rotation x="0*deg" y="-PSTFingureCutBoxP_rotation" z="0*deg"/>
       </shape>      
       </subtraction>      
-      <!-- end of (Positive) SVT PST feet implementation -->            
+      <!-- end of (Positive) SVT PST Fingure implementation -->            
 
       <support type="Cone"
         name="InnerSupportConeEndcapN"
