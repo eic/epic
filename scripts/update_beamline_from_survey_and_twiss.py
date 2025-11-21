@@ -125,7 +125,7 @@ def compute_epic_positions(survey_df: pd.DataFrame, ip_name: str = 'IP6') -> pd.
 
 def merge_element_data(survey_df: pd.DataFrame, twiss_df: pd.DataFrame, mapping: dict, reference_energy_GeV: float = 18.0) -> dict:
     """Merge survey and twiss data, computing reference field strengths.
-    
+
     Args:
         reference_energy_GeV: Reference electron beam energy in GeV for computing field strengths
                              Default 18 GeV (nominal IP6 electron energy)
@@ -215,22 +215,22 @@ def merge_element_data(survey_df: pd.DataFrame, twiss_df: pd.DataFrame, mapping:
     return merged
 
 
-def update_xml(xml_path: Path, merged_data: dict, dry_run: bool = False, 
+def update_xml(xml_path: Path, merged_data: dict, dry_run: bool = False,
                constants_path: Path = None, reference_energy_GeV: float = 18.0) -> tuple[int, int]:
     """Update geometry XML (positions/angles only) and constants XML (magnet fundamental params).
-    
+
     Fundamental parameters (Length, K1L, BendAngle) are written to beamline_constants.xml.
     Reference field strengths (Gradient_Ref, B_Ref) and per-GeV normalization are calculated
     transparently in XML using formulas.
     Only position/orientation (CenterX, CenterZ, Theta) go to definitions.xml.
-    
+
     Returns:
         (geometry_updates, constants_updates) tuple
     """
     xml_text = xml_path.read_text()
     geometry_updates = 0
     constants_updates = 0
-    
+
     # Prepare constants XML content if needed
     constants_lines = []
     if constants_path:
@@ -262,7 +262,7 @@ def update_xml(xml_path: Path, merged_data: dict, dry_run: bool = False,
 
   </define>
 '''
-    
+
     for prefix, params in merged_data.items():
         for suffix, value in params.items():
             # Determine unit
@@ -272,15 +272,15 @@ def update_xml(xml_path: Path, merged_data: dict, dry_run: bool = False,
                 unit = '1/m'
             else:
                 unit = 'm'
-            
+
             const_name = f"{prefix}_{suffix}"
-            
+
             # Only write fundamental magnet parameters (Length, K1L, BendAngle) to constants file
             # K1, Gradient_Ref, B_Ref are calculated in XML from these fundamental parameters
             if suffix in ['Length', 'K1L', 'BendAngle'] and constants_path:
                 formatted = format_value(value, unit)
-                    
-                pattern = re.compile(rf'(<constant\s+name="{const_name}"\s+value=")[^"]*(")') 
+
+                pattern = re.compile(rf'(<constant\s+name="{const_name}"\s+value=")[^"]*(")')
                 if constants_path.exists():
                     m = pattern.search(constants_text)
                     if m:
@@ -308,7 +308,7 @@ def update_xml(xml_path: Path, merged_data: dict, dry_run: bool = False,
             else:
                 # Position/orientation parameters go to definitions.xml
                 formatted = format_value(value, unit)
-                pattern = re.compile(rf'(<constant\s+name="{const_name}"\s+value=")[^"]*(")') 
+                pattern = re.compile(rf'(<constant\s+name="{const_name}"\s+value=")[^"]*(")')
                 m = pattern.search(xml_text)
                 if m:
                     old_value = xml_text[m.start(1)+len(m.group(1)):m.end(2)-len(m.group(2))]
@@ -322,7 +322,7 @@ def update_xml(xml_path: Path, merged_data: dict, dry_run: bool = False,
                     # Skip constants that don't exist in the XML (they should be pre-defined)
                     if suffix not in ['Gradient', 'B']:  # Don't warn for field strengths
                         print(f"  Warning: {const_name} not found in geometry XML, skipping")
-    
+
     if not dry_run:
         if geometry_updates:
             xml_path.write_text(xml_text)
@@ -332,7 +332,7 @@ def update_xml(xml_path: Path, merged_data: dict, dry_run: bool = False,
                 insert_pos = constants_text.rfind('</define>')
                 constants_text = constants_text[:insert_pos] + '\n'.join(constants_lines) + '\n\n' + constants_text[insert_pos:]
             constants_path.write_text(constants_text)
-    
+
     return geometry_updates, constants_updates
 def main():
     ap = argparse.ArgumentParser(description='Merge SURVEY and TWISS TFS files to update XML.')
@@ -405,7 +405,7 @@ def main():
     print('Parsing TWISS file...')
     twiss_df = parse_tfs_file(args.twiss_file)
     print(f"  TWISS elements: {len(twiss_df)}")
-    
+
     # Auto-detect beam energy from TWISS header
     detected_energy = None
     try:
@@ -434,7 +434,7 @@ def main():
                         break
     except Exception as e:
         print(f"  Warning: Could not auto-detect beam energy: {e}")
-    
+
     # Use detected energy if available, otherwise fall back to argument or default
     if detected_energy is not None:
         reference_energy = detected_energy
@@ -452,8 +452,8 @@ def main():
         print(f"  {prefix}: keys={list(data.keys())}")
 
     print('Updating XML files...')
-    geo_updates, const_updates = update_xml(args.xml_file, merged, 
-                                            dry_run=args.dry_run, 
+    geo_updates, const_updates = update_xml(args.xml_file, merged,
+                                            dry_run=args.dry_run,
                                             constants_path=args.constants_file,
                                             reference_energy_GeV=reference_energy)
     print(f"Done. Geometry: {geo_updates} constants {'would be' if args.dry_run else 'were'} updated.")
