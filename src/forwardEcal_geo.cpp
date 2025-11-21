@@ -163,7 +163,7 @@ static Ref_t createDetector(Detector& desc, xml_h handle, SensitiveDetector sens
             pv = block_vol.placeVolume(
                 trow_vol,
                 Transform3D(RotationZYX(0, 0, 0), Position(0.0, (tr - 1.5) * blocksize / 4, 0)));
-            pv.addPhysVolID("tower_y", tr);
+            pv.addPhysVolID("y", tr);
           }
 
           //4 towers in a row - finally a W powder volume, not air
@@ -174,7 +174,7 @@ static Ref_t createDetector(Detector& desc, xml_h handle, SensitiveDetector sens
             pv = trow_vol.placeVolume(
                 tower_vol,
                 Transform3D(RotationZYX(0, 0, 0), Position((tc - 1.5) * blocksize / 4, 0, 0)));
-            pv.addPhysVolID("tower_x", tc);
+            pv.addPhysVolID("x", tc);
           }
 
           //rows of fibers
