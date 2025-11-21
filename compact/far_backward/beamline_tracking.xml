@@ -58,8 +58,8 @@
         <slice
         pipe_id="7"
         grandmother="Pipe_SQ3eR_to_D4eR_5"
-        mother="Pipe_in_Q4eR_vacuum"
-        name="Pipe_in_Q4eR_tracker"/>
+        mother="Pipe_in_Q3eR_vacuum"
+        name="Pipe_in_Q3eR_tracker_start"/>
 
     </detector>
 
@@ -67,7 +67,7 @@
         type="BeamPipeStop"
         name="Backwards_Pipe_Stop"
         grandmother="Pipe_SQ3eR_to_D4eR_5"
-        mother="Pipe_SQ3eR_to_Q3eR_vacuum"
+        mother="Pipe_Q3eR_to_SQ4eR_vacuum"
     />
 
   </detectors>

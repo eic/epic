@@ -14,12 +14,12 @@
 
     <comment> Electron magnet dimensions and positions </comment>
 
-    <constant name="Q1eR_InnerRadius"     value="67.5*mm"/>
+    <constant name="Q1eR_InnerRadius"     value="63.0*mm"/>
     <constant name="Q1eR_Theta"           value="0.000000*rad"/>
     <constant name="Q1eR_CenterZ"         value="-6.200*m"/>
     <constant name="Q1eR_CenterX"         value="-0.000000*m"/>
 
-    <constant name="Q2eR_InnerRadius"     value="78.0*mm"/>
+    <constant name="Q2eR_InnerRadius"     value="70.5*mm"/>
     <constant name="Q2eR_Theta"           value="0.000000*rad"/>
     <constant name="Q2eR_CenterZ"         value="-8.300*m"/>
     <constant name="Q2eR_CenterX"         value="-0.000000*m"/>
@@ -318,7 +318,7 @@
     <constant name="Timepix4width"        value="24.64*mm"/>
 
     <comment> Tagger1 box and dimensions and positions </comment>
-    <constant name="Tagger1_Width"        value="147.84*mm"/>
+    <constant name="Tagger1_Width"        value="1.4*147.84*mm"/>
     <constant name="Tagger1_Height"       value="64.0*mm"/>
 
     <constant name="Tag_Tracker_1_Depth"  value="305*mm"/>
@@ -335,7 +335,7 @@
     <constant name="Tagger1_Offset_X"     value="(-0.5*Tagger1_Width-2*Backwards_Box_Wall-Beam_Width)"/> <!-- In far-backwards beamline coordinates -->
     <constant name="Tagger1_Offset_Y"     value="0*m"/>
     <constant name="Tagger1_Offset_Z"     value="0.0*m"/> <!-- In far-backwards beamline coordinates -->
-    <constant name="Tagger1_Vac_Length"   value="3.0*m+B2BeR_Length"/>
+    <constant name="Tagger1_Vac_Length"   value="2.5*m+B2BeR_Length"/>
     <!-- Tagger1 position semantics: X,Z below are START (negative end) of vacuum length.
          Local (beamline) coordinates rotated into global using standard matrix:
            Xg = X0 + Xloc*cos(theta) - Zloc*sin(theta)
@@ -354,7 +354,7 @@
     <constant name="Tagger1_Z"            value="Tagger1_EndZ"/>
 
     <comment> Tagger2 box and dimensions and positions </comment>
-    <constant name="Tagger2_Width"        value="147.84*mm"/>
+    <constant name="Tagger2_Width"        value="3*147.84*mm"/>
     <constant name="Tagger2_Height"       value="64.0*mm"/>
 
     <constant name="Tag_Tracker_2_Depth"  value="Tag_Tracker_1_Depth"/>
@@ -371,7 +371,7 @@
     <!-- <constant name="Tagger2_Vac_Length"   value="(2*Tagger2_Vac_Offset_X+Tagger2_Min_Offset)/sin(Tagger2_Theta-Beam_Theta)"/> -->
     <constant name="Tagger2_Offset_X"     value="(-0.5*Tagger2_Width-2*Backwards_Box_Wall-Beam_Width)"/>
     <constant name="Tagger2_Offset_Y"     value="0*m"/>
-    <constant name="Tagger2_Offset_Z"     value="-3.5*m-B2BeR_Length"/>
+    <constant name="Tagger2_Offset_Z"     value="-3.0*m-B2BeR_Length"/>
     <constant name="Tagger2_Vac_Length"   value="16.0*m"/>
     <!-- Tagger2 position semantics mirror Tagger1; includes non-zero local Z offset. -->
     <constant name="Tagger2_StartX"       value="Dipole_Focus_X + Tagger2_Offset_X*cos(Tagger2_Theta) + Tagger2_Offset_Z*sin(Tagger2_Theta)"/>
