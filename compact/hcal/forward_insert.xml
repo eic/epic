@@ -3,13 +3,12 @@
 
 <lccdd>
 
-  <info name="forward_insert.xml"
-        title="Forward HCal Insert Calorimeter"
-        author="@rymilton"
-        url="https://github.com/rymilton"
-        status="development"
-        version="1.0"
-          ><comment/></info>
+  <documentation>
+    Title: Forward HCal Insert Calorimeter
+    Author: @rymilton
+    Status: development
+    Version: 1.0
+  </documentation>
 
   <define>
      <documentation>

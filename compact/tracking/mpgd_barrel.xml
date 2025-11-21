@@ -2,14 +2,12 @@
 <!-- Copyright (C) 2022 Sylvester Joosten, Wouter Deconinck, Matt Posik, Yann Bedfer -->
 
 <lccdd>
-<info name="mpgd_barrel.xml"
-      title="Micro Pattern Gas Detectors"
-      author="mposik1983"
-      url="https://github.com/mposik1983"
-      status="development"
-      version="2.0"
-><comment/>
-</info>
+<documentation>
+  Title: Micro Pattern Gas Detectors
+  Author: @mposik1983
+  Status: development
+  Version: 2.0
+</documentation>
 
   <define>
     <comment>
