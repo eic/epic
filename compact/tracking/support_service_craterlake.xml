@@ -80,7 +80,7 @@
           1) base ring
           2) top half ring holes
           3) bottom half ring holes
-          4) beampipe support plate cutouts (left and right)
+          4) rectangular cutout in the middle 
      -->
     <comment> Specifications are from SVT PST Drawing PACKET SEP 2025.pdf </comment> 
     <comment> General dimensions (we assume hole-specs are the same for top and bottom half) </comment>
@@ -206,38 +206,10 @@
     <constant name="ServicePassthroughBotRingHole10N_phimax" value="ServicePassthroughBotRingHole10N_phimin+ServicePassthroughSmallHoleN_width"/>
     <constant name="ServicePassthroughBotRing10N_phimax"     value="ServicePassthroughBotRingHole10N_phimax+ServicePassthroughHoleN_gap"/>
     <constant name="ServicePassthroughBotRingN_phimax"      value="ServicePassthroughBotRingHole10N_phimax"/>
-    <comment> Beampipe support cutouts </comment>    
-    <!-- The wedges in the middle parts of the negative service passthrough plate to make way for the beampipe support.  
-         There are two halves: left and right (while looking towards the hadron going side) 
-         For each half, we need to cut two holes:
-         1) a wedge spanning the width of the beampipe support plate
-         2) a rectangular box to create the flat edge     
-    -->
-    <comment> Left half </comment>
-    <!-- specs for the wegde shaped cut -->
-    <constant name="ServicePassthroughWedgeCutLeftN_rmin1"   value="ServicePassthroughRingN_rmin1"/>
-    <constant name="ServicePassthroughWedgeCutLeftN_thickness" value="ServicePassthroughRingN_thickness"/>
-    <constant name="ServicePassthroughWedgeCutLeftN_length"  value="ServicePassthroughRingN_length"/> 
-    <constant name="ServicePassthroughWedgeCutLeftN_phimax"  value="asin(ServicePassthroughCutN_halfwidth/ServicePassthroughRingN_rmax)*(180/Pi)*deg"/>
-    <constant name="ServicePassthroughWedgeCutLeftN_phimin"  value="360*deg-ServicePassthroughWedgeCutLeftN_phimax"/>  
-    <!-- specs for the rectangular box cut -->
-    <constant name="ServicePassthroughBoxCutLeftN_dx"        value="ServicePassthroughRingN_thickness"/> 
+    <comment> rectangular cutout in the middle </comment>    
+    <constant name="ServicePassthroughBoxCutLeftN_dx"        value="2*ServicePassthroughRingN_rmax"/> 
     <constant name="ServicePassthroughBoxCutLeftN_dy"        value="ServicePassthroughCutN_halfwidth*2"/>
     <constant name="ServicePassthroughBoxCutLeftN_dz"        value="ServicePassthroughRingN_length"/> 
-    <constant name="ServicePassthroughBoxCutLeftN_xcenter_off" value="ServicePassthroughRingN_rmax-sqrt(ServicePassthroughRingN_rmax**2-ServicePassthroughCutN_halfwidth**2)+0.3*mm"/> <!-- 0.3mm ad-hoc offset to tackel round-off error -->
-    <constant name="ServicePassthroughBoxCutLeftN_xcenter"   value="ServicePassthroughRingN_rmin1+(ServicePassthroughRingN_thickness/2)-ServicePassthroughBoxCutLeftN_xcenter_off"/> 
-    <comment> Right half </comment>
-    <!-- specs for the wegde shaped cut -->
-    <constant name="ServicePassthroughWedgeCutRightN_rmin1"   value="ServicePassthroughWedgeCutLeftN_rmin1"/>
-    <constant name="ServicePassthroughWedgeCutRightN_thickness" value="ServicePassthroughWedgeCutLeftN_thickness"/>
-    <constant name="ServicePassthroughWedgeCutRightN_length"  value="ServicePassthroughWedgeCutLeftN_length"/> 
-    <constant name="ServicePassthroughWedgeCutRightN_phimax"  value="180*deg+ServicePassthroughWedgeCutLeftN_phimax"/>  
-    <constant name="ServicePassthroughWedgeCutRightN_phimin"  value="ServicePassthroughWedgeCutLeftN_phimin-180*deg"/>  
-    <!-- specs for the rectangular box cut -->
-    <constant name="ServicePassthroughBoxCutRightN_dx"        value="ServicePassthroughBoxCutLeftN_dx"/> 
-    <constant name="ServicePassthroughBoxCutRightN_dy"        value="ServicePassthroughBoxCutLeftN_dy"/> 
-    <constant name="ServicePassthroughBoxCutRightN_dz"        value="ServicePassthroughBoxCutLeftN_dz"/> 
-    <constant name="ServicePassthroughBoxCutRightN_xcenter"   value="-ServicePassthroughBoxCutLeftN_xcenter"/>
     <!-- qq-->
 
     <comment> (Positive) Service Passthrough Plate </comment>
@@ -245,7 +217,7 @@
           1) base ring
           2) top half ring holes
           3) bottom half ring holes
-          4) beampipe support plate cutouts (left and right)
+          4) rectangular cutout in the middle
      -->
     <comment> Specifications are from SVT PST Drawing PACKET SEP 2025.pdf </comment> 
     <comment> General dimensions (we assume hole-specs are the same for top and bottom half) </comment>
@@ -371,38 +343,10 @@
     <constant name="ServicePassthroughBotRingHole10P_phimax" value="ServicePassthroughBotRingHole10P_phimin+ServicePassthroughSmallHoleP_width"/>
     <constant name="ServicePassthroughBotRing10P_phimax"     value="ServicePassthroughBotRingHole10P_phimax+ServicePassthroughHoleP_gap"/>
     <constant name="ServicePassthroughBotRingP_phimax"      value="ServicePassthroughBotRingHole10P_phimax"/>
-    <comment> Beampipe support cutouts </comment>    
-    <!-- The wedges in the middle parts of the negative service passthrough plate to make way for the beampipe support.  
-         There are two halves: left and right (while looking towards the hadron going side) 
-         For each half, we need to cut two holes:
-         1) a wedge spanning the width of the beampipe support plate
-         2) a rectangular box to create the flat edge     
-    -->
-    <comment> Left half </comment>
-    <!-- specs for the wegde shaped cut -->
-    <constant name="ServicePassthroughWedgeCutLeftP_rmin1"   value="ServicePassthroughRingP_rmin1"/>
-    <constant name="ServicePassthroughWedgeCutLeftP_thickness" value="ServicePassthroughRingP_thickness"/>
-    <constant name="ServicePassthroughWedgeCutLeftP_length"  value="ServicePassthroughRingP_length"/> 
-    <constant name="ServicePassthroughWedgeCutLeftP_phimax"  value="asin(ServicePassthroughCutP_halfwidth/ServicePassthroughRingP_rmax)*(180/Pi)*deg"/>
-    <constant name="ServicePassthroughWedgeCutLeftP_phimin"  value="360*deg-ServicePassthroughWedgeCutLeftP_phimax"/>  
-    <!-- specs for the rectangular box cut -->
-    <constant name="ServicePassthroughBoxCutLeftP_dx"        value="ServicePassthroughRingP_thickness"/> 
+    <comment> rectangular cutout in the middle </comment>    
+    <constant name="ServicePassthroughBoxCutLeftP_dx"        value="2*ServicePassthroughRingN_rmax"/> 
     <constant name="ServicePassthroughBoxCutLeftP_dy"        value="ServicePassthroughCutP_halfwidth*2"/>
     <constant name="ServicePassthroughBoxCutLeftP_dz"        value="ServicePassthroughRingP_length"/> 
-    <constant name="ServicePassthroughBoxCutLeftP_xcenter_off" value="ServicePassthroughRingP_rmax-sqrt(ServicePassthroughRingP_rmax**2-ServicePassthroughCutP_halfwidth**2)+0.3*mm"/> <!-- 0.3mm ad-hoc offset to tackel round-off error -->
-    <constant name="ServicePassthroughBoxCutLeftP_xcenter"   value="ServicePassthroughRingP_rmin1+(ServicePassthroughRingP_thickness/2)-ServicePassthroughBoxCutLeftP_xcenter_off"/> 
-    <comment> Right half </comment>
-    <!-- specs for the wegde shaped cut -->
-    <constant name="ServicePassthroughWedgeCutRightP_rmin1"   value="ServicePassthroughWedgeCutLeftP_rmin1"/>
-    <constant name="ServicePassthroughWedgeCutRightP_thickness" value="ServicePassthroughWedgeCutLeftP_thickness"/>
-    <constant name="ServicePassthroughWedgeCutRightP_length"  value="ServicePassthroughWedgeCutLeftP_length"/> 
-    <constant name="ServicePassthroughWedgeCutRightP_phimax"  value="180*deg+ServicePassthroughWedgeCutLeftP_phimax"/>  
-    <constant name="ServicePassthroughWedgeCutRightP_phimin"  value="ServicePassthroughWedgeCutLeftP_phimin-180*deg"/>  
-    <!-- specs for the rectangular box cut -->
-    <constant name="ServicePassthroughBoxCutRightP_dx"        value="ServicePassthroughBoxCutLeftP_dx"/> 
-    <constant name="ServicePassthroughBoxCutRightP_dy"        value="ServicePassthroughBoxCutLeftP_dy"/> 
-    <constant name="ServicePassthroughBoxCutRightP_dz"        value="ServicePassthroughBoxCutLeftP_dz"/> 
-    <constant name="ServicePassthroughBoxCutRightP_xcenter"   value="-ServicePassthroughBoxCutLeftP_xcenter"/>
     <!-- qq-->
 
    <comment> (Negative) beampipe Support Plate </comment>
@@ -1021,7 +965,7 @@
     <!-- end of PST thermal membrane implementation -->
 
     <!-- |||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||| -->
-    <comment> (Positive) Service passthrough ring implementation </comment>
+    <comment> (Positive) Service passthrough plate implementation </comment>
       <subtraction name="ServicePassthroughRingP" material="Air" vis="TrackerSupportVis"> 
       <position x="0" y="0" z="ServicePassthroughRingP_zcenter"/> <!-- Base half-ring -->
       <shape role="base" type="Cylinder"
@@ -1233,46 +1177,16 @@
             phimax="ServicePassthroughBotRingHole10P_phimax">
       <position x="0*cm" y="0*cm" z="0*cm"/>
       </shape>      
-      <comment> Making left beampipe support cutout </comment>
-      <!-- wedge shpaed cut -->      
-      <shape role="hole" type="Cylinder"
-            name="ServicePassthroughWedgeCutLeftP"
-            rmin="ServicePassthroughWedgeCutLeftP_rmin1"
-            length="ServicePassthroughWedgeCutLeftP_length"
-            thickness="ServicePassthroughWedgeCutLeftP_thickness"
-            phimin="ServicePassthroughWedgeCutLeftP_phimin"
-            phimax="ServicePassthroughWedgeCutLeftP_phimax">
-      <position x="0*cm" y="0*cm" z="0*cm"/>
-      </shape>      
-      <!-- box shaped cut -->     
+      <comment> Making rectangular cut in the center </comment>
       <shape role="hole" type="Box"
-            name="ServicePassthroughBoxCutLeftP"
-            x="ServicePassthroughBoxCutLeftP_dx+1*mm"
+            name="ServicePassthroughBoxCutP"
+            x="ServicePassthroughBoxCutLeftP_dx"
             y="ServicePassthroughBoxCutLeftP_dy"
             z="ServicePassthroughBoxCutLeftP_dz">
-      <position x="ServicePassthroughBoxCutLeftP_xcenter" y="0*cm" z="0*cm"/>
-      </shape> 
-      <comment> Making right beampipe support cutout </comment>
-      <!-- wedge shpaed cut -->      
-      <shape role="hole" type="Cylinder"
-            name="ServicePassthroughWedgeCutRightP"
-            rmin="ServicePassthroughWedgeCutRightP_rmin1"
-            length="ServicePassthroughWedgeCutRightP_length"
-            thickness="ServicePassthroughWedgeCutRightP_thickness"
-            phimin="ServicePassthroughWedgeCutRightP_phimin"
-            phimax="ServicePassthroughWedgeCutRightP_phimax">
       <position x="0*cm" y="0*cm" z="0*cm"/>
-      </shape>      
-      <!-- box shaped cut -->     
-      <shape role="hole" type="Box"
-            name="ServicePassthroughBoxCutRightP"
-            x="ServicePassthroughBoxCutRightP_dx+1*mm"
-            y="ServicePassthroughBoxCutRightP_dy"
-            z="ServicePassthroughBoxCutRightP_dz">
-      <position x="ServicePassthroughBoxCutRightP_xcenter" y="0*cm" z="0*cm"/>
-      </shape>                  
+      </shape> 
       </subtraction>
-      <!-- end of (Positive) Service passthrough ring implementation -->    
+      <!-- end of (Positive) Service passthrough plate implementation -->    
 
     <comment> (Positive) Beampipe Support Plate </comment>
     <!-- 
@@ -2223,7 +2137,7 @@
       <!-- end of (Negative) Beampipe Support Mechanism implementation -->        
 
     <!-- |||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||| -->
-    <comment> (Negative) Service passthrough ring implementation </comment>
+    <comment> (Negative) Service passthrough plate implementation </comment>
       <subtraction name="ServicePassthroughRingN" material="Air" vis="TrackerSupportVis"> 
       <position x="0" y="0" z="-ServicePassthroughRingN_zcenter"/> <!-- Base half-ring -->
       <shape role="base" type="Cylinder"
@@ -2435,44 +2349,14 @@
             phimax="ServicePassthroughBotRingHole10N_phimax">
       <position x="0*cm" y="0*cm" z="0*cm"/>
       </shape>      
-      <comment> Making left beampipe support cutout </comment>
-      <!-- wedge shpaed cut -->      
-      <shape role="hole" type="Cylinder"
-            name="ServicePassthroughWedgeCutLeftN"
-            rmin="ServicePassthroughWedgeCutLeftN_rmin1"
-            length="ServicePassthroughWedgeCutLeftN_length"
-            thickness="ServicePassthroughWedgeCutLeftN_thickness"
-            phimin="ServicePassthroughWedgeCutLeftN_phimin"
-            phimax="ServicePassthroughWedgeCutLeftN_phimax">
-      <position x="0*cm" y="0*cm" z="0*cm"/>
-      </shape>      
-      <!-- box shaped cut -->     
+      <comment> Making rectangular cut in the center </comment>
       <shape role="hole" type="Box"
-            name="ServicePassthroughBoxCutLeftN"
-            x="ServicePassthroughBoxCutLeftN_dx+1*mm"
+            name="ServicePassthroughBoxCutN"
+            x="ServicePassthroughBoxCutLeftN_dx"
             y="ServicePassthroughBoxCutLeftN_dy"
             z="ServicePassthroughBoxCutLeftN_dz">
-      <position x="ServicePassthroughBoxCutLeftN_xcenter" y="0*cm" z="0*cm"/>
-      </shape> 
-      <comment> Making right beampipe support cutout </comment>
-      <!-- wedge shpaed cut -->      
-      <shape role="hole" type="Cylinder"
-            name="ServicePassthroughWedgeCutRightN"
-            rmin="ServicePassthroughWedgeCutRightN_rmin1"
-            length="ServicePassthroughWedgeCutRightN_length"
-            thickness="ServicePassthroughWedgeCutRightN_thickness"
-            phimin="ServicePassthroughWedgeCutRightN_phimin"
-            phimax="ServicePassthroughWedgeCutRightN_phimax">
       <position x="0*cm" y="0*cm" z="0*cm"/>
-      </shape>      
-      <!-- box shaped cut -->     
-      <shape role="hole" type="Box"
-            name="ServicePassthroughBoxCutRightN"
-            x="ServicePassthroughBoxCutRightN_dx+1*mm"
-            y="ServicePassthroughBoxCutRightN_dy"
-            z="ServicePassthroughBoxCutRightN_dz">
-      <position x="ServicePassthroughBoxCutRightN_xcenter" y="0*cm" z="0*cm"/>
-      </shape>                  
+      </shape> 
       </subtraction>
       <!-- end of (Negative) Service passthrough ring implementation -->
 
