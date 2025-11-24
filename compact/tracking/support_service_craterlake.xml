@@ -360,6 +360,7 @@
     <constant name="BeampipeSupportPlateSheetN_length"      value="1*mm"/>
     <constant name="BeampipeSupportPlateCoreN_length"       value="3*mm"/>    
     <constant name="BeampipeSupportPlateN_zcenter"          value="1040*mm"/> <comment> Absolute value </comment>  
+    <constant name="BeampipeSupportPlateN_zmin"             value="BeampipeSupportPlateN_zcenter-0.5*(BeampipeSupportPlateSheetN_length+BeampipeSupportPlateCoreN_length)"/> 
     <constant name="BeampipeSupportPlateN_thickness"        value="ServicePassthroughRingN_rmax"/>    
     <comment> dimensions of the ring shaped sheet in the middle </comment>
     <constant name="BeampipeSupportPlateRingN_rmin"         value="70*mm"/> <!-- 140mm/2 -->
@@ -666,17 +667,21 @@
     <constant name="TrackerSupportCylEndcapP_zmin1A"       value="InnerSupportCone_zmax" />
     <constant name="TrackerSupportCylEndcapP_zmin1B"       value="TrackerEndcapPDisk2_zmin" />
     <constant name="TrackerSupportCylEndcapP_zmin1C"       value="TrackerEndcapPDisk3_zmin" />
+    <constant name="TrackerSupportCylEndcapP_zmin1C_service"    value="TrackerEndcapPDisk3_zmin" />
 
     <constant name="TrackerSupportCylEndcapP_zmax1A"       value="TrackerEndcapPDisk2_zmin" />
     <constant name="TrackerSupportCylEndcapP_zmax1B"       value="TrackerEndcapPDisk3_zmin" />
     <constant name="TrackerSupportCylEndcapP_zmax1C"       value="1270*mm" /> <comment> Ref:  SVT PST Drawing PACKET SEP 2025.pdf</comment>
+    <constant name="TrackerSupportCylEndcapP_zmax1C_service"    value="ServicePassthroughRingP_zmin" /> <comment> Ref:  SVT PST Drawing PACKET SEP 2025.pdf. Crude measure to avoid overlap!</comment>
     <constant name="TrackerSupportCylEndcapP_z1A"          value="0.5*(TrackerSupportCylEndcapP_zmin1A + TrackerSupportCylEndcapP_zmax1A)" />
     <constant name="TrackerSupportCylEndcapP_z1B"          value="0.5*(TrackerSupportCylEndcapP_zmin1B + TrackerSupportCylEndcapP_zmax1B)" />
     <constant name="TrackerSupportCylEndcapP_z1C"          value="0.5*(TrackerSupportCylEndcapP_zmin1C + TrackerSupportCylEndcapP_zmax1C)" />
+    <constant name="TrackerSupportCylEndcapP_z1C_service"       value="0.5*(TrackerSupportCylEndcapP_zmin1C_service + TrackerSupportCylEndcapP_zmax1C_service)" />
 
     <constant name="TrackerSupportCylEndcapP_length1A"     value="TrackerSupportCylEndcapP_zmax1A - TrackerSupportCylEndcapP_zmin1A" />
     <constant name="TrackerSupportCylEndcapP_length1B"     value="TrackerSupportCylEndcapP_zmax1B - TrackerSupportCylEndcapP_zmin1B" />
     <constant name="TrackerSupportCylEndcapP_length1C"     value="TrackerSupportCylEndcapP_zmax1C - TrackerSupportCylEndcapP_zmin1C" />
+    <constant name="TrackerSupportCylEndcapP_length1C_service"  value="TrackerSupportCylEndcapP_zmax1C_service - TrackerSupportCylEndcapP_zmin1C_service" />
 
     <constant name="TrackerSupportCylAlP_thickness1A"      value="3.79*mm" /> <comment> Ref: WP9: 20251003 - services by E. Sichtermann </comment>
     <constant name="TrackerSupportCylAlP_thickness1B"      value="2.97*mm" /> <comment> Ref: WP9: 20251003 - services by E. Sichtermann </comment>
@@ -689,18 +694,22 @@
     <constant name="TrackerSupportCylEndcapN_zmin1A"       value="InnerSupportCone_zmax" />
     <constant name="TrackerSupportCylEndcapN_zmin1B"       value="TrackerEndcapNDisk2_zmin" />
     <constant name="TrackerSupportCylEndcapN_zmin1C"       value="TrackerEndcapNDisk3_zmin" />
+    <constant name="TrackerSupportCylEndcapN_zmin1C_service"    value="TrackerEndcapNDisk3_zmin" />
 
     <constant name="TrackerSupportCylEndcapN_zmax1A"       value="TrackerEndcapNDisk2_zmin" />
     <constant name="TrackerSupportCylEndcapN_zmax1B"       value="TrackerEndcapNDisk3_zmin" />
     <constant name="TrackerSupportCylEndcapN_zmax1C"       value="PSTFingureN_zmin" /> <comment> Ref:  SVT PST Drawing PACKET SEP 2025.pdf</comment>
+    <constant name="TrackerSupportCylEndcapN_zmax1C_service"    value="BeampipeSupportPlateN_zmin" /> <comment> Ref:  SVT PST Drawing PACKET SEP 2025.pdf. Crude measure to avoid overlap!</comment>
 
     <constant name="TrackerSupportCylEndcapN_z1A"          value="0.5*(TrackerSupportCylEndcapN_zmin1A + TrackerSupportCylEndcapN_zmax1A)" />
     <constant name="TrackerSupportCylEndcapN_z1B"          value="0.5*(TrackerSupportCylEndcapN_zmin1B + TrackerSupportCylEndcapN_zmax1B)" />
     <constant name="TrackerSupportCylEndcapN_z1C"          value="0.5*(TrackerSupportCylEndcapN_zmin1C + TrackerSupportCylEndcapN_zmax1C)" />
+    <constant name="TrackerSupportCylEndcapN_z1C_service"       value="0.5*(TrackerSupportCylEndcapN_zmin1C_service + TrackerSupportCylEndcapN_zmax1C_service)" />
 
     <constant name="TrackerSupportCylEndcapN_length1A"     value="TrackerSupportCylEndcapN_zmax1A - TrackerSupportCylEndcapN_zmin1A" />
     <constant name="TrackerSupportCylEndcapN_length1B"     value="TrackerSupportCylEndcapN_zmax1B - TrackerSupportCylEndcapN_zmin1B" />
     <constant name="TrackerSupportCylEndcapN_length1C"     value="TrackerSupportCylEndcapN_zmax1C - TrackerSupportCylEndcapN_zmin1C" />
+    <constant name="TrackerSupportCylEndcapN_length1C_service"  value="TrackerSupportCylEndcapN_zmax1C_service - TrackerSupportCylEndcapN_zmin1C_service" />
 
     <constant name="TrackerSupportCylAlN_thickness1A"      value="3.53*mm" /> <comment> Ref: WP9: 20251003 - services by E. Sichtermann  </comment>
     <constant name="TrackerSupportCylAlN_thickness1B"      value="2.71*mm" /> <comment> Ref: WP9: 20251003 - services by E. Sichtermann  </comment>
@@ -2670,7 +2679,7 @@
           <component material="CarbonFiber" thickness="TrackerSupportCylCF_thickness1" name="Support" vis="TrackerSupportVis"/>
       </support> -->
       <support type="Cylinder"
-        name="TrackerSupportCylEndcapN1C"
+        name="TrackerSupportCylEndcapN1C_support"
         vis="TrackerSupportVis"
         rmin="TrackerSupportCyl_rmin1"
         length="TrackerSupportCylEndcapN_length1C"
@@ -2678,6 +2687,15 @@
           <position x="0*cm" y="0*cm" z="-TrackerSupportCylEndcapN_z1C" />
           <component material="CarbonFiber" thickness="TrackerSupportCylCF_thickness1" name="Support" vis="TrackerSupportVis"/>
       </support>      
+      <support type="Cylinder"
+        name="TrackerSupportCylEndcapN1C_service"
+        vis="TrackerServiceVis"
+        rmin="TrackerSupportCyl_rmin1-TrackerSupportCylAlN_thickness1C"
+        length="TrackerSupportCylEndcapN_length1C_service"
+        thickness="TrackerSupportCylAlN_thickness1C">
+          <position x="0*cm" y="0*cm" z="-TrackerSupportCylEndcapN_z1C_service" />
+          <component material="Aluminum" thickness="TrackerSupportCylAlN_thickness1C" name="Services" vis="TrackerServiceVis" />
+      </support>            
       <support type="Cylinder"
         name="TrackerSupportCylEndcapP1A"
         vis="TrackerSupportVis"
@@ -2709,14 +2727,23 @@
           <component material="CarbonFiber" thickness="TrackerSupportCylCF_thickness1" name="Support" vis="TrackerSupportVis"/>
       </support> -->
       <support type="Cylinder"
-        name="TrackerSupportCylEndcapP1C"
+        name="TrackerSupportCylEndcapP1C_support"
         vis="TrackerSupportVis"
         rmin="TrackerSupportCyl_rmin1"
         length="TrackerSupportCylEndcapP_length1C"
         thickness="TrackerSupportCylCF_thickness1">
           <position x="0*cm" y="0*cm" z="TrackerSupportCylEndcapP_z1C" />
           <component material="CarbonFiber" thickness="TrackerSupportCylCF_thickness1" name="Support" vis="TrackerSupportVis"/>
-      </support>      
+      </support> 
+      <support type="Cylinder"
+        name="TrackerSupportCylEndcapP1C_service"
+        vis="TrackerServiceVis"
+        rmin="TrackerSupportCyl_rmin1-TrackerSupportCylAlP_thickness1C"
+        length="TrackerSupportCylEndcapP_length1C_service"
+        thickness="TrackerSupportCylAlP_thickness1C">
+          <position x="0*cm" y="0*cm" z="TrackerSupportCylEndcapP_z1C_service" />
+          <component material="Aluminum" thickness="TrackerSupportCylAlP_thickness1C" name="Services" vis="TrackerServiceVis" />
+      </support>            
 
 
       <!-- <support type="Cone"
