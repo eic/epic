@@ -737,6 +737,24 @@
     <constant name="SupportRoutingFlangeCone_rmin2"        value="588.83*mm"/> <comment> From SVT PST Drawing PACKET SEP 2025.pdf </comment>
     <!-- .qq -->
 
+    <comment> SVT Support Tube Joints </comment>
+    <comment> Specifications are from SVT PST Drawing PACKET SEP 2025.pdf </comment>
+    <comment> INPORTANT NOTEs: </comment>
+    <comment> 1. Putting the joint outside of PST instead of inside to avoid re-writing existing support-service code. </comment>
+    <comment> 2. On the negative side, extending it up to the service routing flange to avoid operlap. </comment>
+    <constant name="SupportTubeJoint_thickness"     value="2*mm"/>
+    <constant name="SupportTubeJoint_zmin"          value="SupportRoutingFlangeCyl_zmin"/>
+    <constant name="SupportTubeJoint_zmax"          value="PSTFingureP_zmax"/>
+    <constant name="SupportTubeJoint_zcenter"       value="0.5*(SupportTubeJoint_zmax-SupportTubeJoint_zmin)"/>
+    <constant name="SupportTubeJoint_length"        value="SupportTubeJoint_zmin+SupportTubeJoint_zmax"/>  
+    <constant name="SupportTubeJoint_rmin"          value="SupportRoutingFlangeCyl_rmin1"/>
+    <!-- specific to the left piece -->
+    <constant name="SupportTubeJointLeft_phimin"    value="0*deg-2.5*deg"/>
+    <constant name="SupportTubeJointLeft_phimax"    value="0*deg+2.5*deg"/>
+    <constant name="SupportTubeJointRight_phimin"   value="180*deg-2.5*deg"/>
+    <constant name="SupportTubeJointRight_phimax"   value="180*deg+2.5*deg"/>
+    <!-- .qq -->
+
     <comment> Outer tracker service/support cones, asymmetric </comment>
     <constant name="OuterSupportConeCF_thickness"          value="2.0*mm" />
     <comment> Effective Aluminum for services for now </comment>
@@ -2390,6 +2408,33 @@
           <component material="CarbonFiber" thickness="InnerSupportConeCF_thickness" name="Support" vis="TrackerSupportVis"/>
       </support>
       <!-- end of Support routing flange implementation -->
+
+     <comment> SVT Support Tube Joint Implementation </comment>
+     <comment> INPORTANT NOTEs: </comment>
+     <comment> 1. Putting the joint outside of PST instead of inside to avoid re-writing existing support-service code. </comment>
+     <comment> 2. On the negative side, extending it up to the service routing flange to avoid operlap. </comment>
+       <support type="Cylinder"
+        name="SupportTubeJointLeft"
+        vis="TrackerSupportVis"
+        rmin="SupportTubeJoint_rmin"
+        length="SupportTubeJoint_length"
+        thickness="SupportTubeJoint_thickness"
+        phimin="SupportTubeJointLeft_phimin"
+        phimax="SupportTubeJointLeft_phimax">
+          <position x="0*cm" y="0*cm" z="SupportTubeJoint_zcenter" />
+          <component material="CarbonFiber" thickness="SupportTubeJoint_thickness" name="Support" vis="TrackerSupportVis"/>
+      </support>
+       <support type="Cylinder"
+        name="SupportTubeJointRight"
+        vis="TrackerSupportVis"
+        rmin="SupportTubeJoint_rmin"
+        length="SupportTubeJoint_length"
+        thickness="SupportTubeJoint_thickness"
+        phimin="SupportTubeJointRight_phimin"
+        phimax="SupportTubeJointRight_phimax">
+          <position x="0*cm" y="0*cm" z="SupportTubeJoint_zcenter" />
+          <component material="CarbonFiber" thickness="SupportTubeJoint_thickness" name="Support" vis="TrackerSupportVis"/>
+      </support>      
 
      <comment> (Negative) SVT PST Fingure implementation </comment>
      <!-- (Negative) PST foot at 0 deg -->
