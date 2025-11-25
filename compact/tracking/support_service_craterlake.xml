@@ -75,6 +75,44 @@
     <constant name="PSTFingureCutBoxP_translation"            value="(3*PSTFingureBaseP_width+PSTFingureHeadP_width)/4"/>
     <!-- .qq -->
 
+    <comment> SVT PST Feet </comment>
+    <comment> Specifications are from SVT PST Drawing PACKET SEP 2025.pdf </comment>
+    <!-- each foot will be made using 3 boxes -->
+    <constant name="PSTFootMidBox_dx"                         value="50*mm"/>
+    <constant name="PSTFootMidBox_dy"                         value="20*mm"/>
+    <constant name="PSTFootMidBox_dz"                         value="20*mm"/>
+    <constant name="PSTFootOuterBox_dx"                       value="190.9*mm"/>
+    <constant name="PSTFootOuterBox_dy"                       value="29*mm"/>
+    <constant name="PSTFootOuterBox_dz"                       value="20*mm"/>
+    <constant name="PSTFootOuterBox_thickness"                value="2*mm"/>
+    <constant name="PSTFootOuterBox_xoffset"                  value="538*mm"/>
+    <constant name="PSTFootMidBox_xoffset"                    value="PSTFootOuterBox_xoffset+(PSTFootOuterBox_dx-PSTFootMidBox_dx)"/>
+    <constant name="PSTFootOuterBox_xcenter"                  value="PSTFootOuterBox_xoffset+0.5*PSTFootOuterBox_dx"/>
+    <constant name="PSTFootOuterBox_ycenter"                  value="0.5*PSTFootOuterBox_dy"/>
+    <constant name="PSTFootMidBox_xcenter"                    value="PSTFootMidBox_xoffset+0.5*PSTFootMidBox_dx"/>
+    <constant name="PSTFootMidBox_ycenter"                    value="0.5*PSTFootMidBox_dy"/>
+    <!-- cut dimensions -->
+    <constant name="PSTFootMidBoxCylCut_radius"               value="5*mm"/>
+    <constant name="PSTFootMidBoxCylCut_length"               value="PSTFootMidBox_dz"/>
+    <constant name="PSTFootMidBoxCylCut_xcenter"              value="16.1*mm"/> 
+    <constant name="PSTFootMidBoxCylCut_ycenter"              value="-0.5*PSTFootMidBox_dy"/>
+    <constant name="PSTFootOuterBoxCut1_dx"                   value="PSTFootOuterBox_dx"/>
+    <constant name="PSTFootOuterBoxCut1_dy"                   value="PSTFootOuterBox_dy-2.0*PSTFootOuterBox_thickness"/>
+    <constant name="PSTFootOuterBoxCut1_dz"                   value="PSTFootOuterBox_dz-2.0*PSTFootOuterBox_thickness"/>    
+    <constant name="PSTFootOuterBoxCut2_dx"                   value="18.798*mm"/>
+    <constant name="PSTFootOuterBoxCut2_dy"                   value="PSTFootMidBoxCylCut_radius"/>
+    <constant name="PSTFootOuterBoxCut2_dz"                   value="PSTFootOuterBox_dz"/>
+    <constant name="PSTFootOuterBoxCut2_xcenter"              value="0.5*PSTFootOuterBox_dx-8.9*mm"/>
+    <constant name="PSTFootOuterBoxCut2_ycenter"              value="0.5*(PSTFootMidBoxCylCut_radius-PSTFootOuterBox_dy)"/>
+    <!-- +/- side specific Z-centers -->
+    <constant name="PSTFootP_zcenter"                         value="1590*mm"/> <comment> From the STP file. </comment>
+    <constant name="PSTFootOuterBox1P_zcenter"                value="PSTFootP_zcenter+0.5*(PSTFootOuterBox_dz+PSTFootMidBox_dz)"/> 
+    <constant name="PSTFootOuterBox2P_zcenter"                value="PSTFootP_zcenter-0.5*(PSTFootOuterBox_dz+PSTFootMidBox_dz)"/> 
+    <constant name="PSTFootN_zcenter"                         value="1190*mm"/> <comment> From the STP file. </comment>
+    <constant name="PSTFootOuterBox1N_zcenter"                value="PSTFootN_zcenter-0.5*(PSTFootOuterBox_dz+PSTFootMidBox_dz)"/> 
+    <constant name="PSTFootOuterBox2N_zcenter"                value="PSTFootN_zcenter+0.5*(PSTFootOuterBox_dz+PSTFootMidBox_dz)"/> 
+
+
     <comment> (Negative) Service Passthrough Plate </comment>
     <!-- The geometry will be implemented in 4 parts:
           1) base ring
@@ -2436,7 +2474,261 @@
           <component material="CarbonFiber" thickness="SupportTubeJoint_thickness" name="Support" vis="TrackerSupportVis"/>
       </support>      
 
-     <comment> (Negative) SVT PST Fingure implementation </comment>
+     <comment> PST Feet implementation </comment>
+     <comment> Positive left side (while looking downstream) </comment>
+     <subtraction name="PSTFootLeftMidBoxP" material="CarbonFiber" vis="TrackerSupportVis">
+      <position x="-PSTFootMidBox_xcenter" y="PSTFootMidBox_ycenter" z="PSTFootP_zcenter"/>
+      <shape role="base" type="Box"
+            name="PSTFootLeftMidBoxP_base"
+            x="PSTFootMidBox_dx"
+            y="PSTFootMidBox_dy"
+            z="PSTFootMidBox_dz"
+            material="CarbonFiber"/>  
+      <shape role="hole" type="Cylinder"
+            name="PSTFootLeftMidBoxP_hole"
+            rmin="0"
+            length="PSTFingureN_length"
+            thickness="PSTFootMidBoxCylCut_radius">
+      <position x="-PSTFootMidBoxCylCut_xcenter" y="PSTFootMidBoxCylCut_ycenter" z="0"/>
+      </shape>                  
+      </subtraction>
+      <subtraction name="PSTFootLeftOuterBox1P" material="Air" vis="TrackerSupportVis">
+      <position x="-PSTFootOuterBox_xcenter" y="PSTFootOuterBox_ycenter" z="PSTFootOuterBox1P_zcenter"/>
+      <shape role="base" type="Box"
+            name="PSTFootLeftOuterBox1P_base"
+            x="PSTFootOuterBox_dx"
+            y="PSTFootOuterBox_dy"
+            z="PSTFootOuterBox_dz"
+            material="CarbonFiber"/>
+      <shape role="hole" type="Box"
+            name="PSTFootLeftOuterBox1Cut1P"
+            x="PSTFootOuterBoxCut1_dx"
+            y="PSTFootOuterBoxCut1_dy"
+            z="PSTFootOuterBoxCut1_dz">
+      <position x="0" y="0" z="PSTFootOuterBox_thickness"/>
+      </shape>  
+      <shape role="hole" type="Box"
+            name="PSTFootLeftOuterBox1Cut2P_hole"
+            x="PSTFootOuterBoxCut2_dx"
+            y="PSTFootOuterBoxCut2_dy"
+            z="PSTFootOuterBoxCut2_dz">
+      <position x="-PSTFootOuterBoxCut2_xcenter" y="PSTFootOuterBoxCut2_ycenter" z="0"/>
+      </shape>                              
+      </subtraction>
+      <subtraction name="PSTFootLeftOuterBox2P" material="CarbonFiber" vis="TrackerSupportVis">
+      <position x="-PSTFootOuterBox_xcenter" y="PSTFootOuterBox_ycenter" z="PSTFootOuterBox2P_zcenter"/>
+      <shape role="base" type="Box"
+            name="PSTFootLeftOuterBox2P_base"
+            x="PSTFootOuterBox_dx"
+            y="PSTFootOuterBox_dy"
+            z="PSTFootOuterBox_dz"
+            material="CarbonFiber"/>
+      <shape role="hole" type="Box"
+            name="PSTFootLeftOuterBox2Cut1P"
+            x="PSTFootOuterBoxCut1_dx"
+            y="PSTFootOuterBoxCut1_dy"
+            z="PSTFootOuterBoxCut1_dz">
+      <position x="0" y="0" z="-PSTFootOuterBox_thickness"/>
+      </shape>  
+      <shape role="hole" type="Box"
+            name="PSTFootLeftOuterBox2Cut2P_hole"
+            x="PSTFootOuterBoxCut2_dx"
+            y="PSTFootOuterBoxCut2_dy"
+            z="PSTFootOuterBoxCut2_dz">
+      <position x="-PSTFootOuterBoxCut2_xcenter" y="PSTFootOuterBoxCut2_ycenter" z="0"/>
+      </shape>                              
+      </subtraction>
+     <comment> Positive right side (while looking downstream) </comment>
+     <subtraction name="PSTFootRightMidBoxP" material="CarbonFiber" vis="TrackerSupportVis">
+      <position x="PSTFootMidBox_xcenter" y="PSTFootMidBox_ycenter" z="PSTFootP_zcenter"/>
+      <shape role="base" type="Box"
+            name="PSTFootRightMidBoxP_base"
+            x="PSTFootMidBox_dx"
+            y="PSTFootMidBox_dy"
+            z="PSTFootMidBox_dz"
+            material="CarbonFiber"/>  
+      <shape role="hole" type="Cylinder"
+            name="PSTFootRightMidBoxP_hole"
+            rmin="0"
+            length="PSTFingureN_length"
+            thickness="PSTFootMidBoxCylCut_radius">
+      <position x="PSTFootMidBoxCylCut_xcenter" y="PSTFootMidBoxCylCut_ycenter" z="0"/>
+      </shape>                  
+      </subtraction>
+      <subtraction name="PSTFootRightOuterBox1P" material="Air" vis="TrackerSupportVis">
+      <position x="PSTFootOuterBox_xcenter" y="PSTFootOuterBox_ycenter" z="PSTFootOuterBox1P_zcenter"/>
+      <shape role="base" type="Box"
+            name="PSTFootRightOuterBox1P_base"
+            x="PSTFootOuterBox_dx"
+            y="PSTFootOuterBox_dy"
+            z="PSTFootOuterBox_dz"
+            material="CarbonFiber"/>
+      <shape role="hole" type="Box"
+            name="PSTFootRightOuterBox1Cut1P"
+            x="PSTFootOuterBoxCut1_dx"
+            y="PSTFootOuterBoxCut1_dy"
+            z="PSTFootOuterBoxCut1_dz">
+      <position x="0" y="0" z="PSTFootOuterBox_thickness"/>
+      </shape>  
+      <shape role="hole" type="Box"
+            name="PSTFootRightOuterBox1Cut2P_hole"
+            x="PSTFootOuterBoxCut2_dx"
+            y="PSTFootOuterBoxCut2_dy"
+            z="PSTFootOuterBoxCut2_dz">
+      <position x="PSTFootOuterBoxCut2_xcenter" y="PSTFootOuterBoxCut2_ycenter" z="0"/>
+      </shape>                              
+      </subtraction>
+      <subtraction name="PSTFootRightOuterBox2P" material="CarbonFiber" vis="TrackerSupportVis">
+      <position x="PSTFootOuterBox_xcenter" y="PSTFootOuterBox_ycenter" z="PSTFootOuterBox2P_zcenter"/>
+      <shape role="base" type="Box"
+            name="PSTFootRightOuterBox2P_base"
+            x="PSTFootOuterBox_dx"
+            y="PSTFootOuterBox_dy"
+            z="PSTFootOuterBox_dz"
+            material="CarbonFiber"/>
+      <shape role="hole" type="Box"
+            name="PSTFootRightOuterBox2Cut1P"
+            x="PSTFootOuterBoxCut1_dx"
+            y="PSTFootOuterBoxCut1_dy"
+            z="PSTFootOuterBoxCut1_dz">
+      <position x="0" y="0" z="-PSTFootOuterBox_thickness"/>
+      </shape>  
+      <shape role="hole" type="Box"
+            name="PSTFootRightOuterBox2Cut2P_hole"
+            x="PSTFootOuterBoxCut2_dx"
+            y="PSTFootOuterBoxCut2_dy"
+            z="PSTFootOuterBoxCut2_dz">
+      <position x="PSTFootOuterBoxCut2_xcenter" y="PSTFootOuterBoxCut2_ycenter" z="0"/>
+      </shape>                              
+      </subtraction>      
+     <comment> Negative left side (while looking downstream) </comment>
+     <subtraction name="PSTFootLeftMidBoxN" material="CarbonFiber" vis="TrackerSupportVis">
+      <position x="-PSTFootMidBox_xcenter" y="PSTFootMidBox_ycenter" z="-PSTFootN_zcenter"/>
+      <shape role="base" type="Box"
+            name="PSTFootLeftMidBoxN_base"
+            x="PSTFootMidBox_dx"
+            y="PSTFootMidBox_dy"
+            z="PSTFootMidBox_dz"
+            material="CarbonFiber"/>  
+      <shape role="hole" type="Cylinder"
+            name="PSTFootLeftMidBoxN_hole"
+            rmin="0"
+            length="PSTFingureN_length"
+            thickness="PSTFootMidBoxCylCut_radius">
+      <position x="-PSTFootMidBoxCylCut_xcenter" y="PSTFootMidBoxCylCut_ycenter" z="0"/>
+      </shape>                  
+      </subtraction>
+      <subtraction name="PSTFootLeftOuterBox1N" material="Air" vis="TrackerSupportVis">
+      <position x="-PSTFootOuterBox_xcenter" y="PSTFootOuterBox_ycenter" z="-PSTFootOuterBox1N_zcenter"/>
+      <shape role="base" type="Box"
+            name="PSTFootLeftOuterBox1N_base"
+            x="PSTFootOuterBox_dx"
+            y="PSTFootOuterBox_dy"
+            z="PSTFootOuterBox_dz"
+            material="CarbonFiber"/>
+      <shape role="hole" type="Box"
+            name="PSTFootLeftOuterBox1Cut1N"
+            x="PSTFootOuterBoxCut1_dx"
+            y="PSTFootOuterBoxCut1_dy"
+            z="PSTFootOuterBoxCut1_dz">
+      <position x="0" y="0" z="PSTFootOuterBox_thickness"/>
+      </shape>  
+      <shape role="hole" type="Box"
+            name="PSTFootLeftOuterBox1Cut2N_hole"
+            x="PSTFootOuterBoxCut2_dx"
+            y="PSTFootOuterBoxCut2_dy"
+            z="PSTFootOuterBoxCut2_dz">
+      <position x="-PSTFootOuterBoxCut2_xcenter" y="PSTFootOuterBoxCut2_ycenter" z="0"/>
+      </shape>                              
+      </subtraction>
+      <subtraction name="PSTFootLeftOuterBox2N" material="CarbonFiber" vis="TrackerSupportVis">
+      <position x="-PSTFootOuterBox_xcenter" y="PSTFootOuterBox_ycenter" z="-PSTFootOuterBox2N_zcenter"/>
+      <shape role="base" type="Box"
+            name="PSTFootLeftOuterBox2N_base"
+            x="PSTFootOuterBox_dx"
+            y="PSTFootOuterBox_dy"
+            z="PSTFootOuterBox_dz"
+            material="CarbonFiber"/>
+      <shape role="hole" type="Box"
+            name="PSTFootLeftOuterBox2Cut1N"
+            x="PSTFootOuterBoxCut1_dx"
+            y="PSTFootOuterBoxCut1_dy"
+            z="PSTFootOuterBoxCut1_dz">
+      <position x="0" y="0" z="-PSTFootOuterBox_thickness"/>
+      </shape>  
+      <shape role="hole" type="Box"
+            name="PSTFootLeftOuterBox2Cut2N_hole"
+            x="PSTFootOuterBoxCut2_dx"
+            y="PSTFootOuterBoxCut2_dy"
+            z="PSTFootOuterBoxCut2_dz">
+      <position x="-PSTFootOuterBoxCut2_xcenter" y="PSTFootOuterBoxCut2_ycenter" z="0"/>
+      </shape>                              
+      </subtraction> 
+     <comment> Negative right side (while looking downstream) </comment>
+     <subtraction name="PSTFootRightMidBoxN" material="CarbonFiber" vis="TrackerSupportVis">
+      <position x="PSTFootMidBox_xcenter" y="PSTFootMidBox_ycenter" z="-PSTFootN_zcenter"/>
+      <shape role="base" type="Box"
+            name="PSTFootRightMidBoxN_base"
+            x="PSTFootMidBox_dx"
+            y="PSTFootMidBox_dy"
+            z="PSTFootMidBox_dz"
+            material="CarbonFiber"/>  
+      <shape role="hole" type="Cylinder"
+            name="PSTFootRightMidBoxN_hole"
+            rmin="0"
+            length="PSTFingureN_length"
+            thickness="PSTFootMidBoxCylCut_radius">
+      <position x="PSTFootMidBoxCylCut_xcenter" y="PSTFootMidBoxCylCut_ycenter" z="0"/>
+      </shape>                  
+      </subtraction>
+      <subtraction name="PSTFootRightOuterBox1N" material="Air" vis="TrackerSupportVis">
+      <position x="PSTFootOuterBox_xcenter" y="PSTFootOuterBox_ycenter" z="-PSTFootOuterBox1N_zcenter"/>
+      <shape role="base" type="Box"
+            name="PSTFootRightOuterBox1N_base"
+            x="PSTFootOuterBox_dx"
+            y="PSTFootOuterBox_dy"
+            z="PSTFootOuterBox_dz"
+            material="CarbonFiber"/>
+      <shape role="hole" type="Box"
+            name="PSTFootRightOuterBox1Cut1N"
+            x="PSTFootOuterBoxCut1_dx"
+            y="PSTFootOuterBoxCut1_dy"
+            z="PSTFootOuterBoxCut1_dz">
+      <position x="0" y="0" z="PSTFootOuterBox_thickness"/>
+      </shape>  
+      <shape role="hole" type="Box"
+            name="PSTFootRightOuterBox1Cut2N_hole"
+            x="PSTFootOuterBoxCut2_dx"
+            y="PSTFootOuterBoxCut2_dy"
+            z="PSTFootOuterBoxCut2_dz">
+      <position x="PSTFootOuterBoxCut2_xcenter" y="PSTFootOuterBoxCut2_ycenter" z="0"/>
+      </shape>                              
+      </subtraction>
+      <subtraction name="PSTFootRightOuterBox2N" material="CarbonFiber" vis="TrackerSupportVis">
+      <position x="PSTFootOuterBox_xcenter" y="PSTFootOuterBox_ycenter" z="-PSTFootOuterBox2N_zcenter"/>
+      <shape role="base" type="Box"
+            name="PSTFootRightOuterBox2N_base"
+            x="PSTFootOuterBox_dx"
+            y="PSTFootOuterBox_dy"
+            z="PSTFootOuterBox_dz"
+            material="CarbonFiber"/>
+      <shape role="hole" type="Box"
+            name="PSTFootRightOuterBox2Cut1N"
+            x="PSTFootOuterBoxCut1_dx"
+            y="PSTFootOuterBoxCut1_dy"
+            z="PSTFootOuterBoxCut1_dz">
+      <position x="0" y="0" z="-PSTFootOuterBox_thickness"/>
+      </shape>  
+      <shape role="hole" type="Box"
+            name="PSTFootRightOuterBox2Cut2N_hole"
+            x="PSTFootOuterBoxCut2_dx"
+            y="PSTFootOuterBoxCut2_dy"
+            z="PSTFootOuterBoxCut2_dz">
+      <position x="PSTFootOuterBoxCut2_xcenter" y="PSTFootOuterBoxCut2_ycenter" z="0"/>
+      </shape>                              
+      </subtraction>                  
+
+     <comment> (Negative) SVT PST 2452plementation </comment>
      <!-- (Negative) PST foot at 0 deg -->
      <subtraction name="PSTFingureN0deg" material="CarbonFiber" vis="TrackerSupportVis">
       <position x="0*cm" y="0*cm" z="-PSTFingureN_zcenter"/>
@@ -2815,7 +3107,7 @@
           <component material="CarbonFiber" thickness="OuterSupportConeCF_thickness" name="Support" vis="TrackerSupportVis"/>
       </support> -->
 
-      <comment> outer barrel </comment>
+      <!-- <comment> outer barrel </comment>
       <support type="Cylinder"
         name="TrackerSupportCylEndcapN2A"
         vis="TrackerSupportVis"
@@ -3234,7 +3526,7 @@
         thickness="InnerDetectorBarrelSupportCylCF_thickness">
           <position x="0*cm" y="0*cm" z="InnerDetectorBarrelSupportCylCF_offset" />
           <component material="CarbonFiber" thickness="InnerDetectorBarrelSupportCylCF_thickness" name="Support" vis="TrackerSupportVis"/>
-      </support>
+      </support> -->
 
     </detector>
   </detectors>
