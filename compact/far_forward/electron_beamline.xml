@@ -96,8 +96,16 @@
     <detector name="Q1EF_BeamlineMagnet" type="ip6_CryostatMagnet">
       <coil name="Q1EF_Quad_Coil" vis="MagnetCoilVis">
         <placement x="Q1EF_Center_posX" y="Q1EF_Center_posY" z="Q1EF_Center_posZ" theta="Q1EF_Rotation_Angle" phiNum="1" phiStart="0*deg" phiStep="0*deg"/>
-        <dimensions rmin="8.5*cm" rmax="9.0*cm" half_length="161.*cm/2." sphi="0*deg" dphi="360.0*deg"/>
+        <dimensions rmin="8.2*cm" rmax="8.7*cm" half_length="161.*cm/2." sphi="0*deg" dphi="360.0*deg"/>
       </coil>
+      <tube name="Q1EF_InnerSupport_Tube" vis="MagnetSupportTubeVis">
+        <placement x="Q1EF_Center_posX" y="Q1EF_Center_posY" z="Q1EF_Center_posZ" theta="Q1EF_Rotation_Angle"/>
+        <dimensions rmin="7.7*cm" rmax="8.2*cm" half_length="171.*cm/2." sphi="0*deg" dphi="360.0*deg"/>
+      </tube>
+      <tube name="Q1EF_OuterSupport_Tube" vis="MagnetSupportTubeVis">
+        <placement x="Q1EF_Center_posX" y="Q1EF_Center_posY" z="Q1EF_Center_posZ" theta="Q1EF_Rotation_Angle"/>
+        <dimensions rmin="8.7*cm" rmax="9.0*cm" half_length="171.*cm/2." sphi="0*deg" dphi="360.0*deg"/>
+      </tube>
     </detector>
 
   </detectors>
