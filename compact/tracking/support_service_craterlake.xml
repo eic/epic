@@ -980,7 +980,7 @@
           <component material="CarbonFiber" thickness="PSTThermalMembrane_thickness" name="Support" vis="TrackerSupportVis"/>
       </support>
     <!-- Positive side -->
-      <support type="Cylinder"
+      <!-- <support type="Cylinder"
         name="PSTThermalMembraneP"
         vis="TrackerSupportVis"
         rmin="PSTThermalMembrane_rmin"
@@ -988,7 +988,7 @@
         thickness="PSTThermalMembrane_thickness">
           <position x="0*cm" y="0*cm" z="PSTThermalMembraneP_zcenter" />
           <component material="CarbonFiber" thickness="PSTThermalMembrane_thickness" name="Support" vis="TrackerSupportVis"/>
-      </support>
+      </support> -->
     <!-- end of PST thermal membrane implementation -->
 
     <!-- |||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||| -->
