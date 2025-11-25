@@ -25,9 +25,9 @@ features:
     dirc:
     pfrich:
     drich:
-  #far_forward:
+  far_forward:
     # FIXME: disabled due to:
     #   16:39:13    StraightLine   VERBOSE   Step with size 10000 performed. We are now at      -131706      -162867 -9.98943e+06 with direction -0.0131817 -0.0163004   -0.99978
     #   16:39:13    StraightLine   VERBOSE   PathLimit aborter | Target stepSize (path limit) updated to ( +∞,  +∞,  +∞, 10000)
     #   16:39:13    StraightLine   ERROR     Propagation reached the step count limit of 1000 (did 1000 steps)
-    #default:
+    default:
