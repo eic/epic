@@ -92,12 +92,46 @@ install(FILES ${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}_full.xml
     )
 
 #-----------------------------------------------------------------------------------
-# Install the detector description files.
+# Install the detector description files...
+# ...excluding MPGD pixel/2DStrip, which are handled later on
 install(DIRECTORY compact/
     DESTINATION ${CMAKE_INSTALL_DATADIR}/${PROJECT_NAME}/compact
-    FILES_MATCHING PATTERN "*.xml" PATTERN "*.gdml"
+    FILES_MATCHING
+    PATTERN "*.xml"
+    PATTERN "*.gdml"
+    PATTERN "*_pixel.xml" EXCLUDE
+    PATTERN "*_2DStrip.xml" EXCLUDE
     )
-
+# Install MPGD pixel/2DStrip files
+set(MPGD_INSTALL_PIXEL FALSE CACHE BOOL "Use \"pixel\" flavour of MPGD XMLs instead of default \"2DStrip\"")
+IF(${MPGD_INSTALL_PIXEL})
+    file(GLOB_RECURSE MPGD_FILES
+        RELATIVE ${CMAKE_CURRENT_SOURCE_DIR}/compact/tracking
+	"compact/tracking/*_pixel.xml"
+        )
+    foreach(FILE IN ITEMS ${MPGD_FILES})
+	execute_process(COMMAND bash -c "echo ${FILE} | sed -e 's/_pixel//'" OUTPUT_VARIABLE INSTALL_FILE OUTPUT_STRIP_TRAILING_WHITESPACE)
+	install(FILES compact/tracking/${FILE}
+            DESTINATION ${CMAKE_INSTALL_DATADIR}/${PROJECT_NAME}/compact/tracking
+	    RENAME ${INSTALL_FILE}
+	)
+    endforeach()
+    message(STATUS "MPGD: \"pixel\" flavour of XMLs \"${MPGD_FILES}\" to be installed.")
+ELSE()
+    file(GLOB_RECURSE MPGD_FILES
+        RELATIVE ${CMAKE_CURRENT_SOURCE_DIR}/compact/tracking
+	"compact/tracking/*_2DStrip.xml"
+        )
+    foreach(FILE IN ITEMS ${MPGD_FILES})
+	execute_process(COMMAND bash -c "echo ${FILE} | sed -e 's/_2DStrip//'" OUTPUT_VARIABLE INSTALL_FILE OUTPUT_STRIP_TRAILING_WHITESPACE)
+	install(FILES compact/tracking/${FILE}
+            DESTINATION ${CMAKE_INSTALL_DATADIR}/${PROJECT_NAME}/compact/tracking
+	    RENAME ${INSTALL_FILE}
+	    )
+    endforeach()
+    MESSAGE(STATUS "MPGD: \"2DStrip\" flavour of XMLs \"${MPGD_FILES}\" to be installed.")
+ENDIF()
+ 
 #-----------------------------------------------------------------------------------
 # Install the detector calibration files.
 install(DIRECTORY calibrations/
