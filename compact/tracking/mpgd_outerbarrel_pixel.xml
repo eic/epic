@@ -10,6 +10,12 @@
 </documentation>
 
 <define>
+    <comment>
+      Outer MPGD tracking layer
+      Note: MPGDs come in two distinct flavours: pixel and 2DStrip.
+    </comment>
+    <constant name="MPGDOuterBarrel_2DStrip"               value="0"/>
+
     <comment> Frames </comment>
     <constant name="MPGDOuterBarrelFrame_width"            value="15*mm"/>
     <constant name="MPGDOuterBarrelFrame_thickness"        value="7*mm"/>

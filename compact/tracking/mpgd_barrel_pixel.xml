@@ -11,12 +11,10 @@
 
   <define>
     <comment>
-      Inner MPGD tracking layer(s)
-
-      Note: the inner and outer layers are implemented as separate detectors, as they
-      belong to different ACTS tracking volumes. If this restriction goes away
-      in the future they could be put together in a single tag.
+      Inner MPGD tracking layer = CyMBaL
+      Note: MPGDs come in two distinct flavours: pixel and 2DStrip.
     </comment>
+    <constant name="InnerMPGDBarrel_2DStrip"                value="0"/>
 
     <constant name="InnerMPGDBarrelLayer_length"            value="InnerMPGDBarrel_length" />
 
