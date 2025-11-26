@@ -77,11 +77,11 @@
 
     <comment> SVT PST Feet </comment>
     <comment> Specifications are from SVT PST Drawing PACKET SEP 2025.pdf </comment>
-    <!-- each foot will be made using 3 boxes -->
+    <!-- each foot will be made using 3 boxes (1 middile box and 2 outer boxes) -->
     <constant name="PSTFootMidBox_dx"                         value="50*mm"/>
     <constant name="PSTFootMidBox_dy"                         value="20*mm"/>
     <constant name="PSTFootMidBox_dz"                         value="20*mm"/>
-    <constant name="PSTFootOuterBox_dx"                       value="190.9*mm"/>
+    <constant name="PSTFootOuterBox_dx"                       value="TrackerSupportCylEndcapP_rmin2-10*mm-PST_support_tube_rmin"/> <comment> 190.9 mm per drawing. But modifying to avoid conflict! </comment>
     <constant name="PSTFootOuterBox_dy"                       value="29*mm"/>
     <constant name="PSTFootOuterBox_dz"                       value="20*mm"/>
     <constant name="PSTFootOuterBox_thickness"                value="2*mm"/>
@@ -91,7 +91,7 @@
     <constant name="PSTFootOuterBox_ycenter"                  value="0.5*PSTFootOuterBox_dy"/>
     <constant name="PSTFootMidBox_xcenter"                    value="PSTFootMidBox_xoffset+0.5*PSTFootMidBox_dx"/>
     <constant name="PSTFootMidBox_ycenter"                    value="0.5*PSTFootMidBox_dy"/>
-    <!-- cut dimensions -->
+    <!-- cut dimensions (w.r.t. the base solid's center) -->
     <constant name="PSTFootMidBoxCylCut_radius"               value="5*mm"/>
     <constant name="PSTFootMidBoxCylCut_length"               value="PSTFootMidBox_dz"/>
     <constant name="PSTFootMidBoxCylCut_xcenter"              value="16.1*mm"/> 
@@ -111,7 +111,7 @@
     <constant name="PSTFootN_zcenter"                         value="1190*mm"/> <comment> From the STP file. </comment>
     <constant name="PSTFootOuterBox1N_zcenter"                value="PSTFootN_zcenter-0.5*(PSTFootOuterBox_dz+PSTFootMidBox_dz)"/> 
     <constant name="PSTFootOuterBox2N_zcenter"                value="PSTFootN_zcenter+0.5*(PSTFootOuterBox_dz+PSTFootMidBox_dz)"/> 
-
+    <!-- .qq -->
 
     <comment> (Negative) Service Passthrough Plate </comment>
     <!-- The geometry will be implemented in 4 parts:
@@ -398,7 +398,7 @@
     <constant name="BeampipeSupportPlateSheetN_length"      value="1*mm"/>
     <constant name="BeampipeSupportPlateCoreN_length"       value="3*mm"/>    
     <constant name="BeampipeSupportPlateN_zcenter"          value="1040*mm"/> <comment> Absolute value </comment>  
-    <constant name="BeampipeSupportPlateN_zmin"             value="BeampipeSupportPlateN_zcenter-0.5*(BeampipeSupportPlateSheetN_length+BeampipeSupportPlateCoreN_length)"/> 
+    <constant name="BeampipeSupportPlateN_zmin"             value="BeampipeSupportPlateN_zcenter-0.5*BeampipeSupportPlateCoreN_length-BeampipeSupportPlateSheetN_length"/> 
     <constant name="BeampipeSupportPlateN_thickness"        value="ServicePassthroughRingN_rmax"/>    
     <comment> dimensions of the ring shaped sheet in the middle </comment>
     <constant name="BeampipeSupportPlateRingN_rmin"         value="70*mm"/> <!-- 140mm/2 -->
@@ -780,9 +780,10 @@
     <comment> INPORTANT NOTEs: </comment>
     <comment> 1. Putting the joint outside of PST instead of inside to avoid re-writing existing support-service code. </comment>
     <comment> 2. On the negative side, extending it up to the service routing flange to avoid operlap. </comment>
+    <comment> 3. On the positive side, extending it up to the base of PST fingure to avoid operlap with PST feet. </comment>
     <constant name="SupportTubeJoint_thickness"     value="2*mm"/>
     <constant name="SupportTubeJoint_zmin"          value="SupportRoutingFlangeCyl_zmin"/>
-    <constant name="SupportTubeJoint_zmax"          value="PSTFingureP_zmax"/>
+    <constant name="SupportTubeJoint_zmax"          value="PSTFingureP_zmin"/>
     <constant name="SupportTubeJoint_zcenter"       value="0.5*(SupportTubeJoint_zmax-SupportTubeJoint_zmin)"/>
     <constant name="SupportTubeJoint_length"        value="SupportTubeJoint_zmin+SupportTubeJoint_zmax"/>  
     <constant name="SupportTubeJoint_rmin"          value="SupportRoutingFlangeCyl_rmin1"/>
@@ -3107,7 +3108,7 @@
           <component material="CarbonFiber" thickness="OuterSupportConeCF_thickness" name="Support" vis="TrackerSupportVis"/>
       </support> -->
 
-      <!-- <comment> outer barrel </comment>
+      <comment> outer barrel </comment>
       <support type="Cylinder"
         name="TrackerSupportCylEndcapN2A"
         vis="TrackerSupportVis"
@@ -3526,7 +3527,7 @@
         thickness="InnerDetectorBarrelSupportCylCF_thickness">
           <position x="0*cm" y="0*cm" z="InnerDetectorBarrelSupportCylCF_offset" />
           <component material="CarbonFiber" thickness="InnerDetectorBarrelSupportCylCF_thickness" name="Support" vis="TrackerSupportVis"/>
-      </support> -->
+      </support>
 
     </detector>
   </detectors>
