@@ -94,11 +94,11 @@
     <!-- cut dimensions (w.r.t. the base solid's center) -->
     <constant name="PSTFootMidBoxCylCut_radius"               value="5*mm"/>
     <constant name="PSTFootMidBoxCylCut_length"               value="PSTFootMidBox_dz"/>
-    <constant name="PSTFootMidBoxCylCut_xcenter"              value="16.1*mm"/> 
+    <constant name="PSTFootMidBoxCylCut_xcenter"              value="16.1*mm"/>
     <constant name="PSTFootMidBoxCylCut_ycenter"              value="-0.5*PSTFootMidBox_dy"/>
     <constant name="PSTFootOuterBoxCut1_dx"                   value="PSTFootOuterBox_dx"/>
     <constant name="PSTFootOuterBoxCut1_dy"                   value="PSTFootOuterBox_dy-2.0*PSTFootOuterBox_thickness"/>
-    <constant name="PSTFootOuterBoxCut1_dz"                   value="PSTFootOuterBox_dz-2.0*PSTFootOuterBox_thickness"/>    
+    <constant name="PSTFootOuterBoxCut1_dz"                   value="PSTFootOuterBox_dz-2.0*PSTFootOuterBox_thickness"/>
     <constant name="PSTFootOuterBoxCut2_dx"                   value="18.798*mm"/>
     <constant name="PSTFootOuterBoxCut2_dy"                   value="PSTFootMidBoxCylCut_radius"/>
     <constant name="PSTFootOuterBoxCut2_dz"                   value="PSTFootOuterBox_dz"/>
@@ -106,11 +106,11 @@
     <constant name="PSTFootOuterBoxCut2_ycenter"              value="0.5*(PSTFootMidBoxCylCut_radius-PSTFootOuterBox_dy)"/>
     <!-- +/- side specific Z-centers -->
     <constant name="PSTFootP_zcenter"                         value="1590*mm"/> <comment> From the STP file. </comment>
-    <constant name="PSTFootOuterBox1P_zcenter"                value="PSTFootP_zcenter+0.5*(PSTFootOuterBox_dz+PSTFootMidBox_dz)"/> 
-    <constant name="PSTFootOuterBox2P_zcenter"                value="PSTFootP_zcenter-0.5*(PSTFootOuterBox_dz+PSTFootMidBox_dz)"/> 
+    <constant name="PSTFootOuterBox1P_zcenter"                value="PSTFootP_zcenter+0.5*(PSTFootOuterBox_dz+PSTFootMidBox_dz)"/>
+    <constant name="PSTFootOuterBox2P_zcenter"                value="PSTFootP_zcenter-0.5*(PSTFootOuterBox_dz+PSTFootMidBox_dz)"/>
     <constant name="PSTFootN_zcenter"                         value="1190*mm"/> <comment> From the STP file. </comment>
-    <constant name="PSTFootOuterBox1N_zcenter"                value="PSTFootN_zcenter-0.5*(PSTFootOuterBox_dz+PSTFootMidBox_dz)"/> 
-    <constant name="PSTFootOuterBox2N_zcenter"                value="PSTFootN_zcenter+0.5*(PSTFootOuterBox_dz+PSTFootMidBox_dz)"/> 
+    <constant name="PSTFootOuterBox1N_zcenter"                value="PSTFootN_zcenter-0.5*(PSTFootOuterBox_dz+PSTFootMidBox_dz)"/>
+    <constant name="PSTFootOuterBox2N_zcenter"                value="PSTFootN_zcenter+0.5*(PSTFootOuterBox_dz+PSTFootMidBox_dz)"/>
     <!-- .qq -->
 
     <comment> (Negative) Service Passthrough Plate </comment>
@@ -118,9 +118,9 @@
           1) base ring
           2) top half ring holes
           3) bottom half ring holes
-          4) rectangular cutout in the middle 
+          4) rectangular cutout in the middle
      -->
-    <comment> Specifications are from SVT PST Drawing PACKET SEP 2025.pdf </comment> 
+    <comment> Specifications are from SVT PST Drawing PACKET SEP 2025.pdf </comment>
     <comment> General dimensions (we assume hole-specs are the same for top and bottom half) </comment>
     <constant name="ServicePassthroughHoleN_rmin1"          value="461*mm"/>
     <constant name="ServicePassthroughHoleN_thickness"      value="525*mm-ServicePassthroughHoleN_rmin1"/>
@@ -131,8 +131,8 @@
     <constant name="ServicePassthroughRingN_thickness"      value="95*mm"/>
     <constant name="ServicePassthroughRingN_phimin"         value="0*deg"/>
     <constant name="ServicePassthroughRingN_phimax"         value="360*deg"/>
-    <constant name="ServicePassthroughRingN_rmax"           value="PST_support_tube_rmin"/>    
-    <constant name="ServicePassthroughRingN_rmin1"          value="ServicePassthroughRingN_rmax-ServicePassthroughRingN_thickness"/>    
+    <constant name="ServicePassthroughRingN_rmax"           value="PST_support_tube_rmin"/>
+    <constant name="ServicePassthroughRingN_rmin1"          value="ServicePassthroughRingN_rmax-ServicePassthroughRingN_thickness"/>
     <constant name="ServicePassthroughRingN_zmax"           value="PSTFingureN_zmin"/>
     <constant name="ServicePassthroughRingN_zmin"           value="ServicePassthroughRingN_zmax-ServicePassthroughRingN_length"/>
     <constant name="ServicePassthroughRingN_zcenter"        value="0.5*(ServicePassthroughRingN_zmax+ServicePassthroughRingN_zmin)"/>
@@ -153,16 +153,16 @@
     <constant name="ServicePassthroughTopRing3N_phimin"     value="ServicePassthroughTopRing2N_phimax"/>
     <constant name="ServicePassthroughTopRingHole3N_phimin" value="ServicePassthroughTopRing3N_phimin"/>
     <constant name="ServicePassthroughTopRingHole3N_phimax" value="ServicePassthroughTopRingHole3N_phimin+ServicePassthroughSmallHoleN_width"/>
-    <constant name="ServicePassthroughTopRing3N_phimax"     value="ServicePassthroughTopRingHole3N_phimax+ServicePassthroughHoleN_gap"/>    
+    <constant name="ServicePassthroughTopRing3N_phimax"     value="ServicePassthroughTopRingHole3N_phimax+ServicePassthroughHoleN_gap"/>
     <!-- Hole wedge 4 -->
     <constant name="ServicePassthroughTopRing4N_phimin"     value="ServicePassthroughTopRing3N_phimax"/>
     <constant name="ServicePassthroughTopRingHole4N_phimin" value="ServicePassthroughTopRing4N_phimin"/>
     <constant name="ServicePassthroughTopRingHole4N_phimax" value="ServicePassthroughTopRingHole4N_phimin+ServicePassthroughBigHoleN_width"/>
-    <constant name="ServicePassthroughTopRing4N_phimax"     value="ServicePassthroughTopRingHole4N_phimax+ServicePassthroughHoleN_gap"/> 
+    <constant name="ServicePassthroughTopRing4N_phimax"     value="ServicePassthroughTopRingHole4N_phimax+ServicePassthroughHoleN_gap"/>
     <!-- Hole wedge 5 -->
     <constant name="ServicePassthroughTopRing5N_phimin"     value="ServicePassthroughTopRing4N_phimax"/>
     <constant name="ServicePassthroughTopRingHole5N_phimin" value="ServicePassthroughTopRing5N_phimin"/>
-    <constant name="ServicePassthroughTopRingHole5N_phimax" value="ServicePassthroughTopRingHole5N_phimin+ServicePassthroughBigHoleN_width"/>   
+    <constant name="ServicePassthroughTopRingHole5N_phimax" value="ServicePassthroughTopRingHole5N_phimin+ServicePassthroughBigHoleN_width"/>
     <constant name="ServicePassthroughTopRing5N_phimax"     value="ServicePassthroughTopRingHole5N_phimax+ServicePassthroughHoleN_gap"/>
     <!-- Hole wedge 6 -->
     <constant name="ServicePassthroughTopRing6N_phimin"     value="ServicePassthroughTopRing5N_phimax"/>
@@ -183,7 +183,7 @@
     <constant name="ServicePassthroughTopRing9N_phimin"     value="ServicePassthroughTopRing8N_phimax"/>
     <constant name="ServicePassthroughTopRingHole9N_phimin" value="ServicePassthroughTopRing9N_phimin"/>
     <constant name="ServicePassthroughTopRingHole9N_phimax" value="ServicePassthroughTopRingHole9N_phimin+ServicePassthroughBigHoleN_width"/>
-    <constant name="ServicePassthroughTopRing9N_phimax"     value="ServicePassthroughTopRingHole9N_phimax+ServicePassthroughHoleN_gap"/>  
+    <constant name="ServicePassthroughTopRing9N_phimax"     value="ServicePassthroughTopRingHole9N_phimax+ServicePassthroughHoleN_gap"/>
     <!-- Hole wedge 10 -->
     <constant name="ServicePassthroughTopRing10N_phimin"     value="ServicePassthroughTopRing9N_phimax"/>
     <constant name="ServicePassthroughTopRingHole10N_phimin" value="ServicePassthroughTopRing10N_phimin"/>
@@ -207,16 +207,16 @@
     <constant name="ServicePassthroughBotRing3N_phimin"     value="ServicePassthroughBotRing2N_phimax"/>
     <constant name="ServicePassthroughBotRingHole3N_phimin" value="ServicePassthroughBotRing3N_phimin"/>
     <constant name="ServicePassthroughBotRingHole3N_phimax" value="ServicePassthroughBotRingHole3N_phimin+ServicePassthroughSmallHoleN_width"/>
-    <constant name="ServicePassthroughBotRing3N_phimax"     value="ServicePassthroughBotRingHole3N_phimax+ServicePassthroughHoleN_gap"/>    
+    <constant name="ServicePassthroughBotRing3N_phimax"     value="ServicePassthroughBotRingHole3N_phimax+ServicePassthroughHoleN_gap"/>
     <!-- Hole wedge 4 -->
     <constant name="ServicePassthroughBotRing4N_phimin"     value="ServicePassthroughBotRing3N_phimax"/>
     <constant name="ServicePassthroughBotRingHole4N_phimin" value="ServicePassthroughBotRing4N_phimin"/>
     <constant name="ServicePassthroughBotRingHole4N_phimax" value="ServicePassthroughBotRingHole4N_phimin+ServicePassthroughBigHoleN_width"/>
-    <constant name="ServicePassthroughBotRing4N_phimax"     value="ServicePassthroughBotRingHole4N_phimax+ServicePassthroughHoleN_gap"/> 
+    <constant name="ServicePassthroughBotRing4N_phimax"     value="ServicePassthroughBotRingHole4N_phimax+ServicePassthroughHoleN_gap"/>
     <!-- Hole wedge 5 -->
     <constant name="ServicePassthroughBotRing5N_phimin"     value="ServicePassthroughBotRing4N_phimax"/>
     <constant name="ServicePassthroughBotRingHole5N_phimin" value="ServicePassthroughBotRing5N_phimin"/>
-    <constant name="ServicePassthroughBotRingHole5N_phimax" value="ServicePassthroughBotRingHole5N_phimin+ServicePassthroughBigHoleN_width"/>   
+    <constant name="ServicePassthroughBotRingHole5N_phimax" value="ServicePassthroughBotRingHole5N_phimin+ServicePassthroughBigHoleN_width"/>
     <constant name="ServicePassthroughBotRing5N_phimax"     value="ServicePassthroughBotRingHole5N_phimax+ServicePassthroughHoleN_gap"/>
     <!-- Hole wedge 6 -->
     <constant name="ServicePassthroughBotRing6N_phimin"     value="ServicePassthroughBotRing5N_phimax"/>
@@ -237,17 +237,17 @@
     <constant name="ServicePassthroughBotRing9N_phimin"     value="ServicePassthroughBotRing8N_phimax"/>
     <constant name="ServicePassthroughBotRingHole9N_phimin" value="ServicePassthroughBotRing9N_phimin"/>
     <constant name="ServicePassthroughBotRingHole9N_phimax" value="ServicePassthroughBotRingHole9N_phimin+ServicePassthroughBigHoleN_width"/>
-    <constant name="ServicePassthroughBotRing9N_phimax"     value="ServicePassthroughBotRingHole9N_phimax+ServicePassthroughHoleN_gap"/>  
+    <constant name="ServicePassthroughBotRing9N_phimax"     value="ServicePassthroughBotRingHole9N_phimax+ServicePassthroughHoleN_gap"/>
     <!-- Hole wedge 10 -->
     <constant name="ServicePassthroughBotRing10N_phimin"     value="ServicePassthroughBotRing9N_phimax"/>
     <constant name="ServicePassthroughBotRingHole10N_phimin" value="ServicePassthroughBotRing10N_phimin"/>
     <constant name="ServicePassthroughBotRingHole10N_phimax" value="ServicePassthroughBotRingHole10N_phimin+ServicePassthroughSmallHoleN_width"/>
     <constant name="ServicePassthroughBotRing10N_phimax"     value="ServicePassthroughBotRingHole10N_phimax+ServicePassthroughHoleN_gap"/>
     <constant name="ServicePassthroughBotRingN_phimax"      value="ServicePassthroughBotRingHole10N_phimax"/>
-    <comment> rectangular cutout in the middle </comment>    
-    <constant name="ServicePassthroughBoxCutLeftN_dx"        value="2*ServicePassthroughRingN_rmax"/> 
+    <comment> rectangular cutout in the middle </comment>
+    <constant name="ServicePassthroughBoxCutLeftN_dx"        value="2*ServicePassthroughRingN_rmax"/>
     <constant name="ServicePassthroughBoxCutLeftN_dy"        value="ServicePassthroughCutN_halfwidth*2"/>
-    <constant name="ServicePassthroughBoxCutLeftN_dz"        value="ServicePassthroughRingN_length"/> 
+    <constant name="ServicePassthroughBoxCutLeftN_dz"        value="ServicePassthroughRingN_length"/>
     <!-- qq-->
 
     <comment> (Positive) Service Passthrough Plate </comment>
@@ -257,7 +257,7 @@
           3) bottom half ring holes
           4) rectangular cutout in the middle
      -->
-    <comment> Specifications are from SVT PST Drawing PACKET SEP 2025.pdf </comment> 
+    <comment> Specifications are from SVT PST Drawing PACKET SEP 2025.pdf </comment>
     <comment> General dimensions (we assume hole-specs are the same for top and bottom half) </comment>
     <constant name="ServicePassthroughHoleP_rmin1"          value="461*mm"/>
     <constant name="ServicePassthroughHoleP_thickness"      value="525*mm-ServicePassthroughHoleP_rmin1"/>
@@ -268,8 +268,8 @@
     <constant name="ServicePassthroughRingP_thickness"      value="95*mm"/>
     <constant name="ServicePassthroughRingP_phimin"         value="0*deg"/>
     <constant name="ServicePassthroughRingP_phimax"         value="360*deg"/>
-    <constant name="ServicePassthroughRingP_rmax"           value="PST_support_tube_rmin"/>    
-    <constant name="ServicePassthroughRingP_rmin1"          value="ServicePassthroughRingP_rmax-ServicePassthroughRingP_thickness"/>    
+    <constant name="ServicePassthroughRingP_rmax"           value="PST_support_tube_rmin"/>
+    <constant name="ServicePassthroughRingP_rmin1"          value="ServicePassthroughRingP_rmax-ServicePassthroughRingP_thickness"/>
     <constant name="ServicePassthroughRingP_zmax"           value="1254*mm"/>
     <constant name="ServicePassthroughRingP_zmin"           value="ServicePassthroughRingP_zmax-ServicePassthroughRingP_length"/>
     <constant name="ServicePassthroughRingP_zcenter"        value="0.5*(ServicePassthroughRingP_zmax+ServicePassthroughRingP_zmin)"/>
@@ -290,16 +290,16 @@
     <constant name="ServicePassthroughTopRing3P_phimin"     value="ServicePassthroughTopRing2P_phimax"/>
     <constant name="ServicePassthroughTopRingHole3P_phimin" value="ServicePassthroughTopRing3P_phimin"/>
     <constant name="ServicePassthroughTopRingHole3P_phimax" value="ServicePassthroughTopRingHole3P_phimin+ServicePassthroughSmallHoleP_width"/>
-    <constant name="ServicePassthroughTopRing3P_phimax"     value="ServicePassthroughTopRingHole3P_phimax+ServicePassthroughHoleP_gap"/>    
+    <constant name="ServicePassthroughTopRing3P_phimax"     value="ServicePassthroughTopRingHole3P_phimax+ServicePassthroughHoleP_gap"/>
     <!-- Hole wedge 4 -->
     <constant name="ServicePassthroughTopRing4P_phimin"     value="ServicePassthroughTopRing3P_phimax"/>
     <constant name="ServicePassthroughTopRingHole4P_phimin" value="ServicePassthroughTopRing4P_phimin"/>
     <constant name="ServicePassthroughTopRingHole4P_phimax" value="ServicePassthroughTopRingHole4P_phimin+ServicePassthroughBigHoleP_width"/>
-    <constant name="ServicePassthroughTopRing4P_phimax"     value="ServicePassthroughTopRingHole4P_phimax+ServicePassthroughHoleP_gap"/> 
+    <constant name="ServicePassthroughTopRing4P_phimax"     value="ServicePassthroughTopRingHole4P_phimax+ServicePassthroughHoleP_gap"/>
     <!-- Hole wedge 5 -->
     <constant name="ServicePassthroughTopRing5P_phimin"     value="ServicePassthroughTopRing4P_phimax"/>
     <constant name="ServicePassthroughTopRingHole5P_phimin" value="ServicePassthroughTopRing5P_phimin"/>
-    <constant name="ServicePassthroughTopRingHole5P_phimax" value="ServicePassthroughTopRingHole5P_phimin+ServicePassthroughBigHoleP_width"/>   
+    <constant name="ServicePassthroughTopRingHole5P_phimax" value="ServicePassthroughTopRingHole5P_phimin+ServicePassthroughBigHoleP_width"/>
     <constant name="ServicePassthroughTopRing5P_phimax"     value="ServicePassthroughTopRingHole5P_phimax+ServicePassthroughHoleP_gap"/>
     <!-- Hole wedge 6 -->
     <constant name="ServicePassthroughTopRing6P_phimin"     value="ServicePassthroughTopRing5P_phimax"/>
@@ -320,7 +320,7 @@
     <constant name="ServicePassthroughTopRing9P_phimin"     value="ServicePassthroughTopRing8P_phimax"/>
     <constant name="ServicePassthroughTopRingHole9P_phimin" value="ServicePassthroughTopRing9P_phimin"/>
     <constant name="ServicePassthroughTopRingHole9P_phimax" value="ServicePassthroughTopRingHole9P_phimin+ServicePassthroughBigHoleP_width"/>
-    <constant name="ServicePassthroughTopRing9P_phimax"     value="ServicePassthroughTopRingHole9P_phimax+ServicePassthroughHoleP_gap"/>  
+    <constant name="ServicePassthroughTopRing9P_phimax"     value="ServicePassthroughTopRingHole9P_phimax+ServicePassthroughHoleP_gap"/>
     <!-- Hole wedge 10 -->
     <constant name="ServicePassthroughTopRing10P_phimin"     value="ServicePassthroughTopRing9P_phimax"/>
     <constant name="ServicePassthroughTopRingHole10P_phimin" value="ServicePassthroughTopRing10P_phimin"/>
@@ -344,16 +344,16 @@
     <constant name="ServicePassthroughBotRing3P_phimin"     value="ServicePassthroughBotRing2P_phimax"/>
     <constant name="ServicePassthroughBotRingHole3P_phimin" value="ServicePassthroughBotRing3P_phimin"/>
     <constant name="ServicePassthroughBotRingHole3P_phimax" value="ServicePassthroughBotRingHole3P_phimin+ServicePassthroughSmallHoleP_width"/>
-    <constant name="ServicePassthroughBotRing3P_phimax"     value="ServicePassthroughBotRingHole3P_phimax+ServicePassthroughHoleP_gap"/>    
+    <constant name="ServicePassthroughBotRing3P_phimax"     value="ServicePassthroughBotRingHole3P_phimax+ServicePassthroughHoleP_gap"/>
     <!-- Hole wedge 4 -->
     <constant name="ServicePassthroughBotRing4P_phimin"     value="ServicePassthroughBotRing3P_phimax"/>
     <constant name="ServicePassthroughBotRingHole4P_phimin" value="ServicePassthroughBotRing4P_phimin"/>
     <constant name="ServicePassthroughBotRingHole4P_phimax" value="ServicePassthroughBotRingHole4P_phimin+ServicePassthroughBigHoleP_width"/>
-    <constant name="ServicePassthroughBotRing4P_phimax"     value="ServicePassthroughBotRingHole4P_phimax+ServicePassthroughHoleP_gap"/> 
+    <constant name="ServicePassthroughBotRing4P_phimax"     value="ServicePassthroughBotRingHole4P_phimax+ServicePassthroughHoleP_gap"/>
     <!-- Hole wedge 5 -->
     <constant name="ServicePassthroughBotRing5P_phimin"     value="ServicePassthroughBotRing4P_phimax"/>
     <constant name="ServicePassthroughBotRingHole5P_phimin" value="ServicePassthroughBotRing5P_phimin"/>
-    <constant name="ServicePassthroughBotRingHole5P_phimax" value="ServicePassthroughBotRingHole5P_phimin+ServicePassthroughBigHoleP_width"/>   
+    <constant name="ServicePassthroughBotRingHole5P_phimax" value="ServicePassthroughBotRingHole5P_phimin+ServicePassthroughBigHoleP_width"/>
     <constant name="ServicePassthroughBotRing5P_phimax"     value="ServicePassthroughBotRingHole5P_phimax+ServicePassthroughHoleP_gap"/>
     <!-- Hole wedge 6 -->
     <constant name="ServicePassthroughBotRing6P_phimin"     value="ServicePassthroughBotRing5P_phimax"/>
@@ -374,17 +374,17 @@
     <constant name="ServicePassthroughBotRing9P_phimin"     value="ServicePassthroughBotRing8P_phimax"/>
     <constant name="ServicePassthroughBotRingHole9P_phimin" value="ServicePassthroughBotRing9P_phimin"/>
     <constant name="ServicePassthroughBotRingHole9P_phimax" value="ServicePassthroughBotRingHole9P_phimin+ServicePassthroughBigHoleP_width"/>
-    <constant name="ServicePassthroughBotRing9P_phimax"     value="ServicePassthroughBotRingHole9P_phimax+ServicePassthroughHoleP_gap"/>  
+    <constant name="ServicePassthroughBotRing9P_phimax"     value="ServicePassthroughBotRingHole9P_phimax+ServicePassthroughHoleP_gap"/>
     <!-- Hole wedge 10 -->
     <constant name="ServicePassthroughBotRing10P_phimin"     value="ServicePassthroughBotRing9P_phimax"/>
     <constant name="ServicePassthroughBotRingHole10P_phimin" value="ServicePassthroughBotRing10P_phimin"/>
     <constant name="ServicePassthroughBotRingHole10P_phimax" value="ServicePassthroughBotRingHole10P_phimin+ServicePassthroughSmallHoleP_width"/>
     <constant name="ServicePassthroughBotRing10P_phimax"     value="ServicePassthroughBotRingHole10P_phimax+ServicePassthroughHoleP_gap"/>
     <constant name="ServicePassthroughBotRingP_phimax"      value="ServicePassthroughBotRingHole10P_phimax"/>
-    <comment> rectangular cutout in the middle </comment>    
-    <constant name="ServicePassthroughBoxCutLeftP_dx"        value="2*ServicePassthroughRingN_rmax"/> 
+    <comment> rectangular cutout in the middle </comment>
+    <constant name="ServicePassthroughBoxCutLeftP_dx"        value="2*ServicePassthroughRingN_rmax"/>
     <constant name="ServicePassthroughBoxCutLeftP_dy"        value="ServicePassthroughCutP_halfwidth*2"/>
-    <constant name="ServicePassthroughBoxCutLeftP_dz"        value="ServicePassthroughRingP_length"/> 
+    <constant name="ServicePassthroughBoxCutLeftP_dz"        value="ServicePassthroughRingP_length"/>
     <!-- qq-->
 
    <comment> (Negative) beampipe Support Plate </comment>
@@ -393,17 +393,17 @@
           2) left rectangular sheet
           3) right rectangular sheet
     -->
-    <comment> Specifications are from SVT PST Drawing PACKET SEP 2025.pdf </comment> 
-    <comment> General dimensions </comment>    
+    <comment> Specifications are from SVT PST Drawing PACKET SEP 2025.pdf </comment>
+    <comment> General dimensions </comment>
     <constant name="BeampipeSupportPlateSheetN_length"      value="1*mm"/>
-    <constant name="BeampipeSupportPlateCoreN_length"       value="3*mm"/>    
-    <constant name="BeampipeSupportPlateN_zcenter"          value="1040*mm"/> <comment> Absolute value </comment>  
-    <constant name="BeampipeSupportPlateN_zmin"             value="BeampipeSupportPlateN_zcenter-0.5*BeampipeSupportPlateCoreN_length-BeampipeSupportPlateSheetN_length"/> 
-    <constant name="BeampipeSupportPlateN_thickness"        value="ServicePassthroughRingN_rmax"/>    
+    <constant name="BeampipeSupportPlateCoreN_length"       value="3*mm"/>
+    <constant name="BeampipeSupportPlateN_zcenter"          value="1040*mm"/> <comment> Absolute value </comment>
+    <constant name="BeampipeSupportPlateN_zmin"             value="BeampipeSupportPlateN_zcenter-0.5*BeampipeSupportPlateCoreN_length-BeampipeSupportPlateSheetN_length"/>
+    <constant name="BeampipeSupportPlateN_thickness"        value="ServicePassthroughRingN_rmax"/>
     <comment> dimensions of the ring shaped sheet in the middle </comment>
     <constant name="BeampipeSupportPlateRingN_rmin"         value="70*mm"/> <!-- 140mm/2 -->
-    <constant name="BeampipeSupportPlateRingN_rmax"         value="120*mm"/> <!-- 240mm/2 -->    
-    <constant name="BeampipeSupportPlateRingN_thickness"    value="BeampipeSupportPlateRingN_rmax-BeampipeSupportPlateRingN_rmin"/> 
+    <constant name="BeampipeSupportPlateRingN_rmax"         value="120*mm"/> <!-- 240mm/2 -->
+    <constant name="BeampipeSupportPlateRingN_thickness"    value="BeampipeSupportPlateRingN_rmax-BeampipeSupportPlateRingN_rmin"/>
     <comment> dimensions of the rectangular sheet </comment>
     <!--- It has two halves: left and right (while looking towards the hadron going side)
           Each half is a combination of the following two shapes:
@@ -413,47 +413,47 @@
              - from it a disk will be cut to make passage for the ring shaped sheet
     -->
     <constant name="BeampipeSupportPlateBoxN_halfwidth"  value="50*mm"/> <!-- 100mm/2 -->
-    <constant name="BeampipeSupportPlateBoxN_xmin"       value="sqrt(BeampipeSupportPlateRingN_rmax**2-BeampipeSupportPlateBoxN_halfwidth**2)"/> 
-    <constant name="BeampipeSupportPlateBoxN_xmax"       value="sqrt(BeampipeSupportPlateN_thickness**2-BeampipeSupportPlateBoxN_halfwidth**2)"/> 
-    <constant name="BeampipeSupportPlateBoxN_xcenter"    value="0.5*(BeampipeSupportPlateBoxN_xmax+BeampipeSupportPlateBoxN_xmin)"/> 
+    <constant name="BeampipeSupportPlateBoxN_xmin"       value="sqrt(BeampipeSupportPlateRingN_rmax**2-BeampipeSupportPlateBoxN_halfwidth**2)"/>
+    <constant name="BeampipeSupportPlateBoxN_xmax"       value="sqrt(BeampipeSupportPlateN_thickness**2-BeampipeSupportPlateBoxN_halfwidth**2)"/>
+    <constant name="BeampipeSupportPlateBoxN_xcenter"    value="0.5*(BeampipeSupportPlateBoxN_xmax+BeampipeSupportPlateBoxN_xmin)"/>
     <!-- Left half -->
     <constant name="BeampipeSupportPlateWedgeLeftN_rmin"      value="BeampipeSupportPlateBoxN_xcenter"/>
     <constant name="BeampipeSupportPlateWedgeLeftN_thickness" value="BeampipeSupportPlateN_thickness-BeampipeSupportPlateWedgeLeftN_rmin"/>
     <constant name="BeampipeSupportPlateWedgeLeftN_phimax"    value="asin(BeampipeSupportPlateBoxN_halfwidth/BeampipeSupportPlateN_thickness)*(180/Pi)*deg"/>
-    <constant name="BeampipeSupportPlateWedgeLeftN_phimin"    value="360*deg-BeampipeSupportPlateWedgeLeftN_phimax"/>  
-    <constant name="BeampipeSupportPlateRectLeftN_dx"         value="BeampipeSupportPlateBoxN_xmax-BeampipeSupportPlateBoxN_xmin"/> 
-    <constant name="BeampipeSupportPlateRectLeftN_dy"         value="BeampipeSupportPlateBoxN_halfwidth*2"/> 
+    <constant name="BeampipeSupportPlateWedgeLeftN_phimin"    value="360*deg-BeampipeSupportPlateWedgeLeftN_phimax"/>
+    <constant name="BeampipeSupportPlateRectLeftN_dx"         value="BeampipeSupportPlateBoxN_xmax-BeampipeSupportPlateBoxN_xmin"/>
+    <constant name="BeampipeSupportPlateRectLeftN_dy"         value="BeampipeSupportPlateBoxN_halfwidth*2"/>
     <!-- Right half -->
     <constant name="BeampipeSupportPlateWedgeRightN_rmin"      value="BeampipeSupportPlateBoxN_xcenter"/>
     <constant name="BeampipeSupportPlateWedgeRightN_thickness" value="BeampipeSupportPlateN_thickness-BeampipeSupportPlateWedgeRightN_rmin"/>
     <constant name="BeampipeSupportPlateWedgeRightN_phimax"    value="180*deg+BeampipeSupportPlateWedgeLeftN_phimax"/>
-    <constant name="BeampipeSupportPlateWedgeRightN_phimin"    value="BeampipeSupportPlateWedgeLeftN_phimin-180*deg"/>  
-    <constant name="BeampipeSupportPlateRectRightN_dx"         value="BeampipeSupportPlateBoxN_xmax-BeampipeSupportPlateBoxN_xmin"/> 
-    <constant name="BeampipeSupportPlateRectRightN_dy"         value="BeampipeSupportPlateBoxN_halfwidth*2"/> 
-    <!-- Each half has three layers: 
+    <constant name="BeampipeSupportPlateWedgeRightN_phimin"    value="BeampipeSupportPlateWedgeLeftN_phimin-180*deg"/>
+    <constant name="BeampipeSupportPlateRectRightN_dx"         value="BeampipeSupportPlateBoxN_xmax-BeampipeSupportPlateBoxN_xmin"/>
+    <constant name="BeampipeSupportPlateRectRightN_dy"         value="BeampipeSupportPlateBoxN_halfwidth*2"/>
+    <!-- Each half has three layers:
          1) layer 1: CFiber (1mm)
          2) layer 2: AIREX (3mm)
          3) layer 3: CFiber (1mm)
          NOTE: Layer 1 is closest to the center
     -->
     <!-- Layer 1 -->
-    <constant name="BeampipeSupportPlateLayer1N_zcenter"             value="BeampipeSupportPlateN_zcenter-0.5*(BeampipeSupportPlateCoreN_length+BeampipeSupportPlateSheetN_length)"/>    
-    <constant name="BeampipeSupportPlateWedgeLeftLayer1N_length"     value="BeampipeSupportPlateSheetN_length"/> 
+    <constant name="BeampipeSupportPlateLayer1N_zcenter"             value="BeampipeSupportPlateN_zcenter-0.5*(BeampipeSupportPlateCoreN_length+BeampipeSupportPlateSheetN_length)"/>
+    <constant name="BeampipeSupportPlateWedgeLeftLayer1N_length"     value="BeampipeSupportPlateSheetN_length"/>
     <constant name="BeampipeSupportPlateRectLeftLayer1N_dz"          value="BeampipeSupportPlateSheetN_length"/>
-    <constant name="BeampipeSupportPlateWedgeRightLayer1N_length"    value="BeampipeSupportPlateSheetN_length"/> 
-    <constant name="BeampipeSupportPlateRectRightLayer1N_dz"         value="BeampipeSupportPlateSheetN_length"/>     
+    <constant name="BeampipeSupportPlateWedgeRightLayer1N_length"    value="BeampipeSupportPlateSheetN_length"/>
+    <constant name="BeampipeSupportPlateRectRightLayer1N_dz"         value="BeampipeSupportPlateSheetN_length"/>
     <!-- Layer 2 -->
-    <constant name="BeampipeSupportPlateLayer2N_zcenter"             value="BeampipeSupportPlateN_zcenter"/>    
-    <constant name="BeampipeSupportPlateWedgeLeftLayer2N_length"     value="BeampipeSupportPlateCoreN_length"/> 
+    <constant name="BeampipeSupportPlateLayer2N_zcenter"             value="BeampipeSupportPlateN_zcenter"/>
+    <constant name="BeampipeSupportPlateWedgeLeftLayer2N_length"     value="BeampipeSupportPlateCoreN_length"/>
     <constant name="BeampipeSupportPlateRectLeftLayer2N_dz"          value="BeampipeSupportPlateCoreN_length"/>
-    <constant name="BeampipeSupportPlateWedgeRightLayer2N_length"    value="BeampipeSupportPlateCoreN_length"/> 
-    <constant name="BeampipeSupportPlateRectRightLayer2N_dz"         value="BeampipeSupportPlateCoreN_length"/>     
-    <!-- Layer 3 -->    
-    <constant name="BeampipeSupportPlateLayer3N_zcenter"             value="BeampipeSupportPlateN_zcenter+0.5*(BeampipeSupportPlateCoreN_length+BeampipeSupportPlateSheetN_length)"/>    
-    <constant name="BeampipeSupportPlateWedgeLeftLayer3N_length"     value="BeampipeSupportPlateSheetN_length"/> 
+    <constant name="BeampipeSupportPlateWedgeRightLayer2N_length"    value="BeampipeSupportPlateCoreN_length"/>
+    <constant name="BeampipeSupportPlateRectRightLayer2N_dz"         value="BeampipeSupportPlateCoreN_length"/>
+    <!-- Layer 3 -->
+    <constant name="BeampipeSupportPlateLayer3N_zcenter"             value="BeampipeSupportPlateN_zcenter+0.5*(BeampipeSupportPlateCoreN_length+BeampipeSupportPlateSheetN_length)"/>
+    <constant name="BeampipeSupportPlateWedgeLeftLayer3N_length"     value="BeampipeSupportPlateSheetN_length"/>
     <constant name="BeampipeSupportPlateRectLeftLayer3N_dz"          value="BeampipeSupportPlateSheetN_length"/>
-    <constant name="BeampipeSupportPlateWedgeRightLayer3N_length"    value="BeampipeSupportPlateSheetN_length"/> 
-    <constant name="BeampipeSupportPlateRectRightLayer3N_dz"         value="BeampipeSupportPlateSheetN_length"/>         
+    <constant name="BeampipeSupportPlateWedgeRightLayer3N_length"    value="BeampipeSupportPlateSheetN_length"/>
+    <constant name="BeampipeSupportPlateRectRightLayer3N_dz"         value="BeampipeSupportPlateSheetN_length"/>
     <!-- qq-->
 
     <comment> (Positive) beampipe Support Plate </comment>
@@ -462,18 +462,18 @@
           2) left rectangular sheet
           3) right rectangular sheet
     -->
-    <comment> Specifications are from SVT PST Drawing PACKET SEP 2025.pdf </comment> 
-    <comment> General dimensions </comment>    
+    <comment> Specifications are from SVT PST Drawing PACKET SEP 2025.pdf </comment>
+    <comment> General dimensions </comment>
     <constant name="BeampipeSupportPlateSheetP_length"      value="1*mm"/>
-    <constant name="BeampipeSupportPlateCoreP_length"       value="3*mm"/>    
-    <constant name="BeampipeSupportPlateP_zcenter"          value="1420*mm"/>    
-    <constant name="BeampipeSupportPlateP_xcenter_off"      value="-19.4*mm"/>    
-    <constant name="BeampipeSupportPlateP_thickness"        value="ServicePassthroughRingP_rmax"/>    
+    <constant name="BeampipeSupportPlateCoreP_length"       value="3*mm"/>
+    <constant name="BeampipeSupportPlateP_zcenter"          value="1420*mm"/>
+    <constant name="BeampipeSupportPlateP_xcenter_off"      value="-19.4*mm"/>
+    <constant name="BeampipeSupportPlateP_thickness"        value="ServicePassthroughRingP_rmax"/>
     <comment> dimensions of the ring shaped sheet in the middle </comment>
     <constant name="BeampipeSupportPlateRingP_rmin"         value="78.46*mm"/> <!-- 156.92mm/2 -->
-    <constant name="BeampipeSupportPlateRingP_rmax"         value="105*mm"/> <!-- 210mm/2 -->    
-    <constant name="BeampipeSupportPlateRingP_thickness"    value="BeampipeSupportPlateRingP_rmax-BeampipeSupportPlateRingP_rmin"/> 
-    <constant name="BeampipeSupportPlateRingP_xcenter"      value="0*mm+BeampipeSupportPlateP_xcenter_off"/> 
+    <constant name="BeampipeSupportPlateRingP_rmax"         value="105*mm"/> <!-- 210mm/2 -->
+    <constant name="BeampipeSupportPlateRingP_thickness"    value="BeampipeSupportPlateRingP_rmax-BeampipeSupportPlateRingP_rmin"/>
+    <constant name="BeampipeSupportPlateRingP_xcenter"      value="0*mm+BeampipeSupportPlateP_xcenter_off"/>
     <comment> dimensions of the rectangular sheet </comment>
     <!--- It has two halves: left and right (while looking towards the hadron going side)
           Each half is a combination of the following two shapes:
@@ -484,49 +484,49 @@
     -->
     <constant name="BeampipeSupportPlateBoxP_halfwidth"  value="50*mm"/> <!-- 100mm/2 -->
     <!-- Left half -->
-    <constant name="BeampipeSupportPlateBoxLeftP_xmin"       value="sqrt(BeampipeSupportPlateRingP_rmax**2-BeampipeSupportPlateBoxP_halfwidth**2)+BeampipeSupportPlateP_xcenter_off"/> 
-    <constant name="BeampipeSupportPlateBoxLeftP_xmax"       value="sqrt(BeampipeSupportPlateP_thickness**2-BeampipeSupportPlateBoxP_halfwidth**2)"/> 
-    <constant name="BeampipeSupportPlateBoxLeftP_xcenter"    value="0.5*(BeampipeSupportPlateBoxLeftP_xmax+BeampipeSupportPlateBoxLeftP_xmin)"/>     
+    <constant name="BeampipeSupportPlateBoxLeftP_xmin"       value="sqrt(BeampipeSupportPlateRingP_rmax**2-BeampipeSupportPlateBoxP_halfwidth**2)+BeampipeSupportPlateP_xcenter_off"/>
+    <constant name="BeampipeSupportPlateBoxLeftP_xmax"       value="sqrt(BeampipeSupportPlateP_thickness**2-BeampipeSupportPlateBoxP_halfwidth**2)"/>
+    <constant name="BeampipeSupportPlateBoxLeftP_xcenter"    value="0.5*(BeampipeSupportPlateBoxLeftP_xmax+BeampipeSupportPlateBoxLeftP_xmin)"/>
     <constant name="BeampipeSupportPlateWedgeLeftP_rmin"      value="BeampipeSupportPlateBoxLeftP_xcenter"/>
     <constant name="BeampipeSupportPlateWedgeLeftP_thickness" value="BeampipeSupportPlateP_thickness-BeampipeSupportPlateWedgeLeftP_rmin"/>
     <constant name="BeampipeSupportPlateWedgeLeftP_phimax"    value="asin(BeampipeSupportPlateBoxP_halfwidth/BeampipeSupportPlateP_thickness)*(180/Pi)*deg"/>
-    <constant name="BeampipeSupportPlateWedgeLeftP_phimin"    value="360*deg-BeampipeSupportPlateWedgeLeftP_phimax"/>  
-    <constant name="BeampipeSupportPlateRectLeftP_dx"         value="BeampipeSupportPlateBoxLeftP_xmax-BeampipeSupportPlateBoxLeftP_xmin"/> 
-    <constant name="BeampipeSupportPlateRectLeftP_dy"         value="BeampipeSupportPlateBoxP_halfwidth*2"/> 
+    <constant name="BeampipeSupportPlateWedgeLeftP_phimin"    value="360*deg-BeampipeSupportPlateWedgeLeftP_phimax"/>
+    <constant name="BeampipeSupportPlateRectLeftP_dx"         value="BeampipeSupportPlateBoxLeftP_xmax-BeampipeSupportPlateBoxLeftP_xmin"/>
+    <constant name="BeampipeSupportPlateRectLeftP_dy"         value="BeampipeSupportPlateBoxP_halfwidth*2"/>
     <!-- Right half -->
-    <constant name="BeampipeSupportPlateBoxRightP_xmin"        value="sqrt(BeampipeSupportPlateRingP_rmax**2-BeampipeSupportPlateBoxP_halfwidth**2)-BeampipeSupportPlateP_xcenter_off"/> 
-    <constant name="BeampipeSupportPlateBoxRightP_xmax"        value="sqrt(BeampipeSupportPlateP_thickness**2-BeampipeSupportPlateBoxP_halfwidth**2)"/> 
-    <constant name="BeampipeSupportPlateBoxRightP_xcenter"     value="0.5*(BeampipeSupportPlateBoxRightP_xmax+BeampipeSupportPlateBoxRightP_xmin)"/>         
+    <constant name="BeampipeSupportPlateBoxRightP_xmin"        value="sqrt(BeampipeSupportPlateRingP_rmax**2-BeampipeSupportPlateBoxP_halfwidth**2)-BeampipeSupportPlateP_xcenter_off"/>
+    <constant name="BeampipeSupportPlateBoxRightP_xmax"        value="sqrt(BeampipeSupportPlateP_thickness**2-BeampipeSupportPlateBoxP_halfwidth**2)"/>
+    <constant name="BeampipeSupportPlateBoxRightP_xcenter"     value="0.5*(BeampipeSupportPlateBoxRightP_xmax+BeampipeSupportPlateBoxRightP_xmin)"/>
     <constant name="BeampipeSupportPlateWedgeRightP_rmin"      value="BeampipeSupportPlateBoxRightP_xcenter"/>
     <constant name="BeampipeSupportPlateWedgeRightP_thickness" value="BeampipeSupportPlateP_thickness-BeampipeSupportPlateWedgeRightP_rmin"/>
     <constant name="BeampipeSupportPlateWedgeRightP_phimax"    value="180*deg+BeampipeSupportPlateWedgeLeftP_phimax"/>
-    <constant name="BeampipeSupportPlateWedgeRightP_phimin"    value="BeampipeSupportPlateWedgeLeftP_phimin-180*deg"/>  
-    <constant name="BeampipeSupportPlateRectRightP_dx"         value="BeampipeSupportPlateBoxRightP_xmax-BeampipeSupportPlateBoxRightP_xmin"/> 
-    <constant name="BeampipeSupportPlateRectRightP_dy"         value="BeampipeSupportPlateBoxP_halfwidth*2"/> 
-    <!-- Each half has three layers: 
+    <constant name="BeampipeSupportPlateWedgeRightP_phimin"    value="BeampipeSupportPlateWedgeLeftP_phimin-180*deg"/>
+    <constant name="BeampipeSupportPlateRectRightP_dx"         value="BeampipeSupportPlateBoxRightP_xmax-BeampipeSupportPlateBoxRightP_xmin"/>
+    <constant name="BeampipeSupportPlateRectRightP_dy"         value="BeampipeSupportPlateBoxP_halfwidth*2"/>
+    <!-- Each half has three layers:
          1) layer 1: CFiber (1mm)
          2) layer 2: AIREX (3mm)
          3) layer 3: CFiber (1mm)
          NOTE: Layer 1 is closest to the center
     -->
     <!-- Layer 1 -->
-    <constant name="BeampipeSupportPlateLayer1P_zcenter"             value="BeampipeSupportPlateP_zcenter-0.5*(BeampipeSupportPlateCoreP_length+BeampipeSupportPlateSheetP_length)"/>    
-    <constant name="BeampipeSupportPlateWedgeLeftLayer1P_length"     value="BeampipeSupportPlateSheetP_length"/> 
+    <constant name="BeampipeSupportPlateLayer1P_zcenter"             value="BeampipeSupportPlateP_zcenter-0.5*(BeampipeSupportPlateCoreP_length+BeampipeSupportPlateSheetP_length)"/>
+    <constant name="BeampipeSupportPlateWedgeLeftLayer1P_length"     value="BeampipeSupportPlateSheetP_length"/>
     <constant name="BeampipeSupportPlateRectLeftLayer1P_dz"          value="BeampipeSupportPlateSheetP_length"/>
-    <constant name="BeampipeSupportPlateWedgeRightLayer1P_length"    value="BeampipeSupportPlateSheetP_length"/> 
-    <constant name="BeampipeSupportPlateRectRightLayer1P_dz"         value="BeampipeSupportPlateSheetP_length"/>     
+    <constant name="BeampipeSupportPlateWedgeRightLayer1P_length"    value="BeampipeSupportPlateSheetP_length"/>
+    <constant name="BeampipeSupportPlateRectRightLayer1P_dz"         value="BeampipeSupportPlateSheetP_length"/>
     <!-- Layer 2 -->
-    <constant name="BeampipeSupportPlateLayer2P_zcenter"             value="BeampipeSupportPlateP_zcenter"/>    
-    <constant name="BeampipeSupportPlateWedgeLeftLayer2P_length"     value="BeampipeSupportPlateCoreP_length"/> 
+    <constant name="BeampipeSupportPlateLayer2P_zcenter"             value="BeampipeSupportPlateP_zcenter"/>
+    <constant name="BeampipeSupportPlateWedgeLeftLayer2P_length"     value="BeampipeSupportPlateCoreP_length"/>
     <constant name="BeampipeSupportPlateRectLeftLayer2P_dz"          value="BeampipeSupportPlateCoreP_length"/>
-    <constant name="BeampipeSupportPlateWedgeRightLayer2P_length"    value="BeampipeSupportPlateCoreP_length"/> 
-    <constant name="BeampipeSupportPlateRectRightLayer2P_dz"         value="BeampipeSupportPlateCoreP_length"/>     
-    <!-- Layer 3 -->    
-    <constant name="BeampipeSupportPlateLayer3P_zcenter"             value="BeampipeSupportPlateP_zcenter+0.5*(BeampipeSupportPlateCoreP_length+BeampipeSupportPlateSheetP_length)"/>    
-    <constant name="BeampipeSupportPlateWedgeLeftLayer3P_length"     value="BeampipeSupportPlateSheetP_length"/> 
+    <constant name="BeampipeSupportPlateWedgeRightLayer2P_length"    value="BeampipeSupportPlateCoreP_length"/>
+    <constant name="BeampipeSupportPlateRectRightLayer2P_dz"         value="BeampipeSupportPlateCoreP_length"/>
+    <!-- Layer 3 -->
+    <constant name="BeampipeSupportPlateLayer3P_zcenter"             value="BeampipeSupportPlateP_zcenter+0.5*(BeampipeSupportPlateCoreP_length+BeampipeSupportPlateSheetP_length)"/>
+    <constant name="BeampipeSupportPlateWedgeLeftLayer3P_length"     value="BeampipeSupportPlateSheetP_length"/>
     <constant name="BeampipeSupportPlateRectLeftLayer3P_dz"          value="BeampipeSupportPlateSheetP_length"/>
-    <constant name="BeampipeSupportPlateWedgeRightLayer3P_length"    value="BeampipeSupportPlateSheetP_length"/> 
-    <constant name="BeampipeSupportPlateRectRightLayer3P_dz"         value="BeampipeSupportPlateSheetP_length"/>     
+    <constant name="BeampipeSupportPlateWedgeRightLayer3P_length"    value="BeampipeSupportPlateSheetP_length"/>
+    <constant name="BeampipeSupportPlateRectRightLayer3P_dz"         value="BeampipeSupportPlateSheetP_length"/>
     <!-- qq-->
 
     <comment> (Positive) beampipe support mechanism </comment>
@@ -534,10 +534,10 @@
           1) the central ring
           2) the periferal half-ring attached to beampipe support plate
           3) clamp base attached to the periferal half-ring
-    -->    
-    <comment> Specifications are from SVT PST Drawing PACKET SEP 2025.pdf </comment>     
+    -->
+    <comment> Specifications are from SVT PST Drawing PACKET SEP 2025.pdf </comment>
     <comment> central ring </comment>
-    <!-- it will be implemented using two different shapes 
+    <!-- it will be implemented using two different shapes
             1) a full ring
             2) box cuts to make the flat edges
     -->
@@ -555,7 +555,7 @@
     <constant name="BeampipeSupportMechCRingBoxCutP_dy"              value="112.2*mm"/>
     <constant name="BeampipeSupportMechCRingBoxCutP_xtranslation"    value="BeampipeSupportMechCRingBoxCutP_dx"/>
     <constant name="BeampipeSupportMechCRingBoxCutP_ytranslation"    value="BeampipeSupportMechCRingBoxCutP_dy"/>
-    <!-- Each part has three layers: 
+    <!-- Each part has three layers:
          1) layer 1: CFiber (1mm)
          2) layer 2: AIREX (3mm)
          3) layer 3: CFiber (1mm)
@@ -587,7 +587,7 @@
     <comment> beampipe support clamp </comment>
     <!-- Made up of two shapes:
             1) base (the part that sits on the periferal half-ring)
-            2) top (the part that clamps onto the central ring) 
+            2) top (the part that clamps onto the central ring)
     -->
     <!-- 1) base (3 of them placed at 0 deg, 180 deg, and 270 deg) -->
     <constant name="BeampipeSupportMechClampBaseP_length"            value="17*mm"/>
@@ -596,17 +596,17 @@
     <constant name="BeampipeSupportMechClampBaseP_angspan"           value="20*deg" />
     <constant name="BeampipeSupportMechClampBaseP_xcenter"           value="BeampipeSupportPlateRingP_xcenter"/>
     <constant name="BeampipeSupportMechClampBaseP_zcenter"           value="BeampipeSupportMechPRingP_zcenter+0.5*(BeampipeSupportMechPRingP_length+BeampipeSupportMechClampBaseP_length)"/>
-    <!-- qq-->    
+    <!-- qq-->
 
     <comment> (Negative) beampipe support mechanism </comment>
     <!--- The geometry will be implemented in 3 parts:
           1) the central ring
           2) the periferal half-ring attached to beampipe support plate
           3) clamp base attached to the periferal half-ring
-    -->    
-    <comment> Specifications are from SVT PST Drawing PACKET SEP 2025.pdf </comment>     
+    -->
+    <comment> Specifications are from SVT PST Drawing PACKET SEP 2025.pdf </comment>
     <comment> central ring </comment>
-    <!-- it will be implemented using 3 different shapes 
+    <!-- it will be implemented using 3 different shapes
             1) a full ring
             2) box cuts to make the flat edges
             3) cylindrical cut on positive x side
@@ -628,7 +628,7 @@
     <constant name="BeampipeSupportMechCRingCylCutN_rmin"            value="0*mm"/>
     <constant name="BeampipeSupportMechCRingCylCutN_thickness"       value="0.5*33.76*mm"/> <comment> From SVT PST Drawing PACKET SEP 2025 STP File </comment>
     <constant name="BeampipeSupportMechCRingCylCutN_xtranslation"    value="26.693*mm"/> <comment> From SVT PST Drawing PACKET SEP 2025 STP File </comment>
-    <!-- Each part has three layers: 
+    <!-- Each part has three layers:
          1) layer 1: CFiber (1mm)
          2) layer 2: AIREX (3mm)
          3) layer 3: CFiber (1mm)
@@ -662,7 +662,7 @@
     <comment> beampipe support clamp </comment>
     <!-- Made up of two shapes:
             1) base (the part that sits on the periferal half-ring)
-            2) top (the part that clamps onto the central ring) 
+            2) top (the part that clamps onto the central ring)
     -->
     <!-- 1) base (3 of them placed at 0 deg, 180 deg, and 270 deg) -->
     <constant name="BeampipeSupportMechClampBaseN_length"            value="7*mm"/>
@@ -759,7 +759,7 @@
     <comment> Services Routing Flange (WIP) for SVT : 1 Cylinder + 1 Cone </comment>
     <comment> Specifications are from SVT PST Drawing PACKET SEP 2025.pdf </comment>
     <comment> Cylinder dimensions </comment>
-    <constant name="SupportRoutingFlangeCyl_length"        value="49.46*mm"/>  
+    <constant name="SupportRoutingFlangeCyl_length"        value="49.46*mm"/>
     <constant name="SupportRoutingFlangeCyl_zmin"          value="995*mm"/>
     <constant name="SupportRoutingFlangeCyl_zmax"          value="SupportRoutingFlangeCyl_zmin+SupportRoutingFlangeCyl_length"/>
     <!-- <constant name="SupportRoutingFlangeCyl_zmax"          value="-TrackerSupportCylEndcapN_zmax1C"/>
@@ -767,7 +767,7 @@
     <constant name="SupportRoutingFlangeCyl_zcenter"       value="-0.5*(SupportRoutingFlangeCyl_zmax+SupportRoutingFlangeCyl_zmin)"/>
     <constant name="SupportRoutingFlangeCyl_rmin1"         value="PST_support_tube_rmin+InnerSupportConeCF_thickness+0.1*mm"/>
     <comment> Cone dimensions </comment>
-    <constant name="SupportRoutingFlangeCone_length"       value="136.6*mm-SupportRoutingFlangeCyl_length"/> 
+    <constant name="SupportRoutingFlangeCone_length"       value="136.6*mm-SupportRoutingFlangeCyl_length"/>
     <constant name="SupportRoutingFlangeCone_zmin"         value="SupportRoutingFlangeCyl_zmax"/>
     <constant name="SupportRoutingFlangeCone_zmax"         value="SupportRoutingFlangeCone_zmin+SupportRoutingFlangeCone_length"/>
     <constant name="SupportRoutingFlangeCone_zcenter"      value="-0.5*(SupportRoutingFlangeCone_zmax+SupportRoutingFlangeCone_zmin)"/>
@@ -785,7 +785,7 @@
     <constant name="SupportTubeJoint_zmin"          value="SupportRoutingFlangeCyl_zmin"/>
     <constant name="SupportTubeJoint_zmax"          value="PSTFingureP_zmin"/>
     <constant name="SupportTubeJoint_zcenter"       value="0.5*(SupportTubeJoint_zmax-SupportTubeJoint_zmin)"/>
-    <constant name="SupportTubeJoint_length"        value="SupportTubeJoint_zmin+SupportTubeJoint_zmax"/>  
+    <constant name="SupportTubeJoint_length"        value="SupportTubeJoint_zmin+SupportTubeJoint_zmax"/>
     <constant name="SupportTubeJoint_rmin"          value="SupportRoutingFlangeCyl_rmin1"/>
     <!-- specific to the left piece -->
     <constant name="SupportTubeJointLeft_phimin"    value="0*deg-2.5*deg"/>
@@ -1005,7 +1005,7 @@
     <detector type="epic_SupportServiceMaterial"
       name="InnerTrackerSupport"
       id="TrackerSupport_0_ID"
-    >   
+    >
 
     <comment> PST thermal membrane implementation </comment>
     <!-- Negative side -->
@@ -1032,7 +1032,7 @@
 
     <!-- |||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||| -->
     <comment> (Positive) Service passthrough plate implementation </comment>
-      <subtraction name="ServicePassthroughRingP" material="Air" vis="TrackerSupportVis"> 
+      <subtraction name="ServicePassthroughRingP" material="Air" vis="TrackerSupportVis">
       <position x="0" y="0" z="ServicePassthroughRingP_zcenter"/> <!-- Base half-ring -->
       <shape role="base" type="Cylinder"
             name="ServicePassthroughTopRingBaseP"
@@ -1081,7 +1081,7 @@
             phimin="ServicePassthroughTopRingHole4P_phimin"
             phimax="ServicePassthroughTopRingHole4P_phimax">
       <position x="0*cm" y="0*cm" z="0*cm"/>
-      </shape>      
+      </shape>
       <!-- Hole wedge 5 -->
       <shape role="hole" type="Cylinder"
             name="ServicePassthroughTopRingHole5P"
@@ -1101,7 +1101,7 @@
             phimin="ServicePassthroughTopRingHole6P_phimin"
             phimax="ServicePassthroughTopRingHole6P_phimax">
       <position x="0*cm" y="0*cm" z="0*cm"/>
-      </shape>      
+      </shape>
       <!-- Hole wedge 7 -->
       <shape role="hole" type="Cylinder"
             name="ServicePassthroughTopRingHole7P"
@@ -1111,7 +1111,7 @@
             phimin="ServicePassthroughTopRingHole7P_phimin"
             phimax="ServicePassthroughTopRingHole7P_phimax">
       <position x="0*cm" y="0*cm" z="0*cm"/>
-      </shape>      
+      </shape>
       <!-- Hole wedge 8 -->
       <shape role="hole" type="Cylinder"
             name="ServicePassthroughTopRingHole8P"
@@ -1121,7 +1121,7 @@
             phimin="ServicePassthroughTopRingHole8P_phimin"
             phimax="ServicePassthroughTopRingHole8P_phimax">
       <position x="0*cm" y="0*cm" z="0*cm"/>
-      </shape>      
+      </shape>
       <!-- Hole wedge 9 -->
       <shape role="hole" type="Cylinder"
             name="ServicePassthroughTopRingHole9P"
@@ -1131,7 +1131,7 @@
             phimin="ServicePassthroughTopRingHole9P_phimin"
             phimax="ServicePassthroughTopRingHole9P_phimax">
       <position x="0*cm" y="0*cm" z="0*cm"/>
-      </shape>      
+      </shape>
       <!-- Hole wedge 10 -->
       <shape role="hole" type="Cylinder"
             name="ServicePassthroughTopRingHole10P"
@@ -1141,7 +1141,7 @@
             phimin="ServicePassthroughTopRingHole10P_phimin"
             phimax="ServicePassthroughTopRingHole10P_phimax">
       <position x="0*cm" y="0*cm" z="0*cm"/>
-      </shape>      
+      </shape>
       <comment> Making holes in the bottom half-ring </comment>
       <!-- Hole wedge 1 -->
       <shape role="hole" type="Cylinder"
@@ -1182,7 +1182,7 @@
             phimin="ServicePassthroughBotRingHole4P_phimin"
             phimax="ServicePassthroughBotRingHole4P_phimax">
       <position x="0*cm" y="0*cm" z="0*cm"/>
-      </shape>      
+      </shape>
       <!-- Hole wedge 5 -->
       <shape role="hole" type="Cylinder"
             name="ServicePassthroughBotRingHole5P"
@@ -1202,7 +1202,7 @@
             phimin="ServicePassthroughBotRingHole6P_phimin"
             phimax="ServicePassthroughBotRingHole6P_phimax">
       <position x="0*cm" y="0*cm" z="0*cm"/>
-      </shape>      
+      </shape>
       <!-- Hole wedge 7 -->
       <shape role="hole" type="Cylinder"
             name="ServicePassthroughBotRingHole7P"
@@ -1212,7 +1212,7 @@
             phimin="ServicePassthroughBotRingHole7P_phimin"
             phimax="ServicePassthroughBotRingHole7P_phimax">
       <position x="0*cm" y="0*cm" z="0*cm"/>
-      </shape>      
+      </shape>
       <!-- Hole wedge 8 -->
       <shape role="hole" type="Cylinder"
             name="ServicePassthroughBotRingHole8P"
@@ -1222,7 +1222,7 @@
             phimin="ServicePassthroughBotRingHole8P_phimin"
             phimax="ServicePassthroughBotRingHole8P_phimax">
       <position x="0*cm" y="0*cm" z="0*cm"/>
-      </shape>      
+      </shape>
       <!-- Hole wedge 9 -->
       <shape role="hole" type="Cylinder"
             name="ServicePassthroughBotRingHole9P"
@@ -1232,7 +1232,7 @@
             phimin="ServicePassthroughBotRingHole9P_phimin"
             phimax="ServicePassthroughBotRingHole9P_phimax">
       <position x="0*cm" y="0*cm" z="0*cm"/>
-      </shape>      
+      </shape>
       <!-- Hole wedge 10 -->
       <shape role="hole" type="Cylinder"
             name="ServicePassthroughBotRingHole10P"
@@ -1242,7 +1242,7 @@
             phimin="ServicePassthroughBotRingHole10P_phimin"
             phimax="ServicePassthroughBotRingHole10P_phimax">
       <position x="0*cm" y="0*cm" z="0*cm"/>
-      </shape>      
+      </shape>
       <comment> Making rectangular cut in the center </comment>
       <shape role="hole" type="Box"
             name="ServicePassthroughBoxCutP"
@@ -1250,13 +1250,13 @@
             y="ServicePassthroughBoxCutLeftP_dy"
             z="ServicePassthroughBoxCutLeftP_dz">
       <position x="0*cm" y="0*cm" z="0*cm"/>
-      </shape> 
+      </shape>
       </subtraction>
-      <!-- end of (Positive) Service passthrough plate implementation -->    
+      <!-- end of (Positive) Service passthrough plate implementation -->
 
     <comment> (Positive) Beampipe Support Plate </comment>
-    <!-- 
-        Layer 1 
+    <!--
+        Layer 1
     -->
     <!-- ring shaped sheet in the middle -->
       <support type="Cylinder"
@@ -1279,15 +1279,15 @@
             phimin="BeampipeSupportPlateWedgeLeftP_phimin"
             phimax="BeampipeSupportPlateWedgeLeftP_phimax"
             material="CarbonFiber"/>
-      <!-- box shaped cut -->     
+      <!-- box shaped cut -->
       <shape role="hole" type="Box"
             name="BeampipeSupportPlateRectLeftLayer1P_hole"
             x="BeampipeSupportPlateRectLeftP_dx"
             y="BeampipeSupportPlateRectLeftP_dy"
             z="BeampipeSupportPlateRectLeftLayer1P_dz">
       <position x="BeampipeSupportPlateBoxLeftP_xcenter" y="0*cm" z="0*cm"/>
-      </shape>                  
-      </subtraction>      
+      </shape>
+      </subtraction>
       <!-- (part 2) -->
       <subtraction name="BeampipeSupportPlateRectLeftLayer1P" material="Air" vis="TrackerSupportVis">
       <position x="BeampipeSupportPlateBoxLeftP_xcenter" y="0" z="BeampipeSupportPlateLayer1P_zcenter"/>
@@ -1297,14 +1297,14 @@
             y="BeampipeSupportPlateRectLeftP_dy"
             z="BeampipeSupportPlateRectLeftLayer1P_dz"
             material="CarbonFiber"/>
-      <!-- ring shaped cut -->         
+      <!-- ring shaped cut -->
       <shape role="hole" type="Cylinder"
           name="BeampipeSupportPlateRingLayer1P_hole"
           rmin="BeampipeSupportPlateRingP_rmin"
           length="BeampipeSupportPlateWedgeLeftLayer1P_length"
           thickness="BeampipeSupportPlateRingP_thickness">
       <position x="BeampipeSupportPlateRingP_xcenter-BeampipeSupportPlateBoxLeftP_xcenter" y="0*cm" z="0*cm"/>
-      </shape>                  
+      </shape>
       </subtraction>
       <!-- right half rectangular sheet (part 1) -->
       <subtraction name="BeampipeSupportPlateWedgeRightLayer1P" material="Air" vis="TrackerSupportVis">
@@ -1317,15 +1317,15 @@
             phimin="BeampipeSupportPlateWedgeRightP_phimin"
             phimax="BeampipeSupportPlateWedgeRightP_phimax"
             material="CarbonFiber"/>
-      <!-- box shaped cut -->     
+      <!-- box shaped cut -->
       <shape role="hole" type="Box"
             name="BeampipeSupportPlateRectRightLayer1P_hole"
             x="BeampipeSupportPlateRectRightP_dx"
             y="BeampipeSupportPlateRectRightP_dy"
             z="BeampipeSupportPlateRectRightLayer1P_dz">
       <position x="-BeampipeSupportPlateBoxRightP_xcenter" y="0*cm" z="0*cm"/>
-      </shape>                  
-      </subtraction>      
+      </shape>
+      </subtraction>
       <!-- (part 2) -->
       <subtraction name="BeampipeSupportPlateRectRightLayer1P" material="Air" vis="TrackerSupportVis">
       <position x="-BeampipeSupportPlateBoxRightP_xcenter" y="0" z="BeampipeSupportPlateLayer1P_zcenter"/>
@@ -1335,17 +1335,17 @@
             y="BeampipeSupportPlateRectRightP_dy"
             z="BeampipeSupportPlateRectRightLayer1P_dz"
             material="CarbonFiber"/>
-      <!-- ring shaped cut -->         
+      <!-- ring shaped cut -->
       <shape role="hole" type="Cylinder"
           name="BeampipeSupportPlateRingLayer1P_hole"
           rmin="BeampipeSupportPlateRingP_rmin"
           length="BeampipeSupportPlateWedgeRightLayer1P_length"
           thickness="BeampipeSupportPlateRingP_thickness">
       <position x="BeampipeSupportPlateRingP_xcenter+BeampipeSupportPlateBoxRightP_xcenter" y="0*cm" z="0*cm"/>
-      </shape>                  
+      </shape>
       </subtraction>
-    <!-- 
-        Layer 2 
+    <!--
+        Layer 2
     -->
     <!-- ring shaped sheet in the middle -->
       <support type="Cylinder"
@@ -1368,15 +1368,15 @@
             phimin="BeampipeSupportPlateWedgeLeftP_phimin"
             phimax="BeampipeSupportPlateWedgeLeftP_phimax"
             material="AIREX_R82_80"/>
-      <!-- box shaped cut -->     
+      <!-- box shaped cut -->
       <shape role="hole" type="Box"
             name="BeampipeSupportPlateRectLeftLayer2P_hole"
             x="BeampipeSupportPlateRectLeftP_dx"
             y="BeampipeSupportPlateRectLeftP_dy"
             z="BeampipeSupportPlateRectLeftLayer2P_dz">
       <position x="BeampipeSupportPlateBoxLeftP_xcenter" y="0*cm" z="0*cm"/>
-      </shape>                  
-      </subtraction>      
+      </shape>
+      </subtraction>
       <!-- (part 2) -->
       <subtraction name="BeampipeSupportPlateRectLeftLayer2P" material="Air" vis="TrackerSupportVis">
       <position x="BeampipeSupportPlateBoxLeftP_xcenter" y="0" z="BeampipeSupportPlateLayer2P_zcenter"/>
@@ -1386,14 +1386,14 @@
             y="BeampipeSupportPlateRectLeftP_dy"
             z="BeampipeSupportPlateRectLeftLayer2P_dz"
             material="AIREX_R82_80"/>
-      <!-- ring shaped cut -->         
+      <!-- ring shaped cut -->
       <shape role="hole" type="Cylinder"
           name="BeampipeSupportPlateRingLayer2P_hole"
           rmin="BeampipeSupportPlateRingP_rmin"
           length="BeampipeSupportPlateWedgeLeftLayer2P_length"
           thickness="BeampipeSupportPlateRingP_thickness">
       <position x="BeampipeSupportPlateRingP_xcenter-BeampipeSupportPlateBoxLeftP_xcenter" y="0*cm" z="0*cm"/>
-      </shape>                  
+      </shape>
       </subtraction>
       <!-- right half rectangular sheet (part 1) -->
       <subtraction name="BeampipeSupportPlateWedgeRightLayer2P" material="Air" vis="TrackerSupportVis">
@@ -1406,15 +1406,15 @@
             phimin="BeampipeSupportPlateWedgeRightP_phimin"
             phimax="BeampipeSupportPlateWedgeRightP_phimax"
             material="AIREX_R82_80"/>
-      <!-- box shaped cut -->     
+      <!-- box shaped cut -->
       <shape role="hole" type="Box"
             name="BeampipeSupportPlateRectRightLayer2P_hole"
             x="BeampipeSupportPlateRectRightP_dx"
             y="BeampipeSupportPlateRectRightP_dy"
             z="BeampipeSupportPlateRectRightLayer2P_dz">
       <position x="-BeampipeSupportPlateBoxRightP_xcenter" y="0*cm" z="0*cm"/>
-      </shape>                  
-      </subtraction>      
+      </shape>
+      </subtraction>
       <!-- (part 2) -->
       <subtraction name="BeampipeSupportPlateRectRightLayer2P" material="Air" vis="TrackerSupportVis">
       <position x="-BeampipeSupportPlateBoxRightP_xcenter" y="0" z="BeampipeSupportPlateLayer2P_zcenter"/>
@@ -1424,17 +1424,17 @@
             y="BeampipeSupportPlateRectRightP_dy"
             z="BeampipeSupportPlateRectRightLayer2P_dz"
             material="AIREX_R82_80"/>
-      <!-- ring shaped cut -->         
+      <!-- ring shaped cut -->
       <shape role="hole" type="Cylinder"
           name="BeampipeSupportPlateRingLayer2P_hole"
           rmin="BeampipeSupportPlateRingP_rmin"
           length="BeampipeSupportPlateWedgeRightLayer2P_length"
           thickness="BeampipeSupportPlateRingP_thickness">
       <position x="BeampipeSupportPlateRingP_xcenter+BeampipeSupportPlateBoxRightP_xcenter" y="0*cm" z="0*cm"/>
-      </shape>                  
-      </subtraction>      
-    <!-- 
-        Layer 3 
+      </shape>
+      </subtraction>
+    <!--
+        Layer 3
     -->
     <!-- ring shaped sheet in the middle -->
       <support type="Cylinder"
@@ -1457,15 +1457,15 @@
             phimin="BeampipeSupportPlateWedgeLeftP_phimin"
             phimax="BeampipeSupportPlateWedgeLeftP_phimax"
             material="CarbonFiber"/>
-      <!-- box shaped cut -->     
+      <!-- box shaped cut -->
       <shape role="hole" type="Box"
             name="BeampipeSupportPlateRectLeftLayer3P_hole"
             x="BeampipeSupportPlateRectLeftP_dx"
             y="BeampipeSupportPlateRectLeftP_dy"
             z="BeampipeSupportPlateRectLeftLayer3P_dz">
       <position x="BeampipeSupportPlateBoxLeftP_xcenter" y="0*cm" z="0*cm"/>
-      </shape>                  
-      </subtraction>      
+      </shape>
+      </subtraction>
       <!-- (part 2) -->
       <subtraction name="BeampipeSupportPlateRectLeftLayer3P" material="Air" vis="TrackerSupportVis">
       <position x="BeampipeSupportPlateBoxLeftP_xcenter" y="0" z="BeampipeSupportPlateLayer3P_zcenter"/>
@@ -1475,14 +1475,14 @@
             y="BeampipeSupportPlateRectLeftP_dy"
             z="BeampipeSupportPlateRectLeftLayer3P_dz"
             material="CarbonFiber"/>
-      <!-- ring shaped cut -->         
+      <!-- ring shaped cut -->
       <shape role="hole" type="Cylinder"
           name="BeampipeSupportPlateRingLayer3P_hole"
           rmin="BeampipeSupportPlateRingP_rmin"
           length="BeampipeSupportPlateWedgeLeftLayer3P_length"
           thickness="BeampipeSupportPlateRingP_thickness">
       <position x="BeampipeSupportPlateRingP_xcenter-BeampipeSupportPlateBoxLeftP_xcenter" y="0*cm" z="0*cm"/>
-      </shape>                  
+      </shape>
       </subtraction>
       <!-- right half rectangular sheet (part 1) -->
       <subtraction name="BeampipeSupportPlateWedgeRightLayer3P" material="Air" vis="TrackerSupportVis">
@@ -1495,15 +1495,15 @@
             phimin="BeampipeSupportPlateWedgeRightP_phimin"
             phimax="BeampipeSupportPlateWedgeRightP_phimax"
             material="CarbonFiber"/>
-      <!-- box shaped cut -->     
+      <!-- box shaped cut -->
       <shape role="hole" type="Box"
             name="BeampipeSupportPlateRectRightLayer3P_hole"
             x="BeampipeSupportPlateRectRightP_dx"
             y="BeampipeSupportPlateRectRightP_dy"
             z="BeampipeSupportPlateRectRightLayer3P_dz">
       <position x="-BeampipeSupportPlateBoxRightP_xcenter" y="0*cm" z="0*cm"/>
-      </shape>                  
-      </subtraction>      
+      </shape>
+      </subtraction>
       <!-- (part 2) -->
       <subtraction name="BeampipeSupportPlateRectRightLayer3P" material="Air" vis="TrackerSupportVis">
       <position x="-BeampipeSupportPlateBoxRightP_xcenter" y="0" z="BeampipeSupportPlateLayer3P_zcenter"/>
@@ -1513,25 +1513,25 @@
             y="BeampipeSupportPlateRectRightP_dy"
             z="BeampipeSupportPlateRectRightLayer3P_dz"
             material="CarbonFiber"/>
-      <!-- ring shaped cut -->         
+      <!-- ring shaped cut -->
       <shape role="hole" type="Cylinder"
           name="BeampipeSupportPlateRingLayer3P_hole"
           rmin="BeampipeSupportPlateRingP_rmin"
           length="BeampipeSupportPlateWedgeRightLayer3P_length"
           thickness="BeampipeSupportPlateRingP_thickness">
       <position x="BeampipeSupportPlateRingP_xcenter+BeampipeSupportPlateBoxRightP_xcenter" y="0*cm" z="0*cm"/>
-      </shape>                  
-      </subtraction>      
+      </shape>
+      </subtraction>
       <!-- end of (Positive) Beampipe Support Plate implementation -->
 
 
     <comment> (Positive) Beampipe Support Mechanism Implemeantion </comment>
-    <!-- 
-      the central ring (3 layers) 
-    -->    
-    <!-- 
-        Layer 1 
-    -->    
+    <!--
+      the central ring (3 layers)
+    -->
+    <!--
+        Layer 1
+    -->
       <subtraction name="BeampipeSupportMechanismCRingLayer1P" material="CarbonFiber" vis="TrackerSupportVis">
       <position x="BeampipeSupportMechCRingP_xcenter" y="0" z="BeampipeSupportMechCRingLayer1P_zcenter"/>
        <shape role="base" type="Cylinder"
@@ -1571,11 +1571,11 @@
             y="BeampipeSupportMechCRingBoxCutP_dy"
             z="BeampipeSupportMechCRingBoxCutLayer1P_dz">
       <position x="0" y="-BeampipeSupportMechCRingBoxCutP_ytranslation" z="0*cm"/>
-      </shape>                      
-      </subtraction> 
-    <!-- 
-        Layer 2 
-    -->    
+      </shape>
+      </subtraction>
+    <!--
+        Layer 2
+    -->
       <subtraction name="BeampipeSupportMechanismCRingLayer2P" material="AIREX_R82_80" vis="TrackerSupportVis">
       <position x="BeampipeSupportMechCRingP_xcenter" y="0" z="BeampipeSupportMechCRingLayer2P_zcenter"/>
        <shape role="base" type="Cylinder"
@@ -1615,11 +1615,11 @@
             y="BeampipeSupportMechCRingBoxCutP_dy"
             z="BeampipeSupportMechCRingBoxCutLayer2P_dz">
       <position x="0" y="-BeampipeSupportMechCRingBoxCutP_ytranslation" z="0*cm"/>
-      </shape>                      
-      </subtraction> 
-   <!-- 
-        Layer 3 
-    -->    
+      </shape>
+      </subtraction>
+   <!--
+        Layer 3
+    -->
       <subtraction name="BeampipeSupportMechanismCRingLayer3P" material="AIREX_R82_80" vis="TrackerSupportVis">
       <position x="BeampipeSupportMechCRingP_xcenter" y="0" z="BeampipeSupportMechCRingLayer3P_zcenter"/>
        <shape role="base" type="Cylinder"
@@ -1659,11 +1659,11 @@
             y="BeampipeSupportMechCRingBoxCutP_dy"
             z="BeampipeSupportMechCRingBoxCutLayer3P_dz">
       <position x="0" y="-BeampipeSupportMechCRingBoxCutP_ytranslation" z="0*cm"/>
-      </shape>                      
-      </subtraction>                         
-    <!-- 
+      </shape>
+      </subtraction>
+    <!--
       the peripheral half-ring
-    -->      
+    -->
       <support type="Cylinder"
         name="BeampipeSupportMechPRingP"
         vis="TrackerSupportVis"
@@ -1674,10 +1674,10 @@
         thickness="BeampipeSupportMechPRingP_thickness">
           <position x="BeampipeSupportMechPRingP_xcenter" y="0*cm" z="BeampipeSupportMechPRingP_zcenter" />
           <component material="CarbonFiber" thickness="BeampipeSupportMechPRingP_thickness" name="Support" vis="TrackerSupportVis"/>
-      </support>  
-   <!-- 
+      </support>
+   <!--
       the support clamps
-    -->      
+    -->
       <!-- base at 0 deg -->
       <support type="Cylinder"
         name="BeampipeSupportMechClampBaseP_at0deg"
@@ -1689,7 +1689,7 @@
         thickness="BeampipeSupportMechClampBaseP_thickness">
           <position x="BeampipeSupportMechClampBaseP_xcenter" y="0*cm" z="BeampipeSupportMechClampBaseP_zcenter" />
           <component material="CarbonFiber" thickness="BeampipeSupportMechClampBaseP_thickness" name="Support" vis="TrackerSupportVis"/>
-      </support>  
+      </support>
       <!-- base at 180 deg -->
       <support type="Cylinder"
         name="BeampipeSupportMechClampBaseP_at0deg"
@@ -1701,7 +1701,7 @@
         thickness="BeampipeSupportMechClampBaseP_thickness">
           <position x="BeampipeSupportMechClampBaseP_xcenter" y="0*cm" z="BeampipeSupportMechClampBaseP_zcenter" />
           <component material="CarbonFiber" thickness="BeampipeSupportMechClampBaseP_thickness" name="Support" vis="TrackerSupportVis"/>
-      </support>  
+      </support>
       <!-- base at 2700 deg -->
       <support type="Cylinder"
         name="BeampipeSupportMechClampBaseP_at0deg"
@@ -1713,14 +1713,14 @@
         thickness="BeampipeSupportMechClampBaseP_thickness">
           <position x="BeampipeSupportMechClampBaseP_xcenter" y="0*cm" z="BeampipeSupportMechClampBaseP_zcenter" />
           <component material="CarbonFiber" thickness="BeampipeSupportMechClampBaseP_thickness" name="Support" vis="TrackerSupportVis"/>
-      </support>                     
-      <!-- end of (Positive) Beampipe Support Mechanism implementation -->  
+      </support>
+      <!-- end of (Positive) Beampipe Support Mechanism implementation -->
 
 
     <comment> (Negative) Beampipe Support Plate </comment>
-    <!-- 
-        Layer 1 
-    -->    
+    <!--
+        Layer 1
+    -->
     <!-- ring shaped sheet in the middle -->
       <support type="Cylinder"
           name="BeampipeSupportPlateRingN"
@@ -1742,15 +1742,15 @@
             phimin="BeampipeSupportPlateWedgeLeftN_phimin"
             phimax="BeampipeSupportPlateWedgeLeftN_phimax"
             material="CarbonFiber"/>
-      <!-- box shaped cut -->     
+      <!-- box shaped cut -->
       <shape role="hole" type="Box"
             name="BeampipeSupportPlateRectLeftLayer1N_hole"
             x="BeampipeSupportPlateRectLeftN_dx"
             y="BeampipeSupportPlateRectLeftN_dy"
             z="BeampipeSupportPlateRectLeftLayer1N_dz">
       <position x="BeampipeSupportPlateBoxN_xcenter" y="0*cm" z="0*cm"/>
-      </shape>                  
-      </subtraction>      
+      </shape>
+      </subtraction>
       <!-- (part 2) -->
       <subtraction name="BeampipeSupportPlateRectLeftLayer1N" material="Air" vis="TrackerSupportVis">
       <position x="BeampipeSupportPlateBoxN_xcenter" y="0" z="-BeampipeSupportPlateLayer1N_zcenter"/>
@@ -1760,14 +1760,14 @@
             y="BeampipeSupportPlateRectLeftN_dy"
             z="BeampipeSupportPlateRectLeftLayer1N_dz"
             material="CarbonFiber"/>
-      <!-- ring shaped cut -->         
+      <!-- ring shaped cut -->
       <shape role="hole" type="Cylinder"
           name="BeampipeSupportPlateRingLayer1N_hole"
           rmin="BeampipeSupportPlateRingN_rmin"
           length="BeampipeSupportPlateWedgeLeftLayer1N_length"
           thickness="BeampipeSupportPlateRingN_thickness">
       <position x="-BeampipeSupportPlateBoxN_xcenter" y="0*cm" z="0*cm"/>
-      </shape>                  
+      </shape>
       </subtraction>
       <!-- right half rectangular sheet (part 1) -->
       <subtraction name="BeampipeSupportPlateWedgeRightLayer1N" material="Air" vis="TrackerSupportVis">
@@ -1780,15 +1780,15 @@
             phimin="BeampipeSupportPlateWedgeRightN_phimin"
             phimax="BeampipeSupportPlateWedgeRightN_phimax"
             material="CarbonFiber"/>
-      <!-- box shaped cut -->     
+      <!-- box shaped cut -->
       <shape role="hole" type="Box"
             name="BeampipeSupportPlateRectRightLayer1N_hole"
             x="BeampipeSupportPlateRectRightN_dx"
             y="BeampipeSupportPlateRectRightN_dy"
             z="BeampipeSupportPlateRectRightLayer1N_dz">
       <position x="-BeampipeSupportPlateBoxN_xcenter" y="0*cm" z="0*cm"/>
-      </shape>                  
-      </subtraction>      
+      </shape>
+      </subtraction>
       <!-- (part 2) -->
       <subtraction name="BeampipeSupportPlateRectRightLayer1N" material="Air" vis="TrackerSupportVis">
       <position x="-BeampipeSupportPlateBoxN_xcenter" y="0" z="-BeampipeSupportPlateLayer1N_zcenter"/>
@@ -1798,18 +1798,18 @@
             y="BeampipeSupportPlateRectRightN_dy"
             z="BeampipeSupportPlateRectRightLayer1N_dz"
             material="CarbonFiber"/>
-      <!-- ring shaped cut -->         
+      <!-- ring shaped cut -->
       <shape role="hole" type="Cylinder"
           name="BeampipeSupportPlateRingLayer1N_hole"
           rmin="BeampipeSupportPlateRingN_rmin"
           length="BeampipeSupportPlateWedgeRightLayer1N_length"
           thickness="BeampipeSupportPlateRingN_thickness">
       <position x="BeampipeSupportPlateBoxN_xcenter" y="0*cm" z="0*cm"/>
-      </shape>                  
-      </subtraction>     
-    <!-- 
-        Layer 2 
-    -->          
+      </shape>
+      </subtraction>
+    <!--
+        Layer 2
+    -->
     <!-- ring shaped sheet in the middle -->
       <support type="Cylinder"
           name="BeampipeSupportPlateRingN"
@@ -1831,15 +1831,15 @@
             phimin="BeampipeSupportPlateWedgeLeftN_phimin"
             phimax="BeampipeSupportPlateWedgeLeftN_phimax"
             material="AIREX_R82_80"/>
-      <!-- box shaped cut -->     
+      <!-- box shaped cut -->
       <shape role="hole" type="Box"
             name="BeampipeSupportPlateRectLeftLayer2N_hole"
             x="BeampipeSupportPlateRectLeftN_dx"
             y="BeampipeSupportPlateRectLeftN_dy"
             z="BeampipeSupportPlateRectLeftLayer2N_dz">
       <position x="BeampipeSupportPlateBoxN_xcenter" y="0*cm" z="0*cm"/>
-      </shape>                  
-      </subtraction>      
+      </shape>
+      </subtraction>
       <!-- (part 2) -->
       <subtraction name="BeampipeSupportPlateRectLeftLayer2N" material="Air" vis="TrackerSupportVis">
       <position x="BeampipeSupportPlateBoxN_xcenter" y="0" z="-BeampipeSupportPlateLayer2N_zcenter"/>
@@ -1849,14 +1849,14 @@
             y="BeampipeSupportPlateRectLeftN_dy"
             z="BeampipeSupportPlateRectLeftLayer2N_dz"
             material="AIREX_R82_80"/>
-      <!-- ring shaped cut -->         
+      <!-- ring shaped cut -->
       <shape role="hole" type="Cylinder"
           name="BeampipeSupportPlateRingLayer2N_hole"
           rmin="BeampipeSupportPlateRingN_rmin"
           length="BeampipeSupportPlateWedgeLeftLayer2N_length"
           thickness="BeampipeSupportPlateRingN_thickness">
       <position x="-BeampipeSupportPlateBoxN_xcenter" y="0*cm" z="0*cm"/>
-      </shape>                  
+      </shape>
       </subtraction>
       <!-- right half rectangular sheet (part 1) -->
       <subtraction name="BeampipeSupportPlateWedgeRightLayer2N" material="Air" vis="TrackerSupportVis">
@@ -1869,15 +1869,15 @@
             phimin="BeampipeSupportPlateWedgeRightN_phimin"
             phimax="BeampipeSupportPlateWedgeRightN_phimax"
             material="AIREX_R82_80"/>
-      <!-- box shaped cut -->     
+      <!-- box shaped cut -->
       <shape role="hole" type="Box"
             name="BeampipeSupportPlateRectRightLayer2N_hole"
             x="BeampipeSupportPlateRectRightN_dx"
             y="BeampipeSupportPlateRectRightN_dy"
             z="BeampipeSupportPlateRectRightLayer2N_dz">
       <position x="-BeampipeSupportPlateBoxN_xcenter" y="0*cm" z="0*cm"/>
-      </shape>                  
-      </subtraction>      
+      </shape>
+      </subtraction>
       <!-- (part 2) -->
       <subtraction name="BeampipeSupportPlateRectRightLayer2N" material="Air" vis="TrackerSupportVis">
       <position x="-BeampipeSupportPlateBoxN_xcenter" y="0" z="-BeampipeSupportPlateLayer2N_zcenter"/>
@@ -1887,18 +1887,18 @@
             y="BeampipeSupportPlateRectRightN_dy"
             z="BeampipeSupportPlateRectRightLayer2N_dz"
             material="AIREX_R82_80"/>
-      <!-- ring shaped cut -->         
+      <!-- ring shaped cut -->
       <shape role="hole" type="Cylinder"
           name="BeampipeSupportPlateRingLayer2N_hole"
           rmin="BeampipeSupportPlateRingN_rmin"
           length="BeampipeSupportPlateWedgeRightLayer2N_length"
           thickness="BeampipeSupportPlateRingN_thickness">
       <position x="BeampipeSupportPlateBoxN_xcenter" y="0*cm" z="0*cm"/>
-      </shape>                  
-      </subtraction>       
-    <!-- 
-        Layer 3 
-    -->      
+      </shape>
+      </subtraction>
+    <!--
+        Layer 3
+    -->
    <!-- ring shaped sheet in the middle -->
       <support type="Cylinder"
           name="BeampipeSupportPlateRingN"
@@ -1920,15 +1920,15 @@
             phimin="BeampipeSupportPlateWedgeLeftN_phimin"
             phimax="BeampipeSupportPlateWedgeLeftN_phimax"
             material="CarbonFiber"/>
-      <!-- box shaped cut -->     
+      <!-- box shaped cut -->
       <shape role="hole" type="Box"
             name="BeampipeSupportPlateRectLeftLayer3N_hole"
             x="BeampipeSupportPlateRectLeftN_dx"
             y="BeampipeSupportPlateRectLeftN_dy"
             z="BeampipeSupportPlateRectLeftLayer3N_dz">
       <position x="BeampipeSupportPlateBoxN_xcenter" y="0*cm" z="0*cm"/>
-      </shape>                  
-      </subtraction>      
+      </shape>
+      </subtraction>
       <!-- (part 2) -->
       <subtraction name="BeampipeSupportPlateRectLeftLayer3N" material="Air" vis="TrackerSupportVis">
       <position x="BeampipeSupportPlateBoxN_xcenter" y="0" z="-BeampipeSupportPlateLayer3N_zcenter"/>
@@ -1938,14 +1938,14 @@
             y="BeampipeSupportPlateRectLeftN_dy"
             z="BeampipeSupportPlateRectLeftLayer3N_dz"
             material="CarbonFiber"/>
-      <!-- ring shaped cut -->         
+      <!-- ring shaped cut -->
       <shape role="hole" type="Cylinder"
           name="BeampipeSupportPlateRingLayer3N_hole"
           rmin="BeampipeSupportPlateRingN_rmin"
           length="BeampipeSupportPlateWedgeLeftLayer3N_length"
           thickness="BeampipeSupportPlateRingN_thickness">
       <position x="-BeampipeSupportPlateBoxN_xcenter" y="0*cm" z="0*cm"/>
-      </shape>                  
+      </shape>
       </subtraction>
       <!-- right half rectangular sheet (part 1) -->
       <subtraction name="BeampipeSupportPlateWedgeRightLayer3N" material="Air" vis="TrackerSupportVis">
@@ -1958,15 +1958,15 @@
             phimin="BeampipeSupportPlateWedgeRightN_phimin"
             phimax="BeampipeSupportPlateWedgeRightN_phimax"
             material="CarbonFiber"/>
-      <!-- box shaped cut -->     
+      <!-- box shaped cut -->
       <shape role="hole" type="Box"
             name="BeampipeSupportPlateRectRightLayer3N_hole"
             x="BeampipeSupportPlateRectRightN_dx"
             y="BeampipeSupportPlateRectRightN_dy"
             z="BeampipeSupportPlateRectRightLayer3N_dz">
       <position x="-BeampipeSupportPlateBoxN_xcenter" y="0*cm" z="0*cm"/>
-      </shape>                  
-      </subtraction>      
+      </shape>
+      </subtraction>
       <!-- (part 2) -->
       <subtraction name="BeampipeSupportPlateRectRightLayer3N" material="Air" vis="TrackerSupportVis">
       <position x="-BeampipeSupportPlateBoxN_xcenter" y="0" z="-BeampipeSupportPlateLayer3N_zcenter"/>
@@ -1976,24 +1976,24 @@
             y="BeampipeSupportPlateRectRightN_dy"
             z="BeampipeSupportPlateRectRightLayer3N_dz"
             material="CarbonFiber"/>
-      <!-- ring shaped cut -->         
+      <!-- ring shaped cut -->
       <shape role="hole" type="Cylinder"
           name="BeampipeSupportPlateRingLayer3N_hole"
           rmin="BeampipeSupportPlateRingN_rmin"
           length="BeampipeSupportPlateWedgeRightLayer3N_length"
           thickness="BeampipeSupportPlateRingN_thickness">
       <position x="BeampipeSupportPlateBoxN_xcenter" y="0*cm" z="0*cm"/>
-      </shape>                  
-      </subtraction>     
+      </shape>
+      </subtraction>
       <!-- end of (Negative) Beampipe Support Plate implementation -->
 
     <comment> (Negative) Beampipe Support Mechanism Implemeantion </comment>
-    <!-- 
-      the central ring (3 layers) 
-    -->    
-    <!-- 
-        Layer 1 
-    -->    
+    <!--
+      the central ring (3 layers)
+    -->
+    <!--
+        Layer 1
+    -->
       <subtraction name="BeampipeSupportMechanismCRingLayer1N" material="CarbonFiber" vis="TrackerSupportVis">
       <position x="0" y="0" z="-BeampipeSupportMechCRingLayer1N_zcenter"/>
        <shape role="base" type="Cylinder"
@@ -2033,7 +2033,7 @@
             y="BeampipeSupportMechCRingBoxCutN_dy"
             z="BeampipeSupportMechCRingBoxCutLayer1N_dz">
       <position x="0" y="-BeampipeSupportMechCRingBoxCutN_ytranslation" z="0*cm"/>
-      </shape>   
+      </shape>
       <!-- cylindrical cut on pos x -->
       <shape role="hole" type="Cylinder"
           name="BeampipeSupportMechCRingCylCutLayer1N_hole"
@@ -2041,11 +2041,11 @@
           length="BeampipeSupportMechCRingCylCutLayer1N_length"
           thickness="BeampipeSupportMechCRingCylCutN_thickness">
       <position x="BeampipeSupportMechCRingCylCutN_xtranslation" y="0*cm" z="0*cm"/>
-      </shape>              
-      </subtraction> 
-    <!-- 
-        Layer 2 
-    -->    
+      </shape>
+      </subtraction>
+    <!--
+        Layer 2
+    -->
       <subtraction name="BeampipeSupportMechanismCRingLayer2N" material="AIREX_R82_80" vis="TrackerSupportVis">
       <position x="0" y="0" z="-BeampipeSupportMechCRingLayer2N_zcenter"/>
        <shape role="base" type="Cylinder"
@@ -2085,7 +2085,7 @@
             y="BeampipeSupportMechCRingBoxCutN_dy"
             z="BeampipeSupportMechCRingBoxCutLayer2N_dz">
       <position x="0" y="-BeampipeSupportMechCRingBoxCutN_ytranslation" z="0*cm"/>
-      </shape>      
+      </shape>
       <!-- cylindrical cut on pos x -->
       <shape role="hole" type="Cylinder"
           name="BeampipeSupportMechCRingCylCutLayer2N_hole"
@@ -2093,11 +2093,11 @@
           length="BeampipeSupportMechCRingCylCutLayer2N_length"
           thickness="BeampipeSupportMechCRingCylCutN_thickness">
       <position x="BeampipeSupportMechCRingCylCutN_xtranslation" y="0*cm" z="0*cm"/>
-      </shape>                             
-      </subtraction> 
-   <!-- 
-        Layer 3 
-    -->    
+      </shape>
+      </subtraction>
+   <!--
+        Layer 3
+    -->
       <subtraction name="BeampipeSupportMechanismCRingLayer3N" material="AIREX_R82_80" vis="TrackerSupportVis">
       <position x="0" y="0" z="-BeampipeSupportMechCRingLayer3N_zcenter"/>
        <shape role="base" type="Cylinder"
@@ -2137,7 +2137,7 @@
             y="BeampipeSupportMechCRingBoxCutN_dy"
             z="BeampipeSupportMechCRingBoxCutLayer3N_dz">
       <position x="0" y="-BeampipeSupportMechCRingBoxCutN_ytranslation" z="0*cm"/>
-      </shape>             
+      </shape>
       <!-- cylindrical cut on pos x -->
       <shape role="hole" type="Cylinder"
           name="BeampipeSupportMechCRingCylCutLayer3N_hole"
@@ -2145,11 +2145,11 @@
           length="BeampipeSupportMechCRingCylCutLayer3N_length"
           thickness="BeampipeSupportMechCRingCylCutN_thickness">
       <position x="BeampipeSupportMechCRingCylCutN_xtranslation" y="0*cm" z="0*cm"/>
-      </shape>                      
-      </subtraction>                         
-    <!-- 
+      </shape>
+      </subtraction>
+    <!--
       the peripheral half-ring
-    -->      
+    -->
       <support type="Cylinder"
         name="BeampipeSupportMechPRingN"
         vis="TrackerSupportVis"
@@ -2160,10 +2160,10 @@
         thickness="BeampipeSupportMechPRingN_thickness">
           <position x="0" y="0*cm" z="-BeampipeSupportMechPRingN_zcenter" />
           <component material="CarbonFiber" thickness="BeampipeSupportMechPRingN_thickness" name="Support" vis="TrackerSupportVis"/>
-      </support>  
-   <!-- 
+      </support>
+   <!--
       the support clamps
-    -->      
+    -->
       <!-- base at 0 deg -->
       <support type="Cylinder"
         name="BeampipeSupportMechClampBaseN_at0deg"
@@ -2175,7 +2175,7 @@
         thickness="BeampipeSupportMechClampBaseN_thickness">
           <position x="0" y="0*cm" z="-BeampipeSupportMechClampBaseN_zcenter" />
           <component material="CarbonFiber" thickness="BeampipeSupportMechClampBaseN_thickness" name="Support" vis="TrackerSupportVis"/>
-      </support>  
+      </support>
       <!-- base at 180 deg -->
       <support type="Cylinder"
         name="BeampipeSupportMechClampBaseN_at0deg"
@@ -2187,7 +2187,7 @@
         thickness="BeampipeSupportMechClampBaseN_thickness">
           <position x="0" y="0*cm" z="-BeampipeSupportMechClampBaseN_zcenter" />
           <component material="CarbonFiber" thickness="BeampipeSupportMechClampBaseN_thickness" name="Support" vis="TrackerSupportVis"/>
-      </support>  
+      </support>
       <!-- base at 2700 deg -->
       <support type="Cylinder"
         name="BeampipeSupportMechClampBaseN_at0deg"
@@ -2199,12 +2199,12 @@
         thickness="BeampipeSupportMechClampBaseN_thickness">
           <position x="0" y="0*cm" z="-BeampipeSupportMechClampBaseN_zcenter" />
           <component material="CarbonFiber" thickness="BeampipeSupportMechClampBaseN_thickness" name="Support" vis="TrackerSupportVis"/>
-      </support>                     
-      <!-- end of (Negative) Beampipe Support Mechanism implementation -->        
+      </support>
+      <!-- end of (Negative) Beampipe Support Mechanism implementation -->
 
     <!-- |||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||| -->
     <comment> (Negative) Service passthrough plate implementation </comment>
-      <subtraction name="ServicePassthroughRingN" material="Air" vis="TrackerSupportVis"> 
+      <subtraction name="ServicePassthroughRingN" material="Air" vis="TrackerSupportVis">
       <position x="0" y="0" z="-ServicePassthroughRingN_zcenter"/> <!-- Base half-ring -->
       <shape role="base" type="Cylinder"
             name="ServicePassthroughTopRingBaseN"
@@ -2253,7 +2253,7 @@
             phimin="ServicePassthroughTopRingHole4N_phimin"
             phimax="ServicePassthroughTopRingHole4N_phimax">
       <position x="0*cm" y="0*cm" z="0*cm"/>
-      </shape>      
+      </shape>
       <!-- Hole wedge 5 -->
       <shape role="hole" type="Cylinder"
             name="ServicePassthroughTopRingHole5N"
@@ -2273,7 +2273,7 @@
             phimin="ServicePassthroughTopRingHole6N_phimin"
             phimax="ServicePassthroughTopRingHole6N_phimax">
       <position x="0*cm" y="0*cm" z="0*cm"/>
-      </shape>      
+      </shape>
       <!-- Hole wedge 7 -->
       <shape role="hole" type="Cylinder"
             name="ServicePassthroughTopRingHole7N"
@@ -2283,7 +2283,7 @@
             phimin="ServicePassthroughTopRingHole7N_phimin"
             phimax="ServicePassthroughTopRingHole7N_phimax">
       <position x="0*cm" y="0*cm" z="0*cm"/>
-      </shape>      
+      </shape>
       <!-- Hole wedge 8 -->
       <shape role="hole" type="Cylinder"
             name="ServicePassthroughTopRingHole8N"
@@ -2293,7 +2293,7 @@
             phimin="ServicePassthroughTopRingHole8N_phimin"
             phimax="ServicePassthroughTopRingHole8N_phimax">
       <position x="0*cm" y="0*cm" z="0*cm"/>
-      </shape>      
+      </shape>
       <!-- Hole wedge 9 -->
       <shape role="hole" type="Cylinder"
             name="ServicePassthroughTopRingHole9N"
@@ -2303,7 +2303,7 @@
             phimin="ServicePassthroughTopRingHole9N_phimin"
             phimax="ServicePassthroughTopRingHole9N_phimax">
       <position x="0*cm" y="0*cm" z="0*cm"/>
-      </shape>      
+      </shape>
       <!-- Hole wedge 10 -->
       <shape role="hole" type="Cylinder"
             name="ServicePassthroughTopRingHole10N"
@@ -2313,7 +2313,7 @@
             phimin="ServicePassthroughTopRingHole10N_phimin"
             phimax="ServicePassthroughTopRingHole10N_phimax">
       <position x="0*cm" y="0*cm" z="0*cm"/>
-      </shape>      
+      </shape>
       <comment> Making holes in the bottom half-ring </comment>
       <!-- Hole wedge 1 -->
       <shape role="hole" type="Cylinder"
@@ -2354,7 +2354,7 @@
             phimin="ServicePassthroughBotRingHole4N_phimin"
             phimax="ServicePassthroughBotRingHole4N_phimax">
       <position x="0*cm" y="0*cm" z="0*cm"/>
-      </shape>      
+      </shape>
       <!-- Hole wedge 5 -->
       <shape role="hole" type="Cylinder"
             name="ServicePassthroughBotRingHole5N"
@@ -2374,7 +2374,7 @@
             phimin="ServicePassthroughBotRingHole6N_phimin"
             phimax="ServicePassthroughBotRingHole6N_phimax">
       <position x="0*cm" y="0*cm" z="0*cm"/>
-      </shape>      
+      </shape>
       <!-- Hole wedge 7 -->
       <shape role="hole" type="Cylinder"
             name="ServicePassthroughBotRingHole7N"
@@ -2384,7 +2384,7 @@
             phimin="ServicePassthroughBotRingHole7N_phimin"
             phimax="ServicePassthroughBotRingHole7N_phimax">
       <position x="0*cm" y="0*cm" z="0*cm"/>
-      </shape>      
+      </shape>
       <!-- Hole wedge 8 -->
       <shape role="hole" type="Cylinder"
             name="ServicePassthroughBotRingHole8N"
@@ -2394,7 +2394,7 @@
             phimin="ServicePassthroughBotRingHole8N_phimin"
             phimax="ServicePassthroughBotRingHole8N_phimax">
       <position x="0*cm" y="0*cm" z="0*cm"/>
-      </shape>      
+      </shape>
       <!-- Hole wedge 9 -->
       <shape role="hole" type="Cylinder"
             name="ServicePassthroughBotRingHole9N"
@@ -2404,7 +2404,7 @@
             phimin="ServicePassthroughBotRingHole9N_phimin"
             phimax="ServicePassthroughBotRingHole9N_phimax">
       <position x="0*cm" y="0*cm" z="0*cm"/>
-      </shape>      
+      </shape>
       <!-- Hole wedge 10 -->
       <shape role="hole" type="Cylinder"
             name="ServicePassthroughBotRingHole10N"
@@ -2414,7 +2414,7 @@
             phimin="ServicePassthroughBotRingHole10N_phimin"
             phimax="ServicePassthroughBotRingHole10N_phimax">
       <position x="0*cm" y="0*cm" z="0*cm"/>
-      </shape>      
+      </shape>
       <comment> Making rectangular cut in the center </comment>
       <shape role="hole" type="Box"
             name="ServicePassthroughBoxCutN"
@@ -2422,7 +2422,7 @@
             y="ServicePassthroughBoxCutLeftN_dy"
             z="ServicePassthroughBoxCutLeftN_dz">
       <position x="0*cm" y="0*cm" z="0*cm"/>
-      </shape> 
+      </shape>
       </subtraction>
       <!-- end of (Negative) Service passthrough ring implementation -->
 
@@ -2442,7 +2442,7 @@
         rmin1="SupportRoutingFlangeCone_rmin2"
         rmin2="SupportRoutingFlangeCone_rmin1"
         length="SupportRoutingFlangeCone_length"
-        thickness="InnerSupportConeCF_thickness"> 
+        thickness="InnerSupportConeCF_thickness">
           <position x="0*cm" y="0*cm" z="SupportRoutingFlangeCone_zcenter" />
           <component material="CarbonFiber" thickness="InnerSupportConeCF_thickness" name="Support" vis="TrackerSupportVis"/>
       </support>
@@ -2473,7 +2473,7 @@
         phimax="SupportTubeJointRight_phimax">
           <position x="0*cm" y="0*cm" z="SupportTubeJoint_zcenter" />
           <component material="CarbonFiber" thickness="SupportTubeJoint_thickness" name="Support" vis="TrackerSupportVis"/>
-      </support>      
+      </support>
 
      <comment> PST Feet implementation </comment>
      <comment> Positive left side (while looking downstream) </comment>
@@ -2484,14 +2484,14 @@
             x="PSTFootMidBox_dx"
             y="PSTFootMidBox_dy"
             z="PSTFootMidBox_dz"
-            material="CarbonFiber"/>  
+            material="CarbonFiber"/>
       <shape role="hole" type="Cylinder"
             name="PSTFootLeftMidBoxP_hole"
             rmin="0"
             length="PSTFingureN_length"
             thickness="PSTFootMidBoxCylCut_radius">
       <position x="-PSTFootMidBoxCylCut_xcenter" y="PSTFootMidBoxCylCut_ycenter" z="0"/>
-      </shape>                  
+      </shape>
       </subtraction>
       <subtraction name="PSTFootLeftOuterBox1P" material="Air" vis="TrackerSupportVis">
       <position x="-PSTFootOuterBox_xcenter" y="PSTFootOuterBox_ycenter" z="PSTFootOuterBox1P_zcenter"/>
@@ -2507,14 +2507,14 @@
             y="PSTFootOuterBoxCut1_dy"
             z="PSTFootOuterBoxCut1_dz">
       <position x="0" y="0" z="PSTFootOuterBox_thickness"/>
-      </shape>  
+      </shape>
       <shape role="hole" type="Box"
             name="PSTFootLeftOuterBox1Cut2P_hole"
             x="PSTFootOuterBoxCut2_dx"
             y="PSTFootOuterBoxCut2_dy"
             z="PSTFootOuterBoxCut2_dz">
       <position x="-PSTFootOuterBoxCut2_xcenter" y="PSTFootOuterBoxCut2_ycenter" z="0"/>
-      </shape>                              
+      </shape>
       </subtraction>
       <subtraction name="PSTFootLeftOuterBox2P" material="CarbonFiber" vis="TrackerSupportVis">
       <position x="-PSTFootOuterBox_xcenter" y="PSTFootOuterBox_ycenter" z="PSTFootOuterBox2P_zcenter"/>
@@ -2530,14 +2530,14 @@
             y="PSTFootOuterBoxCut1_dy"
             z="PSTFootOuterBoxCut1_dz">
       <position x="0" y="0" z="-PSTFootOuterBox_thickness"/>
-      </shape>  
+      </shape>
       <shape role="hole" type="Box"
             name="PSTFootLeftOuterBox2Cut2P_hole"
             x="PSTFootOuterBoxCut2_dx"
             y="PSTFootOuterBoxCut2_dy"
             z="PSTFootOuterBoxCut2_dz">
       <position x="-PSTFootOuterBoxCut2_xcenter" y="PSTFootOuterBoxCut2_ycenter" z="0"/>
-      </shape>                              
+      </shape>
       </subtraction>
      <comment> Positive right side (while looking downstream) </comment>
      <subtraction name="PSTFootRightMidBoxP" material="CarbonFiber" vis="TrackerSupportVis">
@@ -2547,14 +2547,14 @@
             x="PSTFootMidBox_dx"
             y="PSTFootMidBox_dy"
             z="PSTFootMidBox_dz"
-            material="CarbonFiber"/>  
+            material="CarbonFiber"/>
       <shape role="hole" type="Cylinder"
             name="PSTFootRightMidBoxP_hole"
             rmin="0"
             length="PSTFingureN_length"
             thickness="PSTFootMidBoxCylCut_radius">
       <position x="PSTFootMidBoxCylCut_xcenter" y="PSTFootMidBoxCylCut_ycenter" z="0"/>
-      </shape>                  
+      </shape>
       </subtraction>
       <subtraction name="PSTFootRightOuterBox1P" material="Air" vis="TrackerSupportVis">
       <position x="PSTFootOuterBox_xcenter" y="PSTFootOuterBox_ycenter" z="PSTFootOuterBox1P_zcenter"/>
@@ -2570,14 +2570,14 @@
             y="PSTFootOuterBoxCut1_dy"
             z="PSTFootOuterBoxCut1_dz">
       <position x="0" y="0" z="PSTFootOuterBox_thickness"/>
-      </shape>  
+      </shape>
       <shape role="hole" type="Box"
             name="PSTFootRightOuterBox1Cut2P_hole"
             x="PSTFootOuterBoxCut2_dx"
             y="PSTFootOuterBoxCut2_dy"
             z="PSTFootOuterBoxCut2_dz">
       <position x="PSTFootOuterBoxCut2_xcenter" y="PSTFootOuterBoxCut2_ycenter" z="0"/>
-      </shape>                              
+      </shape>
       </subtraction>
       <subtraction name="PSTFootRightOuterBox2P" material="CarbonFiber" vis="TrackerSupportVis">
       <position x="PSTFootOuterBox_xcenter" y="PSTFootOuterBox_ycenter" z="PSTFootOuterBox2P_zcenter"/>
@@ -2593,15 +2593,15 @@
             y="PSTFootOuterBoxCut1_dy"
             z="PSTFootOuterBoxCut1_dz">
       <position x="0" y="0" z="-PSTFootOuterBox_thickness"/>
-      </shape>  
+      </shape>
       <shape role="hole" type="Box"
             name="PSTFootRightOuterBox2Cut2P_hole"
             x="PSTFootOuterBoxCut2_dx"
             y="PSTFootOuterBoxCut2_dy"
             z="PSTFootOuterBoxCut2_dz">
       <position x="PSTFootOuterBoxCut2_xcenter" y="PSTFootOuterBoxCut2_ycenter" z="0"/>
-      </shape>                              
-      </subtraction>      
+      </shape>
+      </subtraction>
      <comment> Negative left side (while looking downstream) </comment>
      <subtraction name="PSTFootLeftMidBoxN" material="CarbonFiber" vis="TrackerSupportVis">
       <position x="-PSTFootMidBox_xcenter" y="PSTFootMidBox_ycenter" z="-PSTFootN_zcenter"/>
@@ -2610,14 +2610,14 @@
             x="PSTFootMidBox_dx"
             y="PSTFootMidBox_dy"
             z="PSTFootMidBox_dz"
-            material="CarbonFiber"/>  
+            material="CarbonFiber"/>
       <shape role="hole" type="Cylinder"
             name="PSTFootLeftMidBoxN_hole"
             rmin="0"
             length="PSTFingureN_length"
             thickness="PSTFootMidBoxCylCut_radius">
       <position x="-PSTFootMidBoxCylCut_xcenter" y="PSTFootMidBoxCylCut_ycenter" z="0"/>
-      </shape>                  
+      </shape>
       </subtraction>
       <subtraction name="PSTFootLeftOuterBox1N" material="Air" vis="TrackerSupportVis">
       <position x="-PSTFootOuterBox_xcenter" y="PSTFootOuterBox_ycenter" z="-PSTFootOuterBox1N_zcenter"/>
@@ -2633,14 +2633,14 @@
             y="PSTFootOuterBoxCut1_dy"
             z="PSTFootOuterBoxCut1_dz">
       <position x="0" y="0" z="PSTFootOuterBox_thickness"/>
-      </shape>  
+      </shape>
       <shape role="hole" type="Box"
             name="PSTFootLeftOuterBox1Cut2N_hole"
             x="PSTFootOuterBoxCut2_dx"
             y="PSTFootOuterBoxCut2_dy"
             z="PSTFootOuterBoxCut2_dz">
       <position x="-PSTFootOuterBoxCut2_xcenter" y="PSTFootOuterBoxCut2_ycenter" z="0"/>
-      </shape>                              
+      </shape>
       </subtraction>
       <subtraction name="PSTFootLeftOuterBox2N" material="CarbonFiber" vis="TrackerSupportVis">
       <position x="-PSTFootOuterBox_xcenter" y="PSTFootOuterBox_ycenter" z="-PSTFootOuterBox2N_zcenter"/>
@@ -2656,15 +2656,15 @@
             y="PSTFootOuterBoxCut1_dy"
             z="PSTFootOuterBoxCut1_dz">
       <position x="0" y="0" z="-PSTFootOuterBox_thickness"/>
-      </shape>  
+      </shape>
       <shape role="hole" type="Box"
             name="PSTFootLeftOuterBox2Cut2N_hole"
             x="PSTFootOuterBoxCut2_dx"
             y="PSTFootOuterBoxCut2_dy"
             z="PSTFootOuterBoxCut2_dz">
       <position x="-PSTFootOuterBoxCut2_xcenter" y="PSTFootOuterBoxCut2_ycenter" z="0"/>
-      </shape>                              
-      </subtraction> 
+      </shape>
+      </subtraction>
      <comment> Negative right side (while looking downstream) </comment>
      <subtraction name="PSTFootRightMidBoxN" material="CarbonFiber" vis="TrackerSupportVis">
       <position x="PSTFootMidBox_xcenter" y="PSTFootMidBox_ycenter" z="-PSTFootN_zcenter"/>
@@ -2673,14 +2673,14 @@
             x="PSTFootMidBox_dx"
             y="PSTFootMidBox_dy"
             z="PSTFootMidBox_dz"
-            material="CarbonFiber"/>  
+            material="CarbonFiber"/>
       <shape role="hole" type="Cylinder"
             name="PSTFootRightMidBoxN_hole"
             rmin="0"
             length="PSTFingureN_length"
             thickness="PSTFootMidBoxCylCut_radius">
       <position x="PSTFootMidBoxCylCut_xcenter" y="PSTFootMidBoxCylCut_ycenter" z="0"/>
-      </shape>                  
+      </shape>
       </subtraction>
       <subtraction name="PSTFootRightOuterBox1N" material="Air" vis="TrackerSupportVis">
       <position x="PSTFootOuterBox_xcenter" y="PSTFootOuterBox_ycenter" z="-PSTFootOuterBox1N_zcenter"/>
@@ -2696,14 +2696,14 @@
             y="PSTFootOuterBoxCut1_dy"
             z="PSTFootOuterBoxCut1_dz">
       <position x="0" y="0" z="PSTFootOuterBox_thickness"/>
-      </shape>  
+      </shape>
       <shape role="hole" type="Box"
             name="PSTFootRightOuterBox1Cut2N_hole"
             x="PSTFootOuterBoxCut2_dx"
             y="PSTFootOuterBoxCut2_dy"
             z="PSTFootOuterBoxCut2_dz">
       <position x="PSTFootOuterBoxCut2_xcenter" y="PSTFootOuterBoxCut2_ycenter" z="0"/>
-      </shape>                              
+      </shape>
       </subtraction>
       <subtraction name="PSTFootRightOuterBox2N" material="CarbonFiber" vis="TrackerSupportVis">
       <position x="PSTFootOuterBox_xcenter" y="PSTFootOuterBox_ycenter" z="-PSTFootOuterBox2N_zcenter"/>
@@ -2719,15 +2719,15 @@
             y="PSTFootOuterBoxCut1_dy"
             z="PSTFootOuterBoxCut1_dz">
       <position x="0" y="0" z="-PSTFootOuterBox_thickness"/>
-      </shape>  
+      </shape>
       <shape role="hole" type="Box"
             name="PSTFootRightOuterBox2Cut2N_hole"
             x="PSTFootOuterBoxCut2_dx"
             y="PSTFootOuterBoxCut2_dy"
             z="PSTFootOuterBoxCut2_dz">
       <position x="PSTFootOuterBoxCut2_xcenter" y="PSTFootOuterBoxCut2_ycenter" z="0"/>
-      </shape>                              
-      </subtraction>                  
+      </shape>
+      </subtraction>
 
      <comment> (Negative) SVT PST 2452plementation </comment>
      <!-- (Negative) PST foot at 0 deg -->
@@ -2739,7 +2739,7 @@
             length="PSTFingureN_length"
             thickness="PSTFingureN_thickness"
             phimin = "0*deg-PSTFingureBaseN_ang_halfwidth"
-            phimax = "0*deg+PSTFingureBaseN_ang_halfwidth"/>   
+            phimax = "0*deg+PSTFingureBaseN_ang_halfwidth"/>
       <shape role="hole" type="Box"
             name="PSTFingureN0degCutBoxRight"
             x="PSTFingureBaseN_width"
@@ -2755,7 +2755,7 @@
             z="2*PSTFingureBaseN_width">
             <position x="PSTFingureN_rmin1" y="PSTFingureCutBoxN_translation" z="0*mm"/>
             <rotation x="-PSTFingureCutBoxN_rotation" y="0*deg" z="0*deg"/>
-      </shape>      
+      </shape>
       </subtraction>
      <!-- (Negative) PST foot at 90 deg -->
      <subtraction name="PSTFingureN90deg" material="CarbonFiber" vis="TrackerSupportVis">
@@ -2766,7 +2766,7 @@
             length="PSTFingureN_length"
             thickness="PSTFingureN_thickness"
             phimin = "90*deg-PSTFingureBaseN_ang_halfwidth"
-            phimax = "90*deg+PSTFingureBaseN_ang_halfwidth"/>   
+            phimax = "90*deg+PSTFingureBaseN_ang_halfwidth"/>
       <shape role="hole" type="Box"
             name="PSTFingureN90degCutBoxRight"
             x="PSTFingureBaseN_width"
@@ -2782,7 +2782,7 @@
             z="2*PSTFingureBaseN_width">
             <position x="PSTFingureCutBoxN_translation" y="PSTFingureN_rmin1" z="0*mm"/>
             <rotation x="0*deg" y="PSTFingureCutBoxN_rotation" z="0*deg"/>
-      </shape>      
+      </shape>
       </subtraction>
      <!-- (Negative) PST foot at 180 deg -->
      <subtraction name="PSTFingureN180deg" material="CarbonFiber" vis="TrackerSupportVis">
@@ -2793,7 +2793,7 @@
             length="PSTFingureN_length"
             thickness="PSTFingureN_thickness"
             phimin = "180*deg-PSTFingureBaseN_ang_halfwidth"
-            phimax = "180*deg+PSTFingureBaseN_ang_halfwidth"/>   
+            phimax = "180*deg+PSTFingureBaseN_ang_halfwidth"/>
       <shape role="hole" type="Box"
             name="PSTFingureN180degCutBoxRight"
             x="PSTFingureBaseN_width"
@@ -2809,7 +2809,7 @@
             z="2*PSTFingureBaseN_width">
             <position x="-PSTFingureN_rmin1" y="PSTFingureCutBoxN_translation" z="0*mm"/>
             <rotation x="-PSTFingureCutBoxN_rotation" y="0*deg" z="0*deg"/>
-      </shape>      
+      </shape>
       </subtraction>
      <!-- (Negative) PST foot at 270 deg -->
      <subtraction name="PSTFingureN270deg" material="CarbonFiber" vis="TrackerSupportVis">
@@ -2820,7 +2820,7 @@
             length="PSTFingureN_length"
             thickness="PSTFingureN_thickness"
             phimin = "270*deg-PSTFingureBaseN_ang_halfwidth"
-            phimax = "270*deg+PSTFingureBaseN_ang_halfwidth"/>   
+            phimax = "270*deg+PSTFingureBaseN_ang_halfwidth"/>
       <shape role="hole" type="Box"
             name="PSTFingureN270degCutBoxRight"
             x="PSTFingureBaseN_width"
@@ -2836,8 +2836,8 @@
             z="2*PSTFingureBaseN_width">
             <position x="PSTFingureCutBoxN_translation" y="-PSTFingureN_rmin1" z="0*mm"/>
             <rotation x="0*deg" y="PSTFingureCutBoxN_rotation" z="0*deg"/>
-      </shape>      
-      </subtraction>      
+      </shape>
+      </subtraction>
       <!-- end of (Negative) SVT PST Fingure implementation -->
 
      <comment> (Positive) SVT PST Fingure implementation </comment>
@@ -2850,7 +2850,7 @@
             length="PSTFingureP_length"
             thickness="PSTFingureP_thickness"
             phimin = "0*deg-PSTFingureBaseP_ang_halfwidth"
-            phimax = "0*deg+PSTFingureBaseP_ang_halfwidth"/>   
+            phimax = "0*deg+PSTFingureBaseP_ang_halfwidth"/>
       <shape role="hole" type="Box"
             name="PSTFingureP0degCutBoxRight"
             x="PSTFingureBaseP_width"
@@ -2866,7 +2866,7 @@
             z="3*PSTFingureBaseP_width">
             <position x="PSTFingureP_rmin1" y="PSTFingureCutBoxP_translation" z="0*mm"/>
             <rotation x="PSTFingureCutBoxP_rotation" y="0*deg" z="0*deg"/>
-      </shape>      
+      </shape>
       </subtraction>
      <!-- (Positive) PST foot at 90 deg -->
      <subtraction name="PSTFingureP90deg" material="CarbonFiber" vis="TrackerSupportVis">
@@ -2877,7 +2877,7 @@
             length="PSTFingureP_length"
             thickness="PSTFingureP_thickness"
             phimin = "90*deg-PSTFingureBaseP_ang_halfwidth"
-            phimax = "90*deg+PSTFingureBaseP_ang_halfwidth"/>   
+            phimax = "90*deg+PSTFingureBaseP_ang_halfwidth"/>
       <shape role="hole" type="Box"
             name="PSTFingureP90degCutBoxRight"
             x="PSTFingureBaseP_width"
@@ -2893,7 +2893,7 @@
             z="3*PSTFingureBaseP_width">
             <position x="PSTFingureCutBoxP_translation" y="PSTFingureP_rmin1" z="0*mm"/>
             <rotation x="0*deg" y="-PSTFingureCutBoxP_rotation" z="0*deg"/>
-      </shape>      
+      </shape>
       </subtraction>
      <!-- (Positive) PST foot at 180 deg -->
      <subtraction name="PSTFingureP180deg" material="CarbonFiber" vis="TrackerSupportVis">
@@ -2904,7 +2904,7 @@
             length="PSTFingureP_length"
             thickness="PSTFingureP_thickness"
             phimin = "180*deg-PSTFingureBaseP_ang_halfwidth"
-            phimax = "180*deg+PSTFingureBaseP_ang_halfwidth"/>   
+            phimax = "180*deg+PSTFingureBaseP_ang_halfwidth"/>
       <shape role="hole" type="Box"
             name="PSTFingureP180degCutBoxRight"
             x="PSTFingureBaseP_width"
@@ -2920,7 +2920,7 @@
             z="3*PSTFingureBaseP_width">
             <position x="-PSTFingureP_rmin1" y="PSTFingureCutBoxP_translation" z="0*mm"/>
             <rotation x="PSTFingureCutBoxP_rotation" y="0*deg" z="0*deg"/>
-      </shape>      
+      </shape>
       </subtraction>
      <!-- (Positive) PST foot at 270 deg -->
      <subtraction name="PSTFingureP270deg" material="CarbonFiber" vis="TrackerSupportVis">
@@ -2931,7 +2931,7 @@
             length="PSTFingureP_length"
             thickness="PSTFingureP_thickness"
             phimin = "270*deg-PSTFingureBaseP_ang_halfwidth"
-            phimax = "270*deg+PSTFingureBaseP_ang_halfwidth"/>   
+            phimax = "270*deg+PSTFingureBaseP_ang_halfwidth"/>
       <shape role="hole" type="Box"
             name="PSTFingureP270degCutBoxRight"
             x="PSTFingureBaseP_width"
@@ -2947,9 +2947,9 @@
             z="3*PSTFingureBaseP_width">
             <position x="PSTFingureCutBoxP_translation" y="-PSTFingureP_rmin1" z="0*mm"/>
             <rotation x="0*deg" y="-PSTFingureCutBoxP_rotation" z="0*deg"/>
-      </shape>      
-      </subtraction>      
-      <!-- end of (Positive) SVT PST Fingure implementation -->            
+      </shape>
+      </subtraction>
+      <!-- end of (Positive) SVT PST Fingure implementation -->
 
       <support type="Cone"
         name="InnerSupportConeEndcapN"
@@ -2989,7 +2989,7 @@
       <support type="Cylinder"
         name="TrackerSupportCylEndcapN1A"
         vis="TrackerSupportVis"
-        rmin="TrackerSupportCyl_rmin1-TrackerSupportCylAlN_thickness1A" 
+        rmin="TrackerSupportCyl_rmin1-TrackerSupportCylAlN_thickness1A"
         length="TrackerSupportCylEndcapN_length1A"
         thickness="TrackerSupportCylN_thickness1A">
           <position x="0*cm" y="0*cm" z="-TrackerSupportCylEndcapN_z1A" />
@@ -3024,7 +3024,7 @@
         thickness="TrackerSupportCylCF_thickness1">
           <position x="0*cm" y="0*cm" z="-TrackerSupportCylEndcapN_z1C" />
           <component material="CarbonFiber" thickness="TrackerSupportCylCF_thickness1" name="Support" vis="TrackerSupportVis"/>
-      </support>      
+      </support>
       <support type="Cylinder"
         name="TrackerSupportCylEndcapN1C_service"
         vis="TrackerServiceVis"
@@ -3033,7 +3033,7 @@
         thickness="TrackerSupportCylAlN_thickness1C">
           <position x="0*cm" y="0*cm" z="-TrackerSupportCylEndcapN_z1C_service" />
           <component material="Aluminum" thickness="TrackerSupportCylAlN_thickness1C" name="Services" vis="TrackerServiceVis" />
-      </support>            
+      </support>
       <support type="Cylinder"
         name="TrackerSupportCylEndcapP1A"
         vis="TrackerSupportVis"
@@ -3072,7 +3072,7 @@
         thickness="TrackerSupportCylCF_thickness1">
           <position x="0*cm" y="0*cm" z="TrackerSupportCylEndcapP_z1C" />
           <component material="CarbonFiber" thickness="TrackerSupportCylCF_thickness1" name="Support" vis="TrackerSupportVis"/>
-      </support> 
+      </support>
       <support type="Cylinder"
         name="TrackerSupportCylEndcapP1C_service"
         vis="TrackerServiceVis"
@@ -3081,7 +3081,7 @@
         thickness="TrackerSupportCylAlP_thickness1C">
           <position x="0*cm" y="0*cm" z="TrackerSupportCylEndcapP_z1C_service" />
           <component material="Aluminum" thickness="TrackerSupportCylAlP_thickness1C" name="Services" vis="TrackerServiceVis" />
-      </support>            
+      </support>
 
 
       <!-- <support type="Cone"

@@ -167,31 +167,33 @@ std::pair<Volume, Transform3D> build_subtraction(const Detector& descr, const xm
 
   // Try generic multi-shape schema: <shape role="base"> + N x <shape role="hole">
   Solid baseSolid;
-  bool baseSet = false;
+  bool baseSet           = false;
   bool haveGenericShapes = false;
   std::vector<std::pair<Solid, Transform3D>> holes;
 
   for (xml_coll_t s{x_subtraction, _U(shape)}; s; ++s) {
     haveGenericShapes = true;
-    xml_comp_t x_s = s;
+    xml_comp_t x_s    = s;
 
     // Build solid for this child
     auto [v, tr_unused] = build_shape(descr, x_det, x_s, x_s);
-    Solid sld = v.solid();
+    Solid sld           = v.solid();
 
     // Relative transform (default identity) for this child
     xml_dim_t x_pos(x_s.child(_U(position), false));
     xml_dim_t x_rot(x_s.child(_U(rotation), false));
     Position pos{0, 0, 0};
     Rotation3D rot;
-    if (x_rot) rot = RotationZYX(x_rot.z(0), x_rot.y(0), x_rot.x(0));
-    if (x_pos) pos = Position(x_pos.x(0), x_pos.y(0), x_pos.z(0));
+    if (x_rot)
+      rot = RotationZYX(x_rot.z(0), x_rot.y(0), x_rot.x(0));
+    if (x_pos)
+      pos = Position(x_pos.x(0), x_pos.y(0), x_pos.z(0));
     Transform3D tr_rel(rot, pos);
 
     const std::string role = getAttrOrDefault<std::string>(x_s, _Unicode(role), "hole");
     if (role == "base" || role == "primary") {
       baseSolid = sld;
-      baseSet = true;
+      baseSet   = true;
     } else {
       holes.emplace_back(sld, tr_rel);
     }
@@ -203,29 +205,30 @@ std::pair<Volume, Transform3D> build_subtraction(const Detector& descr, const xm
     xml_comp_t x_shape2 = x_subtraction.child(_Unicode(shape2));
     if (!x_shape1 || !x_shape2) {
       printout(ERROR, x_det.nameStr(),
-      "Subtraction %s: expected shape1/shape2 or generic <shape> children.",
-      x_subtraction.nameStr().c_str());
+               "Subtraction %s: expected shape1/shape2 or generic <shape> children.",
+               x_subtraction.nameStr().c_str());
       std::exit(1);
     }
     auto [vol1, tr1_unused] = build_shape(descr, x_det, x_shape1, x_shape1);
     auto [vol2, tr2_unused] = build_shape(descr, x_det, x_shape2, x_shape2);
-    baseSolid = vol1.solid();
-    baseSet = true;
+    baseSolid               = vol1.solid();
+    baseSet                 = true;
 
     // Relative transform for shape2
     xml_dim_t x_pos2(x_shape2.child(_U(position), false));
     xml_dim_t x_rot2(x_shape2.child(_U(rotation), false));
     Position pos2{0, 0, 0};
     Rotation3D rot2;
-    if (x_rot2) rot2 = RotationZYX(x_rot2.z(0), x_rot2.y(0), x_rot2.x(0));
-    if (x_pos2) pos2 = Position(x_pos2.x(0), x_pos2.y(0), x_pos2.z(0));
+    if (x_rot2)
+      rot2 = RotationZYX(x_rot2.z(0), x_rot2.y(0), x_rot2.x(0));
+    if (x_pos2)
+      pos2 = Position(x_pos2.x(0), x_pos2.y(0), x_pos2.z(0));
     holes.emplace_back(vol2.solid(), Transform3D(rot2, pos2));
   }
 
   if (!baseSet) {
-    printout(ERROR, x_det.nameStr(),
-            "Subtraction %s: no base shape found (role=\"base\").",
-            x_subtraction.nameStr().c_str());
+    printout(ERROR, x_det.nameStr(), "Subtraction %s: no base shape found (role=\"base\").",
+             x_subtraction.nameStr().c_str());
     std::exit(1);
   }
 
@@ -236,8 +239,10 @@ std::pair<Volume, Transform3D> build_subtraction(const Detector& descr, const xm
   }
 
   // Create the resulting volume
-  Material mat = descr.material(getAttrOrDefault<std::string>(x_subtraction, _Unicode(material), "Air"));
-  std::string vol_name = getAttrOrDefault<std::string>(x_subtraction, _Unicode(name), "subtraction_vol");
+  Material mat =
+      descr.material(getAttrOrDefault<std::string>(x_subtraction, _Unicode(material), "Air"));
+  std::string vol_name =
+      getAttrOrDefault<std::string>(x_subtraction, _Unicode(name), "subtraction_vol");
   Volume vol{vol_name, current, mat};
 
   // Overall placement of the resulting volume
@@ -245,8 +250,10 @@ std::pair<Volume, Transform3D> build_subtraction(const Detector& descr, const xm
   xml_dim_t x_rot(x_subtraction.child(_U(rotation), false));
   Position pos3D{0, 0, 0};
   Rotation3D rot3D;
-  if (x_rot) rot3D = RotationZYX(x_rot.z(0), x_rot.y(0), x_rot.x(0));
-  if (x_pos) pos3D = Position(x_pos.x(0), x_pos.y(0), x_pos.z(0));
+  if (x_rot)
+    rot3D = RotationZYX(x_rot.z(0), x_rot.y(0), x_rot.x(0));
+  if (x_pos)
+    pos3D = Position(x_pos.x(0), x_pos.y(0), x_pos.z(0));
   Transform3D tr(rot3D, pos3D);
 
   // Set visualization if specified
@@ -255,8 +262,8 @@ std::pair<Volume, Transform3D> build_subtraction(const Detector& descr, const xm
   }
 
   // Debug output
-  printout(DEBUG, "SupportServiceMaterial",
-    "Created subtraction volume: %s (holes=%d)", vol_name.c_str(), int(holes.size()));
+  printout(DEBUG, "SupportServiceMaterial", "Created subtraction volume: %s (holes=%d)",
+           vol_name.c_str(), int(holes.size()));
 
   return {vol, tr};
 }
