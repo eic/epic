@@ -24,6 +24,8 @@
 #include <ActsPlugins/DD4hep/DD4hepDetectorSurfaceFactory.hpp>
 #include <ActsPlugins/DD4hep/DD4hepLayerStructure.hpp>
 
+#include <fstream>
+
 /**
  * Example: Loading and testing ACTS Gen3 geometry from a DD4hep compact file.
  *
