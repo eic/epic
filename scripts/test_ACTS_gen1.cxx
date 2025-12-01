@@ -3,19 +3,33 @@
 
 #include "DD4hep/Detector.h"
 
-#include "Acts/Geometry/TrackingGeometry.hpp"
-#include "Acts/Geometry/TrackingVolume.hpp"
-#include "Acts/Plugins/DD4hep/ConvertDD4hepDetector.hpp"
+#include <Acts/Geometry/TrackingGeometry.hpp>
+#include <Acts/Geometry/TrackingVolume.hpp>
 #include <Acts/Visualization/GeometryView3D.hpp>
 #include <Acts/Visualization/ObjVisualization3D.hpp>
 #include <Acts/Visualization/PlyVisualization3D.hpp>
 #include <Acts/Visualization/ViewConfig.hpp>
 
+#if __has_include(<ActsPlugins/DD4hep/ConvertDD4hepDetector.hpp>)
+#include <ActsPlugins/DD4hep/ConvertDD4hepDetector.hpp>
+#else
+#include "ActsPlugins/DD4hep/ConvertDD4hepDetector.hpp"
+#endif
+
+// Ensure ActsPlugins namespace is used when present
+#if __has_include(<ActsPlugins/DD4hep/ConvertDD4hepDetector.hpp>)
+// Acts_MAJOR_VERSION >= 44
+using ActsPlugins::convertDD4hepDetector;
+#else
+// Acts_MAJOR_VERSION < 44
+using Acts::convertDD4hepDetector;
+#endif
+
 /** Example loading ACTs.
  *
  *
  */
-void test_ACTS(const char* compact = "epic.xml") {
+void test_ACTS_gen1(const char* compact = "epic.xml") {
   // -------------------------
   // Get the DD4hep instance
   // Load the compact XML file
@@ -24,7 +38,7 @@ void test_ACTS(const char* compact = "epic.xml") {
   detector->fromCompact(compact);
 
   auto logger                 = Acts::getDefaultLogger("Acts", Acts::Logging::Level::VERBOSE);
-  auto acts_tracking_geometry = Acts::convertDD4hepDetector(detector->world(), *logger);
+  auto acts_tracking_geometry = convertDD4hepDetector(detector->world(), *logger);
 
   // Visit all surfaces
   acts_tracking_geometry->visitSurfaces([](const Acts::Surface* surface) {});

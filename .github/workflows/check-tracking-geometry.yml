@@ -27,8 +27,11 @@ jobs:
         setup: install/bin/thisepic.sh
         run: |
           /usr/bin/time -v \
-          root -b -q "scripts/test_ACTS.cxx+(\"${DETECTOR_PATH}/${{matrix.detector_config}}.xml\")" | tee check_tracking_geometry.out
+          root -b -q "scripts/test_ACTS_gen1.cxx+(\"${DETECTOR_PATH}/${{matrix.detector_config}}.xml\")" | tee check_tracking_geometry.out
           bin/acts_geo_check check_tracking_geometry.out
+
+          /usr/bin/time -v \
+          root -b -q "scripts/test_ACTS_gen3.cxx+(\"${DETECTOR_PATH}/${{matrix.detector_config}}.xml\")" | tee check_tracking_geometry.out
     - uses: actions/upload-artifact@v5
       with:
         name: ${{matrix.detector_config}}.obj
