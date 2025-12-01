@@ -20,6 +20,7 @@
 #include "DD4hep/DetFactoryHelper.h"
 #include "DD4hep/Printout.h"
 #include "XML/Layering.h"
+#include "XML/Utilities.h"
 
 #include "TVector3.h"
 #include "TGDMLParse.h"
@@ -40,6 +41,9 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
 
   DetElement sdet(det_name, det_id);
   Volume motherVol = description.pickMotherVolume(sdet);
+
+  // apply detector type flags set in XML
+  xml::setDetectorTypeFlag(e, sdet);
 
   // Create envelope to hold HCAL barrel
 
