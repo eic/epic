@@ -69,7 +69,7 @@ void test_ACTS_gen3(const char* compact = "epic.xml") {
   // Now fill the gaps
   Acts::Experimental::detail::BlueprintHelper::fillGaps(*dd4hepBlueprint);
 
-  // dot -P -Tsvg -o plugins.svg
+  // Generate dot file (can be converted to SVG with: dot -Tsvg cylindrical_detector_dd4hep.dot -o output.svg)
   std::ofstream cbp("cylindrical_detector_dd4hep.dot");
   Acts::Experimental::detail::BlueprintDrawer::dotStream(cbp, *dd4hepBlueprint);
   cbp.close();
