@@ -24,9 +24,23 @@
 #include <ActsPlugins/DD4hep/DD4hepDetectorSurfaceFactory.hpp>
 #include <ActsPlugins/DD4hep/DD4hepLayerStructure.hpp>
 
-/** Example loading ACTs.
+/**
+ * Example: Loading and testing ACTS Gen3 geometry from a DD4hep compact file.
  *
+ * Gen3 geometry in ACTS refers to the third-generation detector geometry description,
+ * which introduces improved modularity, flexibility, and support for advanced features
+ * compared to Gen1. Gen3 geometry typically uses blueprints and container builders to
+ * construct detector volumes, allowing for more complex and realistic detector layouts.
  *
+ * This test function demonstrates how to:
+ *   - Load a DD4hep compact XML file describing the detector geometry.
+ *   - Convert the DD4hep geometry into ACTS Gen3 blueprints.
+ *   - Fill gaps in the blueprint to ensure completeness.
+ *   - Export the geometry to DOT, OBJ, and PLY formats for visualization.
+ *   - Build a cylindrical detector using the Gen3 blueprint and visualize its volumes.
+ *
+ * Compared to Gen1, Gen3 geometry provides a more robust and extensible framework for
+ * detector description, making it suitable for modern experiments and simulation workflows.
  */
 void test_ACTS_gen3(const char* compact = "epic.xml") {
   // -------------------------
