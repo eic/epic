@@ -31,7 +31,8 @@ jobs:
           bin/acts_geo_check check_tracking_geometry.out
 
           /usr/bin/time -v \
-          root -b -q "scripts/test_ACTS_gen3.cxx+(\"${DETECTOR_PATH}/${{matrix.detector_config}}.xml\")" | tee check_tracking_geometry.out
+          root -b -q "scripts/test_ACTS_gen3.cxx+(\"${DETECTOR_PATH}/${{matrix.detector_config}}.xml\")" | tee check_tracking_geometry_gen3.out
+          bin/acts_geo_check check_tracking_geometry_gen3.out
     - uses: actions/upload-artifact@v5
       with:
         name: ${{matrix.detector_config}}.obj
