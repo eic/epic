@@ -73,13 +73,6 @@ void test_ACTS_gen3(const char* compact = "epic.xml") {
   auto detector =
       Acts::Experimental::DetectorBuilder(detectorBuilderConfig).construct(trackingGeoCtx);
 
-  // Export to obj+mtl and ply collections
-  Acts::ViewConfig containerView{.color = {220, 220, 220}}; // alto
-  Acts::ViewConfig volumeView{.color = {220, 220, 0}};      // barberry yellow
-  Acts::ViewConfig sensitiveView{.color = {0, 180, 240}};   // picton blue
-  Acts::ViewConfig passiveView{.color = {240, 180, 0}};     // lightning yellow
-  Acts::ViewConfig gridView{.color = {220, 0, 0}};          // scarlet red
-
   // Get the root detector volumes
   for (const auto* volume : detector->rootVolumes()) {
 
