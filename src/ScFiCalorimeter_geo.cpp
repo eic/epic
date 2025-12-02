@@ -13,6 +13,7 @@
 #include "DD4hep/DetFactoryHelper.h"
 #include "GeometryHelpers.h"
 #include <XML/Helper.h>
+#include <XML/Utilities.h>
 #include <algorithm>
 #include <iostream>
 #include <math.h>
@@ -53,6 +54,9 @@ static Ref_t create_detector(Detector& desc, xml::Handle_t handle, SensitiveDete
   Tube envShape(rmin, rmax, length / 2., phimin, phimax);
   Volume env(detName + "_envelope", envShape, desc.material("Air"));
   env.setVisAttributes(desc.visAttributes(detElem.visStr()));
+
+  // apply any detector type flags set in XML
+  dd4hep::xml::setDetectorTypeFlag(detElem, det);
 
   // build module
   auto [modVol, modSize] = build_module(desc, detElem.child(_Unicode(module)), sens);

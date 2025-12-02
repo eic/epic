@@ -7,6 +7,7 @@
 #include "DDRec/DetectorData.h"
 #include "DDRec/Surface.h"
 #include <XML/Helper.h>
+#include <XML/Utilities.h>
 #include <algorithm>
 #include <iostream>
 #include <math.h>
@@ -31,6 +32,9 @@ static Ref_t create_detector(Detector& desc, xml_h handle, SensitiveDetector sen
   auto length   = dim.z();
   xml_dim_t pos = detElem.position();
   xml_dim_t rot = detElem.rotation();
+
+  // apply any detector type flags set in XML
+  dd4hep::xml::setDetectorTypeFlag(detElem, det);
 
   // envelope
   Box envShape(width * 0.5, width * 0.5, length * 0.5);

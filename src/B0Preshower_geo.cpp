@@ -2,6 +2,7 @@
 // Copyright (C) 2022 Whitney Armstrong
 
 #include "DD4hep/DetFactoryHelper.h"
+#include "XML/Utilities.h"
 #include <map>
 
 using namespace std;
@@ -25,6 +26,9 @@ static Ref_t create_B0Preshower(Detector& description, xml_h e, SensitiveDetecto
   Assembly assembly(det_name);
   xml::Component pos = x_det.position();
   xml::Component rot = x_det.rotation();
+
+  // apply any detector type flags set in XML
+  dd4hep::xml::setDetectorTypeFlag(x_det, sdet);
 
   // Material  air  = description.material("Air");
   //  Volume      assembly    (det_name,Box(10000,10000,10000),vacuum);

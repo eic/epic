@@ -6,6 +6,7 @@
 #include "DD4hep/Printout.h"
 #include "DDRec/DetectorData.h"
 #include "DDRec/Surface.h"
+#include "XML/Utilities.h"
 
 //////////////////////////////////////////////////
 // Low Q2 tagger trackers
@@ -28,6 +29,9 @@ static Ref_t create_detector(Detector& desc, xml_h e, SensitiveDetector sens) {
   DetElement det(detName, detID);
 
   string vis_name = dd4hep::getAttrOrDefault<std::string>(x_det, _Unicode(vis), "BackwardsBox");
+
+  // apply any detector type flags set in XML
+  dd4hep::xml::setDetectorTypeFlag(x_det, det);
 
   // Create an Assembly to hold all modules
   Assembly taggerAssembly("BackwardsTaggerAssembly");

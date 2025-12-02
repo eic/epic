@@ -104,6 +104,7 @@ static Ref_t create_detector(Detector& desc, xml_h e, SensitiveDetector sens) {
     xml_comp_t x_sectors = x_detector.child(_Unicode(sectors));
     sector1_volume.setVisAttributes(desc.visAttributes(x_sectors.visStr()));
   }
+  sector1_element.setTypeFlag(sdet.typeFlag());  // make sure type flags are propagated
 
   // Build a sector for layers 2 to 6
   DetElement sector26_element("sector26", detector_id);
@@ -112,6 +113,7 @@ static Ref_t create_detector(Detector& desc, xml_h e, SensitiveDetector sens) {
     xml_comp_t x_sectors = x_detector.child(_Unicode(sectors));
     sector26_volume.setVisAttributes(desc.visAttributes(x_sectors.visStr()));
   }
+  sector26_element.setTypeFlag(sdet.typeFlag());  // make sure type flags are propagated
 
   // keep tracking of the total thickness
   double layer_pos_z = inner_r;
@@ -312,6 +314,7 @@ static Ref_t create_detector(Detector& desc, xml_h e, SensitiveDetector sens) {
                                    x_stave.visStr());
         // No parent, since it will be added on cloning and placement
         DetElement stave_element(stave_name, detector_id);
+        stave_element.setTypeFlag(sdet.typeFlag());  // make sure type flags are propagated
 
         // Loop over the slices for this stave
         double slice_pos_z = -(stave_thick / 2.);
@@ -360,6 +363,7 @@ static Ref_t create_detector(Detector& desc, xml_h e, SensitiveDetector sens) {
               for (auto& sensitive_physvol : module_sensitives) {
                 DetElement sensitive_element(module_element, sensitive_physvol.volume().name(),
                                              i_module);
+                sensitive_element.setTypeFlag(sdet.typeFlag());  // make sure type flags are propagated
                 sensitive_element.setPlacement(sensitive_physvol);
 
                 auto& sensitive_element_params =

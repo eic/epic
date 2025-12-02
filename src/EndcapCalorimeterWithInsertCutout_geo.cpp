@@ -10,6 +10,7 @@
 #include "DD4hep/DetFactoryHelper.h"
 #include <XML/Helper.h>
 #include <XML/Layering.h>
+#include <XML/Utilities.h>
 
 using namespace dd4hep;
 
@@ -119,6 +120,9 @@ static Ref_t createDetector(Detector& desc, xml_h handle, SensitiveDetector sens
 
   DetElement det(detName, detID);
   Volume motherVol = desc.pickMotherVolume(det);
+
+  // apply any detector type flags set in XML
+  dd4hep::xml::setDetectorTypeFlag(detElem, det);
 
   // Placing endcap in world volume
   auto tr = Transform3D(Position(pos.x(), pos.y(), pos.z() + length / 2.));

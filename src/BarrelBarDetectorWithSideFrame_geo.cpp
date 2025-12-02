@@ -19,6 +19,7 @@
 #include "DDRec/DetectorData.h"
 #include "DDRec/Surface.h"
 #include "XML/Layering.h"
+#include "XML/Utilities.h"
 #include <array>
 
 using namespace std;
@@ -53,6 +54,9 @@ static Ref_t create_BarrelBarDetectorWithSideFrame(Detector& description, xml_h 
   Volume assembly(det_name, topVolumeShape, air);
 
   sens.setType("tracker");
+
+  // apply any detector type flags set in XML
+  dd4hep::xml::setDetectorTypeFlag(x_det, sdet);
 
   // loop over the modules
   for (xml_coll_t mi(x_det, _U(module)); mi; ++mi) {

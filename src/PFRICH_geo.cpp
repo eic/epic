@@ -17,6 +17,7 @@
 
 #include <XML/Helper.h>
 #include "XML/Layering.h"
+#include "XML/Utilities.h"
 #include "TVector3.h"
 
 #include "TGeoElement.h"
@@ -38,6 +39,9 @@ static Ref_t createDetector(Detector& description, xml_h e, SensitiveDetector se
   Material air    = description.air();
 
   DetElement sdet(det_name, det_id);
+
+  // apply any detector type flags set in XML
+  dd4hep::xml::setDetectorTypeFlag(x_det, sdet);
 
   std::vector<double> rmins = {100, 100};
   std::vector<double> rmaxs = {1300, 1300};

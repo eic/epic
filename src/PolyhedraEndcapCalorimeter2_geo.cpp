@@ -19,6 +19,7 @@
 //==========================================================================
 #include "DD4hep/DetFactoryHelper.h"
 #include "XML/Layering.h"
+#include "XML/Utilities.h"
 
 using namespace std;
 using namespace dd4hep;
@@ -40,6 +41,9 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
   double totalThickness = layering.totalThickness();
   Volume endcapVol("endcap", PolyhedraRegular(numsides, rmin, rmax, totalThickness), air);
   DetElement endcap("endcap", det_id);
+
+  // apply any detector type flags set in XML
+  dd4hep::xml::setDetectorTypeFlag(x_det, endcap);
 
   // std::cout << "totalThickness = " << totalThickness << "\n";
   // std::cout << "zmin = " << zmin << "\n";
@@ -110,6 +114,7 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
   // Reflect it.
   Assembly assembly(det_name);
   DetElement endcapAssyDE(det_name, det_id);
+  endcapAssyDE.setTypeFlag(endcap.typeFlag());  // make sure type flags are propagated
   Volume motherVol = description.pickMotherVolume(endcapAssyDE);
   pv =
       assembly.placeVolume(endcapVol, Transform3D(RotationZYX(0, M_PI, 0), Position(0, 0, -z_pos)));

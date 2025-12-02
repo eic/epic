@@ -19,6 +19,7 @@
 #include "DDRec/Surface.h"
 
 #include <XML/Helper.h>
+#include <XML/Utilities.h>
 
 using namespace dd4hep;
 using namespace dd4hep::rec;
@@ -33,6 +34,9 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
   OpticalSurfaceManager surfMgr = desc.surfaceManager();
   DetElement det(detName, detID);
   sens.setType("tracker");
+
+  // apply any detector type flags set in XML
+  dd4hep::xml::setDetectorTypeFlag(detElem, det);
 
   // attributes, from compact file =============================================
   // - vessel
