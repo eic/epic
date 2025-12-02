@@ -42,8 +42,8 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
   DetElement sdet(det_name, det_id);
   Volume motherVol = description.pickMotherVolume(sdet);
 
-  // apply detector type flags set in XML
-  xml::setDetectorTypeFlag(e, sdet);
+  // apply any detector type flags set in XML
+  dd4hep::xml::setDetectorTypeFlag(x_det, sdet);
 
   // Create envelope to hold HCAL barrel
 
@@ -373,6 +373,7 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
   double increment_offset = -10.01 * increment_angle;
 
   DetElement tile_det("eta0 phi0", det_id);
+  tile_det.setTypeFlag(sdet.typeFlag());  // make sure type flags are propagated
   sens.setType("calorimeter");
 
   for (int i_eta = 0; i_eta < 12; i_eta++) { // eta ring
