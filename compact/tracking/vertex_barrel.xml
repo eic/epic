@@ -27,6 +27,9 @@
     <constant name="VertexBarrelL0_nphi" value="12*2" />
     <constant name="VertexBarrelL1_nphi" value="16*2" />
     <constant name="VertexBarrelL2_nphi" value="40*2" />
+    <constant name="VertexBarrelL0_nz" value="100" />
+    <constant name="VertexBarrelL1_nz" value="100" />
+    <constant name="VertexBarrelL2_nz" value="100" />
 
     <constant name="VertexBarrelStaveL0_width" value="RSU_width/2" />
     <constant name="VertexBarrelStaveL1_width" value="RSU_width/2" />
@@ -172,9 +175,9 @@
           outer_r="VertexBarrelLayer0_rmax"
           z_length="VertexBarrelLayer_length" />
         <layer_material surface="inner" binning="binPhi,binZ" bins0="VertexBarrelL0_nphi"
-          bins1="100" />
+          bins1="VertexBarrelL0_nz" />
         <layer_material surface="outer" binning="binPhi,binZ" bins0="VertexBarrelL0_nphi"
-          bins1="100" />
+          bins1="VertexBarrelL0_nz" />
         <comment>
           phi0 : Starting phi of first module at the first/second halve.
           nphi : Number of modules in phi.
@@ -193,9 +196,9 @@
           outer_r="VertexBarrelLayer1_rmax"
           z_length="VertexBarrelLayer_length" />
         <layer_material surface="inner" binning="binPhi,binZ" bins0="VertexBarrelL1_nphi"
-          bins1="100" />
+          bins1="VertexBarrelL1_nz" />
         <layer_material surface="outer" binning="binPhi,binZ" bins0="VertexBarrelL1_nphi"
-          bins1="100" />
+          bins1="VertexBarrelL1_nz" />
         <rphi_layout nphi="VertexBarrelL1_nphi" phi0="VertexBarrelModL1_dphi"  dr="0.0 * mm" />
         <z_layout z0="VertexBarrelLayer_z0" nz="VertexBarrelLayer_nz" />
       </layer>
@@ -207,9 +210,9 @@
           outer_r="VertexBarrelLayer2_rmax"
           z_length="VertexBarrelLayer_length" />
         <layer_material surface="inner" binning="binPhi,binZ" bins0="VertexBarrelL2_nphi"
-          bins1="100" />
+          bins1="VertexBarrelL2_nz" />
         <layer_material surface="outer" binning="binPhi,binZ" bins0="VertexBarrelL2_nphi"
-          bins1="100" />
+          bins1="VertexBarrelL2_nz" />
         <rphi_layout nphi="VertexBarrelL2_nphi" phi0="VertexBarrelModL2_dphi" dr="0.0 * mm" />
         <z_layout z0="VertexBarrelLayer_z0" nz="VertexBarrelLayer_nz" />
       </layer>
