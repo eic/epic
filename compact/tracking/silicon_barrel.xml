@@ -49,7 +49,7 @@
     <constant name="SiBarrelBrace_width" value="10*mm" />
     <constant name="SiBarrelBrace_thickness" value="2*mm" />
     <constant name="SiBarrelBrace_StaveWidthFraction" value="0.9" />
-    <constant name="SiBarrelBrace_Position_X" value="-1*mm" />
+    <constant name="SiBarrelBrace_Position_X" value="0.0" />
 
     <constant name="SiBarrel1_Brace0_Position_Y" value="0.0" />
     <constant name="SiBarrel1_Brace1_Position_Y" value="13.20*cm" />
