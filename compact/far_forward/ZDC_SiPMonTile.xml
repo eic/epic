@@ -1,13 +1,12 @@
 <!-- SPDX-License-Identifier: LGPL-3.0-or-later -->
 <!-- Copyright (C) 2023 Sebouh J. Paul -->
 <lccdd>
-  <info name="ZDC_SiPMonTile.xml"
-        title="SiPM-on-Tile Zero-Degree Calorimeter Hcal, Fe/Sc"
-        author="@sebouh137"
-        url="https://github.com/sebouh137"
-        status="development"
-        version="1.0"
-          ><comment/></info>
+  <documentation>
+    Title: SiPM-on-Tile Zero-Degree Calorimeter Hcal, Fe/Sc
+    Author: @sebouh137
+    Status: development
+    Version: 1.0
+  </documentation>
 
   <define>
     <documentation>

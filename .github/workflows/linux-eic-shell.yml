@@ -18,7 +18,7 @@ jobs:
   xmllint-before-build:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v5
+    - uses: actions/checkout@v6
     - run: |
         sudo apt-get update
         sudo apt-get install -y libxml2-utils
@@ -30,7 +30,7 @@ jobs:
       configs_csv: ${{ steps.list-detector-configs.outputs.configs_csv }}
       configs_json: ${{ steps.list-detector-configs.outputs.configs_json }}
     steps:
-    - uses: actions/checkout@v5
+    - uses: actions/checkout@v6
     - id: list-detector-configs
       run: |
         CONFIGS_CSV=$(
@@ -66,7 +66,7 @@ jobs:
     env:
       PREFIX: ${{ github.workspace }}/install
     steps:
-    - uses: actions/checkout@v5
+    - uses: actions/checkout@v6
     - name: Prepare ccache timestamp
       id: ccache_cache_timestamp
       run: |
@@ -110,7 +110,6 @@ jobs:
         source install/bin/thisepic.sh
         sed -i 's%\(<fiber\|<lens\)%<comment>\1%g; s%\(/fiber>\|/lens>\)%\1</comment>%g' \
           ${DETECTOR_PATH}/compact/ecal/bic_default.xml \
-          ${DETECTOR_PATH}/compact/ecal/forward_scfi.xml \
           ${DETECTOR_PATH}/compact/far_forward/ZDC_Ecal_WSciFi.xml
     - uses: actions/upload-artifact@v5
       with:
@@ -151,7 +150,7 @@ jobs:
       - build
       - check-tracking-geometry
     steps:
-    - uses: actions/checkout@v5
+    - uses: actions/checkout@v6
       with:
         ref: 25.07.0
     - uses: actions/download-artifact@v6
@@ -210,7 +209,7 @@ jobs:
       matrix:
         detector_config: [epic_craterlake]
     steps:
-    - uses: actions/checkout@v5
+    - uses: actions/checkout@v6
     - uses: actions/download-artifact@v6
       with:
         name: build-gcc-nightly-full-eic-shell
@@ -237,7 +236,7 @@ jobs:
       matrix:
         detector_config: [epic_craterlake]
     steps:
-    - uses: actions/checkout@v5
+    - uses: actions/checkout@v6
     - uses: actions/download-artifact@v6
       with:
         name: build-gcc-nightly-full-eic-shell
@@ -305,7 +304,7 @@ jobs:
         detector_config: [epic_craterlake, epic_ip6_extended] # FIXME
       fail-fast: false
     steps:
-    - uses: actions/checkout@v5
+    - uses: actions/checkout@v6
     - uses: actions/download-artifact@v6
       with:
         name: build-gcc-nightly-full-eic-shell
@@ -327,7 +326,7 @@ jobs:
     needs: build
     if: github.ref == 'refs/heads/main'
     steps:
-    - uses: actions/checkout@v5
+    - uses: actions/checkout@v6
     - uses: actions/download-artifact@v6
       with:
         name: build-gcc-nightly-full-eic-shell
@@ -362,7 +361,7 @@ jobs:
             tolerance_mm: 0.1
       fail-fast: false
     steps:
-    - uses: actions/checkout@v5
+    - uses: actions/checkout@v6
     - uses: actions/download-artifact@v6
       with:
         name: build-gcc-nightly-full-eic-shell
@@ -387,7 +386,7 @@ jobs:
         detector_config: [epic_inner_detector, epic_craterlake]
       fail-fast: false
     steps:
-    - uses: actions/checkout@v5
+    - uses: actions/checkout@v6
     - uses: actions/download-artifact@v6
       with:
         name: build-gcc-nightly-fast-eic-shell
@@ -448,7 +447,7 @@ jobs:
         detector_config: [epic_craterlake]
       fail-fast: false
     steps:
-    - uses: actions/checkout@v5
+    - uses: actions/checkout@v6
     - uses: actions/download-artifact@v6
       with:
         name: build-gcc-nightly-fast-eic-shell
@@ -477,7 +476,7 @@ jobs:
         detector_config: [epic_craterlake]
       fail-fast: false
     steps:
-    - uses: actions/checkout@v5
+    - uses: actions/checkout@v6
     - uses: actions/download-artifact@v6
       with:
         name: ${{ matrix.detector_config }}.prim
@@ -507,7 +506,7 @@ jobs:
         detector_config: [epic_craterlake]
       fail-fast: false
     steps:
-    - uses: actions/checkout@v5
+    - uses: actions/checkout@v6
     - uses: actions/download-artifact@v6
       with:
         name: ${{ matrix.detector_config }}.prim
@@ -551,7 +550,7 @@ jobs:
         particle: [pi, e]
         detector_config: [epic_craterlake]
     steps:
-    - uses: actions/checkout@v5
+    - uses: actions/checkout@v6
     - uses: actions/download-artifact@v6
       with:
         name: build-gcc-nightly-full-eic-shell
@@ -609,7 +608,7 @@ jobs:
         - beam: 5x41
           minq2: 1000
     steps:
-    - uses: actions/checkout@v5
+    - uses: actions/checkout@v6
     - uses: actions/download-artifact@v6
       with:
         name: build-gcc-nightly-full-eic-shell
@@ -687,7 +686,7 @@ jobs:
     - merge-parameter-table
     - merge-dawn-view
     steps:
-    - uses: actions/checkout@v5
+    - uses: actions/checkout@v6
     - uses: actions/download-artifact@v6
       with:
         path: artifacts/

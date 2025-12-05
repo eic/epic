@@ -53,7 +53,7 @@ static Ref_t create_B0Tracker(Detector& description, xml_h e, SensitiveDetector 
                                                     "boundary_material");
   }
 
-  assembly.setVisAttributes(description.invisible());
+  assembly.setVisAttributes("InvisibleWithDaughters");
   sens.setType("tracker");
 
   for (xml_coll_t mi(x_det, _U(module)); mi; ++mi, ++m_id) {
