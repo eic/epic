@@ -47,6 +47,7 @@ static Ref_t create_detector(Detector& desc, xml_h e, SensitiveDetector sens) {
 
     // Create a DetElement for the module
     DetElement moddet(det, moduleName, moduleID);
+    moddet.setTypeFlag(det.typeFlag());  // make sure type flags are propagated
 
     // Create an Assembly for the module contents
     Assembly moduleAssembly(moduleName + "_assembly");
@@ -107,6 +108,7 @@ static void Make_Tagger(Detector& desc, xml_coll_t& mod, Assembly& env, DetEleme
 
     DetElement laydet(modElement, "layerName" + std::to_string(layerID), layerID);
     laydet.setPlacement(pv_layer);
+    laydet.setTypeFlag(modElement.typeFlag());  // make sure type flags are propagated
   }
 }
 

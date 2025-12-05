@@ -98,10 +98,12 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
       PlacedVolume pv = endcapVol.placeVolume(l_vol, Position(0, 0, layerZ));
       pv.addPhysVolID("layer", l_num);
       layer_elt.setPlacement(pv);
+      layer_elt.setTypeFlag(endcap.typeFlag());  // make sure type flags are propagated
       for (size_t ic = 0; ic < sensitives.size(); ++ic) {
         PlacedVolume sens_pv = sensitives[ic];
         DetElement comp_elt(layer_elt, sens_pv.volume().name(), l_num);
         comp_elt.setPlacement(sens_pv);
+        comp_elt.setTypeFlag(sdet.typeFlag());  // make sure type flags are propagated
       }
       layerZ += l_thick / 2;
       ++l_num;
