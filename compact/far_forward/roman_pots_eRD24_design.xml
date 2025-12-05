@@ -74,6 +74,7 @@
                 type="ip6_ForwardRomanPot"
                 insideTrackingVolume="true"
                 reflect="false" vis="FFTrackerVis">
+            <type_flags type="DetType_TRACKER + DetType_ENDCAP"/>
             <position x="ForwardRomanPotStation1_xpos" y="0" z="ForwardRomanPotStation1_zpos" />
             <rotation x="0" y="ForwardRomanPotStation1_rotation" z="0" />
             <module name="ModuleRP1" vis="FFTrackerShieldedModuleVis" nx="1" ny="1" width="ForwardRomanPot_ModuleWidth" height="ForwardRomanPot_ModuleHeight">
@@ -161,6 +162,7 @@
                 insideTrackingVolume="true"
                 reflect="false"
                 vis="FFTrackerVis">
+            <type_flags type="DetType_TRACKER + DetType_ENDCAP"/>
             <position x="ForwardRomanPotStation2_xpos" y="0" z="ForwardRomanPotStation2_zpos" />
             <rotation x="0" y="ForwardRomanPotStation1_rotation" z="0" />
             <module name="ModuleRP2" vis="FFTrackerShieldedModuleVis" nx="1" ny="1" width="ForwardRomanPot_ModuleWidth" height="ForwardRomanPot_ModuleHeight">

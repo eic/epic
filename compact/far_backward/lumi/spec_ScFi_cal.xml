@@ -5,6 +5,7 @@
 
         <detectors>
                 <detector id="LumiSpecCAL_ID" name="LumiSpecCAL" type="EcalLumiSpecWScFi" vis="LumiSpecCAL_LayerVis" readout="EcalLumiSpecHits" sizeXY="LumiSpecCAL_DXY" sizeZ="LumiSpecCAL_DZ" nmod_perlayer="LumiSpecCAL_XYLayers" nlayer="LumiSpecCAL_ZLayers" >
+                        <type_flags type="DetType_CALORIMETER + DetType_ENDCAP + DetType_ELECTROMAGNETIC"/>
                         <position x="0.0*cm"  y="0.0*cm"  z="0.0*cm"/>
                         <rotation x="0.0*rad" y="0.0*rad" z="0.0*rad"/>
 

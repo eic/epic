@@ -7,6 +7,7 @@
 #include "DDRec/DetectorData.h"
 #include "DDRec/Surface.h"
 #include <XML/Helper.h>
+#include <XML/Utilities.h>
 
 //////////////////////////////////
 // Central Barrel DIRC
@@ -35,6 +36,9 @@ static Ref_t createDetector(Detector& desc, xml_h e, SensitiveDetector sens) {
 
   // Detector type
   sens.setType("tracker");
+
+  // apply any detector type flags set in XML
+  dd4hep::xml::setDetectorTypeFlag(xml_det, det);
 
   // Entire DIRC assembly
   Assembly det_volume("DIRC");

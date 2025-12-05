@@ -467,6 +467,7 @@ static Ref_t create_MPGDCylinderBarrelTracker(Detector& description, xml_h e,
            x_barrel.inner_r(), x_barrel.outer_r(), barrel_length / 2);
 
   DetElement lay_elt(sdet, lay_nam, lay_id);
+  lay_elt.setTypeFlag(sdet.typeFlag()); // make sure type flags are propagated
 
   // the local coordinate systems of modules in dd4hep and acts differ
   // see http://acts.web.cern.ch/ACTS/latest/doc/group__DD4hepPlugins.html
@@ -502,6 +503,7 @@ static Ref_t create_MPGDCylinderBarrelTracker(Detector& description, xml_h e,
       y1                 = rc * std::sin(phic);
       string module_name = _toString(8 * iz + iphi, "module%02d");
       DetElement mod_elt(lay_elt, module_name, nModules);
+      mod_elt.setTypeFlag(sdet.typeFlag()); // make sure type flags are propagated
       printout(DEBUG, "MPGDCylinderBarrelTracker",
                "System %d Layer \"%s\",id=%d Module \"%s\",id=%d: x,y,r: %7.4f,%7.4f,%7.4f cm",
                det_id, lay_nam.c_str(), lay_id, module_name.c_str(), nModules, x1 / cm, y1 / cm,
@@ -526,6 +528,7 @@ static Ref_t create_MPGDCylinderBarrelTracker(Detector& description, xml_h e,
           mod_elt, std::string("de_") + sens_pv.volume().name() + _toString(8 * iz + iphi, "%02d"),
           nModules);
       comp_de.setPlacement(sens_pv);
+      comp_de.setTypeFlag(sdet.typeFlag()); // make sure type flags are propagated
       auto& comp_de_params =
           DD4hepDetectorHelper::ensureExtension<dd4hep::rec::VariantParameters>(comp_de);
       comp_de_params.set<string>("axis_definitions", "XYZ");

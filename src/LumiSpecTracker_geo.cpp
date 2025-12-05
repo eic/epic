@@ -4,6 +4,7 @@
 #include "DD4hep/DetFactoryHelper.h"
 #include "DD4hep/Printout.h"
 #include <XML/Helper.h>
+#include <XML/Utilities.h>
 
 using namespace std;
 using namespace dd4hep;
@@ -29,6 +30,9 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
 
   // Mother volume
   Volume motherVol = description.pickMotherVolume(det);
+
+  // apply any detector type flags set in XML
+  dd4hep::xml::setDetectorTypeFlag(x_det, det);
 
   // Detector assembly
   Assembly assembly(det_name);

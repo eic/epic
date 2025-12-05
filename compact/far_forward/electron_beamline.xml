@@ -51,6 +51,7 @@
       type="BeamPipeChain"
       wall_thickness="Beampipe_cen_pos_Thickness">
 
+      <type_flags type="DetType_ENDCAP + DetType_BEAMPIPE"/>
       <pipe id="0" name="Pipe_FWD_electron"
         xcenter="0" zcenter="(Beampipe_fwd_pos_EndZ+Beampipe_cen_pos_EndZ)/2."
         length="Beampipe_fwd_pos_EndZ-Beampipe_cen_pos_EndZ" theta="0"

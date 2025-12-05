@@ -251,6 +251,7 @@ static Ref_t create_CurvedBarrelTracker(Detector& description, xml_h e, Sensitiv
       m_nams[1]     = m_nam;
     }
     DetElement lay_elt(sdet, lay_nam, lay_id);
+    lay_elt.setTypeFlag(sdet.typeFlag()); // make sure type flags are propagated
 
     // the local coordinate systems of modules in dd4hep and acts differ
     // see http://acts.web.cern.ch/ACTS/latest/doc/group__DD4hepPlugins.html
@@ -282,6 +283,7 @@ static Ref_t create_CurvedBarrelTracker(Detector& description, xml_h e, Sensitiv
         for (int j = 0; j < nz; j++, module_z += z_incr) {
           string module_name = _toString(module, "module%d");
           DetElement mod_elt(lay_elt, module_name, module);
+          mod_elt.setTypeFlag(sdet.typeFlag()); // make sure type flags are propagated
           Transform3D tr(
               RotationZYX(dphi + phi_incr * kk + phi_incr * ii * 2, 0, 0),
               Position(0, 0, module_z)); // altering upper and lower module to fill every other row
@@ -292,6 +294,7 @@ static Ref_t create_CurvedBarrelTracker(Detector& description, xml_h e, Sensitiv
             PlacedVolume sens_pv = sensVols[kk][ic];
             DetElement comp_de(mod_elt, std::string("de_") + sens_pv.volume().name(), module);
             comp_de.setPlacement(sens_pv);
+            comp_de.setTypeFlag(sdet.typeFlag());
             auto& comp_de_params =
                 DD4hepDetectorHelper::ensureExtension<dd4hep::rec::VariantParameters>(comp_de);
             comp_de_params.set<string>("axis_definitions", "XYZ");
