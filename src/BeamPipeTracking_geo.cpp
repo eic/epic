@@ -42,7 +42,7 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
     int pipe_id            = getAttrOrDefault<int>(slice_coll, _Unicode(pipe_id), 0);
     string slice_name      = slice_coll.attr<string>(_Unicode(name));
     DetElement mother      = description.detector(grandmotherName).child(motherName);
-    mother.setTypeFlag(sdet.typeFlag);  // make sure type flags are propagated
+    mother.setTypeFlag(sdet.typeFlag); // make sure type flags are propagated
 
     // Get the mother volume
     Volume mother_vol = mother.volume();
@@ -123,7 +123,7 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
     DetElement slice_element(mother, slice_name, pipe_id);
 
     slice_element.setPlacement(disk_placement);
-    slice_element.setTypeFlag(sdet.typeFlag());  // make sure type flags are propagated
+    slice_element.setTypeFlag(sdet.typeFlag()); // make sure type flags are propagated
   }
 
   auto pv_assembly = description.worldVolume().placeVolume(assembly);

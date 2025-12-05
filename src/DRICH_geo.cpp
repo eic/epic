@@ -296,7 +296,7 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
   PlacedVolume gasvolPV = vesselVol.placeVolume(gasvolVol, Position(0, 0, 0));
   DetElement gasvolDE(det, "gasvol_de", 0);
   gasvolDE.setPlacement(gasvolPV);
-  gasvolDE.setTypeFlag(det.typeFlag());  // make sure type flags are propagated
+  gasvolDE.setTypeFlag(det.typeFlag()); // make sure type flags are propagated
 
   // place mother volume (vessel)
   Volume motherVol      = desc.pickMotherVolume(det);
@@ -339,7 +339,7 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
   auto aerogelPV = gasvolVol.placeVolume(aerogelVol, aerogelPlacement);
   DetElement aerogelDE(det, "aerogel_de", 0);
   aerogelDE.setPlacement(aerogelPV);
-  aerogelDE.setTypeFlag(det.typeFlag());  // make sure type flags are propagated
+  aerogelDE.setTypeFlag(det.typeFlag()); // make sure type flags are propagated
   // SkinSurface aerogelSkin(desc, aerogelDE, "mirror_optical_surface", aerogelSurf, aerogelVol);
   // aerogelSkin.isValid();
 
@@ -354,7 +354,7 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
     auto airgapPV = gasvolVol.placeVolume(airgapVol, airgapPlacement);
     DetElement airgapDE(det, "airgap_de", 0);
     airgapDE.setPlacement(airgapPV);
-    airgapDE.setTypeFlag(det.typeFlag());  // make sure type flags are propagated
+    airgapDE.setTypeFlag(det.typeFlag()); // make sure type flags are propagated
 
     auto filterPlacement =
         Translation3D(0., 0., airgapThickness) * // add an air gap
@@ -365,7 +365,7 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
     auto filterPV = gasvolVol.placeVolume(filterVol, filterPlacement);
     DetElement filterDE(det, "filter_de", 0);
     filterDE.setPlacement(filterPV);
-    filterDE.setTypeFlag(det.typeFlag());  // make sure type flags are propagated
+    filterDE.setTypeFlag(det.typeFlag()); // make sure type flags are propagated
     // SkinSurface filterSkin(desc, filterDE, "mirror_optical_surface", filterSurf, filterVol);
     // filterSkin.isValid();
 
@@ -656,7 +656,7 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
                   secName + "_pdu" + std::to_string(ipdu) + "_sipm" + std::to_string(isipm);
               DetElement pssDE(det, "sensor_de_" + sensorIDname, sensorID);
               pssDE.setPlacement(pssPV);
-              pssDE.setTypeFlag(pssDE.typeFlag());  // make sure type flags are propagated
+              pssDE.setTypeFlag(pssDE.typeFlag()); // make sure type flags are propagated
 
               // sensor surface properties
               if (!debugOptics || debugOpticsMode == 3) {

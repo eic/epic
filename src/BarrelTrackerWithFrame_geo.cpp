@@ -265,10 +265,10 @@ static Ref_t create_BarrelTrackerWithFrame(Detector& description, xml_h e, Sensi
     double nz       = z_layout.nz();       // Number of modules to place in z.
     double z_dr     = z_layout.dr();       // Radial displacement parameter, of every other module.
 
-    Volume module_env = volumes[m_nam];
+    Volume module_env    = volumes[m_nam];
     Placements& sensVols = sensitives[m_nam];
     DetElement lay_elt(sdet, lay_nam, lay_id);
-    lay_elt.setTypeFlag(sdet.typeFlag());  // make sure type flags are propagated
+    lay_elt.setTypeFlag(sdet.typeFlag()); // make sure type flags are propagated
 
     // the local coordinate systems of modules in dd4hep and acts differ
     // see http://acts.web.cern.ch/ACTS/latest/doc/group__DD4hepPlugins.html
@@ -300,7 +300,7 @@ static Ref_t create_BarrelTrackerWithFrame(Detector& description, xml_h e, Sensi
       for (int j = 0; j < nz; j++) {
         string module_name = _toString(module, "module%d");
         DetElement mod_elt(lay_elt, module_name, module);
-        mod_elt.setTypeFlag(sdet.typeFlag());  // make sure type flags are propagated
+        mod_elt.setTypeFlag(sdet.typeFlag()); // make sure type flags are propagated
 
         Transform3D tr(RotationZYX(0, ((M_PI / 2) - phic - phi_tilt), -M_PI / 2),
                        Position(x, y, module_z));
@@ -312,7 +312,7 @@ static Ref_t create_BarrelTrackerWithFrame(Detector& description, xml_h e, Sensi
           PlacedVolume sens_pv = sensVols[ic];
           DetElement comp_de(mod_elt, std::string("de_") + sens_pv.volume().name(), module);
           comp_de.setPlacement(sens_pv);
-          comp_de.setTypeFlag(sdet.typeFlag());  // make sure type flags are propagated
+          comp_de.setTypeFlag(sdet.typeFlag()); // make sure type flags are propagated
 
           auto& comp_de_params =
               DD4hepDetectorHelper::ensureExtension<dd4hep::rec::VariantParameters>(comp_de);

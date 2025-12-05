@@ -196,7 +196,7 @@ static Ref_t create_OffMomentumTracker(Detector& description, xml_h e, Sensitive
     //}
     DetElement layer_element(sdet, layer_name, l_id);
     layer_element.setPlacement(layer_pv);
-    layer_element.setTypeFlag(sdet.typeFlag());  // make sure type flags are propagated
+    layer_element.setTypeFlag(sdet.typeFlag()); // make sure type flags are propagated
 
     string m_nam         = x_layer.moduleStr();
     Volume m_vol         = modules[m_nam];
@@ -206,12 +206,12 @@ static Ref_t create_OffMomentumTracker(Detector& description, xml_h e, Sensitive
     pv = layer_vol.placeVolume(m_vol, Position(0, 0, 0));
     pv.addPhysVolID("layer", l_id).addPhysVolID("module", mod_num);
     module.setPlacement(pv);
-    module.setTypeFlag(sdet.typeFlag());  // make sure type flags are propagated
+    module.setTypeFlag(sdet.typeFlag()); // make sure type flags are propagated
     for (size_t ic = 0; ic < sensVols.size(); ++ic) {
       PlacedVolume sens_pv = sensVols[ic];
       DetElement comp_elt(module, sens_pv.volume().name(), mod_num);
       comp_elt.setPlacement(sens_pv);
-      comp_elt.setTypeFlag(sdet.typeFlag());  // make sure type flags are propagated
+      comp_elt.setTypeFlag(sdet.typeFlag()); // make sure type flags are propagated
     }
 
     // for (xml_coll_t ri(x_layer, _U(ring)); ri; ++ri) {

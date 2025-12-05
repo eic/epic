@@ -91,7 +91,7 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
     string ma_name  = x_ma.nameStr();
     Assembly ma_vol(ma_name);
     DetElement ma_de(ma_name, x_det.id());
-    ma_de.setTypeFlag(sdet.typeFlag());  // make sure type flags are propagated
+    ma_de.setTypeFlag(sdet.typeFlag()); // make sure type flags are propagated
     module_assemblies[ma_name]         = ma_vol;
     module_assembly_delements[ma_name] = ma_de;
 
@@ -125,7 +125,7 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
           }
 
           DetElement mod_de(ma_de, ma_name + std::string("_mod") + std::to_string(i_mod), i_mod);
-          mod_de.setTypeFlag(sdet.typeFlag());  // make sure type flags are propagated
+          mod_de.setTypeFlag(sdet.typeFlag()); // make sure type flags are propagated
           pv = ma_vol.placeVolume(arr_vol, arr_pos);
           pv.addPhysVolID("module", i_mod);
           mod_de.setPlacement(pv);
@@ -133,7 +133,7 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
             PlacedVolume sens_pv = sensVols[ic];
             DetElement comp_de(mod_de, std::string("de_") + sens_pv.volume().name(), ic + 1);
             comp_de.setPlacement(sens_pv);
-            comp_de.setTypeFlag(sdet.typeFlag());  // make sure type flags are propagated
+            comp_de.setTypeFlag(sdet.typeFlag()); // make sure type flags are propagated
           }
         }
       }

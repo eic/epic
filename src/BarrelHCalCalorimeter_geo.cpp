@@ -373,7 +373,7 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
   double increment_offset = -10.01 * increment_angle;
 
   DetElement tile_det("eta0 phi0", det_id);
-  tile_det.setTypeFlag(sdet.typeFlag());  // make sure type flags are propagated
+  tile_det.setTypeFlag(sdet.typeFlag()); // make sure type flags are propagated
   sens.setType("calorimeter");
 
   for (int i_eta = 0; i_eta < 12; i_eta++) { // eta ring

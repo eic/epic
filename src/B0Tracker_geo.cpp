@@ -182,7 +182,7 @@ static Ref_t create_B0Tracker(Detector& description, xml_h e, SensitiveDetector 
     layer_name += "_P";
     DetElement layer_element(sdet, layer_name, l_id);
     layer_element.setPlacement(layer_pv);
-    layer_element.setTypeFlag(sdet.typeFlag());  // make sure type flags are propagated
+    layer_element.setTypeFlag(sdet.typeFlag()); // make sure type flags are propagated
 
     auto& layerParams =
         DD4hepDetectorHelper::ensureExtension<dd4hep::rec::VariantParameters>(layer_element);
@@ -208,7 +208,7 @@ static Ref_t create_B0Tracker(Detector& description, xml_h e, SensitiveDetector 
 
         // if (!reflect) {
         DetElement module(layer_element, m_base + "_pos", det_id);
-        module.setTypeFlag(sdet.typeFlag());  // make sure type flags are propagated
+        module.setTypeFlag(sdet.typeFlag()); // make sure type flags are propagated
         pv = layer_vol.placeVolume(m_vol, Transform3D(RotationZYX(0, -M_PI / 2 - phi, -M_PI / 2),
                                                       Position(x, y, zstart + dz)));
         pv.addPhysVolID("layer", l_id).addPhysVolID("module", mod_num);
@@ -217,7 +217,7 @@ static Ref_t create_B0Tracker(Detector& description, xml_h e, SensitiveDetector 
           PlacedVolume sens_pv = sensVols[ic];
           DetElement comp_elt(module, sens_pv.volume().name(), mod_num);
           comp_elt.setPlacement(sens_pv);
-          comp_elt.setTypeFlag(sdet.typeFlag());  // make sure type flags are propagated
+          comp_elt.setTypeFlag(sdet.typeFlag()); // make sure type flags are propagated
           auto& comp_elt_params =
               DD4hepDetectorHelper::ensureExtension<dd4hep::rec::VariantParameters>(comp_elt);
           comp_elt_params.set<std::string>("axis_definitions", "XZY");

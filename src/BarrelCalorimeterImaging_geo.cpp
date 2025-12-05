@@ -78,7 +78,7 @@ static Ref_t create_detector(Detector& desc, xml_h e, SensitiveDetector sens) {
     envelope1_params.set<double>("envelope_z_max",
                                  getAttrOrDefault(x_envelope, _Unicode(envelope_z_max), 0.));
   }
-  envelope1_element.setTypeFlag(sdet.typeFlag());  // make sure type flags are propagated
+  envelope1_element.setTypeFlag(sdet.typeFlag()); // make sure type flags are propagated
   // Add the volume boundary material if configured
   for (xml_coll_t boundary_material(x_detector, _Unicode(boundary_material)); boundary_material;
        ++boundary_material) {
@@ -97,7 +97,7 @@ static Ref_t create_detector(Detector& desc, xml_h e, SensitiveDetector sens) {
   // Build the envelope assembly for layers 2 to 6 (no Acts support)
   DetElement envelope26_element("envelope26", detector_id);
   Assembly envelope26_volume("envelope26");
-  envelope26_element.setTypeFlag(sdet.typeFlag());  // make sure type flags are propagated
+  envelope26_element.setTypeFlag(sdet.typeFlag()); // make sure type flags are propagated
 
   // Build a sector for layer 1
   DetElement sector1_element("sector1", detector_id);
@@ -106,7 +106,7 @@ static Ref_t create_detector(Detector& desc, xml_h e, SensitiveDetector sens) {
     xml_comp_t x_sectors = x_detector.child(_Unicode(sectors));
     sector1_volume.setVisAttributes(desc.visAttributes(x_sectors.visStr()));
   }
-  sector1_element.setTypeFlag(sdet.typeFlag());  // make sure type flags are propagated
+  sector1_element.setTypeFlag(sdet.typeFlag()); // make sure type flags are propagated
 
   // Build a sector for layers 2 to 6
   DetElement sector26_element("sector26", detector_id);
@@ -115,7 +115,7 @@ static Ref_t create_detector(Detector& desc, xml_h e, SensitiveDetector sens) {
     xml_comp_t x_sectors = x_detector.child(_Unicode(sectors));
     sector26_volume.setVisAttributes(desc.visAttributes(x_sectors.visStr()));
   }
-  sector26_element.setTypeFlag(sdet.typeFlag());  // make sure type flags are propagated
+  sector26_element.setTypeFlag(sdet.typeFlag()); // make sure type flags are propagated
 
   // keep tracking of the total thickness
   double layer_pos_z = inner_r;
@@ -274,7 +274,7 @@ static Ref_t create_detector(Detector& desc, xml_h e, SensitiveDetector sens) {
       Trapezoid layer_shape(layer_trd_x1, layer_trd_x2, layer_trd_y1, layer_trd_y2, layer_trd_z);
       Volume layer_volume(layer_name, layer_shape, layer_mat);
       DetElement layer_element(layer_name, detector_id);
-      layer_element.setTypeFlag(sdet.typeFlag());  // make sure type flags are propagated
+      layer_element.setTypeFlag(sdet.typeFlag()); // make sure type flags are propagated
       if (layer_num == 1) {
         sector1_element.add(layer_element);
       } else {
@@ -317,7 +317,7 @@ static Ref_t create_detector(Detector& desc, xml_h e, SensitiveDetector sens) {
                                    x_stave.visStr());
         // No parent, since it will be added on cloning and placement
         DetElement stave_element(stave_name, detector_id);
-        stave_element.setTypeFlag(sdet.typeFlag());  // make sure type flags are propagated
+        stave_element.setTypeFlag(sdet.typeFlag()); // make sure type flags are propagated
 
         // Loop over the slices for this stave
         double slice_pos_z = -(stave_thick / 2.);
@@ -353,7 +353,7 @@ static Ref_t create_detector(Detector& desc, xml_h e, SensitiveDetector sens) {
               // Create module
               std::string module_name = _toString(i_module, "module%d");
               DetElement module_element(stave_element, module_name, i_module);
-              module_element.setTypeFlag(sdet.typeFlag());  // make sure type flags are propagated
+              module_element.setTypeFlag(sdet.typeFlag()); // make sure type flags are propagated
 
               // Place module
               auto x = x0 + i_x * dx;
@@ -367,7 +367,8 @@ static Ref_t create_detector(Detector& desc, xml_h e, SensitiveDetector sens) {
               for (auto& sensitive_physvol : module_sensitives) {
                 DetElement sensitive_element(module_element, sensitive_physvol.volume().name(),
                                              i_module);
-                sensitive_element.setTypeFlag(sdet.typeFlag());  // make sure type flags are propagated
+                sensitive_element.setTypeFlag(
+                    sdet.typeFlag()); // make sure type flags are propagated
                 sensitive_element.setPlacement(sensitive_physvol);
 
                 auto& sensitive_element_params =
@@ -396,7 +397,7 @@ static Ref_t create_detector(Detector& desc, xml_h e, SensitiveDetector sens) {
           slice_volume.setAttributes(desc, x_slice.regionStr(), x_slice.limitsStr(),
                                      x_slice.visStr());
           DetElement slice_element(stave_element, slice_name, detector_id);
-          slice_element.setTypeFlag(sdet.typeFlag());  // make sure type flags are propagated
+          slice_element.setTypeFlag(sdet.typeFlag()); // make sure type flags are propagated
 
           // Set sensitive
           if (x_slice.isSensitive()) {
@@ -427,7 +428,7 @@ static Ref_t create_detector(Detector& desc, xml_h e, SensitiveDetector sens) {
               (stave_j == 0) ? stave_element
                              : stave_element.clone(Form("stave%d", stave_num + stave_j));
           stave_j_element.setPlacement(stave_physvol);
-          stave_j_element.setTypeFlag(sdet.typeFlag());  // make sure type flags are propagated
+          stave_j_element.setTypeFlag(sdet.typeFlag()); // make sure type flags are propagated
           layer_element.add(stave_j_element);
 
           // Increment X position of stave
@@ -503,7 +504,7 @@ static Ref_t create_detector(Detector& desc, xml_h e, SensitiveDetector sens) {
     DetElement sd1 =
         (sector_num == 0) ? sector1_element : sector1_element.clone(Form("sector1_%d", sector_num));
     sd1.setPlacement(sector1_physvol);
-    sd1.setTypeFlag(sdet.typeFlag());  // make sure type flags are propagated
+    sd1.setTypeFlag(sdet.typeFlag()); // make sure type flags are propagated
     envelope1_element.add(sd1);
 
     // Place layers 2 through 6
@@ -512,7 +513,7 @@ static Ref_t create_detector(Detector& desc, xml_h e, SensitiveDetector sens) {
     DetElement sd26 = (sector_num == 0) ? sector26_element
                                         : sector26_element.clone(Form("sector26_%d", sector_num));
     sd26.setPlacement(sector26_physvol);
-    sd26.setTypeFlag(sdet.typeFlag());  // make sure type flags are propagated
+    sd26.setTypeFlag(sdet.typeFlag()); // make sure type flags are propagated
     envelope26_element.add(sd26);
   }
 

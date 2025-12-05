@@ -275,7 +275,7 @@ static Ref_t create_BarrelPlanarMPGDTracker_geo(Detector& description, xml_h e,
     pv = assembly.placeVolume(layer_assembly);
     pv.addPhysVolID("layer", lay_id);
     lay_elt.setPlacement(pv);
-    lay_elt.setTypeFlag(sdet.typeFlag());  // make sure type flags are propagated
+    lay_elt.setTypeFlag(sdet.typeFlag()); // make sure type flags are propagated
 
     int module = 1;
     // loop over the modules in phi
@@ -288,7 +288,7 @@ static Ref_t create_BarrelPlanarMPGDTracker_geo(Detector& description, xml_h e,
       for (int j = 0; j < nz; j++) {
         string module_name = _toString(module, "module%d");
         DetElement mod_elt(lay_elt, module_name, module);
-        mod_elt.setTypeFlag(sdet.typeFlag());  // make sure type flags are propagated
+        mod_elt.setTypeFlag(sdet.typeFlag()); // make sure type flags are propagated
         double mod_z       = 0.5 * dimensions.length();
         double z_placement = mod_z - 0.5 * pcb_feb_ext -
                              j * (nz * mod_z - pcb_feb_ext); // z location for module placement
@@ -311,7 +311,7 @@ static Ref_t create_BarrelPlanarMPGDTracker_geo(Detector& description, xml_h e,
           PlacedVolume sens_pv = sensVols[ic];
           DetElement comp_de(mod_elt, std::string("de_") + sens_pv.volume().name(), module);
           comp_de.setPlacement(sens_pv);
-          comp_de.setTypeFlag(sdet.typeFlag());  // make sure type flags are propagated
+          comp_de.setTypeFlag(sdet.typeFlag()); // make sure type flags are propagated
         }
         // increas module counter
         module++;

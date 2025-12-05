@@ -251,7 +251,7 @@ static Ref_t create_CurvedBarrelTracker(Detector& description, xml_h e, Sensitiv
       m_nams[1]     = m_nam;
     }
     DetElement lay_elt(sdet, lay_nam, lay_id);
-    lay_elt.setTypeFlag(sdet.typeFlag());  // make sure type flags are propagated
+    lay_elt.setTypeFlag(sdet.typeFlag()); // make sure type flags are propagated
 
     // the local coordinate systems of modules in dd4hep and acts differ
     // see http://acts.web.cern.ch/ACTS/latest/doc/group__DD4hepPlugins.html
@@ -283,7 +283,7 @@ static Ref_t create_CurvedBarrelTracker(Detector& description, xml_h e, Sensitiv
         for (int j = 0; j < nz; j++, module_z += z_incr) {
           string module_name = _toString(module, "module%d");
           DetElement mod_elt(lay_elt, module_name, module);
-          mod_elt.setTypeFlag(sdet.typeFlag());  // make sure type flags are propagated
+          mod_elt.setTypeFlag(sdet.typeFlag()); // make sure type flags are propagated
           Transform3D tr(
               RotationZYX(dphi + phi_incr * kk + phi_incr * ii * 2, 0, 0),
               Position(0, 0, module_z)); // altering upper and lower module to fill every other row

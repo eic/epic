@@ -89,7 +89,7 @@ static Ref_t create_detector(Detector& desc, xml_h e, SensitiveDetector sens) {
   // build a single sector
   DetElement sector_det("sector0", det_id);
   Assembly mod_vol("sector");
-  sector_det.setTypeFlag(sdet.typeFlag());  // make sure type flags are propagated
+  sector_det.setTypeFlag(sdet.typeFlag()); // make sure type flags are propagated
 
   // keep tracking of the total thickness
   double l_pos_z = inner_r;

@@ -205,7 +205,7 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
     lay_elt.setAttributes(description, lay_vol, x_layer.regionStr(), x_layer.limitsStr(),
                           x_layer.visStr());
     lay_elt.setPlacement(pv);
-    lay_elt.setTypeFlag(sdet.typeFlag());  // make sure type flags are propagated
+    lay_elt.setTypeFlag(sdet.typeFlag()); // make sure type flags are propagated
 
     // the local coordinate systems of modules in dd4hep and acts differ
     // see http://acts.web.cern.ch/ACTS/latest/doc/group__DD4hepPlugins.html
@@ -281,13 +281,13 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
           string comp_nam = Form("%s_%s_ix%d_iy%d", lay_nam.c_str(), m_nam.c_str(), ix, iy);
           DetElement comp_elt(lay_elt, comp_nam, det_id);
           comp_elt.setPlacement(pv);
-          comp_elt.setTypeFlag(sdet.typeFlag());  // make sure type flags are propagted
+          comp_elt.setTypeFlag(sdet.typeFlag()); // make sure type flags are propagted
 
           for (size_t ic = 0; ic < sensVols.size(); ++ic) {
             PlacedVolume sens_pv = sensVols[ic];
             DetElement sensor_elt(comp_elt, sens_pv.volume().name(), module);
             sensor_elt.setPlacement(sens_pv);
-            sensor_elt.setTypeFlag(sdet.typeFlag());  // make sure type flags are propagated
+            sensor_elt.setTypeFlag(sdet.typeFlag()); // make sure type flags are propagated
             auto& sensor_elt_params =
                 DD4hepDetectorHelper::ensureExtension<dd4hep::rec::VariantParameters>(sensor_elt);
             sensor_elt_params.set<string>("axis_definitions", "XYZ");

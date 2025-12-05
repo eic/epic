@@ -59,7 +59,7 @@ static Ref_t createDetector(Detector& description, xml_h e, SensitiveDetector se
   string name           = x_det.nameStr();
   string par_nam        = x_par.nameStr();
   DetElement det_parent = description.detector(par_nam);
-  det_parent.setTypeFlag(sdet.typeFlag());  // make sure type flags are propagated
+  det_parent.setTypeFlag(sdet.typeFlag()); // make sure type flags are propagated
 
   Volume mother = det_parent.volume();
   PlacedVolume pv;
@@ -299,7 +299,7 @@ static Ref_t createDetector(Detector& description, xml_h e, SensitiveDetector se
   PlacedVolume vesselPV = pfRICH_volume.placeVolume(vesselVol, Position(0, 0, 0));
   DetElement vesselDE(sdet, "vessel_de", 0);
   vesselDE.setPlacement(vesselPV);
-  vesselDE.setTypeFlag(sdet.typeFlag());  // make sure type flags are propagated
+  vesselDE.setTypeFlag(sdet.typeFlag()); // make sure type flags are propagated
 
   // BUILD RADIATOR //////////////////////////////////////
 
@@ -364,7 +364,7 @@ static Ref_t createDetector(Detector& description, xml_h e, SensitiveDetector se
 
   DetElement wndDE(sdet, "wnd_de", 0);
   wndDE.setPlacement(wndPV);
-  wndDE.setTypeFlag(sdet.typeFlag());  // make sure type flags are propagated
+  wndDE.setTypeFlag(sdet.typeFlag()); // make sure type flags are propagated
 
   //  double pitch = xysize + _HRPPD_INSTALLATION_GAP_;
   double xyactive = _HRPPD_ACTIVE_AREA_SIZE_;
@@ -386,7 +386,7 @@ static Ref_t createDetector(Detector& description, xml_h e, SensitiveDetector se
       hrppdVol_air.placeVolume(ceramicVol, Position(0.0, 0.0, accu + certhick / 2));
   DetElement ceramicDE(sdet, "ceramic_de", 0);
   ceramicDE.setPlacement(ceramicPV);
-  ceramicDE.setTypeFlag(sdet.typeFlag());  // make sure type flags are propagated
+  ceramicDE.setTypeFlag(sdet.typeFlag()); // make sure type flags are propagated
 
   // Plating body
 
@@ -398,7 +398,7 @@ static Ref_t createDetector(Detector& description, xml_h e, SensitiveDetector se
       hrppdVol_air.placeVolume(platingVol, Position(0.0, 0.0, accu + certhick / 2));
   DetElement platingDE(sdet, "plating_de", 0);
   platingDE.setPlacement(platingPV);
-  platingDE.setTypeFlag(sdet.typeFlag());  // make sure type flags are propagated
+  platingDE.setTypeFlag(sdet.typeFlag()); // make sure type flags are propagated
 
   // MCP body
 
@@ -412,7 +412,7 @@ static Ref_t createDetector(Detector& description, xml_h e, SensitiveDetector se
                            _EFFECTIVE_MCP_THICKNESS_ / 2));
   DetElement mcpDE(sdet, "mcp_de", 0);
   mcpDE.setPlacement(mcpPV);
-  mcpDE.setTypeFlag(sdet.typeFlag());  // make sure type flags are propagated
+  mcpDE.setTypeFlag(sdet.typeFlag()); // make sure type flags are propagated
 
   double pdthick = 0.001;
 
@@ -425,7 +425,7 @@ static Ref_t createDetector(Detector& description, xml_h e, SensitiveDetector se
 
   DetElement pdboxDE(sdet, "pdbox_de", 0);
   pdboxDE.setPlacement(pdboxPV);
-  pdboxDE.setTypeFlag(sdet.typeFlag());  // make sure type flags are propagated
+  pdboxDE.setTypeFlag(sdet.typeFlag()); // make sure type flags are propagated
 
   Box qdbox_solid(xyactive / 2, xyactive / 2, pdthick / 2);
   Volume qdboxVol(detName + "_qd", qdbox_solid, HRPPD_MPDMat);
@@ -435,7 +435,7 @@ static Ref_t createDetector(Detector& description, xml_h e, SensitiveDetector se
 
   DetElement qdboxDE(sdet, "qdbox_de", 0);
   qdboxDE.setPlacement(qdboxPV);
-  qdboxDE.setTypeFlag(sdet.typeFlag());  // make sure type flags are propagated
+  qdboxDE.setTypeFlag(sdet.typeFlag()); // make sure type flags are propagated
 
   accu += certhick + 1 * mm;
 
@@ -450,7 +450,7 @@ static Ref_t createDetector(Detector& description, xml_h e, SensitiveDetector se
 
   DetElement pcbDE(sdet, "pcb_de", 0);
   pcbDE.setPlacement(pcbPV);
-  pcbDE.setTypeFlag(sdet.typeFlag());  // make sure type flags are propagated
+  pcbDE.setTypeFlag(sdet.typeFlag()); // make sure type flags are propagated
 
   accu += _READOUT_PCB_THICKNESS_ + 0.001;
 
@@ -475,7 +475,7 @@ static Ref_t createDetector(Detector& description, xml_h e, SensitiveDetector se
 
       DetElement asicDE(sdet, "asic_de_" + std::to_string(imod), 0);
       asicDE.setPlacement(asicPV);
-      asicDE.setTypeFlag(sdet.typeFlag());  // make sure type flags are propagated
+      asicDE.setTypeFlag(sdet.typeFlag()); // make sure type flags are propagated
 
       imod++;
 
@@ -532,7 +532,7 @@ static Ref_t createDetector(Detector& description, xml_h e, SensitiveDetector se
     auto imodEnc = encodeSensorID(sensorPV.volIDs());
     DetElement sensorDE(sdet, "sensor_de_" + std::to_string(imod), imodEnc);
     sensorDE.setPlacement(sensorPV);
-    sensorDE.setTypeFlag(sdet.typeFlag());  // make sure type flags are propagated
+    sensorDE.setTypeFlag(sdet.typeFlag()); // make sure type flags are propagated
     if (!debug_optics) {
       SkinSurface sensorSkin(description, sensorDE,
                              "sensor_optical_surface_" + std::to_string(imod), sensorSurf,
@@ -607,14 +607,14 @@ static Ref_t createDetector(Detector& description, xml_h e, SensitiveDetector se
         auto aerogelTilePV        = pfRICH_volume.placeVolume(agtubeVol, aerogelTilePlacement);
         DetElement aerogelDE(sdet, "aerogel_de_" + std::to_string(kkcounter), 0);
         aerogelDE.setPlacement(aerogelTilePV);
-        aerogelDE.setTypeFlag(sdet.typeFlag());  // make sure type flags are propagated
+        aerogelDE.setTypeFlag(sdet.typeFlag()); // make sure type flags are propagated
 
         Volume sptubeVol(detName + "_sptube", sptube, mirrorMat);
         auto sptubePlacement = Transform3D(r_aerogel_Z, Position(0.0, 0.0, -m_gzOffset));
         auto sptubePV        = pfRICH_volume.placeVolume(sptubeVol, sptubePlacement);
         DetElement sptubeDE(sdet, "sptube_de_" + std::to_string(kkcounter), 0);
         sptubeDE.setPlacement(sptubePV);
-        sptubeDE.setTypeFlag(sdet.typeFlag());  // make sure type flags are propagated
+        sptubeDE.setTypeFlag(sdet.typeFlag()); // make sure type flags are propagated
 
       } else {
 
@@ -630,7 +630,7 @@ static Ref_t createDetector(Detector& description, xml_h e, SensitiveDetector se
 
         DetElement aerogelDE(sdet, "agsubTile_de_" + std::to_string(counter), 0);
         aerogelDE.setPlacement(agsubTilePV);
-        aerogelDE.setTypeFlag(sdet.typeFlag());  // make sure type flags are propagated
+        aerogelDE.setTypeFlag(sdet.typeFlag()); // make sure type flags are propagated
 
         sp_name.Form("%s-%d-%02d", "sp_inner", ir, ia);
         Tube sptube_inner(aerogel_r0, aerogel_r1, agthick / 2, wd0 + ia * apitch,
@@ -644,7 +644,7 @@ static Ref_t createDetector(Detector& description, xml_h e, SensitiveDetector se
 
         DetElement sptubeTileDE(sdet, "sptubeTile_de_" + std::to_string(counter), 0);
         sptubeTileDE.setPlacement(spsubTilePV);
-        sptubeTileDE.setTypeFlag(sdet.typeFlag());  // make sure type flags are propagated
+        sptubeTileDE.setTypeFlag(sdet.typeFlag()); // make sure type flags are propagated
 
         sp_name.Form("A-Spacer--%d-%02d", ir, ia);
 
@@ -682,7 +682,7 @@ static Ref_t createDetector(Detector& description, xml_h e, SensitiveDetector se
 
       DetElement sptubeDE(sdet, "sptube_de_" + std::to_string(tube_counter), 0);
       sptubeDE.setPlacement(sptubePV);
-      sptubeDE.setTypeFlag(sdet.typeFlag());  // make sure type flags are propagated
+      sptubeDE.setTypeFlag(sdet.typeFlag()); // make sure type flags are propagated
 
     }
 
@@ -695,7 +695,7 @@ static Ref_t createDetector(Detector& description, xml_h e, SensitiveDetector se
 
       DetElement sptubeDE(sdet, "sptube_de_" + std::to_string(tube_counter), 0);
       sptubeDE.setPlacement(sptubePV);
-      sptubeDE.setTypeFlag(sdet.typeFlag());  // make sure type flags are propagated
+      sptubeDE.setTypeFlag(sdet.typeFlag()); // make sure type flags are propagated
 
     } //if
 
@@ -729,7 +729,7 @@ static Ref_t createDetector(Detector& description, xml_h e, SensitiveDetector se
 
       DetElement mirror_outerDE(sdet, "_outer_mirror_de", 0);
       mirror_outerDE.setPlacement(mirror_outerPV);
-      mirror_outerDE.setTypeFlag(sdet.typeFlag());  // make sure type flags are propagated
+      mirror_outerDE.setTypeFlag(sdet.typeFlag()); // make sure type flags are propagated
 
     } else {
 
@@ -744,7 +744,7 @@ static Ref_t createDetector(Detector& description, xml_h e, SensitiveDetector se
 
       DetElement mirror_innerDE(sdet, "_inner_mirror_de", 0);
       mirror_innerDE.setPlacement(mirror_innerPV);
-      mirror_innerDE.setTypeFlag(sdet.typeFlag());  // make sure type flags are propagated
+      mirror_innerDE.setTypeFlag(sdet.typeFlag()); // make sure type flags are propagated
     }
 
   } //for im
@@ -763,7 +763,7 @@ static Ref_t createDetector(Detector& description, xml_h e, SensitiveDetector se
 
   DetElement acDE(sdet, "ac_de", 0);
   acDE.setPlacement(ac_PV);
-  acDE.setTypeFlag(sdet.typeFlag());  // make sure type flags are propagated
+  acDE.setTypeFlag(sdet.typeFlag()); // make sure type flags are propagated
 
   return sdet;
 }

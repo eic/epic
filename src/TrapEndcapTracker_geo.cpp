@@ -240,7 +240,7 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
     }
     DetElement layer_element(sdet, layer_name, l_id);
     layer_element.setPlacement(layer_pv);
-    layer_element.setTypeFlag(sdet.typeFlag());  // make sure type flags are propagated
+    layer_element.setTypeFlag(sdet.typeFlag()); // make sure type flags are propagated
 
     auto& layerParams =
         DD4hepDetectorHelper::ensureExtension<dd4hep::rec::VariantParameters>(layer_element);
@@ -275,7 +275,7 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
                                                         Position(x, y, zstart + dz)));
           pv.addPhysVolID("module", mod_num);
           module.setPlacement(pv);
-          module.setTypeFlag(sdet.typeFlag());  // make sure type flags are propagated
+          module.setTypeFlag(sdet.typeFlag()); // make sure type flags are propagated
           for (size_t ic = 0; ic < sensVols.size(); ++ic) {
             PlacedVolume sens_pv = sensVols[ic];
             DetElement comp_elt(module, sens_pv.volume().name(), mod_num);
@@ -283,7 +283,7 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
                 DD4hepDetectorHelper::ensureExtension<dd4hep::rec::VariantParameters>(comp_elt);
             comp_elt_params.set<string>("axis_definitions", "XZY");
             comp_elt.setPlacement(sens_pv);
-            comp_elt.setTypeFlag(sdet.typeFlag());  // make sure type flags are propagated
+            comp_elt.setTypeFlag(sdet.typeFlag()); // make sure type flags are propagated
             volSurfaceList(comp_elt)->push_back(volplane_surfaces[m_nam][ic]);
           }
         } else {
@@ -292,7 +292,7 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
           pv.addPhysVolID("module", mod_num);
           DetElement r_module(layer_element, m_base + "_neg", det_id);
           r_module.setPlacement(pv);
-          r_module.setTypeFlag(sdet.typeFlag());  // make sure type flags are propagated
+          r_module.setTypeFlag(sdet.typeFlag()); // make sure type flags are propagated
           for (size_t ic = 0; ic < sensVols.size(); ++ic) {
             PlacedVolume sens_pv = sensVols[ic];
             DetElement comp_elt(r_module, sens_pv.volume().name(), mod_num);
@@ -300,7 +300,7 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
                 DD4hepDetectorHelper::ensureExtension<dd4hep::rec::VariantParameters>(comp_elt);
             comp_elt_params.set<string>("axis_definitions", "XZY");
             comp_elt.setPlacement(sens_pv);
-            comp_elt.setTypeFlag(sdet.typeFlag());  // make sure type flags are propagated
+            comp_elt.setTypeFlag(sdet.typeFlag()); // make sure type flags are propagated
             volSurfaceList(comp_elt)->push_back(volplane_surfaces[m_nam][ic]);
           }
         }
