@@ -50,7 +50,7 @@ static Ref_t create_BarrelPlanarMPGDTracker_geo(Detector& description, xml_h e,
   string det_name = x_det.nameStr();
   DetElement sdet(det_name, det_id);
 
-  Volume *volume;
+  Volume* volume;
   // Sensitive volumes and associated surfaces
   // - There can be either one or five.
   int sensitiveVolumeSet = 5; // 1: single volume, 5: 5 volumes, -1: error
@@ -94,8 +94,8 @@ static Ref_t create_BarrelPlanarMPGDTracker_geo(Detector& description, xml_h e,
              modules.size());
     throw runtime_error("Logics error in building modules.");
   }
-  xml_comp_t x_mod   = modules;
-  string m_nam       = x_mod.nameStr();
+  xml_comp_t x_mod = modules;
+  string m_nam     = x_mod.nameStr();
 
   int ncomponents        = 0;
   int sensor_number      = 0;
@@ -137,12 +137,12 @@ static Ref_t create_BarrelPlanarMPGDTracker_geo(Detector& description, xml_h e,
   //  accessorily, some extras), the "DriftGap" is subdivided into subVolumes.
   int nSensitives = 0;
   for (xml_coll_t mci(x_mod, _U(module_component)); mci; ++mci, ++ncomponents) {
-    xml_comp_t x_comp = mci;
-    string c_nam      = _toString(ncomponents, "component%d");
-    string comp_name  = x_comp.nameStr();
+    xml_comp_t x_comp     = mci;
+    string c_nam          = _toString(ncomponents, "component%d");
+    string comp_name      = x_comp.nameStr();
     double comp_thickness = x_comp.thickness();
-    double box_width  = x_comp.width();
-    double box_length = x_comp.length();
+    double box_width      = x_comp.width();
+    double box_length     = x_comp.length();
     Box c_box;
     // Since MPGD frames are layed over the MPGD foils, the foil material is pressent under the frame as well.
     // The gas volumes are not present under the frames, so our frames must eat only the gas module areas
@@ -158,8 +158,8 @@ static Ref_t create_BarrelPlanarMPGDTracker_geo(Detector& description, xml_h e,
     // a way to set an attribute via the module tag to flag what components
     // need to have frame thickness subtracted.
     bool isDriftGap = comp_name == "DriftGap" ||
-      /* */           comp_name.find("ThinGap") !=std::string::npos ||
-      /* */           comp_name.find("Radiator")!=std::string::npos;
+                      /* */ comp_name.find("ThinGap") != std::string::npos ||
+                      /* */ comp_name.find("Radiator") != std::string::npos;
     if (isDriftGap || comp_name == "WindowGasGap") {
       box_width            = x_comp.width() - 2.0 * frame_width;
       box_length           = x_comp.length() - 2.0 * frame_width;
@@ -176,8 +176,7 @@ static Ref_t create_BarrelPlanarMPGDTracker_geo(Detector& description, xml_h e,
       printout(DEBUG, "BarrelPlanarMPGDTracker_geo", "Not gas: %s", comp_name.c_str());
       printout(DEBUG, "BarrelPlanarMPGDTracker_geo", "box_comp_width: %f", x_comp.width());
       printout(DEBUG, "BarrelPlanarMPGDTracker_geo", "box_comp_length: %f", x_comp.length());
-      printout(DEBUG, "BarrelPlanarMPGDTracker_geo", "box_comp_thickness: %f",
-	       comp_thickness);
+      printout(DEBUG, "BarrelPlanarMPGDTracker_geo", "box_comp_thickness: %f", comp_thickness);
     }
     Volume c_vol{c_nam, c_box, description.material(x_comp.materialStr())};
 
@@ -187,28 +186,28 @@ static Ref_t create_BarrelPlanarMPGDTracker_geo(Detector& description, xml_h e,
 
     pcb_feb_ext = x_comp.offset();
 
-    pv = m_vol.placeVolume(
-			   c_vol, Position(0, -pcb_feb_ext / 2.0, thickness_sum + comp_thickness / 2.0));
+    pv = m_vol.placeVolume(c_vol,
+                           Position(0, -pcb_feb_ext / 2.0, thickness_sum + comp_thickness / 2.0));
 
     if (x_comp.isSensitive()) {
       // ***** SENSITIVE VOLUME
       if (nSensitives >= 5) {
-	sensitiveVolumeSet = -1;
-	break;
+        sensitiveVolumeSet = -1;
+        break;
       }
       pv.addPhysVolID("sensor", sensor_number);
       // StripID. Single Sensitive Volume?
       int strip_id;
       if (comp_name == "DriftGap") {
-	if (nSensitives != 0) {
-	  sensitiveVolumeSet = -1;
-	  break;
-	}
-	strip_id = 0;
-	sensitiveVolumeSet = 1;
-      }
-      else {
-	int strip_ids[5] = {3,1,0,2,4}; strip_id = strip_ids[nSensitives];
+        if (nSensitives != 0) {
+          sensitiveVolumeSet = -1;
+          break;
+        }
+        strip_id           = 0;
+        sensitiveVolumeSet = 1;
+      } else {
+        int strip_ids[5] = {3, 1, 0, 2, 4};
+        strip_id         = strip_ids[nSensitives];
       }
       pv.addPhysVolID("strip", strip_id);
       c_vol.setSensitiveDetector(sens);
@@ -224,25 +223,21 @@ static Ref_t create_BarrelPlanarMPGDTracker_geo(Detector& description, xml_h e,
       // thicknesses that need to be assigned to the tracking surface
       // depending on wether the support is above or below the sensor.
       double inner_thickness, outer_thickness;
-      if      (sensitiveVolumeSet == 1) {
-	inner_thickness = thickness_so_far + comp_thickness / 2;
-	outer_thickness = total_thickness - thickness_so_far - comp_thickness / 2;
+      if (sensitiveVolumeSet == 1) {
+        inner_thickness = thickness_so_far + comp_thickness / 2;
+        outer_thickness = total_thickness - thickness_so_far - comp_thickness / 2;
+      } else if (nSensitives == 0) {
+        inner_thickness = thickness_so_far + comp_thickness / 2;
+        outer_thickness = comp_thickness / 2;
+      } else if (nSensitives == 4) {
+        inner_thickness = comp_thickness / 2;
+        outer_thickness = total_thickness - thickness_so_far - comp_thickness / 2;
+      } else {
+        inner_thickness = outer_thickness = comp_thickness / 2;
       }
-      else if (nSensitives == 0) {
-	inner_thickness = thickness_so_far + comp_thickness / 2;
-	outer_thickness = comp_thickness / 2;
-      }
-      else if (nSensitives == 4) {
-	inner_thickness = comp_thickness / 2;
-	outer_thickness = total_thickness - thickness_so_far - comp_thickness / 2;
-      }
-      else {
-	inner_thickness = outer_thickness = comp_thickness / 2;
-      }
-      printout(DEBUG, "BarrelPlanarMPGDTracker_geo",
-	       "Sensitive surface @ R = %.4f (%.4f,%.4f) cm",
-	       (thickness_sum + comp_thickness / 2) / cm, inner_thickness / cm,
-	       outer_thickness / cm);
+      printout(DEBUG, "BarrelPlanarMPGDTracker_geo", "Sensitive surface @ R = %.4f (%.4f,%.4f) cm",
+               (thickness_sum + comp_thickness / 2) / cm, inner_thickness / cm,
+               outer_thickness / cm);
 
       SurfaceType type(rec::SurfaceType::Sensitive);
 
@@ -253,10 +248,9 @@ static Ref_t create_BarrelPlanarMPGDTracker_geo(Detector& description, xml_h e,
     thickness_sum += comp_thickness;
     thickness_so_far += comp_thickness;
   }
-  if (sensitiveVolumeSet < 0 ||
-      sensitiveVolumeSet != nSensitives) {
+  if (sensitiveVolumeSet < 0 || sensitiveVolumeSet != nSensitives) {
     printout(ERROR, "BarrelPlanarMPGDTracker_geo",
-	     "Invalid set of Sensitive Volumes: it's either one (named \"DriftGap\") or 5");
+             "Invalid set of Sensitive Volumes: it's either one (named \"DriftGap\") or 5");
     throw runtime_error("Logics error in building modules.");
   }
   // Now add-on the frame
@@ -265,9 +259,9 @@ static Ref_t create_BarrelPlanarMPGDTracker_geo(Detector& description, xml_h e,
     double frame_thickness = getAttrOrDefault<double>(m_frame, _U(thickness), total_thickness);
 
     Box lframe_box{m_frame.width() / 2.0, (max_component_length + 2.0 * m_frame.width()) / 2.0,
-      frame_thickness / 2.0};
+                   frame_thickness / 2.0};
     Box rframe_box{m_frame.width() / 2.0, (max_component_length + 2.0 * m_frame.width()) / 2.0,
-      frame_thickness / 2.0};
+                   frame_thickness / 2.0};
     Box tframe_box{max_component_width / 2.0, m_frame.width() / 2.0, frame_thickness / 2.0};
     Box bframe_box{max_component_width / 2.0, m_frame.width() / 2.0, frame_thickness / 2.0};
 
@@ -286,20 +280,20 @@ static Ref_t create_BarrelPlanarMPGDTracker_geo(Detector& description, xml_h e,
     printout(DEBUG, "BarrelPlanarMPGDTracker_geo", "frame_thickness: %f", frame_thickness);
     printout(DEBUG, "BarrelPlanarMPGDTracker_geo", "total_thickness: %f", total_thickness);
     printout(DEBUG, "BarrelPlanarMPGDTracker_geo", "frame_thickness + total_thickness: %f",
-	     frame_thickness + total_thickness);
+             frame_thickness + total_thickness);
 
-    m_vol.placeVolume(lframe_vol, Position(frame_width / 2.0 + max_component_width / 2, 0.0,
-					   frame_thickness / 2.0 - total_thickness / 2.0 -
-					   gas_thickness / 2.0));
-    m_vol.placeVolume(rframe_vol, Position(-frame_width / 2.0 - max_component_width / 2.0, 0.0,
-					   frame_thickness / 2.0 - total_thickness / 2.0 -
-					   gas_thickness / 2.0));
-    m_vol.placeVolume(tframe_vol, Position(0.0, frame_width / 2.0 + max_component_length / 2,
-					   frame_thickness / 2.0 - total_thickness / 2.0 -
-					   gas_thickness / 2.0));
-    m_vol.placeVolume(bframe_vol, Position(0.0, -frame_width / 2.0 - max_component_length / 2.0,
-					   frame_thickness / 2.0 - total_thickness / 2.0 -
-					   gas_thickness / 2.0));
+    m_vol.placeVolume(
+        lframe_vol, Position(frame_width / 2.0 + max_component_width / 2, 0.0,
+                             frame_thickness / 2.0 - total_thickness / 2.0 - gas_thickness / 2.0));
+    m_vol.placeVolume(
+        rframe_vol, Position(-frame_width / 2.0 - max_component_width / 2.0, 0.0,
+                             frame_thickness / 2.0 - total_thickness / 2.0 - gas_thickness / 2.0));
+    m_vol.placeVolume(
+        tframe_vol, Position(0.0, frame_width / 2.0 + max_component_length / 2,
+                             frame_thickness / 2.0 - total_thickness / 2.0 - gas_thickness / 2.0));
+    m_vol.placeVolume(
+        bframe_vol, Position(0.0, -frame_width / 2.0 - max_component_length / 2.0,
+                             frame_thickness / 2.0 - total_thickness / 2.0 - gas_thickness / 2.0));
   }
 
   // ********** LAYER
@@ -343,7 +337,7 @@ static Ref_t create_BarrelPlanarMPGDTracker_geo(Detector& description, xml_h e,
   Volume module_env = *volume;
   DetElement lay_elt(sdet, lay_nam, lay_id);
   auto& layerParams =
-    DD4hepDetectorHelper::ensureExtension<dd4hep::rec::VariantParameters>(lay_elt);
+      DD4hepDetectorHelper::ensureExtension<dd4hep::rec::VariantParameters>(lay_elt);
 
   pv = assembly.placeVolume(layer_assembly);
   pv.addPhysVolID("layer", lay_id);
@@ -362,34 +356,33 @@ static Ref_t create_BarrelPlanarMPGDTracker_geo(Detector& description, xml_h e,
       DetElement mod_elt(lay_elt, module_name, module);
       double mod_z       = 0.5 * dimensions.length();
       double z_placement = mod_z - 0.5 * pcb_feb_ext -
-	j * (nz * mod_z - pcb_feb_ext); // z location for module placement
+                           j * (nz * mod_z - pcb_feb_ext); // z location for module placement
       double z_offset =
-	z_placement > 0
-	? -z0 / 2.0
-	: z0 / 2.0; // determine the amount of overlap in z the z nz modules have
+          z_placement > 0 ? -z0 / 2.0
+                          : z0 / 2.0; // determine the amount of overlap in z the z nz modules have
 
       Transform3D tr(
-		     RotationZYX(0, ((M_PI / 2) - phic - phi_tilt), -M_PI / 2) * RotationZ(j * M_PI),
-		     Position(
-			      xc, yc,
-			      mpgd_pos.z() + z_placement +
-			      z_offset)); //RotZYX rotates planes around azimuth, RotZ flips plane so pcb_feb_ext is facing endcaps
+          RotationZYX(0, ((M_PI / 2) - phic - phi_tilt), -M_PI / 2) * RotationZ(j * M_PI),
+          Position(
+              xc, yc,
+              mpgd_pos.z() + z_placement +
+                  z_offset)); //RotZYX rotates planes around azimuth, RotZ flips plane so pcb_feb_ext is facing endcaps
 
       pv = layer_assembly.placeVolume(module_env, tr);
       pv.addPhysVolID("module", module);
       mod_elt.setPlacement(pv);
       for (int iSensitive = 0; iSensitive < sensitiveVolumeSet; iSensitive++) {
-	// ***** SENSITIVE COMPONENTS
-	PlacedVolume& sens_pv = sensitives[iSensitive];
-	int de_id = nphi * iSensitive + module;
-	DetElement comp_de(
-			   mod_elt, std::string("de_") + sens_pv.volume().name() + _toString(de_id, "%02d"),
-			   de_id);
-	comp_de.setPlacement(sens_pv);
-	auto& comp_de_params =
-	  DD4hepDetectorHelper::ensureExtension<dd4hep::rec::VariantParameters>(comp_de);
-	comp_de_params.set<string>("axis_definitions", "XYZ");
-	volSurfaceList(comp_de)->push_back(volplane_surfaces[iSensitive]);
+        // ***** SENSITIVE COMPONENTS
+        PlacedVolume& sens_pv = sensitives[iSensitive];
+        int de_id             = nphi * iSensitive + module;
+        DetElement comp_de(mod_elt,
+                           std::string("de_") + sens_pv.volume().name() + _toString(de_id, "%02d"),
+                           de_id);
+        comp_de.setPlacement(sens_pv);
+        auto& comp_de_params =
+            DD4hepDetectorHelper::ensureExtension<dd4hep::rec::VariantParameters>(comp_de);
+        comp_de_params.set<string>("axis_definitions", "XYZ");
+        volSurfaceList(comp_de)->push_back(volplane_surfaces[iSensitive]);
       }
       // increas module counter
       module++;
@@ -410,7 +403,7 @@ static Ref_t create_BarrelPlanarMPGDTracker_geo(Detector& description, xml_h e,
   for (xml_coll_t lmat(x_layer, _Unicode(layer_material)); lmat; ++lmat) {
     xml_comp_t x_layer_material = lmat;
     DD4hepDetectorHelper::xmlToProtoSurfaceMaterial(x_layer_material, layerParams,
-						    "layer_material");
+                                                    "layer_material");
   }
   sdet.setAttributes(description, assembly, x_det.regionStr(), x_det.limitsStr(), x_det.visStr());
   assembly.setVisAttributes(description.invisible());

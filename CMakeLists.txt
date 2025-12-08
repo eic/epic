@@ -111,41 +111,41 @@ set(MPGD_INSTALL_PIXEL TRUE CACHE BOOL "Use \"pixel\" flavour of MPGD XMLs inste
 IF(${MPGD_INSTALL_PIXEL})
     file(GLOB_RECURSE MPGD_FILES
         RELATIVE ${CMAKE_CURRENT_SOURCE_DIR}/compact/tracking
-	"compact/tracking/*_pixel.xml"
+        "compact/tracking/*_pixel.xml"
         )
     foreach(FILE IN ITEMS ${MPGD_FILES})
         execute_process(COMMAND bash -c "echo ${FILE} | sed -e 's/_pixel//'" OUTPUT_VARIABLE INSTALL_FILE OUTPUT_STRIP_TRAILING_WHITESPACE)
-	set(PRE_EXISTING_FILE ${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_DATADIR}/${PROJECT_NAME}/compact/tracking/${INSTALL_FILE})
-	if(EXISTS ${PRE_EXISTING_FILE})
-	    message(STATUS "MPGD: Remove ${PRE_EXISTING_FILE}")
+        set(PRE_EXISTING_FILE ${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_DATADIR}/${PROJECT_NAME}/compact/tracking/${INSTALL_FILE})
+        if(EXISTS ${PRE_EXISTING_FILE})
+            message(STATUS "MPGD: Remove ${PRE_EXISTING_FILE}")
             file(REMOVE_RECURSE ${PRE_EXISTING_FILE})
-	endif()
-	install(FILES compact/tracking/${FILE}
+        endif()
+        install(FILES compact/tracking/${FILE}
             DESTINATION ${CMAKE_INSTALL_DATADIR}/${PROJECT_NAME}/compact/tracking
-	    RENAME ${INSTALL_FILE}
-	)
+            RENAME ${INSTALL_FILE}
+        )
     endforeach()
     message(STATUS "MPGD: \"pixel\" flavour of XMLs \"${MPGD_FILES}\" to be installed.")
 ELSE()
     file(GLOB_RECURSE MPGD_FILES
         RELATIVE ${CMAKE_CURRENT_SOURCE_DIR}/compact/tracking
-	"compact/tracking/*_2DStrip.xml"
+        "compact/tracking/*_2DStrip.xml"
         )
     foreach(FILE IN ITEMS ${MPGD_FILES})
-	execute_process(COMMAND bash -c "echo ${FILE} | sed -e 's/_2DStrip//'" OUTPUT_VARIABLE INSTALL_FILE OUTPUT_STRIP_TRAILING_WHITESPACE)
-	set(PRE_EXISTING_FILE ${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_DATADIR}/${PROJECT_NAME}/compact/tracking/${INSTALL_FILE})
-	if(EXISTS ${PRE_EXISTING_FILE})
-	    message(STATUS "MPGD: Remove ${PRE_EXISTING_FILE}")
+        execute_process(COMMAND bash -c "echo ${FILE} | sed -e 's/_2DStrip//'" OUTPUT_VARIABLE INSTALL_FILE OUTPUT_STRIP_TRAILING_WHITESPACE)
+        set(PRE_EXISTING_FILE ${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_DATADIR}/${PROJECT_NAME}/compact/tracking/${INSTALL_FILE})
+        if(EXISTS ${PRE_EXISTING_FILE})
+            message(STATUS "MPGD: Remove ${PRE_EXISTING_FILE}")
             file(REMOVE_RECURSE ${PRE_EXISTING_FILE})
-	endif()
-	install(FILES compact/tracking/${FILE}
+        endif()
+        install(FILES compact/tracking/${FILE}
             DESTINATION ${CMAKE_INSTALL_DATADIR}/${PROJECT_NAME}/compact/tracking
-	    RENAME ${INSTALL_FILE}
-	    )
+            RENAME ${INSTALL_FILE}
+            )
     endforeach()
     MESSAGE(STATUS "MPGD: \"2DStrip\" flavour of XMLs \"${MPGD_FILES}\" to be installed.")
 ENDIF()
- 
+
 #-----------------------------------------------------------------------------------
 # Install the detector calibration files.
 install(DIRECTORY calibrations/

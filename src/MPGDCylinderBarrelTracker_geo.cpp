@@ -401,8 +401,8 @@ static Ref_t create_MPGDCylinderBarrelTracker(Detector& description, xml_h e,
     }
 
     // ********** LOOP OVER COMPONENTS
-    double comp_rmin          = stave_rmin;
-    double thickness_so_far   = 0;
+    double comp_rmin        = stave_rmin;
+    double thickness_so_far = 0;
     // Pattern of Multiple Sensitive Volumes
     // - The "GasGap" may be subdivided into subVolumes (this order to have one
     //  sensitive component per strip coordinate (and accessorily, some extras).
@@ -419,25 +419,25 @@ static Ref_t create_MPGDCylinderBarrelTracker(Detector& description, xml_h e,
       c_vol.setVisAttributes(description, x_comp.visStr());
       if (x_comp.isSensitive()) {
         // ***** SENSITIVE VOLUME
-	if (nSensitives >= 5) {
-	  sensitiveVolumeSet = -1;
-	  break;
-	}
+        if (nSensitives >= 5) {
+          sensitiveVolumeSet = -1;
+          break;
+        }
         pv.addPhysVolID("sensor", sensor_number);
-	// StripID. Single Sensitive Volume?
-	int strip_id;
-	if (c_nam == "GasGap") {
-	  if (nSensitives != 0) {
-	    sensitiveVolumeSet = -1;
-	    break;
-	  }
-	  strip_id = 0;
-	  sensitiveVolumeSet = 1;
-	}
-	else {
-	  int strip_ids[5] = {3,1,0,2,4}; strip_id = strip_ids[nSensitives];
-	}
-	pv.addPhysVolID("strip", strip_id);
+        // StripID. Single Sensitive Volume?
+        int strip_id;
+        if (c_nam == "GasGap") {
+          if (nSensitives != 0) {
+            sensitiveVolumeSet = -1;
+            break;
+          }
+          strip_id           = 0;
+          sensitiveVolumeSet = 1;
+        } else {
+          int strip_ids[5] = {3, 1, 0, 2, 4};
+          strip_id         = strip_ids[nSensitives];
+        }
+        pv.addPhysVolID("strip", strip_id);
         c_vol.setSensitiveDetector(sens);
         sensitives[nSensitives].push_back(pv);
 
@@ -446,56 +446,52 @@ static Ref_t create_MPGDCylinderBarrelTracker(Detector& description, xml_h e,
         Vector3D v(0., -1., 0.);
         Vector3D n(0., 0., 1.);
 
-	if (strip_id == 0) {
-	  // Consistency(+/-1um) check: segmentation consistent w/ stack of module components?
-	  double rXCheck = comp_rmin + comp_thickness / 2;
-	  if (fabs(staveModel.rsensor - rXCheck) > .0001 / cm) {
-	    printout(ERROR, "MPGDCylinderBarrelTracker",
-		     "Sensitive Component \"%s\" of StaveModel #%d,\"%s\": rsensor(%.4f cm) != "
-		     "radius @ sensitive surface(%.4f cm)",
-		     c_nam.c_str(), iSM, staveModel.name.c_str(), staveModel.rsensor / cm,
-		     rXCheck / cm);
-	    throw runtime_error("Logics error in building modules.");
-	  }
-	}
+        if (strip_id == 0) {
+          // Consistency(+/-1um) check: segmentation consistent w/ stack of module components?
+          double rXCheck = comp_rmin + comp_thickness / 2;
+          if (fabs(staveModel.rsensor - rXCheck) > .0001 / cm) {
+            printout(ERROR, "MPGDCylinderBarrelTracker",
+                     "Sensitive Component \"%s\" of StaveModel #%d,\"%s\": rsensor(%.4f cm) != "
+                     "radius @ sensitive surface(%.4f cm)",
+                     c_nam.c_str(), iSM, staveModel.name.c_str(), staveModel.rsensor / cm,
+                     rXCheck / cm);
+            throw runtime_error("Logics error in building modules.");
+          }
+        }
 
         // Compute the inner (i.e. thickness until mid-sensitive-volume) and
         //             outer (from mid-sensitive-volume to top)
         // thicknesses that need to be assigned to the tracking surface
         // depending on wether the support is above or below the sensor.
         double inner_thickness, outer_thickness;
-	if      (sensitiveVolumeSet == 1) {
-	  inner_thickness = thickness_so_far + comp_thickness / 2;
-	  outer_thickness = total_thickness - inner_thickness;
-	}
-	else if (nSensitives == 0) {
-	  inner_thickness = thickness_so_far + comp_thickness / 2;
-	  outer_thickness = comp_thickness / 2;
-	}
-	else if (nSensitives == 4) {
-	  inner_thickness = comp_thickness / 2;
-	  outer_thickness = total_thickness - thickness_so_far - comp_thickness / 2;
-	}
-	else {
-	  inner_thickness = outer_thickness = comp_thickness / 2;
-	}
-	printout(DEBUG, "MPGDCylinderBarrelTracker",
-		   "Stave Model #%d,\"%s\": Sensitive surface @ R = %.4f (%.4f,%.4f) cm", iSM,
-		   staveModel.name.c_str(), staveModel.rsensor / cm, inner_thickness / cm,
-		   outer_thickness / cm);
+        if (sensitiveVolumeSet == 1) {
+          inner_thickness = thickness_so_far + comp_thickness / 2;
+          outer_thickness = total_thickness - inner_thickness;
+        } else if (nSensitives == 0) {
+          inner_thickness = thickness_so_far + comp_thickness / 2;
+          outer_thickness = comp_thickness / 2;
+        } else if (nSensitives == 4) {
+          inner_thickness = comp_thickness / 2;
+          outer_thickness = total_thickness - thickness_so_far - comp_thickness / 2;
+        } else {
+          inner_thickness = outer_thickness = comp_thickness / 2;
+        }
+        printout(DEBUG, "MPGDCylinderBarrelTracker",
+                 "Stave Model #%d,\"%s\": Sensitive surface @ R = %.4f (%.4f,%.4f) cm", iSM,
+                 staveModel.name.c_str(), staveModel.rsensor / cm, inner_thickness / cm,
+                 outer_thickness / cm);
 
         SurfaceType type(SurfaceType::Sensitive);
         VolPlane surf(c_vol, type, inner_thickness, outer_thickness, u, v, n); //,o ) ;
         volplane_surfaces[nSensitives].push_back(surf);
-	nSensitives++;
+        nSensitives++;
       }
       comp_rmin += comp_thickness;
       thickness_so_far += comp_thickness;
     } //end of module component loop
-    if (sensitiveVolumeSet < 0 ||
-	sensitiveVolumeSet != nSensitives) {
+    if (sensitiveVolumeSet < 0 || sensitiveVolumeSet != nSensitives) {
       printout(ERROR, "MPGDCylinderBarrelTracker",
-	       "Invalid set of Sensitive Volumes: it's either one (named \"GasGap\") or 5");
+               "Invalid set of Sensitive Volumes: it's either one (named \"GasGap\") or 5");
       throw runtime_error("Logics error in building modules.");
     }
   } //end of stave model loop
@@ -566,17 +562,17 @@ static Ref_t create_MPGDCylinderBarrelTracker(Detector& description, xml_h e,
       pv.addPhysVolID("module", nModules);
       mod_elt.setPlacement(pv);
       for (int iSensitive = 0; iSensitive < sensitiveVolumeSet; iSensitive++) {
-	// ***** SENSITIVE COMPONENTS
-	PlacedVolume& sens_pv = sensitives[iSensitive][iV];
-	int de_id = 32 * iSensitive + nModules;
-	DetElement comp_de(
-            mod_elt, std::string("de_") + sens_pv.volume().name() + _toString(de_id, "%02d"),
-	    de_id);
-	comp_de.setPlacement(sens_pv);
-	auto& comp_de_params =
-          DD4hepDetectorHelper::ensureExtension<dd4hep::rec::VariantParameters>(comp_de);
-	comp_de_params.set<string>("axis_definitions", "XYZ");
-	volSurfaceList(comp_de)->push_back(volplane_surfaces[iSensitive][iV]);
+        // ***** SENSITIVE COMPONENTS
+        PlacedVolume& sens_pv = sensitives[iSensitive][iV];
+        int de_id             = 32 * iSensitive + nModules;
+        DetElement comp_de(mod_elt,
+                           std::string("de_") + sens_pv.volume().name() + _toString(de_id, "%02d"),
+                           de_id);
+        comp_de.setPlacement(sens_pv);
+        auto& comp_de_params =
+            DD4hepDetectorHelper::ensureExtension<dd4hep::rec::VariantParameters>(comp_de);
+        comp_de_params.set<string>("axis_definitions", "XYZ");
+        volSurfaceList(comp_de)->push_back(volplane_surfaces[iSensitive][iV]);
       }
     }
   }
