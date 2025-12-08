@@ -142,7 +142,7 @@
           <segmentation name="OuterZ"   type="CylindricalGridPhiZ" key_value="2" grid_size_phi="MMOuterAperture" grid_size_z="0.150*mm*sqrt(12)" radius="MMOuterSensor_R + MMThinGap_thickness" />
           <segmentation name="OuterTop" type="CylindricalGridPhiZ" key_value="3" grid_size_phi="1*mrad"          grid_size_z="0.150*mm*sqrt(12)" radius="MMOuterSensor_R - 3 * MMThinGap_thickness / 2 - MMThickGap_thickness / 2" />
           <segmentation name="OuterBot" type="CylindricalGridPhiZ" key_value="4" grid_size_phi="1*mrad"          grid_size_z="0.150*mm*sqrt(12)" radius="MMOuterSensor_R + 3 * MMThinGap_thickness / 2 + MMThickGap_thickness / 2" />
-	</segmentation>
+        </segmentation>
       </segmentation>
       <id>system:8,layer:4,module:12,sensor:2,strip:28:4,phi:-16,z:-16</id>
     </readout>
