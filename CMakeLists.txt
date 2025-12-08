@@ -102,15 +102,24 @@ install(DIRECTORY compact/
     PATTERN "*_pixel.xml" EXCLUDE
     PATTERN "*_2DStrip.xml" EXCLUDE
     )
-# Install MPGD pixel/2DStrip files
-set(MPGD_INSTALL_PIXEL FALSE CACHE BOOL "Use \"pixel\" flavour of MPGD XMLs instead of default \"2DStrip\"")
+# Install MPGD files:
+# - pixel or 2DStrip version depending upon option "MPGD_INSTALL_PIXEL"
+# - The "install" command turns out to not be able to overwrite pre-existing.
+#  => We use the "file" command to work around that. Which later command takes
+#    effect immediately, at cmake execution time. => Emit a warning message.
+set(MPGD_INSTALL_PIXEL TRUE CACHE BOOL "Use \"pixel\" flavour of MPGD XMLs instead of \"2DStrip\". It's temporarily the default.")
 IF(${MPGD_INSTALL_PIXEL})
     file(GLOB_RECURSE MPGD_FILES
         RELATIVE ${CMAKE_CURRENT_SOURCE_DIR}/compact/tracking
 	"compact/tracking/*_pixel.xml"
         )
     foreach(FILE IN ITEMS ${MPGD_FILES})
-	execute_process(COMMAND bash -c "echo ${FILE} | sed -e 's/_pixel//'" OUTPUT_VARIABLE INSTALL_FILE OUTPUT_STRIP_TRAILING_WHITESPACE)
+        execute_process(COMMAND bash -c "echo ${FILE} | sed -e 's/_pixel//'" OUTPUT_VARIABLE INSTALL_FILE OUTPUT_STRIP_TRAILING_WHITESPACE)
+	set(PRE_EXISTING_FILE ${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_DATADIR}/${PROJECT_NAME}/compact/tracking/${INSTALL_FILE})
+	if(EXISTS ${PRE_EXISTING_FILE})
+	    message(STATUS "MPGD: Remove ${PRE_EXISTING_FILE}")
+            file(REMOVE_RECURSE ${PRE_EXISTING_FILE})
+	endif()
 	install(FILES compact/tracking/${FILE}
             DESTINATION ${CMAKE_INSTALL_DATADIR}/${PROJECT_NAME}/compact/tracking
 	    RENAME ${INSTALL_FILE}
@@ -124,6 +133,11 @@ ELSE()
         )
     foreach(FILE IN ITEMS ${MPGD_FILES})
 	execute_process(COMMAND bash -c "echo ${FILE} | sed -e 's/_2DStrip//'" OUTPUT_VARIABLE INSTALL_FILE OUTPUT_STRIP_TRAILING_WHITESPACE)
+	set(PRE_EXISTING_FILE ${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_DATADIR}/${PROJECT_NAME}/compact/tracking/${INSTALL_FILE})
+	if(EXISTS ${PRE_EXISTING_FILE})
+	    message(STATUS "MPGD: Remove ${PRE_EXISTING_FILE}")
+            file(REMOVE_RECURSE ${PRE_EXISTING_FILE})
+	endif()
 	install(FILES compact/tracking/${FILE}
             DESTINATION ${CMAKE_INSTALL_DATADIR}/${PROJECT_NAME}/compact/tracking
 	    RENAME ${INSTALL_FILE}
