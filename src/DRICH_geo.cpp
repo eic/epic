@@ -732,9 +732,9 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
               addVecToMap("pos", sensorPos);
               addVecToMap("normX", sensorNormX);
               addVecToMap("normY", sensorNormY);
-              printout(DEBUG, "DRICH_geo", "sensor %s:", sensorIDname.c_str());
+              printout(VERBOSE, "DRICH_geo", "sensor %s:", sensorIDname.c_str());
               for (auto kv : pssVarMap->variantParameters)
-                printout(DEBUG, "DRICH_geo", "    %s: %f", kv.first.c_str(),
+                printout(VERBOSE, "DRICH_geo", "    %s: %f", kv.first.c_str(),
                          pssVarMap->get<double>(kv.first));
 
               // increment SIPM number

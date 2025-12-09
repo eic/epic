@@ -14,7 +14,7 @@ jobs:
       matrix:
         detector_config: ${{fromJson(inputs.detector_configs)}}
     steps:
-    - uses: actions/checkout@v5
+    - uses: actions/checkout@v6
     - uses: actions/download-artifact@v6
       with:
         name: build-gcc-nightly-fast-eic-shell
