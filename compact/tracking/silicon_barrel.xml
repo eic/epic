@@ -208,7 +208,7 @@
         rmax="SiBarrelLayer2_rmax"
         length="SiBarrelLayer2_length" />
       <comment>Silicon Barrel Modules</comment>
-      <module name="Module1" vis="TrackerLayerVis">
+      <module name="Module2" vis="TrackerLayerVis">
 
         <module_component name="Frame"
           material="CarbonFiber"
@@ -328,7 +328,7 @@
 
       </module>
       <comment> Layers composed of many arrayed modules </comment>
-      <layer module="Module1" id="1" vis="TrackerLayerVis">
+      <layer module="Module2" id="2" vis="TrackerLayerVis">
         <barrel_envelope
           inner_r="SiBarrelLayer2_rmin"
           outer_r="SiBarrelLayer2_rmax"
