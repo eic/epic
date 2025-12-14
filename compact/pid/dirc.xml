@@ -96,7 +96,7 @@
 
   <detectors>
     <detector id="BarrelDIRC_ID" name="cb_DIRC" type="epic_DIRC" readout="DIRCBarHits" vis="DIRCTube">
-      <type_flag type="DetType_CHERENKOV + DetType_Barrel"/>
+      <type_flag type="DetType_CHERENKOV + DetType_BARREL"/>
       <dimensions rmin="DIRCBar_center - DIRCBar_height/2" rmax="DIRCBar_center + DIRCBar_height/2" length="DIRC_length"/>
       <position x="0" y="0" z="DIRC_offset"/>
       <module name="DIRCBox" repeat="DIRCBox_count" width="DIRCPrism_width + 1*mm" height="DIRCPrism_height*2" length="DIRCBarAssm_length + 550*mm" vis="DIRCBox">
