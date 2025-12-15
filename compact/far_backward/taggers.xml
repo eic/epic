@@ -6,7 +6,7 @@
   <define>
 
    <constant name="tracker_pixel_size" value="55*um"/>
-   
+
    <constant name="Tagger1_Layer_1_Z" value="3*mm"/>
    <constant name="Tagger1_Layer_2_Z" value="103*mm"/>
    <constant name="Tagger1_Layer_3_Z" value="203*mm"/>
@@ -39,7 +39,7 @@
         <trackLayer  id="1" type="timepix" z="Tagger1_Layer_2_Z" sensor_thickness="400*um"/>
         <trackLayer  id="2" type="timepix" z="Tagger1_Layer_3_Z" sensor_thickness="400*um"/>
         <trackLayer  id="3" type="timepix" z="Tagger1_Layer_4_Z" sensor_thickness="400*um"/>
-      </module}
+      </module>
       <module id="2" name="Tagger2">
         <comment> Position and rotation refer to the center front of tagger assembly, this should line up with the back of the exit window </comment>
         <position    x="Tagger2_X" y="Tagger2_Y" z="Tagger2_Z"/>
