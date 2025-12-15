@@ -42,7 +42,7 @@
                 cellx="ZDC_Crystal_cell_width" celly="ZDC_Crystal_cell_height" thickness="ZDC_Crystal_APD_socket_z"
                 material="ZDC_Polyethylene" vis="AnlTeal" />
       </module>
-      <support  material="CarbonFiber" vis="AnlLight_Gray" sizez="ZDC_Crystal_cell_length" thickness="ZDC_Crystal_frame_thickness"/>
+      <support  material="CarbonFiber" vis="AnlLightGray" sizez="ZDC_Crystal_cell_length" thickness="ZDC_Crystal_frame_thickness"/>
 
     </detector>
   </detectors>

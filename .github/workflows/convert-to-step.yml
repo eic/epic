@@ -14,10 +14,10 @@ jobs:
       matrix:
         detector_config: ${{fromJson(inputs.detector_configs)}}
     steps:
-    - uses: actions/checkout@v5
-    - uses: actions/download-artifact@v5
+    - uses: actions/checkout@v6
+    - uses: actions/download-artifact@v7
       with:
-        name: build-gcc-fast-eic-shell
+        name: build-gcc-nightly-fast-eic-shell
         path: install/
     - uses: cvmfs-contrib/github-action-cvmfs@v5
     - uses: eic/run-cvmfs-osg-eic-shell@main
@@ -38,7 +38,7 @@ jobs:
           detectors[OuterBarrelMPGDSubAssembly]='-l 4'
           # Export to one STEP file
           npdet_to_step $(for d in ${!detectors[@]} ; do echo part ${detectors[$d]} $d ; done) -o ${{matrix.detector_config}} $DETECTOR_PATH/${{matrix.detector_config}}.xml 2>&1 | sed '/TGeoMatrix::dtor/d'
-    - uses: actions/upload-artifact@v4
+    - uses: actions/upload-artifact@v6
       with:
         name: ${{matrix.detector_config}}.stp
         path: ${{matrix.detector_config}}.stp

@@ -14,10 +14,10 @@ jobs:
       matrix:
         detector_config: ${{fromJson(inputs.detector_configs)}}
     steps:
-    - uses: actions/checkout@v5
-    - uses: actions/download-artifact@v5
+    - uses: actions/checkout@v6
+    - uses: actions/download-artifact@v7
       with:
-        name: build-gcc-fast-eic-shell
+        name: build-gcc-nightly-fast-eic-shell
         path: install/
     - uses: cvmfs-contrib/github-action-cvmfs@v5
     - uses: eic/run-cvmfs-osg-eic-shell@main
@@ -29,13 +29,13 @@ jobs:
           /usr/bin/time -v \
           root -b -q "scripts/test_ACTS.cxx+(\"${DETECTOR_PATH}/${{matrix.detector_config}}.xml\")" | tee check_tracking_geometry.out
           bin/acts_geo_check check_tracking_geometry.out
-    - uses: actions/upload-artifact@v4
+    - uses: actions/upload-artifact@v6
       with:
         name: ${{matrix.detector_config}}.obj
         path: |
           *.obj
           *.mpl
-    - uses: actions/upload-artifact@v4
+    - uses: actions/upload-artifact@v6
       with:
         name: ${{matrix.detector_config}}.ply
         path: |
