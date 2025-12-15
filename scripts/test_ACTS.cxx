@@ -3,8 +3,8 @@
 
 #include "DD4hep/Detector.h"
 
-#include "Acts/Geometry/TrackingGeometry.hpp"
-#include "Acts/Geometry/TrackingVolume.hpp"
+#include <Acts/Geometry/TrackingGeometry.hpp>
+#include <Acts/Geometry/TrackingVolume.hpp>
 #include <Acts/Visualization/GeometryView3D.hpp>
 #include <Acts/Visualization/ObjVisualization3D.hpp>
 #include <Acts/Visualization/PlyVisualization3D.hpp>
