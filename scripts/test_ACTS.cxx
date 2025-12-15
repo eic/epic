@@ -5,11 +5,20 @@
 
 #include "Acts/Geometry/TrackingGeometry.hpp"
 #include "Acts/Geometry/TrackingVolume.hpp"
-#include "Acts/Plugins/DD4hep/ConvertDD4hepDetector.hpp"
 #include <Acts/Visualization/GeometryView3D.hpp>
 #include <Acts/Visualization/ObjVisualization3D.hpp>
 #include <Acts/Visualization/PlyVisualization3D.hpp>
 #include <Acts/Visualization/ViewConfig.hpp>
+
+#if __has_include(<ActsPlugins/DD4hep/ConvertDD4hepDetector.hpp>)
+// Acts_MAJOR_VERSION >= 44
+#include <ActsPlugins/DD4hep/ConvertDD4hepDetector.hpp>
+using ActsPlugins::convertDD4hepDetector;
+#else
+// Acts_MAJOR_VERSION < 44
+#include <Acts/Plugins/DD4hep/ConvertDD4hepDetector.hpp>
+using Acts::convertDD4hepDetector;
+#endif
 
 /** Example loading ACTs.
  *
@@ -24,7 +33,7 @@ void test_ACTS(const char* compact = "epic.xml") {
   detector->fromCompact(compact);
 
   auto logger                 = Acts::getDefaultLogger("Acts", Acts::Logging::Level::VERBOSE);
-  auto acts_tracking_geometry = Acts::convertDD4hepDetector(detector->world(), *logger);
+  auto acts_tracking_geometry = convertDD4hepDetector(detector->world(), *logger);
 
   // Visit all surfaces
   acts_tracking_geometry->visitSurfaces([](const Acts::Surface* surface) {});
