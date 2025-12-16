@@ -2,14 +2,12 @@
 <!-- Copyright (C) 2022 Matt Posik, Wouter Deconinck -->
 
 <lccdd>
-<info name="mrwell_outerbarrel.xml"
-      title="Micro-Pattern Gas Detector Planar Barrel Layer"
-      author="mposik1983"
-      url="https://github.com/mposik1983"
-      status="development"
-      version="1.0"
-><comment/>
-</info>
+<documentation>
+  Title: Micro-Pattern Gas Detector Planar Barrel Layer
+  Author: @mposik1983
+  Status: development
+  Version: 1.0
+</documentation>
 
 <define>
     <comment> Frames </comment>
