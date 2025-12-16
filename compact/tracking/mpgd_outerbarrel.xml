@@ -18,14 +18,14 @@
     <constant name="MPGDOuterBarrelModule_roverlap"                value="0*cm"/>
     <constant name="MPGDOuterBarrelModule_zoverlap"                value="0*MPGDOuterBarrelFrame_width"/>
     <constant name="MPGDOuterBarrelModule_count"                   value="12" />
-    <constant name="MPGDOuterBarrelModule_allowed_space"           value="25*mm"/>
+    <constant name="MPGDOuterBarrelModule_allowed_space"           value="15*mm"/>
     <constant name="MPGDOuterBarrelModule_rmax"                    value="MPGDOuterBarrelModule_rmin + MPGDOuterBarrelModule_allowed_space" />
     <constant name="MPGDOuterBarrelModule_roffset"                 value="0.5*cm" />
     <constant name="MPGDOuterBarrelModule_width"                   value="360*mm"/>
     <constant name="MPGDOuterBarrel_length"                        value="MPGDOuterBarrelModule_zmin1 + MPGDOuterBarrelModule_zmin2"/>
     <constant name="MPGDOuterBarrelModule_length"                  value="0.5*(MPGDOuterBarrelModule_zmin1 + MPGDOuterBarrelModule_zmin2 + MPGDOuterBarrelModule_zoverlap)"/>
     <constant name="MPGDOuterBarrelModule_offset"                  value="0.5*(MPGDOuterBarrelModule_zmin2 - MPGDOuterBarrelModule_zmin1)"/>
-    <constant name="MPGDOuterBarrelModule_PCB_offset"                 value="110*mm"/>
+    <constant name="MPGDOuterBarrelModule_PCB_offset"              value="110*mm"/>
     <constant name="MPGDOuterStrip_range"                          value="(MPGDOuterBarrelModule_length + MPGDOuterBarrelModule_width)/2.0*sqrt(2)"/>
 
     <comment> Layer parameters </comment>
