@@ -2,4 +2,5 @@ features:
   fields:
     marco:
   hcal:
-    backward_sampF:
+    lfhcal:
+    forward_insert:

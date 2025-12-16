@@ -3,15 +3,16 @@
 
 <lccdd>
 
-  <info name="backward.xml"
-        title="EPIC nHCal default"
-        author="L. Kosarzewski"
-        status="development"
-        version="1.0"
-  ><comment/></info>
+  <documentation>
+    Title: EPIC nHCal default
+    Author: L. Kosarzewski
+    Status: development
+    Version: 1.0
+  </documentation>
 
   <define>
     <constant name="HcalEndcapN_allSensitive" value="0"/>
+    <constant name="HcalEndcapN_extension_for_sampF"              value="0.0*cm"/>
   </define>
 
   <include ref="backward_template.xml"/>
