@@ -49,7 +49,7 @@
     <constant name="SiBarrelBrace_width" value="10*mm" />
     <constant name="SiBarrelBrace_thickness" value="2*mm" />
     <constant name="SiBarrelBrace_StaveWidthFraction" value="0.9" />
-    <constant name="SiBarrelBrace_Position_X" value="-1*mm" />
+    <constant name="SiBarrelBrace_Position_X" value="0.0" />
 
     <constant name="SiBarrel1_Brace0_Position_Y" value="0.0" />
     <constant name="SiBarrel1_Brace1_Position_Y" value="13.20*cm" />
@@ -208,7 +208,7 @@
         rmax="SiBarrelLayer2_rmax"
         length="SiBarrelLayer2_length" />
       <comment>Silicon Barrel Modules</comment>
-      <module name="Module1" vis="TrackerLayerVis">
+      <module name="Module2" vis="TrackerLayerVis">
 
         <module_component name="Frame"
           material="CarbonFiber"
@@ -328,7 +328,7 @@
 
       </module>
       <comment> Layers composed of many arrayed modules </comment>
-      <layer module="Module1" id="1" vis="TrackerLayerVis">
+      <layer module="Module2" id="2" vis="TrackerLayerVis">
         <barrel_envelope
           inner_r="SiBarrelLayer2_rmin"
           outer_r="SiBarrelLayer2_rmax"
