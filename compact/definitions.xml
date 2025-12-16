@@ -224,7 +224,6 @@ The unused IDs below are saved for future use.
       - Unused IDs: 133-139
 
     </documentation>
-    <constant name="MRICH_ID"           value="130"/>
     <constant name="BackwardRICH_ID"    value="131"/>
     <constant name="BackwardTOF_ID"     value="132"/>
 
@@ -325,7 +324,7 @@ SubSystemNameFurtherDescriptor_quantity
 Examples:
  - TrackerBarrelInside_length
  - EcalEndcapP_rmin
- - MRichFresnelLens_thickness
+ - TOFEndcapLayer_thickness
 
 ### Naming Barrel and Endcaps
 
@@ -545,7 +544,7 @@ Examples:
 Service gaps in FW direction (before endcapP ECAL) and BW direction (before endcapN HCAL)
     </documentation>
     <constant name="ForwardInnerEndcapRegionExtraSpace_length" value="4.6*cm"/>
-    <constant name="ForwardServiceGap_length"     value="12.36*cm"/>
+    <constant name="ForwardServiceGap_length"     value="15.4*cm"/>
     <constant name="ForwardServiceGap_zmin"       value="ForwardPIDRegion_zmin + ForwardInnerEndcapRegion_length + ForwardInnerEndcapRegionExtraSpace_length"/>
     <constant name="ForwardServiceGap_zmax"       value="ForwardServiceGap_zmin + ForwardServiceGap_length"/>
 
@@ -562,25 +561,39 @@ Service gaps in FW direction (before endcapP ECAL) and BW direction (before endc
   <documentation level="3">
 ## Calorimeter Parameters
   </documentation>
-    <constant name="EcalBarrelSectorsN"             value="48"/>
-    <constant name="EcalEndcapP_zmin"               value="ForwardServiceGap_zmax" />
-    <constant name="EcalEndcapP_length"             value="30*cm" />
-    <constant name="EcalEndcapP_zmax"               value="EcalEndcapP_zmin + EcalEndcapP_length"/>
-    <constant name="EcalEndcapP_rmin"               value="200.0*mm" />
-    <comment> extra 50cm rmax that "protrudes" into the HCAL</comment>
-    <constant name="EcalEndcapP_rmax"               value="195.0*cm"/>
-    <constant name="EcalEndcapP_numLayers"          value="1"/>
+    <constant name="EcalBarrelSectorsN"               value="48"/>
 
-    <constant name="EcalEndcapPInsert_zmin"           value="EcalEndcapP_zmin"/>
-    <constant name="EcalEndcapPInsert_length"         value="EcalEndcapP_length"/>
-    <constant name="EcalEndcapPInsert_zmax"           value="EcalEndcapPInsert_zmin + EcalEndcapPInsert_length"/>
-    <constant name="EcalEndcapPInsert_width"          value="60.0*cm"/>
-    <constant name="EcalEndcapPInsert_height"         value="60.0*cm"/>
-    <constant name="EcalEndcapPInsert_xposition"      value="-10.0*cm"/>
-    <constant name="EcalEndcapPInsert_yposition"      value="0.0*cm"/>
-    <constant name="EcalEndcapPInsert_hole_radius"    value="14.61*cm"/>
-    <constant name="EcalEndcapPInsert_hole_xposition" value="-7.20*cm"/>
-    <constant name="EcalEndcapPInsert_hole_yposition" value="0.0*cm"/>
+    <constant name="EcalEndcapP_numLayers"              value="1"/>
+    <constant name="EcalEndcapP_zmin"                   value="ForwardServiceGap_zmax"/>
+    <constant name="EcalEndcapP_CoverThickness"         value="0.343*mm"/>
+    <constant name="EcalEndcapP_AirThickness"           value="61.457*mm"/>
+    <constant name="EcalEndcapP_PCBThickness"           value="4.5*mm"/>
+    <constant name="EcalEndcapP_LightGuideThickness"    value="21.0*mm"/>
+    <constant name="EcalEndcapP_ScintillatorThickness"  value="170.0*mm"/>
+    <constant name="EcalEndcapP_MountingPlateThickness" value="12.7*mm"/>
+    <constant name="EcalEndcapP_length"                 value="EcalEndcapP_CoverThickness+EcalEndcapP_AirThickness+EcalEndcapP_PCBThickness+EcalEndcapP_LightGuideThickness+EcalEndcapP_ScintillatorThickness+EcalEndcapP_MountingPlateThickness"/>
+    <constant name="EcalEndcapP_zmax"                   value="EcalEndcapP_zmin + EcalEndcapP_length"/>
+    <constant name="EcalEndcapP_xOffsetNorth"           value="0.685/2.0*cm"/>
+    <constant name="EcalEndcapP_xOffsetSouth"           value="0.685/2.0*cm"/>
+    <constant name="EcalEndcapP_yOffsetNorth"           value="0.0*cm"/>
+    <constant name="EcalEndcapP_yOffsetSouth"           value="0.0*cm"/>
+    <constant name="EcalEndcapP_nsGap"                  value="EcalEndcapP_xOffsetNorth+EcalEndcapP_xOffsetSouth"/>
+    <constant name="EcalEndcapP_rmin"                   value="0.0*inch"/>
+    <constant name="EcalEndcapP_rmax"                   value="81.0*inch"/>
+    <constant name="EcalEndcapP_rmaxWithGap"            value="EcalEndcapP_rmax + EcalEndcapP_nsGap/2.0"/>
+    <constant name="EcalEndcapP_blockSize"              value="10.0*cm"/>
+    <constant name="EcalEndcapP_blockLength"            value="17.0*cm"/>
+    <constant name="EcalEndcapP_spaceBetweenBlock"      value="0.1*cm"/>
+    <constant name="EcalEndcapP_xOffsetBeamPipeNorth"   value="3.0/4.0*EcalEndcapP_blockSize"/>
+    <constant name="EcalEndcapP_xOffsetBeamPipeSouth"   value="2.0*EcalEndcapP_blockSize + 2.0*EcalEndcapP_spaceBetweenBlock"/>
+    <constant name="EcalEndcapP_insert_dy"              value="3.0*EcalEndcapP_blockSize + 3.0*EcalEndcapP_spaceBetweenBlock"/>
+    <constant name="EcalEndcapP_insert_dz"              value="EcalEndcapP_length"/>
+    <constant name="EcalEndcapP_insert_thickness"       value="0.25*inch"/>
+    <constant name="EcalEndcapP_insert_center_x"        value="(EcalEndcapP_xOffsetBeamPipeNorth-EcalEndcapP_xOffsetBeamPipeSouth)/2.0"/>
+    <constant name="EcalEndcapP_nfiber_x"               value="26"/>
+    <constant name="EcalEndcapP_nfiber_y"               value="30"/>
+    <constant name="EcalEndcapP_rfiber"                 value="0.0235*cm"/>
+    <constant name="EcalEndcapP_rscfi"                  value="0.02209*cm"/>
 
     <!-- <constant name="EcalEndcapN_zmin"               value="BackwardPIDRegion_zmin + BackwardInnerEndcapRegion_length"/> -->
     <constant name="EcalEndcapN_zmin"               value="175*cm"/>   <!-- Currently fix value hardcoded -->
@@ -643,12 +656,15 @@ Service gaps in FW direction (before endcapP ECAL) and BW direction (before endc
     <constant name="HcalEndcapPInsert_zmax"     value="HcalEndcapPInsert_zmin + HcalEndcapPInsert_length"/>
     <constant name="HcalEndcapPInsert_width"    value="59.26*cm"/>
     <constant name="HcalEndcapPInsert_height"    value="59.29*cm"/>
-    <constant name="HcalEndcapPInsert_xposition" value="EcalEndcapPInsert_xposition"/>
-    <constant name="HcalEndcapPInsert_yposition" value="EcalEndcapPInsert_yposition"/>
+    <constant name="HcalEndcapPInsert_xposition" value="-10.0*cm"/>
+    <constant name="HcalEndcapPInsert_yposition" value="0.0*cm"/>
+    <constant name="HcalEndcapPInsert_hole_radius"    value="14.61*cm"/>
+    <constant name="HcalEndcapPInsert_hole_xposition" value="-7.20*cm"/>
+    <constant name="HcalEndcapPInsert_hole_yposition" value="0.0*cm"/>
 
     <constant name="HcalEndcapN_CaloSides"      value="60"/>
-    <constant name="HcalEndcapN_zmin"     value="BackwardServiceGap_zmax + 64.0 * cm"/> <!-- 64 cm gap between service gap, includes 28.5 cm oculus -->
-    <constant name="HcalEndcapN_length"   value="45.0*cm"/>
+    <constant name="HcalEndcapN_zmin"     value="BackwardServiceGap_zmax + 44.0 * cm"/> <!-- 44 cm gap between service gap, includes 28.5 cm oculus -->
+    <constant name="HcalEndcapN_length"   value="65.0*cm"/>
     <constant name="HcalEndcapN_zmax"     value="HcalEndcapN_zmin + HcalEndcapN_length"/>
     <comment> HcalEndcapN needs to clear the straight beampipe with 1 * crossing angle + its radius of 22.25 mm </comment>
     <constant name="HcalEndcapN_rmin"     value="max((HcalEndcapN_zmin + HcalEndcapN_length) * tan(abs(CrossingAngle)) + 22.25 * mm, 14.0 * cm)"/>

@@ -42,10 +42,10 @@
 
     <comment> Main parameters for Barrel TOF layers </comment>
     <comment> Barrel TOF region </comment>
-    <constant name="BarrelTOF1_zmin"          value="115.0*cm"/>
-    <constant name="BarrelTOF1_zmax"          value="14.75*cm"/>
-    <constant name="BarrelTOF2_zmin"           value="-15.25*cm"/>
-    <constant name="BarrelTOF2_zmax"           value="145.0*cm"/>
+    <constant name="BarrelTOF1_zmin"          value="112.5*cm"/>
+    <constant name="BarrelTOF1_zmax"          value="17.25*cm"/>
+    <constant name="BarrelTOF2_zmin"           value="-17.75*cm"/>
+    <constant name="BarrelTOF2_zmax"           value="147.5*cm"/>
 
     <constant name="BarrelTOF_radius_design" value="64.6*cm"/>
 
@@ -138,13 +138,13 @@
       <composite name="InnerTrackerEndcapP"/>
     </detector>
     <detector id="TrackerSubAssembly_1_ID"
-      name="MiddleSiBarrelrSubAssembly"
+      name="MiddleSiBarrelSubAssembly"
       type="DD4hep_SubdetectorAssembly"
       vis="TrackerSubAssemblyVis">
       <composite name="SagittaSiBarrel"/>
     </detector>
       <detector id="TrackerSubAssembly_1_ID"
-      name="OuterSiBarrelrSubAssembly"
+      name="OuterSiBarrelSubAssembly"
       type="DD4hep_SubdetectorAssembly"
       vis="TrackerSubAssemblyVis">
       <composite name="OuterSiBarrel"/>
@@ -212,7 +212,7 @@
     <plugin name="epic_FileLoader">
       <arg value="cache:$DETECTOR_PATH:/opt/detector"/>
       <arg value="file:calibrations/materials-map.cbor"/>
-      <arg value="url:https://eicweb.phy.anl.gov/-/project/473/uploads/f175e13500b2708877522736da0127a1/material-map.cbor"/>
+      <arg value="url:https://eicweb.phy.anl.gov/-/project/473/uploads/f892256ac21a4ff1151acca260f8913b/material-map.cbor"/>
     </plugin>
   </plugins>
 

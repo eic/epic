@@ -97,9 +97,9 @@
     <comment>
       Solenoid
     </comment>
-    <vis name="SolenoidCoilVis"     ref="AnlLight_Gray" showDaughters="true"  visible="true" lineStyle="solid" drawingStyle="solid" />
-    <vis name="SolenoidCryostatVis" ref="AnlGray"       showDaughters="true"  visible="true" lineStyle="solid" drawingStyle="solid" />
-    <vis name="SolenoidYokeVis"     ref="AnlLight_Gray" showDaughters="false" visible="true" lineStyle="solid" drawingStyle="solid" />
+    <vis name="SolenoidCoilVis"     ref="AnlLightGray" showDaughters="true"  visible="true" lineStyle="solid" drawingStyle="solid" />
+    <vis name="SolenoidCryostatVis" ref="AnlGray"      showDaughters="true"  visible="true" lineStyle="solid" drawingStyle="solid" />
+    <vis name="SolenoidYokeVis"     ref="AnlLightGray" showDaughters="false" visible="true" lineStyle="solid" drawingStyle="solid" />
 
 
     <comment>
@@ -133,11 +133,6 @@
     <vis name="DRICH_mirror_vis"  ref="AnlGray" showDaughters="true" visible="true" />
     <vis name="DRICH_sensor_vis"  ref="AnlGreen" showDaughters="true" visible="true" />
 
-    <vis name="MRICH_aerogel_vis" ref="AnlTeal" showDaughters="true" visible="true" />
-    <vis name="MRICH_frame_vis" ref="AnlGold" showDaughters="true" visible="true" />
-    <vis name="MRICH_lens_vis" ref="AnlGray" showDaughters="true" visible="true" />
-    <vis name="MRICH_mirror_vis"  ref="AnlGray" showDaughters="true" visible="true" />
-
     <vis name="RICHServiceVis"  ref="AnlGray" showDaughters="true" visible="true" />
 
     <comment>
@@ -145,7 +140,7 @@
     </comment>
     <vis name="GreenVis"       ref="AnlGreen" showDaughters="true" visible="true"/>
     <vis name="RedVis"         ref="AnlRed" showDaughters="true" visible="true"/>
-    <vis name="RPVis"          ref="AnlDelta_Red" showDaughters="true" visible="true"/>
+    <vis name="RPVis"          ref="AnlDarkRed" showDaughters="true" visible="true"/>
     <vis name="RPLayerVis"     ref="AnlTeal" showDaughters="true" visible="true" lineStyle="solid" drawingStyle="solid" />
     <vis name="BlueVis"        ref="AnlBlue" showDaughters="true" visible="true"/>
     <vis name="OrangeVis"      ref="AnlOrange" showDaughters="true" visible="true"/>

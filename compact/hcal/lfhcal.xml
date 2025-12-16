@@ -1,12 +1,11 @@
 <lccdd>
 
-  <info name="lfhcal.xml"
-        title="EPIC LFHCAL"
-        author="@FriederikeBock"
-        url="https://github.com/FriederikeBock"
-        status="development"
-        version="1.0"
-  ><comment/></info>
+  <documentation>
+    Title: EPIC LFHCAL
+    Author: @FriederikeBock
+    Status: development
+    Version: 1.0
+  </documentation>
 
   <define>
     <documentation>
@@ -59,7 +58,7 @@
     <vis name="LFHCAL8MModVis"          ref="AnlBlue"       showDaughters="true"  visible="true"/>
     <vis name="LFHCAL4MModVis"          ref="AnlViolet"     showDaughters="true"  visible="true"/>
     <vis name="LFHCAL8MModOuter"        ref="AnlBlue"       showDaughters="true"  visible="true"/>
-    <vis name="LFHCALLayerScintVis"     ref="AnlLight_Gray" showDaughters="false" visible="true"/>
+    <vis name="LFHCALLayerScintVis"     ref="AnlLightGray"  showDaughters="false" visible="true"/>
     <vis name="LFHCALLayerSteelVis"     ref="AnlRed"        showDaughters="false" visible="true"/>
     <vis name="LFHCALLayerTungstenVis"  ref="AnlViolet"     showDaughters="false" visible="true"/>
     <vis name="LFHCALLayerKaptonVis"    ref="AnlGold"       showDaughters="false" visible="true"/>
