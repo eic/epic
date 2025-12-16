@@ -11,6 +11,7 @@
   <detectors>
 
     <detector id="BeamPipeB0_ID" name="BeamPipeB0" type="forwardBeamPipeBrazil" vis="BeamPipeVis">
+      <type_flags type="DetType_ENDCAP + DetType_BEAMPIPE"/>
       <position x="-0.165*m" y="0*m" z="B0PF_CenterPosition" />
       <rotation x="0*rad" y="0*rad" z="0*rad" />
     </detector>
