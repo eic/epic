@@ -1,0 +1,17 @@
+{
+  "timestamp": 1757535499.0917428,
+  "test_type": "Mock field evaluation benchmark",
+  "field_config": "Simulated MARCO solenoid",
+  "test_points": "Barrel region (r=0-100cm, z=\u00b1150cm)",
+  "expected_performance": {
+    "modern_cpu": ">500k evaluations/sec",
+    "typical_use": "~100k evaluations/sec",
+    "baseline": ">10k evaluations/sec"
+  },
+  "field_characteristics": {
+    "type": "Solenoid + dipole magnets",
+    "peak_field": "~2-3 Tesla",
+    "coverage": "Full detector acceptance",
+    "symmetry": "Cylindrical (solenoid) + asymmetric (dipoles)"
+  }
+}
