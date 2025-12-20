@@ -93,10 +93,18 @@
   <documentation level="0">
     ## World Volume
 
-    The world is a simple box, but could be a union of multiple regions.
+    The world is a union of multiple regions.
   </documentation>
   <world material="Air">
-    <shape type="Box" dx="world_dx" dy="world_dy" dz="world_dz"/>
+    <shape type="BooleanShape" operation="Union">
+      <shape type="BooleanShape" operation="Union">
+        <shape type="Box" dx="exp_hall_dx" dy="exp_hall_dy" dz="exp_hall_dz"/>
+        <shape type="Box" dx="backward_dx" dy="backward_dy" dz="backward_dz"/>
+        <position x="backward_x0" y="0*cm" z="- exp_hall_dz - backward_dz"/>
+      </shape>
+      <shape type="Box" dx="forward_dx" dy="forward_dy" dz="forward_dz"/>
+      <position x="forward_x0" y="0*cm" z="+ exp_hall_dz + forward_dz"/>
+    </shape>
     <!--regionref   name="world_region"/-->
     <!--limitsetref name="world_limits"/-->
   </world>
