@@ -47,7 +47,8 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
   auto fname = detElem.attr<std::string>(_Unicode(optics));
   
   auto output_file = TFile::Open(fname.c_str(), "RECREATE");
-  auto geometry = new CherenkovDetectorCollection();
+  //auto geometry = new CherenkovDetectorCollection();
+  auto geometry = CherenkovDetectorCollection::Instance();
   auto cdet = geometry->AddNewDetector(detName.c_str());
 #endif
   
