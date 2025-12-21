@@ -21,6 +21,7 @@ ACTS_FILES=(
   "Examples/Scripts/MaterialMapping/writeMapConfig.py"
   "Examples/Scripts/MaterialMapping/configureMap.py"
   "Examples/Scripts/MaterialMapping/GeometryVisualisationAndMaterialHandling.py"
+  "Examples/Scripts/MaterialMapping/material_comparison.py"
   "Examples/Scripts/MaterialMapping/Mat_map.C"
   "Examples/Scripts/MaterialMapping/Mat_map_surface_plot.C"
   "Examples/Scripts/MaterialMapping/Mat_map_surface_plot_ratio.C"
@@ -177,6 +178,12 @@ root -l -b -q Examples/Scripts/MaterialMapping/Mat_map.C'("'${propFile}_regenera
 rm -rf Validation/current
 mkdir -p Validation/current
 root -l -b -q Examples/Scripts/MaterialMapping/Mat_map.C'("'${propFile}_current'.root","'${trackFile}'","Validation/current")'
+
+sed -i Examples/Scripts/MaterialMapping/material_comparison.py \
+  -e "s/geant4_material_tracks.root/${recordingFile}/" \
+  -e "s/acts_material_tracks.root/${trackFile}/" \
+  -e 's/(-4.0, 4.0)/(-8.0, 8.0)/'
+python Examples/Scripts/MaterialMapping/material_comparison.py
 
 rm -rf Surfaces
 mkdir -p Surfaces/regenerated/ratio_plot
