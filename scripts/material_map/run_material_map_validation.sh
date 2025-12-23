@@ -184,6 +184,9 @@ sed -i Examples/Scripts/MaterialMapping/material_comparison.py \
   -e "s/acts_material_tracks.root/${trackFile}/" \
   -e 's/(-4.0, 4.0)/(-8.0, 8.0)/'
 python Examples/Scripts/MaterialMapping/material_comparison.py
+echo debug
+ls -la
+exit 1
 
 rm -rf Surfaces
 mkdir -p Surfaces/regenerated/ratio_plot
