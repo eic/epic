@@ -9,8 +9,6 @@
 //   Alexander Kiselev and Chandradoy Chatterjee
 //----------------------------------
 
-//#define _WITH_OPTICS_
-
 #include "DD4hep/DetFactoryHelper.h"
 //#include "DD4hep/OpticalSurfaces.h"
 //#include "DD4hep/Printout.h"
@@ -35,7 +33,7 @@ using namespace dd4hep;
 
 #ifdef _WITH_IRT_OPTICS_
 #include "IRT/CherenkovDetectorCollection.h"
-#include "IRT/CylindricalSurface.h"
+#include "IRT/ConicalSurface.h"
 #endif
 
 //#define _HRPPD_PITCH_                          (3.25*mm)
@@ -55,8 +53,8 @@ static UnionSolid FlangeCut(Detector& description, double length, double clearan
   auto _FLANGE_HPIPE_OFFSET_   = description.constant<double>("FLANGE_HPIPE_OFFSET");
   
   // A wedge bridging two cylinders;
-  Tube eflange(0.0, _FLANGE_EPIPE_DIAMETER_ / 2 + clearance, length/2);//25);
-  Tube hflange(0.0, _FLANGE_HPIPE_DIAMETER_ / 2 + clearance, length/2);//25);
+  Tube eflange(0.0, _FLANGE_EPIPE_DIAMETER_ / 2 + clearance, length/2);
+  Tube hflange(0.0, _FLANGE_HPIPE_DIAMETER_ / 2 + clearance, length/2);
 
   double r0 = _FLANGE_EPIPE_DIAMETER_ / 2 + clearance;
   double r1 = _FLANGE_HPIPE_DIAMETER_ / 2 + clearance;
@@ -180,7 +178,7 @@ static Ref_t createDetector(Detector& description, xml_h e, SensitiveDetector se
      * - `cellMask` is defined such that a hit's `cellID & cellMask` is the corresponding sensor's unique ID
      * - this redundant generalization is for future flexibility, and consistency with dRICH
      */
-  std::vector<std::string> sensorIDfields = {"hrppd"};//module"};
+  std::vector<std::string> sensorIDfields = {"hrppd"};
   const auto& readoutCoder                = *description.readout(readoutName).idSpec().decoder();
   // determine `cellMask` based on `sensorIDfields`
   uint64_t cellMask = 0;
@@ -280,8 +278,8 @@ static Ref_t createDetector(Detector& description, xml_h e, SensitiveDetector se
   float m_r0min = _FLANGE_EPIPE_DIAMETER_ / 2 + _FLANGE_CLEARANCE_ + _VESSEL_INNER_WALL_THICKNESS_ +
     _BUILDING_BLOCK_CLEARANCE_;
   float m_r0max = gas_volume_radius - _BUILDING_BLOCK_CLEARANCE_;
-  printf("@R@ mm & cm %f %f\n", mm, cm);
-  printf("@R@ CLEARANCE: %f [mm]\n", _BUILDING_BLOCK_CLEARANCE_/mm);
+  //printf("@R@ mm & cm %f %f\n", mm, cm);
+  //printf("@R@ CLEARANCE: %f [mm]\n", _BUILDING_BLOCK_CLEARANCE_/mm);
     
   //
   // Aerogel;
@@ -446,17 +444,17 @@ static Ref_t createDetector(Detector& description, xml_h e, SensitiveDetector se
     {
       TVector3 nx(1*sign,0,0), ny(0,-1,0);
 
-      printf("@R@ fvOffset %f, gvOffset  %f, gzOffset  %f [mm]\n", fvOffset/mm, gvOffset/mm, gzOffset/mm);
+      //printf("@R@ fvOffset %f, gvOffset  %f, gzOffset  %f [mm]\n", fvOffset/mm, gvOffset/mm, gzOffset/mm);
       //auto surface = new FlatSurface(sign*(1/mm)*TVector3(0,0,fvOffset + gvOffset + gzOffset), nx, ny);
       auto surface = new FlatSurface(sign*(1/mm)*TVector3(0,0,fvOffset + gvOffset + gzOffset + agthick/2), nx, ny);
       
       auto radiator = geometry->AddFlatRadiator(cdet, "Aerogel", CherenkovDetector::Upstream, 
-						0, (G4LogicalVolume*)(0x1), 0, surface, agthick/mm);//agThick/mm);
+						0, (G4LogicalVolume*)(0x1), 0, surface, agthick/mm);
       {
-	auto sf = dynamic_cast<FlatSurface*>(radiator->GetFrontSide(0));//isec);
-	auto sr = dynamic_cast<FlatSurface*>(radiator->GetRearSide(0));//isec);
-	double zf = sf->GetCenter().Z(), zr = sr->GetCenter().Z();
-	printf("@R@ aerogel: %f %f %f\n", sign, zf, zr);
+	//auto sfront = dynamic_cast<FlatSurface*>(radiator->GetFrontSide(0));//isec);
+	//auto srear = dynamic_cast<FlatSurface*>(radiator->GetRearSide(0));//isec);
+	//double zf = sfront->GetCenter().Z(), zr = srear->GetCenter().Z();
+	//printf("@R@ aerogel: %f %f %f\n", sign, zf, zr);
       }
       radiator->SetAlternativeMaterialName("Aerogel_PFRICH");//aerogelMaterialName.c_str());
       // FIXME: what is it good for in ePIC IRT 2.0 implementation?;
@@ -475,13 +473,13 @@ static Ref_t createDetector(Detector& description, xml_h e, SensitiveDetector se
   //
   // FIXME: XML;
   double _ACRYLIC_THICKNESS_ = 3*mm;
-#if 1//_LATER_
   {
     double acthick = _ACRYLIC_THICKNESS_;// =*/ 3*mm;
     auto acrylicMat = description.material("Acrylic_PFRICH");
     // m_gzOffset += acthick/2;
     
-    Tube ac_tube(m_r0min + 3, m_r0max - 1, acthick / 2, 0 * degree, 360 * degree);
+    //Tube ac_tube(m_r0min + 3, m_r0max - 1, acthick / 2, 0 * degree, 360 * degree);
+    Tube ac_tube(m_r0min, m_r0max, acthick / 2, 0 * degree, 360 * degree);
     SubtractionSolid ac_shape(ac_tube, flange);//_final_shape);
     Volume acVol(detName + "_ac", ac_shape, acrylicMat);
     
@@ -501,15 +499,19 @@ static Ref_t createDetector(Detector& description, xml_h e, SensitiveDetector se
       auto radiator = geometry->AddFlatRadiator(cdet, "Acrylic", CherenkovDetector::Upstream, 
 						0, (G4LogicalVolume*)(0x2), 0, surface, acthick/mm);//acThick/mm);
       {
-	auto sf = dynamic_cast<FlatSurface*>(radiator->GetFrontSide(0));//isec);
-	auto sr = dynamic_cast<FlatSurface*>(radiator->GetRearSide(0));//isec);
-	double zf = sf->GetCenter().Z(), zr = sr->GetCenter().Z();
-	printf("@R@ acrylic: %f %f %f\n", sign, zf, zr);
+	//auto sfront = dynamic_cast<FlatSurface*>(radiator->GetFrontSide(0));//isec);
+	//auto srear = dynamic_cast<FlatSurface*>(radiator->GetRearSide(0));//isec);
+	//double zf = sfront->GetCenter().Z(), zr = srear->GetCenter().Z();
+	//printf("@R@ acrylic: %f %f %f\n", sign, zf, zr);
       }
       radiator->SetAlternativeMaterialName("Acrylic_PFRICH");//acrylicMaterialName.c_str());
     }
 #endif
   }
+  
+#ifdef _WITH_IRT_OPTICS_
+  //ConicalSurface *msurface = 0;
+  OpticalBoundary *mboundaries[2] = {0, 0};
 #endif
   
   //
@@ -549,7 +551,15 @@ static Ref_t createDetector(Detector& description, xml_h e, SensitiveDetector se
 	SkinSurface mirrorSkin(description, mirror_outerDE, "outer_mirror_optical_surface_"/* + secName*/, mirrorSurf,
 			       outer_mirrorVol);
 	mirrorSkin.isValid();
+
+#ifdef _WITH_IRT_OPTICS_
+	auto msurface = new ConicalSurface(sign*(1/mm)*TVector3(0,0,fvOffset + gvOffset + mzoffset),
+					   sign*TVector3(0,0,1), mirror_r0[im]/mm, mirror_r1[im]/mm, mlen/mm);
 	
+	mboundaries[im] = new OpticalBoundary(cdet->GetRadiator("GasVolume"), msurface, false);
+	// Need to store it in a separate call (?), see a comment in CherenkovDetector.h;
+	cdet->StoreOpticalBoundary(mboundaries[im]);
+#endif
       } else {
 	
 	Cone mirror_inner_cone_shape(mlen / 2., mirror_r0[im], mirror_r0[im] + mirror_thickness,
@@ -566,6 +576,17 @@ static Ref_t createDetector(Detector& description, xml_h e, SensitiveDetector se
 	SkinSurface mirrorSkin(description, mirror_innerDE, "inner_mirror_optical_surface_"/* + secName*/, mirrorSurf,
 			       inner_mirrorVol);
 	mirrorSkin.isValid();
+	
+#ifdef _WITH_IRT_OPTICS_
+	auto msurface = new ConicalSurface(sign*(1/mm)*TVector3(0,0,fvOffset + gvOffset + mzoffset),
+					   sign*TVector3(0,0,1), (mirror_r0[im] + mirror_thickness)/mm,
+					   (mirror_r1[im] + mirror_thickness)/mm, mlen/mm);
+	msurface->SetConvex();
+	
+	mboundaries[im] = new OpticalBoundary(cdet->GetRadiator("GasVolume"), msurface, false);
+	// Need to store it in a separate call (?), see a comment in CherenkovDetector.h;
+	cdet->StoreOpticalBoundary(mboundaries[im]);
+#endif
       }
     } //for im
   }
@@ -628,10 +649,10 @@ static Ref_t createDetector(Detector& description, xml_h e, SensitiveDetector se
 						0, (G4LogicalVolume*)(0x3), 0, /*wndVol, m_FusedSilica,*/ surface,
 						_HRPPD_WINDOW_THICKNESS_/mm);
       {
-	auto sf = dynamic_cast<FlatSurface*>(radiator->GetFrontSide(0));//isec);
-	auto sr = dynamic_cast<FlatSurface*>(radiator->GetRearSide(0));//isec);
-	double zf = sf->GetCenter().Z(), zr = sr->GetCenter().Z();
-	printf("@R@ window: %f %f %f\n", sign, zf, zr);
+	//auto sfront = dynamic_cast<FlatSurface*>(radiator->GetFrontSide(0));//isec);
+	//auto srear = dynamic_cast<FlatSurface*>(radiator->GetRearSide(0));//isec);
+	//double zf = sfront->GetCenter().Z(), zr = srear->GetCenter().Z();
+	//printf("@R@ window: %f %f %f\n", sign, zf, zr);
       }
       radiator->SetAlternativeMaterialName("AirOptical");//windowMaterialName.c_str());
     }	
@@ -858,7 +879,6 @@ static Ref_t createDetector(Detector& description, xml_h e, SensitiveDetector se
       {
 	// Photocathode surface;
 	double xOffset = xy.X(), yOffset = xy.Y();
-	//auto surface = new FlatSurface((1/mm)*TVector3(sign*xOffset, yOffset, -1700.*mm),//sign*(fvzOffset + zpdc)),
 	auto surface = new FlatSurface((1/mm)*TVector3(sign*xOffset, yOffset,
 						       sign*(fvOffset + _FIDUCIAL_VOLUME_LENGTH_/2 -
 							     _SENSOR_AREA_LENGTH_ + _HRPPD_WINDOW_THICKNESS_ + pdthick/2)),
@@ -868,12 +888,7 @@ static Ref_t createDetector(Detector& description, xml_h e, SensitiveDetector se
 	  // '0': pfRICH has no division in sectors (unlike e.g. dRICH);
 	  unsigned sector = 0;
 	  
-	  // Just two configurations: with and without a reflection on a conical mirror;
-	  //#ifdef _WITH_MIRROR_
-	  //for(unsigned iq=0; iq<2; iq++) {
-	  //#else
-	  for(unsigned iq=0; iq<1; iq++) {
-	    //#endif
+	  for(unsigned iq=0; iq<4; iq++) {
 	    auto irt = pd->AllocateIRT(sector, sensorID);
 	      
 	    // Aerogel and acrylic;
@@ -882,11 +897,23 @@ static Ref_t createDetector(Detector& description, xml_h e, SensitiveDetector se
 	      for(auto boundary: cdet->m_OpticalBoundaries[CherenkovDetector::Upstream][sector])
 		irt->AddOpticalBoundary(boundary);
 	    
-	    // Optional mirror reflection;
-	    //#ifdef _WITH_MIRROR_
-	    //if (iq) irt->AddOpticalBoundary(mboundary);
-	    //#endif
-	      
+	    switch (iq) {
+	    case 0: 
+	      // Direct hit;
+	      break;
+	    case 1:
+	    case 2:         
+	      // Reflection on either inner or outer mirrors;
+	      irt->AddOpticalBoundary(mboundaries[iq-1]);
+	      break;
+	    case 3:
+	      // Reflection on outer, then on inner mirror; happens at large angles; if the pyramids are
+	      // too high, these photons will undergo more reflections, and cannot be saved;
+	      irt->AddOpticalBoundary(mboundaries[1]);
+	      irt->AddOpticalBoundary(mboundaries[0]);
+	      break;
+	    } //switch
+	    
 	    // Fused silica windows;
 	    if (cdet->m_OpticalBoundaries[CherenkovDetector::Downstream].find(sector) != 
 		cdet->m_OpticalBoundaries[CherenkovDetector::Downstream].end())
