@@ -21,7 +21,7 @@
       <IP_pipe
         OD="BeampipeOD"
         wall_thickness="0.757*mm"
-        gold_thickness="5*um"
+        gold_thickness="5*um+5*um"
         crossing_angle="CrossingAngle"
         upstream_straight_length="BeampipeUpstreamStraightLength"
         downstream_straight_length="BeampipeDownstreamStraightLength"
