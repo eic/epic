@@ -143,7 +143,7 @@
           sensitive="true"
           width="SiBarrelStave1_width/2 - SiBarrelSiliconGap_width/2"
           length="SiBarrelMod1_length"
-          thickness="SiBarrelSensorMod_thickness"
+          thickness="SiBarrelSensor_thickness"
           vis="TrackerLayerVis">
           <position x="SiBarrelSiliconGap_width/4 + SiBarrelStave1_width/4" y="0" z="0" />
         </module_component>
@@ -152,18 +152,18 @@
           sensitive="false"
           width="SiBarrelSiliconGap_width"
           length="SiBarrelMod1_length"
-          thickness="SiBarrelSensorMod_thickness"
+          thickness="SiBarrelSensor_thickness"
           vis="TrackerLayerVis">
-        <position x="0" y="0" z="-SiBarrelSensorMod_thickness" />
+        <position x="0" y="0" z="-SiBarrelSensor_thickness" />
         </module_component>
         <module_component name="Silicon_left"
           material="Silicon"
           sensitive="true"
           width="SiBarrelStave1_width/2 - SiBarrelSiliconGap_width/2"
           length="SiBarrelMod1_length"
-          thickness="SiBarrelSensorMod_thickness"
+          thickness="SiBarrelSensor_thickness"
           vis="TrackerLayerVis">
-        <position x="-SiBarrelSiliconGap_width/4 - SiBarrelStave1_width/4" y="0" z="-SiBarrelSensorMod_thickness" />
+        <position x="-SiBarrelSiliconGap_width/4 - SiBarrelStave1_width/4" y="0" z="-SiBarrelSensor_thickness" />
         </module_component>
 
 
@@ -303,7 +303,7 @@
           sensitive="true"
           width="SiBarrelStave2_width/2 - SiBarrelSiliconGap_width/2"
           length="SiBarrelMod2_length"
-          thickness="SiBarrelSensorMod_thickness"
+          thickness="SiBarrelSensor_thickness"
           vis="TrackerLayerVis">
           <position x="SiBarrelSiliconGap_width/4 + SiBarrelStave2_width/4" y="0" z="0" />
         </module_component>
@@ -312,18 +312,18 @@
           sensitive="false"
           width="SiBarrelSiliconGap_width"
           length="SiBarrelMod2_length"
-          thickness="SiBarrelSensorMod_thickness"
+          thickness="SiBarrelSensor_thickness"
           vis="TrackerLayerVis">
-       <position x="0" y="0" z="-SiBarrelSensorMod_thickness" />
+       <position x="0" y="0" z="-SiBarrelSensor_thickness" />
         </module_component>
         <module_component name="Silicon_left"
           material="Silicon"
           sensitive="true"
           width="SiBarrelStave2_width/2 - SiBarrelSiliconGap_width/2"
           length="SiBarrelMod2_length"
-          thickness="SiBarrelSensorMod_thickness"
+          thickness="SiBarrelSensor_thickness"
           vis="TrackerLayerVis">
-    <position x="-SiBarrelSiliconGap_width/4 - SiBarrelStave2_width/4" y="0" z="-SiBarrelSensorMod_thickness" />
+    <position x="-SiBarrelSiliconGap_width/4 - SiBarrelStave2_width/4" y="0" z="-SiBarrelSensor_thickness" />
         </module_component>
 
       </module>
