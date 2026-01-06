@@ -75,7 +75,7 @@
   material="Aluminum"
   vis_vessel="DRICH_vessel_vis"
   vis_gas="DRICH_gas_vis"
-  
+
   optics="drich-optics.root"
   >
 

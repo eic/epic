@@ -45,24 +45,24 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
 #ifdef _WITH_IRT_OPTICS_
   // Output file with optics description;
   auto fname = detElem.attr<std::string>(_Unicode(optics));
-  
+
   auto output_file = TFile::Open(fname.c_str(), "RECREATE");
   //auto geometry = new CherenkovDetectorCollection();
   auto geometry = CherenkovDetectorCollection::Instance();
-  auto cdet = geometry->AddNewDetector(detName.c_str());
+  auto cdet     = geometry->AddNewDetector(detName.c_str());
 #endif
-  
+
   // attributes, from compact file =============================================
   // - vessel
-  auto vesselZmin      = dims.attr<double>(_Unicode(zmin));
-  auto vesselLength    = dims.attr<double>(_Unicode(length));
-  auto vesselRmin0     = dims.attr<double>(_Unicode(rmin0));
-  auto vesselRmin1     = dims.attr<double>(_Unicode(rmin1));
-  auto vesselRmax0     = dims.attr<double>(_Unicode(rmax0));
-  auto vesselRmax1     = dims.attr<double>(_Unicode(rmax1));
-  auto vesselRmax2     = dims.attr<double>(_Unicode(rmax2));
-  auto snoutLength     = dims.attr<double>(_Unicode(snout_length));
-  auto nSectors        = dims.attr<int>(_Unicode(nsectors));
+  auto vesselZmin   = dims.attr<double>(_Unicode(zmin));
+  auto vesselLength = dims.attr<double>(_Unicode(length));
+  auto vesselRmin0  = dims.attr<double>(_Unicode(rmin0));
+  auto vesselRmin1  = dims.attr<double>(_Unicode(rmin1));
+  auto vesselRmax0  = dims.attr<double>(_Unicode(rmax0));
+  auto vesselRmax1  = dims.attr<double>(_Unicode(rmax1));
+  auto vesselRmax2  = dims.attr<double>(_Unicode(rmax2));
+  auto snoutLength  = dims.attr<double>(_Unicode(snout_length));
+  auto nSectors     = dims.attr<int>(_Unicode(nsectors));
 #ifdef _WITH_IRT_OPTICS_
   cdet->SetSectorCount(nSectors);
   // The way Chris defined it in the geometry;
@@ -71,33 +71,33 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
   auto wallThickness   = dims.attr<double>(_Unicode(wall_thickness));
   auto windowThickness = dims.attr<double>(_Unicode(window_thickness));
   auto vesselMat       = desc.material(detElem.attr<std::string>(_Unicode(material)));
-  
-  auto gasvolMatName   = detElem.attr<std::string>(_Unicode(gas));
-  auto gasvolMat       = desc.material(gasvolMatName);
-  
-  auto vesselVis       = desc.visAttributes(detElem.attr<std::string>(_Unicode(vis_vessel)));
-  auto gasvolVis       = desc.visAttributes(detElem.attr<std::string>(_Unicode(vis_gas)));
+
+  auto gasvolMatName = detElem.attr<std::string>(_Unicode(gas));
+  auto gasvolMat     = desc.material(gasvolMatName);
+
+  auto vesselVis = desc.visAttributes(detElem.attr<std::string>(_Unicode(vis_vessel)));
+  auto gasvolVis = desc.visAttributes(detElem.attr<std::string>(_Unicode(vis_gas)));
   // - radiator (applies to aerogel and filter)
   auto radiatorElem       = detElem.child(_Unicode(radiator));
   auto radiatorRmin       = radiatorElem.attr<double>(_Unicode(rmin));
   auto radiatorRmax       = radiatorElem.attr<double>(_Unicode(rmax));
   auto radiatorPitch      = radiatorElem.attr<double>(_Unicode(pitch));
   auto radiatorFrontplane = radiatorElem.attr<double>(_Unicode(frontplane));
-  
+
   // - aerogel
   auto aerogelElem      = radiatorElem.child(_Unicode(aerogel));
   auto aerogelMatName   = aerogelElem.attr<std::string>(_Unicode(material));
   auto aerogelMat       = desc.material(aerogelMatName);
   auto aerogelVis       = desc.visAttributes(aerogelElem.attr<std::string>(_Unicode(vis)));
   auto aerogelThickness = aerogelElem.attr<double>(_Unicode(thickness));
-  
+
   // - filter
   auto filterElem      = radiatorElem.child(_Unicode(filter));
   auto filterMatName   = filterElem.attr<std::string>(_Unicode(material));
   auto filterMat       = desc.material(filterMatName);
   auto filterVis       = desc.visAttributes(filterElem.attr<std::string>(_Unicode(vis)));
   auto filterThickness = filterElem.attr<double>(_Unicode(thickness));
-  
+
   // - airgap between filter and aerogel
   auto airgapElem      = radiatorElem.child(_Unicode(airgap));
   auto airgapMat       = desc.material(airgapElem.attr<std::string>(_Unicode(material)));
@@ -176,7 +176,7 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
       return det;
     }
   }
-  
+
   // if debugging anything, draw only one sector and adjust visibility
   if (debugOptics || debugMirror || debugSensors)
     debugSector = true;
@@ -184,10 +184,10 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
     gasvolVis = vesselVis = desc.invisible();
 
 #ifdef _WITH_IRT_OPTICS_
-  SphericalSurface *msurface = 0;
-  OpticalBoundary *mboundary = 0;
+  SphericalSurface* msurface = 0;
+  OpticalBoundary* mboundary = 0;
 #endif
-  
+
   // readout coder <-> unique sensor ID
   /* - `sensorIDfields` is a list of readout fields used to specify a unique sensor ID
    * - `cellMask` is defined such that a hit's `cellID & cellMask` is the corresponding sensor's unique ID
@@ -277,7 +277,7 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
   UnionSolid vesselUnion(vesselTank, vesselSnout, Position(0., 0., -vesselLength / 2.));
   UnionSolid gasvolUnion(gasvolTank, gasvolSnout,
                          Position(0., 0., -vesselLength / 2. + windowThickness));
-  
+
   // union: add sensorboxes for all sectors
   for (int isec = 0; isec < nSectors; isec++) {
     RotationZ sectorRotation((isec + 0.5) * 2 * M_PI / nSectors);
@@ -333,7 +333,7 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
   PlacedVolume gasvolPV = vesselVol.placeVolume(gasvolVol, Position(0, 0, 0));
   DetElement gasvolDE(det, "gasvol_de", 0);
   gasvolDE.setPlacement(gasvolPV);
-    
+
   // place mother volume (vessel)
   Volume motherVol      = desc.pickMotherVolume(det);
   PlacedVolume vesselPV = motherVol.placeVolume(vesselVol, vesselPos);
@@ -351,13 +351,13 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
                    radiatorRmin + boreDelta * (aerogelThickness + airgapThickness) / vesselLength,
                    radiatorRmax + snoutDelta * (aerogelThickness + airgapThickness) / snoutLength);
   Cone filterSolid(
-    filterThickness / 2,
-    radiatorRmin + boreDelta * (aerogelThickness + airgapThickness) / vesselLength,
-    radiatorRmax + snoutDelta * (aerogelThickness + airgapThickness) / snoutLength,
-    radiatorRmin +
-    boreDelta * (aerogelThickness + airgapThickness + filterThickness) / vesselLength,
-    radiatorRmax +
-    snoutDelta * (aerogelThickness + airgapThickness + filterThickness) / snoutLength);
+      filterThickness / 2,
+      radiatorRmin + boreDelta * (aerogelThickness + airgapThickness) / vesselLength,
+      radiatorRmax + snoutDelta * (aerogelThickness + airgapThickness) / snoutLength,
+      radiatorRmin +
+          boreDelta * (aerogelThickness + airgapThickness + filterThickness) / vesselLength,
+      radiatorRmax +
+          snoutDelta * (aerogelThickness + airgapThickness + filterThickness) / snoutLength);
 
   Volume aerogelVol(detName + "_aerogel", aerogelSolid, aerogelMat);
   Volume airgapVol(detName + "_airgap", airgapSolid, airgapMat);
@@ -391,11 +391,11 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
     airgapDE.setPlacement(airgapPV);
 
     auto filterPlacement =
-      Translation3D(0., 0., airgapThickness) * // add an air gap
-      Translation3D(radiatorPos) *             // re-center to originFront
-      RotationY(radiatorPitch) *               // change polar angle
-      Translation3D(0., 0.,
-                    (aerogelThickness + filterThickness) / 2.); // move to aerogel backplane
+        Translation3D(0., 0., airgapThickness) * // add an air gap
+        Translation3D(radiatorPos) *             // re-center to originFront
+        RotationY(radiatorPitch) *               // change polar angle
+        Translation3D(0., 0.,
+                      (aerogelThickness + filterThickness) / 2.); // move to aerogel backplane
     auto filterPV = gasvolVol.placeVolume(filterVol, filterPlacement);
     DetElement filterDE(det, "filter_de", 0);
     filterDE.setPlacement(filterPV);
@@ -405,39 +405,42 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
     // radiator z-positions (w.r.t. IP); only needed downstream if !debugOptics
     double aerogelZpos = vesselPos.z() + aerogelPV.position().z();
     //+double airgapZpos  = vesselPos.z() + airgapPV.position().z();
-    double filterZpos  = vesselPos.z() + filterPV.position().z();
+    double filterZpos = vesselPos.z() + filterPV.position().z();
     //+desc.add(Constant("DRICH_aerogel_zpos", std::to_string(aerogelZpos)));
     //+desc.add(Constant("DRICH_airgap_zpos", std::to_string(airgapZpos)));
     //+desc.add(Constant("DRICH_filter_zpos", std::to_string(filterZpos)));
-    
+
 #ifdef _WITH_IRT_OPTICS_
     {
-      TVector3 nx(1,0,0), ny(0,-1,0);
-      
+      TVector3 nx(1, 0, 0), ny(0, -1, 0);
+
       for (int isec = 0; isec < nSectors; isec++) {
-	{
-	  // FIXME: Z-location does not really matter here, right?;
-	  auto boundary = new FlatSurface(TVector3(0,0,0), nx, ny);
-	
-	  auto radiator = geometry->SetContainerVolume(cdet, "GasVolume", isec, (G4LogicalVolume*)(0x0), 0, boundary);
-	  radiator->SetAlternativeMaterialName(gasvolMatName.c_str());
-	}
-    
-	{
-	  auto surface = new FlatSurface((1/mm)*TVector3(0,0,aerogelZpos), nx, ny);
-      
-	  auto radiator = geometry->AddFlatRadiator(cdet, "Aerogel", CherenkovDetector::Upstream, 
-						    isec, (G4LogicalVolume*)(0x1), 0, surface, aerogelThickness/mm);
-	  radiator->SetAlternativeMaterialName(aerogelMatName.c_str());
-	}
-	
-	{
-	  auto surface = new FlatSurface((1/mm)*TVector3(0,0,filterZpos), nx, ny);
-	  
-	  auto radiator = geometry->AddFlatRadiator(cdet, "Acrylic", CherenkovDetector::Upstream, 
-						    isec, (G4LogicalVolume*)(0x2), 0, surface, filterThickness/mm);
-	  radiator->SetAlternativeMaterialName(filterMatName.c_str());
-	}
+        {
+          // FIXME: Z-location does not really matter here, right?;
+          auto boundary = new FlatSurface(TVector3(0, 0, 0), nx, ny);
+
+          auto radiator = geometry->SetContainerVolume(cdet, "GasVolume", isec,
+                                                       (G4LogicalVolume*)(0x0), 0, boundary);
+          radiator->SetAlternativeMaterialName(gasvolMatName.c_str());
+        }
+
+        {
+          auto surface = new FlatSurface((1 / mm) * TVector3(0, 0, aerogelZpos), nx, ny);
+
+          auto radiator =
+              geometry->AddFlatRadiator(cdet, "Aerogel", CherenkovDetector::Upstream, isec,
+                                        (G4LogicalVolume*)(0x1), 0, surface, aerogelThickness / mm);
+          radiator->SetAlternativeMaterialName(aerogelMatName.c_str());
+        }
+
+        {
+          auto surface = new FlatSurface((1 / mm) * TVector3(0, 0, filterZpos), nx, ny);
+
+          auto radiator =
+              geometry->AddFlatRadiator(cdet, "Acrylic", CherenkovDetector::Upstream, isec,
+                                        (G4LogicalVolume*)(0x2), 0, surface, filterThickness / mm);
+          radiator->SetAlternativeMaterialName(filterMatName.c_str());
+        }
       } //for isec
     }
 #endif
@@ -452,23 +455,23 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
 #ifdef _WITH_IRT_OPTICS_
   // [0,0]: have neither access to G4VSolid nor to G4Material; IRT code does not care; fine;
   auto pd = new CherenkovPhotonDetector(0, 0);
-  
+
   // FIXME: '0' stands for the unknown (and irrelevant) G4LogicalVolume;
   geometry->AddPhotonDetector(cdet, 0, pd);
-  
+
   // Cannot access GEANT shapes in the reconstruction code -> store this value;
-  pd->SetActiveAreaSize(pssSide/mm);
-  
+  pd->SetActiveAreaSize(pssSide / mm);
+
   // FIXME: calculate it properly later; see S13361-3050NE-08 specs;
   pd->SetGeometricEfficiency(0.74);
 #endif
-    
+
   // SECTOR LOOP //////////////////////////////////////////////////////////////////////
   for (int isec = 0; isec < nSectors; isec++) {
     // debugging filters, limiting the number of sectors
     if (debugSector && isec != 0)
       continue;
-  
+
     // sector rotation about z axis
     RotationZ sectorRotation((isec + 0.5) * 2 * M_PI / nSectors);
     std::string secName = "sec" + std::to_string(isec);
@@ -553,8 +556,9 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
 #ifdef _WITH_IRT_OPTICS_
     {
       // NB: default is concave, which is fine;
-      msurface = new SphericalSurface((1/mm)*TVector3(mirrorFinalCenter.x(), mirrorFinalCenter.y(), mirrorFinalCenter.z()),
-				      (1/mm)*mirrorRadius);
+      msurface = new SphericalSurface(
+          (1 / mm) * TVector3(mirrorFinalCenter.x(), mirrorFinalCenter.y(), mirrorFinalCenter.z()),
+          (1 / mm) * mirrorRadius);
       mboundary = new OpticalBoundary(cdet->GetRadiator("GasVolume"), msurface, false);
       // Need to store it in a separate call, see a comment in CherenkovDetector.h;
       cdet->StoreOpticalBoundary(mboundary);
@@ -563,14 +567,14 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
       cdet->GetContainerVolume()->m_Borders[isec].second = msurface;
     }
 #endif
-      
+
     // BUILD SENSORS ====================================================================
 
     // if debugging sphere properties, restrict number of sensors drawn
     if (debugSensors) {
       pssSide = 2 * M_PI * sensorSphRadius / 64;
     }
-    
+
     // reconstruction constants
     auto sensorSphPos         = Position(sensorSphCenterX, 0., sensorSphCenterZ) + originFront;
     auto sensorSphFinalCenter = sectorRotation * Position(xS, 0.0, zS);
@@ -743,7 +747,7 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
 
               // sensor DetElement
               auto sensorID = encodeSensorID(pssPV.volIDs());
-	      //printf("@S@ %d vs %lu\n", isec, (sensorID >> 8) & 0x7);
+              //printf("@S@ %d vs %lu\n", isec, (sensorID >> 8) & 0x7);
               std::string sensorIDname =
                   secName + "_pdu" + std::to_string(ipdu) + "_sipm" + std::to_string(isipm);
               DetElement pssDE(det, "sensor_de_" + sensorIDname, sensorID);
@@ -773,13 +777,13 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
                 return pduAssemblyPlacement * n;
               };
               auto sensorNormX = normVector(Direction{
-                 -1., //1.,
+                  -1., //1.,
                   0.,
                   0.,
               });
               auto sensorNormY = normVector(Direction{
                   0.,
-                 -1.,//1.,
+                  -1., //1.,
                   0.,
               });
 
@@ -834,37 +838,38 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
               //+addVecToMap("normX", sensorNormX);
               //+addVecToMap("normY", sensorNormY);
 #ifdef _WITH_IRT_OPTICS_
-	      {
-		// SiPM panel surface;
-		auto surface = new FlatSurface((1/mm)*TVector3(sensorPos.x(), sensorPos.y(), sensorPos.z()),
-					       TVector3(sensorNormX.x(), sensorNormX.y(), sensorNormX.z()), 
-					       TVector3(sensorNormY.x(), sensorNormY.y(), sensorNormY.z())); 
+              {
+                // SiPM panel surface;
+                auto surface = new FlatSurface(
+                    (1 / mm) * TVector3(sensorPos.x(), sensorPos.y(), sensorPos.z()),
+                    TVector3(sensorNormX.x(), sensorNormX.y(), sensorNormX.z()),
+                    TVector3(sensorNormY.x(), sensorNormY.y(), sensorNormY.z()));
 
-		// Wipe out sector bits; FIXME: it seems this is not really needed?;
-		auto irt = pd->AllocateIRT(isec, sensorID & sector_mask);
-		  
-		// Aerogel and acrylic;
-		if (cdet->m_OpticalBoundaries[CherenkovDetector::Upstream].find(isec) != 
-		    cdet->m_OpticalBoundaries[CherenkovDetector::Upstream].end())
-		  for(auto boundary: cdet->m_OpticalBoundaries[CherenkovDetector::Upstream][isec])
-		    irt->AddOpticalBoundary(boundary);
-		
-		// Mirror;
-		irt->AddOpticalBoundary(mboundary);
-		
-		// FIXME: eventually there should be a quartz window defined as part of the
-		// cdet->m_OpticalBoundaries[CherenkovDetector::Downstream] boundaries;
-		
-		// Terminate the optical path;
-		pd->AddItselfToOpticalBoundaries(irt, surface);
-	      } 
+                // Wipe out sector bits; FIXME: it seems this is not really needed?;
+                auto irt = pd->AllocateIRT(isec, sensorID & sector_mask);
+
+                // Aerogel and acrylic;
+                if (cdet->m_OpticalBoundaries[CherenkovDetector::Upstream].find(isec) !=
+                    cdet->m_OpticalBoundaries[CherenkovDetector::Upstream].end())
+                  for (auto boundary : cdet->m_OpticalBoundaries[CherenkovDetector::Upstream][isec])
+                    irt->AddOpticalBoundary(boundary);
+
+                // Mirror;
+                irt->AddOpticalBoundary(mboundary);
+
+                // FIXME: eventually there should be a quartz window defined as part of the
+                // cdet->m_OpticalBoundaries[CherenkovDetector::Downstream] boundaries;
+
+                // Terminate the optical path;
+                pd->AddItselfToOpticalBoundaries(irt, surface);
+              }
 #endif
               printout(DEBUG, "DRICH_geo", "sensor %s:", sensorIDname.c_str());
 
               //+for (auto kv : pssVarMap->variantParameters)
-	      //+printout(DEBUG, "DRICH_geo", "    %s: %f", kv.first.c_str(),
-	      //+         pssVarMap->get<double>(kv.first));
-	      
+              //+printout(DEBUG, "DRICH_geo", "    %s: %f", kv.first.c_str(),
+              //+         pssVarMap->get<double>(kv.first));
+
               // increment SIPM number
               isipm++;
             }
@@ -962,7 +967,7 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
   geometry->Write();
   output_file->Close();
 #endif
-  
+
   return det;
 }
 

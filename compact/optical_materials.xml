@@ -597,7 +597,7 @@
    5.42*eV   15.841*mm
    5.92*eV   11.858*mm
    6.89*eV    5.772*mm
-   7.75*eV    1.644*mm	
+   7.75*eV    1.644*mm
       "/>
     <matrix name="RAYLEIGH__Aerogel_PFRICH" coldim="2" values="
    1.68*eV  417.210*mm
