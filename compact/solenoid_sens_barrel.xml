@@ -100,171 +100,89 @@
     </documentation>
     <detector
       id="Solenoid_ID"
-      name="SolenoidBarrel"
-      type="epic_Solenoid"
-      insideTrackingVolume="false">
+      name="SolenoidBarrelSens"
+      type="epic_SensSolenoid"
+      readout="SolenoidBarrelHits"
+      insideTrackingVolume="false"
+      calorimeterType="HAD_BARREL">
       <position x="0" y="0" z="Solenoid_offset"/>
       <dimensions rmin="Solenoid_rmin" rmax="Solenoid_rmax" length="Solenoid_length"/>
       <layer id="1" name="InnerVacuumVessel"
         inner_r="SolenoidBarrelInnerVacuumVessel_rmin"
         outer_z="SolenoidBarrelInnerVacuumVessel_zmax"
         vis="SolenoidCryostatVis">
-        <slice material="Aluminum5083" thickness="SolenoidBarrelInnerVacuumVesselThickness"/>
+        <slice material="Aluminum5083" thickness="SolenoidBarrelInnerVacuumVesselThickness" sensitive="yes"/>
       </layer>
       <layer id="2" name="InnerSecondMLILayer"
         inner_r="SolenoidBarrelInnerSecondMLILayer_rmin"
         outer_z="SolenoidBarrelInnerSecondMLILayer_zmax"
         vis="SolenoidCryostatVis">
-        <slice material="MylarMLI" thickness="SolenoidBarrelInnerSecondMLILayerThickness"/>
+        <slice material="MylarMLI" thickness="SolenoidBarrelInnerSecondMLILayerThickness" sensitive="yes"/>
       </layer>
       <layer id="3" name="InnerThermalShield"
         inner_r="SolenoidBarrelInnerThermalShield_rmin"
         outer_z="SolenoidBarrelInnerThermalShield_zmax"
         vis="SolenoidCryostatVis">
-        <slice material="Copper" thickness="SolenoidBarrelInnerThermalShieldThickness"/>
+        <slice material="Copper" thickness="SolenoidBarrelInnerThermalShieldThickness" sensitive="yes"/>
       </layer>
       <layer id="4" name="InnerFirstMLILayer"
         inner_r="SolenoidBarrelInnerFirstMLILayer_rmin"
         outer_z="SolenoidBarrelInnerFirstMLILayer_zmax"
         vis="SolenoidCryostatVis">
-        <slice material="MylarMLI" thickness="SolenoidBarrelInnerFirstMLILayerThickness"/>
+        <slice material="MylarMLI" thickness="SolenoidBarrelInnerFirstMLILayerThickness" sensitive="yes"/>
       </layer>
       <layer id="5" name="InnerG10"
         inner_r="SolenoidBarrelInnerG10_rmin"
         outer_z="SolenoidBarrelInnerG10_zmax"
         vis="SolenoidCryostatVis">
-        <slice material="G10" thickness="SolenoidBarrelInnerG10Thickness"/>
+        <slice material="G10" thickness="SolenoidBarrelInnerG10Thickness" sensitive="yes"/>
       </layer>
       <layer id="6" name="Coil"
         inner_r="SolenoidBarrelCoil_rmin"
         outer_z="SolenoidBarrelCoil_zmax"
         vis="SolenoidCryostatVis">
-        <slice material="SolenoidCoil" thickness="SolenoidBarrelCoilThickness"/>
+        <slice material="SolenoidCoil" thickness="SolenoidBarrelCoilThickness" sensitive="yes"/>
       </layer>
       <layer id="7" name="OuterG10"
         inner_r="SolenoidBarrelOuterG10_rmin"
         outer_z="SolenoidBarrelOuterG10_zmax"
         vis="SolenoidCryostatVis">
-        <slice material="G10" thickness="SolenoidBarrelOuterG10Thickness"/>
+        <slice material="G10" thickness="SolenoidBarrelOuterG10Thickness" sensitive="yes"/>
       </layer>
       <layer id="8" name="CoilFormer"
         inner_r="SolenoidBarrelCoilFormer_rmin"
         outer_z="SolenoidBarrelCoilFormer_zmax"
         vis="SolenoidCryostatVis">
-        <slice material="Brass" thickness="SolenoidBarrelCoilFormerThickness"/>
+        <slice material="Brass" thickness="SolenoidBarrelCoilFormerThickness" sensitive="yes"/>
       </layer>
       <layer id="9" name="OuterThermalShield"
         inner_r="SolenoidBarrelOuterThermalShield_rmin"
         outer_z="SolenoidBarrelOuterThermalShield_zmax"
         vis="SolenoidCryostatVis">
-        <slice material="Copper" thickness="SolenoidBarrelOuterThermalShieldThickness"/>
+        <slice material="Copper" thickness="SolenoidBarrelOuterThermalShieldThickness" sensitive="yes"/>
       </layer>
       <layer id="10" name="OuterSecondMLILayer"
         inner_r="SolenoidBarrelOuterSecondMLILayer_rmin"
         outer_z="SolenoidBarrelOuterSecondMLILayer_zmax"
         vis="SolenoidCryostatVis">
-        <slice material="MylarMLI" thickness="SolenoidBarrelOuterSecondMLILayerThickness"/>
+        <slice material="MylarMLI" thickness="SolenoidBarrelOuterSecondMLILayerThickness" sensitive="yes"/>
       </layer>
       <layer id="11" name="OuterVacuumVessel"
         inner_r="SolenoidBarrelOuterVacuumVessel_rmin"
         outer_z="SolenoidBarrelOuterVacuumVessel_zmax"
         vis="SolenoidCryostatVis">
-        <slice material="Aluminum5083" thickness="SolenoidBarrelOuterVacuumVesselThickness"/>
-      </layer>
-    </detector>
-
-    <detector
-      id="Solenoid_ID"
-      name="SolenoidEndcapP"
-      type="epic_SolenoidEndcap"
-      insideTrackingVolume="false"
-      reflect="false"
-      vis="SolenoidCryostatVis">
-      <position x="0" y="0" z="Solenoid_offset"/>
-      <layer id="1" name="CoilEndSupport"
-        inner_z="SolenoidEndcapCoilEndSupport_zmin"
-        inner_r="SolenoidEndcapCoilEndSupport_rmin"
-        outer_r="SolenoidEndcapCoilEndSupport_rmax">
-        <slice material="Brass" thickness="SolenoidEndcapCoilEndSupportThickness"/>
-      </layer>
-      <layer id="2" name="EndcapG10"
-        inner_z="SolenoidEndcapG10_zmin"
-        inner_r="SolenoidEndcapG10_rmin"
-        outer_r="SolenoidEndcapG10_rmax">
-        <slice material="G10" thickness="SolenoidEndcapG10Thickness"/>
-      </layer>
-      <layer id="3" name="FirstMLILayer"
-        inner_z="SolenoidEndcapFirstMLILayer_zmin"
-        inner_r="SolenoidEndcapFirstMLILayer_rmin"
-        outer_r="SolenoidEndcapFirstMLILayer_rmax">
-        <slice material="MylarMLI" thickness="SolenoidEndcapFirstMLILayerThickness"/>
-      </layer>
-      <layer id="4" name="ThermalShield"
-        inner_z="SolenoidEndcapThermalShield_zmin"
-        inner_r="SolenoidEndcapThermalShield_rmin"
-        outer_r="SolenoidEndcapThermalShield_rmax">
-        <slice material="Aluminum" thickness="SolenoidEndcapThermalShieldThickness"/>
-      </layer>
-      <layer id="5" name="SecondMLILayer"
-        inner_z="SolenoidEndcapSecondMLILayer_zmin"
-        inner_r="SolenoidEndcapSecondMLILayer_rmin"
-        outer_r="SolenoidEndcapSecondMLILayer_rmax">
-        <slice material="MylarMLI" thickness="SolenoidEndcapSecondMLILayerThickness"/>
-      </layer>
-      <layer id="6" name="VacuumVessel"
-        inner_z="SolenoidEndcapVacuumVessel_zmin"
-        inner_r="SolenoidEndcapVacuumVessel_rmin"
-        outer_r="SolenoidEndcapVacuumVessel_rmax">
-        <slice material="Aluminum5083" thickness="SolenoidEndcapVacuumVesselThickness"/>
-      </layer>
-    </detector>
-
-    <detector
-      id="Solenoid_ID"
-      name="SolenoidEndcapN"
-      type="epic_SolenoidEndcap"
-      insideTrackingVolume="false"
-      reflect="true"
-      vis="SolenoidCryostatVis">
-      <position x="0" y="0" z="Solenoid_offset"/>
-      <layer id="1" name="CoilEndSupport"
-        inner_z="SolenoidEndcapCoilEndSupport_zmin"
-        inner_r="SolenoidEndcapCoilEndSupport_rmin"
-        outer_r="SolenoidEndcapCoilEndSupport_rmax">
-        <slice material="Brass" thickness="SolenoidEndcapCoilEndSupportThickness"/>
-      </layer>
-      <layer id="2" name="EndcapG10"
-        inner_z="SolenoidEndcapG10_zmin"
-        inner_r="SolenoidEndcapG10_rmin"
-        outer_r="SolenoidEndcapG10_rmax">
-        <slice material="G10" thickness="SolenoidEndcapG10Thickness"/>
-      </layer>
-      <layer id="3" name="FirstMLILayer"
-        inner_z="SolenoidEndcapFirstMLILayer_zmin"
-        inner_r="SolenoidEndcapFirstMLILayer_rmin"
-        outer_r="SolenoidEndcapFirstMLILayer_rmax">
-        <slice material="MylarMLI" thickness="SolenoidEndcapFirstMLILayerThickness"/>
-      </layer>
-      <layer id="4" name="ThermalShield"
-        inner_z="SolenoidEndcapThermalShield_zmin"
-        inner_r="SolenoidEndcapThermalShield_rmin"
-        outer_r="SolenoidEndcapThermalShield_rmax">
-        <slice material="Aluminum" thickness="SolenoidEndcapThermalShieldThickness"/>
-      </layer>
-      <layer id="5" name="SecondMLILayer"
-        inner_z="SolenoidEndcapSecondMLILayer_zmin"
-        inner_r="SolenoidEndcapSecondMLILayer_rmin"
-        outer_r="SolenoidEndcapSecondMLILayer_rmax">
-        <slice material="MylarMLI" thickness="SolenoidEndcapSecondMLILayerThickness"/>
-      </layer>
-      <layer id="6" name="VacuumVessel"
-        inner_z="SolenoidEndcapVacuumVessel_zmin"
-        inner_r="SolenoidEndcapVacuumVessel_rmin"
-        outer_r="SolenoidEndcapVacuumVessel_rmax">
-        <slice material="Aluminum5083" thickness="SolenoidEndcapVacuumVesselThickness"/>
+        <slice material="Aluminum5083" thickness="SolenoidBarrelOuterVacuumVesselThickness" sensitive="yes"/>
       </layer>
     </detector>
   </detectors>
-
+  
+  <!--  Definition of the readout segmentation/definition  -->
+  <readouts>
+    <readout name="SolenoidBarrelHits">
+<!--       <segmentation type="GridPhiEta" grid_size_eta="0.09" phi_bins="320"/>  -->
+      <segmentation type="NoSegmentation"/>
+      <id>system:8,layer:8,slice:8,barrel:8</id>
+    </readout>
+  </readouts>
   
 </lccdd>

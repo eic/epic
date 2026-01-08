@@ -23,15 +23,15 @@ using namespace std;
 using namespace dd4hep;
 using namespace dd4hep::detail;
 
-static Ref_t create_detector(Detector& description, xml_h e, 
-                              [[maybe_unused]] SensitiveDetector sens) {
+static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector sens) {
   xml_det_t x_det = e;
   string det_name = x_det.nameStr();
   Material air    = description.air();
   DetElement sdet(det_name, x_det.id());
   Assembly assembly(det_name + "_assembly");
   PlacedVolume pv;
-  
+     
+  sens.setType("calorimeter");
 
   int i_layer = 0;
   for (xml_coll_t l_iter(x_det, _U(layer)); l_iter; ++l_iter, ++i_layer) {
@@ -65,6 +65,8 @@ static Ref_t create_detector(Detector& description, xml_h e,
 
       s_vol.setAttributes(description, x_slice.regionStr(), x_slice.limitsStr(), x_slice.visStr());
       
+      s_vol.setSensitiveDetector(sens);
+      
       if (s_inner_z > 0) {
         // Place off-center volumes twice
         Position s_pos(0, 0, 0.5 * (s_outer_z + s_inner_z));
@@ -94,4 +96,4 @@ static Ref_t create_detector(Detector& description, xml_h e,
   return sdet;
 }
 
-DECLARE_DETELEMENT(epic_Solenoid, create_detector)
+DECLARE_DETELEMENT(epic_SensSolenoid, create_detector)
