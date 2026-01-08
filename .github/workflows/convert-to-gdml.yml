@@ -11,8 +11,8 @@ jobs:
   convert-to-gdml:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v5
-    - uses: actions/download-artifact@v6
+    - uses: actions/checkout@v6
+    - uses: actions/download-artifact@v7
       with:
         name: build-gcc-nightly-full-eic-shell
         path: install/
@@ -29,7 +29,7 @@ jobs:
             geoConverter -compact2gdml -input ${DETECTOR_PATH}/${config}.xml -output ${config}.gdml ;
             echo "::endgroup::" ;
           done
-    - uses: actions/upload-artifact@v5
+    - uses: actions/upload-artifact@v6
       with:
         name: gdml
         path: "*.gdml"
