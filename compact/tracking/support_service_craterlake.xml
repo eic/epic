@@ -762,7 +762,6 @@
     <constant name="SupportRoutingFlangeCyl_length"        value="49.46*mm"/>
     <constant name="SupportRoutingFlangeCyl_zmin"          value="995*mm"/>
     <constant name="SupportRoutingFlangeCyl_zmax"          value="SupportRoutingFlangeCyl_zmin+SupportRoutingFlangeCyl_length"/>
-    <constant name="SupportRoutingFlangeCyl_zmin"          value="SupportRoutingFlangeCyl_zmax+SupportRoutingFlangeCyl_length"/> -->
     <constant name="SupportRoutingFlangeCyl_zcenter"       value="-0.5*(SupportRoutingFlangeCyl_zmax+SupportRoutingFlangeCyl_zmin)"/>
     <constant name="SupportRoutingFlangeCyl_rmin1"         value="PST_support_tube_rmin+InnerSupportConeCF_thickness+3.5*mm"/>
     <comment> Cone dimensions </comment>
