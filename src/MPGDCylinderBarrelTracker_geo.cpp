@@ -128,7 +128,7 @@ static Ref_t create_MPGDCylinderBarrelTracker(Detector& description, xml_h e,
   double barrel_z0     = getAttrOrDefault(x_barrel, _U(z0), 0.);
   // ***** LAYOUTS
   xml_comp_t x_layout = x_layer.child(_U(rphi_layout));
-  double phi0         = x_layout.phi0();             // Starting phi of first module.
+  double phi0         = x_layout.phi0(); // Starting phi of first module.
   xml_comp_t z_layout = x_layer.child(_U(z_layout));
   double z_gap        = z_layout.gap();
   // ***** INVALID LAYOUT PROPERTIES
@@ -519,11 +519,10 @@ static Ref_t create_MPGDCylinderBarrelTracker(Detector& description, xml_h e,
   // ***** SECTOR POSITIONS ALONG Z
   // These are the 4 central values in Z where the four sets of modules, called
   // sectors, will be placed.
-  double modz_pos[nSectors] = {-barrel_length / 2 + (total_length) / 2,
-                               -(total_length + z_gap) / 2,
+  double modz_pos[nSectors] = {-barrel_length / 2 + (total_length) / 2, -(total_length + z_gap) / 2,
                                +(total_length + z_gap) / 2,
-			       +barrel_length / 2 - (total_length) / 2};
-  int nModules       = 0;
+                               +barrel_length / 2 - (total_length) / 2};
+  int nModules              = 0;
   for (int iz = 0; iz < nSectors; iz++) {
     int io                = (iz == 1 || iz == 2) ? 0 : 1;
     int iSMs[2]           = {sector2Models[io][0], sector2Models[io][1]};
