@@ -165,7 +165,7 @@ jobs:
         run: |
           pushd scripts/material_map
           export DETECTOR_CONFIG=epic_craterlake_material_map_25_07_0
-          ./run_material_map_validation.sh --nevents 500
+          ./run_material_map_validation.sh
           popd
     - uses: actions/upload-artifact@v6
       with:
