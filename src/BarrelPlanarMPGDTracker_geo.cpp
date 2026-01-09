@@ -374,7 +374,7 @@ static Ref_t create_BarrelPlanarMPGDTracker_geo(Detector& description, xml_h e,
       for (int iSensitive = 0; iSensitive < sensitiveVolumeSet; iSensitive++) {
         // ***** SENSITIVE COMPONENTS
         PlacedVolume& sens_pv = sensitives[iSensitive];
-        int de_id             = nphi * iSensitive + module;
+        int de_id             = nphi * nz * iSensitive + module;
         DetElement comp_de(mod_elt,
                            std::string("de_") + sens_pv.volume().name() + _toString(de_id, "%02d"),
                            de_id);
