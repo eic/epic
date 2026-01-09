@@ -206,6 +206,7 @@ static Ref_t create_BarrelPlanarMPGDTracker_geo(Detector& description, xml_h e,
         strip_id           = 0;
         sensitiveVolumeSet = 1;
       } else {
+	// Nota Bene: the definition of the strip IDs below has to match those in EICrecon's MPGDTrackerDigi and in epic's MPGDCylinderBarrelTracker_geo.cpp.
         int strip_ids[5] = {3, 1, 0, 2, 4};
         strip_id         = strip_ids[nSensitives];
       }
