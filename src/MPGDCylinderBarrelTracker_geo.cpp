@@ -129,27 +129,27 @@ static Ref_t create_MPGDCylinderBarrelTracker(Detector& description, xml_h e,
   // ***** LAYOUTS
   xml_comp_t x_layout = x_layer.child(_U(rphi_layout));
   double phi0         = x_layout.phi0();             // Starting phi of first module.
-  xml_comp_t z_layout = x_layer.child(_U(z_layout)); // Get the <z_layout> element.
+  xml_comp_t z_layout = x_layer.child(_U(z_layout));
   double z_gap        = z_layout.gap();
-  // ***** UNVALID LAYOUT PROPERTIES
+  // ***** INVALID LAYOUT PROPERTIES
   // # of staves (along phi) and sectors (along z) are now derived from stave
   // width and sector length. Used to be specified directly. In order to remind
   // the user this is no longer the case, let's forbid the use of the
   // corresponding (and a few more) tags.
-  const int nUnvalids                     = 4;
-  const xml::Tag_t unvalidTags[nUnvalids] = {_U(phi_tilt), _U(nphi), _U(rc), _U(dr)};
-  for (int uv = 0; uv < nUnvalids; uv++) {
+  const int nInvalids                     = 4;
+  const xml::Tag_t unvalidTags[nInvalids] = {_U(phi_tilt), _U(nphi), _U(rc), _U(dr)};
+  for (int uv = 0; uv < nInvalids; uv++) {
     if (x_barrel.hasChild(unvalidTags[uv])) {
       const string tag = _U(nphi);
       printout(ERROR, "MPGDCylinderBarrelTracker",
-               "Layer \"%s\": Unvalid property \"%s\" in \"rphi_layout\"", m_nam.c_str(),
+               "Layer \"%s\": Invalid property \"%s\" in \"rphi_layout\"", m_nam.c_str(),
                tag.c_str());
       throw runtime_error("Logics error in building modules.");
     }
   }
 
   // ***** MODELS
-  // Model = set of two radii of curvature used alternatingly for staves
+  // Model = set of two radii of curvature used alternatively for staves
   //       + an offset to be applied radially.
   // - The offset may be null if the two radii are different enough that
   //  staves adjacent along phi do not overlap.
@@ -168,7 +168,8 @@ static Ref_t create_MPGDCylinderBarrelTracker(Detector& description, xml_h e,
     double offset;
     int io;
   } StaveModel;
-  StaveModel staveModels[4];
+  const int nSectors = 4;
+  StaveModel staveModels[nSectors];
   int sector2Models[2][2];
   xml_coll_t mi(x_mod, _U(model));
   if (mi.size() != 2) {
@@ -311,7 +312,7 @@ static Ref_t create_MPGDCylinderBarrelTracker(Detector& description, xml_h e,
     double dPhi = acos(vEdge0.Dot(vEdge1) / Mag0 / Mag1);
     RMx += total_thickness;
     if (io == 1) {
-      RMn -= service_thickness; // Outer sector: acount for services to inner sector
+      RMn -= service_thickness; // Outer sector: account for services to inner sector
       outerPhiSuperpos = dPhi;
     }
     printout(
@@ -404,7 +405,7 @@ static Ref_t create_MPGDCylinderBarrelTracker(Detector& description, xml_h e,
     double comp_rmin        = stave_rmin;
     double thickness_so_far = 0;
     // Pattern of Multiple Sensitive Volumes
-    // - The "GasGap" may be subdivided into subVolumes (this order to have one
+    // - The "GasGap" may be subdivided into SUBVOLUMES (this order to have one
     //  sensitive component per strip coordinate (and accessorily, some extras).
     int nSensitives = 0;
     for (xml_coll_t mci(x_mod, _U(module_component)); mci; ++mci) {
@@ -462,7 +463,7 @@ static Ref_t create_MPGDCylinderBarrelTracker(Detector& description, xml_h e,
         // Compute the inner (i.e. thickness until mid-sensitive-volume) and
         //             outer (from mid-sensitive-volume to top)
         // thicknesses that need to be assigned to the tracking surface
-        // depending on wether the support is above or below the sensor.
+        // depending on whether the support is above or below the sensor.
         double inner_thickness, outer_thickness;
         if (sensitiveVolumeSet == 1) {
           inner_thickness = thickness_so_far + comp_thickness / 2;
@@ -518,10 +519,12 @@ static Ref_t create_MPGDCylinderBarrelTracker(Detector& description, xml_h e,
   // ***** SECTOR POSITIONS ALONG Z
   // These are the 4 central values in Z where the four sets of modules, called
   // sectors, will be placed.
-  double modz_pos[4] = {-barrel_length / 2 + (total_length) / 2, -(total_length + z_gap) / 2,
-                        +(total_length + z_gap) / 2, +barrel_length / 2 - (total_length) / 2};
+  double modz_pos[nSectors] = {-barrel_length / 2 + (total_length) / 2,
+                               -(total_length + z_gap) / 2,
+                               +(total_length + z_gap) / 2,
+			       +barrel_length / 2 - (total_length) / 2};
   int nModules       = 0;
-  for (int iz = 0; iz < 4; iz++) {
+  for (int iz = 0; iz < nSectors; iz++) {
     int io                = (iz == 1 || iz == 2) ? 0 : 1;
     int iSMs[2]           = {sector2Models[io][0], sector2Models[io][1]};
     int iSM0              = iSMs[0];
@@ -564,7 +567,7 @@ static Ref_t create_MPGDCylinderBarrelTracker(Detector& description, xml_h e,
       for (int iSensitive = 0; iSensitive < sensitiveVolumeSet; iSensitive++) {
         // ***** SENSITIVE COMPONENTS
         PlacedVolume& sens_pv = sensitives[iSensitive][iV];
-        int de_id             = 32 * iSensitive + nModules;
+        int de_id             = nphi * nSectors * iSensitive + nModules;
         DetElement comp_de(mod_elt,
                            std::string("de_") + sens_pv.volume().name() + _toString(de_id, "%02d"),
                            de_id);
