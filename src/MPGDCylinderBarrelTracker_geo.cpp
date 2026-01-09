@@ -435,6 +435,7 @@ static Ref_t create_MPGDCylinderBarrelTracker(Detector& description, xml_h e,
           strip_id           = 0;
           sensitiveVolumeSet = 1;
         } else {
+	  // Nota Bene: the definition of the strip IDs below has to match those in EICrecon's MPGDTrackerDigi and in epic's BarrelPlanarMPGDTracker_geo.cpp.
           int strip_ids[5] = {3, 1, 0, 2, 4};
           strip_id         = strip_ids[nSensitives];
         }
@@ -519,7 +520,8 @@ static Ref_t create_MPGDCylinderBarrelTracker(Detector& description, xml_h e,
   // ***** SECTOR POSITIONS ALONG Z
   // These are the 4 central values in Z where the four sets of modules, called
   // sectors, will be placed.
-  double modz_pos[nSectors] = {-barrel_length / 2 + (total_length) / 2, -(total_length + z_gap) / 2,
+  double modz_pos[nSectors] = {-barrel_length / 2 + (total_length) / 2,
+                               -(total_length + z_gap) / 2,
                                +(total_length + z_gap) / 2,
                                +barrel_length / 2 - (total_length) / 2};
   int nModules              = 0;
