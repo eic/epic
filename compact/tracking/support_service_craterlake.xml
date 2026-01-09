@@ -762,7 +762,6 @@
     <constant name="SupportRoutingFlangeCyl_length"        value="49.46*mm"/>
     <constant name="SupportRoutingFlangeCyl_zmin"          value="995*mm"/>
     <constant name="SupportRoutingFlangeCyl_zmax"          value="SupportRoutingFlangeCyl_zmin+SupportRoutingFlangeCyl_length"/>
-    <!-- <constant name="SupportRoutingFlangeCyl_zmax"          value="-TrackerSupportCylEndcapN_zmax1C"/>
     <constant name="SupportRoutingFlangeCyl_zmin"          value="SupportRoutingFlangeCyl_zmax+SupportRoutingFlangeCyl_length"/> -->
     <constant name="SupportRoutingFlangeCyl_zcenter"       value="-0.5*(SupportRoutingFlangeCyl_zmax+SupportRoutingFlangeCyl_zmin)"/>
     <constant name="SupportRoutingFlangeCyl_rmin1"         value="PST_support_tube_rmin+InnerSupportConeCF_thickness+3.5*mm"/>
@@ -1018,19 +1017,7 @@
           <position x="0*cm" y="0*cm" z="-PSTThermalMembraneN_zcenter" />
           <component material="CarbonFiber" thickness="PSTThermalMembrane_thickness" name="Support" vis="TrackerSupportVis"/>
       </support>
-    <!-- Positive side -->
-      <!-- <support type="Cylinder"
-        name="PSTThermalMembraneP"
-        vis="TrackerSupportVis"
-        rmin="PSTThermalMembrane_rmin"
-        length="PSTThermalMembrane_length"
-        thickness="PSTThermalMembrane_thickness">
-          <position x="0*cm" y="0*cm" z="PSTThermalMembraneP_zcenter" />
-          <component material="CarbonFiber" thickness="PSTThermalMembrane_thickness" name="Support" vis="TrackerSupportVis"/>
-      </support> -->
-    <!-- end of PST thermal membrane implementation -->
 
-    <!-- |||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||| -->
     <comment> (Positive) Service passthrough plate implementation </comment>
       <subtraction name="ServicePassthroughRingP" material="Air" vis="TrackerSupportVis">
       <position x="0" y="0" z="ServicePassthroughRingP_zcenter"/> <!-- Base half-ring -->
@@ -3006,16 +2993,7 @@
           <component material="Aluminum" thickness="TrackerSupportCylAlN_thickness1B" name="Services" vis="TrackerServiceVis" />
           <component material="CarbonFiber" thickness="TrackerSupportCylCF_thickness1" name="Support" vis="TrackerSupportVis"/>
       </support>
-      <!-- <support type="Cylinder"
-        name="TrackerSupportCylEndcapN1C"
-        vis="TrackerSupportVis"
-        rmin="TrackerSupportCyl_rmin1-TrackerSupportCylAlN_thickness1C"
-        length="TrackerSupportCylEndcapN_length1C"
-        thickness="TrackerSupportCylN_thickness1C">
-          <position x="0*cm" y="0*cm" z="-TrackerSupportCylEndcapN_z1C" />
-          <component material="Aluminum" thickness="TrackerSupportCylAlN_thickness1C" name="Services" vis="TrackerServiceVis" />
-          <component material="CarbonFiber" thickness="TrackerSupportCylCF_thickness1" name="Support" vis="TrackerSupportVis"/>
-      </support> -->
+
       <support type="Cylinder"
         name="TrackerSupportCylEndcapN1C_support"
         vis="TrackerSupportVis"
@@ -3054,16 +3032,7 @@
           <component material="Aluminum" thickness="TrackerSupportCylAlP_thickness1B" name="Services" vis="TrackerServiceVis" />
           <component material="CarbonFiber" thickness="TrackerSupportCylCF_thickness1" name="Support" vis="TrackerSupportVis"/>
       </support>
-      <!-- <support type="Cylinder"
-        name="TrackerSupportCylEndcapP1C"
-        vis="TrackerSupportVis"
-        rmin="TrackerSupportCyl_rmin1-TrackerSupportCylAlP_thickness1C"
-        length="TrackerSupportCylEndcapP_length1C"
-        thickness="TrackerSupportCylP_thickness1C">
-          <position x="0*cm" y="0*cm" z="TrackerSupportCylEndcapP_z1C" />
-          <component material="Aluminum" thickness="TrackerSupportCylAlP_thickness1C" name="Services" vis="TrackerServiceVis" />
-          <component material="CarbonFiber" thickness="TrackerSupportCylCF_thickness1" name="Support" vis="TrackerSupportVis"/>
-      </support> -->
+
       <support type="Cylinder"
         name="TrackerSupportCylEndcapP1C_support"
         vis="TrackerSupportVis"
@@ -3083,30 +3052,6 @@
           <component material="Aluminum" thickness="TrackerSupportCylAlP_thickness1C" name="Services" vis="TrackerServiceVis" />
       </support>
 
-
-      <!-- <support type="Cone"
-        name="OuterSupportConeEndcapN"
-        vis="TrackerSupportVis"
-        rmin1="OuterSupportConeN_rmin2"
-        rmin2="OuterSupportConeN_rmin1"
-        rmax="InnerDetectorBarrelSupportCylCF_rmin"
-        length="OuterSupportConeN_length"
-        thickness="OuterSupportConeN_thickness">
-          <position x="0*cm" y="0*cm" z="-OuterSupportConeN_z" />
-          <component material="Aluminum" thickness="OuterSupportConeNAl_thickness" name="Services" vis="TrackerServiceVis" />
-          <component material="CarbonFiber" thickness="OuterSupportConeCF_thickness" name="Support" vis="TrackerSupportVis"/>
-      </support> -->
-      <!-- <support type="Cone"
-        name="OuterSupportConeEndcapP"
-        vis="TrackerSupportVis"
-        rmin1="OuterSupportConeP_rmin1"
-        rmin2="OuterSupportConeP_rmin2"
-        length="OuterSupportConeP_length"
-        thickness="OuterSupportConeP_thickness">
-          <position x="0*cm" y="0*cm" z="OuterSupportConeP_z" />
-          <component material="Aluminum" thickness="OuterSupportConePAl_thickness" name="Services" vis="TrackerServiceVis" />
-          <component material="CarbonFiber" thickness="OuterSupportConeCF_thickness" name="Support" vis="TrackerSupportVis"/>
-      </support> -->
 
       <comment> outer barrel </comment>
       <support type="Cylinder"
