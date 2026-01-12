@@ -468,7 +468,7 @@ Volume createEightMModule(Detector& desc, moduleParamsStrct mod_params,
                           std::vector<sliceParamsStrct> sl_params,
                           //                               int modID,
                           double length, SensitiveDetector sens, bool renderComp, bool allSen,
-                          bool testbeam) {
+                          bool testbeam, int orientation) {
   std::string baseName = "LFHCAL_8M";
 
   // assembly definition
@@ -578,12 +578,27 @@ Volume createEightMModule(Detector& desc, moduleParamsStrct mod_params,
   }
 
   int layer_num  = 0;
-  double slice_z = -length / 2 + mod_params.mod_MPThick +
-                   mod_params.mod_FWThick; // Keeps track of layers' local z locations
+
+  double total_stack = 0.0;
+  for (int i = 0; i < (int)sl_params.size(); i++) {
+    total_stack += sl_params[i].slice_thick + sl_params[i].slice_offset;
+  }
+
+  double slice_z = 0;
+
+  // Mirroring the start and end points of the slices without changing the order in which they're built for orientation 1
+  if (orientation == 1) {
+    slice_z = -length / 2 + mod_params.mod_MPThick + mod_params.mod_FWThick
+              + (length - (mod_params.mod_BWThick + mod_params.mod_FWThick) - mod_params.mod_MPThick - total_stack);
+  } else {
+    slice_z = -length / 2 + mod_params.mod_MPThick + mod_params.mod_FWThick;
+  }
+
   // Looping through the number of repeated layers & slices in each section
   for (int i = 0; i < (int)sl_params.size(); i++) {
     slice_z += sl_params[i].slice_offset +
                sl_params[i].slice_thick / 2.; // Going to halfway point in layer
+
     layer_num = sl_params[i].layer_ID;
     //*************************************************
     // absorber plates
@@ -599,8 +614,15 @@ Volume createEightMModule(Detector& desc, moduleParamsStrct mod_params,
       // Placing slice within layer
       if (allSen)
         modAbsAssembly.setSensitiveDetector(sens);
-      pvm = vol_mod.placeVolume(modAbsAssembly,
+      // orientations for absorber plates
+      if(orientation == 2){
+        pvm = vol_mod.placeVolume(
+            modAbsAssembly, Transform3D(RotationZYX(M_PI, 0, 0), Position(0., 0., slice_z)));
+      } else {
+        pvm = vol_mod.placeVolume(modAbsAssembly,
                                 Transform3D(RotationZYX(0, 0, 0), Position(0., 0., slice_z)));
+      }
+
       if (allSen)
         pvm.addPhysVolID("towerx", 0)
             .addPhysVolID("towery", 0)
@@ -622,9 +644,17 @@ Volume createEightMModule(Detector& desc, moduleParamsStrct mod_params,
       // Placing slice within layer
       if (allSen)
         modFillAssembly.setSensitiveDetector(sens);
-      pvm = vol_mod.placeVolume(
+      // orientations for filler plates
+      if(orientation == 2){
+        pvm = vol_mod.placeVolume(
+          modFillAssembly, Transform3D(RotationZYX(0, 0, 0),
+                                       Position(-(mod_params.mod_notchDepth) / 2., 0., slice_z)));
+      } else {
+        pvm = vol_mod.placeVolume(
           modFillAssembly, Transform3D(RotationZYX(0, 0, 0),
                                        Position((mod_params.mod_notchDepth) / 2., 0., slice_z)));
+      }
+      
       if (allSen)
         pvm.addPhysVolID("towerx", 1)
             .addPhysVolID("towery", 0)
@@ -643,10 +673,18 @@ Volume createEightMModule(Detector& desc, moduleParamsStrct mod_params,
           sl_params[i].slice_regStr, sl_params[i].slice_limStr, sl_params[i].slice_visStr, sens,
           renderComp);
       // Placing slice within layer
-      pvm = vol_mod.placeVolume(
+      // orientations for scintillator plates
+      if (orientation == 2){
+        pvm = vol_mod.placeVolume(
+          modScintAssembly, Transform3D(RotationZYX(0, 0, 0),
+                                        Position(-(mod_params.mod_notchDepth) / 2., 0, slice_z)));
+      } else {
+        pvm = vol_mod.placeVolume(
           modScintAssembly, Transform3D(RotationZYX(0, 0, 0),
                                         Position((mod_params.mod_notchDepth) / 2., 0, slice_z)));
+      }
     }
+
     slice_z += sl_params[i].slice_thick / 2.;
   }
 
@@ -655,16 +693,32 @@ Volume createEightMModule(Detector& desc, moduleParamsStrct mod_params,
     pvm = vol_mod.placeVolume(vol_mountingPlate,
                               Position(0, 0, -(length - mod_params.mod_MPThick) / 2.));
 
-  pvm = vol_mod.placeVolume(
+  // front plate with orientations
+  if (orientation == 1) {
+    pvm =
+      vol_mod.placeVolume(vol_modFrontPlate, Position(0, 0, (length - mod_params.mod_BWThick) / 2.));
+  } else {
+    pvm = vol_mod.placeVolume(
       vol_modFrontPlate,
       Position(0, 0, -(length - mod_params.mod_FWThick) / 2. + mod_params.mod_MPThick));
+  }
+
   if (allSen)
     pvm.addPhysVolID("towerx", 2)
         .addPhysVolID("towery", 0)
         .addPhysVolID("layerz", 0)
         .addPhysVolID("passive", 1);
-  pvm =
+
+  // back plate with orientations
+  if (orientation == 1) {
+    pvm = vol_mod.placeVolume(
+      vol_modBackPlate,
+      Position(0, 0, -(length - mod_params.mod_FWThick) / 2. + mod_params.mod_MPThick));
+  } else {
+    pvm =
       vol_mod.placeVolume(vol_modBackPlate, Position(0, 0, (length - mod_params.mod_BWThick) / 2.));
+  }
+
   if (allSen)
     pvm.addPhysVolID("towerx", 2)
         .addPhysVolID("towery", 0)
@@ -713,17 +767,32 @@ Volume createEightMModule(Detector& desc, moduleParamsStrct mod_params,
       (mod_params.mod_FWThick + mod_params.mod_MPThick + mod_params.mod_BWThick) / 2 -
       (lengthA - mod_params.mod_pcbLength) / 2.;
 
-  pvm = vol_mod.placeVolume(
+  //PCB placement with orientations
+  if (orientation == 1){
+    pvm = vol_mod.placeVolume(
+      vol_modPCB,
+      Position(-(mod_params.mod_width - 2 * mod_params.mod_SWThick - mod_params.mod_notchDepth) /
+                   2.,
+               0, -z_offSetPCB));
+  } else if (orientation == 2){
+    pvm = vol_mod.placeVolume(
+      vol_modPCB,
+      Position((mod_params.mod_width - 2 * mod_params.mod_SWThick - mod_params.mod_notchDepth) /
+                   2.,
+               0, z_offSetPCB));
+  } else {
+    pvm = vol_mod.placeVolume(
       vol_modPCB,
       Position(-(mod_params.mod_width - 2 * mod_params.mod_SWThick - mod_params.mod_notchDepth) /
                    2.,
                0, z_offSetPCB));
+  }
 
   return vol_mod;
 }
 
 //************************************************************************************************************
-//************************** create 8M module assembly  ******************************************************
+//************************** create 4M module assembly  ******************************************************
 //************************************************************************************************************
 Volume createFourMModule(Detector& desc, moduleParamsStrct mod_params,
                          std::vector<sliceParamsStrct> sl_params,
@@ -1005,6 +1074,9 @@ static Ref_t createTestBeam(Detector& desc, xml_h handle, SensitiveDetector sens
 
   struct position {
     double x, y, z;
+    int orientation = 0;
+    int IDx = -1;
+    int IDy = -1;
   };
 
   std::vector<position> pos8M;
@@ -1017,7 +1089,11 @@ static Ref_t createTestBeam(Detector& desc, xml_h handle, SensitiveDetector sens
                position_comp.y());
       continue;
     }
-    pos8M.push_back({position_comp.x(), position_comp.y(), position_comp.z()});
+    // Get orientation and ID attributes
+    int orientation = getAttrOrDefault(position_comp, _Unicode(orientation), 0);
+    int IDx = getAttrOrDefault(position_comp, _Unicode(IDx), -1);
+    int IDy = getAttrOrDefault(position_comp, _Unicode(IDy), -1);
+    pos8M.push_back({position_comp.x(), position_comp.y(), position_comp.z(), orientation, IDx, IDy});
   }
 
   // 8M module specific loading
@@ -1110,16 +1186,25 @@ static Ref_t createTestBeam(Detector& desc, xml_h handle, SensitiveDetector sens
   int moduleIDy = -1;
 
   // create 8M modules
-  Volume eightMassembly = createEightMModule(desc, eightM_params, slice_Params, length, sens,
-                                             renderComponents, allSensitive, true);
   for (int e = 0; e < (int)pos8M.size(); e++) {
     if (e % 20 == 0)
       printout(DEBUG, "LFHCAL_geo",
                "LFHCAL placing 8M module: " + _toString(e) + "/" + _toString((int)pos8M.size()) +
                    "\t" + _toString(pos8M[e].x) + "\t" + _toString(pos8M[e].y) + "\t" +
                    _toString(pos8M[e].z));
-    moduleIDx = (int(pos8M[e].x + 20) / 10);
-    moduleIDy = (int(pos8M[e].y + 15) / 10);
+    
+    // Calculate IDx and IDy based on preset values
+    moduleIDx = pos8M[e].IDx;
+    moduleIDy = pos8M[e].IDy;
+
+    // If moduleIDx or moduleIDy is not set, calculate based on position
+    if (moduleIDx < 0) {
+      moduleIDx = (int(pos8M[e].x + 20) / 10);
+    } 
+    if (moduleIDy < 0) {
+      moduleIDy = (int(pos8M[e].y + 15) / 10);
+    }
+
     std::cout << moduleIDx << "\t" << moduleIDy << "\t" << pos8M[e].x << "\t" << (pos8M[e].x + 20)
               << "\t" << pos8M[e].y << "\t" << (pos8M[e].y + 15) << std::endl;
     if (moduleIDx < 0 || moduleIDy < 0) {
@@ -1129,12 +1214,17 @@ static Ref_t createTestBeam(Detector& desc, xml_h handle, SensitiveDetector sens
                    _toString(moduleIDy));
     }
 
+    // Accounting for individual orientations
+    Volume eightMassembly = createEightMModule(desc, eightM_params, slice_Params, length, sens,
+                                             renderComponents, allSensitive, true, pos8M[e].orientation);
+
     // Placing modules in world volume
     auto tr8M = Transform3D(Position(-pos8M[e].x, -pos8M[e].y, pos8M[e].z));
     phv       = assembly.placeVolume(eightMassembly, tr8M);
+    
     phv.addPhysVolID("moduleIDx", moduleIDx)
-        .addPhysVolID("moduleIDy", moduleIDy)
-        .addPhysVolID("moduletype", 0);
+     .addPhysVolID("moduleIDy", moduleIDy)
+     .addPhysVolID("moduletype", 0);
   }
 
   Volume motherVol = desc.pickMotherVolume(det);
@@ -1204,7 +1294,7 @@ static Ref_t createDetector(Detector& desc, xml_h handle, SensitiveDetector sens
       getAttrOrDefault(eightMmod_dim, _Unicode(pcbThick), 0.),
       getAttrOrDefault(eightMmod_dim, _Unicode(pcbWidth), 0.), eightM_xml.visStr(),
       eightM_xml.regionStr(), eightM_xml.limitsStr());
-
+  
   // 4M module specific loading
   xml_comp_t fourM_xml   = detElem.child(_Unicode(fourmodule));
   xml_dim_t fourMmod_dim = fourM_xml.dimensions();
@@ -1265,6 +1355,9 @@ static Ref_t createDetector(Detector& desc, xml_h handle, SensitiveDetector sens
 
   struct position {
     double x, y, z;
+    int orientation = 0;
+    int IDx = -1;
+    int IDy = -1;
   };
 
   std::vector<position> pos8M;
@@ -1272,12 +1365,18 @@ static Ref_t createDetector(Detector& desc, xml_h handle, SensitiveDetector sens
   xml_coll_t eightMPos(detElem, _Unicode(eightmodulepositions));
   for (xml_coll_t position_i(eightMPos, _U(position)); position_i; ++position_i) {
     xml_comp_t position_comp = position_i;
-    pos8M.push_back({position_comp.x(), position_comp.y(), position_comp.z()});
+    if (!getAttrOrDefault(position_comp, _Unicode(if), true)) {
+      printout(DEBUG, "LFHCAL_geo", "skipping x = %.1f cm, y = %.1f cm", position_comp.x(),
+               position_comp.y());
+      continue;
+    }
+    int orientation = getAttrOrDefault(position_comp, _Unicode(orientation), 0);
+    int IDx = getAttrOrDefault(position_comp, _Unicode(IDx), -1);
+    int IDy = getAttrOrDefault(position_comp, _Unicode(IDy), -1);
+    pos8M.push_back({position_comp.x(), position_comp.y(), position_comp.z(), orientation, IDx, IDy});
   }
 
   // create 8M modules
-  Volume eightMassembly = createEightMModule(desc, eightM_params, slice_Params, length, sens,
-                                             renderComponents, allSensitive, false);
   for (int e = 0; e < (int)pos8M.size(); e++) {
     if (e % 20 == 0)
       printout(DEBUG, "LFHCAL_geo",
@@ -1290,15 +1389,31 @@ static Ref_t createDetector(Detector& desc, xml_h handle, SensitiveDetector sens
                    _toString((int)pos8M.size()) + "\t" + _toString(moduleIDx) + "\t" +
                    _toString(moduleIDy));
     }
-    moduleIDx = ((pos8M[e].x + 270) / 10);
-    moduleIDy = ((pos8M[e].y + 265) / 10);
+
+    // Calculate IDx and IDy based on preset values
+    moduleIDx = pos8M[e].IDx;
+    moduleIDy = pos8M[e].IDy;
+
+    // If IDx or IDy is not set, calculate based on position
+    if(moduleIDx < 0){
+       moduleIDx = ((pos8M[e].x + 270) / 10);
+    }
+    if(moduleIDy < 0){
+       moduleIDy = ((pos8M[e].y + 265) / 10);
+    }
+
+    // Accounting for individual orientations
+    
+    Volume eightMassembly = createEightMModule(desc, eightM_params, slice_Params, length, sens,
+                                             renderComponents, allSensitive, false, pos8M[e].orientation);
 
     // Placing modules in world volume
     auto tr8M = Transform3D(Position(-pos8M[e].x, -pos8M[e].y, pos8M[e].z));
     phv       = assembly.placeVolume(eightMassembly, tr8M);
+    
     phv.addPhysVolID("moduleIDx", moduleIDx)
-        .addPhysVolID("moduleIDy", moduleIDy)
-        .addPhysVolID("moduletype", 0);
+     .addPhysVolID("moduleIDy", moduleIDy)
+     .addPhysVolID("moduletype", 0);
   }
 
   std::vector<position> pos4M;
@@ -1306,7 +1421,13 @@ static Ref_t createDetector(Detector& desc, xml_h handle, SensitiveDetector sens
   xml_coll_t fourMPos(detElem, _Unicode(fourmodulepositions));
   for (xml_coll_t position_i(fourMPos, _U(position)); position_i; ++position_i) {
     xml_comp_t position_comp = position_i;
-    pos4M.push_back({position_comp.x(), position_comp.y(), position_comp.z()});
+    if (!getAttrOrDefault(position_comp, _Unicode(if), true)) {
+      printout(DEBUG, "LFHCAL_geo", "skipping x = %.1f cm, y = %.1f cm", position_comp.x(),
+               position_comp.y());
+      continue;
+    }
+    int orientation = getAttrOrDefault(position_comp, _Unicode(orientation), 0);
+    pos4M.push_back({position_comp.x(), position_comp.y(), position_comp.z(), orientation});
   }
 
   // create 4M modules

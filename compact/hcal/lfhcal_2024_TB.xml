@@ -82,56 +82,56 @@
         <position x="50*cm" y="50*cm" z="140*cm - LFHCALElectronicsThickness" />
       </eightmodule>
       <layer repeat="LFHCALLayer_NSteelRepeatSFirst" vis="InvisibleWithDaughters" readoutlayer="0">
-        <slice material="Polystyrene" thickness="LFHCALPolystyreneThickness" vis="LFHCALLayerScintVis" sensitive="yes" limits="cal_limits" type="3" />
-        <slice material="Kapton" thickness="LFHCALKaptonThickness" vis="LFHCALLayerKaptonVis" type="2" offset="LFHCALAirOffset"/>
         <slice material="Steel235" thickness="LFHCALAbsorberThickness" vis="LFHCALLayerSteelVis" type="1"/>
+        <slice material="Kapton" thickness="LFHCALKaptonThickness" vis="LFHCALLayerKaptonVis" type="2" offset="LFHCALAirOffset"/>
+        <slice material="Polystyrene" thickness="LFHCALPolystyreneThickness" vis="LFHCALLayerScintVis" sensitive="yes" limits="cal_limits" type="3" />
       </layer>
       <layer repeat="LFHCALLayer_NSteelRepeatSFirst" vis="InvisibleWithDaughters" readoutlayer="1">
-        <slice material="Polystyrene" thickness="LFHCALPolystyreneThickness" vis="LFHCALLayerScintVis" sensitive="yes" limits="cal_limits" type="3" />
-        <slice material="Kapton" thickness="LFHCALKaptonThickness" vis="LFHCALLayerKaptonVis" type="2" offset="LFHCALAirOffset"/>
         <slice material="Steel235" thickness="LFHCALAbsorberThickness" vis="LFHCALLayerSteelVis" type="1"/>
+        <slice material="Kapton" thickness="LFHCALKaptonThickness" vis="LFHCALLayerKaptonVis" type="2" offset="LFHCALAirOffset"/>
+        <slice material="Polystyrene" thickness="LFHCALPolystyreneThickness" vis="LFHCALLayerScintVis" sensitive="yes" limits="cal_limits" type="3" />
       </layer>
       <layer repeat="LFHCALLayer_NSteelRepeatS" vis="InvisibleWithDaughters" readoutlayer="2">
-        <slice material="Polystyrene" thickness="LFHCALPolystyreneThickness" vis="LFHCALLayerScintVis" sensitive="yes" limits="cal_limits" type="3" />
-        <slice material="Kapton" thickness="LFHCALKaptonThickness" vis="LFHCALLayerKaptonVis" type="2" offset="LFHCALAirOffset"/>
         <slice material="Steel235" thickness="LFHCALAbsorberThickness" vis="LFHCALLayerSteelVis" type="1"/>
+        <slice material="Kapton" thickness="LFHCALKaptonThickness" vis="LFHCALLayerKaptonVis" type="2" offset="LFHCALAirOffset"/>
+        <slice material="Polystyrene" thickness="LFHCALPolystyreneThickness" vis="LFHCALLayerScintVis" sensitive="yes" limits="cal_limits" type="3" />
       </layer>
       <layer repeat="LFHCALLayer_NSteelRepeatS" vis="InvisibleWithDaughters" readoutlayer="3">
-        <slice material="Polystyrene" thickness="LFHCALPolystyreneThickness" vis="LFHCALLayerScintVis" sensitive="yes" limits="cal_limits" type="3" />
-        <slice material="Kapton" thickness="LFHCALKaptonThickness" vis="LFHCALLayerKaptonVis" type="2" offset="LFHCALAirOffset"/>
         <slice material="Steel235" thickness="LFHCALAbsorberThickness" vis="LFHCALLayerSteelVis" type="1"/>
+        <slice material="Kapton" thickness="LFHCALKaptonThickness" vis="LFHCALLayerKaptonVis" type="2" offset="LFHCALAirOffset"/>
+        <slice material="Polystyrene" thickness="LFHCALPolystyreneThickness" vis="LFHCALLayerScintVis" sensitive="yes" limits="cal_limits" type="3" />
       </layer>
       <layer repeat="LFHCALLayer_NSteelRepeatS" vis="InvisibleWithDaughters" readoutlayer="4">
-        <slice material="Polystyrene" thickness="LFHCALPolystyreneThickness" vis="LFHCALLayerScintVis" sensitive="yes" limits="cal_limits" type="3" />
-        <slice material="Kapton" thickness="LFHCALKaptonThickness" vis="LFHCALLayerKaptonVis" type="2" offset="LFHCALAirOffset"/>
         <slice material="Steel235" thickness="LFHCALAbsorberThickness" vis="LFHCALLayerSteelVis" type="1"/>
+        <slice material="Kapton" thickness="LFHCALKaptonThickness" vis="LFHCALLayerKaptonVis" type="2" offset="LFHCALAirOffset"/>
+        <slice material="Polystyrene" thickness="LFHCALPolystyreneThickness" vis="LFHCALLayerScintVis" sensitive="yes" limits="cal_limits" type="3" />
       </layer>
       <layer repeat="LFHCALLayer_NSteelRepeatS" vis="InvisibleWithDaughters" readoutlayer="5">
-        <slice material="Polystyrene" thickness="LFHCALPolystyreneThickness" vis="LFHCALLayerScintVis" sensitive="yes" limits="cal_limits" type="3" />
-        <slice material="Kapton" thickness="LFHCALKaptonThickness" vis="LFHCALLayerKaptonVis" type="2" offset="LFHCALAirOffset"/>
         <slice material="Steel235" thickness="LFHCALAbsorberThickness" vis="LFHCALLayerSteelVis" type="1"/>
+        <slice material="Kapton" thickness="LFHCALKaptonThickness" vis="LFHCALLayerKaptonVis" type="2" offset="LFHCALAirOffset"/>
+        <slice material="Polystyrene" thickness="LFHCALPolystyreneThickness" vis="LFHCALLayerScintVis" sensitive="yes" limits="cal_limits" type="3" />
       </layer>
       <layer repeat="LFHCALLayer_NSteelRepeatSFirst" vis="InvisibleWithDaughters" readoutlayer="6">
-        <slice material="Polystyrene" thickness="LFHCALPolystyreneThickness" vis="LFHCALLayerScintVis" sensitive="yes" limits="cal_limits" type="3" />
-        <slice material="Kapton" thickness="LFHCALKaptonThickness" vis="LFHCALLayerKaptonVis" type="2" offset="LFHCALAirOffset"/>
         <slice material="Steel235" thickness="LFHCALAbsorberThickness" vis="LFHCALLayerSteelVis" type="1"/>
+        <slice material="Kapton" thickness="LFHCALKaptonThickness" vis="LFHCALLayerKaptonVis" type="2" offset="LFHCALAirOffset"/>
+        <slice material="Polystyrene" thickness="LFHCALPolystyreneThickness" vis="LFHCALLayerScintVis" sensitive="yes" limits="cal_limits" type="3" />
       </layer>
       <layer repeat="LFHCALLayer_NSteelRepeatSFirst" vis="InvisibleWithDaughters" readoutlayer="7">
-        <slice material="Polystyrene" thickness="LFHCALPolystyreneThickness" vis="LFHCALLayerScintVis" sensitive="yes" limits="cal_limits" type="3" />
-        <slice material="Kapton" thickness="LFHCALKaptonThickness" vis="LFHCALLayerKaptonVis" type="2" offset="LFHCALAirOffset"/>
         <slice material="Steel235" thickness="LFHCALAbsorberThickness" vis="LFHCALLayerSteelVis" type="1"/>
+        <slice material="Kapton" thickness="LFHCALKaptonThickness" vis="LFHCALLayerKaptonVis" type="2" offset="LFHCALAirOffset"/>
+        <slice material="Polystyrene" thickness="LFHCALPolystyreneThickness" vis="LFHCALLayerScintVis" sensitive="yes" limits="cal_limits" type="3" />
       </layer>
       <layer repeat="LFHCALLayer_NSteelRepeatSFirst" vis="InvisibleWithDaughters" readoutlayer="8">
-        <slice material="Polystyrene" thickness="LFHCALPolystyreneThickness" vis="LFHCALLayerScintVis" sensitive="yes" limits="cal_limits" type="3" />
-        <slice material="Kapton" thickness="LFHCALKaptonThickness" vis="LFHCALLayerKaptonVis" type="2" offset="LFHCALAirOffset"/>
         <slice material="Steel235" thickness="LFHCALAbsorberThickness" vis="LFHCALLayerSteelVis" type="1"/>
+        <slice material="Kapton" thickness="LFHCALKaptonThickness" vis="LFHCALLayerKaptonVis" type="2" offset="LFHCALAirOffset"/>
+        <slice material="Polystyrene" thickness="LFHCALPolystyreneThickness" vis="LFHCALLayerScintVis" sensitive="yes" limits="cal_limits" type="3" />
       </layer>
 
       <documentation>
         ### for testing of a single module
       </documentation>
       <eightmodulepositions>
-        <position x="0*mm" y="0*mm" z="0*mm"/>
+        <position x="0*mm" y="0*mm" z="0*mm" orientation="1" IDx="0" IDy="0"/>
       </eightmodulepositions>
 
 
@@ -149,7 +149,7 @@
   <readouts>
     <readout name="LFHCALHits">
       <segmentation type="NoSegmentation"/>
-      <id>system:8,moduleIDx:6,moduleIDy:6,moduletype:1,passive:1,towerx:2,towery:1,rlayerz:4,layerz:4</id>
+      <id>system:8,moduleIDx:4,moduleIDy:4,moduletype:1,passive:1,towerx:2,towery:1,rlayerz:6,layerz:6</id>
     </readout>
   </readouts>
 
