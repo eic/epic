@@ -126,14 +126,14 @@
         ### for testing of a single module
       </documentation>
       <eightmodulepositions>
-        <position x="-100.5*mm" y="-50*mm" z="0*mm"/>
-        <position x="-100.5*mm" y="-150*mm" z="0*mm"/>
-        <position x="-100.5*mm" y="50*mm" z="0*mm"/>
-        <position x="-100.5*mm" y="150*mm" z="0*mm"/>
-        <position x="100.5*mm" y="-50*mm" z="0*mm"/>
-        <position x="100.5*mm" y="-150*mm" z="0*mm"/>
-        <position x="100.5*mm" y="50*mm" z="0*mm"/>
-        <position x="100.5*mm" y="150*mm" z="0*mm"/>
+        <position x="-100.94*mm" y="-50.5*mm" z="0*mm" orientation="2" IDx="0" IDy="0"/>
+        <position x="-100.94*mm" y="-151.5*mm" z="0*mm" orientation="2" IDx="0" IDy="1"/>
+        <position x="-100.94*mm" y="50.5*mm" z="0*mm" orientation="2" IDx="0" IDy="2"/>
+        <position x="-100.94*mm" y="151.5*mm" z="0*mm" orientation="2" IDx="0" IDy="3"/>
+        <position x="100.94*mm" y="-50.5*mm" z="0*mm" orientation="0" IDx="1" IDy="0"/>
+        <position x="100.94*mm" y="-151.5*mm" z="0*mm" orientation="0" IDx="1" IDy="1"/>
+        <position x="100.94*mm" y="50.5*mm" z="0*mm" orientation="0" IDx="1" IDy="2"/>
+        <position x="100.94*mm" y="151.5*mm" z="0*mm" orientation="0" IDx="1" IDy="3"/>
       </eightmodulepositions>
 
 
@@ -151,7 +151,7 @@
   <readouts>
     <readout name="LFHCALHits">
       <segmentation type="NoSegmentation"/>
-      <id>system:8,moduleIDx:6,moduleIDy:6,moduletype:1,passive:1,towerx:2,towery:1,rlayerz:4,layerz:4</id>
+      <id>system:8,moduleIDx:4,moduleIDy:4,moduletype:1,passive:1,towerx:2,towery:1,rlayerz:6,layerz:6</id>
     </readout>
   </readouts>
 
