@@ -28,10 +28,10 @@
   <detectors>
     <documentation>
       ### Forward (Positive Z) Endcap Hadronic Calorimeter
-      Test beam setup 2025
+      Test beam setup 2026
 
       LFHCal module features 60 layers of Steel/Sc 1.6 cm/0.4 cm
-
+      
       Currently don't have an implementation of electronics, so just leave that area (final 10 cm) empty
       So then, actual detector area is "LFHCAL_length - LFHCALElectronicsThickness" long
     </documentation>
@@ -51,8 +51,8 @@
         z="LFHCAL_length"
         rmin="20*cm"
         rmax="LFHCAL_rmax"
-        x="EightM_OuterWidth+1*cm"
-        y="EightM_OuterHeight*2+1*cm"/>
+        x="EightM_OuterWidth*2+1*cm"
+        y="EightM_OuterHeight*4+1*cm"/>
       <envelope material="Steel235"/>
 
       <eightmodule name="8MModule" vis="InvisibleWithDaughters" repeat="0" >
@@ -122,8 +122,14 @@
         ### for testing of a single module
       </documentation>
       <eightmodulepositions>
-        <position x="-50.46*mm" y="-50.5*mm" z="0*mm" orientation="2" IDx="0" IDy="0"/>
-        <position x="-50.46*mm" y="50.5*mm" z="0*mm" orientation="2" IDx="0" IDy="1"/>
+        <position x="-100.94*mm" y="-50.5*mm" z="0*mm" orientation="2" IDx="0" IDy="0"/>
+        <position x="-100.94*mm" y="-151.5*mm" z="0*mm" orientation="2" IDx="0" IDy="1"/>
+        <position x="-100.94*mm" y="50.5*mm" z="0*mm" orientation="2" IDx="0" IDy="2"/>
+        <position x="-100.94*mm" y="151.5*mm" z="0*mm" orientation="2" IDx="0" IDy="3"/>
+        <position x="100.94*mm" y="-50.5*mm" z="0*mm" orientation="0" IDx="1" IDy="0"/>
+        <position x="100.94*mm" y="-151.5*mm" z="0*mm" orientation="0" IDx="1" IDy="1"/>
+        <position x="100.94*mm" y="50.5*mm" z="0*mm" orientation="0" IDx="1" IDy="2"/>
+        <position x="100.94*mm" y="151.5*mm" z="0*mm" orientation="0" IDx="1" IDy="3"/>
       </eightmodulepositions>
 
 
