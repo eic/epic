@@ -11,6 +11,17 @@
 //   [ Evaristo Cisbani, Cristiano Fanelli, Alessio Del Dotto, et al. ]
 //
 //==========================================================================
+//  Aerogel: tiled version
+//--------------------------------------------------------------------------
+//
+// Author: Luisa Occhiuto (University of Calabria)
+//
+// - Designed as two overlapping aerogel layers and two cylindrical carbon-fiber
+// structure [Annalisa De Caro, Salvatore Fazio] 
+//
+//==========================================================================
+
+
 
 #include "DD4hep/DetFactoryHelper.h"
 #include "DD4hep/OpticalSurfaces.h"
