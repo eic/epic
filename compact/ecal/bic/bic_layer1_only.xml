@@ -226,7 +226,7 @@
   <plugins>
     <plugin name="DD4hep_ParametersPlugin">
       <argument value="EcalBarrelImaging"/>
-      <argument value="layer_pattern: str=envelope"/>
+      <argument value="layer_pattern: str=envelope1"/>
     </plugin>
   </plugins>
 
