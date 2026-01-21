@@ -1,5 +1,5 @@
 ebeam: 5
-pbeam: 41_He3
+pbeam: 41
 features:
   beampipe:
   tracking:
@@ -27,12 +27,12 @@ features:
   hcal:
     lfhcal:
     forward_insert:
-    barrel_gdml:
-    barrel_flux_return:
     forward_endcap_flux:
+    barrel_flux_return:
+    barrel_gdml:
     backward:
     backward_endcap_flux:
   far_forward:
-    default:
+    default_no_zdc:
   far_backward:
     default:
