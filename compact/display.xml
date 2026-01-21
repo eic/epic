@@ -23,10 +23,10 @@
     <vis name="TrackerGEMModuleVis"  ref="TrackerMPGDVis"  visible="true"  showDaughters="false" />
     <vis name="TrackerMMGASLayerVis" ref="TrackerMPGDVis"  visible="true"  showDaughters="false" />
 
-    <vis name="VertexLayerVis"   ref="AnlGold"         visible="true"  showDaughters="true" />
-    <vis name="VertexSupportLayerVis" ref="AnlBlue"         visible="true"  showDaughters="false" />
-    <vis name="VertexSupportVis"      ref="VertexSupportLayerVis" visible="true"  showDaughters="true" />
-    <vis name="VertexModuleVis"  ref="TrackerLayerVis" visible="true"  showDaughters="false" />
+    <vis name="SVTSensorVis"       ref="AnlGold"        visible="true"  showDaughters="true" />
+    <vis name="SVTReadoutVis"      ref="AnlDarkGreen"   visible="true"  showDaughters="true" />
+    <vis name="SVTSupportVis"      ref="AnlLightGray"   visible="true"  showDaughters="false" />
+    <vis name="VertexLayerVis"     ref="SVTSensorVis"   visible="true"  showDaughters="true" />
 
     <vis name="TOFVis"            ref="AnlTeal"             visible="true"  showDaughters="true"/>
     <vis name="TOFLayerVis"       ref="TOFVis"              visible="true"  showdaughters="true"/>
@@ -122,8 +122,8 @@
       Solenoid
     </comment>
     <vis name="SolenoidCoilVis"     ref="AnlLightGray" showDaughters="true"  visible="true" lineStyle="solid" drawingStyle="solid" />
-    <vis name="SolenoidCryostatVis" ref="AnlGray"       showDaughters="true"  visible="true" lineStyle="solid" drawingStyle="solid" />
-    <vis name="SolenoidYokeVis"     ref="AnlLight_Gray" showDaughters="false" visible="true" lineStyle="solid" drawingStyle="solid" />
+    <vis name="SolenoidCryostatVis" ref="AnlGray"      showDaughters="true"  visible="true" lineStyle="solid" drawingStyle="solid" />
+    <vis name="SolenoidYokeVis"     ref="AnlLightGray" showDaughters="false" visible="true" lineStyle="solid" drawingStyle="solid" />
 
 
     <comment>
@@ -141,9 +141,13 @@
     <comment>
       Beam line with magnets
     </comment>
-    <vis name="BeamPipeVis"         ref="AnlLightGray"       showDaughters="true" visible="true"/>
-    <vis name="FFMagnetVis"         ref="AnlGreen"            showDaughters="true" visible="true"/>
-    <vis name="FFMagnetCoilVis"     ref="AnlRed"              showDaughters="true" visible="true"/>
+    <vis name="BeamPipeVis"             ref="AnlLightGray"      showDaughters="true" visible="true"/>
+    <vis name="MagnetVis"               ref="AnlBlue"           showDaughters="true" visible="true"/>
+    <vis name="MagnetCoilVis"           ref="AnlGreen"          showDaughters="true" visible="true"/>
+    <vis name="MagnetSupportTubeVis"    ref="AnlCyan"           showDaughters="true" visible="true"/>
+    <vis name="MagnetEndPlateVis"       ref="AnlRed"            showDaughters="true" visible="true"/>
+    <vis name="MagnetHeatShieldVis"     ref="AnlGray"           showDaughters="true" visible="true"/>
+    <vis name="MagnetCryoVis"           ref="AnlOrange"         showDaughters="true" visible="true"/>
 
     <comment>
       ZDC visualization
@@ -158,7 +162,7 @@
     </comment>
     <vis name="BackwardsBox"      alpha="0.3" ref="AnlGray"       showDaughters="true" visible="true"/>
     <vis name="BackwardsAir"      alpha="0.7" ref="AnlBlue"       showDaughters="true" visible="true"/>
-    <vis name="BackwardsVac"      alpha="0.1" ref="AnlLight_Gray" showDaughters="true" visible="true"/>
+    <vis name="BackwardsVac"      alpha="0.1" ref="AnlLightGray"  showDaughters="true" visible="true"/>
 
     <comment>
       PID visualization
@@ -174,11 +178,6 @@
     <vis name="DRICH_mirror_vis"  ref="AnlLightGray" showDaughters="true" visible="true" />
     <vis name="DRICH_sensor_vis"  ref="AnlBlue"      showDaughters="true" visible="true" />
     <vis name="DRICH_service_vis" ref="AnlGreen"     showDaughters="true" visible="true" />
-
-    <vis name="MRICH_aerogel_vis" ref="AnlTeal" showDaughters="true" visible="true" />
-    <vis name="MRICH_frame_vis" ref="AnlGold" showDaughters="true" visible="true" />
-    <vis name="MRICH_lens_vis" ref="AnlGray" showDaughters="true" visible="true" />
-    <vis name="MRICH_mirror_vis"  ref="AnlGray" showDaughters="true" visible="true" />
 
     <vis name="RICHServiceVis"  ref="AnlGray" showDaughters="true" visible="true" />
 

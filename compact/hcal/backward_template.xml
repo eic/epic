@@ -1,0 +1,61 @@
+<!-- SPDX-License-Identifier: LGPL-3.0-or-later -->
+<!-- Copyright (C) 2022 - 2025 Wouter Deconinck, Leszek Kosarzewski, Ryan Milton -->
+
+<lccdd>
+  <define>
+    <documentation>
+      #### Material Thickness
+    </documentation>
+
+    <constant name="HcalEndcapNSteelThickness"          value="4.0 * cm"/>
+    <constant name="HcalEndcapNPolystyreneThickness"    value="2.4 * cm"/>
+    <constant name="HcalEndcapNLayerGap"                value="0.1 * cm"/> <!-- 2*thicker than LFHCAL -->
+
+    <documentation>
+      - Hcal Endcap N Layers and computed Thickness
+    </documentation>
+
+    <constant name="HcalEndcapNSingleLayerThickness" value="HcalEndcapNSteelThickness + HcalEndcapNPolystyreneThickness + HcalEndcapNLayerGap"/>
+    <constant name="HcalEndcapNLayer_NRepeat"        value="floor((HcalEndcapN_length + HcalEndcapN_extension_for_sampF) / HcalEndcapNSingleLayerThickness)"/>
+    <constant name="HcalEndcapN_thickness"           value="HcalEndcapNLayer_NRepeat * HcalEndcapNSingleLayerThickness"/>
+  </define>
+
+
+  <!-- Define detector -->
+  <detectors>
+    <documentation>
+      ### Backwards (Negative Z) Endcap Hadronic Calorimeter
+    </documentation>
+    <detector
+      id="HcalEndcapN_ID"
+      name="HcalEndcapN"
+      type="epic_PolyhedraEndcapCalorimeter2"
+      readout="HcalEndcapNHits"
+      vis="HcalEndcapVis"
+      calorimeterType="HAD_ENDCAP"
+      allSensitive="HcalEndcapN_allSensitive"
+      >
+      <position x="0" y="0" z="0"/>
+      <dimensions
+        numsides="HcalEndcapN_CaloSides"
+        zmin="HcalEndcapN_zmin"
+        rmin="HcalEndcapN_rmin"
+        rmax="HcalEndcapN_rmax"/>
+      <layer repeat="HcalEndcapNLayer_NRepeat" vis="HcalEndcapLayerVis" >
+        <slice material="StainlessSteelSAE304" thickness="HcalEndcapNSteelThickness" vis="HcalAbsorberVis"/>
+        <slice material="Air" thickness="HcalEndcapNLayerGap/2" vis="InvisibleNoDaughters"/>
+        <slice material="Polystyrene" thickness="HcalEndcapNPolystyreneThickness" vis="HcalSensorVis" sensitive="yes" limits="cal_limits"/>
+        <slice material="Air" thickness="HcalEndcapNLayerGap/2" vis="InvisibleNoDaughters"/>
+      </layer>
+    </detector>
+  </detectors>
+
+  <!--  Definition of the readout segmentation/definition  -->
+  <readouts>
+    <readout name="HcalEndcapNHits">
+                <segmentation type="CartesianGridXY" grid_size_x="100 * mm" grid_size_y="100 * mm"/>
+        <id>system:8,barrel:3,module:4,layer:8,slice:5,x:32:-16,y:-16</id>
+    </readout>
+  </readouts>
+
+</lccdd>

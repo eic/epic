@@ -18,7 +18,7 @@ static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector /* sens *
   Assembly assembly(det_name + "_assembly");
   Material m_Al    = det.material("Aluminum");
   Material m_Be    = det.material("Beryllium");
-  Material m_SS    = det.material("StainlessSteel");
+  Material m_SS    = det.material("StainlessSteelP506");
   Material m_vac   = det.material("Vacuum");
   string vis_name  = x_det.visStr();
   xml_comp_t x_pos = x_det.position();
@@ -260,6 +260,8 @@ static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector /* sens *
   //------------------------------------------
   //begin building main volumes here
   //------------------------------------------
+  // A box to cut out from the beam pipe to avoid overlaps with the fwd cryostat
+  Box cutout_for_FWD_cryo(1 * dd4hep::m, 1 * dd4hep::m, 2 * dd4hep::m);
 
   //-------------------------------------------------------------------
 
@@ -289,6 +291,12 @@ static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector /* sens *
   tmpAfterB1APF = SubtractionSolid(
       tmpAfterB1APF, neutral_exit_window_cutout,
       Position(160.0 * dd4hep::mm, 0.0, 0.5 * beampipe_dimensions[pieceIdx].length));
+
+  //-----------------------------------------------------------------
+  // Cut on the IP side to avoid overlaps with the fwd cryostat
+  tmpAfterB1APF = SubtractionSolid(tmpAfterB1APF, cutout_for_FWD_cryo,
+                                   Position(0.0, 0.0, (-beampipe_dimensions[pieceIdx].length) / 2));
+  //-----------------------------------------------------------------
 
   Volume v_pipeAfterB1APF(Form("v_pipeAfterB1APF_%d", pieceIdx), tmpAfterB1APF, m_SS);
   sdet.setAttributes(det, v_pipeAfterB1APF, x_det.regionStr(), x_det.limitsStr(), vis_name);
@@ -517,10 +525,23 @@ static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector /* sens *
 
   SubtractionSolid final_vacuum_main_pipe(
       vacuum_main_pipe, cutout_for_OMD_station,
-      Position(0.0, 0.0, (2251.0 - beampipe_dimensions[pieceIdx].zCenter)));
-  final_vacuum_main_pipe =
-      SubtractionSolid(final_vacuum_main_pipe, cutout_for_OMD_station,
-                       Position(0.0, 0.0, (2451.0 - beampipe_dimensions[pieceIdx].zCenter)));
+      Position(0.0, 0.0, (2551.0 * dd4hep::cm - beampipe_dimensions[pieceIdx].zCenter)));
+  final_vacuum_main_pipe = SubtractionSolid(
+      final_vacuum_main_pipe, cutout_for_OMD_station,
+      Position(0.0, 0.0, (2701.0 * dd4hep::cm - beampipe_dimensions[pieceIdx].zCenter)));
+
+  //-----------------------------------------------------------------
+  // Cut on the IP side to avoid overlaps with the fwd cryostat
+  final_vacuum_main_pipe = SubtractionSolid(
+      final_vacuum_main_pipe, cutout_for_FWD_cryo,
+      Position(0.0, 0.0,
+               (2400.0 * dd4hep::cm - 2 * dd4hep::m - beampipe_dimensions[pieceIdx].zCenter)));
+  Tube pipe_for_FWD_cryo(0.0, 16.0 * dd4hep::cm, 97.0 * dd4hep::cm);
+  final_vacuum_main_pipe = UnionSolid(
+      final_vacuum_main_pipe, pipe_for_FWD_cryo,
+      Position(6.5 * dd4hep::cm, 0.0,
+               (2400.0 * dd4hep::cm - 97.0 * dd4hep::cm - beampipe_dimensions[pieceIdx].zCenter)));
+  //-----------------------------------------------------------------
 
   Volume v_vacuum_main_pipe("v_vacuum_main_pipe", final_vacuum_main_pipe, m_vac);
   sdet.setAttributes(det, v_vacuum_main_pipe, x_det.regionStr(), x_det.limitsStr(), "AnlBlue");

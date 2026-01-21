@@ -34,35 +34,35 @@
       <dimensions x="ZDC_WSi_x" y="ZDC_WSi_y" z="ZDC_WSi_z"/>
       <layer id="1" nlayer="1" gapspace="ZDC_Si_Air_thickness">
         <slice name="silicon" material="Silicon" thickness="ZDC_pixel_thickness" vis="AnlRed"  sensitive="true"/>
-        <slice name="glue"  material="G10"     thickness="ZDC_glue_thickness"  vis="AnlLight_Gray"/>
+        <slice name="glue"  material="G10"     thickness="ZDC_glue_thickness"  vis="AnlLightGray"/>
         <slice name="pcb"   material="ZDC_PET" thickness="ZDC_PCB_thickness"   vis="AnlGreen"/>
       </layer>
       <layer id="2" nlayer="ZDC_WSi_pad_nlayers_per_block" gapspace="ZDC_Si_Air_thickness">
-        <slice name="tungsten"  material="ZDC_Tungsten"     thickness="ZDC_Tungsten_thickness"  vis="AnlLight_Gray"/>
-        <slice name="glue"      material="G10"     thickness="ZDC_glue_thickness"  vis="AnlLight_Gray"/>
+        <slice name="tungsten"  material="ZDC_Tungsten"     thickness="ZDC_Tungsten_thickness"  vis="AnlLightGray"/>
+        <slice name="glue"      material="G10"     thickness="ZDC_glue_thickness"  vis="AnlLightGray"/>
         <slice name="silicon"    material="Silicon" thickness="ZDC_pad_thickness"   vis="AnlTeal"  sensitive="true"/>
-        <slice name="glue"      material="G10"     thickness="ZDC_glue_thickness"  vis="AnlLight_Gray"/>
+        <slice name="glue"      material="G10"     thickness="ZDC_glue_thickness"  vis="AnlLightGray"/>
         <slice name="pcb"       material="ZDC_PET" thickness="ZDC_PCB_thickness"   vis="AnlGreen"/>
       </layer>
       <layer id="3" nlayer="1" gapspace="ZDC_Si_Air_thickness">
-        <slice name="tungsten"  material="ZDC_Tungsten"     thickness="ZDC_Tungsten_thickness"  vis="AnlLight_Gray"/>
-        <slice name="glue"      material="G10"     thickness="ZDC_glue_thickness"  vis="AnlLight_Gray"/>
+        <slice name="tungsten"  material="ZDC_Tungsten"     thickness="ZDC_Tungsten_thickness"  vis="AnlLightGray"/>
+        <slice name="glue"      material="G10"     thickness="ZDC_glue_thickness"  vis="AnlLightGray"/>
         <slice name="silicon"   material="Silicon" thickness="ZDC_pixel_thickness"   vis="AnlRed"  sensitive="true"/>
-        <slice name="glue"      material="G10"     thickness="ZDC_glue_thickness"  vis="AnlLight_Gray"/>
+        <slice name="glue"      material="G10"     thickness="ZDC_glue_thickness"  vis="AnlLightGray"/>
         <slice name="pcb"       material="ZDC_PET" thickness="ZDC_PCB_thickness"   vis="AnlGreen"/>
       </layer>
       <layer id="4" nlayer="ZDC_WSi_pad_nlayers_per_block" gapspace="ZDC_Si_Air_thickness">
-        <slice name="tungsten"  material="ZDC_Tungsten"     thickness="ZDC_Tungsten_thickness"  vis="AnlLight_Gray"/>
-        <slice name="glue"      material="G10"     thickness="ZDC_glue_thickness"  vis="AnlLight_Gray"/>
+        <slice name="tungsten"  material="ZDC_Tungsten"     thickness="ZDC_Tungsten_thickness"  vis="AnlLightGray"/>
+        <slice name="glue"      material="G10"     thickness="ZDC_glue_thickness"  vis="AnlLightGray"/>
         <slice name="silicon"   material="Silicon" thickness="ZDC_pad_thickness"   vis="AnlTeal"  sensitive="true"/>
-        <slice name="glue"      material="G10"     thickness="ZDC_glue_thickness"  vis="AnlLight_Gray"/>
+        <slice name="glue"      material="G10"     thickness="ZDC_glue_thickness"  vis="AnlLightGray"/>
         <slice name="pcb"       material="ZDC_PET" thickness="ZDC_PCB_thickness"   vis="AnlGreen"/>
       </layer>
       <layer id="5" nlayer="1" gapspace="ZDC_Si_Air_thickness">
-        <slice name="tungsten"  material="ZDC_Tungsten"     thickness="ZDC_Tungsten_thickness"  vis="AnlLight_Gray"/>
-        <slice name="glue"      material="G10"     thickness="ZDC_glue_thickness"  vis="AnlLight_Gray"/>
+        <slice name="tungsten"  material="ZDC_Tungsten"     thickness="ZDC_Tungsten_thickness"  vis="AnlLightGray"/>
+        <slice name="glue"      material="G10"     thickness="ZDC_glue_thickness"  vis="AnlLightGray"/>
         <slice name="silicon"   material="Silicon" thickness="ZDC_pixel_thickness"   vis="AnlRed"  sensitive="true"/>
-        <slice name="glue"      material="G10"     thickness="ZDC_glue_thickness"  vis="AnlLight_Gray"/>
+        <slice name="glue"      material="G10"     thickness="ZDC_glue_thickness"  vis="AnlLightGray"/>
         <slice name="pcb"       material="ZDC_PET" thickness="ZDC_PCB_thickness"   vis="AnlGreen"/>
       </layer>
 

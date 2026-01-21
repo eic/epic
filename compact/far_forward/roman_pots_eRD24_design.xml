@@ -49,13 +49,14 @@
         <constant name="ForwardRomanPot_ModuleHeight"   value="1.6*cm"/>
 
         <!-- materials -->
-        <!-- <constant name="ForwardRomanPot_RFShieldMat"     value="StainlessSteel"/> -->
+        <!-- <constant name="ForwardRomanPot_RFShieldMat"     value="StainlessSteelP506"/> -->
         <!-- <constant name="ForwardRomanPot_LGADMat"         value="SiliconOxide"/>   -->
         <!-- <constant name="ForwardRomanPot_ASICMat"         value="SiliconOxide"/>   -->
         <!-- <constant name="ForwardRomanPot_ThermalStripMat" value="Copper"/>         -->
 
         <!-- Thicknesses -->
         <constant name="ForwardRomanPot_RFShieldThickness"          value="1.0*mm"/>
+        <!-- RF shielding commented out below until the need is understood and material/thickness chosen-->
         <constant name="ForwardRomanPot_LGADThickness"              value="0.3*mm"/>
         <constant name="ForwardRomanPot_ASICThickness"              value="0.3*mm"/>
         <constant name="ForwardRomanPot_ThermalStripThickness"      value="0.3*mm"/>
@@ -76,7 +77,8 @@
             <position x="ForwardRomanPotStation1_xpos" y="0" z="ForwardRomanPotStation1_zpos" />
             <rotation x="0" y="ForwardRomanPotStation1_rotation" z="0" />
             <module name="ModuleRP1" vis="FFTrackerShieldedModuleVis" nx="1" ny="1" width="ForwardRomanPot_ModuleWidth" height="ForwardRomanPot_ModuleHeight">
-                <module_component material="Aluminum"     vis="FFTrackerShieldingVis" thickness="ForwardRomanPot_RFShieldThickness"/>
+                <!-- RF shielding removed for now because we don't know if we will even need it - it depends on the beam impedence + RF heating, etc. Oct. 2025 -->
+                <!--<module_component material="Aluminum"     vis="FFTrackerShieldingVis" thickness="ForwardRomanPot_RFShieldThickness"/>-->
                 <module_component material="Copper"       vis="FFTrackerServiceVis"   thickness="ForwardRomanPot_ThermalStripThickness" />
                 <module_component material="SiliconOxide" vis="FFTrackerServiceVis"   thickness="ForwardRomanPot_ASICThickness"  />
                 <module_component material="SiliconOxide" vis="FFTrackerSurfaceVis"   thickness="ForwardRomanPot_LGADThickness" sensitive="true"/>
@@ -162,7 +164,7 @@
             <position x="ForwardRomanPotStation2_xpos" y="0" z="ForwardRomanPotStation2_zpos" />
             <rotation x="0" y="ForwardRomanPotStation1_rotation" z="0" />
             <module name="ModuleRP2" vis="FFTrackerShieldedModuleVis" nx="1" ny="1" width="ForwardRomanPot_ModuleWidth" height="ForwardRomanPot_ModuleHeight">
-                <module_component material="Aluminum"     vis="FFTrackerShieldingVis" thickness="ForwardRomanPot_RFShieldThickness"/>
+                <!--<module_component material="Aluminum"     vis="FFTrackerShieldingVis" thickness="ForwardRomanPot_RFShieldThickness"/>-->
                 <module_component material="Copper"       vis="FFTrackerServiceVis"   thickness="ForwardRomanPot_ThermalStripThickness" />
                 <module_component material="SiliconOxide" vis="FFTrackerServiceVis"   thickness="ForwardRomanPot_ASICThickness"  />
                 <module_component material="SiliconOxide" vis="FFTrackerSurfaceVis"   thickness="ForwardRomanPot_LGADThickness" sensitive="true"/>
@@ -241,7 +243,7 @@
 
     <readouts>
         <readout name="ForwardRomanPotHits">
-            <segmentation type="CartesianGridXY" grid_size_x="0.5*mm" grid_size_y="0.5*mm" />
+            <segmentation type="CartesianGridXY" grid_size_x="0.250*mm" grid_size_y="0.250*mm" />
             <id>system:8,assembly:3,layer:4,module:8,sensor:8,x:32:-16,y:-16</id>
         </readout>
     </readouts>

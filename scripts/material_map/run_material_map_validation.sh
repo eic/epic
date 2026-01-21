@@ -3,7 +3,7 @@ set -e
 # script for material map validation with ACTS python bindings
 # run as : ./run_material_map_validation.sh --nevents 1000
 # Shujie Li, 03. 2024 (https://github.com/eic/snippets/pull/3)
-DETECTOR_CONFIG="epic_craterlake_material_map"
+: ${DETECTOR_CONFIG:="epic_craterlake_material_map"}
 # Check if DETECTOR_PATH are set
 if [[ -z ${DETECTOR_PATH} ]] ; then
   echo "You must set \$DETECTOR_PATH before running this script."
@@ -11,7 +11,7 @@ if [[ -z ${DETECTOR_PATH} ]] ; then
 fi
 
 # Download required Acts files
-ACTS_VERSION="v36.3.2"
+ACTS_VERSION="v39.2.0"
 ACTS_URL="https://github.com/acts-project/acts/raw/"
 ACTS_FILES=(
   "Examples/Scripts/Python/geometry.py"
@@ -32,6 +32,24 @@ ACTS_FILES=(
 for file in ${ACTS_FILES[@]} ; do
   if [ ! -f ${file} ] ; then
     curl --silent --location --create-dirs --output ${file} ${ACTS_URL}/${ACTS_VERSION}/${file}
+    if [ "${file}" = "Examples/Scripts/MaterialMapping/Mat_map.C" ] ; then
+      # help with B0 being cropped
+      patch -p1 <<EOF
+diff -aru a/Examples/Scripts/MaterialMapping/Mat_map.C b/Examples/Scripts/MaterialMapping/Mat_map.C
+--- a/Examples/Scripts/MaterialMapping/Mat_map.C
++++ b/Examples/Scripts/MaterialMapping/Mat_map.C
+@@ -145,7 +145,8 @@
+
+     // 2D map for Validation input
+     TCanvas *VM = new TCanvas("VM","Validation Map") ;
+-    Val_file->Draw("mat_y:mat_z","std::abs(mat_x)<1");
++    Val_file->Draw("sqrt(mat_x**2+mat_y**2):mat_z>>mat_map1","(mat_z>-5000)&(mat_z<8000)");
++    VM->SetGrid();
+
+     eta_0->Draw("Same");
+     eta_1p->Draw("Same");
+EOF
+    fi
   fi
 done
 export PYTHONPATH=$PWD/Examples/Scripts/Python:$PYTHONPATH
@@ -51,8 +69,25 @@ export PYTHONPATH=$PWD/Examples/Scripts/Python:$PYTHONPATH
 export ACTS_SEQUENCER_DISABLE_FPEMON=1
 
 # Default arguments
-nevents=1000
-nparticles=1000
+# FIXME
+# This was originally
+#   nevents=1000
+#   nparticles=5000
+# but reduced to get the job to complete...
+nevents=100
+nparticles=500
+
+function print_the_help {
+  echo "USAGE:    [--nevents <int>] [--nparticles <int>]"
+  echo "OPTIONAL ARGUMENTS:"
+  echo "          --nevents       Number of events (default: $nevents)"
+  echo "          --nparticles    Number of particles per event (default: $nparticles)"
+  echo "          -h,--help     Print this message"
+  echo ""
+  echo "  Run material map validation."
+  exit
+}
+
 while [[ $# -gt 1 ]]
 do
   key="$1"
@@ -109,11 +144,24 @@ mkdir -p plots
 python Examples/Scripts/MaterialMapping/GeometryVisualisationAndMaterialHandling.py --geometry ${geoFile}
 echo "::endgroup::"
 
+echo "::group::----MAPPING Debugging-----"
+echo "Volumes by name:"
+jq -r '.Volumes.entries[] | "vol=\(.volume): \(.value.NAME)"' geometry-map.json
+echo "Volume surfaces:"
+jq -r '.Surfaces.entries[] | select(.boundary != null) | "vol=\(.volume)|bnd=\(.boundary): \(.value.type) \(.value.bounds.type) \(.value.bounds.values) rot=\(.value.transform.rotation) pos=\(.value.transform.translation)"' geometry-map.json
+echo "Layer surfaces:"
+jq -r '.Surfaces.entries[] | select(.volume < 40 and .layer != null) | "vol=\(.volume)|lay=\(.layer): \(.value.type) \(.value.bounds.type) \(.value.bounds.values) rot=\(.value.transform.rotation) pos=\(.value.transform.translation)"' geometry-map.json
+echo "::endgroup::"
+
 echo "::group::----MAPPING------------"
 # input: geant4_material_tracks.root, geometry-map.json
 # output: material-maps.json or cbor. This is the material map that you want to provide to EICrecon, i.e.  -Pacts:MaterialMap=XXX  .Please --matFile to specify the name and type
 #         material-maps_tracks.root(recorded steps from geantino, for validation purpose)
-python material_mapping_epic.py --xmlFile ${DETECTOR_PATH}/${DETECTOR_CONFIG}.xml --geoFile ${geoFile} --matFile ${matFile}
+sed -i 's/acts\.logging\.INFO/acts.logging.VERBOSE/g' Examples/Scripts/Python/material_mapping.py
+sed -i 's/navigator = Navigator($/&level=acts.logging.VERBOSE,/' Examples/Scripts/Python/material_mapping.py
+sed -i 's/propagator = Propagator(stepper, navigator)$/propagator = Propagator(stepper, navigator, loglevel=acts.logging.VERBOSE)/' Examples/Scripts/Python/material_mapping.py
+set -o pipefail
+python material_mapping_epic.py --xmlFile ${DETECTOR_PATH}/${DETECTOR_CONFIG}.xml --geoFile ${geoFile} --matFile ${matFile} | tail -n 5000
 echo "::endgroup::"
 
 echo "::group::----Prepare validation rootfile--------"

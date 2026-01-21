@@ -2,12 +2,11 @@ features:
   beampipe:
   solenoid:
   ecal:
-    forward_homogeneous:
-    forward_insert_homogeneous:
+    forward_averaged_homogeneous:
     bic_default:
     backward_PbWO4:
   hcal:
-    lfhcal_with_space_for_insert:
+    lfhcal:
     forward_insert:
     barrel_gdml:
     backward:
