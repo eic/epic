@@ -1,4 +1,7 @@
 #!/usr/bin/env python3
+# SPDX-License-Identifier: LGPL-3.0-or-later
+# Copyright (C) 2025 - 2026 Simon Gardner
+
 """Combine SURVEY (positions) and TWISS (strengths) TFS files to update XML beamline definitions.
 
 Usage:
