@@ -1,0 +1,167 @@
+<!-- SPDX-License-Identifier: LGPL-3.0-or-later -->
+<!-- Copyright (C) 2025 Simon Gardner -->
+<!-- Far backwards electron beamline magnet parameters and field strengths -->
+<!-- Generated from TWISS/SURVEY files via update_beamline_from_survey_and_twiss.py -->
+<!-- Reference energy auto-detected from TWISS file: 17.846262619763 GeV -->
+
+  <define>
+
+    <comment>
+      Reference beam energy from TWISS file (auto-detected)
+      Used for documentation only - perGeV values are calculated directly from:
+        Quadrupoles: K1L/Length * FarBackwardMagnets_Brho_perGeV
+        Dipoles:    BendAngle/Length * FarBackwardMagnets_Brho_perGeV
+      (FarBackwardMagnets_Brho_perGeV = Brho/E = 1/0.299792458 T·m/GeV)
+    </comment>
+    <constant name="FarBackwardMagnets_ReferenceEnergy" value="17.846262619763*GeV"/>
+    <constant name="FarBackwardMagnets_Brho_perGeV" value="1/0.299792458*tesla*m/GeV"/>
+
+    <comment>
+      Magnet physical parameters from TWISS/SURVEY files
+      Length, K1L, BendAngle: fundamental parameters from TWISS
+    </comment>
+
+    <!-- Q1eR: First electron quadrupole -->
+    <constant name="Q1eR_Length"        value="1.800*m"/>
+    <constant name="Q1eR_K1L"           value="-0.4140*1/m"/>
+
+    <!-- Q2eR: Second electron quadrupole -->
+    <constant name="Q2eR_Length"        value="1.400*m"/>
+    <constant name="Q2eR_K1L"           value="0.3164*1/m"/>
+
+    <!-- B2AeR: First electron dipole (part A) -->
+    <constant name="B2AeR_Length"       value="3.800*m"/>
+    <constant name="B2AeR_BendAngle"    value="0.0050*rad"/>
+
+    <!-- B2BeR: First electron dipole (part B) -->
+    <constant name="B2BeR_Length"       value="1.500*m"/>
+    <constant name="B2BeR_BendAngle"    value="0.0150*rad"/>
+
+    <!-- SQ3eR: Skew quadrupole 3 -->
+    <constant name="SQ3eR_Length"       value="0.2500*m"/>
+    <constant name="SQ3eR_K1L"          value="0.000000*1/m"/>
+
+    <!-- Q3eR: Third electron quadrupole -->
+    <constant name="Q3eR_Length"        value="0.6000*m"/>
+    <constant name="Q3eR_K1L"           value="0.1148*1/m"/>
+
+    <!-- SQ4eR: Skew quadrupole 4 -->
+    <constant name="SQ4eR_Length"       value="0.2500*m"/>
+    <constant name="SQ4eR_K1L"          value="0.000000*1/m"/>
+
+    <!-- Q4eR: Fourth electron quadrupole -->
+    <constant name="Q4eR_Length"        value="0.6000*m"/>
+    <constant name="Q4eR_K1L"           value="-0.2388*1/m"/>
+
+    <!-- SQ5eR: Skew quadrupole 5 -->
+    <constant name="SQ5eR_Length"       value="0.2500*m"/>
+    <constant name="SQ5eR_K1L"          value="0.000000*1/m"/>
+
+    <!-- Q5eR: Fifth electron quadrupole -->
+    <constant name="Q5eR_Length"        value="0.6000*m"/>
+    <constant name="Q5eR_K1L"           value="0.1843*1/m"/>
+
+    <!-- B3eR: Third electron dipole -->
+    <constant name="B3eR_Length"        value="0.8914*m"/>
+    <constant name="B3eR_BendAngle"     value="-0.0064*rad"/>
+
+    <!-- SQ6eR: Skew quadrupole 6 -->
+    <constant name="SQ6eR_Length"       value="0.2500*m"/>
+    <constant name="SQ6eR_K1L"          value="0.000000*1/m"/>
+
+    <!-- SQ7eR: Skew quadrupole 7 -->
+    <constant name="SQ7eR_Length"       value="0.2500*m"/>
+    <constant name="SQ7eR_K1L"          value="0.000000*1/m"/>
+
+    <!-- SQ8eR: Skew quadrupole 8 -->
+    <constant name="SQ8eR_Length"       value="0.2500*m"/>
+    <constant name="SQ8eR_K1L"          value="0.000000*1/m"/>
+
+    <!-- Q8eR: Eighth electron quadrupole -->
+    <constant name="Q8eR_Length"        value="1.200*m"/>
+    <constant name="Q8eR_K1L"           value="0.1345*1/m"/>
+
+    <!-- RF_Crab: RF crab cavity -->
+    <constant name="RF_Crab_Length"     value="4.000*m"/>
+
+    <!-- Q9eR: Ninth electron quadrupole -->
+    <constant name="Q9eR_Length"        value="1.200*m"/>
+    <constant name="Q9eR_K1L"           value="0.1611*1/m"/>
+
+    <!-- SQ10eR: Skew quadrupole 10 -->
+    <constant name="SQ10eR_Length"      value="0.2500*m"/>
+    <constant name="SQ10eR_K1L"         value="0.000000*1/m"/>
+
+    <!-- Q10eR: Tenth electron quadrupole -->
+    <constant name="Q10eR_Length"       value="1.200*m"/>
+    <constant name="Q10eR_K1L"          value="-0.2765*1/m"/>
+
+    <!-- Q11eR: Eleventh electron quadrupole -->
+    <constant name="Q11eR_Length"       value="1.200*m"/>
+    <constant name="Q11eR_K1L"          value="0.1911*1/m"/>
+
+    <!-- Q12eR: Twelfth electron quadrupole -->
+    <constant name="Q12eR_Length"       value="1.200*m"/>
+    <constant name="Q12eR_K1L"          value="0.2028*1/m"/>
+
+    <!-- Q13eR: Thirteenth electron quadrupole -->
+    <constant name="Q13eR_Length"       value="1.200*m"/>
+    <constant name="Q13eR_K1L"          value="-0.2500*1/m"/>
+
+    <!-- D4eR_1: Fourth electron dipole (segment 1 of 5) -->
+    <constant name="D4eR_1_Length"      value="2.726*m"/>
+    <constant name="D4eR_1_BendAngle"   value="0.0130*rad"/>
+
+    <!-- D4eR_2: Fourth electron dipole (segment 2 of 5) -->
+    <constant name="D4eR_2_Length"      value="2.726*m"/>
+    <constant name="D4eR_2_BendAngle"   value="0.0130*rad"/>
+
+    <!-- D4eR_3: Fourth electron dipole (segment 3 of 5) -->
+    <constant name="D4eR_3_Length"      value="2.726*m"/>
+    <constant name="D4eR_3_BendAngle"   value="0.0130*rad"/>
+
+    <!-- D4eR_4: Fourth electron dipole (segment 4 of 5) -->
+    <constant name="D4eR_4_Length"      value="2.726*m"/>
+    <constant name="D4eR_4_BendAngle"   value="0.0130*rad"/>
+
+    <!-- D4eR_5: Fourth electron dipole (segment 5 of 5) -->
+    <constant name="D4eR_5_Length"      value="2.726*m"/>
+    <constant name="D4eR_5_BendAngle"   value="0.0130*rad"/>
+
+    <comment>
+      Per-GeV normalized field strengths (transparent calculation in XML)
+      These divide the reference field strengths by the reference energy
+      Use in beamline configs as: FieldStrength = *_perGeV * ElectronBeamEnergy
+    </comment>
+
+    <!-- Quadrupole gradients per GeV -->
+    <constant name="Q1eR_Gradient_perGeV"   value="Q1eR_K1L / Q1eR_Length * FarBackwardMagnets_Brho_perGeV"/>
+    <constant name="Q2eR_Gradient_perGeV"   value="Q2eR_K1L / Q2eR_Length * FarBackwardMagnets_Brho_perGeV"/>
+    <constant name="SQ3eR_Gradient_perGeV"  value="SQ3eR_K1L / SQ3eR_Length * FarBackwardMagnets_Brho_perGeV"/>
+    <constant name="Q3eR_Gradient_perGeV"   value="Q3eR_K1L / Q3eR_Length * FarBackwardMagnets_Brho_perGeV"/>
+    <constant name="SQ4eR_Gradient_perGeV"  value="SQ4eR_K1L / SQ4eR_Length * FarBackwardMagnets_Brho_perGeV"/>
+    <constant name="Q4eR_Gradient_perGeV"   value="Q4eR_K1L / Q4eR_Length * FarBackwardMagnets_Brho_perGeV"/>
+    <constant name="SQ5eR_Gradient_perGeV"  value="SQ5eR_K1L / SQ5eR_Length * FarBackwardMagnets_Brho_perGeV"/>
+    <constant name="Q5eR_Gradient_perGeV"   value="Q5eR_K1L / Q5eR_Length * FarBackwardMagnets_Brho_perGeV"/>
+    <constant name="SQ6eR_Gradient_perGeV"  value="SQ6eR_K1L / SQ6eR_Length * FarBackwardMagnets_Brho_perGeV"/>
+    <constant name="SQ7eR_Gradient_perGeV"  value="SQ7eR_K1L / SQ7eR_Length * FarBackwardMagnets_Brho_perGeV"/>
+    <constant name="SQ8eR_Gradient_perGeV"  value="SQ8eR_K1L / SQ8eR_Length * FarBackwardMagnets_Brho_perGeV"/>
+    <constant name="Q8eR_Gradient_perGeV"   value="Q8eR_K1L / Q8eR_Length * FarBackwardMagnets_Brho_perGeV"/>
+    <constant name="Q9eR_Gradient_perGeV"   value="Q9eR_K1L / Q9eR_Length * FarBackwardMagnets_Brho_perGeV"/>
+    <constant name="SQ10eR_Gradient_perGeV" value="SQ10eR_K1L / SQ10eR_Length * FarBackwardMagnets_Brho_perGeV"/>
+    <constant name="Q10eR_Gradient_perGeV"  value="Q10eR_K1L / Q10eR_Length * FarBackwardMagnets_Brho_perGeV"/>
+    <constant name="Q11eR_Gradient_perGeV"  value="Q11eR_K1L / Q11eR_Length * FarBackwardMagnets_Brho_perGeV"/>
+    <constant name="Q12eR_Gradient_perGeV"  value="Q12eR_K1L / Q12eR_Length * FarBackwardMagnets_Brho_perGeV"/>
+    <constant name="Q13eR_Gradient_perGeV"  value="Q13eR_K1L / Q13eR_Length * FarBackwardMagnets_Brho_perGeV"/>
+
+    <!-- Dipole fields per GeV -->
+    <constant name="B2AeR_B_perGeV"   value="B2AeR_BendAngle / B2AeR_Length * FarBackwardMagnets_Brho_perGeV"/>
+    <constant name="B2BeR_B_perGeV"   value="B2BeR_BendAngle / B2BeR_Length * FarBackwardMagnets_Brho_perGeV"/>
+    <constant name="B3eR_B_perGeV"    value="B3eR_BendAngle / B3eR_Length * FarBackwardMagnets_Brho_perGeV"/>
+    <constant name="D4eR_1_B_perGeV"  value="D4eR_1_BendAngle / D4eR_1_Length * FarBackwardMagnets_Brho_perGeV"/>
+    <constant name="D4eR_2_B_perGeV"  value="D4eR_2_BendAngle / D4eR_2_Length * FarBackwardMagnets_Brho_perGeV"/>
+    <constant name="D4eR_3_B_perGeV"  value="D4eR_3_BendAngle / D4eR_3_Length * FarBackwardMagnets_Brho_perGeV"/>
+    <constant name="D4eR_4_B_perGeV"  value="D4eR_4_BendAngle / D4eR_4_Length * FarBackwardMagnets_Brho_perGeV"/>
+    <constant name="D4eR_5_B_perGeV"  value="D4eR_5_BendAngle / D4eR_5_Length * FarBackwardMagnets_Brho_perGeV"/>
+
+</define>
