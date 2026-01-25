@@ -71,6 +71,7 @@ export ACTS_SEQUENCER_DISABLE_FPEMON=1
 # Default arguments
 nevents=1000
 nparticles=5000
+verbose=0
 
 function print_the_help {
   echo "USAGE:    [--nevents <int>] [--nparticles <int>]"
@@ -95,6 +96,11 @@ do
     --nparticles)
       nparticles=$2
       shift # past value
+      shift
+      ;;
+    -v)
+    --verbose)
+      verbose=1
       shift
       ;;
     *)    # unknown option
@@ -152,11 +158,12 @@ echo "::group::----MAPPING------------"
 # input: geant4_material_tracks.root, geometry-map.json
 # output: material-maps.json or cbor. This is the material map that you want to provide to EICrecon, i.e.  -Pacts:MaterialMap=XXX  .Please --matFile to specify the name and type
 #         material-maps_tracks.root(recorded steps from geantino, for validation purpose)
-sed -i 's/acts\.logging\.INFO/acts.logging.VERBOSE/g' Examples/Scripts/Python/material_mapping.py
-sed -i 's/navigator = Navigator($/&level=acts.logging.VERBOSE,/' Examples/Scripts/Python/material_mapping.py
-sed -i 's/propagator = Propagator(stepper, navigator)$/propagator = Propagator(stepper, navigator, loglevel=acts.logging.VERBOSE)/' Examples/Scripts/Python/material_mapping.py
-set -o pipefail
-python material_mapping_epic.py --xmlFile ${DETECTOR_PATH}/${DETECTOR_CONFIG}.xml --geoFile ${geoFile} --matFile ${matFile} | tail -n 5000
+if [[ "$verbose" -eq 1 ]]; then
+  sed -i 's/acts\.logging\.INFO/acts.logging.VERBOSE/g' Examples/Scripts/Python/material_mapping.py
+  sed -i 's/navigator = Navigator($/&level=acts.logging.VERBOSE,/' Examples/Scripts/Python/material_mapping.py
+  sed -i 's/propagator = Propagator(stepper, navigator)$/propagator = Propagator(stepper, navigator, loglevel=acts.logging.VERBOSE)/' Examples/Scripts/Python/material_mapping.py
+fi
+python material_mapping_epic.py --xmlFile ${DETECTOR_PATH}/${DETECTOR_CONFIG}.xml --geoFile ${geoFile} --matFile ${matFile}
 echo "::endgroup::"
 
 echo "::group::----Prepare validation rootfile--------"
