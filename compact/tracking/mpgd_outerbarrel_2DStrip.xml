@@ -60,11 +60,11 @@
 
     <module name="MPGDOuterBarrelModule" vis="TrackerVis">
 
-        <module_component name="OuterRadiator" material="Ar90IsoButane" sensitive="true" width="MPGDOuterBarrelModule_width" thickness="RWELLThickGap_thickness" vis="TrackerMPGDGasVis" offset="0" length="MPGDOuterBarrelModule_Inset_length"/>
-        <module_component name="pStripThinGap" material="Ar90IsoButane" sensitive="true" width="MPGDOuterBarrelModule_width" thickness="RWELLThinGap_thickness"  vis="TrackerMPGDGasVis" offset="0" length="MPGDOuterBarrelModule_Inset_length"/>
-        <module_component name="pixelThinGap"  material="Ar90IsoButane" sensitive="true" width="MPGDOuterBarrelModule_width" thickness="RWELLThinGap_thickness"  vis="TrackerMPGDGasVis" offset="0" length="MPGDOuterBarrelModule_Inset_length"/>
-        <module_component name="nStripThinGap" material="Ar90IsoButane" sensitive="true" width="MPGDOuterBarrelModule_width" thickness="RWELLThinGap_thickness"  vis="TrackerMPGDGasVis" offset="0" length="MPGDOuterBarrelModule_Inset_length"/>
-        <module_component name="InnerRadiator" material="Ar90IsoButane" sensitive="true" width="MPGDOuterBarrelModule_width" thickness="RWELLThickGap_thickness" vis="TrackerMPGDGasVis" offset="0" length="MPGDOuterBarrelModule_Inset_length"/>
+        <module_component name="OuterRadiator" material="Ar90IsoButane" sensitive="true" width="MPGDOuterBarrelModule_width" thickness="RWELLThickGap_thickness" vis="TrackerMPGDGasVis" offset="0" length="MPGDOuterBarrelModule_Inset_length" key="3" />
+        <module_component name="pStripThinGap" material="Ar90IsoButane" sensitive="true" width="MPGDOuterBarrelModule_width" thickness="RWELLThinGap_thickness"  vis="TrackerMPGDGasVis" offset="0" length="MPGDOuterBarrelModule_Inset_length" key="1" />
+        <module_component name="pixelThinGap"  material="Ar90IsoButane" sensitive="true" width="MPGDOuterBarrelModule_width" thickness="RWELLThinGap_thickness"  vis="TrackerMPGDGasVis" offset="0" length="MPGDOuterBarrelModule_Inset_length" key="0" />
+        <module_component name="nStripThinGap" material="Ar90IsoButane" sensitive="true" width="MPGDOuterBarrelModule_width" thickness="RWELLThinGap_thickness"  vis="TrackerMPGDGasVis" offset="0" length="MPGDOuterBarrelModule_Inset_length" key="2" />
+        <module_component name="InnerRadiator" material="Ar90IsoButane" sensitive="true" width="MPGDOuterBarrelModule_width" thickness="RWELLThickGap_thickness" vis="TrackerMPGDGasVis" offset="0" length="MPGDOuterBarrelModule_Inset_length" key="4" />
 
         <module_component name="WindowGasGap"
                material="Ar90IsoButane"

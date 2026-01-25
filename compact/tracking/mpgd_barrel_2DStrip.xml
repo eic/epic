@@ -87,11 +87,11 @@
         <module_component name="DriftCuGround" thickness="MMDriftCuGround_thickness" material="Copper" vis="TrackerModuleVis"/>
         <module_component name="DriftKapton" thickness="MMDriftKapton_thickness" material="Kapton" vis="TrackerVis" />
         <module_component name="DriftCuElectrode" thickness="MMDriftCuElectrode_thickness" material="Copper" vis="TrackerVis"/>
-        <module_component name="InnerRadiator" thickness="MMThickGap_thickness" material="Ar90IsoButane" sensitive="True" vis="TrackerMPGDGasVis"/>
-        <module_component name="pStripThinGap" thickness="MMThinGap_thickness"  material="Ar90IsoButane" sensitive="True" vis="TrackerMPGDGasVis"/>
-        <module_component name="pixelThinGap"  thickness="MMThinGap_thickness"  material="Ar90IsoButane" sensitive="True" vis="TrackerMPGDGasVis"/>
-        <module_component name="nStripThinGap" thickness="MMThinGap_thickness"  material="Ar90IsoButane" sensitive="True" vis="TrackerMPGDGasVis"/>
-        <module_component name="OuterRadiator" thickness="MMThickGap_thickness" material="Ar90IsoButane" sensitive="True" vis="TrackerMPGDGasVis"/>
+        <module_component name="InnerRadiator" thickness="MMThickGap_thickness" material="Ar90IsoButane" sensitive="True" key="3" vis="TrackerMPGDGasVis"/>
+        <module_component name="pStripThinGap" thickness="MMThinGap_thickness"  material="Ar90IsoButane" sensitive="True" key="1" vis="TrackerMPGDGasVis"/>
+        <module_component name="pixelThinGap"  thickness="MMThinGap_thickness"  material="Ar90IsoButane" sensitive="True" key="0" vis="TrackerMPGDGasVis"/>
+        <module_component name="nStripThinGap" thickness="MMThinGap_thickness"  material="Ar90IsoButane" sensitive="True" key="2" vis="TrackerMPGDGasVis"/>
+        <module_component name="OuterRadiator" thickness="MMThickGap_thickness" material="Ar90IsoButane" sensitive="True" key="4" vis="TrackerMPGDGasVis"/>
         <module_component name="Mesh" thickness="MMMesh_thickness" material="MMGAS_InoxForMesh" vis="TrackerVis"/>
         <module_component name="Fudge" thickness="MMFudgeInnerMPGDBarrel_thickness" material="Kapton" vis="TrackerVis"/>
         <module_component name="Gas" thickness="MMGas_thickness" material="Ar90IsoButane" vis="TrackerMPGDGasVis"/>
