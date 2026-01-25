@@ -197,19 +197,14 @@ static Ref_t create_BarrelPlanarMPGDTracker_geo(Detector& description, xml_h e,
       }
       pv.addPhysVolID("sensor", sensor_number);
       // StripID. Single Sensitive Volume?
-      int strip_id;
       if (comp_name == "DriftGap") {
         if (nSensitives != 0) {
           sensitiveVolumeSet = -1;
           break;
         }
-        strip_id           = 0;
         sensitiveVolumeSet = 1;
-      } else {
-        // Nota Bene: the definition of the strip IDs below has to match those in EICrecon's MPGDTrackerDigi and in epic's MPGDCylinderBarrelTracker_geo.cpp.
-        int strip_ids[5] = {3, 1, 0, 2, 4};
-        strip_id         = strip_ids[nSensitives];
       }
+      int strip_id = x_comp.key();
       pv.addPhysVolID("strip", strip_id);
       c_vol.setSensitiveDetector(sens);
       sensitives.push_back(pv);

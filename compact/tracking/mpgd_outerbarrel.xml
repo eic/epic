@@ -64,7 +64,8 @@
                thickness="MPGDOuterBarrelDriftGap_thickness"
                vis="TrackerMPGDGasVis"
                offset="0"
-               length="MPGDOuterBarrelModule_Inset_length"/>
+               length="MPGDOuterBarrelModule_Inset_length"
+               key="0"/>
 
         <module_component name="WindowGasGap"
                material="Ar90IsoButane"
