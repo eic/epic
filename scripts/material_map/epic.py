@@ -12,8 +12,7 @@ import acts
 import acts.examples.dd4hep
 
 from acts import (
-    Vector4,
-    MaterialMapJsonConverter
+    Vector4
 )
 
 import json
