@@ -202,12 +202,20 @@ static Ref_t create_BarrelTrackerWithFrame(Detector& description, xml_h e, Sensi
       c_vol.setRegion(description, x_comp.regionStr());
       c_vol.setLimitSet(description, x_comp.limitsStr());
       c_vol.setVisAttributes(description, x_comp.visStr());
+      // Calculate thickness_so_far before setting sensitive surface so it can be used to calculate inner and outer thicknesses correctly
+      thickness_sum += x_comp.thickness();
+      thickness_so_far += x_comp.thickness();
+      // apply relative offsets in z-position used to stack components side-by-side
+      if (x_pos) {
+        thickness_sum += x_pos.z(0);
+        thickness_so_far += x_pos.z(0);
+      }
       if (x_comp.isSensitive()) {
         pv.addPhysVolID("sensor", sensor_number++);
         c_vol.setSensitiveDetector(sens);
         sensitives[m_nam].push_back(pv);
-        module_thicknesses[m_nam] = {thickness_so_far + x_comp.thickness() / 2.0,
-                                     total_thickness - thickness_so_far - x_comp.thickness() / 2.0};
+        module_thicknesses[m_nam] = {thickness_so_far - x_comp.thickness() / 2.0,
+                                     total_thickness - thickness_so_far + x_comp.thickness() / 2.0};
 
         // -------- create a measurement plane for the tracking surface attched to the sensitive volume -----
         Vector3D u(-1., 0., 0.);
@@ -229,13 +237,6 @@ static Ref_t create_BarrelTrackerWithFrame(Detector& description, xml_h e, Sensi
         volplane_surfaces[m_nam].push_back(surf);
 
         //--------------------------------------------
-      }
-      thickness_sum += x_comp.thickness();
-      thickness_so_far += x_comp.thickness();
-      // apply relative offsets in z-position used to stack components side-by-side
-      if (x_pos) {
-        thickness_sum += x_pos.z(0);
-        thickness_so_far += x_pos.z(0);
       }
     }
   }
