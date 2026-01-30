@@ -22,7 +22,7 @@
   <detectors>
 
     <detector id="TaggerTracker_ID" name="BackwardsTaggerStation" type="BackwardsTagger" readout="TaggerTrackerHits">
-      <type_flags type="DetType_TRACKER + DetType_ENDCAP"/>
+      <type_flags type="DetType_TRACKER + DetType_ENDCAP + DetType_BEAMPIPE"/>
 
       <comment> Tagger stations </comment>
       <module id="1" name="Tagger1">

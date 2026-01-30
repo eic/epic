@@ -28,7 +28,7 @@
     materialCu="Copper"
     thicknessSi="LumiSpecTracker_Si_DZ/2.0"
     thicknessCu="LumiSpecTracker_Cu_DZ/2.0">
-    <type_flags type="DetType_TRACKER + DetType_ENDCAP"/>
+    <type_flags type="DetType_TRACKER + DetType_ENDCAP + DetType_BEAMPIPE"/>
     <module id="0">
       <detectorType name="compound"/>
       <sector id="0" name="Top1">
