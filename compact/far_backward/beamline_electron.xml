@@ -59,7 +59,6 @@
 
       <comment> Extended vacuum volume for taggers </comment>
       <module id="1" name="Tagger1">
-        <!-- Mark this module as a compound DetElement so ACTS/DD4hep treat it as translated -->
         <detectorType name="compound"/>
         <position    x="Tagger1_Vac_Offset_X" y="Tagger1_Y" z="Tagger1_Vac_Offset_Z"/>
         <rotation    theta="Tagger1_Theta"/>

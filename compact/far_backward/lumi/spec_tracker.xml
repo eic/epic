@@ -30,7 +30,6 @@
     thicknessCu="LumiSpecTracker_Cu_DZ/2.0">
     <type_flags type="DetType_TRACKER + DetType_ENDCAP"/>
     <module id="0">
-      <!-- Mark this module as a compound DetElement so ACTS/DD4hep treat it as translated -->
       <detectorType name="compound"/>
       <sector id="0" name="Top1">
           <position   x="0" y="Pos_Y1" z="Pos_Z1"/>

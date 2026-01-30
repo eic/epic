@@ -128,7 +128,6 @@
       name="VertexBarrelSubAssembly"
       type="DD4hep_SubdetectorAssembly"
       vis="TrackerSubAssemblyVis">
-      <!-- Mark this subassembly as a compound DetElement so ACTS/DD4hep translate it correctly -->
       <detectorType name="compound"/>
       <composite name="VertexBarrel" />
     </detector>

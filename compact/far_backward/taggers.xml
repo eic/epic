@@ -26,7 +26,6 @@
 
       <comment> Tagger stations </comment>
       <module id="1" name="Tagger1">
-        <!-- Mark this module as a compound DetElement so ACTS/DD4hep treat it as translated -->
         <detectorType name="compound"/>
         <comment>
         Position and rotation refer to the center front of tagger assembly, this should line up with the back of the exit window
