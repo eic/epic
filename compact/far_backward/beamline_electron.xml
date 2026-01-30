@@ -68,7 +68,6 @@
         <windowLayer id="1" type="window" thickness="2*mm" material="CarbonFiber"/>
       </module>
       <module id="2" name="Tagger2">
-        <!-- Mark this module as a compound DetElement so ACTS/DD4hep treat it as translated -->
         <detectorType name="compound"/>
         <position    x="Tagger2_Vac_Offset_X" y="Tagger2_Y" z="Tagger2_Vac_Offset_Z"/>
         <rotation    theta="Tagger2_Theta"/>
