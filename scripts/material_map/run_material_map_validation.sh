@@ -52,6 +52,7 @@ EOF
     fi
   fi
 done
+curl --location https://github.com/acts-project/acts/pull/4931.diff | patch -p1
 export PYTHONPATH=$PWD/Examples/Scripts/Python:$PYTHONPATH
 
 # FIXME
