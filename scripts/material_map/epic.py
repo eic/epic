@@ -25,13 +25,14 @@ def getDetector(
         logger.info("Adding material from %s", file.absolute())
         matDeco = acts.IMaterialDecorator.fromFile(
             file,
-            level=customLogLevel(maxLevel=acts.logging.INFO),
+            level=customLogLevel(maxLevel=acts.logging.WARNING),
         )
 
     dd4hepConfig = acts.examples.dd4hep.DD4hepDetector.Config(
         xmlFileNames=[xmlFile],
         logLevel=logLevel,
         dd4hepLogLevel=customLogLevel(),
+        materialDecorator=matDeco,
     )
     detector = acts.examples.dd4hep.DD4hepDetector(dd4hepConfig)
 
