@@ -4,6 +4,7 @@
 
 import os
 import argparse
+from pathlib import Path
 
 import acts
 from material_mapping import runMaterialMapping
@@ -57,8 +58,8 @@ if "__main__" == __name__:
     runMaterialMapping(
         trackingGeometry,
         decorators,
-        outputDir=os.getcwd(),
-        inputDir=os.getcwd(),
+        outputDir=Path.cwd(),
+        inputDir=Path.cwd(),
         readCachedSurfaceInformation=False,
         mapVolume=False,
         mapName=mapName,
