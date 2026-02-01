@@ -10,9 +10,9 @@ import acts
 from material_mapping import runMaterialMapping
 
 try:
-    from acts.examples.json import  JsonFormat
+    from acts.examples.json import JsonFormat
 except ImportError:
-    from acts.examples import  JsonFormat
+    from acts.examples import JsonFormat
 
 import epic
 
