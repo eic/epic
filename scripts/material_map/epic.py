@@ -11,12 +11,6 @@ from pathlib import Path
 import acts
 import acts.examples.dd4hep
 
-from acts import (
-    Vector4
-)
-
-import json
-
 def getDetector(
     xmlFile,
     jsonFile="",

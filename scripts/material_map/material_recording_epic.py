@@ -7,7 +7,6 @@ import warnings
 from pathlib import Path
 import argparse
 
-import acts
 from acts.examples import (
     GaussianVertexGenerator,
     ParametricParticleGenerator,
