@@ -197,18 +197,14 @@ static Ref_t create_BarrelPlanarMPGDTracker_geo(Detector& description, xml_h e,
       }
       pv.addPhysVolID("sensor", sensor_number);
       // StripID. Single Sensitive Volume?
-      int strip_id;
       if (comp_name == "DriftGap") {
         if (nSensitives != 0) {
           sensitiveVolumeSet = -1;
           break;
         }
-        strip_id           = 0;
         sensitiveVolumeSet = 1;
-      } else {
-        int strip_ids[5] = {3, 1, 0, 2, 4};
-        strip_id         = strip_ids[nSensitives];
       }
+      int strip_id = x_comp.key();
       pv.addPhysVolID("strip", strip_id);
       c_vol.setSensitiveDetector(sens);
       sensitives.push_back(pv);
@@ -323,7 +319,7 @@ static Ref_t create_BarrelPlanarMPGDTracker_geo(Detector& description, xml_h e,
   }
 
   double phi0     = x_layout.phi0();     // starting phi of first module
-  double phi_tilt = x_layout.phi_tilt(); // Phi tilit of module
+  double phi_tilt = x_layout.phi_tilt(); // Phi tilt of module
   double rc       = x_layout.rc();       // Radius of the module
   int nphi        = x_layout.nphi();     // Number of modules in phi
   double rphi_dr  = x_layout.dr();       // The delta radius of every other module
@@ -374,7 +370,7 @@ static Ref_t create_BarrelPlanarMPGDTracker_geo(Detector& description, xml_h e,
       for (int iSensitive = 0; iSensitive < sensitiveVolumeSet; iSensitive++) {
         // ***** SENSITIVE COMPONENTS
         PlacedVolume& sens_pv = sensitives[iSensitive];
-        int de_id             = nphi * iSensitive + module;
+        int de_id             = nphi * nz * iSensitive + module;
         DetElement comp_de(mod_elt,
                            std::string("de_") + sens_pv.volume().name() + _toString(de_id, "%02d"),
                            de_id);
