@@ -61,10 +61,10 @@
     <constant name="MMInnerAperture" value="MMModuleWidth/MMInnerSector_R" />
     <constant name="MMOuterAperture" value="MMModuleWidth/MMOuterSector_R" />
     <comment> Strip layout: Pitch is derived from size and # of strips, assuming sensitive area to fill all available space. </comment>
-    <constant name="MMnStripsPhi"    value = "512" /> 
+    <constant name="MMnStripsPhi"    value = "512" />
     <constant name="MMInnerPitchPhi" value = "MMInnerAperture/MMnStripsPhi" />
     <constant name="MMOuterPitchPhi" value = "MMOuterAperture/MMnStripsPhi" />
-    <constant name="MMnStripsZ"      value = "512" /> 
+    <constant name="MMnStripsZ"      value = "512" />
     <constant name="MMPitchZ"        value = "MMModuleLength/MMnStripsZ" />
   </define>
 
