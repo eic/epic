@@ -98,8 +98,7 @@ do
       shift # past value
       shift
       ;;
-    -v)
-    --verbose)
+    -v|--verbose)
       verbose=1
       shift
       ;;
