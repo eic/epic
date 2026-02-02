@@ -26,6 +26,7 @@ ACTS_FILES=(
   "Examples/Scripts/MaterialMapping/Mat_map_surface_plot_ratio.C"
   "Examples/Scripts/MaterialMapping/Mat_map_surface_plot_dist.C"
   "Examples/Scripts/MaterialMapping/Mat_map_surface_plot_1D.C"
+  "Examples/Scripts/MaterialMapping/Mat_map_detector_plot.C" # this file is not used, but we need it for patch below
   "Examples/Scripts/MaterialMapping/materialPlotHelper.cpp"
   "Examples/Scripts/MaterialMapping/materialPlotHelper.hpp"
 )
