@@ -13,6 +13,7 @@
     type="BeamPipeChain"
     wall_thickness="1 * mm"
     vis="BeamPipeVis">
+      <type_flags type="DetType_ENDCAP + DetType_BEAMPIPE"/>
       <pipe id="0" name="Pipe_to_Q1eR"
         xcenter="0" zcenter="(Center_Beampipe_End + Q1eR_CenterPosition+Q1eR_Length/2)/2"
         length="Center_Beampipe_End - (Q1eR_CenterPosition+Q1eR_Length/2)" theta="0"
@@ -58,6 +59,7 @@
 
       <comment> Extended vacuum volume for taggers </comment>
       <module id="1" name="Tagger1">
+        <detectorType name="compound"/>
         <position    x="Tagger1_Vac_Offset_X" y="Tagger1_Y" z="Tagger1_Vac_Offset_Z"/>
         <rotation    theta="Tagger1_Theta"/>
         <dimensions  x="Tagger1_Width" y="Tagger1_Height" z="2*Tagger1_Vac_Length"/>
@@ -66,6 +68,7 @@
         <windowLayer id="1" type="window" thickness="2*mm" material="CarbonFiber"/>
       </module>
       <module id="2" name="Tagger2">
+        <detectorType name="compound"/>
         <position    x="Tagger2_Vac_Offset_X" y="Tagger2_Y" z="Tagger2_Vac_Offset_Z"/>
         <rotation    theta="Tagger2_Theta"/>
         <dimensions  x="Tagger2_Width" y="Tagger2_Height" z="2*Tagger2_Vac_Length"/>

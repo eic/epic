@@ -15,6 +15,7 @@
     name="Pipe_Q3eR_to_B7eR"
     type="BeamPipeChain"
     wall_thickness="2*mm">
+      <type_flags type="DetType_ENDCAP + DetType_BEAMPIPE"/>
       <pipe id="0" name="Pipe_in_Q3eR"
         xcenter="Q3eR_XPosition" zcenter="Q3eR_CenterPosition"
         length="Q3eR_Length" theta="Q3eR_Theta"

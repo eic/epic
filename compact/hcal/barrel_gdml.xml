@@ -22,6 +22,7 @@
           z1="HcalBarrel_length1"
           z2="HcalBarrel_length2"
           calorimeterType="HAD_BARREL">
+        <type_flags type="DetType_CALORIMETER + DetType_BARREL + DetType_HADRONIC"/>
         <sec_gdmlfile file="gdml/barrel_hcal_steel_sector_nocombs.gdml" url="https://github.com/eic/epic-data/raw/c1ef9dca1781047fe9485eec6c0f986ec7d27f41/barrel_HCAL_gdml/barrel_hcal_steel_sector_nocombs.gdml" cache="$DETECTOR_PATH:/opt/detector" material="Steel1020"/>
         <csec_gdmlfile file="gdml/barrel_hcal_steel_chimneysector_nocombs.gdml" url="https://github.com/eic/epic-data/raw/c1ef9dca1781047fe9485eec6c0f986ec7d27f41/barrel_HCAL_gdml/barrel_hcal_steel_chimneysector_nocombs.gdml" cache="$DETECTOR_PATH:/opt/detector" material="Steel1020"/>
         <er_gdmlfile file="gdml/barrel_hcal_steel_endring.gdml" url="https://github.com/eic/epic-data/raw/c1ef9dca1781047fe9485eec6c0f986ec7d27f41/barrel_HCAL_gdml/barrel_hcal_steel_endring.gdml" cache="$DETECTOR_PATH:/opt/detector" material="Steel1020"/>

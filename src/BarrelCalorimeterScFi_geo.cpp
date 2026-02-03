@@ -18,6 +18,7 @@
 #include "Math/Point2D.h"
 #include "TGeoPolygon.h"
 #include "XML/Layering.h"
+#include "XML/Utilities.h"
 #include <functional>
 
 using namespace dd4hep;
@@ -74,6 +75,9 @@ static Ref_t create_detector(Detector& desc, xml_h e, SensitiveDetector sens) {
   DetElement sdet(det_name, det_id);
   Volume motherVol = desc.pickMotherVolume(sdet);
 
+  // apply any detector type flags set in XML
+  dd4hep::xml::setDetectorTypeFlag(x_det, sdet);
+
   Assembly envelope(det_name);
   Transform3D tr_global = Translation3D(0, 0, offset) * RotationZ(0);
   PlacedVolume env_phv  = motherVol.placeVolume(envelope, tr_global);
@@ -85,6 +89,7 @@ static Ref_t create_detector(Detector& desc, xml_h e, SensitiveDetector sens) {
   // build a single sector
   DetElement sector_det("sector0", det_id);
   Assembly mod_vol("sector");
+  sector_det.setTypeFlag(sdet.typeFlag()); // make sure type flags are propagated
 
   // keep tracking of the total thickness
   double l_pos_z = inner_r;

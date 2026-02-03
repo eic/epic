@@ -7,6 +7,7 @@
 #include "DDRec/DetectorData.h"
 #include "DDRec/Surface.h"
 #include <XML/Helper.h>
+#include <XML/Utilities.h>
 
 //////////////////////////////////////////////////
 // Low Q2 Tagger
@@ -75,6 +76,9 @@ static Ref_t createDetector(Detector& desc, xml_h e, SensitiveDetector sens) {
   detPV.addPhysVolID("system", detID);
   DetElement det(detName, detID);
   det.setPlacement(detPV);
+
+  // apply any detector type flags set in XML
+  dd4hep::xml::setDetectorTypeFlag(x_det, det);
 
   return det;
 }

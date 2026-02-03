@@ -22,6 +22,7 @@
         type="ZDC_ImagingCal"
         vis="ZDC_SiliconPix_Vis"
         readout="ZDC_SiliconPix_Hits">
+      <type_flags type="DetType_TRACKER + DetType_ENDCAP"/>
       <position x="ZDC_1stSilicon_x_pos"         y="ZDC_1stSilicon_y_pos"         z="ZDC_1stSilicon_z_pos"/>
       <rotation x="ZDC_1stSilicon_rotateX_angle" y="ZDC_1stSilicon_rotateY_angle" z="ZDC_1stSilicon_rotateZ_angle"/>
       <dimensions x="ZDC_1stSilicon_x" y="ZDC_1stSilicon_y" z="ZDC_1stSilicon_z"/>

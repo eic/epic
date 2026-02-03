@@ -8,6 +8,7 @@
 #include "DDRec/Surface.h"
 #include "XML/Layering.h"
 #include <XML/Helper.h>
+#include <XML/Utilities.h>
 
 using namespace std;
 using namespace dd4hep;
@@ -34,6 +35,9 @@ static Ref_t create_detector(Detector& desc, xml_h e, SensitiveDetector sens) {
   double rotX  = x_rot.x();
   double rotY  = x_rot.y();
   double rotZ  = x_rot.z();
+
+  // apply any detector type flags set in XML
+  dd4hep::xml::setDetectorTypeFlag(x_det, det);
 
   Box box(sizeX, sizeY, sizeZ);
   Volume vol(det_name + "_vol", box, desc.material(mat_name));

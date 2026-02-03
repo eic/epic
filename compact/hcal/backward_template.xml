@@ -35,6 +35,7 @@
       calorimeterType="HAD_ENDCAP"
       allSensitive="HcalEndcapN_allSensitive"
       >
+      <type_flags type="DetType_CALORIMETER + DetType_ENDCAP + DetType_HADRONIC"/>
       <position x="0" y="0" z="0"/>
       <dimensions
         numsides="HcalEndcapN_CaloSides"

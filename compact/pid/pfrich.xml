@@ -103,6 +103,7 @@
   vis_vessel="PFRICH_vessel_vis"
   vis_gas="DRICH_gas_vis"
   >
+  <type_flags type="DetType_CHERENKOV + DetType_ENDCAP"/>
 
     <parent name="/world_volume"/>
 
