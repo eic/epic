@@ -360,8 +360,8 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
   std::vector<double> outerRadiusBottoms_half1;
   std::vector<double> outerRadiusTops_half1;
 
-  std::cout << "radiatorRmin " << radiatorRmin << std::endl;
-  std::cout << "radiatorRmax " << radiatorRmax << std::endl;
+  printout(DEBUG, "DRICH_geo", "radiator (Rmin) %lf:", radiatorRmin);
+  printout(DEBUG, "DRICH_geo", "radiator (Rmax) %lf:", radiatorRmax);
 
   for (int i = 0; i < numCrowns; i++) {
 
