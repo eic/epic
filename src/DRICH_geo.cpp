@@ -23,12 +23,8 @@
 using namespace dd4hep;
 using namespace dd4hep::rec;
 
-#ifdef _WITH_IRT_OPTICS_
-#include <TFile.h>
-
 #include "IRT/CherenkovDetectorCollection.h"
 #include "IRT/SphericalSurface.h"
-#endif
 
 // create the detector
 static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetector sens) {
@@ -41,16 +37,8 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
   DetElement det(detName, detID);
   sens.setType("tracker");
 
-  // Start optical configuration if needed;
-#ifdef _WITH_IRT_OPTICS_
-  // Output file with optics description;
-  auto fname = detElem.attr<std::string>(_Unicode(optics));
-
-  auto output_file = TFile::Open(fname.c_str(), "RECREATE");
-  //auto geometry = new CherenkovDetectorCollection();
   auto geometry = CherenkovDetectorCollection::Instance();
   auto cdet     = geometry->AddNewDetector(detName.c_str());
-#endif
 
   // attributes, from compact file =============================================
   // - vessel
@@ -63,11 +51,9 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
   auto vesselRmax2  = dims.attr<double>(_Unicode(rmax2));
   auto snoutLength  = dims.attr<double>(_Unicode(snout_length));
   auto nSectors     = dims.attr<int>(_Unicode(nsectors));
-#ifdef _WITH_IRT_OPTICS_
   cdet->SetSectorCount(nSectors);
   // The way Chris defined it in the geometry;
   cdet->SetSectorPhase(0.0);
-#endif
   auto wallThickness   = dims.attr<double>(_Unicode(wall_thickness));
   auto windowThickness = dims.attr<double>(_Unicode(window_thickness));
   auto vesselMat       = desc.material(detElem.attr<std::string>(_Unicode(material)));
@@ -183,10 +169,8 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
   if (debugSector)
     gasvolVis = vesselVis = desc.invisible();
 
-#ifdef _WITH_IRT_OPTICS_
   SphericalSurface* msurface = 0;
   OpticalBoundary* mboundary = 0;
-#endif
 
   // readout coder <-> unique sensor ID
   /* - `sensorIDfields` is a list of readout fields used to specify a unique sensor ID
@@ -206,11 +190,9 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
       enc |= uint64_t(idValue) << readoutCoder[idField].offset();
     return enc;
   };
-#ifdef _WITH_IRT_OPTICS_
   uint64_t sector_mask = ~(0x0ul) ^ readoutCoder["sector"].mask();
   // Want to mask away dRICH sector bits in this mask;
   cdet->SetReadoutCellMask(cellMask & sector_mask);
-#endif
 
   // BUILD VESSEL ====================================================================
   /* - `vessel`: aluminum enclosure, the mother volume of the dRICH
@@ -410,7 +392,6 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
     //+desc.add(Constant("DRICH_airgap_zpos", std::to_string(airgapZpos)));
     //+desc.add(Constant("DRICH_filter_zpos", std::to_string(filterZpos)));
 
-#ifdef _WITH_IRT_OPTICS_
     {
       TVector3 nx(1, 0, 0), ny(0, -1, 0);
 
@@ -443,7 +424,6 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
         }
       } //for isec
     }
-#endif
   }
 
   // radiator material names
@@ -452,7 +432,6 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
   //+desc.add(Constant("DRICH_filter_material", filterMat.ptr()->GetName(), "string"));
   //+desc.add(Constant("DRICH_gasvol_material", gasvolMat.ptr()->GetName(), "string"));
 
-#ifdef _WITH_IRT_OPTICS_
   // [0,0]: have neither access to G4VSolid nor to G4Material; IRT code does not care; fine;
   auto pd = new CherenkovPhotonDetector(0, 0);
 
@@ -464,7 +443,6 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
 
   // FIXME: calculate it properly later; see S13361-3050NE-08 specs;
   pd->SetGeometricEfficiency(0.74);
-#endif
 
   // SECTOR LOOP //////////////////////////////////////////////////////////////////////
   for (int isec = 0; isec < nSectors; isec++) {
@@ -553,7 +531,6 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
     //+if (isec == 0)
     //+  desc.add(Constant("DRICH_mirror_radius", std::to_string(mirrorRadius)));
 
-#ifdef _WITH_IRT_OPTICS_
     {
       // NB: default is concave, which is fine;
       msurface = new SphericalSurface(
@@ -566,7 +543,6 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
       // Assign gas volume rear surface (this mirror) by hand;
       cdet->GetContainerVolume()->m_Borders[isec].second = msurface;
     }
-#endif
 
     // BUILD SENSORS ====================================================================
 
@@ -837,7 +813,6 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
               //+addVecToMap("pos", sensorPos);
               //+addVecToMap("normX", sensorNormX);
               //+addVecToMap("normY", sensorNormY);
-#ifdef _WITH_IRT_OPTICS_
               {
                 // SiPM panel surface;
                 auto surface = new FlatSurface(
@@ -863,7 +838,6 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
                 // Terminate the optical path;
                 pd->AddItselfToOpticalBoundaries(irt, surface);
               }
-#endif
               printout(DEBUG, "DRICH_geo", "sensor %s:", sensorIDname.c_str());
 
               //+for (auto kv : pssVarMap->variantParameters)
@@ -961,12 +935,6 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
     //+else if (ipdu != desc.constant<int>("DRICH_num_pdus"))
     //+printout(WARNING, "DRICH_geo", "number of PDUs is not the same for each sector");
   } // END SECTOR LOOP //////////////////////////
-
-  // Write out optical configuration;
-#ifdef _WITH_IRT_OPTICS_
-  geometry->Write();
-  output_file->Close();
-#endif
 
   return det;
 }
