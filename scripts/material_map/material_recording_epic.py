@@ -21,8 +21,6 @@ import acts.examples.geant4
 import epic
 from material_recording import runMaterialRecording
 
-u = acts.UnitConstants
-
 _material_recording_executed = False
 
 
