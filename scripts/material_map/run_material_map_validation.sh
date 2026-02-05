@@ -111,7 +111,7 @@ do
       shift
       ;;
     -v|--verbose)
-      verbose=0
+      verbose=1
       shift
       ;;
     *)    # unknown option
