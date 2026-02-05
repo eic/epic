@@ -157,9 +157,6 @@ python Examples/Scripts/MaterialMapping/GeometryVisualisationAndMaterialHandling
 echo "::endgroup::"
 
 
-
-
-echo "::group::----MAPPING------------"
 # input: geant4_material_tracks.root, geometry-map.json
 # output: material-maps.json or cbor. This is the material map that you want to provide to EICrecon, i.e.  -Pacts:MaterialMap=XXX  .Please --matFile to specify the name and type
 #         material-maps_tracks.root(recorded steps from geantino, for validation purpose)
@@ -178,6 +175,7 @@ echo "::endgroup::"
   sed -i 's/navigator = Navigator($/&level=acts.logging.VERBOSE,/' Examples/Scripts/Python/material_mapping.py
   sed -i 's/propagator = Propagator(stepper, navigator)$/propagator = Propagator(stepper, navigator, loglevel=acts.logging.VERBOSE)/' Examples/Scripts/Python/material_mapping.py
 fi
+echo "::group::----MAPPING------------"
 python material_mapping_epic.py --xmlFile ${DETECTOR_PATH}/${DETECTOR_CONFIG}.xml --geoFile ${geoFile} --matFile ${matFile}
 echo "::endgroup::"
 
