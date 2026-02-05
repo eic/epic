@@ -53,17 +53,8 @@ EOF
     fi
   fi
 done
-apply_diff() {
-  local url="$1"
-  if command -v git >/dev/null 2>&1; then
-    # git apply avoids patch ownership errors on shared filesystems
-    curl --location "$url" | git apply -p1
-  else
-    curl --location "$url" | patch -p1
-  fi
-}
-apply_diff https://github.com/acts-project/acts/pull/4931.diff
-apply_diff https://github.com/acts-project/acts/pull/5046.diff
+curl --location  https://github.com/acts-project/acts/pull/4931.diff | patch -p1
+curl --location  https://github.com/acts-project/acts/pull/5046.diff | patch -p1
 export PYTHONPATH=$PWD/Examples/Scripts/Python:$PYTHONPATH
 
 # FIXME
