@@ -3,7 +3,7 @@ set -e
 # script for material map validation with ACTS python bindings
 # run as : ./run_material_map_validation.sh --nevents 1000
 # Shujie Li, 03. 2024 (https://github.com/eic/snippets/pull/3)
-: ${DETECTOR_CONFIG:="epic_craterlake_material_map"}
+DETECTOR_CONFIG="epic_craterlake_material_map"
 # Check if DETECTOR_PATH are set
 if [[ -z ${DETECTOR_PATH} ]] ; then
   echo "You must set \$DETECTOR_PATH before running this script."
@@ -53,8 +53,17 @@ EOF
     fi
   fi
 done
-curl --location https://github.com/acts-project/acts/pull/4931.diff | patch -p1
-curl --location https://github.com/acts-project/acts/pull/5046.diff | patch -p1
+apply_diff() {
+  local url="$1"
+  if command -v git >/dev/null 2>&1; then
+    # git apply avoids patch ownership errors on shared filesystems
+    curl --location "$url" | git apply -p1
+  else
+    curl --location "$url" | patch -p1
+  fi
+}
+apply_diff https://github.com/acts-project/acts/pull/4931.diff
+apply_diff https://github.com/acts-project/acts/pull/5046.diff
 export PYTHONPATH=$PWD/Examples/Scripts/Python:$PYTHONPATH
 
 # FIXME
@@ -102,7 +111,7 @@ do
       shift
       ;;
     -v|--verbose)
-      verbose=1
+      verbose=0
       shift
       ;;
     *)    # unknown option
@@ -147,6 +156,15 @@ mkdir -p plots
 python Examples/Scripts/MaterialMapping/GeometryVisualisationAndMaterialHandling.py --geometry ${geoFile}
 echo "::endgroup::"
 
+
+
+
+echo "::group::----MAPPING------------"
+# input: geant4_material_tracks.root, geometry-map.json
+# output: material-maps.json or cbor. This is the material map that you want to provide to EICrecon, i.e.  -Pacts:MaterialMap=XXX  .Please --matFile to specify the name and type
+#         material-maps_tracks.root(recorded steps from geantino, for validation purpose)
+if [[ "$verbose" -eq 1 ]]; then
+
 echo "::group::----MAPPING Debugging-----"
 echo "Volumes by name:"
 jq -r '.Volumes.entries[] | "vol=\(.volume): \(.value.NAME)"' geometry-map.json
@@ -156,11 +174,6 @@ echo "Layer surfaces:"
 jq -r '.Surfaces.entries[] | select(.volume < 40 and .layer != null) | "vol=\(.volume)|lay=\(.layer): \(.value.type) \(.value.bounds.type) \(.value.bounds.values) rot=\(.value.transform.rotation) pos=\(.value.transform.translation)"' geometry-map.json
 echo "::endgroup::"
 
-echo "::group::----MAPPING------------"
-# input: geant4_material_tracks.root, geometry-map.json
-# output: material-maps.json or cbor. This is the material map that you want to provide to EICrecon, i.e.  -Pacts:MaterialMap=XXX  .Please --matFile to specify the name and type
-#         material-maps_tracks.root(recorded steps from geantino, for validation purpose)
-if [[ "$verbose" -eq 1 ]]; then
   sed -i 's/acts\.logging\.INFO/acts.logging.VERBOSE/g' Examples/Scripts/Python/material_mapping.py
   sed -i 's/navigator = Navigator($/&level=acts.logging.VERBOSE,/' Examples/Scripts/Python/material_mapping.py
   sed -i 's/propagator = Propagator(stepper, navigator)$/propagator = Propagator(stepper, navigator, loglevel=acts.logging.VERBOSE)/' Examples/Scripts/Python/material_mapping.py
