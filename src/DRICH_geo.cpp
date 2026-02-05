@@ -386,8 +386,7 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
 
     // radiator z-positions (w.r.t. IP); only needed downstream if !debugOptics
     double aerogelZpos = vesselPos.z() + aerogelPV.position().z();
-    double filterZpos = vesselPos.z() + filterPV.position().z();
-
+    double filterZpos  = vesselPos.z() + filterPV.position().z();
 
     {
       TVector3 nx(1, 0, 0), ny(0, -1, 0);
@@ -423,7 +422,6 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
     }
   }
 
-  
   // [0,0]: have neither access to G4VSolid nor to G4Material; IRT code does not care; fine;
   auto pd = new CherenkovPhotonDetector(0, 0);
 
@@ -517,7 +515,7 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
     // - access sector center after `sectorRotation`
     auto mirrorFinalPlacement = mirrorSectorPlacement * mirrorPlacement;
     auto mirrorFinalCenter    = vesselPos + mirrorFinalPlacement.Translation().Vect();
-    
+
     {
       // NB: default is concave, which is fine;
       msurface = new SphericalSurface(
@@ -541,7 +539,6 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
     // reconstruction constants
     auto sensorSphPos         = Position(sensorSphCenterX, 0., sensorSphCenterZ) + originFront;
     auto sensorSphFinalCenter = sectorRotation * Position(xS, 0.0, zS);
-
 
     // SENSOR MODULE LOOP ------------------------
     /* ALGORITHM: generate sphere of positions
