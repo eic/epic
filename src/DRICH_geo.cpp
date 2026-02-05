@@ -386,11 +386,8 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
 
     // radiator z-positions (w.r.t. IP); only needed downstream if !debugOptics
     double aerogelZpos = vesselPos.z() + aerogelPV.position().z();
-    //+double airgapZpos  = vesselPos.z() + airgapPV.position().z();
     double filterZpos = vesselPos.z() + filterPV.position().z();
-    //+desc.add(Constant("DRICH_aerogel_zpos", std::to_string(aerogelZpos)));
-    //+desc.add(Constant("DRICH_airgap_zpos", std::to_string(airgapZpos)));
-    //+desc.add(Constant("DRICH_filter_zpos", std::to_string(filterZpos)));
+
 
     {
       TVector3 nx(1, 0, 0), ny(0, -1, 0);
@@ -426,12 +423,7 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
     }
   }
 
-  // radiator material names
-  //+desc.add(Constant("DRICH_aerogel_material", aerogelMat.ptr()->GetName(), "string"));
-  //+desc.add(Constant("DRICH_airgap_material", airgapMat.ptr()->GetName(), "string"));
-  //+desc.add(Constant("DRICH_filter_material", filterMat.ptr()->GetName(), "string"));
-  //+desc.add(Constant("DRICH_gasvol_material", gasvolMat.ptr()->GetName(), "string"));
-
+  
   // [0,0]: have neither access to G4VSolid nor to G4Material; IRT code does not care; fine;
   auto pd = new CherenkovPhotonDetector(0, 0);
 
@@ -525,12 +517,7 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
     // - access sector center after `sectorRotation`
     auto mirrorFinalPlacement = mirrorSectorPlacement * mirrorPlacement;
     auto mirrorFinalCenter    = vesselPos + mirrorFinalPlacement.Translation().Vect();
-    //+desc.add(Constant("DRICH_mirror_center_x_" + secName, std::to_string(mirrorFinalCenter.x())));
-    //+desc.add(Constant("DRICH_mirror_center_y_" + secName, std::to_string(mirrorFinalCenter.y())));
-    //+desc.add(Constant("DRICH_mirror_center_z_" + secName, std::to_string(mirrorFinalCenter.z())));
-    //+if (isec == 0)
-    //+  desc.add(Constant("DRICH_mirror_radius", std::to_string(mirrorRadius)));
-
+    
     {
       // NB: default is concave, which is fine;
       msurface = new SphericalSurface(
@@ -554,14 +541,7 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
     // reconstruction constants
     auto sensorSphPos         = Position(sensorSphCenterX, 0., sensorSphCenterZ) + originFront;
     auto sensorSphFinalCenter = sectorRotation * Position(xS, 0.0, zS);
-    //+desc.add(
-    //+    Constant("DRICH_sensor_sph_center_x_" + secName, std::to_string(sensorSphFinalCenter.x())));
-    //+desc.add(
-    //+    Constant("DRICH_sensor_sph_center_y_" + secName, std::to_string(sensorSphFinalCenter.y())));
-    //+desc.add(
-    //+    Constant("DRICH_sensor_sph_center_z_" + secName, std::to_string(sensorSphFinalCenter.z())));
-    //+if (isec == 0)
-    //+  desc.add(Constant("DRICH_sensor_sph_radius", std::to_string(sensorSphRadius)));
+
 
     // SENSOR MODULE LOOP ------------------------
     /* ALGORITHM: generate sphere of positions
@@ -723,7 +703,6 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
 
               // sensor DetElement
               auto sensorID = encodeSensorID(pssPV.volIDs());
-              //printf("@S@ %d vs %lu\n", isec, (sensorID >> 8) & 0x7);
               std::string sensorIDname =
                   secName + "_pdu" + std::to_string(ipdu) + "_sipm" + std::to_string(isipm);
               DetElement pssDE(det, "sensor_de_" + sensorIDname, sensorID);
@@ -928,12 +907,6 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
     } // end thetaGen loop
 
     // END SENSOR MODULE LOOP ------------------------
-
-    // add constant for access to the number of PDUs per sector
-    //+if (isec == 0)
-    //+desc.add(Constant("DRICH_num_pdus", std::to_string(ipdu)));
-    //+else if (ipdu != desc.constant<int>("DRICH_num_pdus"))
-    //+printout(WARNING, "DRICH_geo", "number of PDUs is not the same for each sector");
   } // END SECTOR LOOP //////////////////////////
 
   return det;
