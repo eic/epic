@@ -3,7 +3,7 @@ set -e
 # script for material map validation with ACTS python bindings
 # run as : ./run_material_map_validation.sh --nevents 1000
 # Shujie Li, 03. 2024 (https://github.com/eic/snippets/pull/3)
-: ${DETECTOR_CONFIG:="epic_craterlake_material_map"}
+DETECTOR_CONFIG="epic_craterlake_material_map"
 # Check if DETECTOR_PATH are set
 if [[ -z ${DETECTOR_PATH} ]] ; then
   echo "You must set \$DETECTOR_PATH before running this script."
@@ -11,7 +11,7 @@ if [[ -z ${DETECTOR_PATH} ]] ; then
 fi
 
 # Download required Acts files
-ACTS_VERSION="v39.2.0"
+ACTS_VERSION="v44.4.0"
 ACTS_URL="https://github.com/acts-project/acts/raw/"
 ACTS_FILES=(
   "Examples/Scripts/Python/geometry.py"
@@ -26,6 +26,7 @@ ACTS_FILES=(
   "Examples/Scripts/MaterialMapping/Mat_map_surface_plot_ratio.C"
   "Examples/Scripts/MaterialMapping/Mat_map_surface_plot_dist.C"
   "Examples/Scripts/MaterialMapping/Mat_map_surface_plot_1D.C"
+  "Examples/Scripts/MaterialMapping/Mat_map_detector_plot.C" # this file is not used, but we need it for patch below
   "Examples/Scripts/MaterialMapping/materialPlotHelper.cpp"
   "Examples/Scripts/MaterialMapping/materialPlotHelper.hpp"
 )
@@ -52,6 +53,17 @@ EOF
     fi
   fi
 done
+apply_diff() {
+  local url="$1"
+  if command -v git >/dev/null 2>&1; then
+    # git apply avoids patch ownership errors on shared filesystems
+    curl --location "$url" | git apply -p1
+  else
+    curl --location "$url" | patch -p1
+  fi
+}
+apply_diff https://github.com/acts-project/acts/pull/4931.diff
+apply_diff https://github.com/acts-project/acts/pull/5046.diff
 export PYTHONPATH=$PWD/Examples/Scripts/Python:$PYTHONPATH
 
 # FIXME
@@ -144,6 +156,12 @@ mkdir -p plots
 python Examples/Scripts/MaterialMapping/GeometryVisualisationAndMaterialHandling.py --geometry ${geoFile}
 echo "::endgroup::"
 
+
+# input: geant4_material_tracks.root, geometry-map.json
+# output: material-maps.json or cbor. This is the material map that you want to provide to EICrecon, i.e.  -Pacts:MaterialMap=XXX  .Please --matFile to specify the name and type
+#         material-maps_tracks.root(recorded steps from geantino, for validation purpose)
+if [[ "$verbose" -eq 1 ]]; then
+
 echo "::group::----MAPPING Debugging-----"
 echo "Volumes by name:"
 jq -r '.Volumes.entries[] | "vol=\(.volume): \(.value.NAME)"' geometry-map.json
@@ -153,15 +171,11 @@ echo "Layer surfaces:"
 jq -r '.Surfaces.entries[] | select(.volume < 40 and .layer != null) | "vol=\(.volume)|lay=\(.layer): \(.value.type) \(.value.bounds.type) \(.value.bounds.values) rot=\(.value.transform.rotation) pos=\(.value.transform.translation)"' geometry-map.json
 echo "::endgroup::"
 
-echo "::group::----MAPPING------------"
-# input: geant4_material_tracks.root, geometry-map.json
-# output: material-maps.json or cbor. This is the material map that you want to provide to EICrecon, i.e.  -Pacts:MaterialMap=XXX  .Please --matFile to specify the name and type
-#         material-maps_tracks.root(recorded steps from geantino, for validation purpose)
-if [[ "$verbose" -eq 1 ]]; then
   sed -i 's/acts\.logging\.INFO/acts.logging.VERBOSE/g' Examples/Scripts/Python/material_mapping.py
   sed -i 's/navigator = Navigator($/&level=acts.logging.VERBOSE,/' Examples/Scripts/Python/material_mapping.py
   sed -i 's/propagator = Propagator(stepper, navigator)$/propagator = Propagator(stepper, navigator, loglevel=acts.logging.VERBOSE)/' Examples/Scripts/Python/material_mapping.py
 fi
+echo "::group::----MAPPING------------"
 python material_mapping_epic.py --xmlFile ${DETECTOR_PATH}/${DETECTOR_CONFIG}.xml --geoFile ${geoFile} --matFile ${matFile}
 echo "::endgroup::"
 
@@ -191,6 +205,7 @@ mkdir -p Surfaces/1D_plot
 
 root -l -b -q Examples/Scripts/MaterialMapping/Mat_map_surface_plot_ratio.C'("'${propFile}_regenerated'.root","'${trackFile}'",-1,"Surfaces/regenerated/ratio_plot","Surfaces/regenerated/prop_plot","Surfaces/regenerated/map_plot")'
 root -l -b -q Examples/Scripts/MaterialMapping/Mat_map_surface_plot_ratio.C'("'${propFile}_current'.root","'${trackFile}'",-1,"Surfaces/current/ratio_plot","Surfaces/current/prop_plot","Surfaces/current/map_plot")'
-root -l -b -q Examples/Scripts/MaterialMapping/Mat_map_surface_plot_dist.C'("'${trackFile}'",-1,"Surfaces/dist_plot")'
-root -l -b -q Examples/Scripts/MaterialMapping/Mat_map_surface_plot_1D.C'("'${trackFile}'",-1,"Surfaces/1D_plot")'
+# These scripts still need to be patched to work with missing sur_type
+#root -l -b -q Examples/Scripts/MaterialMapping/Mat_map_surface_plot_dist.C'("'${trackFile}'",-1,"Surfaces/dist_plot")'
+#root -l -b -q Examples/Scripts/MaterialMapping/Mat_map_surface_plot_1D.C'("'${trackFile}'",-1,"Surfaces/1D_plot")'
 echo "::endgroup::"
