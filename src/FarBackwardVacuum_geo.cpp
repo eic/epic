@@ -142,9 +142,10 @@ static Ref_t create_detector(Detector& desc, xml_h e, SensitiveDetector /* sens 
     // Transformation to place entry box at the start of the beamline box and rotated.
     // Subtract half of the length of the main beampipe to get to the end position.
     // The rotate into golbal coordinates and then add half of the length of the lumi exit pipe
-    Transform3D entry_tr(RotationY(-global_theta),
-                         Position((Length / 2 - ED_Z / 2 ) * sin(global_theta)+2*pos.x()/cos(global_theta), 0,
-                                  (Length / 2 - ED_Z / 2) * cos(global_theta)+pos.x()*tan(global_theta)));
+    Transform3D entry_tr(
+        RotationY(-global_theta),
+        Position((Length / 2 - ED_Z / 2) * sin(global_theta) + 2 * pos.x() / cos(global_theta), 0,
+                 (Length / 2 - ED_Z / 2) * cos(global_theta) + pos.x() * tan(global_theta)));
 
     // Add entry boxes to main beamline volume
     Wall_Box   = UnionSolid(Wall_Box, Entry_Beam_Box, entry_tr);
