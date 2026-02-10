@@ -58,12 +58,12 @@ static Ref_t create_detector(Detector& desc, xml_h e, SensitiveDetector /* sens 
   double Lumi_R = EB.attr<double>(_Unicode(lumiR));
 
   // Central pipe box
-  Tube Extended_Beam_Box(Width, Width + wall, Length / 2); // More realistic tube pipe
-  // Box Extended_Beam_Box(Width + wall, Height + wall, Length); // Simpler box pipe
+  Tube Extended_Beam_Box(Width, Width, Length / 2); // More realistic tube pipe
+  // Box Extended_Beam_Box(Width, Height, Length); // Simpler box pipe
 
   // Central vacuum box
-  Tube Extended_Vacuum_Box(0, Width, Length / 2); // More realistic tube pipe
-  // Box Extended_Vacuum_Box(Width, Height, Length); // Simpler box pipe
+  Tube Extended_Vacuum_Box(0, Width - wall, Length / 2); // More realistic tube pipe
+  // Box Extended_Vacuum_Box(Width - wall, Height - wall, Length); // Simpler box pipe
 
   Solid Wall_Box   = Extended_Beam_Box;
   Solid Vacuum_Box = Extended_Vacuum_Box;
@@ -143,13 +143,13 @@ static Ref_t create_detector(Detector& desc, xml_h e, SensitiveDetector /* sens 
     // Subtract half of the length of the main beampipe to get to the end position.
     // The rotate into golbal coordinates and then add half of the length of the lumi exit pipe
     Transform3D entry_tr(RotationY(-global_theta),
-                         Position((Length / 2 - ED_Z / 2) * sin(global_theta), 0,
-                                  (Length / 2 - ED_Z / 2) * cos(global_theta)));
+                         Position((Length / 2 - ED_Z / 2 ) * sin(global_theta)+2*pos.x()/cos(global_theta), 0,
+                                  (Length / 2 - ED_Z / 2) * cos(global_theta)+pos.x()*tan(global_theta)));
 
     // Add entry boxes to main beamline volume
     Wall_Box   = UnionSolid(Wall_Box, Entry_Beam_Box, entry_tr);
     Vacuum_Box = UnionSolid(Vacuum_Box, Entry_Vacuum_Box, entry_tr);
-    Vacuum_Box = UnionSolid(Vacuum_Box, Lumi_Exit, entry_tr);
+    // Vacuum_Box = UnionSolid(Vacuum_Box, Lumi_Exit, entry_tr);
   }
 
   //-----------------------------------------------------------------

@@ -45,7 +45,7 @@
     <constant name="B2BeR_EndZ"           value="B2BeR_CenterZ - (B2BeR_Length/2)*cos(B2BeR_Theta)"/>
     <constant name="B2BeR_EndX"           value="B2BeR_CenterX - (B2BeR_Length/2)*sin(B2BeR_Theta)"/>
 
-    <constant name="SQ3eR_InnerRadius"    value="0.051*m"/>
+    <constant name="SQ3eR_InnerRadius"    value="0.05*m"/>
     <constant name="SQ3eR_OuterRadius"    value="0.15*m"/>
     <constant name="SQ3eR_CenterZ"        value="-42.248*m"/>
     <constant name="SQ3eR_CenterX"        value="-0.4263*m"/>
@@ -53,7 +53,7 @@
     <constant name="SQ3eR_StartZ"         value="SQ3eR_CenterZ + (SQ3eR_Length/2)*cos(SQ3eR_Theta)"/>
     <constant name="SQ3eR_StartX"         value="SQ3eR_CenterX + (SQ3eR_Length/2)*sin(SQ3eR_Theta)"/>
 
-    <constant name="Q3eR_InnerRadius"     value="0.051*m"/>
+    <constant name="Q3eR_InnerRadius"     value="0.05*m"/>
     <constant name="Q3eR_OuterRadius"     value="0.15*m"/>
     <constant name="Q3eR_Theta"           value="0.0200*rad"/>
     <constant name="Q3eR_CenterZ"         value="-42.823*m"/>
