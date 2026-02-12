@@ -99,14 +99,14 @@
   id="BackwardRICH_ID"
   name="PFRICH"
   type="epic_PFRICH"
-  
+
   readout="PFRICHHits"
-  
+
   gas="N2cherenkov"
   material="CarbonFiber"
   vis_vessel="PFRICH_vessel_vis"
   vis_gas="DRICH_gas_vis"
-  
+
   optics="pfrich-optics.root"
   >
 
@@ -135,10 +135,10 @@
   side="PFRICH_sensor_sensitive_size"
   thickness="PFRICH_sensor_thickness"
   gap="0.2*mm"
-  
+
   windowmat="QuartzOptical"
   photocathode="AirOptical"
-  
+
   pcbmat="G10"
   mpdmat="SiliconDioxide"
   asicmat="SiliconCarbide"
