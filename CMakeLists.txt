@@ -67,7 +67,7 @@ if (DEFINED WITH_IRT)
   # This is presumably because dd4hep_add_plugin() calls target_link_libraries() internally as well; do by hand
   add_library(${a_lib_name} SHARED ${sources})
   target_include_directories(${a_lib_name} PUBLIC ${CMAKE_INSTALL_PREFIX}/include)
-  target_link_libraries(${a_lib_name} ROOT::Core ROOT::Gdml DD4hep::DDCore DD4hep::DDRec fmt::fmt ${CMAKE_INSTALL_PREFIX}/lib/libIRT.so)
+  target_link_libraries(${a_lib_name} ROOT::Core ROOT::Gdml DD4hep::DDCore DD4hep::DDRec fmt::fmt ${CMAKE_INSTALL_PREFIX}/lib/libIRT2.so)
   install(TARGETS ${a_lib_name} DESTINATION lib)
 else()
 dd4hep_add_plugin(${a_lib_name}
@@ -76,7 +76,7 @@ dd4hep_add_plugin(${a_lib_name}
   USES ROOT::Core ROOT::Gdml 
   )
 target_link_libraries(${a_lib_name}
-  PUBLIC DD4hep::DDCore DD4hep::DDRec fmt::fmt ${CMAKE_INSTALL_PREFIX}/lib/libIRT.so
+  PUBLIC DD4hep::DDCore DD4hep::DDRec fmt::fmt ${CMAKE_INSTALL_PREFIX}/lib/libIRT2.so
   )
 endif()
 

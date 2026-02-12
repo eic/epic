@@ -10,34 +10,18 @@
 //----------------------------------
 
 #include "DD4hep/DetFactoryHelper.h"
-//#include "DD4hep/OpticalSurfaces.h"
-//#include "DD4hep/Printout.h"
-//#include "DDRec/DetectorData.h"
-//#include "DDRec/Surface.h"
 
-//#include <XML/Helper.h>
-//#include "XML/Layering.h"
-//#include "TVector3.h"
-#include "TFile.h"
 #include "TVector2.h"
 
-//#include "TGeoElement.h"
-//#include "TGeoManager.h"
-//#include "TInterpreter.h"
-//#include "TUri.h"
-
-//using namespace std;
 using namespace dd4hep;
-//using namespace dd4hep::rec;
-//using namespace dd4hep::detail;
 
 #ifdef _WITH_IRT_OPTICS_
-#include "IRT/CherenkovDetectorCollection.h"
-#include "IRT/ConicalSurface.h"
+#include "IRT2/CherenkovDetectorCollection.h"
+
+#include "IRT2/ConicalSurface.h"
 #endif
 
-//#define _HRPPD_PITCH_                          (3.25*mm)
-//#define _HRPPD_ACTIVE_AREA_SIZE_      (32*_HRPPD_PITCH_)
+using namespace IRT2;
 
 #define _SENSOR_PLANE_GEOMETRIC_EFFICIENCY_       (1.00)
 #define _SAFETY_FACTOR_                           (0.70)
@@ -64,7 +48,7 @@ static UnionSolid FlangeCut(Detector& description, double length, double clearan
   double c  = r1 * (a - b) / r0;
 
   // GEANT variables to define G4Trap;
-  double pDz = /*25*/length/2, pTheta = 0.0, pPhi = 0.0, pDy1 = (a - b - c) / 2, pDy2 = pDy1;
+  double pDz = length/2, pTheta = 0.0, pPhi = 0.0, pDy1 = (a - b - c) / 2, pDy2 = pDy1;
   double pDx1 = sqrt(r0 * r0 - b * b), pDx2 = pDx1 * r1 / r0, pDx3 = pDx1, pDx4 = pDx2, pAlp1 = 0.0,
          pAlp2 = 0.0;
 
@@ -93,16 +77,11 @@ static Ref_t createDetector(Detector& description, xml_h e, SensitiveDetector se
   description.invisible();
 
   std::string detName     = detElem.nameStr();
-  //+xml::Component dims     = detElem.dimensions();
 
-  int id = detElem.hasAttr(_U(id)) ? /*x_det*/detElem.id() : 0;
+  int id = detElem.hasAttr(_U(id)) ? detElem.id() : 0;
 
   // Start optical configuration if needed;
 #ifdef _WITH_IRT_OPTICS_
-  // Output file with optics description;
-  auto fname = detElem.attr<std::string>(_Unicode(optics));
-  
-  auto output_file = TFile::Open(fname.c_str(), "RECREATE");
   auto geometry = new CherenkovDetectorCollection();
   auto cdet = geometry->AddNewDetector(detName.c_str());
 #endif
@@ -111,68 +90,20 @@ static Ref_t createDetector(Detector& description, xml_h e, SensitiveDetector se
 
   // - sensor module
   auto sensorElem        = detElem.child(_Unicode(sensors)).child(_Unicode(module));
-#if _TODAY_
-  auto sensorMat         = description.material(sensorElem.attr<std::string>(_Unicode(material)));
-  auto sensorVis         = description.visAttributes(sensorElem.attr<std::string>(_Unicode(vis)));
-  auto sensorSurf        = surfMgr.opticalSurface(sensorElem.attr<std::string>(_Unicode(surface)));
-  double sensorSide      = sensorElem.attr<double>(_Unicode(side));
-  double sensorThickness = sensorElem.attr<double>(_Unicode(thickness));
-#endif
   auto readoutName       = detElem.attr<std::string>(_Unicode(readout));
   auto HRPPD_WindowMat = description.material(sensorElem.attr<std::string>(_Unicode(windowmat)));
   auto HRPPD_pcMat     = description.material(sensorElem.attr<std::string>(_Unicode(photocathode)));
   auto HRPPD_MPDMat    = description.material(sensorElem.attr<std::string>(_Unicode(mpdmat)));
   auto HRPPD_PCBMat    = description.material(sensorElem.attr<std::string>(_Unicode(pcbmat)));
-  auto HRPPD_ASICMat   = description.material(sensorElem.attr<std::string>(_Unicode(asicmat)));
 
-#if _TODAY_
-  double vesselRmin0 = dims.attr<double>(_Unicode(rmin0));
-  double vesselRmin1 = dims.attr<double>(_Unicode(rmin1));
-  double vesselRmax0 = dims.attr<double>(_Unicode(rmax0));
-  double vesselRmax1 = dims.attr<double>(_Unicode(rmax1));
-
-  int imod = 0; // module number
-
-  auto gasvolMat = description.material(detElem.attr<std::string>(_Unicode(gas)));
-#endif
   auto gasvolVis = description.visAttributes("DRICH_gas_vis");
-  auto sensorVis = description.visAttributes("PFRICH_sensor_vis");//DRICH_gas_vis");
-#if _TODAY_
-  auto vesselVis = description.visAttributes(detElem.attr<std::string>(_Unicode(vis_vessel)));
-
-  double windowThickness = dims.attr<double>(_Unicode(window_thickness));
-  double wallThickness   = dims.attr<double>(_Unicode(wall_thickness));
-
-  double proximityGap = dims.attr<double>(_Unicode(proximity_gap));
-
-  long debug_optics_mode = description.constantAsLong("PFRICH_debug_optics");
-
-  bool debug_optics = debug_optics_mode > 0;
-
-  double radiatorRmin = radiatorElem.attr<double>(_Unicode(rmin));
-  double radiatorRmax = radiatorElem.attr<double>(_Unicode(rmax));
-
-  auto filterElem = radiatorElem.child(_Unicode(filter));
-
-  double airgapThickness = 0.1;
-  double filterThickness = 1;
-#endif
+  auto sensorVis = description.visAttributes("PFRICH_sensor_vis");
 
   auto radiatorElem         = detElem.child(_Unicode(radiator));
-  //?double radiatorFrontplane = radiatorElem.attr<double>(_Unicode(frontplane));
   auto aerogelElem        = radiatorElem.child(_Unicode(aerogel));
   auto aerogelThickness = aerogelElem.attr<double>(_Unicode(thickness));
   auto aerogelMat = description.material(aerogelElem.attr<std::string>(_Unicode(material)));
-  
-#if _TODAY_
-  auto filterMat  = description.material(filterElem.attr<std::string>(_Unicode(material)));
-
-  double vesselLength = dims.attr<double>(_Unicode(length));
-  auto originFront    = Position(0., 0., vesselLength / 2.0);
-  double sensorZpos = radiatorFrontplane - aerogelThickness - proximityGap - 0.5 * sensorThickness;
-  auto sensorPlanePos = Position(0., 0., sensorZpos) + originFront; // reference position
-#endif
-  
+    
   // readout coder <-> unique sensor ID
   /* - `sensorIDfields` is a list of readout fields used to specify a unique sensor ID
      * - `cellMask` is defined such that a hit's `cellID & cellMask` is the corresponding sensor's unique ID
@@ -205,8 +136,6 @@ static Ref_t createDetector(Detector& description, xml_h e, SensitiveDetector se
   auto mirrorElem = detElem.child(_Unicode(mirror));
   auto mirrorMat  = description.material(mirrorElem.attr<std::string>(_Unicode(material)));
   auto mirrorVis  = description.visAttributes(mirrorElem.attr<std::string>(_Unicode(vis)));
-  auto asicVis  = description.visAttributes("PFRICH_service_vis");//mirrorElem.attr<std::string>(_Unicode(vis)));
-  // auto vesselMat = description.material(detElem.attr<std::string>(_Unicode(material)));
   auto vesselGas = description.material(detElem.attr<std::string>(_Unicode(gas)));
 
   //
@@ -221,7 +150,6 @@ static Ref_t createDetector(Detector& description, xml_h e, SensitiveDetector se
   auto _FLANGE_CLEARANCE_   = description.constant<double>("FLANGE_CLEARANCE");
   SubtractionSolid pfRICH_volume_shape(pfRICH_air_volume,
 				       FlangeCut(description, _FIDUCIAL_VOLUME_LENGTH_ + 1*mm, _FLANGE_CLEARANCE_));
-  //-Volume pfRICH_volume(detName + "_Vol", pfRICH_volume_shape, vesselGas); 
   Volume pfRICH_volume(detName, pfRICH_volume_shape, vesselGas); 
   
   Volume mother = description.pickMotherVolume(sdet);
@@ -242,22 +170,19 @@ static Ref_t createDetector(Detector& description, xml_h e, SensitiveDetector se
   auto _VESSEL_OUTER_WALL_THICKNESS_ = description.constant<double>("VESSEL_OUTER_WALL_THICKNESS");
   
   double gas_volume_length =  _FIDUCIAL_VOLUME_LENGTH_ - _VESSEL_FRONT_SIDE_THICKNESS_ - _SENSOR_AREA_LENGTH_;
-  printf("@R@ %f %f %f -> gas volume length %f [mm]\n",
-	 _FIDUCIAL_VOLUME_LENGTH_/mm, _VESSEL_FRONT_SIDE_THICKNESS_/mm, _SENSOR_AREA_LENGTH_/mm, gas_volume_length/mm);
   double gas_volume_radius = _VESSEL_OUTER_RADIUS_ - _VESSEL_OUTER_WALL_THICKNESS_;
   double gas_volume_offset = -(_SENSOR_AREA_LENGTH_ - _VESSEL_FRONT_SIDE_THICKNESS_)/2, gvOffset = gas_volume_offset;
-  printf("@R@ gvOffset: %f [mm]\n", gvOffset/mm);
   Tube gasTube(0.0, gas_volume_radius, gas_volume_length/2);
   SubtractionSolid gasSolid(gasTube, FlangeCut(description, gas_volume_length + 1*mm, _FLANGE_CLEARANCE_));
   Volume gasVolume(detName + "_GasVol", gasSolid, vesselGas);
-  /*PlacedVolume gasPV =*/ pfRICH_volume.placeVolume(gasVolume, Position(0, 0, gas_volume_offset));
+  pfRICH_volume.placeVolume(gasVolume, Position(0, 0, gas_volume_offset));
 #ifdef _WITH_IRT_OPTICS_
   {
     // FIXME: Z-location does not really matter here, right?;
     auto boundary = new FlatSurface(TVector3(0,0,0), sign*TVector3(1,0,0), TVector3(0,-1,0));
     
     auto radiator = geometry->SetContainerVolume(cdet, "GasVolume", 0, (G4LogicalVolume*)(0x0), 0, boundary);
-    radiator->SetAlternativeMaterialName("N2cherenkov");//gasvolMaterialName.c_str());
+    radiator->SetAlternativeMaterialName("N2cherenkov");
   }
 #endif
 
@@ -272,14 +197,12 @@ static Ref_t createDetector(Detector& description, xml_h e, SensitiveDetector se
   auto flange = FlangeCut(description, gas_volume_length + 1*mm, _FLANGE_CLEARANCE_ + _VESSEL_INNER_WALL_THICKNESS_ + 
 			  _BUILDING_BLOCK_CLEARANCE_);
   
-  double gzOffset = -gas_volume_length / 2 + _BUILDING_BLOCK_CLEARANCE_;// + agthick / 2;
+  double gzOffset = -gas_volume_length / 2 + _BUILDING_BLOCK_CLEARANCE_;
     
   auto _FLANGE_EPIPE_DIAMETER_ = description.constant<double>("FLANGE_EPIPE_DIAMETER");
   float m_r0min = _FLANGE_EPIPE_DIAMETER_ / 2 + _FLANGE_CLEARANCE_ + _VESSEL_INNER_WALL_THICKNESS_ +
     _BUILDING_BLOCK_CLEARANCE_;
   float m_r0max = gas_volume_radius - _BUILDING_BLOCK_CLEARANCE_;
-  //printf("@R@ mm & cm %f %f\n", mm, cm);
-  //printf("@R@ CLEARANCE: %f [mm]\n", _BUILDING_BLOCK_CLEARANCE_/mm);
     
   //
   // Aerogel;
@@ -288,9 +211,6 @@ static Ref_t createDetector(Detector& description, xml_h e, SensitiveDetector se
     const int _AEROGEL_BAND_COUNT_ = 3;
     auto _AEROGEL_INNER_WALL_THICKNESS_ =
       description.constant<double>("AEROGEL_INNER_WALL_THICKNESS");
-    //float _VESSEL_OUTER_RADIUS_         = description.constant<double>("VESSEL_OUTER_RADIUS");
-    //float _FLANGE_CLEARANCE_         = description.constant<double>("FLANGE_CLEARANCE");
-    //float _AEROGEL_BAND_COUNT_ = aerogel_band_count;
     auto _AEROGEL_SEPARATOR_WALL_THICKNESS_ =
       description.constant<double>("AEROGEL_SEPARATOR_WALL_THICKNESS");
     auto _AEROGEL_OUTER_WALL_THICKNESS_ =
@@ -302,7 +222,7 @@ static Ref_t createDetector(Detector& description, xml_h e, SensitiveDetector se
        _AEROGEL_INNER_WALL_THICKNESS_ - _AEROGEL_OUTER_WALL_THICKNESS_) /
       _AEROGEL_BAND_COUNT_;
     
-    double agthick = aerogelThickness;//description.constant<double>("PFRICH_aerogel_thickness");//2.5; // cm
+    double agthick = aerogelThickness;
     
     std::string aerogel_name = "a1040";
     int kkcounter = 0;
@@ -325,14 +245,11 @@ static Ref_t createDetector(Detector& description, xml_h e, SensitiveDetector se
       
       // FIXME: names overlap in several places!;
       double wd0      = (l0 / lsum) * (360 * degree / adim[ir]);
-      //+double wd1      = (l1 / lsum) * (360 * degree / adim[ir]);
-      TString ag_name = "Tmp";//+, sp_name = "Tmp";
+      TString ag_name = "Tmp";
       
       if (ir) ag_name.Form("%s-%d-00", aerogel_name.c_str(), ir);
-      //+if (ir) sp_name.Form("A-Spacer--%d-00", ir);
       
       Tube agtube(aerogel_r0, aerogel_r1, agthick / 2, 0 * degree, wd0);
-      //+Tube sptube(aerogel_r0, aerogel_r1, agthick / 2, wd0, wd0 + wd1);
       
       for (unsigned ia = 0; ia < adim[ir]; ia++) {
 	
@@ -342,48 +259,24 @@ static Ref_t createDetector(Detector& description, xml_h e, SensitiveDetector se
 	if (ir) {
 	  ag_name.Form("%s-%d-%02d", "aerogel", ir, ia);
 	  
-	  Volume agtubeVol(ag_name.Data(), agtube, aerogelMat);//gasvolMat);
-	  auto aerogelTilePlacement = Transform3D(r_aerogel_Z, Position(0.0, 0.0, gzOffset + agthick/2));//-m_gzOffset));
-	  auto aerogelTilePV        = /*pfRICH_volume*/gasVolume.placeVolume(agtubeVol, aerogelTilePlacement);
+	  Volume agtubeVol(ag_name.Data(), agtube, aerogelMat);
+	  auto aerogelTilePlacement = Transform3D(r_aerogel_Z, Position(0.0, 0.0, gzOffset + agthick/2));
+	  auto aerogelTilePV        = gasVolume.placeVolume(agtubeVol, aerogelTilePlacement);
 	  DetElement aerogelDE(sdet, "aerogel_de_" + std::to_string(kkcounter), 0);
 	  aerogelDE.setPlacement(aerogelTilePV);
-#if _LATER_
-	  Volume sptubeVol(detName + "_sptube", sptube, mirrorMat);
-	  auto sptubePlacement = Transform3D(r_aerogel_Z, Position(0.0, 0.0, gzOffset + agthick/2));//-m_gzOffset));
-	  auto sptubePV        = . pfRICH_volume.placeVolume(sptubeVol, sptubePlacement);
-	  DetElement sptubeDE(sdet, "sptube_de_" + std::to_string(kkcounter), 0);
-	  sptubeDE.setPlacement(sptubePV);
-#endif
 	} else {
-	  
 	  ag_name.Form("%s-%d-%02d", "aerogel_inner", ir, ia);
 	  
 	  Tube agtube_inner(aerogel_r0, aerogel_r1, agthick / 2, 0 * degree + ia * apitch,
 			    wd0 + ia * apitch);
-	  SubtractionSolid agsub(agtube_inner, flange);//_final_shape);
-	  Volume agsubtubeVol(ag_name.Data(), agsub, aerogelMat);//gasvolMat);
+	  SubtractionSolid agsub(agtube_inner, flange);
+	  Volume agsubtubeVol(ag_name.Data(), agsub, aerogelMat);
 	  auto aerogelTilePlacement =
-            Transform3D(RotationZYX(0.0, 0.0, 0.0), Position(0.0, 0.0, gzOffset + agthick/2));//-m_gzOffset));
-	  auto agsubTilePV = /*pfRICH_volume*/gasVolume.placeVolume(agsubtubeVol, aerogelTilePlacement);
+            Transform3D(RotationZYX(0.0, 0.0, 0.0), Position(0.0, 0.0, gzOffset + agthick/2));
+	  auto agsubTilePV = gasVolume.placeVolume(agsubtubeVol, aerogelTilePlacement);
 	  
 	  DetElement aerogelDE(sdet, "agsubTile_de_" + std::to_string(counter), 0);
 	  aerogelDE.setPlacement(agsubTilePV);
-#if _LATER_
-	  sp_name.Form("%s-%d-%02d", "sp_inner", ir, ia);
-	  Tube sptube_inner(aerogel_r0, aerogel_r1, agthick / 2, wd0 + ia * apitch,
-			    wd0 + wd1 + ia * apitch);
-	  
-	  SubtractionSolid spsub(sptube_inner, flange_final_shape);
-	  Volume spsubtubeVol(sp_name.Data(), spsub, mirrorMat);
-	  auto spTilePlacement =
-            Transform3D(RotationZYX(0.0, 0.0, 0.0), Position(0.0, 0.0, -m_gzOffset));
-	  auto spsubTilePV = . pfRICH_volume.placeVolume(spsubtubeVol, spTilePlacement);
-	  
-	  DetElement sptubeTileDE(sdet, "sptubeTile_de_" + std::to_string(counter), 0);
-	  sptubeTileDE.setPlacement(spsubTilePV);
-	  
-	  sp_name.Form("A-Spacer--%d-%02d", ir, ia);
-#endif
 	} //if
 	
 	counter++;
@@ -391,72 +284,16 @@ static Ref_t createDetector(Detector& description, xml_h e, SensitiveDetector se
 	
       } //for ia
     } // for ir
-  
-    // Placing radial spacer
-#if _LATER_
-    double sp_accu   = m_r0min;
-    int tube_counter = 0;
-    
-    for (unsigned ir = 0; ir < _AEROGEL_BAND_COUNT_ + 1; ir++) {
-      double thickness = ir ? (ir == _AEROGEL_BAND_COUNT_ ? _AEROGEL_OUTER_WALL_THICKNESS_
-			       : _AEROGEL_SEPARATOR_WALL_THICKNESS_)
-	: _AEROGEL_INNER_WALL_THICKNESS_;
-      double sp_r0     = sp_accu;
-      double sp_r1     = sp_r0 + thickness;
       
-      TString sp_name = "Tmp";
-      if (ir)
-	sp_name.Form("R-Spacer--%d-00", ir);
-      
-      Tube sptube(sp_r0, sp_r1, agthick / 2, 0 * degree, 360 * degree);
-      Volume sptubeVol(detName + "_radial_sptube", sptube, sensorMat);
-      auto sptubePlacement = Transform3D(RotationZYX(0.0, 0.0, 0.0), Position(0.0, 0.0, -m_gzOffset));
-      
-      if (ir) {
-	
-	auto sptubePV = . pfRICH_volume.placeVolume(sptubeVol, sptubePlacement);
-	
-	DetElement sptubeDE(sdet, "sptube_de_" + std::to_string(tube_counter), 0);
-	sptubeDE.setPlacement(sptubePV);
-	
-      }
-      
-      else {
-	
-	SubtractionSolid spsub(sptube, flange_final_shape);
-	Volume agsubtubeVol(detName + "_radial_sptube_inner", spsub, gasvolMat);
-	
-	auto sptubePV = . pfRICH_volume.placeVolume(agsubtubeVol, sptubePlacement);
-	
-	DetElement sptubeDE(sdet, "sptube_de_" + std::to_string(tube_counter), 0);
-	sptubeDE.setPlacement(sptubePV);
-	
-      } //if
-      
-      sp_accu += thickness + rheight;
-      
-      tube_counter++;
-      
-    } //for ir
-#endif
-    
 #ifdef _WITH_IRT_OPTICS_
     {
       TVector3 nx(1*sign,0,0), ny(0,-1,0);
 
-      //printf("@R@ fvOffset %f, gvOffset  %f, gzOffset  %f [mm]\n", fvOffset/mm, gvOffset/mm, gzOffset/mm);
-      //auto surface = new FlatSurface(sign*(1/mm)*TVector3(0,0,fvOffset + gvOffset + gzOffset), nx, ny);
       auto surface = new FlatSurface(sign*(1/mm)*TVector3(0,0,fvOffset + gvOffset + gzOffset + agthick/2), nx, ny);
       
       auto radiator = geometry->AddFlatRadiator(cdet, "Aerogel", CherenkovDetector::Upstream, 
 						0, (G4LogicalVolume*)(0x1), 0, surface, agthick/mm);
-      {
-	//auto sfront = dynamic_cast<FlatSurface*>(radiator->GetFrontSide(0));//isec);
-	//auto srear = dynamic_cast<FlatSurface*>(radiator->GetRearSide(0));//isec);
-	//double zf = sfront->GetCenter().Z(), zr = srear->GetCenter().Z();
-	//printf("@R@ aerogel: %f %f %f\n", sign, zf, zr);
-      }
-      radiator->SetAlternativeMaterialName("Aerogel_PFRICH");//aerogelMaterialName.c_str());
+      radiator->SetAlternativeMaterialName("Aerogel_PFRICH");
       // FIXME: what is it good for in ePIC IRT 2.0 implementation?;
       geometry->AddRadiatorLogicalVolume(radiator, (G4LogicalVolume*)(0x1));
     }
@@ -471,54 +308,39 @@ static Ref_t createDetector(Detector& description, xml_h e, SensitiveDetector se
   //
   // Acrylic filter;
   //
-  // FIXME: XML;
   double _ACRYLIC_THICKNESS_ = 3*mm;
   {
-    double acthick = _ACRYLIC_THICKNESS_;// =*/ 3*mm;
+    double acthick = _ACRYLIC_THICKNESS_;
     auto acrylicMat = description.material("Acrylic_PFRICH");
-    // m_gzOffset += acthick/2;
     
-    //Tube ac_tube(m_r0min + 3, m_r0max - 1, acthick / 2, 0 * degree, 360 * degree);
     Tube ac_tube(m_r0min, m_r0max, acthick / 2, 0 * degree, 360 * degree);
-    SubtractionSolid ac_shape(ac_tube, flange);//_final_shape);
+    SubtractionSolid ac_shape(ac_tube, flange);
     Volume acVol(detName + "_ac", ac_shape, acrylicMat);
     
-    //PlacedVolume ac_PV =
-    gasVolume.placeVolume(acVol, Position(0, 0, gzOffset + acthick/2));//-21.3));
-    
-    //DetElement acDE(sdet, "ac_de", 0);
-    //acDE.setPlacement(ac_PV);
-    
+    gasVolume.placeVolume(acVol, Position(0, 0, gzOffset + acthick/2));
+        
 #ifdef _WITH_IRT_OPTICS_
     {
       TVector3 nx(1*sign,0,0), ny(0,-1,0);
       
-      //auto surface = new FlatSurface(sign*(1/mm)*TVector3(0,0,fvOffset + gvOffset + gzOffset), nx, ny);
       auto surface = new FlatSurface(sign*(1/mm)*TVector3(0,0,fvOffset + gvOffset + gzOffset + acthick/2), nx, ny);
       
       auto radiator = geometry->AddFlatRadiator(cdet, "Acrylic", CherenkovDetector::Upstream, 
-						0, (G4LogicalVolume*)(0x2), 0, surface, acthick/mm);//acThick/mm);
-      {
-	//auto sfront = dynamic_cast<FlatSurface*>(radiator->GetFrontSide(0));//isec);
-	//auto srear = dynamic_cast<FlatSurface*>(radiator->GetRearSide(0));//isec);
-	//double zf = sfront->GetCenter().Z(), zr = srear->GetCenter().Z();
-	//printf("@R@ acrylic: %f %f %f\n", sign, zf, zr);
-      }
-      radiator->SetAlternativeMaterialName("Acrylic_PFRICH");//acrylicMaterialName.c_str());
+						0, (G4LogicalVolume*)(0x2), 0, surface, acthick/mm);
+      radiator->SetAlternativeMaterialName("Acrylic_PFRICH");
     }
 #endif
   }
   
 #ifdef _WITH_IRT_OPTICS_
-  //ConicalSurface *msurface = 0;
-  OpticalBoundary *mboundaries[2] = {0, 0};
+  IRT2::OpticalBoundary *mboundaries[2] = {0, 0};
 #endif
   
   //
   // Mirrors;
   //
   {
-    auto mirrorSurf          = surfMgr.opticalSurface("MirrorSurface_PFRICH");//detElem.attr<std::string>(_Unicode(mirror)));
+    auto mirrorSurf          = surfMgr.opticalSurface("MirrorSurface_PFRICH");
   
     auto _CONICAL_MIRROR_INNER_RADIUS_ = description.constant<double>("CONICAL_MIRROR_INNER_RADIUS");
     auto _CONICAL_MIRROR_OUTER_RADIUS_ = description.constant<double>("CONICAL_MIRROR_OUTER_RADIUS");
@@ -526,8 +348,6 @@ static Ref_t createDetector(Detector& description, xml_h e, SensitiveDetector se
     auto _OUTER_MIRROR_THICKNESS_      = description.constant<double>("OUTER_MIRROR_THICKNESS");
   
     double mlen = gas_volume_length - 4*_BUILDING_BLOCK_CLEARANCE_ - aerogelThickness - _ACRYLIC_THICKNESS_;
-    //mlen -= _BUILDING_BLOCK_CLEARANCE_;// + _HRPPD_SUPPORT_GRID_BAR_HEIGHT_;
-    //mlen -= _BUILDING_BLOCK_CLEARANCE_;// + _HRPPD_SUPPORT_GRID_BAR_HEIGHT_;
     double mzoffset = (aerogelThickness + _ACRYLIC_THICKNESS_ + 2*_BUILDING_BLOCK_CLEARANCE_ )/2;
     
     double mirror_r0[2] = {m_r0min, m_r0max - _BUILDING_BLOCK_CLEARANCE_};
@@ -548,7 +368,7 @@ static Ref_t createDetector(Detector& description, xml_h e, SensitiveDetector se
 	PlacedVolume mirror_outerPV = gasVolume.placeVolume(outer_mirrorVol, Position(0, 0, mzoffset));
 	DetElement mirror_outerDE(sdet, "_outer_mirror_de", 0);
 	mirror_outerDE.setPlacement(mirror_outerPV);
-	SkinSurface mirrorSkin(description, mirror_outerDE, "outer_mirror_optical_surface_"/* + secName*/, mirrorSurf,
+	SkinSurface mirrorSkin(description, mirror_outerDE, "outer_mirror_optical_surface_", mirrorSurf,
 			       outer_mirrorVol);
 	mirrorSkin.isValid();
 
@@ -556,7 +376,7 @@ static Ref_t createDetector(Detector& description, xml_h e, SensitiveDetector se
 	auto msurface = new ConicalSurface(sign*(1/mm)*TVector3(0,0,fvOffset + gvOffset + mzoffset),
 					   sign*TVector3(0,0,1), mirror_r0[im]/mm, mirror_r1[im]/mm, mlen/mm);
 	
-	mboundaries[im] = new OpticalBoundary(cdet->GetRadiator("GasVolume"), msurface, false);
+	mboundaries[im] = new IRT2::OpticalBoundary(cdet->GetRadiator("GasVolume"), msurface, false);
 	// Need to store it in a separate call (?), see a comment in CherenkovDetector.h;
 	cdet->StoreOpticalBoundary(mboundaries[im]);
 #endif
@@ -565,7 +385,7 @@ static Ref_t createDetector(Detector& description, xml_h e, SensitiveDetector se
 	Cone mirror_inner_cone_shape(mlen / 2., mirror_r0[im], mirror_r0[im] + mirror_thickness,
 				     mirror_r1[im], mirror_r1[im] + mirror_thickness);
 	
-	SubtractionSolid mirror_inner_sub(mirror_inner_cone_shape, flange);//_final_shape);
+	SubtractionSolid mirror_inner_sub(mirror_inner_cone_shape, flange);
 	
 	Volume inner_mirrorVol(detName + "_inner_mirror", mirror_inner_sub, mirrorMat);
 	inner_mirrorVol.setVisAttributes(mirrorVis);
@@ -573,7 +393,7 @@ static Ref_t createDetector(Detector& description, xml_h e, SensitiveDetector se
 	PlacedVolume mirror_innerPV = gasVolume.placeVolume(inner_mirrorVol, Position(0, 0, mzoffset));
 	DetElement mirror_innerDE(sdet, "_inner_mirror_de", 0);
 	mirror_innerDE.setPlacement(mirror_innerPV);
-	SkinSurface mirrorSkin(description, mirror_innerDE, "inner_mirror_optical_surface_"/* + secName*/, mirrorSurf,
+	SkinSurface mirrorSkin(description, mirror_innerDE, "inner_mirror_optical_surface_", mirrorSurf,
 			       inner_mirrorVol);
 	mirrorSkin.isValid();
 	
@@ -583,7 +403,7 @@ static Ref_t createDetector(Detector& description, xml_h e, SensitiveDetector se
 					   (mirror_r1[im] + mirror_thickness)/mm, mlen/mm);
 	msurface->SetConvex();
 	
-	mboundaries[im] = new OpticalBoundary(cdet->GetRadiator("GasVolume"), msurface, false);
+	mboundaries[im] = new IRT2::OpticalBoundary(cdet->GetRadiator("GasVolume"), msurface, false);
 	// Need to store it in a separate call (?), see a comment in CherenkovDetector.h;
 	cdet->StoreOpticalBoundary(mboundaries[im]);
 #endif
@@ -600,10 +420,7 @@ static Ref_t createDetector(Detector& description, xml_h e, SensitiveDetector se
     auto _HRPPD_CONTAINER_VOLUME_HEIGHT_ =
       description.constant<double>("HRPPD_CONTAINER_VOLUME_HEIGHT");
     auto _HRPPD_INSTALLATION_GAP_ = description.constant<double>("HRPPD_INSTALLATION_GAP");
-    
-    //auto _HRPPD_SUPPORT_GRID_BAR_HEIGHT_ =
-    //description.constant<double>("HRPPD_SUPPORT_GRID_BAR_HEIGHT");
-    
+        
     auto _HRPPD_TILE_SIZE_        = description.constant<double>("HRPPD_TILE_SIZE");
     auto _HRPPD_OPEN_AREA_SIZE_   = description.constant<double>("HRPPD_OPEN_AREA_SIZE");
     auto _HRPPD_ACTIVE_AREA_SIZE_ = description.constant<double>("HRPPD_ACTIVE_AREA_SIZE");
@@ -618,14 +435,11 @@ static Ref_t createDetector(Detector& description, xml_h e, SensitiveDetector se
 
 #ifdef _WITH_IRT_OPTICS_
     // [0,0]: have neither access to G4VSolid nor to G4Material; IRT code does not care; fine;
-    auto pd = new CherenkovPhotonDetector(0, 0);
+    auto pd = new IRT2::CherenkovPhotonDetector(0, 0);
     
     // FIXME: '0' stands for the unknown (and irrelevant) G4LogicalVolume;
     geometry->AddPhotonDetector(cdet, 0, pd);
     
-    // FIXME: really needed in EICrecon?;
-    //pd->SetCopyIdentifierLevel(1);
-    //?pd->DefineLogicalVolume();
     // Cannot access GEANT shapes in the reconstruction code -> store this value;
     pd->SetActiveAreaSize(_HRPPD_ACTIVE_AREA_SIZE_/mm);
     
@@ -642,19 +456,12 @@ static Ref_t createDetector(Detector& description, xml_h e, SensitiveDetector se
       TVector3 nx(1*sign,0,0), ny(0,-1,0);
       
       auto surface = 
-	//new FlatSurface(sign*(1/mm)*TVector3(0,0,/*fvzOffset + wzOffset + _HRPPD_WINDOW_THICKNESS_/2*/-1700.*mm + 2.5*mm), nx, ny);
 	new FlatSurface(sign*(1/mm)*TVector3(0,0,fvOffset + _FIDUCIAL_VOLUME_LENGTH_/2 - _SENSOR_AREA_LENGTH_ + _HRPPD_WINDOW_THICKNESS_/2), nx, ny);
       
       auto radiator = geometry->AddFlatRadiator(cdet, "QuartzWindow", CherenkovDetector::Downstream, 
-						0, (G4LogicalVolume*)(0x3), 0, /*wndVol, m_FusedSilica,*/ surface,
+						0, (G4LogicalVolume*)(0x3), 0, surface,
 						_HRPPD_WINDOW_THICKNESS_/mm);
-      {
-	//auto sfront = dynamic_cast<FlatSurface*>(radiator->GetFrontSide(0));//isec);
-	//auto srear = dynamic_cast<FlatSurface*>(radiator->GetRearSide(0));//isec);
-	//double zf = sfront->GetCenter().Z(), zr = srear->GetCenter().Z();
-	//printf("@R@ window: %f %f %f\n", sign, zf, zr);
-      }
-      radiator->SetAlternativeMaterialName("AirOptical");//windowMaterialName.c_str());
+      radiator->SetAlternativeMaterialName("AirOptical");
     }	
 #endif
     
@@ -721,13 +528,9 @@ static Ref_t createDetector(Detector& description, xml_h e, SensitiveDetector se
       Box wnd_Solid(xysize / 2, xysize / 2, wndthick / 2);
       TString wndName; wndName.Form("%s-window-%02d", detName.c_str(), imod);
       Volume wndVol(wndName.Data(), wnd_Solid, HRPPD_WindowMat);
-      wndVol.setVisAttributes(gasvolVis);     
-      //PlacedVolume wndPV =
+      wndVol.setVisAttributes(gasvolVis); 
       hrppdVol_air.placeVolume(wndVol, Position(0, 0, accu + wndthick / 2));
-      //DetElement wndDE(hrppdDE, "wnd_de", 0);
-      //wndDE.setPlacement(wndPV);
       
-      //  double pitch = xysize + _HRPPD_INSTALLATION_GAP_;
       double xyactive = _HRPPD_ACTIVE_AREA_SIZE_;
       
       accu += wndthick;
@@ -745,8 +548,7 @@ static Ref_t createDetector(Detector& description, xml_h e, SensitiveDetector se
 	pcPV.addPhysVolID("hrppd", imod);
 	    
 	// sensor DetElement
-	/*auto*/ sensorID = encodeSensorID(pcPV.volIDs());
-	//printf("@S@: %lu\n", sensorID);
+	sensorID = encodeSensorID(pcPV.volIDs());
 	TString deName; deName.Form("%s-sensor-%02d", detName.c_str(), imod);
 	DetElement pcDE(sdet, deName.Data(), sensorID);
 	pcDE.setPlacement(pcPV);
@@ -755,19 +557,17 @@ static Ref_t createDetector(Detector& description, xml_h e, SensitiveDetector se
       // A fake absorber layer behind the photocathode; FIXME: make sure that reflection
       // on the window and photocathode boundary still works correctly (no fake volume as
       // in a standalone code);
-#if 1//_BACK_
+#if 1
       {
-	TString absName; absName.Form("%s-absorber-%02d", detName.c_str(), imod);//x, iy);
+	TString absName; absName.Form("%s-absorber-%02d", detName.c_str(), imod);
 	// Recycle the same pcBox shape;
-	Volume absVol(absName.Data(), pcBox, HRPPD_PCBMat);//absorberMaterial);
+	Volume absVol(absName.Data(), pcBox, HRPPD_PCBMat);
 	hrppdVol_air.placeVolume(absVol, Position(0.0, 0.0, accu + pdthick + pdthick/2));
       }
 #endif
-      
-      //accu += pdthick;
-      
+            
       double xyopen   = _HRPPD_OPEN_AREA_SIZE_;
-      double certhick = _HRPPD_CERAMIC_BODY_THICKNESS_; //, zcer = azOffset + wndthick + certhick/2;
+      double certhick = _HRPPD_CERAMIC_BODY_THICKNESS_; 
       
       // Ceramic body (sidewall and anode);
       //
@@ -778,102 +578,44 @@ static Ref_t createDetector(Detector& description, xml_h e, SensitiveDetector se
       
       TString cerName; cerName.Form("%s-ceramic-%02d", detName.c_str(), imod);
       Volume ceramicVol(cerName.Data(), ceramic, HRPPD_MPDMat);
-      //ceramicVol.setVisAttributes(gasvolVis);
       
-      //PlacedVolume ceramicPV =
       hrppdVol_air.placeVolume(ceramicVol, Position(0.0, 0.0, accu + certhick / 2));
-      //DetElement ceramicDE(sdet, "ceramic_de", 0);
-      //ceramicDE.setPlacement(ceramicPV);
     
       // Effective anode plating layer
       //
       Box plating_solid(xyopen / 2, xyopen / 2, _HRPPD_PLATING_LAYER_THICKNESS_ / 2);
       TString pltName; pltName.Form("%s-plating-%02d", detName.c_str(), imod);
       Volume platingVol(pltName.Data(), plating_solid, HRPPD_MPDMat);
-      //platingVol.setVisAttributes(gasvolVis);
-      //PlacedVolume platingPV =
       // Place somewhere in the middle of the ceramic body gap;
       hrppdVol_air.placeVolume(platingVol, Position(0.0, 0.0, accu + certhick / 2));
-      //DetElement platingDE(sdet, "plating_de", 0);
-      //platingDE.setPlacement(platingPV);
       
       // Effective MCP layer
       //
       Box mcp_solid(xyopen / 2, xyopen / 2, _EFFECTIVE_MCP_THICKNESS_ / 2);
       TString mcpName; mcpName.Form("%s-mcp-%02d", detName.c_str(), imod);
       Volume mcpVol(mcpName.Data(), mcp_solid, HRPPD_MPDMat);
-      //mcpVol.setVisAttributes(gasvolVis);
-      //PlacedVolume mcpPV =
       hrppdVol_air.placeVolume(
 			       mcpVol, Position(0.0, 0.0,
 						accu + certhick / 2 + _HRPPD_PLATING_LAYER_THICKNESS_ +
 						_EFFECTIVE_MCP_THICKNESS_ / 2));
-      //DetElement mcpDE(sdet, "mcp_de", 0);
-      //mcpDE.setPlacement(mcpPV);
     
-      accu += certhick;// + 1 * mm;
+      accu += certhick;
 
       {
 	auto _READOUT_PCB_THICKNESS_ = description.constant<double>("READOUT_PCB_THICKNESS");
 	auto _READOUT_PCB_SIZE_      = description.constant<double>("READOUT_PCB_SIZE");
-	auto _ASIC_SIZE_XY_          = description.constant<double>("ASIC_SIZE_XY");
-	auto _ASIC_THICKNESS_        = description.constant<double>("ASIC_THICKNESS");
 	
 	// PCB Board
 	//
 	Box pcb_solid(_READOUT_PCB_SIZE_ / 2, _READOUT_PCB_SIZE_ / 2, _READOUT_PCB_THICKNESS_ / 2);
 	TString pcbName; pcbName.Form("%s-pcb-%02d", detName.c_str(), imod);
 	Volume pcbVol(pcbName.Data(), pcb_solid, HRPPD_PCBMat);
-	//pcbVol.setVisAttributes(gasvolVis);
-	//PlacedVolume pcbPV =
 	hrppdVol_air.placeVolume(pcbVol, Position(0.0, 0.0, accu + _READOUT_PCB_THICKNESS_ / 2));
-	//DetElement pcbDE(sdet, "pcb_de", 0);
-	//pcbDE.setPlacement(pcbPV);
-	
-	accu += _READOUT_PCB_THICKNESS_;// + 0.001;
-	
-	// ASICs
-	//
-	Box asic_solid(_ASIC_SIZE_XY_ / 2, _ASIC_SIZE_XY_ / 2, _ASIC_THICKNESS_ / 2);
-	TString asicName; asicName.Form("%s-asic-%02d", detName.c_str(), imod);
-	Volume asicVol(asicName.Data(), asic_solid, HRPPD_ASICMat);
-	asicVol.setVisAttributes(asicVis);
-	
-	double asic_pitch = _READOUT_PCB_SIZE_ / 2;
-	
-	//imod = 0;
-	
-	for (unsigned ix = 0; ix < 2; ix++) {
-	  double xOffset = asic_pitch * (ix - (2 - 1) / 2.);
-	  
-	  for (unsigned iy = 0; iy < 2; iy++) {
-	    double yOffset = asic_pitch * (iy - (2 - 1) / 2.);
-	    
-	    //auto asicPV =
-	    hrppdVol_air.placeVolume(asicVol, Position(xOffset, yOffset, accu + _ASIC_THICKNESS_ / 2));
-	    
-	    //DetElement asicDE(sdet, "asic_de_" + std::to_string(imod), 0);
-	    //asicDE.setPlacement(asicPV);
-	    
-	    //imod++;
-	  } //for iy
-	} //for ix
-	
-	accu += _ASIC_THICKNESS_ + 0.01 * mm;
       }
 
       // Eventually place the whole HRPPD container volume;
       double dz = _FIDUCIAL_VOLUME_LENGTH_/2 - _SENSOR_AREA_LENGTH_ + _HRPPD_CONTAINER_VOLUME_HEIGHT_/2;
-      /*auto sensorPV =*/ pfRICH_volume.placeVolume(hrppdVol_air, Position(xy.X(), xy.Y(), dz));
-      
-#if _LATER_
-      if (!debug_optics) {
-	SkinSurface sensorSkin(description, sensorDE,
-			       "sensor_optical_surface_" + std::to_string(imod), sensorSurf,
-			       sensorVol);
-	sensorSkin.isValid();
-      };
-#endif
+      pfRICH_volume.placeVolume(hrppdVol_air, Position(xy.X(), xy.Y(), dz));
       
 #ifdef _WITH_IRT_OPTICS_
       {
@@ -930,12 +672,6 @@ static Ref_t createDetector(Detector& description, xml_h e, SensitiveDetector se
       imod++;
     } //for coord
   } 
-  
-  // Write out optical configuration;
-#ifdef _WITH_IRT_OPTICS_
-  geometry->Write();
-  output_file->Close();
-#endif
   
   return sdet;
 } // createDetector()
