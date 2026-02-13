@@ -106,11 +106,7 @@
   material="CarbonFiber"
   vis_vessel="PFRICH_vessel_vis"
   vis_gas="DRICH_gas_vis"
-
-  optics="pfrich-optics.root"
   >
-
-    <!-- parent name="/world_volume"/ -->
 
     <dimensions
       zmin="PFRICH_zmin"
