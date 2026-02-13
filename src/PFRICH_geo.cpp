@@ -19,9 +19,9 @@ using namespace dd4hep;
 #include "IRT2/CherenkovDetectorCollection.h"
 
 #include "IRT2/ConicalSurface.h"
-#endif
 
 using namespace IRT2;
+#endif
 
 #define _SENSOR_PLANE_GEOMETRIC_EFFICIENCY_ (1.00)
 #define _SAFETY_FACTOR_ (0.70)
@@ -159,8 +159,10 @@ static Ref_t createDetector(Detector& description, xml_h e, SensitiveDetector se
     pv.addPhysVolID("system", id);
   sdet.setPlacement(pv);
 
+#ifdef _WITH_IRT_OPTICS_
   // FIXME: do it better later;
   double fvOffset = fabs(_FIDUCIAL_VOLUME_OFFSET_);
+#endif
 
   //
   // Gas volume;
@@ -172,8 +174,11 @@ static Ref_t createDetector(Detector& description, xml_h e, SensitiveDetector se
   double gas_volume_length =
       _FIDUCIAL_VOLUME_LENGTH_ - _VESSEL_FRONT_SIDE_THICKNESS_ - _SENSOR_AREA_LENGTH_;
   double gas_volume_radius = _VESSEL_OUTER_RADIUS_ - _VESSEL_OUTER_WALL_THICKNESS_;
-  double gas_volume_offset = -(_SENSOR_AREA_LENGTH_ - _VESSEL_FRONT_SIDE_THICKNESS_) / 2,
-         gvOffset          = gas_volume_offset;
+  double gas_volume_offset = -(_SENSOR_AREA_LENGTH_ - _VESSEL_FRONT_SIDE_THICKNESS_) / 2;
+#ifdef _WITH_IRT_OPTICS_
+  double gvOffset = gas_volume_offset;
+#endif
+
   Tube gasTube(0.0, gas_volume_radius, gas_volume_length / 2);
   SubtractionSolid gasSolid(gasTube,
                             FlangeCut(description, gas_volume_length + 1 * mm, _FLANGE_CLEARANCE_));

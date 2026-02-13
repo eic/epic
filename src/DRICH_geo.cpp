@@ -28,9 +28,9 @@ using namespace dd4hep::rec;
 
 #include "IRT2/CherenkovDetectorCollection.h"
 #include "IRT2/SphericalSurface.h"
-#endif
 
 using namespace IRT2;
+#endif
 
 // create the detector
 static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetector sens) {
@@ -395,11 +395,11 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
     DetElement filterDE(det, "filter_de", 0);
     filterDE.setPlacement(filterPV);
 
+#ifdef _WITH_IRT_OPTICS_
     // radiator z-positions (w.r.t. IP); only needed downstream if !debugOptics
     double aerogelZpos = vesselPos.z() + aerogelPV.position().z();
     double filterZpos  = vesselPos.z() + filterPV.position().z();
 
-#ifdef _WITH_IRT_OPTICS_
     {
       TVector3 nx(1, 0, 0), ny(0, -1, 0);
 
@@ -526,12 +526,12 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
                            mirrorVol);
     mirrorSkin.isValid();
 
+#ifdef _WITH_IRT_OPTICS_
     // reconstruction constants (w.r.t. IP)
     // - access sector center after `sectorRotation`
     auto mirrorFinalPlacement = mirrorSectorPlacement * mirrorPlacement;
     auto mirrorFinalCenter    = vesselPos + mirrorFinalPlacement.Translation().Vect();
 
-#ifdef _WITH_IRT_OPTICS_
     {
       // NB: default is concave, which is fine;
       msurface = new SphericalSurface(
