@@ -47,6 +47,7 @@ include(GNUInstallDirs)
 # Dependencies
 find_package(DD4hep 1.27 REQUIRED COMPONENTS DDCore DDRec)
 find_package(fmt REQUIRED)
+find_package(IRT2)
 
 #-----------------------------------------------------------------------------------
 set(a_lib_name ${PROJECT_NAME})
@@ -57,27 +58,16 @@ dd4hep_set_compiler_flags()
 
 file(GLOB sources CONFIGURE_DEPENDS src/*.cpp)
 
-if (DEFINED WITH_IRT)
-  # Suppress the 'variable unused' warning: ignore the actual variable value;
-  set(ignoreMe "${WITH_IRT}")
-  # Instruct the compiler to use IRT include files during compilation;
-  SET( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -D_WITH_IRT_OPTICS_ -Wno-deprecated-copy-with-user-provided-dtor")
-
-  # The below stuff does not work: <...>/libepic.so: undefined symbol: _ZTV8G4Object;
-  # This is presumably because dd4hep_add_plugin() calls target_link_libraries() internally as well; do by hand
-  add_library(${a_lib_name} SHARED ${sources})
-  target_include_directories(${a_lib_name} PUBLIC ${CMAKE_INSTALL_PREFIX}/include)
-  target_link_libraries(${a_lib_name} ROOT::Core ROOT::Gdml DD4hep::DDCore DD4hep::DDRec fmt::fmt ${CMAKE_INSTALL_PREFIX}/lib/libIRT2.so)
-  install(TARGETS ${a_lib_name} DESTINATION lib)
-else()
 dd4hep_add_plugin(${a_lib_name}
   SOURCES ${sources}
-  INCLUDES ${CMAKE_INSTALL_PREFIX}/include
   USES ROOT::Core ROOT::Gdml
   )
 target_link_libraries(${a_lib_name}
-  PUBLIC DD4hep::DDCore DD4hep::DDRec fmt::fmt ${CMAKE_INSTALL_PREFIX}/lib/libIRT2.so
+  PUBLIC DD4hep::DDCore DD4hep::DDRec fmt::fmt
   )
+if(IRT2_FOUND)
+    target_compile_definitions(${a_lib_name} PRIVATE _WITH_IRT_OPTICS_)
+    target_link_libraries(${a_lib_name} PRIVATE IRT2)
 endif()
 
 #-----------------------------------------------------------------------------------
