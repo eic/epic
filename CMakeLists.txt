@@ -28,8 +28,7 @@ if (NOT CMAKE_BUILD_TYPE)
 endif()
 
 # Error on all warnings
-#if(NOT CMAKE_BUILD_TYPE STREQUAL "Release")
-if(CMAKE_BUILD_TYPE STREQUAL "Release")
+if(NOT CMAKE_BUILD_TYPE STREQUAL "Release")
   add_compile_options(-Wall -Wextra -Werror -pedantic)
 endif()
 
