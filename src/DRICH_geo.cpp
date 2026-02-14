@@ -402,7 +402,7 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
 #endif
 
 #ifdef WITH_IRT1_SUPPORT
-    double airgapZpos  = vesselPos.z() + airgapPV.position().z();
+    double airgapZpos = vesselPos.z() + airgapPV.position().z();
     desc.add(Constant("DRICH_aerogel_zpos", std::to_string(aerogelZpos)));
     desc.add(Constant("DRICH_airgap_zpos", std::to_string(airgapZpos)));
     desc.add(Constant("DRICH_filter_zpos", std::to_string(filterZpos)));
