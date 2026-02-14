@@ -151,21 +151,19 @@ jobs:
       - check-tracking-geometry
     steps:
     - uses: actions/checkout@v6
-      with:
-        ref: 25.07.0
     - uses: actions/download-artifact@v7
       with:
-        name: build-gcc-25.07.0-stable-full-eic-shell
+        name: build-gcc-nightly-full-eic-shell
         path: install/
     - uses: cvmfs-contrib/github-action-cvmfs@v5
     - uses: eic/run-cvmfs-osg-eic-shell@main
       with:
-        platform-release: "eic_xl:25.07.0-stable"
+        platform-release: "eic_xl:nightly"
         setup: install/bin/thisepic.sh
         run: |
           pushd scripts/material_map
-          export DETECTOR_CONFIG=epic_craterlake_material_map_25_07_0
-          ./run_material_map_validation.sh --nevents 500
+          export DETECTOR_CONFIG=epic_craterlake_material_map
+          ./run_material_map_validation.sh
           popd
     - uses: actions/upload-artifact@v6
       with:
@@ -570,7 +568,7 @@ jobs:
         if-no-files-found: error
     - name: Download previous artifact
       id: download_previous_artifact
-      uses: dawidd6/action-download-artifact@v11
+      uses: dawidd6/action-download-artifact@v14
       with:
         branch: ${{ github.event.pull_request.base.ref || github.ref_name }}
         path: ref/
@@ -638,7 +636,7 @@ jobs:
         if-no-files-found: error
     - name: Download previous artifact
       id: download_previous_artifact
-      uses: dawidd6/action-download-artifact@v11
+      uses: dawidd6/action-download-artifact@v14
       with:
         branch: ${{ github.event.pull_request.base.ref || github.ref_name }}
         path: ref/

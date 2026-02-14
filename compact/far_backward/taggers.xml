@@ -7,6 +7,16 @@
 
    <constant name="tracker_pixel_size" value="55*um"/>
 
+   <constant name="Tagger1_Layer_1_Z" value="3*mm"/>
+   <constant name="Tagger1_Layer_2_Z" value="103*mm"/>
+   <constant name="Tagger1_Layer_3_Z" value="203*mm"/>
+   <constant name="Tagger1_Layer_4_Z" value="303*mm"/>
+
+   <constant name="Tagger2_Layer_1_Z" value="3*mm"/>
+   <constant name="Tagger2_Layer_2_Z" value="103*mm"/>
+   <constant name="Tagger2_Layer_3_Z" value="203*mm"/>
+   <constant name="Tagger2_Layer_4_Z" value="303*mm"/>
+
   </define>
 
   <detectors>
@@ -25,12 +35,11 @@
         <dimensions  x="Tagger1_Width" y="Tagger1_Height"/>
 
         <comment> Where z is the position of the front face of the detector layer </comment>
-        <trackLayer  id="0" type="timepix" z="3*mm"   sensor_thickness="400*um"/>
-        <trackLayer  id="1" type="timepix" z="103*mm" sensor_thickness="400*um"/>
-        <trackLayer  id="2" type="timepix" z="203*mm" sensor_thickness="400*um"/>
-        <trackLayer  id="3" type="timepix" z="303*mm" sensor_thickness="400*um"/>
+        <trackLayer  id="0" type="timepix" z="Tagger1_Layer_1_Z" sensor_thickness="400*um"/>
+        <trackLayer  id="1" type="timepix" z="Tagger1_Layer_2_Z" sensor_thickness="400*um"/>
+        <trackLayer  id="2" type="timepix" z="Tagger1_Layer_3_Z" sensor_thickness="400*um"/>
+        <trackLayer  id="3" type="timepix" z="Tagger1_Layer_4_Z" sensor_thickness="400*um"/>
       </module>
-
       <module id="2" name="Tagger2">
         <comment> Position and rotation refer to the center front of tagger assembly, this should line up with the back of the exit window </comment>
         <position    x="Tagger2_X" y="Tagger2_Y" z="Tagger2_Z"/>
@@ -39,10 +48,10 @@
         <dimensions  x="Tagger2_Width" y="Tagger2_Height"/>
 
         <comment> Where z is the position of the front face of the detector layer </comment>
-        <trackLayer  id="0" type="timepix" z="3*mm"   sensor_thickness="400*um"/>
-        <trackLayer  id="1" type="timepix" z="103*mm" sensor_thickness="400*um"/>
-        <trackLayer  id="2" type="timepix" z="203*mm" sensor_thickness="400*um"/>
-        <trackLayer  id="3" type="timepix" z="303*mm" sensor_thickness="400*um"/>
+        <trackLayer  id="0" type="timepix" z="Tagger2_Layer_1_Z" sensor_thickness="400*um"/>
+        <trackLayer  id="1" type="timepix" z="Tagger2_Layer_2_Z" sensor_thickness="400*um"/>
+        <trackLayer  id="2" type="timepix" z="Tagger2_Layer_3_Z" sensor_thickness="400*um"/>
+        <trackLayer  id="3" type="timepix" z="Tagger2_Layer_4_Z" sensor_thickness="400*um"/>
       </module>
 
     </detector>
