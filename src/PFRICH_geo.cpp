@@ -15,7 +15,7 @@
 
 using namespace dd4hep;
 
-#ifdef _WITH_IRT_OPTICS_
+#ifdef WITH_IRT2_SUPPORT
 #include "IRT2/CherenkovDetectorCollection.h"
 
 #include "IRT2/ConicalSurface.h"
@@ -79,7 +79,7 @@ static Ref_t createDetector(Detector& description, xml_h e, SensitiveDetector se
   int id = detElem.hasAttr(_U(id)) ? detElem.id() : 0;
 
   // Start optical configuration if needed;
-#ifdef _WITH_IRT_OPTICS_
+#ifdef WITH_IRT2_SUPPORT
   auto geometry = new CherenkovDetectorCollection();
   auto cdet     = geometry->AddNewDetector(detName.c_str());
 #endif
@@ -114,7 +114,7 @@ static Ref_t createDetector(Detector& description, xml_h e, SensitiveDetector se
   for (const auto& idField : sensorIDfields)
     cellMask |= readoutCoder[idField].mask();
   description.add(Constant("PFRICH_cell_mask", std::to_string(cellMask)));
-#ifdef _WITH_IRT_OPTICS_
+#ifdef WITH_IRT2_SUPPORT
   // Do not mind to store it twice;
   cdet->SetReadoutCellMask(cellMask);
 #endif
@@ -126,7 +126,7 @@ static Ref_t createDetector(Detector& description, xml_h e, SensitiveDetector se
     return enc;
   };
 
-#ifdef _WITH_IRT_OPTICS_
+#ifdef WITH_IRT2_SUPPORT
   const bool flip   = true;
   const double sign = flip ? -1.0 : 1.0;
 #endif
@@ -159,7 +159,7 @@ static Ref_t createDetector(Detector& description, xml_h e, SensitiveDetector se
     pv.addPhysVolID("system", id);
   sdet.setPlacement(pv);
 
-#ifdef _WITH_IRT_OPTICS_
+#ifdef WITH_IRT2_SUPPORT
   // FIXME: do it better later;
   double fvOffset = fabs(_FIDUCIAL_VOLUME_OFFSET_);
 #endif
@@ -175,7 +175,7 @@ static Ref_t createDetector(Detector& description, xml_h e, SensitiveDetector se
       _FIDUCIAL_VOLUME_LENGTH_ - _VESSEL_FRONT_SIDE_THICKNESS_ - _SENSOR_AREA_LENGTH_;
   double gas_volume_radius = _VESSEL_OUTER_RADIUS_ - _VESSEL_OUTER_WALL_THICKNESS_;
   double gas_volume_offset = -(_SENSOR_AREA_LENGTH_ - _VESSEL_FRONT_SIDE_THICKNESS_) / 2;
-#ifdef _WITH_IRT_OPTICS_
+#ifdef WITH_IRT2_SUPPORT
   double gvOffset = gas_volume_offset;
 #endif
 
@@ -184,7 +184,7 @@ static Ref_t createDetector(Detector& description, xml_h e, SensitiveDetector se
                             FlangeCut(description, gas_volume_length + 1 * mm, _FLANGE_CLEARANCE_));
   Volume gasVolume(detName + "_GasVol", gasSolid, vesselGas);
   pfRICH_volume.placeVolume(gasVolume, Position(0, 0, gas_volume_offset));
-#ifdef _WITH_IRT_OPTICS_
+#ifdef WITH_IRT2_SUPPORT
   {
     // FIXME: Z-location does not really matter here, right?;
     auto boundary =
@@ -298,7 +298,7 @@ static Ref_t createDetector(Detector& description, xml_h e, SensitiveDetector se
       } //for ia
     } // for ir
 
-#ifdef _WITH_IRT_OPTICS_
+#ifdef WITH_IRT2_SUPPORT
     {
       TVector3 nx(1 * sign, 0, 0), ny(0, -1, 0);
 
@@ -332,7 +332,7 @@ static Ref_t createDetector(Detector& description, xml_h e, SensitiveDetector se
 
     gasVolume.placeVolume(acVol, Position(0, 0, gzOffset + acthick / 2));
 
-#ifdef _WITH_IRT_OPTICS_
+#ifdef WITH_IRT2_SUPPORT
     {
       TVector3 nx(1 * sign, 0, 0), ny(0, -1, 0);
 
@@ -346,7 +346,7 @@ static Ref_t createDetector(Detector& description, xml_h e, SensitiveDetector se
 #endif
   }
 
-#ifdef _WITH_IRT_OPTICS_
+#ifdef WITH_IRT2_SUPPORT
   IRT2::OpticalBoundary* mboundaries[2] = {0, 0};
 #endif
 
@@ -390,7 +390,7 @@ static Ref_t createDetector(Detector& description, xml_h e, SensitiveDetector se
                                mirrorSurf, outer_mirrorVol);
         mirrorSkin.isValid();
 
-#ifdef _WITH_IRT_OPTICS_
+#ifdef WITH_IRT2_SUPPORT
         auto msurface = new ConicalSurface(
             sign * (1 / mm) * TVector3(0, 0, fvOffset + gvOffset + mzoffset),
             sign * TVector3(0, 0, 1), mirror_r0[im] / mm, mirror_r1[im] / mm, mlen / mm);
@@ -418,7 +418,7 @@ static Ref_t createDetector(Detector& description, xml_h e, SensitiveDetector se
                                mirrorSurf, inner_mirrorVol);
         mirrorSkin.isValid();
 
-#ifdef _WITH_IRT_OPTICS_
+#ifdef WITH_IRT2_SUPPORT
         auto msurface =
             new ConicalSurface(sign * (1 / mm) * TVector3(0, 0, fvOffset + gvOffset + mzoffset),
                                sign * TVector3(0, 0, 1), (mirror_r0[im] + mirror_thickness) / mm,
@@ -456,7 +456,7 @@ static Ref_t createDetector(Detector& description, xml_h e, SensitiveDetector se
 
     double xysize = _HRPPD_TILE_SIZE_, wndthick = _HRPPD_WINDOW_THICKNESS_;
 
-#ifdef _WITH_IRT_OPTICS_
+#ifdef WITH_IRT2_SUPPORT
     // [0,0]: have neither access to G4VSolid nor to G4Material; IRT code does not care; fine;
     auto pd = new IRT2::CherenkovPhotonDetector(0, 0);
 
@@ -473,7 +473,7 @@ static Ref_t createDetector(Detector& description, xml_h e, SensitiveDetector se
     double hrppd_container_volume_thickness = _HRPPD_CONTAINER_VOLUME_HEIGHT_;
 
     // For now assume it is a unique surface, same for all HRPPDs;
-#ifdef _WITH_IRT_OPTICS_
+#ifdef WITH_IRT2_SUPPORT
     {
       TVector3 nx(1 * sign, 0, 0), ny(0, -1, 0);
 
@@ -656,7 +656,7 @@ static Ref_t createDetector(Detector& description, xml_h e, SensitiveDetector se
           _FIDUCIAL_VOLUME_LENGTH_ / 2 - _SENSOR_AREA_LENGTH_ + _HRPPD_CONTAINER_VOLUME_HEIGHT_ / 2;
       pfRICH_volume.placeVolume(hrppdVol_air, Position(xy.X(), xy.Y(), dz));
 
-#ifdef _WITH_IRT_OPTICS_
+#ifdef WITH_IRT2_SUPPORT
       {
         // Photocathode surface;
         double xOffset = xy.X(), yOffset = xy.Y();

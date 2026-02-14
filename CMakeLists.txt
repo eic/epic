@@ -69,7 +69,7 @@ if(WITH_IRT1_SUPPORT)
     target_compile_definitions(${a_lib_name} PRIVATE WITH_IRT1_SUPPORT)
 endif()
 if(IRT2_FOUND)
-    target_compile_definitions(${a_lib_name} PRIVATE _WITH_IRT_OPTICS_)
+    target_compile_definitions(${a_lib_name} PRIVATE WITH_IRT2_SUPPORT)
     target_link_libraries(${a_lib_name} PRIVATE IRT2)
 endif()
 

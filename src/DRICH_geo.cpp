@@ -23,7 +23,7 @@
 using namespace dd4hep;
 using namespace dd4hep::rec;
 
-#ifdef _WITH_IRT_OPTICS_
+#ifdef WITH_IRT2_SUPPORT
 #include <TFile.h>
 
 #include "IRT2/CherenkovDetectorCollection.h"
@@ -44,7 +44,7 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
   sens.setType("tracker");
 
   // Start optical configuration if needed;
-#ifdef _WITH_IRT_OPTICS_
+#ifdef WITH_IRT2_SUPPORT
   auto geometry = CherenkovDetectorCollection::Instance();
   auto cdet     = geometry->AddNewDetector(detName.c_str());
 #endif
@@ -60,7 +60,7 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
   auto vesselRmax2  = dims.attr<double>(_Unicode(rmax2));
   auto snoutLength  = dims.attr<double>(_Unicode(snout_length));
   auto nSectors     = dims.attr<int>(_Unicode(nsectors));
-#ifdef _WITH_IRT_OPTICS_
+#ifdef WITH_IRT2_SUPPORT
   cdet->SetSectorCount(nSectors);
   // The way Chris defined it in the geometry;
   cdet->SetSectorPhase(0.0);
@@ -180,7 +180,7 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
   if (debugSector)
     gasvolVis = vesselVis = desc.invisible();
 
-#ifdef _WITH_IRT_OPTICS_
+#ifdef WITH_IRT2_SUPPORT
   SphericalSurface* msurface       = 0;
   IRT2::OpticalBoundary* mboundary = 0;
 #endif
@@ -203,7 +203,7 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
       enc |= uint64_t(idValue) << readoutCoder[idField].offset();
     return enc;
   };
-#ifdef _WITH_IRT_OPTICS_
+#ifdef WITH_IRT2_SUPPORT
   uint64_t sector_mask = ~(0x0ul) ^ readoutCoder["sector"].mask();
   // Want to mask away dRICH sector bits in this mask;
   cdet->SetReadoutCellMask(cellMask & sector_mask);
@@ -395,7 +395,7 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
     DetElement filterDE(det, "filter_de", 0);
     filterDE.setPlacement(filterPV);
 
-#if defined(_WITH_IRT_OPTICS_) || defined(WITH_IRT1_SUPPORT)
+#if defined(WITH_IRT2_SUPPORT) || defined(WITH_IRT1_SUPPORT)
     // radiator z-positions (w.r.t. IP); only needed downstream if !debugOptics
     double aerogelZpos = vesselPos.z() + aerogelPV.position().z();
     double filterZpos  = vesselPos.z() + filterPV.position().z();
@@ -408,7 +408,7 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
     desc.add(Constant("DRICH_filter_zpos", std::to_string(filterZpos)));
 #endif
 
-#ifdef _WITH_IRT_OPTICS_
+#ifdef WITH_IRT2_SUPPORT
     {
       TVector3 nx(1, 0, 0), ny(0, -1, 0);
 
@@ -451,7 +451,7 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
   desc.add(Constant("DRICH_filter_material", filterMat.ptr()->GetName(), "string"));
   desc.add(Constant("DRICH_gasvol_material", gasvolMat.ptr()->GetName(), "string"));
 #endif
-#ifdef _WITH_IRT_OPTICS_
+#ifdef WITH_IRT2_SUPPORT
   // [0,0]: have neither access to G4VSolid nor to G4Material; IRT code does not care; fine;
   auto pd = new IRT2::CherenkovPhotonDetector(0, 0);
 
@@ -542,14 +542,14 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
                            mirrorVol);
     mirrorSkin.isValid();
 
-#if defined(_WITH_IRT_OPTICS_) || defined(WITH_IRT1_SUPPORT)
+#if defined(WITH_IRT2_SUPPORT) || defined(WITH_IRT1_SUPPORT)
     // reconstruction constants (w.r.t. IP)
     // - access sector center after `sectorRotation`
     auto mirrorFinalPlacement = mirrorSectorPlacement * mirrorPlacement;
     auto mirrorFinalCenter    = vesselPos + mirrorFinalPlacement.Translation().Vect();
 #endif
 
-#ifdef _WITH_IRT_OPTICS_
+#ifdef WITH_IRT2_SUPPORT
     {
       // NB: default is concave, which is fine;
       msurface = new SphericalSurface(
@@ -825,7 +825,7 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
                 throw std::runtime_error("dRICH sensor orientation test failed");
               }
 
-#ifdef _WITH_IRT_OPTICS_
+#ifdef WITH_IRT2_SUPPORT
               {
                 // SiPM panel surface;
                 auto surface = new FlatSurface(
