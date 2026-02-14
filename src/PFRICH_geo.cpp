@@ -471,6 +471,7 @@ static Ref_t createDetector(Detector& description, xml_h e, SensitiveDetector se
     {
       unsigned const hdim = 9;
       const unsigned flags[hdim][hdim] = {
+// clang-format off
 	// NB: WYSIWIG fashion; well, it is top/ bottom and left/right symmetric;
 	{0, 0, 1, 1, 1, 1, 1, 0, 0},
 	{0, 1, 1, 1, 1, 1, 1, 1, 0},
@@ -481,6 +482,7 @@ static Ref_t createDetector(Detector& description, xml_h e, SensitiveDetector se
 	{1, 1, 1, 1, 1, 1, 1, 1, 1},
 	{0, 1, 1, 1, 1, 1, 1, 1, 0},
 	{0, 0, 1, 1, 1, 1, 1, 0, 0}};
+// clang-format on
       
       for (unsigned ix = 0; ix < hdim; ix++) {
 	double xOffset = (_HRPPD_TILE_SIZE_ + _HRPPD_INSTALLATION_GAP_) * (ix - (hdim - 1) / 2.);
