@@ -143,6 +143,7 @@
     thickness="DRICH_aerogel_thickness"
     />
   <coronas
+    segmentation="trapezoidal"
     thickness="DRICH_corona_thickness"
     num="DRICH_num_coronas"
     material="CarbonFiber_15percent"
