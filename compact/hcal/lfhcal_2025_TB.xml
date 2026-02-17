@@ -1,7 +1,7 @@
 <lccdd>
 
-  <info name="lfhcal_8m_module_only.xml"
-        title="EPIC LFHCAL Single 8M Module"
+  <info name="lfhcal_2025_TB.xml"
+        title="EPIC LFHCAL 2x 8M Module, configuration as TB at PS in 2025"
         author="@FriederikeBock"
         url="https://github.com/FriederikeBock"
         status="development"
