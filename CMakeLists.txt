@@ -46,7 +46,7 @@ include(GNUInstallDirs)
 # Dependencies
 find_package(DD4hep 1.27 REQUIRED COMPONENTS DDCore DDRec)
 find_package(fmt REQUIRED)
-find_package(IRT2)
+find_package(IRT2 2.1.1)
 
 #-----------------------------------------------------------------------------------
 set(a_lib_name ${PROJECT_NAME})
