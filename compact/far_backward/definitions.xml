@@ -394,7 +394,7 @@
     <!-- Lumi Exit Window -->
     <constant name="LumiWin_Zstart"       value="-30.0*m"/>
     <constant name="LumiWin_thickness"    value="1*cm"/>
-    <constant name="LumiWin_R"            value="4*cm"/> <!-- opening radius of tagger box -->
+    <constant name="LumiWin_R"            value="Exit_Height"/> <!-- opening radius of tagger box -->
     <constant name="LumiWin_Z"            value="LumiWin_Zstart - LumiWin_thickness/2."/>
 
     <!-- Lumi collimator -->

@@ -130,7 +130,7 @@ static Ref_t create_detector(Detector& desc, xml_h e, SensitiveDetector /* sens 
     // Box Entry_Beam_Box(ED_X + wall, ED_Y + wall, ED_Z);
     Tube Entry_Beam_Box(ED_X, ED_X + wall, ED_Z / 2);
     // Box Entry_Vacuum_Box(ED_X, ED_Y, ED_Z - wall);
-    Tube Entry_Vacuum_Box(0, ED_X, ED_Z / 2 - wall);
+    Tube Entry_Vacuum_Box(0, ED_X, ED_Z / 2);
     Tube Lumi_Exit(0, Lumi_R, ED_Z / 2);
 
     // Future angled exit window and more realistic tube shaped pipe.
