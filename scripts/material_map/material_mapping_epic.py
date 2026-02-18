@@ -4,12 +4,18 @@
 
 import os
 import argparse
+from pathlib import Path
 
 import acts
-from acts.examples import JsonFormat
+from material_mapping import runMaterialMapping
+
+try:
+    from acts.examples.json import JsonFormat
+except ImportError:
+    from acts.examples import JsonFormat
 
 import epic
-from material_mapping import runMaterialMapping
+
 
 if "__main__" == __name__:
 
@@ -52,10 +58,10 @@ if "__main__" == __name__:
     runMaterialMapping(
         trackingGeometry,
         decorators,
-        outputDir = os.getcwd(),
-        inputDir  = os.getcwd(),
+        outputDir=Path.cwd(),
+        inputDir=Path.cwd(),
         readCachedSurfaceInformation=False,
-        mapVolume= False,
-        mapName  = mapName,
-        mapFormat = mapFormat,
+        mapVolume=False,
+        mapName=mapName,
+        mapFormat=mapFormat,
     ).run()

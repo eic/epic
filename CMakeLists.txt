@@ -46,6 +46,7 @@ include(GNUInstallDirs)
 # Dependencies
 find_package(DD4hep 1.27 REQUIRED COMPONENTS DDCore DDRec)
 find_package(fmt REQUIRED)
+find_package(IRT2 2.1.1)
 
 #-----------------------------------------------------------------------------------
 set(a_lib_name ${PROJECT_NAME})
@@ -55,6 +56,7 @@ dd4hep_configure_output(INSTALL ${CMAKE_INSTALL_PREFIX})
 dd4hep_set_compiler_flags()
 
 file(GLOB sources CONFIGURE_DEPENDS src/*.cpp)
+
 dd4hep_add_plugin(${a_lib_name}
   SOURCES ${sources}
   USES ROOT::Core ROOT::Gdml
@@ -62,6 +64,14 @@ dd4hep_add_plugin(${a_lib_name}
 target_link_libraries(${a_lib_name}
   PUBLIC DD4hep::DDCore DD4hep::DDRec fmt::fmt
   )
+set(WITH_IRT1_SUPPORT TRUE CACHE STRING "Enable constant definitions used by EICrecon integration in IRT1")
+if(WITH_IRT1_SUPPORT)
+    target_compile_definitions(${a_lib_name} PRIVATE WITH_IRT1_SUPPORT)
+endif()
+if(IRT2_FOUND)
+    target_compile_definitions(${a_lib_name} PRIVATE WITH_IRT2_SUPPORT)
+    target_link_libraries(${a_lib_name} PRIVATE IRT2)
+endif()
 
 #-----------------------------------------------------------------------------------
 # Parse jinja templates: once by default, and once for all yml files
