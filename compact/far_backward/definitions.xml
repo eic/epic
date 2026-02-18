@@ -14,7 +14,7 @@
 
     <comment> Electron magnet dimensions and positions </comment>
 
-    <constant name="Q1eR_InnerRadius"     value="63.0*mm"/>
+    <constant name="Q1eR_InnerRadius"     value="54.9*mm"/>
     <constant name="Q1eR_Theta"           value="0.000000*rad"/>
     <constant name="Q1eR_CenterZ"         value="-6.200*m"/>
     <constant name="Q1eR_CenterX"         value="-0.000000*m"/>
