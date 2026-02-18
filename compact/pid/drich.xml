@@ -43,6 +43,15 @@
 <constant name="DRICH_pdu_sensor_gap"  value="0.2*mm"/> <!-- gap between adjacent sensors -->
 <constant name="DRICH_pdu_gap"         value="3.0*mm"/> <!-- gap between adjacent PDUs -->
 <!-- settings and switches -->
+
+
+<constant name="DRICH_corona_thickness" value="1*mm"/>
+<constant name="DRICH_num_coronas" value="5"/>
+<constant name="DRICH_d_square" value="200*mm"/>
+
+
+
+
 <comment>
 - `DRICH_debug_optics`:    1 = all components become vacuum, except for mirrors; test opticalphotons from IP
                            2 = all components become vacuum, except for mirrors and `gasvol`, test charged particles from IP
@@ -132,6 +141,16 @@
     material="Aerogel_DRICH"
     vis="DRICH_aerogel_vis"
     thickness="DRICH_aerogel_thickness"
+    />
+  <coronas
+    segmentation="trapezoidal"
+    thickness="DRICH_corona_thickness"
+    num="DRICH_num_coronas"
+    material="CarbonFiber_15percent"
+    vis="DRICH_filter_vis"
+    d= "DRICH_d_square"
+    num_segments="10,18,24,30"
+    radii= "12.9596, 31.8, 51.0, 70.5, 88.7962"
     />
   <airgap
     material="AirOptical"
