@@ -143,9 +143,9 @@ static Ref_t create_detector(Detector& desc, xml_h e, SensitiveDetector /* sens 
     // (x,z) = (0, off - ED_Z/2) and its axis is along global z.
     // This uses the same right-handed RotationY convention as the full detector placement.
     Transform3D entry_tr(
-      RotationY(-global_theta),
-      Position(ED_Z / 2 * sin(global_theta) - pos.x() * cos(global_theta), 0,
-           Length / 2 - ED_Z / 2 * cos(global_theta) - pos.x() * sin(global_theta)));
+        RotationY(-global_theta),
+        Position(ED_Z / 2 * sin(global_theta) - pos.x() * cos(global_theta), 0,
+                 Length / 2 - ED_Z / 2 * cos(global_theta) - pos.x() * sin(global_theta)));
 
     // Add entry boxes to main beamline volume
     Wall_Box   = UnionSolid(Wall_Box, Entry_Beam_Box, entry_tr);
