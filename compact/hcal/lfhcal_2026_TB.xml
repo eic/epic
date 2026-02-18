@@ -31,7 +31,7 @@
       Test beam setup 2026
 
       LFHCal module features 60 layers of Steel/Sc 1.6 cm/0.4 cm
-      
+
       Currently don't have an implementation of electronics, so just leave that area (final 10 cm) empty
       So then, actual detector area is "LFHCAL_length - LFHCALElectronicsThickness" long
     </documentation>
