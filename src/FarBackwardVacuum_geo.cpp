@@ -139,13 +139,13 @@ static Ref_t create_detector(Detector& desc, xml_h e, SensitiveDetector /* sens 
     // CutTube Entry_Vacuum_Box(0,    ED_X,        ED_Z - wall, 0,2*pi, sin(angle),0,cos(angle), 0,0,1);
     // CutTube Lumi_Exit       (0,    Lumi_R,      ED_Z,        0,2*pi, sin(angle),0,cos(angle), 0,0,1);
 
-    // Transformation to place entry box at the start of the beamline box and rotated.
-    // Subtract half of the length of the main beampipe to get to the end position.
-    // The rotate into golbal coordinates and then add half of the length of the lumi exit pipe
+    // Transformation to place entry box so its global center sits at
+    // (x,z) = (0, off - ED_Z/2) and its axis is along global z.
+    // This uses the same right-handed RotationY convention as the full detector placement.
     Transform3D entry_tr(
-        RotationY(-global_theta),
-        Position((Length / 2 - ED_Z / 2) * sin(global_theta) + 2 * pos.x() / cos(global_theta), 0,
-                 (Length / 2 - ED_Z / 2) * cos(global_theta) + pos.x() * tan(global_theta)));
+      RotationY(-global_theta),
+      Position(ED_Z / 2 * sin(global_theta) - pos.x() * cos(global_theta), 0,
+           Length / 2 - ED_Z / 2 * cos(global_theta) - pos.x() * sin(global_theta)));
 
     // Add entry boxes to main beamline volume
     Wall_Box   = UnionSolid(Wall_Box, Entry_Beam_Box, entry_tr);
