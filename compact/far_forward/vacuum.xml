@@ -59,6 +59,8 @@
                 <aperture x="B2PF_InnerRadius*2" y="B2PF_InnerRadius*2"  r="B2PF_InnerRadius" />
         </element>
 
+        <end_of_the_world z="exp_hall_dz + 2.0 * forward_dz"/>
+
       </detector>
   </detectors>
 
