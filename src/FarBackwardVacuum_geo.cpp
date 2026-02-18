@@ -238,7 +238,7 @@ static void Make_Tagger(Detector& desc, xml_coll_t& mod, Assembly& env) {
     Volume layVol("WindowVolume", Window_Box, WindowMaterial);
     layVol.setVisAttributes(desc.visAttributes(layerVis));
 
-    env.placeVolume(layVol, Position(0, 0, layerThickness / 2));
+    env.placeVolume(layVol, Position(0, 0, -layerThickness / 2));
 
     // Currently only one "window" layer implemented
     break;
