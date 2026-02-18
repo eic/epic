@@ -95,7 +95,7 @@
     <detector name="Q2ER_BeamlineMagnet" type="ip6_CryostatMagnet">
       <coil name="Q2ER_Quad_Coil" vis="MagnetCoilVis" shape="ConeSegment">
         <placement x="Q2ER_Center_posX" y="Q2ER_Center_posY" z="Q2ER_Center_posZ" theta="Q2ER_Rotation_Angle" phiNum="3" phiStart="90*deg" phiStep="90*deg"/>
-        <dimensions rmin1="7.810500*cm" rmax1="8.176260*cm" rmin2="7.810500*cm" rmax2="8.176260*cm" dz="134.919999*cm/2." sphi="45.0*deg-60.0*deg/2." dphi="60.0*deg"/>0*deg-60.0*deg/2." dphi="60.0*deg"/>
+        <dimensions rmin1="7.810500*cm" rmax1="8.176260*cm" rmin2="7.810500*cm" rmax2="8.176260*cm" dz="134.919999*cm/2." sphi="45.0*deg-60.0*deg/2." dphi="60.0*deg"/>
       </coil>
       <tube name="Q2ER_InnerSupport_Tube" vis="MagnetSupportTubeVis">
         <placement x="Q2ER_Center_posX" y="Q2ER_Center_posY" z="Q2ER_Center_posZ" theta="Q2ER_Rotation_Angle"/>
