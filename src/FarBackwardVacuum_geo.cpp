@@ -58,7 +58,7 @@ static Ref_t create_detector(Detector& desc, xml_h e, SensitiveDetector /* sens 
   double Lumi_R = EB.attr<double>(_Unicode(lumiR));
 
   // Central pipe box
-  Tube Extended_Beam_Box(Width, Width, Length / 2); // More realistic tube pipe
+  Tube Extended_Beam_Box(Width - wall, Width, Length / 2); // More realistic tube pipe
   // Box Extended_Beam_Box(Width, Height, Length); // Simpler box pipe
 
   // Central vacuum box
