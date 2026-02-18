@@ -144,6 +144,31 @@ jobs:
     with:
       detector_configs: "['epic_craterlake', 'epic_ip6']"
 
+  check-geometry-checksum:
+    runs-on: ubuntu-latest
+    needs: build
+    strategy:
+      matrix:
+        detector_config: [epic_craterlake]
+    steps:
+    - uses: actions/checkout@v4
+    - uses: actions/download-artifact@v4
+      with:
+        name: build-gcc-full-eic-shell
+        path: install/
+    - uses: cvmfs-contrib/github-action-cvmfs@v5
+    - uses: eic/run-cvmfs-osg-eic-shell@main
+      with:
+        platform-release: "eic_xl:nightly"
+        network_types: "none"
+        setup: install/bin/thisepic.sh
+        run: |
+          if ! geoPluginRun -print ERROR -input ${DETECTOR_PATH}/${DETECTOR_CONFIG}.xml -plugin DD4hep_DetectorDump -level 0 | grep ERROR ; then
+            geoPluginRun -print ERROR -input ${DETECTOR_PATH}/${{matrix.detector_config}}.xml -plugin DD4hepDetectorChecksum -meshes -readout
+          else
+            exit 1
+          fi
+
   validate-material-map:
     runs-on: ubuntu-latest
     needs:
