@@ -6,26 +6,51 @@
     <constant name="ElectronBeamEnergy" value="10*GeV"  />
     <constant name="IonBeamEnergy"      value="100*GeV" />
 
-    <constant name="FieldScaleFactor" value="250.0/275.0"  /> <!-- only use for light ion beams!!! ASK FF EXPERTS -->
+    <constant name="FieldScaleFactor"   value="250.0/275.0"  /> <!-- only use for light ion beams!!! ASK FF EXPERTS -->
 
     <comment>
        Backwards Fields
-       Values taken from: https://indico.bnl.gov/event/10974/contributions/51260/
-       Relevent values in the tables scale linearly with beam energy
+       Reference field strengths at 18 GeV defined in beamline_constants.xml
+       Scale by electron beam energy ratio for this configuration
     </comment>
 
+    <xi:include href="beamline_constants.xml" xmlns:xi="http://www.w3.org/2001/XInclude"/>
 
-    <!-- Beamline -->
-    <constant name="Q1eR_Gradient"  value="-0.739741*tesla/meter/GeV*ElectronBeamEnergy"/>
-    <constant name="Q2eR_Gradient"  value="0.66821*tesla/meter/GeV*ElectronBeamEnergy"/>
-    <constant name="Q3eR_Gradient"  value="0.21674*tesla/meter/GeV*ElectronBeamEnergy"/>
+    <!-- Scale reference field strengths by beam energy ratio -->
 
-    <constant name="B2AeR_B"        value="0.0106667*tesla/GeV*ElectronBeamEnergy"/>
-    <constant name="B2BeR_B"        value="0.0132222*tesla/GeV*ElectronBeamEnergy"/>
+    <!-- Quadrupole gradients scaled to beam energy -->
+    <constant name="Q1eR_Gradient"   value="Q1eR_Gradient_perGeV * ElectronBeamEnergy"/>
+    <constant name="Q2eR_Gradient"   value="Q2eR_Gradient_perGeV * ElectronBeamEnergy"/>
+    <constant name="Q3eR_Gradient"   value="Q3eR_Gradient_perGeV * ElectronBeamEnergy"/>
+    <constant name="SQ3eR_Gradient"  value="SQ3eR_Gradient_perGeV * ElectronBeamEnergy"/>
+    <constant name="SQ4eR_Gradient"  value="SQ4eR_Gradient_perGeV * ElectronBeamEnergy"/>
+    <constant name="Q4eR_Gradient"   value="Q4eR_Gradient_perGeV * ElectronBeamEnergy"/>
+    <constant name="SQ5eR_Gradient"  value="SQ5eR_Gradient_perGeV * ElectronBeamEnergy"/>
+    <constant name="Q5eR_Gradient"   value="Q5eR_Gradient_perGeV * ElectronBeamEnergy"/>
+    <constant name="SQ6eR_Gradient"  value="SQ6eR_Gradient_perGeV * ElectronBeamEnergy"/>
+    <constant name="SQ7eR_Gradient"  value="SQ7eR_Gradient_perGeV * ElectronBeamEnergy"/>
+    <constant name="SQ8eR_Gradient"  value="SQ8eR_Gradient_perGeV * ElectronBeamEnergy"/>
+    <constant name="Q8eR_Gradient"   value="Q8eR_Gradient_perGeV * ElectronBeamEnergy"/>
+    <constant name="Q9eR_Gradient"   value="Q9eR_Gradient_perGeV * ElectronBeamEnergy"/>
+    <constant name="SQ10eR_Gradient" value="SQ10eR_Gradient_perGeV * ElectronBeamEnergy"/>
+    <constant name="Q10eR_Gradient"  value="Q10eR_Gradient_perGeV * ElectronBeamEnergy"/>
+    <constant name="Q11eR_Gradient"  value="Q11eR_Gradient_perGeV * ElectronBeamEnergy"/>
+    <constant name="Q12eR_Gradient"  value="Q12eR_Gradient_perGeV * ElectronBeamEnergy"/>
+    <constant name="Q13eR_Gradient"  value="Q13eR_Gradient_perGeV * ElectronBeamEnergy"/>
+
+    <!-- Dipole fields scaled to beam energy -->
+    <constant name="B2AeR_B"  value="B2AeR_B_perGeV * ElectronBeamEnergy"/>
+    <constant name="B2BeR_B"  value="B2BeR_B_perGeV * ElectronBeamEnergy"/>
+    <constant name="B3eR_B"   value="B3eR_B_perGeV * ElectronBeamEnergy"/>
+    <constant name="D4eR_1_B" value="D4eR_1_B_perGeV * ElectronBeamEnergy"/>
+    <constant name="D4eR_2_B" value="D4eR_2_B_perGeV * ElectronBeamEnergy"/>
+    <constant name="D4eR_3_B" value="D4eR_3_B_perGeV * ElectronBeamEnergy"/>
+    <constant name="D4eR_4_B" value="D4eR_4_B_perGeV * ElectronBeamEnergy"/>
+    <constant name="D4eR_5_B" value="D4eR_5_B_perGeV * ElectronBeamEnergy"/>
 
     <!-- Luminosity System -->
-    <constant name="LumiSweepMag_B"     value="1/1.2*tesla"/>
-    <constant name="LumiAnalyzerMag_B"  value="1/1.2*tesla"/>
+    <constant name="LumiSweepMag_B"    value="1/1.2*tesla"/>
+    <constant name="LumiAnalyzerMag_B" value="1/1.2*tesla"/>
 
 
     <comment>
@@ -41,28 +66,28 @@
     <constant name="B1PF_GradientMax"  value="0.0*tesla/m"/>
     <constant name="B1APF_GradientMax" value="0.0*tesla/m"/>
     <constant name="B2PF_GradientMax"  value="0.0*tesla/m"/>
-    <constant name="Q0EF_GradientMax" value="-13.12887*tesla/m"/>
+    <constant name="Q0EF_GradientMax"  value="-13.12887*tesla/m"/>
     <constant name="Q1EF_GradientMax"  value="5.85089*tesla/m"/>
 
-    <constant name="B0PF_Bmax"  value="1.1840539*tesla"/>
-    <constant name="B0APF_Bmax" value="3.4314469*tesla"/>
-    <constant name="Q1APF_Bmax" value="0.0*tesla"/>
-    <constant name="Q1BPF_Bmax" value="0.0*tesla"/>
-    <constant name="Q2PF_Bmax"  value="0.0*tesla"/>
-    <constant name="B1PF_Bmax"  value="3.447989*tesla"/>
-    <constant name="B1APF_Bmax" value="2.7*tesla"/>
-    <constant name="B2PF_Bmax" value="-4.7890142*tesla"/>
-    <constant name="Q0EF_BMax" value="0.0*tesla"/>
-    <constant name="Q1EF_BMax"  value="0.0*tesla"/>
+    <constant name="B0PF_Bmax"         value="1.1840539*tesla"/>
+    <constant name="B0APF_Bmax"        value="3.4314469*tesla"/>
+    <constant name="Q1APF_Bmax"        value="0.0*tesla"/>
+    <constant name="Q1BPF_Bmax"        value="0.0*tesla"/>
+    <constant name="Q2PF_Bmax"         value="0.0*tesla"/>
+    <constant name="B1PF_Bmax"         value="3.447989*tesla"/>
+    <constant name="B1APF_Bmax"        value="2.7*tesla"/>
+    <constant name="B2PF_Bmax"         value="-4.7890142*tesla"/>
+    <constant name="Q0EF_BMax"         value="0.0*tesla"/>
+    <constant name="Q1EF_BMax"         value="0.0*tesla"/>
 
     <comment>
     These are the ten-sigma cuts for the Roman pots, translated to the physical layout we currently have.
     They are not perfectly ten-sigma for reasons of physical geometry.
     </comment>
 
-        <constant name="offset_central_RP_section" value ="0.71*cm"/>
-    <constant name="offset_intermediate_1_RP_section" value ="0.55*cm"/>
-    <constant name="offset_intermediate_2_RP_section" value ="0.0*cm"/>
-    <constant name="offset_outer_RP_section" value ="0.0*cm"/>
+    <constant name="offset_central_RP_section"        value="0.71*cm"/>
+    <constant name="offset_intermediate_1_RP_section" value="0.55*cm"/>
+    <constant name="offset_intermediate_2_RP_section" value="0.0*cm"/>
+    <constant name="offset_outer_RP_section"          value="0.0*cm"/>
 
   </define>

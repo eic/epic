@@ -23,7 +23,7 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector /
   string mat_name = dd4hep::getAttrOrDefault<string>(x_det, _U(material), "Aluminum");
   //
   double sizeX = x_dim.x();
-  double sizeY = x_dim.y();
+  // double sizeY = x_dim.y();
   double sizeZ = x_dim.z();
   double posX  = x_pos.x();
   double posY  = x_pos.y();
@@ -32,7 +32,7 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector /
   double rotY  = x_rot.y();
   double rotZ  = x_rot.z();
 
-  Box box(sizeX, sizeY, sizeZ);
+  Tube box(0.0, sizeX, sizeZ);
   Volume vol(det_name + "_vol_ExitWindow", box, description.material(mat_name));
   vol.setVisAttributes(description.visAttributes(x_det.visStr()));
 
