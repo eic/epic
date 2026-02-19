@@ -29,7 +29,8 @@
         length="Q2eR_Length" theta="0"
         rout1="Q2eR_InnerRadius" rout2="Q2eR_InnerRadius">
       </pipe>
-      <pipe id="4" name="Pipe_Q2eR_to_B2AeR"/>
+        <combine name="Pipe_Q2eR_to_B2BeR_combined" start_id="4" end_id="7"/>
+        <pipe id="4" name="Pipe_Q2eR_to_B2AeR"/>
       <pipe id="5" name="Pipe_in_B2AeR"
         xcenter="0" zcenter="B2AeR_CenterPosition"
         length="B2AeR_Length" theta="0"
