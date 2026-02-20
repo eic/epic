@@ -81,10 +81,10 @@
     <constant name="TrackerEndcapPDisk2_zmin"        value="70.0*cm" />
     <constant name="TrackerEndcapPDisk2_rmin"        value="32.86*mm + Beampipe_bakeout_buffer + 0.6*mm" />
     <constant name="TrackerEndcapPDisk2_rmax"        value="TrackerEndcapDisk_rmax * .98" />
-    <constant name="TrackerEndcapPDisk3_zmin"        value="100.0*cm" />
+    <constant name="TrackerEndcapPDisk3_zmin"        value="95.0*cm" />
     <constant name="TrackerEndcapPDisk3_rmin"        value="40.58*mm + Beampipe_bakeout_buffer + 7.85*mm" />
     <constant name="TrackerEndcapPDisk3_rmax"        value="TrackerEndcapDisk_rmax * .98" />
-    <constant name="TrackerEndcapPDisk4_zmin"        value="135.0*cm" />
+    <constant name="TrackerEndcapPDisk4_zmin"        value="120.0*cm" />
     <constant name="TrackerEndcapPDisk4_rmin"        value="49.12*mm + Beampipe_bakeout_buffer + 16.02*mm" />
     <constant name="TrackerEndcapPDisk4_rmax"        value="TrackerEndcapDisk_rmax * .98" />
 
