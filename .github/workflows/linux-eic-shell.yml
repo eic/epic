@@ -170,6 +170,7 @@ jobs:
         name: material_map
         path: |
           scripts/material_map/*.json
+          scripts/material_map/*.svg
           scripts/material_map/material-map.cbor
           scripts/material_map/plots/
           scripts/material_map/Surfaces/
