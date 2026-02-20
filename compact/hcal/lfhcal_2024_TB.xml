@@ -1,0 +1,156 @@
+<lccdd>
+
+  <info name="lfhcal_2024_TB.xml"
+        title="EPIC LFHCAL single 8M Module (long), configuration as TB at PS in 2024"
+        author="@FriederikeBock"
+        url="https://github.com/FriederikeBock"
+        status="development"
+        version="1.0"
+  ><comment/></info>
+
+  <define>
+    <include ref="lfhcal/module_definitions.xml"/>
+    <constant name="Mod_MountingPlateThickness" value="0* mm"/>
+    <constant name="Mod_PCBLength"              value="135* cm"/>
+
+  </define>
+
+  <display>
+    <vis name="LFHCAL8MModVis"          ref="AnlBlue"       showDaughters="true"  visible="true"/>
+    <vis name="LFHCAL4MModVis"          ref="AnlViolet"     showDaughters="true"  visible="true"/>
+    <vis name="LFHCAL8MModOuter"        ref="AnlBlue"       showDaughters="true"  visible="true"/>
+    <vis name="LFHCALLayerScintVis"     ref="AnlLightGray"  showDaughters="false" visible="true"/>
+    <vis name="LFHCALLayerSteelVis"     ref="AnlRed"        showDaughters="false" visible="true"/>
+    <vis name="LFHCALLayerTungstenVis"  ref="AnlViolet"     showDaughters="false" visible="true"/>
+    <vis name="LFHCALLayerKaptonVis"    ref="AnlGold"       showDaughters="false" visible="true"/>
+    <vis name="LFHCALLayerFoilVis"      ref="AnlGray"       showDaughters="false" visible="true"/>
+    <vis name="LFHCALModPCB"            ref="AnlDarkGreen"  showDaughters="false" visible="true"/>
+ </display>
+
+  <!-- Define detector -->
+  <detectors>
+    <documentation>
+      ### Forward (Positive Z) Endcap Hadronic Calorimeter
+
+      This is the ECCE LFHCAL design without individual tower placements and electronics
+      As deployed during thestbeam in 2024
+      The HCal forward insert shape is cut out from this detector
+
+      So then, actual detector area is "LFHCAL_length - LFHCALElectronicsThickness" long
+    </documentation>
+    <detector
+      id="LFHCAL_ID"
+      name="LFHCAL"
+      type="epic_LFHCAL_TestBeam"
+      readout="LFHCALHits"
+      vis="InvisibleWithDaughters"
+      calorimeterType="HAD_ENDCAP"
+      renderComponents="1"
+      allSensitive="0"
+      >
+
+      <position x="0" y="0" z="0"/>
+      <dimensions
+        z="140*cm"
+        rmin="20*cm"
+        rmax="LFHCAL_rmax"
+        x="EightM_OuterWidth"
+        y="EightM_OuterHeight"
+        x0="-FourM_OuterWidth"/>
+      <envelope material="Steel235"/>
+
+      <eightmodule name="8MModule" vis="InvisibleWithDaughters" repeat="0" >
+        <dimensions
+        width="EightM_OuterWidth"
+        height="EightM_OuterHeight"
+        widthBackInner="EightM_BackInnerWidth"
+        heightBackInner="EightM_BackInnerHeight"
+        widthSideWall="Mod_SideWallThickness"
+        widthTopWall="Mod_TopWallThickness"
+        thicknessMountingPlate="Mod_MountingPlateThickness"
+        thicknessFrontWall="Mod_FrontWallThickness"
+        thicknessBackWall="Mod_BackWallThickness"
+        arrayX="EightM_xArr"
+        arrayY="EightM_yArr"
+        notchDepth="Mod_NotchDepth"
+        notchHeight="Mod_NotchHeight"
+        foilThick="Mod_FoilThick"
+        pcbLength="Mod_PCBLength"
+        pcbThick="Mod_PCBThickness"
+        pcbWidth="Mod_PCBWidth"
+        />
+        <position x="50*cm" y="50*cm" z="140*cm - LFHCALElectronicsThickness" />
+      </eightmodule>
+      <layer repeat="LFHCALLayer_NSteelRepeatSFirst" vis="InvisibleWithDaughters" readoutlayer="0">
+        <slice material="Steel235" thickness="LFHCALAbsorberThickness" vis="LFHCALLayerSteelVis" type="1"/>
+        <slice material="Kapton" thickness="LFHCALKaptonThickness" vis="LFHCALLayerKaptonVis" type="2" offset="LFHCALAirOffset"/>
+        <slice material="Polystyrene" thickness="LFHCALPolystyreneThickness" vis="LFHCALLayerScintVis" sensitive="yes" limits="cal_limits" type="3" />
+      </layer>
+      <layer repeat="LFHCALLayer_NSteelRepeatSFirst" vis="InvisibleWithDaughters" readoutlayer="1">
+        <slice material="Steel235" thickness="LFHCALAbsorberThickness" vis="LFHCALLayerSteelVis" type="1"/>
+        <slice material="Kapton" thickness="LFHCALKaptonThickness" vis="LFHCALLayerKaptonVis" type="2" offset="LFHCALAirOffset"/>
+        <slice material="Polystyrene" thickness="LFHCALPolystyreneThickness" vis="LFHCALLayerScintVis" sensitive="yes" limits="cal_limits" type="3" />
+      </layer>
+      <layer repeat="LFHCALLayer_NSteelRepeatS" vis="InvisibleWithDaughters" readoutlayer="2">
+        <slice material="Steel235" thickness="LFHCALAbsorberThickness" vis="LFHCALLayerSteelVis" type="1"/>
+        <slice material="Kapton" thickness="LFHCALKaptonThickness" vis="LFHCALLayerKaptonVis" type="2" offset="LFHCALAirOffset"/>
+        <slice material="Polystyrene" thickness="LFHCALPolystyreneThickness" vis="LFHCALLayerScintVis" sensitive="yes" limits="cal_limits" type="3" />
+      </layer>
+      <layer repeat="LFHCALLayer_NSteelRepeatS" vis="InvisibleWithDaughters" readoutlayer="3">
+        <slice material="Steel235" thickness="LFHCALAbsorberThickness" vis="LFHCALLayerSteelVis" type="1"/>
+        <slice material="Kapton" thickness="LFHCALKaptonThickness" vis="LFHCALLayerKaptonVis" type="2" offset="LFHCALAirOffset"/>
+        <slice material="Polystyrene" thickness="LFHCALPolystyreneThickness" vis="LFHCALLayerScintVis" sensitive="yes" limits="cal_limits" type="3" />
+      </layer>
+      <layer repeat="LFHCALLayer_NSteelRepeatS" vis="InvisibleWithDaughters" readoutlayer="4">
+        <slice material="Steel235" thickness="LFHCALAbsorberThickness" vis="LFHCALLayerSteelVis" type="1"/>
+        <slice material="Kapton" thickness="LFHCALKaptonThickness" vis="LFHCALLayerKaptonVis" type="2" offset="LFHCALAirOffset"/>
+        <slice material="Polystyrene" thickness="LFHCALPolystyreneThickness" vis="LFHCALLayerScintVis" sensitive="yes" limits="cal_limits" type="3" />
+      </layer>
+      <layer repeat="LFHCALLayer_NSteelRepeatS" vis="InvisibleWithDaughters" readoutlayer="5">
+        <slice material="Steel235" thickness="LFHCALAbsorberThickness" vis="LFHCALLayerSteelVis" type="1"/>
+        <slice material="Kapton" thickness="LFHCALKaptonThickness" vis="LFHCALLayerKaptonVis" type="2" offset="LFHCALAirOffset"/>
+        <slice material="Polystyrene" thickness="LFHCALPolystyreneThickness" vis="LFHCALLayerScintVis" sensitive="yes" limits="cal_limits" type="3" />
+      </layer>
+      <layer repeat="LFHCALLayer_NSteelRepeatSFirst" vis="InvisibleWithDaughters" readoutlayer="6">
+        <slice material="Steel235" thickness="LFHCALAbsorberThickness" vis="LFHCALLayerSteelVis" type="1"/>
+        <slice material="Kapton" thickness="LFHCALKaptonThickness" vis="LFHCALLayerKaptonVis" type="2" offset="LFHCALAirOffset"/>
+        <slice material="Polystyrene" thickness="LFHCALPolystyreneThickness" vis="LFHCALLayerScintVis" sensitive="yes" limits="cal_limits" type="3" />
+      </layer>
+      <layer repeat="LFHCALLayer_NSteelRepeatSFirst" vis="InvisibleWithDaughters" readoutlayer="7">
+        <slice material="Steel235" thickness="LFHCALAbsorberThickness" vis="LFHCALLayerSteelVis" type="1"/>
+        <slice material="Kapton" thickness="LFHCALKaptonThickness" vis="LFHCALLayerKaptonVis" type="2" offset="LFHCALAirOffset"/>
+        <slice material="Polystyrene" thickness="LFHCALPolystyreneThickness" vis="LFHCALLayerScintVis" sensitive="yes" limits="cal_limits" type="3" />
+      </layer>
+      <layer repeat="LFHCALLayer_NSteelRepeatSFirst" vis="InvisibleWithDaughters" readoutlayer="8">
+        <slice material="Steel235" thickness="LFHCALAbsorberThickness" vis="LFHCALLayerSteelVis" type="1"/>
+        <slice material="Kapton" thickness="LFHCALKaptonThickness" vis="LFHCALLayerKaptonVis" type="2" offset="LFHCALAirOffset"/>
+        <slice material="Polystyrene" thickness="LFHCALPolystyreneThickness" vis="LFHCALLayerScintVis" sensitive="yes" limits="cal_limits" type="3" />
+      </layer>
+
+      <documentation>
+        ### for testing of a single module
+      </documentation>
+      <eightmodulepositions>
+        <position x="0*mm" y="0*mm" z="0*mm" orientation="1" IDx="0" IDy="0"/>
+      </eightmodulepositions>
+
+
+      <documentation>
+      ### positions of modules for full area LFHCAL (sorted by ascending r, x, y)
+      </documentation>
+      <fourmodulepositions>
+      </fourmodulepositions>
+
+    </detector>
+
+  </detectors>
+
+  <!--  Definition of the readout segmentation/definition  -->
+  <readouts>
+    <readout name="LFHCALHits">
+      <segmentation type="NoSegmentation"/>
+      <id>system:8,moduleIDx:4,moduleIDy:4,moduletype:1,passive:1,towerx:2,towery:1,rlayerz:6,layerz:6</id>
+    </readout>
+  </readouts>
+
+</lccdd>
