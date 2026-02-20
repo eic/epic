@@ -1072,7 +1072,9 @@ static Ref_t createTestBeam(Detector& desc, xml_h handle, SensitiveDetector sens
   printout(DEBUG, "LFHCAL_geo",
            "global LFHCal position " + _toString(pos.x()) + "\t" + _toString(pos.y()) + "\t" +
                _toString(pos.z()));
-
+  std::cout << "Global LFHCal position:\n X: " << pos.x() << "\tY: " << pos.y() << "\t Z: " << pos.z() << std::endl;
+  std::cout << "Envelope dimensions:\n X: " << dim.x() << "\tY: " << dim.y() << "\t Z: " << dim.z() << std::endl;
+  
   struct position {
     double x, y, z;
     int orientation = 0;
@@ -1123,24 +1125,34 @@ static Ref_t createTestBeam(Detector& desc, xml_h handle, SensitiveDetector sens
   double minY = 10000;
   double maxX = -10000;
   double maxY = -10000;
+  double minZ = 10000;
+  double maxZ = -10000;
 
+  std::cout << "Original module positions" << std::endl;
   for (int e = 0; e < (int)pos8M.size(); e++) {
+    std::cout << pos8M[e].IDx << "\t" << pos8M[e].IDy << "\t" << pos8M[e].x << "\t" 
+              << "\t" << pos8M[e].y << "\t" << pos8M[e].z << std::endl;
     if (minX > pos8M[e].x)
       minX = pos8M[e].x;
     if (minY > pos8M[e].y)
       minY = pos8M[e].y;
+    if (minZ > pos8M[e].z)
+      minZ = pos8M[e].z;
     if (maxX < pos8M[e].x)
       maxX = pos8M[e].x;
     if (maxY < pos8M[e].y)
       maxY = pos8M[e].y;
+    if (maxZ < pos8M[e].z)
+      maxZ = pos8M[e].z;
   }
-  std::cout << "X: " << minX << "\t-\t" << maxX << "\t Y: " << minY << "\t - \t" << maxY
+  std::cout << "Maximum X: " << minX << "\t-\t" << maxX << "\t Y: " << minY << "\t - \t" << maxY << "\t Z: " << minZ << "\t - \t" << maxZ
             << std::endl;
 
   // envelope volume
   xml_comp_t x_env = detElem.child(_Unicode(envelope));
   Box env_box(dim.x() / 2, dim.y() / 2, dim.z() / 2);
   Volume env_vol(detName + "_env", env_box, desc.material(x_env.materialStr()));
+        env_vol.setAttributes(desc, eightM_params.mod_regStr, eightM_params.mod_limStr, "LFHCALLayerTungstenVis");
 
   bool renderComponents = getAttrOrDefault(detElem, _Unicode(renderComponents), 0.);
   bool allSensitive     = getAttrOrDefault(detElem, _Unicode(allSensitive), 0.);
@@ -1207,8 +1219,7 @@ static Ref_t createTestBeam(Detector& desc, xml_h handle, SensitiveDetector sens
       moduleIDy = (int(pos8M[e].y + 15) / 10);
     }
 
-    std::cout << moduleIDx << "\t" << moduleIDy << "\t" << pos8M[e].x << "\t" << (pos8M[e].x + 20)
-              << "\t" << pos8M[e].y << "\t" << (pos8M[e].y + 15) << std::endl;
+    std::cout << moduleIDx << "\t" << moduleIDy << "\t" << pos8M[e].x << "\t" << pos8M[e].y << std::endl;
     if (moduleIDx < 0 || moduleIDy < 0) {
       printout(DEBUG, "LFHCAL_geo",
                "LFHCAL WRONG ID FOR 8M module: " + _toString(e) + "/" +
@@ -1470,5 +1481,39 @@ static Ref_t createDetector(Detector& desc, xml_h handle, SensitiveDetector sens
   return det;
 }
 
+//*************************************************************************************************
+// Definition of Detector elements: 
+// - first argument defines which detector type is checked
+// - second argument which function is called 
+// the "type" is the primary identifier in the xml files, what kind of detector you are buidling
+//*************************************************************************************************
+//=================================================================================================
+// in the xml files this looks as follows for the full geom 
+// example from compact/lfhcal.xml
+//     <detector
+//    id="LFHCAL_ID"
+//    name="LFHCAL"
+//    type="epic_LFHCAL"
+//    readout="LFHCALHits"
+//    vis="InvisibleWithDaughters"
+//    calorimeterType="HAD_ENDCAP"
+//    renderComponents="0"
+//    allSensitive="0"
+//    >
+//=================================================================================================
 DECLARE_DETELEMENT(epic_LFHCAL, createDetector)
+//=================================================================================================
+// in the xml files this looks as follows for the Test beam geom
+// example from compact/lfhcal_2026_TB.xml
+//     <detector
+//    id="LFHCAL_ID"
+//    name="LFHCAL"
+//    type="epic_LFHCAL_TestBeam"
+//    readout="LFHCALHits"
+//    vis="InvisibleWithDaughters"
+//    calorimeterType="HAD_ENDCAP"
+//    renderComponents="0"
+//    allSensitive="0"
+//    >
+//=================================================================================================
 DECLARE_DETELEMENT(epic_LFHCAL_TestBeam, createTestBeam)
