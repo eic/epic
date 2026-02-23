@@ -1131,7 +1131,8 @@ static Ref_t createTestBeam(Detector& desc, xml_h handle, SensitiveDetector sens
   double maxZ = -10000;
 
   std::cout << "Original module positions" << std::endl;
-  std::cout << "module width: " << eightM_params.mod_width << "\t height: " << eightM_params.mod_height << "\t length: "  << dim.z()<< std::endl;
+  std::cout << "module width: " << eightM_params.mod_width
+            << "\t height: " << eightM_params.mod_height << "\t length: " << dim.z() << std::endl;
   for (int e = 0; e < (int)pos8M.size(); e++) {
     std::cout << pos8M[e].IDx << "\t" << pos8M[e].IDy << "\t" << pos8M[e].x << "\t"
               << "\t" << pos8M[e].y << "\t" << pos8M[e].z << std::endl;
