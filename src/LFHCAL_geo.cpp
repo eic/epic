@@ -1131,6 +1131,7 @@ static Ref_t createTestBeam(Detector& desc, xml_h handle, SensitiveDetector sens
   double maxZ = -10000;
 
   std::cout << "Original module positions" << std::endl;
+  std::cout << "module width: " << eightM_params.mod_width << "\t height: " << eightM_params.mod_height << "\t length: "  << dim.z()<< std::endl;
   for (int e = 0; e < (int)pos8M.size(); e++) {
     std::cout << pos8M[e].IDx << "\t" << pos8M[e].IDy << "\t" << pos8M[e].x << "\t"
               << "\t" << pos8M[e].y << "\t" << pos8M[e].z << std::endl;
@@ -1154,8 +1155,6 @@ static Ref_t createTestBeam(Detector& desc, xml_h handle, SensitiveDetector sens
   xml_comp_t x_env = detElem.child(_Unicode(envelope));
   Box env_box(dim.x() / 2, dim.y() / 2, dim.z() / 2);
   Volume env_vol(detName + "_env", env_box, desc.material(x_env.materialStr()));
-  env_vol.setAttributes(desc, eightM_params.mod_regStr, eightM_params.mod_limStr,
-                        "LFHCALLayerTungstenVis");
 
   bool renderComponents = getAttrOrDefault(detElem, _Unicode(renderComponents), 0.);
   bool allSensitive     = getAttrOrDefault(detElem, _Unicode(allSensitive), 0.);

@@ -122,8 +122,8 @@
         ### for testing of a single module
       </documentation>
       <eightmodulepositions>
-        <position x="-50.46*mm" y="-50.5*mm" z="0*mm" orientation="2" IDx="0" IDy="0"/>
-        <position x="-50.46*mm" y="50.5*mm" z="0*mm" orientation="2" IDx="0" IDy="1"/>
+        <position x="0*mm" y="-EightM_OuterHeight/2." z="0*mm" orientation="2" IDx="0" IDy="0"/>
+        <position x="0*mm" y="EightM_OuterHeight/2." z="0*mm" orientation="2" IDx="0" IDy="1"/>
       </eightmodulepositions>
 
 
