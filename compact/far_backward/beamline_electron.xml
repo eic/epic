@@ -29,7 +29,7 @@
         length="Q2eR_Length" theta="0"
         rout1="Q2eR_InnerRadius" rout2="Q2eR_InnerRadius">
       </pipe>
-        <combine name="Pipe_Q2eR_to_B2BeR_combined" start_id="4" end_id="7"/>
+        <combine name="Pipe_Q2eR_to_B2BeR_combined" start_id="4" end_id="8"/>
         <pipe id="4" name="Pipe_Q2eR_to_B2AeR"/>
       <pipe id="5" name="Pipe_in_B2AeR"
         xcenter="0" zcenter="B2AeR_CenterPosition"
@@ -42,6 +42,9 @@
         length="B2BeR_Length" theta="0"
         rout1="B2BeR_InnerRadius" rout2="B2BeR_InnerRadius">
       </pipe>
+      <split from_id="4" id="8" name="Pipe_Q2eR_to_TaggerVacuum"
+             length="Q2eR_CenterPosition-B2BeR_CenterPosition"
+             theta="1" rout1="Q2eR_InnerRadius" rout2="Q2eR_InnerRadius"/>
     </detector>
 
     <comment> Main beamline vacuum volume spanning between B2BeR and Q3eR magnets</comment>

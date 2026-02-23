@@ -3,9 +3,41 @@
 
 //==========================================================================
 //
-// Places a chain of beam pipe segments within and between the beamline magnets.
+// BEAMPIPECHAIN DETECTOR GEOMETRY FACTORY
 //
-// Approximation used for beam pipes in between magnets.
+// This file constructs a chain of beam pipe segments connecting beamline magnets.
+// The geometry is built from XML configuration with automatic bend joins, optional
+// boolean combination groups, and optional split-branch extensions.
+//
+// BASIC PIPE CHAIN:
+//   - Reads series of conical pipe segments (names, ids, positions, angles, radii)
+//   - Creates torus transition pieces between consecutive pipes with different angles
+//   - Automatically adjusts pipe lengths to account for torus volumes at junctions
+//   - Each pipe is modeled as Aluminum shell with inner Vacuum
+//   - Vacuums are tracked separately to enable boolean subtraction
+//
+// COMBINE GROUPS (boolean ranges):
+//   - Optional ranges to merge multiple consecutive pipes into unified boolean solids
+//   - Specified in XML as <combine start_id="A" end_id="B"/> (inclusive range by id)
+//   - Strategy: union all matching tube pieces in local frame, union vacuums,
+//     then subtract vacuum union from tube union to create combined pipe shell
+//   - Combines also include adjacent bend pieces if BOTH neighbors are in same range
+//   - Pipes/bends outside any combine group are placed individually
+//
+// SPLIT BRANCHES (junction extensions):
+//   - Allows straight-pipe branches to spawn from downstream end of a chosen source pipe
+//   - Specified in XML as: <split from_id="N" id="M" length="L" theta="T"
+//                                   rout1="R1" rout2="R2" name="Name"/>
+//   - Split branches created as simple conical segments extending from source pipe endpoint
+//   - Uses source outer radii if rout1/rout2 not specified in XML
+//   - Split pieces inherit combine-group membership from their id
+//   - Split pieces participate in vacuum subtraction within combine groups
+//
+// VACUUM SUBTRACTION:
+//   - All pipe solids (straight, bend, split) have associated vacuum solids
+//   - Individual pipes: vacuum is placed separately alongside tube
+//   - Combined groups: all matching vacuum solids unioned, then subtracted from
+//     unioned tube solids to create final pipe shell with proper hollow interior
 //
 //==========================================================================
 
@@ -40,6 +72,13 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector /
   vector<double> rOuters1;
   vector<double> rOuters2;
   vector<double> bendLengths;
+  vector<int> splitFromIds;
+  vector<int> splitIds;
+  vector<string> splitNames;
+  vector<double> splitLengths;
+  vector<double> splitThetas;
+  vector<double> splitROuters1;
+  vector<double> splitROuters2;
 
   // Optional boolean-combine groups, configured via XML:
   //   <combine name="..." start_id="..." end_id="..."/>
@@ -64,6 +103,28 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector /
     combineNames.push_back(name);
   }
 
+  // Optional branch segments starting at the downstream end of an existing pipe id:
+  //   <split from_id="..." id="..." name="..." length="..." theta="..." rout1="..." rout2="..."/>
+  for (xml_coll_t split_coll(x_det, _Unicode(split)); split_coll; ++split_coll) {
+    xml_comp_t split(split_coll);
+
+    int from_id = getAttrOrDefault<int>(split, _Unicode(from_id), -1);
+    int id      = getAttrOrDefault<int>(split, _Unicode(id), -1);
+    string name = getAttrOrDefault<string>(split, _Unicode(name), "split_" + std::to_string(id));
+    double length = getAttrOrDefault<double>(split, _Unicode(length), 0.0);
+    double theta  = getAttrOrDefault<double>(split, _Unicode(theta), 0.0);
+    double rout1  = getAttrOrDefault<double>(split, _Unicode(rout1), 0.0);
+    double rout2  = getAttrOrDefault<double>(split, _Unicode(rout2), 0.0);
+
+    splitFromIds.push_back(from_id);
+    splitIds.push_back(id);
+    splitNames.push_back(name);
+    splitLengths.push_back(length);
+    splitThetas.push_back(theta);
+    splitROuters1.push_back(rout1);
+    splitROuters2.push_back(rout2);
+  }
+
   // Return the combine-range index for a pipe id, or -1 if not in a combine group.
   auto find_range_index = [&](int pipe_id) {
     for (size_t range_n = 0; range_n < combineStartIds.size(); ++range_n) {
@@ -83,6 +144,10 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector /
   vector<Solid> straightTubes;
   vector<Solid> straightVacuums;
   vector<Transform3D> straightTransforms;
+  vector<double> straightXCenters;
+  vector<double> straightZCenters;
+  vector<double> straightLengthsPlaced;
+  vector<double> straightThetasPlaced;
 
   // Parallel vectors for bend-join torus pieces between neighboring straight pipes.
   vector<std::string> bendNames;
@@ -191,6 +256,10 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector /
     straightTubes.push_back(Solid(s_tube));
     straightVacuums.push_back(Solid(s_vacuum));
     straightTransforms.push_back(straightTransform);
+    straightXCenters.push_back(xCenter);
+    straightZCenters.push_back(zCenter);
+    straightLengthsPlaced.push_back(length);
+    straightThetasPlaced.push_back(theta);
 
     // // Add joining bend to next pipe
     if (pipeN != xCenters.size() - 1 && bendLengths[pipeN] != 0) {
@@ -233,6 +302,79 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector /
       bendVacuums.push_back(Solid(s_bend_vac));
       bendTransforms.push_back(bendTransform);
     }
+  }
+
+  // Build optional split branches from downstream ends of configured source ids.
+  // Split branches are created as simple conical segments extending from the source pipe.
+  for (size_t split_n = 0; split_n < splitIds.size(); ++split_n) {
+    int source_index = -1;
+    for (size_t piece_n = 0; piece_n < straightIds.size(); ++piece_n) {
+      if (straightIds[piece_n] == splitFromIds[split_n]) {
+        source_index = static_cast<int>(piece_n);
+        break;
+      }
+    }
+
+    if (source_index < 0) {
+      printout(WARNING, "BeamPipeChain",
+               "Split '%s' references unknown from_id=%d. Skipping.",
+               splitNames[split_n].c_str(), splitFromIds[split_n]);
+      continue;
+    }
+
+    double branch_length = splitLengths[split_n];
+    if (branch_length <= 0) {
+      printout(WARNING, "BeamPipeChain",
+               "Split '%s' has non-positive length. Skipping.",
+               splitNames[split_n].c_str());
+      continue;
+    }
+
+    double source_theta = straightThetasPlaced[source_index];
+    double source_x_center = straightXCenters[source_index];
+    double source_z_center = straightZCenters[source_index];
+    double source_length = straightLengthsPlaced[source_index];
+    double branch_theta = splitThetas[split_n];
+    double branch_r1    = splitROuters1[split_n] > 0 ? splitROuters1[split_n]
+                                                      : rOuters1[source_index];
+    double branch_r2    = splitROuters2[split_n] > 0 ? splitROuters2[split_n] : branch_r1;
+
+    // Calculate position at downstream end of source pipe
+    double source_end_x = source_x_center - 0.5 * source_length * sin(source_theta);
+    double source_end_z = source_z_center - 0.5 * source_length * cos(source_theta);
+
+    // Add a tiny overlap so split and source vacuums do not only touch at a face.
+    // This avoids boolean-cap artifacts (open circles) in visualization.
+    double junction_overlap = 0.05 * mm;
+    if (junction_overlap > 0.45 * branch_length) {
+      junction_overlap = 0.45 * branch_length;
+    }
+    double branch_length_effective = branch_length + junction_overlap;
+    double source_attach_x         = source_end_x + junction_overlap * sin(branch_theta);
+    double source_attach_z         = source_end_z + junction_overlap * cos(branch_theta);
+
+    // Position split branch center: halfway along its length from source endpoint
+    double branch_center_x = source_attach_x - 0.5 * branch_length_effective * sin(branch_theta);
+    double branch_center_z = source_attach_z - 0.5 * branch_length_effective * cos(branch_theta);
+
+    // Create split tube and vacuum solids
+    ConeSegment s_split_tube(branch_length_effective / 2.0, branch_r2 - thickness, branch_r2,
+                             branch_r1 - thickness, branch_r1);
+    ConeSegment s_split_vac(branch_length_effective / 2.0, 0, branch_r2 - thickness, 0,
+                            branch_r1 - thickness);
+    Transform3D split_transform(RotationY(branch_theta), Position(branch_center_x, 0, branch_center_z));
+
+    // Add split branch to straight piece vectors
+    straightNames.push_back(splitNames[split_n]);
+    straightIds.push_back(splitIds[split_n]);
+    straightRangeIndices.push_back(find_range_index(splitIds[split_n]));
+    straightTubes.push_back(Solid(s_split_tube));
+    straightVacuums.push_back(Solid(s_split_vac));
+    straightTransforms.push_back(split_transform);
+    straightXCenters.push_back(branch_center_x);
+    straightZCenters.push_back(branch_center_z);
+    straightLengthsPlaced.push_back(branch_length_effective);
+    straightThetasPlaced.push_back(branch_theta);
   }
 
   // Place non-combined straight segments
