@@ -11,7 +11,6 @@ features:
     mpgd_forward_endcap:
     mpgd_backward_endcap:
     silicon_disks:
-    support_service_craterlake:
     tof_barrel:
     tof_endcap:
   pid:
