@@ -26,6 +26,7 @@ jobs:
         network_types: "none"
         setup: install/bin/thisepic.sh
         run: |
+          set -e -o pipefail
           # convert to gdml, but with sensitive detectors included
           scripts/convert_to_gdml.py --compact $DETECTOR_PATH/${{matrix.detector_config}}.xml --output ${{matrix.detector_config}}.gdml | sed '/G4Exception-START/,+7d'
           # create celeritas input file from template
