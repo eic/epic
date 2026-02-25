@@ -75,7 +75,7 @@ static Ref_t createDetector(Detector& description, xml_h e, SensitiveDetector se
   std::string detName     = detElem.nameStr();
 
   int id = detElem.hasAttr(_U(id)) ? detElem.id() : 0;
-
+  
   // Start optical configuration if needed;
 #ifdef WITH_IRT2_SUPPORT
   auto geometry = CherenkovDetectorCollection::Instance();
@@ -413,7 +413,9 @@ static Ref_t createDetector(Detector& description, xml_h e, SensitiveDetector se
     auto _HRPPD_PLATING_LAYER_THICKNESS_ =
       description.constant<double>("HRPPD_PLATING_LAYER_THICKNESS");
     auto _EFFECTIVE_MCP_THICKNESS_ = description.constant<double>("EFFECTIVE_MCP_THICKNESS");
+#ifdef WITH_IRT2_SUPPORT
     auto _HRPPD_COLLECTION_EFFICIENCY_ = description.constant<double>("HRPPD_COLLECTION_EFFICIENCY");
+#endif
         
 #ifdef WITH_IRT2_SUPPORT
     // [0,0]: have neither access to G4VSolid nor to G4Material; IRT code does not care; fine;
