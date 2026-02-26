@@ -674,7 +674,7 @@ jobs:
     steps:
     - uses: actions/upload-artifact/merge@v6
       with:
-        name: capybara
+        name: capybara-report
         pattern: |
           *.capy
         delete-merged: true
@@ -696,7 +696,7 @@ jobs:
         with:
           commit: ${{ matrix.head_sha }}
           path: publishing_docs/pr/${{ matrix.pr }}/capybara/
-          name: capybara
+          name: capybara-report
           workflow: ".github/workflows/linux-eic-shell.yml"
           workflow_conclusion: "completed"
           if_no_artifact_found: ignore
@@ -704,7 +704,7 @@ jobs:
         uses: actions/download-artifact@v7
         if: github.event.pull_request.number == matrix.pr
         with:
-          name: capybara
+          name: capybara-report
           path: publishing_docs/pr/${{ matrix.pr }}/capybara/
       - uses: actions/upload-artifact@v6
         with:
@@ -727,7 +727,7 @@ jobs:
         with:
           branch: main
           path: publishing_docs/capybara/
-          name: capybara
+          name: capybara-report
           workflow: ".github/workflows/linux-eic-shell.yml"
           workflow_conclusion: "completed"
           if_no_artifact_found: ignore
@@ -735,7 +735,7 @@ jobs:
         uses: actions/download-artifact@v7
         if: github.ref_name == 'main'
         with:
-          name: capybara
+          name: capybara-report
           path: publishing_docs/capybara/
       - name: Populate capybara summary (on main)
         if: github.ref_name == 'main' || steps.download_capybara.outputs.found_artifact == 'true'
