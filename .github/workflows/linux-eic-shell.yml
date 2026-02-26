@@ -755,6 +755,10 @@ jobs:
     - merge-dawn-view
     - get-docs-from-open-prs
     - get-docs-from-main
+    if: |
+      always() &&
+      !cancelled() &&
+      !failure()
     steps:
     - name: Checkout jekyll page
       uses: actions/checkout@v6
@@ -802,6 +806,10 @@ jobs:
   deploy-artifacts-page:
     needs:
     - build-artifacts-page
+    if: |
+      always() &&
+      !cancelled() &&
+      !failure()
     permissions:
       pages: write
       id-token: write
