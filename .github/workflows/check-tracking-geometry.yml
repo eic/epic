@@ -23,7 +23,6 @@ jobs:
     - uses: eic/run-cvmfs-osg-eic-shell@main
       with:
         platform-release: "eic_xl:nightly"
-        network_types: "none"
         setup: install/bin/thisepic.sh
         run: |
           /usr/bin/time -v \
