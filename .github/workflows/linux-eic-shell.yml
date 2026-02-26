@@ -747,11 +747,13 @@ jobs:
         if: github.ref_name == 'main'
         run: |
           cat publishing_docs/capybara/index.md >> $GITHUB_STEP_SUMMARY
+      - name: Ensure publishing_docs is non-empty
+        run: mkdir -p publishing_docs && touch publishing_docs/.keep
       - uses: actions/upload-artifact@v6
         with:
           name: github-pages-staging-main
           path: publishing_docs/
-          if-no-files-found: ignore
+          if-no-files-found: error
 
   build-artifacts-page:
     runs-on: ubuntu-latest
