@@ -522,6 +522,10 @@ jobs:
     needs:
     - dawn-view
     - dawn-view-slices
+    if: |
+      always() && 
+      (needs.dawn-view.result == 'success') &&
+      (needs.dawn-view-slices.result == 'success' || needs.dawn-view-slices.result == 'skipped')
     strategy:
       matrix:
         detector_config: [epic_craterlake]
