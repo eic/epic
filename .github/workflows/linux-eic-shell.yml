@@ -746,6 +746,7 @@ jobs:
           name: github-pages-staging-main
           path: publishing_docs/
           if-no-files-found: error
+          include-hidden-files: true
 
   build-artifacts-page:
     runs-on: ubuntu-latest
