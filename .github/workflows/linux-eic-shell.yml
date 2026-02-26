@@ -195,10 +195,9 @@ jobs:
   convert-to-step:
     needs:
       - build
-      - list-detector-configs
     uses: ./.github/workflows/convert-to-step.yml
     with:
-      detector_configs: ${{needs.list-detector-configs.outputs.configs_json}}
+      detector_configs: '["epic_craterlake_no_bhcal","epic_imaging_only","epic_drich_only","epic_dirc_only","epic_craterlake_tracking_only","epic_ip6"]'
 
   dump-constants:
     runs-on: ubuntu-latest
