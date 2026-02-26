@@ -523,7 +523,7 @@ jobs:
     - dawn-view
     - dawn-view-slices
     if: |
-      always() && 
+      always() &&
       (needs.dawn-view.result == 'success') &&
       (needs.dawn-view-slices.result == 'success' || needs.dawn-view-slices.result == 'skipped')
     strategy:
