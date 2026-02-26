@@ -231,9 +231,8 @@ void FieldMapB::fieldComponents(const double* pos, double* field) {
 
   if (fieldCoord == FieldCoord::BrBz) {
     // coordinates conversion
-    const float r   = sqrt(p.x() * p.x() + p.y() * p.y());
-    const float z   = p.z();
-    const float phi = atan2(p.y(), p.x());
+    const float r = sqrt(p.x() * p.x() + p.y() * p.y());
+    const float z = p.z();
 
     // Return 0 field outside map extent
     if (r < bmin[0] || r > bmax[0] || z < bmin[1] || z > bmax[1])
@@ -246,9 +245,11 @@ void FieldMapB::fieldComponents(const double* pos, double* field) {
             typename T::view_t view(f);
             typename T::output_t b = view.at(r, z);
             const float Br = b[0], Bz = b[1];
-            auto B = fieldRot.has_value()
-                         ? fieldRot.value() * ROOT::Math::XYZPoint(Br * cos(phi), Br * sin(phi), Bz)
-                         : ROOT::Math::XYZPoint(Br * cos(phi), Br * sin(phi), Bz);
+            const float inv_r = (r > 0.f) ? 1.f / r : 0.f;
+            const float Bx    = Br * p.x() * inv_r;
+            const float By    = Br * p.y() * inv_r;
+            auto B = fieldRot.has_value() ? fieldRot.value() * ROOT::Math::XYZPoint(Bx, By, Bz)
+                                          : ROOT::Math::XYZPoint(Bx, By, Bz);
             field[0] += B.x() * dd4hep::tesla * fieldScale;
             field[1] += B.y() * dd4hep::tesla * fieldScale;
             field[2] += B.z() * dd4hep::tesla * fieldScale;
