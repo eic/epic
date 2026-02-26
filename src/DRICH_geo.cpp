@@ -1,25 +1,8 @@
 // SPDX-License-Identifier: LGPL-3.0-or-later
-// Copyright (C) 2022, 2023 Christopher Dilks, Junhuai Xu
+// Copyright (C) 2022 - 2026 Christopher Dilks, Junhuai Xu, Luisa Occhiuto
 
-//==========================================================================
-//  dRICH: Dual Ring Imaging Cherenkov Detector
-//--------------------------------------------------------------------------
-//
-// Author: Christopher Dilks (Duke University)
-//
 // - Design Adapted from Standalone Fun4all and GEMC implementations
 //   [ Evaristo Cisbani, Cristiano Fanelli, Alessio Del Dotto, et al. ]
-//
-//==========================================================================
-//  Aerogel: tiled version
-//--------------------------------------------------------------------------
-//
-// Author: Luisa Occhiuto (University of Calabria)
-//
-// - Designed as two overlapping aerogel layers and two cylindrical carbon-fiber
-// structure [Annalisa De Caro, Salvatore Fazio]
-//
-//==========================================================================
 
 #include "DD4hep/DetFactoryHelper.h"
 #include "DD4hep/OpticalSurfaces.h"
