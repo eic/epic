@@ -216,7 +216,6 @@ jobs:
     - uses: eic/run-cvmfs-osg-eic-shell@main
       with:
         platform-release: "eic_xl:nightly"
-        network_types: "none"
         setup: install/bin/thisepic.sh
         run: |
           mkdir -p doc
@@ -243,7 +242,6 @@ jobs:
     - uses: eic/run-cvmfs-osg-eic-shell@main
       with:
         platform-release: "eic_xl:nightly"
-        network_types: "none"
         setup: install/bin/thisepic.sh
         run: |
           mkdir -p doc
@@ -311,7 +309,6 @@ jobs:
     - uses: eic/run-cvmfs-osg-eic-shell@main
       with:
         platform-release: "eic_xl:nightly"
-        network_types: "bridge" # this job must succeed even when new artifacts
         setup: install/bin/thisepic.sh
         run: |
           mkdir -p doc
@@ -368,7 +365,6 @@ jobs:
     - uses: eic/run-cvmfs-osg-eic-shell@main
       with:
         platform-release: "eic_xl:nightly"
-        network_types: "bridge" # this job must succeed even when new artifacts
         setup: install/bin/thisepic.sh
         run: |
           mkdir -p doc
@@ -393,7 +389,6 @@ jobs:
     - uses: eic/run-cvmfs-osg-eic-shell@main
       with:
         platform-release: "eic_xl:nightly"
-        network_types: "bridge" # this job must succeed even when new artifacts
         setup: install/bin/thisepic.sh
         run: |
           mkdir -p doc
@@ -454,7 +449,6 @@ jobs:
     - uses: eic/run-cvmfs-osg-eic-shell@main
       with:
         platform-release: "eic_xl:nightly"
-        network_types: "none"
         setup: install/bin/thisepic.sh
         run: |
           bin/generate_prim_file -c $DETECTOR_PATH/${{ matrix.detector_config }}.xml -o prim -D -t ${{ matrix.detector_config }}
@@ -483,7 +477,6 @@ jobs:
     - uses: eic/run-cvmfs-osg-eic-shell@main
       with:
         platform-release: "eic_xl:nightly"
-        network_types: "none"
         run: |
           mkdir -p images
           bin/make_dawn_views -i prim/${{ matrix.detector_config }}.prim -t ${{ matrix.view }} -d scripts/${{ matrix.view }} -D
@@ -513,7 +506,6 @@ jobs:
     - uses: eic/run-cvmfs-osg-eic-shell@main
       with:
         platform-release: "eic_xl:nightly"
-        network_types: "none"
         run: |
           mkdir -p images
           bin/make_dawn_views -i prim/${{ matrix.detector_config }}.prim -t ${{ matrix.view }} -d scripts/${{ matrix.view }} -D -- ${{ matrix.slice }}
