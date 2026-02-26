@@ -579,4 +579,8 @@
     <composite n="6"  ref="O"/>
     <composite n="2"  ref="N"/>
   </material>
+  <material name="Diamond"> <!-- https://www.diamond-materials.com/site/assets/files/1096/cvd_diamond_synchrotron_windows.pdf -->
+    <D type="density" unit="g/cm3" value="3.52"/>
+    <fraction n="1.0" ref="C"/>
+  </material>
 </materials>
