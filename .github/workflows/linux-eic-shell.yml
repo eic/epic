@@ -778,6 +778,7 @@ jobs:
         done
     - name: Make PR summary page
       run: |
+        mkdir -p _site/pr
         echo "### PRs" >> _site/pr/index.md
         find _site/pr -mindepth 1 -maxdepth 1 -type d -printf "- [%f](%f/index.md)\n" | sort >> _site/pr/index.md
     - name: List content to publish
