@@ -25,7 +25,7 @@
 
   <define>
     <!-- Prism -->
-    <constant name="DIRCPrism_width"        value="350*mm"/>
+    <constant name="DIRCPrism_width"        value="351.350*mm"/>
     <constant name="DIRCPrism_length"       value="300*mm"/>
     <constant name="DIRCPrism_short_edge"   value="50*mm"/>
     <constant name="DIRCPrism_angle"        value="32*deg"/>
@@ -49,7 +49,7 @@
     <constant name="DIRCLens_r2"            value="36 * mm"/>
     <constant name="DIRCLens_height"        value="50 * mm"/>
     <constant name="DIRCLens_shift"         value="0 * mm" comment="Shift of optical axis compared to bar center"/>
-    <constant name="DIRCLens_width"         value="DIRCPrism_width / DIRCBar_count_y"/>
+    <constant name="DIRCLens_width"         value="35.0 * mm"/>
 
     <!-- MCP -->
     <constant name="DIRCMCP_height"          value="DIRCPrism_height"/>
@@ -58,13 +58,13 @@
 
     <!-- Bar - Each DIRC box consists of N "bars" -->
     <!-- BarAssembly - Bars + Glue -->
-    <constant name="DIRCBarAssm_length"     value="DIRC_length - DIRCPrism_length - DIRCBarbox_space_z - DIRCMirror_thickness - DIRCLens_thickness - DIRCMCP_thickness" comment="Length of bars+glue assembly"/>
+    <constant name="DIRCBarAssm_length"     value="456.0100 * cm" comment="Length of bars+glue assembly"/>
     <constant name="DIRCBar_gap"            value="0.15 * mm"/>
-    <constant name="DIRCBar_height"         value="17 * mm"/>
-    <constant name="DIRCBar_width"          value="(DIRCPrism_width - (DIRCBar_count_y - 1) * DIRCBar_gap) / DIRCBar_count_y"/>
-    <constant name="DIRCGlue_thickness"     value="0.05 * mm"/>
-    <constant name="DIRCBar_length"         value="(DIRCBarAssm_length - DIRCBar_count_z * DIRCGlue_thickness)/DIRCBar_count_z"/>
-    <constant name="DIRCBar_center"         value="(DIRC_rmin + DIRC_rmax)/2" comment="Radial position of center of bar"/>
+    <constant name="DIRCBar_height"         value="17.25 * mm"/>
+    <constant name="DIRCBar_width"          value="35.0 * mm"/>
+    <constant name="DIRCGlue_thickness"     value="0.025 * mm"/>
+    <constant name="DIRCBar_length"         value="114.00 * cm"/>
+    <constant name="DIRCBar_center"         value="76.5875 * cm" comment="Radial position of center of bar"/>
 
     <!-- Rail -->
     <constant name="DIRCRail_rmin"          value="InnerDetectorBarrelSupportCylinder_rmax"/>
