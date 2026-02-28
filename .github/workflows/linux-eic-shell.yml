@@ -779,18 +779,11 @@ jobs:
         path: artifacts/
     - name: Build jekyll page
       uses: actions/jekyll-build-pages@v1
-    - name: Merge GitHub Pages staging artifact
-      uses: actions/upload-artifact/merge@v6
-      with:
-        name: github-pages-staging
-        pattern: |
-          github-pages-staging-*
-        delete-merged: true
-    - name: Download GitHub Pages staging artifact
-      uses: actions/download-artifact@v7
-      with:
-        name: github-pages-staging
-        path: _site/
+    - name: Copy GitHub Pages staging content
+      run: |
+        for dir in artifacts/github-pages-staging-*/; do
+          [ -d "$dir" ] && cp -r "$dir"/. _site/ || true
+        done
     - name: Make PR summary page
       run: |
         mkdir -p _site/pr
