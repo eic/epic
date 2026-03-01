@@ -70,6 +70,7 @@
     <constant name="DIRCRail_rmin"          value="InnerDetectorBarrelSupportCylinder_rmax"/>
     <constant name="DIRCRail_rmax"          value="EcalBarrel_rmin"/>
     <constant name="DIRCRail_width"         value="2 * (DIRCRail_rmax - DIRCRail_rmin) * sin(360*degree / DIRCBox_count / 2)"/>
+    <constant name="DIRCRail_vol_R"         value="77.05 * cm" comment="DIRC support rail radius does not move with barplane"/>
   </define>
 
   <materials>
@@ -171,7 +172,7 @@
         <rail rmin="DIRCRail_rmin" rmax="DIRCRail_rmax" width="2*mm"
               length="DIRCBar_count_z * DIRCBar_length"
               material="Aluminum">
-          <position x="(DIRCRail_rmax + DIRCRail_rmin) / 2.0 - DIRCBar_center" y="0" z="0"/>
+          <position x="(DIRCRail_rmax + DIRCRail_rmin) / 2.0 - DIRCRail_vol_R" y="0" z="0"/>
         </rail>
       </support>
     </detector>
