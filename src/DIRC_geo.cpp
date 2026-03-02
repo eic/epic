@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: LGPL-3.0-or-later
-// Copyright (C) 2022 Wouter Deconinck, Dmitry Romanov
+// Copyright (C) 2022 - 2026 Wouter Deconinck, Dmitry Romanov, Bill Llope
 
 #include "DD4hep/DetFactoryHelper.h"
 #include "DD4hep/OpticalSurfaces.h"
