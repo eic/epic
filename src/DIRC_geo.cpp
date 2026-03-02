@@ -80,7 +80,7 @@ static Ref_t createDetector(Detector& desc, xml_h e, SensitiveDetector sens) {
   //---- Entire DIRC assembly
   Assembly det_volume("DIRC");
   det_volume.setVisAttributes(desc.visAttributes(xml_det.visStr()));
-  Transform3D det_tr(RotationY(0), Position(0.0, 0.0, dirc_pos_z)); //!!!!!!!!!!!!!!
+  Transform3D det_tr(RotationY(0), Position(0.0, 0.0, dirc_pos_z));
   det.setPlacement(
       desc.pickMotherVolume(det).placeVolume(det_volume, det_tr).addPhysVolID("system", det_id));
 
@@ -358,9 +358,6 @@ static Ref_t createDetector(Detector& desc, xml_h e, SensitiveDetector sens) {
   //---- Rail
   xml_comp_t xml_rail = xml_support.child(_Unicode(rail));
   xml_dim_t rail_pos  = xml_rail.position();
-  //printout(DEBUG,"DIRC_geo","rail_pos.x() = %12.4f ",rail_pos.x());
-  //printout(DEBUG,"DIRC_geo","rail_pos.y() = %12.4f ",rail_pos.y());
-  //printout(DEBUG,"DIRC_geo","rail_pos.z() = %12.4f ",rail_pos.z());
 
   double rail_height = (xml_rail.rmax() - xml_rail.rmin()) * cos(dphi / 2);
   double rail_width_at_rmax =
