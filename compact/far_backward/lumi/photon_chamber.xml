@@ -16,7 +16,7 @@
     <detector
       name="LumiPhotonChamber"
       type="LumiPhotonChamber"
-      pipeMaterial="Aluminum"
+      pipeMaterial="StainlessSteelSAE304"
       entrCapMaterial="Aluminum"
       exitCapMaterial="Beryllium"
       convMaterial="Aluminum"
