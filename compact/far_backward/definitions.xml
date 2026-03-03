@@ -14,50 +14,168 @@
 
     <comment> Electron magnet dimensions and positions </comment>
 
-    <constant name="Q1eR_InnerRadius"     value="67.5*mm"/>
-    <constant name="Q1eR_Length"          value="1.78*m"/>
-    <constant name="Q1eR_CenterPosition"  value="-6.2*m"/>
+    <constant name="Q1eR_InnerRadius"     value="54.9*mm"/>
+    <constant name="Q1eR_Theta"           value="0.000000*rad"/>
+    <constant name="Q1eR_CenterZ"         value="-6.200*m"/>
+    <constant name="Q1eR_CenterX"         value="-0.000000*m"/>
 
-    <constant name="Q2eR_InnerRadius"     value="78.0*mm"/>
-    <constant name="Q2eR_Length"          value="1.4*m"/>
-    <constant name="Q2eR_CenterPosition"  value="-8.3*m"/>
+    <constant name="Q2eR_InnerRadius"     value="70.5*mm"/>
+    <constant name="Q2eR_Theta"           value="0.000000*rad"/>
+    <constant name="Q2eR_CenterZ"         value="-8.300*m"/>
+    <constant name="Q2eR_CenterX"         value="-0.000000*m"/>
 
-    <constant name="B2AeR_InnerRadius"    value="90.0*mm"/>
-    <constant name="B2AeR_Length"         value="1.78*m"/>
-    <constant name="B2AeR_CenterPosition" value="-10.5*m"/>
+    <constant name="B2AeR_InnerRadius"    value="50.0*mm"/>
+    <constant name="B2AeR_Theta"          value="0.0050*rad"/>
+    <constant name="B2AeR_CenterZ"        value="-18.650*m"/>
+    <constant name="B2AeR_CenterX"        value="-0.000000*m"/>
+    <constant name="B2AeR_EndZ"           value="B2AeR_CenterZ - (B2AeR_Length/2)*cos(B2AeR_Theta)"/>
+    <constant name="B2AeR_EndX"           value="B2AeR_CenterX - (B2AeR_Length/2)*sin(B2AeR_Theta)"/>
 
-    <constant name="B2BeR_InnerRadius"    value="111.0*mm"/>
-    <constant name="B2BeR_Length"         value="3.18*m"/>
-    <constant name="B2BeR_CenterPosition" value="-13.275*m"/>
+    <constant name="B2AeR_Connection_Length" value="1.0*cm"/>
+    <constant name="B2AeR_Connection_CenterZ"  value="B2AeR_EndZ - B2AeR_Connection_Length*cos(B2AeR_Theta)"/>
+    <constant name="B2AeR_Connection_CenterX"  value="B2AeR_EndX - B2AeR_Connection_Length*sin(B2AeR_Theta)"/>
+    <constant name="B2AeR_Connection_EndZ"     value="B2AeR_Connection_CenterZ - B2AeR_Connection_Length/2*cos(B2AeR_Theta)"/>
+    <constant name="B2AeR_Connection_EndX"     value="B2AeR_Connection_CenterX - B2AeR_Connection_Length/2*sin(B2AeR_Theta)"/>
+
+
+    <constant name="B2BeR_InnerRadius"    value="50.0*mm"/>
+    <constant name="B2BeR_Theta"          value="0.0200*rad"/>
+    <constant name="B2BeR_CenterZ"        value="-21.700*m"/>
+    <constant name="B2BeR_CenterX"        value="-0.0153*m"/>
+    <constant name="B2BeR_EndZ"           value="B2BeR_CenterZ - (B2BeR_Length/2)*cos(B2BeR_Theta)"/>
+    <constant name="B2BeR_EndX"           value="B2BeR_CenterX - (B2BeR_Length/2)*sin(B2BeR_Theta)"/>
+
+    <constant name="SQ3eR_InnerRadius"    value="0.05*m"/>
+    <constant name="SQ3eR_OuterRadius"    value="0.15*m"/>
+    <constant name="SQ3eR_CenterZ"        value="-42.248*m"/>
+    <constant name="SQ3eR_CenterX"        value="-0.4263*m"/>
+    <constant name="SQ3eR_Theta"          value="0.0200*rad"/>
+    <constant name="SQ3eR_StartZ"         value="SQ3eR_CenterZ + (SQ3eR_Length/2)*cos(SQ3eR_Theta)"/>
+    <constant name="SQ3eR_StartX"         value="SQ3eR_CenterX + (SQ3eR_Length/2)*sin(SQ3eR_Theta)"/>
 
     <constant name="Q3eR_InnerRadius"     value="0.05*m"/>
-    <constant name="Q3eR_Length"          value="0.6*m"/>
-    <constant name="Q3eR_StartZ"          value="-37.696067*m"/>
-    <constant name="Q3eR_StartX"          value="-0.460027*m"/>
-    <constant name="Q3eR_EndZ"            value="-38.295969*m"/>
-    <constant name="Q3eR_EndX"            value="-0.470873*m"/>
-    <constant name="Q3eR_XPosition"       value="-0.46545*m"/>
-    <constant name="Q3eR_Theta"           value="0.0180766389*rad"/>
-    <constant name="Q3eR_CenterPosition"  value="-37.996018*m"/>
+    <constant name="Q3eR_OuterRadius"     value="0.15*m"/>
+    <constant name="Q3eR_Theta"           value="0.0200*rad"/>
+    <constant name="Q3eR_CenterZ"         value="-42.823*m"/>
+    <constant name="Q3eR_CenterX"         value="-0.4378*m"/>
 
-    <comment> Note: Placements for Q4eR, B3eR, B4eR, B5eR, B6eR, B7eR
-              are approximate (valid to within ~1 cm).
-              Should be updated with detailed input from the accelerator group
-    </comment>
+    <constant name="SQ4eR_InnerRadius"    value="0.05*m"/>
+    <constant name="SQ4eR_OuterRadius"    value="0.15*m"/>
+    <constant name="SQ4eR_CenterZ"        value="-46.747*m"/>
+    <constant name="SQ4eR_CenterX"        value="-0.5163*m"/>
+    <constant name="SQ4eR_Theta"          value="0.0200*rad"/>
 
-    <constant name="Q4eR_CenterZ"         value="-45.32*m"/>
-    <constant name="Q4eR_CenterX"         value="-0.58*m"/>
-    <constant name="Q4eR_Length"          value="0.6*m"/>
+    <constant name="Q4eR_CenterZ"         value="-47.322*m"/>
+    <constant name="Q4eR_CenterX"         value="-0.5278*m"/>
     <constant name="Q4eR_InnerRadius"     value="0.05*m"/>
     <constant name="Q4eR_OuterRadius"     value="0.2*m"/>
-    <constant name="Q4eR_Theta"           value="Q3eR_Theta"/>
+    <constant name="Q4eR_Theta"           value="0.0200*rad"/>
 
-    <constant name="B3eR_CenterZ"         value="-50.01*m"/>
-    <constant name="B3eR_CenterX"         value="-0.67*m"/>
-    <constant name="B3eR_Length"          value="1.2*m"/>
+    <constant name="B3eR_CenterZ"         value="-53.721*m"/>
+    <constant name="B3eR_CenterX"         value="-0.6557*m"/>
     <constant name="B3eR_InnerRadius"     value="0.05*m"/>
     <constant name="B3eR_OuterRadius"     value="0.24*m"/>
-    <constant name="B3eR_Theta"           value="Q3eR_Theta*7/8"/>
+    <constant name="B3eR_Theta"           value="0.0264*rad"/>
+
+    <constant name="SQ5eR_InnerRadius"    value="0.05*m"/>
+    <constant name="SQ5eR_OuterRadius"    value="0.15*m"/>
+    <constant name="SQ5eR_CenterZ"        value="-51.246*m"/>
+    <constant name="SQ5eR_CenterX"        value="-0.6063*m"/>
+    <constant name="SQ5eR_Theta"          value="0.0200*rad"/>
+
+    <constant name="Q5eR_InnerRadius"     value="0.05*m"/>
+    <constant name="Q5eR_OuterRadius"     value="0.2*m"/>
+    <constant name="Q5eR_CenterZ"         value="-51.821*m"/>
+    <constant name="Q5eR_CenterX"         value="-0.6178*m"/>
+    <constant name="Q5eR_Theta"           value="0.0200*rad"/>
+
+    <constant name="SQ6eR_InnerRadius"    value="0.05*m"/>
+    <constant name="SQ6eR_OuterRadius"    value="0.15*m"/>
+    <constant name="SQ6eR_CenterZ"        value="-55.145*m"/>
+    <constant name="SQ6eR_CenterX"        value="-0.6934*m"/>
+    <constant name="SQ6eR_Theta"          value="0.0264*rad"/>
+
+    <constant name="SQ7eR_InnerRadius"    value="0.05*m"/>
+    <constant name="SQ7eR_OuterRadius"    value="0.15*m"/>
+    <constant name="SQ7eR_CenterZ"        value="-59.644*m"/>
+    <constant name="SQ7eR_CenterX"        value="-0.8123*m"/>
+    <constant name="SQ7eR_Theta"          value="0.0264*rad"/>
+
+    <constant name="SQ8eR_InnerRadius"    value="0.05*m"/>
+    <constant name="SQ8eR_OuterRadius"    value="0.15*m"/>
+    <constant name="SQ8eR_CenterZ"        value="-64.442*m"/>
+    <constant name="SQ8eR_CenterX"        value="-0.9391*m"/>
+    <constant name="SQ8eR_Theta"          value="0.0264*rad"/>
+
+    <constant name="Q8eR_InnerRadius"     value="0.05*m"/>
+    <constant name="Q8eR_OuterRadius"     value="0.2*m"/>
+    <constant name="Q8eR_CenterZ"         value="-65.317*m"/>
+    <constant name="Q8eR_CenterX"         value="-0.9622*m"/>
+    <constant name="Q8eR_Theta"          value="0.0264*rad"/>
+    <constant name="RF_Crab_CenterZ"      value="-68.415*m"/>
+    <constant name="RF_Crab_CenterX"      value="-1.044*m"/>
+    <constant name="RF_Crab_Theta"        value="0.0264*rad"/>
+
+    <constant name="Q9eR_InnerRadius"     value="0.05*m"/>
+    <constant name="Q9eR_OuterRadius"     value="0.2*m"/>
+    <constant name="Q9eR_CenterZ"         value="-71.514*m"/>
+    <constant name="Q9eR_CenterX"         value="-1.126*m"/>
+    <constant name="Q9eR_Theta"          value="0.0264*rad"/>
+
+    <constant name="SQ10eR_InnerRadius"   value="0.05*m"/>
+    <constant name="SQ10eR_OuterRadius"   value="0.15*m"/>
+    <constant name="SQ10eR_CenterZ"       value="-75.364*m"/>
+    <constant name="SQ10eR_CenterX"       value="-1.228*m"/>
+    <constant name="SQ10eR_Theta"         value="0.0264*rad"/>
+
+    <constant name="Q10eR_InnerRadius"    value="0.05*m"/>
+    <constant name="Q10eR_OuterRadius"    value="0.2*m"/>
+    <constant name="Q10eR_CenterZ"        value="-76.239*m"/>
+    <constant name="Q10eR_CenterX"        value="-1.251*m"/>
+    <constant name="Q10eR_Theta"          value="0.0264*rad"/>
+    <constant name="D4eR_1_CenterZ"       value="-78.753*m"/>
+    <constant name="D4eR_1_CenterX"       value="-1.317*m"/>
+    <constant name="D4eR_1_Theta"         value="0.0134*rad"/>
+    <constant name="D4eR_1_InnerRadius"   value="0.05*m"/>
+    <constant name="D4eR_1_OuterRadius"   value="0.24*m"/>
+
+    <constant name="Q11eR_InnerRadius"    value="0.05*m"/>
+    <constant name="Q11eR_OuterRadius"    value="0.2*m"/>
+    <constant name="Q11eR_CenterZ"        value="-81.116*m"/>
+    <constant name="Q11eR_CenterX"        value="-1.349*m"/>
+    <constant name="Q11eR_Theta"          value="0.0134*rad"/>
+    <constant name="D4eR_2_CenterZ"       value="-83.631*m"/>
+    <constant name="D4eR_2_CenterX"       value="-1.383*m"/>
+    <constant name="D4eR_2_Theta"         value="0.000341*rad"/>
+    <constant name="D4eR_2_InnerRadius"   value="0.05*m"/>
+    <constant name="D4eR_2_OuterRadius"   value="0.24*m"/>
+
+    <constant name="Q12eR_InnerRadius"    value="0.05*m"/>
+    <constant name="Q12eR_OuterRadius"    value="0.2*m"/>
+    <constant name="Q12eR_CenterZ"        value="-85.994*m"/>
+    <constant name="Q12eR_CenterX"        value="-1.383*m"/>
+    <constant name="Q12eR_Theta"          value="0.000341*rad"/>
+    <constant name="D4eR_3_CenterZ"       value="-88.509*m"/>
+    <constant name="D4eR_3_CenterX"       value="-1.384*m"/>
+    <constant name="D4eR_3_Theta"         value="-0.0127*rad"/>
+    <constant name="D4eR_3_InnerRadius"   value="0.05*m"/>
+    <constant name="D4eR_3_OuterRadius"   value="0.24*m"/>
+
+    <constant name="Q13eR_InnerRadius"    value="0.05*m"/>
+    <constant name="Q13eR_OuterRadius"    value="0.2*m"/>
+    <constant name="Q13eR_CenterZ"        value="-90.871*m"/>
+    <constant name="Q13eR_CenterX"        value="-1.354*m"/>
+    <constant name="Q13eR_Theta"          value="-0.0127*rad"/>
+    <constant name="D4eR_4_CenterZ"       value="-93.386*m"/>
+    <constant name="D4eR_4_CenterX"       value="-1.322*m"/>
+    <constant name="D4eR_4_Theta"         value="-0.0257*rad"/>
+    <constant name="D4eR_4_InnerRadius"   value="0.05*m"/>
+    <constant name="D4eR_4_OuterRadius"   value="0.24*m"/>
+    <constant name="D4eR_5_CenterZ"       value="-98.263*m"/>
+    <constant name="D4eR_5_CenterX"       value="-1.197*m"/>
+    <constant name="D4eR_5_Theta"         value="-0.0388*rad"/>
+    <constant name="D4eR_5_InnerRadius"   value="0.05*m"/>
+    <constant name="D4eR_5_OuterRadius"   value="0.24*m"/>
 
     <constant name="B4eR_CenterZ"         value="-55*m"/>
     <constant name="B4eR_CenterX"         value="-0.79*m"/>
@@ -65,6 +183,7 @@
     <constant name="B4eR_InnerRadius"     value="0.05*m"/>
     <constant name="B4eR_OuterRadius"     value="0.24*m"/>
     <constant name="B4eR_Theta"           value="Q3eR_Theta*6/8"/>
+    <constant name="B4eR_BendAngle"       value="0.0*rad"/>
 
     <constant name="B5eR_CenterZ"         value="-59.98*m"/>
     <constant name="B5eR_CenterX"         value="-0.93*m"/>
@@ -72,6 +191,7 @@
     <constant name="B5eR_InnerRadius"     value="0.05*m"/>
     <constant name="B5eR_OuterRadius"     value="0.24*m"/>
     <constant name="B5eR_Theta"           value="Q3eR_Theta*5/8"/>
+    <constant name="B5eR_BendAngle"       value="0.0*rad"/>
 
     <constant name="B6eR_CenterZ"         value="-64.97*m"/>
     <constant name="B6eR_CenterX"         value="-1.05*m"/>
@@ -79,6 +199,7 @@
     <constant name="B6eR_InnerRadius"     value="0.05*m"/>
     <constant name="B6eR_OuterRadius"     value="0.24*m"/>
     <constant name="B6eR_Theta"           value="Q3eR_Theta*4/8"/>
+    <constant name="B6eR_BendAngle"       value="0.0*rad"/>
 
     <constant name="B7eR_CenterZ"         value="-69.96*m"/>
     <constant name="B7eR_CenterX"         value="-1.19*m"/>
@@ -86,6 +207,7 @@
     <constant name="B7eR_InnerRadius"     value="0.05*m"/>
     <constant name="B7eR_OuterRadius"     value="0.24*m"/>
     <constant name="B7eR_Theta"           value="Q3eR_Theta*3/8"/>
+    <constant name="B7eR_BendAngle"       value="0.0*rad"/>
 
 
     <comment> Hadron magnet dimensions and positions </comment>
@@ -170,31 +292,25 @@
       Parameters for backwards vacuum box
       --------------------------
     </comment>
-    <constant name="Vacuum_BB_MinX"       value="-2.5*m"/>
-    <constant name="Vacuum_BB_MaxX"       value="0.5*m"/>
-    <constant name="Vacuum_BB_MinY"       value="-1.5*m"/>
-    <constant name="Vacuum_BB_MaxY"       value="1.5*m"/>
-    <constant name="Vacuum_BB_MinZ"       value="B2BeR_CenterPosition-B2BeR_Length/2"/>
-    <constant name="Vacuum_BB_MaxZ"       value="Q3eR_EndZ"/>
 
-    <constant name="Beam_Theta"           value="Q3eR_Theta"/>
+    <constant name="Beam_Theta"           value="SQ3eR_Theta"/>
 
     <constant name="Backwards_Box_Wall"   value="2*mm"/>
 
     <comment> Dipole focal point in global coordinates </comment>
-    <constant name="Dipole_Focus_X"       value="0.0*mm"/>
+    <constant name="Dipole_Focus_X"       value="B2AeR_Connection_EndX"/>
     <constant name="Dipole_Focus_Y"       value="0.0*mm"/>
-    <constant name="Dipole_Focus_Z"       value="Q3eR_StartZ-Q3eR_StartX/tan(Beam_Theta)"/>
+    <constant name="Dipole_Focus_Z"       value="B2AeR_Connection_EndZ"/>
 
     <comment> Central pipe dimensions </comment>
-    <constant name="Beam_Length"          value="(Dipole_Focus_Z-Q3eR_StartZ)/cos(Beam_Theta)"/>
-    <constant name="Beam_WidthR"          value="Q3eR_InnerRadius"/>
-    <constant name="Beam_WidthL"          value="Q3eR_InnerRadius"/>
-    <constant name="Beam_Height"          value="Q3eR_InnerRadius"/>
+    <constant name="Beam_Length"          value="sqrt((Dipole_Focus_X-SQ3eR_StartX)*(Dipole_Focus_X-SQ3eR_StartX)+(Dipole_Focus_Z-SQ3eR_StartZ)*(Dipole_Focus_Z-SQ3eR_StartZ))"/>
+    <!-- <constant name="Beam_Length"          value="10*m"/> -->
+    <constant name="Beam_Width"           value="SQ3eR_InnerRadius"/>
+    <constant name="Beam_Height"          value="SQ3eR_InnerRadius"/>
 
     <comment> Entry box joining magnets, lumi and tagger systems </comment>
-    <constant name="Exit_Height"          value="B2BeR_InnerRadius"/>
-    <constant name="Exit_Width"           value="B2BeR_InnerRadius"/>
+    <constant name="Exit_Height"          value="SQ3eR_InnerRadius"/>
+    <constant name="Exit_Width"           value="SQ3eR_InnerRadius"/>
     <constant name="Exit_Theta"           value="0.07*rad"/>
 
     <comment> Timepix4 ASIC dimensions </comment>
@@ -202,49 +318,72 @@
     <constant name="Timepix4width"        value="24.64*mm"/>
 
     <comment> Tagger1 box and dimensions and positions </comment>
-    <constant name="Tagger1_Width"        value="147.84*mm"/>
-    <constant name="Tagger1_Height"       value="200*mm"/>
+    <constant name="Tagger1_Width"        value="1.4*147.84*mm"/>
+    <constant name="Tagger1_Height"       value="64.0*mm"/>
 
     <constant name="Tag_Tracker_1_Depth"  value="305*mm"/>
     <constant name="Tag_Cal_1_Depth"      value="300*mm"/>
     <constant name="Tagger1_Length"       value="Tag_Tracker_1_Depth"/>
 
-    <constant name="Tagger1_Min_Theta"    value="0.0262*rad"/>
-    <constant name="Tagger1_Max_Theta"    value="0.0410*rad"/>
     <constant name="Tagger1_Min_Offset"   value="Q3eR_InnerRadius+Backwards_Box_Wall"/>
-    <constant name="Tagger1_Theta"        value="Tagger1_Min_Theta"/>
+    <constant name="Tagger1_Theta"        value="Beam_Theta"/>
 
     <comment> Tagger1 calculated constants, shared between vacuum and detector </comment>
-    <constant name="Tagger1_Vac_Offset_X" value="(-0.5*Tagger1_Width-Backwards_Box_Wall)*cos(Tagger1_Theta-Beam_Theta)"/>
-    <constant name="Tagger1_Vac_Offset_Z" value="(0.5*Tagger1_Width+Backwards_Box_Wall)*sin(Tagger1_Theta-Beam_Theta)"/>
-    <constant name="Tagger1_Vac_Length"   value="(Tagger1_Min_Offset)/sin(Tagger1_Theta-Beam_Theta)"/>
-
-    <constant name="Tagger1_X"            value="Dipole_Focus_X+Tagger1_Vac_Offset_X-Tagger1_Vac_Length*sin(Tagger1_Theta)"/>
+    <!-- <constant name="Tagger1_Vac_Offset_X" value="(-0.5*Tagger1_Width-Backwards_Box_Wall)*cos(Tagger1_Theta-Beam_Theta)"/> -->
+    <!-- <constant name="Tagger1_Vac_Offset_Z" value="(0.5*Tagger1_Width+Backwards_Box_Wall)*sin(Tagger1_Theta-Beam_Theta)"/> -->
+    <!-- <constant name="Tagger1_Vac_Length"   value="(Tagger1_Min_Offset)/sin(Tagger1_Theta-Beam_Theta)"/> -->
+    <constant name="Tagger1_Offset_X"     value="(-0.5*Tagger1_Width-2*Backwards_Box_Wall-Beam_Width)"/> <!-- In far-backwards beamline coordinates -->
+    <constant name="Tagger1_Offset_Y"     value="0*m"/>
+    <constant name="Tagger1_Offset_Z"     value="0.0*m"/> <!-- In far-backwards beamline coordinates -->
+    <constant name="Tagger1_Vac_Length"   value="2.5*m+B2BeR_Length"/>
+    <!-- Tagger1 position semantics: X,Z below are START (negative end) of vacuum length.
+         Local (beamline) coordinates rotated into global using standard matrix:
+           Xg = X0 + Xloc*cos(theta) - Zloc*sin(theta)
+           Zg = Z0 + Xloc*sin(theta) + Zloc*cos(theta)
+         End and center helper constants added for downstream use. -->
+    <!-- Standard right-handed rotation about Y: Xg = X0 + Xloc*cos + Zloc*sin ; Zg = Z0 - Xloc*sin + Zloc*cos -->
+    <constant name="Tagger1_StartX"       value="Dipole_Focus_X + Tagger1_Offset_X*cos(Tagger1_Theta) + Tagger1_Offset_Z*sin(Tagger1_Theta)"/>
+    <constant name="Tagger1_StartZ"       value="Dipole_Focus_Z - Tagger1_Offset_X*sin(Tagger1_Theta) + Tagger1_Offset_Z*cos(Tagger1_Theta)"/>
+    <constant name="Tagger1_CenterX"      value="Tagger1_StartX - 0.5*Tagger1_Vac_Length*sin(Tagger1_Theta)"/>
+    <constant name="Tagger1_CenterZ"      value="Tagger1_StartZ - 0.5*Tagger1_Vac_Length*cos(Tagger1_Theta)"/>
+    <constant name="Tagger1_EndX"         value="Tagger1_StartX - Tagger1_Vac_Length*sin(Tagger1_Theta)"/>
+    <constant name="Tagger1_EndZ"         value="Tagger1_StartZ - Tagger1_Vac_Length*cos(Tagger1_Theta)"/>
+    <!-- Backward-compatible names (Tagger1_X/Z/Y) map to start. -->
+    <constant name="Tagger1_X"            value="Tagger1_EndX"/>
     <constant name="Tagger1_Y"            value="Dipole_Focus_Y"/>
-    <constant name="Tagger1_Z"            value="Dipole_Focus_Z+Tagger1_Vac_Offset_Z-Tagger1_Vac_Length*cos(Tagger1_Theta)"/>
+    <constant name="Tagger1_Z"            value="Tagger1_EndZ"/>
 
     <comment> Tagger2 box and dimensions and positions </comment>
-    <constant name="Tagger2_Width"        value="147.84*mm"/>
-    <constant name="Tagger2_Height"       value="150.0*mm"/>
+    <constant name="Tagger2_Width"        value="3*147.84*mm"/>
+    <constant name="Tagger2_Height"       value="64.0*mm"/>
 
     <constant name="Tag_Tracker_2_Depth"  value="Tag_Tracker_1_Depth"/>
     <constant name="Tag_Cal_2_Depth"      value="Tag_Cal_1_Depth"/>
     <constant name="Tagger2_Length"       value="Tag_Tracker_2_Depth"/>
 
-    <constant name="Tagger2_Min_Theta"    value="0.02*rad"/>
-    <constant name="Tagger2_Max_Theta"    value="Tagger1_Min_Theta"/>
     <constant name="Tagger2_Min_Offset"   value="Q3eR_InnerRadius+Backwards_Box_Wall"/>
 
-    <constant name="Tagger2_Theta"        value="Tagger2_Max_Theta"/>
+    <constant name="Tagger2_Theta"        value="Beam_Theta"/>
 
     <comment> Tagger2 calculated constants, shared between vacuum and detector </comment>
-    <constant name="Tagger2_Vac_Offset_X" value="0.5*Tagger2_Width*cos(Tagger2_Theta-Beam_Theta)"/>
-    <constant name="Tagger2_Vac_Offset_Z" value="0.5*Tagger2_Width*sin(Tagger2_Theta-Beam_Theta)"/>
-    <constant name="Tagger2_Vac_Length"   value="(2*Tagger2_Vac_Offset_X+Tagger2_Min_Offset)/sin(Tagger2_Theta-Beam_Theta)"/>
-
-    <constant name="Tagger2_X"            value="Dipole_Focus_X+Tagger2_Vac_Offset_X-Tagger2_Vac_Length*sin(Tagger2_Theta)"/>
+    <!-- <constant name="Tagger2_Vac_Offset_X" value="0.5*Tagger2_Width*cos(Tagger2_Theta-Beam_Theta)"/> -->
+    <!-- <constant name="Tagger2_Vac_Offset_Z" value="0.5*Tagger2_Width*sin(Tagger2_Theta-Beam_Theta)"/> -->
+    <!-- <constant name="Tagger2_Vac_Length"   value="(2*Tagger2_Vac_Offset_X+Tagger2_Min_Offset)/sin(Tagger2_Theta-Beam_Theta)"/> -->
+    <constant name="Tagger2_Offset_X"     value="(-0.5*Tagger2_Width-2*Backwards_Box_Wall-Beam_Width)"/>
+    <constant name="Tagger2_Offset_Y"     value="0*m"/>
+    <constant name="Tagger2_Offset_Z"     value="-3.0*m-B2BeR_Length"/>
+    <constant name="Tagger2_Vac_Length"   value="16.0*m"/>
+    <!-- Tagger2 position semantics mirror Tagger1; includes non-zero local Z offset. -->
+    <constant name="Tagger2_StartX"       value="Dipole_Focus_X + Tagger2_Offset_X*cos(Tagger2_Theta) + Tagger2_Offset_Z*sin(Tagger2_Theta)"/>
+    <constant name="Tagger2_StartZ"       value="Dipole_Focus_Z - Tagger2_Offset_X*sin(Tagger2_Theta) + Tagger2_Offset_Z*cos(Tagger2_Theta)"/>
+    <constant name="Tagger2_CenterX"      value="Tagger2_StartX - 0.5*Tagger2_Vac_Length*sin(Tagger2_Theta)"/>
+    <constant name="Tagger2_CenterZ"      value="Tagger2_StartZ - 0.5*Tagger2_Vac_Length*cos(Tagger2_Theta)"/>
+    <constant name="Tagger2_EndX"         value="Tagger2_StartX - Tagger2_Vac_Length*sin(Tagger2_Theta)"/>
+    <constant name="Tagger2_EndZ"         value="Tagger2_StartZ - Tagger2_Vac_Length*cos(Tagger2_Theta)"/>
+    <!-- Backward-compatible names -->
+    <constant name="Tagger2_X"            value="Tagger2_EndX"/>
     <constant name="Tagger2_Y"            value="Dipole_Focus_Y"/>
-    <constant name="Tagger2_Z"            value="Dipole_Focus_Z+Tagger2_Vac_Offset_Z-Tagger2_Vac_Length*cos(Tagger2_Theta)"/>
+    <constant name="Tagger2_Z"            value="Tagger2_EndZ"/>
 
 
     <!--  -->
@@ -253,16 +392,16 @@
     <constant name="LumiBeamDiv_pref"     value="5 * 211e-6*rad"/>
 
     <!-- Lumi Exit Window -->
-    <constant name="LumiWin_Zstart"       value="-18.5*m"/>
+    <constant name="LumiWin_Zstart"       value="-30.0*m"/>
     <constant name="LumiWin_thickness"    value="1*cm"/>
-    <constant name="LumiWin_R"            value="4*cm"/> <!-- opening radius of tagger box -->
+    <constant name="LumiWin_R"            value="Exit_Height"/> <!-- opening radius of tagger box -->
     <constant name="LumiWin_Z"            value="LumiWin_Zstart - LumiWin_thickness/2."/>
 
     <!-- Lumi collimator -->
     <constant name="LumiColl_DZ"          value="30*cm"/>
     <constant name="LumiColl_X"           value="0*m"/>
     <constant name="LumiColl_Y"           value="0*m"/>
-    <constant name="LumiColl_Z"           value="-22.6*m"/>
+    <constant name="LumiColl_Z"           value="-32.6*m"/>
 
     <!-- Lumi lead walls -->
     <constant name="LumiWall_DX"          value="0.5*m"/>
