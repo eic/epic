@@ -1,7 +1,7 @@
 <lccdd>
 
-  <info name="lfhcal_2025_TB.xml"
-        title="EPIC LFHCAL 2x 8M Module, configuration as TB at PS in 2025"
+  <info name="lfhcal_2028_TB_opt2.xml"
+        title="EPIC LFHCAL 8x 8M Module, configuration as TB at PS and SPS in 2026"
         author="@FriederikeBock"
         url="https://github.com/FriederikeBock"
         status="development"
@@ -28,10 +28,10 @@
   <detectors>
     <documentation>
       ### Forward (Positive Z) Endcap Hadronic Calorimeter
-      Test beam setup 2025
+      Test beam setup 2028
 
       LFHCal module features 60 layers of Steel/Sc 1.6 cm/0.4 cm
-      Summing scheme 5-5-10-10-10-10-5-5
+      Summing scheme 5-5-5-5-10-10-10-10
       Currently don't have an implementation of electronics, so just leave that area (final 10 cm) empty
       So then, actual detector area is "LFHCAL_length - LFHCALElectronicsThickness" long
     </documentation>
@@ -51,8 +51,8 @@
         z="LFHCAL_length"
         rmin="20*cm"
         rmax="LFHCAL_rmax"
-        x="EightM_OuterWidth+1*cm"
-        y="EightM_OuterHeight*2+1*cm"/>
+        x="EightM_OuterWidth*4+1*cm"
+        y="EightM_OuterHeight*8+1*cm"/>
       <envelope material="Steel235"/>
 
       <eightmodule name="8MModule" vis="InvisibleWithDaughters" repeat="0" >
@@ -87,12 +87,12 @@
         <slice material="Kapton" thickness="LFHCALKaptonThickness" vis="LFHCALLayerKaptonVis" type="2" offset="LFHCALAirOffset"/>
         <slice material="Steel235" thickness="LFHCALAbsorberThickness" vis="LFHCALLayerSteelVis" type="1"/>
       </layer>
-      <layer repeat="LFHCALLayer_NSteelRepeatS" vis="InvisibleWithDaughters" readoutlayer="2">
+      <layer repeat="LFHCALLayer_NSteelRepeatSFirst" vis="InvisibleWithDaughters" readoutlayer="2">
         <slice material="Polystyrene" thickness="LFHCALPolystyreneThickness" vis="LFHCALLayerScintVis" sensitive="yes" limits="cal_limits" type="3" />
         <slice material="Kapton" thickness="LFHCALKaptonThickness" vis="LFHCALLayerKaptonVis" type="2" offset="LFHCALAirOffset"/>
         <slice material="Steel235" thickness="LFHCALAbsorberThickness" vis="LFHCALLayerSteelVis" type="1"/>
       </layer>
-      <layer repeat="LFHCALLayer_NSteelRepeatS" vis="InvisibleWithDaughters" readoutlayer="3">
+      <layer repeat="LFHCALLayer_NSteelRepeatSFirst" vis="InvisibleWithDaughters" readoutlayer="3">
         <slice material="Polystyrene" thickness="LFHCALPolystyreneThickness" vis="LFHCALLayerScintVis" sensitive="yes" limits="cal_limits" type="3" />
         <slice material="Kapton" thickness="LFHCALKaptonThickness" vis="LFHCALLayerKaptonVis" type="2" offset="LFHCALAirOffset"/>
         <slice material="Steel235" thickness="LFHCALAbsorberThickness" vis="LFHCALLayerSteelVis" type="1"/>
@@ -107,12 +107,12 @@
         <slice material="Kapton" thickness="LFHCALKaptonThickness" vis="LFHCALLayerKaptonVis" type="2" offset="LFHCALAirOffset"/>
         <slice material="Steel235" thickness="LFHCALAbsorberThickness" vis="LFHCALLayerSteelVis" type="1"/>
       </layer>
-      <layer repeat="LFHCALLayer_NSteelRepeatSFirst" vis="InvisibleWithDaughters" readoutlayer="6">
+      <layer repeat="LFHCALLayer_NSteelRepeatS" vis="InvisibleWithDaughters" readoutlayer="6">
         <slice material="Polystyrene" thickness="LFHCALPolystyreneThickness" vis="LFHCALLayerScintVis" sensitive="yes" limits="cal_limits" type="3" />
         <slice material="Kapton" thickness="LFHCALKaptonThickness" vis="LFHCALLayerKaptonVis" type="2" offset="LFHCALAirOffset"/>
         <slice material="Steel235" thickness="LFHCALAbsorberThickness" vis="LFHCALLayerSteelVis" type="1"/>
       </layer>
-      <layer repeat="LFHCALLayer_NSteelRepeatSFirst" vis="InvisibleWithDaughters" readoutlayer="7">
+      <layer repeat="LFHCALLayer_NSteelRepeatS" vis="InvisibleWithDaughters" readoutlayer="7">
         <slice material="Polystyrene" thickness="LFHCALPolystyreneThickness" vis="LFHCALLayerScintVis" sensitive="yes" limits="cal_limits" type="3" />
         <slice material="Kapton" thickness="LFHCALKaptonThickness" vis="LFHCALLayerKaptonVis" type="2" offset="LFHCALAirOffset"/>
         <slice material="Steel235" thickness="LFHCALAbsorberThickness" vis="LFHCALLayerSteelVis" type="1"/>
@@ -122,8 +122,44 @@
         ### for testing of a single module
       </documentation>
       <eightmodulepositions>
-        <position x="0*mm" y="-EightM_OuterHeight/2." z="0*mm" orientation="2" IDx="0" IDy="0"/>
-        <position x="0*mm" y="EightM_OuterHeight/2." z="0*mm" orientation="2" IDx="0" IDy="1"/>
+        <!--  Left column  -->
+        <position x="-(EightM_OuterWidth/2.+EightM_OuterWidth)" y="-(EightM_OuterHeight/2.+3*EightM_OuterHeight)" z="0*mm" orientation="0" IDx="0" IDy="0"/>
+        <position x="-(EightM_OuterWidth/2.+EightM_OuterWidth)" y="-(EightM_OuterHeight/2.+2*EightM_OuterHeight)" z="0*mm" orientation="0" IDx="0" IDy="1"/>
+        <position x="-(EightM_OuterWidth/2.+EightM_OuterWidth)" y="-(EightM_OuterHeight/2.+1*EightM_OuterHeight)" z="0*mm" orientation="0" IDx="0" IDy="2"/>
+        <position x="-(EightM_OuterWidth/2.+EightM_OuterWidth)" y="-(EightM_OuterHeight/2.)" z="0*mm" orientation="0" IDx="0" IDy="3"/>
+        <position x="-(EightM_OuterWidth/2.+EightM_OuterWidth)" y="(EightM_OuterHeight/2.)" z="0*mm" orientation="0" IDx="0" IDy="4"/>
+        <position x="-(EightM_OuterWidth/2.+EightM_OuterWidth)" y="(EightM_OuterHeight/2.+1*EightM_OuterHeight)" z="0*mm" orientation="0" IDx="0" IDy="5"/>
+        <position x="-(EightM_OuterWidth/2.+EightM_OuterWidth)" y="(EightM_OuterHeight/2.+2*EightM_OuterHeight)" z="0*mm" orientation="0" IDx="0" IDy="6"/>
+        <position x="-(EightM_OuterWidth/2.+EightM_OuterWidth)" y="(EightM_OuterHeight/2.+2*EightM_OuterHeight)" z="0*mm" orientation="0" IDx="0" IDy="7"/>
+        <!--  Left middle column  -->
+        <position x="-(EightM_OuterWidth/2.)" y="-(EightM_OuterHeight/2.+3*EightM_OuterHeight)" z="0*mm" orientation="0" IDx="1" IDy="0"/>
+        <position x="-(EightM_OuterWidth/2.)" y="-(EightM_OuterHeight/2.+2*EightM_OuterHeight)" z="0*mm" orientation="0" IDx="1" IDy="1"/>
+        <position x="-(EightM_OuterWidth/2.)" y="-(EightM_OuterHeight/2.+1*EightM_OuterHeight)" z="0*mm" orientation="0" IDx="1" IDy="2"/>
+        <position x="-(EightM_OuterWidth/2.)" y="-(EightM_OuterHeight/2.)" z="0*mm" orientation="0" IDx="1" IDy="3"/>
+        <position x="-(EightM_OuterWidth/2.)" y="(EightM_OuterHeight/2.)" z="0*mm" orientation="0" IDx="1" IDy="4"/>
+        <position x="-(EightM_OuterWidth/2.)" y="(EightM_OuterHeight/2.+1*EightM_OuterHeight)" z="0*mm" orientation="0" IDx="1" IDy="5"/>
+        <position x="-(EightM_OuterWidth/2.)" y="(EightM_OuterHeight/2.+2*EightM_OuterHeight)" z="0*mm" orientation="0" IDx="1" IDy="6"/>
+        <position x="-(EightM_OuterWidth/2.)" y="(EightM_OuterHeight/2.+2*EightM_OuterHeight)" z="0*mm" orientation="0" IDx="1" IDy="7"/>
+        <!--  Right middle column  -->
+        <position x="(EightM_OuterWidth/2.)" y="-(EightM_OuterHeight/2.+3*EightM_OuterHeight)" z="0*mm" orientation="0" IDx="2" IDy="0"/>
+        <position x="(EightM_OuterWidth/2.)" y="-(EightM_OuterHeight/2.+2*EightM_OuterHeight)" z="0*mm" orientation="0" IDx="2" IDy="1"/>
+        <position x="(EightM_OuterWidth/2.)" y="-(EightM_OuterHeight/2.+1*EightM_OuterHeight)" z="0*mm" orientation="0" IDx="2" IDy="2"/>
+        <position x="(EightM_OuterWidth/2.)" y="-(EightM_OuterHeight/2.)" z="0*mm" orientation="0" IDx="2" IDy="3"/>
+        <position x="(EightM_OuterWidth/2.)" y="(EightM_OuterHeight/2.)" z="0*mm" orientation="0" IDx="2" IDy="4"/>
+        <position x="(EightM_OuterWidth/2.)" y="(EightM_OuterHeight/2.+1*EightM_OuterHeight)" z="0*mm" orientation="0" IDx="2" IDy="5"/>
+        <position x="(EightM_OuterWidth/2.)" y="(EightM_OuterHeight/2.+2*EightM_OuterHeight)" z="0*mm" orientation="0" IDx="2" IDy="6"/>
+        <position x="(EightM_OuterWidth/2.)" y="(EightM_OuterHeight/2.+2*EightM_OuterHeight)" z="0*mm" orientation="0" IDx="2" IDy="7"/>
+        <!--  Right column  -->
+        <position x="(EightM_OuterWidth/2.+EightM_OuterWidth)" y="-(EightM_OuterHeight/2.+3*EightM_OuterHeight)" z="0*mm" orientation="0" IDx="3" IDy="0"/>
+        <position x="(EightM_OuterWidth/2.+EightM_OuterWidth)" y="-(EightM_OuterHeight/2.+2*EightM_OuterHeight)" z="0*mm" orientation="0" IDx="3" IDy="1"/>
+        <position x="(EightM_OuterWidth/2.+EightM_OuterWidth)" y="-(EightM_OuterHeight/2.+1*EightM_OuterHeight)" z="0*mm" orientation="0" IDx="3" IDy="2"/>
+        <position x="(EightM_OuterWidth/2.+EightM_OuterWidth)" y="-(EightM_OuterHeight/2.)" z="0*mm" orientation="0" IDx="3" IDy="3"/>
+        <position x="(EightM_OuterWidth/2.+EightM_OuterWidth)" y="(EightM_OuterHeight/2.)" z="0*mm" orientation="0" IDx="3" IDy="4"/>
+        <position x="(EightM_OuterWidth/2.+EightM_OuterWidth)" y="(EightM_OuterHeight/2.+1*EightM_OuterHeight)" z="0*mm" orientation="0" IDx="3" IDy="5"/>
+        <position x="(EightM_OuterWidth/2.+EightM_OuterWidth)" y="(EightM_OuterHeight/2.+2*EightM_OuterHeight)" z="0*mm" orientation="0" IDx="3" IDy="6"/>
+        <position x="(EightM_OuterWidth/2.+EightM_OuterWidth)" y="(EightM_OuterHeight/2.+2*EightM_OuterHeight)" z="0*mm" orientation="0" IDx="3" IDy="7"/>
+
+
       </eightmodulepositions>
 
 
@@ -140,7 +176,6 @@
   <!--  Definition of the readout segmentation/definition  -->
   <readouts>
     <readout name="LFHCALHits">
-      <segmentation type="NoSegmentation"/>
        <documentation>
         Explanation of CellIDs total 64 bits
         first 8 bits system ID: 116 for LFHCal
@@ -153,7 +188,8 @@
           6 bit [0-63] readout layer z
           6 bit [0-63] layer z in readout layer
       </documentation>        
-      <id>system:8,moduleIDx:4,moduleIDy:4,moduletype:1,passive:1,towerx:2,towery:1,rlayerz:6,layerz:6</id>
+      <segmentation type="NoSegmentation"/>
+      <id>system:8,moduleIDx:4,moduleIDy:4,moduletype:1,passive:1,towerx:2,towery:1,rlayerz:4,layerz:6</id>
     </readout>
   </readouts>
 

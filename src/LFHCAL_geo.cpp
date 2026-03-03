@@ -316,7 +316,7 @@ Assembly createScintillatorPlateEightM(Detector& desc, std::string basename,
 
   // loop over all towers within same module
   for (int i = 0; i < 8; i++) {
-    // printout(DEBUG, "LFHCAL_geo", basename + _toString(i, "_tower_%d") + "\t" + _toString(modID) + "\t" + _toString(i) + "\t" + _toString(layerID));
+    // printout(DEBUG, "LFHCAL_geo", basename + _toString(i, "_tower_%d") +  "\ttile:\t " + _toString(i) + "\t idX:"   + _toString(towerx) + "\tidY:" + _toString(towery) + "\tID layer:"+  _toString(layerID)  + "\tRO-layer:" + _toString(roLayer));
     Volume modScintTowerAss =
         createScintillatorTower(desc, basename + _toString(i, "_tower_%d"), w_tow, h_tow, t_slice,
                                 slice_mat, region, limit, vis, sens, renderComp);
