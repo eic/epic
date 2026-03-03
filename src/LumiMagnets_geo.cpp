@@ -19,9 +19,11 @@ static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector /* sens *
 	Assembly assembly(det_name + "_assembly");
 	Material m_Iron   = det.material("Iron");
 	Material m_Copper = det.material("Copper");
+	Material m_Tungsten = det.material("TungstenDens25");
 	const string vis1 = getAttrOrDefault<string>(x_det, _Unicode(vis_name1), "AnlGreen");
 	const string vis2 = getAttrOrDefault<string>(x_det, _Unicode(vis_name2), "AnlRed");
 	const string vis3 = getAttrOrDefault<string>(x_det, _Unicode(vis_name3), "AnlGray");
+	const string vis4 = getAttrOrDefault<string>(x_det, _Unicode(vis_name4), "AnlBlue");
 
 	// Get position
 	xml::Component pos = x_det.child(_Unicode(position));
@@ -108,6 +110,22 @@ static Ref_t create_detector(Detector& det, xml_h e, SensitiveDetector /* sens *
 	Volume v_coil2_body(det_name + "_vol_coil2_body", coil_body, m_Copper);
 	sdet.setAttributes(det, v_coil2_body, x_det.regionStr(), x_det.limitsStr(), vis2);
 	assembly.placeVolume(v_coil2_body, Transform3D(RotationZYX(0, M_PI_2, 0), Position(x+offset_3, y, z)));
+
+	//--------------------------------------------------------------------------------//
+	// Create shielding
+	if (x_det.hasChild(_Unicode(shielding)))
+	{
+		xml::Component shielding = x_det.child(_Unicode(shielding));
+		double shielding_DR = shielding.attr<double>(_Unicode(DR));
+		double shielding_IR = shielding.attr<double>(_Unicode(IR));
+		double shielding_DZ = shielding.attr<double>(_Unicode(DZ));
+
+		Solid shielding_tube = Tube(shielding_IR, shielding_IR + shielding_DR, shielding_DZ/2.);
+
+		Volume v_shielding_body(det_name + "_vol_shielding_body", shielding_tube, m_Tungsten);
+		sdet.setAttributes(det, v_shielding_body, x_det.regionStr(), x_det.limitsStr(), vis4);
+		assembly.placeVolume(v_shielding_body, Transform3D(RotationZYX(0, 0, 0), Position(x, y, z)));
+	}
 
 	//--------------------------------------------------------------------------------//
 	// Final placement

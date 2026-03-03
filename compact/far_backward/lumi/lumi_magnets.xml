@@ -19,10 +19,14 @@ Construct the sweeper and analyzer dipole magnets for the luminosity subsystem.
   <constant name="LumiMag_DX_Coil_Apert"        value="130.100*cm"/>
   <constant name="LumiMag_DY_Coil_Apert"        value=" 26.250*cm"/>
 
-  <constant name="LumiMag_DX_InnerBox"           value="65.621*cm"/>
-  <constant name="LumiMag_DY_InnerBox"           value="33.448*cm"/>
+  <constant name="LumiMag_DX_InnerBox"         	value="65.621*cm"/>
+  <constant name="LumiMag_DY_InnerBox"         	value="33.448*cm"/>
 
-  <constant name="CenterY_Bfield"                value="0*m"/>
+  <constant name="CenterY_Bfield"              	value="0*m"/>
+
+  <constant name="Shielding_DR"                	value="1 * mm"/>
+  <constant name="Shielding_IR"                	value="LumiBeamDiv_pref * fabs(LumiChamber_Z2) + LumiChamber_DR"/>
+  <constant name="Shielding_DZ"                 value="2 * m"/>
 </define>
 
 
@@ -32,12 +36,17 @@ Construct the sweeper and analyzer dipole magnets for the luminosity subsystem.
       type="LumiMagnets"
       vis_name1="AnlGreen"
       vis_name2="AnlRed"
-      vis_name3="AnlGray">
+      vis_name3="AnlGray"
+      vis_name4="AnlBlue">
 
     <position x="LumiSweepMag_X"
               y="LumiSweepMag_Y - CenterY_Bfield"
               z="LumiSweepMag_Z" />
     <rotation x="0*rad" y="0*rad" z="0*rad" />
+  
+    <shielding DR="Shielding_DR"
+               IR="Shielding_IR"
+               DZ="Shielding_DZ"/>
 
     <dimensions_yoke_box x="LumiMag_DX" y="LumiMag_DY" z="LumiMagMainBody_DZ" />
     <dimensions_yoke_aperture name="aperture">
@@ -74,12 +83,17 @@ Construct the sweeper and analyzer dipole magnets for the luminosity subsystem.
       type="LumiMagnets"
       vis_name1="AnlGreen"
       vis_name2="AnlRed"
-      vis_name3="AnlGray">
+      vis_name3="AnlGray"
+      vis_name4="AnlBlue">
 
     <position x="LumiAnalyzerMag_X" 
 	      y="LumiAnalyzerMag_Y - CenterY_Bfield" 
 	      z="LumiAnalyzerMag_Z"/>
     <rotation x="0*rad" y="0*rad" z="0*rad" />
+
+    <shielding DR="Shielding_DR"
+               IR="Shielding_IR"
+               DZ="Shielding_DZ"/>
 
     <dimensions_yoke_box x="LumiMag_DX" y="LumiMag_DY" z="LumiMagMainBody_DZ" />
     <dimensions_yoke_aperture name="aperture">
