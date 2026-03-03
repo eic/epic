@@ -8,50 +8,7 @@
   </documentation>
 
   <define>
-    <documentation>
-      #### Material Thickness
-    </documentation>
-    <constant name="LFHCALAbsorberThickness"      value="1.52* cm"/>
-    <constant name="LFHCALPolystyreneThickness"   value="0.4* cm"/>
-    <constant name="LFHCALKaptonThickness"        value="0.08* cm"/>
-    <constant name="LFHCALAirOffset"              value="0.05* cm"/>
-    <constant name="LFHCALElectronicsThickness"   value="10.0* cm"/>
-    <documentation>
-      - Hcal Endcap N Layers and computed Thickness
-    </documentation>
-
-    <comment> FIXME: Need actual values once they are decided upon </comment>
-    <constant name="LFHCALLayer_NSteelRepeatSFirst"    value="5"/> <!--      6 x 10 steel layers -->
-    <constant name="LFHCALLayer_NSteelRepeatS"    value="10"/> <!--      6 x 10 steel layers -->
-    <constant name="LFHCALLayer_NTungstenRepeat"  value="0"/>
-    <constant name="Mod_MountingPlateThickness" value="25.4* mm"/>
-    <constant name="Mod_SideWallThickness"    value="1.9* mm"/>
-    <constant name="Mod_TopWallThickness"     value="1.9* mm"/>
-    <constant name="Mod_FrontWallThickness"   value="15* mm"/>
-    <constant name="Mod_BackWallThickness"    value="15* mm"/>
-    <constant name="Mod_NotchDepth"           value="5* mm"/>
-    <constant name="Mod_NotchHeight"          value="78* mm"/>
-    <constant name="Mod_FoilThick"            value="0.1* mm"/>
-    <constant name="Mod_PCBWidth"             value="70* mm"/>
-    <constant name="Mod_PCBThickness"         value="4* mm"/>
-    <constant name="Mod_PCBLength"            value="125* cm"/>
-
-
-    <constant name="EightM_xArr"              value="4" />
-    <constant name="EightM_yArr"              value="2" />
-    <constant name="EightM_OuterWidth"        value="20.188* cm"/>
-    <constant name="EightM_OuterHeight"       value="10.1* cm"/>
-    <constant name="EightM_BackInnerWidth"    value="15.0* cm"/>
-    <constant name="EightM_BackInnerHeight"   value="7.0* cm"/>
-    <constant name="FourM_xArr"               value="2" />
-    <constant name="FourM_yArr"               value="2" />
-    <constant name="FourM_OuterWidth"         value="10.094* cm"/>
-    <constant name="FourM_OuterHeight"        value="10.1* cm"/>
-    <constant name="FourM_BackInnerWidth"     value="7.0* cm"/>
-    <constant name="FourM_BackInnerHeight"    value="7.0* cm"/>
-    <constant name="FourM_NotchHeight"        value="75* mm"/>
-
-
+    <include ref="lfhcal/module_definitions.xml"/>
   </define>
 
   <display>
@@ -1340,6 +1297,18 @@
   <!--  Definition of the readout segmentation/definition  -->
   <readouts>
     <readout name="LFHCALHits">
+      <documentation>
+        Explanation of CellIDs total 64 bits
+        first 8 bits system ID: 116 for LFHCal
+        followed by:
+          6 bits [0-63] ModuleID X
+          6 bits [0-63] ModuleID Y
+          1 bit [0-1] Module type 0 - 8M , 1 - 4M
+          2 bit [0-3] tower X
+          1 bit [0-1] tower Y
+          4 bit [0-15] readout layer z
+          4 bit [0-15] layer z in readout layer
+      </documentation>
       <segmentation type="NoSegmentation"/>
       <id>system:8,moduleIDx:6,moduleIDy:6,moduletype:1,passive:1,towerx:2,towery:1,rlayerz:4,layerz:4</id>
     </readout>
