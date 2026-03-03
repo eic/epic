@@ -179,15 +179,15 @@
        <documentation>
         Explanation of CellIDs total 64 bits
         first 8 bits system ID: 116 for LFHCal
-        followed by: 
+        followed by:
           4 bits [0-15] ModuleID X
           4 bits [0-15] ModuleID Y
           1 bit [0-1] Module type 0 - 8M , 1 - 4M
-          2 bit [0-3] tower X 
+          2 bit [0-3] tower X
           1 bit [0-1] tower Y
           6 bit [0-63] readout layer z
           6 bit [0-63] layer z in readout layer
-      </documentation>        
+      </documentation>
       <segmentation type="NoSegmentation"/>
       <id>system:8,moduleIDx:4,moduleIDy:4,moduletype:1,passive:1,towerx:2,towery:1,rlayerz:4,layerz:6</id>
     </readout>
