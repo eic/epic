@@ -29,7 +29,7 @@
       <dimensions x="ZDC_PbSci_x" y="ZDC_PbSci_y" z="ZDC_PbSci_z"/>
       <module nbox="ZDC_PbSci_nbox" gapspace="ZDC_PbSci_box_gap">
         <layer nlayer="ZDC_PbSci_nlayers_per_box">
-          <slice name="lead"      material="Lead"    thickness="ZDC_Lead_thickness"  vis="AnlLight_Gray"/>
+          <slice name="lead"      material="Lead"    thickness="ZDC_Lead_thickness"  vis="AnlLightGray"/>
           <slice name="scinti"    material="ZDC_Scintillator" thickness="ZDC_Sci_thickness"   vis="AnlGreen"  sensitive="true"/>
         </layer>
       </module>

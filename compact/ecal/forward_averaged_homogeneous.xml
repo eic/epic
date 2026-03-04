@@ -1,0 +1,63 @@
+
+<!-- SPDX-License-Identifier: LGPL-3.0-or-later -->
+<!-- Copyright (C) 2025 Akio Ogawa, Whitney Armstrong, Chao Peng, Sylvester Joosten, Zhongling Ji, Ryan Milton -->
+
+<lccdd>
+
+  <documentation>
+    Title: forward ECal 2025 design
+    Author: @akioogawa
+    Status: development
+    Version: 1.0
+  </documentation>
+
+  <define>
+    <documentation>
+      - Forward Ecal Homogeneous(1) or ScFi(2) Model
+    </documentation>
+    <constant name="EcalEndcapP_Homogeneous_ScFi"         value="1"/>
+  </define>
+
+  <limits>
+  </limits>
+
+  <regions>
+  </regions>
+
+  <display>
+  </display>
+
+  <detectors>
+
+    <documentation>
+      ### Forward (Positive Z) Endcap ScFi Electromagnetic Calorimeter
+      Implementation of 2025 design
+      Insert shape is cut out from middle of detector
+    </documentation>
+    <detector id="EcalEndcapP_ID"
+      name="EcalEndcapP"
+      type="epic_ForwardEcal"
+      readout="EcalEndcapPHits">
+      <position x="0" y="0" z="EcalEndcapP_zmin"/>
+      <dimensions rmin="EcalEndcapP_rmin" rmax="EcalEndcapP_rmax" z="EcalEndcapP_length"/>
+      <slice name="Cover" material="Aluminum" thickness="EcalEndcapP_CoverThickness" vis="AnlGray"/>
+      <slice name="Air" material="Air" thickness="EcalEndcapP_AirThickness" vis="AnlLight_Gray"/>
+      <slice name="PCB" material="Fr4" thickness="EcalEndcapP_PCBThickness" vis="AnlGreen"/>
+      <slice name="LG" material="Plexiglass" thickness="EcalEndcapP_LightGuideThickness" vis="AnlBlue"/>
+      <slice name="WScFi" material="AvgTungstenScFi" thickness="EcalEndcapP_ScintillatorThickness" vis="AnlOrange" sensitive="true"/>
+      <slice name="MountingPlate" material="StainlessSteelSAE304" thickness="EcalEndcapP_MountingPlateThickness" vis="AnlGray"/>
+    </detector>
+  </detectors>
+
+  <!--  Definition of the readout segmentation/definition  -->
+  <readouts>
+    <readout name="EcalEndcapPHits">
+      <segmentation type="CartesianGridXY" grid_size_x="25*mm" grid_size_y="25*mm" offset_x="-37.5*mm" offset_y="-37.5*mm"/>
+      <id>system:8,northsouth:1,blockrow:6,blockcol:5,x:2,y:2</id>
+    </readout>
+  </readouts>
+
+  <plugins>
+  </plugins>
+
+</lccdd>
