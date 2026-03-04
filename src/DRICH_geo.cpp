@@ -555,6 +555,16 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
   airgapVol.setVisAttributes(airgapVis);
   filterVol.setVisAttributes(filterVis);
 
+  // aerogel placement and surface properties
+  // TODO [low-priority]: define skin properties for aerogel and filter
+  // FIXME: radiatorPitch might not be working correctly (not yet used)
+  auto radiatorPos = Position(0., 0., radiatorFrontplane + 0.5 * aerogelThickness) + originFront;
+  auto aerogelPlacement = Translation3D(radiatorPos) * // re-center to originFront
+                          RotationY(radiatorPitch);    // change polar angle to specified pitch
+  auto aerogelPV        = gasvolVol.placeVolume(aerogelVol, aerogelPlacement);
+  DetElement aerogelDE(det, "aerogel_de", 0);
+  aerogelDE.setPlacement(aerogelPV);
+
   // airgap and filter placement and surface properties
   if (!debugOptics) {
 
@@ -951,9 +961,9 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
                                pduAssemblyPlacement *     // position of PDU in vessel
                                sensorAssemblyPlacement *  // position of SiPM in PDU
                                pduOrigin;
-              auto pduPos = Translation3D(vesselPos) * // position of vessel in world
-                            pduAssemblyPlacement *     // position of PDU in vessel
-                            pduOrigin;
+              auto pduPos    = Translation3D(vesselPos) * // position of vessel in world
+                               pduAssemblyPlacement *     // position of PDU in vessel
+                               pduOrigin;
               // - sensor surface basis: the orientation of the sensor surface
               //   NOTE: all sensors of a single PDU have the same surface orientation, but to avoid
               //         loss of generality downstream, define the basis for each sensor
