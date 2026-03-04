@@ -246,23 +246,18 @@ static Ref_t createDetector(Detector& desc, xml_h handle, SensitiveDetector sens
                                     Transform3D(RotationZYX(0, 0, 0), Position(xrow, yrow, 0)));
           pv.addPhysVolID("blockrow", r);
 
-          //column of blocks
-          double xcol = -pm[ns] * (dxrow / 2.0 - bsize / 2.0);
-          for (int c = 0; c < nColBlock; c++) {
-            Box col(bsize / 2.0, bsize / 2.0, slice_thickness / 2.0);
-            std::string col_name = row_name + _toString(c, "C%02d");
-            Volume col_vol(col_name, col, air);
-            col_vol.setAttributes(desc, x_slice.regionStr(), x_slice.limitsStr(), x_slice.visStr());
-            pv = row_vol.placeVolume(col_vol,
-                                     Transform3D(RotationZYX(0, 0, 0), Position(xcol, 0, 0)));
-            pv.addPhysVolID("blockcol", c);
-            //printf("r=%2d dx=%8.3f x=%8.3f y=%8.3f   c=%2d %8.3f  mapx=%8.3f\n",r,dxrow,xrow,yrow,c,xcol,map->xBlock(ns,r,c));
-            xcol += pm[ns] * bsize;
-
-            //a block inside with air gap
-            pv = col_vol.placeVolume(block_vol,
-                                     Transform3D(RotationZYX(0, 0, 0), Position(0, 0, 0)));
-          } //end loop block col
+          // Place columns of blocks using parameterised placement (G4PVParameterised),
+          // reducing nColBlock individual G4PVPlacement objects to one per row.
+          // Copy number (0..nColBlock-1) serves as the blockcol physVolID.
+          // Use Assembly as parameterised template (Volume+Box with daughters crashes TGeo).
+          Assembly col_vol(row_name + "_col");
+          col_vol.setAttributes(desc, x_slice.regionStr(), x_slice.limitsStr(), x_slice.visStr());
+          col_vol.placeVolume(block_vol, Position(0, 0, 0));
+          double xcol_start = -pm[ns] * (dxrow / 2.0 - bsize / 2.0);
+          pv = row_vol.paramVolume1D(Transform3D(Position(xcol_start, 0, 0)), col_vol,
+                                     static_cast<size_t>(nColBlock),
+                                     Transform3D(Position(pm[ns] * bsize, 0, 0)));
+          pv.addPhysVolID("blockcol", 0);
         } //end loop block raw
       } //end if isSensitive
     } //end loop over ns
