@@ -17,7 +17,6 @@
 
     <constant name="HcalEndcapNSingleLayerThickness" value="HcalEndcapNSteelThickness + HcalEndcapNPolystyreneThickness + HcalEndcapNLayerGap"/>
     <constant name="HcalEndcapNLayer_NRepeat"        value="floor((HcalEndcapN_length + HcalEndcapN_extension_for_sampF) / HcalEndcapNSingleLayerThickness)"/>
-    <constant name="HcalEndcapN_thickness"           value="HcalEndcapNLayer_NRepeat * HcalEndcapNSingleLayerThickness"/>
   </define>
 
 
@@ -41,6 +40,10 @@
         zmin="HcalEndcapN_zmin"
         rmin="HcalEndcapN_rmin"
         rmax="HcalEndcapN_rmax"/>
+      <layer repeat="1" vis="HcalEndcapLayerVis">
+        <slice material="Polystyrene" thickness="HcalEndcapNPolystyreneThickness" vis="HcalSensorVis" sensitive="yes" limits="cal_limits"/>
+        <slice material="Air" thickness="HcalEndcapNLayerGap/2" vis="InvisibleNoDaughters"/>
+      </layer>
       <layer repeat="HcalEndcapNLayer_NRepeat" vis="HcalEndcapLayerVis" >
         <slice material="StainlessSteelSAE304" thickness="HcalEndcapNSteelThickness" vis="HcalAbsorberVis"/>
         <slice material="Air" thickness="HcalEndcapNLayerGap/2" vis="InvisibleNoDaughters"/>
