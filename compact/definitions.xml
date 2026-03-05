@@ -624,7 +624,7 @@ Service gaps in FW direction (before endcapP ECAL) and BW direction (before endc
     </documentation>
     <constant name="DIRCReadout_length"         value="30*cm"/>
     <comment> Leave 1.9 cm space from the end of mirror to the end of bar box in +z </comment>
-    <constant name="DIRCMirror_thickness"       value="1 * mm"/>
+    <constant name="DIRCMirror_thickness"       value="3 * mm"/>
     <constant name="DIRCBarbox_space_z"         value="1.9*cm"/>
     <constant name="DIRCLens_thickness"         value="12 * mm"/>
     <constant name="DIRCForward_length"         value="0*cm"/>
@@ -632,7 +632,7 @@ Service gaps in FW direction (before endcapP ECAL) and BW direction (before endc
     <constant name="DIRCBackward_zmax"          value="303*cm"/>
     <constant name="DIRC_thickness"             value="3.1*cm"/>
     <constant name="DIRC_length"                value="DIRCForward_zmax + DIRCBackward_zmax"/>
-    <constant name="DIRC_offset"                value="(DIRCForward_zmax - DIRCBackward_zmax - DIRCMirror_thickness - DIRCBarbox_space_z + DIRCLens_thickness + DIRCReadout_length)/2"/>
+    <constant name="DIRC_offset"                value="-44.7525 * cm"/>
     <comment>
       The DIRC_rmin/rmax values are defined at the center of each stave, such that
       the DIRC_rmax can also be used as the OuterBarrelMPGD_rmin value.
