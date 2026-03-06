@@ -14,12 +14,11 @@
       name="LumiCollimator"
       type="LumiCollimator"
       vis="Shape1_vis">
-      <dimensions_outer x="13/2.*cm" y="13/2.*cm" z="LumiColl_DZ/2."/>
+      <dimensions_outer x="LumiMag_DX/2." y="LumiMag_DY/2." z="LumiColl_DZ/2."/>
       <dimensions_inner
-        x="LumiBeamDiv_pref * (fabs(LumiColl_Z) + LumiColl_DZ/2.)"
-        y="LumiBeamDiv_pref * (fabs(LumiColl_Z) + LumiColl_DZ/2.)"
+        r="0.001 * (fabs(LumiColl_Z) + LumiColl_DZ/2.)"
         z="LumiColl_DZ/2."/>
-      <position   x="LumiColl_X" y="LumiColl_Y" z="LumiColl_Z"/>
+      <position   x="LumiColl_X" y="LumiColl_Y" z="LumiColl_Z+1*cm"/>
       <rotation   x="0*rad" y="0*rad" z="0*rad"/>
     </detector>
   </detectors>

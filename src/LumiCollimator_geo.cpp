@@ -33,11 +33,10 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector /
 
   // Create inner box
   xml::Component box_dim_2 = x_det.child(_Unicode(dimensions_inner));
-  double height_2          = box_dim_2.attr<double>(_Unicode(y));
-  double width_2           = box_dim_2.attr<double>(_Unicode(x));
+  double radius_2          = box_dim_2.attr<double>(_Unicode(r));
   double depth_2           = box_dim_2.attr<double>(_Unicode(z));
 
-  Box box_inner(width_2, height_2, depth_2);
+  Tube tube_inner(0, radius_2, depth_2, 0, 2 * TMath::Pi());
 
   // Sets box positions
   xml::Component box_pos = x_det.child(_Unicode(position));
@@ -46,7 +45,7 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector /
   double z               = box_pos.attr<double>(_Unicode(z));
 
   // Subtractes the volume of the inner box from the outer box
-  BooleanSolid collimator = SubtractionSolid(box_outer, box_inner);
+  BooleanSolid collimator = SubtractionSolid(box_outer, tube_inner);
 
   // Assembles the collimator and sets its material
   Volume v_collimator(det_name + "_vol_collimator", collimator, m_Steel);

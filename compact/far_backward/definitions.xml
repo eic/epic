@@ -258,12 +258,6 @@
     <constant name="LumiWin_R"            value="4*cm"/> <!-- opening radius of tagger box -->
     <constant name="LumiWin_Z"            value="LumiWin_Zstart - LumiWin_thickness/2."/>
 
-    <!-- Lumi collimator -->
-    <constant name="LumiColl_DZ"          value="30*cm"/>
-    <constant name="LumiColl_X"           value="0*m"/>
-    <constant name="LumiColl_Y"           value="0*m"/>
-    <constant name="LumiColl_Z"           value="-22.6*m"/>
-
     <!-- Lumi lead walls -->
     <constant name="LumiWall_DX"          value="0.5*m"/>
     <constant name="LumiWall_DY"          value="1*m"/>
@@ -281,12 +275,26 @@
     <constant name="LumiAnalyzerMag_Y"    value="0*m"/>
     <constant name="LumiAnalyzerMag_Z"    value="-4*m + LumiSweepMag_Z"/>
 
+    <constant name="LumiMag_DX"           value="61.448*cm"/>
+    <constant name="LumiMag_DY"           value="93.621*cm"/>
+
     <!-- Lumi photon chamber -->
     <constant name="LumiChamber_Z1"       value="LumiSweepMag_Z + LumiMagCoils_DZ/2.0"/>
     <constant name="LumiChamber_Z2"       value="LumiAnalyzerMag_Z - LumiMagCoils_DZ/2.0"/>
     <constant name="LumiChamber_DR"       value="2*mm"/>
     <constant name="LumiChamber_entrCap_DZ"  value="1*cm"/>
     <constant name="LumiChamber_exitCap_DZ"  value="0.5*cm"/>
+
+    <!-- Lumi magnet shielding -->
+    <constant name="Shielding_DR"         value="1 * mm"/>
+    <constant name="Shielding_IR"         value="LumiBeamDiv_pref * fabs(LumiChamber_Z2) + LumiChamber_DR"/>
+    <constant name="Shielding_DZ"         value="2 * m"/>
+
+    <!-- Lumi collimator -->
+    <constant name="LumiColl_DZ"          value="30*cm"/>
+    <constant name="LumiColl_X"           value="0*m"/>
+    <constant name="LumiColl_Y"           value="0*m"/>
+    <constant name="LumiColl_Z"           value="LumiSweepMag_Z+Shielding_DZ/2.+LumiColl_DZ/2."/>
 
     <!-- Lumi converter -->
     <constant name="LumiConverter_Z"      value="(LumiAnalyzerMag_Z + LumiSweepMag_Z)/2.0"/>

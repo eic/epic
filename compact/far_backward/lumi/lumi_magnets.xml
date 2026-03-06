@@ -8,9 +8,6 @@ Construct the sweeper and analyzer dipole magnets for the luminosity subsystem.
 </comment>
 
 <define>
-  <constant name="LumiMag_DX"                    value="61.448*cm"/>
-  <constant name="LumiMag_DY"                    value="93.621*cm"/>
-
   <constant name="LumiMag_DX_Coil"              value="168.721*cm"/>
   <constant name="LumiMag_DY_Coil"              value=" 64.871*cm"/>
   <constant name="LumiMag_DZ_Coil"              value="  7.724*cm"/>
@@ -23,10 +20,6 @@ Construct the sweeper and analyzer dipole magnets for the luminosity subsystem.
   <constant name="LumiMag_DY_InnerBox"         	value="33.448*cm"/>
 
   <constant name="CenterY_Bfield"              	value="0*m"/>
-
-  <constant name="Shielding_DR"                	value="1 * mm"/>
-  <constant name="Shielding_IR"                	value="LumiBeamDiv_pref * fabs(LumiChamber_Z2) + LumiChamber_DR"/>
-  <constant name="Shielding_DZ"                 value="2 * m"/>
 </define>
 
 
