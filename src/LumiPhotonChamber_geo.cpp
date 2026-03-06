@@ -99,29 +99,14 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector /
 	const double lumiPhotonPlane_posZ = -2530.9900 * cm;
 	const double lumiExitWind_thikness = 1 * mm;
 	const double lumiExitWind_diam = 50 * mm;
-	const double secondary_tube_length = fabs( (posZ1 + entrCap_DZ) - (lumiPhotonPlane_posZ - lumiExitWind_thikness) );
 
 	Tube lumiexit_wind(0, lumiExitWind_diam/2., lumiExitWind_thikness/2., 0, 2 * TMath::Pi());
-	Tube secondary_tube(rmin, rmin + pipe_DR, secondary_tube_length/2., 0, 2 * TMath::Pi());
-	Tube secondary_vac(0, rmin, secondary_tube_length/2., 0, 2 * TMath::Pi());
 	
 	Volume vol_lumiexit_wind(det_name + "_vol_lumiexit_wind", lumiexit_wind, description.material(mat_wind));
 	vol_lumiexit_wind.setVisAttributes(description.visAttributes("AnlRed"));
 
-	Volume vol_secondary_tube(det_name + "_vol_secondary_tube", secondary_tube, description.material(mat_pipe));
-	vol_secondary_tube.setVisAttributes(description.visAttributes("AnlCyan"));
-
-	Volume vol_secondary_vac(det_name + "_vol_secondary_vac", secondary_vac, description.material(mat_fill));
-	vol_secondary_vac.setVisAttributes(description.invisible());
-
 	assembly.placeVolume(vol_lumiexit_wind, 
 		Transform3D(RotationZYX(0, 0, 0), Position(0, 0, lumiPhotonPlane_posZ - lumiExitWind_thikness/2.)));
-
-	assembly.placeVolume(vol_secondary_tube, 
-		Transform3D(RotationZYX(0, 0, 0), Position(0, 0, posZ1 + entrCap_DZ + secondary_tube_length/2.)));
-
-	assembly.placeVolume(vol_secondary_vac, 
-		Transform3D(RotationZYX(0, 0, 0), Position(0, 0, posZ1 + entrCap_DZ + secondary_tube_length/2.)));
 	//-------------------------------------------------------------------------------------------//
 
 
