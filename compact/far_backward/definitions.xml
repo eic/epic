@@ -286,7 +286,7 @@
     <constant name="LumiChamber_exitCap_DZ"  value="0.5*cm"/>
 
     <!-- Lumi magnet shielding -->
-    <constant name="Shielding_DR"         value="1 * mm"/>
+    <constant name="Shielding_DR"         value="2 * mm"/>
     <constant name="Shielding_IR"         value="LumiBeamDiv_pref * fabs(LumiChamber_Z2) + LumiChamber_DR"/>
     <constant name="Shielding_DZ"         value="2 * m"/>
 
