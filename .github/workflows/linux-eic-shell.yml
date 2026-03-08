@@ -101,7 +101,7 @@ jobs:
         run: |
           CC=${{ matrix.CC }} CXX=${{ matrix.CXX }} cmake -B build -S . -DCMAKE_INSTALL_PREFIX=${PREFIX} -DCMAKE_C_COMPILER_LAUNCHER=ccache -DCMAKE_CXX_COMPILER_LAUNCHER=ccache
           cmake --build build -- -k -j $(getconf _NPROCESSORS_ONLN) install
-    - uses: actions/upload-artifact@v6
+    - uses: actions/upload-artifact@v7
       with:
         name: build-${{ matrix.CC }}-${{ matrix.release }}-full-eic-shell
         path: install/
@@ -111,7 +111,7 @@ jobs:
         sed -i 's%\(<fiber\|<lens\)%<comment>\1%g; s%\(/fiber>\|/lens>\)%\1</comment>%g' \
           ${DETECTOR_PATH}/compact/ecal/bic_default.xml \
           ${DETECTOR_PATH}/compact/far_forward/ZDC_Ecal_WSciFi.xml
-    - uses: actions/upload-artifact@v6
+    - uses: actions/upload-artifact@v7
       with:
         name: build-${{ matrix.CC }}-${{ matrix.release }}-fast-eic-shell
         path: install/
@@ -121,7 +121,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: build
     steps:
-    - uses: actions/download-artifact@v7
+    - uses: actions/download-artifact@v8
       with:
         name: build-gcc-nightly-full-eic-shell
         path: install/
@@ -151,7 +151,7 @@ jobs:
       - check-tracking-geometry
     steps:
     - uses: actions/checkout@v6
-    - uses: actions/download-artifact@v7
+    - uses: actions/download-artifact@v8
       with:
         name: build-gcc-nightly-full-eic-shell
         path: install/
@@ -165,7 +165,7 @@ jobs:
           export DETECTOR_CONFIG=epic_craterlake_material_map
           ./run_material_map_validation.sh
           popd
-    - uses: actions/upload-artifact@v6
+    - uses: actions/upload-artifact@v7
       with:
         name: material_map
         path: |
@@ -208,7 +208,7 @@ jobs:
         detector_config: [epic_craterlake]
     steps:
     - uses: actions/checkout@v6
-    - uses: actions/download-artifact@v7
+    - uses: actions/download-artifact@v8
       with:
         name: build-gcc-nightly-full-eic-shell
         path: install/
@@ -220,7 +220,7 @@ jobs:
         run: |
           mkdir -p doc
           npdet_info dump ${DETECTOR_PATH}/${{matrix.detector_config}}.xml | tee doc/${{matrix.detector_config}}_constants.out
-    - uses: actions/upload-artifact@v6
+    - uses: actions/upload-artifact@v7
       with:
         name: ${{matrix.detector_config}}_constants.out
         path: doc/${{matrix.detector_config}}_constants.out
@@ -234,7 +234,7 @@ jobs:
         detector_config: [epic_craterlake]
     steps:
     - uses: actions/checkout@v6
-    - uses: actions/download-artifact@v7
+    - uses: actions/download-artifact@v8
       with:
         name: build-gcc-nightly-full-eic-shell
         path: install/
@@ -255,12 +255,12 @@ jobs:
             ".output doc/${{matrix.detector_config}}.html" \
             "select * from detector_parameter_table;"
           sed -i '1s/^/<html><body><table border="1" style="border-collapse:collapse">\n/;$a</table></body></html>' doc/${{matrix.detector_config}}.html
-    - uses: actions/upload-artifact@v6
+    - uses: actions/upload-artifact@v7
       with:
         name: ${{matrix.detector_config}}_constants.toml
         path: doc/${{matrix.detector_config}}_constants.toml
         if-no-files-found: error
-    - uses: actions/upload-artifact@v6
+    - uses: actions/upload-artifact@v7
       with:
         name: ${{matrix.detector_config}}_DetectorParameterTable
         path: |
@@ -274,7 +274,7 @@ jobs:
     - dump-constants
     - dump-parameter-table
     steps:
-    - uses: actions/upload-artifact/merge@v6
+    - uses: actions/upload-artifact/merge@v7
       with:
         name: constants
         pattern: '*_constants.*'
@@ -285,7 +285,7 @@ jobs:
     needs:
     - dump-parameter-table
     steps:
-    - uses: actions/upload-artifact/merge@v6
+    - uses: actions/upload-artifact/merge@v7
       with:
         name: DetectorParameterTable
         pattern: '*_DetectorParameterTable'
@@ -301,7 +301,7 @@ jobs:
       fail-fast: false
     steps:
     - uses: actions/checkout@v6
-    - uses: actions/download-artifact@v7
+    - uses: actions/download-artifact@v8
       with:
         name: build-gcc-nightly-full-eic-shell
         path: install/
@@ -322,7 +322,7 @@ jobs:
     if: github.ref == 'refs/heads/main'
     steps:
     - uses: actions/checkout@v6
-    - uses: actions/download-artifact@v7
+    - uses: actions/download-artifact@v8
       with:
         name: build-gcc-nightly-full-eic-shell
         path: install/
@@ -335,7 +335,7 @@ jobs:
           mkdir -p doc
           checkGeometry -f true -c ${DETECTOR_PATH}/${DETECTOR_CONFIG}.xml | tee geometry_check_full.out
           mv statistics.root geometry_check_full.root
-    - uses: actions/upload-artifact@v6
+    - uses: actions/upload-artifact@v7
       with:
         name: check-geometry-full
         path: |
@@ -357,7 +357,7 @@ jobs:
       fail-fast: false
     steps:
     - uses: actions/checkout@v6
-    - uses: actions/download-artifact@v7
+    - uses: actions/download-artifact@v8
       with:
         name: build-gcc-nightly-full-eic-shell
         path: install/
@@ -381,7 +381,7 @@ jobs:
       fail-fast: false
     steps:
     - uses: actions/checkout@v6
-    - uses: actions/download-artifact@v7
+    - uses: actions/download-artifact@v8
       with:
         name: build-gcc-nightly-fast-eic-shell
         path: install/
@@ -441,7 +441,7 @@ jobs:
       fail-fast: false
     steps:
     - uses: actions/checkout@v6
-    - uses: actions/download-artifact@v7
+    - uses: actions/download-artifact@v8
       with:
         name: build-gcc-nightly-fast-eic-shell
         path: install/
@@ -452,7 +452,7 @@ jobs:
         setup: install/bin/thisepic.sh
         run: |
           bin/generate_prim_file -c $DETECTOR_PATH/${{ matrix.detector_config }}.xml -o prim -D -t ${{ matrix.detector_config }}
-    - uses: actions/upload-artifact@v6
+    - uses: actions/upload-artifact@v7
       with:
         name: ${{ matrix.detector_config }}.prim
         path: prim/${{ matrix.detector_config }}.prim
@@ -469,7 +469,7 @@ jobs:
       fail-fast: false
     steps:
     - uses: actions/checkout@v6
-    - uses: actions/download-artifact@v7
+    - uses: actions/download-artifact@v8
       with:
         name: ${{ matrix.detector_config }}.prim
         path: prim/
@@ -480,7 +480,7 @@ jobs:
         run: |
           mkdir -p images
           bin/make_dawn_views -i prim/${{ matrix.detector_config }}.prim -t ${{ matrix.view }} -d scripts/${{ matrix.view }} -D
-    - uses: actions/upload-artifact@v6
+    - uses: actions/upload-artifact@v7
       with:
         name: ${{ matrix.detector_config }}_views_${{ matrix.view }}
         path: images/
@@ -498,7 +498,7 @@ jobs:
       fail-fast: false
     steps:
     - uses: actions/checkout@v6
-    - uses: actions/download-artifact@v7
+    - uses: actions/download-artifact@v8
       with:
         name: ${{ matrix.detector_config }}.prim
         path: prim/
@@ -509,7 +509,7 @@ jobs:
         run: |
           mkdir -p images
           bin/make_dawn_views -i prim/${{ matrix.detector_config }}.prim -t ${{ matrix.view }} -d scripts/${{ matrix.view }} -D -- ${{ matrix.slice }}
-    - uses: actions/upload-artifact@v6
+    - uses: actions/upload-artifact@v7
       with:
         name: ${{ matrix.detector_config }}_views_${{ matrix.view }}_${{ matrix.slice }}
         path: images/
@@ -526,7 +526,7 @@ jobs:
       matrix:
         detector_config: [epic_craterlake]
     steps:
-    - uses: actions/upload-artifact/merge@v6
+    - uses: actions/upload-artifact/merge@v7
       with:
         name: ${{ matrix.detector_config }}_views
         pattern: ${{ matrix.detector_config }}_views_*
@@ -541,7 +541,7 @@ jobs:
         detector_config: [epic_craterlake]
     steps:
     - uses: actions/checkout@v6
-    - uses: actions/download-artifact@v7
+    - uses: actions/download-artifact@v8
       with:
         name: build-gcc-nightly-full-eic-shell
         path: install/
@@ -553,14 +553,14 @@ jobs:
         setup: install/bin/thisepic.sh
         run: |
           npsim --compactFile ${DETECTOR_PATH}/${{ matrix.detector_config }}.xml -G --random.seed 1 --gun.particle "${{ matrix.particle }}-" --gun.momentumMin "1*GeV" --gun.momentumMax "20*GeV" --gun.distribution "uniform" -N 100 --outputFile sim_${{ matrix.particle }}_1GeV_20GeV_${{ matrix.detector_config }}.edm4hep.root -v WARNING
-    - uses: actions/upload-artifact@v6
+    - uses: actions/upload-artifact@v7
       with:
         name: sim_${{ matrix.particle }}_1GeV_20GeV_${{ matrix.detector_config }}.edm4hep.root
         path: sim_${{ matrix.particle }}_1GeV_20GeV_${{ matrix.detector_config }}.edm4hep.root
         if-no-files-found: error
     - name: Download previous artifact
       id: download_previous_artifact
-      uses: dawidd6/action-download-artifact@v15
+      uses: dawidd6/action-download-artifact@v16
       with:
         branch: ${{ github.event.pull_request.base.ref || github.ref_name }}
         path: ref/
@@ -578,7 +578,7 @@ jobs:
           capybara bara ref/sim_${{ matrix.particle }}_1GeV_20GeV_${{ matrix.detector_config }}.edm4hep.root* sim_${{ matrix.particle }}_1GeV_20GeV_${{ matrix.detector_config }}.edm4hep.root
           mv capybara-reports sim_${{ matrix.particle }}_1GeV_20GeV_${{ matrix.detector_config }}
           touch .sim_${{ matrix.particle }}_1GeV_20GeV_${{ matrix.detector_config }}
-    - uses: actions/upload-artifact@v6
+    - uses: actions/upload-artifact@v7
       with:
         name: sim_${{ matrix.particle }}_1GeV_20GeV_${{ matrix.detector_config }}.capy
         path: |
@@ -599,7 +599,7 @@ jobs:
           minq2: 1000
     steps:
     - uses: actions/checkout@v6
-    - uses: actions/download-artifact@v7
+    - uses: actions/download-artifact@v8
       with:
         name: build-gcc-nightly-full-eic-shell
         path: install/
@@ -615,20 +615,20 @@ jobs:
           npsim --compactFile ${DETECTOR_PATH}/${{ matrix.detector_config }}.xml -N 100 --inputFiles ${url} --random.seed 1 --outputFile sim_dis_${{matrix.beam}}_minQ2=${{matrix.minq2}}_${{ matrix.detector_config }}.edm4hep.root -v WARNING
           gprofng display text -ctree sim_dis_${{matrix.beam}}_minQ2=${{matrix.minq2}}_${{ matrix.detector_config }}.er > sim_dis_${{matrix.beam}}_minQ2=${{matrix.minq2}}_${{ matrix.detector_config }}.ctree.txt
     - name: Upload ROOT output
-      uses: actions/upload-artifact@v6
+      uses: actions/upload-artifact@v7
       with:
         name: sim_dis_${{matrix.beam}}_minQ2=${{matrix.minq2}}_${{ matrix.detector_config }}.edm4hep.root
         path: sim_dis_${{matrix.beam}}_minQ2=${{matrix.minq2}}_${{ matrix.detector_config }}.edm4hep.root
         if-no-files-found: error
     - name: Upload call tree
-      uses: actions/upload-artifact@v6
+      uses: actions/upload-artifact@v7
       with:
         name: sim_dis_${{matrix.beam}}_minQ2=${{matrix.minq2}}_${{ matrix.detector_config }}.ctree.txt
         path: sim_dis_${{matrix.beam}}_minQ2=${{matrix.minq2}}_${{ matrix.detector_config }}.ctree.txt
         if-no-files-found: error
     - name: Download previous artifact
       id: download_previous_artifact
-      uses: dawidd6/action-download-artifact@v15
+      uses: dawidd6/action-download-artifact@v16
       with:
         branch: ${{ github.event.pull_request.base.ref || github.ref_name }}
         path: ref/
@@ -646,7 +646,7 @@ jobs:
           capybara bara ref/sim_dis_${{matrix.beam}}_minQ2=${{matrix.minq2}}_${{ matrix.detector_config }}.edm4hep.root* sim_dis_${{matrix.beam}}_minQ2=${{matrix.minq2}}_${{ matrix.detector_config }}.edm4hep.root
           mv capybara-reports sim_dis_${{matrix.beam}}_minQ2=${{matrix.minq2}}_${{ matrix.detector_config }}
           touch .sim_dis_${{matrix.beam}}_minQ2=${{matrix.minq2}}_${{ matrix.detector_config }}
-    - uses: actions/upload-artifact@v6
+    - uses: actions/upload-artifact@v7
       with:
         name: sim_dis_${{matrix.beam}}_minQ2=${{matrix.minq2}}_${{ matrix.detector_config }}.capy
         path: |
@@ -660,7 +660,7 @@ jobs:
     - npsim-gun
     - npsim-dis
     steps:
-    - uses: actions/upload-artifact/merge@v6
+    - uses: actions/upload-artifact/merge@v7
       with:
         name: capybara-report
         pattern: |
@@ -677,7 +677,7 @@ jobs:
     - merge-dawn-view
     steps:
     - uses: actions/checkout@v6
-    - uses: actions/download-artifact@v7
+    - uses: actions/download-artifact@v8
       with:
         path: artifacts/
     - uses: actions/jekyll-build-pages@v1
