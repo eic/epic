@@ -524,18 +524,6 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
 
     printout(WARNING, "DRICH_geo", "Square segmentation requested but not implemented yet.");
   }
-  // ------------------------------------------------------------------------
-  // Final Placement
-  // ------------------------------------------------------------------------
-  auto radiatorPos = Position(0., 0., radiatorFrontplane + 0.5 * aerogelThickness) + originFront;
-  auto aerogelPlacement = Translation3D(radiatorPos) * RotationY(radiatorPitch);
-
-  auto aerogelPV = gasvolVol.placeVolume(aerogelVol, aerogelPlacement);
-
-  DetElement aerogelDE(det, "aerogel_de", 0);
-  aerogelDE.setPlacement(aerogelPV);
-
-  ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
   Cone airgapSolid(airgapThickness / 2.0,
                    radiatorRmin + boreDelta * aerogelThickness / vesselLength,
