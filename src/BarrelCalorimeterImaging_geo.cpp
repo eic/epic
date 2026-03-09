@@ -339,36 +339,40 @@ static Ref_t create_detector(Detector& desc, xml_h e, SensitiveDetector sens) {
           printout(DEBUG, "BarrelCalorimeterImaging", "Stave %s modules starting at x=%f, y=%f",
                    stave_name.c_str(), x0, y0);
 
-          // Place modules
+          // Place modules using parameterised placement (G4PVParameterised), reducing
+          // N individual G4PVPlacement objects to one parameterised volume. Only a
+          // 1D layout (nx == 1) along the stave Y axis is supported; nx > 1 requires
+          // a 2D parameterisation with a different module-ID encoding.
+          if (nx != 1) {
+            except("BarrelCalorimeterImaging",
+                   "xy_layout with nx=%d is not supported; only nx=1 is implemented "
+                   "(stave %s, layer %d)",
+                   nx, stave_name.c_str(), layer_num);
+          }
+          // With G4PVParameterised the copy number (0..ny-1) IS the module ID.
+          // physVolID is set only on the first (anchor) placement with value 0;
+          // all copies share that ID and use their copy number as the actual module ID.
           int i_module = 0;
-          for (auto i_x = 0; i_x < nx; ++i_x) {
-            for (auto i_y = 0; i_y < ny; ++i_y) {
-
-              // Create module
-              std::string module_name = _toString(i_module, "module%d");
-              DetElement module_element(stave_element, module_name, i_module);
-
-              // Place module
-              auto x = x0 + i_x * dx;
-              auto y = y0 + i_y * dy;
-              Position module_pos(x, y, 0);
-              PlacedVolume module_physvol = stave_volume.placeVolume(module_volume, module_pos);
-              module_physvol.addPhysVolID("module", i_module);
-              module_element.setPlacement(module_physvol);
-
-              // Add sensitive volumes
-              for (auto& sensitive_physvol : module_sensitives) {
-                DetElement sensitive_element(module_element, sensitive_physvol.volume().name(),
-                                             i_module);
-                sensitive_element.setPlacement(sensitive_physvol);
-
-                auto& sensitive_element_params =
-                    DD4hepDetectorHelper::ensureExtension<dd4hep::rec::VariantParameters>(
-                        sensitive_element);
-                sensitive_element_params.set<std::string>("axis_definitions", "XYZ");
-              }
-
-              i_module++;
+          PlacedVolume first_pv =
+              stave_volume.paramVolume1D(Transform3D(Position(x0, y0, 0)), module_volume,
+                                         static_cast<size_t>(ny), Transform3D(Position(0, dy, 0)));
+          auto& placements = first_pv.data()->params->placements;
+          for (auto i_y = 0; i_y < ny; ++i_y, ++i_module) {
+            PlacedVolume module_physvol = placements[i_y];
+            std::string module_name     = _toString(i_module, "module%d");
+            DetElement module_element(stave_element, module_name, i_module);
+            if (i_y == 0) {
+              module_physvol.addPhysVolID("module", 0);
+            }
+            module_element.setPlacement(module_physvol);
+            for (auto& sensitive_physvol : module_sensitives) {
+              DetElement sensitive_element(module_element, sensitive_physvol.volume().name(),
+                                           i_module);
+              sensitive_element.setPlacement(sensitive_physvol);
+              auto& sensitive_element_params =
+                  DD4hepDetectorHelper::ensureExtension<dd4hep::rec::VariantParameters>(
+                      sensitive_element);
+              sensitive_element_params.set<std::string>("axis_definitions", "XYZ");
             }
           }
           slice_pos_z += module_thicknesses[module_str][0] + module_thicknesses[module_str][1];
