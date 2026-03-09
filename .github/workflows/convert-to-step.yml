@@ -15,7 +15,7 @@ jobs:
         detector_config: ${{fromJson(inputs.detector_configs)}}
     steps:
     - uses: actions/checkout@v6
-    - uses: actions/download-artifact@v7
+    - uses: actions/download-artifact@v8
       with:
         name: build-gcc-nightly-fast-eic-shell
         path: install/
@@ -23,7 +23,6 @@ jobs:
     - uses: eic/run-cvmfs-osg-eic-shell@main
       with:
         platform-release: "eic_xl:nightly"
-        network_types: "none"
         setup: install/bin/thisepic.sh
         run: |
           # For some reason npdet_to_step really wants a space in IFS
@@ -38,7 +37,7 @@ jobs:
           detectors[OuterBarrelMPGDSubAssembly]='-l 4'
           # Export to one STEP file
           npdet_to_step $(for d in ${!detectors[@]} ; do echo part ${detectors[$d]} $d ; done) -o ${{matrix.detector_config}} $DETECTOR_PATH/${{matrix.detector_config}}.xml 2>&1 | sed '/TGeoMatrix::dtor/d'
-    - uses: actions/upload-artifact@v6
+    - uses: actions/upload-artifact@v7
       with:
         name: ${{matrix.detector_config}}.stp
         path: ${{matrix.detector_config}}.stp

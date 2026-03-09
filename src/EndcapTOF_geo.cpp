@@ -227,7 +227,7 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector s
 
       float ycoord = envelope.rmax() -
                      module_y / 2.; // y-center-coord of the top sensor. Start from the top row
-      int iy = 0;
+      int iy       = 0;
 
       for (xml_coll_t lrow(x_layout, _Unicode(row)); lrow; ++lrow) {
         xml_comp_t x_row = lrow;
