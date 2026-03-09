@@ -225,7 +225,7 @@ static Ref_t createDetector(Detector& description, xml_h e, SensitiveDetector se
       double rm         = (aerogel_r0 + aerogel_r1) / 2;
 
       // Calculate angular space occupied by the spacers and by the tiles; no gas gaps for now;
-      // assume that a wegde shape is good enough (GEANT visualization does not like boolean objects),
+      // assume that a wedge shape is good enough (GEANT visualization does not like boolean objects),
       // rather than creating constant thickness azimuthal spacers; just assume that spacer thickness is
       // _AEROGEL_FRAME_WALL_THICKNESS_ at r=rm;
       double l0   = 2 * M_PI * rm / adim[ir];
