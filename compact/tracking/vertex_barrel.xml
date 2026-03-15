@@ -53,7 +53,7 @@
     <constant name="VertexBarrelSegL1_r" value="VertexBarrelModL1_rmin+SiVertexSensor_thickness/2.0" />
     <constant name="VertexBarrelSegL2_r" value="VertexBarrelModL2_rmin+SiVertexSensor_thickness/2.0" />
 
-    <constant name="VertexBarrelEnvelope_length"    value="VertexTrackingRegion_length"/> <comment>place holder, not used for now bur required for CI checks</comment>
+    <constant name="VertexBarrelEnvelope_length"    value="VertexTrackingRegion_length"/>
     <documentation>
       - Currently there are 3 sensor layers: Layer 1,2,3 = L0, L1, L2.
       - assume they are of the same length and aligned.
