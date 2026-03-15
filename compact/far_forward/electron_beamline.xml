@@ -99,7 +99,7 @@
   <fields>
 
     <!-- Q0eF quadrupole field -->
-    <field name="Q0EF_field" type="MultipoleMagnet">
+    <field name="Q0EF_field" type="BoundedMultipoleMagnet">
       <shape type="Tube" rmax="Q0EF_InnerRadius" dz="(Q0EF_StartZ-Q0EF_EndZ)/2."/>
       <position x="0" y="0" z="(Q0EF_StartZ+Q0EF_EndZ)/2."/>
       <coefficient/>
@@ -107,7 +107,7 @@
     </field>
 
     <!-- Q1eF quadrupole field -->
-    <field name="Q1EF_field" type="MultipoleMagnet">
+    <field name="Q1EF_field" type="BoundedMultipoleMagnet">
       <shape type="Tube" rmax="Q1EF_InnerRadius" dz="(Q1EF_StartZ-Q1EF_EndZ)/2."/>
       <position x="0" y="0" z="(Q1EF_StartZ+Q1EF_EndZ)/2."/>
       <coefficient/>
