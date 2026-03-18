@@ -208,13 +208,14 @@
 
   <documentation>
       ### Material map for ACTS
-      https://eicweb.phy.anl.gov/EIC/detectors/athena/-/issues/127
+      https://eicweb.phy.anl.gov/EIC/detectors/athena/-/issues/153
   </documentation>
   <plugins>
     <plugin name="epic_FileLoader">
       <arg value="cache:$DETECTOR_PATH:/opt/detector"/>
       <arg value="file:calibrations/materials-map.cbor"/>
-      <arg value="url:https://eicweb.phy.anl.gov/-/project/473/uploads/12dae8245c0389ef972e4ff4315da284/material-map.cbor"/>
+      <arg value="url:https://eicweb.phy.anl.gov/-/project/473/uploads/c21564c0821bad5f8d0f1d21f9bc6b9c/material-map.cbor"/>
+
     </plugin>
   </plugins>
 
