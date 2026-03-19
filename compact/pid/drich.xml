@@ -147,7 +147,7 @@
     thickness="DRICH_corona_thickness"
     num="DRICH_num_coronas"
     material="CarbonFiber_15percent"
-    vis="DRICH_filter_vis"
+    vis="DRICH_Corona_vis"
     num_segments="10,18,24,30"
     radii= "12.9596, 31.8, 51.0, 70.5, 88.7962"
     />
