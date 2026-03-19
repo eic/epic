@@ -363,14 +363,14 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
     radii.push_back(std::stod(radius));
   }
   auto radiatorPos = Position(0., 0., radiatorFrontplane + 0.5 * aerogelThickness) + originFront;
-  auto aerogelPlacement   = Translation3D(radiatorPos) * RotationY(radiatorPitch);
+  auto aerogelPlacement = Translation3D(radiatorPos) * RotationY(radiatorPitch);
 
-  aerogelVol = Volume (detName + "_aerogel", aerogelSolid, aerogelMat);
+  aerogelVol = Volume(detName + "_aerogel", aerogelSolid, aerogelMat);
   aerogelVol.setVisAttributes(aerogelVis);
-  auto aerogelPV        = gasvolVol.placeVolume(aerogelVol, aerogelPlacement);
+  auto aerogelPV = gasvolVol.placeVolume(aerogelVol, aerogelPlacement);
   DetElement aerogelDE(det, "aerogel_de", 0);
   aerogelDE.setPlacement(aerogelPV);
-  
+
   if (segmentationType == "trapezoidal") {
     double crownHeight = halfAerogelThickness;
     std::vector<double> innerRadiusBottoms_half[nHalves];
@@ -446,7 +446,8 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
           ConeSegment segmentSolid(crownHeight / 2.0, rMin_Zminus, rMax_Zminus, rMin_Zplus,
                                    rMax_Zplus, phiStart, phiEnd);
           segmentSolids[h].push_back(segmentSolid);
-          std::string segName = "CarbonSegment_Half1_" + std::to_string(i) + "_" + std::to_string(p);
+          std::string segName =
+              "CarbonSegment_Half1_" + std::to_string(i) + "_" + std::to_string(p);
           Volume segVol(segName, segmentSolid, coronasMat);
           segVol.setVisAttributes(coronasVis);
           //aerogelVol.placeVolume(segVol, Position(0., 0., zPos_half));
@@ -458,26 +459,25 @@ static Ref_t createDetector(Detector& desc, xml::Handle_t handle, SensitiveDetec
           [](const Solid& a, const Solid& b) { return UnionSolid(a, b, Position(0., 0., 0.)); });
 
       crownAndSegmentSolid_half[h] = UnionSolid(crownSolidUnion_half[h], segmentSolidUnion_half[h]);
-    }//halves
-    std::string crName[2] = {"_crown_and_segment_1","_crown_and_segment_2"};
+    } //halves
+    std::string crName[2] = {"_crown_and_segment_1", "_crown_and_segment_2"};
 
-    for(int h =0; h<nHalves; h++){
+    for (int h = 0; h < nHalves; h++) {
       // aerogel structure positioning
-      double localZ = pow(-1, h+1) * 0.5 * crownHeight;
-      Transform3D placement = Transform3D( RotationY(radiatorPitch),Position(0., 0., localZ));
-      Volume crownAndSegmentVolume(detName + crName[h], crownAndSegmentSolid_half[h],
-				   coronasMat);
+      double localZ         = pow(-1, h + 1) * 0.5 * crownHeight;
+      Transform3D placement = Transform3D(RotationY(radiatorPitch), Position(0., 0., localZ));
+      Volume crownAndSegmentVolume(detName + crName[h], crownAndSegmentSolid_half[h], coronasMat);
       crownAndSegmentVolume.setVisAttributes(coronasVis);
       auto crownPV = aerogelVol.placeVolume(crownAndSegmentVolume, placement);
-      DetElement crownDE(det,crName[h],0);
+      DetElement crownDE(det, crName[h], 0);
       crownDE.setPlacement(crownPV);
     }
   } //trapezoidal
 
   else if (segmentationType == "square") {
     printout(WARNING, "DRICH_geo", "Square segmentation requested but not implemented yet.");
-  }//Square
-  
+  } //Square
+
   Cone airgapSolid(airgapThickness / 2.0,
                    radiatorRmin + boreDelta * aerogelThickness / vesselLength,
                    radiatorRmax + snoutDelta * aerogelThickness / snoutLength,
