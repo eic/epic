@@ -28,22 +28,22 @@ static Ref_t build_magnet(Detector& dtor, xml_h e, SensitiveDetector /* sens */)
   Assembly assembly(det_name + "_assembly");
 
   // get materials
-  Material iron       = dtor.material("Iron");
-  Material nbti       = dtor.material("SolenoidCoil");
+//  Material iron       = dtor.material("Iron");
+//  Material nbti       = dtor.material("SolenoidCoil");
   Material steel_304l = dtor.material("StainlessSteelSAE304");
-  Material alum       = dtor.material("Al6061T6");
-  Material steel_a53  = dtor.material("StainlessSteelA53");
+//  Material alum       = dtor.material("Al6061T6");
+//  Material steel_a53  = dtor.material("StainlessSteelA53");
 
   // build magnet components
-  buildTubeElement(sdet, assembly, dtor, x_det, "yoke", iron);
-  buildTubeElement(sdet, assembly, dtor, x_det, "coil", nbti);
+//  buildTubeElement(sdet, assembly, dtor, x_det, "yoke", iron);
+//  buildTubeElement(sdet, assembly, dtor, x_det, "coil", nbti);
   buildTubeElement(sdet, assembly, dtor, x_det, "tube", steel_304l);
-  buildPolyElement(sdet, assembly, dtor, x_det, "endplate", steel_304l);
-  buildTubeElement(sdet, assembly, dtor, x_det, "yokeshield", steel_304l);
-  buildTubeElement(sdet, assembly, dtor, x_det, "heatshieldbarrel", alum);
-  buildPolyElement(sdet, assembly, dtor, x_det, "heatshieldend", alum);
-  buildTubeElement(sdet, assembly, dtor, x_det, "cryobarrel", steel_a53);
-  buildPolyElement(sdet, assembly, dtor, x_det, "cryoend", steel_a53);
+//  buildPolyElement(sdet, assembly, dtor, x_det, "endplate", steel_304l);
+//  buildTubeElement(sdet, assembly, dtor, x_det, "yokeshield", steel_304l);
+//  buildTubeElement(sdet, assembly, dtor, x_det, "heatshieldbarrel", alum);
+//  buildPolyElement(sdet, assembly, dtor, x_det, "heatshieldend", alum);
+//  buildTubeElement(sdet, assembly, dtor, x_det, "cryobarrel", steel_a53);
+//  buildPolyElement(sdet, assembly, dtor, x_det, "cryoend", steel_a53);
 
   // final placement
   auto pv_assembly = dtor.pickMotherVolume(sdet).placeVolume(assembly);
