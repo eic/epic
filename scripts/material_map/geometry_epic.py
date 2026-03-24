@@ -4,6 +4,7 @@
 
 import os
 import argparse
+from pathlib import Path
 
 import acts
 
@@ -34,7 +35,7 @@ if "__main__" == __name__:
     runGeometry(
         trackingGeometry,
         decorators,
-        outputDir=os.getcwd(),
+        outputDir=Path.cwd(),
         outputObj=False,
         outputCsv=False,
         outputJson=True,

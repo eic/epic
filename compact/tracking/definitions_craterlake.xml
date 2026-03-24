@@ -138,13 +138,13 @@
       <composite name="InnerTrackerEndcapP"/>
     </detector>
     <detector id="TrackerSubAssembly_1_ID"
-      name="MiddleSiBarrelrSubAssembly"
+      name="MiddleSiBarrelSubAssembly"
       type="DD4hep_SubdetectorAssembly"
       vis="TrackerSubAssemblyVis">
       <composite name="SagittaSiBarrel"/>
     </detector>
       <detector id="TrackerSubAssembly_1_ID"
-      name="OuterSiBarrelrSubAssembly"
+      name="OuterSiBarrelSubAssembly"
       type="DD4hep_SubdetectorAssembly"
       vis="TrackerSubAssemblyVis">
       <composite name="OuterSiBarrel"/>
@@ -206,13 +206,14 @@
 
   <documentation>
       ### Material map for ACTS
-      https://eicweb.phy.anl.gov/EIC/detectors/athena/-/issues/127
+      https://eicweb.phy.anl.gov/EIC/detectors/athena/-/issues/153
   </documentation>
   <plugins>
     <plugin name="epic_FileLoader">
       <arg value="cache:$DETECTOR_PATH:/opt/detector"/>
       <arg value="file:calibrations/materials-map.cbor"/>
-      <arg value="url:https://eicweb.phy.anl.gov/-/project/473/uploads/f892256ac21a4ff1151acca260f8913b/material-map.cbor"/>
+      <arg value="url:https://eicweb.phy.anl.gov/-/project/473/uploads/c21564c0821bad5f8d0f1d21f9bc6b9c/material-map.cbor"/>
+
     </plugin>
   </plugins>
 
