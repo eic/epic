@@ -229,6 +229,7 @@ void buildTubeElement(dd4hep::DetElement& sdet, dd4hep::Assembly& assembly, dd4h
     // get one element
     xml_comp_t elem_c = elems_c;
     string elem_name  = elem_c.nameStr();
+    if (elem_name.find("Outer") != std::string::npos){return;}
     // get placement coordinates
     xml_dim_t elem_pos = elem_c.child(_U(placement));
     double elem_theta  = elem_pos.attr<double>("theta");
