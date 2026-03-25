@@ -202,7 +202,7 @@ static Ref_t create_MPGDCylinderBarrelTracker(Detector& description, xml_h e,
       io = 0;              // ...it's the inner one => io = 0.
     else
       io = 1;
-    staveModel.io        = io;
+    staveModel.io         = io;
     section2Models[io][0] = nStaveModels - 1;
     if (fabs(rmin2 - rmin1) > 1.e6) {
       StaveModel& staveMode2 = staveModels[nStaveModels++];
@@ -515,10 +515,10 @@ static Ref_t create_MPGDCylinderBarrelTracker(Detector& description, xml_h e,
   // ***** SECTOR POSITIONS ALONG Z
   // These are the 4 central values in Z where the four sets of modules, called
   // sectors, will be placed.
-  double modz_pos[nSections] = {-barrel_length / 2 + (total_length) / 2, -(total_length + z_gap) / 2,
-                               +(total_length + z_gap) / 2,
-                               +barrel_length / 2 - (total_length) / 2};
-  int nModules              = 0;
+  double modz_pos[nSections] = {-barrel_length / 2 + (total_length) / 2,
+                                -(total_length + z_gap) / 2, +(total_length + z_gap) / 2,
+                                +barrel_length / 2 - (total_length) / 2};
+  int nModules               = 0;
   for (int iz = 0; iz < nSections; iz++) {
     int io                = (iz == 1 || iz == 2) ? 0 : 1;
     int iSMs[2]           = {section2Models[io][0], section2Models[io][1]};
