@@ -3,8 +3,8 @@
 
 <lccdd>
 <documentation>
-  Title: Micro Pattern Gas Detectors
-  Author: @mposik1983
+  Title: Micro Pattern Gas Detectors Cylindrical Barrel Layer
+  Author: @ybedfer
   Status: development
   Version: 2.2
 </documentation>
@@ -34,7 +34,7 @@
     <constant name="MMDriftCuGround_thickness"              value="0.41*um"/>
     <comment> FIXME: No support material is here, so fudge factor used to bring material budget to ~0.5% for barrel. </comment>
     <constant name="MMFudgeInnerMPGDBarrel_thickness"       value="570*um"/>
-    <comment> FIXME: No definite plan for connections/services to the inner sectors yet, so guess value. </comment>
+    <comment> FIXME: No definite plan for connections/services to the inner sections yet, so guess value. </comment>
     <constant name="MMInnerService_thickness"               value="0.05*cm"/>
     <comment> 2DStrip: Multiple Sensitive Volumes. => Subdivide GasGap: 3 thin slices (pixel and (p|n)strips) at the centre, enclosed by 2 thick radiators. </comment>
     <constant name="MMThinGap_thickness"                    value="10*um"/>
@@ -44,8 +44,8 @@
     <constant name="MMModuleLength"                         value="61.0*cm"/>
     <constant name="MMFrameWidth"                           value="1.0*cm"/>
     <constant name="MMOutwardFrameWidth"                    value="5.0*cm"/>
-    <constant name="MMOuterSector_R"                        value="57.7*cm"/>
-    <constant name="MMInnerSector_R"                        value="55.5*cm"/>
+    <constant name="MMInnerSection_R"                       value="InnerMPGDBarrel_rmin + 0.5*cm"/>
+    <constant name="MMOuterSection_R"                       value="MMInnerSection_R + 2.2*cm"/>
     <comment> ...Positioning </comment>
     <constant name="MMRadial_offset"                        value="1.0*cm"/>
     <constant name="MMCentral_gap"                          value="0.2*cm"/>
@@ -53,13 +53,13 @@
     <comment> In principle, stave count should not be independenty specified: it is fixed by above intrinsic parameters </comment>
     <constant name="MPGDBarrelStave_count"                  value="8"/>
     <constant name="InnerMPGDBarrelLayer_rmin"              value="InnerMPGDBarrel_rmin"/>
-    <constant name="InnerMPGDBarrelLayer_rmax"              value="MMOuterSector_R + MMRadial_offset / 2 + 1*cm"/>
+    <constant name="InnerMPGDBarrelLayer_rmax"              value="MMOuterSection_R + MMRadial_offset / 2 + 1*cm"/>
     <constant name="rmin2Sensor" value="MMDriftCuGround_thickness + MMDriftKapton_thickness + MMDriftCuElectrode_thickness + MMGasGap_thickness / 2" />
     <comment> "MMModuleWidth" is to be understood as the width at the inner wall. Width expands as one moves away from it. </comment>
-    <constant name="MMInnerSensor_R" value="MMInnerSector_R + rmin2Sensor" />
-    <constant name="MMOuterSensor_R" value="MMOuterSector_R + rmin2Sensor" />
-    <constant name="MMInnerAperture" value="MMModuleWidth/MMInnerSector_R" />
-    <constant name="MMOuterAperture" value="MMModuleWidth/MMOuterSector_R" />
+    <constant name="MMInnerSensor_R" value="MMInnerSection_R + rmin2Sensor" />
+    <constant name="MMOuterSensor_R" value="MMOuterSection_R + rmin2Sensor" />
+    <constant name="MMInnerAperture" value="MMModuleWidth/MMInnerSection_R" />
+    <constant name="MMOuterAperture" value="MMModuleWidth/MMOuterSection_R" />
     <comment> Strip layout: Pitch is derived from size and # of strips, assuming sensitive area to fill all available space. </comment>
     <constant name="MMnStripsPhi"    value = "512" />
     <constant name="MMInnerPitchPhi" value = "MMInnerAperture/MMnStripsPhi" />
@@ -83,8 +83,8 @@
 
       <module name="InnerMPGDBarrel_Mod1" vis="TrackerLayerVis" >
         <comment> Models describe the overlapping of staves along phi, either (I) via  offsets or (II) via distinct radii ("rmin1/2"). Solution (II) is only partially implemented: would require FOUR distinct "radius" in the readout segmentation. Note that in any case "rsensor" must be set equal the "radius" of the corresponding segmentation and is used internally to double-check the consistency between the stack of "module_component" and the segmentation "radius". </comment>
-        <model name="MMInnerSector" rmin1="MMInnerSector_R" rmin2="MMInnerSector_R" offset="MMRadial_offset" rsensor="MMInnerSensor_R"/>
-        <model name="MMOuterSector" rmin1="MMOuterSector_R" rmin2="MMOuterSector_R" offset="MMRadial_offset" rsensor="MMOuterSensor_R"/>
+        <model name="MMInnerSection" rmin1="MMInnerSection_R" rmin2="MMInnerSection_R" offset="MMRadial_offset" rsensor="MMInnerSensor_R"/>
+        <model name="MMOuterSection" rmin1="MMOuterSection_R" rmin2="MMOuterSection_R" offset="MMRadial_offset" rsensor="MMOuterSensor_R"/>
         <frame name="MMFrame"        material="CarbonFiber" width="MMFrameWidth"        vis="TrackerSupportVis" />
         <frame name="MMOutwardFrame" material="CarbonFiber" width="MMOutwardFrameWidth" vis="TrackerServiceVis" />
         <service name="MMInnerService" material="Kapton" thickness="MMInnerService_thickness" vis="TrackerServiceVis" /> <comment> This includes cables => Kapton as a material is overoptimistic. </comment>
