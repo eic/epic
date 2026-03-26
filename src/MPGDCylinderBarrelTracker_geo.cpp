@@ -516,7 +516,8 @@ static Ref_t create_MPGDCylinderBarrelTracker(Detector& description, xml_h e,
   // These are the 4 central values in Z where the four sets of modules, called
   // sectors, will be placed.
   double modz_pos[nSections] = {-barrel_length / 2 + (total_length) / 2,
-                                -(total_length + z_gap) / 2, +(total_length + z_gap) / 2,
+                                -(total_length + z_gap) / 2,
+                                +(total_length + z_gap) / 2,
                                 +barrel_length / 2 - (total_length) / 2};
   int nModules               = 0;
   for (int iz = 0; iz < nSections; iz++) {
