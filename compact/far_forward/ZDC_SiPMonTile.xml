@@ -13,13 +13,12 @@
     <documentation>
       #### Material Thicknesses
     </documentation>
-    <constant name="HcalFarForwardZDC_SiPMonTile_AirThickness"                  value="0.02*cm"/>
+    <constant name="HcalFarForwardZDC_SiPMonTile_AirThickness"                  value="0.1212*cm"/>
     <constant name="HcalFarForwardZDC_SiPMonTile_AbsorberThickness"             value="2*cm"/>
-    <constant name="HcalFarForwardZDC_SiPMonTile_ScintillatorCoverThickness"    value="0.04*cm"/>
-    <constant name="HcalFarForwardZDC_SiPMonTile_PolystyreneThickness"          value="0.30*cm"/>
-    <constant name="HcalFarForwardZDC_SiPMonTile_PCBThickness"                  value="0.08*cm"/>
+    <constant name="HcalFarForwardZDC_SiPMonTile_PolystyreneThickness"          value="0.40*cm"/>
+    <constant name="HcalFarForwardZDC_SiPMonTile_PCBThickness"                  value="0.16*cm"/>
     <constant name="HcalFarForwardZDC_SiPMonTile_ESRFoilThickness"              value="0.015*cm"/>
-
+	
     <documentation>
       - ZDC N Layers and computed Thickness
     </documentation>
@@ -29,14 +28,16 @@
       value="HcalFarForwardZDC_SiPMonTile_AbsorberThickness +
              HcalFarForwardZDC_SiPMonTile_PolystyreneThickness +
              HcalFarForwardZDC_SiPMonTile_PCBThickness+HcalFarForwardZDC_SiPMonTile_ESRFoilThickness*2+
-             2*HcalFarForwardZDC_SiPMonTile_AirThickness+HcalFarForwardZDC_SiPMonTile_ScintillatorCoverThickness"
+             2*HcalFarForwardZDC_SiPMonTile_AirThickness"
       />
 
     <constant name="HcalFarForwardZDC_SiPMonTile_BackplateThickness" value="HcalFarForwardZDC_SiPMonTile_AbsorberThickness"/>
     <constant name="HcalFarForwardZDC_SiPMonTile_Layer_NSteelRepeat" value="64"/>
 
-    <constant name="HcalFarForwardZDC_SiPMonTile_SquareSideLength" value="47.8*mm"/>
+    <constant name="HcalFarForwardZDC_SiPMonTile_SquareSideLength" value="48.8*mm"/>
     <constant name="HcalFarForwardZDC_SiPMonTile_stagger" value="1"/>
+    <constant name="HcalFarForwardZDC_SiPMonTile_offset_x" value="0"/>
+	<constant name="HcalFarForwardZDC_SiPMonTile_offset_y" value="0"/>
 
     <constant name="HcalFarForwardZDC_SiPMonTile_width" value= "60*cm"/>
     <constant name="HcalFarForwardZDC_SiPMonTile_height" value= "60*cm"/>
@@ -89,11 +90,10 @@
       <layer repeat="HcalFarForwardZDC_SiPMonTile_Layer_NSteelRepeat" thickness="HcalFarForwardZDC_SiPMonTile_SingleLayerThickness" vis="InvisibleWithDaughters">
         <slice name="Absorber_slice" material="Steel235" thickness="HcalFarForwardZDC_SiPMonTile_AbsorberThickness" vis="AnlGray"/>
         <slice name="Air_slice" material="Air" thickness="HcalFarForwardZDC_SiPMonTile_AirThickness"/>
-        <slice name="ScintCover_slice" material="Aluminum" thickness="HcalFarForwardZDC_SiPMonTile_ScintillatorCoverThickness"/>
+        <slice name="PCB_slice" material="Fr4" thickness="HcalFarForwardZDC_SiPMonTile_PCBThickness"/>
         <slice name="ESRFoil_slice" material="Polystyrene" thickness="HcalFarForwardZDC_SiPMonTile_ESRFoilThickness"/>
         <slice name="Scintillator_slice" material="Polystyrene" thickness="HcalFarForwardZDC_SiPMonTile_PolystyreneThickness" vis="AnlOrange" sensitive="true"/>
         <slice name="ESRFoil_slice" material="Polystyrene" thickness="HcalFarForwardZDC_SiPMonTile_ESRFoilThickness"/>
-        <slice name="PCB_slice" material="Fr4" thickness="HcalFarForwardZDC_SiPMonTile_PCBThickness"/>
         <slice name="Air_slice" material="Air" thickness="HcalFarForwardZDC_SiPMonTile_AirThickness"/>
       </layer>
       <comment> Final layer of steel </comment>
@@ -108,9 +108,11 @@
       <segmentation
         type="CartesianGridXYStaggered"
         grid_size_x="HcalFarForwardZDC_SiPMonTile_SquareSideLength"
-	grid_size_y="HcalFarForwardZDC_SiPMonTile_SquareSideLength"
+	    grid_size_y="HcalFarForwardZDC_SiPMonTile_SquareSideLength"
         stagger_x="HcalFarForwardZDC_SiPMonTile_stagger"
-	stagger_y="HcalFarForwardZDC_SiPMonTile_stagger"
+	    stagger_y="HcalFarForwardZDC_SiPMonTile_stagger"
+		offset_x="HcalFarForwardZDC_SiPMonTile_offset_x"
+		offset_y="HcalFarForwardZDC_SiPMonTile_offset_y"
         />
       <id>system:8,layer:8,slice:5,x:32:-16,y:-16</id>
     </readout>
