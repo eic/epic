@@ -522,18 +522,15 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector /
       double axis_x = sign * sin(theta);
       double axis_z = sign * cos(theta);
 
-      Position end_pos(straightXCenters[piece_n] + sign * halfL * sin(theta),
-                       0.0,
+      Position end_pos(straightXCenters[piece_n] + sign * halfL * sin(theta), 0.0,
                        straightZCenters[piece_n] + sign * halfL * cos(theta));
-      Position cut_center(end_pos.x() + halfL * axis_x,
-                          0.0,
-                          end_pos.z() + halfL * axis_z);
+      Position cut_center(end_pos.x() + halfL * axis_x, 0.0, end_pos.z() + halfL * axis_z);
 
       Tube cut_tube(0.0, rOuter, halfL);
       Transform3D cut_transform(RotationY(theta), cut_center);
       Transform3D rel_cut = inv_base * cut_transform;
-      range_tube   = SubtractionSolid(range_tube, cut_tube, rel_cut);
-      range_vacuum = SubtractionSolid(range_vacuum, cut_tube, rel_cut);
+      range_tube          = SubtractionSolid(range_tube, cut_tube, rel_cut);
+      range_vacuum        = SubtractionSolid(range_vacuum, cut_tube, rel_cut);
     }
 
     SubtractionSolid range_pipe(range_tube, range_vacuum);
