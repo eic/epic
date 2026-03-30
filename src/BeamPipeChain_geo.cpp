@@ -517,8 +517,6 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector /
 
       double theta  = straightThetasPlaced[piece_n];
       double halfL  = 0.5 * straightLengthsPlaced[piece_n];
-      double theta  = straightThetasPlaced[piece_n];
-      double halfL  = 0.5 * straightLengthsPlaced[piece_n];
       double rOuter = straightOuterRadiiMax[piece_n];
       double sign   = static_cast<double>(clipEndSigns[cut_n]);
       double axis_x = sign * sin(theta);
