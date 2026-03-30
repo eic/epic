@@ -23,14 +23,22 @@
         <slice
         pipe_id="2"
         grandmother="Pipe_Q1eR_to_B2BeR"
-        mother="Pipe_in_Q2eR_vacuum"
-        name="Pipe_in_Q2eR_tracker"/>
+        mother="Pipe_Q2eR_to_B2BeR_combined_vacuum"
+        name="Pipe_in_Q2eR_tracker"
+        use_cross_section="true"
+        plane_z="Q2eR_CenterZ - Q2eR_Length/2*cos(Q2eR_Theta)"
+        plane_x="Q2eR_CenterX - Q2eR_Length/2*sin(Q2eR_Theta)"
+        plane_yrot="Q2eR_Theta"/>
 
         <slice
         pipe_id="3"
         grandmother="Pipe_Q1eR_to_B2BeR"
-        mother="Pipe_in_B2AeR_vacuum"
-        name="Pipe_in_B2AeR_tracker"/>
+        mother="Pipe_Q2eR_to_B2BeR_combined_vacuum"
+        name="Pipe_in_B2AeR_tracker"
+        use_cross_section="true"
+        plane_z="B2AeR_CenterZ - B2AeR_Length/2*cos(B2AeR_Theta)"
+        plane_x="B2AeR_CenterX - B2AeR_Length/2*sin(B2AeR_Theta)"
+        plane_yrot="B2AeR_Theta"/>
 
         <slice
         pipe_id="4"
