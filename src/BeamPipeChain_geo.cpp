@@ -152,6 +152,8 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector /
   vector<double> straightLengthsPlaced;
   vector<double> straightThetasPlaced;
   vector<double> straightOuterRadiiMax;
+  vector<size_t> clipPieceIndices;
+  vector<int> clipEndSigns;
 
   // Parallel vectors for bend-join torus pieces between neighboring straight pipes.
   vector<std::string> bendNames;
@@ -382,6 +384,29 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector /
     straightLengthsPlaced.push_back(branch_length_effective);
     straightThetasPlaced.push_back(branch_theta);
     straightOuterRadiiMax.push_back(std::max(branch_r1, branch_r2));
+
+    size_t branch_index = straightNames.size() - 1;
+    int branch_range    = straightRangeIndices[branch_index];
+    if (branch_range >= 0) {
+      clipPieceIndices.push_back(branch_index);
+      clipEndSigns.push_back(-1);
+    }
+  }
+
+  // Clip the terminal downstream end of the original straight chain for each combine
+  // range. This is the last non-split piece in that range.
+  size_t base_straight_count = names.size();
+  for (size_t range_n = 0; range_n < combineStartIds.size(); ++range_n) {
+    int last_piece = -1;
+    for (size_t piece_n = 0; piece_n < base_straight_count; ++piece_n) {
+      if (straightRangeIndices[piece_n] == static_cast<int>(range_n)) {
+        last_piece = static_cast<int>(piece_n);
+      }
+    }
+    if (last_piece >= 0) {
+      clipPieceIndices.push_back(static_cast<size_t>(last_piece));
+      clipEndSigns.push_back(-1);
+    }
   }
 
   // Place non-combined straight segments
@@ -485,36 +510,33 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector /
       range_vacuum    = UnionSolid(range_vacuum, bendVacuums[piece_n], rel);
     }
 
-    // Subtract end-cap cylinders from each joined straight pipe to remove protrusions.
-    // Each subtraction uses the pipe's outer diameter to clip material at the ends.
-    for (size_t piece_n = 0; piece_n < straightNames.size(); ++piece_n) {
+    // Subtract outward-only cylinders from the explicit end-planes that should bound
+    // the combined result: the main chain terminal end and any split branch terminal ends.
+    for (size_t cut_n = 0; cut_n < clipPieceIndices.size(); ++cut_n) {
+      size_t piece_n = clipPieceIndices[cut_n];
       if (straightRangeIndices[piece_n] != static_cast<int>(range_n)) {
         continue;
       }
 
-      double theta = straightThetasPlaced[piece_n];
-      double halfL = 0.5 * straightLengthsPlaced[piece_n];
+      double theta  = straightThetasPlaced[piece_n];
+      double halfL  = 0.5 * straightLengthsPlaced[piece_n];
       double rOuter = straightOuterRadiiMax[piece_n];
+      double sign   = static_cast<double>(clipEndSigns[cut_n]);
+      double axis_x = sign * sin(theta);
+      double axis_z = sign * cos(theta);
 
-      // Subtract at upstream end (-1)
-      Position end_pos_up(straightXCenters[piece_n] - halfL * sin(theta),
+      Position end_pos(straightXCenters[piece_n] + sign * halfL * sin(theta),
+                       0.0,
+                       straightZCenters[piece_n] + sign * halfL * cos(theta));
+      Position cut_center(end_pos.x() + halfL * axis_x,
                           0.0,
-                          straightZCenters[piece_n] - halfL * cos(theta));
-      Tube cap_up(0.0, rOuter, halfL);
-      Transform3D cap_transform_up(RotationY(theta), end_pos_up);
-      Transform3D rel_cap_up = inv_base * cap_transform_up;
-      range_tube   = SubtractionSolid(range_tube, cap_up, rel_cap_up);
-      range_vacuum = SubtractionSolid(range_vacuum, cap_up, rel_cap_up);
+                          end_pos.z() + halfL * axis_z);
 
-      // Subtract at downstream end (+1)
-      Position end_pos_down(straightXCenters[piece_n] + halfL * sin(theta),
-                            0.0,
-                            straightZCenters[piece_n] + halfL * cos(theta));
-      Tube cap_down(0.0, rOuter, halfL);
-      Transform3D cap_transform_down(RotationY(theta), end_pos_down);
-      Transform3D rel_cap_down = inv_base * cap_transform_down;
-      range_tube   = SubtractionSolid(range_tube, cap_down, rel_cap_down);
-      range_vacuum = SubtractionSolid(range_vacuum, cap_down, rel_cap_down);
+      Tube cut_tube(0.0, rOuter, halfL);
+      Transform3D cut_transform(RotationY(theta), cut_center);
+      Transform3D rel_cut = inv_base * cut_transform;
+      range_tube   = SubtractionSolid(range_tube, cut_tube, rel_cut);
+      range_vacuum = SubtractionSolid(range_vacuum, cut_tube, rel_cut);
     }
 
     SubtractionSolid range_pipe(range_tube, range_vacuum);

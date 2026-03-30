@@ -33,7 +33,7 @@
     <constant name="B2AeR_EndZ"           value="B2AeR_CenterZ - (B2AeR_Length/2)*cos(B2AeR_Theta)"/>
     <constant name="B2AeR_EndX"           value="B2AeR_CenterX - (B2AeR_Length/2)*sin(B2AeR_Theta)"/>
 
-    <constant name="B2AeR_Connection_Length" value="1.0*cm"/>
+    <constant name="B2AeR_Connection_Length"   value="1.0*cm"/>
     <constant name="B2AeR_Connection_CenterZ"  value="B2AeR_EndZ - B2AeR_Connection_Length*cos(B2AeR_Theta)"/>
     <constant name="B2AeR_Connection_CenterX"  value="B2AeR_EndX - B2AeR_Connection_Length*sin(B2AeR_Theta)"/>
     <constant name="B2AeR_Connection_EndZ"     value="B2AeR_Connection_CenterZ - B2AeR_Connection_Length/2*cos(B2AeR_Theta)"/>
