@@ -79,6 +79,7 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector /
   vector<double> splitThetas;
   vector<double> splitROuters1;
   vector<double> splitROuters2;
+  vector<double> splitJunctionOverlaps;
 
   // Optional boolean-combine groups, configured via XML:
   //   <combine name="..." start_id="..." end_id="..."/>
@@ -104,7 +105,7 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector /
   }
 
   // Optional branch segments starting at the downstream end of an existing pipe id:
-  //   <split from_id="..." id="..." name="..." length="..." theta="..." rout1="..." rout2="..."/>
+  //   <split from_id="..." id="..." name="..." length="..." theta="..." rout1="..." rout2="..." junction_overlap="..."/>
   for (xml_coll_t split_coll(x_det, _Unicode(split)); split_coll; ++split_coll) {
     xml_comp_t split(split_coll);
 
@@ -115,6 +116,7 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector /
     double theta  = getAttrOrDefault<double>(split, _Unicode(theta), 0.0);
     double rout1  = getAttrOrDefault<double>(split, _Unicode(rout1), 0.0);
     double rout2  = getAttrOrDefault<double>(split, _Unicode(rout2), 0.0);
+    double junction_overlap = getAttrOrDefault<double>(split, _Unicode(junction_overlap), 0.0);
 
     splitFromIds.push_back(from_id);
     splitIds.push_back(id);
@@ -123,6 +125,7 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector /
     splitThetas.push_back(theta);
     splitROuters1.push_back(rout1);
     splitROuters2.push_back(rout2);
+    splitJunctionOverlaps.push_back(junction_overlap);
   }
 
   // Return the combine-range index for a pipe id, or -1 if not in a combine group.
@@ -148,6 +151,7 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector /
   vector<double> straightZCenters;
   vector<double> straightLengthsPlaced;
   vector<double> straightThetasPlaced;
+  vector<double> straightOuterRadiiMax;
 
   // Parallel vectors for bend-join torus pieces between neighboring straight pipes.
   vector<std::string> bendNames;
@@ -260,6 +264,7 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector /
     straightZCenters.push_back(zCenter);
     straightLengthsPlaced.push_back(length);
     straightThetasPlaced.push_back(theta);
+    straightOuterRadiiMax.push_back(std::max(rOuter1, rOuter2));
 
     // // Add joining bend to next pipe
     if (pipeN != xCenters.size() - 1 && bendLengths[pipeN] != 0) {
@@ -343,10 +348,11 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector /
     double source_end_x = source_x_center - 0.5 * source_length * sin(source_theta);
     double source_end_z = source_z_center - 0.5 * source_length * cos(source_theta);
 
-    // Add a tiny overlap so split and source vacuums do not only touch at a face.
-    // This avoids boolean-cap artifacts (open circles) in visualization.
-    double junction_overlap = 0.05 * mm;
-    if (junction_overlap > 0.45 * branch_length) {
+    // Configurable junction overlap for connecting to source or external geometry.
+    // Positive values create overlap (for internal connections to avoid gaps).
+    // Zero or negative values create separation (for external geometry connections).
+    double junction_overlap = splitJunctionOverlaps[split_n];
+    if (junction_overlap > 0 && junction_overlap > 0.45 * branch_length) {
       junction_overlap = 0.45 * branch_length;
     }
     double branch_length_effective = branch_length + junction_overlap;
@@ -375,6 +381,7 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector /
     straightZCenters.push_back(branch_center_z);
     straightLengthsPlaced.push_back(branch_length_effective);
     straightThetasPlaced.push_back(branch_theta);
+    straightOuterRadiiMax.push_back(std::max(branch_r1, branch_r2));
   }
 
   // Place non-combined straight segments
@@ -476,6 +483,38 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector /
       Transform3D rel = inv_base * bendTransforms[piece_n];
       range_tube      = UnionSolid(range_tube, bendTubes[piece_n], rel);
       range_vacuum    = UnionSolid(range_vacuum, bendVacuums[piece_n], rel);
+    }
+
+    // Subtract end-cap cylinders from each joined straight pipe to remove protrusions.
+    // Each subtraction uses the pipe's outer diameter to clip material at the ends.
+    for (size_t piece_n = 0; piece_n < straightNames.size(); ++piece_n) {
+      if (straightRangeIndices[piece_n] != static_cast<int>(range_n)) {
+        continue;
+      }
+
+      double theta = straightThetasPlaced[piece_n];
+      double halfL = 0.5 * straightLengthsPlaced[piece_n];
+      double rOuter = straightOuterRadiiMax[piece_n];
+
+      // Subtract at upstream end (-1)
+      Position end_pos_up(straightXCenters[piece_n] - halfL * sin(theta),
+                          0.0,
+                          straightZCenters[piece_n] - halfL * cos(theta));
+      Tube cap_up(0.0, rOuter, halfL);
+      Transform3D cap_transform_up(RotationY(theta), end_pos_up);
+      Transform3D rel_cap_up = inv_base * cap_transform_up;
+      range_tube   = SubtractionSolid(range_tube, cap_up, rel_cap_up);
+      range_vacuum = SubtractionSolid(range_vacuum, cap_up, rel_cap_up);
+
+      // Subtract at downstream end (+1)
+      Position end_pos_down(straightXCenters[piece_n] + halfL * sin(theta),
+                            0.0,
+                            straightZCenters[piece_n] + halfL * cos(theta));
+      Tube cap_down(0.0, rOuter, halfL);
+      Transform3D cap_transform_down(RotationY(theta), end_pos_down);
+      Transform3D rel_cap_down = inv_base * cap_transform_down;
+      range_tube   = SubtractionSolid(range_tube, cap_down, rel_cap_down);
+      range_vacuum = SubtractionSolid(range_vacuum, cap_down, rel_cap_down);
     }
 
     SubtractionSolid range_pipe(range_tube, range_vacuum);

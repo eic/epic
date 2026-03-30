@@ -29,7 +29,7 @@
         length="Q2eR_Length" theta="Q2eR_Theta"
         rout1="Q2eR_InnerRadius" rout2="Q2eR_InnerRadius">
       </pipe>
-        <combine name="Pipe_Q2eR_to_B2BeR_combined" start_id="4" end_id="8"/>
+        <combine name="Pipe_Q2eR_to_B2BeR_combined" start_id="3" end_id="8"/>
         <pipe id="4" name="Pipe_Q2eR_to_B2AeR"/>
       <pipe id="5" name="Pipe_in_B2AeR"
         xcenter="B2AeR_CenterX" zcenter="B2AeR_CenterZ"
@@ -42,13 +42,15 @@
         length="B2AeR_Connection_Length" theta="B2BeR_Theta"
         rout1="B2BeR_InnerRadius" rout2="B2BeR_InnerRadius">
       </pipe>
-      <split from_id="4" id="8" name="Pipe_Q2eR_to_TaggerVacuum"
-             length="Q2eR_CenterPosition-B2BeR_CenterPosition"
-             theta="1" rout1="Q2eR_InnerRadius" rout2="Q2eR_InnerRadius"/>
+      <comment> Split pipe branches from Q2eR to feed straight path to luminosity exit window </comment>
+      <split from_id="3" id="8" name="Pipe_Q2eR_to_TaggerVacuum"
+             length="Q2eR_EndZ - Dipole_Focus_Z"
+             theta="0" rout1="LumiWin_R+Backwards_Box_Wall" rout2="LumiWin_R+Backwards_Box_Wall"
+             junction_overlap="5*mm"/>
     </detector>
 
     <comment> Main beamline vacuum volume spanning between B2BeR and SQ3eR magnets</comment>
-    <detector name="BackwardsTaggerVacuum" type="FarBackwardVacuum" wall="Backwards_Box_Wall" lumi="true" vis="BeamPipeVis" >
+    <detector name="BackwardsTaggerVacuum" type="FarBackwardVacuum" wall="Backwards_Box_Wall" lumi="false" vis="BeamPipeVis" >
       <focus      x="Dipole_Focus_X"    y="Dipole_Focus_Y"    z="Dipole_Focus_Z" />
 
       <rotation   theta="Beam_Theta"/>
