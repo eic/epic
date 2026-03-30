@@ -96,8 +96,9 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector /
     if (end_id < start_id) {
       std::swap(start_id, end_id);
     }
-    std::string name =
-        getAttrOrDefault<std::string>(combine, _Unicode(name), "combined_" + std::to_string(start_id) + "_" + std::to_string(end_id));
+    std::string name = getAttrOrDefault<std::string>(combine, _Unicode(name),
+                                                     "combined_" + std::to_string(start_id) + "_" +
+                                                         std::to_string(end_id));
 
     combineStartIds.push_back(start_id);
     combineEndIds.push_back(end_id);
@@ -109,9 +110,9 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector /
   for (xml_coll_t split_coll(x_det, _Unicode(split)); split_coll; ++split_coll) {
     xml_comp_t split(split_coll);
 
-    int from_id = getAttrOrDefault<int>(split, _Unicode(from_id), -1);
-    int id      = getAttrOrDefault<int>(split, _Unicode(id), -1);
-    string name = getAttrOrDefault<string>(split, _Unicode(name), "split_" + std::to_string(id));
+    int from_id   = getAttrOrDefault<int>(split, _Unicode(from_id), -1);
+    int id        = getAttrOrDefault<int>(split, _Unicode(id), -1);
+    string name   = getAttrOrDefault<string>(split, _Unicode(name), "split_" + std::to_string(id));
     double length = getAttrOrDefault<double>(split, _Unicode(length), 0.0);
     double theta  = getAttrOrDefault<double>(split, _Unicode(theta), 0.0);
     double rout1  = getAttrOrDefault<double>(split, _Unicode(rout1), 0.0);
@@ -321,28 +322,25 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector /
     }
 
     if (source_index < 0) {
-      printout(WARNING, "BeamPipeChain",
-               "Split '%s' references unknown from_id=%d. Skipping.",
+      printout(WARNING, "BeamPipeChain", "Split '%s' references unknown from_id=%d. Skipping.",
                splitNames[split_n].c_str(), splitFromIds[split_n]);
       continue;
     }
 
     double branch_length = splitLengths[split_n];
     if (branch_length <= 0) {
-      printout(WARNING, "BeamPipeChain",
-               "Split '%s' has non-positive length. Skipping.",
+      printout(WARNING, "BeamPipeChain", "Split '%s' has non-positive length. Skipping.",
                splitNames[split_n].c_str());
       continue;
     }
 
-    double source_theta = straightThetasPlaced[source_index];
+    double source_theta    = straightThetasPlaced[source_index];
     double source_x_center = straightXCenters[source_index];
     double source_z_center = straightZCenters[source_index];
-    double source_length = straightLengthsPlaced[source_index];
-    double branch_theta = splitThetas[split_n];
-    double branch_r1    = splitROuters1[split_n] > 0 ? splitROuters1[split_n]
-                                                      : rOuters1[source_index];
-    double branch_r2    = splitROuters2[split_n] > 0 ? splitROuters2[split_n] : branch_r1;
+    double source_length   = straightLengthsPlaced[source_index];
+    double branch_theta    = splitThetas[split_n];
+    double branch_r1 = splitROuters1[split_n] > 0 ? splitROuters1[split_n] : rOuters1[source_index];
+    double branch_r2 = splitROuters2[split_n] > 0 ? splitROuters2[split_n] : branch_r1;
 
     // Calculate position at downstream end of source pipe
     double source_end_x = source_x_center - 0.5 * source_length * sin(source_theta);
@@ -368,7 +366,8 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector /
                              branch_r1 - thickness, branch_r1);
     ConeSegment s_split_vac(branch_length_effective / 2.0, 0, branch_r2 - thickness, 0,
                             branch_r1 - thickness);
-    Transform3D split_transform(RotationY(branch_theta), Position(branch_center_x, 0, branch_center_z));
+    Transform3D split_transform(RotationY(branch_theta),
+                                Position(branch_center_x, 0, branch_center_z));
 
     // Add split branch to straight piece vectors
     straightNames.push_back(splitNames[split_n]);
@@ -422,32 +421,31 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector /
   //  3) union all matching vacuum pieces in that local frame
   //  4) subtract vacuum-union from tube-union for the final pipe shell
   for (size_t range_n = 0; range_n < combineStartIds.size(); ++range_n) {
-    bool has_piece = false;
+    bool has_piece          = false;
     bool base_from_straight = false;
-    size_t base_index = 0;
+    size_t base_index       = 0;
 
     for (size_t piece_n = 0; piece_n < straightNames.size(); ++piece_n) {
       if (straightRangeIndices[piece_n] == static_cast<int>(range_n)) {
-        has_piece = true;
+        has_piece          = true;
         base_from_straight = true;
-        base_index = piece_n;
+        base_index         = piece_n;
         break;
       }
     }
     if (!has_piece) {
       for (size_t piece_n = 0; piece_n < bendNames.size(); ++piece_n) {
         if (bendRangeIndices[piece_n] == static_cast<int>(range_n)) {
-          has_piece = true;
+          has_piece          = true;
           base_from_straight = false;
-          base_index = piece_n;
+          base_index         = piece_n;
           break;
         }
       }
     }
 
     if (!has_piece) {
-      printout(WARNING, "BeamPipeChain",
-               "Combine range '%s' (%d-%d) did not match any segments.",
+      printout(WARNING, "BeamPipeChain", "Combine range '%s' (%d-%d) did not match any segments.",
                combineNames[range_n].c_str(), combineStartIds[range_n], combineEndIds[range_n]);
       continue;
     }
@@ -455,10 +453,9 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector /
     // Use first matching piece as boolean base frame.
     const Transform3D& base_transform =
         base_from_straight ? straightTransforms[base_index] : bendTransforms[base_index];
-    Transform3D inv_base              = base_transform.Inverse();
-    Solid range_tube = base_from_straight ? straightTubes[base_index] : bendTubes[base_index];
-    Solid range_vacuum =
-        base_from_straight ? straightVacuums[base_index] : bendVacuums[base_index];
+    Transform3D inv_base = base_transform.Inverse();
+    Solid range_tube     = base_from_straight ? straightTubes[base_index] : bendTubes[base_index];
+    Solid range_vacuum = base_from_straight ? straightVacuums[base_index] : bendVacuums[base_index];
 
     // Add all straight pieces in this range into the base frame.
     for (size_t piece_n = 0; piece_n < straightNames.size(); ++piece_n) {
@@ -492,36 +489,33 @@ static Ref_t create_detector(Detector& description, xml_h e, SensitiveDetector /
         continue;
       }
 
-      double theta = straightThetasPlaced[piece_n];
-      double halfL = 0.5 * straightLengthsPlaced[piece_n];
+      double theta  = straightThetasPlaced[piece_n];
+      double halfL  = 0.5 * straightLengthsPlaced[piece_n];
       double rOuter = straightOuterRadiiMax[piece_n];
 
       // Subtract at upstream end (-1)
-      Position end_pos_up(straightXCenters[piece_n] - halfL * sin(theta),
-                          0.0,
+      Position end_pos_up(straightXCenters[piece_n] - halfL * sin(theta), 0.0,
                           straightZCenters[piece_n] - halfL * cos(theta));
       Tube cap_up(0.0, rOuter, halfL);
       Transform3D cap_transform_up(RotationY(theta), end_pos_up);
       Transform3D rel_cap_up = inv_base * cap_transform_up;
-      range_tube   = SubtractionSolid(range_tube, cap_up, rel_cap_up);
-      range_vacuum = SubtractionSolid(range_vacuum, cap_up, rel_cap_up);
+      range_tube             = SubtractionSolid(range_tube, cap_up, rel_cap_up);
+      range_vacuum           = SubtractionSolid(range_vacuum, cap_up, rel_cap_up);
 
       // Subtract at downstream end (+1)
-      Position end_pos_down(straightXCenters[piece_n] + halfL * sin(theta),
-                            0.0,
+      Position end_pos_down(straightXCenters[piece_n] + halfL * sin(theta), 0.0,
                             straightZCenters[piece_n] + halfL * cos(theta));
       Tube cap_down(0.0, rOuter, halfL);
       Transform3D cap_transform_down(RotationY(theta), end_pos_down);
       Transform3D rel_cap_down = inv_base * cap_transform_down;
-      range_tube   = SubtractionSolid(range_tube, cap_down, rel_cap_down);
-      range_vacuum = SubtractionSolid(range_vacuum, cap_down, rel_cap_down);
+      range_tube               = SubtractionSolid(range_tube, cap_down, rel_cap_down);
+      range_vacuum             = SubtractionSolid(range_vacuum, cap_down, rel_cap_down);
     }
 
     SubtractionSolid range_pipe(range_tube, range_vacuum);
 
     Volume v_combined_pipe("v_pipe_combined_" + combineNames[range_n], range_pipe, m_Al);
-    Volume v_combined_vacuum("v_vacuum_combined_" + combineNames[range_n], range_vacuum,
-                             m_Vacuum);
+    Volume v_combined_vacuum("v_vacuum_combined_" + combineNames[range_n], range_vacuum, m_Vacuum);
     v_combined_pipe.setVisAttributes(description.visAttributes(vis_name));
 
     assembly.placeVolume(v_combined_pipe, base_transform);
