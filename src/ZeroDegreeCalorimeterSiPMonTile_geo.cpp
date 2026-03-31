@@ -99,8 +99,6 @@ static Ref_t createDetector(Detector& desc, xml_h handle, SensitiveDetector sens
           slice_x=0;
           slice_y=(-nrows_even/2+1/4)*tile+absorber_height/2;
         }
-        if(i==0 or i==1)
-          std::cout << x_slice.nameStr() << ", layer " << i << ", whxy = " << slice_width << " " << slice_height << " " << slice_x << " " << slice_y << std::endl;
         
         Box slice(slice_width / 2., slice_height / 2., slice_thickness / 2.);
 
