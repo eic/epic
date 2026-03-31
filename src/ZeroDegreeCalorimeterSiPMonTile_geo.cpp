@@ -22,17 +22,17 @@ static Ref_t createDetector(Detector& desc, xml_h handle, SensitiveDetector sens
   double width  = dim.x(); // Size along x-axis
   double height = dim.y(); // Size along y-axis
   double length = dim.z(); // Size along z-axis
-  
-  double absorber_width=desc.constant<double>("HcalFarForwardZDC_SiPMonTile_absorber_width");
-  double absorber_height=desc.constant<double>("HcalFarForwardZDC_SiPMonTile_absorber_height");
-  
-  int nrows_even=desc.constant<int>("HcalFarForwardZDC_SiPMonTile_nrows_even_layers");
-  int nrows_odd=desc.constant<int>("HcalFarForwardZDC_SiPMonTile_nrows_odd_layers");
-  int ncols_even=desc.constant<int>("HcalFarForwardZDC_SiPMonTile_ncols_even_layers");
-  int ncols_odd=desc.constant<int>("HcalFarForwardZDC_SiPMonTile_ncols_odd_layers");
-  
-  double tile=desc.constant<double>("HcalFarForwardZDC_SiPMonTile_SquareSideLength");
-  
+
+  double absorber_width  = desc.constant<double>("HcalFarForwardZDC_SiPMonTile_absorber_width");
+  double absorber_height = desc.constant<double>("HcalFarForwardZDC_SiPMonTile_absorber_height");
+
+  int nrows_even = desc.constant<int>("HcalFarForwardZDC_SiPMonTile_nrows_even_layers");
+  int nrows_odd  = desc.constant<int>("HcalFarForwardZDC_SiPMonTile_nrows_odd_layers");
+  int ncols_even = desc.constant<int>("HcalFarForwardZDC_SiPMonTile_ncols_even_layers");
+  int ncols_odd  = desc.constant<int>("HcalFarForwardZDC_SiPMonTile_ncols_odd_layers");
+
+  double tile = desc.constant<double>("HcalFarForwardZDC_SiPMonTile_SquareSideLength");
+
   xml_dim_t pos = detElem.position(); // Position in global coordinates
   xml_dim_t rot = detElem.rotation();
 
@@ -77,29 +77,27 @@ static Ref_t createDetector(Detector& desc, xml_h handle, SensitiveDetector sens
         Material slice_mat     = desc.material(x_slice.materialStr());
         slice_z += slice_thickness / 2.; // Going to slice halfway point
 
-        
-        
         double slice_width, slice_height, slice_x, slice_y;
-        if(x_slice.nameStr()=="ESRFoil_slice" or x_slice.nameStr()=="Scintillator_slice"){
-          if (i%2==0){
-            slice_width=ncols_even*tile;
-            slice_height=nrows_even*tile;
-            slice_x=tile/4;
-            slice_y=-tile/4;
+        if (x_slice.nameStr() == "ESRFoil_slice" or x_slice.nameStr() == "Scintillator_slice") {
+          if (i % 2 == 0) {
+            slice_width  = ncols_even * tile;
+            slice_height = nrows_even * tile;
+            slice_x      = tile / 4;
+            slice_y      = -tile / 4;
           }
-          if (i%2==1){
-            slice_width=ncols_odd*tile;
-            slice_height=nrows_odd*tile;
-            slice_x=-tile/4;
-            slice_y=-tile/4;
+          if (i % 2 == 1) {
+            slice_width  = ncols_odd * tile;
+            slice_height = nrows_odd * tile;
+            slice_x      = -tile / 4;
+            slice_y      = -tile / 4;
           }
-        } else{//absorber
-          slice_width=absorber_width;
-          slice_height=absorber_height;
-          slice_x=0;
-          slice_y=(-nrows_even/2+1/4)*tile+absorber_height/2;
+        } else { //absorber
+          slice_width  = absorber_width;
+          slice_height = absorber_height;
+          slice_x      = 0;
+          slice_y      = (-nrows_even / 2 + 1 / 4) * tile + absorber_height / 2;
         }
-        
+
         Box slice(slice_width / 2., slice_height / 2., slice_thickness / 2.);
 
         Volume slice_vol(slice_name, slice, slice_mat);
@@ -114,8 +112,8 @@ static Ref_t createDetector(Detector& desc, xml_h handle, SensitiveDetector sens
         slice_vol.setAttributes(desc, x_slice.regionStr(), x_slice.limitsStr(), x_slice.visStr());
 
         // Placing slice within layer
-        pv = layer_vol.placeVolume(slice_vol,
-                                   Transform3D(RotationZYX(0, 0, 0), Position(slice_x, slice_y, slice_z)));
+        pv = layer_vol.placeVolume(
+            slice_vol, Transform3D(RotationZYX(0, 0, 0), Position(slice_x, slice_y, slice_z)));
         pv.addPhysVolID("slice", slice_num);
         slice_z += slice_thickness / 2.;
         z_distance_traversed += slice_thickness;
