@@ -53,7 +53,7 @@
            
            
            <constant name="HcalFarForwardZDC_SiPMonTile_absorber_width" value= "57.6*cm"/>
-           <constant name="HcalFarForwardZDC_SiPMonTile_absorber_height" value= "58.8*cm">
+           <constant name="HcalFarForwardZDC_SiPMonTile_absorber_height" value= "58.8*cm"/>
              
     <constant name="HcalFarForwardZDC_SiPMonTile_rotateX_angle" value="0*deg"/>
     <constant name="HcalFarForwardZDC_SiPMonTile_rotateY_angle" value="ionCrossingAngle"/>
@@ -62,7 +62,7 @@
     <constant name="HcalFarForwardZDC_SiPMonTile_r_pos_front_face" value="35.8*m"/>
     <constant name="HcalFarForwardZDC_SiPMonTile_r_pos" value="HcalFarForwardZDC_SiPMonTile_r_pos_front_face + HcalFarForwardZDC_SiPMonTile_length/2.0"/>
     <constant name="HcalFarForwardZDC_SiPMonTile_x_pos" value="sin(HcalFarForwardZDC_SiPMonTile_rotateY_angle)*HcalFarForwardZDC_SiPMonTile_r_pos"/>
-    <constant name="HcalFarForwardZDC_SiPMonTile_y_pos" value="0*m" />
+    <constant name="HcalFarForwardZDC_SiPMonTile_y_pos" value="0*m"/>
     <constant name="HcalFarForwardZDC_SiPMonTile_z_pos" value="cos(HcalFarForwardZDC_SiPMonTile_rotateY_angle)*HcalFarForwardZDC_SiPMonTile_r_pos"/>
   </define>
 
