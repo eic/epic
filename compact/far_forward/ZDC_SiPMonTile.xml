@@ -117,14 +117,23 @@
 
   <readouts>
     <readout name="HcalFarForwardZDCHits">
-      <segmentation
+      <!--<segmentation
         type="CartesianGridXYStaggered"
         grid_size_x="HcalFarForwardZDC_SiPMonTile_SquareSideLength"
 	    grid_size_y="HcalFarForwardZDC_SiPMonTile_SquareSideLength"
-        stagger_x="HcalFarForwardZDC_SiPMonTile_stagger"
+      stagger_x="HcalFarForwardZDC_SiPMonTile_stagger"
 	    stagger_y="HcalFarForwardZDC_SiPMonTile_stagger"
 		offset_x="HcalFarForwardZDC_SiPMonTile_offset_x"
 		offset_y="HcalFarForwardZDC_SiPMonTile_offset_y"
+        />-->
+      <segmentation
+        type="CartesianGridXYStaggered"
+        grid_size_x="HcalFarForwardZDC_SiPMonTile_SquareSideLength"
+      grid_size_y="HcalFarForwardZDC_SiPMonTile_SquareSideLength"
+      stagger_x="0"
+      stagger_y="HcalFarForwardZDC_SiPMonTile_stagger"
+    offset_x="HcalFarForwardZDC_SiPMonTile_offset_x"
+    offset_y="HcalFarForwardZDC_SiPMonTile_offset_y"
         />
       <id>system:8,layer:8,slice:5,x:32:-16,y:-16</id>
     </readout>
